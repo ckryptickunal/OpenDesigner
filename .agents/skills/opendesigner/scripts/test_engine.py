@@ -282,6 +282,13 @@ class Exports(unittest.TestCase):
         self.assertEqual([c["name"] for c in fig["collections"]][:2], ["Primitives", "Color"])
         self.assertTrue(all(len(v.get("codeSyntax", {})) <= 3 for c in fig["collections"] for v in c["variables"]))
 
+    def test_dtcg_export_drops_a_resolver_left_by_an_earlier_name(self):
+        stale = os.path.join(self.d, "build", "dtcg", "old-name.resolver.json")
+        with open(stale, "w", encoding="utf-8") as f:
+            f.write("{}")
+        quiet(e.cmd_export, self.d, "dtcg", self.files, self.meta)
+        self.assertEqual(os.listdir(os.path.join(self.d, "build", "dtcg")), ["export-test.resolver.json"])
+
     def test_css_has_variables_and_modes(self):
         css = self.read("build", "css", "tokens.css")
         for needle in ("--ds-color-text-primary:", "--ds-space-inset-md:", "--ds-radius-control:", "prefers-color-scheme: dark",
@@ -332,7 +339,9 @@ class StateAndLog(unittest.TestCase):
             with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
                 log = f.read()
             self.assertIn("set_by: delegated", log)
-            self.assertRegex(log, r"## D-0003 · answers\.Q-aud-01 = \"regular\"\n- set_by: chosen · locked: no · date: [\d-]+ · supersedes: D-0002")
+            self.assertRegex(log, r"## D-0004 · answers\.Q-aud-01 = \"regular\"\n- set_by: chosen · locked: no · date: [\d-]+ · supersedes: D-0002")
+            self.assertRegex(log, r"## D-0003 · defaults\.work-tool = \[\"corners\", \"weights\", \"accent\", \"surfaces\"\]\n- set_by: auto_default")
+            self.assertRegex(log, r"## D-0005 · defaults\.work-tool = \[\]\n- set_by: auto_default .* supersedes: D-0003")
             quiet(e.cmd_lock, d, "dials.roundness")
             with self.assertRaises(SystemExit):
                 quiet(e.cmd_set, d, "dials.roundness", 80, "should be refused")
@@ -754,6 +763,109 @@ class BrandColor(unittest.TestCase):
         self.assertEqual(meta["color"]["scheme"], "monochrome")
 
 
+class TypedColorsStayExact(unittest.TestCase):
+    """STRESS-TEST findings 1, 6 and 19: a hex the person typed is never replaced. The brand and secondary colors stay exact
+    with white or dark text, in each mode where that mode's text reads on them; when no text reads on one, fills that carry
+    text use a readable shade and the exact color stays in its seed token."""
+
+    def tokens(self, s):
+        files, meta, _c = e.generate_system(s)
+        return {m: e.resolve_all(files, {"theme": m}) for m in ("light", "dark")}, meta
+
+    def at(self, flat, path):
+        return e.hex_of(flat[path]["resolved"]).lower()
+
+    def test_light_brand_typed_under_delegated_all_stays_exact(self):
+        for hx in ("#FFE500", "#D4FF3A", "#FFC24B", "#FFE45C"):  # yellow, acid lime, lantern gold, lemon
+            with tempfile.TemporaryDirectory() as t:
+                d = os.path.join(t, "opendesigner")
+                quiet(e.cmd_sketch, d, "Typed", hx, "regular", "web", "bold,playful", quiet=True, delegated="all")
+                s = std_read(d)
+                self.assertEqual(s["raw"]["brandColor"], hx.lower(), hx)
+                self.assertFalse(e.brand_delegated(d), hx)
+                flat, meta = self.tokens(s)
+                self.assertEqual(self.at(flat["light"], "color.brand.seed"), hx.lower())
+                self.assertNotEqual(self.at(flat["light"], "color.text.on-brand"), "#ffffff", hx)   # dark text, not a darker fill
+                for mode in ("light", "dark"):
+                    for fill in ("color.bg.brand", "color.bg.action.primary"):
+                        self.assertEqual(self.at(flat[mode], fill), hx.lower(), (hx, mode, fill))
+                    self.assertGreaterEqual(e.contrast(hx, self.at(flat[mode], "color.text.on-brand")), 4.5, (hx, mode))
+                line = e.brand_line(meta, s, plain=True, delegated=e.brand_delegated(d))
+                self.assertTrue(line.startswith("Your brand color is on the buttons exactly, with dark text on it"), line)
+                self.assertNotIn("dark mode", line)
+                for word in ("olive", "brown", "crimson", "I picked"):
+                    self.assertNotIn(word, line)
+
+    def test_keep_hex_restores_the_hex_an_older_sketch_replaced(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Memphis", "#FFE45C", "regular", "web", "bold,playful", quiet=True, delegated="all")
+            quiet(e.cmd_set, d, "raw.brandColor", "#877400", "sketch: picked for them, a readable shade of #ffe45c (an olive)",
+                  set_by="delegated")                                  # what the old sketch wrote (styles/06 D-0005)
+            self.assertTrue(e.brand_delegated(d))
+            quiet(e.cmd_set, d, "answers.Q-color-01", "keep-hex", "keep my lemon")
+            self.assertEqual(std_read(d)["raw"]["brandColor"], "#ffe45c")
+            self.assertFalse(e.brand_delegated(d))
+            quiet(e.cmd_set, d, "raw.brandColor", "#123456", "a new brand")
+            quiet(e.cmd_set, d, "answers.Q-color-01", "keep-hex", "again")  # a color set since then is never undone
+            self.assertEqual(std_read(d)["raw"]["brandColor"], "#123456")
+
+    def test_secondary_colors_are_pinned_like_the_brand(self):
+        s = u5_state(brandColor="#D7261E", secondaryColors=["#1E4AA8", "#F2C200"], accentCount=3)  # Bauhaus (styles/08)
+        flat, meta = self.tokens(s)
+        lt, dk = flat["light"], flat["dark"]
+        self.assertEqual(self.at(lt, "color.accent2.seed"), "#1e4aa8")
+        self.assertEqual(self.at(lt, "color.accent3.seed"), "#f2c200")
+        self.assertEqual(self.at(lt, "color.bg.accent2.bold"), "#1e4aa8")       # ultramarine carries white text
+        self.assertEqual(self.at(lt, "color.text.on-accent2"), "#ffffff")
+        self.assertEqual(self.at(lt, "color.bg.accent3.bold"), "#f2c200")       # cadmium carries dark text
+        self.assertEqual(self.at(dk, "color.bg.accent3.bold"), "#f2c200")       # and dark mode's dark text reads on it too
+        # one dark-mode rule for every typed color: exact where dark text reads, else a lighter shade at the color's own chroma
+        for fill, on, hx in (("color.bg.brand", "color.text.on-brand", "#d7261e"),
+                             ("color.bg.accent2.bold", "color.text.on-accent2", "#1e4aa8")):
+            got = self.at(dk, fill)
+            self.assertNotEqual(got, hx)
+            self.assertGreaterEqual(e.contrast(got, self.at(dk, on)), 4.5, fill)
+            gL, gC, gH = e.hex_to_oklch(got)
+            self.assertGreaterEqual(gC, 0.97 * min(e.hex_to_oklch(hx)[1], e.max_chroma(gL, gH)), fill)
+        self.assertIn("Your second color #1E4AA8 is exact on its fills; in dark mode they use", e.brand_line(meta, s))
+        sage = u5_state(brandColor="#2F6B4F", secondaryColors=["#7E9475"], accentCount=2)  # heroes/03: sage, not grass green
+        flat, _m = self.tokens(sage)
+        for mode in ("light", "dark"):
+            self.assertEqual(self.at(flat[mode], "color.bg.accent2.bold"), "#7e9475", mode)
+
+    def test_brand_line_names_the_action_color_on_buttons(self):
+        """With raw.primaryActionColor the buttons are the action color, so the brand line never claims the buttons."""
+        s = u5_state(brandColor="#D7261E", primaryActionColor="#17181c")  # vermilion is not exact in dark mode
+        _f, meta, _c = e.generate_system(s)
+        self.assertIn("action", meta["color"]["ramps"])
+        for line in (e.brand_line(meta, s, plain=True), e.brand_line(meta, s), e.brand_line(meta, s, plain=True, delegated=True)):
+            self.assertNotRegex(line, r"(on the buttons|buttons use a lighter|buttons, links)")
+            self.assertIn("links, selection and focus", line)
+            self.assertIn("Buttons use your primary action color", line)
+        self.assertIn("In dark mode, brand fills use a lighter shade", e.brand_line(meta, s, plain=True))
+        self.assertIn("Buttons use your primary action color (#17181C).", e.brand_line(meta, s))
+
+    def test_no_readable_text_keeps_the_exact_color_for_non_text_uses(self):
+        s = u5_state(brandColor="#E0457B", secondaryColors=["#E0457B"], accentCount=2)  # white 3.96:1, dark text 3.92:1
+        flat, meta = self.tokens(s)
+        lt = flat["light"]
+        self.assertEqual(self.at(lt, "color.brand.seed"), "#e0457b")
+        self.assertEqual(self.at(lt, "color.accent2.seed"), "#e0457b")
+        for fill, on in (("color.bg.brand", "color.text.on-brand"), ("color.bg.action.primary", "color.text.on-action"),
+                         ("color.bg.accent2.bold", "color.text.on-accent2")):
+            self.assertNotEqual(self.at(lt, fill), "#e0457b", fill)
+            self.assertGreaterEqual(e.contrast(self.at(lt, fill), self.at(lt, on)), 4.5, fill)
+        plain = e.brand_line(meta, s, plain=True)
+        for words in ("Neither white nor dark text", "anything without text", "Your second color"):
+            self.assertIn(words, plain)
+        for bad in ("#", ":1", "color."):
+            self.assertNotIn(bad, plain)
+        docs = e.brand_line(meta, s)
+        self.assertIn("color.brand.seed", docs)
+        self.assertIn("color.accent2.seed", docs)
+
+
 class FeelWordsAndDelegation(unittest.TestCase):
     """U5 fixes 3 and 9."""
 
@@ -784,7 +896,12 @@ class FeelWordsAndDelegation(unittest.TestCase):
             with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
                 log = f.read()
             self.assertRegex(log, r"## D-\d+ · macros = .*\n- set_by: delegated")
-            self.assertRegex(log, r"## D-\d+ · raw.brandColor = .*\n- set_by: delegated")
+            self.assertRegex(log, r"## D-\d+ · raw.brandColor = .*\n- set_by: chosen")   # a --brand hex stays theirs under 'all'
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Ops", "#2563eb", "dense", "web", "serious,minimal", quiet=True, delegated="all,brand")
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                self.assertRegex(f.read(), r"## D-\d+ · raw.brandColor = .*\n- set_by: delegated")
         with tempfile.TemporaryDirectory() as t:
             d = os.path.join(t, "opendesigner")
             quiet(e.cmd_sketch, d, "Ops", "#2563eb", "dense", "web", "serious", quiet=True, delegated="feel")
@@ -992,6 +1109,187 @@ class ReviewReactAndTailwind(unittest.TestCase):
             self.assertIn("off", vals["bg-blue-600"])                           # the reset removes default palette classes
 
 
+class WorkToolDefaults(unittest.TestCase):
+    """The dense work-tool defaults (levers.json profiles, DC-L23-01..07): they fill only what the person left open,
+    and each is recorded as auto_default with a reason. Plus the three smaller bugs the B2B study found."""
+
+    def sketch(self, t, brand=None, audience="dense", feel="professional,minimal"):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Ledger", brand, audience, "web", feel, quiet=True)
+        return d
+
+    def tokens(self, d):
+        files, meta, _c = quiet(e.cmd_generate, d)
+        return e.resolve_all(files, {"theme": "light"}), meta
+
+    def test_dense_sketch_gets_the_work_tool_defaults(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t)
+            flat, meta = self.tokens(d)
+            px = lambda p: flat[p]["resolved"]["value"]
+            self.assertEqual([px(f"radius.{r}") for r in ("control", "container", "overlay")], [6, 8, 12])  # feel words gave 2 / 8 / 12
+            self.assertEqual([flat[f"font.weight.{r}"]["resolved"] for r in ("body", "label", "heading")], [400, 500, 600])
+            for p in ("color.text.link", "color.border.focus", "color.bg.accent.subtle"):
+                self.assertGreater(e.hex_to_oklch(e.hex_of(flat[p]["resolved"]))[1], 0.02, p)  # colored, not grey
+            self.assertLess(e.hex_to_oklch(e.hex_of(flat["color.bg.action.primary"]["resolved"]))[1], 0.01)  # the primary stays ink
+            self.assertEqual([(x["blur"]["value"], x["spread"]["value"]) for x in flat["elevation.raised"]["resolved"]], [(0, 1)])
+            self.assertTrue(any(x["blur"]["value"] > 0 for x in flat["elevation.floating"]["resolved"]))  # menus keep their shadow
+            self.assertEqual([px(f"size.row.{k}") for k in ("sm", "md", "lg", "two-line")], [36, 40, 48, 64])
+            self.assertEqual(flat["color.border.separator"]["$value"], "{color.neutral.light.4}")  # row hairlines, under border.subtle
+            self.assertEqual(flat["text.numeric.md"]["$extensions"]["opendesigner"]["fontVariantNumeric"], "tabular-nums")
+            prof = meta["profile"]
+            self.assertEqual([x["item"] for x in prof["applied"]], ["corners", "weights", "accent", "surfaces"])
+            self.assertTrue(all(x["set_by"] == "auto_default" and x["reason"] and x["evidence"] for x in prof["applied"]))
+            self.assertIn("work-tool floor", meta["dialSources"]["roundness"])
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                self.assertRegex(f.read(), r"defaults\.work-tool = \[\"corners\", \"weights\", \"accent\", \"surfaces\"\]\n- set_by: auto_default")
+            rep = e.validate_dir(d)
+            self.assertEqual(rep.count("error"), 0)
+            self.assertTrue(any("stand-in blue" in i["message"] for i in rep.items))  # the person is told the blue is a stand-in
+
+    def test_floating_layers_keep_a_shadow_at_low_depth(self):
+        """'everyday' pulls depth to 10, the borders-only model: static cards stay flat, menus and dialogs still float."""
+        with tempfile.TemporaryDirectory() as t:
+            flat, meta = self.tokens(self.sketch(t, feel="everyday"))
+            self.assertEqual(meta["elevation"]["model"], "borders")
+            self.assertFalse(any(x["blur"]["value"] or x["spread"]["value"] for x in flat["elevation.raised"]["resolved"]))
+            for p in ("elevation.floating", "elevation.overlay"):
+                self.assertTrue(any(x["blur"]["value"] > 0 for x in flat[p]["resolved"]), p)
+
+    def test_the_defaults_never_override_a_choice(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, brand="#0f766e")
+            quiet(e.cmd_set, d, "Q-shape-01", "square", "sharp corners are our brand")
+            quiet(e.cmd_set, d, "Q-type-12", "two", "two weights")
+            quiet(e.cmd_set, d, "dials.depth", 70, "we like shadows")
+            flat, meta = self.tokens(d)
+            self.assertEqual(flat["radius.control"]["resolved"]["value"], 0)
+            self.assertEqual(flat["font.weight.label"]["resolved"], 400)
+            self.assertTrue(any(x["blur"]["value"] > 0 for x in flat["elevation.raised"]["resolved"]))
+            self.assertEqual(meta["profile"]["applied"], [])
+            self.assertEqual(meta["profile"]["skipped"], {"corners": "you answered Q-shape-01", "weights": "you answered Q-type-12",
+                                                         "accent": "your brand color decides it", "surfaces": "the depth dial is set"})
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                log = f.read()
+            self.assertIn("no longer a default: accent (your brand color decides it)", log)
+            self.assertRegex(log, r"defaults\.work-tool = \[\]\n- set_by: auto_default .*\n- reason: Dense work tool defaults off: "
+                                  r"Q-aud-01 = dense, but you decided each of them yourself\.")
+        with tempfile.TemporaryDirectory() as t:  # one value set or locked by the person wins too
+            d = self.sketch(t)
+            quiet(e.cmd_set, d, "radius.control", 2, "keep 2px")
+            quiet(e.cmd_lock, d, "dials.colorfulness")
+            flat, meta = self.tokens(d)
+            self.assertEqual(flat["radius.control"]["resolved"]["value"], 2)
+            self.assertLess(e.hex_to_oklch(e.hex_of(flat["color.text.link"]["resolved"]))[1], 0.02)
+            self.assertEqual(sorted(meta["profile"]["skipped"]), ["accent", "corners"])
+        with tempfile.TemporaryDirectory() as t:  # a regular audience gets none of them
+            _flat, meta = self.tokens(self.sketch(t, audience="regular"))
+            self.assertIsNone(meta["profile"])
+
+    def test_regular_body_text_is_16_unless_it_is_a_work_tool(self):
+        """Q-aud-01 regular promises body 16px (questions.json); a work tool, said by Q-aud-02 or Q-layout-03, is 14."""
+        cases = [({"Q-aud-01": "regular"}, 16), ({"Q-aud-01": "regular", "Q-aud-02": "consumer"}, 16),
+                 ({"Q-aud-01": "regular", "Q-aud-02": "work"}, 14), ({"Q-aud-01": "regular", "Q-layout-03": "working"}, 14),
+                 ({"Q-aud-01": "dense"}, 14), ({}, 14)]
+        for answers, want in cases:
+            s = e.default_state("T")
+            for qid, v in answers.items():
+                s["answers"][qid] = {"value": v}
+                for path, val in e.answer_effects(qid, v, s).items():
+                    e.set_path(s, path, {"value": val} if path.startswith("dials.") else val)
+            _files, meta, _c = e.generate_system(s)
+            self.assertEqual(meta["type"]["base"], want, answers)
+
+    def test_density_default_follows_the_audience(self):
+        self.assertEqual(e.questions()["Q-dir-02"]["default_follows"]["question"], "Q-aud-01")
+        for aud, want in ((None, "comfortable"), ("dense", "compact"), ("regular", "comfortable"), ("large", "spacious")):
+            s = e.default_state("T")
+            if aud:
+                s["answers"]["Q-aud-01"] = {"value": aud}
+            self.assertEqual(e.question_default(s, "Q-dir-02"), want, aud)
+        with tempfile.TemporaryDirectory() as t:  # accepting the recommended default keeps the dense density
+            d = self.sketch(t)
+            quiet(e.cmd_set, d, "Q-dir-02", e.question_default(e.load_state(d), "Q-dir-02"), "the default", set_by="confirmed_default")
+            self.assertEqual(e.load_state(d)["dials"]["density"]["value"], 80)
+        with open(os.path.join(e.REFERENCES, "stages", "06-visual-direction.md"), encoding="utf-8") as f:
+            self.assertIn("Default follows Q-aud-01:** recommend `compact` when it is `dense`", f.read())
+
+    def test_shape_stage_matches_the_evidence_for_data_tools(self):
+        with open(os.path.join(e.REFERENCES, "stages", "14-shape.md"), encoding="utf-8") as f:
+            stage = f.read()
+        self.assertNotIn("use sharp corners when density and precision are brand values", stage)
+        self.assertIn("top-tier data and developer tools use about 6px controls", stage)
+
+    def test_tabular_digits_are_on_unless_switched_off(self):
+        """STD-visual-details-02 makes tabular digits a must, so every system gets text.numeric.* by default."""
+        s = e.default_state("T")
+        self.assertIn("text.numeric.md", e.resolve_all(e.generate_system(s)[0], {"theme": "light"}))
+        s["raw"]["numericStyles"] = False
+        self.assertNotIn("text.numeric.md", e.resolve_all(e.generate_system(s)[0], {"theme": "light"}))
+
+
+class WebTextFloor(unittest.TestCase):
+    """Owner decision 2026-10-14: on the web, text people read is at least 12px; iOS and Android keep 11 pt/sp."""
+
+    def test_small_text_is_12px_on_the_web(self):
+        for plats, want in ((["web"], 12), (["web", "ios"], 12), (["ios"], 11)):
+            s = state_with(platforms=plats, density=95)  # base 13, ratio 1.2: the step below body was 11
+            files, _meta, _c = e.generate_system(s)
+            fl = e.resolve_all(files, {"theme": "light"})
+            for p in ("body.sm", "code.sm"):
+                self.assertEqual(fl[f"text.{p}"]["resolved"]["fontSize"]["value"], want, (plats, p))
+        s = state_with()  # the default web system: base 14, ratio 1.25 gave an 11px body.sm before
+        fl = e.resolve_all(e.generate_system(s)[0], {"theme": "light"})
+        self.assertGreaterEqual(fl["text.body.sm"]["resolved"]["fontSize"]["value"], 12)
+
+
+class PrimaryActionColor(unittest.TestCase):
+    """raw.primaryActionColor keeps the color typed: a near-black stays ink (it was periwinkle, #17181c -> #5f6dcc), and a
+    colored one keeps its hue. Showcase builds needed a near-black primary beside one colored accent (DC-L23-04)."""
+
+    def action(self, seed, brand="#2f6fd6"):
+        s = state_with(brandColor=brand, primaryActionColor=seed)
+        files, _meta, _c = e.generate_system(s)
+        rep = e.Report()
+        e.validate_files(files, s, rep)
+        self.assertEqual(rep.count("error"), 0, seed)
+        out = {}
+        for theme in ("light", "dark"):
+            fl = e.resolve_all(files, {"theme": theme})
+            h = lambda p: e.hex_of(fl[p]["resolved"])
+            out[theme] = {k: h(f"color.bg.action.{k}") for k in ("primary", "primary-hover", "primary-pressed")}
+            out[theme]["on"] = h("color.text.on-action")
+            for k in ("primary", "primary-hover", "primary-pressed"):
+                self.assertGreaterEqual(e.contrast(out[theme]["on"], out[theme][k]), 4.5, (seed, theme, k))
+        return out
+
+    def test_a_near_black_stays_ink(self):
+        for seed in ("#17181c", "#0f172a", "#111827"):  # near-black, Tailwind slate-900 and gray-900
+            a = self.action(seed)
+            self.assertEqual(a["light"]["primary"], seed)  # exact
+            seed_c = e.hex_to_oklch(seed)[1]
+            for k in ("primary-hover", "primary-pressed"):  # states stay in the seed's family, no jump to a vivid blue
+                self.assertLess(e.hex_to_oklch(a["light"][k])[1], seed_c + 0.01, (seed, k))
+            self.assertGreater(e.hex_to_oklch(a["dark"]["primary"])[0], 0.85, seed)  # dark mode inverts the ink: near-white
+            self.assertLess(e.hex_to_oklch(a["dark"]["primary"])[1], 0.05, seed)
+            self.assertNotEqual(a["dark"]["on"], "#ffffff")
+
+    def test_design_md_says_which_color_the_buttons_use(self):
+        s = state_with(brandColor="#2f6fd6", primaryActionColor="#17181c")
+        files, meta, _c = e.generate_system(s)
+        lead = e.colors_lead(meta, s, e.resolve_all(files, {"theme": "light"}))
+        self.assertIn("Buttons use your primary action color `#17181c`, an ink that turns near-white in dark mode", lead)
+        self.assertIn("`#2f6fd6` marks links, selection and focus", lead)
+
+    def test_a_colored_seed_keeps_its_hue(self):
+        for seed in ("#e11d48", "#1e3a8a"):
+            a = self.action(seed)
+            self.assertEqual(a["light"]["primary"], seed)  # white text reads on it, so it stays exact
+            for theme in ("light", "dark"):
+                hue = abs(e.hex_to_oklch(a[theme]["primary"])[2] - e.hex_to_oklch(seed)[2])
+                self.assertLess(min(hue, 360 - hue), 10, (seed, theme))
+
+
 class ExtendTokens(unittest.TestCase):
     """U5 fix 8: set adds a new token and keeps DTCG and density modes."""
 
@@ -1004,9 +1302,9 @@ class ExtendTokens(unittest.TestCase):
             quiet(e.cmd_set, d, "space.inset.md", 12, "default density only")
             quiet(e.cmd_set, d, "color.bg.highlight", "#fff4c2", "new color")
             files, meta, _c = quiet(e.cmd_generate, d)
-            self.assertEqual(files["semantic.tokens.json"]["size"]["row"]["md"]["$value"], {"value": 36, "unit": "px"})
-            self.assertEqual(files["semantic.tokens.json"]["size"]["row"]["md"]["$type"], "dimension")
             dens = {n: files[f"semantic.density.{n}.tokens.json"] for n in e.DENSITIES}
+            self.assertEqual(dens["compact"]["size"]["row"]["md"]["$value"], {"value": 36, "unit": "px"})  # rows are density tokens
+            self.assertEqual(dens["comfortable"]["size"]["row"]["md"]["$value"], {"value": 48, "unit": "px"})
             self.assertEqual(dens["compact"]["space"]["inset"]["md"]["$value"], {"value": 12, "unit": "px"})
             self.assertNotEqual(dens["spacious"]["space"]["inset"]["md"]["$value"], {"value": 12, "unit": "px"})
             self.assertEqual(dens["compact"]["size"]["control"]["md"]["$value"], {"value": 30, "unit": "px"})
@@ -1286,7 +1584,7 @@ class Standards(unittest.TestCase):
             self.assertEqual(state["overrides"]["size.row.md"], {"value": 40, "unit": "px"})
             self.assertIn("overrides.size.row.md", state["locks"])
             files, _m, _c = quiet(e.cmd_generate, d)
-            self.assertEqual(files["semantic.tokens.json"]["size"]["row"]["md"]["$value"], {"value": 40, "unit": "px"})
+            self.assertEqual(files["semantic.density.compact.tokens.json"]["size"]["row"]["md"]["$value"], {"value": 40, "unit": "px"})
             with self.assertRaises(SystemExit) as cm:
                 quiet(e.cmd_set, d, "size.row.md", 44, "try")
             self.assertIn("project standard PRJ-01: Table rows are 40px tall", str(cm.exception))
@@ -2690,14 +2988,18 @@ class PersonaOutputFixes(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             d = os.path.join(t, "opendesigner")
             out = std_run(e.cmd_sketch, d, "Picked", "#ffd54f", "large", "web", "fun", delegated="brand")[1]
-            brand = std_read(d)["raw"]["brandColor"]
-            self.assertNotEqual(brand, "#ffd54f")                                         # a readable shade, picked for them
-            self.assertGreaterEqual(e.contrast(brand, "#ffffff"), 4.5)
-            self.assertIn("I picked an olive for buttons, links and focus, with white text", out)
+            self.assertEqual(std_read(d)["raw"]["brandColor"], "#ffd54f")                 # dark text reads on it: kept
+            self.assertIn("I picked a light yellow for buttons, links and focus, with dark text on it.", out)
             self.assertNotIn("#", out.split("I picked", 1)[1].split("\n", 1)[0])
             summary = design_text(t).split("\n> Generated", 1)[0]
-            self.assertIn("**Brand color:** Picked for you, not chosen by you: an olive (#", summary)
+            self.assertIn("**Brand color:** Picked for you, not chosen by you: a light yellow (#FFD54F)", summary)
             self.assertNotIn("Your brand color", summary)
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            out = std_run(e.cmd_sketch, d, "Picked", "#e0457b", "large", "web", "fun", quiet=True, delegated="brand")[1]
+            brand = std_read(d)["raw"]["brandColor"]
+            self.assertNotEqual(brand, "#e0457b")              # neither text reads on the color the model picked: a shade of it
+            self.assertGreaterEqual(e.contrast(brand, "#ffffff"), 4.5)
 
     def test_d05_design_md_says_exits_are_derived(self):
         with tempfile.TemporaryDirectory() as t:
@@ -2750,6 +3052,423 @@ class OverviewAndArtifact(unittest.TestCase):
             self.assertEqual(e.read_json(os.path.join(proj, "design-system.json"))["createdOnFiles"]["at"], first)  # stable across builds
             readme = rd(proj, "README.md")
             self.assertFalse(readme.startswith("---"))                           # no front matter in the brand book
+            self.assertIn("`opendesigner/decisions.md`", readme)                 # the repo path stays readable, as code
+            prose = re.sub(r"`[^`\n]*`", "", re.sub(r"^(```|~~~).*?^\1", "", readme, flags=re.S | re.M))
+            for target in re.findall(r"!?\[[^\]\n]*\]\(([^)\s]+)\)", prose):  # tools/check_links.py's rule, from the README's folder
+                rel = target.split("#", 1)[0]
+                if rel and not re.match(r"^[a-z][a-z0-9+.-]*:", rel, re.I):
+                    self.assertTrue(os.path.exists(os.path.join(proj, rel)), target)
+
+    def test_for_agents_names_real_platform_identifiers(self):
+        """DESIGN.md's For Agents section names only Swift and Compose identifiers the exports define (no DsTheme)."""
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Fern", "#0f766e", "regular", "web,ios,android", "calm,friendly")
+            step = next(ln for ln in design_section(t, "For Agents").splitlines() if ln.startswith("2. "))
+            swift_part, compose_part = step.split(" in Swift", 1)
+            swift = re.findall(r"`([A-Za-z_]\w*)", swift_part.rsplit(", ", 1)[1])
+            compose = re.findall(r"`([A-Za-z_]\w*)", compose_part.split("In Compose:", 1)[1])
+            self.assertEqual(swift, ["DS"])
+            self.assertGreaterEqual(len(compose), 5)
+            with open(os.path.join(d, "build", "swift", "DesignTokens.swift"), encoding="utf-8") as f:
+                sw = f.read()
+            with open(os.path.join(d, "build", "compose", "DesignTokens.kt"), encoding="utf-8") as f:
+                kt = f.read()
+            for name in swift:
+                self.assertRegex(sw, rf"\b(enum|struct|class)\s+{name}\b", name)
+            for name in compose:
+                self.assertRegex(kt, rf"\b(val|object|class)\s+{name}\b", name)
+            with open(os.path.join(d, "build", "artifact", "project", "README.md"), encoding="utf-8") as f:
+                self.assertIn(step, f.read())                                   # build writes DESIGN.md before the artifact copies it
+
+def styled(style=None, **raw):
+    """A state that answered Q-dir-01 with a preset or a named style, the way pick does."""
+    s = u5_state(**raw)
+    if style:
+        s["answers"]["Q-dir-01"] = {"value": style, "set_by": "chosen"}
+        for pth, x in e.answer_effects("Q-dir-01", style, s).items():
+            e._store(s, pth, x, "chosen", "t", False)
+    return s
+
+
+def flat_light(files):
+    return e.resolve_all(files, {"theme": "light", "density": "comfortable", "motion": "standard"})
+
+
+class StyleVocabulary(unittest.TestCase):
+    """U8: named styles from references/styles.md reach the interview, the state, the tokens and DESIGN.md."""
+
+    def test_look_words_name_styles(self):
+        """Item 1: everyday look words propose named styles; feel words keep their feel; unknown words are still asked."""
+        macros, mapping, unknown, looks, look_only, start = e.feel_and_looks(
+            ["frosty", "comic", "soft buttons", "bold", "grainy", "zesty", "like my iPhone"])
+        self.assertEqual(looks["frosty"][0], "glassmorphism")
+        self.assertEqual(looks["like my iPhone"][0], "glassmorphism")
+        self.assertEqual(looks["comic"], ["comic"])
+        self.assertEqual(looks["soft buttons"][0], "neumorphism")      # a whole look phrase, not the feel word "soft"
+        self.assertIn("soft buttons", look_only)
+        self.assertNotIn("soft buttons", mapping)
+        self.assertIn("bold", mapping)                                    # shared word: the feel stays...
+        self.assertNotIn("bold", look_only)                               # ...and the looks are only suggested
+        self.assertEqual(looks["bold"][0], "neo-brutalism")
+        self.assertEqual(unknown, ["zesty"])
+        self.assertEqual(start, "glassmorphism")                          # the first look-only word's best style
+        self.assertEqual(e.feel_and_looks(["grainy"])[5], None)          # a texture never becomes the look
+        words = e.styles_doc()["styleWords"]["words"]
+        ids = set(e.style_list())
+        self.assertGreaterEqual(len(ids), 28)
+        self.assertTrue(all(set(v) <= ids for v in words.values()))
+        self.assertEqual({i for v in words.values() for i in v}, ids)   # every style is reachable from some word
+        self.assertFalse(set(words) & e.COLOR_WORDS)                     # "gold" is a color, never Art Deco
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            e.cmd_feel(["frosty", "comic"])
+        self.assertIn("frosty -> glassmorphism: frosted see-through panels", out.getvalue())
+        self.assertIn("comic -> comic style", out.getvalue())
+        self.assertNotIn("not known yet", out.getvalue())
+
+    def test_sketch_starts_from_a_look_word_as_assumed(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(e.cmd_sketch(d, "Fjord", "#0f766e", "regular", "web,ios", "frosty, calm"), 0)
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertEqual(st["style"], "glassmorphism")
+            self.assertEqual(st["preset"], "glass")
+            self.assertEqual(st["answers"]["Q-dir-01"]["set_by"], "assumed")
+            self.assertEqual(st["answers"]["Q-dir-01"]["via"], "sketch")
+            self.assertIn("deferential", [m if isinstance(m, str) else m["id"] for m in st["macros"]])
+            self.assertIn("frosty", st["taste"]["feelWords"])
+            self.assertIn("designers call it glassmorphism", out.getvalue())
+            self.assertNotIn("I don't know the feel word 'frosty'", out.getvalue())
+            self.assertIn("Direction: style glassmorphism (frosted see-through panels), built on preset glass",
+                          design_section(t, "Overview"))
+            quiet(e.cmd_set, d, "Q-dir-01", "flat2", "the person's own pick")
+            quiet(e.cmd_sketch, d, None, None, None, None, "comic")            # a later sketch never overrides a chosen style
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertEqual((st["answers"]["Q-dir-01"]["value"], st["style"]), ("flat2", None))
+
+    def test_q_dir_01_keeps_the_style_name(self):
+        """Item 2: the named style is recorded beside its preset; presets group the styles as STYLE-VOCAB-PROPOSALS section 2 says."""
+        fam = {}
+        for s in e.style_list().values():
+            fam.setdefault(s["preset"], set()).add(s["id"])
+        self.assertTrue({"flat", "swiss", "editorial", "minimal-monochrome"} <= fam["flat2"])
+        self.assertIn("material-elevation", fam["tonal"])
+        self.assertTrue({"glassmorphism", "frutiger-aero"} <= fam["glass"])
+        self.assertTrue({"neo-brutalism", "brutalism", "comic"} <= fam["neobrutal"])
+        self.assertTrue({"neumorphism", "claymorphism"} <= fam["soft"])
+        self.assertTrue({"mesh-gradient", "memphis", "y2k", "risograph"} <= fam["maximal"])
+        self.assertTrue(all(s["kind"] != "look" for s in e.style_list().values() if s["preset"] is None))
+        self.assertTrue(all(s.get("dials", {}).get("warmth", 0) <= 45 for s in e.style_list().values()))  # no beige greys
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Pick")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_set(d, "Q-dir-01", "neo-brutalism", "chunky and loud")
+            self.assertNotIn("not one of the listed options", out.getvalue())
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertEqual((st["preset"], st["style"]), ("neobrutal", "neo-brutalism"))
+            quiet(e.cmd_set, d, "Q-dir-01", "neo-brutalist", "same family keeps the name")
+            self.assertEqual(e.read_json(os.path.join(d, "state.json"))["style"], "neo-brutalism")
+            quiet(e.cmd_set, d, "Q-dir-01", "glass", "another family clears it")
+            self.assertIsNone(e.read_json(os.path.join(d, "state.json"))["style"])
+            with self.assertRaises(SystemExit) as cm:
+                quiet(e.cmd_set, d, "Q-dir-01", "grain", "a texture is not a look")
+            self.assertIn("pairs with a style", str(cm.exception))
+            with self.assertRaises(SystemExit):
+                quiet(e.cmd_set, d, "style", "comic", "one route only")
+            with self.assertRaises(SystemExit):
+                quiet(e.cmd_set, d, "raw.borderDefault", 9, "out of range")
+        s = styled("claymorphism")
+        s["macros"] = ["friendly"]                                         # warmth +30 would turn the greys beige
+        dials, src, conflicts = e.resolve_dials(s)
+        self.assertEqual((dials["warmth"], src["warmth"]), (30, "style:claymorphism"))
+        self.assertEqual(src["expression"], "style:claymorphism")
+        s["dials"]["roundness"] = {"value": 40, "set_by": "chosen"}
+        self.assertEqual(e.resolve_dials(s)[0]["roundness"], 40)          # the person's own value beats the style
+        plain = e.default_state("Same")
+        self.assertEqual(e.state_hash(plain), e.state_hash({k: v for k, v in plain.items() if k != "style"}))
+
+    def test_neo_brutalist_builds_thick_borders_and_offset_shadow(self):
+        """Item 3: the preset's extras are built, not ignored."""
+        files, meta, _c = e.generate_system(styled("neo-brutalist"))
+        fl = flat_light(files)
+        self.assertEqual(fl["border.width.default"]["$value"], "{border.width.3}")
+        self.assertEqual(meta["elevation"]["model"], "offset")
+        raised = fl["elevation.raised"]["$value"]
+        self.assertEqual(len(raised), 1)
+        self.assertEqual((raised[0]["color"], raised[0]["offsetX"], raised[0]["blur"]), ("{color.shadow.offset}", e.dim(4), e.dim(0)))
+        self.assertEqual(fl["color.shadow.offset"]["$value"], fl["color.text.primary"]["$value"])
+        self.assertIn("elevation.pressed", fl)
+        css = e.export_css(files, meta, "ds")
+        self.assertIn("--ds-elevation-raised: 4px 4px 0px 0px var(--ds-color-shadow-offset);", css)
+        for style, border, model in (("brutalism", "{border.width.1}", "borders"), ("comic", "{border.width.3}", "borders")):
+            f2, m2, _c = e.generate_system(styled(style))
+            self.assertEqual((flat_light(f2)["border.width.default"]["$value"], m2["elevation"]["model"]), (border, model), style)
+        f3, _m, _c = e.generate_system(styled("neo-brutalist", borderDefault=2))
+        self.assertEqual(flat_light(f3)["border.width.default"]["$value"], "{border.width.2}")
+        self.assertNotIn("color.shadow.offset", flat_light(e.generate_system(u5_state())[0]))   # nothing new without a style
+
+    def test_paired_and_inner_shadows(self):
+        """Item 3: neumorphism gets paired light and dark shadows; claymorphism gets inner shadows; Figma keeps inset."""
+        files, meta, _c = e.generate_system(styled("neumorphism"))
+        fl = flat_light(files)
+        self.assertEqual(meta["elevation"]["model"], "extruded")
+        hi, key = fl["elevation.raised"]["$value"]
+        self.assertEqual((hi["color"], key["color"]), ("{color.shadow.highlight}", "{color.shadow.key}"))
+        self.assertLess(e._px(hi["offsetX"]), 0)
+        self.assertGreater(e._px(key["offsetX"]), 0)
+        self.assertTrue(all(lay.get("inset") for lay in fl["elevation.pressed"]["$value"]))
+        self.assertEqual(fl["color.shadow.highlight"]["resolved"]["alpha"], 0.8)
+        rep = e.Report()
+        e.validate_files(files, styled("neumorphism"), rep)
+        self.assertIn("neumorphic-preset", json.dumps(rep.items))
+        files, meta, _c = e.generate_system(styled("claymorphism"))
+        self.assertEqual(meta["elevation"]["model"], "clay")
+        layers = flat_light(files)["elevation.raised"]["$value"]
+        self.assertEqual([bool(x.get("inset")) for x in layers], [False, True, True])
+        fig = e.export_figma(files, meta, styled("claymorphism"), "ds")
+        kinds = {fx["type"] for st in fig["effectStyles"] if st["name"] == "elevation/raised" for fx in st["effects"]}
+        self.assertEqual(kinds, {"DROP_SHADOW", "INNER_SHADOW"})
+        rep = e.Report()
+        e.validate_files(files, styled("claymorphism"), rep)
+        self.assertNotIn("neumorphic-preset", json.dumps(rep.items))        # clay states its border rule in DESIGN.md instead
+
+    def test_gradient_and_texture_tokens(self):
+        """Item 3: gradients are DTCG gradient tokens with kind and interpolation in $extensions; grain is a recipe, not a token."""
+        files, meta, _c = e.generate_system(styled("mesh-gradient"))
+        fl = flat_light(files)
+        brand = fl["gradient.brand"]
+        self.assertEqual(brand["type"], "gradient")
+        self.assertEqual([s_["position"] for s_ in brand["$value"]], [0, 1])
+        self.assertTrue(all(isinstance(s_["color"], str) and s_["color"].startswith("{") for s_ in brand["$value"]))  # stops alias colors
+        ext = brand["$extensions"]["opendesigner"]
+        self.assertEqual((ext["kind"], ext["interpolation"]), ("linear", "oklab"))
+        self.assertIn("marketing", ext["allowedSurfaces"])
+        self.assertEqual(fl["gradient.mesh.1"]["$extensions"]["opendesigner"]["kind"], "radial")
+        rep = e.Report()
+        e.validate_files(files, styled("mesh-gradient"), rep)
+        self.assertEqual([i for i in rep.items if i["severity"] == "error"], [])
+        css = e.export_css(files, meta, "ds")
+        self.assertIn("--ds-gradient-brand: linear-gradient(180deg in oklab, var(--ds-color-", css)
+        self.assertIn("--ds-gradient-mesh: var(--ds-gradient-mesh-1), var(--ds-gradient-mesh-2), var(--ds-gradient-mesh-3);", css)
+        none = styled("mesh-gradient", gradients="none")                   # Q-color-25 "none" beats the style
+        self.assertFalse([p for p in flat_light(e.generate_system(none)[0]) if p.startswith("gradient.")])
+        self.assertFalse([p for p in flat_light(e.generate_system(u5_state())[0]) if p.startswith(("gradient.", "texture."))])
+        allowed = u5_state()
+        for pth, x in e.answer_effects("Q-color-25", "brand-only").items():
+            e._store(allowed, pth, x, "chosen", "t", False)
+        self.assertIn("gradient.brand", flat_light(e.generate_system(allowed)[0]))
+        files, meta, _c = e.generate_system(styled("risograph"))
+        grain = flat_light(files)["texture.grain.opacity"]
+        self.assertEqual((grain["type"], grain["$value"]), ("number", 0.06))
+        css = e.export_css(files, meta, "ds")
+        self.assertIn(".ds-grain::before", css)
+        self.assertIn("@media (prefers-contrast: more), (forced-colors: active) { .ds-grain::before { display: none; } }", css)
+        self.assertNotIn("texture.grain.opacity", flat_light(e.generate_system(styled("risograph", texture="none"))[0]))
+        rep = e.Report()
+        e._check_value("gradient", [{"color": "#fff", "position": 0}], "gradient.bad", rep)
+        self.assertTrue(rep.items)
+
+    def test_literal_hex_in_a_shadow_override_builds(self):
+        """Item 4: a hex color in a shadow override used to stop the build (ValueError: not a color) and write var(--ds-fffff)."""
+        layer = {"color": "#ffffff", "offsetX": {"value": 4, "unit": "px"}, "offsetY": {"value": 4, "unit": "px"},
+                 "blur": {"value": 0, "unit": "px"}, "spread": {"value": 0, "unit": "px"}}
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Hex", "#2563eb", "regular", "web", "bold")
+            quiet(e.cmd_set, d, "elevation.raised", [layer], "white offset shadow")
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertEqual(st["overrides"]["elevation.raised"][0]["color"]["colorSpace"], "srgb")   # stored in DTCG form
+            self.assertEqual(quiet(e.cmd_build, d), 0)
+            with open(os.path.join(d, "build", "css", "tokens.css"), encoding="utf-8") as f:
+                css = f.read()
+            self.assertIn("--ds-elevation-raised: 4px 4px 0px 0px #ffffff;", css)
+            self.assertNotIn("var(--ds-fffff", css)
+            st["overrides"]["elevation.raised"] = [layer]                  # a state saved before the fix still builds
+            e.dump_json(os.path.join(d, "state.json"), st)
+            self.assertEqual(quiet(e.cmd_build, d), 0)
+            with self.assertRaises(SystemExit) as cm:
+                quiet(e.cmd_set, d, "elevation.raised", [dict(layer, color="tomato")], "not a color")
+            self.assertIn("each layer needs color", str(cm.exception))
+        rep = e.Report()
+        e._check_value("shadow", [dict(layer, color="#ffffff")], "elevation.raised", rep)   # validate names it, never crashes
+        self.assertIn("color must be an object", json.dumps(rep.items))
+
+    def test_floors_stay_locked_in_every_style(self):
+        """Item 5: every look style validates with no errors (contrast, focus, targets), glass is checked over the worst content
+        behind it and turns solid under reduced transparency, and reduced motion still has its own context."""
+        for sid, st in sorted(e.style_list().items()):
+            if st["kind"] != "look":
+                continue
+            s = styled(sid)
+            files, meta, _c = e.generate_system(s)
+            rep = e.Report()
+            e.validate_files(files, s, rep)
+            self.assertEqual([i["message"] for i in rep.items if i["severity"] == "error"], [], sid)
+            self.assertIn("motion.reduced.tokens.json", files, sid)
+        s = styled("glassmorphism")
+        files, meta, _c = e.generate_system(s)
+        kinds = {(p["mode"], p["kind"]) for p in meta["contrastPairs"] if p.get("behind")}
+        self.assertEqual(kinds, {(m, k) for m in ("light", "dark") for k in ("text-on-glass", "icon-on-glass")})
+        for mode in ("light", "dark"):
+            fl = e.resolve_all(files, {"theme": mode, "density": "comfortable", "motion": "standard"})
+            glass = fl["color.surface.glass"]["resolved"]
+            behind = "#000000" if mode == "light" else "#ffffff"
+            bg = e.composite(e.hex_of(glass), glass["alpha"], behind)
+            self.assertGreaterEqual(e.contrast(e.hex_of(fl["color.text.primary"]["resolved"]), bg), 4.5, mode)
+            self.assertGreaterEqual(e.contrast(e.hex_of(fl["color.icon.default"]["resolved"]), bg), 3.0, mode)
+        css = e.export_css(files, meta, "ds")
+        self.assertIn("@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {", css)
+        self.assertIn("--ds-color-surface-glass: var(--ds-color-surface-glass-fallback); --ds-material-glass-blur: 0px;", css)
+        # the solid twin must out-rank the dark-scheme block, which sets glass on :root:not([data-theme="light"])
+        rt = css[css.index("@media (prefers-reduced-transparency"):]
+        self.assertIn(':root:not([data-theme="light"])', rt.split("{", 2)[1])
+        self.assertLess(css.index('@media (prefers-color-scheme: dark)'), css.index("@media (prefers-reduced-transparency"))
+        self.assertIn("@media (prefers-reduced-motion: reduce)", css)
+
+
+class StyleLab(unittest.TestCase):
+    """U9: an open style space. Every style sits on 12 trait axes; new ones are searched, mixed, mutated, explored and defined
+    on the same axes, repaired when they pile up effects, and held to the same floors."""
+
+    def test_catalogue_is_consistent(self):
+        doc = e.styles_doc()
+        axes = doc["axes"]
+        self.assertEqual(tuple(axes), e.STYLE_AXES)
+        ids = [s["id"] for s in doc["list"]]
+        self.assertEqual(len(ids), len(set(ids)))
+        for s in doc["list"]:
+            self.assertTrue(re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)*", s["id"]), s["id"])
+            for ax in e.STYLE_AXES:
+                self.assertIn(s["traits"][ax], axes[ax]["values"], (s["id"], ax))
+            self.assertIn(s.get("ui_fit"), ("core-ui", "marketing", "illustration-only"), s["id"])
+            self.assertLessEqual(s.get("dials", {}).get("warmth", 0), 45, s["id"])        # no beige greys
+            if not s.get("evidence"):                                                     # researched entries carry real sources
+                urls = [x["url"] for x in s.get("sources") or [] if x.get("url", "").startswith("http")]
+                self.assertGreaterEqual(len(urls), 2, s["id"])
+        self.assertTrue(all(set(v) <= set(ids) for v in doc["styleWords"]["words"].values()))
+        for ax, vals in doc["traitWords"]["words"].items():
+            self.assertTrue(set(vals) <= set(axes[ax]["values"] if ax in axes else doc["motionRisks"]), ax)
+        self.assertTrue(all(set(s.get("motionRisks") or []) <= set(doc["motionRisks"]) for s in doc["list"]))
+        self.assertTrue(set(doc["styleWords"]["suggestOnly"]) <= set(doc["styleWords"]["words"]))
+        derived = [e.complete_style(s) for s in doc["list"] if "dials" not in s]
+        self.assertTrue(all(s["preset"] in {p["id"] for p in e.levers()["presets"]} for s in derived if s["kind"] == "look"))
+
+    def test_traits_become_settings(self):
+        preset, dials, build = e.style_from_traits({"depth": "glow", "color": "neon", "shape": "sharp", "texture": "halftone",
+                                                    "edge": "thick-outline", "density": "dense", "scale": "dramatic"})
+        self.assertEqual((dials["colorfulness"], dials["roundness"], dials["density"]), (95, 0, 75))
+        self.assertEqual((build["elevationModel"], build["borderDefault"], build["texture"], build["typeRatio"]), ("glow", 3, "halftone", 1.333))
+        self.assertEqual(preset, "neobrutal")
+        self.assertEqual(e.style_from_traits({"depth": "glass"})[0], "glass")
+        self.assertEqual(e.style_from_traits({"color": "earthy"})[1]["warmth"], 45)
+        traits, unknown = e.words_to_traits(["shiny chrome", "neon glow", "zesty"])
+        self.assertEqual(traits["surface"], "glossy")
+        self.assertEqual(traits["depth"], "glow")
+        self.assertNotIn("color", traits)                              # "neon" inside "neon glow" is the glow, not the color
+        self.assertEqual(unknown, ["zesty"])
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            e.cmd_feel(["shiny"])
+        self.assertIn("no named style yet; it describes shiny glossy surfaces", out.getvalue())
+
+    def test_guard_repairs_risky_combinations(self):
+        t, notes = e.guard_traits(dict(e.NEUTRAL_TRAITS, surface="gradient", depth="glass", color="neon", theme="light-first",
+                                       density="dense", texture="grain", ornament="stickers", motion="glitchy", edge="thick-outline"),
+                                  risks=["flashing"])
+        self.assertEqual(sum(1 for ax in ("depth", "surface") if (ax, t[ax]) in e.SURFACE_EFFECTS), 1)   # one surface effect
+        self.assertLessEqual(len(e._loud(t, ["flashing"])), 3)
+        self.assertEqual((t["density"], t["texture"]), ("balanced", "none"))
+        self.assertTrue(t["color"] != "neon" or t["theme"] == "dark-first")
+        self.assertEqual(e.guard_traits(dict(e.NEUTRAL_TRAITS, color="neon"))[0]["theme"], "dark-first")   # neon on its own goes dark
+        self.assertTrue(any("three in any second" in n for n in notes))                   # WCAG 2.3.1 for flashing
+        self.assertTrue(notes)
+
+    def test_explore_offers_new_but_recognizable_styles(self):
+        a = e.explore_styles(["neon", "sharp", "dark"], n=4, seed=3)
+        b = e.explore_styles(["neon", "sharp", "dark"], n=4, seed=3)
+        self.assertEqual([c["traits"] for c in a], [c["traits"] for c in b])              # the same seed draws the same styles
+        self.assertGreaterEqual(len(a), 2)
+        for c in a:
+            self.assertTrue(3 <= c["novelty"] <= 7, c)
+            self.assertEqual(c["traits"]["shape"], "sharp")                               # the person's own trait words hold
+            self.assertEqual(c["traits"], e.guard_traits(c["traits"], c["ui_fit"])[0])   # already repaired
+        keys = {tuple(c["traits"].values()) for c in a}
+        self.assertEqual(len(keys), len(a))
+        mix = e.blend_styles(e.style_list()["swiss"], e.style_list()["glassmorphism"])
+        self.assertEqual((mix["traits"]["layout"], mix["traits"]["depth"]), ("grid", "glass"))   # Swiss bones, glass skin
+
+    def test_define_and_use_an_experimental_style(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Lab", "#7c3aed", "regular", "web", "calm")
+            quiet(e.cmd_style, d, "define", ["terminal", "color=neon", "depth=glow"], name="Night market", use=True)
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertIn("x-night-market", st["customStyles"])
+            self.assertEqual(st["style"], "x-night-market")
+            self.assertTrue(st["customStyles"]["x-night-market"]["experimental"])
+            self.assertEqual(quiet(e.cmd_build, d), 0)
+            meta = e.read_json(os.path.join(d, "tokens", "opendesigner.meta.json"))
+            self.assertEqual((meta["style"], meta["elevation"]["model"]), ("x-night-market", "glow"))
+            with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+                self.assertIn("Style:** Night market", f.read())
+            with open(os.path.join(d, "build", "css", "tokens.css"), encoding="utf-8") as f:
+                self.assertIn("var(--ds-color-shadow-glow)", f.read())
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                self.assertIn("customStyles.x-night-market", f.read())
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_style(d, "explore", ["grainy", "editorial"], n=2, seed=1, save=1, name="Paper desk")
+            self.assertIn("Saved as x-paper-desk", out.getvalue())
+            with self.assertRaises(SystemExit):
+                quiet(e.cmd_style, d, "define", ["depth=sideways"], name="Bad")
+
+    def test_tiles_show_styles_built_for_real(self):
+        """The option gallery shows any named or unsaved experimental style, with its outlines, shadows, glass and texture."""
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Tiles", "#2563eb", "regular", "web", "calm")
+            quiet(e.cmd_style, d, "tiles", ["neo-brutalism", "glassmorphism", "newsprint"])
+            with open(os.path.join(d, "preview", "style-tiles.html"), encoding="utf-8") as f:
+                html = f.read()
+            data = json.loads(re.search(r'<script type="application/json" id="od-data">(.*?)</script>', html, re.S).group(1))
+            opts = {o["value"]: o["vars"]["light"] for o in data["options"]}
+            self.assertEqual(list(opts), ["neo-brutalism", "glassmorphism", "newsprint"])
+            self.assertEqual(data["recommended"], "glassmorphism")                       # the recommendation sits in the middle
+            self.assertIn("4px 4px", opts["neo-brutalism"]["btn-shadow"])
+            self.assertEqual(data["options"][0]["vars"]["light"]["border-w"], "3px")
+            self.assertIn("blur(", opts["glassmorphism"]["backdrop"])
+            self.assertIn("radial-gradient", opts["newsprint"]["texture"])
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_style(d, "explore", ["glow", "sharp"], n=2, seed=4, tiles=True)
+            with open(os.path.join(d, "preview", "style-tiles.html"), encoding="utf-8") as f:
+                self.assertIn("(new)", f.read())
+            self.assertNotIn("customStyles\": {\"x-", json.dumps(e.read_json(os.path.join(d, "state.json"))))  # shown, not saved
+            with self.assertRaises(SystemExit) as cm:
+                quiet(e.cmd_set, d, "Q-dir-01", "x-not-saved", "a typo or an unsaved direction")
+            self.assertIn("not saved yet", str(cm.exception))
+
+    def test_every_style_and_some_experiments_keep_the_floors(self):
+        cands = e.explore_styles(["glow", "pastel"], n=3, seed=7) + e.explore_styles([], n=3, seed=11, wild=True)
+        for c in cands:
+            s = u5_state()
+            s["customStyles"] = {c["id"]: {k: c[k] for k in ("name", "plain", "kind", "ui_fit", "traits")}}
+            for pth, x in e.answer_effects("Q-dir-01", c["id"], s).items():
+                e._store(s, pth, x, "chosen", "t", False)
+            files, _m, _c = e.generate_system(s)
+            rep = e.Report()
+            e.validate_files(files, s, rep)
+            self.assertEqual([i["message"] for i in rep.items if i["severity"] == "error"], [], c["name"])
+        files, meta, _c = e.generate_system(styled(None, texture="halftone"))
+        self.assertIn(".ds-halftone::before", e.export_css(files, meta, "ds"))
+        self.assertEqual(e.state_hash(e.default_state("A")), e.state_hash({k: v for k, v in e.default_state("A").items()
+                                                                           if k not in ("style", "customStyles")}))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=1)

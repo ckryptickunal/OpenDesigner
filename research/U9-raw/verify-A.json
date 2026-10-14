@@ -1,0 +1,732 @@
+[
+ {
+  "id": "art-nouveau",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "V&A whiplash article: S-curve from sea organisms and plants; ironwork, borders, textiles; Beardsley, Mucha."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "V&A Job poster: gallery label says Mucha treats hair as pattern echoing the lettering."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Tate: emerged in the 1890s, sinuous plant-based lines, killed off by the First World War; names Mackintosh in Glasgow."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "V&A La Dame aux Camelias, 1896: flowing lines and opulent colouring as the peak of Art Nouveau graphics."
+   },
+   {
+    "id": "S5",
+    "status": "ok",
+    "note": "IPS primer: about 1890 to WWI; Jugendstil and Stile Liberty; Mucha's first Bernhardt poster late 1894."
+   },
+   {
+    "id": "S6",
+    "status": "ok",
+    "note": "Wikipedia: whiplash and asymmetry; Jugendstil typefaces made to match images, Arnold Boecklin 1904."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "Minor: '(Mucha for Sarah Bernhardt, from 1894 to 1896)' reads as the span of the collaboration; it is only the span of the two cited posters. Bernhardt contracted Mucha in 1895 for six years.",
+    "correct": "Mucha's posters for Sarah Bernhardt, from Gismonda (late 1894) onward",
+    "url": "https://collections.vam.ac.uk/item/O76331/"
+   }
+  ],
+  "note": "All six sources load and support their claims; examples are real V&A posters."
+ },
+ {
+  "id": "vienna-secession",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "partly",
+    "note": "V&A Roller poster: lettering fills the sheet, confirmed. It says the group left 'the conservative Academy', which Wikipedia contradicts. Poster printed 1902 for the 16th exhibition of 1903."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Prestel/Wiener Werkstaette PDF (Rainald Franz): shift to planar art, linearity, basic geometric forms and reduced palette first seen in graphics."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Wikipedia: Ver Sacrum; Wagner's buildings after 1899 use straight lines; Hoffmann's Stoclet Palace has stacked cubic forms."
+   },
+   {
+    "id": "S4",
+    "status": "partly",
+    "note": "V&A Moser armchair 1904: one pierced back panel with an oval and an elongated diamond. Nothing about small repeated squares."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "origin",
+    "problem": "'when artists left the Academy' is wrong. The founders resigned from the Association of Austrian Artists (the Kuenstlerhaus); opposing the Academy was one of their aims.",
+    "correct": "Vienna, 1897, when artists resigned from the Association of Austrian Artists (Kuenstlerhaus); Wiener Werkstaette from 1903",
+    "url": "https://en.wikipedia.org/wiki/Vienna_Secession"
+   },
+   {
+    "field": "defining",
+    "problem": "'Small repeated squares, ovals and diamonds as ornament (Moser armchair, 1904)': the chair has a single oval-and-diamond panel, not repeated small squares.",
+    "correct": "Bold geometric cut-outs, such as the oval and elongated diamond in Moser's 1904 armchair; mark repeated squares [inferred] or cite a checkerboard source",
+    "url": "https://collections.vam.ac.uk/item/O84641/"
+   },
+   {
+    "field": "defining",
+    "problem": "'a 1902 exhibition poster': the poster was printed in 1902 for the 16th exhibition, held in 1903 (V&A title 'Secession. 16 Ausstellung, 1903').",
+    "correct": "Roller's poster for the 16th Secession exhibition (printed 1902, show 1903) lets the type fill the whole sheet",
+    "url": "https://collections.vam.ac.uk/item/O74615/"
+   }
+  ],
+  "note": "Origin misstates who the group seceded from; one defining item overreads its source."
+ },
+ {
+  "id": "arts-and-crafts",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Tate: Morris and Co. 1861; plant forms treated as flat pattern; against Victorian excess ornament and imitation of the past."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "V&A Trellis: simple bird and flower forms on a plain ground; notes it is a compromise toward the reformers' flat, muted patterns."
+   }
+  ],
+  "fixes": [],
+  "note": "Supported. Minor nuance: the 1861 firm was Morris, Marshall, Faulkner & Co. (Morris & Co. from 1875), but the entry's wording avoids the issue."
+ },
+ {
+  "id": "plakatstil",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "IPS: begun 1905 by Bernhard in Berlin (Priester matches); reduced naturalism, flat colours and shapes; Hohlwein in Munich."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "V&A Stiller poster: Bernhard devised the style in 1902; product alone with its name; rich colours."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Wikipedia: started by Bernhard 1905/1906; bold lettering, flat colours, simplified central object."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "V&A Hohlwein 1910 Strauss poster: limited colours, pattern, silhouette and integral lettering."
+   }
+  ],
+  "fixes": [],
+  "note": "Origin date range already reflects the 1902 versus 1905 to 1906 disagreement between sources."
+ },
+ {
+  "id": "de-stijl",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Tate: Dutch circle, magazine founded 1917 by Mondrian and Van Doesburg; strict horizontals and verticals."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "V&A Rietveld bolderwagen: vertical and horizontal lines; colour restricted to red, blue, yellow, black and white."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Wikipedia: primaries plus black, white and grey; straight lines and rectangles; non-intersecting layered planes (Rietveld)."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "Minor overstatement: 'Only horizontal and vertical lines'. Van Doesburg introduced diagonals (Elementarism) around 1924, and Tate says Mondrian left in 1923 over this.",
+    "correct": "Horizontal and vertical lines and rectangles (diagonals appear only in Van Doesburg's later Elementarist work)",
+    "url": "https://en.wikipedia.org/wiki/De_Stijl"
+   }
+  ],
+  "note": "Supported; one optional precision about the late diagonal phase."
+ },
+ {
+  "id": "constructivism",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Tate: founded by Tatlin and Rodchenko in Russia around 1915; industrial, of no discernible style."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "IPS: dominant 1924 to 1933; photography, strident slogans, powerful typefaces, strong diagonals. (Its 'first to use photography' claim is the source's own overstatement and is not repeated in the entry.)"
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "V&A Rodchenko, about 1926: photomontage using black and red. The record has no image online."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "V&A Kulagina 1929: photomontage, Constructivist style, red and black."
+   },
+   {
+    "id": "S5",
+    "status": "ok",
+    "note": "Wikipedia: Stenberg brothers' brightly coloured geometric film posters; Klutsis and Kulagina photomontage."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "examples",
+    "problem": "Minor: the Rodchenko V&A record has no image online, so it cannot serve as a visual reference.",
+    "correct": "Keep the Kulagina example (has an image) and replace the Rodchenko one with an object that shows its image",
+    "url": "https://collections.vam.ac.uk/item/O222892/"
+   }
+  ],
+  "note": "All claims supported."
+ },
+ {
+  "id": "suprematism",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Tate: Malevich from 1913; first shown at 0.10, December 1915; basic geometric forms, limited colours, floated on a usually white ground."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Wikipedia: circles, squares, rectangles in a limited range of colours; Black Square 1915; 0,10 exhibition."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "examples",
+    "problem": "Examples list is empty.",
+    "correct": "Kazimir Malevich, Dynamic Suprematism, 1915 or 1916 (Tate): tilted coloured bars on a pale ground",
+    "url": "https://www.tate.org.uk/art/artworks/malevich-dynamic-suprematism-t02319"
+   }
+  ],
+  "note": "Supported; only lacks an example (suggested one verified to load)."
+ },
+ {
+  "id": "futurism",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Tate: Marinetti's manifesto in Le Figaro, 20 February 1909; dynamism and energy of the modern world."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "IPS: Futurists invented lines of force to express speed and noise; Depero, Venna, Diulgheroff."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Estorick: words-in-freedom freed text from the page grid; Depero Futurista 1927 with coloured papers, type games, fold-outs."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "Wikipedia: parole in liberta rejected metre; the word became the main unit."
+   }
+  ],
+  "fixes": [],
+  "note": "All claims and the Depero example are supported."
+ },
+ {
+  "id": "dada-photomontage",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Tate Dada: Zurich during WWI, Cabaret Voltaire 1916, satirical and nonsensical."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Tate photomontage: first used by dadaists in 1915; a means of political dissent; Heartfield."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Wikipedia Dada: monteurs used scissors and glue with press photographs; chance collage."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "Wikipedia Photomontage: Grosz and Heartfield pasting pictures in 1916; term widely known around 1918 to 1919."
+   },
+   {
+    "id": "S5",
+    "status": "partly",
+    "note": "V&A Merz 8: confirms Schwitters' cut-and-paste principle from 1919, but the object is a lithographed booklet, not a photomontage, and its sticker reads 'Anti-Dada'."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "examples",
+    "problem": "The only example (Schwitters, Merz 8, The Cathedral) is a lithographed booklet with an 'Anti-Dada' sticker, made when Schwitters was out of favour with the Dadaists. It does not show photomontage.",
+    "correct": "Raoul Hausmann, The Art Critic, 1919-20 (Tate; lithograph and printed paper on paper, a Berlin Dada photomontage). Hannah Hoech's Cut with the Kitchen Knife (1919) is another option.",
+    "url": "https://www.tate.org.uk/art/artworks/hausmann-the-art-critic-t01918"
+   },
+   {
+    "field": "origin",
+    "problem": "Minor: 'developed by Berlin Dada from about 1915' is slightly anachronistic. Berlin Dada formed in 1918; the 1915 to 1916 experiments were by Grosz and Heartfield before that.",
+    "correct": "Zurich, 1916 (Cabaret Voltaire); photomontage from Grosz and Heartfield's experiments (about 1916), taken up by Berlin Dada from 1918",
+    "url": "https://en.wikipedia.org/wiki/Photomontage"
+   }
+  ],
+  "note": "Sources are fine; the example does not show the style the entry is named after."
+ },
+ {
+  "id": "mid-century-modern",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "partly",
+    "note": "Wikipedia: about 1945 to 1970, clean lines, no embellishment, includes graphic design. 'More organic than the International Style' refers to US architecture, not graphics."
+   },
+   {
+    "id": "S2",
+    "status": "partly",
+    "note": "IPS: supports the cartoon-like drawing, puns and colour until about 1965, but names it the '1950s Style' and uses 'Mid-Century Modern' for the rational International Typographic Style."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "V&A Lucienne Day Calyx 1951: abstraction from plant forms, bold geometric designs, Festival of Britain."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "The cartoon-poster item is attributed to mid-century modern, but S2 explicitly separates that look ('1950s Style') from what it calls Mid-Century Modern (the Swiss International Typographic Style).",
+    "correct": "Say S2 calls this the '1950s Style' and treats it as a playful counterpart to the rational International Typographic Style",
+    "url": "https://internationalposter.com/style-primers/1950s-style-posters/"
+   },
+   {
+    "field": "defining",
+    "problem": "'Slightly more organic and relaxed than the International Style' is S1's statement about American architecture, not graphic design.",
+    "correct": "Mark it as an architecture comparison or mark the graphic application [inferred]",
+    "url": "https://en.wikipedia.org/wiki/Mid-century_modern"
+   }
+  ],
+  "note": "Real style, but two defining items stretch what their sources say about graphics."
+ },
+ {
+  "id": "googie-atomic",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Wikipedia Googie: Southern California, about 1945 to early 1970s; Googie's coffee shop 1949; boomerangs, saucers, atoms, parabolas; upswept roofs; neon; bright colours."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Wikipedia Atomic Age: 1945 to 1967; starburst with spokes often tipped with spheres; white homes with mustard yellows and oranges; Franciscan Starburst 1954 in turquoise, yellow and green on cream."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "V&A Festival Pattern Group fabric 1951: pattern from a crystal-structure diagram (orthoclase)."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "Hyperallergic: space-age commercial buildings of the 1940s to 1960s; the Googie name was first meant derisively."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "examples",
+    "problem": "Minor: the only example is a British Festival of Britain fabric, which shows atomic patterning but not Googie (no starbursts, boomerangs or neon).",
+    "correct": "Add a Googie or starburst example from S2, such as Franciscan's Starburst dinnerware (1954)",
+    "url": "https://en.wikipedia.org/wiki/Atomic_Age_(design)"
+   }
+  ],
+  "note": "All claims supported; the example is atomic but not Googie."
+ },
+ {
+  "id": "psychedelic-poster",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Tate: 1960s; day-glo, anti-naturalistic colour, swirling patterns; San Francisco artists commissioned by Bill Graham."
+   },
+   {
+    "id": "S2",
+    "status": "partly",
+    "note": "V&A Wes Wilson 1966: bold colours, lettering increasingly stylised and illegible; Fillmore posters defined the style. Nothing about lettering 'filling every gap'."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "V&A 'Byrds Byrds Byrds' 1967: sinuous forms, lettering evocative of Art Nouveau."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "Wikipedia: saturated colours in glaring contrast, ornate lettering, strongly symmetrical composition; about 1966 to 1972."
+   },
+   {
+    "id": "S5",
+    "status": "ok",
+    "note": "V&A Moscoso Neon Rose #13: overprinting, hidden skull image, the 'slow poster'."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "Minor: 'filling every gap' is not in S2 or S3.",
+    "correct": "Drop 'filling every gap', or cite Wikipedia's point about warping positive and negative space",
+    "url": "https://en.wikipedia.org/wiki/Psychedelic_art"
+   }
+  ],
+  "note": "Well supported; both examples are real V&A posters."
+ },
+ {
+  "id": "op-art",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Tate: 1960s; a framework of purely geometric forms for optical effects; Riley, Soto, Vasarely."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "V&A Riley Coloured Greys III 1972: vibrating surfaces through repeated simple forms; figure and ground swap; wavy lines."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Wikipedia: better-known pieces in black and white; The Responsive Eye, 1965."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "V&A Vasarely Zett-RG 1966: square-within-square formula, limited colours and forms, endless combinations."
+   }
+  ],
+  "fixes": [],
+  "note": "Supported. The Riley example is in greys and lilac, not black and white, but it still shows the effect."
+ },
+ {
+  "id": "pop-art-silkscreen",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Tate: mid-1950s Britain, late 1950s US, peak in the 1960s; advertising, packaging, film, comics; US pop used hard edges, distinct forms and impersonal imagery."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "V&A Warhol Marilyn 1967: one of ten colourways, all from the same publicity photograph."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "V&A Vasarely screenprint: screenprinting was cheap and used by sign-makers; taken up by Warhol and others in the 1960s."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "V&A Warhol 1964: imagery from magazines, TV, cinema, advertising, packaging; repeated press photos."
+   }
+  ],
+  "fixes": [],
+  "note": "All claims supported; the example is a museum print, not a brand asset."
+ },
+ {
+  "id": "supergraphics",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Wikipedia: large-scale graphics wrapping walls, floors, ceilings; typography and abstract shapes; mid-1960s origin, 1970s surge; Sea Ranch 1965; wayfinding and branding; screens included today."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Eye review of the Unit Editions book: Stauffacher Solomon at Sea Ranch (1966, with architects Moore and Turnbull), Hear Hear store 1969, Sussman's 1984 LA Olympics work."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "origin",
+    "problem": "Overstated single authorship: S1 says Sea Ranch introduced supergraphics to a wide American audience and lists other early practitioners. The term was coined by C. Ray Smith in 1967.",
+    "correct": "Mid-1960s US; popularised by Barbara Stauffacher Solomon's Sea Ranch graphics (1965 to 1966); term coined by C. Ray Smith in 1967; peaked in the 1970s",
+    "url": "https://en.wikipedia.org/wiki/Supergraphics"
+   }
+  ],
+  "note": "Only two sources, both working; origin line should not credit one person with inventing it."
+ },
+ {
+  "id": "new-wave-typography",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Wikipedia: inconsistent letterspacing, mixed weights, non-right angles; bold stairstep; film transparency textures; Weingart, early 1970s, Basel; sans serif predominates."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "V&A Weingart Kunstkredit 76-77 poster: father of new wave or swiss punk; playfully liberated chaos."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "IPS post-modernist primer: Weingart's offset experiments gave complex, chaotic, playful, spontaneous posters."
+   }
+  ],
+  "fixes": [],
+  "note": "All claims and the example are supported."
+ },
+ {
+  "id": "grunge-typography",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Wikipedia David Carson: Beach Culture 1989, Ray Gun three years later; chaotic, collage-like layered photos and messy type. (Does not use the word 'grunge'.)"
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "V&A Carson National Theatre poster 2013: 'godfather of grunge typography'; words, textures and background fused."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "V&A FUSE: started 1990 by Neville Brody (London, FontShop); experimental, often unfinished Mac alphabets. No image online."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "origin",
+    "problem": "'United States' only, yet a defining item cites FUSE, a British project by Neville Brody and Jon Wozencroft.",
+    "correct": "United States and Britain, about 1989 to 1995; Ray Gun (US) from 1992 and FUSE (UK) from 1990",
+    "url": "https://collections.vam.ac.uk/item/O1041541/"
+   },
+   {
+    "field": "examples",
+    "problem": "Minor: the only example is a 2013 poster, long after the period. It is real and V&A ties it to grunge typography, but a Ray Gun spread from 1992 to 1995 would be a truer period reference.",
+    "correct": "Keep it, and add a dated Ray Gun or FUSE item when a source shows one",
+    "url": "https://collections.vam.ac.uk/item/O1364133/"
+   }
+  ],
+  "note": "Supported overall; the origin contradicts its own FUSE item."
+ },
+ {
+  "id": "punk-zine",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "AIGA Eye on Design: ransom-note type, cut-and-paste newsprint, zines, handwritten additions; stencils, Letraset, hand-scrawled lettering, graffiti; purists date punk to 1976 to 1977."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "V&A Reid banner 1976: ransom-note lettering first used on a 100 Club flyer, 31 August 1976. The object is Reid's design for the Sex Pistols logo."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "V&A Notre Dame Hall flyer, 15 November 1976: black-and-white photocopy with ransom-note text."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "Wikipedia Punk visual art: black or grey colours, cut-out letters linked to Dada and ransom notes, photocopying; DIY crude graphics."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "examples",
+    "problem": "The first example is, in V&A's words, Jamie Reid's second design for the Sex Pistols' logo, so the entry points to a band logo as the model for the style.",
+    "correct": "Drop the logo banner and keep the Notre Dame Hall flyer (O1155084) as the example; describe ransom-note lettering generically",
+    "url": "https://collections.vam.ac.uk/item/O1153675/"
+   }
+  ],
+  "note": "Facts are supported; one example is a brand logo."
+ },
+ {
+  "id": "japanese-minimalism",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Metropolis on Kenya Hara: emptiness rather than simplicity; wabi from Murata Shuko's late 15th-century tea ceremony, austere beauty and elegant rusticity; Hara on Muji's board from 2001."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Wikipedia Wabi-sabi: asymmetry, roughness, simplicity, economy, austerity, modesty, natural objects; imperfection, impermanence; work emphasises process."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "name",
+    "problem": "The name and aliases claim 'ma (negative space)', but no source defines or supports ma.",
+    "correct": "Cite a source for ma, or drop it from the name. Wikipedia's 'Ma (negative space)' page loads but is flagged as needing citations, so a stronger source is better.",
+    "url": "https://en.wikipedia.org/wiki/Ma_(negative_space)"
+   },
+   {
+    "field": "aliases",
+    "problem": "Alias 'Muji style' and a Muji example name a living retail brand. Nothing copies its logo or colour, but the alias invites brand imitation.",
+    "correct": "Drop the 'Muji style' alias. Keep Muji only as a described reference, with a note not to copy its logo, wordmark or brand colour.",
+    "url": "https://metropolismag.com/projects/kenya-hara-breaks-down-muji-unique-appeal/"
+   }
+  ],
+  "note": "Wabi and emptiness are supported; 'ma' is unsourced."
+ },
+ {
+  "id": "scandinavian",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Wikipedia: simplicity, minimalism, functionality; flourished in the 1950s across five Nordic countries; Brooklyn Museum 1954; Norwegian durability, beauty, natural forms; Swedish clean lines."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "1stdibs on LACMA's show: simple curvilinear wooden furniture; 'honest, organic and handcrafted'; Marimekko shocking in the US in 1959; hygge; Design in Scandinavia toured 24 museums from 1954."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "'Hygge: simplicity, warmth and coziness' is listed as a defining trait, but S2 presents hygge as a lifestyle concept that Americans embraced recently, not a visual trait of the 1950s style.",
+    "correct": "Drop hygge from defining, or mark it as recent marketing context",
+    "url": "https://www.1stdibs.com/introspective-magazine/scandinavian-design-in-the-us/"
+   },
+   {
+    "field": "aliases",
+    "problem": "Alias 'Marimekko style' and the Marimekko example name a living brand whose patterns are proprietary.",
+    "correct": "Drop the 'Marimekko style' alias. Keep the example as a described reference ('simple shapes, bold flat patterns') with a note not to copy its patterns or marks.",
+    "url": "https://www.1stdibs.com/introspective-magazine/scandinavian-design-in-the-us/"
+   }
+  ],
+  "note": "Core facts supported; hygge is overstated as a style trait."
+ },
+ {
+  "id": "ukiyo-e",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Wikipedia: 17th to 19th centuries, Edo; bold flat lines containing flat colour; asymmetry and unusual viewpoints such as from above; Prussian blue in Hokusai and Hiroshige; bokashi gradation."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Tate Japonisme: flatness, brilliant colour and stylisation of Japanese prints shaped Western art and Art Nouveau."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "V&A Hiroshige Swimming Turtles fan print, about 1840 to 1842: blue predominant."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "aliases",
+    "problem": "'Japonisme' is not another name for ukiyo-e. S2 defines it as the Western craze for Japanese art and its influence on Western artists.",
+    "correct": "Remove 'Japonisme' from aliases (it could go under related)",
+    "url": "https://www.tate.org.uk/art/art-terms/j/japonisme"
+   }
+  ],
+  "note": "Defining items are well supported; one alias is wrong."
+ },
+ {
+  "id": "polish-poster",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "BFI: established 1947, headed by Tomaszewski; painterly Odd Man Out poster; medals at the 1948 Vienna exhibition."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Wikipedia: succinct metaphors, vibrantly coloured painterly approach, hand-lettered typography. It dates the movement from the early 1950s to the late 1980s."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "HMCT Art Center: brash wit; painterly approaches based on ambiguity and metaphor; hand-drawn, self-expressive lettering."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "Eye 'The painted word': for Tomaszewski the paintbrush remains a key instrument."
+   },
+   {
+    "id": "S5",
+    "status": "ok",
+    "note": "V&A May Poland be Poland 1989: Polish Poster School known from the 1950s for painterly approach, irony and visual metaphor."
+   },
+   {
+    "id": "S6",
+    "status": "ok",
+    "note": "IPS 1960s primer: Polish school from the '50s to the '80s, sardonic, gut-wrenching surrealism."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "examples",
+    "problem": "The 1989 Tomaszewski example credits Jerzy Janiszewski as 'logo designer'; the poster carries the Solidarity logo. The V&A record does not describe hand-made lettering, so the 'what' line is unsupported and partly points at a logo.",
+    "correct": "Replace it with a film or theatre poster that a source describes, such as Tomaszewski's Odd Man Out (BFI), or reword 'what' to 'a single visual idea' and note the Solidarity wordmark is not to be copied",
+    "url": "https://bfi.org.uk/features/polish-poster-art-classic-british-films"
+   }
+  ],
+  "note": "All six sources support the style. The origin start date differs between sources (1947 in BFI, early 1950s in Wikipedia); the entry follows BFI."
+ }
+]

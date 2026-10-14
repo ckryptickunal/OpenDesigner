@@ -23,7 +23,7 @@ Five answers shape the sketch. Ask only what their words and files don't already
    - Show six pairs only if they ask for choices, or when the designer voice leads. The pairs are playful or serious · friendly or authoritative · minimal or rich · premium or everyday · modern or heritage · bold or quiet.
    - The words fill in the personality sliders (Q-brand-01), so don't ask for the sliders.
 5. **Do you have a brand color or a logo?** This is Q-color-01, asked together with Q-brand-03.
-   - A hex color becomes the seed (`--brand`). The engine keeps it exact on main buttons when it passes contrast. If it doesn't, the engine changes it just enough and prints one line: pass that line on.
+   - A hex color becomes the seed (`--brand`). The engine never replaces a hex they typed. It keeps it exact on main buttons with white or dark text, whichever reads. If neither reads, fills that carry text use a readable shade and the exact color stays for the logo and large areas. It prints one line either way: pass that line on.
    - A color word ("blue"): pick a hex of that color that fits their feel words, and pass it as `--brand`.
    - A logo file: if you can see images, find its main color. If you can't, ask "What color is your logo mostly?" Before the sketch, record it with `engine.py set raw.brandColor '"<hex>"' --set-by asset --why "main color of their logo"`, and record the logo with `engine.py set hooks.H-logo.status '"have"' --set-by asset`. Then run `sketch` without `--brand`. A second strong logo color can become a second accent later (Q-color-04, `raw.secondaryColors`).
    - With neither, suggest 3 seed colors that fit their words, and label them as a starting point.
@@ -41,7 +41,7 @@ engine.py pick Q-scope-06 persuade --set-by assumed --why "a site that shows off
 
 **People in a hurry.** When they say "just pick", "just do it" or "you choose" about the rest:
 - Stop asking. Pick values that fit their words and files. For example, reuse the button color already in their CSS as the seed.
-- Pass what you picked with `--delegated`, naming those flags (`--delegated feel,brand`). A bare `--delegated` marks every sketch answer as handed over, so use it only when they answered none themselves.
+- Pass what you picked with `--delegated`, naming those flags (`--delegated feel,brand`). A bare `--delegated` marks every sketch answer as handed over, so use it only when they answered none themselves. A hex given with `--brand` stays theirs even then: name `brand` only when you picked the hex.
 - Log `speed_mode` (`rules.md` section 11). That is delegation. Add a frustration signal only if they sound fed up.
 - Ask about who it's for once, and only if nothing points to an answer (`rules.md` section 7). If something does, record it as an assumed answer.
 - After the sketch, send the result, the next step and the offer in one short message, with no extra visuals.

@@ -278,8 +278,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Example:** Show one table-and-form screen at dense, regular and large densities side by side.
 - **Control:** single choice
 - **Options:**
-  - `dense` All day, in tools full of data: body 13-14px, controls 28-32px; compact and utilitarian (Polaris 13px, SLDS 13px, Carbon, Atlassian, Primer, Ant 14px) [DC-L09-04; S-L09-403].
-  - `regular` Often, in an everyday app: body 16px, controls 36-40px (Radix, shadcn, Mantine, Chakra) [DC-L09-04; L09 A3 density].
+  - `dense` All day, in tools full of data: body 13-14px, controls 28-32px; compact and utilitarian (Polaris 13px, SLDS 13px, Carbon, Atlassian, Primer, Ant 14px) [DC-L09-04; S-L09-403]. Corners, weights, accent and surfaces you have not chosen follow the work-tool defaults: 6px controls, three weights, one colored accent for selection, links and focus, borders instead of shadows on static cards [DC-L23-01].
+  - `regular` Often, in an everyday app: body 16px (14px once Q-aud-02 or Q-layout-03 says it is a work tool), controls 36-40px (Radix, shadcn, Mantine, Chakra) [DC-L09-04; L09 A3 density].
   - `large` Now and then, on a phone or in public: body 17px or more, controls and targets 44-48px (iOS 17pt, GOV.UK 19px, Material, USWDS 48px targets) [DC-L09-04; S-L09-540].
 - **Default:** regular. *Source:* L09 shared default row 8 (body 16px general, 14px tools) [L09 A1].
 - **Decides:** DC-L09-04
@@ -340,7 +340,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Options:**
   - `text-size` Text size: layouts must reflow at large sizes (DC-L02-21).
   - `density` Compact or roomy switch: adds a compact/comfortable token mode (DC-L03-11).
-  - `contrast` Contrast themes: adds a high-contrast mode (DC-L01-20).
+  - `contrast` Contrast themes: asks for a high-contrast mode (DC-L01-20); the engine records this but does not generate the mode yet.
   - `reduced-motion` Reduced motion: swaps movement for fades (DC-L04-25).
   - `situational` Tough conditions (one hand busy, bright light, older users): larger targets and higher contrast by default; reads calmer and more legible [DC-L13-14; S-L13-076, S-L13-038].
 - **Default:** text-size + reduced-motion. *Source:* accessibility rule (WCAG 2.2 AA as the floor; text resize and motion preferences are OS settings the system should honor) [DC-L13-14, DC-L10-16].
@@ -875,7 +875,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `comfortable` Comfortable: calmer, touch-friendly, consumer feel [DC-L08-13].
   - `spacious` Spacious: calm, premium, focused message [DC-L15-04].
   - `user-selectable` Let people choose: default plus a compact mode (Atlassian `spacing="compact"`, Salesforce comfy/compact) [S-L08-063; DC-L03-10].
-- **Default:** comfortable for app surfaces, spacious for marketing, compact as a user option for data-heavy components (tables, lists, menus, trees). *Source:* card heuristic [DC-L15-04, DC-L08-13].
+- **Default:** comfortable for app surfaces once Q-aud-01 is regular, compact once it is dense, spacious once it is large; spacious for marketing, compact as a user option for data-heavy components (tables, lists, menus, trees). *Source:* card heuristic [DC-L15-04, DC-L08-13]; the density Q-aud-01 already set, so accepting the default never undoes it [DC-L23-01].
+- **Default follows:** Q-aud-01 `dense` = `compact`, `regular` = `comfortable`, `large` = `spacious`
 - **Decides:** DC-L15-04, DC-L08-13
 - **Changes:** DC-L15-02, DC-L15-05, DC-L15-09, DC-L03-10, DC-L03-11, DC-L02-08 · blocks: Foundations > Visual language > Density voice; Components > Density
 - **Preview:** a data table and a settings form at each density, with the target-size floor drawn so it visibly does not shrink [DC-L15-04].
@@ -2295,7 +2296,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Decides:** DC-L09-01, DC-L04-02
 - **Changes:** DC-L04-01, DC-L04-03, DC-L04-04, DC-L04-06, DC-L04-19, DC-L04-09, DC-L05-18 · blocks: Foundations > Shape > Radius scale and default; Shape personality
 - **Preview:** the component sheet morphing as the slider moves; the focus ring follows the radius.
-- **Use / avoid:** use sharp corners when density and precision are brand values (data, developer tools) and pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
+- **Use / avoid:** use 0-2px corners only as a deliberate brand statement (GOV.UK, Carbon v11 buttons): top-tier data and developer tools use about 6px controls, 8px panels and 12px overlays [DC-L23-02]; use pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
 - **Skip:** yes, 6px.
 - **Block class:** G (generatable)
 - **Time weight:** high (fan-out 4)
@@ -2689,7 +2690,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `transparency` Reduce Transparency [S-L10-008].
   - `motion` Reduce Motion [DC-L04-25].
   - `bold-text` Bold Text [DC-L10-16].
-- **Default:** all, with high contrast and reduced transparency as token modes. *Source:* platform convention [DC-L10-16; L10 baked-in rules 9-10].
+- **Default:** all. Reduced motion is a token mode, and each glass surface gets a solid fallback when the system uses glass; high-contrast and reduced-transparency modes are not generated yet. *Source:* platform convention [DC-L10-16; L10 baked-in rules 9-10].
 - **Decides:** DC-L10-16
 - **Changes:** DC-L07-15, DC-L04-09 · blocks: Foundations > Accessibility > Platform settings
 - **Preview:** a settings simulator panel with each toggle applied live.
@@ -4221,6 +4222,10 @@ These cards have one defensible answer backed by a platform rule, an accessibili
 | DC-L13-12 | Each interactive component documents trigger, rules, feedback, loops and modes plus its state list | S-L13-079, S-L13-106 |
 | DC-L02-22 | Text survives WCAG 1.4.12 overrides (line height 1.5x, paragraph 2x, letter 0.12x, word 0.16x); no fixed-height text boxes | S-L02-027 |
 | DC-L02-23 | Every text style is contrast-checked in every mode; below 18.5px bold / 24px regular it needs 4.5:1 | S-L02-007, S-L02-052 |
+| DC-L23-01, DC-L23-02, DC-L23-03, DC-L23-04 | When Q-aud-01 = dense: corners, weights, accent and static surfaces the person has not answered, set or locked default to 6/8/12 px, 400/500/600, one colored accent for selection, links and focus, and a ring with no shadow on static cards (levers.json `profiles.work-tool`). Each is recorded as auto_default with a reason and never locked | S-L23-001, S-L23-002, S-L23-003, S-L23-004, S-L23-005 |
+| DC-L23-05 | Static surfaces flat and floating ones shadowed in the work-tool profile; `color.border.separator` for row hairlines in every system | S-L23-001, S-L23-002, S-L23-010 |
+| DC-L23-06 | Row heights `size.row.sm/md/lg/two-line` = default control height + 4 / 8 / 16 / 32 px in each density mode | S-L23-014, S-L23-004, S-L23-003 |
+| DC-L23-07 | Tabular digits (`text.numeric.*`) in every system unless `raw.numericStyles` is set to false (STD-visual-details-02) | S-L23-007, S-L23-011 |
 
 ## Not asked: builder product decisions
 

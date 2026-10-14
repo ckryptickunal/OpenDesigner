@@ -22,7 +22,7 @@ Knowledge: `references/reference-intake.json` holds what each source can give, t
 
 ## 1. Consent and tagging (always first)
 - List every URL or file you intend to read, and get a yes. Never sign in, and never bypass a login, paywall or bot check. Read only the pages the person approved.
-- Tag each reference as **our product**, **inspiration** or **competitor**.
+- Tag each reference as **our product**, **inspiration** or **competitor**. The tag decides what the reference does to the person's taste index: an inspiration pulls it, their own product pulls at half strength, and a competitor never pulls (see `references/taste.md` in the opendesigner skill).
 - Tag how closely to follow it:
   - **reinterpret** (default): take the lessons.
   - **our version of this**: copy the structure, with every identity element swapped.

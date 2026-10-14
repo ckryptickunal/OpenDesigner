@@ -182,6 +182,16 @@ Style presets from DC-L15-01, written as dial values [inferred placement; the le
 | Soft / neumorphic | 40 | 30 | 80 | special | 20 | shown only with a contrast warning (fails 3:1 non-text by design) [S-L15-060] |
 | Maximal | 95 | 85 | any | any | 95 | marketing surfaces only; too much complexity costs appeal more than too little [S-L15-047] |
 
+Two presets also carry a `build` object for what the dials cannot express: neo-brutalist builds 3px default borders and the `offset` elevation model (solid 4px shadows in the text color) [S-L15-006, DC-L19-67]; soft builds the `extruded` model (paired light and dark shadows, inset when pressed) [S-L15-060]. Sizes are [inferred] from `skills/opendesigner/references/styles.md`.
+
+### A11. Named styles and look words
+
+`synthesis/styles.json` (shipped as `references/styles.json`, listed in `references/style-catalog.md`) names the looks of `skills/opendesigner/references/styles.md` and the research that followed (U9), each grouped under one of the six presets above (or none, for layouts, textures, image treatments and drawings, which pair with a look). A look is a Q-dir-01 answer: it selects its preset, records `state.style` so DESIGN.md says "glassmorphism" rather than "preset glass", and adds its own dial values between the person's values and the preset's (explicit > style > preset > coupling). A style's dials are not moved by feel words, and none sets Warmth above 45, because a high Warmth turns the neutral greys beige (#efebe8 at 80, against #ebebeb at 50; `brand/showcase/styles/PROCESS-01-04.md`). A style's `build` can add to the preset's: claymorphism builds the `clay` model (a drop shadow plus two inner shadows) [S-L19-058]; mesh gradient builds gradient tokens [DC-L01-25]; risograph and the grain texture add a grain recipe [DC-L19-12]. Dial values are style-range midpoints [inferred] or the values the `brand/showcase/styles` studies tested.
+
+Every style sits on 12 trait axes (surface, edge, depth, shape, color, contrast, type, texture, ornament, layout, motion, theme). A style that carries only traits gets its preset, dials and build from them (engine `style_from_traits`), which is how the person's own and experimental styles work too: `engine.py style search|mix|mutate|explore|define` (`references/style-lab.md`) builds them on the same axes, repairs combinations that pile up effects, and keeps every floor. `traitWords` maps everyday words to single traits ("shiny" is a glossy surface), so a look with no name can still be found and built.
+
+`styleWords` maps everyday look words ("frosty", "soft buttons", "like a comic") to styles, best first [inferred, from the styles.md table]. A word that is only a look word starts the sketch from that style, recorded as `assumed`; a word that is also a feel word ("bold") keeps its macro and only suggests styles.
+
 ---
 ## B. Generation formulas: from dials and raw inputs to tokens
 
@@ -290,7 +300,10 @@ Every foreground/background pair is tested in every mode at build time (DC-L01-2
 - **Default two-layer recipe** (any band with shadows): a 1px contact shadow plus a soft blur scaled to elevation, neutral-tinted (Atlassian #1E1F21, Polaris rgba(26,26,26); no Tier A system uses hue-colored shadows), alpha 8-24% in light mode; in dark mode double the alpha and add a 1px light ring on overlays (Atlassian #BDBDBD at 12%) (DC-L04-12).
 - **Tonal** (36-55): surfaces sunken, default, raised, overlay (Atlassian) or five surface containers (Material); shadows only on floating UI (DC-L04-10, DC-L04-13).
 - **Glass** (81-100): blur and translucency on controls and navigation only; a solid fallback under Reduce Transparency and Increase Contrast; a 35% dimming layer under clear glass over bright content; never in the content layer (DC-L04-15, DC-L04-16 [S-L15-073]).
-- **Borders** at every band: 1px default, 2px selected and focus, 4px emphasis; state changes that alter width use inset box-shadow so layout does not jump (Primer) (DC-L04-07 [S-L04-024]).
+- **Borders** at every band: 1px default, 2px selected and focus, 4px emphasis; state changes that alter width use inset box-shadow so layout does not jump (Primer) (DC-L04-07 [S-L04-024]). `raw.borderDefault` (1 to 4) or a style's build moves the default; neo-brutalist uses 3px [S-L15-006].
+- **Models a style builds** (A10, A11), whatever the band: `offset` (solid, no blur, 4/6/8px, in the text color, plus `elevation.pressed` at 2px) [S-L15-006]; `extruded` (a light shadow up-left and a dark one down-right; pressed swaps both to inset) [S-L15-060]; `clay` (a soft drop shadow plus two inner shadows) [S-L19-058]. Inner and paired shadows are never an edge: controls keep a 3:1 border (DC-L19-67). Sizes [inferred].
+- **Gradients** (Q-color-25, or a style such as mesh gradient): DTCG `gradient` tokens whose stops alias colors, with kind, angle and OKLab interpolation in `$extensions`; `gradient.brand` is one hue between the two accent solids that on-accent text is checked on, and `gradient.mesh.*` are radial layers for marketing surfaces. Never on controls (DC-L01-25, DC-L19-12). **Grain** is an image asset, not a token (DC-L19-12): `texture.grain.opacity` holds its strength, the recipe sits in `$extensions`, and the CSS export draws a static noise that switches off under more contrast.
+- **Glass contrast:** text and icons on glass are checked over the worst content behind it (black under light glass, white under dark glass); the glass gets just opaque enough to pass (S-L15-078).
 
 ### B11. Motion from the Energy dial
 

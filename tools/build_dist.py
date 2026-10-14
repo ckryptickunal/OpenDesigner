@@ -16,7 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC, DIST = ROOT / "skills", ROOT / "dist"
 ALLOWED = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
-IGNORE = {"__pycache__", ".DS_Store"}
+IGNORE = {"__pycache__", ".DS_Store", "node_modules", "out", ".vite"}  # the painting engine must ship without installs or renders
 # claude.ai installs each uploaded skill on its own, so the sub-skills' zips carry the engine and the data it
 # reads (spec 8.2). In the repo and in plugin installs they use the sibling opendesigner skill instead.
 BUNDLE = {p: p for p in ("scripts/engine.py", "scripts/journey.py", "references/levers.json", "references/hooks.json",

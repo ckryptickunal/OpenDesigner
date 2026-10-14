@@ -7392,5 +7392,256 @@
    "visual surface",
    "OD: lines"
   ]
+ },
+ {
+  "id": "prin.style.glassmorphism",
+  "term": "glassmorphism",
+  "plain": "See-through panels that look like frosted glass, so you see a blur of what is behind them.",
+  "designer": "Translucent fill, background blur and a thin light edge over rich content. Use it on bars, sheets and menus, never on reading surfaces, and give it a solid twin.",
+  "engineer": "Q-dir-01 glass, or Depth above 80, builds the materials model: material.glass.blur (24px), color.surface.glass and color.surface.glass-fallback. Web uses backdrop-filter.",
+  "designer_says": "glassmorphism, frosted glass",
+  "code_name": "backdrop-filter, material.glass.blur",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L15-01",
+   "DC-L04-15",
+   "DC-L04-16"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "frosted glass",
+   "frosty",
+   "glassy",
+   "see-through",
+   "backdrop blur"
+  ]
+ },
+ {
+  "id": "prin.style.neumorphism",
+  "term": "neumorphism",
+  "plain": "Soft buttons that look pushed up out of the page, or pressed in, all one color.",
+  "designer": "Same-color surfaces with paired light and dark soft shadows. Tactile but vague: edges usually fail 3:1, so every control needs an added border or fill.",
+  "engineer": "Q-dir-01 soft selects the soft preset (roundness 80, colorfulness 20) and the lint warns neumorphic-preset. Paired and inset shadows are not generated yet (proposed).",
+  "designer_says": "neumorphism, soft UI",
+  "code_name": "paired box-shadow, inset",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L15-01",
+   "S-L15-060"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "soft UI",
+   "soft buttons",
+   "pillowy",
+   "new skeuomorphism"
+  ]
+ },
+ {
+  "id": "prin.style.claymorphism",
+  "term": "claymorphism",
+  "plain": "Puffy, round shapes that look made of soft clay or toy plastic.",
+  "designer": "Large radius, a soft outer shadow plus light and dark inner shadows, pastel color and 3D clay art. Friendly and cute; keep product controls calmer.",
+  "engineer": "No preset of its own: start from soft, then raise roundness above 80 and colorfulness. Inner shadows are not generated yet (proposed); 3D art is an asset (Q-img-06).",
+  "designer_says": "claymorphism, clay 3D",
+  "code_name": "box-shadow with inset pairs",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L15-01"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "clay",
+   "puffy",
+   "squishy",
+   "inflated 3D",
+   "soft 3D"
+  ]
+ },
+ {
+  "id": "prin.style.skeuomorphism",
+  "term": "skeuomorphism",
+  "plain": "Screens that copy real objects and materials, like a record player, a tape or wood.",
+  "designer": "Realistic textures, lighting and shadows that mimic physical objects. Useful as a metaphor, like a folder or trash can; as full realism it clutters screens and loads slowly.",
+  "engineer": "Mostly assets, not tokens: textures and objects use the H-motif hook (Q-img-07), custom controls Q-plat-06 custom, and Depth in the shadow-ladder band (56-80).",
+  "designer_says": "skeuomorphism, realism",
+  "code_name": "layered gradients and box-shadow",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "S-L15-008",
+   "DC-L15-01"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "realistic",
+   "real-world look",
+   "physical metaphor"
+  ]
+ },
+ {
+  "id": "prin.style.flat",
+  "term": "flat design",
+  "plain": "Plain solid colors with no shadows, no shine and no texture.",
+  "designer": "Solid fills, simple icons, hierarchy from color and size. Flat 2.0 brings subtle shadows back. Keep strong signs of what to click, or people search longer.",
+  "engineer": "Depth 0-15 builds the borders model with no shadows. The default flat2 preset (Q-dir-01) sets Depth 30: a ring plus a faint shadow.",
+  "designer_says": "flat design, flat 2.0",
+  "code_name": "box-shadow: none",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L15-01",
+   "S-L15-009",
+   "S-L15-004"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "flat",
+   "flat 2.0",
+   "semi-flat",
+   "no shadows"
+  ]
+ },
+ {
+  "id": "prin.style.neo-brutalism",
+  "term": "neo-brutalism",
+  "plain": "Bright flat colors with thick black lines and hard black shadows, like stickers.",
+  "designer": "Thick borders, a solid 4px offset shadow, 2-3 bold colors, 24-32px padding and a quirky display face over a neutral body face. Loud and indie.",
+  "engineer": "Q-dir-01 neo-brutalist selects the neobrutal preset (roundness 5, depth 0, colorfulness 80). Thick borders and the offset shadow need overrides of border.width.default and elevation.raised.",
+  "designer_says": "neo-brutalism, neubrutalism",
+  "code_name": "box-shadow: 4px 4px 0",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L15-01",
+   "S-L15-006"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "neubrutalism",
+   "neo brutalist",
+   "black borders",
+   "chunky outlines"
+  ]
+ },
+ {
+  "id": "prin.style.swiss",
+  "term": "Swiss style",
+  "plain": "A strict, tidy grid with plain bold letters lined up on the left and lots of space.",
+  "designer": "International Typographic Style: a column grid, neo-grotesque type set flush left, big size jumps, asymmetric layouts, neutral colors plus one accent.",
+  "engineer": "Q-type-03 neo-grotesque, Q-dir-05 start and the flat2 preset, with roundness 0-25 and colorfulness 11-45. The grid itself is layout, not a token.",
+  "designer_says": "Swiss style, International Typographic Style",
+  "code_name": "display: grid; text-align: start",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L02-02"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "International Typographic Style",
+   "Swiss design",
+   "grid style",
+   "Helvetica look"
+  ]
+ },
+ {
+  "id": "prin.style.editorial",
+  "term": "editorial style",
+  "plain": "Pages that read like a good magazine: big titles, calm text and large photos.",
+  "designer": "Serif display headlines, dramatic size jumps (1.333 or more), 60-75 character lines, pull quotes and thin rules. For reading products and long content.",
+  "engineer": "Q-type-03 serif, Q-dir-03 dramatic (type ratio 1.333) and Q-dir-04 lines. Body text stays 16px or larger; limit lines with max-width: 65ch.",
+  "designer_says": "editorial, magazine layout",
+  "code_name": "max-width: 65ch",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L15-02",
+   "DC-L15-05"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "magazine style",
+   "magazine layout",
+   "long-form"
+  ]
+ },
+ {
+  "id": "prin.style.bento",
+  "term": "bento grid",
+  "plain": "Content in neat boxes of different sizes, like the parts of a lunch box.",
+  "designer": "Tiles of two or three spans in one grid with one gap; one idea per tile, the hero tile largest. A layout that borrows its look from another style.",
+  "engineer": "CSS grid with grid-column and grid-row spans; Q-dir-04 containers. Keep DOM order equal to reading order (WCAG 1.3.2) and reflow to one column.",
+  "designer_says": "bento grid, bento box layout",
+  "code_name": "grid-column: span 2",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "S-L15-065",
+   "S-L15-062"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "bento",
+   "bento box",
+   "tile grid",
+   "feature tiles"
+  ]
+ },
+ {
+  "id": "prin.style.mesh-gradient",
+  "term": "mesh gradient",
+  "plain": "Soft clouds of a few colors that melt into each other, like the northern lights.",
+  "designer": "Three to five colors blending in many directions, often blurred and slowly moving. Marketing and brand moments only, never on buttons or forms.",
+  "engineer": "Stacked radial-gradient layers or blurred shapes, interpolated in OKLab. DTCG gradient tokens hold stops only; the engine does not generate gradients yet (proposed).",
+  "designer_says": "mesh gradient, aurora gradient",
+  "code_name": "radial-gradient layers",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L01-25"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "aurora gradient",
+   "aurora",
+   "gradient blur",
+   "gradient background",
+   "northern lights"
+  ]
+ },
+ {
+  "id": "prin.style.grain",
+  "term": "grain texture",
+  "plain": "A fine speckle over colors, like old film or printed paper.",
+  "designer": "Fine noise at 3-8% strength over fills and gradients. It warms flat color and hides gradient banding; keep it off body text and keep it still.",
+  "engineer": "An SVG feTurbulence image on a pseudo-element with mix-blend-mode: overlay. Not a token yet (proposed); record it with the H-motif hook (Q-img-07).",
+  "designer_says": "grain, noise texture",
+  "code_name": "feTurbulence overlay",
+  "source": [
+   "skills/opendesigner/references/styles.md"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "grain",
+   "noise",
+   "film grain",
+   "grainy",
+   "paper texture"
+  ]
+ },
+ {
+  "id": "prin.style.comic",
+  "term": "comic style",
+  "plain": "Looks like a comic book, with thick ink outlines, bright flat colors, dots and speech bubbles.",
+  "designer": "Black outlines, primary colors, halftone dot shading, speech balloons and burst shapes; pop art is its gallery cousin. Keep hand lettering to short labels.",
+  "engineer": "Start from the neobrutal preset with colorfulness above 88. Halftone is a radial-gradient dot pattern; drawings are assets (Q-img-04, opendesigner-illustrate).",
+  "designer_says": "comic style, pop art, halftone",
+  "code_name": "radial-gradient dot pattern",
+  "source": [
+   "skills/opendesigner/references/styles.md"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "comic",
+   "comic book",
+   "pop art",
+   "cartoon",
+   "halftone",
+   "speech bubbles"
+  ]
  }
 ]

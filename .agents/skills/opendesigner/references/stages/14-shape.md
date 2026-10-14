@@ -27,5 +27,5 @@ Zoom 1 broad · weight high · changes 4 decisions · class G · cards DC-L09-01
     - Now: Corners set by size, like Spectrum's 6-10 px, or matched to the container, as Apple does. As it grows: New parts get the right corner from their size or container, without a new decision. [inferred]
 - **Default:** 6px controls, 8-12px containers *Source:* L09 shared default row 7 (16 of 23 control defaults at 4-8px, median 6) [L09 A1; DC-L09-01]; a radius factor slider as Radix offers.
 - **Show:** the component sheet morphing as the slider moves; the focus ring follows the radius.
-- **Use / avoid:** use sharp corners when density and precision are brand values (data, developer tools) and pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
+- **Use / avoid:** use 0-2px corners only as a deliberate brand statement (GOV.UK, Carbon v11 buttons): top-tier data and developer tools use about 6px controls, 8px panels and 12px overlays [DC-L23-02]; use pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
 - **Skip:** yes, 6px.

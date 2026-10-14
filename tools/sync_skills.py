@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "skills"
 TARGETS = [ROOT / ".agents" / "skills", ROOT / ".claude" / "skills"]
-IGNORE = {"__pycache__", ".DS_Store"}
+IGNORE = {"__pycache__", ".DS_Store", "node_modules", "out", ".vite"}  # the painting engine must ship without installs or renders
 
 
 def files(base):

@@ -6,7 +6,7 @@
     {
       "name": "opendesigner",
       "source": "./",
-      "description": "Five skills: opendesigner (the interview), opendesigner-extract (learn from a reference without copying identity), opendesigner-extend (change a system safely), opendesigner-export (code, Figma, Paper), opendesigner-illustrate (open-licence illustrations recolored to your tokens).",
+      "description": "Eight skills: opendesigner (the interview), opendesigner-extract (learn from a reference without copying identity), opendesigner-extend (change a system safely), opendesigner-export (code, Figma, Paper), opendesigner-illustrate (open-licence illustrations recolored to your tokens), opendesigner-review (check a built UI at every size, theme, state and motion, with measurements and evidence), opendesigner-paint (original art and films painted in code in your palette), opendesigner-preflight (the silly mistakes to check before exporting anything visual).",
       "category": "design",
       "tags": ["design-system", "design-tokens", "theme", "figma"]
     }

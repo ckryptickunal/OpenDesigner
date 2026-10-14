@@ -107,6 +107,9 @@ def finish(q):
         "skip": f.get("Skip", ""), "evidence": {"cards": sorted(set(DC.findall(ev))), "sources": sorted(set(SID.findall(ev)))},
         "merges": re.findall(r"\b([KBPD]\d+(?:\.\d+)?)\b", f.get("Merges", "")),
     })
+    fol = re.match(r"^(Q-[a-z]+-\d\d)\s+(.+)$", f.get("Default follows", ""))
+    if fol:  # the default depends on an earlier answer: Q-aud-01 `dense` = `compact`, ...
+        q["default_follows"] = {"question": fol.group(1), "map": dict(re.findall(r"`([^`]+)` = `([^`]+)`", fol.group(2)))}
     st = f.get("Status", "")
     q["status"] = "planned" if st.lower().startswith("planned") else "active"
     if q["status"] == "planned":

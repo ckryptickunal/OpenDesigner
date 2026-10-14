@@ -1,0 +1,940 @@
+[
+  {
+    "id": "low-poly",
+    "name": "Low poly",
+    "aliases": ["low-poly art", "polygon art", "faceted geometric", "triangulated art"],
+    "plain": "Pictures built from many small flat triangles, like a cut gem.",
+    "people_say": ["made of triangles", "faceted", "like a gem", "geometric 3D", "old video game 3D", "crystal look", "angular mountains"],
+    "origin": "Hardware-limited 3D games of the mid 1990s, taken up as a deliberate art style around late 2013 [S1]",
+    "defining": [
+      "Surfaces broken into small flat polygons placed side by side, giving an angular, minimal look [S2]",
+      "Few polygons on purpose: a reference elephant uses 346 triangles against 1.89 million in the detailed version [S1]",
+      "Each facet usually holds one flat colour, so light steps from face to face rather than blending [inferred]",
+      "A drawn or rendered asset (illustration or 3D). Interface tokens can only echo it with sharp corners, clipped polygon shapes and two-tone fills"
+    ],
+    "code": "clip-path: polygon(50% 0, 100% 38%, 82% 100%, 18% 100%, 0 38%); background: linear-gradient(135deg, #3b82f6 50%, #1e40af 50%);",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "tonal",
+      "shape": "geometric",
+      "color": "tonal",
+      "contrast": "normal",
+      "type": "geometric",
+      "texture": "none",
+      "ornament": "3d-objects",
+      "layout": "full-bleed",
+      "motion": "subtle",
+      "theme": "both"
+    },
+    "ui_fit": "illustration-only",
+    "fits": "Game sites, outdoor and tech brand heroes, posters, wallpapers and onboarding scenes.",
+    "goes_wrong": "Auto-triangulated photo filters that look like dated stock backgrounds.",
+    "accessibility": "Busy facets behind text drop contrast: keep text on solid panels at 4.5:1 and stop rotating 3D scenes under reduced motion.",
+    "related": ["voxel", "isometric", "cel-shaded", "pixel-art"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Low_poly", "supports": "Definition, 1990s console origin, deliberate style from late 2013, 346 vs 1.89 million triangle example, Mirror Moon EP"},
+      {"id": "S2", "url": "https://www.sessions.edu/notes-on-design/whats-the-deal-with-low-poly-art/", "supports": "Simple geometric shapes side by side, angular minimalist look, render-time origin, 2,520-polygon portrait, use by illustrators and 3D artists"}
+    ],
+    "examples": [
+      {"name": "Mirror Moon EP (game, 2013)", "url": "https://en.wikipedia.org/wiki/Low_poly", "what": "Cited as the oldest Steam title tagged low poly, an early deliberate use of the style"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "voxel",
+    "name": "Voxel art",
+    "aliases": ["voxels", "3D pixel art", "blocky 3D", "cube art"],
+    "plain": "Scenes built from tiny coloured cubes, like digital LEGO.",
+    "people_say": ["made of cubes", "like Minecraft", "blocky 3D", "LEGO look", "3D pixel art", "tiny cube world", "chunky diorama"],
+    "origin": "1990s video game production, kept alive by retro-styled games and art [S1]",
+    "defining": [
+      "Every form is built from equal coloured cubes; detail depends on cube count, from about ten for a crude house to thousands [S1]",
+      "The 3D cousin of pixel art: each voxel is one value on a regular 3D grid [S2]",
+      "Usually shown as small dioramas from a fixed three-quarter angle with soft rendered light [inferred]",
+      "A rendered 3D asset made in editors such as MagicaVoxel or Qubicle [S1]. Tokens can only echo it with square corners and stepped, unblurred shadows"
+    ],
+    "code": "border-radius: 0; box-shadow: 8px 0 0 #2f6f3e, 0 8px 0 #24572f, 8px 8px 0 #1b4223;",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "extruded",
+      "shape": "pixel",
+      "color": "vivid",
+      "contrast": "normal",
+      "type": "pixel",
+      "texture": "none",
+      "ornament": "3d-objects",
+      "layout": "full-bleed",
+      "motion": "subtle",
+      "theme": "both"
+    },
+    "ui_fit": "illustration-only",
+    "fits": "Games, kids' learning and maker products, playful heroes, empty states and 404 pages.",
+    "goes_wrong": "Reads as a Minecraft copy, or the cube grid is too coarse to show the subject.",
+    "accessibility": "Scenes are decorative: give them a short text description or empty alt text, and stop spinning dioramas under reduced motion.",
+    "related": ["pixel-art", "isometric", "low-poly", "claymorphism"],
+    "sources": [
+      {"id": "S1", "url": "https://www.adobe.com/uk/creativecloud/illustration/discover/digital-art/voxel-art.html", "supports": "Definition as coloured 3D boxes, cube counts, 1990s game origin, LEGO comparison, MagicaVoxel and Qubicle, Minecraft and Crossy Road"},
+      {"id": "S2", "url": "https://en.wikipedia.org/wiki/Voxel", "supports": "Voxel as a value on a regular 3D grid akin to a pixel; voxel art as a style analogous to pixel art"}
+    ],
+    "examples": [
+      {"name": "Minecraft", "url": "https://www.adobe.com/uk/creativecloud/illustration/discover/digital-art/voxel-art.html", "what": "Named as a voxel-style game; its whole world is drawn as cubes"},
+      {"name": "Crossy Road", "url": "https://www.adobe.com/uk/creativecloud/illustration/discover/digital-art/voxel-art.html", "what": "Named as a game using the retro voxel look"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "paper-cut",
+    "name": "Layered paper cut",
+    "aliases": ["papercraft", "paper art", "cut paper", "kirigami", "shadow box", "tactile illustration", "origami"],
+    "plain": "Shapes cut from coloured paper, stacked so each layer casts shadow.",
+    "people_say": ["cut out of paper", "paper layers", "papercraft", "shadow box", "crafty paper look", "like a pop-up book", "handmade paper scene"],
+    "origin": "Papercutting began in China, oldest surviving piece 6th century [S2]; layered, photographed paper illustration grew in editorial and ad work [S1]",
+    "defining": [
+      "Flat, matte colour shapes with crisp cut edges, made by hand and photographed [S1]",
+      "Depth from stacking: makers lift layers on foam board so each casts a small soft shadow [S3]",
+      "Soft lighting and shadows define the form, often leaving clear space for copy [S1]",
+      "The craft piece or a 3D render is the asset. In UI, tokens can carry it as flat fills plus two to four small stacked soft shadows [inferred]"
+    ],
+    "code": "box-shadow: 0 1px 1px rgba(0,0,0,.12), 0 3px 4px rgba(0,0,0,.10), 0 8px 12px rgba(0,0,0,.08);",
+    "traits": {
+      "surface": "paper",
+      "edge": "none",
+      "depth": "layered",
+      "shape": "irregular",
+      "color": "vivid",
+      "contrast": "normal",
+      "type": "humanist",
+      "texture": "paper",
+      "ornament": "illustration",
+      "layout": "layered",
+      "motion": "parallax",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Editorial covers, children's and education brands, seasonal campaigns, onboarding and empty-state scenes.",
+    "goes_wrong": "Shadows too dark or too many layers, so it turns muddy instead of crisp.",
+    "accessibility": "Layer shadows are decorative: text still needs 4.5:1 on the paper colour, and parallax layers should stop under reduced motion.",
+    "related": ["claymorphism", "skeuomorphism", "felt-and-embroidery", "naive-crayon"],
+    "sources": [
+      {"id": "S1", "url": "https://www.creativebloq.com/graphic-design/paper-art-1131666", "supports": "Folded, laser-cut and layered paper in contemporary design; photographed paper leaves with space for copy; soft light and shadow; Hattie Newman for Canon; Zim & Zou for Hermes"},
+      {"id": "S2", "url": "https://en.wikipedia.org/wiki/Papercutting", "supports": "Chinese origin and 6th-century oldest surviving example; jianzhi, papel picado, scherenschnitte, kirigami traditions"},
+      {"id": "S3", "url": "https://www.creativebloq.com/illustration/beginners-guide-tactile-illustration-11410459", "supports": "Owen Gildersleeve raises paper layers with foam board to add depth; tactile illustration defined"}
+    ],
+    "examples": [
+      {"name": "Hattie Newman paper city for Canon", "url": "https://www.creativebloq.com/graphic-design/paper-art-1131666", "what": "A detailed paper city built for a Canon expo"},
+      {"name": "Zim & Zou installations for Hermes, Dubai", "url": "https://www.creativebloq.com/graphic-design/paper-art-1131666", "what": "Colourful paper sculptures used in store windows"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "stained-glass",
+    "name": "Stained glass",
+    "aliases": ["leaded glass", "cathedral window", "lead light", "glass mosaic"],
+    "plain": "Bright see-through colour pieces joined by thick dark lines.",
+    "people_say": ["church window", "stained glass", "jewel colours", "glowing glass pieces", "thick black outlines", "mosaic window", "cathedral look"],
+    "origin": "European churches and cathedrals, at its height between 1150 and 1550 [S1]",
+    "defining": [
+      "Colour sits in the glass itself, tinted with metal oxides, so hues glow when lit from behind [S1][S2]",
+      "Pieces are held in H-shaped lead strips (cames) whose dark lines are part of the design [S1]",
+      "Drawn from a full-size cartoon; faces and shading painted in grey-black vitreous paint and fired on [S1][S3]",
+      "An illustration or pattern asset. In UI, tokens can carry only the thick dark outline, saturated fills and a back-lit glow [inferred]"
+    ],
+    "code": "border: 4px solid #1b1b1f; background: radial-gradient(circle at 50% 30%, #ffd166, #e63946 70%); filter: saturate(1.2);",
+    "traits": {
+      "surface": "translucent",
+      "edge": "thick-outline",
+      "depth": "glow",
+      "shape": "irregular",
+      "color": "vivid",
+      "contrast": "high",
+      "type": "display",
+      "texture": "pattern",
+      "ornament": "ornamental",
+      "layout": "collage",
+      "motion": "subtle",
+      "theme": "dark-first"
+    },
+    "ui_fit": "illustration-only",
+    "fits": "Heritage, church and cultural brands, fantasy games, posters, book covers and seasonal illustration.",
+    "goes_wrong": "Black lead lines everywhere make a heavy, busy page that crowds out text.",
+    "accessibility": "Vivid back-lit colour behind text fails easily: put text on a solid panel at 4.5:1 and never rely on hue alone.",
+    "related": ["art-deco", "comic", "neon-sign", "glassmorphism"],
+    "sources": [
+      {"id": "S1", "url": "https://www.vam.ac.uk/articles/stained-glass-an-introduction", "supports": "1150 to 1550 peak, metallic oxides colour the glass, vitreous paint, H-shaped lead cames as an integral part of the design"},
+      {"id": "S2", "url": "https://en.wikipedia.org/wiki/Stained_glass", "supports": "Glass coloured by metallic salts, pieces held by lead cames in a rigid frame"},
+      {"id": "S3", "url": "https://www.vam.ac.uk/articles/how-was-it-made-stained-glass", "supports": "Making steps: full-size cartoon, cutting coloured glass, enamel painting, leading"}
+    ],
+    "examples": [],
+    "confidence": "medium"
+  },
+  {
+    "id": "watercolour",
+    "name": "Watercolour",
+    "aliases": ["watercolor", "wash", "painterly", "aquarelle"],
+    "plain": "Soft see-through paint that bleeds and pools on paper.",
+    "people_say": ["watercolor", "painted look", "soft and dreamy", "paint bleeding", "hand-painted", "artsy wash", "pastel paint splash"],
+    "origin": "A continuous art medium from the Renaissance, matured in 18th and 19th century England [S2]; a recurring logo, web and packaging trend [S1]",
+    "defining": [
+      "Colour bleeds into the page and into neighbouring colours [S1]",
+      "Transparent layers let the paper and lower layers show through [S2]",
+      "Visible texture and imperfect-on-purpose edges and splotches [S1]",
+      "Blends of three colours or fewer, or they turn muddy [S1]",
+      "A painted or scanned image asset. Tokens carry only the paper-white ground, soft tints and an optional texture image"
+    ],
+    "code": "background: radial-gradient(ellipse at 30% 40%, rgba(96,165,250,.35), transparent 60%), #fbf8f2;",
+    "traits": {
+      "surface": "textured",
+      "edge": "rough",
+      "depth": "flat",
+      "shape": "irregular",
+      "color": "pastel",
+      "contrast": "low",
+      "type": "serif",
+      "texture": "paper",
+      "ornament": "illustration",
+      "layout": "minimal",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Wellness, food and drink, weddings, children's books, stationery and gentle brand accents.",
+    "goes_wrong": "Too many colours blended into brown mud, or paint placed behind body text.",
+    "accessibility": "Washes are low contrast: never set text over them without a solid backing that holds 4.5:1.",
+    "related": ["organic", "sumi-e-ink", "naive-crayon", "grain"],
+    "sources": [
+      {"id": "S1", "url": "https://99designs.com/blog/trends/the-watercolor-design-trend/", "supports": "Watercolour as a design trend; colour bleed, texture, imperfect-on-purpose feel; three colours or fewer advice; use as an accent in logos"},
+      {"id": "S2", "url": "https://en.wikipedia.org/wiki/Watercolor_painting", "supports": "Renaissance continuity, English watercolour school, transparency and glazing layers, washes"}
+    ],
+    "examples": [],
+    "confidence": "high"
+  },
+  {
+    "id": "chalkboard",
+    "name": "Chalkboard",
+    "aliases": ["blackboard", "chalk lettering", "chalk art", "cafe board"],
+    "plain": "White chalk writing and doodles on a dark green or black board.",
+    "people_say": ["chalkboard", "cafe menu board", "chalk writing", "school blackboard", "hand-lettered menu", "dusty chalk", "bistro sign"],
+    "origin": "Classroom slate boards; the word chalkboard came with green enamel boards from 1930 [S2]; revived as retro hand-lettered signage by letterers such as Dana Tanamachi [S1]",
+    "defining": [
+      "Matte dark ground, usually black or dark green, with white or coloured chalk marks [S2]",
+      "Retro hand lettering mixed with doodles, banners and borders [S1]",
+      "Dusty, uneven strokes with smudges and eraser haze [inferred]",
+      "Lettering and texture are drawn assets. Tokens carry the dark matte surface, off-white text and a faint noise texture"
+    ],
+    "code": "background: #22302a url(chalk-dust.png); color: #f2efe6; text-shadow: 0 0 1px rgba(255,255,255,.6);",
+    "traits": {
+      "surface": "textured",
+      "edge": "rough",
+      "depth": "flat",
+      "shape": "irregular",
+      "color": "muted",
+      "contrast": "high",
+      "type": "handwritten",
+      "texture": "grain",
+      "ornament": "illustration",
+      "layout": "dense",
+      "motion": "still",
+      "theme": "dark"
+    },
+    "ui_fit": "marketing",
+    "fits": "Cafes, bakeries, bars and restaurant menus, teaching products, hand-made event signs.",
+    "goes_wrong": "Long text set in chalk fonts, which becomes hard to read at small sizes.",
+    "accessibility": "Off-white on dark passes easily, but rough chalk fonts hurt legibility: keep body text in a plain face and use chalk for headings only.",
+    "related": ["blueprint", "naive-crayon", "sketchy-wireframe", "organic"],
+    "sources": [
+      {"id": "S1", "url": "https://www.printmag.com/daily-heller/chalk-talk-1/", "supports": "Dana Tanamachi's chalk lettering blending retro typography and craft; window displays for Rugby Ralph Lauren, work for Ace Hotel"},
+      {"id": "S2", "url": "https://en.wikipedia.org/wiki/Blackboard", "supports": "Dark matte black or green boards, green enamel from 1930 and the word chalkboard, A-frame boards for restaurant and bar specials"}
+    ],
+    "examples": [
+      {"name": "Rugby Ralph Lauren window displays by Dana Tanamachi", "url": "https://www.printmag.com/daily-heller/chalk-talk-1/", "what": "Chalk type recalling 1940s signage, drawn on store windows"}
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "blueprint",
+    "name": "Blueprint",
+    "aliases": ["cyanotype", "white-on-blue plan", "architect plan", "blueprint grid"],
+    "plain": "White line drawings on a deep blue sheet, often with a grid.",
+    "people_say": ["blueprint", "architect plans", "white lines on blue", "engineering plan", "construction drawing look", "inventor sketch", "blue grid paper"],
+    "origin": "Cyanotype process found by Sir John Herschel in 1842, used to copy technical drawings until diazo prints took over from the 1940s [S1][S2]",
+    "defining": [
+      "Prussian-blue ground with white negative lines [S1][S2]",
+      "One colour only: blue, white and tints between them [S2]",
+      "Thin, even technical lines, often over a fine square grid [inferred]",
+      "Plans and diagrams are drawn assets, but tokens carry the rest in UI: blue surface, white hairline borders and a CSS grid background"
+    ],
+    "code": "background: #1d3f8f linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px) 0 0 / 24px 24px; color: #fff;",
+    "traits": {
+      "surface": "solid",
+      "edge": "hairline",
+      "depth": "flat",
+      "shape": "sharp",
+      "color": "monochrome",
+      "contrast": "high",
+      "type": "mono",
+      "texture": "pattern",
+      "ornament": "illustration",
+      "layout": "grid",
+      "motion": "still",
+      "theme": "dark"
+    },
+    "ui_fit": "marketing",
+    "fits": "Architecture, engineering, hardware and developer tools, launches that explain how something is built.",
+    "goes_wrong": "Hairlines too faint on blue, or a cliche when nothing is actually being explained.",
+    "accessibility": "White on deep blue is high contrast, but faint grid lines and thin type can fall below 3:1: keep text solid white and treat the grid as decoration.",
+    "related": ["technical-drawing", "terminal", "swiss", "chalkboard"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Blueprint", "supports": "Contact print of technical drawings, Herschel 1842, white-on-blue from cyanotype, diazo whiteprints from the early 1940s"},
+      {"id": "S2", "url": "https://www.vam.ac.uk/blog/caring-for-our-collections/a-blueprint-for-the-future-cyanotypes-by-anna-atkins", "supports": "Cyanotype 1842, Prussian blue, white negative images, monochromatic blue and white"}
+    ],
+    "examples": [
+      {"name": "Anna Atkins cyanotype botanical studies (1854), V&A", "url": "https://www.vam.ac.uk/blog/caring-for-our-collections/a-blueprint-for-the-future-cyanotypes-by-anna-atkins", "what": "White plant silhouettes on Prussian blue, the root of the blueprint look"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "technical-drawing",
+    "name": "Technical drawing",
+    "aliases": ["schematic", "engineering drawing", "technical illustration", "spec sheet", "aesthetics of technical information"],
+    "plain": "Precise thin black lines, measurements, labels and tiny data notes.",
+    "people_say": ["engineering drawing", "schematic", "like a diagram", "spec sheet look", "technical", "labels and measurements", "instruction manual style", "blueprint but on white"],
+    "origin": "Drafting conventions codified in standards such as ISO 128 [S1]; named as a branding trend for 2026 [S2]",
+    "defining": [
+      "Shared conventions for line styles, symbols, lettering and page layout make drawings unambiguous [S1]",
+      "Orthographic views, cross sections and dimension lines [S1]",
+      "Tight type overlays, grids, timestamps and tiny metrics used as texture [S2]",
+      "Mostly carried by tokens: hairline borders, mono or condensed caps, numbered labels and a strict grid. Diagrams themselves are assets"
+    ],
+    "code": "border: 1px solid #111; font: 500 11px/1.3 ui-monospace, monospace; letter-spacing: .04em; text-transform: uppercase;",
+    "traits": {
+      "surface": "solid",
+      "edge": "hairline",
+      "depth": "flat",
+      "shape": "sharp",
+      "color": "neutral-accent",
+      "contrast": "high",
+      "type": "mono",
+      "texture": "none",
+      "ornament": "geometric-shapes",
+      "layout": "grid",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "core-ui",
+    "fits": "Hardware, sportswear and performance brands, developer tools, data products and spec pages.",
+    "goes_wrong": "Fake data and decorative numbers that mean nothing, set too small to read.",
+    "accessibility": "Micro labels often drop under 12px and hairlines under 3:1: keep real text at body size and 4.5:1, and treat tiny marks as decoration.",
+    "related": ["blueprint", "swiss", "terminal", "minimal-monochrome"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Technical_drawing", "supports": "Visual language of symbols, line styles and layout; ISO 128; orthographic and section views"},
+      {"id": "S2", "url": "https://www.itsnicethat.com/features/forward-thinking-graphic-trends-2026-graphic-design-120126", "supports": "The aesthetics of technical information as a 2026 trend: diagrams, metrics, grids, timestamps; Astrae Studio for Nike"}
+    ],
+    "examples": [
+      {"name": "Astrae Studio campaigns for Nike and Astrae Sports", "url": "https://www.itsnicethat.com/features/forward-thinking-graphic-trends-2026-graphic-design-120126", "what": "Grids and technical symbols used as page furniture"}
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "liquid-metal",
+    "name": "Liquid metal",
+    "aliases": ["chrome", "chrometype", "chromic graphics", "liquid chrome", "mercury"],
+    "plain": "Shiny melted silver, like mirror chrome poured into letters.",
+    "people_say": ["chrome letters", "liquid metal", "shiny silver", "mercury", "melted metal", "mirror finish", "futuristic shiny"],
+    "origin": "Grew from metal-music lettering and acid graphics into youth-culture branding [S1]; back in tech launches in 2025 [S2]",
+    "defining": [
+      "Gleaming 3D surfaces with sharp mirror reflections and a computerised feel [S1]",
+      "Sinuous, dripping or plumped letterforms [S1]",
+      "Often animated as flowing reflections, tuned by refraction and speed [S2]",
+      "Made with 3D rendering or shaders, so it is an asset. Tokens can only fake a still version with a steep grey gradient clipped to text"
+    ],
+    "code": "background: linear-gradient(180deg, #fff 0%, #a7b0ba 45%, #2b2f36 52%, #d9dee3 100%); -webkit-background-clip: text; background-clip: text; color: transparent;",
+    "traits": {
+      "surface": "metallic",
+      "edge": "none",
+      "depth": "extruded",
+      "shape": "blob",
+      "color": "metallic",
+      "contrast": "high",
+      "type": "display",
+      "texture": "none",
+      "ornament": "3d-objects",
+      "layout": "full-bleed",
+      "motion": "kinetic",
+      "theme": "dark-first"
+    },
+    "ui_fit": "marketing",
+    "fits": "Music, fashion, sneaker and youth-culture launches, product event invites and logo moments.",
+    "goes_wrong": "Melted type nobody can read, and a dated cliche when used on everything.",
+    "accessibility": "Reflections swing from white to near black so parts of letters vanish: keep a solid fallback colour, real text for screen readers, and stop the flow under reduced motion.",
+    "related": ["y2k", "holographic", "dark-luxe", "neon-sign"],
+    "sources": [
+      {"id": "S1", "url": "https://eyeondesign.aiga.org/the-futuristic-gleam-of-liquid-metal-is-everywhere-right-now-heres-why/", "supports": "Names (liquid metal, chromic graphics, chrometype), gleaming 3D type, computerised look, metal-scene and acid-graphics roots, Dazed beauty identity"},
+      {"id": "S2", "url": "https://www.creativebloq.com/design/logos-icons/from-apple-to-nike-im-mesmerised-by-these-hypnotising-chrome-logos", "supports": "Paper's open-source liquid-metal logo tool (February 2025), inspired by Apple event invites; refraction and speed controls"}
+    ],
+    "examples": [
+      {"name": "Paper liquid-metal logo tool", "url": "https://www.creativebloq.com/design/logos-icons/from-apple-to-nike-im-mesmerised-by-these-hypnotising-chrome-logos", "what": "Turns any logo into animated flowing chrome"},
+      {"name": "Dazed beauty site identity", "url": "https://eyeondesign.aiga.org/the-futuristic-gleam-of-liquid-metal-is-everywhere-right-now-heres-why/", "what": "A chromed-out identity for a magazine's beauty site"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "holographic",
+    "name": "Holographic foil",
+    "aliases": ["iridescent", "holo", "pearlescent", "oil slick", "rainbow foil"],
+    "plain": "Shiny rainbow surface that changes colour as it tilts.",
+    "people_say": ["holographic", "rainbow shiny", "iridescent", "like a hologram sticker", "oil slick colours", "unicorn shimmer", "pearly"],
+    "origin": "Packaging foil finish that went mainstream in the late 2010s [S1][S2]",
+    "defining": [
+      "Colour shifts through pink, green and blue as the light moves [S3]",
+      "Usually set against black or white grounds with simple graphics [S2]",
+      "Used as a foil-stamped accent or a full-pack wrap [S1][S3]",
+      "A physical finish or an animated render. In UI, tokens can only imitate it with a multi-stop pastel gradient on small accents, ideally moving with the pointer"
+    ],
+    "code": "background: linear-gradient(115deg, #ffd6f5, #c9f0ff 35%, #d8ffd1 60%, #fff4c2 85%); background-size: 200% 200%;",
+    "traits": {
+      "surface": "metallic",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "rounded",
+      "color": "rainbow",
+      "contrast": "low",
+      "type": "geometric",
+      "texture": "none",
+      "ornament": "none",
+      "layout": "minimal",
+      "motion": "subtle",
+      "theme": "both"
+    },
+    "ui_fit": "marketing",
+    "fits": "Beauty, drinks, fashion and music packaging, collectible cards and small premium accents.",
+    "goes_wrong": "Whole surfaces in rainbow sheen with pale text on top, which looks cheap and is unreadable.",
+    "accessibility": "Pastel sheen gives low contrast: keep text on solid black or white, and stop tilt shimmer under reduced motion.",
+    "related": ["liquid-metal", "y2k", "mesh-gradient", "frutiger-aero"],
+    "sources": [
+      {"id": "S1", "url": "https://thedieline.com/20-mesmerizing-holographic-and-iridescent-packaging-designs/", "supports": "Holographic foil and iridescent finishes becoming mainstream in packaging"},
+      {"id": "S2", "url": "https://99designs.com/blog/trends/packaging-design-trends-2020/", "supports": "Holographic effects on black or white backgrounds as a 2020 packaging trend; shiny multi-coloured metallics"},
+      {"id": "S3", "url": "https://thedieline.com/lumee-turns-light-into-the-whole-design/", "supports": "Lumee pouch shifting through pink, green and blue; foil-stamped wordmark"}
+    ],
+    "examples": [
+      {"name": "Lumee coffee by Studio July", "url": "https://thedieline.com/lumee-turns-light-into-the-whole-design/", "what": "Holographic pouch with a foil-stamped wordmark and a plain paper label"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "neon-sign",
+    "name": "Neon sign",
+    "aliases": ["neon glow", "neon lights", "glow text", "tube lighting"],
+    "plain": "Glowing coloured tube letters lighting up a dark wall.",
+    "people_say": ["neon sign", "glowing letters", "night bar sign", "neon lights", "glow effect", "Vegas sign", "electric glow"],
+    "origin": "Georges Claude's neon tubes, first shown at the Paris Motor Show in December 1910 [S1]",
+    "defining": [
+      "Single continuous tube lines bent into letters or pictures, glowing on a dark ground [S1]",
+      "A bright white core with wider coloured halos, built from several stacked shadows [S2]",
+      "True neon glows reddish orange; other colours come from other gases and coatings [S1]",
+      "Optional flicker where the glow drops out in quick flashes [S2]",
+      "Carried by tokens: dark surface plus text-shadow or box-shadow glow. Bent-tube lettering is a typeface or drawn asset"
+    ],
+    "code": "color: #fff; text-shadow: 0 0 4px #fff, 0 0 10px #fff, 0 0 20px #ff2bd6, 0 0 40px #ff2bd6, 0 0 80px #ff2bd6;",
+    "traits": {
+      "surface": "luminous",
+      "edge": "glow",
+      "depth": "glow",
+      "shape": "rounded",
+      "color": "neon",
+      "contrast": "high",
+      "type": "script",
+      "texture": "none",
+      "ornament": "none",
+      "layout": "minimal",
+      "motion": "subtle",
+      "theme": "dark"
+    },
+    "ui_fit": "marketing",
+    "fits": "Bars, nightlife, music and gaming events, night-mode accents and sign-style headings.",
+    "goes_wrong": "Glow so wide the letters blur, and fast flicker on every element.",
+    "accessibility": "Halos blur edges and flicker can trigger seizures: keep the core text solid at 4.5:1, never flash more than three times a second, and remove flicker under reduced motion.",
+    "related": ["dark-luxe", "y2k", "terminal", "liquid-metal"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Neon_sign", "supports": "Georges Claude, Paris Motor Show December 1910; reddish-orange true neon; other colours from gases and phosphor coatings; bent glass tubes"},
+      {"id": "S2", "url": "https://css-tricks.com/how-to-create-neon-text-with-css/", "supports": "Stacked text-shadow glow with a white inner glow and wider coloured glow; flicker keyframes"}
+    ],
+    "examples": [],
+    "confidence": "high"
+  },
+  {
+    "id": "letterpress",
+    "name": "Letterpress",
+    "aliases": ["deboss", "emboss", "relief print", "impression print", "blind deboss"],
+    "plain": "Ink letters pressed into thick soft paper, leaving a dent.",
+    "people_say": ["pressed into paper", "letterpress", "embossed", "debossed", "wedding invitation feel", "thick cotton card", "stamped letters", "tactile print"],
+    "origin": "Gutenberg's movable type, about 1440; revived as a craft with visible impression from the 1990s [S1]",
+    "defining": [
+      "Type and art pressed into the stock so they sit below the surface [S1]",
+      "Deep bite was a printing fault before the revival; now it is the point [S2]",
+      "Crisper type than offset because of the impression [S1]",
+      "Usually one or two spot inks on thick, soft paper [inferred]",
+      "In UI, tokens carry it: an inset look from a light 1px highlight below and a faint dark edge above on text, inputs or wells"
+    ],
+    "code": "color: #5b5148; text-shadow: 0 1px 0 rgba(255,255,255,.7), 0 -1px 0 rgba(0,0,0,.25);",
+    "traits": {
+      "surface": "paper",
+      "edge": "none",
+      "depth": "inner",
+      "shape": "subtle",
+      "color": "spot-inks",
+      "contrast": "normal",
+      "type": "serif",
+      "texture": "paper",
+      "ornament": "none",
+      "layout": "minimal",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Stationery, weddings, invitations, premium packaging and quiet luxury brand touches.",
+    "goes_wrong": "Fake inset shadows on grey-on-grey text so words look washed out.",
+    "accessibility": "Debossed text is often grey on grey: keep the ink colour at 4.5:1 against the paper and never rely on the shadow to show the letter.",
+    "related": ["risograph", "skeuomorphism", "editorial", "woodcut-linocut"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Letterpress_printing", "supports": "Relief printing; Gutenberg about 1440; revival with deep impression; Martha Stewart Weddings in the 1990s; crisper than offset; debossed output"},
+      {"id": "S2", "url": "https://eyeondesign.aiga.org/is-the-fight-to-revive-traditional-letterpress-a-losing-battle/", "supports": "Tactile impression was once considered bad printing; today linked with wedding invitations and stationery"}
+    ],
+    "examples": [],
+    "confidence": "high"
+  },
+  {
+    "id": "woodcut-linocut",
+    "name": "Woodcut and linocut",
+    "aliases": ["linocut", "woodblock print", "block print", "relief print", "carved print"],
+    "plain": "Bold carved-looking prints with rough black shapes and white cut lines.",
+    "people_say": ["block print", "linocut", "woodcut", "carved stamp look", "old book illustration", "rough printed poster", "folk print"],
+    "origin": "Woodcut in Europe from about 1400, after older Chinese woodblock printing [S1]; linocut popularised in Britain from 1919 [S2]",
+    "defining": [
+      "Cut-away areas stay paper-white while the raised surface carries ink [S1][S2]",
+      "Cutting simplifies drawing into strong, simple graphic shapes with a limited palette [S2]",
+      "Often one or two inks; one-colour posters are common [S2][S3]",
+      "Gouge marks and pattern stand in for shading [inferred]",
+      "A printed or drawn asset. Tokens carry only the ink and paper colours, sharp edges and a print texture"
+    ],
+    "code": "background: #f1e9d6; color: #161616; border: 3px solid #161616;",
+    "traits": {
+      "surface": "paper",
+      "edge": "rough",
+      "depth": "flat",
+      "shape": "irregular",
+      "color": "spot-inks",
+      "contrast": "high",
+      "type": "slab",
+      "texture": "paper",
+      "ornament": "illustration",
+      "layout": "editorial",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "illustration-only",
+    "fits": "Craft food and drink, book covers, cinema and festival posters, folk and outdoor brands.",
+    "goes_wrong": "Digital fakes with smooth, even vector lines that lose the carved roughness.",
+    "accessibility": "Fine cut lines vanish at small sizes: use the look for large images and keep body text in solid ink at 4.5:1.",
+    "related": ["risograph", "letterpress", "sumi-e-ink", "editorial"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Woodcut", "supports": "Relief technique where cut-away areas carry no ink; Chinese origins; European woodcut from about 1400; Expressionist use"},
+      {"id": "S2", "url": "https://www.creativebloq.com/illustration/linocut-11410303", "supports": "Linocut as woodcut on linoleum; simplifies style into strong graphic work and limited palettes; Claude Flight and Edith Lawrence from 1919; one-colour and black and white examples"},
+      {"id": "S3", "url": "https://www.itsnicethat.com/articles/peter-strausfeld-art-for-art-house-the-posters-of-peter-strausfeld-illustration-graphic-design-project-190126", "supports": "Peter Strausfeld's linocut cinema posters with wood type, editions of about 300"}
+    ],
+    "examples": [
+      {"name": "Peter Strausfeld posters for the Academy Cinema, London", "url": "https://www.itsnicethat.com/articles/peter-strausfeld-art-for-art-house-the-posters-of-peter-strausfeld-illustration-graphic-design-project-190126", "what": "Simple linocut images paired with wood type"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "sumi-e-ink",
+    "name": "Sumi-e ink brush",
+    "aliases": ["ink wash", "suibokuga", "brush painting", "brush stroke", "enso"],
+    "plain": "Black ink brush strokes, from dark to pale grey, much empty paper.",
+    "people_say": ["ink brush", "Japanese ink painting", "zen brush strokes", "calligraphy painting", "black ink wash", "enso circle", "minimal brush art"],
+    "origin": "Tang dynasty China (618 to 907), carried on in Korea and Japan [S1]",
+    "defining": [
+      "Usually monochrome: only shades of black ink [S1]",
+      "Tone comes from ink density and pressure within one stroke, from heavy and wet to light and dry [S1][S2]",
+      "Few strokes, each carrying meaning, with empty paper as part of the picture [inferred]",
+      "Brushwork is an asset. Tokens carry the warm paper ground, black ink text and generous empty space"
+    ],
+    "code": "background: #f6f1e7; color: #111; mix-blend-mode: multiply;",
+    "traits": {
+      "surface": "paper",
+      "edge": "rough",
+      "depth": "flat",
+      "shape": "irregular",
+      "color": "monochrome",
+      "contrast": "high",
+      "type": "serif",
+      "texture": "paper",
+      "ornament": "illustration",
+      "layout": "minimal",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "illustration-only",
+    "fits": "Tea, spa, wellness and meditation brands, East Asian cuisine, book covers and calm editorial.",
+    "goes_wrong": "Used as generic 'Asian' decoration with fake calligraphy, which reads as careless or disrespectful.",
+    "accessibility": "Pale grey washes fail contrast: keep text in full black at 4.5:1 and treat strokes as decoration.",
+    "related": ["watercolour", "minimal-monochrome", "organic", "woodcut-linocut"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Ink_wash_painting", "supports": "Tang dynasty origin, monochrome black ink, tone from ink density and pressure, Japanese term sumie"},
+      {"id": "S2", "url": "https://education.asianart.org/resources/the-spiritual-life-of-the-samurai-meditation-and-brushpainting/", "supports": "Sumi ink from compressed charcoal; strokes from heavy and wet to light and dry; enso circle in Zen practice"}
+    ],
+    "examples": [],
+    "confidence": "medium"
+  },
+  {
+    "id": "naive-crayon",
+    "name": "Naive crayon drawing",
+    "aliases": ["childlike illustration", "kidcore", "crayon drawing", "naive illustration", "wonky drawing", "scribble style"],
+    "plain": "Wobbly drawings that look made by a child with crayons.",
+    "people_say": ["like a kid drew it", "crayon", "scribbly", "doodles", "wonky", "messy on purpose", "fridge drawing", "childlike"],
+    "origin": "Branding and illustration trend tracked from 2019 to 2026 as a reaction to polish and AI imagery [S1][S2]",
+    "defining": [
+      "Rough, wobbly lines with visible crayon or pastel texture [S1][S3]",
+      "Bulbous, joyful figures and bright block colours [S3]",
+      "Minimal, intentional palettes, often set beside clean digital type [S1]",
+      "Frame-by-frame motion that exaggerates the roughness [S1]",
+      "Drawn assets carry it. Tokens add only slightly irregular corners, thick outlines and paper colours"
+    ],
+    "code": "border: 3px solid #1d1d1d; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;",
+    "traits": {
+      "surface": "paper",
+      "edge": "rough",
+      "depth": "flat",
+      "shape": "irregular",
+      "color": "vivid",
+      "contrast": "normal",
+      "type": "handwritten",
+      "texture": "grain",
+      "ornament": "squiggles",
+      "layout": "asymmetric",
+      "motion": "stepped",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Bakeries, cafes, kids' and family brands, charities, music and culture campaigns, friendly onboarding.",
+    "goes_wrong": "Looks careless rather than charming when the type and layout are messy too.",
+    "accessibility": "Hand lettering and crayon text are hard to read: keep body text in a clear font at 4.5:1 and use drawings as decoration.",
+    "related": ["playful", "memphis", "paper-cut", "sketchy-wireframe"],
+    "sources": [
+      {"id": "S1", "url": "https://www.creativebloq.com/art/illustration/messy-meaningful-and-made-by-humans-the-biggest-illustration-trends-for-2026", "supports": "Childlike, naive, imperfect illustration as the 2026 trend; minimal palettes; rough illustration with clean type; frame-by-frame motion; Jolene Bakery and Little Wolf Coffee"},
+      {"id": "S2", "url": "https://www.itsnicethat.com/features/forward-thinking-visual-trends-080124", "supports": "Rise of childlike, crayon-covered graphics in 2024; Jolene logo drawn by a six-year-old in 2019"},
+      {"id": "S3", "url": "https://www.itsnicethat.com/articles/des-skordilis-illustration-270820", "supports": "Crayon and pastel work, bulbous joyful figures, radiant block colours"}
+    ],
+    "examples": [
+      {"name": "Jolene Bakery identity by Studio Frith", "url": "https://www.creativebloq.com/art/illustration/messy-meaningful-and-made-by-humans-the-biggest-illustration-trends-for-2026", "what": "Childlike drawings and rough textures"},
+      {"name": "Little Wolf Coffee", "url": "https://www.creativebloq.com/art/illustration/messy-meaningful-and-made-by-humans-the-biggest-illustration-trends-for-2026", "what": "Mascot drawings with relaxed pencil-like textures on bags and digital"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "dithering",
+    "name": "Dithering and 1-bit",
+    "aliases": ["dithered", "1-bit", "bitmap", "Floyd-Steinberg", "ordered dither"],
+    "plain": "Pictures made from scattered black and white dots, like old computer screens.",
+    "people_say": ["dotty black and white", "old computer picture", "1-bit", "dithered", "grainy pixel shading", "retro Mac look", "two-colour pixels"],
+    "origin": "Image dithering for limited displays from the early 1960s [S1]; chosen as a look by indie games and low-energy websites in the 2010s [S1][S2]",
+    "defining": [
+      "Grey levels faked by the density of black and white dots [S1]",
+      "Patterns are either regular (ordered) or noisy (error diffusion, such as Floyd-Steinberg, 1975) [S1]",
+      "Low-tech Magazine reduces images to black, white and four greys, then tints them by section, for about ten times less data [S2]",
+      "Differs from pixel-art: the source is a photo or render reduced by an algorithm, not hand-placed sprites [inferred]",
+      "An image treatment. UI tokens carry the 1-bit palette, a tint colour and crisp, unsmoothed scaling [S3]"
+    ],
+    "code": "image-rendering: pixelated; filter: grayscale(1) contrast(1.4); mix-blend-mode: multiply;",
+    "traits": {
+      "surface": "textured",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "pixel",
+      "color": "monochrome",
+      "contrast": "high",
+      "type": "mono",
+      "texture": "dither",
+      "ornament": "photo",
+      "layout": "editorial",
+      "motion": "still",
+      "theme": "both"
+    },
+    "ui_fit": "marketing",
+    "fits": "Low-energy and sustainability sites, indie games, zines, music, retro-tech and editorial photo treatment.",
+    "goes_wrong": "Faces and detail turn to noise, and dots scaled by odd amounts blur into grey mush.",
+    "accessibility": "Dithered photos lose detail: give real alt text, keep text out of images, and scale by whole numbers so dots stay crisp.",
+    "related": ["pixel-art", "risograph", "terminal", "grain", "duotone"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Dither", "supports": "Dot density for grey levels, 1-bit history, ordered and error-diffusion dithering, Floyd-Steinberg 1975, video game aesthetic and Return of the Obra Dinn"},
+      {"id": "S2", "url": "https://solar.lowtechmagazine.com/2018/09/how-to-build-a-lowtech-website/", "supports": "Images converted to black and white with four greys, coloured per category in the browser, about ten times less resource-intensive"},
+      {"id": "S3", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/image-rendering", "supports": "image-rendering: pixelated for crisp scaling"}
+    ],
+    "examples": [
+      {"name": "Low-tech Magazine solar-powered website", "url": "https://solar.lowtechmagazine.com/2018/09/how-to-build-a-lowtech-website/", "what": "All photos dithered and tinted to cut page weight"},
+      {"name": "Return of the Obra Dinn (game)", "url": "https://en.wikipedia.org/wiki/Dither", "what": "A modern game built on a 1-bit dithered look"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "sketchy-wireframe",
+    "name": "Sketchy wireframe",
+    "aliases": ["lo-fi wireframe", "hand-drawn UI", "whiteboard style", "napkin sketch", "rough UI"],
+    "plain": "Interface drawn with wobbly pen lines, like a quick whiteboard sketch.",
+    "people_say": ["hand-drawn", "sketchy", "like a whiteboard", "rough draft look", "napkin sketch", "wireframe", "doodled diagram"],
+    "origin": "Low-fidelity wireframing tools such as Balsamiq and hand-drawn drawing libraries such as Rough.js and Excalidraw [S1][S2][S3]",
+    "defining": [
+      "Wobbly, slightly doubled strokes with an adjustable roughness setting [S2]",
+      "Deliberately unfinished and forgiving of alignment, so feedback stays on flow and content [S1]",
+      "Hand-drawn font and mostly greyscale fills with one accent [inferred]",
+      "Fully carried by code: a small library (under 9 kB gzipped) draws rough boxes, lines and fills in canvas or SVG [S2]"
+    ],
+    "code": "rough.svg(svg).rectangle(10, 10, 200, 80, { roughness: 1.5, fill: '#ffe08a' });",
+    "traits": {
+      "surface": "paper",
+      "edge": "rough",
+      "depth": "flat",
+      "shape": "irregular",
+      "color": "monochrome",
+      "contrast": "normal",
+      "type": "handwritten",
+      "texture": "none",
+      "ornament": "squiggles",
+      "layout": "grid",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "core-ui",
+    "fits": "Whiteboards, diagram and planning tools, early prototypes, explainers and docs that should feel provisional.",
+    "goes_wrong": "Sloppy layout hiding behind the sketch excuse, or used for a finished product that must feel trustworthy.",
+    "accessibility": "Handwriting fonts and jittery lines slow reading: offer a clean font option, keep text at 4.5:1 and strokes at 3:1.",
+    "related": ["naive-crayon", "technical-drawing", "minimal-monochrome", "neo-brutalism"],
+    "sources": [
+      {"id": "S1", "url": "https://balsamiq.com/learn/articles/polished-wireframes/", "supports": "Sketch style is forgiving about alignment and keeps focus on what matters; Clean style as the alternative"},
+      {"id": "S2", "url": "https://roughjs.com/", "supports": "Library under 9 kB gzipped for sketchy, hand-drawn graphics in canvas and SVG; roughness option"},
+      {"id": "S3", "url": "https://github.com/excalidraw/excalidraw", "supports": "Open-source virtual whiteboard with a hand-drawn style for diagrams and wireframes"}
+    ],
+    "examples": [
+      {"name": "Excalidraw", "url": "https://github.com/excalidraw/excalidraw", "what": "A whole product interface and canvas drawn in the hand-sketched style"},
+      {"name": "Balsamiq Wireframes (Sketch style)", "url": "https://balsamiq.com/learn/articles/polished-wireframes/", "what": "Low-fidelity wireframes with a sketchy default look"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "newsprint",
+    "name": "Newsprint",
+    "aliases": ["newspaper look", "broadsheet", "newspaper clipping", "tabloid style", "inky print"],
+    "plain": "Cheap grey paper, black ink columns, halftone photos and big headlines.",
+    "people_say": ["newspaper style", "old newspaper", "newsprint", "headlines and columns", "newspaper clipping", "inky grey paper", "tabloid look"],
+    "origin": "Cheap mechanical-pulp paper made for newspapers [S1]; newsprint-inspired branding and faked print effects in the 2020s [S2][S3]",
+    "defining": [
+      "Low-cost paper that yellows and turns brittle in air and sunlight [S1]",
+      "Scratchy, inky texture in black, white and one spot colour such as red [S2]",
+      "Desaturated halftone photos treated like cut-outs [S3]",
+      "Dense multi-column text under large headlines [inferred]",
+      "Mostly carried by tokens: off-white surface, black serif text, columns and rules. Ink texture and halftone are image assets"
+    ],
+    "code": "background: #eceae4; color: #1a1a1a; columns: 3 16rem; column-rule: 1px solid #1a1a1a; font-family: Georgia, serif;",
+    "traits": {
+      "surface": "paper",
+      "edge": "hairline",
+      "depth": "flat",
+      "shape": "sharp",
+      "color": "neutral-accent",
+      "contrast": "high",
+      "type": "serif",
+      "texture": "halftone",
+      "ornament": "photo",
+      "layout": "dense",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "core-ui",
+    "fits": "Newsletters, blogs and media sites, food and drink labels, campaigns that want urgency or a press feel.",
+    "goes_wrong": "Grey on grey with fake texture laid over body text.",
+    "accessibility": "Grey paper lowers contrast: keep text near black for at least 4.5:1, keep line length readable, and drop to one column on phones.",
+    "related": ["editorial", "risograph", "swiss", "letterpress"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Newsprint", "supports": "Low-cost paper from mechanical pulp; lignin makes it yellow and brittle"},
+      {"id": "S2", "url": "https://eyeondesign.aiga.org/happy-hour-10/", "supports": "Newsprint-inspired branding for Braxton Brewing by Durham Brand & Co.: scratchy inky texture, black, white and red"},
+      {"id": "S3", "url": "https://www.printmag.com/typography/print-typography-report-2025-march-toward-utopia/", "supports": "Halftone and desaturated print effects that make images look like newspaper cut-outs"}
+    ],
+    "examples": [
+      {"name": "Braxton Brewing Yesterday's Headlines labels", "url": "https://eyeondesign.aiga.org/happy-hour-10/", "what": "Type-led labels with scratchy newspaper ink texture"}
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "felt-and-embroidery",
+    "name": "Felt and embroidery",
+    "aliases": ["textile craft", "stitched", "embroidered", "fabric collage", "quilted", "needlework"],
+    "plain": "Pictures made from soft cut felt or colourful stitched thread.",
+    "people_say": ["made of felt", "embroidered", "stitched", "fabric look", "cosy craft", "sewn letters", "quilted", "woolly"],
+    "origin": "Felt is one of the oldest known textiles [S3]; felt and thread became tactile illustration media in editorial and ad work [S1][S2]",
+    "defining": [
+      "Felt shapes cut from stencils in flat colours; cut felt spreads slightly past the drawn outline [S1]",
+      "Embroidery layers colour stitch by stitch, and different stitches mimic different textures [S1][S2]",
+      "Pieces are photographed so fibres and small imperfections show [S1]",
+      "Craft or rendered assets carry it. Tokens add only warm fills, soft rounded corners and an inset dashed 'stitch' outline"
+    ],
+    "code": "background: #c0533a; border-radius: 14px; outline: 2px dashed #f6e7d7; outline-offset: -8px;",
+    "traits": {
+      "surface": "textured",
+      "edge": "rough",
+      "depth": "soft-shadow",
+      "shape": "rounded",
+      "color": "vivid",
+      "contrast": "normal",
+      "type": "rounded",
+      "texture": "pattern",
+      "ornament": "illustration",
+      "layout": "collage",
+      "motion": "stepped",
+      "theme": "light"
+    },
+    "ui_fit": "illustration-only",
+    "fits": "Children's brands, crafts and homeware, cosy seasonal campaigns, stop-motion animation and editorial covers.",
+    "goes_wrong": "Cheap digital stitch filters that look fake, or fabric texture behind text.",
+    "accessibility": "Fabric textures behind text lower contrast: keep text on flat colour at 4.5:1 and pause stop-motion loops under reduced motion.",
+    "related": ["paper-cut", "claymorphism", "naive-crayon", "organic"],
+    "sources": [
+      {"id": "S1", "url": "https://www.creativebloq.com/illustration/beginners-guide-tactile-illustration-11410459", "supports": "Tactile illustration with paper, embroidery and fabric; Jacopo Rosatti's stencil-cut felt and its spreading edges; stitches simulate textures; photography"},
+      {"id": "S2", "url": "https://eyeondesign.aiga.org/this-aint-your-grandmas-embroidery-twin-designers-maricormaricar-paint-with-thread/", "supports": "Maricor/Maricar embroidered lettering; layering colour; tactile, warm medium; Vogue Japan work"},
+      {"id": "S3", "url": "https://en.wikipedia.org/wiki/Felt", "supports": "Felt as matted, pressed fibres and one of the oldest known textiles; revival in fibre arts from the 1970s"}
+    ],
+    "examples": [
+      {"name": "Maricor/Maricar embroidered lettering for Vogue Japan", "url": "https://eyeondesign.aiga.org/this-aint-your-grandmas-embroidery-twin-designers-maricormaricar-paint-with-thread/", "what": "Hand-stitched type used in an editorial piece"}
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "marbling",
+    "name": "Marbling",
+    "aliases": ["marbled paper", "ebru", "marble texture", "swirled ink", "stone veining"],
+    "plain": "Swirly veined colour patterns, like floating ink or polished marble.",
+    "people_say": ["marble", "marbled", "swirly pattern", "stone veins", "fancy endpapers", "luxury marble", "ink swirls"],
+    "origin": "Floated-colour paper decoration known from Turkey; made in Europe from the early 17th century for bookbinding [S1]",
+    "defining": [
+      "Colours floated on a liquid bath, then stirred or combed into waves, veins and comb patterns [S1]",
+      "Patterns range from calm to busy depending on how strong and frequent the swirls are [S2]",
+      "One colour reads classic; many shades read lively [S2]",
+      "A texture or pattern asset. Tokens only place it as a background image or border fill behind solid panels"
+    ],
+    "code": "background: #f4efe8 url(marble.jpg) center / cover; background-blend-mode: multiply;",
+    "traits": {
+      "surface": "textured",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "irregular",
+      "color": "tonal",
+      "contrast": "low",
+      "type": "serif",
+      "texture": "pattern",
+      "ornament": "ornamental",
+      "layout": "full-bleed",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Book covers and endpapers, stationery, chocolate and cosmetics packaging, hospitality and luxury backgrounds.",
+    "goes_wrong": "Stock marble photos as page backgrounds that look like a bathroom counter.",
+    "accessibility": "Busy veins break up letter shapes: keep text on a solid band at 4.5:1.",
+    "related": ["organic", "dark-luxe", "art-deco", "watercolour"],
+    "sources": [
+      {"id": "S1", "url": "https://www.vam.ac.uk/blog/museum-life/divers-oiled-colours-exploring-the-history-of-marbled-paper-in-the-national-art-library", "supports": "Paints floated on liquid and paper laid on top; 1627 account of the Turkish art; early 17th-century German start; French link to bookbinding; combed and nonpareil patterns"},
+      {"id": "S2", "url": "https://99designs.com/blog/trends/pattern-design/", "supports": "Marble effect common in pattern design; calm to busy by swirl strength; monochrome vs many shades; chocolate packaging example"}
+    ],
+    "examples": [
+      {"name": "Mary and Matt Chocolate Editions packaging", "url": "https://99designs.com/blog/trends/pattern-design/", "what": "Colourful marbled texture on chocolate wrappers"}
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "cel-shaded",
+    "name": "Cel-shaded",
+    "aliases": ["toon shading", "toon shader", "anime 3D", "flat-shaded 3D"],
+    "plain": "3D characters shaded like a cartoon, with hard light and dark steps.",
+    "people_say": ["cartoon 3D", "anime style 3D", "like Zelda Wind Waker", "toon look", "comic-book 3D", "hard cartoon shadows", "outlined 3D"],
+    "origin": "Non-photorealistic rendering in games; Jet Set Radio drew attention to it when shown in 1999 [S1]",
+    "defining": [
+      "Smooth lighting cut into a few flat shade bands, so shadows read as blocks of colour [S1]",
+      "Black ink outlines on silhouettes and contours [S1]",
+      "Typically a base colour plus first and second shade colours, with an adjustable soft edge between them [S2]",
+      "A rendered 3D asset. UI can echo it with unblurred offset shadows, solid outlines and two-step fills"
+    ],
+    "code": "border: 3px solid #1a1a1a; box-shadow: 4px 4px 0 #1a1a1a; background: linear-gradient(160deg, #ffb347 60%, #e08a1e 60%);",
+    "traits": {
+      "surface": "solid",
+      "edge": "thick-outline",
+      "depth": "tonal",
+      "shape": "rounded",
+      "color": "vivid",
+      "contrast": "high",
+      "type": "display",
+      "texture": "none",
+      "ornament": "3d-objects",
+      "layout": "full-bleed",
+      "motion": "kinetic",
+      "theme": "both"
+    },
+    "ui_fit": "illustration-only",
+    "fits": "Games, anime and animation, toys, youth brands, mascots and launch trailers.",
+    "goes_wrong": "Poor silhouettes: the flat look exposes every modelling error.",
+    "accessibility": "Hard outlines help clarity, but keep text off busy scenes at 4.5:1 and pause character motion under reduced motion.",
+    "related": ["comic", "low-poly", "flat", "playful"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Cel_shading", "supports": "Definition as NPR, quantised discrete shades, black ink outlines, Jet Set Radio 1999, The Wind Waker and other games"},
+      {"id": "S2", "url": "https://docs.unity3d.com/Packages/com.unity.toonshader@0.6/manual/index.html", "supports": "Toon shader with base, 1st and 2nd shade colours and adjustable gradation between them for cel-shaded animation"}
+    ],
+    "examples": [
+      {"name": "Jet Set Radio (game)", "url": "https://en.wikipedia.org/wiki/Cel_shading", "what": "Early, influential cel-shaded game"},
+      {"name": "The Legend of Zelda: The Wind Waker (game)", "url": "https://en.wikipedia.org/wiki/Cel_shading", "what": "Cel shading used to keep puzzle objects readable"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "monoline",
+    "name": "Monoline line art",
+    "aliases": ["line art", "outline icons", "single-line drawing", "one-line art", "stroke icons"],
+    "plain": "Drawings made from one even-thickness line, with no fills.",
+    "people_say": ["line drawing", "outline icons", "one continuous line", "thin line art", "minimal line logo", "simple line illustration"],
+    "origin": "Stroke-based icon systems and single-line logo art in digital brands [S1][S2]",
+    "defining": [
+      "One stroke width everywhere: Lucide uses 2 px strokes on a 24 x 24 px canvas with 1 px padding [S1]",
+      "Round caps and joins, with almost every sharp corner rounded [S1]",
+      "Continuous single-line versions reduce a mark to its key gestures [S2]",
+      "Fully carried by tokens in UI: stroke width, cap and join, icon size and current text colour"
+    ],
+    "code": "fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;",
+    "traits": {
+      "surface": "solid",
+      "edge": "outline",
+      "depth": "flat",
+      "shape": "rounded",
+      "color": "monochrome",
+      "contrast": "normal",
+      "type": "geometric",
+      "texture": "none",
+      "ornament": "illustration",
+      "layout": "minimal",
+      "motion": "subtle",
+      "theme": "both"
+    },
+    "ui_fit": "core-ui",
+    "fits": "Icon systems, product UI, wellness and lifestyle logos, spot illustrations and packaging marks.",
+    "goes_wrong": "Mixed stroke widths, or lines so thin they disappear at small sizes.",
+    "accessibility": "Icon strokes need 3:1 against the background, and icon-only buttons need text labels.",
+    "related": ["minimal-monochrome", "flat", "technical-drawing", "swiss"],
+    "sources": [
+      {"id": "S1", "url": "https://lucide.dev/contribute/icon-design-guide", "supports": "24 x 24 px canvas, 1 px padding, 2 px strokes, no mixed widths, round joins and caps, rounded corners"},
+      {"id": "S2", "url": "https://www.creativebloq.com/design/logos-icons/famous-logos-are-even-more-iconic-when-drawn-with-a-single-line", "supports": "Stephane Leopold of Loooop redrew 44 famous logos with one continuous line"}
+    ],
+    "examples": [
+      {"name": "Lucide icon set", "url": "https://lucide.dev/contribute/icon-design-guide", "what": "Open icon set drawn with a single 2 px stroke rule"},
+      {"name": "Loooop single-line logo series", "url": "https://www.creativebloq.com/design/logos-icons/famous-logos-are-even-more-iconic-when-drawn-with-a-single-line", "what": "44 famous logos redrawn as one continuous line"}
+    ],
+    "confidence": "high"
+  }
+]

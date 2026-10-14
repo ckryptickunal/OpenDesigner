@@ -1,7 +1,7 @@
 {
   "$comment": "House standards from the owner's non-negotiable sources (learn/sources.json). Applied and locked in every OpenDesigner project; changed only when the person explicitly asks. Built by lane L19 from learn/analysis/; see learn/README.md.",
-  "version": 2,
-  "updated": "2026-09-27",
+  "version": 3,
+  "updated": "2026-10-14",
   "policy": {
     "non-negotiable": "A standard backed by a non-negotiable source (Emil Kowalski's site, the Sonner docs, the public animations.dev pages, the emilkowalski/skills repo) is applied and locked in every project without asking, written into DESIGN.md and checked by engine.py validate and review.",
     "good-to-have": "A standard backed only by a good-to-have source (the Vaul docs) is a recommended default and always a should: OpenDesigner recommends it first and the person can change it freely. Vaul is unmaintained, so flag that before suggesting it as a dependency.",
@@ -6139,14 +6139,13 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py generates only light and dark color modes (semantic.color.light and .dark) and its CSS export has no @media (prefers-contrast: more) block (only forced-colors: active for the focus ring), although skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-10 defaults to high contrast and reduced transparency 'as token modes'",
-        "skills/opendesigner/scripts/engine.py color.surface.glass-fallback gives the solid twin for Increase Contrast but no contrasting border token goes with it, no export emits a prefers-contrast: more rule, and DESIGN.md says high-contrast themes are not generated [inferred]"
+        "skills/opendesigner/scripts/engine.py generates only light and dark color modes (semantic.color.light and .dark). Under prefers-contrast: more its CSS export turns glass solid (color.surface.glass-fallback, no blur) and hides texture overlays, but gives those surfaces no contrasting border and the system no high-contrast mode; DESIGN.md says 'High-contrast themes are not generated'"
       ],
       "settles": [
         "Q-motion-10"
       ],
       "since": 1,
-      "changed": 2
+      "changed": 3
     },
     {
       "id": "STD-accessibility-motion-13",
@@ -17103,8 +17102,18 @@
         "STD-swift-54"
       ],
       "retired": []
+    },
+    {
+      "version": 3,
+      "date": "2026-10-14",
+      "why": "STD-accessibility-motion-12 conflict note updated: the Q-motion-10 default no longer promises token modes, and the CSS export now turns glass solid under prefers-contrast: more; what remains is no contrasting border and no high-contrast mode",
+      "added": [],
+      "changed": [
+        "STD-accessibility-motion-12"
+      ],
+      "retired": []
     }
   ],
-  "content_hash": "sha256:abe5acb543f750bd",
+  "content_hash": "sha256:0a20a39016aa9231",
   "retired": []
 }

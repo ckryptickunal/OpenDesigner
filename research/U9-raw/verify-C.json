@@ -1,0 +1,562 @@
+[
+  {
+    "id": "vaporwave",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "AIGA Eye on Design: names Turntable.fm, SoundCloud, Bandcamp around 2010-2011; pink/teal gradients, Greek sculptures, palm trees, Word Art, full-width text, VHS graininess, Floral Shoppe cover described."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "Adobe 2021 Vintage Vaporwave trend: candy pastels plus neon, pixel and extruded lettering, grids, stickers, screen pop-ups."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "note": "daisyUI: palette, busts, grids, checker floors, floating windows, slow drift, radius 0 or 0.25rem."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "note": "Wikipedia: Eccojams Aug 2010, first reported use of the term Oct 2011, Floral Shoppe Dec 2011, Greco-Roman sculptures, full-width text."
+      },
+      {
+        "id": "S5",
+        "status": "ok",
+        "note": "Mixmag Asia (June 2026): techno-orientalism criticism and Hiroshi Nagai city-pop art as blueprint."
+      }
+    ],
+    "fixes": [],
+    "note": "All claims and the Floral Shoppe example check out; independent sources beyond daisyUI: AIGA, Adobe, Wikipedia, Mixmag. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "synthwave",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "daisyUI: mid-to-late 2000s online music scenes, Outrun from Sega's 1986 game, palette, grid, sun disc, italic chrome titles, grid-rolling and neon-pulse motion, radius 0.25-1rem. Does not mention VHS tracking (S2 does)."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "Wikipedia: mid-to-late 2000s, French house acts (College, Kavinsky); Outrun term from 1986 Out Run with VHS tracking artefacts, magenta neon, gridlines; Drive (2011). Does not name Sega."
+      }
+    ],
+    "fixes": [],
+    "note": "Second independent source (Wikipedia) supports origin and motifs; examples list is empty, which is allowed. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "cyberpunk-neon-noir",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "daisyUI: Bethke and Gibson origins, palette, clipped panels, brackets, segmented bars, cable paths, condensed sans plus mono, scanlines, RGB split, flicker, high density, radius 0 or 0.25rem. Mentions Blade Runner only in a caption and not Syd Mead (origin rests on S2)."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "Frelik, 'Syd Mead' in Fifty Key Figures in Cyberpunk Culture (Routledge 2022): Mead's Blade Runner Los Angeles shaped later sf city visuals."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "note": "Interface In Game: decorative red shares the shade of functional info, cut-corner tag reads as a button, optional chromatic aberration."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "examples",
+        "problem": "Example says the HUD has cable-line decoration; the critique places the ribbon-cable lines on the Character (skill tree) screen, not the HUD. Red is decorative; yellow marks key info in the hacking interface.",
+        "correct": "Red and yellow interface with cut-corner tags, ribbon-cable lines on the skill-tree screen and optional chromatic aberration",
+        "url": "https://interfaceingame.com/articles/cyberpunk-2077-ux-ui-critique"
+      }
+    ],
+    "note": "Sound entry with two independent sources besides daisyUI; one small example wording fix. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "solarpunk",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "ACMI: coined 2008 on Republic of the Bees as a reaction to steampunk; grew on Tumblr, Medium, message boards (no decade given); Art Nouveau vines and florals; rooftop farms; Fuller's geodesic domes; Ghibli; Saltsea Chronicles (2023, Die Gute Fabrik) with Risograph-inspired picture-book style."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "daisyUI: palette, humanist sans with serif accents, rooftop gardens and solar greenhouses (no domes), growth and flow motion, radius 0.75-1.5rem; community grew around 2014."
+      }
+    ],
+    "fixes": [],
+    "note": "Independent ACMI source backs origin, motifs and the example. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "seapunk",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "Wikipedia: DJ Lil Internet joke tweet, Tumblr 2011 (that sentence is tagged citation needed), aquatic colours, dolphins, shells, yin-yangs, smileys, rotating shapes over water from 1990s 3D net art, Azealia Banks 'Atlantis' 2012."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "daisyUI: palette, motifs, playful display type, bobbing and ripple motion with bubbles, loose collage over wave bands, radius 0.75-1.5rem."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "note": "Tiny Mix Tapes (5 Dec 2011): seapunk as a Tumblr microgenre built on aquamarine hair and Ecco the Dolphin."
+      }
+    ],
+    "fixes": [],
+    "note": "Contemporary 2011 source (TMT) independently confirms the Tumblr origin that Wikipedia leaves uncited. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "frutiger-metro",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "daisyUI: mid-2000s to early-2010s commercial vector art; says the Frutiger Metro label was coined online in 2023 and is historically misleading; palette, motifs, type, radius."
+      },
+      {
+        "id": "S2",
+        "status": "partly",
+        "note": "pi.fyi user post by @jerb (2026), a personal opinion piece: about 2006-2010, black vectors over bright striated backgrounds, iPod ads, Xbox 360 home screens. Says nothing about who named it or when."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "origin",
+        "problem": "The 2023 coinage date appears only on the daisyUI page; searches found no other source dating the label.",
+        "correct": "Commercial vector art of the mid-2000s; the Frutiger Metro label is a later internet coinage of uncertain date [inferred]",
+        "url": "https://trends.daisyui.com/trend/vectordelia-frutiger-metro/"
+      },
+      {
+        "field": "goes_wrong",
+        "problem": "States the name has no link to Windows Metro, but Wikipedia (citing Avci) defines Frutiger Metro as a transitional style named after the Windows 8 Metro design language. The label has two competing meanings.",
+        "correct": "Say the name is contested: some use it for vector silhouettes on bright stripes (Vectordelia), others for a flat transitional style named after Windows 8 Metro",
+        "url": "https://en.wikipedia.org/wiki/Frutiger_Aero"
+      },
+      {
+        "field": "origin",
+        "problem": "Date range 2006-2010 does not fit the main example: Apple's iPod silhouette campaign began in 2003 and ran to at least 2008.",
+        "correct": "About 2003 to 2010, from the iPod silhouette ads onward",
+        "url": "https://en.wikipedia.org/wiki/IPod_advertising"
+      },
+      {
+        "field": "sources",
+        "problem": "Both sources are weak (a design-system trend page and a personal social post); no editorial or academic source names the style.",
+        "correct": "Lead with the name Vectordelia, keep Frutiger Metro as a contested alias, keep confidence low, and add the iPod campaign as documented evidence of the look",
+        "url": "https://peoplesgdarchive.org/item/5373/the-ipod-silhouettes-ad"
+      }
+    ],
+    "note": "Style is real but thinly sourced and its name is disputed; only the fan-level pi.fyi post independently supports the daisyUI description. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "corporate-memphis",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "Wikipedia: long elastic arms, small heads, non-literal skin colours, Alegria by Buck for Facebook 2017, Mike Merrill coined the name via an Are.na board, companies using it."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "AIGA: flat, colourful, minimalist, gangly long-limbed figures always on the go; Buck's Alegria for Facebook (calls this origin story 'mythical'); criticism."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "note": "daisyUI: Alegria with illustrator Xoana Herrera, palette on pale neutrals, geometric sans in sentence case, radius 0.75-1.5rem, medium-low density, onboarding and empty states."
+      }
+    ],
+    "fixes": [],
+    "note": "Well supported; AIGA treats the Alegria origin as partly myth, so a softer 'usually traced to' would be more exact. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "kawaii",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "Wikipedia: flourished in the 1970s, cute handwriting style from the 1970s, Hello Kitty 1974, pastels, rounded shapes, big eyes and small mouths, mascots in business and government."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "daisyUI: pastel base, cocoa or navy outlines, circles, hearts, clouds, pills, scalloped frames, faces on objects, rounded display type, radius 1-2rem, blinks, hops, squashy presses, sparkles."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "note": "Time Out Tokyo: Sanrio Exhibition 'The Beginning of Kawaii' at Mori Arts Center Gallery; Sanrio explored visual softness and warmth before Hello Kitty's 1974 debut."
+      }
+    ],
+    "fixes": [],
+    "note": "Origin, traits and the Sanrio example are confirmed by two non-daisyUI sources; nothing tells users to copy Sanrio characters. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "lofi",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "Wikipedia: ChilledCow streaming from 25 Feb 2017, Lofi Girl in use from March 2018, designed by Juan Pablo Machado, cat on windowsill, sky changing with time of day."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "daisyUI: palette, desk, headphones, books, plants, pet, rainy window, grain and VHS noise, seamless loops, edge-overlay controls, radius 0.25-1rem."
+      },
+      {
+        "id": "S3",
+        "status": "partly",
+        "note": "Elephant (16 June 2022): Ghibli-influenced study scene, plants, books, cat tail, slow gentle loop, refuge. Does not explicitly call the art hand-drawn."
+      }
+    ],
+    "fixes": [],
+    "note": "Supported; the entry rightly warns against tracing the trademarked Lofi Girl character. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "glitch",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "Wikipedia: definition, databending, datamoshing, compression artefacts, Motherboard's glitch art symposium in Oslo Jan 2002, GLI.TC/H Chicago 2010. Gives no exact naming date and does not cover pixel sorting (S2 does)."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "daisyUI: late-1990s/2000s naming, Menkman, RGB split, torn bands, macroblocks, pixel sorting, datamosh, intact readable copy under distortion, burst-then-stable motion, radius 0 or 0.25rem."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "note": "Rosa Menkman, The Glitch Moment(um), Institute of Network Cultures, Network Notebooks 04, 2011: glitch between artifact and filter."
+      }
+    ],
+    "fixes": [],
+    "note": "Strong independent sourcing (Wikipedia, Menkman); examples list is empty, which is allowed. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "acid-graphics",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "partly",
+        "note": "AIGA: organic forms, warped and liquid-metal lettering, neon green, 3D rendering, rave flyers, op-art patterns, @acidgraphix started 2018 by Luigi Brusciano collecting real and speculative posters, uses beyond posters. Does not mention fluorescent yellow/pink/blue, concentric targets or distorted portraits."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "daisyUI: mid-2010s origin, fluorescent yellow/green/orange/pink/blue on black or metallic gray, chrome type, liquid spikes, blobs, concentric targets, fixed info panel. No op-art stripes or checkerboards."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "note": "Mixmag Asia: mid-2010s online revival, late-1980s Chicago acid house to 1990s UK/Europe rave lineage, warped stripes, checkerboards, liquid metallics, liquid chrome type, distorted smiley face."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "defining",
+        "problem": "'Distorted portraits' is not in any cited source; the sources describe heavy 3D rendering and the distorted rave smiley face.",
+        "correct": "Heavy 3D rendering and distorted rave smiley faces collaged like a flyer",
+        "url": "https://mixmag.asia/feature/ctrl-print-vol-2-vaporwave-acidgrafix-cybersigilism"
+      }
+    ],
+    "note": "Origin and example verified by AIGA and Mixmag; one unsupported motif. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "dark-academia",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "Wikipedia: Tumblr around 2014-2015 from fandom of The Secret History, Instagram/Pinterest around 2017, TikTok-driven growth in the early 2020s; Gothic architecture, libraries, black/beige/brown/dark green palette; Eurocentrism and elitism criticism."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "daisyUI: parchment, walnut, forest green, burgundy, brass, ink black; old-style serif with small caps and italics; marginalia, bookplates, wax seals; page turns and drawer reveals; radius 0.25-1rem."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "note": "Vice (28 Dec 2021, Emilie Friedlander): antique books, tweed, black, oak brown, grey, swamp green; has a Light Academia section; notes Eurocentrism criticism."
+      }
+    ],
+    "fixes": [],
+    "note": "All checked claims hold; 'TikTok in 2020' fits Wikipedia's pandemic-era spread. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "cottagecore",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "Wikipedia: named on Tumblr 2018, Tumblr posts up 150% March-May 2020, March 2020 NYT framing, florals, handmade furniture, gardening, baking, crafts; criticism of romanticised rural life."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "daisyUI: palette with no neon, florals, fabric labels, baskets, ribbons, plaques, literary serif plus restrained handwriting, breeze and stitched-line motion, radius 0.75-1.5rem."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "note": "Vice (Dec 2021): Fandom says Dark Academia was most visited on Aesthetics Wiki in 2021, followed by Cottagecore."
+      }
+    ],
+    "fixes": [],
+    "note": "Supported by Wikipedia and Vice independently of daisyUI. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "indie-web",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "Figma blog (9 Jan 2025, Chia Amisola): GeoCities 1994, 38 million pages, Neocities 2013 with nearly a million sites, case for personal imperfect sites, author's own everythingi.love as a landscape of browser windows."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "Wikipedia Web badge: 88x31 buttons from late-1990s browser wars, early-2020s resurgence on Neocities."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "note": "daisyUI Web 1.0/Webcore: browser-safe colours, blue and purple links, default fonts, tiled backgrounds, GIFs, counters, marquees, beveled buttons, table framing, radius 0 or 0.25rem."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "name",
+        "problem": "'Indie web' collides with the IndieWeb, an established community about owning your domain and content (POSSE), not a visual look; an agent could mis-route requests.",
+        "correct": "Name it 'Handmade web (Web 1.0 revival)' after the Figma source, and keep 'indie web' and 'small web' only as loose aliases with a note that the IndieWeb movement is technical, not visual",
+        "url": "https://indieweb.org/IndieWeb"
+      }
+    ],
+    "note": "Facts and both examples verified; only the label needs changing. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "brat",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "Wallpaper: Brent David Freaney of Special Offer Inc., 500 greens tested, Pantone 3507C, title in low-resolution Arial, plainness as the point."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "The Nightly: hex #8ACE00, Arial with a horizontal stretch, 'opinionless' size, 100x100 px at 72 dpi scaled up, about 500 greens."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "note": "ACMI: July 2024 Kamala remix with lime overlay and fuzzy font; Harris team turned Kamala HQ on X lime green with the pixelated font."
+      },
+      {
+        "id": "S4",
+        "status": "partly",
+        "note": "NBC (24 Aug 2024): brat expressed through bright green and Arial, Etsy/eBay/Depop/Amazon copycat products, cafe drink. Arial mention is via one seller; no hex or Pantone."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "defining",
+        "problem": "The style is one album's visual identity, and the entry states its exact brand colour (Pantone 3507C, #8ACE00) while the code uses #9ad600, a near-identical lime. That conflicts with OpenDesigner's rule against using an exact brand hue or a brand's identity.",
+        "correct": "Describe it as one flat, garish acid colour with a single low-resolution lowercase word; keep the Pantone and hex only as a cited fact marked 'do not reuse', and set the code to a clearly different acid colour the user picks",
+        "url": "https://thenightly.com.au/politics/brat-green-aka-hex-8ace00-you-cant-escape-this-colour-thanks-to-charlie-xcx-c-15494520"
+      },
+      {
+        "field": "code",
+        "problem": "Arial is a proprietary Monotype face; the code already falls back to Arimo, which is fine, but defining calls for an 'Arial-style' look tied to the album.",
+        "correct": "Name any plain neo-grotesque (open-licence) and keep Arial out of the recommendation",
+        "url": "https://www.wallpaper.com/art/music/best-album-artwork-2024"
+      }
+    ],
+    "note": "Facts all check out (Freaney, 500 greens, Pantone 3507C, 100 px blur, Kamala HQ); the problem is that it presents a single artist's identity and exact colour as the style."
+  },
+  {
+    "id": "y3k",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "Stylus (20 Nov 2024, Ruth Slater): metallics, neon lights, sleek minimalist visuals, year 3000, started in fashion, Aespa and Sabukaru, utopian and dystopian futures, Gentle Monster x Maison Margiela pop-ups in seven cities (2023)."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "Refinery29 (28 Aug 2024): originated in East Asia, K-pop (Aespa, Lisa), TikTok surge in 2024, metallic and holographic pieces."
+      },
+      {
+        "id": "S3",
+        "status": "partly",
+        "note": "daisyUI Chrome/Liquid Metal page: black, gunmetal, silver, one hot accent, mirror and molten forms, extended geometric display type. Never names Y3K; describes a generic chrome style recurring since the 1930s."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "defining",
+        "problem": "Three of five defining items come from a chrome page that is not about Y3K, while Y3K's own documented marker, holographic finishes, is missing.",
+        "correct": "Add 'Holographic and iridescent finishes next to chrome and neon' citing Refinery29, and mark the chrome-page items as borrowed from the related chrome style",
+        "url": "https://refinery29.com/en-us/y3k-fashion-trend-tiktok"
+      }
+    ],
+    "note": "Origin and example verified by two independent fashion sources; visual definition leans on a non-Y3K page. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "kidcore",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "Adobe Express (18 Apr 2025): primary colours at the core balanced with greens, pinks, pastels; smileys, rainbows, clouds, hearts, stars, checks, squiggles; clashing stickers, cut-out photos, tilted collage; rounded, bubble, handwritten, blocky headings."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "NYLON (14 Oct 2020, Ashlee Mitchell): presented as new in 2020 during quarantine, contrasted with cottagecore, rainbow palette, smileys, checkerboards, cartoon graphics, Depop, Etsy, Instagram, TikTok, Pinterest."
+      }
+    ],
+    "fixes": [],
+    "note": "Both sources independent of daisyUI and support every item."
+  },
+  {
+    "id": "manga-ui",
+    "verdict": "drop",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "partly",
+        "note": "Wikipedia Manga iconography: speed lines, converging lines, screentone sheets and digital replacements, sweat drops. About comics, not interfaces; the page carries missing-citation and original-research tags."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "Siliconera: Persona 5 combat actions circle the character like manga action or dialogue bubbles; same aesthetic across all menus."
+      },
+      {
+        "id": "S3",
+        "status": "partly",
+        "note": "Inverse: Persona 5 uses red, black and white with a DIY look that evoked punk, moving type axes and baselines, extra-bold type, 'a readability nightmare'. Frames it as punk, not manga."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "name",
+        "problem": "No source names 'Manga UI' as a style; the entry stitches comic-drawing devices onto one game's menus. 'Anime UI' as an alias is misleading, since anime-styled game interfaces commonly look nothing like screentone.",
+        "correct": "Drop as a separate style; move Persona 5 menus into the 'comic' entry as an example of manga devices in UI, citing Siliconera and Inverse",
+        "url": "https://trends.daisyui.com/trend/halftone-comic-book/"
+      },
+      {
+        "field": "defining",
+        "problem": "The Persona 5 look is described by its critic as punk DIY collage rather than manga.",
+        "correct": "Red, black and white punk collage with moving baselines (Persona 5)",
+        "url": "https://www.inverse.com/gaming/persona-5-tactica-user-interface"
+      }
+    ],
+    "note": "Sources are real and load, but they support manga drawing devices and one game's UI, not a named style."
+  },
+  {
+    "id": "whimsigothic",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "partly",
+        "note": "NYLON (23 Jun 2022): dubbed whimsigoth by CARI (does not name Evan Collins), TikTok spread, popular in the 90s, celestial and astrological motifs, tarot, purples, blues, dark reds, greens with an orange or yellow pop, Practical Magic and Sabrina."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "Wikipedia: Evan Collins of CARI coined it (no date), 70s bohemia plus 80s-90s gothic influences, celestial motifs, dark colours and jewel tones, overlap with witchcore and cottagecore. Page flags some sources as unreliable."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "note": "daisyUI: Collins coined it in 2020, midnight blue/plum/emerald/ruby/antique gold palette, ornate display caps over serif body, moons, tarot, candles, arches, medallions, slow twinkles, radius 0.75-1.5rem."
+      }
+    ],
+    "fixes": [],
+    "note": "The 2020 date is also given by Yahoo/AOL (https://www.aol.com/entertainment/whimsigoth-season-practical-magic-moody-204026365.html), so 'around 2020' holds. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "mcbling",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "Vice (Dec 2021): bright saturated colours, glitter, hip-hop bling, Juicy Couture, Paris Hilton-esque pop-princess vibe."
+      },
+      {
+        "id": "S2",
+        "status": "partly",
+        "note": "daisyUI: 2000-2008, Froyo Tam coinage in January 2017 per CARI, hot pink lead, rhinestones, hearts, chain borders, leopard, script plus bold sans, radius 1-2rem. The January 2017 date is not on CARI's own page."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "origin",
+        "problem": "CARI's McBling page credits Froyo Tam and dates the era to about 2000-2008, but gives no coinage date; the '2017' is unconfirmed, and one podcast says the word came from a poll in a post-Y2K Facebook group.",
+        "correct": "US celebrity and pop culture of about 2000 to 2008; name credited by CARI to Froyo Tam (date not given)",
+        "url": "https://cari.institute/aesthetics/mcbling"
+      },
+      {
+        "field": "sources",
+        "problem": "Only two sources, one of them daisyUI; CARI's primary page is the natural second source and adds traits the entry lacks.",
+        "correct": "Add CARI: bedazzled electronics, pink Hummers, over-flourished vector art, grunge effects on gothic fonts, tattoo motifs",
+        "url": "https://cari.institute/aesthetics/mcbling"
+      }
+    ],
+    "note": "Style is real and supported by Vice and CARI; the coinage date needs softening. Radius ranges (and motion recipes) cited to daisyUI are that site's theme-token suggestions, not documented traits of the style; label them as a recommendation."
+  },
+  {
+    "id": "cybersigilism",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "note": "Daily Beast (13 Jan 2023, Helen Holmes): long spearlike lines, symmetrical designs, tribal-like patterns, cyberpunk precision, armour, veins, river tributaries. Gives no origin or coiner."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "note": "Mixmag Asia (June 2026): late-2010s Berlin underground techno, began on skin, needle-fine linework, H.R. Giger, spread into high and fast fashion; term traced to tattoo artist @aingelblood."
+      }
+    ],
+    "fixes": [],
+    "note": "Berlin late-2010s origin and Giger influence are independently confirmed by 032c (https://magazine.032c.com/magazine/cybersigilism-the-forever-trend, Feb 2025), which also credits Los Angeles tattoo artist Aingelblood with the name; worth adding as S3."
+  }
+]

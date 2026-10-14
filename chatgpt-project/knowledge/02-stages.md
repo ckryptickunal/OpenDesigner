@@ -164,9 +164,9 @@ Zoom 0 sketch · weight high · changes 0 decisions · class I · cards DC-L09-0
 - **Ask:** "Who uses it, and how often: all day for work, often, or now and then on the go?"
 - **Why:** Who uses it sets density (how packed the screen is) and base text size. Across systems, body text runs 13-19px. Our L09 study puts this fourth on its list of ways systems look most different (an inferred ranking) [DC-L09-04; L09 A2 row 4].
 - **Options:**
-  - `regular` Often, in an everyday app: body 16px, controls 36-40px (Radix, shadcn, Mantine, Chakra) [DC-L09-04; L09 A3 density].
+  - `regular` Often, in an everyday app: body 16px (14px once Q-aud-02 or Q-layout-03 says it is a work tool), controls 36-40px (Radix, shadcn, Mantine, Chakra) [DC-L09-04; L09 A3 density].
     - Now: Body text 16 px and controls 36-40 px: balanced for an everyday app. As it grows: The safe middle: data-heavy pages can add a compact mode later instead of a second system.
-  - `dense` All day, in tools full of data: body 13-14px, controls 28-32px; compact and utilitarian (Polaris 13px, SLDS 13px, Carbon, Atlassian, Primer, Ant 14px) [DC-L09-04].
+  - `dense` All day, in tools full of data: body 13-14px, controls 28-32px; compact and utilitarian (Polaris 13px, SLDS 13px, Carbon, Atlassian, Primer, Ant 14px) [DC-L09-04]. Corners, weights, accent and surfaces you have not chosen follow the work-tool defaults: 6px controls, three weights, one colored accent for selection, links and focus, borders instead of shadows on static cards [DC-L23-01].
     - Now: Body text 13-14 px and controls 28-32 px, so more rows fit; it looks professional and packed. As it grows: Fits data tools as they grow, but touch and occasional use need a roomier mode; tap targets never shrink.
   - `large` Now and then, on a phone or in public: body 17px or more, controls and targets 44-48px (iOS 17pt, GOV.UK 19px, Material, USWDS 48px targets) [DC-L09-04].
     - Now: Body text 17 px or more and 44-48 px targets: calm and easy to read and tap on phones. As it grows: Suits public and phone use; dense admin screens added later would need a compact mode. [inferred]
@@ -208,7 +208,7 @@ Zoom 2 defined · weight medium · changes 1 decisions · class I · cards DC-L1
 - **Options:**
   - `text-size` Text size: layouts must reflow at large sizes (DC-L02-21).
   - `density` Compact or roomy switch: adds a compact/comfortable token mode (DC-L03-11).
-  - `contrast` Contrast themes: adds a high-contrast mode (DC-L01-20).
+  - `contrast` Contrast themes: asks for a high-contrast mode (DC-L01-20); the engine records this but does not generate the mode yet.
   - `reduced-motion` Reduced motion: swaps movement for fades (DC-L04-25).
   - `situational` Tough conditions (one hand busy, bright light, older users): larger targets and higher contrast by default; reads calmer and more legible [DC-L13-14].
 - **Default:** `text-size`: text-size + reduced-motion *Source:* accessibility rule (WCAG 2.2 AA as the floor; text resize and motion preferences are OS settings the system should honor) [DC-L13-14, DC-L10-16].
@@ -675,6 +675,7 @@ Zoom 1 broad · weight high · changes 13 decisions · class G · cards DC-L15-0
     - Now: Vibrant colors, overlapping visuals and bold type: energetic but busy. As it grows: Meant for marketing only; inside the app, the busyness grows with every screen. [inferred]
 - **Default:** `flat2`: flat2 with strong signifiers *Source:* card heuristic; keep the app on a durable base and reserve fashionable styles for marketing [DC-L15-01].
 - **Show:** one product screen (nav, card, form, table) rendered in each style, with contrast warnings on soft and glass.
+- **Named styles:** 118 looks in `references/style-catalog.md`, by preset: `flat2` 81 (for example `skeuomorphism`, `flat`, `bauhaus`, `swiss`); `tonal` 5 (for example `material-elevation`, `playful`, `aqua`, `mcbling`); `glass` 5 (for example `glassmorphism`, `frutiger-aero`, `fluent`, `liquid-glass`); `neo-brutalist` 8 (for example `neo-brutalism`, `brutalism`, `comic`, `de-stijl`); `soft` 10 (for example `neumorphism`, `claymorphism`, `windows-95-classic`, `mac-os-platinum`); `maximal` 9 (for example `memphis`, `mesh-gradient`, `risograph`, `y2k`). When the person's words point at a look, find it with `engine.py style search <their words>` and show it by name. Record one with `engine.py pick Q-dir-01 <style id>`: it selects the preset, keeps the name for DESIGN.md and sets the style's own dials. When nothing named fits, explore new ones with them (`references/style-lab.md`).
 - **Use / avoid:** use flat 2.0 or tonal for app surfaces people use daily; use glass only on the functional layer (bars, controls, sheets) and never on reading surfaces; keep neo-brutalist and maximal for marketing or indie products; avoid soft/neumorphic for anything interactive unless borders are added to reach 3:1 [DC-L15-01; via DC-L10-12].
 - **Skip:** yes; Quick maps sliders A, C and E to a preset [inferred from L06 section 4.2].
 
@@ -691,7 +692,8 @@ Zoom 1 broad · weight high · changes 8 decisions · class G · cards DC-L15-04
     - Now: Lots of space: calm, premium and focused on one message. As it grows: Great for marketing and focused tasks, but it slows down people who come back often.
   - `user-selectable` Let people choose: default plus a compact mode (Atlassian `spacing="compact"`, Salesforce comfy/compact) [DC-L03-10].
     - Now: A default density plus a compact mode people can switch on, like Atlassian and Salesforce. As it grows: Only data-heavy parts (tables, lists, menus, trees) need both sizes; targets never shrink in either mode.
-- **Default:** `comfortable`: comfortable for app surfaces, spacious for marketing, compact as a user option for data-heavy components (tables, lists, menus, trees) *Source:* card heuristic [DC-L15-04, DC-L08-13].
+- **Default:** `comfortable`: comfortable for app surfaces once Q-aud-01 is regular, compact once it is dense, spacious once it is large; spacious for marketing, compact as a user option for data-heavy components (tables, lists, menus, trees) *Source:* card heuristic [DC-L15-04, DC-L08-13]; the density Q-aud-01 already set, so accepting the default never undoes it [DC-L23-01].
+- **Default follows Q-aud-01:** recommend `compact` when it is `dense`, `comfortable` when it is `regular`, `spacious` when it is `large`; `comfortable` only while Q-aud-01 is unanswered.
 - **Show:** a data table and a settings form at each density, with the target-size floor drawn so it visibly does not shrink [DC-L15-04].
 - **Use / avoid:** use compact for data-heavy components (tables, lists, menus, trees); use spacious for marketing and focused tasks; avoid shrinking targets with density; they stay at the floor in every mode [DC-L15-04, DC-L08-13].
 - **Skip:** yes.
@@ -1877,7 +1879,7 @@ Zoom 1 broad · weight high · changes 4 decisions · class G · cards DC-L09-01
     - Now: Corners set by size, like Spectrum's 6-10 px, or matched to the container, as Apple does. As it grows: New parts get the right corner from their size or container, without a new decision. [inferred]
 - **Default:** 6px controls, 8-12px containers *Source:* L09 shared default row 7 (16 of 23 control defaults at 4-8px, median 6) [L09 A1; DC-L09-01]; a radius factor slider as Radix offers.
 - **Show:** the component sheet morphing as the slider moves; the focus ring follows the radius.
-- **Use / avoid:** use sharp corners when density and precision are brand values (data, developer tools) and pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
+- **Use / avoid:** use 0-2px corners only as a deliberate brand statement (GOV.UK, Carbon v11 buttons): top-tier data and developer tools use about 6px controls, 8px panels and 12px overlays [DC-L23-02]; use pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
 - **Skip:** yes, 6px.
 
 
@@ -2231,7 +2233,7 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L10-
   - `transparency` Reduce Transparency.
   - `motion` Reduce Motion [DC-L04-25].
   - `bold-text` Bold Text [DC-L10-16].
-- **Default:** all, with high contrast and reduced transparency as token modes *Source:* platform convention [DC-L10-16; L10 baked-in rules 9-10].
+- **Default:** all. Reduced motion is a token mode, and each glass surface gets a solid fallback when the system uses glass; high-contrast and reduced-transparency modes are not generated yet *Source:* platform convention [DC-L10-16; L10 baked-in rules 9-10].
 - **Show:** a settings simulator panel with each toggle applied live.
 - **Use / avoid:** never convey a boundary or focus state with shadow or translucency alone; avoid app-level switches that override these settings [DC-L10-16].
 - **Skip:** yes.

@@ -12,6 +12,9 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 | They share a website, screenshot, Figma file, repo CSS or brand book to learn from | **opendesigner-extract**, then come back |
 | They want it in Figma, Paper, Tailwind, iOS or Android | **opendesigner-export** |
 | They want illustrations, or the app "more visual" (empty states, onboarding, errors, hero) | **opendesigner-illustrate** |
+| They want original painted art or a film in the brand's colours (hero, launch reel, celebration loop) | **opendesigner-paint** |
+| A screen or page is built and they ask "does it look right?", "review this" or "QA this", or you built it and are about to say it is done | **opendesigner-review** |
+| Anything visual is about to be exported or shared (a page, video, deck or card): "is this ready?" | **opendesigner-preflight** |
 | A one-off UI task in a project that already has a system | Follow its DESIGN.md. Don't interview |
 
 ## Files in this skill
@@ -27,9 +30,12 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 | `references/standards.md` | At the start (short). House standards: rules OpenDesigner applies and locks in every project, the values they lock, and how the person can change one |
 | `references/standards/<theme>.md` | Before you offer options in that area, and before you implement anything it covers (motion, toasts, drawers, touch, Swift and more) |
 | `references/making.md` | Before you build a page, a screen or a section with the system, and each time the person gives feedback on what you built. The round, showing options, keeping a page one page, checking it as rendered, and the mistakes builders make |
+| `references/styles.md` | When the person describes a look in their own words ("frosty", "like a comic", "soft buttons"): map the words to named styles, show them, say the name in plain words first, and record the pick with its dial settings. 28 styles with real examples, and a gradient and surface glossary |
+| `references/style-lab.md`, `references/style-catalog.md` | When no named style fits, when the person wants something new or experimental, or when they ask what else exists: search the full catalogue by their words, mix or change styles on 12 trait axes, explore new directions, and save one as their own. The floors never move |
 | `references/improve.md` | When something is missing, wrong or confusing |
 | `scripts/journey.py`, `references/report.schema.json` | The private journey log and the optional anonymous report (`rules.md` section 11) |
 | `references/questions.json`, `graph.json`, `cards/Lxx.json`, `levers.json`, `ontology-slim.json` | Machine index; what a choice changes; "why?" sources; dials and formulas; the full block map |
+| `references/taste.md`, `scripts/taste.py`, `assets/taste/library.json` | When you offer the taste poll, and before you offer dials or style options once the project has taste evidence: the taste index merges the poll, the person's own decisions, inspirations, the style pick and feel words |
 | `assets/templates/*.html` | Visual steps |
 | `assets/output/*` | The shape of the files the person keeps |
 
@@ -46,6 +52,8 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 Details are in `references/zoom.md`.
 - **Level 0, sketch:** up to 5 questions, one per message, fewer when their words already answer some. Then `engine.py sketch ...` records the answers and builds a complete first version. Show the first result: a plain line on what they got, the overview (`opendesigner/overview.html`), and one clear next step (`zoom.md`, "The first result").
 - **People in a hurry** ("just pick") get the sketch with `--delegated` and no optional questions. People who talk in plain words get fewer questions (`zoom.md`).
+- **The taste poll** (optional, about 5 minutes): the person rates 20 to 30 real screens from shipped products, and the result recommends the eight dials. Offer it when they can't put their taste into words ("I'll know it when I see it"), before level 1, or whenever they ask. It never replaces a question they already answered (`references/taste.md`).
+- **The taste index** (`taste.py index`) merges every taste signal in this project. Offer the dials it is sure about as "confirm this?", ask the rest directly, and never offer an option past one of its red lines. The engine's option gallery and `engine.py review` already use it (`references/taste.md`, "The taste index").
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
 - **Skip what a standard settles.** A question marked **Settled by: STD-...** in its stage file is skipped like a **Planned** one: ask nothing, record nothing. Never recommend an option marked **(breaks STD-...)** (`rules.md` section 6).
@@ -76,6 +84,7 @@ Each template has a **Copy my choice** button that produces `OD:` lines. When th
 python3 <skill>/scripts/engine.py init [--name "Acme"]
 python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal [--brand "#167874"] [--surfaces app:operate] [--delegated feel,brand]
 python3 <skill>/scripts/engine.py feel [words...]            the feel words it knows, or how it reads theirs ("fun" is playful)
+python3 <skill>/scripts/engine.py style search|show|tiles|mix|mutate|explore|define ...   the style lab: find, show, blend, change or invent a look (style-lab.md)
 python3 <skill>/scripts/engine.py set <path> <json-value> --why "..." [--set-by delegated] [--lock]
 python3 <skill>/scripts/engine.py resolve                    current dials and derived values, for payloads
 python3 <skill>/scripts/engine.py generate                   opendesigner/tokens/ (DTCG 2025.10)
@@ -180,7 +189,7 @@ Five answers shape the sketch. Ask only what their words and files don't already
    - Show six pairs only if they ask for choices, or when the designer voice leads. The pairs are playful or serious · friendly or authoritative · minimal or rich · premium or everyday · modern or heritage · bold or quiet.
    - The words fill in the personality sliders (Q-brand-01), so don't ask for the sliders.
 5. **Do you have a brand color or a logo?** This is Q-color-01, asked together with Q-brand-03.
-   - A hex color becomes the seed (`--brand`). The engine keeps it exact on main buttons when it passes contrast. If it doesn't, the engine changes it just enough and prints one line: pass that line on.
+   - A hex color becomes the seed (`--brand`). The engine never replaces a hex they typed. It keeps it exact on main buttons with white or dark text, whichever reads. If neither reads, fills that carry text use a readable shade and the exact color stays for the logo and large areas. It prints one line either way: pass that line on.
    - A color word ("blue"): pick a hex of that color that fits their feel words, and pass it as `--brand`.
    - A logo file: if you can see images, find its main color. If you can't, ask "What color is your logo mostly?" Before the sketch, record it with `engine.py set raw.brandColor '"<hex>"' --set-by asset --why "main color of their logo"`, and record the logo with `engine.py set hooks.H-logo.status '"have"' --set-by asset`. Then run `sketch` without `--brand`. A second strong logo color can become a second accent later (Q-color-04, `raw.secondaryColors`).
    - With neither, suggest 3 seed colors that fit their words, and label them as a starting point.
@@ -198,7 +207,7 @@ engine.py pick Q-scope-06 persuade --set-by assumed --why "a site that shows off
 
 **People in a hurry.** When they say "just pick", "just do it" or "you choose" about the rest:
 - Stop asking. Pick values that fit their words and files. For example, reuse the button color already in their CSS as the seed.
-- Pass what you picked with `--delegated`, naming those flags (`--delegated feel,brand`). A bare `--delegated` marks every sketch answer as handed over, so use it only when they answered none themselves.
+- Pass what you picked with `--delegated`, naming those flags (`--delegated feel,brand`). A bare `--delegated` marks every sketch answer as handed over, so use it only when they answered none themselves. A hex given with `--brand` stays theirs even then: name `brand` only when you picked the hex.
 - Log `speed_mode` (`rules.md` section 11). That is delegation. Add a frustration signal only if they sound fed up.
 - Ask about who it's for once, and only if nothing points to an answer (`rules.md` section 7). If something does, record it as an assumed answer.
 - After the sketch, send the result, the next step and the offer in one short message, with no extra visuals.
@@ -318,6 +327,7 @@ Pick one, say "show me", or tell me what you want.
 - The plain sentence and the "Designers · Code" line appear only the first time the term comes up.
 - The question id (Q-shape-01) is the stable handle for later changes ("change Q-shape-01"). Show it only when the engineer voice leads or the person asks. The engine numbers log entries D-0001, D-0002 and so on.
 - Put the recommended option first. Show up to 4 options. If a question has more, show the 3 closest and put the rest behind "more options". Questions with weight `high` get one extra line on what the choice changes elsewhere. Nothing else.
+- When the project has a taste index (`taste.md`, "The taste index"), never show an option past one of its red lines, and put options in order of fit (`taste.py fit`).
 
 ## 5. Answer statuses (`--set-by`)
 | Status | Meaning | Record with |
@@ -624,12 +634,12 @@ The **Ask** and **Question** columns are what you say to the person, in plain wo
 | `H-appicon` (Q-icon-06) | Do you have app icon artwork? Separate layers are best. | Layered SVG/PDF (Apple Icon Composer), adaptive layers (Android), PNG for stores | Designer; Icon Composer; Android Studio Image Asset; Maskable.app |
 | `H-favicon` (with the logo) | Asked with the logo | Master SVG | Generated from the symbol: favicon.ico 32, icon.svg with dark-mode query, apple-touch 180, manifest 192/512 + maskable |
 | `H-icons` (Q-icon-01) | Do you have your own icons, or icons that free icon sets don't have? | SVG on the library grid, SF Symbol templates, Android vector drawables | Lucide, Phosphor, Tabler, Heroicons, Material Symbols (keep notices); custom icons on the 24 px keyline; commission pictograms |
-| `H-illus` (Q-img-04) | Do you have illustrations, or a drawing style or character? | Master SVG, Lottie for animation | Commission; open sets with their exact terms (the **opendesigner-illustrate** skill finds, recolors and applies them with a licence ledger); AI vector tools with plan terms; or no illustration and honest text empty states |
+| `H-illus` (Q-img-04) | Do you have illustrations, or a drawing style or character? | Master SVG, Lottie for animation | Commission; open sets with their exact terms (the **opendesigner-illustrate** skill finds, recolors and applies them with a licence ledger); AI vector tools with plan terms; original art painted in code (**opendesigner-paint**); or no illustration and honest text empty states |
 | `H-photo` (Q-img-01) | Do you have photos, or a photo style to follow? | Highest-resolution originals | Commission; Unsplash or Pexels under their licences; AI images with ownership caveats and synthetic-media marking |
 | `H-type` (Q-type-02) | Do you have a brand font? Does its licence cover websites, apps and hosting the files yourself? | OTF/TTF masters, WOFF2 for web | Google Fonts (OFL/Apache, self-host OK); Fontshare (no subsetting or conversion, not offerable in a design tool's picker); Adobe Fonts (web embed only, no self-hosting or app embedding); buy the needed licences |
 | `H-color` (Q-color-01) | Do you have brand colors that must match exactly? | Hex, RGB, OKLCH, Pantone refs, Figma variables | Candidates from the logo or brand book; otherwise seeds from the personality dials, labelled a starting point |
-| `H-motion` (Q-img-06) | Do you have any animation: a moving logo, loading animations, animated drawings or 3D? | Lottie / dotLottie, Rive, glTF/GLB, USDZ | Commission a motion designer; otherwise motion tokens only, no signature animation |
-| `H-motif` (Q-img-07, Q-shape-05) | Do you have brand patterns, textures, color blends or a signature shape? | SVG patterns, gradient definitions | Commission; or none (decoration standing in for content reads generic) |
+| `H-motion` (Q-img-06) | Do you have any animation: a moving logo, loading animations, animated drawings or 3D? | Lottie / dotLottie, Rive, glTF/GLB, USDZ | Commission a motion designer; a film or loop painted in code in the brand palette (**opendesigner-paint**, with the person's OK for its npm and Chromium installs); otherwise motion tokens only, no signature animation |
+| `H-motif` (Q-img-07, Q-shape-05) | Do you have brand patterns, textures, color blends or a signature shape? | SVG patterns, gradient definitions | Commission; painted grounds and textures in the brand palette (**opendesigner-paint**); or none (decoration standing in for content reads generic) |
 | `H-sound` (Q-motion-08) | Do you have app sounds, or a short sound for your brand? | Apple: .aiff/.wav/.caf under 30 s; Android: Ogg, WAV, MP3, AAC, FLAC | Commission; platform system sounds; or no sound |
 | `H-haptic` (Q-motion-09) | Do you have your own vibration patterns? | Apple AHAP, Android VibrationEffect | System patterns first |
 | `H-voice` (Q-voice-01) | Do you have a guide for how your product writes, or a word list? | PDF, Markdown, existing product copy | Model drafts voice from the personality answers, marked draft until a content designer or owner reviews it |
@@ -732,11 +742,16 @@ When a reference inspires a section, take its lessons by default. Only when the 
 - **Test between the breakpoints.** A rule written for tablets can squeeze a layout at a width nobody opened.
 - **Test without hover.** Anything that changes on hover must also change another way: by itself on a timer, or on a tap (DC-L19-143). Hover styles themselves sit behind a fine-pointer query (STD-accessibility-motion-15).
 - **Measure text as rendered** wherever something is scaled down. A screen shown at reduced scale can pass every type check while its text renders at 8 to 10 px.
+- **Measure contrast against the pixels behind the text** wherever text sits on glass, a photo, a gradient, a texture or a drawn object. The token check only knows the colors it assigned, so it passes text that fails on screen. Hide the text, render again, and compare each line of text with the brightest (or darkest) 5% of pixels in its box. In the showcase's style studies, the token checks passed 21 such failures, the worst at 2.47:1; this check caught every one.
 - **Compare with the version before** for everything you did not mean to change. Compare computed styles or screenshots, section by section.
 - **Emulation is not a device** (STD-process-review-taste-33). When the person reports a fault you cannot reproduce, say so, say what you tried, remove every difference your change introduced, and ask them to look again. Never report it as fixed.
 - **Ask before you record the screen to check motion, and record only your test window.** A recording of a screen region can catch the person's other windows.
 
 Then tell the person what you checked and what you could not (`guardrails.md` section 5).
+
+**Have fresh eyes read it before the person does.** Ask a reviewer that did not build it (a fresh-context agent, or a person) to read the render and the copy, and to check facts that are easy to get wrong: a weekday against its date, totals that should add up, a step that happens before the approval it needs, a column header that overflows. In the showcase rebuilds, a fresh-context check found two wrong weekdays, a logic error and two name collisions that three rounds of self-review had missed. Later independent audits found six more weekdays taken from the wrong year's calendar, sums that did not add up, a queue that could not drain in the time shown, and three invented names that belong to real products. Work out every weekday from its date with a calendar or a script, and re-add every total from the page itself.
+
+**Compare it with shipped work at the same size.** Before you show a page, a screen or a section, put it next to three shipped products that solve the same thing, at the same width, and score it 1 to 5: 5 passes as a real company's work, 3 is competent but conventional, 1 is slop. Below 4, fix it or rebuild it before anyone sees it, using section 11. Say the score and the three references in your report. A score from an AI reviewer, yours or a fresh one, can only rule work out; it never approves it. In the showcase, independent AI audits scored 4 for two heroes the owner called "very ugly", and he removed four heroes the audits had kept. Show the person, record their verdict in their words, and let it outrank every score.
 
 ## 6. Finished interface inside a page
 A product screen on a marketing page, or a live demo in documentation, is a finished design inside another one (DC-L22-04).
@@ -747,6 +762,7 @@ A product screen on a marketing page, or a live demo in documentation, is a fini
 - **Design it at real size and show it scaled, like a screenshot.** Decide which parts must stay readable (the title, the key figures, the main action) and measure them as rendered.
 - **On a small screen, show part of it at a readable size and move the view.** Don't shrink the whole screen.
 - **Sample content is realistic** (DC-L19-35). On a public page, use made-up names for companies and people. Spread the examples across the kinds of customer the product serves.
+- **One product on several screens shares one data file.** When the same product appears on a phone, a laptop and a mockup, keep its names, amounts and dates in one file that every screen reads, and re-render every screen when it changes. In the showcase, a laptop mockup copied a phone screen's data, and the phone changed twice while the mockup was being built.
 - **Load each embed when it is needed,** and paint only the one that shows.
 
 ## 7. Sections that hold the page, and movement
@@ -805,7 +821,35 @@ These are mistakes an AI builder made in the source project (DC-L22-09). Most dr
 
 **Read each reply for what it says about your reading, not only for the fix.** "I only wanted that one changed" means your changes reach too far. The same fix asked for on five cards means they reach too little. "You just did more of the same" means "more" was a request for new ideas. Change how you read the next note, and say what you changed.
 
-# House standards (version 2)
+## 11. Signs of machine-made work, and what premium work does instead
+In October 2026, AI builders made 54 showcase pieces through this process: heroes, components, app and watch screens, footers and mockups. Each was then audited against three to five shipped products on Mobbin. 28 passed, 20 needed polish and 6 were rebuilt; the owner judged most of the rest "AI slop" (`brand/showcase/audit/`, one file per piece). Every typeface rule held. The failures came from the habits below, counted across the 54. Check your own work against them before you show it.
+
+| The tell | Seen in | Do this instead |
+|---|---|---|
+| Glow, bloom, gradient blobs or a blurred disc with no job | 19 of 54 | Flat fills and hairlines. A gradient or a photo must carry content, such as a real photo with the product on it |
+| Texture or "art" standing in for a real asset: contour lines, painted skies, clipart, a CSS device pasted on a photo | 13 | A real asset from the person or an open library, credited (`hooks.md`), or no picture. Draw one object with craft, or none |
+| Decoration with no data: rings, background grids, confetti, sparkles, crop marks, big sheet numbers | 12 | Every mark on the page carries information. Take decoration away before you add any |
+| The same hero recipe: a "New" pill, a two-line headline with one phrase highlighted, a sub-line, then a filled and an outline button | 9 of 18 heroes and footers | Decide each part. One action is often enough. A highlight block is a choice for one page, not the default |
+| Floating, tilted UI fragments with soft shadows, overlapping the copy | 4 | Show the product flat and whole, at a size where its key numbers read, inside the page's grid |
+| Invented proof: logo rows, star ratings, user counts | 3 | Leave it out until it is real. Specific facts persuade: places, dates, numbers with units |
+| Status said three or four ways at once (border, badge, dot and color) | 4 | One signal per state, plus text. Color only where it carries meaning |
+| Bold everywhere | 3 | Regular weight carries the page. Highlight one thing by weight, a fill or the second face (`rules.md`) |
+| Device frames that copy a real brand's hardware, or hardware that is not lit like the photo under it | 5 | Generic, simple devices; match the photo's light, shadow and perspective, or show the screen without a device |
+| A reference rebuilt too closely: the same labels in the same order, the same ID format, the same filter set | 1 B2B screen matched one product's page tile for tile | Take the structure (a status summary, then filters, then the table) and change everything that identifies the source: the states your product really has, its own labels and order, its own ID format. Compare side by side: if a viewer could name the reference, it is too close (`guardrails.md` section 1) |
+| Warm cream with orange and brown, or four or more pastel hues | 4 | Strong tonal contrast and one accent with one job |
+| Platform slips: a watch clock in the wrong corner, 42 px rows, desktop habits on a phone | 4 | Rebuild the platform's own chrome from a shipped reference before you style it |
+| Reused invented data across pieces ("18:24", the same first name), or an invented name that is a real company | 2 pairs; 8 names in one later draft, and 2 real companies | Write fresh data for every product, in its own units. Search the project for every invented name before you use it (keep a registry of them, as the showcase does in `brand/showcase/NAMES.md`), and search the web for every brand name |
+
+**What the pieces that passed had in common:**
+- One object made with care that only this brand could own: a radio, a contour map with its float marker, a bowl.
+- One typeface doing the work through size and weight.
+- Copy with numbers and places instead of adjectives: "eleven architects", "4,112 instruments at sea", "Unit 4, Canal Yard 41".
+- Small true data in the corners, such as coordinates, sunrise time, a page count.
+- States shown inside a real page rather than floating.
+- A structure taken from a shipped product and rebuilt in the piece's own materials (section 4).
+- In a decorative style, the decoration carries data. The style studies (`brand/showcase/styles/`) moved from 3 to 4 or 5 when it did: shapes sized by tickets sold, two inks whose overlap shows felt wait against actual wait, red only where something failed.
+
+# House standards (version 3)
 
 <!-- generated by tools/build_data.py from synthesis/; edit the source, not this file -->
 

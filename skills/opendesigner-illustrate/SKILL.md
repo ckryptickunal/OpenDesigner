@@ -42,6 +42,7 @@ To show the person every source at once, run `illustrate.py directory --open`. I
 - Read `opendesigner/state.json` for `hooks.H-illus.status` and the answer to `Q-img-04` (style: line, flat, hand-drawn, mascot, none).
 - If they have their own art or a commissioned set, use it: `illustrate.py add FILE --source other --licence "<their words>"`, then go to step 5. Recommend commissioning for anything customers should recognise as theirs, and offer the brief at the end of `hooks.md`.
 - A dense work tool may need no illustration: honest icon-plus-text empty states. Offer that option plainly (DC-L05-20).
+- When found art would read generic and the brand needs something of its own, offer original art painted in code instead: **opendesigner-paint**.
 
 ## 2. Shot list (before any search)
 List the slots that need art, one line each: slot (from `purposes.json`), screen, message it supports, size. Example: `empty-state · Inbox with no mail · "You're all caught up" · 160 px`. Ask the person to confirm or cut it. It stops one idea being searched in ten styles, and keeps every piece in the same style.

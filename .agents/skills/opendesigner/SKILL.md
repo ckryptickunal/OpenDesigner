@@ -22,6 +22,9 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 | They share a website, screenshot, Figma file, repo CSS or brand book to learn from | **opendesigner-extract**, then come back |
 | They want it in Figma, Paper, Tailwind, iOS or Android | **opendesigner-export** |
 | They want illustrations, or the app "more visual" (empty states, onboarding, errors, hero) | **opendesigner-illustrate** |
+| They want original painted art or a film in the brand's colours (hero, launch reel, celebration loop) | **opendesigner-paint** |
+| A screen or page is built and they ask "does it look right?", "review this" or "QA this", or you built it and are about to say it is done | **opendesigner-review** |
+| Anything visual is about to be exported or shared (a page, video, deck or card): "is this ready?" | **opendesigner-preflight** |
 | A one-off UI task in a project that already has a system | Follow its DESIGN.md. Don't interview |
 
 ## Files in this skill
@@ -37,9 +40,12 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 | `references/standards.md` | At the start (short). House standards: rules OpenDesigner applies and locks in every project, the values they lock, and how the person can change one |
 | `references/standards/<theme>.md` | Before you offer options in that area, and before you implement anything it covers (motion, toasts, drawers, touch, Swift and more) |
 | `references/making.md` | Before you build a page, a screen or a section with the system, and each time the person gives feedback on what you built. The round, showing options, keeping a page one page, checking it as rendered, and the mistakes builders make |
+| `references/styles.md` | When the person describes a look in their own words ("frosty", "like a comic", "soft buttons"): map the words to named styles, show them, say the name in plain words first, and record the pick with its dial settings. 28 styles with real examples, and a gradient and surface glossary |
+| `references/style-lab.md`, `references/style-catalog.md` | When no named style fits, when the person wants something new or experimental, or when they ask what else exists: search the full catalogue by their words, mix or change styles on 12 trait axes, explore new directions, and save one as their own. The floors never move |
 | `references/improve.md` | When something is missing, wrong or confusing |
 | `scripts/journey.py`, `references/report.schema.json` | The private journey log and the optional anonymous report (`rules.md` section 11) |
 | `references/questions.json`, `graph.json`, `cards/Lxx.json`, `levers.json`, `ontology-slim.json` | Machine index; what a choice changes; "why?" sources; dials and formulas; the full block map |
+| `references/taste.md`, `scripts/taste.py`, `assets/taste/library.json` | When you offer the taste poll, and before you offer dials or style options once the project has taste evidence: the taste index merges the poll, the person's own decisions, inspirations, the style pick and feel words |
 | `assets/templates/*.html` | Visual steps |
 | `assets/output/*` | The shape of the files the person keeps |
 
@@ -56,6 +62,8 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 Details are in `references/zoom.md`.
 - **Level 0, sketch:** up to 5 questions, one per message, fewer when their words already answer some. Then `engine.py sketch ...` records the answers and builds a complete first version. Show the first result: a plain line on what they got, the overview (`opendesigner/overview.html`), and one clear next step (`zoom.md`, "The first result").
 - **People in a hurry** ("just pick") get the sketch with `--delegated` and no optional questions. People who talk in plain words get fewer questions (`zoom.md`).
+- **The taste poll** (optional, about 5 minutes): the person rates 20 to 30 real screens from shipped products, and the result recommends the eight dials. Offer it when they can't put their taste into words ("I'll know it when I see it"), before level 1, or whenever they ask. It never replaces a question they already answered (`references/taste.md`).
+- **The taste index** (`taste.py index`) merges every taste signal in this project. Offer the dials it is sure about as "confirm this?", ask the rest directly, and never offer an option past one of its red lines. The engine's option gallery and `engine.py review` already use it (`references/taste.md`, "The taste index").
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
 - **Skip what a standard settles.** A question marked **Settled by: STD-...** in its stage file is skipped like a **Planned** one: ask nothing, record nothing. Never recommend an option marked **(breaks STD-...)** (`rules.md` section 6).
@@ -86,6 +94,7 @@ Each template has a **Copy my choice** button that produces `OD:` lines. When th
 python3 <skill>/scripts/engine.py init [--name "Acme"]
 python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal [--brand "#167874"] [--surfaces app:operate] [--delegated feel,brand]
 python3 <skill>/scripts/engine.py feel [words...]            the feel words it knows, or how it reads theirs ("fun" is playful)
+python3 <skill>/scripts/engine.py style search|show|tiles|mix|mutate|explore|define ...   the style lab: find, show, blend, change or invent a look (style-lab.md)
 python3 <skill>/scripts/engine.py set <path> <json-value> --why "..." [--set-by delegated] [--lock]
 python3 <skill>/scripts/engine.py resolve                    current dials and derived values, for payloads
 python3 <skill>/scripts/engine.py generate                   opendesigner/tokens/ (DTCG 2025.10)

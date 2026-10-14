@@ -1,0 +1,611 @@
+[
+ {
+  "id": "web-1-vernacular",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Lialina essay loads; describes the mid-90s web as bright, personal, slow and under construction."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Vernacular Web 2 loads; lists Under Construction signs, outer-space backgrounds, MIDI, blinking New! buttons, glitter, repeating backgrounds, no clear structure."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Cameron's World loads; GeoCities 1994-2009, over 38 million pages, spaces always under construction."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "examples",
+    "problem": "Neocities' own site and about page are not in this style and the about page never mentions GeoCities; it is a host, not an example of the look.",
+    "correct": "Keep Neocities as a host only if labelled that way, or link a specific hand-made Neocities page that shows the style.",
+    "url": "https://neocities.org/about"
+   }
+  ],
+  "note": "Claims check out; only the Neocities example is loose."
+ },
+ {
+  "id": "classic-mac-1bit",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "system.css page: System OS 1984-1991, based on System 6 as the final monochrome version, 59 x 20 px rounded-rectangle buttons."
+   },
+   {
+    "id": "S2",
+    "status": "partly",
+    "note": "Hyperallergic loads and supports Kare's black-and-white pixel icons; it says nothing about dither patterns, which S3 covers."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Stylesheet loads: striped title-bar gradient, 2px border plus 2px offset shadow on .standard-dialog, checkerboard pattern, Chicago/Geneva/Monaco font faces."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "origin",
+    "problem": "'System 6 was the last monochrome version' repeats the library's shorthand. System 6 already ran in colour on the Mac II (1987) and let icons be coloured; only its window frames stayed black and white.",
+    "correct": "System 6 was the last version whose standard window chrome was black and white; System 7 (1991) colourised the interface on colour Macs.",
+    "url": "https://en.wikipedia.org/wiki/System_6"
+   },
+   {
+    "field": "code",
+    "problem": "The code sets font-family to Chicago and Geneva, Apple's proprietary system typefaces, as the thing to use.",
+    "correct": "Use an open-licence bitmap or pixel font and describe Chicago/Geneva only as historical reference.",
+    "url": ""
+   }
+  ],
+  "note": "Accurate look; soften the 'last monochrome' line and drop Apple fonts from the code."
+ },
+ {
+  "id": "windows-95-classic",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Toastytech: bevelled 3d look popularised by NeXTStep and OS/2 2.0; explains the single Start button."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "98.css page plus its stylesheet: silver background, the exact inset-shadow bevel, raised borders turn sunken when pressed, navy-to-#1084d0 title bar, 75 x 23 px buttons, pixel MS Sans Serif."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Kent Sullivan's paper (mirrored): Start menu as a single-button home base, taskbar for switching windows."
+   }
+  ],
+  "fixes": [],
+  "note": "All claims verified; 98.css values live in its stylesheet rather than the page text."
+ },
+ {
+  "id": "mac-os-platinum",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Mac OS 8 HIG: system-wide platinum appearance checkbox people can switch on or off."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Mac OS 8 HIG: platinum is the default; Appearance control panel offers accent and highlight colours; default font Charcoal, Chicago for layout."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Mac OS 8 HIG controls chapter lists push, radio, checkbox and bevel buttons."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "Wikipedia Appearance Manager: built for Copland, keeps System 7 shapes and positions, shades of grey, Charcoal default with Chicago option, palettes for progress bars, scroll thumbs and selections."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "'replacing the mostly black and white System 7 look' overstates it: System 7 already shipped a colourised interface on colour Macs.",
+    "correct": "Platinum made a grey, 3D-shaded look the system-wide default, replacing System 7's mostly flat chrome (lightly tinted on colour Macs).",
+    "url": "https://en.wikipedia.org/wiki/System_7"
+   }
+  ],
+  "note": "Well sourced; one comparison with System 7 is overstated."
+ },
+ {
+  "id": "aqua",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Apple press release, 5 January 2000, Macworld Expo San Francisco: luminous, semi-transparent buttons, scroll bars and windows, fluid animation."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Wikipedia Aqua: blue/white/grey palette, gel effect, pulsing blue default button, pinstripes then white, drop shadows instead of frames, Lucida Grande, Genie effect, red/yellow/green window buttons."
+   }
+  ],
+  "fixes": [],
+  "note": "All claims verified against both sources."
+ },
+ {
+  "id": "windows-xp-luna",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "XP.css 0.2.6 stylesheet: blue title-bar gradient, 8px/7px top radii, Trebuchet MS title, #ece9d8 body, 3px button radius with #003c74 border and white-to-beige gradient."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Wikipedia: Frog Design contracted for the visual identity, saturated colours and rounded corners, blue/olive green/silver, Trebuchet MS titles and Tahoma, Fisher-Price nickname."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "code",
+    "problem": "Code sets font-family 'Trebuchet MS', a Microsoft-owned typeface, and copies Luna's exact title-bar gradient.",
+    "correct": "Keep the gradient as a recipe but name an open humanist sans (with Trebuchet only as a system fallback).",
+    "url": ""
+   }
+  ],
+  "note": "Facts verified; code leans on a Microsoft typeface."
+ },
+ {
+  "id": "web-2-gloss",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Nicol 2006: green the unofficial colour plus saturated blues, oranges, pinks; rounded corners and rounded logo type; FREE in a starburst; big text; white space."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "TNW 2008: unwritten set of guidelines with gradients, round corners, mirror effects, a badge and 48px+ key text."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Frutiger Aero Archive 2025: Web 2.0 Gloss most common from about 2007 to the early 2010s; gradient button with a hard stop at 55% and a reflection added via ::before; reflections under objects."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "'starburst badges shouting Free or Beta': neither S1 nor S2 ties starbursts to Beta; S1 only names Free.",
+    "correct": "Starburst badges shouting Free (Beta labels were common too, but cite a source or mark [inferred]).",
+    "url": "https://jonathannicol.com/blog/2006/10/21/the-visual-design-of-web-20/"
+   }
+  ],
+  "note": "Strong sourcing; one unsupported word."
+ },
+ {
+  "id": "metro",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Wikipedia: Encarta 95 and MSN 2.0, Media Center, Zune, introduced as Metro with Windows Phone 7 in 2010; Swiss design, transit signage, light/thin font, lowercase headings, live tiles, motion acknowledging taps."
+   },
+   {
+    "id": "S2",
+    "status": "partly",
+    "note": "principles.design: authentically digital, bold vibrant colours, typography, content before chrome. It does not mention shadows, bevels or 3D."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "NN/g 2012: completely flat, no pseudo-3D or shadows, low density, overly live tiles backfire."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "'No faux textures, shadows, bevels or 3D icons' is cited only to S2, which does not say it.",
+    "correct": "Cite S3 (NN/g: no pseudo-3D or lighting model to cast shadows) alongside S2.",
+    "url": "https://www.nngroup.com/articles/windows-8-disappointing-usability/"
+   },
+   {
+    "field": "code",
+    "problem": "Code uses 'Segoe UI' (Microsoft's proprietary typeface) and #0078d7 (Windows' default accent blue).",
+    "correct": "Use an open humanist sans in light weight and a neutral saturated tile colour; mention Segoe only as history.",
+    "url": ""
+   }
+  ],
+  "note": "History verified; fix one citation and remove Microsoft font and accent colour from code."
+ },
+ {
+  "id": "material-you",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Android docs: Dynamic Color added in Android 12, source colour, five key colours, 13-tone palettes, light and dark schemes."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Compose docs: Material You and M3 Expressive; M3 Expressive complements Android 16; shape scale square to fully circular."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Google blog: springy animations, neighbouring notifications respond to drag, blurred shade, shape-morphing on Wear OS."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "Compose graphics-shapes: rounded polygons and Morph between shapes."
+   },
+   {
+    "id": "S5",
+    "status": "ok",
+    "note": "Google Design: 46 studies, 18,000+ participants; colour, shape, size, motion, containment; key elements spotted up to four times faster."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "'46 studies with 18,000+ people found key elements spotted up to 4x faster' merges two findings: the 46 studies are the whole research programme, the 4x result comes from one eye-tracking lab study.",
+    "correct": "Research ran 46 studies with 18,000+ participants; in one eye-tracking study people spotted key elements up to 4x faster.",
+    "url": "https://design.google/library/expressive-material-design-google-research"
+   }
+  ],
+  "note": "All sources support; one research statistic is conflated."
+ },
+ {
+  "id": "fluent",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Acrylic doc: recipe of background, blur, exclusion blend, colour/tint, noise; seams edge to edge; no accent text on acrylic."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Mica doc: opaque, samples wallpaper once, neutral when inactive, base layer plus content layer."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Geometry doc: 8px top-level containers, flyouts, dialogs; 4px in-page controls."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "Engadget 2017: Fluent unveiled at Build; five elements light, depth, motion, material, scale."
+   },
+   {
+    "id": "S5",
+    "status": "ok",
+    "note": "Wikipedia: codename Project Neon, revamp of Metro, Reveal highlight discontinued with WinUI 2.6."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "'the noise and tint set it apart from plain glassmorphism' is not in S1; it is the author's comparison.",
+    "correct": "Mark that clause [inferred].",
+    "url": ""
+   }
+  ],
+  "note": "Thoroughly sourced; tag one comparison as inferred."
+ },
+ {
+  "id": "liquid-glass",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Apple newsroom, June 9 2025: translucent material that reflects and refracts, specular highlights, tab bars shrink on scroll, concentric controls, iOS/iPadOS/macOS Tahoe/watchOS/tvOS 26."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "WWDC25 session 219 transcript: lensing bends and concentrates light where older materials scattered it, highlights layer with moving lights, thicker material when larger, concentric nesting in window corners."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "HIG Materials: don't use in the content layer, use sparingly, regular and clear variants, 35% dark dimming layer for bright content."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "NN/g, 10 October 2025: legibility and contrast problems, motion for motion's sake."
+   }
+  ],
+  "fixes": [],
+  "note": "Every claim verified against Apple's own pages."
+ },
+ {
+  "id": "visionos-spatial",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "HIG Designing for visionOS: windows, volumes, immersion, passthrough, eyes and hands."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "HIG Materials: no distinct Dark Mode, glass adapts to luminance behind it, vibrancy; change log shows visionOS guidance added June 21, 2023."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "HIG Windows: default window is an upright plane of unmodifiable glass with specular reflections and shadows; ornaments; opaque backgrounds feel heavy."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "HIG Eyes: hover effect on gaze; 16 pt margin or 60 pt between centres; avoid repeating patterns filling the view."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "plain",
+    "problem": "'glass windows ... that light up when looked at': the hover highlight is on interactive elements, not whole windows.",
+    "correct": "Floating glass windows in your room; controls light up when you look at them.",
+    "url": "https://developer.apple.com/design/human-interface-guidelines/eyes"
+   }
+  ],
+  "note": "Sourcing solid; plain line slightly misdescribes the hover effect."
+ },
+ {
+  "id": "e-ink",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "E Ink: microcapsules holding white and black charged particles; Spectra built for electronic shelf labels."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Waveshare: bistable, reflective, no backlight; full refresh about 2-4 s with flashing; ghosting after partial refresh; unsuitable for animation; 4-grey mode on one panel; Spectra 6 dithering."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "'Very few grey levels' generalises from one hobby panel's 4-grey mode; e-reader and Kaleido panels show 16 grey levels.",
+    "correct": "Limited greys: 16 levels on e-reader panels, as few as 2-4 on small hobby panels; colour panels show a handful of inks with dithering.",
+    "url": "https://www.eink.com/brand/detail/Kaleido"
+   }
+  ],
+  "note": "Two working sources; grey-level claim understated."
+ },
+ {
+  "id": "dos-tui",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Wikipedia TUI: blue background with white or yellow characters, CP437 box drawing, Norton Commander, WordPerfect, Turbo Vision IDEs."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Wikipedia Turbo Vision: Borland, circa 1990, list boxes, check boxes, radio buttons, menus with mouse support."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "int10h blocks curl (403) but loads via WebFetch: DOS-era text-mode fonts including IBM VGA 8x16, CC BY-SA 4.0."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "examples",
+    "problem": "WebTUI is a modern terminal-UI CSS library (Gruvbox/Nord-style themes, vim-like layouts), not the DOS blue-screen text-mode look.",
+    "correct": "Drop it or label it as a general terminal-UI kit; the Turbo Vision port is the faithful example.",
+    "url": "https://webtui.ironclad.sh/"
+   }
+  ],
+  "note": "Facts verified; one example belongs to a different terminal look."
+ },
+ {
+  "id": "crt-phosphor",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Wikipedia Monochrome monitor: common 1960s-1980s; P1 green, P3 amber, P4 page white; amber seen as easier on the eyes."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "CSS-Tricks: radial green glow, text-shadow 0 0 5px, repeating 1px/2px line gradient."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "cool-retro-term README: mimics old cathode tube screens; Default Amber and Default Green profiles."
+   }
+  ],
+  "fixes": [],
+  "note": "All claims and the example verified."
+ },
+ {
+  "id": "financial-terminal",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Fast Company 2015 (archived): terminal on market since December 1982; dense tabular text with charts; amber on black by default; keyboard keys EQUITY, GOVT, NEWS; users notice small font changes."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "UX Magazine, March 2010: black background with yellow and orange text; users take pride in the complex interface."
+   },
+   {
+    "id": "S3",
+    "status": "ok",
+    "note": "Core77, May 2013: two-, four- or six-monitor setups."
+   }
+  ],
+  "fixes": [],
+  "note": "All claims verified; amber hex in code is marked inferred, not Bloomberg's."
+ },
+ {
+  "id": "braun-functionalism",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Vitsoe: ten principles from the late 1970s; neutral and restrained; as little design as possible; Braun products from 1958 onward."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "V&A: ET66, 1987, Rams and Lubs; black number keys, brown operator keys, yellow equals."
+   },
+   {
+    "id": "S3",
+    "status": "partly",
+    "note": "MAK Frankfurt: ET 66, Kronberg, 1987; colour-coded buttons; convex buttons. It does not mention a strict grid."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "'on a strict grid' is not in S3 or the other sources.",
+    "correct": "Round, slightly convex buttons [S3]; mark the grid [inferred] or cite a source.",
+    "url": "https://sammlung-digital.museumangewandtekunst.de/detailpage/collection/8aaba9e5-2b9b-47ac-b304-11074467d180"
+   }
+  ],
+  "note": "Museum-grade sources; one small unsupported detail."
+ },
+ {
+  "id": "synth-panel",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Metropolis: brushed aluminium case, small colour display, four coloured knobs with matching colour-coded display, graphics recalling early Nintendo 8-bit characters."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Wikipedia OP-1: prototype at NAMM 2010, released 2011, 320 x 160 OLED with mode graphics, 'limitations' quote."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "'geometric motifs' is not in S1, which describes characters (gorillas, a Karl Marx likeness) per mode.",
+    "correct": "Screen graphics are playful characters, one set per mode, recalling early 8-bit game art.",
+    "url": "https://metropolismag.com/products/teenage-engineerings-new-synthesizer-is-class-one/"
+   }
+  ],
+  "note": "Rests on one product; two working sources support it."
+ },
+ {
+  "id": "sci-fi-fui",
+  "verdict": "fix",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "HUDS+GUIS book page: FUI mixes film, storytelling, motion graphics, UX and UI."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Mark Coleran: set lighting washes out screens, primary display colours look stronger; green dated, red militaristic, leaving blue."
+   },
+   {
+    "id": "S3",
+    "status": "partly",
+    "note": "Noessel: one film's SHIELD screens are strictly orange or strictly blue, meant to be seen not read; fuidget-filled. It is one production, not a general rule."
+   },
+   {
+    "id": "S4",
+    "status": "ok",
+    "note": "Arwes README: futuristic sci-fi designs, animations and sound effects; now states it is no longer maintained."
+   }
+  ],
+  "fixes": [
+   {
+    "field": "defining",
+    "problem": "'Often one hue per screen' generalises from a single film's screens.",
+    "correct": "Some productions keep each screen to one hue (all orange or all blue), made to be glanced at rather than read.",
+    "url": "https://scifiinterfaces.com/2015/12/15/orangeblue-shield-agent-interfaces/"
+   },
+   {
+    "field": "examples",
+    "problem": "Arwes is real but its README says the project is no longer maintained.",
+    "correct": "Keep it, noting it is unmaintained.",
+    "url": "https://github.com/arwes/arwes"
+   }
+  ],
+  "note": "Well sourced; soften one generalisation and flag Arwes as unmaintained."
+ },
+ {
+  "id": "palm-pda",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Palm OS Programmer's Companion: 160x160 LCD, 1 bit/pixel until OS 3.0, rounded-rectangle buttons that invert, popup dialogs at the bottom using full width. URL now redirects to users.fuw.edu.pl; update it."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Zen of Palm PDF: 80/20 rule, focus on what users do 80 percent of the time; common functions one tap away."
+   }
+  ],
+  "fixes": [],
+  "note": "Verified; only the S1 host moved (redirect works)."
+ },
+ {
+  "id": "console-channel-grid",
+  "verdict": "ok",
+  "sources": [
+   {
+    "id": "S1",
+    "status": "ok",
+    "note": "Iwata Asks: rows of TVs in an electronics shop led to panes and the word Channel; three rows of four channels treated equally."
+   },
+   {
+    "id": "S2",
+    "status": "ok",
+    "note": "Wikipedia Wii Menu: first release 19 November 2006, four pages of 4x3 grids, 48 slots, time and date, Wii Remote pointer."
+   }
+  ],
+  "fixes": [],
+  "note": "Both sources load and support every sourced claim."
+ }
+]
