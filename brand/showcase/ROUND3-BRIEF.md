@@ -57,3 +57,10 @@ Put each piece next to the B2B product screens and Orbika. If it looks weaker or
    - Invented domains and email addresses end in `.example` (`nearmost.example`), and shown shell commands download before they run (see BRIEF.md hard rules).
    - Never save Mobbin images.
    - Don't commit; the orchestrator commits everything.
+
+## Round 4 (owner review, 2026-10-15)
+Kunal: "None of them should feel like they are from a vibe coded app or a cheap Chinese app." Most web components and the private banking screen failed his eye after AI audits had scored them 4 out of 5. Two rules are added to the ones above:
+1. **Blind comparison.** Put the render next to a shipped screen of the same kind, at the same height, with no labels and the sides in random order. Ask a fresh-context reviewer which looks like a premium shipped product, by how much (1 to 5), and why the weaker one looks cheaper. Use three references. The piece is not done while it loses by 3 or more to any of them, or loses to more than one. Reference images stay in your scratch folder and are deleted after. Record the result in the audit JSON as `"round4": {"score", "pairwise", "changed"}`.
+2. **A component is the subject, not a specimen sheet.** No masthead, no state grid, no annotation labels. Show one real product moment with the component large in the frame. Extra states go in `shot-<state>.png`.
+
+The gallery order follows `brand/showcase/order.json` (the strongest pieces first). `AUDIT-ROUND4.md` holds the reasons.
