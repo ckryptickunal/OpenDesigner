@@ -184,7 +184,9 @@ Yes, and it builds it in wherever possible. Every generated system gets:
 - WCAG 2.2 AA text contrast: 4.5:1 for body text, 3:1 for large text;
 - 3:1 contrast for borders, focus rings and meaningful icons;
 - target sizes that fit the input type: at least 24 CSS px on the web, 44pt on iOS, 48dp on Android;
-- a focus ring, reduced-motion and reduced-transparency modes, and text that can scale to 200%.
+- a focus ring, a reduced-motion mode in the tokens, and text that can scale to 200%.
+
+If your system uses see-through glass surfaces, each one also gets a solid version for people who turn transparency off. The CSS export swaps it in, with no blur, when the browser reports that the person wants less transparency (`prefers-reduced-transparency`: Chrome and Edge today; Safari does not report it and Firefox only behind a setting) or more contrast (`prefers-contrast: more`, in every major browser). A glass surface without one is a lint error.
 
 Lint errors block things like unlabeled fields or meaning shown only by color. WCAG 3 is still a draft, so WCAG 2.2 is the target that can be enforced. APCA appears as an advisory note.
 

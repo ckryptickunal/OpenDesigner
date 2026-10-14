@@ -1,0 +1,80 @@
+[
+  {
+    "text": "how",
+    "start": 0,
+    "end": 0.3,
+    "id": "w0"
+  },
+  {
+    "text": "should",
+    "start": 0.3,
+    "end": 0.79,
+    "id": "w1"
+  },
+  {
+    "text": "it",
+    "start": 0.79,
+    "end": 0.96,
+    "id": "w2"
+  },
+  {
+    "text": "feel",
+    "start": 0.96,
+    "end": 0.99,
+    "id": "w3"
+  },
+  {
+    "text": "premium",
+    "start": 1.76,
+    "end": 2.33,
+    "id": "w4"
+  },
+  {
+    "text": "confident",
+    "start": 2.78,
+    "end": 3.32,
+    "id": "w5"
+  },
+  {
+    "text": "warm",
+    "start": 3.8,
+    "end": 4.31,
+    "id": "w6"
+  },
+  {
+    "text": "the",
+    "start": 5.03,
+    "end": 5.12,
+    "id": "w7"
+  },
+  {
+    "text": "gradients",
+    "start": 5.12,
+    "end": 5.76,
+    "id": "w8"
+  },
+  {
+    "text": "go",
+    "start": 5.79,
+    "end": 5.83,
+    "id": "w9"
+  },
+  {
+    "text": "one",
+    "start": 5.83,
+    "end": 6.35,
+    "id": "w10"
+  },
+  {
+    "text": "typeface",
+    "start": 6.35,
+    "end": 7.12,
+    "id": "w11"
+  },
+  {
+    "text": "stays",
+    "start": 7.12,
+    "end": 8.24,
+    "id": "w12"
+  }
+]

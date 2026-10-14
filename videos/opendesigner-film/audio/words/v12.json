@@ -1,0 +1,98 @@
+[
+  {
+    "text": "8",
+    "start": 0,
+    "end": 0.31,
+    "id": "w0"
+  },
+  {
+    "text": "dials",
+    "start": 0.31,
+    "end": 0.83,
+    "id": "w1"
+  },
+  {
+    "text": "tune",
+    "start": 0.83,
+    "end": 1.25,
+    "id": "w2"
+  },
+  {
+    "text": "the",
+    "start": 1.25,
+    "end": 1.56,
+    "id": "w3"
+  },
+  {
+    "text": "feel.",
+    "start": 1.56,
+    "end": 2,
+    "id": "w4"
+  },
+  {
+    "text": "Here,",
+    "start": 2.27,
+    "end": 2.83,
+    "id": "w5"
+  },
+  {
+    "text": "they",
+    "start": 3.07,
+    "end": 3.18,
+    "id": "w6"
+  },
+  {
+    "text": "come",
+    "start": 3.18,
+    "end": 3.36,
+    "id": "w7"
+  },
+  {
+    "text": "from",
+    "start": 3.36,
+    "end": 3.54,
+    "id": "w8"
+  },
+  {
+    "text": "a",
+    "start": 3.54,
+    "end": 3.58,
+    "id": "w9"
+  },
+  {
+    "text": "taste",
+    "start": 3.58,
+    "end": 3.75,
+    "id": "w10"
+  },
+  {
+    "text": "poll",
+    "start": 3.82,
+    "end": 3.83,
+    "id": "w11"
+  },
+  {
+    "text": "of",
+    "start": 3.99,
+    "end": 4.25,
+    "id": "w12"
+  },
+  {
+    "text": "real,",
+    "start": 4.44,
+    "end": 5,
+    "id": "w13"
+  },
+  {
+    "text": "shipped",
+    "start": 5.07,
+    "end": 5.61,
+    "id": "w14"
+  },
+  {
+    "text": "apps.",
+    "start": 5.78,
+    "end": 6,
+    "id": "w15"
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "text": "Any",
+    "start": 0,
+    "end": 0.33,
+    "id": "w0"
+  },
+  {
+    "text": "brand",
+    "start": 0.33,
+    "end": 0.88,
+    "id": "w1"
+  },
+  {
+    "text": "color.",
+    "start": 0.88,
+    "end": 1.63,
+    "id": "w2"
+  },
+  {
+    "text": "This",
+    "start": 1.65,
+    "end": 1.89,
+    "id": "w3"
+  },
+  {
+    "text": "orange.",
+    "start": 1.89,
+    "end": 2.4,
+    "id": "w4"
+  },
+  {
+    "text": "I",
+    "start": 2.4,
+    "end": 2.48,
+    "id": "w5"
+  },
+  {
+    "text": "darken",
+    "start": 2.78,
+    "end": 2.96,
+    "id": "w6"
+  },
+  {
+    "text": "it",
+    "start": 2.96,
+    "end": 3.09,
+    "id": "w7"
+  },
+  {
+    "text": "a",
+    "start": 3.18,
+    "end": 3.2,
+    "id": "w8"
+  },
+  {
+    "text": "little",
+    "start": 3.2,
+    "end": 3.68,
+    "id": "w9"
+  },
+  {
+    "text": "so",
+    "start": 3.68,
+    "end": 3.71,
+    "id": "w10"
+  },
+  {
+    "text": "text",
+    "start": 3.84,
+    "end": 4.12,
+    "id": "w11"
+  },
+  {
+    "text": "on",
+    "start": 4.15,
+    "end": 4.32,
+    "id": "w12"
+  },
+  {
+    "text": "it",
+    "start": 4.39,
+    "end": 4.48,
+    "id": "w13"
+  },
+  {
+    "text": "stays",
+    "start": 4.48,
+    "end": 4.88,
+    "id": "w14"
+  },
+  {
+    "text": "readable.",
+    "start": 4.88,
+    "end": 5.56,
+    "id": "w15"
+  }
+]

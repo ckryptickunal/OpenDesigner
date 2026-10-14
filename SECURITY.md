@@ -12,7 +12,7 @@ Only maintainers can see these reports. You should get a first reply within 7 da
 
 ## What counts
 
-- Anything in `skills/` that could run unexpected code, read files outside the person's project, or make network calls. Skills are meant to be offline and standard-library only; the one exception is `opendesigner-illustrate`'s `search` and `fetch`, which reach listed illustration sources over HTTPS.
+- Anything in `skills/` that could run unexpected code, read files outside the person's project, or make network calls. Skills are meant to be offline and standard-library only; the exceptions are `opendesigner-illustrate`'s `search` and `fetch`, which reach listed illustration sources over HTTPS, the painting engine vendored in `opendesigner-paint` (Node and npm packages, installed with `npm ci` from its committed lockfile, per film project, only after the person agrees; see its `THIRD-PARTY.md`), and two optional helpers in `opendesigner-review`: `capture.py`, which drives a browser through Playwright (installed only after the person agrees) and opens loopback addresses only, and `review.py serve`, which listens on 127.0.0.1 only.
 - Prompt-injection paths: a reference file, URL or design file that could make a skill ignore its rules, leak data or write outside the person's project.
 - Workflow or CI configuration that could leak secrets or let untrusted pull requests run with write access.
 - Committed secrets (API keys, tokens) anywhere in the repository or its history.

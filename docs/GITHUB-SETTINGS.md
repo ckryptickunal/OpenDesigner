@@ -3,7 +3,7 @@
 Everything here is for the maintainer to apply. GitHub's search reads the repository name, the About description and the topics, so these are worth getting right.
 
 **Status on 2026-09-24 (checked with the GitHub API):**
-- The repository is public, with 0 stars [S-V1b-001].
+- The repository is public. It had 0 stars [S-V1b-001] and 1 star on 2026-10-15 (`gh repo view`).
 - Applied on 2026-09-23: the About description, the 20 topics, Discussions on, wiki and projects off, the 22 labels, and the 21 seed issues.
 - Still to do: private vulnerability reporting, secret scanning, push protection and Dependabot alerts (all off). The merge settings and the `main` ruleset are not applied yet either.
 - Update on 2026-10-13 (checked with the GitHub API): the ruleset "Protect main" is applied, so `main` cannot be deleted or force-pushed (see [Protect main](#protect-main)). Private vulnerability reporting is on. Secret scanning, push protection and Dependabot alerts are still off, the merge settings are still not applied, and CI has still never run (0 workflow runs).

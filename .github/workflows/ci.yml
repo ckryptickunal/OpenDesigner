@@ -72,6 +72,16 @@ jobs:
       - name: Illustration skill tests (illustrate.py, offline)
         run: python3 skills/opendesigner-illustrate/scripts/test_illustrate.py
 
+      - name: Painting bridge tests (paint.py, offline; the painting engine is not installed in CI)
+        run: python3 skills/opendesigner-paint/scripts/test_paint.py
+      - name: Preflight skill tests
+        run: python3 skills/opendesigner-preflight/scripts/test_preflight.py
+
+      - name: Review skill tests (review.py and probe.js guarantees, offline; the live-browser file skips without Playwright)
+        run: |
+          python3 skills/opendesigner-review/scripts/test_review.py
+          python3 skills/opendesigner-review/scripts/test_probe_live.py
+
       - name: Learning wiki (tools/wiki.py check, standards, tests without OpenWiki)
         run: |
           python3 tools/wiki.py check

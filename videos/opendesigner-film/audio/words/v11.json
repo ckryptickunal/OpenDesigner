@@ -1,0 +1,74 @@
+[
+  {
+    "text": "Every",
+    "start": 0.26,
+    "end": 0.41,
+    "id": "w0"
+  },
+  {
+    "text": "answer",
+    "start": 0.41,
+    "end": 0.79,
+    "id": "w1"
+  },
+  {
+    "text": "becomes",
+    "start": 0.9,
+    "end": 1.48,
+    "id": "w2"
+  },
+  {
+    "text": "a",
+    "start": 1.48,
+    "end": 1.55,
+    "id": "w3"
+  },
+  {
+    "text": "token,",
+    "start": 1.55,
+    "end": 2.16,
+    "id": "w4"
+  },
+  {
+    "text": "color,",
+    "start": 2.24,
+    "end": 2.81,
+    "id": "w5"
+  },
+  {
+    "text": "type,",
+    "start": 3.06,
+    "end": 3.58,
+    "id": "w6"
+  },
+  {
+    "text": "spacing,",
+    "start": 3.93,
+    "end": 4.72,
+    "id": "w7"
+  },
+  {
+    "text": "corners,",
+    "start": 4.94,
+    "end": 5.55,
+    "id": "w8"
+  },
+  {
+    "text": "depth,",
+    "start": 6.02,
+    "end": 6.23,
+    "id": "w9"
+  },
+  {
+    "text": "and",
+    "start": 6.38,
+    "end": 6.71,
+    "id": "w10"
+  },
+  {
+    "text": "motion.",
+    "start": 6.88,
+    "end": 7.4,
+    "id": "w11"
+  }
+]

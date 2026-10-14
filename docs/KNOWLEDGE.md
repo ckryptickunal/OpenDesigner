@@ -49,6 +49,21 @@ A conflict is never settled silently.
 | "Why?" | Cites the card or standard, and its source | `cards/*.json`, `standards.json` |
 | Implementation | DESIGN.md lists the standards to follow. `engine.py review` flags code that breaks one (for example `transition: all`, or an enter animation from `scale(0)`) | `standards.json` → DESIGN.md, review checks |
 
+### Consumer and enterprise products
+
+Advice is not the same for every kind of product, so each rule and decision in an analysis can say who it is for (`product`):
+
+| Value | Means | What comes first |
+|---|---|---|
+| `enterprise` | Work tools people use to get a job done: dashboards, internal tools, B2B apps | Utility: clarity, density, speed, few surprises |
+| `consumer` | Apps people choose to use | Delight: feel, personality, moments worth remembering |
+| `both` | Holds for either | |
+
+- The tag follows the situation, not the brand. A consumer app has utility screens (checkout, settings), and a work tool has moments worth celebrating. Products switch roles often.
+- An agent recommends an `enterprise` rule to a consumer project, or a `consumer` rule to a work tool, only with that caveat said in one line.
+- Analyses written before this field existed have no tag. No tag means "not yet sorted", not "both".
+- `python3 tools/wiki.py check` accepts only these three values. The source page in `learn/wiki/sources/` shows the tag next to each rule.
+
 ## 4. A person adds a source while working
 
 This happens when the person shares a link or file and says to follow it, or to learn from it.

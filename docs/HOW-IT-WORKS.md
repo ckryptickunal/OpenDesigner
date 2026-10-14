@@ -158,7 +158,8 @@ Rule-based checks run first, before the model gives any opinion ([`synthesis/LEV
   - 3:1 contrast for borders, focus rings and other non-text parts.
   - Minimum target sizes for each input type: 24 CSS px on the web, 44pt on iOS, 48dp on Android.
   - A generated focus ring.
-  - Reduced-motion and reduced-transparency modes.
+  - A reduced-motion mode in the tokens.
+  - A solid fallback for every see-through glass surface, if the system uses glass. The CSS export swaps it in when the browser reports reduced transparency or more contrast. A glass surface without one is a lint error.
   - Text that scales to 200%.
   - Inner spacing smaller than outer spacing.
 - **Lint errors** block publishing unless you waive them with a written reason. Examples: targets under 24 px, fields with no label, meaning shown by color alone, and dialogs with no way out.

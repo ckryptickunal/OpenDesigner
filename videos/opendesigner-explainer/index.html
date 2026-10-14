@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>OpenDesigner: what we built</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter Tight";
+        src: url("assets/fonts/InterTight-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      :root {
+        --bg: #f5f4f0;
+        --card: #fbfaf7;
+        --line: #dcdad3;
+        --line-2: #e4e3de;
+        --ink: #121212;
+        --ink-2: #3a3935;
+        --ink-3: #5c5a54;
+        --accent: #e4572e;
+        --accent-ink: #b23c17;
+        --sans: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font-family: var(--sans); }
+
+      /* persistent chrome */
+      #grid { position: absolute; left: -96px; top: -96px; width: 2112px; height: 1272px;
+        background-image: linear-gradient(var(--line-2) 1px, transparent 1px), linear-gradient(90deg, var(--line-2) 1px, transparent 1px);
+        background-size: 96px 96px; opacity: .55; }
+      #brand { position: absolute; left: 72px; top: 56px; display: flex; align-items: center; gap: 14px; font: 600 18px/1 var(--mono); letter-spacing: .14em; color: var(--ink-2); z-index: 50; }
+      #brand i { display: block; width: 14px; height: 14px; background: var(--accent); }
+      #progress-track { position: absolute; left: 72px; right: 72px; bottom: 52px; height: 2px; background: var(--line); z-index: 50; }
+      #progress { position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: var(--ink); transform-origin: 0 50%; }
+      #wipe { position: absolute; inset: 0; background: var(--accent); z-index: 80; transform-origin: 0 50%; }
+
+      .clip { position: absolute; inset: 0; }
+      .scene { width: 100%; height: 100%; padding: 150px 120px 120px; display: flex; flex-direction: column; }
+      .tag { position: absolute; right: 72px; top: 56px; font: 600 18px/1 var(--mono); letter-spacing: .14em; color: var(--ink-3); }
+      .ghost { position: absolute; right: 60px; bottom: 40px; font: 800 420px/0.8 var(--sans); letter-spacing: -0.06em; color: var(--ink); opacity: .04; }
+      .mono { font-family: var(--mono); }
+      .eyebrow { font: 600 22px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+      .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
+      .wi { display: inline-block; }
+      .accent { color: var(--accent); }
+      .center { align-items: center; justify-content: center; text-align: center; }
+      .card { background: var(--card); border: 1.5px solid var(--line); border-radius: 22px; }
+
+      /* S1 hook */
+      .big { font-weight: 800; font-size: 150px; line-height: .98; letter-spacing: -0.045em; max-width: 1600px; }
+      .swap { position: relative; width: 1400px; height: 290px; overflow: hidden; }
+      .swap .tok { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font: 800 200px/1 var(--sans); letter-spacing: -0.05em; }
+
+      /* S2 title */
+      .word { font: 800 270px/0.9 var(--sans); letter-spacing: -0.06em; display: flex; }
+      .word .ch { display: inline-block; overflow: hidden; padding-bottom: .1em; }
+      .word .ci { display: inline-block; }
+      .sub { font: 500 60px/1.15 var(--sans); letter-spacing: -0.02em; max-width: 1400px; color: var(--ink-2); }
+      .hl { position: relative; display: inline-block; color: var(--ink); font-weight: 700; }
+      .hl .bar { position: absolute; left: 0; right: 0; bottom: 4px; height: 12px; background: var(--accent); opacity: .35; transform-origin: 0 50%; display: block; }
+
+      /* S3 hosts */
+      .h2 { font: 800 110px/1 var(--sans); letter-spacing: -0.045em; max-width: 1650px; }
+      .chips { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 80px; max-width: 1650px; }
+      .chip { display: block; padding: 26px 40px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--card); font: 600 40px/1 var(--mono); color: var(--ink); }
+      .chip.dark { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+      .note { margin-top: 70px; font: 500 40px/1.3 var(--sans); color: var(--ink-2); }
+
+      /* S4 questions */
+      .split { display: flex; gap: 100px; align-items: center; height: 100%; }
+      .split .left { width: 720px; flex: none; }
+      .huge { font: 800 168px/0.9 var(--sans); letter-spacing: -0.06em; }
+      .qs { flex: 1; display: flex; flex-direction: column; gap: 18px; }
+      .q { display: flex; align-items: center; justify-content: space-between; padding: 28px 36px; }
+      .q .qt { font: 700 44px/1.1 var(--sans); letter-spacing: -0.02em; }
+      .q .qn { font: 600 22px/1 var(--mono); color: var(--ink-3); margin-right: 24px; }
+      .q .ans { display: block; padding: 14px 22px; border-radius: 999px; background: var(--ink); color: var(--bg); font: 600 26px/1 var(--mono); }
+      .principles { position: absolute; left: 120px; right: 120px; bottom: 110px; display: flex; gap: 22px; }
+      .pr { display: block; flex: 1; padding: 26px 30px; background: var(--ink); color: var(--bg); border-radius: 18px; font: 700 34px/1.1 var(--sans); letter-spacing: -0.01em; }
+
+      /* S5 system */
+      .sys { display: grid; grid-template-columns: 1.25fr 1fr; grid-template-rows: 250px 300px; gap: 26px; margin-top: 50px; }
+      .panel { padding: 30px 36px; position: relative; overflow: hidden; }
+      .lbl { display: flex; justify-content: space-between; font: 600 22px/1 var(--mono); color: var(--ink-3); margin-bottom: 28px; }
+      .ramp { display: flex; height: 120px; border-radius: 14px; overflow: hidden; }
+      .sw { display: block; flex: 1; height: 100%; transform-origin: 50% 100%; }
+      .tscale { display: flex; align-items: baseline; gap: 26px; font-weight: 700; letter-spacing: -0.03em; height: 130px; }
+      .tscale span { display: inline-block; }
+      .row2 { grid-column: 1 / span 2; display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 26px; }
+      .spaces { display: flex; align-items: flex-end; gap: 18px; height: 120px; }
+      .sp { display: block; height: 34px; background: var(--ink); border-radius: 3px; transform-origin: 0 50%; }
+      .radii { display: flex; gap: 26px; height: 120px; align-items: center; }
+      .rad { display: block; width: 100px; height: 100px; border: 4px solid var(--ink); }
+      .dials { display: flex; justify-content: space-between; height: 170px; }
+      .dial { display: flex; flex-direction: column; align-items: center; gap: 14px; width: 90px; }
+      .trk { position: relative; width: 6px; height: 120px; background: var(--line); border-radius: 3px; }
+      .knob { position: absolute; left: -15px; top: 0; width: 36px; height: 36px; border-radius: 50%; border: 4px solid var(--ink); background: var(--card); }
+      .knob.on { background: var(--accent); border-color: var(--accent); }
+      .dial small { font: 600 18px/1 var(--mono); color: var(--ink-3); }
+      .voices { position: absolute; left: 120px; right: 120px; bottom: 100px; display: flex; gap: 22px; }
+      .voice { display: block; flex: 1; padding: 24px 28px; border-radius: 18px; background: var(--ink); color: var(--bg); }
+      .voice b { display: block; font: 600 20px/1 var(--mono); letter-spacing: .1em; color: #c9c7bf; margin-bottom: 12px; }
+      .voice span { font: 600 32px/1.15 var(--sans); }
+
+      /* S6 zoom */
+      .nest { position: absolute; left: 50%; top: 60%; width: 0; height: 0; }
+      .lvl { position: absolute; border: 2px solid var(--ink); border-radius: 28px; padding: 22px 28px; display: block; }
+      .lvl .n { font: 800 64px/1 var(--sans); letter-spacing: -0.04em; }
+      .lvl .t { font: 600 24px/1.25 var(--mono); color: var(--ink-2); margin-top: 8px; }
+      .lvl.l0 { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+      .lvl.l0 .t { color: #d6d4cc; }
+
+      /* S7 exports */
+      #s7lines { position: absolute; inset: 0; }
+      .src { position: absolute; left: 710px; top: 400px; width: 500px; height: 330px; padding: 34px 38px; }
+      .src pre { font: 500 24px/1.6 var(--mono); color: var(--ink-2); margin-top: 6px; }
+      .tgt { position: absolute; width: 360px; height: 84px; display: flex; align-items: center; padding: 0 30px; font: 700 36px/1 var(--sans); letter-spacing: -0.02em; }
+      .tgt.r { justify-content: flex-start; }
+
+      /* S8 locks */
+      .locks { display: flex; flex-direction: column; gap: 22px; margin-top: 70px; width: 1300px; }
+      .lock { display: flex; align-items: center; justify-content: space-between; padding: 30px 40px; }
+      .lock .lt { font: 700 56px/1 var(--sans); letter-spacing: -0.03em; }
+      .lock .lb { display: block; padding: 14px 22px; border-radius: 999px; background: var(--ink); color: var(--bg); font: 600 24px/1 var(--mono); letter-spacing: .12em; }
+
+      /* S9 numbers */
+      .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 60px; }
+      .stat { padding: 36px 40px 40px; height: 290px; display: flex; flex-direction: column; justify-content: space-between; }
+      .stat .num { font: 800 150px/0.9 var(--sans); letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
+      .stat .cap { font: 600 30px/1.2 var(--sans); color: var(--ink-2); }
+
+      /* S10 skills */
+      .skills { display: flex; flex-direction: column; gap: 14px; margin-top: 50px; }
+      .sk { display: flex; align-items: center; gap: 40px; padding: 20px 34px; }
+      .sk .sn { width: 560px; font: 600 36px/1 var(--mono); color: var(--ink); }
+      .sk .sd { font: 600 38px/1.1 var(--sans); letter-spacing: -0.02em; color: var(--ink-2); }
+      .sk .dot { display: block; width: 14px; height: 14px; background: var(--accent); border-radius: 50%; }
+
+      /* S11 close */
+      .prompt { width: 1360px; height: 150px; display: flex; align-items: center; padding: 0 50px; gap: 26px; }
+      .prompt .pr-ic { font: 700 50px/1 var(--mono); color: var(--accent-ink); }
+      .prompt .pr-tx { font: 600 56px/1 var(--sans); letter-spacing: -0.02em; }
+      .caret { display: inline-block; width: 5px; height: 62px; background: var(--ink); }
+      .endsub { font: 600 40px/1.2 var(--mono); color: var(--ink-2); margin-top: 50px; }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-x6kv" id="root" data-composition-id="main" data-start="0" data-duration="85" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-gs5t" id="grid"></div>
+      <div data-hf-id="hf-t9qp" id="brand"><i data-hf-id="hf-wt6k"></i>OPENDESIGNER</div>
+      <div data-hf-id="hf-o48q" id="progress-track"><div data-hf-id="hf-o6ww" id="progress"></div></div>
+
+      <!-- S1 hook -->
+      <section data-hf-id="hf-sao0" id="s1" class="clip" data-start="0" data-duration="6.5" data-track-index="1">
+        <div data-hf-id="hf-meaj" class="scene center">
+          <span data-hf-id="hf-gl5z" class="tag">01 / WHY</span>
+          <div data-hf-id="hf-nq7f" id="s1a" class="big kin">Every app needs rules for how it looks.</div>
+          <div data-hf-id="hf-i06q" id="s1swap" class="swap" data-layout-allow-overlap="">
+            <div data-hf-id="hf-ccpu" data-layout-allow-overlap="" class="tok">Colors.</div>
+            <div data-hf-id="hf-orp2" data-layout-allow-overlap="" class="tok">Type.</div>
+            <div data-hf-id="hf-4duh" data-layout-allow-overlap="" class="tok">Spacing.</div>
+            <div data-hf-id="hf-fss0" data-layout-allow-overlap="" class="tok">Corners.</div>
+            <div data-hf-id="hf-1m2v" data-layout-allow-overlap="" class="tok accent">Buttons.</div>
+          </div>
+          <div data-hf-id="hf-axnb" id="s1b" class="big kin">What if <span data-hf-id="hf-pmka" class="accent">your AI</span> built them with you?</div>
+        </div>
+      </section>
+
+      <!-- S2 title -->
+      <section data-hf-id="hf-eh9k" id="s2" class="clip" data-start="6.5" data-duration="5" data-track-index="1">
+        <div data-hf-id="hf-jknp" class="scene" style="justify-content:center">
+          <span data-hf-id="hf-3tvu" class="tag">02 / WHAT</span>
+          <div data-hf-id="hf-5zwl" id="s2eye" class="eyebrow" style="display:flex;align-items:center;gap:16px"><span data-hf-id="hf-2w1b" style="display:block;width:16px;height:16px;background:var(--accent)"></span>Open source · AI-first design systems</div>
+          <div data-hf-id="hf-mat2" id="s2word" class="word" style="margin-top:40px">OpenDesigner</div>
+          <div data-hf-id="hf-16qb" id="s2sub" class="sub" style="margin-top:40px">Build a <span data-hf-id="hf-5xju" class="hl"><span data-hf-id="hf-hy4c" class="bar" id="s2bar"></span>real design system</span> with the AI you already use.</div>
+        </div>
+      </section>
+
+      <!-- S3 hosts -->
+      <section data-hf-id="hf-uyfn" id="s3" class="clip" data-start="11.5" data-duration="5" data-track-index="1">
+        <div data-hf-id="hf-jhqh" class="scene" style="justify-content:center">
+          <span data-hf-id="hf-dv0c" class="tag">03 / WHERE</span>
+          <div data-hf-id="hf-ovxp" id="s3h" class="h2 kin">It lives inside the AI you already use.</div>
+          <div data-hf-id="hf-0k0m" class="chips" id="s3chips">
+            <span data-hf-id="hf-x38v" class="chip dark">Claude</span>
+            <span data-hf-id="hf-dmni" class="chip">ChatGPT</span>
+            <span data-hf-id="hf-g3l6" class="chip">Codex</span>
+            <span data-hf-id="hf-ifk5" class="chip">Cursor</span>
+            <span data-hf-id="hf-fj0c" class="chip">VS Code + Copilot</span>
+            <span data-hf-id="hf-du5u" class="chip">Gemini CLI</span>
+            <span data-hf-id="hf-afz6" class="chip">any agent · AGENTS.md</span>
+          </div>
+          <div data-hf-id="hf-flfl" id="s3n" class="note">Nothing new to install as an app. Your AI loads it and starts asking.</div>
+        </div>
+      </section>
+
+      <!-- S4 questions -->
+      <section data-hf-id="hf-eq00" id="s4" class="clip" data-start="16.5" data-duration="9.5" data-track-index="1">
+        <div data-hf-id="hf-wua0" class="scene">
+          <span data-hf-id="hf-fcwg" class="tag">04 / HOW</span>
+          <div data-hf-id="hf-3yyb" class="split" style="margin-top:-40px">
+            <div data-hf-id="hf-i0dv" class="left">
+              <div data-hf-id="hf-an0c" id="s4eye" class="eyebrow">Zoom 0 · the sketch</div>
+              <div data-hf-id="hf-wrwd" id="s4h" class="huge kin" style="margin-top:28px">Five questions.</div>
+              <div data-hf-id="hf-3cgq" id="s4s" class="note" style="margin-top:34px">About three minutes, and you already have a complete system.</div>
+            </div>
+            <div data-hf-id="hf-04wn" class="qs" id="s4qs">
+              <div data-hf-id="hf-y2ex" class="q card"><div data-hf-id="hf-8640" style="display:flex;align-items:baseline"><span data-hf-id="hf-uukn" class="qn">01</span><span data-hf-id="hf-f3nn" class="qt">What are you making?</span></div><span data-hf-id="hf-vfyr" class="ans">a club website</span></div>
+              <div data-hf-id="hf-q9al" class="q card"><div data-hf-id="hf-b1s8" style="display:flex;align-items:baseline"><span data-hf-id="hf-ug9m" class="qn">02</span><span data-hf-id="hf-jv5t" class="qt">Who is it for?</span></div><span data-hf-id="hf-44vu" class="ans">regular use</span></div>
+              <div data-hf-id="hf-rg7o" class="q card"><div data-hf-id="hf-9uv5" style="display:flex;align-items:baseline"><span data-hf-id="hf-u1yl" class="qn">03</span><span data-hf-id="hf-6lr7" class="qt">Where does it run?</span></div><span data-hf-id="hf-llk3" class="ans">web · iOS</span></div>
+              <div data-hf-id="hf-r1wn" class="q card"><div data-hf-id="hf-a966" style="display:flex;align-items:baseline"><span data-hf-id="hf-wu3s" class="qn">04</span><span data-hf-id="hf-4wdh" class="qt">How should it feel?</span></div><span data-hf-id="hf-x2sj" class="ans">calm, bold</span></div>
+              <div data-hf-id="hf-s8tq" class="q card"><div data-hf-id="hf-9293" style="display:flex;align-items:baseline"><span data-hf-id="hf-wfsr" class="qn">05</span><span data-hf-id="hf-wb69" class="qt">Brand color or logo?</span></div><span data-hf-id="hf-47a8" class="ans">#E4572E</span></div>
+            </div>
+          </div>
+          <div data-hf-id="hf-0xwk" class="principles" id="s4p">
+            <span data-hf-id="hf-rylw" class="pr">One question at a time</span>
+            <span data-hf-id="hf-v0jn" class="pr">Choices you can see</span>
+            <span data-hf-id="hf-y7e2" class="pr">Plain words first</span>
+            <span data-hf-id="hf-vr3n" class="pr">A pick, with its reason</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- S5 system assembles -->
+      <section data-hf-id="hf-uppt" id="s5" class="clip" data-start="26" data-duration="13" data-track-index="1">
+        <div data-hf-id="hf-md34" class="scene">
+          <span data-hf-id="hf-whnq" class="tag">05 / RESULT</span>
+          <div data-hf-id="hf-y5bo" id="s5h" class="h2 kin" style="font-size:96px">A complete, working system.</div>
+          <div data-hf-id="hf-vskz" class="sys">
+            <div data-hf-id="hf-2wos" class="panel card" id="p-color">
+              <div data-hf-id="hf-p8km" class="lbl"><span data-hf-id="hf-bbki">color.ramp</span><span data-hf-id="hf-79mr">10 steps</span></div>
+              <div data-hf-id="hf-snnk" class="ramp">
+                <span data-hf-id="hf-5it7" class="sw" style="background:#f3f2ee"></span><span data-hf-id="hf-r65y" class="sw" style="background:#e4e3de"></span><span data-hf-id="hf-h1qd" class="sw" style="background:#cfcdc6"></span><span data-hf-id="hf-xdr6" class="sw" style="background:#b1afa7"></span><span data-hf-id="hf-f8pz" class="sw" style="background:#8f8d85"></span><span data-hf-id="hf-xqm6" class="sw" style="background:#6f6d66"></span><span data-hf-id="hf-20jy" class="sw" style="background:#53524c"></span><span data-hf-id="hf-85vo" class="sw" style="background:#3a3935"></span><span data-hf-id="hf-cdci" class="sw" style="background:#232320"></span><span data-hf-id="hf-4ikc" class="sw" style="background:#e4572e"></span>
+              </div>
+            </div>
+            <div data-hf-id="hf-48gj" class="panel card" id="p-type">
+              <div data-hf-id="hf-jvai" class="lbl"><span data-hf-id="hf-699t">type.scale</span><span data-hf-id="hf-4cpj">1.25</span></div>
+              <div data-hf-id="hf-j2v6" class="tscale">
+                <span data-hf-id="hf-rpts" style="font-size:30px">Aa</span><span data-hf-id="hf-jymw" style="font-size:38px">Aa</span><span data-hf-id="hf-lwua" style="font-size:47px">Aa</span><span data-hf-id="hf-rf4z" style="font-size:59px">Aa</span><span data-hf-id="hf-f7nr" style="font-size:73px">Aa</span><span data-hf-id="hf-4jl8" style="font-size:92px">Aa</span>
+              </div>
+            </div>
+            <div data-hf-id="hf-5t86" class="row2">
+              <div data-hf-id="hf-7ch7" class="panel card" id="p-space">
+                <div data-hf-id="hf-k9lj" class="lbl"><span data-hf-id="hf-2ztt">space</span><span data-hf-id="hf-dndb">4px</span></div>
+                <div data-hf-id="hf-xx25" class="spaces">
+                  <span data-hf-id="hf-gsbm" class="sp" style="width:8px"></span><span data-hf-id="hf-eqxz" class="sp" style="width:16px"></span><span data-hf-id="hf-46cs" class="sp" style="width:24px"></span><span data-hf-id="hf-6oax" class="sp" style="width:32px"></span><span data-hf-id="hf-xkte" class="sp" style="width:48px"></span><span data-hf-id="hf-v7vk" class="sp" style="width:64px"></span>
+                </div>
+              </div>
+              <div data-hf-id="hf-yhe5" class="panel card" id="p-radius">
+                <div data-hf-id="hf-knwk" class="lbl"><span data-hf-id="hf-v3en">radius</span><span data-hf-id="hf-ptba">0 → 32</span></div>
+                <div data-hf-id="hf-s2lz" class="radii"><span data-hf-id="hf-okzq" class="rad"></span><span data-hf-id="hf-sswa" class="rad"></span><span data-hf-id="hf-t77b" class="rad"></span></div>
+              </div>
+              <div data-hf-id="hf-yf78" class="panel card" id="p-dials">
+                <div data-hf-id="hf-l27l" class="lbl"><span data-hf-id="hf-issv">eight dials</span><span data-hf-id="hf-phor">0–100</span></div>
+                <div data-hf-id="hf-rk4x" class="dials">
+                  <div data-hf-id="hf-8buu" class="dial"><div data-hf-id="hf-l3rt" class="trk"><span data-hf-id="hf-8884" class="knob on"></span></div><small data-hf-id="hf-255f">Exp</small></div>
+                  <div data-hf-id="hf-c0sq" class="dial"><div data-hf-id="hf-wqi5" class="trk"><span data-hf-id="hf-kcm9" class="knob"></span></div><small data-hf-id="hf-feuk">Brd</small></div>
+                  <div data-hf-id="hf-cf3r" class="dial"><div data-hf-id="hf-xxf8" class="trk"><span data-hf-id="hf-499x" class="knob"></span></div><small data-hf-id="hf-70zn">Den</small></div>
+                  <div data-hf-id="hf-ctes" class="dial"><div data-hf-id="hf-xj47" class="trk"><span data-hf-id="hf-5g70" class="knob"></span></div><small data-hf-id="hf-pjvz">Enr</small></div>
+                  <div data-hf-id="hf-d7pt" class="dial"><div data-hf-id="hf-yq1a" class="trk"><span data-hf-id="hf-51vz" class="knob"></span></div><small data-hf-id="hf-8pq8">Rnd</small></div>
+                  <div data-hf-id="hf-dm0u" class="dial"><div data-hf-id="hf-ybq9" class="trk"><span data-hf-id="hf-68t2" class="knob"></span></div><small data-hf-id="hf-7tlp">Dep</small></div>
+                  <div data-hf-id="hf-e0bv" class="dial"><div data-hf-id="hf-zinc" class="trk"><span data-hf-id="hf-5ui1" class="knob"></span></div><small data-hf-id="hf-cv5i">Col</small></div>
+                  <div data-hf-id="hf-eemw" class="dial"><div data-hf-id="hf-z4cb" class="trk"><span data-hf-id="hf-71f4" class="knob"></span></div><small data-hf-id="hf-bgqs">Wrm</small></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div data-hf-id="hf-y10v" class="voices" id="s5v">
+            <span data-hf-id="hf-l7y1" class="voice"><b data-hf-id="hf-a6xz">PLAIN</b><span data-hf-id="hf-hx5o">How round the corners are.</span></span>
+            <span data-hf-id="hf-7akt" class="voice"><b data-hf-id="hf-ratx">DESIGNERS</b><span data-hf-id="hf-4yz5">Corner radius, concentric when nested.</span></span>
+            <span data-hf-id="hf-8hhw" class="voice"><b data-hf-id="hf-ls0k">CODE</b><span data-hf-id="hf-fz34">border-radius · radius.0 → radius.32</span></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- S6 zoom levels -->
+      <section data-hf-id="hf-ywfl" id="s6" class="clip" data-start="39" data-duration="6.5" data-track-index="1">
+        <div data-hf-id="hf-l661" class="scene">
+          <span data-hf-id="hf-rcgx" class="tag">06 / DEPTH</span>
+          <div data-hf-id="hf-ilf2" id="s6h" class="h2 kin" style="font-size:96px">Stop anywhere. Zoom in.</div>
+          <div data-hf-id="hf-3jba" class="nest">
+            <div data-hf-id="hf-41hi" class="lvl l3" style="left:-820px;top:-330px;width:1640px;height:660px"><div data-hf-id="hf-mkoi" class="n">3 · Detailed</div><div data-hf-id="hf-af5o" class="t">components, patterns, fine print</div></div>
+            <div data-hf-id="hf-krck" class="lvl l2" style="left:-600px;top:-200px;width:1200px;height:500px"><div data-hf-id="hf-9qqs" class="n">2 · Defined</div><div data-hf-id="hf-7cbe" class="t">one area at a time</div></div>
+            <div data-hf-id="hf-sfnc" class="lvl l1" style="left:-390px;top:-70px;width:780px;height:340px"><div data-hf-id="hf-5no4" class="n">1 · Broad</div><div data-hf-id="hf-de76" class="t">8 questions · ~8 min</div></div>
+            <div data-hf-id="hf-v79w" class="lvl l0" style="left:-200px;top:60px;width:400px;height:180px"><div data-hf-id="hf-ehr9" class="n">0 · Sketch</div><div data-hf-id="hf-wupy" class="t">5 questions · ~3 min</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- S7 exports -->
+      <section data-hf-id="hf-55wt" id="s7" class="clip" data-start="45.5" data-duration="8" data-track-index="1">
+        <div data-hf-id="hf-lkh2" class="scene">
+          <span data-hf-id="hf-vb8s" class="tag">07 / OUTPUT</span>
+          <div data-hf-id="hf-nbup" id="s7h" class="h2 kin" style="font-size:96px">One source of truth. Every platform.</div>
+          <svg data-hf-id="hf-avlz" id="s7lines" viewBox="0 0 1920 1080" width="1920" height="1080">
+            <g data-hf-id="hf-maqc" fill="none" stroke="#121212" stroke-width="2">
+              <path data-hf-id="hf-xlaq" class="ln" d="M710 565 C 600 565, 600 440, 520 440" />
+              <path data-hf-id="hf-phte" class="ln" d="M710 565 C 600 565, 600 545, 520 545" />
+              <path data-hf-id="hf-m1z0" class="ln" d="M710 565 C 600 565, 600 650, 520 650" />
+              <path data-hf-id="hf-pf0s" class="ln" d="M710 565 C 600 565, 600 755, 520 755" />
+              <path data-hf-id="hf-fymy" class="ln" d="M1210 565 C 1320 565, 1320 440, 1400 440" />
+              <path data-hf-id="hf-g23u" class="ln" d="M1210 565 C 1320 565, 1320 545, 1400 545" />
+              <path data-hf-id="hf-2f82" class="ln" d="M1210 565 C 1320 565, 1320 650, 1400 650" />
+              <path data-hf-id="hf-n1s2" class="ln" d="M1210 565 C 1320 565, 1320 755, 1400 755" />
+            </g>
+          </svg>
+          <div data-hf-id="hf-ot4u" class="src card" id="s7src">
+            <div data-hf-id="hf-6wrp" class="lbl" style="margin-bottom:10px"><span data-hf-id="hf-ar08">opendesigner/tokens/</span><span data-hf-id="hf-05r7">DTCG</span></div>
+            <pre data-hf-id="hf-iizp">"color": {
+  "accent": "#e4572e",
+  "ink":    "#121212" },
+"radius": { "md": "12px" },
+"space":  { "base": "4px" }</pre>
+          </div>
+          <div data-hf-id="hf-mirj" class="tgt card" style="left:160px;top:398px">CSS variables</div>
+          <div data-hf-id="hf-fjw8" class="tgt card" style="left:160px;top:503px">Tailwind theme</div>
+          <div data-hf-id="hf-xy36" class="tgt card" style="left:160px;top:608px">SwiftUI</div>
+          <div data-hf-id="hf-w8tu" class="tgt card" style="left:160px;top:713px">Jetpack Compose</div>
+          <div data-hf-id="hf-6abj" class="tgt card r" style="left:1400px;top:398px">Figma</div>
+          <div data-hf-id="hf-bc9z" class="tgt card r" style="left:1400px;top:503px">Paper</div>
+          <div data-hf-id="hf-56s4" class="tgt card r" style="left:1400px;top:608px">DESIGN.md</div>
+          <div data-hf-id="hf-vfds" class="tgt card r" style="left:1400px;top:713px">PRODUCT.md</div>
+        </div>
+      </section>
+
+      <!-- S8 locks -->
+      <section data-hf-id="hf-igh7" id="s8" class="clip" data-start="53.5" data-duration="5.5" data-track-index="1">
+        <div data-hf-id="hf-konk" class="scene" style="justify-content:center">
+          <span data-hf-id="hf-a2sd" class="tag">08 / FLOORS</span>
+          <div data-hf-id="hf-lfij" id="s8h" class="h2 kin">Some rules never drift.</div>
+          <div data-hf-id="hf-8qjt" class="locks" id="s8l">
+            <div data-hf-id="hf-wfz9" class="lock card"><span data-hf-id="hf-bru1" class="lt">WCAG 2.2 AA contrast</span><span data-hf-id="hf-tztx" class="lb">LOCKED</span></div>
+            <div data-hf-id="hf-abll" class="lock card"><span data-hf-id="hf-azxv" class="lt">24 px minimum targets</span><span data-hf-id="hf-zkzd" class="lb">LOCKED</span></div>
+            <div data-hf-id="hf-biio" class="lock card"><span data-hf-id="hf-nki5" class="lt">Visible focus</span><span data-hf-id="hf-0rwg" class="lb">LOCKED</span></div>
+            <div data-hf-id="hf-b47n" class="lock card"><span data-hf-id="hf-kwy9" class="lt">Reduced motion</span><span data-hf-id="hf-0dlf" class="lb">LOCKED</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- S9 numbers -->
+      <section data-hf-id="hf-7dau" id="s9" class="clip" data-start="59" data-duration="10" data-track-index="1">
+        <div data-hf-id="hf-kdjz" class="scene">
+          <span data-hf-id="hf-38oq" class="tag">09 / RESEARCH</span>
+          <div data-hf-id="hf-gzqc" id="s9h" class="h2 kin" style="font-size:96px">Built on research, not guesses.</div>
+          <div data-hf-id="hf-1pt2" class="stats" id="s9s">
+            <div data-hf-id="hf-8nqs" class="stat card"><span data-hf-id="hf-kjnn" class="num" data-to="32">0</span><span data-hf-id="hf-6bu1" class="cap">famous design systems torn down</span></div>
+            <div data-hf-id="hf-v8ek" class="stat card"><span data-hf-id="hf-3m81" class="num" data-to="193">0</span><span data-hf-id="hf-j4ec" class="cap">questions across 28 stages</span></div>
+            <div data-hf-id="hf-u1hh" class="stat card"><span data-hf-id="hf-k449" class="num" data-to="270" data-suffix="+">0</span><span data-hf-id="hf-o7oy" class="cap">building blocks mapped</span></div>
+            <div data-hf-id="hf-ufsi" class="stat card"><span data-hf-id="hf-j4n3" class="num" data-to="500" data-suffix="+">0</span><span data-hf-id="hf-dbk7" class="cap">Decision Cards, each with sources</span></div>
+            <div data-hf-id="hf-wfbn" class="stat card"><span data-hf-id="hf-2hxk" class="num" data-to="455">0</span><span data-hf-id="hf-5k5j" class="cap">house standards from 46 sources</span></div>
+            <div data-hf-id="hf-wtmo" class="stat card"><span data-hf-id="hf-hdx2" class="num" data-to="400" data-prefix="~">0</span><span data-hf-id="hf-qg4t" class="cap">terms explained in 3 voices</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- S10 skills -->
+      <section data-hf-id="hf-bqoz" id="s10" class="clip" data-start="69" data-duration="8.5" data-track-index="1">
+        <div data-hf-id="hf-krv0" class="scene">
+          <span data-hf-id="hf-i0tj" class="tag">10 / SKILLS</span>
+          <div data-hf-id="hf-l93u" id="s10h" class="h2 kin" style="font-size:96px">Seven skills, one system.</div>
+          <div data-hf-id="hf-3cgn" class="skills" id="s10s">
+            <div data-hf-id="hf-xglk" class="sk card"><span data-hf-id="hf-9gry" class="dot"></span><span data-hf-id="hf-bnwz" class="sn">opendesigner</span><span data-hf-id="hf-47uu" class="sd">builds the system with you</span></div>
+            <div data-hf-id="hf-rfsw" class="sk card"><span data-hf-id="hf-zcc2" class="dot"></span><span data-hf-id="hf-ngxq" class="sn">-extract</span><span data-hf-id="hf-s9a8" class="sd">learns from a site, screenshot or Figma file</span></div>
+            <div data-hf-id="hf-q8vt" class="sk card"><span data-hf-id="hf-zqn3" class="dot"></span><span data-hf-id="hf-nmfd" class="sn">-extend</span><span data-hf-id="hf-okdu" class="sd">changes a system you already have</span></div>
+            <div data-hf-id="hf-qn6u" class="sk card"><span data-hf-id="hf-04y4" class="dot"></span><span data-hf-id="hf-5sj7" class="sn">-export</span><span data-hf-id="hf-1x45" class="sd">ships it to CSS, Tailwind, Swift, Compose, Figma</span></div>
+            <div data-hf-id="hf-pg9r" class="sk card"><span data-hf-id="hf-0j95" class="dot"></span><span data-hf-id="hf-73ty" class="sn">-illustrate</span><span data-hf-id="hf-ab1q" class="sd">open-licence art, recolored to your tokens</span></div>
+            <div data-hf-id="hf-puks" class="sk card"><span data-hf-id="hf-0xk6" class="dot"></span><span data-hf-id="hf-pfj5" class="sn">-review</span><span data-hf-id="hf-em42" class="sd">checks a built UI against the tokens</span></div>
+            <div data-hf-id="hf-onnp" class="sk card"><span data-hf-id="hf-1bv7" class="dot"></span><span data-hf-id="hf-ka43" class="sn">-paint</span><span data-hf-id="hf-jsrk" class="sd">original art, painted in code, in your palette</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- S11 close -->
+      <section data-hf-id="hf-o59f" id="s11" class="clip" data-start="77.5" data-duration="7.5" data-track-index="1">
+        <div data-hf-id="hf-7fh7" class="scene center">
+          <span data-hf-id="hf-cink" class="tag">11 / START</span>
+          <div data-hf-id="hf-8jyt" class="prompt card" id="s11p"><span data-hf-id="hf-ivpu" class="pr-ic">&gt;</span><span data-hf-id="hf-fisv" class="pr-tx" id="s11tx"></span><span data-hf-id="hf-x0eg" class="caret" id="s11c"></span></div>
+          <div data-hf-id="hf-jdv1" id="s11end" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <div data-hf-id="hf-at5e" id="s11word" class="word">OpenDesigner</div>
+            <div data-hf-id="hf-5j0l" id="s11sub" class="endsub">Free and open source · MIT</div>
+            <div data-hf-id="hf-q8d7" id="s11url" class="endsub" style="margin-top:14px;color:var(--ink)">github.com/ckryptickunal/OpenDesigner</div>
+          </div>
+        </div>
+      </section>
+
+      <div data-hf-id="hf-omfg" id="wipe"></div>
+    </div>
+
+    <script>
+      // ---------- build-time DOM splitting (deterministic) ----------
+      function splitWords(el) {
+        const walk = (node) => {
+          [...node.childNodes].forEach((c) => {
+            if (c.nodeType === 3) {
+              const frag = document.createDocumentFragment();
+              c.textContent.split(/(\s+)/).forEach((part) => {
+                if (!part) return;
+                if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(" ")); return; }
+                const w = document.createElement("span"); w.className = "w";
+                const i = document.createElement("span"); i.className = "wi"; i.textContent = part;
+                w.appendChild(i); frag.appendChild(w);
+              });
+              c.replaceWith(frag);
+            } else if (c.nodeType === 1 && !c.classList.contains("bar")) walk(c);
+          });
+        };
+        walk(el);
+        return el.querySelectorAll(".wi");
+      }
+      function splitChars(el) {
+        const t = el.textContent; el.textContent = "";
+        [...t].forEach((ch) => {
+          const o = document.createElement("span"); o.className = "ch";
+          const i = document.createElement("span"); i.className = "ci"; i.textContent = ch;
+          o.appendChild(i); el.appendChild(o);
+        });
+        return el.querySelectorAll(".ci");
+      }
+      document.querySelectorAll(".kin").forEach(splitWords);
+      splitWords(document.getElementById("s2sub"));
+      splitWords(document.getElementById("s3n"));
+      splitWords(document.getElementById("s4s"));
+      const s2chars = splitChars(document.getElementById("s2word"));
+      const s11chars = splitChars(document.getElementById("s11word"));
+
+      const tl = gsap.timeline({ paused: true });
+      const IN = "expo.out", OUT = "power3.in";
+      const q = (s) => document.querySelectorAll(s);
+
+      // rise words of an element
+      function rise(sel, t, stagger = 0.05, dur = 0.7) {
+        tl.fromTo(q(sel + " .wi"), { yPercent: 110 }, { yPercent: 0, duration: dur, ease: IN, stagger }, t);
+      }
+      // quick exit of a set of nodes
+      function leave(targets, t, dur = 0.32) {
+        tl.fromTo(targets, { y: 0, opacity: 1 }, { y: -40, opacity: 0, duration: dur, ease: OUT, immediateRender: false }, t);
+      }
+
+      // ---------- persistent ----------
+      tl.fromTo("#progress", { scaleX: 0 }, { scaleX: 1, duration: 85, ease: "none" }, 0);
+      tl.fromTo("#grid", { x: 0, y: 0 }, { x: 96, y: 96, duration: 85, ease: "none" }, 0);
+      tl.fromTo("#brand", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 0.1);
+      tl.set("#wipe", { scaleX: 0 }, 0);
+      function wipe(t) {
+        tl.fromTo("#wipe", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.28, ease: "power4.in", immediateRender: false }, t - 0.28);
+        tl.fromTo("#wipe", { scaleX: 1, transformOrigin: "100% 50%" }, { scaleX: 0, duration: 0.42, ease: "power4.out", immediateRender: false }, t);
+      }
+      [6.5, 26, 59, 77.5].forEach(wipe);
+      q(".tag").forEach((el) => {
+        const sec = el.closest(".clip"); const s = parseFloat(sec.dataset.start);
+        tl.fromTo(el, { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.5, ease: IN }, s + 0.1);
+      });
+
+      // ---------- S1 hook 0–6.5 ----------
+      tl.set("#s1swap, #s1b", { display: "none" }, 0);
+      rise("#s1a", 0.25, 0.06, 0.8);
+      leave("#s1a", 2.15);
+      tl.set("#s1a", { display: "none" }, 2.48);
+      tl.set("#s1swap", { display: "block" }, 2.48);
+      const toks = q("#s1swap .tok");
+      toks.forEach((tk, i) => {
+        const t = 2.5 + i * 0.36;
+        tl.fromTo(tk, { yPercent: 100 }, { yPercent: 0, duration: 0.3, ease: "expo.out" }, t);
+        if (i < toks.length - 1) tl.fromTo(tk, { yPercent: 0 }, { yPercent: -100, duration: 0.3, ease: "expo.out", immediateRender: false }, t + 0.36);
+      });
+      tl.fromTo("#s1swap .tok:last-child", { scale: 1 }, { scale: 1.06, duration: 0.5, ease: "power2.out" }, 4.1);
+      leave("#s1swap", 4.4, 0.25);
+      tl.set("#s1swap", { display: "none" }, 4.66);
+      tl.set("#s1b", { display: "block" }, 4.66);
+      rise("#s1b", 4.7, 0.05, 0.7);
+      leave("#s1b", 6.15);
+
+      // ---------- S2 title 6.5–11.5 ----------
+      tl.fromTo("#s2eye", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: IN }, 6.7);
+      tl.fromTo(s2chars, { yPercent: 115 }, { yPercent: 0, duration: 0.9, ease: IN, stagger: 0.035 }, 6.75);
+      rise("#s2sub", 7.6, 0.04, 0.7);
+      tl.fromTo("#s2bar", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out" }, 8.4);
+      leave(["#s2eye", "#s2word", "#s2sub"], 11.15);
+
+      // ---------- S3 hosts 11.5–16.5 ----------
+      rise("#s3h", 11.6, 0.05);
+      tl.fromTo("#s3chips .chip", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: IN, stagger: 0.09 }, 12.3);
+      rise("#s3n", 13.9, 0.03, 0.6);
+      leave(["#s3h", "#s3chips", "#s3n"], 16.15);
+
+      // ---------- S4 questions 16.5–26 ----------
+      tl.fromTo("#s4eye", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 16.6);
+      rise("#s4h", 16.7, 0.08, 0.8);
+      const qsEls = q("#s4qs .q");
+      qsEls.forEach((el, i) => {
+        const t = 17.4 + i * 0.95;
+        tl.fromTo(el, { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.55, ease: IN }, t);
+        tl.fromTo(el.querySelector(".ans"), { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out" }, t + 0.45);
+      });
+      rise("#s4s", 19.0, 0.03, 0.6);
+      leave(["#s4qs", "#s4s"], 22.5, 0.35);
+      tl.fromTo("#s4p .pr", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: IN, stagger: 0.18 }, 22.8);
+      tl.fromTo("#s4h", { scale: 1 }, { scale: 1.02, duration: 3, ease: "none" }, 22.8);
+      leave(["#s4eye", "#s4h", "#s4p"], 25.65);
+
+      // ---------- S5 system 26–39 ----------
+      rise("#s5h", 26.2, 0.06);
+      const panels = ["#p-color", "#p-type", "#p-space", "#p-radius", "#p-dials"];
+      panels.forEach((p, i) => tl.fromTo(p, { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: IN }, 26.8 + i * 0.25));
+      tl.fromTo("#p-color .sw", { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: IN, stagger: 0.06 }, 27.2);
+      tl.fromTo("#p-type .tscale span", { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.5, ease: IN, stagger: 0.08 }, 27.6);
+      tl.fromTo("#p-space .sp", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: IN, stagger: 0.07 }, 28.0);
+      const rads = q("#p-radius .rad");
+      [[0, 12], [0, 28], [0, 50]].forEach(([a, b], i) =>
+        tl.fromTo(rads[i], { borderRadius: a + "px" }, { borderRadius: b + "px", duration: 0.9, ease: "power3.inOut" }, 28.4 + i * 0.12));
+      const knobs = q("#p-dials .knob");
+      const vals = [0.18, 0.55, 0.3, 0.62, 0.42, 0.7, 0.48, 0.35];
+      knobs.forEach((k, i) => tl.fromTo(k, { y: 42 }, { y: vals[i] * 84, duration: 0.9, ease: "power3.inOut" }, 28.6 + i * 0.07));
+      // dial tweak: a second pass, like someone turning the dials
+      const vals2 = [0.05, 0.4, 0.5, 0.2, 0.65, 0.5, 0.3, 0.55];
+      knobs.forEach((k, i) => tl.to(k, { y: vals2[i] * 84, duration: 0.8, ease: "power3.inOut" }, 31.2 + i * 0.05));
+      tl.to(rads, { borderRadius: (i) => [6, 20, 38][i] + "px", duration: 0.8, ease: "power3.inOut" }, 31.3);
+      tl.to("#p-type .tscale", { gap: 34, duration: 0.8, ease: "power3.inOut" }, 31.3);
+      // three voices overlay
+      leave(["#p-space", "#p-radius", "#p-dials"], 33.6, 0.3);
+      tl.fromTo("#s5v .voice", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: IN, stagger: 0.2 }, 33.95);
+      leave(["#s5h", "#p-color", "#p-type", "#s5v"], 38.6);
+
+      // ---------- S6 zoom 39–45.5 ----------
+      rise("#s6h", 39.15, 0.05);
+      const lv = ["#s6 .l0", "#s6 .l1", "#s6 .l2", "#s6 .l3"];
+      lv.forEach((l, i) => tl.fromTo(l, { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.7, ease: IN }, 39.8 + i * 0.75));
+      tl.fromTo("#s6 .nest", { scale: 1.35 }, { scale: 1, duration: 3.4, ease: "power2.inOut" }, 39.8);
+      leave(["#s6h", "#s6 .nest"], 45.15);
+
+      // ---------- S7 exports 45.5–53.5 ----------
+      rise("#s7h", 45.65, 0.05);
+      tl.fromTo("#s7src", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: IN }, 46.3);
+      const lines = q("#s7 .ln");
+      lines.forEach((p, i) => {
+        const L = Math.ceil(p.getTotalLength()); p.style.strokeDasharray = L;
+        tl.fromTo(p, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.6, ease: "power2.out" }, 47.0 + i * 0.1);
+      });
+      const tg = q("#s7 .tgt");
+      tg.forEach((el, i) => tl.fromTo(el, { x: i < 4 ? -40 : 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: IN }, 47.4 + i * 0.1));
+      leave(["#s7h", "#s7src", "#s7lines", ...tg], 53.15);
+
+      // ---------- S8 locks 53.5–59 ----------
+      rise("#s8h", 53.6, 0.06);
+      const lk = q("#s8l .lock");
+      lk.forEach((el, i) => {
+        const t = 54.2 + i * 0.35;
+        tl.fromTo(el, { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: IN }, t);
+        tl.fromTo(el.querySelector(".lb"), { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "power4.out" }, t + 0.35);
+      });
+      leave(["#s8h", "#s8l"], 58.65);
+
+      // ---------- S9 numbers 59–69 ----------
+      rise("#s9h", 59.2, 0.05);
+      const stats = q("#s9s .stat");
+      stats.forEach((el, i) => {
+        const t = 59.9 + i * 0.3;
+        tl.fromTo(el, { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: IN }, t);
+        const num = el.querySelector(".num");
+        const to = +num.dataset.to, pre = num.dataset.prefix || "", suf = num.dataset.suffix || "";
+        const o = { v: 0 };
+        tl.fromTo(o, { v: 0 }, { v: to, duration: 1.4, ease: "power3.out",
+          onUpdate: () => { num.textContent = pre + Math.round(o.v) + (o.v >= to - 0.5 ? suf : ""); } }, t + 0.1);
+      });
+      leave(["#s9h", "#s9s"], 68.6);
+
+      // ---------- S10 skills 69–77.5 ----------
+      rise("#s10h", 69.15, 0.05);
+      tl.fromTo("#s10s .sk", { x: 90, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: IN, stagger: 0.32 }, 69.8);
+      tl.fromTo("#s10s .dot", { scale: 0 }, { scale: 1, duration: 0.35, ease: "power3.out", stagger: 0.32 }, 70.1);
+      leave(["#s10h", "#s10s"], 77.15);
+
+      // ---------- S11 close 77.5–85 ----------
+      tl.fromTo("#s11p", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: IN }, 77.75);
+      const msg = "Create a design system for this project.";
+      const tx = document.getElementById("s11tx");
+      const ty = { n: 0 };
+      tl.fromTo(ty, { n: 0 }, { n: msg.length, duration: 1.9, ease: "none",
+        onUpdate: () => { tx.textContent = msg.slice(0, Math.round(ty.n)); } }, 78.2);
+      tl.fromTo("#s11c", { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "steps(1)", repeat: 5, yoyo: true }, 78.0);
+      tl.to("#s11p", { scale: 0.97, duration: 0.2, ease: "power2.out" }, 80.5);
+      leave("#s11p", 80.75, 0.3);
+      tl.set("#s11end", { opacity: 0 }, 0);
+      tl.set("#s11end", { opacity: 1 }, 81.0);
+      tl.fromTo(s11chars, { yPercent: 115 }, { yPercent: 0, duration: 0.9, ease: IN, stagger: 0.035 }, 81.05);
+      tl.fromTo("#s11sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: IN }, 81.9);
+      tl.fromTo("#s11url", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: IN }, 82.15);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
