@@ -7449,8 +7449,8 @@ def _css_theme_vars(css):
 
 
 def export_artifact(d, files, meta, state, prefix):
-    """The system as a Claude Design System artifact's files (project/...): tokens.json in its list grammar, README.md
-    from DESIGN.md, a cover and a button preview. Publish the folder with the Artifact tool (SKILL.md: Design System
+    """The system as a Claude Design System artifact's files (project/...): tokens.json in its list grammar, a README.md
+    made of DESIGN.md, a cover and a button preview. Publish the folder with the Artifact tool (SKILL.md: Design System
     artifact). Logos and other images are uploads there, so they are listed in the README instead of copied."""
     name = state.get("name") or "Design system"
     base = resolve_all(files, {})
