@@ -92,6 +92,17 @@ Decisions: D-0035 (answers.Q-aud-01), D-0037 (answers.Q-scope-01), D-0038 (answe
 
 </details>
 
+**Taste card.** How it looks and feels, in five lines for you, your team and any AI that builds with it. Nothing on it is invented: each line says where it comes from.
+Designers: style brief, mood in words · Code: `taste.brief, taste.never`
+
+| Line | What it says | From |
+|---|---|---|
+| In your words | Not given yet. Describe the look as a picture, not adjectives (for example, "a quiet library at night"). | not asked yet |
+| Color | One accent color: your brand color `#2338FF` (exactly) marks buttons, links and focus. Everything else stays neutral. Keep the accent to small areas, about 15% of a screen at most (a rule of thumb, DC-L15-03). | brand color; colorfulness 35/100 |
+| Shape | Buttons and fields have 12px corners; cards have 16px corners. Surfaces are separated by thin borders, with no shadows. | roundness 75/100, depth 15/100 |
+| Motion | Calm. Most movements take 200ms. They turn into fades when a person asks for less motion. | energy 30/100 |
+| Never | Nothing yet. Say what it should never look like, or rate real screens in the taste poll. | not asked yet |
+
 ## Colors
 
 > Zoom: sketch (0 of 3), 4 decisions in this area. To zoom in, answer Q-color-02.
@@ -713,7 +724,7 @@ Your own decisions first (the newest value per path), then your changes to stand
 
 1. Before any visual work, read this file, PRODUCT.md and `opendesigner/tokens/` (start at `opendesigner/tokens/opendesigner.resolver.json`).
 2. Use tokens, never raw values: CSS `var(--ds-...)`, Tailwind classes from `opendesigner/build/tailwind/theme.css`, `DS.*` in Swift. In Compose: colors from `LocalDsColors.current` (provide `DsLightColors` or `DsDarkColors`), then `DsSpace`, `DsType` and `DsMotion`.
-3. Do not change a locked decision without asking the owner.
+3. Do not change a locked decision without asking the owner. Keep new screens inside the taste card at the top of the Overview, and never add anything on its Never list without asking.
 4. To change the system: `engine.py set <path> <value> --why "..."`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.
 5. To extend: add a decision (never hand-edit tokens or this file). Keep semantic names the same across modes. Deprecate instead of deleting.
 6. After any implementation, run `engine.py review` and re-read this file.
