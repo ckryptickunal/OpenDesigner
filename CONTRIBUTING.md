@@ -1,5 +1,12 @@
 # Contributing to OpenDesigner
 
+## Start here
+1. **Pick something small:** the [good first issues](https://github.com/ckryptickunal/OpenDesigner/labels/good%20first%20issue) each name their files and sources.
+2. **Run the checks** before a pull request: the list under "Before you commit" in [AGENTS.md](AGENTS.md#before-you-commit), or the short version [below](#local-checks-to-run-before-a-pull-request).
+3. **Propose a source or a standard** with a [research correction](.github/ISSUE_TEMPLATE/research-correction.yml) issue: the source, what it says and where it applies. The owner decides which sources become house standards ([docs/KNOWLEDGE.md](docs/KNOWLEDGE.md)).
+4. **Report a problem** with [an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose), or let your AI draft one with `engine.py feedback`. Security problems go through [private reporting](SECURITY.md).
+5. **Rather talk first?** Book a free 20-minute intro call with Kunal: https://calendar.app.google/42qSQUrBiSL4CHfv6
+
 Thanks for helping. OpenDesigner is an open-source, AI-first way to create a design system: a set of skills, knowledge files and a small engine that any capable model (Claude, ChatGPT, Codex and others) uses to interview a person, recommend sourced defaults and write design tokens. Everything it recommends traces back to research in this repo, so there are two kinds of contribution: improving the product and improving the evidence.
 
 You do not need to be a designer. Engineers, designers, accessibility specialists, writers and translators all have useful work here, and so do AI agents working on your behalf.
@@ -26,7 +33,9 @@ Browse [good first issues](https://github.com/ckryptickunal/OpenDesigner/labels/
 4. **Reference intake never copies identity.** Examples and extraction may copy structure and quality from a reference, never another brand's logo, name, typeface files, illustrations or signature colors presented as your own.
 5. **Plain language.** Write for an engineer who is new to design. Short sentences, real values, no marketing words.
 6. **Never commit secrets.** `.env` and key files are git-ignored. Keep them that way. If you commit a key by mistake, revoke it first, then tell a maintainer through private reporting (see [`SECURITY.md`](SECURITY.md)).
-7. **Skills ship offline.** Anything inside `skills/` uses the Python standard library only and makes no network calls.
+7. **Skills ship offline.** Anything inside `skills/` uses the Python standard library only and makes no network calls, except owner-approved cases: illustration search and fetch, the paint engine's installs and the review skill's optional local browser ([`SECURITY.md`](SECURITY.md), [SPEC principle 9](docs/SPEC.md)), plus report sharing after the person's yes and taste-poll screens from their own Mobbin access ([docs/PRIVACY.md](docs/PRIVACY.md)). A new exception needs the owner's yes.
+8. **Claims match the repo.** A count, command or status in a doc is true today, and shipped work is kept apart from planned work. After you add or remove something, search the docs for counts of it (preflight check 25).
+9. **Checks report; people decide.** A check never rewrites someone's interface. Fixes to existing code wait for the person's yes.
 
 ## How the files fit together
 
@@ -80,7 +89,7 @@ python3 -c "import json,pathlib; [json.loads(p.read_text()) for p in pathlib.Pat
 # citation integrity: every cited source id is in a trace, every card id exists
 python3 tools/jev_nav.py check
 
-# engine tests (once they are in the repo)
+# engine tests (157 tests, about a minute)
 python3 skills/opendesigner/scripts/test_engine.py
 
 # journey tracker tests: the private log, the anonymous report and the consent texts
@@ -94,7 +103,9 @@ python3 tools/build_dist.py --check
 python3 tools/check_links.py
 ```
 
-CI runs the same checks on every pull request (see `.github/workflows/ci.yml`).
+The CI workflow (`.github/workflows/ci.yml`) runs these and every other test file, but GitHub has no recorded runs yet, so run them yourself. The full list, including the learning-wiki checks, is "Before you commit" in [AGENTS.md](AGENTS.md#before-you-commit).
+
+Working on the website or the showcase? Follow [`site/README.md`](site/README.md) "Before every deploy" and [`brand/showcase/BRIEF.md`](brand/showcase/BRIEF.md). The showcase checks are `brand/tools/check_dates.py` and `brand/tools/check_names.py`.
 
 ## Pull requests
 

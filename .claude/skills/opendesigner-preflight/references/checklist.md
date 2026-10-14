@@ -63,3 +63,7 @@ Run this on any video, page, deck or image before you call it done. Each line is
 36. **One primary action.** Each view has one primary button. Secondary actions are visibly quieter (a text link), and places already in the header, such as GitHub or the docs, are not repeated as buttons. [M37]
 37. **Real names and marks.** Every invented name was web-searched and is not one letter away from a real or already-used name. A well-known tool the work names shows its own mark beside its name. Shown domains end in `.example`. [M38]
 38. **Controls sit on the content.** A button pinned inside a box, such as a copy or close button, is centred on the content's first line, with equal top and side insets. The content makes room beside it, never an empty band above it. [M39]
+39. **No widows.** No heading, lede or short centred line ends on a single word, at any width from 320 to 1920 px. [M40]
+40. **Labels stay whole.** Chips, tags and button labels never break across lines, and never inside a word; a long file name gets a chip that may wrap on purpose. Nothing scrolls or runs under a pinned control. Check every page at phone widths, not only the landing page. [M41]
+41. **Opposite actions apart.** A pair like Skip and Mark done, or Decline and Approve, sits on one row: the secondary on the left, the primary on the right, as far apart as the row allows. Never stacked. [M42]
+42. **One mark per company.** In a row of tools, each company's mark appears once, and its products share it ("Claude Code / app", "ChatGPT / Codex"). [M43]

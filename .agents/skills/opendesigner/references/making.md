@@ -138,6 +138,8 @@ These are mistakes an AI builder made in the source project (DC-L22-09). Most dr
 | Selling the mechanism first | The headline names files, tokens or features before what the person gets | Lead with the outcome (a product that looks like it belongs together), then show how |
 | Names that only feel invented | A brand name turns out to be a real product in the same field, or one letter from a name already used | Web-search every name and check the project's name registry before it is rendered (preflight 37) |
 | Reserving a band for a control | A copy or close button floats in empty padding above the content | Centre it on the content's first line with equal top and side insets, and make room beside the text (preflight 38) |
+| Widows and broken labels | A last line with one word; a chip split inside a word; text running under a pinned button on a phone | Balance headings, keep labels on one line, make room beside pinned controls, and check every page at phone widths (preflight 39, 40) |
+| Opposite actions side by side, or stacked | Skip above Mark done on a phone, or Decline next to Approve | One row, secondary left, primary right, as far apart as the row allows (preflight 41) |
 | Plain names where a mark is expected | Well-known tools listed as text in a "works with" row | Show each tool's own mark beside its name, monochrome; never put real marks on invented brands |
 | Changing what was approved or protected | A page-wide pass restyles something they were happy with | Approved work is frozen. Compare it with the version before (section 5) |
 | Growing with each pass | Type, cards and detail get bigger or busier every round | A restyle is not a resize. When something is cluttered, take things out |

@@ -11,6 +11,17 @@ It does not replace a designer. It makes what can be made well: spacing, type sc
 
 This page is the easy-to-read version. The full product specification is [SPEC.md](SPEC.md), and [RESEARCH.md](RESEARCH.md) maps the evidence behind each step. Unfamiliar words are in the [glossary](GLOSSARY.md).
 
+## Four things you can ask for
+
+Most requests are one of four jobs. They are names for what the existing skills already do, not new commands; the AI picks the skill from your words.
+
+| Ask for | What happens | Skills and commands |
+|---|---|---|
+| **Audit** what you have | It measures a site, repo, Figma file or brand book you point it at, then checks the built UI at every size, theme and state | `opendesigner-extract`, then `opendesigner-review` |
+| **Establish** a system | The 5-question sketch and a complete first build | `opendesigner`: `engine.py sketch`, then `engine.py build` |
+| **Improve** it | A change to the system, with everything it would move named first | `opendesigner-extend` |
+| **Check** the work | Rules on the code and on the rendered page, then what still needs a person's eye | `engine.py review`, `opendesigner-review`, `opendesigner-preflight` |
+
 ## The process at a glance
 
 The diagram shows the full process from the specification: ten phases. Three of them end at a gate, where you approve before the model moves on. In practice, the skill starts with a 5-question sketch (section 2). Then, for each area you zoom into, it asks questions in this order.
@@ -174,7 +185,22 @@ Rule-based checks run first, before the model gives any opinion ([`synthesis/LEV
 - **Lint errors** block publishing unless you waive them with a written reason. Examples: targets under 24 px, fields with no label, meaning shown by color alone, and dialogs with no way out.
 - **Warnings** you can override. Examples: too many type sizes or primary actions in one view, or very high colorfulness with high density. These come from practitioner advice and are labelled as guidance, not law.
 
-The model critiques the system only after it passes, using a rubric fixed in advance. Then a coverage check shows every block's status. Nothing is silently skipped.
+The model critiques the system only after it passes. The skills give no fixed scoring rubric yet; what they do give is the overview page, which marks every area Chosen, Picked for you, Default or Not enough information, so a gap shows instead of being skipped. `build` refuses to write exports while an error stands. To ship anyway, record the reason as a waiver (`engine.py set waivers.<rule> '"<reason>"' --why "..."`), which DESIGN.md lists, and run `build --force`.
+
+### What the rules check, and what is judgment
+
+| Checked by rules (same result every time) | Judged by the AI or a person |
+|---|---|
+| Contrast, target sizes, focus rings and reduced motion in the tokens (`engine.py validate`) | Hierarchy: what the eye reads first, and whether that is the right thing |
+| Hard-coded values in code that skip the tokens, house-standard patterns, and `DESIGN.md` sections that no longer match the state (`engine.py review`) | Personality: whether the page feels like the brand, or generic |
+| On the rendered page: text contrast as styled, sizes and spacing off the scale, missing focus rings, overflow and fonts that did not load (`opendesigner-review`'s `review.py`, from `probe.js` measurements) | Whether it reads as premium next to shipped work (`making.md` section 5 scores it 1 to 5) |
+| Type and font mistakes in a page's CSS, and frozen time or noise in a video (`preflight.py`) | Layout balance, variety and rhythm (`opendesigner-preflight`'s checklist marks these as looks) |
+
+The review skill labels each finding by how it is known: measured, operated, seen or inferred. A finding with no evidence is not reported. An AI score can rule work out but never approve it; the person's verdict outranks every score.
+
+### Nothing changes your interface without your yes
+
+The checks only report. `engine.py review`, `review.py` and `preflight.py` never edit your code. A fix to code that already exists, such as replacing a hard-coded color with its token, waits for your yes (`opendesigner-extend` section 5). The skills ask before wiring an export into your build, before adding a note to your `AGENTS.md`, and before installing anything. The illustration and paint skills write new files into your app only after you picked the piece to add.
 
 ## 8. Export, and what lands in your repo
 
@@ -185,7 +211,7 @@ The source of truth is `opendesigner/state.json` plus the DTCG tokens made from 
 | `DESIGN.md` (project root) | The readable view of the system that you, your team and any AI tool can follow |
 | `PRODUCT.md` (project root) | Product truth: audience, purpose, surfaces, principles |
 | `opendesigner/tokens/` | DTCG 2025.10 design tokens (the canonical format), with modes in one resolver file |
-| CSS variables, Tailwind theme | Use in web code right away, including shadcn/ui |
+| CSS variables, Tailwind theme | Use in web code right away; for shadcn/ui, map its variables to the tokens once |
 | Figma variables, Paper tokens | Mirror the system in your design tool |
 | Swift and Jetpack Compose | Native apps |
 | `opendesigner/decisions.md` | Every decision with its reason, source and what it changed, append-only |
@@ -193,7 +219,7 @@ The source of truth is `opendesigner/state.json` plus the DTCG tokens made from 
 | `opendesigner/coverage.md`, asset briefs | Every block's status; briefs a designer can act on |
 | `opendesigner/state.json`, `overview.html`, `preview.html` | Continue later; see your whole system on one page (`overview.html` grows with every decision and marks what is still missing) and every token (`preview.html`) |
 
-This is the full contract from [SPEC.md section 7](SPEC.md#7-outputs). Today the engine writes the core set: tokens, exports, `DESIGN.md`, `PRODUCT.md`, the decision log, `state.json` and the preview. The skill also writes `RATIONALE.md` from a template and, if you agree, adds a snippet to your `AGENTS.md`. The README's status table says what has shipped.
+This is the full contract from [SPEC.md section 7](SPEC.md#7-outputs). Today the engine writes the core set: tokens, exports, `DESIGN.md`, `PRODUCT.md`, the decision log, `state.json` and the preview. The skill also writes `RATIONALE.md` from a template and, if you agree, adds a snippet to your `AGENTS.md`. The README's "Status and roadmap" section says what has shipped.
 
 ## 9. Keeping it coherent later
 

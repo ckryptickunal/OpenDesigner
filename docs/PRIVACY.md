@@ -90,6 +90,16 @@ The reference receiver in `server/telemetry/` (a Cloudflare Worker, not deployed
 ## How long reports are kept
 Raw reports are kept for 12 months, then deleted automatically (a weekly cleanup in the receiver). Totals made from them are kept and may be published, because they can't be traced to anyone. These totals are the aggregate journey report: counts, rates and averages per question.
 
+## Everything else that can use the network
+This page is about the journey log and shared reports. For completeness, these are the only other places OpenDesigner's own scripts go online (checked against the code on 2026-10-15):
+- **The engine (`engine.py`) never does.** It imports no network module.
+- **Illustrations:** `illustrate.py search` and `fetch` call open-licence art sites over HTTPS, after you say yes to the search. Your search words go to those sites. `--offline` prints the requests instead.
+- **Taste poll screens:** `taste.py add` downloads screen images into `~/.opendesigner/taste-screens/` when your AI tool is connected to Mobbin and the poll needs more. Nothing about your project is sent.
+- **The paint skill** installs its npm packages and a browser for one film project, only after you say yes.
+- **The review skill** opens local addresses only (`capture.py`), and `review.py serve` listens on 127.0.0.1.
+
+Your conversation itself goes to your AI provider, as any prompt does. That is set by the tool you chose, not by OpenDesigner.
+
 ## Changing your mind
 - Stop sharing: `python3 <skill>/scripts/journey.py share-consent never`. Reports still waiting in the outbox are deleted.
 - Stop the local log, and delete it: `python3 <skill>/scripts/journey.py consent off --forget`.

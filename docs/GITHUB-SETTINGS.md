@@ -8,6 +8,7 @@ Everything here is for the maintainer to apply. GitHub's search reads the reposi
 - Still to do: private vulnerability reporting, secret scanning, push protection and Dependabot alerts (all off). The merge settings and the `main` ruleset are not applied yet either.
 - Update on 2026-10-13 (checked with the GitHub API): the ruleset "Protect main" is applied, so `main` cannot be deleted or force-pushed (see [Protect main](#protect-main)). Private vulnerability reporting is on. Secret scanning, push protection and Dependabot alerts are still off, the merge settings are still not applied, and CI has still never run (0 workflow runs).
 - GitHub Actions is disabled at the account level, so CI has never run. Kunal has to turn it back on in his GitHub account settings, or ask GitHub Support.
+- Update on 2026-10-15: a new About description, new topics and a new social preview are proposed below, to match the website. The homepage is already https://opendesigner.vercel.app (`gh repo view`). The description and topics are not applied yet; the social preview needs a manual upload.
 
 All commands use the [GitHub CLI](https://cli.github.com/) and assume:
 
@@ -21,40 +22,43 @@ REPO=ckryptickunal/OpenDesigner
 2. **Decide the licenses.** The defaults are MIT for code, skills and data, and CC BY 4.0 for written research and docs (`LICENSE`, `LICENSE-CONTENT`). Change them now if you want something else; it is much harder after outside contributions arrive.
 3. **Check for other secrets** once more: `git log -p | grep -iE "api[_-]?key|secret|token" | head`.
 
-## About description (315 characters)
+## About description (173 characters)
 
 ```
-Open-source AI design system builder. Load it into Claude, ChatGPT, Codex or Cursor: it interviews you, recommends sourced defaults and writes DTCG design tokens, CSS, Tailwind, Figma variables, DESIGN.md and a decision log, with WCAG 2.2 checks. Built on 352 cited Decision Cards and 25 benchmarked design systems.
+A free, open-source add-on for Claude, ChatGPT, Codex and Cursor that turns a few plain answers into a design system, so everything you build looks like it belongs together.
 ```
 
-It leads with the phrase people search for. It names the hosts and formats people filter by, and ends with the proof. Update the card count when the research grows (`python3 tools/jev_nav.py check` prints it).
+One plain sentence: the outcome, the tools it is packaged for, and that it is open source. It replaces the 2026-09-23 description, which ended with a card count that goes stale; the proof now lives in the README and on the website.
 
 ## Topics (20, the maximum)
 
 ```
-design-system, design-systems, design-tokens, dtcg, design-system-generator, ai-design,
-claude, claude-code, claude-skills, agent-skills, codex, chatgpt, mcp, figma,
-tailwindcss, shadcn-ui, accessibility, wcag, ui-design, theming
+design-system, design-tokens, dtcg, design-system-generator, tailwind, tailwindcss, figma, figma-variables,
+claude, claude-code, claude-skills, agent-skills, ai-agents, codex, cursor, chatgpt, accessibility, wcag,
+ui-design, open-source
 ```
+
+Compared with 2026-09-23, this drops `mcp` (no MCP server yet, issue #20) and `shadcn-ui` (not tested yet), and drops `design-systems`, `ai-design` and `theming` to make room for `tailwind`, `cursor`, `ai-agents`, `figma-variables` and `open-source`.
 
 ## Homepage
 
-Leave it empty until there is a site. A good first site is GitHub Pages serving `docs/` at `https://ckryptickunal.github.io/OpenDesigner/`. Once it exists, set it with `gh repo edit "$REPO" --homepage <url>`. Do not point the homepage at the repo itself; it adds nothing.
+https://opendesigner.vercel.app, the website built from `site/`. It is already set.
 
 ## Social preview image
 
-Upload `docs/assets/social-preview.png` (1280x640) under **Settings > General > Social preview**. GitHub has no API for this, so it is a manual step. The source is `docs/assets/social-preview.html`; re-render it if the tagline changes.
+Upload `brand/kit/readme/social-preview.png` (1280x640) under **Settings > General > Social preview**. GitHub has no API for this, so it is a manual step. It is the README banner at GitHub's size: the source is `brand/kit/readme/src/banner.html`, rendered with `python3 brand/kit/readme/src/render.py`. It replaces `docs/assets/social-preview.png`, which used the first brand kit.
 
-## Apply description, topics and features
+## Apply description, topics and homepage
 
 ```bash
 gh repo edit "$REPO" \
-  --description "Open-source AI design system builder. Load it into Claude, ChatGPT, Codex or Cursor: it interviews you, recommends sourced defaults and writes DTCG design tokens, CSS, Tailwind, Figma variables, DESIGN.md and a decision log, with WCAG 2.2 checks. Built on 352 cited Decision Cards and 25 benchmarked design systems." \
-  --add-topic design-system,design-systems,design-tokens,dtcg,design-system-generator,ai-design,claude,claude-code,claude-skills,agent-skills,codex,chatgpt,mcp,figma,tailwindcss,shadcn-ui,accessibility,wcag,ui-design,theming \
-  --enable-issues --enable-discussions --enable-wiki=false --enable-projects=false \
-  --enable-squash-merge --enable-merge-commit=false --enable-rebase-merge=false \
-  --delete-branch-on-merge
+  --description "A free, open-source add-on for Claude, ChatGPT, Codex and Cursor that turns a few plain answers into a design system, so everything you build looks like it belongs together." \
+  --homepage "https://opendesigner.vercel.app" \
+  --remove-topic ai-design,design-systems,mcp,shadcn-ui,theming \
+  --add-topic tailwind,cursor,ai-agents,figma-variables,open-source
 ```
+
+The features were set on 2026-09-23 with `--enable-issues --enable-discussions --enable-wiki=false --enable-projects=false`. The merge settings are not applied yet: `gh repo edit "$REPO" --enable-squash-merge --enable-merge-commit=false --enable-rebase-merge=false --delete-branch-on-merge`.
 
 ## Security features
 

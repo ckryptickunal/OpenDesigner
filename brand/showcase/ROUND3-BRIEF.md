@@ -42,6 +42,7 @@ Put each piece next to the B2B product screens and Orbika. If it looks weaker or
    - Re-add every total from the page itself.
 5. **Names:**
    - Check every invented person, company and brand against `brand/showcase/NAMES.md`. Each name belongs to one product only.
+   - `python3 brand/tools/check_names.py brand/showcase/<category>/<piece>` must pass (or each flag must be shown to be a false positive). It finds names another piece owns or nearly owns (Tellwick and Stellwick) and lists the new names to search.
    - Web-search each new brand name.
    - Add your final names to NAMES.md: append only, never reorder.
 6. **Fresh-eyes audit:** before you finish, ask a fresh-context subagent (Agent tool) to audit the render.

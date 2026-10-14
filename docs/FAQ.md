@@ -13,7 +13,7 @@ Load OpenDesigner into the AI tool you already use: Claude Code, Claude, Codex, 
 The model reads your repo first. It starts with a short sketch, and you can zoom into any area. It shows each choice visually where your tool allows it. It writes DTCG design tokens, CSS variables, a Tailwind theme, a `DESIGN.md` and a decision log into your project. See [How it works](HOW-IT-WORKS.md).
 
 How is that different from typing "make me a design system"?
-- Every recommendation comes from a cited research base: 352 Decision Cards and 25 benchmarked systems.
+- Every recommendation comes from a cited research base: more than 500 Decision Cards and 25 benchmarked systems.
 - The questions come in order of what depends on what.
 - Fixed checks (contrast, target sizes, scale steps) run before you see the result.
 
@@ -32,7 +32,7 @@ What it cannot generate well (a logo, custom icons, illustration, photography) i
 
 ### How long does it take?
 
-Start with a sketch. About 3 to 5 questions, in about 3 minutes, give you a complete, working system with sourced defaults. Then zoom into any area you care about, and stop whenever it is enough. The next level, one short screen per foundation, is 8 questions in about 8 minutes. Every default stays editable. The full interview has 192 questions, but you only answer the ones for the areas you zoom into.
+Start with a sketch. About 3 to 5 questions, in about 3 minutes, give you a complete, working system with sourced defaults. Then zoom into any area you care about, and stop whenever it is enough. The next level, one short screen per foundation, is 8 questions in about 8 minutes. Every default stays editable. The full interview has 193 questions, but you only answer the ones for the areas you zoom into.
 
 ### What do I get at the end?
 
@@ -109,7 +109,7 @@ Yes. Tailwind is one of the export formats. The tokens become a Tailwind theme, 
 
 ### Does it work with shadcn/ui?
 
-Yes. shadcn/ui is one of the 25 benchmarked systems and one of the dial recipes. The export's CSS variables and Tailwind theme are what shadcn/ui components read. OpenDesigner decides the system (roles, scales, states, accessibility targets) that a shadcn theme expresses. A note from L08: shadcn/ui changed its default base library from Radix to Base UI in July 2026.
+Yes. shadcn/ui is one of the 25 benchmarked systems and one of the dial recipes. The exports use their own `--ds-*` variable names, not the ones shadcn/ui components read (`--primary`, `--background` and so on), so map them once in your global CSS, for example `--primary: var(--ds-color-bg-action-primary)` and `--background: var(--ds-color-surface-base)`. OpenDesigner decides the system (roles, scales, states, accessibility targets) that a shadcn theme expresses. A note from L08: shadcn/ui changed its default base library from Radix to Base UI in July 2026.
 
 ### Does it work with Figma?
 

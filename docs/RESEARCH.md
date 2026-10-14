@@ -9,7 +9,7 @@ Counts on this page were read from the files on 2026-09-24, with `python3 tools/
 | | Count | How it was counted |
 |---|---|---|
 | Research lanes finished | 18 | L00 to L18 on `_coordination/BOARD.md`; L12 is still open |
-| Decision Cards | 352 | `### DC-` headings across `research/` and `benchmarks/` |
+| Decision Cards | 543 on 2026-10-15: 352 from lanes L01 to L18 and the benchmark, 175 from the learning wiki (L19), 9 from L22, 7 from L23 | `### DC-` headings across `research/` and `benchmarks/` (`python3 tools/jev_nav.py check` prints the total) |
 | Sources logged | 2,740 | distinct source ids in the research lanes' traces (`traces/L*-trace.md`), including sources that were opened and rejected. With the sponsorship research (R4) and the verification pass (V1), `traces/` holds 3,225 |
 | Design systems benchmarked | 25 | files in `benchmarks/systems/` |
 | Ontology nodes | 275, of which 211 are building blocks outside the builder layer: 156 generatable, 23 tool-assisted, 21 owner input, 9 designer-owned, 2 extractable | `synthesis/ontology.json` [S-V1b-091] |

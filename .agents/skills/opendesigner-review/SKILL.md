@@ -38,6 +38,7 @@ Helper: `scripts/review.py` (below: `review.py`). Run it from the person's proje
 - **Say what was not checked.** A cell you skip needs a reason; the report prints every skip. Never mark a cell done from memory.
 - **Do not grade your own work alone.** If the host can start a fresh agent, give it the brief, the URL and this skill, not your reasoning (`references/report.md`). A reviewer that shares the builder's assumptions agrees with it.
 - **Ask before installing** Playwright or a browser. Nothing else here installs anything or needs the internet: the helper reads and writes files, `serve` listens on 127.0.0.1 only, and `capture.py` opens local addresses only.
+- **Report; don't rewrite.** The review changes nothing by itself. Fixing code you did not write in this task, or code already shipped, waits for the person's yes: name the file, the line and the change, and apply only what they approve.
 - **Do not change a locked token to make a finding go away.** Report it; if the person wants the rule changed, that is a `standard override` or `engine.py set` with their say-so (`guardrails.md` section 4b).
 
 ## 1. Look first
@@ -97,7 +98,7 @@ review.py check opendesigner/review          every probe and capture file in the
 - It prints what was resolved and what is new each time you run it on the same files.
 
 ## 7. Report, fix, run the same cells again
-`review.py report` writes `REPORT.md`: verdict, what was not checked, findings (errors, warnings, notes) each with where, measured, expected, evidence and fix, then the coverage table. After a fix, run the same cells again; do not trust the fix. If you can start a fresh agent, hand it `references/report.md` ("The verifier") and the report, and have it try to disprove each error and find what you missed.
+`review.py report` writes `REPORT.md`: verdict, what was not checked, findings (errors, warnings, notes) each with where, measured, expected, evidence and fix, then the coverage table. Fix only what the person approved (hard rules). After a fix, run the same cells again; do not trust the fix. If you can start a fresh agent, hand it `references/report.md` ("The verifier") and the report, and have it try to disprove each error and find what you missed.
 
 Screenshots add up. Offer to git-ignore `opendesigner/review/shots/` and `opendesigner/review/probes/` (ask first: it edits a file outside `opendesigner/`), and keep `REPORT.md`, `plan.json` and `ledger.json`.
 

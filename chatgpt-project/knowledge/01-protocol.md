@@ -531,6 +531,8 @@ You are in the repo when `_coordination/PROTOCOL.md` and `tools/od.py` exist. Th
 3. Record why with `python3 tools/od.py log "<what changed and why>"`. Then commit and push following `_coordination/PROTOCOL.md` section 4. When other sessions share the checkout, commit only your paths (`git commit -- <paths>`), because `od.py sync` adds everything. If you don't own the file, send its owner a message with `od.py send` instead of editing it.
 4. For a research claim, add the source to the lane's `traces/` file and cite it. If you can't cite it, mark it `[inferred]`.
 5. When the owner gives an instruction, or a session makes a mistake worth not repeating, append it to `_coordination/OWNER-FEEDBACK.md` (his words, what it means, its status). Then turn it into a rule where agents will read it: `_coordination/PROTOCOL.md`, `learn/IMPROVING.md`, a skill reference or a test. A note in one tool's private memory is not enough, because other models and hosts never see it.
+   - A mistake in visual work becomes a check, in the same change: a numbered line in `opendesigner-preflight/references/checklist.md` with its story in `mistakes.md`, a row in `making.md` section 10 (or 11 for a tell), and, when a review should catch it, a case in `synthesis/review-cases.json` (then `python3 tools/build_data.py`).
+   - When it can be measured, add a small tool and name it in the check: `site/check_layout.py` (alignment at 13 widths), `brand/tools/check_dates.py` (weekdays), `brand/tools/check_names.py` (names). Mark the row's status in OWNER-FEEDBACK.md with the files that address it.
 
 # Guardrails
 
@@ -809,6 +811,8 @@ These are mistakes an AI builder made in the source project (DC-L22-09). Most dr
 | Selling the mechanism first | The headline names files, tokens or features before what the person gets | Lead with the outcome (a product that looks like it belongs together), then show how |
 | Names that only feel invented | A brand name turns out to be a real product in the same field, or one letter from a name already used | Web-search every name and check the project's name registry before it is rendered (preflight 37) |
 | Reserving a band for a control | A copy or close button floats in empty padding above the content | Centre it on the content's first line with equal top and side insets, and make room beside the text (preflight 38) |
+| Widows and broken labels | A last line with one word; a chip split inside a word; text running under a pinned button on a phone | Balance headings, keep labels on one line, make room beside pinned controls, and check every page at phone widths (preflight 39, 40) |
+| Opposite actions side by side, or stacked | Skip above Mark done on a phone, or Decline next to Approve | One row, secondary left, primary right, as far apart as the row allows (preflight 41) |
 | Plain names where a mark is expected | Well-known tools listed as text in a "works with" row | Show each tool's own mark beside its name, monochrome; never put real marks on invented brands |
 | Changing what was approved or protected | A page-wide pass restyles something they were happy with | Approved work is frozen. Compare it with the version before (section 5) |
 | Growing with each pass | Type, cards and detail get bigger or busier every round | A restyle is not a resize. When something is cluttered, take things out |
