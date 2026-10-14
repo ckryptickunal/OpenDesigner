@@ -93,7 +93,7 @@ The first public version: the research base, the synthesis that turns it into an
 - **Community and repository health:** README, CONTRIBUTING, Code of Conduct (Contributor Covenant 2.1), security policy, support, governance, citation file, issue forms, pull request template, labels, CI, `llms.txt`, `funding.json`, a social preview image, a sponsorship plan, and docs (`docs/HOW-IT-WORKS.md`, `docs/RESEARCH.md`, `docs/FAQ.md`, `docs/GITHUB-SETTINGS.md`, `docs/SEED-ISSUES.md`).
 - **Licenses:** MIT for code, skills and data; CC BY 4.0 for research and documentation.
 
-- **Lessons from the owner's website review** (2026-10-15): preflight checks 35 to 37 (alignment at every width, one primary action, real names and marks) and mistakes M36 to M38; five rows in `making.md` section 10; review cases MS-05 and CV-04 measure stacked rows and scroll inside cards. The log is `_coordination/OWNER-FEEDBACK.md`.
+- **Lessons from the owner's website review** (2026-10-15): preflight checks 35 to 38 (alignment at every width, one primary action, real names and marks, controls on the content's first line) and mistakes M36 to M39; five rows in `making.md` section 10; review cases MS-05 and CV-04 measure stacked rows and scroll inside cards. The log is `_coordination/OWNER-FEEDBACK.md`.
 
 ### Fixed
 

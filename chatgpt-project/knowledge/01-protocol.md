@@ -808,6 +808,7 @@ These are mistakes an AI builder made in the source project (DC-L22-09). Most dr
 | Three calls to action of equal weight | Two buttons and a link side by side in the hero | One primary button for the one action the view exists for, one quiet text link, the rest in the header (preflight 36) |
 | Selling the mechanism first | The headline names files, tokens or features before what the person gets | Lead with the outcome (a product that looks like it belongs together), then show how |
 | Names that only feel invented | A brand name turns out to be a real product in the same field, or one letter from a name already used | Web-search every name and check the project's name registry before it is rendered (preflight 37) |
+| Reserving a band for a control | A copy or close button floats in empty padding above the content | Centre it on the content's first line with equal top and side insets, and make room beside the text (preflight 38) |
 | Plain names where a mark is expected | Well-known tools listed as text in a "works with" row | Show each tool's own mark beside its name, monochrome; never put real marks on invented brands |
 | Changing what was approved or protected | A page-wide pass restyles something they were happy with | Approved work is frozen. Compare it with the version before (section 5) |
 | Growing with each pass | Type, cards and detail get bigger or busier every round | A restyle is not a resize. When something is cluttered, take things out |

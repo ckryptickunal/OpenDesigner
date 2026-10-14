@@ -69,6 +69,7 @@ Kunal reviewed every showcase piece, then the website as it became the project's
 | 10 | Staggered hero cards read as "misaligned"; three calls to action in one row are "very bad UX". | Sibling cards share a top edge and height; one primary action per view. | addressed: home hero; preflight checks 35 and 36 (M36, M37) |
 | 11 | "Use the Emil Kowalski skill to introduce motion", "even mention about resources like such in the website", with motion, UX and UI examples, "the go-to guide". | Motion with a purpose, credited to its sources; a craft guide on the site. | addressed for the landing page motion (`site/static/home.css`); the craft guide is open until it ships |
 | 12 | Explore stickers, doodles and illustrations as three directions in a preview, "no production changes until approved". | Decoration is chosen by the owner from working previews. | open: waiting for his choice |
+| 13 | The Copy button in code blocks "feels out of place. Why are such mistakes happening? ... rule out any such mistakes from future implementation." | A control pinned in a box is lined up with the content, and a tool checks it on every page and width. | addressed: `site/static/site.css` (`.code`); `site/check_layout.py` check 8; preflight check 38 (M39); `making.md` section 10 |
 
 **Lessons the agent learned** (each is now a rule in the files named):
 1. A layout checked at one width is not checked. Measure every row's centre, edges, top and height from 320 to 1920 px (`site/check_layout.py`).
