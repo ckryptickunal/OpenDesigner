@@ -25,6 +25,7 @@ OpenDesigner/
 ├── data/                      R3  chunked knowledge built from synthesis/ by tools/build_data.py (ontology, graph, levers, questions per stage, hooks, pacing)
 ├── examples/                  R2  complete worked examples, each with DESIGN.md, decisions.md, tokens/, css/, preview.html
 ├── chatgpt-project/           R3  instructions.md + at most 5 knowledge files, for ChatGPT Projects
+├── brand/                     --  OpenDesigner's own brand system, its Design System artifact files, and the showcase stress test (brand/README.md)
 ├── docs/                      R1  SPEC.md (from S1d), HOW-IT-WORKS.md, RESEARCH.md (map of the research), FAQ.md
 ├── research/, benchmarks/, sources/, traces/, synthesis/   unchanged: the evidence base
 ├── _coordination/, tools/od.py, tools/jev_nav.py           unchanged: multi-session collaboration
@@ -61,6 +62,7 @@ python3 <skill>/scripts/engine.py preview [--open]                              
 
 ## Shared conventions
 - Python 3.10+, standard library only, no network in anything that ships inside `skills/`. One exception (owner decision, 2026-09-28): `skills/opendesigner-illustrate/scripts/illustrate.py` `search` and `fetch` may call the illustration sources that allow automation, over HTTPS only.
+- Binary files are blocked by the PR scanner (`scan_pr.py`). Exception (owner decision, 2026-10-14): the showcase gallery thumbnails `brand/showcase/_thumbs/*.jpg`, reported for review instead; the full-size renders stay out of git (`brand/.gitignore`).
 - Every value the engine produces traces to `synthesis/levers.json` or a Decision Card; keep `[inferred]` honesty in docs.
 - DTCG 2025.10 is the canonical token format; DESIGN.md is the readable view.
 - Reference intake copies structure and quality, never another brand's identity (hard rule).

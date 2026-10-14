@@ -26,6 +26,9 @@ HIGH_RISK = [  # (path regex, why a human must read every changed line)
     (r"^tools/.*\.py$|^skills/.*\.py$", "code maintainers and users run"),
     (r"\.html?$", "page that runs in a browser or artifact"),
 ]
+# Showcase gallery thumbnails (owner decision 2026-10-14): small JPEGs that build_gallery.py makes from local renders.
+# Reviewed by eye, not blocked; every other binary file still blocks.
+BRAND_THUMBS = r"^brand/showcase/_thumbs/[^/]+\.jpg$"
 GENERATED = [(r"^\.agents/skills/opendesigner|^\.claude/skills/opendesigner", r"^skills/", "sync_skills.py"),
              (r"^data/|^skills/[^/]+/references/.*\.json$|^skills/opendesigner/references/(stages|cards)/"
               r"|^chatgpt-project/knowledge/", r"^synthesis/", "build_data.py")]
@@ -88,7 +91,10 @@ def main():
     for line in git("diff", "--numstat", rng).splitlines():
         adds, _, path = line.split("\t", 2)
         if adds == "-":
-            add("BLOCK", path, 0, "binary file: cannot be reviewed as text")
+            if re.search(BRAND_THUMBS, path):
+                add("REVIEW", path, 0, "showcase gallery thumbnail (owner decision 2026-10-14): open it and look")
+            else:
+                add("BLOCK", path, 0, "binary file: cannot be reviewed as text")
     for path in paths:
         for rx, why in HIGH_RISK:
             if re.search(rx, path):

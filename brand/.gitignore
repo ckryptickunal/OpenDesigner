@@ -2,8 +2,7 @@
 # Full-size renders of the showcase (2x and 3x PNGs). The gallery uses showcase/_thumbs/ and links to each live page.
 showcase/**/shot*.png
 showcase/**/*.png
-# Gallery thumbnails (JPEG) too, until the owner rules on images in the repo: the PR scanner blocks binary files.
-showcase/_thumbs/
+# Gallery thumbnails (showcase/_thumbs/*.jpg) are committed: owner decision 2026-10-14, reviewed by scan_pr.py, not blocked.
 # Each piece's engine outputs can be rebuilt from its state.json; keep only the CSS its index.html loads.
 showcase/*/*/opendesigner/build/*
 !showcase/*/*/opendesigner/build/css/
