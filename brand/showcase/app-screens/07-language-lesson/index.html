@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parlo · Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+/* Parlo: a playful Italian lesson. Colors, spacing, radii and sizes are --ds-* tokens; the hard offset
+   shadow is defined here because the engine's neo-brutalist preset does not emit one (see notes.md). */
+:root {
+  --ink: var(--ds-color-accent-light-12);          /* deep cobalt ink for outlines */
+  --cobalt: var(--ds-color-bg-action-primary);
+  --sun: var(--ds-color-bg-accent2-bold);
+  --tomato: var(--ds-color-bg-accent3-bold);
+  --line: var(--ds-border-width-2);
+  --hard: 0 4px 0 0 var(--ink);                     /* off-token: neo-brutalist offset shadow */
+  --hard-sm: 0 3px 0 0 var(--ink);
+  --display: var(--ds-font-family-display);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--ds-color-surface-base); }
+body { width: 390px; height: 844px; overflow: hidden; position: relative; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); -webkit-font-smoothing: antialiased; }
+/* art: faint dot grid, decorative */
+body::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: radial-gradient(var(--ds-color-accent-light-5) 1.2px, transparent 1.4px); background-size: 20px 20px; background-position: 10px 6px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 46%); mask-image: linear-gradient(to bottom, #000 0%, transparent 46%); opacity: .7; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.i { width: var(--ds-size-icon-lg); height: var(--ds-size-icon-lg); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-lg); stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* iOS chrome */
+.status { position: relative; z-index: 3; height: 50px; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-6) var(--ds-space-32) 0; }
+.status time { font: 700 var(--ds-font-size-17)/1 var(--ds-font-family-text); }
+.status .sys { display: flex; gap: var(--ds-space-6); align-items: center; }
+.home-ind { position: absolute; z-index: 9; left: 50%; bottom: 8px; width: 134px; height: 5px; border-radius: var(--ds-radius-full); background: var(--ink); transform: translateX(-50%); }
+
+main { position: relative; z-index: 1; padding: 0 var(--ds-space-20); }
+
+/* progress row */
+.top { display: flex; align-items: center; gap: var(--ds-space-12); height: 52px; }
+.close { width: var(--ds-size-target-min); height: var(--ds-size-target-min); margin-left: -10px; display: grid; place-items: center; color: var(--ds-color-text-secondary); }
+.bar { flex: 1; height: 20px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-3); box-shadow: inset 0 0 0 var(--line) var(--ink); position: relative; overflow: hidden; }
+.bar .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 72%; border-radius: var(--ds-radius-full); background: var(--cobalt); box-shadow: inset 0 0 0 var(--line) var(--ink); }
+.bar .fill::after { /* art: shine */ content: ""; position: absolute; left: 12px; right: 14px; top: 5px; height: 4px; border-radius: var(--ds-radius-full); background: var(--ds-color-white); opacity: .45; }
+.hearts { display: flex; align-items: center; gap: var(--ds-space-4); font: 800 var(--ds-font-size-17)/1 var(--ds-font-family-text); color: var(--ds-color-text-accent3); }
+.hearts svg { width: 26px; height: 24px; }
+
+/* prompt */
+.eyebrow { margin-top: var(--ds-space-12); display: inline-flex; align-items: center; gap: var(--ds-space-6); height: 30px; padding: 0 var(--ds-space-12) 0 var(--ds-space-6); border-radius: var(--ds-radius-full); background: var(--tomato); color: var(--ds-color-text-on-accent3); font: 800 var(--ds-font-size-13)/1 var(--ds-font-family-text); letter-spacing: .06em; text-transform: uppercase; box-shadow: inset 0 0 0 var(--line) var(--ink); }
+.eyebrow .star { width: 20px; height: 20px; border-radius: 50%; background: var(--sun); display: grid; place-items: center; box-shadow: inset 0 0 0 1.5px var(--ink); }
+.eyebrow .star svg { width: 12px; height: 12px; fill: var(--ink); }
+h1 { margin-top: var(--ds-space-8); font: 600 var(--ds-font-size-30)/1.1 var(--display); letter-spacing: -.01em; color: var(--ink); }
+
+/* mascot + bubble */
+.scene { position: relative; height: 168px; margin-top: var(--ds-space-8); }
+.mascot { position: absolute; left: -8px; top: 4px; width: 124px; height: 160px; }
+.bubble { position: absolute; left: 120px; right: 0; top: 24px; padding: var(--ds-space-16) var(--ds-space-16) var(--ds-space-16) var(--ds-space-16); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); box-shadow: inset 0 0 0 var(--line) var(--ink), var(--hard); }
+.bubble::before { /* tail */ content: ""; position: absolute; left: -11px; top: 46px; width: 20px; height: 20px; background: var(--ds-color-surface-raised); border-left: var(--line) solid var(--ink); border-bottom: var(--line) solid var(--ink); transform: rotate(45deg); border-bottom-left-radius: 4px; }
+.say { display: flex; gap: var(--ds-space-12); align-items: flex-start; }
+.speak { width: var(--ds-size-target-min); height: var(--ds-size-target-min); flex: none; border-radius: var(--ds-radius-control); background: var(--cobalt); color: var(--ds-color-text-on-action); display: grid; place-items: center; box-shadow: inset 0 0 0 var(--line) var(--ink), var(--hard-sm); }
+.speak svg { width: 22px; height: 22px; }
+.it { font: 600 var(--ds-font-size-23)/1.25 var(--display); color: var(--ds-color-text-primary); padding-top: var(--ds-space-2); }
+.it .w { text-decoration: underline dotted var(--ds-color-accent-light-8); text-decoration-thickness: 2.5px; text-underline-offset: 6px; }
+.it .hl { background: var(--sun); border-radius: var(--ds-radius-detail); padding: 0 3px; margin: 0 -3px; text-decoration-color: var(--ink); }
+.tip { position: absolute; right: 18px; top: -26px; height: 36px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); background: var(--ink); color: var(--ds-color-white); display: flex; align-items: center; gap: var(--ds-space-8); font: 700 var(--ds-font-size-17)/1 var(--ds-font-family-text); }
+.tip::after { content: ""; position: absolute; left: 50%; bottom: -6px; width: 12px; height: 12px; background: var(--ink); transform: translateX(-50%) rotate(45deg); border-radius: 2px; }
+.tip small { font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-accent2-light-6); }
+
+/* answer */
+.answer { margin-top: var(--ds-space-8); position: relative; }
+.answer .rule { height: 56px; border-bottom: var(--line) solid var(--ds-color-neutral-light-5); display: flex; align-items: flex-end; gap: var(--ds-space-8); padding-bottom: var(--ds-space-8); flex-wrap: nowrap; }
+.tile { height: 48px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-raised); box-shadow: inset 0 0 0 var(--line) var(--ink), var(--hard-sm); display: inline-flex; align-items: center; font: 800 var(--ds-font-size-17)/1 var(--ds-font-family-text); color: var(--ds-color-text-primary); white-space: nowrap; }
+.answer .tile { background: var(--ds-color-accent-light-2); color: var(--ink); }
+.answer .tile.new { background: var(--sun); }
+
+/* bank */
+.bank { margin-top: var(--ds-space-20); display: flex; flex-wrap: wrap; justify-content: center; gap: var(--ds-space-12) var(--ds-space-8); }
+.slot { height: 48px; border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-3); box-shadow: inset 0 0 0 var(--line) var(--ds-color-neutral-light-5); }
+
+/* result sheet */
+.sheet { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; height: 224px; padding: var(--ds-space-20) var(--ds-space-20) 0; background: var(--sun); border-radius: var(--ds-radius-overlay) var(--ds-radius-overlay) 0 0; box-shadow: inset 0 var(--line) 0 0 var(--ink), 0 -10px 30px -12px var(--ds-color-shadow-ambient); }
+.confetti { position: absolute; right: 88px; top: 4px; width: 90px; height: 44px; pointer-events: none; }
+.res { position: relative; display: flex; align-items: center; gap: var(--ds-space-12); }
+.badge { width: 52px; height: 52px; border-radius: 50%; background: var(--ink); color: var(--sun); display: grid; place-items: center; flex: none; }
+.badge svg { width: 30px; height: 30px; stroke-width: 3.5; }
+.res h2 { font: 700 var(--ds-font-size-30)/1 var(--display); color: var(--ink); letter-spacing: -.01em; }
+.res p { margin-top: var(--ds-space-4); font: 700 var(--ds-font-size-17)/1.3 var(--ds-font-family-text); color: var(--ds-color-text-on-accent2); }
+.xp { position: absolute; right: 0; top: 10px; display: flex; gap: var(--ds-space-8); }
+.xp span { height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-full); background: var(--ds-color-surface-raised); box-shadow: inset 0 0 0 var(--line) var(--ink); display: flex; align-items: center; gap: var(--ds-space-4); font: 900 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ink); }
+.meaning { position: relative; margin-top: var(--ds-space-16); font: 600 var(--ds-font-size-17)/1.35 var(--ds-font-family-text); color: var(--ds-color-text-on-accent2); }
+.meaning b { font-weight: 800; }
+.cta { position: relative; margin-top: var(--ds-space-16); width: 100%; height: 58px; border-radius: var(--ds-radius-control); background: var(--cobalt); color: var(--ds-color-text-on-action); font: 600 var(--ds-font-size-23)/1 var(--display); letter-spacing: .01em; box-shadow: inset 0 0 0 var(--line) var(--ink), var(--hard); }
+</style>
+</head>
+<body>
+<div class="status" aria-hidden="true">
+  <time>9:41</time>
+  <div class="sys">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.6c2.3 0 4.4.9 6 2.4l1.2-1.3A10.3 10.3 0 0 0 8 .8C5.2.8 2.7 1.9.8 3.7L2 5c1.6-1.5 3.7-2.4 6-2.4Zm0 3.5c1.3 0 2.5.5 3.5 1.4l1.2-1.3A6.8 6.8 0 0 0 8 4.3c-1.8 0-3.5.7-4.7 1.9l1.2 1.3c.9-.9 2.2-1.4 3.5-1.4Zm0 3.4c.5 0 1 .2 1.3.5L8 11.4 6.7 10c.3-.3.8-.5 1.3-.5Z" fill="currentColor"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="22" height="12" rx="3.5" stroke="currentColor" opacity=".4" fill="none"/><rect x="2" y="2" width="19" height="9" rx="2" fill="currentColor"/><path d="M24.5 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2Z" fill="currentColor" opacity=".45"/></svg>
+  </div>
+</div>
+
+<main>
+  <div class="top">
+    <button class="close" aria-label="Quit lesson"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <div class="bar" role="progressbar" aria-label="Lesson progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="72"><div class="fill"></div></div>
+    <div class="hearts" aria-label="4 hearts left"><svg viewBox="0 0 26 24"><path d="M13 22S2 15.4 2 8.2C2 4.7 4.6 2 8 2c2.2 0 4 1.2 5 3 1-1.8 2.8-3 5-3 3.4 0 6 2.7 6 6.2C24 15.4 13 22 13 22Z" fill="var(--tomato)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/><path d="M6.5 7.5c.3-1.3 1.3-2 2.5-2" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none" opacity=".7"/></svg>4</div>
+  </div>
+
+  <span class="eyebrow"><span class="star"><svg viewBox="0 0 12 12"><path d="M6 .8l1.5 3.3 3.6.4-2.7 2.4.8 3.6L6 8.7 2.8 10.5l.8-3.6L.9 4.5l3.6-.4Z"/></svg></span>New word</span>
+  <h1>Translate this sentence</h1>
+
+  <div class="scene">
+    <svg class="mascot" viewBox="0 0 132 170" aria-hidden="true">
+      <!-- art: Moka, the Parlo mascot (an enamel coffee pot), drawn in code -->
+      <g stroke="var(--ink)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M60 14c-6-6 2-10-2-16M74 12c-5-6 3-10-1-15" fill="none" stroke="var(--ds-color-accent2-light-9)" stroke-width="4.5" transform="translate(0 6)"/>
+        <ellipse cx="66" cy="164" rx="40" ry="5" fill="var(--ds-color-neutral-light-4)" stroke="none"/>
+        <!-- handle -->
+        <path d="M96 40c14 0 22 4 21 12-1 9-4 20-15 22" fill="none" stroke-width="9"/>
+        <path d="M96 40c14 0 22 4 21 12-1 9-4 20-15 22" fill="none" stroke="var(--ds-color-accent3-light-11)" stroke-width="3"/>
+        <!-- top chamber -->
+        <path d="M30 32h70l-9 46H39Z" fill="var(--tomato)"/>
+        <path d="M30 32l-12-5 5 15Z" fill="var(--tomato)"/>
+        <path d="M44 24h42l4 8H40Z" fill="var(--ds-color-accent3-light-11)"/>
+        <rect x="58" y="16" width="14" height="9" rx="3" fill="var(--ink)"/>
+        <!-- waist -->
+        <rect x="37" y="77" width="56" height="10" rx="2" fill="var(--ds-color-neutral-light-6)"/>
+        <!-- bottom chamber -->
+        <path d="M40 87h50l13 58c1 8-3 12-10 12H37c-7 0-11-4-10-12Z" fill="var(--tomato)"/>
+        <!-- arms -->
+        <path d="M31 112c-8 0-13-5-15-12" fill="none" stroke-width="5"/>
+        <path d="M100 112c8 1 13-3 16-10" fill="none" stroke-width="5"/>
+        <!-- feet -->
+        <path d="M46 157v7M84 157v7" stroke-width="5"/>
+      </g>
+      <!-- highlights -->
+      <path d="M40 40l-5 30" stroke="var(--ds-color-white)" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+      <path d="M44 96l-7 40" stroke="var(--ds-color-white)" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+      <!-- face -->
+      <ellipse cx="57" cy="115" rx="9" ry="11" fill="var(--ds-color-white)" stroke="var(--ink)" stroke-width="3"/>
+      <ellipse cx="80" cy="115" rx="9" ry="11" fill="var(--ds-color-white)" stroke="var(--ink)" stroke-width="3"/>
+      <circle cx="60" cy="112" r="5" fill="var(--ink)"/><circle cx="83" cy="112" r="5" fill="var(--ink)"/>
+      <circle cx="62" cy="110" r="1.8" fill="var(--ds-color-white)"/><circle cx="85" cy="110" r="1.8" fill="var(--ds-color-white)"/>
+      <ellipse cx="47" cy="131" rx="6" ry="4" fill="var(--ds-color-accent2-light-9)" opacity=".9"/>
+      <ellipse cx="91" cy="131" rx="6" ry="4" fill="var(--ds-color-accent2-light-9)" opacity=".9"/>
+      <path d="M62 132q7 8 14 0" fill="var(--ink)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M64 135q5 3 10 0" fill="var(--ds-color-accent3-light-7)"/>
+    </svg>
+
+    <div class="bubble">
+      <div class="tip" role="tooltip">croissant <small>(m.)</small></div>
+      <div class="say">
+        <button class="speak" aria-label="Play the sentence"><svg class="i" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4Z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+        <p class="it" lang="it"><span class="w">Vorrei</span> <span class="w">un</span> <span class="w">caffè</span> <span class="w">e</span> <span class="w">un</span> <span class="w hl">cornetto</span>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="answer" aria-label="Your answer">
+    <div class="rule"><span class="tile">I'd like</span><span class="tile">a</span><span class="tile">coffee</span><span class="tile">and</span></div>
+    <div class="rule"><span class="tile">a</span><span class="tile new">croissant</span></div>
+  </div>
+
+  <div class="bank" aria-label="Word bank">
+    <span class="slot" style="width:88px" aria-hidden="true"></span>
+    <span class="tile">tea</span>
+    <span class="slot" style="width:42px" aria-hidden="true"></span>
+    <span class="slot" style="width:94px" aria-hidden="true"></span>
+    <span class="tile">please</span>
+    <span class="slot" style="width:62px" aria-hidden="true"></span>
+    <span class="tile">juice</span>
+  </div>
+</main>
+
+<section class="sheet" role="status" aria-live="polite">
+  <svg class="confetti" viewBox="0 0 190 92" aria-hidden="true">
+    <!-- art: confetti sprinkles, decorative -->
+    <g stroke="var(--ink)" stroke-width="2" stroke-linejoin="round">
+      <rect x="20" y="40" width="16" height="7" rx="3.5" fill="var(--tomato)" transform="rotate(-28 28 43)"/>
+      <rect x="58" y="10" width="14" height="6" rx="3" fill="var(--cobalt)" transform="rotate(32 65 13)"/>
+      <rect x="160" y="18" width="16" height="7" rx="3.5" fill="var(--ds-color-white)" transform="rotate(-12 168 21)"/>
+      <rect x="120" y="4" width="12" height="6" rx="3" fill="var(--tomato)" transform="rotate(48 126 7)"/>
+      <circle cx="96" cy="26" r="5" fill="var(--ds-color-white)"/>
+      <circle cx="176" cy="54" r="4" fill="var(--cobalt)"/>
+    </g>
+  </svg>
+  <div class="res">
+    <span class="badge" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+    <div>
+      <h2>Perfetto!</h2>
+      <p>6 right in a row</p>
+    </div>
+    <div class="xp"><span>+15 XP</span></div>
+  </div>
+  <p class="meaning"><b>Cornetto</b> is the Italian breakfast croissant, usually with a cappuccino.</p>
+  <button class="cta">Continue</button>
+</section>
+<div class="home-ind" aria-hidden="true"></div>
+</body>
+</html>

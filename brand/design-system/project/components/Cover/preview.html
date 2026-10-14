@@ -1,0 +1,41 @@
+<!-- @dsCard height=300 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300..700&family=Source+Code+Pro:wght@400;500&display=block" rel="stylesheet"><title>Cover</title>
+<style>
+html,body{margin:0;background:var(--surface)}
+.cv{position:relative;width:960px;height:300px;background:var(--surface);font-family:var(--font-sans)}
+.cv svg{position:absolute;left:0;top:0}
+.b-accent{fill:var(--accent)} .b-ink{fill:var(--ink)} .b-soft{fill:var(--accent-soft)} .b-sunk{fill:var(--surface-sunken)} .b-line{fill:var(--line)} .b-on{fill:var(--on-accent)}
+.name{position:absolute;left:48px;top:168px;margin:0;font-size:64px;line-height:60px;font-weight:300;letter-spacing:-0.03em;color:var(--ink)}
+.tag{position:absolute;left:50px;top:244px;margin:0;font-size:14px;line-height:20px;color:var(--ink-muted);max-width:440px}
+</style></head>
+<body>
+<div class="cv">
+<!--
+blocks: accent 384x120 (space-64 x6 by space-24 x5), ink 96x120, accent-soft 192x120, surface-sunken 240x120; radius 0 (a scale starts square)
+arrangement: one strip of unequal bands across the top, flush, bleeding off the right edge
+pattern: geometric, modular -> tiles cut by the radius tokens; the mark's square-to-circle ramp, 8 tiles of 48 (space-48) at gap 24 (space-24), radius 0..full, last one the decision
+steps and radii: space-24, space-48, radius-detail, radius-control, radius-container, radius-overlay, radius-full
+-->
+<svg width="960" height="128" viewBox="0 0 960 128" aria-hidden="true">
+  <rect class="b-accent" x="0" y="0" width="384" height="120"/>
+  <rect class="b-ink" x="384" y="0" width="96" height="120"/>
+  <rect class="b-soft" x="480" y="0" width="192" height="120"/>
+  <rect class="b-sunk" x="672" y="0" width="288" height="120"/>
+  <g>
+    <rect class="b-on" x="24" y="36" width="48" height="48" rx="0"/>
+    <rect class="b-on" x="96" y="36" width="48" height="48" rx="2"/>
+    <rect class="b-on" x="168" y="36" width="48" height="48" rx="6"/>
+    <rect class="b-on" x="240" y="36" width="48" height="48" rx="12"/>
+    <rect class="b-on" x="312" y="36" width="48" height="48" rx="24"/>
+    <rect class="b-line" x="504" y="36" width="48" height="48" rx="8"/>
+    <rect class="b-line" x="576" y="36" width="48" height="48" rx="12"/>
+    <rect class="b-accent" x="696" y="36" width="48" height="48" rx="24"/>
+  </g>
+</svg>
+<p class="name">OpenDesigner</p>
+<p class="tag">Design systems, one decision at a time. Free and open source.</p>
+</div>
+</body>
+</html>

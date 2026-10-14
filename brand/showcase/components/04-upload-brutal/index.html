@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halftone Yard upload</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Outside the tokens, on purpose (notes.md): the hard offset shadow. The engine's elevation is blurred
+     shadows only; neo-brutalism needs a solid ink shadow, so --hard is ink at 0 blur. */
+  :root {
+    --ink: var(--ds-color-neutral-light-12);
+    --paper: var(--ds-color-accent-light-2);
+    --white: var(--ds-color-neutral-light-1);
+    --Y: var(--ds-color-accent-light-9);
+    --C: var(--ds-color-accent2-light-9);
+    --M: var(--ds-color-accent3-light-9);
+    --bw: var(--ds-border-width-4);
+    --hard: 6px 6px 0 0 var(--ink);
+    --hard-lg: 10px 10px 0 0 var(--ink);
+    --wide: 125;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); }
+  body { color: var(--ink); font: var(--ds-text-body-md); -webkit-font-smoothing: antialiased; font-synthesis: none; }
+  .sheet { position: relative; width: 1440px; height: 900px; overflow: hidden; background: var(--paper); isolation: isolate; }
+  .x { font-family: var(--ds-font-family-display); font-stretch: 125%; font-weight: 900; text-transform: uppercase; letter-spacing: -0.01em; }
+
+  /* print furniture */
+  .dots { position: absolute; z-index: -1; width: 520px; height: 520px; border-radius: 50%; mask: radial-gradient(closest-side, #000 30%, transparent); -webkit-mask: radial-gradient(closest-side, #000 30%, transparent); }
+  .dots.c { right: -140px; top: -160px; background: radial-gradient(circle, var(--C) 2.6px, transparent 3px) 0 0 / 11px 11px; transform: rotate(15deg); opacity: .55; }
+  .dots.m { right: -90px; top: -120px; background: radial-gradient(circle, var(--M) 2.6px, transparent 3px) 0 0 / 11px 11px; transform: rotate(75deg); opacity: .45; }
+  .reg { position: absolute; width: 28px; height: 28px; }
+  .bar { position: absolute; left: 48px; right: 48px; bottom: 16px; height: 20px; display: flex; border: 2px solid var(--ink); }
+  .bar i { flex: 1; }
+  .bar span { font: 800 var(--ds-font-size-12)/16px var(--ds-font-family-text); padding: 0 var(--ds-space-8); background: var(--white); border-right: 2px solid var(--ink); white-space: nowrap; }
+
+  .top { position: absolute; left: 48px; right: 48px; top: 30px; display: flex; align-items: center; gap: var(--ds-space-16); }
+  .logo { display: flex; align-items: center; gap: var(--ds-space-12); }
+  .logo b { font-size: var(--ds-font-size-28); line-height: 1; }
+  .tags { margin-left: auto; display: flex; gap: var(--ds-space-8); }
+  .tags span { font: 800 var(--ds-font-size-12)/1 var(--ds-font-family-text); text-transform: uppercase; letter-spacing: .06em; border: 2px solid var(--ink); padding: var(--ds-space-6) var(--ds-space-8); background: var(--white); white-space: nowrap; }
+  .tags span:nth-child(2) { background: var(--Y); } .tags span:nth-child(3) { background: var(--C); }
+
+  /* ---------- the uploader ---------- */
+  .up { position: absolute; left: 48px; top: 92px; width: 872px; background: var(--white); border: var(--bw) solid var(--ink); box-shadow: var(--hard-lg); }
+  .ticket { display: flex; justify-content: space-between; background: var(--ink); color: var(--Y); font: 700 var(--ds-font-size-12)/1 var(--ds-font-family-mono); letter-spacing: .06em; text-transform: uppercase; padding: var(--ds-space-8) var(--ds-space-20); }
+  .ticket span:last-child { color: var(--white); }
+  .inner { padding: var(--ds-space-20) var(--ds-space-24) var(--ds-space-24); }
+  .title { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-16); }
+  .title h1 { font-size: var(--ds-font-size-51); line-height: .92; white-space: nowrap; }
+  .title p { font: 800 var(--ds-font-size-12)/1.5 var(--ds-font-family-text); text-transform: uppercase; letter-spacing: .04em; text-align: right; max-width: 240px; }
+
+  .drop { position: relative; margin-top: var(--ds-space-16); border: var(--bw) dashed var(--ink); background: var(--paper); display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--ds-space-24); padding: var(--ds-space-20) var(--ds-space-24); cursor: pointer;
+    transition: background-color var(--ds-motion-duration-micro) var(--ds-motion-easing-hover); }
+  .drop:hover, .drop.is-hover { background: var(--ds-color-accent-light-4); }
+  .drop:focus-visible, .drop.is-focus { outline: var(--bw) solid var(--C); outline-offset: var(--ds-space-4); }
+  .drop.is-over { background: var(--Y); border-style: solid; }
+  .drop.is-reject { background: repeating-linear-gradient(-45deg, var(--ds-color-danger-light-3) 0 10px, var(--white) 10px 20px); border-color: var(--ds-color-danger-light-11); }
+  .drop .icon { width: 72px; height: 72px; border: var(--bw) solid var(--ink); background: var(--Y); display: grid; place-items: center; box-shadow: 4px 4px 0 0 var(--ink); }
+  .drop.is-over .icon { background: var(--white); }
+  .drop h2 { font-size: var(--ds-font-size-28); line-height: 1; text-wrap: balance; }
+  .drop .spec { margin-top: var(--ds-space-8); font: 400 var(--ds-font-size-12)/1.5 var(--ds-font-family-mono); }
+  .drop .spec b { font-weight: 700; }
+
+  .btn { appearance: none; cursor: pointer; display: inline-flex; align-items: center; gap: var(--ds-space-8); height: var(--ds-size-control-md); padding: 0 var(--ds-space-20); border: var(--bw) solid var(--ink); background: var(--Y); color: var(--ds-color-text-on-action);
+    font: 800 var(--ds-font-size-16)/1 var(--ds-font-family-display); font-stretch: 125%; text-transform: uppercase; box-shadow: var(--hard); white-space: nowrap;
+    transition: transform var(--ds-motion-duration-micro) var(--ds-motion-easing-enter), box-shadow var(--ds-motion-duration-micro) var(--ds-motion-easing-enter), background-color var(--ds-motion-duration-micro) var(--ds-motion-easing-hover); }
+  .btn:hover, .btn.is-hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 0 var(--ink); }
+  .btn:active, .btn.is-active { transform: translate(6px, 6px); box-shadow: 0 0 0 0 var(--ink); }
+  .btn:focus-visible, .btn.is-focus { outline: var(--bw) solid var(--C); outline-offset: var(--ds-space-4); }
+  .btn.white { background: var(--white); }
+  .btn.sm { height: var(--ds-size-control-sm); padding: 0 var(--ds-space-12); font-size: var(--ds-font-size-12); box-shadow: 4px 4px 0 0 var(--ink); }
+  .btn.sm:active { transform: translate(4px, 4px); }
+  .btn[aria-disabled="true"], .btn.is-dis { cursor: not-allowed; background: var(--ds-color-neutral-light-3); color: var(--ds-color-text-secondary); border-color: var(--ds-color-neutral-light-9); box-shadow: none; transform: none; }
+
+  .files { list-style: none; margin-top: var(--ds-space-16); display: grid; gap: var(--ds-space-12); }
+  .file { display: grid; grid-template-columns: 48px minmax(0, 1fr) 184px 176px 32px; align-items: center; gap: var(--ds-space-16); border: var(--bw) solid var(--ink); padding: var(--ds-space-12); background: var(--white); min-height: 64px; }
+  .badge { width: 48px; height: 40px; border: 2px solid var(--ink); display: grid; place-items: center; font: 900 var(--ds-font-size-12)/1 var(--ds-font-family-display); font-stretch: 125%; position: relative; }
+  .badge::after { content: ""; position: absolute; right: -2px; top: -2px; border-style: solid; border-width: 0 12px 12px 0; border-color: transparent var(--white) transparent transparent; }
+  .badge.pdf { background: var(--M); color: var(--ds-color-text-on-accent3); } .badge.tif, .badge.jpg { color: var(--ds-color-text-on-accent2); } .badge.ai { background: var(--Y); } .badge.tif, .badge.jpg { background: var(--C); } .badge.eps { background: var(--ink); color: var(--Y); }
+  .fname { font: 700 var(--ds-font-size-16)/1.2 var(--ds-font-family-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fmeta { margin-top: var(--ds-space-6); font: 400 var(--ds-font-size-12)/1.4 var(--ds-font-family-mono); color: var(--ds-color-text-secondary); white-space: nowrap; }
+  .prog { height: 16px; border: 2px solid var(--ink); background: var(--white); position: relative; overflow: hidden; }
+  .prog i { position: absolute; inset: 0 auto 0 0; background: repeating-linear-gradient(-45deg, var(--C) 0 8px, var(--ds-color-accent2-light-6) 8px 16px); border-right: 2px solid var(--ink); background-size: 22.6px 22.6px; animation: stripes 600ms linear infinite; }
+  @keyframes stripes { to { background-position: 22.6px 0; } }
+  .prog.done i { background: var(--ink); animation: none; border-right: 0; }
+  .prog.err i { background: repeating-linear-gradient(-45deg, var(--ds-color-danger-light-9) 0 8px, var(--ds-color-danger-light-7) 8px 16px); animation: none; }
+  .chip { display: inline-flex; align-items: center; gap: var(--ds-space-6); border: 2px solid var(--ink); padding: var(--ds-space-6) var(--ds-space-8); font: 800 var(--ds-font-size-12)/1 var(--ds-font-family-text); text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; background: var(--white); }
+  .chip.ok { background: var(--ds-color-success-light-3); color: var(--ds-color-success-light-12); }
+  .chip.run { background: var(--ds-color-accent2-light-3); color: var(--ds-color-accent2-light-12); }
+  .chip.wait { background: var(--ds-color-neutral-light-3); }
+  .chip.bad { background: var(--ds-color-danger-light-11); color: var(--white); border-color: var(--ds-color-danger-light-11); }
+  .end { display: contents; }
+  .end > :first-child { justify-self: start; }
+  .x-btn { appearance: none; width: 32px; height: 32px; border: 2px solid var(--ink); background: var(--white); display: grid; place-items: center; cursor: pointer; color: var(--ink); }
+  .x-btn:hover { background: var(--ink); color: var(--white); }
+  .x-btn:focus-visible { outline: var(--bw) solid var(--C); outline-offset: 2px; }
+  .file.bad { border-color: var(--ds-color-danger-light-11); background: var(--ds-color-danger-light-2); box-shadow: inset 8px 0 0 0 var(--ds-color-danger-light-11); padding-left: var(--ds-space-20); }
+  .file.bad .fmeta { white-space: normal; }
+  .file.bad .fmeta { color: var(--ds-color-danger-light-11); font-weight: 700; }
+
+  .foot { display: flex; align-items: center; gap: var(--ds-space-16); margin-top: var(--ds-space-16); padding-top: var(--ds-space-16); border-top: var(--bw) solid var(--ink); }
+  .foot .count { font-size: var(--ds-font-size-21); line-height: 1; }
+  .foot .why { font: 800 var(--ds-font-size-12)/1.4 var(--ds-font-family-text); color: var(--ds-color-danger-light-11); text-transform: uppercase; letter-spacing: .04em; }
+  .foot .btn { margin-left: auto; }
+
+  /* ---------- states ---------- */
+  .states { position: absolute; left: 968px; top: 92px; width: 424px; display: grid; gap: var(--ds-space-16); }
+  .sec { border: var(--bw) solid var(--ink); background: var(--white); box-shadow: var(--hard); }
+  .sec h3 { display: flex; justify-content: space-between; align-items: center; background: var(--ink); color: var(--white); font: 800 var(--ds-font-size-12)/1 var(--ds-font-family-text); text-transform: uppercase; letter-spacing: .06em; letter-spacing: .06em; padding: var(--ds-space-8) var(--ds-space-12); }
+  .sec h3 span { color: var(--Y); }
+  .sec .body { padding: var(--ds-space-12); }
+  .zones { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-12); }
+  .zone { height: 64px; border: 2px dashed var(--ink); background: var(--paper); display: grid; place-items: center; font-size: var(--ds-font-size-12); font-weight: 800; text-align: center; line-height: 1.1; padding: 0 var(--ds-space-8); }
+  .zone.over { background: var(--Y); border-style: solid; }
+  .zones .lbl { margin-top: var(--ds-space-12); }
+  .zone.focus { outline: var(--bw) solid var(--C); outline-offset: 3px; }
+  .zone.rej { background: repeating-linear-gradient(-45deg, var(--ds-color-danger-light-3) 0 8px, var(--white) 8px 16px); border-color: var(--ds-color-danger-light-11); color: var(--ds-color-danger-light-11); }
+  .lbl { font: 800 var(--ds-font-size-12)/1 var(--ds-font-family-text); text-transform: uppercase; letter-spacing: .06em; color: var(--ds-color-text-secondary); margin-top: var(--ds-space-6); }
+  .btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-16) var(--ds-space-12); padding-bottom: var(--ds-space-4); }
+  .btns .lbl { margin-top: var(--ds-space-12); }
+  .btns .btn { height: var(--ds-size-control-sm); padding: 0 var(--ds-space-12); font-size: var(--ds-font-size-12); }
+  .progs { display: grid; gap: var(--ds-space-8); }
+  .progs .row { display: grid; grid-template-columns: 1fr 64px; gap: var(--ds-space-12); align-items: center; }
+  .progs .prog { margin: 0; }
+  .progs .lbl { margin: 0; text-align: right; }
+  .badges { display: flex; gap: var(--ds-space-12); }
+  .badges .badge { width: 56px; height: 44px; }
+
+  .live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .prog i { animation: none; }
+    .btn, .drop { transition: none; }
+    .btn:hover, .btn.is-hover { transform: none; }
+    .btn:active, .btn.is-active { transform: none; box-shadow: 2px 2px 0 0 var(--ink); }
+  }
+</style>
+</head>
+<body>
+<main class="sheet" aria-label="Halftone Yard file upload, component sheet">
+  <div class="dots c" aria-hidden="true"></div><div class="dots m" aria-hidden="true"></div>
+  <svg class="reg" style="left:12px;top:12px" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8" fill="none" stroke="#262421" stroke-width="1.5"/><path d="M14 0v28M0 14h28" stroke="#262421" stroke-width="1.5"/></svg>
+  <svg class="reg" style="right:12px;bottom:44px" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8" fill="none" stroke="#262421" stroke-width="1.5"/><path d="M14 0v28M0 14h28" stroke="#262421" stroke-width="1.5"/></svg>
+
+  <header class="top">
+    <div class="logo">
+      <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" fill="var(--Y)" stroke="#262421" stroke-width="3"/><g fill="#262421"><circle cx="11" cy="11" r="4"/><circle cx="21" cy="11" r="3"/><circle cx="30" cy="11" r="2"/><circle cx="11" cy="21" r="3"/><circle cx="21" cy="21" r="2.2"/><circle cx="30" cy="21" r="1.4"/><circle cx="11" cy="30" r="2"/><circle cx="21" cy="30" r="1.4"/><circle cx="30" cy="30" r=".8"/></g></svg>
+      <b class="x">Halftone Yard</b>
+    </div>
+    <div class="tags"><span>04 · File upload</span><span>Neo-brutal</span><span>C M Y K</span></div>
+  </header>
+
+  <section class="up" aria-labelledby="h">
+    <div class="ticket"><span>Job 4471 · 500 business cards · 350 gsm uncoated</span><span>Due Thu 16:00</span></div>
+    <div class="inner">
+      <div class="title">
+        <h1 id="h" class="x">Send your files</h1>
+        <p>We check every file before it touches the press. You get a proof in 2 hours.</p>
+      </div>
+
+      <div class="drop" id="drop" role="button" tabindex="0" aria-describedby="spec">
+        <div class="icon" aria-hidden="true"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="#262421" stroke-width="4" stroke-linecap="square"><path d="M18 30V7M8 16l10-10 10 10"/></svg></div>
+        <div>
+          <h2 class="x" id="dropTitle">Drop print files here</h2>
+          <p class="spec" id="spec"><b>PDF, TIFF, AI, EPS.</b> Up to 500&nbsp;MB each. CMYK, 300&nbsp;dpi, 3&nbsp;mm&nbsp;bleed.</p>
+        </div>
+        <span class="btn" aria-hidden="true">Browse files</span>
+        <input type="file" id="picker" class="sr" multiple accept=".pdf,.tif,.tiff,.ai,.eps,.jpg,.jpeg" tabindex="-1" aria-hidden="true">
+      </div>
+
+      <ul class="files" id="files" aria-label="Files in this job"></ul>
+
+      <div class="foot">
+        <b class="x count" id="count">3 of 4 ready</b>
+        <span class="why" id="why">1 file needs fixing</span>
+        <button class="btn" id="send" type="button">Send to press <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" aria-hidden="true"><path d="M2 9h12M9 3l6 6-6 6"/></svg></button>
+      </div>
+      <p class="live" aria-live="polite" id="live"></p>
+    </div>
+  </section>
+
+  <aside class="states" aria-label="States and variants">
+    <div class="sec">
+      <h3>Dropzone <span>4 states</span></h3>
+      <div class="body zones" aria-hidden="true">
+        <div><div class="zone x">Drop files</div><p class="lbl">idle</p></div>
+        <div><div class="zone x focus">Drop files</div><p class="lbl">focus-visible</p></div>
+        <div><div class="zone x over">Release to upload</div><p class="lbl">drag over</p></div>
+        <div><div class="zone x rej">ZIP not accepted</div><p class="lbl">reject</p></div>
+      </div>
+    </div>
+    <div class="sec">
+      <h3>Button <span>press = slam into shadow</span></h3>
+      <div class="body btns" aria-hidden="true">
+        <div><span class="btn">Upload</span><p class="lbl">default</p></div>
+        <div><span class="btn is-hover">Upload</span><p class="lbl">hover</p></div>
+        <div><span class="btn is-active">Upload</span><p class="lbl">pressed</p></div>
+        <div><span class="btn is-focus">Upload</span><p class="lbl">focus</p></div>
+        <div><span class="btn white">Replace</span><p class="lbl">secondary</p></div>
+        <div><span class="btn is-dis">Upload</span><p class="lbl">disabled</p></div>
+      </div>
+    </div>
+    <div class="sec">
+      <h3>Progress <span>16 px · 2 px rule</span></h3>
+      <div class="body progs" aria-hidden="true">
+        <div class="row"><div class="prog"><i style="width:0"></i></div><p class="lbl">queued</p></div>
+        <div class="row"><div class="prog"><i style="width:64%"></i></div><p class="lbl">64%</p></div>
+        <div class="row"><div class="prog done"><i style="width:100%"></i></div><p class="lbl">done</p></div>
+        <div class="row"><div class="prog err"><i style="width:38%"></i></div><p class="lbl">failed</p></div>
+      </div>
+    </div>
+    <div class="sec">
+      <h3>File type <span>badge</span></h3>
+      <div class="body badges" aria-hidden="true"><span class="badge pdf">PDF</span><span class="badge ai">AI</span><span class="badge tif">TIFF</span><span class="badge eps">EPS</span><span class="badge jpg">JPG</span></div>
+    </div>
+  </aside>
+
+  <div class="bar" aria-hidden="true">
+    <span>CONTROL STRIP</span>
+    <i style="background:var(--C)"></i><i style="background:color-mix(in srgb, var(--C) 60%, white)"></i><i style="background:color-mix(in srgb, var(--C) 25%, white)"></i>
+    <i style="background:var(--M)"></i><i style="background:color-mix(in srgb, var(--M) 60%, white)"></i><i style="background:color-mix(in srgb, var(--M) 25%, white)"></i>
+    <i style="background:var(--Y)"></i><i style="background:color-mix(in srgb, var(--Y) 60%, white)"></i><i style="background:color-mix(in srgb, var(--Y) 25%, white)"></i>
+    <i style="background:var(--ink)"></i><i style="background:color-mix(in srgb, var(--ink) 60%, white)"></i><i style="background:color-mix(in srgb, var(--ink) 25%, white)"></i>
+  </div>
+</main>
+
+<script>
+  const ACCEPT = ['pdf', 'tif', 'tiff', 'ai', 'eps', 'jpg', 'jpeg'];
+  const BADGE = { pdf: 'pdf', tif: 'tif', tiff: 'tif', ai: 'ai', eps: 'eps', jpg: 'jpg', jpeg: 'jpg' };
+  const mb = b => (b / 1048576).toFixed(1) + ' MB';
+  let files = [
+    { name: 'front-v3.pdf', size: 19293798, p: 100, st: 'ok' },
+    { name: 'back-v3.pdf', size: 18769510, p: 64, st: 'run' },
+    { name: 'logo-final.ai', size: 4404019, p: 0, st: 'wait' },
+    { name: 'photo-lake.jpg', size: 9542041, p: 38, st: 'bad', err: 'RGB at 150\u00a0dpi. Needs CMYK at 300\u00a0dpi.' },
+  ];
+  const list = document.getElementById('files'), live = document.getElementById('live');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ext = n => n.split('.').pop().toLowerCase();
+  function row(f, i) {
+    const e = ext(f.name), b = BADGE[e] || 'pdf';
+    const chip = { ok: '<span class="chip ok">✓ Preflight passed</span>', run: `<span class="chip run">Uploading ${f.p}%</span>`, wait: '<span class="chip wait">Queued</span>', bad: `<button class="btn white sm" data-fix="${i}" type="button">Replace file</button>` }[f.st];
+    const left = f.st === 'run' ? ` · ${mb(f.size * f.p / 100)} of ${mb(f.size)} · ${Math.max(1, Math.round((100 - f.p) / 6))} s left` : f.st === 'ok' ? ` · ${mb(f.size)} · 4-colour, 300 dpi` : f.st === 'wait' ? ` · ${mb(f.size)} · waiting for a slot` : '';
+    const meta = f.st === 'bad' ? f.err : left.slice(3);
+    const prog = f.st === 'ok' ? '<div class="prog done"><i style="width:100%"></i></div>' : f.st === 'bad' ? `<div class="prog err"><i style="width:${f.p}%"></i></div>` : `<div class="prog"><i style="width:${f.p}%"></i></div>`;
+    const act = '';
+    return `<li class="file ${f.st === 'bad' ? 'bad' : ''}"><span class="badge ${b}" aria-hidden="true">${e === 'tiff' ? 'TIFF' : e.toUpperCase().slice(0, 4)}</span>
+      <div style="min-width:0"><p class="fname">${f.name}</p><p class="fmeta">${meta}</p></div>${prog}
+      <div class="end">${chip}${act}<button class="x-btn" data-rm="${i}" type="button" aria-label="Remove ${f.name}"><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="2.5"><path d="M2 2l8 8M10 2l-8 8"/></svg></button></div></li>`;
+  }
+  function render() {
+    const a = document.activeElement, keep = a && list.contains(a) ? (a.dataset.rm ? `[data-rm="${a.dataset.rm}"]` : a.dataset.fix ? `[data-fix="${a.dataset.fix}"]` : null) : null;
+    list.innerHTML = files.map(row).join('');
+    if (keep) list.querySelector(keep)?.focus();   // progress ticks re-render the list; keyboard focus stays put
+    const ready = files.filter(f => f.st === 'ok').length, bad = files.filter(f => f.st === 'bad').length;
+    document.getElementById('count').textContent = `${ready} of ${files.length} ready`;
+    const why = document.getElementById('why');
+    why.textContent = bad ? `${bad} file${bad > 1 ? 's' : ''} need${bad > 1 ? '' : 's'} fixing` : files.some(f => f.st !== 'ok') ? 'Still uploading' : 'All files passed';
+    why.style.color = bad ? '' : 'var(--ds-color-success-light-11)';
+  }
+  function tick() {
+    let changed = false;
+    files.forEach(f => {
+      if (f.st === 'run') { f.p = Math.min(100, f.p + 3); changed = true; if (f.p === 100) { f.st = 'ok'; live.textContent = `${f.name} uploaded and passed preflight`; const nx = files.find(g => g.st === 'wait'); if (nx) nx.st = 'run'; } }
+    });
+    if (changed) render();
+  }
+  if (!location.search.includes('still')) setInterval(tick, 400);   // ?still freezes the sheet for the render
+  function addFiles(fl) {
+    const bad = [...fl].filter(f => !ACCEPT.includes(ext(f.name)));
+    if (bad.length) { flash('reject', `${bad[0].name.split('.').pop().toUpperCase()} not accepted`); live.textContent = `${bad.map(f => f.name).join(', ')} not accepted. Send PDF, TIFF, AI or EPS.`; }
+    [...fl].filter(f => ACCEPT.includes(ext(f.name))).forEach(f => files.push({ name: f.name, size: f.size || 1048576, p: 0, st: files.some(g => g.st === 'run') ? 'wait' : 'run' }));
+    render();
+  }
+  const drop = document.getElementById('drop'), picker = document.getElementById('picker'), title = document.getElementById('dropTitle');
+  function flash(kind, text) {
+    drop.classList.add(kind === 'reject' ? 'is-reject' : 'is-over'); title.textContent = text;
+    setTimeout(() => { drop.classList.remove('is-reject', 'is-over'); title.textContent = 'Drop print files here'; }, 1600);
+  }
+  drop.addEventListener('click', () => picker.click());
+  drop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); picker.click(); } });
+  picker.addEventListener('change', () => addFiles(picker.files));
+  ['dragenter', 'dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('is-over'); title.textContent = 'Release to upload'; }));
+  drop.addEventListener('dragleave', () => { drop.classList.remove('is-over'); title.textContent = 'Drop print files here'; });
+  drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('is-over'); title.textContent = 'Drop print files here'; addFiles(e.dataTransfer.files); });
+  list.addEventListener('click', e => {
+    const rm = e.target.closest('[data-rm]'), fx = e.target.closest('[data-fix]');
+    if (rm) { const f = files.splice(+rm.dataset.rm, 1)[0]; live.textContent = `${f.name} removed`; render(); }
+    if (fx) { const i = +fx.dataset.fix; files[i] = { name: 'photo-lake-cmyk.tif', size: 21495808, p: 0, st: files.some(g => g.st === 'run') ? 'wait' : 'run' }; live.textContent = 'Replaced with photo-lake-cmyk.tif'; render(); }
+  });
+  document.getElementById('send').addEventListener('click', () => {
+    const bad = files.find(f => f.st === 'bad');
+    if (bad) { live.textContent = `Fix ${bad.name} first: ${bad.err}`; list.querySelector('.file.bad .btn')?.focus(); }
+    else if (files.some(f => f.st !== 'ok')) live.textContent = 'Still uploading. We will send the job when every file passes.';
+    else live.textContent = 'Sent to press. Proof in 2 hours.';
+  });
+  render();
+</script>
+</body>
+</html>

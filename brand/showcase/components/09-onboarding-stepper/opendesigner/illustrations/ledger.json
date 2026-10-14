@@ -1,0 +1,202 @@
+{
+  "_about": "Licence ledger: one row per illustration used in this project (hooks.md rule 5).",
+  "items": [
+    {
+      "name": "plant-3",
+      "status": "chosen",
+      "file": "src/plant-3.svg",
+      "source": "cocomaterial",
+      "id": "cocomaterial:1242",
+      "title": "Plant 3",
+      "page": "https://cocomaterial.com/results?q=potted%2Chouse%2Cplant",
+      "download": "https://cocomaterial.com/media/house_plants_flowerpot_pot_04.svg",
+      "author": "CocoMaterial",
+      "author_url": null,
+      "licence": "CC0",
+      "licence_url": "https://cocomaterial.com/license",
+      "attribution": "",
+      "verdict": "ok",
+      "restrictions": "",
+      "set": null,
+      "fetched": "2026-10-14",
+      "sanitized": [],
+      "metrics": {
+        "colors": 2,
+        "hues": 0,
+        "shapes": 2,
+        "stroke_ratio": 0.0,
+        "aspect": 1.03,
+        "bytes": 19048,
+        "gradients": 0,
+        "raster": 0,
+        "text": 0
+      },
+      "mapping": {
+        "#ffffff": "neutral-1",
+        "#030303": "neutral-12"
+      },
+      "variants": [
+        "themed",
+        "tint"
+      ],
+      "palette": "brand/showcase/components/09-onboarding-stepper/opendesigner/build/css/tokens.css",
+      "applied": [
+        "brand/showcase/components/09-onboarding-stepper/art/plant-3.illustration.css",
+        "brand/showcase/components/09-onboarding-stepper/art/plant-3.svg"
+      ],
+      "slot": null
+    },
+    {
+      "name": "plant-2",
+      "status": "chosen",
+      "file": "src/plant-2.svg",
+      "source": "cocomaterial",
+      "id": "cocomaterial:1243",
+      "title": "Plant 2",
+      "page": "https://cocomaterial.com/results?q=potted%2Chouse%2Cplant",
+      "download": "https://cocomaterial.com/media/house_plants_flowerpot_pot_01.svg",
+      "author": "CocoMaterial",
+      "author_url": null,
+      "licence": "CC0",
+      "licence_url": "https://cocomaterial.com/license",
+      "attribution": "",
+      "verdict": "ok",
+      "restrictions": "",
+      "set": null,
+      "fetched": "2026-10-14",
+      "sanitized": [],
+      "metrics": {
+        "colors": 2,
+        "hues": 0,
+        "shapes": 2,
+        "stroke_ratio": 0.0,
+        "aspect": 0.7,
+        "bytes": 6131,
+        "gradients": 0,
+        "raster": 0,
+        "text": 0
+      },
+      "mapping": {
+        "#ffffff": "neutral-1",
+        "#030303": "neutral-12"
+      },
+      "variants": [
+        "themed",
+        "tint"
+      ],
+      "palette": "brand/showcase/components/09-onboarding-stepper/opendesigner/build/css/tokens.css",
+      "applied": [
+        "brand/showcase/components/09-onboarding-stepper/art/plant-2.illustration.css",
+        "brand/showcase/components/09-onboarding-stepper/art/plant-2.svg"
+      ],
+      "slot": null
+    },
+    {
+      "name": "cactus",
+      "status": "chosen",
+      "file": "src/cactus.svg",
+      "source": "cocomaterial",
+      "id": "cocomaterial:1245",
+      "title": "Cactus",
+      "page": "https://cocomaterial.com/results?q=potted%2Chouse%2Cplant",
+      "download": "https://cocomaterial.com/media/house_plants_cactus_flowerpot_pot_03.svg",
+      "author": "CocoMaterial",
+      "author_url": null,
+      "licence": "CC0",
+      "licence_url": "https://cocomaterial.com/license",
+      "attribution": "",
+      "verdict": "ok",
+      "restrictions": "",
+      "set": null,
+      "fetched": "2026-10-14",
+      "sanitized": [],
+      "metrics": {
+        "colors": 2,
+        "hues": 0,
+        "shapes": 2,
+        "stroke_ratio": 0.0,
+        "aspect": 0.71,
+        "bytes": 6642,
+        "gradients": 0,
+        "raster": 0,
+        "text": 0
+      },
+      "mapping": {
+        "#ffffff": "neutral-1",
+        "#030303": "neutral-12"
+      },
+      "variants": [
+        "themed",
+        "tint"
+      ],
+      "palette": "brand/showcase/components/09-onboarding-stepper/opendesigner/build/css/tokens.css",
+      "applied": [
+        "brand/showcase/components/09-onboarding-stepper/art/cactus.illustration.css",
+        "brand/showcase/components/09-onboarding-stepper/art/cactus.svg"
+      ],
+      "slot": null
+    },
+    {
+      "name": "plant-1",
+      "status": "chosen",
+      "file": "src/plant-1.svg",
+      "source": "cocomaterial",
+      "id": "cocomaterial:1244",
+      "title": "Plant 1",
+      "page": "https://cocomaterial.com/results?q=potted%2Chouse%2Cplant",
+      "download": "https://cocomaterial.com/media/house_plants_flowerpot_pot_02.svg",
+      "author": "CocoMaterial",
+      "author_url": null,
+      "licence": "CC0",
+      "licence_url": "https://cocomaterial.com/license",
+      "attribution": "",
+      "verdict": "ok",
+      "restrictions": "",
+      "set": null,
+      "fetched": "2026-10-14",
+      "sanitized": [],
+      "metrics": {
+        "colors": 2,
+        "hues": 0,
+        "shapes": 2,
+        "stroke_ratio": 0.0,
+        "aspect": 0.59,
+        "bytes": 28405,
+        "gradients": 0,
+        "raster": 0,
+        "text": 0
+      },
+      "mapping": {
+        "#ffffff": "neutral-1",
+        "#030303": "neutral-12"
+      },
+      "variants": [
+        "themed",
+        "tint"
+      ],
+      "palette": "brand/showcase/components/09-onboarding-stepper/opendesigner/build/css/tokens.css",
+      "applied": [
+        "brand/showcase/components/09-onboarding-stepper/art/plant-1.illustration.css",
+        "brand/showcase/components/09-onboarding-stepper/art/plant-1.svg"
+      ],
+      "slot": null
+    }
+  ],
+  "style": {
+    "source": "cocomaterial",
+    "set": null,
+    "by": "plant-3",
+    "metrics": {
+      "colors": 2,
+      "hues": 0,
+      "shapes": 2,
+      "stroke_ratio": 0.0,
+      "aspect": 1.03,
+      "bytes": 19048,
+      "gradients": 0,
+      "raster": 0,
+      "text": 0
+    },
+    "locked": "2026-10-14"
+  }
+}

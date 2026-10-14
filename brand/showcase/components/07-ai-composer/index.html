@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oriel · Composer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+/* Oriel AI composer. Colors, spacing, radius, type sizes and motion are --ds-* tokens.
+   OFF-TOKEN notes are inline where a value steps outside the system on purpose. */
+:root {
+  --ink: var(--ds-color-text-primary);
+  --paper: var(--ds-color-surface-sunken);
+  --rule: var(--ds-color-border-subtle);
+  --fb: var(--ds-motion-transition-feedback-duration) var(--ds-motion-transition-feedback-easing);
+  --serif: var(--ds-font-family-display);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  width: 1440px; height: 900px; overflow: hidden; position: relative;
+  background: var(--paper);
+  color: var(--ink);
+  font: var(--ds-text-body-md);
+  -webkit-font-smoothing: antialiased;
+}
+/* paper grain: decorative noise, 5% */
+body::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .05; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .25 0 0 0 0 .2 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E"); }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible, .is-focus { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.serif { font-family: var(--serif); }
+.sc { font: var(--ds-text-label-sm); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ds-color-text-tertiary); }
+
+/* masthead */
+.mast { position: relative; height: 96px; margin: 0 56px; display: flex; align-items: flex-end; padding-bottom: var(--ds-space-16); border-bottom: 1px solid var(--ink); }
+.mast::after { content: ""; position: absolute; left: 0; right: 0; bottom: -5px; border-bottom: 1px solid var(--ink); }
+.logo { display: flex; align-items: flex-end; gap: var(--ds-space-12); }
+.logo svg { width: 30px; height: 40px; }
+.logo b { font: 400 var(--ds-font-size-39)/0.9 var(--serif); letter-spacing: -0.015em; }
+.mast .tag { margin-left: var(--ds-space-20); padding-bottom: 4px; font: italic 400 var(--ds-font-size-20)/1 var(--serif); color: var(--ds-color-text-secondary); }
+.mast .right { margin-left: auto; display: flex; gap: var(--ds-space-32); align-items: flex-end; padding-bottom: 4px; }
+.mast .no { display: flex; align-items: baseline; gap: var(--ds-space-12); font: 400 var(--ds-font-size-39)/0.8 var(--serif); }
+.mast .no .nolab { font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 8px; background: var(--ink); color: var(--ds-color-surface-base); transform: translateY(-6px); }
+
+.stage { display: grid; grid-template-columns: 800px 1fr; gap: 48px; padding: 32px 56px 0; }
+.col-l { display: flex; flex-direction: column; }
+.col-r { display: flex; flex-direction: column; gap: var(--ds-space-12); padding-top: 4px; }
+.lab { display: flex; align-items: baseline; gap: var(--ds-space-8); margin-bottom: var(--ds-space-8); }
+.lab .sc b { color: var(--ds-color-text-accent); font-weight: 600; }
+.lab .note { font: italic 400 var(--ds-font-size-13)/1.3 var(--serif); color: var(--ds-color-text-secondary); margin-left: auto; }
+
+/* answer excerpt */
+.answer { position: relative; padding: 0 40px 0 0; }
+.answer .who { display: flex; align-items: center; gap: var(--ds-space-8); margin-bottom: var(--ds-space-8); }
+.answer .who .dot { width: 6px; height: 6px; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-bold); }
+.answer p { margin: 0; font: 400 var(--ds-font-size-20)/1.5 var(--serif); font-variation-settings: "opsz" 20; color: var(--ink); text-wrap: pretty; }
+.answer em { font-style: italic; }
+.cite { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; margin: 0 0 0 2px; vertical-align: 3px; border-radius: var(--ds-radius-detail); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); transition: background-color var(--fb); }
+.cite:hover { background: var(--ds-color-bg-accent-subtle-hover); }
+.srcs { display: flex; gap: var(--ds-space-20); margin-top: var(--ds-space-12); font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+.srcs span b { color: var(--ds-color-text-accent); font-weight: 600; margin-right: 4px; }
+.srcs i { font-family: var(--serif); }
+
+/* composer (hero) */
+.composer { position: relative; margin-top: 28px; background: var(--ds-color-surface-base); border: 1px solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-overlay); box-shadow: var(--ds-elevation-floating); transition: border-color var(--fb), box-shadow var(--fb); }
+.composer:focus-within, .composer.is-focus-within { border-color: var(--ds-color-border-accent); box-shadow: var(--ds-elevation-floating), 0 0 0 3px var(--ds-color-bg-accent-subtle); }
+.composer.drag { border-style: dashed; border-color: var(--ds-color-border-accent); background: var(--ds-color-accent-light-2); }
+.atts { display: flex; gap: var(--ds-space-8); padding: var(--ds-space-16) var(--ds-space-16) 0; }
+.att { position: relative; display: flex; align-items: center; gap: var(--ds-space-12); height: 60px; padding: 0 var(--ds-space-12) 0 var(--ds-space-8); min-width: 0; flex: 0 1 236px; border: 1px solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-raised); transition: border-color var(--fb); }
+.att:hover, .att.is-hover { border-color: var(--ds-color-border-default); }
+.att .doc { position: relative; width: 36px; height: 44px; flex: none; border-radius: 4px 12px 4px 4px; display: grid; place-items: center; font: italic 500 var(--ds-font-size-20)/1 var(--serif); }
+.att .doc.pdf { background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); }
+.att .doc.web { background: var(--ds-color-bg-info-subtle); color: var(--ds-color-text-info); }
+.att .doc.csv { background: var(--ds-color-bg-success-subtle); color: var(--ds-color-text-success); }
+.att .t { min-width: 0; }
+.att .n { display: block; font: var(--ds-text-label-sm); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.att .m { display: block; font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); white-space: nowrap; }
+.att .x { position: absolute; top: -9px; right: -9px; width: 24px; height: 24px; border-radius: var(--ds-radius-full); display: grid; place-items: center; background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); opacity: 0; transform: scale(var(--ds-motion-scale-enter)); transition: opacity var(--fb), transform var(--fb); }
+.att:hover .x, .att:focus-within .x, .att.is-hover .x { opacity: 1; transform: none; }
+.att .x svg { width: 12px; height: 12px; stroke-width: 2; }
+.ring { width: 36px; height: 36px; flex: none; }
+.ring circle { fill: none; stroke-width: 3; }
+.att.err { border-color: var(--ds-color-border-danger); background: var(--ds-color-bg-danger-subtle); }
+.att.err .m { color: var(--ds-color-text-danger); }
+
+.input { min-height: 84px; padding: var(--ds-space-16) var(--ds-space-20) var(--ds-space-8); font: 400 var(--ds-font-size-20)/1.5 var(--ds-font-family-text); color: var(--ink); outline: none; caret-color: var(--ds-color-bg-accent-bold); }
+.input:empty::before { content: attr(data-ph); color: var(--ds-color-text-tertiary); }
+.mention { display: inline-flex; align-items: center; gap: 4px; padding: 0 6px; border-radius: var(--ds-radius-detail); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font: 500 1em/1.25 var(--ds-font-family-text); }
+.caret { display: inline-block; width: 2px; height: 1.1em; vertical-align: -3px; background: var(--ds-color-bg-accent-bold); animation: blink 1.1s steps(1) infinite; margin-left: 1px; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.bar { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-8) var(--ds-space-12) var(--ds-space-12); }
+.iconbtn { width: 40px; height: 40px; border-radius: var(--ds-radius-full); display: grid; place-items: center; color: var(--ds-color-icon-default); border: 1px solid var(--ds-color-border-subtle); transition: background-color var(--fb), color var(--fb), border-color var(--fb); }
+.iconbtn:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ink); border-color: var(--ds-color-border-default); }
+.seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); }
+.seg button { height: 34px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-full); font: italic 400 var(--ds-font-size-16)/1 var(--serif); color: var(--ds-color-text-secondary); transition: background-color var(--fb), color var(--fb); display: inline-flex; align-items: center; gap: 6px; }
+.seg button:hover, .seg button.is-hover { color: var(--ink); background: var(--ds-color-bg-neutral-subtle-hover); }
+.seg button[aria-checked="true"] { background: var(--ds-color-surface-raised); color: var(--ink); box-shadow: var(--ds-elevation-floating); }
+.seg button svg { width: 14px; height: 14px; }
+.pill { height: 40px; display: inline-flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-12) 0 var(--ds-space-8); border-radius: var(--ds-radius-full); font: var(--ds-text-label-md); color: var(--ink); transition: background-color var(--fb); }
+.pill:hover, .pill[aria-expanded="true"] { background: var(--ds-color-bg-neutral-subtle); }
+.pill .av { width: 24px; height: 24px; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); display: grid; place-items: center; font: italic 500 var(--ds-font-size-13)/1 var(--serif); }
+.pill .chev { width: 14px; height: 14px; color: var(--ds-color-icon-subtle); }
+.hint { margin-left: auto; font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); display: flex; gap: var(--ds-space-12); }
+.hint kbd { font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+.send { width: 44px; height: 44px; border-radius: var(--ds-radius-full); display: grid; place-items: center; background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); transition: background-color var(--fb), transform var(--fb); }
+.send svg { width: 20px; height: 20px; stroke-width: 2; }
+.send:hover, .send.is-hover { background: var(--ds-color-bg-action-primary-hover); }
+.send:active, .send.is-active { background: var(--ds-color-bg-action-primary-pressed); transform: scale(var(--ds-motion-scale-press)); }
+.send:disabled, .send.is-disabled { background: var(--ds-color-bg-disabled); color: var(--ds-color-text-disabled); cursor: not-allowed; }
+.send.stop { background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); }
+.send.stop .sq { width: 12px; height: 12px; border-radius: 3px; background: currentColor; }
+
+.fine { margin-top: var(--ds-space-12); display: flex; justify-content: space-between; font: italic 400 var(--ds-font-size-13)/1.4 var(--serif); color: var(--ds-color-text-secondary); }
+
+/* popover (live) */
+.pop { position: absolute; left: 236px; bottom: 64px; width: 300px; z-index: 5; display: none; }
+.pill[aria-expanded="true"] + .pop { display: block; }
+
+/* menu (spec + live) */
+.menu { background: var(--ds-color-surface-overlay); border: 1px solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-overlay); padding: var(--ds-space-6); }
+.menu .mh { padding: var(--ds-space-6) var(--ds-space-8) var(--ds-space-8); }
+.opt { display: grid; grid-template-columns: 28px 1fr 18px; gap: var(--ds-space-8) var(--ds-space-12); align-items: start; width: 100%; text-align: left; padding: var(--ds-space-8); border-radius: var(--ds-radius-control-sm); transition: background-color var(--fb); }
+.opt:hover, .opt.is-hover { background: var(--ds-color-bg-neutral-subtle); }
+.opt .av { width: 28px; height: 28px; border-radius: var(--ds-radius-full); display: grid; place-items: center; font: italic 500 var(--ds-font-size-16)/1 var(--serif); background: var(--ds-color-bg-neutral-subtle); color: var(--ink); }
+.opt[aria-checked="true"] .av { background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); }
+.opt .on { font: var(--ds-text-label-md); color: var(--ink); display: flex; gap: 8px; align-items: baseline; }
+.opt .on em { font: 400 var(--ds-font-size-13)/1 var(--ds-font-family-text); font-style: normal; color: var(--ds-color-text-secondary); }
+.opt .od { display: block; font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+.opt .ck { color: var(--ds-color-text-accent); opacity: 0; margin-top: 4px; }
+.opt[aria-checked="true"] .ck { opacity: 1; }
+.menu .mf { display: flex; align-items: center; gap: 6px; margin-top: var(--ds-space-4); padding: var(--ds-space-8); border-top: 1px solid var(--rule); font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); }
+.menu .mf svg { width: 14px; height: 14px; }
+.slow { font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-warning); background: var(--ds-color-bg-warning-subtle); padding: 2px 6px; border-radius: var(--ds-radius-detail); }
+
+/* minis */
+.minis { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-20); margin-top: 28px; }
+.mini { background: var(--ds-color-surface-base); border: 1px solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); padding: var(--ds-space-12); }
+.mini .input { min-height: 0; padding: var(--ds-space-4) var(--ds-space-8) var(--ds-space-12); font-size: var(--ds-font-size-16); }
+.mini .bar { padding: 0; }
+.mini .send { width: 36px; height: 36px; }
+.mini .send svg { width: 16px; height: 16px; }
+.sugs { display: flex; flex-wrap: wrap; gap: var(--ds-space-6); margin: var(--ds-space-12) 0 0; }
+.sug { height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-full); border: 1px solid var(--ds-color-border-subtle); font: italic 400 var(--ds-font-size-16)/1 var(--serif); color: var(--ds-color-text-secondary); transition: border-color var(--fb), color var(--fb), background-color var(--fb); }
+.sug:hover { border-color: var(--ds-color-border-accent); color: var(--ds-color-text-accent); background: var(--ds-color-accent-light-2); }
+.status { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-4) var(--ds-space-8) var(--ds-space-12); font: italic 400 var(--ds-font-size-16)/1.4 var(--serif); color: var(--ds-color-text-secondary); }
+.status .pulse { width: 8px; height: 8px; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-bold); animation: pulse 1.4s var(--ds-motion-easing-standard) infinite; flex: none; }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.7); } }
+.read { flex: 1; height: 3px; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); overflow: hidden; }
+.read span { display: block; height: 100%; width: 38%; background: var(--ds-color-bg-accent-bold); border-radius: inherit; }
+
+/* right column specs */
+.spec { background: transparent; }
+.sends { display: flex; justify-content: space-between; padding: var(--ds-space-12) var(--ds-space-4) 0; border-top: 1px solid var(--rule); }
+.sends figure { margin: 0; display: grid; justify-items: center; gap: var(--ds-space-8); }
+.sends figcaption { font: italic 400 var(--ds-font-size-13)/1 var(--serif); color: var(--ds-color-text-secondary); }
+.row2 { display: grid; grid-template-columns: 1fr; gap: var(--ds-space-16); }
+.attcol { display: grid; gap: var(--ds-space-8); padding-top: var(--ds-space-12); border-top: 1px solid var(--rule); }
+.attcol .att { flex: none; width: 100%; height: 52px; }
+.attcol .att .doc { width: 30px; height: 36px; font-size: var(--ds-font-size-16); }
+.attrow { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-8); }
+.errbox { display: flex; gap: var(--ds-space-12); align-items: center; padding: var(--ds-space-12) var(--ds-space-16); border-radius: var(--ds-radius-container); background: var(--ds-color-bg-danger-subtle); border: 1px solid var(--ds-color-border-danger); }
+.errbox .t { flex: 1; }
+.errbox b { display: block; font: var(--ds-text-label-md); color: var(--ds-color-text-danger); }
+.errbox span { font: var(--ds-text-body-sm); color: var(--ink); }
+.btn-s { height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-full); font: var(--ds-text-label-md); border: 1px solid var(--ds-color-border-danger); color: var(--ds-color-text-danger); background: var(--ds-color-surface-raised); display: inline-flex; align-items: center; gap: 6px; transition: background-color var(--fb); }
+.btn-s:hover { background: var(--ds-color-danger-light-2); }
+.btn-s svg { width: 14px; height: 14px; }
+
+.drop { display: flex; align-items: center; gap: var(--ds-space-16); padding: var(--ds-space-12) var(--ds-space-20); border: 1.5px dashed var(--ds-color-border-accent); border-radius: var(--ds-radius-container); background: var(--ds-color-accent-light-2); }
+.drop b { display: block; font: italic 500 var(--ds-font-size-20)/1.2 var(--serif); color: var(--ds-color-text-accent); }
+.drop span { font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+@media (prefers-reduced-motion: reduce) {
+  .caret, .status .pulse { animation: none; }
+  *, *::before, *::after { transition-duration: 0ms !important; }
+}
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="logo" aria-label="Oriel">
+    <svg viewBox="0 0 30 40" aria-hidden="true"><path d="M2 39V15a13 13 0 0 1 26 0v24z" fill="var(--ds-color-bg-brand)"/><path d="M15 6v33M2 22h26" stroke="var(--paper)" stroke-width="2"/></svg>
+    <b>Oriel</b>
+  </div>
+  <span class="tag">a reading room for your sources</span>
+  <div class="right">
+    <span class="sc">Components · Autumn 2026</span>
+    <span class="no" aria-hidden="true"><span class="nolab">No. 07</span>Composer</span>
+  </div>
+</header>
+
+<main class="stage">
+  <div class="col-l">
+    <article class="answer" aria-label="Previous answer">
+      <div class="who"><span class="dot" aria-hidden="true"></span><span class="sc">Oriel · Heron · read 3 sources, 61 pages</span></div>
+      <p>Keller treats the estuary as a <em>common pool</em> held by custom rather than by title <a class="cite" href="#s1" aria-label="Source 1">1</a>. The 2019 interviews mostly agree, but four fishers describe the tide flats as “nobody’s until you work them” <a class="cite" href="#s2" aria-label="Source 2">2</a>, which sits closer to first possession than to Keller’s commons.</p>
+      <div class="srcs"><span id="s1"><b>1</b><i>Keller, Tidal Commons</i>, 1987, p. 14</span><span id="s2"><b>2</b><i>Saltings field interviews</i>, 2019, #0412</span></div>
+    </article>
+
+    <div class="lab" style="margin-top:28px;margin-bottom:-16px"><span class="sc"><b>Hero</b> · typing, three sources attached, one uploading</span><span class="note">focus ring is the soft terracotta halo</span></div>
+    <section class="composer is-focus-within" id="composer" aria-label="Ask Oriel">
+      <div class="atts" id="atts">
+        <div class="att"><span class="doc pdf" aria-hidden="true">¶</span><span class="t"><span class="n">Keller – Tidal Commons.pdf</span><span class="m">PDF · 42 pages</span></span><button class="x" aria-label="Remove Keller – Tidal Commons.pdf"><svg class="i" viewBox="0 0 12 12"><path d="m3 3 6 6M9 3 3 9"/></svg></button></div>
+        <div class="att"><span class="doc csv" aria-hidden="true">#</span><span class="t"><span class="n">saltings-interviews.csv</span><span class="m">Table · 1,204 rows</span></span><button class="x" aria-label="Remove saltings-interviews.csv"><svg class="i" viewBox="0 0 12 12"><path d="m3 3 6 6M9 3 3 9"/></svg></button></div>
+        <div class="att"><svg class="ring" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="14" stroke="var(--ds-color-bg-neutral-subtle)"/><circle cx="18" cy="18" r="14" stroke="var(--ds-color-bg-accent-bold)" stroke-dasharray="54.6 88" stroke-linecap="round" transform="rotate(-90 18 18)"/></svg><span class="t"><span class="n">Harbour board minutes 1931–38</span><span class="m" role="status">Uploading · 62%</span></span><button class="x" aria-label="Cancel upload"><svg class="i" viewBox="0 0 12 12"><path d="m3 3 6 6M9 3 3 9"/></svg></button></div>
+      </div>
+      <div class="input" id="input" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Message" data-ph="Ask about your sources…">Now set that against the <span class="mention" contenteditable="false">@Harbour minutes</span>. Where do they contradict Keller on who may dredge the flats?<span class="caret" aria-hidden="true"></span></div>
+      <div class="bar">
+        <button class="iconbtn" aria-label="Attach a source"><svg class="i" viewBox="0 0 18 18"><path d="M9 3.5v11M3.5 9h11"/></svg></button>
+        <div class="seg" role="radiogroup" aria-label="Mode" id="mode">
+          <button role="radio" aria-checked="false" tabindex="-1">Ask</button>
+          <button role="radio" aria-checked="true" tabindex="0"><svg class="i" viewBox="0 0 14 14"><circle cx="6" cy="6" r="4"/><path d="m9 9 3 3"/></svg>Research</button>
+          <button role="radio" aria-checked="false" tabindex="-1">Draft</button>
+        </div>
+        <button class="pill" id="modelBtn" aria-haspopup="menu" aria-expanded="false"><span class="av" aria-hidden="true">H</span>Heron<svg class="i chev" viewBox="0 0 14 14"><path d="m3.5 5.5 3.5 3.5 3.5-3.5"/></svg></button>
+        <div class="pop" id="pop"></div>
+        <span class="hint"><span><kbd>Enter</kbd> to send</span><span><kbd>Shift + Enter</kbd> for a new line</span></span>
+        <button class="send" id="send" aria-label="Send"><svg class="i" viewBox="0 0 20 20"><path d="M10 16V4M5 9l5-5 5 5"/></svg></button>
+      </div>
+    </section>
+    <div class="fine"><span>Oriel cites every claim. Check a quote against its page before you publish it.</span><span>Sources stay in this project</span></div>
+
+    <div class="minis">
+      <div>
+        <div class="lab"><span class="sc"><b>Empty</b> · first question</span><span class="note">send stays disabled</span></div>
+        <div class="mini">
+          <div class="input" data-ph="Ask about your sources…" aria-hidden="true"></div>
+          <div class="bar"><button class="iconbtn" tabindex="-1" aria-hidden="true"><svg class="i" viewBox="0 0 18 18"><path d="M9 3.5v11M3.5 9h11"/></svg></button><span class="hint" style="margin-left:auto">&nbsp;</span><button class="send" disabled aria-label="Send (type a question first)"><svg class="i" viewBox="0 0 20 20"><path d="M10 16V4M5 9l5-5 5 5"/></svg></button></div>
+        </div>
+        <div class="sugs"><button class="sug">Summarise it</button><button class="sug">Find contradictions</button><button class="sug">Draft a note</button></div>
+      </div>
+      <div>
+        <div class="lab"><span class="sc"><b>Streaming</b> · reading</span><span class="note">Esc or the square stops it</span></div>
+        <div class="mini">
+          <div class="status" role="status"><span class="pulse" aria-hidden="true"></span><span>Reading <span style="font-style:normal">Harbour minutes</span>, p. 9 of 24</span></div>
+          <div class="bar"><div class="read" aria-hidden="true"><span></span></div><span style="font:var(--ds-text-body-sm);color:var(--ds-color-text-tertiary);margin:0 var(--ds-space-8)">0:14</span><button class="send stop" aria-label="Stop"><span class="sq"></span></button></div>
+        </div>
+        <p style="margin:var(--ds-space-12) 0 0;font:var(--ds-text-body-sm);color:var(--ds-color-text-tertiary)">Typing stays open while Oriel reads; a new message queues after this one.</p>
+      </div>
+    </div>
+  </div>
+
+  <aside class="col-r" aria-label="States">
+    <div class="spec">
+      <div class="lab"><span class="sc"><b>Send</b> · six states</span><span class="note">44px, one filled action</span></div>
+      <div class="sends">
+        <figure><button class="send is-disabled" tabindex="-1" aria-hidden="true"><svg class="i" viewBox="0 0 20 20"><path d="M10 16V4M5 9l5-5 5 5"/></svg></button><figcaption>empty</figcaption></figure>
+        <figure><button class="send" tabindex="-1" aria-hidden="true"><svg class="i" viewBox="0 0 20 20"><path d="M10 16V4M5 9l5-5 5 5"/></svg></button><figcaption>ready</figcaption></figure>
+        <figure><button class="send is-hover" tabindex="-1" aria-hidden="true"><svg class="i" viewBox="0 0 20 20"><path d="M10 16V4M5 9l5-5 5 5"/></svg></button><figcaption>hover</figcaption></figure>
+        <figure><button class="send is-active" tabindex="-1" aria-hidden="true"><svg class="i" viewBox="0 0 20 20"><path d="M10 16V4M5 9l5-5 5 5"/></svg></button><figcaption>pressed</figcaption></figure>
+        <figure><button class="send is-focus" tabindex="-1" aria-hidden="true"><svg class="i" viewBox="0 0 20 20"><path d="M10 16V4M5 9l5-5 5 5"/></svg></button><figcaption>focus</figcaption></figure>
+        <figure><button class="send stop" tabindex="-1" aria-hidden="true"><span class="sq"></span></button><figcaption>stop</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="spec">
+      <div class="lab"><span class="sc"><b>Model</b> · menu open</span><span class="note">speed is said in words</span></div>
+      <div class="menu" role="menu" aria-label="Model" id="menuSpec">
+        <div class="mh sc">Who reads for you</div>
+        <button class="opt" role="menuitemradio" aria-checked="false"><span class="av">W</span><span><span class="on">Wren <em>quick</em></span><span class="od">Short answers from the passages it finds first.</span></span><svg class="i ck" viewBox="0 0 18 18"><path d="m4 9.5 3.5 3.5L14 6"/></svg></button>
+        <button class="opt" role="menuitemradio" aria-checked="true"><span class="av">H</span><span><span class="on">Heron <em>careful</em></span><span class="od">Reads every page and cites each claim.</span></span><svg class="i ck" viewBox="0 0 18 18"><path d="m4 9.5 3.5 3.5L14 6"/></svg></button>
+        <button class="opt is-hover" role="menuitemradio" aria-checked="false"><span class="av">K</span><span><span class="on">Kestrel <em>thorough</em> <span class="slow">a few minutes</span></span><span class="od">Long reports across many sources.</span></span><svg class="i ck" viewBox="0 0 18 18"><path d="m4 9.5 3.5 3.5L14 6"/></svg></button>
+        <div class="mf"><svg class="i" viewBox="0 0 14 14"><rect x="3" y="6.5" width="8" height="5.5" rx="1.5"/><path d="M4.75 6.5V5a2.25 2.25 0 0 1 4.5 0v1.5"/></svg>Your sources are never used for training.</div>
+      </div>
+    </div>
+
+    <div class="spec">
+      <div class="lab"><span class="sc"><b>Source</b> · attachment states</span></div>
+      <div class="attcol">
+        <div class="attrow">
+          <div class="att is-hover"><span class="doc pdf" aria-hidden="true">¶</span><span class="t"><span class="n">Keller.pdf</span><span class="m">hover</span></span><button class="x" tabindex="-1" aria-hidden="true"><svg class="i" viewBox="0 0 12 12"><path d="m3 3 6 6M9 3 3 9"/></svg></button></div>
+          <div class="att"><span class="doc web" aria-hidden="true">§</span><span class="t"><span class="n">estuary-act</span><span class="m">link · ready</span></span></div>
+          <div class="att err"><span class="doc pdf" aria-hidden="true" style="background:var(--ds-color-surface-raised)">!</span><span class="t"><span class="n">Survey.tiff</span><span class="m">120 MB · max 50</span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec">
+      <div class="lab"><span class="sc"><b>Error</b> · send failed</span><span class="note">the draft is never lost</span></div>
+      <div class="errbox" role="alert">
+        <svg class="i" viewBox="0 0 18 18" style="color:var(--ds-color-text-danger);margin-top:2px"><circle cx="9" cy="9" r="7"/><path d="M9 5.5v4M9 12.2v.3"/></svg>
+        <div class="t"><b>Couldn’t reach Oriel</b><span>Your question and sources are kept.</span></div>
+        <button class="btn-s"><svg class="i" viewBox="0 0 14 14"><path d="M11.5 7A4.5 4.5 0 1 1 10 3.6M11.5 1.5v2.5H9"/></svg>Retry</button>
+      </div>
+    </div>
+    <div class="spec">
+      <div class="lab"><span class="sc"><b>Drop</b> · dragging files in</span><span class="note">the whole composer is the target</span></div>
+      <div class="drop" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="36" height="36"><path d="M11 6h13l7 7v21H11z" fill="var(--ds-color-surface-raised)" stroke="var(--ds-color-border-accent)" stroke-width="1.5"/><path d="M24 6v7h7" fill="none" stroke="var(--ds-color-border-accent)" stroke-width="1.5"/><path d="M21 28v-9M17 22.5l4-4 4 4" fill="none" stroke="var(--ds-color-bg-accent-bold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><b>Drop to add as a source</b><span>PDF, EPUB, CSV, notes or a link · up to 50 MB each</span></div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<script>
+const input = document.getElementById("input"), send = document.getElementById("send"), composer = document.getElementById("composer");
+composer.classList.remove("is-focus-within");
+const params = new URLSearchParams(location.search);
+if (!params.has("live")) composer.classList.add("is-focus-within"); // the render shows the focused hero
+function sync() { send.disabled = !input.textContent.trim(); }
+input.addEventListener("input", () => { input.querySelector(".caret")?.remove(); sync(); });
+let streaming = null;
+function stop() { clearTimeout(streaming); streaming = null; send.classList.remove("stop"); send.innerHTML = '<svg class="i" viewBox="0 0 20 20"><path d="M10 16V4M5 9l5-5 5 5"/></svg>'; send.setAttribute("aria-label", "Send"); sync(); }
+function go() {
+  if (streaming) return stop();
+  if (!input.textContent.trim()) return;
+  send.classList.add("stop"); send.disabled = false; send.innerHTML = '<span class="sq"></span>'; send.setAttribute("aria-label", "Stop");
+  streaming = setTimeout(stop, 4000);
+}
+send.addEventListener("click", go);
+input.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); go(); } });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { if (streaming) stop(); closeMenu(); } });
+// mode radiogroup with arrow keys
+const radios = [...document.querySelectorAll("#mode [role=radio]")];
+function pick(r) { radios.forEach(o => { o.setAttribute("aria-checked", o === r); o.tabIndex = o === r ? 0 : -1; }); r.focus(); }
+radios.forEach((r, i) => { r.addEventListener("click", () => pick(r)); r.addEventListener("keydown", e => { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); pick(radios[(i + (e.key === "ArrowRight" ? 1 : radios.length - 1)) % radios.length]); } }); });
+// model menu (live copy of the spec menu)
+const btn = document.getElementById("modelBtn"), pop = document.getElementById("pop");
+pop.appendChild(document.getElementById("menuSpec").cloneNode(true)).removeAttribute("id");
+pop.querySelectorAll(".is-hover").forEach(n => n.classList.remove("is-hover"));
+function closeMenu() { btn.setAttribute("aria-expanded", "false"); }
+btn.addEventListener("click", () => { const open = btn.getAttribute("aria-expanded") === "true"; btn.setAttribute("aria-expanded", !open); if (!open) pop.querySelector("[aria-checked=true]").focus(); });
+pop.addEventListener("click", e => { const o = e.target.closest(".opt"); if (!o) return; pop.querySelectorAll(".opt").forEach(x => x.setAttribute("aria-checked", x === o)); btn.querySelector(".av").textContent = o.querySelector(".av").textContent; btn.childNodes[1].textContent = o.querySelector(".on").firstChild.textContent.trim(); closeMenu(); btn.focus(); });
+// remove attachments
+document.querySelectorAll("#atts .x").forEach(x => x.addEventListener("click", () => x.closest(".att").remove()));
+// drag-over state
+["dragenter", "dragover"].forEach(t => composer.addEventListener(t, e => { e.preventDefault(); composer.classList.add("drag"); }));
+["dragleave", "drop"].forEach(t => composer.addEventListener(t, e => { e.preventDefault(); composer.classList.remove("drag"); }));
+</script>
+</body>
+</html>

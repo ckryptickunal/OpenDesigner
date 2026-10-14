@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=205, initial-scale=1">
+<title>Nook: evening scenes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200..1000&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root { --display-w: 205px; --display-h: 251px; --display-r: 48px; --lamp: var(--ds-color-brand-seed); }  /* hardware shape; lamp = exact brand amber */
+  /* Type roles: watchOS text styles at xLarge (49 mm default). Body/Headline 17 is an engine token; Caption 2 15 and
+     Title 2 30 are HIG values (the engine scale steps 14, 17, 21, 27, 33). Three sizes in all. */
+  :root { --t-caption: 15px; --t-body: var(--ds-font-size-17); --t-title2: 30px; }
+  html, body { margin: 0; background: var(--ds-color-black); }
+  .display {
+    position: relative; width: var(--display-w); height: var(--display-h); overflow: hidden; border-radius: var(--display-r);
+    background: var(--ds-color-surface-base); color: var(--ds-color-text-primary); font-family: var(--ds-font-family-text);
+  }
+  .status { position: absolute; top: var(--ds-space-12); left: 26px; right: 22px; display: flex; justify-content: space-between; align-items: center; }
+  .room { font: 700 var(--t-body)/1 var(--ds-font-family-text); color: var(--lamp); }
+  .clock { font: 600 var(--t-body)/1 var(--ds-font-family-text); font-variant-numeric: tabular-nums; }
+
+  .tiles { position: absolute; left: var(--ds-space-8); right: var(--ds-space-8); top: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-6); }
+  button.tile {
+    all: unset; box-sizing: border-box; position: relative; display: flex; flex-direction: column; justify-content: space-between;
+    min-height: var(--ds-size-target-touch); padding: var(--ds-space-12) var(--ds-space-12) var(--ds-space-12) 14px;
+    border-radius: var(--ds-radius-28); background: var(--ds-color-neutral-dark-5); cursor: pointer; overflow: hidden;
+    transition: transform var(--ds-motion-duration-short) var(--ds-motion-easing-standard, ease);
+  }
+  button.tile:focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
+  .tile.hero {
+    grid-column: 1 / -1; height: 104px; color: var(--ds-color-text-on-brand);
+    background:
+      radial-gradient(130px 110px at 88% 8%, color-mix(in oklch, var(--ds-color-accent-dark-12) 85%, transparent), transparent 70%),
+      radial-gradient(160px 120px at 0% 100%, color-mix(in oklch, var(--lamp) 60%, var(--ds-color-warning-dark-9)), transparent 80%),
+      var(--lamp);
+  }
+  .tile.small { height: 86px; }
+  .ico { flex: none; align-self: flex-start; width: 30px; height: 30px; border-radius: var(--ds-radius-full); display: grid; place-items: center; }
+  .hero .ico { background: color-mix(in oklch, var(--ds-color-black) 82%, transparent); color: var(--lamp); width: 32px; height: 32px; }
+  .small .ico { background: var(--ds-color-neutral-dark-7); color: var(--lamp); }
+  .ico svg { width: 18px; height: 18px; }
+  .name { font: 700 var(--t-body)/1.05 var(--ds-font-family-text); letter-spacing: -0.01em; }
+  .hero .name { font-size: var(--t-title2); font-weight: 750; letter-spacing: -0.03em; }
+  .sub { margin-top: 3px; font: 600 var(--t-caption)/1.2 var(--ds-font-family-text); }
+  .hero .sub { margin-top: var(--ds-space-4); font-size: var(--t-body); color: var(--ds-color-text-on-brand); }
+  .small .name { font-size: var(--t-body); }
+  .small .sub { color: var(--ds-color-text-secondary); font-size: var(--t-caption); }
+  .on-dot { position: absolute; top: 14px; right: 14px; width: 28px; height: 16px; border-radius: var(--ds-radius-full); background: color-mix(in oklch, var(--ds-color-black) 82%, transparent); }
+  .on-dot::after { content: ""; position: absolute; right: var(--ds-space-2); top: var(--ds-space-2); width: 12px; height: 12px; border-radius: var(--ds-radius-full); background: var(--lamp); }
+</style>
+</head>
+<body>
+<main class="display" aria-label="Nook: evening scenes">
+  <div class="status"><span class="room">Living room</span><span class="clock">9:12</span></div>
+
+  <div class="tiles">
+    <button class="tile hero" aria-pressed="true">
+      <span class="ico"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M15.5 12.6A6.6 6.6 0 0 1 7.4 4.5a6.6 6.6 0 1 0 8.1 8.1Z" fill="currentColor"/></svg></span>
+      <span class="on-dot" aria-hidden="true"></span>
+      <span><span class="name">Wind down</span><span class="sub" style="display:block">4 lamps · 2700 K</span></span>
+    </button>
+    <button class="tile small">
+      <span class="ico"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3h8l2.5 6h-13Z M10 9v6 M6.5 17h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span><span class="name">Reading</span><span class="sub" style="display:block">1 lamp</span></span>
+    </button>
+    <button class="tile small">
+      <span class="ico"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.4" fill="currentColor"/><path d="M10 2.2v2M10 15.8v2M2.2 10h2M15.8 10h2M4.5 4.5l1.4 1.4M14.1 14.1l1.4 1.4M4.5 15.5l1.4-1.4M14.1 5.9l1.4-1.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+      <span><span class="name">Bright</span><span class="sub" style="display:block">All on</span></span>
+    </button>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maison Auberval</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root {
+    --ground: var(--ds-color-surface-sunken);      /* ivory: neutral step 2 (the base surface is near-white) */
+    --ink: var(--ds-color-text-primary);
+    --ink-2: var(--ds-color-text-secondary);
+    --espresso: var(--ds-color-brand-seed);
+    --hair: var(--ds-color-border-default);
+    --m: var(--ds-space-96);
+    --caps: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--ground); color: var(--ink); font-family: var(--ds-font-family-text); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+  .caps { font: var(--caps); text-transform: uppercase; letter-spacing: .24em; }
+
+  .hero { position: relative; height: 100vh; height: 100svh; min-height: 820px; overflow: hidden; }
+
+  /* nav */
+  .nav { position: absolute; z-index: 5; top: var(--ds-space-32); left: var(--ds-space-40); right: var(--ds-space-40); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+  .nav .l, .nav .r { display: flex; gap: var(--ds-space-32); }
+  .nav .r { justify-content: flex-end; }
+  .nav a.caps { min-height: var(--ds-size-target-min); display: inline-flex; align-items: center; }
+  .mark { font: 400 var(--ds-font-size-28)/1 var(--ds-font-family-display); letter-spacing: .42em; text-transform: uppercase; margin-right: -.42em; font-variation-settings: "opsz" 96; min-height: var(--ds-size-target-min); display: inline-flex; align-items: center; }
+  @media (hover: hover) and (pointer: fine) { .nav a:hover, .more:hover { color: var(--espresso); } }
+
+  /* the plate: a painted silk study, cropped tall and off-centre, bleeding off the top */
+  .plate { position: absolute; z-index: 1; left: 868px; top: -1px; width: 296px; height: 792px; background: var(--ink); }
+  .plate canvas { width: 100%; height: 100%; display: block; }
+  .cap { position: absolute; z-index: 2; left: 1188px; top: 728px; width: 200px; font: italic 400 var(--ds-font-size-16)/1.4 var(--ds-font-family-display); color: var(--ink-2); }
+  .cap span { display: block; font: var(--caps); font-style: normal; letter-spacing: .24em; text-transform: uppercase; margin-bottom: var(--ds-space-8); color: var(--ink); }
+
+  /* copy */
+  .intro { position: absolute; z-index: 3; left: var(--m); top: 196px; width: 340px; }
+  .intro .season { display: flex; gap: var(--ds-space-16); align-items: center; }
+  .intro .season i { width: var(--ds-space-32); height: var(--ds-border-width-1); background: var(--ink); }
+  .intro h2 { margin-top: var(--ds-space-24); font: 400 var(--ds-font-size-28)/1.15 var(--ds-font-family-display); font-variation-settings: "opsz" 48; }
+  .intro p { margin-top: var(--ds-space-20); font: 300 var(--ds-font-size-16)/1.65 var(--ds-font-family-text); color: var(--ink-2); }
+  .more { margin-top: var(--ds-space-32); white-space: nowrap; display: inline-flex; align-items: center; gap: var(--ds-space-16); min-height: var(--ds-size-target-min); }
+  .more i { width: var(--ds-space-96); height: var(--ds-border-width-1); background: currentColor; transform-origin: left center; transition: transform var(--ds-motion-duration-medium) var(--ds-motion-easing-standard); }
+  @media (hover: hover) and (pointer: fine) { .more:hover i { transform: scaleX(1.33); } }
+
+  h1 { position: absolute; z-index: 3; left: var(--m); top: 470px; font-family: var(--ds-font-family-display); font-weight: 400; font-size: var(--ds-font-size-160); line-height: .98; letter-spacing: -0.02em; font-variation-settings: "opsz" 96; color: var(--ink); pointer-events: none; white-space: nowrap; }
+  h1 span { display: block; }
+  h1 em { display: block; font-style: normal; padding-left: calc(2 * var(--ds-space-96) + var(--ds-space-40)); }
+  h1.over { color: var(--ds-color-neutral-light-1); }   /* the same line, in ivory, shown only where it crosses the plate */
+
+  .index { position: absolute; z-index: 3; left: 1188px; top: 196px; width: 200px; list-style: none; }
+  .index li { display: flex; gap: var(--ds-space-12); align-items: baseline; padding: var(--ds-space-12) 0; border-top: var(--ds-border-width-1) solid var(--hair); }
+  .index li:last-child { border-bottom: var(--ds-border-width-1) solid var(--hair); }
+  .index b { font: italic 400 var(--ds-font-size-16)/1 var(--ds-font-family-display); width: 28px; }
+  .index a { color: var(--ink-2); }
+  .index li.on a { color: var(--ink); }
+  .index li.on b::after { content: ""; }
+
+  .foot { position: absolute; z-index: 3; left: var(--ds-space-40); right: var(--ds-space-40); bottom: var(--ds-space-24); display: flex; justify-content: space-between; align-items: center; padding-top: var(--ds-space-16); border-top: var(--ds-border-width-1) solid var(--hair); color: var(--ink-2); }
+  .foot a { min-height: var(--ds-size-target-min); display: inline-flex; align-items: center; }
+</style>
+</head>
+<body>
+<main class="hero">
+  <header class="nav">
+    <nav class="l" aria-label="Main"><a class="caps" href="#">Collections</a><a class="caps" href="#">L'atelier</a><a class="caps" href="#">Journal</a></nav>
+    <a class="mark" href="#" aria-label="Maison Auberval, home">Auberval</a>
+    <div class="r"><a class="caps" href="#">Rendez-vous</a><a class="caps" href="#">Bag (0)</a></div>
+  </header>
+
+  <figure class="plate" aria-label="A painted study of black silk draped from a single pin, falling in deep folds.">
+    <canvas id="silk" aria-hidden="true"></canvas>
+  </figure>
+  <p class="cap"><span>Plate IV</span>Study of drape, black silk, pinned once at the shoulder.</p>
+
+  <section class="intro">
+    <p class="season caps"><i aria-hidden="true"></i>Autumn–Winter 2027</p>
+    <h2>Chapter four: the drape</h2>
+    <p>Fifteen pieces cut from a single bolt of undyed silk, draped by hand on the stand and never drawn on paper first.</p>
+    <a class="more caps" href="#">Discover the collection <i aria-hidden="true"></i></a>
+  </section>
+
+  <h1 id="h1"><span>Le silence</span><em>des étoffes</em></h1>
+  <div class="h1-over" aria-hidden="true"></div>
+
+  <ol class="index caps" aria-label="Chapters">
+    <li><b>I</b><a href="#">The cut</a></li>
+    <li><b>II</b><a href="#">The cloth</a></li>
+    <li><b>III</b><a href="#">The atelier</a></li>
+    <li class="on"><b>IV</b><a href="#" aria-current="true">The drape</a></li>
+  </ol>
+
+  <footer class="foot caps">
+    <span>Paris, Rive Gauche</span>
+    <a href="#">Scroll</a>
+    <span>EN · FR</span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  const css = getComputedStyle(document.documentElement);
+  const tok = n => css.getPropertyValue(n).trim();
+
+  /* 1. The headline crosses the plate: an ivory copy of it, clipped to the plate, sits on top. */
+  const h1 = document.getElementById('h1'), plate = document.querySelector('.plate');
+  const over = h1.cloneNode(true); over.removeAttribute('id'); over.classList.add('over'); over.setAttribute('aria-hidden', 'true');
+  h1.after(over);
+  function clip() {
+    const a = h1.getBoundingClientRect(), p = plate.getBoundingClientRect();
+    over.style.clipPath = `inset(${p.top - a.top}px ${a.right - p.right}px ${a.bottom - p.bottom}px ${p.left - a.left}px)`;
+  }
+
+  /* 2. The silk: a height field of folds radiating from one pin, lit like satin, mapped to an
+        espresso-to-ivory palette mixed in OKLab from two tokens. Deterministic. */
+  const hex = h => { h = h.replace('#', ''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255); };
+  const lin = c => c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4, gam = c => c <= .0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - .055;
+  const toLab = rgb => { const [r, g, b] = rgb.map(lin);
+    const l = Math.cbrt(.4122214708 * r + .5363325363 * g + .0514459929 * b), m = Math.cbrt(.2119034982 * r + .6806995451 * g + .1073969566 * b), s = Math.cbrt(.0883024619 * r + .2817188376 * g + .6299787005 * b);
+    return [.2104542553 * l + .793617785 * m - .0040720468 * s, 1.9779984951 * l - 2.428592205 * m + .4505937099 * s, .0259040371 * l + .7827717662 * m - .808675766 * s]; };
+  const toRgb = ([L, A, B]) => { const l = (L + .3963377774 * A + .2158037573 * B) ** 3, m = (L - .1055613458 * A - .0638541728 * B) ** 3, s = (L - .0894841775 * A - 1.291485548 * B) ** 3;
+    return [4.0767416621 * l - 3.3077115913 * m + .2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - .3413193965 * s, -.0041960863 * l - .7034186147 * m + 1.707614701 * s].map(c => Math.max(0, Math.min(1, gam(c)))); };
+  // black silk: the system's ink and ivory only, so the plate stays high-contrast and never brown
+  const INK = toLab(hex(tok('--ds-color-neutral-light-12'))), IVO = toLab(hex(tok('--ds-color-neutral-light-1'))), BLACK = toLab(hex(tok('--ds-color-black')));
+  const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+  const stops = [[0, mix(BLACK, INK, .5)], [.3, INK], [.62, mix(INK, IVO, .42)], [.86, mix(INK, IVO, .8)], [1, IVO]];
+  const ramp = t => { t = Math.max(0, Math.min(1, t)); for (let i = 1; i < stops.length; i++) if (t <= stops[i][0]) { const [t0, c0] = stops[i - 1], [t1, c1] = stops[i]; return mix(c0, c1, (t - t0) / (t1 - t0)); } return IVO; };
+  const LUT = Array.from({ length: 256 }, (_, i) => toRgb(ramp(i / 255)).map(v => Math.round(v * 255)));
+
+  function paint() {
+    const cv = document.getElementById('silk'), dpr = Math.min(devicePixelRatio || 1, 2);
+    const W = Math.round(plate.clientWidth * dpr), H = Math.round(plate.clientHeight * dpr);
+    cv.width = W; cv.height = H;
+    const c = cv.getContext('2d'), img = c.createImageData(W, H), d = img.data;
+    const field = new Float32Array(W * H);
+    const gx = W * .30, gy = -H * .05;           // the pin, just above the crop
+    const p2x = W * 1.18, p2y = H * .40;         // the cloth turning over a hip, off the right edge
+    const ss = (a, b, x) => { const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+    const TAU = Math.PI * 2;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const dx = x - gx, dy = y - gy;
+      const u = dx / (dy + H * .6);               // folds converge on the pin
+      const warp = .35 * Math.sin(y / H * 2.4 + .7) + .18 * Math.sin(y / H * 5.1 + x / W * 1.7);
+      const grow = ss(0, H * .5, Math.hypot(dx, dy));
+      const irregular = .58 + .42 * Math.sin(u * 29 + warp + 1.3);
+      let h1 = Math.sin(u * 80 + warp * 2 + .4) * irregular + .3 * Math.sin(u * 151 + warp * 3.1 + 1.3) + .06 * Math.sin(u * 290 + warp * 4 + 2.2);
+      h1 *= .3 + .7 * grow;
+      // the swag: catenary-like arcs around the second gather
+      const ex = x - p2x, ey = y - p2y, r2 = Math.hypot(ex, ey) / W, a2 = Math.atan2(ey, ex);
+      const h2 = Math.sin(r2 * TAU * 2.4 + .35 * Math.sin(a2 * 3) + .8) + .3 * Math.sin(r2 * TAU * 5.1 + 1.1);
+      const m = ss(H * .46, H * .72, y) * ss(1.25, .35, r2);
+      field[y * W + x] = h1 * (1 - m) + h2 * m * .85;
+    }
+    // light from the upper left, satin sheen along the crests
+    const L = [-.55, -.62, .56], Ln = Math.hypot(...L), Lx = L[0] / Ln, Ly = L[1] / Ln, Lz = L[2] / Ln;
+    const Hx = Lx, Hy = Ly, Hz = Lz + 1, Hn = Math.hypot(Hx, Hy, Hz);
+    let s = 3; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+    const k = 4.6 * dpr;
+    for (let y = 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) {
+      const i = y * W + x, f = field[i];
+      const nx = -(field[i + 1] - field[i - 1]) * k, ny = -(field[i + W] - field[i - W]) * k, nn = Math.hypot(nx, ny, 1);
+      const Nx = nx / nn, Ny = ny / nn, Nz = 1 / nn;
+      const dif = Math.max(0, Nx * Lx + Ny * Ly + Nz * Lz);
+      const sp = Math.max(0, (Nx * Hx + Ny * Hy + Nz * Hz) / Hn);
+      const sheen = sp ** 22 * .3 + sp ** 6 * .2;
+      const ao = .62 + .38 * Math.max(-1, Math.min(1, f * .55 + .25));
+      // the lower left falls into shadow so the ivory headline reads where it crosses
+      const fall = 1 - .62 * ss(H * .58, H * .95, y) * ss(W * .95, W * .1, x);
+      const top = .9 + .1 * ss(0, H * .2, y);
+      const blotch = .03 * Math.sin(x / W * 5.3 + y / H * 3.1) * Math.sin(y / H * 9.7 - x / W * 2.3);
+      const grain = (rnd() - .5) * .03 + blotch;
+      const u = (x - gx) / (y - gy + H * .6);
+      const stroke = .018 * Math.sin(u * 640 + y / H * 9) * Math.sin(y / H * 31 + u * 40);
+      let t = .1 + (dif * .72 * ao + sheen) * .9 * fall * top + grain + stroke;
+      const p = LUT[Math.max(0, Math.min(255, Math.round(t * 255)))], o = i * 4;
+      d[o] = p[0]; d[o + 1] = p[1]; d[o + 2] = p[2]; d[o + 3] = 255;
+    }
+    // edge rows
+    for (let x = 0; x < W; x++) { [0, H - 1].forEach(y => { const o = (y * W + x) * 4, q = ((y ? H - 2 : 1) * W + x) * 4; d[o] = d[q]; d[o + 1] = d[q + 1]; d[o + 2] = d[q + 2]; d[o + 3] = 255; }); }
+    for (let y = 0; y < H; y++) { [0, W - 1].forEach(x => { const o = (y * W + x) * 4, q = (y * W + (x ? W - 2 : 1)) * 4; d[o] = d[q]; d[o + 1] = d[q + 1]; d[o + 2] = d[q + 2]; d[o + 3] = 255; }); }
+    c.putImageData(img, 0, 0);
+    // soften once, like wet paint settling
+    c.filter = `blur(${.6 * dpr}px)`; c.drawImage(cv, 0, 0); c.filter = 'none';
+  }
+
+  const go = () => { paint(); clip(); };
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(go);
+  addEventListener('resize', go);
+})();
+</script>
+</body>
+</html>

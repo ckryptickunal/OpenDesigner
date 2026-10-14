@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1600, initial-scale=1">
+<title>Eight wrists, eight systems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=block" rel="stylesheet">
+<style>
+  /* The presentation board sits outside any one piece's system: a neutral stage so eight different systems can sit side by side.
+     One family (Inter); the headline highlights by weight, not by a second face or italics. Sizes: 13, 15, 17, 46. */
+  :root {
+    --paper: #e9e5de; --ink: #1b1a18; --ink-2: #57534c; --ink-3: #6f6a62; --rule: #cfc9bf;
+    --case-hi: #4a4a4d; --case: #1a1a1c; --case-lo: #0c0c0d;
+  }
+  html, body { margin: 0; }
+  body {
+    width: 1600px; height: 1000px; overflow: hidden; position: relative; color: var(--ink);
+    background:
+      radial-gradient(900px 700px at 72% 46%, #f4f1ec 0%, transparent 70%),
+      radial-gradient(600px 500px at 0% 100%, #ded8ce 0%, transparent 70%),
+      var(--paper);
+    font-family: "Inter", sans-serif; font-optical-sizing: auto;
+  }
+  .intro { position: absolute; left: 72px; top: 132px; width: 356px; }
+  .over { font: 600 13px/1 "Inter", sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+  h1 { margin: 24px 0 0; font: 300 46px/1.08 "Inter", sans-serif; letter-spacing: -0.03em; }
+  h1 b { font-weight: 650; }
+  .lede { margin: 28px 0 0; font: 400 17px/1.5 "Inter", sans-serif; color: var(--ink-2); max-width: 310px; }
+  .spec { margin: 36px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
+  .spec li { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--rule); font: 500 15px/1.3 "Inter", sans-serif; }
+  .spec li span:first-child { color: var(--ink-3); font-weight: 400; }
+  .foot { position: absolute; left: 72px; bottom: 96px; font: 400 13px/1.5 "Inter", sans-serif; color: var(--ink-3); width: 320px; }
+
+  .grid { position: absolute; left: 452px; top: 88px; display: grid; grid-template-columns: repeat(4, 262px); column-gap: 18px; row-gap: 6px; }
+  figure { margin: 0; display: flex; flex-direction: column; align-items: center; }
+  .watch { position: relative; width: 247px; height: 372px; }
+  .band { position: absolute; left: 34px; width: 179px; height: 52px; background: var(--band, #1d1d1f); }
+  .band.top { -webkit-mask-image: linear-gradient(to top, #000 55%, transparent); mask-image: linear-gradient(to top, #000 55%, transparent); }
+  .band.bot { -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent); mask-image: linear-gradient(to bottom, #000 55%, transparent); }
+  .band::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 1px, transparent 1px 4px), linear-gradient(90deg, rgba(0,0,0,.22), transparent 18%, transparent 82%, rgba(0,0,0,.22)); }
+  .band.top { top: 0; border-radius: 10px 10px 0 0; }
+  .band.bot { bottom: 0; border-radius: 0 0 10px 10px; }
+  .case {
+    position: absolute; left: 0; top: 40px; width: 247px; height: 293px; border-radius: 74px;
+    background: linear-gradient(150deg, var(--case-hi) 0%, var(--case) 30%, var(--case-lo) 62%, #2a2a2d 100%);
+    box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.14), inset 0 -2px 6px rgba(255,255,255,.06),
+                0 34px 50px -22px rgba(30,24,16,.55), 0 10px 22px -6px rgba(30,24,16,.28);
+  }
+  .glass { position: absolute; inset: 9px; border-radius: 66px; background: #000; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+  .case iframe { position: absolute; left: 21px; top: 21px; width: 205px; height: 251px; border: 0; border-radius: 48px; background: #000; }
+  .case .sheen { position: absolute; left: 9px; top: 9px; right: 9px; bottom: 9px; border-radius: 66px; pointer-events: none;
+    background: linear-gradient(160deg, rgba(255,255,255,.07) 0%, rgba(255,255,255,0) 32%); }
+  .crown { position: absolute; right: -9px; top: 84px; width: 13px; height: 44px; border-radius: 5px;
+    background: repeating-linear-gradient(0deg, #2a2a2c 0 1.6px, #58585b 1.6px 2.6px); box-shadow: inset -2px 0 3px rgba(0,0,0,.5), 0 2px 4px rgba(0,0,0,.3); }
+  .btn { position: absolute; right: -5px; top: 150px; width: 7px; height: 52px; border-radius: 4px; background: linear-gradient(90deg, #232325, #4a4a4d); }
+  figcaption { margin-top: 10px; width: 247px; display: flex; justify-content: space-between; align-items: baseline; font: 500 15px/1.2 "Inter", sans-serif; }
+  figcaption b { font-weight: 600; }
+  figcaption span { color: var(--ink-3); font-weight: 400; font-size: 13px; }
+  figcaption i { font-style: normal; color: var(--ink-3); margin-right: 6px; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+  <section class="intro">
+    <div class="over">OpenDesigner · showcase · watch</div>
+    <h1>Eight wrists,<br><b>eight systems.</b></h1>
+    <p class="lede">Eight fictional watch apps, each its own brand. Every screen reads its colour, type, spacing and radius from tokens the OpenDesigner engine generated for it.</p>
+    <ul class="spec">
+      <li><span>Display</span><span>205 × 251 pt, 49 mm class</span></li>
+      <li><span>Theme</span><span>Dark only, pure black</span></li>
+      <li><span>Text contrast</span><span>4.5:1 or better</span></li>
+      <li><span>Touch targets</span><span>44 pt minimum</span></li>
+      <li><span>Type</span><span>watchOS text roles, one family each</span></li>
+    </ul>
+  </section>
+  <p class="foot">All brands, places and data are invented. Rendered at 3x from HTML; the art is drawn in code.</p>
+
+  <main class="grid">
+    <figure style="--band:#2d3317"><div class="watch"><i class="band top"></i><i class="band bot"></i><div class="case"><div class="glass"></div><iframe src="01-ridgeline-trail/index.html" scrolling="no" title="Ridgeline"></iframe><div class="sheen"></div><i class="crown"></i><i class="btn"></i></div></div>
+      <figcaption><b><i>01</i>Ridgeline</b><span>Trail pace · Archivo</span></figcaption></figure>
+    <figure style="--band:#4a1f1a"><div class="watch"><i class="band top"></i><i class="band bot"></i><div class="case"><div class="glass"></div><iframe src="02-thrum-heart/index.html" scrolling="no" title="Thrum"></iframe><div class="sheen"></div><i class="crown"></i><i class="btn"></i></div></div>
+      <figcaption><b><i>02</i>Thrum</b><span>Heart zones · Bricolage</span></figcaption></figure>
+    <figure style="--band:#1b2a3a"><div class="watch"><i class="band top"></i><i class="band bot"></i><div class="case"><div class="glass"></div><iframe src="03-tidemark-face/index.html" scrolling="no" title="Tidemark"></iframe><div class="sheen"></div><i class="crown"></i><i class="btn"></i></div></div>
+      <figcaption><b><i>03</i>Tidemark</b><span>Tide face · Sora</span></figcaption></figure>
+    <figure style="--band:#262523"><div class="watch"><i class="band top"></i><i class="band bot"></i><div class="case"><div class="glass"></div><iframe src="04-headway-transit/index.html" scrolling="no" title="Headway"></iframe><div class="sheen"></div><i class="crown"></i><i class="btn"></i></div></div>
+      <figcaption><b><i>04</i>Headway</b><span>Transit · Big Shoulders</span></figcaption></figure>
+    <figure style="--band:#8a6f50"><div class="watch"><i class="band top"></i><i class="band bot"></i><div class="case"><div class="glass"></div><iframe src="05-nook-home/index.html" scrolling="no" title="Nook"></iframe><div class="sheen"></div><i class="crown"></i><i class="btn"></i></div></div>
+      <figcaption><b><i>05</i>Nook</b><span>Home scenes · Nunito</span></figcaption></figure>
+    <figure style="--band:#6d6585"><div class="watch"><i class="band top"></i><i class="band bot"></i><div class="case"><div class="glass"></div><iframe src="06-hush-breathe/index.html" scrolling="no" title="Hush"></iframe><div class="sheen"></div><i class="crown"></i><i class="btn"></i></div></div>
+      <figcaption><b><i>06</i>Hush</b><span>Breathing · Fraunces</span></figcaption></figure>
+    <figure style="--band:#b8ae96"><div class="watch"><i class="band top"></i><i class="band bot"></i><div class="case"><div class="glass"></div><iframe src="07-leeward-sail/index.html" scrolling="no" title="Leeward"></iframe><div class="sheen"></div><i class="crown"></i><i class="btn"></i></div></div>
+      <figcaption><b><i>07</i>Leeward</b><span>Sailing · Plex Mono</span></figcaption></figure>
+    <figure style="--band:#2b2a2c"><div class="watch"><i class="band top"></i><i class="band bot"></i><div class="case"><div class="glass"></div><iframe src="08-onething-focus/index.html" scrolling="no" title="Onething"></iframe><div class="sheen"></div><i class="crown"></i><i class="btn"></i></div></div>
+      <figcaption><b><i>08</i>Onething</b><span>Focus timer · Geist</span></figcaption></figure>
+  </main>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pomelo Tapes · Player</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Unbounded:wght@500;700;850&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+/* Pomelo Tapes player. Tokens for color roles, spacing, radius, type, motion.
+   --c1..--c3 are ART-DERIVED (sampled from the generated cover at runtime): the one place the palette leaves the tokens, on purpose. */
+:root {
+  --c1: #ff2e88; --c2: #ff8a1f; --c3: #7b4dff;  /* fallbacks, replaced by the sampler */
+  --ink: #0c0710;                              /* OFF-TOKEN: the darkening base for art-derived fills */
+  --on-art: var(--ds-color-white);
+  --on-art-2: rgb(255 255 255 / 0.74);         /* OFF-TOKEN: secondary text on the art gradient (5:1+ on the darkened mix) */
+  --spring: var(--ds-motion-spring-spatial-fast-duration) var(--ds-motion-spring-spatial-fast-easing);
+  --fb: var(--ds-motion-transition-feedback-duration) var(--ds-motion-transition-feedback-easing);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { width: 1440px; height: 900px; overflow: hidden; position: relative; background: var(--ds-color-surface-sunken); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
+.glow { position: absolute; inset: 0; pointer-events: none; background:
+  radial-gradient(700px 520px at 22% 40%, color-mix(in oklch, var(--c1) 34%, transparent), transparent 70%),
+  radial-gradient(520px 420px at 55% 70%, color-mix(in oklch, var(--c2) 22%, transparent), transparent 70%),
+  radial-gradient(600px 500px at 90% 8%, color-mix(in oklch, var(--c3) 22%, transparent), transparent 70%); }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible, .is-focus { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+svg.i { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.mono { font-family: var(--ds-font-family-text); }
+.disp { font-family: var(--ds-font-family-display); }
+
+/* top */
+.top { position: relative; height: 72px; display: flex; align-items: center; padding: 0 48px; gap: var(--ds-space-16); }
+.brand { display: flex; align-items: center; gap: var(--ds-space-12); }
+.brand svg { width: 30px; height: 30px; }
+.brand b { font: 700 var(--ds-font-size-21)/1 var(--ds-font-family-display); letter-spacing: -0.02em; }
+.top .kicker { font: var(--ds-text-code-sm, 400 12px/1.4 monospace); font-family: var(--ds-font-family-text); font-size: var(--ds-font-size-12); color: var(--ds-color-text-secondary); letter-spacing: 0.06em; text-transform: uppercase; }
+.top .num { margin-left: auto; font: 500 var(--ds-font-size-38)/1 var(--ds-font-family-display); letter-spacing: -0.02em; color: var(--ds-color-text-primary); }
+.top .num span { color: var(--ds-color-text-accent); }
+
+.stage { position: relative; display: grid; grid-template-columns: 836px 1fr; gap: 32px; padding: 16px 48px 0; }
+.cap { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--ds-space-8); font: 600 var(--ds-font-size-12)/1.3 var(--ds-font-family-text); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-color-text-secondary); }
+.cap b { color: var(--ds-color-text-accent); font-weight: 700; }
+
+/* hero card */
+.card { position: relative; height: 548px; border-radius: var(--ds-radius-overlay); overflow: hidden; color: var(--on-art);
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in oklch, var(--c1) 58%, var(--ink)), transparent 60%),
+    radial-gradient(90% 90% at 100% 100%, color-mix(in oklch, var(--c2) 46%, var(--ink)), transparent 65%),
+    linear-gradient(135deg, color-mix(in oklch, var(--c3) 50%, var(--ink)), color-mix(in oklch, var(--c1) 30%, var(--ink)));
+  box-shadow: var(--ds-elevation-overlay); }
+.card::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .14; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.row1 { display: grid; grid-template-columns: 320px 1fr; gap: 80px; padding: 36px 36px 0; position: relative; z-index: 1; }
+.art { position: relative; width: 320px; height: 320px; margin-top: 10px; }
+.vinyl { position: absolute; top: 14px; left: 40px; width: 292px; height: 292px; border-radius: 50%;
+  background: radial-gradient(circle, var(--c2) 0 17%, #120c14 17.5% 19%, transparent 19.5%), repeating-radial-gradient(circle, #141016 0 2px, #1e1820 2px 3px);
+  box-shadow: 0 20px 50px rgb(0 0 0 / .5); transition: left var(--spring); animation: spin 2.4s linear infinite; animation-play-state: paused; }
+.vinyl::after { content: ""; position: absolute; inset: 47%; border-radius: 50%; background: #0c0710; }
+.vinyl::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 30deg, transparent 0 10%, rgb(255 255 255 / .1) 14%, transparent 20% 60%, rgb(255 255 255 / .07) 64%, transparent 70%); }
+.playing .vinyl { left: 72px; animation-play-state: running; }
+@keyframes spin { to { transform: rotate(1turn); } }
+canvas#cover { position: absolute; inset: 0; width: 320px; height: 320px; border-radius: var(--ds-radius-container); box-shadow: 0 24px 60px rgb(0 0 0 / .45), 0 0 0 1px rgb(255 255 255 / .08); }
+.meta { position: relative; z-index: 2; min-height: 352px; padding-top: var(--ds-space-8); display: flex; flex-direction: column; min-width: 0; }
+.cat { font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); letter-spacing: 0.08em; color: var(--on-art-2); text-transform: uppercase; display: flex; gap: var(--ds-space-12); }
+.cat span + span::before { content: "/"; margin-right: var(--ds-space-12); opacity: .6; }
+h1 { text-wrap: balance; margin: var(--ds-space-16) 0 var(--ds-space-12); font: 500 var(--ds-font-size-51)/1 var(--ds-font-family-display); letter-spacing: -0.03em; }
+.artist { display: flex; align-items: center; gap: var(--ds-space-8); font: 500 var(--ds-font-size-21)/1.2 var(--ds-font-family-text); }
+.artist .vf { width: 18px; height: 18px; border-radius: 50%; background: var(--on-art); color: var(--ink); display: grid; place-items: center; }
+.album { margin-top: var(--ds-space-6); font: var(--ds-text-body-md); color: var(--on-art-2); }
+.chips { display: flex; gap: var(--ds-space-8); margin-top: var(--ds-space-16); }
+.chip { height: 36px; display: inline-flex; align-items: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-full); background: rgb(255 255 255 / .12); color: var(--on-art); font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); letter-spacing: 0.02em; transition: background-color var(--fb); backdrop-filter: blur(8px); }
+.chip:hover { background: rgb(255 255 255 / .2); }
+.chip svg { width: 16px; height: 16px; }
+.like[aria-pressed="true"] { background: var(--on-art); color: var(--ds-color-accent-light-9); }
+.like[aria-pressed="true"] svg { fill: currentColor; }
+
+.controls { margin-top: auto; display: flex; align-items: center; gap: var(--ds-space-8); }
+.ctl { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: var(--on-art); transition: background-color var(--fb), transform var(--fb); position: relative; }
+.ctl:hover { background: rgb(255 255 255 / .14); }
+.ctl:active { transform: scale(var(--ds-motion-scale-press)); }
+.ctl[aria-pressed="false"] { color: var(--on-art-2); }
+.ctl[aria-pressed="true"]::after { content: ""; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+.play { flex: none; width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; background: var(--on-art); color: var(--ink); box-shadow: 0 10px 30px rgb(0 0 0 / .35); transition: transform var(--spring), box-shadow var(--fb); }
+.play:hover, .play.is-hover { transform: scale(1.06); }
+.play:active, .play.is-active { transform: scale(var(--ds-motion-scale-press)); }
+.play svg { width: 30px; height: 30px; fill: currentColor; stroke: none; }
+.vol { display: flex; align-items: center; gap: var(--ds-space-6); color: var(--on-art); }
+.vol svg { width: 18px; height: 18px; }
+.range { -webkit-appearance: none; appearance: none; width: 76px; height: 24px; background: transparent; cursor: pointer; --v: 64%; }
+.range::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: linear-gradient(90deg, var(--on-art) var(--v), rgb(255 255 255 / .25) var(--v)); }
+.range::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -5px; border-radius: 50%; background: var(--on-art); box-shadow: 0 2px 6px rgb(0 0 0 / .4); transition: transform var(--fb); }
+.range:hover::-webkit-slider-thumb { transform: scale(1.2); }
+
+/* waveform */
+.wave-wrap { position: relative; z-index: 1; padding: 22px 36px 0; }
+.marks { position: relative; height: 22px; }
+.mk { position: absolute; transform: translateX(-50%); display: flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px 0 6px; border-radius: var(--ds-radius-full); background: rgb(0 0 0 / .32); font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--on-art-2); white-space: nowrap; }
+.mk::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--on-art-2); }
+.mk.hot { background: var(--on-art); color: var(--ink); }
+.mk.hot::before { background: var(--c1); }
+.wave { position: relative; height: 72px; margin-top: 6px; display: flex; align-items: center; gap: 2px; cursor: pointer; border-radius: var(--ds-radius-detail); }
+.wave i { flex: 1; border-radius: 2px; background: rgb(255 255 255 / .26); min-height: 3px; transition: background-color var(--fb); }
+.wave i.on { background: var(--on-art); }
+.wave .head { position: absolute; top: -6px; bottom: -6px; width: 2px; margin-left: -1px; background: var(--on-art); border-radius: 2px; box-shadow: 0 0 0 3px rgb(0 0 0 / .18); pointer-events: none; }
+.wave .head::before { content: ""; position: absolute; top: -5px; left: -5px; width: 12px; height: 12px; border-radius: 50%; background: var(--on-art); }
+.wave .tip { position: absolute; bottom: calc(100% + 12px); transform: translateX(-50%); padding: 4px 8px; border-radius: var(--ds-radius-detail); background: var(--on-art); color: var(--ink); font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); opacity: 0; transition: opacity var(--fb); pointer-events: none; }
+.wave:hover .tip { opacity: 1; }
+.times { display: flex; justify-content: space-between; margin-top: var(--ds-space-8); font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--on-art-2); letter-spacing: 0.04em; }
+.times b { color: var(--on-art); font-weight: 500; }
+
+/* minis */
+.minis { margin-top: 22px; display: grid; gap: var(--ds-space-12); }
+.mini { position: relative; height: 72px; display: flex; align-items: center; gap: var(--ds-space-12); padding: 0 var(--ds-space-12) 0 var(--ds-space-12); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); border: 1px solid var(--ds-color-border-subtle); overflow: hidden; }
+.mini .prog { position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--ds-color-bg-neutral-subtle); }
+.mini .prog span { display: block; height: 100%; background: linear-gradient(90deg, var(--c1), var(--c2)); }
+.thumb { width: 48px; height: 48px; border-radius: var(--ds-radius-detail); flex: none; }
+.mini .tt { min-width: 0; flex: 1; }
+.mini .tt b { display: block; font: 700 var(--ds-font-size-16)/1.25 var(--ds-font-family-display); letter-spacing: -0.02em; }
+.mini .tt span { font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+.mini .ctl { color: var(--ds-color-text-primary); }
+.mini .ctl:hover { background: var(--ds-color-bg-neutral-subtle); }
+.mini .pp { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--ds-color-text-primary); color: var(--ds-color-surface-base); transition: transform var(--spring); }
+.mini .pp:hover { transform: scale(1.06); }
+.mini .pp svg { width: 20px; height: 20px; fill: currentColor; stroke: none; }
+.eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 14px; margin-right: 6px; vertical-align: -1px; }
+.eq i { width: 3px; background: var(--ds-color-text-accent); border-radius: 1px; animation: eq 0.9s ease-in-out infinite alternate; }
+.eq i:nth-child(2) { animation-delay: -.3s; } .eq i:nth-child(3) { animation-delay: -.6s; }
+@keyframes eq { from { height: 3px; } to { height: 14px; } }
+.mini .when { font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); margin-right: var(--ds-space-8); }
+.mini.off { background: var(--ds-color-surface-base); }
+.badge { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: var(--ds-radius-full); font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); }
+.badge.warn { background: var(--ds-color-bg-warning-subtle); color: var(--ds-color-text-warning); }
+.spin { width: 20px; height: 20px; border-radius: 50%; border: 2.5px solid currentColor; border-right-color: transparent; animation: rot .8s linear infinite; }
+@keyframes rot { to { transform: rotate(1turn); } }
+
+/* right column */
+.col-r { display: flex; flex-direction: column; gap: 14px; }
+.panel { border-radius: var(--ds-radius-container); background: var(--ds-color-surface-base); border: 1px solid var(--ds-color-border-subtle); padding: var(--ds-space-16); }
+.plays { display: flex; justify-content: space-between; }
+.plays figure { margin: 0; display: grid; justify-items: center; gap: var(--ds-space-8); }
+.plays figcaption, .lbl { font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); letter-spacing: 0.02em; }
+.pb { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--ds-color-text-primary); color: var(--ds-color-surface-base); transition: transform var(--spring); }
+.pb svg { width: 20px; height: 20px; fill: currentColor; stroke: none; }
+.pb.is-hover { transform: scale(1.06); }
+.pb.is-active { transform: scale(var(--ds-motion-scale-press)); background: var(--ds-color-neutral-dark-11); }
+.pb.is-disabled { background: var(--ds-color-bg-disabled); color: var(--ds-color-text-disabled); }
+.scrubs { display: grid; grid-template-columns: 74px 1fr; align-items: center; row-gap: 8px; column-gap: var(--ds-space-12); }
+.sc { position: relative; height: 24px; display: flex; align-items: center; }
+.sc .tr { position: relative; width: 100%; height: 4px; border-radius: 4px; background: var(--ds-color-bg-neutral-subtle-pressed); }
+.sc .buf { position: absolute; left: 0; top: 0; bottom: 0; border-radius: inherit; background: var(--ds-color-neutral-dark-8); }
+.sc .pl { position: absolute; left: 0; top: 0; bottom: 0; border-radius: inherit; background: linear-gradient(90deg, var(--c1), var(--c2)); }
+.sc .th { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--ds-color-text-primary); box-shadow: 0 2px 6px rgb(0 0 0 / .5); }
+.sc.hover .tr { height: 6px; }
+.sc.drag .tr { height: 8px; }
+.sc.drag .th { width: 20px; height: 20px; margin: -10px 0 0 -10px; box-shadow: 0 0 0 6px color-mix(in oklch, var(--c1) 30%, transparent); }
+.sc .bub { position: absolute; bottom: 20px; transform: translateX(-50%); padding: 3px 7px; border-radius: var(--ds-radius-detail); background: var(--ds-color-text-primary); color: var(--ds-color-surface-base); font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); }
+.toggles { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--ds-space-8); }
+.toggles figure { margin: 0; display: grid; justify-items: center; gap: var(--ds-space-6); }
+.tg { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: var(--ds-color-text-secondary); background: var(--ds-color-bg-neutral-subtle); position: relative; }
+.tg.on { color: var(--ds-color-text-accent); background: var(--ds-color-bg-accent-subtle); }
+.tg.on.fill svg { fill: currentColor; }
+.tg .one { position: absolute; top: 4px; right: 3px; min-width: 16px; height: 16px; border-radius: 8px; display: grid; place-items: center; background: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent); font: 700 var(--ds-font-size-12)/1 var(--ds-font-family-text); }
+.tg svg { width: 20px; height: 20px; }
+.burst { position: absolute; inset: -6px; border-radius: 50%; border: 2px dashed color-mix(in oklch, var(--ds-color-text-accent) 60%, transparent); }
+.q { display: grid; gap: 4px; }
+.qi { display: flex; align-items: center; gap: var(--ds-space-12); padding: 6px; border-radius: var(--ds-radius-control-sm); transition: background-color var(--fb); }
+.qi:hover, .qi.is-hover { background: var(--ds-color-bg-neutral-subtle); }
+.qi.now { background: var(--ds-color-bg-accent-subtle); }
+.qi canvas { width: 40px; height: 40px; border-radius: var(--ds-radius-detail); flex: none; }
+.qi .t { flex: 1; min-width: 0; }
+.qi b { display: block; font: 500 var(--ds-font-size-16)/1.25 var(--ds-font-family-text); }
+.qi.now b { color: var(--ds-color-text-accent); }
+.qi span { font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+.qi .d { font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+.err { display: flex; align-items: center; gap: var(--ds-space-12); padding: var(--ds-space-12) var(--ds-space-16); border-radius: var(--ds-radius-container); background: var(--ds-color-bg-danger-subtle); border: 1px solid var(--ds-color-border-danger); }
+.err .t { flex: 1; }
+.err b { display: block; font: 700 var(--ds-font-size-16)/1.3 var(--ds-font-family-text); color: var(--ds-color-text-danger); }
+.err span { font: var(--ds-text-body-sm); color: var(--ds-color-text-primary); }
+.btn { height: 36px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-full); background: var(--ds-color-text-primary); color: var(--ds-color-surface-base); font: 700 var(--ds-font-size-12)/1 var(--ds-font-family-text); letter-spacing: 0.04em; text-transform: uppercase; transition: transform var(--fb); }
+.btn:active { transform: scale(var(--ds-motion-scale-press)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .vinyl, .eq i, .spin { animation: none !important; }
+  *, *::before, *::after { transition-duration: 0ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+<header class="top">
+  <div class="brand"><svg viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14" fill="var(--ds-color-bg-brand)"/><path d="M15 1v28M1 15h28M5 5l20 20M25 5 5 25" stroke="var(--ds-color-surface-sunken)" stroke-width="1.6"/><circle cx="15" cy="15" r="4" fill="var(--ds-color-surface-sunken)"/></svg><b>Pomelo Tapes</b></div>
+  <span class="kicker">Embeddable player · indie label kit</span>
+  <span class="num" aria-hidden="true">08<span>.</span></span>
+</header>
+
+<main class="stage">
+  <div>
+    <div class="cap"><span><b>Hero</b> · playing · 1:42 of 3:53 · colours sampled from the cover</span><span>hover the waveform to scrub</span></div>
+    <section class="card playing" id="card" aria-label="Now playing">
+      <div class="row1">
+        <div class="art"><div class="vinyl" aria-hidden="true"></div><canvas id="cover" width="680" height="680" role="img" aria-label="Cover art for Heat Lamp Lullabies"></canvas></div>
+        <div class="meta">
+          <div class="cat"><span>PMLO-014</span><span>Side A</span><span>Track 3 of 9</span></div>
+          <h1>Sodium Summer</h1>
+          <div class="artist">Juniper Static <span class="vf" aria-label="Label artist"><svg class="i" viewBox="0 0 18 18" style="width:12px;height:12px;stroke-width:2.5"><path d="m5 9.5 2.5 2.5L13 6.5"/></svg></span></div>
+          <div class="album">Heat Lamp Lullabies · 2026 · on cassette</div>
+          <div class="chips">
+            <button class="chip like" aria-pressed="true" id="like"><svg class="i" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></svg>Saved</button>
+            <button class="chip"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 20h14"/></svg>Buy $1</button>
+            <div class="vol chip" style="padding-right:6px"><svg class="i" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" style="fill:currentColor"/><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg><input class="range" type="range" min="0" max="100" value="64" aria-label="Volume"></div>
+          </div>
+          <div class="controls">
+            <button class="ctl" aria-label="Shuffle" aria-pressed="true"><svg class="i" viewBox="0 0 24 24"><path d="M3 7h3.5c4 0 6 10 10 10H21M18 14l3 3-3 3M3 17h3.5c1.6 0 2.8-1.6 3.8-3.5M13.7 9.5C14.7 8 15.6 7 16.5 7H21M18 4l3 3-3 3"/></svg></button>
+            <button class="ctl" aria-label="Previous track"><svg class="i" viewBox="0 0 24 24" style="fill:currentColor"><path d="M18 5.5v13L8.5 12zM6 5v14" stroke-width="2.4"/></svg></button>
+            <button class="play" id="play" aria-label="Pause"><svg class="i" viewBox="0 0 30 30"><rect x="7.5" y="6" width="5" height="18" rx="1.6"/><rect x="17.5" y="6" width="5" height="18" rx="1.6"/></svg></button>
+            <button class="ctl" aria-label="Next track"><svg class="i" viewBox="0 0 24 24" style="fill:currentColor"><path d="M6 5.5v13l9.5-6.5zM18 5v14" stroke-width="2.4"/></svg></button>
+            <button class="ctl" aria-label="Repeat" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><path d="M4 11V9a3 3 0 0 1 3-3h12M16 3l3 3-3 3M20 13v2a3 3 0 0 1-3 3H5M8 21l-3-3 3-3"/></svg></button>
+
+          </div>
+        </div>
+      </div>
+      <div class="wave-wrap">
+        <div class="marks" aria-hidden="true"><span class="mk" style="left:6%">intro</span><span class="mk" style="left:27%">verse</span><span class="mk hot" style="left:43.7%">1:42 the drop</span><span class="mk" style="left:74%">bridge</span><span class="mk" style="left:93%">outro</span></div>
+        <div class="wave" id="wave" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="233" aria-valuenow="102" aria-valuetext="1:42 of 3:53"><span class="tip" id="tip">2:31</span><span class="head" id="head"></span></div>
+        <div class="times"><b id="cur">1:42</b><span>−2:11</span></div>
+      </div>
+    </section>
+
+    <div class="minis">
+      <div>
+        <div class="cap" style="margin-bottom:6px"><span><b>Mini</b> · playing, docked to the page bottom</span><span>72px · same art, same controls</span></div>
+        <div class="mini"><span class="prog"><span style="width:44%"></span></span><canvas class="thumb" id="t0" width="96" height="96" aria-hidden="true"></canvas><div class="tt"><b><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Sodium Summer</b><span>Juniper Static · Heat Lamp Lullabies</span></div><span class="when">1:42 / 3:53</span><button class="ctl" aria-label="Previous track"><svg class="i" viewBox="0 0 24 24" style="fill:currentColor"><path d="M18 5.5v13L8.5 12zM6 5v14" stroke-width="2.4"/></svg></button><button class="pp" aria-label="Pause"><svg class="i" viewBox="0 0 30 30"><rect x="7.5" y="6" width="5" height="18" rx="1.6"/><rect x="17.5" y="6" width="5" height="18" rx="1.6"/></svg></button><button class="ctl" aria-label="Next track"><svg class="i" viewBox="0 0 24 24" style="fill:currentColor"><path d="M6 5.5v13l9.5-6.5zM18 5v14" stroke-width="2.4"/></svg></button></div>
+      </div>
+      <div class="mini off"><span class="prog"><span style="width:12%;opacity:.5"></span></span><canvas class="thumb" id="t1" width="96" height="96" aria-hidden="true" style="filter:grayscale(.6)"></canvas><div class="tt"><b>Glass Orchard</b><span>Moss Radio · buffering on a slow connection</span></div><span class="badge warn" role="status"><span class="spin" style="width:12px;height:12px;border-width:2px"></span>Buffering</span><button class="pp" aria-label="Loading" disabled style="background:var(--ds-color-bg-neutral-subtle);color:var(--ds-color-text-primary)"><span class="spin"></span></button></div>
+    </div>
+  </div>
+
+  <aside class="col-r" aria-label="States">
+    <div>
+      <div class="cap"><span><b>Play</b> · states</span><span>76 in hero, 52 here</span></div>
+      <div class="panel plays">
+        <figure><span class="pb"><svg class="i" viewBox="0 0 30 30"><path d="M9 5.5v19L24.5 15z"/></svg></span><figcaption>rest</figcaption></figure>
+        <figure><span class="pb is-hover"><svg class="i" viewBox="0 0 30 30"><path d="M9 5.5v19L24.5 15z"/></svg></span><figcaption>hover</figcaption></figure>
+        <figure><span class="pb is-active"><svg class="i" viewBox="0 0 30 30"><path d="M9 5.5v19L24.5 15z"/></svg></span><figcaption>press</figcaption></figure>
+        <figure><span class="pb is-focus"><svg class="i" viewBox="0 0 30 30"><rect x="7.5" y="6" width="5" height="18" rx="1.6"/><rect x="17.5" y="6" width="5" height="18" rx="1.6"/></svg></span><figcaption>focus</figcaption></figure>
+        <figure><span class="pb"><span class="spin"></span></span><figcaption>loading</figcaption></figure>
+        <figure><span class="pb is-disabled"><svg class="i" viewBox="0 0 30 30"><path d="M9 5.5v19L24.5 15z"/></svg></span><figcaption>off</figcaption></figure>
+      </div>
+    </div>
+    <div>
+      <div class="cap"><span><b>Scrubber</b> · compact</span><span>played · buffered · rest</span></div>
+      <div class="panel scrubs">
+        <span class="lbl">rest</span><div class="sc"><div class="tr"><span class="buf" style="width:70%"></span><span class="pl" style="width:44%"></span></div></div>
+        <span class="lbl">hover</span><div class="sc hover"><div class="tr"><span class="buf" style="width:70%"></span><span class="pl" style="width:44%"></span></div><span class="th" style="left:44%"></span></div>
+        <span class="lbl">drag</span><div class="sc drag"><div class="tr"><span class="buf" style="width:70%"></span><span class="pl" style="width:64%"></span></div><span class="th" style="left:64%"></span><span class="bub" style="left:64%">2:31</span></div>
+        <span class="lbl">buffering</span><div class="sc"><div class="tr"><span class="buf" style="width:22%"></span><span class="pl" style="width:12%"></span></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="cap"><span><b>Toggles</b> · off / on</span><span>accent only when on</span></div>
+      <div class="panel toggles">
+        <figure><span class="tg"><svg class="i" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></svg></span><figcaption class="lbl">save</figcaption></figure>
+        <figure><span class="tg on fill"><span class="burst"></span><svg class="i" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></svg></span><figcaption class="lbl">saved</figcaption></figure>
+        <figure><span class="tg"><svg class="i" viewBox="0 0 24 24"><path d="M3 7h3.5c4 0 6 10 10 10H21M18 14l3 3-3 3M3 17h3.5c1.6 0 2.8-1.6 3.8-3.5M13.7 9.5C14.7 8 15.6 7 16.5 7H21M18 4l3 3-3 3"/></svg></span><figcaption class="lbl">shuffle</figcaption></figure>
+        <figure><span class="tg on"><svg class="i" viewBox="0 0 24 24"><path d="M3 7h3.5c4 0 6 10 10 10H21M18 14l3 3-3 3M3 17h3.5c1.6 0 2.8-1.6 3.8-3.5M13.7 9.5C14.7 8 15.6 7 16.5 7H21M18 4l3 3-3 3"/></svg></span><figcaption class="lbl">on</figcaption></figure>
+        <figure><span class="tg on"><svg class="i" viewBox="0 0 24 24"><path d="M4 11V9a3 3 0 0 1 3-3h12M16 3l3 3-3 3M20 13v2a3 3 0 0 1-3 3H5M8 21l-3-3 3-3"/></svg></span><figcaption class="lbl">repeat</figcaption></figure>
+        <figure><span class="tg on"><span class="one">1</span><svg class="i" viewBox="0 0 24 24"><path d="M4 11V9a3 3 0 0 1 3-3h12M16 3l3 3-3 3M20 13v2a3 3 0 0 1-3 3H5M8 21l-3-3 3-3"/></svg></span><figcaption class="lbl">one</figcaption></figure>
+      </div>
+    </div>
+    <div>
+      <div class="cap"><span><b>Up next</b> · queue rows</span><span>now · hover · rest</span></div>
+      <div class="panel q">
+        <div class="qi now"><canvas id="q0" width="80" height="80" aria-hidden="true"></canvas><div class="t"><b><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Sodium Summer</b><span>Juniper Static</span></div><span class="d">3:53</span></div>
+        <div class="qi is-hover"><canvas id="q1" width="80" height="80" aria-hidden="true"></canvas><div class="t"><b>Neon Tidepool</b><span>Juniper Static</span></div><span class="d">4:20</span></div>
+        <div class="qi"><canvas id="q2" width="80" height="80" aria-hidden="true"></canvas><div class="t"><b>Afterglow, Slowly</b><span>Juniper Static · instrumental</span></div><span class="d">5:02</span></div>
+      </div>
+    </div>
+    <div class="err" role="alert"><svg class="i" viewBox="0 0 24 24" style="color:var(--ds-color-text-danger)"><path d="M3 3l18 18M9.5 5.6A4 4 0 0 1 16 9v1.5M16 15.5A4 4 0 0 1 8 15V9"/></svg><div class="t"><b>This track didn't load</b><span>Your place is saved at 1:42.</span></div><button class="btn">Retry</button></div>
+  </aside>
+</main>
+
+<script>
+// ---------- generative cover ----------
+function rng(seed) { return () => (seed = (seed * 16807) % 2147483647) / 2147483647; }
+function cover(cv, hues, seed, text) {
+  const g = cv.getContext("2d"), W = cv.width, H = cv.height, r = rng(seed);
+  const [a, b, c, d] = hues;
+  g.fillStyle = d; g.fillRect(0, 0, W, H);
+  const blob = (x, y, rad, col) => { const gr = g.createRadialGradient(x * W, y * H, 0, x * W, y * H, rad * W); gr.addColorStop(0, col); gr.addColorStop(1, "rgba(0,0,0,0)"); g.fillStyle = gr; g.fillRect(0, 0, W, H); };
+  blob(0.25, 0.3, 0.75, a); blob(0.8, 0.75, 0.6, b); blob(0.85, 0.12, 0.45, c); blob(0.1, 0.95, 0.4, b);
+  // the heat lamp: a hard-edged disc with concentric grooves
+  const cx = W * 0.6, cy = H * 0.44, R = W * 0.25;
+  const sg = g.createRadialGradient(cx - R * 0.15, cy - R * 0.2, 0, cx, cy, R); sg.addColorStop(0, "#fff6c8"); sg.addColorStop(0.35, "#ffc35a"); sg.addColorStop(0.75, b); sg.addColorStop(1, a);
+  g.save(); g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.fillStyle = sg; g.fill(); g.clip();
+  g.restore();
+  // filament: an Archimedean spiral, the "heat lamp" coil
+  g.save(); g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.clip();
+  g.strokeStyle = d; g.lineWidth = W / 150; g.lineCap = "round"; g.beginPath();
+  for (let t = 0; t < Math.PI * 2 * 6.2; t += 0.05) { const rr = (t / (Math.PI * 2 * 6.2)) * R * 0.98; const x = cx + Math.cos(t) * rr, y = cy + Math.sin(t) * rr; t === 0 ? g.moveTo(x, y) : g.lineTo(x, y); }
+  g.globalAlpha = 0.55; g.stroke(); g.globalAlpha = 1; g.restore();
+  // glow halo
+  const hg = g.createRadialGradient(cx, cy, R * 0.95, cx, cy, R * 1.6); hg.addColorStop(0, "rgba(255,200,120,.35)"); hg.addColorStop(1, "rgba(255,120,80,0)");
+  g.fillStyle = hg; g.beginPath(); g.arc(cx, cy, R * 1.6, 0, Math.PI * 2); g.arc(cx, cy, R, 0, Math.PI * 2, true); g.fill();
+  // halftone field lower left
+  for (let y = H * 0.62; y < H; y += W / 42) for (let x = 0; x < W * 0.55; x += W / 42) {
+    const k = Math.max(0, 1 - Math.hypot(x / W - 0.05, y / H - 0.98) * 1.9); if (k <= 0) continue;
+    g.fillStyle = "rgba(255,240,220," + (0.75 * k) + ")"; g.beginPath(); g.arc(x, y, (W / 110) * k + 0.4, 0, Math.PI * 2); g.fill();
+  }
+  // grain
+  const im = g.getImageData(0, 0, W, H), px = im.data;
+  for (let i = 0; i < px.length; i += 4) { const n = (r() - 0.5) * 34; px[i] += n; px[i + 1] += n; px[i + 2] += n; }
+  g.putImageData(im, 0, 0);
+  if (text) {
+    g.fillStyle = "rgba(255,255,255,.92)"; g.font = `600 ${W / 34}px "DM Sans", sans-serif`; g.textBaseline = "top";
+    g.fillText("PMLO—014", W * 0.06, H * 0.06);
+    g.textAlign = "right"; g.fillText("SIDE A / B", W * 0.94, H * 0.06);
+    g.textAlign = "left"; g.font = `850 ${W / 9.5}px "Unbounded", sans-serif`; g.textBaseline = "alphabetic";
+    g.fillText("HEAT", W * 0.06, H * 0.84); g.fillText("LAMP", W * 0.06, H * 0.95);
+    g.font = `600 ${W / 34}px "DM Sans", sans-serif`; g.textAlign = "right"; g.fillText("lullabies", W * 0.94, H * 0.94);
+  }
+}
+// ---------- dominant colours sampled from the art ----------
+function sample(cv) {
+  const d = cv.getContext("2d").getImageData(0, 0, cv.width, cv.height).data, bins = new Map();
+  for (let i = 0; i < d.length; i += 4 * 7) {
+    const R = d[i], G = d[i + 1], B = d[i + 2], mx = Math.max(R, G, B), mn = Math.min(R, G, B);
+    if (mx < 60 || (mx - mn) / mx < 0.45) continue; // vivid only
+    let h = 0; if (mx === R) h = ((G - B) / (mx - mn)) % 6; else if (mx === G) h = (B - R) / (mx - mn) + 2; else h = (R - G) / (mx - mn) + 4;
+    const key = Math.round(((h * 60 + 360) % 360) / 24);
+    const v = bins.get(key) || { n: 0, r: 0, g: 0, b: 0 }; v.n++; v.r += R; v.g += G; v.b += B; bins.set(key, v);
+  }
+  const top = [...bins.entries()].sort((x, y) => y[1].n - x[1].n), pick = [];
+  for (const [k, v] of top) { if (pick.every(p => Math.min(Math.abs(p.k - k), 15 - Math.abs(p.k - k)) >= 2)) pick.push({ k, c: `rgb(${v.r / v.n | 0} ${v.g / v.n | 0} ${v.b / v.n | 0})` }); if (pick.length === 3) break; }
+  return pick.map(p => p.c);
+}
+const HUES = ["#ff2e88", "#ff8a1f", "#8d5bff", "#2a0b3d"];
+function paint() {
+  const cv = document.getElementById("cover");
+  cover(cv, HUES, 7, true);
+  const cols = sample(cv);
+  ["--c1", "--c2", "--c3"].forEach((v, i) => cols[i] && document.documentElement.style.setProperty(v, cols[i]));
+  cover(document.getElementById("t0"), HUES, 7, false);
+  cover(document.getElementById("t1"), ["#5fd3a8", "#2f7dff", "#b8ff6a", "#0b1d2a"], 11, false);
+  cover(document.getElementById("q0"), HUES, 7, false);
+  cover(document.getElementById("q1"), ["#22e3ff", "#ff4fd8", "#3f2dff", "#0b0d33"], 3, false);
+  cover(document.getElementById("q2"), ["#ffb02e", "#ff5b3a", "#ffe08a", "#3a1206"], 5, false);
+  
+}
+document.fonts.ready.then(paint);
+// ---------- waveform ----------
+const wave = document.getElementById("wave"), head = document.getElementById("head"), tip = document.getElementById("tip"), cur = document.getElementById("cur");
+const N = 128, DUR = 233; let pos = 102;
+const r2 = rng(42), bars = [];
+for (let i = 0; i < N; i++) {
+  const t = i / N;
+  const env = t < 0.08 ? 0.25 + t * 4 : t < 0.42 ? 0.5 + 0.15 * Math.sin(t * 40) : t < 0.7 ? 0.92 : t < 0.8 ? 0.45 : t < 0.94 ? 0.8 : 0.8 - (t - 0.94) * 12;
+  const h = Math.max(0.06, Math.min(1, env * (0.55 + r2() * 0.5)));
+  const b = document.createElement("i"); b.style.height = (h * 100) + "%"; wave.insertBefore(b, tip); bars.push(b);
+}
+const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+function setPos(s) {
+  pos = Math.max(0, Math.min(DUR, s)); const f = pos / DUR;
+  bars.forEach((b, i) => b.classList.toggle("on", (i + 0.5) / N <= f));
+  head.style.left = (f * 100) + "%"; cur.textContent = fmt(pos);
+  wave.setAttribute("aria-valuenow", Math.round(pos)); wave.setAttribute("aria-valuetext", `${fmt(pos)} of ${fmt(DUR)}`);
+}
+setPos(pos);
+wave.addEventListener("mousemove", e => { const r = wave.getBoundingClientRect(), f = (e.clientX - r.left) / r.width; tip.style.left = (f * 100) + "%"; tip.textContent = fmt(f * DUR); });
+wave.addEventListener("click", e => { const r = wave.getBoundingClientRect(); setPos((e.clientX - r.left) / r.width * DUR); });
+wave.addEventListener("keydown", e => { const step = { ArrowRight: 5, ArrowUp: 5, ArrowLeft: -5, ArrowDown: -5, PageUp: 30, PageDown: -30 }[e.key]; if (step) { e.preventDefault(); setPos(pos + step); } if (e.key === "Home") setPos(0); if (e.key === "End") setPos(DUR); });
+// ---------- play / pause ----------
+const card = document.getElementById("card"), play = document.getElementById("play");
+const PAUSE = '<svg class="i" viewBox="0 0 30 30"><rect x="7.5" y="6" width="5" height="18" rx="1.6"/><rect x="17.5" y="6" width="5" height="18" rx="1.6"/></svg>';
+const PLAY = '<svg class="i" viewBox="0 0 30 30"><path d="M9 5.5v19L24.5 15z"/></svg>';
+let timer = null;
+function tick() { setPos(pos + 1); }
+play.addEventListener("click", () => {
+  const on = card.classList.toggle("playing");
+  play.innerHTML = on ? PAUSE : PLAY; play.setAttribute("aria-label", on ? "Pause" : "Play");
+  clearInterval(timer); if (on) timer = setInterval(tick, 1000);
+});
+document.addEventListener("keydown", e => { if (e.code === "Space" && e.target === document.body) { e.preventDefault(); play.click(); } });
+document.querySelectorAll(".ctl[aria-pressed], .like").forEach(b => b.addEventListener("click", () => {
+  const on = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", on);
+  if (b.classList.contains("like")) b.lastChild.textContent = on ? "Saved" : "Save";
+}));
+const vol = document.querySelector(".range"); vol.addEventListener("input", () => vol.style.setProperty("--v", vol.value + "%"));
+</script>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wayfern date picker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..800,100,1&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Heat tiers (notes.md): one warm sequence from the system's own ramps, cream to coral.
+     lower = warning.3, typical = warning.6, higher = accent.7. Text on every tier is text.primary. */
+  :root {
+    --heat-1: var(--ds-color-warning-light-3);
+    --heat-2: var(--ds-color-warning-light-6);
+    --heat-3: var(--ds-color-accent-light-7);
+    --band: var(--ds-color-bg-action-primary);
+    --ink: var(--ds-color-text-primary);
+    --paper: var(--ds-color-warning-light-2);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); }
+  body { color: var(--ink); font: var(--ds-text-body-md); -webkit-font-smoothing: antialiased; font-synthesis: none; }
+  .sheet { position: relative; width: 1440px; height: 900px; overflow: hidden; background: var(--paper); isolation: isolate; }
+  .art { position: absolute; inset: 0; z-index: -1; }
+
+  .top { position: absolute; left: 56px; right: 56px; top: 28px; display: flex; align-items: center; gap: var(--ds-space-12); }
+  .logo { display: flex; align-items: center; gap: var(--ds-space-8); }
+  .logo b { font: 700 var(--ds-font-size-25)/1 var(--ds-font-family-display); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 48; letter-spacing: -0.01em; }
+  .tag { margin-left: auto; display: flex; gap: var(--ds-space-8); }
+  .tag span { font: 700 var(--ds-font-size-13)/1 var(--ds-font-family-text); padding: var(--ds-space-8) var(--ds-space-12); border-radius: var(--ds-radius-full); background: var(--ds-color-surface-overlay); color: var(--ds-color-text-secondary); box-shadow: var(--ds-elevation-raised); white-space: nowrap; }
+
+  /* ---------- picker card ---------- */
+  .card { position: absolute; left: 56px; top: 92px; width: 808px; background: var(--ds-color-surface-overlay); border-radius: var(--ds-radius-overlay);
+    box-shadow: var(--ds-elevation-overlay), 0 40px 80px -40px rgb(160 70 30 / .35); padding: var(--ds-space-32); }
+  .head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--ds-space-24); }
+  .head h1 { font: 560 var(--ds-font-size-31)/1.1 var(--ds-font-family-display); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 72; letter-spacing: -0.01em; }
+  .head p { margin-top: var(--ds-space-6); color: var(--ds-color-text-secondary); }
+  .fields { display: flex; align-items: center; gap: var(--ds-space-8); flex: none; }
+  .field { min-width: 132px; padding: var(--ds-space-8) var(--ds-space-16); border-radius: var(--ds-radius-control); border: 2px solid var(--ds-color-border-subtle); background: var(--ds-color-surface-overlay); text-align: left; cursor: pointer; font: inherit; color: inherit; }
+  .field small { display: block; font: 800 var(--ds-font-size-13)/1.2 var(--ds-font-family-text); letter-spacing: .04em; text-transform: uppercase; color: var(--ds-color-text-secondary); }
+  .field strong { display: block; font: 700 var(--ds-font-size-16)/1.4 var(--ds-font-family-text); white-space: nowrap; }
+  .field.active { border-color: var(--ink); }
+  .field:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+  .arrow { color: var(--ds-color-text-secondary); }
+
+  .chips { display: flex; gap: var(--ds-space-8); margin-top: var(--ds-space-20); flex-wrap: wrap; }
+  .chip { appearance: none; border: 2px solid var(--ds-color-border-subtle); background: var(--ds-color-surface-overlay); color: var(--ink); cursor: pointer;
+    font: 700 var(--ds-font-size-13)/1 var(--ds-font-family-text); height: 36px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-full); display: inline-flex; align-items: center; gap: var(--ds-space-6);
+    transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-hover), border-color var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
+  .chip:hover, .chip.is-hover { background: var(--ds-color-bg-accent-subtle); border-color: var(--ds-color-accent-light-7); }
+  .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--ds-color-surface-overlay); }
+  .chip:focus-visible, .chip.is-focus { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+  .chip.ghost { border-color: transparent; color: var(--ds-color-text-secondary); margin-left: auto; }
+
+  .months { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-40); margin-top: var(--ds-space-24); position: relative; }
+  .mhead { display: flex; align-items: center; justify-content: center; height: 40px; position: relative; }
+  .mhead h2 { font: 560 var(--ds-font-size-20)/1 var(--ds-font-family-display); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 30; }
+  .nav { position: absolute; top: 0; width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--ds-color-border-subtle); background: var(--ds-color-surface-overlay); display: grid; place-items: center; cursor: pointer; color: var(--ink); }
+  .nav:hover { background: var(--ds-color-bg-accent-subtle); }
+  .nav:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+  .nav.prev { left: 0; } .nav.next { right: 0; }
+  .nav[aria-disabled="true"] { color: var(--ds-color-text-disabled); cursor: not-allowed; background: transparent; }
+  .dow, .grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+  .dow { margin-top: var(--ds-space-12); }
+  .dow span { text-align: center; font: 800 var(--ds-font-size-13)/1.85 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+  .grid { row-gap: var(--ds-space-4); margin-top: var(--ds-space-4); }
+
+  .day { position: relative; height: 56px; display: grid; place-items: center; }
+  .day .band { position: absolute; inset: 4px 0; background: var(--band); display: none; }
+  .day.in .band { display: block; }
+  .day.r-start .band { left: 50%; } .day.r-end .band { right: 50%; }
+  .day.r-start.r-end .band { display: none; }
+  .day.c-mon .band { border-radius: var(--ds-radius-full) 0 0 var(--ds-radius-full); left: 2px; }
+  .day.c-sun .band { border-radius: 0 var(--ds-radius-full) var(--ds-radius-full) 0; right: 2px; }
+  .day.preview .band { background: var(--ds-color-accent-light-3); border-top: 2px dashed var(--ds-color-accent-light-8); border-bottom: 2px dashed var(--ds-color-accent-light-8); }
+  .day.in.preview .cell { color: var(--ink); } .day.in.preview .cell .p { color: var(--ds-color-text-secondary); opacity: 1; }
+  .cell { position: relative; z-index: 1; width: 44px; height: 48px; border-radius: var(--ds-radius-control); border: 0; background: var(--heat-2); color: var(--ink); cursor: pointer;
+    display: grid; align-content: center; justify-items: center; gap: 1px; font: inherit;
+    transition: transform var(--ds-motion-duration-short) var(--ds-motion-easing-enter), box-shadow var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
+  .cell .n { font: 800 var(--ds-font-size-16)/1 var(--ds-font-family-text); font-variant-numeric: tabular-nums; }
+  .cell .p { font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); font-variant-numeric: tabular-nums; color: var(--ds-color-text-secondary); }
+  .cell.t1 { background: var(--heat-1); } .cell.t3 { background: var(--heat-3); }
+  .cell.t2 .p, .cell.t3 .p { color: var(--ink); }
+  .cell:hover, .cell.is-hover { box-shadow: inset 0 0 0 2px var(--ink); }
+  .cell:focus-visible, .cell.is-focus { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+  .cell.today::after { content: ""; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background: var(--ink); }
+  .cell.today .p { display: none; }
+  .cell .fern { position: absolute; top: 3px; right: 3px; color: var(--ds-color-success-light-11); }
+  .day.in .cell { background: transparent; color: var(--ds-color-text-on-action); }
+  .day.in .cell .p { color: var(--ds-color-text-on-action); }
+  .day.in .cell .fern { color: var(--ds-color-text-on-action); }
+  .day.in .cell:hover { box-shadow: inset 0 0 0 2px var(--ds-color-text-on-action); }
+  .cell.sel, .day.in .cell.sel { background: var(--ds-color-surface-overlay); color: var(--ink); border-radius: var(--ds-radius-full); width: 48px; box-shadow: inset 0 0 0 3px var(--ink), 0 6px 14px -6px rgb(120 40 10 / .5); }
+  .cell.sel .p, .day.in .cell.sel .p { color: var(--ink); }
+  .cell.sel .fern { display: none; }
+  .cell.pop { animation: pop var(--ds-motion-spring-momentum-duration) var(--ds-motion-spring-momentum-easing); }
+  @keyframes pop { from { transform: scale(.9); } to { transform: scale(1); } }
+  .cell[aria-disabled="true"] { cursor: not-allowed; background: transparent; color: var(--ds-color-text-disabled); }
+  .cell[aria-disabled="true"] .p { color: var(--ds-color-text-disabled); }
+  .cell.past .n { text-decoration: line-through; text-decoration-thickness: 1.5px; }
+  .cell.full { background: repeating-linear-gradient(-45deg, var(--ds-color-neutral-light-3) 0 4px, transparent 4px 8px); color: var(--ds-color-text-secondary); }
+  .cell.full .p { color: var(--ds-color-text-secondary); }
+
+  .foot { display: flex; align-items: center; gap: var(--ds-space-16); margin-top: var(--ds-space-20); padding-top: var(--ds-space-20); border-top: 2px dashed var(--ds-color-border-subtle); }
+  .legend { display: flex; gap: var(--ds-space-12); font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); flex-wrap: wrap; max-width: 300px; }
+  .legend span { display: inline-flex; align-items: center; gap: var(--ds-space-6); white-space: nowrap; }
+  .legend i { width: 16px; height: 16px; border-radius: 6px; display: inline-block; box-shadow: inset 0 0 0 1px var(--ds-color-border-subtle); }
+  .sum { margin-left: auto; text-align: right; }
+  .sum b { display: block; font: 650 var(--ds-font-size-25)/1.1 var(--ds-font-family-display); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 40; font-variant-numeric: tabular-nums; }
+  .sum span { font: 600 var(--ds-font-size-13)/1.4 var(--ds-font-family-text); color: var(--ds-color-text-secondary); white-space: nowrap; }
+  .cta { appearance: none; border: 0; cursor: pointer; height: var(--ds-size-control-lg); padding: 0 var(--ds-space-24); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-action-primary);
+    color: var(--ds-color-text-on-action); font: 800 var(--ds-font-size-16)/1 var(--ds-font-family-text); white-space: nowrap; box-shadow: 0 8px 20px -8px rgb(160 50 10 / .6);
+    transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-hover), transform var(--ds-motion-duration-micro) var(--ds-motion-easing-enter); }
+  .cta:hover { background: var(--ds-color-bg-action-primary-hover); }
+  .cta:active { transform: scale(.97); background: var(--ds-color-bg-action-primary-pressed); }
+  .cta:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+  .live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  /* ---------- states column ---------- */
+  .states { position: absolute; left: 904px; top: 92px; width: 480px; display: grid; gap: var(--ds-space-16); }
+  .panel { background: var(--ds-color-surface-overlay); border-radius: var(--ds-radius-container); padding: var(--ds-space-20) var(--ds-space-24); box-shadow: var(--ds-elevation-raised); }
+  .panel h3 { font: 560 var(--ds-font-size-20)/1 var(--ds-font-family-display); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 30; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--ds-space-16); }
+  .panel h3 span { font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+  .cells { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--ds-space-12) var(--ds-space-8); }
+  .cells figure { display: grid; justify-items: center; gap: var(--ds-space-6); }
+  .cells figcaption { font: 600 var(--ds-font-size-13)/1.2 var(--ds-font-family-text); color: var(--ds-color-text-secondary); text-align: center; white-space: nowrap; }
+  .strip { display: grid; grid-template-columns: repeat(7, 1fr); }
+  .msg { display: flex; gap: var(--ds-space-12); align-items: flex-start; padding: var(--ds-space-12) var(--ds-space-16); border-radius: var(--ds-radius-control); font: 600 var(--ds-font-size-13)/1.45 var(--ds-font-family-text); }
+  .msg + .msg { margin-top: var(--ds-space-8); }
+  .msg svg { flex: none; margin-top: 1px; }
+  .msg.err { background: var(--ds-color-danger-light-2); color: var(--ds-color-text-danger); }
+  .msg.err b { color: var(--ds-color-danger-light-12); }
+  .msg.info { background: var(--ds-color-neutral-light-2); color: var(--ds-color-text-secondary); }
+  .skel { width: 44px; height: 48px; border-radius: var(--ds-radius-control); background: linear-gradient(90deg, var(--ds-color-neutral-light-3), var(--ds-color-neutral-light-2), var(--ds-color-neutral-light-3)); background-size: 200% 100%; animation: sh 1.4s linear infinite; }
+  @keyframes sh { to { background-position: -200% 0; } }
+  .skels { display: flex; gap: var(--ds-space-4); margin-left: auto; }
+  .hint { position: absolute; left: 56px; bottom: 20px; font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+  .hint kbd { font: 800 var(--ds-font-size-13)/1 var(--ds-font-family-text); padding: 2px 6px; border-radius: 6px; background: var(--ds-color-surface-overlay); box-shadow: var(--ds-elevation-raised); color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cell.pop { animation: none; } .skel { animation: none; }
+    .cell, .chip, .cta { transition: none; }
+  }
+</style>
+</head>
+<body>
+<main class="sheet" aria-label="Wayfern date range picker, component sheet">
+  <svg class="art" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
+    <circle cx="1250" cy="40" r="210" fill="var(--ds-color-accent-light-4)"/>
+    <circle cx="1250" cy="40" r="150" fill="var(--ds-color-accent-light-6)" opacity=".7"/>
+    <path d="M0 760 C 220 690 380 720 560 760 S 920 840 1100 770 S 1340 700 1440 730 L1440 900 L0 900Z" fill="var(--ds-color-warning-light-5)"/>
+    <path d="M0 820 C 180 780 320 800 520 830 S 860 880 1060 840 S 1320 800 1440 820 L1440 900 L0 900Z" fill="var(--ds-color-accent2-light-6)"/>
+    <path d="M0 870 C 300 846 520 860 760 878 S 1200 900 1440 872 L1440 900 L0 900Z" fill="var(--ds-color-accent-light-6)"/>
+    <g fill="none" stroke="var(--ds-color-neutral-light-10)" stroke-width="2" stroke-linecap="round"><path d="M1010 120q8-8 16 0q8-8 16 0"/><path d="M1068 150q6-6 12 0q6-6 12 0"/></g>
+  </svg>
+
+  <header class="top">
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="var(--ds-color-bg-action-primary)"/><path d="M14 22V8M14 11l-4-3M14 14l-5-2.5M14 17l-5-2M14 11l4-3M14 14l5-2.5M14 17l5-2" stroke="#fff" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>
+      <b>Wayfern</b>
+    </div>
+    <div class="tag"><span>03 · Date range picker</span><span>Soft · warm · price heat</span></div>
+  </header>
+
+  <section class="card" aria-labelledby="ttl">
+    <div class="head">
+      <div>
+        <h1 id="ttl">When are you staying?</h1>
+        <p>Pinecone Hollow · a cabin for two on Lake Vessa</p>
+      </div>
+      <div class="fields">
+        <button class="field" id="fIn" type="button"><small>Check-in</small><strong id="vIn">Fri 12 Jun</strong></button>
+        <svg class="arrow" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h12M11 5l4 4-4 4"/></svg>
+        <button class="field active" id="fOut" type="button"><small>Check-out</small><strong id="vOut">Tue 16 Jun</strong></button>
+      </div>
+    </div>
+    <div class="chips" role="group" aria-label="Quick picks">
+      <button class="chip" type="button" data-q="weekend">This weekend</button>
+      <button class="chip" type="button" data-q="week">A week in July</button>
+      <button class="chip" type="button" aria-pressed="false" id="flex">± 2 days flexible</button>
+      <button class="chip ghost" type="button" data-q="clear">Clear dates</button>
+    </div>
+    <div class="months" id="months"></div>
+    <div class="foot">
+      <div class="legend" aria-label="Price key">
+        <span><i style="background:var(--heat-1)"></i>Lower</span>
+        <span><i style="background:var(--heat-2)"></i>Typical</span>
+        <span><i style="background:var(--heat-3)"></i>Higher</span>
+        <span><svg width="12" height="14" viewBox="0 0 12 14" fill="none" stroke="var(--ds-color-success-light-11)" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 13V2M6 5L3 3M6 8L2.5 6M6 5l3-2M6 8l3.5-2"/></svg>Best price</span>
+      </div>
+      <div class="sum"><b id="total">€436</b><span id="avg">4 nights · €109 a night avg</span></div>
+      <button class="cta" type="button" id="cta">Keep these dates</button>
+    </div>
+    <p class="live" aria-live="polite" id="live"></p>
+  </section>
+
+  <aside class="states" aria-label="States and variants">
+    <div class="panel">
+      <h3>Night cell <span>44 × 48 · 13 / 16</span></h3>
+      <div class="cells" aria-hidden="true">
+        <figure><span class="cell t1"><span class="n">8</span><span class="p">€86</span></span><figcaption>lower</figcaption></figure>
+        <figure><span class="cell"><span class="n">9</span><span class="p">€104</span></span><figcaption>typical</figcaption></figure>
+        <figure><span class="cell t3"><span class="n">13</span><span class="p">€138</span></span><figcaption>higher</figcaption></figure>
+        <figure><span class="cell t1"><svg class="fern" width="10" height="12" viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 13V2M6 5L3 3M6 8L2.5 6M6 5l3-2M6 8l3.5-2"/></svg><span class="n">2</span><span class="p">€79</span></span><figcaption>best price</figcaption></figure>
+        <figure><span class="cell today"><span class="n">3</span><span class="p">€99</span></span><figcaption>today</figcaption></figure>
+        <figure><span class="cell full"><span class="n">20</span><span class="p">full</span></span><figcaption>sold out</figcaption></figure>
+        <figure><span class="cell is-hover"><span class="n">10</span><span class="p">€96</span></span><figcaption>hover</figcaption></figure>
+        <figure><span class="cell is-focus"><span class="n">11</span><span class="p">€98</span></span><figcaption>focus</figcaption></figure>
+        <figure><span class="cell sel"><span class="n">12</span><span class="p">€124</span></span><figcaption>check-in</figcaption></figure>
+        <figure><span class="day in" style="width:100%"><span class="band" style="inset:4px -4px"></span><span class="cell"><span class="n">14</span><span class="p">€92</span></span></span><figcaption>in range</figcaption></figure>
+        <figure><span class="cell sel"><span class="n">16</span><span class="p">out</span></span><figcaption>check-out</figcaption></figure>
+        <figure><span class="cell past" aria-disabled="true"><span class="n">1</span><span class="p">—</span></span><figcaption>past</figcaption></figure>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Range <span>picked · hover preview</span></h3>
+      <div class="strip" aria-hidden="true" id="strip"></div>
+    </div>
+    <div class="panel">
+      <h3>Messages <span>error · loading</span></h3>
+      <div class="msg err" role="presentation"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="7.5"/><path d="M9 5.5v4.5M9 12.6v.1"/></svg><span><b>Two nights at least on Saturdays.</b> Pick Sunday 21 or later to check out.</span></div>
+      <div class="msg info" role="presentation"><span>Fetching July prices</span><span class="skels"><span class="skel"></span><span class="skel"></span><span class="skel"></span><span class="skel"></span></span></div>
+    </div>
+  </aside>
+
+  <p class="hint">Live: click two dates, or <kbd>Tab</kbd> into the month and use arrows, <kbd>Enter</kbd> to pick.</p>
+</main>
+
+<script>
+  const TODAY = new Date(2026, 5, 3);               // Wed 3 Jun 2026: the sheet's "today"
+  const MONTHS = [[2026, 5], [2026, 6]];
+  const fmt = d => d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  const key = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const add = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+  // Deterministic prices: weekends and July cost more, with a little wobble.
+  function price(d) {
+    const dow = d.getDay(), wk = dow === 5 || dow === 6 ? 26 : 0, jul = d.getMonth() === 6 ? 18 : 0;
+    const wob = Math.round(Math.sin(d.getDate() * 1.7 + d.getMonth()) * 9);
+    return 88 + wk + jul + wob;
+  }
+  const FULL = new Set(['2026-06-20', '2026-06-21', '2026-07-18']);
+  const days = []; MONTHS.forEach(([y, m]) => { for (let d = 1; d <= new Date(y, m + 1, 0).getDate(); d++) days.push(new Date(y, m, d)); });
+  const open = days.filter(d => d >= TODAY && !FULL.has(key(d))).map(price).sort((a, b) => a - b);
+  const q1 = open[Math.floor(open.length / 3)], q2 = open[Math.floor(open.length * 2 / 3)];
+  const best = new Set(days.filter(d => d >= TODAY && !FULL.has(key(d))).sort((a, b) => price(a) - price(b)).slice(0, 4).map(key));
+  const FERN = '<svg class="fern" width="10" height="12" viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 13V2M6 5L3 3M6 8L2.5 6M6 5l3-2M6 8l3.5-2"/></svg>';
+
+  let start = new Date(2026, 5, 12), end = new Date(2026, 5, 16), hover = null, focusDay = new Date(2026, 5, 12), fromKey = false;
+  const months = document.getElementById('months');
+
+  function render(popKey) {
+    let html = '';
+    MONTHS.forEach(([y, m], mi) => {
+      const first = new Date(y, m, 1), lead = (first.getDay() + 6) % 7, n = new Date(y, m + 1, 0).getDate();
+      const name = first.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+      html += `<div><div class="mhead">${mi === 0 ? '<button class="nav prev" aria-label="Previous month" aria-disabled="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg></button>' : ''}<h2 id="m${mi}">${name}</h2>${mi === 1 ? '<button class="nav next" aria-label="Next month"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></button>' : ''}</div>`;
+      html += `<div class="dow" aria-hidden="true">${['Mo','Tu','We','Th','Fr','Sa','Su'].map(s => `<span>${s}</span>`).join('')}</div>`;
+      html += `<div class="grid" role="grid" aria-labelledby="m${mi}">`;
+      for (let i = 0; i < lead; i++) html += '<div class="day" role="presentation"></div>';
+      for (let d = 1; d <= n; d++) {
+        const dt = new Date(y, m, d), k = key(dt), p = price(dt), past = dt < TODAY, full = FULL.has(k);
+        const isStart = start && k === key(start), isEnd = end && k === key(end);
+        const rEnd = end || (hover && start && hover > start ? hover : null);
+        const inR = start && rEnd && dt >= start && dt <= rEnd;
+        const dow = (dt.getDay() + 6) % 7;
+        let dc = 'day' + (inR ? ' in' : '') + (!end && hover && inR ? ' preview' : '') + (isStart ? ' r-start' : '') + ((isEnd || (!end && hover && k === key(hover) && inR)) ? ' r-end' : '') + (dow === 0 || d === 1 ? ' c-mon' : '') + (dow === 6 || d === n ? ' c-sun' : '');
+        const tier = p <= q1 ? 't1' : p >= q2 ? 't3' : 't2';
+        let cc = 'cell ' + tier + (isStart || isEnd ? ' sel' : '') + (k === key(TODAY) ? ' today' : '') + (past ? ' past' : '') + (full ? ' full' : '') + (popKey === k ? ' pop' : '');
+        const dis = past || full;
+        const label = `${fmt(dt)}, ${full ? 'sold out' : past ? 'unavailable' : '€' + p + ' a night'}${isStart ? ', check-in' : ''}${isEnd ? ', check-out' : ''}`;
+        const ptxt = full ? 'full' : past ? '—' : isEnd ? 'out' : '€' + p;
+        html += `<div class="${dc}" role="gridcell"><span class="band" aria-hidden="true"></span><button class="${cc}" data-k="${k}" tabindex="${k === key(focusDay) ? 0 : -1}" aria-label="${label}" ${dis ? 'aria-disabled="true"' : ''} aria-pressed="${isStart || isEnd}">${best.has(k) && !dis ? FERN : ''}<span class="n" aria-hidden="true">${d}</span><span class="p" aria-hidden="true">${ptxt}</span></button></div>`;
+      }
+      html += '</div></div>';
+    });
+    months.innerHTML = html;
+    summary();
+  }
+  function nightsBetween(a, b) { return Math.round((b - a) / 864e5); }
+  function summary() {
+    document.getElementById('vIn').textContent = start ? fmt(start) : 'Add date';
+    document.getElementById('vOut').textContent = end ? fmt(end) : 'Add date';
+    document.getElementById('fIn').classList.toggle('active', !start);
+    document.getElementById('fOut').classList.toggle('active', !!start && !end);
+    const t = document.getElementById('total'), a = document.getElementById('avg');
+    if (start && end) {
+      let sum = 0; for (let d = start; d < end; d = add(d, 1)) sum += price(d);
+      const n = nightsBetween(start, end);
+      t.textContent = '€' + sum; a.textContent = `${n} night${n > 1 ? 's' : ''} · €${Math.round(sum / n)} a night avg`;
+      document.getElementById('live').textContent = `${fmt(start)} to ${fmt(end)}, ${n} nights, €${sum}`;
+    } else { t.textContent = '—'; a.textContent = start ? 'Now pick a check-out day' : 'Pick a check-in day'; }
+  }
+  function pick(dt) {
+    const k = key(dt);
+    if (dt < TODAY || FULL.has(k)) return;
+    if (!start || end || dt <= start) { start = dt; end = null; }
+    else {
+      for (let d = start; d < dt; d = add(d, 1)) if (FULL.has(key(d))) { start = dt; end = null; focusDay = dt; render(fromKey ? null : k); return; }
+      end = dt;
+    }
+    focusDay = dt; render(fromKey ? null : k);
+    months.querySelector(`[data-k="${k}"]`)?.focus({ preventScroll: true });
+  }
+  months.addEventListener('click', e => { const b = e.target.closest('.cell'); if (!b) return; fromKey = false; const [y, m, d] = b.dataset.k.split('-').map(Number); pick(new Date(y, m - 1, d)); });
+  months.addEventListener('mouseover', e => { const b = e.target.closest('.cell'); if (!b || !start || end) return; const [y, m, d] = b.dataset.k.split('-').map(Number); const h = new Date(y, m - 1, d); if (!hover || key(h) !== key(hover)) { hover = h; render(); } });
+  months.addEventListener('keydown', e => {
+    const b = e.target.closest('.cell'); if (!b) return;
+    const [y, m, d] = b.dataset.k.split('-').map(Number); let cur = new Date(y, m - 1, d), nx = null;
+    const mv = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key];
+    if (mv) nx = add(cur, mv);
+    if (e.key === 'Home') nx = add(cur, -((cur.getDay() + 6) % 7));
+    if (e.key === 'End') nx = add(cur, 6 - (cur.getDay() + 6) % 7);
+    if (nx) { e.preventDefault(); if (nx < days[0] || nx > days[days.length - 1]) return; focusDay = nx; if (start && !end) hover = nx; render(); months.querySelector(`[data-k="${key(nx)}"]`).focus(); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fromKey = true; pick(cur); }
+  });
+  document.querySelectorAll('[data-q]').forEach(c => c.addEventListener('click', () => {
+    const q = c.dataset.q; fromKey = false;
+    if (q === 'weekend') { start = new Date(2026, 5, 5); end = new Date(2026, 5, 7); }
+    if (q === 'week') { start = new Date(2026, 6, 6); end = new Date(2026, 6, 13); }
+    if (q === 'clear') { start = null; end = null; }
+    hover = null; focusDay = start || TODAY; render();
+  }));
+  document.getElementById('flex').addEventListener('click', e => { const b = e.currentTarget; b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true'); });
+  render();
+
+  // the "Range" strip in the states panel: a picked range, then a hover preview, drawn with the same classes
+  const strip = document.getElementById('strip');
+  const sd = [[15, '€90', 'r-start c-mon in', 'sel'], [16, '€88', 'in', ''], [17, '€95', 'in r-end', 'sel'], [18, '€101', 'in preview r-start', 'sel'], [19, '€122', 'in preview', ''], [20, 'full', '', 'full'], [21, 'full', 'c-sun', 'full']];
+  strip.innerHTML = sd.map(([n, p, dc, cc]) => `<div class="day ${dc}"><span class="band"></span><span class="cell ${cc} ${cc ? '' : 't2'}"><span class="n">${n}</span><span class="p">${cc === 'sel' && dc.includes('r-end') ? 'out' : p}</span></span></div>`).join('');
+</script>
+</body>
+</html>

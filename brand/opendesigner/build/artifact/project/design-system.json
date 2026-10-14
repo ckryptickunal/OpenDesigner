@@ -1,0 +1,25 @@
+{
+ "v": 3,
+ "layout": "files",
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-10-14T11:37:49Z"
+ },
+ "title": "OpenDesigner brand",
+ "namespace": "OpendesignerBrand",
+ "libraries": [],
+ "sections": {},
+ "groups": [],
+ "assetGroups": {},
+ "blobs": {},
+ "docs": {
+  "readme": "project/README.md",
+  "sections": []
+ },
+ "lastChange": {
+  "by": "OpenDesigner",
+  "at": "2026-10-14T11:51:29Z",
+  "via": "engine.py export --format artifact",
+  "note": "Rebuilt from the system's tokens"
+ }
+}

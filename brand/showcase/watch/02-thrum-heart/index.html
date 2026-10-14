@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=205, initial-scale=1">
+<title>Thrum: heart-rate zones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root {
+    --display-w: 205px; --display-h: 251px; --display-r: 48px;   /* hardware shape */
+    /* Type roles: watchOS text styles at xLarge (49 mm default), on engine tokens.
+       Footnote 2 13, Body 17, Title 2 30, plus one data display numeral outside the HIG styles on purpose. */
+    --t-footnote: var(--ds-font-size-13); --t-body: var(--ds-font-size-17); --t-title2: var(--ds-font-size-30); --t-display: 104px;
+    /* Five zones derived from the brand token with relative oklch: bright, saturated steps from amber to crimson.
+       The generated dark ramps are too dusty for a zone scale. */
+    --z1: oklch(from var(--ds-color-brand-seed) .87 .16 calc(h + 52));
+    --z2: oklch(from var(--ds-color-brand-seed) .79 .19 calc(h + 30));
+    --z3: oklch(from var(--ds-color-brand-seed) .72 .21 calc(h + 13));
+    --z4: var(--ds-color-brand-seed);
+    --z5: oklch(from var(--ds-color-brand-seed) .62 .24 calc(h - 24));
+  }
+  html, body { margin: 0; background: var(--ds-color-black); }
+  .display {
+    position: relative; width: var(--display-w); height: var(--display-h); overflow: hidden; border-radius: var(--display-r);
+    background: var(--ds-color-surface-base); color: var(--ds-color-text-primary);
+    font-family: var(--ds-font-family-text); font-variant-numeric: tabular-nums;
+  }
+  .status { position: absolute; top: var(--ds-space-12); left: var(--ds-space-24); right: 22px; display: flex; justify-content: space-between; align-items: center; }
+  .zone-name { font: 600 var(--t-body)/1 var(--ds-font-family-text); font-variation-settings: "opsz" 17; color: var(--z4); }
+  .clock { font: 500 var(--t-body)/1 var(--ds-font-family-text); font-variation-settings: "opsz" 17; }
+
+  .bpm { position: absolute; left: 14px; top: 30px; display: flex; align-items: flex-end; gap: var(--ds-space-6); }
+  .bpm .num {
+    /* the data numeral: heavy on purpose, the one number you read mid-interval; pure white on pure black */
+    font-weight: 800; font-size: var(--t-display); line-height: .8; letter-spacing: -0.055em;
+    font-variation-settings: "opsz" 96, "wdth" 78; color: var(--ds-color-white);
+  }
+  .bpm .side { display: flex; flex-direction: column; align-items: flex-start; gap: var(--ds-space-6); padding-bottom: var(--ds-space-6); }
+  .bpm .unit { font: 600 var(--t-body)/1 var(--ds-font-family-text); font-variation-settings: "opsz" 17; color: var(--z4); letter-spacing: .02em; }
+  .heart { width: 22px; height: 20px; display: block; }
+
+  .bar { position: absolute; left: var(--ds-space-20); right: var(--ds-space-20); top: 146px; }
+  .segs { display: grid; grid-template-columns: 1fr 1fr 1fr 1.25fr 1fr; gap: 3px; align-items: end; height: 16px; }
+  .seg { height: 5px; border-radius: var(--ds-radius-detail); }
+  .seg.on { height: 16px; }
+  .marker { position: absolute; top: -9px; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: var(--ds-space-6) solid var(--ds-color-white); transform: translateX(-5px); }
+  .labels { display: grid; grid-template-columns: 1fr 1fr 1fr 1.25fr 1fr; gap: 3px; margin-top: var(--ds-space-6); }
+  .labels span { font: 500 var(--t-footnote)/1 var(--ds-font-family-text); font-variation-settings: "opsz" 13; color: var(--ds-color-text-secondary); text-align: center; }
+  .labels span.on { color: var(--ds-color-white); font-weight: 700; }
+
+  .foot { position: absolute; left: var(--ds-space-24); right: var(--ds-space-24); top: 184px; display: flex; justify-content: space-between; align-items: baseline; }
+  .foot .k { font: 400 var(--t-body)/1.1 var(--ds-font-family-text); font-variation-settings: "opsz" 17; color: var(--ds-color-text-secondary); }
+  .foot .v { font: 400 var(--t-title2)/1 var(--ds-font-family-text); font-variation-settings: "opsz" 30; letter-spacing: -0.02em; }
+  .trace { position: absolute; left: 0; right: 0; bottom: 0; width: 205px; height: 34px; }
+</style>
+</head>
+<body>
+<main class="display" aria-label="Thrum: live heart rate 162 beats per minute, zone 4 of 5">
+  <div class="status"><span class="zone-name">Threshold</span><span class="clock">6:15</span></div>
+
+  <section class="bpm">
+    <span class="num">162</span>
+    <span class="side">
+      <svg class="heart" viewBox="0 0 22 20" aria-hidden="true"><path d="M11 19.2 C 4.5 14.6 1 11.2 1 6.6 C 1 3.4 3.4 1 6.3 1 C 8.3 1 10 2.1 11 3.8 C 12 2.1 13.7 1 15.7 1 C 18.6 1 21 3.4 21 6.6 C 21 11.2 17.5 14.6 11 19.2 Z" fill="var(--z4)"/></svg>
+      <span class="unit">BPM</span>
+    </span>
+  </section>
+
+  <section class="bar" aria-label="Zone 4 of 5">
+    <div class="segs">
+      <i class="seg" style="background:var(--z1)"></i>
+      <i class="seg" style="background:var(--z2)"></i>
+      <i class="seg" style="background:var(--z3)"></i>
+      <i class="seg on" style="background:var(--z4)"></i>
+      <i class="seg" style="background:var(--z5)"></i>
+    </div>
+    <span class="marker" style="left: 72%"></span>
+    <div class="labels"><span>1</span><span>2</span><span>3</span><span class="on">4</span><span>5</span></div>
+  </section>
+
+  <svg class="trace" id="trace" viewBox="0 0 205 44" preserveAspectRatio="none" aria-hidden="true"></svg>
+  <div class="foot"><span class="k">In zone</span><span class="v">12:40</span></div>
+</main>
+<script>
+/* last 12 minutes of heart rate as a warm trace, colored by zone from bottom (zone 1) to top (zone 5) */
+(function () {
+  const svg = document.getElementById('trace'), NS = 'http://www.w3.org/2000/svg';
+  const add = (p, n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+  const cs = getComputedStyle(document.documentElement), z = i => cs.getPropertyValue('--z' + i).trim();
+  const defs = add(svg, 'defs', {});
+  const g = add(defs, 'linearGradient', { id: 'zg', x1: 0, y1: 1, x2: 0, y2: 0 });
+  [1, 2, 3, 4, 5].forEach((i, k) => add(g, 'stop', { offset: (k / 4).toFixed(2), 'stop-color': z(i) }));
+  const f = add(defs, 'linearGradient', { id: 'zf', x1: 0, y1: 0, x2: 0, y2: 1 });
+  add(f, 'stop', { offset: 0, 'stop-color': z(4), 'stop-opacity': .35 }); add(f, 'stop', { offset: 1, 'stop-color': z(4), 'stop-opacity': 0 });
+  let s = 3; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const pts = []; const N = 70;
+  for (let i = 0; i <= N; i++) {
+    const x = i / N;
+    const hr = 118 + 46 * (1 - Math.exp(-x * 3.2)) + 6 * Math.sin(x * 22) + (r() - .5) * 5;   /* warm-up, then intervals */
+    pts.push([x * 205, 42 - (hr - 110) / 60 * 30]);
+  }
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+  add(svg, 'path', { d, fill: 'none', stroke: 'url(#zg)', 'stroke-width': 2, 'stroke-linejoin': 'round', 'vector-effect': 'non-scaling-stroke' });
+})();
+</script>
+</body>
+</html>

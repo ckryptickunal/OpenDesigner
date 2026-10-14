@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=205, initial-scale=1">
+<title>Leeward: heading and wind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root {
+    --display-w: 205px; --display-h: 251px; --display-r: 48px;          /* hardware shape */
+    --bone: var(--ds-color-brand-seed);                                  /* exact brand bone */
+    /* side lights: the status tokens' hues, pushed to signal chroma with relative oklch (the generated status ramps are muted) */
+    --port: oklch(from var(--ds-color-danger-dark-11) .68 .2 h); --stbd: oklch(from var(--ds-color-success-dark-11) .8 .19 h);
+    /* Type roles: watchOS text styles at xLarge (49 mm default). Footnote 1 14 and Body/Headline 17 are engine tokens;
+       Title 2 30 and Large Title 40 are HIG values (the engine scale steps 14, 17, 21, 27, 33, 42). Four sizes. */
+    --t-footnote: var(--ds-font-size-14); --t-body: var(--ds-font-size-17); --t-title2: 30px; --t-large: 40px;
+  }
+  html, body { margin: 0; background: var(--ds-color-black); }
+  .display {
+    position: relative; width: var(--display-w); height: var(--display-h); overflow: hidden; border-radius: var(--display-r);
+    background: var(--ds-color-surface-base); color: var(--bone); font-family: var(--ds-font-family-mono);
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+  .clock { position: absolute; left: 0; right: 0; top: 11px; text-align: center; font: 500 var(--t-footnote)/1 var(--ds-font-family-mono); color: var(--ds-color-text-secondary); letter-spacing: .04em; }
+  svg.card { position: absolute; inset: 0; width: 205px; height: 251px; }
+  .hdg { position: absolute; left: 0; right: 0; top: 94px; text-align: center; }
+  .hdg .v {
+    /* the heading, Large Title: regular weight reads more like an instrument than bold */
+    font-weight: 400; font-size: var(--t-large); line-height: 1; letter-spacing: -0.04em;
+  }
+  .hdg .v .deg { color: var(--ds-color-text-secondary); margin-left: -2px; }
+  .hdg .k { margin-top: var(--ds-space-6); font: 500 var(--t-footnote)/1 var(--ds-font-family-mono); letter-spacing: .08em; color: var(--ds-color-text-secondary); }
+  .reads { position: absolute; left: 22px; right: 22px; top: 160px; display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--ds-color-border-default); }
+  .read { padding-top: var(--ds-space-8); }
+  .read + .read { border-left: 1px solid var(--ds-color-border-default); padding-left: var(--ds-space-12); }
+  .read .k { font: 500 var(--t-footnote)/1 var(--ds-font-family-mono); letter-spacing: .04em; white-space: nowrap; color: var(--ds-color-text-secondary); }
+  .read .v { margin-top: 5px; font: 400 var(--t-title2)/1 var(--ds-font-family-mono); letter-spacing: -0.03em; }
+  .read .v small { font-size: var(--ds-font-size-14); letter-spacing: 0; color: var(--ds-color-accent-dark-9); margin-left: var(--ds-space-2); }
+  .tack { position: absolute; left: 0; right: 0; top: 225px; text-align: center; font: 600 var(--t-body)/1 var(--ds-font-family-mono); letter-spacing: .08em; color: var(--stbd); }
+</style>
+</head>
+<body>
+<main class="display" aria-label="Leeward: heading 247 degrees magnetic, apparent wind 38 degrees starboard at 14.2 knots, speed over ground 6.8 knots">
+  <div class="clock">11:04</div>
+  <svg class="card" id="card" viewBox="0 0 205 251" aria-hidden="true"></svg>
+  <div class="hdg"><div class="v">247<span class="deg">°</span></div><div class="k">HDG · MAG</div></div>
+  <div class="reads">
+    <div class="read"><div class="k">AWS KN</div><div class="v">14.2</div></div>
+    <div class="read"><div class="k">SOG KN</div><div class="v">6.8</div></div>
+  </div>
+  <div class="tack">STBD · 38°</div>
+</main>
+<script>
+/* Compass card: a 300 px card whose top arc crosses the display, rotated so the heading sits under the lubber line.
+   The red and green arcs are the close-hauled sectors (relative to the bow); the marker is the apparent wind. */
+(function () {
+  const svg = document.getElementById('card'), NS = 'http://www.w3.org/2000/svg';
+  const add = (n, a, p = svg) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+  const cs = getComputedStyle(document.documentElement), tok = n => cs.getPropertyValue(n).trim();
+  const bone = tok('--ds-color-brand-seed'), dimB = tok('--ds-color-accent-dark-8'), port = cs.getPropertyValue('--port').trim(), stbd = cs.getPropertyValue('--stbd').trim();
+  const cx = 102.5, cy = 196, R = 136, HDG = 247, AWA = 38;
+  const pt = (rel, r) => { const a = (rel - 90) * Math.PI / 180; return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; };
+  const arc = (a0, a1, r) => { const [x0, y0] = pt(a0, r), [x1, y1] = pt(a1, r); return `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${r} ${r} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`; };
+  // card rim
+  add('path', { d: arc(-60, 60, R), fill: 'none', stroke: dimB, 'stroke-width': .8 });
+  // close-hauled sectors, inside the rim
+  add('path', { d: arc(-60, -25, R - 9), fill: 'none', stroke: port, 'stroke-width': 4.5 });
+  add('path', { d: arc(25, 60, R - 9), fill: 'none', stroke: stbd, 'stroke-width': 4.5 });
+  // ticks: every degree of the card, relative to the bow
+  for (let deg = 0; deg < 360; deg++) {
+    const rel = ((deg - HDG + 540) % 360) - 180;
+    if (Math.abs(rel) > 60) continue;
+    const major = deg % 10 === 0, mid5 = deg % 5 === 0;
+    if (!mid5 && Math.abs(rel) > 50) continue;
+    const len = major ? 10 : mid5 ? 6 : 3;
+    const [x0, y0] = pt(rel, R + 2), [x1, y1] = pt(rel, R + 2 + len);
+    add('line', { x1: x0, y1: y0, x2: x1, y2: y1, stroke: major ? bone : dimB, 'stroke-width': major ? 1.1 : .7 });
+    if (deg % 30 === 0) {
+      const [tx, ty] = pt(rel, R + 21);
+      const label = { 0: 'N', 90: 'E', 180: 'S', 270: 'W' }[deg] || String(deg).padStart(3, '0');
+      const t = add('text', { x: tx, y: ty, 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: bone,
+        'font-family': 'IBM Plex Mono', 'font-size': deg % 90 === 0 ? 17 : 14, 'font-weight': deg % 90 === 0 ? 600 : 500,
+        transform: `rotate(${rel} ${tx} ${ty})` });
+      t.textContent = label;
+    }
+  }
+  // lubber line at the bow
+  const [lx, ly] = pt(0, R + 2);
+  add('path', { d: `M ${lx} ${ly + 3} l -4.5 -8 h 9 z`, fill: bone });
+  // apparent wind: a pointer from the boat toward the wind, its shaft fading toward the centre
+  const [wx, wy] = pt(AWA, R - 22), [ux, uy] = pt(AWA, R - 56);
+  const grad = add('linearGradient', { id: 'shaft', gradientUnits: 'userSpaceOnUse', x1: wx, y1: wy, x2: ux, y2: uy }, add('defs', {}));
+  add('stop', { offset: 0, 'stop-color': bone }, grad); add('stop', { offset: 1, 'stop-color': bone, 'stop-opacity': 0 }, grad);
+  add('line', { x1: wx, y1: wy, x2: ux, y2: uy, stroke: 'url(#shaft)', 'stroke-width': 2 });
+  const head = add('path', { d: 'M 0 0 l -5.5 -11 h 11 z', fill: bone });
+  const [hx, hy] = pt(AWA, R - 15);
+  head.setAttribute('transform', `translate(${hx} ${hy}) rotate(${AWA + 180})`);
+})();
+</script>
+</body>
+</html>

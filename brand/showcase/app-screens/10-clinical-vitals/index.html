@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vigil · Ward 4B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;600;700&family=Atkinson+Hyperlegible+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+/* Vigil: ward vitals at a glance. Status never relies on color alone: every state has a shape and a word
+   (circle + "In range", triangle + "Watch", octagon + "Urgent"). Colors, space, radius and type are --ds-* tokens. */
+:root {
+  --t1: var(--ds-color-text-primary); --t2: var(--ds-color-text-secondary); --t3: var(--ds-color-text-tertiary);
+  --line: var(--ds-color-border-subtle); --line2: var(--ds-color-neutral-light-4);
+  --teal: var(--ds-color-bg-action-primary);
+  --mono: var(--ds-font-family-mono);
+  --ok: var(--ds-color-text-success); --ok-bg: var(--ds-color-bg-success-subtle);
+  --watch: var(--ds-color-text-warning); --watch-bg: var(--ds-color-bg-warning-subtle); --watch-solid: var(--ds-color-bg-warning-bold);
+  --urg: var(--ds-color-text-danger); --urg-bg: var(--ds-color-bg-danger-subtle); --urg-solid: var(--ds-color-bg-danger-bold);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--ds-color-surface-sunken); }
+body { width: 1180px; height: 820px; overflow: hidden; font: var(--ds-text-body-md); color: var(--t1); -webkit-font-smoothing: antialiased; display: grid; grid-template-rows: 24px 60px 1fr; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* iPadOS status bar */
+.sb { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--ds-space-20); font: 600 var(--ds-font-size-14)/1 var(--ds-font-family-text); }
+.sb .sys { display: flex; gap: var(--ds-space-6); align-items: center; }
+
+/* app bar */
+.bar { display: flex; align-items: center; gap: var(--ds-space-16); padding: 0 var(--ds-space-20); }
+.brand { display: flex; align-items: center; gap: var(--ds-space-8); font: 700 var(--ds-font-size-24)/1 var(--ds-font-family-text); letter-spacing: -.01em; }
+.ward { display: flex; flex-direction: column; gap: var(--ds-space-2); padding-left: var(--ds-space-16); border-left: 1px solid var(--line); }
+.ward b { font: 600 var(--ds-font-size-17)/1.2 var(--ds-font-family-text); }
+.ward small { font: var(--ds-text-body-sm); color: var(--t2); }
+.bar .grow { flex: 1; }
+.pillbtn { height: 44px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-full); display: inline-flex; align-items: center; gap: var(--ds-space-8); font: 600 var(--ds-font-size-14)/1 var(--ds-font-family-text); background: var(--ds-color-surface-raised); box-shadow: inset 0 0 0 1px var(--line); }
+.pillbtn.alert { background: var(--urg-bg); color: var(--urg); box-shadow: inset 0 0 0 1px var(--ds-color-border-danger); }
+.nurse { display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-body-sm); color: var(--t2); }
+.nurse b { display: block; font-weight: 600; color: var(--t1); }
+.av { width: 40px; height: 40px; border-radius: 50%; background: var(--ds-color-accent-light-4); color: var(--ds-color-accent-light-12); display: grid; place-items: center; font: 700 var(--ds-font-size-14)/1 var(--ds-font-family-text); }
+
+.wrap { display: grid; grid-template-columns: 344px 1fr; gap: var(--ds-space-12); padding: 0 var(--ds-space-12) var(--ds-space-12); min-height: 0; }
+
+/* patient list */
+.list { background: var(--ds-color-surface-raised); border-radius: var(--ds-radius-overlay); box-shadow: inset 0 0 0 1px var(--line); display: flex; flex-direction: column; overflow: hidden; }
+.list-h { padding: var(--ds-space-16) var(--ds-space-16) var(--ds-space-8); }
+.list-h h2 { font: 700 var(--ds-font-size-24)/1.2 var(--ds-font-family-text); display: flex; align-items: baseline; gap: var(--ds-space-8); }
+.list-h h2 small { font: var(--ds-text-body-sm); color: var(--t2); }
+.seg { margin-top: var(--ds-space-12); display: grid; grid-template-columns: 1fr 1fr 1fr; padding: var(--ds-space-2); border-radius: var(--ds-radius-container); background: var(--ds-color-bg-neutral-subtle); }
+.seg button { height: 40px; border-radius: var(--ds-radius-control); font: 600 var(--ds-font-size-14)/1 var(--ds-font-family-text); color: var(--t2); }
+.seg button.on { background: var(--ds-color-surface-raised); color: var(--t1); box-shadow: 0 1px 2px var(--ds-color-shadow-key), 0 0 0 1px var(--line); }
+.rows { flex: 1; overflow: hidden; padding: var(--ds-space-4) var(--ds-space-8) var(--ds-space-8); }
+.pt { display: flex; align-items: center; gap: var(--ds-space-8); height: 64px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-container); position: relative; }
+.pt + .pt::before { content: ""; position: absolute; left: 60px; right: 8px; top: 0; border-top: 1px solid var(--line2); }
+.pt.on { background: var(--ds-color-bg-accent-subtle); box-shadow: inset 0 0 0 2px var(--teal); }
+.pt.on::before, .pt.on + .pt::before { display: none; }
+.bed { width: 40px; height: 40px; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-neutral-subtle); display: grid; place-items: center; font: 600 var(--ds-font-size-17)/1 var(--mono); flex: none; }
+.pt.on .bed { background: var(--teal); color: var(--ds-color-text-on-action); }
+.who { flex: 1; min-width: 0; }
+.who b { display: block; font: 600 var(--ds-font-size-17)/1.25 var(--ds-font-family-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.who b i { font-style: normal; font-weight: 400; color: var(--t2); margin-left: var(--ds-space-4); }
+.who small { display: flex; align-items: center; gap: var(--ds-space-4); font: var(--ds-text-body-sm); color: var(--t2); white-space: nowrap; }
+.who small.late { color: var(--watch); font-weight: 600; }
+.who small svg { width: 14px; height: 14px; }
+.pt.empty { opacity: 1; }
+.pt.empty b { color: var(--t3); font-weight: 400; }
+/* NEWS2 badge: shape + number + word */
+.news { display: inline-flex; align-items: center; gap: var(--ds-space-6); height: 32px; padding: 0 var(--ds-space-8) 0 6px; border-radius: var(--ds-radius-control); font: 700 var(--ds-font-size-14)/1 var(--ds-font-family-text); white-space: nowrap; }
+.news svg { width: 18px; height: 18px; }
+.news .n { font: 600 var(--ds-font-size-17)/1 var(--mono); }
+.news.low { color: var(--ok); background: var(--ok-bg); }
+.news.med { color: var(--watch); background: var(--watch-bg); }
+.news.high { color: var(--ds-color-text-on-danger); background: var(--urg-solid); }
+.trend { width: 16px; height: 16px; color: var(--t2); }
+
+/* hover and press */
+.pt, .btn, .pillbtn, .seg button { transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
+.pt:not(.on):hover { background: var(--ds-color-bg-neutral-subtle); }
+.btn.urgent:hover { background: var(--ds-color-bg-danger-bold-hover); }
+.btn.sec:hover, .pillbtn:not(.alert):hover, .seg button:not(.on):hover { background: var(--ds-color-bg-neutral-subtle-hover); }
+.pillbtn.alert:hover { background: var(--ds-color-danger-light-4); }
+/* detail */
+.detail { display: grid; grid-template-rows: auto auto 1fr auto; gap: var(--ds-space-12); min-height: 0; }
+.ph { background: var(--ds-color-surface-raised); border-radius: var(--ds-radius-overlay); box-shadow: inset 0 0 0 1px var(--line); padding: var(--ds-space-16) var(--ds-space-20); display: flex; align-items: center; gap: var(--ds-space-20); }
+.ph .big { display: flex; align-items: center; gap: var(--ds-space-12); }
+.ph h1 { font: 700 var(--ds-font-size-29)/1.1 var(--ds-font-family-display); letter-spacing: -.01em; }
+.ph .sub { margin-top: var(--ds-space-4); display: flex; flex-wrap: wrap; gap: 4px var(--ds-space-12); font: var(--ds-text-body-sm); color: var(--t2); }
+.ph .sub b { color: var(--t1); font-weight: 600; }
+.allergy { display: inline-flex; align-items: center; gap: var(--ds-space-4); height: 24px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-full); box-shadow: inset 0 0 0 1.5px var(--ds-color-border-danger); color: var(--urg); font: 700 var(--ds-font-size-14)/1 var(--ds-font-family-text); }
+.allergy svg { width: 14px; height: 14px; }
+.ph .grow { flex: 1; }
+.score { display: flex; align-items: center; gap: var(--ds-space-12); padding-left: var(--ds-space-20); border-left: 1px solid var(--line); }
+.oct { width: 72px; height: 72px; position: relative; display: grid; place-items: center; color: var(--ds-color-text-on-danger); background: var(--urg-solid); clip-path: polygon(30% 0, 70% 0, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0 70%, 0 30%); }
+.oct span { position: relative; font: 700 var(--ds-font-size-42)/1 var(--ds-font-family-text); }
+.score .lbl { white-space: nowrap; }
+.score .lbl b { display: block; font: 700 var(--ds-font-size-17)/1.2 var(--ds-font-family-text); color: var(--urg); }
+.score .lbl small { font: var(--ds-text-body-sm); color: var(--t2); }
+
+/* escalation banner */
+.esc { border-radius: var(--ds-radius-overlay); background: var(--urg-bg); box-shadow: inset 0 0 0 1px var(--ds-color-border-danger); display: flex; align-items: center; gap: var(--ds-space-16); padding: var(--ds-space-12) var(--ds-space-12) var(--ds-space-12) var(--ds-space-20); }
+.esc .msg { flex: 1; font: var(--ds-text-body-md); line-height: 1.35; color: var(--ds-color-danger-light-12); }
+.esc .msg b { font-weight: 700; }
+.esc .clock { text-align: right; padding-right: var(--ds-space-8); }
+.esc .clock b { display: block; font: 600 var(--ds-font-size-24)/1 var(--mono); color: var(--urg); }
+.esc .clock small { font: var(--ds-text-body-sm); color: var(--ds-color-danger-light-12); }
+.btn { height: 48px; padding: 0 var(--ds-space-20); border-radius: var(--ds-radius-container); font: 700 var(--ds-font-size-17)/1 var(--ds-font-family-text); display: inline-flex; align-items: center; gap: var(--ds-space-8); }
+.btn.urgent { background: var(--urg-solid); color: var(--ds-color-text-on-danger); }
+.btn.icon { width: 48px; padding: 0; justify-content: center; }
+.btn.sec { background: var(--ds-color-surface-raised); box-shadow: inset 0 0 0 1px var(--ds-color-border-default); }
+
+/* vitals grid */
+.vit { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; gap: var(--ds-space-12); min-height: 0; }
+.tile { background: var(--ds-color-surface-raised); border-radius: var(--ds-radius-overlay); box-shadow: inset 0 0 0 1px var(--line); padding: var(--ds-space-12) var(--ds-space-16) var(--ds-space-12); display: grid; grid-template-rows: auto auto 1fr; position: relative; overflow: hidden; }
+.tile.watch { box-shadow: inset 0 0 0 1px var(--ds-color-border-warning), inset 4px 0 0 var(--watch-solid); }
+.tile.urgent { box-shadow: inset 0 0 0 1px var(--ds-color-border-danger), inset 4px 0 0 var(--urg-solid); }
+.th { display: flex; align-items: center; gap: var(--ds-space-8); }
+.th .name { font: 600 var(--ds-font-size-14)/1.2 var(--ds-font-family-text); color: var(--t2); flex: 1; }
+.st { display: inline-flex; align-items: center; gap: var(--ds-space-4); height: 26px; padding: 0 var(--ds-space-8) 0 6px; border-radius: var(--ds-radius-full); font: 700 var(--ds-font-size-14)/1 var(--ds-font-family-text); }
+.st svg { width: 14px; height: 14px; }
+.st.ok { color: var(--ok); background: var(--ok-bg); }
+.st.watch { color: var(--watch); background: var(--watch-bg); }
+.st.urgent { color: var(--urg); background: var(--urg-bg); }
+.val { display: flex; align-items: baseline; gap: var(--ds-space-6); margin-top: var(--ds-space-4); }
+.val b { font: 700 var(--ds-font-size-42)/1 var(--ds-font-family-text); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.val .u { font: var(--ds-text-body-sm); color: var(--t2); }
+.val .pts { margin-left: auto; font: 600 var(--ds-font-size-14)/1 var(--mono); color: var(--t2); }
+.val .pts.hot { color: var(--urg); }
+.rng { font: var(--ds-text-body-sm); color: var(--t2); margin-top: var(--ds-space-2); }
+.chart { align-self: end; margin: var(--ds-space-8) 0 0; height: 96px; position: relative; }
+.chart .tag { position: absolute; left: 0; top: -2px; font: 400 var(--ds-font-size-14)/1 var(--ds-font-family-text); color: var(--t2); }
+.chart svg { width: 100%; height: 100%; display: block; }
+
+/* 12-hour NEWS2 strip */
+.strip { background: var(--ds-color-surface-raised); border-radius: var(--ds-radius-overlay); box-shadow: inset 0 0 0 1px var(--line); padding: var(--ds-space-12) var(--ds-space-20); display: grid; grid-template-columns: 168px 1fr; gap: var(--ds-space-16); align-items: center; }
+.strip .sh { font: 600 var(--ds-font-size-14)/1.3 var(--ds-font-family-text); }
+.strip .sh small { display: block; font: var(--ds-text-body-sm); color: var(--t2); font-weight: 400; }
+.cells { display: grid; grid-template-columns: repeat(24, 1fr); gap: 3px; }
+.cell { height: 34px; border-radius: var(--ds-radius-detail); display: grid; place-items: center; font: 600 var(--ds-font-size-14)/1 var(--mono); }
+.cell.l { background: var(--ok-bg); color: var(--ok); }
+.cell.m { background: var(--watch-bg); color: var(--watch); }
+.cell.h { background: var(--urg-solid); color: var(--ds-color-text-on-danger); }
+.cell.x { background: transparent; box-shadow: inset 0 0 0 1px var(--line2); color: var(--t3); }
+.hours { grid-column: 2; display: flex; justify-content: space-between; font: 400 var(--ds-font-size-14)/1 var(--mono); color: var(--t2); margin-top: -8px; }
+@media (prefers-reduced-motion: no-preference) { .pulse { animation: pulse var(--ds-motion-duration-extra) var(--ds-motion-easing-standard) 6 alternate; /* a few beats to say "live", then still (no endless loop) */ } }
+@keyframes pulse { to { opacity: .35; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="s-ok" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7.5" fill="currentColor"/><path d="m5.6 9.2 2.3 2.3 4.5-4.6" fill="none" stroke="var(--ds-color-white)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="s-watch" viewBox="0 0 18 18"><path d="M9 1.8 16.8 15.6H1.2Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 7v3.6" stroke="var(--ds-color-white)" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="13" r="1.1" fill="var(--ds-color-white)"/></symbol>
+    <symbol id="s-urg" viewBox="0 0 18 18"><path d="M5.9 1.5h6.2l4.4 4.4v6.2l-4.4 4.4H5.9l-4.4-4.4V5.9Z" fill="currentColor"/><path d="M9 5v4.6" stroke="var(--ds-color-white)" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="12.6" r="1.1" fill="var(--ds-color-white)"/></symbol>
+    <symbol id="s-urg-inv" viewBox="0 0 18 18"><path d="M5.9 1.5h6.2l4.4 4.4v6.2l-4.4 4.4H5.9l-4.4-4.4V5.9Z" fill="var(--ds-color-white)"/><path d="M9 5v4.6" stroke="var(--ds-color-danger-light-9)" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="12.6" r="1.1" fill="var(--ds-color-danger-light-9)"/></symbol>
+    <symbol id="clock" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.6V8l2.2 1.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="sb" aria-hidden="true">
+  <span>9:41 &nbsp;Tue 14 Oct</span>
+  <span class="sys">
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.6c2.3 0 4.4.9 6 2.4l1.2-1.3A10.3 10.3 0 0 0 8 .8C5.2.8 2.7 1.9.8 3.7L2 5c1.6-1.5 3.7-2.4 6-2.4Zm0 3.5c1.3 0 2.5.5 3.5 1.4l1.2-1.3A6.8 6.8 0 0 0 8 4.3c-1.8 0-3.5.7-4.7 1.9l1.2 1.3c.9-.9 2.2-1.4 3.5-1.4Zm0 3.4c.5 0 1 .2 1.3.5L8 11.4 6.7 10c.3-.3.8-.5 1.3-.5Z" fill="currentColor"/></svg>
+    84%
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="22" height="12" rx="3.5" stroke="currentColor" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="9" rx="2" fill="currentColor"/><path d="M24.5 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2Z" fill="currentColor" opacity=".45"/></svg>
+  </span>
+</div>
+
+<header class="bar">
+  <div class="brand"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" fill="var(--teal)"/><path d="M5 15h4l2.5-6 4 11 2.5-5H23" fill="none" stroke="var(--ds-color-white)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Vigil</div>
+  <div class="ward"><b>Ward 4B · Acute Medicine</b><small>Night shift 19:30–07:30 · 14 beds · 13 patients</small></div>
+  <span class="grow"></span>
+  <button class="pillbtn"><svg class="i" viewBox="0 0 20 20"><circle cx="9" cy="9" r="5.5"/><path d="m13 13 3.5 3.5"/></svg>Find patient</button>
+  <button class="pillbtn alert"><svg width="18" height="18"><use href="#s-urg"/></svg>2 need review</button>
+  <div class="nurse"><span class="av">TA</span><div><b>T. Adeyemi</b>Nurse in charge</div></div>
+</header>
+
+<div class="wrap">
+  <section class="list" aria-label="Patients">
+    <div class="list-h">
+      <h2>Patients <small>by NEWS2 · traces show 2 h</small></h2>
+      <div class="seg" role="tablist"><button class="on" role="tab" aria-selected="true">All 13</button><button role="tab">Review 2</button><button role="tab">Due obs 3</button></div>
+    </div>
+    <div class="rows" id="rows"></div>
+  </section>
+
+  <section class="detail" aria-label="Selected patient">
+    <div class="ph">
+      <div>
+        <h1>Rosa Halvorsen</h1>
+        <div class="sub"><span><b>Bed 7</b></span><span>68 y, female</span><span>Day 2 · community-acquired pneumonia</span><span class="allergy"><svg width="14" height="14"><use href="#s-urg"/></svg>Allergy: penicillin</span></div>
+      </div>
+      <span class="grow"></span>
+      <div class="score">
+        <div class="oct" role="img" aria-label="NEWS2 score 7, high risk"><span>7</span></div>
+        <div class="lbl"><b>NEWS2 high</b><small>Was 4 at 22:00</small></div>
+      </div>
+    </div>
+
+    <div class="esc" role="alert">
+      <svg width="28" height="28" style="color:var(--urg-solid)"><use href="#s-urg"/></svg>
+      <p class="msg"><b>Urgent review.</b> On-call doctor paged at 02:14. Observations every 30 min until reviewed.</p>
+      <div class="clock"><b class="num">18 min</b><small>to response target</small></div>
+      <button class="btn sec icon" aria-label="Add note"><svg class="i" viewBox="0 0 20 20"><path d="M4 3.5h8.5L16 7v9.5H4Z"/><path d="M12 3.5V7h4M7 11h6M7 14h4"/></svg></button>
+      <button class="btn urgent">Doctor arrived</button>
+    </div>
+
+    <div class="vit" id="vit"></div>
+
+    <div class="strip">
+      <h2 class="sh">NEWS2, last 12 hours<small>One cell every 30 minutes</small></h2>
+      <div class="cells" id="cells" role="img" aria-label="NEWS2 rose from 2 to 7 over 12 hours"></div>
+      <div class="hours"><span>14:30</span><span>17:30</span><span>20:30</span><span>23:30</span><span>02:30</span></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const sym = { low: 's-ok', med: 's-watch', high: 's-urg-inv' };
+const word = { low: 'Low', med: 'Medium', high: 'High' };
+const up = '<svg class="trend" viewBox="0 0 16 16" aria-label="rising"><path d="M4 12 12 4M6 4h6v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const flat = '<svg class="trend" viewBox="0 0 16 16" aria-label="steady"><path d="M3 8h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+const pts = [
+  { bed: 7, n: 'R. Halvorsen', a: 68, s: 'Obs 4 min ago', news: 7, lv: 'high', tr: up, on: true },
+  { bed: 9, n: 'E. Sørensen', a: 90, s: 'Overdue 15 min', late: true, news: 6, lv: 'med', tr: up },
+  { bed: 4, n: 'J. Pereira', a: 47, s: 'Obs due now', news: 5, lv: 'med', tr: flat },
+  { bed: 8, n: 'D. Mbeki', a: 63, s: 'Obs 22 min ago', news: 4, lv: 'low', tr: up },
+  { bed: 2, n: 'M. Lindqvist', a: 81, s: 'Obs 35 min ago', news: 3, lv: 'low', tr: flat },
+  { bed: 5, n: 'H. Nakamura', a: 72, s: 'Obs 41 min ago', news: 2, lv: 'low', tr: flat },
+  { bed: 1, n: 'A. Okonkwo', a: 54, s: 'Obs 52 min ago', news: 1, lv: 'low', tr: flat },
+  { bed: 10, n: 'K. Brennan', a: 58, s: 'Obs 1 h ago', news: 1, lv: 'low', tr: flat },
+  { bed: 6, n: 'S. Ferreira', a: 39, s: 'Obs 2 h ago', news: 0, lv: 'low', tr: flat },
+  { bed: 3, n: 'Bed free', s: 'Cleaned 23:40', empty: true },
+];
+document.getElementById('rows').innerHTML = pts.map((p) => `<div class="pt ${p.on ? 'on' : ''} ${p.empty ? 'empty' : ''}" ${p.on ? 'aria-current="true"' : ''} tabindex="0">
+  <span class="bed">${p.bed}</span>
+  <span class="who"><b>${p.n}${p.a ? `<i>${p.a}</i>` : ''}</b><small class="${p.late ? 'late' : ''}">${p.late ? '<svg><use href="#clock"/></svg>' : ''}${p.s}</small></span>
+  ${p.empty ? '' : `${p.tr}<span class="news ${p.lv}"><svg><use href="#${sym[p.lv]}"/></svg><span class="n">${p.news}</span>${word[p.lv]}</span>`}
+</div>`).join('');
+
+// vitals with a normal band and a 2-hour trace; values are fictional
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const series = (n, a, b, noise) => Array.from({ length: n }, (_, i) => a + (b - a) * Math.pow(i / (n - 1), 1.6) + (rnd() - .5) * noise);
+const V = [
+  { name: 'Heart rate', v: '118', u: 'bpm', r: 'Usual range 51–90', st: 'watch', pts: 2, data: series(48, 92, 118, 6), lo: 51, hi: 90, min: 50, max: 135, c: '--ds-color-chart-categorical-8' },
+  { name: 'Oxygen saturation', v: '91', u: '% on 2 L/min O₂', r: 'Target 94–98', st: 'urgent', pts: 3, data: series(48, 96, 91, 1.4), lo: 94, hi: 98, min: 86, max: 100, c: '--ds-color-chart-categorical-5' },
+  { name: 'Respiration rate', v: '24', u: '/min', r: 'Usual range 12–20', st: 'watch', pts: 2, data: series(48, 17, 24, 1.6), lo: 12, hi: 20, min: 8, max: 30, c: '--ds-color-chart-categorical-6' },
+  { name: 'Blood pressure', v: '104/68', u: 'mmHg', r: 'Systolic usual 111–219', st: 'watch', pts: 1, data: series(48, 126, 104, 5), lo: 111, hi: 219, min: 90, max: 150, c: '--ds-color-chart-categorical-2' },
+  { name: 'Temperature', v: '38.4', u: '°C', r: 'Usual range 36.1–38.0', st: 'watch', pts: 1, data: series(48, 37.4, 38.4, .15), lo: 36.1, hi: 38, min: 35.5, max: 39.5, c: '--ds-color-chart-categorical-3' },
+  { name: 'Consciousness', v: 'Alert', u: 'ACVPU', r: 'No new confusion', st: 'ok', pts: 0, data: null },
+];
+const stTxt = { ok: ['s-ok', 'In range'], watch: ['s-watch', 'Watch'], urgent: ['s-urg', 'Urgent'] };
+const W = 300, H = 96;
+const chart = (d) => {
+  if (!d.data) return `<svg viewBox="0 0 ${W} 54" aria-hidden="true" style="height:54px"><g fill="var(--ds-color-bg-success-subtle)">${Array.from({ length: 8 }, (_, i) => `<rect x="${i * 37}" y="8" width="31" height="38" rx="4"/>`).join('')}</g><g font-family="var(--ds-font-family-mono)" font-size="14" fill="var(--ds-color-text-success)" font-weight="600">${Array.from({ length: 8 }, (_, i) => `<text x="${15.5 + i * 37}" y="32" text-anchor="middle">A</text>`).join('')}</g></svg>`;
+  const y = (v) => H - 6 - (v - d.min) / (d.max - d.min) * (H - 12);
+  const x = (i) => i / (d.data.length - 1) * (W - 14);
+  const line = d.data.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
+  const area = `${line} L${x(d.data.length - 1)} ${H} L0 ${H} Z`;
+  const last = d.data[d.data.length - 1];
+  const col = `var(${d.c})`;
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+    <rect x="0" y="${y(Math.min(d.hi, d.max))}" width="${W}" height="${y(Math.max(d.lo, d.min)) - y(Math.min(d.hi, d.max))}" fill="var(--ds-color-bg-success-subtle)" opacity=".7"/>
+    <line x1="0" x2="${W}" y1="${y(Math.min(d.hi, d.max))}" y2="${y(Math.min(d.hi, d.max))}" stroke="var(--ds-color-neutral-light-6)" stroke-dasharray="3 3"/>
+    
+    <path d="${line}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+    <circle class="pulse" cx="${x(d.data.length - 1)}" cy="${y(last)}" r="9" fill="${col}" opacity=".25"/>
+    <circle cx="${x(d.data.length - 1)}" cy="${y(last)}" r="4.5" fill="${col}" stroke="var(--ds-color-surface-raised)" stroke-width="2"/>
+  </svg>`;
+};
+document.getElementById('vit').innerHTML = V.map((d) => `<article class="tile ${d.st === 'ok' ? '' : d.st}">
+  <div class="th"><span class="name">${d.name}</span><span class="st ${d.st}"><svg><use href="#${stTxt[d.st][0]}"/></svg>${stTxt[d.st][1]}</span></div>
+  <div><div class="val"><b>${d.v}</b><span class="u">${d.u}</span><span class="pts ${d.pts >= 3 ? 'hot' : ''}">+${d.pts}</span></div><div class="rng">${d.r}</div></div>
+  <div class="chart">${chart(d)}</div>
+</article>`).join('');
+
+const hist = [2,2,2,1,2,2,2,3,3,3,4,3,4,4,4,4,5,5,6,6,7,7,7,null];
+document.getElementById('cells').innerHTML = hist.map((v) => v === null ? '<span class="cell x">·</span>' : `<span class="cell ${v >= 7 ? 'h' : v >= 5 ? 'm' : 'l'}">${v}</span>`).join('');
+</script>
+</body>
+</html>

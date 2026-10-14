@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=205, initial-scale=1">
+<title>Headway: next departures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100..900&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root { --display-w: 205px; --display-h: 251px; --display-r: 48px; --sign: var(--ds-color-brand-seed); }  /* hardware shape; sign = exact brand yellow */
+  /* Type roles: watchOS text styles at xLarge (49 mm default). Footnote 1 14 and Body/Headline 17 are engine tokens;
+     Title 3 20 and Title 2 30 are HIG values (the engine scale steps 17, 21, 27, 33); the countdown is the one display size. */
+  :root { --t-footnote: var(--ds-font-size-14); --t-body: var(--ds-font-size-17); --t-title3: 20px; --t-title2: 30px; --t-display: 114px; }
+  html, body { margin: 0; background: var(--ds-color-black); }
+  .display {
+    position: relative; width: var(--display-w); height: var(--display-h); overflow: hidden; border-radius: var(--display-r);
+    background: var(--ds-color-surface-base); color: var(--ds-color-text-primary); font-family: var(--ds-font-family-text);
+    font-variant-numeric: tabular-nums;
+  }
+  .status { position: absolute; top: var(--ds-space-12); left: 26px; right: 22px; display: flex; justify-content: space-between; align-items: center; }
+  .stop { font: 800 var(--t-body)/1 var(--ds-font-family-text); letter-spacing: .06em; text-transform: uppercase; color: var(--sign); }
+  .clock { font: 600 var(--t-body)/1 var(--ds-font-family-text); letter-spacing: .02em; }
+
+  .badge {
+    display: inline-grid; place-items: center; min-width: 26px; height: 26px; padding: 0 var(--ds-space-4); box-sizing: border-box;
+    background: var(--sign); color: var(--ds-color-black); border-radius: var(--ds-radius-control);
+    font: 900 var(--t-title3)/1 var(--ds-font-family-text);
+  }
+  .badge.alt { background: none; color: var(--ds-color-text-primary); box-shadow: inset 0 0 0 2px var(--ds-color-text-primary); }
+
+  .next { position: absolute; left: var(--ds-space-24); right: var(--ds-space-20); top: 38px; height: 98px; }
+  .next .meta { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; }
+  .next .dest { font: 700 var(--t-title3)/1 var(--ds-font-family-text); letter-spacing: .01em; }
+  .next .via { font: 500 var(--t-body)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); letter-spacing: .02em; }
+  .next .n {
+    /* signage numeral: far above the type scale on purpose; read from across a platform, or a wrist at arm's length */
+    position: absolute; right: 0; bottom: -11px; font-weight: 900; font-size: var(--t-display); line-height: 1; letter-spacing: -0.03em; color: var(--sign);
+  }
+  .next .u { position: absolute; right: 58px; bottom: 3px; writing-mode: vertical-rl; transform: rotate(180deg); font: 900 var(--t-title3)/1 var(--ds-font-family-text); color: var(--sign); letter-spacing: .08em; }
+  /* approach line: the train two stops out */
+  .approach { position: absolute; left: var(--ds-space-24); right: var(--ds-space-24); top: 140px; height: 12px; }
+  .approach .rail { position: absolute; left: 0; right: 0; top: 5px; height: 2px; background: var(--ds-color-neutral-dark-7); }
+  .approach .done { position: absolute; left: 0; width: 64%; top: 5px; height: 2px; background: var(--sign); }
+  .approach .st { position: absolute; top: var(--ds-space-2); width: 8px; height: 8px; border-radius: var(--ds-radius-full); background: var(--ds-color-black); box-shadow: inset 0 0 0 2px var(--ds-color-neutral-dark-9); transform: translateX(-4px); }
+  .approach .st.passed { box-shadow: inset 0 0 0 2px var(--sign); }
+  .approach .st.here { width: 12px; height: 12px; top: 0; transform: translateX(-6px); background: var(--ds-color-text-primary); box-shadow: none; }
+  .approach .train { position: absolute; top: -2px; left: 64%; width: 16px; height: 16px; transform: translateX(-8px); }
+
+  .list { position: absolute; left: 0; right: 0; top: 162px; border-top: var(--ds-space-2) solid var(--sign); }
+  .row { display: flex; align-items: center; gap: var(--ds-space-8); height: 42px; padding: 0 var(--ds-space-24) 0 var(--ds-space-24); border-bottom: 1px solid var(--ds-color-border-subtle); }
+  .row:last-child { border-bottom: 0; }
+  .row .dest { flex: 1; font: 600 var(--t-title3)/1 var(--ds-font-family-text); }
+  .row .min { font: 700 var(--t-title2)/1 var(--ds-font-family-text); }
+  .row .min small { font: 700 var(--t-footnote)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); margin-left: var(--ds-space-2); letter-spacing: .04em; }
+  .row .late { color: var(--ds-color-text-warning); }
+</style>
+</head>
+<body>
+<main class="display" aria-label="Headway: next train to Northgate on line 7 in 2 minutes; then Northgate 9 minutes, Harbour 14 minutes">
+  <div class="status"><span class="stop">Wharf Rd</span><span class="clock">8:04</span></div>
+
+  <section class="next">
+    <div class="meta"><span class="badge">7</span><span class="dest">Northgate</span><span class="via">2 stops out</span></div>
+    <span class="n">2</span><span class="u">MIN</span>
+  </section>
+
+  <div class="approach" aria-hidden="true">
+    <i class="rail"></i><i class="done"></i>
+    <i class="st passed" style="left:0%"></i><i class="st passed" style="left:33%"></i><i class="st" style="left:72%"></i><i class="st here" style="left:100%"></i>
+    <svg class="train" viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="14" rx="0" fill="var(--sign)"/><path d="M5 8h6M8.5 5.5 11 8l-2.5 2.5" stroke="#000" stroke-width="1.8" fill="none"/></svg>
+  </div>
+
+  <section class="list">
+    <div class="row"><span class="badge">7</span><span class="dest">Northgate</span><span class="min">9<small>MIN</small></span></div>
+    <div class="row"><span class="badge alt">12</span><span class="dest">Harbour</span><span class="min">14<small>MIN</small></span></div>
+  </section>
+</main>
+</body>
+</html>

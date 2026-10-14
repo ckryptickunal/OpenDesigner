@@ -1,0 +1,66 @@
+{
+  "made": "2026-10-14T16:42:35",
+  "system": "Vigil",
+  "probes": 1,
+  "inputs": [
+    "p10.json"
+  ],
+  "findings": [
+    {
+      "id": "M-MS01-6365",
+      "case": "MS-01",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Spacing off the ladder (7 value(s), 8 of 285 uses)",
+      "where": [
+        "index.html · 1180x820 · light"
+      ],
+      "measured": "3px x2 (nearest 2); 92.14px x1 (nearest 96); 43.69px x1 (nearest 40); 117.47px x1 (nearest 96); 9.59px x1 (nearest 8); 95.31px x1 (nearest 96)",
+      "expected": "steps: 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96",
+      "evidence": [
+        "div#cells",
+        "div:nth-of-type(2) > div.val:nth-of-type(1) > span.pts:nth-of-type(2)",
+        "div:nth-of-type(2) > div.val:nth-of-type(1) > span.pts.hot:nth-of-type(2)"
+      ],
+      "fix": "use the spacing tokens; 1-2 px values are usually borders or browser defaults",
+      "standard": "tokens",
+      "status": "confirmed"
+    },
+    {
+      "id": "M-MS02-2927",
+      "case": "MS-02",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Font weights outside the system's",
+      "where": [
+        "index.html · 1180x820 · light"
+      ],
+      "measured": "weight 700 on 30 element(s); the system uses [400, 600]",
+      "expected": "the system's weights",
+      "evidence": [
+        "header.bar > div.brand:nth-of-type(1)"
+      ],
+      "fix": null,
+      "standard": null,
+      "status": "confirmed"
+    },
+    {
+      "id": "M-MS11-5224",
+      "case": "MS-11",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Negative margins in use",
+      "where": [
+        "index.html · 1180x820 · light"
+      ],
+      "measured": "section.detail:nth-of-type(2) > div.strip:nth-of-type(4) > div.hours:nth-of-type(2) marginTop -8 px",
+      "expected": "usually a workaround that overlaps neighbours",
+      "evidence": [
+        "section.detail:nth-of-type(2) > div.strip:nth-of-type(4) > div.hours:nth-of-type(2)"
+      ],
+      "fix": null,
+      "standard": null,
+      "status": "confirmed"
+    }
+  ]
+}

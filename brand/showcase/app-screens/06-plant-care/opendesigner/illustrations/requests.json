@@ -1,0 +1,75 @@
+{
+  "purpose": "houseplant leaves",
+  "slot": "hero",
+  "query": "houseplant leaves",
+  "requests": [
+    {
+      "source": "cocomaterial",
+      "url": "https://cocomaterial.com/api/vectors/?page=1&page_size=20&tags=houseplant%2Cleaves",
+      "save_as": "brand/showcase/app-screens/06-plant-care/opendesigner/illustrations/responses/cocomaterial-1.json",
+      "words": [
+        "houseplant",
+        "leaves",
+        "hero",
+        "product",
+        "team",
+        "work",
+        "growth",
+        "launch",
+        "people",
+        "collaboration"
+      ]
+    },
+    {
+      "source": "cocomaterial",
+      "url": "https://cocomaterial.com/api/vectors/?page=1&page_size=20&tags=houseplant",
+      "save_as": "brand/showcase/app-screens/06-plant-care/opendesigner/illustrations/responses/cocomaterial-2.json",
+      "words": [
+        "houseplant",
+        "leaves",
+        "hero",
+        "product",
+        "team",
+        "work",
+        "growth",
+        "launch",
+        "people",
+        "collaboration"
+      ]
+    },
+    {
+      "source": "cocomaterial",
+      "url": "https://cocomaterial.com/api/vectors/?page=1&page_size=20&tags=leaves",
+      "save_as": "brand/showcase/app-screens/06-plant-care/opendesigner/illustrations/responses/cocomaterial-3.json",
+      "words": [
+        "houseplant",
+        "leaves",
+        "hero",
+        "product",
+        "team",
+        "work",
+        "growth",
+        "launch",
+        "people",
+        "collaboration"
+      ]
+    },
+    {
+      "source": "opendoodles",
+      "url": "https://www.opendoodles.com/",
+      "save_as": "brand/showcase/app-screens/06-plant-care/opendesigner/illustrations/responses/opendoodles-1.html",
+      "words": [
+        "houseplant",
+        "leaves",
+        "hero",
+        "product",
+        "team",
+        "work",
+        "growth",
+        "launch",
+        "people",
+        "collaboration"
+      ]
+    }
+  ]
+}

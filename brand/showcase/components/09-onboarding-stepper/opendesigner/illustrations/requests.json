@@ -1,0 +1,187 @@
+{
+  "purpose": "potted house plant",
+  "slot": "onboarding",
+  "query": "potted house plant",
+  "requests": [
+    {
+      "source": "openverse",
+      "url": "https://api.openverse.org/v1/images/?q=potted+house+plant&page_size=20&extension=svg&license_type=commercial%2Cmodification&mature=false&category=illustration",
+      "save_as": "brand/showcase/components/09-onboarding-stepper/opendesigner/responses/openverse-1.json",
+      "words": [
+        "potted",
+        "house",
+        "plant",
+        "welcome",
+        "start",
+        "journey",
+        "hello",
+        "rocket",
+        "plan",
+        "team",
+        "tour"
+      ]
+    },
+    {
+      "source": "openverse",
+      "url": "https://api.openverse.org/v1/images/?q=potted&page_size=20&extension=svg&license_type=commercial%2Cmodification&mature=false&category=illustration",
+      "save_as": "brand/showcase/components/09-onboarding-stepper/opendesigner/responses/openverse-2.json",
+      "words": [
+        "potted",
+        "house",
+        "plant",
+        "welcome",
+        "start",
+        "journey",
+        "hello",
+        "rocket",
+        "plan",
+        "team",
+        "tour"
+      ]
+    },
+    {
+      "source": "openverse",
+      "url": "https://api.openverse.org/v1/images/?q=potted+house+plant&page_size=20&extension=svg&license_type=commercial%2Cmodification&mature=false",
+      "save_as": "brand/showcase/components/09-onboarding-stepper/opendesigner/responses/openverse-3.json",
+      "words": [
+        "potted",
+        "house",
+        "plant",
+        "welcome",
+        "start",
+        "journey",
+        "hello",
+        "rocket",
+        "plan",
+        "team",
+        "tour"
+      ]
+    },
+    {
+      "source": "commons",
+      "url": "https://commons.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&generator=search&gsrnamespace=6&gsrlimit=20&prop=imageinfo&iiprop=url%7Cmime%7Csize%7Cextmetadata&iiurlwidth=320&iiextmetadatafilter=LicenseShortName%7CLicenseUrl%7CArtist%7CAttributionRequired%7CCategories%7CUsageTerms&gsrsearch=potted+house+plant+filemime%3Aimage%2Fsvg%2Bxml",
+      "save_as": "brand/showcase/components/09-onboarding-stepper/opendesigner/responses/commons-1.json",
+      "words": [
+        "potted",
+        "house",
+        "plant",
+        "welcome",
+        "start",
+        "journey",
+        "hello",
+        "rocket",
+        "plan",
+        "team",
+        "tour"
+      ]
+    },
+    {
+      "source": "commons",
+      "url": "https://commons.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&generator=search&gsrnamespace=6&gsrlimit=20&prop=imageinfo&iiprop=url%7Cmime%7Csize%7Cextmetadata&iiurlwidth=320&iiextmetadatafilter=LicenseShortName%7CLicenseUrl%7CArtist%7CAttributionRequired%7CCategories%7CUsageTerms&gsrsearch=potted+filemime%3Aimage%2Fsvg%2Bxml",
+      "save_as": "brand/showcase/components/09-onboarding-stepper/opendesigner/responses/commons-2.json",
+      "words": [
+        "potted",
+        "house",
+        "plant",
+        "welcome",
+        "start",
+        "journey",
+        "hello",
+        "rocket",
+        "plan",
+        "team",
+        "tour"
+      ]
+    },
+    {
+      "source": "opendoodles",
+      "url": "https://www.opendoodles.com/",
+      "save_as": "brand/showcase/components/09-onboarding-stepper/opendesigner/responses/opendoodles-1.html",
+      "words": [
+        "potted",
+        "house",
+        "plant",
+        "welcome",
+        "start",
+        "journey",
+        "hello",
+        "rocket",
+        "plan",
+        "team",
+        "tour"
+      ]
+    },
+    {
+      "source": "lukaszadam",
+      "url": "https://lukaszadam.com/illustrations",
+      "save_as": "brand/showcase/components/09-onboarding-stepper/opendesigner/responses/lukaszadam-1.html",
+      "words": [
+        "potted",
+        "house",
+        "plant",
+        "welcome",
+        "start",
+        "journey",
+        "hello",
+        "rocket",
+        "plan",
+        "team",
+        "tour"
+      ]
+    },
+    {
+      "source": "cocomaterial",
+      "url": "https://cocomaterial.com/api/vectors/?page=1&page_size=20&tags=potted%2Chouse%2Cplant",
+      "save_as": "brand/showcase/components/09-onboarding-stepper/opendesigner/responses/cocomaterial-1.json",
+      "words": [
+        "potted",
+        "house",
+        "plant",
+        "welcome",
+        "start",
+        "journey",
+        "hello",
+        "rocket",
+        "plan",
+        "team",
+        "tour"
+      ]
+    },
+    {
+      "source": "cocomaterial",
+      "url": "https://cocomaterial.com/api/vectors/?page=1&page_size=20&tags=potted",
+      "save_as": "brand/showcase/components/09-onboarding-stepper/opendesigner/responses/cocomaterial-2.json",
+      "words": [
+        "potted",
+        "house",
+        "plant",
+        "welcome",
+        "start",
+        "journey",
+        "hello",
+        "rocket",
+        "plan",
+        "team",
+        "tour"
+      ]
+    },
+    {
+      "source": "cocomaterial",
+      "url": "https://cocomaterial.com/api/vectors/?page=1&page_size=20&tags=house",
+      "save_as": "brand/showcase/components/09-onboarding-stepper/opendesigner/responses/cocomaterial-3.json",
+      "words": [
+        "potted",
+        "house",
+        "plant",
+        "welcome",
+        "start",
+        "journey",
+        "hello",
+        "rocket",
+        "plan",
+        "team",
+        "tour"
+      ]
+    }
+  ]
+}

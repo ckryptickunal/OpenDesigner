@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salt Ledger footer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,200..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root {
+    --paper: var(--ds-color-neutral-light-3);
+    --ink: var(--ds-color-neutral-light-12);
+    --ox: var(--ds-color-accent-light-9);
+    --gutter: var(--ds-space-80);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); }
+  body { font-family: var(--ds-font-family-text); color: var(--ink); font-optical-sizing: auto; font-variant-numeric: oldstyle-nums proportional-nums; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+
+  footer { padding: var(--ds-space-48) var(--gutter) var(--ds-space-32); }
+  .rule { border-top: 3px solid var(--ink); }
+  .rule + .rule2 { margin-top: var(--ds-space-4); border-top: 1px solid var(--ink); }
+  .label { font-size: var(--ds-font-size-12); letter-spacing: .14em; text-transform: uppercase; font-weight: 500; font-variant-numeric: lining-nums; }
+
+  .run { display: flex; justify-content: space-between; align-items: center; padding: var(--ds-space-12) 0; border-bottom: 1px solid var(--ink); }
+  .run .mast { font-style: italic; font-weight: 500; font-size: var(--ds-font-size-21); letter-spacing: -0.01em; }
+  .run .mid { color: var(--ds-color-text-secondary); }
+
+  .spread { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--ds-space-24); padding-top: var(--ds-space-40); }
+  .issue { grid-column: 1 / span 4; position: relative; padding-right: var(--ds-space-24); border-right: 1px solid var(--ink); }
+  .no { display: flex; align-items: flex-start; gap: var(--ds-space-8); color: var(--ox); }
+  .no small { margin-top: var(--ds-space-32); font-style: italic; font-size: var(--ds-font-size-28); font-weight: 400; }
+  .no b { font-style: italic; font-weight: 250; font-size: 248px; /* od-ignore: the issue numeral is art, bigger than the scale */ line-height: .78; letter-spacing: -0.04em; font-variant-numeric: lining-nums; font-variation-settings: "opsz" 72; }
+  .theme { margin-top: var(--ds-space-24); font-style: italic; font-weight: 400; font-size: var(--ds-font-size-38); line-height: 1.05; letter-spacing: -0.01em; }
+  .season { margin-top: var(--ds-space-8); color: var(--ds-color-text-secondary); }
+  .note { margin-top: var(--ds-space-20); font-size: var(--ds-font-size-16); line-height: 1.55; color: var(--ds-color-text-secondary); max-width: 26em; hanging-punctuation: first; text-wrap: pretty; }
+  .sub { display: inline-flex; align-items: center; gap: var(--ds-space-8); margin-top: var(--ds-space-24); min-height: var(--ds-size-target-min); font-size: var(--ds-font-size-21); font-style: italic; color: var(--ox);
+    border-bottom: 1px solid currentColor; transition: gap var(--ds-motion-duration-medium) var(--ds-motion-easing-enter); }
+  .sub:hover { gap: var(--ds-space-16); }
+
+  .toc { grid-column: 5 / span 8; display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--ds-space-48); }
+  .sect + .sect { margin-top: var(--ds-space-32); }
+  .sect h3 { display: flex; align-items: baseline; gap: var(--ds-space-12); padding-bottom: var(--ds-space-8); border-bottom: 1px solid var(--ink); margin-bottom: var(--ds-space-4); }
+  .sect h3 .roman { font-style: italic; font-weight: 400; font-size: var(--ds-font-size-21); color: var(--ox); letter-spacing: 0; text-transform: none; }
+  .sect ol { list-style: none; }
+  .sect li a { display: flex; align-items: baseline; gap: var(--ds-space-8); min-height: var(--ds-space-40); padding-top: var(--ds-space-8); font-size: var(--ds-font-size-21); line-height: 1.25; }
+  .sect li a .t { transition: color var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
+  .sect li a em { font-size: var(--ds-font-size-16); color: var(--ds-color-text-secondary); }
+  .sect li a::after { content: ""; order: 2; flex: 1; min-width: var(--ds-space-24); height: 1px; transform: translateY(-4px);
+    background: radial-gradient(circle, var(--ds-color-neutral-light-9) 0.75px, transparent 1px) 0 0 / 6px 1px repeat-x; }
+  .sect li a .pg { order: 3; font-size: var(--ds-font-size-16); color: var(--ox); font-feature-settings: "onum"; min-width: 2.2em; text-align: right; }
+  .sect li a:hover .t { color: var(--ox); }
+
+  .colophon { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--ds-space-24); margin-top: var(--ds-space-48); padding-top: var(--ds-space-16); border-top: 1px solid var(--ink); align-items: start; }
+  .colophon .nw { white-space: nowrap; font-variant-numeric: lining-nums; }
+  .colophon p { grid-column: 1 / span 8; font-size: var(--ds-font-size-16); line-height: 1.5; color: var(--ds-color-text-secondary); font-style: italic; }
+  .colophon p .fl { font-style: normal; color: var(--ox); margin-right: var(--ds-space-6); }
+  .colophon nav { grid-column: 9 / span 4; display: flex; justify-content: flex-end; align-items: center; flex-wrap: wrap; column-gap: var(--ds-space-24); }
+  .colophon nav a { display: inline-flex; align-items: center; min-height: var(--ds-size-target-pointer); }
+  .colophon nav a:hover { color: var(--ox); }
+  .colophon nav .up { color: var(--ox); }
+
+  @media (max-width: 900px) {
+    :root { --gutter: var(--ds-space-20); }
+    footer { padding-top: var(--ds-space-32); }
+    .run .mid { display: none; }
+    .issue { grid-column: 1 / -1; border-right: 0; padding-right: 0; padding-bottom: var(--ds-space-32); border-bottom: 1px solid var(--ink); }
+    .no b { font-size: 180px; } /* od-ignore */
+    .toc { grid-column: 1 / -1; grid-template-columns: 1fr; margin-top: var(--ds-space-32); }
+    .toc > div + div { margin-top: var(--ds-space-32); }
+    .sect li a { font-size: var(--ds-font-size-16); min-height: 36px; }
+    .sect li a em { display: none; }
+    .colophon p, .colophon nav { grid-column: 1 / -1; justify-content: flex-start; }
+    .colophon nav { margin-top: var(--ds-space-16); }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<footer aria-label="Site footer">
+  <div class="rule"></div><div class="rule2"></div>
+  <div class="run">
+    <a class="mast" href="#">Salt Ledger</a>
+    <span class="label mid">An independent quarterly of place, work &amp; weather</span>
+    <span class="label">Leith &middot; Est. 2020</span>
+  </div>
+
+  <div class="spread">
+    <section class="issue" aria-label="Current issue">
+      <p class="no" aria-label="Issue number 23"><small aria-hidden="true">No.</small><b aria-hidden="true">23</b></p>
+      <h2 class="theme">Thresholds</h2>
+      <p class="season label">Autumn 2026 &middot; 168 pages</p>
+      <p class="note">&ldquo;Doors, tidelines, the first frost, the last ferry. This issue is about the places where one thing turns into another.&rdquo;</p>
+      <a class="sub" href="#">Subscribe, four issues for &pound;38 <span aria-hidden="true">&rarr;</span></a>
+    </section>
+
+    <nav class="toc" aria-label="Sections">
+      <div>
+        <div class="sect">
+          <h3 class="label"><span class="roman">I.</span>In this issue</h3>
+          <ol>
+            <li><a href="#"><span class="t">Essays</span><span class="pg">12</span></a></li>
+            <li><a href="#"><span class="t">Fiction <em>&middot; The Lighthouse Keeper&rsquo;s Daughter</em></span><span class="pg">38</span></a></li>
+            <li><a href="#"><span class="t">Field notes</span><span class="pg">61</span></a></li>
+            <li><a href="#"><span class="t">Conversations</span><span class="pg">84</span></a></li>
+            <li><a href="#"><span class="t">Poems</span><span class="pg">112</span></a></li>
+          </ol>
+        </div>
+        <div class="sect">
+          <h3 class="label"><span class="roman">II.</span>To look at</h3>
+          <ol>
+            <li><a href="#"><span class="t">Portfolios</span><span class="pg">124</span></a></li>
+            <li><a href="#"><span class="t">Maps &amp; drawings</span><span class="pg">146</span></a></li>
+          </ol>
+        </div>
+      </div>
+      <div>
+        <div class="sect">
+          <h3 class="label"><span class="roman">III.</span>The ledger</h3>
+          <ol>
+            <li><a href="#"><span class="t">Archive <em>&middot; issues 1&ndash;22</em></span><span class="pg">&infin;</span></a></li>
+            <li><a href="#"><span class="t">Stockists</span><span class="pg">152</span></a></li>
+            <li><a href="#"><span class="t">Readings &amp; events</span><span class="pg">156</span></a></li>
+            <li><a href="#"><span class="t">The shop</span><span class="pg">160</span></a></li>
+          </ol>
+        </div>
+        <div class="sect">
+          <h3 class="label"><span class="roman">IV.</span>Colophon</h3>
+          <ol>
+            <li><a href="#"><span class="t">Masthead</span><span class="pg">164</span></a></li>
+            <li><a href="#"><span class="t">Submissions <em>&middot; open till 1 Dec</em></span><span class="pg">165</span></a></li>
+            <li><a href="#"><span class="t">Write to us</span><span class="pg">168</span></a></li>
+          </ol>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="colophon">
+    <p><span class="fl" aria-hidden="true">&#10087;</span>&copy; 2026 Salt Ledger Press. Made in Leith, printed on uncoated paper four times a year. <span class="nw">ISSN 2977-0412</span></p>
+    <nav class="label" aria-label="Legal">
+      <a href="#">Privacy</a><a href="#">Terms</a><a class="up" href="#top">Back to the cover &uarr;</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

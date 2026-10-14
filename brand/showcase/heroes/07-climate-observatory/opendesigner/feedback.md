@@ -1,0 +1,33 @@
+# Feedback
+
+Gaps, bugs, confusing steps and ideas found while using OpenDesigner. Each entry has a ready-to-file issue link. Nothing is posted unless you open the link and submit it yourself.
+
+## F-001 · 2026-10-14 · bug
+The feel word 'precise' was dropped without a word: it is not in taste.feelWords, macros, or DESIGN.md. 'engine.py feel' promises 'any other word is asked about, never rejected', but with --delegated it vanishes.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bbug%5D%20The%20feel%20word%20%27precise%27%20was%20dropped%20without%20a%20word%3A%20it%20is%20not%20in%20taste...&body=%2A%2AKind%3A%2A%2A%20bug%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AThe%20feel%20word%20%27precise%27%20was%20dropped%20without%20a%20word%3A%20it%20is%20not%20in%20taste.feelWords%2C%20macros%2C%20or%20DESIGN.md.%20%27engine.py%20feel%27%20promises%20%27any%20other%20word%20is%20asked%20about%2C%20never%20rejected%27%2C%20but%20with%20--delegated%20it%20vanishes.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=bug%2Cfrom-engine)
+
+## F-002 · 2026-10-14 · gap
+A deep navy page is unreachable: raw.neutralBase #0E2A4A still gives neutral-dark-1 #131519 because ramp ends are capped at chroma 0.008 (and neutralBase at 0.05). Ocean, night-sky and ink-blue brands need a tinted base step; I had to hard-code the navy background.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bgap%5D%20A%20deep%20navy%20page%20is%20unreachable%3A%20raw.neutralBase%20%230E2A4A%20still%20gives%20n...&body=%2A%2AKind%3A%2A%2A%20gap%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AA%20deep%20navy%20page%20is%20unreachable%3A%20raw.neutralBase%20%230E2A4A%20still%20gives%20neutral-dark-1%20%23131519%20because%20ramp%20ends%20are%20capped%20at%20chroma%200.008%20%28and%20neutralBase%20at%200.05%29.%20Ocean%2C%20night-sky%20and%20ink-blue%20brands%20need%20a%20tinted%20base%20step%3B%20I%20had%20to%20hard-code%20the%20navy%20background.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=gap%2Cfrom-engine)
+
+## F-003 · 2026-10-14 · confusing
+The colorfulness dial does nothing to a brand-seeded accent ramp (Material Fidelity pin). With brand #3FC1D9 and dark-only, bg.action.primary became a muddy #418e9d; only raw.primaryActionColor fixed it. Say in the sketch output which color the dark-mode button actually got.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bconfusing%5D%20The%20colorfulness%20dial%20does%20nothing%20to%20a%20brand-seeded%20accent%20ramp%20%28Mate...&body=%2A%2AKind%3A%2A%2A%20confusing%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AThe%20colorfulness%20dial%20does%20nothing%20to%20a%20brand-seeded%20accent%20ramp%20%28Material%20Fidelity%20pin%29.%20With%20brand%20%233FC1D9%20and%20dark-only%2C%20bg.action.primary%20became%20a%20muddy%20%23418e9d%3B%20only%20raw.primaryActionColor%20fixed%20it.%20Say%20in%20the%20sketch%20output%20which%20color%20the%20dark-mode%20button%20actually%20got.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=confusing%2Cfrom-engine)
+
+## F-004 · 2026-10-14 · bug
+validate warns about light-mode contrast (action primary on base surface 2.08:1) for a system whose theme is dark-only. Pairs for modes the system does not ship should be skipped.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bbug%5D%20validate%20warns%20about%20light-mode%20contrast%20%28action%20primary%20on%20base%20surfa...&body=%2A%2AKind%3A%2A%2A%20bug%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0Avalidate%20warns%20about%20light-mode%20contrast%20%28action%20primary%20on%20base%20surface%202.08%3A1%29%20for%20a%20system%20whose%20theme%20is%20dark-only.%20Pairs%20for%20modes%20the%20system%20does%20not%20ship%20should%20be%20skipped.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=bug%2Cfrom-engine)
+
+## F-005 · 2026-10-14 · gap
+Heading weight bands are 600/650/750, so a calm, editorial display (light optical-size serif at 300) can't come from the dials. With 3 weights there is no separate display weight either; I set 300 by hand.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bgap%5D%20Heading%20weight%20bands%20are%20600/650/750%2C%20so%20a%20calm%2C%20editorial%20display%20%28li...&body=%2A%2AKind%3A%2A%2A%20gap%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AHeading%20weight%20bands%20are%20600/650/750%2C%20so%20a%20calm%2C%20editorial%20display%20%28light%20optical-size%20serif%20at%20300%29%20can%27t%20come%20from%20the%20dials.%20With%203%20weights%20there%20is%20no%20separate%20display%20weight%20either%3B%20I%20set%20300%20by%20hand.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=gap%2Cfrom-engine)
+
+## F-006 · 2026-10-14 · bug
+Standard STD-accessibility-motion-13 ('write spacing in rem or em') is flagged by review on 'margin-top: 2px', but tokens.css emits every --ds-space-* in px, so following the tokens still breaks the standard.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bbug%5D%20Standard%20STD-accessibility-motion-13%20%28%27write%20spacing%20in%20rem%20or%20em%27%29%20is...&body=%2A%2AKind%3A%2A%2A%20bug%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AStandard%20STD-accessibility-motion-13%20%28%27write%20spacing%20in%20rem%20or%20em%27%29%20is%20flagged%20by%20review%20on%20%27margin-top%3A%202px%27%2C%20but%20tokens.css%20emits%20every%20--ds-space-%2A%20in%20px%2C%20so%20following%20the%20tokens%20still%20breaks%20the%20standard.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=bug%2Cfrom-engine)

@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voltfield: live workout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* The neon is --ds-color-brand-seed: the dark ramp's accent is desaturated (#b6d269), see notes. */
+  :root { --neon: var(--ds-color-brand-seed); --z5: var(--ds-color-accent2-dark-9); --z3: var(--ds-color-neutral-dark-12); --z2: var(--ds-color-neutral-dark-11); --z1: var(--ds-color-neutral-dark-8); } /* zone fills keep 3:1 or more on black */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ds-color-surface-sunken); }
+  body { width: 390px; height: 844px; overflow: hidden; position: relative; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); -webkit-font-smoothing: antialiased; }
+  .grid { position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(60% 28% at 38% 27%, color-mix(in oklab, var(--neon) 16%, transparent), transparent 70%),
+      repeating-linear-gradient(90deg, color-mix(in oklab, var(--ds-color-neutral-dark-12) 4%, transparent) 0 1px, transparent 1px 39px),
+      repeating-linear-gradient(0deg, color-mix(in oklab, var(--ds-color-neutral-dark-12) 4%, transparent) 0 1px, transparent 1px 39px); }
+  .mono { font-family: var(--ds-font-family-mono); }
+  .cond { font-family: var(--ds-font-family-display); font-stretch: 62%; }
+
+  .status { position: relative; height: 54px; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-4) var(--ds-space-32) 0 var(--ds-space-40); }
+  .status time { font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); letter-spacing: -0.01em; }
+  .status .sys { display: flex; gap: var(--ds-space-6); align-items: center; }
+  .status svg { display: block; fill: var(--ds-color-text-primary); }
+
+  .head { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 0 var(--ds-space-20); height: 48px; }
+  .live { display: flex; align-items: center; gap: var(--ds-space-8); }
+  .dot { width: 10px; height: 10px; background: var(--neon); box-shadow: 0 0 0 4px color-mix(in oklab, var(--neon) 22%, transparent), 0 0 14px var(--neon); border-radius: 50%; } /* od-ignore: neon glow is light, not elevation */
+  .live b { font: 800 var(--ds-font-size-22)/1 var(--ds-font-family-display); font-stretch: 62%; letter-spacing: 0.01em; text-transform: uppercase; }
+  .live span { font: 700 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); letter-spacing: 0.08em; }
+  .lock { all: unset; width: 44px; height: 44px; display: grid; place-items: center; color: var(--ds-color-text-primary); }
+
+  .reps { position: relative; padding: var(--ds-space-8) var(--ds-space-20) 0; }
+  .reps .bar { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--ds-space-4); }
+  .reps .bar i { height: 6px; background: var(--ds-color-neutral-dark-6); transform: skewX(-24deg); }
+  .reps .bar i.done { background: var(--ds-color-neutral-dark-11); }
+  .reps .bar i.now { background: linear-gradient(90deg, var(--neon) 62%, var(--ds-color-neutral-dark-6) 62%); box-shadow: 0 0 12px color-mix(in oklab, var(--neon) 50%, transparent); } /* od-ignore: neon glow is light, not elevation */
+  .reps .lbl { display: flex; justify-content: space-between; margin-top: var(--ds-space-8); font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-mono); color: var(--ds-color-text-secondary); letter-spacing: 0.04em; }
+  .reps .lbl b { color: var(--ds-color-text-primary); font-weight: 700; }
+
+  .hero { position: relative; display: flex; align-items: flex-end; gap: var(--ds-space-8); padding: var(--ds-space-8) var(--ds-space-20) 0; height: 172px; }
+  .bpm { font: 850 var(--ds-font-size-169)/0.8 var(--ds-font-family-display); font-stretch: 62%; letter-spacing: -0.025em; color: var(--neon); font-variant-numeric: tabular-nums; text-shadow: 0 0 40px color-mix(in oklab, var(--neon) 35%, transparent); margin-left: -6px; } /* od-ignore: neon glow is light, not elevation */
+  .side { display: flex; flex-direction: column; gap: var(--ds-space-8); padding-bottom: var(--ds-space-4); }
+  .zone { display: inline-flex; white-space: nowrap; align-items: center; gap: var(--ds-space-6); height: 30px; padding: 0 var(--ds-space-12); background: var(--neon); color: var(--ds-color-text-on-brand); font: 800 var(--ds-font-size-17)/1 var(--ds-font-family-display); font-stretch: 68%; text-transform: uppercase; letter-spacing: 0.02em;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); }
+  .unit { display: flex; align-items: center; gap: var(--ds-space-6); font: 700 var(--ds-font-size-13)/1 var(--ds-font-family-text); letter-spacing: 0.08em; color: var(--ds-color-text-secondary); }
+  .heart { color: var(--z5); }
+  .side .rng { font: 500 var(--ds-font-size-13)/1.3 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+  .side .rng b { font-weight: 700; }
+  .side .rng b { color: var(--ds-color-text-primary); }
+
+  .trace { position: relative; margin-top: var(--ds-space-20); height: 140px; }
+  .trace svg { display: block; width: 390px; height: 140px; overflow: visible; }
+
+  .tiz { position: relative; padding: var(--ds-space-32) var(--ds-space-20) 0; }
+  .tiz .stack { display: flex; height: 12px; gap: 2px; }
+  .tiz .stack i { display: block; height: 100%; }
+  .tiz .legend { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: var(--ds-space-8); font: 500 var(--ds-font-size-13)/1.25 var(--ds-font-family-mono); color: var(--ds-color-text-secondary); }
+  .tiz .legend b { display: block; color: var(--ds-color-text-primary); font-weight: 700; }
+  .tiz .legend span.now b { color: var(--neon); }
+
+  .metrics { position: relative; display: grid; grid-template-columns: 1fr 1fr 1fr; margin: var(--ds-space-24) var(--ds-space-20) 0; border-top: 1px solid var(--ds-color-border-default); }
+  .metrics div { padding-top: var(--ds-space-12); }
+  .metrics div + div { padding-left: var(--ds-space-12); border-left: 1px solid var(--ds-color-border-subtle); }
+  .metrics small { display: block; font: 700 var(--ds-font-size-13)/1 var(--ds-font-family-text); letter-spacing: 0.08em; color: var(--ds-color-text-secondary); text-transform: uppercase; }
+  .metrics b { display: block; margin-top: var(--ds-space-6); font: 800 var(--ds-font-size-54)/0.9 var(--ds-font-family-display); font-stretch: 62%; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .metrics b sub { font: 700 var(--ds-font-size-17)/1 var(--ds-font-family-display); font-stretch: 75%; vertical-align: baseline; color: var(--ds-color-text-secondary); margin-left: 2px; }
+
+  .cue { position: relative; margin: var(--ds-space-20) var(--ds-space-20) 0; display: flex; align-items: center; gap: var(--ds-space-12); font: 500 var(--ds-font-size-17)/1.3 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+  .cue .l { display: block; }
+  .cue b { color: var(--ds-color-text-primary); font-weight: 700; }
+  .cue .arrow { flex: none; width: 28px; height: 28px; display: grid; place-items: center; background: color-mix(in oklab, var(--neon) 14%, transparent); color: var(--neon); }
+  .ctrl { position: absolute; left: var(--ds-space-20); right: var(--ds-space-20); bottom: 40px; display: flex; gap: var(--ds-space-12); align-items: stretch; height: 72px; }
+  .ctrl button { all: unset; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: var(--ds-space-8); font: 800 var(--ds-font-size-22)/1 var(--ds-font-family-display); font-stretch: 75%; text-transform: uppercase; letter-spacing: 0.02em; }
+  .ctrl .lap { flex: 0 0 96px; color: var(--ds-color-text-primary); --c: 14px; }
+  .ctrl .pause { flex: 1; background: var(--neon); color: var(--ds-color-text-on-brand); clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px); box-shadow: 0 0 40px color-mix(in oklab, var(--neon) 30%, transparent); } /* od-ignore: neon glow is light, not elevation */
+  button.cut { --c: 10px; --b: 1.5px; position: relative; isolation: isolate; background: var(--ds-color-border-strong); clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c)); }
+  button.cut::before { content: ""; position: absolute; inset: var(--b); z-index: -1; background: var(--ds-color-surface-sunken); clip-path: polygon(calc(var(--c) - var(--b) * .4) 0, 100% 0, 100% calc(100% - var(--c) + var(--b) * .4), calc(100% - var(--c) + var(--b) * .4) 100%, 0 100%, 0 calc(var(--c) - var(--b) * .4)); }
+  .hold { position: absolute; left: 0; right: 0; bottom: 18px; text-align: center; font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); letter-spacing: 0.02em; }
+  .home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: var(--ds-color-text-primary); }
+  :focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="grid" aria-hidden="true"></div>
+<div class="status" aria-hidden="true">
+  <time>9:41</time>
+  <div class="sys">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.2A10.2 10.2 0 0 0 8 .7 10.2 10.2 0 0 0 .9 3.5L2 4.7a8.6 8.6 0 0 1 6-2.4Zm0 3.3c1.4 0 2.7.5 3.7 1.4l1.1-1.2A7 7 0 0 0 8 3.9a7 7 0 0 0-4.8 1.9l1.1 1.2A5.4 5.4 0 0 1 8 5.6Zm0 3.2c.6 0 1.1.2 1.5.6L8 11 6.5 9.4c.4-.4.9-.6 1.5-.6Z"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" style="stroke: var(--ds-color-text-secondary)"/><rect x="2" y="2" width="12" height="9" rx="2.5"/><path d="M25 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" style="fill: var(--ds-color-text-secondary)"/></svg>
+  </div>
+</div>
+
+<header class="head">
+  <div class="live"><span class="dot" aria-hidden="true"></span><b>Tempo 6 × 800</b><span>LIVE</span></div>
+  <button class="lock cut" aria-label="Lock screen during run"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><rect x="5" y="11" width="14" height="9"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button>
+</header>
+
+<section class="reps" aria-label="Interval 4 of 6, 62 percent done">
+  <div class="bar"><i class="done"></i><i class="done"></i><i class="done"></i><i class="now"></i><i></i><i></i></div>
+  <div class="lbl"><span>REP <b>4/6</b> · 800 M</span><span><b>496</b> / 800 M</span></div>
+</section>
+
+<section class="hero" aria-label="Heart rate 172 beats per minute, zone 4, threshold">
+  <div class="bpm" aria-hidden="true">172</div>
+  <div class="side">
+    <span class="zone">Z4 · Threshold</span>
+    <span class="unit"><svg class="heart" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.4-9.3C1.2 8 3.6 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.7 1.2-1.6 2.8-2.7 4.8-2.7 3.6 0 6 3.5 4.6 7.2C19.5 16.4 12 21 12 21Z"/></svg>BPM</span>
+    <span class="rng">Target <b>158–176</b></span>
+  </div>
+</section>
+
+<section class="trace" aria-label="Heart rate over the last 12 minutes, by zone">
+  <svg id="trace" viewBox="0 0 390 140"></svg>
+</section>
+
+<section class="tiz" aria-label="Time in zone">
+  <div class="stack" id="stack"></div>
+  <div class="legend" id="legend"></div>
+</section>
+
+<section class="metrics" aria-label="Run so far">
+  <div><small>Time</small><b>38:42</b></div>
+  <div><small>Dist · km</small><b>7.84</b></div>
+  <div><small>Pace · /km</small><b>4:31</b></div>
+</section>
+
+<p class="cue"><span class="arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 19 19 5M9 5h10v10"/></svg></span><span><span class="l">Hold <b>4:30–4:35</b> /km for <b>304&nbsp;m</b></span><span class="l"><b>2&nbsp;s</b> faster than rep&nbsp;3.</span></span></p>
+
+<div class="ctrl">
+  <button class="lap cut" aria-label="Lap">Lap</button>
+  <button class="pause" aria-label="Pause run"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="4" width="5" height="16"/><rect x="14" y="4" width="5" height="16"/></svg>Pause</button>
+</div>
+<p class="hold">Hold Pause to end the run</p>
+<div class="home-ind" aria-hidden="true"></div>
+
+<script>
+(() => {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const Z = [['Z1', css('--z1'), 0, 120], ['Z2', css('--z2'), 120, 140], ['Z3', css('--z3'), 140, 158], ['Z4', css('--neon'), 158, 176], ['Z5', css('--z5'), 176, 999]];
+  // 12 minutes of heart rate: warm-up drift, then 800 m reps with jog recoveries (deterministic)
+  const hr = [];
+  let s = 5; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i <= 144; i++) {
+    const t = i / 144, phase = (t * 3.2) % 1, rep = phase < .6;
+    const base = rep ? 150 + 28 * Math.min(1, phase / .45) : 178 - 30 * Math.min(1, (phase - .6) / .3);
+    hr.push(Math.max(132, Math.min(181, base + (rnd() - .5) * 4)));
+  }
+  hr[hr.length - 1] = 172;
+  const W = 390, H = 140, lo = 126, hi = 188, padR = 40;
+  const X = i => i / (hr.length - 1) * (W - padR), Y = v => (1 - (v - lo) / (hi - lo)) * H;
+  let d = '';
+  hr.forEach((v, i) => { d += (i ? 'L' : 'M') + X(i).toFixed(1) + ',' + Y(v).toFixed(1); });
+  // stroke gradient with hard stops at the zone thresholds
+  const stops = [];
+  Z.slice().reverse().forEach(([n, c, a, b]) => {
+    const top = Math.max(0, Math.min(1, Y(Math.min(b, hi)) / H)), bot = Math.max(0, Math.min(1, Y(Math.max(a, lo)) / H));
+    stops.push(`<stop offset="${top}" stop-color="${c}"/><stop offset="${bot}" stop-color="${c}"/>`);
+  });
+  const bands = Z.filter(z => z[0] === 'Z4' || z[0] === 'Z5').map(([n, c, a, b]) => {
+    const y1 = Y(Math.min(b, hi)), y2 = Y(a);
+    return `<rect x="0" y="${y1}" width="${W - padR}" height="${y2 - y1}" fill="${c}" opacity="${n === 'Z4' ? .07 : .06}"/>`;
+  }).join('');
+  const lines = [140, 158, 176].map(v => `<line x1="0" x2="${W - padR}" y1="${Y(v)}" y2="${Y(v)}" stroke="${css('--ds-color-neutral-dark-12')}" stroke-opacity=".14" stroke-dasharray="2 4"/>
+    <text x="${W - padR + 6}" y="${Y(v) + 4}" fill="${css('--ds-color-text-secondary')}" font-family="JetBrains Mono" font-size="11" font-weight="500">${v}</text>`).join('');
+  const lx = X(hr.length - 1), ly = Y(172);
+  document.getElementById('trace').innerHTML = `
+    <defs><linearGradient id="zg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="${H}">${stops.join('')}</linearGradient>
+      <linearGradient id="fade" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <mask id="m"><path d="${d} L${lx},${H} L0,${H} Z" fill="url(#fade)"/></mask>
+      <filter id="glow" x="-10%" y="-30%" width="120%" height="160%"><feGaussianBlur stdDeviation="3"/></filter></defs>
+    ${bands}${lines}
+    <rect width="${W - padR}" height="${H}" fill="url(#zg)" mask="url(#m)"/>
+    <path d="${d}" fill="none" stroke="url(#zg)" stroke-width="3" filter="url(#glow)" opacity=".7"/>
+    <path d="${d}" fill="none" stroke="url(#zg)" stroke-width="2" stroke-linejoin="round"/>
+    <line x1="${lx}" x2="${lx}" y1="${ly}" y2="${H}" stroke="${css('--neon')}" stroke-opacity=".5"/>
+    <rect x="${lx - 5}" y="${ly - 5}" width="10" height="10" fill="${css('--neon')}" transform="rotate(45 ${lx} ${ly})"/>
+    <text x="20" y="${H + 16}" fill="${css('--ds-color-text-secondary')}" font-family="JetBrains Mono" font-size="11">−12 MIN</text>
+    <text x="${lx}" y="${H + 16}" text-anchor="end" fill="${css('--ds-color-text-secondary')}" font-family="JetBrains Mono" font-size="11">NOW</text>`;
+  // time in zone (minutes:seconds) for the whole run so far
+  const tiz = [['Z1', '2:10'], ['Z2', '8:45'], ['Z3', '12:30'], ['Z4', '13:57'], ['Z5', '1:20']];
+  const secs = t => t.split(':').reduce((m, x) => m * 60 + +x, 0), total = tiz.reduce((a, [, t]) => a + secs(t), 0);
+  document.getElementById('stack').innerHTML = tiz.map(([n, t], i) => `<i style="width:${secs(t) / total * 100}%;background:${Z[i][1]};${n === 'Z4' ? `box-shadow:0 0 12px ${Z[i][1]}` : ''}"></i>`).join('');
+  document.getElementById('legend').innerHTML = tiz.map(([n, t]) => `<span class="${n === 'Z4' ? 'now' : ''}">${n}<b>${t}</b></span>`).join('');
+})();
+</script>
+</body>
+</html>

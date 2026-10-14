@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-density="compact">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quarry · Field App · Cycle 14</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+/* Quarry: a calm, dense project workspace. Neutral greys plus one vermilion accent (today, the primary action,
+   the focused card, the milestone). Every color, space, radius, size and duration is a --ds-* token. */
+:root {
+  --accent: var(--ds-color-bg-action-primary);
+  --accent-ink: var(--ds-color-text-link);
+  --line: var(--ds-color-border-subtle);
+  --line-2: var(--ds-color-neutral-light-4);
+  --t1: var(--ds-color-text-primary);
+  --t2: var(--ds-color-text-secondary);
+  --t3: var(--ds-color-text-tertiary);
+  --mono: var(--ds-font-family-mono);
+  --side: 248px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--ds-color-surface-sunken); }
+body { width: 1440px; height: 900px; overflow: hidden; display: grid; grid-template-columns: var(--side) 1fr; font: var(--ds-text-body-md); color: var(--t1); -webkit-font-smoothing: antialiased; letter-spacing: -.003em; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.i { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-sm); stroke-linecap: round; stroke-linejoin: round; flex: none; }
+kbd { font: 500 var(--ds-font-size-12)/1 var(--mono); min-width: 20px; height: 20px; padding: 0 5px; display: inline-grid; place-items: center; border-radius: var(--ds-radius-control); background: var(--ds-color-surface-raised); box-shadow: inset 0 0 0 1px var(--line), 0 1px 0 var(--line); color: var(--t2); }
+
+/* ---------------- sidebar ---------------- */
+aside { padding: var(--ds-space-12) var(--ds-space-12) var(--ds-space-12); display: flex; flex-direction: column; gap: var(--ds-space-2); min-height: 0; }
+.ws { display: flex; align-items: center; gap: var(--ds-space-8); height: 36px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-container); }
+.logo { width: 24px; height: 24px; display: grid; place-items: center; }
+.ws b { font: 600 var(--ds-font-size-14)/1 var(--ds-font-family-text); }
+.ws .grow { flex: 1; }
+.ws .av { width: 24px; height: 24px; border-radius: 50%; }
+.search { margin: var(--ds-space-8) 0 var(--ds-space-12); height: 32px; display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-6) 0 var(--ds-space-8); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); box-shadow: inset 0 0 0 1px var(--line); color: var(--t3); font: var(--ds-text-body-md); }
+.search span { flex: 1; }
+.nav a, .proj a { display: flex; align-items: center; gap: var(--ds-space-8); height: 30px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control); color: var(--t2); text-decoration: none; font: 500 var(--ds-font-size-14)/1 var(--ds-font-family-text); }
+.nav a .n { margin-left: auto; font: 500 var(--ds-font-size-12)/1 var(--mono); color: var(--t2); }
+.nav a .n.hot { min-width: 20px; height: 18px; padding: 0 5px; border-radius: var(--ds-radius-full); background: var(--accent); color: var(--ds-color-text-on-action); display: grid; place-items: center; }
+.sec { margin: var(--ds-space-16) var(--ds-space-8) var(--ds-space-4); display: flex; align-items: center; justify-content: space-between; font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--t3); }
+.proj a.on { background: var(--ds-color-surface-raised); color: var(--t1); box-shadow: inset 0 0 0 1px var(--line), 0 1px 2px var(--ds-color-shadow-key); }
+.proj .ring { width: 14px; height: 14px; flex: none; }
+.proj .sub { margin-left: 22px; }
+.proj .sub a { height: 28px; font-weight: 400; }
+.proj .sub a.on { background: var(--ds-color-bg-neutral-subtle); box-shadow: none; color: var(--t1); font-weight: 500; }
+.spacer { flex: 1; }
+.me { display: flex; align-items: center; gap: var(--ds-space-8); height: 40px; padding: 0 var(--ds-space-8); border-top: 1px solid var(--line); margin: 0 calc(-1 * var(--ds-space-12)); padding: var(--ds-space-12) var(--ds-space-20) 0; height: auto; }
+.me .who { flex: 1; font: 500 var(--ds-font-size-14)/1.2 var(--ds-font-family-text); }
+.me .who small { display: block; font: 400 var(--ds-font-size-12)/1.4 var(--ds-font-family-text); color: var(--t3); }
+
+/* avatars: initials on stepped neutrals (no extra hues, one accent rule) */
+.av { width: 24px; height: 24px; border-radius: 50%; display: inline-grid; place-items: center; font: 600 var(--ds-font-size-12)/1 var(--ds-font-family-text); letter-spacing: -.02em; color: var(--ds-color-neutral-light-12); background: var(--ds-color-neutral-light-5); box-shadow: 0 0 0 1.5px var(--ds-color-surface-raised); flex: none; }
+.av.a2 { background: var(--ds-color-neutral-light-7); }
+.av.a3 { background: var(--ds-color-neutral-light-11); color: var(--ds-color-white); }
+.av.a4 { background: var(--ds-color-neutral-light-12); color: var(--ds-color-white); }
+.av.a5 { background: var(--ds-color-accent-light-4); color: var(--ds-color-accent-light-12); }
+
+/* ---------------- main ---------------- */
+.main { margin: var(--ds-space-8) var(--ds-space-8) var(--ds-space-8) 0; background: var(--ds-color-surface-base); border-radius: var(--ds-radius-overlay); box-shadow: inset 0 0 0 1px var(--line), var(--ds-elevation-raised); display: grid; grid-template-rows: 48px 44px auto 1fr 36px; min-height: 0; overflow: hidden; }
+.hdr { display: flex; align-items: center; gap: var(--ds-space-12); padding: 0 var(--ds-space-16) 0 var(--ds-space-20); border-bottom: 1px solid var(--line-2); }
+.crumb { display: flex; align-items: center; gap: var(--ds-space-8); font: 500 var(--ds-font-size-14)/1 var(--ds-font-family-text); color: var(--t2); }
+.crumb b { color: var(--t1); font-weight: 600; }
+.crumb .sep { color: var(--t3); }
+.cyc { font: 500 var(--ds-font-size-12)/1 var(--mono); color: var(--t2); padding: var(--ds-space-4) var(--ds-space-6); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-neutral-subtle); }
+.hdr .grow { flex: 1; }
+.stack { display: flex; }
+.stack { gap: var(--ds-space-4); }
+.stack .av { width: 28px; height: 28px; margin-left: 0; box-shadow: 0 0 0 2px var(--ds-color-surface-base); }
+.btn { height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-container); display: inline-flex; align-items: center; gap: var(--ds-space-8); font: 500 var(--ds-font-size-14)/1 var(--ds-font-family-text); }
+.btn.ghost { box-shadow: inset 0 0 0 1px var(--ds-color-border-default); color: var(--t1); background: var(--ds-color-surface-raised); }
+.btn.pri { background: var(--accent); color: var(--ds-color-text-on-action); box-shadow: inset 0 -1px 0 color-mix(in oklab, var(--ds-color-black) 18%, transparent); }
+.btn.pri kbd { background: var(--ds-color-accent-light-11); box-shadow: none; color: var(--ds-color-text-on-action); }
+.btn.icon { width: 32px; padding: 0; justify-content: center; color: var(--t2); }
+
+.viewbar { display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-16) 0 var(--ds-space-20); border-bottom: 1px solid var(--line-2); }
+.tabs { display: flex; gap: var(--ds-space-2); padding: var(--ds-space-2); border-radius: var(--ds-radius-container); background: var(--ds-color-bg-neutral-subtle); }
+.tab { height: 28px; padding: 0 var(--ds-space-8) 0 var(--ds-space-12); border-radius: var(--ds-radius-container); display: inline-flex; align-items: center; gap: var(--ds-space-8); font: 500 var(--ds-font-size-14)/1 var(--ds-font-family-text); color: var(--t2); }
+.tab kbd { height: 18px; min-width: 18px; background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
+.tab.on { background: var(--ds-color-surface-raised); color: var(--t1); box-shadow: 0 0 0 1px var(--line), 0 1px 2px var(--ds-color-shadow-key); }
+.chip { height: 28px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-container); display: inline-flex; align-items: center; gap: var(--ds-space-6); font: 400 var(--ds-font-size-14)/1 var(--ds-font-family-text); color: var(--t2); box-shadow: inset 0 0 0 1px var(--line); }
+.chip b { font-weight: 500; color: var(--t1); }
+.chip.add { box-shadow: inset 0 0 0 1px var(--line); border: 0; color: var(--t3); }
+.viewbar .grow { flex: 1; }
+
+/* timeline */
+.tl { padding: var(--ds-space-12) var(--ds-space-20) var(--ds-space-12); border-bottom: 1px solid var(--line-2); display: grid; grid-template-columns: 196px 1fr; column-gap: var(--ds-space-12); position: relative; }
+.tl-h { grid-column: 1 / -1; display: grid; grid-template-columns: 196px 1fr; column-gap: var(--ds-space-12); align-items: end; margin-bottom: var(--ds-space-6); }
+.tl-h .ttl { font: 600 var(--ds-font-size-14)/1 var(--ds-font-family-text); display: flex; flex-direction: column; gap: var(--ds-space-6); padding-bottom: var(--ds-space-6); }
+.tl-h .ttl small { font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--t2); }
+.days { display: grid; grid-template-columns: repeat(14, 1fr); font: 400 var(--ds-font-size-12)/1 var(--mono); color: var(--t3); }
+.days span { padding: 0 0 var(--ds-space-6) var(--ds-space-4); }
+.days span.we { color: var(--t3); }
+.days span.today { color: var(--accent-ink); font-weight: 500; }
+.ep { height: 30px; display: flex; align-items: center; gap: var(--ds-space-8); font: 500 var(--ds-font-size-14)/1 var(--ds-font-family-text); white-space: nowrap; }
+.ep .pct { margin-left: auto; font: 400 var(--ds-font-size-12)/1 var(--mono); color: var(--t3); }
+.lane { height: 30px; position: relative; display: grid; grid-template-columns: repeat(14, 1fr); }
+.lane i { border-left: 1px solid var(--line-2); }
+.lane i.we { background: repeating-linear-gradient(135deg, transparent 0 4px, var(--ds-color-neutral-light-3) 4px 5px); }
+.barx { position: absolute; top: 6px; height: 18px; border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-4); box-shadow: inset 0 0 0 1px var(--ds-color-neutral-light-6); overflow: hidden; display: flex; align-items: center; }
+.barx .p { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ds-color-neutral-light-11); }
+.barx .av { position: relative; z-index: 1; width: 18px; height: 18px; font-size: 0; margin-left: 0; box-shadow: 0 0 0 2px var(--ds-color-surface-raised); } /* the bar owner, as a dot; the name is in the epic row label */
+.today-line { position: absolute; top: 34px; bottom: 6px; width: 2px; background: var(--accent); z-index: 2; }
+.today-line::before { content: ""; position: absolute; top: -2px; left: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.mile { position: absolute; z-index: 2; top: 30px; bottom: 6px; width: 0; border-left: 1px dashed var(--ds-color-neutral-light-8); }
+.mile .d { position: absolute; left: -6px; bottom: -2px; width: 11px; height: 11px; transform: rotate(45deg); background: var(--ds-color-surface-raised); box-shadow: inset 0 0 0 2px var(--t1); }
+.mile .lbl { position: absolute; left: 8px; top: -2px; font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--t1); white-space: nowrap; background: var(--ds-color-surface-base); padding: var(--ds-space-2) var(--ds-space-4); }
+
+/* board */
+.board { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--ds-space-12); padding: var(--ds-space-12) var(--ds-space-16) 0 var(--ds-space-20); min-height: 0; overflow: hidden; background: var(--ds-color-surface-sunken); }
+.col { display: flex; flex-direction: column; gap: var(--ds-space-8); min-width: 0; }
+.col-h { display: flex; align-items: center; gap: var(--ds-space-8); height: 28px; font: 600 var(--ds-font-size-14)/1 var(--ds-font-family-text); }
+.col-h .c { font: 400 var(--ds-font-size-12)/1 var(--mono); color: var(--t3); }
+.col-h .grow { flex: 1; }
+.col-h button { width: 24px; height: 24px; display: grid; place-items: center; color: var(--t3); border-radius: var(--ds-radius-control); }
+.st { width: 14px; height: 14px; flex: none; }
+.card { background: var(--ds-color-surface-raised); border-radius: var(--ds-radius-container); box-shadow: inset 0 0 0 1px var(--line), 0 1px 2px var(--ds-color-shadow-key); padding: var(--ds-space-8) var(--ds-space-12) var(--ds-space-8); display: flex; flex-direction: column; gap: var(--ds-space-6); position: relative; }
+.card .top { display: flex; align-items: center; gap: var(--ds-space-6); font: 400 var(--ds-font-size-12)/1 var(--mono); color: var(--t3); }
+.card .top .grow { flex: 1; }
+.card h3 { font: 500 var(--ds-font-size-14)/1.36 var(--ds-font-family-text); color: var(--t1); text-wrap: pretty; }
+.card .meta { display: flex; align-items: center; gap: var(--ds-space-6); flex-wrap: wrap; }
+.lbl { height: 20px; padding: 0 var(--ds-space-6); border-radius: var(--ds-radius-control); box-shadow: inset 0 0 0 1px var(--line); display: inline-flex; align-items: center; gap: var(--ds-space-4); font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--t2); }
+.lbl i { width: 6px; height: 6px; transform: rotate(45deg); background: var(--ds-color-neutral-light-8); }
+.due { font: 400 var(--ds-font-size-12)/1 var(--mono); color: var(--t2); display: inline-flex; align-items: center; gap: 3px; }
+.due.soon { color: var(--accent-ink); }
+.prio { width: 14px; height: 14px; }
+.card.done h3 { color: var(--t2); }
+.card.focus { box-shadow: 0 0 0 2px var(--ds-color-border-focus), 0 4px 12px -4px var(--ds-color-shadow-ambient); }
+.sub-p { display: flex; align-items: center; gap: var(--ds-space-6); font: 400 var(--ds-font-size-12)/1 var(--mono); color: var(--t2); }
+.sub-p .trk { width: 48px; height: 4px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-4); overflow: hidden; }
+.sub-p .trk b { display: block; height: 100%; width: 60%; background: var(--t1); }
+.hint { position: absolute; z-index: 5; left: calc(100% - 28px); top: 54px; width: 212px; padding: var(--ds-space-8); border-radius: var(--ds-radius-container); background: var(--ds-color-neutral-light-12); color: var(--ds-color-white); box-shadow: var(--ds-elevation-overlay); display: grid; gap: var(--ds-space-6); font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); }
+.hint div { display: flex; align-items: center; justify-content: space-between; color: var(--ds-color-neutral-dark-12); }
+.hint kbd { background: color-mix(in oklab, var(--ds-color-white) 14%, transparent); box-shadow: none; color: var(--ds-color-white); }
+.drop { height: 118px; border-radius: var(--ds-radius-container); border: 1.5px dashed var(--ds-color-neutral-light-8); background: color-mix(in oklab, var(--ds-color-neutral-light-3) 60%, transparent); }
+.card.drag { position: absolute; z-index: 6; width: 216px; transform: rotate(2.2deg); box-shadow: inset 0 0 0 1px var(--line), var(--ds-elevation-overlay); }
+
+/* hover and press (pointer) */
+.nav a, .proj a, .card, .btn, .chip, .tab, .col-h button { transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-hover), box-shadow var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
+.nav a:hover, .proj a:not(.on):hover, .col-h button:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--t1); }
+.card:not(.focus):not(.drag):hover { box-shadow: inset 0 0 0 1px var(--ds-color-border-default), var(--ds-elevation-raised); }
+.btn.pri:hover { background: var(--ds-color-bg-action-primary-hover); }
+.btn.ghost:hover, .chip:hover, .tab:not(.on):hover, .btn.icon:hover { background: var(--ds-color-bg-neutral-subtle-hover); color: var(--t1); }
+/* footer: shortcuts */
+.foot { display: flex; align-items: center; gap: var(--ds-space-16); padding: 0 var(--ds-space-20); border-top: 1px solid var(--line-2); font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--t2); background: var(--ds-color-surface-base); }
+.foot span { display: inline-flex; align-items: center; gap: var(--ds-space-6); }
+.foot kbd { height: 18px; min-width: 18px; font-size: var(--ds-font-size-12); }
+.foot .grow { flex: 1; }
+.sync i { width: 6px; height: 6px; border-radius: 50%; background: var(--ds-color-bg-success-bold); }
+</style>
+</head>
+<body>
+<aside>
+  <div class="ws">
+    <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2.5 20.5 7.5v9L12 21.5 3.5 16.5v-9Z" fill="var(--ds-color-neutral-light-12)"/><path d="M12 2.5v9.5l8.5-4.5M12 12 3.5 7.5M12 12v9.5" stroke="var(--ds-color-neutral-light-1)" stroke-width="1.2" fill="none" stroke-linejoin="round"/><path d="M12 12 20.5 7.5v9L12 21.5Z" fill="var(--accent)"/></svg></span>
+    <b>Kestrel</b>
+    <svg class="i" viewBox="0 0 16 16" style="color:var(--t3)"><path d="m5 6.5 3 3 3-3"/></svg>
+    <span class="grow"></span>
+    <button class="btn icon" aria-label="New issue" style="height:28px;width:28px"><svg class="i" viewBox="0 0 16 16"><path d="M9.5 2.5H4A1.5 1.5 0 0 0 2.5 4v8A1.5 1.5 0 0 0 4 13.5h8a1.5 1.5 0 0 0 1.5-1.5V6.5"/><path d="m13 2.2.8.8-5.6 5.6-1.3.5.5-1.3Z"/></svg></button>
+  </div>
+  <div class="search"><svg class="i" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg><span>Search or jump to</span><kbd>⌘K</kbd></div>
+  <nav class="nav" aria-label="Workspace">
+    <a href="#"><svg class="i" viewBox="0 0 16 16"><path d="M2.5 9.5 4 3.5h8l1.5 6v3h-11Z"/><path d="M2.5 9.5h3.2l.8 1.5h3l.8-1.5h3.2"/></svg>Inbox<span class="n hot">4</span></a>
+    <a href="#"><svg class="i" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>My issues<span class="n">12</span></a>
+    <a href="#"><svg class="i" viewBox="0 0 16 16"><path d="M13 8a5 5 0 1 1-1.5-3.5"/><path d="M13 3v2.5h-2.5"/></svg>Cycles</a>
+    <a href="#"><svg class="i" viewBox="0 0 16 16"><path d="M2.5 4h6M5 8h8.5M2.5 12h5"/></svg>Roadmap</a>
+  </nav>
+  <div class="sec"><span>Projects</span><svg class="i" viewBox="0 0 16 16"><path d="M8 3.5v9M3.5 8h9"/></svg></div>
+  <div class="proj">
+    <a href="#" class="on"><svg class="ring" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--ds-color-neutral-light-5)" stroke-width="2"/><path d="M7 1.5A5.5 5.5 0 0 1 11.8 9.6" fill="none" stroke="var(--accent)" stroke-width="2"/></svg>Field App</a>
+    <div class="sub">
+      <a href="#" class="on">Cycle 14</a>
+      <a href="#">Backlog</a>
+      <a href="#">Releases</a>
+    </div>
+    <a href="#"><svg class="ring" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--ds-color-neutral-light-5)" stroke-width="2"/><path d="M7 1.5A5.5 5.5 0 0 1 12.2 8.8 5.5 5.5 0 0 1 3.3 11" fill="none" stroke="var(--ds-color-neutral-light-11)" stroke-width="2"/></svg>Billing v2</a>
+    <a href="#"><svg class="ring" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--ds-color-neutral-light-5)" stroke-width="2"/><path d="M7 1.5A5.5 5.5 0 0 1 12.5 7" fill="none" stroke="var(--ds-color-neutral-light-11)" stroke-width="2"/></svg>Design system</a>
+    <a href="#"><svg class="ring" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--ds-color-neutral-light-5)" stroke-width="2"/><path d="M7 1.5A5.5 5.5 0 0 1 9 1.9" fill="none" stroke="var(--ds-color-neutral-light-11)" stroke-width="2"/></svg>Partner portal</a>
+  </div>
+  <div class="sec"><span>Views</span></div>
+  <div class="proj">
+    <a href="#"><svg class="i" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M4.2 11.8l7.6-7.6"/></svg>Blocked<span class="n" style="margin-left:auto;font:500 var(--ds-font-size-12)/1 var(--mono);color:var(--t2)">2</span></a>
+    <a href="#"><svg class="i" viewBox="0 0 16 16"><rect x="2.5" y="3.5" width="11" height="10" rx="1.5"/><path d="M2.5 6.5h11M5.5 2v3M10.5 2v3"/></svg>Due this week<span class="n" style="margin-left:auto;font:500 var(--ds-font-size-12)/1 var(--mono);color:var(--t2)">7</span></a>
+  </div>
+  <div class="spacer"></div>
+  <div class="me">
+    <span class="av a4" style="width:32px;height:32px">MO</span>
+    <div class="who">Mara Okafor<small>Engineering lead</small></div>
+    <button class="btn icon" aria-label="Settings"><svg class="i" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2"/><path d="M8 1.8v1.8M8 12.4v1.8M1.8 8h1.8M12.4 8h1.8M3.6 3.6l1.3 1.3M11.1 11.1l1.3 1.3M3.6 12.4l1.3-1.3M11.1 4.9l1.3-1.3"/></svg></button>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="hdr">
+    <div class="crumb"><span>Field App</span><span class="sep">/</span><h1 style="font:inherit;font-weight:600;color:var(--t1)">Cycle 14</h1><span class="cyc">Oct 7 – Oct 20</span></div>
+    <span class="grow"></span>
+    <div class="stack" aria-label="6 members"><span class="av a1">MO</span><span class="av a2">JT</span><span class="av a3">RS</span><span class="av a5">AK</span><span class="av a2">+2</span></div>
+    <button class="btn ghost"><svg class="i" viewBox="0 0 16 16"><path d="M6.5 9.5a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.8.8M9.5 6.5a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.8-.8"/></svg>Share</button>
+    <button class="btn pri"><svg class="i" viewBox="0 0 16 16"><path d="M8 3.5v9M3.5 8h9"/></svg>New issue<kbd>C</kbd></button>
+  </header>
+
+  <div class="viewbar">
+    <div class="tabs" role="tablist">
+      <button class="tab on" role="tab" aria-selected="true"><svg class="i" viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="3" height="11" rx=".8"/><rect x="6.5" y="2.5" width="3" height="7" rx=".8"/><rect x="10.5" y="2.5" width="3" height="9" rx=".8"/></svg>Board<kbd>1</kbd></button>
+      <button class="tab" role="tab"><svg class="i" viewBox="0 0 16 16"><path d="M2.5 4.5h6M5.5 8h8M3.5 11.5h5"/></svg>Timeline<kbd>2</kbd></button>
+      <button class="tab" role="tab"><svg class="i" viewBox="0 0 16 16"><path d="M5.5 4h8M5.5 8h8M5.5 12h8M2.5 4h.5M2.5 8h.5M2.5 12h.5"/></svg>List<kbd>3</kbd></button>
+    </div>
+    <span class="chip"><svg class="i" viewBox="0 0 16 16"><path d="M2.5 4h11M4.5 8h7M6.5 12h3"/></svg>Label is <b>mobile</b></span>
+    <span class="chip">Assignee <b>anyone</b></span>
+    <span class="chip add"><svg class="i" viewBox="0 0 16 16"><path d="M8 3.5v9M3.5 8h9"/></svg>Filter<kbd style="height:18px">F</kbd></span>
+    <span class="grow"></span>
+    <span class="chip">Group <b>Status</b></span>
+    <span class="chip">Order <b>Priority</b></span>
+  </div>
+
+  <section class="tl" aria-label="Cycle timeline">
+    <div class="tl-h">
+      <div class="ttl">Cycle 14 <small>Day 8 of 14 · 61% done</small></div>
+      <div class="days" id="days"></div>
+    </div>
+    <div id="eps"></div>
+    <div id="lanes" style="position:relative"></div>
+  </section>
+
+  <section class="board" id="board" aria-label="Board"></section>
+
+  <footer class="foot">
+    <span><kbd>⌘K</kbd>Command menu</span>
+    <span><kbd>C</kbd>New issue</span>
+    <span><kbd>J</kbd><kbd>K</kbd>Move between cards</span>
+    <span><kbd>⇧</kbd><kbd>→</kbd>Move to next status</span>
+    <span><kbd>?</kbd>All shortcuts</span>
+    <span class="grow"></span>
+    <span class="sync"><i></i>Synced 2 s ago</span>
+  </footer>
+</div>
+
+<script>
+const days = ['M 7','T 8','W 9','T 10','F 11','S 12','S 13','M 14','T 15','W 16','T 17','F 18','S 19','S 20'];
+// today is Tuesday 14 October: index 7 when the cycle starts Tue 7 Oct
+const labels = ['Tu 7','We 8','Th 9','Fr 10','Sa 11','Su 12','Mo 13','Tu 14','We 15','Th 16','Fr 17','Sa 18','Su 19','Mo 20'];
+const weekend = [4, 5, 11, 12], TODAY = 7;
+document.getElementById('days').innerHTML = labels.map((d, i) => `<span class="${weekend.includes(i) ? 'we' : ''} ${i === TODAY ? 'today' : ''}">${d}</span>`).join('');
+const eps = [
+  { n: 'Offline sync', s: 0, e: 10, p: .68, who: 'MO', a: 'a4' },
+  { n: 'Route planner', s: 2, e: 14, p: .35, who: 'JT', a: 'a2' },
+  { n: 'Photo capture v2', s: 5, e: 11, p: .5, who: 'RS', a: 'a3' },
+  { n: 'Dispatcher map', s: 7, e: 14, p: .1, who: 'AK', a: 'a5' },
+];
+const pct = (x) => `${x / 14 * 100}%`;
+document.getElementById('eps').innerHTML = eps.map((e) => `<div class="ep"><svg class="st" viewBox="0 0 14 14"><path d="M7 1.5 12.5 7 7 12.5 1.5 7Z" fill="none" stroke="var(--ds-color-neutral-light-11)" stroke-width="1.5"/><path d="M7 1.5 12.5 7 7 12.5Z" fill="var(--ds-color-neutral-light-11)"/></svg>${e.n}<span class="pct">${Math.round(e.p * 100)}%</span></div>`).join('');
+document.getElementById('lanes').innerHTML = eps.map((e) => `<div class="lane">${labels.map((_, i) => `<i class="${weekend.includes(i) ? 'we' : ''}"></i>`).join('')}<div class="barx" style="left:calc(${pct(e.s)} + 2px);width:calc(${pct(e.e - e.s)} - 4px)"><span class="p" style="width:${e.p * 100}%"></span><span class="av ${e.a}" aria-label="Lead ${e.who}"></span></div></div>`).join('')
+  + `<div class="today-line" style="left:calc(${pct(TODAY + .5)} - 1px);top:2px"></div>`
+  + `<div class="mile" style="left:${pct(11)};top:0"><span class="d"></span></div>`;
+// milestone label on the day row
+document.querySelector('.tl').insertAdjacentHTML('beforeend', `<div class="mile-tag" style="position:absolute;left:calc(var(--ds-space-20) + 196px + var(--ds-space-12) + (100% - 196px - var(--ds-space-12) - 2 * var(--ds-space-20)) * 11 / 14 + 8px);bottom:calc(var(--ds-space-12) + 36px);font:500 var(--ds-font-size-12)/1 var(--ds-font-family-text);color:var(--ds-color-text-primary);background:var(--ds-color-surface-base);padding:3px 6px;border-radius:var(--ds-radius-control);box-shadow:inset 0 0 0 1px var(--ds-color-border-subtle)">◆ Release 4.2 · Fri 17</div>`);
+
+const st = {
+  backlog: '<svg class="st" viewBox="0 0 14 14"><path d="M7 1.5 12.5 7 7 12.5 1.5 7Z" fill="none" stroke="var(--ds-color-neutral-light-8)" stroke-width="1.5" stroke-dasharray="2 1.6"/></svg>',
+  todo: '<svg class="st" viewBox="0 0 14 14"><path d="M7 1.5 12.5 7 7 12.5 1.5 7Z" fill="none" stroke="var(--ds-color-neutral-light-10)" stroke-width="1.5"/></svg>',
+  prog: '<svg class="st" viewBox="0 0 14 14"><path d="M7 1.5 12.5 7 7 12.5 1.5 7Z" fill="none" stroke="var(--ds-color-neutral-light-12)" stroke-width="1.5"/><path d="M7 1.5 12.5 7 7 12.5Z" fill="var(--ds-color-neutral-light-12)"/></svg>',
+  review: '<svg class="st" viewBox="0 0 14 14"><path d="M7 1.5 12.5 7 7 12.5 1.5 7Z" fill="none" stroke="var(--ds-color-neutral-light-12)" stroke-width="1.5"/><path d="M7 4 10 7 7 10 4 7Z" fill="var(--ds-color-neutral-light-12)"/></svg>',
+  done: '<svg class="st" viewBox="0 0 14 14"><path d="M7 1 13 7 7 13 1 7Z" fill="var(--ds-color-neutral-light-11)"/><path d="m4.8 7.1 1.6 1.6 2.9-3" fill="none" stroke="var(--ds-color-white)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+};
+const pri = {
+  urgent: '<svg class="prio" viewBox="0 0 14 14" aria-label="Urgent"><rect x="1" y="1" width="12" height="12" rx="3" fill="var(--accent)"/><path d="M7 4v3.6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><circle cx="7" cy="10" r="1" fill="#fff"/></svg>',
+  high: '<svg class="prio" viewBox="0 0 14 14" aria-label="High"><rect x="1.5" y="8" width="2.4" height="4" rx=".6" fill="var(--ds-color-neutral-light-12)"/><rect x="5.8" y="5" width="2.4" height="7" rx=".6" fill="var(--ds-color-neutral-light-12)"/><rect x="10.1" y="2" width="2.4" height="10" rx=".6" fill="var(--ds-color-neutral-light-12)"/></svg>',
+  med: '<svg class="prio" viewBox="0 0 14 14" aria-label="Medium"><rect x="1.5" y="8" width="2.4" height="4" rx=".6" fill="var(--ds-color-neutral-light-12)"/><rect x="5.8" y="5" width="2.4" height="7" rx=".6" fill="var(--ds-color-neutral-light-12)"/><rect x="10.1" y="2" width="2.4" height="10" rx=".6" fill="var(--ds-color-neutral-light-6)"/></svg>',
+  low: '<svg class="prio" viewBox="0 0 14 14" aria-label="Low"><rect x="1.5" y="8" width="2.4" height="4" rx=".6" fill="var(--ds-color-neutral-light-12)"/><rect x="5.8" y="5" width="2.4" height="7" rx=".6" fill="var(--ds-color-neutral-light-6)"/><rect x="10.1" y="2" width="2.4" height="10" rx=".6" fill="var(--ds-color-neutral-light-6)"/></svg>',
+};
+const cal = '<svg class="i" viewBox="0 0 16 16" style="width:12px;height:12px"><rect x="2.5" y="3.5" width="11" height="10" rx="1.5"/><path d="M2.5 6.5h11"/></svg>';
+const cols = [
+  { k: 'backlog', n: 'Backlog', c: 9, cards: [
+    { id: 'FLD-231', t: 'Bulk reassign jobs from the dispatcher map', l: ['map', 'web'], p: 'low', a: ['a2', 'JT'] },
+    { id: 'FLD-228', t: 'Light haptic when a signature is captured', l: ['ios'], p: 'low', a: ['a3', 'RS'] },
+    { id: 'FLD-226', t: 'Dark theme for the technician app', l: ['design'], p: 'med', a: ['a5', 'AK'] },
+    { id: 'FLD-223', t: 'Explain why a job was rescheduled', l: ['copy'], p: 'low' },
+  ]},
+  { k: 'todo', n: 'Todo', c: 5, cards: [
+    { id: 'FLD-219', t: 'Cache the parts catalog for offline lookup', l: ['offline'], p: 'high', a: ['a4', 'MO'], due: ['Oct 16', 1] },
+    { id: 'FLD-217', t: 'Route planner: avoid toll roads', l: ['routing'], p: 'med', a: ['a2', 'JT'] },
+    { id: 'FLD-215', t: 'Empty state for jobs with no photos', l: ['design'], p: 'low', a: ['a5', 'AK'] },
+  ]},
+  { k: 'prog', n: 'In progress', c: 4, cards: [
+    { id: 'FLD-214', t: 'Resolve sync conflicts when two technicians edit one job', l: ['offline'], p: 'urgent', a: ['a4', 'MO'], due: ['Oct 15', 1], sub: '3/5', focus: true },
+    { id: 'FLD-207', t: 'Show ETA drift on the dispatcher map', l: ['map'], p: 'med', a: ['a5', 'AK'] },
+    { id: 'FLD-204', t: 'Turn-by-turn handoff to the phone’s maps app', l: ['routing', 'ios'], p: 'med', a: ['a2', 'JT'] },
+  ]},
+  { k: 'review', n: 'In review', c: 3, drop: true, cards: [
+    { id: 'FLD-205', t: 'Retry queue for failed photo uploads', l: ['offline'], p: 'high', a: ['a3', 'RS'], pr: '#482' },
+    { id: 'FLD-201', t: 'Technician availability calendar', l: ['web'], p: 'med', a: ['a2', 'JT'], pr: '#479' },
+  ]},
+  { k: 'done', n: 'Done', c: 11, cards: [
+    { id: 'FLD-198', t: 'Job checklist templates', l: ['web'], p: 'med', a: ['a4', 'MO'], done: true },
+    { id: 'FLD-196', t: 'Signature pad redraws on rotate', l: ['ios'], p: 'low', a: ['a3', 'RS'], done: true },
+    { id: 'FLD-190', t: 'Crash when a job has no address', l: ['ios'], p: 'high', a: ['a5', 'AK'], done: true },
+    { id: 'FLD-188', t: 'Faster job list on older phones', l: ['perf'], p: 'med', a: ['a2', 'JT'], done: true },
+  ]},
+];
+const card = (c) => `<article class="card ${c.done ? 'done' : ''} ${c.focus ? 'focus' : ''} ${c.drag ? 'drag' : ''}" ${c.drag ? `style="${c.drag}" aria-grabbed="true"` : ''} tabindex="0">
+  <div class="top">${pri[c.p]}<span>${c.id}</span><span class="grow"></span>${c.a ? `<span class="av ${c.a[0]}">${c.a[1]}</span>` : ''}</div>
+  <h3>${c.t}</h3>
+  <div class="meta">${c.l.map((x) => `<span class="lbl"><i></i>${x}</span>`).join('')}${c.due ? `<span class="due ${c.due[1] ? 'soon' : ''}">${cal}${c.due[0]}</span>` : ''}${c.pr ? `<span class="due"><svg class="i" viewBox="0 0 16 16" style="width:12px;height:12px"><circle cx="4.5" cy="3.5" r="1.5"/><circle cx="4.5" cy="12.5" r="1.5"/><circle cx="11.5" cy="12.5" r="1.5"/><path d="M4.5 5v6M11.5 11V7a2 2 0 0 0-2-2H7.5"/></svg>${c.pr}</span>` : ''}${c.sub ? `<span class="sub-p"><span class="trk"><b></b></span>${c.sub}</span>` : ''}</div>
+</article>`;
+document.getElementById('board').innerHTML = cols.map((col) => `<div class="col"><h2 class="col-h">${st[col.k]}${col.n}<span class="c">${col.c}</span><span class="grow"></span><button aria-label="Add to ${col.n}"><svg class="i" viewBox="0 0 16 16"><path d="M8 3.5v9M3.5 8h9"/></svg></button></h2>${col.drop ? '<div class="drop" aria-hidden="true"></div>' : ''}${col.cards.map(card).join('')}</div>`).join('');
+// a card mid-drag between In progress and In review
+const dragged = { id: 'FLD-209', t: 'Compress photos before upload', l: ['ios', 'perf'], p: 'high', a: ['a3', 'RS'], drag: 'left: calc(60% + 14px); top: 62px;' };
+const board = document.getElementById('board');
+board.style.position = 'relative';
+board.insertAdjacentHTML('beforeend', card(dragged));
+</script>
+</body>
+</html>

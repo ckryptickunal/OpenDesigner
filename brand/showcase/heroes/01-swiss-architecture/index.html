@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halde Architekten</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root {
+    /* Page ground: the off-white paper. The engine's base surface is always near-white, so the
+       ground uses the subtle neutral fill (step 3), which also flips correctly in dark mode. */
+    --ground: var(--ds-color-bg-neutral-subtle);
+    --ink: var(--ds-color-text-primary);
+    --ink-2: var(--ds-color-text-secondary);
+    --rule: var(--ds-color-border-strong);
+    --guide: var(--ds-color-border-subtle);
+    --signal: var(--ds-color-brand-seed);
+    --m: var(--ds-space-32);          /* outer margin */
+    --g: var(--ds-space-16);          /* gutter */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--ds-font-family-text);
+    font-feature-settings: "tnum" 1, "ss01" 1;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .hero {
+    position: relative;
+    height: 100vh; height: 100svh; min-height: 820px;
+    padding: 0 var(--m);
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--g);
+    grid-template-rows: 64px 1fr auto;
+  }
+  /* visible column guides: the grid is the ornament */
+  .guides { position: absolute; inset: 0 var(--m); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--g); pointer-events: none; }
+  .guides i { border-left: 1px solid var(--guide); border-right: 1px solid var(--guide); opacity: .45; }
+
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+
+  /* top bar */
+  .bar { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: center; border-bottom: 1px solid var(--ink); position: relative; z-index: 1; }
+  .mark { grid-column: 1 / 4; font-weight: 700; font-size: var(--ds-font-size-16); letter-spacing: -0.02em; display: flex; gap: var(--ds-space-8); align-items: center; min-height: var(--ds-size-target-min); }
+  .mark b { width: 14px; height: 14px; background: var(--ink); display: inline-block; }
+  .meta { font-size: var(--ds-font-size-13); color: var(--ink-2); letter-spacing: 0; }
+  .loc { grid-column: 4 / 7; }
+  .nav { grid-column: 7 / 10; display: flex; gap: var(--ds-space-20); font-size: var(--ds-font-size-13); font-weight: 500; }
+  .nav a { min-height: var(--ds-size-target-min); display: inline-flex; align-items: center; }
+  .nav a[aria-current] { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .time { grid-column: 10 / 13; text-align: right; }
+
+  /* upper band */
+  .upper { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; padding-top: var(--ds-space-24); position: relative; z-index: 1; min-height: 0; }
+  .index { grid-column: 1 / 4; font-size: var(--ds-font-size-13); line-height: var(--ds-font-line-height-20); }
+  .index h2 { font-size: var(--ds-font-size-13); font-weight: 600; display: flex; justify-content: space-between; padding-bottom: var(--ds-space-8); border-bottom: 1px solid var(--ink); }
+  .index h2 span { font-weight: 400; color: var(--ink-2); }
+  .index ol { list-style: none; }
+  .index li a { display: grid; grid-template-columns: 28px 1fr auto 40px; gap: var(--ds-space-8); padding: var(--ds-space-4) 0; border-bottom: 1px solid var(--guide); min-height: var(--ds-size-target-min); align-items: center; }
+  .index .n { color: var(--ink-2); }
+  .index .pl { color: var(--ink-2); }
+  .index .y { text-align: right; }
+  .index li.on a { font-weight: 600; }
+  .index li.on .n { color: var(--ink); }
+  .index li a { position: relative; }
+  .index li.on a::before { content: ""; position: absolute; left: -18px; top: calc(50% - var(--ds-space-4)); width: var(--ds-space-8); height: var(--ds-space-8); background: var(--signal); }
+  .index .more { display: inline-flex; margin-top: var(--ds-space-12); font-weight: 600; min-height: var(--ds-size-target-min); align-items: center; gap: var(--ds-space-6); }
+
+  .statement { grid-column: 4 / 7; display: flex; flex-direction: column; gap: var(--ds-space-24); padding-right: var(--ds-space-8); }
+  .statement p.lead { font-size: var(--ds-font-size-20); line-height: 1.3; letter-spacing: -0.01em; font-weight: 500; text-wrap: pretty; }
+  .statement p.small { font-size: var(--ds-font-size-16); line-height: 1.45; color: var(--ink-2); max-width: 30ch; }
+  .cta { display: flex; gap: var(--ds-space-16); align-items: center; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: var(--ds-space-8); height: var(--ds-size-control-lg); padding: 0 var(--ds-space-20); background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); border-radius: var(--ds-radius-control); transition: background var(--ds-motion-duration-medium) var(--ds-motion-easing-standard); }
+  @media (hover: hover) and (pointer: fine) { .btn:hover { background: var(--signal); } .index li a:hover { color: var(--signal); } }
+  .link { font-size: var(--ds-font-size-13); font-weight: 600; border-bottom: 1px solid currentColor; padding-bottom: var(--ds-space-2); min-height: var(--ds-size-target-min); display: inline-flex; align-items: center; }
+
+  .drawing { grid-column: 7 / 13; position: relative; }
+  .drawing svg { width: 100%; height: auto; display: block; overflow: visible; }
+
+  /* headline */
+  .head { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: end; padding-bottom: var(--ds-space-24); position: relative; z-index: 1; }
+  h1 {
+    grid-column: 1 / 11;
+    font-family: var(--ds-font-family-display);
+    font-weight: 600;
+    /* Display size outside the scale on purpose: the poster line is set to the column grid (about 10 columns),
+       one step above the largest token (--ds-font-size-149). */
+    font-size: clamp(96px, 11.6vw, 168px);
+    line-height: .84;
+    letter-spacing: -0.03em;
+    margin-left: -0.06em;
+  }
+  h1 .dot { color: var(--signal); }
+  .aside { grid-column: 11 / 13; font-size: var(--ds-font-size-13); line-height: var(--ds-font-line-height-20); color: var(--ink-2); display: flex; flex-direction: column; gap: var(--ds-space-4); padding-bottom: var(--ds-space-6); }
+  .aside strong { color: var(--ink); font-weight: 600; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ray { stroke-dasharray: 3 5; animation: drift 6s linear infinite; }
+    @keyframes drift { to { stroke-dashoffset: -64; } }
+  }
+</style>
+</head>
+<body>
+<main class="hero">
+  <div class="guides" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+  <header class="bar">
+    <a class="mark" href="#" aria-label="Halde Architekten, home"><b aria-hidden="true"></b>Halde Architekten</a>
+    <span class="meta loc">Zurich and Chur, since 1998</span>
+    <nav class="nav" aria-label="Main">
+      <a href="#" aria-current="page">Work</a><a href="#">Studio</a><a href="#">Writing</a><a href="#">Contact</a>
+    </nav>
+    <span class="meta time">47.37° N &nbsp;8.54° E &nbsp;&nbsp;Sunrise 07:38</span>
+  </header>
+
+  <section class="upper">
+    <div class="index">
+      <h2>Index <span>24 projects</span></h2>
+      <ol>
+        <li class="on"><a href="#"><span class="n">01</span><span>Haus am Hang</span><span class="pl">Flims</span><span class="y">2025</span></a></li>
+        <li><a href="#"><span class="n">02</span><span>Atelier Rheinufer</span><span class="pl">Basel</span><span class="y">2024</span></a></li>
+        <li><a href="#"><span class="n">03</span><span>Schulhaus Moos</span><span class="pl">Chur</span><span class="y">2023</span></a></li>
+        <li><a href="#"><span class="n">04</span><span>Bad Tamina</span><span class="pl">Pfäfers</span><span class="y">2022</span></a></li>
+        <li><a href="#"><span class="n">05</span><span>Wohnhof Letten</span><span class="pl">Zurich</span><span class="y">2021</span></a></li>
+        <li><a href="#"><span class="n">06</span><span>Kapelle Sur</span><span class="pl">Savognin</span><span class="y">2019</span></a></li>
+        <li><a href="#"><span class="n">07</span><span>Lager Neun</span><span class="pl">Winterthur</span><span class="y">2018</span></a></li>
+        <li><a href="#"><span class="n">08</span><span>Haus Vier Winde</span><span class="pl">Sils</span><span class="y">2016</span></a></li>
+      </ol>
+      <a class="more" href="#">All 24 projects <span aria-hidden="true">→</span></a>
+    </div>
+
+    <div class="statement">
+      <p class="lead">We are eleven architects who place every room by the path of the sun across its site.</p>
+      <p class="small">Low winter light reaches deep inside. High summer light is held off by the roof. The section decides the house before the plan does.</p>
+      <div class="cta">
+        <a class="btn" href="#">Start a project <span aria-hidden="true">→</span></a>
+        <a class="link" href="#">Read the method</a>
+      </div>
+    </div>
+
+    <figure class="drawing" aria-label="Section drawing of Haus am Hang: three floors stepping down a south slope, with winter sun at 19 degrees reaching deep into the rooms and summer sun at 66 degrees stopped by the roof overhangs.">
+      <svg id="section" viewBox="0 0 700 470" role="img" aria-hidden="true"></svg>
+    </figure>
+  </section>
+
+  <section class="head">
+    <h1>Houses that<br>follow the sun<span class="dot">.</span></h1>
+    <div class="aside">
+      <strong>01 / Haus am Hang</strong>
+      <span>Section A–A, 1:200</span>
+      <span>Flims, 1,080 m</span>
+    </div>
+  </section>
+</main>
+
+<script>
+/* Generated section drawing. Deterministic: no randomness. Colors come from the tokens via currentColor and CSS vars. */
+(function () {
+  const svg = document.getElementById('section');
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (n, a, p = svg) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+  const INK = 'var(--ink)', INK2 = 'var(--ink-2)', SIG = 'var(--signal)', GROUND = 'var(--ground)';
+
+  const defs = el('defs', {});
+  const pat = el('pattern', { id: 'hatch', width: 7, height: 7, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)' }, defs);
+  el('line', { x1: 0, y1: 0, x2: 0, y2: 7, stroke: INK, 'stroke-width': .7, opacity: .55 }, pat);
+  // the earth fades out at the bottom instead of ending on a hard crop
+  const lg = el('linearGradient', { id: 'fade', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+  el('stop', { offset: '.72', 'stop-color': '#fff' }, lg); el('stop', { offset: '1', 'stop-color': '#000' }, lg); // od-ignore: mask luminance, not a visible color
+  const mk = el('mask', { id: 'earthfade', maskContentUnits: 'objectBoundingBox' }, defs);
+  el('rect', { x: 0, y: 0, width: 1, height: 1, fill: 'url(#fade)' }, mk);
+
+  // terrain: a south slope falling to the left; three storeys terraced into it.
+  // Each roof is the terrace of the storey above (classic hillside section). 1 m = 20 units.
+  const T = 10, H = 68, OVER = 46;
+  const F = [0, 1, 2].map(i => { const x0 = 60 + i * 150; return { x0, x1: x0 + 250, y: 392 - i * (H + T) }; });
+  const slope = x => 430 - (x / 700) * 300; // natural ground line before the cut
+
+  el('polygon', { points: `0,${slope(0)} 700,${slope(700)} 700,470 0,470`, fill: 'url(#hatch)', mask: 'url(#earthfade)' });
+  el('line', { x1: 0, y1: slope(0), x2: 700, y2: slope(700), stroke: INK2, 'stroke-width': .8, 'stroke-dasharray': '2 4' });
+  el('polyline', { points: `0,${slope(0)} ${F[0].x0 - 30},${F[0].y + T} ${F[0].x0},${F[0].y + T}`, fill: 'none', stroke: INK, 'stroke-width': 1.4 });
+
+  F.forEach(({ x0, x1, y }, i) => {
+    el('rect', { x: x0, y: y - H, width: x1 - x0, height: H, fill: GROUND });          // room (hides the hatch)
+    el('rect', { x: x0, y, width: x1 - x0, height: T, fill: INK });                    // floor slab
+    el('rect', { x: x0 - OVER, y: y - H - T, width: x1 - x0 + OVER, height: T, fill: INK }); // roof with south overhang
+    el('rect', { x: x1 - T, y: y - H, width: T, height: H, fill: INK });               // retaining back wall
+    el('line', { x1: x0 + 5, y1: y - H, x2: x0 + 5, y2: y, stroke: INK, 'stroke-width': 1.1 }); // glazing
+    el('line', { x1: x0 + 9, y1: y - H, x2: x0 + 9, y2: y, stroke: INK, 'stroke-width': .6 });
+    el('line', { x1: x0 + 2, y1: y - H * .64, x2: x0 + 12, y2: y - H * .64, stroke: INK, 'stroke-width': .6 });
+    // terrace railing on the roof below (thin)
+    const lx = 668;
+    el('line', { x1: x1 + 4, y1: y, x2: lx - 7, y2: y, stroke: INK2, 'stroke-width': .5, 'stroke-dasharray': '1 3' });
+    el('path', { d: `M${lx},${y} l-5,-7 h10 z`, fill: 'none', stroke: INK, 'stroke-width': .8 });
+    const t = el('text', { x: lx + 9, y: y - 1, 'font-size': 11, fill: INK2, 'font-family': 'var(--ds-font-family-text)' });
+    t.textContent = ['±0.00', '+3.90', '+7.80'][i];
+  });
+
+  // winter sun, altitude 19 degrees: rays slip under each overhang and light the floor more than halfway in
+  const tw = Math.tan(19 * Math.PI / 180);
+  F.forEach(({ x0, x1, y }) => {
+    const land = x0 - OVER + H / tw;                    // where the ray under the overhang tip meets the floor
+    [0, 22].forEach(dx => {
+      const xe = land + dx, ye = y;
+      const xs = Math.max(0, xe - 520), ys = ye - (xe - xs) * tw;
+      el('line', { class: 'ray', x1: xs, y1: ys, x2: xe, y2: ye, stroke: SIG, 'stroke-width': 1 });
+    });
+    el('rect', { x: x0 + 12, y: y - 3, width: land + 22 - x0 - 12, height: 3, fill: SIG });
+  });
+  // summer sun, altitude 66 degrees: the steepest ray past each overhang tip lands outside the glass
+  const ts = Math.tan(66 * Math.PI / 180);
+  F.forEach(({ x0, y }) => {
+    const tipx = x0 - OVER, tipy = y - H - T;
+    [-14, 0].forEach(dx => {
+      const x2 = tipx + dx + (H + T) / ts, y2 = y;
+      el('line', { x1: tipx + dx - 40 / ts, y1: tipy - 40, x2, y2, stroke: INK, 'stroke-width': .8 });
+    });
+  });
+  // the sun disc and labels
+  el('circle', { cx: 40, cy: 44, r: 15, fill: SIG });
+  const lab = (x, y, s, w = 400, c = INK) => { const t = el('text', { x, y, 'font-size': 11, fill: c, 'font-weight': w, 'font-family': 'var(--ds-font-family-text)' }); t.textContent = s; return t; };
+  lab(64, 40, '21 Dec, noon', 600); lab(64, 53, 'altitude 19°, reaches in', 400, INK2);
+  lab(196, 168, '21 Jun, noon', 600); lab(196, 181, 'altitude 66°, held off', 400, INK2);
+  el('line', { x1: 194, y1: 186, x2: 176, y2: 214, stroke: INK2, 'stroke-width': .5 });
+
+  // angle arc where the lowest winter ray lands
+  const a0 = F[0], ax = a0.x0 - OVER + H / tw + 22, ay = a0.y, r = 46, rad = 19 * Math.PI / 180;
+  el('line', { x1: ax - 64, y1: ay - .5, x2: ax, y2: ay - .5, stroke: INK2, 'stroke-width': .5 });
+  el('path', { d: `M${ax - r},${ay} A${r},${r} 0 0 1 ${ax - r * Math.cos(rad)},${ay - r * Math.sin(rad)}`, fill: 'none', stroke: INK2, 'stroke-width': .6 });
+  lab(ax - r - 24, ay - 6, '19°', 400, INK2);
+
+  // dimension line over the top storey
+  const dy = 128, d0 = F[2].x0 - OVER, d1 = F[2].x1;
+  el('line', { x1: d0, y1: dy, x2: d1, y2: dy, stroke: INK, 'stroke-width': .6 });
+  [d0, d1].forEach(x => { el('line', { x1: x - 4, y1: dy + 4, x2: x + 4, y2: dy - 4, stroke: INK, 'stroke-width': .8 }); el('line', { x1: x, y1: dy - 6, x2: x, y2: dy + 10, stroke: INK2, 'stroke-width': .4 }); });
+  lab((d0 + d1) / 2 - 12, dy - 6, '14.80');
+
+  // title block and orientation
+  lab(520, 22, 'Section A–A', 600); lab(520, 35, 'Haus am Hang, Flims · 1:200', 400, INK2);
+  lab(520, 60, 'S', 600); el('line', { x1: 532, y1: 56, x2: 600, y2: 56, stroke: INK, 'stroke-width': .8 }); el('path', { d: 'M606,56 l-8,-4 v8 z', fill: INK }); lab(612, 60, 'N', 600);
+})();
+</script>
+</body>
+</html>

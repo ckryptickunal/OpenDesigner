@@ -1,0 +1,18 @@
+# Feedback
+
+Gaps, bugs, confusing steps and ideas found while using OpenDesigner. Each entry has a ready-to-file issue link. Nothing is posted unless you open the link and submit it yourself.
+
+## F-001 · 2026-10-14 · gap · area color
+color.border.subtle is neutral step 7 (#c4cad5 here). In a dense mega footer with about 40 hairlines (column dividers, table rules) that reads heavy; I used step 4 for hairlines. A 'hairline' or 'divider' border role a step or three lighter than border.subtle is missing.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bgap%5D%5Bcolor%5D%20color.border.subtle%20is%20neutral%20step%207%20%28%23c4cad5%20here%29.%20In%20a%20dense%20mega%20...&body=%2A%2AKind%3A%2A%2A%20gap%0A%0A%2A%2AWhere%3A%2A%2A%20area%20color%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0Acolor.border.subtle%20is%20neutral%20step%207%20%28%23c4cad5%20here%29.%20In%20a%20dense%20mega%20footer%20with%20about%2040%20hairlines%20%28column%20dividers%2C%20table%20rules%29%20that%20reads%20heavy%3B%20I%20used%20step%204%20for%20hairlines.%20A%20%27hairline%27%20or%20%27divider%27%20border%20role%20a%20step%20or%20three%20lighter%20than%20border.subtle%20is%20missing.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=gap%2Cfrom-engine)
+
+## F-002 · 2026-10-14 · bug · area review
+engine.py review maps every px value to a spacing token, including the size of a 6px status dot, a 12px icon and a 20px logo height ('use var(--ds-space-20)'). Sizes of graphics should map to size.icon.* or be left alone; a spacing token for a width is the wrong role.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bbug%5D%5Breview%5D%20engine.py%20review%20maps%20every%20px%20value%20to%20a%20spacing%20token%2C%20including%20the...&body=%2A%2AKind%3A%2A%2A%20bug%0A%0A%2A%2AWhere%3A%2A%2A%20area%20review%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0Aengine.py%20review%20maps%20every%20px%20value%20to%20a%20spacing%20token%2C%20including%20the%20size%20of%20a%206px%20status%20dot%2C%20a%2012px%20icon%20and%20a%2020px%20logo%20height%20%28%27use%20var%28--ds-space-20%29%27%29.%20Sizes%20of%20graphics%20should%20map%20to%20size.icon.%2A%20or%20be%20left%20alone%3B%20a%20spacing%20token%20for%20a%20width%20is%20the%20wrong%20role.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=bug%2Cfrom-engine)
+
+## F-003 · 2026-10-14 · idea · area feel
+The feel word 'precise' is not known (sketch left it out). It is a common word for technical, enterprise and security brands; it could map to serious + minimal.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bidea%5D%5Bfeel%5D%20The%20feel%20word%20%27precise%27%20is%20not%20known%20%28sketch%20left%20it%20out%29.%20It%20is%20a%20com...&body=%2A%2AKind%3A%2A%2A%20idea%0A%0A%2A%2AWhere%3A%2A%2A%20area%20feel%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AThe%20feel%20word%20%27precise%27%20is%20not%20known%20%28sketch%20left%20it%20out%29.%20It%20is%20a%20common%20word%20for%20technical%2C%20enterprise%20and%20security%20brands%3B%20it%20could%20map%20to%20serious%20%2B%20minimal.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=enhancement%2Cfrom-engine)

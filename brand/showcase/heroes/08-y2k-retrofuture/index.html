@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orbika SR-1: tune the sky</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Outside the tokens, on purpose (see notes.md):
+     - chrome is built from the neutral ramp, but the specular white bands and the deep shadow tones are hand-mixed
+     - the headline is 104px; the scale stops at 90px
+     Two fonts only (owner rule): Michroma for display, Space Grotesk for everything else. The LCD is dot-matrix art drawn on canvas. */
+  :root {
+    --lime: var(--ds-color-accent-light-9);
+    --lime-ink: var(--ds-color-accent-light-12);
+    --ink: var(--ds-color-neutral-light-12);
+    --chrome-soft: linear-gradient(180deg, var(--ds-color-white) 0%, var(--ds-color-neutral-light-3) 45%, var(--ds-color-neutral-light-6) 55%, var(--ds-color-neutral-light-2) 100%); /* behind text: stays over 4.5:1 */
+    --chrome: linear-gradient(180deg, var(--ds-color-white) 0%, var(--ds-color-neutral-light-3) 16%, var(--ds-color-neutral-light-8) 46%, var(--ds-color-neutral-light-2) 54%, var(--ds-color-neutral-light-6) 78%, var(--ds-color-neutral-light-9) 100%);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body { color: var(--ink); font: var(--ds-text-body-md); overflow: hidden; background: var(--ds-color-neutral-light-4); }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+
+  .page { position: relative; height: 100vh; height: 100svh; min-height: 820px; overflow: hidden;
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.9) 0%, transparent 22%, transparent 58%, rgb(255 255 255 / 0.55) 66%, transparent 74%),
+      linear-gradient(180deg, var(--ds-color-neutral-light-2) 0%, var(--ds-color-neutral-light-5) 55%, var(--ds-color-neutral-light-7) 100%); }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .px { font-family: var(--ds-font-family-text); font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; font-variant-numeric: tabular-nums; }
+
+  nav { position: relative; z-index: 6; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-24) var(--ds-space-48); }
+  .wm { font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-21); letter-spacing: 0.08em; display: flex; align-items: center; gap: var(--ds-space-12); }
+  .wm svg { display: block; }
+  .bar { display: flex; gap: var(--ds-space-4); padding: var(--ds-space-4); border-radius: var(--ds-radius-full);
+         background: var(--chrome-soft); box-shadow: inset 0 1px 0 var(--ds-color-white), inset 0 -1px 0 rgb(34 36 40 / 0.25), 0 6px 16px -8px rgb(34 36 40 / 0.4); }
+  .bar a { font: var(--ds-text-label-lg); font-weight: 500; padding: 0 var(--ds-space-16); height: var(--ds-size-control-sm); display: inline-flex; align-items: center; border-radius: var(--ds-radius-full); }
+  .bar a.on { background: var(--ink); color: var(--lime); }
+  .btn { display: inline-flex; align-items: center; gap: var(--ds-space-12); border-radius: var(--ds-radius-full); font-family: var(--ds-font-family-text); font-weight: 700;
+         height: var(--ds-size-control-md); padding: 0 var(--ds-space-24); font-size: var(--ds-font-size-16); transition: transform var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-lime { background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); box-shadow: inset 0 0 0 2px var(--ink), 0 4px 0 var(--ink); }
+  .btn-chrome { background: var(--chrome-soft); box-shadow: inset 0 0 0 2px var(--ink); }
+  .btn-lg { height: var(--ds-size-control-lg); padding: 0 var(--ds-space-32); }
+
+  h1 { position: relative; z-index: 4; margin: var(--ds-space-32) var(--ds-space-48) 0; font-family: var(--ds-font-family-display); font-weight: 400;
+       font-size: 104px; line-height: 1; letter-spacing: -0.01em; white-space: nowrap; display: flex; align-items: center; gap: 0.18em; }
+  h1 .sky { background: var(--lime); padding: 0.02em 0.14em 0.06em; border-radius: var(--ds-radius-control); box-shadow: inset 0 0 0 3px var(--ink); }
+  h1 .sky span { text-shadow: 3px 0 0 rgb(255 0 128 / 0.18), -3px 0 0 rgb(0 160 255 / 0.18); }
+  .sub { position: relative; z-index: 4; margin: var(--ds-space-16) var(--ds-space-48) 0; display: flex; gap: var(--ds-space-24); color: var(--ds-color-text-secondary); font-size: var(--ds-font-size-12); }
+  .sub b { color: var(--ink); font-weight: 700; }
+
+  .copy { position: absolute; z-index: 5; left: var(--ds-space-48); top: 376px; width: 420px; }
+  .tagline { font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-21); line-height: 1.35; letter-spacing: 0.01em; }
+  .lede { margin-top: var(--ds-space-16); font-size: var(--ds-font-size-16); line-height: 1.55; color: var(--ds-color-text-secondary); max-width: 38ch; }
+  .ctas { margin-top: var(--ds-space-32); display: flex; gap: var(--ds-space-12); }
+  .specs { margin-top: var(--ds-space-32); display: grid; grid-template-columns: repeat(3, auto); gap: var(--ds-space-8) var(--ds-space-24); justify-content: start; font-size: var(--ds-font-size-12); }
+  .specs div { border-top: 2px solid var(--ink); padding-top: var(--ds-space-8); }
+  .specs b { display: block; font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-21); font-weight: 400; text-transform: none; letter-spacing: 0; margin-top: var(--ds-space-4); }
+
+  /* the receiver */
+  .rx { position: absolute; z-index: 3; left: 560px; top: 392px; width: 780px; height: 344px; transform: rotate(-5deg); }
+  .antenna { position: absolute; right: 120px; bottom: 270px; width: 10px; height: 250px; transform-origin: 50% 100%; transform: rotate(24deg);
+             background: linear-gradient(90deg, var(--ds-color-neutral-light-9), var(--ds-color-white) 40%, var(--ds-color-neutral-light-8) 100%); border-radius: var(--ds-radius-full); }
+  .antenna::before { content: ""; position: absolute; left: -2px; right: -2px; top: 80px; height: 3px; background: var(--ds-color-neutral-light-10); box-shadow: 0 70px 0 var(--ds-color-neutral-light-10); }
+  .antenna::after { content: ""; position: absolute; left: 50%; top: -12px; width: 22px; height: 22px; translate: -50% 0; border-radius: 50%;
+                    background: radial-gradient(circle at 35% 30%, var(--ds-color-white), var(--ds-color-neutral-light-8) 70%, var(--ds-color-neutral-light-11)); }
+  .body { position: absolute; inset: 0; border-radius: var(--ds-radius-full); background: var(--chrome);
+          box-shadow: inset 0 3px 0 var(--ds-color-white), inset 0 -10px 24px rgb(34 36 40 / 0.35), inset 0 0 0 2px rgb(34 36 40 / 0.35),
+                      0 50px 60px -30px rgb(20 22 26 / 0.55), 0 18px 24px -12px rgb(20 22 26 / 0.35); }
+  .body::after { content: ""; position: absolute; inset: 14px; border-radius: var(--ds-radius-full); box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.7), inset 0 2px 0 rgb(34 36 40 / 0.15); pointer-events: none; }
+  .grille { position: absolute; left: 44px; top: 50%; translate: 0 -50%; width: 236px; height: 236px; border-radius: 50%;
+            background: radial-gradient(circle, var(--ink) 2.4px, transparent 2.8px) 0 0 / 11px 11px, radial-gradient(circle at 40% 30%, var(--ds-color-neutral-light-5), var(--ds-color-neutral-light-9));
+            box-shadow: inset 0 6px 14px rgb(0 0 0 / 0.45), 0 0 0 8px var(--ds-color-neutral-light-3), 0 0 0 10px var(--ds-color-neutral-light-9), 0 2px 0 10px var(--ds-color-white); }
+  .lcd { position: absolute; left: 300px; top: 64px; width: 226px; height: 150px; border-radius: var(--ds-radius-overlay); overflow: hidden;
+         background: radial-gradient(120% 100% at 50% 0%, var(--ds-color-accent-light-10), var(--lime) 50%, var(--ds-color-accent-light-8) 140%);
+         box-shadow: inset 0 0 0 3px var(--ink), inset 0 8px 18px rgb(0 0 0 / 0.35), 0 0 0 6px var(--ds-color-neutral-light-3), 0 0 26px 6px rgb(184 244 0 / 0.45);
+         color: var(--lime-ink); padding: var(--ds-space-16) var(--ds-space-20); }
+  .lcd::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgb(41 57 1 / 0.16) 0 1px, transparent 1px 3px), radial-gradient(90% 80% at 50% 50%, transparent 60%, rgb(41 57 1 / 0.35)); pointer-events: none; }
+  .lcd canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .lcd .spec { display: flex; gap: var(--ds-space-2); align-items: flex-end; height: 26px; margin-top: var(--ds-space-8); }
+  .lcd .spec i { width: 7px; background: var(--lime-ink); }
+  .keys { position: absolute; left: 306px; bottom: 50px; display: flex; gap: var(--ds-space-8); }
+  .keys span { height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-full); display: grid; place-items: center; font-size: var(--ds-font-size-12); color: var(--ink);
+               background: var(--chrome); box-shadow: inset 0 1px 0 var(--ds-color-white), 0 2px 0 var(--ds-color-neutral-light-10), 0 3px 6px rgb(0 0 0 / 0.25); }
+  .keys span.on { background: var(--ink); color: var(--lime); box-shadow: 0 2px 0 var(--ds-color-neutral-light-10), 0 0 12px rgb(184 244 0 / 0.5); }
+  .dial { position: absolute; right: 50px; top: 50%; translate: 0 -50%; width: 196px; height: 196px; border-radius: 50%;
+          background: repeating-conic-gradient(var(--ds-color-neutral-light-10) 0 3deg, var(--ds-color-neutral-light-3) 3deg 6deg);
+          box-shadow: 0 0 0 6px var(--ds-color-neutral-light-9), 0 0 0 8px var(--ds-color-white), 0 14px 22px -6px rgb(0 0 0 / 0.5); }
+  .dial::before { content: ""; position: absolute; inset: 16px; border-radius: 50%; background: conic-gradient(from 200deg, var(--ds-color-white), var(--ds-color-neutral-light-8), var(--ds-color-neutral-light-3), var(--ds-color-neutral-light-9), var(--ds-color-white));
+                  box-shadow: inset 0 0 0 1px rgb(34 36 40 / 0.3), 0 4px 10px rgb(0 0 0 / 0.35); }
+  .dial::after { content: ""; position: absolute; left: 50%; top: 30px; width: 14px; height: 14px; translate: -50% 0; border-radius: 50%; background: var(--lime); box-shadow: inset 0 0 0 2px var(--ink), 0 0 10px var(--lime); }
+  .engrave { position: absolute; left: 312px; top: 30px; font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-12); letter-spacing: 0.3em; color: var(--ds-color-neutral-light-11); text-shadow: 0 1px 0 rgb(255 255 255 / 0.8); }
+  .sticker { position: absolute; z-index: 4; left: 560px; top: 628px; width: 132px; height: 132px; border-radius: 50%; background: var(--ink); color: var(--lime); transform: rotate(-14deg);
+             display: grid; place-items: center; text-align: center; font-size: var(--ds-font-size-12); line-height: 1.3; box-shadow: 0 0 0 4px var(--lime), 0 12px 20px -6px rgb(0 0 0 / 0.4); }
+  .sticker b { display: block; font-family: var(--ds-font-family-display); font-weight: 400; font-size: var(--ds-font-size-28); color: var(--ds-color-white); }
+
+  .ticker { position: absolute; z-index: 6; left: 0; right: 0; bottom: 0; height: 56px; background: var(--ink); color: var(--lime); display: flex; align-items: center; gap: var(--ds-space-40); font-family: var(--ds-font-family-display); letter-spacing: 0.06em;
+            padding: 0 var(--ds-space-48); white-space: nowrap; overflow: hidden; font-size: var(--ds-font-size-16); }
+  .ticker::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgb(0 0 0 / 0.35) 0 1px, transparent 1px 3px); pointer-events: none; }
+  .ticker .dot { width: 10px; height: 10px; background: var(--lime); box-shadow: 0 0 10px var(--lime); }
+  .ticker span { opacity: 0.92; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .rx { animation: rise var(--ds-motion-spring-spatial-slow-duration) var(--ds-motion-spring-momentum-easing) both; }
+    @keyframes rise { from { opacity: 0; } }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <canvas id="sig" aria-hidden="true"></canvas>
+
+  <nav aria-label="Main">
+    <a class="wm" href="#" aria-label="Orbika home">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="13" fill="none" stroke="currentColor" stroke-width="2.4"/><ellipse cx="15" cy="15" rx="13" ry="4.5" fill="none" stroke="currentColor" stroke-width="2" transform="rotate(-24 15 15)"/><circle cx="25.5" cy="9.5" r="3" fill="var(--ds-color-accent-light-9)" stroke="currentColor" stroke-width="1.6"/></svg>
+      ORBIKA
+    </a>
+    <div class="bar">
+      <a class="on" href="#">SR-1</a><a href="#">Channels</a><a href="#">Coverage</a><a href="#">Specs</a><a href="#">Support</a>
+    </div>
+    <a class="btn btn-lime" href="#">Pre-order</a>
+  </nav>
+
+  <h1><span>TUNE</span><span>THE</span><span class="sky"><span>SKY.</span></span></h1>
+  <div class="sub px" aria-hidden="true"><span>RX <b>1525–1559 MHZ</b></span><span>SATS <b>11 IN VIEW</b></span><span>SIGNAL <b>−92 DBM</b></span></div>
+
+  <section class="copy">
+    <p class="tagline">A pocket receiver for 2,400 stations, straight from orbit.</p>
+    <p class="lede">No towers, no dead zones, no account. Pull up the antenna in a desert, on a ferry or at the top of a ski lift, and it plays.</p>
+    <div class="ctas">
+      <a class="btn btn-lime btn-lg" href="#">Pre-order · €349</a>
+      <a class="btn btn-chrome btn-lg" href="#">Hear a channel</a>
+    </div>
+    <div class="specs px">
+      <div>Battery<b>36 h</b></div>
+      <div>Weight<b>212 g</b></div>
+      <div>Ships<b>Dec</b></div>
+    </div>
+  </section>
+
+  <div class="rx" aria-hidden="true">
+    <div class="antenna"></div>
+    <div class="body"></div>
+    <div class="grille"></div>
+    <span class="engrave">ORBIKA SR-1</span>
+    <div class="lcd"><canvas id="lcd"></canvas></div>
+    <div class="keys px"><span>BAND</span><span class="on">SCAN</span><span>MEM</span></div>
+    <div class="dial"></div>
+  </div>
+
+  <div class="sticker px" aria-hidden="true"><div><b>2,400</b><span style="display:block">STATIONS</span><span style="display:block">NO TOWERS</span></div></div>
+
+  <div class="ticker" aria-label="Now playing">
+    <i class="dot" aria-hidden="true"></i>
+    <span>NOW PLAYING · CH 042 NEBULA FM · LOW TIDE ORCHESTRA</span><span>· CH 118 POLAR NIGHT RADIO</span><span>· CH 207 DUNE SESSIONS</span><span>· CH 311 OPEN SEA WEATHER</span>
+  </div>
+</div>
+<script>
+(() => {
+  const css = getComputedStyle(document.documentElement), tok = n => css.getPropertyValue(n).trim();
+  // LCD: a 5 x 7 dot-matrix display drawn as art (no pixel font)
+  const F = {
+    '0': ['01110','10001','10011','10101','11001','10001','01110'], '2': ['01110','10001','00001','00010','00100','01000','11111'],
+    '4': ['00010','00110','01010','10010','11111','00010','00010'], '7': ['11111','00001','00010','00100','01000','01000','01000'],
+    A: ['01110','10001','10001','11111','10001','10001','10001'], B: ['11110','10001','10001','11110','10001','10001','11110'],
+    C: ['01110','10001','10000','10000','10000','10001','01110'], D: ['11110','10001','10001','10001','10001','10001','11110'],
+    E: ['11111','10000','10000','11110','10000','10000','11111'], F: ['11111','10000','10000','11110','10000','10000','10000'],
+    H: ['10001','10001','10001','11111','10001','10001','10001'], L: ['10000','10000','10000','10000','10000','10000','11111'],
+    M: ['10001','11011','10101','10101','10001','10001','10001'], N: ['10001','11001','10101','10011','10001','10001','10001'],
+    U: ['10001','10001','10001','10001','10001','10001','01110'], '-': ['00000','00000','00000','11111','00000','00000','00000'],
+    ':': ['00000','01100','01100','00000','01100','01100','00000'], '^': ['00000','00100','01110','11111','00000','00000','00000'],
+    ' ': ['00000','00000','00000','00000','00000','00000','00000'],
+  };
+  const lc = document.getElementById('lcd'), ld = devicePixelRatio || 1;   // offset sizes: the device is rotated, so the bounding box would distort
+  lc.width = lc.offsetWidth * ld; lc.height = lc.offsetHeight * ld;
+  const l = lc.getContext('2d'); l.scale(ld, ld);
+  const ink = tok('--ds-color-accent-light-12');
+  const dm = (text, x, y, d, ghost = true) => {
+    let cx = x;
+    for (const ch of text) {
+      const g = F[ch] || F[' '];
+      g.forEach((row, r) => [...row].forEach((b, c) => {
+        if (b === '1') { l.globalAlpha = 0.92; } else if (ghost) { l.globalAlpha = 0.07; } else return;
+        l.fillStyle = ink; l.fillRect(cx + c * d, y + r * d, d * 0.82, d * 0.82);
+      }));
+      cx += 6 * d;
+    }
+    l.globalAlpha = 1;
+    return cx;
+  };
+  dm('^ L-BAND', 18, 16, 2);
+  // signal strength: four of five bars
+  for (let i = 0; i < 5; i++) { l.globalAlpha = i < 4 ? 0.92 : 0.12; l.fillStyle = ink; l.fillRect(166 + i * 8, 28 - i * 3, 5, 2 + i * 3); }
+  l.globalAlpha = 1;
+  const end = dm('042', 18, 38, 6);
+  dm('CH', end + 4, 66, 2);
+  dm('NEBULA FM', 18, 94, 2);
+  dm('24:07', 156, 94, 2);
+  // spectrum
+  [3, 6, 9, 12, 10, 7, 11, 13, 8, 5, 9, 12, 6, 4, 7, 10, 5, 3, 6, 4, 2, 3].forEach((h, i) => {
+    for (let k = 0; k < 11; k++) { l.globalAlpha = k < Math.min(h, 11) ? 0.9 : 0.06; l.fillStyle = ink; l.fillRect(18 + i * 8.6, 140 - k * 2.4, 6.4, 1.6); }
+  });
+  l.globalAlpha = 1;
+
+  // pixel signal rings radiating from the antenna tip
+  const cv = document.getElementById('sig'), W = innerWidth, H = innerHeight, dpr = devicePixelRatio || 1;
+  cv.width = W * dpr; cv.height = H * dpr;
+  const ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
+  const P = 14;
+  const ant = document.querySelector('.antenna').getBoundingClientRect();
+  const tx = ant.right - 8, ty = ant.top + 8;   // the rotated rod's top end
+  // faint dot-matrix grid
+  ctx.fillStyle = 'rgba(34,36,40,0.14)'; // od-ignore: dot-matrix art
+  for (let y = P / 2; y < H; y += P) for (let x = P / 2; x < W; x += P) ctx.fillRect(x - 1, y - 1, 2, 2);
+  // continuous pixel arcs: walk each circle and light the cell under it (a pixel-art Bresenham)
+  const lit = new Map();
+  const rings = [30, 58, 90, 126, 166];
+  const Q = 9;
+  rings.forEach((r, i) => {
+    for (let t = -170; t <= 30; t += (Q * 0.3) / r * 180 / Math.PI) {
+      const a = t * Math.PI / 180, x = tx + r * Math.cos(a), y = ty + r * Math.sin(a);
+      const gx = Math.floor(x / Q), gy = Math.floor(y / Q);
+      if (gx < 0 || gy < 0 || gx * Q > W || gy * Q > H) continue;
+      const k = gx + ',' + gy;
+      if (i >= 3 && (Math.floor((t + 200) / (14 - i)) % 3 === 0)) continue;      // outer rings break into dashes
+      if (!lit.has(k)) lit.set(k, i);
+    }
+  });
+  const lime = tok('--ds-color-accent-light-9'), edge = tok('--ds-color-accent-light-8');
+  lit.forEach((i, k) => {
+    const [gx, gy] = k.split(',').map(Number), x = gx * Q, y = gy * Q;
+    ctx.globalAlpha = 1 - i * 0.1;
+    ctx.fillStyle = lime; ctx.fillRect(x + 1, y + 1, Q - 2, Q - 2);
+    ctx.strokeStyle = edge; ctx.lineWidth = 1; ctx.strokeRect(x + 1.5, y + 1.5, Q - 3, Q - 3);
+  });
+  ctx.globalAlpha = 1;
+})();
+</script>
+</body>
+</html>
