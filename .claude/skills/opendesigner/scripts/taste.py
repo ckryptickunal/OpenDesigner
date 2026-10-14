@@ -20,13 +20,13 @@ left out of the poll. Mobbin screens stay local: Mobbin's terms do not allow re-
 committed or published.
 
 Adding screens: entries.json is a list of library entries plus "image_url". Each image is downloaded (the only
-network use in this script, and only for this command), the Mobbin footer bar is cropped when Pillow is installed,
-and the entry is added to ~/.opendesigner/taste-extra.json (or, with --library, to the shared library and the
-repo's taste-screens/, for maintainers).
+network use in this script, and only for this command) and kept as it is, credit bar included. The entry is added
+to ~/.opendesigner/taste-extra.json (or, with --library, to the shared library and the repo's taste-screens/, for
+maintainers).
 
 The taste index (references/taste.md, "The taste index") lives in the project only: taste-profile.json beside state.json.
 Its dial recommendations are printed with --set-by assumed: the person confirms them in the sketch.
-Standard library only, except the optional Pillow crop.
+Standard library only.
 """
 from __future__ import annotations
 
@@ -498,31 +498,6 @@ def cmd_build(a):
         webbrowser.open(page.resolve().as_uri())
 
 
-def crop_footer(path):
-    """Crop Mobbin's flat grey 'curated by Mobbin' bar off the bottom and resize. Needs Pillow; skipped without it."""
-    try:
-        from PIL import Image
-    except ImportError:
-        return False
-    im = Image.open(path).convert("RGB")
-    w, h = im.size
-    px = im.load()
-
-    def bar(y):
-        return all(40 <= c[0] <= 56 and abs(c[0] - c[1]) < 6 and abs(c[1] - c[2]) < 6
-                   for c in (px[x, y] for x in range(2, max(4, int(w * 0.015)))))
-    y = h - 1
-    floor = h - round(h * 0.1) if w > h else h - round(h * 0.06)  # the bar is ~120 px; never cut more
-    while y > floor and bar(y):
-        y -= 1
-    im = im.crop((0, 0, w, y + 1))
-    tw = 1100 if w > h else 560
-    if im.width > tw:
-        im = im.resize((tw, round(im.height * tw / im.width)), Image.LANCZOS)
-    im.save(path, "JPEG", quality=74, optimize=True)
-    return True
-
-
 def cmd_add(a):
     new = json.loads(Path(a.entries).read_text(encoding="utf-8"))
     new = new if isinstance(new, list) else [new]
@@ -542,7 +517,6 @@ def cmd_add(a):
         dest = folder / f"{e['id']}.jpg"
         if url and not dest.exists():
             urllib.request.urlretrieve(url, dest)
-            crop_footer(dest)
         current.append(e)
         have.add(e["id"])
         added += 1
