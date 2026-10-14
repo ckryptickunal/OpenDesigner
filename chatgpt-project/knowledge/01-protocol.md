@@ -528,8 +528,9 @@ You are in the repo when `_coordination/PROTOCOL.md` and `tools/od.py` exist. Th
    python3 tools/build_data.py --check && python3 tools/sync_skills.py --check
    python3 tools/build_dist.py --check && python3 tools/jev_nav.py check
    ```
-3. Record why with `python3 tools/od.py log "<what changed and why>"`. Then sync with `python3 tools/od.py sync -m "<lane>: <what changed>"`, following `_coordination/PROTOCOL.md`. If you don't own the file, send its owner a message with `od.py send` instead of editing it.
+3. Record why with `python3 tools/od.py log "<what changed and why>"`. Then commit and push following `_coordination/PROTOCOL.md` section 4. When other sessions share the checkout, commit only your paths (`git commit -- <paths>`), because `od.py sync` adds everything. If you don't own the file, send its owner a message with `od.py send` instead of editing it.
 4. For a research claim, add the source to the lane's `traces/` file and cite it. If you can't cite it, mark it `[inferred]`.
+5. When the owner gives an instruction, or a session makes a mistake worth not repeating, append it to `_coordination/OWNER-FEEDBACK.md` (his words, what it means, its status). Then turn it into a rule where agents will read it: `_coordination/PROTOCOL.md`, `learn/IMPROVING.md`, a skill reference or a test. A note in one tool's private memory is not enough, because other models and hosts never see it.
 
 # Guardrails
 

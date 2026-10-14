@@ -26,6 +26,11 @@ Keep messages to one or two lines plus a file path; the content belongs in files
 - Sync with `python3 tools/od.py sync -m "L19: what changed"`: it commits, rebases on the remote, and pushes.
 - Small commits, message prefixed with your lane. Never force-push `main`. Never commit secrets: `.env` and key files are git-ignored; keep them that way.
 - Lane files have one owner, so conflicts are rare. If `BOARD.md` conflicts, keep both sides' rows and notes.
+- **The owner wants GitHub kept current** (2026-10-15): push finished work once the checks pass. A push he asks for carries every session's finished work (2026-10-14), never another session's half-done edits.
+- **Many sessions, one checkout.** Before a push that carries other sessions' work, ask each running session for a consistent point (`od.py send`, or the host's session messages). Leave out the paths they say are mid-edit, and name each author session in its commit.
+- **Commit only your paths:** `git commit -- <paths>`. Another session may have staged files, and a bare `git commit` sweeps them in. `od.py sync` runs `git add -A`, so in a shared checkout use it only for a push that carries everyone's finished work. In zsh, expand a path list with `${=paths}`; a plain `$paths` is not split into words.
+- **Check what you commit, not what is on disk.** Run `build_data.py` and `sync_skills.py` after your last edit. Then run the AGENTS.md checks and `scan_pr.py <base> HEAD` on a clean checkout of HEAD (`git worktree add --detach <dir> HEAD`). Other sessions' uncommitted files can hide a stale generated file. `site/check.py` needs `site/build.py` first in a clean checkout.
+- **Before a push, clear every scan_pr BLOCK.** A binary file needs the owner's yes, recorded in `scan_pr.py`, the od-pr-review threat table, REPO-PLAN and DECISIONS. Skills stay standard-library only, even for an optional import. Shown install commands use RFC 2606 `.example` domains and download before they run. A doc that states such a rule describes the blocked pattern in words, because the scanner blocks the pattern wherever it appears.
 
 ## 5. What gets traced (everything)
 | What | Where |
