@@ -53,5 +53,6 @@ Put each piece next to the B2B product screens and Orbika. If it looks weaker or
 8. **Scratch:** use only your own folder, `/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System/34a003df-3e22-4934-a798-b489a90e133e/scratchpad/<your-slug>/`. Write and delete only inside it.
 9. **Limits:**
    - Never use real company names or logos.
+   - Invented domains and email addresses end in `.example` (`nearmost.example`), and shown shell commands download before they run (see BRIEF.md hard rules).
    - Never save Mobbin images.
    - Don't commit; the orchestrator commits everything.
