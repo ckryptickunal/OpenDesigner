@@ -779,6 +779,10 @@ def main():
                                                        "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
                                                                  {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"}]}, indent=1))
     (DIST / ".nojekyll").write_text("")
+    key_file = SITE / "indexnow-key.txt"  # IndexNow (Bing and others): the key is public by design, served at the root
+    if key_file.exists():
+        key = key_file.read_text().strip()
+        (DIST / f"{key}.txt").write_text(key)
     (DIST / "vercel.json").write_text(json.dumps(VERCEL, indent=1))
     host = SITE_URL.split("//", 1)[1]
     if "/" not in host and not host.endswith("github.io"):

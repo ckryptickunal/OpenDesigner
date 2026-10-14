@@ -10,6 +10,7 @@ canonical links, the sitemap, robots.txt and llms.txt point at the right domain.
 """
 import json
 import os
+import re
 import pathlib
 import shutil
 import subprocess
@@ -36,6 +37,25 @@ def main():
         print(f"{dep['readyState']}: {dep['url']} ({dep['target'] or 'preview'})")
     except (ValueError, KeyError):
         print(out.strip().splitlines()[-1])
+    if "--preview" not in sys.argv:
+        indexnow(env.get("SITE_URL", ""))
+
+
+def indexnow(site_url):
+    """Tell IndexNow engines (Bing, Yandex, Seznam, Naver...) which pages changed. Google uses the sitemap instead."""
+    import urllib.request
+    key_file = SITE / "indexnow-key.txt"
+    if not (site_url and key_file.exists()):
+        return
+    key = key_file.read_text().strip()
+    urls = re.findall(r"<loc>([^<]+)</loc>", (DIST / "sitemap.xml").read_text())
+    body = json.dumps({"host": site_url.split("//", 1)[1], "key": key, "keyLocation": f"{site_url}/{key}.txt", "urlList": urls}).encode()
+    req = urllib.request.Request("https://api.indexnow.org/indexnow", data=body, headers={"Content-Type": "application/json; charset=utf-8"})
+    try:
+        with urllib.request.urlopen(req, timeout=15) as r:
+            print(f"IndexNow: {r.status} for {len(urls)} URLs")
+    except Exception as e:
+        print("IndexNow not accepted:", e)
 
 
 if __name__ == "__main__":
