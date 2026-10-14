@@ -7880,12 +7880,10 @@ def face_licence_words(faces, raw):
     return "; ".join(parts) + "." if parts else "system fonts only."
 
 
-def render_summary(d, state, meta, zoom):
-    """The first screen of DESIGN.md (U5 F26): what this is, for whom, where, how it feels, the brand color, what is
-    decided and what is next, in plain words and at most about 15 lines."""
-    name = state.get("name") or "This design system"
+def answer_counts(state, latest):
+    """(answers the person gave, answers picked for them): each answered question once, by who set it now (R20).
+    DESIGN.md's summary and overview.html both count this way, so their numbers agree."""
     ans = state.get("answers") or {}
-    latest = _decisions(d)  # each path's latest decision: who set it now, not who set it first (R20)
     by = {}
     for qid, rec in ans.items():
         sb = (latest.get(f"answers.{qid}") or {}).get("set_by") or (rec.get("set_by", "chosen") if isinstance(rec, dict) else "chosen")
@@ -7894,8 +7892,17 @@ def render_summary(d, state, meta, zoom):
         if get_path(state, path) not in (None, "", [], {}, "pending") and _q not in ans:
             sb = (latest.get(path) or {}).get("set_by") or "chosen"
             by[sb] = by.get(sb, 0) + 1
-    mine = by.get("chosen", 0) + by.get("confirmed_default", 0) + by.get("reference", 0) + by.get("asset", 0)
-    picked = by.get("delegated", 0) + by.get("assumed", 0)
+    return (by.get("chosen", 0) + by.get("confirmed_default", 0) + by.get("reference", 0) + by.get("asset", 0),
+            by.get("delegated", 0) + by.get("assumed", 0))
+
+
+def render_summary(d, state, meta, zoom):
+    """The first screen of DESIGN.md (U5 F26): what this is, for whom, where, how it feels, the brand color, what is
+    decided and what is next, in plain words and at most about 15 lines."""
+    name = state.get("name") or "This design system"
+    ans = state.get("answers") or {}
+    latest = _decisions(d)  # each path's latest decision: who set it now, not who set it first (R20)
+    mine, picked = answer_counts(state, latest)
     sketchy = [t for k, t in ZOOM_AREAS if k != "overview" and zoom[k]["level"] == "sketch"]
     feel_own = (state.get("taste") or {}).get("feelWords") or []
     macros = [m if isinstance(m, str) else m.get("id") for m in state.get("macros") or []]
@@ -8957,8 +8964,7 @@ def render_overview(d, files, meta, state):
 
     # ---- counts for the status line
     statuses = {title: _ov_area_status(decs, title) for _k, title in ZOOM_AREAS if title != "Overview"}
-    n_chosen = sum(1 for v in decs.values() if v["set_by"] in ("chosen", "confirmed_default", "reference", "asset"))
-    n_picked = sum(1 for v in decs.values() if v["set_by"] in ("delegated", "assumed"))
+    n_chosen, n_picked = answer_counts(state, decs)
     open_hooks = [h for h, v in hooks.items() if (v or {}).get("status", "pending") in ("pending", "unknown")]
 
     def section(sid, title, status, body, note=""):
@@ -8982,7 +8988,7 @@ def render_overview(d, files, meta, state):
              + f'<h1>{_esc(name)}</h1>'
              + (f'<p class="ov-lede">{_esc(what)}</p>' if what else
                 f'<p class="ov-lede ov-dim">What it is for is not recorded yet. {_ov_tag("missing")}</p>')
-             + f'<p class="ov-meta">{n_chosen} decisions you made · {n_picked} picked for you · everything else a sourced default · '
+             + f'<p class="ov-meta">{n_chosen} answers you gave · {n_picked} picked for you · everything else a sourced default · '
                f'{len(hooks) - len(open_hooks)} of {len(hooks)} brand assets provided · built {_dt.date.today().isoformat()}</p>'
              + "</div></div>")
 
@@ -9022,7 +9028,10 @@ def render_overview(d, files, meta, state):
                 hx = hexv(tree, p)
                 if not hx:
                     continue
-                cr = contrast(hx, surf) if p.startswith(("color.text", "color.border")) else None
+                on = {"color.text.on-action": "color.bg.action.primary"}.get(p) or (
+                    f"color.bg.{p.split('.on-', 1)[1]}.bold" if ".on-" in p else None)  # text on a fill: measure against the fill
+                ground = (hexv(tree, on) if on else None) or surf
+                cr = contrast(hx, ground) if p.startswith(("color.text", "color.border")) else None
                 items.append(f'<div class="ov-sw"><i style="background:{hx}"></i><span><b>{_esc(p[6:])}</b>{hx}'
                              + (f' · {cr:.1f}:1' if cr else "") + "</span></div>")
             cells.append(f'<div><h4>{gname}</h4>{"".join(items)}</div>')
@@ -9127,7 +9136,7 @@ def render_overview(d, files, meta, state):
         section("brand", "Brand book", statuses["Content and Voice"] if voice.get("status") not in (None, "pending", "unknown") else "default", brand),
         section("progress", "How complete it is", None, progress,
                 "Each area works at every zoom level. Zoom into an area by answering its next question."),
-        section("color", "Colors", statuses["Colors"], color, "Every text color shows its contrast on the theme's base surface."),
+        section("color", "Colors", statuses["Colors"], color, "Every text color shows its contrast on the theme's base surface; text meant for a fill is measured on that fill."),
         section("typography", "Typography", type_status, typ),
         section("layout", "Spacing", statuses["Layout"], space),
         section("shape", "Corners", statuses["Shapes"], shape),

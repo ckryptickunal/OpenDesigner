@@ -2725,6 +2725,9 @@ class OverviewAndArtifact(unittest.TestCase):
             html = rd(d, "overview.html")
             self.assertIn("Not enough information", html)                       # no logo yet: the gap is shown, not hidden
             self.assertIn("Fern", html)
+            self.assertIn("answers you gave", html)                             # counted the same way as DESIGN.md's summary
+            on = re.search(r"text\.on-action</b>(#[0-9a-f]{6}) · ([0-9.]+):1", html)
+            self.assertGreaterEqual(float(on.group(2)), 4.5)                     # measured on the button fill, not the page
             self.assertIn('href="preview/palette.html"', html)
             self.assertNotRegex(html, r"https?://(?!github\.com)")                   # no network: nothing loads from another host
             tpl = rd(d, "preview", "palette.html")
