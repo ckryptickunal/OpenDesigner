@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<!-- "How it works" for the README (1012 px wide, rendered at 2x): you answer, it writes the rules, your AI builds with them.
+     Every value is real engine output for the Billerwick example (site/demo-systems.json; engine.py sketch --name "Billerwick"
+     --audience dense --platforms web --feel precise,calm --brand "#15803D", then build). The invoice names and amounts are
+     invented, as on the site (DEMO_UI in site/build.py). Photo: Sean Fahrenbruch on Unsplash. -->
+<style>
+{{CSS}}
+#canvas { width: 1012px; padding: 40px 28px 44px; border-radius: var(--r-panel); box-shadow: none; background: var(--accent) center 45% / cover no-repeat; }
+.row3 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.16fr) minmax(0, 1fr); gap: 18px; align-items: stretch; }
+.card { display: flex; flex-direction: column; min-width: 0; overflow: visible; }
+.card-h { border-radius: var(--r-card) var(--r-card) 0 0; }
+.card-b { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+.card-f { padding: 12px 16px; border-top: 1px solid var(--line-soft); background: var(--surface); border-radius: 0 0 var(--r-card) var(--r-card); font-size: 13px; line-height: 20px; color: var(--ink-muted); letter-spacing: -0.006em; }
+.card-f .num { color: var(--ink); }
+
+/* 1 · you answer */
+.q { font-size: 16px; line-height: 23px; font-weight: 500; letter-spacing: -0.02em; }
+.you { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin: 14px 0 16px; }
+.bubble { display: inline-flex; align-items: center; gap: 8px; background: var(--ink); color: #fff; padding: 7px 12px; border-radius: 16px 16px 4px 16px; font-size: 15px; line-height: 20px; font-weight: 500; }
+.sw { width: 14px; height: 14px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / .9); }
+.answers { list-style: none; margin-top: auto; border-top: 1px solid var(--line-soft); }
+.answers li > span:last-child, .md, .q { text-wrap: balance; }
+.answers li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 8px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--line-soft); font-size: 14px; line-height: 20px; letter-spacing: -0.011em; }
+
+/* 2 · it writes the rules */
+.code { padding: 14px 16px; font-size: 12px; line-height: 20px; white-space: pre; background: var(--surface-raised); color: var(--ink); }
+.code .c { color: var(--ink-muted); } .code .k { color: var(--accent-text); }
+.md { padding: 12px 16px 16px; border-top: 1px solid var(--line-soft); font-size: 14px; line-height: 21px; letter-spacing: -0.011em; flex: 1; }
+.md .kicker { display: block; margin-bottom: 4px; }
+.stamp { position: absolute; z-index: 3; right: -12px; bottom: 26px; width: 84px; height: 84px; transform: rotate(-6deg); filter: drop-shadow(0 2px 3px rgb(10 14 40 / .25)); }
+
+/* 3 · your AI builds: only Billerwick's own tokens */
+.app { --bg: #fdfdfd; --raised: #ffffff; --text: #242424; --muted: #575757; --border: #c9c9c9; --sep: #e3e3e3; --primary: #15803d; --on: #ffffff;
+  --soft: #e0efe2; --soft-text: #0c652e; --r: 6px; --h: 32px;
+  padding: 16px; background: var(--bg); color: var(--text); font-size: 14px; line-height: 20px; flex: 1; display: flex; flex-direction: column; border-radius: 0 0 var(--r-card) var(--r-card); }
+.app-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.app-title { font-size: 17px; line-height: 22px; font-weight: 650; }
+.pill { background: var(--soft); color: var(--soft-text); border-radius: var(--r); padding: 2px 8px; font-size: 12px; line-height: 16px; font-weight: 500; white-space: nowrap; }
+.app-sub { margin-top: 4px; color: var(--muted); }
+.amt { margin: 12px 0 8px; font-size: 24px; line-height: 30px; font-weight: 650; font-family: inherit; font-variant-numeric: tabular-nums; }
+.lines > div { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-top: 1px solid var(--sep); }
+.lines .num { font-family: inherit; color: var(--muted); }
+.acts { display: flex; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 14px; }  /* opposite actions far apart: decline left, approve right */
+.b { display: inline-flex; align-items: center; height: var(--h); padding: 0 12px; border: 1px solid var(--border); border-radius: var(--r); background: var(--raised); font-weight: 500; white-space: nowrap; }
+.b.p { background: var(--primary); border-color: var(--primary); color: var(--on); }
+@supports (corner-shape: squircle) { .bubble, .card-h, .card-f, .app { corner-shape: squircle; } }
+/* phone version (html.narrow, 358 px): the cards stacked */
+html.narrow #canvas { width: 358px; padding: 16px 14px 18px; border-radius: 24px; }
+html.narrow .row3 { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+html.narrow .stamp { right: -4px; bottom: 34px; width: 72px; height: 72px; }
+</style></head>
+<body>
+<div id="canvas" class="stage" style="background-image:url(https://images.unsplash.com/photo-1645811791231-279658fb46dc?auto=format&fit=crop&w=2000&q=80)">
+<div class="row3">
+
+  <div class="card">
+    <div class="card-h"><span class="kicker">1 · You answer</span><span class="chip">Question 5 of 5</span></div>
+    <div class="card-b">
+      <p class="q">Do you have a brand color or a logo?</p>
+      <p class="you"><span class="kicker">You</span><span class="bubble"><span class="sw" style="background:#15803D"></span>#15803D</span></p>
+      <ul class="answers">
+        <li><span class="kicker">Making</span><span>a finance tool for approving invoices</span></li>
+        <li><span class="kicker">Who</span><span>used all day</span></li>
+        <li><span class="kicker">Where</span><span>web</span></li>
+        <li><span class="kicker">Feel</span><span>precise, calm</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="position:relative">
+    <div class="card-h"><span class="kicker">2 · It writes the rules</span><span class="chip ok">Passes</span></div>
+<pre class="code"><span class="c">/* build/css/tokens.css, resolved */</span>
+<span class="k">--ds-radius-control</span>: 6px;
+<span class="k">--ds-radius-container</span>: 8px;
+<span class="k">--ds-size-control-md</span>: 32px;
+<span class="k">--ds-color-bg-action-primary</span>: #15803d;</pre>
+    <p class="md"><span class="kicker">DESIGN.md</span>Buttons and fields have 6px corners; cards have 8px corners.</p>
+    <div class="card-f"><span class="num">164</span> color pairs checked · <span class="num">50</span> files · <span class="num">0</span> errors</div>
+    <svg class="stamp" viewBox="0 0 120 120" aria-hidden="true"><defs><path id="ring" d="M60 60m-40 0a40 40 0 1 1 80 0a40 40 0 1 1-80 0"/></defs><circle cx="60" cy="60" r="58" fill="#fff"/><g fill="none" stroke="#2338ff"><circle cx="60" cy="60" r="53" stroke-width="2.6"/><circle cx="60" cy="60" r="30" stroke-width="1.3"/><text fill="#2338ff" stroke="none" font-family="Source Code Pro" font-weight="500" font-size="10.5"><textPath href="#ring" textLength="244" lengthAdjust="spacing">CONTRAST CHECKED · WCAG 2.2 ·</textPath></text><text x="60" y="65.5" fill="#2338ff" stroke="none" text-anchor="middle" font-family="Hanken Grotesk" font-weight="700" font-size="21" letter-spacing="-.2">AA</text><path d="M53.5 72.5l4.2 4.2 8.6-8.8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><span class="kicker">3 · Your AI builds</span><span class="chip accent">Billerwick</span></div>
+    <div class="app">
+      <div class="app-row"><span class="app-title">Invoice 2207</span><span class="pill">Waiting on you</span></div>
+      <p class="app-sub">Marlowe &amp; Pratt Supplies<br>Due Fri 16 Oct</p>
+      <p class="amt">$14,860.00</p>
+      <div class="lines">
+        <div><span>Traction battery × 1</span><span class="num">$12,940.00</span></div>
+        <div><span>Charger, three-phase × 1</span><span class="num">$1,420.00</span></div>
+        <div><span>Delivery and fitting</span><span class="num">$500.00</span></div>
+      </div>
+      <div class="acts"><span class="b">Decline</span><span class="b p">Approve $14,860</span></div>
+    </div>
+  </div>
+
+</div>
+</div>
+</body></html>

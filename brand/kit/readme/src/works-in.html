@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<!-- "Works in" for the README (1012 px wide, rendered at 2x): the tools OpenDesigner is packaged for, each with its own mark
+     (Simple Icons, CC0, from site/logos.json), monochrome, one mark per company. Says where it runs, never an endorsement
+     (owner, 2026-10-15). -->
+<style>
+{{CSS}}
+#canvas { width: 1012px; height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-radius: var(--r-card); }
+.hosts { display: flex; align-items: center; gap: 30px; list-style: none; }
+.hosts li { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; line-height: 22px; font-weight: 500; letter-spacing: -0.016em; white-space: nowrap; }
+.tile { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--surface-raised); color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--line), 0 1px 2px rgb(20 21 23 / .06); }
+.tile .logo { width: 20px; height: 20px; }
+.hosts li span:last-child small { font-weight: 400; color: var(--ink-muted); font-size: 15px; }
+@supports (corner-shape: squircle) { .tile { corner-shape: squircle; } }
+/* phone version (html.narrow, 358 px): one column */
+html.narrow #canvas { width: 358px; height: auto; display: block; padding: 20px 22px 22px; }
+html.narrow .hosts { flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 14px; }
+html.narrow .tile { width: 34px; height: 34px; border-radius: 10px; }
+html.narrow .tile .logo { width: 17px; height: 17px; }
+</style></head>
+<body>
+<div id="canvas">
+  <span class="kicker">Works in</span>
+  <ul class="hosts">
+    <li><span class="tile">{{LOGO:claude}}</span><span>Claude Code <small>and app</small></span></li>
+    <li><span class="tile">{{LOGO:openai}}</span><span>ChatGPT <small>and</small> Codex</span></li>
+    <li><span class="tile">{{LOGO:cursor}}</span><span>Cursor</span></li>
+    <li><span class="tile">{{LOGO:githubcopilot}}</span><span>GitHub Copilot</span></li>
+    <li><span class="tile">{{LOGO:googlegemini}}</span><span>Gemini CLI</span></li>
+  </ul>
+</div>
+</body></html>

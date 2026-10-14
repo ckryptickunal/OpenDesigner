@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<!-- Examples for the README (1012 px wide, rendered at 2x): three B2B screens from the showcase on photo stages, as in the
+     site's "Real screens" section (site/build.py home(), same photos). The screens are the local renders in
+     brand/showcase/product/*/shot.png (git-ignored; render them before this). Every brand in them is invented.
+     Photos (free Unsplash photos): Photoholgic, Annie Spratt, Harshal Tandel. -->
+<style>
+{{CSS}}
+#canvas { width: 1012px; padding: 20px 20px 18px; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 16px; }
+.screen.big { grid-column: 1 / -1; }
+.stage { display: grid; place-items: center; padding: 22px; }
+.big .stage { padding: 40px 52px; }
+.bezel { width: 100%; }
+figure figcaption { display: flex; gap: 8px; align-items: baseline; margin-top: 10px; padding-left: 2px; font-size: 15px; line-height: 22px; letter-spacing: -0.016em; }
+figcaption strong { font-weight: 600; }
+figcaption span { color: var(--ink-muted); }
+/* phone version (html.narrow, 358 px): the stages stacked */
+html.narrow #canvas { width: 358px; padding: 12px 12px 10px; border-radius: 24px; }
+html.narrow .grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+html.narrow .stage, html.narrow .big .stage { padding: 18px 16px; border-radius: 16px; }
+html.narrow figcaption { margin-top: 8px; font-size: 14px; line-height: 20px; }
+</style></head>
+<body>
+<div id="canvas">
+<div class="grid">
+  <figure class="screen big">
+    <div class="stage" style="background-image:url(https://images.unsplash.com/photo-1532935702929-2a7df164ddea?auto=format&fit=crop&w=2400&q=80)">
+      <div class="bezel"><img src="{{ROOT}}/brand/showcase/product/02-fennick-approvals/shot.png" alt=""></div>
+    </div>
+    <figcaption><strong>Fennick</strong><span>Bill approvals</span></figcaption>
+  </figure>
+  <figure class="screen">
+    <div class="stage" style="background-image:url(https://images.unsplash.com/photo-1737279722244-4b5f5b896c6b?auto=format&fit=crop&w=1400&q=80)">
+      <div class="bezel"><img src="{{ROOT}}/brand/showcase/product/04-sounding-observability/shot.png" alt=""></div>
+    </div>
+    <figcaption><strong>Sounding</strong><span>Service overview</span></figcaption>
+  </figure>
+  <figure class="screen">
+    <div class="stage" style="background-image:url(https://images.unsplash.com/photo-1786797773538-9fb650c5c7c7?auto=format&fit=crop&w=1400&q=80)">
+      <div class="bezel"><img src="{{ROOT}}/brand/showcase/product/06-ferrule-security/shot.png" alt=""></div>
+    </div>
+    <figcaption><strong>Ferrule</strong><span>Security settings and audit log</span></figcaption>
+  </figure>
+</div>
+</div>
+</body></html>

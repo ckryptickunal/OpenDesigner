@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<!-- The README banner (1012 x 506, rendered at 2x) and, with html.full, the GitHub social preview (1280 x 640).
+     Adapted from the site's social preview (site/og/home.html), in light: buttons that each made their own choice
+     settle into cards that share one set of rules, on visible alignment guides. Photo: Philipp Hubert on Unsplash. -->
+<style>
+{{CSS}}
+#canvas { width: 1012px; height: 506px; }
+/* a faint 24 px layout grid behind the words, fading out toward the stage */
+#canvas::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: linear-gradient(rgb(34 36 40 / .04) 1px, transparent 1px), linear-gradient(90deg, rgb(34 36 40 / .04) 1px, transparent 1px);
+  background-size: 24px 24px; background-position: 7px 7px; -webkit-mask: linear-gradient(90deg, #000 0%, rgb(0 0 0 / .35) 50%, transparent 56%); }
+
+/* left: one left edge, x = 56 */
+.lockup { position: absolute; left: 56px; top: 52px; height: 26px; }
+.lockup svg { height: 26px; width: auto; display: block; }
+h1 { position: absolute; left: 56px; top: 146px; width: 500px; font-size: 41px; line-height: 48px; font-weight: 300; letter-spacing: -0.005em; }
+h1 b { display: block; font-weight: 650; letter-spacing: -0.012em; }
+.sub { position: absolute; left: 56px; top: 314px; width: 400px; font-size: 18px; line-height: 27px; color: var(--ink-muted); letter-spacing: -0.016em; }
+.foot { position: absolute; left: 56px; bottom: 50px; display: flex; align-items: center; gap: 10px; }
+.foot .kicker { color: var(--ink-muted); }
+.foot .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--line-strong); }
+
+/* right: the stage */
+.stage.art { position: absolute; right: 12px; top: 12px; bottom: 12px; width: 436px; background-position: 30% 40%; }
+.guide { position: absolute; z-index: 2; border: 0 dashed rgb(255 255 255 / .7); }
+.guide.v { top: 24px; bottom: 24px; border-left-width: 1px; }
+.guide.h { left: 18px; right: 18px; border-top-width: 1px; }
+
+/* before: three buttons that disagree */
+.drift { position: absolute; z-index: 2; display: flex; align-items: center; justify-content: center; font-weight: 600; letter-spacing: -0.01em; }
+.d1 { left: 40px; top: 76px; width: 92px; height: 30px; border-radius: 3px; background: #6f62f5; color: #fff; font-size: 13px; transform: rotate(-7deg); }
+.d2 { left: 150px; top: 40px; width: 116px; height: 42px; border-radius: 21px; background: rgb(255 255 255 / .9); color: #0b1a7a; font-size: 15px; font-weight: 500; transform: rotate(5deg); }
+.d3 { left: 96px; top: 112px; width: 84px; height: 28px; border-radius: 9px; background: #0c1340; color: #c9d2ff; font-size: 12.5px; transform: rotate(-3deg); }
+.arc { position: absolute; z-index: 2; left: 196px; top: 96px; width: 64px; height: 74px; }
+
+/* after: one system. One left edge (x = 70), one radius, one accent, 14 px apart */
+.cards { position: absolute; z-index: 2; left: 68px; top: 186px; width: 300px; display: grid; gap: 16px; }
+.cards .card { border-radius: 20px; }
+.c1, .c3 { height: 50px; display: flex; align-items: center; gap: 12px; padding: 0 16px; }
+.c2 { padding: 14px 16px 16px; }
+.dotc { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); flex: none; }
+.bar { height: 8px; border-radius: 4px; background: #e1e5ee; }
+.bar.ink { background: var(--ink); }
+.stack { display: grid; gap: 8px; flex: 1; }
+.c2 .t { font-size: 18px; line-height: 22px; font-weight: 650; letter-spacing: -0.02em; }
+.c2 .s { font-size: 13px; line-height: 18px; color: var(--ink-muted); margin-top: 2px; }
+.row { display: flex; justify-content: space-between; gap: 8px; margin-top: 14px; }  /* opposite actions far apart: decline left, approve right */
+.btn { height: 32px; border-radius: 10px; display: inline-flex; align-items: center; padding: 0 13px; font-size: 13.5px; font-weight: 600; letter-spacing: -0.01em; }
+.btn.p { background: var(--accent); color: #fff; }
+.btn.s { box-shadow: inset 0 0 0 1px var(--line); color: var(--ink); }
+.toggle { width: 36px; height: 22px; border-radius: 11px; background: var(--accent); position: relative; flex: none; }
+.toggle::after { content: ""; position: absolute; right: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; }
+.glass { position: absolute; z-index: 2; font: 500 11.5px/16px "Source Code Pro", ui-monospace, monospace; color: #fff; background: rgb(12 19 64 / .34);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .5); border-radius: 999px; padding: 4px 10px; backdrop-filter: blur(6px); }
+/* phone version (html.narrow, 358 px): words on top, the stage below at 334/436 of its size */
+html.narrow #canvas { width: 358px; height: auto; padding: 30px 0 12px; }
+html.narrow .lockup, html.narrow h1, html.narrow .sub, html.narrow .foot { position: static; width: auto; margin-inline: 24px; }
+html.narrow .lockup, html.narrow .lockup svg { height: 22px; }
+html.narrow h1 { margin-top: 30px; font-size: 26px; line-height: 32px; }
+html.narrow .sub { margin-top: 14px; font-size: 16px; line-height: 24px; }
+html.narrow .foot { margin-top: 20px; }
+html.narrow .stage.art { position: relative; right: auto; top: auto; bottom: auto; width: 436px; height: 482px; zoom: 0.766055; margin: 31.33px 15.66px 0; }
+html.narrow #canvas::before { -webkit-mask: linear-gradient(180deg, #000 0%, rgb(0 0 0 / .35) 30%, transparent 40%); }
+</style></head>
+<body>
+<div id="canvas">
+  <div class="lockup">{{LOCKUP}}</div>
+  <h1>Make everything you build<b>look like it<br>belongs together.</b></h1>
+  <p class="sub">Your AI tools know what to build. OpenDesigner tells them how it should look.</p>
+  <div class="foot"><span class="kicker">Free</span><span class="dot"></span><span class="kicker">Open source</span><span class="dot"></span><span class="kicker">MIT</span></div>
+
+  <div class="stage art" style="background-image:url(https://images.unsplash.com/photo-1760865245520-21b0786f5236?auto=format&fit=crop&w=1600&q=80)" aria-hidden="true">
+    <div class="guide v" style="left:68px"></div>
+    <div class="guide v" style="left:368px"></div>
+    <div class="guide h" style="top:252px"></div>
+    <span class="call" style="left:76px;top:156px">one edge</span>
+    <span class="call" style="left:288px;top:156px">radius<b>20</b></span>
+    <div class="drift d1">Save</div>
+    <div class="drift d2">Continue</div>
+    <div class="drift d3">Send</div>
+    <svg class="arc" viewBox="0 0 64 74" fill="none"><path d="M4 6 C 34 8, 50 30, 46 64" stroke="rgba(255,255,255,.85)" stroke-width="1.6" stroke-dasharray="4 5" stroke-linecap="round"/><path d="M39 57 L46 67 L53 57" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="cards">
+      <div class="card c1"><span class="dotc"></span><div class="stack"><div class="bar ink" style="width:46%"></div><div class="bar" style="width:74%"></div></div></div>
+      <div class="card c2"><div class="t">Invoice 2207</div><div class="s">Due Fri 16 Oct</div><div class="stack" style="margin-top:12px"><div class="bar" style="width:84%"></div></div>
+        <div class="row"><span class="btn s">Decline</span><span class="btn p">Approve</span></div></div>
+      <div class="card c3"><span class="toggle"></span><div class="stack"><div class="bar ink" style="width:38%"></div><div class="bar" style="width:60%"></div></div></div>
+    </div>
+    <span class="glass" style="left:296px;top:50px">#2338FF</span>
+    <span class="glass" style="left:316px;top:92px">space 16</span>
+  </div>
+</div>
+</body></html>
