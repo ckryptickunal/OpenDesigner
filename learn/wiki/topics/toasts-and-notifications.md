@@ -2,7 +2,7 @@
 type: topic
 title: Toasts and notifications
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -43,3 +43,4 @@ Vercel notifies users of build status immediately after a deploy, so they never 
 - [[sources/sonner-toast-toast-sonner|Toast – Sonner]]: Documents every toast variant (success, error, action, cancel, promise, loading, custom, headless) and the per-toast API defaults.
 - [[sources/sonner-toaster-toaster-sonner|Toaster – Sonner]]: Documents the Toaster container: expand on hover, visible count, positions, multiple toasters, offsets, theme and all container defaults.
 - See also: [[synthesis/toasts-and-notifications|Toasts and notifications synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-craft-details-referodesign-refero-skill-skills-refero-design-references-craft-details-md|referodesign/refero_skill: skills/refero-design/references/craft-details.md]]: Async messages such as toasts use role="status" aria-live="polite"; an undo toast can replace a confirmation for deletes.

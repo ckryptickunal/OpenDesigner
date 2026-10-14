@@ -2,7 +2,7 @@
 type: entity
 title: prefers-reduced-motion
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -21,3 +21,4 @@ Media query whose gentler variant must ship with every animation
 - [[sources/eks-skills-improve-animations-audit-emilkowalski-skills-skills-improve-animations-audit-md|emilkowalski/skills: skills/improve-animations/AUDIT.md]]: Media query used to keep opacity/color feedback while dropping movement.
 - [[sources/eks-skills-prototype-picker-emilkowalski-skills-skills-prototype-picker-md|emilkowalski/skills: skills/prototype/PICKER.md]]: Media query under which the highlight transition is turned off
 - [[sources/eks-skills-review-animations-skill-emilkowalski-skills-skills-review-animations-skill-md|emilkowalski/skills: skills/review-animations/SKILL.md]]: Must be honored with gentler motion (keep opacity/color, drop movement), not zero.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-motion-referodesign-refero-skill-skills-refero-design-references-motion-md|referodesign/refero_skill: skills/refero-design/references/motion.md]]: Media query the guide requires a variant for

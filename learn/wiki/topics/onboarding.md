@@ -2,7 +2,7 @@
 type: topic
 title: Onboarding
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -31,3 +31,5 @@ An onboarding flow uses a button that can be tapped or swiped, with a circle tha
 - [[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]] [0:00](https://www.youtube.com/watch?v=YbLF42BaoZs&t=0s): The worked example is a fintech onboarding and account opening flow; the grounded version accounts for identity checks and compliance requirements, and an offers nudge is placed on the homepage right after onboarding.
 - [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]] [0:14](https://www.youtube.com/watch?v=qK7WYCMvjUw&t=14s): Moonly's onboarding is 30 screens, built around the user's job or pain, gives a bite-sized insight before introducing a feature, and comes in about 10 variants tailored to the ad and App Store page the user came from; this doubled lifetime value.
 - See also: [[synthesis/onboarding|Onboarding synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: Onboarding and signup are listed as flow research cases; extract entry point, step count, friction reducers and system responses.
+- [[sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont|The Reason Why Some Apps Feel Expensive, But Most Don’t]]: Anticipating needs through recommendations and pre-filled information, and first-use empty states that give a stepping stone to the next part of the experience.

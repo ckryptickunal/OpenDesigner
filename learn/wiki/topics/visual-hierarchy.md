@@ -2,7 +2,7 @@
 type: topic
 title: Visual hierarchy
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -40,3 +40,5 @@ Darkness signals importance: the most important buttons and headings are darkest
 - [[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily|Awful To AMAZING Web Designs Easily]]: Making an element bigger draws attention to it; a one-column stacked layout keeps focus on one feature at a time.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Keep the nav button smaller so it does not compete with the hero button; set supporting text and stat labels in gray 600; drop unnecessary section titles, background tints and background cards.
 - See also: [[synthesis/visual-hierarchy|Visual hierarchy synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-typography-referodesign-refero-skill-skills-refero-design-references-typography-md|referodesign/refero_skill: skills/refero-design/references/typography.md]]: Weight stack of size, weight, color, case, spacing, style; squint, 5-second and scan tests; everything-bold flattens hierarchy.
+- [[sources/palantir-workshop-applic-application-design-best-practices-palantir|Palantir]]: Hierarchy should draw attention to the right areas of interaction. Avoid overload (limit actionable items; at most five primary actions in top navigation) and overcrowding (30 to 40 percent whitespace; at most ten visible components). Check it by squinting.

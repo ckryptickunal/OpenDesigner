@@ -831,3 +831,67 @@
 ## [2026-09-28] ingest | He Spent $1M on A/B Tests. Here's What Won.
 - Source: `raw/mobbin/qK7WYCMvjUw.txt`
 - Wiki page: `wiki/sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won.md`
+
+## [2026-10-07] ingest | referodesign/refero_skill: README.md
+- Source: `raw/referodesign-refero-skill/referodesign-refero-skil-readme.txt`
+- Wiki page: `wiki/sources/referodesign-refero-skil-readme-referodesign-refero-skill-readme-md.md`
+
+## [2026-10-07] ingest | referodesign/refero_skill: skills/refero-design/references/anti-ai-slop.md
+- Source: `raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop.txt`
+- Wiki page: `wiki/sources/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop-referodesign-refero-skill-skills-refero-design-references-anti-ai-slop-md.md`
+
+## [2026-10-07] ingest | referodesign/refero_skill: skills/refero-design/references/color.md
+- Source: `raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-color.txt`
+- Wiki page: `wiki/sources/referodesign-refero-skil-skills-refero-design-references-color-referodesign-refero-skill-skills-refero-design-references-color-md.md`
+
+## [2026-10-07] ingest | referodesign/refero_skill: skills/refero-design/references/copywriting.md
+- Source: `raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-copywriting.txt`
+- Wiki page: `wiki/sources/referodesign-refero-skil-skills-refero-design-references-copywriting-referodesign-refero-skill-skills-refero-design-references-copywriting-md.md`
+
+## [2026-10-07] ingest | referodesign/refero_skill: skills/refero-design/references/craft-details.md
+- Source: `raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-craft-details.txt`
+- Wiki page: `wiki/sources/referodesign-refero-skil-skills-refero-design-references-craft-details-referodesign-refero-skill-skills-refero-design-references-craft-details-md.md`
+
+## [2026-10-07] ingest | referodesign/refero_skill: skills/refero-design/references/example-workflow.md
+- Source: `raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-example-workflow.txt`
+- Wiki page: `wiki/sources/referodesign-refero-skil-skills-refero-design-references-example-workflow-referodesign-refero-skill-skills-refero-design-references-example-workflow-md.md`
+
+## [2026-10-07] ingest | referodesign/refero_skill: skills/refero-design/references/icons.md
+- Source: `raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-icons.txt`
+- Wiki page: `wiki/sources/referodesign-refero-skil-skills-refero-design-references-icons-referodesign-refero-skill-skills-refero-design-references-icons-md.md`
+
+## [2026-10-07] ingest | referodesign/refero_skill: skills/refero-design/references/mcp-tools.md
+- Source: `raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-mcp-tools.txt`
+- Wiki page: `wiki/sources/referodesign-refero-skil-skills-refero-design-references-mcp-tools-referodesign-refero-skill-skills-refero-design-references-mcp-tools-md.md`
+
+## [2026-10-07] ingest | referodesign/refero_skill: skills/refero-design/references/motion.md
+- Source: `raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-motion.txt`
+- Wiki page: `wiki/sources/referodesign-refero-skil-skills-refero-design-references-motion-referodesign-refero-skill-skills-refero-design-references-motion-md.md`
+
+## [2026-10-07] ingest | referodesign/refero_skill: skills/refero-design/references/typography.md
+- Source: `raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-typography.txt`
+- Wiki page: `wiki/sources/referodesign-refero-skil-skills-refero-design-references-typography-referodesign-refero-skill-skills-refero-design-references-typography-md.md`
+
+## [2026-10-07] ingest | referodesign/refero_skill: skills/refero-design/references/visual-workflow.md
+- Source: `raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-visual-workflow.txt`
+- Wiki page: `wiki/sources/referodesign-refero-skil-skills-refero-design-references-visual-workflow-referodesign-refero-skill-skills-refero-design-references-visual-workflow-md.md`
+
+## [2026-10-07] ingest | referodesign/refero_skill: skills/refero-design/SKILL.md
+- Source: `raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-skill.txt`
+- Wiki page: `wiki/sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md.md`
+
+## [2026-10-13] ingest | The Reason Why Some Apps Feel Expensive, But Most Don’t
+- Source: `raw/videos/SAxKK5fbjbc.txt`
+- Wiki page: `wiki/sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont.md`
+
+## [2026-10-13] ingest | The Reason Why Some Apps Feel Expensive, But Most Don’t
+- Source: `raw/videos/SAxKK5fbjbc.txt`
+- Wiki page: `wiki/sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont.md`
+
+## [2026-10-13] ingest | Palantir
+- Source: `raw/palantir-workshop-application-design-best-practices/palantir-workshop-applic-application-design-best-practices.txt`
+- Wiki page: `wiki/sources/palantir-workshop-applic-application-design-best-practices-palantir.md`
+
+## [2026-10-13] ingest | Palantir
+- Source: `raw/palantir-workshop-application-design-best-practices/palantir-workshop-applic-application-design-best-practices.txt`
+- Wiki page: `wiki/sources/palantir-workshop-applic-application-design-best-practices-palantir.md`

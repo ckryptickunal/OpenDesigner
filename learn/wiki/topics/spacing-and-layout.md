@@ -2,7 +2,7 @@
 type: topic
 title: Spacing and layout
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -47,3 +47,5 @@ Hero spacing of 8, 12 and 32 px sets which elements read as a group; layout choi
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: Alignment is one of the three biggest fixes after generation, such as lining up sidebar items and exact left alignment.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Split 3/5 and 2/5 hero, a wider 1280 page container, full-width screenshots and stats, 8px insets and gaps, 64px padding around the large hero screenshot, and a canvas grid of section borders.
 - See also: [[synthesis/spacing-and-layout|Spacing and layout synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-typography-referodesign-refero-skill-skills-refero-design-references-typography-md|referodesign/refero_skill: skills/refero-design/references/typography.md]]: Vertical rhythm from line height (12/24/48/72px for a 24px line); spacing matters more than font size.
+- [[sources/palantir-workshop-applic-application-design-best-practices-palantir|Palantir]]: Use grid, column, or row-and-column layouts that follow the F-shaped reading pattern, with filters anchored on the left. Use compact padding in most cases; separate groups with padding and containers, and related content with dividers; do not over-nest containers.

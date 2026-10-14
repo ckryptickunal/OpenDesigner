@@ -2,7 +2,7 @@
 type: topic
 title: Design taste and judgement
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -55,3 +55,9 @@ Eye-catching Dribbble-style variety differs from usable design; usability is at 
 - [[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily|Awful To AMAZING Web Designs Easily]]: Distinguishes a good design from an interesting one and argues interesting sites have more variety in layouts, colors and sizes, and more originality.
 - See also: [[synthesis/design-taste-and-judgement|Design taste and judgement synthesis]]
 - [[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]: Use the gut check 'Would I screenshot this, and why?'; the best dashboards knew what to leave out rather than being the prettiest.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop-referodesign-refero-skill-skills-refero-design-references-anti-ai-slop-md|referodesign/refero_skill: skills/refero-design/references/anti-ai-slop.md]]: Names nine tells of AI-generated design and argues for intentional, project-specific choices over safe defaults.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-example-workflow-referodesign-refero-skill-skills-refero-design-references-example-workflow-md|referodesign/refero_skill: skills/refero-design/references/example-workflow.md]]: Preserve the primary reference's signature traits, borrow bounded details, and justify each choice in a ledger.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-mcp-tools-referodesign-refero-skill-skills-refero-design-references-mcp-tools-md|referodesign/refero_skill: skills/refero-design/references/mcp-tools.md]]: Styles are used to establish taste and visual language; never copy a single style.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-typography-referodesign-refero-skill-skills-refero-design-references-typography-md|referodesign/refero_skill: skills/refero-design/references/typography.md]]: AI-slop anti-patterns and countable limits that reveal amateur typography.
+- [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: Pick one dominant direction, preserve its sharp traits, avoid averaging references and avoid listed AI-slop defaults.
+- [[sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont|The Reason Why Some Apps Feel Expensive, But Most Don’t]]: Premium feel is the sum of small, deliberate details across the experience; the video lists eight of them and says a trained eye is usually what finds them.

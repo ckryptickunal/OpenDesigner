@@ -2,7 +2,7 @@
 type: topic
 title: Modals and popovers
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -46,3 +46,6 @@ Swipe gestures are a quick, often intuitive way to dismiss popovers and pages, w
 - [[sources/vaul-other-other-vaul|Other – Vaul]]: modal false keeps the background interactive; dismissible false removes outside-click, Escape and drag-down dismissal.
 - [[sources/vaul-snap-points-snap-points-vaul|Snap Points – Vaul]]: modal false with snap points keeps the background interactive while the drawer is open.
 - See also: [[synthesis/modals-and-popovers|Modals and popovers synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-craft-details-referodesign-refero-skill-skills-refero-design-references-craft-details-md|referodesign/refero_skill: skills/refero-design/references/craft-details.md]]: overscroll-behavior: contain on modals, drawers and sheets; confirmation modal before destructive actions.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-motion-referodesign-refero-skill-skills-refero-design-references-motion-md|referodesign/refero_skill: skills/refero-design/references/motion.md]]: Overlay fades 200ms in and 150ms out; modal fades and scales from 0.95; dropdown transform-origin at the trigger corner.
+- [[sources/palantir-workshop-applic-application-design-best-practices-palantir|Palantir]]: Overlays suit temporary, secondary interactions such as a questionnaire. Avoid them for analysis. A dialog blocks the background, so reference text needed while typing must sit beside the inputs or be repeated.

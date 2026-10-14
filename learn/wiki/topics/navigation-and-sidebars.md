@@ -2,7 +2,7 @@
 type: topic
 title: Navigation and sidebars
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -48,3 +48,5 @@ Navigation between pages can be a swipe with a card expanding to full screen or 
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: Sidebar fixes: a line the author found too low is moved, the user's name and icon with an arrow to switch accounts added, items lined up, 'Menu' and other labels removed, settings and help center moved to the bottom.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Left-align nav links next to the logo instead of centering them, make the logo slightly bigger, give sign-in a secondary button treatment, and use a ring for the nav's bottom border.
 - See also: [[synthesis/navigation-and-sidebars|Navigation and sidebars synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-craft-details-referodesign-refero-skill-skills-refero-design-references-craft-details-md|referodesign/refero_skill: skills/refero-design/references/craft-details.md]]: URL reflects app state; use real links instead of onClick navigation so Cmd+click and middle-click work.
+- [[sources/palantir-workshop-applic-application-design-best-practices-palantir|Palantir]]: At most five primary actions in top-level navigation; a home page that centralises navigation to all modules; navigation bars and tabs pinned inside the primary header so they never scroll away.

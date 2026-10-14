@@ -2,7 +2,7 @@
 type: topic
 title: Presenting designs
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -21,3 +21,4 @@ Six creative showcase techniques (plain or glowing backgrounds, extending off th
 - [[sources/eks-skills-prototype-skill-emilkowalski-skills-skills-prototype-skill-md|emilkowalski/skills: skills/prototype/SKILL.md]]: Show one variant at a time, full size, in realistic context, never as side-by-side thumbnails; present a table of axis, when it wins and its cost; never pre-pick a favorite; close with where the picker runs and the keys to flip.
 - [[sources/t7mpEDXzjCg-make-a-perfect-ux-case-study-in-8-steps|Make A Perfect UX Case Study In 8 Steps]]: Presentation is as important as content: concise text, many images and GIFs, final designs shown large with explanatory text beside them, and clickable tabs as one way to organise screens.
 - See also: [[synthesis/presenting-designs|Presenting designs synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-visual-workflow-referodesign-refero-skill-skills-refero-design-references-visual-workflow-md|referodesign/refero_skill: skills/refero-design/references/visual-workflow.md]]: Present three distinct directions in a fixed format and stop for the user to choose.

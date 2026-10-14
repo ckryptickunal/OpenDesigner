@@ -1,0 +1,467 @@
+{
+  "summary": "Wyatt Feaster lists eight habits that make an app feel expensive and premium, and argues that most of them are small and cheap to apply. The habits are about behaviour more than looks: anticipate what the user needs, pace the waiting moments on purpose, add delight in both big and small moments, leave animation out where it would slow people down, keep icons, colors, spacing, fonts and interactions so consistent that nobody notices them, give every empty state a way forward, hide small rewards for people who explore, and write error messages that say how to fix the problem. For a design system this matters because several of these are system-level rules (one icon style, a small set of type and color styles, an empty-state and error-state pattern with a next action, a motion budget) and not one-off screen decisions. The video gives no numbers or exact values; it is a checklist of principles with short app clips as examples.",
+  "key_ideas": [
+    "A premium feel comes from many small, thought-through moments, not from one big visual move.",
+    "Anticipate needs like a high-end hotel does: recommend, pre-fill, and offer the likely next step before the user asks.",
+    "Waiting and transition moments are designed on purpose: how long an animation lasts before the next screen, and what happens on screen during the wait.",
+    "Delight belongs in small moments (a password field) as well as big ones (completing an action).",
+    "Delight is optional by nature; it works because people enjoy what makes them feel something.",
+    "Animating everything feels wrong and slows people down, often at the critical moments; premium apps get out of the way there.",
+    "Consistency done well is invisible; inconsistency is felt even by people who cannot say what is off.",
+    "Mixing a filled icon with stroke icons in one set is a subtle tell of a cheap app.",
+    "Empty states never dead-end: they say nothing is here and offer another route, a first action, or a promoted feature.",
+    "Small unexpected rewards found by exploring make an app memorable.",
+    "Error messages give the steps to fix the problem, not only the fact that something went wrong.",
+    "Prescriptive errors are named as a premium feeling that takes very little effort."
+  ],
+  "entities": [
+    {
+      "name": "Wyatt Feaster",
+      "type": "person",
+      "description": "The presenter; a designer who runs the studio the video promotes."
+    },
+    {
+      "name": "Instagram",
+      "type": "product",
+      "description": "Named for the 3D transition when switching between stories, as an example of delight."
+    },
+    {
+      "name": "Strava",
+      "type": "product",
+      "description": "Named for a printing (receipt) animation shown when an activity is completed."
+    },
+    {
+      "name": "Airbnb",
+      "type": "product",
+      "description": "Named for the postcard of the destination shown after a stay is confirmed, as a reward for engaging."
+    },
+    {
+      "name": "Granola",
+      "type": "product",
+      "description": "Shown on screen in the intro (a recipe list with usage counts); not discussed in the narration."
+    },
+    {
+      "name": "Reddit",
+      "type": "product",
+      "description": "Shown on screen during the delight section (an animated mascot above the feed); not named in the narration."
+    },
+    {
+      "name": "Empty state",
+      "type": "concept",
+      "description": "A screen with no content yet, or none left; the video says it must always offer a next step."
+    },
+    {
+      "name": "Prescriptive error state",
+      "type": "concept",
+      "description": "An error message that tells the user the steps to solve the problem."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Design taste and judgement",
+      "summary": "Premium feel is the sum of small, deliberate details across the experience; the video lists eight of them and says a trained eye is usually what finds them."
+    },
+    {
+      "name": "Motion principles",
+      "summary": "Animation has a time and a place. Use it to carry transitions and to add delight, and leave it out where it would slow down a critical task such as entering card details."
+    },
+    {
+      "name": "Easing and timing",
+      "summary": "Decide on purpose how long an animation should run before the next screen, and what is shown during the wait, so the flow does not feel disjointed. No durations are given."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "Small moments of delight: a micro animation on password entry, a 3D transition between stories, a printing animation on completion."
+    },
+    {
+      "name": "Feedback, empty and loading states",
+      "summary": "Empty states always offer an exit: an alternative route, a first action ('Create your first post'), or an upsell. Loading and analysing screens are treated as designed transitional states. Errors say how to fix the problem."
+    },
+    {
+      "name": "Content and microcopy",
+      "summary": "Empty states name the next action in words; error messages give steps to solve the problem instead of only stating that an error occurred."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "One icon style across the set: a filled icon next to stroke icons feels wrong even to people who cannot say why."
+    },
+    {
+      "name": "Design systems and tokens",
+      "summary": "Extreme consistency of icons, colors, spacing, fonts and interactions is what makes UI feel invisible; many font styles, many colors and one-or-two-pixel misalignments read as cheap."
+    },
+    {
+      "name": "Onboarding",
+      "summary": "Anticipating needs through recommendations and pre-filled information, and first-use empty states that give a stepping stone to the next part of the experience."
+    },
+    {
+      "name": "Retention and gamification",
+      "summary": "Reward discovery: small unexpected moments, found only by engaging with the app, make the experience special and memorable."
+    },
+    {
+      "name": "Mobile app patterns",
+      "summary": "Every example is a mobile app screen: suggested-reply chips, a pre-filled vehicle confirmation sheet, analysing and setup screens, completion screens, empty tabs and inline form errors."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "The things that make an app feel premium are easy to apply.",
+      "evidence": "[0:21] they're super easy things that you can take and go apply to your app today"
+    },
+    {
+      "claim": "Premium apps remove friction by anticipating what users need, which is why they show recommendations, pre-filled information and delivery windows.",
+      "evidence": "[0:32] They recommend and anticipate the users' needs"
+    },
+    {
+      "claim": "Thought-through transitions are felt because the experience does not feel disjointed.",
+      "evidence": "[2:04] thought through and you feel that because it doesn't feel disjointed"
+    },
+    {
+      "claim": "Delight creates a luxurious feeling because people enjoy things more when they feel something.",
+      "evidence": "[3:01] feeling because when we start to feel something, we enjoy it more"
+    },
+    {
+      "claim": "Apps that animate everything feel wrong and slow the experience down, often in critical moments.",
+      "evidence": "[3:16] animate everything, it feels wrong and it slows the experience down"
+    },
+    {
+      "claim": "When consistency is executed at a high level, users do not notice it; when it is off, it feels wrong even to an untrained eye that cannot say why.",
+      "evidence": "[3:56] at a high premium level, you don't notice"
+    },
+    {
+      "claim": "Apps that execute empty states well never dead-end users.",
+      "evidence": "[4:33] they never dead end users"
+    },
+    {
+      "claim": "Unexpected moments found by exploring are what make users remember an app.",
+      "evidence": "[5:51] That little unexpected moment is only discovered by interacting and engaging"
+    },
+    {
+      "claim": "Prescriptive error states give an expensive feeling with very minimal effort.",
+      "evidence": "[6:29] It's an expensive feeling with very minimal effort"
+    }
+  ],
+  "quotes": [
+    "Know when not to animate.",
+    "they never dead end users."
+  ],
+  "tags": [
+    "premium-feel",
+    "polish",
+    "delight",
+    "empty-states",
+    "error-states",
+    "consistency",
+    "motion-restraint",
+    "anticipation",
+    "mobile"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Anticipate the user's next need and meet it before they ask: show recommendations, pre-fill information you already have, and offer choices such as delivery windows.",
+      "why": "It removes friction by meeting users where they are, the way a high-end hotel thinks ahead for its guests.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[1:10] It's why we see recommendations, pre-filling information, and delivery windows",
+      "product": "both"
+    },
+    {
+      "rule": "Design transitional states on purpose: decide how long an animation should take before the next screen appears, and what is shown to lift the wait while it happens.",
+      "why": "When pacing and timing are thought through, the flow does not feel disjointed, like calm music in a luxury hotel's elevator makes the ride less awkward.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[1:53] how long should an animation actually take before moving on to the next screen",
+      "product": "both"
+    },
+    {
+      "rule": "Add moments of delight in both small moments (such as a password entry) and big ones (such as completing an action), using things like micro animations or a special transition.",
+      "why": "They are not strictly needed, but people enjoy an experience more when it makes them feel something.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[2:20] Leverage moments of delight in big moments and in small moments",
+      "product": "consumer"
+    },
+    {
+      "rule": "Do not animate everything. Leave animation out of critical, repeated tasks such as entering credit card information.",
+      "why": "Animating everything feels wrong and slows the experience down, often in critical moments; an animation loading on every entry gets frustrating.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[3:16] animate everything, it feels wrong and it slows the experience down",
+      "product": "both"
+    },
+    {
+      "rule": "Keep icons, colors, spacing, fonts and interactions consistent across the whole product, to the point where the UI goes unnoticed.",
+      "why": "Executed at a high level, consistency is invisible; tons of font styles, tons of colors and elements off by one or two pixels feel wrong.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tokens",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[3:45] I'm talking icons, colors, spacing, fonts, interactions",
+      "product": "both"
+    },
+    {
+      "rule": "Do not mix filled icons and stroke icons in the same set.",
+      "why": "It feels wrong to users even when they cannot say why.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[4:15] one icon is a filled icon and the other icon is a stroke icon",
+      "product": "both"
+    },
+    {
+      "rule": "Never let an empty state dead-end the user: say there is nothing here, then offer an alternative route in the app or a first action such as 'Create your first post' or 'Create your first invoice'.",
+      "why": "It gives the user a stepping stone to the next part of the experience instead of only telling them they have nothing here.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[4:33] they never dead end users",
+      "product": "both"
+    },
+    {
+      "rule": "Consider using an empty state to point to another area of the product you want people to find or upgrade to.",
+      "why": "The empty moment is an opportunity to promote other areas of the app.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[4:55] use those opportunities to promote other areas of their app",
+      "product": "consumer"
+    },
+    {
+      "rule": "Reward discovery: place small unexpected moments where users find them only by engaging with the app, such as a postcard of the destination after a booking is confirmed.",
+      "why": "The unexpected moment makes the experience feel special and makes people remember the app.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[5:30] give users little nuggets here and there",
+      "product": "consumer"
+    },
+    {
+      "rule": "Write error states that tell the user the steps to solve the problem and how to act on it, not only that there is a password problem or that an error occurred.",
+      "why": "An error that only says something is wrong is like a person who answers a request for directions with 'Nope, wrong way'; the prescriptive version feels expensive for very little effort.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "[6:13] but rather they provide them with steps",
+      "product": "both"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Where should the product animate, and where should it stay still?",
+      "options": [
+        {
+          "name": "Animate everything",
+          "effect": "Feels wrong and slows the experience down, often in critical moments.",
+          "when": "The video advises against it."
+        },
+        {
+          "name": "Animate transitions and chosen moments of delight, stay still on critical tasks",
+          "effect": "Transitions feel paced and connected, completions feel rewarding, and tasks like entering card details stay fast.",
+          "when": "The video's recommendation for an app that should feel premium."
+        }
+      ],
+      "recommendation": "Pick the moments: pace transitional states on purpose, add delight to small and big moments, and leave animation out where the user needs speed.",
+      "maps_to": "Q-brand-04",
+      "evidence": "[3:08] there's a time and a place for animations",
+      "product": "both"
+    },
+    {
+      "question": "Should icons be filled or stroke?",
+      "options": [
+        {
+          "name": "One style across the set",
+          "effect": "The set reads as a whole and goes unnoticed.",
+          "when": "Always, according to the video."
+        },
+        {
+          "name": "Mixed filled and stroke",
+          "effect": "Feels wrong, even to people who cannot say why.",
+          "when": "The video treats this as a mistake."
+        }
+      ],
+      "recommendation": "The video does not prefer filled or stroke; it says not to mix them.",
+      "maps_to": "Q-icon-02",
+      "evidence": "[4:15] one icon is a filled icon and the other icon is a stroke icon",
+      "product": "both"
+    },
+    {
+      "question": "What should an empty screen offer?",
+      "options": [
+        {
+          "name": "A statement only",
+          "effect": "The user is told there is nothing here and is left at a dead end.",
+          "when": "The video advises against it."
+        },
+        {
+          "name": "A first action",
+          "effect": "A prompt such as 'Create your first post' or 'Create your first invoice' gives a stepping stone into the product.",
+          "when": "The user has never created anything here."
+        },
+        {
+          "name": "An alternative route",
+          "effect": "The screen says there is nothing here and points to something else to do in the app.",
+          "when": "The user has completed everything in this place."
+        },
+        {
+          "name": "A promoted feature",
+          "effect": "The empty space points to another area of the app or an upsell.",
+          "when": "There is another area the product wants people to find."
+        }
+      ],
+      "recommendation": "Always give users an alternative thing to do instead of only saying there is nothing here.",
+      "maps_to": "Q-pattern-04",
+      "evidence": "[5:00] They always give their users an alternative thing to do",
+      "product": "both"
+    },
+    {
+      "question": "How should an error message be worded?",
+      "options": [
+        {
+          "name": "States the problem only",
+          "effect": "The user learns something is wrong but not what to do, like being told 'Nope, wrong way'.",
+          "when": "The video advises against it."
+        },
+        {
+          "name": "Prescriptive",
+          "effect": "The message gives the steps to solve the problem and how to act on it.",
+          "when": "The video's recommendation."
+        }
+      ],
+      "recommendation": "Prescriptive: it feels expensive and takes very little effort.",
+      "maps_to": "Q-form-03",
+      "evidence": "[6:13] but rather they provide them with steps",
+      "product": "both"
+    }
+  ],
+  "process": [
+    {
+      "step": "Audit a product for premium feel",
+      "detail": "Walk the product against the video's eight checks: anticipates needs, paced transitional states, delight in small and big moments, no animation on critical tasks, invisible consistency, empty states with a way forward, rewards for discovery, prescriptive errors. [inferred: the video presents these as a list, not as an audit]"
+    }
+  ],
+  "examples": [
+    {
+      "what": "Playful age input",
+      "where": "Unnamed mobile app, shown in the intro at 0:15 to 0:19 without commentary",
+      "visual_note": "After the user types 67 into 'How old are you?', two illustrated hands pop in on either side of the number in about a quarter of a second, and a dialog asks 'How old are you really?' with a 'Change age' button. A joke placed inside a plain form field."
+    },
+    {
+      "what": "Suggested-reply chips in a help-centre chat",
+      "where": "Unnamed mobile app, shown around 1:08",
+      "visual_note": "Under the support agent's greeting, a column of tappable chips lists likely issues (payment, cancellation, ticket status), so the user picks instead of typing. Shown as anticipating needs."
+    },
+    {
+      "what": "'Recommended for you' row above the category list",
+      "where": "Unnamed wellness app, shown around 1:11",
+      "visual_note": "A Challenges screen opens with a highlighted 'Recommended for you' card (a suggested habit) before the 'Explore by category' list of Nutrition, Stress & Mood, Energy and Sleep. Shown as recommendations."
+    },
+    {
+      "what": "Pre-filled confirmation sheet",
+      "where": "Unnamed mobile app, shown around 1:14",
+      "visual_note": "A bottom sheet asks 'Is this your vehicle?' with a photo and the model name already filled in, a Continue button and a 'Back to search' link. Shown as pre-filling information."
+    },
+    {
+      "what": "Designed waiting screens",
+      "where": "Two unnamed mobile apps, shown at 1:56 and 2:00",
+      "visual_note": "A habit app shows a thin green line sweeping down the photo about once a second, again and again, above a disabled button labelled 'Analyzing photo...'. A podcast app shows small blurred app icons circling a central icon and coming into focus one at a time under 'Setting up your podcasts'. Both give the eye something moving that matches the task while the user waits. Shown as transitional states with intentional pacing."
+    },
+    {
+      "what": "Password strength micro animation",
+      "where": "Unnamed mobile app, shown at 2:28",
+      "visual_note": "On a 'Create password' screen a green bar under the field is full with a check mark at its end, and a line of praise sits below it ('Nice work! That would take a long time to crack'). Shown as delight in a small moment."
+    },
+    {
+      "what": "Completion screens with staged reveals and confetti",
+      "where": "Three unnamed mobile apps, shown at 2:31 to 2:38",
+      "visual_note": "One ends a flow on an empty cream screen where 'That's' appears first, 'a wrap!' fades in under it about a quarter of a second later, then an illustration and last the 'Onward' button, all within about a second and a half. A delivery tracker bursts confetti over the whole screen for about two seconds after the order is marked as delivered, with a small 'Marked as delivered' toast. An event page drops confetti from the top once the RSVP shows 'Going', above 'Add to calendar' and share actions. Shown as delight in a big moment."
+    },
+    {
+      "what": "Logo that changes on hover",
+      "where": "A desktop coding tool, shown at 2:38 to 2:41 without commentary; the mark looks like GitHub's [inferred]",
+      "visual_note": "When the pointer reaches the round logo above the prompt box, the mark turns into a small cat that reaches for the cursor, in under a second. A hidden hover reward in a work tool."
+    },
+    {
+      "what": "Mascot in the pull-to-refresh gap",
+      "where": "Reddit, shown at 2:40 (not named in the narration)",
+      "visual_note": "Pulling the feed down opens a gap at the top; the mascot rises into it inside a red speech-bubble shape and stays while the feed reloads, then new posts slide in, in about three seconds. The delight sits in a wait the user started. Shown during the delight section."
+    },
+    {
+      "what": "3D transition between stories",
+      "where": "Instagram, shown at 2:44",
+      "visual_note": "Moving to the next story turns the whole screen like the face of a cube: the current story swings away to the left while the next swings in from the right, with both visible at an angle mid-turn. The clip plays it slowly."
+    },
+    {
+      "what": "Printing animation after an activity",
+      "where": "Strava, as named in the narration; shown at 2:48 to 2:52",
+      "visual_note": "A monochrome grid of route outlines titled 'Run Receipt', with a menu offering a long or short receipt. Choosing one clears the screen to a slot drawn at the top, and the run summary feeds out of it downward like paper from a printer in about a second: header, pace chart, then the stats in a monospace face. A menu on the receipt then switches the chart between a 3D route, an ASCII map and the pace trend."
+    },
+    {
+      "what": "Design system pages for color, spacing and type",
+      "where": "Unnamed design system pages, shown at 3:47 to 3:50",
+      "visual_note": "Three quick pages: a palette of four named purples and three named neutrals; a spacing page showing five steps labelled 4, 8, 12, 16 and 24; and sample headlines in one typeface, each labelled with a style name (display-xl, display-lg, display-md, display-sm, title-lg) and its size, weight and line height. Shown as consistent colors, spacing and fonts."
+    },
+    {
+      "what": "Category tabs with matching illustrated icons",
+      "where": "Airbnb [inferred from the labels All, Homes, Experiences, Services], shown at 3:47 and 3:50 to 3:55",
+      "visual_note": "First a row of five illustrated category icons in one 3D rendering style. Then four tabs, each with a small icon in that same style: as the pointer moves along, the hovered tab's label darkens and the underline moves under it, and every tab responds in the same way. Shown as consistent icons and interactions."
+    },
+    {
+      "what": "Inconsistent app screens",
+      "where": "Two unnamed app mock-ups, shown at 4:00 to 4:04",
+      "visual_note": "Screens with many competing colors, card styles and font treatments. Shown while the narration describes tons of font styles and colors."
+    },
+    {
+      "what": "Cheap versus expensive icon row",
+      "where": "Diagram made for the video, shown at 4:16",
+      "visual_note": "Two rows of the same four icons (bicycle, lightning bolt, droplet, heart). In the row labelled 'Cheap', red arrows point at the bolt and the droplet, which are filled while the others are outlines. In the row labelled 'Expensive & Premium' all four are outlines of the same weight."
+    },
+    {
+      "what": "Empty states with a way forward",
+      "where": "Five unnamed mobile apps, shown at 4:44 to 5:20",
+      "visual_note": "A Trips tab with 'No upcoming trips' and two buttons to find or book one; a Chats tab with an illustration, 'Connections start here', a button to find people and a promoted paid feature below; a chat with a 'Start Chat' button; an Investments screen with an illustration and a button to explore more; a community page with 'Time to make your first post!' and a button; a bills screen titled 'Add your first bill' with provider logos to pick from."
+    },
+    {
+      "what": "Postcard after booking",
+      "where": "Airbnb, shown at 5:44",
+      "visual_note": "On a red background, a tall illustrated card titled 'Greater London' sways slightly as if held. It then flips over in about half a second to show the back: a photo of the room, 'Rental unit in Greater London', the dates, the guest count and the host's name, like the back of a postcard. It then flips to the front again."
+    },
+    {
+      "what": "Inline error messages next to the field",
+      "where": "Three unnamed mobile apps, shown at 6:16 to 6:24",
+      "visual_note": "Red text sits directly under or beside the field that failed: under a weekly goal number, under an address field in a booking form ('A valid address is required to book with this doctor'), and above an amount that is more than the available balance. Shown as prescriptive error states."
+    }
+  ],
+  "numbers": [],
+  "caveats": [
+    "No paid sponsor. Self-promotion only, left out of the rules: a like-and-subscribe break at 2:08 to 2:20, the outro from 7:21, and a plug for the author's studio (dugdugstudios.com) in the outro and the description.",
+    "Consumer focus: every app the video names or shows as a good example is a consumer mobile app, apart from two desktop work-tool clips shown without commentary. The 'product' tag on each rule is this analysis's judgement, not the author's: delight, discovery rewards and upsell empty states are tagged consumer; the rest are tagged both because the video states them for apps in general.",
+    "Opinion, not tested findings: the eight habits are one designer's view of what feels premium. The video gives no data, durations or values, so nothing here sets a number.",
+    "The on-screen clips mostly run without commentary, and only Instagram, Strava and Airbnb are named in the narration. The other examples were read from frames of a 360p copy of the video (four frames a second for the motion clips), so small text may be misread and the durations given are estimates from frame times, not stated by the source. Clips may be slowed or sped up in the edit. Where an app is identified from the frame alone it is marked [inferred] or 'not named in the narration'.",
+    "The delivery-windows example is mentioned in the narration but no clip of it is shown.",
+    "The upsell-in-empty-states advice is about business goals; OpenDesigner's research on user-hostile design should be weighed against it before recommending it [inferred].",
+    "Auto-caption and title-card readings: the caption 'The reward discovery' matches the title card and is read as 'they reward discovery' [inferred]; the title cards misspell 'recommend' and 'prescriptive', which does not change the meaning."
+  ]
+}

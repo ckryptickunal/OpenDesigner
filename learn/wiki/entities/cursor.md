@@ -2,7 +2,7 @@
 type: entity
 title: Cursor
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -20,3 +20,4 @@ Cited for letting people add code context to the chat.
 - [[sources/adev-changelog-animations-dev|animations.dev]]: AI code editor the rules file and SKILLS.md target.
 - [[sources/ek-building-a-toast-component-building-a-toast-component|Building a toast component]]: Named as a company that uses Sonner.
 - [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: AI tool (captioned 'Coror', read as Cursor [inferred]) Moonly uses with Codex to design and analyse experiments.
+- [[sources/referodesign-refero-skil-readme-referodesign-refero-skill-readme-md|referodesign/refero_skill: README.md]]: Host that installs Refero from its plugin marketplace once approved

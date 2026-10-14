@@ -2,7 +2,7 @@
 type: topic
 title: Content and microcopy
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -35,3 +35,8 @@ Use realistic content in designs; absolutely no lorem ipsum.
 - [[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]: Copy tweaks matter: sell the outcome, conversational quiz wording, reassuring copy with tooltips, and a sign-up screen rewritten as a pitch.
 - [[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]: The research distills how the best apps differ in copy, and the AI can suggest copy tailored to users while citing where the inspiration came from.
 - [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: Changing only paywall titles and subtitles raised conversion by 12%; social proof and a 'no commitment, cancel anytime' subtitle help.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-copywriting-referodesign-refero-skill-skills-refero-design-references-copywriting-md|referodesign/refero_skill: skills/refero-design/references/copywriting.md]]: Clarity > respect > character; action+object buttons; three-part errors; empty states with one CTA; descriptive headings in product UI; banned hype, filler and corporate words.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-craft-details-referodesign-refero-skill-skills-refero-design-references-craft-details-md|referodesign/refero_skill: skills/refero-design/references/craft-details.md]]: Active voice, Title Case headings and buttons, numerals for counts, specific labels, errors with the fix, second person, & in tight spaces.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-typography-referodesign-refero-skill-skills-refero-design-references-typography-md|referodesign/refero_skill: skills/refero-design/references/typography.md]]: Ellipsis character, curly quotes, non-breaking spaces, loading labels ending with an ellipsis.
+- [[sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont|The Reason Why Some Apps Feel Expensive, But Most Don’t]]: Empty states name the next action in words; error messages give steps to solve the problem instead of only stating that an error occurred.
+- [[sources/palantir-workshop-applic-application-design-best-practices-palantir|Palantir]]: Headings and their descriptions should be succinct and help a new user understand what the section is for.

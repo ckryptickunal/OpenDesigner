@@ -2,7 +2,7 @@
 type: entity
 title: Linear
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -32,3 +32,5 @@ Named in the video description as an inspiration for the animations shown.
 - [[sources/tNMAFjzapOk-the-formula-behind-truly-captivating-ui-sections|The Formula Behind Truly Captivating UI Sections]]: Web app whose menu shows clear structure and an expanding-modal surprise.
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: Project management tool whose screenshot was used as the style reference.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Named as using the inline section-heading treatment.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-mcp-tools-referodesign-refero-skill-skills-refero-design-references-mcp-tools-md|referodesign/refero_skill: skills/refero-design/references/mcp-tools.md]]: Named in an example style query for a dark developer-tool changelog
+- [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: Named in an example style query for a dark developer-tool changelog.

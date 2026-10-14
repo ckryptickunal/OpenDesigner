@@ -1,0 +1,999 @@
+{
+  "summary": "Refero's typography guide for product and marketing UI. It starts from context questions, offers a safe SaaS preset (Inter, 16px, 1.55 line height, 1.2 scale, 65ch), and then covers type scale ratios with a ready Minor Third scale, the one-font rule and pairing strategies, a text color system by opacity, weights, line height, vertical rhythm derived from line height, letter spacing by size and case, measure, punctuation and text-polish details, fluid and stepped responsive type, and font loading. It lists AI-slop red flags with countable limits (8 sizes, 4 colors, 4 weights) and closes with a pre-ship checklist and a complete token set. For a design system it supplies concrete defaults and limits for nearly every typography decision.",
+  "key_ideas": [
+    "Decide context first: work tools need neutrality; when in doubt go denser, simpler and more neutral",
+    "A safe SaaS preset already gives good typography; everything else is refinement",
+    "Pick one scale ratio and stick to it; Minor Third 1.2 is the default",
+    "Keep production to 6-8 font sizes",
+    "One family with several weights is the professional default; a second font needs a real reason",
+    "Text color comes from a few opacity levels, never pure black, and body never under 60% opacity",
+    "Larger text can be lighter; smaller text needs more weight; body is always 400",
+    "Line height: body 1.5-1.7, headlines 1.0-1.2, UI 1.2-1.4; longer lines need more",
+    "Derive vertical spacing from line height: half the line height is the minimum step",
+    "Spacing matters more than font size",
+    "Tracking: positive for small text, labels and all caps; negative for large headings; always in em",
+    "Keep body measure at 50-75 characters, about 65ch",
+    "Polish details: real ellipsis, curly quotes, non-breaking spaces, tabular numbers, balanced headings",
+    "Load at most 2 families and 3 weights with font-display: swap; system stack is fine"
+  ],
+  "entities": [
+    {
+      "name": "Refero",
+      "type": "company",
+      "description": "Publisher of the refero_skill repo this guide comes from"
+    },
+    {
+      "name": "Inter",
+      "type": "product",
+      "description": "Typeface used in the safe SaaS preset and recommended across product types"
+    },
+    {
+      "name": "JetBrains Mono",
+      "type": "product",
+      "description": "Monospace font suggested for code alongside Inter"
+    },
+    {
+      "name": "Instrument Serif",
+      "type": "product",
+      "description": "Serif in the example serif + sans pairing with Inter"
+    },
+    {
+      "name": "Cal Sans",
+      "type": "product",
+      "description": "Display font in the example display + system pairing"
+    },
+    {
+      "name": "IBM Plex Sans",
+      "type": "product",
+      "description": "Suggested for finance and enterprise"
+    },
+    {
+      "name": "Geist",
+      "type": "product",
+      "description": "Suggested for SaaS and tech"
+    },
+    {
+      "name": "SF Pro",
+      "type": "product",
+      "description": "Suggested for SaaS and tech"
+    },
+    {
+      "name": "DM Sans",
+      "type": "product",
+      "description": "Suggested for startups"
+    },
+    {
+      "name": "Plus Jakarta",
+      "type": "product",
+      "description": "Suggested for startups"
+    },
+    {
+      "name": "Minor Third",
+      "type": "concept",
+      "description": "1.200 type scale ratio, the guide's default"
+    },
+    {
+      "name": "tabular-nums",
+      "type": "concept",
+      "description": "font-variant-numeric value for aligned digits in tables, prices and stats"
+    },
+    {
+      "name": "text-wrap: balance",
+      "type": "concept",
+      "description": "CSS for balancing short headings and avoiding one-word last lines"
+    }
+  ],
+  "topics": [
+    {
+      "name": "Typography",
+      "summary": "Scale, pairing, weights, line height, tracking, measure, polish details, responsive type and font loading, with concrete values."
+    },
+    {
+      "name": "Visual hierarchy",
+      "summary": "Weight stack of size, weight, color, case, spacing, style; squint, 5-second and scan tests; everything-bold flattens hierarchy."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Vertical rhythm from line height (12/24/48/72px for a 24px line); spacing matters more than font size."
+    },
+    {
+      "name": "Color",
+      "summary": "Text color system by opacity (100/65/45/30%), never pure black, dark-mode inversion."
+    },
+    {
+      "name": "Dark mode and themes",
+      "summary": "Dark text tokens: #F5F5F5 primary, 0.7 and 0.5 white for secondary and tertiary."
+    },
+    {
+      "name": "Design systems and tokens",
+      "summary": "Complete CSS token set for families, sizes, weights, leading, tracking, text colors and spacing."
+    },
+    {
+      "name": "Content and microcopy",
+      "summary": "Ellipsis character, curly quotes, non-breaking spaces, loading labels ending with an ellipsis."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "clamp() fluid type, breakpoints, truncation and line clamp, min-width: 0 for flex children, font-display: swap."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "AI-slop anti-patterns and countable limits that reveal amateur typography."
+    },
+    {
+      "name": "Accessibility",
+      "summary": "WCAG AA 4.5:1 for body and 3:1 for large text; light text for an airy feel destroys readability."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Typography is 90% of web design.",
+      "evidence": "Typography Guide intro"
+    },
+    {
+      "claim": "Most successful SaaS products use one font family.",
+      "evidence": "Font Pairing"
+    },
+    {
+      "claim": "Most bad interfaces look bad because of color, not font choice.",
+      "evidence": "Text Color System"
+    },
+    {
+      "claim": "Line height affects readability more than any other property.",
+      "evidence": "Line Height"
+    },
+    {
+      "claim": "AI-slop is almost always exposed by bad spacing between text blocks.",
+      "evidence": "Vertical Rhythm"
+    },
+    {
+      "claim": "Light weights (300) become illegible below 16px.",
+      "evidence": "Font Weight Rules: Small text"
+    },
+    {
+      "claim": "Default proportional figures make 111 narrower than 999.",
+      "evidence": "Tabular Numbers: Why"
+    },
+    {
+      "claim": "Weights 400, 500 and 600 cover 95% of needs.",
+      "evidence": "Performance Typography Rules"
+    },
+    {
+      "claim": "Full-width paragraphs on desktop are unreadable above 100 characters.",
+      "evidence": "Line Length: Anti-pattern"
+    },
+    {
+      "claim": "Sans-serif needs 0.1 more line height than serif.",
+      "evidence": "Line Height Principles"
+    }
+  ],
+  "quotes": [
+    "When in doubt — go denser, simpler, and more neutral.",
+    "Spacing matters more than font size.",
+    "If typography is beautiful but the page loads slow — it's bad typography."
+  ],
+  "tags": [
+    "typography",
+    "type-scale",
+    "letter-spacing",
+    "line-height",
+    "font-pairing",
+    "text-color",
+    "vertical-rhythm",
+    "refero"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Before choosing fonts, answer: work tool or marketing, long reading or scanning, B2B, B2C or dev tool; in work products choose neutrality over personality.",
+      "why": "Context changes line height, density, character and weight choices.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Context First"
+    },
+    {
+      "rule": "Start from the safe SaaS preset: Inter with system-ui fallback, 16px base, 1.55 line height, 1.2 scale, weights 400/500/600, 65ch max width.",
+      "why": "If you use this preset as-is, your typography is already good.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [
+        "16px",
+        "1.55",
+        "1.2",
+        "400",
+        "500",
+        "600",
+        "65ch"
+      ],
+      "evidence": "The Safe SaaS Preset"
+    },
+    {
+      "rule": "Pick one type scale ratio and stick to it; use Minor Third 1.200 by default, 1.067-1.125 for dense UI, 1.250-1.333 for marketing and expressive layouts, and 1.618 only for landing page heroes.",
+      "why": "A consistent scale creates visual rhythm.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "1.067",
+        "1.125",
+        "1.200",
+        "1.250",
+        "1.333",
+        "1.618"
+      ],
+      "evidence": "Type Scale: Common Ratios"
+    },
+    {
+      "rule": "Use no more than 6-8 font sizes in production.",
+      "why": "More = chaos; 10+ sizes is an AI-slop red flag.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "6-8"
+      ],
+      "evidence": "Type Scale Rule"
+    },
+    {
+      "rule": "Use one font family with multiple weights; add a second only for marketing pages, content-heavy products or real art direction, and almost never a third.",
+      "why": "Two fonts adds complexity that must be justified.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "The One-Font Rule"
+    },
+    {
+      "rule": "When pairing, contrast structure (serif with sans, not two serifs) and match x-heights.",
+      "why": "Pairing rules.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "If You Must Pair"
+    },
+    {
+      "rule": "Never use pure black for text; use #0B0B0B to #111.",
+      "why": "Listed under Rules That Actually Work: never pure black, use #0B0B0B–#111.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "#0B0B0B",
+        "#111",
+        "#000"
+      ],
+      "evidence": "Never pure black"
+    },
+    {
+      "rule": "Keep 3-4 text color levels (primary 100%, secondary 65%, tertiary 45%, disabled 30%) and never set readable body text below 60% opacity.",
+      "why": "Fewer shades with stable usage; lighter text destroys readability.",
+      "kind": "do",
+      "strength": "must",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "rgba(0,0,0,0.65)",
+        "rgba(0,0,0,0.45)",
+        "rgba(0,0,0,0.3)",
+        "60%"
+      ],
+      "evidence": "Text Color System"
+    },
+    {
+      "rule": "Do not lighten text for an airy feel; if it fails the squint test it is too light.",
+      "why": "Almost always destroys readability.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Anti-pattern"
+    },
+    {
+      "rule": "In dark mode use #F5F5F5 for primary text, rgba(255,255,255,0.7) for secondary and rgba(255,255,255,0.5) for tertiary.",
+      "why": "Dark Mode Inversion tokens.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "color",
+      "applies_to": "css",
+      "values": [
+        "#F5F5F5",
+        "rgba(255,255,255,0.7)",
+        "rgba(255,255,255,0.5)"
+      ],
+      "evidence": "Dark Mode Inversion"
+    },
+    {
+      "rule": "Set body text at 400 and never bold whole paragraphs; use 500 for UI labels, 600 for buttons and subheadings, 400-700 for headlines depending on the font (serifs often look better at 400); use 300 only for large display text.",
+      "why": "Weight creates hierarchy; bold everywhere flattens it.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "400",
+        "500",
+        "600",
+        "400–700",
+        "300"
+      ],
+      "evidence": "Font Weight"
+    },
+    {
+      "rule": "Use 400 minimum and preferably 500 for small text like 12px captions; do not use light 300 below 16px.",
+      "why": "Smaller size needs heavier weight; light becomes illegible.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "12px",
+        "400",
+        "500",
+        "300",
+        "16px"
+      ],
+      "evidence": "Weight + Size Relationship"
+    },
+    {
+      "rule": "Set line height to 1.5-1.7 for body, 1.4-1.5 for short paragraphs, 1.0-1.2 for headlines, 0.9-1.1 for large display, 1.2-1.4 for UI text and 1 for buttons.",
+      "why": "Line height affects readability most.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "1.5 – 1.7",
+        "1.4 – 1.5",
+        "1.0 – 1.2",
+        "0.9 – 1.1",
+        "1.2 – 1.4",
+        "1"
+      ],
+      "evidence": "Line Height: Quick Reference"
+    },
+    {
+      "rule": "Give 80+ character lines 1.6-1.7 leading, 40-character lines about 1.4, and sans-serif about 0.1 more than serif.",
+      "why": "Longer lines need more leading.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "80+",
+        "1.6–1.7",
+        "40",
+        "1.4",
+        "0.1"
+      ],
+      "evidence": "Line Height Principles"
+    },
+    {
+      "rule": "Derive the minimum vertical spacing step from line height × 0.5 (e.g. 16px/1.5 gives 24px lines, 12px step, 12/24/48 scale).",
+      "why": "Bad spacing between text blocks exposes AI-slop.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [
+        "0.5",
+        "12px",
+        "24px",
+        "48px",
+        "72px"
+      ],
+      "evidence": "Vertical Rhythm"
+    },
+    {
+      "rule": "Fix spacing before tweaking fonts.",
+      "why": "Same fonts with different spacing look like different products.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Golden Rule"
+    },
+    {
+      "rule": "Add letter spacing of 0.06em-0.10em to all-caps text, 0.01em-0.02em to 11-13px small text, and 0.01em-0.03em to UI labels and buttons.",
+      "why": "Without tracking caps look cramped and small text is harder to read.",
+      "kind": "do",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "0.06em",
+        "0.10em",
+        "0.01em",
+        "0.02em",
+        "0.03em",
+        "11–13px"
+      ],
+      "evidence": "Letter Spacing: Quick Reference"
+    },
+    {
+      "rule": "Tighten large headings (32px+) to 0 to -0.02em and display text (48px+) to -0.02em to -0.03em, only for non-light headlines where pairs like AV, WA, To do not collide.",
+      "why": "Large headlines feel loose without tightening.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "32px+",
+        "-0.02em",
+        "48px+",
+        "-0.03em"
+      ],
+      "evidence": "When to Tighten"
+    },
+    {
+      "rule": "Always specify letter spacing in em, never px.",
+      "why": "Em scales with font size.",
+      "kind": "do",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [
+        "em"
+      ],
+      "evidence": "Units"
+    },
+    {
+      "rule": "Keep body text measure at 50-75 characters (about 65ch, minimum 45, maximum 85) and cap compact UI descriptions near 45ch.",
+      "why": "Optimal reading width prevents eye fatigue.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "50–75",
+        "45",
+        "85",
+        "65ch",
+        "45ch"
+      ],
+      "evidence": "Line Length (Measure)"
+    },
+    {
+      "rule": "Use the ellipsis character instead of three dots, curly quotes, and non-breaking spaces between numbers and units and in keyboard shortcuts; end loading labels with an ellipsis.",
+      "why": "Polish details AI models often miss.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [
+        "…",
+        "&hellip;",
+        "&nbsp;",
+        "Loading…"
+      ],
+      "evidence": "Punctuation"
+    },
+    {
+      "rule": "Use font-variant-numeric: tabular-nums for tables, prices, counters and stats.",
+      "why": "Proportional figures make digits different widths.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [
+        "font-variant-numeric: tabular-nums"
+      ],
+      "evidence": "Tabular Numbers"
+    },
+    {
+      "rule": "Apply text-wrap: balance to short headings, captions, pull quotes and card titles and text-wrap: pretty to lead and prose, but not to nav, buttons, tables, badges, code, form controls or dense labels.",
+      "why": "Prevents one-word last lines that look accidental.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [
+        "text-wrap: balance",
+        "text-wrap: pretty"
+      ],
+      "evidence": "Text Wrapping for Headings"
+    },
+    {
+      "rule": "Make text containers handle long content with truncation, line clamp or word breaking, and give flex children min-width: 0 so text can truncate.",
+      "why": "Flex children otherwise will not truncate.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [
+        "min-width: 0",
+        "-webkit-line-clamp: 2",
+        "overflow-wrap: break-word"
+      ],
+      "evidence": "Content Overflow"
+    },
+    {
+      "rule": "Scale type with viewport non-linearly using clamp() or breakpoints: base 16px to 16-18px, H1 32-36px to 48-64px, keeping letter spacing the same.",
+      "why": "Font size should respond to viewport, but not linearly.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [
+        "clamp(1rem, 1.5vw + 0.5rem, 1.25rem)",
+        "clamp(2rem, 5vw + 1rem, 3.5rem)",
+        "768px",
+        "1200px"
+      ],
+      "evidence": "Responsive Typography"
+    },
+    {
+      "rule": "Load at most 2 font families and 3 weights per family, prefer variable fonts, and always use font-display: swap.",
+      "why": "Beautiful typography on a slow page is bad typography.",
+      "kind": "do",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "web",
+      "values": [
+        "font-display: swap",
+        "≤2",
+        "≤3"
+      ],
+      "evidence": "Performance Typography"
+    },
+    {
+      "rule": "Do not center paragraphs except short marketing copy, and do not use a decorative display font without brand intent.",
+      "why": "Listed as instant red flags that reveal AI-generated or amateur design.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Instant Red Flags"
+    },
+    {
+      "rule": "Check that an interface has at most 8 font sizes, 4 text colors and 4 font weights.",
+      "why": "More is likely AI-slop or needs editing.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "≤8",
+        "≤4"
+      ],
+      "evidence": "Quick Test"
+    },
+    {
+      "rule": "Test hierarchy with a squint test (3 clear levels), a 5-second test and a scan test.",
+      "why": "Clear hierarchy guides the eye.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "3",
+        "5-second"
+      ],
+      "evidence": "Hierarchy Test"
+    },
+    {
+      "rule": "Meet WCAG AA text contrast: 4.5:1 for body and 3:1 for large text; test layouts at 320px, 768px and 1440px.",
+      "why": "Pre-ship checklist.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [
+        "4.5:1",
+        "3:1",
+        "320px",
+        "768px",
+        "1440px"
+      ],
+      "evidence": "Pre-Ship Checklist"
+    },
+    {
+      "rule": "Keep small text at 11px minimum, with positive tracking.",
+      "why": "Pre-ship checklist item.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [
+        "11px"
+      ],
+      "evidence": "Pre-Ship Checklist: Small text"
+    },
+    {
+      "rule": "Keep disabled text rare; if a screen has lots of disabled text, redesign it.",
+      "why": "Rules That Actually Work: Disabled is rare.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "rgba(0,0,0,0.3)"
+      ],
+      "evidence": "Text Color System: Rules"
+    },
+    {
+      "rule": "After applying text-wrap, inspect the real breakpoints; if wrapping is still awkward, adjust copy, max-width, font-size or line-height instead of trusting CSS alone.",
+      "why": "A single word on the last line of a hero title usually looks accidental.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [],
+      "evidence": "Text Wrapping for Headings"
+    },
+    {
+      "rule": "Build hierarchy in this order of impact: size, weight, color, case (caps for labels), spacing, then italic (rarely); do not make everything bold or use italic everywhere.",
+      "why": "Everything bold means nothing is bold; italic everywhere is meaningless emphasis.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Hierarchy Checklist: Visual Weight Stack; Anti-patterns"
+    },
+    {
+      "rule": "Use the system font stack (system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif) when a custom font is not needed.",
+      "why": "It loads instantly, looks native and is perfectly professional.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [
+        "system-ui",
+        "-apple-system",
+        "BlinkMacSystemFont",
+        "'Segoe UI'",
+        "Roboto",
+        "'Helvetica Neue'"
+      ],
+      "evidence": "System Font Stack"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "How much bigger should each text size be than the one below?",
+      "options": [
+        {
+          "name": "Minor Second 1.067",
+          "effect": "Very small steps, dense",
+          "when": "Dense UI, dashboards"
+        },
+        {
+          "name": "Major Second 1.125",
+          "effect": "Small steps",
+          "when": "Compact interfaces"
+        },
+        {
+          "name": "Minor Third 1.200",
+          "effect": "Balanced rhythm",
+          "when": "General purpose"
+        },
+        {
+          "name": "Major Third 1.250",
+          "effect": "More contrast between levels",
+          "when": "Marketing, editorial"
+        },
+        {
+          "name": "Perfect Fourth 1.333",
+          "effect": "Bold, expressive jumps",
+          "when": "Expressive layouts"
+        },
+        {
+          "name": "Golden Ratio 1.618",
+          "effect": "Dramatic",
+          "when": "Landing page heroes only"
+        }
+      ],
+      "recommendation": "Minor Third 1.200 as the default choice.",
+      "maps_to": "Q-type-09",
+      "evidence": "Type Scale: Common Ratios"
+    },
+    {
+      "question": "One font family or a pair?",
+      "options": [
+        {
+          "name": "One font, multiple weights",
+          "effect": "Professional, simple",
+          "when": "Default"
+        },
+        {
+          "name": "Serif + Sans (Instrument Serif + Inter)",
+          "effect": "Editorial contrast",
+          "when": "Marketing or content-heavy products with real art direction"
+        },
+        {
+          "name": "Display + System (Cal Sans + system-ui)",
+          "effect": "Branded headlines, native body",
+          "when": "Marketing pages"
+        },
+        {
+          "name": "Mono accent (JetBrains Mono + Inter)",
+          "effect": "Code set apart from UI",
+          "when": "Dev tools"
+        }
+      ],
+      "recommendation": "One font, different weights unless there is a strong reason.",
+      "maps_to": "Q-type-05",
+      "evidence": "Font Pairing"
+    },
+    {
+      "question": "Which font family fits the product type?",
+      "options": [
+        {
+          "name": "Inter, SF Pro, Geist",
+          "effect": "Neutral tech sans",
+          "when": "SaaS / Tech"
+        },
+        {
+          "name": "Inter, IBM Plex Sans",
+          "effect": "Sober and enterprise-like",
+          "when": "Finance / Enterprise"
+        },
+        {
+          "name": "Inter, DM Sans, Plus Jakarta",
+          "effect": "Friendlier startup feel",
+          "when": "Startup"
+        },
+        {
+          "name": "System font stack",
+          "effect": "Loads instantly, looks native",
+          "when": "When custom fonts are not needed; the source says it is often better than custom fonts"
+        }
+      ],
+      "recommendation": "Inter is safe across product types; the system stack is perfectly professional.",
+      "maps_to": "Q-type-01",
+      "evidence": "Safe Font Choices by Product Type; System Font Stack"
+    },
+    {
+      "question": "Which font weights should the system use?",
+      "options": [
+        {
+          "name": "400 / 500 / 600",
+          "effect": "Covers 95% of needs",
+          "when": "Default"
+        },
+        {
+          "name": "Add 700",
+          "effect": "Strong headlines",
+          "when": "Headlines and strong emphasis"
+        },
+        {
+          "name": "Add 300",
+          "effect": "Elegant light display",
+          "when": "Large display text only"
+        }
+      ],
+      "recommendation": "400, 500, 600; at most 3-4 weights.",
+      "maps_to": "Q-type-12",
+      "evidence": "Font Weight; Performance Typography"
+    },
+    {
+      "question": "How should letter spacing change with size and case?",
+      "options": [
+        {
+          "name": "Size and case table",
+          "effect": "Positive tracking for small, labels and caps; negative for large headings",
+          "when": "Recommended"
+        },
+        {
+          "name": "No extra tracking",
+          "effect": "Caps look cramped, small text harder to read, big headlines loose",
+          "when": "Not recommended"
+        }
+      ],
+      "recommendation": "Use the tracking table and em units; skipping letter spacing entirely is called out.",
+      "maps_to": "Q-type-13",
+      "evidence": "Letter Spacing (Tracking)"
+    },
+    {
+      "question": "How wide can paragraphs get?",
+      "options": [
+        {
+          "name": "65ch prose",
+          "effect": "Optimal 50-75 characters",
+          "when": "Article content"
+        },
+        {
+          "name": "45ch compact",
+          "effect": "Short descriptions",
+          "when": "Card descriptions, compact UI"
+        }
+      ],
+      "recommendation": "50-75 characters, max 85; never full-width paragraphs on desktop.",
+      "maps_to": "Q-type-14",
+      "evidence": "Line Length (Measure)"
+    },
+    {
+      "question": "Should text sizes change with screen width?",
+      "options": [
+        {
+          "name": "Fluid clamp()",
+          "effect": "Sizes interpolate between a minimum and maximum",
+          "when": "Base and hero text"
+        },
+        {
+          "name": "Breakpoint steps",
+          "effect": "H1 36px, 48px at 768px, 56px at 1200px",
+          "when": "Discrete control"
+        }
+      ],
+      "recommendation": "Respond to viewport but not linearly.",
+      "maps_to": "Q-type-15",
+      "evidence": "Responsive Typography"
+    },
+    {
+      "question": "What size should body text be?",
+      "options": [
+        {
+          "name": "16px",
+          "effect": "Base of the safe preset and practical scale",
+          "when": "Default"
+        },
+        {
+          "name": "16-18px on desktop",
+          "effect": "Slightly larger reading text",
+          "when": "Responsive desktop"
+        }
+      ],
+      "recommendation": "Body 16px+ with line height 1.5+.",
+      "maps_to": "Q-type-08",
+      "evidence": "Pre-Ship Checklist; What Changes"
+    }
+  ],
+  "process": [
+    {
+      "step": "Answer context questions",
+      "detail": "Work tool or marketing, reading or scanning, B2B/B2C/dev tool."
+    },
+    {
+      "step": "Start from the preset",
+      "detail": "Apply the safe SaaS preset before customizing."
+    },
+    {
+      "step": "Set the scale",
+      "detail": "Pick a ratio (default 1.2), generate sizes, keep 6-8 in production."
+    },
+    {
+      "step": "Choose family and weights",
+      "detail": "One family; 400/500/600; add a second family only with justification."
+    },
+    {
+      "step": "Set text colors",
+      "detail": "3-4 opacity levels, no pure black, dark-mode inversion."
+    },
+    {
+      "step": "Set line height and rhythm",
+      "detail": "Leading by text type; spacing scale from line height × 0.5."
+    },
+    {
+      "step": "Add tracking and measure",
+      "detail": "Tracking table in em; 65ch prose."
+    },
+    {
+      "step": "Polish",
+      "detail": "Ellipsis, curly quotes, non-breaking spaces, tabular nums, text-wrap balance/pretty, overflow handling."
+    },
+    {
+      "step": "Make responsive and performant",
+      "detail": "clamp() or breakpoints; font-display: swap; ≤2 families, ≤3 weights."
+    },
+    {
+      "step": "Test",
+      "detail": "Count sizes, colors, weights; squint, 5-second and scan tests; run the pre-ship checklist at 320, 768 and 1440px."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Minor Third × 16px practical scale: 11, 13, 16, 19, 23, 28, 33, 40, 48, 57px from caption to hero",
+      "where": "Practical Scale",
+      "visual_note": "A ten-step type ramp usable as a type-scale sample."
+    },
+    {
+      "what": "Badge with text-transform: uppercase and letter-spacing: 0.08em versus without",
+      "where": "ALL CAPS Rule",
+      "visual_note": "Untracked caps look cramped; tracked caps look polished."
+    },
+    {
+      "what": "Caption at 12px with letter-spacing: 0.015em",
+      "where": "Small Text Rule",
+      "visual_note": "Small text reads more easily with slight positive tracking."
+    },
+    {
+      "what": "Text color tokens #0B0B0B / 0.65 / 0.45 / 0.3 black and dark-mode #F5F5F5 / 0.7 / 0.5 white",
+      "where": "Text Color System",
+      "visual_note": "Three-to-four level text hierarchy by opacity in light and dark themes."
+    },
+    {
+      "what": "Vertical rhythm from 16px / 1.5: 12 / 24 / 48 / 72px spacing",
+      "where": "Vertical Rhythm",
+      "visual_note": "Spacing scale tied to the body line height."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "1.200",
+      "context": "Minor Third, default scale ratio",
+      "evidence": "Common Ratios"
+    },
+    {
+      "value": "6-8",
+      "context": "Maximum font sizes in production",
+      "evidence": "Type Scale Rule"
+    },
+    {
+      "value": "1.55",
+      "context": "Preset and token normal line height",
+      "evidence": "Safe SaaS Preset; Appendix"
+    },
+    {
+      "value": "65ch",
+      "context": "Prose max width",
+      "evidence": "Safe SaaS Preset; Line Length"
+    },
+    {
+      "value": "60%",
+      "context": "Minimum opacity for readable body text",
+      "evidence": "Rules That Actually Work"
+    },
+    {
+      "value": "0.06em – 0.10em",
+      "context": "All-caps tracking",
+      "evidence": "Letter Spacing Quick Reference"
+    },
+    {
+      "value": "0.08em",
+      "context": "--tracking-caps / --tracking-widest",
+      "evidence": "CSS Tokens"
+    },
+    {
+      "value": "50–75",
+      "context": "Optimal characters per line",
+      "evidence": "Line Length Guidelines"
+    },
+    {
+      "value": "95%",
+      "context": "Share of needs covered by 400, 500, 600 weights",
+      "evidence": "Performance Typography Rules"
+    },
+    {
+      "value": "≤8 / ≤4 / ≤4",
+      "context": "Max sizes, text colors and weights in the quick test",
+      "evidence": "AI-Slop Quick Test"
+    },
+    {
+      "value": "4.5:1 / 3:1",
+      "context": "WCAG AA contrast for body and large text",
+      "evidence": "Pre-Ship Checklist"
+    },
+    {
+      "value": "90%",
+      "context": "Share of web design the guide attributes to typography",
+      "evidence": "Typography Guide intro"
+    },
+    {
+      "value": "11px",
+      "context": "Minimum small text size",
+      "evidence": "Pre-Ship Checklist"
+    }
+  ],
+  "caveats": [
+    "Opinionated guide from Refero's skill; claims such as 'typography is 90% of web design' are rhetoric, not measurements.",
+    "The weights checklist is inconsistent: the quick test allows 4 weights while elsewhere 400/500/600 is 'enough' and ≤3 weights are loaded. [inferred]",
+    "The safe preset uses 1.55 line height and rgba(0,0,0,0.7)/0.5 text colors, while the text color system section uses 0.65/0.45; the two sets differ. [inferred]",
+    "The scale's pixel values (19, 23, 33, 57) are rounded from the 1.2 ratio. [inferred]",
+    "text-wrap: balance and pretty depend on modern browser support; the source says they degrade gracefully."
+  ]
+}

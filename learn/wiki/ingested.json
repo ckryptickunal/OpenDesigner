@@ -255,6 +255,14 @@
     "title": "The one thing vibe coding CAN\u2019T fix about your website",
     "wiki_page": "wiki/sources/RCneB_MQ7qs-the-one-thing-vibe-coding-cant-fix-about-your-website.md"
   },
+  "SAxKK5fbjbc": {
+    "analysis_hash": "af10fd9fca75",
+    "ingested_at": "2026-10-13T21:04:06",
+    "mtime": 1791905159.200858,
+    "source_file": "raw/videos/SAxKK5fbjbc.txt",
+    "title": "The Reason Why Some Apps Feel Expensive, But Most Don\u2019t",
+    "wiki_page": "wiki/sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont.md"
+  },
   "SfX43uIubj4": {
     "analysis_hash": "d65dfc1ce97f",
     "ingested_at": "2026-09-27T20:47:03",
@@ -719,6 +727,14 @@
     "title": "I Redesigned Google's AI Website from SCRATCH (complete transformation)",
     "wiki_page": "wiki/sources/pGYLZyBE32o-i-redesigned-google-s-ai-website-from-scratch-complete-transformation.md"
   },
+  "palantir-workshop-applic-application-design-best-practices": {
+    "analysis_hash": "a729e2da4069",
+    "ingested_at": "2026-10-13T21:04:25",
+    "mtime": 1791905371.8822536,
+    "source_file": "raw/palantir-workshop-application-design-best-practices/palantir-workshop-applic-application-design-best-practices.txt",
+    "title": "Palantir",
+    "wiki_page": "wiki/sources/palantir-workshop-applic-application-design-best-practices-palantir.md"
+  },
   "qK7WYCMvjUw": {
     "analysis_hash": "df7af9599aa6",
     "ingested_at": "2026-09-28T01:17:27",
@@ -726,6 +742,102 @@
     "source_file": "raw/mobbin/qK7WYCMvjUw.txt",
     "title": "He Spent $1M on A/B Tests. Here's What Won.",
     "wiki_page": "wiki/sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won.md"
+  },
+  "referodesign-refero-skil-readme": {
+    "analysis_hash": "73b01cd49567",
+    "ingested_at": "2026-10-07T17:43:09",
+    "mtime": 1791374650.179184,
+    "source_file": "raw/referodesign-refero-skill/referodesign-refero-skil-readme.txt",
+    "title": "referodesign/refero_skill: README.md",
+    "wiki_page": "wiki/sources/referodesign-refero-skil-readme-referodesign-refero-skill-readme-md.md"
+  },
+  "referodesign-refero-skil-skills-refero-design-references-anti-ai-slop": {
+    "analysis_hash": "a7ece0ad0e40",
+    "ingested_at": "2026-10-07T17:43:09",
+    "mtime": 1791374650.1795182,
+    "source_file": "raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop.txt",
+    "title": "referodesign/refero_skill: skills/refero-design/references/anti-ai-slop.md",
+    "wiki_page": "wiki/sources/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop-referodesign-refero-skill-skills-refero-design-references-anti-ai-slop-md.md"
+  },
+  "referodesign-refero-skil-skills-refero-design-references-color": {
+    "analysis_hash": "91774275f687",
+    "ingested_at": "2026-10-07T17:43:09",
+    "mtime": 1791374650.1796503,
+    "source_file": "raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-color.txt",
+    "title": "referodesign/refero_skill: skills/refero-design/references/color.md",
+    "wiki_page": "wiki/sources/referodesign-refero-skil-skills-refero-design-references-color-referodesign-refero-skill-skills-refero-design-references-color-md.md"
+  },
+  "referodesign-refero-skil-skills-refero-design-references-copywriting": {
+    "analysis_hash": "91a33a807aa8",
+    "ingested_at": "2026-10-07T17:43:09",
+    "mtime": 1791374650.1797628,
+    "source_file": "raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-copywriting.txt",
+    "title": "referodesign/refero_skill: skills/refero-design/references/copywriting.md",
+    "wiki_page": "wiki/sources/referodesign-refero-skil-skills-refero-design-references-copywriting-referodesign-refero-skill-skills-refero-design-references-copywriting-md.md"
+  },
+  "referodesign-refero-skil-skills-refero-design-references-craft-details": {
+    "analysis_hash": "b89be2165cb2",
+    "ingested_at": "2026-10-07T17:43:09",
+    "mtime": 1791374650.179868,
+    "source_file": "raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-craft-details.txt",
+    "title": "referodesign/refero_skill: skills/refero-design/references/craft-details.md",
+    "wiki_page": "wiki/sources/referodesign-refero-skil-skills-refero-design-references-craft-details-referodesign-refero-skill-skills-refero-design-references-craft-details-md.md"
+  },
+  "referodesign-refero-skil-skills-refero-design-references-example-workflow": {
+    "analysis_hash": "aa3ee5e3bd7c",
+    "ingested_at": "2026-10-07T17:43:09",
+    "mtime": 1791374650.1799624,
+    "source_file": "raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-example-workflow.txt",
+    "title": "referodesign/refero_skill: skills/refero-design/references/example-workflow.md",
+    "wiki_page": "wiki/sources/referodesign-refero-skil-skills-refero-design-references-example-workflow-referodesign-refero-skill-skills-refero-design-references-example-workflow-md.md"
+  },
+  "referodesign-refero-skil-skills-refero-design-references-icons": {
+    "analysis_hash": "2c899f62a823",
+    "ingested_at": "2026-10-07T17:43:09",
+    "mtime": 1791374650.180056,
+    "source_file": "raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-icons.txt",
+    "title": "referodesign/refero_skill: skills/refero-design/references/icons.md",
+    "wiki_page": "wiki/sources/referodesign-refero-skil-skills-refero-design-references-icons-referodesign-refero-skill-skills-refero-design-references-icons-md.md"
+  },
+  "referodesign-refero-skil-skills-refero-design-references-mcp-tools": {
+    "analysis_hash": "fc3f71a6e33c",
+    "ingested_at": "2026-10-07T17:43:09",
+    "mtime": 1791374650.180137,
+    "source_file": "raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-mcp-tools.txt",
+    "title": "referodesign/refero_skill: skills/refero-design/references/mcp-tools.md",
+    "wiki_page": "wiki/sources/referodesign-refero-skil-skills-refero-design-references-mcp-tools-referodesign-refero-skill-skills-refero-design-references-mcp-tools-md.md"
+  },
+  "referodesign-refero-skil-skills-refero-design-references-motion": {
+    "analysis_hash": "a0d4047a2a6d",
+    "ingested_at": "2026-10-07T17:43:09",
+    "mtime": 1791374650.1802292,
+    "source_file": "raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-motion.txt",
+    "title": "referodesign/refero_skill: skills/refero-design/references/motion.md",
+    "wiki_page": "wiki/sources/referodesign-refero-skil-skills-refero-design-references-motion-referodesign-refero-skill-skills-refero-design-references-motion-md.md"
+  },
+  "referodesign-refero-skil-skills-refero-design-references-typography": {
+    "analysis_hash": "e94438658bcd",
+    "ingested_at": "2026-10-07T17:43:09",
+    "mtime": 1791374650.1803415,
+    "source_file": "raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-typography.txt",
+    "title": "referodesign/refero_skill: skills/refero-design/references/typography.md",
+    "wiki_page": "wiki/sources/referodesign-refero-skil-skills-refero-design-references-typography-referodesign-refero-skill-skills-refero-design-references-typography-md.md"
+  },
+  "referodesign-refero-skil-skills-refero-design-references-visual-workflow": {
+    "analysis_hash": "9ccc6fe606d5",
+    "ingested_at": "2026-10-07T17:43:09",
+    "mtime": 1791374650.1804538,
+    "source_file": "raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-references-visual-workflow.txt",
+    "title": "referodesign/refero_skill: skills/refero-design/references/visual-workflow.md",
+    "wiki_page": "wiki/sources/referodesign-refero-skil-skills-refero-design-references-visual-workflow-referodesign-refero-skill-skills-refero-design-references-visual-workflow-md.md"
+  },
+  "referodesign-refero-skil-skills-refero-design-skill": {
+    "analysis_hash": "71cb3b9f5a45",
+    "ingested_at": "2026-10-07T17:43:09",
+    "mtime": 1791374650.17938,
+    "source_file": "raw/referodesign-refero-skill/referodesign-refero-skil-skills-refero-design-skill.txt",
+    "title": "referodesign/refero_skill: skills/refero-design/SKILL.md",
+    "wiki_page": "wiki/sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md.md"
   },
   "sonner-getting-started": {
     "analysis_hash": "c81b16f1f1fc",

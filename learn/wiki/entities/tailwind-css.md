@@ -2,7 +2,7 @@
 type: entity
 title: Tailwind CSS
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -19,3 +19,4 @@ Its color palette is offered as a shortcut for accent and background pairs in li
 - [[sources/eks-skills-ask-sonner-skill-emilkowalski-skills-skills-ask-sonner-skill-md|emilkowalski/skills: skills/ask-sonner/SKILL.md]]: Utility classes on toast parts need the ! (important) prefix, e.g. !text-red-900.
 - [[sources/eks-skills-mobile-native-skill-emilkowalski-skills-skills-mobile-native-skill-md|emilkowalski/skills: skills/mobile-native/SKILL.md]]: v4's hover: variant compiles to @media (hover: hover); v3 needs future.hoverOnlyWhenSupported.
 - [[sources/sonner-styling-styling-sonner|Styling – Sonner]]: A utility CSS framework; its classes work in classNames only when marked important.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop-referodesign-refero-skill-skills-refero-design-references-anti-ai-slop-md|referodesign/refero_skill: skills/refero-design/references/anti-ai-slop.md]]: Named as the reason training data is saturated with indigo.

@@ -2,7 +2,7 @@
 type: topic
 title: Easing and timing
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -50,3 +50,5 @@ Almost never use a linear ease; open the curve up for bounce so swiped cards car
 - [[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]]: Tooltips appear only after a full second of hover; the search expansion uses a little delay between frames; toasts are built from simple delay triggers.
 - [[sources/nl8OFGdx75w-prototyping-professional-load-animations-in-figma-part-1|Prototyping Professional Load Animations in Figma: Part 1]]: Gives exact delays and durations for each step: 1,000 ms hold then an 800 ms custom bezier slide, 200 ms ease in and out fades, 300 ms and 400 ms for the expanding circle, 700 ms for each wipe pass.
 - See also: [[synthesis/easing-and-timing|Easing and timing synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-motion-referodesign-refero-skill-skills-refero-design-references-motion-md|referodesign/refero_skill: skills/refero-design/references/motion.md]]: Duration bands (90-150, 160-240, 240-360, 360-500ms), duration and easing tokens, and enter/exit/change curves.
+- [[sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont|The Reason Why Some Apps Feel Expensive, But Most Don’t]]: Decide on purpose how long an animation should run before the next screen, and what is shown during the wait, so the flow does not feel disjointed. No durations are given.

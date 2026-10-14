@@ -464,7 +464,7 @@
       "review": null,
       "design_md": true,
       "conflicts": [
-        "skills/opendesigner/scripts/engine.py generates only light and dark color modes (semantic.color.light and .dark) and its CSS export has no @media (prefers-contrast: more) block (only forced-colors: active for the focus ring), although skills/opendesigner/references/stages/16-motion-haptics-and-sound.detailed.md Q-motion-10 defaults to high contrast and reduced transparency 'as token modes'"
+        "skills/opendesigner/scripts/engine.py generates only light and dark color modes (semantic.color.light and .dark). Under prefers-contrast: more its CSS export turns glass solid (color.surface.glass-fallback, no blur) and hides texture overlays, but gives those surfaces no contrasting border and the system no high-contrast mode; DESIGN.md says 'High-contrast themes are not generated'"
       ]
     },
     {

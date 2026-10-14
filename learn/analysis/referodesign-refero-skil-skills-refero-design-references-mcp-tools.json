@@ -1,0 +1,454 @@
+{
+  "summary": "A tool reference for Refero's MCP server, which gives an AI agent three research layers: styles for visual direction and taste, screens for concrete UI patterns, and flows for multi-step journeys. It lists each tool, its parameters, good example queries and how to search well, plus common mistakes and what to do when results are weak. Its key method is to search several visual angles, treat each returned style as an ingredient rather than a template, pick one primary foundation and borrow one or two details from others. For a design system it shows a research-first way to gather references before choosing tokens, while translating everything to the person's own product.",
+  "key_ideas": [
+    "Refero research has three layers: styles (taste), screens (UI patterns), flows (journeys)",
+    "Search styles first for anything about visual direction, brand feel, type, color, layout or polish",
+    "Run 3-5 style searches from different angles: broad aesthetic, domain, and a known brand",
+    "Do not stop at the first good result; use later pages to find less obvious directions",
+    "Treat each style as a reference ingredient, not a template; never copy one style directly",
+    "Pick one primary foundation for mood and density and borrow 1-2 details from other styles",
+    "Extract layout, component, spacing and elevation rules, not only colors and fonts",
+    "Search screens by what is literally on the screen, using concrete UI terms",
+    "Styles currently cover web marketing and product pages, not dashboards, auth, settings or iOS screens",
+    "Use flows for journey logic such as onboarding, checkout, cancellation and password reset",
+    "When results are weak, broaden the query, drop adjectives, try adjacent categories or a known product"
+  ],
+  "entities": [
+    {
+      "name": "Refero",
+      "type": "product",
+      "description": "Design reference library exposed to agents through an MCP server with refero_ tools"
+    },
+    {
+      "name": "Model Context Protocol (MCP)",
+      "type": "concept",
+      "description": "The protocol through which agents call the Refero tools"
+    },
+    {
+      "name": "refero_search_styles",
+      "type": "tool",
+      "description": "Semantic search over curated design styles"
+    },
+    {
+      "name": "refero_get_style",
+      "type": "tool",
+      "description": "Returns full style references (colors, type, layout, components, do/don't rules) for style UUIDs"
+    },
+    {
+      "name": "refero_search_screens",
+      "type": "tool",
+      "description": "Semantic search over real UI screens for web or iOS"
+    },
+    {
+      "name": "refero_get_screen",
+      "type": "tool",
+      "description": "Full metadata for one or more screens"
+    },
+    {
+      "name": "refero_get_similar_screens",
+      "type": "tool",
+      "description": "Visually and functionally similar screens for one screen"
+    },
+    {
+      "name": "refero_get_screen_image",
+      "type": "tool",
+      "description": "Raw screenshot image for a screen, thumbnail or full"
+    },
+    {
+      "name": "refero_search_flows",
+      "type": "tool",
+      "description": "Search connected screens showing how a user completes a task"
+    },
+    {
+      "name": "refero_get_flow",
+      "type": "tool",
+      "description": "Step-by-step details of user flows"
+    },
+    {
+      "name": "Attio",
+      "type": "company",
+      "description": "Named in an example style query for editorial SaaS typography"
+    },
+    {
+      "name": "Linear",
+      "type": "company",
+      "description": "Named in an example style query for a dark developer-tool changelog"
+    }
+  ],
+  "topics": [
+    {
+      "name": "AI-assisted design",
+      "summary": "How an agent should use Refero's MCP tools to research styles, screens and flows before designing."
+    },
+    {
+      "name": "Design resources",
+      "summary": "Refero as a searchable reference library of styles, real screens and user flows."
+    },
+    {
+      "name": "Design process",
+      "summary": "Research-first method: several search angles, one primary foundation plus borrowed details, translated to the user's product."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Styles are used to establish taste and visual language; never copy a single style."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Styles currently focus on web marketing and product pages and do not cover in-app dashboards, auth screens, settings screens or iOS app screens as style systems.",
+      "evidence": "Current coverage"
+    },
+    {
+      "claim": "Full styles are large, so the recommended maximum batch for refero_get_style is 3-4 IDs.",
+      "evidence": "refero_get_style parameters: recommended max batch is 3-4"
+    },
+    {
+      "claim": "refero_get_similar_screens takes an optional limit whose default is usually 10 and maximum usually 20.",
+      "evidence": "refero_get_similar_screens: Default is usually 10; max is usually 20"
+    },
+    {
+      "claim": "refero_get_screen_image returns image content and can use more context than text tools.",
+      "evidence": "refero_get_screen_image"
+    },
+    {
+      "claim": "Flow IDs are numeric while style and screen IDs are UUIDs.",
+      "evidence": "refero_get_flow: Numeric flow ID"
+    }
+  ],
+  "quotes": [
+    "Treat each style as a reference ingredient, not a template.",
+    "Search by what is literally on the screen.",
+    "Do not copy a single style directly."
+  ],
+  "tags": [
+    "refero",
+    "mcp",
+    "design-research",
+    "references",
+    "agent-tools",
+    "user-flows",
+    "styles"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Search Refero styles first for any task involving visual direction, brand feel, typography, color, layout, spacing, elevation, components, imagery or polish.",
+      "why": "Styles are the layer for visual direction and taste.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "refero_search_styles: Use first for any task with visual direction"
+    },
+    {
+      "rule": "Run 3-5 style searches from different visual angles, including one broad aesthetic query, one domain or category query, and one known-brand query when relevant.",
+      "why": "Do not stop at the first good result.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "3-5"
+      ],
+      "evidence": "Search method"
+    },
+    {
+      "rule": "Pick one style as the primary foundation for mood and density and borrow only 1-2 specific details from other styles.",
+      "why": "Each style is a reference ingredient, not a template.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "1-2"
+      ],
+      "evidence": "How to use returned styles"
+    },
+    {
+      "rule": "Extract layout, component, spacing and elevation rules from a reference style, not only its colors and fonts.",
+      "why": "Listed in how to use returned styles.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "How to use returned styles"
+    },
+    {
+      "rule": "Keep the source's token, component and imagery roles instead of repurposing them; use real, generated or stock assets, or an intentional art-directed placeholder when none is available.",
+      "why": "Preserve source roles and media roles.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Preserve source token/component roles"
+    },
+    {
+      "rule": "Translate every borrowed reference to the user's product, audience and constraints; never copy a single style directly.",
+      "why": "Styles are ingredients, not templates.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Common Mistakes: Do not copy a single style directly"
+    },
+    {
+      "rule": "Write screen searches with concrete UI terms for what is literally on the screen (e.g. 'pricing page annual monthly toggle'), and search styles first when the query is aesthetic.",
+      "why": "Concrete terminology beats broad aesthetic words for screens.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Search guidance"
+    },
+    {
+      "rule": "Do not rely on screens as the main source of visual taste when styles are available.",
+      "why": "Styles are the taste layer; screens are for product-specific logic.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Common Mistakes"
+    },
+    {
+      "rule": "Do not assume Refero styles cover dashboards, auth screens, settings or iOS app screens; for those, use styles for taste and screens/flows for structure.",
+      "why": "Listed as a common mistake; current style coverage is web marketing and product pages.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Common Mistakes"
+    },
+    {
+      "rule": "Fetch at most 3-4 full styles per refero_get_style batch, and retry screen batches with fewer IDs if one fails.",
+      "why": "Full styles are large.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [
+        "3-4"
+      ],
+      "evidence": "refero_get_style; Batching"
+    },
+    {
+      "rule": "Use refero_get_screen_image only when text metadata is not enough to judge a screen.",
+      "why": "Images use more context than text tools.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "refero_get_screen_image"
+    },
+    {
+      "rule": "Do not pass limit, image_size or include_similar to search tools, or image_size/include_similar to refero_get_screen; use the dedicated image and similar-screens tools.",
+      "why": "Listed as common mistakes.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [
+        "limit",
+        "image_size",
+        "include_similar"
+      ],
+      "evidence": "Search guidance; Common Mistakes"
+    },
+    {
+      "rule": "Do not use old _tool suffixed names or call get_design_guidance; use the styles, screens and flows tools.",
+      "why": "Listed as common mistakes.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [
+        "_tool",
+        "get_design_guidance"
+      ],
+      "evidence": "Common Mistakes"
+    },
+    {
+      "rule": "When results are weak, broaden the query, remove adjectives, search adjacent categories, try a known product, inspect later pages, and for sparse flows rebuild the journey from related screens.",
+      "why": "If Results Are Weak guidance.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "If Results Are Weak"
+    },
+    {
+      "rule": "Call the Refero tools by the exact names the client shows (they carry the refero_ prefix, possibly namespaced).",
+      "why": "MCP clients may namespace tool names.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [
+        "refero_"
+      ],
+      "evidence": "Intro"
+    },
+    {
+      "rule": "Pass exactly one of the single-id or multi-id parameters (style_id or style_ids, screen_id or screen_ids, flow_id or flow_ids).",
+      "why": "The parameter tables require exactly one.",
+      "kind": "do",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Parameter tables"
+    },
+    {
+      "rule": "Pass response_format (md or json) only when the client's tool schema includes it.",
+      "why": "Only some clients expose it.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [
+        "md",
+        "json"
+      ],
+      "evidence": "Response Formats"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Which Refero research layer fits the question at hand?",
+      "options": [
+        {
+          "name": "Styles",
+          "effect": "Gives visual direction and taste: colors, type, layout, elevation, do/don't rules",
+          "when": "Brand feel, aesthetics, design-system inspiration, visual polish"
+        },
+        {
+          "name": "Screens",
+          "effect": "Shows concrete page structure, components, hierarchy, copy and states",
+          "when": "Product-specific UI decisions"
+        },
+        {
+          "name": "Flows",
+          "effect": "Shows step-by-step journey logic across connected screens",
+          "when": "Onboarding, checkout, cancellation, upgrade, password reset and other sequences"
+        }
+      ],
+      "recommendation": "Styles first for taste, then screens and flows for product logic.",
+      "maps_to": null,
+      "evidence": "Refero has three research layers"
+    },
+    {
+      "question": "Return research in markdown or JSON?",
+      "options": [
+        {
+          "name": "md",
+          "effect": "Human-readable research notes",
+          "when": "Default, reading"
+        },
+        {
+          "name": "json",
+          "effect": "Structured fields",
+          "when": "Structured comparison or programmatic extraction"
+        }
+      ],
+      "recommendation": "Use only when the client's tool schema exposes response_format.",
+      "maps_to": null,
+      "evidence": "Response Formats"
+    }
+  ],
+  "process": [
+    {
+      "step": "Search styles",
+      "detail": "Run 3-5 refero_search_styles queries from different angles (broad aesthetic, domain, known brand); page through results."
+    },
+    {
+      "step": "Get full styles",
+      "detail": "Call refero_get_style on the promising UUIDs, 3-4 at most per batch."
+    },
+    {
+      "step": "Compose a direction",
+      "detail": "Pick one primary foundation for mood and density, borrow 1-2 details from others, extract layout, component, spacing and elevation rules."
+    },
+    {
+      "step": "Search screens",
+      "detail": "Use refero_search_screens with literal UI terms and a platform (web or ios); open strong hits with refero_get_screen and refero_get_similar_screens."
+    },
+    {
+      "step": "Inspect images if needed",
+      "detail": "Use refero_get_screen_image only when metadata is not enough."
+    },
+    {
+      "step": "Search flows",
+      "detail": "For journeys, use refero_search_flows then refero_get_flow for goals, actions, system responses and screens."
+    },
+    {
+      "step": "Translate",
+      "detail": "Map everything to the user's product, audience and constraints."
+    },
+    {
+      "step": "Recover from weak results",
+      "detail": "Broaden, drop adjectives, try adjacent categories or a known product, inspect later pages, rebuild sparse flows from screens."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Example style queries such as 'editorial monochrome SaaS landing page' and 'premium fintech website with restrained typography'",
+      "where": "refero_search_styles",
+      "visual_note": "Shows the mix of aesthetic, domain and brand angles a style search should cover."
+    },
+    {
+      "what": "Known-brand style queries: 'Attio editorial SaaS typography', 'Linear changelog dark developer tool'",
+      "where": "refero_search_styles",
+      "visual_note": "Demonstrates the known-product query angle."
+    },
+    {
+      "what": "Example screen queries such as 'pricing page annual monthly toggle', 'dashboard empty state', 'destructive action confirmation'",
+      "where": "refero_search_screens",
+      "visual_note": "Shows literal, concrete UI terms rather than aesthetic words."
+    },
+    {
+      "what": "Example flow queries such as 'checkout with promo code', 'subscription cancellation', 'password reset 2FA'",
+      "where": "refero_search_flows",
+      "visual_note": "Shows task- and journey-based query wording."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "3-5",
+      "context": "Number of different visual angles to search for styles",
+      "evidence": "Search method"
+    },
+    {
+      "value": "3-4",
+      "context": "Recommended maximum batch of full styles",
+      "evidence": "refero_get_style"
+    },
+    {
+      "value": "1-2",
+      "context": "Specific details to borrow from secondary styles",
+      "evidence": "How to use returned styles"
+    },
+    {
+      "value": "10",
+      "context": "Usual default limit for refero_get_similar_screens",
+      "evidence": "refero_get_similar_screens"
+    },
+    {
+      "value": "20",
+      "context": "Usual maximum limit for refero_get_similar_screens",
+      "evidence": "refero_get_similar_screens"
+    }
+  ],
+  "caveats": [
+    "This is product documentation for Refero's own MCP tools; it promotes Refero as the research source.",
+    "Tool names, parameters and coverage are tied to commit a9b54a3 and will change as the server changes.",
+    "Most content is tool-usage detail rather than design guidance; the transferable parts are the research method and reference-use rules."
+  ]
+}

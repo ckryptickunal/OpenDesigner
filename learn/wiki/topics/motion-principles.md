@@ -2,7 +2,7 @@
 type: topic
 title: Motion principles
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -51,3 +51,5 @@ Interactions turn a UI into an experience; transitions should follow the swipe d
 - [[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily|Awful To AMAZING Web Designs Easily]]: Motion is presented as one of the most foolproof ways to make a site feel alive: photos slightly zooming in or out, accordions, marquee text and staggered slide-up entrances, with a warning about marquee-style usability.
 - [[sources/vaul-default-default-vaul|Default – Vaul]]: The --initial-transform CSS variable adjusts the drawer's animation, useful when the drawer does not touch the screen edge.
 - See also: [[synthesis/motion-principles|Motion principles synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-motion-referodesign-refero-skill-skills-refero-design-references-motion-md|referodesign/refero_skill: skills/refero-design/references/motion.md]]: Motion must serve feedback, continuity or hierarchy; the motion pyramid; context first; anti-patterns.
+- [[sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont|The Reason Why Some Apps Feel Expensive, But Most Don’t]]: Animation has a time and a place. Use it to carry transitions and to add delight, and leave it out where it would slow down a critical task such as entering card details.

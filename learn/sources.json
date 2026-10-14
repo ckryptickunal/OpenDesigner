@@ -24,6 +24,12 @@
       "url": "https://www.youtube.com/watch?v=lkKGQVHrXzE",
       "folder": "raw/videos",
       "authority": "reference"
+    },
+    {
+      "name": "Wyatt Feaster: Why some apps feel expensive",
+      "url": "https://www.youtube.com/watch?v=SAxKK5fbjbc",
+      "folder": "raw/videos",
+      "authority": "reference"
     }
   ],
   "essay_sources": [
@@ -77,6 +83,15 @@
       "id_prefix": "vaul",
       "authority": "good-to-have",
       "note": "The vaul GitHub README says the library is unmaintained (checked 2026-09-24). Use its drawer craft as guidance; flag the maintenance status before recommending it as a dependency."
+    },
+    {
+      "name": "Palantir Workshop: application design best practices",
+      "urls": [
+        "https://www.palantir.com/docs/foundry/workshop/application-design-best-practices"
+      ],
+      "folder": "raw/palantir-workshop-application-design-best-practices",
+      "id_prefix": "palantir-workshop-applic",
+      "authority": "reference"
     }
   ],
   "github_repos": [
@@ -92,6 +107,19 @@
       "folder": "raw/emil-skills",
       "id_prefix": "eks",
       "authority": "non-negotiable"
+    },
+    {
+      "name": "referodesign/refero_skill",
+      "url": "https://github.com/referodesign/refero_skill",
+      "include": [
+        "README.md",
+        "skills/refero-design/SKILL.md",
+        "skills/refero-design/references/*.md"
+      ],
+      "folder": "raw/referodesign-refero-skill",
+      "id_prefix": "referodesign-refero-skil",
+      "authority": "reference",
+      "license": "MIT"
     }
   ]
 }

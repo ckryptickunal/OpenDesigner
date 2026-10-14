@@ -2,7 +2,7 @@
 type: topic
 title: Micro-interactions
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -60,3 +60,5 @@ Carousel page indicators can go from a plain highlight to a fluid, magnetic effe
 - See also: [[synthesis/micro-interactions|Micro-interactions synthesis]]
 - [[sources/ARq1bx3Sfg8-the-psychology-behind-streaks|The Psychology Behind Streaks]]: Once streaks become predictable, apps layer in surprises such as animations, milestone celebrations and bonus XP; a jingle after each lesson builds craving for the next one.
 - [[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]: Small moments like a vibration as a ticket-shaped offer prints, or animated verification, add delight to onboarding.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-motion-referodesign-refero-skill-skills-refero-design-references-motion-md|referodesign/refero_skill: skills/refero-design/references/motion.md]]: Specs for hover, press, focus, input focus/error/success, and list add/remove animations.
+- [[sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont|The Reason Why Some Apps Feel Expensive, But Most Don’t]]: Small moments of delight: a micro animation on password entry, a 3D transition between stories, a printing animation on completion.

@@ -2,7 +2,7 @@
 type: topic
 title: Spring animation
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -32,3 +32,4 @@ Bounce in the easing curve and an elastic snap at the end of a page transition m
 - [[sources/eks-skills-review-animations-standards-emilkowalski-skills-skills-review-animations-standards-md|emilkowalski/skills: skills/review-animations/STANDARDS.md]]: Apple-style { duration: 0.5, bounce: 0.2 } recommended, a traditional mass/stiffness/damping alternative, subtle bounce 0.1–0.3, and useSpring for decorative mouse tracking.
 - [[sources/ld1zhQMXxXU-11-micro-animations-that-will-instantly-level-up-your-ui-free-figma-file|11 Micro Animations That Will Instantly Level Up Your UI (free figma file)]]: The name tag pop-up uses a custom spring of 500 milliseconds, stiffness 636 and dampening 24, which the creator says is what creates the difference between two versions of the animation; the tooltip also gets a custom easing with more bounce.
 - See also: [[synthesis/spring-animation|Spring animation synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-motion-referodesign-refero-skill-skills-refero-design-references-motion-md|referodesign/refero_skill: skills/refero-design/references/motion.md]]: Use springs for gestures and physical elements; snappy, smooth and bouncy stiffness/damping presets; must decay quickly.

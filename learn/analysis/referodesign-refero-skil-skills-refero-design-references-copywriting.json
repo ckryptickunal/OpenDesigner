@@ -1,0 +1,456 @@
+{
+  "summary": "This Refero copywriting guide treats copy as an interface between a person and their next step, ordered by clarity first, then respect, then character. It contrasts dead, interchangeable words with living, specific ones, gives a six-part structure every piece of copy should answer, and lists info-style habits such as facts over adjectives and calmer tone at higher stakes. It covers microcopy (action-plus-object buttons, three-part errors, empty states with one CTA), what a marketing hero must answer, writing in scenes, proof over hype, rhythm and a quotable 'sticky line'. It separates product UI copy, which should orient, report status and enable action with descriptive headings, from marketing tone, and ends with a pre-publish checklist and banned word lists. For a design system it supplies voice rules and component copy patterns that can ship with buttons, errors and empty states.",
+  "key_ideas": [
+    "Copy exists to help someone understand, choose or act; if it does neither it hurts the design.",
+    "Order copy priorities as clarity, then respect, then character.",
+    "Dead copy could sit on 1,000 websites unchanged; living copy states concrete facts.",
+    "Good copy answers context, job to be done, solution, outcome, conditions and next step.",
+    "Prefer facts to adjectives, verbs to nouns, plain word order and one idea per sentence.",
+    "The higher the stakes (payments, deletion, security), the calmer the tone.",
+    "Buttons name an action plus an object; errors say what happened, why if useful, and what to do next.",
+    "Empty states teach and guide with one CTA.",
+    "Write in scenes (who, where, what happens, what changes), not abstract claims.",
+    "Replace hype words with numbers, scenarios, constraints and real limits.",
+    "Product UI copy is orientation, status and action, not promise, mood and brand voice.",
+    "Marketing tone fits in product only in empty states, onboarding, upgrade prompts and success moments, and even then for one line."
+  ],
+  "entities": [
+    {
+      "name": "Info-style",
+      "type": "concept",
+      "description": "Writing approach that favours facts, verbs, plain word order and one idea per sentence."
+    },
+    {
+      "name": "Sticky line test",
+      "type": "concept",
+      "description": "Check that every important page has one line people could screenshot, quote or remember."
+    },
+    {
+      "name": "referodesign/refero_skill",
+      "type": "tool",
+      "description": "The MIT-licensed agent skill repository this guide comes from."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Content and microcopy",
+      "summary": "Clarity > respect > character; action+object buttons; three-part errors; empty states with one CTA; descriptive headings in product UI; banned hype, filler and corporate words."
+    },
+    {
+      "name": "Landing pages",
+      "summary": "A marketing hero must say who it is for, what problem, what outcome, why trust it and what to do next; use scenes, proof, rhythm and a sticky line."
+    },
+    {
+      "name": "Feedback, empty and loading states",
+      "summary": "Error messages follow what happened, why, what next; empty states teach and offer one CTA."
+    },
+    {
+      "name": "Dashboards and data display",
+      "summary": "Dashboard headings should be descriptive (\"Revenue This Month\"), and operators should understand a page from headings, labels and numbers alone."
+    },
+    {
+      "name": "Buttons and actions",
+      "summary": "Replace OK, Submit, Confirm with action plus object, such as Create project or Save changes."
+    },
+    {
+      "name": "AI-assisted design",
+      "summary": "Lists AI slop phrases to ban, such as \"In today's fast-paced world\" and \"Supercharge your\"."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "People do not read copy; they make decisions.",
+      "evidence": "Core Belief"
+    },
+    {
+      "claim": "Most bad brand voice starts with character and skips clarity.",
+      "evidence": "The Order of Great Copy"
+    },
+    {
+      "claim": "If copy feels empty, one of the six structural parts is missing.",
+      "evidence": "Universal Copy Structure"
+    },
+    {
+      "claim": "People remember images, not abstractions.",
+      "evidence": "Write in Scenes, Not Claims"
+    },
+    {
+      "claim": "Honesty increases credibility, and credibility increases impact.",
+      "evidence": "Proof Beats Hype"
+    },
+    {
+      "claim": "Flat rhythm kills attention.",
+      "evidence": "Rhythm"
+    },
+    {
+      "claim": "If nothing on a page is quotable, nothing sticks.",
+      "evidence": "The Sticky Line Test"
+    }
+  ],
+  "quotes": [
+    "People do not read copy. They make decisions.",
+    "Copy is an interface between a person and a next step.",
+    "Orientation + Status + Action. Not Promise + Mood + Brand Voice."
+  ],
+  "tags": [
+    "copywriting",
+    "microcopy",
+    "voice",
+    "buttons",
+    "error-messages",
+    "empty-states",
+    "hero",
+    "banned-words",
+    "product-copy",
+    "refero"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Prioritise clarity first, respect second and character third.",
+      "why": "Without clarity copy fails, without respect it irritates, without character it is forgotten; most bad brand voice skips clarity.",
+      "kind": "do",
+      "strength": "must",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Clarity > Respect > Character"
+    },
+    {
+      "rule": "Replace abstract claims with concrete facts, for example \"Create a landing page in 20 minutes. No code.\" instead of \"Innovative platform\".",
+      "why": "Dead copy is generic and could live on 1,000 websites unchanged.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Living Words vs Dead Words"
+    },
+    {
+      "rule": "Remove any word that can go without changing the meaning.",
+      "why": "It is probably dead.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Rule: If a word can be removed"
+    },
+    {
+      "rule": "Make copy answer context, job to be done, solution, outcome, conditions and next step.",
+      "why": "If copy feels empty, one of these is missing.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Universal Copy Structure"
+    },
+    {
+      "rule": "Use facts instead of adjectives (\"in 10 seconds\" not \"fast\"), verbs instead of nouns (\"set up\" not \"configuration\"), plain word order (what happens first, details later), and one idea per sentence.",
+      "why": "Info-style thinking.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Info-Style Thinking"
+    },
+    {
+      "rule": "Use a calmer tone as stakes rise, for payments, deletion and security.",
+      "why": "Higher stakes call for calmer tone.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Higher stakes = calmer tone"
+    },
+    {
+      "rule": "Label buttons with an action plus an object (Create project, Save changes, Invite teammates, Download PDF, Start free trial), not OK, Submit or Confirm.",
+      "why": "The source marks OK, Submit and Confirm as bad and action + object as good; it gives no further reason.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Microcopy, Buttons"
+    },
+    {
+      "rule": "Write errors that say what happened, why if useful, and what to do next; never just \"Something went wrong\".",
+      "why": "\"You're offline. Reconnect to save changes.\" is the best form.",
+      "kind": "do",
+      "strength": "must",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Microcopy, Errors"
+    },
+    {
+      "rule": "Make empty states teach and guide with a single CTA instead of \"No data.\"",
+      "why": "One CTA, not five.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Empty States"
+    },
+    {
+      "rule": "Make a marketing hero answer who it is for, what problem it solves, what outcome, why trust it, and what to do next.",
+      "why": "It must answer these instantly.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Marketing Hero Section"
+    },
+    {
+      "rule": "Write scenes with who, where, what happens and what changes rather than claims like \"A better workflow for teams.\"",
+      "why": "People remember images, not abstractions.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Write in Scenes, Not Claims"
+    },
+    {
+      "rule": "Do not use hype words such as revolutionary, seamless, cutting-edge, best-in-class or next-generation; use numbers, scenarios, constraints, real outputs and real limits.",
+      "why": "They kill trust; honesty increases credibility.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Proof Beats Hype"
+    },
+    {
+      "rule": "Vary sentence length every 1-2 lines: short line, longer line, short punch; one paragraph, one punch.",
+      "why": "Flat rhythm kills attention.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [
+        "1-2"
+      ],
+      "evidence": "Rhythm"
+    },
+    {
+      "rule": "Give every important page at least one line that can be screenshotted, quoted or remembered.",
+      "why": "If nothing is quotable, nothing sticks.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "The Sticky Line Test"
+    },
+    {
+      "rule": "Use descriptive headings on dashboards, settings and admin panels (\"Revenue This Month\", not \"Unlock Your Growth Potential\").",
+      "why": "Product UI copy exists to orient, report status and enable action.",
+      "kind": "do",
+      "strength": "must",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Headings: Descriptive, Not Aspirational"
+    },
+    {
+      "rule": "Do not put executive-summary hero banners, motivational subheadings or marketing slogans on operational surfaces.",
+      "why": "On operational surfaces copy exists to orient, report status and enable action, not to inspire, persuade or build brand.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Avoid on Operational Surfaces"
+    },
+    {
+      "rule": "Use marketing warmth in product only in empty states, onboarding, upgrade prompts and success celebrations, and limit it to one line before returning to function.",
+      "why": "These are the moments where marketing tone is appropriate.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "When Marketing Tone IS Appropriate in Product"
+    },
+    {
+      "rule": "Rewrite copy if two or more pre-publish checks fail (understood in 3 seconds, why care, a concrete detail, 30% cuttable, honest limits, obvious next step, sounds human).",
+      "why": "Two or more \"no\" means rewrite.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "3 seconds",
+        "30%"
+      ],
+      "evidence": "Pre-Publish Checklist"
+    },
+    {
+      "rule": "Avoid filler words (very, really, just, actually, basically, simply, easily...), corporate zombie words (leverage, synergy, ecosystem, empower...) and AI slop openers (\"In today's fast-paced world...\", \"Supercharge your...\", \"Elevate your...\").",
+      "why": "They are on the guide's banned lists.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Banned Words"
+    },
+    {
+      "rule": "Check product pages by scanning only headings, labels and numbers; if an operator cannot understand the page that way, rewrite.",
+      "why": "Product UI copy exists to orient, report status and enable action.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Litmus test: If an operator scans only headings, labels, and numbers"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "What tone should product UI copy take compared with marketing copy?",
+      "options": [
+        {
+          "name": "Orientation, status and action",
+          "effect": "Descriptive headings and labels an operator can scan.",
+          "when": "Dashboards, settings and admin panels."
+        },
+        {
+          "name": "Promise, mood and brand voice",
+          "effect": "Aspirational headings and motivational lines.",
+          "when": "Marketing; in product only empty states, onboarding, upgrade prompts and success moments, for one line."
+        }
+      ],
+      "recommendation": "Orientation + status + action in product UI.",
+      "maps_to": "Q-voice-02",
+      "evidence": "Product UI Copy"
+    },
+    {
+      "question": "How should error messages be worded?",
+      "options": [
+        {
+          "name": "Generic",
+          "effect": "\"Something went wrong\" leaves the user stuck.",
+          "when": "Never."
+        },
+        {
+          "name": "Cause plus fix",
+          "effect": "\"Couldn't save. Check your connection and try again.\"",
+          "when": "Better."
+        },
+        {
+          "name": "Precise state plus fix",
+          "effect": "\"You're offline. Reconnect to save changes.\"",
+          "when": "Best."
+        }
+      ],
+      "recommendation": "Say what happened, why if useful, and what to do next.",
+      "maps_to": "Q-form-03",
+      "evidence": "Microcopy, Errors"
+    },
+    {
+      "question": "What should an empty screen show?",
+      "options": [
+        {
+          "name": "\"No data.\"",
+          "effect": "Leaves the user without direction.",
+          "when": "Not recommended."
+        },
+        {
+          "name": "Teach and guide with one CTA",
+          "effect": "\"Projects will appear here. Create your first one to get started.\"",
+          "when": "Default."
+        }
+      ],
+      "recommendation": "Teach and guide with one CTA, not five.",
+      "maps_to": "Q-pattern-04",
+      "evidence": "Empty States"
+    }
+  ],
+  "process": [
+    {
+      "step": "Check the order",
+      "detail": "Make the copy clear first, then respectful, then give it character."
+    },
+    {
+      "step": "Cover the six parts",
+      "detail": "Context, job to be done, solution, outcome, conditions, next step."
+    },
+    {
+      "step": "Swap dead words for facts",
+      "detail": "Replace adjectives and hype with numbers, scenarios, constraints and real limits."
+    },
+    {
+      "step": "Add rhythm and a sticky line",
+      "detail": "Vary sentence length every 1-2 lines and include one quotable line on important pages."
+    },
+    {
+      "step": "Run the pre-publish checklist",
+      "detail": "Seven questions; two or more \"no\" answers mean rewrite."
+    },
+    {
+      "step": "Scan for banned words",
+      "detail": "Remove hype, filler, corporate zombie words and AI slop markers."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Hero copy example",
+      "where": null,
+      "visual_note": "Headline \"Turn meeting notes into decisions.\", subhead about recording and summarizing calls on macOS, proof line with languages and 60-minute meetings, CTA \"Try it free\"."
+    },
+    {
+      "what": "Dead vs living copy table",
+      "where": null,
+      "visual_note": "\"Seamless experience\" becomes \"Export to PDF and Google Docs in one click.\"; \"Powerful and flexible\" becomes \"Works with Gmail and Outlook. iCloud is next.\""
+    },
+    {
+      "what": "Scene instead of claim",
+      "where": null,
+      "visual_note": "\"At 10:03 the PM drops a task. At 10:07 the designer has real references and a draft.\""
+    },
+    {
+      "what": "Dashboard headings",
+      "where": null,
+      "visual_note": "\"Your Journey Starts Here\" becomes \"Onboarding Progress\"; \"Insights That Matter\" becomes \"Search Metrics\"."
+    },
+    {
+      "what": "Sticky line patterns",
+      "where": null,
+      "visual_note": "\"Not another X. Finally Y.\", \"Less noise. More decisions.\", \"Stop guessing. Start seeing.\""
+    }
+  ],
+  "numbers": [
+    {
+      "value": "1,000",
+      "context": "Dead copy could live on this many websites unchanged.",
+      "evidence": "it could live on 1,000 websites unchanged"
+    },
+    {
+      "value": "1-2",
+      "context": "Change sentence length every 1-2 lines.",
+      "evidence": "Rhythm"
+    },
+    {
+      "value": "3 seconds",
+      "context": "A stranger should understand the copy in this time.",
+      "evidence": "Pre-Publish Checklist"
+    },
+    {
+      "value": "30%",
+      "context": "Amount you should be able to cut without losing meaning.",
+      "evidence": "Can I cut 30% without losing meaning?"
+    }
+  ],
+  "caveats": [
+    "Hero and scene examples are illustrative inventions in the source, not real products.",
+    "The banned word lists are the authors' editorial stance; some words (for example \"just\", \"simply\") are banned as filler rather than for a measured reason.",
+    "This guide's sentence-case button examples (\"Save changes\") differ from the craft-details guide in the same repo, which recommends Title Case (\"Save Changes\") [inferred]."
+  ]
+}

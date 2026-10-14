@@ -45,6 +45,7 @@ Repo: ${ROOT}. Knowledge base (learn/README.md explains it):
 - ${ROOT}/learn/wiki/sources/*.md: the wiki page per source (link as [[sources/<file name without .md>|<title>]]).
 - OpenDesigner's current questions and research: ${ROOT}/skills/opendesigner/references/questions.json (Q-ids, options, defaults), ${ROOT}/skills/opendesigner/references/stages/*.md, ${ROOT}/research/L*.md (existing Decision Cards, DC-Lxx-nn), ${ROOT}/skills/opendesigner/references/pacing.json.
 Authority: non-negotiable (Emil Kowalski sources) = house standards; good-to-have (Vaul) = recommended default; reference (Kole Jain, Mobbin, Steve Schoger videos) = trusted practitioner opinion: use it, but a number or "always/never" claim from a single video is opinion unless another source or existing research agrees; say so.
+Consumer or enterprise: a rule or decision in an analysis may carry "product": consumer | enterprise | both (docs/KNOWLEDGE.md section 3). Keep that distinction in what you write: never present a consumer-only practice (delight, celebration, playful motion) as general advice for work tools, or an enterprise-only one (density, many controls in view) as general advice for consumer apps; say which it fits.
 Faithfulness: only what sources say; mark your own connections " [inferred]". Quotes: none needed; if you quote, 15 words max.`
 
 function topicPrompt(a) {

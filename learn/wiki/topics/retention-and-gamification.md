@@ -2,7 +2,7 @@
 type: topic
 title: Retention and gamification
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -26,3 +26,4 @@ Satirises engagement mechanics: usage-shaming notifications, step-goal guilt pop
 - [[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]: Coined metrics like streaks, a readiness score and closing rings become part of how users talk and make them unlikely to switch; post-run highlights give a sense of accomplishment.
 - [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: The first session is personalized with a daily guidance card, a personalized daily program and personal transits, which the host calls a perfect hook; customizing the whole experience brought day 1 retention to 41% and day 7 to 37%.
 - See also: [[synthesis/retention-and-gamification|Retention and gamification synthesis]]
+- [[sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont|The Reason Why Some Apps Feel Expensive, But Most Don’t]]: Reward discovery: small unexpected moments, found only by engaging with the app, make the experience special and memorable.

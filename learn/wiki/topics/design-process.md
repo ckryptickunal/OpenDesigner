@@ -2,7 +2,7 @@
 type: topic
 title: Design process
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -57,3 +57,9 @@ A short project workflow: unique prompt, niche fit, full brief, inspiration gath
 - See also: [[synthesis/design-process|Design process synthesis]]
 - [[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]: Research how top apps in the category solve the flow, compare patterns, get a report, then build with a brief and flag deliberate deviations; prioritizing, keeping and cutting stay with the designer.
 - [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: Start by asking why an element is needed instead of copying other apps, and test the market cheaply with a web funnel before building the full product.
+- [[sources/referodesign-refero-skil-readme-referodesign-refero-skill-readme-md|referodesign/refero_skill: README.md]]: Lays out a five-step order: research styles, then screens and flows, extract patterns and lock references, apply craft guidance, check work before handoff.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-example-workflow-referodesign-refero-skill-skills-refero-design-references-example-workflow-md|referodesign/refero_skill: skills/refero-design/references/example-workflow.md]]: Six phases: discovery brief, styles research, screen research, flow research, synthesis with a decision ledger, and an implementation blueprint with a quality gate.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-mcp-tools-referodesign-refero-skill-skills-refero-design-references-mcp-tools-md|referodesign/refero_skill: skills/refero-design/references/mcp-tools.md]]: Research-first method: several search angles, one primary foundation plus borrowed details, translated to the user's product.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-visual-workflow-referodesign-refero-skill-skills-refero-design-references-visual-workflow-md|referodesign/refero_skill: skills/refero-design/references/visual-workflow.md]]: Gate-based flow: research, three reference-locked directions, user choice, visual target, build, visual QA with severities.
+- [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: Brief, workflow routing, research by layer, synthesis into three buckets, presenting findings, building, then visual validation.
+- [[sources/palantir-workshop-applic-application-design-best-practices-palantir|Palantir]]: Validate as you build: squint to test hierarchy, stay close to real user workflows, and ask of every element whether it must be visible where it is.

@@ -2,7 +2,7 @@
 type: topic
 title: Animation performance
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -38,3 +38,5 @@ Massive changes to a morphing image can slow the browser and make the animation 
 - [[sources/eks-skills-review-animations-standards-emilkowalski-skills-skills-review-animations-standards-md|emilkowalski/skills: skills/review-animations/STANDARDS.md]]: Only transform and opacity, no parent CSS variables driving child transforms, full transform strings instead of Framer Motion shorthands, CSS over JS under load, and WAAPI.
 - [[sources/eks-skills-write-swift-skill-emilkowalski-skills-skills-write-swift-skill-md|emilkowalski/skills: skills/write-swift/SKILL.md]]: In SwiftUI, start animations with a withAnimation state change in the synchronous callback on the same frame as the gesture or scroll event; SwiftUI runs @Sendable closures such as visualEffect off the main thread to keep frames cheap, so copy values into their capture list.
 - See also: [[synthesis/animation-performance|Animation performance synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-craft-details-referodesign-refero-skill-skills-refero-design-references-craft-details-md|referodesign/refero_skill: skills/refero-design/references/craft-details.md]]: Flags transition: all as a performance killer and recommends virtualizing long lists and avoiding forced synchronous layout.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-motion-referodesign-refero-skill-skills-refero-design-references-motion-md|referodesign/refero_skill: skills/refero-design/references/motion.md]]: transition: all causes layout recalculation; test on slower devices; animate reorder only if performant.

@@ -2,7 +2,7 @@
 type: topic
 title: Design systems and tokens
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -32,3 +32,12 @@ Build the style guide's font sizes from a ratio (square root of the golden ratio
 - [[sources/eks-skills-review-animations-standards-emilkowalski-skills-skills-review-animations-standards-md|emilkowalski/skills: skills/review-animations/STANDARDS.md]]: Named easing curves --ease-out, --ease-in-out and --ease-drawer are defined as CSS custom properties alongside a duration table.
 - [[sources/sonner-styling-styling-sonner|Styling – Sonner]]: Recommends headless because people usually either use the defaults or go fully custom, and shows abstracting toast() into your own function with props that fit the codebase.
 - See also: [[synthesis/design-systems-and-tokens|Design systems and tokens synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop-referodesign-refero-skill-skills-refero-design-references-anti-ai-slop-md|referodesign/refero_skill: skills/refero-design/references/anti-ai-slop.md]]: A token's role is part of the token; combine references by giving each source a bounded job.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-color-referodesign-refero-skill-skills-refero-design-references-color-md|referodesign/refero_skill: skills/refero-design/references/color.md]]: Name tokens by purpose; gives a minimum token set and a complete reference token system for light and dark.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-example-workflow-referodesign-refero-skill-skills-refero-design-references-example-workflow-md|referodesign/refero_skill: skills/refero-design/references/example-workflow.md]]: Token commitments from the reference lock become a small token set: white bg, #171717 text, green accent #1f8a5b, 8px card radius, 4px-based spacing.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-icons-referodesign-refero-skill-skills-refero-design-references-icons-md|referodesign/refero_skill: skills/refero-design/references/icons.md]]: Pick one icon library or define your own spec so icons stay consistent; variable glyph systems fit design systems.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-motion-referodesign-refero-skill-skills-refero-design-references-motion-md|referodesign/refero_skill: skills/refero-design/references/motion.md]]: Minimum and complete motion token sets with component mapping.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-typography-referodesign-refero-skill-skills-refero-design-references-typography-md|referodesign/refero_skill: skills/refero-design/references/typography.md]]: Complete CSS token set for families, sizes, weights, leading, tracking, text colors and spacing.
+- [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: Define tokens before implementation and keep each token in the role its source assigned.
+- [[sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont|The Reason Why Some Apps Feel Expensive, But Most Don’t]]: Extreme consistency of icons, colors, spacing, fonts and interactions is what makes UI feel invisible; many font styles, many colors and one-or-two-pixel misalignments read as cheap.
+- [[sources/palantir-workshop-applic-application-design-best-practices-palantir|Palantir]]: A unified suite standardises where high-use components go and applies the same styles to tabs, metric cards, headers and buttons across every application.

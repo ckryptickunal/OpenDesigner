@@ -2,7 +2,7 @@
 type: topic
 title: AI-assisted design
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -44,3 +44,11 @@ ChatGPT is used to write a full project brief from a short prompt.
 - See also: [[synthesis/ai-assisted-design|AI-assisted design synthesis]]
 - [[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]: Shows a research-then-build workflow with Claude and MCP servers: unresearched AI output is generic or broken, researched output is grounded in shipped products and cites its sources.
 - [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: Moonly uses Cursor and Codex to design experiments around inefficiencies and to reconcile analytics numbers into ship, don't ship or collect-more-data recommendations.
+- [[sources/referodesign-refero-skil-readme-referodesign-refero-skill-readme-md|referodesign/refero_skill: README.md]]: Describes an AI design workflow where the agent must research real references, lock them and check the result against the selected direction instead of using generic AI defaults.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop-referodesign-refero-skill-skills-refero-design-references-anti-ai-slop-md|referodesign/refero_skill: skills/refero-design/references/anti-ai-slop.md]]: Explains why AI models default to indigo, cards, dark mode and calm editorial serif, and how an agent should avoid them.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-color-referodesign-refero-skill-skills-refero-design-references-color-md|referodesign/refero_skill: skills/refero-design/references/color.md]]: Treats indigo/violet as the fingerprint of AI-generated design and asks four justification questions before using purple.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-copywriting-referodesign-refero-skill-skills-refero-design-references-copywriting-md|referodesign/refero_skill: skills/refero-design/references/copywriting.md]]: Lists AI slop phrases to ban, such as "In today's fast-paced world" and "Supercharge your".
+- [[sources/referodesign-refero-skil-skills-refero-design-references-example-workflow-referodesign-refero-skill-skills-refero-design-references-example-workflow-md|referodesign/refero_skill: skills/refero-design/references/example-workflow.md]]: Shows how an agent should use reference research without averaging it: lock one primary direction and reject generic AI defaults.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-mcp-tools-referodesign-refero-skill-skills-refero-design-references-mcp-tools-md|referodesign/refero_skill: skills/refero-design/references/mcp-tools.md]]: How an agent should use Refero's MCP tools to research styles, screens and flows before designing.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-visual-workflow-referodesign-refero-skill-skills-refero-design-references-visual-workflow-md|referodesign/refero_skill: skills/refero-design/references/visual-workflow.md]]: How an agent should use or skip image generation and avoid substituting screenshots, CSS drawings or SVG placeholders for real imagery.
+- [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: A full methodology for AI agents doing design: research first, lock a reference, keep a decision ledger, and pass a quality gate against generic AI defaults.

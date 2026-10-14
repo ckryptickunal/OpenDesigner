@@ -162,10 +162,11 @@ class AnalysisSchema(unittest.TestCase):
         self.assertTrue(any("numbers must be a list" in e for e in self.errs(analysis(numbers="300ms"))))
         rule = analysis()["rules"][0]
         for bad, needle in (({"values": "ease-out"}, "values must be a list"), ({"area": "sound"}, "rule area 'sound'"),
-                            ({"applies_to": "vue"}, "applies_to 'vue'"), ({"kind": "maybe"}, "rule kind 'maybe'")):
+                            ({"applies_to": "vue"}, "applies_to 'vue'"), ({"kind": "maybe"}, "rule kind 'maybe'"),
+                            ({"product": "b2b"}, "rule product 'b2b'")):
             with self.subTest(bad):
                 self.assertTrue(any(needle in e for e in self.errs(analysis(rules=[dict(rule, **bad)]))))
-        self.assertEqual(self.errs(analysis(rules=[dict(rule, applies_to=["react-native", "compose"])])), [])
+        self.assertEqual(self.errs(analysis(rules=[dict(rule, applies_to=["react-native", "compose"], product="enterprise")])), [])
         dec = analysis()["decisions"][0]
         self.assertTrue(any("maps_to 'Q-nope-01'" in e for e in self.errs(analysis(decisions=[dict(dec, maps_to="Q-nope-01")]))))
         self.assertEqual(self.errs(analysis(decisions=[dict(dec, maps_to="Q-motion-01")])), [])

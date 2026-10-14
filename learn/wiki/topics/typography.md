@@ -2,7 +2,7 @@
 type: topic
 title: Typography
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -36,3 +36,7 @@ Font categories, anatomy (baseline, x-height, cap height), letter spacing, font 
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: Fonts are named as one of the three biggest changes needed after AI generation, without further detail.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Variable Inter with the display cut, a 550 weight between medium and semibold, tighter tracking on large headlines, 40ch heading widths, monospace uppercase eyebrows with wide tracking, text-wrap pretty or balance.
 - See also: [[synthesis/typography|Typography synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop-referodesign-refero-skill-skills-refero-design-references-anti-ai-slop-md|referodesign/refero_skill: skills/refero-design/references/anti-ai-slop.md]]: Warns against the decorative one-word serif/italic highlight, same weight throughout, and missing letter-spacing on all caps; asks for 3-4 hierarchy levels.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-typography-referodesign-refero-skill-skills-refero-design-references-typography-md|referodesign/refero_skill: skills/refero-design/references/typography.md]]: Scale, pairing, weights, line height, tracking, measure, polish details, responsive type and font loading, with concrete values.
+- [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: Use text-wrap: balance for headings and short display text, text-wrap: pretty selectively for prose; avoid decorative serif or italic word swaps.
+- [[sources/palantir-workshop-applic-application-design-best-practices-palantir|Palantir]]: The page header is the largest text and states the purpose; section headers are second largest; subheadings are descriptions. In Workshop, prefer a system font over a custom typeface because custom fonts cannot be uploaded and only render if installed on the viewer's device.

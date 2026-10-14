@@ -2,7 +2,7 @@
 type: topic
 title: A/B testing and conversion
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -22,3 +22,4 @@ Conversion rate optimization is the better add-on for high-traffic sites; compar
 - [[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]: Cites results: multi-goal selection +10% trial conversion, conversational quiz copy +5% subscriptions, tailored plans almost +20% upgrades, a checklist +10% relative retention, a split sign-up form +15% conversions.
 - [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: Hundreds of experiments a month over six years moved paid-traffic conversion from 10% to 40%; pricing tests are called the most important; many winners contradicted common advice.
 - See also: [[synthesis/a-b-testing-and-conversion|A/B testing and conversion synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-example-workflow-referodesign-refero-skill-skills-refero-design-references-example-workflow-md|referodesign/refero_skill: skills/refero-design/references/example-workflow.md]]: Conversion tactics: 'No credit card required' near the trial CTA, exact annual savings, objection killers under the primary CTA, proof near decision points.
