@@ -56,3 +56,9 @@ Run this on any video, page, deck or image before you call it done. Each line is
 32. **The automated check passed, and you still looked.** A clean lint or contrast report is the floor, not the verdict. [M27]
 33. **You looked at full size,** not only at thumbnails or contact sheets. [M28]
 34. **The person's words were followed.** "Explain" means a voice or captions. "Premium" means restraint. Memory notes and preferences you already have were applied. [M29]
+
+## Found by the owner, reviewing the website (2026-10-15)
+
+35. **Alignment holds at every width.** Rows that wrap into a column share one centre line and the same outer edges. Sibling cards share a top edge and a height, and their header rows match. Nothing scrolls inside a card. Measure it from 320 to 1920 px; one screenshot at one width hides it. [M36]
+36. **One primary action.** Each view has one primary button. Secondary actions are visibly quieter (a text link), and places already in the header, such as GitHub or the docs, are not repeated as buttons. [M37]
+37. **Real names and marks.** Every invented name was web-searched and is not one letter away from a real or already-used name. A well-known tool the work names shows its own mark beside its name. Shown domains end in `.example`. [M38]

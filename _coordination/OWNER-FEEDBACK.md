@@ -50,3 +50,29 @@ Mistakes made or caught in this session, and the rule that now prevents each:
 5. A showcase page offered a copy button for an install command piped from an unregistered domain into a shell. Anyone could have bought the domain. `scan_pr.py` blocked it. Rule: invented brands use RFC 2606 `.example` domains, and shown commands download before they run (`brand/showcase/BRIEF.md`).
 6. A rule that quoted the blocked pattern was itself blocked by the scanner. Rule: describe a blocked pattern in words.
 7. `yt-dlp` needs a login for Instagram, and `timeout` does not exist on macOS. The working path for login-walled videos is in `learn/README.md`.
+
+## 2026-10-14 to 2026-10-15: showcase and website reviews (Claude Code, Opus 5.5)
+
+Kunal reviewed every showcase piece, then the website as it became the project's landing page. In his words where it matters.
+
+| # | Feedback | What it means for the project | Status |
+|---|---|---|---|
+| 1 | "Many of the showcase designs still look like AI slop." Named the ugly pieces one by one; loved the B2B product screens. | His verdict outranks any AI audit score; the B2B screens are the bar. | addressed: round 3 rebuilt or removed each named piece (`brand/showcase/ROUND3-BRIEF.md`, `audit/*.json` `owner` and `round3`) |
+| 2 | "Make sure when you push, you are pushing each and everything." | A push includes every session's work, checked together. | addressed: push practice, commit groups name their session |
+| 3 | "Always launch it locally before pushing it to Vercel." Later: "keep the Vercel updated." | Local preview, then a real-header check, then deploy, every time work lands. | addressed: `site/README.md` |
+| 4 | Stickers in a zigzag are wrong: "in a straight line" when several, tilted only when one or two are stuck on a container. | Decoration follows physical logic. | addressed: `site/static/site.css`; a new decoration direction waits for his choice among three previews |
+| 5 | "Use iOS style rounded edges with iOS kerning everywhere." | Continuous corners and Apple's tracking by size. | addressed: iOS block in `site/static/site.css` |
+| 6 | Make the root "the hero landing website" with what, why, how and examples; move the docs directory to a subpage. | The site sells the outcome; docs live at `/docs/`. | addressed: `home()` and `docs_home()` in `site/build.py` |
+| 7 | Rewrite the copy: "Make everything you build look like it belongs together." Outcome before features, plain short sentences. | The design system is the mechanism; a consistent product is the outcome. | addressed: home page copy |
+| 8 | A pair of cards was off the centre line at a narrow width: "test each and everything across viewpoints for symmetry, UX and UI so that silly mistakes like this misalignment does not happen again." Later: "Alignment is very important for making anything feel trustworthy and premium." | Alignment is measured at every width, by a tool, before anything ships. | addressed: `site/check_layout.py`; review cases MS-05 and CV-04; `making.md` sections 5 and 10; preflight check 35 (M36) |
+| 9 | "Use actual logos instead of names whenever talking about commonly known things/apps/businesses." | Known tools show their own marks beside their names; invented brands never use real marks. | addressed: `site/logos.json`; exception recorded in `brand/README.md` |
+| 10 | Staggered hero cards read as "misaligned"; three calls to action in one row are "very bad UX". | Sibling cards share a top edge and height; one primary action per view. | addressed: home hero; preflight checks 35 and 36 (M36, M37) |
+| 11 | "Use the Emil Kowalski skill to introduce motion", "even mention about resources like such in the website", with motion, UX and UI examples, "the go-to guide". | Motion with a purpose, credited to its sources; a craft guide on the site. | addressed for the landing page motion (`site/static/home.css`); the craft guide is open until it ships |
+| 12 | Explore stickers, doodles and illustrations as three directions in a preview, "no production changes until approved". | Decoration is chosen by the owner from working previews. | open: waiting for his choice |
+
+**Lessons the agent learned** (each is now a rule in the files named):
+1. A layout checked at one width is not checked. Measure every row's centre, edges, top and height from 320 to 1920 px (`site/check_layout.py`).
+2. A stagger the builder meant as dynamic reads as an error to the owner. Keep siblings on one top edge unless asked for a cascade (preflight M36).
+3. Invented names that "feel invented" were real five times (Ledger, Orrery, Chorus, Pomelo, Vigil). Web-search every name before it is rendered (preflight M38).
+4. A screenshot embedded in a page goes stale: the overview image still showed house standards v2 and old feel words. Re-capture it with the brand font loaded after each brand change (`site/README.md`).
+5. A scroll reveal that hides content breaks full-page screenshots and reduced motion. Reveal only content below the fold, and hide nothing when motion is reduced (`site/static/site.js`).
