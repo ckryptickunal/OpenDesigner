@@ -122,6 +122,9 @@ def main():
             if re.search(r"^(skills|\.agents/skills|\.claude/skills)/opendesigner-paint/engine/package(-lock)?\.json$", path):
                 add("REVIEW", path, 0, "npm manifest or lockfile of the vendored painting engine: every version exact, every package from "
                                        "registry.npmjs.org with a sha512 integrity hash, no install hooks in the manifest (test_paint.py checks)")
+            elif re.search(r"^videos/[^/]+/package\.json$", path):
+                add("REVIEW", path, 0, "video project manifest (owner decision 2026-10-15): no dependencies, no install hooks, "
+                                       "only npx scripts pinned to an exact version; open it and check")
             else:
                 add("BLOCK", path, 0, "dependency or install hook: skills and tools must stay standard-library only")
     for gen_rx, src_rx, tool in GENERATED:
