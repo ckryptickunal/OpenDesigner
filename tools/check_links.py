@@ -11,7 +11,9 @@ import re, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SKIP_DIRS = {".git", "node_modules", "__pycache__", "last30days-raw"}
+SKIP_DIRS = {".git", "node_modules", "__pycache__", "last30days-raw", "dist"}  # dist: build output, git-ignored
+SITE_DOCS = ROOT / "site" / "docs"
+SITE_ROUTES = {"/", "/showcase/", "/llms.txt", "/llms-full.txt", "/sitemap.xml", "/robots.txt"}  # made by site/build.py
 LINK = re.compile(r"(?<!\!)\[[^\]\n]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)|!\[[^\]\n]*\]\(([^)\s]+)\)")
 FENCE = re.compile(r"^\s*(```|~~~)")
 
@@ -40,6 +42,14 @@ def links(path):
             yield n, m.group(1) or m.group(2)
 
 
+def site_route(rel):
+    """The website's docs link by address: /docs/<page>/ is site/docs/<page>.md, and /docs/ is index.md."""
+    if rel in SITE_ROUTES:
+        return ROOT / "site" / "build.py"
+    m = re.fullmatch(r"/docs/(?:([a-z0-9-]+)/)?", rel)
+    return SITE_DOCS / f"{m.group(1) or 'index'}.md" if m else ROOT / "site" / "missing"
+
+
 def main(args):
     broken, checked = [], 0
     for p in md_files(args):
@@ -49,7 +59,10 @@ def main(args):
             rel = target.split("#", 1)[0].split("?", 1)[0]
             if not rel:
                 continue
-            dest = (ROOT / rel.lstrip("/")) if rel.startswith("/") else (p.parent / rel)
+            if rel.startswith("/") and p.is_relative_to(SITE_DOCS):
+                dest = site_route(rel)
+            else:
+                dest = (ROOT / rel.lstrip("/")) if rel.startswith("/") else (p.parent / rel)
             checked += 1
             if not dest.exists():
                 broken.append(f"{p.relative_to(ROOT)}:{n}: {target}")

@@ -8,7 +8,7 @@ It asks simple questions one at a time, shows you choices you can see, and saves
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Website](https://img.shields.io/badge/website-opendesigner.vercel.app-2338ff.svg)](https://opendesigner.vercel.app)
 
-**Website:** [opendesigner.vercel.app](https://opendesigner.vercel.app), with install steps for each AI tool, a showcase and a plain guide to design systems.
+**Website:** [opendesigner.vercel.app](https://opendesigner.vercel.app): docs for product designers, design-system teams and engineers, install steps for each AI tool, and a showcase.
 
 ![OpenDesigner: build a real design system with the AI you already use](docs/assets/social-preview.png)
 

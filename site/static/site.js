@@ -1,9 +1,10 @@
 // OpenDesigner site: copy buttons and live GitHub numbers. The page reads fine without it.
 (function () {
   document.querySelectorAll("[data-copy], [data-copy-text]").forEach(function (btn) {
+    var label = btn.textContent;
     btn.addEventListener("click", function () {
       var text = btn.getAttribute("data-copy-text") || (btn.parentElement.querySelector("code") || {}).innerText || "";
-      var done = function () { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = "Copy"; }, 1600); };
+      var done = function () { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = label; }, 1600); };
       if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () {}); else done();
     });
   });
