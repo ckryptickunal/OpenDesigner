@@ -116,7 +116,7 @@
 
       <div class="install" role="region" aria-label="Install">
         <div class="bar"><span class="sec">INSTALL</span><div class="tabs" role="tablist" aria-label="Operating system"><button role="tab" aria-selected="true">macOS · Linux</button><button role="tab" aria-selected="false" tabindex="-1">Windows</button></div></div>
-        <div class="line"><span><span class="p">$</span> curl -fsSL coppicedb.dev/install.sh | sh</span><button style="all:unset;cursor:pointer;display:flex;gap:8px;align-items:center;color:var(--dim);font-size:var(--ds-font-size-12)" aria-label="Copy install command" id="copy">copy <kbd>y</kbd></button></div>
+        <div class="line"><span><span class="p">$</span> curl -fsSLO https://coppicedb.example/install.sh &amp;&amp; sh install.sh</span><button style="all:unset;cursor:pointer;display:flex;gap:8px;align-items:center;color:var(--dim);font-size:var(--ds-font-size-12)" aria-label="Copy install command" id="copy">copy <kbd>y</kbd></button></div>
       </div>
 
       <div class="next">
@@ -189,7 +189,7 @@
   document.querySelectorAll('.tabs [role=tab]').forEach(t => t.addEventListener('click', () => {
     document.querySelectorAll('.tabs [role=tab]').forEach(o => { o.setAttribute('aria-selected', o === t); o.tabIndex = o === t ? 0 : -1; });
     document.querySelector('.install .line > span').innerHTML = t.textContent.startsWith('Windows')
-      ? '<span class="p">&gt;</span> irm coppicedb.dev/install.ps1 | iex' : '<span class="p">$</span> curl -fsSL coppicedb.dev/install.sh | sh';
+      ? '<span class="p">&gt;</span> irm https://coppicedb.example/install.ps1 -OutFile install.ps1; .\\install.ps1' : '<span class="p">$</span> curl -fsSLO https://coppicedb.example/install.sh &amp;&amp; sh install.sh';
   }));
 </script>
 </body>
