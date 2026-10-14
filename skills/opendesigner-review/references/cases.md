@@ -46,7 +46,7 @@ Sources: S-R5-081, S-R5-091
 
 **Why it is missed.** Page scroll and full-page screenshots do not reach inside an element with overflow: auto. In tests a 2,000 px inner scroller stayed 300 px tall in the capture.
 
-**How to catch it.** Read overflow.scrollers from the probe. Scroll each one to its end with the tool and screenshot it. Check its scrollbar is visible and it has a way for keyboard users to reach it (tabindex or focusable content).
+**How to catch it.** Read overflow.scrollers from the probe. Scroll each one to its end with the tool and screenshot it. Check its scrollbar is visible and it has a way for keyboard users to reach it (tabindex or focusable content). Content meant to fit, such as code in a card inside a figure or a hero composition, should never scroll: a scrollbar there is a layout bug, so make the text wrap or the box wider.
 
 Sources: S-R5-091, S-R5-081, S-R5-092
 
@@ -382,7 +382,7 @@ Sources: S-R5-006, S-R5-043, S-R5-029, S-R5-096
 
 **Why it is missed.** A 2 px offset is easy to miss once a screenshot is scaled down (about 1.5 px after a 1920 px screenshot is shrunk to 1456 px on standard-tier models) [inferred].
 
-**How to catch it.** Pick the pair you suspect and call __od.measure(a, b): it gives the gap, the overlap and the left, right and center offsets. Repeat for the pairs that matter most: heading and content, icon and label, columns.
+**How to catch it.** Pick the pair you suspect and call __od.measure(a, b): it gives the gap, the overlap and the left, right and center offsets. Repeat for the pairs that matter most: heading and content, icon and label, columns. At every width where a row of cards wraps into a column, compare each row's centre and outer edges with the rows above it: stacked groups should share one centre line. OpenDesigner's own site shipped a pair of cards 30 px off that line between 600 and 900 px, because it was only looked at on a desktop; the owner caught it on 2026-10-15.
 
 Sources: S-R5-030, S-R5-031
 
