@@ -7643,5 +7643,26 @@
    "halftone",
    "speech bubbles"
   ]
+ },
+ {
+  "id": "use.taste-card",
+  "term": "Taste card",
+  "plain": "Five lines at the top of DESIGN.md that sum up how your system looks and feels: your own picture of it, then color, shape, motion and what it should never look like.",
+  "designer": "A one-glance style brief in the Overview. The picture and the Never list are the person's own words or taste-poll ratings, never written for them; color, shape and motion repeat the plain sentences that open those sections, so the card cannot disagree with the system.",
+  "engineer": "Rendered by engine.py taste_card() into DESIGN.md's Overview and overview.html. Reads state.taste.brief (sketch --brief or engine.py set taste.brief), state.taste.never (a list) and the taste index's red lines; the Never items are repeated in Do's and Don'ts.",
+  "designer_says": "style brief, mood in words",
+  "code_name": "taste.brief, taste.never",
+  "example": "In your words: \"a quiet library at night\". Never: gradients, emoji (your words).",
+  "source": [
+   "skills/opendesigner/scripts/engine.py (taste_card)",
+   "skills/opendesigner/references/taste.md",
+   "DC-L15-03"
+  ],
+  "layer": "use",
+  "aliases": [
+   "taste summary",
+   "style brief",
+   "never list"
+  ]
  }
 ]

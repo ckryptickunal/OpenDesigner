@@ -67,3 +67,21 @@ For each of the eight dials it records a value, a confidence (0 to 0.9) and its 
 - **Options:** never offer an option past a red line, in a question card, in AskUserQuestion or in a gallery. Order options by fit, best first. `engine.py show option-gallery` and `engine.py style tiles` already do both: they leave such directions out and say so, and they recommend the best fit unless the person already has an answer. For options you build yourself, run `python3 <skill>/scripts/taste.py fit options.json` (a list of options with `dials`, or a gallery payload) and show what it returns. An index that is sure of no open dial (feel words alone, for example) leaves the order as it is. Red lines still apply.
 - **Drift:** `engine.py review` lists dials that moved 20 or more from a value the index is sure of, and any dial past a red line. Show the person the difference and ask. If they want their taste back, set the taste value. If they keep the new one, record it as `chosen`, and the index follows. Drift is a note, not a failure: `--strict` ignores it, because taste is theirs to change.
 - **Accessibility floors stay locked.** Taste moves dials. It never moves a floor or a standard: the engine refuses those values whatever their source.
+
+## The taste card
+Five lines at the top of DESIGN.md's Overview (and in overview.html) that sum up how the system looks and feels, so the person, their team and any AI building with it hold the same picture. Each line says where it comes from.
+
+| Line | What it shows | Where it comes from |
+|---|---|---|
+| In your words | The person's own picture of the look ("a quiet library at night") | `sketch --brief`, or `engine.py set taste.brief "<their words>" --why "their words"` |
+| Color | Each color's job, plus the soft guide that the accent covers about 15% of a screen at most | The Colors section's first sentence; DC-L15-03 (the card doesn't use 60-30-10: its evidence is weak, LEVERS D2) |
+| Shape | Corners and how surfaces separate | The Shapes and Elevation sections' first sentences |
+| Motion | How it feels to move, then the rule | The Energy dial's own words and the Motion section's first sentence |
+| Never | What it should never look like | Their words (`engine.py set taste.never '["gradients", "emoji in buttons"]' --why "their words"`), red lines from screens they rated "I hate it", and a high generic allergy from the poll |
+
+Rules that keep it theirs:
+- **The picture and the Never list are never invented.** Ask for a picture inside the feel question (`references/zoom.md`, sketch question 4). Record a "never" whenever they say one, for example "no gradients" while looking at the overview. If you write either for them, record it with `--set-by delegated`. The card then says "picked for you".
+- **Color, shape and motion are not new claims.** They repeat the sentences that open those sections, so the card cannot disagree with the tokens. To change a line, change the decision, not the card.
+- **Never is taste, not a rule.** It is repeated in Do's and Don'ts. `engine.py review` flags red lines, and nothing on the list fails a build. Floors and standards are not on it: they are locked anyway.
+- **References give structure, never identity.** A site the person loves can move their dials through `opendesigner-extract`, but the card never carries its brand name, exact colors, typefaces or copy.
+- **It stays in the project,** like the taste index.

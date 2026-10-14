@@ -29,6 +29,8 @@ and the short "Designers · Code" line; the full designer and engineer notes sta
 
 {{One plain paragraph: what the product is, who it is for, how it should feel, and the one thing people should remember.}}
 
+**Taste card.** {{Five lines, each with where it comes from: In your words (the person's own picture of the look, or "Not given yet"), Color, Shape, Motion, and Never (their words and taste-poll red lines, or "Nothing yet"). Never invent the picture or the Never list.}}
+
 ## Colors
 > Zoom: broad (1 of 3). Say "zoom into Colors" to define ramps, roles and contrast.
 <!-- od:zoom area=color level=1 -->

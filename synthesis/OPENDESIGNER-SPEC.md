@@ -492,14 +492,14 @@ DESIGN.md is the readable view that later sessions and other models read first. 
 
 | # | Heading | Contents |
 |---|---|---|
-| 1 | `## Overview` | one-line product description, audience, the memorable thing, surfaces and their modes, ranked principles, the chosen direction and its dial positions, platforms; a line saying the tokens in `opendesigner/tokens/` are canonical and this file is generated |
+| 1 | `## Overview` | the taste card, shown under the opening sentence (five lines: the person's own picture of the look, color, shape, motion and their Never list, each with its source; the picture and the Never list are never invented), one-line product description, audience, the memorable thing, surfaces and their modes, ranked principles, the chosen direction and its dial positions, platforms; a line saying the tokens in `opendesigner/tokens/` are canonical and this file is generated |
 | 2 | `## Colors` | brand color and its role, ramps and how steps are built, semantic roles, interaction states, dark-mode rule, the step-distance contrast table (LEVERS B5), chart palette pointer |
 | 3 | `## Typography` | faces with licence status, scale (size, line height, tracking, weight per style), per-script rules, text scaling |
 | 4 | `## Layout` | spacing ladder and semantic aliases, density modes, breakpoints, grid and containers, target sizes |
 | 5 | `## Elevation & Depth` | depth model, surfaces, shadows or materials with solid fallbacks, stacking layers, borders |
 | 6 | `## Shapes` | radius scale and roles, nested-radius rule, focus-ring geometry, any signature shape |
 | 7 | `## Components` | v1 inventory with status labels, component-token overrides, the contested policies chosen (disabled submit, toasts, validation timing, undo versus confirm), links to `opendesigner/components/` |
-| 8 | `## Do's and Don'ts` | the enforced rules, lint errors and warnings in plain sentences; waivers with their reasons |
+| 8 | `## Do's and Don'ts` | the enforced rules, lint errors and warnings in plain sentences; the person's Never list from the taste card (taste: it warns, never fails); waivers with their reasons |
 | 9 | `## Motion` | duration ladder, easings, springs, reduced motion, haptics and sound |
 | 10 | `## Modes and Themes` | theme axes and contexts, the resolver, what a brand or client may override |
 | 11 | `## Iconography and Imagery` | icon library, stroke, sizes and labels; logo rules; illustration, photography and motifs, each with its asset status; placeholders labeled |

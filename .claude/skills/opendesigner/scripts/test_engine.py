@@ -3470,5 +3470,79 @@ class StyleLab(unittest.TestCase):
                                                                            if k not in ("style", "customStyles")}))
 
 
+class TasteCard(unittest.TestCase):
+    """The taste card (references/taste.md): five lines at the top of DESIGN.md's Overview. The picture and the Never list
+    are only the person's; color, shape and motion repeat their sections' sentences; DESIGN.md keeps its 17 headings."""
+
+    def _sketch(self, t, **kw):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Fieldnote", None, "regular", "web", "calm,minimal", **kw)
+        return d, open(os.path.join(t, "DESIGN.md"), encoding="utf-8").read()
+
+    @staticmethod
+    def _overview(md):
+        return md.split("## Overview", 1)[1].split("\n## ", 1)[0]
+
+    def test_brief_and_never_are_the_persons(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, md = self._sketch(t, brief="a quiet library at night")
+            quiet(e.cmd_set, d, "taste.never", ["gradients", "emoji in buttons"], "their words")
+            quiet(e.cmd_design_md, d)
+            md = open(os.path.join(t, "DESIGN.md"), encoding="utf-8").read()
+            ov = self._overview(md)
+            self.assertGreater(ov.index("**Taste card.**"), ov.index("</details>"))  # shown, not folded; the three-voice opening stays
+            self.assertIn('| In your words | "a quiet library at night" | your words |', ov)
+            self.assertIn("| Never | gradients, emoji in buttons (your words) |", ov)
+            dos = md.split("## Do's and Don'ts", 1)[1].split("\n## ", 1)[0]
+            self.assertIn("- gradients (your words)", dos)
+            self.assertIn("never add anything on its Never list without asking", md)  # For Agents
+
+    def test_nothing_is_invented(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, md = self._sketch(t)
+            ov = self._overview(md)
+            self.assertIn("| In your words | Not given yet.", ov)
+            self.assertIn("| Never | Nothing yet.", ov)
+            self.assertNotIn("**Never** (the person's taste", md)                    # no empty block in Do's and Don'ts
+            self.assertIn("about 15% of a screen at most (a rule of thumb, DC-L15-03)", ov)   # sourced, not 60-30-10
+            self.assertNotIn("60-30-10", ov)
+
+    def test_a_picked_brief_is_labeled(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, md = self._sketch(t, brief="a field notebook", delegated="brief")
+            self.assertIn('"a field notebook" | picked for you; say it in your own words to replace it |', md)
+        with tempfile.TemporaryDirectory() as t:
+            with self.assertRaises(SystemExit):
+                self._sketch(t, brief="x" * 161)                                    # one short line, checked before writing
+            self.assertFalse(os.path.exists(os.path.join(t, "opendesigner", "state.json")))
+
+    def test_never_list_names_each_source(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, _md = self._sketch(t)
+            quiet(e.cmd_set, d, "taste.never", ["glass"], "their words")
+            index = {"redLines": [{"dial": "depth", "side": "high", "value": 85, "limit": 70}], "genericAllergy": 0.7}
+            items = e.taste_nevers(d, e.load_state(d), index)
+            self.assertEqual(items[0], ("glass", "your words"))
+            self.assertIn(("too deep", "screens you rated 'I hate it'"), items)
+            self.assertIn(("safe, middle-of-the-road defaults", "your taste poll ratings"), items)
+            self.assertEqual(e.never_words(items[:2]), "glass (your words); too deep (screens you rated 'I hate it')")
+
+    def test_card_agrees_with_its_sections_and_headings_stay(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, md = self._sketch(t)
+            ov = self._overview(md)
+            shapes = re.search(r"^## Shapes\n(?:.*\n)*?\*\*(Buttons and fields[^*]+)\*\*", md, re.M).group(1)
+            motion = re.search(r"^## Motion\n(?:.*\n)*?\*\*(Most movements take \d+ms\.)\*\*", md, re.M).group(1)
+            card = ov.split("**Taste card.**", 1)[1]
+            self.assertIn(f"| Shape | {shapes}", card)
+            self.assertIn(motion, card.split("| Motion |", 1)[1].split("\n", 1)[0])
+            heads = re.findall(r"^## (.+)$", md, re.M)
+            self.assertEqual(heads, [h for h in e.DESIGN_SECTIONS if h in heads])   # the contract's headings, in order
+            self.assertEqual(set(heads) - set(e.DESIGN_SECTIONS), set())           # the card adds no heading
+            html = open(os.path.join(d, "overview.html"), encoding="utf-8").read()
+            self.assertIn("<h3>Taste card</h3>", html)
+            self.assertIn("Not given yet.", html)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)

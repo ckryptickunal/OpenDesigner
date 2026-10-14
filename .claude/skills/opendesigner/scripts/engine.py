@@ -8364,10 +8364,16 @@ def _direction_words(state):
     return f"preset {pid}" + (" (the default until Q-dir-01 is answered)" if is_default else "")
 
 
+def dial_side(dial, v):
+    """A dial position in its own end words: 'calm', 'leaning calm', 'balanced', 'leaning energetic' or 'energetic'."""
+    L = {d["id"]: d for d in levers()["dials"]}[dial]
+    return (L["left"] if v <= 33 else f"leaning {L['left']}" if v < 45 else "balanced" if v <= 55
+            else f"leaning {L['right']}" if v < 67 else L["right"])
+
+
 def dial_words(dial, v, params, ci=None):
     L = {d["id"]: d for d in levers()["dials"]}[dial]
-    side = (L["left"] if v <= 33 else f"leaning {L['left']}" if v < 45 else "balanced" if v <= 55
-            else f"leaning {L['right']}" if v < 67 else L["right"])
+    side = dial_side(dial, v)
     pretty = re.sub(r"(?<=[a-z])([A-Z])", lambda m_: " " + m_.group(1).lower(), dial)
     head = f"**{pretty[0].upper() + pretty[1:]} {v}/100** ({L['left']} to {L['right']}: {side})"
     say = {
@@ -8598,6 +8604,97 @@ def colors_lead(meta, state, light, delegated=False):
     return f"**One accent color: {first}.** Everything else stays neutral."
 
 
+DEPTH_LEADS = {"borders": "**Surfaces are separated by thin borders, with no shadows.**",
+               "ring+faint-shadow": "**Cards get a faint outline and a very soft shadow.**",
+               "tonal": "**Surfaces step in lightness; only menus and dialogs cast shadows.**",
+               "shadow-ladder": "**Raised things cast soft shadows that grow with height.**",
+               "materials": "**Controls and bars can be see-through glass, with solid fallbacks.**",
+               "offset": "**Cards and buttons cast hard, solid shadows, like stickers.**",
+               "extruded": "**Surfaces look pushed out of the page, with a light and a dark soft shadow.**",
+               "clay": "**Shapes look puffy, with soft shadows inside their edges.**",
+               "glow": "**Raised things glow softly in the accent color.**"}
+
+
+def shapes_lead(shp):
+    return (f"**Buttons and fields have {'fully round' if shp['control'] == 'full' else str(shp['control']) + 'px'} corners; "
+            f"cards have {shp['container']}px corners.**")
+
+
+def motion_lead(mot, medium_ms):
+    return ("**Motion is off: things change in place without moving.**" if mot.get("motionOff")
+            else f"**Most movements take {medium_ms}ms.** They turn into fades when a person asks for less motion.")
+
+
+def token_ms(light, path):
+    """A resolved duration token in ms (so an override shows, not the lever's value), or None."""
+    t = (light.get(path) or {}).get("resolved")
+    if not (isinstance(t, dict) and isinstance(t.get("value"), (int, float))):
+        return None
+    v = t["value"] * 1000 if t.get("unit") == "s" else t["value"]
+    return int(v) if float(v).is_integer() else v
+
+
+def _yours(rec):
+    return (rec or {}).get("set_by") not in ("delegated", "assumed")
+
+
+def taste_nevers(d, state, index=None):
+    """The person's Never list, each item with where it came from: their own words (taste.never), the red lines of their
+    taste index (screens they rated 'I hate it') and a high generic allergy in the taste poll. It is taste, not a rule:
+    `engine.py review` flags red lines and nothing fails a build (references/taste.md)."""
+    own = (state.get("taste") or {}).get("never") or []
+    src = "your words" if _yours(_decisions(d).get("taste.never") if d else None) else "picked for you"
+    out = [(str(w).strip().rstrip("."), src) for w in ([own] if isinstance(own, str) else own) if str(w).strip()]
+    index = taste_index(d, state) if index is None else index
+    if index and taste_py:
+        hated = "screens you rated 'I hate it'"
+        out += [(taste_py.line_text(r, plain=True), hated) for r in index.get("redLines") or []]
+        if (index.get("genericAllergy") or 0) > 0.5:
+            out.append(("safe, middle-of-the-road defaults", "your taste poll ratings"))
+    return out
+
+
+def never_words(items):
+    """'gradients, emoji (your words); too deep (screens you rated ...)': items grouped by where they came from."""
+    groups = {}
+    for w, src in items:
+        groups.setdefault(src, []).append(w)
+    return "; ".join(f"{', '.join(ws)} ({src})" for src, ws in groups.items())
+
+
+def taste_card(d, state, meta, light, delegated=False, index=None):
+    """Five lines that sum up how the system looks and feels, each with where it comes from (references/taste.md).
+    Color, shape and motion reuse the plain sentences that open those DESIGN.md sections, so the card and the sections
+    cannot disagree. The picture and the Never list are only ever the person's: when missing, the card says so."""
+    taste, dials = state.get("taste") or {}, meta["dials"]
+    brief = re.sub(r"\s+", " ", str(taste.get("brief") or "")).strip().strip('"')
+    if brief:
+        mine = _yours(_decisions(d).get("taste.brief") if d else None)
+        pic = (f'"{brief}"', "your words" if mine else "picked for you; say it in your own words to replace it")
+    else:
+        pic = ('Not given yet. Describe the look as a picture, not adjectives (for example, "a quiet library at night").',
+               "not asked yet")
+    shp, mot = meta["shape"], meta["motion"]
+    move = _plain(motion_lead(mot, token_ms(light, "motion.duration.medium") or mot["durations"].get("medium")))
+    nev = taste_nevers(d, state, index)
+    return [("In your words", *pic),
+            ("Color", _plain(colors_lead(meta, state, light, delegated=delegated))
+             + " Keep the accent to small areas, about 15% of a screen at most (a rule of thumb, DC-L15-03).",
+             ("brand color" if (state.get("raw") or {}).get("brandColor") else "no brand color yet")
+             + f"; colorfulness {dials['colorfulness']}/100"),
+            ("Shape", (_plain(shapes_lead(shp)) + " " + _plain(DEPTH_LEADS.get(meta["elevation"]["model"], ""))).strip(),
+             f"roundness {dials['roundness']}/100, depth {dials['depth']}/100"),
+            ("Motion", move if mot.get("motionOff") else f"{dial_side('energy', dials['energy']).capitalize()}. {move}",
+             f"energy {dials['energy']}/100"),
+            ("Never", never_words(nev) if nev else
+             "Nothing yet. Say what it should never look like, or rate real screens in the taste poll.",
+             "named with each item" if nev else "not asked yet")]
+
+
+def _plain(s):
+    return re.sub(r"\*\*", "", s or "").strip()
+
+
 def tailwind_classes(files):
     """Tailwind v4 class names generated by build/tailwind/theme.css, grouped for DESIGN.md (U5 F14)."""
     flat = resolve_all(files, {})
@@ -8675,9 +8772,10 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
                         f"{kind}; {qid})")
         return "**Your answers here** (each one either sets tokens or is a rule for this section):\n" + "\n".join(rows)
 
-    def section(title, body, lead=None, term_key=None, fold=True):
+    def section(title, body, lead=None, term_key=None, fold=True, after=None):
         """Three-voice layout (synthesis/THREE-VOICES.md, assets/output/DESIGN.md): zoom line, one plain sentence,
-        the one-line 'Designers · Code' note, then the full designer and engineer detail folded under 'More'."""
+        the one-line 'Designers · Code' note, then the full designer and engineer detail folded under 'More'.
+        after is shown, not folded, right after 'More', so the three-voice opening stays as it is (the Overview's taste card)."""
         parts = [f"## {title}", ""]
         zk = ztitle.get(title)
         if zk:
@@ -8695,6 +8793,8 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
         if di:
             detail += [di, ""]
         parts += (["<details><summary>More</summary>", ""] + detail + ["</details>", ""]) if fold and lead else detail
+        if after:
+            parts += [after, ""]
         if title in keeps:
             parts += [keeps[title], ""]
         return "\n".join(parts)
@@ -8753,7 +8853,12 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     named = effective_style(state)
     style = f"the {named['name']} style ({named['plain']})" if named else f"{style} style"
     lead_overview = f"**{state.get('name') or 'This system'} feels {feel_phrase(state, dials)}. Screens are {dw}, in {style}.**"
-    out.append(section("Overview", "\n".join(body), lead=lead_overview, term_key="Visual style direction"))
+    t_index = taste_index(d, state)
+    sl_card = short_line("Taste card")
+    card_md = ("**Taste card.** How it looks and feels, in five lines for you, your team and any AI that builds with it. "
+               "Nothing on it is invented: each line says where it comes from." + ("\n" + sl_card if sl_card else "") + "\n\n"
+               + _md_table(["Line", "What it says", "From"], taste_card(d, state, meta, light, brand_delegated(d), t_index)))
+    out.append(section("Overview", "\n".join(body), lead=lead_overview, term_key="Visual style direction", after=card_md))
 
     # 2 Colors
     rows = []
@@ -8903,15 +9008,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
         body.append(f"- {tx.title()}: the `.{prefix}-{tx}` class draws a static {TEXTURES[tx][1].split(': ')[1]} at `texture.{tx}.opacity` "
                     "behind content on brand surfaces, never over body text or controls, and switches off under more contrast and "
                     "forced colors. Textures are image assets, not tokens (DC-L19-12).")
-    lead_depth = {"borders": "**Surfaces are separated by thin borders, with no shadows.**",
-                  "ring+faint-shadow": "**Cards get a faint outline and a very soft shadow.**",
-                  "tonal": "**Surfaces step in lightness; only menus and dialogs cast shadows.**",
-                  "shadow-ladder": "**Raised things cast soft shadows that grow with height.**",
-                  "materials": "**Controls and bars can be see-through glass, with solid fallbacks.**",
-                  "offset": "**Cards and buttons cast hard, solid shadows, like stickers.**",
-                  "extruded": "**Surfaces look pushed out of the page, with a light and a dark soft shadow.**",
-                  "clay": "**Shapes look puffy, with soft shadows inside their edges.**",
-                  "glow": "**Raised things glow softly in the accent color.**"}.get(el["model"], "")
+    lead_depth = DEPTH_LEADS.get(el["model"], "")
     out.append(section("Elevation & Depth", "\n".join(body), lead=lead_depth, term_key="Depth model"))
 
     # 6 Shapes
@@ -8922,7 +9019,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             f"- Focus ring: {shp['focusWidth']}px, 2px offset, radius = control radius + offset ({shp['focusRadius'] if shp['focusRadius'] < FULL else 'full'}).",
             f"- Icons: {shp['iconCorners']} corners, {shp['iconCaps']} caps. On iOS, use continuous corners (DC-L04-04).",
             "- Signature shapes: none generated; a brand shape library is a designer asset (hook H-motif)."]
-    out.append(section("Shapes", "\n".join(body), lead=f"**Buttons and fields have {'fully round' if shp['control'] == 'full' else str(shp['control']) + 'px'} corners; cards have {shp['container']}px corners.**", term_key="corner radius"))
+    out.append(section("Shapes", "\n".join(body), lead=shapes_lead(shp), term_key="corner radius"))
 
     # 7 Components
     inv = (state.get("components") or {}).get("inventory") or []
@@ -8947,6 +9044,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     vr = Report()
     validate_files(files, state, vr)
     warns = [i for i in vr.items if i["severity"] in ("error", "warn")]
+    nevers = taste_nevers(d, state, t_index)
     body = ["**Enforced by construction.** The generator cannot break these:",
             f"- text contrast {ci['textMin']}:1, and 3:1 for edges, in every mode",
             "- text on colored fills picked automatically",
@@ -8960,6 +9058,8 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             "", "**Don't**", "- Don't shrink hit areas in dense layouts; shrink visuals and extend the hit area.",
             "- Don't use motion as the only signal, or flash more than three times a second.",
             "- Don't copy another brand's identity from a reference (colors, typeface, logo, imagery, copy).",
+            *(["", "**Never** (the person's taste, from the taste card; `engine.py review` flags red lines, and nothing here fails a "
+               "build). Ask before going against one:"] + [f"- {w} ({src})" for w, src in nevers] if nevers else []),
             "", "**Current validation findings:** " + (", ".join(f"{i['severity']}: {i['message']}" for i in warns) if warns else "none (errors 0, warnings 0)."),
             "", "**Waivers:** " + ("; ".join(f"{k}: {v}" for k, v in (state.get("waivers") or {}).items()) or "none.")]
     out.append(section("Do's and Don'ts", "\n".join(body), lead="**These rules keep screens clear and easy to read.** The engine checks the ones it can.", term_key="Guardrails and validation"))
@@ -8971,11 +9071,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
 
     # 9 Motion: values from the resolved tokens, so an override (the person's or a standard's) shows, not the lever's value
     def _res_ms(path):
-        t = (light.get(path) or {}).get("resolved")
-        if not (isinstance(t, dict) and isinstance(t.get("value"), (int, float))):
-            return None
-        v = t["value"] * 1000 if t.get("unit") == "s" else t["value"]
-        return int(v) if float(v).is_integer() else v
+        return token_ms(light, path)
 
     def _ease(k):
         t = (light.get(f"motion.easing.{k}") or {}).get("resolved")
@@ -9029,7 +9125,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             "- Springs are stored as damping and stiffness in `$extensions.opendesigner.spring` because DTCG 2025.10 has no spring type.",
             f"- Haptics: {params['haptics.intensity']} intensity where the platform has them; sound: hook H-sound is "
             f"{(state.get('hooks') or {}).get('H-sound', {}).get('status', 'pending')}."]
-    out.append(section("Motion", "\n".join(body), lead=("**Motion is off: things change in place without moving.**" if mot.get("motionOff") else f"**Most movements take {durs['medium']}ms.** They turn into fades when a person asks for less motion."), term_key="Motion"))
+    out.append(section("Motion", "\n".join(body), lead=motion_lead(mot, durs["medium"]), term_key="Motion"))
 
     # 10 Modes and Themes
     rows = [(n, ", ".join(m["contexts"]), m.get("default")) for n, m in mods.items()]
@@ -9112,7 +9208,8 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             f"2. Use tokens, never raw values: CSS `var(--{prefix}-...)`, Tailwind classes from `{R('build/tailwind/theme.css')}`, `{prefix.upper()}.*` in Swift. "
             f"In Compose: colors from `Local{prefix.capitalize()}Colors.current` (provide `{prefix.capitalize()}LightColors` or "
             f"`{prefix.capitalize()}DarkColors`), then `{prefix.capitalize()}Space`, `{prefix.capitalize()}Type` and `{prefix.capitalize()}Motion`.",
-            "3. Do not change a locked decision without asking the owner.",
+            "3. Do not change a locked decision without asking the owner. Keep new screens inside the taste card at the top of "
+            "the Overview, and never add anything on its Never list without asking.",
             "4. To change the system: `engine.py set <path> <value> --why \"...\"`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.",
             "5. To extend: add a decision (never hand-edit tokens or this file). Keep semantic names the same across modes. Deprecate instead of deleting.",
             "6. After any implementation, run `engine.py review` and re-read this file."]
@@ -9675,6 +9772,13 @@ def render_overview(d, files, meta, state):
     summary = _ov_md(render_summary(d, state, meta, zoom))
     voice = hooks.get("H-voice") or {}
     brand = f'<div class="ov-prose">{summary}</div>'
+    light_ = by_theme.get("light") or base
+    inline = lambda v: re.sub(r"^<p>(.*)</p>$", r"\1", _ov_md(v))
+    card = "".join(f'<tr><th scope="row">{_esc(k)}</th><td>{inline(v)}</td><td class="ov-dim">{_esc(src)}</td></tr>'
+                   for k, v, src in taste_card(d, state, meta, light_, brand_delegated(d)))
+    brand += ('<h3>Taste card</h3><p class="ov-dim">How it looks and feels, in five lines. Nothing on it is invented: each line '
+              'says where it comes from.</p><table class="ov-table"><thead><tr><th>Line</th><th>What it says</th><th>From</th></tr>'
+              f'</thead><tbody>{card}</tbody></table>')
     if voice.get("status", "pending") in ("pending", "unknown"):
         brand += missing("Voice and tone: how your product talks.", "Q-voice-01",
                          "Give 3 or 4 traits in the form 'X, but not Y', or a voice guide.")
@@ -9843,7 +9947,7 @@ div.ov-missing{{display:block;border-radius:{V('radius.container')};padding:16px
 .ov-q{{display:block;margin-top:6px;{t('text.body.sm')}color:{V('color.text.tertiary')}}} .ov-how{{{t('text.body.sm')}}}
 .ov-prose ul{{padding-left:20px}} .ov-prose li{{margin:4px 0}} code{{font-family:var({css_var(prefix, 'font.family.mono')});font-size:.92em}}
 .ov-table{{width:100%;border-collapse:collapse;margin:8px 0}} .ov-table th{{text-align:left;{t('text.label.md') if has('text.label.md') else t('text.body.sm')}color:{V('color.text.secondary')};padding:8px 10px;border-bottom:1px solid {V('color.border.default')}}}
-.ov-table td{{padding:8px 10px;border-bottom:1px solid {V('color.border.subtle')};vertical-align:top}} .ov-table a{{color:{V('color.text.link')}}}
+.ov-table td{{padding:8px 10px;border-bottom:1px solid {V('color.border.subtle')};vertical-align:top}} .ov-table th[scope=row]{{vertical-align:top}} .ov-table a{{color:{V('color.text.link')}}}
 .ov-themes{{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px}}
 .ov-theme{{background:{V('color.surface.base')};color:{V('color.text.primary')};border:1px solid {V('color.border.subtle')};border-radius:{V('radius.container')};padding:18px}}
 .ov-theme h3{{margin:0 0 12px}} .ov-roles{{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}}
@@ -10283,6 +10387,8 @@ def main(argv=None):
     p.add_argument("--platforms", help="comma list: web,ios,android,desktop,secondary")
     p.add_argument("--stack", help="comma list of the code stack (react, react-native, vue, ...); read from package.json when not given")
     p.add_argument("--feel", help="comma list of feel words in the person's own words (fun, calm, bold, techy, ...); `engine.py feel` lists them")
+    p.add_argument("--brief", help="optional: the person's picture of the look in one line, in their words "
+                                   "(\"a quiet library at night\"); shown on the taste card, never invented")
     p.add_argument("--delegated", nargs="?", const="all", default=None,
                    help="the person said 'just pick': record the sketch answers as delegated (all, or a comma list such as feel,brand). "
                         "A --brand hex stays the person's unless brand is named")
@@ -10403,7 +10509,7 @@ def main(argv=None):
         return cmd_build(d, a.force)
     elif a.cmd == "sketch":
         return cmd_sketch(d, a.name, a.brand, a.audience, a.platforms, a.feel, a.theme, surfaces=a.surfaces, delegated=a.delegated,
-                          stack=a.stack)
+                          stack=a.stack, brief=a.brief)
     elif a.cmd == "feel":
         return cmd_feel(a.words)
     elif a.cmd == "style":
@@ -10502,7 +10608,7 @@ def zoom_levels(d, state):
 AUDIENCE_WORDS = {"dense": "people who use it all day for work, in screens full of data",
                   "regular": "people who use it often, as an everyday app",
                   "large": "people who use it now and then, often on a phone"}
-SKETCH_FLAGS = ("name", "brand", "audience", "platforms", "feel", "theme", "surfaces")
+SKETCH_FLAGS = ("name", "brand", "audience", "platforms", "feel", "theme", "surfaces", "brief")
 
 
 def normalize_hex(v):
@@ -11075,11 +11181,12 @@ def cmd_style(d, action, args, n=4, seed=0, wild=False, save=None, name=None, pl
 
 
 def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=None, theme=None, quiet=False, surfaces=None, delegated=None,
-               stack=None):
+               stack=None, brief=None):
     """Level 0: about five answers give a complete, coarse system; everything else stays on defaults.
     Every input is checked before anything is written. delegated names the answers the person left to the model
     ('all' or a comma list of sketch flags); they are recorded as set_by delegated. A look word in --feel ("frosty") starts
-    the system from a named style (Q-dir-01, set_by assumed), unless the style question was already answered."""
+    the system from a named style (Q-dir-01, set_by assumed), unless the style question was already answered. --brief keeps
+    the person's picture of the look ("a quiet library at night") for the taste card; it is never written for them."""
     macros, mapping, unknown, looks, look_only, start = feel_and_looks([w for w in re.split(r"\s*,\s*", feel or "") if w.strip()])
     items = [x.strip() for x in (surfaces or "").split(",") if x.strip()]
     if items and (not surface_list(items) or len(surface_list(items)) != len(items)):
@@ -11089,6 +11196,9 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
         if not hx:
             raise SystemExit(f"--brand takes a hex color like #2563EB; {brand!r} is not one. Nothing was written.")
         brand = hx
+    brief = re.sub(r"\s+", " ", brief or "").strip().strip('"') or None
+    if brief and len(brief) > 160:
+        raise SystemExit("--brief is one short line in the person's words (160 characters at most). Nothing was written.")
     deleg = {x.strip() for x in str(delegated).split(",") if x.strip()} if delegated else set()
     bad = deleg - set(SKETCH_FLAGS) - {"all"}
     if bad:
@@ -11144,6 +11254,9 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
     if macros or look_only:
         cmd_set(d, "taste.feelWords", [w.strip("!.?,;: ").lower() for w in list(mapping) + [p for p in look_only if p not in mapping]],
                 "sketch: feel words picked for them" if sb("feel") else "sketch: the person's own feel words", quiet=True, set_by=sb("feel"))
+    if brief:
+        cmd_set(d, "taste.brief", brief, "sketch: picked for them" if sb("brief") else "sketch: the person's picture of the look",
+                quiet=True, set_by=sb("brief"))
     started = None
     if start:
         cur = (load_state(d).get("answers") or {}).get("Q-dir-01")

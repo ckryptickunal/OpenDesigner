@@ -17,7 +17,8 @@ Five answers shape the sketch. Ask only what their words and files don't already
    - If they name several surfaces (an app and a landing page), confirm Q-scope-01 in one line. The main surface goes first.
 2. **Who is it for?** This is Q-aud-01. Ask whether people use it all day (`dense`), regularly (`regular`), or now and then on the go (`large`).
 3. **Where does it run?** This is Q-plat-01. The choices are web, iPhone (`ios`), Android and desktop. Web alone is fine.
-4. **How should it feel?** Ask: "Describe the feel in 2 or 3 words, like fun, calm, serious or bold." Pass their words to `sketch --feel`.
+4. **How should it feel?** Ask: "Describe the feel in 2 or 3 words, like fun, calm, serious or bold. A picture works too, like a quiet library at night." Pass their words to `sketch --feel`.
+   - If they give a picture, pass it unchanged as `sketch --brief "<their words>"` and the feel words it suggests as `--feel`. The picture opens the taste card at the top of DESIGN.md (`references/taste.md`). Never write a picture for them; without one, the card says it is not given yet.
    - The engine maps common words to its own (fun to playful, calm to deferential and minimal). `engine.py feel fun calm` shows the mapping, and `engine.py feel` lists every word it knows.
    - If the engine doesn't know a word, it builds with the others and prints one short question. Ask that question with the result.
    - Show six pairs only if they ask for choices, or when the designer voice leads. The pairs are playful or serious · friendly or authoritative · minimal or rich · premium or everyday · modern or heritage · bold or quiet.

@@ -45,7 +45,7 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 | `references/improve.md` | When something is missing, wrong or confusing |
 | `scripts/journey.py`, `references/report.schema.json` | The private journey log and the optional anonymous report (`rules.md` section 11) |
 | `references/questions.json`, `graph.json`, `cards/Lxx.json`, `levers.json`, `ontology-slim.json` | Machine index; what a choice changes; "why?" sources; dials and formulas; the full block map |
-| `references/taste.md`, `scripts/taste.py`, `assets/taste/library.json` | When you offer the taste poll, and before you offer dials or style options once the project has taste evidence: the taste index merges the poll, the person's own decisions, inspirations, the style pick and feel words |
+| `references/taste.md`, `scripts/taste.py`, `assets/taste/library.json` | When you offer the taste poll, and before you offer dials or style options once the project has taste evidence: the taste index merges the poll, the person's own decisions, inspirations, the style pick and feel words. Also when the person gives a picture of the look or says what it should never look like: both go on the taste card |
 | `assets/templates/*.html` | Visual steps |
 | `assets/output/*` | The shape of the files the person keeps |
 

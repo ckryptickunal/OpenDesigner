@@ -35,7 +35,7 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 | `references/improve.md` | When something is missing, wrong or confusing |
 | `scripts/journey.py`, `references/report.schema.json` | The private journey log and the optional anonymous report (`rules.md` section 11) |
 | `references/questions.json`, `graph.json`, `cards/Lxx.json`, `levers.json`, `ontology-slim.json` | Machine index; what a choice changes; "why?" sources; dials and formulas; the full block map |
-| `references/taste.md`, `scripts/taste.py`, `assets/taste/library.json` | When you offer the taste poll, and before you offer dials or style options once the project has taste evidence: the taste index merges the poll, the person's own decisions, inspirations, the style pick and feel words |
+| `references/taste.md`, `scripts/taste.py`, `assets/taste/library.json` | When you offer the taste poll, and before you offer dials or style options once the project has taste evidence: the taste index merges the poll, the person's own decisions, inspirations, the style pick and feel words. Also when the person gives a picture of the look or says what it should never look like: both go on the taste card |
 | `assets/templates/*.html` | Visual steps |
 | `assets/output/*` | The shape of the files the person keeps |
 
@@ -183,7 +183,8 @@ Five answers shape the sketch. Ask only what their words and files don't already
    - If they name several surfaces (an app and a landing page), confirm Q-scope-01 in one line. The main surface goes first.
 2. **Who is it for?** This is Q-aud-01. Ask whether people use it all day (`dense`), regularly (`regular`), or now and then on the go (`large`).
 3. **Where does it run?** This is Q-plat-01. The choices are web, iPhone (`ios`), Android and desktop. Web alone is fine.
-4. **How should it feel?** Ask: "Describe the feel in 2 or 3 words, like fun, calm, serious or bold." Pass their words to `sketch --feel`.
+4. **How should it feel?** Ask: "Describe the feel in 2 or 3 words, like fun, calm, serious or bold. A picture works too, like a quiet library at night." Pass their words to `sketch --feel`.
+   - If they give a picture, pass it unchanged as `sketch --brief "<their words>"` and the feel words it suggests as `--feel`. The picture opens the taste card at the top of DESIGN.md (`references/taste.md`). Never write a picture for them; without one, the card says it is not given yet.
    - The engine maps common words to its own (fun to playful, calm to deferential and minimal). `engine.py feel fun calm` shows the mapping, and `engine.py feel` lists every word it knows.
    - If the engine doesn't know a word, it builds with the others and prints one short question. Ask that question with the result.
    - Show six pairs only if they ask for choices, or when the designer voice leads. The pairs are playful or serious · friendly or authoritative · minimal or rich · premium or everyday · modern or heritage · bold or quiet.
@@ -968,6 +969,8 @@ and the short "Designers · Code" line; the full designer and engineer notes sta
 <!-- od:zoom area=overview level=0 -->
 
 {{One plain paragraph: what the product is, who it is for, how it should feel, and the one thing people should remember.}}
+
+**Taste card.** {{Five lines, each with where it comes from: In your words (the person's own picture of the look, or "Not given yet"), Color, Shape, Motion, and Never (their words and taste-poll red lines, or "Nothing yet"). Never invent the picture or the Never list.}}
 
 ## Colors
 > Zoom: broad (1 of 3). Say "zoom into Colors" to define ramps, roles and contrast.

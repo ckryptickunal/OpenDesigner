@@ -8,6 +8,10 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Added
 
+- **Taste: the poll, the taste index and the taste card** (`skills/opendesigner/references/taste.md`).
+  - The taste poll: the person rates 20 to 30 real screens from shipped products, and the result recommends the eight dials. Images stay on the person's machine; the library holds links and dial values only.
+  - The taste index (`taste.py index`) merges the poll, the person's own decisions, inspirations, the style pick and feel words into a value and a confidence per dial, with red lines. The option gallery is ordered by fit and leaves out directions past a red line, and `engine.py review` flags drift.
+  - The taste card: five lines under the opening sentence of DESIGN.md's Overview, and on the overview page. It shows the person's own picture of the look (`sketch --brief`), color, shape, motion and a Never list, each with where it came from. The picture and the Never list are never invented. Color, shape and motion repeat the sentences that open those sections, and the color line uses the sourced 15% accent guide (DC-L15-03), not 60-30-10. The Never list is repeated in Do's and Don'ts as taste: it warns, never fails. DESIGN.md keeps its 17 headings.
 - **Making and reviewing pages** (lane L22, `research/L22-making-and-review.md`): what to do after the system exists.
   - A guide for agents, `skills/opendesigner/references/making.md`: the first draft built on the tokens, one round of feedback at a time, options on a review copy of the page with the current version kept, what stays the same between sections, checking the rendered page in the person's own window, finished interface shown inside a page, sections that hold the page, and figures drawn as graphics. It ends with the mistakes an AI builder made in that project, and what to do when the person has to repeat a note.
   - A cohesion audit template, `assets/output/COHESION-AUDIT.md`, for a page that stopped looking like one page.
