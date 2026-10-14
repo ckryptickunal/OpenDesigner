@@ -54,7 +54,7 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 
 ## The flow: zoom, don't march
 Details are in `references/zoom.md`.
-- **Level 0, sketch:** up to 5 questions, one per message, fewer when their words already answer some. Then `engine.py sketch ...` records the answers and builds a complete first version. Show the first result: a plain line on what they got, the preview, and one clear next step (`zoom.md`, "The first result").
+- **Level 0, sketch:** up to 5 questions, one per message, fewer when their words already answer some. Then `engine.py sketch ...` records the answers and builds a complete first version. Show the first result: a plain line on what they got, the overview (`opendesigner/overview.html`), and one clear next step (`zoom.md`, "The first result").
 - **People in a hurry** ("just pick") get the sketch with `--delegated` and no optional questions. People who talk in plain words get fewer questions (`zoom.md`).
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
@@ -71,11 +71,13 @@ Use the best surface the host supports, and say which one you use. Never block o
 1. An OpenDesigner MCP App view, if its tools are present (phase 2).
 2. Host-rendered HTML: Claude custom visuals or artifacts, Claude Code artifacts, the Codex desktop browser, ChatGPT canvas. Paste a template from `assets/templates/` with its `od-data` JSON filled in.
 3. A Figma or Paper canvas, when that MCP is connected (see opendesigner-export).
-4. A local page: `python3 <skill>/scripts/show.py <template> <payload.json> --open`. For the whole system, use `engine.py preview --open`.
+4. A local page: `python3 <skill>/scripts/show.py <template> <payload.json> --open`. For the whole system, use `engine.py overview --open`.
 5. The host's question tool (Claude AskUserQuestion, Codex `request_user_input`), up to 4 options.
 6. Plain text: numbered options with values.
 
-Templates: `palette` (color, light and dark), `type-scale` (text), `spacing-ruler` (spacing and density), `radius` (corners), `elevation` (depth), `motion`, `component-sheet` (components and states), `option-gallery` (3 to 8 directions side by side). `engine.py show <template>` fills one with real values, plus what-if options for its question, without changing any choice. It writes `opendesigner/preview/<template>.html` (`--open` opens it). Never fill a template with invented values.
+**The overview** (`opendesigner/overview.html`, rebuilt by every `build`) is the person's own design-system page: cover, brand book, colors per theme, headings h1 to h6, spacing, corners, depth, motion, components, brand assets and how it grew. Each area says Chosen, Picked for you or Default, and anything only a person can give (a logo, a voice guide, what the product is for) shows as **Not enough information**, with the question that fills it. Show it after the sketch and after each zoom. In Claude Code, also offer to keep it as a Design System artifact: `build` writes its files to `opendesigner/build/artifact/project/`; create one with the Artifact tool (quickstart, the Design System type) and publish that folder as its `root`, uploading the logo files the README lists. Republish after later builds.
+
+Templates: `palette` (color, light and dark), `type-scale` (text), `spacing-ruler` (spacing and density), `radius` (corners), `elevation` (depth), `motion`, `component-sheet` (components and states), `option-gallery` (3 to 8 directions side by side). `engine.py show <template>` fills one with real values, plus what-if options for its question, without changing any choice. It writes `opendesigner/preview/<template>.html` (`--open` opens it); `build` refreshes all of them, so the person always sees their own system, never sample data. Never fill a template with invented values.
 
 Each template has a **Copy my choice** button that produces `OD:` lines. When the person pastes them back, run each line with the engine (`rules.md` section 9) and confirm in one sentence. Record how each answer was set with `--set-by` (`rules.md` section 5).
 
@@ -89,10 +91,11 @@ python3 <skill>/scripts/engine.py resolve                    current dials and d
 python3 <skill>/scripts/engine.py generate                   opendesigner/tokens/ (DTCG 2025.10)
 python3 <skill>/scripts/engine.py validate [--json]          contrast, targets, lint; exit 1 on errors
 python3 <skill>/scripts/engine.py design-md                  DESIGN.md and PRODUCT.md at the project root
-python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all
-python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html
+python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|all
+python3 <skill>/scripts/engine.py overview [--open]          opendesigner/overview.html: the whole system, what is chosen and what is still missing
+python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html: every token
 python3 <skill>/scripts/engine.py show <template> [--open]   one visual template filled with real values (opendesigner/preview/)
-python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports, DESIGN.md and preview only if there are no errors
+python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports, DESIGN.md, overview, filled templates and preview only if there are no errors
 python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
 python3 <skill>/scripts/engine.py standards [--update]       house and project standards; --update applies newer house standards (overrides stay)
@@ -101,7 +104,7 @@ python3 <skill>/scripts/engine.py standard restore <id> [--why "..."]      undo 
 python3 <skill>/scripts/engine.py standard add --rule "..." --why "..." --source <url or "person, <date>"> [--path P --value <json>]... [--values '{...}'] [--review-pattern RE --review-message "..."] [--authority good-to-have] [--beats STD-a,STD-b]
 python3 <skill>/scripts/engine.py standard remove PRJ-<nn> --why "..."   project standards only
 ```
-After every change, run `build` before showing results, so the exports and preview are never stale. Fix every error first. The report cites the rule it applied. When `pick` or `set` says an answer changes no tokens, it is still saved (as a DESIGN.md rule or a PRODUCT.md fact). Tell the person so, in a few words.
+After every change, run `build` before showing results, so the exports, overview and preview are never stale. Fix every error first. The report cites the rule it applied. When `pick` or `set` says an answer changes no tokens, it is still saved (as a DESIGN.md rule or a PRODUCT.md fact). Tell the person so, in a few words.
 
 ## The journey log (only after a yes)
 The journey log is a private diary of the person's steps, kept in their project files. It shows where the questions slow people down. `rules.md` section 11 says what to log and when.

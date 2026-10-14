@@ -2712,5 +2712,41 @@ class PersonaOutputFixes(unittest.TestCase):
                 ids = re.findall(r"D-\d{4}", motion.split("Decisions: ", 1)[1])
                 self.assertEqual(len(ids), len(set(ids)))                                   # each decision once (R29)
 
+
+class OverviewAndArtifact(unittest.TestCase):
+    """overview.html is the person's own system page: what is set shows, what needs a person says so; the visual templates
+    are filled with their values; export --format artifact writes a Design System artifact in its list grammar."""
+
+    def test_overview_and_artifact(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Fern", "#0f766e", "regular", "web", "calm,friendly")
+            rd = lambda *p: open(os.path.join(*p), encoding="utf-8").read()
+            html = rd(d, "overview.html")
+            self.assertIn("Not enough information", html)                       # no logo yet: the gap is shown, not hidden
+            self.assertIn("Fern", html)
+            self.assertIn('href="preview/palette.html"', html)
+            self.assertNotRegex(html, r"https?://(?!github\.com)")                   # no network: nothing loads from another host
+            tpl = rd(d, "preview", "palette.html")
+            self.assertIn("Fern", tpl)                                          # the template shows their system, not Acme
+            self.assertNotIn(">Acme<", tpl)
+            proj = os.path.join(d, "build", "artifact", "project")
+            tok = e.read_json(os.path.join(proj, "tokens.json"))
+            self.assertEqual([th["id"] for th in tok["color"]["themes"]][:1], ["light"])
+            names = [c["name"] for c in tok["color"]["tokens"]]
+            self.assertIn("accent", names)
+            self.assertEqual(len(names), len(set(names)))                        # artifact names are one namespace
+            for c in tok["color"]["tokens"]:
+                for v in (c["value"].values() if isinstance(c["value"], dict) else [c["value"]]):
+                    self.assertRegex(v, r"^#[0-9a-f]{6}$")
+            self.assertTrue(tok["type"]["groups"][0]["styles"])
+            idx = e.read_json(os.path.join(proj, "design-system.json"))
+            self.assertEqual((idx["v"], idx["layout"], idx["title"]), (3, "files", "Fern"))
+            first = idx["createdOnFiles"]["at"]
+            quiet(e.cmd_export, d, "artifact")
+            self.assertEqual(e.read_json(os.path.join(proj, "design-system.json"))["createdOnFiles"]["at"], first)  # stable across builds
+            readme = rd(proj, "README.md")
+            self.assertFalse(readme.startswith("---"))                           # no front matter in the brand book
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)

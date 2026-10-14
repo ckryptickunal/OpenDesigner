@@ -181,7 +181,7 @@ The source of truth is `opendesigner/state.json` plus the DTCG tokens made from 
 | `opendesigner/decisions.md` | Every decision with its reason, source and what it changed, append-only |
 | `opendesigner/RATIONALE.md` | One page for the team: what was chosen, why, and what is still open |
 | `opendesigner/coverage.md`, asset briefs | Every block's status; briefs a designer can act on |
-| `opendesigner/state.json`, `preview.html` | Continue later; see every token and the components on one page |
+| `opendesigner/state.json`, `overview.html`, `preview.html` | Continue later; see your whole system on one page (`overview.html` grows with every decision and marks what is still missing) and every token (`preview.html`) |
 
 This is the full contract from [SPEC.md section 7](SPEC.md#7-outputs). Today the engine writes the core set: tokens, exports, `DESIGN.md`, `PRODUCT.md`, the decision log, `state.json` and the preview. The skill also writes `RATIONALE.md` from a template and, if you agree, adds a snippet to your `AGENTS.md`. The README's status table says what has shipped.
 

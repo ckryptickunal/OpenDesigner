@@ -20,6 +20,7 @@ Commands (run from the user's project; state lives in ./opendesigner/ unless --d
     engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all
     engine.py design-md [--out DIR]       DESIGN.md and PRODUCT.md (project root when the state is ./opendesigner)
     engine.py preview [--open]            preview.html (every token plus a few components, light and dark)
+    engine.py overview [--open]           overview.html (the whole system on one page, what is chosen, what is missing)
     engine.py intake <measurements.json> [--accept] [--json]   reference values -> proposed dials (LEVERS E)
     engine.py review [--project P] [--strict] [--json]         hard-coded values that bypass tokens; stale DESIGN.md
     engine.py feedback "text" --kind gap|bug|confusing|idea [--from-journey]   local note + a pre-filled issue link (never posts)
@@ -7422,12 +7423,150 @@ def export_dtcg(files, meta):
     return res, flats
 
 
+ARTIFACT_COLORS = [  # Design System artifact token name -> semantic path (the roles a reader needs, not every token)
+    ("surface", "color.surface.base"), ("surface-raised", "color.surface.raised"), ("surface-sunken", "color.surface.sunken"),
+    ("ink", "color.text.primary"), ("ink-muted", "color.text.secondary"), ("ink-subtle", "color.text.tertiary"),
+    ("line", "color.border.subtle"), ("line-strong", "color.border.default"), ("accent", "color.bg.action.primary"),
+    ("accent-hover", "color.bg.action.primary-hover"), ("on-accent", "color.text.on-action"), ("accent-text", "color.text.accent"),
+    ("accent-soft", "color.bg.accent.subtle"), ("link", "color.text.link"), ("focus-ring", "color.border.focus"),
+    ("danger", "color.text.danger"), ("danger-soft", "color.bg.danger.subtle"), ("success", "color.text.success"),
+    ("success-soft", "color.bg.success.subtle"), ("warning", "color.text.warning"), ("warning-soft", "color.bg.warning.subtle"),
+    ("info", "color.text.info"), ("info-soft", "color.bg.info.subtle"),
+]
+
+
+def _css_theme_vars(css):
+    """{theme: {--var: value}} from export_css text, with var() references resolved, for values an artifact needs plain."""
+    light, dark = {}, {}
+    for sel, body in re.findall(r"([^{}]+)\{([^{}]*)\}", css):
+        decl = dict(re.findall(r"(--[\w-]+)\s*:\s*([^;]+);", body))
+        (dark if ("dark" in sel or "not(" in sel) else light).update(decl)
+    dark = {**light, **dark}
+
+    def res(v, env, depth=0):
+        return v if depth > 12 else re.sub(r"var\((--[\w-]+)\)", lambda m: res(env.get(m.group(1), m.group(0)), env, depth + 1), v)
+    return {"light": {k: res(v, light) for k, v in light.items()}, "dark": {k: res(v, dark) for k, v in dark.items()}}
+
+
+def export_artifact(d, files, meta, state, prefix):
+    """The system as a Claude Design System artifact's files (project/...): tokens.json in its list grammar, README.md
+    from DESIGN.md, a cover and a button preview. Publish the folder with the Artifact tool (SKILL.md: Design System
+    artifact). Logos and other images are uploads there, so they are listed in the README instead of copied."""
+    name = state.get("name") or "Design system"
+    base = resolve_all(files, {})
+    res = files["opendesigner.resolver.json"]
+    themes = list((res.get("modifiers", {}).get("theme") or {}).get("contexts") or meta["modes"])
+    trees = {th: resolve_all(files, {"theme": th}) for th in themes}
+    hexv = lambda tree, p: (((tree.get(p) or {}).get("resolved") or {}).get("hex"))
+    colors = []
+    for tname, path in ARTIFACT_COLORS:
+        vals = {th: hexv(trees[th], path) for th in themes if hexv(trees[th], path)}
+        if vals:
+            colors.append({"name": tname, "value": vals if len(themes) > 1 else next(iter(vals.values())),
+                           "usage": ((base.get(path) or {}).get("$description") or path)[:1000]})
+    stack = lambda v: ", ".join(f'"{x}"' if " " in x else x for x in (v if isinstance(v, list) else [v]))[:200]
+    fam = {}
+    for key in ("text", "display", "mono"):
+        r = ((base.get(f"font.family.{key}") or {}).get("resolved"))
+        if r:
+            fam[key] = re.sub(r"[;{}<>\\()]", "", stack(r))
+    styles = []
+    for p in sorted((k for k in base if k.startswith("text.")), key=lambda k: -(((base[k].get("resolved") or {}).get("fontSize") or {}).get("value") or 0)):
+        r = base[p].get("resolved") or {}
+        ext = (base[p].get("$extensions") or {}).get("opendesigner") or {}
+        size = (r.get("fontSize") or {}).get("value")
+        if not size:
+            continue
+        fam_key = "mono" if p.startswith("text.code") else ("display" if p.startswith(("text.display", "text.headline")) and "display" in fam else "text")
+        styles.append({"name": p[5:].replace(".", "-"), "family": fam_key, "fontSize": f"{size}px",
+                       "lineHeight": f"{ext.get('lineHeightPx') or round(size * (r.get('lineHeight') or 1.4))}px",
+                       "fontWeight": r.get("fontWeight") or 400, "letterSpacing": f"{ext.get('letterSpacingEm', 0)}em",
+                       "usage": (ext.get("use") or "")[:1000]})
+    space = [{"name": k.replace(".", "-"), "value": f"{(base[k].get('resolved') or {}).get('value')}px", "usage": "Spacing step."}
+             for k in sorted((k for k in base if re.match(r"^space\.\d+$", k)), key=lambda k: int(k.split(".")[1]))
+             if (base[k].get("resolved") or {}).get("value")]
+    radius = []
+    for k in ("radius.detail", "radius.control-sm", "radius.control", "radius.container", "radius.overlay", "radius.person"):
+        r = (base.get(k) or {}).get("resolved") or {}
+        if r.get("value") is not None:
+            v = r["value"]
+            radius.append({"name": k.replace(".", "-"), "value": "9999px" if v >= 999 else f"{v}px", "usage": (base[k].get("$description") or k)[:1000]})
+    cv = _css_theme_vars(export_css(files, meta, prefix))
+    shadows = []
+    for k in ("elevation.raised", "elevation.floating", "elevation.overlay"):
+        var = css_var(prefix, k)
+        vals = {th: cv.get(th if th in cv else "light", {}).get(var) for th in themes}
+        if all(v and "var(" not in v for v in vals.values()):
+            shadows.append({"name": k.replace(".", "-"), "value": vals if len(themes) > 1 else next(iter(vals.values())),
+                            "usage": ((base.get(k) or {}).get("$description") or k)[:1000]})
+    tokens = {"name": name, "version": 1, "meta": {"source": "OpenDesigner engine.py export --format artifact"},
+              "color": {"themes": [{"id": th, "name": th.title()} for th in themes], "tokens": colors},
+              "type": {"fonts": [], "families": fam, "groups": [{"name": "Text", "family": "text", "styles": styles}]},
+              "spacing": {"tokens": space}, "radius": {"tokens": radius}}
+    if shadows:
+        tokens["shadow"] = {"tokens": shadows}
+    # README: DESIGN.md without its front matter and title (the artifact page shows the name), plus the assets to upload
+    md_path = os.path.join(os.path.dirname(os.path.abspath(d)), "DESIGN.md")
+    md = ""
+    if os.path.exists(md_path):
+        with open(md_path, encoding="utf-8") as f:
+            md = f.read()
+    md = re.sub(r"\A---\n.*?\n---\n", "", md, flags=re.S).lstrip()
+    md = re.sub(r"\A# [^\n]*\n+", "", md)
+    logos = [f for f in ((state.get("hooks") or {}).get("H-logo") or {}).get("files") or []]
+    if logos:
+        md += "\n\n## Logo files\n\nUpload these as assets in the Logos group when you publish: " + ", ".join(f"`{f}`" for f in logos) + ".\n"
+    files_out = {"project/tokens.json": json.dumps(tokens, indent=1, ensure_ascii=False) + "\n", "project/README.md": md[:190000]}
+    # cover (the type's brief: colour blocks, one pattern from the radius tokens, the name; top-band skeleton fits any name)
+    rad = [r["value"] for r in radius][:5] or ["0px", "4px", "8px", "16px", "9999px"]
+    tiles = "".join(f'<rect class="b-on" x="{24 + i * 72}" y="36" width="48" height="48" rx="{min(24, int(float(re.sub("[^0-9.]", "", v) or 0)))}"/>'
+                    for i, v in enumerate(rad))
+    files_out["project/components/Cover/preview.html"] = (
+        '<!-- @dsCard height=300 -->\n<!doctype html>\n<html>\n<head><meta charset="utf-8"><title>Cover</title>\n<style>\n'
+        'html,body{margin:0;background:var(--surface)}\n.cv{position:relative;width:960px;height:300px;background:var(--surface);font-family:var(--font-text)}\n'
+        '.cv svg{position:absolute;left:0;top:0} .b-accent{fill:var(--accent)} .b-ink{fill:var(--ink)} .b-soft{fill:var(--accent-soft)} '
+        '.b-sunk{fill:var(--surface-sunken)} .b-on{fill:var(--on-accent)}\n'
+        '.name{position:absolute;left:48px;top:168px;margin:0;font-size:64px;line-height:60px;font-weight:400;letter-spacing:-0.025em;color:var(--ink)}\n'
+        '.tag{position:absolute;left:50px;top:244px;margin:0;font-size:14px;line-height:20px;color:var(--ink-muted);max-width:440px}\n</style></head>\n<body>\n<div class="cv">\n'
+        '<!--\nblocks: accent, ink, accent-soft, surface-sunken as one strip of unequal bands, 120px tall\narrangement: top band, flush, bleeding off the right edge\n'
+        'pattern: the radius tokens as tiles, square to round, on the accent block\nsteps and radii: the radius tokens in order\n-->\n'
+        '<svg width="960" height="128" viewBox="0 0 960 128" aria-hidden="true"><rect class="b-accent" x="0" y="0" width="384" height="120"/>'
+        '<rect class="b-ink" x="384" y="0" width="96" height="120"/><rect class="b-soft" x="480" y="0" width="192" height="120"/>'
+        f'<rect class="b-sunk" x="672" y="0" width="288" height="120"/>{tiles}</svg>\n'
+        f'<p class="name">{_esc(name)}</p>\n<p class="tag">{_esc(product_words(state) or "A design system made with OpenDesigner.")}</p>\n</div>\n</body>\n</html>\n')
+    files_out["project/components/Button/preview.html"] = (
+        '<!-- @dsCard group="Actions" height=96 subtitle="Primary and secondary, with focus and disabled" -->\n<!doctype html>\n<html>\n<head><meta charset="utf-8"><title>Button</title>\n<style>\n'
+        'html,body{margin:0;background:var(--surface)} .row{display:flex;gap:12px;align-items:center;padding:24px;font-family:var(--font-text)}\n'
+        f'.b{{font:inherit;font-size:16px;font-weight:500;min-height:44px;padding:0 16px;border-radius:var(--radius-control, 6px);border:1px solid transparent;cursor:pointer}}\n'
+        '.p{background:var(--accent);color:var(--on-accent)} .p:hover{background:var(--accent-hover)} .s{background:transparent;color:var(--ink);border-color:var(--line-strong)}\n'
+        '.b:focus-visible,.f{outline:2px solid var(--focus-ring);outline-offset:2px} .b[disabled]{opacity:.45;cursor:not-allowed}\n</style></head>\n<body>\n'
+        '<div class="row"><button class="b p">Save changes</button><button class="b s">Cancel</button><button class="b p f">Focused</button>'
+        '<button class="b p" disabled>Disabled</button></div>\n</body>\n</html>\n')
+    files_out["project/components/Button/README.md"] = ("# Button\n\nThe primary action uses `accent` with `on-accent`; the secondary is outlined in `line-strong`. "
+                                                       "At least 44 px tall. Focus is a 2 px `focus-ring` with a 2 px gap. One primary per screen.\n")
+    # the index: keep the first creation time so repeated builds do not churn it
+    idx_path = os.path.join(d, "build", "artifact", "project", "design-system.json")
+    created = None
+    if os.path.exists(idx_path):
+        try:
+            created = (read_json(idx_path) or {}).get("createdOnFiles")
+        except ValueError:
+            created = None
+    now = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    index = {"v": 3, "layout": "files", "createdOnFiles": created or {"v": 1, "at": now}, "title": name,
+             "namespace": re.sub(r"[^A-Za-z0-9]", "", name.title()) or "DesignSystem", "libraries": [], "sections": {}, "groups": [],
+             "assetGroups": {}, "blobs": {}, "docs": {"readme": "project/README.md", "sections": []},
+             "lastChange": {"by": "OpenDesigner", "at": now, "via": "engine.py export --format artifact", "note": "Rebuilt from the system's tokens"}}
+    files_out["project/design-system.json"] = json.dumps(index, indent=1, ensure_ascii=False) + "\n"
+    return files_out
+
+
 def cmd_export(d, fmt, files=None, meta=None, quiet=False):
     state = merge_defaults(load_state(d))
     if files is None:
         files, meta, _ = generate_system(load_state(d))
     prefix = slug(meta.get("prefix") or state["exports"].get("prefix") or "ds").replace("-", "")
-    formats = ["css", "tailwind", "figma", "paper", "swift", "compose", "dtcg"] if fmt == "all" else [fmt]
+    formats = ["css", "tailwind", "figma", "paper", "swift", "compose", "dtcg", "artifact"] if fmt == "all" else [fmt]
     written = []
     for f in formats:
         if f == "css":
@@ -7458,8 +7597,13 @@ def cmd_export(d, fmt, files=None, meta=None, quiet=False):
             bundle, _flats = export_dtcg(files, meta)
             p = os.path.join(d, "build", "dtcg", f"{slug(meta.get('name') or 'design-system')}.resolver.json")
             dump_json(p, bundle, compact=True)
+        elif f == "artifact":
+            out = export_artifact(d, files, meta, state, prefix)
+            for rel, text in out.items():
+                write_text(os.path.join(d, "build", "artifact", rel), text)
+            p = os.path.join(d, "build", "artifact", "project", "design-system.json")
         else:
-            raise SystemExit(f"unknown format {f}; use css, tailwind, figma, paper, swift, compose, dtcg or all")
+            raise SystemExit(f"unknown format {f}; use css, tailwind, figma, paper, swift, compose, dtcg, artifact or all")
         written.append(p)
     if not quiet:
         for p in written:
@@ -8711,6 +8855,402 @@ def cmd_preview(d, open_=False, files=None, meta=None, quiet=False):
 
 
 # =============================================================================================
+# Overview: the person's own design-system page (overview.html), rebuilt on every build so it grows with the system.
+# What is decided shows as it is; what is a default says so; what needs a person (a logo, a voice guide, a product
+# sentence) shows as "Not enough information" with the question that fills it. Templates are filled with their values.
+# =============================================================================================
+
+OVERVIEW_TEMPLATES = ["palette", "type-scale", "spacing-ruler", "radius", "elevation", "motion", "component-sheet"]
+OVERVIEW_STATUS = {  # status -> (label, plain meaning)
+    "chosen": ("Chosen", "You decided this."),
+    "picked": ("Picked for you", "The AI picked this when you said 'just pick'. Change it any time."),
+    "default": ("Default", "A sourced default. Nobody has looked at it with you yet."),
+    "missing": ("Not enough information", "This needs something only you can give."),
+}
+OVERVIEW_HEADINGS = [("Hero", "display", ("display.lg", "display.md", "display.sm")), ("h1", "page title", ("headline.lg",)),
+                     ("h2", "section", ("headline.md",)), ("h3", "sub-section", ("headline.sm",)), ("h4", "card title", ("title.lg",)),
+                     ("h5", "group title", ("title.md",)), ("h6", "smallest heading", ("title.sm",)), ("p", "body", ("body.md",)),
+                     ("small", "caption", ("body.sm",))]
+
+
+def _ov_area_status(decs, title):
+    rx = SECTION_PATHS.get(title)
+    sb = [v["set_by"] for k, v in decs.items() if rx and re.match(rx, k)]
+    if any(s in ("chosen", "confirmed_default", "reference", "asset") for s in sb):
+        return "chosen"
+    if any(s in ("delegated", "assumed") for s in sb):
+        return "picked"
+    return "default"
+
+
+def _ov_tag(status, extra=""):
+    label, why = OVERVIEW_STATUS[status]
+    return f'<span class="ov-tag ov-{status}" title="{_esc(why)}">{label}{_esc(extra)}</span>'
+
+
+def _ov_md(text):
+    """The few markdown marks DESIGN.md's summary uses: **bold**, `code`, '- ' bullets."""
+    out, items = [], []
+    for line in (text or "").splitlines():
+        h = _esc(line.strip())
+        h = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", h)
+        h = re.sub(r"`(.+?)`", r"<code>\1</code>", h)
+        if line.strip().startswith("- "):
+            items.append(f"<li>{h[2:]}</li>")
+            continue
+        if items:
+            out.append("<ul>" + "".join(items) + "</ul>")
+            items = []
+        if h:
+            out.append(f"<p>{h}</p>")
+    if items:
+        out.append("<ul>" + "".join(items) + "</ul>")
+    return "".join(out)
+
+
+def _ov_dated_log(d):
+    """(date, id, path, set_by) for every decision, from decisions.md."""
+    fp = os.path.join(d, "decisions.md")
+    if not os.path.exists(fp):
+        return []
+    with open(fp, encoding="utf-8") as f:
+        text = f.read()
+    return [(m.group(4), m.group(1), m.group(2).partition(" = ")[0].strip(), m.group(3))
+            for m in re.finditer(r"^## (D-\d+) · (.*?)\n- set_by: (\S+) · locked: \S+ · date: (\S+)", text, flags=re.M)]
+
+
+def _ov_font_link(state, meta, d="."):
+    """No network: an @font-face for each brand font file the person recorded (hook H-type), relative to overview.html.
+    Without files the page uses the face if it is installed, and says so when it is not (see the script below)."""
+    rules = []
+    faces = font_faces(state.get("raw") or {})
+    name = next((f.get("face") for f in faces.values() if isinstance(f.get("face"), str) and not _generic_face(f.get("face"))
+                 and f.get("face") != "=textFace"), None)
+    for f in ((state.get("hooks") or {}).get("H-type") or {}).get("files") or []:
+        m = re.search(r"\.(woff2|woff|ttf|otf)$", str(f), re.I)
+        if not (m and name):
+            continue
+        path = f if os.path.isabs(f) else os.path.join(os.path.dirname(os.path.abspath(d)), f)
+        if os.path.exists(path):
+            fmt = {"woff2": "woff2", "woff": "woff", "ttf": "truetype", "otf": "opentype"}[m.group(1).lower()]
+            rules.append(f'@font-face{{font-family:"{name}";src:url("{_esc(os.path.relpath(path, os.path.abspath(d)))}") format("{fmt}");font-weight:100 900}}')
+    return ("<style>" + "".join(rules) + "</style>") if rules else "", name
+
+
+def render_overview(d, files, meta, state):
+    prefix = slug(meta.get("prefix") or "ds").replace("-", "")
+    css = export_css(files, meta, prefix)
+    V = lambda p: f"var({css_var(prefix, p)})"
+    base = resolve_all(files, {})
+    res = files["opendesigner.resolver.json"]
+    themes = list((res.get("modifiers", {}).get("theme") or {}).get("contexts") or meta["modes"])
+    by_theme = {th: resolve_all(files, {"theme": th}) for th in themes}
+    hexv = lambda tree, p: (((tree.get(p) or {}).get("resolved") or {}).get("hex"))
+    decs = _decisions(d)
+    zoom = zoom_levels(d, state)
+    qs = questions()
+    ask = lambda qid: (qs.get(qid) or {}).get("ask") or qid
+    name = state.get("name") or "Your design system"
+    hooks = state.get("hooks") or {}
+    t = lambda p: f"font: var({css_var(prefix, p)}); letter-spacing: var({css_var(prefix, p)}-tracking);"
+    has = lambda p: p in base
+
+    # ---- counts for the status line
+    statuses = {title: _ov_area_status(decs, title) for _k, title in ZOOM_AREAS if title != "Overview"}
+    n_chosen = sum(1 for v in decs.values() if v["set_by"] in ("chosen", "confirmed_default", "reference", "asset"))
+    n_picked = sum(1 for v in decs.values() if v["set_by"] in ("delegated", "assumed"))
+    open_hooks = [h for h, v in hooks.items() if (v or {}).get("status", "pending") in ("pending", "unknown")]
+
+    def section(sid, title, status, body, note=""):
+        return (f'<section class="ov-sec" id="{sid}"><header class="ov-sh"><h2>{_esc(title)}</h2>{_ov_tag(status) if status else ""}</header>'
+                + (f'<p class="ov-note">{note}</p>' if note else "") + body + "</section>")
+
+    def missing(what, qid=None, how=None):
+        q = f'<span class="ov-q">{_esc(qid)}: {_esc(ask(qid))}</span>' if qid else ""
+        return (f'<div class="ov-missing">{_ov_tag("missing")}<p>{_esc(what)}</p>{q}'
+                + (f'<p class="ov-how">{_esc(how)}</p>' if how else "") + "</div>")
+
+    # ---- cover: color blocks cut from the system, the name, the logo if there is one
+    acc = hexv(base, "color.bg.action.primary") or "#444"
+    blocks = [hexv(base, p) for p in ("color.bg.action.primary", "color.text.primary", "color.bg.accent.subtle", "color.surface.sunken")]
+    logo = logo_src(state, d)
+    what = product_words(state)
+    cover = (f'<div class="ov-cover"><div class="ov-blocks">'
+             + "".join(f'<i style="background:{b};flex:{w}"></i>' for b, w in zip(blocks, (4, 1, 2, 3)) if b)
+             + '</div><div class="ov-name">'
+             + (f'<img src="{_esc(logo)}" alt="{_esc(name)} logo" class="ov-logo">' if logo else "")
+             + f'<h1>{_esc(name)}</h1>'
+             + (f'<p class="ov-lede">{_esc(what)}</p>' if what else
+                f'<p class="ov-lede ov-dim">What it is for is not recorded yet. {_ov_tag("missing")}</p>')
+             + f'<p class="ov-meta">{n_chosen} decisions you made · {n_picked} picked for you · everything else a sourced default · '
+               f'{len(hooks) - len(open_hooks)} of {len(hooks)} brand assets provided · built {_dt.date.today().isoformat()}</p>'
+             + "</div></div>")
+
+    # ---- how complete: one row per area
+    rows = []
+    for key, title in ZOOM_AREAS:
+        if key == "overview":
+            continue
+        z = zoom[key]
+        nxt = "; ".join(f"{q} {ask(q)}" for q in z["next"][:1])
+        rows.append(f'<tr><td><a href="#{key}">{_esc(title)}</a></td><td>{_ov_tag(statuses[title])}</td>'
+                    f'<td>{z["level"]}</td><td class="ov-dim">{_esc(nxt) or "nothing left at this level"}</td></tr>')
+    progress = ('<table class="ov-table"><thead><tr><th>Area</th><th>Status</th><th>Zoom</th><th>Next question</th></tr></thead>'
+                f'<tbody>{"".join(rows)}</tbody></table>')
+
+    # ---- brand book: DESIGN.md's summary, voice
+    summary = _ov_md(render_summary(d, state, meta, zoom))
+    voice = hooks.get("H-voice") or {}
+    brand = f'<div class="ov-prose">{summary}</div>'
+    if voice.get("status", "pending") in ("pending", "unknown"):
+        brand += missing("Voice and tone: how your product talks.", "Q-voice-01",
+                         "Give 3 or 4 traits in the form 'X, but not Y', or a voice guide.")
+
+    # ---- color: semantic roles per theme, with contrast on the base surface
+    groups = [("Text", ["color.text.primary", "color.text.secondary", "color.text.tertiary", "color.text.link", "color.text.accent"]),
+              ("Surfaces", ["color.surface.base", "color.surface.raised", "color.surface.sunken", "color.bg.accent.subtle"]),
+              ("Action", ["color.bg.action.primary", "color.text.on-action", "color.border.focus", "color.border.default"]),
+              ("Status", ["color.text.danger", "color.text.success", "color.text.warning", "color.text.info"])]
+    th_cols = []
+    for th in themes:
+        tree = by_theme[th]
+        surf = hexv(tree, "color.surface.base") or "#ffffff"
+        cells = []
+        for gname, paths in groups:
+            items = []
+            for p in paths:
+                hx = hexv(tree, p)
+                if not hx:
+                    continue
+                cr = contrast(hx, surf) if p.startswith(("color.text", "color.border")) else None
+                items.append(f'<div class="ov-sw"><i style="background:{hx}"></i><span><b>{_esc(p[6:])}</b>{hx}'
+                             + (f' · {cr:.1f}:1' if cr else "") + "</span></div>")
+            cells.append(f'<div><h4>{gname}</h4>{"".join(items)}</div>')
+        th_cols.append(f'<div class="ov-theme" data-theme="{th}"><h3>{_esc(th.title())}</h3><div class="ov-roles">{"".join(cells)}</div></div>')
+    color = f'<div class="ov-themes">{"".join(th_cols)}</div>'
+    if (hooks.get("H-color") or {}).get("status", "pending") in ("pending", "unknown") and not (state.get("raw") or {}).get("brandColor"):
+        color += missing("Your exact brand colors, if you have them.", "Q-color-01")
+
+    # ---- type: faces, the heading map, every style
+    faces = font_faces(state.get("raw") or {})
+    face_rows = "".join(f'<tr><td>{role}</td><td>{_esc(f.get("face") if f.get("face") != "=textFace" else "same as text")}</td>'
+                        f'<td>{"open licence" if f.get("open") else (f.get("note") or "licence not recorded")}</td></tr>'
+                        for role, f in faces.items())
+    type_status = statuses["Typography"]
+    fam_note = ""
+    if all((f.get("face") in (None, "system", "=textFace") or _generic_face(f.get("face"))) for f in faces.values()):
+        fam_note = missing("A typeface. The system font works, but it says nothing about the brand.", "Q-type-01")
+    head_rows = []
+    for tag, role, cands in OVERVIEW_HEADINGS:
+        p = next((f"text.{c}" for c in cands if has(f"text.{c}")), None)
+        if not p:
+            continue
+        r = base[p]["resolved"]
+        size = (r.get("fontSize") or {}).get("value")
+        head_rows.append(f'<div class="ov-hrow"><span class="ov-dim">{tag} · {role}<br>{p[5:]} · {size}px · {r.get("fontWeight")}</span>'
+                         f'<span style="{t(p)}" class="ov-sample">{_esc(name if tag in ("Hero", "h1") else "The quick system builds itself")}</span></div>')
+    styles = []
+    for p in sorted((k for k in base if k.startswith("text.")), key=lambda k: -(((base[k].get("resolved") or {}).get("fontSize") or {}).get("value") or 0)):
+        ext = ((base[p].get("$extensions") or {}).get("opendesigner") or {})
+        r = base[p]["resolved"]
+        styles.append(f'<tr><td><code>{p[5:]}</code></td><td>{(r.get("fontSize") or {}).get("value")} / {ext.get("lineHeightPx", "")}</td>'
+                      f'<td>{r.get("fontWeight")}</td><td>{ext.get("letterSpacingEm", 0)}em</td><td class="ov-dim">{_esc(ext.get("use", ""))}</td></tr>')
+    typ = (f'<table class="ov-table"><thead><tr><th>Role</th><th>Face</th><th>Licence</th></tr></thead><tbody>{face_rows}</tbody></table>'
+           + fam_note + f'<h3>Headings</h3><div class="ov-heads">{"".join(head_rows)}</div>'
+           + f'<details><summary>All {len(styles)} text styles</summary><table class="ov-table"><thead><tr><th>Style</th><th>Size / line</th>'
+             f'<th>Weight</th><th>Tracking</th><th>Use for</th></tr></thead><tbody>{"".join(styles)}</tbody></table></details>')
+
+    # ---- space, shape, depth, motion
+    sp = sorted({int(v) for v in meta["space"].get("scale", []) if isinstance(v, (int, float)) and v > 0})[:12] if isinstance(meta["space"].get("scale"), list) else []
+    if not sp:
+        sp = sorted({int(((base[k].get("resolved") or {}).get("value") or 0)) for k in base if re.match(r"^space\.\d+$", k)} - {0})[:12]
+    space = '<div class="ov-ruler">' + "".join(f'<div><i style="width:{s}px;height:{s}px"></i><span>{s}</span></div>' for s in sp) + "</div>"
+    radii = [k for k in ("radius.detail", "radius.control-sm", "radius.control", "radius.container", "radius.overlay", "radius.person") if has(k)]
+    shape = '<div class="ov-radii">' + "".join(f'<div><i style="border-radius:{V(k)}"></i><span>{k[7:]}</span></div>' for k in radii) + "</div>"
+    elev = [k for k in ("elevation.raised", "elevation.floating", "elevation.overlay") if has(k)]
+    depth = '<div class="ov-elev">' + "".join(f'<div style="box-shadow:{V(k)}">{k[10:]}</div>' for k in elev) + "</div>"
+    durs = [k for k in base if re.match(r"^motion\.duration\.[a-z-]+$", k)]
+    motion = ('<div class="ov-motion"><div class="ov-lane"><i></i></div><p class="ov-dim">Hover the lane: the standard easing at the medium '
+              'duration. Reduced motion turns it off.</p><p class="ov-dim">' + " · ".join(f'{k[16:]} {_esc(((base[k].get("resolved") or {}).get("value")))}'
+                                                                                       f'{_esc(((base[k].get("resolved") or {}).get("unit") or ""))}' for k in durs) + "</p></div>")
+
+    # ---- components: the core set in their states, plus the inventory
+    inv = ((state.get("components") or {}).get("inventory")) or []
+    comp_status = statuses["Components"]
+    comps = (f'<div class="ov-comps"><button class="ov-btn primary">Save changes</button><button class="ov-btn secondary">Cancel</button>'
+             f'<button class="ov-btn primary is-focus">Focused</button><button class="ov-btn primary" disabled>Disabled</button>'
+             f'<label class="ov-field"><span>Email</span><input class="ov-input" placeholder="you@example.com"></label>'
+             f'<div class="ov-card"><b>Card title</b><span class="ov-dim">Raised surface, container radius, the raised shadow.</span></div></div>'
+             + (f'<p class="ov-note">Planned components ({len(inv)}): {_esc(", ".join(inv))}.</p>' if inv else
+                missing("Which components the product needs.", "Q-comp-02")))
+
+    # ---- assets: every designer hook, provided or not
+    cards = []
+    for hid, hname, qid in hook_catalog():
+        rec = hooks.get(hid) or {}
+        st = rec.get("status", "pending")
+        files_ = rec.get("files") or []
+        if st in ("pending", "unknown"):
+            cards.append(f'<div class="ov-asset ov-asset-missing"><b>{_esc(hname)}</b>{_ov_tag("missing")}'
+                         f'<span class="ov-q">{_esc(qid or "")} {_esc(ask(qid) if qid else "")}</span></div>')
+        else:
+            imgs = "".join(f'<img src="{_esc(os.path.relpath(f if os.path.isabs(f) else os.path.join(os.path.dirname(os.path.abspath(d)), f), os.path.abspath(d)))}" alt="">'
+                           for f in files_ if re.search(r"\.(svg|png|jpe?g|webp|gif)$", str(f), re.I))
+            word = {"have": "Provided", "commissioning": "Being made", "tool": "Made with a tool", "open-library": "From an open library",
+                    "placeholder": "Placeholder for now", "not-needed": "Not needed"}.get(st, st.title())
+            cards.append(f'<div class="ov-asset"><b>{_esc(hname)}</b><span class="ov-tag ov-chosen">{_esc(word)}</span>{imgs}'
+                         f'<span class="ov-dim">{_esc(rec.get("note") or ", ".join(os.path.basename(str(f)) for f in files_))}</span></div>')
+    assets = f'<div class="ov-assets">{"".join(cards)}</div>'
+
+    # ---- growth over time
+    log = _ov_dated_log(d)
+    days = {}
+    for date, _id, _p, sb in log:
+        days.setdefault(date, {"mine": 0, "other": 0})["mine" if sb in PERSON_SET_BY else "other"] += 1
+    mx = max([v["mine"] + v["other"] for v in days.values()] or [1])
+    timeline = ('<div class="ov-timeline">' + "".join(
+        f'<div title="{dt}: {v["mine"]} of yours, {v["other"]} from defaults and standards"><i style="height:{max(4, round(80 * (v["mine"] + v["other"]) / mx))}px">'
+        f'<em style="height:{round(100 * v["mine"] / max(1, v["mine"] + v["other"]))}%"></em></i><span>{dt[5:]}</span></div>' for dt, v in sorted(days.items()))
+        + "</div>")
+    recent = [e_ for e_ in log if e_[3] in PERSON_SET_BY][-8:][::-1]
+    timeline += ('<table class="ov-table"><thead><tr><th>Latest of your decisions</th><th>How</th><th>Date</th></tr></thead><tbody>'
+                 + "".join(f'<tr><td><code>{_esc(p)}</code></td><td>{_esc(sb.replace("_", " "))}</td><td>{dt}</td></tr>' for dt, _i, p, sb in recent)
+                 + "</tbody></table>")
+
+    # ---- templates filled with this system
+    tpl = "".join(f'<a class="ov-tpl" href="preview/{n}.html">{n.replace("-", " ")}</a>' for n in OVERVIEW_TEMPLATES
+                  if os.path.exists(os.path.join(d, "preview", f"{n}.html")))
+    tpl = (f'<div class="ov-tpls">{tpl}<a class="ov-tpl" href="preview.html">every token</a></div>' if tpl else
+           '<p class="ov-note">Run <code>engine.py build</code> to fill the visual templates with this system.</p>')
+
+    sections = [
+        section("brand", "Brand book", statuses["Content and Voice"] if voice.get("status") not in (None, "pending", "unknown") else "default", brand),
+        section("progress", "How complete it is", None, progress,
+                "Each area works at every zoom level. Zoom into an area by answering its next question."),
+        section("color", "Colors", statuses["Colors"], color, "Every text color shows its contrast on the theme's base surface."),
+        section("typography", "Typography", type_status, typ),
+        section("layout", "Spacing", statuses["Layout"], space),
+        section("shape", "Corners", statuses["Shapes"], shape),
+        section("elevation", "Depth", statuses["Elevation & Depth"], depth),
+        section("motion", "Motion", statuses["Motion"], motion),
+        section("components", "Components", comp_status, comps),
+        section("iconography", f"Brand assets · {len(hooks) - len(open_hooks)} of {len(hooks)} provided", "chosen" if not open_hooks else "missing", assets,
+                "The parts only a designer or the brand owner can make. The system never invents them."),
+        section("growth", "How it grew", None, timeline, "Each bar is a day. The filled part is decisions people made; the rest came from defaults and standards."),
+        section("templates", "Visual templates", None, tpl, "Each template shows your system, not sample data."),
+    ]
+    nav = "".join(f'<a href="#{sid}">{title}</a>' for sid, title in [("brand", "Brand"), ("progress", "Progress"), ("color", "Color"),
+                  ("typography", "Type"), ("layout", "Space"), ("components", "Components"), ("iconography", "Assets"), ("growth", "History")])
+    toggle = "".join(f'<button class="ov-th" data-set="{th}">{th.title()}</button>' for th in themes)
+    page_css = f"""
+*,*::before,*::after{{box-sizing:border-box}}
+body{{margin:0;background:{V('color.surface.base')};color:{V('color.text.primary')};{t('text.body.md')}}}
+.ov-wrap{{max-width:1120px;margin:0 auto;padding:0 20px 96px}}
+.ov-bar{{position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;padding:12px 0;background:{V('color.surface.base')};border-bottom:1px solid {V('color.border.subtle')}}}
+.ov-bar a{{color:{V('color.text.secondary')};text-decoration:none}} .ov-bar a:hover{{color:{V('color.text.primary')}}}
+.ov-bar span{{flex:1}} .ov-th{{font:inherit;background:none;border:1px solid {V('color.border.default')};color:{V('color.text.primary')};border-radius:{V('radius.control')};padding:4px 10px;cursor:pointer}}
+.ov-cover{{margin:32px 0 8px}} .ov-blocks{{display:flex;height:120px;border-radius:{V('radius.container')};overflow:hidden}} .ov-blocks i{{display:block}}
+.ov-name{{padding:28px 0 8px}} .ov-name h1{{margin:0;{t('text.display.sm') if has('text.display.sm') else t('text.headline.lg')}}}
+.ov-logo{{height:48px;width:auto;margin:0 0 16px;display:block}}
+.ov-lede{{margin:12px 0 0;max-width:62ch;{t('text.body.lg') if has('text.body.lg') else t('text.body.md')}color:{V('color.text.secondary')}}}
+.ov-meta{{margin:14px 0 0;{t('text.body.sm')}color:{V('color.text.tertiary')}}}
+.ov-sec{{margin:56px 0 0;padding:28px 0 0;border-top:1px solid {V('color.border.subtle')}}}
+.ov-sh{{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 12px}} .ov-sh h2{{margin:0;{t('text.headline.sm') if has('text.headline.sm') else t('text.title.lg')}}}
+h3{{margin:24px 0 10px;{t('text.title.md') if has('text.title.md') else t('text.title.sm')}}} h4{{margin:0 0 8px;{t('text.label.lg') if has('text.label.lg') else t('text.body.md')}color:{V('color.text.secondary')}}}
+.ov-note{{margin:0 0 16px;max-width:70ch;color:{V('color.text.secondary')}}} .ov-dim{{color:{V('color.text.tertiary')}}}
+.ov-tag{{display:inline-flex;align-items:center;gap:6px;{t('text.label.sm') if has('text.label.sm') else t('text.body.sm')}padding:3px 9px;border-radius:999px;white-space:nowrap;border:1px solid transparent}}
+.ov-chosen{{background:{V('color.bg.accent.subtle')};color:{V('color.text.accent')}}}
+.ov-picked{{background:{V('color.bg.neutral.subtle')};color:{V('color.text.primary')}}}
+.ov-default{{background:transparent;color:{V('color.text.secondary')};border-color:{V('color.border.default')}}}
+.ov-missing{{background:transparent;color:{V('color.text.tertiary')};border:1px dashed {V('color.border.default')}}}
+div.ov-missing{{display:block;border-radius:{V('radius.container')};padding:16px 18px;margin:12px 0}} div.ov-missing p{{margin:8px 0 0;color:{V('color.text.secondary')}}}
+.ov-q{{display:block;margin-top:6px;{t('text.body.sm')}color:{V('color.text.tertiary')}}} .ov-how{{{t('text.body.sm')}}}
+.ov-prose ul{{padding-left:20px}} .ov-prose li{{margin:4px 0}} code{{font-family:var({css_var(prefix, 'font.family.mono')});font-size:.92em}}
+.ov-table{{width:100%;border-collapse:collapse;margin:8px 0}} .ov-table th{{text-align:left;{t('text.label.md') if has('text.label.md') else t('text.body.sm')}color:{V('color.text.secondary')};padding:8px 10px;border-bottom:1px solid {V('color.border.default')}}}
+.ov-table td{{padding:8px 10px;border-bottom:1px solid {V('color.border.subtle')};vertical-align:top}} .ov-table a{{color:{V('color.text.link')}}}
+.ov-themes{{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px}}
+.ov-theme{{background:{V('color.surface.base')};color:{V('color.text.primary')};border:1px solid {V('color.border.subtle')};border-radius:{V('radius.container')};padding:18px}}
+.ov-theme h3{{margin:0 0 12px}} .ov-roles{{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}}
+.ov-sw{{display:flex;gap:10px;align-items:center;margin:0 0 8px;{t('text.body.sm')}}} .ov-sw i{{width:32px;height:32px;border-radius:6px;flex:none;border:1px solid {V('color.border.subtle')}}}
+.ov-sw b{{display:block;font-weight:500;color:{V('color.text.primary')}}} .ov-sw span{{color:{V('color.text.secondary')};min-width:0;overflow-wrap:anywhere}}
+.ov-heads{{display:grid;gap:14px}} .ov-hrow{{display:grid;grid-template-columns:200px 1fr;gap:16px;align-items:baseline}} .ov-hrow>span:first-child{{{t('text.body.sm')}}}
+.ov-sample{{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+@media (max-width:640px){{.ov-hrow{{grid-template-columns:1fr}}}}
+details summary{{cursor:pointer;color:{V('color.text.secondary')};margin:16px 0 8px}}
+.ov-ruler{{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}} .ov-ruler div{{display:grid;justify-items:center;gap:6px;{t('text.body.sm')}color:{V('color.text.tertiary')}}}
+.ov-ruler i{{display:block;background:{V('color.bg.action.primary')};opacity:.85;border-radius:2px}}
+.ov-radii{{display:flex;gap:16px;flex-wrap:wrap}} .ov-radii div{{display:grid;gap:6px;justify-items:center;{t('text.body.sm')}color:{V('color.text.tertiary')}}}
+.ov-radii i{{width:72px;height:72px;border:2px solid {V('color.text.primary')}}}
+.ov-elev{{display:flex;gap:20px;flex-wrap:wrap;padding:12px 0}} .ov-elev div{{width:180px;height:96px;display:grid;place-items:center;background:{V('color.surface.raised')};border-radius:{V('radius.container')};color:{V('color.text.secondary')}}}
+.ov-lane{{position:relative;height:48px;background:{V('color.surface.sunken')};border-radius:{V('radius.container')};container-type:inline-size}}
+.ov-lane i{{position:absolute;left:6px;top:6px;width:36px;height:36px;border-radius:{V('radius.control')};background:{V('color.bg.action.primary')};transition:transform {V('motion.duration.medium')} {V('motion.easing.standard')}}}
+.ov-lane:hover i{{transform:translateX(calc(100cqw - 48px))}}
+@media (prefers-reduced-motion: reduce){{.ov-lane i{{transition:none}} .ov-lane:hover i{{transform:none}}}}
+.ov-comps{{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin:8px 0 16px}}
+.ov-btn{{{t('text.label.lg') if has('text.label.lg') else t('text.body.md')}height:{V('size.control.md')};padding:0 {V('space.inset.lg')};border-radius:{V('radius.control')};border:1px solid transparent;cursor:pointer}}
+.ov-btn.primary{{background:{V('color.bg.action.primary')};color:{V('color.text.on-action')}}} .ov-btn.primary:hover{{background:{V('color.bg.action.primary-hover')}}}
+.ov-btn.secondary{{background:transparent;color:{V('color.text.primary')};border-color:{V('color.border.default')}}}
+.ov-btn.is-focus,.ov-btn:focus-visible,.ov-input:focus-visible,.ov-th:focus-visible{{outline:{V('focus.ring.width')} solid {V('color.border.focus')};outline-offset:{V('focus.ring.offset')}}}
+.ov-btn[disabled]{{background:{V('color.bg.disabled')};color:{V('color.text.disabled')};cursor:not-allowed}}
+.ov-field{{display:grid;gap:6px;{t('text.body.sm')}color:{V('color.text.secondary')}}}
+.ov-input{{{t('text.body.md')}height:{V('size.control.md')};padding:0 {V('space.inset.md')};border-radius:{V('radius.control')};border:1px solid {V('color.border.input')};background:{V('color.surface.raised')};color:{V('color.text.primary')}}}
+.ov-card{{display:grid;gap:4px;max-width:280px;padding:{V('space.inset.xl')};background:{V('color.surface.raised')};border:1px solid {V('color.border.subtle')};border-radius:{V('radius.container')};box-shadow:{V('elevation.raised')}}}
+.ov-assets{{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}}
+.ov-asset{{display:grid;gap:8px;align-content:start;padding:16px;border-radius:{V('radius.container')};border:1px solid {V('color.border.subtle')};background:{V('color.surface.raised')}}}
+.ov-asset{{min-width:0}} .ov-asset img{{width:100%;height:56px;object-fit:contain;object-position:left center}} .ov-asset .ov-tag{{justify-self:start}}
+.ov-asset-missing{{background:transparent;border-style:dashed;border-color:{V('color.border.default')}}} .ov-asset-missing b{{color:{V('color.text.secondary')};font-weight:500}}
+.ov-timeline{{display:flex;align-items:flex-end;gap:8px;height:110px;overflow-x:auto;padding:0 0 4px}}
+.ov-timeline div{{display:grid;justify-items:center;gap:4px;{t('text.body.sm')}color:{V('color.text.tertiary')}}}
+.ov-timeline i{{display:flex;flex-direction:column-reverse;width:22px;background:{V('color.bg.neutral.subtle')};border-radius:3px;overflow:hidden}}
+.ov-timeline em{{display:block;background:{V('color.bg.action.primary')}}}
+.ov-tpls{{display:flex;flex-wrap:wrap;gap:10px}} .ov-tpl{{padding:10px 14px;border-radius:{V('radius.control')};border:1px solid {V('color.border.default')};color:{V('color.text.primary')};text-decoration:none}}
+.ov-tpl:hover{{border-color:{V('color.border.strong') if has('color.border.strong') else V('color.text.primary')}}}
+"""
+    font_css, face = _ov_font_link(state, meta, d)
+    font_note = ""
+    if face:  # say so when the brand face is not on this computer, instead of quietly showing a fallback
+        font_note = ('<p id="ov-font" class="ov-note" hidden>' + _esc(face) + " is not installed on this computer, so this page shows a "
+                     "fallback font. Install it, or record its font files with the H-type asset, to see the real type.</p>")
+    script = ("<script>(function(){var r=document.documentElement;document.querySelectorAll('.ov-th').forEach(function(b){"
+              "b.addEventListener('click',function(){r.setAttribute('data-theme',b.dataset.set);"
+              "try{localStorage.setItem('od-overview-theme',b.dataset.set)}catch(e){}})});"
+              "try{var s=localStorage.getItem('od-overview-theme');if(s)r.setAttribute('data-theme',s)}catch(e){}"
+              + ("var n=document.getElementById('ov-font');function w(f){var c=document.createElement('canvas').getContext('2d');"
+                 "c.font='40px '+f;return c.measureText('mmmmmmmmmmlli WQ@#').width}"
+                 "var go=function(){if(n&&w('\"" + _esc(face).replace("'", "") + "\", monospace')===w('monospace'))n.hidden=false};"
+                 "(document.fonts&&document.fonts.ready?document.fonts.ready.then(go):go());" if face else "")
+              + "})();</script>")
+    return (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+            f'<title>{_esc(name)} design system</title>{font_css}'
+            f'<!-- Written by OpenDesigner engine.py build: your system as it stands today. Edit the system, not this file. -->'
+            f'<style>{css}\n{page_css}</style></head><body><div class="ov-wrap">'
+            f'<nav class="ov-bar" aria-label="Sections"><b>{_esc(name)}</b>{nav}<span></span>{toggle}</nav>'
+            f'{cover}{font_note}{"".join(sections)}</div>{script}</body></html>')
+
+
+def cmd_overview(d, open_=False, files=None, meta=None, quiet=False, templates=True):
+    state = merge_defaults(load_state(d))
+    if files is None:
+        files, meta, _ = generate_system(load_state(d))
+    if templates:  # fill every visual template with this system, so the person never sees sample data
+        import contextlib
+        import io
+        with contextlib.redirect_stdout(io.StringIO()):
+            for n in OVERVIEW_TEMPLATES:
+                try:
+                    cmd_show(d, n)
+                except SystemExit:
+                    pass
+    path = os.path.join(d, "overview.html")
+    write_text(path, render_overview(d, files, meta, state))
+    if not quiet:
+        print(f"wrote {path}")
+    if open_:
+        webbrowser.open("file://" + os.path.abspath(path))
+    return path
+
+
+# =============================================================================================
 # Intake: reference measurements -> proposed dials and raw inputs (LEVERS E, spec 5)
 # =============================================================================================
 
@@ -8994,8 +9534,9 @@ def cmd_build(d, force=False):
     cmd_export(d, "all", files, meta, quiet=True)
     cmd_design_md(d, files=files, meta=meta, quiet=True)
     cmd_preview(d, files=files, meta=meta, quiet=True)
+    cmd_overview(d, files=files, meta=meta, quiet=True)
     track(d, "export", kind="all")
-    print(f"built {d}: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg), DESIGN.md, PRODUCT.md, preview.html"
+    print(f"built {d}: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg, artifact), DESIGN.md, PRODUCT.md, preview.html, overview.html"
           + (" (exported with errors because of --force)" if errors else ""))
     print_report(rep, d)
     return 1 if errors else 0
@@ -9045,10 +9586,12 @@ def main(argv=None):
     p = sub.add_parser("validate", parents=[common])
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("export", parents=[common])
-    p.add_argument("--format", required=True, choices=["css", "tailwind", "figma", "paper", "swift", "compose", "dtcg", "all"])
+    p.add_argument("--format", required=True, choices=["css", "tailwind", "figma", "paper", "swift", "compose", "dtcg", "artifact", "all"])
     p = sub.add_parser("design-md", parents=[common], help="render DESIGN.md and PRODUCT.md")
     p.add_argument("--out", default=None, help="folder for DESIGN.md and PRODUCT.md (default: project root, or the state folder)")
     p = sub.add_parser("preview", parents=[common])
+    p.add_argument("--open", action="store_true")
+    p = sub.add_parser("overview", parents=[common], help="overview.html: the whole system on one page, with what is still missing")
     p.add_argument("--open", action="store_true")
     p = sub.add_parser("intake", parents=[common], help="fit reference measurements to proposed dials and inputs")
     p.add_argument("file")
@@ -9161,6 +9704,8 @@ def main(argv=None):
         cmd_design_md(d, a.out)
     elif a.cmd == "preview":
         cmd_preview(d, a.open)
+    elif a.cmd == "overview":
+        cmd_overview(d, a.open)
     elif a.cmd == "intake":
         cmd_intake(d, a.file, a.accept, a.json)
     elif a.cmd == "build":

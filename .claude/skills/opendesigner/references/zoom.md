@@ -55,10 +55,10 @@ Then send the first result (below), and make the offer.
 ## The first result
 Show what they got, not how it was made. Send one message:
 1. **One plain line on what they got, in their words.** For example: "Robotics Club now has its colors, text and spacing, in your logo blue, with a fun feel."
-2. **The visual,** on the best surface the host has (SKILL.md, visual ladder). Lead with the preview (`engine.py preview --open`).
+2. **The visual,** on the best surface the host has (SKILL.md, visual ladder). Lead with the overview (`engine.py overview --open`): their system on one page, with what is still missing marked as such.
 3. **What you guessed,** in one line: answers you took from their words, and anything the engine changed. For example: "I guessed people visit now and then, mostly on phones. Say if that's wrong."
 4. **One clear next step,** the single most useful thing to do now:
-   - Plain voice: "Look at the preview and tell me anything that feels off."
+   - Plain voice: "Look at the overview and tell me anything that feels off."
    - Engineer voice: the exact file and how to wire it in. For Tailwind v4, two lines in the main CSS file: `@import "tailwindcss";` then `@import "<path to>/opendesigner/build/tailwind/theme.css";`. For plain CSS, import `opendesigner/build/css/tokens.css` once. The opendesigner-export skill lists every file.
    - Designer voice: the one or two defaults most worth a look, such as the body text size. Say where DESIGN.md explains them.
 5. **The offer** (below).

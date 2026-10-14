@@ -71,7 +71,7 @@ Files in your project that any person or AI tool can read:
 - **Code you can use right away:** CSS variables, a Tailwind theme, and Swift and Jetpack Compose files.
 - **Figma variables and Paper tokens,** so your design tool matches your code.
 - **A decision log:** every choice with its reason, so your team and the next AI session don't undo it.
-- **A preview page** that shows every color, size and core component.
+- **An overview page** of your whole system that grows with every decision and marks what is still missing, plus a preview page with every color, size and core component.
 
 ## How it works
 
