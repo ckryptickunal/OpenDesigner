@@ -1,0 +1,93 @@
+# Silly mistakes, and how to catch them
+
+Every entry is a mistake that really happened. Most come from the first OpenDesigner explainer video (October 2026). It passed every automated check and still looked cheap. Each entry gives what it looked like, why it happens, and the catch.
+
+## System
+
+**M1. No design system for the artifact.** The video copied the look of one social-preview image and invented every other value as it went. *Why:* a video or deck feels like "not a product", so nobody thinks to run the design-system step. *Catch:* before building anything visual, ask "which system is this built on?" If the answer is "none" or "that screenshot", make one first.
+
+**M2. Values outside the system.** The video had 27 font sizes, random radii and hand-picked easing. *Why:* without tokens, every scene is decided locally. *Catch:* list the values in the source and count the ones that are not tokens or a written mapping of tokens.
+
+**M3. No reference research.** The look was built from memory of "premium", which comes out as the average of everything, and that is AI slop. *Why:* researching feels slower than building. *Catch:* look at 5 to 10 real, shipped references first and write down what the best ones do (for example: real product UI in window chrome, lighter display weights, a lot of empty space, one accent).
+
+## Type
+
+**M4. Clipped descenders.** The "g" and "p" in "OpenDesigner" were cut flat by the mask used for the reveal. *Why:* a word-reveal mask with `overflow: hidden` is sized to the line box, and the line box is shorter than the descender. *Catch:* give masks about 0.24em of bottom padding (with an equal negative margin) and crop the resting frame at 200%.
+
+**M5. Shouting type.** Weight 800 with -0.045em to -0.06em tracking made letters touch and word spaces vanish ("how it" read as "howit"). The system said weight 650 and -0.02em. *Why:* tight black type looks "designed" in a thumbnail. *Catch:* use the system's display weight and tracking, and check word spaces at 200%.
+
+**M6. No type scale.** Sizes like 150, 168, 170, 200, 220 and 230 px were used side by side. *Catch:* pull every computed size. If there are more than about 8, or two sit within 10% of each other, snap them to the scale.
+
+**M7. Widows and broken phrases.** "It lives inside the AI you already" left "use." alone on the next line. Card titles left "drift" alone. *Catch:* `text-wrap: balance` on headings and card titles, then reread every wrapped line.
+
+**M8. Labels too small for the screen they are watched on.** Mono labels at 18 to 26 px became 4 to 6 px on a phone. *Why:* the author looks at a 27-inch monitor. *Catch:* shrink frames to 390 px wide and read them. On a 1920 px wide video frame, meaningful text is at least about 54 px (about 11 pt on the phone); the helper fails anything under 40 px. On screens the floors are 12 px on a web page (11 px only for short labels), 11 pt in a phone app and 12 pt on a watch (Apple HIG; Material's smallest style is 11).
+
+**M9. Fonts that never loaded.** A mono family was named but never declared, so the renderer silently used another face. *Catch:* every `font-family` has an `@font-face` that points to a shipped file, or comes from a font service link such as Google Fonts. The helper lists the ones that don't. In the browser, check that `document.fonts` shows each face as loaded, and for a render, wait for `document.fonts.ready` before the first frame.
+
+## Layout
+
+**M10. A grid nothing aligns to.** A 96 px background grid was drawn, and no content edge sat on it. *Catch:* if you draw a grid, snap to it. If you don't snap, don't draw it.
+
+**M11. Big empty areas.** A scene put four small cards in the middle of the frame and left the rest empty. *Catch:* on every hold, outline the content box. Unplanned empty space over about a quarter of the frame needs a reason.
+
+**M12. Slide-deck grammar.** Five scenes in a row were "headline, then N identical cards". *Catch:* list the scene shapes. Carry one object through the story instead of rebuilding the frame every time.
+
+**M13. Labels that wrap or overflow.** A status pill broke onto two lines. File paths ran past the panel edge. *Catch:* `white-space: nowrap` on pills and chips, measure the longest label, and shorten the text rather than the type size.
+
+## Motion
+
+**M14. Dead holds.** About 42% of the runtime was frozen frames. *Why:* scenes were timed by how long the text takes to read, with nothing moving while it is read. *Catch:* run the helper's freeze measure. Give holds a slow move, or cut them.
+
+**M15. Blank frames and remnants at cuts.** Exits ended before the next entrance began, so a few frames showed only the background. A word swap left the tail of the previous word showing. *Catch:* step through every cut at 0.05 s.
+
+**M16. One entrance for everything.** Every element rose 40 px and faded in. *Catch:* write the motion table, vary it on purpose, and keep one signature move.
+
+**M17. Motion that contradicts the words.** "Zoom in" was animated as a pull back. *Catch:* read the verb on screen, then watch which way things move.
+
+**M18. Layout tweens.** Animating `left`, `top`, `font-size` and `letter-spacing` snaps to whole pixels. *Catch:* move with `x`, `y` and `scale`.
+
+## Truth
+
+**M19. Labels that disagree with the drawing.** A "10-step ramp" was nine greys plus an orange. A "radius 0 to 32" panel animated to 50 px, a circle. *Catch:* count, measure, and compare with the label.
+
+**M20. Fake real output.** A card labelled DTCG showed JSON with no `$value` or `$type`, and with token names the engine never generates. *Catch:* paste the real file, or screenshot the real page. Never type up an imitation.
+
+**M21. Counts that drift after edits.** A label said "11 DTCG files" when the folder held 9 `.tokens.json` files. *Catch:* count with a command (`ls ... | wc -l`) right before the export, not from memory.
+
+**M22. A claim shown next to the wrong thing.** A panel showed "white text 4.64 : 1" (the light-theme button) next to a canvas showing the dark-theme button, which uses dark text. *Catch:* every measured claim names the pair it measures and sits next to that pair.
+
+**M23. Licence shorthand.** "MIT" on the end card, when the research and docs are CC BY 4.0. *Catch:* state what each licence covers, or say "free and open source".
+
+## Sound and words
+
+**M24. The voice read the directions.** A text-to-speech model spoke "Read this as the narrator of a premium product film..." before the line. *Why:* some TTS models treat any prompt text as script. *Catch:* transcribe every generated line and compare it with the script. Fix the prompt or the model, never the transcript.
+
+**M25. An explainer with no voice and no captions.** The brief said "explaining", and the first cut was silent. *Catch:* "explain" means a narrator, captions or both. For phone viewing, captions always.
+
+**M26. Repeated phrases.** "The AI you already use" appeared three times in 15 seconds. *Catch:* read all the on-screen text in order, out loud.
+
+## Process
+
+**M27. Treating "check passed" as "done".** The first video had 0 lint errors and 57/57 contrast passes, and looked cheap. *Catch:* automated checks are the floor. The full-size look and this list are the verdict.
+
+**M28. Reviewing thumbnails.** Contact sheets at 600 px wide hid clipped letters, touching glyphs and overflow. *Catch:* review at 100%, crop type at 200%, and get a second pair of eyes (a fresh reviewer, or a subagent with no stake in the work).
+
+**M29. Ignoring what you already know.** A stored preference said to study the reference's motion first and keep things premium and restrained. It was not applied. *Catch:* reread the person's preferences and the brief's own words before building, and again before export.
+
+## Found by the review of the second video
+
+**M30. Your own change made the film wrong.** The narration said "seven skills". Adding the preflight skill during the same session made it eight. *Catch:* after changing the product, search the artifact for every count and list that change touches.
+
+**M31. Small text hiding in a scaled container.** The canvas was drawn at about half size, so text that was 32 to 50 px in its own coordinates showed as 17 to 27 px. *Catch:* multiply every size by the scale of everything it sits in before comparing it with the floor.
+
+**M32. Highlights out of step with the voice.** Cue times were copied from a transcript of an earlier take, so the last two highlights landed after the words were said. *Catch:* transcribe the final audio and take the times from it. Check that each line's last cue falls inside that line's audio.
+
+**M33. A rule of thumb that contradicts its own premise.** The first version of this skill said "tokens × 2.5 for phone viewing", which gives about 8 pt text on a 390 pt phone. *Catch:* when a rule exists for a reason, work the number through to that reason.
+
+## Found by the owner, listening
+
+**M34. White noise at the end of every voice line.** The text-to-speech API returned a whole WAV file (`audio/wav`): a header, the samples and 6,070 bytes of trailing metadata. The script decoded it as raw PCM, so the metadata played as about 0.13 s of noise after each line, plus a click at the start. Every visual check passed, because none of them listened. *Why:* the script trusted an assumed format instead of the MIME type and the file's first bytes (`RIFF`). *Catch:* decode by the container (`ffprobe` the bytes first), listen to the first and last half second of every clip, and run `preflight.py audio`.
+
+## Found by the showcase builders
+
+**M35. Text over glass, photos and gradients that passed every check.** In the showcase style studies (October 2026), `validate` and this helper passed text that measured 2.47:1 over the scene behind a glass panel, 4.31:1 on a clay highlight, and 1.03:1 for a graph label in a skeuomorphic panel. *Why:* the token check knows only the colors it assigned, and this helper reads CSS. Neither sees the pixels behind the text. *Catch:* hide the text, render again, and compare each line of text with the brightest (or darkest) 5% of pixels in its box. That is how the builder caught them, and all four pieces then passed.
