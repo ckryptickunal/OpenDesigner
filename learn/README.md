@@ -51,7 +51,7 @@ Every source in `sources.json` has an `authority`. It decides what the knowledge
 Current sources:
 - **Non-negotiable:** Emil Kowalski's site, the Sonner docs, animations.dev (public pages only; the course itself is paid), the `emilkowalski/skills` repo (MIT).
 - **Good to have:** the Vaul docs. The Vaul README says the library is unmaintained, so OpenDesigner recommends its drawer craft but flags that status before suggesting it as a dependency.
-- **Reference:** every video on Kole Jain's and Mobbin's channels, Steve Schoger's "Designing with Claude Code", Wyatt Feaster's "The Reason Why Some Apps Feel Expensive, But Most Don't" (consumer apps), and Palantir's Workshop "Application design best practices" (enterprise apps). Each rule can say whether it is for consumer products, enterprise products or both: see [../docs/KNOWLEDGE.md](../docs/KNOWLEDGE.md) section 3.
+- **Reference:** every video on Kole Jain's and Mobbin's channels, Steve Schoger's "Designing with Claude Code", Wyatt Feaster's "The Reason Why Some Apps Feel Expensive, But Most Don't" (consumer apps), Palantir's Workshop "Application design best practices" (enterprise apps), the `referodesign/refero_skill` repo (MIT), and davecto's "Taste Index" Instagram reel (a format for an AI-readable taste summary; its copying of one brand's identity is a caveat, not a rule). Each rule can say whether it is for consumer products, enterprise products or both: see [../docs/KNOWLEDGE.md](../docs/KNOWLEDGE.md) section 3.
 
 ## The pipeline
 

@@ -27017,6 +27017,48 @@
    "how": "keyword window",
    "verdict": "supports",
    "confidence": 1.0
+  },
+  {
+   "source": "davecto-taste-index-reel-deddoxeujet",
+   "n": 0,
+   "rule": "Give the AI a written visual reference and point it at that reference whenever it builds something new, so new pages come out in the same style.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "davecto-taste-index-reel-deddoxeujet",
+   "n": 1,
+   "rule": "Open the brief with one line and 5-7 principles, then color, type, components, motion and a Do / Don't list, and write why each rule exists.",
+   "values": [
+    "5-7 principles"
+   ],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "davecto-taste-index-reel-deddoxeujet",
+   "n": 2,
+   "rule": "Mark which values were measured from the reference and which the agent made up.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
+  },
+  {
+   "source": "davecto-taste-index-reel-deddoxeujet",
+   "n": 3,
+   "rule": "Don't invent rules the reference site does not follow.",
+   "values": [],
+   "strength": "should",
+   "how": "evidence found",
+   "verdict": "supports",
+   "confidence": 1.0
   }
  ],
  "standards": [

@@ -1,6 +1,6 @@
 # Wiki Index
 
-Last updated: 2026-10-13T21:04:26
+Last updated: 2026-10-15T02:29:32
 
 This index is maintained by the wiki ingest scripts.
 
@@ -52,6 +52,7 @@ This index is maintained by the wiki ingest scripts.
 - [[sources/adev-home-animations-dev|animations.dev]]
 - [[sources/c1TvOcKdBVE-the-8-ui-ux-cheat-codes-for-instantly-better-designs|The 8 UI/UX Cheat Codes for INSTANTLY Better Designs]]
 - [[sources/d4MF6pdAZNw-developing-premium-load-animations-html-css-js-part-2|Developing Premium Load animations (HTML, CSS & JS): Part 2]]
+- [[sources/davecto-taste-index-reel-deddoxeujet-want-better-ai-designs-use-a-taste-index|Want better AI designs? use a Taste Index]]
 - [[sources/eMMiLeo_UGI-the-4-levels-of-landing-page-ui-ux-design|The 4 Levels of Landing Page UI/UX Design]]
 - [[sources/eeN7yUcIWbw-20-top-underrated-web-design-resources-for-2025|20 Top Underrated Web Design Resources for 2025]]
 - [[sources/ek-7-practical-animation-tips-7-practical-animation-tips|7 Practical Animation Tips]]
@@ -245,6 +246,7 @@ This index is maintained by the wiki ingest scripts.
 - [[entities/chrome-devtools-animations-panel|Chrome DevTools Animations panel]]
 - [[entities/chrome-inspect|chrome://inspect]]
 - [[entities/classpass|ClassPass]]
+- [[entities/claude-code-codex-and-cursor|Claude Code, Codex and Cursor]]
 - [[entities/claude-code|Claude Code]]
 - [[entities/claude|Claude]]
 - [[entities/clay-effect|Clay effect]]
@@ -297,6 +299,7 @@ This index is maintained by the wiki ingest scripts.
 - [[entities/data-instant|data-instant]]
 - [[entities/data-position-top|data-position="top"]]
 - [[entities/data-ready|data-ready]]
+- [[entities/davecto|davecto]]
 - [[entities/decision-ledger|Decision ledger]]
 - [[entities/default-actor-isolation|Default Actor Isolation]]
 - [[entities/delassis|Delassis]]
@@ -853,6 +856,7 @@ This index is maintained by the wiki ingest scripts.
 - [[entities/tap-highlight|Tap highlight]]
 - [[entities/tapaku-maru-caption-spelling|tapaku Maru (caption spelling)]]
 - [[entities/tapasgrowth-com|tapasgrowth.com]]
+- [[entities/taste-index|Taste Index]]
 - [[entities/taste|Taste]]
 - [[entities/tastemakers|Tastemakers]]
 - [[entities/tesla|Tesla]]
@@ -895,6 +899,7 @@ This index is maintained by the wiki ingest scripts.
 - [[entities/tuple|Tuple]]
 - [[entities/twelve-basic-principles-of-animation|Twelve basic principles of animation]]
 - [[entities/two-sided-bar-chart|Two-sided bar chart]]
+- [[entities/typesafe-ai|TypeSafe AI]]
 - [[entities/uber-eats|Uber Eats]]
 - [[entities/uber|Uber]]
 - [[entities/ui-colors|UI colors]]

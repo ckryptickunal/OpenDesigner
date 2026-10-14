@@ -2,7 +2,7 @@
 type: topic
 title: Design taste and judgement
 created: 2026-09-24
-updated: 2026-10-13
+updated: 2026-10-15
 sources: []
 tags: []
 ---
@@ -61,3 +61,4 @@ Eye-catching Dribbble-style variety differs from usable design; usability is at 
 - [[sources/referodesign-refero-skil-skills-refero-design-references-typography-referodesign-refero-skill-skills-refero-design-references-typography-md|referodesign/refero_skill: skills/refero-design/references/typography.md]]: AI-slop anti-patterns and countable limits that reveal amateur typography.
 - [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: Pick one dominant direction, preserve its sharp traits, avoid averaging references and avoid listed AI-slop defaults.
 - [[sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont|The Reason Why Some Apps Feel Expensive, But Most Don’t]]: Premium feel is the sum of small, deliberate details across the experience; the video lists eight of them and says a trained eye is usually what finds them.
+- [[sources/davecto-taste-index-reel-deddoxeujet-want-better-ai-designs-use-a-taste-index|Want better AI designs? use a Taste Index]]: Taste is captured as a one-line picture, a few named principles and a Never list, in a format that stays the same across opposite tastes.

@@ -2,7 +2,7 @@
 type: topic
 title: Design systems and tokens
 created: 2026-09-24
-updated: 2026-10-13
+updated: 2026-10-15
 sources: []
 tags: []
 ---
@@ -41,3 +41,4 @@ Build the style guide's font sizes from a ratio (square root of the golden ratio
 - [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: Define tokens before implementation and keep each token in the role its source assigned.
 - [[sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont|The Reason Why Some Apps Feel Expensive, But Most Don’t]]: Extreme consistency of icons, colors, spacing, fonts and interactions is what makes UI feel invisible; many font styles, many colors and one-or-two-pixel misalignments read as cheap.
 - [[sources/palantir-workshop-applic-application-design-best-practices-palantir|Palantir]]: A unified suite standardises where high-use components go and applies the same styles to tabs, metric cards, headers and buttons across every application.
+- [[sources/davecto-taste-index-reel-deddoxeujet-want-better-ai-designs-use-a-taste-index|Want better AI designs? use a Taste Index]]: The output is a small design system: a DESIGN.md, CSS variables for every value, a motion file and a specimen page.

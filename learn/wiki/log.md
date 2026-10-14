@@ -895,3 +895,13 @@
 ## [2026-10-13] ingest | Palantir
 - Source: `raw/palantir-workshop-application-design-best-practices/palantir-workshop-applic-application-design-best-practices.txt`
 - Wiki page: `wiki/sources/palantir-workshop-applic-application-design-best-practices-palantir.md`
+
+## [2026-10-15] ingest | Want better AI designs? use a Taste Index
+- Source: `raw/davecto-taste-index-reel/davecto-taste-index-reel-deddoxeujet.txt`
+- Wiki page: `wiki/sources/davecto-taste-index-reel-deddoxeujet-want-better-ai-designs-use-a-taste-index.md`
+- Dropped 1 quote(s) that were not in the transcript.
+
+## [2026-10-15] ingest | Want better AI designs? use a Taste Index
+- Source: `raw/davecto-taste-index-reel/davecto-taste-index-reel-deddoxeujet.txt`
+- Wiki page: `wiki/sources/davecto-taste-index-reel-deddoxeujet-want-better-ai-designs-use-a-taste-index.md`
+- Dropped 1 quote(s) that were not in the transcript.

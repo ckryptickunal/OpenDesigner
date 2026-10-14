@@ -2,7 +2,7 @@
 type: topic
 title: AI-assisted design
 created: 2026-09-24
-updated: 2026-10-07
+updated: 2026-10-15
 sources: []
 tags: []
 ---
@@ -52,3 +52,4 @@ ChatGPT is used to write a full project brief from a short prompt.
 - [[sources/referodesign-refero-skil-skills-refero-design-references-mcp-tools-referodesign-refero-skill-skills-refero-design-references-mcp-tools-md|referodesign/refero_skill: skills/refero-design/references/mcp-tools.md]]: How an agent should use Refero's MCP tools to research styles, screens and flows before designing.
 - [[sources/referodesign-refero-skil-skills-refero-design-references-visual-workflow-referodesign-refero-skill-skills-refero-design-references-visual-workflow-md|referodesign/refero_skill: skills/refero-design/references/visual-workflow.md]]: How an agent should use or skip image generation and avoid substituting screenshots, CSS drawings or SVG placeholders for real imagery.
 - [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: A full methodology for AI agents doing design: research first, lock a reference, keep a decision ledger, and pass a quality gate against generic AI defaults.
+- [[sources/davecto-taste-index-reel-deddoxeujet-want-better-ai-designs-use-a-taste-index|Want better AI designs? use a Taste Index]]: Gives an AI coding agent a written visual reference so it stops producing generic pages; the reference is built by the agent from a site the person admires.

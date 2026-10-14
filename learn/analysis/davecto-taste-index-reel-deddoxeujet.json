@@ -1,0 +1,260 @@
+{
+ "summary": "A 46-second creator reel that names a 'Taste Index': point an AI at one website you love, have it break down that site's fonts, colors, shapes, components, motion and voice, and turn them into a reusable guide the AI reads before building anything new. The on-screen prompt asks for four files (a DESIGN.md with a one-line brief, 5-7 principles and a Do / Don't list that explains why, a CSS file of variables, a motion script and a live specimen page), and asks the agent to mark what it measured versus made up. Two example cards show the same five-line format (Brief, Color, Shape, Motion, Never) holding two opposite tastes. For a design system this matters as a format: a short, plain taste summary that any agent can hold in its head. It conflicts with OpenDesigner on one point: the example copies one brand's identity wholesale.",
+ "key_ideas": [
+  "Generic AI output comes from the AI having no written reference for what good looks like.",
+  "A written visual reference, read before every build, keeps new pages in one visual language.",
+  "The guide should explain why each rule exists, so the agent can handle cases the guide did not cover.",
+  "One fixed format can hold opposite tastes: Brief, Color, Shape, Motion, Never.",
+  "A one-line brief written as a concrete picture says more than adjectives.",
+  "Motion can be written as a feeling plus a test, not only as durations.",
+  "The agent should say which values it measured and which it invented.",
+  "A live specimen page that shows every swatch, size and component is part of the guide.",
+  "Extracting from a single site also copies that site's identity [inferred]."
+ ],
+ "entities": [
+  {
+   "name": "davecto",
+   "type": "person",
+   "description": "The presenter, who builds his website and Instagram content with AI and promotes his prompt."
+  },
+  {
+   "name": "TypeSafe AI",
+   "type": "company",
+   "description": "The site whose design the example Taste Index was extracted from (typesafe.ai; the transcript calls it the Jev website)."
+  },
+  {
+   "name": "Claude",
+   "type": "product",
+   "description": "The AI the presenter prompts to build and then follow the Taste Index."
+  },
+  {
+   "name": "Taste Index",
+   "type": "concept",
+   "description": "The presenter's name for an AI-readable brand guide extracted from a website you love."
+  },
+  {
+   "name": "Claude Code, Codex and Cursor",
+   "type": "tool",
+   "description": "The coding agents the on-screen prompt says to paste it into."
+  }
+ ],
+ "topics": [
+  {
+   "name": "AI-assisted design",
+   "summary": "Gives an AI coding agent a written visual reference so it stops producing generic pages; the reference is built by the agent from a site the person admires."
+  },
+  {
+   "name": "Design systems and tokens",
+   "summary": "The output is a small design system: a DESIGN.md, CSS variables for every value, a motion file and a specimen page."
+  },
+  {
+   "name": "Design taste and judgement",
+   "summary": "Taste is captured as a one-line picture, a few named principles and a Never list, in a format that stays the same across opposite tastes."
+  }
+ ],
+ "claims": [
+  {
+   "claim": "AI looks bad at design because people do not give it a taste reference.",
+   "evidence": "[0:00] Most people think AI is terrible at design,"
+  },
+  {
+   "claim": "Pointing the AI at the Taste Index makes new pages come out in the same style.",
+   "evidence": "[0:30] I just point my AI and my taste index"
+  },
+  {
+   "claim": "Generic AI websites share purple gradients, giant rounded cards and 2023 SaaS layouts.",
+   "evidence": "Purple gradients, giant rounded cards, and layouts that look like every SaaS startup from 2023."
+  }
+ ],
+ "quotes": [
+  "Most people think AI is terrible at design",
+  "Find a website you love, have AI break down what makes it work"
+ ],
+ "tags": [
+  "taste-index",
+  "ai-design",
+  "brand-guide",
+  "design-md",
+  "reference-extraction"
+ ],
+ "authority": "reference",
+ "rules": [
+  {
+   "rule": "Give the AI a written visual reference and point it at that reference whenever it builds something new, so new pages come out in the same style.",
+   "why": "New pages then reuse the fonts, colors and animations already defined, instead of a look the AI makes up.",
+   "kind": "do",
+   "strength": "should",
+   "area": "process",
+   "applies_to": "all",
+   "product": "both",
+   "values": [],
+   "evidence": "[0:30] I just point my AI and my taste index"
+  },
+  {
+   "rule": "Open the brief with one line and 5-7 principles, then color, type, components, motion and a Do / Don't list, and write why each rule exists.",
+   "why": "Explaining why lets the agent handle cases the guide did not cover.",
+   "kind": "do",
+   "strength": "should",
+   "area": "process",
+   "applies_to": "all",
+   "product": "both",
+   "values": [
+    "5-7 principles"
+   ],
+   "evidence": "[0:40] Then build four files: 1. DESIGN.md: a one-line brief, 5-7 principles"
+  },
+  {
+   "rule": "Mark which values were measured from the reference and which the agent made up.",
+   "why": "So the person can tell evidence from guesses.",
+   "kind": "do",
+   "strength": "should",
+   "area": "process",
+   "applies_to": "all",
+   "product": "both",
+   "values": [],
+   "evidence": "[0:41] Mark what you measured and what you made up."
+  },
+  {
+   "rule": "Don't invent rules the reference site does not follow.",
+   "why": "The guide should describe the site, not the agent's own preferences.",
+   "kind": "dont",
+   "strength": "should",
+   "area": "process",
+   "applies_to": "all",
+   "product": "both",
+   "values": [],
+   "evidence": "[0:41] Don't invent rules the site doesn't follow."
+  },
+  {
+   "rule": "When the reference uses a commercial font, name the closest free substitute.",
+   "why": "So the guide can be used without a licence the person may not have.",
+   "kind": "do",
+   "strength": "consider",
+   "area": "typography",
+   "applies_to": "all",
+   "product": "both",
+   "values": [],
+   "evidence": "[0:41] If a font is commercial, name the closest free substitute."
+  },
+  {
+   "rule": "Use one fixed format for every taste summary: Brief, Color, Shape, Motion, Never.",
+   "why": "The format holds any taste, so opposite tastes stay comparable and complete.",
+   "kind": "do",
+   "strength": "consider",
+   "area": "process",
+   "applies_to": "all",
+   "product": "both",
+   "values": [
+    "Brief",
+    "Color",
+    "Shape",
+    "Motion",
+    "Never"
+   ],
+   "evidence": "[0:38] Two Examples. Same Format, Opposite Taste."
+  },
+  {
+   "rule": "Write motion as a feeling plus a test, for example a whisper that is wrong if you notice it as an animation.",
+   "why": "A felt description tells the agent how much motion is too much, beyond durations.",
+   "kind": "do",
+   "strength": "consider",
+   "area": "motion",
+   "applies_to": "all",
+   "product": "both",
+   "values": [],
+   "evidence": "[0:40] Motion: A whisper. If you notice it as an animation, it's wrong."
+  }
+ ],
+ "decisions": [
+  {
+   "question": "Where should an AI's visual direction for new pages come from?",
+   "options": [
+    {
+     "name": "The AI's own defaults",
+     "effect": "Generic pages: purple gradients, giant rounded cards, 2023 SaaS layouts.",
+     "when": "The source argues against it."
+    },
+    {
+     "name": "A Taste Index extracted from one site the person loves",
+     "effect": "New pages share that site's fonts, colors and animations.",
+     "when": "The source's recommendation."
+    },
+    {
+     "name": "The person's own recorded choices, with references giving structure only",
+     "effect": "Consistent pages in the person's own identity rather than another brand's. [inferred: OpenDesigner's approach, not the source's]",
+     "when": "When the result must not copy another brand's identity. [inferred]"
+    }
+   ],
+   "recommendation": "The source recommends a Taste Index built from a site you love, kept as files the AI reads before every build.",
+   "maps_to": null,
+   "product": "both",
+   "evidence": "I started using something I call a Taste Index to give Claude a reference"
+  }
+ ],
+ "process": [
+  {
+   "step": "Read the reference site",
+   "detail": "Open a few different pages, not only the home page, and read the computed styles: fonts, every color and where it is used, borders, radius, shadows, spacing and grid, repeating components, motion and easing, and how headlines, labels and buttons are written."
+  },
+  {
+   "step": "Write the guide",
+   "detail": "DESIGN.md (a one-line brief, 5-7 principles, then color, type, components, motion and a Do / Don't list, with reasons), a CSS file with every value as a variable plus component classes, a motion script with no dependencies, and a live page showing every swatch, size and component."
+  },
+  {
+   "step": "Match an earlier guide's structure",
+   "detail": "Attach an existing Taste Index as the example and match its structure and depth, not its look."
+  },
+  {
+   "step": "Report and hand off",
+   "detail": "Mark measured versus made-up values, open the live page, list what was uncertain, and add one line to CLAUDE.md so later agents read the guide first."
+  }
+ ],
+ "examples": [
+  {
+   "what": "The reference site",
+   "where": "typesafe.ai (TypeSafe AI)",
+   "visual_note": "0:05-0:08: hot pink and mint green panels, a large grotesk headline ('We Took The Opposite Research Direction'), a halftone dollar-bill image, big stats ('193.6x Faster, 444.6x Cheaper') and a dark FAQ panel. Read from frames only."
+  },
+  {
+   "what": "The generated Taste Index page ('Retro OS')",
+   "where": "The presenter's own guide, extracted from typesafe.ai",
+   "visual_note": "0:22-0:25: a pink page with tabs (Color, Type, Micrographics, Texture, Components, Motion, Rules, DESIGN.md) and header controls that read like dials (line weight 1px always, corner radius 0 never, 7 section colors, linear or stepped easing). A metaphor thesis ('Desktop Software, Printed On Pink Paper'), three named principles ('Color Is A Place', 'Everything Is A Window', 'Two Voices'), color swatches each named with its job, neutrals, chart accents only as chips, a page order, a usage ratio, a contrast table, and component specimens each captioned with its rule. Read from frames only."
+  },
+  {
+   "what": "A page built from the index",
+   "where": "The presenter's resources page",
+   "visual_note": "0:26-0:38: full-width sections in flat colors (pink, teal, magenta, mustard, orange, blue) with 1px windowed cards, scrolled top to bottom; it repeats the index's language. Read from frames only."
+  },
+  {
+   "what": "Two taste cards in one format",
+   "where": "Retro.OS and davecto.com",
+   "visual_note": "0:38-0:41: two cards side by side, each with a font pairing, a swatch strip and five lines (Brief, Color, Shape, Motion, Never). One is loud (flat pink, hard shadows, square corners), the other quiet (warm paper, one teal accent, hairlines, a 2px radius). Below them the prompt itself. Read from frames only."
+  },
+  {
+   "what": "The reel's own editing",
+   "where": "This video",
+   "visual_note": "Word-by-word serif captions with key words in pink, a persistent title chip, hard cuts between five or six setups every 3 to 9 seconds, and screen recordings scrolling in the upper half of the frame."
+  }
+ ],
+ "numbers": [
+  {
+   "value": "5-7",
+   "context": "principles in the DESIGN.md brief",
+   "evidence": "[0:40] a one-line brief, 5-7 principles"
+  },
+  {
+   "value": "90% paper and ink, 9% muted grey, 1% teal",
+   "context": "the color ratio on the presenter's quiet taste card; a stated taste, not research",
+   "evidence": "[0:40] Color: Roughly 90% paper and ink, 9% muted grey, 1% teal."
+  }
+ ],
+ "caveats": [
+  "Self-promotion, left out of the rules: 'comment TASTE' to receive the prompt, and a follow request (0:38 to the end, and the caption).",
+  "Most rules, numbers and examples were read from frames (the on-screen prompt and pages, 0:22 to 0:41), not spoken; the raw file's on-screen section was transcribed from full-resolution frames on 2026-10-15.",
+  "The example index copies typesafe.ai's identity (its colors and look) for the presenter's own content. OpenDesigner's identity rule forbids that: references give structure and quality, never a brand's identity. Use the format, not the copying. [inferred conflict with SPEC 5.4]",
+  "The 90/9/1 ratio is one person's taste card, not evidence; OpenDesigner's research keeps accent use as a soft guide (about 15% of a view, DC-L15-03) and treats 60-30-10 as weak evidence.",
+  "Auto-captions: 'the Jev website' refers to typesafe.ai (TypeSafe's model is named Jev, shown in the frames); 'your CTO' may be a mis-hearing of the presenter's name or handle.",
+  "Product tag judged here: the source shows only marketing and resource pages, but the technique is not specific to either, so rules are tagged both. [inferred]",
+  "A 46-second creator reel: no measured outcomes beyond the presenter's own pages."
+ ]
+}

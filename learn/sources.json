@@ -92,6 +92,15 @@
       "folder": "raw/palantir-workshop-application-design-best-practices",
       "id_prefix": "palantir-workshop-applic",
       "authority": "reference"
+    },
+    {
+      "name": "davecto: Taste Index reel",
+      "urls": [
+        "https://www.instagram.com/p/DedDoxEujet/"
+      ],
+      "folder": "raw/davecto-taste-index-reel",
+      "id_prefix": "davecto-taste-index-reel",
+      "authority": "reference"
     }
   ],
   "github_repos": [
