@@ -35,7 +35,7 @@ NOT_CARDS = ["a.btn", "button", "[role=tab]", "input", "select", "textarea", ".c
              ".ui-btn", ".ui-input", ".x-btn", ".x-input", ".hh-btn", ".tag-missing", ".swatch"]  # controls, also when drawn in figures
 PANELS = [".fig", ".fig-panel", ".fig-scene", ".demo-stage", ".h-end-photo", ".h-end-card", ".starts", ".tree"]  # check 2 looks inside these too
 GALLERIES = [".pieces", ".ex-grid", ".bento"]  # named in a partly filled last row warning
-SCROLL_OK = [".prose .code pre", ".prose .table-wrap"]  # may scroll sideways on purpose
+SCROLL_OK = [".prose .code pre", ".prose .table-wrap", ".sl-track", ".filters"]  # may scroll sideways on purpose (a carousel; tag filters on phones)
 STUCK_OK = [".sticker", ".piece-stuck", ".a-stamp", ".a-rstamp"]  # sit on corners on purpose: never an overlap
 MARKS_OK = [".a-call", ".a-dim", ".a-crop", ".a-reg", ".a-stamp"]  # proof marks drawn outside a box on purpose: their text may pass its edge
 
@@ -52,6 +52,11 @@ HINTS = {
     "target": "smaller than 24 x 24 px (WCAG 2.5.8): add padding or min-height, or keep 24 px clear around it",
     "text-edge": "text runs past the edge: let it wrap (overflow-wrap: anywhere, min-width: 0 on its flex or grid item) or shorten it",
     "anchor": "a control pinned inside a box should sit on the content's first line (same centre) with equal top and side insets: reserve room beside the text, never an empty band above it",
+    "under-control": "text runs under a pinned control: make room beside the control (padding) and let the text wrap instead of scrolling",
+    "label-break": "a label, chip or tag broke across lines (sometimes inside a word): keep it on one line (white-space: nowrap) and let its row wrap instead",
+    "actions": "opposite actions belong on one row, the secondary on the left and the primary on the right, as far apart as the row allows",
+    "text-left": "text blocks that sit one under another should start on one left edge: look for an auto or leftover margin, or an indent",
+    "widow": "the last line holds a single word: balance the text (text-wrap: balance for headings and short centred lines, pretty for paragraphs), or reword",
 }
 
 MEASURE = r"""(cfg) => {
@@ -262,7 +267,8 @@ MEASURE = r"""(cfg) => {
     if (cs(el).position !== "absolute" || !el.offsetParent || el.closest("dialog:not([open])")) continue;
     const r = R(el); if (!r.width || !r.height) continue;
     const box = el.offsetParent, b = R(box);
-    const tw = document.createTreeWalker(box, NodeFilter.SHOW_TEXT, { acceptNode: n => (!el.contains(n) && n.textContent.trim()) ? 1 : 3 });
+    // text for screen readers only (a carousel's "Frame 1 of 3") is not a line the eye lines a control up with
+    const tw = document.createTreeWalker(box, NodeFilter.SHOW_TEXT, { acceptNode: n => (!el.contains(n) && n.textContent.trim() && R(n.parentElement).width > 1) ? 1 : 3 });
     const t = tw.nextNode(); if (!t) continue;
     const rg = document.createRange(), i = t.textContent.search(/\S/); rg.setStart(t, i); rg.setEnd(t, i + 1);
     const line = rg.getBoundingClientRect(); if (!line.height) continue;
@@ -274,6 +280,64 @@ MEASURE = r"""(cfg) => {
     }
     const top = r.top - b.top, side = Math.min(r.left - b.left, b.right - r.right);
     if (Math.abs(top - side) > 2) add("anchor", "warning", el, `insets differ: ${px(top)} px from the top, ${px(side)} px from the side`, [b, r]);
+  }
+  // 9. widows: a heading, lede or card text whose last line is one word (owner, 2026-10-15: "it." alone on the closing card's last line)
+  for (const el of document.querySelectorAll("h1, h2, h3, .lede, .h-lede, .h-end-lede, .h-cmd-label, .h-step > p, .bento-card > p, .who-card > p, .craft-card > p, figure > figcaption:not(:has(.a-tags))")) {
+    if (!seen(el) || el.closest(any(cfg.marksOk))) continue;
+    const words = [], tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    for (let n = tw.nextNode(); n; n = tw.nextNode()) {
+      if (n.parentElement.closest("svg, .sr-only, [hidden]")) continue;
+      for (const m of n.textContent.matchAll(/\S+/g)) {
+        const rg = document.createRange(); rg.setStart(n, m.index); rg.setEnd(n, m.index + m[0].length);
+        const rs = rg.getClientRects(), rr = rs[rs.length - 1]; if (rr && rr.width) words.push([Math.round(rr.top), Math.round(rr.bottom)]);  // a word belongs to the line it ends on
+      }
+    }
+    if (words.length < 4) continue;
+    const lines = []; for (const [t, b] of words) { const l = lines.find(x => Math.abs(x.t - t) < (b - t) / 2); if (l) l.n++; else lines.push({ t, n: 1 }); }
+    if (lines.length < 2) continue;
+    lines.sort((a, b) => a.t - b.t);
+    const last = lines[lines.length - 1];
+    if (last.n === 1) add("widow", /^H[1-3]$/.test(el.tagName) || el.matches(".lede, .h-lede, .h-end-lede") ? "error" : "warning", el, `${lines.length} lines, and the last holds one word`, [R(el)]);
+  }
+  // 10. stacked text blocks share a left edge: a heading, its lede and the next paragraph start at the same x
+  //     (owner-caught class of bug, 2026-10-15: a section lede 64 px right of its heading, from a centred margin leaking in)
+  for (const box of document.querySelectorAll("main *")) {
+    const kids = [...box.children].filter(k => /^(P|H1|H2|H3|H4)$/.test(k.tagName) && seen(k) && cs(k).display === "block" && cs(k).position === "static"
+                                         && /^(left|start)$/.test(cs(k).textAlign) && !k.closest(any(cfg.marksOk)) && !k.classList.contains("kicker") && k.textContent.trim());
+    if (kids.length < 2) continue;
+    const lefts = kids.map(k => R(k).left);
+    if (Math.max(...lefts) - Math.min(...lefts) > 1) add("text-left", "error", box, `text blocks start at ${lefts.map(px).join(", ")} px`, kids.map(R));
+  }
+  // 11. no text under a pinned control (owner, 2026-10-15: long commands scrolled under the Copy button on a phone)
+  for (const el of document.querySelectorAll("button, a.btn, .copy, [role=button]")) {
+    if (cs(el).position !== "absolute" || !el.offsetParent || el.closest("dialog:not([open])")) continue;
+    const r = R(el); if (!r.width) continue;
+    const tw = document.createTreeWalker(el.offsetParent, NodeFilter.SHOW_TEXT, { acceptNode: n => (!el.contains(n) && n.textContent.trim()) ? 1 : 3 });
+    let hit = null;
+    for (let n = tw.nextNode(); n && !hit; n = tw.nextNode()) {
+      const rg = document.createRange(); rg.selectNodeContents(n);
+      for (const q of rg.getClientRects()) if (q.width && q.right > r.left + 1 && q.left < r.right - 1 && q.bottom > r.top + 1 && q.top < r.bottom - 1) { hit = q; break; }
+    }
+    if (hit) add("under-control", "error", el, `text at ${px(hit.left)}–${px(hit.right)} px runs under the control at ${px(r.left)}–${px(r.right)} px`, [r, hit]);
+  }
+  // 12. a label never breaks across lines (owner, 2026-10-15: a "Default" chip read "Defaul / t" on a phone)
+  for (const el of document.querySelectorAll(".chip:not(.wrap), .tag-missing, .a-tag, .sticker, .h-pill-tag, .x-chip, .hh-pill, .a-rstamp, .kicker.a-idx .a-idx-n, .btn")) {
+    if (!seen(el)) continue;
+    const tops = new Set(), tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);  // text only: an icon beside the label is not a line
+    for (let n = tw.nextNode(); n; n = tw.nextNode()) {
+      if (!n.textContent.trim()) continue;
+      const rg = document.createRange(); rg.selectNodeContents(n);
+      for (const q of rg.getClientRects()) if (q.width > 1) tops.add(Math.round((q.top + q.height / 2) / 6));
+    }
+    if (tops.size > 1) add("label-break", "error", el, `"${el.textContent.trim().slice(0, 40)}" runs over ${tops.size} lines`, [R(el)]);
+  }
+  // 13. opposite actions: one row, secondary left, primary right (owner, 2026-10-15)
+  for (const row of document.querySelectorAll(".x-actions, .hh-actions, .dialog-actions, form .actions")) {
+    if (!seen(row)) continue;
+    const bs = [...row.children].filter(seen).map(R); if (bs.length < 2) continue;
+    const prim = [...row.children].findIndex(c => c.matches(".primary, [type=submit]"));
+    if (new Set(bs.map(b => Math.round(b.top))).size > 1) add("actions", "error", row, `${bs.length} actions on ${new Set(bs.map(b => Math.round(b.top))).size} rows`, bs);
+    else if (prim >= 0 && prim !== bs.length - 1) add("actions", "error", row, "the primary action is not on the right", bs);
   }
   return out;
 }"""

@@ -4,12 +4,12 @@
     <p class="dd-h">Say why</p>
     <p class="dd-why">The reason goes into the decision log, so a later session knows what the value protects before it changes it.</p>
     <div class="dd-art" style="display:grid;gap:10px">
-      <pre class="code-lines" style="background:var(--surface-raised);white-space:pre-wrap;overflow-wrap:anywhere"><span class="c">$</span> engine.py set dials.roundness 60 <span class="k">--why "softer corners for a friendlier feel"</span>
-D-0009 set dials.roundness = 60 (chosen)
+      <pre class="code-lines" style="background:var(--surface-raised);white-space:pre-wrap;overflow-wrap:anywhere"><span class="c">$</span> engine.py set dials.roundness 60 <span class="k"><span class="nw">--why</span> "softer corners for a friendlier feel"</span>
+<span class="nw">D-0009</span> set dials.roundness = 60 (chosen)
   tokens: 6 values change (radius.container, radius.control, radius.control-sm, ...)</pre>
       <span class="kicker">opendesigner/decisions.md</span>
-      <pre class="code-lines" style="background:var(--surface-raised);white-space:pre-wrap;overflow-wrap:anywhere">## D-0009 · dials.roundness = 60
-- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0008 · source_ref: none
+      <pre class="code-lines" style="background:var(--surface-raised);white-space:pre-wrap;overflow-wrap:anywhere">## <span class="nw">D-0009</span>&nbsp;· dials.roundness = 60
+- set_by: chosen&nbsp;· locked: no&nbsp;· date: <span class="nw">2026-10-14</span>&nbsp;· supersedes: <span class="nw">D-0008</span>&nbsp;· source_ref: none
 - <span class="ok">reason: softer corners for a friendlier feel</span>
 - previous value: 45</pre>
     </div>
@@ -19,11 +19,11 @@ D-0009 set dials.roundness = 60 (chosen)
     <p class="dd-why">The value is saved, but the log can't say what it was for. The next change has nothing to weigh it against.</p>
     <div class="dd-art" style="display:grid;gap:10px">
       <pre class="code-lines" style="background:var(--surface-raised);white-space:pre-wrap;overflow-wrap:anywhere"><span class="c">$</span> engine.py set dials.roundness 45
-D-0008 set dials.roundness = 45 (chosen)
+<span class="nw">D-0008</span> set dials.roundness = 45 (chosen)
   tokens: 6 values change (radius.container, radius.control, radius.control-sm, ...)</pre>
       <span class="kicker">opendesigner/decisions.md</span>
-      <pre class="code-lines" style="background:var(--surface-raised);white-space:pre-wrap;overflow-wrap:anywhere">## D-0008 · dials.roundness = 45
-- set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+      <pre class="code-lines" style="background:var(--surface-raised);white-space:pre-wrap;overflow-wrap:anywhere">## <span class="nw">D-0008</span>&nbsp;· dials.roundness = 45
+- set_by: chosen&nbsp;· locked: no&nbsp;· date: <span class="nw">2026-10-14</span>&nbsp;· supersedes: none&nbsp;· source_ref: none
 - <span class="bad">reason: (no reason given)</span></pre>
     </div>
   </div>

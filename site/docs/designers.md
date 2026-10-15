@@ -4,7 +4,7 @@ seo_title: OpenDesigner for product designers: decisions and Figma
 description: How OpenDesigner fits a product designer's process: what it automates, what you keep control of, how logged decisions help in reviews, and Figma variables.
 section: Guides
 order: 1
-updated: 2026-10-14
+updated: 2026-10-15
 ---
 
 OpenDesigner does the repetitive part of design-system work for you: scales, tokens, component states, contrast checks and keeping the code in step with the design. You keep the direction, the taste and every asset a person should make. It writes down each decision with its reason, and it exports Figma variables so your design file can match the code.
@@ -41,7 +41,7 @@ Reviews go faster when everyone can see why a value is what it is.
 
 {{figure:designers-review-why-blue}}
 
-The defaults rest on 352 Decision Cards. Each card covers one design decision, with its options, a default and its sources. See [Decisions, DESIGN.md and the overview page](/docs/decisions/).
+The defaults rest on more than 500 Decision Cards. Each card covers one design decision, with its options, a default and its sources. See [Decisions, DESIGN.md and the overview page](/docs/decisions/).
 
 ## Figma variables
 
@@ -65,8 +65,8 @@ Hands-on Figma research is still an open task ([issue #10](https://github.com/ck
 In a stress test, 8 AI agents built 46 pieces by following the OpenDesigner process. All the brands in them were made up.
 
 - The engine helped most where things are easy to get wrong: contrast-safe colors, spacing, radii, focus rings and motion.
-- About a third of the pieces were competent but conventional.
+- A later audit of these and 8 mockups against shipped products kept 28 of the 54, sent 20 back for polish and rebuilt 6. The owner judged most of the first round generic.
 - Most display type, light weights, tinted backgrounds, hard shadows and art colors were made outside the tokens, or against them.
-- Every builder had to restore or work around a brand color the engine changed.
+- Every builder had to restore or work around a brand color the engine changed. That is fixed: the engine now keeps a brand color you type exact.
 
 So the tokens give you consistency and readable contrast, and a distinctive look still needs your eye. Check your brand color on the overview page after each build. The full findings are in the [stress test report](https://github.com/ckryptickunal/OpenDesigner/blob/main/brand/showcase/STRESS-TEST.md).

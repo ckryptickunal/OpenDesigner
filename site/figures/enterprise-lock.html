@@ -4,10 +4,10 @@
 <p class="dd-h">Lock what must not drift</p>
 <p class="dd-why">Set the brand color with <span class="mono">--lock</span>. From then on the engine refuses to change it.</p>
 <div class="dd-art">
-<pre class="code-lines" style="white-space:pre-wrap;overflow-wrap:anywhere;margin:0 0 10px"><span class="c">$</span> engine.py set raw.brandColor '"#2563eb"' --why "brand team" <span class="k">--lock</span></pre>
+<pre class="code-lines" style="white-space:pre-wrap;overflow-wrap:anywhere;margin:0 0 10px"><span class="c">$</span> engine.py set raw.brandColor '"#2563eb"' <span class="nw">--why</span> "brand team" <span class="k"><span class="nw">--lock</span></span></pre>
 <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"><span class="chip ink">locked: yes</span><span class="chip">set_by: chosen</span></div>
 <div class="kicker" style="font-size:12px;margin-bottom:4px">A later session tries to change it</div>
-<pre class="code-lines" style="white-space:pre-wrap;overflow-wrap:anywhere;margin:0"><span class="bad">raw.brandColor is locked.</span> Ask the owner before changing it, then run `engine.py unlock raw.brandColor` (or pass --force).</pre>
+<pre class="code-lines" style="white-space:pre-wrap;overflow-wrap:anywhere;margin:0"><span class="bad">raw.brandColor is locked.</span> Ask the owner before changing it, then run `engine.py unlock raw.brandColor` (or pass <span class="nw">--force</span>).</pre>
 </div>
 </div>
 <div class="dont">

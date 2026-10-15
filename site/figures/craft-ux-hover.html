@@ -10,13 +10,13 @@
 </div></div>
 <div class="cr-meta" style="margin-top:10px;justify-content:center"><span>tapped once: the row stays lit</span></div>
 <pre class="code-lines" style="margin-top:14px;justify-self:stretch">.row:hover {
-  background: var(--accent-soft);
+  background: var(<span class="nw">--accent-soft</span>);
 }</pre></div></div>
 <div class="do"><p class="dd-h">Hover only where there is a fine pointer</p><p class="dd-why">The hover style applies only when the main input can hover and point precisely. The press style is a real press on touch, so it stays ungated.</p>
 <div class="dd-art"><pre class="code-lines">@media (hover: hover)
    and (pointer: fine) {
   .row:hover {
-    background: var(--accent-soft);
+    background: var(<span class="nw">--accent-soft</span>);
   }
 }
 

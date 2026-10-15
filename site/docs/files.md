@@ -4,7 +4,7 @@ seo_title: The files OpenDesigner writes: tokens, exports and DESIGN.md
 description: Every file OpenDesigner writes into your project: DESIGN.md, the DTCG tokens, the exports, the overview page and the decision log, and what each one is for.
 section: Reference
 order: 3
-updated: 2026-10-14
+updated: 2026-10-15
 ---
 
 OpenDesigner writes `DESIGN.md` and `PRODUCT.md` at the root of your project, and everything else into an `opendesigner/` folder. The token files in `opendesigner/tokens/` are the source of truth, and every other file is made from them. In a test run, one sketch and build wrote 50 files with no errors.
@@ -51,7 +51,7 @@ See [Export](/docs/export/) for how to use each one.
 
 - **`opendesigner/overview.html`:** your whole system on one page, including what is still missing. It works offline and loads nothing from the web.
 - **`opendesigner/preview.html`:** every token on one page.
-- **`opendesigner/preview/`:** seven visual templates filled with your own values: palette, type scale, spacing ruler, radius, elevation, motion and component sheet. The eighth, the option gallery, is filled per question with `engine.py show`.
+- **`opendesigner/preview/`:** seven visual templates filled with your own values: palette, type scale, spacing ruler, radius, elevation, motion and component sheet. The option gallery is filled per question with `engine.py show`, and the taste poll is built by `taste.py build` into `opendesigner/preview/taste-poll/`.
 
 ## The record
 

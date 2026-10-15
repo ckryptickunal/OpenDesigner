@@ -148,9 +148,22 @@ def slugify(s):
     return re.sub(r"[^a-z0-9]+", "-", re.sub(r"<[^>]+>", "", s).lower()).strip("-")
 
 
+def code_html(s):
+    """Escaped code, ready for the page: a word never splits (Chrome breaks "--why" between its hyphens and "tokens.css" anywhere).
+    Lines break at spaces and after a path's slash; a word longer than 24 characters may also break after a dot, hyphen or comma."""
+    def word(m):
+        w = re.sub(r"(?<=[A-Za-z0-9_*])/(?=\S)", "/<wbr>", m.group(0))
+        if len(m.group(0)) > 24:
+            w = re.sub(r"(?<=[A-Za-z0-9])\.(?=[A-Za-z0-9{]{5})", ".<wbr>", w)
+            w = re.sub(r"(?<=[A-Za-z0-9])-(?=[A-Za-z0-9]{3})", "-<wbr>", w)
+            w = re.sub(r"(?<=[A-Za-z0-9]),(?=\S)", ",<wbr>", w)
+        return f'<span class="w">{w}</span>'
+    return re.sub(r"\S+", word, s)
+
+
 def inline(s):
     s = esc(s, quote=False)
-    s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
+    s = re.sub(r"`([^`]+)`", lambda m: "<code>" + code_html(m.group(1)) + "</code>", s)
     s = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", s)
     s = re.sub(r"(?<![\w*])\*([^*\n]+)\*(?![\w*])", r"<em>\1</em>", s)
     s = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", lambda m: f'<a href="{m.group(2)}">{m.group(1)}</a>', s)
@@ -169,7 +182,7 @@ def md_to_html(md, toc=None):
             j, code = i + 1, []
             while j < len(lines) and not lines[j].startswith("```"):
                 code.append(lines[j]); j += 1
-            out.append(f'<div class="code"><pre><code>{esc(chr(10).join(code), quote=False)}</code></pre>'
+            out.append(f'<div class="code"><pre><code>{code_html(esc(chr(10).join(code), quote=False))}</code></pre>'
                        f'<button class="copy" type="button" data-copy>Copy</button></div>')
             i = j + 1
             continue
@@ -270,6 +283,7 @@ ARROW = '<svg class="arrow" aria-hidden="true" viewBox="0 0 14 14"><path d="M3 1
 CHEVRON = '<svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>'
 STATE = {"stars": ""}
 CUR, EAGER, LAZY = ' aria-current="page"', ' fetchpriority="high"', ' loading="lazy"'
+NBH = "\u2011"  # non-breaking hyphen: headings keep hyphenated words whole
 
 
 def lockup():
@@ -344,6 +358,7 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.pn
 <link rel="preload" href="/fonts/hanken-300-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://images.unsplash.com">
 <link rel="stylesheet" href="/site.css">
+<noscript><style>.g-wait{{animation-delay:60ms!important}}</style></noscript>
 {md_link}
 <link rel="sitemap" type="application/xml" href="/sitemap.xml">
 {jsonld(*ld)}
@@ -354,7 +369,7 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.pn
 <header class="bar"><div class="bar-in">
 <a class="brand" href="/" aria-label="{NAME} home">{lockup()}</a>
 <nav class="top-nav" aria-label="Main"><a href="/docs/"{CUR if path.startswith("/docs/") else ""}>Docs</a><a href="/docs/install/">Install</a><a href="/docs/enterprise/">For teams</a><a href="/showcase/"{CUR if path == "/showcase/" else ""}>Showcase</a></nav>
-<a class="gh-btn" href="{GH}">{GH_ICON}<span>GitHub</span><span class="gh-count" data-stars>{STATE["stars"]}</span></a>
+<a class="nav-book" href="/book/">Book a call</a><a class="gh-btn" href="{GH}">{GH_ICON}<span>GitHub</span><span class="gh-count" data-stars>{STATE["stars"]}</span></a>
 </div></header>
 {inner}
 {footer(pages)}
@@ -365,13 +380,13 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.pn
 
 
 def footer(pages):
-    by = {s: [p for p in pages if p["section"] == s][:6] for s in SECTIONS}
+    by = {s: [p for p in pages if p["section"] == s and p["path"] != "/docs/security/"][:6] for s in SECTIONS}  # security is under Trust
     cols = "".join(f'<div><h2 class="foot-h kicker">{s}</h2><ul>' + "".join(f'<li><a href="{p["path"]}">{esc(p["title"])}</a></li>' for p in ps) + "</ul></div>"
                    for s, ps in by.items() if ps)
     trust = (f'<div><h2 class="foot-h kicker">Trust</h2><ul><li><a href="/docs/security/">Security and data</a></li><li><a href="{GH}/blob/main/SECURITY.md">Report a vulnerability</a></li>'
              f'<li><a href="{GH}/blob/main/CHANGELOG.md">Changelog</a></li><li><a href="{GH}/blob/main/LICENSE">Licence (MIT)</a></li></ul></div>')
     proj = (f'<div><h2 class="foot-h kicker">Project</h2><ul><li><a href="{GH}">GitHub</a></li><li><a href="{GH}/issues/new/choose">Report a problem</a></li>'
-            f'<li><a href="/showcase/">Showcase</a></li><li><a href="/llms.txt">llms.txt</a></li><li><a href="/sitemap.xml">Sitemap</a></li></ul></div>')
+            f'<li><a href="{GH}/blob/main/CONTRIBUTING.md">Contribute</a></li><li><a href="/book/">Book a call</a></li><li><a href="/showcase/">Showcase</a></li><li><a href="/llms.txt">llms.txt</a></li><li><a href="/sitemap.xml">Sitemap</a></li></ul></div>')
     return (f'<footer class="foot"><div class="foot-in"><div class="foot-brand">{lockup()}<p>Free and open source. MIT for code, '
             f'CC BY 4.0 for docs.</p></div>{cols}{trust}{proj}</div><p class="foot-legal">OpenDesigner is an independent open-source project. Claude, '
             f'ChatGPT, Codex, Cursor, Figma and other names belong to their owners and appear only to say where OpenDesigner runs. Photos: Unsplash '
@@ -508,6 +523,51 @@ HOME_STATUS = ["Created on 2026-09-23 and maintained by one person. There is no 
                "No watched user trials yet, and no recorded run in every AI tool. The engine's tests pass."]
 
 
+def book_link(label, primary=False):
+    """A booking link when the owner has set one; otherwise plain text, never a placeholder link (site/config.json)."""
+    url = CONFIG.get("BOOKING_FREE_URL")
+    if not url:
+        return f'<span class="h-soon">Bookings opening soon</span>'
+    cls = "btn primary lg" if primary else "h-link"
+    return f'<a class="{cls}" href="{esc(url)}" rel="noopener" target="_blank">{esc(label)}{"" if primary else " " + ARROW}</a>'
+
+
+def book_page(pages):
+    m = CONFIG["BOOKING_FREE_MINUTES"]
+    body = f"""
+<section class="h-sec h-first">
+<nav class="crumb" aria-label="Breadcrumb"><a href="/">{NAME}</a><span aria-hidden="true">/</span><span aria-current="page">Book a call</span></nav>
+<h1 class="h-h2 book-title">Work through your design with {CONFIG["HOST_NAME"]}.</h1>
+<p class="h-lede book-lede">{CONFIG["HOST_NAME"]} is {CONFIG["HOST_ROLE"]}. Bring your product and leave with a clear first step for its design system. OpenDesigner stays free and open source, and you never need a call to use it.</p>
+<div class="book-grid">
+<article class="book-card">
+<p class="kicker">Free · {m} minutes · Google Meet</p>
+<h2>Intro call</h2>
+<p>To see whether OpenDesigner fits your product, and where to start.</p>
+<dl class="book-dl">
+<div><dt>You'll be asked</dt><dd>Your product's address or repository (optional), the design problem you have today, your stage and your goal.</dd></div>
+<div><dt>You leave with</dt><dd>A suggested first step. The call includes no code changes.</dd></div>
+<div><dt>Please don't share</dt><dd>Confidential code or anything under a non-disclosure agreement in the booking form.</dd></div>
+</dl>
+<div class="book-act">{book_link("Book a free " + str(m) + "-minute call", primary=True)}</div>
+<p class="h-fine">Booked through Google Calendar. The confirmation carries the Google Meet link.</p>
+</article>
+<article class="book-card later">
+<p class="kicker">Later</p>
+<h2>Paid sessions</h2>
+<p>A design-system review of an existing product, and an implementation strategy session, will open later. Nothing is charged today.</p>
+<p class="h-soon">Opening soon</p>
+</article>
+</div>
+<p class="h-fine">The site has no analytics, and nothing you send through the booking form is used for anything but the call.</p>
+</section>
+"""
+    ld = [crumbs_ld([("Book a call", "/book/")])]
+    return shell("/book/", f"Book a free {m}-minute OpenDesigner intro call",
+                 f"A free {m}-minute call with {CONFIG['HOST_NAME']}, OpenDesigner's maintainer: whether it fits your product and where to start. No code changes, no cost.",
+                 body, pages, ld, home=True, md=False)
+
+
 def stage(scene, inner, cls=""):
     """A screen on a photo: a rounded container with a free Unsplash photo and film grain, the screen in a soft glass bezel (owner, 2026-10-15)."""
     pid, author, page_id = SCENES[scene]
@@ -526,9 +586,9 @@ def gh_card(facts):
 
 # ---------------------------------------------------------------- the home page (/): what it is, why, how, examples, install
 DEMO = json.loads((SITE / "demo-systems.json").read_text())
+CONFIG = {**json.loads((SITE / "config.json").read_text()), **{k: v for k, v in os.environ.items() if k.startswith(("BOOKING_", "CONTACT_"))}}
 LOGOS = json.loads((SITE / "logos.json").read_text())["icons"]  # Simple Icons (CC0); owner, 2026-10-15: show the tools' own marks
-HOSTS = [("Claude Code", "claude"), ("Claude app", "claude"), ("ChatGPT", "openai"), ("Codex", "openai"), ("Cursor", "cursor"),
-         ("VS Code with Copilot", "githubcopilot"), ("Gemini CLI", "googlegemini")]
+HOSTS = [("Claude Code / app", "claude"), ("ChatGPT / Codex", "openai"), ("Cursor", "cursor"), ("Copilot in VS Code", "githubcopilot"), ("Gemini CLI", "googlegemini")]
 
 
 def logo(slug, size=20):
@@ -545,7 +605,7 @@ DEMO_UI = {  # the card each example builds with its own values; names, amounts 
                "field": ("Registration number", "AB12 CDE", "As it appears on your registration document"),
                "rows": [("Permit zone", "Zone C"), ("Permit length", "12 months")],
                "primary": "Continue", "secondary": "Save and finish later"}}
-INSTALL_MARKS = {"claude-code": ["claude"], "claude-app": ["claude"], "agents": ["openai", "cursor", "githubcopilot", "googlegemini"], "chatgpt": ["openai"], "engine": []}
+INSTALL_MARKS = {"claude-code": [], "claude-app": [], "agents": [], "chatgpt": [], "engine": []}  # the marks appear once, in the hero row
 INSTALL = [
     ("claude-code", "Claude Code", "Add the plugin, then ask for a design system in your project.",
      "/plugin marketplace add ckryptickunal/OpenDesigner\n/plugin install opendesigner@opendesigner", "Then say: “Create a design system for this project.”"),
@@ -572,7 +632,7 @@ STEPS = [
 INSIDE = [  # (benefit title, what it does, vignette, column span)
     ("Nobody has to guess why", "Every value records how it was set and why. Locked values change only with the owner's yes.",
      '<div class="vg-log"><p class="mono">D-0056 · dials.roundness = 75</p><p><span class="chip accent">chosen</span> <span class="chip">supersedes D-0033</span></p><p class="vg-why">“Use iOS style rounded edges with iOS kerning everywhere instead of sharp corners.”</p></div>', 2),
-    ("Readable for everyone", "WCAG 2.2 AA contrast, 24 px targets on the web, focus rings and reduced motion. A floor, not a certificate.",
+    ("Readable for everyone", "WCAG 2.2 AA contrast, 24 px targets, focus rings and reduced motion: a floor, not a certificate.",
      '<div class="vg-floor"><span class="vg-aa">Aa</span><span class="num">4.5:1</span><span class="vg-target"></span><span class="num">24 px</span></div>', 1),
     ("Start from what you have", "Point it at a website, screenshot, Figma file or repo. It keeps the structure, never another brand's identity.",
      '<p class="vg-from"><span class="chip">Website</span><span class="chip">Screenshot</span><span class="chip">Figma file</span><span class="chip">Repository</span><span class="chip">Brand book</span></p>', 1),
@@ -639,7 +699,7 @@ def install_tabs():
     tabs = "".join(f'<button type="button" role="tab" id="inst-tab-{k}" aria-controls="inst-{k}" aria-selected="{"true" if i == 0 else "false"}">{"".join(logo(m, 16) for m in INSTALL_MARKS[k])}{esc(label)}</button>'
                    for i, (k, label, _d, _c, _t) in enumerate(INSTALL))
     panels = "".join(f'<div class="inst-panel" role="tabpanel" tabindex="0" id="inst-{k}" aria-labelledby="inst-tab-{k}"><p>{esc(d)}</p>'
-                     f'<div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>{esc(c)}</code></pre></div><p class="inst-then">{esc(then)}</p></div>'
+                     f'<div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>{code_html(esc(c))}</code></pre></div><p class="inst-then">{esc(then)}</p></div>'
                      for k, _label, d, c, then in INSTALL)
     return f'<div class="tabs" data-tabs><div class="tablist" role="tablist" aria-label="Your AI tool">{tabs}</div>{panels}</div>'
 
@@ -681,9 +741,9 @@ def home(pages, facts, faq):
     body = f"""
 <section class="h-hero">
 {announce}
-<h1 class="h-title">Make everything you build <strong>look like it belongs together.</strong></h1>
+<h1 class="h-title{" g-wait" if HEADLINE_GATHER else ""}">Make everything you build <strong>look like it belongs together.</strong></h1>
 <p class="h-lede">Your AI tools know what to build. OpenDesigner tells them how it should look: one set of design rules that every new screen follows, and that it updates when you change your mind.</p>
-<div class="h-cta"><a class="btn primary lg" href="#install">Get started, free</a><a class="h-link" href="#how">See how it works {ARROW}</a></div>
+<div class="h-cta"><a class="btn primary lg" href="#install">Get started free</a><a class="h-link" href="#fix">See it in action {ARROW}</a></div>
 <div class="h-cmd-wrap"><p class="h-cmd-label">Two commands in Claude Code, then a few plain questions</p>
 <div class="cmd h-cmd"><code>/plugin marketplace add ckryptickunal/OpenDesigner</code><button class="copy" type="button" data-copy-text="/plugin marketplace add ckryptickunal/OpenDesigner
 /plugin install opendesigner@opendesigner">Copy both</button></div></div>
@@ -693,7 +753,7 @@ def home(pages, facts, faq):
 
 <section class="h-sec" id="why">
 <div class="h-head">{idx("01", "The problem")}<h2 class="h-h2">Every new screen drifts a little.</h2>
-<p class="h-lede">One page gets rounded buttons, the next gets square ones, and a new blue appears. People notice: a first impression forms in 17 to 50 milliseconds, and simple, consistent screens are the ones that earn trust (<a href="{GH}/blob/main/research/L15-visual-design-principles.md">research</a>).</p></div>
+<p class="h-lede">One page gets rounded buttons, the next gets square ones, and a new blue appears. People notice: they judge how a page looks in 17 to 50 milliseconds, and simple, familiar screens are the ones they rate most appealing (<a href="{GH}/blob/main/research/L15-visual-design-principles.md">research</a>).</p></div>
 {figure("design-systems-one-source")}
 </section>
 
@@ -736,7 +796,7 @@ def home(pages, facts, faq):
 {craft_sec}
 <section class="h-sec" id="install">
 <div class="h-head">{idx("08", "Get started")}<h2 class="h-h2">Add it to the AI tool you already use.</h2>
-<p class="h-lede">You need your own AI tool and Python 3.10 or newer. Pick your tool and copy the commands.</p></div>
+<p class="h-lede">You need your own AI tool. Claude Code, the Claude app and other agents also need Python 3.10 or newer; ChatGPT needs nothing installed.</p></div>
 {install_tabs()}
 </section>
 
@@ -744,8 +804,17 @@ def home(pages, facts, faq):
 <div class="h-split">
 <div><p class="kicker">Status</p><h2 class="h-h2">Early, and honest about it.</h2>
 <ul class="status">{"".join(f"<li>{x}</li>" for x in HOME_STATUS)}</ul>
-<p class="h-lede">The most useful help right now: try it on a real project and tell us where it breaks.</p></div>
+<p class="h-lede">The most useful help right now: try it on a real project and tell us where it breaks.</p>
+<p class="h-contrib"><span class="kicker">Contribute</span><a href="{GH}/blob/main/CONTRIBUTING.md">How to contribute</a><a href="{GH}/issues?q=is%3Aopen+label%3A%22good+first+issue%22">Good first issues</a><a href="{GH}/issues/new/choose">Report a problem</a></p></div>
 {gh_card(facts)}
+</div>
+</section>
+
+<section class="h-sec" id="talk">
+<div class="h-book">
+<div><p class="kicker">Talk it through</p><h2 class="h-h2">Work through your design with {CONFIG["HOST_NAME"]}.</h2>
+<p class="h-lede">A free {CONFIG["BOOKING_FREE_MINUTES"]}-minute call with {CONFIG["HOST_NAME"]}, {CONFIG["HOST_ROLE"]}, to see whether it fits your product and where to start. OpenDesigner stays free; you never need a call to use it.</p></div>
+<div class="h-book-act">{book_link("Book a free " + str(CONFIG["BOOKING_FREE_MINUTES"]) + "-minute call", primary=True)}<a class="h-link" href="/book/">What the call covers {ARROW}</a></div>
 </div>
 </section>
 
@@ -760,7 +829,7 @@ def home(pages, facts, faq):
 <p class="kicker">Try it</p>
 <h2 class="h-h2">Make your next feature feel like it was always there.</h2>
 <p class="h-end-lede">One set of rules, and every screen after that follows it.</p>
-<div class="h-cta"><a class="btn primary lg" href="/docs/install/">Get started, free</a></div>
+<div class="h-cta"><a class="btn primary lg" href="/docs/install/">Get started free</a>{book_link("Or book a free " + str(CONFIG["BOOKING_FREE_MINUTES"]) + "-minute call")}</div>
 </div>
 </div>
 <p class="h-credit">Photo: <a href="https://unsplash.com/photos/{page_id}">{esc(author)}</a> on Unsplash</p>
@@ -811,7 +880,7 @@ def doc_page(p, pages):
     pos = same.index(p) + 1
     kind = {"Getting started": "lime", "Guides": "", "Concepts": "sky", "Craft": "pink", "Reference": "paper"}.get(p["section"], "paper")
     icon = {"Getting started": "play", "Guides": "compass", "Concepts": "bulb", "Craft": "brush", "Reference": "book"}.get(p["section"], "tag")
-    main_html = (f'<div class="doc-grid"><article class="doc">{crumb}<p class="doc-stickers a-doc"><span class="a-card"><span class="a-card-k">{esc(p["section"])}</span><span class="a-card-n">{pos:02d}<small>/{len(same):02d}</small></span></span></p><h1 class="t-h1">{esc(p["title"])}</h1>'
+    main_html = (f'<div class="doc-grid"><article class="doc">{crumb}<p class="doc-stickers a-doc"><span class="a-card"><span class="a-card-k">{esc(p["section"])}</span><span class="a-card-n">{pos:02d}<small>/{len(same):02d}</small></span></span></p><h1 class="t-h1">{esc(p["title"]).replace("-", NBH)}</h1>'
                  f'<p class="meta">Updated <time datetime="{p.get("updated", TODAY)}">{p.get("updated", TODAY)}</time> · <a href="{edit}">Edit on GitHub</a></p>'
                  f'<div class="prose">{content}</div>{pn}</article>{toc_html}</div>')
     ld = [crumbs_ld([("Docs", "/docs/")] + ([] if p["slug"] == "index" else [(p["title"], p["path"])])),
@@ -850,6 +919,11 @@ CATS = [("product", "B2B product screens"), ("styles", "Style studies"), ("heroe
 CAT_FRAMES = {"product": "16 / 10", "styles": "16 / 10", "heroes": "16 / 10", "components": "16 / 10", "footers": "16 / 8", "mockups": "4 / 3", "app-screens": "9 / 19.5", "watch": "615 / 753"}
 THUMB_W, FULL_W = 900, 1800
 AUDIT = BRAND / "showcase" / "audit"
+# The headline's letters gather on load (site.js). Built locally for the owner to see; off in every deploy until he approves it
+# (2026-10-15). Preview it with OD_HEADLINE_GATHER=1 python3 site/build.py.
+HEADLINE_GATHER = os.environ.get("OD_HEADLINE_GATHER") == "1"
+_order = BRAND / "showcase" / "order.json"
+ORDER = {"scores": {}, "order": [], "category_order": [], **(json.loads(_order.read_text()) if _order.exists() else {})}
 # Words in the audit's "industry" field that mean the product is sold to businesses.
 B2B_WORDS = ("b2b", "saas", "enterprise", "payments", "billing", "spend", "accounts", "crm", "sales", "observability", "monitoring", "cloud", "security",
              "devops", "incident", "on-call", "people ops", "hr ", "facilit", "building management", "post-production", "event", "data", "etl", "pipeline",
@@ -866,8 +940,10 @@ def piece_text(d):
         lines = notes.read_text().splitlines()
         title = next((ln[2:].strip() for ln in lines if ln.startswith("# ")), title)
         title = re.sub(r":\s*notes$", "", title)
+        title = re.sub(r"^\d{1,2}\s*[·.:–-]?\s+(?=\D)", "", title)  # "01 · Payments table": the number adds nothing in a gallery
         body = [ln.strip() for ln in lines if ln.strip() and not ln.startswith(("#", "|", "-", ">", "!", "```"))
-                and not re.search(r"(shot\.png|index\.html|^Render|^Final render|renders?,? each|^Page|^Status|^Built by|scale 2|\d+ ?[×x] ?\d+ at)", ln.strip(), re.I)]
+                and not re.search(r"(shot\.png|index\.html|^Render|^Final render|renders?,? each|^Page|^Status|^Built by|scale 2|\d+ ?[×x] ?\d+ at"
+                                  r"|\b[\w-]+/[\w./-]+\.(?:html|png|json|md|css|py)\b|\bbrand/|\bsite/|\bengine\.py\b)", ln.strip(), re.I)]
         if d.name in MOCKUP_CAPTIONS:
             body = [MOCKUP_CAPTIONS[d.name]]
         if body:
@@ -908,10 +984,19 @@ def show_pieces():
                 industry = str(j.get("industry", "")).lower().strip()
                 audience = "b2b" if cat == "product" or industry in B2B_INDUSTRIES or any(k in industry for k in B2B_WORDS) else "consumer"
                 styles = [str(x).lower().strip() for x in j.get("style", [])][:4]
-                meta = {"tags": [audience] + styles + ([industry] if industry else []), "styles": styles, "verdict": "" if ((j.get("round3") or {}).get("score") or 0) >= 4 else j.get("owner", {}).get("verdict") or j.get("verdict", ""), "pattern": j.get("pattern", "")}
+                # the latest round decides the "Being rebuilt" stamp: a round-4 piece passed the blind comparison; before that, round 3;
+                # a piece the round-4 audit sends back for work is stamped until it passes
+                latest = j.get("round4") or j.get("round3") or {}
+                todo = ORDER["scores"].get(f"{cat}--{d.name}", {}).get("action") in ("polish", "rebuild") and not j.get("round4")
+                verdict = "polish" if todo else ("" if (latest.get("score") or 0) >= 4 else j.get("owner", {}).get("verdict") or j.get("verdict", ""))
+                meta = {"tags": [audience] + styles + ([industry] if industry else []), "styles": styles, "verdict": verdict, "pattern": j.get("pattern", "")}
             extras = [x for x in sorted(d.glob("shot-*.png")) if not any(k in x.stem for k in ("painted", "-v", "draft", "old"))] if shot.exists() else []
             out.append({"key": f"{cat}--{d.name}", "cat": cat, "label": label, "src": src, "w": w, "h": h, "title": title, "blurb": blurb,
                         "frames": [(x.stem.replace("shot-", ""), x) for x in extras], **meta})
+    # strongest first (owner, 2026-10-15: "in the order that people feel good to see them"), from the round-4 audit's ranking;
+    # pieces it has not ranked keep their folder order after the ranked ones
+    rank = {k: i for i, k in enumerate(ORDER["order"])}
+    out.sort(key=lambda p: rank.get(p["key"], len(rank)))
     return out
 
 
@@ -944,6 +1029,16 @@ def show_images(pieces):
                     im = im.resize((round(im.width * scale), round(im.height * scale)), Image.LANCZOS)
                 im.save(c, "WEBP", quality=82)
             shutil.copy(c, DIST / "img" / "show" / f"{p['key']}--{fname}-{FULL_W}.webp")
+            t = cache / f"{fstamp}-{p['key']}--{fname}.webp"
+            if not t.exists():
+                im = Image.open(fsrc).convert("RGB")
+                scale = min(1.0, THUMB_W / im.width)
+                if scale < 1:
+                    im = im.resize((round(im.width * scale), round(im.height * scale)), Image.LANCZOS)
+                im.save(t, "WEBP", quality=80)
+            shutil.copy(t, DIST / "img" / "show" / f"{p['key']}--{fname}.webp")
+            with Image.open(t) as im:
+                p.setdefault("frame_sizes", {})[fname] = im.size
 
 
 STYLE_WORDS = {"minimal", "swiss", "editorial", "brutalist", "glass", "dark", "neon", "y2k", "organic", "luxury", "playful", "enterprise", "retro", "industrial", "terminal", "clinical"}
@@ -970,28 +1065,46 @@ def sticker_icon(t, p):
     return "tag"
 
 
+CAPS = {"ai": "AI", "b2b": "B2B", "b2c": "B2C", "ui": "UI", "ux": "UX", "saas": "SaaS", "hr": "HR", "crm": "CRM", "api": "API", "iot": "IoT", "hmi": "HMI"}
+
+
 def sticker_label(t):
-    if t == "b2b":
-        return "B2B"
-    t = re.split(r"[(/,;:]| - ", t)[0].strip()  # the audit's industry field can be a phrase; the sticker keeps its head
+    t = re.split(r"[(/,;:]| - ", t)[0].strip()  # the audit's industry field can be a phrase; the label keeps its head
     t = t if len(t) <= 24 else t[:24].rsplit(" ", 1)[0]
+    t = " ".join(CAPS.get(w.lower(), w) for w in t.split(" "))
     return t[:1].upper() + t[1:]
 
 
+CHEV = {"prev": '<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        "next": '<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m6 3.5 4.5 4.5L6 12.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>'}
+
+
 def piece_card(p, i, frame):
+    """One gallery card. A piece with extra frames gets them in its own frame: swipe, chevrons and a dot for each (owner,
+    2026-10-15: no "+2 frames" sticker; the image itself changes). Tags are one quiet line, not three styles of label."""
     tags = [t for t in p["tags"] if t in ("b2b", "consumer")][:1] + [t for t in p["tags"] if t in p.get("styles", [])][:1] + [t for t in p["tags"] if t not in ("b2b", "consumer") and t not in p.get("styles", [])][:1]
-    kind = lambda t: "a-aud" if t in ("b2b", "consumer") else ("a-sty" if t in p.get("styles", []) else "a-ind")
-    chips = "".join(f'<span class="a-tag {kind(t)}">{esc(sticker_label(t))}</span>' for t in tags)
-    review = '<span class="a-rstamp rot">Being rebuilt</span>' if p["verdict"] in ("polish", "remake", "improve") else ""
-    frames = p.get("frames", [])
-    if frames:
-        review += f'<span class="a-rstamp rot">+{len(frames)} frame{"s" if len(frames) > 1 else ""}</span>'
-    extra_links = "".join(f'<a class="frame-link" hidden href="/img/show/{p["key"]}--{fn}-{FULL_W}.webp" data-gallery="{i}" data-title="{esc(p["title"])} · {esc(fn.replace("-", " "))}" '
-                          f'data-blurb="{esc(p["blurb"])}" data-tags="{esc(", ".join(p["tags"]))}"></a>' for fn, _src in frames)
-    return (f'<figure class="piece" data-tags="{esc(" ".join(p["tags"]))}" data-cat="{p["cat"]}">'
-            f'<a class="piece-link" href="/img/show/{p["key"]}-{FULL_W}.webp" data-gallery="{i}" data-title="{esc(p["title"])}" data-blurb="{esc(p["blurb"])}" '
-            f'data-tags="{esc(", ".join(p["tags"]))}" style="aspect-ratio:{frame}"><img src="/img/show/{p["key"]}.webp" width="{p["tw"]}" height="{p["th"]}" loading="lazy" alt="{esc(p["title"])}"></a>{extra_links}'
-            + (f'<span class="piece-stuck">{review}</span>' if review else "") + f'<figcaption><strong>{esc(p["title"])}</strong><span>{esc(p["blurb"])}</span><span class="a-tags">{chips}</span></figcaption></figure>')
+    meta = " · ".join(esc(sticker_label(t)) for t in tags)
+    review = '<span class="piece-stuck"><span class="a-rstamp rot">Being rebuilt</span></span>' if p["verdict"] in ("polish", "remake", "improve") else ""
+    data = f'data-blurb="{esc(p["blurb"])}" data-tags="{esc(", ".join(p["tags"]))}"'
+    shots = [(f"/img/show/{p['key']}-{FULL_W}.webp", f"/img/show/{p['key']}.webp", p["tw"], p["th"], p["title"])]
+    for fn, _src in p.get("frames", []):
+        fw, fh = p.get("frame_sizes", {}).get(fn, (p["tw"], p["th"]))
+        shots.append((f"/img/show/{p['key']}--{fn}-{FULL_W}.webp", f"/img/show/{p['key']}--{fn}.webp", fw, fh, f"{p['title']} · {fn.replace('-', ' ')}"))
+    links = "".join(f'<a class="piece-link{" slide" if len(shots) > 1 else ""}" href="{full}" data-gallery="{i}" data-title="{esc(t)}" {data}'
+                    + ("" if len(shots) > 1 else f' style="aspect-ratio:{frame}"')
+                    + f'><img src="{thumb}" width="{w}" height="{h}" loading="lazy" alt="{esc(t)}"></a>' for full, thumb, w, h, t in shots)
+    if len(shots) > 1:
+        dots = '<span class="sl-dot"></span>' * len(shots)
+        media = (f'<div class="slides" data-slides role="group" aria-roledescription="carousel" aria-label="{esc(p["title"])}, {len(shots)} frames" style="aspect-ratio:{frame}">'
+                 f'<div class="sl-track">{links}</div>'
+                 f'<button type="button" class="sl-arrow sl-prev" aria-label="Previous frame" disabled>{CHEV["prev"]}</button>'
+                 f'<button type="button" class="sl-arrow sl-next" aria-label="Next frame">{CHEV["next"]}</button>'
+                 f'<span class="sl-status visually-hidden" aria-live="polite">Frame 1 of {len(shots)}</span></div>')
+        dots = f'<span class="sl-dots" aria-hidden="true">{dots}<span class="sl-pill"></span></span>'  # beside the title, so they never cover the screen
+    else:
+        media, dots = links, ""
+    return (f'<figure class="piece" data-tags="{esc(" ".join(p["tags"]))}" data-cat="{p["cat"]}">{media}{review}'
+            f'<figcaption><span class="piece-head"><strong>{esc(p["title"])}</strong>{dots}</span><span>{esc(p["blurb"])}</span>' + (f'<span class="piece-meta">{meta}</span>' if meta else "") + '</figcaption></figure>')
 
 
 def showcase(pages):
@@ -1004,9 +1117,10 @@ def showcase(pages):
     styles = {"minimal", "swiss", "editorial", "brutalist", "glass", "dark", "neon", "y2k", "organic", "luxury", "playful", "enterprise", "retro", "industrial", "terminal", "clinical"}
     top = [t for t in ("b2b", "consumer") if t in counts] + [t for t, n in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0])) if t in styles and n >= 3]
     filters = ('<div class="filters" role="group" aria-label="Filter by tag"><button type="button" class="filter is-on" data-tag="">All <span class="num">' + str(len(pieces)) + "</span></button>"
-               + "".join(f'<button type="button" class="filter" data-tag="{esc(t)}">{esc("B2B" if t == "b2b" else t.capitalize())} <span class="num">{counts[t]}</span></button>' for t in top) + "</div>") if top else ""
+               + "".join(f'<button type="button" class="filter" data-tag="{esc(t)}">{esc(sticker_label(t))} <span class="num">{counts[t]}</span></button>' for t in top) + "</div>") if top else ""
     blocks, items, md, i = [], [], ["# Showcase", "", SHOW_INTRO, ""], 0
-    for cat, label in CATS:
+    cat_rank = {c: n for n, c in enumerate(ORDER["category_order"])}
+    for cat, label in sorted(CATS, key=lambda c: cat_rank.get(c[0], len(cat_rank))):
         ps = [p for p in pieces if p["cat"] == cat]
         if not ps:
             continue
@@ -1028,8 +1142,7 @@ def showcase(pages):
         blocks.append(f'<section class="block show-cat" id="{cat}"><p class="kicker">{len(ps)} pieces</p><h2 class="t-h2">{label}</h2>{"".join(grids)}</section>')
     head = (f'<div class="page-head"><nav class="crumb" aria-label="Breadcrumb"><a href="/">{NAME}</a><span aria-hidden="true">/</span><span aria-current="page">Showcase</span></nav>'
             f'<h1 class="t-h1">{len(pieces)} designs, one process</h1><p class="lede">{esc(SHOW_INTRO)} <a href="{GH}/blob/main/brand/showcase/STRESS-TEST.md">Read the findings</a>.</p>{filters}'
-            f'<p class="a-tags legend"><span class="kicker">Labels</span><span class="a-tag a-aud">Audience</span><span class="a-tag a-sty">Style</span>'
-            f'<span class="a-tag a-ind">Industry</span><span class="a-rstamp">Being rebuilt</span><span class="a-rstamp">More frames</span></p></div>')
+            f'</div>')
     lightbox = ('<dialog class="lb" id="lightbox" aria-label="Gallery"><div class="lb-bar"><div class="lb-text"><strong class="lb-title"></strong><span class="lb-blurb"></span><span class="lb-tags kicker"></span></div>'
                 '<div class="lb-actions"><a class="lb-open" href="#" target="_blank" rel="noopener">Open image</a><button type="button" class="lb-prev" aria-label="Previous">←</button><button type="button" class="lb-next" aria-label="Next">→</button><button type="button" class="lb-close" aria-label="Close">Esc</button></div></div>'
                 '<div class="lb-stage"><img class="lb-img" alt=""></div></dialog>')
@@ -1189,11 +1302,12 @@ def main():
     files["showcase/index.html"] = sh_html
     mds["showcase/index.md"] = sh_md + "\n"
     files["404.html"] = not_found(pages)
+    files["book/index.html"] = book_page(pages)
     for rel, text in {**files, **mds}.items():
         f = DIST / rel
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text(text)
-    paths = ["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/"]
+    paths = ["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/"]
     (DIST / "robots.txt").write_text(robots())
     (DIST / "llms.txt").write_text(llms_txt(pages))
     (DIST / "llms-full.txt").write_text(f"# {NAME} (full text of {SITE_URL})\n\n" + "\n\n---\n\n".join(mds.values()))

@@ -229,6 +229,28 @@ svg.arrow { width: 14px; height: 14px; flex: none; }
 .piece-link:hover img { transform: scale(1.015); }
 .piece figcaption { display: grid; gap: 4px; margin-top: 10px; font-size: 13.5px; line-height: 20px; color: var(--ink-muted); }
 .piece figcaption strong { color: var(--ink); font-weight: 500; font-size: 14px; }
+.piece-meta { font-size: 12.5px; color: var(--ink-subtle, var(--ink-muted)); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* A piece with several frames: they sit side by side in its own frame. Swipe on touch; chevrons appear under a mouse or on
+   keyboard focus; the dots show how many frames there are and which one is showing (the longer dot). */
+.slides { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface-sunken); }
+.sl-track { display: flex; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+.sl-track::-webkit-scrollbar { display: none; }
+.slides .slide { flex: 0 0 100%; height: 100%; scroll-snap-align: start; scroll-snap-stop: always; border: 0; border-radius: 0; }
+.sl-arrow { position: absolute; top: 50%; display: grid; place-items: center; width: 32px; height: 32px; margin-top: -16px; padding: 0; border: 0; border-radius: 50%;
+  background: rgb(255 255 255 / .94); color: #14161c; box-shadow: 0 0 0 1px rgb(0 0 0 / .06), 0 2px 8px rgb(0 0 0 / .16); cursor: pointer;
+  opacity: 0; transition: opacity 160ms ease, transform 160ms var(--ease-out-strong, ease-out); }
+.sl-prev { left: 10px; } .sl-next { right: 10px; }
+.sl-arrow:disabled { visibility: hidden; }
+.sl-arrow:active { transform: scale(0.94); }
+.slides:focus-within .sl-arrow { opacity: 1; }
+@media (hover: hover) and (pointer: fine) { .slides:hover .sl-arrow { opacity: 1; } }
+.piece-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.piece-head strong { min-width: 0; }
+.sl-dots { position: relative; flex: none; display: flex; gap: 10px; padding: 0 6px; }
+.sl-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink); opacity: .22; }
+.sl-pill { position: absolute; left: 0; top: 0; width: 18px; height: 6px; border-radius: 3px; background: var(--ink); transition: transform 320ms var(--ease-out-strong, ease-out); }  /* centred on dot n by site.js: translateX(n * 16px) */
+@media (prefers-reduced-motion: reduce) { .sl-pill, .sl-arrow { transition: none; } }
 .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
 .tag { display: inline-block; padding: 1px 6px; border: 1px solid var(--line); font: 500 11px/16px "Source Code Pro", ui-monospace, monospace; color: var(--ink-muted); }
 .tag.review { border-style: dashed; color: var(--warn); border-color: var(--warn); }
@@ -393,3 +415,27 @@ code, pre, .mono, .num, .code, .tree code { letter-spacing: 0; }
 .btn, .copy, .gh-btn, .filter, .tablist [role="tab"], .lb-actions button { transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background-color 160ms ease, border-color 160ms ease, color 160ms ease; }
 .btn:active, .copy:active, .gh-btn:active, .filter:active, .tablist [role="tab"]:active, .lb-actions button:active { transform: scale(0.97); }
 @media (prefers-reduced-motion: reduce) { .btn:active, .copy:active, .gh-btn:active, .filter:active, .tablist [role="tab"]:active, .lb-actions button:active { transform: none; } }
+
+/* No widows (owner, 2026-10-15: "the word 'it' is always on the next line"). Headings and short centred lines balance their lines;
+   paragraphs, list items and captions avoid a lone last word. site/check_layout.py check 9 measures it at every width. */
+h1, h2, h3, h4, .t-hero, .t-h1, .t-h2, .t-h3, .h-title, .h-h2, .h-h3, .h-end-lede, .h-cmd-label, figcaption, .kicker { text-wrap: balance; }
+p, li, dd, .lede, .h-lede, .prose p, .prose li { text-wrap: pretty; }
+/* short card text balances (Chrome's "pretty" leaves some lone last words); long captions use "pretty", which works past six lines */
+.bento-card > p, .who-card > p, .craft-card > p, .h-step > p { text-wrap: balance; }
+.fig > figcaption { text-wrap: pretty; }
+@media (max-width: 380px) { .t-h1 { font-size: 28px; } }
+/* Phone audit, 2026-10-15: commands wrap instead of scrolling under the Copy button; inline code keeps its chip on every line it wraps to. */
+.code pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+/* Code never splits inside a word (build.py code_html marks each word). The Copy button keeps its room on the first lines only,
+   and a wrapped line is indented so it reads as the same line (phone audit, 2026-10-15). */
+code .w { white-space: nowrap; }
+.code pre { padding-right: 16px; overflow-wrap: normal; text-indent: 2ch hanging each-line; }
+.code pre::before { content: ""; float: right; width: 80px; height: 28px; }
+/* Showcase on phones: the stamp stays inside the screen; the tag filters scroll in one row instead of five */
+@media (max-width: 640px) {
+  .piece-stuck { right: 4px; }
+  .filters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -16px; padding-inline: 16px; }
+  .filters::-webkit-scrollbar { display: none; }
+  .filters .filter { flex: none; }
+}
+:not(pre) > code { -webkit-box-decoration-break: clone; box-decoration-break: clone; overflow-wrap: break-word; }

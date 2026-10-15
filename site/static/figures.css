@@ -159,3 +159,46 @@
 /* Do and Don't panels: the drawing fills the panel, so both grey boxes end on one line (alignment audit, 2026-10-15). */
 .dodont > div { display: flex; flex-direction: column; }
 .dodont .dd-art { flex: 1; }
+/* Phone audit, 2026-10-15: a chip never breaks inside a word ("Defaul / t"); only chips marked .wrap (long file names) may wrap. */
+.fig .chip { white-space: nowrap; overflow-wrap: normal; }
+.fig .chip.wrap { white-space: normal; overflow-wrap: anywhere; }
+.tag-missing { white-space: nowrap; }
+/* the small status tables stack on phones: the status sits under its row's text, not squeezed beside it */
+@media (max-width: 560px) {
+  table.mini, table.mini tbody, table.mini tr, table.mini td { display: block; }
+  table.mini thead { display: none; }
+  table.mini tr { padding: 12px 0; border-top: 1px solid var(--line); }
+  table.mini td { border: 0 !important; padding: 0 !important; }
+  table.mini td + td { margin-top: 8px; }
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+   Phone audit, 2026-10-15 (internal pages). Measured at 320, 375, 390 and 430 px with a phone profile.
+   --------------------------------------------------------------------------------------------------------------- */
+/* Small text in a figure is 12 px or more (figures/README.md): the kicker grows from 11 to 12 px inside figures. */
+.fig .kicker { font-size: 12px; line-height: 16px; }
+/* Labels and short keys never break inside a word ("CORNER / S", "compos / e"); only names in .mono and code may. */
+.fig .kicker, .fig .kv dt { overflow-wrap: normal; }
+/* A word or token in .nw stays whole: a flag never splits as "-" / "-why", a name never at its hyphen ("radius-" / "8);"). */
+.fig .nw { white-space: nowrap; }
+/* The interview card's suggestion: on a phone the chip sits above its reason instead of beside a 130 px column. */
+@media (max-width: 480px) { .rec { grid-template-columns: minmax(0, 1fr); gap: 8px; } .rec > .chip { justify-self: start; } }
+/* The parts-of-a-system drawing (design-systems-parts.html): under 314 px of panel, its labels and markers grow back to 12 px or more. */
+@container (max-width: 313px) {
+  .fig svg.dsp-art .lbl, .fig svg.dsp-art .lbl-g text { font-size: 17px; }
+  .fig svg.dsp-art .mk circle { r: 14px; }
+  .fig svg.dsp-art .mk text { font-size: 16px; }
+}
+/* A swatch row (accessibility-contrast.html): swatch, name and ratio on one row; in a narrow panel the ratio moves under the name. */
+.fig .ct-row { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; align-items: center; gap: 6px 12px; }
+@container (max-width: 300px) {
+  .fig .ct-row { grid-template-columns: 56px minmax(0, 1fr); }
+  .fig .ct-row > :first-child { grid-row: span 2; }
+  .fig .ct-row > .chip { justify-self: start; }
+}
+/* Token tiers (design-tokens-tiers.html): the tier name sits beside its token on wide panels and above it on phones. */
+.fig .tier { grid-template-columns: 96px minmax(0, 1fr); gap: 4px 12px; }
+.fig .tier > .kicker { grid-row: span 2; }
+@container (max-width: 420px) { .fig .tier { grid-template-columns: minmax(0, 1fr); } .fig .tier > .kicker { grid-row: auto; } }
+/* Stacked Do and Don't panels on phones: room for the next panel's sticker, so it never touches the panel above. */
+@media (max-width: 640px) { .dodont { gap: 28px; } }

@@ -4,7 +4,7 @@ seo_title: Design decisions, DESIGN.md and the overview page explained
 description: How OpenDesigner records each design decision with its reason, keeps DESIGN.md current for people and AI agents, and shows the system on one overview page.
 section: Concepts
 order: 4
-updated: 2026-10-14
+updated: 2026-10-15
 ---
 
 OpenDesigner writes every decision into a log with how it was set and why. It turns the current decisions into `DESIGN.md`, a plain-words description of your system that people and AI tools read. It also builds `overview.html`, one page that shows your whole system and marks what is still missing.
@@ -91,7 +91,7 @@ At the end of a session, the skill writes `opendesigner/RATIONALE.md` from a tem
 
 ## Where the reasons come from
 
-Every default traces to the research: the dial formulas in `levers.json` and the Decision Cards behind them. A card covers one design decision, with its options, a default and its sources. The defaults rest on 352 cards, and some formulas are marked as inferred. A citation check finds no broken references, and a verification pass re-checked 161 claims against live sources. It found 5 wrong, and the fixes are logged. The research map is in the [repository](https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/RESEARCH.md).
+Every default traces to the research: the dial formulas in `levers.json` and the Decision Cards behind them. A card covers one design decision, with its options, a default and its sources. The defaults rest on more than 500 cards, and some formulas are marked as inferred. A citation check finds no broken references, and a verification pass re-checked 161 claims against live sources. It found 5 wrong, and the fixes are logged. The research map is in the [repository](https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/RESEARCH.md).
 
 ## Known issues
 

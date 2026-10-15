@@ -4,7 +4,7 @@ seo_title: OpenDesigner for engineers: tokens, CSS, Tailwind v4, Swift
 description: The tokens and code exports OpenDesigner writes, how to wire them into web, iOS and Android apps, how review finds hard-coded values, and how agents use them.
 section: Guides
 order: 3
-updated: 2026-10-14
+updated: 2026-10-15
 ---
 
 OpenDesigner turns design decisions into files you import: DTCG 2025.10 tokens, CSS variables, a Tailwind v4 theme, Swift and Jetpack Compose files, and a DTCG resolver. `engine.py review` finds values typed straight into your code that skip the tokens. `DESIGN.md` and a short note in `AGENTS.md` tell coding agents to use the tokens too.
@@ -116,7 +116,7 @@ At the end of a session, OpenDesigner asks whether to add a short note to your `
 
 ## About the engine
 
-The engine is one Python file that needs Python 3.10 or newer. It uses only the standard library and makes no network calls. The same `state.json` gives the same tokens. It has 119 tests, which pass on the maintainer's computer. No CI runs are recorded yet.
+The engine is one Python file that needs Python 3.10 or newer. It uses only the standard library and makes no network calls. The same `state.json` gives the same tokens. It has 157 tests, which pass on the maintainer's computer. No CI runs are recorded yet.
 
 ## Not yet
 

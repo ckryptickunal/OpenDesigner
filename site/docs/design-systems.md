@@ -4,7 +4,7 @@ seo_title: What is a design system? A plain guide for any team
 description: A design system is the set of rules for how a product looks and behaves. What goes into one, what tokens and DESIGN.md are, and how to make one with AI.
 section: Concepts
 order: 1
-updated: 2026-10-14
+updated: 2026-10-15
 ---
 
 A design system is the set of rules for how a product looks and behaves. It covers colors, text sizes, spacing, corners, depth, motion and the parts people use, like buttons and form fields. Writing the rules down keeps every screen consistent, even when different people, or different AI chats, build them.
@@ -66,4 +66,4 @@ OpenDesigner follows these steps with the AI tool you already use. It is free an
 
 - [Design Tokens Community Group: first stable version, 2025.10](https://www.w3.org/community/design-tokens/2025/10/28/design-tokens-specification-reaches-first-stable-version/)
 - [WCAG 2.2: 1.4.3 Contrast (Minimum)](https://www.w3.org/TR/WCAG22/#contrast-minimum) and [2.5.8 Target Size (Minimum)](https://www.w3.org/TR/WCAG22/#target-size-minimum)
-- [OpenDesigner research map](https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/RESEARCH.md): the 352 Decision Cards behind the defaults, each with its sources
+- [OpenDesigner research map](https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/RESEARCH.md): the more than 500 Decision Cards behind the defaults, each with its sources

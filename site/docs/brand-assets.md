@@ -64,7 +64,8 @@ For a logo made by a contractor, it reminds you to get a written copyright assig
 ## The brief it writes
 
 ```
-Asset: logo                    Needed by: launch
+Asset: logo
+Needed by: launch
 Files: SVG master with outlined text, one-color version
 System: DESIGN.md; palette accent + neutrals; type faces; radius control/container
 Direction: the chosen direction in one line; memorable thing: from your answers

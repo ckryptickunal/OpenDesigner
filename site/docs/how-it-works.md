@@ -26,6 +26,17 @@ Other AI tools follow the same steps, and some show the choices as text.
 11. **Later, it keeps things consistent.** Changes go through the extend skill, which reads the decision log first. `engine.py review` finds hard-coded values in your code and names the token to use.
 12. **If something is confusing or broken,** it saves a note in your project and gives you a ready-to-file GitHub link. Nothing is posted unless you submit it.
 
+## Four things you can ask for
+
+Most requests are one of four jobs. Your AI picks the skill from your words; there are no extra commands to learn.
+
+| Ask for | What happens | What runs |
+|---|---|---|
+| **Audit** what you have | It measures your site, repo, Figma file or brand book, then checks the built screens at every size and theme | the extract skill, then the review skill |
+| **Establish** a system | The five-question sketch and a complete first build | `engine.py sketch`, then `engine.py build` |
+| **Improve** it | A change to the system, with what it would move named first | the extend skill |
+| **Check** the work | Fixed rules on the code and the page, then what still needs your eye | `engine.py review`, the review skill, the preflight skill |
+
 ## Two parts: written instructions and an engine
 
 The skills are written instructions your AI follows. The questions follow a decision graph, so nothing is asked before the things it depends on.
@@ -44,7 +55,7 @@ Every answer is recorded with how it was set, such as chosen, assumed or delegat
 
 Your taste can move the dials too, but only as a suggestion you confirm.
 
-- **The taste poll** is optional and takes about 5 minutes. You rate 20 to 30 real screens from shipped products, never AI-made ones. The screen images stay on your computer.
+- **The taste poll** is optional and takes about 5 minutes. You rate 20 to 30 real screens from shipped products, never AI-made ones. The screens come from Mobbin and don't ship with OpenDesigner, so the poll needs your own Mobbin access. The images stay on your computer.
 - **The taste index** combines every taste signal in your project: the poll, your own decisions, your inspirations, a style you picked and your feel words. It gives each dial a value and a confidence, plus red lines. When it is sure about a dial, it asks "confirm this?". It never offers an option past a red line, and `engine.py review` tells you when the system drifts from your taste.
 - **The taste card** sits at the top of `DESIGN.md` and on the overview page. It has five lines: your own picture of the look, color, shape, motion, and what it should never look like. Each line says where it comes from. The picture and the Never list only ever come from you.
 
@@ -52,7 +63,7 @@ Taste never moves an accessibility floor or a house standard, and it stays in yo
 
 ## Showing choices
 
-It shows each choice in the most visual way your AI tool allows: a page in the chat (such as a Claude artifact), Figma or Paper, a local HTML page, the tool's own multiple-choice question, or plain text with numbered options. It never waits on a picture to move on. The pictures come from eight templates, each with a "Copy my choice" button that makes lines you paste back into the chat. Clicking choices directly inside the AI tool is planned ([issue #20](https://github.com/ckryptickunal/OpenDesigner/issues/20)).
+It shows each choice in the most visual way your AI tool allows: a page in the chat (such as a Claude artifact), Figma or Paper, a local HTML page, the tool's own multiple-choice question, or plain text with numbered options. It never waits on a picture to move on. The pictures come from nine templates, each with a "Copy my choice" button that makes lines you paste back into the chat. Clicking choices directly inside the AI tool is planned ([issue #20](https://github.com/ckryptickunal/OpenDesigner/issues/20)).
 
 ## References and assets
 
@@ -64,6 +75,10 @@ For a logo, custom icons, illustration, photos, a brand typeface or a voice guid
 
 Rule-based checks run first and give the same result every time. Breaking an accessibility rule is an error. Breaking a taste rule is a warning. Only after the system passes does the AI critique it. See [Accessibility floors](/docs/accessibility/).
 
+- **Checked by rules:** contrast, target sizes, focus rings and reduced motion; hard-coded values in your code that skip the tokens; `DESIGN.md` sections that no longer match; and, on the built page, sizes off the scale, missing focus rings, overflow and fonts that did not load.
+- **Judged by the AI and by you:** hierarchy, personality, and whether a page looks premium or generic. The AI says which of its findings it measured and which it only saw. An AI score can rule work out but never approve it: your verdict wins.
+- **Nothing rewrites your interface on its own.** The checks only report. A fix to code you already have waits for your yes.
+
 House standards also apply. These are 455 rules from sources the project owner marked non-negotiable. The engine applies the ones that fit your platforms and locks them.
 
 {{figure:how-it-works-checks}}
@@ -73,4 +88,4 @@ House standards also apply. These are 455 rules from sources the project owner m
 - **Files:** `DESIGN.md` and `PRODUCT.md` at the root, and an `opendesigner/` folder with tokens, exports, the overview page and the decision log. See [The files it writes](/docs/files/).
 - **Later changes:** see [Change or extend a system](/docs/extend/).
 - **Privacy:** the private log stays in your project, out of git. Anonymous reports are a separate yes, and no server collects them yet. See the [privacy page](https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/PRIVACY.md).
-- **Defaults:** they rest on 352 Decision Cards, each covering one design decision with its sources. See the [research map](https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/RESEARCH.md).
+- **Defaults:** they rest on more than 500 Decision Cards, each covering one design decision with its sources. See the [research map](https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/RESEARCH.md).

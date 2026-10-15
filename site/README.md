@@ -11,13 +11,30 @@ python3 site/demo_systems.py   # re-makes the home page's three example systems 
 python3 site/deploy.py         # builds and publishes to Vercel (--preview for a preview URL)
 ```
 
-Before every deploy, open the build locally in the browser pane (`preview_start` with the `opendesigner-site` config in `.claude/launch.json`) and look at it.
+## Before every deploy
+
+1. Build: `python3 site/build.py`. After engine changes, run `python3 site/demo_systems.py` first: the home page's example values come only from it.
+2. Open the build locally in the browser pane (`preview_start` with the `opendesigner-site` config in `.claude/launch.json`) and look at every page you changed, at full size.
+3. `python3 site/check.py` reports no problems.
+4. `python3 site/check_layout.py` reports 0 errors at all 13 widths (320 to 1920 px). Read each warning.
+5. Check the real headers. The local server sends none, so a script, style or font the Content-Security-Policy in `vercel.json` blocks only fails once deployed: deploy a preview (`python3 site/deploy.py --preview`), open it, and confirm the console shows no CSP errors.
+6. Deploy (`python3 site/deploy.py`). It pings IndexNow.
+
+What the owner's reviews settled for this site (`_coordination/OWNER-FEEDBACK.md`, 2026-10-14 and 2026-10-15):
+- **Outcome first.** Copy leads with what the person gets (a product that looks like it belongs together), then how. Short, plain sentences.
+- **One primary action per view.** Secondary actions are quiet text links; places already in the header are not repeated as buttons (preflight 36).
+- **Known tools show their own marks** beside their names (`logos.json`, Simple Icons, monochrome). Invented brands never use real marks.
+- **Short lines with no widows:** headings and short labels use `text-wrap: balance`, and no line ends on one word (preflight 8).
+- **Alignment holds at every width:** siblings share a top edge and height, stacked rows share one centre line, and a pinned control sits on the content's first line (preflight 35 and 38).
+- **Invented names are checked** with `python3 brand/tools/check_names.py site/dist/index.html --gallery` and a web search.
+
+## How the site is put together
 
 - **Hosting:** Vercel, project `opendesigner`, at https://opendesigner.vercel.app (the address is in `site-url.txt`). Deploying needs the Vercel CLI, signed in. Each production deploy also pings IndexNow.
 - **Figures** live in `figures/*.html` and are placed in a docs page with `{{figure:name}}` on its own line (contract: `figures/README.md`).
 - **Showcase** tiles, tags and the lightbox come from `brand/showcase/` and its Mobbin audit files in `brand/showcase/audit/`.
 - **Edit the docs** in `docs/*.md`. Front matter: `title`, `seo_title` (50 to 60 characters), `description` (140 to 160), `section` (Getting started, Guides, Concepts or Reference), `order` and `updated`. Links are root-absolute (`/docs/install/`). Every claim must match the product facts; when in doubt, leave it out.
-- **The home page** (`/`) is `home()` in `build.py`, styled by `static/home.css`, with the hero figure `figures/home-hero.html`. Its three examples (Tellwick, Pebbleday, Fernhollow; invented names) are real engine output from `demo_systems.py`: never edit their values by hand. Every claim on it must match `brand/gtm/research/facts.md` and the repo.
+- **The home page** (`/`) is `home()` in `build.py`, styled by `static/home.css`, with the hero figure `figures/home-hero.html`. Its three examples (Billerwick, Pebbleday, Fernhollow; invented names, each in `brand/showcase/NAMES.md`) are real engine output from `demo_systems.py`: never edit their values by hand. Every claim on it must match `brand/gtm/research/facts.md` and the repo.
 - **The docs home** (`/docs/`) is `docs_home()`, the documentation directory that was the home page until 2026-10-15. The introduction is `docs/introduction.md` at `/docs/introduction/`. Its photos are free Unsplash photos, hotlinked from images.unsplash.com as Unsplash asks, shown in a cobalt duotone, with the photographer credited under each.
 - **One source:** the HTML pages, their Markdown copies, `llms.txt`, `llms-full.txt`, the sitemap and the structured data all come from the same docs.
 - **Fonts** (Hanken Grotesk, Source Code Pro; SIL OFL) are downloaded once into `.cache/` and self-hosted with their licence files.

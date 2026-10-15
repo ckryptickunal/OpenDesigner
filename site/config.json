@@ -1,0 +1,11 @@
+{
+  "_about": "Booking and contact settings for the website. An empty value means the option shows as 'opening soon' and is never linked. Owner, 2026-10-15: the free call is a 20-minute intro; paid sessions come later, with no prices shown yet.",
+  "BOOKING_FREE_URL": "https://calendar.app.google/42qSQUrBiSL4CHfv6",
+  "BOOKING_FREE_MINUTES": 20,
+  "BOOKING_PAID_REVIEW_URL": "",
+  "BOOKING_PAID_STRATEGY_URL": "",
+  "SHOW_PRICES": false,
+  "CONTACT_EMAIL": "",
+  "HOST_NAME": "Kunal",
+  "HOST_ROLE": "OpenDesigner's maintainer"
+}

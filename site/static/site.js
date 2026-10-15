@@ -52,6 +52,73 @@
     pick(tabs.filter(function (t) { return t.getAttribute("aria-selected") === "true"; })[0] || tabs[0], false, false);
   });
 
+  // home headline, "look like it belongs together": the letters arrive a little loose and settle together, as if tracking
+  // tightened. They start 70% of the way home (owner, 2026-10-15: the first version moved too much) and take 0.7 s.
+  // Each line gathers on its own centre, so the centred axis never moves. Transform and opacity only (Web Animations),
+  // once per load. The original markup comes back at the end, so kerning and text selection are exactly as before.
+  var title = document.querySelector(".h-title.g-wait");
+  if (title && title.animate && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    var gather = function () {
+      var original = title.innerHTML, chars = [], texts = [], kerned = [];
+      (function walk(node) {
+        Array.prototype.slice.call(node.childNodes).forEach(function (n) { if (n.nodeType === 1) walk(n); else if (n.nodeType === 3) texts.push(n); });
+      })(title);
+      // where each letter sits in the real, kerned text, measured before splitting
+      texts.forEach(function (n) {
+        var r = document.createRange(), at = 0;
+        Array.from(n.textContent).forEach(function (ch) {
+          r.setStart(n, at); r.setEnd(n, at + ch.length); at += ch.length;
+          if (!/\s/.test(ch)) kerned.push(r.getBoundingClientRect().left);
+        });
+      });
+      texts.forEach(function (n) {
+        var frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(function (part) {
+          if (!part) return;
+          if (/^\s+$/.test(part)) return frag.appendChild(document.createTextNode(part));
+          var w = document.createElement("span"); w.className = "g-w";
+          Array.from(part).forEach(function (ch) { var c = document.createElement("span"); c.className = "g-c"; c.textContent = ch; w.appendChild(c); chars.push(c); });
+          frag.appendChild(w);
+        });
+        n.parentNode.replaceChild(frag, n);
+      });
+      // separate boxes lose the font's kerning; give each pair its kerning back as a margin, so the split headline wraps and sits
+      // exactly like the real one and the swap back at the end is invisible
+      var split = chars.map(function (c) { return c.getBoundingClientRect().left; });
+      chars.forEach(function (c, i) {
+        if (i + 1 < chars.length && chars[i + 1].parentNode === c.parentNode) c.style.marginRight = ((kerned[i + 1] - kerned[i]) - (split[i + 1] - split[i])).toFixed(2) + "px";
+      });
+      // group the letters into lines, counting each space as one step, the way letter-spacing does
+      var lines = [], top = null, prevWord = null;
+      chars.forEach(function (c) {
+        var t = Math.round(c.offsetTop);
+        if (t !== top) { lines.push([]); top = t; prevWord = null; }
+        var line = lines[lines.length - 1], step = line.length ? line[line.length - 1].i + 1 + (c.parentNode !== prevWord ? 1 : 0) : 0;
+        line.push({ el: c, i: step }); prevWord = c.parentNode;
+      });
+      var gap = parseFloat(getComputedStyle(title).fontSize) * 0.048, ease = "cubic-bezier(0.23, 1, 0.32, 1)", runs = [];
+      lines.forEach(function (line, li) {
+        var mid = line[line.length - 1].i / 2;
+        line.forEach(function (ch) {
+          runs.push(ch.el.animate([{ transform: "translateX(" + ((ch.i - mid) * gap).toFixed(1) + "px)", opacity: 0 }, { opacity: 1, offset: 0.4 }, { transform: "none", opacity: 1 }],
+            { duration: 700, delay: 60 + li * 50, easing: ease, fill: "both" }).finished);
+        });
+      });
+      runs.push(title.animate([{ filter: "blur(2px)" }, { filter: "blur(0)" }], { duration: 500, delay: 60, easing: ease, fill: "backwards" }).finished);
+      title.classList.remove("g-wait");
+      title.style.animation = "none";
+      Promise.all(runs).then(function () { title.innerHTML = original; }, function () {});  // the CSS rise stays off, or it would replay
+    };
+    // measure only in the real font, both weights (preloaded, so usually there at once). If it takes longer than 400 ms, skip the
+    // effect and let the title rise as usual: letters measured in a fallback font would jump when the font swaps in.
+    var strong = title.querySelector("strong"), late = false, wait = setTimeout(function () { late = true; title.classList.remove("g-wait"); }, 400);
+    if (document.fonts && document.fonts.load) {
+      var font = function (el) { var c = getComputedStyle(el); return c.fontStyle + " " + c.fontWeight + " " + c.fontSize + " " + c.fontFamily; };
+      Promise.all([document.fonts.load(font(title)), document.fonts.load(font(strong || title))])
+        .then(function () { if (!late) { clearTimeout(wait); gather(); } }, function () {});
+    } else { clearTimeout(wait); title.classList.remove("g-wait"); }
+  }
+
   // reveal on scroll: content below the fold fades and rises once as it comes into view. Content already on screen is left alone,
   // and with reduced motion nothing is hidden at all. Printing shows everything.
   window.addEventListener("beforeprint", function () { document.querySelectorAll(".reveal-wait").forEach(function (el) { el.classList.remove("reveal-wait"); }); });
@@ -74,6 +141,33 @@
       io.observe(el);
     });
   }
+
+  // showcase: a piece with several frames scrolls between them in its own frame (scroll snap, so touch swipes natively).
+  // Chevrons step one frame; the longer dot glides to the frame that is showing; frames out of view leave the tab order.
+  var calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll("[data-slides]").forEach(function (box) {
+    var track = box.querySelector(".sl-track"), slides = Array.prototype.slice.call(track.children), at = -1,
+        prev = box.querySelector(".sl-prev"), next = box.querySelector(".sl-next"), pill = box.closest(".piece").querySelector(".sl-pill"), status = box.querySelector(".sl-status");
+    var show = function (i) {
+      if (i === at) return;
+      at = i;
+      slides.forEach(function (s, n) { s.inert = n !== i; });
+      var lost = document.activeElement === prev || document.activeElement === next;
+      prev.disabled = i === 0; next.disabled = i === slides.length - 1;
+      if (lost && document.activeElement.disabled) (prev.disabled ? next : prev).focus();  // a chevron that disappears hands focus to the other one
+      pill.style.transform = "translateX(" + i * 16 + "px)";
+      status.textContent = "Frame " + (i + 1) + " of " + slides.length;
+    };
+    var go = function (i) { track.scrollTo({ left: i * track.clientWidth, behavior: calm ? "auto" : "smooth" }); };
+    prev.addEventListener("click", function () { go(Math.max(0, at - 1)); });
+    next.addEventListener("click", function () { go(Math.min(slides.length - 1, at + 1)); });
+    var frame = 0;
+    track.addEventListener("scroll", function () {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(function () { show(Math.round(track.scrollLeft / track.clientWidth)); });
+    }, { passive: true });
+    show(0);
+  });
 
   // showcase: tag filters
   var filters = document.querySelector(".filters");

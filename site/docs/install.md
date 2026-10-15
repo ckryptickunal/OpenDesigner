@@ -4,7 +4,7 @@ seo_title: Install OpenDesigner in Claude, ChatGPT, Codex or Cursor
 description: How to add OpenDesigner to Claude Code, the Claude app, ChatGPT, Codex, Cursor and other agents, or run its engine with no AI. Which paths are tested so far.
 section: Getting started
 order: 2
-updated: 2026-10-14
+updated: 2026-10-15
 ---
 
 You add OpenDesigner to the AI tool you already use: two commands in Claude Code, or a skills folder, a skill zip or a ChatGPT Project in other tools. After that, open your project and say: **"Create a design system for this project."** There is no account to create.
@@ -84,7 +84,7 @@ OpenDesigner is new, so here is what was checked on 2026-10-14 and what was not.
 
 - **Claude Code:** the plugin manifest passes Claude Code's own check. An install in a fresh Claude Code session has not been tested yet.
 - **Claude app:** the skill files pass the packaging check. Building the zip, uploading it and a run on claude.ai have not been recorded yet.
-- **Codex, Cursor and other agents:** the five skill folders are in the public repository. A run in each of these tools has not been recorded yet.
+- **Codex, Cursor and other agents:** the eight skill folders are in the public repository. A run in each of these tools has not been recorded yet.
 - **ChatGPT:** the instructions file and the five knowledge files are in the public repository. A run in ChatGPT has not been recorded yet.
 - **The engine on its own:** tested with Python 3.10.11. It wrote all its files with no errors.
 

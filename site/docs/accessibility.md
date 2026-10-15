@@ -4,7 +4,7 @@ seo_title: Accessibility floors in OpenDesigner: WCAG 2.2 AA checks
 description: The accessibility minimums every OpenDesigner system gets: WCAG 2.2 AA contrast, target sizes, focus rings and reduced motion, what is checked, and what is not.
 section: Concepts
 order: 5
-updated: 2026-10-14
+updated: 2026-10-15
 ---
 
 Every design system OpenDesigner makes gets a set of accessibility minimums, called floors. They are WCAG 2.2 AA text contrast, 3:1 contrast for borders and focus rings, minimum target sizes, a visible focus ring and a reduced-motion mode. Fixed rules check them before the AI gives any opinion, and an error blocks the build.
@@ -60,7 +60,7 @@ The checks give the same result every time.
 
 ## Your brand color and contrast
 
-If your brand color passes contrast on the main buttons, the engine keeps it exact. If it doesn't, the engine changes it just enough to pass and tells you in one line. You can see the result, with its contrast ratio, on the overview page.
+A brand color you typed stays exact. On the main buttons the engine puts white or dark text on it, whichever reads. Only when neither reads do buttons with text use a nearby readable shade, and your exact color stays for the logo and large areas. The engine tells you which in one line, and the overview page shows the result with its contrast ratio.
 
 ## The floors stay locked
 

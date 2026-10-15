@@ -4,7 +4,7 @@ seo_title: OpenDesigner engine commands: sketch, set, build, review
 description: Every OpenDesigner engine command with one line on what it does: starting a system, recording decisions, building and checking, standards, review and feedback.
 section: Reference
 order: 2
-updated: 2026-10-14
+updated: 2026-10-15
 ---
 
 The OpenDesigner engine is one Python file, `skills/opendesigner/scripts/engine.py`, that does the math and writes the tokens, exports and pages. Your AI usually runs these commands for you, but you can run them yourself from your project folder. It needs Python 3.10 or newer, uses only the standard library, and makes no network calls.
@@ -26,6 +26,7 @@ The commands below write `engine.py` for short. If you installed the plugin, the
 - `engine.py init --name "Acme"` creates `state.json` with defaults and applies the house standards that fit.
 - `engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal` records the five sketch answers and builds a complete first version.
 - `engine.py feel fun calm` shows how the engine reads your feel words. With no words, it lists every word it knows.
+- `engine.py style search frosty` finds the named styles that match your words. `style list` shows all 133, and `style mix`, `mutate`, `explore` and `define` make new ones.
 
 The sketch takes these options:
 
@@ -35,6 +36,7 @@ The sketch takes these options:
 - `--brand`: your brand color as a hex value, such as `"#167874"`.
 - `--surfaces`: the main surface first, such as `"app:operate,landing page:persuade"`.
 - `--delegated`: marks answers as handed over when you said "just pick", for example `--delegated feel,brand`.
+- `--brief`, `--stack` and `--theme` are also accepted: your own picture of the look, your code stack, and light, dark or both. `engine.py sketch --help` explains each.
 
 ## Record decisions
 
@@ -77,7 +79,7 @@ Run `build` after every change, so the exports and pages are never out of date.
 
 ## Keep it consistent
 
-- `engine.py review` scans your code for hard-coded colors, sizes, radii, shadows and durations, and for out-of-date `DESIGN.md` sections. `--project src` scans one folder. `--strict` exits with an error when it finds anything.
+- `engine.py review` scans your code for hard-coded colors, sizes, radii, shadows and durations, and for out-of-date `DESIGN.md` sections. It only reports: it never edits your code. `--project src` scans one folder. `--strict` exits with an error when it finds anything.
 
 ## Standards
 
@@ -97,4 +99,4 @@ Every standard change is recorded in the decision log. See [For enterprise desig
 
 - The same `state.json` gives the same tokens.
 - When `set` or `pick` changes no tokens, the answer is still saved, as a `DESIGN.md` rule or a `PRODUCT.md` fact. The engine says so.
-- The engine has 119 tests, which pass on the maintainer's computer. No CI runs are recorded yet.
+- The engine has 157 tests, which pass on the maintainer's computer. No CI runs are recorded yet.

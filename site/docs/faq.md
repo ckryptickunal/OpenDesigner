@@ -4,7 +4,7 @@ seo_title: OpenDesigner FAQ: AI design systems, tokens, teams, privacy
 description: Plain answers about OpenDesigner: what it is, which AI tools it works with, privacy, accessibility, how it compares, team governance, and how early it is.
 section: Reference
 order: 5
-updated: 2026-10-14
+updated: 2026-10-15
 ---
 
 These are short answers to the questions people ask most about OpenDesigner. They cover what it does, which tools it works with, privacy, accessibility, use by teams, and how early the project is. Most answers link to a longer page.
@@ -87,7 +87,7 @@ Each system has light and dark color mappings, three densities and a reduced-mot
 
 ### Why should I trust the defaults?
 
-You don't have to trust them. You can check them. The defaults rest on 352 Decision Cards. Each card covers one design decision and cites logged sources, or is marked as an inference. A citation check finds no broken references. A verification pass re-checked 161 claims against live sources: it found 5 wrong, and the fixes are logged. The research map is in the [repository](https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/RESEARCH.md).
+You don't have to trust them. You can check them. The defaults rest on more than 500 Decision Cards. Each card covers one design decision and cites logged sources, or is marked as an inference. A citation check finds no broken references. A verification pass re-checked 161 claims against live sources: it found 5 wrong, and the fixes are logged. The research map is in the [repository](https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/RESEARCH.md).
 
 ### How early is it, and how do I report a problem?
 
