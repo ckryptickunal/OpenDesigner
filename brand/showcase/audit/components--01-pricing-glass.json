@@ -1,102 +1,109 @@
 {
- "piece": "components/01-pricing-glass",
- "title": "01 · Pricing table, glass (Gloaming)",
- "pattern": "pricing table",
- "platform": "web",
- "industry": "AI video",
- "style": [
-  "dark",
-  "glass",
-  "editorial",
-  "luxury"
- ],
- "tags": [
-  "pricing table",
-  "ai video",
-  "dark",
-  "glass",
-  "serif",
-  "billing toggle",
-  "plan cards"
- ],
- "score": 4,
- "verdict": "keep",
- "strengths": [
-  "A real idea: one near-white lit plan with ink text inside a dark page, so the hierarchy is a single bright object rather than three equal cards",
-  "Confident type: Instrument Serif at one weight for names and the 90 px prices, Geist for everything else; the $ superscript and tabular 'Render-minutes 600 / mo' rows read as product",
-  "Believable, consistent numbers ($19 x 12 = $228 billed yearly, 'save $60'; '2,400 pooled' minutes; '3 seats min.') and real states in context (hover, pressed, focus, loading, disabled, 'Current plan')"
- ],
- "slop_signals": [
-  "The projector beam is a wedge with two visible hard edges converging above 'MOST PICKED'; a glow with a visible edge reads as a CSS gradient, not light",
-  "Coloured glows at the card corners: a teal bloom at the bottom-left of 'Spark' and an amber bloom under 'Studio' (decorative glow for no reason)",
-  "Viewfinder corner marks in the four page corners and the 'SC 01 / SC 02 / SC 03' slate numbers are decoration with no job",
-  "'$51 per seat, monthly' next to 'Billed yearly, 3 seats min.' contradicts itself; copy a real page would not ship"
- ],
- "fixes": [
-  "Feather the beam edges out completely (or replace it with a single soft radial light behind the Studio card, as Clay and Chronicle do)",
-  "Remove the teal and amber corner blooms; keep the amber only in the 'MOST PICKED' pill and the arrow",
-  "Drop the viewfinder marks and slate numbers",
-  "Rewrite Premiere's price line: '$51 per seat / month, billed yearly, 3 seats minimum'"
- ],
- "references": [
-  {
-   "site": "Dovetail",
-   "url": "https://mobbin.com/sites/sections/46aff981-8257-4873-aa8a-c8e5f7467381",
-   "what": "Same dark three-card layout with a lifted middle plan; flat near-black cards and a mono billing toggle, no beam or glow, and it still holds"
-  },
-  {
-   "site": "Clay",
-   "url": "https://mobbin.com/sites/sections/4818354e-594b-4cf0-b62c-25652390154d",
-   "what": "Only the Pro card is tinted from inside; the light stays inside the card instead of being cast on the page"
-  },
-  {
-   "site": "Linear",
-   "url": "https://mobbin.com/sites/sections/0499d8f7-09b7-4022-afc1-4b63a4fabb00",
-   "what": "'-20%' chips sit on the plan names, not in the toggle; a comparison grid with hairlines and no decoration"
-  },
-  {
-   "site": "Spline",
-   "url": "https://mobbin.com/sites/sections/8bbb6748-986d-4490-8f95-b3a10df08da0",
-   "what": "Dark pricing with the save chip inside the yearly/monthly toggle, the same device as ours"
-  },
-  {
-   "site": "HoneyBook",
-   "url": "https://mobbin.com/sites/sections/e72ef239-29c4-45c5-b9b1-cd92db0a4173",
-   "what": "'Most Popular' tab on the card's top edge, as our 'MOST PICKED' pill"
-  }
- ],
- "audited": "2026-10-14",
- "owner": {
-  "verdict": "improve",
-  "said": "can be better",
-  "date": "2026-10-14"
- },
- "round3": {
-  "score": 4,
-  "changed": [
-   "Rebuilt as Gloaming's pricing page at real size: a plan table (label column with the billing toggle, three 300 px plan columns, grouped rows with units) instead of a component sheet with a states column",
-   "Projector beam, teal and amber blooms, glass, grain, viewfinder corners and slate numbers removed; the one idea is a single lit (near-white) Studio column in a dark page, with no tag and no overhang",
-   "Prices re-derived and re-added: Studio $19/$24 ($228 a year, saves $60); Premiere $48/$60 a seat, 1,800 render-minutes a seat pooled, extras $0.035 so overage never undercuts included minutes; 3 seats $1,728 a year or $180 a month; finished film 5 / 40 / 120 min",
-   "Type: Instrument Serif 51/38/28 and Geist 21/16/12; billing lines and table values at 16 px; weights 400 and 500",
-   "Engine: depth dial 90 to 35 (no glass) and rebuild; accent.dark.9 is now the exact brand #F2A93B",
-   "States one per frame: shot-monthly, shot-hover, shot-loading, shot-current (usage 412 of 600, quiet downgrade link), shot-focus",
-   "Fresh-eyes audit 3/5, then 4/5; all six remaining notes fixed"
-  ]
- },
- "facts": [
-  "mockups/05-components-board embeds this shot.png and its caption or alt text may still describe the old glass cards and beam; re-check and re-render it",
-  "mockups/05-components-board (and 08 where it uses this piece) crop this shot.png with fixed background-position offsets set for the old layout; the crops now land on different content and need new offsets"
- ],
- "round4": {
-  "score": 3,
-  "pairwise": "2 of 3 better (Aside -2, HoneyBook +2, PamPam +3); worst margin 2",
-  "changed": [
-   "Usage estimator spans the top of the three plans; per-plan meters; the cheapest covering plan is named and carries the one filled button, following the slider and billing",
-   "Prices are the one display size; heading and estimate a step down; Instrument Sans replaces Geist; twilight blue-black surfaces, amber only for your usage",
-   "Cut: subtitle, footnote, per-plan note lines, ruler ticks, Spark's empty meter, repeated '3 seats', the real product name 'ProRes'; three feature rows per plan; a comparison table on the plan columns, cropped by the frame",
-   "Engine: one family, base size 14, cool greys, dials lowered; brand #F2A93B unchanged; stale extra frames deleted",
-   "Six fresh audits scored 3: a generic dark three-plan layout, sparser than the B2B screens; needs the owner's call (a light page, or a different estimator presentation)"
+  "piece": "components/01-pricing-glass",
+  "title": "01 · Pricing table, glass (Gloaming)",
+  "pattern": "pricing table",
+  "platform": "web",
+  "industry": "AI video",
+  "style": [
+    "dark",
+    "glass",
+    "editorial",
+    "luxury"
   ],
-  "note": "Did not reach 4 after six audit rounds; the last round's concrete notes were fixed and measured, not re-audited"
- }
+  "tags": [
+    "pricing table",
+    "ai video",
+    "dark",
+    "glass",
+    "serif",
+    "billing toggle",
+    "plan cards"
+  ],
+  "score": 4,
+  "verdict": "keep",
+  "strengths": [
+    "A real idea: one near-white lit plan with ink text inside a dark page, so the hierarchy is a single bright object rather than three equal cards",
+    "Confident type: Instrument Serif at one weight for names and the 90 px prices, Geist for everything else; the $ superscript and tabular 'Render-minutes 600 / mo' rows read as product",
+    "Believable, consistent numbers ($19 x 12 = $228 billed yearly, 'save $60'; '2,400 pooled' minutes; '3 seats min.') and real states in context (hover, pressed, focus, loading, disabled, 'Current plan')"
+  ],
+  "slop_signals": [
+    "The projector beam is a wedge with two visible hard edges converging above 'MOST PICKED'; a glow with a visible edge reads as a CSS gradient, not light",
+    "Coloured glows at the card corners: a teal bloom at the bottom-left of 'Spark' and an amber bloom under 'Studio' (decorative glow for no reason)",
+    "Viewfinder corner marks in the four page corners and the 'SC 01 / SC 02 / SC 03' slate numbers are decoration with no job",
+    "'$51 per seat, monthly' next to 'Billed yearly, 3 seats min.' contradicts itself; copy a real page would not ship"
+  ],
+  "fixes": [
+    "Feather the beam edges out completely (or replace it with a single soft radial light behind the Studio card, as Clay and Chronicle do)",
+    "Remove the teal and amber corner blooms; keep the amber only in the 'MOST PICKED' pill and the arrow",
+    "Drop the viewfinder marks and slate numbers",
+    "Rewrite Premiere's price line: '$51 per seat / month, billed yearly, 3 seats minimum'"
+  ],
+  "references": [
+    {
+      "site": "Dovetail",
+      "url": "https://mobbin.com/sites/sections/46aff981-8257-4873-aa8a-c8e5f7467381",
+      "what": "Same dark three-card layout with a lifted middle plan; flat near-black cards and a mono billing toggle, no beam or glow, and it still holds"
+    },
+    {
+      "site": "Clay",
+      "url": "https://mobbin.com/sites/sections/4818354e-594b-4cf0-b62c-25652390154d",
+      "what": "Only the Pro card is tinted from inside; the light stays inside the card instead of being cast on the page"
+    },
+    {
+      "site": "Linear",
+      "url": "https://mobbin.com/sites/sections/0499d8f7-09b7-4022-afc1-4b63a4fabb00",
+      "what": "'-20%' chips sit on the plan names, not in the toggle; a comparison grid with hairlines and no decoration"
+    },
+    {
+      "site": "Spline",
+      "url": "https://mobbin.com/sites/sections/8bbb6748-986d-4490-8f95-b3a10df08da0",
+      "what": "Dark pricing with the save chip inside the yearly/monthly toggle, the same device as ours"
+    },
+    {
+      "site": "HoneyBook",
+      "url": "https://mobbin.com/sites/sections/e72ef239-29c4-45c5-b9b1-cd92db0a4173",
+      "what": "'Most Popular' tab on the card's top edge, as our 'MOST PICKED' pill"
+    }
+  ],
+  "audited": "2026-10-14",
+  "owner": {
+    "verdict": "hold",
+    "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
+    "date": "2026-10-18"
+  },
+  "round3": {
+    "score": 4,
+    "changed": [
+      "Rebuilt as Gloaming's pricing page at real size: a plan table (label column with the billing toggle, three 300 px plan columns, grouped rows with units) instead of a component sheet with a states column",
+      "Projector beam, teal and amber blooms, glass, grain, viewfinder corners and slate numbers removed; the one idea is a single lit (near-white) Studio column in a dark page, with no tag and no overhang",
+      "Prices re-derived and re-added: Studio $19/$24 ($228 a year, saves $60); Premiere $48/$60 a seat, 1,800 render-minutes a seat pooled, extras $0.035 so overage never undercuts included minutes; 3 seats $1,728 a year or $180 a month; finished film 5 / 40 / 120 min",
+      "Type: Instrument Serif 51/38/28 and Geist 21/16/12; billing lines and table values at 16 px; weights 400 and 500",
+      "Engine: depth dial 90 to 35 (no glass) and rebuild; accent.dark.9 is now the exact brand #F2A93B",
+      "States one per frame: shot-monthly, shot-hover, shot-loading, shot-current (usage 412 of 600, quiet downgrade link), shot-focus",
+      "Fresh-eyes audit 3/5, then 4/5; all six remaining notes fixed"
+    ]
+  },
+  "facts": [
+    "mockups/05-components-board embeds this shot.png and its caption or alt text may still describe the old glass cards and beam; re-check and re-render it",
+    "mockups/05-components-board (and 08 where it uses this piece) crop this shot.png with fixed background-position offsets set for the old layout; the crops now land on different content and need new offsets"
+  ],
+  "round4": {
+    "score": 3,
+    "pairwise": "2 of 3 better (Aside -2, HoneyBook +2, PamPam +3); worst margin 2",
+    "changed": [
+      "Usage estimator spans the top of the three plans; per-plan meters; the cheapest covering plan is named and carries the one filled button, following the slider and billing",
+      "Prices are the one display size; heading and estimate a step down; Instrument Sans replaces Geist; twilight blue-black surfaces, amber only for your usage",
+      "Cut: subtitle, footnote, per-plan note lines, ruler ticks, Spark's empty meter, repeated '3 seats', the real product name 'ProRes'; three feature rows per plan; a comparison table on the plan columns, cropped by the frame",
+      "Engine: one family, base size 14, cool greys, dials lowered; brand #F2A93B unchanged; stale extra frames deleted",
+      "Six fresh audits scored 3: a generic dark three-plan layout, sparser than the B2B screens; needs the owner's call (a light page, or a different estimator presentation)"
+    ],
+    "note": "Did not reach 4 after six audit rounds; the last round's concrete notes were fixed and measured, not re-audited"
+  },
+  "owner_history": [
+    {
+      "verdict": "improve",
+      "said": "can be better",
+      "date": "2026-10-14"
+    }
+  ]
 }

@@ -1,135 +1,142 @@
 {
- "piece": "app-screens/09-project-workspace",
- "title": "09 · Soffit: roadmap forecast (desktop, 1440×900 @2x)",
- "pattern": "roadmap timeline",
- "platform": "web",
- "industry": "software",
- "style": [
-  "enterprise",
-  "minimal",
-  "swiss"
- ],
- "tags": [
-  "roadmap",
-  "timeline",
-  "gantt",
-  "forecast",
-  "software",
-  "desktop",
-  "light",
-  "dense",
-  "web"
- ],
- "score": 4,
- "verdict": "keep",
- "strengths": [
-  "Card density, label chips, initials avatars and the sidebar sections match Linear and Height at a real 14/12 px scale; one vermilion for today, urgent, due dates and the primary action.",
-  "Believable work: FLD-231 'Bulk reassign jobs from the dispatcher map', 'Retry queue for failed photo uploads', a 'Release 4.2' milestone on Fri 17, 'Synced 2 s ago', a named engineering lead.",
-  "Own details inside the convention: diamond status glyphs, keyboard numbers on the view tabs, a 3/5 subtask bar on the focused card."
- ],
- "slop_signals": [
-  "A two-week timeline and a five-column board stacked on one screen: Linear and Jira show one or the other, so the composite reads as a showcase, not a view someone works in.",
-  "A permanent keyboard-shortcut footer across the bottom; real tools keep this behind '?'.",
-  "Every label chip repeats the same diamond glyph before its text."
- ],
- "fixes": [
-  "Show either the board or the timeline; if both, collapse the timeline to a one-row cycle-progress strip.",
-  "Remove the shortcut footer, or reduce it to 'Synced 2 s ago' and a '?'.",
-  "Drop the glyph from label chips, or give each label its own colour dot as Linear does."
- ],
- "references": [
-  {
-   "site": "Linear",
-   "url": "https://mobbin.com/screens/410846e7-09d4-4ed8-baf2-ec94d96c29f4",
-   "what": "Board with id, title, label dots and avatar per card, sidebar in sections: the anatomy this piece reproduces, with no timeline above it."
-  },
-  {
-   "site": "Linear",
-   "url": "https://mobbin.com/screens/a6f3c2e2-cbe0-4559-bda7-54ee9d405692",
-   "what": "Milestone progress lives in a side panel, not in a strip over the board."
-  },
-  {
-   "site": "Linear",
-   "url": "https://mobbin.com/screens/720724d3-f686-457f-8c00-fa7efa409b12",
-   "what": "Dark board, same card anatomy; no shortcut footer."
-  }
- ],
- "audited": "2026-10-14",
- "owner": {
+  "piece": "app-screens/09-project-workspace",
+  "title": "09 · Soffit: roadmap forecast (desktop, 1440×900 @2x)",
+  "pattern": "roadmap timeline",
+  "platform": "web",
+  "industry": "software",
+  "style": [
+    "enterprise",
+    "minimal",
+    "swiss"
+  ],
+  "tags": [
+    "roadmap",
+    "timeline",
+    "gantt",
+    "forecast",
+    "software",
+    "desktop",
+    "light",
+    "dense",
+    "web"
+  ],
+  "score": 4,
   "verdict": "keep",
-  "said": "okay",
-  "date": "2026-10-14"
- },
- "round4": {
-  "score": 3,
-  "score_history": {
-   "B": 3,
-   "C": 3,
-   "D": 3,
-   "E": 4,
-   "F": 3,
-   "G": 3,
-   "final": 3
+  "strengths": [
+    "Card density, label chips, initials avatars and the sidebar sections match Linear and Height at a real 14/12 px scale; one vermilion for today, urgent, due dates and the primary action.",
+    "Believable work: FLD-231 'Bulk reassign jobs from the dispatcher map', 'Retry queue for failed photo uploads', a 'Release 4.2' milestone on Fri 17, 'Synced 2 s ago', a named engineering lead.",
+    "Own details inside the convention: diamond status glyphs, keyboard numbers on the view tabs, a 3/5 subtask bar on the focused card."
+  ],
+  "slop_signals": [
+    "A two-week timeline and a five-column board stacked on one screen: Linear and Jira show one or the other, so the composite reads as a showcase, not a view someone works in.",
+    "A permanent keyboard-shortcut footer across the bottom; real tools keep this behind '?'.",
+    "Every label chip repeats the same diamond glyph before its text."
+  ],
+  "fixes": [
+    "Show either the board or the timeline; if both, collapse the timeline to a one-row cycle-progress strip.",
+    "Remove the shortcut footer, or reduce it to 'Synced 2 s ago' and a '?'.",
+    "Drop the glyph from label chips, or give each label its own colour dot as Linear does."
+  ],
+  "references": [
+    {
+      "site": "Linear",
+      "url": "https://mobbin.com/screens/410846e7-09d4-4ed8-baf2-ec94d96c29f4",
+      "what": "Board with id, title, label dots and avatar per card, sidebar in sections: the anatomy this piece reproduces, with no timeline above it."
+    },
+    {
+      "site": "Linear",
+      "url": "https://mobbin.com/screens/a6f3c2e2-cbe0-4559-bda7-54ee9d405692",
+      "what": "Milestone progress lives in a side panel, not in a strip over the board."
+    },
+    {
+      "site": "Linear",
+      "url": "https://mobbin.com/screens/720724d3-f686-457f-8c00-fa7efa409b12",
+      "what": "Dark board, same card anatomy; no shortcut footer."
+    }
+  ],
+  "audited": "2026-10-14",
+  "owner": {
+    "verdict": "hold",
+    "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
+    "date": "2026-10-18"
   },
-  "passed": {
-   "pairwise": true,
-   "fresh_audit": false
+  "round4": {
+    "score": 3,
+    "score_history": {
+      "B": 3,
+      "C": 3,
+      "D": 3,
+      "E": 4,
+      "F": 3,
+      "G": 3,
+      "final": 3
+    },
+    "passed": {
+      "pairwise": true,
+      "fresh_audit": false
+    },
+    "pairwise": [
+      {
+        "reference": "Linear, project timeline with side panel",
+        "url": "https://mobbin.com/screens/c1cc22aa-69de-468c-b200-cf80f05ac1c7",
+        "rounds": [
+          "won 4",
+          "won 3",
+          "won 3",
+          "won 3",
+          "won 4",
+          "won 4"
+        ],
+        "final": "won 3"
+      },
+      {
+        "reference": "Linear, project page",
+        "url": "https://mobbin.com/screens/9c8e3907-b7af-48d6-ae2d-9b4ff700d433",
+        "rounds": [
+          "won 2",
+          "won 2",
+          "won 2",
+          "lost 2",
+          "won 2",
+          "won 2"
+        ],
+        "final": "won 2"
+      },
+      {
+        "reference": "Wrike, Gantt with task table",
+        "url": "https://mobbin.com/screens/309ce63c-f7a7-4f54-93a0-16a72d3181c2",
+        "rounds": [
+          "won 4",
+          "won 4",
+          "won 4",
+          "won 4",
+          "won 4",
+          "won 4"
+        ],
+        "final": "won 4"
+      }
+    ],
+    "pairwise_note": "Blind, random sides, same height, no labels. Rounds A to F used a fresh judge per pair; the final render was judged by one fresh judge for all three pairs. The references are Mobbin demo accounts with sparse data, so the test mostly rewards data richness (feedback F-003).",
+    "changed": [
+      "Rebuilt from scratch: the Linear-like Quarry cycle board became Soffit, a roadmap planner that forecasts each project's finish from its own pace (H2 2026, 14 projects in 5 teams).",
+      "Renamed everything: Quarry, Kestrel, Field App, Mara Okafor and the rest are gone; Soffit, Whinberry, Martha Quayle and Ngozi Eze are new (NAMES.md, 2026-10-18).",
+      "Table columns Closed, Target, Forecast and 'vs target' on every row; bars show plan span and closed issues with 3:1 edges, and a red block only where a forecast passes its target.",
+      "No drag state, no shortcut footer, no orange: one petrol accent for today only, red only for late forecasts, neutral selection, one dark button.",
+      "Side panel: one display figure (Tue 8 Dec, 8 days past target), closed and pace, checkpoints in order with due and forecast dates, the week 42 check-in and a decision bar (cut 7 issues or move the target).",
+      "IBM Plex Sans only, 12/14/17/29 px; British dates; weekdays and every total re-added from the page."
+    ],
+    "open": [
+      "The strict fresh audit stays at 3: mostly grey and can read as a wireframe; family resemblance to Linear (⌘K sidebar, Teams list, side panel); small type in a dense panel.",
+      "Auditors reversed each other across rounds (bar outlines, today pill, checkpoint slip line), so the owner's eye has to settle this piece.",
+      "The gallery index.html and _thumbs still show the old Quarry title, caption and shot until they are rebuilt."
+    ],
+    "date": "2026-10-18"
   },
-  "pairwise": [
-   {
-    "reference": "Linear, project timeline with side panel",
-    "url": "https://mobbin.com/screens/c1cc22aa-69de-468c-b200-cf80f05ac1c7",
-    "rounds": [
-     "won 4",
-     "won 3",
-     "won 3",
-     "won 3",
-     "won 4",
-     "won 4"
-    ],
-    "final": "won 3"
-   },
-   {
-    "reference": "Linear, project page",
-    "url": "https://mobbin.com/screens/9c8e3907-b7af-48d6-ae2d-9b4ff700d433",
-    "rounds": [
-     "won 2",
-     "won 2",
-     "won 2",
-     "lost 2",
-     "won 2",
-     "won 2"
-    ],
-    "final": "won 2"
-   },
-   {
-    "reference": "Wrike, Gantt with task table",
-    "url": "https://mobbin.com/screens/309ce63c-f7a7-4f54-93a0-16a72d3181c2",
-    "rounds": [
-     "won 4",
-     "won 4",
-     "won 4",
-     "won 4",
-     "won 4",
-     "won 4"
-    ],
-    "final": "won 4"
-   }
-  ],
-  "pairwise_note": "Blind, random sides, same height, no labels. Rounds A to F used a fresh judge per pair; the final render was judged by one fresh judge for all three pairs. The references are Mobbin demo accounts with sparse data, so the test mostly rewards data richness (feedback F-003).",
-  "changed": [
-   "Rebuilt from scratch: the Linear-like Quarry cycle board became Soffit, a roadmap planner that forecasts each project's finish from its own pace (H2 2026, 14 projects in 5 teams).",
-   "Renamed everything: Quarry, Kestrel, Field App, Mara Okafor and the rest are gone; Soffit, Whinberry, Martha Quayle and Ngozi Eze are new (NAMES.md, 2026-10-18).",
-   "Table columns Closed, Target, Forecast and 'vs target' on every row; bars show plan span and closed issues with 3:1 edges, and a red block only where a forecast passes its target.",
-   "No drag state, no shortcut footer, no orange: one petrol accent for today only, red only for late forecasts, neutral selection, one dark button.",
-   "Side panel: one display figure (Tue 8 Dec, 8 days past target), closed and pace, checkpoints in order with due and forecast dates, the week 42 check-in and a decision bar (cut 7 issues or move the target).",
-   "IBM Plex Sans only, 12/14/17/29 px; British dates; weekdays and every total re-added from the page."
-  ],
-  "open": [
-   "The strict fresh audit stays at 3: mostly grey and can read as a wireframe; family resemblance to Linear (⌘K sidebar, Teams list, side panel); small type in a dense panel.",
-   "Auditors reversed each other across rounds (bar outlines, today pill, checkpoint slip line), so the owner's eye has to settle this piece.",
-   "The gallery index.html and _thumbs still show the old Quarry title, caption and shot until they are rebuilt."
-  ],
-  "date": "2026-10-18"
- }
+  "owner_history": [
+    {
+      "verdict": "keep",
+      "said": "okay",
+      "date": "2026-10-14"
+    }
+  ]
 }

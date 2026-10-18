@@ -1,98 +1,105 @@
 {
- "piece": "components/08-music-player",
- "title": "08 · Music player · Calamondin Tapes",
- "pattern": "media player",
- "platform": "web",
- "industry": "music",
- "style": [
-  "dark",
-  "neon",
-  "y2k",
-  "playful"
- ],
- "tags": [
-  "media player",
-  "music",
-  "waveform",
-  "album art",
-  "dark",
-  "gradient",
-  "embed"
- ],
- "score": 3,
- "verdict": "polish",
- "strengths": [
-  "Two real ideas: section markers on the waveform ('1:42 the drop', 'bridge', 'outro') and a record sliding out from behind the sleeve",
-  "Believable label data: 'CLMD-014 / SIDE A / TRACK 3 OF 9', 'Heat Lamp Lullabies · 2026 · on cassette', 'Buy $1', queue rows with durations, a mini player that buffers 'on a slow connection'",
-  "Controls are complete: six play states, four scrubber states, toggles off/on with the accent only when on, an error with Retry"
- ],
- "slop_signals": [
-  "The generated cover is a pink-orange-violet gradient with a spiral and a dotted halftone corner: the stock 'AI album art' blob, and it then paints the whole hero card magenta-to-violet with a glow bleeding onto the page",
-  "Dark + neon pink: the 'Saved' pill, the toggles, the queue's 'now' row and the error are all hot pink on near-black",
-  "Four surface treatments in one card (gradient fill, translucent white chips, a solid white disc, a pink pill) stacked with a 24 px outer and 16 px inner radius",
-  "Title 'Sodium Summer' in Unbounded 850 beside 'Juniper Static' with a verified badge: the badge is a borrowed Spotify device, not a cassette label's"
- ],
- "fixes": [
-  "Replace the cover with flat two-colour sleeve art (a riso-style print: one ink, one paper, hard shapes), and sample only one flat tint from it for the card, as TIDAL does",
-  "Remove the page glow; keep the card a single flat dark tint with the art as the one vivid object",
-  "Use one chip style (translucent white) for Saved, Buy and volume, and reserve pink for the played waveform",
-  "Drop the verified badge; put the label name where it was"
- ],
- "references": [
-  {
-   "site": "SoundCloud",
-   "url": "https://mobbin.com/screens/301a21e9-d189-4959-9e06-efe024cc9c2b",
-   "what": "The waveform is the scrubber with the played part in orange and the rest grey; cover art is designed, not a gradient"
-  },
-  {
-   "site": "TIDAL",
-   "url": "https://mobbin.com/screens/2e073289-7c6a-4440-b471-83bdb41de138",
-   "what": "The page is one flat colour tinted from the art and the art is the only vivid object; controls live in a plain bottom bar"
-  },
-  {
-   "site": "Spotify",
-   "url": "https://mobbin.com/screens/7e88185e-30b2-4478-8185-3ada92d36934",
-   "what": "Full-bleed dark art with white controls and a thin progress line; no glow anywhere"
-  },
-  {
-   "site": "Suno",
-   "url": "https://mobbin.com/screens/ec844563-54d6-49a7-9b79-0249f0c369e5",
-   "what": "Gradient-blob covers like ours; shows the register the piece currently sits in and why it reads as generated"
-  }
- ],
- "audited": "2026-10-14",
- "owner": {
-  "verdict": "improve",
-  "said": "needs a little more work",
-  "date": "2026-10-14"
- },
- "round3": {
-  "score": 4,
-  "changed": [
-   "Rebuilt as the label's release page at real size with the player as the main element; buy box, liner notes, embed box, more releases",
-   "Gradient AI cover, magenta card, page glow, neon pink chips and the verified badge removed; a two-ink riso J-card drawn in SVG; flat navy card tinted from its blue ink; pink only for what is playing",
-   "Album as page heading, track title 28 px; fixed 740 x 400 embed; error keeps the size with the message in the time row",
-   "Facts re-added (sides 19:54 and 14:18, 34:12, 1:47 + 2:06 = 3:53); cassette vocabulary (J-card, real-time dubbing)",
-   "Engine: brand #FF3D81 restored as typed, roundness 82 to 52, depth 70 to 30, colorfulness 92 to 62, warmth 62 to 30, expression 90 to 68",
-   "Fresh-eyes audit 3/5, then 4/5; remaining notes fixed",
-   "Renamed Pomelo Tapes to Calamondin Tapes, catalogue prefix PMLO to CLMD (coordinator, 2026-10-15): the old name sat close to a real Vienna label; web search found no Calamondin Tapes"
-  ]
- },
- "facts": [
-  "mockups/05-components-board and mockups/08-made-with-opendesigner embed this shot.png; their captions may still describe the gradient cover; re-check and re-render",
-  "mockups/05-components-board (and 08 where it uses this piece) crop this shot.png with fixed background-position offsets set for the old layout; the crops now land on different content and need new offsets"
- ],
- "round4": {
+  "piece": "components/08-music-player",
+  "title": "08 · Music player · Calamondin Tapes",
+  "pattern": "media player",
+  "platform": "web",
+  "industry": "music",
+  "style": [
+    "dark",
+    "neon",
+    "y2k",
+    "playful"
+  ],
+  "tags": [
+    "media player",
+    "music",
+    "waveform",
+    "album art",
+    "dark",
+    "gradient",
+    "embed"
+  ],
   "score": 3,
-  "pairwise": "TIDAL/Apple Music/Deezer: round 1 -2/+3/+3, round 2 +2/+4/+3, round 3 +2/+4/+3, round 4 +2/+3/+3, round 6 TIDAL +2, round 7 TIDAL +2 and Deezer +3. Passes the pairwise test from round 2; fails the fresh-eyes bar (3 in four audits).",
-  "changed": [
-   "Release page replaced by the listening room, now playing: 560 px cover, track, grouped transport with volume and output, liner line, side B list",
-   "Signature: the scrubber is the whole of side A (19:54) split by track, played to 9:48",
-   "Cover: Hanson Lu photo (Unsplash License, hotlinked, credited in the page) with the cassette's paper spine across its foot; drawn J-card removed",
-   "Accent pink to calamondin orange #FF9A3D (the label's citrus, the lamps in the photo), one job: what has played; room tinted from the cover; citrus-slice logo",
-   "Removed: buy box, embed box, more releases, shuffle, bar-built section labels, duplicate tracks 4-5 in the list; two punning titles renamed (Second Week of March, Last Frost)",
-   "Last round: cover changed to Iván Martínez Díaz's seedling photo (Unsplash License, hotlinked, credited in the page), J-card strip removed, 520 px cover, side A drawn as five track blocks with labels on the same geometry, layout gaps closed",
-   "Remaining (final auditor): a stock photo is still the largest thing; scrubber labels lose to the side B list; needs cover art the label owns"
+  "verdict": "polish",
+  "strengths": [
+    "Two real ideas: section markers on the waveform ('1:42 the drop', 'bridge', 'outro') and a record sliding out from behind the sleeve",
+    "Believable label data: 'CLMD-014 / SIDE A / TRACK 3 OF 9', 'Heat Lamp Lullabies · 2026 · on cassette', 'Buy $1', queue rows with durations, a mini player that buffers 'on a slow connection'",
+    "Controls are complete: six play states, four scrubber states, toggles off/on with the accent only when on, an error with Retry"
+  ],
+  "slop_signals": [
+    "The generated cover is a pink-orange-violet gradient with a spiral and a dotted halftone corner: the stock 'AI album art' blob, and it then paints the whole hero card magenta-to-violet with a glow bleeding onto the page",
+    "Dark + neon pink: the 'Saved' pill, the toggles, the queue's 'now' row and the error are all hot pink on near-black",
+    "Four surface treatments in one card (gradient fill, translucent white chips, a solid white disc, a pink pill) stacked with a 24 px outer and 16 px inner radius",
+    "Title 'Sodium Summer' in Unbounded 850 beside 'Juniper Static' with a verified badge: the badge is a borrowed Spotify device, not a cassette label's"
+  ],
+  "fixes": [
+    "Replace the cover with flat two-colour sleeve art (a riso-style print: one ink, one paper, hard shapes), and sample only one flat tint from it for the card, as TIDAL does",
+    "Remove the page glow; keep the card a single flat dark tint with the art as the one vivid object",
+    "Use one chip style (translucent white) for Saved, Buy and volume, and reserve pink for the played waveform",
+    "Drop the verified badge; put the label name where it was"
+  ],
+  "references": [
+    {
+      "site": "SoundCloud",
+      "url": "https://mobbin.com/screens/301a21e9-d189-4959-9e06-efe024cc9c2b",
+      "what": "The waveform is the scrubber with the played part in orange and the rest grey; cover art is designed, not a gradient"
+    },
+    {
+      "site": "TIDAL",
+      "url": "https://mobbin.com/screens/2e073289-7c6a-4440-b471-83bdb41de138",
+      "what": "The page is one flat colour tinted from the art and the art is the only vivid object; controls live in a plain bottom bar"
+    },
+    {
+      "site": "Spotify",
+      "url": "https://mobbin.com/screens/7e88185e-30b2-4478-8185-3ada92d36934",
+      "what": "Full-bleed dark art with white controls and a thin progress line; no glow anywhere"
+    },
+    {
+      "site": "Suno",
+      "url": "https://mobbin.com/screens/ec844563-54d6-49a7-9b79-0249f0c369e5",
+      "what": "Gradient-blob covers like ours; shows the register the piece currently sits in and why it reads as generated"
+    }
+  ],
+  "audited": "2026-10-14",
+  "owner": {
+    "verdict": "hold",
+    "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
+    "date": "2026-10-18"
+  },
+  "round3": {
+    "score": 4,
+    "changed": [
+      "Rebuilt as the label's release page at real size with the player as the main element; buy box, liner notes, embed box, more releases",
+      "Gradient AI cover, magenta card, page glow, neon pink chips and the verified badge removed; a two-ink riso J-card drawn in SVG; flat navy card tinted from its blue ink; pink only for what is playing",
+      "Album as page heading, track title 28 px; fixed 740 x 400 embed; error keeps the size with the message in the time row",
+      "Facts re-added (sides 19:54 and 14:18, 34:12, 1:47 + 2:06 = 3:53); cassette vocabulary (J-card, real-time dubbing)",
+      "Engine: brand #FF3D81 restored as typed, roundness 82 to 52, depth 70 to 30, colorfulness 92 to 62, warmth 62 to 30, expression 90 to 68",
+      "Fresh-eyes audit 3/5, then 4/5; remaining notes fixed",
+      "Renamed Pomelo Tapes to Calamondin Tapes, catalogue prefix PMLO to CLMD (coordinator, 2026-10-15): the old name sat close to a real Vienna label; web search found no Calamondin Tapes"
+    ]
+  },
+  "facts": [
+    "mockups/05-components-board and mockups/08-made-with-opendesigner embed this shot.png; their captions may still describe the gradient cover; re-check and re-render",
+    "mockups/05-components-board (and 08 where it uses this piece) crop this shot.png with fixed background-position offsets set for the old layout; the crops now land on different content and need new offsets"
+  ],
+  "round4": {
+    "score": 3,
+    "pairwise": "TIDAL/Apple Music/Deezer: round 1 -2/+3/+3, round 2 +2/+4/+3, round 3 +2/+4/+3, round 4 +2/+3/+3, round 6 TIDAL +2, round 7 TIDAL +2 and Deezer +3. Passes the pairwise test from round 2; fails the fresh-eyes bar (3 in four audits).",
+    "changed": [
+      "Release page replaced by the listening room, now playing: 560 px cover, track, grouped transport with volume and output, liner line, side B list",
+      "Signature: the scrubber is the whole of side A (19:54) split by track, played to 9:48",
+      "Cover: Hanson Lu photo (Unsplash License, hotlinked, credited in the page) with the cassette's paper spine across its foot; drawn J-card removed",
+      "Accent pink to calamondin orange #FF9A3D (the label's citrus, the lamps in the photo), one job: what has played; room tinted from the cover; citrus-slice logo",
+      "Removed: buy box, embed box, more releases, shuffle, bar-built section labels, duplicate tracks 4-5 in the list; two punning titles renamed (Second Week of March, Last Frost)",
+      "Last round: cover changed to Iván Martínez Díaz's seedling photo (Unsplash License, hotlinked, credited in the page), J-card strip removed, 520 px cover, side A drawn as five track blocks with labels on the same geometry, layout gaps closed",
+      "Remaining (final auditor): a stock photo is still the largest thing; scrubber labels lose to the side B list; needs cover art the label owns"
+    ]
+  },
+  "owner_history": [
+    {
+      "verdict": "improve",
+      "said": "needs a little more work",
+      "date": "2026-10-14"
+    }
   ]
- }
 }

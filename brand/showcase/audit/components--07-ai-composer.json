@@ -1,96 +1,103 @@
 {
- "piece": "components/07-ai-composer",
- "title": "07 · AI composer · Oriel",
- "pattern": "ai composer",
- "platform": "web",
- "industry": "research",
- "style": [
-  "editorial",
-  "organic",
-  "minimal"
- ],
- "tags": [
-  "ai composer",
-  "research",
-  "chat input",
-  "citations",
-  "model picker",
-  "serif",
-  "parchment"
- ],
- "score": 3,
- "verdict": "polish",
- "strengths": [
-  "The anatomy is right and matches shipped composers: attachment cards above the text, a mention chip, mode pills, a model pill named by behaviour ('Heron · careful'), one filled send, 'Enter to send' hints; send has six states and the streaming state shows elapsed time and a square stop",
-  "Believable content: 'saltings-interviews.csv · Table · 1,204 rows', 'Harbour board minutes 19... · Uploading · 62%', a prompt a historian would type, citations that name page numbers"
- ],
- "slop_signals": [
-  "Cream parchment + terracotta + warm brown-black ink: the cream/orange/brown palette the house rules forbid; tertiary text is #6d634f brown and the paper carries a 5% grain",
-  "Italic serif used as decoration in at least eight places ('a reading room for your sources', 'focus ring is the soft terracotta halo', 'Sources stay in this project', 'send stays disabled', 'the draft is never lost', 'Esc or the square stops it', the suggestion chips, the 'Reading Harbour minutes, p. 9 of 24' line)",
-  "Journal costume on a component: a double-ruled masthead, 'COMPONENTS · AUTUMN 2026', a black 'NO. 07' issue tag and a 39 px italic wordmark",
-  "The footer row holds seven things (plus, three mode pills, model pill, two hints, send) in one line of 44 px; shipped composers show three or four"
- ],
- "fixes": [
-  "Move the paper to near-white (#faf9f7 or whiter), the ink to a neutral near-black, and keep terracotta only for send, the citation numbers and the mention chip",
-  "Use italics only inside the answer (quotes and titles); set every label and note upright",
-  "Remove the grain, the double rule and the issue tag; keep the wordmark and a single hairline",
-  "Put the keyboard hints in the input's placeholder or a tooltip and keep plus, modes, model and send in the row"
- ],
- "references": [
-  {
-   "site": "Langdock",
-   "url": "https://mobbin.com/screens/b66870ae-8d47-493d-b1b6-e6c01173ad96",
-   "what": "Attachment card above the prompt, a mode pill, a model pill and a round send on white; the same anatomy with one blue"
-  },
-  {
-   "site": "Dropbox Dash",
-   "url": "https://mobbin.com/screens/536f1280-e59b-43c4-8dd0-3f0e91e15695",
-   "what": "PDF chip above the prompt and a model menu with a one-line description and a check for the selected one"
-  },
-  {
-   "site": "Gumloop",
-   "url": "https://mobbin.com/screens/a3f8b130-cfc5-4ddc-8fd9-b95a4a6927bf",
-   "what": "Models named Recommended / Smartest / Fastest with a one-line reason; our Wren / Heron / Kestrel does the same"
-  },
-  {
-   "site": "Google Gemini",
-   "url": "https://mobbin.com/screens/057d8ba8-d787-4612-b7ce-ea3595a984ed",
-   "what": "Composer with a Deep research pill and a model selector; one tint, no texture, no italics"
-  }
- ],
- "audited": "2026-10-14",
- "owner": {
-  "verdict": "improve",
-  "said": "very good, but colors can be worked on",
-  "date": "2026-10-14"
- },
- "round3": {
-  "score": 4,
-  "changed": [
-   "Palette only, as the owner asked; layout, type, copy and the component sheet kept",
-   "Engine: brand #b4532a to ink blue #2B4C8C (chosen), neutralBase parchment removed, pure greys (raw.neutralTint and Q-color-09), warmth 88 to 20, focusColor #242424; rebuilt",
-   "Blue has one meaning, a source (citations, mention, drop target, logo); every action and state is ink; red only on error icon, title and size text",
-   "Paper grain removed; page #f4f4f4 with white working surfaces",
-   "Copy that named the old colour fixed ('focus is a 1 px ink border')",
-   "Fresh-eyes audit 3/5, then 4/5; the last four notes fixed"
-  ]
- },
- "facts": [
-  "Italic serif notes, the journal masthead and the 'NO. 07' tag from the earlier audit are kept on purpose (owner: keep everything else)",
-  "Dark theme: raw.focusColor is one value for both themes; the page overrides dark focus to neutral.dark.12 until the engine supports a per-theme focus colour"
- ],
- "round4": {
+  "piece": "components/07-ai-composer",
+  "title": "07 · AI composer · Oriel",
+  "pattern": "ai composer",
+  "platform": "web",
+  "industry": "research",
+  "style": [
+    "editorial",
+    "organic",
+    "minimal"
+  ],
+  "tags": [
+    "ai composer",
+    "research",
+    "chat input",
+    "citations",
+    "model picker",
+    "serif",
+    "parchment"
+  ],
   "score": 3,
-  "pairwise": "Dash/Langdock/Notion (ours minus shipped, 1 to 5, fresh judges, sides random): round 1 +2/+2/+2, round 2 +3/+2/+2, round 3 +3/+2/+2, round 4 +3/+2/+3, round 5 +2/+2/+2, round 6 Dash +2, round 7 Langdock +2 and Notion +2. Passes the pairwise test in every round; fails the fresh-eyes bar (3 in four audits).",
-  "changed": [
-   "Component sheet removed: NO. 07 masthead, six send-button states, italic serif labels, side state panels",
-   "Rebuilt three times: centred new thread with model menu; thread with docked composer; final: end of an answer as quiet context and the composer with its @ source picker open",
-   "One face (Onest); Source Serif 4 dropped as another product's signature",
-   "Ink blue limited to the typed @harb and the chosen picker row; citations, tiles and actions grey or ink; icon tiles removed",
-   "Clutter removed: action row, footnote, Research mode, hint line, repeated project name, source cards (now one line)",
-   "Facts fixed: last claim cited (Keller p. 112 in a 248-page book), one name per source, 212-page minutes, Kestrel and a real-sounding Fisheries Act removed",
-   "Last round: one depth technique (shadow on the composer and picker only, flat fills elsewhere), the chosen picker row tinted, a two-line prompt that cites the minutes directly",
-   "Remaining (final auditor): composer and picker about a quarter of the frame; reads as the stock AI-app layout; next step is a tighter viewport or a structure of its own"
+  "verdict": "polish",
+  "strengths": [
+    "The anatomy is right and matches shipped composers: attachment cards above the text, a mention chip, mode pills, a model pill named by behaviour ('Heron · careful'), one filled send, 'Enter to send' hints; send has six states and the streaming state shows elapsed time and a square stop",
+    "Believable content: 'saltings-interviews.csv · Table · 1,204 rows', 'Harbour board minutes 19... · Uploading · 62%', a prompt a historian would type, citations that name page numbers"
+  ],
+  "slop_signals": [
+    "Cream parchment + terracotta + warm brown-black ink: the cream/orange/brown palette the house rules forbid; tertiary text is #6d634f brown and the paper carries a 5% grain",
+    "Italic serif used as decoration in at least eight places ('a reading room for your sources', 'focus ring is the soft terracotta halo', 'Sources stay in this project', 'send stays disabled', 'the draft is never lost', 'Esc or the square stops it', the suggestion chips, the 'Reading Harbour minutes, p. 9 of 24' line)",
+    "Journal costume on a component: a double-ruled masthead, 'COMPONENTS · AUTUMN 2026', a black 'NO. 07' issue tag and a 39 px italic wordmark",
+    "The footer row holds seven things (plus, three mode pills, model pill, two hints, send) in one line of 44 px; shipped composers show three or four"
+  ],
+  "fixes": [
+    "Move the paper to near-white (#faf9f7 or whiter), the ink to a neutral near-black, and keep terracotta only for send, the citation numbers and the mention chip",
+    "Use italics only inside the answer (quotes and titles); set every label and note upright",
+    "Remove the grain, the double rule and the issue tag; keep the wordmark and a single hairline",
+    "Put the keyboard hints in the input's placeholder or a tooltip and keep plus, modes, model and send in the row"
+  ],
+  "references": [
+    {
+      "site": "Langdock",
+      "url": "https://mobbin.com/screens/b66870ae-8d47-493d-b1b6-e6c01173ad96",
+      "what": "Attachment card above the prompt, a mode pill, a model pill and a round send on white; the same anatomy with one blue"
+    },
+    {
+      "site": "Dropbox Dash",
+      "url": "https://mobbin.com/screens/536f1280-e59b-43c4-8dd0-3f0e91e15695",
+      "what": "PDF chip above the prompt and a model menu with a one-line description and a check for the selected one"
+    },
+    {
+      "site": "Gumloop",
+      "url": "https://mobbin.com/screens/a3f8b130-cfc5-4ddc-8fd9-b95a4a6927bf",
+      "what": "Models named Recommended / Smartest / Fastest with a one-line reason; our Wren / Heron / Kestrel does the same"
+    },
+    {
+      "site": "Google Gemini",
+      "url": "https://mobbin.com/screens/057d8ba8-d787-4612-b7ce-ea3595a984ed",
+      "what": "Composer with a Deep research pill and a model selector; one tint, no texture, no italics"
+    }
+  ],
+  "audited": "2026-10-14",
+  "owner": {
+    "verdict": "hold",
+    "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
+    "date": "2026-10-18"
+  },
+  "round3": {
+    "score": 4,
+    "changed": [
+      "Palette only, as the owner asked; layout, type, copy and the component sheet kept",
+      "Engine: brand #b4532a to ink blue #2B4C8C (chosen), neutralBase parchment removed, pure greys (raw.neutralTint and Q-color-09), warmth 88 to 20, focusColor #242424; rebuilt",
+      "Blue has one meaning, a source (citations, mention, drop target, logo); every action and state is ink; red only on error icon, title and size text",
+      "Paper grain removed; page #f4f4f4 with white working surfaces",
+      "Copy that named the old colour fixed ('focus is a 1 px ink border')",
+      "Fresh-eyes audit 3/5, then 4/5; the last four notes fixed"
+    ]
+  },
+  "facts": [
+    "Italic serif notes, the journal masthead and the 'NO. 07' tag from the earlier audit are kept on purpose (owner: keep everything else)",
+    "Dark theme: raw.focusColor is one value for both themes; the page overrides dark focus to neutral.dark.12 until the engine supports a per-theme focus colour"
+  ],
+  "round4": {
+    "score": 3,
+    "pairwise": "Dash/Langdock/Notion (ours minus shipped, 1 to 5, fresh judges, sides random): round 1 +2/+2/+2, round 2 +3/+2/+2, round 3 +3/+2/+2, round 4 +3/+2/+3, round 5 +2/+2/+2, round 6 Dash +2, round 7 Langdock +2 and Notion +2. Passes the pairwise test in every round; fails the fresh-eyes bar (3 in four audits).",
+    "changed": [
+      "Component sheet removed: NO. 07 masthead, six send-button states, italic serif labels, side state panels",
+      "Rebuilt three times: centred new thread with model menu; thread with docked composer; final: end of an answer as quiet context and the composer with its @ source picker open",
+      "One face (Onest); Source Serif 4 dropped as another product's signature",
+      "Ink blue limited to the typed @harb and the chosen picker row; citations, tiles and actions grey or ink; icon tiles removed",
+      "Clutter removed: action row, footnote, Research mode, hint line, repeated project name, source cards (now one line)",
+      "Facts fixed: last claim cited (Keller p. 112 in a 248-page book), one name per source, 212-page minutes, Kestrel and a real-sounding Fisheries Act removed",
+      "Last round: one depth technique (shadow on the composer and picker only, flat fills elsewhere), the chosen picker row tinted, a two-line prompt that cites the minutes directly",
+      "Remaining (final auditor): composer and picker about a quarter of the frame; reads as the stock AI-app layout; next step is a tighter viewport or a structure of its own"
+    ]
+  },
+  "owner_history": [
+    {
+      "verdict": "improve",
+      "said": "very good, but colors can be worked on",
+      "date": "2026-10-14"
+    }
   ]
- }
 }
