@@ -1021,8 +1021,8 @@ def show_pieces():
                 styles = [str(x).lower().strip() for x in j.get("style", [])][:4]
                 # the latest round decides the "Being rebuilt" stamp: a round-4 piece passed the blind comparison; before that, round 3;
                 # a piece the round-4 audit sends back for work is stamped until it passes
-                latest = j.get("round4") or j.get("round3") or {}
-                todo = ORDER["scores"].get(f"{cat}--{d.name}", {}).get("action") in ("polish", "rebuild") and not j.get("round4")
+                latest = j.get("round5") or j.get("round4") or j.get("round3") or {}
+                todo = ORDER["scores"].get(f"{cat}--{d.name}", {}).get("action") in ("polish", "rebuild") and not (j.get("round4") or j.get("round5"))
                 verdict = "polish" if todo else ("" if (latest.get("score") or 0) >= 4 else j.get("owner", {}).get("verdict") or j.get("verdict", ""))
                 meta = {"tags": [audience] + styles + ([industry] if industry else []), "styles": styles, "verdict": verdict, "pattern": j.get("pattern", "")}
             extras = [x for x in sorted(d.glob("shot-*.png")) if not any(k in x.stem for k in ("painted", "-v", "draft", "old"))] if shot.exists() else []
