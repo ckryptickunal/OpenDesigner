@@ -943,6 +943,9 @@ def piece_text(d):
                                   r"|\b[\w-]+/[\w./-]+\.(?:html|png|json|md|css|py)\b|\bbrand/|\bsite/|\bengine\.py\b)", ln.strip(), re.I)]
         if d.name in MOCKUP_CAPTIONS:
             body = [MOCKUP_CAPTIONS[d.name]]
+        caption = next((ln.split(":", 1)[1].strip() for ln in lines if ln.startswith("Gallery:")), "")
+        if caption:  # a rebuilt piece says what it is now in one line; its first paragraph may describe the design it replaced
+            body = [caption]
         if body:
             text = re.sub(r"^(Direction|Brief|Concept)[.:]\s*", "", re.sub(r"[*_`]", "", body[0]))
             sentences = re.split(r"(?<=[.!?])\s+", text)

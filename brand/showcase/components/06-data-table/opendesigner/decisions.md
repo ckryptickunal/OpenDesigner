@@ -425,3 +425,13 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 ## D-0025 · raw.baseSize = 14
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: owner rule: Material body minimum 14; dense table keeps 32px rows
+
+## D-0026 · dials.depth = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0020 · source_ref: none
+- reason: round 4: the floating bulk bar and row menu need a real shadow; 15 gave none
+- previous value: 15
+
+## D-0027 · dials.roundness = 22
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0019 · source_ref: none
+- reason: round 4: 2-4 px on controls; radius 0 checkboxes read harsh at 16 px
+- previous value: 10

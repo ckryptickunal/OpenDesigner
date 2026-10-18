@@ -4,12 +4,17 @@
   "engine_version": "1.0.0",
   "levers_version": "levers/1.0 2026-09-23",
   "mode": "standard",
-  "name": "Mossby",
+  "name": "Sedge",
   "summary": "",
   "context": {
     "product": "",
     "audience": "people who use it often, as an everyday app",
-    "surfaces": [],
+    "surfaces": [
+      {
+        "name": "setup",
+        "mode": "Operate"
+      }
+    ],
     "entryPath": "",
     "memorable": "",
     "scope": {
@@ -21,80 +26,77 @@
   },
   "dials": {
     "expression": {
-      "value": 66,
+      "value": 35,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0012"
+      "decision": "D-0019"
     },
-    "brandPresence": {
-      "value": 70,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0013"
-    },
+    "brandPresence": null,
     "density": {
-      "value": 25,
+      "value": 50,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0014"
+      "decision": "D-0002"
     },
     "energy": {
-      "value": 55,
+      "value": 22,
+      "set_by": "delegated",
+      "detached": true,
+      "decision": "D-0020"
+    },
+    "roundness": {
+      "value": 45,
       "set_by": "delegated",
       "detached": true,
       "decision": "D-0015"
     },
-    "roundness": {
-      "value": 95,
+    "depth": {
+      "value": 15,
       "set_by": "delegated",
       "detached": true,
       "decision": "D-0016"
     },
-    "depth": {
-      "value": 35,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0017"
-    },
     "colorfulness": {
-      "value": 62,
+      "value": 28,
       "set_by": "delegated",
       "detached": true,
       "decision": "D-0018"
     },
     "warmth": {
-      "value": 85,
+      "value": 15,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0019"
+      "decision": "D-0017"
     }
   },
   "preset": null,
+  "style": null,
+  "customStyles": {},
   "macros": [
     "friendly",
-    "playful",
-    "deferential"
+    "deferential",
+    "minimal",
+    "authoritative"
   ],
   "raw": {
-    "brandColor": "#338355",
+    "brandColor": "#56701A",
     "primaryActionColor": null,
     "focusColor": null,
     "neutralBase": null,
     "contrastTarget": "AA",
-    "textFace": "Nunito",
-    "displayFace": "Fredoka",
+    "textFace": "Schibsted Grotesk",
+    "displayFace": "=textFace",
     "baseSize": null,
     "spaceUnit": 4,
     "platforms": [
-      "web",
-      "ios"
+      "web"
     ],
     "inputs": [
       "pointer",
       "touch"
     ],
-    "productType": "marketing",
-    "marketingSurfaces": true,
+    "productType": "work-tool",
+    "marketingSurfaces": false,
     "flags": {
       "brandExact": true,
       "tintTowardBrand": false,
@@ -105,14 +107,14 @@
     "overrides": {},
     "brandFace": null,
     "fontLicence": {
-      "web": true,
-      "app": true,
-      "selfHost": true
+      "web": null,
+      "app": null,
+      "selfHost": null
     },
     "fontClass": null,
-    "accentCount": 3,
+    "accentCount": null,
     "accentHarmony": "triadic",
-    "neutralTint": null,
+    "neutralTint": "pure",
     "chartPalette": null,
     "statusSet": "classic-4",
     "stateMethod": "hybrid",
@@ -124,7 +126,7 @@
     "textScaling": "full",
     "lineHeightGrid": 4,
     "tracking": "size-table",
-    "numericStyles": false,
+    "numericStyles": true,
     "spaceLadder": "hybrid",
     "spaceExtras": [],
     "groupRatio": null,
@@ -144,10 +146,10 @@
     "domain": null,
     "minTarget": null,
     "focusWidth": 2,
-    "secondaryColors": [
-      "#f08a63",
-      "#9b7be8"
-    ],
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null,
+    "secondaryColors": [],
     "monoFace": "ui-monospace",
     "scripts": [
       "Latn"
@@ -360,25 +362,26 @@
     },
     "Q-plat-01": {
       "value": [
-        "web",
-        "ios"
+        "web"
       ],
       "set_by": "delegated",
-      "decision": "D-0006",
+      "decision": "D-0005",
       "via": "sketch",
       "locked": false
     },
     "Q-theme-01": {
       "value": "system-light-dark",
       "set_by": "delegated",
-      "decision": "D-0009",
+      "decision": "D-0008",
       "via": "sketch",
       "locked": false
     },
     "Q-scope-06": {
-      "value": "experience",
+      "value": [
+        "setup:operate"
+      ],
       "set_by": "delegated",
-      "decision": "D-0010",
+      "decision": "D-0009",
       "via": "sketch",
       "locked": false
     }
@@ -524,13 +527,13 @@
   "taste": {
     "feelWords": [
       "friendly",
-      "cheerful",
-      "gentle"
+      "calm",
+      "reliable"
     ]
   },
   "hashes": {
-    "DESIGN.md": "6494f8fea72c1067",
-    "PRODUCT.md": "d530b3d7231d2319"
+    "DESIGN.md": "eccd4371c0099b98",
+    "PRODUCT.md": "5b3a46cce8b2b224"
   },
   "exports": {
     "prefix": "ds",
@@ -586,7 +589,7 @@
     "overrides.font.size.input"
   ],
   "standards": {
-    "house_version": 2,
+    "house_version": 3,
     "applied": [
       "STD-when-to-animate-01",
       "STD-when-to-animate-03",
@@ -599,7 +602,6 @@
       "STD-when-to-animate-10",
       "STD-when-to-animate-11",
       "STD-when-to-animate-13",
-      "STD-when-to-animate-14",
       "STD-when-to-animate-15",
       "STD-when-to-animate-16",
       "STD-when-to-animate-17",
@@ -634,14 +636,12 @@
       "STD-enter-exit-origin-21",
       "STD-enter-exit-origin-23",
       "STD-enter-exit-origin-24",
-      "STD-enter-exit-origin-25",
       "STD-enter-exit-origin-26",
       "STD-enter-exit-origin-27",
       "STD-enter-exit-origin-28",
       "STD-enter-exit-origin-29",
       "STD-enter-exit-origin-30",
       "STD-enter-exit-origin-31",
-      "STD-enter-exit-origin-33",
       "STD-enter-exit-origin-37",
       "STD-enter-exit-origin-38",
       "STD-enter-exit-origin-39",
@@ -694,9 +694,6 @@
       "STD-performance-properties-15",
       "STD-performance-properties-16",
       "STD-performance-properties-17",
-      "STD-performance-properties-18",
-      "STD-performance-properties-19",
-      "STD-performance-properties-20",
       "STD-performance-properties-24",
       "STD-performance-properties-25",
       "STD-accessibility-motion-01",
@@ -721,7 +718,6 @@
       "STD-accessibility-motion-27",
       "STD-components-toasts-drawers-03",
       "STD-components-toasts-drawers-07",
-      "STD-components-toasts-drawers-08",
       "STD-components-toasts-drawers-10",
       "STD-components-toasts-drawers-11",
       "STD-components-toasts-drawers-12",
@@ -741,7 +737,6 @@
       "STD-components-toasts-drawers-44",
       "STD-components-toasts-drawers-45",
       "STD-components-toasts-drawers-48",
-      "STD-components-toasts-drawers-60",
       "STD-components-toasts-drawers-65",
       "STD-components-toasts-drawers-72",
       "STD-components-toasts-drawers-77",
@@ -765,22 +760,6 @@
       "STD-mobile-touch-21",
       "STD-mobile-touch-24",
       "STD-mobile-touch-28",
-      "STD-mobile-touch-30",
-      "STD-mobile-touch-33",
-      "STD-mobile-touch-34",
-      "STD-mobile-touch-35",
-      "STD-mobile-touch-36",
-      "STD-mobile-touch-37",
-      "STD-mobile-touch-38",
-      "STD-mobile-touch-39",
-      "STD-mobile-touch-41",
-      "STD-mobile-touch-42",
-      "STD-mobile-touch-44",
-      "STD-mobile-touch-48",
-      "STD-mobile-touch-51",
-      "STD-mobile-touch-60",
-      "STD-mobile-touch-61",
-      "STD-mobile-touch-62",
       "STD-mobile-touch-70",
       "STD-visual-details-01",
       "STD-visual-details-02",
@@ -900,120 +879,7 @@
       "STD-process-review-taste-64",
       "STD-process-review-taste-65",
       "STD-process-review-taste-66",
-      "STD-process-review-taste-67",
-      "STD-swift-01",
-      "STD-swift-02",
-      "STD-swift-03",
-      "STD-swift-04",
-      "STD-swift-05",
-      "STD-swift-06",
-      "STD-swift-07",
-      "STD-swift-08",
-      "STD-swift-09",
-      "STD-swift-10",
-      "STD-swift-11",
-      "STD-swift-12",
-      "STD-swift-13",
-      "STD-swift-14",
-      "STD-swift-15",
-      "STD-swift-16",
-      "STD-swift-17",
-      "STD-swift-18",
-      "STD-swift-19",
-      "STD-swift-20",
-      "STD-swift-21",
-      "STD-swift-22",
-      "STD-swift-23",
-      "STD-swift-24",
-      "STD-swift-25",
-      "STD-swift-26",
-      "STD-swift-27",
-      "STD-swift-28",
-      "STD-swift-29",
-      "STD-swift-30",
-      "STD-swift-31",
-      "STD-swift-32",
-      "STD-swift-33",
-      "STD-swift-34",
-      "STD-swift-35",
-      "STD-swift-36",
-      "STD-swift-37",
-      "STD-swift-38",
-      "STD-swift-39",
-      "STD-swift-40",
-      "STD-swift-41",
-      "STD-swift-42",
-      "STD-swift-43",
-      "STD-swift-44",
-      "STD-swift-45",
-      "STD-swift-46",
-      "STD-swift-47",
-      "STD-swift-48",
-      "STD-swift-49",
-      "STD-swift-50",
-      "STD-swift-51",
-      "STD-swift-52",
-      "STD-swift-53",
-      "STD-swift-54",
-      "STD-swift-55",
-      "STD-swift-56",
-      "STD-swift-57",
-      "STD-swift-58",
-      "STD-swift-59",
-      "STD-swift-60",
-      "STD-swift-61",
-      "STD-swift-62",
-      "STD-swift-63",
-      "STD-swift-64",
-      "STD-swift-65",
-      "STD-swift-66",
-      "STD-swift-67",
-      "STD-swift-68",
-      "STD-swift-69",
-      "STD-swift-70",
-      "STD-swift-71",
-      "STD-swift-72",
-      "STD-swift-73",
-      "STD-swift-74",
-      "STD-swift-75",
-      "STD-swift-76",
-      "STD-swift-77",
-      "STD-swift-78",
-      "STD-swift-79",
-      "STD-swift-80",
-      "STD-swift-81",
-      "STD-swift-82",
-      "STD-swift-83",
-      "STD-swift-84",
-      "STD-swift-85",
-      "STD-swift-86",
-      "STD-swift-87",
-      "STD-swift-88",
-      "STD-swift-89",
-      "STD-swift-90",
-      "STD-swift-91",
-      "STD-swift-92",
-      "STD-swift-93",
-      "STD-swift-94",
-      "STD-swift-95",
-      "STD-swift-96",
-      "STD-swift-97",
-      "STD-swift-98",
-      "STD-swift-99",
-      "STD-swift-100",
-      "STD-swift-101",
-      "STD-swift-102",
-      "STD-swift-103",
-      "STD-swift-104",
-      "STD-swift-105",
-      "STD-swift-106",
-      "STD-swift-107",
-      "STD-swift-108",
-      "STD-swift-109",
-      "STD-swift-110",
-      "STD-swift-111",
-      "STD-swift-112",
-      "STD-swift-113"
+      "STD-process-review-taste-67"
     ],
     "overridden": {},
     "project": [],
@@ -1021,17 +887,17 @@
     "records": {
       "STD-when-to-animate-01": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-03": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-04": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-05": {
@@ -1041,72 +907,67 @@
             "unit": "ms"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-06": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-07": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-08": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-09": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-10": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-11": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-13": {
         "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-when-to-animate-14": {
-        "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-15": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-16": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-17": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-20": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-when-to-animate-22": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-easing-duration-01": {
@@ -1124,7 +985,7 @@
             1
           ]
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-easing-duration-02": {
@@ -1148,17 +1009,17 @@
             1
           ]
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-easing-duration-03": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-easing-duration-06": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-easing-duration-07": {
@@ -1180,74 +1041,74 @@
             "unit": "ms"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-easing-duration-09": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-easing-duration-10": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-easing-duration-11": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-easing-duration-12": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-easing-duration-13": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-easing-duration-15": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-easing-duration-17": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-easing-duration-19": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-01": {
         "paths": {
           "overrides.motion.scale.enter": 0.95
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-02": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-03": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-04": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-06": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-08": {
@@ -1258,7 +1119,7 @@
           },
           "overrides.motion.scale.enter": 0.95
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-09": {
@@ -1269,7 +1130,7 @@
           },
           "overrides.motion.scale.enter-tooltip": 0.97
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-10": {
@@ -1279,7 +1140,7 @@
             "unit": "ms"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-11": {
@@ -1290,7 +1151,7 @@
           },
           "overrides.motion.scale.enter-modal": 0.96
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-12": {
@@ -1300,7 +1161,7 @@
             "unit": "ms"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-13": {
@@ -1310,22 +1171,22 @@
             "unit": "ms"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-16": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-17": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-21": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-23": {
@@ -1335,17 +1196,12 @@
             "unit": "ms"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-24": {
         "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-enter-exit-origin-25": {
-        "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-26": {
@@ -1355,17 +1211,17 @@
             "unit": "ms"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-27": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-28": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-29": {
@@ -1375,42 +1231,37 @@
             "unit": "px"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-30": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-31": {
         "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-enter-exit-origin-33": {
-        "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-37": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-38": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-39": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-40": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-41": {
@@ -1426,32 +1277,32 @@
             "unit": "ms"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-42": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-43": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-enter-exit-origin-44": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-01": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-02": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-04": {
@@ -1459,12 +1310,12 @@
           "overrides.motion.spring.spatial.dampingRatio": 1.0,
           "overrides.motion.spring.spatial.stiffness": 246.7
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-05": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-06": {
@@ -1475,12 +1326,12 @@
             "mass": 1
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-07": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-08": {
@@ -1491,7 +1342,7 @@
             "mass": 1
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-09": {
@@ -1502,83 +1353,83 @@
             "mass": 1
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-11": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-12": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-13": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-14": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-15": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-16": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-17": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-18": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-19": {
         "paths": {
           "overrides.motion.gesture.deceleration-rate": 0.998
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-20": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-21": {
         "paths": {
           "overrides.motion.gesture.dismiss-velocity": 0.11
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-25": {
         "paths": {
           "overrides.motion.gesture.rubberband-constant": 0.55
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-26": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-28": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-30": {
@@ -1588,142 +1439,127 @@
             "unit": "px"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-34": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-39": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-41": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-42": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-45": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-59": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-60": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-61": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-springs-gestures-63": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-01": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-02": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-06": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-09": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-10": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-11": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-12": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-13": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-14": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-15": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-16": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-17": {
         "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-performance-properties-18": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-performance-properties-19": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-performance-properties-20": {
-        "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-24": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-performance-properties-25": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-01": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-02": {
@@ -1773,102 +1609,102 @@
             ]
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-05": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-06": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-07": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-08": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-09": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-10": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-11": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-12": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-13": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-15": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-16": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-17": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-18": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-20": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-23": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-24": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-26": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-accessibility-motion-27": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-03": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-07": {
@@ -1884,22 +1720,17 @@
             1
           ]
         },
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-components-toasts-drawers-08": {
-        "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-10": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-11": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-12": {
@@ -1909,19 +1740,19 @@
             "unit": "px"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-13": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-14": {
         "paths": {
           "overrides.component.toast.visible": 3
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-15": {
@@ -1931,32 +1762,32 @@
             "unit": "ms"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-16": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-17": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-18": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-25": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-29": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-30": {
@@ -1970,22 +1801,22 @@
             "unit": "px"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-33": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-34": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-37": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-40": {
@@ -1997,7 +1828,7 @@
             1
           ]
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-44": {
@@ -2007,47 +1838,42 @@
             "unit": "ms"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-45": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-48": {
         "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-components-toasts-drawers-60": {
-        "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-65": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-72": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-components-toasts-drawers-77": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-02": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-03": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-05": {
@@ -2058,22 +1884,22 @@
             "unit": "ms"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-06": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-07": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-08": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-09": {
@@ -2087,12 +1913,12 @@
             "unit": "px"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-10": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-11": {
@@ -2102,1309 +1928,662 @@
             "unit": "px"
           }
         },
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-13": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-14": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-15": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-16": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-17": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-18": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-19": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-20": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-21": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-24": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-28": {
         "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-30": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-33": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-34": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-35": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-36": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-37": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-38": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-39": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-41": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-42": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-44": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-48": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-51": {
-        "paths": {
-          "overrides.motion.spring.spatial.dampingRatio": 1.0
-        },
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-60": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-61": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-mobile-touch-62": {
-        "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-mobile-touch-70": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-01": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-02": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-03": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-04": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-05": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-06": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-07": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-08": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-09": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-10": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-11": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-13": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-14": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-15": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-16": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-17": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-18": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-19": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-20": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-21": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-24": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-25": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-26": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-27": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-28": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-29": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-30": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-31": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-32": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-33": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-34": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-35": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-36": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-37": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-38": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-39": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-40": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-41": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-42": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-43": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-44": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-45": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-46": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-47": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-48": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-49": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-50": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-51": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-55": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-56": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-57": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-59": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-visual-details-64": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-01": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-02": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-03": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-04": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-05": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-06": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-07": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-08": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-09": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-10": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-11": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-12": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-13": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-14": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-15": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-16": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-17": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-18": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-19": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-20": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-21": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-22": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-23": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-24": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-25": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-26": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-27": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-28": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-29": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-30": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-31": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-32": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-33": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-34": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-35": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-36": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-37": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-38": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-39": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-40": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-41": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-42": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-43": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-44": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-45": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-46": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-47": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-48": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-49": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-50": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-51": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-52": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-53": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-54": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-55": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-56": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-57": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-58": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-59": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-60": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-62": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-63": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-64": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-65": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-66": {
         "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       },
       "STD-process-review-taste-67": {
         "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-01": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-02": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-03": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-04": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-05": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-06": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-07": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-08": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-09": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-10": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-11": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-12": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-13": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-14": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-15": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-16": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-17": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-18": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-19": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-20": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-21": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-22": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-23": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-24": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-25": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-26": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-27": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-28": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-29": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-30": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-31": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-32": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-33": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-34": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-35": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-36": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-37": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-38": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-39": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-40": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-41": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-42": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-43": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-44": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-45": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-46": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-47": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-48": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-49": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-50": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-51": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-52": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-53": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-54": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-55": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-56": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-57": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-58": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-59": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-60": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-61": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-62": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-63": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-64": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-65": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-66": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-67": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-68": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-69": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-70": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-71": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-72": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-73": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-74": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-75": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-76": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-77": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-78": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-79": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-80": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-81": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-82": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-83": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-84": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-85": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-86": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-87": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-88": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-89": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-90": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-91": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-92": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-93": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-94": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-95": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-96": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-97": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-98": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-99": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-100": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-101": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-102": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-103": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-104": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-105": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-106": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-107": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-108": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-109": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-110": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-111": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-112": {
-        "paths": {},
-        "decision": "D-0011",
-        "locked": true
-      },
-      "STD-swift-113": {
-        "paths": {},
-        "decision": "D-0011",
+        "decision": "D-0010",
         "locked": true
       }
     },

@@ -430,3 +430,13 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0018 · source_ref: none
 - reason: owner colour rule: avoid brownish neutrals; a cool-green ground
 - previous value: 70
+
+## D-0027 · raw.displayFace = "Shippori Mincho"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 3: the Mincho sets the name and the tea names only
+- previous value: "=textFace"
+
+## D-0028 · raw.textFace = "Zen Kaku Gothic New"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0022 · source_ref: none
+- reason: Round 3: a quiet Japanese gothic for hours, seats, dates and links, small and exact
+- previous value: "Shippori Mincho"

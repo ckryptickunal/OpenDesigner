@@ -631,3 +631,43 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0054 · source_ref: none
 - reason: Round 3: Newsreader is already the serif of app-screens/08 (Undertow); Literata (OFL, optical sizes 7-72) is a reading serif with a warmer, bookish display cut that suits a cooking quarterly
 - previous value: "Newsreader"
+
+## D-0061 · raw.displayFace = "Source Serif 4"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0060 · source_ref: none
+- reason: Round 4: owner asked for better fonts; a crisp editorial serif at display optical size for the title and section heads only
+- previous value: "Literata"
+
+## D-0062 · raw.textFace = "Instrument Sans"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0055 · source_ref: none
+- reason: Round 4: a quiet, slightly narrow grotesk for everything read or tapped; pairs with the serif without competing
+- previous value: "Schibsted Grotesk"
+
+## D-0063 · raw.neutralBase = "#85827E"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0058 · source_ref: none
+- reason: Round 4: near-neutral greys on a white page; no cream
+- previous value: "#8C8984"
+
+## D-0064 · dials.warmth = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0052 · source_ref: none
+- reason: Round 4: the photo brings the warmth; the page stays white
+- previous value: 55
+
+## D-0065 · dials.colorfulness = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0015 · source_ref: none
+- reason: Round 4: one accent, the tomato red action
+- previous value: 65
+
+## D-0066 · name = "Potwell"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 4: Larder is a live App Store recipe app; renamed
+- previous value: "Larder"
+
+## D-0067 · name = "Saltmoor"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0066 · source_ref: none
+- reason: Round 4: Larder is a live App Store recipe app and Potwell is two letters from Ostwell (styles/02); Saltmoor is clear in NAMES.md and on the web
+- previous value: "Potwell"
+
+## D-0068 · name = "Sorrelby"
+- set_by: chosen · locked: no · date: 2026-10-18 · supersedes: D-0067 · source_ref: none
+- reason: Round 4: Saltmoor is one letter from Saltmoore, a real hotel with restaurants; Sorrelby is clear in NAMES.md and on the web
+- previous value: "Saltmoor"

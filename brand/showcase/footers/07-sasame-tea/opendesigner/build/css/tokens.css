@@ -44,19 +44,19 @@
   --ds-color-accent-light-11: #515b35;
   --ds-color-accent-light-12: #313624;
   --ds-color-accent-light-solid-pressed: #4d582c;
-  --ds-color-accent-dark-1: #171816;
-  --ds-color-accent-dark-2: #1f201c;
-  --ds-color-accent-dark-3: #262821;
-  --ds-color-accent-dark-4: #2d3026;
-  --ds-color-accent-dark-5: #35392b;
-  --ds-color-accent-dark-6: #3c4230;
-  --ds-color-accent-dark-7: #444b33;
-  --ds-color-accent-dark-8: #7c8564;
-  --ds-color-accent-dark-9: #7d8862;
-  --ds-color-accent-dark-10: #8a956e;
-  --ds-color-accent-dark-11: #a6b18b;
-  --ds-color-accent-dark-12: #d3d7ca;
-  --ds-color-accent-dark-solid-pressed: #949f77;
+  --ds-color-accent-dark-1: #171815;
+  --ds-color-accent-dark-2: #1e201b;
+  --ds-color-accent-dark-3: #25281f;
+  --ds-color-accent-dark-4: #2d3023;
+  --ds-color-accent-dark-5: #343928;
+  --ds-color-accent-dark-6: #3c422c;
+  --ds-color-accent-dark-7: #434b2e;
+  --ds-color-accent-dark-8: #7a865d;
+  --ds-color-accent-dark-9: #7c8959;
+  --ds-color-accent-dark-10: #899665;
+  --ds-color-accent-dark-11: #a4b183;
+  --ds-color-accent-dark-12: #d2d7c7;
+  --ds-color-accent-dark-solid-pressed: #92a06f;
   --ds-color-accent2-light-1: #fffcfb;
   --ds-color-accent2-light-2: #fdf2ef;
   --ds-color-accent2-light-3: #fee7e1;
@@ -65,24 +65,25 @@
   --ds-color-accent2-light-6: #ffc4b7;
   --ds-color-accent2-light-7: #ffb9a8;
   --ds-color-accent2-light-8: #c66e5b;
-  --ds-color-accent2-light-9: #c45139;
-  --ds-color-accent2-light-10: #b34731;
+  --ds-color-accent2-light-9: #b4432c;
+  --ds-color-accent2-light-10: #a43923;
   --ds-color-accent2-light-11: #963925;
   --ds-color-accent2-light-12: #54271d;
-  --ds-color-accent2-light-solid-pressed: #a93e28;
-  --ds-color-accent2-dark-1: #1c1715;
-  --ds-color-accent2-dark-2: #271d1b;
-  --ds-color-accent2-dark-3: #35231f;
-  --ds-color-accent2-dark-4: #432923;
-  --ds-color-accent2-dark-5: #512e26;
-  --ds-color-accent2-dark-6: #60342a;
-  --ds-color-accent2-dark-7: #71382c;
-  --ds-color-accent2-dark-8: #bd6b59;
-  --ds-color-accent2-dark-9: #c76955;
-  --ds-color-accent2-dark-10: #d67661;
-  --ds-color-accent2-dark-11: #f09480;
-  --ds-color-accent2-dark-12: #f1cec6;
-  --ds-color-accent2-dark-solid-pressed: #e1806b;
+  --ds-color-accent2-light-solid-pressed: #9a301a;
+  --ds-color-accent2-dark-1: #1d1615;
+  --ds-color-accent2-dark-2: #281d1a;
+  --ds-color-accent2-dark-3: #38221d;
+  --ds-color-accent2-dark-4: #472720;
+  --ds-color-accent2-dark-5: #562b22;
+  --ds-color-accent2-dark-6: #663024;
+  --ds-color-accent2-dark-7: #793223;
+  --ds-color-accent2-dark-8: #c9644e;
+  --ds-color-accent2-dark-9: #d56048;
+  --ds-color-accent2-dark-10: #e46d54;
+  --ds-color-accent2-dark-11: #fe8d74;
+  --ds-color-accent2-dark-12: #f6ccc2;
+  --ds-color-accent2-dark-solid-pressed: #ef775e;
+  --ds-color-accent2-seed: #b4432c;
   --ds-color-success-light-1: #fafefb;
   --ds-color-success-light-2: #eff5f0;
   --ds-color-success-light-3: #e1efe3;
@@ -311,8 +312,8 @@
   --ds-motion-spring-sheet-duration: 410ms;
   --ds-motion-spring-sheet-easing: linear(0, 0.053, 0.176, 0.324, 0.474, 0.609, 0.723, 0.815, 0.884, 0.934, 0.969, 0.991, 1.005, 1.012, 1.015, 1.015, 1.014, 1.012, 1.009, 1.007, 1.005, 1.004, 1.002, 1.001, 1);
   --ds-motion-spring-sheet-delay: 0ms;
-  --ds-font-family-text: "Shippori Mincho", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --ds-font-family-display: var(--ds-font-family-text);
+  --ds-font-family-text: "Zen Kaku Gothic New", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ds-font-family-display: "Shippori Mincho", "Zen Kaku Gothic New", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --ds-font-family-mono: ui-monospace, ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --ds-font-weight-body: 400;
   --ds-font-weight-label: 500;
@@ -520,6 +521,7 @@
   --ds-color-border-input: var(--ds-color-neutral-light-8);
   --ds-color-border-focus: var(--ds-color-accent-light-9);
   --ds-color-border-accent: var(--ds-color-accent-light-8);
+  --ds-color-border-separator: var(--ds-color-neutral-light-4);
   --ds-color-border-success: var(--ds-color-success-light-8);
   --ds-color-border-warning: var(--ds-color-warning-light-8);
   --ds-color-border-danger: var(--ds-color-danger-light-8);
@@ -603,6 +605,7 @@
   --ds-color-border-input: var(--ds-color-neutral-dark-8);
   --ds-color-border-focus: var(--ds-color-accent-dark-11);
   --ds-color-border-accent: var(--ds-color-accent-dark-8);
+  --ds-color-border-separator: var(--ds-color-neutral-dark-5);
   --ds-color-border-success: var(--ds-color-success-dark-8);
   --ds-color-border-warning: var(--ds-color-warning-dark-8);
   --ds-color-border-danger: var(--ds-color-danger-dark-8);
@@ -687,6 +690,7 @@
     --ds-color-border-input: var(--ds-color-neutral-dark-8);
     --ds-color-border-focus: var(--ds-color-accent-dark-11);
     --ds-color-border-accent: var(--ds-color-accent-dark-8);
+    --ds-color-border-separator: var(--ds-color-neutral-dark-5);
     --ds-color-border-success: var(--ds-color-success-dark-8);
     --ds-color-border-warning: var(--ds-color-warning-dark-8);
     --ds-color-border-danger: var(--ds-color-danger-dark-8);
@@ -722,6 +726,10 @@
   --ds-size-control-sm: 40px;
   --ds-size-control-md: 48px;
   --ds-size-control-lg: 56px;
+  --ds-size-row-sm: 52px;
+  --ds-size-row-md: 56px;
+  --ds-size-row-lg: 64px;
+  --ds-size-row-two-line: 80px;
 }
 
 [data-density="comfortable"] {
@@ -744,6 +752,10 @@
   --ds-size-control-sm: 32px;
   --ds-size-control-md: 40px;
   --ds-size-control-lg: 48px;
+  --ds-size-row-sm: 44px;
+  --ds-size-row-md: 48px;
+  --ds-size-row-lg: 56px;
+  --ds-size-row-two-line: 72px;
 }
 
 [data-density="compact"] {
@@ -766,6 +778,10 @@
   --ds-size-control-sm: 24px;
   --ds-size-control-md: 32px;
   --ds-size-control-lg: 40px;
+  --ds-size-row-sm: 36px;
+  --ds-size-row-md: 40px;
+  --ds-size-row-lg: 48px;
+  --ds-size-row-two-line: 64px;
 }
 
 :root, [data-motion="standard"] {

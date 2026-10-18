@@ -3,170 +3,136 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Loam: today</title>
+<title>Loam: Gus</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@500;600&family=Figtree:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-  /* Round 3. Type roles (iOS Dynamic Type): Display 48 (Figtree 600, the soil reading that matters) · Large Title 34 (Alegreya 500, the day's headline) ·
-     Title 1 28 (Alegreya 500, the plant's name) · Body 17 · Subheadline 15 · Footnote 13 · Caption 1 12 (tab labels).
-     Moss has one job: today and the actions. Dark amber is a status colour, used only for "too dry". Latin names in italics, common names roman. */
+  /* Round 4: one plant's page. One face (Onest), one accent (moss, --ds-color-accent-light-*) with one job: watering (the events in the chart and the button). */
+  :root {
+    --ink: var(--ds-color-text-primary);
+    --ink-2: var(--ds-color-text-secondary);
+    --rule: var(--ds-color-border-subtle);
+    --water: var(--ds-color-accent-light-9);
+    --gutter: var(--ds-space-20);
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: var(--ds-color-surface-base); }
-  body { width: 390px; height: 844px; overflow: hidden; position: relative; color: var(--ds-color-text-primary); font: 400 var(--ds-font-size-17)/1.29 var(--ds-font-family-text); -webkit-font-smoothing: antialiased; }
+  html, body { background: var(--ds-color-surface-raised); }
+  body { width: 390px; height: 844px; overflow: hidden; position: relative; color: var(--ink);
+    font: 400 var(--ds-font-size-17)/22px var(--ds-font-family-text); -webkit-font-smoothing: antialiased; }
+  button { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+  button:focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
   .num { font-variant-numeric: tabular-nums; }
-  i.lat { font-style: italic; }
 
-  .status { height: 54px; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-4) var(--ds-space-32) 0 var(--ds-space-40); }
+  /* The owner's own photo of the plant (here a free Unsplash photo), full bleed under the status bar. */
+  .photo { position: absolute; top: 0; left: 0; width: 390px; height: 272px; overflow: hidden; background: var(--ds-color-neutral-light-3); }
+  .photo img { display: block; width: 390px; height: 272px; object-fit: cover; }
+
+  .status { position: absolute; top: 0; left: 0; right: 0; height: 54px; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-4) 30px 0 46px; z-index: 2; }
   .status time { font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); letter-spacing: -0.01em; }
   .status .sys { display: flex; gap: var(--ds-space-6); align-items: center; }
-  .status svg { display: block; fill: currentColor; }
+  .status svg { display: block; fill: var(--ink); }
 
-  /* large-title header that states the day's job */
-  header { display: flex; align-items: flex-end; justify-content: space-between; padding: var(--ds-space-8) var(--ds-space-20) 0; }
-  .date { font: 500 var(--ds-font-size-15)/1.33 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
-  h1 { font: 500 var(--ds-font-size-34)/1.2 var(--ds-font-family-display); letter-spacing: -0.005em; }
-  h1 span { color: var(--ds-color-text-secondary); font-weight: 500; }
-  .add { all: unset; width: 44px; height: 44px; display: grid; place-items: center; margin-right: -4px; margin-bottom: 2px; }
-  .add span { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); }
+  .nav { position: absolute; top: 54px; left: var(--gutter); right: var(--gutter); height: 44px; display: flex; justify-content: space-between; z-index: 2; }
+  .nav button { width: 44px; height: 44px; border-radius: var(--ds-radius-full); background: rgb(255 255 255 / .86); box-shadow: inset 0 0 0 1px var(--ds-color-neutral-alpha-light-5); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); color: var(--ink); }
+  .nav .pair { display: flex; gap: var(--ds-space-8); }
 
-  /* the week: numerals, today filled, the number of plants due under each day */
-  .week { margin: var(--ds-space-16) var(--ds-space-20) 0; display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
-  .day { display: flex; flex-direction: column; align-items: center; gap: var(--ds-space-4); }
-  .day .dow { font: 500 var(--ds-font-size-13)/1.2 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
-  .day .n { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font: 500 var(--ds-font-size-17)/1 var(--ds-font-family-text); font-variant-numeric: tabular-nums; }
-  .day.past .n { color: var(--ds-color-text-tertiary); }
-  .day.today .n { background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font-weight: 600; }
-  .day.today .dow { color: var(--ds-color-text-primary); font-weight: 600; }
-  .due { height: 16px; display: flex; align-items: center; gap: 2px; font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-accent); font-variant-numeric: tabular-nums; }
-  .due svg { width: 7px; height: 9px; fill: currentColor; }
-  .day.past .due { color: var(--ds-color-text-tertiary); font-weight: 500; }
+  .head { position: absolute; top: 292px; left: var(--gutter); right: var(--gutter); }
+  .head h1 { font: 600 var(--ds-font-size-28)/34px var(--ds-font-family-display); letter-spacing: -0.015em; }
+  .head p { margin-top: var(--ds-space-2); font: 400 var(--ds-font-size-15)/20px var(--ds-font-family-text); color: var(--ink-2); }
+  
+  /* The reading leads: one big number, the instruction beside it. */
+  .reading { position: absolute; top: 368px; left: var(--gutter); right: var(--gutter); display: flex; align-items: center; gap: var(--ds-space-16); }
+  .reading .v { font: 500 var(--ds-font-size-64)/64px var(--ds-font-family-display); letter-spacing: -0.03em; }
+  .reading .v span { font-size: var(--ds-font-size-34); letter-spacing: -0.01em; margin-left: 2px; }
+  .reading .t small { display: block; font: 400 var(--ds-font-size-13)/18px var(--ds-font-family-text); color: var(--ink-2); }
+  .reading .t b { display: block; font: 600 var(--ds-font-size-17)/22px var(--ds-font-family-text); color: var(--ds-color-text-accent); }
+  .reading .t span { display: block; margin-top: var(--ds-space-2); font: 600 var(--ds-font-size-17)/22px var(--ds-font-family-text); color: var(--ink); }
 
-  .caption { margin: var(--ds-space-12) var(--ds-space-20) 0; font: 400 var(--ds-font-size-13)/1.38 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+  .chart { position: absolute; top: 472px; left: var(--gutter); width: 350px; height: 140px; }
+  .chart svg { display: block; overflow: visible; }
+  .chart text { font: 400 var(--ds-font-size-11)/1 var(--ds-font-family-text); fill: var(--ink-2); }
+  .chart .w { fill: var(--ds-color-text-accent); font-weight: 500; }
 
-  /* the driest plant, with the reading that matters */
-  .hero { margin: var(--ds-space-8) var(--ds-space-20) 0; padding: var(--ds-space-12); border-radius: var(--ds-radius-24); background: var(--ds-color-surface-raised); box-shadow: 0 0 0 1px var(--ds-color-border-subtle); }
-  .hero-top { display: flex; gap: var(--ds-space-16); }
-  .hero-top img { width: 120px; height: 164px; flex: none; border-radius: var(--ds-radius-12); object-fit: cover; background: var(--ds-color-surface-sunken); filter: saturate(.9); }
-  .info { flex: 1; min-width: 0; padding-top: var(--ds-space-4); }
-  .info h2 { font: 500 var(--ds-font-size-28)/1.15 var(--ds-font-family-display); }
-  .latin { margin-top: 2px; font: italic 400 var(--ds-font-size-15)/1.33 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
-  .reading { margin-top: var(--ds-space-12); display: flex; align-items: baseline; gap: var(--ds-space-8); }
-  .reading b { font: 600 var(--ds-font-size-48)/1 var(--ds-font-family-text); /* Display, custom: the one number on the screen */ letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-  .reading span { font: 400 var(--ds-font-size-15)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); white-space: nowrap; }
-  /* meter: the healthy band (30-60%), the watering line (25%) and today's reading */
-  .meter { position: relative; margin-top: var(--ds-space-12); height: 8px; border-radius: 4px; background: var(--ds-color-neutral-light-4); }
-  .meter .band { position: absolute; left: 30%; width: 30%; top: 0; bottom: 0; background: var(--ds-color-accent-light-9); } /* 4.9:1 on the track */
-  .meter .fill { position: absolute; left: 0; width: 18%; top: 0; bottom: 0; border-radius: 4px 0 0 4px; background: var(--ds-color-text-warning); }
-  .meter .tick { position: absolute; left: 25%; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--ds-color-text-primary); }
-  .meter-key { margin-top: var(--ds-space-8); font: 400 var(--ds-font-size-13)/1.38 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
-  .hero-bottom { margin-top: var(--ds-space-12); display: flex; align-items: center; gap: var(--ds-space-12); }
-  .last { flex: 1; font: 400 var(--ds-font-size-15)/1.33 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
-  .last b { display: block; font-weight: 500; color: var(--ds-color-text-primary); }
-  .log { all: unset; flex: none; height: 48px; padding: 0 var(--ds-space-20); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); display: flex; align-items: center; font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); }
+  .ledger { position: absolute; top: 628px; left: var(--gutter); right: var(--gutter); }
+  .ledger div { display: flex; justify-content: space-between; align-items: center; height: 44px; border-top: 1px solid var(--rule); font: 400 var(--ds-font-size-17)/22px var(--ds-font-family-text); }
+  .ledger dt { color: var(--ink-2); }
+  .ledger dd { font-weight: 500; }
 
-  /* the other plants due today: the same fields and the same action */
-  .list { margin: var(--ds-space-4) var(--ds-space-20) 0; }
-  .item { position: relative; display: flex; align-items: center; gap: var(--ds-space-12); min-height: 80px; }
-  .item + .item::before { content: ""; position: absolute; left: 68px; right: 0; top: 0; height: 1px; background: var(--ds-color-border-subtle); }
-  .item img, .item .when { width: 56px; height: 56px; flex: none; border-radius: var(--ds-radius-12); object-fit: cover; background: var(--ds-color-surface-sunken); }
-  .item .txt { flex: 1; min-width: 0; }
-  .item .name { font: 600 var(--ds-font-size-17)/1.29 var(--ds-font-family-text); }
-  .item .sub { margin-top: 1px; font: 400 var(--ds-font-size-15)/1.33 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
-  .item .sub b { font-weight: 600; color: var(--ds-color-text-primary); }
-  .item .log-s { margin-right: var(--ds-space-12); }
-  .log-s { all: unset; flex: none; height: 36px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); display: flex; align-items: center; font: 600 var(--ds-font-size-15)/1 var(--ds-font-family-text); position: relative; }
-  .log-s::after { content: ""; position: absolute; inset: -4px 0; } /* 44 pt hit area */
-  .item .when { display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--ds-color-bg-neutral-subtle); font: 600 var(--ds-font-size-17)/1.1 var(--ds-font-family-text); }
-  .item .when small { font: 500 var(--ds-font-size-13)/1.2 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
-  .soon { display: flex; align-items: center; gap: var(--ds-space-12); min-height: 48px; font: 400 var(--ds-font-size-17)/1.29 var(--ds-font-family-text); }
-  .soon + .soon { border-top: 1px solid var(--ds-color-border-subtle); }
-  .soon .d { width: 56px; flex: none; font: 600 var(--ds-font-size-15)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
-  .soon i { color: var(--ds-color-text-secondary); }
-  .sec { display: flex; align-items: baseline; justify-content: space-between; margin: var(--ds-space-20) var(--ds-space-20) 0; }
-  .sec h3 { font: 600 var(--ds-font-size-20)/1.25 var(--ds-font-family-text); letter-spacing: -0.01em; }
+  .action { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 44px; display: flex; }
+  .action .log { flex: 1; height: 52px; border-radius: var(--ds-radius-12); background: var(--water); color: var(--ds-color-text-on-accent); font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); gap: var(--ds-space-8); }
 
-  /* tab bar: 49 pt + home indicator, labelled; the selected icon is filled */
-  .tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: 83px; padding: var(--ds-space-6) var(--ds-space-8) 0; display: flex; justify-content: space-around; align-items: flex-start;
-    background: color-mix(in oklab, var(--ds-color-surface-base) 72%, transparent); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--ds-color-border-subtle); }
-  .tab { all: unset; flex: 1; min-height: 48px; display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--ds-color-text-secondary); font: 500 var(--ds-font-size-12)/1.2 var(--ds-font-family-text); }
-  .tab[aria-current="page"] { color: var(--ds-color-text-accent); }
-  .tab svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-  .tab[aria-current="page"] svg .f { fill: currentColor; }
-  .home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: var(--ds-color-text-primary); }
-  :focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
+  .home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: var(--ink); }
 </style>
 </head>
 <body>
-  <div class="status" aria-hidden="true">
-    <time>9:41</time>
-    <div class="sys">
-      <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
-      <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.2A10.2 10.2 0 0 0 8 .7 10.2 10.2 0 0 0 .9 3.5L2 4.7a8.6 8.6 0 0 1 6-2.4Zm0 3.3c1.4 0 2.7.5 3.7 1.4l1.1-1.2A7 7 0 0 0 8 3.9a7 7 0 0 0-4.8 1.9l1.1 1.2A5.4 5.4 0 0 1 8 5.6Zm0 3.2c.6 0 1.1.2 1.5.6L8 11 6.5 9.4c.4-.4.9-.6 1.5-.6Z"/></svg>
-      <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="currentColor" stroke-opacity=".45"/><rect x="2" y="2" width="17" height="9" rx="2.5"/><path d="M25 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" fill-opacity=".45"/></svg>
-    </div>
+<div class="photo">
+  <!-- Photo: Rumman Amin, "Green rubber fig in pot", Unsplash (free licence), photo-1544474921-9df05bc76d66, cropped to the leaves, above the pot -->
+  <img src="https://images.unsplash.com/photo-1544474921-9df05bc76d66?rect=0,280,4000,2790&w=1170&h=816&fit=crop&q=90&auto=format" alt="Gus, a young rubber fig, in morning sun by the east window">
+</div>
+
+<div class="status" aria-hidden="true">
+  <time>08:14</time>
+  <div class="sys">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.2A10.2 10.2 0 0 0 8 .7 10.2 10.2 0 0 0 .9 3.5L2 4.7a8.6 8.6 0 0 1 6-2.4Zm0 3.3c1.4 0 2.7.5 3.7 1.4l1.1-1.2A7 7 0 0 0 8 3.9a7 7 0 0 0-4.8 1.9l1.1 1.2A5.4 5.4 0 0 1 8 5.6Zm0 3.2c.6 0 1.1.2 1.5.6L8 11 6.5 9.4c.4-.4.9-.6 1.5-.6Z"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="17" height="9" rx="2.5"/><path d="M25 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" fill-opacity=".4"/></svg>
+  </div>
+</div>
+
+<nav class="nav">
+  <button aria-label="Back to Plants"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg></button>
+  <div class="pair">
+    <button aria-label="Add a photo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5Z"/><circle cx="12" cy="12.75" r="3.25"/></svg></button>
+    <button aria-label="More"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5.5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18.5" cy="12" r="1.6"/></svg></button>
+  </div>
+</nav>
+
+<main>
+  <div class="head">
+    <h1>Gus</h1>
+    <p>Ficus elastica · Living room, east window</p>
   </div>
 
-  <header>
-    <div><p class="date">Wednesday, 14 October</p><h1>3 plants to water</h1></div>
-    <button class="add" aria-label="Add a plant"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button>
-  </header>
+  <section class="reading" aria-label="Soil moisture">
+    <b class="v num">18<span>%</span></b>
+    <div class="t">
+      <small>Soil moisture, read at 08:10</small>
+      <span>Below 20% since Tue 22:30</span>
+    </div>
+  </section>
 
-  <div class="week" role="list" aria-label="Watering this week, Monday 12 to Sunday 18 October">
-    <div class="day past" role="listitem" aria-label="Monday 12, 2 plants watered"><span class="dow">M</span><span class="n">12</span><span class="due"><svg viewBox="0 0 7 9" aria-hidden="true"><path d="M3.5 0S0 4 0 5.6a3.5 3.5 0 0 0 7 0C7 4 3.5 0 3.5 0Z"/></svg>2</span></div>
-    <div class="day past" role="listitem" aria-label="Tuesday 13, nothing due"><span class="dow">T</span><span class="n">13</span><span class="due"></span></div>
-    <div class="day today" role="listitem" aria-label="Today, Wednesday 14, 3 plants to water"><span class="dow">W</span><span class="n">14</span><span class="due"><svg viewBox="0 0 7 9" aria-hidden="true"><path d="M3.5 0S0 4 0 5.6a3.5 3.5 0 0 0 7 0C7 4 3.5 0 3.5 0Z"/></svg>3</span></div>
-    <div class="day" role="listitem" aria-label="Thursday 15, nothing due"><span class="dow">T</span><span class="n">15</span><span class="due"></span></div>
-    <div class="day" role="listitem" aria-label="Friday 16, 1 plant"><span class="dow">F</span><span class="n">16</span><span class="due"><svg viewBox="0 0 7 9" aria-hidden="true"><path d="M3.5 0S0 4 0 5.6a3.5 3.5 0 0 0 7 0C7 4 3.5 0 3.5 0Z"/></svg>1</span></div>
-    <div class="day" role="listitem" aria-label="Saturday 17, nothing due"><span class="dow">S</span><span class="n">17</span><span class="due"></span></div>
-    <div class="day" role="listitem" aria-label="Sunday 18, 2 plants"><span class="dow">S</span><span class="n">18</span><span class="due"><svg viewBox="0 0 7 9" aria-hidden="true"><path d="M3.5 0S0 4 0 5.6a3.5 3.5 0 0 0 7 0C7 4 3.5 0 3.5 0Z"/></svg>2</span></div>
+  <figure class="chart" aria-label="Soil moisture from 8 September to today: watered with 250 ml on 10 September, 22 September and 4 October, each time rising to between 54% and 58% and drying below 20% in 9 to 11 days">
+    <svg width="350" height="140" viewBox="0 0 350 140">
+      <!-- 10 to 60% over 120 pt; a reading every 3 hours from 8 Sep 00:00 to 15 Oct 08:10 -->
+      <g stroke-width="1">
+        <line x1="0" x2="312" y1="0.5" y2="0.5" stroke="var(--ds-color-border-subtle)"/>
+        <line x1="0" x2="312" y1="96" y2="96" stroke="var(--ds-color-neutral-light-8)" stroke-dasharray="3 3"/>
+        <line x1="0" x2="312" y1="120.5" y2="120.5" stroke="var(--ds-color-border-default)"/>
+      </g>
+      <!-- watering events: the accent's one job; each is labelled by its date on the axis -->
+      <line x1="19.8" x2="19.8" y1="104.7" y2="4.8" stroke="var(--water)" stroke-width="2"/>
+      <line x1="119.9" x2="119.9" y1="106.7" y2="14.4" stroke="var(--water)" stroke-width="2"/>
+      <line x1="220.4" x2="220.4" y1="102.4" y2="7.2" stroke="var(--water)" stroke-width="2"/>
+      <path fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M0.0 96.9 L1.0 98.0 L2.1 97.9 L3.1 97.4 L4.2 97.5 L5.2 97.6 L6.3 98.4 L7.3 99.6 L8.4 100.9 L9.4 100.8 L10.4 101.1 L11.5 101.6 L12.5 100.6 L13.6 100.8 L14.6 101.7 L15.7 102.7 L16.7 103.5 L17.8 104.7 L18.8 104.7 M19.8 4.8 L19.8 5.4 L20.9 7.4 L21.9 9.0 L23.0 11.5 L24.0 13.8 L25.1 17.6 L26.1 19.7 L27.2 21.4 L28.2 22.7 L29.2 23.3 L30.3 25.2 L31.3 28.0 L32.4 30.9 L33.4 33.5 L34.5 35.8 L35.5 36.7 L36.6 38.1 L37.6 38.7 L38.6 40.5 L39.7 41.9 L40.7 44.3 L41.8 46.3 L42.8 48.5 L43.9 49.3 L44.9 50.9 L46.0 52.3 L47.0 53.0 L48.0 54.4 L49.1 56.7 L50.1 57.9 L51.2 59.6 L52.2 61.3 L53.3 61.9 L54.3 62.8 L55.4 63.9 L56.4 64.6 L57.4 66.9 L58.5 69.0 L59.5 69.8 L60.6 71.0 L61.6 70.6 L62.7 71.3 L63.7 71.9 L64.8 73.6 L65.8 75.5 L66.8 77.8 L67.9 78.2 L68.9 78.7 L70.0 78.1 L71.0 77.7 L72.1 78.8 L73.1 81.2 L74.2 82.5 L75.2 83.4 L76.2 84.9 L77.3 85.4 L78.3 85.8 L79.4 85.9 L80.4 86.0 L81.5 87.3 L82.5 88.3 L83.6 89.5 L84.6 90.8 L85.6 90.9 L86.7 90.5 L87.7 91.1 L88.8 91.6 L89.8 91.9 L90.9 93.4 L91.9 94.5 L93.0 95.2 L94.0 96.2 L95.0 95.4 L96.1 95.4 L97.1 95.9 L98.2 96.8 L99.2 98.3 L100.3 99.3 L101.3 99.3 L102.4 99.8 L103.4 99.2 L104.4 99.6 L105.5 100.4 L106.5 101.4 L107.6 101.8 L108.6 102.5 L109.7 102.8 L110.7 103.3 L111.8 103.5 L112.8 102.8 L113.8 103.7 L114.9 104.4 L115.9 105.0 L117.0 106.2 L118.0 106.8 L119.1 106.7 M119.9 14.4 L120.1 15.2 L121.2 16.0 L122.2 16.9 L123.2 18.9 L124.3 21.7 L125.3 25.3 L126.4 27.3 L127.4 28.3 L128.5 28.0 L129.5 29.0 L130.6 30.2 L131.6 33.3 L132.6 35.4 L133.7 37.9 L134.7 38.7 L135.8 40.4 L136.8 40.5 L137.9 41.1 L138.9 42.3 L140.0 44.5 L141.0 46.8 L142.0 49.5 L143.1 50.3 L144.1 50.4 L145.2 50.5 L146.2 51.4 L147.3 52.5 L148.3 54.5 L149.4 57.2 L150.4 58.6 L151.4 59.9 L152.5 61.0 L153.5 60.6 L154.6 60.4 L155.6 61.3 L156.7 63.0 L157.7 65.3 L158.8 67.4 L159.8 68.1 L160.8 69.1 L161.9 68.3 L162.9 69.0 L164.0 69.2 L165.0 71.0 L166.1 73.2 L167.1 74.5 L168.2 75.3 L169.2 76.1 L170.2 76.1 L171.3 75.7 L172.3 75.9 L173.4 77.8 L174.4 79.7 L175.5 81.4 L176.5 81.8 L177.6 82.2 L178.6 81.3 L179.6 81.5 L180.7 81.8 L181.7 83.0 L182.8 84.9 L183.8 86.6 L184.9 87.8 L185.9 88.0 L187.0 87.1 L188.0 86.2 L189.0 86.5 L190.1 87.8 L191.1 89.4 L192.2 90.9 L193.2 91.9 L194.3 92.3 L195.3 92.0 L196.4 91.6 L197.4 92.0 L198.4 92.9 L199.5 93.5 L200.5 96.3 L201.6 97.1 L202.6 96.0 L203.7 96.0 L204.7 94.7 L205.8 94.9 L206.8 96.4 L207.8 97.7 L208.9 98.5 L209.9 99.6 L211.0 99.1 L212.0 99.6 L213.1 99.7 L214.1 99.9 L215.2 99.9 L216.2 100.9 L217.2 102.2 L218.3 102.5 L219.3 102.4 M220.4 7.2 L220.4 7.0 L221.4 8.2 L222.5 10.5 L223.5 13.5 L224.6 16.1 L225.6 18.8 L226.6 21.2 L227.7 22.4 L228.7 23.5 L229.8 24.2 L230.8 25.4 L231.9 28.0 L232.9 30.3 L234.0 33.0 L235.0 35.6 L236.0 37.4 L237.1 37.6 L238.1 37.8 L239.2 38.5 L240.2 40.9 L241.3 43.4 L242.3 46.2 L243.4 48.1 L244.4 48.4 L245.4 49.0 L246.5 49.0 L247.5 50.3 L248.6 52.7 L249.6 55.2 L250.7 56.4 L251.7 57.5 L252.8 58.7 L253.8 59.0 L254.8 60.2 L255.9 60.9 L256.9 62.6 L258.0 64.8 L259.0 65.9 L260.1 66.9 L261.1 67.9 L262.2 68.9 L263.2 68.7 L264.2 70.3 L265.3 70.8 L266.3 72.9 L267.4 74.7 L268.4 75.6 L269.5 75.6 L270.5 75.5 L271.6 75.7 L272.6 76.8 L273.6 77.9 L274.7 79.9 L275.7 81.7 L276.8 82.8 L277.8 83.4 L278.9 82.6 L279.9 82.2 L281.0 82.4 L282.0 83.2 L283.0 85.3 L284.1 86.7 L285.1 87.5 L286.2 88.5 L287.2 88.5 L288.3 88.6 L289.3 88.6 L290.4 89.5 L291.4 91.2 L292.4 92.3 L293.5 93.6 L294.5 93.6 L295.6 93.7 L296.6 93.7 L297.7 93.8 L298.7 94.0 L299.8 95.5 L300.8 96.6 L301.8 97.7 L302.9 97.8 L303.9 97.8 L305.0 97.9 L306.0 97.9 L307.1 98.0 L308.1 98.9 L309.2 101.0 L310.2 101.5 L311.2 101.5 L312.0 101.6"/>
+      <circle cx="312" cy="101.6" r="4" fill="var(--ink)" stroke="var(--ds-color-surface-raised)" stroke-width="2"/>
+      <text x="350" y="4.5" text-anchor="end">60%</text><text x="350" y="100" text-anchor="end">20%</text>
+      <g stroke="var(--water)" stroke-width="1"><line x1="19.8" x2="19.8" y1="121" y2="125"/><line x1="119.9" x2="119.9" y1="121" y2="125"/><line x1="220.4" x2="220.4" y1="121" y2="125"/></g>
+      <line x1="311.5" x2="311.5" y1="121" y2="125" stroke="var(--ds-color-border-default)"/>
+      <text class="w" x="19.8" y="138" text-anchor="middle">10 Sep</text><text class="w" x="119.9" y="138" text-anchor="middle">22 Sep</text><text class="w" x="220.4" y="138" text-anchor="middle">4 Oct</text><text x="312" y="138" text-anchor="end" style="fill: var(--ink); font-weight: 500">Today</text>
+    </svg>
+  </figure>
+
+  <dl class="ledger">
+    <div><dt>Last watered</dt><dd>11 days ago</dd></div>
+    <div><dt>Usually watered</dt><dd>Every 12 days</dd></div>
+  </dl>
+
+  <div class="action">
+    <button class="log"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5s-6 6.6-6 10.9a6 6 0 0 0 12 0C18 10.1 12 3.5 12 3.5Z"/></svg>Log 250 ml</button>
   </div>
-
-  <p class="caption num">Most urgent first · 800 ml in all · sensors read at 08:10</p>
-
-  <article class="hero" aria-labelledby="monty">
-    <div class="hero-top">
-      <img src="https://images.unsplash.com/photo-1640302104416-063dd2dbf1a5?rect=100,0,3600,4918&w=360&h=492&fit=crop&q=80&auto=format" alt="Monty, a monstera with large split leaves in a white pot">
-      <div class="info">
-        <h2 id="monty">Monty</h2>
-        <p class="latin">Monstera deliciosa</p>
-        <p class="reading"><b>18%</b><span>soil moisture</span></p>
-        <div class="meter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="18" aria-label="Soil moisture 18 percent; water below 25; healthy 30 to 60"><span class="band"></span><span class="fill"></span><span class="tick"></span></div>
-        <p class="meter-key num">Water below 25% · best 30–60%</p>
-      </div>
-    </div>
-    <div class="hero-bottom">
-      <p class="last"><b>Last watered</b>9 days ago, 400 ml</p>
-      <button class="log">Log 400 ml</button>
-    </div>
-  </article>
-
-  <div class="list">
-    <div class="item">
-      <img src="https://images.unsplash.com/photo-1598880942562-8cf3cf728312?w=168&h=168&fit=crop&crop=focalpoint&fp-x=.45&fp-y=.5&q=80&auto=format" alt="" style="filter: saturate(.7) brightness(.97)">
-      <div class="txt"><p class="name">Pip</p><p class="sub"><i class="lat">Pilea peperomioides</i></p><p class="sub num"><b>21%</b> · water below 25%</p></div>
-      <button class="log-s" aria-label="Log 150 ml for Pip">Log 150 ml</button>
-    </div>
-    <div class="item">
-      <img src="https://images.unsplash.com/photo-1593482892290-f54927ae1bb6?w=168&h=168&fit=crop&crop=focalpoint&fp-x=.5&fp-y=.4&q=80&auto=format" alt="" style="filter: saturate(.85)">
-      <div class="txt"><p class="name">Sansa</p><p class="sub"><i class="lat">Dracaena trifasciata</i></p><p class="sub num"><b>8%</b> · water below 10%</p></div>
-      <button class="log-s" aria-label="Log 250 ml for Sansa">Log 250 ml</button>
-    </div>
-  </div>
-
-  <div class="sec"><h3>Coming up</h3></div>
-  <div class="list">
-    <div class="soon"><span class="d num">Fri 16</span><span>Fern <i class="lat">Nephrolepis exaltata</i></span></div>
-    <div class="soon"><span class="d num">Sun 18</span><span>Olive and Fig, hallway</span></div>
-  </div>
-
-  <nav class="tabbar" aria-label="Main">
-    <button class="tab" aria-current="page"><svg viewBox="0 0 24 24"><path class="f" d="M5 9h9l-.8 9.2a2 2 0 0 1-2 1.8H7.8a2 2 0 0 1-2-1.8Z"/><path d="M5.7 14.5C1.6 14.2 1.2 8.4 5 8.4"/><path d="M13.6 14.5 20 9.5M19 8.2l2.4 2.6"/></svg>Today</button>
-    <button class="tab"><svg viewBox="0 0 24 24"><path d="M7 21h10l1.5-8h-13L7 21Z"/><path d="M12 13c0-4 2-7 6-8-.3 4-2.3 7-6 8Zm0 0c0-3-1.6-5.3-5-6 .2 3 1.8 5.4 5 6Z"/></svg>Plants</button>
-    <button class="tab"><svg viewBox="0 0 24 24"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5v-15Z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19M9 7.5h6"/></svg>Diary</button>
-    <button class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5"/></svg>You</button>
-  </nav>
-  <div class="home-ind" aria-hidden="true"></div>
+</main>
+<div class="home-ind" aria-hidden="true"></div>
 </body>
 </html>

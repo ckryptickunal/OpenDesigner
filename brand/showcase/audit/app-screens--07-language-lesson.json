@@ -64,5 +64,34 @@
   "verdict": "keep",
   "said": "good to go",
   "date": "2026-10-14"
+ },
+ "round4": {
+  "score": 3,
+  "pairwise": "Passes. Ours more premium than all three in every round: Speak +3, +3, +4, +4 and +3 on the final render; Duolingo +3, +3, +2, +3; Babbel +3, +3, +3, +3. No judge or auditor named Duolingo after the rebuild.",
+  "changed": [
+   "New exercise for the same product and sentence: speaking feedback after the attempt, structure only from shipped apps",
+   "Removed everything that named Duolingo: mascot, word bank and tiles, hearts, XP, result sheet, confetti, dot grid, green, outlines and hard shadows",
+   "The word to fix leads: caffè at 34 pt, /kafˈfɛ/, stress on the last syllable; loudness envelopes of both recordings with each peak marked",
+   "One accent with one job (what to fix): vermilion #CC3B22 only under caffè and on the learner's peak; cobalt near Aerlo's blue removed",
+   "Faces: Spectral for the Italian, IBM Plex Sans for the interface (Fredoka/Nunito, then Plus Jakarta Sans and Inter, dropped)",
+   "Progress 60% for 6 of 10; 7 of 8 words clear; no-break spaces in the sentence",
+   "Engine: textFace IBM Plex Sans, displayFace Spectral, brand #CC3B22, accentCount 1, secondaryColors [], neutralBase #8A8F98"
+  ],
+  "date": "2026-10-18",
+  "scores_by_round": [
+   2,
+   3,
+   2.5,
+   2,
+   3,
+   3
+  ],
+  "references": [
+   "https://mobbin.com/screens/3e01c79e-3175-4df8-9fc6-91966389ffb3",
+   "https://mobbin.com/screens/35a6f682-bab6-4fc2-be70-b5fa58792795",
+   "https://mobbin.com/screens/3c8dc043-64d5-4ef3-b70c-5339053595a0"
+  ],
+  "copies_named_product": "No (final audit: generic lesson chrome)",
+  "fresh_eyes": "Does not pass: six fresh-context audits against the B2B product screens, none reached 4. Facts (times, dates, counts, Italian) confirmed correct each time; the verdict is design, not data."
  }
 }

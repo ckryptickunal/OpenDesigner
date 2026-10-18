@@ -21,28 +21,28 @@
   },
   "dials": {
     "expression": {
-      "value": 75,
+      "value": 45,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0023"
+      "decision": "D-0063"
     },
     "brandPresence": {
-      "value": 65,
+      "value": 40,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0024"
+      "decision": "D-0064"
     },
     "density": {
-      "value": 15,
+      "value": 30,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0025"
+      "decision": "D-0068"
     },
     "energy": {
       "value": 5,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0026"
+      "decision": "D-0067"
     },
     "roundness": {
       "value": 95,
@@ -51,16 +51,16 @@
       "decision": "D-0027"
     },
     "depth": {
-      "value": 90,
+      "value": 55,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0031"
+      "decision": "D-0066"
     },
     "colorfulness": {
-      "value": 60,
+      "value": 30,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0029"
+      "decision": "D-0065"
     },
     "warmth": {
       "value": 75,
@@ -79,10 +79,10 @@
     "brandColor": "#E8A48A",
     "primaryActionColor": null,
     "focusColor": null,
-    "neutralBase": "#231E4A",
+    "neutralBase": "#1C2430",
     "contrastTarget": "AA",
-    "textFace": "Instrument Sans",
-    "displayFace": "Instrument Serif",
+    "textFace": "Albert Sans",
+    "displayFace": "Albert Sans",
     "baseSize": 17,
     "spaceUnit": 4,
     "platforms": [
@@ -109,7 +109,7 @@
       "selfHost": true
     },
     "fontClass": null,
-    "accentCount": 3,
+    "accentCount": 1,
     "accentHarmony": "analogous",
     "neutralTint": null,
     "chartPalette": null,
@@ -143,15 +143,15 @@
     "domain": null,
     "minTarget": null,
     "focusWidth": 2,
-    "secondaryColors": [
-      "#C77DA8",
-      "#7E6CC9"
-    ],
+    "secondaryColors": [],
     "monoFace": "ui-monospace",
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -441,6 +441,14 @@
         "unit": "em"
       },
       "lineHeight": 1.2059
+    },
+    "font.size.76": {
+      "value": 76,
+      "unit": "px"
+    },
+    "font.size.112": {
+      "value": 112,
+      "unit": "px"
     }
   },
   "answers": {
@@ -679,7 +687,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "506e27322d48cd50",
+    "DESIGN.md": "69fd4903e884a36c",
     "PRODUCT.md": "f448a69fa4dffdaa"
   },
   "exports": {
@@ -2969,5 +2977,7 @@
       "size.target.min": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

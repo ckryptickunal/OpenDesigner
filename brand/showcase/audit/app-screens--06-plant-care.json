@@ -80,5 +80,35 @@
  },
  "facts": [
   "art/ (the CC0 line drawings and their CSS) is no longer used by the page; left in place because this session only deletes inside its scratch folder"
- ]
+ ],
+ "round4": {
+  "score": 3,
+  "pairwise": "Passes. Ours more premium than all three Greg screens in every round: care list +3, +4, +3, +3; plant page +3, +4, +4, +4 and +4 on the final render; guides +3, +4, +3, +4.",
+  "changed": [
+   "New screen for the same product: one plant's page instead of the Today list",
+   "Plant renamed Gus, a rubber fig (Ficus elastica); Monty, Pip and Sansa and their photos removed",
+   "Free Unsplash photo with morning light (Rumman Amin, photo-1544474921-9df05bc76d66), cropped above the pot",
+   "One confident number: 18% at 64 pt, 'Below 20% since Tue 22:30'",
+   "Soil-moisture chart, 3-hourly readings 8 Sep to 15 Oct 08:10: waterings 10 Sep, 22 Sep, 4 Oct (250 ml, 12 days apart), peaks 54-58%, last crossing of 20% Tue 13 Oct 22:26",
+   "One face (Onest; Alegreya and Figtree removed); one accent (moss) only for watering events and the Log 250 ml button",
+   "Week strip, meta line, segmented bar, legend and per-row pill buttons removed; two plain rows",
+   "Engine: textFace/displayFace Onest, brand #3F6B45, font sizes 11-64"
+  ],
+  "date": "2026-10-18",
+  "scores_by_round": [
+   3,
+   3,
+   3,
+   3,
+   3,
+   3
+  ],
+  "references": [
+   "https://mobbin.com/screens/c802b78e-a223-4ea6-b64a-b67b397e04ba",
+   "https://mobbin.com/screens/a340773c-c634-48b5-b615-b5440bc1c216",
+   "https://mobbin.com/screens/40b8b9b5-23b8-4b10-b462-586f9e044565"
+  ],
+  "copies_named_product": "No",
+  "fresh_eyes": "Does not pass: six fresh-context audits against the B2B product screens, none reached 4. Facts (times, dates, counts, Italian) confirmed correct each time; the verdict is design, not data."
+ }
 }

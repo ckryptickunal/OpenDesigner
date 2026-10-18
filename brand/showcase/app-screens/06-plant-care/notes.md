@@ -90,3 +90,34 @@ Three CC0 line drawings from CocoMaterial, found and recolored with **opendesign
 **Fresh-eyes audit** (fresh-context agent, against the B2B product screens and the three references): **3/5** ("no hero moment; too close to Bloom part for part; two controls for one task; 'Dry' said four ways; amber fill 1.6:1"), **3/5** after the first rebuild ("'Driest first' was false; Sunday's 2 unexplained; band 1.2:1; rows cut by the tab bar"), then **4/5**, with a stray object in Monty's photo, the band at 2.8:1 and the can icon reading as a padlock; all fixed after it.
 
 **Checks:** `engine.py build` passes (1 warning: 15 text sizes, old formula steps). `preflight.py html`: 0 errors, 1 warning (12/13 within 10%: Caption 1 tab labels and Footnote, both iOS roles). `check_dates.py --year 2026` passes.
+
+## Round 4 (owner review, 2026-10-15)
+**What he said** about all the app screens: they "look absolutely shit. None of them should feel like they are from a vibe coded app or a cheap Chinese app." `AUDIT-ROUND4.md` scored the old shot 5 (rebuild): three type voices, a light 64 pt reading, a week strip with drop counts, a meta line, a segmented bar with a legend and two rows with their own pill buttons.
+
+**The idea in one sentence:** one plant's page says it needs water today, and its soil-moisture history shows why.
+
+**What changed (a new screen for the same product):**
+- **One plant instead of a to-do list.** The plant is now **Gus**, a young rubber fig (*Ficus elastica*) on the living-room sideboard by the east window. "Monty" the monstera was dropped: an auditor called the monstera photo the most used one on Unsplash and the name the stock monstera pun. Pip and Sansa are no longer on the page.
+- **A photo with real morning light:** Rumman Amin, "Green rubber fig in pot", Unsplash (`photo-1544474921-9df05bc76d66`; the page says "Free Photo on Unsplash"; no people, no logos), cropped to the leaves and their shadow, above the pot.
+- **One confident number:** 18% at 64 pt (Onest 500), with "Soil moisture, read at 08:10" and "Below 20% since Tue 22:30" (ink, 600) beside it; the button says what to do.
+- **The chart carries the story.** A reading every 3 hours from 8 September to 08:10 today, 10 to 60% over 120 pt. Three waterings of 250 ml (Thu 10 Sep, Tue 22 Sep and Sun 4 Oct, 12 days apart, which is where "Every 12 days" comes from; the one before was Sat 29 Aug) lift it to 58%, 54% and 57%, and each cycle dries at its own rate (14 to 16.5% a day of what is above a 9% floor), with a daily ripple that varies from day to day. In this cycle it last crossed 20% on Tue 13 Oct at 22:26 and has not risen since; today's 17.7% reads as 18%. Each watering line is labelled by its date on the axis, in moss. Gridlines at 60% and at the dashed 20% line only.
+- **One accent with one job: watering.** Moss is used only for the watering lines and their dates and the "Log 250 ml" button.
+- **One face:** Onest (OFL) for everything, regular and semibold. The Latin name is upright, because Onest has no italic.
+- **Less clutter:** two plain rows ("Last watered · 11 days ago", "Usually watered · Every 12 days") instead of a fact grid, and one button instead of a button and a reminder icon.
+- Status bar 08:14, on Thursday 15 October 2026.
+
+**System through the engine:** `raw.textFace` and `raw.displayFace "Onest"`, brand `#3F6B45` (a deeper, cooler moss; white text on it 6.2:1), dials expression 35, roundness 55, depth 15, density 50, colorfulness 35, `overrides.font.size` 11, 13, 15, 17, 22, 34 and 64; `build` passes.
+
+**Type roles (iOS):** Display 64 (the reading) · Large Title 34 (the % sign) · Title 1 28 ("Gus") · Body 17 (the status line, the rows, the button, status bar) · Subheadline 15 (species and place) · Footnote 13 (labels) · Caption 2 11 (chart axes).
+
+**References this round (Mobbin, structure only):** Greg https://mobbin.com/screens/c802b78e-a223-4ea6-b64a-b67b397e04ba (a care list with amounts and when each plant was last watered), Greg https://mobbin.com/screens/a340773c-c634-48b5-b615-b5440bc1c216 (one plant per screen with one big water action), Greg https://mobbin.com/screens/40b8b9b5-23b8-4b10-b462-586f9e044565 (care facts as label and value pairs; also what to avoid: ten equal tiles, six icon colours).
+
+**Where I left the tokens, on purpose:** the iOS chrome, the chart geometry (SVG units), the white 86% nav discs over the photo, with a hairline ring so they show on the white wall.
+
+**Checks:** `engine.py build` and `validate` pass (1 warning: 15 text sizes in the scale). `preflight.py html`: 0 errors, 1 warning (11 px chart labels, the iOS Caption 2 minimum). `check_dates.py --year 2026`: the page passes; the one flag is in this file's round 3 notes, which quote the old wrong date "Tuesday, 14 October" on purpose. `check_names.py`: 0 errors; "Ficus" (the genus) and "Plants" (a tab name) are not invented names, and "Gus" is new (added to NAMES.md). Contrast against the rendered pixels: status time on the wall 6.8:1, labels 7.2:1. Gallery copy at 192 px: the eye lands on the plant, then 18%.
+
+**Blind pairwise test (A)**, as for Lullwater (fresh-context judges, random sides, one pair per piece per judge from round 2): ours was judged more premium than all three Greg screens in every round: the care list +3, +4, +3, +3; the plant page +3, +4, +4, +4 and +4 on the final render; the guides page +3, +4, +3, +4. **Passes.**
+
+**Fresh-eyes audit (B), against the B2B screens:** 3 in all six rounds: **does not pass**. The data, dates and chart were confirmed true each time; the remaining verdict is that the layout (photo, title, number, chart, rows, button) is the standard detail-page template and that only the chart belongs to Loam.
+
+**After the last audit** (renders of 18 Oct, 22:22), two small changes went into the final `shot.png` (22:27): the in-chart "Water below 20%" note was removed (the final audit found it touching the 22 Sep low point), and the status line "Below 20% since Tue 22:30" is set in ink 600 instead of moss (the audit said moss read as healthy). They were not re-audited.

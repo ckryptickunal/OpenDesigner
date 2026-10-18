@@ -630,3 +630,38 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: Round 3: the wealth figure, a custom display role above Large Title 34
 - new dimension token in primitives.tokens.json
+
+## D-0061 · raw.brandColor = "#14674A"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0028 · source_ref: none
+- reason: Round 4: one deep green with one job, performance (chart and gains); gold pill read as cheap
+- previous value: "#C9A86A"
+
+## D-0062 · raw.neutralBase = "#5E6460"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0058 · source_ref: none
+- reason: Round 4: light, near-neutral greys with a trace of green; strong ink on white
+- previous value: "#1C2B24"
+
+## D-0063 · raw.displayFace = "Inter"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0023 · source_ref: none
+- reason: Round 4: one refined face; the Bodoni total fought the system-style text
+- previous value: "Bodoni Moda"
+
+## D-0064 · dials.brandPresence = 35
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0015 · source_ref: none
+- reason: Round 4: restraint; the brand is the household and the data, not the type
+- previous value: 70
+
+## D-0065 · dials.depth = 10
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0053 · source_ref: none
+- reason: Round 4: flat sections divided by hairlines, no cards
+- previous value: 30
+
+## D-0066 · dials.colorfulness = 15
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0020 · source_ref: none
+- reason: Round 4: one accent
+- previous value: 22
+
+## D-0067 · overrides.font.size.40 = {"value": 40, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 4: the one display figure (Newsreader 500) must outweigh the 17 pt medium amounts
+- new dimension token in primitives.tokens.json

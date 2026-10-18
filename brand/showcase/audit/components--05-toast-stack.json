@@ -86,5 +86,18 @@
  "facts": [
   "mockups/05-components-board embeds this shot.png; its caption may still describe the lilac pillow toasts; re-check and re-render",
   "mockups/05-components-board (and 08 where it uses this piece) crop this shot.png with fixed background-position offsets set for the old layout; the crops now land on different content and need new offsets"
- ]
+ ],
+ "round4": {
+  "score": 4,
+  "pairwise": "3 of 3 better (Laravel Cloud +1, Skiff +2, Todoist +2); worst margin: none weaker",
+  "changed": [
+   "New concept and brand: Panelwise hiring pipeline board with the toast stack expanded (export progress, reminders sent, move with Undo); Kinroom chat app removed",
+   "Presentation: real-size app (14 px) at 1.25x with icon rail and top bar; the first 1.5x table version failed the blind test (Laravel -3) and was replaced",
+   "Board counts add up to 296; moved candidates shown in Onsite; scorecard dots only where scorecards are collected",
+   "One accent job (green = work running); ink primary; cool greys via Q-color-09",
+   "Engine: re-sketched as Panelwise, Figtree, base size 14, dials lowered",
+   "Stale extra frames (shot-error, shot-expanded, shot-mention) deleted; 'LinkedIn' removed",
+   "Per PRESENTATION.md: shown at 1x (the 1.25x crop removed); board columns filled so no dead quarter; no hanging close button, no undefined dots, one toast button style, one date format"
+  ]
+ }
 }

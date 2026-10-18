@@ -7,262 +7,213 @@
   --ds-color-white: #ffffff;
   --ds-color-black: #000000;
   --ds-color-brand-seed: #e8a48a;
-  --ds-color-neutral-light-1: #fcfdff;
-  --ds-color-neutral-light-2: #f3f3fe;
-  --ds-color-neutral-light-3: #eaeaf9;
-  --ds-color-neutral-light-4: #e1e1f4;
-  --ds-color-neutral-light-5: #d8d9ef;
-  --ds-color-neutral-light-6: #cfd0e9;
-  --ds-color-neutral-light-7: #c7c7e4;
-  --ds-color-neutral-light-8: #8383a2;
-  --ds-color-neutral-light-9: #737293;
-  --ds-color-neutral-light-10: #616181;
-  --ds-color-neutral-light-11: #555470;
-  --ds-color-neutral-light-12: #242428;
-  --ds-color-neutral-dark-1: #151519;
-  --ds-color-neutral-dark-2: #1c1c24;
-  --ds-color-neutral-dark-3: #24242f;
-  --ds-color-neutral-dark-4: #2c2c3a;
-  --ds-color-neutral-dark-5: #353546;
-  --ds-color-neutral-dark-6: #3e3d52;
-  --ds-color-neutral-dark-7: #46465e;
-  --ds-color-neutral-dark-8: #7e7e9c;
-  --ds-color-neutral-dark-9: #8080a1;
-  --ds-color-neutral-dark-10: #9292b4;
-  --ds-color-neutral-dark-11: #a8a9c8;
-  --ds-color-neutral-dark-12: #e8e9ef;
+  --ds-color-neutral-light-1: #fbfdff;
+  --ds-color-neutral-light-2: #f1f4f9;
+  --ds-color-neutral-light-3: #e7ecf2;
+  --ds-color-neutral-light-4: #dee3ec;
+  --ds-color-neutral-light-5: #d4dbe5;
+  --ds-color-neutral-light-6: #cbd2de;
+  --ds-color-neutral-light-7: #c2cad7;
+  --ds-color-neutral-light-8: #7e8794;
+  --ds-color-neutral-light-9: #6c7685;
+  --ds-color-neutral-light-10: #5b6573;
+  --ds-color-neutral-light-11: #505864;
+  --ds-color-neutral-light-12: #222428;
+  --ds-color-neutral-dark-1: #141517;
+  --ds-color-neutral-dark-2: #1b1d21;
+  --ds-color-neutral-dark-3: #22252a;
+  --ds-color-neutral-dark-4: #2a2e34;
+  --ds-color-neutral-dark-5: #31373e;
+  --ds-color-neutral-dark-6: #393f49;
+  --ds-color-neutral-dark-7: #424953;
+  --ds-color-neutral-dark-8: #78818f;
+  --ds-color-neutral-dark-9: #7a8392;
+  --ds-color-neutral-dark-10: #8c96a6;
+  --ds-color-neutral-dark-11: #a2abb9;
+  --ds-color-neutral-dark-12: #e6e9ee;
   --ds-color-accent-light-1: #fffcfb;
-  --ds-color-accent-light-2: #faf3f0;
-  --ds-color-accent-light-3: #f8e8e3;
-  --ds-color-accent-light-4: #f6ded5;
-  --ds-color-accent-light-5: #f4d4c7;
-  --ds-color-accent-light-6: #f2c9ba;
-  --ds-color-accent-light-7: #f0bfac;
-  --ds-color-accent-light-8: #b37861;
+  --ds-color-accent-light-2: #f9f3f1;
+  --ds-color-accent-light-3: #f5e9e5;
+  --ds-color-accent-light-4: #f1dfd8;
+  --ds-color-accent-light-5: #eed5cc;
+  --ds-color-accent-light-6: #eacbc0;
+  --ds-color-accent-light-7: #e7c2b4;
+  --ds-color-accent-light-8: #a97c6b;
   --ds-color-accent-light-9: #e8a48a;
-  --ds-color-accent-light-10: #e09274;
-  --ds-color-accent-light-11: #93533b;
-  --ds-color-accent-light-12: #4a2c21;
-  --ds-color-accent-light-solid-pressed: #d5886a;
-  --ds-color-accent-dark-1: #1c1816;
-  --ds-color-accent-dark-2: #251f1c;
-  --ds-color-accent-dark-3: #312520;
-  --ds-color-accent-dark-4: #3d2c25;
-  --ds-color-accent-dark-5: #4a3229;
-  --ds-color-accent-dark-6: #57392d;
-  --ds-color-accent-dark-7: #653f30;
-  --ds-color-accent-dark-8: #ac755f;
+  --ds-color-accent-light-10: #d29881;
+  --ds-color-accent-light-11: #885846;
+  --ds-color-accent-light-12: #452e26;
+  --ds-color-accent-light-solid-pressed: #c78e77;
+  --ds-color-accent-dark-1: #1b1716;
+  --ds-color-accent-dark-2: #241e1c;
+  --ds-color-accent-dark-3: #302521;
+  --ds-color-accent-dark-4: #3c2c25;
+  --ds-color-accent-dark-5: #48322a;
+  --ds-color-accent-dark-6: #55392f;
+  --ds-color-accent-dark-7: #633f32;
+  --ds-color-accent-dark-8: #a87562;
   --ds-color-accent-dark-9: #e8a48a;
-  --ds-color-accent-dark-10: #f8b499;
-  --ds-color-accent-dark-11: #ffbea6;
-  --ds-color-accent-dark-12: #e9d1c8;
+  --ds-color-accent-dark-10: #f5b59d;
+  --ds-color-accent-dark-11: #fbbfa9;
+  --ds-color-accent-dark-12: #e7d1c9;
   --ds-color-accent-dark-solid-pressed: #ffc2ab;
-  --ds-color-accent2-light-1: #fffcfd;
-  --ds-color-accent2-light-2: #f9f3f6;
-  --ds-color-accent2-light-3: #f6e8ef;
-  --ds-color-accent2-light-4: #f3dde9;
-  --ds-color-accent2-light-5: #f0d3e2;
-  --ds-color-accent2-light-6: #edc8dc;
-  --ds-color-accent2-light-7: #e9bdd5;
-  --ds-color-accent2-light-8: #ab7694;
-  --ds-color-accent2-light-9: #c67ea8;
-  --ds-color-accent2-light-10: #d38db5;
-  --ds-color-accent2-light-11: #8b5273;
-  --ds-color-accent2-light-12: #472b3b;
-  --ds-color-accent2-light-solid-pressed: #de97c0;
-  --ds-color-accent2-dark-1: #1b1719;
-  --ds-color-accent2-dark-2: #241f21;
-  --ds-color-accent2-dark-3: #30252b;
-  --ds-color-accent2-dark-4: #3b2b34;
-  --ds-color-accent2-dark-5: #47313d;
-  --ds-color-accent2-dark-6: #533847;
-  --ds-color-accent2-dark-7: #603e52;
-  --ds-color-accent2-dark-8: #a5738f;
-  --ds-color-accent2-dark-9: #be83a5;
-  --ds-color-accent2-dark-10: #cc91b3;
-  --ds-color-accent2-dark-11: #d49cbc;
-  --ds-color-accent2-dark-12: #e5d0db;
-  --ds-color-accent2-dark-solid-pressed: #d89bbd;
-  --ds-color-accent3-light-1: #fdfcff;
-  --ds-color-accent3-light-2: #f4f3fc;
-  --ds-color-accent3-light-3: #eceafb;
-  --ds-color-accent3-light-4: #e3e0fc;
-  --ds-color-accent3-light-5: #dbd6fc;
-  --ds-color-accent3-light-6: #d2cdfc;
-  --ds-color-accent3-light-7: #cac3fc;
-  --ds-color-accent3-light-8: #887dc3;
-  --ds-color-accent3-light-9: #7a67c4;
-  --ds-color-accent3-light-10: #6e5cb3;
-  --ds-color-accent3-light-11: #5b4c97;
-  --ds-color-accent3-light-12: #352f53;
-  --ds-color-accent3-light-solid-pressed: #6654aa;
-  --ds-color-accent3-dark-1: #18181d;
-  --ds-color-accent3-dark-2: #201f26;
-  --ds-color-accent3-dark-3: #282634;
-  --ds-color-accent3-dark-4: #302d42;
-  --ds-color-accent3-dark-5: #383450;
-  --ds-color-accent3-dark-6: #413b5f;
-  --ds-color-accent3-dark-7: #4a4270;
-  --ds-color-accent3-dark-8: #8379bb;
-  --ds-color-accent3-dark-9: #867ac6;
-  --ds-color-accent3-dark-10: #9387d4;
-  --ds-color-accent3-dark-11: #aea3ed;
-  --ds-color-accent3-dark-12: #d6d3ee;
-  --ds-color-accent3-dark-solid-pressed: #9d91df;
   --ds-color-success-light-1: #fafefb;
-  --ds-color-success-light-2: #eef6ef;
-  --ds-color-success-light-3: #e0efe2;
-  --ds-color-success-light-4: #d0e9d4;
-  --ds-color-success-light-5: #c0e3c6;
-  --ds-color-success-light-6: #b1dcb8;
-  --ds-color-success-light-7: #a1d6ab;
-  --ds-color-success-light-8: #4e945f;
-  --ds-color-success-light-9: #158740;
-  --ds-color-success-light-10: #0b7a38;
-  --ds-color-success-light-11: #01652c;
-  --ds-color-success-light-12: #163b20;
-  --ds-color-success-light-solid-pressed: #007131;
-  --ds-color-success-dark-1: #151a16;
+  --ds-color-success-light-2: #eff5f0;
+  --ds-color-success-light-3: #e1efe3;
+  --ds-color-success-light-4: #d3e8d6;
+  --ds-color-success-light-5: #c4e2c9;
+  --ds-color-success-light-6: #b6dbbc;
+  --ds-color-success-light-7: #a7d4af;
+  --ds-color-success-light-8: #599365;
+  --ds-color-success-light-9: #318549;
+  --ds-color-success-light-10: #297840;
+  --ds-color-success-light-11: #1d6333;
+  --ds-color-success-light-12: #1c3a23;
+  --ds-color-success-light-solid-pressed: #1e7039;
+  --ds-color-success-dark-1: #151916;
   --ds-color-success-dark-2: #1b211c;
-  --ds-color-success-dark-3: #1d2b20;
-  --ds-color-success-dark-4: #203424;
-  --ds-color-success-dark-5: #223d28;
-  --ds-color-success-dark-6: #24472c;
-  --ds-color-success-dark-7: #23522f;
-  --ds-color-success-dark-8: #4e8f5d;
-  --ds-color-success-dark-9: #46935a;
-  --ds-color-success-dark-10: #53a066;
-  --ds-color-success-dark-11: #74bc84;
-  --ds-color-success-dark-12: #c4dcc7;
-  --ds-color-success-dark-solid-pressed: #5daa6f;
+  --ds-color-success-dark-3: #1f2a21;
+  --ds-color-success-dark-4: #223325;
+  --ds-color-success-dark-5: #263c2a;
+  --ds-color-success-dark-6: #29462f;
+  --ds-color-success-dark-7: #2a5033;
+  --ds-color-success-dark-8: #578d63;
+  --ds-color-success-dark-9: #519160;
+  --ds-color-success-dark-10: #5e9e6c;
+  --ds-color-success-dark-11: #7eba8a;
+  --ds-color-success-dark-12: #c6dbc9;
+  --ds-color-success-dark-solid-pressed: #68a876;
   --ds-color-warning-light-1: #fffcf9;
-  --ds-color-warning-light-2: #f8f4ec;
-  --ds-color-warning-light-3: #f4eadb;
-  --ds-color-warning-light-4: #f0e1c9;
-  --ds-color-warning-light-5: #ecd8b7;
-  --ds-color-warning-light-6: #e8cfa5;
-  --ds-color-warning-light-7: #e4c592;
-  --ds-color-warning-light-8: #a6803a;
-  --ds-color-warning-light-9: #eab34f;
-  --ds-color-warning-light-10: #d8a446;
-  --ds-color-warning-light-11: #845d00;
-  --ds-color-warning-light-12: #44300a;
-  --ds-color-warning-light-solid-pressed: #cd9a3a;
-  --ds-color-warning-dark-1: #1b1814;
+  --ds-color-warning-light-2: #f8f4ed;
+  --ds-color-warning-light-3: #f3eadd;
+  --ds-color-warning-light-4: #efe1cb;
+  --ds-color-warning-light-5: #ebd8ba;
+  --ds-color-warning-light-6: #e6cfa8;
+  --ds-color-warning-light-7: #e2c697;
+  --ds-color-warning-light-8: #a48042;
+  --ds-color-warning-light-9: #e7b55b;
+  --ds-color-warning-light-10: #d5a652;
+  --ds-color-warning-light-11: #845d03;
+  --ds-color-warning-light-12: #43310f;
+  --ds-color-warning-light-solid-pressed: #ca9c47;
+  --ds-color-warning-dark-1: #1a1814;
   --ds-color-warning-dark-2: #231f19;
-  --ds-color-warning-dark-3: #2e271a;
-  --ds-color-warning-dark-4: #392e1b;
-  --ds-color-warning-dark-5: #45351b;
-  --ds-color-warning-dark-6: #503d1a;
-  --ds-color-warning-dark-7: #5d4414;
-  --ds-color-warning-dark-8: #a07c3c;
-  --ds-color-warning-dark-9: #e2b66a;
-  --ds-color-warning-dark-10: #f3c67a;
-  --ds-color-warning-dark-11: #fad08a;
-  --ds-color-warning-dark-12: #eadbc4;
-  --ds-color-warning-dark-solid-pressed: #ffd388;
+  --ds-color-warning-dark-3: #2d261b;
+  --ds-color-warning-dark-4: #382e1c;
+  --ds-color-warning-dark-5: #43351d;
+  --ds-color-warning-dark-6: #4f3d1e;
+  --ds-color-warning-dark-7: #5b441a;
+  --ds-color-warning-dark-8: #9d7c42;
+  --ds-color-warning-dark-9: #dfb772;
+  --ds-color-warning-dark-10: #f0c781;
+  --ds-color-warning-dark-11: #f8d191;
+  --ds-color-warning-dark-12: #e9dcc6;
+  --ds-color-warning-dark-solid-pressed: #fdd48e;
   --ds-color-danger-light-1: #fffcfc;
-  --ds-color-danger-light-2: #fcf2f1;
-  --ds-color-danger-light-3: #fde7e4;
-  --ds-color-danger-light-4: #fedbd7;
-  --ds-color-danger-light-5: #fed0ca;
-  --ds-color-danger-light-6: #fec4bd;
-  --ds-color-danger-light-7: #feb9b0;
-  --ds-color-danger-light-8: #c26f66;
-  --ds-color-danger-light-9: #c0534a;
-  --ds-color-danger-light-10: #b04941;
-  --ds-color-danger-light-11: #933a34;
-  --ds-color-danger-light-12: #522723;
-  --ds-color-danger-light-solid-pressed: #a64039;
-  --ds-color-danger-dark-1: #1d1716;
-  --ds-color-danger-dark-2: #271e1d;
-  --ds-color-danger-dark-3: #352421;
-  --ds-color-danger-dark-4: #422926;
-  --ds-color-danger-dark-5: #502f2b;
-  --ds-color-danger-dark-6: #5f3430;
-  --ds-color-danger-dark-7: #6f3933;
-  --ds-color-danger-dark-8: #bb6c64;
-  --ds-color-danger-dark-9: #c56a61;
-  --ds-color-danger-dark-10: #d3776e;
-  --ds-color-danger-dark-11: #ed958b;
-  --ds-color-danger-dark-12: #f0ceca;
-  --ds-color-danger-dark-solid-pressed: #de8177;
+  --ds-color-danger-light-2: #fbf2f1;
+  --ds-color-danger-light-3: #fbe7e5;
+  --ds-color-danger-light-4: #fbdcd8;
+  --ds-color-danger-light-5: #fad1cc;
+  --ds-color-danger-light-6: #f9c6bf;
+  --ds-color-danger-light-7: #f8bbb3;
+  --ds-color-danger-light-8: #bc726a;
+  --ds-color-danger-light-9: #b95850;
+  --ds-color-danger-light-10: #a84e46;
+  --ds-color-danger-light-11: #8d4039;
+  --ds-color-danger-light-12: #4f2925;
+  --ds-color-danger-light-solid-pressed: #9f463e;
+  --ds-color-danger-dark-1: #1c1716;
+  --ds-color-danger-dark-2: #261e1d;
+  --ds-color-danger-dark-3: #332422;
+  --ds-color-danger-dark-4: #402a27;
+  --ds-color-danger-dark-5: #4d302c;
+  --ds-color-danger-dark-6: #5b3632;
+  --ds-color-danger-dark-7: #6b3b36;
+  --ds-color-danger-dark-8: #b46f67;
+  --ds-color-danger-dark-9: #bd6e65;
+  --ds-color-danger-dark-10: #cc7b72;
+  --ds-color-danger-dark-11: #e6988f;
+  --ds-color-danger-dark-12: #edcfcb;
+  --ds-color-danger-dark-solid-pressed: #d6847b;
   --ds-color-info-light-1: #fbfdff;
-  --ds-color-info-light-2: #edf5fc;
-  --ds-color-info-light-3: #dceefc;
-  --ds-color-info-light-4: #cae7fc;
-  --ds-color-info-light-5: #b8e0fd;
-  --ds-color-info-light-6: #a5d8fd;
-  --ds-color-info-light-7: #92d1fd;
-  --ds-color-info-light-8: #348dc4;
-  --ds-color-info-light-9: #007cb7;
-  --ds-color-info-light-10: #0070a6;
+  --ds-color-info-light-2: #eef5fa;
+  --ds-color-info-light-3: #dfedf8;
+  --ds-color-info-light-4: #cfe6f7;
+  --ds-color-info-light-5: #bfdff6;
+  --ds-color-info-light-6: #aed7f5;
+  --ds-color-info-light-7: #9ed0f3;
+  --ds-color-info-light-8: #4a8cb8;
+  --ds-color-info-light-9: #057cb6;
+  --ds-color-info-light-10: #0070a5;
   --ds-color-info-light-11: #005c8a;
-  --ds-color-info-light-12: #043753;
+  --ds-color-info-light-12: #13374d;
   --ds-color-info-light-solid-pressed: #006799;
-  --ds-color-info-dark-1: #14191d;
-  --ds-color-info-dark-2: #192126;
-  --ds-color-info-dark-3: #1a2934;
-  --ds-color-info-dark-4: #1a3242;
-  --ds-color-info-dark-5: #193b50;
-  --ds-color-info-dark-6: #18445f;
-  --ds-color-info-dark-7: #0d4d71;
-  --ds-color-info-dark-8: #3789bc;
-  --ds-color-info-dark-9: #248cc7;
-  --ds-color-info-dark-10: #3699d6;
-  --ds-color-info-dark-11: #5eb5ee;
-  --ds-color-info-dark-12: #bddaef;
-  --ds-color-info-dark-solid-pressed: #42a3e0;
-  --ds-color-neutral-alpha-light-2: rgb(5 5 234 / 0.048);
-  --ds-color-neutral-alpha-light-3: rgb(2 2 183 / 0.083);
-  --ds-color-neutral-alpha-light-4: rgb(1 1 162 / 0.118);
-  --ds-color-neutral-alpha-light-5: rgb(0 7 150 / 0.153);
-  --ds-color-neutral-alpha-light-6: rgb(1 6 139 / 0.189);
-  --ds-color-neutral-alpha-light-7: rgb(0 0 132 / 0.22);
-  --ds-color-neutral-alpha-light-8: rgb(0 0 64 / 0.487);
-  --ds-color-neutral-alpha-light-9: rgb(2 0 60 / 0.553);
-  --ds-color-neutral-alpha-light-10: rgb(0 0 52 / 0.62);
-  --ds-color-neutral-alpha-light-11: rgb(2 0 42 / 0.671);
-  --ds-color-neutral-alpha-light-12: rgb(0 0 5 / 0.859);
-  --ds-color-neutral-alpha-dark-2: rgb(167 167 254 / 0.048);
-  --ds-color-neutral-alpha-dark-3: rgb(177 177 254 / 0.096);
-  --ds-color-neutral-alpha-dark-4: rgb(181 181 254 / 0.144);
-  --ds-color-neutral-alpha-dark-5: rgb(184 184 255 / 0.196);
-  --ds-color-neutral-alpha-dark-6: rgb(186 182 255 / 0.248);
-  --ds-color-neutral-alpha-dark-7: rgb(184 184 255 / 0.3);
-  --ds-color-neutral-alpha-dark-8: rgb(205 205 255 / 0.57);
-  --ds-color-neutral-alpha-dark-9: rgb(202 202 255 / 0.592);
-  --ds-color-neutral-alpha-dark-10: rgb(206 206 255 / 0.674);
-  --ds-color-neutral-alpha-dark-11: rgb(214 215 255 / 0.761);
-  --ds-color-neutral-alpha-dark-12: rgb(248 249 255 / 0.931);
+  --ds-color-info-dark-1: #15191c;
+  --ds-color-info-dark-2: #1a2025;
+  --ds-color-info-dark-3: #1c2932;
+  --ds-color-info-dark-4: #1f313e;
+  --ds-color-info-dark-5: #203a4c;
+  --ds-color-info-dark-6: #224359;
+  --ds-color-info-dark-7: #1f4c69;
+  --ds-color-info-dark-8: #4a87b1;
+  --ds-color-info-dark-9: #418aba;
+  --ds-color-info-dark-10: #4e97c8;
+  --ds-color-info-dark-11: #70b3e1;
+  --ds-color-info-dark-12: #c2d9ea;
+  --ds-color-info-dark-solid-pressed: #58a1d2;
+  --ds-color-neutral-alpha-light-2: rgb(0 55 146 / 0.055);
+  --ds-color-neutral-alpha-light-3: rgb(2 55 118 / 0.095);
+  --ds-color-neutral-alpha-light-4: rgb(1 40 109 / 0.13);
+  --ds-color-neutral-alpha-light-5: rgb(1 42 101 / 0.169);
+  --ds-color-neutral-alpha-light-6: rgb(0 34 93 / 0.204);
+  --ds-color-neutral-alpha-light-7: rgb(1 34 88 / 0.24);
+  --ds-color-neutral-alpha-light-8: rgb(0 18 44 / 0.506);
+  --ds-color-neutral-alpha-light-9: rgb(0 18 44 / 0.577);
+  --ds-color-neutral-alpha-light-10: rgb(0 16 38 / 0.644);
+  --ds-color-neutral-alpha-light-11: rgb(0 12 29 / 0.687);
+  --ds-color-neutral-alpha-light-12: rgb(0 2 7 / 0.867);
+  --ds-color-neutral-alpha-dark-2: rgb(179 203 250 / 0.044);
+  --ds-color-neutral-alpha-dark-3: rgb(191 216 255 / 0.082);
+  --ds-color-neutral-alpha-dark-4: rgb(196 221 255 / 0.125);
+  --ds-color-neutral-alpha-dark-5: rgb(192 222 254 / 0.169);
+  --ds-color-neutral-alpha-dark-6: rgb(191 215 254 / 0.216);
+  --ds-color-neutral-alpha-dark-7: rgb(198 222 255 / 0.259);
+  --ds-color-neutral-alpha-dark-8: rgb(213 229 255 / 0.518);
+  --ds-color-neutral-alpha-dark-9: rgb(212 228 255 / 0.531);
+  --ds-color-neutral-alpha-dark-10: rgb(214 230 255 / 0.617);
+  --ds-color-neutral-alpha-dark-11: rgb(223 236 255 / 0.699);
+  --ds-color-neutral-alpha-dark-12: rgb(247 250 255 / 0.927);
   --ds-opacity-state-hover: 0.08;
   --ds-opacity-state-focus: 0.1;
   --ds-opacity-state-pressed: 0.1;
   --ds-opacity-state-drag: 0.16;
   --ds-opacity-disabled-container: 0.12;
   --ds-opacity-disabled-content: 0.38;
-  --ds-font-size-13: 0.8125rem;
+  --ds-font-size-14: 0.875rem;
   --ds-font-size-17: 1.0625rem;
-  --ds-font-size-23: 1.4375rem;
-  --ds-font-size-30: 1.875rem;
-  --ds-font-size-40: 2.5rem;
-  --ds-font-size-54: 3.375rem;
-  --ds-font-size-72: 4.5rem;
-  --ds-font-size-95: 5.9375rem;
+  --ds-font-size-21: 1.3125rem;
+  --ds-font-size-27: 1.6875rem;
+  --ds-font-size-42: 2.625rem;
+  --ds-font-size-52: 3.25rem;
+  --ds-font-size-81: 5.0625rem;
+  --ds-font-size-101: 6.3125rem;
   --ds-font-size-11: 0.6875rem;
+  --ds-font-size-112: 7rem;
+  --ds-font-size-13: 0.8125rem;
   --ds-font-size-15: 0.9375rem;
   --ds-font-size-20: 1.25rem;
   --ds-font-size-22: 1.375rem;
   --ds-font-size-28: 1.75rem;
   --ds-font-size-34: 2.125rem;
+  --ds-font-size-76: 4.75rem;
   --ds-font-line-height-20: 20px;
   --ds-font-line-height-24: 24px;
+  --ds-font-line-height-28: 28px;
   --ds-font-line-height-32: 32px;
-  --ds-font-line-height-36: 36px;
-  --ds-font-line-height-48: 48px;
+  --ds-font-line-height-52: 52px;
   --ds-font-line-height-60: 60px;
-  --ds-font-line-height-80: 80px;
-  --ds-font-line-height-108: 108px;
+  --ds-font-line-height-92: 92px;
+  --ds-font-line-height-112: 112px;
   --ds-space-0: 0px;
   --ds-space-2: 2px;
   --ds-space-4: 4px;
@@ -293,12 +244,6 @@
   --ds-border-width-1: 1px;
   --ds-border-width-2: 2px;
   --ds-border-width-4: 4px;
-  --ds-elevation-shadow-1: 0px 0px 2px 0px var(--ds-color-shadow-ambient), 0px 1px 2px 0px var(--ds-color-shadow-key);
-  --ds-elevation-shadow-2: 0px 0px 2px 0px var(--ds-color-shadow-ambient), 0px 2px 4px 0px var(--ds-color-shadow-key);
-  --ds-elevation-shadow-3: 0px 0px 2px 0px var(--ds-color-shadow-ambient), 0px 4px 8px 0px var(--ds-color-shadow-key);
-  --ds-elevation-shadow-4: 0px 0px 2px 0px var(--ds-color-shadow-ambient), 0px 8px 16px 0px var(--ds-color-shadow-key);
-  --ds-elevation-shadow-5: 0px 0px 2px 0px var(--ds-color-shadow-ambient), 0px 14px 28px 0px var(--ds-color-shadow-key);
-  --ds-elevation-shadow-6: 0px 0px 2px 0px var(--ds-color-shadow-ambient), 0px 32px 64px 0px var(--ds-color-shadow-key);
   --ds-motion-duration-instant: 0ms;
   --ds-motion-duration-micro: 100ms;
   --ds-motion-duration-short: 150ms;
@@ -342,13 +287,12 @@
   --ds-motion-spring-sheet-duration: 410ms;
   --ds-motion-spring-sheet-easing: linear(0, 0.053, 0.176, 0.324, 0.474, 0.609, 0.723, 0.815, 0.884, 0.934, 0.969, 0.991, 1.005, 1.012, 1.015, 1.015, 1.014, 1.012, 1.009, 1.007, 1.005, 1.004, 1.002, 1.001, 1);
   --ds-motion-spring-sheet-delay: 0ms;
-  --ds-font-family-text: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --ds-font-family-display: "Instrument Serif", "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ds-font-family-text: "Albert Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ds-font-family-display: var(--ds-font-family-text);
   --ds-font-family-mono: ui-monospace, ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --ds-font-weight-body: 400;
   --ds-font-weight-label: 500;
   --ds-font-weight-heading: 600;
-  --ds-font-weight-display: 700;
   --ds-text-body-sm-size: var(--ds-font-size-15);
   --ds-text-body-sm-line-height: 1.3333;
   --ds-text-body-sm-weight: var(--ds-font-weight-body);
@@ -385,12 +329,12 @@
   --ds-text-label-lg-tracking: 0em;
   --ds-text-label-lg-family: var(--ds-font-family-text);
   --ds-text-label-lg: var(--ds-font-weight-label) var(--ds-font-size-17)/calc(1.2941 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-text);
-  --ds-text-code-sm-size: var(--ds-font-size-13);
-  --ds-text-code-sm-line-height: 1.5385;
+  --ds-text-code-sm-size: var(--ds-font-size-14);
+  --ds-text-code-sm-line-height: 1.4286;
   --ds-text-code-sm-weight: var(--ds-font-weight-body);
   --ds-text-code-sm-tracking: 0em;
   --ds-text-code-sm-family: var(--ds-font-family-mono);
-  --ds-text-code-sm: var(--ds-font-weight-body) var(--ds-font-size-13)/calc(1.5385 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-mono);
+  --ds-text-code-sm: var(--ds-font-weight-body) var(--ds-font-size-14)/calc(1.4286 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-mono);
   --ds-text-code-md-size: var(--ds-font-size-17);
   --ds-text-code-md-line-height: 1.4118;
   --ds-text-code-md-weight: var(--ds-font-weight-body);
@@ -421,90 +365,24 @@
   --ds-text-headline-sm-tracking: -0.01em;
   --ds-text-headline-sm-family: var(--ds-font-family-display);
   --ds-text-headline-sm: var(--ds-font-weight-heading) var(--ds-font-size-28)/calc(1.2143 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-display);
-  --ds-text-headline-md-size: var(--ds-font-size-34);
-  --ds-text-headline-md-line-height: 1.2059;
-  --ds-text-headline-md-weight: var(--ds-font-weight-heading);
-  --ds-text-headline-md-tracking: -0.02em;
-  --ds-text-headline-md-family: var(--ds-font-family-display);
-  --ds-text-headline-md: var(--ds-font-weight-heading) var(--ds-font-size-34)/calc(1.2059 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-display);
-  --ds-text-headline-lg-size: var(--ds-font-size-72);
-  --ds-text-headline-lg-line-height: 1.1111;
+  --ds-text-headline-lg-size: var(--ds-font-size-52);
+  --ds-text-headline-lg-line-height: 1.1538;
   --ds-text-headline-lg-weight: var(--ds-font-weight-heading);
   --ds-text-headline-lg-tracking: -0.02em;
   --ds-text-headline-lg-family: var(--ds-font-family-display);
-  --ds-text-headline-lg: var(--ds-font-weight-heading) var(--ds-font-size-72)/calc(1.1111 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-display);
-  --ds-text-display-sm-size: var(--ds-font-size-95);
-  --ds-text-display-sm-line-height: 1.1368;
-  --ds-text-display-sm-weight: var(--ds-font-weight-display);
-  --ds-text-display-sm-tracking: -0.02em;
-  --ds-text-display-sm-family: var(--ds-font-family-display);
-  --ds-text-display-sm: var(--ds-font-weight-display) var(--ds-font-size-95)/calc(1.1368 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-display);
-  --ds-text-emphasized-body-sm-size: var(--ds-font-size-13);
-  --ds-text-emphasized-body-sm-line-height: 1.5385;
-  --ds-text-emphasized-body-sm-weight: var(--ds-font-weight-label);
-  --ds-text-emphasized-body-sm-tracking: 0em;
-  --ds-text-emphasized-body-sm-family: var(--ds-font-family-text);
-  --ds-text-emphasized-body-sm: var(--ds-font-weight-label) var(--ds-font-size-13)/calc(1.5385 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-text);
-  --ds-text-emphasized-body-md-size: var(--ds-font-size-17);
-  --ds-text-emphasized-body-md-line-height: 1.4118;
-  --ds-text-emphasized-body-md-weight: var(--ds-font-weight-label);
-  --ds-text-emphasized-body-md-tracking: 0em;
-  --ds-text-emphasized-body-md-family: var(--ds-font-family-text);
-  --ds-text-emphasized-body-md: var(--ds-font-weight-label) var(--ds-font-size-17)/calc(1.4118 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-text);
-  --ds-text-emphasized-body-lg-size: var(--ds-font-size-23);
-  --ds-text-emphasized-body-lg-line-height: 1.3913;
-  --ds-text-emphasized-body-lg-weight: var(--ds-font-weight-label);
-  --ds-text-emphasized-body-lg-tracking: 0em;
-  --ds-text-emphasized-body-lg-family: var(--ds-font-family-text);
-  --ds-text-emphasized-body-lg: var(--ds-font-weight-label) var(--ds-font-size-23)/calc(1.3913 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-text);
-  --ds-text-emphasized-label-md-size: var(--ds-font-size-13);
-  --ds-text-emphasized-label-md-line-height: 1.5385;
-  --ds-text-emphasized-label-md-weight: var(--ds-font-weight-heading);
-  --ds-text-emphasized-label-md-tracking: 0em;
-  --ds-text-emphasized-label-md-family: var(--ds-font-family-text);
-  --ds-text-emphasized-label-md: var(--ds-font-weight-heading) var(--ds-font-size-13)/calc(1.5385 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-text);
-  --ds-text-emphasized-label-lg-size: var(--ds-font-size-17);
-  --ds-text-emphasized-label-lg-line-height: 1.4118;
-  --ds-text-emphasized-label-lg-weight: var(--ds-font-weight-heading);
-  --ds-text-emphasized-label-lg-tracking: 0em;
-  --ds-text-emphasized-label-lg-family: var(--ds-font-family-text);
-  --ds-text-emphasized-label-lg: var(--ds-font-weight-heading) var(--ds-font-size-17)/calc(1.4118 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-text);
-  --ds-text-emphasized-title-sm-size: var(--ds-font-size-17);
-  --ds-text-emphasized-title-sm-line-height: 1.4118;
-  --ds-text-emphasized-title-sm-weight: var(--ds-font-weight-display);
-  --ds-text-emphasized-title-sm-tracking: 0em;
-  --ds-text-emphasized-title-sm-family: var(--ds-font-family-text);
-  --ds-text-emphasized-title-sm: var(--ds-font-weight-display) var(--ds-font-size-17)/calc(1.4118 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-text);
-  --ds-text-emphasized-title-md-size: var(--ds-font-size-23);
-  --ds-text-emphasized-title-md-line-height: 1.3913;
-  --ds-text-emphasized-title-md-weight: var(--ds-font-weight-display);
-  --ds-text-emphasized-title-md-tracking: 0em;
-  --ds-text-emphasized-title-md-family: var(--ds-font-family-text);
-  --ds-text-emphasized-title-md: var(--ds-font-weight-display) var(--ds-font-size-23)/calc(1.3913 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-text);
-  --ds-text-emphasized-title-lg-size: var(--ds-font-size-30);
-  --ds-text-emphasized-title-lg-line-height: 1.2;
-  --ds-text-emphasized-title-lg-weight: var(--ds-font-weight-display);
-  --ds-text-emphasized-title-lg-tracking: 0em;
-  --ds-text-emphasized-title-lg-family: var(--ds-font-family-text);
-  --ds-text-emphasized-title-lg: var(--ds-font-weight-display) var(--ds-font-size-30)/calc(1.2 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-text);
-  --ds-text-emphasized-headline-sm-size: var(--ds-font-size-40);
-  --ds-text-emphasized-headline-sm-line-height: 1.2;
-  --ds-text-emphasized-headline-sm-weight: var(--ds-font-weight-display);
-  --ds-text-emphasized-headline-sm-tracking: -0.01em;
-  --ds-text-emphasized-headline-sm-family: var(--ds-font-family-display);
-  --ds-text-emphasized-headline-sm: var(--ds-font-weight-display) var(--ds-font-size-40)/calc(1.2 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-display);
-  --ds-text-emphasized-headline-md-size: var(--ds-font-size-54);
-  --ds-text-emphasized-headline-md-line-height: 1.1111;
-  --ds-text-emphasized-headline-md-weight: var(--ds-font-weight-display);
-  --ds-text-emphasized-headline-md-tracking: -0.02em;
-  --ds-text-emphasized-headline-md-family: var(--ds-font-family-display);
-  --ds-text-emphasized-headline-md: var(--ds-font-weight-display) var(--ds-font-size-54)/calc(1.1111 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-display);
-  --ds-text-emphasized-headline-lg-size: var(--ds-font-size-72);
-  --ds-text-emphasized-headline-lg-line-height: 1.1111;
-  --ds-text-emphasized-headline-lg-weight: var(--ds-font-weight-display);
-  --ds-text-emphasized-headline-lg-tracking: -0.02em;
-  --ds-text-emphasized-headline-lg-family: var(--ds-font-family-display);
-  --ds-text-emphasized-headline-lg: var(--ds-font-weight-display) var(--ds-font-size-72)/calc(1.1111 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-display);
+  --ds-text-headline-lg: var(--ds-font-weight-heading) var(--ds-font-size-52)/calc(1.1538 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-display);
+  --ds-text-display-md-size: var(--ds-font-size-81);
+  --ds-text-display-md-line-height: 1.1358;
+  --ds-text-display-md-weight: var(--ds-font-weight-heading);
+  --ds-text-display-md-tracking: -0.02em;
+  --ds-text-display-md-family: var(--ds-font-family-display);
+  --ds-text-display-md: var(--ds-font-weight-heading) var(--ds-font-size-81)/calc(1.1358 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-display);
+  --ds-text-display-lg-size: var(--ds-font-size-101);
+  --ds-text-display-lg-line-height: 1.1089;
+  --ds-text-display-lg-weight: var(--ds-font-weight-heading);
+  --ds-text-display-lg-tracking: -0.02em;
+  --ds-text-display-lg-family: var(--ds-font-family-display);
+  --ds-text-display-lg: var(--ds-font-weight-heading) var(--ds-font-size-101)/calc(1.1089 * var(--ds-script-line-height-scale, 1)) var(--ds-font-family-display);
   --ds-space-target-gap: 12px;
   --ds-size-icon-sm: 16px;
   --ds-size-icon-md: 20px;
@@ -529,9 +407,9 @@
   --ds-border-width-emphasis: var(--ds-border-width-4);
   --ds-focus-ring-width: 2px;
   --ds-focus-ring-offset: 2px;
-  --ds-elevation-raised: var(--ds-elevation-shadow-1);
-  --ds-elevation-floating: var(--ds-elevation-shadow-3);
-  --ds-elevation-overlay: var(--ds-elevation-shadow-5);
+  --ds-elevation-raised: 0px 0px 0px 0px var(--ds-color-shadow-key);
+  --ds-elevation-floating: 0px 1px 2px 0px var(--ds-color-shadow-key), 0px 4px 12px 0px var(--ds-color-shadow-ambient);
+  --ds-elevation-overlay: 0px 1px 2px 0px var(--ds-color-shadow-key), 0px 12px 32px 0px var(--ds-color-shadow-ambient);
   --ds-material-glass-blur: 24px;
   --ds-component-toast-duration: 4000ms;
   --ds-motion-gesture-deceleration-rate: 0.998;
@@ -545,12 +423,11 @@
 
 :root, [data-theme="light"] {
   color-scheme: light;
-  --ds-color-surface-sunken: var(--ds-color-neutral-light-2);
-  --ds-color-surface-base: var(--ds-color-neutral-light-1);
-  --ds-color-surface-raised: var(--ds-color-white);
+  --ds-color-surface-sunken: var(--ds-color-neutral-light-3);
+  --ds-color-surface-base: var(--ds-color-neutral-light-2);
+  --ds-color-surface-raised: var(--ds-color-neutral-light-1);
   --ds-color-surface-overlay: var(--ds-color-white);
   --ds-color-surface-nav: var(--ds-color-neutral-light-2);
-  --ds-color-surface-tinted: var(--ds-color-accent-light-2);
   --ds-color-surface-glass: rgb(255 255 255 / 0.72);
   --ds-color-surface-glass-fallback: var(--ds-color-white);
   --ds-color-surface-glass-dimming: rgb(0 0 0 / 0.35);
@@ -564,10 +441,6 @@
   --ds-color-text-on-accent: var(--ds-color-neutral-light-12);
   --ds-color-text-on-action: var(--ds-color-neutral-light-12);
   --ds-color-text-on-brand: var(--ds-color-neutral-light-12);
-  --ds-color-text-accent2: var(--ds-color-accent2-light-11);
-  --ds-color-text-on-accent2: var(--ds-color-neutral-light-12);
-  --ds-color-text-accent3: var(--ds-color-accent3-light-11);
-  --ds-color-text-on-accent3: var(--ds-color-white);
   --ds-color-text-success: var(--ds-color-success-light-11);
   --ds-color-text-on-success: var(--ds-color-white);
   --ds-color-text-warning: var(--ds-color-warning-light-11);
@@ -587,19 +460,11 @@
   --ds-color-bg-accent-bold-pressed: var(--ds-color-accent-light-solid-pressed);
   --ds-color-bg-disabled: var(--ds-color-neutral-light-3);
   --ds-color-bg-inverse: var(--ds-color-neutral-light-12);
-  --ds-color-bg-field: var(--ds-color-white);
+  --ds-color-bg-field: var(--ds-color-neutral-light-1);
   --ds-color-bg-action-primary: var(--ds-color-accent-light-9);
   --ds-color-bg-action-primary-hover: var(--ds-color-accent-light-10);
   --ds-color-bg-action-primary-pressed: var(--ds-color-accent-light-solid-pressed);
   --ds-color-bg-brand: var(--ds-color-accent-light-9);
-  --ds-color-bg-accent2-subtle: var(--ds-color-accent2-light-3);
-  --ds-color-bg-accent2-bold: var(--ds-color-accent2-light-9);
-  --ds-color-bg-accent2-bold-hover: var(--ds-color-accent2-light-10);
-  --ds-color-bg-accent2-bold-pressed: var(--ds-color-accent2-light-solid-pressed);
-  --ds-color-bg-accent3-subtle: var(--ds-color-accent3-light-3);
-  --ds-color-bg-accent3-bold: var(--ds-color-accent3-light-9);
-  --ds-color-bg-accent3-bold-hover: var(--ds-color-accent3-light-10);
-  --ds-color-bg-accent3-bold-pressed: var(--ds-color-accent3-light-solid-pressed);
   --ds-color-bg-success-subtle: var(--ds-color-success-light-3);
   --ds-color-bg-success-bold: var(--ds-color-success-light-9);
   --ds-color-bg-success-bold-hover: var(--ds-color-success-light-10);
@@ -622,6 +487,7 @@
   --ds-color-border-input: var(--ds-color-neutral-light-8);
   --ds-color-border-focus: var(--ds-color-accent-light-11);
   --ds-color-border-accent: var(--ds-color-accent-light-8);
+  --ds-color-border-separator: var(--ds-color-neutral-light-3);
   --ds-color-border-success: var(--ds-color-success-light-8);
   --ds-color-border-warning: var(--ds-color-warning-light-8);
   --ds-color-border-danger: var(--ds-color-danger-light-8);
@@ -630,10 +496,10 @@
   --ds-color-icon-subtle: var(--ds-color-neutral-light-10);
   --ds-color-icon-accent: var(--ds-color-accent-light-11);
   --ds-color-icon-on-accent: var(--ds-color-neutral-light-12);
-  --ds-color-overlay-scrim: rgb(36 36 40 / 0.45);
-  --ds-color-shadow-key: rgb(36 36 40 / 0.221);
-  --ds-color-shadow-ambient: rgb(36 36 40 / 0.188);
-  --ds-color-shadow-ring: rgb(36 36 40 / 0.1);
+  --ds-color-overlay-scrim: rgb(34 36 40 / 0.45);
+  --ds-color-shadow-key: rgb(34 36 40 / 0.154);
+  --ds-color-shadow-ambient: rgb(34 36 40 / 0.131);
+  --ds-color-shadow-ring: rgb(34 36 40 / 0.1);
 }
 
 [data-theme="dark"] {
@@ -643,8 +509,7 @@
   --ds-color-surface-raised: var(--ds-color-neutral-dark-3);
   --ds-color-surface-overlay: var(--ds-color-neutral-dark-4);
   --ds-color-surface-nav: var(--ds-color-neutral-dark-1);
-  --ds-color-surface-tinted: var(--ds-color-accent-dark-2);
-  --ds-color-surface-glass: rgb(36 36 47 / 0.72);
+  --ds-color-surface-glass: rgb(34 37 42 / 0.77);
   --ds-color-surface-glass-fallback: var(--ds-color-neutral-dark-4);
   --ds-color-surface-glass-dimming: rgb(0 0 0 / 0.35);
   --ds-color-text-primary: var(--ds-color-neutral-dark-12);
@@ -657,10 +522,6 @@
   --ds-color-text-on-accent: var(--ds-color-neutral-dark-1);
   --ds-color-text-on-action: var(--ds-color-neutral-dark-1);
   --ds-color-text-on-brand: var(--ds-color-neutral-dark-1);
-  --ds-color-text-accent2: var(--ds-color-accent2-dark-11);
-  --ds-color-text-on-accent2: var(--ds-color-neutral-dark-1);
-  --ds-color-text-accent3: var(--ds-color-accent3-dark-11);
-  --ds-color-text-on-accent3: var(--ds-color-neutral-dark-1);
   --ds-color-text-success: var(--ds-color-success-dark-11);
   --ds-color-text-on-success: var(--ds-color-neutral-dark-1);
   --ds-color-text-warning: var(--ds-color-warning-dark-11);
@@ -685,14 +546,6 @@
   --ds-color-bg-action-primary-hover: var(--ds-color-accent-dark-10);
   --ds-color-bg-action-primary-pressed: var(--ds-color-accent-dark-solid-pressed);
   --ds-color-bg-brand: var(--ds-color-accent-dark-9);
-  --ds-color-bg-accent2-subtle: var(--ds-color-accent2-dark-3);
-  --ds-color-bg-accent2-bold: var(--ds-color-accent2-dark-9);
-  --ds-color-bg-accent2-bold-hover: var(--ds-color-accent2-dark-10);
-  --ds-color-bg-accent2-bold-pressed: var(--ds-color-accent2-dark-solid-pressed);
-  --ds-color-bg-accent3-subtle: var(--ds-color-accent3-dark-3);
-  --ds-color-bg-accent3-bold: var(--ds-color-accent3-dark-9);
-  --ds-color-bg-accent3-bold-hover: var(--ds-color-accent3-dark-10);
-  --ds-color-bg-accent3-bold-pressed: var(--ds-color-accent3-dark-solid-pressed);
   --ds-color-bg-success-subtle: var(--ds-color-success-dark-3);
   --ds-color-bg-success-bold: var(--ds-color-success-dark-9);
   --ds-color-bg-success-bold-hover: var(--ds-color-success-dark-10);
@@ -715,6 +568,7 @@
   --ds-color-border-input: var(--ds-color-neutral-dark-8);
   --ds-color-border-focus: var(--ds-color-accent-dark-11);
   --ds-color-border-accent: var(--ds-color-accent-dark-8);
+  --ds-color-border-separator: var(--ds-color-neutral-dark-4);
   --ds-color-border-success: var(--ds-color-success-dark-8);
   --ds-color-border-warning: var(--ds-color-warning-dark-8);
   --ds-color-border-danger: var(--ds-color-danger-dark-8);
@@ -724,9 +578,9 @@
   --ds-color-icon-accent: var(--ds-color-accent-dark-11);
   --ds-color-icon-on-accent: var(--ds-color-neutral-dark-1);
   --ds-color-overlay-scrim: rgb(0 0 0 / 0.6);
-  --ds-color-shadow-key: rgb(0 0 0 / 0.442);
-  --ds-color-shadow-ambient: rgb(0 0 0 / 0.376);
-  --ds-color-shadow-ring: rgb(232 233 239 / 0.12);
+  --ds-color-shadow-key: rgb(0 0 0 / 0.308);
+  --ds-color-shadow-ambient: rgb(0 0 0 / 0.262);
+  --ds-color-shadow-ring: rgb(230 233 238 / 0.12);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -737,8 +591,7 @@
     --ds-color-surface-raised: var(--ds-color-neutral-dark-3);
     --ds-color-surface-overlay: var(--ds-color-neutral-dark-4);
     --ds-color-surface-nav: var(--ds-color-neutral-dark-1);
-    --ds-color-surface-tinted: var(--ds-color-accent-dark-2);
-    --ds-color-surface-glass: rgb(36 36 47 / 0.72);
+    --ds-color-surface-glass: rgb(34 37 42 / 0.77);
     --ds-color-surface-glass-fallback: var(--ds-color-neutral-dark-4);
     --ds-color-surface-glass-dimming: rgb(0 0 0 / 0.35);
     --ds-color-text-primary: var(--ds-color-neutral-dark-12);
@@ -751,10 +604,6 @@
     --ds-color-text-on-accent: var(--ds-color-neutral-dark-1);
     --ds-color-text-on-action: var(--ds-color-neutral-dark-1);
     --ds-color-text-on-brand: var(--ds-color-neutral-dark-1);
-    --ds-color-text-accent2: var(--ds-color-accent2-dark-11);
-    --ds-color-text-on-accent2: var(--ds-color-neutral-dark-1);
-    --ds-color-text-accent3: var(--ds-color-accent3-dark-11);
-    --ds-color-text-on-accent3: var(--ds-color-neutral-dark-1);
     --ds-color-text-success: var(--ds-color-success-dark-11);
     --ds-color-text-on-success: var(--ds-color-neutral-dark-1);
     --ds-color-text-warning: var(--ds-color-warning-dark-11);
@@ -779,14 +628,6 @@
     --ds-color-bg-action-primary-hover: var(--ds-color-accent-dark-10);
     --ds-color-bg-action-primary-pressed: var(--ds-color-accent-dark-solid-pressed);
     --ds-color-bg-brand: var(--ds-color-accent-dark-9);
-    --ds-color-bg-accent2-subtle: var(--ds-color-accent2-dark-3);
-    --ds-color-bg-accent2-bold: var(--ds-color-accent2-dark-9);
-    --ds-color-bg-accent2-bold-hover: var(--ds-color-accent2-dark-10);
-    --ds-color-bg-accent2-bold-pressed: var(--ds-color-accent2-dark-solid-pressed);
-    --ds-color-bg-accent3-subtle: var(--ds-color-accent3-dark-3);
-    --ds-color-bg-accent3-bold: var(--ds-color-accent3-dark-9);
-    --ds-color-bg-accent3-bold-hover: var(--ds-color-accent3-dark-10);
-    --ds-color-bg-accent3-bold-pressed: var(--ds-color-accent3-dark-solid-pressed);
     --ds-color-bg-success-subtle: var(--ds-color-success-dark-3);
     --ds-color-bg-success-bold: var(--ds-color-success-dark-9);
     --ds-color-bg-success-bold-hover: var(--ds-color-success-dark-10);
@@ -809,6 +650,7 @@
     --ds-color-border-input: var(--ds-color-neutral-dark-8);
     --ds-color-border-focus: var(--ds-color-accent-dark-11);
     --ds-color-border-accent: var(--ds-color-accent-dark-8);
+    --ds-color-border-separator: var(--ds-color-neutral-dark-4);
     --ds-color-border-success: var(--ds-color-success-dark-8);
     --ds-color-border-warning: var(--ds-color-warning-dark-8);
     --ds-color-border-danger: var(--ds-color-danger-dark-8);
@@ -818,9 +660,9 @@
     --ds-color-icon-accent: var(--ds-color-accent-dark-11);
     --ds-color-icon-on-accent: var(--ds-color-neutral-dark-1);
     --ds-color-overlay-scrim: rgb(0 0 0 / 0.6);
-    --ds-color-shadow-key: rgb(0 0 0 / 0.442);
-    --ds-color-shadow-ambient: rgb(0 0 0 / 0.376);
-    --ds-color-shadow-ring: rgb(232 233 239 / 0.12);
+    --ds-color-shadow-key: rgb(0 0 0 / 0.308);
+    --ds-color-shadow-ambient: rgb(0 0 0 / 0.262);
+    --ds-color-shadow-ring: rgb(230 233 238 / 0.12);
   }
 }
 
@@ -844,6 +686,10 @@
   --ds-size-control-sm: 40px;
   --ds-size-control-md: 48px;
   --ds-size-control-lg: 56px;
+  --ds-size-row-sm: 52px;
+  --ds-size-row-md: 56px;
+  --ds-size-row-lg: 64px;
+  --ds-size-row-two-line: 80px;
 }
 
 [data-density="comfortable"] {
@@ -866,6 +712,10 @@
   --ds-size-control-sm: 32px;
   --ds-size-control-md: 40px;
   --ds-size-control-lg: 48px;
+  --ds-size-row-sm: 44px;
+  --ds-size-row-md: 48px;
+  --ds-size-row-lg: 56px;
+  --ds-size-row-two-line: 72px;
 }
 
 [data-density="compact"] {
@@ -888,6 +738,10 @@
   --ds-size-control-sm: 24px;
   --ds-size-control-md: 32px;
   --ds-size-control-lg: 40px;
+  --ds-size-row-sm: 36px;
+  --ds-size-row-md: 40px;
+  --ds-size-row-lg: 48px;
+  --ds-size-row-two-line: 64px;
 }
 
 [data-motion="standard"] {
@@ -926,20 +780,17 @@
   --ds-motion-transition-expand-delay: 0ms;
 }
 
+/* Glass turns solid for people who reduce transparency or ask for more contrast. */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  :root, :root:not([data-theme="light"]), [data-theme] { --ds-color-surface-glass: var(--ds-color-surface-glass-fallback); --ds-material-glass-blur: 0px; }
+}
+
 /* Hit-area floor per input (L14 I-1, DC-L03-12): pointer 24px (WCAG 2.5.8), touch 44/48. */
 @media (pointer: fine) {
   :root { --ds-size-target-min: 24px; }
 }
 @media (pointer: coarse) {
   :root { --ds-size-target-min: 44px; }
-}
-
-@media (color-gamut: p3) {
-  :root {
-    --ds-color-info-light-9: color(display-p3 0.0971 0.4789 0.7517);
-    --ds-color-info-light-10: color(display-p3 0.0609 0.431 0.6859);
-    --ds-color-info-light-11: color(display-p3 0.0203 0.3557 0.5768);
-  }
 }
 
 /* Text style classes (one per typography token). */
@@ -955,20 +806,9 @@
 .ds-text-title-md { font: var(--ds-text-title-md); letter-spacing: var(--ds-text-title-md-tracking); }
 .ds-text-title-lg { font: var(--ds-text-title-lg); letter-spacing: var(--ds-text-title-lg-tracking); }
 .ds-text-headline-sm { font: var(--ds-text-headline-sm); letter-spacing: var(--ds-text-headline-sm-tracking); }
-.ds-text-headline-md { font: var(--ds-text-headline-md); letter-spacing: var(--ds-text-headline-md-tracking); }
 .ds-text-headline-lg { font: var(--ds-text-headline-lg); letter-spacing: var(--ds-text-headline-lg-tracking); }
-.ds-text-display-sm { font: var(--ds-text-display-sm); letter-spacing: var(--ds-text-display-sm-tracking); }
-.ds-text-emphasized-body-sm { font: var(--ds-text-emphasized-body-sm); letter-spacing: var(--ds-text-emphasized-body-sm-tracking); }
-.ds-text-emphasized-body-md { font: var(--ds-text-emphasized-body-md); letter-spacing: var(--ds-text-emphasized-body-md-tracking); }
-.ds-text-emphasized-body-lg { font: var(--ds-text-emphasized-body-lg); letter-spacing: var(--ds-text-emphasized-body-lg-tracking); }
-.ds-text-emphasized-label-md { font: var(--ds-text-emphasized-label-md); letter-spacing: var(--ds-text-emphasized-label-md-tracking); }
-.ds-text-emphasized-label-lg { font: var(--ds-text-emphasized-label-lg); letter-spacing: var(--ds-text-emphasized-label-lg-tracking); }
-.ds-text-emphasized-title-sm { font: var(--ds-text-emphasized-title-sm); letter-spacing: var(--ds-text-emphasized-title-sm-tracking); }
-.ds-text-emphasized-title-md { font: var(--ds-text-emphasized-title-md); letter-spacing: var(--ds-text-emphasized-title-md-tracking); }
-.ds-text-emphasized-title-lg { font: var(--ds-text-emphasized-title-lg); letter-spacing: var(--ds-text-emphasized-title-lg-tracking); }
-.ds-text-emphasized-headline-sm { font: var(--ds-text-emphasized-headline-sm); letter-spacing: var(--ds-text-emphasized-headline-sm-tracking); }
-.ds-text-emphasized-headline-md { font: var(--ds-text-emphasized-headline-md); letter-spacing: var(--ds-text-emphasized-headline-md-tracking); }
-.ds-text-emphasized-headline-lg { font: var(--ds-text-emphasized-headline-lg); letter-spacing: var(--ds-text-emphasized-headline-lg-tracking); }
+.ds-text-display-md { font: var(--ds-text-display-md); letter-spacing: var(--ds-text-display-md-tracking); }
+.ds-text-display-lg { font: var(--ds-text-display-lg); letter-spacing: var(--ds-text-display-lg-tracking); }
 
 .ds-focus-ring:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus);

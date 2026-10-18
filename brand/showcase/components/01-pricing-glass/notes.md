@@ -72,3 +72,22 @@ What changed and why:
 **Fresh-eyes audit:** first pass 3/5 ("clean but the stock SaaS layout, no table, Premiere costs twice as much per minute, the lit plan flagged four ways"). After the table rebuild 4/5; its six remaining notes (header row shifting in the signed-in state, a missing resolution row, Premiere's overage below its included rate, tall blank group rows in the lit column, the empty top-left cell, square hover corners) were all fixed. References: Linear pricing comparison https://mobbin.com/sites/sections/0499d8f7-09b7-4022-afc1-4b63a4fabb00 (the label column with the billing toggle, a highlighted column), Linear cards joined by hairlines https://mobbin.com/sites/sections/5ffa41ef-e9a4-428b-921e-c13ad57b4873, Framer pricing https://mobbin.com/sites/sections/5da6c164-bbc2-4322-ac56-a6aed51c7369.
 
 **Fresh score: 4.**
+
+## Round 4 (owner review, 2026-10-15 to 2026-10-18)
+**What Kunal said** (relayed by the coordinator): "most of the web components look absolutely rubbish"; "None of them should feel like they are from a vibe coded app or a cheap Chinese app." The round-4 audit (`AUDIT-ROUND4.md`) gave this piece 6: "a slider panel, a note line under each button and a footnote all stack up", "reads as a copy of the dark Linear or Vercel pricing style", tiny tick labels. This section replaces the descriptions above: the serif, the lit column and the nine-row table are gone.
+
+**The idea, in one sentence:** you set how much finished 4K film you make a month, and the plans tell you which one covers it for least.
+
+**What changed**
+- One panel: the usage estimator spans the top, the three plans sit under it, and the slider runs from Studio's text edge to Premiere's. Each paid plan has a meter of your usage against its allowance; the plan that covers it for least says "Cheapest fit for 32 min" and carries the one filled button. The choice follows the slider and the billing toggle (Studio up to 240 min yearly, Premiere above).
+- Prices are the one display size (43 px); the heading and the estimate are a step down (22 px). Instrument Sans replaces Geist (three audits read Geist on zinc as the stock dark template). Twilight blue-black surfaces (off-token, said in the CSS) with amber only for your usage.
+- Cut: the subtitle, the footnote, the per-plan note lines, the ruler ticks, Spark's empty meter, "3 seats" said three times (now "3-seat minimum" once), "ProRes" (a real product name). Feature lists are three rows that differ by plan; a comparison table under the plans, on the plan columns, is cropped by the frame.
+- Engine: displayFace `=textFace`, textFace Instrument Sans, base size 14, Q-color-09 cool, expression 45, colorfulness 40, energy 35, roundness 45, warmth 25, density 60. Brand #F2A93B unchanged. Stale extra frames (shot-current, shot-focus, shot-hover, shot-loading) deleted; shot-monthly.png re-rendered.
+
+**Type scale:** 12 (slider ticks, comparison labels), 14 (body, meters, comparison heads), 18 (plan names), 22 (heading, estimate), 43 (prices). One face.
+
+**Blind pairwise test** (opaque names, random sides, fresh judges), final version: Aside https://mobbin.com/sites/sections/de9e1a65-59c9-41f0-8c73-01df009482e1 reference better by 2; HoneyBook https://mobbin.com/sites/sections/e72ef239-29c4-45c5-b9b1-cd92db0a4173 ours better by 2; PamPam https://mobbin.com/sites/sections/67e0a61a-3431-44e4-9f2b-23e3477c87d5 ours better by 3. 2 of 3 better; worst margin 2. Earlier rounds: 3 of 3 better twice, 2 of 3 three times; never weaker by 3.
+
+**Fresh-eyes audit: 3, in six rounds.** Every price and the estimator logic checked out each time. The audits kept naming the same thing: a generic dark three-plan layout that is sparser than the B2B product screens, with the estimator as the only original idea. The last round's concrete notes were fixed afterwards and checked by measurement, not re-audited: the comparison rows now sit on the plan columns under a plan-name header, the estimator and meter text are 14 px, nothing wraps at 240 or 320 minutes in either billing mode (buttons and lists align in all three states), Spark's reason moved into its bill line. **This piece did not reach 4.** It needs the owner's call: a light page in the B2B screens' manner, or a different presentation of the estimator.
+
+**Checks:** check_dates pass; check_names 0 errors; preflight 0 errors; engine validate passes (2 light-mode warnings on a dark-only system, as recorded in round 1).

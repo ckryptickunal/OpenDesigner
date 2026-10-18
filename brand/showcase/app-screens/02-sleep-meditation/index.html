@@ -3,228 +3,133 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lullwater: sleep session</title>
+<title>Lullwater: sleep story</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
+  /* Round 4: a photo-led player. One face (Albert Sans) and one confident number (the time left). One accent (peach, --ds-color-accent-dark-*) with one job: the sleep timer. */
+  :root {
+    --bg: var(--ds-color-neutral-dark-1);
+    --ink: var(--ds-color-text-primary);
+    --ink-2: var(--ds-color-text-secondary);
+    --timer: var(--ds-color-accent-dark-11);
+    --gutter: var(--ds-space-24);
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: var(--ds-color-neutral-dark-1); }
-  body { width: 390px; height: 844px; overflow: hidden; position: relative; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); -webkit-font-smoothing: antialiased; }
-  /* ART: the sky and the orb are painted on canvas from the accent and neutral ramps */
-  #sky { position: absolute; inset: 0; width: 390px; height: 844px; display: block; }
-  .screen { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; }
+  html, body { background: var(--bg); }
+  body { width: 390px; height: 844px; overflow: hidden; position: relative; color: var(--ink);
+    font: 400 var(--ds-font-size-17)/22px var(--ds-font-family-text); -webkit-font-smoothing: antialiased; }
+  button { all: unset; box-sizing: border-box; cursor: pointer; display: grid; place-items: center; color: inherit; }
+  button:focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; border-radius: var(--ds-radius-full); }
+  .num { font-variant-numeric: tabular-nums; }
+  svg [stroke], svg[stroke] * { vector-effect: non-scaling-stroke; }
 
-  .status { width: 100%; height: 54px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-4) var(--ds-space-32) 0 var(--ds-space-40); }
+  /* Story artwork: blue hour over still water, graded toward night. The two gradients carry legibility, not decoration. */
+  .art { position: absolute; inset: 0 0 auto 0; height: 400px; overflow: hidden; }
+  .art img { width: 390px; height: 400px; object-fit: cover; display: block; filter: brightness(.74) saturate(.7) contrast(1.06); }
+  .art::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 170px; background: linear-gradient(rgb(0 0 0 / .6), rgb(0 0 0 / .4) 100px, rgb(0 0 0 / 0)); z-index: 1; }
+  .art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 0, transparent 205px, color-mix(in oklab, var(--bg) 60%, transparent) 280px, color-mix(in oklab, var(--bg) 90%, transparent) 345px, var(--bg) 400px); }
+
+  .status { position: absolute; top: 0; left: 0; right: 0; height: 54px; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-4) 30px 0 46px; z-index: 2; }
   .status time { font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); letter-spacing: -0.01em; }
   .status .sys { display: flex; gap: var(--ds-space-6); align-items: center; }
-  .status svg { display: block; fill: var(--ds-color-text-primary); }
+  .status svg { display: block; fill: var(--ink); }
 
-  .glass { background: var(--ds-color-surface-glass); -webkit-backdrop-filter: blur(var(--ds-material-glass-blur)) saturate(1.4); backdrop-filter: blur(var(--ds-material-glass-blur)) saturate(1.4);
-    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ds-color-neutral-dark-12) 16%, transparent), inset 0 1px 0 color-mix(in oklab, var(--ds-color-neutral-dark-12) 24%, transparent); }
-  @media (prefers-reduced-transparency: reduce) { .glass { background: var(--ds-color-surface-glass-fallback); backdrop-filter: none; } }
+  /* Nav glyphs sit on the 24 pt text edges: the chevron's ink starts at x = 24, the dots end at x = 366. */
+  .nav { position: absolute; top: 54px; left: 0; right: 0; height: 44px; z-index: 2; }
+  .nav button { position: absolute; top: 0; width: 44px; height: 44px; filter: drop-shadow(0 1px 2px rgb(0 0 0 / .35)); }
+  .nav .down { left: 8px; } .nav .more { right: 9px; }
+  .nav p { position: absolute; left: 0; right: 0; top: 13px; text-align: center; font: 600 var(--ds-font-size-13)/18px var(--ds-font-family-text); text-shadow: 0 1px 2px rgb(0 0 0 / .35); }
+  .nav p span { font-weight: 400; opacity: .86; }
 
-  .top { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: var(--ds-space-4) var(--ds-space-20) 0; flex: none; }
-  .round { all: unset; box-sizing: border-box; width: 44px; height: 44px; border-radius: var(--ds-radius-full); display: grid; place-items: center; color: var(--ds-color-text-primary); cursor: pointer; }
-  .round.glass { background: var(--ds-color-surface-glass); -webkit-backdrop-filter: blur(var(--ds-material-glass-blur)) saturate(1.4); backdrop-filter: blur(var(--ds-material-glass-blur)) saturate(1.4); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ds-color-neutral-dark-12) 16%, transparent), inset 0 1px 0 color-mix(in oklab, var(--ds-color-neutral-dark-12) 24%, transparent); }
-  .crumb { text-align: center; }
-  .crumb b { display: block; font: var(--ds-text-label-md); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ds-color-text-secondary); }
-  .crumb span { font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-body); color: var(--ds-color-text-secondary); } /* tertiary is 4.15:1 on the painted sky */
+  .story { position: absolute; top: 288px; left: var(--gutter); right: var(--gutter); }
+  .story .kind { font: 400 var(--ds-font-size-13)/18px var(--ds-font-family-text); color: var(--ink-2); }
+  .story h1 { margin-top: var(--ds-space-4); font: 500 var(--ds-font-size-28)/34px var(--ds-font-family-text); letter-spacing: -0.015em; }
+  .story .by { margin-top: var(--ds-space-2); color: var(--ink-2); }
 
-  .title { margin-top: var(--ds-space-16); text-align: center; flex: none; padding: 0 var(--ds-space-32); }
-  .title h1 { font-family: var(--ds-font-family-display); font-weight: 400; font-style: italic; font-size: var(--ds-font-size-34); line-height: 1.12; letter-spacing: -0.005em; text-wrap: balance; }
-  .title p { margin-top: var(--ds-space-8); font: var(--ds-text-body-md); color: var(--ds-color-text-secondary); display: flex; gap: var(--ds-space-8); justify-content: center; align-items: center; }
-  .title p i { width: 3px; height: 3px; border-radius: 50%; background: var(--ds-color-text-tertiary); }
+  .timer { position: absolute; top: 404px; left: var(--gutter); right: var(--gutter); }
+  .timer .t { display: flex; align-items: baseline; gap: var(--ds-space-12); font: 300 var(--ds-font-size-112)/112px var(--ds-font-family-display); letter-spacing: -0.03em; margin-left: -6px; }
+  .timer .t small { font: 400 var(--ds-font-size-17)/22px var(--ds-font-family-text); letter-spacing: 0; color: var(--ink-2); }
+  .timer .l { margin-top: var(--ds-space-8); font: 500 var(--ds-font-size-17)/22px var(--ds-font-family-text); color: var(--timer); }
 
-  .orb-space { position: relative; flex: none; width: 100%; height: 276px; display: grid; place-items: center; }
-  .cue { font-family: var(--ds-font-family-display); font-style: italic; font-size: var(--ds-font-size-22); color: var(--ds-color-accent-dark-1); opacity: .78; letter-spacing: 0.01em; }
-  .cue small { display: block; text-align: center; font: var(--ds-text-label-md); font-style: normal; letter-spacing: 0.18em; text-transform: uppercase; margin-top: var(--ds-space-4); opacity: .8; }
+  .scrub { position: absolute; top: 586px; left: var(--gutter); right: var(--gutter); }
+  .scrub .track { position: relative; height: 4px; border-radius: 2px; background: var(--ds-color-neutral-alpha-dark-7); }
+  .scrub .fill { width: 43.78%; height: 100%; border-radius: 2px; background: var(--ink); }
 
-  .timer { flex: none; text-align: center; margin-top: var(--ds-space-8); }
-  .timer .t { font-family: var(--ds-font-family-display); font-weight: 400; font-size: var(--ds-font-size-95); line-height: 0.95; letter-spacing: -0.02em; font-variant-numeric: lining-nums tabular-nums; color: var(--ds-color-text-primary); }
-  .timer .t span { color: var(--ds-color-text-tertiary); margin: 0 -0.02em; position: relative; top: -0.06em; }
-  .timer .l { font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-body); color: var(--ds-color-text-secondary); margin-top: var(--ds-space-4); }
+  /* Transport: five controls on equal centres (33, 114, 195, 276, 357), the outer glyphs' ink on the text edges. */
+  .transport { position: absolute; top: 626px; left: 0; right: 0; height: 68px; }
+  .transport button { position: absolute; top: 50%; transform: translate(-50%, -50%); }
+  .transport .side { width: 44px; height: 44px; color: var(--ink-2); }
+  .transport .side.on { color: var(--timer); }
+  .transport .side.out { color: var(--ink); }
+  .transport .skip { width: 44px; height: 44px; }
+  .transport .skip em { position: absolute; inset: 0; display: grid; place-items: center; padding-top: 5px; font: 600 var(--ds-font-size-11)/1 var(--ds-font-family-text); font-style: normal; }
+  .transport .play { width: 68px; height: 68px; border-radius: var(--ds-radius-full); background: var(--ink); color: var(--bg); }
+  .transport .s1 { left: 33px; } .transport .s2 { left: 114px; } .transport .play { left: 195px; } .transport .s3 { left: 276px; } .transport .s4 { left: 357px; }
 
-  .progress { width: 100%; padding: var(--ds-space-20) var(--ds-space-32) 0; flex: none; }
-  .track { height: 4px; border-radius: var(--ds-radius-full); background: color-mix(in oklab, var(--ds-color-neutral-dark-12) 16%, transparent); position: relative; }
-  .track .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 39%; border-radius: inherit; background: linear-gradient(90deg, color-mix(in oklab, var(--ds-color-accent-dark-9) 30%, transparent), var(--ds-color-accent-dark-9)); box-shadow: 0 0 12px color-mix(in oklab, var(--ds-color-accent-dark-9) 70%, transparent); }
-  .track .knob { position: absolute; left: 39%; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--ds-color-accent-dark-12); box-shadow: 0 0 0 4px color-mix(in oklab, var(--ds-color-accent-dark-9) 30%, transparent); }
-  .times { display: flex; justify-content: space-between; margin-top: var(--ds-space-8); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-body); color: var(--ds-color-text-secondary); font-variant-numeric: tabular-nums; }
+  .mix { position: absolute; top: 734px; left: var(--gutter); right: var(--gutter); height: 52px; display: flex; align-items: center; gap: var(--ds-space-12); border-top: 1px solid var(--ds-color-border-subtle); font: 400 var(--ds-font-size-17)/22px var(--ds-font-family-text); color: var(--ink-2); }
+  .mix .name { flex: 1; color: var(--ink); }
+  .mix svg { flex: none; }
+  .mix .lvl { position: relative; width: 120px; height: 4px; border-radius: 2px; background: var(--ds-color-neutral-alpha-dark-7); }
+  .mix .lvl i { display: block; width: 40%; height: 100%; border-radius: 2px; background: var(--ink); }
+  .mix .lvl b { position: absolute; top: 50%; left: 40%; width: 24px; height: 24px; margin: -12px 0 0 -12px; border-radius: var(--ds-radius-full); background: var(--ink); box-shadow: 0 1px 3px rgb(0 0 0 / .4); }
 
-  .controls { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-16) var(--ds-space-24) 0; flex: none; }
-  .play { all: unset; width: 80px; height: 80px; border-radius: var(--ds-radius-full); display: grid; place-items: center; background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
-    box-shadow: 0 0 0 8px color-mix(in oklab, var(--ds-color-accent-dark-9) 14%, transparent), 0 18px 40px -10px color-mix(in oklab, var(--ds-color-accent-dark-9) 60%, transparent); }
-  .skip { all: unset; width: 56px; height: 56px; border-radius: var(--ds-radius-full); display: grid; place-items: center; color: var(--ds-color-text-primary); position: relative; }
-  .skip em { position: absolute; font: 600 var(--ds-font-size-11)/1 var(--ds-font-family-text); font-style: normal; top: 50%; left: 50%; transform: translate(-50%, -38%); }
-  .side { all: unset; width: 44px; height: 44px; border-radius: var(--ds-radius-full); display: grid; place-items: center; color: var(--ds-color-text-secondary); }
-
-  .mix { margin-top: var(--ds-space-16); flex: none; display: flex; align-items: center; gap: var(--ds-space-12); height: 48px; padding: 0 var(--ds-space-20) 0 var(--ds-space-8); border-radius: var(--ds-radius-full); font: var(--ds-text-body-md); color: var(--ds-color-text-secondary); }
-  .mix .ic { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in oklab, var(--ds-color-accent-dark-9) 22%, transparent); color: var(--ds-color-accent-dark-11); }
-  .mix b { font-weight: 500; color: var(--ds-color-text-primary); }
-  .bars { display: flex; gap: 2px; align-items: center; height: 14px; }
-  .bars i { width: 2px; border-radius: 1px; background: var(--ds-color-accent-dark-10); }
-
-  .home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: var(--ds-color-text-primary); }
-  :focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 3px; }
+  .home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: var(--ink); }
 </style>
 </head>
 <body>
-<canvas id="sky" aria-hidden="true"></canvas>
-<div class="screen">
-  <div class="status" aria-hidden="true">
-    <time>9:41</time>
-    <div class="sys">
-      <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
-      <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.2A10.2 10.2 0 0 0 8 .7 10.2 10.2 0 0 0 .9 3.5L2 4.7a8.6 8.6 0 0 1 6-2.4Zm0 3.3c1.4 0 2.7.5 3.7 1.4l1.1-1.2A7 7 0 0 0 8 3.9a7 7 0 0 0-4.8 1.9l1.1 1.2A5.4 5.4 0 0 1 8 5.6Zm0 3.2c.6 0 1.1.2 1.5.6L8 11 6.5 9.4c.4-.4.9-.6 1.5-.6Z"/></svg>
-      <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" style="stroke: var(--ds-color-text-secondary)"/><rect x="2" y="2" width="14" height="9" rx="2.5"/><path d="M25 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" style="fill: var(--ds-color-text-secondary)"/></svg>
-    </div>
-  </div>
-
-  <div class="top">
-    <button class="round glass" aria-label="Minimise player"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
-    <div class="crumb"><b>Wind down</b><span>Night 3 of 7</span></div>
-    <button class="round glass" aria-label="More"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/></svg></button>
-  </div>
-
-  <div class="title">
-    <h1>Low tide at Merrow Bay</h1>
-    <p>Sleep story <i></i> told by Ines Calder</p>
-  </div>
-
-  <div class="orb-space" id="orbSpace">
-    <p class="cue" aria-live="polite">breathe in<small>4 · 7 · 8</small></p>
-  </div>
-
-  <div class="timer" role="timer" aria-label="18 minutes 24 seconds remaining">
-    <div class="t">18<span>:</span>24</div>
-    <div class="l">left · fades out by 23:40</div>
-  </div>
-
-  <div class="progress">
-    <div class="track" role="slider" aria-label="Position" aria-valuemin="0" aria-valuemax="1800" aria-valuenow="696" aria-valuetext="11 minutes 36 seconds of 30 minutes" tabindex="0"><div class="fill"></div><div class="knob"></div></div>
-    <div class="times"><span>11:36</span><span>30:00</span></div>
-  </div>
-
-  <div class="controls">
-    <button class="side" aria-label="Sleep timer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button>
-    <button class="skip" aria-label="Back 15 seconds"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16a9 9 0 1 0 3-6.7"/><path d="M10 4v5.3H4.7"/></svg><em>15</em></button>
-    <button class="play" aria-label="Pause"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4.5" width="4" height="15" rx="2"/><rect x="14" y="4.5" width="4" height="15" rx="2"/></svg></button>
-    <button class="skip" aria-label="Forward 15 seconds"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M25 16a9 9 0 1 1-3-6.7"/><path d="M22 4v5.3h5.3"/></svg><em>15</em></button>
-    <button class="side" aria-label="Sound mix"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 4v16M12 4v16M19 4v16"/><circle cx="5" cy="14" r="2" fill="currentColor"/><circle cx="12" cy="8" r="2" fill="currentColor"/><circle cx="19" cy="16" r="2" fill="currentColor"/></svg></button>
-  </div>
-
-  <div class="mix glass">
-    <span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 15c0 2-1 3-1 4M12 13c0 3-1.5 4-1.5 6M17 15c0 2-1 3-1 4"/><path d="M5 11a5 5 0 0 1 9.6-2A3.5 3.5 0 1 1 17 11Z"/></svg></span>
-    <span>Rain on the reed beds <b>· 40%</b></span>
-    <span class="bars" aria-hidden="true"><i style="height:6px"></i><i style="height:12px"></i><i style="height:8px"></i><i style="height:14px"></i><i style="height:5px"></i></span>
-  </div>
-  <div class="home-ind" aria-hidden="true"></div>
+<div class="art" aria-hidden="true">
+  <!-- Photo: Jörg Angeli, "Body of water at night", Unsplash (free licence), photo-1546273735-bea2e41924f1; cropped so the horizon sits at about 200 pt -->
+  <img src="https://images.unsplash.com/photo-1546273735-bea2e41924f1?rect=0,592,2668,2736&w=1170&h=1200&fit=crop&q=80&auto=format" alt="">
 </div>
-<script>
-(() => {
-  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-  const hex = h => { h = h.replace('#', ''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); };
-  const rgba = (h, a) => { const [r, g, b] = hex(h); return `rgba(${r},${g},${b},${a})`; };
-  const mix = (a, b, t) => { const A = hex(a), B = hex(b); return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join(''); };
-  // palette straight from the generated ramps
-  const N1 = css('--ds-color-neutral-dark-1'), N3 = css('--ds-color-neutral-dark-3'), N7 = css('--ds-color-neutral-dark-7'), N12 = css('--ds-color-neutral-dark-12');
-  const A7 = css('--ds-color-accent-dark-7'), A8 = css('--ds-color-accent-dark-8'), A9 = css('--ds-color-accent-dark-9'), A11 = css('--ds-color-accent-dark-11'), A12 = css('--ds-color-accent-dark-12');
-  const R5 = css('--ds-color-accent2-dark-5'), R7 = css('--ds-color-accent2-dark-7'), R9 = css('--ds-color-accent2-dark-9');
-  const L5 = css('--ds-color-accent3-dark-5'), L7 = css('--ds-color-accent3-dark-7'), L8 = css('--ds-color-accent3-dark-8');
-  const indigo = mix(N1, L7, .55), plum = mix(R7, L7, .35);
 
-  const cv = document.getElementById('sky'), dpr = Math.min(window.devicePixelRatio || 1, 3);
-  const W = 390, H = 844; cv.width = W * dpr; cv.height = H * dpr;
-  const g = cv.getContext('2d'); g.scale(dpr, dpr);
-  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+<div class="status" aria-hidden="true">
+  <time>23:22</time>
+  <div class="sys">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.2A10.2 10.2 0 0 0 8 .7 10.2 10.2 0 0 0 .9 3.5L2 4.7a8.6 8.6 0 0 1 6-2.4Zm0 3.3c1.4 0 2.7.5 3.7 1.4l1.1-1.2A7 7 0 0 0 8 3.9a7 7 0 0 0-4.8 1.9l1.1 1.2A5.4 5.4 0 0 1 8 5.6Zm0 3.2c.6 0 1.1.2 1.5.6L8 11 6.5 9.4c.4-.4.9-.6 1.5-.6Z"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" style="stroke: var(--ink-2)"/><rect x="2" y="2" width="12" height="9" rx="2.5"/><path d="M25 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" style="fill: var(--ink-2)"/></svg>
+  </div>
+</div>
 
-  const space = document.getElementById('orbSpace').getBoundingClientRect();
-  const cx = W / 2, cy = space.top + 118, R = 86, horizon = cy + R + 18;
+<div class="nav">
+  <button class="down" aria-label="Minimise player"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+  <p>Wind Down <span>· Night 3 of 7</span></p>
+  <button class="more" aria-label="More"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5.5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18.5" cy="12" r="1.6"/></svg></button>
+</div>
 
-  function sky() {
-    const lg = g.createLinearGradient(0, 0, 0, H);
-    lg.addColorStop(0, mix(N1, L5, .5)); lg.addColorStop(.2, indigo); lg.addColorStop(.4, plum); lg.addColorStop(.5, mix(R7, R9, .25));
-    lg.addColorStop(.62, plum); lg.addColorStop(.8, mix(N1, L5, .7)); lg.addColorStop(1, N1);
-    g.fillStyle = lg; g.fillRect(0, 0, W, H);
-    // horizon glow around the orb
-    const hg = g.createRadialGradient(cx, cy + 30, 10, cx, cy + 30, 330);
-    hg.addColorStop(0, rgba(A9, .5)); hg.addColorStop(.3, rgba(R9, .28)); hg.addColorStop(.65, rgba(L8, .1)); hg.addColorStop(1, rgba(L8, 0));
-    g.fillStyle = hg; g.fillRect(0, 0, W, H);
-    // the bay: darker water below a soft horizon, with the orb's reflection broken into ripples
-    const sea = g.createLinearGradient(0, horizon, 0, H);
-    sea.addColorStop(0, mix(plum, L7, .5)); sea.addColorStop(.25, mix(N1, L5, .8)); sea.addColorStop(1, N1);
-    g.fillStyle = sea; g.fillRect(0, horizon, W, H - horizon);
-    const hl = g.createLinearGradient(0, 0, W, 0);
-    hl.addColorStop(0, rgba(A11, 0)); hl.addColorStop(.5, rgba(A11, .55)); hl.addColorStop(1, rgba(A11, 0));
-    g.fillStyle = hl; g.fillRect(0, horizon - .5, W, 1);
-    seed = 21;
-    for (let y = horizon + 3; y < horizon + 120; y += 2.4) {
-      const k = (y - horizon) / 120, half = R * (0.95 - k * .55) * (0.55 + rnd() * .6);
-      const off = Math.sin(y * .21) * 6 * k;
-      const a = (1 - k) ** 1.4 * .8;
-      const lgr = g.createLinearGradient(cx - half, 0, cx + half, 0);
-      lgr.addColorStop(0, rgba(R9, 0)); lgr.addColorStop(.5, rgba(k < .3 ? A11 : A9, a)); lgr.addColorStop(1, rgba(R9, 0));
-      g.fillStyle = lgr; g.fillRect(cx - half + off, y, half * 2, 1.1 + rnd() * .8);
-    }
-    // a few faint stars in the top band
-    // stars stay out from behind text: only the outer columns, and above the title band
-    for (let i = 0; i < 90; i++) { const x = rnd() * W, y = rnd() * 330, a = rnd() * .55 * (1 - y / 330), r = rnd() * .9 + .2;
-      const nearText = (y > 56 && y < 112 && x > 120 && x < 270) || (y > 112 && y < 204 && x > 22 && x < 368) || (y > 56 && y < 106 && (x < 74 || x > 316));
-      if (nearText) continue; g.fillStyle = rgba(N12, a); g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); }
-  }
+<main>
+  <div class="story">
+    <p class="kind">Sleep story</p>
+    <h1>Low tide at Merrow Bay</h1>
+    <p class="by">Told by Oona Prentice</p>
+  </div>
 
-  function orb(t) {
-    const breath = 1 + 0.035 * Math.sin(t / 1600);
-    const r = R * breath;
-    // breath rings
-    g.save(); g.beginPath(); g.rect(0, 0, W, horizon - 1); g.clip();
-    for (let k = 1; k <= 3; k++) {
-      g.beginPath(); g.arc(cx, cy, r + k * 17 + 3 * Math.sin(t / 1600 - k * .6), 0, Math.PI * 2);
-      g.strokeStyle = rgba(A12, .17 - k * .04); g.lineWidth = 1; g.stroke();
-    }
-    g.restore();
-    // halo
-    const halo = g.createRadialGradient(cx, cy, r * .6, cx, cy, r * 2.1);
-    halo.addColorStop(0, rgba(A9, .5)); halo.addColorStop(.45, rgba(R9, .16)); halo.addColorStop(1, rgba(R9, 0));
-    g.fillStyle = halo; g.beginPath(); g.arc(cx, cy, r * 2.1, 0, Math.PI * 2); g.fill();
-    // body: soft sphere lit from the upper left
-    const body = g.createRadialGradient(cx - r * .32, cy - r * .38, r * .05, cx, cy, r);
-    body.addColorStop(0, mix(A12, '#ffffff', .45)); body.addColorStop(.3, A11); body.addColorStop(.62, A9); body.addColorStop(.86, R9); body.addColorStop(1, mix(R9, L8, .6));
-    g.save(); g.beginPath(); g.arc(cx, cy, r, 0, Math.PI * 2); g.clip();
-    g.fillStyle = body; g.fillRect(cx - r, cy - r, r * 2, r * 2);
-    // pearlescent currents: a flow field of faint strokes inside the sphere
-    g.globalCompositeOperation = 'soft-light';
-    seed = 11;
-    for (let i = 0; i < 260; i++) {
-      let x = cx + (rnd() - .5) * r * 2, y = cy + (rnd() - .5) * r * 2;
-      g.beginPath(); g.moveTo(x, y);
-      for (let s = 0; s < 40; s++) {
-        const a = Math.sin((x - cx) / 38 + t / 9000) * 1.6 + Math.cos((y - cy) / 31) * 1.3;
-        x += Math.cos(a) * 2.2; y += Math.sin(a) * 2.2; g.lineTo(x, y);
-      }
-      g.strokeStyle = rgba(i % 3 ? N12 : R9, .24); g.lineWidth = .8; g.stroke();
-    }
-    g.globalCompositeOperation = 'source-over';
-    // rim light and lower shade
-    const shade = g.createLinearGradient(0, cy - r, 0, cy + r);
-    shade.addColorStop(0, 'rgba(255,255,255,0)'); shade.addColorStop(.6, 'rgba(255,255,255,0)'); shade.addColorStop(1, rgba(L8, .45));
-    g.fillStyle = shade; g.fillRect(cx - r, cy - r, r * 2, r * 2);
-    g.restore();
-  }
+  <div class="timer" role="timer" aria-label="16 minutes 52 seconds left; the story fades out by 23:40">
+    <div class="t"><span class="num">16:52</span><small>left</small></div>
+    <p class="l">Fades out by 23:40</p>
+  </div>
 
-  function grain() {
-    const img = g.getImageData(0, 0, cv.width, cv.height), d = img.data; seed = 3;
-    for (let i = 0; i < d.length; i += 4) { const n = (rnd() - .5) * 14; d[i] += n; d[i + 1] += n; d[i + 2] += n; }
-    g.putImageData(img, 0, 0);
-  }
+  <div class="scrub">
+    <div class="track" role="slider" aria-label="Position" aria-valuemin="0" aria-valuemax="1800" aria-valuenow="788" aria-valuetext="13 minutes 8 seconds of 30 minutes" tabindex="0"><div class="fill"></div></div>
+      </div>
 
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function frame(t) { g.setTransform(dpr, 0, 0, dpr, 0, 0); seed = 7; sky(); orb(t); grain(); }
-  frame(2400);
-  // the orb breathes slowly; reduced motion keeps it still
-  if (!still) { let last = 0; const loop = t => { if (t - last > 120) { frame(2400 + t); last = t; } requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
-})();
-</script>
+  <div class="transport">
+    <button class="side on s1" aria-label="Sleep timer: fades out by 23:40"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button>
+    <button class="skip s2" aria-label="Back 15 seconds"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8.5a11 11 0 1 1-9.53 5.5"/><path d="M19.4 5 15.9 8.5l3.5 3.5"/></svg><em>15</em></button>
+    <button class="play" aria-label="Pause"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><rect x="5.5" y="4" width="4.2" height="16" rx="1.4"/><rect x="14.3" y="4" width="4.2" height="16" rx="1.4"/></svg></button>
+    <button class="skip s3" aria-label="Forward 15 seconds"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8.5a11 11 0 1 0 9.53 5.5"/><path d="M16.6 5 20.1 8.5l-3.5 3.5"/></svg><em>15</em></button>
+    <button class="side out s4" aria-label="Play on: bedroom speaker"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7.2 16.8a7.5 7.5 0 1 1 9.6 0"/><path d="M9.4 14.4a4.2 4.2 0 1 1 5.2 0"/><path d="m12 14.2 4 5.3H8Z"/></svg></button>
+  </div>
+
+  <div class="mix" role="group" aria-label="Sound mix">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 14.5a4 4 0 0 0-.6-8 5.5 5.5 0 0 0-10.6 1.6A3.3 3.3 0 0 0 7 14.5"/><path d="M8 17.5 7 20M12 16.5 11 19M16 17.5 15 20"/></svg>
+    <span class="name">Rain on the reed beds</span>
+    <span class="lvl" role="slider" aria-label="Rain volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40" aria-valuetext="40%" tabindex="0"><i></i><b></b></span>
+  </div>
+</main>
+<div class="home-ind" aria-hidden="true"></div>
 </body>
 </html>

@@ -64,5 +64,16 @@
   "verdict": "keep",
   "said": "okay",
   "date": "2026-10-14"
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "Mercury/ElevenLabs/Remote: round 1 +3/+3/+3, round 2 +3/+3/+3, round 3 +3/+3/+3, round 4 +4/+3/+2, round 5 +3/+3/+3. Passes both tests.",
+  "changed": [
+   "New concept in the same folder: Sedge payroll setup for Spokewright Cycles, step 3 of 6, pay schedule, replacing the Mossby plant stepper",
+   "Stepper rail with done-step summaries and Edit links; four frequency choices with paydays a year; this year's five paydays with approval deadlines moved around Veterans Day, Thanksgiving and Christmas",
+   "Accent orange-red to sedge green #56701A (the audit named Gusto as the look it echoed); one job: logo and the button to press",
+   "Clutter removed: rail subtitle, future-step descriptions, Book a call block, holiday column, struck date, extra save words; footer and rail rules aligned",
+   "Remaining (auditor, for the owner): grey second lines on choices and done steps, progress shown twice, a heavy table frame"
+  ]
  }
 }

@@ -1,184 +1,207 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Halden Private: home</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..600&family=Newsreader:opsz,wght@6..72,500&display=block" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-  /* Round 3. Everything reads from the generated tokens (--ds-*). Art-only values are marked ART.
-     Type roles (iOS Dynamic Type): Display 48 (custom, the one wealth figure) · Title 2 22 (wordmark, pence) ·
-     Title 3 20 (section heads) · Body 17 · Subheadline 15 · Caption 1 12 (tab labels). */
+  /* Round 4. One face (Inter, optical sizes on) at iOS Dynamic Type roles:
+     Display 40 (the one figure, Newsreader) · Title 3 20 (the amount to approve) · Body 17 · Subheadline 15 · Caption 2 11 (chart labels, tab labels). The figure is the one display moment: Newsreader 500 at 40.
+     One accent (Halden green) with one job: what you can act on (Review, the tab you are on). The chart and the numbers are ink.
+     Colors, sizes and spacing come from the generated tokens; chart geometry is drawn below. */
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: var(--ds-color-surface-sunken); }
+  html, body { background: var(--ds-color-surface-raised); }
   body {
     width: 390px; height: 844px; overflow: hidden; position: relative;
     color: var(--ds-color-text-primary);
     font: var(--ds-text-body-md);
+    font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
   }
-  .screen { position: relative; height: 100%; display: flex; flex-direction: column; }
   .num { font-variant-numeric: tabular-nums; }
+  button { all: unset; cursor: default; }
+  :focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; border-radius: 6px; }
 
   /* iOS status bar, 54 pt */
-  .status { height: 54px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-4) var(--ds-space-32) 0 var(--ds-space-40); }
-  .status time { font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); letter-spacing: -0.01em; }
-  .status .sys { display: flex; gap: var(--ds-space-6); align-items: center; }
+  .status { height: 54px; display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0 46px; }
+  .status time { font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .status .sys { display: flex; gap: 6px; align-items: center; }
   .status svg { display: block; fill: var(--ds-color-text-primary); }
 
-  /* navigation bar, 44 pt: the brand said once, two actions */
-  .nav { height: 44px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 14px 0 var(--ds-space-20); } /* 14 + the 6 pt inset of the 32 pt avatar in its 44 pt target = the 20 pt margin */
-  .mark { font: 500 var(--ds-font-size-22)/1 var(--ds-font-family-display); font-variation-settings: "opsz" 24; letter-spacing: 0; color: var(--ds-color-text-primary); }
+  /* navigation bar, 44 pt: whose money this is, search and notices */
+  .nav { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 8px 0 var(--ds-space-20); }
+  .wm { display: block; font: 600 var(--ds-font-size-17)/20px var(--ds-font-family-text); letter-spacing: -0.01em; }
+  .wm small { display: block; font: 400 var(--ds-font-size-11)/14px var(--ds-font-family-text); color: var(--ds-color-text-secondary); letter-spacing: 0; }
+  .who { display: flex; align-items: center; gap: var(--ds-space-4); text-align: left; height: 44px; font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); letter-spacing: -0.01em; }
+  .who svg { color: var(--ds-color-text-secondary); align-self: flex-start; margin-top: 5px; }
   .actions { display: flex; }
-  .icon-btn { all: unset; width: 44px; height: 44px; display: grid; place-items: center; color: var(--ds-color-text-primary); position: relative; }
-  .icon-btn .badge { position: absolute; top: 10px; right: 11px; width: 8px; height: 8px; border-radius: 50%; background: var(--ds-color-bg-accent-bold); box-shadow: 0 0 0 2px var(--ds-color-surface-sunken); }
-  .avatar { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--ds-color-bg-neutral-subtle); font: 600 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-primary); letter-spacing: 0.02em; }
+  .icon-btn { width: 44px; height: 44px; display: grid; place-items: center; color: var(--ds-color-text-primary); }
 
-  /* hero: label, figure, change */
-  .hero { padding: var(--ds-space-12) var(--ds-space-20) 0; flex: none; }
+  /* the figure */
+  .hero { padding: var(--ds-space-12) var(--ds-space-20) 0; }
   .label { font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
-  .balance { margin-top: var(--ds-space-4); font-family: var(--ds-font-family-display); font-weight: 500; font-size: var(--ds-font-size-48); /* Display, custom: one figure above Large Title 34 */ line-height: 56px; letter-spacing: -0.02em; font-variation-settings: "opsz" 14; /* a small optical size keeps the hairlines at 2-3 device px */ color: var(--ds-color-text-primary); white-space: nowrap; font-variant-numeric: lining-nums; }
-  .balance .pence { font-size: var(--ds-font-size-22); font-variation-settings: "opsz" 11; color: var(--ds-color-text-secondary); letter-spacing: 0; margin-left: 1px; }
-  .delta { margin-top: var(--ds-space-4); font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); display: flex; align-items: center; gap: var(--ds-space-6); }
-  .delta b { font-weight: 600; color: var(--ds-color-text-primary); }
+  .total { margin-top: var(--ds-space-4); font: 500 var(--ds-font-size-40)/46px Newsreader, serif; font-variation-settings: "opsz" 40; letter-spacing: -0.01em; white-space: nowrap; font-variant-numeric: lining-nums; } /* the one display moment: Newsreader, used once, for the figure only */
+  .change { margin-top: var(--ds-space-8); display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-body-sm); }
+  .gain { color: var(--ds-color-text-primary); font-weight: 500; display: inline-flex; align-items: center; gap: 2px; font-variant-numeric: tabular-nums; }
+  .period { color: var(--ds-color-text-secondary); }
 
-  .chart { position: relative; margin: var(--ds-space-16) 0 0; height: 84px; flex: none; }
-  .ends { display: flex; justify-content: space-between; padding: var(--ds-space-6) var(--ds-space-20) 0; font: 400 var(--ds-font-size-12)/1.33 var(--ds-font-family-text); color: var(--ds-color-text-secondary); flex: none; }
-  .chart svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  /* chart: trading-day closes, labelled at the start, the high and the end */
+  .chart { margin-top: var(--ds-space-12); height: 116px; position: relative; }
+  .chart svg { display: block; width: 390px; height: 116px; overflow: visible; }
+  .chart text { font: 400 var(--ds-font-size-11) var(--ds-font-family-text); fill: var(--ds-color-text-tertiary); font-variant-numeric: tabular-nums; }
 
-  /* range picker: an iOS segmented control on the 20 pt margins, 44 pt tall hit areas */
-  .range { margin: var(--ds-space-12) var(--ds-space-20) 0; height: 36px; padding: 2px; display: grid; grid-template-columns: repeat(5, 1fr); border-radius: var(--ds-radius-full); background: var(--ds-color-surface-raised); flex: none; }
-  .range button { all: unset; position: relative; display: grid; place-items: center; border-radius: var(--ds-radius-full); font: 500 var(--ds-font-size-15)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
-  .range button::after { content: ""; position: absolute; inset: -6px 0; } /* 44 pt hit area */
-  .range [aria-pressed="true"] { background: var(--ds-color-bg-neutral-subtle-pressed); color: var(--ds-color-text-primary); font-weight: 600; }
 
-  /* sections */
-  .sec { padding: 0 var(--ds-space-20); flex: none; }
-  .sec-head { display: flex; justify-content: space-between; align-items: center; height: 44px; }
-  .sec-head h2 { font: 600 var(--ds-font-size-20)/1.25 var(--ds-font-family-text); letter-spacing: -0.01em; }
-  .sec-head a { font: var(--ds-text-body-sm); color: var(--ds-color-text-link); text-decoration: none; height: 44px; display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+  /* sections divided by full-width hairlines */
+  .sep { height: 1px; background: var(--ds-color-border-separator); margin-top: var(--ds-space-20); }
+  .sec { padding: 0 var(--ds-space-20); }
+  .sec-head { height: 32px; display: flex; align-items: baseline; padding-top: 10px; justify-content: space-between; padding-bottom: var(--ds-space-4); }
+  .sec-head h2 { font: 600 var(--ds-font-size-17)/22px var(--ds-font-family-text); letter-spacing: -0.01em; }
+  .sec-head .aside { font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
 
-  /* the one thing a private bank asks of you today */
-  .approve { display: flex; align-items: center; gap: var(--ds-space-16); padding: var(--ds-space-12) var(--ds-space-16); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
-  .approve .what { flex: 1; min-width: 0; }
-  .eyebrow { display: block; font: 400 var(--ds-font-size-15)/1.33 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
-  .what b { display: block; font: 500 var(--ds-font-size-17)/1.2941 var(--ds-font-family-text); color: var(--ds-color-text-primary); }
-  .what span:not(.eyebrow) { display: block; font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); margin-top: 2px; }
-  .approve .what b { margin-top: 2px; }
-  .cta { all: unset; flex: none; height: 36px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font: 600 var(--ds-font-size-15)/36px var(--ds-font-family-text); position: relative; }
-  .cta::after { content: ""; position: absolute; inset: -4px; } /* 44 pt hit area */
-  .count { font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
-  .amt { text-align: right; font: var(--ds-text-body-md); font-variant-numeric: tabular-nums; color: var(--ds-color-text-primary); white-space: nowrap; }
-  .amt small { display: block; font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .row { display: flex; align-items: center; gap: var(--ds-space-12); min-height: 58px; padding: var(--ds-space-8) 0; }
+  .row + .row { border-top: 0.34px solid var(--ds-color-border-default); }
+  .what { flex: 1; min-width: 0; }
+  .what b { display: block; font: 400 var(--ds-font-size-17)/22px var(--ds-font-family-text); letter-spacing: -0.01em; }
+  .what span { display: block; font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+  .amt { text-align: right; font: 500 var(--ds-font-size-17)/22px var(--ds-font-family-text); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .amt span { display: block; font: var(--ds-text-body-sm); font-weight: 400; color: var(--ds-color-text-secondary); letter-spacing: 0; }
+  .chev { flex: none; color: var(--ds-color-text-tertiary); margin: 0 -4px 0 -4px; }
 
-  .row { display: flex; align-items: center; gap: var(--ds-space-12); min-height: 64px; border-bottom: 1px solid var(--ds-color-border-subtle); }
-  .glyph { width: 36px; height: 36px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
-  .row .what { flex: 1; min-width: 0; }
-  .row.last { border-bottom: 0; }
 
-  /* tab bar: 49 pt + home indicator, labelled, translucent over the list */
-  .tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: 83px; padding: var(--ds-space-6) var(--ds-space-8) 0; display: flex; justify-content: space-around; align-items: flex-start;
-    background: color-mix(in oklab, var(--ds-color-surface-sunken) 86%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid var(--ds-color-border-subtle); }
-  .tab { all: unset; flex: 1; min-height: 48px; display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--ds-color-text-tertiary);
-    font: 500 var(--ds-font-size-12)/1.2 var(--ds-font-family-text); } /* HIG Caption 1 */
-  .tab[aria-current="page"] { color: var(--ds-color-text-accent); }
+
+  /* the one thing the bank needs from you today */
+  .ask { margin: var(--ds-space-12) var(--ds-space-20) 0; padding: var(--ds-space-12) var(--ds-space-16); border-radius: var(--ds-radius-12); background: var(--ds-color-surface-raised); border: 0.34px solid var(--ds-color-border-default); display: flex; align-items: center; gap: var(--ds-space-12); }
+  .ask .what b { margin: 0; }
+  .ask .what b { font: 600 var(--ds-font-size-20)/25px var(--ds-font-family-text); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+  .review { flex: none; height: 34px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font: 600 var(--ds-font-size-15)/34px var(--ds-font-family-text); position: relative; }
+  .review::after { content: ""; position: absolute; inset: -5px -2px; } /* 44 pt hit area */
+
+  /* tab bar: 49 pt + home indicator, translucent over the list */
+  .edge { position: absolute; left: 0; right: 0; bottom: 0; height: 104px; background: linear-gradient(rgb(255 255 255 / 0), rgb(255 255 255 / 1) 30%); pointer-events: none; } /* iOS scroll-edge effect under the floating bar */
+  .tabbar { position: absolute; left: 20px; right: 20px; bottom: 28px; height: 62px; padding: 4px; display: flex; border-radius: 31px;
+    background: color-mix(in oklab, var(--ds-color-surface-raised) 72%, transparent); backdrop-filter: blur(18px) saturate(1.6); -webkit-backdrop-filter: blur(18px) saturate(1.6);
+    box-shadow: 0 0 0 0.5px rgb(0 0 0 / .1), 0 8px 24px rgb(0 0 0 / .08); } /* iOS 26 floating tab bar */
+  .tab { flex: 1; height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 27px; color: var(--ds-color-text-secondary); font: 500 var(--ds-font-size-11)/13px var(--ds-font-family-text); }
+  .tab[aria-current="page"] { color: var(--ds-color-text-accent); background: var(--ds-color-bg-neutral-subtle); font-weight: 600; }
   .home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: var(--ds-color-text-primary); }
-  :focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
+/* one icon stroke: every line icon draws at 1.5 pt on screen, whatever its size */
+svg[stroke="currentColor"] { stroke-width: 1.5px; }
+svg[stroke="currentColor"] * { vector-effect: non-scaling-stroke; }
 </style>
 </head>
 <body>
-<div class="screen">
-  <div class="status" aria-hidden="true">
-    <time>9:41</time>
-    <div class="sys">
-      <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
-      <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.2A10.2 10.2 0 0 0 8 .7 10.2 10.2 0 0 0 .9 3.5L2 4.7a8.6 8.6 0 0 1 6-2.4Zm0 3.3c1.4 0 2.7.5 3.7 1.4l1.1-1.2A7 7 0 0 0 8 3.9a7 7 0 0 0-4.8 1.9l1.1 1.2A5.4 5.4 0 0 1 8 5.6Zm0 3.2c.6 0 1.1.2 1.5.6L8 11 6.5 9.4c.4-.4.9-.6 1.5-.6Z"/></svg>
-      <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" style="stroke: var(--ds-color-text-secondary)"/><rect x="2" y="2" width="20" height="9" rx="2.5"/><path d="M25 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" style="fill: var(--ds-color-text-secondary)"/></svg>
-    </div>
+<div class="status" aria-hidden="true">
+  <time>9:41</time>
+  <div class="sys">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.2A10.2 10.2 0 0 0 8 .7 10.2 10.2 0 0 0 .9 3.5L2 4.7a8.6 8.6 0 0 1 6-2.4Zm0 3.3c1.4 0 2.7.5 3.7 1.4l1.1-1.2A7 7 0 0 0 8 3.9a7 7 0 0 0-4.8 1.9l1.1 1.2A5.4 5.4 0 0 1 8 5.6Zm0 3.2c.6 0 1.1.2 1.5.6L8 11 6.5 9.4c.4-.4.9-.6 1.5-.6Z"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" style="stroke: var(--ds-color-text-tertiary)"/><rect x="2" y="2" width="20" height="9" rx="2.5"/><path d="M25 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" style="fill: var(--ds-color-text-tertiary)"/></svg>
   </div>
-
-  <header class="nav">
-    <div class="mark">Halden Private</div>
-    <div class="actions">
-      <button class="icon-btn" aria-label="Notifications">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15L6 16Z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg>
-      </button>
-      <button class="icon-btn" aria-label="Eleanor Voss, profile"><span class="avatar">EV</span></button>
-    </div>
-  </header>
-
-  <section class="hero" aria-labelledby="tw">
-    <p class="label" id="tw">Total wealth · at close, 13 Oct</p>
-    <h1 class="balance" aria-label="4,862,310 pounds 54">£4,862,310<span class="pence">.54</span></h1>
-    <p class="delta"><b class="num">+£38,214.08 (0.79%)</b> past month</p>
-  </section>
-
-  <div class="chart" aria-label="Total wealth from 14 September to 13 October, rising from £4,824,096 to £4,862,311; flat at weekends">
-    <svg id="spark" viewBox="0 0 390 84" preserveAspectRatio="none"></svg>
-  </div>
-  <div class="ends" aria-hidden="true"><span>14 Sep</span><span>13 Oct</span></div>
-
-  <div class="range" role="group" aria-label="Chart range">
-    <button aria-pressed="false">1W</button>
-    <button aria-pressed="true">1M</button>
-    <button aria-pressed="false">3M</button>
-    <button aria-pressed="false">1Y</button>
-    <button aria-pressed="false">All</button>
-  </div>
-
-  <section class="sec" aria-labelledby="ap" style="margin-top: var(--ds-space-16)">
-    <div class="approve">
-      <span class="what"><span class="eyebrow" id="ap">Approve by Fri 16 Oct</span><b class="num">£150,000.00</b><span>To Cardew Aske LLP</span><span>Completion · from •••• 0921</span></span>
-      <button class="cta">Review</button>
-    </div>
-  </section>
-
-  <section class="sec" aria-labelledby="acc" style="margin-top: var(--ds-space-8)">
-    <div class="sec-head"><h2 id="acc">Holdings</h2><span class="count">3 accounts</span></div>
-    <div class="row">
-      <span class="glyph"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 4l9 5.5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/></svg></span>
-      <span class="what"><b>Current account</b><span>Sterling •••• 0921</span></span>
-      <span class="amt">£182,440.12<small>−£3,612.40</small></span>
-    </div>
-    <div class="row">
-      <span class="glyph"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v8.5h8.5"/><path d="M20.3 13.6A8.5 8.5 0 1 1 10.4 3.7"/></svg></span>
-      <span class="what"><b>Managed portfolio</b><span>Balanced mandate</span></span>
-      <span class="amt">£3,435,092.17<small>+£37,048.23</small></span>
-    </div>
-    <div class="row last">
-      <span class="glyph"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg></span>
-      <span class="what"><b>Reserve deposit</b><span>95-day notice · 4.85%</span></span>
-      <span class="amt">£1,244,778.25<small>+£4,778.25</small></span>
-    </div>
-    <div class="sec-head" style="margin-top: var(--ds-space-16)"><h2>Recent activity</h2><span class="count">13 Oct</span></div>
-  </section>
-
-  <nav class="tabbar" aria-label="Main">
-    <button class="tab" aria-current="page"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20h-5v-6H9v6H4z"/></svg>Home</button>
-    <button class="tab"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3.5v8.5h8.5"/><path d="M20.3 13.6A8.5 8.5 0 1 1 10.4 3.7"/></svg>Wealth</button>
-    <button class="tab"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h14l-3-3M20 16H6l3 3"/></svg>Pay</button>
-    <button class="tab"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16M6 18a6 6 0 0 1 12 0M12 9V7M10 7h4"/></svg>Concierge</button>
-  </nav>
-  <div class="home-ind" aria-hidden="true"></div>
 </div>
+
+<header class="nav">
+  <button class="who" aria-label="Halden Private, Voss household, switch">
+    <span class="wm">Halden Private<small>Voss household</small></span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+  </button>
+  <div class="actions">
+    <button class="icon-btn" aria-label="Search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
+    <button class="icon-btn" aria-label="Messages from your banker"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 3.5V17A2.5 2.5 0 0 1 4 14.5z"/></svg></button>
+  </div>
+</header>
+
+<section class="hero" aria-labelledby="tw">
+  <p class="label" id="tw">Total wealth · at close, Wed 14 Oct</p>
+  <h1 class="total">£6,048,680</h1>
+  <p class="change">
+    <span class="gain"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>£47,497 (0.79%)</span>
+    <span class="period">past month</span>
+  </p>
+</section>
+
+<div class="chart" role="img" aria-label="Total wealth at each trading-day close from Mon 14 September to Wed 14 October: from £6,001,183, a high of £6,062,468 on 6 October, to £6,048,680.">
+  <svg id="chart" viewBox="0 0 390 116"></svg>
+</div>
+
+<div class="ask" role="group" aria-labelledby="ap">
+  <span class="what"><span id="ap">Payment to Cardew Aske LLP</span><b>£150,000.00</b><span>House purchase · by Fri 16 Oct</span></span>
+  <button class="review">Review</button>
+</div>
+
+<section class="sec" aria-labelledby="acc" style="margin-top: var(--ds-space-12)">
+  <div class="sec-head"><h2 id="acc">Accounts</h2><span class="aside">Past month</span></div>
+  <div class="row">
+    <span class="what"><b>Current account</b><span>Sterling •• 0921</span></span>
+    <span class="amt">£182,440.12<span>−£3,612.40</span></span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+  </div>
+  <div class="row">
+    <span class="what"><b>Managed portfolio</b><span>Balanced mandate</span></span>
+    <span class="amt">£3,435,092.17<span>+£37,048.23</span></span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+  </div>
+  <div class="row">
+    <span class="what"><b>Reserve deposit</b><span>95-day notice · 4.85%</span></span>
+    <span class="amt">£1,244,943.01<span>+£4,943.01</span></span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+  </div>
+  <div class="row">
+    <span class="what"><b>Pension</b><span>SIPP · growth mandate</span></span>
+    <span class="amt">£1,186,204.66<span>+£9,118.37</span></span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="rp" style="margin-top: var(--ds-space-4)">
+  <div class="sec-head"><h2 id="rp">Recent payments</h2></div>
+  <div class="row">
+    <span class="what"><b>Council Tax</b><span>Direct Debit · from •• 0921</span></span>
+    <span class="amt">−£268.42<span>Paid</span></span>
+  </div>
+</section>
+
+<div class="edge" aria-hidden="true"></div>
+<nav class="tabbar" aria-label="Main">
+  <button class="tab" aria-current="page"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.2 12 4l8 6.2V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/></svg>Home</button>
+  <button class="tab"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5h16"/><path d="M5 15.5 9.5 11l3.5 3 6-6.5"/><path d="M15 7.5h4v4"/></svg>Wealth</button>
+  <button class="tab"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 8.5h14l-3.5-3.5"/><path d="M19.5 15.5h-14l3.5 3.5"/></svg>Payments</button>
+  <button class="tab"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h7.5L18.5 7.5V20a.5.5 0 0 1-.5.5H7a1.5 1.5 0 0 1-1.5-1.5V5A1.5 1.5 0 0 1 7 3.5Z"/><path d="M14 3.5V8h4.5M9 12.5h6M9 16h6"/></svg>Documents</button>
+  <button class="tab"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.75"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></svg>Banker</button>
+</nav>
+<div class="home-ind" aria-hidden="true"></div>
+
 <script>
-  // Daily closing values in £ thousands, Mon 14 Sep to Tue 13 Oct (deterministic). Weekends are flat: markets are shut.
-  const v = [4824.10,4825.15,4830.26,4831.46,4832.20,4832.20,4832.20,4829.69,4830.96,4839.25,4843.90,4851.78,4851.78,4851.78,4855.50,4860.00,4863.38,4856.97,4863.90,4863.90,4863.90,4868.98,4874.02,4867.48,4860.66,4858.36,4858.36,4858.36,4858.29,4862.31];
-  const W = 390, H = 84, padT = 8, padB = 8, min = Math.min(...v), max = Math.max(...v);
-  const x0 = 20, x1 = W - 25;
-  const pts = v.map((y, i) => [x0 + i / (v.length - 1) * (x1 - x0), padT + (1 - (y - min) / (max - min)) * (H - padT - padB)]);
-  const last = pts[pts.length - 1];
-  const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  // Total wealth at each trading-day close in £ thousands, Mon 14 Sep to Wed 14 Oct 2026 (23 closes; holdings are
+  // valued at market close, so weekends are skipped). First and last match the page:
+  // 6,001.18 = 6,048,679.96 − 47,497.21, and 6,048.68 = the total.
+  const v = [6001.18,6003.90,6010.77,6007.74,6013.37,
+             6008.73,6016.83,6023.46,6030.26,6034.53,
+             6039.30,6044.74,6050.74,6043.63,6049.01,
+             6055.76,6062.468,6056.87,6047.28,6042.89,
+             6045.55,6041.15,6048.68];
   const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-  const startY = pts[0][1];
-  document.getElementById('spark').innerHTML = `
-    <line x1="${x0}" x2="${x1}" y1="${startY}" y2="${startY}" stroke="${css('--ds-color-neutral-dark-8')}" stroke-dasharray="2 4" stroke-width="1"/>
-    <path d="${d}" fill="none" stroke="${css('--ds-color-neutral-dark-12')}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-    <circle cx="${last[0]}" cy="${last[1]}" r="4.5" fill="${css('--ds-color-neutral-dark-12')}" stroke="${css('--ds-color-neutral-dark-1')}" stroke-width="2"/>`;
+  const X0 = 20, X1 = 370, T = 20, B = 96, lo = 5941, hi = 6066; // floor about 1% under the opening value
+  const x = i => X0 + i / (v.length - 1) * (X1 - X0);
+  const y = val => T + (hi - val) / (hi - lo) * (B - T);
+  const P = v.map((val, i) => [x(i), y(val)]);
+  // monotone cubic (Fritsch-Carlson): smooth, never overshoots a close
+  const n = P.length, d = [], m = [];
+  for (let i = 0; i < n - 1; i++) d.push((P[i + 1][1] - P[i][1]) / (P[i + 1][0] - P[i][0]));
+  m[0] = d[0]; m[n - 1] = d[n - 2];
+  for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2;
+  for (let i = 0; i < n - 1; i++) { if (d[i] === 0) { m[i] = m[i + 1] = 0; continue; } const a = m[i] / d[i], b = m[i + 1] / d[i], h = a * a + b * b; if (h > 9) { const t = 3 / Math.sqrt(h); m[i] = t * a * d[i]; m[i + 1] = t * b * d[i]; } }
+  let line = `M${P[0][0].toFixed(2)} ${P[0][1].toFixed(2)}`;
+  for (let i = 0; i < n - 1; i++) { const dx = (P[i + 1][0] - P[i][0]) / 3; line += ` C${(P[i][0] + dx).toFixed(2)} ${(P[i][1] + m[i] * dx).toFixed(2)} ${(P[i + 1][0] - dx).toFixed(2)} ${(P[i + 1][1] - m[i + 1] * dx).toFixed(2)} ${P[i + 1][0].toFixed(2)} ${P[i + 1][1].toFixed(2)}`; }
+  const ink = css('--ds-color-text-primary'), base = css('--ds-color-border-default');
+  const last = P[n - 1];
+  let s = `<defs><linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${ink}" stop-opacity=".07"/><stop offset="1" stop-color="${ink}" stop-opacity="0"/></linearGradient></defs>`;
+  s += `<path d="${line} L${X1} ${B} L${X0} ${B} Z" fill="url(#f)"/>`;
+  s += `<line x1="${X0}" x2="${X1}" y1="${B}" y2="${B}" stroke="${base}" stroke-width=".34"/>`;
+  s += `<path d="${line}" fill="none" stroke="${ink}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${last[0]}" cy="${last[1]}" r="3.5" fill="${ink}"/>`;
+  const peak = P[16];
+  s += `<text x="${peak[0]}" y="${peak[1] - 9}" text-anchor="middle">£6,062,468 · 6 Oct</text>`;
+  s += `<text x="${X0}" y="${B + 16}">14 Sep · £6,001,183</text><text x="${X1}" y="${B + 16}" text-anchor="end">14 Oct</text>`;
+  document.getElementById('chart').innerHTML = s;
 </script>
 </body>
 </html>

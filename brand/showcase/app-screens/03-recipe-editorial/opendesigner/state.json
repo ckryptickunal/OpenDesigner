@@ -4,7 +4,7 @@
   "engine_version": "1.0.0",
   "levers_version": "levers/1.0 2026-09-23",
   "mode": "standard",
-  "name": "Larder",
+  "name": "Sorrelby",
   "summary": "",
   "context": {
     "product": "",
@@ -57,16 +57,16 @@
       "decision": "D-0021"
     },
     "colorfulness": {
-      "value": 65,
+      "value": 30,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0015"
+      "decision": "D-0065"
     },
     "warmth": {
-      "value": 55,
+      "value": 30,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0052"
+      "decision": "D-0064"
     }
   },
   "preset": null,
@@ -78,10 +78,10 @@
     "brandColor": "#c8401f",
     "primaryActionColor": null,
     "focusColor": null,
-    "neutralBase": "#8C8984",
+    "neutralBase": "#85827E",
     "contrastTarget": "AA",
-    "textFace": "Schibsted Grotesk",
-    "displayFace": "Literata",
+    "textFace": "Instrument Sans",
+    "displayFace": "Source Serif 4",
     "baseSize": 17,
     "spaceUnit": 4,
     "platforms": [
@@ -672,8 +672,8 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "186f5cb081349427",
-    "PRODUCT.md": "48fc2f32c51eeb5d"
+    "DESIGN.md": "731a6cfb954eebed",
+    "PRODUCT.md": "ec39cb5950bda502"
   },
   "exports": {
     "prefix": "ds",

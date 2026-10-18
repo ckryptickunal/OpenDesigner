@@ -608,3 +608,113 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 ## D-0055 · overrides.text.headline.md = {"fontFamily": "{font.family.display}", "fontSize": "{font.size.34}", "fontWeight": "{font.weight.heading}", "letterSpacing": {"value": 0.0, "unit": "em"}, "lineHeight": 1.2059}
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: HIG Large Title (34/41)
+
+## D-0056 · raw.textFace = "Inter"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0019 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a photo-led player; SF-like UI face
+- previous value: "Instrument Sans"
+
+## D-0057 · raw.displayFace = "Source Serif 4"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0018 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a photo-led player; a book serif for the title and timer, replacing Instrument Serif
+- previous value: "Instrument Serif"
+
+## D-0058 · raw.fontLicence = {"web": true, "app": true, "selfHost": true}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Inter and Source Serif 4 are SIL OFL
+- previous value: {"web": true, "app": true, "selfHost": true}
+
+## D-0059 · raw.neutralBase = "#1C2430"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0013 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a photo-led player; slate night instead of violet-indigo (no violet AI glow)
+- previous value: "#231E4A"
+
+## D-0060 · raw.accentCount = 1
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: one accent, one job: the sleep timer
+- previous value: 3
+
+## D-0061 · raw.secondaryColors = []
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0034 · source_ref: none
+- reason: rose and lavender sky ramps no longer used: the sky is a photograph
+- previous value: ["#C77DA8", "#7E6CC9"]
+
+## D-0062 · raw.brandColor = "#E8A48A"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0012 · source_ref: none
+- reason: brand peach kept as typed
+- previous value: "#E8A48A"
+
+## D-0063 · dials.expression = 45
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0023 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a photo-led player
+- previous value: 75
+
+## D-0064 · dials.brandPresence = 40
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0024 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a photo-led player
+- previous value: 65
+
+## D-0065 · dials.colorfulness = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0029 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a photo-led player
+- previous value: 60
+
+## D-0066 · dials.depth = 55
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0031 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a photo-led player
+- previous value: 90
+
+## D-0067 · dials.energy = 5
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0026 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a photo-led player
+- previous value: 5
+
+## D-0068 · dials.density = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0025 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a photo-led player
+- previous value: 15
+
+## D-0069 · overrides.font.size.11 = {"value": 11, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0037 · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 1, and the 76 pt timer
+- previous value: {"value": 11, "unit": "px"}
+
+## D-0070 · overrides.font.size.13 = {"value": 13, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0038 · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 1, and the 76 pt timer
+- previous value: {"value": 13, "unit": "px"}
+
+## D-0071 · overrides.font.size.15 = {"value": 15, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0039 · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 1, and the 76 pt timer
+- previous value: {"value": 15, "unit": "px"}
+
+## D-0072 · overrides.font.size.17 = {"value": 17, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0040 · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 1, and the 76 pt timer
+- previous value: {"value": 17, "unit": "px"}
+
+## D-0073 · overrides.font.size.28 = {"value": 28, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0043 · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 1, and the 76 pt timer
+- previous value: {"value": 28, "unit": "px"}
+
+## D-0074 · overrides.font.size.76 = {"value": 76, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 1, and the 76 pt timer
+- new dimension token in primitives.tokens.json
+
+## D-0075 · raw.textFace = "Albert Sans"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0056 · source_ref: none
+- reason: round 4 audit 3: Inter with Source Serif reads as the default AI pairing; Albert Sans (OFL) is quieter and less common
+- previous value: "Inter"
+
+## D-0076 · overrides.font.size.112 = {"value": 112, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 4 audit 3: the time left becomes one confident number, like 172 and 14A on the screens the owner likes
+- new dimension token in primitives.tokens.json
+
+## D-0077 · raw.displayFace = "Albert Sans"
+- set_by: chosen · locked: no · date: 2026-10-18 · supersedes: D-0057 · source_ref: none
+- reason: round 4 audit 5: a sans title beside serif numerals read as an unresolved mix, and a big serif countdown under a night photo is Insight Timer's signature; one face for everything read or tapped (PRESENTATION.md, app screens)
+- previous value: "Source Serif 4"

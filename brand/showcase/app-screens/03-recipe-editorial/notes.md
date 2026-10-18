@@ -1,5 +1,7 @@
 # 03 · Larder: recipe detail
 
+Gallery: Sorrelby is a fictional cooking quarterly turned into an app: one recipe, read like a magazine page.
+
 ## Direction
 Larder is a fictional cooking quarterly turned into an app: recipes read like a magazine spread, with one big plate image, a strong serif headline, and the practical parts (ingredient checklist, step timer) set like good print furniture. Warm off-white paper, ink, tomato red, an olive check. Feel words: **warm, editorial, rich** ("editorial" is not in the engine's feel list).
 
@@ -81,3 +83,34 @@ The first version used a still I painted in canvas 2D from `paint.py brief --slo
 **Fresh-eyes audit** (fresh-context agent, against the B2B product screens and the three references): **3/5** ("a recipe template; the running timer contradicts the page; two accent jobs; wasted top"), then **3/5** after the first rework (fade made an unticked row look ticked; status strip; widowed "and"), then **4/5** after the timeline and full-bleed photo, with three polish items (waiting segments too faint, status-bar margin, "per serving"), all fixed after it.
 
 **Checks:** `engine.py build` passes (1 warning: 12 text sizes from the old formula steps). `preflight.py html`: 1 error, "Literata has no @font-face" (Google Fonts `<link>`). `check_dates.py --year 2026`: passes (no dates on the page).
+
+## Round 4 (owner review, 2026-10-15)
+**What he said:** "None of them should feel like they are from a vibe coded app or a cheap Chinese app" (all app screens), after "better fonts, better spacing" for this one. Round 3 still read as a template: a 6-step bar with a legend, checkbox rows, the photo credit as a body line under the title, terracotta on a cream page, and a full-width pill with three ingredients above it.
+
+**The one idea:** a saved recipe, read before you start: what it is, how long, what you need.
+
+**Name:** Larder is a live App Store recipe app ("Larder: Family Meal Planner"), so the brand is now **Sorrelby** (`set name`). Potwell was two letters from Ostwell (`styles/02`) and Saltmoor one letter from Saltmoore, a real hotel with restaurants; both were dropped. The brand shows only in the page title and the save button's label.
+
+**What changed (rebuilt in place):**
+- **Fonts.** Source Serif 4 at display optical size for the title (Large Title 34, weight 400), the section head and the headnote; Instrument Sans for everything read or tapped. Both set through the engine (`raw.displayFace`, `raw.textFace`).
+- **The recipe matches the photo.** The pot shows butter beans, red pepper strips, a mint leaf and flatbreads, so the recipe is now "Butter beans with red peppers and tomato" with those ingredients; the old "burnt tomatoes" title and its list did not match.
+- **Spacing and structure.** 20 pt margins on a 4 pt grid. Title, byline ("By Hester Bryce · Autumn issue"), a three-line serif headnote in the quarterly's voice, a three-column fact row (Total 50 min · Hands-on 25 min · Washing up 1 pot) between hairlines, then "Ingredients 8" with a bordered servings stepper (44 pt targets) and a quantity column, without row rules, whose names line up with the second fact column.
+- **One accent, one job:** tomato red only on "Start cooking · 6 steps", in a blurred bottom bar the list scrolls under; three whole rows sit above it.
+- **Mid-task:** the recipe is saved (filled bookmark). The photo credit moved to the foot of the page.
+- Icons at one 1.5 pt stroke; the page is white, the warmth comes from the photo.
+
+**Numbers:** 8 ingredients (2 × 700 g jars of butter beans, 2 red peppers, 600 g ripe tomatoes, 6 garlic cloves, 4 tbsp olive oil, 1 tsp smoked paprika, 1 bunch mint, 4 flatbreads); 3 are above the bar and the rest scroll. Method: slice (5), soften the peppers (10), garlic, paprika and tomatoes (5), simmer with the beans (20), warm the flatbreads (5), rest and finish with mint (5) = 50 min in 6 steps; hands-on is steps 1, 2, 3 and 5 = 25 min.
+
+**Type scale (iOS roles):** Large Title 34 (title) · Title 2 22 (section head) · Body 17 (headnote in the serif, rows, fact values, the action) · Subheadline 15 (byline, servings, step count) · Footnote 13 (fact labels, credit). Five sizes.
+
+**Contrast over the photo** (text hidden, against the brightest 5% of pixels behind it): clock 6.0:1, status icons 5.8:1.
+
+**Engine (this round):** `set raw.displayFace "Source Serif 4"`, `set raw.textFace "Instrument Sans"`, `set raw.neutralBase "#85827E"`, `dials.warmth 30`, `dials.colorfulness 30`, `set name "Sorrelby"`, then `build` (passes; 1 warning: 12 text sizes from old formula steps). `preflight.py html`: 0 errors, 0 warnings.
+
+**Blind pairwise test** (same method as `app-screens/01`). References: Julienne https://mobbin.com/screens/336f3aac-22b0-4c0f-9b23-b4f7de9e0882, NYT Cooking https://mobbin.com/screens/dab36560-7c32-4d44-842c-993760d7aad1, Noom https://mobbin.com/screens/b93dcf56-1078-493d-9977-469355ca45ee.
+- Round 1: ours won by 2 (Julienne) and 3 (Noom, NYT Cooking; a second NYT screen with a popover also lost by 3).
+- Rounds 2, 3 and the final round: ours won all three, by 3 to 4.
+
+**Fresh-eyes audit:** **3, 3, 3, 4** over four rounds. It caught that the photo did not match the recipe (the pot holds pepper strips, a mint leaf and flatbreads), the credit over the photo at 2.4 to 2.8:1, a reference followed too closely (Julienne's fact row and bottom bar), a half-faded row under the bar, and that Larder is a real app. The last round's five polish items (stepper, edge alignment, the bar's rule, nav insets, "Autumn issue") were applied after it.
+
+**Checks:** `check_dates.py`: passes (no dates on the page). `check_names.py`: 0 errors; its "new" words are Hands-on (a label) and Unsplash (a real service, credited). Contrast over the photo: clock 6.2:1, status icons 5.0:1. Shot re-rendered at 390 × 844, 3x.

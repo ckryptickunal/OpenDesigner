@@ -60,5 +60,16 @@
   "verdict": "keep",
   "said": "the one web component that is not ugly",
   "date": "2026-10-14"
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "Before the polish (the spec sheet): Magnific -3, Mintlify +2, v0 -2, so it failed. After: round 2 +3/+2/+2, round 3 +2/+3/+2, round 4 +2/+3/+2 (ours minus shipped, 1 to 5, fresh judges, sides random). Passes.",
+  "changed": [
+   "Spec-sheet framing removed: header tags, five numbered margin notes, the states column, the footnote citing STD-when-to-animate",
+   "Margin's own chrome added: binder with chapters and word counts, chapter 3 filling the editor, a 64% white veil over the whole window",
+   "Palette kept (scope chip, spaced-caps labels with counts, ink rule, switch row, footer keycaps, IBM Plex Sans with Newsreader); widened to 640 px over the manuscript column",
+   "Polish: match by weight only, row shortcuts as plain glyphs, ⌥⌘H to ⌥⌘R (macOS clash), section break to ⇧⌘↵, drafts show word counts, Shipwreck scene renamed Shore lamp scene, stray revision rule removed",
+   "Fresh audits 3.5, 4, 4; remaining notes left for the owner: palette covers about 22% of the frame, the black switch outweighs the selected row, no visible caret"
+  ]
  }
 }

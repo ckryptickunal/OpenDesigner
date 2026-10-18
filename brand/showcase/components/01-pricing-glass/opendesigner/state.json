@@ -26,29 +26,29 @@
   },
   "dials": {
     "expression": {
-      "value": 85,
+      "value": 45,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0017"
+      "decision": "D-0033"
     },
     "brandPresence": null,
     "density": {
+      "value": 60,
+      "set_by": "delegated",
+      "detached": true,
+      "decision": "D-0038"
+    },
+    "energy": {
       "value": 35,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0018"
-    },
-    "energy": {
-      "value": 55,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0021"
+      "decision": "D-0035"
     },
     "roundness": {
-      "value": 62,
+      "value": 45,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0019"
+      "decision": "D-0036"
     },
     "depth": {
       "value": 35,
@@ -57,16 +57,16 @@
       "decision": "D-0031"
     },
     "colorfulness": {
-      "value": 82,
+      "value": 40,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0015"
+      "decision": "D-0034"
     },
     "warmth": {
-      "value": 62,
+      "value": 25,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0020"
+      "decision": "D-0037"
     }
   },
   "preset": null,
@@ -82,9 +82,9 @@
     "focusColor": null,
     "neutralBase": null,
     "contrastTarget": "AA",
-    "textFace": "Geist",
-    "displayFace": "Instrument Serif",
-    "baseSize": null,
+    "textFace": "Instrument Sans",
+    "displayFace": "=textFace",
+    "baseSize": 14,
     "spaceUnit": 4,
     "platforms": [
       "web"
@@ -393,7 +393,7 @@
     "Q-color-09": {
       "value": "cool",
       "set_by": "delegated",
-      "decision": "D-0026",
+      "decision": "D-0041",
       "locked": false
     },
     "Q-depth-01": {
@@ -560,7 +560,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "15c818c733d01ed9",
+    "DESIGN.md": "7c78f65db94918c1",
     "PRODUCT.md": "a7b413bd7bd8da82"
   },
   "exports": {

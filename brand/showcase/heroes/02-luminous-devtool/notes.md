@@ -1,5 +1,7 @@
 # 02 Orrery: luminous dev-tool hero
 
+Gallery: Nearmost is a fictional open-source vector database.
+
 ## Direction
 Orrery is a fictional open-source vector database. Its audience is backend and ML engineers who judge a tool by its numbers and its code sample before its adjectives. The hero is a night sky: an embedding "galaxy" drawn in canvas, a bright query star joined to its 8 nearest neighbours inside orrery rings, and the product floating in front with real depth (a results table, the query in code, a latency chip), each panel at a different distance. Feel words: **techy, futuristic, precise** ("precise" is not in the engine's word list; it asked, which is the designed behaviour).
 

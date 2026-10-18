@@ -1,5 +1,7 @@
 # 05 · Toast stack (Kinroom)
 
+Gallery: Panelwise is a fictional hiring tool; three toasts stack over its candidate pipeline, the last with Undo.
+
 ## Direction
 Kinroom is a fictional team chat app. Toasts here confirm small things you just did (sent, deleted, saved), bring you a mention, or tell you an upload failed, and each one offers one way back: Undo, Retry or Reply. The mood is a soft lilac fog with white, pillowy toasts stacked in depth, ink text, one iris accent and mint for success. Built after the owner's type and colour rules, so it follows them from the start. Feel words: **soft, calm, friendly**.
 
@@ -65,3 +67,30 @@ Deviation, on purpose: the toaster is mounted inside the app frame so the sheet 
 **Fresh-eyes audit:** 3/5, then 4/5 (low 4); its last notes (room icons that looked like checkboxes, a lumpy collapsed stack, states that disagreed with the brief, a wrapped label, two retries, the timing of the advance copies) were fixed. References: Asana toast with a time bar https://mobbin.com/screens/36cb9092-004d-4cfa-abc7-930e4a7ff931, Notion Mail dark one-line toast https://mobbin.com/screens/5ba89c38-f816-455e-bfa0-ad98517c7d0d, GitBook toast with a small icon https://mobbin.com/screens/9e06cd74-e5a9-4913-b907-5fc7476065be.
 
 **Fresh score: 4.**
+
+## Round 4 (owner review, 2026-10-15)
+**What Kunal said** (relayed by the coordinator): "most of the web components look absolutely rubbish"; "None of them should feel like they are from a vibe coded app or a cheap Chinese app." The coordinator's own look: here the toast was a tiny element in the corner of a generic Slack-like chat app, so the component was not the subject.
+
+**What changed:** new concept and brand. Panelwise is a fictional hiring tool; the moment is the pipeline board for a Staff Data Engineer role (296 applicants, 2 openings) right after a bulk move, with the toast stack expanded under the pointer.
+- The stack: an export in progress (184 of 296, green progress), scorecard reminders sent to four interviewers (due Fri, 17:00), and "Moved 3 candidates to Onsite" with Undo and a dismiss button on the hovered toast. Ink toasts, 400 px, 8 px gaps, one line of detail each.
+- The board is real context: Screen 23, Technical 17, Onsite 12, Offer 2, Hired 1 of 2, plus 53 not screened and 188 archived (= 296). The three moved candidates sit at the top of Onsite as "Onsite not scheduled". Scorecard progress is shown once, as dots, and only in the stages that collect scorecards.
+- Presentation: the app is laid out at its real size (14 px text, 1152 x 720, icon rail and top bar included) and shown at 1.25x so the stack reads at a glance. A first version at 1.5x over a candidate table failed the blind test (text showed through the gaps between toasts, and the crop read as oversized); the board puts calm column space under the stack.
+- Green has one job (work still running); the primary button is ink. Greys switched to cool (`pick Q-color-09 cool`; the brand-tinted greys read mint).
+- Engine: re-sketched as Panelwise (brand #1E8A5E kept as typed; the 9 step is #17865a), Figtree as the one face, base size 14, expression 35, energy 40, roundness 50, depth 50, colorfulness 30, warmth 20.
+- Old extra frames (shot-error, shot-expanded, shot-mention) deleted: they showed the old Kinroom design.
+- Real names removed: "LinkedIn" as a source.
+
+**Type scale:** 12 (meta, toast detail), 14 (body, card names, toast titles), 20 (H1). Figtree only.
+
+**Blind pairwise test** (opaque names, random sides, fresh judges), final version: Laravel Cloud deployment toast https://mobbin.com/screens/f9a999ee-f498-4a02-b17f-be383d866950 reference better by 2; Skiff message sent https://mobbin.com/screens/bf104b69-c42d-4fb9-a746-d51ca884f4a6 ours better by 2; Todoist date updated https://mobbin.com/screens/75c4093b-73e7-4344-b2e7-54e90d94e58c ours better by 2. 2 of 3 better; worst margin 2. (The 1.5x table version: Laravel -3, Skiff +2, Todoist -2, a fail.)
+
+**Fresh-eyes audit:** 3 (oversized crop, text through the gaps, generic library styling), then **4** on the board version ("the closest of the three to the B2B screens"). Its last notes were fixed: Onsite cards no longer carry Technical scorecards, the fraction beside the dots is gone, a dismiss button on the hovered toast, a real mark instead of a letter tile, and a breadcrumb that names the department.
+
+**Checks:** check_dates pass; check_names 0 errors (the remaining "new" words are real cities and UI words); preflight 0 errors (the 10 px avatar initials of the first version were raised); engine validate passes.
+
+**Process findings (recorded with `engine.py feedback`):** sketch on an existing folder keeps the old dials and fonts without saying so; the default brand-tinted greys turn mint or beige; preflight's M31 knows `transform: scale` but not CSS `zoom`.
+
+### Round 4, last pass (2026-10-18): PRESENTATION.md and the round-4 audit row
+- **The idea, in one sentence:** a recruiter has just moved three candidates and can still undo it.
+- `PRESENTATION.md` asks for the component at 1x, so the 1.25x crop is gone: the whole app at 1440 × 900, the board quiet, the stack bottom right. Columns now hold six or seven cards each (Pau Ferrando, Kenji Morimoto, Wiktoria Zielińska, Abena Boakye and Raoul Lemaire added, all checked against NAMES.md), so no quarter of the frame is empty. Removed after the final audit: the close button hanging off a toast's corner, the scorecard dots (undefined), the icon on Undo only; one date format ("due Fri 16 Oct, 17:00"); Screen cards that had passed now read "Ready to move".
+- Final blind test: Laravel Cloud +1, Skiff +2, Todoist +2 (3 of 3 better). Final fresh audit: **4**.

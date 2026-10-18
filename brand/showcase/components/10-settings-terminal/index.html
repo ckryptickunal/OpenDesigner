@@ -3,354 +3,197 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>rackhound power settings</title>
+<title>Ackwire · Notification settings</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-/* Round 3: rackhound has a job. It is the web console an ML infrastructure team uses for the GPU servers it keeps in a
-   colocation cage; this page is the power and thermal policy for one pool, set so the rack stays under the power it is
-   contracted for. The terminal costume is quieter: grey text and grey frames, and the phosphor amber only where something
-   is live, changed or chosen. No scanlines, no glow.
-   OFF-ROLE on purpose: the phosphor colour is accent ramp LIGHT step 9 (the exact brand #ffb000); the dark ramp
-   desaturates it to #eeb763, which reads as beige. Everything else is a --ds-* token. */
-:root {
-  --ph: var(--ds-color-accent-light-9);
-  --tx: var(--ds-color-neutral-dark-12);
-  --tx-2: var(--ds-color-neutral-dark-11);
-  --rule: var(--ds-color-neutral-dark-6);
-  --wash: var(--ds-color-neutral-dark-3);
-  --crt: var(--ds-color-neutral-dark-1);
-  --bad: var(--ds-color-text-danger);
-  --ok: var(--ds-color-text-success);
-  --fb: var(--ds-motion-transition-feedback-duration) var(--ds-motion-transition-feedback-easing);
-  --vt: var(--ds-font-family-display);
-}
-* { box-sizing: border-box; }
-html, body { margin: 0; }
-body { width: 1440px; height: 900px; overflow: hidden; position: relative; background: var(--crt); color: var(--tx); font: 400 var(--ds-font-size-14)/1.5 var(--ds-font-family-text); -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
-button, input { font: inherit; color: inherit; background: none; border: 0; padding: 0; }
-button { cursor: pointer; }
-:focus-visible, .is-focus { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-.ph { color: var(--ph); }
-.bad { color: var(--bad); }
+  /* Type roles (three sizes): label 12, body 14, title 20. Weights 400 / 500 / 600. */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { font: var(--ds-text-body-md); color: var(--ds-color-text-primary); background: var(--ds-color-surface-base); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  .ic { width: 16px; height: 16px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  :focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
+  .hair { --hair: var(--ds-color-neutral-alpha-dark-4); }
 
-/* status lines */
-.status { height: 32px; display: flex; align-items: center; background: var(--ds-color-neutral-dark-2); border-bottom: 1px solid var(--rule); color: var(--tx-2); font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); }
-.status span { padding: 0 var(--ds-space-16); height: 100%; display: flex; align-items: center; gap: var(--ds-space-8); border-right: 1px solid var(--rule); }
-.status .brand { color: var(--crt); background: var(--ph); font-weight: 700; border-right: 0; }
-.status .r { margin-left: auto; border-right: 0; border-left: 1px solid var(--rule); }
-.status b { color: var(--tx); font-weight: 500; }
-.status.bot { position: absolute; left: 0; right: 0; bottom: 0; border-bottom: 0; border-top: 1px solid var(--rule); }
-.status.bot kbd { font: inherit; color: var(--tx); }
+  /* The app behind the dialog (context only) */
+  .app { position: fixed; inset: 0; display: grid; grid-template-columns: 224px 1fr; }
+  .app nav { background: var(--ds-color-surface-sunken); border-right: 1px solid var(--ds-color-neutral-alpha-dark-4); padding: var(--ds-space-16) var(--ds-space-12); }
+  .app nav .brand { display: flex; align-items: center; gap: var(--ds-space-8); height: 32px; padding: 0 var(--ds-space-8); font-weight: var(--ds-font-weight-heading); margin-bottom: var(--ds-space-16); }
+  .app nav a { display: flex; align-items: center; gap: var(--ds-space-8); height: 32px; padding: 0 var(--ds-space-8); color: var(--ds-color-text-secondary); text-decoration: none; border-radius: var(--ds-radius-control); }
+  .app nav a.on { background: var(--ds-color-neutral-alpha-dark-3); color: var(--ds-color-text-primary); }
+  .app main { padding: var(--ds-space-24) var(--ds-space-32); max-width: 960px; }
+  .app h1 { margin: 0 0 var(--ds-space-24); font-size: var(--ds-font-size-20); font-weight: var(--ds-font-weight-label); }
+  .app .row { display: grid; grid-template-columns: 88px 1fr 160px 120px 100px; align-items: center; height: 44px; border-bottom: 1px solid var(--ds-color-neutral-alpha-dark-3); color: var(--ds-color-text-secondary); }
+  .app .row.head { height: 36px; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); }
+  .app .pill { justify-self: start; padding: 2px 8px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-alpha-dark-3); font-size: var(--ds-font-size-12); }
+  .app .pill.ack { color: var(--ds-color-text-primary); background: var(--ds-color-neutral-alpha-dark-5); }
+  .app .row b { font-weight: var(--ds-font-weight-label); color: var(--ds-color-text-primary); }
+  .scrim { position: fixed; inset: 0; background: rgb(0 0 0 / 0.6); }
 
-.head { display: flex; align-items: baseline; gap: var(--ds-space-24); padding: var(--ds-space-24) var(--ds-space-32) var(--ds-space-20); }
-.head h1 { margin: 0; font: 400 var(--ds-font-size-29)/1 var(--vt); letter-spacing: .02em; }
-.head p { margin: 0; color: var(--tx-2); }
+  /* The settings dialog */
+  .dlg { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 1120px; height: 656px; display: grid; grid-template-columns: 240px 1fr; background: var(--ds-color-surface-raised); border-radius: var(--ds-radius-overlay); box-shadow: 0 0 0 1px var(--ds-color-neutral-alpha-dark-6); overflow: hidden; }
+  .dlg aside { background: var(--ds-color-surface-base); border-right: 1px solid var(--ds-color-neutral-alpha-dark-4); padding: var(--ds-space-16) var(--ds-space-12); }
+  .dlg aside { padding-top: var(--ds-space-24); }
+  .dlg aside h2 { margin: 0; padding: 0 var(--ds-space-8) var(--ds-space-16); font-size: var(--ds-font-size-14); line-height: 28px; font-weight: var(--ds-font-weight-heading); }
+  .grp { font-size: var(--ds-font-size-12); line-height: 16px; color: var(--ds-color-text-tertiary); padding: var(--ds-space-16) var(--ds-space-8) var(--ds-space-6); }
+  .grp:first-of-type { padding-top: 0; }
+  .dlg aside a { display: flex; align-items: center; gap: var(--ds-space-8); height: 32px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control); color: var(--ds-color-text-secondary); text-decoration: none; }
+  .dlg aside a .ic { color: var(--ds-color-icon-subtle); }
+  .dlg aside a .n { margin-left: auto; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); }
+  .dlg aside a[aria-current] { background: var(--ds-color-neutral-alpha-dark-4); color: var(--ds-color-text-primary); }
+  .dlg aside a[aria-current] .ic { color: var(--ds-color-icon-default); }
 
-.body { display: grid; grid-template-columns: 200px 696px minmax(0, 1fr); gap: var(--ds-space-24); padding: 0 var(--ds-space-32); height: 763px; }
-.box { position: relative; border: 1px solid var(--rule); padding: var(--ds-space-24) var(--ds-space-16) var(--ds-space-16); }
-.box > .lg { position: absolute; top: -10px; left: 12px; padding: 0 var(--ds-space-8); background: var(--crt); font: 500 var(--ds-font-size-17)/1.2 var(--ds-font-family-text); letter-spacing: .04em; color: var(--tx); }
-.box > .lg.r { left: auto; right: 12px; top: -9px; color: var(--tx-2); font: 400 var(--ds-font-size-12)/1.5 var(--ds-font-family-text); }
-.left, .right { display: flex; flex-direction: column; gap: 28px; margin-bottom: var(--ds-space-32); }
-.left .box:last-child, .right .box:last-child { flex: 1; }
-.mid { margin-bottom: var(--ds-space-32); display: flex; flex-direction: column; }
+  .content { position: relative; overflow: hidden; }
+  .head { display: flex; align-items: flex-start; padding: var(--ds-space-24) var(--ds-space-40) 0; }
+  .head h1 { margin: 0; font-size: var(--ds-font-size-20); line-height: 28px; font-weight: var(--ds-font-weight-heading); letter-spacing: -0.01em; }
+  .head p { margin: var(--ds-space-4) 0 0; color: var(--ds-color-text-secondary); }
+  .close { margin-left: auto; margin-right: -8px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: var(--ds-radius-control); color: var(--ds-color-icon-default); }
 
-/* nav */
-.nav { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ds-space-2); }
-.nav a { display: flex; align-items: center; gap: var(--ds-space-8); height: 32px; padding: 0 var(--ds-space-8); color: var(--tx-2); text-decoration: none; transition: background-color var(--fb), color var(--fb); }
-.nav a .k { margin-left: auto; color: var(--ds-color-neutral-dark-10); font-size: var(--ds-font-size-12); }
-.nav a:hover { background: var(--wash); color: var(--tx); }
-.nav a[aria-current="page"] { background: var(--ph); color: var(--crt); font-weight: 700; }
-.nav a[aria-current="page"] .k { color: var(--crt); }
-.nav a.danger { color: var(--tx-2); }
-.pools a { display: grid; grid-template-columns: 1fr auto; padding: var(--ds-space-6) var(--ds-space-8); color: var(--tx-2); text-decoration: none; }
-.pools a small { grid-column: 1 / 3; font-size: var(--ds-font-size-12); color: var(--ds-color-neutral-dark-10); }
-.pools a[aria-current] { color: var(--tx); box-shadow: inset 2px 0 0 var(--ph); }
-.box.pools { display: flex; flex-direction: column; }
-.pools .cage { margin: auto 0 0; padding: var(--ds-space-12) var(--ds-space-8) 0; border-top: 1px dashed var(--rule); color: var(--tx-2); }
-.pools .cage b { display: block; color: var(--tx); font-weight: 500; }
+  .sec { padding: var(--ds-space-20) var(--ds-space-40) 0; }
+  .sec h3 { margin: 0; padding-bottom: var(--ds-space-8); border-bottom: 1px solid var(--ds-color-neutral-alpha-dark-5); font-size: var(--ds-font-size-12); line-height: 16px; font-weight: var(--ds-font-weight-heading); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ds-color-text-secondary); }
+  .item { display: flex; align-items: center; gap: var(--ds-space-24); min-height: 64px; padding: var(--ds-space-12) 0; border-bottom: 1px solid var(--ds-color-neutral-alpha-dark-4); }
+  .item:last-child { border-bottom: 0; }
+  .item .lbl { flex: 1; min-width: 0; }
+  .item .t { line-height: 20px; font-weight: var(--ds-font-weight-label); }
+  .item .d { margin-top: 2px; line-height: 20px; color: var(--ds-color-text-secondary); }
+  .item .lead { width: 32px; height: 32px; border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-alpha-dark-3); display: grid; place-items: center; color: var(--ds-color-icon-default); flex: none; }
 
-/* settings rows */
-.row { display: grid; grid-template-columns: 1fr 280px; align-items: center; gap: var(--ds-space-24); min-height: 76px; padding: var(--ds-space-12) var(--ds-space-8); border-bottom: 1px dashed var(--rule); }
-.row .t { font: 500 var(--ds-font-size-17)/1.3 var(--ds-font-family-text); }
-.row .d { font-size: var(--ds-font-size-14); color: var(--tx-2); margin-top: var(--ds-space-4); }
-.row .d b { color: var(--tx); font-weight: 500; }
-.row .d b.bad { color: var(--bad); }
-.row.dirty .t::before { content: "*"; color: var(--ph); margin-left: -16px; width: 16px; display: inline-block; }
-.ctl { justify-self: end; display: flex; align-items: center; gap: var(--ds-space-12); }
-.tg { position: relative; width: 60px; height: 28px; border: 1px solid var(--rule); display: block; transition: border-color var(--fb); }
-.tg::before { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 20px; background: var(--rule); transition: left var(--ds-motion-transition-move-duration) var(--ds-motion-transition-move-easing), background-color var(--fb); }
-.tg[aria-checked="true"] { border-color: var(--ph); }
-.tg[aria-checked="true"]::before { left: 31px; background: var(--ph); }
-.tg:hover { background: var(--wash); }
-.tg.pending::before { animation: pend .7s steps(2) infinite; left: 17px; }
-@keyframes pend { 50% { opacity: .3; } }
-.tw { font: 700 var(--ds-font-size-12)/1 var(--ds-font-family-text); letter-spacing: .08em; width: 32px; color: var(--tx-2); }
-.tw.on { color: var(--ph); }
-.seg { display: inline-flex; border: 1px solid var(--rule); height: 32px; }
-.seg button { padding: 0 var(--ds-space-12); font: 500 var(--ds-font-size-14)/1 var(--ds-font-family-text); color: var(--tx-2); transition: background-color var(--fb), color var(--fb); }
-.seg button + button { border-left: 1px solid var(--rule); }
-.seg button:hover { background: var(--wash); color: var(--tx); }
-.seg button[aria-checked="true"] { background: var(--ph); color: var(--crt); font-weight: 700; }
-.sl { display: flex; align-items: center; gap: var(--ds-space-12); }
-.rng { -webkit-appearance: none; appearance: none; width: 184px; height: 28px; background: transparent; cursor: pointer; --v: 50%; }
-.rng::-webkit-slider-runnable-track { height: 14px; background: linear-gradient(90deg, var(--ph) var(--v), var(--rule) var(--v)); -webkit-mask: repeating-linear-gradient(90deg, #000 0 6px, transparent 6px 8px); }
-.rng::-webkit-slider-thumb { -webkit-appearance: none; width: 4px; height: 28px; margin-top: -7px; background: var(--ds-color-white); box-shadow: 0 0 0 2px var(--crt); }
-.rd { min-width: 104px; text-align: right; font: 400 var(--ds-font-size-29)/1 var(--vt); color: var(--ph); }
-.rd small { font-size: var(--ds-font-size-24); color: var(--tx-2); }
-.sl.over .rng::-webkit-slider-runnable-track { background: linear-gradient(90deg, var(--ph) var(--lim), var(--bad) var(--lim), var(--bad) var(--v), var(--rule) var(--v)); }
-.sl.over .rd { color: var(--bad); }
-.sl.is-drag .rng::-webkit-slider-thumb { width: 6px; box-shadow: 0 0 0 2px var(--crt), 0 0 0 3px var(--ds-color-white); }
+  .sw { position: relative; width: 36px; height: 20px; border-radius: 10px; background: var(--ds-color-neutral-dark-7); flex: none; }
+  .sw::after { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--ds-color-neutral-dark-12); box-shadow: 0 1px 2px rgb(0 0 0 / 0.4); }
+  .sw[aria-checked="true"] { background: var(--ds-color-accent-dark-8); }
+  .sw[aria-checked="true"]::after { left: 18px; background: #fff; }
 
-.curve { margin-top: var(--ds-space-16); padding: 0 var(--ds-space-8); }
-.curve .h { display: flex; justify-content: space-between; color: var(--tx-2); }
-.plot { position: relative; margin-top: var(--ds-space-8); padding-left: var(--ds-space-40); }
-.plot .y { position: absolute; left: 0; font-size: var(--ds-font-size-12); color: var(--tx-2); }
-.plot svg { display: block; }
-.curve .ax { position: relative; height: 18px; width: 600px; margin: var(--ds-space-4) 0 0 var(--ds-space-40); color: var(--tx-2); font-size: var(--ds-font-size-12); }
-.curve .ax span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
-.curve .ax span.l0 { transform: none; } .curve .ax span.r0 { transform: translateX(-100%); }
-.plot .in { position: absolute; top: 0; font-size: var(--ds-font-size-12); white-space: nowrap; }
-.plot .in.tg62 { transform: translateX(-100%); padding-right: var(--ds-space-6); color: var(--ph); }
-.plot .in.hot { padding-left: var(--ds-space-6); color: var(--tx); }
-.actions { display: flex; align-items: center; gap: var(--ds-space-12); margin-top: auto; padding: var(--ds-space-16) var(--ds-space-8) 0; border-top: 1px dashed var(--rule); }
-.actions .note { flex: 1; color: var(--tx-2); margin: 0; }
-.actions .note b { color: var(--ph); font-weight: 500; }
-.actions .note b.bad { color: var(--bad); }
-.btn { height: 36px; padding: 0 var(--ds-space-16); font: 700 var(--ds-font-size-14)/1 var(--ds-font-family-text); border: 1px solid var(--ds-color-neutral-dark-8); color: var(--tx); white-space: nowrap; }
-.btn.primary { background: var(--ph); color: var(--crt); border-color: var(--ph); }
-.btn[aria-disabled="true"] { background: transparent; border-style: dashed; border-color: var(--rule); color: var(--ds-color-neutral-dark-9); cursor: not-allowed; }
-.btn kbd { font: inherit; font-weight: 400; margin-left: var(--ds-space-8); opacity: .75; }
+  .sel { display: inline-flex; align-items: center; gap: var(--ds-space-8); height: 32px; padding: 0 var(--ds-space-8) 0 var(--ds-space-12); border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-alpha-dark-3); box-shadow: inset 0 0 0 1px var(--ds-color-neutral-alpha-dark-5); min-width: 152px; }
+  .sel .ic { margin-left: auto; color: var(--ds-color-icon-subtle); width: 14px; height: 14px; }
+  .sel.open { box-shadow: inset 0 0 0 1px var(--ds-color-neutral-alpha-dark-8); }
+  .link { color: var(--ds-color-text-primary); text-decoration: underline; text-decoration-color: var(--ds-color-neutral-alpha-dark-7); text-underline-offset: 3px; }
 
-/* budget */
-.big { display: flex; align-items: baseline; gap: var(--ds-space-12); }
-.big b { font: 400 56px/1 var(--vt); color: var(--ph); }    /* OFF-TOKEN: VT323 runs small; 56 px reads like a 38 px sans */
-.big span { color: var(--tx-2); }
-.meter { position: relative; margin-top: var(--ds-space-16); height: 16px; -webkit-mask: repeating-linear-gradient(90deg, #000 0 8px, transparent 8px 11px);
-  background: linear-gradient(90deg, var(--ph) 0 var(--now), transparent var(--now) var(--full), var(--rule) var(--full)); }
-.meter.over { background: linear-gradient(90deg, var(--ph) 0 var(--now), var(--ds-color-neutral-dark-9) var(--now) var(--cap), var(--bad) var(--cap) var(--full), var(--rule) var(--full)); }
-.meter:not(.over) { background: linear-gradient(90deg, var(--ph) 0 var(--now), var(--ds-color-neutral-dark-9) var(--now) var(--full), var(--rule) var(--full)); }
-.ticks { position: relative; height: 22px; font-size: var(--ds-font-size-12); color: var(--tx-2); }
-.ticks i { position: absolute; top: -20px; width: 2px; height: 24px; background: var(--tx); }
-.ticks span { position: absolute; top: 6px; white-space: nowrap; transform: translateX(-100%); padding-right: var(--ds-space-6); }
-.ticks span.c { transform: none; padding: 0 0 0 var(--ds-space-6); color: var(--tx); }
-.lines { margin-top: var(--ds-space-8); display: grid; gap: var(--ds-space-4); }
-.lines div { display: flex; justify-content: space-between; color: var(--tx-2); }
-.lines b { color: var(--tx); font-weight: 500; }
-.lines .bad b, .lines .bad span { color: var(--bad); }
-.lines .warn b { color: var(--ph); }
+  /* Open select menu */
+  .menu { position: absolute; width: 200px; padding: var(--ds-space-4); background: var(--ds-color-surface-overlay); border-radius: var(--ds-radius-container); box-shadow: 0 0 0 1px var(--ds-color-neutral-alpha-dark-5), 0 12px 32px -8px rgb(0 0 0 / 0.6); z-index: 3; }
+  .menu div { display: flex; align-items: center; height: 32px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-6); color: var(--ds-color-text-secondary); }
+  .menu div.hl { background: var(--ds-color-neutral-alpha-dark-4); color: var(--ds-color-text-primary); }
+  .menu div .ic { margin-left: auto; color: var(--ds-color-text-accent); }
+  .menu hr { border: 0; border-top: 1px solid var(--ds-color-neutral-alpha-dark-4); margin: var(--ds-space-4) 0; }
 
-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-col.n { width: 84px; } col.d { width: 84px; } col.t { width: 84px; }
-th { text-align: right; font: 500 var(--ds-font-size-12)/1.5 var(--ds-font-family-text); color: var(--tx-2); padding: 0 0 var(--ds-space-6); border-bottom: 1px dashed var(--rule); }
-td { text-align: right; padding: var(--ds-space-4) 0; }
-th:first-child, td:first-child, th:last-child, td:last-child { text-align: left; }
-th:last-child, td:last-child { padding-left: var(--ds-space-24); }
-td.j { color: var(--tx-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-td.above { color: var(--ph); }
-tr.down td { color: var(--ds-color-neutral-dark-9); }
-tr.down td.j { color: var(--bad); }
-.log { font-size: var(--ds-font-size-14); line-height: 1.7; color: var(--tx-2); white-space: pre; overflow: hidden; }
-.log .who { color: var(--tx); }
-.log .ok { color: var(--ok); }
-.log .bad { color: var(--bad); }
-@media (prefers-reduced-motion: reduce) { .tg.pending::before { animation: none; } }
+  /* Quiet hours timeline */
+  .tl { padding: var(--ds-space-4) 0 0; }
+  .lane { margin-top: var(--ds-space-12); }
+  .lane .k { display: flex; justify-content: space-between; font-size: var(--ds-font-size-12); line-height: 16px; color: var(--ds-color-text-secondary); margin-bottom: var(--ds-space-6); }
+  .lane .k b { font-weight: var(--ds-font-weight-label); color: var(--ds-color-text-primary); }
+  .bar { position: relative; height: 32px; border-radius: var(--ds-radius-4); background: var(--ds-color-neutral-alpha-dark-3); }
+  .blk { position: absolute; top: 0; bottom: 0; border-radius: var(--ds-radius-4); display: flex; align-items: center; padding: 0 var(--ds-space-8); font-size: var(--ds-font-size-12); white-space: nowrap; overflow: hidden; }
+  .blk.quiet { background: repeating-linear-gradient(135deg, var(--ds-color-accent-dark-6) 0 3px, var(--ds-color-accent-dark-4) 3px 7px); color: var(--ds-color-accent-dark-12); font-weight: var(--ds-font-weight-label); padding: 0 var(--ds-space-12); }
+  
+  .now { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--ds-color-text-primary); border-radius: 1px; }
+  .axis { margin-top: var(--ds-space-8); }
+  .axis .ticks { position: relative; height: 16px; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); }
+  .axis .ticks span { position: absolute; transform: translateX(-50%); }
+  .axis .ticks span:first-child { transform: none; }
+  .axis .ticks span:last-child { transform: translateX(-100%); }
+
+  .callout { display: flex; gap: var(--ds-space-8); align-items: flex-start; margin-top: var(--ds-space-20); padding-top: var(--ds-space-16); border-top: 1px solid var(--ds-color-neutral-alpha-dark-4); color: var(--ds-color-text-secondary); line-height: 20px; }
+  .callout b { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
+  .callout .ic { color: var(--ds-color-icon-default); margin-top: 2px; }
+
 </style>
 </head>
 <body>
-<header class="status" aria-label="Status">
-  <span class="brand">rackhound</span><span>cage 14</span><span>rack <b>B2</b></span><span>draw <b class="ph" id="sbDraw">11.4 kW</b></span>
-  <span class="r">Noa Brekke · on call · 14:06 UTC</span>
-</header>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-x" viewBox="0 0 16 16"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 16 16"><path d="M4.5 6.5 8 10l3.5-3.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="m3.5 8.5 3 3 6-7"/></symbol>
+  <symbol id="i-user" viewBox="0 0 16 16"><circle cx="8" cy="5.5" r="2.5"/><path d="M3 13.5a5 5 0 0 1 10 0"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 16 16"><path d="M4 11.5V7a4 4 0 0 1 8 0v4.5l1 1H3l1-1ZM6.5 14h3"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 16 16"><rect x="4.5" y="1.5" width="7" height="13" rx="1.5"/><path d="M7 12.5h2"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 16 16"><rect x="2.5" y="3.5" width="11" height="10" rx="1.5"/><path d="M2.5 6.5h11M5.5 2v3M10.5 2v3"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 16 16"><path d="M3 4.5h6M12 4.5h1M3 11.5h1M7 11.5h6"/><circle cx="10.5" cy="4.5" r="1.5"/><circle cx="5.5" cy="11.5" r="1.5"/></symbol>
+  <symbol id="i-team" viewBox="0 0 16 16"><circle cx="6" cy="6" r="2.2"/><circle cx="11" cy="6.5" r="1.8"/><path d="M2 13a4 4 0 0 1 8 0M10 9.6a3.2 3.2 0 0 1 4 3.1"/></symbol>
+  <symbol id="i-rot" viewBox="0 0 16 16"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v2.5h-2.5"/></symbol>
+  <symbol id="i-esc" viewBox="0 0 16 16"><path d="M3 12.5h3v-3h3v-3h3v-3"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 16 16"><path d="M6 2.5v3M10 2.5v3M4.5 5.5h7v2a3.5 3.5 0 0 1-7 0v-2ZM8 11v2.5"/></symbol>
+  <symbol id="i-card" viewBox="0 0 16 16"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></symbol>
+  <symbol id="i-call" viewBox="0 0 16 16"><path d="M5.5 2.5h-2a1 1 0 0 0-1 1.1 10.5 10.5 0 0 0 9.9 9.9 1 1 0 0 0 1.1-1v-2l-2.5-1-1.5 1.5a7 7 0 0 1-3-3L8 7.5l-1-2.5-1.5-2.5Z"/></symbol>
+  <symbol id="i-sms" viewBox="0 0 16 16"><path d="M2.5 4A1.5 1.5 0 0 1 4 2.5h8A1.5 1.5 0 0 1 13.5 4v6a1.5 1.5 0 0 1-1.5 1.5H6.5l-3 2.5v-2.5H4A1.5 1.5 0 0 1 2.5 10V4Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 16 16"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="m2.5 4.5 5.5 4 5.5-4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 16 16"><path d="M13 9.5A5.5 5.5 0 0 1 6.5 3a5.5 5.5 0 1 0 6.5 6.5Z"/></symbol>
+  <symbol id="i-info" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5v3M8 5.3v.2"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 16 16"><path d="m6 8.5 1.5 1.5L10.5 7"/><path d="M4.5 12.5a3 3 0 0 1-.4-6 4 4 0 0 1 7.7.8 2.6 2.6 0 0 1-.3 5.2h-7Z"/></symbol>
+  <symbol id="i-send" viewBox="0 0 16 16"><path d="M13.5 2.5 7 9M13.5 2.5l-4 11-2.5-4.5-4.5-2.5 11-4Z"/></symbol>
+</svg>
 
-<div class="head">
-  <h1>power &amp; thermals</h1>
-  <p>pool train-a · rack B2 · 8 nodes, 4 GPUs each</p>
+<div class="app" aria-hidden="true">
+  <nav>
+    <div class="brand"><svg width="20" height="20" viewBox="0 0 20 20"><rect width="20" height="20" rx="5" fill="var(--ds-color-neutral-dark-12)"/><path d="M6 14.5 10 5.5l4 9M7.4 11.3h5.2" fill="none" stroke="#151515" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="4" r="3" fill="var(--ds-color-bg-action-primary)" stroke="#151515" stroke-width="1.5"/></svg>Ackwire</div>
+    <a>Incidents</a><a>On call</a><a>Services</a><a>Escalation policies</a><a>Reports</a>
+  </nav>
+  <main>
+    <h1>Incidents</h1>
+    <div class="row head"><span>ID</span><span>Title</span><span>Status</span><span>Owner</span><span>Opened</span></div>
+    <div class="row"><span>#2214</span><b>checkout-svc: card auth errors above 2%</b><span class="pill ack">Acknowledged</span><span>Tomas</span><span>13:48</span></div>
+    <div class="row"><span>#2213</span><b>picking-queue backlog over 900 orders</b><span class="pill">Resolved</span><span>Bea</span><span>12:47</span></div>
+    <div class="row"><span>#2212</span><b>basket-api p95 latency over 600 ms</b><span class="pill">Resolved</span><span>Tomas</span><span>09:15</span></div>
+    <div class="row"><span>#2211</span><b>Store 41 handheld scanners offline</b><span class="pill">Resolved</span><span>Bea</span><span>Yesterday</span></div>
+    <div class="row"><span>#2210</span><b>delivery-slots: Saturday slots not loading</b><span class="pill">Resolved</span><span>Tomas</span><span>Yesterday</span></div>
+    <div class="row"><span>#2209</span><b>checkout-svc: payment retries doubled</b><span class="pill">Resolved</span><span>Tomas</span><span>Oct 13</span></div>
+    <div class="row"><span>#2208</span><b>loyalty-points sync paused</b><span class="pill">Resolved</span><span>Bea</span><span>Oct 13</span></div>
+    <div class="row"><span>#2207</span><b>basket-api pods restarting</b><span class="pill">Resolved</span><span>Tomas</span><span>Oct 12</span></div>
+    <div class="row"><span>#2206</span><b>Store 12 price labels out of date</b><span class="pill">Resolved</span><span>Bea</span><span>Oct 12</span></div>
+    <div class="row"><span>#2205</span><b>picking-queue: two pickers per order</b><span class="pill">Resolved</span><span>Tomas</span><span>Oct 11</span></div>
+    <div class="row"><span>#2204</span><b>delivery-slots API timeouts</b><span class="pill">Resolved</span><span>Bea</span><span>Oct 10</span></div>
+    <div class="row"><span>#2203</span><b>checkout-svc deploy rolled back</b><span class="pill">Resolved</span><span>Tomas</span><span>Oct 10</span></div>
+    <div class="row"><span>#2202</span><b>Store 8 card readers offline</b><span class="pill">Resolved</span><span>Bea</span><span>Oct 9</span></div>
+    <div class="row"><span>#2201</span><b>basket-api cache misses doubled</b><span class="pill">Resolved</span><span>Tomas</span><span>Oct 9</span></div>
+    <div class="row"><span>#2200</span><b>loyalty-points: double credits</b><span class="pill">Resolved</span><span>Bea</span><span>Oct 8</span></div>
+    <div class="row"><span>#2199</span><b>Saturday picking forecast late</b><span class="pill">Resolved</span><span>Tomas</span><span>Oct 8</span></div>
+  </main>
 </div>
+<div class="scrim" aria-hidden="true"></div>
 
-<div class="body">
-  <div class="left">
-    <nav class="box" aria-label="Settings sections">
-      <span class="lg">sections</span>
-      <ul class="nav">
-        <li><a href="#">general<span class="k">g</span></a></li>
-        <li><a href="#">network<span class="k">n</span></a></li>
-        <li><a href="#" aria-current="page">power &amp; thermals<span class="k">p</span></a></li>
-        <li><a href="#">scheduler<span class="k">s</span></a></li>
-        <li><a href="#">alerts<span class="k">a</span></a></li>
-        <li><a href="#">access<span class="k">u</span></a></li>
-        <li><a href="#" class="danger">danger zone<span class="k">d</span></a></li>
-      </ul>
-    </nav>
-    <nav class="box pools" aria-label="Pools">
-      <span class="lg">pools</span>
-      <a href="#" aria-current="true"><span>train-a</span><span>8</span><small>rack B2 · 12.5 kW</small></a>
-      <a href="#"><span>train-b</span><span>8</span><small>rack B3 · 12.5 kW</small></a>
-      <a href="#"><span>infer</span><span>4</span><small>rack B4 · 6 kW</small></a>
-      <p class="cage"><b>cage 14</b>3 racks · 31 kW contracted</p>
-    </nav>
-  </div>
+<div class="dlg" role="dialog" aria-modal="true" aria-labelledby="t">
+  <aside>
+    <h2>Settings</h2>
+    <div class="grp">Your account</div>
+    <a href="#"><svg class="ic"><use href="#i-user"/></svg>Profile</a>
+    <a href="#" aria-current="page"><svg class="ic"><use href="#i-bell"/></svg>Notifications</a>
+    <a href="#"><svg class="ic"><use href="#i-phone"/></svg>Devices<span class="n">2</span></a>
+    <a href="#"><svg class="ic"><use href="#i-cal"/></svg>Calendar sync</a>
+    <div class="grp">Fernbank Grocery</div>
+    <a href="#"><svg class="ic"><use href="#i-gear"/></svg>General</a>
+    <a href="#"><svg class="ic"><use href="#i-team"/></svg>Members<span class="n">38</span></a>
+    <a href="#"><svg class="ic"><use href="#i-rot"/></svg>Rotations<span class="n">6</span></a>
+    <a href="#"><svg class="ic"><use href="#i-esc"/></svg>Escalation policies<span class="n">9</span></a>
+    <a href="#"><svg class="ic"><use href="#i-plug"/></svg>Integrations<span class="n">5</span></a>
+    <a href="#"><svg class="ic"><use href="#i-card"/></svg>Billing</a>
+  </aside>
 
-  <section class="box mid" aria-label="Power and thermal policy for pool train-a">
-    <span class="lg">policy</span>
-
-    <div class="row dirty">
-      <div><div class="t" id="l1">gpu power limit</div><div class="d" id="d1">all 32 GPUs · full load <b id="full">11.9 kW</b></div></div>
-      <div class="ctl sl" id="slPow"><input class="rng" type="range" min="200" max="350" step="10" value="300" aria-labelledby="l1" aria-describedby="d1" data-out="o1" data-u="W" id="pow"><span class="rd" id="o1">300<small>W</small></span></div>
-    </div>
-    <div class="row dirty">
-      <div><div class="t" id="l2">fan target temp</div><div class="d">fans ramp when a GPU passes this. 3&nbsp;nodes are above it now</div></div>
-      <div class="ctl sl"><input class="rng" type="range" min="50" max="80" value="62" aria-labelledby="l2" data-out="o2" data-u="°C"><span class="rd" id="o2">62<small>°C</small></span></div>
-    </div>
-    <div class="row">
-      <div><div class="t" id="l3">fan profile</div><div class="d">max holds the target harder, for about 180&nbsp;W more across the pool</div></div>
-      <div class="ctl"><div class="seg" role="radiogroup" aria-labelledby="l3"><button role="radio" aria-checked="false" tabindex="-1">quiet</button><button role="radio" aria-checked="true">balanced</button><button role="radio" aria-checked="false" tabindex="-1">max</button></div></div>
-    </div>
-    <div class="row dirty">
-      <div><div class="t" id="l4">power on after outage</div><div class="d">nodes start <b>20 s apart</b> to keep the inrush under the breaker</div></div>
-      <div class="ctl"><span class="tw on" id="w4">ON</span><button class="tg" role="switch" aria-checked="true" aria-labelledby="l4" data-w="w4" id="tg4"></button></div>
-    </div>
-    <div class="row">
-      <div><div class="t" id="l5">single-feed cap</div><div class="d">one feed alone carries 10.5&nbsp;kW. at 250&nbsp;W the pool needs 10.3</div></div>
-      <div class="ctl"><div class="seg" role="radiogroup" aria-labelledby="l5"><button role="radio" aria-checked="false" tabindex="-1">off</button><button role="radio" aria-checked="true">250 W</button><button role="radio" aria-checked="false" tabindex="-1">200 W</button></div></div>
+  <section class="content">
+    <div class="head">
+      <div><h1 id="t">Notifications</h1></div>
+      <button class="close" type="button" aria-label="Close settings"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
 
-    <div class="curve" aria-label="Fan curve preview">
-      <div class="h"><span>fan curve preview</span><span>fan speed against the hottest GPU</span></div>
-      <div class="plot">
-        <span class="y" style="top:0">100%</span><span class="y" style="top:72px">20%</span><span class="in tg62" style="left:calc(40px + 48.9% * 600 / 640)">target 62</span><span class="in hot" style="left:calc(40px + 53.3% * 600 / 640)">hottest 64, gpu-05</span>
-        <svg width="600" height="96" viewBox="0 0 632 96" preserveAspectRatio="none" aria-hidden="true">
-          <g stroke="var(--rule)" stroke-dasharray="2 4"><path d="M0 8h632M0 80h632"/><path d="M140 0v96M281 0v96M421 0v96M562 0v96"/></g>
-          <path d="M0 80H309L520 8H632" fill="none" stroke="var(--tx)" stroke-width="2"/>
-          <path d="M309 0v96" stroke="var(--ph)" stroke-width="2"/>
-          <path d="M337 0v96" stroke="var(--tx-2)" stroke-dasharray="4 3"/>
-        </svg>
+    <div class="sec">
+      <h3>When you’re paged</h3>
+      <div class="item"><div class="lbl"><div class="t">Push to your phone</div><div class="d">Tomas’s phone, seen 4 min ago. High-urgency pages sound in Do Not Disturb.</div></div><span class="sw" role="switch" aria-checked="true" aria-label="Push to your phone"></span></div>
+      <div class="item"><div class="lbl"><div class="t">Phone call</div><div class="d">Calls you again if a page is still open</div></div><button class="sel" type="button" aria-haspopup="listbox">After 5 minutes<svg class="ic"><use href="#i-chev"/></svg></button></div>
+      <div class="item"><div class="lbl"><div class="t">Text message</div><div class="d">To +1 (503) 555-0148, with a link to acknowledge</div></div><span class="sw" role="switch" aria-checked="true" aria-label="Text message"></span></div>
+      <div class="item"><div class="lbl"><div class="t">Email summary</div><div class="d">To tomas@fernbank.example</div></div><button class="sel" type="button" aria-haspopup="listbox">Daily at 08:00<svg class="ic"><use href="#i-chev"/></svg></button></div>
+    </div>
+
+    <div class="sec">
+      <h3>Schedule</h3>
+      <div class="item" style="border-bottom:0; padding-bottom:0; min-height:0"><div class="lbl"><div class="t">Quiet hours</div><div class="d">Only high-urgency pages reach you.</div></div><span class="sw" role="switch" aria-checked="true" aria-label="Quiet hours"></span></div>
+      <div class="tl" aria-label="Thursday 07:00 to Friday 12:00, Pacific time">
+        <div class="lane"><div class="k"><span><b>Weeknights 22:00 to 07:00</b></span><span>Pacific time</span></div><div class="bar"><span class="blk quiet" style="left:51.72%; width:31.03%">Quiet</span><span class="now" style="left:23.68%"></span></div></div>
+        <div class="axis"><div class="ticks"><span style="left:0">Thu 07:00</span><span style="left:23.68%">Now 13:52</span><span style="left:51.72%">22:00</span><span style="left:82.76%">Fri 07:00</span><span style="left:100%">12:00</span></div></div>
       </div>
-      <div class="ax"><span class="l0" style="left:0">40</span><span style="left:22.15%">50</span><span style="left:44.46%">60</span><span style="left:66.6%">70</span><span style="left:88.9%">80</span><span class="r0" style="left:100%">85°C</span></div>
+      <div class="callout"><svg class="ic"><use href="#i-info"/></svg><div>You’re primary on call for <b>checkout-svc</b> until Mon, Oct 19 at 09:00. If a page isn’t acknowledged in 10 minutes, the policy pages <b>Bea Ashby</b>, the secondary. <a class="link" href="#">Edit policy</a></div></div>
     </div>
 
-    <div class="actions">
-      <p class="note" id="note"><b>3 changes</b> · live on 8 nodes, kept on reboot</p>
-      <button class="btn" id="revert">revert<kbd>esc</kbd></button>
-      <button class="btn primary" id="apply">apply<kbd>↵</kbd></button>
-    </div>
   </section>
-
-  <div class="right">
-    <section class="box" aria-label="Power budget">
-      <span class="lg">budget</span>
-      <div class="big"><b id="now">11.4 kW</b><span>drawn now<br>contract 12.5 kW</span></div>
-      <div class="meter" id="meter" aria-hidden="true"></div>
-      <div class="ticks" aria-hidden="true"><i style="left:77.42%"></i><span style="left:77.42%">alert &gt; 12.0</span><i style="left:80.65%"></i><span class="c" style="left:80.65%">contract</span></div>
-      <div class="lines">
-        <div id="fullLine"><span id="fullLbl">full load, fans included</span><b id="full2">11.9 kW</b></div>
-        <div class="bad" id="liveLine"><span id="liveLbl">full load live now, 330 W</span><b>12.8 kW</b></div>
-      </div>
-    </section>
-
-    <section class="box" aria-label="Nodes">
-      <span class="lg">nodes</span>
-      <span class="lg r">live, every 10 s</span>
-      <table>
-        <colgroup><col class="n"><col class="d"><col class="t"><col></colgroup>
-        <thead><tr><th>node</th><th>draw</th><th>gpu max</th><th>job</th></tr></thead>
-        <tbody id="nodes"></tbody>
-      </table>
-    </section>
-
-    <section class="box" aria-label="Change log">
-      <span class="lg">log</span>
-      <div class="log" id="log"></div>
-    </section>
-  </div>
 </div>
-
-<footer class="status bot" aria-label="Keys">
-  <span><b class="ph" id="bUnsaved">3 unsaved</b></span><span><kbd>↑↓</kbd> move</span><span><kbd>←→</kbd> change</span><span><kbd>space</kbd> toggle</span><span><kbd>↵</kbd> apply</span><span><kbd>esc</kbd> revert</span><span><kbd>?</kbd> help</span>
-</footer>
-
-<script>
-  // node: [draw kW now, hottest GPU °C, job]
-  const NODES = [['gpu-01', 1.48, 61, 'ft-0412'], ['gpu-02', 1.46, 63, 'ft-0412'], ['gpu-03', 1.49, 62, 'ft-0412'], ['gpu-04', 1.31, 55, 'eval-88'],
-                 ['gpu-05', 1.47, 64, 'ft-0412'], ['gpu-06', 1.45, 62, 'ft-0412'], ['gpu-07', 1.28, 52, 'eval-88'], ['gpu-08', 1.46, 63, 'ft-0412']];
-  const CONTRACT = 12.5, SCALE = 15.5, BASE_W = 290, OLD_BASE = 280, GPUS = 4, N = 8, TARGET = 62;   // base = CPU, memory, NICs and fans; fans at 62 °C use 10 W more a node than at 66 °C
-  const full = w => N * (GPUS * w + BASE_W) / 1000;                         // 8 x (4 x W + 290 W)
-  const now = NODES.reduce((s, n) => s + n[1], 0);                          // 11.40 kW
-  const pct = kw => (kw / SCALE * 100) + '%';
-  const maxFit = Math.floor((CONTRACT * 1000 / N - BASE_W) / GPUS / 10) * 10; // 318 W, so 310 on a 10 W step
-  function nodes(down) {
-    document.getElementById('nodes').innerHTML = NODES.map(([n, d, t, j]) => `<tr class="${down === n ? 'down' : ''}"><td>${n}</td><td>${d.toFixed(2)} kW</td><td class="${t > TARGET && down !== n ? 'above' : ''}">${t}°C</td><td class="j">${down === n ? 'no answer' : j}</td></tr>`).join('');
-  }
-  function meter(f) {
-    const m = document.getElementById('meter');
-    m.style.setProperty('--now', pct(now)); m.style.setProperty('--full', pct(f)); m.style.setProperty('--cap', pct(CONTRACT));
-    m.classList.toggle('over', f > CONTRACT);
-  }
-  function sync(w) {
-    const f = full(w), over = f > CONTRACT;
-    const pow = document.getElementById('pow');
-    pow.style.setProperty('--v', ((w - 200) / 150 * 100) + '%');
-    pow.style.setProperty('--lim', (((CONTRACT * 1000 / N - BASE_W) / GPUS - 200) / 150 * 100) + '%');
-    document.getElementById('o1').innerHTML = w + '&nbsp;<small>W</small>';
-    document.getElementById('slPow').classList.toggle('over', over);
-    const fb = document.getElementById('full'); fb.textContent = f.toFixed(1) + ' kW'; fb.className = over ? 'bad' : '';
-    document.getElementById('full2').textContent = f.toFixed(1) + ' kW';
-    document.getElementById('fullLine').className = over ? 'bad' : '';
-    const apply = document.getElementById('apply');
-    if (over) { apply.setAttribute('aria-disabled', 'true'); document.getElementById('note').innerHTML = `<b class="bad">${(f - CONTRACT).toFixed(1)} kW over the contract at full load.</b> ${maxFit} W is the most that fits.`; }
-    else apply.removeAttribute('aria-disabled');
-    meter(f);
-  }
-  document.querySelectorAll('button.tg[role=switch]').forEach(t => t.addEventListener('click', () => {
-    const on = t.getAttribute('aria-checked') !== 'true'; t.setAttribute('aria-checked', on);
-    const w = document.getElementById(t.dataset.w); w.textContent = on ? 'ON' : 'OFF'; w.classList.toggle('on', on); t.closest('.row').classList.add('dirty');
-  }));
-  document.querySelectorAll('.seg[role=radiogroup]').forEach(g => {
-    const bs = [...g.querySelectorAll('[role=radio]')];
-    const pick = b => { bs.forEach(o => { o.setAttribute('aria-checked', o === b); o.tabIndex = o === b ? 0 : -1; }); b.focus(); g.closest('.row').classList.add('dirty'); };
-    bs.forEach((b, i) => { b.addEventListener('click', () => pick(b)); b.addEventListener('keydown', e => { const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (d) { e.preventDefault(); pick(bs[(i + d + bs.length) % bs.length]); } }); });
-  });
-  document.querySelectorAll('.rng').forEach(r => {
-    const out = () => { r.style.setProperty('--v', ((r.value - r.min) / (r.max - r.min) * 100) + '%'); document.getElementById(r.dataset.out).innerHTML = r.value + '&nbsp;<small>' + r.dataset.u + '</small>'; r.setAttribute('aria-valuetext', r.value + (r.dataset.u === 'W' ? ' watts' : ' degrees')); };
-    r.addEventListener('input', () => { out(); r.closest('.row').classList.add('dirty'); if (r.id === 'pow') sync(+r.value); }); out();
-  });
-  const L = (t, who, m, s) => `${t}  <span class="who">${who.padEnd(9)}</span>  ${s ? '<span class="' + s + '">' + m + '</span>' : m}`;
-  const BASE_LOG = [
-    L('13:58', 'alert', 'full load 12.8 > 12.0 kW', 'bad'),
-    L('14:05', 'noa', 'gpu limit 330 → 300 W'),
-    L('14:05', 'noa', 'fan target 66 → 62 °C'),
-    L('14:06', 'noa', 'power on, 20 s apart'),
-  ];
-  document.getElementById('log').innerHTML = BASE_LOG.join('\n');
-  nodes(); sync(300);
-
-  // One temporary state per frame (?state=drag | applying | error).
-  const state = new URLSearchParams(location.search).get('state');
-  if (state === 'drag') { document.getElementById('pow').value = 340; document.getElementById('slPow').classList.add('is-drag'); sync(340); }
-  const apply = document.getElementById('apply'), revert = document.getElementById('revert');
-  if (state === 'applying') {
-    document.getElementById('log').innerHTML = [...BASE_LOG.slice(2), L('14:06', 'noa', 'apply to 8 nodes'), L('14:06', 'rackhound', '5 of 8 nodes set', 'ok')].join('\n');
-    document.getElementById('tg4').classList.add('pending');
-    apply.setAttribute('aria-disabled', 'true'); revert.setAttribute('aria-disabled', 'true');
-    document.getElementById('note').innerHTML = '<b>applying</b>, 5 of 8 nodes done';
-    document.getElementById('bUnsaved').textContent = 'applying 5/8';
-  }
-  if (state === 'error') {                                   // gpu-07 never answered, so it keeps 330 W: 7 x 1,490 + 1,610 W = 12.04 kW at full load
-    document.getElementById('log').innerHTML = [L('14:06', 'noa', 'apply to 8 nodes'), L('14:06', 'rackhound', '7 of 8 nodes set', 'ok'), L('14:06', 'rackhound', 'gpu-07: no answer', 'bad'), L('14:06', 'alert', 'full load 12.03 > 12.0', 'bad')].join('\n');
-    nodes('gpu-07');
-    document.querySelectorAll('.row.dirty').forEach(r => r.classList.remove('dirty'));
-    const f = (7 * (GPUS * 300 + BASE_W) + (GPUS * 330 + OLD_BASE)) / 1000;   // gpu-07 keeps 330 W and the 66 °C fan target: 7 x 1,490 + 1,600 W
-    document.getElementById('fullLbl').textContent = 'full load now, gpu-07 still at 330 W';
-    document.getElementById('full2').textContent = f.toFixed(2) + ' kW';
-    document.getElementById('fullLine').className = 'bad';
-    document.getElementById('liveLbl').textContent = 'before, every node at 330 W';
-    meter(f);
-    apply.innerHTML = 'retry gpu-07<kbd>↵</kbd>'; revert.innerHTML = 'undo all<kbd>esc</kbd>';
-    document.getElementById('note').innerHTML = '<b class="bad">7 of 8 nodes set.</b> gpu-07 keeps 330 W until it answers.';
-    document.getElementById('bUnsaved').textContent = '1 node pending';
-  }
-</script>
 </body>
 </html>

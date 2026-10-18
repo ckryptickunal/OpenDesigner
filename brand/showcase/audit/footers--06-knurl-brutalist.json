@@ -1,0 +1,82 @@
+{
+ "piece": "footers/06-knurl-brutalist",
+ "title": "06 Knurl Supply: neo-brutalist footer",
+ "pattern": "footer-mega",
+ "platform": "web",
+ "industry": "streetwear",
+ "style": [
+  "brutalist",
+  "neon",
+  "industrial"
+ ],
+ "tags": [
+  "footer-mega",
+  "streetwear",
+  "brutalist",
+  "lime",
+  "marquee",
+  "countdown",
+  "cells",
+  "drop"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "One drawing rule held everywhere: 4 px ink borders, 6 px zero-blur offset shadows, cells instead of columns, the legal row as cells too",
+  "Lime, black and white only, with strong tonal contrast; Big Shoulders Display against Space Mono is a clean two-face pairing",
+  "Specific content: 'THE LIST / 41,208 ON IT', 'UNIT 4, CANAL YARD 41, ROTTERDAM', 'OPEN NOW · WED-SUN 12-19', 'ARCHIVE -40%'; the knurl texture block gives the eye a rest"
+ ],
+ "slop_signals": [
+  "Round rotating-text stamp ('KNURL SUPPLY CO · HARD GOODS · EST 2019') on the texture block: the sticker badge",
+  "'BEFORE' in a black highlight block inside the headline; 'ONE EMAIL PER DROP. NO SPAM. NO MERCY.' is hype copy",
+  "Asterisk separators in the marquee and a four-box countdown are the drop-site kit",
+  "Lime-and-black neo-brutalism is a default theme in AI page builders; the execution is better than the genre, but the genre is recognisable"
+ ],
+ "fixes": [
+  "Replace the stamp with the wordmark set large in the cell, or leave the knurl texture bare",
+  "Cut 'NO MERCY.'; keep 'One email per drop.'",
+  "Set 'BEFORE' in the same black as the rest and let the condensed face carry the line"
+ ],
+ "references": [
+  {
+   "site": "Analogue Agency",
+   "url": "https://mobbin.com/sites/sections/77811129-826b-4c72-a84a-afaf51c9dafb",
+   "what": "Footer built from bordered cells with a newsletter strip on top; the cell edges are the grid, as here"
+  },
+  {
+   "site": "Antimetal",
+   "url": "https://mobbin.com/sites/sections/ab88d658-db2f-4436-b63e-f4a441f63b76",
+   "what": "Each link group in its own cell with corner marks and a status chip; our cell structure follows this"
+  },
+  {
+   "site": "Graza",
+   "url": "https://mobbin.com/sites/sections/e0b0a006-0495-4969-ab1a-5b35acc33e8d",
+   "what": "Mono link columns, dashed rules, a bordered email field with a small button and a giant wordmark; a shipped brutalist footer with less kit"
+  },
+  {
+   "site": "adidas",
+   "url": "https://mobbin.com/sites/sections/e7b362df-b600-4afd-a0e4-05aabbbe8088",
+   "what": "A coloured newsletter band with a hard-shadow button above plain columns; what a mainstream streetwear footer does"
+  },
+  {
+   "site": "BAGGU",
+   "url": "https://mobbin.com/sites/sections/ddfad441-10db-4949-9baa-299e7e0edeee",
+   "what": "Product photographs in the footer above a cropped wordmark; shows photography as the alternative to a texture block"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "okay-ish",
+  "date": "2026-10-14"
+ },
+ "round4": {
+  "changed": [
+   "Ticker 'Thu 24.10' corrected to 'Sat 24.10' (24 Oct 2026 is a Saturday), in the ticker and its screen-reader label",
+   "Time zone corrected to CEST (Central Europe is on summer time until 25 Oct 2026)",
+   "'41,208 on it' changed to '38,917 on it', so it no longer reuses product/02's figure"
+  ],
+  "note": "Date and data fixes only; the layout the round-4 audit asked to rebuild was not changed",
+  "date": "2026-10-18"
+ }
+}

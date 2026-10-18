@@ -1,317 +1,440 @@
 <!doctype html>
-<html lang="en" data-theme="light" data-density="compact">
+<html lang="en-GB" data-theme="light" data-density="compact">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quarry · Field App · Cycle 14</title>
+<title>H2 2026 · Roadmaps · Soffit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-/* Quarry: a calm, dense project workspace. Neutral greys plus one vermilion accent (today, the primary action,
-   the focused card, the milestone). Every color, space, radius, size and duration is a --ds-* token. */
+/* Soffit: a roadmap planner that forecasts each project's finish from its own pace and shows how far that lands
+   from its target. Cool greys for the data, a near-black primary, one petrol accent whose only job is "today"
+   (the current week and the today line), and red only where a forecast lands after its target. */
 :root {
-  --accent: var(--ds-color-bg-action-primary);
-  --accent-ink: var(--ds-color-text-link);
-  --line: var(--ds-color-border-subtle);
-  --line-2: var(--ds-color-neutral-light-4);
-  --t1: var(--ds-color-text-primary);
-  --t2: var(--ds-color-text-secondary);
-  --t3: var(--ds-color-text-tertiary);
-  --mono: var(--ds-font-family-mono);
-  --side: 248px;
+  --ink: var(--ds-color-text-primary);
+  --ink-2: var(--ds-color-text-secondary);
+  --ink-3: var(--ds-color-text-tertiary);
+  --line: var(--ds-color-neutral-light-4);     /* row hairlines */
+  --edge: var(--ds-color-border-separator);    /* control and panel edges */
+  --grid: var(--ds-color-neutral-light-3);     /* week lines */
+  --mark: var(--ds-color-neutral-light-8);     /* bar outlines: 3.6:1 on white */
+  --fill: var(--ds-color-neutral-light-8);     /* closed issues and bar edges: 3.6:1 on white, 3.05:1 on the selected row */
+  --wash: var(--ds-color-surface-nav);
+  --page: var(--ds-color-surface-raised);
+  --accent: var(--ds-color-accent-light-9);
+  --selected: var(--ds-color-neutral-light-3);
+  --late: var(--ds-color-text-danger);
+  --late-mark: var(--ds-color-danger-light-9);
+  --primary: var(--ds-color-bg-inverse);       /* near-black primary; the engine has no such role (process finding) */
+  --on-primary: var(--ds-color-text-inverse);
+  --row: var(--ds-size-row-sm);
+  --side: 192px;
+  --panel: 336px;
+  --table: 408px;
+  --week: 31px;                                /* timeline scale: 16 weeks from Mon 31 Aug, inset 8 px */
+  --inset: 8px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { background: var(--ds-color-surface-sunken); }
-body { width: 1440px; height: 900px; overflow: hidden; display: grid; grid-template-columns: var(--side) 1fr; font: var(--ds-text-body-md); color: var(--t1); -webkit-font-smoothing: antialiased; letter-spacing: -.003em; }
+html, body { background: var(--page); }
+body { width: 1440px; height: 900px; overflow: hidden; font: var(--ds-text-body-md); color: var(--ink); -webkit-font-smoothing: antialiased; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
-:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-.i { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-sm); stroke-linecap: round; stroke-linejoin: round; flex: none; }
-kbd { font: 500 var(--ds-font-size-12)/1 var(--mono); min-width: 20px; height: 20px; padding: 0 5px; display: inline-grid; place-items: center; border-radius: var(--ds-radius-control); background: var(--ds-color-surface-raised); box-shadow: inset 0 0 0 1px var(--line), 0 1px 0 var(--line); color: var(--t2); }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-control-sm); }
+.num { font-variant-numeric: tabular-nums; }
+svg.i { width: var(--ds-size-icon-sm); height: var(--ds-size-icon-sm); flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ---------------- sidebar ---------------- */
-aside { padding: var(--ds-space-12) var(--ds-space-12) var(--ds-space-12); display: flex; flex-direction: column; gap: var(--ds-space-2); min-height: 0; }
-.ws { display: flex; align-items: center; gap: var(--ds-space-8); height: 36px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-container); }
-.logo { width: 24px; height: 24px; display: grid; place-items: center; }
-.ws b { font: 600 var(--ds-font-size-14)/1 var(--ds-font-family-text); }
-.ws .grow { flex: 1; }
-.ws .av { width: 24px; height: 24px; border-radius: 50%; }
-.search { margin: var(--ds-space-8) 0 var(--ds-space-12); height: 32px; display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-6) 0 var(--ds-space-8); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); box-shadow: inset 0 0 0 1px var(--line); color: var(--t3); font: var(--ds-text-body-md); }
-.search span { flex: 1; }
-.nav a, .proj a { display: flex; align-items: center; gap: var(--ds-space-8); height: 30px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control); color: var(--t2); text-decoration: none; font: 500 var(--ds-font-size-14)/1 var(--ds-font-family-text); }
-.nav a .n { margin-left: auto; font: 500 var(--ds-font-size-12)/1 var(--mono); color: var(--t2); }
-.nav a .n.hot { min-width: 20px; height: 18px; padding: 0 5px; border-radius: var(--ds-radius-full); background: var(--accent); color: var(--ds-color-text-on-action); display: grid; place-items: center; }
-.sec { margin: var(--ds-space-16) var(--ds-space-8) var(--ds-space-4); display: flex; align-items: center; justify-content: space-between; font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--t3); }
-.proj a.on { background: var(--ds-color-surface-raised); color: var(--t1); box-shadow: inset 0 0 0 1px var(--line), 0 1px 2px var(--ds-color-shadow-key); }
-.proj .ring { width: 14px; height: 14px; flex: none; }
-.proj .sub { margin-left: 22px; }
-.proj .sub a { height: 28px; font-weight: 400; }
-.proj .sub a.on { background: var(--ds-color-bg-neutral-subtle); box-shadow: none; color: var(--t1); font-weight: 500; }
+.app { display: grid; grid-template-columns: var(--side) 1fr; height: 900px; }
+
+/* ---------- sidebar ---------- */
+.side { background: var(--wash); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: var(--ds-space-12) var(--ds-space-8); min-height: 0; }
+.ws { display: flex; align-items: center; gap: var(--ds-space-8); height: var(--ds-size-control-md); padding: 0 var(--ds-space-8); }
+.ws .tile { width: var(--ds-size-icon-md); height: var(--ds-size-icon-md); border-radius: var(--ds-radius-control-sm); background: var(--primary); color: var(--on-primary); display: grid; place-items: center; }
+.ws .tile svg { width: 12px; height: 12px; }
+.ws b { font: var(--ds-text-title-sm); }
+.ws .chev { color: var(--ink-3); width: 14px; height: 14px; }
+.find { margin: var(--ds-space-8) 0 var(--ds-space-12); height: var(--ds-size-control-md); display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-6) 0 var(--ds-space-8); border-radius: var(--ds-radius-control); background: var(--page); box-shadow: inset 0 0 0 1px var(--edge); color: var(--ink-3); }
+.find span { flex: 1; }
+kbd { font: var(--ds-text-body-sm); letter-spacing: 0; color: var(--ink-3); padding: 0 var(--ds-space-4); border-radius: var(--ds-radius-control-sm); box-shadow: inset 0 0 0 1px var(--edge); line-height: 18px; }
+nav { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+nav a { display: flex; align-items: center; gap: var(--ds-space-8); height: var(--ds-size-control-md); padding: 0 var(--ds-space-8) 0 var(--ds-space-12); border-radius: var(--ds-radius-control); color: var(--ink-2); text-decoration: none; }
+nav a svg { color: var(--ink-3); }
+nav a .n { margin-left: auto; font: var(--ds-text-body-sm); color: var(--ink-3); }
+nav a[aria-current] { background: var(--ds-color-neutral-light-4); color: var(--ink); font-weight: 500; }
+nav a[aria-current] svg { color: var(--ink); }
+.sec { font: var(--ds-text-body-sm); font-weight: 500; color: var(--ink-3); padding: var(--ds-space-20) var(--ds-space-12) var(--ds-space-6); }
+.me { margin-top: auto; display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-12) var(--ds-space-8) var(--ds-space-4); border-top: 1px solid var(--line); }
+.me .who { flex: 1; display: grid; min-width: 0; }
+.me .who b { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.me .who span { font: var(--ds-text-body-sm); color: var(--ink-3); }
+.av { width: var(--ds-size-icon-lg); height: var(--ds-size-icon-lg); border-radius: 50%; background: var(--ds-color-neutral-light-3); color: var(--ink-2); display: inline-grid; place-items: center; font: var(--ds-text-body-sm); font-weight: 500; letter-spacing: -0.02em; flex: none; box-shadow: inset 0 0 0 1px var(--ds-color-neutral-light-5); }
+.iconbtn { width: 28px; height: 28px; display: grid; place-items: center; border-radius: var(--ds-radius-control); color: var(--ink-2); }
+
+/* ---------- main ---------- */
+.main { display: grid; grid-template-rows: 48px 1fr; min-width: 0; min-height: 0; }
+.top { display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-16) 0 var(--ds-space-20); border-bottom: 1px solid var(--line); }
+.crumb { display: flex; align-items: center; gap: var(--ds-space-8); color: var(--ink-2); }
+.crumb .sl { color: var(--ds-color-neutral-light-7); }
+.crumb h1 { font: var(--ds-text-title-sm); color: var(--ink); display: flex; align-items: center; gap: var(--ds-space-4); }
+.crumb h1 svg { width: 14px; height: 14px; color: var(--ink-3); }
 .spacer { flex: 1; }
-.me { display: flex; align-items: center; gap: var(--ds-space-8); height: 40px; padding: 0 var(--ds-space-8); border-top: 1px solid var(--line); margin: 0 calc(-1 * var(--ds-space-12)); padding: var(--ds-space-12) var(--ds-space-20) 0; height: auto; }
-.me .who { flex: 1; font: 500 var(--ds-font-size-14)/1.2 var(--ds-font-family-text); }
-.me .who small { display: block; font: 400 var(--ds-font-size-12)/1.4 var(--ds-font-family-text); color: var(--t3); }
+.btn { height: var(--ds-size-control-md); display: inline-flex; align-items: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); white-space: nowrap; }
+.btn.line { box-shadow: inset 0 0 0 1px var(--edge); color: var(--ink); }
+.btn.dark { background: var(--primary); color: var(--on-primary); }
+.btn.ghost { color: var(--ink-2); padding: 0 var(--ds-space-8); }
+.btn.sm { height: 28px; }
 
-/* avatars: initials on stepped neutrals (no extra hues, one accent rule) */
-.av { width: 24px; height: 24px; border-radius: 50%; display: inline-grid; place-items: center; font: 600 var(--ds-font-size-12)/1 var(--ds-font-family-text); letter-spacing: -.02em; color: var(--ds-color-neutral-light-12); background: var(--ds-color-neutral-light-5); box-shadow: 0 0 0 1.5px var(--ds-color-surface-raised); flex: none; }
-.av.a2 { background: var(--ds-color-neutral-light-7); }
-.av.a3 { background: var(--ds-color-neutral-light-11); color: var(--ds-color-white); }
-.av.a4 { background: var(--ds-color-neutral-light-12); color: var(--ds-color-white); }
-.av.a5 { background: var(--ds-color-accent-light-4); color: var(--ds-color-accent-light-12); }
+.work { display: grid; grid-template-columns: 1fr var(--panel); min-height: 0; }
 
-/* ---------------- main ---------------- */
-.main { margin: var(--ds-space-8) var(--ds-space-8) var(--ds-space-8) 0; background: var(--ds-color-surface-base); border-radius: var(--ds-radius-overlay); box-shadow: inset 0 0 0 1px var(--line), var(--ds-elevation-raised); display: grid; grid-template-rows: 48px 44px auto 1fr 36px; min-height: 0; overflow: hidden; }
-.hdr { display: flex; align-items: center; gap: var(--ds-space-12); padding: 0 var(--ds-space-16) 0 var(--ds-space-20); border-bottom: 1px solid var(--line-2); }
-.crumb { display: flex; align-items: center; gap: var(--ds-space-8); font: 500 var(--ds-font-size-14)/1 var(--ds-font-family-text); color: var(--t2); }
-.crumb b { color: var(--t1); font-weight: 600; }
-.crumb .sep { color: var(--t3); }
-.cyc { font: 500 var(--ds-font-size-12)/1 var(--mono); color: var(--t2); padding: var(--ds-space-4) var(--ds-space-6); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-neutral-subtle); }
-.hdr .grow { flex: 1; }
-.stack { display: flex; }
-.stack { gap: var(--ds-space-4); }
-.stack .av { width: 28px; height: 28px; margin-left: 0; box-shadow: 0 0 0 2px var(--ds-color-surface-base); }
-.btn { height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-container); display: inline-flex; align-items: center; gap: var(--ds-space-8); font: 500 var(--ds-font-size-14)/1 var(--ds-font-family-text); }
-.btn.ghost { box-shadow: inset 0 0 0 1px var(--ds-color-border-default); color: var(--t1); background: var(--ds-color-surface-raised); }
-.btn.pri { background: var(--accent); color: var(--ds-color-text-on-action); box-shadow: inset 0 -1px 0 color-mix(in oklab, var(--ds-color-black) 18%, transparent); }
-.btn.pri kbd { background: var(--ds-color-accent-light-11); box-shadow: none; color: var(--ds-color-text-on-action); }
-.btn.icon { width: 32px; padding: 0; justify-content: center; color: var(--t2); }
+/* ---------- toolbar ---------- */
+.plan { display: grid; grid-template-rows: 44px 1fr 40px; min-width: 0; min-height: 0; }
+.bar { display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-12) 0 var(--ds-space-16); border-bottom: 1px solid var(--line); }
+.seg { display: inline-flex; padding: var(--ds-space-2); gap: var(--ds-space-2); border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-2); box-shadow: inset 0 0 0 1px var(--line); }
+.seg button { height: 24px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control-sm); color: var(--ink-2); display: inline-flex; align-items: center; gap: var(--ds-space-6); }
+.seg button[aria-pressed="true"] { background: var(--page); color: var(--ink); font-weight: 500; box-shadow: 0 0 0 1px var(--edge); }
+.vr { width: 1px; height: 18px; background: var(--line); margin: 0 var(--ds-space-4); }
+.tally { font: var(--ds-text-body-sm); color: var(--ink-3); margin-right: var(--ds-space-4); }
 
-.viewbar { display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-16) 0 var(--ds-space-20); border-bottom: 1px solid var(--line-2); }
-.tabs { display: flex; gap: var(--ds-space-2); padding: var(--ds-space-2); border-radius: var(--ds-radius-container); background: var(--ds-color-bg-neutral-subtle); }
-.tab { height: 28px; padding: 0 var(--ds-space-8) 0 var(--ds-space-12); border-radius: var(--ds-radius-container); display: inline-flex; align-items: center; gap: var(--ds-space-8); font: 500 var(--ds-font-size-14)/1 var(--ds-font-family-text); color: var(--t2); }
-.tab kbd { height: 18px; min-width: 18px; background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
-.tab.on { background: var(--ds-color-surface-raised); color: var(--t1); box-shadow: 0 0 0 1px var(--line), 0 1px 2px var(--ds-color-shadow-key); }
-.chip { height: 28px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-container); display: inline-flex; align-items: center; gap: var(--ds-space-6); font: 400 var(--ds-font-size-14)/1 var(--ds-font-family-text); color: var(--t2); box-shadow: inset 0 0 0 1px var(--line); }
-.chip b { font-weight: 500; color: var(--t1); }
-.chip.add { box-shadow: inset 0 0 0 1px var(--line); border: 0; color: var(--t3); }
-.viewbar .grow { flex: 1; }
+/* ---------- timeline ---------- */
+.tl { position: relative; overflow: hidden; min-height: 0; display: flex; flex-direction: column; }
+.tl .thead { flex: none; }
+.thead, .row { display: grid; grid-template-columns: var(--table) 1fr; }
+.thead { height: 48px; border-bottom: 1px solid var(--edge); }
+.cols { display: grid; grid-template-columns: 1fr 36px 40px 40px 48px; column-gap: var(--ds-space-12); padding: 0 var(--ds-space-12) 0 var(--ds-space-16); border-right: 1px solid var(--line); }
+.thead .cols { align-items: end; padding-bottom: var(--ds-space-4); font: var(--ds-text-body-sm); color: var(--ink-3); line-height: 16px; }
+.thead .cols .r { text-align: right; }
+.thead .cols .r2 { text-align: right; white-space: nowrap; }
+.scale { position: relative; }
+.mo, .wk, .now { position: absolute; font: var(--ds-text-body-sm); line-height: 16px; white-space: nowrap; }
+.mo { top: 6px; color: var(--ink); font-weight: 500; }
+.mtick { position: absolute; top: 4px; height: 20px; width: 1px; background: var(--edge); }
+.wk { top: 28px; color: var(--ink-3); transform: translateX(-50%); }
+.tick { position: absolute; top: 24px; bottom: 0; width: 1px; background: var(--grid); }
+.now { top: 4px; height: 18px; line-height: 18px; padding: 0 var(--ds-space-4); border-radius: var(--ds-radius-control-sm); background: var(--accent); color: var(--ds-color-text-on-accent); font-weight: 600; transform: translateX(-50%); z-index: 2; }
 
-/* timeline */
-.tl { padding: var(--ds-space-12) var(--ds-space-20) var(--ds-space-12); border-bottom: 1px solid var(--line-2); display: grid; grid-template-columns: 196px 1fr; column-gap: var(--ds-space-12); position: relative; }
-.tl-h { grid-column: 1 / -1; display: grid; grid-template-columns: 196px 1fr; column-gap: var(--ds-space-12); align-items: end; margin-bottom: var(--ds-space-6); }
-.tl-h .ttl { font: 600 var(--ds-font-size-14)/1 var(--ds-font-family-text); display: flex; flex-direction: column; gap: var(--ds-space-6); padding-bottom: var(--ds-space-6); }
-.tl-h .ttl small { font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--t2); }
-.days { display: grid; grid-template-columns: repeat(14, 1fr); font: 400 var(--ds-font-size-12)/1 var(--mono); color: var(--t3); }
-.days span { padding: 0 0 var(--ds-space-6) var(--ds-space-4); }
-.days span.we { color: var(--t3); }
-.days span.today { color: var(--accent-ink); font-weight: 500; }
-.ep { height: 30px; display: flex; align-items: center; gap: var(--ds-space-8); font: 500 var(--ds-font-size-14)/1 var(--ds-font-family-text); white-space: nowrap; }
-.ep .pct { margin-left: auto; font: 400 var(--ds-font-size-12)/1 var(--mono); color: var(--t3); }
-.lane { height: 30px; position: relative; display: grid; grid-template-columns: repeat(14, 1fr); }
-.lane i { border-left: 1px solid var(--line-2); }
-.lane i.we { background: repeating-linear-gradient(135deg, transparent 0 4px, var(--ds-color-neutral-light-3) 4px 5px); }
-.barx { position: absolute; top: 6px; height: 18px; border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-4); box-shadow: inset 0 0 0 1px var(--ds-color-neutral-light-6); overflow: hidden; display: flex; align-items: center; }
-.barx .p { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ds-color-neutral-light-11); }
-.barx .av { position: relative; z-index: 1; width: 18px; height: 18px; font-size: 0; margin-left: 0; box-shadow: 0 0 0 2px var(--ds-color-surface-raised); } /* the bar owner, as a dot; the name is in the epic row label */
-.today-line { position: absolute; top: 34px; bottom: 6px; width: 2px; background: var(--accent); z-index: 2; }
-.today-line::before { content: ""; position: absolute; top: -2px; left: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-.mile { position: absolute; z-index: 2; top: 30px; bottom: 6px; width: 0; border-left: 1px dashed var(--ds-color-neutral-light-8); }
-.mile .d { position: absolute; left: -6px; bottom: -2px; width: 11px; height: 11px; transform: rotate(45deg); background: var(--ds-color-surface-raised); box-shadow: inset 0 0 0 2px var(--t1); }
-.mile .lbl { position: absolute; left: 8px; top: -2px; font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--t1); white-space: nowrap; background: var(--ds-color-surface-base); padding: var(--ds-space-2) var(--ds-space-4); }
+.rows { position: relative; flex: 1; }
+.rows::before { content: ""; position: absolute; top: 0; bottom: 0; left: calc(var(--table) - 1px); width: 1px; background: var(--line); }
+.row { height: var(--row); }
+.row .cols { align-items: center; border-bottom: 1px solid var(--grid); min-width: 0; }
+.row .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .c, .row .t, .row .f, .row .s { font: var(--ds-text-body-sm); white-space: nowrap; font-variant-numeric: tabular-nums; text-align: right; }
+.row .c, .row .t { color: var(--ink-2); }
+.row .f { color: var(--ink); }
+.row .s { color: var(--ink-3); }
+.row .s.late { color: var(--late); font-weight: 600; }
+.row .na { color: var(--ink-3); }
+.row .track { position: relative; }
+.row.group { height: 32px; }
+.row.group .cols { display: flex; align-items: center; border-bottom-color: var(--line); gap: var(--ds-space-6); padding-left: var(--ds-space-12); }
+.row.group .cols svg { width: 12px; height: 12px; color: var(--ink-3); }
+.row.group b { font: var(--ds-text-label-lg); font-weight: 600; }
+.row.group .count { font: var(--ds-text-body-sm); color: var(--ink-3); }
+.row.sel .cols, .row.sel .track { background: var(--selected); }
+.row.foot b { font-weight: 400; color: var(--ink-2); }
 
-/* board */
-.board { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--ds-space-12); padding: var(--ds-space-12) var(--ds-space-16) 0 var(--ds-space-20); min-height: 0; overflow: hidden; background: var(--ds-color-surface-sunken); }
-.col { display: flex; flex-direction: column; gap: var(--ds-space-8); min-width: 0; }
-.col-h { display: flex; align-items: center; gap: var(--ds-space-8); height: 28px; font: 600 var(--ds-font-size-14)/1 var(--ds-font-family-text); }
-.col-h .c { font: 400 var(--ds-font-size-12)/1 var(--mono); color: var(--t3); }
-.col-h .grow { flex: 1; }
-.col-h button { width: 24px; height: 24px; display: grid; place-items: center; color: var(--t3); border-radius: var(--ds-radius-control); }
-.st { width: 14px; height: 14px; flex: none; }
-.card { background: var(--ds-color-surface-raised); border-radius: var(--ds-radius-container); box-shadow: inset 0 0 0 1px var(--line), 0 1px 2px var(--ds-color-shadow-key); padding: var(--ds-space-8) var(--ds-space-12) var(--ds-space-8); display: flex; flex-direction: column; gap: var(--ds-space-6); position: relative; }
-.card .top { display: flex; align-items: center; gap: var(--ds-space-6); font: 400 var(--ds-font-size-12)/1 var(--mono); color: var(--t3); }
-.card .top .grow { flex: 1; }
-.card h3 { font: 500 var(--ds-font-size-14)/1.36 var(--ds-font-family-text); color: var(--t1); text-wrap: pretty; }
-.card .meta { display: flex; align-items: center; gap: var(--ds-space-6); flex-wrap: wrap; }
-.lbl { height: 20px; padding: 0 var(--ds-space-6); border-radius: var(--ds-radius-control); box-shadow: inset 0 0 0 1px var(--line); display: inline-flex; align-items: center; gap: var(--ds-space-4); font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--t2); }
-.lbl i { width: 6px; height: 6px; transform: rotate(45deg); background: var(--ds-color-neutral-light-8); }
-.due { font: 400 var(--ds-font-size-12)/1 var(--mono); color: var(--t2); display: inline-flex; align-items: center; gap: 3px; }
-.due.soon { color: var(--accent-ink); }
-.prio { width: 14px; height: 14px; }
-.card.done h3 { color: var(--t2); }
-.card.focus { box-shadow: 0 0 0 2px var(--ds-color-border-focus), 0 4px 12px -4px var(--ds-color-shadow-ambient); }
-.sub-p { display: flex; align-items: center; gap: var(--ds-space-6); font: 400 var(--ds-font-size-12)/1 var(--mono); color: var(--t2); }
-.sub-p .trk { width: 48px; height: 4px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-4); overflow: hidden; }
-.sub-p .trk b { display: block; height: 100%; width: 60%; background: var(--t1); }
-.hint { position: absolute; z-index: 5; left: calc(100% - 28px); top: 54px; width: 212px; padding: var(--ds-space-8); border-radius: var(--ds-radius-container); background: var(--ds-color-neutral-light-12); color: var(--ds-color-white); box-shadow: var(--ds-elevation-overlay); display: grid; gap: var(--ds-space-6); font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); }
-.hint div { display: flex; align-items: center; justify-content: space-between; color: var(--ds-color-neutral-dark-12); }
-.hint kbd { background: color-mix(in oklab, var(--ds-color-white) 14%, transparent); box-shadow: none; color: var(--ds-color-white); }
-.drop { height: 118px; border-radius: var(--ds-radius-container); border: 1.5px dashed var(--ds-color-neutral-light-8); background: color-mix(in oklab, var(--ds-color-neutral-light-3) 60%, transparent); }
-.card.drag { position: absolute; z-index: 6; width: 216px; transform: rotate(2.2deg); box-shadow: inset 0 0 0 1px var(--line), var(--ds-elevation-overlay); }
+.grid { position: absolute; top: 0; bottom: 0; left: calc(var(--table) + var(--inset)); right: 0; background: repeating-linear-gradient(to right, var(--ds-color-neutral-light-2) 0 1px, transparent 1px var(--week)); pointer-events: none; }
+.mline { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--grid); }
+.over { position: absolute; top: 0; bottom: 0; left: var(--table); right: 0; pointer-events: none; z-index: 3; }
+.freeze { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, var(--ds-color-neutral-light-6) 0 1px, transparent 1px 6px); border-left: 1px solid var(--mark); }
+.today { position: absolute; top: -26px; bottom: 0; width: 1px; background: var(--accent); }
 
-/* hover and press (pointer) */
-.nav a, .proj a, .card, .btn, .chip, .tab, .col-h button { transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-hover), box-shadow var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
-.nav a:hover, .proj a:not(.on):hover, .col-h button:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--t1); }
-.card:not(.focus):not(.drag):hover { box-shadow: inset 0 0 0 1px var(--ds-color-border-default), var(--ds-elevation-raised); }
-.btn.pri:hover { background: var(--ds-color-bg-action-primary-hover); }
-.btn.ghost:hover, .chip:hover, .tab:not(.on):hover, .btn.icon:hover { background: var(--ds-color-bg-neutral-subtle-hover); color: var(--t1); }
-/* footer: shortcuts */
-.foot { display: flex; align-items: center; gap: var(--ds-space-16); padding: 0 var(--ds-space-20); border-top: 1px solid var(--line-2); font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--t2); background: var(--ds-color-surface-base); }
-.foot span { display: inline-flex; align-items: center; gap: var(--ds-space-6); }
-.foot kbd { height: 18px; min-width: 18px; font-size: var(--ds-font-size-12); }
-.foot .grow { flex: 1; }
-.sync i { width: 6px; height: 6px; border-radius: 50%; background: var(--ds-color-bg-success-bold); }
+/* bars: the plan from start to target, closed issues as an ink fill, and a red line where the forecast runs past the target */
+.b { position: absolute; top: 11px; height: 14px; border-radius: var(--ds-radius-control-sm); background: var(--page); box-shadow: inset 0 0 0 1px var(--mark); overflow: hidden; z-index: 1; }
+.b .done { position: absolute; left: 0; top: 0; bottom: 0; background: var(--fill); }
+.miss { position: absolute; top: 11px; height: 14px; margin-left: -1px; border-radius: 0 var(--ds-radius-control-sm) var(--ds-radius-control-sm) 0; background: var(--late-mark); z-index: 1; }
+.cslip { position: absolute; top: 17px; height: 2px; background: var(--late-mark); z-index: 2; }
+.cp { position: absolute; top: 14px; width: 8px; height: 8px; border-radius: 50%; transform: translateX(-50%); background: var(--page); box-shadow: inset 0 0 0 1.5px var(--ds-color-neutral-light-12), 0 0 0 1.5px var(--page); z-index: 2; }
+.cp.met { background: var(--ds-color-neutral-light-12); }
+
+.legend { display: flex; align-items: center; gap: var(--ds-space-20); padding: 0 var(--ds-space-16); border-top: 1px solid var(--line); font: var(--ds-text-body-sm); color: var(--ink-3); background: var(--page); }
+.legend .rule { margin-left: auto; }
+.legend span { display: inline-flex; align-items: center; gap: var(--ds-space-6); }
+.legend i { display: inline-block; flex: none; }
+.lg-bar { width: 22px; height: 10px; border-radius: 3px; box-shadow: inset 0 0 0 1px var(--mark); background: linear-gradient(90deg, var(--fill) 0 50%, var(--page) 50%); }
+.lg-miss { width: 12px; height: 10px; border-radius: 0 3px 3px 0; background: var(--late-mark); }
+.lg-cp { width: 8px; height: 8px; border-radius: 50%; background: var(--ds-color-neutral-light-12); }
+.legend .lg-cp + .lg-cp { margin-left: -2px; }
+.lg-cp.open { background: var(--page); box-shadow: inset 0 0 0 1.5px var(--ds-color-neutral-light-12); }
+.lg-frz { width: 14px; height: 12px; background: repeating-linear-gradient(135deg, var(--ds-color-neutral-light-6) 0 1px, transparent 1px 4px); box-shadow: inset 1px 0 0 var(--mark); }
+
+/* ---------- side panel ---------- */
+.panel { border-left: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
+.ph { height: 44px; flex: none; display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-12) 0 var(--ds-space-20); border-bottom: 1px solid var(--line); color: var(--ink-2); }
+.ph .grow { flex: 1; }
+.pb { padding: var(--ds-space-16) var(--ds-space-20); display: flex; flex-direction: column; gap: var(--ds-space-16); min-height: 0; }
+.pb h2 { font: var(--ds-text-title-md); letter-spacing: -0.005em; }
+.desc { color: var(--ink-2); margin-top: var(--ds-space-4); }
+.sh { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-8); }
+.sh h3 { font: var(--ds-text-title-sm); }
+.sh span { font: var(--ds-text-body-sm); color: var(--ink-3); }
+.big { display: grid; gap: var(--ds-space-2); }
+.big .k { font: var(--ds-text-body-sm); color: var(--ink-3); }
+.big .fig { font: var(--ds-text-headline-md); font-weight: 500; letter-spacing: -0.015em; font-variant-numeric: tabular-nums; }
+.big .late { color: var(--late); font-weight: 600; }
+.big .props { margin-top: var(--ds-space-8); }
+.big .props dt, .big .props dd { min-height: 28px; height: 28px; }
+.cph { display: grid; grid-template-columns: 1fr 46px 52px; column-gap: var(--ds-space-8); align-items: baseline; padding-left: 22px; }
+.cph h3 { font: var(--ds-text-title-sm); margin-left: -22px; }
+.cph span { font: var(--ds-text-body-sm); color: var(--ink-3); text-align: right; }
+.decide { flex: none; margin-top: auto; padding: var(--ds-space-12) var(--ds-space-20) var(--ds-space-16); border-top: 1px solid var(--line); display: grid; gap: var(--ds-space-8); }
+.decide p { color: var(--ink-2); }
+.decide .acts { display: flex; gap: var(--ds-space-8); justify-content: flex-end; }
+.fc-line { margin-top: var(--ds-space-8); }
+.fc-line b { font-weight: 600; }
+.fc-line .late, .fc-risk .late { color: var(--late); font-weight: 600; }
+.lead { display: flex; align-items: center; gap: var(--ds-space-8); margin-top: var(--ds-space-12); color: var(--ink-2); }
+.fc-risk { color: var(--ink-2); margin-top: var(--ds-space-2); }
+.chart { display: block; margin-top: var(--ds-space-12); overflow: visible; }
+.chart text { font: var(--ds-text-body-sm); fill: var(--ink-3); font-variant-numeric: tabular-nums; }
+.chart .lbl { fill: var(--ink-2); }
+.chart .end { fill: var(--ink); font-weight: 600; }
+.cap { margin-top: var(--ds-space-8); font: var(--ds-text-body-sm); color: var(--ink-3); }
+hr { border: 0; border-top: 1px solid var(--line); }
+.props { display: grid; grid-template-columns: 76px 1fr; align-items: center; }
+.props dt { color: var(--ink-3); height: var(--ds-size-control-md); display: flex; align-items: center; }
+.props dd { display: flex; align-items: center; gap: var(--ds-space-8); min-height: var(--ds-size-control-md); }
+.cps { list-style: none; margin-top: var(--ds-space-4); }
+.cps li { display: grid; grid-template-columns: 14px 1fr 46px 52px;  align-items: center; column-gap: var(--ds-space-8); height: var(--ds-size-control-md); }
+.cps .d { width: 8px; height: 8px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--ds-color-neutral-light-12); justify-self: center; }
+.cps .d.met { background: var(--ds-color-neutral-light-12); box-shadow: none; }
+.cps .t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cps .c, .cps .w { font: var(--ds-text-body-sm); color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; }
+.cps .w { color: var(--ink-2); }
+.cps .v { font: var(--ds-text-body-sm); color: var(--ink-3); text-align: right; white-space: nowrap; }
+.cps .v.late { color: var(--late); font-weight: 600; }
+.note { font: var(--ds-text-body-sm); color: var(--ink-3); }
+.ci { margin-top: var(--ds-space-8); }
+
+@media (hover: hover) and (pointer: fine) {
+  nav a:hover:not([aria-current]) { background: var(--ds-color-neutral-light-3); color: var(--ink); }
+  .iconbtn:hover, .btn.ghost:hover, .seg button:hover:not([aria-pressed="true"]) { background: var(--ds-color-neutral-light-3); color: var(--ink); }
+  .btn.line:hover { background: var(--ds-color-neutral-light-2); }
+  .btn.dark:hover { background: var(--ds-color-neutral-light-11); }
+  .row:not(.group):not(.sel):hover .cols, .row:not(.group):not(.sel):hover .track { background: var(--ds-color-neutral-light-2); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  nav a, .btn, .iconbtn, .row .cols, .row .track { transition: background-color var(--ds-motion-duration-micro) ease; }
+}
 </style>
 </head>
 <body>
-<aside>
-  <div class="ws">
-    <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2.5 20.5 7.5v9L12 21.5 3.5 16.5v-9Z" fill="var(--ds-color-neutral-light-12)"/><path d="M12 2.5v9.5l8.5-4.5M12 12 3.5 7.5M12 12v9.5" stroke="var(--ds-color-neutral-light-1)" stroke-width="1.2" fill="none" stroke-linejoin="round"/><path d="M12 12 20.5 7.5v9L12 21.5Z" fill="var(--accent)"/></svg></span>
-    <b>Kestrel</b>
-    <svg class="i" viewBox="0 0 16 16" style="color:var(--t3)"><path d="m5 6.5 3 3 3-3"/></svg>
-    <span class="grow"></span>
-    <button class="btn icon" aria-label="New issue" style="height:28px;width:28px"><svg class="i" viewBox="0 0 16 16"><path d="M9.5 2.5H4A1.5 1.5 0 0 0 2.5 4v8A1.5 1.5 0 0 0 4 13.5h8a1.5 1.5 0 0 0 1.5-1.5V6.5"/><path d="m13 2.2.8.8-5.6 5.6-1.3.5.5-1.3Z"/></svg></button>
-  </div>
-  <div class="search"><svg class="i" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg><span>Search or jump to</span><kbd>⌘K</kbd></div>
-  <nav class="nav" aria-label="Workspace">
-    <a href="#"><svg class="i" viewBox="0 0 16 16"><path d="M2.5 9.5 4 3.5h8l1.5 6v3h-11Z"/><path d="M2.5 9.5h3.2l.8 1.5h3l.8-1.5h3.2"/></svg>Inbox<span class="n hot">4</span></a>
-    <a href="#"><svg class="i" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>My issues<span class="n">12</span></a>
-    <a href="#"><svg class="i" viewBox="0 0 16 16"><path d="M13 8a5 5 0 1 1-1.5-3.5"/><path d="M13 3v2.5h-2.5"/></svg>Cycles</a>
-    <a href="#"><svg class="i" viewBox="0 0 16 16"><path d="M2.5 4h6M5 8h8.5M2.5 12h5"/></svg>Roadmap</a>
-  </nav>
-  <div class="sec"><span>Projects</span><svg class="i" viewBox="0 0 16 16"><path d="M8 3.5v9M3.5 8h9"/></svg></div>
-  <div class="proj">
-    <a href="#" class="on"><svg class="ring" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--ds-color-neutral-light-5)" stroke-width="2"/><path d="M7 1.5A5.5 5.5 0 0 1 11.8 9.6" fill="none" stroke="var(--accent)" stroke-width="2"/></svg>Field App</a>
-    <div class="sub">
-      <a href="#" class="on">Cycle 14</a>
-      <a href="#">Backlog</a>
-      <a href="#">Releases</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 16 16"><path d="m4.5 6.5 3.5 3.5 3.5-3.5"/></symbol>
+  <symbol id="i-right" viewBox="0 0 16 16"><path d="m6.5 4.5 3.5 3.5-3.5 3.5"/></symbol>
+  <symbol id="i-home" viewBox="0 0 16 16"><path d="M2.5 7 8 2.5 13.5 7v6a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z"/><path d="M6.5 13.5v-4h3v4"/></symbol>
+  <symbol id="i-road" viewBox="0 0 16 16"><path d="M2.5 4h6M5 8h7M7 12h6.5"/></symbol>
+  <symbol id="i-box" viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="11" rx="2"/><path d="M2.5 6.5h11M6.5 6.5v7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="11" rx="2"/><path d="m5.5 8.25 1.75 1.75 3.25-3.5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 16 16"><path d="M8 3.5v9M3.5 8h9"/></symbol>
+  <symbol id="i-share" viewBox="0 0 16 16"><path d="M6.5 9.5 9.5 6.5"/><path d="M7.5 4.5 9 3a2.5 2.5 0 0 1 3.5 3.5L11 8M8.5 11.5 7 13a2.5 2.5 0 0 1-3.5-3.5L5 8"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 16 16"><path d="M2.5 3.5h11l-4.25 5v4l-2.5 1.5v-5.5z"/></symbol>
+  <symbol id="i-rows" viewBox="0 0 16 16"><path d="M6 4h7.5M6 8h7.5M6 12h7.5"/><circle cx="3" cy="4" r=".6"/><circle cx="3" cy="8" r=".6"/><circle cx="3" cy="12" r=".6"/></symbol>
+  <symbol id="i-tl" viewBox="0 0 16 16"><rect x="2" y="2.75" width="6.5" height="2.5" rx="1"/><rect x="5" y="6.75" width="7" height="2.5" rx="1"/><rect x="8.5" y="10.75" width="5.5" height="2.5" rx="1"/></symbol>
+  <symbol id="i-group" viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="4" rx="1"/><rect x="2.5" y="9.5" width="11" height="4" rx="1"/></symbol>
+  <symbol id="i-x" viewBox="0 0 16 16"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 16 16"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 12 12"><path d="M2.5 9.5c0-4 2.5-7 7-7 0 4.5-3 7-7 7Z" fill="currentColor" stroke="none"/></symbol>
+</svg>
+
+<div class="app">
+  <aside class="side" aria-label="Workspace">
+    <div class="ws">
+      <span class="tile" aria-hidden="true"><svg class="i" viewBox="0 0 12 12"><use href="#i-leaf"/></svg></span>
+      <b>Whinberry</b>
+      <svg class="i chev" aria-hidden="true"><use href="#i-chev"/></svg>
     </div>
-    <a href="#"><svg class="ring" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--ds-color-neutral-light-5)" stroke-width="2"/><path d="M7 1.5A5.5 5.5 0 0 1 12.2 8.8 5.5 5.5 0 0 1 3.3 11" fill="none" stroke="var(--ds-color-neutral-light-11)" stroke-width="2"/></svg>Billing v2</a>
-    <a href="#"><svg class="ring" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--ds-color-neutral-light-5)" stroke-width="2"/><path d="M7 1.5A5.5 5.5 0 0 1 12.5 7" fill="none" stroke="var(--ds-color-neutral-light-11)" stroke-width="2"/></svg>Design system</a>
-    <a href="#"><svg class="ring" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="var(--ds-color-neutral-light-5)" stroke-width="2"/><path d="M7 1.5A5.5 5.5 0 0 1 9 1.9" fill="none" stroke="var(--ds-color-neutral-light-11)" stroke-width="2"/></svg>Partner portal</a>
-  </div>
-  <div class="sec"><span>Views</span></div>
-  <div class="proj">
-    <a href="#"><svg class="i" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M4.2 11.8l7.6-7.6"/></svg>Blocked<span class="n" style="margin-left:auto;font:500 var(--ds-font-size-12)/1 var(--mono);color:var(--t2)">2</span></a>
-    <a href="#"><svg class="i" viewBox="0 0 16 16"><rect x="2.5" y="3.5" width="11" height="10" rx="1.5"/><path d="M2.5 6.5h11M5.5 2v3M10.5 2v3"/></svg>Due this week<span class="n" style="margin-left:auto;font:500 var(--ds-font-size-12)/1 var(--mono);color:var(--t2)">7</span></a>
-  </div>
-  <div class="spacer"></div>
-  <div class="me">
-    <span class="av a4" style="width:32px;height:32px">MO</span>
-    <div class="who">Mara Okafor<small>Engineering lead</small></div>
-    <button class="btn icon" aria-label="Settings"><svg class="i" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2"/><path d="M8 1.8v1.8M8 12.4v1.8M1.8 8h1.8M12.4 8h1.8M3.6 3.6l1.3 1.3M11.1 11.1l1.3 1.3M3.6 12.4l1.3-1.3M11.1 4.9l1.3-1.3"/></svg></button>
-  </div>
-</aside>
-
-<div class="main">
-  <header class="hdr">
-    <div class="crumb"><span>Field App</span><span class="sep">/</span><h1 style="font:inherit;font-weight:600;color:var(--t1)">Cycle 14</h1><span class="cyc">Oct 7 – Oct 20</span></div>
-    <span class="grow"></span>
-    <div class="stack" aria-label="6 members"><span class="av a1">MO</span><span class="av a2">JT</span><span class="av a3">RS</span><span class="av a5">AK</span><span class="av a2">+2</span></div>
-    <button class="btn ghost"><svg class="i" viewBox="0 0 16 16"><path d="M6.5 9.5a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.8.8M9.5 6.5a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.8-.8"/></svg>Share</button>
-    <button class="btn pri"><svg class="i" viewBox="0 0 16 16"><path d="M8 3.5v9M3.5 8h9"/></svg>New issue<kbd>C</kbd></button>
-  </header>
-
-  <div class="viewbar">
-    <div class="tabs" role="tablist">
-      <button class="tab on" role="tab" aria-selected="true"><svg class="i" viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="3" height="11" rx=".8"/><rect x="6.5" y="2.5" width="3" height="7" rx=".8"/><rect x="10.5" y="2.5" width="3" height="9" rx=".8"/></svg>Board<kbd>1</kbd></button>
-      <button class="tab" role="tab"><svg class="i" viewBox="0 0 16 16"><path d="M2.5 4.5h6M5.5 8h8M3.5 11.5h5"/></svg>Timeline<kbd>2</kbd></button>
-      <button class="tab" role="tab"><svg class="i" viewBox="0 0 16 16"><path d="M5.5 4h8M5.5 8h8M5.5 12h8M2.5 4h.5M2.5 8h.5M2.5 12h.5"/></svg>List<kbd>3</kbd></button>
+    <div class="find" role="search"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><span>Search</span><kbd>⌘K</kbd></div>
+    <nav aria-label="Main">
+      <a href="#"><svg class="i" aria-hidden="true"><use href="#i-home"/></svg>Home</a>
+      <a href="#" aria-current="page"><svg class="i" aria-hidden="true"><use href="#i-road"/></svg>Roadmaps</a>
+      <a href="#"><svg class="i" aria-hidden="true"><use href="#i-box"/></svg>Projects<span class="n num">19</span></a>
+      <a href="#"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Check-ins<span class="n num">4</span></a>
+    </nav>
+    <div class="sec">Teams</div>
+    <nav class="teams" aria-label="Teams">
+      <a href="#">Storefront</a>
+      <a href="#">Fulfilment</a>
+      <a href="#">Driver app</a>
+      <a href="#">Loyalty</a>
+      <a href="#">Payments</a>
+    </nav>
+    <div class="me">
+      <span class="av" aria-hidden="true">MQ</span>
+      <div class="who"><b>Martha Quayle</b><span>Head of product</span></div>
     </div>
-    <span class="chip"><svg class="i" viewBox="0 0 16 16"><path d="M2.5 4h11M4.5 8h7M6.5 12h3"/></svg>Label is <b>mobile</b></span>
-    <span class="chip">Assignee <b>anyone</b></span>
-    <span class="chip add"><svg class="i" viewBox="0 0 16 16"><path d="M8 3.5v9M3.5 8h9"/></svg>Filter<kbd style="height:18px">F</kbd></span>
-    <span class="grow"></span>
-    <span class="chip">Group <b>Status</b></span>
-    <span class="chip">Order <b>Priority</b></span>
-  </div>
+  </aside>
 
-  <section class="tl" aria-label="Cycle timeline">
-    <div class="tl-h">
-      <div class="ttl">Cycle 14 <small>Day 8 of 14 · 61% done</small></div>
-      <div class="days" id="days"></div>
+  <div class="main">
+    <header class="top">
+      <div class="crumb">
+        <span>Roadmaps</span><span class="sl" aria-hidden="true">/</span>
+        <h1>H2 2026 <svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></h1>
+      </div>
+      <span class="spacer"></span>
+      <button class="btn line"><svg class="i" aria-hidden="true"><use href="#i-share"/></svg>Share</button>
+      <button class="btn line"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg>New project</button>
+    </header>
+
+    <div class="work">
+      <section class="plan" aria-label="H2 2026 timeline">
+        <div class="bar">
+          <div class="seg" role="group" aria-label="View">
+            <button aria-pressed="true"><svg class="i" aria-hidden="true"><use href="#i-tl"/></svg>Timeline</button>
+            <button aria-pressed="false"><svg class="i" aria-hidden="true"><use href="#i-rows"/></svg>List</button>
+          </div>
+          <span class="vr" aria-hidden="true"></span>
+          <button class="btn ghost sm"><svg class="i" aria-hidden="true"><use href="#i-filter"/></svg>Filter</button>
+          <button class="btn ghost sm"><svg class="i" aria-hidden="true"><use href="#i-group"/></svg>Group: Team</button>
+          <span class="spacer"></span>
+          <span class="tally num">14 scheduled · 2 forecast late</span>
+          <div class="seg" role="group" aria-label="Zoom">
+            <button aria-pressed="true">Weeks</button>
+            <button aria-pressed="false">Months</button>
+          </div>
+          <button class="btn line sm">Today</button>
+        </div>
+
+        <div class="tl" role="table" aria-label="Projects by team, 31 Aug to 20 Dec 2026">
+          <div class="thead" role="row">
+            <div class="cols"><span role="columnheader">Project</span><span class="r" role="columnheader">Closed</span><span class="r" role="columnheader">Target</span><span class="r2" role="columnheader">Forecast</span><span class="r2" role="columnheader">vs target</span></div>
+            <div class="scale" id="scale" role="columnheader" aria-label="Weeks"></div>
+          </div>
+          <div class="rows" id="rows"></div>
+        </div>
+        <div class="legend" aria-hidden="true">
+          <span><i class="lg-bar"></i>Issues closed</span>
+          <span><i class="lg-miss"></i>Forecast past target</span>
+          <span><i class="lg-cp"></i><i class="lg-cp open"></i>Checkpoint met, open</span>
+          <span><i class="lg-frz"></i>Peak freeze from 14 Dec</span>
+        </div>
+      </section>
+
+      <aside class="panel" aria-label="Project details">
+        <div class="ph">
+          <span>Storefront</span>
+          <span class="grow"></span>
+          <button class="btn ghost sm"><svg class="i" aria-hidden="true"><use href="#i-expand"/></svg>Open</button>
+          <button class="iconbtn" aria-label="Close panel"><svg class="i"><use href="#i-x"/></svg></button>
+        </div>
+        <div class="pb">
+          <div>
+            <h2>Christmas slot booking</h2>
+            <p class="desc">Delivery slots for 21 to 24 Dec. Members book from 23 Nov, everyone else from 30 Nov.</p>
+            <div class="lead"><span class="av" aria-hidden="true">NE</span>Ngozi Eze leads, with 5 others</div>
+          </div>
+          <div class="big">
+            <span class="k">Forecast finish</span>
+            <b class="fig">Tue 8 Dec</b>
+            <span class="late">8 days past the 30 Nov target</span>
+            <dl class="props">
+              <dt>Closed</dt><dd class="num">41 of 89 issues</dd>
+              <dt>Pace</dt><dd class="num">25 issues in the last 4 weeks</dd>
+            </dl>
+          </div>
+          <hr>
+          <div>
+            <div class="cph"><h3>Checkpoints</h3><span>Due</span><span>Forecast</span></div>
+            <ul class="cps">
+              <li><span class="d met" aria-label="Met"></span><span class="t">Slot model and pricing</span><span class="w num">9 Oct</span><span class="v">met</span></li>
+              <li><span class="d" aria-label="Open, 11 issues"></span><span class="t">Load test at 9,000/min</span><span class="w num">22 Oct</span><span class="v late">28 Oct</span></li>
+              <li><span class="d" aria-label="Open, 22 issues"></span><span class="t">Members first</span><span class="w num">23 Nov</span><span class="v">on time</span></li>
+              <li><span class="d" aria-label="Open, 15 issues"></span><span class="t">Everyone else</span><span class="w num">30 Nov</span><span class="v late">8 Dec</span></li>
+            </ul>
+          </div>
+          <hr>
+          <div>
+            <div class="sh"><h3>Week 42 check-in</h3><span class="num">Ngozi Eze, Wed 14 Oct</span></div>
+            <p class="ci">Tuesday’s load test peaked at 6,200 bookings a minute. Opening night needs about 9,000: last year’s 7,400 plus 22% more members. We retest on Thu 22 Oct if the queue is in.</p>
+          </div>
+        </div>
+        <div class="decide">
+          <p>To keep 30 Nov at this pace, cut 7 of the 48 open issues.</p>
+          <div class="acts"><button class="btn line sm">Move target to 8 Dec</button><button class="btn dark sm">Choose 7 to cut</button></div>
+        </div>
+      </aside>
     </div>
-    <div id="eps"></div>
-    <div id="lanes" style="position:relative"></div>
-  </section>
-
-  <section class="board" id="board" aria-label="Board"></section>
-
-  <footer class="foot">
-    <span><kbd>⌘K</kbd>Command menu</span>
-    <span><kbd>C</kbd>New issue</span>
-    <span><kbd>J</kbd><kbd>K</kbd>Move between cards</span>
-    <span><kbd>⇧</kbd><kbd>→</kbd>Move to next status</span>
-    <span><kbd>?</kbd>All shortcuts</span>
-    <span class="grow"></span>
-    <span class="sync"><i></i>Synced 2 s ago</span>
-  </footer>
+  </div>
 </div>
 
 <script>
-const days = ['M 7','T 8','W 9','T 10','F 11','S 12','S 13','M 14','T 15','W 16','T 17','F 18','S 19','S 20'];
-// today is Tuesday 14 October: index 7 when the cycle starts Tue 7 Oct
-const labels = ['Tu 7','We 8','Th 9','Fr 10','Sa 11','Su 12','Mo 13','Tu 14','We 15','Th 16','Fr 17','Sa 18','Su 19','Mo 20'];
-const weekend = [4, 5, 11, 12], TODAY = 7;
-document.getElementById('days').innerHTML = labels.map((d, i) => `<span class="${weekend.includes(i) ? 'we' : ''} ${i === TODAY ? 'today' : ''}">${d}</span>`).join('');
-const eps = [
-  { n: 'Offline sync', s: 0, e: 10, p: .68, who: 'MO', a: 'a4' },
-  { n: 'Route planner', s: 2, e: 14, p: .35, who: 'JT', a: 'a2' },
-  { n: 'Photo capture v2', s: 5, e: 11, p: .5, who: 'RS', a: 'a3' },
-  { n: 'Dispatcher map', s: 7, e: 14, p: .1, who: 'AK', a: 'a5' },
-];
-const pct = (x) => `${x / 14 * 100}%`;
-document.getElementById('eps').innerHTML = eps.map((e) => `<div class="ep"><svg class="st" viewBox="0 0 14 14"><path d="M7 1.5 12.5 7 7 12.5 1.5 7Z" fill="none" stroke="var(--ds-color-neutral-light-11)" stroke-width="1.5"/><path d="M7 1.5 12.5 7 7 12.5Z" fill="var(--ds-color-neutral-light-11)"/></svg>${e.n}<span class="pct">${Math.round(e.p * 100)}%</span></div>`).join('');
-document.getElementById('lanes').innerHTML = eps.map((e) => `<div class="lane">${labels.map((_, i) => `<i class="${weekend.includes(i) ? 'we' : ''}"></i>`).join('')}<div class="barx" style="left:calc(${pct(e.s)} + 2px);width:calc(${pct(e.e - e.s)} - 4px)"><span class="p" style="width:${e.p * 100}%"></span><span class="av ${e.a}" aria-label="Lead ${e.who}"></span></div></div>`).join('')
-  + `<div class="today-line" style="left:calc(${pct(TODAY + .5)} - 1px);top:2px"></div>`
-  + `<div class="mile" style="left:${pct(11)};top:0"><span class="d"></span></div>`;
-// milestone label on the day row
-document.querySelector('.tl').insertAdjacentHTML('beforeend', `<div class="mile-tag" style="position:absolute;left:calc(var(--ds-space-20) + 196px + var(--ds-space-12) + (100% - 196px - var(--ds-space-12) - 2 * var(--ds-space-20)) * 11 / 14 + 8px);bottom:calc(var(--ds-space-12) + 36px);font:500 var(--ds-font-size-12)/1 var(--ds-font-family-text);color:var(--ds-color-text-primary);background:var(--ds-color-surface-base);padding:3px 6px;border-radius:var(--ds-radius-control);box-shadow:inset 0 0 0 1px var(--ds-color-border-subtle)">◆ Release 4.2 · Fri 17</div>`);
+// Timeline scale: day 0 is Mon 31 Aug 2026; 16 weeks of 31 px end on Sun 20 Dec.
+const D0 = Date.UTC(2026, 7, 31), WEEK = 31, PX = WEEK / 7, WEEKS = 16, IN = 8;   // IN: the timeline starts 8 px in from the table
+const day = s => Math.round((Date.parse(s + 'T00:00:00Z') - D0) / 864e5);
+const xs = s => IN + day(s) * PX;            // start of a day
+const xe = s => IN + (day(s) + 1) * PX;      // end of a day: a target day is inside its bar
+const xm = s => IN + (day(s) + 0.5) * PX;
+const fmt = s => new Date(s + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+const TODAY = '2026-10-15';
 
-const st = {
-  backlog: '<svg class="st" viewBox="0 0 14 14"><path d="M7 1.5 12.5 7 7 12.5 1.5 7Z" fill="none" stroke="var(--ds-color-neutral-light-8)" stroke-width="1.5" stroke-dasharray="2 1.6"/></svg>',
-  todo: '<svg class="st" viewBox="0 0 14 14"><path d="M7 1.5 12.5 7 7 12.5 1.5 7Z" fill="none" stroke="var(--ds-color-neutral-light-10)" stroke-width="1.5"/></svg>',
-  prog: '<svg class="st" viewBox="0 0 14 14"><path d="M7 1.5 12.5 7 7 12.5 1.5 7Z" fill="none" stroke="var(--ds-color-neutral-light-12)" stroke-width="1.5"/><path d="M7 1.5 12.5 7 7 12.5Z" fill="var(--ds-color-neutral-light-12)"/></svg>',
-  review: '<svg class="st" viewBox="0 0 14 14"><path d="M7 1.5 12.5 7 7 12.5 1.5 7Z" fill="none" stroke="var(--ds-color-neutral-light-12)" stroke-width="1.5"/><path d="M7 4 10 7 7 10 4 7Z" fill="var(--ds-color-neutral-light-12)"/></svg>',
-  done: '<svg class="st" viewBox="0 0 14 14"><path d="M7 1 13 7 7 13 1 7Z" fill="var(--ds-color-neutral-light-11)"/><path d="m4.8 7.1 1.6 1.6 2.9-3" fill="none" stroke="var(--ds-color-white)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-};
-const pri = {
-  urgent: '<svg class="prio" viewBox="0 0 14 14" aria-label="Urgent"><rect x="1" y="1" width="12" height="12" rx="3" fill="var(--accent)"/><path d="M7 4v3.6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><circle cx="7" cy="10" r="1" fill="#fff"/></svg>',
-  high: '<svg class="prio" viewBox="0 0 14 14" aria-label="High"><rect x="1.5" y="8" width="2.4" height="4" rx=".6" fill="var(--ds-color-neutral-light-12)"/><rect x="5.8" y="5" width="2.4" height="7" rx=".6" fill="var(--ds-color-neutral-light-12)"/><rect x="10.1" y="2" width="2.4" height="10" rx=".6" fill="var(--ds-color-neutral-light-12)"/></svg>',
-  med: '<svg class="prio" viewBox="0 0 14 14" aria-label="Medium"><rect x="1.5" y="8" width="2.4" height="4" rx=".6" fill="var(--ds-color-neutral-light-12)"/><rect x="5.8" y="5" width="2.4" height="7" rx=".6" fill="var(--ds-color-neutral-light-12)"/><rect x="10.1" y="2" width="2.4" height="10" rx=".6" fill="var(--ds-color-neutral-light-6)"/></svg>',
-  low: '<svg class="prio" viewBox="0 0 14 14" aria-label="Low"><rect x="1.5" y="8" width="2.4" height="4" rx=".6" fill="var(--ds-color-neutral-light-12)"/><rect x="5.8" y="5" width="2.4" height="7" rx=".6" fill="var(--ds-color-neutral-light-6)"/><rect x="10.1" y="2" width="2.4" height="10" rx=".6" fill="var(--ds-color-neutral-light-6)"/></svg>',
-};
-const cal = '<svg class="i" viewBox="0 0 16 16" style="width:12px;height:12px"><rect x="2.5" y="3.5" width="11" height="10" rx="1.5"/><path d="M2.5 6.5h11"/></svg>';
-const cols = [
-  { k: 'backlog', n: 'Backlog', c: 9, cards: [
-    { id: 'FLD-231', t: 'Bulk reassign jobs from the dispatcher map', l: ['map', 'web'], p: 'low', a: ['a2', 'JT'] },
-    { id: 'FLD-228', t: 'Light haptic when a signature is captured', l: ['ios'], p: 'low', a: ['a3', 'RS'] },
-    { id: 'FLD-226', t: 'Dark theme for the technician app', l: ['design'], p: 'med', a: ['a5', 'AK'] },
-    { id: 'FLD-223', t: 'Explain why a job was rescheduled', l: ['copy'], p: 'low' },
-  ]},
-  { k: 'todo', n: 'Todo', c: 5, cards: [
-    { id: 'FLD-219', t: 'Cache the parts catalog for offline lookup', l: ['offline'], p: 'high', a: ['a4', 'MO'], due: ['Oct 16', 1] },
-    { id: 'FLD-217', t: 'Route planner: avoid toll roads', l: ['routing'], p: 'med', a: ['a2', 'JT'] },
-    { id: 'FLD-215', t: 'Empty state for jobs with no photos', l: ['design'], p: 'low', a: ['a5', 'AK'] },
-  ]},
-  { k: 'prog', n: 'In progress', c: 4, cards: [
-    { id: 'FLD-214', t: 'Resolve sync conflicts when two technicians edit one job', l: ['offline'], p: 'urgent', a: ['a4', 'MO'], due: ['Oct 15', 1], sub: '3/5', focus: true },
-    { id: 'FLD-207', t: 'Show ETA drift on the dispatcher map', l: ['map'], p: 'med', a: ['a5', 'AK'] },
-    { id: 'FLD-204', t: 'Turn-by-turn handoff to the phone’s maps app', l: ['routing', 'ios'], p: 'med', a: ['a2', 'JT'] },
-  ]},
-  { k: 'review', n: 'In review', c: 3, drop: true, cards: [
-    { id: 'FLD-205', t: 'Retry queue for failed photo uploads', l: ['offline'], p: 'high', a: ['a3', 'RS'], pr: '#482' },
-    { id: 'FLD-201', t: 'Technician availability calendar', l: ['web'], p: 'med', a: ['a2', 'JT'], pr: '#479' },
-  ]},
-  { k: 'done', n: 'Done', c: 11, cards: [
-    { id: 'FLD-198', t: 'Job checklist templates', l: ['web'], p: 'med', a: ['a4', 'MO'], done: true },
-    { id: 'FLD-196', t: 'Signature pad redraws on rotate', l: ['ios'], p: 'low', a: ['a3', 'RS'], done: true },
-    { id: 'FLD-190', t: 'Crash when a job has no address', l: ['ios'], p: 'high', a: ['a5', 'AK'], done: true },
-    { id: 'FLD-188', t: 'Faster job list on older phones', l: ['perf'], p: 'med', a: ['a2', 'JT'], done: true },
-  ]},
+// s start, e target, c closed of t issues, f forecast (from each project's pace), cp checkpoints [date, met]
+const teams = [
+  ['Storefront', [
+    { n: 'Christmas slot booking', s: '2026-08-31', e: '2026-11-30', c: 41, t: 89, f: '2026-12-08', sel: 1, cp: [['2026-10-09', 1], ['2026-10-22'], ['2026-11-23']] },
+    { n: 'Checkout substitutions', s: '2026-09-14', e: '2026-10-29', c: 39, t: 52, f: '2026-10-26', cp: [['2026-10-08', 1]] },
+    { n: 'Saved baskets', s: '2026-10-05', e: '2026-11-20', c: 9, t: 34, f: '2026-11-12' },
+    { n: 'Search ranking v3', s: '2026-10-26', e: '2026-12-11' },
+  ]],
+  ['Fulfilment', [
+    { n: 'Depot 4 pick paths', s: '2026-09-07', e: '2026-11-06', c: 52, t: 80, f: '2026-11-05', cp: [['2026-10-13', 1], ['2026-11-02']] },
+    { n: 'Short-pick alerts', s: '2026-09-21', e: '2026-10-23', c: 29, t: 36, f: '2026-10-21' },
+    { n: 'Cold-chain scan', s: '2026-10-12', e: '2026-12-04', c: 2, t: 45, early: 1 },
+  ]],
+  ['Driver app', [
+    { n: 'Offline delivery proof', s: '2026-09-21', e: '2026-11-12', c: 21, t: 55, f: '2026-11-23', cp: [['2026-10-26']] },
+    { n: 'Age check at the door', s: '2026-10-05', e: '2026-11-19', c: 7, t: 30, f: '2026-11-17' },
+    { n: 'Two-drop batching', s: '2026-11-02', e: '2026-12-11' },
+  ]],
+  ['Loyalty', [
+    { n: 'Bag returns credit', s: '2026-09-28', e: '2026-10-30', c: 16, t: 24, f: '2026-10-26' },
+    { n: 'Member prices', s: '2026-10-19', e: '2026-12-09' },
+  ]],
+  ['Payments', [
+    { n: 'Vouchers at checkout', s: '2026-10-05', e: '2026-11-13', c: 9, t: 28, f: '2026-11-06' },
+    { n: 'Refunds to wallet', s: '2026-10-19', e: '2026-12-04' },
+  ]],
 ];
-const card = (c) => `<article class="card ${c.done ? 'done' : ''} ${c.focus ? 'focus' : ''} ${c.drag ? 'drag' : ''}" ${c.drag ? `style="${c.drag}" aria-grabbed="true"` : ''} tabindex="0">
-  <div class="top">${pri[c.p]}<span>${c.id}</span><span class="grow"></span>${c.a ? `<span class="av ${c.a[0]}">${c.a[1]}</span>` : ''}</div>
-  <h3>${c.t}</h3>
-  <div class="meta">${c.l.map((x) => `<span class="lbl"><i></i>${x}</span>`).join('')}${c.due ? `<span class="due ${c.due[1] ? 'soon' : ''}">${cal}${c.due[0]}</span>` : ''}${c.pr ? `<span class="due"><svg class="i" viewBox="0 0 16 16" style="width:12px;height:12px"><circle cx="4.5" cy="3.5" r="1.5"/><circle cx="4.5" cy="12.5" r="1.5"/><circle cx="11.5" cy="12.5" r="1.5"/><path d="M4.5 5v6M11.5 11V7a2 2 0 0 0-2-2H7.5"/></svg>${c.pr}</span>` : ''}${c.sub ? `<span class="sub-p"><span class="trk"><b></b></span>${c.sub}</span>` : ''}</div>
-</article>`;
-document.getElementById('board').innerHTML = cols.map((col) => `<div class="col"><h2 class="col-h">${st[col.k]}${col.n}<span class="c">${col.c}</span><span class="grow"></span><button aria-label="Add to ${col.n}"><svg class="i" viewBox="0 0 16 16"><path d="M8 3.5v9M3.5 8h9"/></svg></button></h2>${col.drop ? '<div class="drop" aria-hidden="true"></div>' : ''}${col.cards.map(card).join('')}</div>`).join('');
-// a card mid-drag between In progress and In review
-const dragged = { id: 'FLD-209', t: 'Compress photos before upload', l: ['ios', 'perf'], p: 'high', a: ['a3', 'RS'], drag: 'left: calc(60% + 14px); top: 62px;' };
-const board = document.getElementById('board');
-board.style.position = 'relative';
-board.insertAdjacentHTML('beforeend', card(dragged));
+
+// header: each month at its first day, each Monday's date on its own tick line, today marked on the today line
+let hs = '';
+[['Sep', '2026-09-01'], ['Oct', '2026-10-01'], ['Nov', '2026-11-01'], ['Dec', '2026-12-01']].forEach(([m, d]) => { hs += `<span class="mtick" style="left:${xs(d).toFixed(1)}px"></span><span class="mo" style="left:${(xs(d) + 4).toFixed(1)}px">${m}</span>`; });
+for (let k = 0; k < WEEKS; k++) {
+  const d = new Date(D0 + k * 7 * 864e5);
+  hs += `<span class="tick" style="left:${IN + k * WEEK}px"></span><span class="wk num" style="left:${IN + k * WEEK}px">${d.getUTCDate()}</span>`;
+}
+hs += `<span class="now num" style="left:${Math.round(xm(TODAY)) + 0.5}px" title="Today">15 Oct</span>`;
+document.getElementById('scale').innerHTML = hs;
+
+// rows
+const slack = (f, e) => { const n = day(f) - day(e); return n > 0 ? `${n}d late` : n < 0 ? `${-n}d early` : 'on time'; };
+let rs = '', first = true;
+for (const [team, ps] of teams) {
+  rs += `<div class="row group${first ? ' first' : ''}" role="row"><div class="cols" role="rowheader"><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg><b>${team}</b><span class="count num">${ps.length}</span></div><div class="track" role="cell"></div></div>`;
+  first = false;
+  for (const p of ps) {
+    const x0 = xs(p.s), x1 = xe(p.e), started = p.c !== undefined;
+    let bar = `<span class="b" style="left:${x0.toFixed(1)}px;width:${(x1 - x0).toFixed(1)}px">`;
+    if (started) bar += `<span class="done" style="width:${((x1 - x0) * p.c / p.t).toFixed(1)}px"></span>`;
+    bar += `</span>`;
+    const late = p.f && day(p.f) > day(p.e);
+    if (late) bar += `<span class="miss" style="left:${x1.toFixed(1)}px;width:${(xe(p.f) - x1).toFixed(1)}px"></span>`;
+    for (const [d, met, slip] of (p.cp || [])) {
+      bar += `<span class="cp${met ? ' met' : ''}" style="left:${xm(d).toFixed(1)}px"></span>`;
+    }
+    const fc = p.f ? `<span class="f" role="cell">${fmt(p.f)}</span><span class="s${late ? ' late' : ''}" role="cell">${slack(p.f, p.e)}</span>`
+                   : `<span class="f na" role="cell">–</span><span class="s" role="cell"${started ? ' title="No forecast in a project’s first week"' : ''}></span>`;
+    const label = `${fmt(p.s)} to ${fmt(p.e)}` + (started ? `, ${p.c} of ${p.t} issues closed` : ', not started') + (p.f ? `, forecast ${fmt(p.f)}` : started ? ', no forecast in its first week' : '');
+    rs += `<div class="row${p.sel ? ' sel' : ''}" role="row"${p.sel ? ' aria-selected="true"' : ''}>`
+        + `<div class="cols"><span class="name" role="rowheader">${p.n}</span>`
+        + `<span class="c${started ? '' : ' na'}" role="cell">${started ? `${p.c}/${p.t}` : '–'}</span><span class="t" role="cell">${fmt(p.e)}</span>${fc}</div>`
+        + `<div class="track" role="cell" aria-label="${label}">${bar}</div></div>`;
+  }
+}
+rs += `<div class="row group foot" role="row"><div class="cols" role="rowheader"><svg class="i" aria-hidden="true"><use href="#i-right"/></svg><b>No dates yet</b><span class="count num">5</span></div><div class="track" role="cell"></div></div>`;
+const mlines = [1, 31, 62, 92].map(d => `<span class="mline" style="left:${(d * PX).toFixed(1)}px"></span>`).join('');
+document.getElementById('rows').innerHTML = `<div class="grid" aria-hidden="true">${mlines}</div>` + rs
+  + `<div class="over" aria-hidden="true"><span class="freeze" style="left:${xs('2026-12-14').toFixed(1)}px;right:0"></span><span class="today" style="left:${Math.round(xm(TODAY))}px"></span></div>`;
+
 </script>
 </body>
 </html>

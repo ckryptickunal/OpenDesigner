@@ -3,266 +3,285 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gloaming pricing</title>
+<title>Gloaming · Pricing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-  /* Round 3: the pricing page itself at real size: a plan table, not three cards.
-     The one idea: a dark screening room with one lit column, the plan most people pick.
-     Outside the tokens, on purpose (notes.md): --page is a step darker than neutral.dark.1 so the label
-     column and the dark plans sit on one quiet ground; display text is 400 (Instrument Serif ships one weight). */
-  :root { --page: #0e0f11; --screen: var(--ds-color-neutral-light-1); --ink: var(--ds-color-neutral-light-12);
-    --hair: var(--ds-color-neutral-alpha-dark-4); --hair-lit: var(--ds-color-neutral-light-4); }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: var(--page); }
-  body { color: var(--ds-color-neutral-dark-12); font: var(--ds-text-body-md); -webkit-font-smoothing: antialiased; font-synthesis: none; font-variant-numeric: tabular-nums; }
-  .page { position: relative; width: 1440px; height: 900px; overflow: hidden; }
-  a { color: inherit; text-decoration: none; }
-  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
-  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+/* Gloaming pricing. Colour, space, radius, type and motion are --ds-* tokens; OFF-TOKEN values say why.
+   Amber (the brand seed) has one job on this page: it marks your usage and the plan that covers it. */
+:root {
+  --line: var(--ds-color-neutral-alpha-dark-4);       /* hairlines between plans */
+  --line-strong: var(--ds-color-neutral-alpha-dark-6);
+  --amber: var(--ds-color-accent-dark-9);
+  /* OFF-TOKEN: twilight surfaces. The engine's dark greys are neutral (#141516); Gloaming means dusk, so the page and
+     panels lean blue-black and amber is the last light. Text, lines and controls stay on the token greys. */
+  --dusk: #0e1117;
+  --dusk-raised: #151a22;
+  --w: 1200px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--dusk);
+  color: var(--ds-color-text-primary);
+  font: var(--ds-text-body-md);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh; min-height: 100svh;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.i { width: var(--ds-size-icon-sm); height: var(--ds-size-icon-sm); flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.shell { width: var(--w); margin: 0 auto; }
 
-  /* nav */
-  .nav { height: 72px; display: flex; align-items: center; padding: 0 120px; border-bottom: 1px solid var(--hair); }
-  .brand { display: flex; align-items: center; gap: var(--ds-space-12); margin-right: var(--ds-space-64); }
-  .brand b { font: 400 var(--ds-font-size-28)/1 var(--ds-font-family-display); }
-  .links { display: flex; gap: var(--ds-space-32); color: var(--ds-color-neutral-dark-11); }
-  .links a[aria-current] { color: var(--ds-color-neutral-dark-12); }
-  .nav .end { margin-left: auto; display: flex; align-items: center; gap: var(--ds-space-24); }
-  .nav .end > a:first-child { color: var(--ds-color-neutral-dark-11); }
-  .avatar { display: none; width: 32px; height: 32px; border-radius: 50%; background: var(--ds-color-neutral-dark-5); color: var(--ds-color-neutral-dark-12);
-    font: 500 var(--ds-font-size-12)/32px var(--ds-font-family-text); text-align: center; }
+/* nav */
+.nav { height: 64px; border-bottom: 1px solid var(--line); }
+.nav .shell { height: 100%; display: flex; align-items: center; gap: var(--ds-space-32); }
+.logo { display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-title-sm); letter-spacing: -0.01em; }
+.logo svg { width: 20px; height: 20px; }
+.links { display: flex; gap: var(--ds-space-24); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); }
+.links .on { color: var(--ds-color-text-primary); }
+.nav .end { margin-left: auto; display: flex; align-items: center; gap: var(--ds-space-16); font: var(--ds-text-label-lg); color: var(--ds-color-text-secondary); }
+.btn { height: var(--ds-size-control-md); display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: 500; color: var(--ds-color-text-primary); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.btn.solid { background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); box-shadow: none; }
 
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-8); height: 44px; padding: 0 var(--ds-space-20);
-    border-radius: var(--ds-radius-control-sm); font: 500 var(--ds-font-size-16)/1 var(--ds-font-family-text); white-space: nowrap;
-    transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-hover), border-color var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
-  .btn.sm { height: 36px; padding: 0 var(--ds-space-16); }
-  .btn.light { background: var(--ds-color-neutral-dark-12); color: var(--ink); }
-  .btn.ghost { border: 1px solid var(--ds-color-neutral-alpha-dark-6); color: var(--ds-color-neutral-dark-12); }
-  .btn.ink { background: var(--ink); color: var(--ds-color-neutral-light-1); }
-  @media (hover: hover) and (pointer: fine) {
-    .btn.ghost:hover { border-color: var(--ds-color-neutral-alpha-dark-8); background: var(--ds-color-neutral-alpha-dark-3); }
-    .btn.ink:hover { background: var(--ds-color-neutral-light-11); }
-    .btn.light:hover { background: var(--ds-color-white); }
-  }
-  .spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgb(255 255 255 / .3); border-top-color: var(--ds-color-white); animation: spin .8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+/* header */
+.head { padding-top: var(--ds-space-40); display: flex; align-items: center; gap: var(--ds-space-32); }
+.head h1 { margin: 0; font: var(--ds-text-title-lg); font-weight: 500; letter-spacing: -0.01em; }
+.head .seg { margin-left: auto; }
+.head p { margin: var(--ds-space-8) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-md); }
+.seg { display: inline-flex; padding: var(--ds-space-2); border-radius: var(--ds-radius-control); background: var(--dusk); box-shadow: inset 0 0 0 1px var(--line); }
+.seg button { height: 28px; padding: 0 var(--ds-space-12); border-radius: calc(var(--ds-radius-control) - 2px); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); display: inline-flex; align-items: center; gap: var(--ds-space-6); }
+.seg button[aria-checked="true"] { background: var(--ds-color-neutral-dark-5); color: var(--ds-color-text-primary); box-shadow: var(--ds-elevation-raised); }
+.seg button[aria-checked="true"] small { color: var(--ds-color-text-secondary); }
+.seg small { font: var(--ds-text-label-md); color: var(--ds-color-text-tertiary); }
 
-  /* head */
-  .head { padding: var(--ds-space-48) 120px 0; }
-  h1 { font: 400 var(--ds-font-size-51)/1.1 var(--ds-font-family-display); letter-spacing: -0.01em; }
-  .lead { margin-top: var(--ds-space-12); font: 400 var(--ds-font-size-21)/1.45 var(--ds-font-family-text); color: var(--ds-color-neutral-dark-11); }
+/* estimator */
+.calc { margin-top: var(--ds-space-32); border-radius: var(--ds-radius-container); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.est { display: grid; grid-template-columns: 360px 1fr; /* 360 + 40 gap + 24 inset = the Studio column's content edge, so the slider spans Studio and Premiere */ align-items: center; gap: var(--ds-space-40); padding: var(--ds-space-20) var(--ds-space-24); background: var(--dusk-raised); border-bottom: 1px solid var(--line); }
+.est .lab { font: var(--ds-text-label-lg); color: var(--ds-color-text-secondary); }
+.est .val { margin-top: var(--ds-space-4); display: flex; align-items: baseline; gap: var(--ds-space-8); }
+.est .val b { font: var(--ds-text-title-lg); font-weight: 500; letter-spacing: -0.01em; }
+.est .val span { color: var(--ds-color-text-secondary); }
+.slider { position: relative; height: 44px; outline: none; }
+.slider .rail { position: absolute; left: 0; right: 0; top: 10px; height: 4px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-alpha-dark-5); }
+.slider .fill { position: absolute; left: 0; top: 10px; height: 4px; border-radius: var(--ds-radius-full); background: var(--amber); }
+.slider .thumb { position: absolute; top: 2px; width: 20px; height: 20px; margin-left: -10px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-dark-12); box-shadow: var(--ds-elevation-raised); }
+.slider:focus-visible .thumb { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: 4px; }
+.slider .tick { position: absolute; top: 26px; transform: translateX(-50%); font: var(--ds-text-label-md); color: var(--ds-color-text-secondary); white-space: nowrap; }
+.slider .tick.first { transform: none; }
+.slider .tick.last { transform: translateX(-100%); }
 
-  /* the plan table: a label column and three plans; Studio is the lit column */
-  .table { position: relative; margin: var(--ds-space-40) 120px 0; display: grid; grid-template-columns: 300px repeat(3, 300px); }
-  .table > div { border-bottom: 1px solid var(--hair); }
-  .table > .lit { background: var(--screen); color: var(--ink); border-bottom-color: var(--hair-lit); }
-  .table > .lit.top { border-radius: var(--ds-radius-container) var(--ds-radius-container) 0 0; }
-  .ph { padding: 28px var(--ds-space-24); display: flex; flex-direction: column; }
-  .ph.lbl { padding-left: 0; }
-  .ph h2 { font: 400 var(--ds-font-size-28)/1.2 var(--ds-font-family-display); }
-  .ph .who { margin-top: var(--ds-space-4); color: var(--ds-color-neutral-dark-11); }
-  .lit .who, .lit .bill, .lit .cap, .lit .no { color: var(--ds-color-neutral-light-11); }
-  .price { display: flex; align-items: baseline; gap: var(--ds-space-8); margin-top: var(--ds-space-24); }
-  .price .num { font: 400 var(--ds-font-size-38)/1 var(--ds-font-family-display); transition: opacity var(--ds-motion-duration-short) var(--ds-motion-easing-standard), filter var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
-  .price .num.swap { opacity: 0; filter: blur(2px); }
-  .price .per { color: var(--ds-color-neutral-dark-11); }
-  .lit .price .per { color: var(--ds-color-neutral-light-11); }
-  .bill { margin-top: var(--ds-space-4); color: var(--ds-color-neutral-dark-11); }
-  .billbox { height: 40px; }
-  .bill b { font-weight: 500; color: var(--ds-color-neutral-dark-12); }
-  .lit .bill b { color: var(--ink); }
-  .ph .btn { margin-top: var(--ds-space-16); width: 100%; }
-  .ph .quiet { margin-top: var(--ds-space-16); height: 44px; line-height: 44px; text-align: center; color: var(--ds-color-neutral-dark-11); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--ds-color-neutral-alpha-dark-7); display: none; }
+/* plans */
+.plans { display: grid; grid-template-columns: repeat(3, 1fr); }
+.plan { padding: var(--ds-space-24); display: flex; flex-direction: column; }
+.plan + .plan { border-left: 1px solid var(--line); }
+.plan h2 { margin: 0; font: var(--ds-text-title-md); font-weight: 500; letter-spacing: -0.01em; }
+.plan .for { margin: var(--ds-space-4) 0 0; color: var(--ds-color-text-secondary); }
+.price { margin-top: var(--ds-space-24); display: flex; align-items: baseline; gap: var(--ds-space-8); }
+.price b { font: var(--ds-text-headline-lg); font-weight: 500; letter-spacing: -0.025em; }
+.price span { color: var(--ds-color-text-secondary); }
+.bill { margin-top: var(--ds-space-4); color: var(--ds-color-text-tertiary); font: var(--ds-text-body-md); min-height: 20px; }
+.bill em { font-style: normal; color: var(--ds-color-text-secondary); }
+.plan .btn { margin-top: var(--ds-space-24); height: var(--ds-size-control-lg); width: 100%; }
+.meter { margin-top: var(--ds-space-20); height: 32px; }
+.meter .row { display: flex; justify-content: space-between; gap: var(--ds-space-8); font: var(--ds-text-label-lg); color: var(--ds-color-text-tertiary); white-space: nowrap; }
+.meter .row b { font-weight: 500; color: var(--ds-color-text-secondary); }
+.plan.fit .meter .row b { color: var(--ds-color-text-primary); }
+.meter .track { margin-top: var(--ds-space-8); height: 4px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-alpha-dark-4); overflow: hidden; }
+.meter .track i { display: block; height: 100%; border-radius: var(--ds-radius-full); background: var(--amber); }
 
-  .lbl .k { font: 500 var(--ds-font-size-16)/24px var(--ds-font-family-text); margin: 5px 0 var(--ds-space-12); }
-  .seg { display: inline-flex; align-self: flex-start; padding: var(--ds-space-4); border-radius: var(--ds-radius-full); border: 1px solid var(--ds-color-neutral-alpha-dark-5); }
-  .seg button { height: 32px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-full); font: 500 var(--ds-font-size-16)/1 var(--ds-font-family-text); color: var(--ds-color-neutral-dark-11);
-    transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-hover), color var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
-  .seg button[aria-checked="true"] { background: var(--ds-color-neutral-dark-12); color: var(--ink); }
-  .seg.instant button { transition: none; }
-  .lbl .save { margin-top: var(--ds-space-12); color: var(--ds-color-neutral-dark-11); max-width: 220px; }
+.feat { margin: var(--ds-space-20) 0 0; padding: var(--ds-space-20) 0 0; list-style: none; border-top: 1px solid var(--line); display: grid; gap: var(--ds-space-12); }
+.feat li { display: flex; gap: var(--ds-space-12); align-items: flex-start; }
+.feat .i { margin-top: 2px; color: var(--ds-color-icon-subtle); }
+.feat .dim { color: var(--ds-color-text-tertiary); }
+.note { margin-top: var(--ds-space-16); display: flex; justify-content: space-between; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); }
+.note a { color: var(--ds-color-text-secondary); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line-strong); }
 
-  .grp { padding: var(--ds-space-12) var(--ds-space-24) var(--ds-space-4); font: 500 var(--ds-font-size-16)/24px var(--ds-font-family-text); }
-  .grp.l { padding-left: 0; }
-  .cell { padding: var(--ds-space-8) var(--ds-space-24); min-height: 40px; display: flex; align-items: center; gap: var(--ds-space-8); line-height: 24px; }
-  .cell.l { padding-left: 0; color: var(--ds-color-neutral-dark-11); flex-direction: column; align-items: flex-start; justify-content: center; gap: 0; }
-  .cell .cap { font: 400 var(--ds-font-size-12)/16px var(--ds-font-family-text); color: var(--ds-color-neutral-dark-11); }
-  .cell .no { color: var(--ds-color-neutral-dark-11); }
-  .cell svg { flex: none; }
-
-  /* states, one per frame (?state=monthly | hover | loading | current | focus) */
-  .table > .col-hover { background: var(--ds-color-neutral-alpha-dark-3); }
-  .table > .col-hover.ph { border-radius: var(--ds-radius-container) var(--ds-radius-container) 0 0; }
-  .col-hover .btn.ghost { border-color: var(--ds-color-neutral-alpha-dark-8); background: var(--ds-color-neutral-alpha-dark-3); }
-  [data-state="current"] .nav .signin, [data-state="current"] .nav .start { display: none; }
-  [data-state="current"] .avatar { display: block; }
-  .btn.mine { background: var(--ds-color-neutral-light-3); color: var(--ink); cursor: default; }
-  .use { margin-top: var(--ds-space-6); height: 4px; border-radius: 2px; background: var(--ds-color-neutral-light-4); overflow: hidden; display: none; }
-  .use i { display: block; height: 100%; width: 68.67%; background: var(--ink); }
-
-  @media (prefers-reduced-motion: reduce) { .btn, .seg button, .price .num { transition: none; } .spin { animation-duration: 2.4s; } }
-  @media (prefers-contrast: more) { :root { --hair: var(--ds-color-neutral-alpha-dark-8); } .who, .bill, .cap, .links, .cell.l { color: var(--ds-color-neutral-dark-12); } }
+.cmp { margin-top: var(--ds-space-32); }
+.cmp-h, .cmp-r { display: grid; grid-template-columns: repeat(3, 1fr); }
+.cmp-h span, .cmp-r span { padding: 0 var(--ds-space-24); }
+.cmp-h { padding-bottom: var(--ds-space-12); font: var(--ds-text-title-sm); font-weight: 500; }
+.cmp-r { padding: var(--ds-space-12) 0; border-top: 1px solid var(--line); color: var(--ds-color-text-secondary); }
+.cmp-l { grid-column: 1 / -1; padding: 0 var(--ds-space-24) var(--ds-space-4); font: var(--ds-text-label-md); color: var(--ds-color-text-tertiary); }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { background: var(--ds-color-neutral-alpha-dark-3); }
+  .btn.solid:hover { background: var(--ds-color-neutral-dark-11); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .slider .fill, .slider .thumb { transition: left var(--ds-motion-transition-feedback-duration) var(--ds-motion-transition-feedback-easing), width var(--ds-motion-transition-feedback-duration) var(--ds-motion-transition-feedback-easing); }
+}
 </style>
 </head>
 <body>
-<main class="page" id="page" aria-label="Gloaming pricing">
-  <header class="nav">
-    <a class="brand" href="#" aria-label="Gloaming home">
-      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
-        <path d="M5 18a9 9 0 0 1 18 0z" fill="#F2A93B"/>
-        <rect x="2" y="20" width="24" height="1.5" rx=".75" fill="#e5e9ee"/>
-        <rect x="7" y="24" width="14" height="1.5" rx=".75" fill="#7c8086"/>
-      </svg>
-      <b>Gloaming</b>
-    </a>
-    <nav class="links" aria-label="Main">
-      <a href="#">Studio</a><a href="#">Films</a><a href="#" aria-current="page">Pricing</a><a href="#">Docs</a><a href="#">Changelog</a>
-    </nav>
-    <div class="end">
-      <a class="signin" href="#">Sign in</a>
-      <a class="btn sm light start" href="#">Start free</a>
-      <span class="avatar" aria-label="Signed in as Odile Brenner">OB</span>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="i-fit" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.2 2.4 2.4 4.6-4.8"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></symbol>
+</svg>
+
+<nav class="nav" aria-label="Main">
+  <div class="shell">
+    <a class="logo" href="#"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 13a6 6 0 0 1 12 0z" fill="currentColor"/><path d="M2 16h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Gloaming</a>
+    <div class="links"><a href="#">Editor</a><a href="#">Films</a><a href="#" class="on" aria-current="page">Pricing</a><a href="#">Docs</a><a href="#">Changelog</a></div>
+    <div class="end"><a href="#">Sign in</a><a class="btn" href="#">Open the editor</a></div>
+  </div>
+</nav>
+
+<main class="shell">
+  <header class="head">
+    <h1>Plans by the render-minute</h1>
+    <div class="seg" role="radiogroup" aria-label="Billing">
+      <button role="radio" aria-checked="false" data-bill="m">Monthly</button>
+      <button role="radio" aria-checked="true" data-bill="y">Yearly <small>save 20%</small></button>
     </div>
   </header>
 
-  <section class="head">
-    <h1>Pay for the minutes you render.</h1>
-    <p class="lead">Plans differ in minutes, resolution and team tools. Unused minutes roll over for a month.</p>
+  <div class="calc">
+  <section class="est" aria-label="Estimate your month">
+    <div>
+      <div class="lab" id="est-lab">Finished 4K film a month</div>
+      <div class="val"><b id="est-min">32 min</b><span id="est-rm">uses 480 render-minutes</span></div>
+    </div>
+    <div class="slider" id="slider" role="slider" tabindex="0" aria-labelledby="est-lab" aria-valuemin="5" aria-valuemax="320" aria-valuenow="32" aria-valuetext="32 minutes">
+      <div class="rail"></div><div class="fill" id="fill"></div>
+      <div class="thumb" id="thumb"></div>
+      <span class="tick first" style="left:0">5 min</span>
+      <span class="tick" style="left:16.667%">10</span>
+      <span class="tick" style="left:33.333%">20</span>
+      <span class="tick" style="left:50%">40</span>
+      <span class="tick" style="left:66.667%">80</span>
+      <span class="tick" style="left:83.333%">160</span>
+      <span class="tick last" style="left:100%">320 min</span>
+    </div>
   </section>
 
-  <section class="table" role="table" aria-label="Plans compared">
-    <div class="ph lbl" role="columnheader">
-      <p class="k" id="bl">Billing</p>
-      <div class="seg" id="billing" role="radiogroup" aria-labelledby="bl" data-value="yearly">
-        <button role="radio" aria-checked="false" tabindex="-1" data-v="monthly">Monthly</button>
-        <button role="radio" aria-checked="true" tabindex="0" data-v="yearly">Yearly</button>
-      </div>
-      <p class="save">Yearly saves 20%. Prices in US dollars, before tax.</p>
-    </div>
-    <div class="ph" role="columnheader" id="spark">
+  <section class="plans" aria-label="Plans">
+    <article class="plan" data-plan="spark">
       <h2>Spark</h2>
-      <p class="who">For first cuts and trying looks.</p>
-      <div class="price"><span class="num">$0</span><span class="per">forever</span></div>
-      <div class="billbox"><p class="bill">No card needed.</p></div>
-      <a class="btn ghost" href="#" id="spark-cta">Start free</a>
-      <a class="quiet" href="#" id="spark-down">Move to Spark</a>
-    </div>
-    <div class="ph lit top" role="columnheader" id="studio">
+      <p class="for">For first cuts and trying looks.</p>
+      <div class="price"><b>$0</b><span>forever</span></div>
+      <div class="bill">No card needed · 720p only</div>
+      <div class="meter" aria-hidden="true"></div>
+      <a class="btn" href="#">Start free</a>
+      <ul class="feat">
+        <li><svg class="i"><use href="#i-check"/></svg>20 render-minutes a month</li>
+        <li><svg class="i"><use href="#i-check"/></svg>720p export, watermarked</li>
+        <li><svg class="i"><use href="#i-check"/></svg>1 render at a time</li>
+      </ul>
+    </article>
+    <article class="plan fit" data-plan="studio">
       <h2>Studio</h2>
-      <p class="who">For creators who post weekly.</p>
-      <div class="price"><span class="num" data-m="$24" data-y="$19">$19</span><span class="per">a month</span></div>
-      <div class="billbox"><p class="bill" id="studio-bill" data-m="Billed monthly. Yearly saves $60." data-y="<b>$228</b> billed yearly. You save $60."><b>$228</b> billed yearly. You save $60.</p>
-      <div class="use" id="studio-use" aria-hidden="true"><i></i></div></div>
-      <a class="btn ink" href="#" id="studio-cta">Start 7-day trial</a>
-    </div>
-    <div class="ph" role="columnheader" id="premiere">
+      <p class="for">For creators who post every week.</p>
+      <div class="price"><b data-price="19|24">$19</b><span>a month</span></div>
+      <div class="bill" data-bill-line="$228 billed yearly|Billed monthly">$228 billed yearly</div>
+      <div class="meter"><div class="row"><b data-fit>Cheapest fit for 32 min</b><span data-cap>covers 40 4K min</span></div><div class="track"><i data-bar style="width:80%"></i></div></div>
+      <a class="btn solid" href="#">Start 7-day trial</a>
+      <ul class="feat">
+        <li><svg class="i"><use href="#i-check"/></svg>600 render-minutes, 40 min of 4K</li>
+        <li><svg class="i"><use href="#i-check"/></svg>4K export, 3 renders at once</li>
+        <li><svg class="i"><use href="#i-check"/></svg>Commercial licence</li>
+      </ul>
+    </article>
+    <article class="plan" data-plan="premiere">
       <h2>Premiere</h2>
-      <p class="who">For studios and their clients.</p>
-      <div class="price"><span class="num" data-m="$60" data-y="$48">$48</span><span class="per">a seat a month</span></div>
-      <div class="billbox"><p class="bill" data-m="Billed monthly from 3 seats: <b>$180</b>." data-y="Billed yearly from 3 seats: <b>$1,728</b>.">Billed yearly from 3 seats: <b>$1,728</b>.</p></div>
-      <a class="btn ghost" href="#" id="premiere-cta">Book a screening</a>
-    </div>
-
-    <div class="grp l" role="rowheader">Rendering</div><div class="grp" aria-hidden="true"></div><div class="grp lit" aria-hidden="true"></div><div class="grp" aria-hidden="true"></div>
-
-    <div class="cell l" role="rowheader">Render-minutes a month</div>
-    <div class="cell" role="cell">20</div>
-    <div class="cell lit" role="cell">600</div>
-    <div class="cell" role="cell">1,800 a seat, pooled</div>
-
-    <div class="cell l" role="rowheader">Minutes past your plan</div>
-    <div class="cell" role="cell"><span class="no">Wait for next month</span></div>
-    <div class="cell lit" role="cell">$0.04 each</div>
-    <div class="cell" role="cell">$0.035 each</div>
-
-    <div class="cell l" role="rowheader">Export resolution</div>
-    <div class="cell" role="cell">720p</div>
-    <div class="cell lit" role="cell">4K</div>
-    <div class="cell" role="cell">4K</div>
-
-    <div class="cell l" role="rowheader">Finished film a month, about<span class="cap">15 render-minutes per 4K minute, 4 per 720p</span></div>
-    <div class="cell" role="cell">5 min</div>
-    <div class="cell lit" role="cell">40 min</div>
-    <div class="cell" role="cell">120 min a seat</div>
-
-    <div class="cell l" role="rowheader">Longest clip</div>
-    <div class="cell" role="cell">30 s</div>
-    <div class="cell lit" role="cell">3 min</div>
-    <div class="cell" role="cell">10 min</div>
-
-    <div class="cell l" role="rowheader">Renders at once</div>
-    <div class="cell" role="cell">1, shared queue</div>
-    <div class="cell lit" role="cell">3, priority queue</div>
-    <div class="cell" role="cell">2 a seat, priority queue</div>
-
-    <div class="grp l" role="rowheader">Team and licence</div><div class="grp" aria-hidden="true"></div><div class="grp lit" aria-hidden="true"></div><div class="grp" aria-hidden="true"></div>
-
-    <div class="cell l" role="rowheader">Licence</div>
-    <div class="cell" role="cell"><span class="no">Personal, small mark</span></div>
-    <div class="cell lit" role="cell">Commercial, no mark</div>
-    <div class="cell" role="cell">Commercial, transfer to clients</div>
-
-    <div class="cell l" role="rowheader">Review links</div>
-    <div class="cell" role="cell"><span class="no">None</span></div>
-    <div class="cell lit" role="cell">5 open at a time</div>
-    <div class="cell" role="cell">Unlimited, frame-accurate</div>
-
-    <div class="cell l" role="rowheader">Single sign-on and audit log</div>
-    <div class="cell" role="cell"><span class="no">None</span></div>
-    <div class="cell lit" role="cell"><span class="no">None</span></div>
-    <div class="cell" role="cell"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg>Included</div>
+      <p class="for">For studios and the clients they cut for.</p>
+      <div class="price"><b data-price="48|60">$48</b><span>a seat a month</span></div>
+      <div class="bill" data-bill-line="$1,728 a year, 3-seat minimum|$180 a month, 3-seat minimum">$1,728 a year, 3-seat minimum</div>
+      <div class="meter"><div class="row"><b data-fit></b><span data-cap>covers 360 4K min</span></div><div class="track"><i data-bar style="width:9%"></i></div></div>
+      <a class="btn" href="#">Start Premiere</a>
+      <ul class="feat">
+        <li><svg class="i"><use href="#i-check"/></svg>1,800 render-minutes a seat, pooled</li>
+        <li><svg class="i"><use href="#i-check"/></svg>4K and 10-bit master, priority queue</li>
+        <li><svg class="i"><use href="#i-check"/></svg>Client review links and SAML sign-on</li>
+      </ul>
+    </article>
   </section>
+  </div>
+
+  <section class="cmp" aria-label="Compare plans">
+    <div class="cmp-h"><span>Spark</span><span>Studio</span><span>Premiere</span></div>
+    <div class="cmp-r"><div class="cmp-l">Longest clip</div><span>30 seconds</span><span>3 minutes</span><span>10 minutes</span></div>
+    <div class="cmp-r"><div class="cmp-l">Projects kept</div><span>30 days</span><span>1 year</span><span>Until you delete them</span></div>
+    <div class="cmp-r"><div class="cmp-l">Support</div><span>Community</span><span>Email, next working day</span><span>Priority, within 4 working hours</span></div>
+    <div class="cmp-r"><div class="cmp-l">Extra render-minutes</div><span>None</span><span>$0.04 each</span><span>$0.035 each, or add a seat</span></div>
+    <div class="cmp-r"><div class="cmp-l">Sign-on</div><span>Email</span><span>Email or Google</span><span>SAML, with an audit log</span></div>
+  </section>
+
 </main>
 
 <script>
-  const group = document.getElementById('billing');
-  const segs = [...group.querySelectorAll('button')];
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  function setBilling(v, fromKey) {
-    if (group.dataset.value === v) return;
-    group.classList.toggle('instant', !!fromKey);          // STD-when-to-animate-06: keyboard changes are instant
-    group.dataset.value = v;
-    segs.forEach(s => { const on = s.dataset.v === v; s.setAttribute('aria-checked', on); s.tabIndex = on ? 0 : -1; if (on && fromKey) s.focus(); });
-    document.querySelectorAll('.price .num[data-m]').forEach(n => {
-      const next = n.dataset[v[0]];
-      if (fromKey || reduce.matches) { n.textContent = next; return; }
-      n.classList.add('swap');
-      setTimeout(() => { n.textContent = next; n.classList.remove('swap'); }, 150);
-    });
-    document.querySelectorAll('.bill[data-m]').forEach(b => b.innerHTML = b.dataset[v[0]]);
-  }
-  segs.forEach(s => s.addEventListener('click', () => setBilling(s.dataset.v, false)));
-  group.addEventListener('keydown', e => {
-    if (['ArrowLeft', 'ArrowUp'].includes(e.key)) { e.preventDefault(); setBilling('monthly', true); }
-    if (['ArrowRight', 'ArrowDown'].includes(e.key)) { e.preventDefault(); setBilling('yearly', true); }
+// Estimate: finished 4K minutes a month on a log scale from 5 to 320. One finished 4K minute uses 15 render-minutes.
+const STEPS = [5, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80, 100, 120, 160, 200, 240, 320];
+const RM = 15, STUDIO = 600, SEAT = 1800, MIN_SEATS = 3;
+const slider = document.getElementById("slider");
+let idx = STEPS.indexOf(new URLSearchParams(location.search).has("min") ? +new URLSearchParams(location.search).get("min") : 32);
+if (idx < 0) idx = STEPS.indexOf(32);
+const pos = (m) => Math.log2(m / 5) / 6 * 100;
+const fmt = (n) => n.toLocaleString("en-US");
+function render() {
+  const m = STEPS[idx], used = m * RM, p = pos(m);
+  document.getElementById("fill").style.width = p + "%";
+  document.getElementById("thumb").style.left = p + "%";
+  document.getElementById("est-min").textContent = `${m} min`;
+  document.getElementById("est-rm").textContent = `uses ${fmt(used)} render-minutes`;
+  slider.setAttribute("aria-valuenow", m); slider.setAttribute("aria-valuetext", `${m} minutes`);
+  const seats = Math.max(MIN_SEATS, Math.ceil(used / SEAT)), premCap = seats * SEAT / RM;
+  const yearly = document.querySelector('.seg [data-bill="y"]').getAttribute("aria-checked") === "true";
+  const extra = Math.max(0, used - STUDIO) * 0.04;
+  const studioCost = (yearly ? 19 : 24) + extra, premCost = seats * (yearly ? 48 : 60);
+  const fit = studioCost <= premCost ? "studio" : "premiere";
+  const money = (n) => "$" + (Number.isInteger(n) ? fmt(n) : n.toFixed(2));
+  const dollars = (n) => "$" + fmt(Math.round(n));
+  const plans = {
+    spark: null,
+    studio: used <= STUDIO
+      ? { fit: fit === "studio" ? `Cheapest fit for ${m} min` : "", cap: "covers 40 4K min", pct: m / 40 }
+      : { fit: fit === "studio" ? `Cheapest: ${dollars(studioCost)} a month` : `${dollars(studioCost)} a month`, cap: "with extra minutes", pct: 1 },
+    premiere: { fit: fit === "premiere" ? `Cheapest fit for ${m} min` : "", cap: `covers ${fmt(premCap)} 4K min`, pct: m / premCap },
+  };
+  document.querySelectorAll(".plan").forEach((el) => {
+    const k = el.dataset.plan, p = plans[k];
+    if (!p) return;
+    el.classList.toggle("fit", k === fit);
+    el.querySelector("[data-fit]").textContent = p.fit;
+    el.querySelector("[data-cap]").textContent = p.cap;
+    const bar = el.querySelector("[data-bar]"); if (bar) bar.style.width = Math.max(2, Math.min(100, p.pct * 100)) + "%";
+    if (k !== "spark") el.querySelector(".btn").classList.toggle("solid", k === fit);
   });
-
-  // One temporary state per frame, for the extra renders (shot-<state>.png).
-  const state = new URLSearchParams(location.search).get('state');
-  const page = document.getElementById('page');
-  if (state) page.dataset.state = state;
-  if (state === 'monthly') { setBilling('monthly', true); document.activeElement.blur(); }
-  if (state === 'focus') segs[1].focus();
-  if (state === 'hover') {                                  // pointer over the Premiere column: the whole column tints
-    [...document.querySelectorAll('.table > div')].forEach((c, i) => { if (i % 4 === 3) c.classList.add('col-hover'); });
-  }
-  if (state === 'loading') {
-    const b = document.getElementById('studio-cta');
-    b.innerHTML = '<span class="spin" aria-hidden="true"></span>Starting your trial';
-    b.setAttribute('aria-busy', 'true');
-  }
-  if (state === 'current') {
-    const b = document.getElementById('studio-cta');
-    b.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg>Your plan';
-    b.className = 'btn mine'; b.setAttribute('aria-disabled', 'true');
-    document.getElementById('studio-bill').innerHTML = '<b>412</b> of 600 used. Resets Nov 3.';
-    document.getElementById('studio-use').style.display = 'block';
-    document.getElementById('premiere-cta').textContent = 'Upgrade to Premiere';
-    document.getElementById('spark-cta').style.display = 'none';
-    document.getElementById('spark-down').style.display = 'block';
-  }
+}
+slider.addEventListener("keydown", (e) => {
+  const d = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key];
+  if (d) { idx = Math.min(STEPS.length - 1, Math.max(0, idx + d)); render(); e.preventDefault(); }
+  if (e.key === "Home") { idx = 0; render(); } if (e.key === "End") { idx = STEPS.length - 1; render(); }
+});
+slider.addEventListener("pointerdown", (e) => {
+  const move = (ev) => {
+    const r = slider.getBoundingClientRect(), t = Math.min(1, Math.max(0, (ev.clientX - r.left) / r.width));
+    const m = 5 * Math.pow(2, t * 6);
+    idx = STEPS.reduce((b, s, i) => Math.abs(Math.log(s / m)) < Math.abs(Math.log(STEPS[b] / m)) ? i : b, 0); render();
+  };
+  move(e); slider.setPointerCapture(e.pointerId);
+  slider.onpointermove = move; slider.onpointerup = () => { slider.onpointermove = null; };
+});
+// Billing toggle: a radiogroup; arrow keys move between the two options.
+const radios = [...document.querySelectorAll(".seg [role=radio]")];
+function bill(yearly) {
+  radios.forEach((r) => { const on = (r.dataset.bill === "y") === yearly; r.setAttribute("aria-checked", on); r.tabIndex = on ? 0 : -1; });
+  if (typeof STEPS !== "undefined" && idx >= 0) render();
+  document.querySelectorAll("[data-price]").forEach((el) => { const [y, mo] = el.dataset.price.split("|"); el.textContent = "$" + (yearly ? y : mo); });
+  document.querySelectorAll("[data-bill-line]").forEach((el) => { const [y, mo] = el.dataset.billLine.split("|"); el.textContent = yearly ? y : mo; });
+}
+radios.forEach((r) => {
+  r.addEventListener("click", () => bill(r.dataset.bill === "y"));
+  r.addEventListener("keydown", (e) => { if (["ArrowLeft", "ArrowRight"].includes(e.key)) { const y = r.dataset.bill !== "y"; bill(y); radios.find((x) => (x.dataset.bill === "y") === y).focus(); } });
+});
+bill(new URLSearchParams(location.search).get("bill") !== "monthly");
+render();
 </script>
 </body>
 </html>

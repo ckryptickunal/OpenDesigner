@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Millrace footer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Round 4: a quiet footer. Link columns in one text size, one muted heading style, one rule, one legal line,
+     and one signature element: the retention promise applied to this minute, set as a plain sentence. The band at the top is the end of the section above, so the shot reads as the foot of a page. */
+  :root {
+    --bg: var(--ds-color-neutral-dark-1);
+    --above: var(--ds-color-neutral-dark-3);
+    --ink: var(--ds-color-neutral-dark-12);
+    --muted: var(--ds-color-neutral-dark-11);    /* 7.9:1 */
+    --rule: var(--ds-color-neutral-dark-6);
+    --accent: var(--ink);
+    --above-ink: var(--ds-color-neutral-dark-12);
+    --above-muted: var(--ds-color-neutral-dark-11);
+    --above-rule: var(--ds-color-neutral-dark-6);
+    --amber: var(--ds-color-brand-seed);   /* the exact brand amber, 9.0:1 on the ground */
+    --gutter: var(--ds-space-80);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); }
+  body { font-family: var(--ds-font-family-text); font-size: 13px; line-height: 1.5; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .above { background: var(--above); padding: 0 var(--gutter); }
+  .above p { display: flex; justify-content: flex-start; gap: 16px; padding: 20px 0 24px; border-top: 1px solid var(--above-rule); font-size: 13px; line-height: 24px; color: var(--above-muted); }
+  .above b { font-weight: 500; color: var(--above-ink); }
+  .above u { color: var(--above-ink); text-underline-offset: 4px; }
+  footer { padding: 72px var(--gutter) 32px; }
+  .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--ds-space-24); }
+  .statement { grid-column: 1 / span 9; font-family: var(--ds-font-family-display); font-weight: 400; font-size: 39px; line-height: 48px; letter-spacing: -0.01em; text-wrap: balance; margin-bottom: 72px; }
+  .about { grid-column: 1 / span 4; }
+  .name { display: inline-block; font-family: var(--ds-font-family-display); font-weight: 500; font-size: 25px; line-height: 32px; letter-spacing: -0.01em; }
+  .name span { margin-left: 10px; font-size: 13px; color: var(--muted); }
+  .num { font-variant-numeric: tabular-nums; }
+  .about p { margin-top: 12px; color: var(--muted); max-width: 26em; text-wrap: pretty; }
+  nav.cols { grid-column: 6 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--ds-space-24); padding-top: 6px; }
+  .cols h3 { font-size: 13px; line-height: 24px; font-weight: 500; color: var(--muted); margin-bottom: 8px; }
+  .cols ul { list-style: none; }
+  .cols li { font-size: 13px; line-height: 24px; padding: 4px 0; color: var(--ink); }
+  .cols li.t { color: var(--muted); }
+  @media (hover: hover) and (pointer: fine) { .cols a:hover, .legal a:hover { text-decoration: underline; text-underline-offset: 4px; } }
+  .mark { display: inline-block; margin-top: 72px; font-family: var(--ds-font-family-display); font-weight: 500; color: var(--accent); line-height: .82; letter-spacing: -0.03em; white-space: nowrap; }
+  .legal { display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-24); margin-top: 80px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 13px; line-height: 20px; color: var(--muted); }
+  .legal nav { display: flex; gap: var(--ds-space-24); }
+  .legal a { display: inline-flex; align-items: center; min-height: 32px; }
+  .legal a[aria-current] { color: var(--ink); }
+  @media (max-width: 1100px) {
+    .about { grid-column: 1 / -1; }
+    nav.cols { grid-column: 1 / -1; margin-top: 48px; }
+    .statement { grid-column: 1 / -1; }
+  }
+  @media (max-width: 760px) {
+    :root { --gutter: var(--ds-space-20); }
+    .above p { flex-direction: column; gap: 4px; padding: 16px 0 20px; }
+    footer { padding-top: 48px; }
+    .grid { grid-template-columns: 1fr; }
+    .statement { font-size: 25px; line-height: 32px; margin-bottom: 48px; }
+    nav.cols { grid-template-columns: 1fr 1fr; row-gap: 32px; margin-top: 40px; }
+    .legal { flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 56px; }
+    .legal nav { flex-wrap: wrap; column-gap: 20px; }
+  }
+  .about p { font-size: 13px; line-height: 20px; }
+  .tail { margin-top: 48px; }
+  .tail .statement { margin-bottom: 0; font-size: 39px; line-height: 48px; color: var(--muted); }
+  .tail .statement time { color: var(--amber); }
+  .legal { margin-top: 24px; }
+  @media (max-width: 760px) { .tail { margin-top: 56px; } .tail .statement { font-size: 25px; line-height: 32px; } .cols li, .cols h3, .about p { font-size: 16px; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="above" aria-hidden="true"><p><b>Ready to stream?</b><span><u>Start with 1 GB a day free</u>. No card needed.</span></p></div>
+<footer aria-label="Site footer">
+  <div class="grid">
+    <div class="about">
+      <a class="name" href="#">Millrace</a>
+      <p>Managed event streams for teams that cannot lose a message. Read any stream again from any point in its retention window, 30 days by default.</p>
+    </div>
+    
+    <nav class="cols" aria-label="Footer">
+      <div><h3>Product</h3><ul><li><a href="#">Streams</a></li><li><a href="#">Connectors</a></li><li><a href="#">Replay</a></li><li><a href="#">Pricing</a></li><li><a href="#">Enterprise</a></li><li><a href="#">Changelog</a></li></ul></div>
+      <div><h3>Developers</h3><ul><li><a href="#">Documentation</a></li><li><a href="#">API reference</a></li><li><a href="#">CLI</a></li><li><a href="#">SDKs</a></li><li><a href="#">Status</a></li></ul></div>
+      <div><h3>Company</h3><ul><li><a href="#">About</a></li><li><a href="#">Engineering blog</a></li><li><a href="#">Careers</a></li><li><a href="#">Contact sales</a></li></ul></div>
+      <div><h3>Trust</h3><ul><li><a href="#">Security</a></li><li><a href="#">SOC 2 report</a></li><li><a href="#">Data processing</a></li><li><a href="#">Subprocessors</a></li><li><a href="#">Data residency</a></li></ul></div>
+    </nav>
+  </div>
+  <div class="grid tail"><p class="statement">An event sent now stays readable until <time id="until"></time>.</p></div>
+  <div class="legal">
+    <p>&copy; 2026 Millrace Data GmbH, Berlin</p>
+    <nav aria-label="Legal"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Imprint</a><a href="#">Cookie settings</a></nav>
+  </div>
+</footer>
+<script>
+  // The retention promise applied to this minute: now plus the default 30 days, in UTC.
+  (function () {
+    const t = document.getElementById('until'), d = new Date(Date.now() + 30 * 864e5);
+    const mons = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], p = function (n) { return String(n).padStart(2, '0'); };
+    t.textContent = d.getUTCDate() + ' ' + mons[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + ', ' + p(d.getUTCHours()) + ':' + p(d.getUTCMinutes()) + ' UTC';
+    t.setAttribute('datetime', d.toISOString().slice(0, 16) + 'Z');
+  })();
+</script>
+</body>
+</html>

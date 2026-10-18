@@ -4,14 +4,14 @@
   "engine_version": "1.0.0",
   "levers_version": "levers/1.0 2026-09-23",
   "mode": "standard",
-  "name": "Wayfern",
+  "name": "Gridlark",
   "summary": "",
   "context": {
     "product": "",
     "audience": "people who use it often, as an everyday app",
     "surfaces": [
       {
-        "name": "booking",
+        "name": "app",
         "mode": "Operate"
       }
     ],
@@ -26,63 +26,70 @@
   },
   "dials": {
     "expression": {
-      "value": 45,
+      "value": 30,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0028"
+      "decision": "D-0044"
     },
-    "brandPresence": null,
-    "density": {
-      "value": 40,
+    "brandPresence": {
+      "value": 35,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0013"
+      "decision": "D-0050"
+    },
+    "density": {
+      "value": 80,
+      "set_by": "delegated",
+      "detached": true,
+      "decision": "D-0034"
     },
     "energy": {
-      "value": 68,
+      "value": 30,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0014"
+      "decision": "D-0045"
     },
     "roundness": {
-      "value": 60,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0027"
-    },
-    "depth": {
       "value": 40,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0016"
+      "decision": "D-0046"
+    },
+    "depth": {
+      "value": 35,
+      "set_by": "delegated",
+      "detached": true,
+      "decision": "D-0047"
     },
     "colorfulness": {
-      "value": 72,
+      "value": 35,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0017"
+      "decision": "D-0048"
     },
     "warmth": {
-      "value": 22,
+      "value": 15,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0025"
+      "decision": "D-0049"
     }
   },
   "preset": null,
   "macros": [
-    "playful",
-    "friendly"
+    "deferential",
+    "minimal",
+    "modern",
+    "serious"
   ],
   "raw": {
-    "brandColor": "#E4572E",
+    "brandColor": "#2b5bd7",
     "primaryActionColor": null,
     "focusColor": null,
     "neutralBase": null,
     "contrastTarget": "AA",
-    "textFace": "Albert Sans",
-    "displayFace": "Fraunces",
-    "baseSize": 16,
+    "textFace": "Inter",
+    "displayFace": "=textFace",
+    "baseSize": 14,
     "spaceUnit": 4,
     "platforms": [
       "web"
@@ -351,9 +358,9 @@
   },
   "answers": {
     "Q-aud-01": {
-      "value": "regular",
+      "value": "dense",
       "set_by": "delegated",
-      "decision": "D-0002",
+      "decision": "D-0034",
       "via": "sketch",
       "locked": false
     },
@@ -362,23 +369,23 @@
         "web"
       ],
       "set_by": "delegated",
-      "decision": "D-0006",
+      "decision": "D-0037",
       "via": "sketch",
       "locked": false
     },
     "Q-theme-01": {
       "value": "system-light-dark",
       "set_by": "delegated",
-      "decision": "D-0009",
+      "decision": "D-0040",
       "via": "sketch",
       "locked": false
     },
     "Q-scope-06": {
       "value": [
-        "booking:operate"
+        "app:operate"
       ],
       "set_by": "delegated",
-      "decision": "D-0010",
+      "decision": "D-0041",
       "via": "sketch",
       "locked": false
     },
@@ -547,13 +554,13 @@
   "references": {},
   "taste": {
     "feelWords": [
-      "playful",
-      "warm"
+      "calm",
+      "technical"
     ]
   },
   "hashes": {
-    "DESIGN.md": "80a24418612b9d2b",
-    "PRODUCT.md": "678cd3586d0c1135"
+    "DESIGN.md": "77a4099d0f2be538",
+    "PRODUCT.md": "b17ce4abed699d2a"
   },
   "exports": {
     "prefix": "ds",

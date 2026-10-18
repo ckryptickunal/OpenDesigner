@@ -81,5 +81,18 @@
  "facts": [
   "mockups/05-components-board and mockups/08-made-with-opendesigner embed this shot.png; their captions may still describe the gradient cover; re-check and re-render",
   "mockups/05-components-board (and 08 where it uses this piece) crop this shot.png with fixed background-position offsets set for the old layout; the crops now land on different content and need new offsets"
- ]
+ ],
+ "round4": {
+  "score": 3,
+  "pairwise": "TIDAL/Apple Music/Deezer: round 1 -2/+3/+3, round 2 +2/+4/+3, round 3 +2/+4/+3, round 4 +2/+3/+3, round 6 TIDAL +2, round 7 TIDAL +2 and Deezer +3. Passes the pairwise test from round 2; fails the fresh-eyes bar (3 in four audits).",
+  "changed": [
+   "Release page replaced by the listening room, now playing: 560 px cover, track, grouped transport with volume and output, liner line, side B list",
+   "Signature: the scrubber is the whole of side A (19:54) split by track, played to 9:48",
+   "Cover: Hanson Lu photo (Unsplash License, hotlinked, credited in the page) with the cassette's paper spine across its foot; drawn J-card removed",
+   "Accent pink to calamondin orange #FF9A3D (the label's citrus, the lamps in the photo), one job: what has played; room tinted from the cover; citrus-slice logo",
+   "Removed: buy box, embed box, more releases, shuffle, bar-built section labels, duplicate tracks 4-5 in the list; two punning titles renamed (Second Week of March, Last Frost)",
+   "Last round: cover changed to Iván Martínez Díaz's seedling photo (Unsplash License, hotlinked, credited in the page), J-card strip removed, 520 px cover, side A drawn as five track blocks with labels on the same geometry, layout gaps closed",
+   "Remaining (final auditor): a stock photo is still the largest thing; scrubber labels lose to the side B list; needs cover art the label owns"
+  ]
+ }
 }

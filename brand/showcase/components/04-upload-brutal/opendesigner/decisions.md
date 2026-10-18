@@ -449,3 +449,64 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0020 · source_ref: none
 - reason: Uncoated newsprint paper
 - previous value: 45
+
+## D-0030 · raw.monoFace = "JetBrains Mono"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0023 · source_ref: none
+- reason: round 4: file specs are data; Space Mono read as decoration
+- previous value: "Space Mono"
+
+## D-0031 · raw.baseSize = 14
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 4: 14 px body like the B2B product screens
+- previous value: 16
+
+## D-0032 · dials.expression = 35
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0014 · source_ref: none
+- reason: round 4: a working upload dialog; character only in the yellow and the square corners
+- previous value: 90
+
+## D-0033 · dials.colorfulness = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0019 · source_ref: none
+- reason: round 4: one accent (yellow: files moving forward) plus pass and fail
+- previous value: 100
+
+## D-0034 · dials.energy = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0016 · source_ref: none
+- reason: round 4: calm; progress is the only motion
+- previous value: 75
+
+## D-0035 · dials.warmth = 15
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0029 · source_ref: none
+- reason: round 4: cool greys so the yellow is the only warm thing
+- previous value: 70
+
+## D-0036 · dials.roundness = 18
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0017 · source_ref: none
+- reason: round 4: 2-4 px corners, print-shop square
+- previous value: 0
+
+## D-0037 · dials.depth = 40
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 4: the dialog needs a real shadow over the scrim
+- previous value: 8
+
+## D-0038 · dials.density = 60
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0015 · source_ref: none
+- reason: round 4: four files with checks in view
+- previous value: 55
+
+## D-0039 · answers.Q-color-09 = "cool"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0028 · source_ref: none
+- reason: round 4: cool greys; the brand-tinted greys read mint or beige
+- previous value: "warm"
+- also set: raw.neutralTint = "cool" (from Q-color-09)
+
+## D-0040 · dials.roundness = 42
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0036 · source_ref: none
+- reason: round 4: softer 6 px controls and a 12 px dialog; the square controls read as a wireframe next to shipped modals
+- previous value: 18
+
+## D-0041 · raw.monoFace = "ui-monospace"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0030 · source_ref: none
+- reason: round 4: one face (Archivo with tabular figures) for file specs too; the mono lines added a third text treatment
+- previous value: "JetBrains Mono"

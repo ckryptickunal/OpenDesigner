@@ -12,7 +12,7 @@ People who use it often, as an everyday app.
 
 ## Surfaces
 
-something people explore and enjoy
+- listening room: Experience mode (density spacious; hero moments and big imagery allowed; display styles welcome)
 
 ## Memorable Thing
 

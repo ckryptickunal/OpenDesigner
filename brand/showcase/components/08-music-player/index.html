@@ -1,275 +1,195 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Calamondin Tapes player</title>
+<title>Calamondin Tapes · Listening room</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<!-- Cover photo: Iván Martínez Díaz, "A young plant emerges from the darkness", Unsplash License, https://unsplash.com/photos/a-young-plant-emerges-from-the-darkness-uG9Z4qrbt5c (hotlinked as Unsplash asks). -->
 <style>
-  /* Round 3: the embeddable player in its real place, the release page on Calamondin Tapes' own site.
-     The sleeve is a two-ink riso print (pink and blue on paper), drawn in SVG; the player card is one flat tint
-     sampled from the blue ink. Pink has one job: what is playing (the played waveform, the playing row).
-     Outside the tokens, on purpose (notes.md): --sleeve-ink (card tint taken from the art), --riso-blue and --paper-stock
-     (the print's ink and paper, used only inside the sleeve art). */
-  :root { --ink: var(--ds-color-neutral-light-12); --sub: var(--ds-color-neutral-light-10); --line: var(--ds-color-neutral-light-5);
-    --pink: var(--ds-color-accent-light-9); --sleeve-ink: #17213b; --riso-blue: #3557c0; --paper-stock: #f2f1ee; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: var(--ds-color-white); }
-  body { color: var(--ink); font: 400 var(--ds-font-size-16)/1.5 var(--ds-font-family-text); -webkit-font-smoothing: antialiased; font-synthesis: none; font-variant-numeric: tabular-nums; }
-  .page { position: relative; width: 1440px; height: 900px; overflow: hidden; background: var(--ds-color-white); }
-  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
-  a { color: inherit; text-decoration: none; }
-  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-  .disp { font-family: var(--ds-font-family-display); }
+  /* Type roles (three sizes): caption 13, body 16, headline 25. Weights 400 / 500 / 600 / 700. */
+  /* Outside the tokens, on purpose: the room takes a deep tint of the cover's darkest green. */
+  :root { --room: rgb(12 16 13); --edge: 92px; }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { font: var(--ds-text-body-md); color: var(--ds-color-text-primary); background: var(--room); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  .ic { width: 20px; height: 20px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  :focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
 
-  /* site header */
-  .top { height: 64px; display: flex; align-items: center; padding: 0 120px; border-bottom: 1px solid var(--line); }
-  .logo { display: flex; align-items: center; gap: var(--ds-space-8); margin-right: 56px; }
-  .logo b { font: 600 var(--ds-font-size-16)/1 var(--ds-font-family-display); letter-spacing: .01em; }
-  .links { display: flex; gap: var(--ds-space-32); color: var(--ds-color-neutral-light-11); }
-  .links a[aria-current] { color: var(--ink); font-weight: 500; }
-  .top .end { margin-left: auto; color: var(--ds-color-neutral-light-11); }
+  .top { height: 64px; display: flex; align-items: center; gap: var(--ds-space-16); padding: 0 var(--edge); }
+  .brand { display: flex; align-items: center; gap: var(--ds-space-8); font-weight: 700; letter-spacing: -0.01em; }
+  .brand svg { width: 22px; height: 22px; }
+  .top .room { color: var(--ds-color-text-secondary); }
+  .top .vr { width: 1px; height: 16px; background: var(--ds-color-neutral-alpha-dark-5); }
+  .top .right { margin-left: auto; display: flex; align-items: center; gap: var(--ds-space-8); }
+  .top .left { color: var(--ds-color-text-secondary); font-size: var(--ds-font-size-13); margin: 0 var(--ds-space-4) 0 var(--ds-space-8); }
+  .pill { display: inline-flex; align-items: center; height: 36px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-full); box-shadow: inset 0 0 0 1px var(--ds-color-neutral-alpha-dark-6); font-weight: 600; font-size: var(--ds-font-size-13); }
+  .iconbtn { width: 36px; height: 36px; display: grid; place-items: center; border-radius: var(--ds-radius-full); color: var(--ds-color-text-secondary); }
+  .iconbtn .ic { width: 18px; height: 18px; }
 
-  .crumb { padding: var(--ds-space-24) 120px 0; font-size: var(--ds-font-size-12); color: var(--sub); }
-  .crumb b { color: var(--ink); font-weight: 500; }
-  .wrap { display: grid; grid-template-columns: 740px 412px; gap: var(--ds-space-48); padding: var(--ds-space-16) 120px 0; }
+  .stage { display: grid; grid-template-columns: 520px 1fr; column-gap: 64px; padding: 40px var(--edge) 0; }
+  .cover { width: 520px; height: 520px; border-radius: var(--ds-radius-8); overflow: hidden; background: var(--ds-color-neutral-dark-3); box-shadow: 0 0 0 1px var(--ds-color-neutral-alpha-dark-3); }
+  .cover { position: relative; }
+  .cover img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 64%; display: block; }
 
-  /* the embed */
-  .player { height: 400px; background: var(--sleeve-ink); color: var(--ds-color-neutral-dark-12); border-radius: var(--ds-radius-overlay); padding: 28px; }
-  .row1 { display: grid; grid-template-columns: 200px 1fr; gap: 28px; }
-  .sleeve { width: 200px; height: 200px; border-radius: 4px; display: block; }
-  .meta { display: flex; flex-direction: column; justify-content: flex-end; min-width: 0; }
-  .meta .k { font-size: var(--ds-font-size-12); color: var(--ds-color-neutral-dark-11); letter-spacing: .02em; }
-  .meta h2 { margin-top: var(--ds-space-8); font: 600 var(--ds-font-size-28)/1.1 var(--ds-font-family-display); letter-spacing: -0.01em; color: var(--ds-color-white); }
-  .meta .by { margin-top: var(--ds-space-8); color: var(--ds-color-neutral-dark-11); }
-  .meta .by b { color: var(--ds-color-neutral-dark-12); font-weight: 500; }
-  .ctrl { margin-top: var(--ds-space-16); display: flex; align-items: center; gap: var(--ds-space-8); }
-  .ib { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: var(--ds-color-neutral-dark-12); transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
-  .ib:hover { background: rgb(255 255 255 / .08); }
-  .ib.off { color: var(--ds-color-neutral-dark-10); }
-  .play { width: 56px; height: 56px; border-radius: 50%; background: var(--ds-color-white); color: var(--sleeve-ink); display: grid; place-items: center; margin: 0 var(--ds-space-4); }
-  .play .spin { width: 22px; height: 22px; border-radius: 50%; border: 2.5px solid rgb(23 33 59 / .2); border-top-color: var(--sleeve-ink); animation: spin .8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .ctrl .sp { flex: 1; }
-  .vol { display: flex; align-items: center; gap: var(--ds-space-8); color: var(--ds-color-neutral-dark-11); }
-  .vol .tr { position: relative; width: 88px; height: 4px; border-radius: 2px; background: rgb(255 255 255 / .2); }
-  .vol .tr i { position: absolute; left: 0; top: 0; bottom: 0; width: 70%; border-radius: 2px; background: var(--ds-color-neutral-dark-12); }
+  .side { display: flex; flex-direction: column; }
+  .kicker { font-size: var(--ds-font-size-13); line-height: 20px; color: var(--ds-color-text-secondary); font-weight: 500; }
+  .title-row { display: flex; align-items: center; gap: var(--ds-space-12); margin-top: var(--ds-space-8); }
+  h1 { margin: 0; font-size: var(--ds-font-size-25); line-height: 32px; font-weight: 700; letter-spacing: -0.02em; }
+  .by { margin-top: var(--ds-space-4); color: var(--ds-color-text-secondary); line-height: 24px; }
+  .by a { color: var(--ds-color-text-primary); text-decoration: none; font-weight: 500; }
+  .save { width: 32px; height: 32px; display: grid; place-items: center; border-radius: var(--ds-radius-full); box-shadow: inset 0 0 0 1px var(--ds-color-neutral-alpha-dark-6); color: var(--ds-color-text-primary); }
+  .save .ic { width: 18px; height: 18px; fill: currentColor; stroke: none; }
 
-  .wave { position: relative; margin-top: 28px; height: 116px; }
-  .marks { position: relative; height: 24px; font-size: var(--ds-font-size-12); color: var(--ds-color-neutral-dark-11); }
-  .marks span { position: absolute; top: 0; padding-left: 7px; white-space: nowrap; }
-  .marks span::before { content: ""; position: absolute; left: 0; top: 3px; width: 1px; height: 30px; background: rgb(255 255 255 / .22); }
-  .marks span.now { color: var(--ds-color-white); font-weight: 500; }
-  .bars { position: relative; height: 64px; display: flex; align-items: center; gap: var(--ds-space-2); cursor: pointer; }
-  .bars i { flex: none; width: 2px; border-radius: 1px; background: rgb(255 255 255 / .4); }
-  .bars i.p { background: var(--pink); }
-  .bars i.b { background: rgb(255 255 255 / .62); }
-  .bars i.h { background: rgb(255 255 255 / .75); }
-  .head { position: absolute; top: -6px; bottom: -6px; width: 2px; background: var(--ds-color-white); border-radius: 1px; }
-    .hoverline { position: absolute; top: -6px; bottom: -6px; width: 1px; background: var(--ds-color-white); opacity: .8; display: none; }
-  .tip { position: absolute; top: -40px; transform: translateX(-50%); padding: var(--ds-space-4) var(--ds-space-8); border-radius: 6px; background: var(--ds-color-white); color: var(--sleeve-ink); font: 600 var(--ds-font-size-12)/16px var(--ds-font-family-text); display: none; white-space: nowrap; }
-  .times { display: flex; justify-content: space-between; margin-top: var(--ds-space-8); font-size: var(--ds-font-size-12); color: var(--ds-color-neutral-dark-11); }
-  .player.failed .bars { opacity: .45; }
-  .times .fail { color: var(--ds-color-neutral-dark-11); align-self: center; font-size: var(--ds-font-size-16); }
-  .times .fail b { color: var(--ds-color-white); font-weight: 500; }
-  .times .retry { height: 40px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-control); background: var(--ds-color-white); color: var(--sleeve-ink); font-weight: 600; margin-top: -8px; }
-  .msg { display: none; align-items: center; gap: var(--ds-space-12); height: 116px; margin-top: 28px; padding: var(--ds-space-12) 14px; border-radius: var(--ds-radius-control); background: rgb(255 255 255 / .07); }
-  .msg b { font-weight: 500; color: var(--ds-color-white); }
-  .msg span { color: var(--ds-color-neutral-dark-11); }
-  .msg button { margin-left: auto; height: 40px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-control); background: var(--ds-color-white); color: var(--sleeve-ink); font-weight: 600; }
+  .controls { display: flex; align-items: center; gap: var(--ds-space-16); margin-top: var(--ds-space-32); }
+  .ctl { width: 40px; height: 40px; display: grid; place-items: center; border-radius: var(--ds-radius-full); color: var(--ds-color-text-primary); }
+  .ctl .ic { fill: currentColor; stroke: none; width: 22px; height: 22px; }
+  .ctl.line .ic { fill: none; stroke: currentColor; color: var(--ds-color-text-secondary); width: 20px; height: 20px; }
+  .play { width: 56px; height: 56px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-dark-12); display: grid; place-items: center; }
+  .play .ic { width: 22px; height: 22px; fill: var(--ds-color-neutral-dark-1); stroke: none; }
+  .ctl.on { position: relative; margin-left: var(--ds-space-8); }
+  .ctl.on .ic { stroke: var(--ds-color-text-primary); }
+  .ctl.on::after { content: ""; position: absolute; bottom: 2px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--ds-color-text-primary); }
+  .vol { margin-left: var(--ds-space-32); display: flex; align-items: center; gap: var(--ds-space-12); color: var(--ds-color-text-secondary); font-size: var(--ds-font-size-13); }
+  .vol .ic { width: 18px; height: 18px; }
+  .vol .track { width: 112px; height: 4px; border-radius: 2px; background: var(--ds-color-neutral-alpha-dark-6); position: relative; }
+  .vol .track i { position: absolute; left: 0; top: 0; bottom: 0; width: 64%; border-radius: 2px; background: var(--ds-color-neutral-dark-11); }
 
-  /* tracklist */
-  .sides { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-40); margin-top: 28px; }
-  .sides h2 { font: 500 var(--ds-font-size-12)/16px var(--ds-font-family-text); color: var(--sub); padding-bottom: var(--ds-space-8); border-bottom: 1px solid var(--line); }
-  .tr-row { display: grid; grid-template-columns: 24px 1fr auto; align-items: center; height: 40px; border-bottom: 1px solid var(--line); }
-  .tr-row .no { font-size: var(--ds-font-size-12); color: var(--sub); }
-  .tr-row .d { font-size: var(--ds-font-size-12); color: var(--sub); }
-  .tr-row.now .t { font-weight: 600; }
-  .eq { display: inline-flex; align-items: flex-end; gap: var(--ds-space-2); height: 12px; }
-  .eq i { width: 3px; background: var(--ds-color-accent-light-11); border-radius: 1px; }
+  .liner { margin: var(--ds-space-32) 0 0; max-width: 520px; color: var(--ds-color-text-secondary); line-height: 24px; }
+  .queue { margin-top: auto; }
+  .qh { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: var(--ds-space-8); border-bottom: 1px solid var(--ds-color-neutral-alpha-dark-4); }
+  .qh b { font-weight: 600; }
+  .qh span, .sub { font-size: var(--ds-font-size-13); color: var(--ds-color-text-secondary); }
+  .sub { display: flex; justify-content: space-between; align-items: flex-end; height: 36px; padding-bottom: var(--ds-space-6); border-bottom: 1px solid var(--ds-color-neutral-alpha-dark-3); }
+  .row { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; height: 44px; border-bottom: 1px solid var(--ds-color-neutral-alpha-dark-3); }
+  .row:last-child { border-bottom: 0; }
+  .row .n { font-size: var(--ds-font-size-13); color: var(--ds-color-text-tertiary); }
+  .row .d { font-size: var(--ds-font-size-13); color: var(--ds-color-text-secondary); }
 
-  /* release */
-  .rel .k { font-size: var(--ds-font-size-12); color: var(--sub); letter-spacing: .02em; }
-  .rel h1 { margin-top: var(--ds-space-8); font: 600 var(--ds-font-size-38)/1.1 var(--ds-font-family-display); letter-spacing: -0.01em; }
-  .rel .by { margin-top: var(--ds-space-8); }
-  .rel .by a { font-weight: 500; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line); }
-  .rel .facts { margin-top: var(--ds-space-4); color: var(--sub); }
-  .buy { margin-top: var(--ds-space-24); border: 1px solid var(--line); border-radius: var(--ds-radius-container); }
-  .buy > div { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--ds-space-16); padding: var(--ds-space-16) var(--ds-space-20); }
-  .buy > div + div { border-top: 1px solid var(--line); }
-  .buy b { font-weight: 600; }
-  .buy small { display: block; font-size: var(--ds-font-size-12); color: var(--sub); }
-  .btn { height: 40px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-control); font-weight: 600; }
-  .btn.dark { background: var(--ink); color: var(--ds-color-white); }
-  .btn.line { border: 1px solid var(--ds-color-neutral-light-8); }
-  .notes { margin-top: var(--ds-space-24); }
-  .notes h3 { font: 500 var(--ds-font-size-12)/16px var(--ds-font-family-text); color: var(--sub); }
-  .notes p { margin-top: var(--ds-space-8); }
-  .notes .cred { margin-top: var(--ds-space-12); font-size: var(--ds-font-size-12); color: var(--sub); line-height: 1.5; }
-
-  .more { margin-top: var(--ds-space-24); }
-  .more h2 { font: 500 var(--ds-font-size-12)/16px var(--ds-font-family-text); color: var(--sub); }
-  .mrow { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-16); margin-top: var(--ds-space-12); }
-  .mrow a { display: flex; gap: var(--ds-space-12); align-items: center; }
-  .mrow svg { width: 48px; height: 48px; border-radius: 3px; flex: none; }
-  .mrow b { display: block; font-weight: 500; }
-  .mrow small { font-size: var(--ds-font-size-12); color: var(--sub); }
-  .embed { margin-top: var(--ds-space-24); padding-top: var(--ds-space-20); border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr auto; gap: var(--ds-space-16); align-items: center; }
-  .embed b { font-weight: 600; display: block; }
-  .embed small { display: block; margin-top: var(--ds-space-2); font-size: var(--ds-font-size-12); line-height: 18px; color: var(--sub); }
-  @media (prefers-reduced-motion: reduce) { .play .spin { animation-duration: 2.4s; } }
+  /* The scrubber is the whole side of the tape: you hear a cassette a side at a time. */
+  .tape { padding: 48px var(--edge) 0; }
+  .labels { position: relative; height: 20px; font-size: var(--ds-font-size-13); color: var(--ds-color-text-secondary); }
+  .labels span { position: absolute; top: 0; white-space: nowrap; }
+  .labels span b { font-weight: 500; color: var(--ds-color-text-tertiary); margin-right: var(--ds-space-6); }
+  .labels span.cur { color: var(--ds-color-text-primary); font-weight: 600; }
+  .wave { position: relative; height: 112px; margin-top: var(--ds-space-8); }
+  .wave canvas { width: 100%; height: 100%; display: block; }
+  .head { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; border-radius: 1px; background: var(--ds-color-text-primary); }
+  .times { display: flex; justify-content: space-between; margin-top: var(--ds-space-8); font-size: var(--ds-font-size-13); color: var(--ds-color-text-secondary); }
+  .times b { color: var(--ds-color-text-primary); font-weight: 500; }
 </style>
 </head>
 <body>
-<main class="page" id="page" aria-label="Heat Lamp Lullabies on Calamondin Tapes">
-  <header class="top">
-    <a class="logo" href="#" aria-label="Calamondin Tapes home">
-      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#FF3D81"/><path d="M12 1v22M1 12h22M4.2 4.2l15.6 15.6M19.8 4.2L4.2 19.8" stroke="#fff" stroke-width="1.4"/><circle cx="12" cy="12" r="3" fill="#fff"/></svg>
-      <b>Calamondin Tapes</b>
-    </a>
-    <nav class="links" aria-label="Main"><a href="#" aria-current="page">Releases</a><a href="#">Artists</a><a href="#">Shop</a><a href="#">Mailing list</a></nav>
-    <a class="end" href="#">Bag (0)</a>
-  </header>
-  <p class="crumb">Releases / <b>CLMD-014</b></p>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-back" viewBox="0 0 20 20"><path d="M12 4.5 6.5 10l5.5 5.5"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 20 20"><path d="M3 6h2.5c3.5 0 4.5 8 9 8H17M3 14h2.5c1.3 0 2.2-1 3-2.3M11.3 8.2C12 7 12.9 6 14.5 6H17M15 4l2 2-2 2M15 12l2 2-2 2"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 20 20"><rect x="4" y="4.5" width="2" height="11" rx="1"/><path d="M16 5.3v9.4a.7.7 0 0 1-1.1.6L8.2 10.6a.7.7 0 0 1 0-1.2l6.7-4.7a.7.7 0 0 1 1.1.6Z"/></symbol>
+  <symbol id="i-next" viewBox="0 0 20 20"><rect x="14" y="4.5" width="2" height="11" rx="1"/><path d="M4 5.3v9.4a.7.7 0 0 0 1.1.6l6.7-4.7a.7.7 0 0 0 0-1.2L5.1 4.7a.7.7 0 0 0-1.1.6Z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 20 20"><rect x="5" y="4" width="3.5" height="12" rx="1"/><rect x="11.5" y="4" width="3.5" height="12" rx="1"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 20 20"><path d="M4 9V8a2.5 2.5 0 0 1 2.5-2.5H16M13.5 3 16 5.5 13.5 8M16 11v1a2.5 2.5 0 0 1-2.5 2.5H4M6.5 17 4 14.5 6.5 12"/></symbol>
+  <symbol id="i-vol" viewBox="0 0 20 20"><path d="M3.5 8v4h3l4 3.5v-11l-4 3.5h-3ZM13.5 7.5a3.5 3.5 0 0 1 0 5M15.5 5.5a6.5 6.5 0 0 1 0 9"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 20 20"><path d="M10 16.5s-6.5-3.8-6.5-8.6A3.4 3.4 0 0 1 10 6.1a3.4 3.4 0 0 1 6.5 1.8c0 4.8-6.5 8.6-6.5 8.6Z"/></symbol>
+  <symbol id="i-speaker" viewBox="0 0 20 20"><rect x="5" y="2.5" width="10" height="15" rx="2"/><circle cx="10" cy="11.5" r="3"/><path d="M10 6h.01" stroke-width="2"/></symbol>
+  <symbol id="i-more" viewBox="0 0 20 20"><path d="M5 10h.01M10 10h.01M15 10h.01" stroke-width="2.4"/></symbol>
+  <symbol id="i-notes" viewBox="0 0 20 20"><path d="M6 3h6l3 3v10.5a.5.5 0 0 1-.5.5h-8.5a.5.5 0 0 1-.5-.5v-13A.5.5 0 0 1 6 3Z"/><path d="M12 3v3h3M7.5 10h5M7.5 13h3.5"/></symbol>
+</svg>
 
-  <div class="wrap">
-    <section>
-      <article class="player" data-theme="dark" aria-label="Player">
-        <div class="row1">
-          <svg class="sleeve" viewBox="0 0 200 200" role="img" aria-label="J-card art for Heat Lamp Lullabies: a blue lamp shade and a pink bulb warming three seedlings, printed in two inks">
-            <defs>
-              <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .12 0"/></filter>
-            </defs>
-            <rect width="200" height="200" fill="var(--paper-stock)"/>
-            <g style="mix-blend-mode:multiply" fill="#FF3D81">
-              <circle cx="61" cy="66" r="1.74"/><circle cx="67" cy="66" r="1.85"/><circle cx="73" cy="66" r="1.97"/><circle cx="127" cy="66" r="1.97"/><circle cx="133" cy="66" r="1.85"/><circle cx="139" cy="66" r="1.74"/><circle cx="58" cy="72" r="1.66"/><circle cx="64" cy="72" r="1.78"/><circle cx="70" cy="72" r="1.89"/><circle cx="76" cy="72" r="2.01"/><circle cx="82" cy="72" r="2.12"/><circle cx="88" cy="72" r="2.22"/><circle cx="94" cy="72" r="2.30"/><circle cx="100" cy="72" r="2.34"/><circle cx="106" cy="72" r="2.30"/><circle cx="112" cy="72" r="2.22"/><circle cx="118" cy="72" r="2.12"/><circle cx="124" cy="72" r="2.01"/><circle cx="130" cy="72" r="1.89"/><circle cx="136" cy="72" r="1.78"/><circle cx="142" cy="72" r="1.66"/><circle cx="55" cy="78" r="1.58"/><circle cx="61" cy="78" r="1.69"/><circle cx="67" cy="78" r="1.80"/><circle cx="73" cy="78" r="1.91"/><circle cx="79" cy="78" r="2.01"/><circle cx="85" cy="78" r="2.10"/><circle cx="91" cy="78" r="2.17"/><circle cx="97" cy="78" r="2.22"/><circle cx="103" cy="78" r="2.22"/><circle cx="109" cy="78" r="2.17"/><circle cx="115" cy="78" r="2.10"/><circle cx="121" cy="78" r="2.01"/><circle cx="127" cy="78" r="1.91"/><circle cx="133" cy="78" r="1.80"/><circle cx="139" cy="78" r="1.69"/><circle cx="145" cy="78" r="1.58"/><circle cx="52" cy="84" r="1.48"/><circle cx="58" cy="84" r="1.59"/><circle cx="64" cy="84" r="1.70"/><circle cx="70" cy="84" r="1.80"/><circle cx="76" cy="84" r="1.89"/><circle cx="82" cy="84" r="1.97"/><circle cx="88" cy="84" r="2.04"/><circle cx="94" cy="84" r="2.09"/><circle cx="100" cy="84" r="2.11"/><circle cx="106" cy="84" r="2.09"/><circle cx="112" cy="84" r="2.04"/><circle cx="118" cy="84" r="1.97"/><circle cx="124" cy="84" r="1.89"/><circle cx="130" cy="84" r="1.80"/><circle cx="136" cy="84" r="1.70"/><circle cx="142" cy="84" r="1.59"/><circle cx="148" cy="84" r="1.48"/><circle cx="49" cy="90" r="1.38"/><circle cx="55" cy="90" r="1.48"/><circle cx="61" cy="90" r="1.58"/><circle cx="67" cy="90" r="1.68"/><circle cx="73" cy="90" r="1.77"/><circle cx="79" cy="90" r="1.85"/><circle cx="85" cy="90" r="1.91"/><circle cx="91" cy="90" r="1.96"/><circle cx="97" cy="90" r="1.99"/><circle cx="103" cy="90" r="1.99"/><circle cx="109" cy="90" r="1.96"/><circle cx="115" cy="90" r="1.91"/><circle cx="121" cy="90" r="1.85"/><circle cx="127" cy="90" r="1.77"/><circle cx="133" cy="90" r="1.68"/><circle cx="139" cy="90" r="1.58"/><circle cx="145" cy="90" r="1.48"/><circle cx="151" cy="90" r="1.38"/><circle cx="46" cy="96" r="1.27"/><circle cx="52" cy="96" r="1.37"/><circle cx="58" cy="96" r="1.47"/><circle cx="64" cy="96" r="1.56"/><circle cx="70" cy="96" r="1.64"/><circle cx="76" cy="96" r="1.72"/><circle cx="82" cy="96" r="1.78"/><circle cx="88" cy="96" r="1.83"/><circle cx="94" cy="96" r="1.86"/><circle cx="100" cy="96" r="1.88"/><circle cx="106" cy="96" r="1.86"/><circle cx="112" cy="96" r="1.83"/><circle cx="118" cy="96" r="1.78"/><circle cx="124" cy="96" r="1.72"/><circle cx="130" cy="96" r="1.64"/><circle cx="136" cy="96" r="1.56"/><circle cx="142" cy="96" r="1.47"/><circle cx="148" cy="96" r="1.37"/><circle cx="154" cy="96" r="1.27"/><circle cx="43" cy="102" r="1.16"/><circle cx="49" cy="102" r="1.26"/><circle cx="55" cy="102" r="1.35"/><circle cx="61" cy="102" r="1.44"/><circle cx="67" cy="102" r="1.52"/><circle cx="73" cy="102" r="1.59"/><circle cx="79" cy="102" r="1.65"/><circle cx="85" cy="102" r="1.70"/><circle cx="91" cy="102" r="1.74"/><circle cx="97" cy="102" r="1.76"/><circle cx="103" cy="102" r="1.76"/><circle cx="109" cy="102" r="1.74"/><circle cx="115" cy="102" r="1.70"/><circle cx="121" cy="102" r="1.65"/><circle cx="127" cy="102" r="1.59"/><circle cx="133" cy="102" r="1.52"/><circle cx="139" cy="102" r="1.44"/><circle cx="145" cy="102" r="1.35"/><circle cx="151" cy="102" r="1.26"/><circle cx="157" cy="102" r="1.16"/><circle cx="40" cy="108" r="1.05"/><circle cx="46" cy="108" r="1.14"/><circle cx="52" cy="108" r="1.23"/><circle cx="58" cy="108" r="1.31"/><circle cx="64" cy="108" r="1.39"/><circle cx="70" cy="108" r="1.46"/><circle cx="76" cy="108" r="1.52"/><circle cx="82" cy="108" r="1.57"/><circle cx="88" cy="108" r="1.61"/><circle cx="94" cy="108" r="1.63"/><circle cx="100" cy="108" r="1.64"/><circle cx="106" cy="108" r="1.63"/><circle cx="112" cy="108" r="1.61"/><circle cx="118" cy="108" r="1.57"/><circle cx="124" cy="108" r="1.52"/><circle cx="130" cy="108" r="1.46"/><circle cx="136" cy="108" r="1.39"/><circle cx="142" cy="108" r="1.31"/><circle cx="148" cy="108" r="1.23"/><circle cx="154" cy="108" r="1.14"/><circle cx="160" cy="108" r="1.05"/><circle cx="37" cy="114" r="0.93"/><circle cx="43" cy="114" r="1.02"/><circle cx="49" cy="114" r="1.11"/><circle cx="55" cy="114" r="1.19"/><circle cx="61" cy="114" r="1.26"/><circle cx="67" cy="114" r="1.33"/><circle cx="73" cy="114" r="1.39"/><circle cx="79" cy="114" r="1.44"/><circle cx="85" cy="114" r="1.48"/><circle cx="91" cy="114" r="1.51"/><circle cx="97" cy="114" r="1.52"/><circle cx="103" cy="114" r="1.52"/><circle cx="109" cy="114" r="1.51"/><circle cx="115" cy="114" r="1.48"/><circle cx="121" cy="114" r="1.44"/><circle cx="127" cy="114" r="1.39"/><circle cx="133" cy="114" r="1.33"/><circle cx="139" cy="114" r="1.26"/><circle cx="145" cy="114" r="1.19"/><circle cx="151" cy="114" r="1.11"/><circle cx="157" cy="114" r="1.02"/><circle cx="163" cy="114" r="0.93"/><circle cx="34" cy="120" r="0.81"/><circle cx="40" cy="120" r="0.90"/><circle cx="46" cy="120" r="0.98"/><circle cx="52" cy="120" r="1.06"/><circle cx="58" cy="120" r="1.13"/><circle cx="64" cy="120" r="1.20"/><circle cx="70" cy="120" r="1.26"/><circle cx="76" cy="120" r="1.31"/><circle cx="82" cy="120" r="1.35"/><circle cx="88" cy="120" r="1.38"/><circle cx="94" cy="120" r="1.40"/><circle cx="100" cy="120" r="1.41"/><circle cx="106" cy="120" r="1.40"/><circle cx="112" cy="120" r="1.38"/><circle cx="118" cy="120" r="1.35"/><circle cx="124" cy="120" r="1.31"/><circle cx="130" cy="120" r="1.26"/><circle cx="136" cy="120" r="1.20"/><circle cx="142" cy="120" r="1.13"/><circle cx="148" cy="120" r="1.06"/><circle cx="154" cy="120" r="0.98"/><circle cx="160" cy="120" r="0.90"/><circle cx="166" cy="120" r="0.81"/><circle cx="31" cy="126" r="0.69"/><circle cx="37" cy="126" r="0.77"/><circle cx="43" cy="126" r="0.86"/><circle cx="49" cy="126" r="0.93"/><circle cx="55" cy="126" r="1.00"/><circle cx="61" cy="126" r="1.07"/><circle cx="67" cy="126" r="1.13"/><circle cx="73" cy="126" r="1.18"/><circle cx="79" cy="126" r="1.22"/><circle cx="85" cy="126" r="1.25"/><circle cx="91" cy="126" r="1.28"/><circle cx="97" cy="126" r="1.29"/><circle cx="103" cy="126" r="1.29"/><circle cx="109" cy="126" r="1.28"/><circle cx="115" cy="126" r="1.25"/><circle cx="121" cy="126" r="1.22"/><circle cx="127" cy="126" r="1.18"/><circle cx="133" cy="126" r="1.13"/><circle cx="139" cy="126" r="1.07"/><circle cx="145" cy="126" r="1.00"/><circle cx="151" cy="126" r="0.93"/><circle cx="157" cy="126" r="0.86"/><circle cx="163" cy="126" r="0.77"/><circle cx="169" cy="126" r="0.69"/><circle cx="34" cy="132" r="0.65"/><circle cx="40" cy="132" r="0.73"/><circle cx="46" cy="132" r="0.80"/><circle cx="52" cy="132" r="0.87"/><circle cx="58" cy="132" r="0.94"/><circle cx="64" cy="132" r="1.00"/><circle cx="70" cy="132" r="1.05"/><circle cx="76" cy="132" r="1.09"/><circle cx="82" cy="132" r="1.13"/><circle cx="88" cy="132" r="1.15"/><circle cx="94" cy="132" r="1.17"/><circle cx="100" cy="132" r="1.17"/><circle cx="106" cy="132" r="1.17"/><circle cx="112" cy="132" r="1.15"/><circle cx="118" cy="132" r="1.13"/><circle cx="124" cy="132" r="1.09"/><circle cx="130" cy="132" r="1.05"/><circle cx="136" cy="132" r="1.00"/><circle cx="142" cy="132" r="0.94"/><circle cx="148" cy="132" r="0.87"/><circle cx="154" cy="132" r="0.80"/><circle cx="160" cy="132" r="0.73"/><circle cx="166" cy="132" r="0.65"/><circle cx="37" cy="138" r="0.60"/><circle cx="43" cy="138" r="0.68"/><circle cx="49" cy="138" r="0.74"/><circle cx="55" cy="138" r="0.81"/><circle cx="61" cy="138" r="0.87"/><circle cx="67" cy="138" r="0.92"/><circle cx="73" cy="138" r="0.96"/><circle cx="79" cy="138" r="1.00"/><circle cx="85" cy="138" r="1.03"/><circle cx="91" cy="138" r="1.04"/><circle cx="97" cy="138" r="1.05"/><circle cx="103" cy="138" r="1.05"/><circle cx="109" cy="138" r="1.04"/><circle cx="115" cy="138" r="1.03"/><circle cx="121" cy="138" r="1.00"/><circle cx="127" cy="138" r="0.96"/><circle cx="133" cy="138" r="0.92"/><circle cx="139" cy="138" r="0.87"/><circle cx="145" cy="138" r="0.81"/><circle cx="151" cy="138" r="0.74"/><circle cx="157" cy="138" r="0.68"/><circle cx="163" cy="138" r="0.60"/><circle cx="46" cy="144" r="0.61"/><circle cx="52" cy="144" r="0.68"/><circle cx="58" cy="144" r="0.74"/><circle cx="64" cy="144" r="0.79"/><circle cx="70" cy="144" r="0.83"/><circle cx="76" cy="144" r="0.87"/><circle cx="82" cy="144" r="0.90"/><circle cx="88" cy="144" r="0.92"/><circle cx="94" cy="144" r="0.93"/><circle cx="100" cy="144" r="0.94"/><circle cx="106" cy="144" r="0.93"/><circle cx="112" cy="144" r="0.92"/><circle cx="118" cy="144" r="0.90"/><circle cx="124" cy="144" r="0.87"/><circle cx="130" cy="144" r="0.83"/><circle cx="136" cy="144" r="0.79"/><circle cx="142" cy="144" r="0.74"/><circle cx="148" cy="144" r="0.68"/><circle cx="154" cy="144" r="0.61"/>
-              <circle cx="100" cy="64" r="19"/>
-            </g>
-            <g style="mix-blend-mode:multiply" transform="translate(-2 -1)" fill="var(--riso-blue)">
-              <rect x="98.5" y="0" width="3" height="15"/>
-              <path d="M82 14h36l24 46H58z"/>
-              <rect x="24" y="150.5" width="152" height="3" rx="1.5"/>
-              <path d="M60.5 151v-16h3v16z"/><path d="M62 137c-9 1-14-4-14-11 8-1 13 4 14 11z"/><path d="M62 133c7 0 11-5 11-11-7 0-11 5-11 11z"/>
-              <path d="M98.5 151v-22h3v22z"/><path d="M100 132c-10 1-15-5-15-12 9-1 14 5 15 12z"/><path d="M100 127c8 0 13-6 13-12-8 0-13 5-13 12z"/>
-              <path d="M136.5 151v-12h3v12z"/><path d="M138 141c-8 1-12-4-12-10 7 0 11 4 12 10z"/>
-              <text x="24" y="181" font-family="DM Sans" font-weight="700" font-size="10" letter-spacing="1.1">HEAT LAMP LULLABIES</text>
-              <text x="24" y="193" font-family="DM Sans" font-weight="500" font-size="7" letter-spacing="1">JUNIPER STATIC · CLMD-014</text>
-            </g>
-            <rect width="200" height="200" filter="url(#grain)"/>
-          </svg>
-          <div class="meta">
-            <p class="k">Juniper Static · side A, track 3 of 9</p>
-            <h2>Sodium Summer</h2>
-            <div class="ctrl">
-              <button class="ib off" aria-label="Shuffle, off" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h3.5c4 0 5 10 9 10H18M15.5 12.5L18 15l-2.5 2.5M2 15h3.5c1.6 0 2.6-1.6 3.4-3.4M11.2 8.4C12 6.6 13 5 14.5 5H18M15.5 2.5L18 5l-2.5 2.5"/></svg></button>
-              <button class="ib" aria-label="Previous track"><svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path d="M4 3h2v14H4zM17 3.5v13L7.5 10z"/></svg></button>
-              <button class="play" id="play" aria-label="Pause"><svg width="22" height="22" viewBox="0 0 22 22" fill="currentColor"><rect x="5" y="4" width="4" height="14" rx="1"/><rect x="13" y="4" width="4" height="14" rx="1"/></svg></button>
-              <button class="ib" aria-label="Next track"><svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path d="M14 3h2v14h-2zM3 3.5v13L12.5 10z"/></svg></button>
-              <button class="ib off" aria-label="Repeat, off" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V7.5A2.5 2.5 0 0 1 6.5 5H16M13.5 2.5L16 5l-2.5 2.5M16 11v1.5a2.5 2.5 0 0 1-2.5 2.5H4M6.5 17.5L4 15l2.5-2.5"/></svg></button>
-              <span class="sp"></span>
-              <div class="vol" aria-label="Volume 70%"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h3l4-3.5v11L6 12H3zM13.5 7.5a3.5 3.5 0 0 1 0 5M15.5 5a7 7 0 0 1 0 10"/></svg><span class="tr"><i></i></span></div>
-            </div>
-          </div>
-        </div>
-        <div class="wave">
-          <div class="marks" id="marks"></div>
-          <div class="bars" id="bars" role="slider" aria-label="Position" aria-valuemin="0" aria-valuemax="233" aria-valuenow="107" aria-valuetext="1:47 of 3:53" tabindex="0">
-            <span class="head" id="head"></span><span class="hoverline" id="hl"></span><span class="tip" id="tip">2:31</span>
-          </div>
-          <div class="times"><span id="tNow">1:47</span><span id="tLeft">−2:06</span></div>
-        </div>
-        <div class="msg" id="msg" role="alert"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="M10 6v5M10 13.6v.2"/></svg><span><b>Sodium Summer didn't load.</b> Your place is saved at 1:47.</span><button>Retry</button></div>
-      </article>
+<header class="top">
+  <span class="brand"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10.5" fill="var(--ds-color-accent-dark-9)"/><circle cx="11" cy="11" r="8.6" fill="#ffe2bf"/><g fill="var(--ds-color-accent-dark-9)"><path d="M11 11 L18.00 8.59 A7.4 7.4 0 0 1 18.00 13.41 Z" transform="translate(1.10 0.00)"/><path d="M11 11 L17.65 14.24 A7.4 7.4 0 0 1 14.24 17.65 Z" transform="translate(0.78 0.78)"/><path d="M11 11 L13.41 18.00 A7.4 7.4 0 0 1 8.59 18.00 Z" transform="translate(0.00 1.10)"/><path d="M11 11 L7.76 17.65 A7.4 7.4 0 0 1 4.35 14.24 Z" transform="translate(-0.78 0.78)"/><path d="M11 11 L4.00 13.41 A7.4 7.4 0 0 1 4.00 8.59 Z" transform="translate(-1.10 0.00)"/><path d="M11 11 L4.35 7.76 A7.4 7.4 0 0 1 7.76 4.35 Z" transform="translate(-0.78 -0.78)"/><path d="M11 11 L8.59 4.00 A7.4 7.4 0 0 1 13.41 4.00 Z" transform="translate(-0.00 -1.10)"/><path d="M11 11 L14.24 4.35 A7.4 7.4 0 0 1 17.65 7.76 Z" transform="translate(0.78 -0.78)"/></g></svg>Calamondin Tapes</span>
+  <span class="vr" aria-hidden="true"></span>
+  <span class="room">Listening room</span>
+  <div class="right">
+    <button class="iconbtn" type="button" aria-label="Liner notes"><svg class="ic"><use href="#i-notes"/></svg></button>
+    <button class="iconbtn" type="button" aria-label="More"><svg class="ic"><use href="#i-more"/></svg></button>
+    <span class="left">41 of 150 left</span>
+    <button class="pill" type="button">Buy the cassette, $12</button>
+  </div>
+</header>
 
-      <div class="sides">
-        <div><h2>Side A · 19:54</h2><div id="sideA"></div></div>
-        <div><h2>Side B · 14:18</h2><div id="sideB"></div></div>
+<main aria-label="Now playing">
+  <div class="stage">
+    <div class="cover"><img src="https://images.unsplash.com/photo-1744566380959-b14d0cb6e88a?w=1200&q=80&auto=format&fit=crop" alt="Cover of Heat Lamp Lullabies: a young seedling lit against the dark"></div>
+
+    <section class="side">
+      <div class="kicker">Side A · track 3 of 9 · 1:47 of 3:53</div>
+      <div class="title-row"><h1>Sodium Summer</h1><button class="save" type="button" aria-label="Saved to your library" aria-pressed="true"><svg class="ic"><use href="#i-heart"/></svg></button></div>
+      <div class="by"><a href="#">Juniper Static</a> · Heat Lamp Lullabies · 2026</div>
+
+      <div class="controls">
+        <button class="ctl" type="button" aria-label="Previous track"><svg class="ic"><use href="#i-prev"/></svg></button>
+        <button class="play" type="button" aria-label="Pause"><svg class="ic"><use href="#i-pause"/></svg></button>
+        <button class="ctl" type="button" aria-label="Next track"><svg class="ic"><use href="#i-next"/></svg></button>
+        <button class="ctl line on" type="button" aria-label="Repeat the tape" aria-pressed="true"><svg class="ic"><use href="#i-repeat"/></svg></button>
+        <div class="vol">
+          <svg class="ic"><use href="#i-vol"/></svg>
+          <div class="track" role="slider" aria-label="Volume" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100"><i></i></div>
+          <svg class="ic"><use href="#i-speaker"/></svg>Studio speakers
+        </div>
       </div>
-      <div class="more">
-        <h2>More from Calamondin Tapes</h2>
-        <div class="mrow">
-          <a href="#"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" fill="var(--paper-stock)"/><g style="mix-blend-mode:multiply"><path d="M8 26L24 14l16 12z" fill="var(--riso-blue)"/><path d="M12 30v12M20 30v12M28 30v12M36 30v12" stroke="#FF3D81" stroke-width="2.5"/></g></svg><span><b>Tin Roof Weather</b><small>Moss Radio · CLMD-013</small></span></a>
-          <a href="#"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" fill="var(--paper-stock)"/><g style="mix-blend-mode:multiply"><rect x="9" y="9" width="30" height="30" fill="none" stroke="var(--riso-blue)" stroke-width="4"/><circle cx="24" cy="26" r="7" fill="#FF3D81"/></g></svg><span><b>Cold Frame</b><small>Ondine Vale · CLMD-012</small></span></a>
-          <a href="#"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" fill="var(--paper-stock)"/><g style="mix-blend-mode:multiply"><rect x="6" y="16" width="36" height="18" rx="3" fill="var(--riso-blue)"/><circle cx="35" cy="25" r="6" fill="#FF3D81"/></g></svg><span><b>Night Bus Hymns</b><small>Hollis Arcade · CLMD-011</small></span></a>
-        </div>
+
+      <p class="liner">Recorded over one cold March in a greenhouse, with the heat lamps left on for the seedlings. You can hear them hum under side B.</p>
+
+      <div class="queue">
+        <div class="qh"><b>Then side B</b><span>14:18</span></div>
+        <div class="row"><span class="n">6</span><span class="t">Glass Orchard</span><span class="d">4:07</span></div>
+        <div class="row"><span class="n">7</span><span class="t">Second Week of March</span><span class="d">3:36</span></div>
+        <div class="row"><span class="n">8</span><span class="t">Warm Front</span><span class="d">3:19</span></div>
+        <div class="row"><span class="n">9</span><span class="t">Last Frost</span><span class="d">3:16</span></div>
       </div>
     </section>
-
-    <aside class="rel">
-      <p class="k">Cassette and digital</p>
-      <h1>Heat Lamp Lullabies</h1>
-      <p class="by">by <a href="#">Juniper Static</a></p>
-      <p class="facts">9 tracks, 34:12 · out Oct 9, 2026</p>
-      <div class="buy">
-        <div><span><b>Cassette, $12</b><small>Edition of 150, pink shell · 41 left</small></span><button class="btn dark">Add to bag</button></div>
-        <div><span><b>Digital, $8 or more</b><small>FLAC and MP3, with the liner notes</small></span><button class="btn line">Buy digital</button></div>
-      </div>
-      <div class="notes">
-        <h3>Liner notes</h3>
-        <p>Nine songs recorded over one cold March in a greenhouse, with the heat lamps left on for the seedlings. You can hear them hum under side B.</p>
-        <p class="cred">Written, played and mixed by Juniper Static. Dubbed in real time onto chrome tape. J-card printed in two inks on a riso.</p>
-      </div>
-      <div class="embed">
-        <div><b>Put this player on your site</b><small>Large, 740&nbsp;×&nbsp;400, or compact, 740&nbsp;×&nbsp;120. It plays the whole release.</small></div>
-        <button class="btn line">Copy embed code</button>
-      </div>
-    </aside>
   </div>
+
+  <section class="tape" aria-label="Side A">
+    <div class="labels" id="labels" aria-hidden="true"></div>
+    <div class="wave" role="slider" aria-label="Seek within side A" aria-valuemin="0" aria-valuemax="1194" aria-valuenow="588" aria-valuetext="9 minutes 48 seconds of 19 minutes 54 seconds" tabindex="0"><canvas id="wave"></canvas><span class="head" id="head"></span></div>
+    <div class="times"><span><b>9:48</b> into side A</span><span>−10:06 · side A 19:54</span></div>
+  </section>
 </main>
 
 <script>
-  // Sodium Summer: 3:53 = 233 s; the frame shows 1:47 = 107 s, five seconds into the swell.
-  const LEN = 233, NOW = 107;
-  const SECTIONS = [[0, 'Intro'], [24, 'Verse'], [102, 'Swell'], [158, 'Bridge'], [201, 'Outro']];
-  const TRACKS = [['Low Bulb', '3:41'], ['Neon Tidepool', '4:20'], ['Sodium Summer', '3:53'], ['Brooder', '2:58'], ['Afterglow, Slowly', '5:02'],
-                  ['Glass Orchard', '4:07'], ['Thermostat Hymn', '3:36'], ['Warm Front', '3:19'], ['Lullaby for a Hatchery', '3:16']];
-  const N = 171, W = 684;                                   // 171 bars of 2 px with 2 px gaps = 684 px
-  const bars = document.getElementById('bars');
-  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
-  for (let i = 0; i < N; i++) {
-    const t = i / N * LEN;
-    let env = t < 24 ? .35 + t / 24 * .2 : t < 102 ? .55 : t < 158 ? .92 : t < 201 ? .62 : .5 - (t - 201) / 32 * .3;
-    const h = Math.max(6, Math.round((env * (.55 + rnd() * .45)) * 64));
-    const b = document.createElement('i'); b.style.height = h + 'px'; bars.appendChild(b);
-  }
-  const at = s => s / LEN * W;
-  const mk = document.getElementById('marks');
-  const cur = SECTIONS.filter(([s]) => s <= NOW).pop()[0];
-  mk.innerHTML = SECTIONS.map(([s, l]) => `<span class="${s === cur ? 'now' : ''}" style="left:${at(s)}px">${l}</span>`).join('');
-  function paint(now, buffered, hover) {
-    [...bars.querySelectorAll('i')].forEach((b, i) => {
-      const t = (i + .5) / N * LEN;
-      b.className = t <= now ? 'p' : buffered && t <= buffered ? 'b' : hover && t <= hover ? 'h' : '';
-    });
-    document.getElementById('head').style.left = (at(now) - 1) + 'px';
-  }
-  const fmt = s => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
-  const row = ([t, d], i) => `<div class="tr-row ${i === 2 ? 'now' : ''}"><span class="no">${i === 2 ? '<span class="eq" aria-label="Playing"><i style="height:6px"></i><i style="height:12px"></i><i style="height:8px"></i></span>' : i + 1}</span><span class="t">${t}</span><span class="d">${d}</span></div>`;
-  document.getElementById('sideA').innerHTML = TRACKS.slice(0, 5).map(row).join('');
-  document.getElementById('sideB').innerHTML = TRACKS.slice(5).map((x, i) => row(x, i + 5)).join('');
-  paint(NOW);
-
-  // One temporary state per frame (?state=scrub | buffering | error).
-  const state = new URLSearchParams(location.search).get('state');
-  if (state === 'scrub') {                                  // pointer over 2:31: a preview line, the time, and the stretch it would skip
-    const x = at(151); paint(NOW, null, 151);
-    const hl = document.getElementById('hl'), tip = document.getElementById('tip');
-    hl.style.display = 'block'; hl.style.left = x + 'px'; tip.style.display = 'block'; tip.style.left = x + 'px';
-  }
-  if (state === 'buffering') {
-    paint(NOW, NOW + 1.5); document.getElementById('tNow').textContent = '1:47 · Loading…';
-    const p = document.getElementById('play'); p.innerHTML = '<span class="spin" aria-hidden="true"></span>'; p.setAttribute('aria-label', 'Loading');
-  }
-  if (state === 'error') {
-    paint(NOW);
-    const p = document.getElementById('play'); p.innerHTML = '<svg width="22" height="22" viewBox="0 0 22 22" fill="currentColor"><path d="M7 4.5v13L18 11z"/></svg>'; p.setAttribute('aria-label', 'Play');
-    document.querySelector('.player').classList.add('failed');
-    document.querySelector('.times').innerHTML = '<span class="fail"><b>Sodium Summer didn\'t load.</b> Your place is saved at 1:47.</span><button class="retry">Retry</button>';
-    const eq = document.querySelector('.tr-row.now .no'); eq.textContent = '3';
-  }
+  // Side A of the tape, track by track (seconds). The bars are drawn loudness, not decoded audio.
+  const TRACKS = [["Low Bulb", 221], ["Neon Tidepool", 260], ["Sodium Summer", 233], ["Brooder", 178], ["Afterglow, Slowly", 302]];
+  const LEN = TRACKS.reduce((a, t) => a + t[1], 0), POS = 221 + 260 + 107;   // 1194 s; 9:48
+  const starts = []; TRACKS.reduce((a, t) => (starts.push(a), a + t[1]), 0);
+  const c = document.getElementById("wave"), r = c.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  c.width = r.width * dpr; c.height = r.height * dpr;
+  const g = c.getContext("2d"); g.scale(dpr, dpr);
+  // geometry: bars of 3 px every 5 px, with a 16 px gap before each track after the first
+  const bw = 3, step = 5, GAP = 16;
+  const usable = r.width - GAP * (TRACKS.length - 1);
+  const xOf = t => { const k = starts.filter(st => t >= st).length - 1; return t / LEN * usable + k * GAP; };
+  const le = document.getElementById("labels");
+  TRACKS.forEach(([name], i) => {
+    const s = document.createElement("span");
+    s.innerHTML = `<b>${i + 1}</b>${name}`;
+    s.style.left = xOf(starts[i]) + "px";
+    if (i === 2) s.className = "cur";
+    le.appendChild(s);
+  });
+  document.getElementById("head").style.left = xOf(POS) + "px";
+  let seed = 41;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const css = getComputedStyle(document.documentElement);
+  const ahead = css.getPropertyValue("--ds-color-neutral-alpha-dark-8").trim();
+  const accent = css.getPropertyValue("--ds-color-accent-dark-9").trim();
+  // drawn loudness, not decoded audio: each track's own level, a soft start and a fade, smoothed
+  const level = [0.5, 0.64, 0.72, 0.46, 0.58];
+  let walk = 0;
+  TRACKS.forEach(([, len], k) => {
+    const x0 = xOf(starts[k]), w = len / LEN * usable, bars = Math.floor(w / step);
+    for (let j = 0; j < bars; j++) {
+      const u = j / bars, t = starts[k] + u * len;
+      const shape = Math.min(1, u / 0.08) * Math.min(1, (1 - u) / 0.14);
+      walk = walk * 0.8 + (rnd() - 0.5) * 0.3;
+      const h = Math.max(3, Math.min(1, level[k] * (0.3 + 0.7 * shape) * (0.9 + walk)) * r.height);
+      g.fillStyle = t <= POS ? accent : ahead;
+      g.beginPath(); g.roundRect(x0 + j * step, (r.height - h) / 2, bw, h, 1.5); g.fill();
+    }
+  });
 </script>
 </body>
 </html>

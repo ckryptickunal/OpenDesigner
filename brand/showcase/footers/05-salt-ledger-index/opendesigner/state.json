@@ -68,10 +68,10 @@
       "decision": "D-0017"
     },
     "warmth": {
-      "value": 72,
+      "value": 12,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0018"
+      "decision": "D-0023"
     }
   },
   "preset": null,
@@ -83,10 +83,10 @@
     "brandColor": "#7a1f1f",
     "primaryActionColor": null,
     "focusColor": null,
-    "neutralBase": "#efe6d4",
+    "neutralBase": "#e4ebf1",
     "contrastTarget": "AA",
-    "textFace": "Newsreader",
-    "displayFace": "=textFace",
+    "textFace": "Inter",
+    "displayFace": "Newsreader",
     "baseSize": null,
     "spaceUnit": 4,
     "platforms": [
@@ -152,7 +152,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -529,7 +532,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "797d9c3692cc36c7",
+    "DESIGN.md": "5cdaba8855de4abc",
     "PRODUCT.md": "99a43191a1bba07c"
   },
   "exports": {
@@ -2631,5 +2634,7 @@
       "font.size.input": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

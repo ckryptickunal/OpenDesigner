@@ -1,5 +1,7 @@
 # 10 · Settings panel · rackhound
 
+Gallery: Ackwire is a fictional on-call paging tool; its notification settings are open over the incidents page.
+
 ## Direction
 rackhound is a fictional self-hosted console for people who run a small server rack at home. Its settings panel lives in the browser but feels like a 1980s amber-phosphor terminal: mono everything, box-drawing frames, block-character switches and sliders, a tmux-style status line top and bottom, a pixel display face for titles and readouts, scanlines and a soft phosphor glow. It must still be a real, accessible settings UI: switches, segmented controls, sliders, an input, apply and revert.
 Feel words: **retro, technical, nerdy** (engine: retro → heritage + playful, technical → modern + serious, nerdy → modern + playful).
@@ -80,3 +82,53 @@ caption/label 12 (status lines, chip labels, hints), body 14 (setting names and 
 **Fresh-eyes audit:** 3/5 ("believable job, but the costume is louder than the data, and the rack does not add up"), then 4/5 (low 4: "a believable ML-infra console; the numbers check out"); its last notes (a white over-contract figure, fan watts not counted, no feed capacity, an unclear alert rule, an empty pools box, pixel-face legends, a pale drag handle, unit spacing, "the old 330 W", the "rh" actor, a red "danger zone", the missing name) were fixed. References: Linear settings rows https://mobbin.com/screens/c968b3b2-82a5-4044-8e4a-0bec5683dec5, Dropbox Dash dark settings https://mobbin.com/screens/f2c6abf3-905c-444a-af3d-33088030cb89, Modal developer settings https://mobbin.com/screens/87b2d397-bbe1-4398-ad00-f8143c60f24f.
 
 **Fresh score: 4.**
+
+## Round 4 (owner review, 2026-10-15)
+
+**What he said.** Most of the web components "look absolutely rubbish", and none should "feel like they are from a vibe coded app or a cheap Chinese app". Margin (02) is the only component he does not call ugly; the B2B product screens are the bar. In round 3 he had said of this piece: "okay, but I don't know who will use it".
+
+**The idea in one sentence:** an on-call engineer sets how Ackwire reaches him, and sees tonight's quiet hours against his shift.
+
+**What changed: a new concept, rebuilt in place.** The rackhound GPU-rack console answered "who uses it" for very few people, and the terminal look was optional. The folder now holds a settings dialog most engineering teams know:
+- **Ackwire**, a fictional on-call paging tool, with its settings open over the incidents page (dimmed), for **Tomas** at **Fernbank Grocery**, a grocer whose services (checkout-svc, basket-api, picking-queue) page their engineers.
+- The dialog (1120 × 656): the section list (your account; the team) and *Notifications*. *When you're paged*: push to your phone, a phone call after 5 minutes if a page is still open, a text message to +1 (503) 555-0148, a daily email summary to tomas@fernbank.example. *Schedule*: quiet hours on weeknights from 22:00 to 07:00, a strip from Thu 07:00 to Fri 12:00 with now (13:52) and tonight's quiet hours, and one line on the shift: Tomas is primary for checkout-svc until Mon, Oct 19 at 09:00, and after 10 minutes the policy pages Bea Ashby.
+- Green (#3DD68C) means on: the switches (deeper accent step, white knob) and the quiet-hours block in the strip, which is the "on" period of the quiet-hours switch. The auditor counts that as a second job.
+- Removed after the audits: an icon tile on every row, the open select menu (it hid two controls), the second strip for the on-call shift, the boxed callout, the save footer and its test-page button (settings save as they change), the pane's subtitle, the second lines on the text and email rows, the dialog's shadows (one hairline is its only depth now), the incidents column that showed past the dialog, and a to-do style check-mark logo.
+- Two names changed: "Wen Ashby" became Bea Ashby ("Wen" is in `app-screens/09`), and "now" moved from 14:06 to 13:52 (14:06 is in `components/06`).
+
+**References (Mobbin, cited by link only).**
+- Notion preferences (dark), https://mobbin.com/screens/d138214d-5351-4bd6-a2bb-c7b3648ea6a5 : a dialog with grouped section nav over the dimmed app. Taught the shell.
+- Perplexity preferences, https://mobbin.com/screens/27ad8f42-8906-4552-a56d-01c4c15e69dd : label and description left, control right, plain section headings. Taught the row.
+- Replit settings, https://mobbin.com/screens/e2c001c6-04fa-4162-aa16-a3f89d7c7d8d : a long run of identical toggles. Taught what to avoid.
+
+**System (engine).** Re-sketched (git keeps the old state):
+`sketch --name Ackwire --brand "#3DD68C" --audience dense --platforms web --feel calm,technical,reliable --theme system-light-dark --delegated all --surfaces "console:operate"`, then `set raw.textFace "Mona Sans"`, `raw.neutralTint pure`, `raw.brandColor "#3DD68C" --set-by chosen`; dials roundness 40, depth 40, warmth 8, colorfulness 20, expression 25, energy 15 (all `delegated`); `build`. Rendered with `data-theme="dark"` (dark-only is refused by a house standard).
+- Face: Mona Sans (SIL OFL), one family.
+- Type scale, named roles (web px): label 12 (section labels in caps, ticks, note), body 14, title 20 (semibold). Weights 400, 500, 600.
+- Outside the tokens on purpose: the 36 × 20 switch, the hatched quiet block and its 32 px strip, the scrim at 60%. The dialog's only depth is one hairline.
+
+**Checks (final render).**
+- Dates and times: Thu Oct 15 is today; Mon, Oct 19 is a Monday; the strip runs 29 hours, so now (13:52) sits at 23.7%, 22:00 at 51.7% and Fri 07:00 at 82.8%; the incident list behind runs from 13:48 today back to Oct 8. `check_dates.py --year 2026` passes.
+- `check_names.py`: no collisions. New: Ackwire, Fernbank Grocery (web search found neither), Tomas, Bea Ashby. The phone number is in the 555-01xx range kept for fiction.
+- `preflight.py html`: 0 errors, 0 warnings; sizes 12, 14, 17, 20.
+- `engine.py validate`: no errors; 2 warnings, both for light mode (a light green button is faint on white). The piece is shown dark; recorded with `engine.py feedback`.
+- Computed contrast: 45 runs, lowest 5.12:1. The app behind the scrim is context (`aria-hidden`).
+- Gallery size (337 px): the eye lands on the dialog's switches and title.
+
+**Blind pairwise test** (ours against a shipped settings dialog, sides random, fresh judges):
+
+| Round | Version | Notion | Perplexity | Replit |
+|---|---|---|---|---|
+| 1 | first build | ours +1 | 0 | +3 |
+| 2 | Schedule heading, labels out of the strip | +1 | −1 | +3 |
+| 3 | no icon tiles, 14 px descriptions, no open menu | +1 | −2 | +3 |
+| 4 | blurred backdrop, one strip, white knobs | +1 | +1 | +3 |
+| 5 | no save footer | +2 | +1 | +3 |
+| 6 | one hairline, fewer second lines; one judge, one pair | | +1 | |
+| 7 | final (larger dialog, semibold title, destinations named, green quiet block); one judge | +2 | +1 | |
+
+It passed every round by the rule (never weaker by 3, equal or better at least twice), but it was the closest piece: Perplexity beat it twice, on weak separation from the page behind and a timeline of flat grey slabs. Both were fixed in round 4.
+
+**Fresh-eyes audit:** round 1, 3 (icon tile on every row, 12 px descriptions, the menu hiding two controls); round 2, 3 (flat hierarchy, an on-call bar with no information, dark switch knobs); round 3, 3 (three heading levels, four depth effects on the dialog, the strip repeating its row; addressed); round 4, 3 ("the closest to a 4": stock dark dialog, dialog about 52% of the frame, title outweighed by the section headings; addressed); final, **3.5**, still the closest to the bar.
+
+**Result: fails the fresh-eyes bar after four rounds, honestly reported.** It wins or ties every blind pairing except two narrow losses to Perplexity (by 1 and 2, both before round 4), and the final auditor scores it 3.5: a resting state with nothing being changed, the dimmed page shows no useful context (the acknowledged #2214 sits behind the dialog), and green does two jobs. Next steps: show one setting mid-change (the quiet-hours end time being dragged on the strip), and place the dialog so the acknowledged incident stays visible.

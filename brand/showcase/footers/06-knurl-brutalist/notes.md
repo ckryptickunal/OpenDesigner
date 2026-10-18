@@ -45,3 +45,8 @@ python3 $E --dir .../06-knurl-brutalist/opendesigner sketch --name "Knurl Supply
 1. No hard offset shadow style, and the stage file calls it dated (feedback: gap).
 2. The contrast fix suggested for a pale brand action colour would lose the brand; a border is the real fix (feedback: idea).
 - Helped: border-width tokens (1, 2, 4) were exactly what this style needs.
+
+## Date and data fix (2026-10-18)
+The round-4 audit found that the ticker's "Thu 24.10" is a Saturday in 2026, and that "41,208 on it" reused a number from product/02. Changed to "Sat 24.10" and "38,917 on it"; nothing else changed. `shot.png` and `shot-mobile.png` were re-rendered at the same widths. `check_dates.py` does not read the day.month format, so this was checked by hand.
+
+The fresh audit then found the ticker still said CET; Central Europe is on summer time until 25 Oct 2026, so it now reads 'Sat 24.10 / 12:00 CEST' (ticker and screen-reader label). The rebuild the round-4 audit asked for was not done in this pass.

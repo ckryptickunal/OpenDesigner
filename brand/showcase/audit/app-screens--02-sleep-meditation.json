@@ -1,0 +1,108 @@
+{
+ "piece": "app-screens/02-sleep-meditation",
+ "title": "02 · Lullwater: sleep session",
+ "pattern": "sleep timer",
+ "platform": "ios",
+ "industry": "wellness",
+ "style": [
+  "organic",
+  "dark",
+  "glass"
+ ],
+ "tags": [
+  "sleep timer",
+  "wellness",
+  "meditation",
+  "player",
+  "dark",
+  "gradient",
+  "serif",
+  "ios"
+ ],
+ "score": 2,
+ "verdict": "remake",
+ "strengths": [
+  "The timer as hero type (18:24 in Instrument Serif) with the line 'left · fades out by 23:40' is a real product idea, and the sound-mix pill 'Rain on the reed beds · 40%' is a detail only a sleep app would have.",
+  "Controls are bottom-weighted with an 80 pt play target, skip 15, a moon for the sleep timer and a mixer: the right transport set."
+ ],
+ "slop_signals": [
+  "A glowing orb with a feathered white swirl inside it, on an indigo-to-peach gradient, ringed by concentric hairlines and scattered stars: the canonical AI 'calm app' image. Calm, Oura and Ten Percent Happier use a photo, a flat grainy gradient or nothing.",
+  "Two heroes compete: the orb (with 'breathe in 4 · 7 · 8' inside it) and the 95 px timer directly below it.",
+  "A rendered reflection of the orb on the water, plus a glow ring around the peach play button: glow stacked on glow.",
+  "The concentric rings around the orb carry no data (the 4-7-8 phase is not drawn on them)."
+ ],
+ "fixes": [
+  "Choose one hero: either the breath cue (a crisp disc or a ring whose arc is the phase) or the timer; remove the other from the upper half.",
+  "Replace the painted sky and reflection with one flat grainy gradient (the Ten Percent Happier reference) or a photographic horizon.",
+  "Remove the rings, the stars and the play-button glow; keep film grain only on a flat gradient."
+ ],
+ "references": [
+  {
+   "site": "Ten Percent Happier",
+   "url": "https://mobbin.com/screens/17b0bfe1-6fdd-4564-8af8-828391ce17c8",
+   "what": "A flat grainy gradient, a title, and controls low on the screen; nothing is drawn in the middle."
+  },
+  {
+   "site": "Oura",
+   "url": "https://mobbin.com/screens/7be5795d-113c-493f-a297-ae5b4fbd4fc9",
+   "what": "A single photograph, one title line, three controls and a scrubber: calm comes from restraint, not from an object."
+  },
+  {
+   "site": "Calm",
+   "url": "https://mobbin.com/screens/74b9f7f2-cdf9-442b-8d18-b9a15410a330",
+   "what": "Dark sky, narrator and author as label-value pairs, plain transport row."
+  },
+  {
+   "site": "Moonly",
+   "url": "https://mobbin.com/screens/a2630565-db77-4a6b-9669-d39b2fd2d1e0",
+   "what": "Also centres a glowing object; shows how quickly that reads as a template rather than a product."
+  },
+  {
+   "site": "Breathwrk",
+   "url": "https://mobbin.com/screens/a79fe461-e5eb-4087-af57-2c742e665b4e",
+   "what": "A blurred photo with the title and controls in the lower third."
+  }
+ ],
+ "audited": "2026-10-14",
+ "round3": {
+  "date": "2026-10-15",
+  "score": null,
+  "score_note": "not re-audited; a data fix found by the fresh audit of mockups/01-phone-trio",
+  "changed": [
+   "Status bar 9:41 is now 23:22, the time the screen implies (23:22 + 16:52 = 23:40, 'fades out by 23:40')",
+   "Timer 18:24 (also watch/08's value) is now 16:52 left, 13:08 played of 30:00; fill and knob 39% to 43.8%; accessible labels match",
+   "shot.png re-rendered at 390 x 844, 3x, with reduced motion (still frame)"
+  ]
+ },
+ "round4": {
+  "score": 3,
+  "pairwise": "Passes. Fresh-context judges, random sides, no labels. Ours more premium than Oura (+2, +2, +3, +2) and Ten Percent Happier (+3, +3, +3, +3) in every round; against Insight Timer -2, +2, +2, -2, and -2 on the final render. Never clearly weaker (3 or more); better in 2 of 3 every round.",
+  "changed": [
+   "Rebuilt in place: canvas sky, orb, rings, stars, reflection, glows and glass pill removed",
+   "Story artwork is a free Unsplash photo (Jorg Angeli, photo-1546273735-bea2e41924f1), cropped and graded to night; title set on it",
+   "One face (Albert Sans) and one confident number: 16:52 left at 112 pt; Instrument Serif/Sans, then Source Serif 4 and Inter, dropped",
+   "One accent with one job (the sleep timer): peach only on the moon button and 'Fades out by 23:40'",
+   "Elapsed/total labels and '30 min' removed; scrubber 43.8% (788 of 1800 s)",
+   "iOS-style skip glyphs, one rendered 1.75 stroke, five controls on equal centres, audio-output glyph; rain row at 17 pt with a 24 pt slider thumb",
+   "Narrator Ines Calder renamed Oona Prentice (Calder and Ines collided with styles/03 and app-screens/08)",
+   "Kept: clock 23:22, 16:52 left of 30:00, fades out by 23:40, Low tide at Merrow Bay, Wind Down night 3 of 7, Rain on the reed beds 40%",
+   "Engine: textFace and displayFace Albert Sans, neutralBase #1C2430, accentCount 1, secondaryColors [], font sizes 11-112"
+  ],
+  "date": "2026-10-18",
+  "scores_by_round": [
+   3,
+   3,
+   3,
+   3,
+   3,
+   3
+  ],
+  "references": [
+   "https://mobbin.com/screens/9f4d6660-a448-4182-b56a-09be46facc81",
+   "https://mobbin.com/screens/3b2948a4-734e-4c08-a403-2c6ae0d5d1f7",
+   "https://mobbin.com/screens/397f0ee2-9bfc-4d6b-995e-d3e18ff85baf"
+  ],
+  "copies_named_product": "No (final audit); Insight Timer's big countdown under a photo is the closest structure",
+  "fresh_eyes": "Does not pass: six fresh-context audits against the B2B product screens, none reached 4. Facts (times, dates, counts, Italian) confirmed correct each time; the verdict is design, not data."
+ }
+}

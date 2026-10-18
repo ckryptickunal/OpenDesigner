@@ -462,3 +462,131 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: chunky toy-like tiles with a hard bottom edge read as pressable; playful indie product
 - also set: preset = "neobrutal" (from Q-dir-01)
+
+## D-0025 · raw.textFace = "Plus Jakarta Sans"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0017 · source_ref: none
+- reason: round 4: owner said the app screens look cheap and toy-like; rebuilt as a calm speaking-feedback screen; the UI face
+- previous value: "Nunito"
+
+## D-0026 · raw.displayFace = "Spectral"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0018 · source_ref: none
+- reason: round 4: owner said the app screens look cheap and toy-like; rebuilt as a calm speaking-feedback screen; the Italian itself is set like a book, so the language is the hero
+- previous value: "Fredoka"
+
+## D-0027 · raw.fontLicence = {"web": true, "app": true, "selfHost": true}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0019 · source_ref: none
+- reason: Plus Jakarta Sans and Spectral are SIL OFL
+- previous value: {"web": true, "app": true, "selfHost": true}
+
+## D-0028 · raw.brandColor = "#CC3B22"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0004 · source_ref: none
+- reason: round 4: owner said the app screens look cheap and toy-like; rebuilt as a calm speaking-feedback screen; one vermilion accent with one job: what to fix (4.98:1 on white)
+- previous value: "#2a5bd7"
+
+## D-0029 · raw.accentCount = 1
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0020 · source_ref: none
+- reason: one accent
+- previous value: 3
+
+## D-0030 · raw.secondaryColors = []
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0021 · source_ref: none
+- reason: sunflower and tomato removed
+- previous value: ["#FFC531", "#F2493B"]
+
+## D-0031 · raw.neutralBase = "#8A8F98"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: cool neutral: white page, near-black ink
+
+## D-0032 · dials.expression = 40
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0009 · source_ref: none
+- reason: round 4: owner said the app screens look cheap and toy-like; rebuilt as a calm speaking-feedback screen
+- previous value: 90
+
+## D-0033 · dials.brandPresence = 40
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0010 · source_ref: none
+- reason: round 4: owner said the app screens look cheap and toy-like; rebuilt as a calm speaking-feedback screen
+- previous value: 85
+
+## D-0034 · dials.energy = 35
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0012 · source_ref: none
+- reason: round 4: owner said the app screens look cheap and toy-like; rebuilt as a calm speaking-feedback screen
+- previous value: 85
+
+## D-0035 · dials.roundness = 55
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0013 · source_ref: none
+- reason: round 4: owner said the app screens look cheap and toy-like; rebuilt as a calm speaking-feedback screen
+- previous value: 75
+
+## D-0036 · dials.depth = 15
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0014 · source_ref: none
+- reason: round 4: owner said the app screens look cheap and toy-like; rebuilt as a calm speaking-feedback screen
+- previous value: 60
+
+## D-0037 · dials.colorfulness = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0015 · source_ref: none
+- reason: round 4: owner said the app screens look cheap and toy-like; rebuilt as a calm speaking-feedback screen
+- previous value: 95
+
+## D-0038 · dials.warmth = 35
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0016 · source_ref: none
+- reason: round 4: owner said the app screens look cheap and toy-like; rebuilt as a calm speaking-feedback screen
+- previous value: 60
+
+## D-0039 · dials.density = 45
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0011 · source_ref: none
+- reason: round 4: owner said the app screens look cheap and toy-like; rebuilt as a calm speaking-feedback screen
+- previous value: 40
+
+## D-0040 · overrides.font.size.11 = {"value": 11, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 2, and 30 for the Italian sentence
+- new dimension token in primitives.tokens.json
+
+## D-0041 · overrides.font.size.13 = {"value": 13, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 2, and 30 for the Italian sentence
+- new dimension token in primitives.tokens.json
+
+## D-0042 · overrides.font.size.15 = {"value": 15, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 2, and 30 for the Italian sentence
+- new dimension token in primitives.tokens.json
+
+## D-0043 · overrides.font.size.17 = {"value": 17, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 2, and 30 for the Italian sentence
+
+## D-0044 · overrides.font.size.22 = {"value": 22, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 2, and 30 for the Italian sentence
+- new dimension token in primitives.tokens.json
+
+## D-0045 · overrides.font.size.30 = {"value": 30, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 2, and 30 for the Italian sentence
+- new dimension token in primitives.tokens.json
+
+## D-0046 · raw.textFace = "IBM Plex Sans"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0025 · source_ref: none
+- reason: round 4 audit: Plus Jakarta Sans draws I and l alike ('Al bar' read as 'AI bar') and read as a startup template; Plex Sans has a serifed I and a tailed l, which a language app needs
+- previous value: "Plus Jakarta Sans"
+
+## D-0047 · raw.textFace = "Inter"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0046 · source_ref: none
+- reason: round 4 audit 2: IBM Plex digits made the status bar read as not-iOS; Inter is the closest open face to SF. The Italian lesson name is set in Spectral so 'Al bar' cannot read as 'AI bar'
+- previous value: "IBM Plex Sans"
+
+## D-0048 · raw.textFace = "IBM Plex Sans"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0047 · source_ref: none
+- reason: round 4 audit 3: Inter read as the vibe-coded default and Spectral inside an Inter line looked like a fallback; Plex Sans has a serifed I and a tailed l, so 'Al bar' reads right in one face
+- previous value: "Inter"
+
+## D-0049 · overrides.font.size.48 = {"value": 48, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 4 audit 3: the score becomes one confident number
+- new dimension token in primitives.tokens.json
+
+## D-0050 · overrides.font.size.34 = {"value": 34, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-18 · supersedes: none · source_ref: none
+- reason: round 4 audit 5: the word to fix becomes the one large moment (Large Title)
+- new dimension token in primitives.tokens.json

@@ -1,335 +1,191 @@
 <!doctype html>
-<html lang="en-GB" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kinroom toasts</title>
+<title>Panelwise · Toasts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-  /* Round 3: the toast stack in its real place, the corner of a Kinroom room at real size.
-     Kinroom's own idea: every room keeps a brief (the facts the room is working towards) beside the conversation.
-     Toasts are ink, one line where they can be, in the window corner over the brief's empty lower half, so they never cover
-     a message. The iris accent is only on actions. Behaviour follows the house toast standards (STD-components-toasts-drawers):
-     newest in front, 3 visible, 14 px lift, 4 s for plain toasts, action toasts stay until acted on (WCAG 2.2.1). */
-  :root { --ink: var(--ds-color-neutral-light-12); --sub: var(--ds-color-neutral-light-10); --line: var(--ds-color-neutral-light-5); --gap: var(--ds-component-toast-gap);
-    --toast: var(--ds-color-neutral-light-12); }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: var(--ds-color-white); }
-  body { color: var(--ink); font: 400 var(--ds-font-size-16)/1.5 var(--ds-font-family-text); -webkit-font-smoothing: antialiased; font-synthesis: none; font-variant-numeric: tabular-nums; }
-  .app { position: relative; width: 1440px; height: 900px; overflow: hidden; display: grid; grid-template-columns: 248px 1fr 336px; grid-template-rows: 100%; background: var(--ds-color-white); }
-  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
-  a { color: inherit; text-decoration: none; }
-  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-  .av { flex: none; width: 32px; height: 32px; border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-3); color: var(--ink);
-    display: grid; place-items: center; font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); }
-  .av.sm { width: 24px; height: 24px; border-radius: 6px; font-size: 11px; }
-  .ico { width: 24px; display: grid; place-items: center; color: var(--sub); flex: none; }
+/* Panelwise: a hiring pipeline board with the toast stack expanded under the pointer.
+   Shown at 1x, the whole app in the 1440 x 900 frame (PRESENTATION.md: the component at its real size, the rest kept quiet).
+   Colour, space, radius, type and motion are --ds-* tokens; OFF-TOKEN values say why.
+   Green has one job: work still running (the export's progress). */
+:root {
+  --rule: var(--ds-color-neutral-light-4);      /* OFF-TOKEN: hairline; border.subtle is too heavy for card edges */
+  --rule-strong: var(--ds-color-neutral-light-6);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background: var(--ds-color-surface-raised); -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.i { width: var(--ds-size-icon-sm); height: var(--ds-size-icon-sm); flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-  /* sidebar */
-  .side { min-height: 0; overflow: hidden; background: var(--ds-color-neutral-light-2); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: var(--ds-space-12); }
-  .ws { display: flex; align-items: center; gap: var(--ds-space-8); height: 40px; padding: 0 var(--ds-space-8); font-weight: 600; }
-  .ws .tile { width: 24px; height: 24px; border-radius: 6px; background: var(--ink); color: var(--ds-color-white); display: grid; place-items: center; font-size: var(--ds-font-size-13); }
-  .ws svg { margin-left: auto; color: var(--sub); }
-  .find { display: flex; align-items: center; gap: var(--ds-space-8); height: 36px; margin: var(--ds-space-8) 0 var(--ds-space-16); padding: 0 var(--ds-space-12); border: 1px solid var(--line); border-radius: var(--ds-radius-control); background: var(--ds-color-white); color: var(--sub); }
-  .find kbd { margin-left: auto; font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-text); }
-  .nav { display: grid; gap: var(--ds-space-2); }
-  .nav a { display: flex; align-items: center; gap: var(--ds-space-8); height: 32px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control); color: var(--ds-color-neutral-light-11); }
-  .nav a .n { margin-left: auto; font-size: var(--ds-font-size-13); }
-  .nav a.unread { color: var(--ink); font-weight: 600; }
-  .nav a[aria-current] { background: var(--ds-color-neutral-light-4); color: var(--ink); font-weight: 500; }
-  .nav a:hover { background: var(--ds-color-neutral-light-3); }
-  .sq { width: 6px; height: 6px; border-radius: 1.5px; background: currentColor; }
-  .lbl { margin: var(--ds-space-16) var(--ds-space-8) var(--ds-space-4); font-size: var(--ds-font-size-13); color: var(--sub); }
-  .me { margin-top: auto; display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-12) var(--ds-space-8) 0; border-top: 1px solid var(--line); }
-  .me b { display: block; font-weight: 500; line-height: 1.25; }
-  .me small { font-size: var(--ds-font-size-13); color: var(--sub); }
+.app { width: 100vw; height: 100vh; height: 100dvh; position: relative; display: grid; grid-template-columns: 56px 1fr;
+  color: var(--ds-color-text-primary); font: var(--ds-text-body-md); font-variant-numeric: tabular-nums; background: var(--ds-color-surface-raised); }
+.rail { border-right: 1px solid var(--rule); background: var(--ds-color-surface-sunken); display: flex; flex-direction: column; align-items: center; gap: var(--ds-space-8); padding-top: var(--ds-space-12); color: var(--ds-color-icon-subtle); }
+.rail .mark { width: 28px; height: 28px; border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-12); color: var(--ds-color-white); display: grid; place-items: center; font: 600 var(--ds-font-size-14)/1 var(--ds-font-family-text); margin-bottom: var(--ds-space-12); }
+.rail span { width: 36px; height: 36px; display: grid; place-items: center; border-radius: var(--ds-radius-control); }
+.rail span.on { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); box-shadow: var(--ds-elevation-raised); }
+.main { min-width: 0; display: flex; flex-direction: column; position: relative; }
+.top { height: 52px; flex: none; display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-24); border-bottom: 1px solid var(--rule); color: var(--ds-color-text-secondary); }
+.top b { color: var(--ds-color-text-primary); font-weight: 500; }
+.top .end { margin-left: auto; display: flex; align-items: center; gap: var(--ds-space-16); color: var(--ds-color-icon-default); }
+.avatar { width: 28px; height: 28px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-4); display: grid; place-items: center; font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
 
-  /* room */
-  .main { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
-  .head { height: 64px; flex: none; display: flex; align-items: center; gap: var(--ds-space-12); padding: 0 var(--ds-space-32); border-bottom: 1px solid var(--line); }
-  .head h1 { display: flex; align-items: center; gap: var(--ds-space-8); font: 600 var(--ds-font-size-16)/1 var(--ds-font-family-text); }
-  .head .end { margin-left: auto; display: flex; align-items: center; gap: var(--ds-space-8); color: var(--ds-color-neutral-light-11); font-size: var(--ds-font-size-13); }
-  .iconbtn { width: 32px; height: 32px; border-radius: var(--ds-radius-control); display: grid; place-items: center; color: var(--ds-color-neutral-light-11); }
-  .iconbtn:hover { background: var(--ds-color-neutral-light-2); }
-  .msgs { flex: 1; min-height: 0; overflow: hidden; padding: var(--ds-space-16) var(--ds-space-32) 0; display: flex; flex-direction: column; justify-content: flex-end; }
-  .day { display: flex; align-items: center; gap: var(--ds-space-12); margin: var(--ds-space-8) 0; font-size: var(--ds-font-size-13); color: var(--sub); font-weight: 500; }
-  .day::before, .day::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-  .msg { display: grid; grid-template-columns: 32px 1fr; gap: var(--ds-space-12); padding: var(--ds-space-8) 0; max-width: 720px; }
-  .msg .who { display: flex; align-items: baseline; gap: var(--ds-space-8); line-height: 1.25; }
-  .msg .who b { font-weight: 600; }
-  .msg .who time { font-size: var(--ds-font-size-13); color: var(--sub); }
-  .msg p { margin-top: var(--ds-space-4); }
-  .msg.gone { display: none; }
-  .file { display: inline-flex; align-items: center; gap: var(--ds-space-12); margin-top: var(--ds-space-8); padding: var(--ds-space-8) var(--ds-space-16) var(--ds-space-8) var(--ds-space-8); border: 1px solid var(--line); border-radius: var(--ds-radius-control); }
-  .doc { width: 32px; height: 40px; border-radius: 4px; background: var(--ds-color-neutral-light-3); display: grid; place-items: center; font: 600 11px/1 var(--ds-font-family-text); color: var(--ds-color-neutral-light-11); flex: none; }
-  .file b { display: block; font-weight: 500; line-height: 1.25; }
-  .file small { font-size: var(--ds-font-size-13); color: var(--sub); }
-  .react { display: inline-flex; gap: var(--ds-space-8); margin-top: var(--ds-space-8); }
-  .react span { display: inline-flex; align-items: center; gap: var(--ds-space-4); height: 28px; padding: 0 var(--ds-space-8); border: 1px solid var(--line); border-radius: var(--ds-radius-full); font-size: var(--ds-font-size-13); }
-  .mention { color: var(--ds-color-accent-light-11); font-weight: 500; }
+.job { padding: var(--ds-space-16) var(--ds-space-24) 0; display: flex; align-items: center; gap: var(--ds-space-12); }
+.job h1 { margin: 0; font: var(--ds-text-title-lg); letter-spacing: -0.01em; }
+.job .meta { color: var(--ds-color-text-tertiary); }
+.job .acts { margin-left: auto; display: flex; gap: var(--ds-space-8); }
+.btn { height: var(--ds-size-control-md); display: inline-flex; align-items: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: 500; border: 1px solid var(--rule-strong); background: var(--ds-color-surface-raised); white-space: nowrap; }
+.btn.ink { background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); border-color: transparent; }
+.seg { display: inline-flex; padding: var(--ds-space-2); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-sunken); }
+.seg span { height: 28px; padding: 0 var(--ds-space-12); display: flex; align-items: center; border-radius: calc(var(--ds-radius-control) - 2px); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); }
+.seg .on { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); font-weight: 500; box-shadow: var(--ds-elevation-raised); }
+.sub { padding: var(--ds-space-12) var(--ds-space-24); display: flex; gap: var(--ds-space-16); font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); }
+.sub b { color: var(--ds-color-text-secondary); font-weight: 500; }
+.sub .r { margin-left: auto; }
 
-  .compose { flex: none; margin: var(--ds-space-8) var(--ds-space-32) var(--ds-space-24); border: 1px solid var(--ds-color-neutral-light-7); border-radius: var(--ds-radius-container); padding: var(--ds-space-12) var(--ds-space-12) var(--ds-space-8) var(--ds-space-16); }
-  .compose .ph { color: var(--sub); min-height: 24px; }
-  .att { display: none; align-items: center; gap: var(--ds-space-12); margin-bottom: var(--ds-space-12); padding: var(--ds-space-8); width: 344px; border: 1px solid var(--line); border-radius: var(--ds-radius-control); }
-  .att b { display: block; font-weight: 500; font-size: var(--ds-font-size-13); line-height: 1.25; }
-  .att small { font-size: var(--ds-font-size-13); color: var(--ds-color-text-danger); }
-  .att .retry { margin-left: auto; }
-  .tools { display: flex; align-items: center; gap: var(--ds-space-4); margin-top: var(--ds-space-8); }
-  .send { margin-left: auto; height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-3); color: var(--sub); font-weight: 500; display: inline-flex; align-items: center; gap: var(--ds-space-8); }
+/* ---------- board ---------- */
+.board { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--ds-space-12); padding: 0 var(--ds-space-24); overflow: hidden; }
+.col { background: var(--ds-color-surface-sunken); border-radius: var(--ds-radius-container) var(--ds-radius-container) 0 0; padding: var(--ds-space-8); display: flex; flex-direction: column; gap: var(--ds-space-8); }
+.col h2 { margin: 0; height: 28px; display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-4); font: var(--ds-text-label-lg); font-weight: 600; }
+.col h2 span { color: var(--ds-color-text-tertiary); font-weight: 400; }
+.card { background: var(--ds-color-surface-raised); border: 1px solid var(--rule); border-radius: var(--ds-radius-control); padding: var(--ds-space-12); }
+.card b { display: block; font-weight: 500; }
+.card .m { margin-top: var(--ds-space-2); font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); }
+.card .f { margin-top: var(--ds-space-12); display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+.pips { display: inline-flex; gap: var(--ds-space-2); }
+.pips i { width: 6px; height: 6px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-5); }
+.pips i.on { background: var(--ds-color-neutral-light-12); }
+.card .f .r { margin-left: auto; color: var(--ds-color-text-tertiary); }
 
-  /* the room brief */
-  .brief { border-left: 1px solid var(--line); padding: var(--ds-space-20) var(--ds-space-24); min-height: 0; overflow: hidden; }
-  .brief h2 { font: 600 var(--ds-font-size-16)/24px var(--ds-font-family-text); }
-  .brief .sub { font-size: var(--ds-font-size-13); color: var(--sub); }
-  .facts { margin-top: var(--ds-space-16); display: grid; gap: var(--ds-space-12); }
-  .fact small { display: block; font-size: var(--ds-font-size-13); color: var(--sub); }
-  .fact b { font-weight: 500; }
-  .meter { height: 4px; margin-top: var(--ds-space-8); border-radius: 2px; background: var(--ds-color-neutral-light-3); overflow: hidden; }
-  .meter i { display: block; height: 100%; background: var(--ink); }
-  .checks { margin-top: var(--ds-space-20); padding-top: var(--ds-space-16); border-top: 1px solid var(--line); display: grid; gap: var(--ds-space-8); }
-  .checks h3 { font: 500 var(--ds-font-size-13)/16px var(--ds-font-family-text); color: var(--sub); margin-bottom: var(--ds-space-4); }
-  .checks p { display: grid; grid-template-columns: 16px 1fr; gap: var(--ds-space-8); align-items: start; }
-  .checks .box { margin-top: var(--ds-space-4); }
-  .checks p.done { color: var(--sub); }
-  .checks p.done s { text-decoration: line-through; }
-  .checks em { display: block; font-style: normal; font-size: var(--ds-font-size-13); color: var(--sub); text-decoration: none; }
-  .box { width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--ds-color-neutral-light-8); }
-  .done .box { background: var(--ink); border-color: var(--ink); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.2l2.6 2.6L12 5.4' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
-
-  /* toasts: ink, compact, in the window corner */
-  .toaster { position: absolute; right: 24px; bottom: 32px; width: 288px; z-index: 5; }   /* inside the brief column: 336 - 2 x 24 */
-  .toast { position: absolute; left: 0; right: 0; bottom: 0; background: var(--toast); color: var(--ds-color-white); border-radius: var(--ds-radius-container);
-    box-shadow: 0 8px 24px -8px rgb(20 20 24 / .35); padding: var(--ds-space-12) var(--ds-space-8) var(--ds-space-12) var(--ds-space-16); display: grid; grid-template-columns: 16px 1fr auto; column-gap: var(--ds-space-12); align-items: center;
-    transform-origin: 50% 100%; touch-action: pan-y; user-select: none; overflow: hidden;
-    transition: transform var(--ds-motion-spring-momentum-duration) var(--ds-motion-spring-momentum-easing), opacity var(--ds-motion-duration-toast) var(--ds-motion-easing-toast); }
-  .toast.entering { transform: translateY(100%) !important; opacity: 0; }
-  .toast.leaving { opacity: 0; transition-duration: var(--ds-motion-duration-medium-exit); }
-  .toast.dragging { transition: none; }
-  .toast::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: var(--gap); }
-  .toaster:not(.expanded) .toast:not(.front) > * { opacity: 0; }
-  .toaster:not(.expanded) .toast.b1 { background: #3d3d43; }   /* the cards behind step lighter so the stack reads as three */
-  .toaster:not(.expanded) .toast.b2 { background: var(--ds-color-neutral-light-11); }
-  .toast .ic { display: grid; place-items: center; color: var(--ds-color-neutral-dark-11); align-self: start; margin-top: var(--ds-space-4); }
-  .ic.err { color: #ff9a8f; }
-  .toast .t { font: 500 var(--ds-font-size-16)/24px var(--ds-font-family-text); }
-  .toast .d { font: 400 var(--ds-font-size-13)/16px var(--ds-font-family-text); color: var(--ds-color-neutral-dark-11); margin-top: var(--ds-space-2); }
-  .toast .end { display: flex; align-items: center; gap: var(--ds-space-4); }
-  .toast .acts { grid-column: 2 / 4; display: flex; gap: var(--ds-space-8); margin-top: var(--ds-space-12); }
-  .tbtn { height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); font: 600 var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-accent-dark-11, #b8adff); transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
-  .tbtn:hover { background: rgb(255 255 255 / .1); }
-  .tbtn.solid { background: var(--ds-color-white); color: var(--ink); }
-  .tbtn.quiet { color: var(--ds-color-neutral-dark-11); }
-  .x { width: 32px; height: 32px; border-radius: var(--ds-radius-control); display: grid; place-items: center; color: var(--ds-color-neutral-dark-10); }
-  .x:hover { background: rgb(255 255 255 / .1); color: var(--ds-color-white); }
-  .timer { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: rgb(255 255 255 / .12); }
-  .timer i { display: block; height: 100%; background: rgb(255 255 255 / .55); transform-origin: left; }
-  .cursor { position: absolute; pointer-events: none; z-index: 20; }
-
-  @media (prefers-reduced-motion: reduce) { .toast { transition: opacity var(--ds-motion-duration-reduced-fade) linear; } .toast.entering { transform: none !important; } }
+/* ---------- the toast stack (expanded: the pointer is over it) ---------- */
+.stack { position: absolute; right: var(--ds-space-24); bottom: var(--ds-space-24); width: 400px; display: flex; flex-direction: column; gap: var(--ds-space-8); }
+.toast { display: grid; grid-template-columns: 20px 1fr auto; column-gap: var(--ds-space-12); row-gap: var(--ds-space-2); align-items: start; padding: var(--ds-space-12) var(--ds-space-12) var(--ds-space-12) var(--ds-space-16);
+  border-radius: var(--ds-radius-container); background: var(--ds-color-neutral-light-12); color: var(--ds-color-white);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / .06), 0 2px 4px var(--ds-color-shadow-key), 0 12px 32px var(--ds-color-shadow-ambient); } /* OFF-TOKEN: a hairline ring in black at 6% keeps the ink toast's edge crisp on the grey column */
+.toast .ic { grid-row: 1 / span 2; width: 20px; height: 20px; display: grid; place-items: center; color: var(--ds-color-neutral-dark-12); }
+.toast .ic .i { width: 18px; height: 18px; }
+.toast .t { font: var(--ds-text-label-lg); font-weight: 500; }
+.toast .d { grid-column: 2; font: var(--ds-text-body-sm); color: var(--ds-color-neutral-dark-11); }
+.toast .act { grid-row: 1 / span 2; grid-column: 3; align-self: center; }
+.toast .act button { height: 28px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: 500; color: var(--ds-color-white); background: rgb(255 255 255 / .12); display: inline-flex; align-items: center; gap: var(--ds-space-6); } /* OFF-TOKEN: white at 12% is the button fill on the ink toast; the token neutrals have no tint for an inverse surface */
+.toast { position: relative; }
+.toast .x { position: absolute; right: -6px; top: -6px; width: 20px; height: 20px; border-radius: var(--ds-radius-full); display: grid; place-items: center; background: var(--ds-color-neutral-light-12); color: var(--ds-color-neutral-dark-11); box-shadow: 0 0 0 1px rgb(255 255 255 / .16); }
+.toast .x .i { width: 12px; height: 12px; stroke-width: 2.5; }
+.toast .prog { grid-column: 2 / 4; margin-top: var(--ds-space-8); height: 4px; border-radius: var(--ds-radius-full); background: rgb(255 255 255 / .14); overflow: hidden; }
+.toast .prog b { display: block; height: 100%; border-radius: var(--ds-radius-full); background: var(--ds-color-accent-dark-10); }
+@media (prefers-reduced-motion: no-preference) {
+  .toast { animation: toast-in var(--ds-motion-transition-enter-duration) var(--ds-motion-transition-enter-easing) both; }
+  @keyframes toast-in { from { opacity: 0; transform: translateY(8px); } }
+}
+@media (hover: hover) and (pointer: fine) { .toast .act button:hover { background: rgb(255 255 255 / .2); } }
 </style>
 </head>
 <body>
-<main class="app" aria-label="Kinroom, Pellwick Press">
-  <nav class="side" aria-label="Workspace">
-    <div class="ws"><span class="tile">P</span>Pellwick Press<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></div>
-    <div class="find"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg>Find<kbd>⌘K</kbd></div>
-    <div class="nav">
-      <a href="#" class="unread"><span class="ico"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 9.5l2-6h7l2 6v3.5h-11zM2.5 9.5h3.5l.8 1.5h2.4l.8-1.5h3.5"/></svg></span>Inbox<span class="n">2</span></a>
-      <a href="#"><span class="ico"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M4 2.5h8v11L8 10.5 4 13.5z"/></svg></span>Kept for later</a>
-    </div>
-    <p class="lbl">Rooms</p>
-    <div class="nav">
-      <a href="#"><span class="ico"><span class="sq"></span></span>front-desk</a>
-      <a href="#" aria-current="page"><span class="ico"><span class="sq"></span></span>launch-week</a>
-      <a href="#" class="unread"><span class="ico"><span class="sq"></span></span>covers<span class="n">3</span></a>
-      <a href="#"><span class="ico"><span class="sq"></span></span>print-and-stock</a>
-      <a href="#" class="unread"><span class="ico"><span class="sq"></span></span>events<span class="n">@1</span></a>
-      <a href="#"><span class="ico"><span class="sq"></span></span>rights</a>
-    </div>
-    <p class="lbl">People</p>
-    <div class="nav">
-      <a href="#"><span class="ico"><span class="av sm">SI</span></span>Sana Ito</a>
-      <a href="#"><span class="ico"><span class="av sm">MK</span></span>Mira Kade</a>
-      <a href="#"><span class="ico"><span class="av sm">TO</span></span>Theo Okoye</a>
-      <a href="#"><span class="ico"><span class="av sm">VM</span></span>Vikram Malhotra</a>
-    </div>
-    <div class="me"><span class="av">RA</span><div><b>Ruth Ashdown</b><small>Managing editor</small></div></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.2 2.4 2.4 4.6-4.8"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M20.5 3.5 10 14M20.5 3.5 14 20.5l-4-6.5-6.5-4z"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4.5v11M7 10.5l5 5 5-5M5 19.5h14"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4.5 9.5 9 5"/><path d="M4.5 9.5H14a5.5 5.5 0 0 1 0 11h-3"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-jobs" viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M9 7V5h6v2M4 12h16"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.5"/><path d="M3.5 19.5c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5M15.5 5.2a3.5 3.5 0 0 1 0 6.6M17.5 14.3c1.8.8 3 2.7 3 5.2"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16M7 16.5V11M12 16.5V6M17 16.5v-8"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6.5 16.5V11a5.5 5.5 0 0 1 11 0v5.5l1.5 2H5z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+</svg>
+
+<div class="app">
+  <nav class="rail" aria-label="Main">
+    <span class="mark" aria-label="Panelwise"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="2" y="3" width="8" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="6" y="3" width="8" height="10" rx="2" fill="currentColor" opacity=".55"/></svg></span>
+    <span class="on" aria-label="Jobs"><svg class="i"><use href="#i-jobs"/></svg></span>
+    <span aria-label="Candidates"><svg class="i"><use href="#i-people"/></svg></span>
+    <span aria-label="Interviews"><svg class="i"><use href="#i-cal"/></svg></span>
+    <span aria-label="Reports"><svg class="i"><use href="#i-chart"/></svg></span>
   </nav>
-
-  <section class="main" aria-label="launch-week">
-    <header class="head">
-      <h1>launch-week</h1>
-      <div class="end">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="5.5" r="2.5"/><path d="M1.5 13.5c.5-2.5 2.3-3.8 4.5-3.8s4 1.3 4.5 3.8M10.5 3.2a2.5 2.5 0 010 4.6M12 9.9c1.3.5 2.2 1.7 2.5 3.6"/></svg><span>12 people</span>
-        <button class="iconbtn" aria-label="Search this room"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg></button>
-      </div>
+  <main class="main">
+    <header class="top">Jobs<span>/</span><b>Engineering</b>
+      <div class="end"><svg class="i" aria-label="Search"><use href="#i-search"/></svg><svg class="i" aria-label="Notifications"><use href="#i-bell"/></svg><span class="avatar" aria-label="Signed in as LF">LF</span></div>
     </header>
-
-    <div class="msgs" id="msgs">
-      <p class="day">Yesterday</p>
-      <article class="msg"><span class="av">MK</span><div><p class="who"><b>Mira Kade</b><time>16:20</time></p>
-        <p>The shop confirmed the window display for the week of 19 Oct. They want 24 signed copies by Friday.</p></div></article>
-      <article class="msg"><span class="av">VM</span><div><p class="who"><b>Vikram Malhotra</b><time>16:34</time></p>
-        <p>The audio edition is signed. Recording starts 9 Nov, and the narrator wants the pronunciation list by 2 Nov.</p></div></article>
-      <p class="day">Today</p>
-      <article class="msg"><span class="av">SI</span><div><p class="who"><b>Sana Ito</b><time>10:42</time></p>
-        <p>Poster proofs are back from the printer. The green came out a shade darker than the PDF, and I think it's better.</p>
-        <div class="file"><span class="doc">PDF</span><span><b>reading-poster-proof.pdf</b><small>4.2 MB · 2 pages</small></span></div></div></article>
-      <article class="msg"><span class="av">MK</span><div><p class="who"><b>Mira Kade</b><time>10:46</time></p>
-        <p>The print run landed this morning: 3,000 copies, with 400 held back for the launch.</p></div></article>
-      <article class="msg"><span class="av">TO</span><div><p class="who"><b>Theo Okoye</b><time>10:51</time></p>
-        <p>The reading is Thu 22 Oct at 19:00, at the shop on Mercer Row. 60 seats, 41 taken.</p>
-        <div class="react"><span>👍 4</span><span>🎉 2</span></div></div></article>
-      <article class="msg gone" id="deletedMsg"><span class="av">RA</span><div><p class="who"><b>Ruth Ashdown</b><time>10:58</time></p>
-        <p>The invite still says 21 Oct. I'll fix it before lunch.</p></div></article>
-      <article class="msg"><span class="av">VM</span><div><p class="who"><b>Vikram Malhotra</b><time>11:02</time></p>
-        <p>Advance copies went to 28 of the 35 reviewers last week. The last 7 ship Monday, after <span class="mention">@Ruth Ashdown</span> signs off the letter.</p></div></article>
+    <div class="job">
+      <h1>Staff Data Engineer</h1><span class="meta">Remote, CET ± 2 h · 2 openings</span>
+      <div class="acts"><div class="seg" aria-label="View"><span class="on">Board</span><span>List</span></div><button class="btn ink"><svg class="i"><use href="#i-plus"/></svg>Add candidate</button></div>
     </div>
+    <div class="sub"><span><b>296</b> applicants</span><span><b>53</b> not screened yet</span><span><b>188</b> archived</span><span class="r">Cards sorted by last activity</span></div>
+    <div class="board" id="board"></div>
 
-    <div class="compose">
-      <div class="att" id="att"><span class="doc">PDF</span><span><b>invite-reading-22-oct.pdf</b><small>Didn't upload, stopped at 62%</small></span></div>
-      <p class="ph">Write in launch-week</p>
-      <div class="tools">
-        <button class="iconbtn" aria-label="Attach a file"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.5 4.5L5.8 9.2a1.5 1.5 0 0 0 2.1 2.1l5-5a3 3 0 0 0-4.2-4.2l-5 5a4.5 4.5 0 0 0 6.4 6.4l4.2-4.2"/></svg></button>
-        <button class="iconbtn" aria-label="Mention someone">@</button>
-        <button class="send">Send<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 8h11M9 3.5L13.5 8 9 12.5"/></svg></button>
+    <section class="stack" aria-label="Notifications" aria-live="polite">
+      <div class="toast" role="status">
+        <span class="ic"><svg class="i"><use href="#i-down"/></svg></span>
+        <div class="t">Exporting pipeline</div>
+        <div class="act"><button>Cancel</button></div>
+        <div class="d">184 of 296 applicants · CSV, with scorecards</div>
+        <div class="prog" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Export progress"><b style="width:62%"></b></div>
       </div>
-    </div>
-    <p id="live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
-  </section>
-
-  <aside class="brief" aria-label="Room brief">
-    <h2>Orchard at Low Water</h2>
-    <p class="sub">Room brief · out Thu 22 Oct, 8 days from now</p>
-    <div class="facts">
-      <div class="fact"><small>Print run</small><b>3,000 copies</b>, 400 held for the launch</div>
-      <div class="fact"><small>Reading, Thu 22 Oct, 19:00, Mercer Row</small><b>41 of 60 seats</b> taken<div class="meter"><i style="width:68.3%"></i></div></div>
-      <div class="fact"><small>Advance copies</small><b>28 of 35</b> sent<div class="meter"><i style="width:80%"></i></div></div>
-      <div class="fact"><small>Pinned</small>Call notes, today 10:30</div>
-    </div>
-    <div class="checks">
-      <h3>Before the 22nd</h3>
-      <p class="done"><span class="box"></span><span><s>Poster proofs approved</s><em>Sana · done today</em></span></p>
-      <p><span class="box"></span><span>24 signed copies to the shop<em>Mira · due Fri 16 Oct</em></span></p>
-      <p><span class="box"></span><span>Fix the date on the invite<em>Ruth · due today</em></span></p>
-      <p><span class="box"></span><span>Sign off the review letter<em>Ruth · due Mon 19 Oct</em></span></p>
-    </div>
-  </aside>
-
-  <section class="toaster" id="toaster" aria-label="Notifications (F8)" tabindex="-1"></section>
-</main>
+      <div class="toast" role="status">
+        <span class="ic"><svg class="i"><use href="#i-send"/></svg></span>
+        <div class="t">Scorecard reminders sent</div>
+        <div class="act"><button>View</button></div>
+        <div class="d">Lucia, Yaw, Hana and Gaurav · due Fri 16 Oct, 17:00</div>
+      </div>
+      <div class="toast hovered" role="status">
+        <span class="ic"><svg class="i"><use href="#i-ok"/></svg></span>
+        <div class="t">Moved 3 candidates to Onsite</div>
+        <div class="act"><button>Undo</button></div>
+        <div class="d">Marisol, Tomasz and Ifeoma · from Technical</div>
+      </div>
+    </section>
+  </main>
+</div>
 
 <script>
-  const Q = new URLSearchParams(location.search), STATE = Q.get('state');
-  const toaster = document.getElementById('toaster'), live = document.getElementById('live');
-  const css = getComputedStyle(document.documentElement);
-  const GAP = parseFloat(css.getPropertyValue('--ds-component-toast-gap')) || 14;
-  const VISIBLE = parseInt(css.getPropertyValue('--ds-component-toast-visible')) || 3;
-  const DURATION = parseFloat(css.getPropertyValue('--ds-component-toast-duration')) || 4000;
-  const I = {
-    ok: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg>',
-    del: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 8.5h5.6l.7-8.5"/></svg>',
-    err: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="8" r="6.5"/><path d="M8 4.8v3.8M8 11v.2"/></svg>',
-    at: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.6"/><path d="M10.6 8v1a2 2 0 004 0V8a6.6 6.6 0 10-2.6 5.2"/></svg>',
-    x: '<svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg>',
-  };
-  const KINDS = {
-    deleted: () => ({ ic: 'del', t: 'Message deleted', end: [['Undo', 'undo']] }),
-    saved: () => ({ ic: 'ok', t: 'Call notes saved', d: 'Kept in the launch-week brief', timed: true }),
-    mention: () => ({ ic: 'at', t: 'Theo Okoye in events', d: '“@Ruth Ashdown, can we confirm 60 chairs for the 22nd?”', acts: [['Reply', 'reply', 'solid'], ['Mark as read', 'read', 'quiet']] }),
-    failed: () => ({ ic: 'err', t: 'Upload failed', end: [['Retry', 'retry']], role: 'alert' }),
-    restored: () => ({ ic: 'ok', t: 'Message restored', timed: true }),
-  };
-  let toasts = [], seq = 0, hovering = false, queue = [];
-  function make(kind) {
-    const o = KINDS[kind](); o.id = ++seq; o.kind = kind; o.left = DURATION;
-    const el = document.createElement('div');
-    el.className = 'toast'; el.setAttribute('role', o.role || 'status'); el.tabIndex = 0;
-    el.innerHTML = `<span class="ic ${o.ic}" aria-hidden="true">${I[o.ic]}</span><div><p class="t">${o.t}</p>${o.d ? `<p class="d">${o.d}</p>` : ''}</div>
-      <div class="end">${(o.end || []).map(([l, a, c]) => `<button class="tbtn ${c || ''}" data-act="${a}">${l}</button>`).join('')}<button class="x" data-act="close" aria-label="Dismiss: ${o.t}">${I.x}</button></div>
-      ${o.acts ? `<div class="acts">${o.acts.map(([l, a, c]) => `<button class="tbtn ${c || ''}" data-act="${a}">${l}</button>`).join('')}</div>` : ''}${o.timed ? '<span class="timer" aria-hidden="true"><i></i></span>' : ''}`;
-    o.el = el; return o;
-  }
-  function add(kind, instant) {
-    const o = make(kind);
-    if (toasts.length >= VISIBLE) queue.push(toasts.pop());             // older ones wait their turn (STD-14)
-    toasts.unshift(o); toaster.appendChild(o.el);
-    if (!instant) { o.el.classList.add('entering'); requestAnimationFrame(() => requestAnimationFrame(() => o.el.classList.remove('entering'))); live.textContent = o.t; }
-    layout();
-  }
-  function remove(o, dir) {
-    toasts = toasts.filter(t => t !== o);
-    o.el.classList.add('leaving'); o.el.style.transform = dir ? `translateX(${dir}px)` : o.el.style.transform + ' translateY(20%)';
-    setTimeout(() => o.el.remove(), 260);
-    if (queue.length && toasts.length < VISIBLE) toasts.push(queue.shift());
-    layout();
-  }
-  function layout() {
-    toasts.forEach(o => { if (!o.el.isConnected) toaster.appendChild(o.el); });
-    queue.forEach(q => q.el.remove());
-    toasts.forEach(o => { o.el.style.height = ''; });
-    const hs = toasts.map(o => o.el.offsetHeight), front = hs[0] || 0;
-    let y = 0;
-    toasts.forEach((o, i) => {
-      o.el.classList.toggle('front', i === 0); o.el.classList.toggle('b1', i === 1); o.el.classList.toggle('b2', i === 2); o.el.style.zIndex = 10 - i;
-      if (o.el.classList.contains('dragging')) return;
-      if (hovering) { o.el.style.transform = `translateY(${-y}px)`; y += hs[i] + GAP; }
-      else { o.el.style.transform = `translateY(${-GAP * i}px) scale(${1 - .05 * i})`; if (i) o.el.style.height = front + 'px'; }
-    });
-    toaster.style.height = (hovering ? y - GAP : front + GAP * (toasts.length - 1)) + 'px';
-  }
-  const open = v => { hovering = v; toaster.classList.toggle('expanded', v); layout(); };
-  toaster.addEventListener('pointerenter', () => open(true));
-  toaster.addEventListener('pointerleave', () => open(false));
-  toaster.addEventListener('focusin', () => open(true));
-  toaster.addEventListener('focusout', e => { if (!toaster.contains(e.relatedTarget)) open(false); });
-  // 4 s for plain toasts; paused on hover and in a hidden tab (STD-15, -16, -17); action toasts stay. Frozen for the renders.
-  const FROZEN = !!STATE || Q.has('still') || navigator.webdriver;
-  let last = performance.now();
-  function frame(now) {
-    const dt = now - last; last = now;
-    if (!hovering && !document.hidden && !FROZEN) toasts.slice().forEach(o => { if (!o.timed) return; o.left -= dt; const bar = o.el.querySelector('.timer i'); if (bar) bar.style.transform = `scaleX(${Math.max(0, o.left / DURATION)})`; if (o.left <= 0) remove(o); });
-    requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-  const deleted = document.getElementById('deletedMsg');
-  toaster.addEventListener('click', e => {
-    const b = e.target.closest('[data-act]'); if (!b) return;
-    const o = toasts.find(t => t.el.contains(b)); if (!o) return;
-    if (b.dataset.act === 'undo') { deleted.classList.remove('gone'); remove(o); add('restored'); return; }
-    remove(o);
-  });
-  toaster.addEventListener('keydown', e => { if (e.key === 'Escape') { const o = toasts.find(t => t.el.contains(document.activeElement)); if (o) { remove(o); toaster.focus(); } } });
-  document.addEventListener('keydown', e => { if (e.key === 'F8') { e.preventDefault(); (toasts[0]?.el || toaster).focus(); } });
-  toaster.addEventListener('pointerdown', e => {                       // drag right to dismiss; a short drag springs back (STD-18)
-    const el = e.target.closest('.toast'); if (!el || e.target.closest('button')) return;
-    const o = toasts.find(t => t.el === el); const x0 = e.clientX, t0 = performance.now(); let dx = 0;
-    const base = el.style.transform; el.classList.add('dragging'); el.setPointerCapture(e.pointerId);
-    const move = ev => { dx = Math.max(-20, ev.clientX - x0); el.style.transform = `${base} translateX(${dx}px)`; el.style.opacity = 1 - Math.max(0, dx) / 300; };
-    const up = () => { el.removeEventListener('pointermove', move); el.classList.remove('dragging'); el.style.opacity = '';
-      const v = dx / (performance.now() - t0); if (dx > 80 || v > 0.11) remove(o, 420); else el.style.transform = base; };
-    el.addEventListener('pointermove', move); el.addEventListener('pointerup', up, { once: true }); el.addEventListener('pointercancel', up, { once: true });
-  });
-
-  // The moment each frame shows (one temporary state per frame):
-  //   default   you just deleted your own message; two older toasts are tucked behind it
-  //   expanded  the pointer is over the stack, so it fans out and the timer pauses
-  //   mention   a mention from another room arrives on its own
-  //   error     an upload failed; the failure also stays on the file in the composer
-  deleted.classList.add('gone');
-  if (STATE === 'mention') add('mention', true);
-  else if (STATE === 'error') { document.getElementById('att').style.display = 'flex'; add('failed', true); }
-  else { add('saved', true); add('mention', true); add('deleted', true); }
-  toasts.forEach(o => { const bar = o.el.querySelector('.timer i'); if (bar) bar.style.transform = 'scaleX(.58)'; });
-  if (STATE === 'expanded') {
-    open(true);
-    const c = document.createElement('div'); c.className = 'cursor'; c.innerHTML = '<svg width="20" height="24" viewBox="0 0 22 26" aria-hidden="true"><path d="M2 2l17 11-7.5 1.5L16 23l-3.5 1.5-4.5-8.5L2 21z" fill="#fff" stroke="#242428" stroke-width="1.6" stroke-linejoin="round"/></svg>';
-    c.style.left = '200px'; c.style.top = '96px'; toaster.appendChild(c);
-  }
-  document.fonts.ready.then(layout);                        // measure again once Figtree has loaded, or the fan-out gaps use fallback heights
+// Stages and counts: 53 not screened + 23 + 17 + 12 + 2 + 1 + 188 archived = 296 applicants. Now: Thu 15 Oct 2026, 10:24.
+// Card: name, place and years, scorecards [in, of] or null, right-hand note.
+const COLS = [
+  ["Screen", "23", [
+    ["Mateus Lacerda", "Porto · 7 yrs", [1, 1], "Ready to move"],
+    ["Jarrah Whitfield", "Rotterdam · 6 yrs", [0, 1], "Call Mon 19 Oct"],
+    ["Tobias Engel", "Hamburg · 9 yrs", [0, 1], "Call Fri 16 Oct"],
+    ["Lina Haddou", "Lyon · 6 yrs", [1, 1], "Ready to move"],
+    ["Felix Aurand", "Vienna · 8 yrs", [0, 1], "Call Tue 20 Oct"],
+    ["Pau Ferrando", "Girona · 7 yrs", [0, 1], "Call Wed 21 Oct"],
+  ]],
+  ["Technical", "17", [
+    ["Saoirse Kavanagh", "Dublin · 11 yrs", [3, 3], "Ready to move"],
+    ["Hyun-woo Baek", "Berlin · 8 yrs", [2, 3], "1 scorecard due"],
+    ["Daniela Restrepo", "Madrid · 5 yrs", [1, 3], "2 scorecards due"],
+    ["Priyanka Venkatesan", "Amsterdam · 10 yrs", [0, 3], "Today, 15:30"],
+    ["Kenji Morimoto", "Warsaw · 9 yrs", [0, 3], "Fri 16 Oct, 11:00"],
+    ["Wiktoria Zielińska", "Gdańsk · 7 yrs", [0, 3], "Mon 19 Oct, 14:00"],
+  ]],
+  ["Onsite", "12", [
+    ["Marisol Ortega", "Lisbon · 7 yrs", null, "Onsite not scheduled"],
+    ["Tomasz Wierzbicki", "Kraków · 9 yrs", null, "Onsite not scheduled"],
+    ["Ifeoma Chukwu", "Lagos · 6 yrs", null, "Onsite not scheduled"],
+    ["Noemi Castell", "Barcelona · 12 yrs", null, "Onsite Tue 20 Oct"],
+    ["Abena Boakye", "Accra · 8 yrs", null, "Onsite Wed 21 Oct"],
+    ["Raoul Lemaire", "Marseille · 11 yrs", null, "Onsite Thu 22 Oct"],
+  ]],
+  ["Offer", "2", [
+    ["Selin Aydın", "Istanbul · 8 yrs", null, "Sent Mon 12 Oct"],
+    ["Joaquín Ferrer", "Valencia · 10 yrs", null, "Verbal yes"],
+  ]],
+  ["Hired", "1 of 2", [
+    ["Nadia Benali", "Brussels · 9 yrs", null, "Starts Mon 2 Nov"],
+  ]],
+];
+document.getElementById("board").innerHTML = COLS.map(([stage, n, cards]) => `
+  <section class="col" aria-label="${stage}"><h2>${stage}<span>${n}</span></h2>
+  ${cards.map(([name, meta, sc, note]) => `<article class="card"><b>${name}</b><div class="m">${meta}</div>
+    <div class="f"><span class="r">${note}</span></div></article>`).join("")}
+  </section>`).join("");
 </script>
 </body>
 </html>

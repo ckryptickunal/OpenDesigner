@@ -67,5 +67,18 @@
       "Carrier Halden Freight renamed Ostrel Freight (name clash with app-screens/01); re-rendered"
     ],
     "note": "Owner verdict keep; not rebuilt, so no fresh score"
+  },
+  "round4": {
+    "score": 4,
+    "pairwise": "3 of 3 better (ClickUp +3, Dovetail +3, Jira +3); worst margin: none weaker",
+    "changed": [
+      "Specimen sheet removed (06/ masthead, token chips, anatomy column, loading/empty/error panels, manifest grid); one product moment fills the 1440x900 frame at 1x",
+      "Top navigation instead of a sidebar so it no longer reads as product/01 recoloured; rows grouped by ETA day; light docked selection bar with freight actions",
+      "Freight data rebuilt and audited: city lanes, last ping vs progress, delivery appointments, delay past appointment, FTL/LTL/intermodal terms, overlapping Exceptions view",
+      "One signal per state; orange only on New booking (logo ink); carrier monograms, mode icons and lane tracks removed",
+      "Northvale Haul renamed Brennock Haul (Northvale belongs to heroes/10)",
+      "Engine: depth 15 to 30, roundness 10 to 22, rebuilt",
+      "Per the round-4 audit row: the meta line removed, one primary in a dark docked selection bar, Late in a clear red, no hover state (one state per shot), CDT named in the time headers, New booking secondary so the selection leads"
+    ]
   }
 }

@@ -77,7 +77,22 @@
   ]
  },
  "facts": [
-  "Name collision still open: 'Halden' is also Halden Freight in components/06-data-table (a customer row); rename the freight company, since the bank is this piece's product and appears in mockups/01",
-  "mockups/01-phone-trio shows this shot.png; its alt text still describes 'a metal card ... on deep green' and it needs a re-render"
- ]
+  "mockups/01-phone-trio shows this shot.png; its alt text still describes the round 3 screen (£4,862,310.54, three holdings) and needs updating with a re-render",
+  "Fresh-eyes audit still 3/5: the layout follows the standard wealth-home order (figure, change, chart, range, accounts); the owner should judge whether that is acceptable"
+ ],
+ "round4": {
+  "score": 3,
+  "pairwise": "Last blind test (2026-10-18, fresh judge, random sides): won against Wealthfront by 3, Monarch by 2 and Mercury by 3; never clearly weaker (3+) in any of six rounds. Fresh-eyes audit 3, 3, 3, 3, 3 over five rounds: does not reach 4 ('the stock fintech home'; 'nothing on it belongs to Halden').",
+  "changed": [
+   "Light theme: white page, ink text 15:1, near-neutral greys (raw.neutralBase #5E6460); every text 5.9:1 or more",
+   "Type: Inter for everything read or tapped; Newsreader 500 only for the total (40 pt, to the pound) and the wordmark in the nav; five sizes",
+   "Halden green (#14674A) has one job, what you can act on (Review, the active tab); chart and numbers in ink",
+   "Chart: 23 trading-day closes as a monotone curve, 2 pt ink line, faint fill, floor 1% under the start, start, high and end labelled; 1W-All range control",
+   "Approval card: Payment to Cardew Aske LLP, £150,000.00, House purchase by Fri 16 Oct, Review",
+   "Four accounts (pension added) with chevrons under a 'Past month' label; total £6,048,679.96 and change £47,497.21 re-add",
+   "One 1.5 pt icon stroke; one-device-pixel separators",
+   "Tried and removed: icon discs, allocation bar and shares, value grid, end-point halo",
+   "Focused pass: range chips removed, 'Recent payments' under an iOS 26 floating glass tab bar, wordmark in Inter so the serif sets only the figure, unrounded chart high, 8 pt row padding"
+  ]
+ }
 }

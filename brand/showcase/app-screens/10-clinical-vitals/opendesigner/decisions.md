@@ -484,3 +484,28 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0011 · source_ref: none
 - reason: Round 3: an observation chart is dense by nature; the chrome around it is calm
 - previous value: 66
+
+## D-0030 · raw.textFace = "IBM Plex Sans"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0017 · source_ref: none
+- reason: Round 4: one sober, engineered face with clear 0/O and 1/l and true tabular figures; the slashed zeros of the old face read as odd in bed numbers
+- previous value: "Atkinson Hyperlegible Next"
+
+## D-0031 · raw.brandColor = "#1E2833"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0004 · source_ref: none
+- reason: Round 4: ink is the brand and the action colour; red is kept for one job, clinical risk
+- previous value: "#0b7a84"
+
+## D-0032 · dials.colorfulness = 20
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0015 · source_ref: none
+- reason: Round 4: one accent (risk red) and greys
+- previous value: 35
+
+## D-0033 · overrides.font.size.22 = {"value": 22, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 4: iPadOS Title 2 for the ward name in the sidebar
+- new dimension token in primitives.tokens.json
+
+## D-0034 · overrides.font.size.48 = {"value": 48, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 4: the NEWS2 score in the patient header, read from across the station
+- new dimension token in primitives.tokens.json

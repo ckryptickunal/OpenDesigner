@@ -1,0 +1,87 @@
+{
+ "piece": "footers/05-salt-ledger-index",
+ "title": "05 Salt Ledger: editorial magazine index footer",
+ "pattern": "footer-brand",
+ "platform": "web",
+ "industry": "magazine",
+ "style": [
+  "editorial",
+  "minimal"
+ ],
+ "tags": [
+  "footer-brand",
+  "magazine",
+  "editorial",
+  "contents page",
+  "serif",
+  "paper",
+  "dotted leaders",
+  "one typeface"
+ ],
+ "score": 5,
+ "verdict": "keep",
+ "strengths": [
+  "A real idea only this brand would have: the footer set as the printed issue's contents page, with a double rule, a running head, a huge oxblood italic '23', roman-numeral sections, dotted leaders and page numbers",
+  "One typeface (Newsreader) in roman, italic and small caps does everything; two colours (ink, oxblood) on paper",
+  "Every line is specific: 'Thresholds · Autumn 2026 · 168 pages', 'Fiction · The Lighthouse Keeper's Daughter ... 38', 'Submissions · open till 1 Dec', 'ISSN 2977-0412', 'printed on uncoated paper four times a year'"
+ ],
+ "slop_signals": [],
+ "fixes": [
+  "The pull-quote under 'Thresholds' is a size step smaller than the index entries and could sit one step up"
+ ],
+ "references": [
+  {
+   "site": "The New Yorker",
+   "url": "https://mobbin.com/sites/sections/84724b3c-961d-4245-a46a-f176fe4bec67",
+   "what": "Sections grouped under one small label with the seal to one side; type does all the work, as here"
+  },
+  {
+   "site": "The New Yorker",
+   "url": "https://mobbin.com/sites/sections/051eb1f2-7ee6-4526-937b-f2aa4998497d",
+   "what": "A tiny centred legal line in serif on paper; our colophon line is in this register"
+  },
+  {
+   "site": "Readymag",
+   "url": "https://mobbin.com/sites/sections/5bc39154-2faf-4da2-8c59-b375379c1f7b",
+   "what": "Thin rules under lowercase column labels instead of boxes; our ruled section heads follow this"
+  },
+  {
+   "site": "General Intelligence Company",
+   "url": "https://mobbin.com/sites/sections/0222c241-b0da-45eb-a95e-7ba703270a5d",
+   "what": "Editorial footer with a small top row of links and one large picture; shows the opposite route, image-led rather than index-led"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "needs work",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "Warm cream, oxblood italics, the 248 px numeral and dotted leaders removed; cool near-white paper and ink set through the engine (warmth 12, cool neutralBase), oxblood kept for one job",
+   "Two faces through the engine: Newsreader (roman) for masthead and titles, Inter for links and data; one 14 px label style",
+   "Quiet index: current issue with one Subscribe action, three pieces with page ranges and bylines, newsletter row, four link groups on the contents' columns",
+   "One ownable object: the shelf, every issue since 2021 as a spine as thick as its page count, themes down the spine, the current issue the one oxblood spine, the next a dashed space",
+   "Facts corrected: pieces open on left-hand pages, issue numbering checked from spring 2021, ISSN with a wrong check digit removed",
+   "Layouts checked at 1440, 1100, 960, 800 and 390 px; phone frame re-rendered"
+  ]
+ },
+ "facts": [
+  "heading alignment (6 px) fixed after the final audit, checked by eye",
+  "Pairwise judging was not blind: the judge knew which side came from Mobbin"
+ ],
+ "round4": {
+  "score": 4,
+  "pairwise": "won against Legora by 1 (not blind)",
+  "changed": [
+   "Issue promo, contents list, newsletter and the 24-spine shelf removed (audit round 4: 'nothing leads')",
+   "The one signature element is the masthead fitted to the content width in oxblood, the brand colour's only job",
+   "Warm uncoated-paper ground #f5f3ee, outside the tokens on purpose (the cool neutral step read as software grey)",
+   "Prices taken out of the links; the fourth column renamed About; column headings aligned with the issue line"
+  ],
+  "after_audit": "heading alignment (6 px) fixed after the final audit, checked by eye",
+  "date": "2026-10-18"
+ }
+}

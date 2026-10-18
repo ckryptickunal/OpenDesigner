@@ -3,51 +3,68 @@
 Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later entry for the same path supersedes an earlier one; nothing is edited or deleted. set_by is chosen, confirmed_default, auto_default, assumed, delegated, reference, asset or standard.
 
 ## D-0001 · init with defaults
-- set_by: auto_default · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- set_by: auto_default · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: Start of the design system; every default traces to references/levers.json.
 
-## D-0002 · answers.Q-aud-01 = "regular"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+## D-0002 · answers.Q-aud-01 = "dense"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: sketch: picked for them
-- also set: dials.density = 50 (from Q-aud-01)
+- also set: dials.density = 80 (from Q-aud-01)
 
-## D-0003 · context.audience = "people who use it often, as an everyday app"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+## D-0003 · defaults.work-tool = ["corners", "weights", "accent", "surfaces"]
+- set_by: auto_default · locked: no · date: 2026-10-15 · supersedes: none · source_ref: DC-L23-01
+- reason: Dense work tool defaults for what you have not answered, set or locked (Q-aud-01 = dense). Confirm or change any of them like any other answer.
+- corners: Controls 6px, cards and panels 8px, dialogs and popovers 12px [DC-L23-02, DC-L09-01]
+- weights: Three weights: body 400, labels, column headers and row titles 500, headings 600 [DC-L23-03, DC-L02-15]
+- accent: One colored accent for selection, links and focus (the placeholder blue until a brand color is given); the primary button may stay ink [DC-L23-04, S-L01-010]
+- surfaces: Static cards and panels separate by a 1px ring with no shadow; shadows stay on menus, popovers, dialogs and toasts [DC-L23-05, DC-L04-10]
+
+## D-0004 · context.audience = "people who use it all day for work, in screens full of data"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: sketch: plain words for Q-aud-01, picked for them
 - previous value: ""
 
-## D-0004 · raw.brandColor = "#b4532a"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: sketch: picked for them
+## D-0005 · raw.brandColor = "#2b4c8c"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: sketch: Level 0 answer
 
-## D-0005 · answers.Q-plat-01 = ["web"]
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+## D-0006 · defaults.work-tool = ["corners", "weights", "surfaces"]
+- set_by: auto_default · locked: no · date: 2026-10-15 · supersedes: D-0003 · source_ref: DC-L23-01
+- reason: Dense work tool defaults for what you have not answered, set or locked (Q-aud-01 = dense). Confirm or change any of them like any other answer.
+- corners: Controls 6px, cards and panels 8px, dialogs and popovers 12px [DC-L23-02, DC-L09-01]
+- weights: Three weights: body 400, labels, column headers and row titles 500, headings 600 [DC-L23-03, DC-L02-15]
+- surfaces: Static cards and panels separate by a 1px ring with no shadow; shadows stay on menus, popovers, dialogs and toasts [DC-L23-05, DC-L04-10]
+- no longer a default: accent (your brand color decides it)
+
+## D-0007 · answers.Q-plat-01 = ["web"]
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: sketch: picked for them
 - also set: raw.platforms = ["web"] (from Q-plat-01)
 
-## D-0006 · macros = ["friendly", "premium"]
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: sketch: picked for them (feel words: warm, refined)
+## D-0008 · macros = ["deferential", "minimal", "premium"]
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: sketch: picked for them (feel words: calm, focused, refined)
 - previous value: []
 
-## D-0007 · taste.feelWords = ["warm", "refined"]
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+## D-0009 · taste.feelWords = ["calm", "focused", "refined"]
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: sketch: feel words picked for them
 
-## D-0008 · answers.Q-theme-01 = "system-light-dark"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+## D-0010 · answers.Q-theme-01 = "system-light-dark"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: sketch: picked for them
 - also set: raw.flags.darkMode = true (from Q-theme-01)
 - also set: raw.defaultTheme = "system" (from Q-theme-01)
 
-## D-0009 · answers.Q-scope-06 = "read"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+## D-0011 · answers.Q-scope-06 = ["app:operate"]
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: sketch: picked for them
-- also set: raw.productType = "content" (from Q-scope-06)
+- also set: context.surfaces = [{"name": "app", "mode": "Operate"}] (from Q-scope-06)
+- also set: raw.productType = "work-tool" (from Q-scope-06)
 - also set: raw.marketingSurfaces = false (from Q-scope-06)
 
-## D-0010 · House standards v2: 289 applied
-- set_by: standard · locked: yes · date: 2026-10-14 · supersedes: none · source_ref: standards.json v2
+## D-0012 · House standards v3: 289 applied
+- set_by: standard · locked: yes · date: 2026-10-15 · supersedes: none · source_ref: standards.json v3
 - reason: OpenDesigner's house standards (sources marked non-negotiable) are applied without asking and locked. Change one only when the person asks: engine.py standard override <id> --why "<their words>".
 - <details><summary>289 standards</summary> STD-when-to-animate-01, STD-when-to-animate-03, STD-when-to-animate-04, STD-when-to-animate-05, STD-when-to-animate-06, STD-when-to-animate-07, STD-when-to-animate-08, STD-when-to-animate-09, STD-when-to-animate-10, STD-when-to-animate-11, STD-when-to-animate-13, STD-when-to-animate-15, STD-when-to-animate-16, STD-when-to-animate-17, STD-when-to-animate-20, STD-when-to-animate-22, STD-easing-duration-01, STD-easing-duration-02, STD-easing-duration-03, STD-easing-duration-06, STD-easing-duration-07, STD-easing-duration-09, STD-easing-duration-10, STD-easing-duration-11, STD-easing-duration-12, STD-easing-duration-13, STD-easing-duration-15, STD-easing-duration-17, STD-easing-duration-19, STD-enter-exit-origin-01, STD-enter-exit-origin-02, STD-enter-exit-origin-03, STD-enter-exit-origin-04, STD-enter-exit-origin-06, STD-enter-exit-origin-08, STD-enter-exit-origin-09, STD-enter-exit-origin-10, STD-enter-exit-origin-11, STD-enter-exit-origin-12, STD-enter-exit-origin-13, STD-enter-exit-origin-16, STD-enter-exit-origin-17, STD-enter-exit-origin-21, STD-enter-exit-origin-23, STD-enter-exit-origin-24, STD-enter-exit-origin-26, STD-enter-exit-origin-27, STD-enter-exit-origin-28, STD-enter-exit-origin-29, STD-enter-exit-origin-30, STD-enter-exit-origin-31, STD-enter-exit-origin-37, STD-enter-exit-origin-38, STD-enter-exit-origin-39, STD-enter-exit-origin-40, STD-enter-exit-origin-41, STD-enter-exit-origin-42, STD-enter-exit-origin-43, STD-enter-exit-origin-44, STD-springs-gestures-01, STD-springs-gestures-02, STD-springs-gestures-04, STD-springs-gestures-05, STD-springs-gestures-06, STD-springs-gestures-07, STD-springs-gestures-08, STD-springs-gestures-09, STD-springs-gestures-11, STD-springs-gestures-12, STD-springs-gestures-13, STD-springs-gestures-14, STD-springs-gestures-15, STD-springs-gestures-16, STD-springs-gestures-17, STD-springs-gestures-18, STD-springs-gestures-19, STD-springs-gestures-20, STD-springs-gestures-21, STD-springs-gestures-25, STD-springs-gestures-26, STD-springs-gestures-28, STD-springs-gestures-30, STD-springs-gestures-34, STD-springs-gestures-39, STD-springs-gestures-41, STD-springs-gestures-42, STD-springs-gestures-45, STD-springs-gestures-59, STD-springs-gestures-60, STD-springs-gestures-61, STD-springs-gestures-63, STD-performance-properties-01, STD-performance-properties-02, STD-performance-properties-06, STD-performance-properties-09, STD-performance-properties-10, STD-performance-properties-11, STD-performance-properties-12, STD-performance-properties-13, STD-performance-properties-14, STD-performance-properties-15, STD-performance-properties-16, STD-performance-properties-17, STD-performance-properties-24, STD-performance-properties-25, STD-accessibility-motion-01, STD-accessibility-motion-02, STD-accessibility-motion-05, STD-accessibility-motion-06, STD-accessibility-motion-07, STD-accessibility-motion-08, STD-accessibility-motion-09, STD-accessibility-motion-10, STD-accessibility-motion-11, STD-accessibility-motion-12, STD-accessibility-motion-13, STD-accessibility-motion-15, STD-accessibility-motion-16, STD-accessibility-motion-17, STD-accessibility-motion-18, STD-accessibility-motion-20, STD-accessibility-motion-23, STD-accessibility-motion-24, STD-accessibility-motion-26, STD-accessibility-motion-27, STD-components-toasts-drawers-03, STD-components-toasts-drawers-07, STD-components-toasts-drawers-10, STD-components-toasts-drawers-11, STD-components-toasts-drawers-12, STD-components-toasts-drawers-13, STD-components-toasts-drawers-14, STD-components-toasts-drawers-15, STD-components-toasts-drawers-16, STD-components-toasts-drawers-17, STD-components-toasts-drawers-18, STD-components-toasts-drawers-25, STD-components-toasts-drawers-29, STD-components-toasts-drawers-30, STD-components-toasts-drawers-33, STD-components-toasts-drawers-34, STD-components-toasts-drawers-37, STD-components-toasts-drawers-40, STD-components-toasts-drawers-44, STD-components-toasts-drawers-45, STD-components-toasts-drawers-48, STD-components-toasts-drawers-65, STD-components-toasts-drawers-72, STD-components-toasts-drawers-77, STD-mobile-touch-02, STD-mobile-touch-03, STD-mobile-touch-05, STD-mobile-touch-06, STD-mobile-touch-07, STD-mobile-touch-08, STD-mobile-touch-09, STD-mobile-touch-10, STD-mobile-touch-11, STD-mobile-touch-13, STD-mobile-touch-14, STD-mobile-touch-15, STD-mobile-touch-16, STD-mobile-touch-17, STD-mobile-touch-18, STD-mobile-touch-19, STD-mobile-touch-20, STD-mobile-touch-21, STD-mobile-touch-24, STD-mobile-touch-28, STD-mobile-touch-70, STD-visual-details-01, STD-visual-details-02, STD-visual-details-03, STD-visual-details-04, STD-visual-details-05, STD-visual-details-06, STD-visual-details-07, STD-visual-details-08, STD-visual-details-09, STD-visual-details-10, STD-visual-details-11, STD-visual-details-13, STD-visual-details-14, STD-visual-details-15, STD-visual-details-16, STD-visual-details-17, STD-visual-details-18, STD-visual-details-19, STD-visual-details-20, STD-visual-details-21, STD-visual-details-24, STD-visual-details-25, STD-visual-details-26, STD-visual-details-27, STD-visual-details-28, STD-visual-details-29, STD-visual-details-30, STD-visual-details-31, STD-visual-details-32, STD-visual-details-33, STD-visual-details-34, STD-visual-details-35, STD-visual-details-36, STD-visual-details-37, STD-visual-details-38, STD-visual-details-39, STD-visual-details-40, STD-visual-details-41, STD-visual-details-42, STD-visual-details-43, STD-visual-details-44, STD-visual-details-45, STD-visual-details-46, STD-visual-details-47, STD-visual-details-48, STD-visual-details-49, STD-visual-details-50, STD-visual-details-51, STD-visual-details-55, STD-visual-details-56, STD-visual-details-57, STD-visual-details-59, STD-visual-details-64, STD-process-review-taste-01, STD-process-review-taste-02, STD-process-review-taste-03, STD-process-review-taste-04, STD-process-review-taste-05, STD-process-review-taste-06, STD-process-review-taste-07, STD-process-review-taste-08, STD-process-review-taste-09, STD-process-review-taste-10, STD-process-review-taste-11, STD-process-review-taste-12, STD-process-review-taste-13, STD-process-review-taste-14, STD-process-review-taste-15, STD-process-review-taste-16, STD-process-review-taste-17, STD-process-review-taste-18, STD-process-review-taste-19, STD-process-review-taste-20, STD-process-review-taste-21, STD-process-review-taste-22, STD-process-review-taste-23, STD-process-review-taste-24, STD-process-review-taste-25, STD-process-review-taste-26, STD-process-review-taste-27, STD-process-review-taste-28, STD-process-review-taste-29, STD-process-review-taste-30, STD-process-review-taste-31, STD-process-review-taste-32, STD-process-review-taste-33, STD-process-review-taste-34, STD-process-review-taste-35, STD-process-review-taste-36, STD-process-review-taste-37, STD-process-review-taste-38, STD-process-review-taste-39, STD-process-review-taste-40, STD-process-review-taste-41, STD-process-review-taste-42, STD-process-review-taste-43, STD-process-review-taste-44, STD-process-review-taste-45, STD-process-review-taste-46, STD-process-review-taste-47, STD-process-review-taste-48, STD-process-review-taste-49, STD-process-review-taste-50, STD-process-review-taste-51, STD-process-review-taste-52, STD-process-review-taste-53, STD-process-review-taste-54, STD-process-review-taste-55, STD-process-review-taste-56, STD-process-review-taste-57, STD-process-review-taste-58, STD-process-review-taste-59, STD-process-review-taste-60, STD-process-review-taste-62, STD-process-review-taste-63, STD-process-review-taste-64, STD-process-review-taste-65, STD-process-review-taste-66, STD-process-review-taste-67</details>
 - STD-when-to-animate-01: followed; it sets no values (DESIGN.md carries it)
@@ -359,99 +376,72 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - STD-process-review-taste-66: followed; it sets no values
 - STD-process-review-taste-67: followed; it sets no values (DESIGN.md carries it)
 
-## D-0011 · dials.expression = 62
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: editorial voice: serif accents, generous display sizes in the answer
-
-## D-0012 · dials.brandPresence = 62
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: terracotta and the serif carry the brand through the composer
-
-## D-0013 · dials.density = 32
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: reading product: airy, unhurried spacing
-- previous value: 50
-
-## D-0014 · dials.energy = 30
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: calm; streaming and send feedback only
-
-## D-0015 · dials.roundness = 64
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: soft paper-card corners, pill controls
-
-## D-0016 · dials.depth = 45
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: cards lift slightly off the paper
-
-## D-0017 · dials.colorfulness = 38
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: warm neutrals, one terracotta accent
-
-## D-0018 · dials.warmth = 88
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: cream paper, brown-black ink
-
-## D-0019 · raw.textFace = "Instrument Sans"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: warm grotesque for UI labels and input text
+## D-0013 · raw.textFace = "Onest"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: one clean grotesque for every control
 - previous value: "system"
 
-## D-0020 · raw.displayFace = "Newsreader"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: editorial serif for answers, headings and mode names
+## D-0014 · raw.displayFace = "Source Serif 4"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: the answer is read like a page, so it is set in a text serif
 - previous value: "=textFace"
 
-## D-0021 · raw.fontLicence = {"web": true, "app": true, "selfHost": true}
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: both faces are SIL OFL on Google Fonts
-- previous value: {"web": null, "app": null, "selfHost": null}
+## D-0015 · raw.neutralTint = "pure"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: white working surfaces, no parchment
 
-## D-0022 · answers.Q-color-09 = "warm"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: cream paper, not pink
-- also set: raw.neutralTint = "warm" (from Q-color-09)
+## D-0016 · raw.brandColor = "#2B4C8C"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0005 · source_ref: none
+- reason: ink blue means a source
+- previous value: "#2b4c8c"
 
-## D-0023 · raw.neutralBase = "#e8dcc5"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: parchment cream; Q-color-09 warm gave near-gray
+## D-0017 · dials.roundness = 50
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: work tool: quiet chrome, one accent
 
-## D-0024 · answers.Q-ai-01 = "chat"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: the product is a conversational research assistant
+## D-0018 · defaults.work-tool = ["weights", "surfaces"]
+- set_by: auto_default · locked: no · date: 2026-10-15 · supersedes: D-0006 · source_ref: DC-L23-01
+- reason: Dense work tool defaults for what you have not answered, set or locked (Q-aud-01 = dense). Confirm or change any of them like any other answer.
+- weights: Three weights: body 400, labels, column headers and row titles 500, headings 600 [DC-L23-03, DC-L02-15]
+- surfaces: Static cards and panels separate by a 1px ring with no shadow; shadows stay on menus, popovers, dialogs and toasts [DC-L23-05, DC-L04-10]
+- no longer a default: corners (the roundness dial is set)
+
+## D-0019 · dials.depth = 28
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: work tool: quiet chrome, one accent
+
+## D-0020 · defaults.work-tool = ["weights"]
+- set_by: auto_default · locked: no · date: 2026-10-15 · supersedes: D-0018 · source_ref: DC-L23-01
+- reason: Dense work tool defaults for what you have not answered, set or locked (Q-aud-01 = dense). Confirm or change any of them like any other answer.
+- weights: Three weights: body 400, labels, column headers and row titles 500, headings 600 [DC-L23-03, DC-L02-15]
+- no longer a default: surfaces (the depth dial is set)
+
+## D-0021 · dials.warmth = 12
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: work tool: quiet chrome, one accent
+
+## D-0022 · dials.colorfulness = 22
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: work tool: quiet chrome, one accent
+
+## D-0023 · dials.expression = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: work tool: quiet chrome, one accent
+
+## D-0024 · dials.energy = 18
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: work tool: quiet chrome, one accent
+
+## D-0025 · dials.brandPresence = 35
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: work tool: quiet chrome, one accent
+
+## D-0026 · answers.Q-ai-01 = "chat"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: (no reason given)
 - also set: components.inventory = ["chat-message", "prompt-input"] (from Q-ai-01)
 
-## D-0025 · raw.brandColor = "#2B4C8C"
-- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0004 · source_ref: none
-- reason: round 3: the owner said the colours need work; cream, terracotta and brown read as the forbidden warm trio and sit close to a real AI brand's clay-on-ivory; an ink blue on white paper keeps the reading-room feel
-- previous value: "#b4532a"
-
-## D-0026 · raw.neutralBase = null
-- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0023 · source_ref: none
-- reason: round 3: no parchment; neutrals come from the tint
-- previous value: "#e8dcc5"
-
-## D-0027 · raw.neutralTint = "neutral"
-- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
-- reason: round 3: neutral grey text, no brown
-- previous value: "warm"
-
-## D-0028 · dials.warmth = 20
-- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0018 · source_ref: none
-- reason: round 3: warmth 88 made the neutrals brown
-- previous value: 88
-
-## D-0029 · raw.neutralTint = "pure"
-- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0027 · source_ref: none
-- reason: round 3: true greys; the neutral tint came out blue and turned the page monochrome blue
-- previous value: "neutral"
-
-## D-0030 · answers.Q-color-09 = "pure"
-- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0022 · source_ref: none
-- reason: round 3: pure greys, matching raw.neutralTint; the warm answer was left from round 1
-- previous value: "warm"
-- also set: raw.neutralTint = "pure" (from Q-color-09)
-
-## D-0031 · raw.focusColor = "#242424"
-- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
-- reason: round 3: blue means a source; focus and actions are ink
+## D-0027 · raw.displayFace = "Onest"
+- set_by: delegated · locked: no · date: 2026-10-18 · supersedes: D-0014 · source_ref: none
+- reason: one face: a serif answer reads as another product's signature, and it was used for one element
+- previous value: "Source Serif 4"

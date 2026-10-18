@@ -418,3 +418,110 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: round 3: renamed; the first name belongs to real products in the same field
 - previous value: (the first name, listed in NAMES.md)
+
+## D-0024 · name = "Panelwise"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0023 · source_ref: none
+- reason: sketch: the product's name
+- previous value: "Kinroom"
+
+## D-0025 · answers.Q-aud-01 = "dense"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0002 · source_ref: none
+- reason: sketch: picked for them
+- previous value: "regular"
+- also set: dials.density = 80 (from Q-aud-01)
+
+## D-0026 · defaults.work-tool = ["weights"]
+- set_by: auto_default · locked: no · date: 2026-10-15 · supersedes: none · source_ref: DC-L23-01
+- reason: Dense work tool defaults for what you have not answered, set or locked (Q-aud-01 = dense). Confirm or change any of them like any other answer.
+- weights: Three weights: body 400, labels, column headers and row titles 500, headings 600 [DC-L23-03, DC-L02-15]
+
+## D-0027 · raw.brandColor = "#1e8a5e"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0004 · source_ref: none
+- reason: sketch: Level 0 answer
+- previous value: "#6f58d9"
+
+## D-0028 · answers.Q-plat-01 = ["web"]
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0005 · source_ref: none
+- reason: sketch: picked for them
+- previous value: ["web"]
+- also set: raw.platforms = ["web"] (from Q-plat-01)
+
+## D-0029 · macros = ["deferential", "minimal", "friendly"]
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0006 · source_ref: none
+- reason: sketch: picked for them (feel words: calm, friendly)
+- previous value: ["friendly", "deferential", "minimal"]
+
+## D-0030 · taste.feelWords = ["calm", "friendly"]
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0007 · source_ref: none
+- reason: sketch: feel words picked for them
+- previous value: ["soft", "calm", "friendly"]
+
+## D-0031 · answers.Q-theme-01 = "system-light-dark"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0008 · source_ref: none
+- reason: sketch: picked for them
+- previous value: "system-light-dark"
+- also set: raw.flags.darkMode = true (from Q-theme-01)
+- also set: raw.defaultTheme = "system" (from Q-theme-01)
+
+## D-0032 · answers.Q-scope-06 = ["app:operate"]
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0009 · source_ref: none
+- reason: sketch: picked for them
+- previous value: ["chat:operate"]
+- also set: context.surfaces = [{"name": "app", "mode": "Operate"}] (from Q-scope-06)
+- also set: raw.productType = "work-tool" (from Q-scope-06)
+- also set: raw.marketingSurfaces = false (from Q-scope-06)
+
+## D-0033 · raw.textFace = "Figtree"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0020 · source_ref: none
+- reason: round 4: one friendly, legible face for a hiring tool
+- previous value: "Figtree"
+
+## D-0034 · raw.displayFace = "=textFace"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 4: one family
+- previous value: "=textFace"
+
+## D-0035 · raw.baseSize = 14
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 4: 14 px body like the B2B screens
+- previous value: 16
+
+## D-0036 · dials.expression = 35
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0011 · source_ref: none
+- reason: round 4: a working tool; warmth only in the copy and the green
+- previous value: 45
+
+## D-0037 · dials.energy = 40
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0013 · source_ref: none
+- reason: round 4: toasts slide and stack; nothing bounces
+- previous value: 62
+
+## D-0038 · dials.roundness = 50
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0021 · source_ref: none
+- reason: round 4: 8 px controls, 10-12 px toasts
+- previous value: 55
+
+## D-0039 · dials.depth = 50
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0022 · source_ref: none
+- reason: round 4: toasts float over the page with a real shadow
+- previous value: 45
+
+## D-0040 · dials.colorfulness = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0016 · source_ref: none
+- reason: round 4: one accent (progress) on neutral greys
+- previous value: 55
+
+## D-0041 · dials.warmth = 20
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0017 · source_ref: none
+- reason: round 4: cool greys, no beige
+- previous value: 30
+
+## D-0042 · dials.brandPresence = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 4: the brand is the green and the wordmark
+
+## D-0043 · answers.Q-color-09 = "cool"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0018 · source_ref: none
+- reason: round 4: cool greys; the brand-tinted greys read mint or beige
+- previous value: "hue-matched"
+- also set: raw.neutralTint = "cool" (from Q-color-09)

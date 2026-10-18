@@ -18,7 +18,7 @@ python3 site/deploy.py         # builds and publishes to Vercel (--preview for a
 3. `python3 site/check.py` reports no problems.
 4. `python3 site/check_layout.py` reports 0 errors at all 13 widths (320 to 1920 px). Read each warning.
 5. Check the real headers. The local server sends none, so a script, style or font the Content-Security-Policy in `vercel.json` blocks only fails once deployed: deploy a preview (`python3 site/deploy.py --preview`), open it, and confirm the console shows no CSP errors.
-6. Deploy (`python3 site/deploy.py`). It pings IndexNow.
+6. Deploy (`python3 site/deploy.py`). It pings IndexNow. Never run `vercel deploy site/dist` by hand: the build recreates `site/dist/` without the project link, and Vercel then quietly creates a new project named "dist" and deploys there (it happened on 2026-10-18). `deploy.py` copies `site/.vercel/` in first.
 
 What the owner's reviews settled for this site (`_coordination/OWNER-FEEDBACK.md`, 2026-10-14 and 2026-10-15):
 - **Outcome first.** Copy leads with what the person gets (a product that looks like it belongs together), then how. Short, plain sentences.

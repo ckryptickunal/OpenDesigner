@@ -1,6 +1,6 @@
 {
  "piece": "app-screens/10-clinical-vitals",
- "title": "10 · Vigil: ward vitals (tablet, 1180×820 @2x)",
+ "title": "10 · Wardlight: ward observations (tablet)",
  "pattern": "vitals dashboard",
  "platform": "ipados",
  "industry": "healthcare",
@@ -78,7 +78,22 @@
   ]
  },
  "facts": [
-  "mockups/07-tablet-clinic still says 'Vigil' (title, comment, alt text, caption) and shows this shot.png: rename and re-render",
+  "mockups/07-tablet-clinic shows this shot.png and needs a re-render (its alt text still holds)",
+  "Device: the round 4 brief asked for iPhone frames and PRESENTATION.md wants one canvas per category; this piece stays iPad so mockups/07 keeps working. Owner decision",
   "'Ward 4B' is also used in heroes/10"
- ]
+ ],
+ "round4": {
+  "score": 4,
+  "pairwise": "Last blind test (2026-10-18): won against incident.io by 1, Perplexity Health by 2 and Sentry by 3. Never clearly weaker (3+) after the first rebuild. Fresh-eyes audit 3, 3, 4, 3, 4 over five rounds; the last scored 4. Kept on iPad (1180 × 820 at 2x), not iPhone.",
+  "changed": [
+   "One face, IBM Plex Sans; no slashed zeros; six sizes",
+   "Red has one job, clinical risk: dots for parameter scores 1 and 2, outlined totals 5-6, solid 7+; teal, amber and beige removed",
+   "NEWS2 8 tile beside the patient's name; red-outlined allergy chip",
+   "Escalation: registrar and outreach both paged 02:04, 'No reply', 12 min; 'Page again' is the filled action; earlier events (sepsis screen, FY1 review, IV levofloxacin given, oxygen) as one line in the card",
+   "Table: right-aligned 17 pt values, live column marked by an ink rule, trend column removed, key lists only what is drawn",
+   "Sidebar: Wardlight mark, search in the bar, 44 pt rows, next obs time for low-risk patients",
+   "NEWS2 re-scored against RCP 2017 every round: totals 2, 4, 5, 6, 7, 8",
+   "Focused pass: 'No reply · 12 min' said once in ink, earlier events as one line in the card, live column marked by a rule, key lists only what is drawn, 'Bed 7' leads the facts line, 40/56 pt row pitches"
+  ]
+ }
 }

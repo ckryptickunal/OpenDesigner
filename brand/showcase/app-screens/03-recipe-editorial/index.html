@@ -3,128 +3,128 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Larder: recipe</title>
+<title>Sorrelby: Butter beans with red peppers and tomato</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400..600&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400..600&family=Instrument+Sans:wght@400..600&display=block" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-  /* Round 3. Type roles (iOS Dynamic Type): Large Title 34 (recipe title, Literata 400) · Title 2 22 (section head, Literata 500) ·
-     Body 17 (rows, fact values, the action) · Subheadline 15 (kicker, credit, stepper) · Footnote 13 (fact labels). Five sizes, nothing under 13.
-     Tomato red has one job: the one action, "Start cooking". */
+  /* Round 4. Two faces: Source Serif 4 (display optical size) for the title and the section head only; Instrument Sans for everything read or tapped.
+     iOS roles: Large Title 34 (recipe title, weight 400) · Title 2 22 (section head) · Body 17 (rows, values, the action) · Body 17 serif (the headnote) · Subheadline 15 (byline, notes, servings, step count) · Footnote 13 (fact labels, photo credit at the page foot).
+     Tomato red has one job: the one action, "Start cooking". Spacing on a 4 pt grid, 20 pt margins. */
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: var(--ds-color-surface-base); }
+  html, body { background: var(--ds-color-surface-raised); }
   body { width: 390px; height: 844px; overflow: hidden; position: relative; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); -webkit-font-smoothing: antialiased; }
+  button { all: unset; cursor: default; }
+  :focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; border-radius: 8px; }
   .num { font-variant-numeric: tabular-nums; }
 
-  .status { position: absolute; z-index: 3; left: 0; right: 0; top: 0; color: var(--ds-color-white); height: 54px; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-4) var(--ds-space-32) 0 var(--ds-space-40); }
-  .status time { font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); letter-spacing: -0.01em; }
-  .status .sys { display: flex; gap: var(--ds-space-6); align-items: center; }
+  .status { position: absolute; z-index: 3; left: 0; right: 0; top: 0; color: var(--ds-color-white); height: 54px; display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0 46px; }
+  .status time { font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+  .status .sys { display: flex; gap: 6px; align-items: center; }
   .status svg { display: block; fill: currentColor; }
 
-  /* the photograph, edge to edge under the status bar; the navigation floats on it as round buttons */
-  .photo { position: relative; height: 282px; overflow: hidden; background: var(--ds-color-surface-sunken); }
-  .photo::before { content: ""; position: absolute; z-index: 1; inset: 0 0 auto; height: 110px; background: linear-gradient(rgb(0 0 0 / .6), rgb(0 0 0 / .35) 49%, rgb(0 0 0 / 0)); } /* scrim for the white status bar, not decoration */
+  /* the photograph, edge to edge under the status bar */
+  .photo { position: relative; height: 280px; overflow: hidden; background: var(--ds-color-surface-sunken); }
+  .photo::before { content: ""; position: absolute; z-index: 1; inset: 0 0 auto; height: 112px; background: linear-gradient(rgb(0 0 0 / .55), rgb(0 0 0 / .3) 50%, rgb(0 0 0 / 0)); } /* scrim for the white status bar */
   .photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .credit { margin-top: var(--ds-space-16); font: 400 var(--ds-font-size-13)/18px var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
   .nav { position: absolute; z-index: 2; left: 0; right: 0; top: 54px; height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 var(--ds-space-16); }
   .navr { display: flex; gap: var(--ds-space-8); }
-  .fab { all: unset; width: 44px; height: 44px; display: grid; place-items: center; }
-  .fab span { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: rgb(255 255 255 / .92); color: var(--ds-color-text-primary); box-shadow: 0 1px 3px rgb(0 0 0 / .18); }
+  .fab { width: 36px; height: 36px; display: grid; place-items: center; position: relative; }
+  .fab::after { content: ""; position: absolute; inset: -4px; } /* 44 pt hit area */
+  .fab span { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: rgb(255 255 255 / .94); color: var(--ds-color-text-primary); }
 
-  main { padding: var(--ds-space-24) var(--ds-space-20) 0; }
-  .kicker { font: 500 var(--ds-font-size-15)/1.33 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
-  h1 { margin-top: var(--ds-space-6); font-family: var(--ds-font-family-display); font-weight: 400; font-size: var(--ds-font-size-34); line-height: 1.18; letter-spacing: -0.015em; font-variation-settings: "opsz" 72; text-wrap: balance; }
-  .credit { margin-top: var(--ds-space-6); font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+  main { padding: var(--ds-space-20) var(--ds-space-20) 0; }
+  h1 { font: 400 var(--ds-font-size-34)/40px var(--ds-font-family-display); font-variation-settings: "opsz" 60; letter-spacing: -0.02em; text-wrap: balance; }
+  .by { margin-top: var(--ds-space-8); font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+  .note { margin-top: var(--ds-space-12); font: 400 var(--ds-font-size-17)/24px var(--ds-font-family-display); font-variation-settings: "opsz" 16; color: var(--ds-color-text-primary); }
+  .by b { font-weight: 500; color: var(--ds-color-text-primary); }
 
-  /* the method at a glance: six steps across 55 minutes, hands-on time in ink, waiting time as a hairline */
-  .plan { margin-top: var(--ds-space-20); }
-  .plan-h { display: flex; justify-content: space-between; align-items: baseline; font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
-  .plan-h b { font-weight: 500; color: var(--ds-color-text-primary); }
-  .bar { margin-top: var(--ds-space-8); display: flex; gap: 2px; height: 8px; align-items: center; }
-  .bar i { height: 8px; border-radius: 2px; background: var(--ds-color-text-primary); }
-  .bar i.wait { height: 2px; border-radius: 1px; background: var(--ds-color-text-tertiary); } /* waiting time: a 2 pt line, 5:1 on paper */
-  .legend { margin-top: var(--ds-space-8); display: flex; gap: var(--ds-space-16); font: 400 var(--ds-font-size-13)/1.38 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
-  .legend span { display: inline-flex; align-items: center; gap: var(--ds-space-6); }
-  .legend span::before { content: ""; width: 12px; height: 8px; border-radius: 2px; background: var(--ds-color-text-primary); }
-  .legend span.w::before { height: 2px; border-radius: 1px; background: var(--ds-color-text-tertiary); }
+  /* four facts, set like a table head */
+  .facts { margin-top: var(--ds-space-16); display: grid; grid-template-columns: repeat(3, 1fr); padding: var(--ds-space-12) 0; border-block: 1px solid var(--ds-color-border-separator); }
+      .facts span { display: block; font: 400 var(--ds-font-size-13)/18px var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+  .facts b { display: block; margin-top: 2px; font: 500 var(--ds-font-size-17)/22px var(--ds-font-family-text); font-variant-numeric: tabular-nums; }
 
   .ing-h { margin-top: var(--ds-space-20); display: flex; justify-content: space-between; align-items: center; }
-  .ing-h h2 { font: 500 var(--ds-font-size-22)/1.27 var(--ds-font-family-display); font-variation-settings: "opsz" 28; }
-  .stepper { display: flex; align-items: center; height: 36px; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); }
-  .stepper button { all: unset; width: 40px; height: 36px; display: grid; place-items: center; color: var(--ds-color-text-primary); position: relative; }
-  .stepper button::after { content: ""; position: absolute; inset: -4px 0; } /* 44 pt hit area */
-  .stepper output { font: 500 var(--ds-font-size-15)/1 var(--ds-font-family-text); min-width: 76px; text-align: center; font-variant-numeric: tabular-nums; }
+  .ing-h h2 .count { font: 400 var(--ds-font-size-17)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); margin-left: var(--ds-space-4); }
+  .ing-h h2 { font: 500 var(--ds-font-size-22)/28px var(--ds-font-family-display); font-variation-settings: "opsz" 28; letter-spacing: -0.005em; }
+  
+  ul { list-style: none; margin-top: var(--ds-space-6); }
+  li { display: grid; grid-template-columns: 116.67px 1fr; align-items: baseline; padding: 6px 0; }
+  .q { font: 500 var(--ds-font-size-17)/22px var(--ds-font-family-text); font-variant-numeric: tabular-nums; }
+  .n { font: 400 var(--ds-font-size-17)/22px var(--ds-font-family-text); }
+  .n span { color: var(--ds-color-text-secondary); }
 
-  ul { list-style: none; margin-top: var(--ds-space-8); }
-  li { display: flex; align-items: center; gap: var(--ds-space-12); min-height: 52px; border-bottom: 1px solid var(--ds-color-border-subtle); }
-  .box { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--ds-color-border-strong); display: grid; place-items: center; position: relative; color: var(--ds-color-text-tertiary); }
-  .box::after { content: ""; position: absolute; inset: -10px; } /* 44 pt hit area */
-  li.done .box { border-color: var(--ds-color-border-default); background: var(--ds-color-bg-neutral-subtle); }
-  .qty { flex: none; width: 60px; font: 500 var(--ds-font-size-17)/1.3 var(--ds-font-family-text); font-variant-numeric: tabular-nums; }
-  .what { flex: 1; min-width: 0; font: var(--ds-text-body-md); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .what .note { color: var(--ds-color-text-secondary); }
-  li.done .qty, li.done .what, li.done .what .note { color: var(--ds-color-text-tertiary); }
-
-  .fade { position: absolute; left: 0; right: 0; bottom: 0; height: 116px; background: linear-gradient(to bottom, color-mix(in oklab, var(--ds-color-surface-base) 0%, transparent), var(--ds-color-surface-base) 14px); pointer-events: none; } /* a solid paper band behind the action, with a 14 pt ramp */
-  .go { all: unset; box-sizing: border-box; position: absolute; left: var(--ds-space-20); right: var(--ds-space-20); bottom: 34px; height: 52px; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
-    display: flex; align-items: center; justify-content: center; font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); white-space: pre; }
-  .go span { font-weight: 400; }
-  .home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: var(--ds-color-text-primary); }
-  :focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
+  /* bottom bar: servings and the one action */
+  .dock { position: absolute; left: 0; right: 0; bottom: 0; padding: var(--ds-space-12) var(--ds-space-20) 34px; display: flex; background: color-mix(in oklab, var(--ds-color-surface-raised) 80%, transparent); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid var(--ds-color-border-separator); }
+  .serves { flex: none; display: flex; align-items: center; height: 32px; border-radius: var(--ds-radius-full); box-shadow: inset 0 0 0 1px var(--ds-color-border-default); }
+  .serves button { width: 40px; height: 44px; margin: -6px 0; display: grid; place-items: center; color: var(--ds-color-text-primary); }
+  .serves output { min-width: 60px; text-align: center; font: 400 var(--ds-font-size-15)/1 var(--ds-font-family-text); font-variant-numeric: tabular-nums; }
+  .go { flex: 1; height: 50px; border-radius: var(--ds-radius-full); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--ds-space-24); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); }
+  .go span { font: 400 var(--ds-font-size-15)/1 var(--ds-font-family-text); }
+  .home-ind { position: absolute; z-index: 4; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: var(--ds-color-text-primary); }
+/* one icon stroke: every line icon draws at 1.5 pt on screen, whatever its size */
+svg[stroke="currentColor"] { stroke-width: 1.5px; }
+svg[stroke="currentColor"] * { vector-effect: non-scaling-stroke; }
 </style>
 </head>
 <body>
-  <div class="status" aria-hidden="true">
-    <time>9:41</time>
-    <div class="sys">
-      <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
-      <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.2A10.2 10.2 0 0 0 8 .7 10.2 10.2 0 0 0 .9 3.5L2 4.7a8.6 8.6 0 0 1 6-2.4Zm0 3.3c1.4 0 2.7.5 3.7 1.4l1.1-1.2A7 7 0 0 0 8 3.9a7 7 0 0 0-4.8 1.9l1.1 1.2A5.4 5.4 0 0 1 8 5.6Zm0 3.2c.6 0 1.1.2 1.5.6L8 11 6.5 9.4c.4-.4.9-.6 1.5-.6Z"/></svg>
-      <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="currentColor" stroke-opacity=".45"/><rect x="2" y="2" width="17" height="9" rx="2.5"/><path d="M25 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" fill-opacity=".45"/></svg>
+<div class="status" aria-hidden="true">
+  <time>9:41</time>
+  <div class="sys">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.2A10.2 10.2 0 0 0 8 .7 10.2 10.2 0 0 0 .9 3.5L2 4.7a8.6 8.6 0 0 1 6-2.4Zm0 3.3c1.4 0 2.7.5 3.7 1.4l1.1-1.2A7 7 0 0 0 8 3.9a7 7 0 0 0-4.8 1.9l1.1 1.2A5.4 5.4 0 0 1 8 5.6Zm0 3.2c.6 0 1.1.2 1.5.6L8 11 6.5 9.4c.4-.4.9-.6 1.5-.6Z"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="currentColor" stroke-opacity=".5"/><rect x="2" y="2" width="20" height="9" rx="2.5"/><path d="M25 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" fill-opacity=".5"/></svg>
+  </div>
+</div>
+
+<div class="photo">
+  <img src="https://images.unsplash.com/photo-1715216553304-4960f95dfff2?w=1170&h=840&fit=crop&crop=focalpoint&fp-x=.47&fp-y=.5&fp-z=1.25&q=80&auto=format" alt="Butter beans in a red tomato sauce in an enamel pot, seen from above">
+  <div class="nav">
+    <button class="fab" aria-label="Back"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 5-7 7 7 7"/></svg></span></button>
+    <div class="navr">
+      <button class="fab" aria-label="Share"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14.5V3.5M8 7l4-3.5L16 7"/><path d="M8.5 10.5H6.5a1 1 0 0 0-1 1V20a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-8.5a1 1 0 0 0-1-1h-2"/></svg></span></button>
+      <button class="fab" aria-label="Saved to Sorrelby" aria-pressed="true"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h11v17L12 16.5l-5.5 4z" fill="currentColor"/></svg></span></button>
     </div>
   </div>
+</div>
 
-  <div class="photo">
-    <img src="https://images.unsplash.com/photo-1715216553304-4960f95dfff2?w=1170&h=846&fit=crop&crop=focalpoint&fp-x=.47&fp-y=.54&fp-z=1.4&q=80&auto=format" alt="Butter beans in a red tomato sauce in an enamel pot, seen from above">
-    <nav class="nav">
-      <button class="fab" aria-label="Back"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg></span></button>
-      <div class="navr">
-        <button class="fab" aria-label="Share recipe"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M6 12v7h12v-7"/></svg></span></button>
-        <button class="fab" aria-label="Save recipe"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M6.5 4h11v16l-5.5-3.6L6.5 20z"/></svg></span></button>
-      </div>
-    </nav>
+<main>
+  <h1>Butter beans with red peppers and tomato</h1>
+  <p class="by">By <b>Hester Bryce</b> · Autumn issue</p>
+  <p class="note">Let the peppers catch at the edges before the tomatoes go in. The beans only need to warm through.</p>
+
+  <div class="facts">
+    <div><span>Total</span><b>50 min</b></div>
+    <div><span>Hands-on</span><b>25 min</b></div>
+    <div><span>Washing up</span><b>1 pot</b></div>
   </div>
 
-  <main>
-    <p class="kicker">Larder No. 14 · Autumn suppers</p>
-    <h1>Burnt tomatoes and butter beans</h1>
-    <p class="credit">Photo: Kerri Leung / Unsplash</p>
-
-    <div class="plan" role="img" aria-label="6 steps over 55 minutes: prep 5, blister the tomatoes 8, add garlic and beans 2, simmer 25, grill 10, rest 5. 15 minutes hands-on.">
-      <p class="plan-h"><span><b class="num">6 steps · 55 min</b></span><span class="num">470 kcal per serving</span></p>
-      <div class="bar" aria-hidden="true"><i style="flex: 5"></i><i style="flex: 8"></i><i style="flex: 2"></i><i class="wait" style="flex: 25"></i><i class="wait" style="flex: 10"></i><i class="wait" style="flex: 5"></i></div>
-      <p class="legend" aria-hidden="true"><span>Hands-on 15 min</span><span class="w">Simmer, grill, rest 40 min</span></p>
+  <div class="ing-h">
+    <h2>Ingredients <span class="count">8</span></h2>
+    <div class="serves" role="group" aria-label="Servings">
+      <button aria-label="Fewer servings"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M6 12h12"/></svg></button>
+      <output>Serves 4</output>
+      <button aria-label="More servings"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg></button>
     </div>
+  </div>
+  <ul aria-label="8 ingredients">
+    <li><span class="q">2 × 700 g</span><span class="n">jars of butter beans</span></li>
+    <li><span class="q">2</span><span class="n">red peppers, <span>cut into strips</span></span></li>
+    <li><span class="q">600 g</span><span class="n">ripe tomatoes, <span>chopped</span></span></li>
+    <li><span class="q">6</span><span class="n">garlic cloves, <span>sliced thin</span></span></li>
+    <li><span class="q">4 tbsp</span><span class="n">olive oil</span></li>
+    <li><span class="q">1 tsp</span><span class="n">smoked paprika</span></li>
+    <li><span class="q">1 bunch</span><span class="n">mint, <span>leaves picked</span></span></li>
+    <li><span class="q">4</span><span class="n">flatbreads, <span>to serve</span></span></li>
+  </ul>
+  <p class="credit">Photo: Kerri Leung / Unsplash</p>
+</main>
 
-    <section aria-labelledby="ih">
-      <div class="ing-h">
-        <h2 id="ih">Ingredients</h2>
-        <div class="stepper" role="group" aria-label="Servings">
-          <button aria-label="Fewer servings"><svg width="14" height="14" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 7h8"/></svg></button>
-          <output>4 servings</output>
-          <button aria-label="More servings"><svg width="14" height="14" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 7h8M7 3v8"/></svg></button>
-        </div>
-      </div>
-      <ul>
-        <li class="done"><span class="box" role="checkbox" aria-checked="true" aria-label="Cherry tomatoes, in the basket"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2.5 6.3 2.3 2.2 4.7-5"/></svg></span><span class="qty">600 g</span><span class="what">cherry tomatoes, <span class="note">on the vine</span></span></li>
-        <li><span class="box" role="checkbox" aria-checked="false" aria-label="Butter beans"></span><span class="qty">2 jars</span><span class="what">butter beans, <span class="note">700 g each</span></span></li>
-        <li><span class="box" role="checkbox" aria-checked="false" aria-label="Garlic"></span><span class="qty">6</span><span class="what">garlic cloves, <span class="note">sliced thin</span></span></li>
-        <li><span class="box" role="checkbox" aria-checked="false" aria-label="Olive oil"></span><span class="qty">90 ml</span><span class="what">olive oil</span></li>
-      </ul>
-    </section>
-  </main>
-
-  <div class="fade" aria-hidden="true"></div>
-  <button class="go">Start cooking</button>
-  <div class="home-ind" aria-hidden="true"></div>
+<div class="dock">
+  <button class="go">Start cooking<span>6 steps</span></button>
+</div>
+<div class="home-ind" aria-hidden="true"></div>
 </body>
 </html>

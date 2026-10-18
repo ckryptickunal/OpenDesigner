@@ -49,3 +49,6 @@ python3 $E --dir .../02-keystrata-mega/opendesigner sketch --name "Keystrata" --
 2. `engine.py review` suggests spacing tokens for graphic sizes (feedback: bug).
 3. "precise" is not a feel word (feedback: idea).
 - Helped: `--delegated` with a list kept the brand hex exact. `engine.py review` is a fast way to find raw values that skip the tokens.
+
+## Domain rule (2026-10-15)
+Under the new showcase rule (invented domains and email addresses end in `.example`, RFC 2606), `status.keystrata.com` became `status.keystrata.example` and `security@keystrata.com` became `security@keystrata.example`. Nothing else changed. `shot.png` and `shot-mobile.png` were re-rendered at the same sizes, and a pixel diff against the previous renders shows only those two lines changed.

@@ -42,3 +42,15 @@ python3 $E --dir .../07-sasame-tea/opendesigner sketch --name "Sasame Tea House"
 ## Process findings
 1. The fallback stack ignores the face's class and the page's scripts (feedback: bug).
 2. No vertical writing support (feedback: gap). The `:lang(ja)` line-height scale is a good start.
+
+## Round 4 (18 Oct 2026): quiet footer
+This replaces the round-3 design described above. The round-4 audit (`brand/showcase/AUDIT-ROUND4.md`) and the owner called the footer studies cluttered; `brand/showcase/PRESENTATION.md` now sets the footer rules. Built from one shared generator so all four keep the PRESENTATION.md footer rules: link columns in one text size, one muted heading style, one rule, one legal line, at most one signature element, and the last row of the section above (one line of real copy) so the shot reads as the end of a page. No illustrations, charts, chips, badges or boxes.
+
+- The tea-year Gantt, seal, today line and every chart label removed
+- The one signature element is a seasonal sentence in Shippori Mincho beside the name, at 49 px so it reads at gallery size
+- Visit, Hours, Seats and More as four quiet columns; headings muted, links no longer underlined, the address reduced to 'Higashiyama 2-chome' so it cannot match a real house
+- Last row of the section above: 'Ask for a seat'
+
+**Fresh audit:** 3 of 5. **Pairwise:** lost to VanMoof by 2 (not blind); the earlier blind test lost to Legora by 4. After the audit: all four of the final audit's Sasame fixes (muted headings, no underlines, 49 px statement, address) were applied after it scored 3 and were checked by eye, not re-judged; the score stays 3 until it is.
+
+**Checks:** `preflight.py html`: 0 errors, 0 warnings. `check_dates.py --year 2026`: passes. No invented domains on the page. Two typefaces at most, sizes on the token scale.

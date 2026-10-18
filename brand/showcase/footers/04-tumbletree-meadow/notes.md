@@ -49,3 +49,39 @@ python3 $E --dir .../04-tumbletree-meadow/opendesigner sketch --name "Tumbletree
 3. No saturated mid-tones for illustration in the ramps (feedback: gap).
 4. The illustrate skill cannot run without a person to say yes to fetching (feedback: confusing).
 - Helped: the yellow-on-white warning caught a real problem with a chunky yellow button.
+
+## Round 3 (owner review)
+**What he said:** "needs work". He likes the Brask, Keystrata and Rallo footers and the B2B product screens: quiet, exact, real, one accent. The independent audit had listed the hero stack in a footer (highlight block, two sticker buttons, three check pills), stock scenery (clouds, sun, birds, lollipop trees) and a generic blob mascot.
+
+**What changed (rebuilt in place):**
+- Everything decorative is gone: the meadow, sun, clouds, birds, trees, kite, speech bubble, the mascot Pip, the headline with its highlight block, both buttons and the check pills.
+- A quiet index on a flat night ground (accent2 dark step 3): the wordmark, two short paragraphs with facts (ages 4 to 7, England's EYFS framework and the Key Stage 1 national curriculum, the app locks until 6.30am, 31 people of whom nine are former teachers), and four link columns. The Lessons column carries lesson counts and a total (380 + 240 + 300 + 90 + 26 = 1,036).
+- The one detail only this brand would have: a handwriting-formation specimen of the first eight Phase 2 phonics sounds, Set 1 s a t p and Set 2 i n m d, on four writing lines. Single-line letters in white; sun yellow has one job: the start dot, the first-direction arrow and the stroke numbers of the two-stroke letters t and i. It is drawn by a small script inside the grid columns, so it fits every width; below 480 px the two sets go on two rows.
+- Text is white at 68% (7.5:1) instead of the pale cyan the first draft used; all rules are white at 14%, the writing lines 40% and 50% (3.5:1 and 4.7:1).
+- Legal row: "© 2026 Tumbletree Learning Ltd, Bristol · Registered in England and Wales", with five legal links aligned to the index column.
+
+**Drafts the fresh-eyes audits turned down (16 audits in all):** a sleeping mascot on a green hill (3: still a hero band, and close to Duolingo's footer), a night bed with an alphabet quilt (3: clip-art, Duolingo's silhouette), a patchwork quilt of felt letters (3: texture standing in for an asset), large dotted tracing letters across the page (3: worksheet-generator look, wrong dot ends), and a small specimen beside the about text (3: too small and fussy). The fixes that moved it to 4: the specimen moved under the index at about 75 px x-height with a 3 px stroke, marks that scale with the letters, each downstroke arrow inside its own letter, one arrow length, and layouts checked at 1440, 1240, 1100, 960 and 390 px.
+
+**Type scale used:** label 12 (set labels), footnote 14 (legal, counts, stroke numbers), body 16, title 28 (wordmark). Fredoka for the wordmark only, Nunito for everything else.
+
+**Outside the tokens, on purpose:** 14 px (no 14 step in this scale; footnote role), white-alpha text and rule colours (`rgb(255 255 255 / .68)` and `/ .14`, `/ .4`, `/ .5`), a 56 px row gap, and the 5 px and 13 px baseline nudges that put the column headings on the wordmark's baseline.
+
+**Checks:** `preflight.py html`: 0 errors, 1 warning (14 px is off the token scale, kept on purpose). `check_dates.py --year 2026`: passes. `engine.py validate`: no errors. Names: Tumbletree and Tumbletree Learning Ltd are this piece's only names (NAMES.md); no new names. No invented domains on the page.
+
+**Fresh score: 4** (sixteenth audit, against the B2B screens and the Brask, Keystrata and Rallo footers, with Opennote and Clay footers on Mobbin as references: https://mobbin.com/sites/sections/3dbc7c17-d1c9-4490-a394-33c61e52f471, https://mobbin.com/sites/sections/9ee341c1-9b8d-4389-9899-62f10bfaa78b). Its remaining notes (arrow lengths, arrows sitting in the gaps, the note far from the drawing at mid widths, the i's stacked numbers, the d's cap above the top line, a lone "Bristol" on phones) were fixed afterwards and checked by eye at 1440, 1100 and 390 px; that last pass was not re-audited.
+
+**Process findings:**
+- The engine's type scale has no 14 px step, but footers need a footnote size between 12 and 16.
+- Nothing in the process checks a layout between breakpoints; three of the audit rounds found faults only at 960 to 1240 px.
+
+## Round 4 (18 Oct 2026): quiet footer
+This replaces the round-3 design described above. The round-4 audit (`brand/showcase/AUDIT-ROUND4.md`) and the owner called the footer studies cluttered; `brand/showcase/PRESENTATION.md` now sets the footer rules. Built from one shared generator so all four keep the PRESENTATION.md footer rules: link columns in one text size, one muted heading style, one rule, one legal line, at most one signature element, and the last row of the section above (one line of real copy) so the shot reads as the end of a page. No illustrations, charts, chips, badges or boxes.
+
+- Round-3 writing specimen, lesson counts and second paragraph removed (audit round 4: 'letter-formation diagram with numbered yellow arrows', 'corporate navy')
+- Pale sky ground (accent2 step 2) instead of navy; the one signature element is the product's rule in Fredoka: 'Ten minutes a day, then the app locks until morning.'
+- Four link columns of four links, one muted heading style, one rule, one legal line; a placeholder logo square removed after the fresh audit
+- The last row of the FAQ above as the top sliver
+
+**Fresh audit:** 4 of 5. **Pairwise:** won against Loom by 1 (not blind: the judge knew which side came from Mobbin). After the audit: placeholder mark removed and the about text cut to one line (both from the final audit, checked by eye).
+
+**Checks:** `preflight.py html`: 0 errors, 0 warnings. `check_dates.py --year 2026`: passes. No invented domains on the page. Two typefaces at most, sizes on the token scale.

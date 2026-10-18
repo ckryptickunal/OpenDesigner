@@ -1,0 +1,64 @@
+{
+ "piece": "footers/03-quietfield-horizon",
+ "title": "03 Quietfield: newsletter-led dark footer with a glowing horizon",
+ "pattern": "footer-brand",
+ "platform": "web",
+ "industry": "AI research",
+ "style": [
+  "dark",
+  "glass"
+ ],
+ "tags": [
+  "footer-brand",
+  "ai research",
+  "newsletter",
+  "dark",
+  "glow",
+  "horizon",
+  "centred"
+ ],
+ "score": 2,
+ "verdict": "remake",
+ "strengths": [
+  "Type is quiet: Sora 300 for the headline, three small link columns tucked top-right, a tiny legal row",
+  "Copy has a human line: 'Read by 31,000 researchers and a few very patient parents' and 'No tracking pixels. Leave with one click.'"
+ ],
+ "slop_signals": [
+  "A planet's edge glowing violet, magenta and amber over a starfield: the gradient-horizon glow that AI landing pages default to, with no link to interpretability research",
+  "Centred headline where the second line is bold ('before it becomes a paper.'): the bold-phrase trick",
+  "Pill email field with the white pill button inside it, centred, with a note underneath: the standard newsletter block",
+  "'LATEST' amber chip inside a rounded pill with the post title: a badge inside a badge",
+  "Label flanked by dashes ('— DISPATCH NO. 41 · OCTOBER 2026 —') above the headline",
+  "Nothing of the lab's actual work appears; the only picture is atmosphere"
+ ],
+ "fixes": [
+  "Remove the planet and the starfield; let the ground be plain near-black",
+  "Make the picture the lab's work: a feature-activation figure, an attention map or a sparse-feature plot drawn in one colour, as the Daylight reference uses grain and light rather than a scene",
+  "Left-align the newsletter block with the link columns beside it, as Spade does; input and button as separate plain controls",
+  "Drop the 'LATEST' chip; list the latest letter as the first link under Research",
+  "One weight in the headline"
+ ],
+ "references": [
+  {
+   "site": "Daylight",
+   "url": "https://mobbin.com/sites/sections/2c33a0e6-3add-4a11-b4b8-d8b66ba00597",
+   "what": "Warm light bleeds in from the edges with heavy grain and no horizon; pill field with the button inside; the glow is texture, not a scene"
+  },
+  {
+   "site": "Spade",
+   "url": "https://mobbin.com/sites/sections/6d088b40-a574-4e35-905c-bff022cfc5d5",
+   "what": "Dark footer with mono labels, link columns left and the newsletter top-right; no art at all and it holds"
+  },
+  {
+   "site": "Reflect",
+   "url": "https://mobbin.com/sites/sections/59c36bb2-2898-4e00-8481-892fa6c8520c",
+   "what": "The centred-newsletter-on-dark-gradient pattern ours resembles most; already a cliché in 2023"
+  },
+  {
+   "site": "Phantom",
+   "url": "https://mobbin.com/sites/sections/1a5e60a8-b79e-4b2b-9aef-7a1d30867b51",
+   "what": "'Enter your email' set as the headline inside a card, links below; a newsletter-led footer with an idea instead of a glow"
+  }
+ ],
+ "audited": "2026-10-14"
+}

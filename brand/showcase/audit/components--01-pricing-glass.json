@@ -86,5 +86,17 @@
  "facts": [
   "mockups/05-components-board embeds this shot.png and its caption or alt text may still describe the old glass cards and beam; re-check and re-render it",
   "mockups/05-components-board (and 08 where it uses this piece) crop this shot.png with fixed background-position offsets set for the old layout; the crops now land on different content and need new offsets"
- ]
+ ],
+ "round4": {
+  "score": 3,
+  "pairwise": "2 of 3 better (Aside -2, HoneyBook +2, PamPam +3); worst margin 2",
+  "changed": [
+   "Usage estimator spans the top of the three plans; per-plan meters; the cheapest covering plan is named and carries the one filled button, following the slider and billing",
+   "Prices are the one display size; heading and estimate a step down; Instrument Sans replaces Geist; twilight blue-black surfaces, amber only for your usage",
+   "Cut: subtitle, footnote, per-plan note lines, ruler ticks, Spark's empty meter, repeated '3 seats', the real product name 'ProRes'; three feature rows per plan; a comparison table on the plan columns, cropped by the frame",
+   "Engine: one family, base size 14, cool greys, dials lowered; brand #F2A93B unchanged; stale extra frames deleted",
+   "Six fresh audits scored 3: a generic dark three-plan layout, sparser than the B2B screens; needs the owner's call (a light page, or a different estimator presentation)"
+  ],
+  "note": "Did not reach 4 after six audit rounds; the last round's concrete notes were fixed and measured, not re-audited"
+ }
 }

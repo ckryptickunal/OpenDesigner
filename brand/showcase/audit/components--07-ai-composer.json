@@ -78,5 +78,19 @@
  "facts": [
   "Italic serif notes, the journal masthead and the 'NO. 07' tag from the earlier audit are kept on purpose (owner: keep everything else)",
   "Dark theme: raw.focusColor is one value for both themes; the page overrides dark focus to neutral.dark.12 until the engine supports a per-theme focus colour"
- ]
+ ],
+ "round4": {
+  "score": 3,
+  "pairwise": "Dash/Langdock/Notion (ours minus shipped, 1 to 5, fresh judges, sides random): round 1 +2/+2/+2, round 2 +3/+2/+2, round 3 +3/+2/+2, round 4 +3/+2/+3, round 5 +2/+2/+2, round 6 Dash +2, round 7 Langdock +2 and Notion +2. Passes the pairwise test in every round; fails the fresh-eyes bar (3 in four audits).",
+  "changed": [
+   "Component sheet removed: NO. 07 masthead, six send-button states, italic serif labels, side state panels",
+   "Rebuilt three times: centred new thread with model menu; thread with docked composer; final: end of an answer as quiet context and the composer with its @ source picker open",
+   "One face (Onest); Source Serif 4 dropped as another product's signature",
+   "Ink blue limited to the typed @harb and the chosen picker row; citations, tiles and actions grey or ink; icon tiles removed",
+   "Clutter removed: action row, footnote, Research mode, hint line, repeated project name, source cards (now one line)",
+   "Facts fixed: last claim cited (Keller p. 112 in a 248-page book), one name per source, 212-page minutes, Kestrel and a real-sounding Fisheries Act removed",
+   "Last round: one depth technique (shadow on the composer and picker only, flat fills elsewhere), the chosen picker row tinted, a two-line prompt that cites the minutes directly",
+   "Remaining (final auditor): composer and picker about a quarter of the frame; reads as the stock AI-app layout; next step is a tighter viewport or a structure of its own"
+  ]
+ }
 }

@@ -67,3 +67,27 @@ Result used from tokens.css: every colour role (surfaces, text, border, accent, 
 ## Round 3 (owner review)
 - The owner's verdict was "okay", so the piece is kept as it is.
 - 2026-10-15: the carrier "Halden Freight" is renamed "Ostrel Freight" (OF), because Halden Private (`app-screens/01`) is a product in the showcase and each name belongs to one product. Re-rendered at 1440 × 900 @2.
+
+## Round 4 (owner review, 2026-10-15)
+**What Kunal said** (relayed by the coordinator): "most of the web components look absolutely rubbish", and "None of them should feel like they are from a vibe coded app or a cheap Chinese app." Only components/02 escaped. This piece was a specimen sheet: a "06/" masthead, token chips in the header, an anatomy column and loading, empty and error panels.
+
+**What changed:** the piece is now one product moment, the table filling the 1440 x 900 frame at 1x.
+- Removed: the masthead and token chips, the anatomy and states panels, the manifest grid, carrier monogram tiles, mode icons (the LTL icon read as a CJK character), the lane progress track and its amber/red markers, the dark floating bulk bar.
+- Shell: a top navigation bar instead of a sidebar, so it no longer reads as product/01 (Quoin) recoloured. Rows grouped by ETA day ("Today, Thu 15 Oct · 11 arriving"), a docked light selection bar with freight actions (Request ETA update, Reschedule delivery, Escalate to carrier).
+- Freight data rebuilt and checked by two fresh audits: city-name lanes, last-ping place and time consistent with progress and elapsed hours, delivery appointment windows, ETA with its delay past the appointment (+1h, +3h, +1h), FTL/LTL/intermodal terms used correctly (out for delivery and at terminal only on LTL), Exceptions as a separate, overlapping view (tabs 96 + 412 + 776 = 1,284).
+- One signal per state: "Late" in amber text plus the delay; selection is a grey tint with ink checkboxes; hover a lighter tint with the row menu; orange only on "New booking" (the logo is ink).
+- Carrier renamed: Northvale Haul became Brennock Haul (Northvale belongs to heroes/10).
+- Engine: depth 15 to 30 (the dock and row menu need a shadow), roundness 10 to 22 (2 px controls, 8 px containers), rebuilt.
+
+**Type scale:** 12 (labels, column heads, meta), 14 (body and cells), 17 (wordmark), 24 (H1). IBM Plex Sans and IBM Plex Mono (shipment IDs only).
+
+**Blind pairwise test** (each pair composed side by side at the same height, sides random, file names opaque, judged by fresh agents): ClickUp list https://mobbin.com/screens/5e65f2f8-de04-4b6a-a5c5-dddb990e878f ours better by 3; Dovetail table https://mobbin.com/screens/aac9827e-b12f-4fe5-908a-2efd0acfcc11 ours better by 4; Jira list https://mobbin.com/screens/1999248d-f1d5-41bf-8c63-f25c6ac7e1de ours better by 3. 3 of 3 better. (The first round used file names that named the reference; it was re-run with opaque names.)
+
+**Fresh-eyes audit:** 3 (selection orange next to amber "late", status said five ways, impossible transit times, near-copy of Quoin), then 3.5 (one fill for selected, hovered and group rows; Quoin's anatomy), then **4** ("dense, specific, quiet and believable, at the level of the product screens"). Its last notes were fixed: a visible hover tint, a row boundary at the dock edge, the ink logo, Newark to Boston at 16:15 (+1h), "Mode is not Air". Left as is: times shown in CDT for every receiver (a dispatcher view in one zone, said in the toolbar).
+
+**Checks:** check_dates pass; check_names 0 errors; preflight 0 errors; engine validate passes.
+
+### Round 4, last pass (2026-10-18): PRESENTATION.md and the round-4 audit row
+- **The idea, in one sentence:** a dispatcher selects the two late loads and asks their carrier for new ETAs.
+- From the round-4 row ("a 'Times in CDT · tracking updated' line, two filter chips, date-group headers and a bulk bar compete", "three identical outlined buttons", "'Late' in a muddy ochre"): the meta line is gone and the zone moved into the headers ("Appointment, CDT", "ETA, CDT"); the docked bar is dark with one primary (Request ETA update) and two quiet actions; Late is a clear red; the hover state is gone (one state per shot); New booking is secondary, so the selection and its bar lead. Orange stays in the logo.
+- Final blind test: ClickUp +3, Dovetail +3, Jira +3 (3 of 3 better). Final fresh audit: **4** (it asked for these changes; they were made afterwards).

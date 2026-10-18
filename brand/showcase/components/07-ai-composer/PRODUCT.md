@@ -8,11 +8,11 @@ Not recorded yet (Q-scope-01).
 
 ## Audience
 
-People who use it often, as an everyday app.
+People who use it all day for work, in screens full of data.
 
 ## Surfaces
 
-pages people read
+- app: Operate mode (density set by the Density dial; no hero; cards only to group related data)
 
 ## Memorable Thing
 

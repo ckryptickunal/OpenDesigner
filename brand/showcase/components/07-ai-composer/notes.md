@@ -73,3 +73,57 @@ Typefaces: `raw.textFace "Instrument Sans"`, `raw.displayFace "Newsreader"` (bot
 **Fresh-eyes audit:** first pass 3/5 (the composer had lost its lift, blue had about ten jobs, a periwinkle border and an invisible halo, salmon error outlines, a tinted drop zone, DESIGN.md still said "Warm tint"). Second pass 4/5 ("premium and believable, now in Margin's family"; two hues only, blue pixels down from 24,440 to 8,056); its last four notes (dark focus, the heavy 2 px ring, the blue upload arc, one periwinkle icon outline) were fixed. References: Langdock https://mobbin.com/screens/b66870ae-8d47-493d-b1b6-e6c01173ad96, Dropbox Dash https://mobbin.com/screens/536f1280-e59b-43c4-8dd0-3f0e91e15695, Google Gemini https://mobbin.com/screens/057d8ba8-d787-4612-b7ce-ea3595a984ed.
 
 **Fresh score: 4.**
+
+## Round 4 (owner review, 2026-10-15)
+
+**What he said.** Most of the web components "look absolutely rubbish", and none should "feel like they are from a vibe coded app or a cheap Chinese app". Margin (02) is the only component he does not call ugly; the B2B product screens are the bar. The round 3 audit had scored this piece 4; his verdict overrules it.
+
+**The idea in one sentence:** a historian cites a source mid-question by typing "@harb" and choosing the harbour board minutes.
+
+**What changed.** The brand and its job stay (Oriel reads your sources and cites every claim). The presentation was rebuilt three times in this round:
+1. The component sheet went: the "NO. 07 Composer" masthead, "COMPONENTS · AUTUMN 2026", the grid of six send-button states, the italic serif state labels and the empty, streaming, error and drop panels.
+2. First rebuild: a new thread with the composer centred and the model menu open. Judges preferred it to every reference, but the fresh audit (3) called it the stock AI start page with an empty top third, and AUDIT-ROUND4 named Claude Projects as the look it echoed.
+3. Second rebuild: the thread with the composer docked. The audit (3) said the 17 px serif answer, not the composer, drew the eye.
+4. Now: yesterday's question and the end of its answer as quiet context (body size, secondary ink, one line naming its sources), and the composer as the subject: "Who did the board let dredge the flats, and when? Quote each minute with its date from the @harb", with the source picker open at the @ (three matching sources, with pages and whether Oriel has read them; the chosen one tinted), two attached sources under the text, the reading depth ("Careful reading") and send. One secondary state, in place.
+- One typeface (Onest); Source Serif 4 is gone, because a serif answer is another product's signature and it was used for one element.
+- Ink blue keeps one meaning, a source, and appears only on the typed "@harb" and the chosen picker row (tinted). Citations, chips and every action are grey or ink.
+- Depth: one technique, a soft shadow, on the two floating parts only (the composer and the picker). Everything else is flat fills: no borders on the sidebar, top bar, search, chips or buttons. Icon tiles are gone; icons stand alone.
+- Removed as clutter: the Copy and Add to notes row, the footnote under the composer, the "Research" mode (it did the same job as the reading depth), the hint line, the project name repeated in the top bar.
+- Fixed facts: the answer's last claim now carries its citation (Keller, p. 112, in a 248-page book); sources keep one name everywhere (Tidal Commons, Saltings interviews); the 24-page minutes became 212 pages; "Kestrel" (also a workspace in `app-screens/09`) is no longer used; "Fisheries Act 1951" became "Harbour by-laws, 1929", so no real law is named.
+
+**References (Mobbin, cited by link only).**
+- Dropbox Dash, https://mobbin.com/screens/536f1280-e59b-43c4-8dd0-3f0e91e15695 : attachments and a menu tied to the composer. Taught how a menu opens without hiding the prompt.
+- Langdock, https://mobbin.com/screens/e8b4319b-3d79-4dcd-b49f-7370ccf89b29 : one toolbar row (add, tools, model, send). Taught the toolbar order.
+- Notion AI, https://mobbin.com/screens/58188761-2d93-43a2-be51-df5fee96707a : the composer as the calm centre of the page. Also showed what to avoid: a duplicated model list and a logo strip.
+
+**System (engine).** Re-sketched for a dense work tool (git keeps the old state):
+`sketch --name Oriel --brand "#2B4C8C" --audience dense --platforms web --feel calm,focused,refined --theme system-light-dark --delegated all --surfaces "app:operate"`, then `set raw.textFace "Onest"`, `raw.displayFace "Onest"`, `raw.neutralTint pure`, `raw.brandColor "#2B4C8C" --set-by chosen`; dials roundness 50, depth 28, warmth 12, colorfulness 22, expression 30, energy 18, brandPresence 35 (all `delegated`); `pick Q-ai-01 chat`; `build`.
+- Type scale, named roles (web px): label 12, body 14, prompt 17. Weights 400, 500, 600.
+- Outside the tokens on purpose: the two shadows (the engine's elevation tokens pair a ring with the shadow), the text caret, the picker's position at the @.
+- Tabular figures were removed: in Onest they spaced every "1" (recorded with `engine.py feedback`).
+
+**Checks (final render).**
+- `check_dates.py --year 2026`: passes (no weekdays; "Read Oct 9" and "Read Oct 2" are before today).
+- `check_names.py`: no errors. New titles: Saltings estuary study, the five recent threads, Harbourmaster's day book and Harbour by-laws, 1929 (added to NAMES.md). The reading models Wren and Heron are no longer on the page. "Harb" and "Esc" are a query and a key.
+- `preflight.py html`: 0 errors, 0 warnings; sizes 12, 14, 17; one face.
+- `engine.py validate`: no errors, 0 warnings.
+- Computed contrast of every text run: 58 runs, lowest 4.96:1.
+- Gallery size (337 px): my eye lands on the picker and the composer; the final auditor's landed on the black send button and the logo (see the result below).
+
+**Blind pairwise test** (ours against a shipped composer, sides random, fresh judges with no context; each judge saw one pair per piece):
+
+| Round | Version | Dropbox Dash | Langdock | Notion |
+|---|---|---|---|---|
+| 1 | centred composer, model menu | ours +2 | +2 | +2 |
+| 2 | same, stage raised | +3 | +2 | +2 |
+| 3 | thread with docked composer | +3 | +2 | +2 |
+| 4 | answer tail, source picker open | +3 | +2 | +3 |
+| 5 | one face, clutter removed | +2 | +2 | +2 |
+| 6 | sources as one line, no tiles; one judge, one pair | +2 | | |
+| 7 | final (one depth technique, tinted picker row); one judge | | +2 | +2 |
+
+Passes in every round: never clearly weaker, better in all three.
+
+**Fresh-eyes audit:** round 1, 3 (empty start page, two controls for one job, mixed units); round 2, 3 (composer not the subject, accent used eight times, serif answer); round 3, 3 (a page-count contradiction, sources shown twice, grey tiles everywhere; fixed); round 4, 3 (component about 23% of the frame, popover white on white with two depth effects, accent nearly gone; addressed); final, **3** (the composer and picker still fill about a quarter of the frame, the stock AI-app layout, a prompt that compared the minutes with themselves, now reworded).
+
+**Result: fails the fresh-eyes bar after four rounds, honestly reported.** It wins every blind pairing in seven rounds, but the fresh auditors score it 3 four times running: at 1× the composer and picker fill about a quarter of a 1440 × 900 frame, and the layout (sidebar, thread, rounded composer, round send) reads as the stock AI-app pattern. More polish is not moving it. What would: a crop to a smaller viewport so the composer fills the frame, or a structure of its own (for example the source picker as a side panel with the page being cited).

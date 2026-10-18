@@ -530,3 +530,83 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: chosen · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: Round 3: the soil reading, a custom display role above Large Title 34
 - new dimension token in primitives.tokens.json
+
+## D-0039 · raw.textFace = "Onest"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0009 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a plant detail with a soil-moisture chart; one SF-like face does the work through size and weight
+- previous value: "Figtree"
+
+## D-0040 · raw.displayFace = "Onest"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0024 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a plant detail with a soil-moisture chart; Alegreya removed, one face
+- previous value: "Alegreya"
+
+## D-0041 · raw.fontLicence = {"web": true, "app": true, "selfHost": true}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0019 · source_ref: none
+- reason: Onest is SIL OFL
+- previous value: {"web": true, "app": true, "selfHost": true}
+
+## D-0042 · raw.brandColor = "#3F6B45"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0004 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a plant detail with a soil-moisture chart; a deeper, cooler moss so white button text passes AA and it reads as leaf, not olive
+- previous value: "#4e6e48"
+
+## D-0043 · dials.expression = 35
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0011 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a plant detail with a soil-moisture chart
+- previous value: 55
+
+## D-0044 · dials.roundness = 55
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0028 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a plant detail with a soil-moisture chart
+- previous value: 60
+
+## D-0045 · dials.depth = 15
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0016 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a plant detail with a soil-moisture chart
+- previous value: 25
+
+## D-0046 · dials.density = 50
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0013 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a plant detail with a soil-moisture chart
+- previous value: 38
+
+## D-0047 · dials.colorfulness = 35
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0017 · source_ref: none
+- reason: round 4: owner said the app screens look cheap; rebuilt as a plant detail with a soil-moisture chart
+- previous value: 45
+
+## D-0048 · overrides.font.size.11 = {"value": 11, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0029 · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 2, Large Title
+- previous value: {"value": 11, "unit": "px"}
+
+## D-0049 · overrides.font.size.13 = {"value": 13, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0031 · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 2, Large Title
+- previous value: {"value": 13, "unit": "px"}
+
+## D-0050 · overrides.font.size.15 = {"value": 15, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0032 · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 2, Large Title
+- previous value: {"value": 15, "unit": "px"}
+
+## D-0051 · overrides.font.size.17 = {"value": 17, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0033 · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 2, Large Title
+- previous value: {"value": 17, "unit": "px"}
+
+## D-0052 · overrides.font.size.22 = {"value": 22, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0035 · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 2, Large Title
+- previous value: {"value": 22, "unit": "px"}
+
+## D-0053 · overrides.font.size.34 = {"value": 34, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0037 · source_ref: none
+- reason: iOS roles: Caption 2, Footnote, Subheadline, Body, Title 2, Large Title
+- previous value: {"value": 34, "unit": "px"}
+
+## D-0054 · overrides.font.size.64 = {"value": 64, "unit": "px"}
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 4 audit 3: the reading needs to be a confident number, like the 172 and 14A the owner likes
+- new dimension token in primitives.tokens.json

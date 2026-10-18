@@ -1,6 +1,6 @@
 {
  "piece": "app-screens/03-recipe-editorial",
- "title": "03 · Larder: recipe detail",
+ "title": "03 · Sorrelby: recipe detail",
  "pattern": "recipe detail",
  "platform": "ios",
  "industry": "food",
@@ -73,5 +73,18 @@
    "Fresh-eyes audit: 3/5, 3/5, then 4/5; its polish items fixed"
   ]
  },
- "facts": []
+ "facts": [],
+ "round4": {
+  "score": 4,
+  "pairwise": "Final round: won against Julienne by 3, NYT Cooking by 3 and Noom by 3 (won every pairing in every round after the first). Fresh-eyes audit 3, 3, 3, 4.",
+  "changed": [
+   "Renamed Larder (a live App Store recipe app) to Sorrelby; Potwell and Saltmoor rejected as near-names",
+   "Recipe rewritten to match the photo: Butter beans with red peppers and tomato, 8 ingredients, 50 min, 25 hands-on, 6 steps",
+   "Fonts: Source Serif 4 (title 34 regular, section head, headnote) and Instrument Sans; five sizes",
+   "Spacing: 20 pt margins, 4 pt grid; three-column fact row; quantity column aligned to it, no row rules",
+   "One accent: tomato red only on 'Start cooking · 6 steps' in a blurred bottom bar; bordered servings stepper in the Ingredients header",
+   "Photo credit moved to the page foot; recipe shown saved; headnote in the quarterly's voice",
+   "Status bar contrast over the photo 6.2:1 (clock) and 5.0:1 (icons)"
+  ]
+ }
 }

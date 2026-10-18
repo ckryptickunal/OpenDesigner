@@ -80,5 +80,20 @@
   "mockups/05-components-board and mockups/08-made-with-opendesigner embed this shot.png; their captions may still describe the old warm price-heat picker; re-check and re-render them",
   "The cabin thumbnail is a hotlinked Unsplash photo of a real lake (Laghi di Fusine) labelled with the invented Lake Vessa",
   "mockups/05-components-board (and 08 where it uses this piece) crop this shot.png with fixed background-position offsets set for the old layout; the crops now land on different content and need new offsets"
- ]
+ ],
+ "round4": {
+  "score": 4,
+  "pairwise": "2 of 3 better (Shopify -2, Mixpanel +2, Klaviyo +3); worst margin 2",
+  "changed": [
+   "New concept and brand: Gridlark, a solar-portfolio monitoring tool; the date range picker open on its Generation dashboard (presets, two months, compare period, partial-data days)",
+   "Wayfern booking calendar, price heat, receipt panel and serif removed; Inter only, cobalt only for the chosen range and Apply",
+   "Dashboard numbers add up (4,812 vs 4,531 MWh, +6.2%; 5 of 14 sites with plausible capacity factors)",
+   "Audit fixes: legend wording, one active state, grid aligned to its column, picker moved right so the main KPI shows, compare dates in the footer, disabled next-month arrow",
+   "Engine: re-sketched as Gridlark (dense, calm, technical), base size 14, dials lowered; brand #2b5bd7 kept",
+   "Stale extra frames (shot-leave, shot-loading, shot-taken) deleted",
+   "Per PRESENTATION.md and the round-4 audit row: one range only (compare off), seven presets, no legend or data dots, no time fields, no field icons",
+   "Last 30 days (Sep 15 - Oct 14) so the range spans both months; ink selection and Apply, cobalt only in the logo; popover anchored to its trigger with its edge on a KPI boundary",
+   "Dashboard re-derived for 30 days (10,463 MWh, 20.2% capacity factor, late-September output above October's); lighter bars so the picker leads"
+  ]
+ }
 }

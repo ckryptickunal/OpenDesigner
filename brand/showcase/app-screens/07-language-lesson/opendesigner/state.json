@@ -21,52 +21,52 @@
   },
   "dials": {
     "expression": {
-      "value": 90,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0009"
-    },
-    "brandPresence": {
-      "value": 85,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0010"
-    },
-    "density": {
       "value": 40,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0011"
+      "decision": "D-0032"
+    },
+    "brandPresence": {
+      "value": 40,
+      "set_by": "delegated",
+      "detached": true,
+      "decision": "D-0033"
+    },
+    "density": {
+      "value": 45,
+      "set_by": "delegated",
+      "detached": true,
+      "decision": "D-0039"
     },
     "energy": {
-      "value": 85,
+      "value": 35,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0012"
+      "decision": "D-0034"
     },
     "roundness": {
-      "value": 75,
+      "value": 55,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0013"
+      "decision": "D-0035"
     },
     "depth": {
-      "value": 60,
+      "value": 15,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0014"
+      "decision": "D-0036"
     },
     "colorfulness": {
-      "value": 95,
+      "value": 30,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0015"
+      "decision": "D-0037"
     },
     "warmth": {
-      "value": 60,
+      "value": 35,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0016"
+      "decision": "D-0038"
     }
   },
   "preset": "neobrutal",
@@ -76,13 +76,13 @@
     "friendly"
   ],
   "raw": {
-    "brandColor": "#2a5bd7",
+    "brandColor": "#CC3B22",
     "primaryActionColor": null,
     "focusColor": null,
-    "neutralBase": null,
+    "neutralBase": "#8A8F98",
     "contrastTarget": "AA",
-    "textFace": "Nunito",
-    "displayFace": "Fredoka",
+    "textFace": "IBM Plex Sans",
+    "displayFace": "Spectral",
     "baseSize": 17,
     "spaceUnit": 4,
     "platforms": [
@@ -109,7 +109,7 @@
       "selfHost": true
     },
     "fontClass": null,
-    "accentCount": 3,
+    "accentCount": 1,
     "accentHarmony": "triadic",
     "neutralTint": null,
     "chartPalette": null,
@@ -143,15 +143,15 @@
     "domain": null,
     "minTarget": null,
     "focusWidth": 2,
-    "secondaryColors": [
-      "#FFC531",
-      "#F2493B"
-    ],
+    "secondaryColors": [],
     "monoFace": "ui-monospace",
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -297,6 +297,38 @@
     },
     "size.target.min": {
       "value": 44,
+      "unit": "px"
+    },
+    "font.size.11": {
+      "value": 11,
+      "unit": "px"
+    },
+    "font.size.13": {
+      "value": 13,
+      "unit": "px"
+    },
+    "font.size.15": {
+      "value": 15,
+      "unit": "px"
+    },
+    "font.size.17": {
+      "value": 17,
+      "unit": "px"
+    },
+    "font.size.22": {
+      "value": 22,
+      "unit": "px"
+    },
+    "font.size.30": {
+      "value": 30,
+      "unit": "px"
+    },
+    "font.size.48": {
+      "value": 48,
+      "unit": "px"
+    },
+    "font.size.34": {
+      "value": 34,
       "unit": "px"
     }
   },
@@ -476,7 +508,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "b77dd73fa83608c6",
+    "DESIGN.md": "299013911ddb4940",
     "PRODUCT.md": "1871de3e01506066"
   },
   "exports": {
@@ -2766,5 +2798,7 @@
       "size.target.min": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

@@ -57,10 +57,10 @@
       "decision": "D-0014"
     },
     "colorfulness": {
-      "value": 35,
+      "value": 20,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0015"
+      "decision": "D-0032"
     },
     "warmth": {
       "value": 30,
@@ -77,12 +77,12 @@
     "everyday"
   ],
   "raw": {
-    "brandColor": "#0b7a84",
+    "brandColor": "#1E2833",
     "primaryActionColor": null,
     "focusColor": null,
     "neutralBase": null,
     "contrastTarget": "AA",
-    "textFace": "Atkinson Hyperlegible Next",
+    "textFace": "IBM Plex Sans",
     "displayFace": "=textFace",
     "baseSize": null,
     "spaceUnit": 4,
@@ -323,6 +323,14 @@
     "font.size.34": {
       "value": 34,
       "unit": "px"
+    },
+    "font.size.22": {
+      "value": 22,
+      "unit": "px"
+    },
+    "font.size.48": {
+      "value": 48,
+      "unit": "px"
     }
   },
   "answers": {
@@ -489,7 +497,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "5dc5937696e79ed2",
+    "DESIGN.md": "408c693f2eb10b88",
     "PRODUCT.md": "697b4eed06c838d7"
   },
   "exports": {

@@ -27,10 +27,10 @@
       "decision": "D-0014"
     },
     "brandPresence": {
-      "value": 70,
+      "value": 35,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0015"
+      "decision": "D-0064"
     },
     "density": {
       "value": 35,
@@ -51,16 +51,16 @@
       "decision": "D-0030"
     },
     "depth": {
-      "value": 30,
+      "value": 10,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0053"
+      "decision": "D-0065"
     },
     "colorfulness": {
-      "value": 22,
+      "value": 15,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0020"
+      "decision": "D-0066"
     },
     "warmth": {
       "value": 45,
@@ -78,13 +78,13 @@
     "authoritative"
   ],
   "raw": {
-    "brandColor": "#C9A86A",
+    "brandColor": "#14674A",
     "primaryActionColor": null,
     "focusColor": null,
-    "neutralBase": "#1C2B24",
+    "neutralBase": "#5E6460",
     "contrastTarget": "AA",
     "textFace": "Inter",
-    "displayFace": "Bodoni Moda",
+    "displayFace": "Inter",
     "baseSize": 17,
     "spaceUnit": 4,
     "platforms": [
@@ -451,6 +451,10 @@
     "font.size.48": {
       "value": 48,
       "unit": "px"
+    },
+    "font.size.40": {
+      "value": 40,
+      "unit": "px"
     }
   },
   "answers": {
@@ -666,7 +670,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "23591ac0aa4888cb",
+    "DESIGN.md": "83534053f27401de",
     "PRODUCT.md": "8378170895d94bfb"
   },
   "exports": {

@@ -411,3 +411,28 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: Newsreader is SIL OFL 1.1
 - previous value: {"web": null, "app": null, "selfHost": null}
+
+## D-0023 · dials.warmth = 12
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0018 · source_ref: none
+- reason: Round 3: the owner's rule forbids cream with brown and red; cool white paper, true black ink
+- previous value: 72
+
+## D-0024 · raw.neutralBase = "#f2f3f4"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0019 · source_ref: none
+- reason: Round 3: neutral paper, not warm cream
+- previous value: "#efe6d4"
+
+## D-0025 · raw.displayFace = "Newsreader"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 3: the serif sets titles only
+- previous value: "=textFace"
+
+## D-0026 · raw.textFace = "Inter"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0020 · source_ref: none
+- reason: Round 3: a grotesque for links, labels and data, small and exact like the B2B screens
+- previous value: "Newsreader"
+
+## D-0027 · raw.neutralBase = "#e4ebf1"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0024 · source_ref: none
+- reason: Round 3: a faint cool paper tint; flat #f4f4f4 read as default UI grey
+- previous value: "#f2f3f4"

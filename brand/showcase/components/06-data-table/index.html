@@ -3,553 +3,259 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tarrow Freight · Data table</title>
+<title>Tarrow · Shipments</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-/* Tarrow Freight data table. Every color, space, radius, type size and motion value is a --ds-* token
-   from opendesigner/build/css/tokens.css. Off-token values are marked OFF-TOKEN with the reason. */
+/* Tarrow shipments table. Colour, space, radius, type and motion come from the --ds-* tokens.
+   OFF-TOKEN values are marked with the reason. Orange is the brand mark only; the selection and its bar lead. */
 :root {
-  /* OFF-TOKEN: a row divider lighter than color.border.subtle (neutral 7 is too heavy for 32px rows
-     repeated 12 times). The engine has no hairline/divider role; neutral 4 is the nearest ramp step. */
+  /* OFF-TOKEN: row rules. border.subtle (neutral 7) is too heavy repeated 18 times; neutral 4 is the nearest step. */
   --rule: var(--ds-color-neutral-light-4);
-  --rule-strong: var(--ds-color-neutral-light-7);
-  --row: var(--ds-size-control-md);
-  --ease: var(--ds-motion-transition-feedback-easing);
-  --dur: var(--ds-motion-transition-feedback-duration);
+  --rule-strong: var(--ds-color-neutral-light-6);
+  /* 36 px rows: control.md (32) plus the 4 px step, between the compact and comfortable densities */
+  --row: calc(var(--ds-size-control-md) + var(--ds-space-4));
+  --pad: var(--ds-space-32);
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body {
-  width: 1440px; height: 900px; overflow: hidden;
-  background-color: var(--ds-color-surface-sunken);
-  /* manifest grid: 24px squares in the gutters only (cards are opaque) */
-  background-image:
-    linear-gradient(var(--ds-color-neutral-light-3) 1px, transparent 1px),
-    linear-gradient(90deg, var(--ds-color-neutral-light-3) 1px, transparent 1px);
-  background-size: 24px 24px;
-  background-position: -1px -1px;
+  min-width: 1280px; height: 100vh; height: 100dvh; overflow: hidden; position: relative;
+  display: flex; flex-direction: column;
+  background: var(--ds-color-surface-raised);
   color: var(--ds-color-text-primary);
   font: var(--ds-text-body-md);
   font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
 }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
-:focus-visible, .is-focus { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-.mono { font-family: var(--ds-font-family-mono); }
-svg.i { width: var(--ds-size-icon-sm); height: var(--ds-size-icon-sm); stroke: currentColor; fill: none; stroke-width: var(--ds-icon-stroke-sm); stroke-linecap: square; flex: none; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.i { width: var(--ds-size-icon-sm); height: var(--ds-size-icon-sm); flex: none; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ---------- sheet header ---------- */
-.sheet-head {
-  height: 72px; display: flex; align-items: center; gap: var(--ds-space-16);
-  padding: 0 var(--ds-space-32);
-  background: var(--ds-color-surface-raised);
-  border-bottom: 1px solid var(--rule-strong);
-}
-.mark { display: flex; align-items: center; gap: var(--ds-space-8); }
-.mark-glyph { width: 28px; height: 28px; background: var(--ds-color-bg-brand); position: relative; }
-.mark-glyph::before { content: ""; position: absolute; inset: 7px 7px 7px 7px; border: 2px solid var(--ds-color-white); border-left-color: transparent; border-bottom-color: transparent; transform: rotate(45deg) translate(-2px, 2px); }
-.mark-word { font: 700 var(--ds-font-size-20)/1 var(--ds-font-family-display); letter-spacing: 0.14em; text-transform: uppercase; }
-.crumbs { display: flex; align-items: center; gap: var(--ds-space-8); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-lg); }
-.crumbs b { color: var(--ds-color-text-primary); font-weight: 600; }
-.vr { width: 1px; height: 24px; background: var(--rule-strong); }
-.sheet-meta { margin-left: auto; display: flex; gap: var(--ds-space-8); }
-.meta { display: flex; align-items: center; gap: var(--ds-space-6); height: 24px; padding: 0 var(--ds-space-8); border: 1px solid var(--rule-strong); font: var(--ds-text-code-sm); color: var(--ds-color-text-secondary); }
-.meta i { font-style: normal; color: var(--ds-color-text-tertiary); }
-.sheet-no { font: 300 var(--ds-font-size-35)/1 var(--ds-font-family-display); color: var(--ds-color-text-primary); letter-spacing: -0.02em; margin-left: var(--ds-space-16); }
-.sheet-no span { color: var(--ds-color-text-accent); }
+/* ---------- top bar ---------- */
+.top { height: 52px; flex: none; display: flex; align-items: center; gap: var(--ds-space-32); padding: 0 var(--pad); border-bottom: 1px solid var(--rule); }
+.brand { display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-title-sm); font-size: var(--ds-font-size-17); letter-spacing: -0.01em; }
+.mark { width: 22px; height: 22px; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-brand); display: grid; place-items: center; color: var(--ds-color-white); }
+.mark .i { width: 14px; height: 14px; stroke-width: 2.6; }
+.nav { display: flex; gap: var(--ds-space-4); height: 100%; }
+.nav a { display: flex; align-items: center; padding: 0 var(--ds-space-12); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.nav a.on { color: var(--ds-color-text-primary); font-weight: 500; border-bottom-color: var(--ds-color-text-primary); }
+.top .right { margin-left: auto; display: flex; align-items: center; gap: var(--ds-space-16); color: var(--ds-color-icon-default); }
+.search { width: 300px; height: var(--ds-size-control-md); display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-6) 0 var(--ds-space-12); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-sunken); color: var(--ds-color-text-tertiary); }
+.search kbd { margin-left: auto; font: var(--ds-text-code-sm); padding: 1px var(--ds-space-6); border: 1px solid var(--rule-strong); border-radius: var(--ds-radius-detail); background: var(--ds-color-surface-raised); }
+.avatar { width: 28px; height: 28px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-4); display: grid; place-items: center; font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
 
-/* ---------- layout ---------- */
-.stage { display: grid; min-height: 0; grid-template-columns: 1fr 352px; gap: var(--ds-space-20); padding: var(--ds-space-24) var(--ds-space-32); height: calc(900px - 72px); }
-.left { display: grid; grid-template-rows: minmax(0, 1fr) 188px; min-height: 0; gap: var(--ds-space-20); min-width: 0; }
-.card { background: var(--ds-color-surface-raised); border: 1px solid var(--rule-strong); border-radius: var(--ds-radius-container); position: relative; min-width: 0; }
-.cap { position: absolute; top: -9px; left: 12px; padding: 0 var(--ds-space-6); background: var(--ds-color-surface-sunken); font: var(--ds-text-label-sm); letter-spacing: var(--ds-text-label-sm-tracking); text-transform: uppercase; color: var(--ds-color-text-tertiary); line-height: 16px; }
-.cap b { color: var(--ds-color-text-accent); font-weight: 600; }
+/* ---------- page head ---------- */
+.head { padding: var(--ds-space-32) var(--pad) 0; display: flex; align-items: center; gap: var(--ds-space-12); }
+.head h1 { margin: 0; font: var(--ds-text-headline-sm); letter-spacing: -0.01em; }
+.head .acts { margin-left: auto; display: flex; gap: var(--ds-space-8); }
+.btn { height: var(--ds-size-control-md); display: inline-flex; align-items: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: 500; border: 1px solid var(--rule-strong); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); white-space: nowrap; }
+.btn.primary { background: var(--ds-color-bg-action-primary); border-color: transparent; color: var(--ds-color-text-on-action); }
+.btn.ghost { border-color: transparent; color: var(--ds-color-text-secondary); }
+.btn.ghost .i { color: var(--ds-color-icon-subtle); }
+.btn.ink { background: var(--ds-color-bg-inverse); border-color: transparent; color: var(--ds-color-text-inverse); }
 
-/* ---------- hero table ---------- */
-.hero { display: flex; flex-direction: column; min-height: 0; }
-.t-head { display: flex; align-items: center; gap: var(--ds-space-16); height: 52px; padding: 0 var(--ds-space-16); border-bottom: 1px solid var(--rule); }
-.t-title { font: 500 var(--ds-font-size-24)/1 var(--ds-font-family-display); letter-spacing: -0.01em; }
-.t-count { font: var(--ds-text-code-sm); color: var(--ds-color-text-tertiary); padding: 2px var(--ds-space-6); background: var(--ds-color-bg-neutral-subtle); }
-.tabs { display: flex; height: 100%; margin-left: var(--ds-space-8); }
-.tab { position: relative; height: 100%; display: flex; align-items: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-12); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); transition: color var(--dur) var(--ease); }
-.tab:hover { color: var(--ds-color-text-primary); }
-.tab[aria-selected="true"] { color: var(--ds-color-text-primary); font-weight: 600; }
-.tab[aria-selected="true"]::after { content: ""; position: absolute; left: var(--ds-space-12); right: var(--ds-space-12); bottom: -1px; height: 2px; background: var(--ds-color-bg-brand); }
-.tab .n { font: var(--ds-text-code-sm); color: var(--ds-color-text-tertiary); }
-.tab .n.hot { color: var(--ds-color-text-danger); }
-.t-actions { margin-left: auto; display: flex; gap: var(--ds-space-8); }
-.btn { height: var(--ds-size-control-md); display: inline-flex; align-items: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-12); font: var(--ds-text-label-lg); font-weight: 500; border-radius: var(--ds-radius-control); transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease); }
-.btn-2 { border: 1px solid var(--ds-color-border-default); background: var(--ds-color-surface-raised); }
-.btn-2:hover { background: var(--ds-color-bg-neutral-subtle); }
-.btn-2:active { background: var(--ds-color-bg-neutral-subtle-pressed); }
-.btn-1 { background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
-.btn-1:hover { background: var(--ds-color-bg-action-primary-hover); }
-.btn-1:active { background: var(--ds-color-bg-action-primary-pressed); }
-.kbd { font: var(--ds-text-code-sm); padding: 0 var(--ds-space-4); border: 1px solid currentColor; opacity: .7; line-height: 14px; }
+.tabs { display: flex; gap: var(--ds-space-24); padding: 0 var(--pad); margin-top: var(--ds-space-16); border-bottom: 1px solid var(--rule); }
+.tab { height: 40px; display: flex; align-items: center; gap: var(--ds-space-6); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tab .n { color: var(--ds-color-text-tertiary); }
+.tab.on { color: var(--ds-color-text-primary); font-weight: 500; border-bottom-color: var(--ds-color-text-primary); }
 
-.toolbar { display: flex; align-items: center; gap: var(--ds-space-8); height: 48px; padding: 0 var(--ds-space-16); border-bottom: 1px solid var(--rule-strong); }
-.search { position: relative; width: 220px; flex: none; }
-.search input { width: 100%; height: 28px; padding: 0 var(--ds-space-32) 0 28px; border: 1px solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-field); font: var(--ds-text-body-md); color: var(--ds-color-text-primary); }
-.search input::placeholder { color: var(--ds-color-text-tertiary); }
-.search input:hover { border-color: var(--ds-color-text-tertiary); }
-.search svg { position: absolute; left: 8px; top: 6px; color: var(--ds-color-icon-subtle); }
-.search .kbd { position: absolute; right: 8px; top: 6px; color: var(--ds-color-text-tertiary); }
-.chip-f { height: 28px; display: inline-flex; align-items: center; border: 1px solid var(--ds-color-border-default); background: var(--ds-color-surface-raised); font: var(--ds-text-label-lg); white-space: nowrap; }
-.chip-f .k { padding: 0 var(--ds-space-6) 0 var(--ds-space-8); color: var(--ds-color-text-tertiary); }
-.chip-f .op { padding: 0 var(--ds-space-6); color: var(--ds-color-text-tertiary); border-left: 1px solid var(--rule); border-right: 1px solid var(--rule); height: 100%; display: flex; align-items: center; font: var(--ds-text-code-sm); }
-.chip-f .v { padding: 0 var(--ds-space-8); font-weight: 500; }
-.chip-f .x { width: 26px; height: 100%; display: grid; place-items: center; border-left: 1px solid var(--rule); color: var(--ds-color-icon-subtle); transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease); }
-.chip-f .x:hover { background: var(--ds-color-bg-danger-subtle); color: var(--ds-color-text-danger); }
-.add-f { height: 28px; display: inline-flex; align-items: center; gap: var(--ds-space-4); padding: 0 var(--ds-space-8); color: var(--ds-color-text-secondary); border: 1px dashed var(--ds-color-border-default); font: var(--ds-text-label-lg); }
-.add-f:hover { color: var(--ds-color-text-primary); border-style: solid; }
-.tb-right { margin-left: auto; display: flex; align-items: center; gap: var(--ds-space-8); }
-.seg { display: inline-flex; border: 1px solid var(--ds-color-border-default); height: 28px; }
-.seg button { width: 28px; display: grid; place-items: center; color: var(--ds-color-icon-subtle); }
-.seg button + button { border-left: 1px solid var(--ds-color-border-default); }
-.seg button[aria-pressed="true"] { background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); }
-.seg button:not([aria-pressed="true"]):hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
-.ghost { height: 28px; display: inline-flex; align-items: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-8); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); }
-.ghost:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
+.tools { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-16) var(--pad); }
+.chip { height: 28px; display: inline-flex; align-items: center; border: 1px solid var(--rule-strong); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); overflow: hidden; }
+.chip span { padding: 0 var(--ds-space-8); height: 100%; display: flex; align-items: center; }
+.chip .k { color: var(--ds-color-text-secondary); border-right: 1px solid var(--rule); }
+.chip .x { padding: 0 var(--ds-space-6); color: var(--ds-color-icon-subtle); }
+.chip .x .i { width: 14px; height: 14px; }
+.chip.add { border-style: dashed; color: var(--ds-color-text-secondary); padding: 0 var(--ds-space-8); gap: var(--ds-space-4); }
+.tools .meta { margin-left: auto; color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); }
+.tools .btn { height: 28px; }
 
-/* grid */
-.grid-wrap { flex: 1; min-height: 0; overflow: hidden; position: relative; }
-table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+/* ---------- table ---------- */
+.wrap { padding: 0 var(--pad); flex: 1; min-height: 0; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 th, td { height: var(--row); padding: 0 var(--ds-space-12); text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px solid var(--rule); }
-th { position: sticky; top: 0; z-index: 1; background: var(--ds-color-surface-base); border-bottom-color: var(--rule-strong); font: 600 var(--ds-font-size-12)/1 var(--ds-font-family-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-color-text-secondary); }
-th.num, td.num { text-align: right; }
-.th-btn { display: inline-flex; align-items: center; gap: var(--ds-space-4); height: 24px; margin: 0 calc(var(--ds-space-6) * -1); padding: 0 var(--ds-space-6); font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease); }
-.th-btn:hover, .th-btn.is-hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
-.th-btn .ar { width: 10px; height: 10px; opacity: 0; transition: opacity var(--dur) var(--ease); }
-.th-btn:hover .ar, .th-btn.is-hover .ar { opacity: .5; }
-th[aria-sort="ascending"] .th-btn, th[aria-sort="descending"] .th-btn, .th-btn.is-sorted { color: var(--ds-color-text-accent); }
-th[aria-sort] .ar, .th-btn.is-sorted .ar { opacity: 1; }
-th[aria-sort="descending"] .ar { transform: rotate(180deg); }
-td { color: var(--ds-color-text-primary); }
-tbody tr { transition: background-color var(--dur) var(--ease); }
-tbody tr:hover, tr.is-hover { background: var(--ds-color-surface-base); }
-tbody tr:hover td:first-child, tr.is-hover td:first-child { box-shadow: inset 2px 0 0 var(--ds-color-border-default); }
-tbody tr[aria-selected="true"] { background: var(--ds-color-bg-accent-subtle); }
-tbody tr[aria-selected="true"] td { border-bottom-color: var(--ds-color-accent-light-5); }
-tbody tr[aria-selected="true"] td:first-child { box-shadow: inset 3px 0 0 var(--ds-color-bg-brand); }
-tbody tr:focus-visible, tr.is-focus { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: calc(var(--ds-focus-ring-width) * -1); }
-td.sel, th.sel { width: 40px; padding: 0 0 0 var(--ds-space-12); }
+th { font: var(--ds-text-label-md); font-weight: 500; color: var(--ds-color-text-tertiary); border-top: 1px solid var(--rule); border-bottom-color: var(--rule-strong); }
+th.sorted { color: var(--ds-color-text-primary); }
+th .i { width: 12px; height: 12px; vertical-align: -1px; margin-left: var(--ds-space-2); }
+th.r, td.r { text-align: right; }
+th:first-child, td:first-child { padding-left: var(--ds-space-8); padding-right: 0; }
+tr.group td { height: 36px; padding-top: var(--ds-space-12); vertical-align: bottom; font: var(--ds-text-label-md); font-weight: 600; color: var(--ds-color-text-primary); border-bottom-color: var(--rule-strong); }
+tr.group td span { color: var(--ds-color-text-tertiary); font-weight: 400; margin-left: var(--ds-space-8); }
+tr.sel td { background: var(--ds-color-neutral-light-3); }
+tr.hover td { background: var(--ds-color-surface-sunken); }
 
-/* checkbox */
-.cb { appearance: none; -webkit-appearance: none; margin: 0; width: 16px; height: 16px; display: grid; place-items: center; border: 1px solid var(--ds-color-border-input); border-radius: var(--ds-radius-detail); background: var(--ds-color-bg-field); cursor: pointer; position: relative; transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease); }
-.cb::before { content: ""; position: absolute; inset: -4px; } /* 24px hit area */
-.cb:hover { border-color: var(--ds-color-text-primary); }
-.cb:checked, .cb:indeterminate, .cb.is-checked, .cb.is-mixed { background: var(--ds-color-bg-brand); border-color: var(--ds-color-bg-brand); }
-.cb:checked::after, .cb.is-checked::after { content: ""; width: 8px; height: 4px; border: 2px solid var(--ds-color-white); border-top: 0; border-right: 0; transform: rotate(-45deg) translate(1px, -1px); }
-.cb:indeterminate::after, .cb.is-mixed::after { content: ""; width: 8px; height: 2px; background: var(--ds-color-white); }
-.cb:disabled, .cb.is-disabled { background: var(--ds-color-bg-disabled); border-color: var(--ds-color-border-subtle); cursor: not-allowed; }
+.cb { width: 16px; height: 16px; border-radius: var(--ds-radius-detail); border: 1px solid var(--ds-color-border-default); background: var(--ds-color-surface-raised); display: grid; place-items: center; flex: none; }
+.cb.on, .cb.mixed { background: var(--ds-color-bg-inverse); border-color: var(--ds-color-bg-inverse); color: var(--ds-color-white); }
+.cb svg { width: 12px; height: 12px; stroke-width: 3; }
 
-.id { font: var(--ds-text-code-md); font-weight: 500; letter-spacing: 0.01em; }
-.id span { color: var(--ds-color-text-tertiary); font-weight: 400; }
-.lane { display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-code-md); }
-.lane .track { flex: 1; position: relative; height: 2px; background-image: linear-gradient(90deg, var(--rule-strong) 50%, transparent 50%); background-size: 6px 2px; min-width: 40px; }
-.lane .done { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ds-color-text-primary); }
-.lane .dot { position: absolute; top: -3px; width: 8px; height: 8px; margin-left: -4px; background: var(--ds-color-surface-raised); border: 2px solid var(--ds-color-text-primary); }
-tr.late .lane .dot { border-color: var(--ds-color-warning-light-9); }
-tr.exc .lane .dot { border-color: var(--ds-color-text-danger); }
-.lane .to { color: var(--ds-color-text-tertiary); }
-.carrier { display: flex; align-items: center; gap: var(--ds-space-8); }
-.c-badge { width: 20px; height: 20px; display: grid; place-items: center; font: 700 var(--ds-font-size-12)/1 var(--ds-font-family-display); letter-spacing: 0; color: var(--ds-color-text-inverse); background: var(--ds-color-bg-inverse); flex: none; }
-.mode { display: flex; align-items: center; gap: var(--ds-space-4); color: var(--ds-color-text-secondary); font: var(--ds-text-code-sm); letter-spacing: 0.04em; line-height: 16px; height: 16px; }
-.mode svg { margin-top: -1px; }
-.eta { display: flex; align-items: baseline; gap: var(--ds-space-6); }
-.eta .d { color: var(--ds-color-text-tertiary); }
-.delta { font: var(--ds-text-code-sm); font-weight: 500; padding: 0 var(--ds-space-4); }
-.delta.late { color: var(--ds-color-text-warning); background: var(--ds-color-bg-warning-subtle); }
-.delta.early { color: var(--ds-color-text-success); }
-.wt { font: var(--ds-text-code-md); }
-.wt small { color: var(--ds-color-text-tertiary); font-size: var(--ds-font-size-12); }
+.id { font: var(--ds-text-code-md); }
+.lane .to { color: var(--ds-color-text-secondary); }
+.lane .ar { color: var(--ds-color-text-tertiary); margin: 0 var(--ds-space-4); }
+.ping { color: var(--ds-color-text-secondary); }
+.ping time { color: var(--ds-color-text-tertiary); margin-left: var(--ds-space-6); }
+.mode, .appt { color: var(--ds-color-text-secondary); }
+.delta { margin-left: var(--ds-space-6); font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+.unit { color: var(--ds-color-text-tertiary); margin-left: 3px; }
+.st { color: var(--ds-color-text-secondary); }
+.st.late { color: var(--ds-color-text-danger); font-weight: 500; }
+.st.ofd { color: var(--ds-color-text-success); }
+.rowact { visibility: hidden; color: var(--ds-color-icon-default); display: grid; place-items: center; width: 24px; height: 24px; border-radius: var(--ds-radius-control); }
+tr.hover .rowact { visibility: visible; background: var(--ds-color-surface-raised); box-shadow: var(--ds-elevation-raised); }
 
-/* status chip */
-.st { display: inline-flex; align-items: center; gap: var(--ds-space-6); height: 20px; padding: 0 var(--ds-space-6); font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); letter-spacing: 0.02em; border: 1px solid transparent; }
-.st::before { content: ""; width: 6px; height: 6px; background: currentColor; flex: none; }
-.st.transit { color: var(--ds-color-text-info); background: var(--ds-color-bg-info-subtle); }
-.st.late { color: var(--ds-color-text-warning); background: var(--ds-color-bg-warning-subtle); }
-.st.late::before { background: var(--ds-color-warning-light-9); }
-.st.done { color: var(--ds-color-text-success); background: var(--ds-color-bg-success-subtle); }
-.st.exc { color: var(--ds-color-text-danger); background: var(--ds-color-bg-danger-subtle); }
-.st.exc::before { clip-path: polygon(50% 0, 100% 100%, 0 100%); width: 8px; height: 7px; }
-.st.dock { color: var(--ds-color-text-secondary); background: var(--ds-color-bg-neutral-subtle); }
-.st.booked { color: var(--ds-color-text-secondary); background: transparent; border-color: var(--ds-color-border-default); border-style: dashed; }
-.st.booked::before { background: transparent; border: 1px solid currentColor; }
-.kebab { width: 24px; height: 24px; display: grid; place-items: center; color: var(--ds-color-icon-subtle); opacity: 0; }
-tr:hover .kebab, tr:focus-within .kebab, tr[aria-selected="true"] .kebab { opacity: 1; }
-.kebab:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
-
-.t-foot { height: 40px; display: flex; align-items: center; gap: var(--ds-space-12); padding: 0 var(--ds-space-16); border-top: 1px solid var(--rule-strong); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); }
-.pager { margin-left: auto; display: flex; align-items: center; gap: var(--ds-space-4); }
-.pager button { width: 24px; height: 24px; display: grid; place-items: center; font: var(--ds-text-code-sm); }
-.pager button:hover { background: var(--ds-color-bg-neutral-subtle); }
-.pager button[aria-current="page"] { background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); }
-
-/* bulk bar */
-.bulk { position: absolute; left: 50%; bottom: 54px; transform: translate(-50%, 0); display: flex; align-items: center; height: 40px; padding: 0 var(--ds-space-4) 0 var(--ds-space-12); gap: var(--ds-space-4); background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); transition: transform var(--ds-motion-transition-enter-duration) var(--ds-motion-transition-enter-easing), opacity var(--ds-motion-transition-enter-duration) var(--ds-motion-transition-enter-easing); }
-.bulk[hidden] { display: flex; opacity: 0; transform: translate(-50%, 12px); pointer-events: none; }
-.bulk .cnt { display: flex; align-items: center; gap: var(--ds-space-8); padding-right: var(--ds-space-12); margin-right: var(--ds-space-4); border-right: 1px solid var(--ds-color-neutral-light-11); font: var(--ds-text-label-lg); font-weight: 600; }
-.bulk .cnt b { display: grid; place-items: center; min-width: 20px; height: 20px; padding: 0 var(--ds-space-4); background: var(--ds-color-bg-brand); color: var(--ds-color-white); font: var(--ds-text-code-sm); font-weight: 500; }
-.bulk button { height: 32px; display: inline-flex; align-items: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-8); font: var(--ds-text-label-lg); color: var(--ds-color-text-inverse); }
-.bulk button:hover { background: var(--ds-color-neutral-light-11); }
-.bulk button:focus-visible { outline-color: var(--ds-color-accent-light-7); outline-offset: -2px; }
-.bulk .x { width: 32px; justify-content: center; padding: 0; }
-
-/* ---------- state cards ---------- */
-.states3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-20); }
-.mini { display: flex; flex-direction: column; }
-.mini .mh { height: 28px; display: flex; align-items: center; padding: 0 var(--ds-space-12); background: var(--ds-color-surface-base); border-bottom: 1px solid var(--rule-strong); gap: var(--ds-space-16); font: 600 var(--ds-font-size-12)/1 var(--ds-font-family-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-color-text-secondary); }
-.sk-row { height: 28px; display: flex; align-items: center; gap: var(--ds-space-12); padding: 0 var(--ds-space-12); border-bottom: 1px solid var(--rule); }
-.sk { height: 8px; background: linear-gradient(90deg, var(--ds-color-neutral-light-3) 0%, var(--ds-color-neutral-light-4) 40%, var(--ds-color-neutral-light-3) 80%); background-size: 300% 100%; animation: shimmer 1.4s linear infinite; }
-@keyframes shimmer { from { background-position: 100% 0; } to { background-position: -50% 0; } }
-.empty { flex: 1; display: flex; align-items: center; gap: var(--ds-space-16); padding: var(--ds-space-16) var(--ds-space-20); }
-.empty h4, .err h4 { margin: 0 0 var(--ds-space-4); font: var(--ds-text-title-sm); }
-.empty p, .err p { margin: 0 0 var(--ds-space-12); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); letter-spacing: var(--ds-text-body-sm-tracking); max-width: 220px; }
-.btn-sm { height: var(--ds-size-control-sm); padding: 0 var(--ds-space-8); font: var(--ds-text-label-lg); font-weight: 500; display: inline-flex; align-items: center; gap: var(--ds-space-6); }
-.err-bar { display: flex; align-items: flex-start; gap: var(--ds-space-8); padding: var(--ds-space-12); background: var(--ds-color-bg-danger-subtle); border-bottom: 1px solid var(--ds-color-border-danger); color: var(--ds-color-text-danger); }
-.err-bar h4 { color: var(--ds-color-text-danger); }
-.err-bar p { color: var(--ds-color-text-primary); margin-bottom: var(--ds-space-8); }
-.stale { background: repeating-linear-gradient(-45deg, transparent 0 6px, var(--ds-color-neutral-light-2) 6px 7px); }
-.stale .sk-row { gap: var(--ds-space-16); font: var(--ds-text-code-sm); color: var(--ds-color-text-tertiary); }
-
-/* ---------- right: states rail ---------- */
-.rail { display: flex; flex-direction: column; padding: var(--ds-space-20) var(--ds-space-16) var(--ds-space-16); gap: var(--ds-space-16); min-height: 0; }
-.grp h5 { margin: 0 0 var(--ds-space-8); display: flex; align-items: baseline; justify-content: space-between; font: 600 var(--ds-font-size-12)/1 var(--ds-font-family-display); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ds-color-text-primary); }
-.grp h5 span { font: var(--ds-text-code-sm); text-transform: none; letter-spacing: 0; color: var(--ds-color-text-tertiary); font-weight: 400; }
-.spec { display: grid; grid-template-columns: 76px 1fr; align-items: center; column-gap: var(--ds-space-12); }
-.spec + .spec { margin-top: var(--ds-space-2); }
-.lbl { font: var(--ds-text-code-sm); color: var(--ds-color-text-tertiary); }
-.hc-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--ds-space-4); }
-.hc { height: var(--row); display: flex; align-items: center; padding: 0 var(--ds-space-6); background: var(--ds-color-surface-base); border-bottom: 1px solid var(--rule-strong); font: 600 var(--ds-font-size-12)/1 var(--ds-font-family-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-color-text-secondary); }
-.hc .th-btn { margin: 0; }
-.hc-cap { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--ds-space-4); margin-top: var(--ds-space-4); }
-.hc-cap span { font: var(--ds-text-code-sm); color: var(--ds-color-text-tertiary); }
-.rowspec { height: var(--row); display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-8); border-bottom: 1px solid var(--rule); font: var(--ds-text-code-md); position: relative; }
-.rowspec.is-hover { background: var(--ds-color-surface-base); box-shadow: inset 2px 0 0 var(--ds-color-border-default); }
-.rowspec.is-sel { background: var(--ds-color-bg-accent-subtle); box-shadow: inset 3px 0 0 var(--ds-color-bg-brand); }
-.rowspec.is-focus { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: calc(var(--ds-focus-ring-width) * -1); }
-.rowspec.is-dis { color: var(--ds-color-text-disabled); background: repeating-linear-gradient(-45deg, transparent 0 6px, var(--ds-color-neutral-light-2) 6px 7px); }
-.rowspec .grow { flex: 1; }
-.chips { display: flex; flex-wrap: wrap; gap: var(--ds-space-6); }
-.cbs { display: flex; gap: var(--ds-space-16); align-items: flex-start; }
-.cbs figure { margin: 0; display: grid; justify-items: center; gap: var(--ds-space-6); }
-.cbs figcaption { font: var(--ds-text-code-sm); color: var(--ds-color-text-tertiary); }
-.lane-spec { padding: var(--ds-space-8) var(--ds-space-4) 0; }
-.lane.big { font: var(--ds-text-code-md); font-weight: 500; }
-.lane.big .track { height: 2px; }
-.ann { position: relative; height: 18px; margin-top: var(--ds-space-6); }
-.ann span { position: absolute; top: 0; font: var(--ds-text-code-sm); color: var(--ds-color-text-tertiary); padding-top: var(--ds-space-4); border-top: 1px solid var(--rule-strong); }
-.lane-vars { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-16); margin-top: var(--ds-space-8); }
-.lane-vars .lane { font: var(--ds-text-code-sm); }
-.dens { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-16); align-items: start; }
-.dcol { display: grid; gap: 0; }
-.drow { border-top: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--ds-space-8); border-bottom: 1px solid var(--rule); font: var(--ds-text-code-sm); }
-.dcol .lbl { margin-top: var(--ds-space-6); }
-.rules { margin-top: auto; border-top: 1px solid var(--rule-strong); padding-top: var(--ds-space-12); display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-8) var(--ds-space-12); }
-.rules div { font: var(--ds-text-code-sm); color: var(--ds-color-text-tertiary); }
-.rules b { display: block; font: 600 var(--ds-font-size-14)/1.3 var(--ds-font-family-display); color: var(--ds-color-text-primary); letter-spacing: 0.02em; }
-
-@media (prefers-reduced-motion: reduce) {
-  .sk { animation: none; }
-  *, *::before, *::after { transition-duration: 0ms !important; }
+/* ---------- docked selection bar ---------- */
+.dock { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--pad) 0 calc(var(--pad) + var(--ds-space-8)); background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); }
+.dock .btn.ink { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.dock .btn.ghost { background: transparent; border-color: transparent; color: var(--ds-color-neutral-dark-12); }
+.dock .btn.ghost .i { color: var(--ds-color-neutral-dark-11); }
+.dock .count small { color: var(--ds-color-neutral-dark-11); }
+.dock .cb.mixed { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); border-color: transparent; }
+.dock .count { display: flex; align-items: center; gap: var(--ds-space-12); font: var(--ds-text-label-lg); font-weight: 500; margin-right: var(--ds-space-16); }
+.dock .count small { font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); font-weight: 400; }
+.dock .end { margin-left: auto; display: flex; gap: var(--ds-space-8); }
+@media (hover: hover) and (pointer: fine) {
+  tbody tr:not(.group):hover td { background: var(--ds-color-surface-sunken); }
+  tbody tr:hover .rowact { visibility: visible; }
+  .btn:hover { background: var(--ds-color-surface-sunken); }
+  .btn.primary:hover { background: var(--ds-color-bg-action-primary-hover); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dock { transition: transform var(--ds-motion-transition-enter-duration) var(--ds-motion-transition-enter-easing); }
 }
 </style>
 </head>
 <body>
-<header class="sheet-head">
-  <div class="mark" aria-label="Tarrow Freight">
-    <div class="mark-glyph" aria-hidden="true"></div>
-    <div class="mark-word">Tarrow</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-mark" viewBox="0 0 24 24"><path d="M8 5.5 14.5 12 8 18.5M13 5.5l6.5 6.5-6.5 6.5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6.5 16.5V11a5.5 5.5 0 0 1 11 0v5.5l1.5 2H5z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4.5v11M7 10.5l5 5 5-5M5 19.5h14"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></symbol>
+  <symbol id="i-cols" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M9.5 5v14M14.5 5v14"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6.5 10.5 12 5l5.5 5.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5.5 12.5 4 4 9-9"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><circle cx="6" cy="12" r=".9"/><circle cx="12" cy="12" r=".9"/><circle cx="18" cy="12" r=".9"/></symbol>
+  <symbol id="i-ping" viewBox="0 0 24 24"><path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3"/><circle cx="12" cy="12" r="5.5"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14" rx="1.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5.5 21V4.5M5.5 4.5h11l-2 4 2 4h-11"/></symbol>
+</svg>
+
+<header class="top">
+  <a class="brand" href="#"><span class="mark"><svg class="i"><use href="#i-mark"/></svg></span>Tarrow</a>
+  <nav class="nav" aria-label="Main">
+    <a href="#" class="on" aria-current="page">Shipments</a>
+    <a href="#">Load board</a>
+    <a href="#">Carriers</a>
+    <a href="#">Lanes</a>
+    <a href="#">Docks</a>
+    <a href="#">Freight bills</a>
+  </nav>
+  <div class="right">
+    <label class="search"><svg class="i"><use href="#i-search"/></svg>Search PRO, BOL or shipment<kbd>⌘K</kbd></label>
+    <svg class="i" aria-label="Notifications"><use href="#i-bell"/></svg>
+    <span class="avatar" aria-label="Signed in as RM">RM</span>
   </div>
-  <div class="vr" aria-hidden="true"></div>
-  <nav class="crumbs" aria-label="Breadcrumb">Freight OS <span aria-hidden="true">/</span> Components <span aria-hidden="true">/</span> <b>Data table</b></nav>
-  <div class="sheet-meta">
-    <span class="meta"><i>row</i> 32 · body 14</span>
-    <span class="meta"><i>density</i> compact</span>
-    <span class="meta"><i>type</i> Plex Sans · Plex Mono</span>
-    <span class="meta"><i>radius</i> 0</span>
-  </div>
-  <div class="sheet-no" aria-hidden="true">06<span>/</span></div>
 </header>
 
-<main class="stage">
-  <div class="left">
-    <!-- HERO -->
-    <section class="card hero" aria-labelledby="t-title">
-      <span class="cap"><b>Hero</b> · 3 rows selected · sorted by ETA ↑ · 2 filters</span>
-      <div class="t-head">
-        <h1 class="t-title" id="t-title">Shipments</h1>
-        <span class="t-count">1,284</span>
-        <div class="tabs" role="tablist" aria-label="Views">
-          <button class="tab" role="tab" aria-selected="false">All</button>
-          <button class="tab" role="tab" aria-selected="true">In transit <span class="n">412</span></button>
-          <button class="tab" role="tab" aria-selected="false">Exceptions <span class="n hot">23</span></button>
-          <button class="tab" role="tab" aria-selected="false">Delivered</button>
-        </div>
-        <div class="t-actions">
-          <button class="btn btn-2"><svg class="i" viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10"/></svg>Export</button>
-          <button class="btn btn-1"><svg class="i" viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></svg>New booking</button>
-        </div>
-      </div>
-      <div class="toolbar">
-        <label class="search"><svg class="i" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg><input id="q" type="search" placeholder="Search ID or lane" aria-label="Search shipments"><span class="kbd" aria-hidden="true">/</span></label>
-        <span class="chip-f" data-f="status"><span class="k">Status</span><span class="op">is any of</span><span class="v">In transit, Delayed <span style="color:var(--ds-color-text-tertiary);font-weight:400">+1</span></span><button class="x" aria-label="Remove status filter"><svg class="i" viewBox="0 0 16 16" style="width:12px;height:12px"><path d="m4 4 8 8M12 4l-8 8"/></svg></button></span>
-        <span class="chip-f" data-f="mode"><span class="k">Mode</span><span class="op">is not</span><span class="v">Air</span><button class="x" aria-label="Remove mode filter"><svg class="i" viewBox="0 0 16 16" style="width:12px;height:12px"><path d="m4 4 8 8M12 4l-8 8"/></svg></button></span>
-        <button class="add-f"><svg class="i" viewBox="0 0 16 16" style="width:12px;height:12px"><path d="M8 3v10M3 8h10"/></svg>Filter</button>
-        <div class="tb-right">
-          <button class="ghost"><svg class="i" viewBox="0 0 16 16"><path d="M2.5 3h11M2.5 8h11M2.5 13h11M6 3v10M10 3v10"/></svg>Columns</button>
-          <div class="seg" role="group" aria-label="Row density">
-            <button aria-pressed="true" aria-label="Compact rows"><svg class="i" viewBox="0 0 16 16"><path d="M2.5 3.5h11M2.5 6.5h11M2.5 9.5h11M2.5 12.5h11"/></svg></button>
-            <button aria-pressed="false" aria-label="Comfortable rows"><svg class="i" viewBox="0 0 16 16"><path d="M2.5 4h11M2.5 8h11M2.5 12h11"/></svg></button>
-          </div>
-        </div>
-      </div>
-      <div class="grid-wrap">
-        <table id="grid" role="grid" aria-label="Shipments" aria-multiselectable="true">
-          <colgroup><col style="width:40px"><col style="width:142px"><col><col style="width:158px"><col style="width:80px"><col style="width:150px"><col style="width:108px"><col style="width:112px"><col style="width:36px"></colgroup>
-          <thead><tr>
-            <th class="sel"><input type="checkbox" class="cb" id="all" aria-label="Select all shipments"></th>
-            <th data-k="id"><button class="th-btn">Shipment<svg class="ar i" viewBox="0 0 10 10"><path d="M5 8V2M2 5l3-3 3 3"/></svg></button></th>
-            <th data-k="lane"><button class="th-btn">Lane<svg class="ar i" viewBox="0 0 10 10"><path d="M5 8V2M2 5l3-3 3 3"/></svg></button></th>
-            <th data-k="carrier"><button class="th-btn">Carrier<svg class="ar i" viewBox="0 0 10 10"><path d="M5 8V2M2 5l3-3 3 3"/></svg></button></th>
-            <th>Mode</th>
-            <th data-k="eta" aria-sort="ascending"><button class="th-btn">ETA<svg class="ar i" viewBox="0 0 10 10"><path d="M5 8V2M2 5l3-3 3 3"/></svg></button></th>
-            <th class="num" data-k="wt"><button class="th-btn">Weight<svg class="ar i" viewBox="0 0 10 10"><path d="M5 8V2M2 5l3-3 3 3"/></svg></button></th>
-            <th data-k="st"><button class="th-btn">Status<svg class="ar i" viewBox="0 0 10 10"><path d="M5 8V2M2 5l3-3 3 3"/></svg></button></th>
-            <th><span class="visually-hidden" style="position:absolute;clip:rect(0 0 0 0)">Actions</span></th>
-          </tr></thead>
-          <tbody id="rows"></tbody>
-        </table>
-      </div>
-      <div class="bulk" id="bulk" role="toolbar" aria-label="Bulk actions">
-        <span class="cnt"><b id="selN">3</b> selected</span>
-        <button><svg class="i" viewBox="0 0 16 16"><path d="M2 5h9l-2.5-2.5M14 11H5l2.5 2.5"/></svg>Reassign carrier</button>
-        <button><svg class="i" viewBox="0 0 16 16"><path d="M5 3v10M11 3v10"/></svg>Hold</button>
-        <button><svg class="i" viewBox="0 0 16 16"><path d="M3 2.5h7l3 3v8H3z"/><path d="M5.5 8.5h5M5.5 11h3"/></svg>Print BOL</button>
-        <button class="x" id="clearSel" aria-label="Clear selection"><svg class="i" viewBox="0 0 16 16"><path d="m4 4 8 8M12 4l-8 8"/></svg></button>
-      </div>
-      <div class="t-foot">
-        <span><b style="color:var(--ds-color-text-primary);font-weight:600" id="shown">1–10</b> of 412 · updated 14:06</span>
-        <div class="pager" aria-label="Pages">
-          <button aria-label="Previous page"><svg class="i" viewBox="0 0 16 16"><path d="M10 3 5 8l5 5"/></svg></button>
-          <button aria-current="page">1</button><button>2</button><button>3</button><button aria-hidden="true" tabindex="-1">…</button><button>35</button>
-          <button aria-label="Next page"><svg class="i" viewBox="0 0 16 16"><path d="m6 3 5 5-5 5"/></svg></button>
-        </div>
-      </div>
-    </section>
-
-    <!-- LOADING / EMPTY / ERROR -->
-    <div class="states3">
-      <section class="card mini" aria-label="Loading state">
-        <span class="cap"><b>Loading</b> · skeleton, first load &gt; 1s</span>
-        <div class="mh"><span>Shipment</span><span>Lane</span><span style="margin-left:auto">Status</span></div>
-        <div class="sk-row"><span class="sk" style="width:72px"></span><span class="sk" style="width:110px"></span><span class="sk" style="width:48px;margin-left:auto"></span></div>
-        <div class="sk-row"><span class="sk" style="width:64px"></span><span class="sk" style="width:90px"></span><span class="sk" style="width:56px;margin-left:auto"></span></div>
-        <div class="sk-row"><span class="sk" style="width:76px"></span><span class="sk" style="width:120px"></span><span class="sk" style="width:44px;margin-left:auto"></span></div>
-        <div class="sk-row"><span class="sk" style="width:60px"></span><span class="sk" style="width:100px"></span><span class="sk" style="width:52px;margin-left:auto"></span></div>
-        <div class="sk-row" style="border:0"><span class="sk" style="width:70px"></span><span class="sk" style="width:84px"></span><span class="sk" style="width:48px;margin-left:auto"></span></div>
-      </section>
-      <section class="card mini" aria-label="Empty state">
-        <span class="cap"><b>Empty</b> · no results for filters</span>
-        <div class="empty">
-          <svg width="104" height="88" viewBox="0 0 104 88" aria-hidden="true">
-            <g fill="none" stroke-width="1.5">
-              <path d="M6 78h76" stroke="var(--ds-color-neutral-light-7)"/>
-              <path d="M10 56h44v22H10z" fill="var(--ds-color-neutral-light-2)" stroke="var(--ds-color-neutral-light-8)"/>
-              <path d="M17 60v14M24 60v14M31 60v14M38 60v14M45 60v14" stroke="var(--ds-color-neutral-light-7)"/>
-              <path d="M32 32h44v22H32z" stroke="var(--ds-color-neutral-light-8)" stroke-dasharray="4 3"/>
-              <circle cx="72" cy="34" r="13" fill="var(--ds-color-surface-raised)" stroke="var(--ds-color-text-primary)" stroke-width="2"/>
-              <path d="m81.5 43.5 10 10" stroke="var(--ds-color-text-primary)" stroke-width="3" stroke-linecap="square"/>
-              <path d="m67.5 29.5 9 9M76.5 29.5l-9 9" stroke="var(--ds-color-bg-brand)" stroke-width="2"/>
-            </g>
-          </svg>
-          <div>
-            <h4>No shipments match</h4>
-            <p>Nothing is in transit by Air with these statuses. Try removing a filter.</p>
-            <button class="btn-sm btn-2" style="border:1px solid var(--ds-color-border-default)">Clear 2 filters</button>
-          </div>
-        </div>
-      </section>
-      <section class="card mini" aria-label="Error state">
-        <span class="cap"><b>Error</b> · refresh failed, data kept</span>
-        <div class="err-bar err" role="alert">
-          <svg class="i" viewBox="0 0 16 16" style="margin-top:2px"><path d="M8 2 14.5 13.5h-13z"/><path d="M8 6.5v3.5M8 11.5v.5"/></svg>
-          <div>
-            <h4>Couldn't refresh shipments</h4>
-            <p>Showing data from 14:02. The carrier feed timed out.</p>
-            <button class="btn-sm btn-2" style="border:1px solid var(--ds-color-border-danger)"><svg class="i" viewBox="0 0 16 16"><path d="M13 8a5 5 0 1 1-1.5-3.5M13 2.5v3h-3"/></svg>Retry now</button>
-          </div>
-        </div>
-        <div class="stale" aria-hidden="true">
-          <div class="sk-row"><span>TRW-48213</span><span>CHI → LAX</span><span style="margin-left:auto">In transit</span></div>
-          <div class="sk-row" style="border:0"><span>TRW-48190</span><span>ATL → DFW</span><span style="margin-left:auto">Delayed</span></div>
-        </div>
-      </section>
-    </div>
+<div class="head">
+  <h1>Shipments</h1>
+  <div class="acts">
+    <button class="btn"><svg class="i"><use href="#i-down"/></svg>Export</button>
+    <button class="btn"><svg class="i"><use href="#i-plus"/></svg>New booking</button>
   </div>
+</div>
 
-  <!-- STATES RAIL -->
-  <aside class="card rail" aria-label="States and variants">
-    <span class="cap"><b>States</b> · anatomy</span>
+<div class="tabs" role="tablist">
+  <div class="tab" role="tab">All<span class="n">1,284</span></div>
+  <div class="tab" role="tab">Booked<span class="n">96</span></div>
+  <div class="tab on" role="tab" aria-selected="true">In transit<span class="n">412</span></div>
+  <div class="tab" role="tab">Delivered<span class="n">776</span></div>
+  <div class="tab" role="tab" style="margin-left:auto">Exceptions<span class="n">23</span></div>
+</div>
 
-    <div class="grp">
-      <h5>Header cell <span>12/600 caps, +0.08em</span></h5>
-      <div class="hc-row" aria-hidden="true">
-        <div class="hc"><span class="th-btn">ETA<svg class="ar i" viewBox="0 0 10 10"><path d="M5 8V2M2 5l3-3 3 3"/></svg></span></div>
-        <div class="hc"><span class="th-btn is-hover">ETA<svg class="ar i" viewBox="0 0 10 10"><path d="M5 8V2M2 5l3-3 3 3"/></svg></span></div>
-        <div class="hc"><span class="th-btn is-sorted">ETA<svg class="ar i" viewBox="0 0 10 10"><path d="M5 8V2M2 5l3-3 3 3"/></svg></span></div>
-        <div class="hc"><span class="th-btn is-focus">ETA<svg class="ar i" viewBox="0 0 10 10"><path d="M5 8V2M2 5l3-3 3 3"/></svg></span></div>
-      </div>
-      <div class="hc-cap"><span>default</span><span>hover</span><span>sorted ↑</span><span>focus</span></div>
-    </div>
+<div class="tools">
+  <span class="chip"><span class="k">ETA</span><span>Next 24 hours</span><button class="x" aria-label="Remove ETA filter"><svg class="i"><use href="#i-x"/></svg></button></span>
+  <span class="chip"><span class="k">Mode</span><span class="op" style="color:var(--ds-color-text-tertiary);padding-right:0">is not</span><span>Air</span><button class="x" aria-label="Remove mode filter"><svg class="i"><use href="#i-x"/></svg></button></span>
+  <button class="chip add"><svg class="i"><use href="#i-plus"/></svg>Filter</button>
+  <button class="btn ghost" style="margin-left:auto"><svg class="i"><use href="#i-cols"/></svg>Columns</button>
+</div>
 
-    <div class="grp">
-      <h5>Row <span>32px · 1px rule</span></h5>
-      <div class="spec"><span class="lbl">default</span><div class="rowspec"><input type="checkbox" class="cb" tabindex="-1" aria-hidden="true"><span>TRW-48213</span><span class="grow"></span><span class="st transit">In transit</span></div></div>
-      <div class="spec"><span class="lbl">hover</span><div class="rowspec is-hover"><input type="checkbox" class="cb" tabindex="-1" aria-hidden="true"><span>TRW-48213</span><span class="grow"></span><span class="st transit">In transit</span></div></div>
-      <div class="spec"><span class="lbl">selected</span><div class="rowspec is-sel"><span class="cb is-checked"></span><span>TRW-48213</span><span class="grow"></span><span class="st transit">In transit</span></div></div>
-      <div class="spec"><span class="lbl">focus</span><div class="rowspec is-focus"><input type="checkbox" class="cb" tabindex="-1" aria-hidden="true"><span>TRW-48213</span><span class="grow"></span><span class="st transit">In transit</span></div></div>
-      <div class="spec"><span class="lbl">archived</span><div class="rowspec is-dis"><span class="cb is-disabled"></span><span>TRW-47002</span><span class="grow"></span><span class="st done" style="opacity:.6">Delivered</span></div></div>
-    </div>
+<div class="wrap">
+  <table>
+    <colgroup>
+      <col style="width:32px"><col style="width:112px"><col style="width:216px"><col style="width:208px"><col style="width:148px">
+      <col style="width:104px"><col style="width:132px"><col style="width:112px"><col style="width:104px"><col><col style="width:40px">
+    </colgroup>
+    <thead><tr>
+      <th><span class="cb mixed" role="checkbox" aria-checked="mixed" aria-label="Select all"><svg class="i"><use href="#i-minus"/></svg></span></th>
+      <th>Shipment</th><th>Lane</th><th>Last ping</th><th>Carrier</th><th>Mode</th>
+      <th>Appointment, CDT</th>
+      <th class="sorted">ETA, CDT<svg class="i"><use href="#i-up"/></svg></th>
+      <th class="r">Weight</th><th>Status</th><th></th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</div>
 
-    <div class="grp">
-      <h5>Status <span>icon + text, never color alone</span></h5>
-      <div class="chips">
-        <span class="st booked">Booked</span><span class="st dock">At dock</span><span class="st transit">In transit</span><span class="st late">Delayed</span><span class="st exc">Exception</span><span class="st done">Delivered</span>
-      </div>
-    </div>
-
-    <div class="grp">
-      <h5>Select <span>16px box · 24px hit</span></h5>
-      <div class="cbs">
-        <figure><span class="cb"></span><figcaption>off</figcaption></figure>
-        <figure><span class="cb is-checked"></span><figcaption>on</figcaption></figure>
-        <figure><span class="cb is-mixed"></span><figcaption>mixed</figcaption></figure>
-        <figure><span class="cb is-checked is-focus"></span><figcaption>focus</figcaption></figure>
-        <figure><span class="cb is-disabled"></span><figcaption>disabled</figcaption></figure>
-      </div>
-    </div>
-
-    <div class="grp">
-      <h5>Lane cell <span>progress = miles run / total</span></h5>
-      <div class="lane-spec" aria-hidden="true">
-        <div class="lane big"><span>CHI</span><span class="track"><span class="done" style="width:62%"></span><span class="dot" style="left:62%"></span></span><span class="to">LAX</span></div>
-        <div class="ann"><span style="left:0">origin</span><span style="left:58%">truck · 62%</span><span style="right:0">dest</span></div>
-      </div>
-      <div class="lane-vars" aria-hidden="true">
-        <div><div class="lane"><span>ATL</span><span class="track"><span class="done" style="width:48%"></span><span class="dot" style="left:48%;border-color:var(--ds-color-warning-light-9)"></span></span><span class="to">DFW</span></div><span class="lbl">late, amber</span></div>
-        <div><div class="lane"><span>NWK</span><span class="track"><span class="done" style="width:30%"></span><span class="dot" style="left:30%;border-color:var(--ds-color-text-danger)"></span></span><span class="to">BOS</span></div><span class="lbl">exception, red</span></div>
-      </div>
-    </div>
-
-    <div class="grp">
-      <h5>Density <span>row = size.control.md / lg</span></h5>
-      <div class="dens" aria-hidden="true">
-        <div class="dcol"><div class="drow" style="height:var(--ds-size-control-md)"><span>48213</span><span>14:20</span></div><span class="lbl">compact · 32</span></div>
-        <div class="dcol"><div class="drow" style="height:var(--ds-size-control-lg)"><span>48213</span><span>14:20</span></div><span class="lbl">comfortable · 40</span></div>
-      </div>
-    </div>
-
-    <div class="rules">
-      <div><b>Tabular figures</b>numbers right-aligned</div>
-      <div><b>↑ ↓ · Space · ⇧</b>move, select, range</div>
-    </div>
-  </aside>
-</main>
+<div class="dock" role="toolbar" aria-label="2 shipments selected">
+  <span class="count"><span class="cb mixed" aria-hidden="true"><svg class="i"><use href="#i-minus"/></svg></span>2 selected<small>TRW-48207, TRW-48190</small></span>
+  <button class="btn ink"><svg class="i"><use href="#i-ping"/></svg>Request ETA update</button>
+  <button class="btn ghost"><svg class="i"><use href="#i-cal"/></svg>Reschedule delivery</button>
+  <button class="btn ghost"><svg class="i"><use href="#i-flag"/></svg>Escalate to carrier</button>
+  <div class="end"><button class="btn ghost">Clear selection</button></div>
+</div>
 
 <script>
-const DATA = [
-  { id: "TRW-48213", sfx: "CH", o: "CHI", d: "LAX", p: 0.62, c: "Northvale Haul", cc: "NV", m: "FTL", day: "Oct 16", t: "14:20", eta: 1, dl: "", wt: 18420, st: "transit" },
-  { id: "TRW-48190", sfx: "AT", o: "ATL", d: "DFW", p: 0.48, c: "Brisk Line", cc: "BL", m: "LTL", day: "Oct 16", t: "16:05", eta: 2, dl: "+3h", wt: 6210, st: "late" },
-  { id: "TRW-48177", sfx: "SE", o: "SEA", d: "DEN", p: 0.81, c: "Corrin Rail", cc: "CR", m: "RAIL", day: "Oct 16", t: "18:40", eta: 3, dl: "", wt: 41900, st: "transit" },
-  { id: "TRW-48161", sfx: "NW", o: "NWK", d: "BOS", p: 0.3, c: "Ostrel Freight", cc: "OF", m: "LTL", day: "Oct 16", t: "21:15", eta: 4, dl: "+5h", wt: 3880, st: "exc" },
-  { id: "TRW-48158", sfx: "ME", o: "MEM", d: "PHX", p: 0.55, c: "Northvale Haul", cc: "NV", m: "FTL", day: "Oct 17", t: "06:30", eta: 5, dl: "", wt: 22140, st: "transit" },
-  { id: "TRW-48144", sfx: "SV", o: "SAV", d: "CLT", p: 0.92, c: "Pellam Carriers", cc: "PC", m: "FTL", day: "Oct 17", t: "08:10", eta: 6, dl: "−40m", wt: 15600, st: "transit" },
-  { id: "TRW-48139", sfx: "KC", o: "MCI", d: "MSP", p: 0.12, c: "Brisk Line", cc: "BL", m: "LTL", day: "Oct 17", t: "09:55", eta: 7, dl: "", wt: 2475, st: "dock" },
-  { id: "TRW-48126", sfx: "OA", o: "OAK", d: "SLC", p: 0.4, c: "Corrin Rail", cc: "CR", m: "RAIL", day: "Oct 17", t: "13:00", eta: 8, dl: "+1h", wt: 38250, st: "late" },
-  { id: "TRW-48118", sfx: "HO", o: "IAH", d: "MSY", p: 0.7, c: "Ostrel Freight", cc: "OF", m: "FTL", day: "Oct 17", t: "15:45", eta: 9, dl: "", wt: 19730, st: "transit" },
-  { id: "TRW-48102", sfx: "DE", o: "DTW", d: "PIT", p: 0.05, c: "Pellam Carriers", cc: "PC", m: "LTL", day: "Oct 18", t: "07:20", eta: 10, dl: "", wt: 4105, st: "booked" },
-  { id: "TRW-48097", sfx: "PO", o: "PDX", d: "BOI", p: 0.66, c: "Northvale Haul", cc: "NV", m: "FTL", day: "Oct 18", t: "10:35", eta: 11, dl: "", wt: 20880, st: "transit" },
-  { id: "TRW-48083", sfx: "CL", o: "CLE", d: "IND", p: 0.88, c: "Brisk Line", cc: "BL", m: "LTL", day: "Oct 18", t: "12:50", eta: 12, dl: "", wt: 5320, st: "transit" },
+// Each row: id, from, to, last ping place, ping time, carrier, mode, ETA, appointment window [start, end], weight lb, status, flag.
+// Times are CDT; "now" is Thu 15 Oct 2026, 14:06. Every ping is before now. Hours past 24 are Friday (25:30 = Fri 01:30).
+const G = [
+  ["Today", "Thu 15 Oct", 11, [
+    ["TRW-48244","Dallas","Houston","Houston, TX","14:01","Pellam Carriers","LTL","15:10",[15,17],3120,"ofd"],
+    ["TRW-48231","Los Angeles","Phoenix","Buckeye, AZ","13:58","Brennock Haul","FTL","15:25",[15,16],21300,"ok"],
+    ["TRW-48252","Memphis","Birmingham","Jasper, AL","14:03","Brennock Haul","FTL","15:45",[15.5,16.5],17880,"ok"],
+    ["TRW-48207","Newark","Boston","Hartford, CT","13:47","Brisk Line","FTL","16:15",[14,15.25],18420,"late","sel","+1h"],
+    ["TRW-48219","Houston","New Orleans","Lafayette, LA","13:55","Brisk Line","FTL","16:30",[16,18],19730,"ok"],
+    ["TRW-48256","Savannah","Charlotte","Orangeburg, SC","14:00","Pellam Carriers","FTL","17:05",[17,18],15600,"ok"],
+    ["TRW-48198","Chicago","Indianapolis","Indianapolis terminal","09:12","Ostrel Freight","LTL","17:20",[16,19],2475,"terminal"],
+    ["TRW-48233","Kansas City","St. Louis","Higginsville, MO","13:59","Brennock Haul","FTL","18:30",[18,20],22140,"ok"],
+    ["TRW-48190","Atlanta","Dallas","Monroe, LA","13:50","Brisk Line","FTL","19:05",[15,16],26210,"late","sel","+3h"],
+    ["TRW-48174","Seattle","Denver","Cheyenne, WY","13:30","Corrin Rail","Intermodal","22:40",[22,24],41900,"ok"],
+    ["TRW-48126","Oakland","Salt Lake City","Wendover, UT","13:41","Corrin Rail","Intermodal","23:30",[21.5,22.5],38250,"late","","+1h"],
+  ]],
+  ["Tomorrow", "Fri 16 Oct", 15, [
+    ["TRW-48203","Chicago","Denver","Kearney, NE","13:57","Brennock Haul","FTL","06:20",[30,32],20560,"ok"],
+    ["TRW-48261","Detroit","Pittsburgh","Detroit terminal","13:40","Pellam Carriers","LTL","08:30",[32,36],4105,"terminal"],
+    ["TRW-48168","Memphis","Phoenix","Albuquerque, NM","13:44","Brennock Haul","FTL","09:20",[33,34],22880,"ok"],
+    ["TRW-48249","Kansas City","Minneapolis","Des Moines terminal","13:20","Ostrel Freight","LTL","09:40",[33,37],1860,"terminal"],
+    ["TRW-48240","Atlanta","Miami","Cordele, GA","13:58","Pellam Carriers","FTL","10:15",[34,35],14220,"ok"],
+    ["TRW-48226","Denver","Albuquerque","Pueblo, CO","13:10","Corrin Rail","Intermodal","11:50",[35,37],36400,"ok"],
+  ]],
 ];
-const ST = { transit: "In transit", late: "Delayed", exc: "Exception", dock: "At dock", booked: "Booked", done: "Delivered" };
-const ORDER = { booked: 0, dock: 1, transit: 2, late: 3, exc: 4, done: 5 };
-const MODE_ICON = {
-  FTL: '<path d="M1.5 4.5h8v6h-8zM9.5 6.5h3l2 2v2h-5"/><circle cx="4" cy="11.5" r="1.2"/><circle cx="11.5" cy="11.5" r="1.2"/>',
-  LTL: '<path d="M2 5.5h12v5H2zM6 5.5v5M10 5.5v5"/><circle cx="4" cy="12" r="1"/><circle cx="12" cy="12" r="1"/>',
-  RAIL: '<path d="M4 2.5h8v8H4zM4 7.5h8M6 13.5l-1.5 1.5M10 13.5l1.5 1.5"/><circle cx="6" cy="9.3" r=".6"/><circle cx="10" cy="9.3" r=".6"/>',
-};
-let selected = new Set(["TRW-48190", "TRW-48161", "TRW-48126"]);
-let sortKey = "eta", sortDir = 1, query = "";
-const rowsEl = document.getElementById("rows");
-function fmtWt(n) { return n.toLocaleString("en-US"); }
-function render() {
-  let rows = DATA.slice(0, 10).filter(r => !query || (r.id + r.o + r.d + r.c + ST[r.st]).toLowerCase().includes(query));
-  rows.sort((a, b) => {
-    const va = sortKey === "st" ? ORDER[a.st] : sortKey === "lane" ? a.o : sortKey === "carrier" ? a.c : sortKey === "wt" ? a.wt : sortKey === "id" ? a.id : a.eta;
-    const vb = sortKey === "st" ? ORDER[b.st] : sortKey === "lane" ? b.o : sortKey === "carrier" ? b.c : sortKey === "wt" ? b.wt : sortKey === "id" ? b.id : b.eta;
-    return (va > vb ? 1 : va < vb ? -1 : 0) * sortDir;
-  });
-  rowsEl.innerHTML = rows.map((r, i) => {
-    const sel = selected.has(r.id);
-    const cls = r.st === "late" ? "late" : r.st === "exc" ? "exc" : "";
-    const dl = r.dl ? `<span class="delta ${r.dl.startsWith("+") ? "late" : "early"}">${r.dl}</span>` : "";
-    return `<tr tabindex="${i === 0 ? 0 : -1}" aria-selected="${sel}" data-id="${r.id}" class="${cls}">
-      <td class="sel"><input type="checkbox" class="cb" tabindex="-1" ${sel ? "checked" : ""} aria-label="Select ${r.id}"></td>
-      <td><span class="id">${r.id}<span>-${r.sfx}</span></span></td>
-      <td><div class="lane"><span>${r.o}</span><span class="track"><span class="done" style="width:${r.p * 100}%"></span><span class="dot" style="left:${r.p * 100}%"></span></span><span class="to">${r.d}</span></div></td>
-      <td><div class="carrier"><span class="c-badge" aria-hidden="true">${r.cc}</span>${r.c}</div></td>
-      <td><span class="mode"><svg class="i" viewBox="0 0 16 16" aria-hidden="true">${MODE_ICON[r.m]}</svg>${r.m}</span></td>
-      <td><div class="eta"><span class="d">${r.day}</span><span>${r.t}</span>${dl}</div></td>
-      <td class="num"><span class="wt">${fmtWt(r.wt)} <small>lb</small></span></td>
-      <td><span class="st ${r.st}">${ST[r.st]}</span></td>
-      <td><button class="kebab" tabindex="-1" aria-label="More actions for ${r.id}"><svg class="i" viewBox="0 0 16 16"><circle cx="8" cy="3.5" r=".8"/><circle cx="8" cy="8" r=".8"/><circle cx="8" cy="12.5" r=".8"/></svg></button></td>
+const ST = { ok: "On time", late: "Late", terminal: "At terminal", ofd: "Out for delivery" };
+const use = (id) => `<svg class="i"><use href="#${id}"/></svg>`;
+const hm = (h) => String(Math.floor(h % 24)).padStart(2, "0") + ":" + String(Math.round(h % 1 * 60)).padStart(2, "0");
+document.getElementById("rows").innerHTML = G.map(([day, date, n, rows]) =>
+  `<tr class="group"><td></td><td colspan="10">${day}, ${date}<span>${n} arriving</span></td></tr>` +
+  rows.map(([id, a, b, at, t, car, mode, eta, win, w, st, flag, d]) => {
+    const sel = flag === "sel";
+    return `<tr class="${flag || ""}">
+      <td><span class="cb${sel ? " on" : ""}" role="checkbox" aria-checked="${sel}" aria-label="Select ${id}">${sel ? use("i-check") : ""}</span></td>
+      <td class="id">${id}</td>
+      <td class="lane">${a}<span class="ar">→</span><span class="to">${b}</span></td>
+      <td class="ping">${at}<time>${t}</time></td>
+      <td>${car}</td>
+      <td class="mode">${mode}</td>
+      <td class="appt">${hm(win[0])}–${hm(win[1])}</td>
+      <td>${eta}${d ? `<span class="delta" title="past the appointment">${d}</span>` : ""}</td>
+      <td class="r">${w.toLocaleString("en-US")}<span class="unit">lb</span></td>
+      <td><span class="st ${st}">${ST[st]}</span></td>
+      <td><span class="rowact" aria-label="More actions">${use("i-more")}</span></td>
     </tr>`;
-  }).join("");
-  syncSel();
-}
-function syncSel() {
-  const all = document.getElementById("all");
-  const n = selected.size;
-  all.checked = n === 10; all.indeterminate = n > 0 && n < 10;
-  document.getElementById("selN").textContent = n;
-  document.getElementById("bulk").hidden = n === 0;
-}
-rowsEl.addEventListener("click", e => {
-  const tr = e.target.closest("tr"); if (!tr || e.target.closest(".kebab")) return;
-  toggle(tr.dataset.id);
-});
-function toggle(id) { selected.has(id) ? selected.delete(id) : selected.add(id); const tr = rowsEl.querySelector(`[data-id="${id}"]`); tr.setAttribute("aria-selected", selected.has(id)); tr.querySelector(".cb").checked = selected.has(id); syncSel(); }
-rowsEl.addEventListener("keydown", e => {
-  const tr = e.target.closest("tr"); if (!tr) return;
-  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-    e.preventDefault();
-    const next = e.key === "ArrowDown" ? tr.nextElementSibling : tr.previousElementSibling;
-    if (next) { tr.tabIndex = -1; next.tabIndex = 0; next.focus(); if (e.shiftKey) toggle(next.dataset.id); }
-  } else if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggle(tr.dataset.id); }
-});
-document.getElementById("all").addEventListener("change", e => { selected = e.target.checked ? new Set(DATA.slice(0, 10).map(r => r.id)) : new Set(); render(); });
-document.getElementById("clearSel").addEventListener("click", () => { selected.clear(); render(); });
-document.querySelectorAll("th[data-k] .th-btn").forEach(b => b.addEventListener("click", () => {
-  const th = b.closest("th"), k = th.dataset.k;
-  sortDir = sortKey === k ? -sortDir : 1; sortKey = k;
-  document.querySelectorAll("th[aria-sort]").forEach(t => t.removeAttribute("aria-sort"));
-  th.setAttribute("aria-sort", sortDir === 1 ? "ascending" : "descending");
-  render();
-}));
-document.getElementById("q").addEventListener("input", e => { query = e.target.value.trim().toLowerCase(); render(); });
-document.querySelectorAll(".chip-f .x").forEach(x => x.addEventListener("click", () => x.closest(".chip-f").remove()));
-document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => { document.querySelectorAll(".tab").forEach(o => o.setAttribute("aria-selected", o === t)); }));
-document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
-  document.querySelectorAll(".seg button").forEach(o => o.setAttribute("aria-pressed", o === b));
-  document.documentElement.style.setProperty("--row", b.getAttribute("aria-label").startsWith("Compact") ? "var(--ds-size-control-md)" : "var(--ds-size-control-lg)");
-}));
-document.addEventListener("keydown", e => { if (e.key === "/" && document.activeElement.tagName !== "INPUT") { e.preventDefault(); document.getElementById("q").focus(); } });
-render();
+  }).join("")).join("");
 </script>
 </body>
 </html>

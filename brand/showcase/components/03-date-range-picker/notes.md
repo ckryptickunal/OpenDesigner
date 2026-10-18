@@ -1,5 +1,7 @@
 # 03 · Date range picker (Wayfern)
 
+Gallery: Gridlark is a fictional solar-farm monitoring tool; the date range picker is open on its generation dashboard.
+
 ## Direction
 Wayfern is a fictional booking site for small cabins and guesthouses. The picker should feel like the start of a holiday: cream paper, terracotta, apricot, a low sun and rolling hills, soft round shapes, a wonky friendly serif. Every night shows its price, and the price colours the cell from cream (lower) to coral (higher), so cheap stretches jump out. A tiny fern marks the four best-priced nights. Feel words: **playful, warm, sunny**.
 
@@ -68,3 +70,27 @@ Interaction: each month is a `role="grid"` with roving tabindex; arrows move by 
 **Fresh-eyes audit:** 3, 3, then 4/5 ("premium and believable; every number checks out"); its last eight notes (gutter months on the wrong weeks, no way to see later weeks, the taken night not shown, the leave line wrapping, bottoms not aligned, an empty gap in the loading card, decorative icons, the missing name) were fixed. References: KAYAK price calendar https://mobbin.com/screens/cc893e37-8460-4521-a192-d32a1c15501d, GetYourGuide two-month picker https://mobbin.com/screens/98baebd4-f715-4323-b368-6ca68c5973a4, Airbnb listing and booking card https://mobbin.com/screens/c548900a-62e5-4988-9a2f-5b87890d8e35 (used as the thing not to copy).
 
 **Fresh score: 4.**
+
+## Round 4 (owner review, 2026-10-15)
+**What Kunal said** (relayed by the coordinator): "most of the web components look absolutely rubbish"; "None of them should feel like they are from a vibe coded app or a cheap Chinese app." The Wayfern booking calendar read as a consumer template: big type, an orange heat of prices, a receipt panel.
+
+**What changed:** new concept and brand. Gridlark is a fictional monitoring tool for a 14-site solar portfolio (72 MWac). The moment: the asset manager opens the date range picker on the Generation dashboard.
+- The picker: presets (Last 14 days chosen, today excluded), Start and End fields, two months with a continuous range band, the comparison period as a quiet grey band, future days disabled, the next-month arrow disabled, and one data mark: Oct 6–7 had partial telemetry from 2 of 14 sites. Compare toggle with "Previous period · Sep 17 – 30", Cancel, Apply.
+- The dashboard behind is real and adds up: daily energy sums to 4,812 MWh (previous 4,531, +6.2%), five of 14 sites listed with plausible October capacity factors (18–21%), WP-11 the site with the partial days.
+- Cobalt (#2B5BD7) has one job: the range being chosen and Apply. Greys are pure.
+- Engine: re-sketched as Gridlark (`--audience dense --feel calm,technical`), Inter as the one face, base size 14, expression 30, energy 30, roundness 40, depth 35, colorfulness 35, warmth 15. The brand stayed #2b5bd7 as typed.
+- Old extra frames (shot-leave, shot-loading, shot-taken) deleted: they showed the old design.
+
+**Type scale:** 12 (labels, legends), 14 (body, days), 18 (wordmark), 22 (H1, KPI values). Inter only.
+
+**Blind pairwise test** (opaque names, random sides, fresh judges), final version: Shopify https://mobbin.com/screens/bd05437f-c66e-4e9b-a780-b5ffaf8bd8e7 reference better by 2 ("stock blue", "no imagery or texture"); Mixpanel https://mobbin.com/screens/ae6d8404-51d9-443a-81c0-c484d228f7d9 ours better by 3; Klaviyo https://mobbin.com/screens/4ca7b81a-9cb8-497c-a728-e66ae0487f5e ours better by 3. 2 of 3 better; worst margin 2. The earlier left-aligned version scored the same pattern (Shopify -2, Mixpanel +3, Klaviyo +4).
+
+**Fresh-eyes audit: 4** (low end). Every fact checked out. Its notes were then fixed: the legend no longer says "14 complete days" next to the partial-data note; the preset has no extra checkmark and the End field no focus ring; the grid fills its column so fields, titles and arrows align; the picker moved right so "Energy delivered" and the chart stay in view; the compare dates live in the footer dropdown; future days lighter; times removed; the table says "Top 5 of 14 sites" and states each problem once.
+
+**Checks:** check_dates pass (weekdays come from Date objects); check_names 0 errors; preflight 0 errors; engine validate passes.
+
+### Round 4, last pass (2026-10-18): PRESENTATION.md and the round-4 audit row
+- **The idea, in one sentence:** an asset manager picks the last 30 days for the whole portfolio.
+- Held to `PRESENTATION.md` and the round-4 row ("two ranges, ten presets, two time fields, a legend and amber dots"): compare is off, so one range shows; seven presets; no legend, data dots, time fields or field icons. The range is now Last 30 days (Sep 15 – Oct 14), so it spans both months; selection and Apply are ink (a judge read the cobalt as stock framework blue), and cobalt stays in the logo. The popover is anchored to its trigger by script, its left edge on the line between two KPIs, so no label is cut mid-word.
+- Data re-derived for 30 days: 10,463 MWh, 20.2% of 72 MW × 720 h, late-September days above October's (seasonal), the five sites re-scaled; WP-11's note now says output was lost on Oct 6–7.
+- Final blind test: Shopify −2, Mixpanel +2, Klaviyo +3 (2 of 3 better, worst margin 2). Final fresh audit: **4**. Its last notes (lighter bars, the label cut, the band corners, the seasonal curve) were fixed afterwards.

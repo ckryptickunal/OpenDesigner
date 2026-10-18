@@ -50,3 +50,22 @@ Interaction: the dropzone is a focusable `role="button"` that opens a real file 
 5. **Display reach is hidden**: poster sizes on an operate surface need `overrides.type.displayReach`, which no question asks. Confusing.
 6. **11 px small size again** on an operate surface (same as 03).
 7. Helped: once the brand was set right, every on-colour text came out correct by itself (`text.on-action` and `text.on-accent2` dark on yellow and cyan, `text.on-accent3` white on magenta; the badges now use those tokens), and the `border.width.4` token was exactly the keyline weight.
+
+## Round 4 (owner review, 2026-10-15 to 2026-10-18)
+**What Kunal said:** in round 3 "okay-ish, you can keep it"; on 2026-10-15, via the coordinator, "most of the web components look absolutely rubbish". The round-4 audit gave this piece 4 and "rebuild": half the frame was a spec sheet (dropzone in four states, button states, tag chips "04 · FILE UPLOAD · NEO-BRUTAL · CMYK"), crop marks, a halftone corner, a CMYK strip, offset shadows, and an error said four ways. This section replaces the neo-brutal descriptions above.
+
+**The idea, in one sentence:** a print shop checks each artwork file against the order before it lets you send for a proof.
+
+**What changed**
+- One product moment: the "Upload artwork" dialog over order HY-4471 (500 business cards, 85 × 55 mm, 350 gsm silk, matt laminated, gold foil and spot UV on the front, $148.00 including foil), the order page behind under a light scrim and blur.
+- Four files, each said once: front ready (CMYK, 342 dpi, 3 mm bleed), back uploading (64%, 11.5 of 17.9 MB), the foil layer ready with the choice to print in CMYK instead (−$38.00), and a spot UV mask that fails because it has no bleed (85 × 55 mm; it must be 91 × 61 mm). The footer says what blocks "Send for proof". `shot-ready.png` is the same dialog a minute later: all four ready, the yellow go-ahead enabled.
+- Yellow (#FFE500) has one job: the go-ahead (and the logo). Removed: the spec sheet, the chips, crop marks, halftone corner, CMYK strip, offset shadows, the second face (JetBrains Mono was dropped; specs are Archivo with tabular figures). Coated profile (PSO Coated v3) to match the laminated stock, after an audit caught the uncoated profile and spot UV on uncoated board.
+- Engine: monoFace `ui-monospace` (unused), base size 14, Q-color-09 cool (the yellow-tinted greys read beige), expression 35, colorfulness 30, energy 30, warmth 15, roundness 42 (6 px controls), depth 40, density 60. Brand #FFE500 unchanged.
+
+**Type scale:** 12 (meta, tags), 14 (body, file names, buttons), 18 (dialog title), 27 (order title behind). Archivo only.
+
+**Blind pairwise test** (opaque names, random sides, fresh judges), final version: Whop bulk upload https://mobbin.com/screens/03fc821c-eec1-4278-bf97-8f8ac202d34c ours better by 2; AirOps https://mobbin.com/screens/3c80b45c-6d21-4bd7-9e60-41ab67ef25e5 ours better by 3; Lindy https://mobbin.com/screens/7dcd57a7-d2e9-4742-bb0f-9e7b364c139b ours better by 3. 3 of 3 better. (One intermediate version lost to Whop by 3: the page behind showed through unblurred and the controls were square; both fixed.)
+
+**Fresh-eyes audit:** 3, 3, then **4** twice ("everything round 4 flagged is gone"; "the print details are more specific than any of the three references"). Remaining notes, not fixed: the thumbnails are drawn glyphs rather than real tiny renders of the card; the blur turns the yellow logo into a soft disc; the folder name "upload-brutal" no longer describes the piece (kept, as the brief asks to rebuild in place).
+
+**Checks:** check_dates pass; check_names 0 errors; preflight 0 errors; engine validate passes (2 warnings: the yellow primary on white has low boundary contrast, advisory for a text-labelled button).

@@ -45,16 +45,16 @@
       "decision": "D-0018"
     },
     "roundness": {
-      "value": 10,
+      "value": 22,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0019"
+      "decision": "D-0027"
     },
     "depth": {
-      "value": 15,
+      "value": 30,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0020"
+      "decision": "D-0026"
     },
     "colorfulness": {
       "value": 30,
@@ -147,7 +147,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -521,7 +524,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "1e53931fafffd5ef",
+    "DESIGN.md": "f0a98fffae700fc9",
     "PRODUCT.md": "e58b488fb99600ce"
   },
   "exports": {
@@ -2623,5 +2626,7 @@
       "font.size.input": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

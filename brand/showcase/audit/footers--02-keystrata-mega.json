@@ -1,0 +1,72 @@
+{
+ "piece": "footers/02-keystrata-mega",
+ "title": "02 Keystrata: enterprise mega footer",
+ "pattern": "footer-mega",
+ "platform": "web",
+ "industry": "cloud security",
+ "style": [
+  "enterprise",
+  "swiss",
+  "minimal"
+ ],
+ "tags": [
+  "footer-mega",
+  "cloud security",
+  "enterprise",
+  "status",
+  "compliance",
+  "six columns",
+  "light",
+  "mono"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "The status console is a real idea: 90 days of uptime bars with a hover tooltip ('Sep 12 · API latency · 14 min'), '99.998% uptime', and four region latencies in mono",
+  "Six columns on a strict grid with numbered mono labels (01 PLATFORM ... 06 TRUST), hairline dividers, small tags where they inform ('14 open', 'v4.12')",
+  "'Found a vulnerability? security@keystrata.com PGP 4F2A 9C1E 77B0' and 'Do not sell my data' are the details a security buyer looks for"
+ ],
+ "slop_signals": [
+  "A hero-style headline with a bold phrase ('from commit to runtime.') and two buttons at the top of a footer; the hero template repeated at the bottom",
+  "Six certification chips with check marks in a row (SOC 2 Type II, ISO 27001, ISO 27701, HIPAA, GDPR, PCI DSS 4.0): a badge row, even if a real one",
+  "Numbered column labels ('01 PLATFORM') are a 'we are precise' affectation rather than a wayfinding aid"
+ ],
+ "fixes": [
+  "Replace the headline-and-buttons band with the wordmark, one line and one text link; the status console is the footer's pitch",
+  "Set the certifications as one mono line ('SOC 2 Type II · ISO 27001 · ...') linking to the trust center, or as small seals like Vanta's, not check-mark chips",
+  "Drop the 01-06 numbering; the labels work without it"
+ ],
+ "references": [
+  {
+   "site": "Vercel",
+   "url": "https://mobbin.com/sites/sections/82d7b249-da3b-4e9f-9b61-7f8f21dc94e3",
+   "what": "Six-plus columns on a strict grid, 'ALL SYSTEMS NORMAL' as a mono line, 'NEW' tags on links; the density without boxes we follow"
+  },
+  {
+   "site": "Stripe",
+   "url": "https://mobbin.com/sites/sections/bb332c54-0717-4314-9dd9-3361ccc1960a",
+   "what": "Dense columns, region and language at the bottom, no headline or buttons in the footer"
+  },
+  {
+   "site": "Vanta",
+   "url": "https://mobbin.com/sites/sections/15f32198-9410-4592-add8-a95d08db61ef",
+   "what": "Compliance shown as three round seals, not six chips; 'HIRING' tag on Careers"
+  },
+  {
+   "site": "Railway",
+   "url": "https://mobbin.com/sites/sections/59cdf49d-e039-4904-a90e-aebfb09a9771",
+   "what": "Status line in mono with compliance marks and two 'featured' cards; a calmer top band"
+  },
+  {
+   "site": "Midday",
+   "url": "https://mobbin.com/sites/sections/503872ca-2331-4a6f-8cc6-66889b8586f8",
+   "what": "'System status: Operational' as a plain line plus SOC 2 and GDPR marks; the minimum version of our console"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "okay",
+  "date": "2026-10-14"
+ }
+}

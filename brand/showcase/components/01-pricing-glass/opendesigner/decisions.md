@@ -791,3 +791,53 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0016 · source_ref: none
 - reason: round 3: the owner found the glass page weak; flat dark columns and one lit plan, no glass over art
 - previous value: 90
+
+## D-0032 · raw.displayFace = "=textFace"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0023 · source_ref: none
+- reason: round 4: one family (Geist); the film-title serif read as decoration
+- previous value: "Instrument Serif"
+
+## D-0033 · dials.expression = 45
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0017 · source_ref: none
+- reason: round 4: a pricing tool, not a poster; personality only in the amber and the estimator
+- previous value: 85
+
+## D-0034 · dials.colorfulness = 40
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0015 · source_ref: none
+- reason: round 4: one accent with one job (your usage)
+- previous value: 82
+
+## D-0035 · dials.energy = 35
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0021 · source_ref: none
+- reason: round 4: calm; motion only confirms
+- previous value: 55
+
+## D-0036 · dials.roundness = 45
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0019 · source_ref: none
+- reason: round 4: 6-8 px controls and 12 px cards, no pill toggle
+- previous value: 62
+
+## D-0037 · dials.warmth = 25
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0020 · source_ref: none
+- reason: round 4: cool graphite neutrals so the amber is the only warm thing
+- previous value: 62
+
+## D-0038 · dials.density = 60
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0018 · source_ref: none
+- reason: round 4: 14 px body like a product page; 16 px read oversized
+- previous value: 35
+
+## D-0039 · raw.baseSize = 14
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 4: a 14 px body like a product page; the 16 px body read oversized
+
+## D-0040 · raw.textFace = "Instrument Sans"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0022 · source_ref: none
+- reason: round 4: three audits read Geist on zinc as the stock dark template; Instrument Sans keeps the precision with more character
+- previous value: "Geist"
+
+## D-0041 · answers.Q-color-09 = "cool"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0026 · source_ref: none
+- reason: round 4: twilight blue-black greys (gloaming); amber is the last light
+- previous value: "cool"
+- also set: raw.neutralTint = "cool" (from Q-color-09)

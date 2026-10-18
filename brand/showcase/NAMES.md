@@ -681,11 +681,74 @@ The candidates above, one per row so `check_names.py` can read them:
 
 | Name | Kind | Piece |
 |---|---|---|
-| Saltmoor | brand (a cooking quarterly's app; replaces Larder, which is a live App Store recipe app, "Larder: Family Meal Planner"; web search found no food brand, app or magazine called Saltmoor) | app-screens/03-recipe-editorial |
+| Sorrelby | brand (a cooking quarterly's app; replaces Larder, which is a live App Store recipe app, "Larder: Family Meal Planner"; web search found no exact match, only the surname Sorby and Sorrelsykes House) | app-screens/03-recipe-editorial |
 | Hester Bryce | person (recipe byline; web search found no cook or food writer of that name) | app-screens/03-recipe-editorial |
 | Voss household | household (the account holder Eleanor Voss's family, already listed for this piece) | app-screens/01-private-banking |
 
-- **Rejected:** Potwell for `app-screens/03` (two letters from Ostwell, `styles/02`).
+- **Rejected:** Potwell for `app-screens/03` (two letters from Ostwell, `styles/02`) and Saltmoor (one letter from Saltmoore, a real North Yorkshire hotel with restaurants).
 - **No longer on any page:** Larder and Larder No. 14 (`app-screens/03`; the brand now appears only in the page title and the save button's label), and the "EV" avatar and "Halden Private" wordmark (`app-screens/01`; the nav now names the household). Kerri Leung (Unsplash, already listed) is still credited, now at the foot of the recipe.
 - **`app-screens/10`:** no new names. The antibiotic in the timeline is now levofloxacin (a real drug, not a name), and outreach is paged at 02:04 with the registrar.
 - **Still open:** `check_names.py` still reports Halden against Halde (`heroes/01`; kept on purpose, see above) and against "Halden Freight", whose registry row remains although the 2026-10-15 orchestrator block above records its rename to Ostrel Freight.
+| Kenji Morimoto | person (candidate) | components/05-toast-stack |
+| Wiktoria Zielińska | person (candidate) | components/05-toast-stack |
+| Abena Boakye | person (candidate; replaced "Esther Mensa", one letter from Mensah in styles/05) | components/05-toast-stack |
+| Raoul Lemaire | person (candidate; replaced "Raoul Vidal", near Tidal Commons in components/07) | components/05-toast-stack |
+| Pau Ferrando | person (candidate; replaced "Oriol Puig", near Oriel in components/07) | components/05-toast-stack |
+
+## Appended 2026-10-18: app-screens/09 round 4 rebuild (Quarry board replaced by the Soffit roadmap)
+Appended by the round 4 app-screens session (app-c). Each name was searched in `brand/showcase` (pages and NAMES.md) and for near-misses; the two brand names were searched on the web: no roadmap or planning product called Soffit and no grocer called Whinberry was found (Whinberry Gin, a UK gin, is in a different field). Purlin and Transom were also considered and dropped (Purlin is `heroes/11`; Transom is a public-radio site).
+
+| Name | Kind | Pieces |
+|---|---|---|
+| Soffit | brand (roadmap planner) | app-screens/09-project-workspace |
+| Whinberry | workspace (online grocer) | app-screens/09-project-workspace |
+| Martha Quayle | person (signed-in user; avatar MQ) | app-screens/09-project-workspace |
+| Ngozi Eze | person (project lead; avatar NE) | app-screens/09-project-workspace |
+| Depot 4 | place | app-screens/09-project-workspace |
+| Christmas slot booking, Checkout substitutions, Saved baskets, Search ranking v3, Depot 4 pick paths, Short-pick alerts, Cold-chain scan, Offline delivery proof, Age check at the door, Two-drop batching, Bag returns credit, Member prices, Vouchers at checkout, Refunds to wallet | projects (descriptive titles) | app-screens/09-project-workspace |
+| Storefront, Fulfilment, Driver app, Loyalty, Payments | teams | app-screens/09-project-workspace |
+
+- **No longer on any page (from `app-screens/09`):** Quarry, Kestrel, Field App, Billing v2, Partner portal, Mara Okafor, Offline sync, Route planner, Photo capture v2, Dispatcher map, Release 4.2, Cycle 14 and the FLD- issue ids, and the avatars MO, JT, AK and RS. Quarry now belongs to Quarry & Vale (`styles/09`) alone, and Kestrel to `components/07` and Kestrel Bay Hospitals (`heroes/10`); the "Okafor", "Mara" and "MO" overlaps listed under "Still shared between pieces" no longer involve `app-screens/09`.
+- **Avatar initials now in `app-screens/09`:** MQ (signed in), NE.
+- **Still open, outside this folder:** the gallery `index.html` and its `_thumbs` still show the Quarry title, caption and old shot for this piece until the gallery is rebuilt.
+
+## Appended 2026-10-18: app screens 02, 06 and 07, round 4 (owner review)
+
+| Name | Kind | Piece |
+|---|---|---|
+| Oona Prentice | person (the narrator; replaces Ines Calder) | app-screens/02-sleep-meditation |
+| Gus | other (a houseplant; replaces Monty) | app-screens/06-plant-care |
+
+- **No longer on the page:** Ines Calder (`app-screens/02`; "Calder" overlapped 41 Calder Street in `styles/03` and "Ines" overlapped Ines Valcourt in `app-screens/08`), and Monty, Pip and Sansa (`app-screens/06`). `mockups/01-phone-trio` embeds `app-screens/02/shot.png`, so its own `shot.png` still shows Ines Calder and the old orb until the mockup is re-rendered.
+- **Kept:** Lullwater, Low tide at Merrow Bay, Merrow Bay, Rain on the reed beds (`app-screens/02`); Loam (`app-screens/06`); Parlo (`app-screens/07`). "Wind Down" is a series name on the Lullwater page (not a brand). "Al bar" is an Italian lesson title, not a name.
+
+## Appended 2026-10-18: components round 4 (02, 07 to 10)
+
+07, 09 and 10 were rebuilt and 08 reworked after the owner's review of 2026-10-15; 02 kept its palette and gained its own app chrome. New names on the pages; each brand was web-searched:
+
+| Name | Kind | Pieces |
+|---|---|---|
+| Saltings estuary study | project | components/07-ai-composer |
+| Who may dredge the flats?, Keller’s three tests, Tide tables and the minutes, Fishers in the 1934 day book, Gaps in interview #0412 | titles (threads) | components/07-ai-composer |
+| Harbourmaster’s day book (1934), Harbour by-laws, 1929 | titles (sources) | components/07-ai-composer |
+| Second Week of March, Last Frost | titles (side B tracks; replace Thermostat Hymn and Lullaby for a Hatchery) | components/08-music-player |
+| Sedge | brand (payroll; web search found no payroll company of that name) | components/09-onboarding-stepper |
+| Spokewright Cycles, Spokewright Cycles LLC | customer (web search found no business of that name) | components/09-onboarding-stepper |
+| Ackwire | brand (on-call paging; web search found no product of that name) | components/10-settings-terminal |
+| Fernbank Grocery | workspace (web search found no business of that name) | components/10-settings-terminal |
+| Tomas | person (first name only; the signed-in engineer) | components/10-settings-terminal |
+| Bea Ashby | person (secondary on call) | components/10-settings-terminal |
+| checkout-svc, basket-api, picking-queue, delivery-slots, loyalty-points | services | components/10-settings-terminal |
+| Store 41, Store 12, Store 8 | places (numbered stores) | components/10-settings-terminal |
+| Low water, The salt pans, Wreck season, Lamps out | titles (chapters of The Salt Road) | components/02-command-palette |
+| Workshop comments, Shore lamp scene, revised | titles (notebook page, draft; the draft replaces Shipwreck scene, revised) | components/02-command-palette |
+
+- **No longer on any page (free again):**
+  - `components/07`: Wren, Heron and Kestrel (reading models), estuary-act, Harbour minutes.
+  - `components/08`: Moss Radio, Ondine Vale, Hollis Arcade, Tin Roof Weather, Cold Frame, Night Bus Hymns, CLMD-011 to CLMD-013, Thermostat Hymn, Lullaby for a Hatchery. The mockups that crop an older shot of this piece still show some of them until they are re-cropped.
+  - `components/09`: Mossby and its plant names.
+  - `components/10`: rackhound, Noa Brekke, train-a, train-b, infer, ft-0412, eval-88.
+  - `components/02`: Shipwreck scene, revised.
+- **Tried and dropped before shipping:** Wen Ashby (`components/10`; "Wen" is in `app-screens/09`), Godwit (`components/07`), Fisheries Act 1951 (`components/07`; could be a real law).
+- **False positives from `check_names.py`, checked by hand:** "Studio" in `components/08` is the word in "Studio speakers"; "Harb" in `components/07` is the typed query.
+- **Also a false positive:** "Christmas" in `components/09` is the bank holiday (Fri, Dec 25, 2026), not the `app-screens/09` title "Christmas slot booking".

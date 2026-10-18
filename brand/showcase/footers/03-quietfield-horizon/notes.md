@@ -48,3 +48,5 @@ python3 $E --dir .../03-quietfield-horizon/opendesigner sketch --name "Quietfiel
 2. A "read" surface silently caps display type at 38 px (feedback: confusing).
 3. No gradient token; secondary colours worked well as ramps (feedback: gap).
 - Helped: `raw.secondaryColors` plus `accentCount 3` made the three light colours real ramps with dark-mode steps, and `raw.darkBase "black"` was exactly the right switch.
+
+Replaced on 2026-10-14 by footers/09-b2b-platform after the Mobbin audit (score 2).

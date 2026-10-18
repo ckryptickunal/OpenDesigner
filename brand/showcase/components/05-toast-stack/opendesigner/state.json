@@ -4,14 +4,14 @@
   "engine_version": "1.0.0",
   "levers_version": "levers/1.0 2026-09-23",
   "mode": "standard",
-  "name": "Kinroom",
+  "name": "Panelwise",
   "summary": "",
   "context": {
     "product": "",
     "audience": "people who use it often, as an everyday app",
     "surfaces": [
       {
-        "name": "chat",
+        "name": "app",
         "mode": "Operate"
       }
     ],
@@ -26,64 +26,69 @@
   },
   "dials": {
     "expression": {
-      "value": 45,
+      "value": 35,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0011"
+      "decision": "D-0036"
     },
-    "brandPresence": null,
-    "density": {
-      "value": 50,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0012"
-    },
-    "energy": {
-      "value": 62,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0013"
-    },
-    "roundness": {
-      "value": 55,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0021"
-    },
-    "depth": {
-      "value": 45,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0022"
-    },
-    "colorfulness": {
-      "value": 55,
-      "set_by": "delegated",
-      "detached": true,
-      "decision": "D-0016"
-    },
-    "warmth": {
+    "brandPresence": {
       "value": 30,
       "set_by": "delegated",
       "detached": true,
-      "decision": "D-0017"
+      "decision": "D-0042"
+    },
+    "density": {
+      "value": 80,
+      "set_by": "delegated",
+      "detached": true,
+      "decision": "D-0025"
+    },
+    "energy": {
+      "value": 40,
+      "set_by": "delegated",
+      "detached": true,
+      "decision": "D-0037"
+    },
+    "roundness": {
+      "value": 50,
+      "set_by": "delegated",
+      "detached": true,
+      "decision": "D-0038"
+    },
+    "depth": {
+      "value": 50,
+      "set_by": "delegated",
+      "detached": true,
+      "decision": "D-0039"
+    },
+    "colorfulness": {
+      "value": 30,
+      "set_by": "delegated",
+      "detached": true,
+      "decision": "D-0040"
+    },
+    "warmth": {
+      "value": 20,
+      "set_by": "delegated",
+      "detached": true,
+      "decision": "D-0041"
     }
   },
   "preset": null,
   "macros": [
-    "friendly",
     "deferential",
-    "minimal"
+    "minimal",
+    "friendly"
   ],
   "raw": {
-    "brandColor": "#6f58d9",
+    "brandColor": "#1e8a5e",
     "primaryActionColor": null,
     "focusColor": null,
     "neutralBase": null,
     "contrastTarget": "AA",
     "textFace": "Figtree",
     "displayFace": "=textFace",
-    "baseSize": 16,
+    "baseSize": 14,
     "spaceUnit": 4,
     "platforms": [
       "web"
@@ -111,7 +116,7 @@
     "fontClass": null,
     "accentCount": null,
     "accentHarmony": "triadic",
-    "neutralTint": "brand",
+    "neutralTint": "cool",
     "chartPalette": null,
     "statusSet": "classic-4",
     "stateMethod": "hybrid",
@@ -351,9 +356,9 @@
   },
   "answers": {
     "Q-aud-01": {
-      "value": "regular",
+      "value": "dense",
       "set_by": "delegated",
-      "decision": "D-0002",
+      "decision": "D-0025",
       "via": "sketch",
       "locked": false
     },
@@ -362,30 +367,30 @@
         "web"
       ],
       "set_by": "delegated",
-      "decision": "D-0005",
+      "decision": "D-0028",
       "via": "sketch",
       "locked": false
     },
     "Q-theme-01": {
       "value": "system-light-dark",
       "set_by": "delegated",
-      "decision": "D-0008",
+      "decision": "D-0031",
       "via": "sketch",
       "locked": false
     },
     "Q-scope-06": {
       "value": [
-        "chat:operate"
+        "app:operate"
       ],
       "set_by": "delegated",
-      "decision": "D-0009",
+      "decision": "D-0032",
       "via": "sketch",
       "locked": false
     },
     "Q-color-09": {
-      "value": "hue-matched",
+      "value": "cool",
       "set_by": "delegated",
-      "decision": "D-0018",
+      "decision": "D-0043",
       "locked": false
     },
     "Q-type-08": {
@@ -535,14 +540,13 @@
   "references": {},
   "taste": {
     "feelWords": [
-      "soft",
       "calm",
       "friendly"
     ]
   },
   "hashes": {
-    "DESIGN.md": "e3c12758577d730c",
-    "PRODUCT.md": "84b36c5f7100c84f"
+    "DESIGN.md": "a42e8614cb000b29",
+    "PRODUCT.md": "aaa625fa568eebf3"
   },
   "exports": {
     "prefix": "ds",

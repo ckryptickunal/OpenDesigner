@@ -1,5 +1,7 @@
 # 10 · Vigil: ward vitals (tablet, 1180×820 @2x)
 
+Gallery: Wardlight is a fictional ward dashboard for the nurse in charge on a night shift, on an iPad at the nurses' station.
+
 ## Direction
 Vigil is a fictional ward dashboard for the nurse in charge on a night shift, used on an iPad at the nurses' station. The screen shows Ward 4B: a patient list sorted by early-warning score (NEWS2), the selected patient (bed 7, NEWS2 7, urgent review), an escalation banner with a response countdown, six vital-sign tiles with 2-hour traces against the usual range, and a 12-hour NEWS2 strip. Clinical clarity comes first. **Status never relies on color alone**: every state has a shape and a word (green circle with a check and "In range" or "Low", amber triangle and "Watch" or "Medium", red octagon and "Urgent" or "High"), plus the score as a number. Feel words: **trustworthy, clean, accessible**. All patients and staff are fictional.
 
@@ -81,3 +83,46 @@ Cool light greys, near-black ink and one teal for selection and the brand. The s
 **Checks:** `engine.py build` passes (1 warning: text sizes from the old formula steps). `preflight.py html`: no errors after the mono face was dropped. `check_dates.py --year 2026`: passes.
 
 **Outside this folder:** `mockups/07-tablet-clinic/index.html` still says "Vigil" (title, comment, alt text, caption) and shows this shot.png; it needs the new name and a re-render.
+
+## Round 4 (owner review, 2026-10-15)
+**What he said:** "needs a lot of work" (earlier), and about the app screens now: "None of them should feel like they are from a vibe coded app or a cheap Chinese app." AUDIT-ROUND4 scored the round 3 shot 4/10: caramel and beige boxes on every value, slashed zeros, three bordered boxes stacked at the top.
+
+**The one idea:** at 02:16 the nurse in charge sees that bed 7's emergency page has gone unanswered for 12 minutes.
+
+**Device (needs the owner):** the round 4 brief asked for iPhone frames, and PRESENTATION.md wants one canvas per category. Wardlight is the nurses'-station iPad app and `mockups/07-tablet-clinic` shows it in a tablet, so it stays iPad landscape, 1180 × 820 pt at 2x, with iPadOS chrome (24 pt status bar with full battery, home indicator, 17 pt body, 44 pt targets).
+
+**What changed (rebuilt in place):**
+- **One face:** IBM Plex Sans (`raw.textFace`), tabular figures, no slashed zeros.
+- **Red has one job, clinical risk.** Ink is the brand and action colour (`raw.brandColor` #1E2833). A NEWS2 parameter score is counted in dots beside the value (one for 1, two for 2; a 3 would be a solid cell); a total of 5 to 6 is outlined and 7 or more is solid, in the table, the sidebar and the header tile alike. Most cells stay white. The first rebuild filled every scored cell and blind judges called it "flooded with salmon".
+- **The score sits with the patient** (a solid NEWS2 8 tile beside the name; "Up from 7 at 02:00" leads the facts line) and the penicillin allergy is a red-outlined chip.
+- **Escalation:** the registrar and critical care outreach, both paged at 02:04, "No reply", 12 min (said once more in the card's subtitle, in ink); the filled action is "Page again". The card's last row is one line of what happened earlier: 01:05 sepsis screen positive, 01:20 FY1 review, 01:30 IV levofloxacin given (she is penicillin-allergic), 01:40 oxygen 2 L/min.
+- **The table:** right-aligned values at 17 pt, the live 02:15 column marked by a 2 pt ink rule under its head, "Continuous · manual every 15 min" (RCP: continuous monitoring at 7 or more), and a key that lists only what is drawn. The trend column is gone: each sparkline had its own scale and even spacing over uneven times, which misled.
+- **Sidebar:** the Wardlight mark with search and the sidebar toggle, Ward 4B, three "Needs action" rows with a status glyph (bell, clock, repeat), then the 10 low-risk patients with their next obs time; selection is white on grey with a hairline ring; every row 44 pt or more.
+- Icons at one 1.5 pt stroke.
+
+**NEWS2, re-scored against RCP 2017 (SpO₂ scale 1):** respiration, SpO₂, air or oxygen, systolic, pulse, consciousness, temperature.
+- 22:00: 20 (0), 95 (1), air (0), 122 (0), 94 (1), A (0), 37.8 (0) = 2
+- 00:00: 21 (2), 95 (1), air (0), 120 (0), 96 (1), A (0), 37.9 (0) = 4
+- 01:00: 21 (2), 94 (1), air (0), 118 (0), 98 (1), A (0), 38.1 (1) = 5
+- 01:30: 22 (2), 93 (2), air (0), 116 (0), 104 (1), A (0), 38.2 (1) = 6
+- 02:00: 23 (2), 94 (1), oxygen (2), 112 (0), 108 (1), A (0), 38.3 (1) = 7
+- 02:15: 23 (2), 95 (1), oxygen (2), 110 (1), 110 (1), A (0), 38.4 (1) = 8
+
+Ward: 3 needing action + 10 at 0 to 4 = 13 patients. Next obs for the low-risk patients follow RCP minimum frequencies (4-hourly at 1 to 4, 12-hourly at 0).
+
+**Type scale (iPadOS roles):** Large Title 34 (the score) · Title 1 28 (patient) · Title 3 20 (ward, section head, minutes since paging) · Body 17 (names, values, escalation title) · Subheadline 15 (sublines, labels, buttons, timeline) · Footnote 13 (column heads, bed numbers, times, key). Six sizes.
+
+**Engine (this round):** `set raw.textFace "IBM Plex Sans"`, `set raw.brandColor "#1E2833"`, `dials.colorfulness 20`, `overrides.font.size.22` (the step was missing, so the ward title had silently fallen back to 17 px; now spare) and `.48` (spare), then `build` (passes; 1 warning: 13 text sizes from old formula steps). `preflight.py html`: 0 errors, 0 warnings. `check_dates.py` flags only "2017" (the RCP edition) in this file: false positives.
+
+**Blind pairwise test** (same method; no ward-observation app is on Mobbin, so the nearest shipped work of the same shape: an alert with its escalation and a data view). References: incident.io https://mobbin.com/screens/16809a67-3ba1-423b-92a1-63c8eea209d5, Perplexity Health https://mobbin.com/screens/7e1d573a-6062-4c81-b4e9-b5d6a9fe46db, Sentry https://mobbin.com/screens/44f8570c-f154-4173-a40b-06d1adba7f00.
+- First rebuild: ours won by 3 against Perplexity and Sentry; incident.io won by 2.
+- With filled score cells: incident.io and Perplexity each won by 2 ("flooded with salmon"), so the score ramp became dots and outlines.
+- Rounds after that, and the final round: ours won against Perplexity and Sentry by 2 to 3; incident.io won by 1 or 2, never by 3. Passes the rule.
+
+**Fresh-eyes audit:** **3, 3, 4, 3** over four rounds. Every round re-scored NEWS2 and found it right. It caught misleading sparklines, the pink-tile table, a key that showed a score no cell had, the wrong button filled, red doing too many jobs, outreach paged 10 minutes late, a first-dose antibiotic on day 2, and a clipped last bed. The last round's items (one line of earlier events inside the card, "No reply" said once in ink, a rule instead of the tint on the live column, the key, the monitoring wording, a ring-only selection) were applied after it and audited in the focused pass below. The fourth audit scored 3; the focused pass below scored 4.
+
+**Checks:** `check_dates.py --year 2026`: the page passes. `check_names.py`: 0 errors. Shot re-rendered at 1180 × 820, 2x.
+
+**Outside this folder:** `mockups/07-tablet-clinic` shows this shot.png and needs a re-render; its alt text (NEWS2 8, the 02:04 call, the registrar unanswered for 12 minutes, the 22:00 to 02:15 chart) still holds.
+
+**Focused pass (2026-10-18).** After the polish above: blind test, ours won against incident.io by 1, Perplexity Health by 2 and Sentry by 3. **Fresh-eyes audit: 4** ("the closest piece to the B2B bar: dense, mid-task, one face, edges aligned"), with every NEWS2 value and all 32 dots re-scored correct. Two of its items were applied after it: "Bed 7" leads the facts line (no "7 · 7" side by side) and rows sit on 40 pt and 56 pt pitches. Not applied: replacing the dots with a points column, an "Escalate to consultant" primary action, a grey allergy chip; the auditor marked the escalation one as its own judgment, not RCP text.

@@ -1,0 +1,74 @@
+{
+ "piece": "footers/08-rallo-app",
+ "title": "08 Rallo: app-download footer with a phone peeking up",
+ "pattern": "footer-mega",
+ "platform": "web",
+ "industry": "fitness",
+ "style": [
+  "minimal",
+  "playful"
+ ],
+ "tags": [
+  "footer-mega",
+  "fitness",
+  "app download",
+  "phone",
+  "store badges",
+  "cobalt",
+  "link columns"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "The phone screen is a believable tempo-run view: distance ring, 6.42 of 9.5 km, pace 4'52\", 156 bpm, 31:14, a Zone 3 tag",
+  "The four link columns and the legal row below the panel are clean and correctly quiet; one typeface (Plus Jakarta Sans) throughout",
+  "Copy has a point of view: 'Coaching for people who run before work and lift after it'"
+ ],
+ "slop_signals": [
+  "'New · Adaptive half-marathon plans' pill badge above the headline, in a footer",
+  "Headline mixes weights for 'counting on you.'",
+  "A tilted phone with two floating cards (VO2 max trend, '18 day streak, keep it going') at different angles and shadows, over decorative concentric rings",
+  "Five green stars, '4.9 from 38,200 ratings' and '14 days free': invented social proof",
+  "Two generic black store-style badges plus a QR code plus 'Scan to install': three ways to say install",
+  "The cobalt panel is the hero template (badge, headline, sub, buttons, proof, device) moved to the bottom of the page"
+ ],
+ "fixes": [
+  "Straighten the phone and crop it hard at the panel's bottom edge, as the direction's own reference does; remove the floating cards and the rings",
+  "Remove the pill badge and the mixed weight; shorten the panel so it is a band, not a second hero",
+  "Keep the QR code and one install badge; drop the rating line until there is a real one, or state a real count plainly",
+  "Consider no panel at all: the QR and store badges beside the link columns, as Function and Shop do, with the phone shown elsewhere on the site"
+ ],
+ "references": [
+  {
+   "site": "Function",
+   "url": "https://mobbin.com/sites/sections/86b57046-171c-45b5-80e5-61e86bc6747c",
+   "what": "A QR code and real store badges sit beside the link columns in a card; no phone, no floating cards"
+  },
+  {
+   "site": "Shop",
+   "url": "https://mobbin.com/sites/sections/3c2c0222-79e1-4a32-8b73-cbe33406f26d",
+   "what": "'Get the app with 500K 5-star reviews' with one big QR, then plain columns with badges; the proof is a number, not stars"
+  },
+  {
+   "site": "ClassPass",
+   "url": "https://mobbin.com/sites/sections/72f3e601-f3de-4861-83e6-7cd8148771a1",
+   "what": "'Enjoy fitness on the go' plus two store badges inside the footer columns; the install ask at footer scale"
+  },
+  {
+   "site": "MasterClass",
+   "url": "https://mobbin.com/sites/sections/87cf65e4-5a00-40ad-a0c7-439bef25b65b",
+   "what": "Four store badges stacked as their own column; install as a list, not a pitch"
+  },
+  {
+   "site": "Jeton",
+   "url": "https://mobbin.com/sites/sections/e96309a7-4699-4bdd-8791-9c2cde217746",
+   "what": "Store badges and licence marks in one row above a giant wordmark; a fintech app footer without a device render"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "okay",
+  "date": "2026-10-14"
+ }
+}

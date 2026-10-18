@@ -1,0 +1,83 @@
+{
+ "piece": "footers/07-sasame-tea",
+ "title": "07 Sasame: Japanese-minimal tea house footer",
+ "pattern": "footer-compact",
+ "platform": "web",
+ "industry": "tea house",
+ "style": [
+  "minimal",
+  "organic",
+  "editorial"
+ ],
+ "tags": [
+  "footer-compact",
+  "tea house",
+  "japanese",
+  "minimal",
+  "enso",
+  "hours",
+  "seal",
+  "celadon"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "Almost nothing on the page and all of it placed: name, one sentence, three notes with kanji labels (訪 VISIT, 時 HOURS, 秋 OCTOBER NOTE), a brush enso, one vertical phrase, one seal",
+  "One typeface (Shippori Mincho) for Latin and Japanese; pale celadon paper with a faint fibre, sumi ink, matcha for the kanji labels, one vermilion",
+  "The October note ('The first hojicha of the year is roasting in the back room. Ask for a cup with roasted chestnut.') is the kind of line a real eight-seat tea house would write"
+ ],
+ "slop_signals": [
+  "The brush enso is the stock mark of 'Japanese minimal'; drawn with real texture, but expected",
+  "The enso floats in the centre with no relation to the columns on the left or the vertical type on the right",
+  "The middle third of the footer is empty in a way that reads as unresolved rather than as deliberate space"
+ ],
+ "fixes": [
+  "Anchor the enso: align its centre to the vertical phrase's column or to the top of the three notes, or shrink it and set it beside the seal",
+  "Consider a drawn object from the house instead of the enso: the kettle, a chawan, a sprig of the first hojicha",
+  "Pull the vertical phrase in one column so the right edge is not a lone strip"
+ ],
+ "references": [
+  {
+   "site": "Shupatto",
+   "url": "https://mobbin.com/sites/sections/471f17eb-e5b3-4785-8cd9-333119653eac",
+   "what": "A Japanese brand footer that is almost empty: tracked small capitals, a JA / EN switch, no boxes; our language row follows this"
+  },
+  {
+   "site": "Claude Type",
+   "url": "https://mobbin.com/sites/sections/e4b43a6b-b75a-4564-8573-10742b5e5911",
+   "what": "One calligraphic line carries the whole footer and everything else steps back; the same single-gesture idea"
+  },
+  {
+   "site": "MOUTHWASH Studio",
+   "url": "https://mobbin.com/sites/sections/082f5fac-4648-4314-aa7d-a06fe0235b77",
+   "what": "One large mark with a tiny address below; a lesson in anchoring one object to the type"
+  },
+  {
+   "site": "Cursor",
+   "url": "https://mobbin.com/sites/sections/956c4125-2886-463c-9c81-772bfa1bc974",
+   "what": "A compact footer with the email top-left, link columns and a language picker; the plain version of the same job"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "needs work",
+  "date": "2026-10-14"
+ },
+ "round4": {
+  "score": 3,
+  "pairwise": "lost to VanMoof by 2 (not blind); the earlier blind test lost to Legora by 4",
+  "changed": [
+   "The tea-year Gantt, seal, today line and every chart label removed",
+   "The one signature element is a seasonal sentence in Shippori Mincho beside the name, at 49 px so it reads at gallery size",
+   "Visit, Hours, Seats and More as four quiet columns; headings muted, links no longer underlined, the address reduced to 'Higashiyama 2-chome' so it cannot match a real house",
+   "Last row of the section above: 'Ask for a seat'"
+  ],
+  "after_audit": "all four of the final audit's Sasame fixes (muted headings, no underlines, 49 px statement, address) were applied after it scored 3 and were checked by eye, not re-judged; the score stays 3 until it is",
+  "date": "2026-10-18"
+ },
+ "facts": [
+  "all four of the final audit's Sasame fixes (muted headings, no underlines, 49 px statement, address) were applied after it scored 3 and were checked by eye, not re-judged; the score stays 3 until it is",
+  "Pairwise judging was not blind: the judge knew which side came from Mobbin"
+ ]
+}

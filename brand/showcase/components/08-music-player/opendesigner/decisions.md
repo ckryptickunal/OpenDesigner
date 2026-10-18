@@ -3,56 +3,52 @@
 Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later entry for the same path supersedes an earlier one; nothing is edited or deleted. set_by is chosen, confirmed_default, auto_default, assumed, delegated, reference, asset or standard.
 
 ## D-0001 · init with defaults
-- set_by: auto_default · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- set_by: auto_default · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: Start of the design system; every default traces to references/levers.json.
 
 ## D-0002 · answers.Q-aud-01 = "regular"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: sketch: picked for them
 - also set: dials.density = 50 (from Q-aud-01)
 
 ## D-0003 · context.audience = "people who use it often, as an everyday app"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: sketch: plain words for Q-aud-01, picked for them
 - previous value: ""
 
-## D-0004 · raw.brandColor = "#ff3d81"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: sketch: picked for them
+## D-0004 · raw.brandColor = "#ff5577"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: sketch: Level 0 answer
 
-## D-0005 · raw.brandColor = "#e2136a"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0004 · source_ref: none
-- reason: sketch: picked for them, a readable shade of #ff3d81 (a crimson)
-- previous value: "#ff3d81"
-
-## D-0006 · answers.Q-plat-01 = ["web"]
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+## D-0005 · answers.Q-plat-01 = ["web"]
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: sketch: picked for them
 - also set: raw.platforms = ["web"] (from Q-plat-01)
 
-## D-0007 · macros = ["rich", "bold"]
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: sketch: picked for them (feel words: vibrant, bold)
+## D-0006 · macros = ["deferential", "minimal", "bold"]
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: sketch: picked for them (feel words: calm, bold, minimal)
 - previous value: []
 
-## D-0008 · taste.feelWords = ["vibrant", "bold"]
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+## D-0007 · taste.feelWords = ["calm", "bold", "minimal"]
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: sketch: feel words picked for them
 
-## D-0009 · answers.Q-theme-01 = "system-light-dark"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+## D-0008 · answers.Q-theme-01 = "system-light-dark"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: sketch: picked for them
 - also set: raw.flags.darkMode = true (from Q-theme-01)
 - also set: raw.defaultTheme = "system" (from Q-theme-01)
 
-## D-0010 · answers.Q-scope-06 = "experience"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
+## D-0009 · answers.Q-scope-06 = ["listening room:experience"]
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
 - reason: sketch: picked for them
+- also set: context.surfaces = [{"name": "listening room", "mode": "Experience"}] (from Q-scope-06)
 - also set: raw.productType = "marketing" (from Q-scope-06)
 - also set: raw.marketingSurfaces = true (from Q-scope-06)
 
-## D-0011 · House standards v2: 289 applied
-- set_by: standard · locked: yes · date: 2026-10-14 · supersedes: none · source_ref: standards.json v2
+## D-0010 · House standards v3: 289 applied
+- set_by: standard · locked: yes · date: 2026-10-15 · supersedes: none · source_ref: standards.json v3
 - reason: OpenDesigner's house standards (sources marked non-negotiable) are applied without asking and locked. Change one only when the person asks: engine.py standard override <id> --why "<their words>".
 - <details><summary>289 standards</summary> STD-when-to-animate-01, STD-when-to-animate-03, STD-when-to-animate-04, STD-when-to-animate-05, STD-when-to-animate-06, STD-when-to-animate-07, STD-when-to-animate-08, STD-when-to-animate-09, STD-when-to-animate-10, STD-when-to-animate-11, STD-when-to-animate-13, STD-when-to-animate-15, STD-when-to-animate-16, STD-when-to-animate-17, STD-when-to-animate-20, STD-when-to-animate-22, STD-easing-duration-01, STD-easing-duration-02, STD-easing-duration-03, STD-easing-duration-06, STD-easing-duration-07, STD-easing-duration-09, STD-easing-duration-10, STD-easing-duration-11, STD-easing-duration-12, STD-easing-duration-13, STD-easing-duration-15, STD-easing-duration-17, STD-easing-duration-19, STD-enter-exit-origin-01, STD-enter-exit-origin-02, STD-enter-exit-origin-03, STD-enter-exit-origin-04, STD-enter-exit-origin-06, STD-enter-exit-origin-08, STD-enter-exit-origin-09, STD-enter-exit-origin-10, STD-enter-exit-origin-11, STD-enter-exit-origin-12, STD-enter-exit-origin-13, STD-enter-exit-origin-16, STD-enter-exit-origin-17, STD-enter-exit-origin-21, STD-enter-exit-origin-23, STD-enter-exit-origin-24, STD-enter-exit-origin-26, STD-enter-exit-origin-27, STD-enter-exit-origin-28, STD-enter-exit-origin-29, STD-enter-exit-origin-30, STD-enter-exit-origin-31, STD-enter-exit-origin-37, STD-enter-exit-origin-38, STD-enter-exit-origin-39, STD-enter-exit-origin-40, STD-enter-exit-origin-41, STD-enter-exit-origin-42, STD-enter-exit-origin-43, STD-enter-exit-origin-44, STD-springs-gestures-01, STD-springs-gestures-02, STD-springs-gestures-04, STD-springs-gestures-05, STD-springs-gestures-06, STD-springs-gestures-07, STD-springs-gestures-08, STD-springs-gestures-09, STD-springs-gestures-11, STD-springs-gestures-12, STD-springs-gestures-13, STD-springs-gestures-14, STD-springs-gestures-15, STD-springs-gestures-16, STD-springs-gestures-17, STD-springs-gestures-18, STD-springs-gestures-19, STD-springs-gestures-20, STD-springs-gestures-21, STD-springs-gestures-25, STD-springs-gestures-26, STD-springs-gestures-28, STD-springs-gestures-30, STD-springs-gestures-34, STD-springs-gestures-39, STD-springs-gestures-41, STD-springs-gestures-42, STD-springs-gestures-45, STD-springs-gestures-59, STD-springs-gestures-60, STD-springs-gestures-61, STD-springs-gestures-63, STD-performance-properties-01, STD-performance-properties-02, STD-performance-properties-06, STD-performance-properties-09, STD-performance-properties-10, STD-performance-properties-11, STD-performance-properties-12, STD-performance-properties-13, STD-performance-properties-14, STD-performance-properties-15, STD-performance-properties-16, STD-performance-properties-17, STD-performance-properties-24, STD-performance-properties-25, STD-accessibility-motion-01, STD-accessibility-motion-02, STD-accessibility-motion-05, STD-accessibility-motion-06, STD-accessibility-motion-07, STD-accessibility-motion-08, STD-accessibility-motion-09, STD-accessibility-motion-10, STD-accessibility-motion-11, STD-accessibility-motion-12, STD-accessibility-motion-13, STD-accessibility-motion-15, STD-accessibility-motion-16, STD-accessibility-motion-17, STD-accessibility-motion-18, STD-accessibility-motion-20, STD-accessibility-motion-23, STD-accessibility-motion-24, STD-accessibility-motion-26, STD-accessibility-motion-27, STD-components-toasts-drawers-03, STD-components-toasts-drawers-07, STD-components-toasts-drawers-10, STD-components-toasts-drawers-11, STD-components-toasts-drawers-12, STD-components-toasts-drawers-13, STD-components-toasts-drawers-14, STD-components-toasts-drawers-15, STD-components-toasts-drawers-16, STD-components-toasts-drawers-17, STD-components-toasts-drawers-18, STD-components-toasts-drawers-25, STD-components-toasts-drawers-29, STD-components-toasts-drawers-30, STD-components-toasts-drawers-33, STD-components-toasts-drawers-34, STD-components-toasts-drawers-37, STD-components-toasts-drawers-40, STD-components-toasts-drawers-44, STD-components-toasts-drawers-45, STD-components-toasts-drawers-48, STD-components-toasts-drawers-65, STD-components-toasts-drawers-72, STD-components-toasts-drawers-77, STD-mobile-touch-02, STD-mobile-touch-03, STD-mobile-touch-05, STD-mobile-touch-06, STD-mobile-touch-07, STD-mobile-touch-08, STD-mobile-touch-09, STD-mobile-touch-10, STD-mobile-touch-11, STD-mobile-touch-13, STD-mobile-touch-14, STD-mobile-touch-15, STD-mobile-touch-16, STD-mobile-touch-17, STD-mobile-touch-18, STD-mobile-touch-19, STD-mobile-touch-20, STD-mobile-touch-21, STD-mobile-touch-24, STD-mobile-touch-28, STD-mobile-touch-70, STD-visual-details-01, STD-visual-details-02, STD-visual-details-03, STD-visual-details-04, STD-visual-details-05, STD-visual-details-06, STD-visual-details-07, STD-visual-details-08, STD-visual-details-09, STD-visual-details-10, STD-visual-details-11, STD-visual-details-13, STD-visual-details-14, STD-visual-details-15, STD-visual-details-16, STD-visual-details-17, STD-visual-details-18, STD-visual-details-19, STD-visual-details-20, STD-visual-details-21, STD-visual-details-24, STD-visual-details-25, STD-visual-details-26, STD-visual-details-27, STD-visual-details-28, STD-visual-details-29, STD-visual-details-30, STD-visual-details-31, STD-visual-details-32, STD-visual-details-33, STD-visual-details-34, STD-visual-details-35, STD-visual-details-36, STD-visual-details-37, STD-visual-details-38, STD-visual-details-39, STD-visual-details-40, STD-visual-details-41, STD-visual-details-42, STD-visual-details-43, STD-visual-details-44, STD-visual-details-45, STD-visual-details-46, STD-visual-details-47, STD-visual-details-48, STD-visual-details-49, STD-visual-details-50, STD-visual-details-51, STD-visual-details-55, STD-visual-details-56, STD-visual-details-57, STD-visual-details-59, STD-visual-details-64, STD-process-review-taste-01, STD-process-review-taste-02, STD-process-review-taste-03, STD-process-review-taste-04, STD-process-review-taste-05, STD-process-review-taste-06, STD-process-review-taste-07, STD-process-review-taste-08, STD-process-review-taste-09, STD-process-review-taste-10, STD-process-review-taste-11, STD-process-review-taste-12, STD-process-review-taste-13, STD-process-review-taste-14, STD-process-review-taste-15, STD-process-review-taste-16, STD-process-review-taste-17, STD-process-review-taste-18, STD-process-review-taste-19, STD-process-review-taste-20, STD-process-review-taste-21, STD-process-review-taste-22, STD-process-review-taste-23, STD-process-review-taste-24, STD-process-review-taste-25, STD-process-review-taste-26, STD-process-review-taste-27, STD-process-review-taste-28, STD-process-review-taste-29, STD-process-review-taste-30, STD-process-review-taste-31, STD-process-review-taste-32, STD-process-review-taste-33, STD-process-review-taste-34, STD-process-review-taste-35, STD-process-review-taste-36, STD-process-review-taste-37, STD-process-review-taste-38, STD-process-review-taste-39, STD-process-review-taste-40, STD-process-review-taste-41, STD-process-review-taste-42, STD-process-review-taste-43, STD-process-review-taste-44, STD-process-review-taste-45, STD-process-review-taste-46, STD-process-review-taste-47, STD-process-review-taste-48, STD-process-review-taste-49, STD-process-review-taste-50, STD-process-review-taste-51, STD-process-review-taste-52, STD-process-review-taste-53, STD-process-review-taste-54, STD-process-review-taste-55, STD-process-review-taste-56, STD-process-review-taste-57, STD-process-review-taste-58, STD-process-review-taste-59, STD-process-review-taste-60, STD-process-review-taste-62, STD-process-review-taste-63, STD-process-review-taste-64, STD-process-review-taste-65, STD-process-review-taste-66, STD-process-review-taste-67</details>
 - STD-when-to-animate-01: followed; it sets no values (DESIGN.md carries it)
@@ -364,95 +360,50 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - STD-process-review-taste-66: followed; it sets no values
 - STD-process-review-taste-67: followed; it sets no values (DESIGN.md carries it)
 
-## D-0012 · dials.expression = 90
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: a label's player is a piece of the record sleeve: big display type, art-led
-
-## D-0013 · dials.brandPresence = 85
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: the cover art and the label's pink run the whole card
-
-## D-0014 · dials.density = 38
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: one track at a time, room around the art
-- previous value: 50
-
-## D-0015 · dials.energy = 82
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: springy play button, spinning record, live waveform
-
-## D-0016 · dials.roundness = 82
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: soft, record-like: round controls, 24-32px card corners
-
-## D-0017 · dials.depth = 70
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: the cover floats off a glowing card
-
-## D-0018 · dials.colorfulness = 92
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: vivid gradient pulled from the cover
-
-## D-0019 · dials.warmth = 62
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: warm pinks and tangerine over cool violet
-
-## D-0020 · raw.textFace = "DM Sans"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: friendly geometric sans for meta and controls
+## D-0011 · raw.textFace = "Manrope"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: one face; titles by weight
 - previous value: "system"
 
-## D-0021 · raw.displayFace = "Unbounded"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: wide, loud display face for the track title
-- previous value: "=textFace"
+## D-0012 · raw.neutralTint = "pure"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: cool black, never brown
 
-## D-0022 · raw.monoFace = "DM Mono"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: time codes and catalogue numbers
-- previous value: "ui-monospace"
+## D-0013 · raw.brandColor = "#FF5577"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0004 · source_ref: none
+- reason: pink marks what is playing
+- previous value: "#ff5577"
 
-## D-0023 · raw.fontLicence = {"web": true, "app": true, "selfHost": true}
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: all three faces are SIL OFL on Google Fonts
-- previous value: {"web": null, "app": null, "selfHost": null}
+## D-0014 · dials.roundness = 40
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: dark listening room; the cover carries the colour
 
-## D-0024 · answers.Q-type-06 = "system-mono"
-- set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
-- reason: owner rule: two fonts only (Unbounded + DM Sans); time codes use DM Sans tabular figures
-- also set: raw.monoFace = "ui-monospace" (from Q-type-06)
+## D-0015 · dials.depth = 20
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: dark listening room; the cover carries the colour
 
-## D-0025 · raw.brandColor = "#FF3D81"
-- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0005 · source_ref: none
-- reason: round 3: the brand stays as typed (it had been stored as #e2136a); the pink is now a riso ink for the sleeve and the played waveform, never text on white
-- previous value: "#e2136a"
+## D-0016 · dials.warmth = 10
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: dark listening room; the cover carries the colour
 
-## D-0026 · dials.roundness = 52
-- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0016 · source_ref: none
-- reason: round 3: 24/32 px pillows read as a toy; 8-16 px
-- previous value: 82
+## D-0017 · dials.colorfulness = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: dark listening room; the cover carries the colour
 
-## D-0027 · dials.depth = 30
-- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0017 · source_ref: none
-- reason: round 3: no page glow; flat card
-- previous value: 70
+## D-0018 · dials.expression = 55
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: dark listening room; the cover carries the colour
 
-## D-0028 · dials.colorfulness = 62
-- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0018 · source_ref: none
-- reason: round 3: one vivid object (the sleeve), quiet chrome
-- previous value: 92
+## D-0019 · dials.energy = 30
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: dark listening room; the cover carries the colour
 
-## D-0029 · dials.warmth = 30
-- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0019 · source_ref: none
-- reason: round 3: cooler neutrals on a paper-white release page
-- previous value: 62
+## D-0020 · dials.density = 62
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: a player is a tool you operate: 13-14 px lists
+- previous value: 50
 
-## D-0030 · dials.expression = 68
-- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0012 · source_ref: none
-- reason: round 3: the title no longer needs 90 px at 850
-- previous value: 90
-
-## D-0031 · name = "Calamondin Tapes"
-- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
-- reason: round 3: renamed; the first name sat close to a real record label
-- previous value: (the first name, listed in NAMES.md)
+## D-0021 · raw.brandColor = "#FF9A3D"
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: D-0013 · source_ref: none
+- reason: calamondin orange: the label is named for the citrus, and the cover's lamps are this colour
+- previous value: "#FF5577"

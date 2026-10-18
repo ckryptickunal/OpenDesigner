@@ -47,3 +47,38 @@ Interaction: the input is a combobox with `aria-activedescendant`; arrow keys mo
 4. **No white veil token** for light-mode overlays. Gap, recorded.
 5. **review pushes React libraries on a plain-HTML page**, and cannot tell page layout from component CSS. Recorded.
 6. The feel word "literary" was unknown; the engine said so and carried on, which is the right behaviour.
+
+## Round 4 (owner review, 2026-10-15)
+
+**What he said.** Most of the web components "look absolutely rubbish"; Margin is the only one he does not call ugly. The brief for this round: don't rebuild it, run the blind pairwise test, and if it shows spec-sheet framing or fails, polish only what is needed and keep what he liked. AUDIT-ROUND4 also asked whether it should be cropped to the palette in its app.
+
+**The idea in one sentence:** a novelist types "shrev" and the palette finds both commands and drafts.
+
+**Blind pairwise test on the piece as it was** (ours against a shipped command palette, sides random, fresh judges): Magnific, ours weaker by 3; Mintlify, ours better by 2; v0, ours weaker by 2. It failed (clearly weaker once, equal or better once). Every judge named the cause: it read as a spec sheet. Two judges also said the palette itself was the better-made one.
+
+**What changed (the framing, and small polish to the palette).**
+- Removed: the header tags ("02 · Command palette · ⌘K anywhere · Monochrome · 1 px rules · 2 faces"), the five numbered margin notes with leader lines, the states column (row, query, keycaps, footer, dark) and the footnote citing STD-when-to-animate. Their CSS went with them; the old sheet stays in git.
+- Added: Margin's own chrome. The binder on the left (the mark, *The Salt Road · draft 4*, chapters 1 to 5 with word counts, two notebook pages) and chapter 3 filling the editor. A white veil at 64% covers the whole window, so the palette reads first.
+- The palette: 640 px wide (was 560), placed over the manuscript column so no line peeks out beside it, and its bottom edge falls between two paragraphs.
+- Kept exactly: the scope chip, "shrev", the spaced-caps group labels with counts, the 2 px ink rule on the selected row, the switch row, the footer with every key in a keycap, "5 results", IBM Plex Sans with Newsreader, monochrome, and every behaviour in the script.
+- Polished after the fresh audit: matched letters are marked by weight only (the underline went); row shortcuts are set as quiet glyphs (⌥⌘R), so only the footer and esc carry keycaps; ⌥⌘H, which clashes with macOS Hide Others, became ⌥⌘R; section break moved to ⇧⌘↵ so ⌘↵ means only "open beside"; the drafts show word counts (640 w, 1,312 w) instead of "edited 2 d" and a count equal to the whole chapter; "Shipwreck scene" became "Shore lamp scene" so it no longer sits in chapter 3 while chapter 4 is "Wreck season"; the revision rule on the first paragraph went, because it peeked out beside the palette.
+
+**Checks (final render).**
+- `check_dates.py --year 2026`: passes.
+- `check_names.py`: no errors. New titles: Low water, The salt pans, Wreck season, Lamps out (chapters), Workshop comments (a notebook page), Shore lamp scene (a draft). ArrowDown, ArrowUp, Bible and The are words or key names.
+- `preflight.py html`: 0 errors, 0 warnings; sizes 12, 14, 17, 20, 35.
+- Computed contrast: 38 runs outside the decorative manuscript, lowest 5.92:1. The manuscript and binder are context behind an open dialog (`aria-hidden`).
+- Gallery size (337 px): the eye lands on the palette and its selected row.
+
+**Blind pairwise test after the polish:**
+
+| Round | Magnific | Mintlify | v0 |
+|---|---|---|---|
+| 1 (the spec sheet) | ours −3 | +2 | −2 |
+| 2 (in its app) | +3 | +2 | +2 |
+| 3 (veil over the window, glyph shortcuts) | +2 | +3 | +2 |
+| 4 (final) | +2 | +3 | +2 |
+
+**Fresh-eyes audit:** round 1, 3.5 (half-window veil, keycap clutter, match marked twice, off-centre); round 2, 4; round 3, **4**. Remaining notes from that audit, left for the owner because they touch what he liked: the palette covers about 22% of the frame, the black switch outweighs the selected row, and the query has no visible caret.
+
+**Result: passes both tests.**

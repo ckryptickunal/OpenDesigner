@@ -1,5 +1,7 @@
 # 09 · Onboarding stepper · Mossby
 
+Gallery: Sedge is a fictional payroll tool; this is step 3 of 6, setting paydays for a 14-person bike shop.
+
 ## Direction
 Mossby is a fictional plant-care app for first-time plant owners, many of whom have already killed a plant and feel a bit guilty about it. Onboarding has four short steps (your space, your plants, your rhythm, all set) and should feel like a friendly storybook: pastel sage, peach, lilac and butter; ink-line plant drawings on soft blobs; a progress line that is a growing vine and sprouts a leaf for each finished step; very round cards and pill buttons; a guilt-free "I'm not sure yet" on every question.
 Feel words: **friendly, cheerful, gentle** (all three known: friendly; playful + friendly; friendly + deferential).
@@ -59,3 +61,51 @@ Illustrations through **opendesigner-illustrate**: `search "potted house plant" 
 - **Type scale (6 sizes):** caption 13 (step labels, card hints, error text), body 16 (buttons, options), body-large 20 (lede, card names), title 25 (phone question, "Your jungle is set"), headline 39 (sheet number), display 49 (the step question). Adjacent steps are at least 20% apart.
 - **Weight:** the question is Fredoka 600, chosen because the rounded face looks thin and timid at 400 on pastel; card names 600, body 400-700 Nunito.
 - **No highlight trick** in any heading. **Color:** light warm-white background with near-black text and pastel fills; Warmth 85 tinted the neutrals slightly pink-cream, not brown, so no change.
+
+## Round 4 (owner review, 2026-10-15)
+
+**What he said.** Most of the web components "look absolutely rubbish", and none should "feel like they are from a vibe coded app or a cheap Chinese app". Margin (02) is the only component he does not call ugly; the B2B product screens are the bar. In round 3 he had called this piece "okay".
+
+**The idea in one sentence:** a bike shop owner picks a pay schedule and sees this year's paydays, moved around bank holidays.
+
+**What changed: a new concept, rebuilt in place.** The Mossby plant-care stepper (hand-drawn plants, a vine that grew a leaf per step, a phone mock, a column of button states) could not reach the B2B bar, so the folder now holds a different product with the same component type:
+- **Sedge**, a fictional payroll service, setting up **Spokewright Cycles**, a 14-person bike shop in Oregon, at step 3 of 6, *Pay schedule*.
+- The stepper rail: progress (2 of 6 done), two done steps with what was saved and an Edit link, the current step, and three steps to come.
+- The step: how often (four choices, each with its paydays a year), first payday and first pay period, and a table of this year's five paydays with their approval deadlines. Bank holidays move dates the way a payroll service does, and each note sits under the date it explains: Veterans Day (Wed, Nov 11) moves an approval to Tue, Nov 10; Thanksgiving (Thu, Nov 26) moves one to Tue, Nov 24; Christmas (Fri, Dec 25) moves the payday to Thu, Dec 24.
+- Footer: Back, "Next: Your team", Continue, aligned to the form column, with its rule level with the rail's.
+- Colour: AUDIT-ROUND4 said the orange-red payroll flow read as Gusto, so the accent is now sedge green (#56701A, 5.6:1 with white), the plant the brand is named for. It has one job: the logo and the button to press. The chosen option and the current step are ink.
+- Removed as clutter after the audits: the rail's subtitle, the descriptions of the current and future steps, the "Book a call" block, the holiday-notes column, the struck-through date, two of the four "save" words ("Exit setup", "Continue").
+
+**References (Mobbin, cited by link only).**
+- Mercury business onboarding, https://mobbin.com/screens/8b12e7b5-4bd6-4eea-9a61-7ebbcfa4f855 : a numbered step list beside one form column. Taught the rail and form split.
+- ElevenLabs publishing flow, https://mobbin.com/screens/428640a6-8442-4468-9ffc-b3bb5ea62ecf : done steps keep a line saying what was saved. Taught the summary under each done step.
+- Remote contractor flow, https://mobbin.com/screens/0d2b48f4-1904-4fe9-b335-a34ca87fbb68 : choice cards for one decision. Taught the frequency cards; ours sit in one row and carry their consequence.
+
+**System (engine).** The Mossby system was replaced (git keeps it):
+`sketch --name Sedge --brand "#D4421C" --audience regular --platforms web --feel friendly,calm,reliable --theme system-light-dark --delegated all --surfaces "setup:operate"`, then `set raw.textFace "Schibsted Grotesk"`, `raw.neutralTint pure`, `raw.numericStyles true`; dials roundness 45, depth 15, warmth 15, colorfulness 28, expression 35, energy 22 (all `delegated`); later `set raw.brandColor "#56701A" --set-by chosen` and `raw.primaryActionColor null`; `build`.
+- Face: Schibsted Grotesk (SIL OFL), one family.
+- Type scale, named roles (web px): label 12, body 14, title 18, headline 27. Weights 400, 500, 600.
+- Outside the tokens on purpose: the 16 px radio, the 24 px step nodes, the 4 px progress track (no component tokens for them).
+- Tabular figures were turned off in the table: in Schibsted Grotesk they put a gap before the comma in "Fri, Oct 30" (recorded with `engine.py feedback`).
+
+**Checks (final render).**
+- Dates: periods are two weeks, Sunday to Saturday, paid 6 days after they end; approvals are two business days before payday, skipping bank holidays; 5 runs left in 2026; 26 paydays a year. `check_dates.py --year 2026` passes.
+- `check_names.py`: no collisions. New names: Sedge and Spokewright Cycles (web search found no payroll company called Sedge and no business called Spokewright). Christmas, Thanksgiving and Oregon are real holidays and a real state.
+- `preflight.py html`: 0 errors, 0 warnings; sizes 12, 14, 18, 27.
+- `engine.py validate`: no errors, 0 warnings.
+- Computed contrast: 63 runs, lowest 5.63:1.
+- Gallery size (337 px): the eye lands on the question and the chosen card, then the green button.
+
+**Blind pairwise test** (ours against a shipped onboarding, sides random, fresh judges):
+
+| Round | Version | Mercury | ElevenLabs | Remote |
+|---|---|---|---|---|
+| 1 | first build | ours +3 | +3 | +3 |
+| 2 | unchanged | +3 | +3 | +3 |
+| 3 | footer aligned, current step in ink, deeper button, one icon set | +3 | +3 | +3 |
+| 4 | notes under their dates, rules aligned, new mark, fewer save words | +4 | +3 | +2 |
+| 5 | final, sedge green, clutter removed | +3 | +3 | +3 |
+
+**Fresh-eyes audit:** round 1, 4 (state said four ways on the Christmas row, repeated facts, a generic logo); round 2, 4 (two rules 30 px apart, a crude logo, an ambiguous notes column); round 3, **4**, "the closest to the B2B bar". Remaining notes from that audit, left for the owner: grey second lines on the choices and done steps, progress shown as a bar and as numbered steps, and a heavy table frame.
+
+**Result: passes both tests.**

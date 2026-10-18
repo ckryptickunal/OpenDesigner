@@ -62,5 +62,16 @@
   "verdict": "keep",
   "said": "okay-ish, you can keep it",
   "date": "2026-10-14"
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "3 of 3 better (Whop +2, AirOps +3, Lindy +3); worst margin: none weaker",
+  "changed": [
+   "Spec sheet, tag chips, crop marks, halftone corner, CMYK strip and offset shadows removed; one product moment: the Upload artwork dialog over order HY-4471",
+   "Four files each with one state: ready, uploading 64%, foil layer ready with a CMYK option (-$38.00), spot UV mask failing on bleed (85 x 55 vs 91 x 61 mm); footer says what blocks sending; shot-ready.png shows the go-ahead",
+   "Yellow only for the go-ahead and the logo; one face (Archivo, tabular figures); coated profile and laminated stock so spot UV is printable",
+   "Engine: cool greys, roundness 42, base size 14, dials lowered; brand #FFE500 unchanged",
+   "Remaining: thumbnails are drawn glyphs, not tiny renders of the card"
+  ]
  }
 }

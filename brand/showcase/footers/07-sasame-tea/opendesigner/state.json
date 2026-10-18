@@ -86,8 +86,8 @@
     "focusColor": null,
     "neutralBase": "#d9e2cf",
     "contrastTarget": "AA",
-    "textFace": "Shippori Mincho",
-    "displayFace": "=textFace",
+    "textFace": "Zen Kaku Gothic New",
+    "displayFace": "Shippori Mincho",
     "baseSize": null,
     "spaceUnit": 4,
     "platforms": [
@@ -156,7 +156,10 @@
       "Latn",
       "Jpan"
     ],
-    "defaultTheme": "system"
+    "defaultTheme": "system",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -534,7 +537,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "8a1a56fe6a51ed98",
+    "DESIGN.md": "58f6d05083355b84",
     "PRODUCT.md": "36c52105f478ff90"
   },
   "exports": {
@@ -2636,5 +2639,7 @@
       "font.size.input": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }
