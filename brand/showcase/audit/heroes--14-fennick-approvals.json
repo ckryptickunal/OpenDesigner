@@ -1,0 +1,84 @@
+{
+ "piece": "heroes/14-fennick-approvals",
+ "title": "14 Fennick: bill approvals hero",
+ "pattern": "product hero",
+ "platform": "web",
+ "industry": "fintech, B2B accounts payable",
+ "style": [
+  "minimal",
+  "product-led",
+  "flat"
+ ],
+ "tags": [
+  "product hero",
+  "b2b",
+  "fintech",
+  "accounts payable",
+  "bill approvals",
+  "finance teams",
+  "controllers",
+  "product screenshot",
+  "footed ledger",
+  "light"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "The proof is the product's own feature set as an accountant would set it: the drawer's 'If you approve' ledger as a footed column ($63,904.52 − 15,277.75 − 7,418.60 = $41,208.17), tabular figures, $ only on the first line and the total, a single rule over the total and a double rule under it on the figures only",
+  "Exact alignment between claim, proof and picture: the ledger's left edge stands on the drawer's content edge in the screen below (966 px), its double rule ends level with the button, and the 1344 px window sits on the 48 px margins",
+  "Restraint: one regular-weight two-line headline in the buyer's words, one green action (the product's Approve green), no kicker, pill, glow or invented proof; the real bills screen flat and whole, cropped where the list ends on a row boundary and the drawer's sticky footer starts under its own 'If you approve' heading"
+ ],
+ "slop_signals": [
+  "At thumbnail size it is a sibling of heroes/11 (Purlin): a white finance page, a two-line headline on the left, a block on the right, the product below",
+  "The Fennick frond appears twice: in the nav and, inside the product, as the customer's workspace icon (product-side)"
+ ],
+ "fixes": [
+  "Product-side: give Bramblecote Foods its own workspace icon in product/02, and set data-theme=\"light\" on its <html> so an OS dark preference doesn't flip the embedded screen",
+  "If the owner wants more distance from heroes/11: make the ledger carry the page (larger figures over the drawer column) or set the product on a pale stage band"
+ ],
+ "references": [
+  {
+   "site": "Ramp",
+   "url": "https://mobbin.com/sites/sections/83a61ac1-4ad8-48d0-91be-13ac7b374e22",
+   "what": "Regular one-line headline, a live figure, then the product on a pale stage; our live figure is the cash-left sum"
+  },
+  {
+   "site": "Slash",
+   "url": "https://mobbin.com/sites/sections/a5e87e77-0bc7-4b65-8f28-7cb0ecee16bb",
+   "what": "Large flat screenshot of a list with a detail drawer under the copy; ours keeps it whole at 0.9333"
+  },
+  {
+   "site": "Sequence",
+   "url": "https://mobbin.com/sites/sections/ca1841d9-bfa2-43c6-ad49-ba6eceddf894",
+   "what": "Blurred colour wash and a small product beside a serif headline; what to avoid"
+  }
+ ],
+ "audited": "2026-10-15",
+ "self_score": 4,
+ "audited_by": "independent",
+ "facts": [
+  "The selected Calloway row (7 of 14) is below the crop; a taller crop that shows it does not fit 900 px with the copy",
+  "Product-side: the Fennick frond doubles as the customer's workspace icon; product/02 has no data-theme"
+ ],
+ "fixed": [
+  "Dropped 'bills arrive matched to their PO' (the screen shows one PO match, not forwarding)",
+  "Ledger re-labelled to the product's own words ('6 bills scheduled before Oct 20'), signed the accountant's way, rules on the figures only, total at 500",
+  "Ledger aligned to the drawer's content edge; button bottom level with the double rule",
+  "Crop measured in Chrome at 523 product px so no line is cut and the drawer heading meets its sticky footer",
+  "Kicker removed and nav changed so it no longer echoes heroes/11; page white instead of mint so the product's sidebar reads as its own column",
+  "Unused DM Mono link removed; hover only on fine pointers"
+ ],
+ "owner": {
+  "verdict": "new",
+  "said": "built after the owner's review",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "New piece: marketing hero for product/02 Fennick, using the product's own system extended with a display set (Q-brand-06 two-sets)",
+   "Seven fresh-eyes audit rounds: 3, 3, 3, 3, 3, 3, then 4 (final)",
+   "Recipe moved from a centred one-liner over the screen to a claim-and-footed-sum split, so it shares no recipe with heroes/12 (dark, product first) or heroes/13 (centred, open frame)"
+  ]
+ }
+}

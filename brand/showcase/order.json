@@ -1,0 +1,443 @@
+{
+  "updated": "2026-10-15",
+  "scores": {
+    "product--01-quoin-payments": {
+      "premium": 9,
+      "action": "keep",
+      "why": "Dense, exact payments-matching table with one green accent: the bar the rest of the gallery is measured against."
+    },
+    "product--02-fennick-approvals": {
+      "premium": 9,
+      "action": "keep",
+      "why": "Bill queue and approval panel with a ledger that adds up; quiet chrome, small exact type."
+    },
+    "product--03-corvane-record": {
+      "premium": 9,
+      "action": "keep",
+      "why": "Company record with a real activity feed and field diffs; restrained and specific."
+    },
+    "product--05-kilnworks-billing": {
+      "premium": 9,
+      "action": "keep",
+      "why": "Usage and billing with a forecast, a budget line and invoices; orange has one job."
+    },
+    "product--04-sounding-observability": {
+      "premium": 8,
+      "action": "keep",
+      "why": "Strong service overview, let down by one synthetic-looking chart and one empty card."
+    },
+    "product--06-ferrule-security": {
+      "premium": 8,
+      "action": "keep",
+      "why": "Clean security settings and audit log; the settings frame is long toggle rows, the audit frame is the stronger image."
+    },
+    "styles--09-bento-grid": {
+      "premium": 7,
+      "action": "polish",
+      "why": "Holdfast help desk bento reads like a shipped SaaS page and beat Windsurf's bento in the blind test, but every tile is full."
+    },
+    "styles--12-pixel-art": {
+      "premium": 7,
+      "action": "polish",
+      "why": "A believable live-ops dashboard where the pixel theme carries data; it won its blind pair, but every region is packed."
+    },
+    "styles--07-risograph": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Real editorial study with data in the inks, but the hero numbers collide and the page uses too many text sizes."
+    },
+    "styles--04-skeuomorphism": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Convincing post-production console, but nearly every pixel is a control and the chrome reads as a plugin skin."
+    },
+    "styles--11-terminal": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Consistent man-page style, but one monospace face flattens the hierarchy, and the gallery image is out of date."
+    },
+    "styles--01-glassmorphism": {
+      "premium": 6,
+      "action": "polish",
+      "why": "A real asset-review product on a real photo, but placeholder bars on the photo read as an unfinished wireframe."
+    },
+    "styles--10-mesh-gradient": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Good eval product UI; the mesh gradient became a glowing orange blob in the chart."
+    },
+    "styles--05-comic": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "Distinctive and data-carrying, but three faces and dense halftone panels make it look busy and amateur next to shipped editorial pages."
+    },
+    "styles--08-bauhaus": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "The shapes carry data, but they bleed off the bottom so the page looks cropped, not composed."
+    },
+    "styles--06-memphis": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "Ticket shapes sized by sales are good, but the hero uses the floating, tilted fragment tell."
+    },
+    "styles--02-neumorphism": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "The floor plan is hundreds of tiny boxes and the one neumorphic element is grey on grey."
+    },
+    "styles--03-claymorphism": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "Clean checklist, but the clay avatar and lanyard badge look like stock AI renders."
+    },
+    "heroes--08-y2k-retrofuture": {
+      "premium": 8,
+      "action": "keep",
+      "why": "One object made with care and a confident display word; the owner calls it good to go."
+    },
+    "heroes--14-fennick-approvals": {
+      "premium": 7,
+      "action": "polish",
+      "why": "The ledger-led B2B hero beat Coda's hero by a clear margin, but its product frame repeats product/02."
+    },
+    "heroes--11-spend-platform": {
+      "premium": 7,
+      "action": "polish",
+      "why": "Ramp-grade spend hero that won its blind pair; the chart and header are crowded."
+    },
+    "heroes--02-luminous-devtool": {
+      "premium": 7,
+      "action": "polish",
+      "why": "A real search console that won its blind pair, with a dead hole on the left and a big-stat recipe."
+    },
+    "heroes--01-swiss-architecture": {
+      "premium": 7,
+      "action": "polish",
+      "why": "A confident section drawing that carries data; it won its blind pair but has too many annotation layers."
+    },
+    "heroes--07-climate-observatory": {
+      "premium": 7,
+      "action": "polish",
+      "why": "Real science UI that won its blind pair, but contour texture runs behind the text."
+    },
+    "heroes--03-organic-wellness": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "Nice serif headline, but the tin and flowers look like clip-art and a quarter of the frame is empty."
+    },
+    "heroes--12-sounding-observability": {
+      "premium": 6,
+      "action": "remove",
+      "why": "Repeats product/04 pixel for pixel and lost its blind pair; the product section already shows this screen better."
+    },
+    "heroes--13-ferrule-security": {
+      "premium": 5,
+      "action": "remove",
+      "why": "Repeats product/06's audit frame, and the spaced headline reads as a layout bug."
+    },
+    "components--02-command-palette": {
+      "premium": 8,
+      "action": "keep",
+      "why": "The palette itself is premium; the owner's one approved component. Drop the spec-sheet half."
+    },
+    "components--08-music-player": {
+      "premium": 7,
+      "action": "polish",
+      "why": "Rebuilt dark listening room; the judge called it equal to SoundCloud on craft."
+    },
+    "components--07-ai-composer": {
+      "premium": 7,
+      "action": "polish",
+      "why": "Rebuilt composer is clean and specific, but it floats in empty space and reads like Claude Projects."
+    },
+    "components--09-onboarding-stepper": {
+      "premium": 7,
+      "action": "polish",
+      "why": "Rebuilt as a Sedge payroll setup: believable B2B, but every element has a grey second line and it reads as Gusto."
+    },
+    "components--03-date-range-picker": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Rebuilt as a Gridlark dashboard picker; tidy, but the popover shows everything at once."
+    },
+    "components--06-data-table": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Rebuilt shipments table (re-rendered 05:59) is tidy, but uniform demo data and stacked chrome make it read as a well-made fake."
+    },
+    "components--01-pricing-glass": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Rebuilt pricing is tidy but generic dark-SaaS, and it stacks notes before the features."
+    },
+    "components--10-settings-terminal": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Rebuilt as Ackwire notification settings; competent, but one modal holds too much."
+    },
+    "components--05-toast-stack": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "Rebuilt at 06:02 as Panelwise, a hiring pipeline with a toast stack; cleaner than the Slack clone it replaced, but the toasts bury the table."
+    },
+    "components--04-upload-brutal": {
+      "premium": 4,
+      "action": "rebuild",
+      "why": "Half the frame is a spec sheet and the rest is boxed decoration."
+    },
+    "app-screens--05-travel-boarding": {
+      "premium": 8,
+      "action": "keep",
+      "why": "The owner's 'great': clear, real and calm. Fix one weekday."
+    },
+    "app-screens--04-fitness-neon": {
+      "premium": 8,
+      "action": "keep",
+      "why": "The owner's 'great': condensed numerals, one lime accent, live data."
+    },
+    "app-screens--11-approvals-mobile": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Reads like a shipped enterprise iOS app, but has no voice of its own."
+    },
+    "app-screens--08-podcast-player": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Nice transcript idea, but the serif title dominates and the pause button looks unstyled."
+    },
+    "app-screens--07-language-lesson": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Well executed, but a viewer names Duolingo in one second."
+    },
+    "app-screens--03-recipe-editorial": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "Real photo and serif title, but the palette and spacing feel cheap (the owner asked for better fonts and spacing)."
+    },
+    "app-screens--06-plant-care": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "Real plant photos and believable data, but three type voices and a crowded first card."
+    },
+    "app-screens--09-project-workspace": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "A Linear clone with a heavy grey Gantt; the judge named Linear at once."
+    },
+    "app-screens--10-clinical-vitals": {
+      "premium": 4,
+      "action": "rebuild",
+      "why": "The owner's 'needs a lot of work': every value boxed in caramel, like spreadsheet formatting."
+    },
+    "app-screens--01-private-banking": {
+      "premium": 3,
+      "action": "rebuild",
+      "why": "The owner's 'fonts are not visible': a Didone total fights the UI text, grey on charcoal, a bare polyline chart."
+    },
+    "watch--09-oncall-incident": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Useful and clear, but four lines at nearly one size and buttons that press the edge."
+    },
+    "watch--01-ridgeline-trail": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Strong pace number, but three faces and decorative chart texture."
+    },
+    "watch--07-leeward-sail": {
+      "premium": 6,
+      "action": "polish",
+      "why": "A real instrument, but all-mono type and a dial cut by the screen edge."
+    },
+    "watch--05-nook-home": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "Reads as Apple Home tiles with a glaring gradient."
+    },
+    "watch--04-headway-transit": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "Clear idea, default-looking condensed type and many small marks."
+    },
+    "watch--02-thrum-heart": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "The heart-rate number is crammed and the bottom is a decorative gradient line."
+    },
+    "watch--03-tidemark-face": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "Elegant time, but a painted sky-and-sea gradient stands in for an asset."
+    },
+    "watch--08-onething-focus": {
+      "premium": 4,
+      "action": "remove",
+      "why": "A generic focus timer with a reused number; nothing only this brand could own."
+    },
+    "footers--02-keystrata-mega": {
+      "premium": 8,
+      "action": "keep",
+      "why": "The owner's approved enterprise mega footer."
+    },
+    "footers--01-brask-wordmark": {
+      "premium": 8,
+      "action": "keep",
+      "why": "The owner's approved giant-wordmark footer."
+    },
+    "footers--08-rallo-app": {
+      "premium": 8,
+      "action": "keep",
+      "why": "The owner approved it, but it carries invented proof and four decorations at once."
+    },
+    "footers--09-b2b-platform": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Close to Railway or Vercel, but a loud amber date and three mini-tables crowd it."
+    },
+    "footers--05-salt-ledger-index": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "The issue-spine chart is lovely, but the footer does a homepage's job."
+    },
+    "footers--07-sasame-tea": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "Elegant type, but most of the footer is a Gantt chart with untidy details."
+    },
+    "footers--04-tumbletree-meadow": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "Real content (letter formation), but a kids' brand on corporate navy with a crowded diagram."
+    },
+    "footers--06-knurl-brutalist": {
+      "premium": 4,
+      "action": "rebuild",
+      "why": "Every element boxed with an offset shadow, four decorations at once, and a wrong weekday."
+    },
+    "mockups--10-multi-device": {
+      "premium": 6,
+      "action": "polish",
+      "why": "Flat and legible, but a presentation plate with a caption strip and dead space."
+    },
+    "mockups--09-laptop-dashboard": {
+      "premium": 6,
+      "action": "polish",
+      "why": "The best design in the gallery on a laptop, at a size where none of it reads."
+    },
+    "mockups--07-tablet-clinic": {
+      "premium": 5,
+      "action": "rebuild",
+      "why": "Shows the Wardlight screen, which scores 4 here; re-render after that rebuild."
+    },
+    "mockups--01-phone-trio": {
+      "premium": 3,
+      "action": "rebuild",
+      "why": "Two of its three phones show pieces the owner rejected."
+    },
+    "mockups--05-components-board": {
+      "premium": 3,
+      "action": "rebuild",
+      "why": "Shows the old web components the owner calls rubbish."
+    },
+    "mockups--08-made-with-opendesigner": {
+      "premium": 3,
+      "action": "remove",
+      "why": "Its grid shows heroes the owner removed as 'very ugly'."
+    },
+    "mockups--04-browser-cascade": {
+      "premium": 2,
+      "action": "remove",
+      "why": "Shows a removed hero and a replaced hero, with numbered documentation callouts."
+    },
+    "mockups--06-poster-street": {
+      "premium": 2,
+      "action": "remove",
+      "why": "A billboard of a hero the owner removed as 'very ugly'."
+    }
+  },
+  "category_order": [
+    "product",
+    "heroes",
+    "components",
+    "footers",
+    "styles",
+    "app-screens",
+    "watch",
+    "mockups"
+  ],
+  "order": [
+    "product--01-quoin-payments",
+    "product--02-fennick-approvals",
+    "product--03-corvane-record",
+    "product--05-kilnworks-billing",
+    "product--04-sounding-observability",
+    "product--06-ferrule-security",
+    "heroes--08-y2k-retrofuture",
+    "heroes--14-fennick-approvals",
+    "heroes--11-spend-platform",
+    "heroes--02-luminous-devtool",
+    "heroes--01-swiss-architecture",
+    "heroes--07-climate-observatory",
+    "heroes--03-organic-wellness",
+    "heroes--12-sounding-observability",
+    "heroes--13-ferrule-security",
+    "components--02-command-palette",
+    "components--08-music-player",
+    "components--07-ai-composer",
+    "components--09-onboarding-stepper",
+    "components--03-date-range-picker",
+    "components--06-data-table",
+    "components--01-pricing-glass",
+    "components--10-settings-terminal",
+    "components--05-toast-stack",
+    "components--04-upload-brutal",
+    "footers--02-keystrata-mega",
+    "footers--01-brask-wordmark",
+    "footers--08-rallo-app",
+    "footers--09-b2b-platform",
+    "footers--05-salt-ledger-index",
+    "footers--07-sasame-tea",
+    "footers--04-tumbletree-meadow",
+    "footers--06-knurl-brutalist",
+    "styles--09-bento-grid",
+    "styles--12-pixel-art",
+    "styles--07-risograph",
+    "styles--04-skeuomorphism",
+    "styles--11-terminal",
+    "styles--01-glassmorphism",
+    "styles--10-mesh-gradient",
+    "styles--05-comic",
+    "styles--08-bauhaus",
+    "styles--06-memphis",
+    "styles--02-neumorphism",
+    "styles--03-claymorphism",
+    "app-screens--05-travel-boarding",
+    "app-screens--04-fitness-neon",
+    "app-screens--11-approvals-mobile",
+    "app-screens--08-podcast-player",
+    "app-screens--07-language-lesson",
+    "app-screens--03-recipe-editorial",
+    "app-screens--06-plant-care",
+    "app-screens--09-project-workspace",
+    "app-screens--10-clinical-vitals",
+    "app-screens--01-private-banking",
+    "watch--09-oncall-incident",
+    "watch--01-ridgeline-trail",
+    "watch--07-leeward-sail",
+    "watch--05-nook-home",
+    "watch--04-headway-transit",
+    "watch--02-thrum-heart",
+    "watch--03-tidemark-face",
+    "watch--08-onething-focus",
+    "mockups--10-multi-device",
+    "mockups--09-laptop-dashboard",
+    "mockups--07-tablet-clinic",
+    "mockups--01-phone-trio",
+    "mockups--05-components-board",
+    "mockups--08-made-with-opendesigner",
+    "mockups--04-browser-cascade",
+    "mockups--06-poster-street"
+  ]
+}

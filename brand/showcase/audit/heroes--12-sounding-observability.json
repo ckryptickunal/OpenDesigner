@@ -1,0 +1,91 @@
+{
+  "piece": "heroes/12-sounding-observability",
+  "title": "12 Sounding: API observability hero",
+  "pattern": "product hero",
+  "platform": "web",
+  "industry": "developer tools, API observability",
+  "style": [
+    "minimal",
+    "product-led",
+    "flat",
+    "typographic",
+    "dark"
+  ],
+  "tags": [
+    "product hero",
+    "b2b",
+    "developer tools",
+    "observability",
+    "sre",
+    "on-call",
+    "product screenshot",
+    "display type",
+    "dark"
+  ],
+  "score": 4,
+  "verdict": "keep",
+  "strengths": [
+    "Product first: the real Overview screen (product/04) flat and whole on the 1344 px grid, cropped cleanly under its chart legend, inert, with KPI numbers that read; a light window on charcoal is the brightest object with no glow",
+    "One confident display line in the on-call engineer's words, 'Find the deploy that broke p95.', at 107 px so its ink runs 43 to ~1390 px, the width of the window above: type and product read as one block",
+    "Discipline and proof: one face (Inter, plus mono for the version tag), one button, amber only where the product alerts, and a sentence built only from on-screen facts (v2.41.0 deployed 13:12 UTC; p95 past 450 ms nine minutes later)"
+  ],
+  "slop_signals": [
+    "The headline's evidence is a ~10 px spike at the right edge of one chart card, next to a 386 ms 24-hour tile that reads as 'fine'; the hero cannot change the product's time range",
+    "Little besides the type move and the plumb-line mark is ownable by this brand",
+    "107 px is outside the type scale (an exception recorded in notes.md for the owner)"
+  ],
+  "fixes": [
+    "Product-side: a deploy or alert state on product/04 that opens the charts on the alert's window, so the spike fills the card; set data-theme=\"light\" on its <html>",
+    "Optional, if the owner wants more: a nav-level 'Connect a service' so the action shows in a short browser viewport (keep it the same single action)"
+  ],
+  "references": [
+    {
+      "site": "incident.io",
+      "url": "https://mobbin.com/sites/sections/1f8c9d4b-9f7f-4bfa-aed3-9a849b84831e",
+      "what": "Light product window on a dark page; theirs adds an orange highlight line, two buttons and a phone over the window, ours keeps one flat window and one action"
+    },
+    {
+      "site": "Laravel Cloud",
+      "url": "https://mobbin.com/screens/bb369cb4-f7e0-4c16-a0f3-f39e7e4a3adf",
+      "what": "Regular-weight headline with a full-width window; theirs uses a glow and a floating modal, ours puts the product first and the claim under it"
+    },
+    {
+      "site": "Better Stack",
+      "url": "https://mobbin.com/sites/sections/ee148e54-0a65-4d40-b945-cef19b160085",
+      "what": "Bold centred headline over a dashboard on a purple glow; what to avoid"
+    }
+  ],
+  "audited": "2026-10-15",
+  "self_score": 4,
+  "audited_by": "independent",
+  "facts": [
+    "The picture's proof is small (product-side time range); the 386 ms KPI is the 24-hour figure",
+    "Product-side: no data-theme on product/04 (OS dark mode flips the embed to its unfinished dark theme); 'Updated 14:02 UTC' also appears in product/06"
+  ],
+  "fixed": [
+    "Unsupported claims removed: 'works with any OpenTelemetry exporter', 'paged', 'every chart marks the deploy', a causal 'release that took p95 past 450 ms'",
+    "Kicker, mono incident logs, tick annotation and caption strips tried and removed after audits found them repetitive or misleading",
+    "Headline sized to the window's width; sentence cut to one 20 px line with the category first; nav 'Docs' dropped so it isn't repeated by the product's own bar",
+    "Crop set at 548 px (587 product px) under the legend; frame made inert; hover only on fine pointers"
+  ],
+  "owner": {
+    "verdict": "remove",
+    "said": "Hide all 6: approved the round 4 audit's removals (mockups showing removed pieces, heroes repeating the product screens, a generic timer)",
+    "date": "2026-10-15"
+  },
+  "round3": {
+    "score": 4,
+    "changed": [
+      "New piece: marketing hero for product/04 Sounding, using the product's own system extended with a display set (Q-brand-06 two-sets)",
+      "About eighteen fresh-eyes audit rounds: 3 for the copy-above-screen and caption versions, 3.5 to 4 once the product moved first and one display line was measured to the window; confirming score 4",
+      "Distinct recipe: the only hero in 11-14 with the product first, a dark page and one grid-wide display line"
+    ]
+  },
+  "owner_history": [
+    {
+      "verdict": "new",
+      "said": "built after the owner's review",
+      "date": "2026-10-14"
+    }
+  ]
+}

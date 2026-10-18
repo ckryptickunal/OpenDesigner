@@ -1,0 +1,81 @@
+{
+ "piece": "mockups/03-watch-trio",
+ "title": "03 · Watch trio: three faces on generic cases",
+ "pattern": "watch mockup",
+ "platform": "watchos",
+ "industry": "wearables",
+ "style": [
+  "dark",
+  "industrial",
+  "luxury"
+ ],
+ "tags": [
+  "watch mockup",
+  "wearables",
+  "product shot",
+  "black",
+  "rim light",
+  "watch faces",
+  "trail"
+ ],
+ "score": 2,
+ "verdict": "remake",
+ "strengths": [
+  "The three faces are strong and read in a second: '4\\'52\"' pace in lime, '6:18' with a tide curve, the '2 MIN' transit countdown",
+  "The case bevels are drawn with care: a chamfered rim, a highlight on the top edge, a ridged crown"
+ ],
+ "slop_signals": [
+  "The case is an Apple Watch silhouette: rounded-square glass, a ridged digital crown and a flat side button on the right, a fluoroelastomer-style strap with pin holes; no other watch looks like this, so 'generic' is not true",
+  "The straps are flat dark bands with a column of dots and no edge, stitching or curvature; they read as rectangles behind the cases",
+  "The background is three vertical soft bands (lighter centre, darker sides) that read as stripes rather than a studio falloff",
+  "The faces are rendered at full brightness with no glass reflection, so they look placed on the case rather than under its crystal"
+ ],
+ "fixes": [
+  "Redraw the case so it is nobody's: a round or softly squared case with a crown at 2 o'clock, or a flat-top case with two pushers; change the strap to a woven or leather band with visible edges and a buckle",
+  "Light it as one scene: a single key from the upper left, a rim on the opposite edge, and a floor shadow; remove the vertical bands",
+  "Add a 3% white sweep across each crystal and darken the face 10% toward the edges",
+  "Or photograph a real generic watch (open licence) and map the faces onto it"
+ ],
+ "references": [
+  {
+   "site": "Apple",
+   "url": "https://mobbin.com/sites/sections/f174bfcb-c4f9-425b-bcca-b230a46345e2",
+   "what": "The real hardware ours resembles: rounded-square case, crown and side button on the right, sport strap; the plate should look like something else"
+  },
+  {
+   "site": "Oura Ring",
+   "url": "https://mobbin.com/sites/sections/1d4e7f70-0eba-45bd-88d6-7a73aedc5732",
+   "what": "Wearables shot with one soft light on fabric; the material and the falloff do the selling"
+  },
+  {
+   "site": "Telepathic Instruments",
+   "url": "https://mobbin.com/sites/sections/e19b1448-2e4b-4614-b64d-9f2cda0540c5",
+   "what": "Hardware on black with one key light and a soft floor glow; the falloff our background wants instead of bands"
+  },
+  {
+   "site": "MOUTHWASH Studio",
+   "url": "https://mobbin.com/sites/sections/bd9d4072-e7dd-4193-bb33-c974ad83bd1b",
+   "what": "Several devices on a flat grey field in frames with no brand cues; proves generic frames can hold real screens"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "when designs are bad, mockups will also be bad; work on them",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "date": "2026-10-15",
+  "score": 2,
+  "score_note": "not re-audited; re-rendered for the Tidemark date only",
+  "changed": [
+   "shot.png re-rendered: the middle watch now reads 'WED 14'; nothing else changed",
+   "Caption and first watch's alt text say Fellrise (Ridgeline is a real product name); re-rendered again"
+  ],
+  "audited_by": "fresh-context check",
+  "remaining": [
+   "Earlier reasons for 2 remain (Apple Watch-shaped case, flat straps, lit bands); replaced by mockups/10",
+   "The side watches' 14 px lower position never applies (inline margin:0 overrides it)"
+  ]
+ }
+}

@@ -1,0 +1,100 @@
+{
+  "piece": "mockups/04-browser-cascade",
+  "title": "04 · Browser cascade: five heroes, one index",
+  "pattern": "browser stack",
+  "platform": "web",
+  "industry": "portfolio",
+  "style": [
+    "minimal",
+    "swiss",
+    "editorial"
+  ],
+  "tags": [
+    "browser stack",
+    "portfolio",
+    "index",
+    "hero sections",
+    "editorial",
+    "windows",
+    "paper"
+  ],
+  "score": 4,
+  "verdict": "keep",
+  "strengths": [
+    "An editorial idea executed exactly: five windows on a fixed step so each one behind shows only its address bar and navigation, which is enough to read five different systems, and the front one shows its whole hero",
+    "The numbered index with hairline connectors and one orange '05' is restrained typography doing the whole job; two type sizes, one accent",
+    "Window chrome stays quiet (grey dots, a centred URL pill) so the pages inside lead"
+  ],
+  "slop_signals": [
+    "A faint 12-column grid drawn across the whole page background is decoration (a blueprint-grid tic)",
+    "The hairlines from the index end at the window's left edge, but 'Kumo Kōbō' and 'Plumpot' sit behind Isobath's shadow so their lines vanish into the stack"
+  ],
+  "fixes": [
+    "Remove the background column grid, or keep only the gutter lines nearest the index",
+    "End each connector 8 px before its window and give the index rows the same 104 px rhythm as the windows so the lines read as one system"
+  ],
+  "references": [
+    {
+      "site": "Readymag",
+      "url": "https://mobbin.com/sites/sections/0df56e85-333b-49b0-b2e3-0c500a699fcc",
+      "what": "Stacked sheets showing only each site's top strip; the fan reads as many sites at once, the device our stack borrows"
+    },
+    {
+      "site": "Mailchimp",
+      "url": "https://mobbin.com/sites/sections/a7d9ea9b-380d-44f6-90cc-26c4e2b27e0b",
+      "what": "A numbered editorial index with a hairline between entries; the same index language as our left column"
+    },
+    {
+      "site": "Phantom",
+      "url": "https://mobbin.com/sites/sections/27513f15-796b-4e65-bb7b-443364e226d9",
+      "what": "A browser frame kept flat and quiet so the content inside leads"
+    },
+    {
+      "site": "Webflow",
+      "url": "https://mobbin.com/sites/sections/f0b2cf3b-c4b7-44bf-9e3d-e104422ef914",
+      "what": "A flat row of site cards with a label under each; the plainer alternative to a cascade"
+    }
+  ],
+  "audited": "2026-10-14",
+  "owner": {
+    "verdict": "remove",
+    "said": "Hide all 6: approved the round 4 audit's removals (mockups showing removed pieces, heroes repeating the product screens, a generic timer)",
+    "date": "2026-10-15"
+  },
+  "round3": {
+    "date": "2026-10-15",
+    "score": 4,
+    "audited_by": "fresh-context agent (did not build it), then a fresh check of the fixes",
+    "references": [
+      {
+        "site": "Readymag",
+        "url": "https://mobbin.com/sites/sections/0df56e85-333b-49b0-b2e3-0c500a699fcc"
+      },
+      {
+        "site": "Phantom",
+        "url": "https://mobbin.com/sites/sections/27513f15-796b-4e65-bb7b-443364e226d9"
+      },
+      {
+        "site": "Webflow",
+        "url": "https://mobbin.com/sites/sections/f0b2cf3b-c4b7-44bf-9e3d-e104422ef914"
+      }
+    ],
+    "changed": [
+      "Orrery renamed Nearmost (a real open-source tool had the name); windows show the rebuilt heroes 02 and 07",
+      "All address bars use RFC 2606 .example domains",
+      "Background 12-column grid removed (decoration); all connector lines end 12 px before the stack",
+      "Index is an ol; parallel alt texts",
+      "shot.png re-rendered"
+    ],
+    "remaining": [
+      "The back windows' 24 px strips show fragments of their heroes (Nearmost's '8.7 ms', a teal button edge)"
+    ]
+  },
+  "owner_history": [
+    {
+      "verdict": "improve",
+      "said": "when designs are bad, mockups will also be bad; work on them",
+      "date": "2026-10-14"
+    }
+  ]
+}

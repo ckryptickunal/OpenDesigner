@@ -1,0 +1,100 @@
+{
+  "piece": "mockups/05-components-board",
+  "title": "05 · Components board: five components at their real size",
+  "pattern": "component board",
+  "platform": "web",
+  "industry": "design tools",
+  "style": [
+    "dark",
+    "minimal"
+  ],
+  "tags": [
+    "component board",
+    "design tools",
+    "bento",
+    "1:1",
+    "dark board",
+    "tiles",
+    "kit"
+  ],
+  "score": 3,
+  "verdict": "polish",
+  "strengths": [
+    "Honest scale: each tile is a 1:1 window onto a finished render, measured from the DOM, with hairline edges and one lime '1:1' tag as the only accent",
+    "The mix of light and dark components on a black board reads as a kit, and the two-row bento with mixed widths keeps a grid without a uniform rhythm"
+  ],
+  "slop_signals": [
+    "Accidental crops: the Wayfern tile cuts through the 'CHECK-OUT' field and the July column headers, the Gloaming tile crops the 'MOST PICKED' pill against the tile's top edge, and the Margin tile shows a ghosted manuscript title above the palette",
+    "A cursor arrow is baked into the Chorus tile (left over from the fanned-out render) and sits over 'Theo mentioned you'",
+    "Tiles carry no name or size, so the board reads as 'five screenshots in boxes' rather than a components page (Chronicle and Base label every tile)"
+  ],
+  "fixes": [
+    "Recompose each crop so it frames one whole element with even padding: the full Studio card with its pill, one month of Wayfern, the palette without the manuscript",
+    "Re-render Chorus for the board without the cursor",
+    "Add a one-line caption per tile (component name · brand · width) in the 13 px label style",
+    "Equalise the inner margins to one value (16 px) in every tile"
+  ],
+  "references": [
+    {
+      "site": "Chronicle",
+      "url": "https://mobbin.com/sites/sections/d56f6dd4-a959-448d-a7cc-c0c2f145fce4",
+      "what": "Dark tiles each framing a whole widget with a caption and a source line under it"
+    },
+    {
+      "site": "Framer",
+      "url": "https://mobbin.com/sites/sections/c4179cb1-cf1f-4a6f-b7b6-cb721f39cda3",
+      "what": "A crop window onto the real editor at 1:1; the crop lands on a complete panel, not mid-control"
+    },
+    {
+      "site": "Base",
+      "url": "https://mobbin.com/sites/sections/d4f3d376-5f46-430f-b7f6-0b3d82a90917",
+      "what": "A grid of media tiles on black, each with a filename and size line; labelling makes a wall of crops a catalogue"
+    },
+    {
+      "site": "Spline",
+      "url": "https://mobbin.com/sites/sections/9f139af7-c535-4fa6-b81d-b04ac3b57fa5",
+      "what": "A uniform dark grid where every tile is named"
+    }
+  ],
+  "audited": "2026-10-14",
+  "owner": {
+    "verdict": "hold",
+    "said": "Hide until it is re-rendered with the rebuilt screens",
+    "date": "2026-10-15"
+  },
+  "round3": {
+    "date": "2026-10-15",
+    "score": 3,
+    "audited_by": "fresh-context agent (did not build it), twice",
+    "references": [
+      {
+        "site": "Retool",
+        "url": "https://mobbin.com/sites/sections/2516034c-7096-4637-80c6-424444c9d100"
+      },
+      {
+        "site": "Chronicle",
+        "url": "https://mobbin.com/sites/sections/d56f6dd4-a959-448d-a7cc-c0c2f145fce4"
+      },
+      {
+        "site": "Base",
+        "url": "https://mobbin.com/sites/sections/d4f3d376-5f46-430f-b7f6-0b3d82a90917"
+      }
+    ],
+    "changed": [
+      "Chorus renamed Kinroom and Pomelo Tapes renamed Calamondin Tapes (close to real companies); aria-labels and caption rewritten",
+      "Crops re-measured for the new layouts of components 01, 03, 05 and 08",
+      "Re-gridded: pricing shows the Spark and Studio heads only (no values without labels); the whole calendar width with Monday and the November label; the toast stack with Send whole",
+      "shot.png re-rendered"
+    ],
+    "remaining": [
+      "Every tile still cuts something at an edge, and there is one caption for the board, not one per tile; the references frame whole components and label each tile. Owner decision: keep the 'windows at 1:1' idea at 3, or rebuild as framed, labelled components"
+    ]
+  },
+  "owner_history": [
+    {
+      "verdict": "improve",
+      "said": "when designs are bad, mockups will also be bad; work on them",
+      "date": "2026-10-14"
+    }
+  ]
+}

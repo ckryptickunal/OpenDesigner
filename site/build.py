@@ -741,7 +741,7 @@ def home(pages, facts, faq):
     body = f"""
 <section class="h-hero">
 {announce}
-<h1 class="h-title{" g-wait" if HEADLINE_GATHER else ""}">Make everything you build <strong>look like it belongs together.</strong></h1>
+<h1 class="h-title g-wait">Make everything you build <strong>look like it belongs together.</strong></h1>
 <p class="h-lede">Your AI tools know what to build. OpenDesigner tells them how it should look: one set of design rules that every new screen follows, and that it updates when you change your mind.</p>
 <div class="h-cta"><a class="btn primary lg" href="#install">Get started free</a><a class="h-link" href="#fix">See it in action {ARROW}</a></div>
 <div class="h-cmd-wrap"><p class="h-cmd-label">Two commands in Claude Code, then a few plain questions</p>
@@ -919,9 +919,6 @@ CATS = [("product", "B2B product screens"), ("styles", "Style studies"), ("heroe
 CAT_FRAMES = {"product": "16 / 10", "styles": "16 / 10", "heroes": "16 / 10", "components": "16 / 10", "footers": "16 / 8", "mockups": "4 / 3", "app-screens": "9 / 19.5", "watch": "615 / 753"}
 THUMB_W, FULL_W = 900, 1800
 AUDIT = BRAND / "showcase" / "audit"
-# The headline's letters gather on load (site.js). Built locally for the owner to see; off in every deploy until he approves it
-# (2026-10-15). Preview it with OD_HEADLINE_GATHER=1 python3 site/build.py.
-HEADLINE_GATHER = os.environ.get("OD_HEADLINE_GATHER") == "1"
 _order = BRAND / "showcase" / "order.json"
 ORDER = {"scores": {}, "order": [], "category_order": [], **(json.loads(_order.read_text()) if _order.exists() else {})}
 # Words in the audit's "industry" field that mean the product is sold to businesses.
@@ -956,6 +953,40 @@ def piece_text(d):
     return title, text
 
 
+# Gallery titles read "Brand · what it is" (owner, 2026-10-15: the gallery looked cluttered; the audit found device specs, old
+# brand names and four title formats). The kind is fixed per folder; the brand comes from the page's own <title>, so a rename
+# in the piece shows here without an edit.
+KIND = {
+    "product": {"01": "Payments table", "02": "Bill approvals", "03": "Company record", "04": "Service overview", "05": "Usage and billing", "06": "Security settings and audit log"},
+    "heroes": {"01": "Architecture studio", "02": "Developer tool", "03": "Wellness", "07": "Ocean observatory", "08": "Retro-future hardware", "11": "Spend management",
+               "12": "API monitoring", "13": "Security and access", "14": "Bill approvals"},
+    "components": {"01": "Pricing table", "02": "Command palette", "03": "Date range picker", "04": "File upload", "05": "Toast stack", "06": "Data table",
+                   "07": "AI composer", "08": "Music player", "09": "Onboarding stepper", "10": "Settings"},
+    "footers": {"01": "Wordmark footer", "02": "Enterprise footer", "03": "Horizon footer", "04": "Illustrated footer", "05": "Magazine footer", "06": "Brutalist footer",
+                "07": "Tea house footer", "08": "App footer", "09": "Data platform footer"},
+    "styles": {"01": "Glassmorphism", "02": "Neumorphism", "03": "Claymorphism", "04": "Skeuomorphism", "05": "Comic", "06": "Memphis", "07": "Risograph",
+               "08": "Bauhaus", "09": "Bento grid", "10": "Mesh gradient", "11": "Terminal", "12": "Pixel art"},
+    "app-screens": {"01": "Private banking", "02": "Sleep story", "03": "Recipe", "04": "Live workout", "05": "Boarding pass", "06": "Plant care", "07": "Language lesson",
+                    "08": "Podcast player", "09": "Project roadmap", "10": "Ward vitals", "11": "Purchase approval"},
+    "watch": {"01": "Trail run", "02": "Heart-rate zones", "03": "Tide face", "04": "Transit", "05": "Home scenes", "06": "Breathe", "07": "Sailing", "08": "Focus timer", "09": "On-call page"},
+}
+BRAND_SHORT = {"Isobath Ocean Observatory": "Isobath", "Fenmoor STEM-8 Post Console": "Fenmoor", "Sasame Tea House": "Sasame", "Brask Studio": "Brask",
+               "Margin command palette": "Margin", "Nightjar Engineering": "Nightjar", "Lullwort Sleep Teas": "Lullwort", "Orbika SR-1": "Orbika"}
+
+
+def gallery_title(cat, d, fallback):
+    kind = KIND.get(cat, {}).get(d.name[:2])
+    page = d / "index.html"
+    m = re.search(r"<title>([^<]+)</title>", page.read_text(errors="ignore")) if kind and page.exists() else None
+    if not m:
+        return fallback
+    t = html.unescape(m.group(1)).strip()
+    parts = [x.strip() for x in re.split(r":| · | — | – | \| ", t) if x.strip()]
+    brand = parts[-1] if cat == "product" or re.match(r"Q\d", parts[0]) else parts[0]
+    brand = re.sub(r"\s+(footer|annual report.*)$|\(\d\)$", "", brand).strip()
+    return f"{BRAND_SHORT.get(brand, brand)} · {kind}"
+
+
 def show_pieces():
     """Every showcase piece with its render, its notes and, when the Mobbin audit has run, its tags and verdict."""
     from PIL import Image
@@ -975,12 +1006,13 @@ def show_pieces():
             with Image.open(src) as im:
                 w, h = im.size
             title, blurb = piece_text(d)
+            title = gallery_title(cat, d, title)
             meta = {"tags": [], "styles": [], "verdict": "", "pattern": ""}
             a = AUDIT / f"{cat}--{d.name}.json"
             if a.exists():
                 j = json.loads(a.read_text())
-                if j.get("owner", {}).get("verdict") == "remove":
-                    continue  # removed after the owner's review; the files stay in the repo
+                if j.get("owner", {}).get("verdict") in ("remove", "hold"):
+                    continue  # removed after the owner's review, or held until rebuilt; the files stay in the repo
                 industry = str(j.get("industry", "")).lower().strip()
                 audience = "b2b" if cat == "product" or industry in B2B_INDUSTRIES or any(k in industry for k in B2B_WORDS) else "consumer"
                 styles = [str(x).lower().strip() for x in j.get("style", [])][:4]
@@ -1084,7 +1116,9 @@ def piece_card(p, i, frame):
     2026-10-15: no "+2 frames" sticker; the image itself changes). Tags are one quiet line, not three styles of label."""
     tags = [t for t in p["tags"] if t in ("b2b", "consumer")][:1] + [t for t in p["tags"] if t in p.get("styles", [])][:1] + [t for t in p["tags"] if t not in ("b2b", "consumer") and t not in p.get("styles", [])][:1]
     meta = " · ".join(esc(sticker_label(t)) for t in tags)
-    review = '<span class="piece-stuck"><span class="a-rstamp rot">Being rebuilt</span></span>' if p["verdict"] in ("polish", "remake", "improve") else ""
+    review = ""
+    if p["verdict"] in ("polish", "remake", "improve"):  # a quiet note, not a rotated stamp on the picture (round 4 audit: stamps were clutter)
+        meta = (meta + " · " if meta else "") + '<span class="piece-note">Being rebuilt</span>'
     data = f'data-blurb="{esc(p["blurb"])}" data-tags="{esc(", ".join(p["tags"]))}"'
     shots = [(f"/img/show/{p['key']}-{FULL_W}.webp", f"/img/show/{p['key']}.webp", p["tw"], p["th"], p["title"])]
     for fn, _src in p.get("frames", []):

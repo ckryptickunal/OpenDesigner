@@ -1,0 +1,102 @@
+{
+  "piece": "mockups/07-tablet-clinic",
+  "title": "07 · Tablet on the ward: Vigil",
+  "pattern": "tablet mockup",
+  "platform": "ios",
+  "industry": "healthcare",
+  "style": [
+    "minimal",
+    "enterprise"
+  ],
+  "tags": [
+    "tablet mockup",
+    "healthcare",
+    "dashboard",
+    "photo",
+    "ward",
+    "top-down",
+    "clinical"
+  ],
+  "score": 3,
+  "verdict": "polish",
+  "strengths": [
+    "The dashboard inside is the strength: a NEWS2 ward view with 'Rosa Halvorsen · Bed 7', 'Allergy: penicillin', vitals with usual ranges and traces, a 12-hour score strip; it is specific and reads as a real clinical tool",
+    "The photo is real and calm (white table, a glass of water half out of frame, window light), and the slight rotation keeps the plate from being a template"
+  ],
+  "slop_signals": [
+    "The window-light shadows cross the table at the top right but never cross the tablet or its screen, and the screen shows no glare or reflection: the device is pasted onto the photo rather than lit by it",
+    "The tablet's own cast shadow is a faint even halo instead of a shadow thrown toward the lower left, so it floats a few millimetres above the table",
+    "A uniform thin black bezel with a silver rim and that corner radius is an iPad Pro outline; the notes call it generic"
+  ],
+  "fixes": [
+    "Paint the same diagonal window shadow across the bezel and the screen as a multiply band at 10 to 15%, continuous with the table's shadow",
+    "Replace the halo with a soft shadow offset 12 to 20 px toward the lower left, darker at the contact edge",
+    "Add a 3 to 5% white diagonal reflection on the glass and darken the screen 5% toward the edges",
+    "Make the frame nobody's: a slightly thicker chin, a matte dark rim instead of silver, or a different corner radius"
+  ],
+  "references": [
+    {
+      "site": "Poly",
+      "url": "https://mobbin.com/sites/sections/954077a6-b1a9-4625-8e1f-5e0d6fc7783d",
+      "what": "A tablet composited onto a photographed wood desk, rotated, with a cast shadow that matches the scene; the closest shipped example of our plate"
+    },
+    {
+      "site": "Superpower",
+      "url": "https://mobbin.com/sites/sections/4f2c6ee9-bebc-4c9b-82ef-15e8ba9f2a4f",
+      "what": "A health dashboard in a generic tablet frame on black; frontal and flat, nothing else on the plate"
+    },
+    {
+      "site": "OpenTable",
+      "url": "https://mobbin.com/sites/sections/938af52f-c5d5-42f6-9f91-dbcb9aa8e9fc",
+      "what": "Flat tablet frames on blobs: the template look a photo was meant to avoid"
+    },
+    {
+      "site": "Runway",
+      "url": "https://mobbin.com/sites/sections/99a2b466-83d0-4b41-bacf-17e6f1f0f1cd",
+      "what": "Product UI shown on a plain card with no device at all; an honest alternative when the hardware cannot be lit"
+    }
+  ],
+  "audited": "2026-10-14",
+  "owner": {
+    "verdict": "hold",
+    "said": "Hide until it is re-rendered with the rebuilt screens",
+    "date": "2026-10-15"
+  },
+  "round3": {
+    "date": "2026-10-15",
+    "score": 4,
+    "audited_by": "fresh-context agent (did not build it)",
+    "references": [
+      {
+        "site": "Poly",
+        "url": "https://mobbin.com/sites/sections/954077a6-b1a9-4625-8e1f-5e0d6fc7783d"
+      },
+      {
+        "site": "Daylight",
+        "url": "https://mobbin.com/sites/sections/7655435a-d6e7-4c7c-897a-5ddf03b3b015"
+      },
+      {
+        "site": "Superpower",
+        "url": "https://mobbin.com/sites/sections/4f2c6ee9-bebc-4c9b-82ef-15e8ba9f2a4f"
+      }
+    ],
+    "changed": [
+      "Vigil (a real company, Vigil Health Solutions) renamed Wardlight in the title, comment, alt text and caption, matching the rebuilt app-screens/10",
+      "Scene system renamed 'Wardlight Ward Tablet' through the engine; the old vigil-ward-tablet resolver export moved to the macOS Trash",
+      "Alt text rewritten from the new screen (02:16, Ward 4B, Rosa Halvorsen NEWS2 8, emergency response 02:04, registrar paged 12 min, chart 22:00 to 02:15)",
+      "shot.png re-rendered with the rebuilt screen; notes.md title now Wardlight"
+    ],
+    "remaining": [
+      "The earlier audit's scene fixes were not in scope: matte graphite rim (the silver rim and thin bezel read as an iPad Pro), shadow toward the lower left, glass reflection",
+      "Right caption 'Tablet, 1180 × 820' is 4.96:1 inside a window-shadow band; move it out to widen the margin",
+      "Vigil still in the gallery page and its committed thumbnail until build_gallery.py runs; also in app-screens/10's notes title, app-screens/PROCESS-06-10.md and that piece's old resolver and findings files"
+    ]
+  },
+  "owner_history": [
+    {
+      "verdict": "improve",
+      "said": "when designs are bad, mockups will also be bad; work on them",
+      "date": "2026-10-14"
+    }
+  ]
+}

@@ -230,6 +230,7 @@ svg.arrow { width: 14px; height: 14px; flex: none; }
 .piece figcaption { display: grid; gap: 4px; margin-top: 10px; font-size: 13.5px; line-height: 20px; color: var(--ink-muted); }
 .piece figcaption strong { color: var(--ink); font-weight: 500; font-size: 14px; }
 .piece-meta { font-size: 12.5px; color: var(--ink-subtle, var(--ink-muted)); }
+.piece-note { color: var(--ink); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 /* A piece with several frames: they sit side by side in its own frame. Swipe on touch; chevrons appear under a mouse or on
    keyboard focus; the dots show how many frames there are and which one is showing (the longer dot). */

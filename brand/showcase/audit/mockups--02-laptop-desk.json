@@ -1,0 +1,80 @@
+{
+ "piece": "mockups/02-laptop-desk",
+ "title": "02 · Laptop on a desk: Halde Architekten",
+ "pattern": "laptop mockup",
+ "platform": "web",
+ "industry": "architecture",
+ "style": [
+  "minimal",
+  "swiss"
+ ],
+ "tags": [
+  "laptop mockup",
+  "architecture",
+  "photo",
+  "desk",
+  "plaster",
+  "oak",
+  "hero"
+ ],
+ "score": 2,
+ "verdict": "remake",
+ "strengths": [
+  "The photograph is real, well chosen and empty of people and brands; the credit line with one red dot is the right amount of text",
+  "The Halde hero is fitted to the screen at the right aspect and stays sharp"
+ ],
+ "slop_signals": [
+  "The keyboard is a grid of identical black rounded rectangles with no legends, no gaps for the function row, no space bar: the single biggest tell that the laptop is drawn, not photographed",
+  "The laptop casts almost no contact shadow and no ambient occlusion on the oak, while the photo's light clearly comes from the upper left; the silver base shows no warm reflection from the table",
+  "The screen is pasted: full brightness, no glass reflection, no vignette, while the wall and table carry grain and soft light",
+  "The silhouette (silver slab, black bezel, wide trackpad, thin lid) is a MacBook outline without a logo rather than a generic machine",
+  "Composition: the laptop takes a quarter of the frame and sits in the lower third under a large empty plaster wall; the ratio says 'template with a photo behind it'"
+ ],
+ "fixes": [
+  "Photograph or source an open-licence laptop on a similar table and perspective-map the hero onto its screen (the Squarespace and Poly references show the result)",
+  "If it must stay CSS: draw real key legends and gaps, a space bar, a hinge; add a soft contact shadow and occlusion under the base and a warm gradient on the silver facing the oak",
+  "Lay a 4 to 6% white diagonal reflection over the screen and a slight vignette toward the bezel",
+  "Crop so the laptop fills at least 60% of the width; or move the camera closer and lower"
+ ],
+ "references": [
+  {
+   "site": "Squarespace",
+   "url": "https://mobbin.com/sites/sections/c933603d-46cb-4b6f-b166-3973ca7bd660",
+   "what": "Photographed laptop on a table: real keyboard, hinge and reflections; the screen is the brightest thing but it shares the room's light"
+  },
+  {
+   "site": "Figma",
+   "url": "https://mobbin.com/sites/sections/51af57e8-fe1d-441d-87cc-a32fa09da50c",
+   "what": "Laptop photographed at an angle with hands and objects; the device belongs to the scene"
+  },
+  {
+   "site": "Poly",
+   "url": "https://mobbin.com/sites/sections/210bc6a6-7c34-4210-9482-6b798e258ba5",
+   "what": "UI composited onto a photographed wood desk with matched shadows; proves a composite can pass when the light matches"
+  },
+  {
+   "site": "Calm",
+   "url": "https://mobbin.com/sites/sections/64137922-5347-4aeb-8b08-3dedee8a44bc",
+   "what": "A laptop inside a photographed scene; the machine is part of the picture, not a frame on top of it"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "when designs are bad, mockups will also be bad; work on them",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "date": "2026-10-15",
+  "score": 2,
+  "audited_by": "fresh-context agent (did not build it)",
+  "changed": [
+   "Alt text rewritten for the rebuilt hero 01 (one building section with sun angles)",
+   "shot.png re-rendered"
+  ],
+  "remaining": [
+   "Unchanged reasons for 2: legend-less CSS keyboard, MacBook outline with thumb notch, no hinge, flat lighting",
+   "Replaced by mockups/09 and out of the gallery: owner to decide whether to keep or remove it"
+  ]
+ }
+}

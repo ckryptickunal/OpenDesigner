@@ -1,0 +1,73 @@
+{
+ "piece": "watch/03-tidemark-face",
+ "title": "03 Tidemark: notes",
+ "pattern": "watch face",
+ "platform": "watchos",
+ "industry": "outdoors",
+ "style": [
+  "organic",
+  "dark"
+ ],
+ "tags": [
+  "watch face",
+  "outdoors",
+  "tide",
+  "weather",
+  "watch",
+  "dark",
+  "sky",
+  "watchos"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "The tide as a sine curve with a now dot and the next high labelled on the curve is the Tide Guide idea rebuilt small; '2.1 m rising' with the time is what a swimmer needs.",
+  "A light 72 px time with the date and temperature as corner complications: it reads as a face, not an app."
+ ],
+ "slop_signals": [
+  "Four layers of atmosphere art behind the data (starfield, crescent, cloud strata, horizon glints): the painted-sky watch face.",
+  "A crescent moon floats at the left of the horizon as a stray glyph while a cloud icon already gives the weather at the top.",
+  "Glow on the horizon line and on the now dot."
+ ],
+ "fixes": [
+  "Keep one atmosphere layer (the gradient and the horizon); remove the stars, the crescent and the glints.",
+  "Remove the glow on the now dot; a solid dot with a ring is enough."
+ ],
+ "references": [
+  {
+   "site": "Tide Guide",
+   "url": "https://mobbin.com/screens/6159898e-0f62-46ba-a0c9-3e5c24124993",
+   "what": "Height, 'Rising Tide', next high time and a sine curve with a now dot on a plain dark gradient."
+  },
+  {
+   "site": "Tide Guide",
+   "url": "https://mobbin.com/screens/110bff1b-5304-43ea-b5b4-9417af30c06b",
+   "what": "24-hour tide chart with labelled highs and lows: the curve carries the labels, the background stays quiet."
+  },
+  {
+   "site": "Tide Guide",
+   "url": "https://mobbin.com/screens/cfbd4e7a-6bad-460d-8af6-753004a6faf6",
+   "what": "Small tide cards: what survives at widget size is the curve, two times and a height."
+  },
+  {
+   "site": "Apple Watch",
+   "url": "https://mobbin.com/screens/48d420a8-3c3b-4861-bcb8-7f7dbcbf01e6",
+   "what": "Activity Analog face in the gallery: how few elements a shipped face holds."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "most of the watch screens are okay",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "date": "2026-10-15",
+  "score": null,
+  "score_note": "not re-audited; a date fix found by the fresh audit of mockups/08-made-with-opendesigner",
+  "changed": [
+   "'TUE 14' is now 'WED 14' (14 Oct 2026 is a Wednesday)",
+   "shot.png re-rendered with watch/render.py"
+  ]
+ }
+}

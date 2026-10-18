@@ -1,64 +1,71 @@
 {
- "piece": "watch/08-onething-focus",
- "title": "08 Onething: notes",
- "pattern": "focus timer",
- "platform": "watchos",
- "industry": "productivity",
- "style": [
-  "minimal",
-  "dark"
- ],
- "tags": [
-  "focus timer",
-  "productivity",
-  "countdown",
-  "ring",
-  "watch",
-  "dark",
-  "pink",
-  "watchos"
- ],
- "score": 4,
- "verdict": "keep",
- "strengths": [
-  "One task, one countdown, one ring: '18:24 of 25 min' in Geist 300 inside a minute-tick track, the task name as the only sentence, stop and pause as watchOS round buttons.",
-  "Three sizes, one family, pink as the only colour."
- ],
- "slop_signals": [
-  "A pink glow (drop-shadow) under the progress arc.",
-  "Four dashes at the top left with no label: they read as a page indicator in the wrong corner rather than a session count.",
-  "'18:24' is the same timer value as the sleep piece: reused invented data."
- ],
- "fixes": [
-  "Remove the arc glow.",
-  "Label the dashes ('2 of 4') or move them under the task name."
- ],
- "references": [
-  {
-   "site": "Oura",
-   "url": "https://mobbin.com/screens/08366dca-8bef-401f-a5d2-2514448fdf7d",
-   "what": "A thin ring around a single time with one button: no glow on the ring."
-  },
-  {
-   "site": "MyDyson",
-   "url": "https://mobbin.com/screens/379633cb-5523-499f-8ff0-1b427037361f",
-   "what": "Tick ring with the value in the centre and two round buttons below."
-  },
-  {
-   "site": "CREME",
-   "url": "https://mobbin.com/screens/2fbd258f-ef89-4c4d-98d4-f1aa04db4f55",
-   "what": "A thick white ring on black with the time inside: contrast by weight, not light."
-  },
-  {
-   "site": "Tiimo",
-   "url": "https://mobbin.com/screens/ffeedfca-2932-4798-9f5a-fccdaff4f095",
-   "what": "Ring timer with the remaining time and a pause pill under it."
-  }
- ],
- "audited": "2026-10-14",
- "owner": {
+  "piece": "watch/08-onething-focus",
+  "title": "08 Onething: notes",
+  "pattern": "focus timer",
+  "platform": "watchos",
+  "industry": "productivity",
+  "style": [
+    "minimal",
+    "dark"
+  ],
+  "tags": [
+    "focus timer",
+    "productivity",
+    "countdown",
+    "ring",
+    "watch",
+    "dark",
+    "pink",
+    "watchos"
+  ],
+  "score": 4,
   "verdict": "keep",
-  "said": "most of the watch screens are okay",
-  "date": "2026-10-14"
- }
+  "strengths": [
+    "One task, one countdown, one ring: '18:24 of 25 min' in Geist 300 inside a minute-tick track, the task name as the only sentence, stop and pause as watchOS round buttons.",
+    "Three sizes, one family, pink as the only colour."
+  ],
+  "slop_signals": [
+    "A pink glow (drop-shadow) under the progress arc.",
+    "Four dashes at the top left with no label: they read as a page indicator in the wrong corner rather than a session count.",
+    "'18:24' is the same timer value as the sleep piece: reused invented data."
+  ],
+  "fixes": [
+    "Remove the arc glow.",
+    "Label the dashes ('2 of 4') or move them under the task name."
+  ],
+  "references": [
+    {
+      "site": "Oura",
+      "url": "https://mobbin.com/screens/08366dca-8bef-401f-a5d2-2514448fdf7d",
+      "what": "A thin ring around a single time with one button: no glow on the ring."
+    },
+    {
+      "site": "MyDyson",
+      "url": "https://mobbin.com/screens/379633cb-5523-499f-8ff0-1b427037361f",
+      "what": "Tick ring with the value in the centre and two round buttons below."
+    },
+    {
+      "site": "CREME",
+      "url": "https://mobbin.com/screens/2fbd258f-ef89-4c4d-98d4-f1aa04db4f55",
+      "what": "A thick white ring on black with the time inside: contrast by weight, not light."
+    },
+    {
+      "site": "Tiimo",
+      "url": "https://mobbin.com/screens/ffeedfca-2932-4798-9f5a-fccdaff4f095",
+      "what": "Ring timer with the remaining time and a pause pill under it."
+    }
+  ],
+  "audited": "2026-10-14",
+  "owner": {
+    "verdict": "remove",
+    "said": "Hide all 6: approved the round 4 audit's removals (mockups showing removed pieces, heroes repeating the product screens, a generic timer)",
+    "date": "2026-10-15"
+  },
+  "owner_history": [
+    {
+      "verdict": "keep",
+      "said": "most of the watch screens are okay",
+      "date": "2026-10-14"
+    }
+  ]
 }
