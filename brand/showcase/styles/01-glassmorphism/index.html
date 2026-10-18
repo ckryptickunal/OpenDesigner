@@ -76,7 +76,7 @@
   .mark { display: flex; align-items: center; gap: var(--ds-space-8); font-weight: 700; letter-spacing: -0.01em; }
   .crumbs { display: flex; align-items: center; gap: var(--ds-space-8); padding-left: var(--ds-space-12); border-left: 1px solid rgb(255 255 255 / 0.22); color: var(--on-glass-2); white-space: nowrap; font-weight: 500; }
   .crumbs b { color: var(--on-glass); font-weight: 600; }
-  .crumbs i { font-style: normal; opacity: .7; }
+  .crumbs i { font-style: normal; opacity: .85; }
   .spacer { flex: 1; }
   .seg { display: flex; gap: var(--ds-space-2); padding: var(--ds-space-2); border-radius: var(--ds-radius-full); background: rgb(0 0 0 / 0.22); }
   .seg button { all: unset; cursor: pointer; height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-full); display: inline-flex; align-items: center; color: var(--on-glass-2); font-weight: 500; }
@@ -90,10 +90,12 @@
   .tools hr { border: 0; height: 1px; background: rgb(255 255 255 / 0.22); margin: var(--ds-space-2) var(--ds-space-6); }
 
   /* labels on the crop */
-  .chip { border-radius: var(--ds-radius-full); height: 28px; padding: 0 var(--ds-space-12); display: inline-flex; align-items: center; gap: var(--ds-space-8); white-space: nowrap; font-size: var(--ds-font-size-11); line-height: var(--ds-font-line-height-16); font-weight: 600; }
+  .chip { border-radius: var(--ds-radius-full); height: 28px; padding: 0 var(--ds-space-12); display: inline-flex; align-items: center; gap: var(--ds-space-8); white-space: nowrap; font-size: var(--ds-font-size-12); line-height: var(--ds-font-line-height-16); font-weight: 600; }
   .chip span { color: var(--on-glass-2); font-weight: 500; }
-  .chip.crop { left: 12px; top: 111px; }
-  .chip.zone { left: 80px; top: 566px; }
+  .chip.crop { left: var(--ds-space-16); top: 111px; }
+  .chip.zone { left: 96px; top: 256px; }
+  /* small glass blurs less than the big bar (styles.md: bigger surfaces, stronger blur); the engine has one blur token */
+  .chip.glass, .zoom.glass { --glass-blur: 14px; }
   .chip.zone { color: var(--on-glass-2); font-weight: 500; }
   .chip.zone em { font-style: normal; color: var(--on-glass); font-weight: 700; }
   .zoom { right: var(--ds-space-16); bottom: var(--ds-space-16); height: 36px; border-radius: var(--ds-radius-full); display: flex; align-items: center; padding: 0 var(--ds-space-4); gap: var(--ds-space-2); font-weight: 600; }
@@ -102,22 +104,24 @@
 
   /* comment pins sit on the photo: solid, numbered, one per open comment */
   .pin { position: absolute; width: 28px; height: 28px; border-radius: 50% 50% 50% 4px; background: var(--ds-color-neutral-dark-12); color: var(--ds-color-neutral-dark-1);
-    display: grid; place-items: center; font-weight: 700; font-size: var(--ds-font-size-11); box-shadow: 0 0 0 2px rgb(0 0 0 / 0.35), 0 6px 14px -4px rgb(0 0 0 / .6); }
+    display: grid; place-items: center; font-weight: 700; font-size: var(--ds-font-size-12); box-shadow: 0 0 0 2px rgb(0 0 0 / 0.35), 0 6px 14px -4px rgb(0 0 0 / .6); }
 
   /* ---- placements strip (solid) */
-  .strip { padding: var(--ds-space-12) var(--ds-space-24) var(--ds-space-8); border-top: 1px solid var(--hair); display: grid; grid-template-rows: auto 1fr; gap: var(--ds-space-8); }
+  .strip { padding: var(--ds-space-12) var(--ds-space-16) var(--ds-space-8); border-top: 1px solid var(--hair); display: grid; grid-template-rows: auto 1fr; gap: var(--ds-space-8); }
   .strip header { display: flex; align-items: baseline; gap: var(--ds-space-12); }
   .strip h2 { font-size: var(--ds-font-size-14); line-height: var(--ds-font-line-height-20); font-weight: 600; }
-  .meta { color: var(--ink-2); font-size: var(--ds-font-size-11); line-height: var(--ds-font-line-height-16); }
+  .meta { color: var(--ink-2); font-size: var(--ds-font-size-12); line-height: var(--ds-font-line-height-16); }
   .strip header .meta:last-child { margin-left: auto; }
-  .crops { display: flex; gap: var(--ds-space-24); align-items: flex-start; }
+  .crops { display: flex; gap: var(--ds-space-32); align-items: flex-start; }
+  .crops figure { min-width: 112px; }
   .crops figure { display: grid; gap: var(--ds-space-8); align-items: start; }
-  .thumb { height: 96px; border-radius: var(--ds-radius-6); background-image: var(--photo); background-repeat: no-repeat; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .08); }
-  .crops figure[aria-current] .thumb { box-shadow: 0 0 0 2px var(--ds-color-neutral-dark-1), 0 0 0 4px var(--ds-color-neutral-dark-12); }
+  .thumb { height: 80px; border-radius: var(--ds-radius-6); background-image: var(--photo); background-repeat: no-repeat; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .08); }
+  .crops figure[aria-current] .thumb { box-shadow: inset 0 0 0 2px var(--ds-color-neutral-dark-12), inset 0 0 0 4px var(--ds-color-neutral-dark-1); }
   .crops figcaption { display: grid; white-space: nowrap; }
   .crops figcaption b { font-weight: 600; }
-  .crops figcaption b span { font-weight: 400; color: var(--ink-2); font-size: var(--ds-font-size-11); margin-left: var(--ds-space-6); }
-  .st { font-size: var(--ds-font-size-11); line-height: var(--ds-font-line-height-16); font-weight: 600; }
+  .crops figcaption { width: 0; min-width: 100%; white-space: nowrap; }
+  .crops figcaption .dim { color: var(--ink-2); font-size: var(--ds-font-size-12); line-height: var(--ds-font-line-height-16); }
+  .st { font-size: var(--ds-font-size-12); line-height: var(--ds-font-line-height-16); font-weight: 600; }
   .st.ok { color: var(--ok); }
   .golive { margin-left: auto; display: grid; justify-items: end; align-content: start; gap: var(--ds-space-2); text-align: right; padding-top: var(--ds-space-2); }
   .golive b { font-weight: 600; }
@@ -127,17 +131,21 @@
   /* ---- inspector (solid) */
   .inspector { background: var(--ds-color-surface-base); border-left: 1px solid var(--hair); display: grid; grid-template-rows: auto auto 1fr auto; min-height: 0; }
   .ins-head { padding: var(--ds-space-24) var(--ds-space-24) var(--ds-space-16); }
-  .ins-head h1 { font-size: var(--ds-font-size-18); line-height: var(--ds-font-line-height-24); font-weight: 600; letter-spacing: -0.01em; }
+  .ins-head h1 { font-size: var(--ds-font-size-17); line-height: var(--ds-font-line-height-24); font-weight: 600; letter-spacing: -0.01em; }
   .ins-head p { margin-top: var(--ds-space-4); }
   section.rights { padding: var(--ds-space-16) var(--ds-space-24) var(--ds-space-20); border-top: 1px solid var(--hair); }
-  h3 { font-size: var(--ds-font-size-11); line-height: var(--ds-font-line-height-16); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); margin-bottom: var(--ds-space-8); }
+  h3 { font-size: var(--ds-font-size-12); line-height: var(--ds-font-line-height-16); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); margin-bottom: var(--ds-space-8); }
   dl.kv { display: grid; grid-template-columns: 76px 1fr; gap: var(--ds-space-6) var(--ds-space-12); }
   dl.kv dt { color: var(--ink-2); }
   dl.kv dd b { font-weight: 600; }
   dl.kv a { color: var(--ink); text-decoration: underline; text-decoration-color: rgb(255 255 255 / .35); text-underline-offset: 3px; }
   section.thread { padding: var(--ds-space-16) var(--ds-space-24); border-top: 1px solid var(--hair); overflow: hidden; display: flex; flex-direction: column; gap: var(--ds-space-16); }
+  .tabs { display: flex; gap: var(--ds-space-20); border-bottom: 1px solid var(--hair); margin-bottom: var(--ds-space-4); }
+  .tabs button { all: unset; cursor: pointer; padding: 0 0 var(--ds-space-8); color: var(--ink-2); font-weight: 600; box-shadow: inset 0 -2px 0 transparent; }
+  .tabs button[aria-selected="true"] { color: var(--ink); box-shadow: inset 0 -2px 0 var(--ink); }
+  .tabs span { color: var(--ink-2); font-weight: 500; margin-left: var(--ds-space-4); }
   .c { display: grid; grid-template-columns: 20px 1fr; gap: var(--ds-space-2) var(--ds-space-12); }
-  .c .n { grid-row: span 2; width: 20px; height: 20px; border-radius: 50% 50% 50% 3px; background: var(--ds-color-neutral-dark-12); color: var(--ds-color-neutral-dark-1); display: grid; place-items: center; font-size: var(--ds-font-size-11); font-weight: 700; margin-top: var(--ds-space-2); }
+  .c .n { grid-row: span 2; width: 20px; height: 20px; border-radius: 50% 50% 50% 3px; background: var(--ds-color-neutral-dark-12); color: var(--ds-color-neutral-dark-1); display: grid; place-items: center; font-size: var(--ds-font-size-12); font-weight: 700; margin-top: var(--ds-space-2); }
   .c .reply-line { grid-row: span 2; width: 1px; justify-self: center; background: rgb(255 255 255 / .16); }
   .c .who { display: flex; gap: var(--ds-space-6); align-items: baseline; }
   .c .who b { font-weight: 600; }
@@ -147,14 +155,17 @@
   .hist ol { list-style: none; padding: 0; display: grid; gap: var(--ds-space-6); }
   .hist ol { gap: var(--ds-space-4); }
   .hist li { display: grid; grid-template-columns: 76px 1fr; gap: var(--ds-space-8); }
-  .hist li span { color: var(--ink); }
-  .composer { margin-top: auto; height: 40px; border-radius: var(--ds-radius-12); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16); display: flex; align-items: center; padding: 0 var(--ds-space-12); color: var(--ink-2); }
+  .hist li { color: var(--ink); }
+  .hist li span { color: var(--ink-2); }
+  .composer { height: 40px; border-radius: var(--ds-radius-12); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16); display: flex; align-items: center; padding: 0 var(--ds-space-12); color: var(--ink-2); }
   .ins-foot { padding: var(--ds-space-16) var(--ds-space-24) var(--ds-space-24); border-top: 1px solid var(--hair); display: grid; gap: var(--ds-space-12); }
   .ins-foot .row { display: flex; gap: var(--ds-space-8); }
   .ins-foot .sel { color: var(--ink); font-weight: 600; }
   .btn { all: unset; cursor: pointer; flex: 1; height: var(--ds-size-control-md); border-radius: var(--ds-radius-12); display: inline-flex; align-items: center; justify-content: center; font-weight: 600; white-space: nowrap; }
   .btn.ghost { box-shadow: inset 0 0 0 1px rgb(255 255 255 / .28); }
   .btn.primary { background: var(--mint); color: var(--ds-color-text-on-accent); }
+  .wait { flex: 1; display: inline-flex; align-items: center; gap: var(--ds-space-8); color: var(--ink); font-weight: 600; }
+  .btn.rem { flex: none; padding: 0 var(--ds-space-20); }
   @media (pointer: fine) {
     .seg button:hover, .tools button:hover, .zoom button:hover { background: rgb(255 255 255 / 0.14); }
     .btn.primary:hover { filter: brightness(1.06); }
@@ -171,15 +182,15 @@
 
       <!-- Web hero 21:9 crop: full width, rows 20.9% to 85.2% of the frame, centred on the focal point. Headline zone = left 40% of the crop. -->
       <svg class="overlay" viewBox="0 0 1060 707" preserveAspectRatio="none" aria-hidden="true">
-        <defs>
-          <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <rect width="8" height="8" fill="rgb(247 144 133 / .12)"/><line x1="0" y1="0" x2="0" y2="8" stroke="rgb(255 215 209 / .38)" stroke-width="1.2"/>
-          </pattern>
-        </defs>
-        <rect x="0" y="0" width="1060" height="147" fill="rgb(6 8 12 / .58)"/>
-        <rect x="0" y="602" width="1060" height="105" fill="rgb(6 8 12 / .58)"/>
-        <rect x="0" y="147" width="424" height="455" fill="url(#hatch)"/>
+        <rect x="0" y="0" width="1060" height="147" fill="rgb(6 8 12 / .45)"/>
+        <rect x="0" y="602" width="1060" height="105" fill="rgb(6 8 12 / .45)"/>
+        <rect x="0" y="147" width="424" height="455" fill="rgb(10 12 18 / .34)"/>
         <line x1="424" y1="147" x2="424" y2="602" stroke="rgb(255 215 209 / .9)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <!-- the template's headline and button, ghosted where the layout would set them -->
+        <g fill="rgb(255 255 255 / .66)">
+          <rect x="96" y="300" width="196" height="18" rx="2"/><rect x="96" y="326" width="152" height="18" rx="2"/>
+          <rect x="96" y="360" width="84" height="24" rx="12" fill="none" stroke="rgb(255 255 255 / .66)" stroke-width="2"/>
+        </g>
         <rect x="0.75" y="147" width="1058.5" height="455" fill="none" stroke="#fff" stroke-width="1.5"/>
         <g stroke="#fff" stroke-width="4" fill="none" stroke-linecap="square">
           <path d="M2 167V149h18M1040 149h18v18M1058 582v18h-18M20 600H2v-18"/>
@@ -188,7 +199,6 @@
         <g transform="translate(403 375)">
           <circle r="15" fill="none" stroke="#fff" stroke-width="2"/>
           <circle r="3" fill="#fff"/>
-          <path d="M-22 0h-6M22 0h6M0 -22v-6M0 22v6" stroke="#fff" stroke-width="2"/>
         </g>
       </svg>
 
@@ -220,9 +230,9 @@
       </div>
 
       <div class="chip crop glass">Web hero 21:9 <span>2520 × 1080</span></div>
-      <div class="chip zone glass">Headline zone <em>covers the shed</em></div>
+      <div class="chip zone glass">Headline zone <em>overlaps the shed</em></div>
 
-      <span class="pin" style="left: 300px; top: 300px;" aria-label="Comment 1">1</span>
+      <span class="pin" style="left: 344px; top: 318px;" aria-label="Comment 1">1</span>
       <span class="pin" style="left: 990px; top: 346px;" aria-label="Comment 2">2</span>
 
       <div class="zoom glass" role="group" aria-label="Zoom">
@@ -235,24 +245,24 @@
     <section class="strip" aria-label="Placements">
       <header>
         <h2>Placements</h2>
-        <span class="meta">4 crops from one photo, each as close to the focal point (38%, 53%) as its frame allows</span>
+        <span class="meta">4 crops, auto-placed around focal point 38%, 53%</span>
       </header>
       <div class="crops">
         <figure aria-current="true" data-crop="0,0.2085,1,0.643">
           <div class="thumb" role="img" aria-label="Web hero crop"></div>
-          <figcaption><b>Web hero<span>21:9 · 2520 × 1080</span></b><span class="st stop">Changes requested</span></figcaption>
+          <figcaption><b>Web hero</b><span class="dim">21:9 · 2520 × 1080</span><span class="st stop">Changes requested</span></figcaption>
         </figure>
         <figure data-crop="0,0.28,1,0.5">
           <div class="thumb" role="img" aria-label="Billboard crop"></div>
-          <figcaption><b>Billboard<span>3:1 · 4800 × 1600</span></b><span class="st ok">Approved</span></figcaption>
+          <figcaption><b>Billboard</b><span class="dim">3:1 · 4800 × 1600</span><span class="st ok">Approved</span></figcaption>
         </figure>
         <figure data-crop="0.1133,0,0.5333,1">
           <div class="thumb" role="img" aria-label="Feed crop"></div>
-          <figcaption><b>Feed<span>4:5 · 1080 × 1350</span></b><span class="st ok">Approved</span></figcaption>
+          <figcaption><b>Feed</b><span class="dim">4:5 · 1080 × 1350</span><span class="st ok">Approved</span></figcaption>
         </figure>
         <figure data-crop="0.1925,0,0.375,1">
           <div class="thumb" role="img" aria-label="Story crop"></div>
-          <figcaption><b>Story<span>9:16 · 1080 × 1920</span></b><span class="st">Waiting for review</span></figcaption>
+          <figcaption><b>Story</b><span class="dim">9:16 · 1080 × 1920</span><span class="st">Waiting for review</span></figcaption>
         </figure>
         <div class="golive">
           <span class="meta">Goes live</span>
@@ -266,8 +276,8 @@
   <aside class="inspector" aria-label="Asset details">
     <div class="ins-head">
       <h1>Lakeside shed, Mora</h1>
-      <p class="meta">JPG · 6240 × 4160 · shot 8 Jul 2025 on a Canon EOS 6D Mark II</p>
-      <p class="meta">Added Fri 9 Oct 2026 by Signe Aldén</p>
+      <p class="meta">JPG · 6240 × 4160 · Canon EOS 6D Mark II</p>
+      <p class="meta">Shot 8 Jul 2025 · added Fri 9 Oct 2026 by Signe Aldén</p>
     </div>
 
     <section class="rights">
@@ -277,13 +287,13 @@
         <dt>Licence</dt><dd><b>Unsplash Licence.</b> Commercial use, no fee, no expiry</dd>
         <dt>Place</dt><dd>Near Mora, Sweden</dd>
         <dt>People</dt><dd>None identifiable</dd>
-        <dt>Releases</dt><dd>None on file (a building is visible)</dd>
+        <dt>Releases</dt><dd>Property release not on file</dd>
       </dl>
     </section>
 
 
     <section class="thread" aria-label="Comments">
-      <h3>Comments · 3</h3>
+      <div class="tabs" role="tablist" aria-label="Asset activity"><button role="tab" aria-selected="true">Comments <span>5</span></button><button role="tab" aria-selected="false">Activity <span>3</span></button></div>
       <div class="c">
         <span class="n">1</span>
         <div class="who"><b>Signe Aldén</b><span class="meta">Art director · 09:12</span></div>
@@ -295,25 +305,28 @@
         <p>A bottom-band headline over the grass clears the shed and the lifebuoy. Layout up by 14:00.</p>
       </div>
       <div class="c">
+        <span class="reply-line"></span>
+        <div class="who"><b>Signe Aldén</b><span class="meta">09:44</span></div>
+        <p>Good. Keep the 21:9 crop itself as it is.</p>
+      </div>
+      <div class="c">
         <span class="n">2</span>
         <div class="who"><b>Signe Aldén</b><span class="meta">10:05</span></div>
         <p>Keep the lifebuoy in the two wide crops. It leads the eye down the jetty.</p>
       </div>
-      <div class="composer">Reply to Rhys</div>
-      <div class="hist">
-        <h3>History</h3>
-        <ol class="meta">
-          <li><span>Today 09:12</span>Changes requested on Web hero</li>
-          <li><span>Tue 13 Oct</span>Billboard and Feed approved by Signe</li>
-        </ol>
+      <div class="c">
+        <span class="reply-line"></span>
+        <div class="who"><b>Rhys Marsh</b><span class="meta">10:12</span></div>
+        <p>Both wide crops keep it. Feed and Story can't: it sits outside their frames.</p>
       </div>
+      <div class="composer">Reply to Rhys</div>
     </section>
 
     <div class="ins-foot">
-      <p class="meta">Selected: <b class="sel">Web hero</b>, changes requested. 2 of 4 crops approved.</p>
+      <p class="meta">Selected: <b class="sel">Web hero</b> · changes requested · 2 of 4 approved</p>
       <div class="row">
-        <button class="btn ghost">Request changes</button>
-        <button class="btn primary">Approve web hero</button>
+        <span class="wait"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.6V8l2.4 1.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Waiting on Rhys · due 14:00</span>
+        <button class="btn ghost rem">Remind</button>
       </div>
     </div>
   </aside>
@@ -323,7 +336,7 @@
   const A = 6240 / 4160;
   document.querySelectorAll('.crops figure').forEach(f => {
     const [x, y, w, h] = f.dataset.crop.split(',').map(Number);
-    const t = f.querySelector('.thumb'), th = 96, tw = th * (w * A) / h;
+    const t = f.querySelector('.thumb'), th = 80, tw = th * (w * A) / h;
     const bw = tw / w, bh = bw / A;
     Object.assign(t.style, { width: tw.toFixed(1) + 'px', backgroundSize: `${bw.toFixed(1)}px ${bh.toFixed(1)}px`, backgroundPosition: `${(-x * bw).toFixed(1)}px ${(-y * bh).toFixed(1)}px` });
   });

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fennick · Bill approvals for finance teams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+/* Fennick's own system (the product's state, extended with a display set: Q-brand-06 two-sets). */
+:root {
+  --page: var(--ds-color-white);
+  --ink: var(--ds-color-text-primary);
+  --muted: var(--ds-color-text-secondary);
+  --faint: var(--ds-color-text-tertiary);
+  --edge: var(--ds-color-neutral-light-6);     /* the product's own warm-grey edge, not a green one */
+  --grid: 1344px;
+  --shot-scale: 0.93333;                        /* the product's 1440 px layout at 1344 px */
+  --shot-h: 488px;                              /* 523 product px: the list ends on a row boundary (after Ember Valley) and the drawer's
+                                                   sticky footer starts just under "If you approve"; the hero's footed sum above is
+                                                   that same ledger, so the screen and the claim join up */
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--page); }
+body { font: var(--ds-text-body-lg); color: var(--ink); -webkit-font-smoothing: antialiased; min-width: 1440px; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-control-sm); }
+.wrap { width: var(--grid); margin: 0 auto; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Nav */
+.nav { height: 56px; /* od-ignore: marketing nav bar, no nav-height token */ display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+.brand { justify-self: start; display: inline-flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-title-md); }
+.mark { width: var(--ds-size-icon-lg); height: var(--ds-size-icon-lg); color: var(--ds-color-text-inverse); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-inverse); display: grid; place-items: center; }
+.links { display: flex; gap: var(--ds-space-32); font: var(--ds-text-label-lg); font-weight: 400; color: var(--muted); }
+.signin { justify-self: end; font: var(--ds-text-label-lg); font-weight: 400; }
+
+/* Copy: the claim on the left; on the right, the drawer's "If you approve" ledger, footed the way an accountant foots a
+   column: tabular figures, a single rule over the total and a double rule under it, on the figures only */
+.copy { padding-top: var(--ds-space-48); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--ds-space-24); align-items: stretch; }
+.claim { grid-column: 1 / span 7; display: flex; flex-direction: column; align-items: flex-start; }
+h1 { margin-left: -0.04em; /* optical: the K's side bearing */ font: var(--ds-text-display-md); font-weight: 400; letter-spacing: -0.025em; }
+h1 span { display: block; }
+.btn { margin-top: auto; /* ends level with the sum's double rule */ display: inline-flex; align-items: center; height: var(--ds-size-control-lg); padding: 0 var(--ds-space-24); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font: var(--ds-text-label-lg); font-size: var(--ds-font-size-17); font-weight: 500; white-space: nowrap; }
+@media (hover: hover) and (pointer: fine) { .btn:hover { background: var(--ds-color-accent-light-10); } }
+
+/* 426 px wide: its left edge sits on the drawer's content edge below (48 + 984 x 0.9333 = 966 px), so the quote stands over its source */
+.foot { grid-column: 8 / span 5; justify-self: end; align-self: start; width: 426px; /* od-ignore: 1392 - 966 */ border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.foot caption { caption-side: top; text-align: left; padding-bottom: var(--ds-space-4); font: var(--ds-text-body-md); color: var(--muted); }
+.foot caption span { float: right; } /* laid out like the drawer's own heading: label left, account right */
+.foot th { text-align: left; vertical-align: baseline; padding-right: var(--ds-space-24); font-weight: 400; color: var(--muted); white-space: nowrap; }
+.foot td { width: 1%; text-align: right; vertical-align: baseline; font-size: var(--ds-font-size-29); line-height: 40px; /* od-ignore: 29 px figures on a 40 px line */ letter-spacing: -0.01em; white-space: nowrap; }
+.foot tr.total th { color: var(--ink); font-weight: 500; }
+.foot tr.total td { font-weight: 500; border-top: 1px solid var(--ink); border-bottom: 3px double var(--ink); padding-top: var(--ds-space-4); }
+
+/* The product, flat and whole */
+.shot { margin-top: var(--ds-space-64); }
+.screen { width: var(--grid); height: var(--shot-h); overflow: hidden; border-radius: var(--ds-radius-overlay); background: var(--ds-color-white); outline: 1px solid var(--edge); }
+.screen iframe { display: block; width: 1440px; height: calc(var(--shot-h) / var(--shot-scale)); border: 0; transform: scale(var(--shot-scale)); transform-origin: 0 0; pointer-events: none; }
+</style>
+</head>
+<body data-density="comfortable"><!-- on body: on <html>, the later ":root, [data-density=compact]" block wins -->
+<div class="wrap">
+  <header class="nav">
+    <a class="brand" href="#" aria-label="Fennick home">
+      <span class="mark" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="6.2" y="1" width="1.6" height="12"/><path d="M6.2 4.2 2 2.4v1.8l4.2 1.8zM7.8 6.6 12 4.8v1.8L7.8 8.4zM6.2 9 2 7.2V9l4.2 1.8z"/></svg></span>
+      Fennick
+    </a>
+    <nav class="links" aria-label="Main">
+      <a href="#">How it works</a>
+      <a href="#">Integrations</a>
+      <a href="#">Pricing</a>
+    </nav>
+    <a class="signin" href="#">Sign in</a>
+  </header>
+
+  <main>
+    <section class="copy" aria-labelledby="h">
+      <div class="claim">
+        <h1 id="h"><span>Know what’s left in the bank</span> <span>before you approve a bill.</span></h1>
+        <a class="btn" href="#">Try it on your own bills</a>
+      </div>
+      <table class="foot">
+        <caption>If you approve Calloway Freight <span>Operating ••4410</span></caption>
+        <tbody>
+          <tr><th scope="row">Balance today</th><td>$63,904.52</td></tr>
+          <tr><th scope="row">6 bills scheduled before Oct 20</th><td>−15,277.75</td></tr>
+          <tr><th scope="row">This bill</th><td>−7,418.60</td></tr>
+          <tr class="total"><th scope="row">Left on Oct 20</th><td>$41,208.17</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <figure class="shot">
+      <div class="screen" inert>
+        <iframe src="../../product/02-fennick-approvals/index.html" title="Fennick bills to approve" tabindex="-1" aria-hidden="true" scrolling="no"></iframe>
+      </div>
+      <figcaption class="sr-only">Fennick's bills to approve at Bramblecote Foods, with the review drawer open on Calloway Freight Brokers: $7,418.60 due Oct 21, over $5,000 so it needs CFO approval, and $41,208.17 left in the operating account on Oct 20 if it is approved.</figcaption>
+    </figure>
+  </main>
+</div>
+</body>
+</html>

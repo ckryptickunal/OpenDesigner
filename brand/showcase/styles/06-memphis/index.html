@@ -40,38 +40,42 @@
   nav.top a { text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
   nav.top .right { margin-left: auto; }
 
-  .copy { position: absolute; left: 80px; top: 150px; width: 640px; }
-  h1 { margin: 0; max-width: 9.5em; text-wrap: balance; font-size: var(--ds-font-size-67); line-height: 1; font-weight: 400; font-stretch: 84%; font-variation-settings: "opsz" 96; letter-spacing: -0.01em; }
-  .lede { margin: var(--ds-space-24) 0 0; font-size: var(--ds-font-size-21); line-height: 1.4; color: var(--dim); max-width: 29em; text-wrap: pretty; font-variation-settings: "opsz" 21; }
-  .actions { display: flex; align-items: center; gap: var(--ds-space-20); margin-top: var(--ds-space-32); }
+  .copy { position: absolute; left: 80px; top: 136px; width: 760px; }
+  h1 { margin: 0; max-width: 9.5em; text-wrap: balance; font-size: var(--ds-font-size-90); line-height: .96; font-weight: 400; font-stretch: 84%; font-variation-settings: "opsz" 96; letter-spacing: -0.01em; }
+  .lede { margin: var(--ds-space-20) 0 0; font-size: var(--ds-font-size-21); line-height: 1.4; color: var(--dim); max-width: 700px; text-wrap: pretty; font-variation-settings: "opsz" 21; }
+  .actions { display: flex; align-items: center; gap: var(--ds-space-20); margin-top: var(--ds-space-20); }
   .btn { display: inline-flex; align-items: center; height: 52px; padding: 0 var(--ds-space-24); background: var(--chalk); color: var(--ds-color-neutral-light-12); font-weight: 600; font-size: var(--ds-font-size-16); text-decoration: none; border-radius: var(--ds-radius-4, 4px); }
   .price { color: var(--dim); font-size: var(--ds-font-size-16); }
 
   /* the badge, as printed at the door: the tier shapes are on it, big enough to read from a room's door */
-  .lanyard { position: absolute; left: 1164px; top: 0; width: 24px; height: 128px; background: var(--chalk); }
-  .clip { position: absolute; left: 1156px; top: 118px; width: 40px; height: 22px; border-radius: 4px; background: var(--dim); }
-  .badge { position: absolute; left: 1036px; top: 132px; width: 280px; height: 376px; background: var(--ds-color-neutral-light-1); color: var(--ds-color-neutral-light-12); border-radius: var(--ds-radius-8, 8px); padding: 34px 22px 18px; font-variation-settings: "opsz" 14; }
-  .badge .hole { position: absolute; left: 124px; top: 12px; width: 32px; height: 8px; border-radius: 4px; background: var(--ground); }
+  .door { position: absolute; left: 1046px; top: 112px; width: 300px; height: 260px; transform: rotate(-7deg); overflow: visible; }
+  .badge { position: absolute; left: 872px; top: 150px; width: 240px; height: 320px; transform: rotate(4deg); background: var(--ds-color-neutral-light-1); color: var(--ds-color-neutral-light-12); border-radius: var(--ds-radius-8, 8px); padding: 32px 20px 16px; font-variation-settings: "opsz" 14; }
+  .badge .hole { position: absolute; left: 104px; top: 12px; width: 32px; height: 8px; border-radius: 4px; background: var(--ground); }
   .badge .ev { font-size: var(--ds-font-size-12); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
   .badge .ev span { display: block; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--ds-color-neutral-light-11); margin-top: 2px; }
-  .badge .who { margin-top: 26px; font-size: var(--ds-font-size-38); line-height: 1; font-weight: 700; font-stretch: 88%; letter-spacing: -0.015em; }
-  .badge .role { margin-top: 10px; font-size: var(--ds-font-size-16); color: var(--ds-color-neutral-light-11); }
-  .badge svg { position: absolute; left: 22px; bottom: 58px; width: 236px; height: 104px; }
-  .badge .tiers { position: absolute; left: 22px; right: 22px; bottom: 18px; font-size: var(--ds-font-size-12); line-height: 1.35; border-top: 1px solid var(--ds-color-border-subtle); padding-top: 8px; }
+  .badge .who { margin-top: 20px; font-size: var(--ds-font-size-28); line-height: 1.05; font-weight: 700; font-stretch: 88%; letter-spacing: -0.015em; }
+  .badge .role { margin-top: 8px; font-size: var(--ds-font-size-16); color: var(--ds-color-neutral-light-11); }
+  .badge svg { position: absolute; left: 20px; bottom: 57px; width: 182px; height: 80px; }
+  .badge .tiers { position: absolute; left: 20px; right: 20px; bottom: 16px; font-size: var(--ds-font-size-12); line-height: 1.35; border-top: 1px solid var(--ds-color-border-subtle); padding-top: 8px; }
 
   /* the sales chart: the same four shapes, filled to tickets issued, dashed to tickets released, area to scale */
   .chart { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; pointer-events: none; }
-  .c-head { position: absolute; left: 80px; top: 548px; font-size: var(--ds-font-size-16); }
+  .c-head { position: absolute; left: 80px; top: 516px; font-size: var(--ds-font-size-16); }
   .c-head b { font-weight: 600; }
   .c-head span { display: block; margin-top: 4px; color: var(--dim); font-size: var(--ds-font-size-12); }
-  .lab { position: absolute; top: 814px; font-size: var(--ds-font-size-16); line-height: 1.25; transform: translateX(-50%); text-align: center; white-space: nowrap; }
-  .lab small { display: block; font-size: var(--ds-font-size-12); color: var(--dim); margin-top: 2px; }
-  .sum { position: absolute; left: 1180px; top: 552px; width: 180px; white-space: nowrap; }
-  .c-head .scale { color: var(--dim); font-size: var(--ds-font-size-12); }
-  .sum .key { margin-top: 14px; font-size: var(--ds-font-size-12); }
-  .sum .big { font-size: var(--ds-font-size-51); line-height: 1; font-weight: 600; font-stretch: 88%; letter-spacing: -0.02em; }
-  .sum p { margin: 6px 0 0; color: var(--dim); font-size: var(--ds-font-size-16); line-height: 1.35; }
-  .sum p b { color: var(--chalk); font-weight: 500; }
+  .lab { position: absolute; top: 782px; font-size: var(--ds-font-size-16); line-height: 1.25; transform: translateX(-50%); text-align: center; white-space: nowrap; }
+  .lab small { display: block; font-size: var(--ds-font-size-16); color: var(--dim); margin-top: 2px; }
+  .lab small + small { font-size: var(--ds-font-size-12); }
+  .sum { position: absolute; left: 1060px; top: 516px; width: 300px; white-space: nowrap; }
+  .c-head .scale { color: var(--dim); font-size: var(--ds-font-size-12); display: flex; align-items: center; gap: 6px; }
+  .c-head .scale svg { flex: none; }
+  .c-head .scale i { font-style: normal; margin-right: 10px; }
+  .sum .big { font-size: var(--ds-font-size-38); line-height: 1; font-weight: 600; font-stretch: 88%; letter-spacing: -0.02em; }
+  .sum .of { margin: 8px 0 20px; color: var(--dim); font-size: var(--ds-font-size-16); line-height: 1.35; }
+  .sum dl { margin: 0; border-top: 1px solid var(--ds-color-neutral-dark-6); }
+  .sum dl div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--ds-color-neutral-dark-6); }
+  .sum dt { color: var(--dim); }
+  .sum dd { margin: 0; }
 </style>
 </head>
 <body>
@@ -88,63 +92,68 @@
 
   <section class="copy" aria-labelledby="h">
     <h1 id="h">The workshop room lets in triangles.</h1>
-    <p class="lede">Plenary gives each ticket type a shape. It prints on every badge, so a volunteer at any door can see who belongs from across the room. The same shapes chart your sales as they happen.</p>
+    <p class="lede">Plenary gives each ticket type a shape. It prints on every badge, so a volunteer at any door can see who belongs from across the room.</p>
     <div class="actions">
       <a class="btn" href="#">Start an event</a>
       <span class="price">2.5% + €0.50 a ticket, paid out every Friday</span>
     </div>
   </section>
 
-  <!-- one badge, flat and whole -->
-  <div class="lanyard" aria-hidden="true"></div>
-  <article class="badge" aria-label="Sample badge: Femke Verhaegen, type designer at Studio Veldkant, with a standard ticket and the workshop add-on, room 3, Friday 12 March at 10:00">
+  <!-- the workshop room's door sign: the triangle, big, at the door; the badge that matches it leans on it -->
+  <svg class="door" viewBox="0 0 300 260" role="img" aria-label="Door sign for workshop room 3: a large mint triangle">
+    <path d="M150 0 L300 260 L0 260 Z" fill="var(--mint)"/><g id="door-stripes"></g>
+    <text x="150" y="246" text-anchor="middle" font-size="21" font-weight="700" fill="var(--ds-color-neutral-light-12)" font-family="var(--ds-font-family-text)">Room 3</text>
+  </svg>
+  <!-- one badge, as the check-in desk prints it -->
+  <article class="badge" aria-label="Sample badge: Femke Verhaegen, type designer, with a standard ticket and the workshop add-on, room 3, Friday 12 March at 10:00">
     <i class="hole" aria-hidden="true"></i>
     <div class="ev">Kanteel Design Week 2027<span>Ghent · Hall 4 · 11–13 March</span></div>
     <div class="who">Femke<br>Verhaegen</div>
-    <div class="role">Type designer, Studio Veldkant</div>
+    <div class="role">Type designer</div>
     <svg viewBox="0 0 236 104" aria-hidden="true">
-      <!-- standard: the pink half disc; workshop: the mint triangle -->
-      <path d="M0 104 A92 92 0 0 1 184 104 Z" fill="var(--pink)"/>
-      <path d="M150 104 L236 104 L193 29.5 Z" fill="var(--mint)" stroke="var(--ds-color-neutral-light-1)" stroke-width="4" stroke-linejoin="round"/>
+      <!-- standard: the pink half disc; workshop: the mint triangle. Printed with the chart's patterns, a second cue besides colour -->
+      <path d="M0 104 A72 72 0 0 1 144 104 Z" fill="var(--pink)"/><g id="b-squig"></g>
+      <path d="M112 104 L196 104 L154 31.3 Z" fill="var(--mint)"/><g id="b-tri"></g>
     </svg>
-    <div class="tiers"><b>Standard + workshop</b> · Room 3, Fri 10:00</div>
+    <div class="tiers"><b>Standard + workshop</b><br>Workshop room 3 · Fri 10:00</div>
   </article>
-  <div class="clip" aria-hidden="true"></div>
 
-  <div class="c-head"><b>Tickets issued, Kanteel Design Week 2027</b> <span class="scale">Each shape's area is to scale.</span></div>
-  <svg class="chart" id="chart" viewBox="0 0 1440 900" role="img" aria-label="Tickets issued by type, each shape's area to scale, filled for issued and dashed for released: early bird 400 of 400, sold out; standard 1,212 of 1,800; workshop add-on 186 of 240; speaker and press 64 of 80."></svg>
+  <div class="c-head"><b>Tickets issued, Kanteel Design Week 2027</b> <span class="scale"><i>Area to scale</i><svg width="20" height="8" aria-hidden="true"><rect width="20" height="8" fill="var(--dim)"/></svg><i>issued</i><svg width="20" height="8" aria-hidden="true"><rect x="1" y="1" width="18" height="6" fill="none" stroke="var(--dim)" stroke-width="2" stroke-dasharray="4 3"/></svg><i>released</i></span></div>
+  <svg class="chart" id="chart" viewBox="0 0 1440 900" role="img" aria-label="Tickets issued by type, each shape's area to scale, filled for issued and dashed for released: early bird 400 of 400, sold out; standard 1,212 of 1,800; workshop 186 of 240; speaker and press 64 of 80."></svg>
   <div id="labels"></div>
   <div class="sum">
     <div class="big">1,862</div>
-    <p>issued of 2,520<br>released, 74%</p>
-    <p>1,676 people<br>+ 186 workshop seats</p>
-    <p><b>€647,360</b> gross</p>
-    <p>next payout<br>Fri 16 Oct 2026</p>
-    <p class="key">Filled: issued.<br>Dashed: released.</p>
+    <p class="of">issued, 74% of 2,520</p>
+    <dl>
+      <div><dt>People</dt><dd>1,676</dd></div>
+      <div><dt>Workshop add-ons</dt><dd>186</dd></div>
+      <div><dt>Gross</dt><dd>€647,360</dd></div>
+      <div><dt>Payout</dt><dd>Fri 16 Oct 2026</dd></div>
+    </dl>
   </div>
 </div>
 <script>
 (() => {
-  // The four ticket types. Area = 50 px² per ticket, for the filled (issued) and the dashed (released) shape alike.
-  // Every pattern covers 20% of its shape (dots r 3.53 on 14 px, stripes 2 of 10 and 2.4 of 12, squiggles about 20%),
-  // so the visible colour is to scale too.
-  const K = 50, FLOOR = 800;
+  // The four ticket types. Area = 28 px² per ticket, for the filled (issued) and the dashed (released) shape alike.
+  // Patterns cover about 20% of each shape inside (dots r 3.53 on a 14 px grid, stripes 2 of 10, zigzags and squiggles about 20%),
+  // so the visible colour stays close to scale. Dots, squiggles and stripes are whole, placed only where they sit 4 px inside the edge.
+  const K = 28, FLOOR = 768;
   const T = [
-    { name: 'Early bird', price: '€290', sold: 400, cap: 400, shape: 'disc', fill: 'var(--lemon)', pat: 'dots', note: ['400 of 400, sold out', 'closed 30 Sep'] },
+    { name: 'Early bird', price: '€290', sold: 400, cap: 400, shape: 'disc', fill: 'var(--lemon)', pat: 'dots', note: ['400 of 400', 'sold out, closed 30 Sep'] },
     { name: 'Standard', price: '€420', sold: 1212, cap: 1800, shape: 'dome', fill: 'var(--pink)', pat: 'squig', note: ['1,212 of 1,800', 'on sale until 10 Mar'] },
-    { name: 'Workshop add-on', price: '€120', sold: 186, cap: 240, shape: 'tri', fill: 'var(--mint)', pat: 'hstripes', note: ['186 of 240', '6 rooms of 40'] },
-    { name: 'Speaker & press', price: 'free', sold: 64, cap: 80, shape: 'square', fill: 'var(--chalk)', pat: 'stripes', note: ['64 of 80', 'invite code'] }
+    { name: 'Workshop', price: '€120', sold: 186, cap: 240, shape: 'tri', fill: 'var(--mint)', pat: 'hstripes', note: ['186 of 240', '6 rooms of 40'] },
+    { name: 'Speaker & press', price: 'free', sold: 64, cap: 80, shape: 'square', fill: 'var(--chalk)', pat: 'zig', note: ['64 of 80', 'invite code'] }
   ];
-  // equal 56 px gaps between the released (outer) shapes, from x 80
+  // 48 px gaps between the released (outer) shapes from x 86 (so the first label stays inside the 80 px margin); 96 before the small square, whose label is wider than it
   const width = (shape, n) => { const A = n * K; return shape === 'disc' ? 2 * Math.sqrt(A / Math.PI) : shape === 'dome' ? 2 * Math.sqrt(2 * A / Math.PI) : shape === 'tri' ? Math.sqrt(4 * A / Math.sqrt(3)) : Math.sqrt(A); };
-  let x = 80; T.forEach(t => { const w = width(t.shape, t.cap); t.cx = x + w / 2; x += w + 56; });
-  const RIGHT = x - 56;
-  // open outline: no stroke along the floor
+  const GAPS = [48, 48, 96];
+  let x = 86; T.forEach((t, i) => { const w = width(t.shape, t.cap); t.cx = x + w / 2; x += w + (GAPS[i] || 0); });
+  const RIGHT = x;
   const outline = (shape, n, cx) => {
     const A = n * K;
     if (shape === 'dome') { const r = Math.sqrt(2 * A / Math.PI); return `M${cx - r} ${FLOOR} A${r} ${r} 0 0 1 ${cx + r} ${FLOOR}`; }
     if (shape === 'tri') { const s = Math.sqrt(4 * A / Math.sqrt(3)), h = s * Math.sqrt(3) / 2; return `M${cx - s / 2} ${FLOOR} L${cx} ${FLOOR - h} L${cx + s / 2} ${FLOOR}`; }
-    const a = Math.sqrt(A); return `M${cx - a / 2} ${FLOOR} v${-a} h${a} v${a}`;
+    const a = Math.sqrt(A) + 2; return `M${cx - a / 2} ${FLOOR} v${-a} h${a} v${a}`;   // drawn 1 px outside, so the dashes clear the fill
   };
   const path = (shape, n, cx) => {
     const A = n * K;
@@ -153,22 +162,46 @@
     if (shape === 'tri') { const s = Math.sqrt(4 * A / Math.sqrt(3)), h = s * Math.sqrt(3) / 2; return `M${cx - s / 2} ${FLOOR} L${cx + s / 2} ${FLOOR} L${cx} ${FLOOR - h} Z`; }
     const a = Math.sqrt(A); return `M${cx - a / 2} ${FLOOR} h${a} v${-a} h${-a} Z`;
   };
+  // whole glyphs inside a disc (dots) or a half disc on a floor (squiggles)
+  const dots = (cx, cy, r) => { let o = ''; for (let i = -12; i <= 12; i++) for (let j = -12; j <= 12; j++) { const px = cx + i * 14, py = cy + j * 14; if (Math.hypot(px - cx, py - cy) + 3.53 + 4 <= r) o += `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="3.53"/>`; } return `<g fill="var(--ground)">${o}</g>`; };
+  const squigs = (cx, floor, r) => {
+    let o = '';
+    for (let k = 0; k < 40; k++) { const y = floor - 10 - k * 13; if (y < floor - r) break;
+      for (let m = -12; m <= 12; m++) { const x0 = cx - 8 + m * 30 + (k % 2 ? 15 : 0);
+        const ok = [[x0 - 2, y - 5.5], [x0 + 18, y - 5.5], [x0 - 2, y + 5.5], [x0 + 18, y + 5.5]].every(([px, py]) => Math.hypot(px - cx, py - floor) <= r - 4 && py <= floor - 4);
+        if (ok) o += `<path d="M${x0.toFixed(1)} ${y}q4 -7 8 0t8 0"/>`; } }
+    return `<g fill="none" stroke="var(--ground)" stroke-width="3.5" stroke-linecap="round">${o}</g>`;
+  };
+  // whole horizontal stripes inside a triangle (apex, side), from its base (or a lower limit) up; none shorter than 8 px
+  const stripes = (ax, ay, side, bottom, step = 10, thick = 2) => {
+    const h = side * Math.sqrt(3) / 2; let o = '';
+    for (let y = ay + h - 6; y > ay + 10; y -= step) { if (y > bottom - 6) continue; const half = (y - ay) / h * side / 2 - 4 / Math.sin(Math.PI / 3);
+      if (half >= 4) o += `<rect x="${(ax - half).toFixed(1)}" y="${(y - thick / 2).toFixed(1)}" width="${(2 * half).toFixed(1)}" height="${thick}"/>`; }
+    return `<g fill="var(--ground)">${o}</g>`;
+  };
+  // whole zigzag rows inside a square (centre x, floor, side), 4 px in from every edge
+  const zigs = (cx, floor, a) => { let o = ''; const x0 = cx - a / 2 + 4, x1 = cx + a / 2 - 4; for (let y = floor - 8; y >= floor - a + 8; y -= 8) { let d = `M${x0.toFixed(1)} ${y}`, up = true; for (let x = x0 + 3; x <= x1 + 0.01; x += 3) { d += `L${x.toFixed(1)} ${up ? y - 3 : y}`; up = !up; } o += `<path d="${d}"/>`; } return `<g fill="none" stroke="var(--ground)" stroke-width="1.6" stroke-linejoin="round">${o}</g>`; };
+  const [sX, sY] = [T[3].cx, FLOOR];
   let defs = `<defs>
-    <pattern id="dots" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="7" cy="7" r="3.53" fill="var(--ground)"/></pattern>
-    <pattern id="stripes" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="2.4" height="12" fill="var(--ground)"/></pattern>
-    <pattern id="hstripes" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="2" fill="var(--ground)"/></pattern>
-    <pattern id="squig" width="30" height="26" patternUnits="userSpaceOnUse"><path d="M4 8 q4 -7 8 0 t8 0 M14 21 q4 -7 8 0 t8 0" fill="none" stroke="var(--ground)" stroke-width="3.5" stroke-linecap="round"/></pattern>
+    <pattern id="zig" x="${sX}" y="${sY}" width="12" height="10" patternUnits="userSpaceOnUse"><path d="M0 7 L3 3 L6 7 L9 3 L12 7" fill="none" stroke="var(--ground)" stroke-width="2" stroke-linejoin="round"/></pattern>
   </defs>`;
   let g = '';
   T.forEach((t, i) => {
     if (t.cap > t.sold) g += `<path d="${outline(t.shape, t.cap, t.cx)}" fill="none" stroke="var(--chalk)" stroke-width="2" stroke-dasharray="6 6"/>`;
-    const d = path(t.shape, t.sold, t.cx);
-    // the pattern stays 3 px inside the edge, so it never bites the silhouette
-    g += `<clipPath id="in${i}"><path d="${d}"/></clipPath><path d="${d}" fill="${t.fill}"/><path d="${d}" fill="url(#${t.pat})"/>` +
-         `<path d="${d}" fill="none" stroke="${t.fill}" stroke-width="6" clip-path="url(#in${i})"/>`;
+    const d = path(t.shape, t.sold, t.cx), A = t.sold * K;
+    g += `<path d="${d}" fill="${t.fill}"/>`;
+    if (t.pat === 'dots') { const r = Math.sqrt(A / Math.PI); g += dots(t.cx, FLOOR - r, r); }
+    else if (t.pat === 'squig') g += squigs(t.cx, FLOOR, Math.sqrt(2 * A / Math.PI));
+    else if (t.pat === 'zig') { const a = Math.sqrt(A); g += zigs(t.cx, FLOOR, a); }
+    else if (t.pat === 'hstripes') { const side = Math.sqrt(4 * A / Math.sqrt(3)); g += stripes(t.cx, FLOOR - side * Math.sqrt(3) / 2, side, FLOOR); }
+    // stripes stay 3 px inside the edge, so they never bite the silhouette
+    else g += `<clipPath id="in${i}"><path d="${d}"/></clipPath><path d="${d}" fill="url(#${t.pat})"/><path d="${d}" fill="none" stroke="${t.fill}" stroke-width="6" clip-path="url(#in${i})"/>`;
   });
   g += `<path d="M80 ${FLOOR + 1} H${RIGHT}" stroke="var(--chalk)" stroke-width="2"/>`;
   document.getElementById('chart').innerHTML = defs + g;
+  document.getElementById('b-squig').outerHTML = squigs(72, 104, 72);
+  document.getElementById('b-tri').outerHTML = stripes(154, 31.3, 84, 104);
+  document.getElementById('door-stripes').outerHTML = stripes(150, 0, 300, 214, 14, 4);
   document.getElementById('labels').innerHTML = T.map(t => `<div class="lab" style="left:${t.cx}px">${t.name}<small>${t.price} · ${t.note[0]}</small><small>${t.note[1]}</small></div>`).join('');
 })();
 </script>

@@ -27,6 +27,7 @@ Every invented person, company, brand, product, place and title in `brand/showca
 | Arden Telecom | customer | styles/09-bento-grid |
 | Arjun D. | person | heroes/11-spend-platform |
 | Ashbury Traction Power | vendor | mockups/10-multi-device, app-screens/11-approvals-mobile |
+| Ashlund Packaging | vendor (replaces Stellwick Packaging, two letters from Pellwick Press in components/05; web search found no company of that name) | mockups/10-multi-device |
 | Atelier Rheinufer | project | heroes/01-swiss-architecture |
 | Atlas & Ivy | customer | heroes/02-luminous-devtool |
 | atlas-01 | other | components/10-settings-terminal |
@@ -114,14 +115,14 @@ Every invented person, company, brand, product, place and title in `brand/showca
 | H. Nakamura | person | app-screens/10-clinical-vitals |
 | Haddleby Inns Ltd | customer | mockups/09-laptop-dashboard, product/01-quoin-payments |
 | Halberd Security Group | vendor | product/02-fennick-approvals |
-| Halde | brand | mockups/02-laptop-desk |
+| Halde | brand | mockups/02-laptop-desk, mockups/08-made-with-opendesigner |
 | Halde Architekten | brand | heroes/01-swiss-architecture, mockups/02-laptop-desk, mockups/08-made-with-opendesigner |
-| Halden | brand | app-screens/01-private-banking |
+| Halden | brand | app-screens/01-private-banking, mockups/01-phone-trio |
 | Halden Freight | company | components/06-data-table |
 | Halden Private | brand | app-screens/01-private-banking, mockups/01-phone-trio |
 | Halftone Yard | brand | components/04-upload-brutal |
 | Hanne Varga | person | mockups/10-multi-device |
-| Harbour | place | watch/04-headway-transit |
+| Harbour | place | watch/04-headway-transit, mockups/03-watch-trio |
 | Harbour board minutes 1931–38 | title | components/07-ai-composer |
 | Harbour minutes | title | components/07-ai-composer |
 | Harlow Print Co. | vendor | product/02-fennick-approvals |
@@ -131,7 +132,7 @@ Every invented person, company, brand, product, place and title in `brand/showca
 | Haus Vier Winde | project | heroes/01-swiss-architecture |
 | Hawthorn Steakhouse | customer | mockups/09-laptop-dashboard, product/01-quoin-payments |
 | Headway | brand (may be real) | watch/04-headway-transit, mockups/03-watch-trio |
-| Heat Lamp Lullabies | title | components/08-music-player |
+| Heat Lamp Lullabies | title | components/08-music-player, mockups/05-components-board |
 | Heron | product | components/07-ai-composer |
 | Holdfast | brand | styles/09-bento-grid |
 | Hotel Brakelduin BV | customer | mockups/09-laptop-dashboard, product/01-quoin-payments |
@@ -145,7 +146,7 @@ Every invented person, company, brand, product, place and title in `brand/showca
 | INC-2291 | incident ID | watch/09-oncall-incident |
 | Ines Calder | person | app-screens/02-sleep-meditation, mockups/01-phone-trio |
 | Ines Valcourt | person | app-screens/08-podcast-player |
-| Islands that drift north | title | app-screens/08-podcast-player |
+| Islands that drift north | title | app-screens/08-podcast-player, mockups/01-phone-trio |
 | Isobath | brand | mockups/04-browser-cascade, mockups/08-made-with-opendesigner |
 | Isobath Ocean Observatory | brand | heroes/07-climate-observatory, mockups/04-browser-cascade |
 | isobath.example | domain (RFC 2606 .example; was isobath.org) | mockups/04-browser-cascade |
@@ -255,7 +256,7 @@ Every invented person, company, brand, product, place and title in `brand/showca
 | Onething | brand | watch/08-onething-focus |
 | OPEN SEA WEATHER | station | heroes/08-y2k-retrofuture |
 | Orbika | brand | heroes/08-y2k-retrofuture, mockups/04-browser-cascade |
-| Orbika SR-1 | product | heroes/08-y2k-retrofuture |
+| Orbika SR-1 | product | heroes/08-y2k-retrofuture, mockups/04-browser-cascade |
 | orbika.example | domain (RFC 2606 .example; was orbika.radio) | mockups/04-browser-cascade |
 | Oriel | brand | components/07-ai-composer |
 | Orrinford Plant Hire | vendor | mockups/10-multi-device |
@@ -296,12 +297,12 @@ Every invented person, company, brand, product, place and title in `brand/showca
 | Quarry & Vale | customer | styles/09-bento-grid |
 | Quenby Door Systems | vendor | mockups/10-multi-device |
 | Quietfield | brand | footers/03-quietfield-horizon, mockups/08-made-with-opendesigner |
-| Quietfield Research | company | footers/03-quietfield-horizon |
+| Quietfield Research | company | footers/03-quietfield-horizon, mockups/08-made-with-opendesigner |
 | Quillmark | customer | heroes/02-luminous-devtool |
 | Quillon | brand | mockups/10-multi-device, app-screens/11-approvals-mobile |
 | Quoin | brand | mockups/09-laptop-dashboard, product/01-quoin-payments |
 | R. Castillo | person | heroes/10-enterprise-health |
-| R. Halvorsen | person | app-screens/10-clinical-vitals |
+| R. Halvorsen | person | app-screens/10-clinical-vitals, mockups/07-tablet-clinic |
 | rackhound | brand | components/10-settings-terminal |
 | Rafael Ortiz | person | product/06-ferrule-security |
 | Rain on the reed beds | title | app-screens/02-sleep-meditation, mockups/01-phone-trio |
@@ -350,11 +351,10 @@ Every invented person, company, brand, product, place and title in `brand/showca
 | Slow-wave sleep restores hippocampal capacity | title | heroes/02-luminous-devtool |
 | Sodium Summer | title | components/08-music-player, mockups/05-components-board |
 | Sounding | brand | product/04-sounding-observability |
-| Spark | product | components/01-pricing-glass |
+| Spark | product | components/01-pricing-glass, mockups/05-components-board |
 | ST. ALDRIC | customer | heroes/10-enterprise-health |
 | St. Aldric Health | customer | heroes/10-enterprise-health |
 | Stefan Ruud | person | product/03-corvane-record |
-| Stellwick Packaging | vendor | mockups/10-multi-device |
 | STEM-8 | product | styles/04-skeuomorphism |
 | Stonebridge Hall | customer | mockups/09-laptop-dashboard, product/01-quoin-payments |
 | Straven Composites | company | product/03-corvane-record |
@@ -405,9 +405,9 @@ Every invented person, company, brand, product, place and title in `brand/showca
 | Wayfold | brand | styles/03-claymorphism |
 | weir | brand | styles/08-bauhaus |
 | Wexley Freight | merchant | heroes/11-spend-platform |
-| Wharf Rd | place | watch/04-headway-transit |
+| Wharf Rd | place | watch/04-headway-transit, mockups/03-watch-trio |
 | Why sparse features drift during fine‑tuning | title | footers/03-quietfield-horizon |
-| Wind down | title | app-screens/02-sleep-meditation, watch/05-nook-home |
+| Wind down | title | app-screens/02-sleep-meditation, watch/05-nook-home, mockups/01-phone-trio |
 | Wohnhof Letten | project | heroes/01-swiss-architecture |
 | Workline Uniform Supply | vendor | product/02-fennick-approvals |
 | Workload Shield | product | footers/02-keystrata-mega |
@@ -636,3 +636,56 @@ No new names. Checked again on the web:
 - **weir** (`styles/08`): The Weir Group plc is a real engineering company in a different field (pumps and mining equipment); "weir" here is the lowercase common noun for a data-pipeline product, and no data-pipeline or ETL product of that name was found. Flagged to the owner, not changed.
 
 No longer on the page: **Studio Veldkant** (`styles/06`; the badge now gives Femke Verhaegen's role only). A street name tried for `styles/03` (Tanner Row) was dropped before it shipped because it is a real street in York.
+
+## Appended 2026-10-15: components round 4 (01, 03, 04, 05, 06), after the owner's review
+
+| Name | Kind | Piece |
+|---|---|---|
+| Gridlark | brand (solar portfolio monitoring; web search found no company or product of that name) | components/03-date-range-picker |
+| Western portfolio | portfolio name (generic words) | components/03-date-range-picker |
+| WP-02, WP-03, WP-05, WP-07, WP-11 | site codes | components/03-date-range-picker |
+| Panelwise | brand (hiring tool; web search found no product of that name, only general articles on panel interviews) | components/05-toast-stack |
+| Marisol Ortega, Tomasz Wierzbicki, Ifeoma Chukwu, Saoirse Kavanagh, Hyun-woo Baek, Daniela Restrepo, Priyanka Venkatesan, Mateus Lacerda, Jarrah Whitfield, Tobias Engel, Lina Haddou, Felix Aurand, Noemi Castell, Selin Aydın, Joaquín Ferrer, Nadia Benali | people (candidates) | components/05-toast-stack |
+| Lucia, Yaw, Hana, Gaurav | people (interviewers, first names only; avatar LF is Lucia) | components/05-toast-stack |
+| Staff Data Engineer | job title (generic) | components/05-toast-stack |
+| Brennock Haul | company (carrier; replaces Northvale Haul, which shared "Northvale" with Northvale Medical in heroes/10 and was one letter from Northgate; web search found no carrier of that name) | components/06-data-table |
+| HY-4471 | order number | components/04-upload-brutal |
+| Foil Gold | spot colour name (generic; replaces "Gold 871", which echoes a real ink-matching system's numbering) | components/04-upload-brutal |
+
+- **No longer on any page (in these pieces), so free again:** `components/03`: Wayfern, Pinecone Hollow, Lake Vessa, Maren Ekholm (and avatars JW, ME). `components/05`: Kinroom, Pellwick Press, Orchard at Low Water, Mira Kade, Sana Ito, Vikram Malhotra, Ruth Ashdown, Theo Okoye, Mercer Row, #launch-week and the room names. `components/06`: Northvale Haul, Freight OS, Tarrow Freight (the product is now just "Tarrow"). `components/01`: Odile Brenner (the signed-in frame was removed). `mockups/05-components-board` and `mockups/08-made-with-opendesigner` still show Wayfern and Kinroom through these pieces' old shots or captions; they need a re-check.
+- **Real places used as places, not names:** the 06 lanes and pings (Dallas, Houston, Monroe LA, Hartford CT and so on) and the 05 candidate cities are real cities, used only as locations.
+- **Real things removed:** "LinkedIn" as a candidate source (`components/05`) and "ProRes 422" (`components/01`, a real codec brand) are gone. "PSO Uncoated v3" (`components/04`) is an industry print standard, not a brand.
+
+The candidates above, one per row so `check_names.py` can read them:
+
+| Name | Kind | Piece |
+|---|---|---|
+| Marisol Ortega | person (candidate) | components/05-toast-stack |
+| Tomasz Wierzbicki | person (candidate) | components/05-toast-stack |
+| Ifeoma Chukwu | person (candidate) | components/05-toast-stack |
+| Saoirse Kavanagh | person (candidate) | components/05-toast-stack |
+| Hyun-woo Baek | person (candidate) | components/05-toast-stack |
+| Daniela Restrepo | person (candidate) | components/05-toast-stack |
+| Priyanka Venkatesan | person (candidate) | components/05-toast-stack |
+| Mateus Lacerda | person (candidate) | components/05-toast-stack |
+| Jarrah Whitfield | person (candidate) | components/05-toast-stack |
+| Tobias Engel | person (candidate) | components/05-toast-stack |
+| Lina Haddou | person (candidate) | components/05-toast-stack |
+| Felix Aurand | person (candidate) | components/05-toast-stack |
+| Noemi Castell | person (candidate) | components/05-toast-stack |
+| Selin Aydın | person (candidate) | components/05-toast-stack |
+| Joaquín Ferrer | person (candidate) | components/05-toast-stack |
+| Nadia Benali | person (candidate) | components/05-toast-stack |
+
+## Appended 2026-10-15: app screens round 4 (01, 03, 10)
+
+| Name | Kind | Piece |
+|---|---|---|
+| Saltmoor | brand (a cooking quarterly's app; replaces Larder, which is a live App Store recipe app, "Larder: Family Meal Planner"; web search found no food brand, app or magazine called Saltmoor) | app-screens/03-recipe-editorial |
+| Hester Bryce | person (recipe byline; web search found no cook or food writer of that name) | app-screens/03-recipe-editorial |
+| Voss household | household (the account holder Eleanor Voss's family, already listed for this piece) | app-screens/01-private-banking |
+
+- **Rejected:** Potwell for `app-screens/03` (two letters from Ostwell, `styles/02`).
+- **No longer on any page:** Larder and Larder No. 14 (`app-screens/03`; the brand now appears only in the page title and the save button's label), and the "EV" avatar and "Halden Private" wordmark (`app-screens/01`; the nav now names the household). Kerri Leung (Unsplash, already listed) is still credited, now at the foot of the recipe.
+- **`app-screens/10`:** no new names. The antibiotic in the timeline is now levofloxacin (a real drug, not a name), and outreach is paged at 02:04 with the registrar.
+- **Still open:** `check_names.py` still reports Halden against Halde (`heroes/01`; kept on purpose, see above) and against "Halden Freight", whose registry row remains although the 2026-10-15 orchestrator block above records its rename to Ostrel Freight.

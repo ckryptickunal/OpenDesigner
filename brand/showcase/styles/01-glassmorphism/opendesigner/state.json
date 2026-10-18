@@ -353,7 +353,8 @@
     "font.size.input": {
       "value": 16,
       "unit": "px"
-    }
+    },
+    "type.ratio": 1.2
   },
   "answers": {
     "Q-aud-01": {
@@ -389,6 +390,12 @@
       "value": "glassmorphism",
       "set_by": "chosen",
       "decision": "D-0035",
+      "locked": false
+    },
+    "Q-type-09": {
+      "value": 1.2,
+      "set_by": "chosen",
+      "decision": "D-0037",
       "locked": false
     }
   },
@@ -537,7 +544,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "5b8b627415669797",
+    "DESIGN.md": "ce814ff23be28130",
     "PRODUCT.md": "a76bdb084cbfe609"
   },
   "exports": {

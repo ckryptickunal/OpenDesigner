@@ -70,5 +70,34 @@
    "One black action; red marks only the saas square apart from the logo and focus ring",
    "312 connectors replaced by 287 (312 is used elsewhere); SVG after the copy in source order with a full aria-label; engine pick Q-dir-01 bauhaus"
   ]
+ },
+ "round3": {
+  "score": 4,
+  "audited": "2026-10-15",
+  "audited_by": "fresh-context agents, three rounds (3, 4, 4)",
+  "changed": [
+   "The weir column holds the count: rows at source against rows landed for today to 14:00 UTC, with 2,482,309 rows in flight and missing 0",
+   "Out-flow stops at the warehouse edge, labelled where it arrives; paper edges where flows cross the blue",
+   "Composition: circle on the page edge, square set clearly into its shoulder with its flow flush to its top, triangle apex on the square edge, databases label centred",
+   "Headline 76 px at weight 500, balanced in the crest; labels at 16 px",
+   "Copy agrees with the data: none older than 6 min against p95 4 min; if one runs late, you hear at once"
+  ],
+  "references": [
+   {
+    "site": "Customer.io",
+    "mobbin_url": "https://mobbin.com/sites/sections/6e31f38b-b744-4dbf-9369-7e7e3205c19a",
+    "what": "Many sources drawn into one hub"
+   },
+   {
+    "site": "Figma Enterprise",
+    "mobbin_url": "https://mobbin.com/sites/sections/199259c8-fe79-4eb8-8487-77464c455ebb",
+    "what": "A geometric figure that does a job beside a heavy headline"
+   },
+   {
+    "site": "Shopify",
+    "mobbin_url": "https://mobbin.com/sites/sections/ee5646ad-4ed5-4561-bb59-15de0e1e5b17",
+    "what": "Flat shapes that interlock firmly instead of grazing"
+   }
+  ]
  }
 }

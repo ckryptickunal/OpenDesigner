@@ -61,3 +61,6 @@ Owner rule: complications and labels from 18 to Body 17, '2.1 m' from 22 to Titl
 - Before the base size was set, the density dial lowered the type below the watch floor even with `--audience large`; recorded with the missing watchOS roles.
 - Q-color-21 'black' exists and works, but the stage file warns against bright objects on pure black, which is exactly the watch convention.
 - Cross-piece findings are in `../PROCESS.md`; engine feedback is in `opendesigner/feedback.md` where this piece recorded one.
+
+## Round 3 (2026-10-15): Wed 14
+The face said "TUE 14". The showcase is set on Wednesday 14 October 2026 (Wayfern's calendar and Wardlight's status bar agree), so the date complication now reads "WED 14". `check_dates.py` could not catch it, because no month sits next to the date. Re-rendered `shot.png` with `../render.py 03-tidemark-face`; `mockups/03-watch-trio` was re-rendered with it. Found by the fresh audit of `mockups/08-made-with-opendesigner`, which shows this face.

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Five heroes, one index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Scene: five hero sections as browser windows, stacked on an exact step (24 x 104 px): each window behind shows only its address bar and navigation,
+     each one numbered on a left-hand index with a hairline to its window.
+     Colours, type, spacing and radii are tokens. Window shadows are layered by hand (the elevation
+     scale has no "stacked sheets" shadow), and the window geometry follows the 1440 x 900 renders. */
+  :root { --step-x: 24px; --step-y: 104px; --win-w: 1000px; --chrome: 34px; --x0: 400px; --y0: 64px; }
+  html, body { margin: 0; }
+  body {
+    width: 1600px; height: 1200px; overflow: hidden; position: relative;
+    background: var(--ds-color-surface-base);
+    font-family: var(--ds-font-family-text);
+    color: var(--ds-color-text-primary);
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "tnum" 1;
+  }
+
+  .win {
+    position: absolute; width: var(--win-w);
+    left: calc(var(--x0) + var(--i) * var(--step-x));
+    top: calc(var(--y0) + var(--i) * var(--step-y));
+    border-radius: var(--ds-radius-8); overflow: hidden;
+    background: var(--ds-color-surface-raised);
+    box-shadow:
+      0 0 0 1px var(--ds-color-border-subtle),
+      0 1px 2px var(--ds-color-shadow-key),
+      0 18px 40px -12px var(--ds-color-shadow-key),
+      0 40px 90px -30px var(--ds-color-shadow-ambient);
+  }
+  .bar { height: var(--chrome); display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-12);
+    background: var(--ds-color-surface-sunken); border-bottom: 1px solid var(--ds-color-border-subtle); box-sizing: border-box; }
+  .bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--ds-color-border-default); }
+  .bar span { margin: 0 auto; transform: translateX(-24px); min-width: 260px; text-align: center;
+    padding: var(--ds-space-2) var(--ds-space-12); border-radius: var(--ds-radius-6); background: var(--ds-color-surface-raised);
+    font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+  .win img { display: block; width: 100%; aspect-ratio: 1440 / 900; }
+
+  .index { position: absolute; left: var(--ds-space-64); top: 0; width: 1px; height: 100%; }
+  .row { position: absolute; left: 0; top: calc(var(--y0) + var(--i) * var(--step-y)); height: var(--chrome);
+    display: flex; align-items: center; gap: var(--ds-space-16); white-space: nowrap; font: var(--ds-text-body-md); }
+  .row b { font-weight: var(--ds-font-weight-label); width: 28px; color: var(--ds-color-text-secondary); }
+  .row.on b { color: var(--ds-color-text-accent); }
+  .row em { font-style: normal; color: var(--ds-color-text-primary); }
+  /* hairline from each label to the stack, all ending the same 12 px before it (round 3: the windows behind
+     the first are covered at the stack's edge, so a line to each window's own edge read as five lengths) */
+  .row::after { content: ""; position: absolute; left: 228px; top: 50%; height: 1px; background: var(--ds-color-border-default);
+    width: calc(var(--x0) - 64px - 228px - 12px); }
+
+  .foot { position: absolute; left: var(--ds-space-64); bottom: var(--ds-space-48); font: var(--ds-text-body-md); color: var(--ds-color-text-secondary); }
+</style>
+</head>
+<body>
+
+  <ol class="index" aria-label="Index of heroes" style="margin:0;padding:0;list-style:none">
+    <li class="row" style="--i:0;margin:0"><b>01</b><em>Kumo Kōbō</em></li>
+    <li class="row" style="--i:1;margin:0"><b>02</b><em>Plumpot</em></li>
+    <li class="row" style="--i:2;margin:0"><b>03</b><em>Orbika</em></li>
+    <li class="row" style="--i:3;margin:0"><b>04</b><em>Nearmost</em></li>
+    <li class="row on" style="--i:4;margin:0"><b>05</b><em>Isobath</em></li>
+  </ol>
+
+  <figure class="win" style="--i:0;margin:0"><div class="bar"><i></i><i></i><i></i><span>kumokobo.example</span></div><img src="../../heroes/09-japanese-ceramics/shot.png" alt="Kumo Kōbō, a ceramics studio: hero section"></figure>
+  <figure class="win" style="--i:1;margin:0"><div class="bar"><i></i><i></i><i></i><span>plumpot.example</span></div><img src="../../heroes/06-playful-fintech/shot.png" alt="Plumpot, a money app for teens: hero section"></figure>
+  <figure class="win" style="--i:2;margin:0"><div class="bar"><i></i><i></i><i></i><span>orbika.example</span></div><img src="../../heroes/08-y2k-retrofuture/shot.png" alt="Orbika, a pocket radio receiver: hero section"></figure>
+  <figure class="win" style="--i:3;margin:0"><div class="bar"><i></i><i></i><i></i><span>nearmost.example</span></div><img src="../../heroes/02-luminous-devtool/shot.png" alt="Nearmost, an open-source vector database: hero section"></figure>
+  <figure class="win" style="--i:4;margin:0"><div class="bar"><i></i><i></i><i></i><span>isobath.example</span></div><img src="../../heroes/07-climate-observatory/shot.png" alt="Isobath Ocean Observatory: hero section, The North Atlantic, from the surface to 6,000 metres, over a contour map with a float's temperature profile"></figure>
+
+  <p class="foot" style="margin:0">Five hero sections, five systems</p>
+</body>
+</html>

@@ -1,5 +1,7 @@
 # 10 · Mesh gradient · Prill
 
+**This page now:** the "Round 3 (polish)" section of 2026-10-15, the last one, describes it. The sections between record earlier versions.
+
 **Final self-audit score: 4 / 5** (4 rounds). Render: `shot.png`, 1440 x 900 at scale 2.
 
 ## Direction
@@ -111,3 +113,48 @@ After the independent audit (score 3). **Renamed Assay to Prill.** Assay is alre
 **References used by the re-audit:** Intercom Fin (https://mobbin.com/sites/sections/7b51d1f3-dcb3-4803-a67a-b10557822ba1), Dovetail (https://mobbin.com/sites/sections/57c3f21b-b420-47cc-be74-8b45ab45aea5), Equals (https://mobbin.com/sites/sections/85da8987-9cb3-438d-9fb5-2ca3efd9ab1b).
 
 **Left:** the field reads as a density chart first and a mesh gradient second, so a gallery visitor looking for the style sees only a little of it.
+
+## Round 3 (polish) 2026-10-15
+**Fresh audit: 4 of 5** against the B2B product screens and Orbika (`heroes/08`). Render: `shot.png`, 1440 x 900 at scale 2.
+
+### Why this round
+The piece still carried "Being rebuilt" on the public showcase. It was audited first this round, before any change, to find what still kept it below the B2B bar.
+
+### What changed
+- **After the first fresh audit (3), which found the style did not show:**
+  - **A real mesh, still a chart.** The axes run 0.28 to 1.02, where the cases are. The field fills the panel edge to edge and blends five hues in OKLab, each with a job: blue where v14 scores higher, graphite where most cases sit, peach where v14 scores lower, molten orange and an amber core for the 117. Blue is the system's info ramp; no violet.
+  - **No clipping and no clamp:** scores for the 117 are reflected at their bounds instead of piling up on 0.97; 1.0 sits inside the edge; the x-axis has its own strip below the field.
+  - **One story:** the subtitle names the orange ("Orange: the 117 that now fail the refund policy"), and the tag and the finding use the same words.
+  - **The finding is body copy:** 16 px in ink-2 with the lead in ink, above the button.
+  - **A denser table:** rows of 44 px.
+  - **Baselines:** "Release blocked" sits on the title's baseline; the lede starts level with the headline.
+  - **Consistent ids:** run #2481 and case 1187. The model line reads "Candidate v14: new refund prompt, smaller model. In production: v13."
+  - **Orange has one job:** the mark is a graphite bead.
+  - **A bug fixed:** the field was drawn before the web fonts loaded, so when the subtitle reflowed the overlay could drift from the canvas. It now draws after `document.fonts.ready`; the plotted means still equal the table's 0.861 and 0.893.
+- **After the second fresh audit (4, "just"):**
+  - **The main mass is whole:** the axes run to 1.07, so the dense corner sits inside the field; the graphite is lighter and labelled "3,895 held or improved".
+  - **More field, stronger hues:** the figure column is 600 px (was 520), the blue and peach regions are stronger, and table rows are 40 px.
+  - **Level panels:** the field starts on the table header's line; the subtitle's orange sentence has its own line.
+  - **Axis titles:** "v13 →" sits past the 1.0 tick.
+  - **The finding in two lines,** with "become 3,815" and "45 days" kept together.
+- **After the final fresh audit (4, "only just"):**
+  - **A wrong label fixed:** "3,895 held or improved" was false (the generator puts 365 of those cases below the equal-score line); it reads "the other 3,895".
+  - **No density past 1.0:** the blur of the main mass fades out beyond a score of 1.0.
+  - **Peach reads as "worse":** the warm region uses accent step 5, so "worse in v14" and "fails the refund policy" are two colours.
+  - **Said once:** the orange subtitle line is gone; the tag, the table row and the finding carry the 117.
+  - Table rows are 44 px, so the finding sits right under the table; "v13 →" sits at the axis start; the field starts on the table header's line.
+
+- **After a last regression check (holds at 4):** the main mass now reaches zero at 1.0 (ink showed up to about 1.03).
+
+### References (Mobbin, by link only)
+| Reference | What it taught |
+|---|---|
+| Retool, https://mobbin.com/sites/sections/dcbd55be-58cb-4e0e-9b70-cb4d184fa30a | A flat, whole product window in the page grid. |
+| Grammarly for developers, https://mobbin.com/sites/sections/6cc25036-b072-445c-9612-c0d83c5c8196 | A mesh gradient with saturation that reads. |
+| Dovetail, https://mobbin.com/sites/sections/57c3f21b-b420-47cc-be74-8b45ab45aea5 | Colour only where the data is. |
+
+### Checks
+- **Contrast as rendered:** 85 runs. The only flag is "same score in both", whose rotated box takes in the dashed line; with the line hidden it passes, and every run is 5.0:1 or more.
+- **Weekdays:** `check_dates.py --year 2026` passes.
+- **Facts re-added:** 6 checks gated (cost is not), 1 below threshold; 3,924 − 117 + 8 = 3,815; 3,924 / 4,012 = 0.978 and 3,815 / 4,012 = 0.951; every change is v14 − v13; the plotted means equal the table's 0.861 and 0.893.
+- Preflight: no type or font errors.

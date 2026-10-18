@@ -8,7 +8,7 @@ Files: each piece has `index.html`, `shot.png`, `notes.md`, `engine-log.txt` (ev
 
 | # | Brand, domain | Palette | Type (one family each) and roles used | Shape idea | Render |
 |---|---|---|---|---|---|
-| 01 | Ridgeline, trail pace and climb | acid green #C8FF2E on black | Archivo: 13 / 17 / 30 / 68 display | slanted heavy numeral, hatched ridge, cut-corner tag | 205 x 251 @3x |
+| 01 | Fellrise (was Ridgeline), trail pace and climb | acid green #C8FF2E on black | Archivo: 13 / 17 / 30 / 68 display | slanted heavy numeral, hatched ridge, cut-corner tag | 205 x 251 @3x |
 | 02 | Thrum, heart-rate zones | warm red #FF5436, amber-to-crimson zones | Bricolage Grotesque: 13 / 17 / 30 / 104 display | one giant numeral, segmented zone bar, live trace | 205 x 251 @3x |
 | 03 | Tidemark, dawn tide face | sky blue #5CC8FF, navy sky | Sora: 14 / 17 / 20 / 72 display | generative dawn sky, tide sine on the sea | 205 x 251 @3x |
 | 04 | Headway, transit countdown | signal yellow #FFCC1A on black | Big Shoulders Display: 14 / 17 / 20 / 30 / 114 display | signage: square badges, hard rules, vertical MIN | 205 x 251 @3x |

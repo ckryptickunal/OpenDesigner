@@ -72,5 +72,34 @@
    "Gate reads 1 of 6 checks; 117 newly failing and 8 newly passing (3,924 to 3,815 passes); v14 is a new prompt and a smaller model; run time 14:37",
    "Mark is a flat bead, no gradient"
   ]
+ },
+ "round3": {
+  "score": 4,
+  "audited": "2026-10-15",
+  "audited_by": "fresh-context agents, three rounds (3, 4, 4)",
+  "changed": [
+   "The field is a real mesh that is also the chart: blue where v14 scores higher, graphite where cases sit, peach where it scores lower, orange and amber for the 117, blended in OKLab, filling a 600 px panel",
+   "Axes zoomed to where the cases are (0.28 to 1.07); no clamp artifact; density fades past 1.0; x-axis in its own strip",
+   "Labels true: \"the other 3,895\" (not \"held or improved\"); the 117 said by the tag, the table and the finding, once each",
+   "Finding at 16 px; table rows 44 px; panels level; graphite mark so orange means failure only",
+   "Bug fixed: the field now draws after the web fonts load, so the overlay matches the canvas"
+  ],
+  "references": [
+   {
+    "site": "Retool",
+    "mobbin_url": "https://mobbin.com/sites/sections/dcbd55be-58cb-4e0e-9b70-cb4d184fa30a",
+    "what": "A flat, whole product window in the page grid"
+   },
+   {
+    "site": "Grammarly for developers",
+    "mobbin_url": "https://mobbin.com/sites/sections/6cc25036-b072-445c-9612-c0d83c5c8196",
+    "what": "A mesh gradient with saturation that reads"
+   },
+   {
+    "site": "Dovetail",
+    "mobbin_url": "https://mobbin.com/sites/sections/57c3f21b-b420-47cc-be74-8b45ab45aea5",
+    "what": "Colour only where the data is"
+   }
+  ]
  }
 }

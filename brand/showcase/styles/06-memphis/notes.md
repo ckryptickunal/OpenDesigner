@@ -1,5 +1,7 @@
 # 06 Plenary: a Memphis landing section for conference ticketing
 
+**This page now:** the "Round 3 (polish)" section of 2026-10-15, the last one, describes it. The sections between record earlier versions.
+
 **Direction.** Plenary is a fictional ticketing platform sold to conference organisers (events of 300 to 30,000 people). The landing section shows the organiser's view of a real-looking event, "Northfold Design Week 2027" in Rotterdam: four ticket types, sales against capacity, gross revenue and the next payout. The Memphis set around it is not confetti: each big shape is one ticket type, drawn to scale by tickets sold, and the same shapes are the tier markers inside the product. Feel words: **playful, vibrant, practical**.
 
 Render: 1440 x 900, scale 2 (`shot.png`), dark ground by design (`data-theme="dark"` on the page, the product card in its light theme).
@@ -103,3 +105,58 @@ After the independent audit (score 3: the default hero recipe, a floating card w
 **References used by the re-audit:** Luma (https://mobbin.com/sites/sections/e9ae7e4b-3538-47fd-9369-6fd7df860b00), Eventbrite organiser page (https://mobbin.com/sites/sections/b1b1d629-b848-4364-a974-0fb4a6502f96), Figma Enterprise (https://mobbin.com/sites/sections/199259c8-fe79-4eb8-8487-77464c455ebb).
 
 **Left:** the top half still puts the copy on the left and the badge on the right.
+
+## Round 3 (polish) 2026-10-15
+**Fresh audit: 4 of 5** against the B2B product screens and Orbika (`heroes/08`). Render: `shot.png`, 1440 x 900 at scale 2.
+
+### Why this round
+The piece still carried "Being rebuilt" on the public showcase. Two things kept it from the bar. Its badge hung from a lanyard strap, the same object and staging as `styles/03`, so two studies in one set read as related. Its totals were a loose column of phrases that broke mid-thought ("issued of 2,520 / released, 74%").
+
+### What changed
+- **The badge lies flat on the grid,** without the strap and clip, top-aligned with the headline and right-aligned with the nav. A caption says what it is: "Badge proof · printed at check-in · 3 × 4 in" (the badge is drawn 280 x 376, a 3:4 ratio).
+- **Totals as aligned rows.** 1,862 stays the one big figure, with "issued, 74% of 2,520" under it, then four label and value rows with hairlines: People 1,676, Workshop seats 186, Gross €647,360, Next payout Fri 16 Oct 2026.
+- **The key moved beside the chart title,** after "Area to scale". The note "Filled: issued. Dashed: released." under the totals is gone.
+- **After the first fresh audit (3):**
+  - **Room between the copy and the chart.** The lede lost its last sentence (the chart says it), the copy moved up 14 px, and the chart scale went from 50 to 40 px² per ticket with 48 px gaps. The chart title now has 40 px above it and the Standard dome 42 px below it.
+  - **One right column at x 1080:** the badge, its caption and the totals share a left edge; the chart ends near x 1000.
+  - **A neutral key:** grey bars for issued and released. The white square looked like the speaker-and-press ticket.
+  - **Key data at 16 px:** each shape's price and count line; the date line stays a 12 px caption.
+  - **Memphis on the one object:** the badge's half disc and triangle are apart on one baseline, with the chart's squiggles and stripes, a second cue besides colour for the door volunteers.
+  - **Patterns centred** on each shape, so the rims cut them evenly.
+  - **"Next payout · Fri 16 Oct 2026"** fits the wider column.
+- **After the second fresh audit (3):**
+  - **A focal point:** the headline is the scale's 90 px display size, two lines, so it reads as the display word; the lede runs to two lines.
+  - **Whole glyphs:** dots and squiggles are drawn one by one, only where each sits at least 4 px inside its shape, on the chart and on the badge's half disc, so no fragment touches a rim. Stripes keep their 3 px inset.
+  - **Room between the right labels:** a 64 px gap before the speaker square (48 between the others), and "Workshop" as the short label.
+  - **One bottom edge:** the chart floor is at y 760, and the totals column ends on it, beside the chart it totals. The scale is 34 px² per ticket so the Standard dome still clears the chart title.
+  - **The badge at 240 x 320** (still 3:4), with "Type designer" and a two-line ticket line; Studio Veldkant is no longer on the page. The right column (badge, caption, totals) now runs from x 1120 to 1360, and the last row reads "Payout · Fri 16 Oct 2026" so it fits.
+- **After the third fresh audit (3), a new layout:**
+  - **One object:** Room 3's door sign, a large striped mint triangle with a solid band naming the room, set at −7°, with Femke's badge leaning on it at +4°. The headline names the triangle and the page now shows it.
+  - **Memphis, taught:** large shapes at angles beside the copy, the badge's triangle tilted over its half disc, and a black-and-white zigzag for speakers and press.
+  - **The totals beside their chart:** "1,862" (38 px, so it no longer competes) starts on the chart title's line.
+  - **Rhythm:** 56 px from the action to the chart; the chart at 28 px² per ticket on a floor at y 768; 96 px before the speaker square so its label clears "Workshop"; the chart starts at x 86 so the first label stays inside the 80 px margin.
+  - Stripes are whole too, inside every triangle; the badge caption is "Badge proof, 3 × 4 in".
+- **After the fourth fresh audit (4):**
+  - The badge caption is gone: it sat in the chart's heading row and read as a chart note (and inches were odd for a euro event).
+  - The totals' last rule lands on the chart floor (y 768); "Workshop add-ons 186" makes the 1,676 people figure follow; the totals start at x 1060.
+  - Speakers and press: whole zigzag rows 4 px inside the square, and the dashed released outline drawn 1 px outside the fill so it no longer reads as a double border.
+  - The badge's printed triangle sits flat on the rule, still over the half disc (tilted, it clipped at the edge).
+  - The door's stripes are bolder (4 of every 14 px); the door sign is not drawn to scale.
+
+### Totals, re-added from the page
+- Issued: 400 + 1,212 + 64 = 1,676 people, + 186 workshop seats = 1,862.
+- Released: 400 + 1,800 + 80 = 2,280 people + 240 seats = 2,520; 1,862 / 2,520 = 73.9%, shown as 74%.
+- Gross: 400 x €290 + 1,212 x €420 + 186 x €120 = €116,000 + €509,040 + €22,320 = €647,360 (speakers and press are free).
+- Workshop: 6 rooms of 40 = 240 seats.
+
+### References (Mobbin, by link only)
+| Reference | What it taught |
+|---|---|
+| Eventbrite, https://mobbin.com/sites/sections/d2ac77c3-af65-4cfb-9f59-227d98a51578 | Shapes set inside the display line, so word and object read as one. |
+| Maze Disco Conf, https://mobbin.com/sites/sections/f1932dd7-d181-45e1-a395-1b42541895d6 | One display word and one drawn object on a dark ground. |
+| Figma Shortcut, https://mobbin.com/sites/sections/d89d3841-aea4-4bc6-a310-075eb53e19db | Real Memphis: black-and-white patterns, tilt and collisions. |
+
+### Checks
+- **Contrast as rendered:** 44 runs. Two flags come from rotated elements ("Room 3" on the door sign, "Standard + workshop" on the badge): the measuring box is upright, so it takes in stripes and the badge's rule. With the rotation switched off, every run passes; lowest 7.09:1.
+- **Weekdays:** `check_dates.py --year 2026` passes. With the payout written without its year, the tool took the event's year from the chart title nearby and flagged the weekday, so the row carries its year.
+- Preflight: no type or font errors.

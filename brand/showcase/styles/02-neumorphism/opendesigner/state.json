@@ -355,7 +355,8 @@
     "font.size.input": {
       "value": 16,
       "unit": "px"
-    }
+    },
+    "type.ratio": 1.2
   },
   "answers": {
     "Q-aud-01": {
@@ -394,6 +395,12 @@
       "value": "neumorphism",
       "set_by": "chosen",
       "decision": "D-0030",
+      "locked": false
+    },
+    "Q-type-09": {
+      "value": 1.2,
+      "set_by": "chosen",
+      "decision": "D-0032",
       "locked": false
     }
   },
@@ -543,7 +550,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "13e572800c984621",
+    "DESIGN.md": "72ae16d7d9a1530d",
     "PRODUCT.md": "6dfb28ad5ed9b901"
   },
   "exports": {

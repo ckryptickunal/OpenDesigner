@@ -316,3 +316,8 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 ## D-0023 · dials.warmth = 35
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: cool-neutral so the green burns
+
+## D-0024 · name = "Fellrise"
+- set_by: delegated · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: round 3: Ridgeline is a real product name (Honda Ridgeline), so the trail app is renamed Fellrise (no app or product of that name found)
+- previous value: "Ridgeline"

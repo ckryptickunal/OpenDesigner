@@ -96,5 +96,34 @@
    }
   ],
   "facts_checked": "All seven weekdays, days to start, task counts per group and overall against the bar, times in order, photo credit"
+ },
+ "round3": {
+  "score": 4,
+  "audited": "2026-10-15",
+  "audited_by": "fresh-context agents, three rounds (3, 4, 4)",
+  "changed": [
+   "The badge photo of a real person, captioned as the invented Imani Clarke, replaced by a clay portrait drawn in SVG (eyes with lids, a raised nose tip, a jaw, a visible ear, a swept fringe, a collar); credit line removed",
+   "Badge face in pale mint clay with a deeper bottom-right shade; lanyard shows one whole NORTHCOTE LABS per strap",
+   "Green for done and progress only; ink for actions; the day-level calendar action is a link under the address",
+   "Welcome lunch is an unticked day-one event: 5 of 12 done, bar 41.7%; \"in 4 days\" from Thu 15 Oct",
+   "Panel and list end on one line; 60 px rows; times at body size in their own column; no repeated directions; no real street name"
+  ],
+  "references": [
+   {
+    "site": "GoDaddy",
+    "mobbin_url": "https://mobbin.com/screens/66d1dcdf-73d4-4364-9549-1629c474c326",
+    "what": "A shipped 3D clay person: lids, nose, hair with volume"
+   },
+   {
+    "site": "Pipedrive",
+    "mobbin_url": "https://mobbin.com/screens/e7f636d0-1d6f-4a07-a5fa-9baaffea7734",
+    "what": "Quiet task rows with the accent only on done"
+   },
+   {
+    "site": "Revolut Business",
+    "mobbin_url": "https://mobbin.com/screens/480acc51-97cd-45f9-b0dc-8feb37488e77",
+    "what": "One soft 3D object beside a flat list"
+   }
+  ]
  }
 }

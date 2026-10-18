@@ -72,5 +72,35 @@
    "Reused 14:06 and 1.84M replaced by 13:47 and 1.87M; paper boat replaces the crane; pass drawn as a ticket stub; hills removed",
    "Engine pick Q-dir-01 pixel-art"
   ]
+ },
+ "round3": {
+  "score": 4,
+  "audited": "2026-10-15",
+  "audited_by": "fresh-context agents, three rounds (3, 3, 4)",
+  "changed": [
+   "Sky moved from indigo to a petrol-blue night; no violet anywhere; decorative reflections removed",
+   "Lanterns redrawn as paper lanterns; gridlines and 100K and 200K labels; last year varied by day and dimmer after now; a dotted gold line where the +15% pace crosses 5M on Saturday",
+   "Gold means the event only; the report button is an outline; Silkscreen for the event name only",
+   "Mini-charts as stepped pixel lines on a shared Oct 8 to Oct 14 header; deltas under each value with what they compare to; ARPDAU derived from revenue and actives",
+   "Numbers re-added: ARPDAU base $0.305; Lantern Bundle 38,200 buyers so offers add to $554.9K; offers sorted by gross; sprites at a whole-number 3x",
+   "4/8 spacing; flat water band; prose without tabular figures"
+  ],
+  "references": [
+   {
+    "site": "Mixpanel",
+    "mobbin_url": "https://mobbin.com/screens/89c9a8e5-8f5b-4590-b4ff-1f3ed791bd6d",
+    "what": "Draws the unfinished period differently"
+   },
+   {
+    "site": "Amplitude",
+    "mobbin_url": "https://mobbin.com/screens/3afcd733-04bd-4028-884b-922ffdbdea98",
+    "what": "Names the comparison beside the number"
+   },
+   {
+    "site": "Unity",
+    "mobbin_url": "https://mobbin.com/screens/8a4c6a9b-2cc5-48a0-a4b7-66f3b7754920",
+    "what": "Game analytics: tight KPI rows under one hero chart"
+   }
+  ]
  }
 }

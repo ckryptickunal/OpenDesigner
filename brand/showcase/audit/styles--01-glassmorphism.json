@@ -97,5 +97,36 @@
    }
   ],
   "facts_checked": "Weekdays (Fri 9 Oct 2026, Mon 26 Oct 2026), crop sizes against 6240 x 4160 and their ratios, zoom 1060/6240, approval and comment counts, photo metadata (Canon EOS 6D Mark II, DateTimeOriginal 2025-07-08)"
+ },
+ "round3": {
+  "score": 4,
+  "audited": "2026-10-15",
+  "audited_by": "fresh-context agents, three rounds (4 with a stale render, 4, 4)",
+  "changed": [
+   "Captions from 11 to 12 px through the engine (Q-type-09 1.2: 12, 14, 17, 20, 24); no size outside the scale",
+   "Headline zone: a 34% scrim with a ghosted headline block and its label on the zone, in place of a busy hatch; focal point a ring and dot clear of the zone edge",
+   "Small glass blurs less than big glass (chips and zoom 14 px, bar 24 px token); every overlay on the 16 px edge; darkening outside the crop 58% to 45%",
+   "Placements: 80 px pictures, columns at least 112 px, captions on three lines, an inset selection ring",
+   "Inspector: Comments and Activity tabs, two true replies (Feed and Story cannot keep the lifebuoy), reply box under the thread",
+   "Footer matches the state: Waiting on Rhys, due 14:00, with Remind, instead of Approve on a crop with changes requested",
+   "Copy labels instead of narrating; breadcrumb slashes at 85% white for contrast (lowest run 4.99:1)"
+  ],
+  "references": [
+   {
+    "site": "Air",
+    "mobbin_url": "https://mobbin.com/screens/e2b11887-ecc9-4be2-abd8-ee714db2e7ae",
+    "what": "Dark asset viewer with a solid info panel"
+   },
+   {
+    "site": "Higgsfield",
+    "mobbin_url": "https://mobbin.com/screens/ce861b55-1645-4413-8942-6f627d73b953",
+    "what": "Glass tools over media, reply box under the comments"
+   },
+   {
+    "site": "Ghost",
+    "mobbin_url": "https://mobbin.com/screens/092f62e5-6f39-4a6b-8189-934b7bab5a12",
+    "what": "Quiet darkening and handles in a crop editor"
+   }
+  ]
  }
 }

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wardlight on the ward</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400..700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Scene: the Wardlight ward tablet lying on a white table, seen from above, with a glass of water at the
+     edge of frame and soft window light falling across both.
+     Photo: NordWood Themes on Unsplash (free Unsplash licence), hotlinked and enlarged so the glass sits
+     half out of frame. The tablet frame is generic and drawn in CSS; its shadow falls down and right,
+     away from the window. Caption type, colours and spacing are tokens; the photo, metal and light are art. */
+  html, body { margin: 0; }
+  body {
+    width: 1600px; height: 1200px; overflow: hidden; position: relative;
+    background: var(--ds-color-surface-base);
+    font-family: var(--ds-font-family-text);
+    color: var(--ds-color-text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+  .photo { position: absolute; left: 0; top: -293px; width: 2240px; height: 1493px; object-fit: cover; }
+
+  .tablet {
+    position: absolute; left: 150px; top: 236px; width: 1041px; height: 739px; box-sizing: border-box;
+    transform: rotate(-3deg);
+    border-radius: 46px; padding: 3px; /* od-ignore: device or photo art */
+    background: linear-gradient(135deg, #f4f5f7 0%, #c9ccd2 40%, #e3e5e9 70%, #b5b9c0 100%); /* od-ignore: device or photo art */
+    box-shadow:
+      0 1px 2px rgb(30 38 48 / .35), /* od-ignore: device or photo art */
+      6px 10px 14px rgb(30 38 48 / .14), /* od-ignore: device or photo art */
+      22px 34px 50px rgb(30 38 48 / .16), /* od-ignore: device or photo art */
+      50px 78px 110px rgb(30 38 48 / .10); /* od-ignore: device or photo art */
+  }
+  .glass { width: 100%; height: 100%; box-sizing: border-box; border-radius: 43px; padding: 22px; background: #0b0c0e; position: relative; } /* od-ignore: device or photo art */
+  .glass::before { /* front camera on the long edge */
+    content: ""; position: absolute; top: 9px; left: 50%; width: 6px; height: 6px; border-radius: 50%; transform: translateX(-50%); /* od-ignore: device or photo art */
+    background: radial-gradient(circle at 35% 35%, #39404e, #050506 65%); } /* od-ignore: device or photo art */
+  .screen { width: 100%; height: 100%; border-radius: 22px; overflow: hidden; position: relative; } /* od-ignore: device or photo art */
+  .screen img { display: block; width: 100%; height: 100%; }
+  .screen::after { content: ""; position: absolute; inset: 0;
+    background: linear-gradient(125deg, rgb(255 255 255 / .10) 0%, rgb(255 255 255 / .03) 26%, transparent 26.3%); } /* od-ignore: device or photo art */
+
+  /* window light: two soft mullion shadows crossing the table from the upper left */
+  .window { position: absolute; inset: -200px; pointer-events: none; mix-blend-mode: multiply; opacity: .6; filter: blur(16px);
+    background:
+      linear-gradient(118deg, transparent 0 66%, rgb(150 165 185 / .34) 66% 69%, transparent 69% 100%), /* od-ignore: device or photo art */
+      linear-gradient(118deg, transparent 0 76%, rgb(150 165 185 / .30) 76% 83%, transparent 83% 100%), /* od-ignore: device or photo art */
+      linear-gradient(28deg, transparent 0 74%, rgb(150 165 185 / .22) 74% 76%, transparent 76% 100%); } /* od-ignore: device or photo art */
+  .falloff { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+    background: radial-gradient(90% 80% at 15% 10%, transparent 40%, rgb(210 216 226 / .42) 100%); } /* od-ignore: device or photo art */
+
+  .caption {
+    position: absolute; left: var(--ds-space-64); right: var(--ds-space-64); bottom: var(--ds-space-48);
+    display: flex; align-items: baseline; gap: var(--ds-space-12); font: var(--ds-text-body-md);
+  }
+  .caption i { width: 10px; height: 10px; border-radius: 3px; background: var(--ds-color-bg-brand); align-self: center; } /* od-ignore: device or photo art */
+  .caption b { font-weight: var(--ds-font-weight-heading); }
+  .caption span { color: var(--ds-color-text-secondary); }
+  .caption span:last-child { margin-left: auto; }
+</style>
+</head>
+<body>
+  <img class="photo" src="https://images.unsplash.com/photo-1567011345445-fd175f248019?w=4480&q=80&auto=format&fit=crop" alt="">
+  <figure class="tablet" style="margin:0">
+    <div class="glass"><div class="screen"><img src="../../app-screens/10-clinical-vitals/shot.png" alt="Wardlight on Ward 4B at 02:16: patients sorted by NEWS2, and Rosa Halvorsen in bed 7 at NEWS2 8, with an emergency response called at 02:04, the registrar paged 12 minutes ago and not yet acknowledged, and her observation chart from 22:00 to 02:15"></div></div>
+  </figure>
+  <div class="window"></div>
+  <div class="falloff"></div>
+  <p class="caption" style="margin:0"><i></i><b>Wardlight</b><span>Ward 4B at night, on the nurses' station tablet</span><span>Tablet, 1180 × 820</span></p>
+</body>
+</html>

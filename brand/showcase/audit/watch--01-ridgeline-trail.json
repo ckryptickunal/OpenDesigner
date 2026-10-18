@@ -1,6 +1,6 @@
 {
  "piece": "watch/01-ridgeline-trail",
- "title": "01 Ridgeline: notes",
+ "title": "01 Fellrise: notes",
  "pattern": "activity",
  "platform": "watchos",
  "industry": "fitness",
@@ -61,5 +61,17 @@
   "verdict": "keep",
   "said": "most of the watch screens are okay",
   "date": "2026-10-14"
+ },
+ "round3": {
+  "date": "2026-10-15",
+  "score": null,
+  "score_note": "not re-audited; a rename only",
+  "changed": [
+   "Renamed Ridgeline to Fellrise: Ridgeline is a real product name (Honda Ridgeline) and NAMES.md marked it 'may be real'; no app or product called Fellrise was found",
+   "Engine system renamed with engine.py set name, then build (DESIGN.md, PRODUCT.md and exports regenerated)",
+   "Page title and aria-label changed; the face itself shows no brand name, so shot.png is unchanged in pixels but was re-rendered",
+   "The folder keeps its name (01-ridgeline-trail) so links do not break",
+   "watch/sheet.html caption and iframe title renamed; sheet.png re-rendered (it also picks up Tidemark's WED 14)"
+  ]
  }
 }

@@ -2,7 +2,7 @@
 
 Ostwell, a building-management system: a flat Level 6 floor plan with live desks and one fault, and one soft object, the zone dial. Fresh audit after the polish round: 4 of 5.
 
-The polish round of 2026-10-14 (the last section) describes this page. The sections between record the first build, the Ouvra climate panel that the independent audit scored 3.
+The "Round 3 (polish)" section of 2026-10-15, the last one, describes this page. The polish round of 2026-10-14 before it describes the version that round started from. The sections between record the first build, the Ouvra climate panel that the independent audit scored 3.
 
 **Final score: 4 of 5** after three rounds (3.5, then 4, then 4). Render: 1440 x 900 at scale 2 (`shot.png`).
 
@@ -221,3 +221,69 @@ set name "Ostwell"; pick Q-dir-01 neumorphism; build
 ### Remaining weaknesses
 - The dial spends 340 px on a 0.9° gap. A shipped system would give the plan more room.
 - The meeting rooms count as one zone although they show two temperatures on two VAV boxes.
+
+## Round 3 (polish) 2026-10-15
+**Fresh audit: 4 of 5** against the B2B product screens (`product/01`, `02`, `04`, `06`). Render: `shot.png`, 1440 x 900 at scale 2.
+
+### Why this round
+The piece still carried "Being rebuilt" on the public showcase. The owner's bar is the B2B product screens: one accent with one job, real dense content, exact spacing, legible type. The audit's fixes were done in the polish round of 2026-10-14; this round closed what stood between that page and the bar.
+
+### What changed
+- **One type scale, through the engine.** The page used eight sizes, three pairs within 10% of each other (11 and 12, 14 and 15.3, 22 and 24). `pick Q-type-09 1.2` rebuilt the scale as 12, 14, 17, 20, 24, 29, 35. The page now uses five sizes:
+
+| Role | Size | Use |
+|---|---|---|
+| Caption | 12 | Legends, plan labels, chart axes, set points |
+| Body | 14 | Header, readings, nav |
+| Title | 17 | The wordmark |
+| Headline | 24 | Zone name, zone temperatures on the plan |
+| Display | 56 (outside the scale) | The reading inside the dial |
+
+  The plan is an SVG drawn in metres and scaled to the column, so its labels are now sized by the plan's own zoom and render at 12 and 24 px. Comms uses the same zone tag as the other rooms (it was 15.3 px).
+- **The mode switch is the second soft part.** It was a bordered row with a solid cobalt segment, the loudest block on the right. It is now a track pressed into the page (the engine's pressed elevation) with the chosen mode raised out of it (the raised elevation), so the page shows both halves of the style: raised and pressed. State is never shadow alone: the raised mode is also cobalt, heavier, and keeps the 3:1 rim, as the engine's neumorphic warning asks.
+- **Spacing.** The bigger zone title pushed the schedule note into the last reading row; the dial and switch gaps went from 32 and 24 to 20 px, so the note has 16 px of air again.
+- **After the first fresh audit (3):**
+  - **Soft parts without outlines.** The dial, its handle, − and +, and the mode track carry no rim; their cobalt dot and ink glyphs give the 3:1 cue. Only the chosen mode keeps a rim, as its state cue.
+  - **The fault is on the plan.** Rooms 6.24 to 6.26 are tinted, VAV-6.06 is drawn in red, each meeting room shows its own reading (21.5, 21.7, 21.6; 23.0, 23.3, 23.0, averaging 21.6° and 23.1°), and the fault line is 14 px: "1.6° over in 6.24 to 6.26: V-6.06 stuck at 10%".
+  - **The core says what it is:** lifts, stair, WC and risers in hairline cells on the plate colour, instead of the darkest grey block on the plan.
+  - **Selection on the walls.** The east zone's own walls are drawn in cobalt, with a 5% cobalt fill; the inset outline doubled the grey wall on three sides.
+  - **Edges.** The plan's viewBox starts at the wall, so the plan lines up with the header, legend and charts on the 32 px edge.
+  - **One time axis.** Both charts run 06 to 19, and both carry the 10:42 line.
+  - **VAV boxes off the walls:** V-6.05 and V-6.06 sit over the middle room of the three each serves, labelled below.
+  - **Cobalt has one job,** the selected zone and its control: the logo is ink now.
+  - **4/8 rhythm:** the reading rows are back to 8 px, gaps of 2 px are 4. The dial went from 340 to 320 px to make the room.
+- **After the second fresh audit (3, "close to 4"):**
+  - **The arc owns its track:** the ticks under the set-point arc are masked, so no tick crosses it.
+  - **Cobalt has one meaning,** the selected zone and its control: the temperature chart draws today in ink and yesterday dashed.
+  - **No soft part has a rim.** The chosen mode is raised, cobalt and heavier; the handle's dot and the ink − and + are the 3:1 cues.
+  - **A plan, not a wireframe:** glazing on a 2.4 m module along the outer walls, a door for each meeting room, a temperature sensor in each zone (and in the legend), and the riser cell tagged AHU-2.
+  - **The fault is said twice, not four times:** the tinted rooms show where; the sentence says why. V-6.06's box and label are neutral.
+  - **Charts:** desk bars in the plan's desk grey; legends on one line height; short titles ("Temperature", "Desks in use") so neither header wraps.
+  - **Readings:** airflow 2,160 of 3,000 L/s (72%), no longer equal to the 86% damper average; the panel says V-6.01 to 6.04, as the plan does.
+- **After the final fresh audit (4):**
+  - The charts sit under one heading, "East open office, today", so they say which zone they show.
+  - The set-point arc and its handle ride outside the tick ring (radius 152), so no tick is hidden or crossed.
+  - The selection is 3.5 px, wide enough to cover the glazing lines on the zone's walls; the east wall is glazed its full height.
+  - The temperature curve levels off after cooling starts at 09:20 (22.05, 22.24, 22.36, 22.42, 22.4 now).
+  - "Set 21.5°" on the meeting-rooms strip, as everywhere else.
+
+- **After a last regression check (holds at 4):** the selection moved 3 px inside the zone's walls so their glazing shows (drawn on the walls, it hid the panes), and the ticks end at radius 144 so the handle covers the half-degree tick under it.
+
+### System (engine)
+```
+pick Q-type-09 1.2 --why "one scale, captions at 12 px, as the B2B product screens"
+build
+```
+
+### References (Mobbin, by link only)
+| Reference | What it taught |
+|---|---|
+| Rivian, https://mobbin.com/screens/d217e8a1-3cf7-44b4-be12-5937efd5ee13 | Chosen segment raised out of a track; set point against the reading. |
+| MyDyson, https://mobbin.com/screens/4b8af8cf-12b8-45a1-a2be-40f6e33cd0f6 | Round soft controls whose glyph is the cue. |
+| Tripadvisor, https://mobbin.com/screens/33957d93-1613-4b44-af7d-a07f32ff16ff | A plan with state in room fills and one clean selection edge. |
+
+### Checks
+- **Contrast as rendered:** 131 runs; the only flag is the white "1" on the red alarm pill, where the measuring box takes in the page behind the pill's rounded ends. The pair itself (white on `#a82321`) is 7.17:1. Every other run passes.
+- **Weekdays:** `check_dates.py --year 2026` passes (Wed 14 Oct).
+- **Facts re-added:** desks 38 + 27 = 65 of 64 + 48 = 112; plate 64 x 34 = 2,176 m²; meeting rooms 21.5, 21.7, 21.6 average 21.6° and 23.0, 23.3, 23.0 average 23.1°, 1.6° over 21.5°; zone 22.4° against 21.5° is 0.9° over; outside 11.8 °C is under the 12 °C chiller lockout.
+- `engine.py validate`: no errors, 1 warning (the neumorphic edge-contrast warning; every soft control has a 3:1 glyph or label). Preflight: one warning, the 56 px dial figure outside the scale, on purpose.

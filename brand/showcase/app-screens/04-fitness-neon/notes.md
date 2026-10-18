@@ -65,3 +65,6 @@ Changes made for the rules:
 - Mono is now only on data (rep counter, zone times, axis numbers). "LIVE", "BPM", "Target", the metric labels, the coach cue and the hold hint moved to Archivo. The cue went from 13 px mono to 17 px Body, which reads better mid-stride.
 - Workout name and buttons 23 → 22; the status bar uses Archivo instead of the system font. Two fonts in the piece.
 - Color: black with acid lime and one pink; nothing changed (lime on black 18.16:1).
+
+## Round 3 (2026-10-15): one label
+Found by the fresh audit of `mockups/08-made-with-opendesigner`, which shows this screen. 38:42 for 7.84 km averages 4:56 per km, but the third metric read "PACE · /KM 4:31". 4:31 is the current pace (the cue holds 4:30–4:35 for this rep), so the label now says so: **"Pace now"**. "Pace now · /km" wrapped to two lines in the 117 px column, so the unit was dropped from the label; the cue line below still states /km. Nothing else changed (the owner likes this screen): the pixel difference against the previous render is confined to that label. Re-rendered `shot.png` (390 × 844 at 3×).

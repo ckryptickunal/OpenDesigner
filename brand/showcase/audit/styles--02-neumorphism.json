@@ -94,5 +94,35 @@
    }
   ],
   "facts_checked": "Weekday, desk counts per zone and total (65 of 112), plate area 64 x 34 = 2,176 m², VAV assignments, fault direction, economiser and chiller lockout, airflow against damper position, set point against reading on the dial and the chart"
+ },
+ "round3": {
+  "score": 4,
+  "audited": "2026-10-15",
+  "audited_by": "fresh-context agents, three rounds (3, 3, 4)",
+  "changed": [
+   "One type scale through the engine (Q-type-09 1.2): 12, 14, 17, 24 plus the 56 px dial figure; plan labels sized by the plan zoom",
+   "Soft parts: the dial, its handle, the − and + buttons, a pressed mode track and the raised chosen mode; no rims (glyphs and labels are the 3:1 cues); the set-point arc rides outside the tick ring",
+   "Cobalt means the selected zone and its control only: logo and temperature line in ink; selection drawn on the zone walls",
+   "The plan: fault rooms tinted and each meeting room with its reading; core split into lifts, stair, WC, risers (AHU-2); glazing, doors and sensors; VAV boxes off the walls",
+   "Charts under one \"East open office, today\" heading on a shared 06 to 19 axis, yesterday on both, desks in the plan grey",
+   "Fault said twice (tint and sentence), not four times; airflow 2,160 of 3,000 L/s; V- naming throughout; 4/8 spacing"
+  ],
+  "references": [
+   {
+    "site": "Rivian",
+    "mobbin_url": "https://mobbin.com/screens/d217e8a1-3cf7-44b4-be12-5937efd5ee13",
+    "what": "Chosen segment raised out of a track; set point against the reading"
+   },
+   {
+    "site": "MyDyson",
+    "mobbin_url": "https://mobbin.com/screens/4b8af8cf-12b8-45a1-a2be-40f6e33cd0f6",
+    "what": "Round soft controls whose glyph is the cue"
+   },
+   {
+    "site": "Tripadvisor",
+    "mobbin_url": "https://mobbin.com/screens/33957d93-1613-4b44-af7d-a07f32ff16ff",
+    "what": "A plan with state in room fills and one clean selection edge"
+   }
+  ]
  }
 }

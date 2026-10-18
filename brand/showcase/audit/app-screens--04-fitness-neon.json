@@ -69,5 +69,14 @@
   "verdict": "keep",
   "said": "great",
   "date": "2026-10-14"
+ },
+ "round3": {
+  "date": "2026-10-15",
+  "score": null,
+  "score_note": "not re-audited; one label, found by the fresh audit of mockups/08",
+  "changed": [
+   "'PACE · /KM 4:31' is now 'PACE NOW 4:31': 38:42 for 7.84 km averages 4:56 per km, so 4:31 is the current pace and the label says so ('Pace now · /km' wrapped in its column)",
+   "shot.png re-rendered; the pixel change is confined to that label"
+  ]
  }
 }

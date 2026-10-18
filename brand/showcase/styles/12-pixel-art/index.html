@@ -36,8 +36,8 @@
 
   .app { width: 1440px; height: 900px; padding: 0 var(--ds-space-64); display: flex; flex-direction: column; }
   header.top { height: 64px; display: flex; align-items: center; gap: var(--ds-space-24); border-bottom: 1px solid var(--line); margin: 0 -64px; padding: 0 var(--ds-space-64); }
-  .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; }
-  .game { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-6) 10px; border: 1px solid var(--line); border-radius: var(--ds-radius-control); }
+  .logo { display: flex; align-items: center; gap: var(--ds-space-8); font-weight: 600; }
+  .game { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-4) var(--ds-space-8); border: 1px solid var(--line); border-radius: var(--ds-radius-control); }
   .game small { color: var(--tx3); font-size: var(--ds-font-size-14); }
   .tabs { display: flex; gap: var(--ds-space-4); margin-left: var(--ds-space-8); }
   .tabs a { padding: var(--ds-space-6) var(--ds-space-12); border-radius: var(--ds-radius-control); color: var(--tx2); }
@@ -50,7 +50,7 @@
 
   /* the event: a title row, then the chart drawn as the game's own sky */
   .ev-head { margin-top: var(--ds-space-20); display: flex; align-items: flex-end; gap: var(--ds-space-32); }
-  .ev-kicker { font-family: var(--ds-font-family-display); font-size: 16px; line-height: 16px; color: var(--gold); }
+  .ev-kicker { font-size: var(--ds-font-size-14); line-height: 16px; font-weight: 600; letter-spacing: .08em; color: var(--gold); }
   .ev-title { font-family: var(--ds-font-family-display); font-size: 32px; line-height: 32px; font-weight: 400; margin-top: var(--ds-space-8); white-space: nowrap; }
   .ev-line { display: flex; align-items: baseline; gap: var(--ds-space-16); }
   .ev-dates { font-size: var(--ds-font-size-14); color: var(--tx2); }
@@ -60,45 +60,54 @@
   .blocks { display: flex; gap: 2px; margin-top: var(--ds-space-8); justify-content: flex-end; }
   .blocks i { width: var(--px); height: 12px; background: var(--ds-color-neutral-dark-6); }
   .blocks i.on { background: var(--gold); }
-  .btn { height: 36px; padding: 0 14px; border-radius: var(--ds-radius-control); display: inline-flex; align-items: center; font-weight: 500; background: var(--gold); color: #1a1405; white-space: nowrap; }
+  .btn { height: 36px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-control); display: inline-flex; align-items: center; font-weight: 500; box-shadow: inset 0 0 0 1px var(--ds-color-neutral-dark-7); white-space: nowrap; }
+  @media (pointer: fine) { .btn:hover { background: var(--raised); } }
 
   .sky { position: relative; margin-top: var(--ds-space-12); height: 320px; border-radius: var(--ds-radius-container); overflow: hidden; }
   .sky canvas { position: absolute; inset: 0; width: 1312px; height: 320px; }
-  .sky .day { position: absolute; bottom: 10px; transform: translateX(-50%); color: #c8cfee; font-size: var(--ds-font-size-14); }
+  .sky .day { position: absolute; bottom: 12px; transform: translateX(-50%); color: #c3d3e0; font-size: var(--ds-font-size-14); }
   .sky .day.today { color: #fff; font-weight: 600; }
-  .sky .now { position: absolute; top: 10px; color: #fff; font-size: var(--ds-font-size-14); white-space: nowrap; }
-  .sky .now span { color: #c8cfee; }
-  .sky .key { position: absolute; right: 16px; top: 12px; display: flex; gap: var(--ds-space-16); color: #c8cfee; background: rgb(8 10 32 / 0.85); padding: 6px 10px; border-radius: 4px; }
+  .sky .now { position: absolute; top: 12px; color: #fff; font-size: var(--ds-font-size-14); white-space: nowrap; }
+  .sky .now span { color: #c3d3e0; }
+  .sky .key { position: absolute; right: 16px; top: 8px; display: flex; gap: var(--ds-space-16); color: #c3d3e0; background: rgb(5 11 20 / 0.85); padding: 4px 8px; border-radius: 4px; }
   .sky .key span { display: inline-flex; align-items: center; gap: var(--ds-space-8); }
   .sky .key canvas { position: static; width: 12px; height: 16px; }
-  .sky .key .k-line { display: inline-block; width: 20px; height: 4px; background: #8f99d8; }
+  .sky .mid { position: absolute; bottom: 14px; width: 1px; height: 12px; background: #33506c; }
+  .sky .goal5 { position: absolute; transform: translateX(-50%); color: var(--gold); font-size: var(--ds-font-size-14); line-height: 16px; white-space: nowrap; }
+  .sky .lv { position: absolute; left: 16px; transform: translateY(-50%); color: #c3d3e0; font-size: var(--ds-font-size-14); }
+  .sky .key .k-line { display: inline-block; width: 20px; height: 4px; background: #8fb0c9; }
 
   /* lower row */
   .lower { margin-top: var(--ds-space-16); flex: 1; display: grid; grid-template-columns: 520px 1fr; gap: var(--ds-space-12); padding-bottom: var(--ds-space-24); min-height: 0; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--ds-radius-container); padding: 14px 18px; display: flex; flex-direction: column; min-height: 0; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--ds-radius-container); padding: var(--ds-space-16); display: flex; flex-direction: column; min-height: 0; }
   .c-h { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--ds-space-4); }
   .c-h h2 { font-size: var(--ds-font-size-14); font-weight: 600; }
   .c-h span { color: var(--tx3); }
-  .kpi { display: grid; grid-template-columns: 1fr 108px 168px; align-items: center; gap: var(--ds-space-12); padding: 8px 0; border-top: 1px solid var(--line); }
-  .k-l { color: var(--tx2); }
+  .kpi { display: grid; grid-template-columns: 1fr 156px 168px; align-items: center; gap: var(--ds-space-12); padding: var(--ds-space-4) 0; border-top: 1px solid var(--line); }
+  .k-l { color: var(--tx2); line-height: 20px; }
+  .k-d { display: block; font-size: var(--ds-font-size-14); font-weight: 400; letter-spacing: 0; line-height: 18px; color: var(--tx3); }
+  .k-d b { font-weight: 500; }
+  .k-d .up { color: var(--up); } .k-d .down { color: var(--down); }
   .k-l small { display: block; color: var(--tx3); font-size: var(--ds-font-size-14); }
   .k-l small b { font-weight: 500; }
   .k-l .up { color: var(--up); } .k-l .down { color: var(--down); }
-  .k-v { font-size: var(--ds-font-size-22); font-weight: 500; text-align: right; letter-spacing: -0.01em; }
+  .k-v { font-size: var(--ds-font-size-22); font-weight: 500; text-align: right; letter-spacing: -0.01em; line-height: 24px; }
   .k-v.ev { color: var(--gold); }
   .steps { display: block; width: 168px; height: 32px; }
+  .k-axis { padding: 0 0 var(--ds-space-4); border-top: 0; color: var(--tx3); }
+  .k-axis > span:last-child { display: flex; justify-content: space-between; }
 
   table { width: 100%; border-collapse: collapse; }
   th { text-align: right; font-weight: 500; color: var(--tx3); padding: var(--ds-space-6) 0; border-bottom: 1px solid var(--line); }
   th:first-child, td:first-child { text-align: left; }
-  td { text-align: right; padding: 13px 0; border-bottom: 1px solid var(--line); }
+  td { text-align: right; padding: var(--ds-space-12) 0; border-bottom: 1px solid var(--line); }
   td.bar { width: 128px; padding-left: var(--ds-space-16); }
-  .item { display: flex; align-items: center; gap: 10px; }
-  .item canvas { width: 32px; height: 32px; background: var(--raised); border-radius: 4px; }
+  .item { display: flex; align-items: center; gap: var(--ds-space-12); }
+  .item canvas { width: 36px; height: 36px; background: var(--raised); border-radius: 4px; }
   .item small { display: block; color: var(--tx3); font-size: var(--ds-font-size-14); line-height: 1.2; }
   .gb { display: flex; gap: 2px; justify-content: flex-start; }
   .gb i { width: var(--px); height: 12px; background: var(--bar); }
-  .t-foot { margin-top: auto; padding-top: 10px; color: var(--tx2); display: flex; justify-content: space-between; }
+  .t-foot { margin-top: auto; padding-top: var(--ds-space-12); color: var(--tx2); display: flex; justify-content: space-between; }
   .t-foot b { color: var(--tx); font-weight: 500; }
 </style>
 </head>
@@ -119,40 +128,41 @@
       <div class="ev-kicker">LIVE EVENT · DAY 3 OF 7</div>
       <div class="ev-line"><h1 class="ev-title">LANTERN FESTIVAL</h1><span class="ev-dates">Mon Oct 12 to Sun Oct 18, 23:59 UTC</span></div>
     </div>
-    <div class="goal num">
-      <div class="g-l"><b>2.31M of 5M lanterns</b> · finale on pace for Sat Oct 17</div>
+    <div class="goal">
+      <div class="g-l"><b>2.31M of 5M lanterns</b> · 5M goal on pace for Sat Oct 17</div>
       <div class="blocks" id="goal" role="img" aria-label="Community goal: 2.31 million of 5 million lanterns released, 46 percent"></div>
     </div>
     <button class="btn">Open event report</button>
   </section>
 
   <section class="sky" aria-label="Lanterns released every 3 hours">
-    <canvas class="pix" id="scene" width="328" height="80" role="img" aria-label="Chart drawn as the game's night sky over the lake. Each 3-hour slot from Monday October 12 to Sunday October 18 is a column of lanterns, one lantern for every 25,000 released. Lit lanterns are this year: they peak each evening between 18:00 and 21:00 UTC, highest on Monday at about 300,000 in three hours, and stop at now, Wednesday 13:47. A pale stepped line is last year's festival over the same three hours, running on to Sunday. So far 2.31 million lanterns are released, 15 percent more than last year's 2.01 million at the same point."></canvas>
-    <div class="key"><span><canvas class="pix" id="k-lit" width="3" height="4"></canvas>25,000 released, 2026</span><span><i class="k-line" aria-hidden="true"></i>same 3 hours, last year</span></div>
-    <div class="now num" id="now">Now · Wed 13:47 <span>· 2.31M so far, +15% on last year</span></div>
+    <canvas class="pix" id="scene" width="328" height="80" role="img" aria-label="Chart drawn as the game's night sky over the lake. Each 3-hour slot from Monday October 12 to Sunday October 18 is a column of lanterns, one lantern for every 25,000 released. Lit lanterns are this year: they peak each evening between 18:00 and 21:00 UTC, highest on Monday at about 300,000 in three hours, and stop at now, Wednesday 13:47. A pale stepped line is last year's festival over the same three hours, dimmer after now, with dotted gridlines at 100,000 and 200,000, and a gold mark on the shore shows where this year's pace, 15 percent above last year, crosses 5 million: Saturday, 09:00 to 12:00, marked by a dotted gold line. So far 2.31 million lanterns are released, 15 percent more than last year's 2.01 million at the same point."></canvas>
+    <div class="key"><span><canvas class="pix" id="k-lit" width="3" height="4"></canvas>25,000 released in a 3-hour slot</span><span><i class="k-line" aria-hidden="true"></i>same 3 hours, last year</span></div>
+    <div class="now" id="now">Now · Wed 13:47 <span>· 2.31M so far, +15% on last year</span></div>
     <div id="days"></div>
   </section>
 
   <section class="lower">
     <div class="card" aria-label="Key numbers">
-      <div class="c-h"><h2>Last 24 h, to 13:47 UTC</h2><span>change on the same 24 h a week ago</span></div>
-      <div class="kpi"><div class="k-l">Daily actives<small><b class="up">+6.2%</b></small></div><div class="k-v num">1.87M</div><svg class="steps" data-s="dau" aria-label="Daily actives, Oct 8 to 14: about 1.77M to 1.80M, a dip on Oct 11, then up to 1.87M from the event's first day"></svg></div>
-      <div class="kpi"><div class="k-l">Gross revenue<small><b class="up">+31.4%</b></small></div><div class="k-v num">$706.2K</div><svg class="steps" data-s="rev" aria-label="Gross revenue for each of the last 24 hours, peaking at $47.0K an hour between 19:00 and 21:00 UTC"></svg></div>
-      <div class="kpi"><div class="k-l">ARPDAU<small><b class="up">+23.7%</b></small></div><div class="k-v num">$0.378</div><svg class="steps" data-s="arp" aria-label="Revenue per daily active user, Oct 8 to 14: flat near $0.30, then up from Oct 12"></svg></div>
-      <div class="kpi"><div class="k-l">D1 retention, Oct 12 installs<small><b class="down">−1.3 pts</b> · bars by install day</small></div><div class="k-v num">41.8%</div><svg class="steps" data-s="ret" aria-label="Day-one retention by install day, Oct 6 to 12: about 43% before the event, 41.8% for Oct 12 installs"></svg></div>
-      <div class="kpi"><div class="k-l">Joined the event<small>1.19M players</small></div><div class="k-v ev num">63.4%</div><svg class="steps" data-s="evt" aria-label="Share of daily actives who joined the event, Oct 12 to 14, rising to 63.4%"></svg></div>
-      <div class="kpi"><div class="k-l">Crash-free sessions<small>+0.04 pts · v3.8.2</small></div><div class="k-v num">99.62%</div><svg class="steps" data-s="crash" aria-label="Crash-free sessions, Oct 8 to 14, between 99.55% and 99.62%"></svg></div>
+      <div class="c-h"><h2>Last 24 h, to 13:47 UTC</h2><span>against the same 24 h a week ago</span></div>
+      <div class="kpi k-axis" aria-hidden="true"><span></span><span></span><span><span>Oct 8</span><span>Oct 14</span></span></div>
+      <div class="kpi"><div class="k-l">Daily actives</div><div class="k-v num">1.87M<span class="k-d"><b class="up">+6.2%</b> vs 1.76M</span></div><svg class="steps" data-s="dau" aria-label="Daily actives, Oct 8 to 14: about 1.77M to 1.80M, a dip on Oct 11, then up to 1.87M from the event's first day"></svg></div>
+      <div class="kpi"><div class="k-l">Gross revenue</div><div class="k-v num">$706.2K<span class="k-d"><b class="up">+31.4%</b> vs $537.4K</span></div><svg class="steps" data-s="rev" aria-label="Gross revenue for each 24 hours to 13:47 UTC, Oct 8 to 14: $541K to $572K before the event, then $655K, $689K and $706.2K since it began on Oct 12"></svg></div>
+      <div class="kpi"><div class="k-l">ARPDAU</div><div class="k-v num">$0.378<span class="k-d"><b class="up">+23.7%</b> vs $0.305</span></div><svg class="steps" data-s="arp" aria-label="Revenue per daily active user, Oct 8 to 14: $0.31 to $0.32 before the event, then $0.36, $0.37 and $0.378 from Oct 12"></svg></div>
+      <div class="kpi"><div class="k-l">D1 retention<small>Oct 12 installs</small></div><div class="k-v num">41.8%<span class="k-d"><b class="down">−1.3 pts</b> vs Oct 5</span></div><svg class="steps" data-s="ret" aria-label="Day-one retention by install day, Oct 8 to 12: about 43% before the event, 41.8% for Oct 12 installs; Oct 13 and 14 installs have no day-one figure yet"></svg></div>
+      <div class="kpi"><div class="k-l">Joined the event<small>of daily actives</small></div><div class="k-v ev num">63.4%<span class="k-d">1.186M players</span></div><svg class="steps" data-s="evt" aria-label="Share of daily actives who joined the event, Oct 12 to 14, rising to 63.4%"></svg></div>
+      <div class="kpi"><div class="k-l">Crash-free sessions<small>v3.8.2</small></div><div class="k-v num">99.62%<span class="k-d"><b class="up">+0.04 pts</b> vs 99.58%</span></div><svg class="steps" data-s="crash" aria-label="Crash-free sessions, Oct 8 to 14, between 99.55% and 99.62%"></svg></div>
     </div>
 
     <div class="card" aria-label="Live offers">
       <div class="c-h"><h2>Festival offers</h2><span>last 24 h · each block $10K gross</span></div>
       <table class="num">
-        <thead><tr><th>Item</th><th>Bought</th><th>Of daily actives</th><th>Gross</th><th class="bar" style="text-align:left">&nbsp;</th></tr></thead>
+        <thead><tr><th>Item</th><th>Buyers</th><th>Of daily actives</th><th>Gross ↓</th><th class="bar" style="text-align:left">&nbsp;</th></tr></thead>
         <tbody>
-          <tr><td><div class="item"><canvas class="pix" data-sprite="lantern" width="12" height="12" aria-hidden="true"></canvas><div>Lantern Bundle<small>$4.99</small></div></div></td><td>38,210</td><td>2.0%</td><td>$190.7K</td><td class="bar"><div class="gb" data-n="19"></div></td></tr>
-          <tr><td><div class="item"><canvas class="pix" data-sprite="boat" width="12" height="12" aria-hidden="true"></canvas><div>Paper Boat Pack<small>$1.99</small></div></div></td><td>52,640</td><td>2.8%</td><td>$104.8K</td><td class="bar"><div class="gb" data-n="10"></div></td></tr>
-          <tr><td><div class="item"><canvas class="pix" data-sprite="kite" width="12" height="12" aria-hidden="true"></canvas><div>Moonlit Kite Skin<small>$9.99</small></div></div></td><td>11,904</td><td>0.6%</td><td>$118.9K</td><td class="bar"><div class="gb" data-n="12"></div></td></tr>
+          <tr><td><div class="item"><canvas class="pix" data-sprite="lantern" width="12" height="12" aria-hidden="true"></canvas><div>Lantern Bundle<small>$4.99</small></div></div></td><td>38,200</td><td>2.0%</td><td>$190.6K</td><td class="bar"><div class="gb" data-n="19"></div></td></tr>
           <tr><td><div class="item"><canvas class="pix" data-sprite="pass" width="12" height="12" aria-hidden="true"></canvas><div>Festival Pass<small>$14.99</small></div></div></td><td>9,377</td><td>0.5%</td><td>$140.6K</td><td class="bar"><div class="gb" data-n="14"></div></td></tr>
+          <tr><td><div class="item"><canvas class="pix" data-sprite="kite" width="12" height="12" aria-hidden="true"></canvas><div>Moonlit Kite Skin<small>$9.99</small></div></div></td><td>11,904</td><td>0.6%</td><td>$118.9K</td><td class="bar"><div class="gb" data-n="12"></div></td></tr>
+          <tr><td><div class="item"><canvas class="pix" data-sprite="boat" width="12" height="12" aria-hidden="true"></canvas><div>Paper Boat Pack<small>$1.99</small></div></div></td><td>52,640</td><td>2.8%</td><td>$104.8K</td><td class="bar"><div class="gb" data-n="10"></div></td></tr>
         </tbody>
       </table>
       <div class="t-foot num"><span>The four offers: <b>$554.9K</b> of $706.2K gross, 79%</span><span>Prices before store fees</span></div>
@@ -166,7 +176,10 @@
   // 2026 so far, to now (Wed 13:47, inside slot 20): 92 lanterns = 2.30M of the 2.31M released.
   // Last year, each full 3-hour slot. To now it is 80 lanterns (2.00M of 2.01M; slot 20 counts 2 of its 4 by 13:47), so +15%.
   const LIT  = [3, 2, 2, 4, 5, 8, 12, 7, 2, 2, 2, 3, 4, 7, 11, 6, 2, 2, 2, 3, 3];
-  const LAST = [2, 2, 2, 3, 4, 7, 11, 6, 2, 1, 2, 3, 4, 6, 9, 6, 2, 1, 2, 3, 4, 6, 9, 6, 2, 1, 2, 3, 4, 6, 9, 5, 2, 1, 2, 3, 4, 6, 9, 5, 2, 1, 2, 3, 4, 5, 9, 5, 2, 1, 2, 3, 4, 5, 9, 5];
+  // last year by day: a flatter Thursday, a busier Friday and weekend, the finale on Sunday evening (254 lanterns, 6.35M)
+  const LAST = [2, 2, 2, 3, 4, 7, 11, 6, 2, 1, 2, 3, 4, 6, 9, 6, 2, 1, 2, 3, 4, 6, 8, 5, 2, 2, 3, 3, 5, 6, 7, 4, 2, 1, 2, 3, 5, 7, 9, 6, 3, 2, 3, 4, 6, 8, 10, 7, 4, 3, 4, 5, 6, 8, 10, 3];
+  // this year from now on, projected at +15% on last year's slots: 5M (200 lanterns) is crossed in Saturday's 09:00 to 12:00 slot
+  const PROJ = LAST.map((g, i) => i > 20 ? Math.round(g * 1.15) : null);
   const NOW_H = 61 + 47 / 60;
 
   // ---------- the sky: 328 x 80 art pixels at 4x ----------
@@ -175,54 +188,64 @@
   const grid = []; for (let y = 0; y < H; y++) grid.push(new Array(W).fill(null));
   const set = (x, y, col) => { x |= 0; y |= 0; if (x < 0 || y < 0 || x >= W || y >= H) return; grid[y][x] = col; };
   const bayer = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
-  const SKY = ['#080a20', '#0c0f2e', '#11163f', '#171e52', '#1f2963', '#2a3575'];
+  const SKY = ['#060c16', '#09121f', '#0d1828', '#112033', '#16293f', '#1c334c'];   // a petrol-blue night, no violet
   for (let y = 0; y < SHORE; y++) for (let x = 0; x < W; x++) {
     const t = Math.min(0.999, Math.pow(y / HORIZON, 1.3)) * (SKY.length - 1), i = Math.floor(t), f = t - i;
     set(x, y, (f * 16 > bayer[y % 4][x % 4]) ? SKY[Math.min(i + 1, SKY.length - 1)] : SKY[i]);
   }
-  const WATER = ['#0a0d29', '#0d1133', '#10163e'];
+  const WATER = ['#0a121e', '#0a121e', '#0a121e'];
   for (let y = SHORE; y < H; y++) for (let x = 0; x < W; x++) set(x, y, WATER[Math.min(2, Math.floor((y - SHORE) / 7))]);
 
   // columns: slot i at x0 = 25 + 5i (3 art px wide, 2 gap); lanterns stack up from the shore, 5 art px apart
   const X0 = 25, STEP = 5, BASE = SHORE - 6;
   const L = { cap: '#c9602a', body: '#ffb547', hi: '#ffe7a3', rib: '#f08f3a', base: '#ff8a3d' };
-  function lit(x, y) { set(x + 1, y, L.cap); set(x, y + 1, L.body); set(x + 1, y + 1, L.hi); set(x + 2, y + 1, L.body); set(x, y + 2, L.body); set(x + 1, y + 2, L.body); set(x + 2, y + 2, L.rib); set(x + 1, y + 3, L.base); }
+  function lit(x, y) { // a paper lantern, 3 x 4: dark caps top and bottom, a lit body between
+    for (let i = 0; i < 3; i++) { set(x + i, y, L.cap); set(x + i, y + 3, L.cap); }
+    set(x, y + 1, L.body); set(x + 1, y + 1, L.hi); set(x + 2, y + 1, L.body); set(x, y + 2, L.body); set(x + 1, y + 2, L.body); set(x + 2, y + 2, L.rib);
+  }
   LIT.forEach((n, i) => {
     for (let k = 0; k < n; k++) lit(X0 + i * STEP, BASE - k * STEP);
-    // reflection: longer and brighter under a taller column
-    for (let y = SHORE + 1; y < Math.min(SHORE + 10, SHORE + 2 + n); y += 2) set(X0 + i * STEP + 1 + ((y >> 1) & 1), y, y < SHORE + 8 ? '#a8673a' : '#5a3d4a');
   });
+  // gridlines at 100K and 200K (4 and 8 lanterns), dotted, under everything else drawn after them
+  for (const n of [4, 8]) for (let x = X0 - 1; x < W - 4; x += 2) if (!grid[BASE - (n - 1) * STEP - 1][x] || grid[BASE - (n - 1) * STEP - 1][x].startsWith('#0') || grid[BASE - (n - 1) * STEP - 1][x].startsWith('#1')) set(x, BASE - (n - 1) * STEP - 1, '#2a4560');
   // last year: a stepped line at the top of each slot's count, in the gap rows so it never covers a lantern
   const ly = g => BASE - (g - 1) * STEP - 1;
   LAST.forEach((g, i) => {
-    const x0 = X0 + i * STEP - 1;
-    for (let x = x0; x < x0 + STEP; x++) set(x, ly(g), '#8f99d8');
-    if (i) { const a = ly(LAST[i - 1]), b = ly(g); for (let y = Math.min(a, b); y <= Math.max(a, b); y++) set(x0, y, '#8f99d8'); }
+    const x0 = X0 + i * STEP - 1, col = i <= 20 ? '#8fb0c9' : '#6488a8';   // dimmer after now, still 3:1 on the sky
+    for (let x = x0; x < x0 + STEP; x++) set(x, ly(g), col);
+    if (i) { const a = ly(LAST[i - 1]), b = ly(g); for (let y = Math.min(a, b); y <= Math.max(a, b); y++) set(x0, y, col); }
   });
+  // where this year's pace (+15% on last year's slots) crosses 5M: a gold mark on the shore under Saturday 09:00 to 12:00
+  let cum = LIT.reduce((a, b) => a + b, 0), cross = -1;
+  PROJ.forEach((g, i) => { if (g !== null && cross < 0) { cum += g; if (cum >= 200) cross = i; } });
+  for (let x = X0 + cross * STEP; x < X0 + cross * STEP + 3; x++) { set(x, SHORE, '#ffb547'); set(x, SHORE + 1, '#ffb547'); }
+  for (let y = 14; y < SHORE; y += 2) set(X0 + cross * STEP + 1, y, '#c98a3e');
   // now: a dotted line at Wed 13:47, from the top of the sky to the shore
   const nx = X0 + Math.floor(NOW_H / 3) * STEP + 3;   // the gap column just after the current slot, never through a lantern
-  for (let y = 2; y < SHORE; y += 2) set(nx, y, '#e8ecff');
+  for (let y = 2; y < SHORE; y += 2) set(nx, y, '#e6eef5');
   // midnight ticks on the shore line
-  for (let d = 1; d < 7; d++) { const x = X0 + d * 8 * STEP - 1; set(x, SHORE, '#3a4486'); set(x, SHORE + 1, '#3a4486'); }
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (grid[y][x]) { c.fillStyle = grid[y][x]; c.fillRect(x, y, 1, 1); }
 
   // labels, placed from the same geometry
   const days = ['Mon 12', 'Tue 13', 'Wed 14', 'Thu 15', 'Fri 16', 'Sat 17', 'Sun 18'];
-  document.getElementById('days').innerHTML = days.map((d, i) => `<span class="day${i === 2 ? ' today' : ''}" style="left:${(X0 + (i * 8 + 4) * STEP - 1) * 4}px">${d}</span>`).join('');
-  document.getElementById('now').style.left = (nx * 4 + 10) + 'px';
+  document.getElementById('days').innerHTML = days.map((d, i) => `<span class="day${i === 2 ? ' today' : ''}" style="left:${(X0 + (i * 8 + 4) * STEP - 1) * 4}px">${d}</span>`).join('') +
+    [1, 2, 3, 4, 5, 6].map(d => `<i class="mid" style="left:${(X0 + d * 8 * STEP - 2) * 4}px"></i>`).join('') +
+    `<span class="goal5" style="left:${(X0 + cross * STEP + 1) * 4}px;top:${(SHORE + 2) * 4 + 2}px">5M at this pace</span>`;
+  document.getElementById('now').style.left = (nx * 4 + 12) + 'px';
+  document.getElementById('days').insertAdjacentHTML('beforeend', [4, 8].map(n => `<span class="lv" style="top:${(BASE - (n - 1) * STEP - 1) * 4}px">${n / 4 * 100}K</span>`).join(''));
 
   // ---------- sprites ----------
   function sprite(canvas, rows, pal) { const g = canvas.getContext('2d'); rows.forEach((r, y) => [...r].forEach((ch, x) => { if (pal[ch]) { g.fillStyle = pal[ch]; g.fillRect(x, y, 1, 1); } })); }
-  sprite(document.getElementById('k-lit'), ['.c.', 'bhb', 'bbr', '.f.'], { c: L.cap, b: L.body, h: L.hi, r: L.rib, f: L.base });
-  sprite(document.getElementById('logo'), ['.....y......', '....yy......', '....yoy.....', '...yooy.....', '...yoory....', '..yoorry....', '..yorrry....', '...yrry.....', '....rr......', '..wwwwwwww..', '...w....w...', '..w......w..'], { y: '#ffe08a', o: '#ffc24b', r: '#e0702b', w: '#a8abb1' });
-  sprite(document.getElementById('me'), ['..kkkk..', '.kkkkkk.', '.kssssk.', '.sesses.', '.ssssss.', '..smms..', '.bbbbbb.', 'bbbbbbbb'], { k: '#2b2f6e', s: '#f1c9a5', e: '#151516', m: '#c26a5a', b: '#3fa58d' });
+  sprite(document.getElementById('k-lit'), ['ccc', 'bhb', 'bbr', 'ccc'], { c: L.cap, b: L.body, h: L.hi, r: L.rib });
+  sprite(document.getElementById('logo'), ['.....y......', '....yy......', '....yoy.....', '...yooy.....', '...yoory....', '..yoorry....', '..yorrry....', '...yrry.....', '....rr......', '..wwwwwwww..', '...w....w...', '..w......w..'], { y: '#f2f5f8', o: '#c9d1da', r: '#8f99a6', w: '#5c6672' });
+  sprite(document.getElementById('me'), ['..kkkk..', '.kkkkkk.', '.kssssk.', '.sesses.', '.ssssss.', '..smms..', '.bbbbbb.', 'bbbbbbbb'], { k: '#2b3a4a', s: '#f1c9a5', e: '#151516', m: '#c26a5a', b: '#3fa58d' });
   const items = {
     lantern: ['............', '.....cc.....', '....cccc....', '...bbhhbb...', '...bhhbbb...', '...bbbbrb...', '...bbbbrb...', '....bbrb....', '.....ff.....', '.....f......', '............', '............'],
     boat:    ['............', '............', '.....wg.....', '....wwgg....', '...wwwggg...', '.w.wwwggg.g.', '.wwwwwggggg.', '..wwwwgggg..', '...wwwggg...', '............', '..~~..~~.~..', '............'],
     kite:    ['.....m......', '....mmm.....', '...mmlmm....', '..mmmlmmm...', '...mmlmm....', '....mmm.....', '.....m......', '.....t......', '......t.....', '.....t......', '......t.....', '............'],
     pass:    ['............', '............', '............', '.pppppp.ppp.', '.pppppp.ppp.', '..ppppp.pp..', '..ppppp.pp..', '.pppppp.ppp.', '.pppppp.ppp.', '............', '............', '............']
   };
-  const ipal = { c: '#d9702b', b: '#ffb547', h: '#ffe7a3', r: '#f08f3a', f: '#ff8a3d', w: '#e7e9ed', g: '#9aa0aa', '~': '#4a5499', m: '#8f86ff', l: '#d4d0ff', t: '#a8abb1', p: '#ffc24b' };
+  const ipal = { c: '#d9702b', b: '#ffb547', h: '#ffe7a3', r: '#f08f3a', f: '#ff8a3d', w: '#e7e9ed', g: '#9aa0aa', '~': '#3f6a8a', m: '#7fc4d8', l: '#d6f0f6', t: '#a8abb1', p: '#d9e2ea' };
   document.querySelectorAll('canvas[data-sprite]').forEach(cv => sprite(cv, items[cv.dataset.sprite], ipal));
 
   // ---------- 4 px blocks ----------
@@ -232,19 +255,22 @@
   // stepped bars, drawn on a 4 px grid: every value snaps to whole blocks
   const S = {
     dau:  { v: [1.768, 1.779, 1.795, 1.744, 1.841, 1.858, 1.870], lo: 1.70, hi: 1.88, ev: 4 },
-    rev:  { v: [31076, 30990, 33411, 38177, 43514, 47039, 47035, 43477, 37968, 32572, 24095, 23155, 21404, 18999, 16767, 15842, 16771, 19036, 21614, 23996, 26483, 29289, 31522, 31968], lo: 0, hi: 48000, ev: 0 },
-    arp:  { v: [0.301, 0.304, 0.307, 0.310, 0.352, 0.366, 0.378], lo: 0.27, hi: 0.38, ev: 4 },
-    ret:  { v: [43.1, 43.0, 43.2, 43.1, 43.3, 42.6, 41.8], lo: 40, hi: 43.5, ev: 6 },
-    evt:  { v: [0, 0, 0, 0, 41.2, 55.0, 63.4], lo: 0, hi: 64, ev: 4 },
+    rev:  { v: [541.0, 552.6, 571.9, 559.0, 655.3, 688.7, 706.2], lo: 440, hi: 712, ev: 4 },
+    arp:  { v: [], lo: 0.29, hi: 0.38, ev: 4 },   // revenue / daily actives, derived below
+    ret:  { v: [43.2, 43.1, 43.3, 42.6, 41.8, null, null], lo: 40, hi: 43.5, ev: 4 },   // by install day; Oct 13 and 14 installs have no D1 yet
+    evt:  { v: [null, null, null, null, 41.2, 55.0, 63.4], lo: 0, hi: 64, ev: 4 },   // the event began on Oct 12
     crash: { v: [99.57, 99.55, 99.58, 99.56, 99.60, 99.61, 99.62], lo: 99.50, hi: 99.63, ev: 4 }
   };
+  S.arp.v = S.rev.v.map((r, i) => r / (S.dau.v[i] * 1000));   // $K / M actives = $ per active
   document.querySelectorAll('svg.steps').forEach(svg => {
-    const d = S[svg.dataset.s], n = d.v.length, bw = n > 12 ? 4 : 16, gap = n > 12 ? 3 : 8, rows = 8;
+    const d = S[svg.dataset.s], n = d.v.length, w = 168 / n, col = svg.dataset.s === 'evt' ? 'var(--gold)' : 'var(--bar)';
+    const y = v => 28 - Math.max(0, Math.min(7, Math.round((v - d.lo) / (d.hi - d.lo) * 7))) * 4;
     let out = '';
+    if (d.ev) for (let t = 0; t < 32; t += 6) out += `<rect x="${d.ev * w - 1}" y="${t}" width="2" height="2" style="fill:var(--ds-color-neutral-dark-7)"/>`;
     d.v.forEach((v, i) => {
-      const h = Math.max(1, Math.round((v - d.lo) / (d.hi - d.lo) * rows));
-      const col = svg.dataset.s === 'evt' ? 'var(--gold)' : 'var(--bar)';
-      for (let k = 0; k < h; k++) out += `<rect x="${168 - (n - i) * (bw + gap) + gap}" y="${28 - k * 4}" width="${bw}" height="3" style="fill:${(svg.dataset.s === 'evt' && v === 0) ? 'var(--line)' : col}"/>`;
+      if (v === null) return;
+      out += `<rect x="${i * w}" y="${y(v)}" width="${w}" height="4" style="fill:${col}"/>`;
+      if (i && d.v[i - 1] !== null) { const a = y(d.v[i - 1]), b = y(v); if (a !== b) out += `<rect x="${i * w}" y="${Math.min(a, b)}" width="4" height="${Math.abs(a - b) + 4}" style="fill:${col}"/>`; }
     });
     svg.setAttribute('viewBox', '0 0 168 32'); svg.setAttribute('role', 'img'); svg.innerHTML = out;
   });

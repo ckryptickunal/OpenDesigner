@@ -72,5 +72,35 @@
    "1,862 issued of 2,520 released (1,676 people + 186 workshop seats), EUR 647,360 gross; next payout Fri 16 Oct 2026 (was 13 Nov, against 'every Friday')",
    "Event renamed Kanteel Design Week 2027 in Ghent, Hall 4 (Northfold was the seventh North- name; Rotterdam reused); engine pick Q-dir-01 memphis"
   ]
+ },
+ "round3": {
+  "score": 4,
+  "audited": "2026-10-15",
+  "audited_by": "fresh-context agents, four rounds (3, 3, 3, 4)",
+  "changed": [
+   "The lanyard strap is gone (it repeated styles/03); the hero object is now Room 3's door sign, a large striped mint triangle at an angle, with the attendee badge leaning on it",
+   "Headline at the scale's 90 px display size, so the page has one display word; lede shortened; 56 px from the action to the chart",
+   "Dots, squiggles, stripes and zigzags drawn as whole glyphs 4 px inside each shape, on the chart and the badge; speakers and press get a zigzag",
+   "Chart at 28 px² per ticket on a floor at y 768; labels at 16 px with 12 px captions, clear of the margin and of each other",
+   "Totals as aligned rows beside the chart, starting on its title line and ending on its floor; \"1,862\" at 38 px",
+   "A neutral issued/released key beside the chart title; badge at 240 x 320 with \"Type designer\" (Studio Veldkant no longer on the page)"
+  ],
+  "references": [
+   {
+    "site": "Eventbrite",
+    "mobbin_url": "https://mobbin.com/sites/sections/d2ac77c3-af65-4cfb-9f59-227d98a51578",
+    "what": "Shapes set inside the display line, so word and object read as one"
+   },
+   {
+    "site": "Maze Disco Conf",
+    "mobbin_url": "https://mobbin.com/sites/sections/f1932dd7-d181-45e1-a395-1b42541895d6",
+    "what": "One display word and one drawn object on a dark ground"
+   },
+   {
+    "site": "Figma Shortcut",
+    "mobbin_url": "https://mobbin.com/sites/sections/d89d3841-aea4-4bc6-a310-075eb53e19db",
+    "what": "Real Memphis: black-and-white patterns, tilt and collisions"
+   }
+  ]
  }
 }

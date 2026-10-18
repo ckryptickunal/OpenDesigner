@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ferrule · Security and access for IT teams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+/* Ferrule's own system (the product's state, extended with a display set: Q-brand-06 two-sets). */
+:root {
+  /* The page is Ferrule's plum (accent 11), flat: the brand owns the first screen the way the product owns "on" */
+  --page: var(--ds-color-accent-light-11);
+  --ink: var(--ds-color-white);                  /* 10.4:1 on the plum */
+  --muted: var(--ds-color-accent-dark-12);       /* 7.2:1 on the plum */
+  --edge: var(--ds-color-accent-light-10);
+  --primary: var(--ds-color-white);
+  --on-primary: var(--ds-color-neutral-light-12);
+  --grid: 1344px;
+  --shot-scale: 0.93333;                        /* the product's 1440 px layout at 1344 px: 14 px body reads 13 px */
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--page); }
+body { font: var(--ds-text-body-lg); color: var(--ink); -webkit-font-smoothing: antialiased; min-width: 1440px; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-white); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-control-sm); }
+.wrap { width: var(--grid); margin: 0 auto; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Nav */
+.nav { height: 64px; /* od-ignore: marketing nav bar, no nav-height token */ display: flex; align-items: center; gap: var(--ds-space-40); }
+.brand { width: 240px; /* od-ignore: with the 40 px gap, the nav links start at 328 px, the headline's edge */ display: inline-flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-title-md); font-weight: 600; letter-spacing: -0.01em; }
+.mark { width: var(--ds-size-icon-lg); height: var(--ds-size-icon-lg); border-radius: var(--ds-radius-control-sm); background: var(--ds-color-white); color: var(--page); display: grid; place-items: center; }
+.links { display: flex; gap: var(--ds-space-32); font: var(--ds-text-label-lg); font-weight: 400; color: var(--muted); }
+.links a[aria-current] { color: var(--ink); font-weight: 500; }
+.signin { margin-left: auto; font: var(--ds-text-label-lg); font-weight: 400; }
+
+/* Copy: the four questions an audit log answers, each set over the column of the log below that answers it
+   (Time x 328, Actor x 485, Action x 689, IP address x 1167: product x + 12 px cell padding, x 0.9333, + 48).
+   The type is aligned to the product, so the headline and the proof read as one object. */
+.copy { position: relative; height: 296px; /* od-ignore: copy band; the window top lands at 384 px */ }
+.q { position: absolute; top: var(--ds-space-80); margin: 0; font: var(--ds-text-display-md); font-weight: 400; letter-spacing: var(--ds-text-display-md-tracking); }
+.q span { position: absolute; white-space: nowrap; }
+.q .t { left: 280px; } .q .a { left: 437px; } .q .c { left: 641px; } .q .i { left: 1119px; } /* od-ignore: column x minus the 48 px margin */
+.rule { position: absolute; left: 269px; right: 37px; top: 152px; border-top: 1px solid var(--ds-color-accent-light-8); } /* od-ignore: the log's header rule exactly, 317 to 1355 px */
+.lede { position: absolute; left: 280px; top: 168px; color: var(--muted); white-space: nowrap; } /* od-ignore */
+.btn { position: absolute; left: 280px; top: 216px; display: inline-flex; align-items: center; height: var(--ds-size-control-lg); padding: 0 var(--ds-space-24); border-radius: var(--ds-radius-control); background: var(--primary); color: var(--on-primary); font: var(--ds-text-label-lg); font-size: var(--ds-font-size-17); font-weight: 500; white-space: nowrap; } /* od-ignore */
+@media (hover: hover) and (pointer: fine) { .btn:hover { background: var(--ds-color-accent-light-2); } }
+
+/* The product under it, full width: the audit log's 1440 px layout at 1344 px (at 1344 px its export row wraps).
+   It runs on past the bottom of the first screen, the way a page continues. Window top at 384 px, so the 900 px fold
+   lands on the claims-archive row's bottom border (553 product px x 0.9333 = 516); the frame ends on a row boundary (721). */
+.shot { margin-top: var(--ds-space-24); padding-bottom: var(--ds-space-48); }
+.screen { --h: 673px; /* 721 product px */ width: var(--grid); height: var(--h); overflow: hidden; border-radius: var(--ds-radius-overlay); background: var(--ds-color-white); }
+.screen iframe { display: block; width: 1440px; height: calc(var(--h) / var(--shot-scale)); border: 0; transform: scale(var(--shot-scale)); transform-origin: 0 0; pointer-events: none; }
+</style>
+</head>
+<body data-density="comfortable"><!-- on body: on <html>, the later ":root, [data-density=compact]" block wins -->
+<div class="wrap">
+  <header class="nav">
+    <a class="brand" href="#" aria-label="Ferrule home"><span class="mark" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5.6 7.2v5.3h2.8V7.2"/><rect x="3.7" y="1.5" width="6.6" height="5.7" rx="1" fill="currentColor" stroke="none"/></svg></span>Ferrule</a>
+    <nav class="links" aria-label="Main">
+      <a href="#">Platform</a>
+      <a href="#" aria-current="page">Security</a>
+      <a href="#">Pricing</a>
+      <a href="#">Docs</a>
+    </nav>
+    <a class="signin" href="#">Sign in</a>
+  </header>
+
+  <main>
+    <section class="copy" aria-labelledby="h">
+      <h1 class="q" id="h"><span class="t">When.</span> <span class="a">Who.</span> <span class="c">What.</span> <span class="i">Where.</span></h1>
+      <span class="rule" aria-hidden="true"></span>
+      <p class="lede">Ferrule logs every change to your workspace, to the second, with who made it and from which IP.</p>
+      <a class="btn" href="#">Start a workspace</a>
+    </section>
+
+    <figure class="shot">
+      <div class="screen" inert>
+        <iframe src="../../product/06-ferrule-security/index.html?frame=audit" title="Ferrule audit log" tabindex="-1" aria-hidden="true" scrolling="no"></iframe>
+      </div>
+      <figcaption class="sr-only">Ferrule's audit log for Larchfield Mutual: 1,146 events from Oct 7 to Oct 14, 2026. The newest, at 13:58:07 UTC, is Amara Sjöberg changing session length from 24 hours to 12 hours, from 198.51.100.24 in Stockholm. Below it, the hr-sync service account deactivates a member, the claims-archive API key exports 1,204,881 rows, and Amara Sjöberg adds the company's email domain and starts verifying it.</figcaption>
+    </figure>
+  </main>
+</div>
+</body>
+</html>

@@ -27,7 +27,7 @@ spacing:
 - **Feel:** soft, calm, technical (friendly, deferential, minimal, modern, serious; picked for you)
 - **Style:** neumorphism (soft buttons pushed out of the page or pressed in, all one color)
 - **Brand color:** Picked for you, not chosen by you: a bright blue (#2F5BEA) on buttons, links and focus, with white text that reads clearly on it.
-- **Decided:** 1 answer you gave, 6 picked for you; everything else uses sourced defaults
+- **Decided:** 2 answers you gave, 6 picked for you; everything else uses sourced defaults
 - **Standards:** 288 house standards followed (locked, house standards v2), 1 overridden by you; see the Standards section
 - **Next:** zoom into Colors, Typography, Layout, or stop here: each level works
 - **Licence risks:** none found
@@ -61,7 +61,7 @@ No principles recorded yet (Q-brand-07). Until they are, the dials act as the ti
 
 **Dial positions.** Three posture dials set the overall stance. Five character dials fine-tune it.
 
-- **Expression 45/100** (productive to expressive: balanced): type ratio 1.25, hero moments: significant-moments, expressive motion: significant-moments, brand color role: accent+signature-surface, containment: mixed.
+- **Expression 45/100** (productive to expressive: balanced): type ratio 1.2, hero moments: significant-moments, expressive motion: significant-moments, brand color role: accent+signature-surface, containment: mixed.
 - **Brand presence 30/100** (native to brand-led: native): typeface suggestion: open-neutral-face, brand color placement: accent-only+content-layer, native component share about 88%, voice guidance: none.
 - **Density 50/100** (spacious to compact: balanced): body 14px on the web, default control 40px, density mode comfortable, icons 20px; hit areas never shrink.
 - **Energy 25/100** (calm to energetic: calm): standard easing [0.77, 0, 0.175, 1], duration multiplier 0.9, spring damping 1.0, heading weight 600, navigation: recessive.
@@ -92,6 +92,17 @@ The tokens in `opendesigner/tokens/` (DTCG 2025.10 with `opendesigner.resolver.j
 Decisions: D-0005 (answers.Q-aud-01), D-0009 (macros), D-0012 (answers.Q-scope-06), D-0023 (dials.expression), D-0024 (dials.brandPresence), D-0025 (dials.density), D-0030 (answers.Q-dir-01).
 
 </details>
+
+**Taste card.** How it looks and feels, in five lines for you, your team and any AI that builds with it. Nothing on it is invented: each line says where it comes from.
+Designers: style brief, mood in words · Code: `taste.brief, taste.never`
+
+| Line | What it says | From |
+|---|---|---|
+| In your words | Not given yet. Describe the look as a picture, not adjectives (for example, "a quiet library at night"). | not asked yet |
+| Color | One accent color: a bright blue picked for you (`#2f5bea`) marks buttons, links and focus. Everything else stays neutral. Keep the accent to small areas, about 15% of a screen at most (a rule of thumb, DC-L15-03). | brand color; colorfulness 18/100 |
+| Shape | Buttons and fields have 16px corners; cards have 24px corners. Surfaces look pushed out of the page, with a light and a dark soft shadow. | roundness 85/100, depth 70/100 |
+| Motion | Calm. Most movements take 200ms. They turn into fades when a person asks for less motion. | energy 25/100 |
+| Never | Nothing yet. Say what it should never look like, or rate real screens in the taste poll. | not asked yet |
 
 ## Colors
 
@@ -223,15 +234,18 @@ Decisions: D-0007 (raw.brandColor), D-0011 (answers.Q-theme-01), D-0027 (dials.c
 
 ## Typography
 
-> Zoom: sketch (0 of 3), 3 decisions in this area. To zoom in, answer Q-type-01.
+> Zoom: sketch (0 of 3), 4 decisions in this area. To zoom in, answer Q-type-01.
 <!-- od:zoom area=typography level=0 -->
 
-**Body text is 14px, and each larger size is about 1.25 times the one below.**
+**Body text is 14px, and each larger size is about 1.2 times the one below.**
 Designers: type scale: base size and ratio · Code: `font.size.14`
 
 <details><summary>More</summary>
 
-**Intent.** Body text is 14px; sizes follow `round(14 x 1.25^n)` for n from -2 to 4, reaching about 2.5x body (product surfaces only). Sizes: 11, 14, 18, 22, 27, 34px.
+**Your answers here** (each one either sets tokens or is a rule for this section):
+- How much bigger should each text size be than the one below it? **1.2 minor third** (chosen; a rule here; Q-type-09)
+
+**Intent.** Body text is 14px; sizes follow `round(14 x 1.2^n)` for n from -2 to 5, reaching about 2.5x body (product surfaces only). Sizes: 12, 14, 17, 20, 24, 29, 35px.
 
 - Text face: Outfit, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif. Licence status (hook H-type): **pending**.
 - Licence by platform: text: Outfit (open licence or system font: web, apps and self-hosting).
@@ -245,20 +259,21 @@ Designers: type scale: base size and ratio · Code: `font.size.14`
 
 | Style | Size/line (px) | Weight | Tracking | Use |
 |---|---|---|---|---|
-| `text.body.lg` | 18/24 | 400 | 0em | Long-form reading, onboarding copy. |
+| `text.body.lg` | 17/24 | 400 | 0em | Long-form reading, onboarding copy. |
 | `text.body.md` | 14/20 | 400 | 0em | Default UI text: forms, tables, descriptions. |
-| `text.body.sm` | 11/16 | 400 | 0.02em | Helper text, timestamps, captions. |
+| `text.body.sm` | 12/16 | 400 | 0.02em | Helper text, timestamps, captions. |
 | `text.code.md` | 14/20 | 400 | 0em | Code blocks, token names. |
-| `text.code.sm` | 11/16 | 400 | 0.02em | Inline values, dense code rows. |
-| `text.headline.md` | 34/44 | 600 | -0.01em | Page and section titles. |
-| `text.headline.sm` | 27/32 | 600 | 0em | Page and section titles. |
+| `text.code.sm` | 12/16 | 400 | 0.02em | Inline values, dense code rows. |
+| `text.headline.lg` | 35/44 | 600 | -0.01em | Page and section titles. |
+| `text.headline.md` | 29/36 | 600 | 0em | Page and section titles. |
+| `text.headline.sm` | 24/32 | 600 | 0em | Page and section titles. |
 | `text.label.lg` | 14/20 | 500 | 0em | Button and control labels. |
-| `text.label.md` | 11/16 | 500 | 0.02em | Small control labels, badges, dense tabs. |
-| `text.label.sm` | 11/16 | 500 | 0.05em caps | Overlines in capitals with wide tracking (DC-L02-18). |
-| `text.numeric.lg` | 22/32 | 600 | 0em | Key numbers: balances, KPIs. |
+| `text.label.md` | 12/16 | 500 | 0.02em | Small control labels, badges, dense tabs. |
+| `text.label.sm` | 12/16 | 500 | 0.05em caps | Overlines in capitals with wide tracking (DC-L02-18). |
+| `text.numeric.lg` | 20/28 | 600 | 0em | Key numbers: balances, KPIs. |
 | `text.numeric.md` | 14/20 | 400 | 0em | Amounts and table figures: tabular digits line up in columns; right-align numeric columns. |
-| `text.title.lg` | 22/32 | 600 | 0em | Card, panel and group titles. |
-| `text.title.md` | 18/24 | 600 | 0em | Card, panel and group titles. |
+| `text.title.lg` | 20/28 | 600 | 0em | Card, panel and group titles. |
+| `text.title.md` | 17/24 | 600 | 0em | Card, panel and group titles. |
 | `text.title.sm` | 14/20 | 600 | 0em | Table headers, field-group titles. |
 
 **Use / avoid.**
@@ -267,7 +282,7 @@ Designers: type scale: base size and ratio · Code: `font.size.14`
 
 **Tailwind classes:** `text-body-md`, `text-label-lg`, `text-title-md`, `text-headline-md`.
 
-Decisions: D-0015 (raw.textFace), D-0016 (raw.displayFace), D-0017 (raw.monoFace).
+Decisions: D-0015 (raw.textFace), D-0016 (raw.displayFace), D-0017 (raw.monoFace), D-0032 (answers.Q-type-09).
 
 </details>
 
@@ -643,7 +658,7 @@ Decisions: D-0008 (answers.Q-plat-01).
 
 ## Decisions
 
-**31 decisions so far.** Each one says who set it and why.
+**32 decisions so far.** Each one says who set it and why.
 Designers: decision history with reasons · Code: `opendesigner/decisions.md`
 
 <details><summary>More</summary>
@@ -675,6 +690,7 @@ Your own decisions first (the newest value per path), then your changes to stand
 | D-0028 | `dials.warmth` | 22 | delegated | cool grey-blue so the neutrals never go beige; the feel word soft had pushed warmth to 80 |
 | D-0030 | `answers.Q-dir-01` | "neumorphism" | chosen | The soft extruded look on the one control people touch, the zone dial; everything else flat with hairlines (audit fix) |
 | D-0031 | `name` | "Ostwell" | chosen | Kelvane is a live Framer template for HVAC contractors (found by the fresh re-audit); Ostwell returned no company in building controls |
+| D-0032 | `answers.Q-type-09` | 1.2 | chosen | Round 3: the 1.25 ratio on a 14 px body puts captions at 11 px, below the 12 px the B2B product screens use; 1.2 gives 12, 14, 17, 20, 24 |
 | D-0003 | standards | override STD-visual-details-24 (house standard) | chosen, overrides STD-visual-details-24 | Style study: neumorphism is a light, same-colour material; the brief fixes one light appearance |
 | D-0002 | standards | House standards v2: 455 applied | standard (locked) | OpenDesigner's house standards (sources marked non-negotiable) are applied without asking and locked. Change one only when the person asks: engine.py... |
 | D-0013 | standards | House standards v2 for css, web: 0 now apply, 166 no longer apply | standard (locked) | The platforms or the stack changed, so the house standards were re-scoped: the ones that now apply are applied and locked; the ones that no longer apply are... |
@@ -698,7 +714,7 @@ Your own decisions first (the newest value per path), then your changes to stand
 
 1. Before any visual work, read this file, PRODUCT.md and `opendesigner/tokens/` (start at `opendesigner/tokens/opendesigner.resolver.json`).
 2. Use tokens, never raw values: CSS `var(--ds-...)`, Tailwind classes from `opendesigner/build/tailwind/theme.css`, `DS.*` in Swift. In Compose: colors from `LocalDsColors.current` (provide `DsLightColors` or `DsDarkColors`), then `DsSpace`, `DsType` and `DsMotion`.
-3. Do not change a locked decision without asking the owner.
+3. Do not change a locked decision without asking the owner. Keep new screens inside the taste card at the top of the Overview, and never add anything on its Never list without asking.
 4. To change the system: `engine.py set <path> <value> --why "..."`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.
 5. To extend: add a decision (never hand-edit tokens or this file). Keep semantic names the same across modes. Deprecate instead of deleting.
 6. After any implementation, run `engine.py review` and re-read this file.

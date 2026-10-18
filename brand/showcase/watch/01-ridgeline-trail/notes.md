@@ -1,9 +1,9 @@
-# 01 Ridgeline: notes
+# 01 Fellrise: notes
 
 Render: `shot.png` (205 x 251 CSS px at 3x, clipped to the display shape by `../render.py`). Page: `index.html`.
 
 ## Direction
-Ridgeline is a trail-running app for people who race in the mountains. Mid-stride, with a heart rate of 170, the runner needs one number (pace) and one picture (where the climb is). Acid green on pure black, heavy italic numerals, cut corners like rock strata. Feel words: energetic, bold, futuristic.
+Fellrise (called Ridgeline before round 3) is a trail-running app for people who race in the mountains. Mid-stride, with a heart rate of 170, the runner needs one number (pace) and one picture (where the climb is). Acid green on pure black, heavy italic numerals, cut corners like rock strata. Feel words: energetic, bold, futuristic.
 
 ## References (Mobbin, cited by link only; nothing saved)
 - https://mobbin.com/screens/c9eb6b69-dd81-4527-97a5-84df9ab113c5: one gigantic slanted metric can own a running screen; everything else is small and grey.
@@ -62,3 +62,6 @@ Owner type and colour rule: moved the tag, clock and delta from 16 to Body 17, t
 - Dark-only shows the brand only through `--ds-color-brand-seed`; every semantic accent role points at a desaturated step (#b0d468). Recorded.
 - Watch answers change no tokens; recorded as a gap.
 - Cross-piece findings are in `../PROCESS.md`; engine feedback is in `opendesigner/feedback.md` where this piece recorded one.
+
+## Round 3 (2026-10-15): Fellrise, not Ridgeline
+"Ridgeline" is a real product name (Honda sells the Ridgeline truck), and `NAMES.md` had marked it "may be real", so the app is now **Fellrise** (a web search found no app or product of that name; the nearest are the Lake District walking apps Fellbase and Fells). Changed: the page title and aria-label, this file's title, the engine system (`engine.py set name "Fellrise" --set-by delegated`, then `build`, which regenerated DESIGN.md, PRODUCT.md and the exports; logged in `engine-log.txt`), `../PROCESS.md`, `../sheet.html` (and `sheet.png`, re-rendered), the audit file's title, and the mockups that show it (`mockups/03-watch-trio`, `mockups/08-made-with-opendesigner`). The face shows no brand name, so `shot.png` is unchanged in pixels (re-rendered with `../render.py 01-ridgeline-trail`). The folder keeps its name so links do not break.

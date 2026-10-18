@@ -793,3 +793,8 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0029 · source_ref: none
 - reason: Kelvane is a live Framer template for HVAC contractors (found by the fresh re-audit); Ostwell returned no company in building controls
 - previous value: "Kelvane"
+
+## D-0032 · answers.Q-type-09 = 1.2
+- set_by: chosen · locked: no · date: 2026-10-15 · supersedes: none · source_ref: none
+- reason: Round 3: the 1.25 ratio on a 14 px body puts captions at 11 px, below the 12 px the B2B product screens use; 1.2 gives 12, 14, 17, 20, 24
+- also set: overrides.type.ratio = 1.2 (from Q-type-09)

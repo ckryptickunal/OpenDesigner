@@ -37,7 +37,8 @@
   .top .sp { flex: 1; }
   .link { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rim); text-underline-offset: 4px; padding: var(--ds-space-8) 0; }
   .me { display: flex; align-items: center; gap: var(--ds-space-8); margin-left: var(--ds-space-16); }
-  .me img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display: block; }
+  .me .av { width: 32px; height: 32px; border-radius: 50%; overflow: hidden; display: block; }
+  .me .av svg { display: block; }
 
   .main { display: grid; grid-template-columns: 540px 1fr; gap: var(--ds-space-48); min-height: 0; }
 
@@ -46,8 +47,8 @@
   .scene { position: relative; }
   .scene svg.lanyard { position: absolute; left: 0; top: 0; width: 540px; height: 260px; overflow: visible; }
   .badge { position: absolute; left: 124px; top: 186px; overflow: visible; width: 292px; height: 404px; border-radius: 36px; transform: rotate(-4deg); transform-origin: 50% 0;
-    background: linear-gradient(150deg, var(--ds-color-white) 0%, var(--ds-color-neutral-light-2) 100%);
-    box-shadow: var(--ds-elevation-overlay), inset -12px -16px 26px color-mix(in srgb, var(--ds-color-neutral-light-12) 13%, transparent), inset 12px 14px 20px var(--ds-color-white); display: grid; grid-template-rows: auto auto auto 1fr auto; justify-items: center; padding: var(--ds-space-24) 0 0; }
+    background: linear-gradient(150deg, var(--ds-color-accent-light-1) 0%, var(--ds-color-accent-light-3) 100%);
+    box-shadow: var(--ds-elevation-overlay), inset -12px -16px 26px color-mix(in srgb, var(--ds-color-accent-light-12) 20%, transparent), inset 12px 14px 20px var(--ds-color-white); display: grid; grid-template-rows: auto auto auto 1fr auto; justify-items: center; padding: var(--ds-space-24) 0 0; }
   .slot { position: absolute; left: 50%; top: 18px; width: 56px; height: 12px; margin-left: -28px; border-radius: 6px; background: var(--stage); box-shadow: inset 2px 2px 3px var(--ds-color-shadow-key); }
   /* the strap clip: a small steel plate through the slot, holding the ring */
   .clip { position: absolute; left: 50%; top: -10px; width: 30px; height: 34px; margin-left: -15px; border-radius: 8px; z-index: 1;
@@ -55,49 +56,130 @@
     box-shadow: 0 4px 8px var(--ds-color-shadow-ambient), inset -3px -4px 6px color-mix(in srgb, var(--ds-color-neutral-light-12) 30%, transparent), inset 3px 3px 4px var(--ds-color-white); }
   .co { display: flex; align-items: center; gap: var(--ds-space-6); margin-top: var(--ds-space-8); font: var(--ds-text-label-md); font-weight: 650; letter-spacing: 0.01em; }
   .photo { width: 152px; height: 184px; border-radius: 22px; overflow: hidden; margin-top: var(--ds-space-16); box-shadow: inset 0 0 0 1px rgb(0 0 0 / .06); }
-  .photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
+  .photo svg { display: block; }
   .nm { margin-top: var(--ds-space-16); font: var(--ds-text-title-lg); font-weight: 500; letter-spacing: -0.015em; text-align: center; }
   .rl { color: var(--ink-2); text-align: center; }
   .band { align-self: end; width: 100%; height: 52px; border-radius: 0 0 36px 36px; display: grid; place-items: center; background: var(--ds-color-accent-light-10); color: var(--ds-color-text-on-accent);
     box-shadow: inset -8px -10px 16px var(--ds-color-accent-light-12), inset 6px 7px 12px color-mix(in srgb, var(--ds-color-white) 16%, transparent);
     font: var(--ds-text-label-md); font-weight: 650; letter-spacing: 0.12em; text-transform: uppercase; }
-  .credit { font: var(--ds-text-body-sm); color: var(--ink-2); margin-top: var(--ds-space-4); }
-  .credit a { color: inherit; text-underline-offset: 3px; }
   .when { padding: 0 var(--ds-space-40) var(--ds-space-32); display: grid; gap: var(--ds-space-6); }
-  .kick { font: var(--ds-text-label-lg); color: var(--green-ink); font-weight: 600; }
+  .kick { font: var(--ds-text-label-lg); color: var(--ink-2); font-weight: 600; }
   .when h2 { font: var(--ds-text-title-lg); font-weight: 500; letter-spacing: -0.015em; }
   .when p { color: var(--ink-2); }
   .when p b { color: var(--ink); font-weight: 500; }
+  .when .cal { justify-self: start; font-weight: 600; padding: var(--ds-space-4) 0; }
 
   /* ---- checklist: flat */
   .list { display: flex; flex-direction: column; min-height: 0; padding-top: var(--ds-space-4); }
   .list h1 { font: var(--ds-text-headline-sm); font-weight: 400; letter-spacing: -0.025em; }
-  .lede { color: var(--ink-2); margin-top: var(--ds-space-4); }
+  .lede { color: var(--ink-2); margin-top: var(--ds-space-8); }
   .lede b { color: var(--ink); font-weight: 500; }
-  .prog { display: flex; align-items: center; gap: var(--ds-space-16); margin-top: var(--ds-space-20); }
+  .prog { display: flex; align-items: center; gap: var(--ds-space-16); margin-top: var(--ds-space-24); }
   .prog b { font-weight: 600; white-space: nowrap; }
   .bar { flex: 1; height: 8px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-4); position: relative; overflow: hidden; }
   .bar i { position: absolute; inset: 0 auto 0 0; border-radius: var(--ds-radius-full); background: var(--green); }
 
-  .group { margin-top: var(--ds-space-20); }
+  .group { margin-top: var(--ds-space-24); }
   .gh { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: var(--ds-space-8); border-bottom: 1px solid var(--hair); }
   .gh h3 { font: var(--ds-text-label-lg); font-weight: 650; }
   .tasks { list-style: none; padding: 0; }
-  .task { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: var(--ds-space-16); padding: var(--ds-space-8) 0; border-bottom: 1px solid var(--hair); min-height: 58px; }
+  .task { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: var(--ds-space-16); padding: var(--ds-space-8) 0; border-bottom: 1px solid var(--hair); min-height: 60px; }
   .task .t { font-weight: 500; }
   .task .s { font: var(--ds-text-body-sm); color: var(--ink-2); margin-top: var(--ds-space-2); }
   .task.done .t { color: var(--ink-2); }
   .chk { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; }
   .chk.on { background: var(--green); color: var(--ds-color-text-on-accent); }
   .chk.off { box-shadow: inset 0 0 0 1.5px var(--rim); }
-  .when-r { font: var(--ds-text-body-sm); color: var(--ink-2); text-align: right; white-space: nowrap; }
-  .btn { height: 40px; padding: 0 var(--ds-space-20); border: 0; border-radius: var(--ds-radius-full); background: var(--green); color: var(--ds-color-text-on-accent); font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .when-r { color: var(--ink); text-align: right; white-space: nowrap; }
+  .btn { height: 40px; padding: 0 var(--ds-space-20); border: 0; border-radius: var(--ds-radius-full); background: var(--ink); color: var(--ds-color-white); font-weight: 600; cursor: pointer; white-space: nowrap; }
   .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--rim); }
   .task.next .t { font-weight: 600; }
   @media (pointer: fine) { .btn:hover { filter: brightness(1.08); } .btn.ghost:hover { background: var(--ds-color-neutral-light-3); filter: none; } }
 </style>
 </head>
 <body>
+<!-- the badge portrait: a clay figure drawn in SVG (no photograph of a real person stands in for an invented one) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- clay: inner shade bottom-right, inner light top-left, as the engine's clay elevation, written as an SVG filter -->
+    <filter id="pc" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feOffset in="SourceAlpha" dx="-4" dy="-5" result="o1"/><feGaussianBlur in="o1" stdDeviation="4" result="b1"/>
+      <feComposite in="SourceAlpha" in2="b1" operator="out" result="r1"/>
+      <feFlood flood-color="#120a06" flood-opacity=".32"/><feComposite in2="r1" operator="in" result="shade"/>
+      <feOffset in="SourceAlpha" dx="3" dy="4" result="o2"/><feGaussianBlur in="o2" stdDeviation="3" result="b2"/>
+      <feComposite in="SourceAlpha" in2="b2" operator="out" result="r2"/>
+      <feFlood flood-color="#fff" flood-opacity=".38"/><feComposite in2="r2" operator="in" result="hi"/>
+      <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="shade"/><feMergeNode in="hi"/></feMerge>
+    </filter>
+    <filter id="pcs" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feOffset in="SourceAlpha" dx="-1.5" dy="-2" result="o1"/><feGaussianBlur in="o1" stdDeviation="1.6" result="b1"/>
+      <feComposite in="SourceAlpha" in2="b1" operator="out" result="r1"/>
+      <feFlood flood-color="#120a06" flood-opacity=".35"/><feComposite in2="r1" operator="in" result="shade"/>
+      <feOffset in="SourceAlpha" dx="1.2" dy="1.5" result="o2"/><feGaussianBlur in="o2" stdDeviation="1.2" result="b2"/>
+      <feComposite in="SourceAlpha" in2="b2" operator="out" result="r2"/>
+      <feFlood flood-color="#fff" flood-opacity=".5"/><feComposite in2="r2" operator="in" result="hi"/>
+      <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="shade"/><feMergeNode in="hi"/></feMerge>
+    </filter>
+    <filter id="pblur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="pblur2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.4"/></filter>
+    <linearGradient id="pbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3efe9"/><stop offset="1" stop-color="#c9ddd3"/></linearGradient>
+    <radialGradient id="pskin" cx=".38" cy=".32" r=".8"><stop offset="0" stop-color="#c98d6b"/><stop offset=".55" stop-color="#a96b4b"/><stop offset="1" stop-color="#8a5135"/></radialGradient>
+    <radialGradient id="pnose" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#c58866"/><stop offset="1" stop-color="#a1643f"/></radialGradient>
+    <linearGradient id="pneck" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9a5f41"/><stop offset="1" stop-color="#7f4a30"/></linearGradient>
+    <radialGradient id="phair" cx=".35" cy=".25" r=".9"><stop offset="0" stop-color="#4c3a31"/><stop offset=".6" stop-color="#2c211d"/><stop offset="1" stop-color="#1b1412"/></radialGradient>
+    <linearGradient id="ptop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b6370"/><stop offset="1" stop-color="#363c46"/></linearGradient>
+    <g id="portrait">
+      <rect width="152" height="184" fill="url(#pbg)"/>
+      <!-- hair, the mass behind the head and shoulders -->
+      <path d="M40 84 C36 52 55 33 77 33 C99 33 118 52 114 86 L117 130 C117 143 108 149 98 149 L58 149 C48 149 40 142 40 130 Z" fill="url(#phair)" filter="url(#pc)"/>
+      <!-- neck, tapered, in the head's shade -->
+      <path d="M63 104 C64 120 63 134 61 168 L91 168 C89 134 88 120 89 104 Z" fill="url(#pneck)"/>
+      <ellipse cx="76" cy="121" rx="16" ry="8" fill="#4a2617" opacity=".4" filter="url(#pblur)"/>
+      <!-- shirt collar under the jumper -->
+      <path d="M58 137 L76 160 L69 162 L54 141 Z" fill="#e9edf1" filter="url(#pcs)"/>
+      <path d="M94 137 L76 160 L83 162 L98 141 Z" fill="#dfe4ea" filter="url(#pcs)"/>
+      <!-- jumper with a V neck -->
+      <path d="M8 184 L10 170 C12 150 32 140 54 138 L74 166 L78 166 L98 138 C120 140 140 150 142 170 L144 184 Z" fill="url(#ptop)" filter="url(#pc)"/>
+      <!-- left ear, visible: the hair is tucked behind it -->
+      <ellipse cx="45" cy="89" rx="6.5" ry="9.5" fill="#a46647" filter="url(#pcs)"/>
+      <path d="M46.5 84 C43 86 43 93 46 95" fill="none" stroke="#7a4430" stroke-width="1.4" stroke-linecap="round" opacity=".7"/>
+      <!-- head: cheekbones, then a jaw and chin -->
+      <path d="M76 46 C96 46 108 61 108 82 C108 96 103 108 95 115 C89 120 83 123 76 123 C69 123 63 120 57 115 C49 108 44 96 44 82 C44 61 56 46 76 46 Z" fill="url(#pskin)" filter="url(#pc)"/>
+      <!-- the fringe's shadow on the forehead -->
+      <path d="M48 70 C60 72 78 66 92 57 C100 62 106 70 108 80" fill="none" stroke="#3a1d10" stroke-width="7" opacity=".28" filter="url(#pblur)"/>
+      <!-- cheeks -->
+      <circle cx="59" cy="102" r="6" fill="#d77a68" opacity=".3" filter="url(#pblur)"/>
+      <circle cx="93" cy="102" r="6" fill="#d77a68" opacity=".3" filter="url(#pblur)"/>
+      <!-- hair, front: a lock falling over the right shoulder, the crown, and a fringe swept from a left part -->
+      <path d="M114 88 C117 107 115 132 106 153 C100 156 94 152 93 147 C100 128 104 106 107 77 C110 80 112 84 114 88 Z" fill="url(#phair)" filter="url(#pc)"/>
+      <path d="M40 84 C34 54 54 33 77 33 C100 33 120 54 114 89 C110 73 102 62 89 57 C80 66 63 70 49 70 C45 73 42 78 40 84 Z" fill="url(#phair)" filter="url(#pc)"/>
+      <ellipse cx="66" cy="43" rx="15" ry="4.5" fill="#fff" opacity=".14" filter="url(#pblur2)"/>
+      <!-- the part, and the fringe's strands following the sweep -->
+      <path d="M60 37 C58 45 55 54 51 64" fill="none" stroke="#120c0a" stroke-width="1.2" stroke-linecap="round" opacity=".35"/>
+      <path d="M60 56 C72 52 86 52 98 59 M64 62 C76 59 90 60 104 70" fill="none" stroke="#120c0a" stroke-width="1.1" stroke-linecap="round" opacity=".35"/>
+      <path d="M62 51 C74 47 88 48 100 55" fill="none" stroke="#7a5e50" stroke-width="1.3" stroke-linecap="round" opacity=".45" filter="url(#pblur2)"/>
+      <path d="M108 96 C110 112 109 128 104 146" fill="none" stroke="#7a5e50" stroke-width="1.6" stroke-linecap="round" opacity=".4" filter="url(#pblur2)"/>
+      <!-- brows -->
+      <path d="M57.5 82 C60 78.1 66 77.1 71 79.1 L70.6 80.9 C66 79.7 61.4 80.3 59 82.9 Z" fill="#24180f"/>
+      <path d="M94.5 82 C92 78.1 86 77.1 81 79.1 L81.4 80.9 C86 79.7 90.6 80.3 93 82.9 Z" fill="#24180f"/>
+      <!-- eyes: white, iris, pupil, one highlight, upper lid -->
+      <ellipse cx="65" cy="89" rx="5.2" ry="3.4" fill="#f7f4f1"/><ellipse cx="87" cy="89" rx="5.2" ry="3.4" fill="#f7f4f1"/>
+      <circle cx="65.4" cy="88.8" r="2.6" fill="#4a2c1c"/><circle cx="86.6" cy="88.8" r="2.6" fill="#4a2c1c"/>
+      <circle cx="65.4" cy="88.8" r="1.3" fill="#120a06"/><circle cx="86.6" cy="88.8" r="1.3" fill="#120a06"/>
+      <circle cx="64.6" cy="87.8" r=".8" fill="#fff"/><circle cx="85.8" cy="87.8" r=".8" fill="#fff"/>
+      <path d="M59.6 88.6 C61.4 85.2 68.8 85 70.6 88.2 M81.4 88.2 C83.2 85 90.6 85.2 92.4 88.6" fill="none" stroke="#2a1a12" stroke-width="1.8" stroke-linecap="round"/>
+      <!-- nose: a raised tip that catches the light, two soft nostrils, a shadow under it -->
+      <ellipse cx="76.8" cy="93" rx="1.4" ry="4" fill="#fff" opacity=".2" filter="url(#pblur2)"/>
+      <ellipse cx="76" cy="103" rx="5" ry="2" fill="#5e2f1d" opacity=".3" filter="url(#pblur2)"/>
+      <ellipse cx="76" cy="99.6" rx="3.9" ry="3.2" fill="url(#pnose)" filter="url(#pcs)"/>
+      <ellipse cx="74" cy="101.6" rx=".9" ry=".6" fill="#4a2214" opacity=".45"/><ellipse cx="78" cy="101.6" rx=".9" ry=".6" fill="#4a2214" opacity=".45"/>
+      <!-- mouth: a closed smile with a fuller lower lip -->
+      <path d="M68.6 108.6 C72 111.6 80 111.6 83.4 108.6 C80 113.6 72 113.6 68.6 108.6 Z" fill="#7f3a2c"/>
+      <ellipse cx="76" cy="111.6" rx="3" ry=".8" fill="#c27a68" opacity=".55" filter="url(#pblur2)"/>
+      <path d="M68.2 108.4 C72 110.8 80 110.8 83.8 108.4" fill="none" stroke="#4e2216" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+  </defs>
+</svg>
 <div class="app">
   <header class="top">
     <div class="logo">
@@ -107,7 +189,7 @@
     <div class="emp">Onboarding for <b>Northcote Labs</b></div>
     <div class="sp"></div>
     <a class="link" href="#">Ask the People team</a>
-    <div class="me"><img src="https://images.unsplash.com/photo-1609436132311-e4b0c9370469?w=96&h=96&fit=crop&crop=faces&q=80" alt=""><span>Imani</span></div>
+    <div class="me"><span class="av"><svg viewBox="34 34 84 84" width="32" height="32" aria-hidden="true"><use href="#portrait"/></svg></span><span>Imani</span></div>
   </header>
 
   <div class="main">
@@ -147,10 +229,11 @@
           <use href="#runR" fill="none" stroke="url(#strapL)" stroke-width="34" filter="url(#clay)"/>
           <use href="#runL" fill="none" stroke="url(#strapL)" stroke-width="34" filter="url(#clay)"/>
           <!-- woven name along each run -->
-          <text font-family="Bricolage Grotesque" font-size="11" font-weight="650" letter-spacing="2.2" style="fill: var(--ds-color-white)" dominant-baseline="middle">
-            <textPath href="#runL" startOffset="14">NORTHCOTE LABS · NORTHCOTE LABS</textPath></text>
-          <text font-family="Bricolage Grotesque" font-size="11" font-weight="650" letter-spacing="2.2" style="fill: var(--ds-color-white)" dominant-baseline="middle">
-            <textPath href="#runR" startOffset="14">NORTHCOTE LABS · NORTHCOTE LABS</textPath></text>
+          <!-- one whole name per strap, between the top of the frame and the crimp (path length 78 to 206) -->
+          <text font-family="Bricolage Grotesque" font-size="11" font-weight="650" letter-spacing="1.8" style="fill: var(--ds-color-white)" dominant-baseline="middle">
+            <textPath href="#runL" startOffset="84">NORTHCOTE LABS</textPath></text>
+          <text font-family="Bricolage Grotesque" font-size="11" font-weight="650" letter-spacing="1.8" style="fill: var(--ds-color-white)" dominant-baseline="middle">
+            <textPath href="#runR" startOffset="84">NORTHCOTE LABS</textPath></text>
           <!-- crimp, swivel and hook -->
           <rect x="239" y="150" width="62" height="30" rx="10" fill="url(#steel)" filter="url(#metal)"/>
           <rect x="264" y="176" width="12" height="34" rx="4" fill="url(#steel)" filter="url(#metal)"/>
@@ -159,24 +242,24 @@
         <div class="badge" role="img" aria-label="Your Northcote Labs badge, waiting at reception: Imani Clarke, Product Designer, staff, valid from 19 October 2026">
           <span class="slot"></span><span class="clip"></span>
           <div class="co"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 12V2l10 10V2" fill="none" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Northcote Labs</div>
-          <div class="photo"><img src="https://images.unsplash.com/photo-1609436132311-e4b0c9370469?w=400&h=492&fit=crop&crop=faces&q=80" alt=""></div>
+          <div class="photo"><svg viewBox="0 0 152 184" width="152" height="184" aria-hidden="true"><use href="#portrait"/></svg></div>
           <div><div class="nm">Imani Clarke</div><div class="rl">Product Designer</div></div>
           <span></span>
           <div class="band">Staff · Floors 3 and 4</div>
         </div>
       </div>
       <div class="when">
-        <span class="kick">Your first day, in 5 days</span>
-        <h2 id="day-h">Monday 19 October, 09:30</h2>
-        <p><b>41 Ropewalk Lane, 3rd floor.</b> Ask for Tove at reception. Your badge and laptop are waiting.</p>
-        <span class="credit">Badge photo: <a href="https://unsplash.com/photos/woman-in-gray-and-black-scarf-pq9npYMirk8">Andre Styles on Unsplash</a></span>
+        <span class="kick">Your first day, in 4 days</span>
+        <h2 id="day-h">Monday 19 October</h2>
+        <p><b>41 Ropewalk Lane, 3rd floor.</b> Side door, open from 08:30.</p>
+        <a class="link cal" href="#">Add day one to your calendar</a>
       </div>
     </section>
 
     <section class="list" aria-labelledby="wk-h">
       <h1 id="wk-h">Welcome to Northcote, Imani</h1>
       <p class="lede">Your buddy is <b>Tove Nyström</b> (Design). Your manager is <b>Lena Fischer</b>.</p>
-      <div class="prog"><div class="bar" role="progressbar" aria-label="Onboarding progress" aria-valuemin="0" aria-valuemax="12" aria-valuenow="6"><i style="width: 50%"></i></div><b>6 of 12 done</b></div>
+      <div class="prog"><div class="bar" role="progressbar" aria-label="Onboarding progress" aria-valuemin="0" aria-valuemax="12" aria-valuenow="5"><i style="width: 41.667%"></i></div><b>5 of 12 done</b></div>
 
       <div class="group">
         <div class="gh"><h3>Before day one</h3><span class="sm">5 of 5 done</span></div>
@@ -187,15 +270,15 @@
       </div>
 
       <div class="group">
-        <div class="gh"><h3>Day one · Monday 19 Oct</h3><span class="sm">1 of 3 done</span></div>
+        <div class="gh"><h3>Day one</h3><span class="sm">0 of 3 done</span></div>
         <ul class="tasks">
           <li class="task next"><span class="chk off" aria-label="To do"></span>
-            <div><div class="t">Collect your badge and laptop</div><div class="s">Reception, 3rd floor · ask for Tove</div></div>
-            <button class="btn">Add 09:30 to calendar</button></li>
+            <div><div class="t">Collect your badge and laptop</div><div class="s">At reception · Tove meets you</div></div>
+            <span class="when-r">09:30</span></li>
           <li class="task"><span class="chk off" aria-label="To do"></span>
-            <div><div class="t">Coffee with your buddy, Tove Nyström</div><div class="s">3rd-floor kitchen · 30 min</div></div><span class="when-r">11:00</span></li>
-          <li class="task done"><span class="chk on" aria-label="Done"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.5 2.5L11 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <div><div class="t">Pick your welcome lunch</div><div class="s">Vegetarian · chosen Fri 9 Oct</div></div><span class="when-r">12:30</span></li>
+            <div><div class="t">Coffee with your buddy, Tove Nyström</div><div class="s">Kitchen · 30 min</div></div><span class="when-r">11:00</span></li>
+          <li class="task"><span class="chk off" aria-label="To do"></span>
+            <div><div class="t">Welcome lunch with the design team</div><div class="s">Vegetarian, picked Fri 9 Oct</div></div><span class="when-r">12:30</span></li>
         </ul>
       </div>
 

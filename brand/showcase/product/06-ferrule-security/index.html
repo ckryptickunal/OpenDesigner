@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -205,18 +205,18 @@ table.log { width: 100%; border-collapse: collapse; margin-top: var(--ds-space-8
           <div class="panel">
             <div class="notice" role="status">
               <svg class="i" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M8 7.5v3.5M8 5.2v.1"/></svg>
-              <div><div class="t">Verify a domain first</div><div class="d">SAML can be turned on once larchfieldmutual.com is verified. We look for its TXT record every 10 minutes; the 13:52 UTC check didn't find it yet.</div></div>
+              <div><div class="t">Verify a domain first</div><div class="d">SAML can be turned on once larchfieldmutual.example is verified. We look for its TXT record every 10 minutes; the 13:52 UTC check didn't find it yet.</div></div>
               <div class="acts"><button class="btn sm">Check now</button></div>
             </div>
             <div class="field"><label>ACS URL<small>Reply URL in some providers</small></label><div class="ro"><span>https://id.ferrule.cloud/saml/larchfield-mutual/acs</span><button aria-label="Copy ACS URL"><svg class="i" viewBox="0 0 16 16" style="width:14px;height:14px"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5v-2a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2"/></svg>Copy</button></div></div>
             <div class="field"><label>Entity ID<small>Also called audience URI</small></label><div class="ro"><span>urn:ferrule:sp:ws_8Kq2Nf7Tc4</span><button aria-label="Copy entity ID"><svg class="i" viewBox="0 0 16 16" style="width:14px;height:14px"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5v-2a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2"/></svg>Copy</button></div></div>
             <div class="field" style="padding-bottom:var(--ds-space-16)"><label for="md">IdP metadata URL<small>From your identity provider</small></label><div class="pair"><div class="input" id="md">e.g. https://idp.example.com/saml/metadata</div><button class="btn">Upload XML</button><button class="btn primary">Save</button></div></div>
             <div class="row off" style="border-top:1px solid var(--sep)">
-              <div class="txt"><div class="t">Turn on SAML sign-in</div><div class="d">Members with a larchfieldmutual.com email can sign in through your identity provider.</div></div>
+              <div class="txt"><div class="t">Turn on SAML sign-in</div><div class="d">Members with a larchfieldmutual.example email can sign in through your identity provider.</div></div>
               <button class="sw" role="switch" aria-checked="false" disabled aria-label="Turn on SAML sign-in, needs a verified domain"></button>
             </div>
             <div class="row off">
-              <div class="txt"><div class="t">Require SAML for everyone</div><div class="d">Password sign-in stops for larchfieldmutual.com members; owners keep a recovery password.</div></div>
+              <div class="txt"><div class="t">Require SAML for everyone</div><div class="d">Password sign-in stops for larchfieldmutual.example members; owners keep a recovery password.</div></div>
               <button class="sw" role="switch" aria-checked="false" disabled aria-label="Require SAML, needs a verified domain"></button>
             </div>
           </div>
@@ -306,9 +306,9 @@ const ICON = {
 };
 const E = [
   ["2026-10-14 13:58:07", ["AS", "Amara Sjöberg", "Owner"], "Changed session length from <b>24 hours</b> to <b>12 hours</b>", "security.session_policy.updated", "198.51.100.24", "Stockholm, Sweden", "open"],
-  ["2026-10-14 13:41:52", ["bot", "hr-sync", "Service account"], "Deactivated <b>jakob.hensel@larchfieldmutual.com</b>", "member.deactivated", "203.0.113.18", "Frankfurt, Germany"],
+  ["2026-10-14 13:41:52", ["bot", "hr-sync", "Service account"], "Deactivated <b>jakob.hensel@larchfieldmutual.example</b>", "member.deactivated", "203.0.113.18", "Frankfurt, Germany"],
   ["2026-10-14 13:22:10", ["key", "claims-archive", "API key ••••3f9a"], "Exported <b>claims.payments_2026</b>, 1,204,881 rows, to stage ext_archive", "data.export.completed", "192.0.2.140", "Dublin, Ireland"],
-  ["2026-10-14 12:47:33", ["AS", "Amara Sjöberg", "Owner"], "Added domain <b>larchfieldmutual.com</b> and started verification", "domain.verification.started", "198.51.100.24", "Stockholm, Sweden"],
+  ["2026-10-14 12:47:33", ["AS", "Amara Sjöberg", "Owner"], "Added domain <b>larchfieldmutual.example</b> and started verification", "domain.verification.started", "198.51.100.24", "Stockholm, Sweden"],
   ["2026-10-14 11:05:19", ["support", "Ferrule Support", "Access grant SA-2291"], "Viewed warehouse settings for <b>ANALYTICS_M</b>", "support.access.used", "192.0.2.77", "Toronto, Canada"],
   ["2026-10-14 10:31:46", ["DV", "Dmitri Volkov", "Member"], "Sign-in with a wrong password, third attempt in 5 minutes", "auth.login.failed", "203.0.113.209", "Rotterdam, Netherlands", "fail"],
   ["2026-10-14 09:58:02", ["RO", "Rafael Ortiz", "Admin"], "Invited <b>3 people</b> to the Underwriting group", "member.invited", "198.51.100.61", "Madrid, Spain"],
@@ -333,7 +333,7 @@ E.forEach(([t, who, action, code, ip, place, flag]) => {
     dt.className = "detail";
     dt.innerHTML = `<td colspan="5"><dl class="entry">
       <dt>Event ID</dt><dd><span class="mono">evt_01JA7X3M9QH2K8VZ4T6N</span><button class="copy" aria-label="Copy event ID"><svg class="i" viewBox="0 0 16 16"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5v-2a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2"/></svg></button></dd>
-      <dt>Actor</dt><dd>amara.sjoberg@larchfieldmutual.com · <span class="mono">usr_4Tz81wQ</span></dd>
+      <dt>Actor</dt><dd>amara.sjoberg@larchfieldmutual.example · <span class="mono">usr_4Tz81wQ</span></dd>
       <dt>Changes</dt><dd class="diff">
         <div><span class="mono">session.max_length</span><s>24h</s><span>→</span><span class="mono">12h</span></div>
         <div><span class="mono">session.idle_timeout</span><s>60m</s><span>→</span><span class="mono">30m</span></div>

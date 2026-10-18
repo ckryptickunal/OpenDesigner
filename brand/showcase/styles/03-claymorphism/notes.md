@@ -1,8 +1,8 @@
 # 03 · Claymorphism · Arrivant new-hire first week
 
-Arrivant, a people-ops onboarding page: clay on one object, the new hire's badge with a real portrait, beside a flat first-week list in one green. Fresh audit after the polish round: 4 of 5.
+Arrivant, a people-ops onboarding page: clay on one object, the new hire's badge with a clay portrait drawn in SVG (a real person's photo until Round 3), beside a flat first-week list in one green. Fresh audit after the polish round: 4 of 5.
 
-The polish round of 2026-10-14 (the last section) describes this page. The sections between record the first build, the Wayfold page that the independent audit scored 3.
+The "Round 3 (polish)" section of 2026-10-15, the last one, describes this page. The polish round of 2026-10-14 before it describes the version that round started from. The sections between record the first build, the Wayfold page that the independent audit scored 3.
 
 **Final score: 4 of 5** after three rounds (3.5, then 4, then 4). Render: 1440 x 900 at scale 2 (`shot.png`).
 
@@ -213,3 +213,47 @@ The dials were already the claymorphism ones: roundness 96, depth 80, colorfulne
 ### Remaining weaknesses
 - The badge reads as soft 3D plastic more than modelling clay.
 - The stage gives about 40% of the width to one object. That is the point of the piece, but a shipped onboarding page would give the list more room.
+
+## Round 3 (polish) 2026-10-15
+**Fresh audit: 4 of 5** against the B2B product screens (`product/01`, `02`, `04`, `06`). Render: `shot.png`, 1440 x 900 at scale 2.
+
+### Why this round
+The piece still carried "Being rebuilt" on the public showcase, against the bar of the B2B product screens. One rule was also broken: the badge showed an Unsplash photograph of a real person, captioned as the invented Imani Clarke. The showcase brief allows Unsplash photos but not "photographs of fake people", and not real faces standing in for invented people.
+
+### What changed
+- **A clay portrait drawn in SVG replaces the photograph,** on the badge and in the header avatar. Head, hair, ears, neck and jumper are each a shape shaded like the engine's clay elevation (an inner shade bottom-right, an inner light top-left), written as an SVG filter because a CSS box-shadow cannot reach inside SVG shapes, over a soft fill gradient. Features are kept plain: brows, eyes with one highlight, a soft nose shadow, a closed smile. Claymorphism is defined by its 3D clay figures (`styles.md`, section 3, point 4), so the badge now teaches the style twice: the clay card and the clay figure on it.
+- **The photo credit line is gone,** with the photograph. No image on the page now comes from outside the file.
+- **After the first fresh audit (3):**
+  - **The portrait, redrawn.** The first SVG figure read as a default avatar. Now: eye whites, irises, pupils, a highlight and upper lids; filled brows; a raised nose tip that catches the light, with soft nostrils and a shadow under it; a jaw and chin; the left ear showing, with the hair tucked behind it; a side-swept fringe with its shadow on the forehead; a lock over the right shoulder; a shirt collar under the jumper's V.
+  - **Edges.** The stage and the last task row both end at y 868 (they were 30 px apart); the space went into the list's group gaps, on the 4 px grid.
+  - **Rows on a 60 px rhythm** (they were 59).
+  - **Times at body size in ink,** in their own column. The next task keeps "09:30" in that column; its button says "Add to calendar".
+  - **The lanyard shows the name whole:** one "NORTHCOTE LABS" per strap, placed by measuring the path between the frame's top and the crimp.
+  - **No repeated directions:** the address line says the badge and laptop wait at reception; the task says "At reception · Tove meets you"; coffee is "Kitchen · 30 min".
+  - **"In 4 days":** today is Thu 15 Oct 2026, and Monday 19 October is 4 days away (the page said 5, true on the 14th).
+- **After the second fresh audit (4, "only just"):**
+  - **Green has one job,** done and progress (the employer's lanyard and badge band stay green: they are the badge). "Add day one to calendar" is ink, and the first-day line is ink-2.
+  - **The panel and the list no longer repeat each other:** the panel gives the date, the address and the way in ("Side door, open from 08:30"); the time stays in the list.
+  - **The welcome lunch is a day-one event,** not yet done: "Welcome lunch with the design team, 12:30 · Vegetarian, picked Fri 9 Oct". Totals: before day one 5 of 5, day one 0 of 3, the rest 0 of 4, so 5 of 12 and a bar at 41.7%.
+  - **One calendar action for the whole day:** "Add day one to calendar".
+  - **The portrait:** smaller irises (no stare), a part line, and two shaded strands following the fringe's sweep, plus a sheen on the shoulder lock.
+- **After the final fresh audit (4):**
+  - The render was stale (it still showed the old side-door line); it is re-rendered from the current page.
+  - The eyes no longer stare: the whites sit under lowered lids, and the brows are 1.5 px lower.
+  - The clay reads: the badge face is a pale mint gradient with a deeper shade bottom-right (claymorphism's pastel, `styles.md` point 3).
+  - The day-level action sits with the day: "Add day one to your calendar" is a link under the address; the first task keeps only its time. The group header is "Day one", since the date is in the panel.
+
+- **After a last regression check (holds at 4):** the lids are raised halfway again (at 32 px in the header avatar, the lowered lids read as drowsy).
+
+### References (Mobbin, by link only)
+| Reference | What it taught |
+|---|---|
+| GoDaddy, https://mobbin.com/screens/66d1dcdf-73d4-4364-9549-1629c474c326 | A shipped 3D clay person: lids, nose, hair with volume. |
+| Pipedrive, https://mobbin.com/screens/e7f636d0-1d6f-4a07-a5fa-9baaffea7734 | Quiet task rows with the accent only on done. |
+| Revolut Business, https://mobbin.com/screens/480acc51-97cd-45f9-b0dc-8feb37488e77 | One soft 3D object beside a flat list. |
+
+### Checks
+- **Contrast as rendered:** 52 runs, 0 below the floor; lowest 5.21:1 ("Staff · Floors 3 and 4" on the green band).
+- **Weekdays:** `check_dates.py --year 2026` passes (Fri 9, Mon 12, Mon 19, Wed 21, Thu 22, Fri 23 Oct 2026); Thu 15 to Mon 19 October is 4 days.
+- **Facts re-added:** 5 + 3 + 4 = 12 tasks; 5 + 0 + 0 = 5 done; the bar fills 41.7%. The panel and the last task row end within 1 px of each other.
+- Preflight: no type or font errors.

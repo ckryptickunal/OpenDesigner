@@ -2,7 +2,7 @@
 
 Kadrel, a brand-asset review tool: glass only on the controls that float over a campaign photo, which is the content. Fresh audit after the polish round: 4 of 5.
 
-The polish round of 2026-10-14 (the last section) describes this page. The sections between record the first build, the Corvale revenue overview that the independent audit scored 3.
+The "Round 3 (polish)" section of 2026-10-15, the last one, describes this page. The polish round of 2026-10-14 before it describes the version that round started from. The sections between record the first build, the Corvale revenue overview that the independent audit scored 3.
 
 **Final score: 4 of 5** after three rounds (3, then 3.5, then 4). Render: 1440 x 900 at scale 2 (`shot.png`).
 
@@ -219,3 +219,54 @@ The fresh audits also compared it with Later (crop presets per placement, https:
 ### Remaining weaknesses
 - The overlay on the photo is busy: dimming, hatch, corner ticks, focal point, pins and chips. Every mark carries data, though.
 - The inspector will crowd after three or four comments. A shipped tool would put Info and Comments on tabs.
+
+## Round 3 (polish) 2026-10-15
+**Fresh audit: 4 of 5** against the B2B product screens (`product/01`, `02`, `04`, `06`). Render: `shot.png`, 1440 x 900 at scale 2.
+
+### Why this round
+The piece still carried "Being rebuilt" on the public showcase. The owner's bar is the B2B product screens: one accent with one job, real dense content, exact spacing, legible type. The audit's own fixes were done in the polish round of 2026-10-14; this round closed what stood between that page and the bar.
+
+### What changed
+- **Captions moved from 11 px to 12 px, through the engine.** The 1.25 ratio on a 14 px body put 34 text runs at 11 px, below the 12 px the B2B screens use. `pick Q-type-09 1.2` rebuilt the scale as 12, 14, 17, 20, 24, 29, 35; the page now uses 12 (captions, labels), 14 (body) and 17 (the asset title). No size is outside the scale.
+- **A quieter headline zone.** The hatch over the left 40% of the crop dropped from 1.2 px lines at 38% every 8 px to 1 px lines at 22% every 12 px, with a lighter tint. The dashed edge and the glass label still mark the zone; the shed under it reads again. This was the first "remaining weakness" of the last round (a busy overlay).
+- **Two orphan wraps fixed** after the bigger captions: the camera line ("... Mark" / "II") and the footer ("... crops" / "approved.") are reworded to fit on one line each.
+- **After the first fresh audit (4 for the source; the committed render was stale):**
+  - The headline zone is a flat 15% tint with its dashed edge; the hatch lines read as scratches on the shed roof.
+  - The focal point is a ring and a dot; its four arm ticks touched the zone's edge.
+  - Both crop chips sit on the 16 px edge shared with the bar and the tool palette (they were at 12 and 80 px).
+  - Small glass blurs less than big glass: chips and zoom at 14 px, the bar and palette at the engine's 24 px (`styles.md`: bigger surfaces, stronger blur). The engine has one blur token, so 14 px is set by hand.
+  - The inspector's empty band moved: the reply box follows the comments, and History keeps to the bottom above the footer.
+  - History reads like Rights: muted dates, ink events.
+  - Copy labels instead of narrating: "4 crops, auto-placed around focal point 38%, 53%"; "Property release not on file"; "Approve Web hero", matching the placement's name.
+- **After the second fresh audit (4):**
+  - **The headline zone reads at a glance:** a 34% dark scrim over the left 40% of the crop, with the template's headline block ghosted in white (two lines and a button) where the layout would set it; the label sits on the zone's top edge and says "overlaps the shed", which is what the dashed edge shows.
+  - **Even placements:** pictures 80 px tall with equal 48 px gaps; name, ratio and size, and status on three caption lines that may overhang into the gap, so a caption never widens its column.
+  - **A footer that matches the state:** "Waiting on Rhys · due 14:00" with a Remind button, instead of offering Approve and Request changes on a crop whose changes are already requested.
+  - **The inspector has no dead band:** History follows the comments and records the upload (Fri 9 Oct, 4 crops placed); the reply box is pinned above the footer.
+  - **One edge:** the strip pads 16 px, like the glass overlays.
+- **After the final fresh audit (4, "a low 4"):**
+  - The ghost headline is 66% white, so it reads as a placeholder rather than a redaction bar, and pin 1 sits on the shed roof, clear of it.
+  - The darkening outside the crop is 45% (was 58%), so the glass over it reads as glass, not grey pills.
+  - Comments and Activity are tabs. The thread has two more true replies: Signe keeps the 21:9 crop; Rhys notes that Feed and Story cannot keep the lifebuoy (Feed spans 11 to 65% of the width, Story 19 to 57%; the buoy is near 90%). The reply box sits under the thread, and the history moved into the Activity tab.
+  - Placement columns are at least 112 px with 32 px gaps, so no caption crowds the next picture; the selected picture has an inset ring on the 16 px edge.
+
+- **After a last regression check (holds at 4):** no regression found; the lifebuoy claim was re-checked against the crop spans.
+
+### System (engine)
+```
+pick Q-type-09 1.2 --why "captions at 12 px, as the B2B product screens"
+build
+```
+
+### References (Mobbin, by link only)
+| Reference | What it taught |
+|---|---|
+| Air, https://mobbin.com/screens/e2b11887-ecc9-4be2-abd8-ee714db2e7ae | Dark asset viewer with a solid info panel. |
+| Higgsfield, https://mobbin.com/screens/ce861b55-1645-4413-8942-6f627d73b953 | Glass tools over media, reply box under the comments. |
+| Ghost, https://mobbin.com/screens/092f62e5-6f39-4a6b-8189-934b7bab5a12 | Quiet darkening and handles in a crop editor. |
+
+### Checks
+- **Contrast as rendered** (text hidden, each run compared with the worst 5% of pixels behind it): 77 runs, 0 below the floor; lowest 4.99:1, the "Headline zone" label on its glass chip. The breadcrumb slashes went from 70% to 85% white when the darkening outside the crop was lightened (they had dropped to 4.55:1).
+- **Weekdays:** `check_dates.py --year 2026` passes (Fri 9 Oct, Mon 26 Oct 2026).
+- **Facts re-added:** crops 6240 x 2674 (21:9), 6240 x 2080 (3:1), 3328 x 4160 (4:5), 2340 x 4160 (9:16); zoom 1060 / 6240 = 17%; 2 of 4 crops approved; 5 comments on 2 pins; 14 to 26 October is 12 days.
+- `engine.py validate`: no errors (the 2 light-mode warnings are on a dark-only system, as before). Preflight: no type or font errors.

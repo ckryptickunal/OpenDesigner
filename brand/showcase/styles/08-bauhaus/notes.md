@@ -1,5 +1,7 @@
 # 08 weir: a Bauhaus hero for a data-pipeline company
 
+**This page now:** the "Round 3 (polish)" section of 2026-10-15, the last one, describes it. The sections between record earlier versions.
+
 **Direction.** weir is a fictional ETL company: it copies data from 312 kinds of source into a customer's warehouse and checks every row against where it came from. The hero is a Bauhaus poster in which the geometry *is* the pipeline diagram: three sources as the three elementary shapes, sized by rows a day; black bars as flows, weighted by rows a second; the weir itself as a vertical black bar with its job set along it; the warehouse as a black square. All type is lowercase, after Herbert Bayer's universal alphabet. Feel words: **bold, technical, clean**.
 
 Render: 1440 x 900, scale 2 (`shot.png`), light by design (`data-theme="light"`).
@@ -99,3 +101,46 @@ After the independent audit (score 3: the hero recipe, shapes floating apart at 
 **References used by the re-audit:** Friends of Figma (https://mobbin.com/sites/sections/d07a48ba-b906-4fac-a94c-4506459d69d1), Figma Enterprise (https://mobbin.com/sites/sections/199259c8-fe79-4eb8-8487-77464c455ebb), Customer.io data pipelines (https://mobbin.com/sites/sections/6e31f38b-b744-4dbf-9369-7e7e3205c19a).
 
 **Left:** the composition is calmer than a full Friends-of-Figma frame (only the crest, the weir, the triangle and the warehouse touch the edges), and the copy stack on the left is conventional.
+
+## Round 3 (polish) 2026-10-15
+**Fresh audit: 4 of 5** against the B2B product screens and Orbika (`heroes/08`). Render: `shot.png`, 1440 x 900 at scale 2.
+
+### Why this round
+The piece still carried "Being rebuilt" on the public showcase. The poster held, but its right column, "the weir", said what the weir does and then stood empty for 200 px above the warehouse. The B2B screens persuade with specific numbers, not claims.
+
+### What changed
+- **The weir shows its count.** The column under the weir's line held a two-item list (287 connectors, which the lede already says, and a region line). It now holds a three-row ledger for today to 14:00 UTC. The first version showed rows at source and "missing 0"; the audit below changed it to at source against landed.
+- **After the first fresh audit (3):**
+  - **The ledger shows the count:** rows at source against rows landed for each kind of source, and a footnote: "the gap is 2,482,309 rows in flight, none older than 4 min. missing: 0." (Databases 1,665,288, event streams 647,823, SaaS apps 169,198 in flight; about 90 s of each rate.) The "eu or us" line, unrelated to the count, is gone.
+  - **The out-flow enters the warehouse** with a paper edge, as the databases flow crosses the blue. The warehouse text sits in two groups: the name and 2.4 b at the top, the rate and lag at the bottom on the same baselines as the event-streams label.
+  - **The red square has room:** the button moved up 28 px; the source comment that said the square's base lined up with the button was wrong and is fixed.
+  - **The event-streams flow is visible:** raised from the bottom edge to y 800, with a paper edge where it crosses the blue.
+  - **"databases" is centred** on the circle.
+  - **Labels at 16 px:** flow rates, rows-a-day lines, ledger headers and footnote (they were 12).
+- **After the second fresh audit (4, "only just"):**
+  - **The out-flow stops at the warehouse's edge,** on the databases axis, and its rate is labelled where it arrives ("27,800 rows/s in", "p95 4 min behind the source").
+  - **The databases bar starts clean** at the circle's centre: paper edges run along its top and bottom only.
+  - **The triangle's apex sits on the square's left edge** (moved 10.75 px), and **the circle sits on the page's bottom edge** like the triangle (centre moved 28 px down; the flow and labels with it).
+  - **A heavier headline:** 80 px at weight 500, outside the scale (67 and 90) on purpose: 90 runs into the weir, 67 left the crest empty. Glyphs measured inside the crest bar (y 136 to 216 of 118 to 222).
+  - **The footnote agrees with the lag:** "none older than 6 min", since p95 is 4 min.
+- **After the final fresh audit (4):**
+  - The red square is set clearly into the circle's shoulder (it grazed it), and its flow leaves flush with its top.
+  - The weir's line no longer promises "in seconds" while rows can be minutes in flight: "if one runs late, you hear at once."
+  - The headline is 76 px, balanced in the crest (80 px left, 70 px before the weir); "the weir" sits on the crest's top line.
+
+- **After a last regression check (holds at 4):** the square and the triangle moved 40 px right together: the square overlaps the circle clearly and the triangle's apex now sits 51 px under the square's corner, a clear gap instead of an 11 px near miss; the SaaS flow still leaves flush with the square's top.
+
+### Arithmetic
+- 14 hours is 50,400 s. 931,872,406 / 50,400 = 18,490 rows/s (the poster's average: 18,500); 362,509,877 / 50,400 = 7,193 (7,200); 106,114,239 / 50,400 = 2,105 (2,100). The order of the rows follows the shapes, largest first.
+
+### References (Mobbin, by link only)
+| Reference | What it taught |
+|---|---|
+| Customer.io, https://mobbin.com/sites/sections/6e31f38b-b744-4dbf-9369-7e7e3205c19a | Many sources drawn into one hub. |
+| Figma Enterprise, https://mobbin.com/sites/sections/199259c8-fe79-4eb8-8487-77464c455ebb | A geometric figure that does a job beside a heavy headline. |
+| Shopify, https://mobbin.com/sites/sections/ee5646ad-4ed5-4561-bb59-15de0e1e5b17 | Flat shapes that interlock firmly instead of grazing. |
+
+### Checks
+- **Contrast as rendered:** 39 runs. The only flag is the headline: an upright 76 px text box is taller than the 104 px crest bar, so it takes in paper above and below. Measured with canvas text metrics, the glyphs sit inside the bar. Every other run passes; lowest 7.93:1.
+- **Weekdays:** `check_dates.py --year 2026` passes (no weekdays on the page).
+- Preflight: one warning, the 76 px headline outside the scale, on purpose (90 px runs into the weir, 67 px left the crest empty).

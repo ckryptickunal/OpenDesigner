@@ -1,0 +1,8 @@
+# Feedback
+
+Gaps, bugs, confusing steps and ideas found while using OpenDesigner. Each entry has a ready-to-file issue link. Nothing is posted unless you open the link and submit it yourself.
+
+## F-001 · 2026-10-14 · confusing
+With --delegated feel, unknown feel words are dropped without asking: 'I don't know the feel word precise yet, so I left it out' and the same for 'editorial'. The system was built from 'minimal' alone until I re-ran with known words. Precise and editorial are common designer words; map them (precise -> minimal + serious; editorial -> heritage + minimal) or ask even when delegated.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bconfusing%5D%20With%20--delegated%20feel%2C%20unknown%20feel%20words%20are%20dropped%20without%20asking%3A%20...&body=%2A%2AKind%3A%2A%2A%20confusing%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AWith%20--delegated%20feel%2C%20unknown%20feel%20words%20are%20dropped%20without%20asking%3A%20%27I%20don%27t%20know%20the%20feel%20word%20precise%20yet%2C%20so%20I%20left%20it%20out%27%20and%20the%20same%20for%20%27editorial%27.%20The%20system%20was%20built%20from%20%27minimal%27%20alone%20until%20I%20re-ran%20with%20known%20words.%20Precise%20and%20editorial%20are%20common%20designer%20words%3B%20map%20them%20%28precise%20-%3E%20minimal%20%2B%20serious%3B%20editorial%20-%3E%20heritage%20%2B%20minimal%29%20or%20ask%20even%20when%20delegated.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=confusing%2Cfrom-engine)

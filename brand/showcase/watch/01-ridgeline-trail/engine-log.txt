@@ -134,3 +134,15 @@ NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups
 Checked 188 color pairs in every mode, 12 mode combinations and 475 tokens.
 (exit 0)
 
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/01-ridgeline-trail/opendesigner set name "Fellrise" --set-by delegated --why ...
+D-0024 set name = "Fellrise" (delegated)
+  previous value: "Ridgeline"
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/01-ridgeline-trail/opendesigner build
+WARN  In light mode, action primary background on raised surface is too faint to see: contrast 1.18:1, needs 3.0:1.  [WCAG 2.2 SC 1.4.11 (advisory: a text-labelled button needs no boundary contrast); DC-L01-22, S-L01-022, S-L01-023]
+      Fix: Point the role at a step further from the background: steps 11-12 for text, 8 or higher for edges. Or remove the override that detached it. Generated steps always pass.
+Checked 188 color pairs in every mode, 12 mode combinations and 480 tokens.
+(exit 0)

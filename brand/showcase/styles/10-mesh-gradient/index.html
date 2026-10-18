@@ -33,28 +33,30 @@
   .page { position: relative; width: 1440px; height: 900px; padding: 0 var(--ds-space-64); }
   nav { height: 80px; display: flex; align-items: center; gap: var(--ds-space-48); }
   .brand { display: flex; align-items: center; gap: 10px; font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-21); font-weight: 500; letter-spacing: -0.01em; }
-  /* the mark is a prill, the bead an assay leaves: one flat orange disc with one amber highlight */
-  .mark { position: relative; width: 20px; height: 20px; border-radius: 50%; background: var(--ds-color-brand-seed); }
-  .mark::after { content: ""; position: absolute; left: 5px; top: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--ds-color-accent3-light-9); }
+  /* the mark is a prill, the bead an assay leaves: one flat graphite disc with one light highlight (orange is kept for failures) */
+  .mark { position: relative; width: 20px; height: 20px; border-radius: 50%; background: var(--ds-color-accent2-light-9); }
+  .mark::after { content: ""; position: absolute; left: 5px; top: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--ds-color-neutral-light-5); }
   .links { display: flex; gap: var(--ds-space-32); color: var(--ink-2); }
   .signin { margin-left: auto; font-weight: 500; }
 
-  .hero { display: grid; grid-template-columns: 760px 1fr; gap: var(--ds-space-48); align-items: end; padding-top: 36px; }
+  .hero { display: grid; grid-template-columns: 760px 1fr; gap: var(--ds-space-48); align-items: start; padding-top: 36px; }
   h1 { font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-67); line-height: 1.02; font-weight: 300; letter-spacing: -0.03em; }
-  .side { padding-bottom: 6px; }
+  .side { padding-top: 8px; }
   .lede { font-size: var(--ds-font-size-21); line-height: 1.4; color: var(--ink-2); max-width: 26em; }
   .cta { margin-top: var(--ds-space-24); display: inline-flex; align-items: center; gap: 10px; height: 48px; padding: 0 22px; border-radius: var(--ds-radius-control); background: var(--ink); color: var(--ds-color-white); border: 0; font: inherit; font-weight: 500; cursor: pointer; }
 
   /* the product, flat and whole in the page grid */
-  .run { margin-top: 36px; border: 1px solid var(--line); border-radius: var(--ds-radius-overlay); overflow: hidden; display: grid; grid-template-columns: 520px 1fr; grid-template-rows: 40px 1fr; height: 548px; }
+  .run { margin-top: 36px; border: 1px solid var(--line); border-radius: var(--ds-radius-overlay); overflow: hidden; display: grid; grid-template-columns: 600px 1fr; grid-template-rows: 40px 1fr; height: 548px; }
   .bar { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; padding: 0 var(--ds-space-20); border-bottom: 1px solid var(--line-soft); font-size: var(--ds-font-size-12); color: var(--ink-3); }
   .bar b { color: var(--ink); font-weight: 500; }
 
-  .fig { border-right: 1px solid var(--line-soft); padding: var(--ds-space-16) var(--ds-space-20) 0; position: relative; }
-  .fig h2 { font-size: var(--ds-font-size-16); font-weight: 500; }
-  .fig .sub { font-size: var(--ds-font-size-12); color: var(--ink-2); margin-top: 2px; }
-  .plotwrap { position: absolute; left: 20px; top: 72px; width: 479px; height: 420px; }
-  .plot { position: absolute; inset: 0; border-radius: var(--ds-radius-4); overflow: hidden; background: var(--plate); }
+  .fig { border-right: 1px solid var(--line-soft); padding-top: var(--ds-space-16); display: flex; flex-direction: column; min-height: 0; }
+  .fig h2 { font-size: var(--ds-font-size-16); font-weight: 500; padding: 0 var(--ds-space-20); }
+  .fig .sub { font-size: var(--ds-font-size-12); color: var(--ink-2); margin-top: var(--ds-space-4); padding: 0 var(--ds-space-20); }
+  .fig .sub b { color: var(--hot-text); font-weight: 600; }
+  .plotwrap { position: relative; flex: 1; margin-top: 18px; min-height: 0; }   /* starts on the table header's line */
+  .plot { position: absolute; inset: 0 0 32px 0; overflow: hidden; background: var(--plate); }
+  .plotwrap .xt { position: absolute; bottom: 8px; transform: translateX(-50%); }
   .plot canvas, .plot svg { position: absolute; inset: 0; width: 100%; height: 100%; }
   .tick { position: absolute; font-size: var(--ds-font-size-12); color: var(--ink-2); }
   .axis { position: absolute; font-size: var(--ds-font-size-12); color: var(--ink); font-weight: 500; white-space: nowrap; }
@@ -63,21 +65,21 @@
   .quiet { position: absolute; font-size: var(--ds-font-size-12); color: var(--ink-2); }
 
   .res { display: flex; flex-direction: column; min-width: 0; }
-  .title { display: flex; justify-content: space-between; align-items: flex-start; padding: var(--ds-space-16) var(--ds-space-20) 14px; }
+  .title { display: flex; justify-content: space-between; align-items: baseline; padding: var(--ds-space-16) var(--ds-space-20); }
   .title h2 { font-size: var(--ds-font-size-21); font-weight: 500; letter-spacing: -0.01em; line-height: 1.2; }
   .models { margin-top: var(--ds-space-4); font-size: var(--ds-font-size-12); color: var(--ink-2); }
   .gate { text-align: right; }
   .gate .state { font-size: var(--ds-font-size-16); font-weight: 600; color: var(--hot-text); }
-  .gate .why { font-size: var(--ds-font-size-12); color: var(--ink-3); }
+  .gate .why { font-size: var(--ds-font-size-12); color: var(--ink-3); margin-top: var(--ds-space-4); }
   table { width: 100%; border-collapse: collapse; }
   th { font-size: var(--ds-font-size-12); font-weight: 500; color: var(--ink-3); text-align: right; padding: var(--ds-space-8) var(--ds-space-20) var(--ds-space-8) 0; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); background: var(--ds-color-neutral-light-1); }
   th:first-child, td:first-child { text-align: left; padding-left: var(--ds-space-20); }
-  td { text-align: right; padding: 11px var(--ds-space-20) 11px 0; border-bottom: 1px solid var(--line-soft); white-space: nowrap; }
+  td { text-align: right; padding: 10px var(--ds-space-20) 10px 0; border-bottom: 1px solid var(--line-soft); white-space: nowrap; }
   td .kind { font-size: var(--ds-font-size-12); color: var(--ink-3); margin-left: var(--ds-space-8); }
   td.thr, td.base { color: var(--ink-2); }
   tr.fail td.cand, tr.fail td.chg { color: var(--hot-text); font-weight: 600; }
-  .reg { margin-top: auto; display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-24); padding: 14px var(--ds-space-20); background: var(--ds-color-neutral-light-1); }
-  .reg p { font-size: var(--ds-font-size-12); color: var(--ink-2); line-height: 1.45; }
+  .reg { margin-top: auto; display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-24); padding: var(--ds-space-16) var(--ds-space-20); background: var(--ds-color-neutral-light-1); border-top: 1px solid var(--line-soft); }
+  .reg p { font-size: var(--ds-font-size-16); color: var(--ink-2); line-height: 1.4; }
   .reg p b { color: var(--ink); font-weight: 600; }
   .ghost { flex: none; height: 36px; padding: 0 14px; border-radius: var(--ds-radius-control); border: 1px solid var(--line); background: var(--ds-color-white); font: inherit; font-size: var(--ds-font-size-16); font-weight: 500; color: var(--ink); cursor: pointer; }
 </style>
@@ -98,25 +100,19 @@
     </div>
   </section>
 
-  <article class="run" aria-label="Eval run 2,481: v14 against v13">
-    <div class="bar"><span>support-agent / Runs / <b>#2,481</b></span><span class="num">4,012 cases · Oct 14, 14:37 · 6 min 12 s</span></div>
+  <article class="run" aria-label="Eval run 2481: v14 against v13">
+    <div class="bar"><span>support-agent / Runs / <b>#2481</b></span><span class="num">4,012 cases · Oct 14, 14:37 · 6 min 12 s</span></div>
 
     <figure class="fig">
       <h2>Answer correctness, case by case</h2>
-      <p class="sub">Each case by its v13 score (across) and v14 score (up). Darker grey: more cases.</p>
+      <p class="sub">All 4,012 cases by v13 score (across) and v14 score (up), darker where more cases sit.</p>
       <div class="plotwrap" id="wrap">
         <div class="plot" role="img" aria-label="Density of all 4,012 cases by v13 and v14 answer-correctness score. Most cases sit in the top right, just above the line where the two scores are equal, so v14 scores a little higher. A separate orange cloud of 117 cases sits below the line on the right: they scored about 0.9 under v13 and about 0.4 under v14, and they now break the refund policy.">
           <canvas id="field"></canvas>
-          <svg id="over" viewBox="0 0 479 420" aria-hidden="true"></svg>
+          <svg id="over" aria-hidden="true"></svg>
         </div>
-        <span class="tick" style="left:8px;top:6px">1.0</span><span class="axis" style="left:40px;top:6px">v14 ↑</span>
-        <span class="tick" style="left:8px;top:50%;transform:translateY(-50%)">0.6</span>
-        <span class="tick" style="left:8px;bottom:6px">0.2</span>
-        <span class="tick" style="left:50%;bottom:6px;transform:translateX(-50%)">0.6</span>
-        <span class="axis" style="left:calc(50% + 26px);bottom:6px">v13 →</span><span class="tick" style="right:8px;bottom:6px">1.0</span>
-        <span class="quiet" style="left:22%;top:24%">better in v14</span>
-        <span class="quiet" style="left:40%;bottom:9%">worse in v14</span>
-        <span class="tag hot" id="hotTag">117 now break the refund policy</span>
+        <div id="ticks" aria-hidden="true"></div>
+        <span class="tag hot" id="hotTag">117 now fail the refund policy</span>
       </div>
     </figure>
 
@@ -124,7 +120,7 @@
       <div class="title">
         <div>
           <h2>v14 against v13</h2>
-          <div class="models">v14 · candidate · new refund prompt, smaller model &nbsp;·&nbsp; v13 · in production</div>
+          <div class="models">Candidate v14: new refund prompt, smaller model. In production: v13.</div>
         </div>
         <div class="gate"><div class="state">Release blocked</div><div class="why">1 of 6 checks below threshold</div></div>
       </div>
@@ -141,7 +137,7 @@
         </tbody>
       </table>
       <div class="reg">
-        <p><b>117 cases pass the refund policy in v13 and fail it in v14;</b> 8 go the other way, so 3,924 passes become 3,815. Case 1187, “Refund after 45 days?”: v13 declined, v14 offered one.</p>
+        <p><b>117 now fail the refund policy</b>, 8 now pass: 3,924 passes become&nbsp;3,815. Case 1187: v14 offered a refund after 45&nbsp;days.</p>
         <button class="ghost">Review 117 cases</button>
       </div>
     </section>
@@ -150,10 +146,12 @@
 
 <script>
 /* The field. Deterministic: a seeded generator stands in for the run's 4,012 cases.
-   3,895 cases that held or improved; 117 that now break the refund policy. */
-(function () {
+   3,895 cases that held or improved; 117 that now break the refund policy.
+   Drawn once the fonts have loaded, because the field takes its size from the laid-out panel. */
+document.fonts.ready.then(function () {
   const wrap = document.getElementById('wrap'), cv = document.getElementById('field');
-  const W = 479, H = 420, dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const box = wrap.querySelector('.plot').getBoundingClientRect(), W = Math.round(box.width), H = Math.round(box.height), dpr = Math.min(window.devicePixelRatio || 1, 2);
+  document.getElementById('over').setAttribute('viewBox', `0 0 ${W} ${H}`);
   cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
   const ctx = cv.getContext('2d');
   const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
@@ -172,11 +170,14 @@
     return [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s, -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s].map(c => Math.max(0, Math.min(1, gam(c))) * 255);
   }
   const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+  // five hues, each with a job: blue where v14 scores higher, peach where it scores lower, graphite where most cases sit,
+  // molten orange and an amber core for the 117 that now fail the refund policy
   const C = {
     ground: toLab(hex(tok('--ds-color-neutral-light-2'))),
-    lo: toLab(hex(tok('--ds-color-neutral-light-6'))),
-    mid: toLab(hex(tok('--ds-color-neutral-light-9'))),
-    hi: toLab(hex(tok('--ds-color-neutral-light-12'))),
+    cool: toLab(hex(tok('--ds-color-info-light-4'))),
+    warm: toLab(hex(tok('--ds-color-accent-light-5'))),
+    graphite: toLab(hex(tok('--ds-color-accent2-light-9'))),
+    blue: toLab(hex(tok('--ds-color-info-light-9'))),
     hot: toLab(hex(tok('--ds-color-brand-seed'))),
     core: toLab(hex(tok('--ds-color-accent3-light-9')))
   };
@@ -187,7 +188,7 @@
   const cl = x => Math.max(0, Math.min(1, x));
 
   const G = 196, GH = Math.round(G * H / W), held = new Float32Array(G * GH), hot = new Float32Array(G * GH);
-  const ax = v => (v - 0.2) / 0.8;   // the axes run from 0.2 to 1.0: almost no case scores lower
+  const D0 = 0.28, D1 = 1.07, ax = v => (v - D0) / (D1 - D0);   // the axes run where the cases are; 1.0 sits well inside the edge, so the main mass is whole
   function splat(g, x, y, sig) {
     x = ax(x); y = ax(y);
     const cx = x * (G - 1), cy = (1 - y) * (GH - 1), R = Math.ceil(sig * 3);
@@ -198,7 +199,8 @@
   }
   const hotPts = [];
   // the 117: passed the refund policy in v13, fail it in v14
-  for (let i = 0; i < 117; i++) hotPts.push([Math.min(0.97, cl(gauss(0.88, 0.045))), cl(gauss(0.40, 0.07))]);
+  const within = (v, a, b) => v > b ? 2 * b - v : v < a ? 2 * a - v : v;   // reflect at the bounds instead of piling up on them
+  for (let i = 0; i < 117; i++) hotPts.push([within(gauss(0.88, 0.045), 0.70, 0.99), within(gauss(0.46, 0.06), 0.34, 0.62)]);
   // the other 3,895, on a logit scale, with the centre and the shift solved so that all 4,012 cases
   // average the table's answer-correctness scores: v13 0.861, v14 0.893
   const n1 = [], n2 = []; for (let i = 0; i < 3895; i++) { n1.push(gauss(0, 1)); n2.push(gauss(0, 1)); }
@@ -217,9 +219,10 @@
   const oc = off.getContext('2d'), img = oc.createImageData(G, GH);
   for (let i = 0; i < held.length; i++) {
     const a = Math.pow(held[i] / mh, 0.34), b = Math.pow(hot[i] / mo, 0.55);
-    let c = mix(C.ground, C.lo, Math.min(1, a * 1.6));
-    c = mix(c, C.mid, Math.max(0, Math.min(1, (a - 0.35) * 1.6)));
-    c = mix(c, C.hi, Math.max(0, (a - 0.75) * 3.2));
+    const gx = (i % G) / (G - 1), gy = 1 - Math.floor(i / G) / (GH - 1), d = gy - gx;   // d > 0: above the line of equal scores
+    const lim = ax(0.985), keep = Math.max(gx, gy) <= lim ? 1 : Math.max(0, 1 - (Math.max(gx, gy) - lim) / (ax(1) - lim));   // no score passes 1.0: the mass reaches zero there
+    let c = mix(C.ground, d > 0 ? C.cool : C.warm, Math.min(1, Math.abs(d) * 1.8) * 0.78);
+    c = mix(c, mix(C.graphite, C.blue, Math.max(0, Math.min(1, d * 7))), Math.pow(a, 1.15) * 0.7 * keep);
     c = mix(c, C.hot, Math.min(1, b * 1.25));
     c = mix(c, C.core, Math.pow(b, 3) * 0.9);
     const [r, g, bb] = toRgb(c); img.data.set([r, g, bb, 255], i * 4);
@@ -237,15 +240,24 @@
   // the line of equal scores and the label of the orange cloud, placed where the cloud really is
   const over = document.getElementById('over');
   const ang = -Math.atan2(H, W) * 180 / Math.PI;
-  over.innerHTML = `<line x1="${W * 0.1}" y1="${H * 0.9}" x2="${W}" y2="0" stroke="var(--ink)" stroke-width="1" stroke-dasharray="3 4" opacity=".55"/>` +
-    `<text x="0" y="0" transform="translate(${W * 0.34 - 5} ${H * 0.66 - 6}) rotate(${ang})" text-anchor="middle" font-size="12" fill="var(--ink-2)" font-family="var(--ds-font-family-text)">same score in both</text>`;
+  over.innerHTML = `<line x1="0" y1="${H}" x2="${W}" y2="0" stroke="var(--ink)" stroke-width="1" stroke-dasharray="3 4" opacity=".55"/>` +
+    `<text x="0" y="0" transform="translate(${W * 0.3} ${H * 0.7 - 7}) rotate(${ang})" text-anchor="middle" font-size="12" fill="var(--ink-2)" font-family="var(--ds-font-family-text)">same score in both</text>`;
+  // ticks from the domain, and the two halves named where they are
+  const X = v => ax(v) * W, Y = v => (1 - ax(v)) * H;
+  let t = '';
+  for (const v of [0.4, 0.6, 0.8]) t += `<span class="tick xt" style="left:${X(v)}px">${v.toFixed(1)}</span><span class="tick" style="left:12px;top:${Y(v)}px;transform:translateY(-50%)">${v.toFixed(1)}</span>`;
+  t += `<span class="tick" style="left:12px;top:${Y(1)}px;transform:translateY(-50%)">1.0</span><span class="axis" style="left:44px;top:${Y(1)}px;transform:translateY(-50%)">v14 ↑</span>`;
+  t += `<span class="tick xt" style="left:${X(1)}px">1.0</span><span class="axis" style="left:12px;bottom:8px">v13 →</span>`;
+  t += `<span class="quiet" style="left:${X(0.42)}px;top:${Y(0.86)}px">better in v14</span><span class="quiet" style="left:${X(0.5)}px;top:${Y(0.37)}px">worse in v14</span>`;
+  t += `<span class="quiet" style="right:${W - X(0.9)}px;top:${Y(0.985)}px;transform:translateY(-50%);color:var(--ink)">the other 3,895</span>`;
+  document.getElementById('ticks').innerHTML = t;
   // the 117 are the only cases drawn one by one
   over.insertAdjacentHTML('beforeend', hotPts.map(([a, b]) => `<circle cx="${(ax(a) * W).toFixed(1)}" cy="${((1 - ax(b)) * H).toFixed(1)}" r="1.6" fill="var(--ink)" opacity=".75"/>`).join(''));
   const cx = ax(hotPts.reduce((a, p) => a + p[0], 0) / hotPts.length), cy = ax(hotPts.reduce((a, p) => a + p[1], 0) / hotPts.length);
   const tag = document.getElementById('hotTag');
   tag.style.right = '12px'; tag.style.top = ((1 - cy) * H - 92) + 'px';
   over.insertAdjacentHTML('beforeend', `<path d="M${cx * W} ${(1 - cy) * H - 68} V${(1 - cy) * H - 44}" stroke="var(--hot)" stroke-width="1.5"/>`);
-})();
+});
 </script>
 </body>
 </html>
