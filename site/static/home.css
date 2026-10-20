@@ -476,3 +476,8 @@ body:has(> main.home) :is(.bar-in, .foot-in, .foot-legal) { max-width: 1200px; }
 /* a button label never wraps; at the smallest phones the large buttons and booking cards tighten instead */
 .btn { white-space: nowrap; }
 @media (max-width: 380px) { .btn.lg { padding: 0 18px; font-size: 15px; } .book-card { padding: 20px; } }
+
+/* Tested in the open (#evals): the eval tiles, then one quiet link */
+#evals .ev-stats { margin-top: 32px; }
+@media (min-width: 1024px) { #evals .ev-stats[data-n="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.h-more { margin: 20px 0 0; text-align: center; }

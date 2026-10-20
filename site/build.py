@@ -51,6 +51,7 @@ HERO_LEDE = ("It asks the decisions a design system needs, one at a time, and su
              "and writes design tokens, CSS, a Tailwind theme and a DESIGN.md that your team and your coding agents build from. Free and open source.")
 FIGURES = SITE / "figures"
 FIG_RE = re.compile(r"^\{\{figure:([a-z0-9-]+)\}\}$")
+EVALS_RE = re.compile(r"^\{\{evals:([a-z-]+)\}\}$")  # live eval results (site/evals_html.py)
 # Photo scenes for figures: free Unsplash photos (licence checked 2026-10-14, abstract, no logos). A figure asks for one with data-scene="name".
 SCENES = {
     "blue-gradient": ("photo-1760865245520-21b0786f5236", "Philipp Hubert", "dVVjhUcdb30"),
@@ -177,6 +178,11 @@ def md_to_html(md, toc=None):
         fm = FIG_RE.match(ln.strip())
         if fm:
             out.append(figure(fm.group(1))); i += 1
+            continue
+        em = EVALS_RE.match(ln.strip())
+        if em:
+            import evals_html
+            out.append(evals_html.block(em.group(1))); i += 1
             continue
         if ln.startswith("```"):
             j, code = i + 1, []
@@ -704,6 +710,11 @@ def install_tabs():
     return f'<div class="tabs" data-tabs><div class="tablist" role="tablist" aria-label="Your AI tool">{tabs}</div>{panels}</div>'
 
 
+def evals_block(name):
+    import evals_html
+    return evals_html.block(name)
+
+
 def home(pages, facts, faq):
     pieces = [p for p in show_pieces() if p["cat"] == "product"][:6]
     total = len(show_pieces())
@@ -798,6 +809,13 @@ def home(pages, facts, faq):
 <div class="h-head">{idx("08", "Get started")}<h2 class="h-h2">Add it to the AI tool you already use.</h2>
 <p class="h-lede">You need your own AI tool. Claude Code, the Claude app and other agents also need Python 3.10 or newer; ChatGPT needs nothing installed.</p></div>
 {install_tabs()}
+</section>
+
+<section class="h-sec" id="evals">
+<div class="h-head">{idx("09", "Tested in the open")}<h2 class="h-h2">We test it on itself, and publish the numbers.</h2>
+<p class="h-lede">AI agents do real tasks with and without OpenDesigner. The engine builds systems from 18 fixed briefs. Our own checkers face pages with planted mistakes. When a test fails, the page says so.</p></div>
+{evals_block("summary")}
+<p class="h-more"><a class="h-link" href="/docs/evals/">See every test, and run them yourself {ARROW}</a></p>
 </section>
 
 <section class="h-sec" id="status">

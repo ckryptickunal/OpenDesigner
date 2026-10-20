@@ -1,0 +1,890 @@
+{
+  "about": "Planted defects for tools/checker_evals.py. Each fixture names its checker and the findings it must produce; a clean page expects none. An expectation matches a finding with the same check id and the same element (a selector segment) or quoted text; layout expectations also name the widths.",
+  "owner_feedback": {
+    "source": "_coordination/OWNER-FEEDBACK.md, section 2026-10-14 to 2026-10-15: showcase and website reviews",
+    "8": "A pair of cards off the centre line at a narrow width: alignment measured at every width (check 3, symmetry).",
+    "13": "The Copy button in code blocks 'feels out of place': a pinned control lines up with the content (check 8, anchor).",
+    "14": "'The word it is always on the next line': no heading or short line ends on one word (check 9, widow).",
+    "16": "Phone screenshots: a Copy button over a command, 'Defaul / t': every page checked at phone widths (checks 11 under-control and 12 label-break).",
+    "17": "'Skip today should always come on the left of Mark today done': opposite actions on one row, primary right (check 13, actions)."
+  },
+  "fixtures": [
+    {
+      "page": "layout/overflow.html",
+      "checker": "layout",
+      "widths": [
+        320
+      ],
+      "expect": [
+        {
+          "id": "L-overflow-img",
+          "what": "a 400 px image with no max-width makes the page scroll sideways at 320 px",
+          "check": "page-overflow",
+          "elements": [
+            "img#wide-chart"
+          ],
+          "widths": [
+            320
+          ]
+        }
+      ]
+    },
+    {
+      "page": "layout/overflow-svg.html",
+      "checker": "layout",
+      "widths": [
+        320
+      ],
+      "expect": [
+        {
+          "id": "L-overflow-svg",
+          "what": "a 400 px inline svg chart makes the page scroll sideways at 320 px; the finding must name the svg",
+          "check": "page-overflow",
+          "elements": [
+            "svg#wide-svg"
+          ],
+          "widths": [
+            320
+          ]
+        }
+      ]
+    },
+    {
+      "page": "layout/inner-scroll.html",
+      "checker": "layout",
+      "widths": [
+        320
+      ],
+      "expect": [
+        {
+          "id": "L-inner-scroll",
+          "what": "a pre inside a .fig-card scrolls sideways at 320 px",
+          "check": "inner-scroll",
+          "elements": [
+            "pre#scroll-pre"
+          ],
+          "widths": [
+            320
+          ]
+        },
+        {
+          "id": "L-clipped",
+          "what": "a note with overflow: hidden and a fixed 48 px height cuts its last lines off",
+          "check": "clipped",
+          "elements": [
+            "p#clip-note"
+          ],
+          "widths": [
+            320
+          ]
+        }
+      ]
+    },
+    {
+      "page": "layout/symmetry.html",
+      "checker": "layout",
+      "widths": [
+        768
+      ],
+      "expect": [
+        {
+          "id": "L-symmetry",
+          "what": "a big card centred over a pair that stays on the left: the rows lose their shared centre line at 768 px",
+          "check": "symmetry",
+          "elements": [
+            "div#hero-cards"
+          ],
+          "widths": [
+            768
+          ],
+          "owner_feedback": [
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "page": "layout/overlap.html",
+      "checker": "layout",
+      "widths": [
+        1280
+      ],
+      "expect": [
+        {
+          "id": "L-overlap",
+          "what": "a card pulled up by margin-top: -40px covers the card above it",
+          "check": "overlap",
+          "elements": [
+            "div#card-a",
+            "div#card-b"
+          ],
+          "widths": [
+            1280
+          ]
+        }
+      ]
+    },
+    {
+      "page": "layout/edge.html",
+      "checker": "layout",
+      "widths": [
+        1280
+      ],
+      "expect": [
+        {
+          "id": "L-edge",
+          "what": "three stacked cards, the middle one indented 12 px by a leftover margin",
+          "check": "edge",
+          "elements": [
+            "div#steps"
+          ],
+          "widths": [
+            1280
+          ]
+        }
+      ]
+    },
+    {
+      "page": "layout/targets.html",
+      "checker": "layout",
+      "widths": [
+        1280
+      ],
+      "expect": [
+        {
+          "id": "L-target-in",
+          "what": "a 20 x 20 px zoom-in button 2 px from its neighbour",
+          "check": "target",
+          "elements": [
+            "button#zoom-in"
+          ],
+          "widths": [
+            1280
+          ]
+        },
+        {
+          "id": "L-target-out",
+          "what": "a 20 x 20 px zoom-out button 2 px from its neighbour",
+          "check": "target",
+          "elements": [
+            "button#zoom-out"
+          ],
+          "widths": [
+            1280
+          ]
+        }
+      ],
+      "note": "button#lonely is 20 x 20 px with clear space all round (the WCAG 2.5.8 spacing exception): a finding on it is a false alarm"
+    },
+    {
+      "page": "layout/text-edge.html",
+      "checker": "layout",
+      "widths": [
+        1280
+      ],
+      "expect": [
+        {
+          "id": "L-text-edge",
+          "what": "an API key with white-space: nowrap runs past its 200 px card",
+          "check": "text-edge",
+          "elements": [
+            "code#api-key"
+          ],
+          "widths": [
+            1280
+          ]
+        }
+      ]
+    },
+    {
+      "page": "layout/anchor.html",
+      "checker": "layout",
+      "widths": [
+        1280
+      ],
+      "expect": [
+        {
+          "id": "L-anchor-band",
+          "what": "a Copy button 8 px from the top of a box whose code starts 48 px down: an empty band above the code",
+          "check": "anchor",
+          "elements": [
+            "button#copy-band"
+          ],
+          "level": "error",
+          "widths": [
+            1280
+          ],
+          "owner_feedback": [
+            13
+          ]
+        },
+        {
+          "id": "L-anchor-inset",
+          "what": "a Copy button on the first line but 16 px from the top and 4 px from the side",
+          "check": "anchor",
+          "elements": [
+            "button#copy-inset"
+          ],
+          "level": "warning",
+          "widths": [
+            1280
+          ]
+        }
+      ]
+    },
+    {
+      "page": "layout/widow.html",
+      "checker": "layout",
+      "widths": [
+        320
+      ],
+      "expect": [
+        {
+          "id": "L-widow-h2",
+          "what": "an h2 whose last line at 320 px is the single word 'shipping'",
+          "check": "widow",
+          "elements": [
+            "h2#widow-heading"
+          ],
+          "widths": [
+            320
+          ],
+          "owner_feedback": [
+            14
+          ]
+        },
+        {
+          "id": "L-widow-lede",
+          "what": "a lede whose last line at 320 px is the single word 'release.'",
+          "check": "widow",
+          "elements": [
+            "p#widow-lede"
+          ],
+          "widths": [
+            320
+          ],
+          "owner_feedback": [
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "page": "layout/text-left.html",
+      "checker": "layout",
+      "widths": [
+        1280
+      ],
+      "expect": [
+        {
+          "id": "L-text-left",
+          "what": "a lede centred by margin-inline: auto starts 260 px right of its heading at 1280 px",
+          "check": "text-left",
+          "elements": [
+            "section#intro"
+          ],
+          "widths": [
+            1280
+          ]
+        }
+      ]
+    },
+    {
+      "page": "layout/under-control.html",
+      "checker": "layout",
+      "widths": [
+        320
+      ],
+      "expect": [
+        {
+          "id": "L-under-control",
+          "what": "a wrapped command runs under the pinned Copy button at 320 px",
+          "check": "under-control",
+          "elements": [
+            "button#copy-cmd"
+          ],
+          "widths": [
+            320
+          ],
+          "owner_feedback": [
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "page": "layout/label-break.html",
+      "checker": "layout",
+      "widths": [
+        320
+      ],
+      "expect": [
+        {
+          "id": "L-label-default",
+          "what": "a 'Default' chip squeezed in a flex row breaks inside the word at 320 px",
+          "check": "label-break",
+          "elements": [
+            "span#chip-default"
+          ],
+          "widths": [
+            320
+          ],
+          "owner_feedback": [
+            16
+          ]
+        },
+        {
+          "id": "L-label-readonly",
+          "what": "a 'Read only' chip with a fixed 56 px width wraps onto two lines",
+          "check": "label-break",
+          "elements": [
+            "span#chip-readonly"
+          ],
+          "widths": [
+            320
+          ],
+          "owner_feedback": [
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "page": "layout/actions.html",
+      "checker": "layout",
+      "widths": [
+        390
+      ],
+      "expect": [
+        {
+          "id": "L-actions-stacked",
+          "what": "'Skip today' stacked above its primary action",
+          "check": "actions",
+          "elements": [
+            "div#stacked"
+          ],
+          "widths": [
+            390
+          ],
+          "owner_feedback": [
+            17
+          ]
+        },
+        {
+          "id": "L-actions-reversed",
+          "what": "the primary 'Save' on the left of 'Cancel'",
+          "check": "actions",
+          "elements": [
+            "div#reversed"
+          ],
+          "widths": [
+            390
+          ],
+          "owner_feedback": [
+            17
+          ]
+        }
+      ]
+    },
+    {
+      "page": "layout/clean-basics.html",
+      "checker": "layout",
+      "widths": [
+        320,
+        360,
+        390,
+        430,
+        600,
+        768,
+        820,
+        900,
+        1024,
+        1180,
+        1280,
+        1440,
+        1920
+      ],
+      "expect": [],
+      "clean": true,
+      "note": "the corrected version of every planted layout defect"
+    },
+    {
+      "page": "layout/clean-docs.html",
+      "checker": "layout",
+      "widths": [
+        320,
+        360,
+        390,
+        430,
+        600,
+        768,
+        820,
+        900,
+        1024,
+        1180,
+        1280,
+        1440,
+        1920
+      ],
+      "expect": [],
+      "clean": true,
+      "note": "a docs-shaped page: nav, prose, code with a Copy button, a scrolling table, a carousel with a screen-reader-only status, scrolling tag filters in a card, visually hidden link text in a card, a form"
+    },
+    {
+      "page": "preflight/small-text-error.html",
+      "checker": "preflight",
+      "expect": [
+        {
+          "id": "P-text-10",
+          "what": "legal text at 10 px, under the 11 px web floor",
+          "check": "M8",
+          "text": "under 11px for web: \\[10\\]",
+          "level": "error"
+        }
+      ]
+    },
+    {
+      "page": "preflight/small-text-warn.html",
+      "checker": "preflight",
+      "expect": [
+        {
+          "id": "P-text-11",
+          "what": "captions at 11 px, under the 12 px floor for text people read",
+          "check": "M8",
+          "text": "under 12px for web: \\[11\\]",
+          "level": "warn"
+        }
+      ]
+    },
+    {
+      "page": "preflight/font-missing.html",
+      "checker": "preflight",
+      "expect": [
+        {
+          "id": "P-font-missing",
+          "what": "headings ask for a family with no @font-face and no font link",
+          "check": "M9",
+          "text": "\"Fixture Grotesk\"",
+          "level": "error"
+        }
+      ]
+    },
+    {
+      "page": "preflight/too-many-sizes.html",
+      "checker": "preflight",
+      "expect": [
+        {
+          "id": "P-many-sizes",
+          "what": "eleven distinct font sizes",
+          "check": "M6",
+          "text": "11 distinct font sizes"
+        }
+      ]
+    },
+    {
+      "page": "preflight/close-sizes.html",
+      "checker": "preflight",
+      "expect": [
+        {
+          "id": "P-close-sizes",
+          "what": "a 15 px intro next to 16 px body text",
+          "check": "M6",
+          "text": "15/16"
+        }
+      ]
+    },
+    {
+      "page": "preflight/off-scale.html",
+      "checker": "preflight",
+      "expect": [
+        {
+          "id": "P-off-scale-fs",
+          "what": "an 18 px label off a scale named --fs-* (14, 16, 20, 24, 32)",
+          "check": "M2",
+          "text": "\\[18\\]"
+        }
+      ]
+    },
+    {
+      "page": "preflight/off-scale-ds.html",
+      "checker": "preflight",
+      "expect": [
+        {
+          "id": "P-off-scale-ds",
+          "what": "an 18 px label off a scale named --ds-font-size-* (the engine's names)",
+          "check": "M2",
+          "text": "\\[18\\]"
+        }
+      ]
+    },
+    {
+      "page": "preflight/tracking-break-tween.html",
+      "checker": "preflight",
+      "expect": [
+        {
+          "id": "P-tracking",
+          "what": "a heading tracked at -0.05em",
+          "check": "M5",
+          "text": "-0\\.05"
+        },
+        {
+          "id": "P-br",
+          "what": "a <br> inside a heading",
+          "check": "M7",
+          "text": "<br> in a heading"
+        },
+        {
+          "id": "P-tween",
+          "what": "a script tween that animates width",
+          "check": "M18",
+          "text": "animates width"
+        }
+      ]
+    },
+    {
+      "page": "preflight/missing-sheet.html",
+      "checker": "preflight",
+      "expect": [
+        {
+          "id": "P-missing-sheet",
+          "what": "a linked stylesheet that is not next to the page",
+          "check": "missing-sheet",
+          "text": "styles/theme\\.css"
+        }
+      ]
+    },
+    {
+      "page": "preflight/three-typefaces.html",
+      "checker": "preflight",
+      "expect": [],
+      "note": "not a clean page and not a scored defect: any finding here is counted as unexpected",
+      "out_of_scope": [
+        {
+          "what": "three typefaces on one page (the house rule is two)",
+          "why": "preflight.py html does not count families: its font check (M9) only asks whether each family is loaded"
+        }
+      ]
+    },
+    {
+      "page": "preflight/clean.html",
+      "checker": "preflight",
+      "expect": [],
+      "clean": true
+    },
+    {
+      "page": "review/floors-a.html",
+      "checker": "review",
+      "viewports": [
+        390,
+        1280
+      ],
+      "expect": [
+        {
+          "id": "R-contrast",
+          "what": "grey text at about 2.8:1",
+          "check": "MS-04",
+          "elements": [
+            "p#faint"
+          ]
+        },
+        {
+          "id": "R-targets",
+          "what": "two 16 x 16 px pager buttons 4 px apart",
+          "any_of": [
+            {
+              "check": "MS-06",
+              "elements": [
+                "button#pg-prev",
+                "button#pg-next"
+              ]
+            },
+            {
+              "check": "IN-04",
+              "elements": [
+                "button#pg-prev",
+                "button#pg-next"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "R-lang",
+          "what": "no lang on <html>",
+          "check": "IN-03",
+          "elements": [
+            "html"
+          ],
+          "text": "does not declare its language"
+        },
+        {
+          "id": "R-zoom",
+          "what": "the viewport meta blocks zoom (user-scalable=no)",
+          "check": "EN-01",
+          "elements": [
+            "meta[name=viewport]"
+          ]
+        },
+        {
+          "id": "R-alt",
+          "what": "an image with no alt attribute",
+          "check": "MS-10",
+          "elements": [
+            "img#hero-photo"
+          ],
+          "text": "no alt"
+        },
+        {
+          "id": "R-focus",
+          "what": "a link whose :focus rule removes the outline and puts nothing in its place",
+          "check": "IN-02",
+          "elements": [
+            "a#more"
+          ]
+        }
+      ]
+    },
+    {
+      "page": "review/floors-b.html",
+      "checker": "review",
+      "viewports": [
+        320,
+        1280
+      ],
+      "expect": [
+        {
+          "id": "R-hscroll",
+          "what": "a 400 px table makes the page scroll sideways at 320 px",
+          "check": "CV-05",
+          "elements": [
+            "table#wide-table"
+          ]
+        },
+        {
+          "id": "R-small-text",
+          "what": "10 px fine print",
+          "check": "MS-02",
+          "elements": [
+            "span#fine"
+          ],
+          "text": "smaller than 12"
+        },
+        {
+          "id": "R-reduced-motion",
+          "what": "a 4 s entrance animation and no prefers-reduced-motion rule anywhere",
+          "check": "EN-02",
+          "elements": [
+            "div#toast"
+          ]
+        },
+        {
+          "id": "R-placeholder",
+          "what": "the word undefined where a price should be",
+          "check": "ST-06",
+          "elements": [
+            "span#price"
+          ]
+        },
+        {
+          "id": "R-heading-skip",
+          "what": "an h1 followed by an h3",
+          "check": "IN-03",
+          "elements": [
+            "h3"
+          ],
+          "text": "Heading levels skip"
+        },
+        {
+          "id": "R-broken-img",
+          "what": "an image whose file is missing",
+          "any_of": [
+            {
+              "check": "MS-10",
+              "elements": [
+                "img#avatar"
+              ],
+              "text": "failed to load"
+            },
+            {
+              "check": "EN-06",
+              "text": "missing-avatar\\.png"
+            }
+          ]
+        },
+        {
+          "id": "R-long-lines",
+          "what": "a paragraph with no max-width runs past 80 characters a line at 1280 px",
+          "check": "MS-07",
+          "elements": [
+            "p#long"
+          ]
+        }
+      ]
+    },
+    {
+      "page": "review/drift.html",
+      "checker": "review",
+      "viewports": [
+        390,
+        1280
+      ],
+      "expect": [
+        {
+          "id": "R-color-drift",
+          "what": "text in an off-palette violet on six items",
+          "check": "MS-08",
+          "elements": [
+            "li.tag-text"
+          ],
+          "text": "^Text colors"
+        },
+        {
+          "id": "R-type-drift",
+          "what": "18 px text, off the type scale, on six items",
+          "check": "MS-02",
+          "elements": [
+            "p.off-size"
+          ],
+          "text": "off the type scale"
+        },
+        {
+          "id": "R-radius-drift",
+          "what": "a 6 px corner radius on three cards (the ladder is 0, 4, 8, 12)",
+          "check": "MS-09",
+          "elements": [
+            "div.soft-card"
+          ]
+        },
+        {
+          "id": "R-space-drift",
+          "what": "10 px padding, off the spacing ladder, on six items",
+          "check": "MS-01",
+          "elements": [
+            "p.off-size.pad10"
+          ]
+        },
+        {
+          "id": "R-face-drift",
+          "what": "most text set in Georgia instead of the system face",
+          "check": "MS-03",
+          "elements": [
+            "h1#drift-title"
+          ],
+          "text": "not in the system's typeface"
+        }
+      ],
+      "project": "review/system"
+    },
+    {
+      "page": "review/clean.html",
+      "checker": "review",
+      "viewports": [
+        320,
+        390,
+        768,
+        1280
+      ],
+      "expect": [],
+      "project": "review/system",
+      "clean": true
+    },
+    {
+      "page": "dates/wrong.html",
+      "checker": "dates",
+      "expect": [
+        {
+          "id": "D-thu-24-oct",
+          "what": "\"Thu 24 Oct 2026\" is a Saturday",
+          "check": "weekday",
+          "text": "^\"Thu 24 Oct 2026\" is a Saturday in 2026$"
+        },
+        {
+          "id": "D-fri-oct-18",
+          "what": "\"Fri Oct 18, 2026\" is a Sunday",
+          "check": "weekday",
+          "text": "^\"Fri Oct 18, 2026\" is a Sunday in 2026$"
+        },
+        {
+          "id": "D-mon-3-nov",
+          "what": "\"Monday, 3 November 2026\" is a Tuesday",
+          "check": "weekday",
+          "text": "^\"Monday, 3 November 2026\" is a Tuesday in 2026$"
+        },
+        {
+          "id": "D-31-sep",
+          "what": "\"Wed 31 Sep 2026\" is not a date",
+          "check": "not-a-date",
+          "text": "^\"Wed 31 Sep 2026\" is not a date$"
+        }
+      ]
+    },
+    {
+      "page": "dates/wrong.md",
+      "checker": "dates",
+      "expect": [
+        {
+          "id": "D-fri-dec-26",
+          "what": "\"Friday, December 26, 2026\" (Markdown) is a Saturday",
+          "check": "weekday",
+          "text": "^\"Friday, December 26, 2026\" is a Saturday in 2026$"
+        }
+      ]
+    },
+    {
+      "page": "dates/clean.html",
+      "checker": "dates",
+      "expect": [],
+      "clean": true
+    },
+    {
+      "page": "names/piece-a.html",
+      "checker": "names",
+      "registry": "names/NAMES.md",
+      "expect": [],
+      "note": "holds the first half of two near-name pairs; the checker reports a pair against the page it meets second (piece-b)"
+    },
+    {
+      "page": "names/piece-b.html",
+      "checker": "names",
+      "registry": "names/NAMES.md",
+      "expect": [
+        {
+          "id": "N-near-one-word",
+          "what": "\"Stellwick\" here, one letter from \"Tellwick\" in piece-a",
+          "check": "cross-near",
+          "text": "\"Stellwick\".*\"Tellwick\""
+        },
+        {
+          "id": "N-near-two-words",
+          "what": "\"Vosberg Health\" here, one letter from \"Vossberg Health\" in piece-a",
+          "check": "cross-near",
+          "text": "Vos+berg Health.*Vos+berg Health"
+        },
+        {
+          "id": "N-registry-name",
+          "what": "\"Corvantis\", a registry name that belongs to other-piece",
+          "check": "registry-name",
+          "text": "\"Corvantis\" is already"
+        },
+        {
+          "id": "N-registry-near",
+          "what": "\"Marrowend\", one letter from the registry's \"Marrowind Freight\"",
+          "check": "registry-near",
+          "text": "\"Marrowend\".*\"Marrowind\""
+        },
+        {
+          "id": "N-registry-word",
+          "what": "\"Quillfeather\", the distinctive word of the registry's \"Quillfeather Bay Hotel\"",
+          "check": "registry-word",
+          "text": "\"Quillfeather\" is part of"
+        }
+      ]
+    },
+    {
+      "page": "names/piece-clean.html",
+      "checker": "names",
+      "registry": "names/NAMES.md",
+      "expect": [],
+      "clean": true
+    }
+  ]
+}

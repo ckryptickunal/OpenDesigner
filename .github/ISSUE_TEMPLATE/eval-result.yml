@@ -1,0 +1,30 @@
+name: Eval result
+description: Share what happened when you ran OpenDesigner's evals, or a task where it did badly
+title: "Eval: "
+labels: ["evals"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. Bad results help most: a task where OpenDesigner did worse than no plugin, a design brief the engine handles badly, or a mistake our checkers missed. Don't paste private code or client work.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Which evals
+      options: ["Agent evals (tools/agent_evals.py)", "Design evals (tools/design_evals.py)", "Checker evals (tools/checker_evals.py)", "A new task or brief I'd like added"]
+    validations: { required: true }
+  - type: textarea
+    id: result
+    attributes:
+      label: What you ran and what you got
+      description: The command, and the summary it printed (or the case names and scores). Include the commit (git rev-parse --short HEAD).
+    validations: { required: true }
+  - type: input
+    id: setup
+    attributes:
+      label: Model and host
+      description: For agent evals, the --model you used and your Claude Code version (claude --version).
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead

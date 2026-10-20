@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Floors b</title>
+<!-- Checker eval fixture for skills/opendesigner-review (probe.js measured in Chrome, then review.py check). Floors only, no design system. Planted: a 400 px table that makes the page scroll sideways at 320 px; 10 px fine print; a 4 s entrance animation (transform only, so its text keeps full contrast while it runs) with no prefers-reduced-motion rule anywhere; the text "undefined" where a price should be; an h1 followed by an h3; an image whose file is missing; no links or buttons at all; a paragraph over 120 characters with no max-width, so its lines run past 80 characters at 1280 px.
+     Expected findings are in evals/checkers/manifest.json. -->
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font: 16px/24px system-ui, sans-serif; color: #1c1c1e; background: #ffffff; }
+body { margin: 0; }
+main { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 32px; line-height: 40px; margin: 0 0 16px; }
+h2, h3 { font-size: 20px; line-height: 28px; margin: 24px 0 8px; }
+p { margin: 0 0 16px; max-width: 65ch; }
+a { color: #1f4fd8; }
+button { font: inherit; font-size: 16px; line-height: 24px; padding: 8px 16px; border: 1px solid #1f4fd8; border-radius: 8px; background: #1f4fd8; color: #ffffff; }
+ul { margin: 0 0 16px; padding: 0; list-style: none; }
+img { max-width: 100%; height: auto; display: block; }
+button:focus-visible, a:focus-visible { outline: 2px solid #1f4fd8; outline-offset: 2px; }
+main { max-width: none; }
+#wide-table { min-width: 400px; border-collapse: collapse; margin: 0 0 16px; }
+#wide-table td { padding: 8px; border-bottom: 1px solid #d1d1d6; }
+#fine { font-size: 10px; line-height: 16px; }
+#toast { padding: 8px 16px; border-radius: 8px; background: #f5f5f7; animation: toast-in 4s ease-out 1 both; }
+@keyframes toast-in { from { transform: translateY(8px); } to { transform: none; } }
+#long { max-width: none; }
+</style>
+</head>
+<body>
+<main>
+<h1>Plans and billing</h1>
+<table id="wide-table"><tr><td>Starter</td><td>3 seats</td><td>Monthly</td><td>Email support</td></tr></table>
+<p>Price: <span id="price">undefined</span></p>
+<p><span id="fine">Taxes are added at checkout.</span></p>
+<div id="toast">Saved</div>
+<h3>Questions</h3>
+<p id="long">Every plan includes the engine, the exports and the review tools, and you can switch plans at any time from the billing page without losing any of your saved decisions or files.</p>
+<img id="avatar" src="img/missing-avatar.png" width="64" height="64" alt="Account owner">
+</main>
+</body>
+</html>

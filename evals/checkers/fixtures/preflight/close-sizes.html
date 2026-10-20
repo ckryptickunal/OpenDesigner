@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Close sizes</title>
+<!-- Checker eval fixture for skills/opendesigner-preflight/scripts/preflight.py html (--medium web). Planted: a 15px intro next to 16px body text, two sizes within 10% of each other (a warning, M6).
+     Expected findings are in evals/checkers/manifest.json. -->
+<style>
+:root { --fs-sm: 14px; --fs-md: 16px; --fs-lg: 20px; --fs-xl: 24px; --fs-2xl: 32px; }
+body { margin: 0; padding: 24px; font-family: system-ui, sans-serif; font-size: var(--fs-md); line-height: 1.5; }
+h1 { font-size: var(--fs-2xl); line-height: 1.2; }
+h2 { font-size: var(--fs-xl); }
+.meta { font-size: var(--fs-sm); }
+.intro { font-size: 15px; }
+</style>
+</head>
+<body>
+<h1>Welcome</h1>
+<p class="intro">Start with five questions.</p>
+<p>Then build.</p>
+<p class="meta">Two minutes.</p>
+</body>
+</html>

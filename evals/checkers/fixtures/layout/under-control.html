@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Under control fixture</title>
+<!-- Checker eval fixture for site/check_layout.py. Planted, at 320 px: a long command in a box with a Copy button pinned top right and no room reserved beside it, so the wrapped command runs under the button (owner feedback item 16). The button is centred on the first line with equal insets, so check 8 has nothing to report here.
+     The planted defects and where each must be found are listed in evals/checkers/manifest.json. -->
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font: 16px/1.5 system-ui, -apple-system, sans-serif; color: #1c1c1e; background: #ffffff; }
+body { margin: 0; }
+main { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 28px; line-height: 1.2; margin: 0 0 16px; text-wrap: balance; }
+h2 { font-size: 20px; line-height: 1.3; margin: 24px 0 8px; text-wrap: balance; }
+p { margin: 0 0 16px; text-wrap: pretty; }
+.x-card { border: 1px solid #d1d1d6; border-radius: 12px; padding: 16px; background: #f7f7f8; }
+button { font: inherit; font-size: 15px; min-height: 40px; padding: 0 16px; border: 1px solid #8e8e93; border-radius: 8px; background: #ffffff; color: #1c1c1e; }
+button.primary { background: #1f4fd8; border-color: #1f4fd8; color: #ffffff; }
+#cmd-box { position: relative; padding: 12px; border: 1px solid #d1d1d6; border-radius: 12px; background: #f7f7f8; }
+#cmd-box pre { margin: 0; font: 14px/24px ui-monospace, Menlo, monospace; white-space: pre-wrap; word-break: break-all; }
+.copy { position: absolute; top: 12px; right: 12px; min-height: 0; height: 24px; padding: 0 10px; font-size: 13px; line-height: 22px; border-radius: 6px; }
+</style>
+</head>
+<body>
+<main>
+<h1>Under control fixture</h1>
+<div id="cmd-box"><button class="copy" id="copy-cmd">Copy</button><pre>git clone https://github.example/opendesigner/opendesigner.git && cd opendesigner && python3 tools/sync_skills.py --check</pre></div>
+</main>
+</body>
+</html>

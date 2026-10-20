@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Three typefaces</title>
+<!-- Checker eval fixture for skills/opendesigner-preflight/scripts/preflight.py html (--medium web). Not counted: three typefaces on one page (a sans, a serif and a mono, each with an @font-face). The house rule is two families at most, but preflight.py html does not claim to count families, so this page expects no finding and the README says why.
+     Expected findings are in evals/checkers/manifest.json. -->
+<style>
+:root { --fs-sm: 14px; --fs-md: 16px; --fs-lg: 20px; --fs-xl: 24px; --fs-2xl: 32px; }
+body { margin: 0; padding: 24px; font-family: system-ui, sans-serif; font-size: var(--fs-md); line-height: 1.5; }
+h1 { font-size: var(--fs-2xl); line-height: 1.2; }
+h2 { font-size: var(--fs-xl); }
+.meta { font-size: var(--fs-sm); }
+@font-face { font-family: "Fixture Sans"; src: local("Helvetica"); }
+@font-face { font-family: "Fixture Serif"; src: local("Georgia"); }
+@font-face { font-family: "Fixture Mono"; src: local("Menlo"); }
+body { font-family: "Fixture Sans", sans-serif; }
+h1 { font-family: "Fixture Serif", serif; }
+code { font-family: "Fixture Mono", monospace; }
+</style>
+</head>
+<body>
+<h1>Fonts</h1>
+<p>Body text, and <code>code</code>.</p>
+</body>
+</html>

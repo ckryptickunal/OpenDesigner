@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Small text warn</title>
+<!-- Checker eval fixture for skills/opendesigner-preflight/scripts/preflight.py html (--medium web). Planted: captions at 11px, under the 12px web floor for text people read (a warning, M8).
+     Expected findings are in evals/checkers/manifest.json. -->
+<style>
+:root { --fs-sm: 14px; --fs-md: 16px; --fs-lg: 20px; --fs-xl: 24px; --fs-2xl: 32px; }
+body { margin: 0; padding: 24px; font-family: system-ui, sans-serif; font-size: var(--fs-md); line-height: 1.5; }
+h1 { font-size: var(--fs-2xl); line-height: 1.2; }
+h2 { font-size: var(--fs-xl); }
+.meta { font-size: var(--fs-sm); }
+.caption { font-size: 11px; }
+</style>
+</head>
+<body>
+<h1>Usage</h1>
+<p>Seats used this month.</p>
+<p class="caption">Updated hourly.</p>
+</body>
+</html>

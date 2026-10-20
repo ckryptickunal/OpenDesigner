@@ -46,6 +46,10 @@ BRAND_KIT = r"^brand/kit/.+\.png$"
 GENERATED = [(r"^\.agents/skills/opendesigner|^\.claude/skills/opendesigner", r"^skills/", "sync_skills.py"),
              (r"^data/|^skills/[^/]+/references/.*\.json$|^skills/opendesigner/references/(stages|cards)/"
               r"|^chatgpt-project/knowledge/", r"^synthesis/", "build_data.py")]
+# Eval fixture pages plant mistakes on purpose (evals/README.md), such as a pipe-to-shell install line the preflight must catch.
+# They are HTML that agents read, never run, so that one rule is a REVIEW there. Prompts, graders and scripts stay BLOCK.
+EVAL_FIXTURE = r"^evals/.+\.html$"
+
 LINE_RULES = [  # (severity, label, regex, file regex it applies to or None for all)
     ("BLOCK", "workflow trigger that runs fork code with secrets", r"pull_request_target|workflow_run", r"^\.github/"),
     ("BLOCK", "workflow write permission or secret use", r"permissions:\s*write-all|:\s*write\b|\$\{\{\s*secrets\.", r"^\.github/"),
@@ -161,6 +165,9 @@ def main():
             add("BLOCK", path, lineno, "invisible or bidirectional control character (can hide code)")
         for sev, label, rx, file_rx in LINE_RULES:
             if (file_rx is None or re.search(file_rx, path)) and re.search(rx, text):
+                if sev == "BLOCK" and label.startswith("pipe from the network") and re.search(EVAL_FIXTURE, path):
+                    add("REVIEW", path, lineno, f"{label} in an eval fixture page (a planted defect the agent must catch? confirm it is never run): {text[1:].strip()[:120]}")
+                    continue
                 add(sev, path, lineno, f"{label}: {text[1:].strip()[:140]}")
         if path == "_coordination/DECISIONS.md" and text.startswith("+- ") and not IST.match(text):
             add("NOTE", path, lineno, "decision line is not in the 'YYYY-MM-DD HH:MM IST' format")

@@ -1,0 +1,3564 @@
+{
+  "color": {
+    "$type": "color",
+    "$description": "Primitive color ramps. Private tier: components use the semantic roles, never these (DC-L01-26).",
+    "$extensions": {
+      "opendesigner": {
+        "method": "OKLCH, contrast-indexed, 12 steps, separate light and dark ramps, sRGB gamut-mapped by lowering chroma",
+        "evidence": [
+          "DC-L01-01",
+          "DC-L01-02",
+          "DC-L01-03",
+          "DC-L01-05",
+          "DC-L01-06",
+          "DC-L01-18",
+          "S-L01-002"
+        ],
+        "stepJobs": {
+          "1": "app background",
+          "2": "subtle background",
+          "3": "component background",
+          "4": "component hover",
+          "5": "component pressed or selected",
+          "6": "subtle border",
+          "7": "interactive border (decorative)",
+          "8": "strong border, focus, 3:1 boundary",
+          "9": "solid fill (peak chroma)",
+          "10": "solid hover, tertiary text",
+          "11": "low-contrast text",
+          "12": "high-contrast text"
+        },
+        "scheme": "tonalSpot",
+        "accentPeakHct": 53.54
+      }
+    },
+    "white": {
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "hex": "#ffffff"
+      },
+      "$description": "Pure white: light raised and overlay surfaces, on-color text."
+    },
+    "black": {
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "hex": "#000000"
+      },
+      "$description": "Pure black: dark-mode shadow base (DC-L04-12)."
+    },
+    "brand": {
+      "seed": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0824,
+            0.502,
+            0.2392
+          ],
+          "hex": "#15803d"
+        },
+        "$description": "The brand color exactly as given: logos, marketing, large color areas and other uses that carry no text. Fills that carry text use color.bg.brand."
+      }
+    },
+    "neutral": {
+      "$description": "Neutral ramp; tint from the Warmth dial (DC-L01-06, S-L01-062).",
+      "$extensions": {
+        "opendesigner": {
+          "textOnSolid": {
+            "light": "light",
+            "dark": "light"
+          }
+        }
+      },
+      "light": {
+        "1": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9931,
+              0.0,
+              0.0
+            ],
+            "hex": "#fdfdfd"
+          },
+          "$description": "app background"
+        },
+        "2": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9671,
+              0.0,
+              0.0
+            ],
+            "hex": "#f4f4f4"
+          },
+          "$description": "subtle background"
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9411,
+              0.0,
+              0.0
+            ],
+            "hex": "#ebebeb"
+          },
+          "$description": "component background"
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.915,
+              0.0,
+              0.0
+            ],
+            "hex": "#e3e3e3"
+          },
+          "$description": "component hover"
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.889,
+              0.0,
+              0.0
+            ],
+            "hex": "#dadada"
+          },
+          "$description": "component pressed or selected"
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.863,
+              0.0,
+              0.0
+            ],
+            "hex": "#d2d2d2"
+          },
+          "$description": "subtle border"
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.837,
+              0.0,
+              0.0
+            ],
+            "hex": "#c9c9c9"
+          },
+          "$description": "interactive border (decorative)"
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6196,
+              0.0,
+              0.0
+            ],
+            "hex": "#868686"
+          },
+          "$description": "strong border, focus, 3:1 boundary"
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5633,
+              0.0,
+              0.0
+            ],
+            "hex": "#757575"
+          },
+          "$description": "solid fill (peak chroma)"
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5043,
+              0.0,
+              0.0
+            ],
+            "hex": "#646464"
+          },
+          "$description": "solid hover, tertiary text"
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.457,
+              0.0,
+              0.0
+            ],
+            "hex": "#575757"
+          },
+          "$description": "low-contrast text"
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2608,
+              0.0,
+              0.0
+            ],
+            "hex": "#242424"
+          },
+          "$description": "high-contrast text"
+        }
+      },
+      "dark": {
+        "1": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.1957,
+              0.0,
+              0.0
+            ],
+            "hex": "#151515"
+          },
+          "$description": "app background"
+        },
+        "2": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2301,
+              0.0,
+              0.0
+            ],
+            "hex": "#1d1d1d"
+          },
+          "$description": "subtle background"
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2645,
+              0.0,
+              0.0
+            ],
+            "hex": "#252525"
+          },
+          "$description": "component background"
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2989,
+              0.0,
+              0.0
+            ],
+            "hex": "#2d2d2d"
+          },
+          "$description": "component hover"
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3333,
+              0.0,
+              0.0
+            ],
+            "hex": "#363636"
+          },
+          "$description": "component pressed or selected"
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3677,
+              0.0,
+              0.0
+            ],
+            "hex": "#3f3f3f"
+          },
+          "$description": "subtle border"
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4021,
+              0.0,
+              0.0
+            ],
+            "hex": "#484848"
+          },
+          "$description": "interactive border (decorative)"
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5999,
+              0.0,
+              0.0
+            ],
+            "hex": "#808080"
+          },
+          "$description": "strong border, focus, 3:1 boundary"
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6078,
+              0.0,
+              0.0
+            ],
+            "hex": "#828282"
+          },
+          "$description": "solid fill (peak chroma)"
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6694,
+              0.0,
+              0.0
+            ],
+            "hex": "#959595"
+          },
+          "$description": "solid hover, tertiary text"
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.7415,
+              0.0,
+              0.0
+            ],
+            "hex": "#ababab"
+          },
+          "$description": "low-contrast text"
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9331,
+              0.0,
+              0.0
+            ],
+            "hex": "#e9e9e9"
+          },
+          "$description": "high-contrast text"
+        }
+      }
+    },
+    "accent": {
+      "$description": "Accent ramp from the brand color's hue; chroma from the Colorfulness dial (S-L01-010).",
+      "$extensions": {
+        "opendesigner": {
+          "textOnSolid": {
+            "light": "light",
+            "dark": "light"
+          }
+        }
+      },
+      "light": {
+        "1": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9924,
+              0.0055,
+              150.07
+            ],
+            "hex": "#fafefb"
+          },
+          "$description": "app background"
+        },
+        "2": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9651,
+              0.011,
+              150.07
+            ],
+            "hex": "#eff6f0"
+          },
+          "$description": "subtle background"
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9377,
+              0.0234,
+              150.07
+            ],
+            "hex": "#e0efe2"
+          },
+          "$description": "component background"
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9103,
+              0.0372,
+              150.07
+            ],
+            "hex": "#d1e9d5"
+          },
+          "$description": "component hover"
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8829,
+              0.051,
+              150.07
+            ],
+            "hex": "#c2e2c7"
+          },
+          "$description": "component pressed or selected"
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8555,
+              0.0647,
+              150.07
+            ],
+            "hex": "#b2dcba"
+          },
+          "$description": "subtle border"
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8281,
+              0.0785,
+              150.07
+            ],
+            "hex": "#a3d6ac"
+          },
+          "$description": "interactive border (decorative)"
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6081,
+              0.1033,
+              150.07
+            ],
+            "hex": "#519461"
+          },
+          "$description": "strong border, focus, 3:1 boundary"
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5273,
+              0.1371,
+              150.07
+            ],
+            "hex": "#15803d"
+          },
+          "$description": "solid fill (peak chroma)",
+          "$extensions": {
+            "opendesigner": {
+              "pinned": "brand color kept exactly (flags.brandExact, S-L06-083)"
+            }
+          }
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4882,
+              0.1309,
+              150.07
+            ],
+            "hex": "#097334"
+          },
+          "$description": "solid hover, tertiary text"
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4452,
+              0.1171,
+              150.07
+            ],
+            "hex": "#0c652e"
+          },
+          "$description": "low-contrast text"
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3171,
+              0.062,
+              150.07
+            ],
+            "hex": "#173b21"
+          },
+          "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4601,
+              0.1265,
+              150.07
+            ],
+            "hex": "#006b2e"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
+        }
+      },
+      "dark": {
+        "1": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2085,
+              0.011,
+              150.07
+            ],
+            "hex": "#141915"
+          },
+          "$description": "app background"
+        },
+        "2": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.239,
+              0.0165,
+              150.07
+            ],
+            "hex": "#1a211b"
+          },
+          "$description": "subtle background"
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2696,
+              0.0317,
+              150.07
+            ],
+            "hex": "#1b2b1e"
+          },
+          "$description": "component background"
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3002,
+              0.0455,
+              150.07
+            ],
+            "hex": "#1c3422"
+          },
+          "$description": "component hover"
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3308,
+              0.0592,
+              150.07
+            ],
+            "hex": "#1d3e25"
+          },
+          "$description": "component pressed or selected"
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3614,
+              0.073,
+              150.07
+            ],
+            "hex": "#1d4828"
+          },
+          "$description": "subtle border"
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.392,
+              0.0923,
+              150.07
+            ],
+            "hex": "#165329"
+          },
+          "$description": "interactive border (decorative)"
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.591,
+              0.1198,
+              150.07
+            ],
+            "hex": "#409156"
+          },
+          "$description": "strong border, focus, 3:1 boundary"
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5967,
+              0.1377,
+              150.07
+            ],
+            "hex": "#329551"
+          },
+          "$description": "solid fill (peak chroma)"
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6383,
+              0.1377,
+              150.07
+            ],
+            "hex": "#41a25d"
+          },
+          "$description": "solid hover, tertiary text"
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.7295,
+              0.1281,
+              150.07
+            ],
+            "hex": "#67be7c"
+          },
+          "$description": "low-contrast text"
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8693,
+              0.0455,
+              150.07
+            ],
+            "hex": "#c0ddc5"
+          },
+          "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6701,
+              0.1377,
+              150.07
+            ],
+            "hex": "#4cac66"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
+        }
+      }
+    },
+    "success": {
+      "$description": "Status: success. Always paired with an icon or label (DC-L01-15).",
+      "$extensions": {
+        "opendesigner": {
+          "textOnSolid": {
+            "light": "light",
+            "dark": "light"
+          }
+        }
+      },
+      "light": {
+        "1": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9922,
+              0.0072,
+              150.0
+            ],
+            "hex": "#f9fefa"
+          },
+          "$description": "app background"
+        },
+        "2": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9644,
+              0.0145,
+              150.0
+            ],
+            "hex": "#edf6ee"
+          },
+          "$description": "subtle background"
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9366,
+              0.0308,
+              150.0
+            ],
+            "hex": "#dcf0df"
+          },
+          "$description": "component background"
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9088,
+              0.0489,
+              150.0
+            ],
+            "hex": "#cbebd0"
+          },
+          "$description": "component hover"
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.881,
+              0.067,
+              150.0
+            ],
+            "hex": "#b9e5c1"
+          },
+          "$description": "component pressed or selected"
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8532,
+              0.0851,
+              150.0
+            ],
+            "hex": "#a7dfb2"
+          },
+          "$description": "subtle border"
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8254,
+              0.1032,
+              150.0
+            ],
+            "hex": "#95d9a2"
+          },
+          "$description": "interactive border (decorative)"
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6041,
+              0.1358,
+              150.0
+            ],
+            "hex": "#379754"
+          },
+          "$description": "strong border, focus, 3:1 boundary"
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5471,
+              0.1507,
+              150.0
+            ],
+            "hex": "#00883d"
+          },
+          "$description": "solid fill (peak chroma)",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.1563,
+                  0.5377,
+                  0.2292
+                ],
+                "oklch": [
+                  0.5471,
+                  0.181,
+                  150.0
+                ]
+              }
+            }
+          }
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5087,
+              0.1401,
+              150.0
+            ],
+            "hex": "#007b36"
+          },
+          "$description": "solid hover, tertiary text",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.1266,
+                  0.4877,
+                  0.1991
+                ],
+                "oklch": [
+                  0.5087,
+                  0.172,
+                  150.0
+                ]
+              }
+            }
+          }
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4436,
+              0.1222,
+              150.0
+            ],
+            "hex": "#00652c"
+          },
+          "$description": "low-contrast text"
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3151,
+              0.0815,
+              150.0
+            ],
+            "hex": "#063d1a"
+          },
+          "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4808,
+              0.1324,
+              150.0
+            ],
+            "hex": "#007132"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
+        }
+      },
+      "dark": {
+        "1": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2084,
+              0.0118,
+              150.0
+            ],
+            "hex": "#141a15"
+          },
+          "$description": "app background"
+        },
+        "2": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2389,
+              0.0176,
+              150.0
+            ],
+            "hex": "#19211b"
+          },
+          "$description": "subtle background"
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2694,
+              0.0338,
+              150.0
+            ],
+            "hex": "#1a2b1d"
+          },
+          "$description": "component background"
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2999,
+              0.0485,
+              150.0
+            ],
+            "hex": "#1b3521"
+          },
+          "$description": "component hover"
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3304,
+              0.0632,
+              150.0
+            ],
+            "hex": "#1a3e23"
+          },
+          "$description": "component pressed or selected"
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3609,
+              0.0779,
+              150.0
+            ],
+            "hex": "#194826"
+          },
+          "$description": "subtle border"
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3914,
+              0.0985,
+              150.0
+            ],
+            "hex": "#0f5327"
+          },
+          "$description": "interactive border (decorative)"
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5886,
+              0.128,
+              150.0
+            ],
+            "hex": "#399252"
+          },
+          "$description": "strong border, focus, 3:1 boundary"
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.596,
+              0.1471,
+              150.0
+            ],
+            "hex": "#28964d"
+          },
+          "$description": "solid fill (peak chroma)"
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6376,
+              0.1471,
+              150.0
+            ],
+            "hex": "#38a359"
+          },
+          "$description": "solid hover, tertiary text"
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.7267,
+              0.1368,
+              150.0
+            ],
+            "hex": "#60be78"
+          },
+          "$description": "low-contrast text"
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8689,
+              0.0485,
+              150.0
+            ],
+            "hex": "#beddc3"
+          },
+          "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6695,
+              0.1471,
+              150.0
+            ],
+            "hex": "#44ae62"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
+        }
+      }
+    },
+    "warning": {
+      "$description": "Status: warning. The solid carries dark text (on-color-auto, S-L06-094).",
+      "$extensions": {
+        "opendesigner": {
+          "textOnSolid": {
+            "light": "dark",
+            "dark": "dark"
+          }
+        }
+      },
+      "light": {
+        "1": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9931,
+              0.0057,
+              80.0
+            ],
+            "hex": "#fffcf9"
+          },
+          "$description": "app background"
+        },
+        "2": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9674,
+              0.0115,
+              80.0
+            ],
+            "hex": "#f8f4ec"
+          },
+          "$description": "subtle background"
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9416,
+              0.0244,
+              80.0
+            ],
+            "hex": "#f4eada"
+          },
+          "$description": "component background"
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9159,
+              0.0388,
+              80.0
+            ],
+            "hex": "#f1e1c7"
+          },
+          "$description": "component hover"
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8902,
+              0.0531,
+              80.0
+            ],
+            "hex": "#eed8b4"
+          },
+          "$description": "component pressed or selected"
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8644,
+              0.0675,
+              80.0
+            ],
+            "hex": "#eacea1"
+          },
+          "$description": "subtle border"
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8387,
+              0.0818,
+              80.0
+            ],
+            "hex": "#e6c58d"
+          },
+          "$description": "interactive border (decorative)"
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6226,
+              0.1077,
+              80.0
+            ],
+            "hex": "#a97f30"
+          },
+          "$description": "strong border, focus, 3:1 boundary"
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8,
+              0.1436,
+              80.0
+            ],
+            "hex": "#eeb23f"
+          },
+          "$description": "solid fill (peak chroma)"
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.7513,
+              0.1364,
+              80.0
+            ],
+            "hex": "#dba437"
+          },
+          "$description": "solid hover, tertiary text"
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5072,
+              0.105,
+              80.0
+            ],
+            "hex": "#845d00"
+          },
+          "$description": "low-contrast text",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.5103,
+                  0.3655,
+                  0.0
+                ],
+                "oklch": [
+                  0.5072,
+                  0.1209,
+                  80.0
+                ]
+              }
+            }
+          }
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3259,
+              0.0646,
+              80.0
+            ],
+            "hex": "#453003"
+          },
+          "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.7178,
+              0.1364,
+              80.0
+            ],
+            "hex": "#d09929"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
+        }
+      },
+      "dark": {
+        "1": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2099,
+              0.0093,
+              80.0
+            ],
+            "hex": "#1b1814"
+          },
+          "$description": "app background"
+        },
+        "2": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2423,
+              0.014,
+              80.0
+            ],
+            "hex": "#231f18"
+          },
+          "$description": "subtle background"
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2747,
+              0.0268,
+              80.0
+            ],
+            "hex": "#2f2618"
+          },
+          "$description": "component background"
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3071,
+              0.0385,
+              80.0
+            ],
+            "hex": "#3a2d18"
+          },
+          "$description": "component hover"
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3396,
+              0.0502,
+              80.0
+            ],
+            "hex": "#453517"
+          },
+          "$description": "component pressed or selected"
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.372,
+              0.0618,
+              80.0
+            ],
+            "hex": "#513c15"
+          },
+          "$description": "subtle border"
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4044,
+              0.0782,
+              80.0
+            ],
+            "hex": "#5f430a"
+          },
+          "$description": "interactive border (decorative)"
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6078,
+              0.1015,
+              80.0
+            ],
+            "hex": "#a27b33"
+          },
+          "$description": "strong border, focus, 3:1 boundary"
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8,
+              0.1167,
+              80.0
+            ],
+            "hex": "#e5b561"
+          },
+          "$description": "solid fill (peak chroma)"
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8501,
+              0.1167,
+              80.0
+            ],
+            "hex": "#f6c571"
+          },
+          "$description": "solid hover, tertiary text"
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8788,
+              0.1085,
+              80.0
+            ],
+            "hex": "#fdcf82"
+          },
+          "$description": "low-contrast text"
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8973,
+              0.0385,
+              80.0
+            ],
+            "hex": "#ebdbc1"
+          },
+          "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8878,
+              0.106,
+              80.0
+            ],
+            "hex": "#ffd387"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
+        }
+      }
+    },
+    "danger": {
+      "$description": "Status: danger. Always paired with an icon or label (DC-L01-15).",
+      "$extensions": {
+        "opendesigner": {
+          "textOnSolid": {
+            "light": "light",
+            "dark": "light"
+          }
+        }
+      },
+      "light": {
+        "1": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9934,
+              0.0032,
+              27.0
+            ],
+            "hex": "#fffcfc"
+          },
+          "$description": "app background"
+        },
+        "2": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9689,
+              0.0138,
+              27.0
+            ],
+            "hex": "#fef1f0"
+          },
+          "$description": "subtle background"
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9444,
+              0.0278,
+              27.0
+            ],
+            "hex": "#ffe6e3"
+          },
+          "$description": "component background"
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9199,
+              0.041,
+              27.0
+            ],
+            "hex": "#ffdbd6"
+          },
+          "$description": "component hover"
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8954,
+              0.0547,
+              27.0
+            ],
+            "hex": "#ffcfc9"
+          },
+          "$description": "component pressed or selected"
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8708,
+              0.069,
+              27.0
+            ],
+            "hex": "#ffc4bc"
+          },
+          "$description": "subtle border",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.9851,
+                  0.7668,
+                  0.7307
+                ],
+                "oklch": [
+                  0.8708,
+                  0.0808,
+                  27.0
+                ]
+              }
+            }
+          }
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8463,
+              0.084,
+              27.0
+            ],
+            "hex": "#ffb8af"
+          },
+          "$description": "interactive border (decorative)",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.9823,
+                  0.7201,
+                  0.6781
+                ],
+                "oklch": [
+                  0.8463,
+                  0.098,
+                  27.0
+                ]
+              }
+            }
+          }
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6344,
+              0.129,
+              27.0
+            ],
+            "hex": "#cd685f"
+          },
+          "$description": "strong border, focus, 3:1 boundary"
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5836,
+              0.172,
+              27.0
+            ],
+            "hex": "#cd473f"
+          },
+          "$description": "solid fill (peak chroma)"
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5421,
+              0.1634,
+              27.0
+            ],
+            "hex": "#bc3d37"
+          },
+          "$description": "solid hover, tertiary text"
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4748,
+              0.1462,
+              27.0
+            ],
+            "hex": "#9e302b"
+          },
+          "$description": "low-contrast text"
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3329,
+              0.0774,
+              27.0
+            ],
+            "hex": "#57241f"
+          },
+          "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5135,
+              0.1634,
+              27.0
+            ],
+            "hex": "#b2342e"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
+        }
+      },
+      "dark": {
+        "1": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2109,
+              0.0112,
+              27.0
+            ],
+            "hex": "#1d1716"
+          },
+          "$description": "app background"
+        },
+        "2": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2446,
+              0.0168,
+              27.0
+            ],
+            "hex": "#281d1c"
+          },
+          "$description": "subtle background"
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2783,
+              0.0321,
+              27.0
+            ],
+            "hex": "#372220"
+          },
+          "$description": "component background"
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3119,
+              0.0461,
+              27.0
+            ],
+            "hex": "#452724"
+          },
+          "$description": "component hover"
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3456,
+              0.0601,
+              27.0
+            ],
+            "hex": "#542c28"
+          },
+          "$description": "component pressed or selected"
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3792,
+              0.0741,
+              27.0
+            ],
+            "hex": "#64312c"
+          },
+          "$description": "subtle border"
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4129,
+              0.0936,
+              27.0
+            ],
+            "hex": "#76342e"
+          },
+          "$description": "interactive border (decorative)"
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.618,
+              0.1216,
+              27.0
+            ],
+            "hex": "#c4665d"
+          },
+          "$description": "strong border, focus, 3:1 boundary"
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.628,
+              0.1397,
+              27.0
+            ],
+            "hex": "#cf6359"
+          },
+          "$description": "solid fill (peak chroma)"
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6707,
+              0.1397,
+              27.0
+            ],
+            "hex": "#de7065"
+          },
+          "$description": "solid hover, tertiary text"
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.7595,
+              0.13,
+              27.0
+            ],
+            "hex": "#f98f84"
+          },
+          "$description": "low-contrast text"
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8795,
+              0.0461,
+              27.0
+            ],
+            "hex": "#f5ccc7"
+          },
+          "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.7026,
+              0.1397,
+              27.0
+            ],
+            "hex": "#e97a6f"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
+        }
+      }
+    },
+    "info": {
+      "$description": "Status: info. Always paired with an icon or label (DC-L01-15).",
+      "$extensions": {
+        "opendesigner": {
+          "textOnSolid": {
+            "light": "light",
+            "dark": "light"
+          }
+        }
+      },
+      "light": {
+        "1": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9929,
+              0.0037,
+              240.0
+            ],
+            "hex": "#fbfdff"
+          },
+          "$description": "app background"
+        },
+        "2": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9663,
+              0.0176,
+              240.0
+            ],
+            "hex": "#eaf6ff"
+          },
+          "$description": "subtle background"
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.9396,
+              0.0323,
+              240.0
+            ],
+            "hex": "#d9efff"
+          },
+          "$description": "component background"
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.913,
+              0.047,
+              240.0
+            ],
+            "hex": "#c7e7ff"
+          },
+          "$description": "component hover"
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8864,
+              0.062,
+              240.0
+            ],
+            "hex": "#b5e0ff"
+          },
+          "$description": "component pressed or selected"
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8597,
+              0.0773,
+              240.0
+            ],
+            "hex": "#a3d8ff"
+          },
+          "$description": "subtle border"
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8331,
+              0.0929,
+              240.0
+            ],
+            "hex": "#8fd1ff"
+          },
+          "$description": "interactive border (decorative)"
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6154,
+              0.141,
+              240.0
+            ],
+            "hex": "#008ed0"
+          },
+          "$description": "strong border, focus, 3:1 boundary",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.154,
+                  0.5466,
+                  0.8401
+                ],
+                "oklch": [
+                  0.6154,
+                  0.1651,
+                  240.0
+                ]
+              }
+            }
+          }
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5595,
+              0.1282,
+              240.0
+            ],
+            "hex": "#007cb7"
+          },
+          "$description": "solid fill (peak chroma)",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.0,
+                  0.4782,
+                  0.7718
+                ],
+                "oklch": [
+                  0.5595,
+                  0.1674,
+                  240.0
+                ]
+              }
+            }
+          }
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5191,
+              0.1189,
+              240.0
+            ],
+            "hex": "#0070a6"
+          },
+          "$description": "solid hover, tertiary text",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.0,
+                  0.4305,
+                  0.6979
+                ],
+                "oklch": [
+                  0.5191,
+                  0.1553,
+                  240.0
+                ]
+              }
+            }
+          }
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4539,
+              0.104,
+              240.0
+            ],
+            "hex": "#005c8a"
+          },
+          "$description": "low-contrast text",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.0,
+                  0.3555,
+                  0.5816
+                ],
+                "oklch": [
+                  0.4539,
+                  0.1358,
+                  240.0
+                ]
+              }
+            }
+          }
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3218,
+              0.0737,
+              240.0
+            ],
+            "hex": "#003755"
+          },
+          "$description": "high-contrast text",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.0,
+                  0.212,
+                  0.3591
+                ],
+                "oklch": [
+                  0.3218,
+                  0.0963,
+                  240.0
+                ]
+              }
+            }
+          }
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.4906,
+              0.1124,
+              240.0
+            ],
+            "hex": "#006799"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
+        }
+      },
+      "dark": {
+        "1": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2091,
+              0.0143,
+              240.0
+            ],
+            "hex": "#12191e"
+          },
+          "$description": "app background"
+        },
+        "2": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2408,
+              0.0215,
+              240.0
+            ],
+            "hex": "#162129"
+          },
+          "$description": "subtle background"
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.2725,
+              0.0411,
+              240.0
+            ],
+            "hex": "#122a39"
+          },
+          "$description": "component background"
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3042,
+              0.059,
+              240.0
+            ],
+            "hex": "#0c3249"
+          },
+          "$description": "component hover"
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3359,
+              0.0769,
+              240.0
+            ],
+            "hex": "#003b5a"
+          },
+          "$description": "component pressed or selected"
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3676,
+              0.0842,
+              240.0
+            ],
+            "hex": "#004467"
+          },
+          "$description": "subtle border",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.0692,
+                  0.2611,
+                  0.4087
+                ],
+                "oklch": [
+                  0.3676,
+                  0.0948,
+                  240.0
+                ]
+              }
+            }
+          }
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.3993,
+              0.0915,
+              240.0
+            ],
+            "hex": "#004d73"
+          },
+          "$description": "interactive border (decorative)",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.0,
+                  0.2948,
+                  0.4874
+                ],
+                "oklch": [
+                  0.3993,
+                  0.1195,
+                  240.0
+                ]
+              }
+            }
+          }
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6008,
+              0.1376,
+              240.0
+            ],
+            "hex": "#0089c9"
+          },
+          "$description": "strong border, focus, 3:1 boundary",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.1718,
+                  0.529,
+                  0.8031
+                ],
+                "oklch": [
+                  0.6008,
+                  0.1556,
+                  240.0
+                ]
+              }
+            }
+          }
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6085,
+              0.1394,
+              240.0
+            ],
+            "hex": "#008bcd"
+          },
+          "$description": "solid fill (peak chroma)",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.0433,
+                  0.5374,
+                  0.8571
+                ],
+                "oklch": [
+                  0.6085,
+                  0.1788,
+                  240.0
+                ]
+              }
+            }
+          }
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6499,
+              0.1489,
+              240.0
+            ],
+            "hex": "#0099e0"
+          },
+          "$description": "solid hover, tertiary text",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.146,
+                  0.5889,
+                  0.912
+                ],
+                "oklch": [
+                  0.6499,
+                  0.1788,
+                  240.0
+                ]
+              }
+            }
+          }
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.7406,
+              0.1496,
+              240.0
+            ],
+            "hex": "#3ab6ff"
+          },
+          "$description": "low-contrast text",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.3427,
+                  0.7032,
+                  1.0
+                ],
+                "oklch": [
+                  0.7406,
+                  0.1619,
+                  240.0
+                ]
+              }
+            }
+          }
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8718,
+              0.059,
+              240.0
+            ],
+            "hex": "#b2dbf8"
+          },
+          "$description": "high-contrast text"
+        },
+        "solid-pressed": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6816,
+              0.1561,
+              240.0
+            ],
+            "hex": "#00a3ee"
+          },
+          "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
+        }
+      }
+    },
+    "neutral-alpha": {
+      "$description": "Alpha twins of the neutral ramp over the page background (Radix and Atlassian pattern, DC-L01-07).",
+      "light": {
+        "2": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0196,
+              0.0196,
+              0.0196
+            ],
+            "hex": "#050505",
+            "alpha": 0.044
+          },
+          "$description": "Composites to neutral light 2 over white."
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0078,
+              0.0078,
+              0.0078
+            ],
+            "hex": "#020202",
+            "alpha": 0.079
+          },
+          "$description": "Composites to neutral light 3 over white."
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "hex": "#000000",
+            "alpha": 0.11
+          },
+          "$description": "Composites to neutral light 4 over white."
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0078,
+              0.0078,
+              0.0078
+            ],
+            "hex": "#020202",
+            "alpha": 0.146
+          },
+          "$description": "Composites to neutral light 5 over white."
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0039,
+              0.0039,
+              0.0039
+            ],
+            "hex": "#010101",
+            "alpha": 0.177
+          },
+          "$description": "Composites to neutral light 6 over white."
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "hex": "#000000",
+            "alpha": 0.212
+          },
+          "$description": "Composites to neutral light 7 over white."
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "hex": "#000000",
+            "alpha": 0.475
+          },
+          "$description": "Composites to neutral light 8 over white."
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "hex": "#000000",
+            "alpha": 0.542
+          },
+          "$description": "Composites to neutral light 9 over white."
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "hex": "#000000",
+            "alpha": 0.608
+          },
+          "$description": "Composites to neutral light 10 over white."
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "hex": "#000000",
+            "alpha": 0.659
+          },
+          "$description": "Composites to neutral light 11 over white."
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "hex": "#000000",
+            "alpha": 0.859
+          },
+          "$description": "Composites to neutral light 12 over white."
+        }
+      },
+      "dark": {
+        "2": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.9804,
+              0.9804,
+              0.9804
+            ],
+            "hex": "#fafafa",
+            "alpha": 0.035
+          },
+          "$description": "Composites to neutral dark 2 over neutral dark 1."
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.9922,
+              0.9922,
+              0.9922
+            ],
+            "hex": "#fdfdfd",
+            "alpha": 0.069
+          },
+          "$description": "Composites to neutral dark 3 over neutral dark 1."
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.9961,
+              0.9961,
+              0.9961
+            ],
+            "hex": "#fefefe",
+            "alpha": 0.103
+          },
+          "$description": "Composites to neutral dark 4 over neutral dark 1."
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.9922,
+              0.9922,
+              0.9922
+            ],
+            "hex": "#fdfdfd",
+            "alpha": 0.142
+          },
+          "$description": "Composites to neutral dark 5 over neutral dark 1."
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.9961,
+              0.9961,
+              0.9961
+            ],
+            "hex": "#fefefe",
+            "alpha": 0.18
+          },
+          "$description": "Composites to neutral dark 6 over neutral dark 1."
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "hex": "#ffffff",
+            "alpha": 0.218
+          },
+          "$description": "Composites to neutral dark 7 over neutral dark 1."
+        },
+        "8": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "hex": "#ffffff",
+            "alpha": 0.458
+          },
+          "$description": "Composites to neutral dark 8 over neutral dark 1."
+        },
+        "9": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "hex": "#ffffff",
+            "alpha": 0.466
+          },
+          "$description": "Composites to neutral dark 9 over neutral dark 1."
+        },
+        "10": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "hex": "#ffffff",
+            "alpha": 0.548
+          },
+          "$description": "Composites to neutral dark 10 over neutral dark 1."
+        },
+        "11": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "hex": "#ffffff",
+            "alpha": 0.642
+          },
+          "$description": "Composites to neutral dark 11 over neutral dark 1."
+        },
+        "12": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "hex": "#ffffff",
+            "alpha": 0.906
+          },
+          "$description": "Composites to neutral dark 12 over neutral dark 1."
+        }
+      }
+    }
+  },
+  "opacity": {
+    "$type": "number",
+    "$description": "State and disabled opacities for colors unknown at design time (Material state layers, DC-L01-17).",
+    "$extensions": {
+      "opendesigner": {
+        "evidence": [
+          "DC-L01-17",
+          "S-L01-005",
+          "S-L01-064"
+        ]
+      }
+    },
+    "state": {
+      "hover": {
+        "$value": 0.08
+      },
+      "focus": {
+        "$value": 0.1
+      },
+      "pressed": {
+        "$value": 0.1
+      },
+      "drag": {
+        "$value": 0.16
+      }
+    },
+    "disabled": {
+      "container": {
+        "$value": 0.12
+      },
+      "content": {
+        "$value": 0.38
+      }
+    }
+  },
+  "font": {
+    "size": {
+      "$type": "dimension",
+      "$description": "Type scale: round(14 x 1.2^n), n from -2 to 5; sizes under 12px dropped; adjacent sizes under 10% apart merged; only the steps a named text style uses are kept (DC-L02-09, DC-L02-10).",
+      "$extensions": {
+        "opendesigner": {
+          "base": 14,
+          "ratio": 1.2,
+          "displayReach": 2.5,
+          "formulaSizes": [
+            10,
+            12,
+            14,
+            17,
+            20,
+            24,
+            29,
+            35
+          ],
+          "merged": [],
+          "evidence": [
+            "DC-L02-09",
+            "DC-L02-10",
+            "S-L02-021",
+            "S-L09-407"
+          ]
+        }
+      },
+      "12": {
+        "$value": {
+          "value": 12,
+          "unit": "px"
+        }
+      },
+      "14": {
+        "$value": {
+          "value": 14,
+          "unit": "px"
+        }
+      },
+      "17": {
+        "$value": {
+          "value": 17,
+          "unit": "px"
+        }
+      },
+      "20": {
+        "$value": {
+          "value": 20,
+          "unit": "px"
+        }
+      },
+      "24": {
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        }
+      },
+      "29": {
+        "$value": {
+          "value": 29,
+          "unit": "px"
+        }
+      },
+      "35": {
+        "$value": {
+          "value": 35,
+          "unit": "px"
+        }
+      },
+      "input": {
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        },
+        "$type": "dimension",
+        "$description": "Added by standard STD-mobile-touch-11.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-mobile-touch-11"
+          }
+        }
+      }
+    },
+    "line-height": {
+      "$type": "dimension",
+      "$description": "Line heights snapped to a 4px grid: 1.5 up to 17px, 1.4 to 26px, 1.25 to 44px, 1.12 above (DC-L02-13).",
+      "16": {
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        }
+      },
+      "20": {
+        "$value": {
+          "value": 20,
+          "unit": "px"
+        }
+      },
+      "24": {
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        }
+      },
+      "28": {
+        "$value": {
+          "value": 28,
+          "unit": "px"
+        }
+      },
+      "32": {
+        "$value": {
+          "value": 32,
+          "unit": "px"
+        }
+      },
+      "36": {
+        "$value": {
+          "value": 36,
+          "unit": "px"
+        }
+      },
+      "44": {
+        "$value": {
+          "value": 44,
+          "unit": "px"
+        }
+      }
+    }
+  },
+  "space": {
+    "$type": "dimension",
+    "$description": "Spacing ladder: 4 x [0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24], non-integers dropped (LEVERS B8; x24 added by spec 6.2). Names are pixel values.",
+    "$extensions": {
+      "opendesigner": {
+        "unit": 4,
+        "evidence": [
+          "DC-L03-01",
+          "DC-L03-02",
+          "S-L09-508"
+        ]
+      }
+    },
+    "0": {
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      }
+    },
+    "2": {
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      }
+    },
+    "4": {
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      }
+    },
+    "6": {
+      "$value": {
+        "value": 6,
+        "unit": "px"
+      }
+    },
+    "8": {
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      }
+    },
+    "12": {
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      }
+    },
+    "16": {
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      }
+    },
+    "20": {
+      "$value": {
+        "value": 20,
+        "unit": "px"
+      }
+    },
+    "24": {
+      "$value": {
+        "value": 24,
+        "unit": "px"
+      }
+    },
+    "32": {
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      }
+    },
+    "40": {
+      "$value": {
+        "value": 40,
+        "unit": "px"
+      }
+    },
+    "48": {
+      "$value": {
+        "value": 48,
+        "unit": "px"
+      }
+    },
+    "64": {
+      "$value": {
+        "value": 64,
+        "unit": "px"
+      }
+    },
+    "80": {
+      "$value": {
+        "value": 80,
+        "unit": "px"
+      }
+    },
+    "96": {
+      "$value": {
+        "value": 96,
+        "unit": "px"
+      }
+    }
+  },
+  "radius": {
+    "$type": "dimension",
+    "$description": "Radius scale snapped to 0, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32 plus full (LEVERS B9, [inferred] ratios checked against Atlassian).",
+    "$extensions": {
+      "opendesigner": {
+        "evidence": [
+          "DC-L04-02",
+          "DC-L04-03",
+          "DC-L04-05",
+          "S-L04-016",
+          "S-L04-007"
+        ]
+      }
+    },
+    "0": {
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      }
+    },
+    "2": {
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      }
+    },
+    "4": {
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      }
+    },
+    "6": {
+      "$value": {
+        "value": 6,
+        "unit": "px"
+      }
+    },
+    "8": {
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      }
+    },
+    "12": {
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      }
+    },
+    "16": {
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      }
+    },
+    "20": {
+      "$value": {
+        "value": 20,
+        "unit": "px"
+      }
+    },
+    "24": {
+      "$value": {
+        "value": 24,
+        "unit": "px"
+      }
+    },
+    "28": {
+      "$value": {
+        "value": 28,
+        "unit": "px"
+      }
+    },
+    "32": {
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      }
+    },
+    "full": {
+      "$value": {
+        "value": 9999,
+        "unit": "px"
+      },
+      "$description": "Pills and avatars."
+    }
+  },
+  "border": {
+    "$type": "dimension",
+    "width": {
+      "$description": "Border widths 1 / 2 / 4. Width changes on state use an inset shadow so layout does not jump (DC-L04-07).",
+      "1": {
+        "$value": {
+          "value": 1,
+          "unit": "px"
+        }
+      },
+      "2": {
+        "$value": {
+          "value": 2,
+          "unit": "px"
+        }
+      },
+      "4": {
+        "$value": {
+          "value": 4,
+          "unit": "px"
+        }
+      }
+    }
+  },
+  "motion": {
+    "duration": {
+      "$type": "duration",
+      "$description": "Duration ladder (DC-L04-20); Energy multiplies medium and longer by 0.94 (0.8-1.2, A4). Exits about 20% shorter (STD-easing-duration-11).",
+      "instant": {
+        "$value": {
+          "value": 0,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-when-to-animate-05"
+          }
+        }
+      },
+      "micro": {
+        "$value": {
+          "value": 100,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-easing-duration-07"
+          }
+        }
+      },
+      "short": {
+        "$value": {
+          "value": 150,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-easing-duration-07"
+          }
+        }
+      },
+      "medium": {
+        "$value": {
+          "value": 200,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-easing-duration-07"
+          }
+        }
+      },
+      "long": {
+        "$value": {
+          "value": 250,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-easing-duration-07"
+          }
+        }
+      },
+      "extra": {
+        "$value": {
+          "value": 660,
+          "unit": "ms"
+        },
+        "$description": "Illustrative and marketing motion only: UI animations stay under 300ms (house standard STD-easing-duration-06)."
+      },
+      "medium-exit": {
+        "$value": {
+          "value": 160,
+          "unit": "ms"
+        },
+        "$description": "About 0.8 x medium, the entrance in force (STD-easing-duration-11)."
+      },
+      "long-exit": {
+        "$value": {
+          "value": 200,
+          "unit": "ms"
+        },
+        "$description": "About 0.8 x long, the entrance in force (STD-easing-duration-11)."
+      },
+      "drawer": {
+        "$value": {
+          "value": 500,
+          "unit": "ms"
+        },
+        "$type": "duration",
+        "$description": "Added by standard STD-enter-exit-origin-41.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-enter-exit-origin-41"
+          }
+        }
+      },
+      "modal": {
+        "$value": {
+          "value": 250,
+          "unit": "ms"
+        },
+        "$type": "duration",
+        "$description": "Added by standard STD-enter-exit-origin-11.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-enter-exit-origin-11"
+          }
+        }
+      },
+      "reduced-fade": {
+        "$value": {
+          "value": 200,
+          "unit": "ms"
+        },
+        "$type": "duration",
+        "$description": "Added by standard STD-accessibility-motion-02.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-accessibility-motion-02"
+          }
+        }
+      },
+      "reveal": {
+        "$value": {
+          "value": 600,
+          "unit": "ms"
+        },
+        "$type": "duration",
+        "$description": "Added by standard STD-enter-exit-origin-26.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-enter-exit-origin-26"
+          }
+        }
+      },
+      "stagger": {
+        "$value": {
+          "value": 50,
+          "unit": "ms"
+        },
+        "$type": "duration",
+        "$description": "Added by standard STD-enter-exit-origin-13.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-enter-exit-origin-13"
+          }
+        }
+      },
+      "toast": {
+        "$value": {
+          "value": 400,
+          "unit": "ms"
+        },
+        "$type": "duration",
+        "$description": "Added by standard STD-components-toasts-drawers-07.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-components-toasts-drawers-07"
+          }
+        }
+      },
+      "tooltip": {
+        "$value": {
+          "value": 125,
+          "unit": "ms"
+        },
+        "$type": "duration",
+        "$description": "Added by standard STD-enter-exit-origin-09.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-enter-exit-origin-09"
+          }
+        }
+      }
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "$description": "Standard, enter (decelerate) and exit curves; linear only for spinners and progress (DC-L04-21).",
+      "standard": {
+        "$value": [
+          0.77,
+          0,
+          0.175,
+          1
+        ],
+        "$description": "Moving and morphing on screen.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-easing-duration-02"
+          }
+        }
+      },
+      "enter": {
+        "$value": [
+          0.23,
+          1,
+          0.32,
+          1
+        ],
+        "$description": "Entering: decelerate.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-easing-duration-02"
+          }
+        }
+      },
+      "exit": {
+        "$value": [
+          0.23,
+          1,
+          0.32,
+          1
+        ],
+        "$description": "Leaving the screen.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-easing-duration-02"
+          }
+        }
+      },
+      "linear": {
+        "$value": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "$description": "Spinners and progress only.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-easing-duration-01"
+          }
+        }
+      },
+      "drawer": {
+        "$value": [
+          0.32,
+          0.72,
+          0,
+          1
+        ],
+        "$type": "cubicBezier",
+        "$description": "Added by standard STD-enter-exit-origin-41.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-enter-exit-origin-41"
+          }
+        }
+      },
+      "hover": {
+        "$value": [
+          0.25,
+          0.1,
+          0.25,
+          1
+        ],
+        "$type": "cubicBezier",
+        "$description": "Added by standard STD-easing-duration-01.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-easing-duration-01"
+          }
+        }
+      },
+      "toast": {
+        "$value": [
+          0.25,
+          0.1,
+          0.25,
+          1
+        ],
+        "$type": "cubicBezier",
+        "$description": "Added by standard STD-components-toasts-drawers-07.",
+        "$extensions": {
+          "opendesigner": {
+            "source": "standard",
+            "standard": "STD-components-toasts-drawers-07"
+          }
+        }
+      }
+    },
+    "spring": {
+      "$type": "transition",
+      "$description": "Springs. DTCG 2025.10 has no spring type (S-L07-002, issue #429): each is a transition with a cubic-bezier fallback; dampingRatio and stiffness live in $extensions with Apple duration/bounce and a CSS linear() sample (DC-L04-22, L04 token-encoding default). Effects springs stay critically damped (S-L04-004).",
+      "spatial": {
+        "fast": {
+          "$value": {
+            "duration": {
+              "value": 410,
+              "unit": "ms"
+            },
+            "delay": {
+              "value": 0,
+              "unit": "ms"
+            },
+            "timingFunction": "{motion.easing.standard}"
+          },
+          "$extensions": {
+            "opendesigner": {
+              "spring": {
+                "dampingRatio": 1.0,
+                "stiffness": 493.4,
+                "mass": 1
+              },
+              "apple": {
+                "duration": 0.283,
+                "bounce": 0.0
+              },
+              "css": {
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
+                "durationMs": 410
+              },
+              "use": "small components (switches, buttons)"
+            }
+          }
+        },
+        "default": {
+          "$value": {
+            "duration": {
+              "value": 590,
+              "unit": "ms"
+            },
+            "delay": {
+              "value": 0,
+              "unit": "ms"
+            },
+            "timingFunction": "{motion.easing.standard}"
+          },
+          "$extensions": {
+            "opendesigner": {
+              "spring": {
+                "dampingRatio": 1.0,
+                "stiffness": 246.7,
+                "mass": 1
+              },
+              "apple": {
+                "duration": 0.4,
+                "bounce": 0.0
+              },
+              "css": {
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
+                "durationMs": 590
+              },
+              "use": "partial-screen (sheets, drawers)"
+            }
+          }
+        },
+        "slow": {
+          "$value": {
+            "duration": {
+              "value": 870,
+              "unit": "ms"
+            },
+            "delay": {
+              "value": 0,
+              "unit": "ms"
+            },
+            "timingFunction": "{motion.easing.standard}"
+          },
+          "$extensions": {
+            "opendesigner": {
+              "spring": {
+                "dampingRatio": 1.0,
+                "stiffness": 111.0,
+                "mass": 1
+              },
+              "apple": {
+                "duration": 0.596,
+                "bounce": 0.0
+              },
+              "css": {
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
+                "durationMs": 870
+              },
+              "use": "full-screen"
+            }
+          }
+        }
+      },
+      "effects": {
+        "fast": {
+          "$value": {
+            "duration": {
+              "value": 150,
+              "unit": "ms"
+            },
+            "delay": {
+              "value": 0,
+              "unit": "ms"
+            },
+            "timingFunction": "{motion.easing.standard}"
+          },
+          "$extensions": {
+            "opendesigner": {
+              "spring": {
+                "dampingRatio": 1.0,
+                "stiffness": 3800.0,
+                "mass": 1
+              },
+              "apple": {
+                "duration": 0.102,
+                "bounce": 0.0
+              },
+              "css": {
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
+                "durationMs": 150
+              },
+              "use": "small components (switches, buttons)"
+            }
+          }
+        },
+        "default": {
+          "$value": {
+            "duration": {
+              "value": 230,
+              "unit": "ms"
+            },
+            "delay": {
+              "value": 0,
+              "unit": "ms"
+            },
+            "timingFunction": "{motion.easing.standard}"
+          },
+          "$extensions": {
+            "opendesigner": {
+              "spring": {
+                "dampingRatio": 1.0,
+                "stiffness": 1600.0,
+                "mass": 1
+              },
+              "apple": {
+                "duration": 0.157,
+                "bounce": 0.0
+              },
+              "css": {
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
+                "durationMs": 230
+              },
+              "use": "partial-screen (sheets, drawers)"
+            }
+          }
+        },
+        "slow": {
+          "$value": {
+            "duration": {
+              "value": 330,
+              "unit": "ms"
+            },
+            "delay": {
+              "value": 0,
+              "unit": "ms"
+            },
+            "timingFunction": "{motion.easing.standard}"
+          },
+          "$extensions": {
+            "opendesigner": {
+              "spring": {
+                "dampingRatio": 1.0,
+                "stiffness": 800.0,
+                "mass": 1
+              },
+              "apple": {
+                "duration": 0.222,
+                "bounce": 0.0
+              },
+              "css": {
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
+                "durationMs": 330
+              },
+              "use": "full-screen"
+            }
+          }
+        }
+      },
+      "momentum": {
+        "$value": {
+          "duration": {
+            "value": 550,
+            "unit": "ms"
+          },
+          "delay": {
+            "value": 0,
+            "unit": "ms"
+          },
+          "timingFunction": "{motion.easing.standard}"
+        },
+        "$type": "transition",
+        "$description": "Added by standard STD-springs-gestures-06.",
+        "$extensions": {
+          "opendesigner": {
+            "spring": {
+              "dampingRatio": 0.8,
+              "stiffness": 246.7,
+              "mass": 1
+            },
+            "apple": {
+              "duration": 0.4,
+              "bounce": 0.2
+            },
+            "css": {
+              "easing": "linear(0, 0.053, 0.176, 0.324, 0.474, 0.609, 0.723, 0.815, 0.884, 0.934, 0.969, 0.991, 1.005, 1.012, 1.015, 1.015, 1.014, 1.012, 1.009, 1.007, 1.005, 1.004, 1.002, 1.001, 1)",
+              "durationMs": 550
+            },
+            "source": "standard",
+            "standard": "STD-springs-gestures-06"
+          }
+        }
+      },
+      "rotation": {
+        "$value": {
+          "duration": {
+            "value": 550,
+            "unit": "ms"
+          },
+          "delay": {
+            "value": 0,
+            "unit": "ms"
+          },
+          "timingFunction": "{motion.easing.standard}"
+        },
+        "$type": "transition",
+        "$description": "Added by standard STD-springs-gestures-09.",
+        "$extensions": {
+          "opendesigner": {
+            "spring": {
+              "dampingRatio": 0.8,
+              "stiffness": 246.7,
+              "mass": 1
+            },
+            "apple": {
+              "duration": 0.4,
+              "bounce": 0.2
+            },
+            "css": {
+              "easing": "linear(0, 0.053, 0.176, 0.324, 0.474, 0.609, 0.723, 0.815, 0.884, 0.934, 0.969, 0.991, 1.005, 1.012, 1.015, 1.015, 1.014, 1.012, 1.009, 1.007, 1.005, 1.004, 1.002, 1.001, 1)",
+              "durationMs": 550
+            },
+            "source": "standard",
+            "standard": "STD-springs-gestures-09"
+          }
+        }
+      },
+      "sheet": {
+        "$value": {
+          "duration": {
+            "value": 410,
+            "unit": "ms"
+          },
+          "delay": {
+            "value": 0,
+            "unit": "ms"
+          },
+          "timingFunction": "{motion.easing.standard}"
+        },
+        "$type": "transition",
+        "$description": "Added by standard STD-springs-gestures-08.",
+        "$extensions": {
+          "opendesigner": {
+            "spring": {
+              "dampingRatio": 0.8,
+              "stiffness": 438.6,
+              "mass": 1
+            },
+            "apple": {
+              "duration": 0.3,
+              "bounce": 0.2
+            },
+            "css": {
+              "easing": "linear(0, 0.053, 0.176, 0.324, 0.474, 0.609, 0.723, 0.815, 0.884, 0.934, 0.969, 0.991, 1.005, 1.012, 1.015, 1.015, 1.014, 1.012, 1.009, 1.007, 1.005, 1.004, 1.002, 1.001, 1)",
+              "durationMs": 410
+            },
+            "source": "standard",
+            "standard": "STD-springs-gestures-08"
+          }
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "opendesigner": {
+      "source": "formula",
+      "note": "Every value comes from references/levers.json formulas at the dials recorded in opendesigner.meta.json; tokens a person detached carry source: person."
+    }
+  }
+}

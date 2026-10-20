@@ -148,7 +148,9 @@ python3 tools/wiki.py standards          house standards valid and versioned (el
 python3 tools/wiki.py map --check        learn/MAP.md is current (else: wiki.py map)
 python3 tools/wiki.py proposals --check  the pending-proposals table in synthesis/QUESTIONNAIRE.md is current
 python3 tools/test_wiki.py               learning wiki tests (.venv-wiki/bin/python also runs the OpenWiki ones)
+python3 tools/design_evals.py --check --no-save   the engine on 18 fixed briefs: every required check passes (evals/README.md)
 ```
+Changed a skill? Also run its agent evals once (`python3 tools/agent_evals.py --case '<name>' --runs 1`; they cost model usage) and say the result in the pull request.
 Improving the app from the learning wiki? Read `learn/IMPROVING.md` first. `python3 tools/wiki.py next` lists what in the wiki is out of date.
 
 ### Reviewing and merging pull requests

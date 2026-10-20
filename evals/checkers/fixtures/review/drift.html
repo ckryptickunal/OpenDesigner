@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drift</title>
+<!-- Checker eval fixture for skills/opendesigner-review (probe.js measured in Chrome, then review.py check). Checked against the fixture system in system/opendesigner (sizes 12-32, ladder 0-64, radii 0/4/8/12, eight palette colors, system-ui). Planted: text in an off-palette violet (#5a3fd1) on six items; 18 px text (off the type scale) on six items; a 6 px corner radius on three cards; 10 px padding (off the spacing ladder) on six items; most text set in Georgia instead of the system face.
+     Expected findings are in evals/checkers/manifest.json. -->
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font: 16px/24px system-ui, sans-serif; color: #1c1c1e; background: #ffffff; }
+body { margin: 0; }
+main { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 32px; line-height: 40px; margin: 0 0 16px; }
+h2, h3 { font-size: 20px; line-height: 28px; margin: 24px 0 8px; }
+p { margin: 0 0 16px; max-width: 65ch; }
+a { color: #1f4fd8; }
+button { font: inherit; font-size: 16px; line-height: 24px; padding: 8px 16px; border: 1px solid #1f4fd8; border-radius: 8px; background: #1f4fd8; color: #ffffff; }
+ul { margin: 0 0 16px; padding: 0; list-style: none; }
+img { max-width: 100%; height: auto; display: block; }
+button:focus-visible, a:focus-visible { outline: 2px solid #1f4fd8; outline-offset: 2px; }
+main { font-family: Georgia, serif; }
+.tag-text { color: #5a3fd1; }
+.off-size { font-size: 18px; line-height: 24px; }
+.soft-card { border: 1px solid #d1d1d6; border-radius: 6px; padding: 16px; margin: 0 0 16px; background: #f5f5f7; }
+.pad10 { padding: 10px; }
+</style>
+</head>
+<body>
+<main>
+<h1 id="drift-title">Release board</h1>
+<ul id="tags"><li class="tag-text">Design</li><li class="tag-text">Engine</li><li class="tag-text">Review</li><li class="tag-text">Export</li><li class="tag-text">Docs</li><li class="tag-text">Site</li></ul>
+<div class="soft-card"><p class="off-size pad10">Tokens ship first.</p><p class="off-size pad10">Then the checks.</p></div>
+<div class="soft-card"><p class="off-size pad10">Exports follow.</p><p class="off-size pad10">Then the docs.</p></div>
+<div class="soft-card"><p class="off-size pad10">Review last.</p><p class="off-size pad10">Then ship.</p></div>
+</main>
+</body>
+</html>

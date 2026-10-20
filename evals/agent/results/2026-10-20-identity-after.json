@@ -1,0 +1,28 @@
+{
+  "kind": "agent",
+  "date": "2026-10-20",
+  "commit": "9dcd6ba",
+  "skillsRef": "working tree",
+  "label": "identity-after",
+  "model": "sonnet",
+  "judgeModel": "haiku",
+  "runsPerArm": 3,
+  "claudeVersion": "2.1.302",
+  "overallScore": 1,
+  "meanDelta": null,
+  "casesPassed": 1,
+  "casesTotal": 1,
+  "costUsd": 0.2697648,
+  "durationSeconds": 57,
+  "partial": false,
+  "cases": [
+    {
+      "name": "no-identity-copy",
+      "score": 1,
+      "without": null,
+      "delta": null,
+      "runs": 3,
+      "errors": []
+    }
+  ]
+}

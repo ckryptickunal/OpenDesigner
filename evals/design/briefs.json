@@ -1,0 +1,257 @@
+{
+  "_about": "Design-eval briefs: each is a person's five sketch answers. tools/design_evals.py builds a system from each and checks it. Add a brief when a real project finds a case the engine handles badly.",
+  "briefs": [
+    {
+      "id": "b2b-dense-cobalt",
+      "why": "A dense B2B work tool with a strong blue",
+      "name": "Ledgerline",
+      "brand": "#2338FF",
+      "audience": "dense",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "precise",
+        "calm"
+      ]
+    },
+    {
+      "id": "finance-green",
+      "why": "An invoice-approval tool with a green brand (the home page's example)",
+      "name": "Billerwick",
+      "brand": "#15803D",
+      "audience": "dense",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "precise",
+        "calm"
+      ]
+    },
+    {
+      "id": "consumer-pink",
+      "why": "A friendly consumer app on web and iPhone",
+      "name": "Pebbleday",
+      "brand": "#E0457B",
+      "audience": "regular",
+      "platforms": [
+        "web",
+        "ios"
+      ],
+      "feel": [
+        "friendly",
+        "fun"
+      ]
+    },
+    {
+      "id": "yellow-brand",
+      "why": "Yellow is hard: white text on it fails, so the engine must find another pairing",
+      "name": "Sunwick",
+      "brand": "#FACC15",
+      "audience": "regular",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "bold",
+        "friendly"
+      ]
+    },
+    {
+      "id": "cyan-brand",
+      "why": "Light cyan, also low contrast against white",
+      "name": "Tidepool",
+      "brand": "#06B6D4",
+      "audience": "regular",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "calm",
+        "techy"
+      ]
+    },
+    {
+      "id": "pure-red",
+      "why": "Pure #FF0000, a common first answer",
+      "name": "Redline",
+      "brand": "#FF0000",
+      "audience": "regular",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "bold"
+      ]
+    },
+    {
+      "id": "near-black",
+      "why": "A brand color that is almost black",
+      "name": "Inkwell",
+      "brand": "#111111",
+      "audience": "regular",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "minimal",
+        "precise"
+      ]
+    },
+    {
+      "id": "near-white",
+      "why": "A brand color that is almost white",
+      "name": "Paperlight",
+      "brand": "#F5F5F5",
+      "audience": "regular",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "minimal",
+        "calm"
+      ]
+    },
+    {
+      "id": "brown-brand",
+      "why": "A warm brown: the neutrals must not turn muddy",
+      "name": "Copperleaf",
+      "brand": "#8B5A2B",
+      "audience": "regular",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "warm",
+        "calm"
+      ]
+    },
+    {
+      "id": "large-text",
+      "why": "Older readers and low vision: large text",
+      "name": "Brightread",
+      "brand": "#1D4ED8",
+      "audience": "large",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "calm",
+        "friendly"
+      ]
+    },
+    {
+      "id": "ios-only",
+      "why": "An iPhone-only app",
+      "name": "Harbourlog",
+      "brand": "#0D9488",
+      "audience": "regular",
+      "platforms": [
+        "ios"
+      ],
+      "feel": [
+        "calm"
+      ]
+    },
+    {
+      "id": "android-only",
+      "why": "An Android-only app",
+      "name": "Fieldkit",
+      "brand": "#EA580C",
+      "audience": "regular",
+      "platforms": [
+        "android"
+      ],
+      "feel": [
+        "friendly",
+        "bold"
+      ]
+    },
+    {
+      "id": "three-platforms",
+      "why": "One system for web, iPhone and Android",
+      "name": "Crossway",
+      "brand": "#2563EB",
+      "audience": "regular",
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ],
+      "feel": [
+        "friendly"
+      ]
+    },
+    {
+      "id": "desktop-app",
+      "why": "A desktop app",
+      "name": "Benchmark",
+      "brand": "#475569",
+      "audience": "dense",
+      "platforms": [
+        "desktop"
+      ],
+      "feel": [
+        "precise",
+        "techy"
+      ]
+    },
+    {
+      "id": "playful-rose",
+      "why": "Bold and playful",
+      "name": "Fizzpop",
+      "brand": "#F43F5E",
+      "audience": "regular",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "playful",
+        "bold"
+      ]
+    },
+    {
+      "id": "purple-saas",
+      "why": "A purple SaaS brand",
+      "name": "Orchard",
+      "brand": "#7C3AED",
+      "audience": "regular",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "techy",
+        "friendly"
+      ]
+    },
+    {
+      "id": "dark-toggle",
+      "why": "Light and dark with a switch",
+      "name": "Nightlark",
+      "brand": "#4F46E5",
+      "audience": "regular",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "techy"
+      ],
+      "theme": "light-dark-toggle"
+    },
+    {
+      "id": "lime-brand",
+      "why": "Lime, another hard light color",
+      "name": "Limeway",
+      "brand": "#84CC16",
+      "audience": "regular",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "fun",
+        "bold"
+      ]
+    }
+  ]
+}

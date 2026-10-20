@@ -37,3 +37,6 @@ videos/**/*.png
 videos/**/*.woff2
 videos/**/renders/
 videos/**/node_modules/
+
+# plugin eval raw runs (curated summaries live in evals/agent/)
+evals/results/

@@ -1,0 +1,84 @@
+{
+  "kind": "agent",
+  "date": "2026-10-20",
+  "commit": "9dcd6ba",
+  "skillsRef": "working tree",
+  "label": null,
+  "model": "sonnet",
+  "judgeModel": "haiku",
+  "runsPerArm": 3,
+  "claudeVersion": "2.1.302",
+  "overallScore": 0.9131944444444445,
+  "meanDelta": 0.3340277777777777,
+  "casesPassed": 8,
+  "casesTotal": 8,
+  "costUsd": 5.479593,
+  "durationSeconds": 1070,
+  "partial": false,
+  "cases": [
+    {
+      "name": "contrast-floor",
+      "score": 1,
+      "without": 1.0,
+      "delta": 0,
+      "runs": 3,
+      "errors": []
+    },
+    {
+      "name": "export-tailwind",
+      "score": 1,
+      "without": 0.833,
+      "delta": 0.16666666666666663,
+      "runs": 3,
+      "errors": []
+    },
+    {
+      "name": "extend-rounder",
+      "score": 0.8888888888888888,
+      "without": 0.0,
+      "delta": 0.8888888888888888,
+      "runs": 3,
+      "errors": []
+    },
+    {
+      "name": "no-identity-copy",
+      "score": 1,
+      "without": 0.0,
+      "delta": 1,
+      "runs": 3,
+      "errors": []
+    },
+    {
+      "name": "one-question-first",
+      "score": 0.5,
+      "without": 0.5,
+      "delta": 0,
+      "runs": 3,
+      "errors": []
+    },
+    {
+      "name": "preflight-before-share",
+      "score": 0.9166666666666666,
+      "without": 0.833,
+      "delta": 0.08333333333333326,
+      "runs": 3,
+      "errors": []
+    },
+    {
+      "name": "review-planted-page",
+      "score": 1,
+      "without": 1.0,
+      "delta": 0,
+      "runs": 3,
+      "errors": []
+    },
+    {
+      "name": "sketch-five-answers",
+      "score": 1,
+      "without": 0.467,
+      "delta": 0.5333333333333334,
+      "runs": 3,
+      "errors": []
+    }
+  ]
+}

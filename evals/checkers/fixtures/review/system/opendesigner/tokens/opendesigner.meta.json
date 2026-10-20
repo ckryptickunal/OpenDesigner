@@ -1,0 +1,15 @@
+{
+  "name": "Fixture System",
+  "prefix": "ds",
+  "modes": ["light"],
+  "type": {
+    "sizes": [12, 14, 16, 20, 24, 32],
+    "lineHeights": [16, 20, 24, 28, 32, 40],
+    "minSize": 12,
+    "weights": {"body": 400, "label": 600, "heading": 600},
+    "faces": {"text": {"face": "system-ui"}, "display": {"face": "=text"}}
+  },
+  "space": {"unit": 4, "ladder": [0, 2, 4, 8, 12, 16, 24, 32, 48, 64], "targets": {"pointer": 24, "touch": 44}, "breakpoints": {}},
+  "shape": {"control": 8, "container": 12},
+  "motion": {"durations": {"micro": 100, "short": 150, "medium": 200}}
+}

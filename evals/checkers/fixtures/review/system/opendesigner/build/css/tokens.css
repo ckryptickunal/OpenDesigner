@@ -1,0 +1,15 @@
+/* Fixture System: the minimum review.py reads (palette hexes and the radius ladder). Hand-written for evals/checkers. */
+:root {
+  --ds-color-white: #ffffff;
+  --ds-color-black: #000000;
+  --ds-color-ink: #1c1c1e;
+  --ds-color-ink-muted: #3a3a3c;
+  --ds-color-surface: #f5f5f7;
+  --ds-color-line: #d1d1d6;
+  --ds-color-brand: #1f4fd8;
+  --ds-color-brand-ink: #ffffff;
+  --ds-radius-0: 0px;
+  --ds-radius-4: 4px;
+  --ds-radius-8: 8px;
+  --ds-radius-12: 12px;
+}
