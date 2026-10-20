@@ -132,12 +132,11 @@
 .ui-input, .opt, .flow-box, .dd-art, .code-lines, .dodont > div { border-radius: var(--r-control); }
 .dodont > div { border-radius: var(--r-card); }
 .swatch, .ramp span { border-radius: var(--r-detail); }
-.fig p, .fig li, .fig span, .fig strong, .fig div { letter-spacing: inherit; }
-.fig { letter-spacing: -0.011em; }
+/* letter spacing: each sized rule gets Apple's value from build.py apple_tracking(), so figure text follows its own size */
 .fig .kicker { letter-spacing: .07em; }
 .fig .mono, .fig .num, .fig code, .fig pre, .fig .code-lines, .fig .chip { letter-spacing: 0; }
-@supports (corner-shape: squircle) {
-  .fig-panel, .fig-scene, .fig-card, .ui-input, .opt, .flow-box, .dd-art, .code-lines, .dodont > div, .swatch { corner-shape: squircle; }
+@supports (corner-shape: superellipse(1.35)) {
+  .fig-panel, .fig-scene, .fig-card, .ui-input, .opt, .flow-box, .dd-art, .code-lines, .dodont > div { corner-shape: superellipse(1.35); --corner-k: 1.22; }
 }
 
 /* do / don't: one sticker per panel, stuck on its corner, with a check or a cross (owner, 2026-10-14) */

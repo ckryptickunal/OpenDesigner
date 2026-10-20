@@ -25,7 +25,7 @@ svg.arrow { width: 14px; height: 14px; flex: none; }
 .t-h1 { font-size: clamp(32px, 3.6vw, 48px); line-height: 1.12; font-weight: 400; letter-spacing: -0.03em; margin: 0; text-wrap: balance; }
 .t-h2 { font-size: clamp(24px, 2.4vw, 32px); line-height: 1.2; font-weight: 400; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
 .t-h3 { font-size: 21px; line-height: 28px; font-weight: 500; letter-spacing: -0.01em; margin: 0 0 20px; }
-.lede { font-size: 17px; line-height: 27px; letter-spacing: -0.005em; color: var(--ink-muted); max-width: 62ch; margin: 20px 0 0; text-wrap: pretty; }
+.lede { font-size: 17px; line-height: 27px; color: var(--ink-muted); max-width: 62ch; margin: 20px 0 0; text-wrap: pretty; }
 
 /* top bar */
 .bar { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--surface-raised) 92%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
@@ -170,7 +170,7 @@ svg.arrow { width: 14px; height: 14px; flex: none; }
 .qa { border-top: 1px solid var(--line); }
 .qa summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 16px 0; }
 .qa summary::-webkit-details-marker { display: none; }
-.qa summary h3, .qa summary h2 { margin: 0; font-size: 17px; line-height: 26px; font-weight: 500; letter-spacing: -0.005em; }
+.qa summary h3, .qa summary h2 { margin: 0; font-size: 17px; line-height: 26px; font-weight: 500; }
 .qa summary::after { content: "+"; font-family: "Source Code Pro", ui-monospace, monospace; font-size: 18px; color: var(--ink-muted); flex: none; }
 .qa[open] summary::after { content: "\2212"; }
 .qa .ans { color: var(--ink-muted); padding: 0 0 20px; max-width: 70ch; }
@@ -329,29 +329,31 @@ svg.arrow { width: 14px; height: 14px; flex: none; }
 
 
 /* iOS geometry and letter spacing. Owner, 2026-10-14: "use iOS style rounded edges with iOS kerning everywhere instead of sharp corners".
-   Radii are the brand tokens (6 / 12 / 16 / 24) with capsules for buttons; where the browser supports it, corners are continuous
-   (corner-shape: squircle), drawn a little larger because a squircle reads smaller than a circle of the same radius.
-   Letter spacing follows Apple's SF Pro tracking table by size (HIG, Typography, iOS tracking values, in 1/1000 em):
-   11 +6 · 12 0 · 13 -6 · 14 -11 · 15 -16 · 16 -20 · 17 -26 · 18 -25 · 20 -23 · 21 -18 · 22 -12 · 24 +3 · 28 +14 · 32 +13 · 34 +12 · 40 +10 · 48 +8 · 56 +6.
-   Monospace keeps its own spacing. */
+   Radii are the brand tokens (6 / 12 / 16 / 24) with capsules for buttons. Where the browser draws corner-shape, the surfaces in
+   the @supports lists take Apple's continuous corner: superellipse(1.35) at 1.22 times the radius, within 0.4% of the radius of
+   SwiftUI's own curve (synthesis/levers.json formulas.radius.continuous; tools/fit_corner.py). The squircle keyword is squarer
+   than iOS. --corner-k scales the radius of that box only: every element resets it to 1, so the boxes inside keep the plain
+   radius, whose circular arc is itself within 1.4% of the radius of Apple's curve. Capsules and circles keep round ends.
+   Letter spacing for text up to 19px is Apple's SF Pro tracking table (HIG, Typography, tracking values; synthesis/levers.json
+   formulas.type.tracking.sfPro): build.py apple_tracking() gives every rule that sets a text size the table's value for that
+   size, because letter-spacing is inherited in pixels and a hand-set value goes wrong as soon as a child changes size.
+   Headings from 20px are set by eye below: from 20 pt Apple loosens SF Pro Display, which is drawn tighter than Hanken
+   Grotesk, so the table would loosen these headings (the owner tightened the hero to -0.01em, 2026-10-20). The engine follows
+   the same rule for a face that is not SF Pro. Monospace and uppercase labels keep their own spacing. */
 :root { --r-detail: var(--radius-detail); --r-control: var(--radius-control); --r-card: var(--radius-container); --r-panel: var(--radius-overlay); --r-pill: 999px; }
-@supports (corner-shape: squircle) { :root { --r-detail: 8px; --r-control: 16px; --r-card: 22px; --r-panel: 32px; } }
+@supports (corner-shape: superellipse(1.35)) {
+  *, ::before, ::after { --corner-k: 1; --r-detail: calc(var(--radius-detail) * var(--corner-k)); --r-control: calc(var(--radius-control) * var(--corner-k));
+    --r-card: calc(var(--radius-container) * var(--corner-k)); --r-panel: calc(var(--radius-overlay) * var(--corner-k)); }
+}
 
-body { letter-spacing: -0.02em; }
 code, pre, .mono, .num, .code, .tree code { letter-spacing: 0; }
 .t-hero { letter-spacing: 0.008em; } .t-hero strong { letter-spacing: inherit; }
 .t-h1 { letter-spacing: 0.01em; }
 .t-h2 { letter-spacing: 0.008em; }
 .t-h3 { letter-spacing: -0.018em; } .t-h3.sub { letter-spacing: -0.02em; }
-.lede, .prose p, .prose li, .start strong, .qa summary h2, .qa summary h3, .prose .qa summary h2 { letter-spacing: -0.026em; }
 .prose h2 { letter-spacing: 0; }
 .prose h3, .role h3 { letter-spacing: -0.025em; }
 .stages h3 { letter-spacing: -0.023em; }
-.stages p, .role ul, .more, .status li, .checks li, .lb-title { letter-spacing: -0.016em; }
-.rows .row-t { letter-spacing: -0.02em; }
-.side a, .top-nav a, .start > span:not(.kicker), .tree span, .intro, .works, .foot ul a, .foot-brand p, .piece figcaption strong { letter-spacing: -0.011em; }
-.toc a, .meta, .piece figcaption, .lb-blurb, .duo figcaption, .shot figcaption, .roles-credit { letter-spacing: -0.006em; }
-.foot-legal { letter-spacing: 0; }
 
 /* controls in the iOS manner: capsules, sentence case, semibold */
 .btn { font: 600 15px/20px "Hanken Grotesk", system-ui, sans-serif; letter-spacing: -0.016em; text-transform: none; border-radius: var(--r-pill); padding: 0 20px; }
@@ -373,8 +375,8 @@ code, pre, .mono, .num, .code, .tree code { letter-spacing: 0; }
 .shot .frame { border-radius: var(--r-panel) var(--r-panel) 0 0; }
 .shot img { border-radius: 0 0 var(--r-panel) var(--r-panel); }
 .role-photo .duo-frame { border-radius: var(--r-card); }
-@supports (corner-shape: squircle) {
-  .cmd, .side a, :not(pre) > code, .code pre, .tree, .prevnext a, .table-wrap, .piece-link, .duo-frame, .lb-img, .ghcard, .starts, .shot .frame, .shot img { corner-shape: squircle; }
+@supports (corner-shape: superellipse(1.35)) {
+  .cmd, .side a, :not(pre) > code, .code pre, .tree, .prevnext a, .table-wrap, .piece-link, .duo-frame, .lb-img, .ghcard, .starts, .shot .frame, .shot img { corner-shape: superellipse(1.35); --corner-k: 1.22; }
 }
 @media (max-width: 560px) { .intro { border-radius: var(--r-card); } }
 

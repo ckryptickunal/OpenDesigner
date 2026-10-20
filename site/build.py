@@ -124,6 +124,74 @@ def fonts():
     return rules
 
 
+_SF = json.loads((ROOT / "synthesis" / "levers.json").read_text())["formulas"]["type"]["tracking"]["sfPro"]  # Apple HIG, S-L02-001
+SF_PRO, SF_TEXT_UNTIL = _SF["table"], _SF["textUntil"]
+_CORNER = json.loads((ROOT / "synthesis" / "levers.json").read_text())["formulas"]["radius"]["continuous"]  # tools/fit_corner.py
+
+
+def corners_match_levers(css):
+    """site.css draws Apple's continuous corner with the numbers in levers formulas.radius.continuous; stop the build if they drift."""
+    shapes = set(re.findall(r"corner-shape: (superellipse\([\d.]+\)|squircle)", css)) | set(re.findall(r"@supports \(corner-shape: ([^)]+\)?)\)", css))
+    scales = set(re.findall(r"--corner-k: ([\d.]+);", css)) - {"1"}
+    want_shape, want_scale = f"superellipse({_CORNER['superellipse']:g})", f"{_CORNER['radiusScale']:g}"
+    if shapes - {want_shape} or scales - {want_scale}:
+        raise SystemExit(f"site CSS corners {sorted(shapes)} at {sorted(scales)} differ from levers: {want_shape} at {want_scale}")
+    return css
+
+
+def sf_tracking(px):
+    """Apple's SF Pro tracking for a text size, in em, straight-line between the HIG table's rows (the engine's sf_pro_tracking)."""
+    if px <= SF_PRO[0][0]:
+        return SF_PRO[0][1] / 1000
+    for (s0, t0), (s1, t1) in zip(SF_PRO, SF_PRO[1:]):
+        if px <= s1:
+            return round((t0 + (t1 - t0) * (px - s0) / (s1 - s0)) / 1000, 4)
+    return SF_PRO[-1][1] / 1000
+
+
+def apple_tracking(css):
+    """Give every rule that sets a text size up to 19px Apple's tracking for that size (owner, 2026-10-14: "iOS kerning everywhere").
+    letter-spacing in em is turned into pixels where it is declared and inherited as pixels, so a 12px note inside 16px text
+    would keep the parent's spacing: each rule that sets its own size needs its own value. A rule that already sets
+    letter-spacing keeps it (the owner's headline, code, uppercase labels), and so does monospace, uppercase or a size that is
+    not one number (clamp, em, var)."""
+    rule = re.compile(r"([^{}]+)\{([^{}]*)\}")
+    parts = lambda sel: {x.strip() for x in re.sub(r"/\*.*?\*/", "", sel, flags=re.S).split(",") if x.strip()}
+    own = set()  # selectors that set letter-spacing somewhere, so a later rule that only resizes them keeps it
+    for m in rule.finditer(css):
+        if "letter-spacing" in m.group(2):
+            own |= parts(m.group(1))
+
+    def fix(m):
+        sel, body = m.group(1), m.group(2)
+        if "letter-spacing" in body or "@" in sel or parts(sel) & own or re.search(r"monospace|Source Code|uppercase", body):
+            return m.group(0)
+        size = re.search(r"(?:^|;)\s*font-size:\s*([\d.]+)(px|rem)\s*(?:;|$)", body) or \
+            re.search(r"(?:^|;)\s*font:\s*(?:[a-z-]+\s+)*?(?:\d{3}\s+)?([\d.]+)(px|rem)\b", body)
+        if not size:
+            return m.group(0)
+        px = float(size.group(1)) * (16 if size.group(2) == "rem" else 1)
+        if px > SF_TEXT_UNTIL:  # headings are set by eye in site.css (see the iOS block there)
+            return m.group(0)
+        return f"{sel}{{{body.rstrip().rstrip(';')}; letter-spacing: {fmt_em(sf_tracking(px))}; }}"
+    return rule.sub(fix, css)
+
+
+def apple_tracking_inline(html_):
+    """The same rule for a figure's inline styles: style="font-size:13px" with no letter-spacing gets Apple's value for 13px."""
+    def fix(m):
+        style = m.group(1)
+        size = re.search(r"(?:^|;)\s*font-size:\s*([\d.]+)px", style) or re.search(r"(?:^|;)\s*font:\s*(?:[a-z-]+\s+)*?(?:\d{3}\s+)?([\d.]+)px", style)
+        if not size or "letter-spacing" in style or re.search(r"monospace|Source Code|uppercase", style) or float(size.group(1)) > SF_TEXT_UNTIL:
+            return m.group(0)
+        return f'style="{style.rstrip().rstrip(";")};letter-spacing:{fmt_em(sf_tracking(float(size.group(1))))}"'
+    return re.sub(r'style="([^"]*)"', fix, html_)
+
+
+def fmt_em(x):
+    return "0" if x == 0 else f"{x:g}em"
+
+
 def tokens_css():
     light = "\n".join(f"  --{c['name']}: {c['value']['light']};" for c in T["color"]["tokens"])
     light += "\n" + "\n".join(f"  --{s['name']}: {s['value']['light']};" for s in T["shadow"]["tokens"])
@@ -253,7 +321,7 @@ def figure(name):
         pid, author, page_id = SCENES[key]
         h = h.replace(f'data-scene="{key}"', f'style="background-image:url(https://images.unsplash.com/{pid}?auto=format&fit=crop&w=1400&q=70)"', 1)
         h = h.replace("</figcaption>", f' Photo: <a href="https://unsplash.com/photos/{page_id}">{esc(author)}</a> on Unsplash.</figcaption>', 1)
-    return h
+    return apple_tracking_inline(h)
 
 
 def figure_caption(name):
@@ -1332,7 +1400,7 @@ def main():
     for key, _f, _l in FONT_SPECS:
         shutil.copy(CACHE / f"{key}-OFL.txt", DIST / "fonts" / f"{key}-OFL.txt")
     ff = "".join(f"@font-face{{font-family:'{fam}';font-style:normal;font-weight:{w};font-display:swap;src:url(/fonts/{f}) format('woff2')}}\n" for fam, w, f in rules)
-    (DIST / "site.css").write_text(ff + tokens_css() + (SITE / "static" / "site.css").read_text() + (SITE / "static" / "figures.css").read_text() + status_css() + (SITE / "static" / "home.css").read_text() + (SITE / "static" / "craft.css").read_text() + (SITE / "static" / "deco.css").read_text())
+    (DIST / "site.css").write_text(ff + tokens_css() + corners_match_levers(apple_tracking((SITE / "static" / "site.css").read_text() + (SITE / "static" / "figures.css").read_text() + status_css() + (SITE / "static" / "home.css").read_text() + (SITE / "static" / "craft.css").read_text() + (SITE / "static" / "deco.css").read_text())))
     shutil.copy(SITE / "static" / "site.js", DIST / "site.js")
     images()
     if "--og" in sys.argv or not (CACHE / "og" / "home.png").exists():
