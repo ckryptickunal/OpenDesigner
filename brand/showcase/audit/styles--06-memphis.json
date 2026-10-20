@@ -102,5 +102,16 @@
     "what": "Real Memphis: black-and-white patterns, tilt and collisions"
    }
   ]
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "3 of 3 better on the count version (Eventbrite +4, Sweatpals +3, Posh +4); the earlier area version of this round scored Posh +3, Sweatpals +3, Eventbrite +4",
+  "changed": [
+   "Landing hero replaced by the organiser's Tickets tab; count as a one-colour headline; totals row; one action",
+   "Tilted badge, door sign and lanyard removed; strict grid",
+   "Encoding changed from area to count: one Memphis shape per 20 tickets, solid issued, outline on sale, partial shapes filled by area",
+   "Three textures and the stats list removed",
+   "Area-true partial fills after the third audit"
+  ]
  }
 }

@@ -340,6 +340,14 @@
     "font.size.input": {
       "value": 16,
       "unit": "px"
+    },
+    "font.size.15": {
+      "value": 15,
+      "unit": "px"
+    },
+    "font.size.13": {
+      "value": 13,
+      "unit": "px"
     }
   },
   "answers": {
@@ -506,7 +514,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "9432550bbfdc80db",
+    "DESIGN.md": "145e92969bfb7a78",
     "PRODUCT.md": "ff88ab9a9c8e14b3"
   },
   "exports": {

@@ -1,10 +1,12 @@
-# 02 · Neumorphism · Ostwell floor plan and zone dial
+# 02 · Neumorphism · Ostwell zone dial
+
+Gallery: Ostwell is a fictional building-management system; the East open office's zone dial is the one soft object in a flat app.
 
 Ostwell, a building-management system: a flat Level 6 floor plan with live desks and one fault, and one soft object, the zone dial. Fresh audit after the polish round: 4 of 5.
 
-The "Round 3 (polish)" section of 2026-10-15, the last one, describes this page. The polish round of 2026-10-14 before it describes the version that round started from. The sections between record the first build, the Ouvra climate panel that the independent audit scored 3.
+The "Round 4 (owner review, 2026-10-18)" section, the last one, describes this page; the sections before it record earlier versions. The polish round of 2026-10-14 before it describes the version that round started from. The sections between record the first build, the Ouvra climate panel that the independent audit scored 3.
 
-**Final score: 4 of 5** after three rounds (3.5, then 4, then 4). Render: 1440 x 900 at scale 2 (`shot.png`).
+Round 3 ended at 4 of 5; the round-4 audit then scored it 5 of 10 and it was rebuilt (last section).
 
 ## Direction
 Ouvra is a fictional building-management system. The screen is the climate panel a facility manager uses for one zone: Level 6 East open office in Tessaly House, a 12-floor office building. The panel holds the zone dial, the set point, the mode, airflow and dampers, desk occupancy, the other zones on the floor and the occupied-hours schedule. The audience is facilities staff at a desk or on a wall tablet. Mood: quiet, tactile, engineered, like a well-made thermostat.
@@ -287,3 +289,45 @@ build
 - **Weekdays:** `check_dates.py --year 2026` passes (Wed 14 Oct).
 - **Facts re-added:** desks 38 + 27 = 65 of 64 + 48 = 112; plate 64 x 34 = 2,176 m²; meeting rooms 21.5, 21.7, 21.6 average 21.6° and 23.0, 23.3, 23.0 average 23.1°, 1.6° over 21.5°; zone 22.4° against 21.5° is 0.9° over; outside 11.8 °C is under the 12 °C chiller lockout.
 - `engine.py validate`: no errors, 1 warning (the neumorphic edge-contrast warning; every soft control has a 3:1 glyph or label). Preflight: one warning, the 56 px dial figure outside the scale, on purpose.
+
+## Round 4 (owner review, 2026-10-18)
+**This section describes the page now.** Rebuilt after the round-4 audit scored it 5 of 10 (rebuild). Render: `shot.png`, 1440 x 900 at scale 2.
+
+**One idea:** A facilities manager watches the East open office cool from 22.4° to its 21.5° set point on one soft dial, while the rest of the floor stays flat rows.
+
+**Why:** The round-4 audit: the floor plan was hundreds of tiny boxes, and the one neumorphic element was grey on grey.
+
+### What changed
+- **The floor plan is gone.** Level 6 is now a flat list of six zones (reading, set point, state), with the selected zone on a cobalt tint, and today's curve for that zone under it.
+- **The style lives in one zone:** the right-hand field, the dial's own colour (neutral 4). The dial is raised out of it, its groove is pressed in, and the knob, the − and + keys and the chosen mode are raised again. Everything left of it is a white app with hairlines.
+- **Not grey on grey:** ink numerals (88 px reading, 14 px tick labels), ticks in neutral 10, the reading marked in ink across the tick band, a 12 px cobalt arc from the set point to the reading, and the chosen mode in cobalt and semibold. The ring is still only 1.09:1 against the field, held up by its shadows; that is the style, and every control keeps a glyph or label at 3:1 or more.
+- **Cobalt has one job:** the selected zone and its control. The alarm count is neutral; the stuck damper is said once, in the zone's row, with an ink warning glyph.
+- **Composition:** the dial and the right column are aligned at the top and centred together in the field; the zone title sits on the dial's top line.
+- After the fresh audits: the field one step darker, the chosen mode in cobalt, a thicker arc, the title aligned with the dial, the chart's 'Cooling on, 09:20' note off the curve, the cooling marker on the line (22.24°).
+
+### Type scale
+Outfit only. 12 caption, 14 body, 17 values, 24 headings, 88 the dial's reading (outside the scale on purpose, the display moment).
+
+### Blind pairwise test
+Three shipped references (Mobbin, cited by link only; images were kept in scratch and deleted). Each pair at the same height, sides random, no labels; fresh judges saw several pairs at once (four sets: 15, 9, 6 and 6 pairs, a new judge each time) and were told to weigh craft, not content. The table gives the result for the final render.
+
+| Reference | Result |
+|---|---|
+| Google Analytics, https://mobbin.com/screens/8e1e43af-face-4aed-a992-c63ae71816eb | ours better by 4 |
+| Neon, https://mobbin.com/screens/1662d1cc-c43f-4227-91f1-bf6652b2146e | ours better by 3 |
+| Tailscale, https://mobbin.com/screens/9bcf227b-1066-4066-bb0d-3f13dba0cdab | ours better by 3 |
+
+**Pass rule:** never lose by 3 or more, and equal or better in at least 2 of 3. Passes. The judge's flaw for ours: faint ticks, and the reading's ink mark beside the 22 tick reads as a double tick.
+
+### Fresh-eyes audit
+Round 1 was a fresh-context auditor given PRESENTATION.md, ROUND3-BRIEF.md, the owner's note, the B2B product screens (product/01, 02, 04, 06), Orbika, Holdfast and Lampwright as the bar, and the three references below. Rounds 2 and 3 went to the same auditor, so they check its own fixes rather than being fresh eyes. Scores: 4, 4, 4. Left open in round 3: the ring is 1.09:1 against the field, and the field below the dial is empty for about 200 px.
+
+### Checks
+- `check_dates.py --year 2026` passes (Wed 14 Oct 2026).
+- `check_names.py`: 0 errors; its new words (Airflow, Comms) are UI words.
+- `engine.py validate`: no errors, 1 warning, the neumorphic edge-contrast warning (every soft control has a 3:1 glyph or label).
+- Preflight: 1 warning, the 88 px reading outside the scale, on purpose.
+- Re-added from the page: desks 38 + 27 = 65 of 64 + 48 = 112; 22.4 − 21.5 = 0.9° to go; the set band is 21.5 ± 0.5.
+
+### Left
+The faint ticks and the 'double tick' at 22 (the reading's ink mark beside the major tick); about 200 px of empty field under the dial.

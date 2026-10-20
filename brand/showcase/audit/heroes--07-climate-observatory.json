@@ -76,5 +76,35 @@
  },
  "facts": [
   "The seamount is generated in code, not drawn from real bathymetry (the auditor's reason it stays below 5)"
- ]
+ ],
+ "round4": {
+  "score": 4,
+  "pairwise": [
+   {
+    "reference": "Grok",
+    "url": "https://mobbin.com/sites/sections/30ab578c-5e08-4070-905a-146bc41a8e12",
+    "result": "won 2 (three times)"
+   },
+   {
+    "reference": "Dovetail",
+    "url": "https://mobbin.com/sites/sections/57c3f21b-b420-47cc-be74-8b45ab45aea5",
+    "result": "won 3 (twice)"
+   },
+   {
+    "reference": "Visitors",
+    "url": "https://mobbin.com/sites/sections/487e372c-a833-46ec-b112-e9ddc1dacd3f",
+    "result": "won 4 (twice)"
+   },
+   {
+    "note": "The final round only moved the 5,000 m label inside the frame and the seamount 40 px left; it was not re-judged after that."
+   }
+  ],
+  "changed": [
+   "Contours no longer run behind the copy: only the seamount is drawn, off centre to the right, so the copy sits on open sea; the legibility scrim is gone",
+   "Removed: the graticule and its latitude and longitude labels, the scale bar, the dashed anomaly ring and its label, the float track, the profile card with its chart, legend and three stat cells, the eyebrow and the coordinates footer",
+   "Contours every 200 m with brighter 1,000 m index lines (was every 100 m), two depth labels set along their lines (3,000 m and 5,000 m)",
+   "The float's reading sits beside its marker in two lines, lettered with a halo in the sea's colour instead of a box: 'Surfaced 13:52 UTC · +1.38 °C above the October mean'",
+   "The button is an outline, so teal means depth and coral means warm water"
+  ]
+ }
 }

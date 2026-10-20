@@ -82,7 +82,7 @@
     "focusColor": null,
     "neutralBase": null,
     "contrastTarget": "AA",
-    "textFace": "IBM Plex Mono",
+    "textFace": "IBM Plex Sans",
     "displayFace": "=textFace",
     "baseSize": 17,
     "spaceUnit": 4,
@@ -153,7 +153,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "dark"
+    "defaultTheme": "dark",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -490,7 +493,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "db176cd93e624572",
+    "DESIGN.md": "e7066d59ae740c09",
     "PRODUCT.md": "24e9b7840bcf47c6"
   },
   "exports": {
@@ -1914,5 +1917,7 @@
       "size.target.min": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

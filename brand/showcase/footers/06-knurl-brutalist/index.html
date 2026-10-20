@@ -6,176 +6,108 @@
 <title>Knurl Supply footer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
+  /* Round 4 rebuild: a quiet footer with one signature element, the house rule set large in lime (it does not date).
+     No marquee, countdown, stamp, texture block, boxes or offset shadows. One depth technique: hairline rules.
+     Type: Big Shoulders Display for the one statement, Space Mono for everything else. Sizes 12, 16, 90 (tokens); 67 on phones. */
   :root {
     --lime: var(--ds-color-brand-seed);
-    --ink: var(--ds-color-neutral-light-12);
-    --concrete: var(--ds-color-neutral-light-4);
-    --paper: var(--ds-color-neutral-light-1);
-    --b: var(--ds-border-width-4) solid var(--ink);
-    --hard: 6px 6px 0 var(--ink);        /* neo-brutalist hard offset: the engine has no zero-blur shadow style */
+    --bg: var(--ds-color-neutral-dark-1);          /* near-black */
+    --ink: var(--ds-color-neutral-dark-12);
+    --muted: var(--ds-color-neutral-dark-10);
+    --rule: var(--ds-color-neutral-dark-5);
+    --above: var(--ds-color-neutral-light-2);
+    --above-ink: var(--ds-color-neutral-light-12);
+    --above-muted: var(--ds-color-neutral-light-11);
+    --gutter: var(--ds-space-48);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: var(--concrete); }
-  body { font-family: var(--ds-font-family-text); color: var(--ink); -webkit-font-smoothing: antialiased; }
+  html, body { background: var(--bg); }
+  body { font-family: var(--ds-font-family-text); font-size: var(--ds-font-size-16); line-height: 1.5; color: var(--ink); -webkit-font-smoothing: antialiased; }
   a { color: inherit; text-decoration: none; }
-  :focus-visible { outline: var(--ds-border-width-4) solid var(--ds-color-accent-light-11); outline-offset: 2px; }
-  .disp { font-family: var(--ds-font-family-display); font-weight: 900; text-transform: uppercase; letter-spacing: 0; line-height: .86; }
-  .lbl { font-size: var(--ds-font-size-12); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  :focus-visible { outline: var(--ds-border-width-2) solid var(--lime); outline-offset: 3px; }
+  .cap { font-size: var(--ds-font-size-12); line-height: 20px; letter-spacing: .06em; text-transform: uppercase; }
 
-  footer { border-top: var(--b); }
+  /* the last row of the section above, so the shot reads as the end of a page */
+  .above { background: var(--above); color: var(--above-muted); padding: 0 var(--gutter); }
+  .above p { display: flex; gap: var(--ds-space-16); padding: 24px 0 28px; border-top: var(--ds-border-width-1) solid var(--ds-color-neutral-light-6); }
+  .above b { font-weight: 700; color: var(--above-ink); }
 
-  /* marquee */
-  .marquee { overflow: hidden; background: var(--ink); color: var(--lime); border-bottom: var(--b); }
-  .track { display: flex; width: max-content; animation: run 28s linear infinite; }
-  .track span { display: flex; align-items: center; gap: var(--ds-space-24); padding: var(--ds-space-16) var(--ds-space-12); font-size: var(--ds-font-size-28); white-space: nowrap; }
-  .track svg { width: 20px; height: 20px; flex: none; }
-  @keyframes run { to { transform: translateX(-50%); } }
+  footer { padding: 88px var(--gutter) 32px; }
+  .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--ds-space-24); }
 
-  /* the block grid */
-  .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); }
-  .blk { border-right: var(--b); border-bottom: var(--b); padding: var(--ds-space-32); position: relative; }
-  .blk:last-child { border-right: 0; }
-  .news { grid-column: 1 / span 6; grid-row: span 2; background: var(--lime); padding: var(--ds-space-40) var(--ds-space-40) var(--ds-space-40); display: flex; flex-direction: column; }
-  .news h2 { margin-top: var(--ds-space-20); font-size: var(--ds-font-size-90); max-width: 7.5em; text-wrap: balance; }
-  .news h2 { line-height: .9; }
-  .news h2 mark { display: inline-block; line-height: .84; padding: .06em .08em 0; background: var(--ink); color: var(--lime); }
-  .count { display: flex; gap: var(--ds-space-16); margin-top: var(--ds-space-32); }
-  .count div { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 104px; height: 104px; background: var(--paper); border: var(--b); box-shadow: var(--hard); }
-  .count b { font-size: var(--ds-font-size-51); line-height: .9; font-variant-numeric: tabular-nums; }
-  .count div.live { background: var(--ink); color: var(--lime); }
-  form { display: flex; margin-top: auto; padding-top: var(--ds-space-40); gap: var(--ds-space-12); }
-  form label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-  input { flex: 1; min-width: 0; height: 64px; padding: 0 var(--ds-space-20); border: var(--b); background: var(--paper); box-shadow: var(--hard);
-    font: inherit; font-size: var(--ds-font-size-16); text-transform: uppercase; color: var(--ink); border-radius: 0; }
-  input::placeholder { color: var(--ds-color-text-secondary); }
-  button, .btn { display: inline-flex; align-items: center; gap: var(--ds-space-12); height: 64px; padding: 0 var(--ds-space-24); border: var(--b); background: var(--ink); color: var(--lime);
-    box-shadow: var(--hard); font-family: var(--ds-font-family-display); font-weight: 900; font-size: var(--ds-font-size-28); text-transform: uppercase; cursor: pointer; border-radius: 0;
-    transition: transform var(--ds-motion-duration-micro, 90ms) linear, box-shadow var(--ds-motion-duration-micro, 90ms) linear; }
-  button:hover, .btn:hover { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--ink); }
-  button:active, .btn:active { transform: translate(6px, 6px); box-shadow: none; }
-  .fine { margin-top: var(--ds-space-20); }
+  .drop { grid-column: 1 / span 9; }
+  .drop .cap { color: var(--muted); }
+  .drop h2 { margin-top: var(--ds-space-16); font-family: var(--ds-font-family-display); font-weight: 800; font-size: var(--ds-font-size-90);
+    line-height: .92; letter-spacing: .005em; text-transform: uppercase; color: var(--lime); }
 
-  .links { grid-column: span 3; background: var(--paper); }
-  .links h3 { font-size: var(--ds-font-size-51); margin-bottom: var(--ds-space-16); }
-  .links ul { list-style: none; }
-  .links li { border-top: var(--ds-border-width-2) solid var(--ink); }
-  .links li:last-child { border-bottom: var(--ds-border-width-2) solid var(--ink); }
-  .links a { display: flex; justify-content: space-between; align-items: center; min-height: 40px; font-size: var(--ds-font-size-16); font-weight: 700; text-transform: uppercase; }
-  .links a::after { content: "\2192"; opacity: 0; transform: translateX(-8px); transition: opacity var(--ds-motion-duration-short) linear, transform var(--ds-motion-duration-short) var(--ds-motion-easing-enter); }
-  .links a:hover { background: var(--lime); }
-  .links a:hover::after { opacity: 1; transform: none; }
-  .tag { background: var(--lime); border: var(--ds-border-width-2) solid var(--ink); padding: 0 var(--ds-space-6); font-size: var(--ds-font-size-12); }
+  .join { grid-column: 10 / -1; align-self: start; }
+  .join p { color: var(--muted); font-size: var(--ds-font-size-12); line-height: 20px; letter-spacing: .06em; text-transform: uppercase; }
+  .join form { margin-top: var(--ds-space-16); display: flex; }
+  .join label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .join input { flex: 1; min-width: 0; height: 48px; padding: 0 var(--ds-space-16); font: inherit; color: var(--ink); background: transparent;
+    border: var(--ds-border-width-1) solid var(--ds-color-neutral-dark-7); border-right: 0; border-radius: 0; }
+  .join input::placeholder { color: var(--muted); }
+  .join button { height: 48px; padding: 0 var(--ds-space-24); font: 700 var(--ds-font-size-16)/1 var(--ds-font-family-text); text-transform: uppercase;
+    color: var(--ink); background: transparent; border: var(--ds-border-width-1) solid var(--ds-color-neutral-dark-7); border-radius: 0; cursor: pointer; }
 
-  .shop { grid-column: span 3; background: var(--ink); color: var(--paper); display: flex; flex-direction: column; gap: var(--ds-space-12); }
-  .shop h3 { font-size: var(--ds-font-size-51); color: var(--lime); }
-  .shop p { font-size: var(--ds-font-size-16); line-height: 1.5; text-transform: uppercase; }
-  .shop .open { display: inline-flex; align-items: center; gap: var(--ds-space-8); color: var(--lime); }
-  .shop .open i { width: 10px; height: 10px; background: var(--lime); }
-  .shop .handle { margin-top: auto; font-size: var(--ds-font-size-16); font-weight: 700; color: var(--lime); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 2px; min-height: var(--ds-size-target-min); display: inline-flex; align-items: center; }
+  .cols { grid-column: 1 / -1; margin-top: 88px; padding-top: var(--ds-space-32); border-top: var(--ds-border-width-1) solid var(--rule);
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--ds-space-24); }
+  .cols h3 { font-weight: 400; color: var(--muted); margin-bottom: var(--ds-space-12); }
+  .cols ul { list-style: none; }
+  .cols li.t { color: var(--muted); }
+  .cols li { line-height: 24px; padding: 4px 0; }
+    @media (hover: hover) and (pointer: fine) { .cols a:hover, .legal a:hover { color: var(--lime); } }
 
-  .knurl { grid-column: span 3; background: var(--lime); padding: 0; overflow: hidden; display: grid; place-items: center; }
-  .knurl svg.pat { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .stamp { position: relative; width: 196px; height: 196px; transform: rotate(-12deg); }
-  .stamp svg { width: 100%; height: 100%; }
+  .legal { margin-top: 72px; display: flex; justify-content: space-between; align-items: center; color: var(--muted); }
+  .legal nav { display: flex; gap: var(--ds-space-32); }
+  .legal a { display: inline-flex; align-items: center; min-height: 32px; }
 
-  /* base bar */
-  .base { display: grid; grid-template-columns: 2fr repeat(3, 1fr) 1fr 1.4fr; border-bottom: var(--b); background: var(--paper); }
-  .base > * { display: flex; align-items: center; min-height: 64px; padding: 0 var(--ds-space-24); border-right: var(--b); }
-  .base > *:last-child { border-right: 0; }
-  .base a:hover { background: var(--lime); }
-  .base .cur { justify-content: space-between; }
-  .base .top { justify-content: space-between; background: var(--ink); color: var(--lime); }
-  .base .top:hover { background: var(--lime); color: var(--ink); }
-
-  @media (max-width: 900px) {
-    .news, .links, .shop, .knurl { grid-column: 1 / -1; grid-row: auto; border-right: 0; }
-    .news { padding: var(--ds-space-24); }
-    .news h2 { font-size: var(--ds-font-size-67); }
-    .count { gap: var(--ds-space-8); }
-    .count div { width: 72px; height: 76px; }
-    .count b { font-size: var(--ds-font-size-28); }
-    form { flex-direction: column; }
-    button { justify-content: space-between; }
-    .knurl { min-height: 240px; }
-    .base { grid-template-columns: 1fr 1fr; }
-    .base > * { border-bottom: var(--b); }
-    .base > *:nth-child(odd) { border-right: 0; }
-    .base .copy, .base .top { grid-column: 1 / -1; }
-    .base > *:last-child { border-bottom: 0; }
-    input { flex: none; }
+  @media (max-width: 1100px) {
+    .drop { grid-column: 1 / -1; }
+    .join { grid-column: 1 / span 6; margin-top: var(--ds-space-48); }
   }
-  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  @media (max-width: 760px) {
+    :root { --gutter: var(--ds-space-20); }
+    .above p { flex-direction: column; gap: 4px; padding: 16px 0 20px; }
+    footer { padding-top: 56px; }
+    .grid { grid-template-columns: 1fr; }
+    .drop h2 { font-size: var(--ds-font-size-67); }
+    .join { grid-column: 1 / -1; margin-top: var(--ds-space-40); }
+    .cols { grid-template-columns: 1fr 1fr; row-gap: var(--ds-space-32); margin-top: 56px; }
+    .legal { flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 48px; }
+    .legal nav { flex-wrap: wrap; column-gap: var(--ds-space-20); }
+  }
 </style>
 </head>
 <body>
+<div class="above" aria-hidden="true"><p><b>Archive</b><span>Last pieces from drops 01 to 06, while they last.</span></p></div>
 <footer aria-label="Site footer">
-  <div class="marquee" aria-label="Drop 07, Field Issue, Saturday 24 October at 12:00 CEST. No restocks.">
-    <div class="track disp" aria-hidden="true">
-      <span>Drop 07 <svg viewBox="0 0 26 26"><path d="M13 0v26M0 13h26M3.8 3.8l18.4 18.4M22.2 3.8 3.8 22.2" stroke="currentColor" stroke-width="5"/></svg> Field issue <svg viewBox="0 0 26 26"><path d="M13 0v26M0 13h26M3.8 3.8l18.4 18.4M22.2 3.8 3.8 22.2" stroke="currentColor" stroke-width="5"/></svg> Sat 24.10 / 12:00 CEST <svg viewBox="0 0 26 26"><path d="M13 0v26M0 13h26M3.8 3.8l18.4 18.4M22.2 3.8 3.8 22.2" stroke="currentColor" stroke-width="5"/></svg> No restocks. Ever. <svg viewBox="0 0 26 26"><path d="M13 0v26M0 13h26M3.8 3.8l18.4 18.4M22.2 3.8 3.8 22.2" stroke="currentColor" stroke-width="5"/></svg></span>
-      <span>Drop 07 <svg viewBox="0 0 26 26"><path d="M13 0v26M0 13h26M3.8 3.8l18.4 18.4M22.2 3.8 3.8 22.2" stroke="currentColor" stroke-width="5"/></svg> Field issue <svg viewBox="0 0 26 26"><path d="M13 0v26M0 13h26M3.8 3.8l18.4 18.4M22.2 3.8 3.8 22.2" stroke="currentColor" stroke-width="5"/></svg> Sat 24.10 / 12:00 CEST <svg viewBox="0 0 26 26"><path d="M13 0v26M0 13h26M3.8 3.8l18.4 18.4M22.2 3.8 3.8 22.2" stroke="currentColor" stroke-width="5"/></svg> No restocks. Ever. <svg viewBox="0 0 26 26"><path d="M13 0v26M0 13h26M3.8 3.8l18.4 18.4M22.2 3.8 3.8 22.2" stroke="currentColor" stroke-width="5"/></svg></span>
-    </div>
-  </div>
-
   <div class="grid">
-    <section class="blk news" aria-labelledby="news-h">
-      <p class="lbl">[ The list / 38,917 on it ]</p>
-      <h2 class="disp" id="news-h">Get the drop <mark>before</mark> it drops.</h2>
-      <div class="count" role="timer" aria-label="Next drop in 9 days, 14 hours, 22 minutes">
-        <div aria-hidden="true"><b class="disp">09</b><span class="lbl">Days</span></div>
-        <div aria-hidden="true"><b class="disp">14</b><span class="lbl">Hrs</span></div>
-        <div aria-hidden="true"><b class="disp">22</b><span class="lbl">Min</span></div>
-        <div class="live" aria-hidden="true"><b class="disp">47</b><span class="lbl">Sec</span></div>
-      </div>
+    <section class="drop" aria-labelledby="drop-h">
+      <p class="cap">Knurl Supply, Rotterdam</p>
+      <h2 id="drop-h">Made once.<br>No restocks.</h2>
+    </section>
+    <section class="join" aria-label="Drop emails">
+      <p>One email per drop</p>
       <form onsubmit="return false">
         <label for="em">Email address</label>
         <input id="em" type="email" placeholder="Your email" autocomplete="email">
-        <button type="submit">Join <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M2 11h17M12 4l7 7-7 7" stroke="currentColor" stroke-width="3.5"/></svg></button>
+        <button type="submit">Join</button>
       </form>
-      <p class="lbl fine">One email per drop. No spam. No mercy.</p>
     </section>
-
-    <nav class="blk links" aria-label="Shop">
-      <h3 class="disp">Shop</h3>
-      <ul><li><a href="#">New in</a></li><li><a href="#">Outerwear</a></li><li><a href="#">Pants</a></li><li><a href="#">Tees</a></li><li><a href="#">Headwear</a></li><li><a href="#">Archive <span class="tag">-40%</span></a></li></ul>
+    <nav class="cols" aria-label="Footer">
+      <div><h3 class="cap">Shop</h3><ul><li><a href="#">New in</a></li><li><a href="#">Outerwear</a></li><li><a href="#">Pants</a></li><li><a href="#">Tees</a></li><li><a href="#">Archive</a></li></ul></div>
+      <div><h3 class="cap">Help</h3><ul><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Size guide</a></li><li><a href="#">Track order</a></li></ul></div>
+      <div><h3 class="cap">Flagship</h3><ul><li class="t">Unit 4, Canal Yard 41</li><li class="t">Rotterdam</li><li class="t">Wed–Sun 12–19</li><li><a href="#">Directions</a></li></ul></div>
+      <div><h3 class="cap">Knurl</h3><ul><li><a href="#">Journal</a></li><li><a href="#">Stockists</a></li><li><a href="#">Careers</a></li></ul></div>
     </nav>
-    <nav class="blk links" aria-label="Help">
-      <h3 class="disp">Help</h3>
-      <ul><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Size guide</a></li><li><a href="#">Track order</a></li><li><a href="#">Stockists</a></li><li><a href="#">Contact</a></li></ul>
-    </nav>
-
-    <section class="blk shop" aria-label="Flagship store">
-      <h3 class="disp">Flagship</h3>
-      <p>Unit 4, Canal Yard 41<br>Rotterdam</p>
-      <p class="open"><i aria-hidden="true"></i>Open now &middot; Wed&ndash;Sun 12&ndash;19</p>
-      <a class="handle" href="#">@knurl.supply</a>
-    </section>
-    <div class="blk knurl" aria-hidden="true">
-      <svg class="pat" preserveAspectRatio="none">
-        <defs><pattern id="kn" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M0 0l22 22M22 0 0 22" stroke="var(--ink)" stroke-width="2.5"/></pattern></defs>
-        <rect width="100%" height="100%" fill="url(#kn)"/>
-      </svg>
-      <div class="stamp">
-        <svg viewBox="0 0 200 200">
-          <defs><path id="ring" d="M100 100m-74 0a74 74 0 1 1 148 0a74 74 0 1 1-148 0"/></defs>
-          <circle cx="100" cy="100" r="96" fill="var(--ink)"/>
-          <circle cx="100" cy="100" r="58" fill="var(--lime)"/>
-          <text font-family="Space Mono, monospace" font-weight="700" font-size="17" fill="var(--lime)"><textPath href="#ring" textLength="452" lengthAdjust="spacing">KNURL SUPPLY CO &#8226; HARD GOODS &#8226; EST 2019 &#8226; </textPath></text>
-          <path d="M100 62v76M62 100h76M73 73l54 54M127 73l-54 54" stroke="var(--ink)" stroke-width="11"/>
-        </svg>
-      </div>
-    </div>
   </div>
-
-  <div class="base lbl">
-    <span class="copy">&copy; 2026 Knurl Supply Co.</span>
-    <a href="#">Privacy</a>
-    <a href="#">Terms</a>
-    <a href="#">Cookies</a>
-    <a class="cur" href="#" aria-label="Currency: euro. Change">EUR &euro; <span aria-hidden="true">&#9662;</span></a>
-    <a class="top" href="#top">Back to top <span aria-hidden="true">&uarr;</span></a>
+  <div class="legal cap">
+    <span>&copy; 2026 Knurl Supply Co.</span>
+    <nav aria-label="Legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a><a href="#">EUR &euro;</a></nav>
   </div>
 </footer>
 </body>

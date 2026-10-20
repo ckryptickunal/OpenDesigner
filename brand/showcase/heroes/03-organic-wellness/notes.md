@@ -1,5 +1,7 @@
 # 03 Lullwort: organic wellness hero
 
+Gallery: Lullwort is a fictional loose-leaf sleep tea; the hero is one tin of its No. 3 Dusk Blend.
+
 ## Direction
 Lullwort is a fictional maker of loose-leaf sleep teas (chamomile, lemon balm, valerian). The audience is adults who want a wind-down ritual, not a supplement. The hero is a painted dusk: a clay sun, a sage meadow, a tin and a cup among chamomile and valerian, all in pen and watercolour on cream paper. A soft serif headline does the talking. Feel words: **calm, cozy, natural** ("natural" is not in the engine's list; it asked).
 
@@ -101,3 +103,32 @@ Result: cool green-grey paper (#eaece9), green-black ink (#232521, about 14:1), 
 Contrast measured on the pixels: ink on the ground 13.0:1, secondary and the 12 px Latin names 6.09:1, button 7.63:1, "40 g" on the tin green 7.4:1 or more.
 
 **Still open.** Lullwort shares the "Lull" stem with Lullwater (`app-screens/02`), a sleep app; not one letter apart, and no real tea company called Lullwort was found, so it is kept.
+
+## Round 4 (owner review, 2026-10-18)
+
+**What he said.** The showcase pieces look "very very very cluttered and very unprofessional, which is not acceptable at all", and "None of them should feel like they are from a vibe coded app". This round followed `AUDIT-ROUND4.md` and `PRESENTATION.md` (hero: a headline, one line, one action or none, one subject).
+
+**One idea.** One tin of Lullwort's No. 3 Dusk Blend, made with care, beside the line that sells it.
+
+**What changed.**
+- Rebuilt: the botanical plate (clip-art daisies, lemon balm, valerian dish), the three callouts, the spec table, the 50/30/20 bar and the plate caption are gone.
+- One object: the tin, straight on and a little above eye level, drawn in SVG with a shallow slip lid, a paper label, physically based matte shading (one light from the upper left, a broad soft sheen instead of the stripe highlights), a rim light, a lid seam, a tight contact shadow and a soft one.
+- Every label line sits on the same ellipse as the label's edges (SVG textPath).
+- A wall and a table top give the tin somewhere to stand; the copy sits on the wall, vertically centred, so the empty lower left is gone.
+- Headline two lines at the 90 px token; one line of copy; one action, 'Add to bag · £14'.
+
+**Type scale (round 4).** Display 90 px (token, Fraunces 340) · Title 28 px (wordmark) · Body large 21 px (the line) · Body 16 px (nav, button). The tin's print is part of the drawing (44 and 13 px in its own coordinates). Two faces: Fraunces and Instrument Sans.
+
+**Blind pairwise test** (our shot beside a shipped hero at the same height, random sides, no labels, fresh judges; reference images kept in scratch and deleted):
+- Seed (https://mobbin.com/sites/sections/9b15de56-af55-474d-866d-caf975c999b9): lost 3, lost 3, then lost 2 on the final tin
+- Calm (https://mobbin.com/sites/sections/7c6850a8-7a9e-43d8-951a-0232d9cad5b8): won 2 (twice)
+- KÖPPEN (https://mobbin.com/sites/sections/ee24f236-d46f-4c8f-b9d1-1fdb6cfc6e9e): won 3 (twice)
+
+Every judge who preferred Seed gave the same reason: its jars are photographs and this tin is visibly drawn in code. The final tin (round 4 shading fixes) was not re-judged.
+
+**Fresh-eyes audit** (against the B2B product screens and Orbika): 3.5 (round 1), 3.5 (round 2), 3.5 (round 3), 3.5 (round 4, final). Below the 4 the brief asks for; stopped after 4 rounds as instructed.
+
+**Checks.** `check_dates.py --year 2026`: passes. `check_names.py`: only the false positives recorded in NAMES.md (2026-10-20 heroes block). `preflight.py html`: no errors.
+
+**Still open.** The last auditor still reads the tin as code-drawn next to photography, and asks for the lid's bottom edge and seam to curve with the label and for all label lines to wrap alike. A photograph of a real tin (the owner's asset) is the likely way past 4; a code-drawn object did not get there in 4 rounds.
+

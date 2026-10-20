@@ -643,7 +643,7 @@ Decisions: D-0007 (answers.Q-plat-01).
 
 ## Decisions
 
-**21 decisions so far.** Each one says who set it and why.
+**23 decisions so far.** Each one says who set it and why.
 Designers: decision history with reasons · Code: `opendesigner/decisions.md`
 
 <details><summary>More</summary>
@@ -665,6 +665,8 @@ Your own decisions first (the newest value per path), then your changes to stand
 | D-0018 | `dials.expression` | 15 | delegated | a tool people live in; quiet chrome |
 | D-0020 | `raw.brandColor` | "#136F8A" | delegated | petrol: a calm, less default accent whose one job is now and selected |
 | D-0021 | `raw.textFace` | "IBM Plex Sans" | delegated | an open (OFL) engineering face with tabular figures; not the default Inter |
+| D-0022 | `font.size.15` | {"value": 15, "unit": "px"} | delegated | Round 5: table rows at 15 px; reviewers called 14 px small in a dense panel |
+| D-0023 | `font.size.13` | {"value": 13, "unit": "px"} | delegated | Round 5: column heads, axis and secondary labels at 13 px |
 | D-0010 | standards | House standards v3: 289 applied | standard (locked) | OpenDesigner's house standards (sources marked non-negotiable) are applied without asking and locked. Change one only when the person asks: engine.py... |
 
 </details>
@@ -675,7 +677,7 @@ Your own decisions first (the newest value per path), then your changes to stand
 
 - Still defaults (zoom 0, sketch): Colors, Typography, Layout, Elevation & Depth, Shapes, Components, Motion, Modes and Themes, Iconography and Imagery, Content and Voice, Accessibility, Platforms and Devices
 - Assets not final: Logo, wordmark, symbol, lockups (H-logo): pending; App icon (H-appicon): pending; Favicon set (H-favicon): pending; Custom icons, pictograms, spot icons (H-icons): pending; Illustration, characters, empty-state art (H-illus): pending; Photography and art direction (H-photo): pending; Brand typeface files (H-type): pending; Fixed brand colors (H-color): pending; Motion signature and rich media (H-motion): pending; Graphic devices, patterns, textures, brand gradients, signature shape (H-motif): pending; UI sounds and sonic logo (H-sound): pending; Custom haptic patterns (H-haptic): pending; Voice and tone guide (H-voice): pending; Brand guidelines PDF (H-brandbook): pending
-- Answers taken on assumption or delegated: answers.Q-aud-01 (delegated), defaults.work-tool (auto_default), context.audience (delegated), raw.brandColor (delegated), answers.Q-plat-01 (delegated), macros (delegated), taste.feelWords (delegated), dials.warmth (delegated), raw.neutralTint (delegated), dials.depth (delegated), dials.roundness (delegated), dials.colorfulness (delegated), dials.expression (delegated), raw.textFace (delegated)
+- Answers taken on assumption or delegated: answers.Q-aud-01 (delegated), defaults.work-tool (auto_default), context.audience (delegated), raw.brandColor (delegated), answers.Q-plat-01 (delegated), macros (delegated), taste.feelWords (delegated), dials.warmth (delegated), raw.neutralTint (delegated), dials.depth (delegated), dials.roundness (delegated), dials.colorfulness (delegated), dials.expression (delegated), raw.textFace (delegated), overrides.font.size.15 (delegated), overrides.font.size.13 (delegated)
 - Waivers: none.
 - Licence risks: none found.
 - Validation: 0 errors, 0 warnings.

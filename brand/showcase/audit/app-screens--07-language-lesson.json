@@ -61,9 +61,9 @@
   ],
   "audited": "2026-10-14",
   "owner": {
-    "verdict": "hold",
-    "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
-    "date": "2026-10-18"
+    "verdict": "returned",
+    "said": "Back in the gallery: it passed round 5 at 4, the owner's condition for hidden pieces (2026-10-18: hide until better)",
+    "date": "2026-10-20"
   },
   "round4": {
     "score": 3,
@@ -99,6 +99,33 @@
       "verdict": "keep",
       "said": "good to go",
       "date": "2026-10-14"
+    },
+    {
+      "verdict": "hold",
+      "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
+      "date": "2026-10-18"
     }
-  ]
+  ],
+  "round5": {
+    "score": 4,
+    "pairwise": "Passes. Speak +3, +3, +3; Quizlet +3, +3, +4; Duolingo -1, -1, +1 (never behind by more than 1).",
+    "changed": [
+      "One subject: the stress in caffè set in type, two rows (You, Native speaker), each syllable as large as it was loud (Spectral 81 and 34) on one drawn baseline",
+      "Real playback: a 44 pt round play button per row, replacing the text links",
+      "Demoted: the sentence (Spectral 22) and 7 of 8 words clear as context; removed the English prompt, the caffè heading with IPA, Slow and the loudness envelopes",
+      "One explanation line: caffè is /kafˈfɛ/; you leaned on caf, as in English coffee",
+      "Vermilion only under caffè and on the learner's caf"
+    ],
+    "scores_by_round": [
+      4,
+      4,
+      4
+    ],
+    "references": [
+      "https://mobbin.com/screens/8a1471fc-b4f0-4bd5-9bef-83969238d426",
+      "https://mobbin.com/screens/33d32d0d-5778-45c9-bc6d-8496bab70db8",
+      "https://mobbin.com/screens/609a3ede-102a-42c0-bf90-c216edda5713"
+    ],
+    "date": "2026-10-20"
+  }
 }

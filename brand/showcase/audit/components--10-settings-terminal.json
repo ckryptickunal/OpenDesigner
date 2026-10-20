@@ -57,9 +57,9 @@
   ],
   "audited": "2026-10-14",
   "owner": {
-    "verdict": "hold",
-    "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
-    "date": "2026-10-18"
+    "verdict": "returned",
+    "said": "Back in the gallery: it passed round 5 at 4, the owner's condition for hidden pieces (2026-10-18: hide until better)",
+    "date": "2026-10-20"
   },
   "round3": {
     "score": 4,
@@ -94,6 +94,22 @@
       "verdict": "improve",
       "said": "okay, but I don't know who will use it",
       "date": "2026-10-14"
+    },
+    {
+      "verdict": "hold",
+      "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
+      "date": "2026-10-18"
     }
-  ]
+  ],
+  "round5": {
+    "score": 4,
+    "pairwise": "Devin/Buffer/hilos (ours minus shipped, fresh judges, sides random): round 1 +1/+1/+1, round 2 +1/+1/+1. Passes in both rounds.",
+    "changed": [
+      "Settings page instead of a dialog over a dimmed incidents page; settings sidebar and the Notifications pane",
+      "Mid-change: quiet-hours end handle held at Fri 08:30 with tooltip, old end dashed at 07:00, 'Weeknights 22:00 to 08:30, was 07:00', and the effect: '90 more quiet minutes each weekday morning ... Last week, 4 did.'",
+      "Green has one job: the 90 minutes being added; switches monochrome, quiet block, handle and logo neutral",
+      "Email summary moved to 09:00 (08:00 fell in the new quiet hours); on-call line shortened",
+      "Round 2 auditor: 4; remaining: empty daytime part of the strip, the added minutes could be louder, three white switches"
+    ]
+  }
 }

@@ -86,5 +86,36 @@
  "facts": [
   "mockups/04-browser-cascade/index.html line 71 still captions this piece 'Orrery'",
   "opendesigner/build/dtcg/orrery.resolver.json is a stale export from before the rename (engine build does not remove it)"
- ]
+ ],
+ "round4": {
+  "score": 4,
+  "pairwise": [
+   {
+    "reference": "Antimetal",
+    "url": "https://mobbin.com/sites/sections/38557cd6-8934-4d5a-b186-89ac968d8332",
+    "result": "won 3"
+   },
+   {
+    "reference": "Frontify",
+    "url": "https://mobbin.com/sites/sections/67380933-75aa-40ed-b13c-617db6250c9c",
+    "result": "won 3"
+   },
+   {
+    "reference": "Mixpanel",
+    "url": "https://mobbin.com/sites/sections/76746e2a-bc5e-4f66-a541-e684aa10a3e0",
+    "result": "won 3"
+   },
+   {
+    "note": "Judged on the first round-4 render; later changes only removed marks from the map and the teal from the result dots."
+   }
+  ],
+  "changed": [
+   "Title in this file fixed: the '# ' line said Orrery, so the gallery captioned the piece with the old brand",
+   "The 148 px '8.7 ms' headline is gone; the headline is now the claim in words, 'Search a billion vectors by meaning.', at the 67 px token, with 8.7 ms at p99 in the one supporting line",
+   "Headline on the left, the statement and one button beside it (the pip install line, the facts row and the footnote are gone); the console runs full width below and is cropped by the foot of the frame through its result rows, so the 230 px dead band is gone",
+   "Console cut from four panels to two: the results (now 10, with dense and sparse scores shown so the 0.7 + 0.3 score can be checked) and the map. The query plan, the map legend, two of the three filter chips, the hollow 'filtered' rings and the numbers on nine of the ten map dots are gone; half the background points are gone",
+   "Teal has one job, the button; the selected row has one signal (a fill)",
+   "'GitHub' in the nav (a real brand) is now 'Open source'"
+  ]
+ }
 }

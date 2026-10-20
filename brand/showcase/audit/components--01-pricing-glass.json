@@ -105,5 +105,17 @@
       "said": "can be better",
       "date": "2026-10-14"
     }
-  ]
+  ],
+  "round5": {
+    "score": 3.5,
+    "pairwise": "Vercel/Cartesia/Stripe (ours minus shipped, fresh judges, sides random): round 1 +1/+2/+1, round 2 -1/+2/0, round 3 -1/+2/+1. Passes the blind test in every round; fresh-eyes 3.5, 3.5, 3.5, so it did not reach 4.",
+    "changed": [
+      "Light page; the estimator is the subject: a cost chart for Studio and Premiere from 0 to 300 min of 4K film, the slider as its x axis, held at 90 min",
+      "The plans are the answer: the cheapest plan at your usage (Studio $49.00 = $19.00 + 750 extra render-minutes at $0.04), one action, a short spec, then Premiere $144.00 and Spark (no 4K)",
+      "Amber only for you (slider fill and your dot); Studio a 4 px ink line, Premiere 3 px grey; crossing labelled 'Premiere costs less from 249 min'",
+      "Removed: three plan cards, feature lists, comparison table, the 'save 20%' claim (20.8% for Studio), stale shot-monthly.png",
+      "Engine: raw.defaultTheme light, rebuilt; brand #F2A93B unchanged",
+      "Remaining (round 3 auditor): the slider's fill on the $0 line reads as a third line, the answer panel stacks seven groups, the chart stroke outweighs the price"
+    ]
+  }
 }

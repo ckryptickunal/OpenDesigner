@@ -11,10 +11,10 @@ Files: each piece has `index.html`, `shot.png`, `notes.md`, `engine-log.txt` (ev
 | 01 | Fellrise (was Ridgeline), trail pace and climb | acid green #C8FF2E on black | Archivo: 13 / 17 / 30 / 68 display | slanted heavy numeral, hatched ridge, cut-corner tag | 205 x 251 @3x |
 | 02 | Thrum, heart-rate zones | warm red #FF5436, amber-to-crimson zones | Bricolage Grotesque: 13 / 17 / 30 / 104 display | one giant numeral, segmented zone bar, live trace | 205 x 251 @3x |
 | 03 | Tidemark, dawn tide face | sky blue #5CC8FF, navy sky | Sora: 14 / 17 / 20 / 72 display | generative dawn sky, tide sine on the sea | 205 x 251 @3x |
-| 04 | Headway, transit countdown | signal yellow #FFCC1A on black | Big Shoulders Display: 14 / 17 / 20 / 30 / 114 display | signage: square badges, hard rules, vertical MIN | 205 x 251 @3x |
+| 04 | Headway, transit countdown | signal yellow #FFCC1A on black | Overpass (round 4; was Big Shoulders Display): 15 / 17 / 21 / 124 display | one countdown, signage voice without badges or rules | 205 x 251 @3x |
 | 05 | Nook, home scenes | lamp amber #FFB54A, neutral tiles | Nunito: 15 / 17 / 30 | pillowy tiles, one lit | 205 x 251 @3x |
 | 06 | Hush, breathing | lavender #B9A6FF | Fraunces (upright): 15 / 17 / 30 | grainy orb, ripples, phase arc | 205 x 251 @3x |
-| 07 | Leeward, sailing heading and wind | bone #EDE4CC, port red, starboard green | IBM Plex Mono: 14 / 17 / 30 / 40 | compass card larger than the screen | 205 x 251 @3x |
+| 07 | Leeward, sailing heading and wind | bone #EDE4CC, starboard green | IBM Plex Sans (round 4; was Plex Mono): 13 / 15 / 17 / 42 | a whole heading-up compass card inside the display | 205 x 251 @3x |
 | 08 | Onething, focus timer | monochrome plus pink #FF4F9A | Geist: 15 / 17 / 40 | one ring on a minute-tick track | 205 x 251 @3x |
 
 Directions were written side by side before building. Each has its own hue, family and shape language. The closest pair is 06 and 08 (both a circle in the middle); one is a soft light, the other a hard ring with ticks.

@@ -82,5 +82,34 @@
    "Finance logic made consistent: rows say Posts tonight, Posted with that night's journal entry (one per night), or are held; 1,206 + 78 + 18 = 1,302; USD books in Eastern time",
    "A Z-purlin mark; the lavender band removed; cents in a lighter tone; tabs on their own row; ledger settings in the sidebar; the table footer under the last row and Edit coding in the drawer header"
   ]
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": [
+   {
+    "reference": "Ramp",
+    "url": "https://mobbin.com/sites/sections/83a61ac1-4ad8-48d0-91be-13ac7b374e22",
+    "result": "won 3"
+   },
+   {
+    "reference": "Monarch",
+    "url": "https://mobbin.com/sites/sections/24964640-6293-40e9-994e-591814a32ec5",
+    "result": "won 4"
+   },
+   {
+    "reference": "Origin",
+    "url": "https://mobbin.com/sites/sections/e922bd8f-9385-4ecd-8930-43b50e499fbc",
+    "result": "won 2"
+   },
+   {
+    "note": "Judged on the first round-4 render; later changes only lightened and narrowed the bars and removed labels."
+   }
+  ],
+  "changed": [
+   "Header: the kicker and the aside note are gone; the headline, one two-line statement and one button",
+   "Product: the filter tabs, the journal-entry drawer, the ledger settings block, the connected-ledger footer, the screen's subtitle, the chart legend and the 'Books lock' and 'Tonight' labels inside the chart are gone; the chart header carries '1,206 posted · 78 queued' and 'Books lock Tue 3 Nov'",
+   "The chart is 148 px tall (was 52) so weekend nights read as short bars, not 2 px dust; bars are lighter (neutral step 8, 3.6:1) and narrower; the axis says 'Nov 1' where the month turns",
+   "The app is cropped by the foot of the frame through its table rows (two rows added, reusing this piece's merchants)"
+  ]
  }
 }

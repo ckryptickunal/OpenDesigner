@@ -1,5 +1,7 @@
 # 09 · Soffit: roadmap forecast (desktop, 1440×900 @2x)
 
+Gallery: Soffit is a fictional roadmap planner; Christmas slot booking opens in place on the timeline, forecast 8 days past its target, with the choice to cut or move.
+
 Soffit is a fictional roadmap planner that forecasts each project's finish from its own pace. The screen is the H2 2026 roadmap of Whinberry, a fictional UK online grocer: 14 projects in five teams, each with closed issues, target, forecast and how far the forecast lands from the target, and Christmas slot booking open in the side panel because it will finish 8 days late. Rebuilt in round 4 (see the end of this file); the sections from "Direction" to "Process findings" describe the Quarry board it replaced.
 
 ## Direction (rounds 1 to 3: the Quarry board, replaced in round 4)
@@ -137,3 +139,32 @@ build → Passes: no errors, 0 warnings
 - **F-003 (gap):** the Mobbin references for this kind of screen are demo accounts with empty data, so the blind test mostly measures data richness; ours won it from round A while the strict audit stayed at 3.
 - **F-004 (bug):** the warning role reads as brown (`#845d00` text on a cream `#f8f4ed`), the owner's banned combination, even with cool neutrals; the late state uses the danger role instead.
 - Fresh audits do not converge after about four rounds: each finds new nits and some reverse earlier ones. A score from an AI reviewer can only rule work out, and the owner's eye has to decide this one.
+
+## Round 5 (owner hid it until better, 2026-10-18)
+**What he said:** hide it until it passes at 4; it won the blind test, but the fresh reviewer stayed at 3: mostly grey so it could read as a wireframe, a family resemblance to Linear (the ⌘K sidebar, the Teams list, the side panel), and small type in a dense panel.
+
+**The idea in one sentence:** the head of product sees Christmas slot booking open in place on the roadmap, forecast 8 days past its target, and chooses whether to cut 7 issues or move the date.
+
+**What changed (its own structure):**
+- **No sidebar, no side panel.** A top bar with the workspace and the product's own tabs (Roadmap, Projects, Check-ins, Capacity), a page head with the one summary line ("14 scheduled projects in 5 teams · 2 forecast late"), and the roadmap at full width.
+- **The project being decided opens in place,** as a band inside the timeline: on the left, Tue 8 Dec at 29 px with "8 days past the 30 Nov target", 41 of 89 closed and the pace, and the decision ("To keep 30 Nov, cut 7 of 48 open issues": Move target, Choose 7 to cut); on the right, its own bar with its checkpoints, only the two late ones labelled (Load test, 9,000 bookings/min: due 22 Oct, forecast 28 Oct; Open to all customers: due 30 Nov, forecast 8 Dec). The check-in text and the legend footer are gone.
+- **Every bar runs from its start to its forecast:** solid petrol up to today, petrol tint after today, red past the target; a tick marks each target, so slack and overrun read on a date axis. A project with no forecast shows its plan as a dashed outline; Cold-chain scan says "Too early". The issues-closed fill is gone (an auditor noted it ran past today on a date axis).
+- **Colour jobs:** petrol for work, red for late, ink for the one primary action and the today pill; the today line is 1 px secondary ink.
+- **Type up:** IBM Plex Sans 13 / 15 / 17 / 24 / 29 (was 12 / 14 / 17 / 29). Months sit at their first Monday; one line per week.
+
+**Engine:** `set overrides.font.size.15` and `overrides.font.size.13` (both `--set-by delegated`), then `build`: passes, 0 warnings.
+
+**Figures, re-added from the page:** 4 + 3 + 3 + 2 + 2 = 14 scheduled (Loyalty and Payments are cropped at the bottom, through repetition); 2 forecast late (Christmas slot booking 8d, Offline delivery proof 11d). Every "vs target" is forecast minus target (26 Oct − 29 Oct = 3d early … 23 Nov − 12 Nov = 11d late). From 15 Oct to 30 Nov is 46 days; at 25 issues in 28 days that closes 41, so 7 of the 48 open must go; the 48 take 54 days at that pace, which lands on Tue 8 Dec.
+
+**References (Mobbin, structure only; also the blind-test references):** Linear project timeline https://mobbin.com/screens/c1cc22aa-69de-468c-b200-cf80f05ac1c7 (the structure to move away from: sidebar, side panel), Jira timeline https://mobbin.com/screens/45d3b32a-ed07-481f-bb37-8712b7cd546c (a work column beside bars and a today line), Productboard roadmap https://mobbin.com/screens/89e63446-9567-41d3-bdc2-f7d6aa88e394 (items placed by time in swimlanes; also what to avoid: cards and chrome with nothing leading).
+
+**Contrast:** petrol 5.7:1 on white, the tint bars' edge 3.7:1, red marks 4.6:1, grey and red text on the open band 6.5:1.
+
+**A. Blind pairwise:** Linear +2, +3, +2; Productboard +3, +3, +3; Jira +2, +2, +3. **Passes.** The judges' one steady complaint was small, dense table type.
+
+**B. Fresh-eyes audit:** **3.5, 4, 3.5. Does not reliably reach 4 after three rounds.**
+- Round 1 (3.5): the axis read "Sep 31" and "Dec 30"; the closed fill ran past today; two forecast markers; the freeze hatch broke across the band.
+- Round 2 (4): "it no longer reads as Linear"; plan-only bars looked like tinted ones (now dashed); too many callouts (now only the late ones); projects not indented under teams; "–" with no reason.
+- Round 3 (3.5): "the Linear look is gone"; the open band is the new dense panel (five markers, two callouts, target tick and ring on one x); the 2 px black today line outranked the forecast; "Everyone else" unclear; an orphaned "open issues". Applied after it, not audited again: the today line is 1 px secondary ink, the checkpoint is "Open to all customers", and "open issues" stays together. Not applied: fewer markers on the open bar (round 2 asked to keep them as plain rings).
+
+**Checks:** `check_dates.py --year 2026`: every weekday matches. `check_names.py`: 0 errors ("Check-ins", "Roadmap" are UI words). `preflight.py html`: 0 errors, 0 warnings (13/15/17/24/29). `engine.py validate` passes. Gallery copy at 337 px: the eye lands on the long petrol bar ending in red, then Tue 8 Dec.

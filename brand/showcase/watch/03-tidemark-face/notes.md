@@ -1,5 +1,7 @@
 # 03 Tidemark: notes
 
+Gallery: Tidemark is a fictional tide app; one glance shows the water height now over today's tide at Kellan Bay.
+
 Render: `shot.png` (205 x 251 CSS px at 3x, clipped to the display shape by `../render.py`). Page: `index.html`.
 
 ## Direction
@@ -64,3 +66,21 @@ Owner rule: complications and labels from 18 to Body 17, '2.1 m' from 22 to Titl
 
 ## Round 3 (2026-10-15): Wed 14
 The face said "TUE 14". The showcase is set on Wednesday 14 October 2026 (Wayfern's calendar and Wardlight's status bar agree), so the date complication now reads "WED 14". `check_dates.py` could not catch it, because no month sits next to the date. Re-rendered `shot.png` with `../render.py 03-tidemark-face`; `mockups/03-watch-trio` was re-rendered with it. Found by the fresh audit of `mockups/08-made-with-opendesigner`, which shows this face.
+
+## Round 4 (owner review, 2026-10-18)
+The owner called the showcase "very very very cluttered and very unprofessional". The round-4 audit (`../../AUDIT-ROUND4.md`) and `../../PRESENTATION.md` set the watch rules: one glanceable thing, the time top right, colour only when it carries information.
+
+**One idea:** A swimmer checks the water: 2.1 m now, rising to high water at 9:42.
+
+**Changed:**
+- Painted night sky, sea gradient and stars removed; pure black
+- Now an app screen, not a face (watchOS has no third-party faces): the system time small at the top right, the place 'Kellan Bay' as the title, the height 2.1 m as the hero
+- Tide curve rebuilt from a two-component tide (high 4.3 m at 9:42, a lower high at 22:07, lows near 0.5 m), stroke colour only, past grey, now as a white dot, hours 6, 12 and 18 at 13 px
+
+Common to all seven: black ground, the title and clock in Inter (SIL OFL) as the stand-in for San Francisco, which watchOS draws itself; the app's own face for everything else (two typefaces); sizes from the watchOS roles (Caption 2 15, Headline 17) plus one data numeral. Rendered with `../render.py` at the existing size, 205 x 251 pt at 3x (615 x 753), clipped to the display; the gallery copy (192 px) was checked first.
+
+**Blind pairwise (18 Oct, fresh judge, no labels, random sides; tested the first round-4 render, before the audit fixes):** lost 2 vs Tide Guide, won 3 vs Tide Charts, won 2 vs Tides Near Me (tested as the face with the big clock). References were App Store Apple Watch screenshots, kept in scratch and deleted.
+
+**Fresh-eyes audit:** 3 (18 Oct), 3, then 4 (20 Oct). Final: 4 of 5.
+
+**Checks:** `check_dates.py --year 2026` passes; `check_names.py` 0 errors; `preflight.py html` only warns about the HIG sizes and the display numeral outside the token scale (both on purpose, commented in the page).

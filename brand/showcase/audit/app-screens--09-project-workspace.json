@@ -138,5 +138,31 @@
       "said": "okay",
       "date": "2026-10-14"
     }
-  ]
+  ],
+  "round5": {
+    "score": 3.5,
+    "pairwise": "Passes. Linear +2, +3, +2; Productboard +3, +3, +3; Jira +2, +2, +3 (ours better every round).",
+    "changed": [
+      "Own structure: no sidebar or side panel; top bar with the product's tabs; one summary line; the roadmap at full width",
+      "The project being decided opens in place in the timeline: Tue 8 Dec (29 px), 8 days past the 30 Nov target, the pace, the cut-or-move decision, and only the two late checkpoints labelled on its bar",
+      "Every bar runs from start to forecast: solid petrol to today, tint after, red past the target, a tick at the target; plan-only bars dashed; Too early where there is no forecast",
+      "Colour: petrol for work, red for late, ink for the primary action and the today pill",
+      "Type up to IBM Plex Sans 13/15/17/24/29 (engine overrides font.size.13 and 15); months at their first Monday"
+    ],
+    "scores_by_round": [
+      3.5,
+      4,
+      3.5
+    ],
+    "references": [
+      "https://mobbin.com/screens/c1cc22aa-69de-468c-b200-cf80f05ac1c7",
+      "https://mobbin.com/screens/45d3b32a-ed07-481f-bb37-8712b7cd546c",
+      "https://mobbin.com/screens/89e63446-9567-41d3-bdc2-f7d6aa88e394"
+    ],
+    "date": "2026-10-20",
+    "open": [
+      "Fresh audit 3.5, 4, 3.5: does not reliably reach 4. Last verdict: the Linear look is gone, but the open band is the new dense panel (five markers, two callouts)",
+      "Applied after the last audit, not re-audited: 1 px secondary today line, checkpoint renamed Open to all customers, open issues kept together"
+    ]
+  }
 }

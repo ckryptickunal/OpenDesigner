@@ -522,7 +522,7 @@ Decisions: D-0002 (34 values, standards), D-0035 (dials.energy).
 
 ## Modes and Themes
 
-> Zoom: sketch (0 of 3), 1 decision in this area. To zoom in, answer Q-theme-03.
+> Zoom: sketch (0 of 3), 2 decisions in this area. To zoom in, answer Q-theme-03.
 <!-- od:zoom area=modes level=0 -->
 
 **The system has light and dark color modes, three spacing densities and a reduced-motion mode.**
@@ -537,7 +537,7 @@ Designers: modes: light, dark, density, motion · Code: `resolver modifiers, Fig
 
 | Modifier | Contexts | Default |
 |---|---|---|
-| theme | light, dark | dark |
+| theme | light, dark | light |
 | density | spacious, comfortable, compact | comfortable |
 | motion | standard, reduced | standard |
 
@@ -545,7 +545,7 @@ Designers: modes: light, dark, density, motion · Code: `resolver modifiers, Fig
 - High-contrast themes are not generated; set `raw.contrastTarget` to AAA for 7:1 text everywhere.
 - A second brand or a client re-skin may override the color primitives and `color.bg.brand`; semantic names never change.
 
-Decisions: D-0012 (answers.Q-theme-01).
+Decisions: D-0012 (answers.Q-theme-01), D-0042 (raw.defaultTheme).
 
 </details>
 
@@ -660,7 +660,7 @@ Decisions: D-0009 (answers.Q-plat-01).
 
 ## Decisions
 
-**41 decisions so far.** Each one says who set it and why.
+**42 decisions so far.** Each one says who set it and why.
 Designers: decision history with reasons · Code: `opendesigner/decisions.md`
 
 <details><summary>More</summary>
@@ -694,6 +694,7 @@ Your own decisions first (the newest value per path), then your changes to stand
 | D-0039 | `raw.baseSize` | 14 | delegated | round 4: a 14 px body like a product page; the 16 px body read oversized |
 | D-0040 | `raw.textFace` | "Instrument Sans" | delegated | round 4: three audits read Geist on zinc as the stock dark template; Instrument Sans keeps the precision with more character |
 | D-0041 | `answers.Q-color-09` | "cool" | delegated | round 4: twilight blue-black greys (gloaming); amber is the last light |
+| D-0042 | `raw.defaultTheme` | "light" | delegated | Round 5: a light page in the manner of the B2B product screens; the estimator is the subject |
 | D-0003 | standards | override STD-visual-details-24 (house standard) | chosen, overrides STD-visual-details-24 | Brief asks for a dark pricing table for an AI video studio: a dark-only marketing surface |
 | D-0002 | standards | House standards v2: 455 applied | standard (locked) | OpenDesigner's house standards (sources marked non-negotiable) are applied without asking and locked. Change one only when the person asks: engine.py... |
 | D-0014 | standards | House standards v2 for css, web: 0 now apply, 166 no longer apply | standard (locked) | The platforms or the stack changed, so the house standards were re-scoped: the ones that now apply are applied and locked; the ones that no longer apply are... |
@@ -706,7 +707,7 @@ Your own decisions first (the newest value per path), then your changes to stand
 
 - Still defaults (zoom 0, sketch): Colors, Typography, Layout, Shapes, Components, Motion, Modes and Themes, Iconography and Imagery, Content and Voice, Accessibility, Platforms and Devices
 - Assets not final: Logo, wordmark, symbol, lockups (H-logo): pending; App icon (H-appicon): pending; Favicon set (H-favicon): pending; Custom icons, pictograms, spot icons (H-icons): pending; Illustration, characters, empty-state art (H-illus): pending; Photography and art direction (H-photo): pending; Brand typeface files (H-type): pending; Fixed brand colors (H-color): pending; Motion signature and rich media (H-motion): pending; Graphic devices, patterns, textures, brand gradients, signature shape (H-motif): pending; UI sounds and sonic logo (H-sound): pending; Custom haptic patterns (H-haptic): pending; Voice and tone guide (H-voice): pending; Brand guidelines PDF (H-brandbook): pending
-- Answers taken on assumption or delegated: name (delegated), answers.Q-aud-01 (delegated), context.audience (delegated), answers.Q-plat-01 (delegated), macros (delegated), taste.feelWords (delegated), answers.Q-theme-01 (delegated), answers.Q-scope-06 (delegated), dials.colorfulness (delegated), dials.depth (delegated), dials.expression (delegated), dials.density (delegated), dials.roundness (delegated), dials.warmth (delegated), dials.energy (delegated), raw.textFace (delegated), raw.displayFace (delegated), raw.monoFace (delegated), answers.Q-color-01 (delegated), answers.Q-color-09 (delegated), answers.Q-depth-01 (delegated), answers.Q-color-21 (delegated), answers.Q-color-10 (delegated), raw.baseSize (delegated)
+- Answers taken on assumption or delegated: name (delegated), answers.Q-aud-01 (delegated), context.audience (delegated), answers.Q-plat-01 (delegated), macros (delegated), taste.feelWords (delegated), answers.Q-theme-01 (delegated), answers.Q-scope-06 (delegated), dials.colorfulness (delegated), dials.depth (delegated), dials.expression (delegated), dials.density (delegated), dials.roundness (delegated), dials.warmth (delegated), dials.energy (delegated), raw.textFace (delegated), raw.displayFace (delegated), raw.monoFace (delegated), answers.Q-color-01 (delegated), answers.Q-color-09 (delegated), answers.Q-depth-01 (delegated), answers.Q-color-21 (delegated), answers.Q-color-10 (delegated), raw.baseSize (delegated), raw.defaultTheme (delegated)
 - Waivers: none.
 - Licence risks: none found.
 - Validation: 0 errors, 2 warnings.

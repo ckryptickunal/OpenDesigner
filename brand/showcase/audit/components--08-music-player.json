@@ -101,5 +101,16 @@
       "said": "needs a little more work",
       "date": "2026-10-14"
     }
-  ]
+  ],
+  "round5": {
+    "score": 3.5,
+    "pairwise": "Apple Music/SoundCloud/NYT podcasts (ours minus shipped, fresh judges, sides random): round 1 +3/+3/+2, round 2 +1/+3/+2, round 3 +3/+3/+2. Passes in every round; fresh-eyes 3.5, 3, 3.5, so it did not reach 4.",
+    "changed": [
+      "Stock photo replaced by cover art drawn in code: one seed-tray row under a heat lamp, nine cells for nine tracks, each seedling as tall as its track is long, a wall between the sides; two inks (green and the lamp's pale light); J-card lettering",
+      "Orange only for what has played (and the logo); the cover does not use it",
+      "Scrubber given the frame's weight: cover 400 px, waveform 176 px, 25 px track labels, each track its own drawn shape",
+      "Removed: liner-notes and more buttons, stock count, output device, liner note",
+      "Remaining (round 3 auditor): procedural-looking waveforms, the track title at display size twice, the cover reads as a card with clip-art seedlings; a painted cover needs the owner's OK for the paint skill's install"
+    ]
+  }
 }

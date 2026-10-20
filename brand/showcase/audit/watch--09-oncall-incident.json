@@ -75,5 +75,15 @@
   "verdict": "keep",
   "said": "most of the watch screens are okay",
   "date": "2026-10-14"
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "won 4 vs PagerDuty, won 5 vs New Relic, won 3 vs Opsgenie (blind, 18 Oct; tested before the audit fixes)",
+  "changed": [
+   "One clear hierarchy: 'card-auth' small, 31% at 64 as the hero, one line 'of cards declined, usually 4%'",
+   "Second button moved below the fold; 'Join incident' is one dark watchOS platter inset from the corners",
+   "'Open 14 min', INC-2291 and 'Noor and Bastian on it' removed so nothing competes with the number; 'Sev 1' is red text instead of a filled tag"
+  ],
+  "date": "2026-10-20"
  }
 }

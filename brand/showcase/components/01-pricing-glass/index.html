@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,107 +9,95 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-/* Gloaming pricing. Colour, space, radius, type and motion are --ds-* tokens; OFF-TOKEN values say why.
-   Amber (the brand seed) has one job on this page: it marks your usage and the plan that covers it. */
+/* Gloaming pricing, round 5: the estimator is the subject and the plans are its answer. Light, like the B2B screens.
+   Colour, space, radius, type and motion are --ds-* tokens; OFF-TOKEN values say why.
+   Amber (the brand seed) has one job: you. The slider's filled part, your marker's dot and the "you" label. It is only ever a
+   fill behind dark ink or a dot with an ink ring, because amber on white is 2:1 and would fail as text or as a line. */
 :root {
-  --line: var(--ds-color-neutral-alpha-dark-4);       /* hairlines between plans */
-  --line-strong: var(--ds-color-neutral-alpha-dark-6);
-  --amber: var(--ds-color-accent-dark-9);
-  /* OFF-TOKEN: twilight surfaces. The engine's dark greys are neutral (#141516); Gloaming means dusk, so the page and
-     panels lean blue-black and amber is the last light. Text, lines and controls stay on the token greys. */
-  --dusk: #0e1117;
-  --dusk-raised: #151a22;
+  --line: var(--ds-color-neutral-light-4);            /* hairlines */
+  --grid: var(--ds-color-neutral-light-3);            /* chart gridlines, quieter than structure */
+  --ink: var(--ds-color-text-primary);
+  --amber: var(--ds-color-accent-light-9);
+  --plan-b: var(--ds-color-neutral-light-8);          /* the second plan's line: 3.6:1 on white */
   --w: 1200px;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
-body {
-  background: var(--dusk);
-  color: var(--ds-color-text-primary);
-  font: var(--ds-text-body-md);
-  font-variant-numeric: tabular-nums;
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh; min-height: 100svh;
-}
+body { background: var(--ds-color-white); color: var(--ink); font: var(--ds-text-body-md); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 a { color: inherit; text-decoration: none; }
-:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-.i { width: var(--ds-size-icon-sm); height: var(--ds-size-icon-sm); flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ink); outline-offset: var(--ds-focus-ring-offset); }
 .shell { width: var(--w); margin: 0 auto; }
+.sec { color: var(--ds-color-text-secondary); }
+.ter { color: var(--ds-color-text-tertiary); }
 
 /* nav */
 .nav { height: 64px; border-bottom: 1px solid var(--line); }
 .nav .shell { height: 100%; display: flex; align-items: center; gap: var(--ds-space-32); }
-.logo { display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-title-sm); letter-spacing: -0.01em; }
+.logo { display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-label-lg); font-weight: 600; font-size: var(--ds-font-size-18); letter-spacing: -0.01em; }
 .logo svg { width: 20px; height: 20px; }
 .links { display: flex; gap: var(--ds-space-24); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); }
-.links .on { color: var(--ds-color-text-primary); }
+.links .on { color: var(--ink); }
 .nav .end { margin-left: auto; display: flex; align-items: center; gap: var(--ds-space-16); font: var(--ds-text-label-lg); color: var(--ds-color-text-secondary); }
-.btn { height: var(--ds-size-control-md); display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: 500; color: var(--ds-color-text-primary); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.btn { height: var(--ds-size-control-md); display: inline-flex; align-items: center; justify-content: center; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); color: var(--ink); box-shadow: inset 0 0 0 1px var(--ds-color-neutral-light-6); }
 .btn.solid { background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); box-shadow: none; }
 
 /* header */
-.head { padding-top: var(--ds-space-40); display: flex; align-items: center; gap: var(--ds-space-32); }
+.head { padding-top: var(--ds-space-40); display: flex; align-items: center; }
 .head h1 { margin: 0; font: var(--ds-text-title-lg); font-weight: 500; letter-spacing: -0.01em; }
-.head .seg { margin-left: auto; }
-.head p { margin: var(--ds-space-8) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-md); }
-.seg { display: inline-flex; padding: var(--ds-space-2); border-radius: var(--ds-radius-control); background: var(--dusk); box-shadow: inset 0 0 0 1px var(--line); }
+.seg { margin-left: auto; display: inline-flex; padding: var(--ds-space-2); border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-2); }
 .seg button { height: 28px; padding: 0 var(--ds-space-12); border-radius: calc(var(--ds-radius-control) - 2px); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); display: inline-flex; align-items: center; gap: var(--ds-space-6); }
-.seg button[aria-checked="true"] { background: var(--ds-color-neutral-dark-5); color: var(--ds-color-text-primary); box-shadow: var(--ds-elevation-raised); }
-.seg button[aria-checked="true"] small { color: var(--ds-color-text-secondary); }
-.seg small { font: var(--ds-text-label-md); color: var(--ds-color-text-tertiary); }
+.seg button[aria-checked="true"] { background: var(--ds-color-white); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
 
-/* estimator */
-.calc { margin-top: var(--ds-space-32); border-radius: var(--ds-radius-container); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
-.est { display: grid; grid-template-columns: 360px 1fr; /* 360 + 40 gap + 24 inset = the Studio column's content edge, so the slider spans Studio and Premiere */ align-items: center; gap: var(--ds-space-40); padding: var(--ds-space-20) var(--ds-space-24); background: var(--dusk-raised); border-bottom: 1px solid var(--line); }
-.est .lab { font: var(--ds-text-label-lg); color: var(--ds-color-text-secondary); }
-.est .val { margin-top: var(--ds-space-4); display: flex; align-items: baseline; gap: var(--ds-space-8); }
-.est .val b { font: var(--ds-text-title-lg); font-weight: 500; letter-spacing: -0.01em; }
-.est .val span { color: var(--ds-color-text-secondary); }
-.slider { position: relative; height: 44px; outline: none; }
-.slider .rail { position: absolute; left: 0; right: 0; top: 10px; height: 4px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-alpha-dark-5); }
-.slider .fill { position: absolute; left: 0; top: 10px; height: 4px; border-radius: var(--ds-radius-full); background: var(--amber); }
-.slider .thumb { position: absolute; top: 2px; width: 20px; height: 20px; margin-left: -10px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-dark-12); box-shadow: var(--ds-elevation-raised); }
-.slider:focus-visible .thumb { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: 4px; }
-.slider .tick { position: absolute; top: 26px; transform: translateX(-50%); font: var(--ds-text-label-md); color: var(--ds-color-text-secondary); white-space: nowrap; }
-.slider .tick.first { transform: none; }
-.slider .tick.last { transform: translateX(-100%); }
+/* the calculator: estimator left, answer right */
+.calc { margin-top: var(--ds-space-24); display: grid; grid-template-columns: 1fr 400px; border-radius: var(--ds-radius-overlay); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.est { padding: var(--ds-space-32) var(--ds-space-32) var(--ds-space-24); }
+.q label { display: block; font: var(--ds-text-label-lg); color: var(--ds-color-text-secondary); }
+.q .val { margin-top: var(--ds-space-4); display: flex; align-items: baseline; gap: var(--ds-space-8); }
+.q b { font: var(--ds-text-title-lg); font-weight: 500; letter-spacing: -0.01em; }
+.q span { color: var(--ds-color-text-secondary); }
 
-/* plans */
-.plans { display: grid; grid-template-columns: repeat(3, 1fr); }
-.plan { padding: var(--ds-space-24); display: flex; flex-direction: column; }
-.plan + .plan { border-left: 1px solid var(--line); }
-.plan h2 { margin: 0; font: var(--ds-text-title-md); font-weight: 500; letter-spacing: -0.01em; }
-.plan .for { margin: var(--ds-space-4) 0 0; color: var(--ds-color-text-secondary); }
-.price { margin-top: var(--ds-space-24); display: flex; align-items: baseline; gap: var(--ds-space-8); }
+/* the slider is the chart's x axis: one scale, after the 48 px y-label gutter */
+.plot { --gut: 48px; position: relative; margin-top: var(--ds-space-24); }
+.slider { position: relative; height: 32px; margin: -16px 0 0 var(--gut); outline: none; touch-action: none; cursor: ew-resize; }
+.ticks { position: relative; height: 16px; margin: var(--ds-space-4) 0 0 var(--gut); font-size: var(--ds-font-size-12); line-height: 16px; color: var(--ds-color-text-tertiary); }
+.ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.ticks span:first-child { transform: none; }
+.ticks span:last-child { transform: translateX(-100%); }
+.slider .rail { position: absolute; left: 0; right: 0; top: 14px; height: 4px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-4); }
+.slider .fill { position: absolute; left: 0; top: 14px; height: 4px; border-radius: var(--ds-radius-full); background: var(--amber); }
+.slider .thumb { position: absolute; top: 4px; width: 24px; height: 24px; margin-left: -12px; border-radius: var(--ds-radius-full); background: var(--ds-color-white); box-shadow: inset 0 0 0 2px var(--ink); }
+.slider.drag .thumb { box-shadow: inset 0 0 0 2px var(--ink), 0 0 0 6px var(--ds-color-neutral-light-4); } /* held: a flat grey halo */
+.slider:focus-visible .thumb { box-shadow: inset 0 0 0 2px var(--ink), 0 0 0 3px var(--ds-color-white), 0 0 0 5px var(--ink); }
+svg.chart { display: block; width: 100%; height: 488px; overflow: visible; }
+.chart text { font-family: var(--ds-font-family-text); font-size: 12px; fill: var(--ds-color-text-tertiary); }
+.chart .lab { font-size: 14px; fill: var(--ds-color-text-secondary); }
+.chart .lab.ink { fill: var(--ink); font-weight: 500; }
+
+/* answer */
+.ans { padding: var(--ds-space-32); background: var(--ds-color-neutral-light-2); display: flex; flex-direction: column; }
+.ans .at { font: var(--ds-text-label-lg); color: var(--ds-color-text-secondary); }
+.ans h2 { margin: var(--ds-space-20) 0 0; font: var(--ds-text-title-md); font-weight: 500; }
+.price { margin-top: var(--ds-space-16); display: flex; align-items: baseline; gap: var(--ds-space-8); }
 .price b { font: var(--ds-text-headline-lg); font-weight: 500; letter-spacing: -0.025em; }
 .price span { color: var(--ds-color-text-secondary); }
-.bill { margin-top: var(--ds-space-4); color: var(--ds-color-text-tertiary); font: var(--ds-text-body-md); min-height: 20px; }
-.bill em { font-style: normal; color: var(--ds-color-text-secondary); }
-.plan .btn { margin-top: var(--ds-space-24); height: var(--ds-size-control-lg); width: 100%; }
-.meter { margin-top: var(--ds-space-20); height: 32px; }
-.meter .row { display: flex; justify-content: space-between; gap: var(--ds-space-8); font: var(--ds-text-label-lg); color: var(--ds-color-text-tertiary); white-space: nowrap; }
-.meter .row b { font-weight: 500; color: var(--ds-color-text-secondary); }
-.plan.fit .meter .row b { color: var(--ds-color-text-primary); }
-.meter .track { margin-top: var(--ds-space-8); height: 4px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-alpha-dark-4); overflow: hidden; }
-.meter .track i { display: block; height: 100%; border-radius: var(--ds-radius-full); background: var(--amber); }
+.lines { margin: var(--ds-space-20) 0 0; padding: 0; list-style: none; }
+.lines li { display: flex; justify-content: space-between; gap: var(--ds-space-16); padding: var(--ds-space-8) 0; border-top: 1px solid var(--ds-color-neutral-light-5); }
+.lines li span:first-child { color: var(--ds-color-text-secondary); }
+.ans .btn.solid { margin-top: var(--ds-space-20); height: var(--ds-size-control-lg); align-self: flex-start; padding: 0 var(--ds-space-20); }
+.inc { margin: var(--ds-space-24) 0 0; display: grid; grid-template-columns: 112px 1fr; row-gap: var(--ds-space-8); }
+.inc dt { color: var(--ds-color-text-tertiary); }
+.inc dd { margin: 0; }
+.others { margin-top: var(--ds-space-40); }
+.others .at { display: block; margin-bottom: var(--ds-space-4); }
+.other { display: flex; align-items: baseline; gap: var(--ds-space-8); padding: var(--ds-space-8) 0; border-top: 1px solid var(--ds-color-neutral-light-5); }
+.other b { font-weight: 500; }
+.other span { color: var(--ds-color-text-secondary); }
+.other em { margin-left: auto; font-style: normal; }
 
-.feat { margin: var(--ds-space-20) 0 0; padding: var(--ds-space-20) 0 0; list-style: none; border-top: 1px solid var(--line); display: grid; gap: var(--ds-space-12); }
-.feat li { display: flex; gap: var(--ds-space-12); align-items: flex-start; }
-.feat .i { margin-top: 2px; color: var(--ds-color-icon-subtle); }
-.feat .dim { color: var(--ds-color-text-tertiary); }
-.note { margin-top: var(--ds-space-16); display: flex; justify-content: space-between; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); }
-.note a { color: var(--ds-color-text-secondary); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line-strong); }
-
-.cmp { margin-top: var(--ds-space-32); }
-.cmp-h, .cmp-r { display: grid; grid-template-columns: repeat(3, 1fr); }
-.cmp-h span, .cmp-r span { padding: 0 var(--ds-space-24); }
-.cmp-h { padding-bottom: var(--ds-space-12); font: var(--ds-text-title-sm); font-weight: 500; }
-.cmp-r { padding: var(--ds-space-12) 0; border-top: 1px solid var(--line); color: var(--ds-color-text-secondary); }
-.cmp-l { grid-column: 1 / -1; padding: 0 var(--ds-space-24) var(--ds-space-4); font: var(--ds-text-label-md); color: var(--ds-color-text-tertiary); }
 @media (hover: hover) and (pointer: fine) {
-  .btn:hover { background: var(--ds-color-neutral-alpha-dark-3); }
-  .btn.solid:hover { background: var(--ds-color-neutral-dark-11); }
+  .btn:hover { background: var(--ds-color-neutral-light-2); }
+  .btn.solid:hover { background: var(--ds-color-neutral-light-11); }
 }
 @media (prefers-reduced-motion: no-preference) {
   .slider .fill, .slider .thumb { transition: left var(--ds-motion-transition-feedback-duration) var(--ds-motion-transition-feedback-easing), width var(--ds-motion-transition-feedback-duration) var(--ds-motion-transition-feedback-easing); }
@@ -117,13 +105,6 @@ a { color: inherit; text-decoration: none; }
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
-  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
-  <symbol id="i-fit" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.2 2.4 2.4 4.6-4.8"/></symbol>
-  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></symbol>
-</svg>
-
 <nav class="nav" aria-label="Main">
   <div class="shell">
     <a class="logo" href="#"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 13a6 6 0 0 1 12 0z" fill="currentColor"/><path d="M2 16h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Gloaming</a>
@@ -134,154 +115,137 @@ a { color: inherit; text-decoration: none; }
 
 <main class="shell">
   <header class="head">
-    <h1>Plans by the render-minute</h1>
+    <h1>What a month of films costs</h1>
     <div class="seg" role="radiogroup" aria-label="Billing">
       <button role="radio" aria-checked="false" data-bill="m">Monthly</button>
-      <button role="radio" aria-checked="true" data-bill="y">Yearly <small>save 20%</small></button>
+      <button role="radio" aria-checked="true" data-bill="y">Yearly</button>
     </div>
   </header>
 
   <div class="calc">
-  <section class="est" aria-label="Estimate your month">
-    <div>
-      <div class="lab" id="est-lab">Finished 4K film a month</div>
-      <div class="val"><b id="est-min">32 min</b><span id="est-rm">uses 480 render-minutes</span></div>
-    </div>
-    <div class="slider" id="slider" role="slider" tabindex="0" aria-labelledby="est-lab" aria-valuemin="5" aria-valuemax="320" aria-valuenow="32" aria-valuetext="32 minutes">
-      <div class="rail"></div><div class="fill" id="fill"></div>
-      <div class="thumb" id="thumb"></div>
-      <span class="tick first" style="left:0">5 min</span>
-      <span class="tick" style="left:16.667%">10</span>
-      <span class="tick" style="left:33.333%">20</span>
-      <span class="tick" style="left:50%">40</span>
-      <span class="tick" style="left:66.667%">80</span>
-      <span class="tick" style="left:83.333%">160</span>
-      <span class="tick last" style="left:100%">320 min</span>
-    </div>
-  </section>
+    <section class="est" aria-label="Estimate your month">
+      <div class="q"><label id="q-lab" for="slider">Finished 4K film a month</label><div class="val"><b id="q-min">90 min</b><span id="q-rm">uses 1,350 render-minutes</span></div></div>
+      <div class="plot">
+        <svg class="chart" id="chart" role="img" aria-label="Monthly cost on each plan by minutes of finished 4K film"></svg>
+        <div class="slider drag" id="slider" role="slider" tabindex="0" aria-labelledby="q-lab" aria-valuemin="0" aria-valuemax="300" aria-valuenow="90" aria-valuetext="90 minutes">
+          <div class="rail"></div><div class="fill" id="fill"></div><div class="thumb" id="thumb"></div>
+        </div>
+        <div class="ticks" id="ticks" aria-hidden="true"></div>
+      </div>
+    </section>
 
-  <section class="plans" aria-label="Plans">
-    <article class="plan" data-plan="spark">
-      <h2>Spark</h2>
-      <p class="for">For first cuts and trying looks.</p>
-      <div class="price"><b>$0</b><span>forever</span></div>
-      <div class="bill">No card needed · 720p only</div>
-      <div class="meter" aria-hidden="true"></div>
-      <a class="btn" href="#">Start free</a>
-      <ul class="feat">
-        <li><svg class="i"><use href="#i-check"/></svg>20 render-minutes a month</li>
-        <li><svg class="i"><use href="#i-check"/></svg>720p export, watermarked</li>
-        <li><svg class="i"><use href="#i-check"/></svg>1 render at a time</li>
+    <aside class="ans" aria-live="polite" aria-label="The plan for your month">
+      <span class="at" id="a-at">At 90 min a month, the cheapest plan is</span>
+      <h2 id="a-name">Studio</h2>
+      <div class="price"><b id="a-price">$49.00</b><span>a month</span></div>
+      <ul class="lines" id="a-lines">
+        <li><span>Studio, billed yearly</span><span>$19.00</span></li>
+        <li><span>750 extra render-minutes at $0.04</span><span>$30.00</span></li>
       </ul>
-    </article>
-    <article class="plan fit" data-plan="studio">
-      <h2>Studio</h2>
-      <p class="for">For creators who post every week.</p>
-      <div class="price"><b data-price="19|24">$19</b><span>a month</span></div>
-      <div class="bill" data-bill-line="$228 billed yearly|Billed monthly">$228 billed yearly</div>
-      <div class="meter"><div class="row"><b data-fit>Cheapest fit for 32 min</b><span data-cap>covers 40 4K min</span></div><div class="track"><i data-bar style="width:80%"></i></div></div>
-      <a class="btn solid" href="#">Start 7-day trial</a>
-      <ul class="feat">
-        <li><svg class="i"><use href="#i-check"/></svg>600 render-minutes, 40 min of 4K</li>
-        <li><svg class="i"><use href="#i-check"/></svg>4K export, 3 renders at once</li>
-        <li><svg class="i"><use href="#i-check"/></svg>Commercial licence</li>
-      </ul>
-    </article>
-    <article class="plan" data-plan="premiere">
-      <h2>Premiere</h2>
-      <p class="for">For studios and the clients they cut for.</p>
-      <div class="price"><b data-price="48|60">$48</b><span>a seat a month</span></div>
-      <div class="bill" data-bill-line="$1,728 a year, 3-seat minimum|$180 a month, 3-seat minimum">$1,728 a year, 3-seat minimum</div>
-      <div class="meter"><div class="row"><b data-fit></b><span data-cap>covers 360 4K min</span></div><div class="track"><i data-bar style="width:9%"></i></div></div>
-      <a class="btn" href="#">Start Premiere</a>
-      <ul class="feat">
-        <li><svg class="i"><use href="#i-check"/></svg>1,800 render-minutes a seat, pooled</li>
-        <li><svg class="i"><use href="#i-check"/></svg>4K and 10-bit master, priority queue</li>
-        <li><svg class="i"><use href="#i-check"/></svg>Client review links and SAML sign-on</li>
-      </ul>
-    </article>
-  </section>
+      <a class="btn solid" href="#" id="a-cta">Start a 7-day trial of Studio</a>
+      <dl class="inc" id="a-inc">
+        <dt>Included</dt><dd>600 render-minutes a month</dd>
+        <dt>Export</dt><dd>4K, 3 renders at once</dd>
+        <dt>Longest clip</dt><dd>3 minutes</dd>
+      </dl>
+      <div class="others">
+        <span class="at">The other plans at 90 min</span>
+        <div class="other" id="o-1"><b>Premiere</b><span>3-seat minimum</span><em>$144.00</em></div>
+        <div class="other" id="o-2"><b>Spark</b><span>Free, 720p only</span><em class="sec">No 4K</em></div>
+      </div>
+    </aside>
   </div>
-
-  <section class="cmp" aria-label="Compare plans">
-    <div class="cmp-h"><span>Spark</span><span>Studio</span><span>Premiere</span></div>
-    <div class="cmp-r"><div class="cmp-l">Longest clip</div><span>30 seconds</span><span>3 minutes</span><span>10 minutes</span></div>
-    <div class="cmp-r"><div class="cmp-l">Projects kept</div><span>30 days</span><span>1 year</span><span>Until you delete them</span></div>
-    <div class="cmp-r"><div class="cmp-l">Support</div><span>Community</span><span>Email, next working day</span><span>Priority, within 4 working hours</span></div>
-    <div class="cmp-r"><div class="cmp-l">Extra render-minutes</div><span>None</span><span>$0.04 each</span><span>$0.035 each, or add a seat</span></div>
-    <div class="cmp-r"><div class="cmp-l">Sign-on</div><span>Email</span><span>Email or Google</span><span>SAML, with an audit log</span></div>
-  </section>
 
 </main>
 
 <script>
-// Estimate: finished 4K minutes a month on a log scale from 5 to 320. One finished 4K minute uses 15 render-minutes.
-const STEPS = [5, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80, 100, 120, 160, 200, 240, 320];
-const RM = 15, STUDIO = 600, SEAT = 1800, MIN_SEATS = 3;
-const slider = document.getElementById("slider");
-let idx = STEPS.indexOf(new URLSearchParams(location.search).has("min") ? +new URLSearchParams(location.search).get("min") : 32);
-if (idx < 0) idx = STEPS.indexOf(32);
-const pos = (m) => Math.log2(m / 5) / 6 * 100;
+// One finished 4K minute uses 15 render-minutes. Studio: 600 included, $0.04 each after. Premiere: 3-seat minimum,
+// 1,800 a seat pooled (360 min of 4K), $0.03 each after. Spark has no 4K. The chart runs 0 to 300 min and $0 to $200.
+const RM = 15, MAXM = 300, MAXY = 200, STEPY = 50;
+const P = { y: { studio: 19, seat: 48 }, m: { studio: 24, seat: 60 } };
 const fmt = (n) => n.toLocaleString("en-US");
+const usd = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const q = new URLSearchParams(location.search);
+let min = q.has("min") ? +q.get("min") : 90, yearly = q.get("bill") !== "monthly";
+const studioCost = (m) => P[yearly ? "y" : "m"].studio + Math.max(0, m * RM - 600) * 0.04;
+const premCost = (m) => { const seats = Math.max(3, Math.ceil(m * RM / 1800)); return seats * P[yearly ? "y" : "m"].seat + 0; };
+const slider = document.getElementById("slider"), svg = document.getElementById("chart");
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, text) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; svg.appendChild(e); return e; }
+function draw() {
+  svg.innerHTML = "";
+  const W = svg.clientWidth, H = 488, G = 48, top = 8, bot = 0, ph = H - top - bot, pw = W - G;
+  const X = (m) => G + m / MAXM * pw, Y = (v) => top + ph - Math.min(v, MAXY) / MAXY * ph;
+  for (let v = 0; v <= MAXY; v += 50) {
+    if (v) el("line", { x1: G, x2: W, y1: Y(v), y2: Y(v), stroke: "var(--grid)", "stroke-width": 1 });
+    el("text", { x: 0, y: Y(v) + 4 }, "$" + v);
+  }
+  document.getElementById("ticks").innerHTML = [0, 60, 120, 180, 240, 300].map((m) => `<span style="left:${m / MAXM * 100}%">${m === MAXM ? m + " min" : m}</span>`).join("");
+  // Premiere: flat while 3 seats cover it
+  const pe = premCost(MAXM);
+  el("path", { d: `M${X(0)},${Y(pe)}H${X(MAXM)}`, stroke: "var(--plan-b)", "stroke-width": 3, fill: "none" });
+  el("text", { x: X(MAXM), y: Y(pe) + 20, "text-anchor": "end", class: "lab" }, "Premiere");
+  // Studio: flat to 40 min, then $0.60 a minute (15 render-minutes at $0.04)
+  const pts = [[0, studioCost(0)], [40, studioCost(40)], [MAXM, studioCost(MAXM)]];
+  el("path", { d: "M" + pts.map(([m, v]) => `${X(m)},${Y(v)}`).join("L"), stroke: "var(--ink)", "stroke-width": 4, fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round" });
+  el("text", { x: X(MAXM), y: Y(studioCost(MAXM)) - 12, "text-anchor": "end", class: "lab ink" }, "Studio");
+  // where Premiere becomes the cheaper plan
+  const cross = 40 + (pe - studioCost(40)) / 0.6;
+  if (cross < MAXM) {
+    el("circle", { cx: X(cross), cy: Y(pe), r: 4, fill: "var(--ds-color-white)", stroke: "var(--ink)", "stroke-width": 1.5 });
+    el("text", { x: X(cross) - 12, y: Y(pe) - 12, "text-anchor": "end", class: "lab" }, `Premiere costs less from ${Math.ceil(cross)} min`);
+  }
+  // you
+  const s = studioCost(min), p = premCost(min), best = Math.min(s, p);
+  el("line", { x1: X(min), x2: X(min), y1: Y(Math.max(s, p)), y2: H, stroke: "var(--ink)", "stroke-width": 1 });
+  el("circle", { cx: X(min), cy: Y(Math.max(s, p)), r: 4, fill: "var(--ds-color-white)", stroke: "var(--plan-b)", "stroke-width": 2 });
+  el("circle", { cx: X(min), cy: Y(best), r: 7, fill: "var(--amber)", stroke: "var(--ink)", "stroke-width": 2 });
+  el("text", { x: X(min) + 14, y: Y(best) + 5, class: "lab ink" }, usd(best).replace(".00", ""));
+}
 function render() {
-  const m = STEPS[idx], used = m * RM, p = pos(m);
+  const p = min / MAXM * 100;
   document.getElementById("fill").style.width = p + "%";
   document.getElementById("thumb").style.left = p + "%";
-  document.getElementById("est-min").textContent = `${m} min`;
-  document.getElementById("est-rm").textContent = `uses ${fmt(used)} render-minutes`;
-  slider.setAttribute("aria-valuenow", m); slider.setAttribute("aria-valuetext", `${m} minutes`);
-  const seats = Math.max(MIN_SEATS, Math.ceil(used / SEAT)), premCap = seats * SEAT / RM;
-  const yearly = document.querySelector('.seg [data-bill="y"]').getAttribute("aria-checked") === "true";
-  const extra = Math.max(0, used - STUDIO) * 0.04;
-  const studioCost = (yearly ? 19 : 24) + extra, premCost = seats * (yearly ? 48 : 60);
-  const fit = studioCost <= premCost ? "studio" : "premiere";
-  const money = (n) => "$" + (Number.isInteger(n) ? fmt(n) : n.toFixed(2));
-  const dollars = (n) => "$" + fmt(Math.round(n));
-  const plans = {
-    spark: null,
-    studio: used <= STUDIO
-      ? { fit: fit === "studio" ? `Cheapest fit for ${m} min` : "", cap: "covers 40 4K min", pct: m / 40 }
-      : { fit: fit === "studio" ? `Cheapest: ${dollars(studioCost)} a month` : `${dollars(studioCost)} a month`, cap: "with extra minutes", pct: 1 },
-    premiere: { fit: fit === "premiere" ? `Cheapest fit for ${m} min` : "", cap: `covers ${fmt(premCap)} 4K min`, pct: m / premCap },
-  };
-  document.querySelectorAll(".plan").forEach((el) => {
-    const k = el.dataset.plan, p = plans[k];
-    if (!p) return;
-    el.classList.toggle("fit", k === fit);
-    el.querySelector("[data-fit]").textContent = p.fit;
-    el.querySelector("[data-cap]").textContent = p.cap;
-    const bar = el.querySelector("[data-bar]"); if (bar) bar.style.width = Math.max(2, Math.min(100, p.pct * 100)) + "%";
-    if (k !== "spark") el.querySelector(".btn").classList.toggle("solid", k === fit);
-  });
+  const used = min * RM, extra = Math.max(0, used - 600);
+  document.getElementById("q-min").textContent = `${min} min`;
+  document.getElementById("q-rm").textContent = `uses ${fmt(used)} render-minutes`;
+  slider.setAttribute("aria-valuenow", min); slider.setAttribute("aria-valuetext", `${min} minutes`);
+  const s = studioCost(min), pr = premCost(min), seats = Math.max(3, Math.ceil(used / 1800));
+  const studio = s <= pr, bill = yearly ? "billed yearly" : "billed monthly";
+  document.getElementById("a-at").textContent = `At ${min} min a month, the cheapest plan is`;
+  document.getElementById("a-name").textContent = studio ? "Studio" : "Premiere";
+  document.getElementById("a-inc").innerHTML = (studio ? [["Included", "600 render-minutes a month"], ["Export", "4K, 3 renders at once"], ["Longest clip", "3 minutes"]]
+    : [["Included", `${fmt(seats * 1800)} render-minutes, pooled`], ["Export", "4K and 10-bit, priority queue"], ["Longest clip", "10 minutes"]]).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
+  document.getElementById("a-price").textContent = usd(studio ? s : pr);
+  const base = P[yearly ? "y" : "m"];
+  document.getElementById("a-lines").innerHTML = studio
+    ? `<li><span>Studio, ${bill}</span><span>${usd(base.studio)}</span></li>` + (extra ? `<li><span>${fmt(extra)} extra render-minutes at $0.04</span><span>${usd(extra * 0.04)}</span></li>` : `<li><span>${fmt(used)} of 600 render-minutes used</span><span>$0.00</span></li>`)
+    : `<li><span>${seats} seats at ${usd(base.seat)}, ${bill}</span><span>${usd(pr)}</span></li><li><span>${fmt(used)} of ${fmt(seats * 1800)} render-minutes used</span><span>$0.00</span></li>`;
+  document.getElementById("a-cta").textContent = studio ? "Start a 7-day trial of Studio" : "Start Premiere";
+  document.querySelector(".others .at").textContent = `The other plans at ${min} min`;
+  document.getElementById("o-1").innerHTML = studio ? `<b>Premiere</b><span>3-seat minimum</span><em>${usd(pr)}</em>` : `<b>Studio</b><span>with extra render-minutes</span><em>${usd(s)}</em>`;
+  draw();
 }
+const set = (m) => { min = Math.max(0, Math.min(MAXM, Math.round(m / 5) * 5)); render(); };
 slider.addEventListener("keydown", (e) => {
-  const d = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key];
-  if (d) { idx = Math.min(STEPS.length - 1, Math.max(0, idx + d)); render(); e.preventDefault(); }
-  if (e.key === "Home") { idx = 0; render(); } if (e.key === "End") { idx = STEPS.length - 1; render(); }
+  const d = { ArrowRight: 5, ArrowUp: 5, ArrowLeft: -5, ArrowDown: -5, PageUp: 30, PageDown: -30 }[e.key];
+  if (d) { set(min + d); e.preventDefault(); }
+  if (e.key === "Home") set(0); if (e.key === "End") set(MAXM);
 });
 slider.addEventListener("pointerdown", (e) => {
-  const move = (ev) => {
-    const r = slider.getBoundingClientRect(), t = Math.min(1, Math.max(0, (ev.clientX - r.left) / r.width));
-    const m = 5 * Math.pow(2, t * 6);
-    idx = STEPS.reduce((b, s, i) => Math.abs(Math.log(s / m)) < Math.abs(Math.log(STEPS[b] / m)) ? i : b, 0); render();
-  };
-  move(e); slider.setPointerCapture(e.pointerId);
-  slider.onpointermove = move; slider.onpointerup = () => { slider.onpointermove = null; };
+  const move = (ev) => { const r = slider.getBoundingClientRect(); set((ev.clientX - r.left) / r.width * MAXM); };
+  slider.classList.add("drag"); move(e); slider.setPointerCapture(e.pointerId);
+  slider.onpointermove = move; slider.onpointerup = () => { slider.onpointermove = null; slider.classList.remove("drag"); };
 });
-// Billing toggle: a radiogroup; arrow keys move between the two options.
+if (!q.has("drag")) slider.addEventListener("blur", () => slider.classList.remove("drag"), { once: true });
 const radios = [...document.querySelectorAll(".seg [role=radio]")];
-function bill(yearly) {
-  radios.forEach((r) => { const on = (r.dataset.bill === "y") === yearly; r.setAttribute("aria-checked", on); r.tabIndex = on ? 0 : -1; });
-  if (typeof STEPS !== "undefined" && idx >= 0) render();
-  document.querySelectorAll("[data-price]").forEach((el) => { const [y, mo] = el.dataset.price.split("|"); el.textContent = "$" + (yearly ? y : mo); });
-  document.querySelectorAll("[data-bill-line]").forEach((el) => { const [y, mo] = el.dataset.billLine.split("|"); el.textContent = yearly ? y : mo; });
-}
+function setBill(y) { yearly = y; radios.forEach((r) => { const on = (r.dataset.bill === "y") === y; r.setAttribute("aria-checked", on); r.tabIndex = on ? 0 : -1; }); render(); }
 radios.forEach((r) => {
-  r.addEventListener("click", () => bill(r.dataset.bill === "y"));
-  r.addEventListener("keydown", (e) => { if (["ArrowLeft", "ArrowRight"].includes(e.key)) { const y = r.dataset.bill !== "y"; bill(y); radios.find((x) => (x.dataset.bill === "y") === y).focus(); } });
+  r.addEventListener("click", () => setBill(r.dataset.bill === "y"));
+  r.addEventListener("keydown", (e) => { if (["ArrowLeft", "ArrowRight"].includes(e.key)) { setBill(r.dataset.bill !== "y"); radios.find((x) => x.getAttribute("aria-checked") === "true").focus(); } });
 });
-bill(new URLSearchParams(location.search).get("bill") !== "monthly");
-render();
+setBill(yearly);
+addEventListener("resize", draw);
 </script>
 </body>
 </html>

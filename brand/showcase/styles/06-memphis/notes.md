@@ -1,6 +1,8 @@
-# 06 Plenary: a Memphis landing section for conference ticketing
+# 06 Plenary: Memphis ticket counts for a conference organiser
 
-**This page now:** the "Round 3 (polish)" section of 2026-10-15, the last one, describes it. The sections between record earlier versions.
+Gallery: Plenary is a fictional ticketing tool; each ticket type is a row of Memphis shapes, one for every 20 tickets.
+
+**This page now:** the "Round 4 (owner review, 2026-10-18)" section, the last one, describes it. The sections between record earlier versions.
 
 **Direction.** Plenary is a fictional ticketing platform sold to conference organisers (events of 300 to 30,000 people). The landing section shows the organiser's view of a real-looking event, "Northfold Design Week 2027" in Rotterdam: four ticket types, sales against capacity, gross revenue and the next payout. The Memphis set around it is not confetti: each big shape is one ticket type, drawn to scale by tickets sold, and the same shapes are the tier markers inside the product. Feel words: **playful, vibrant, practical**.
 
@@ -160,3 +162,44 @@ The piece still carried "Being rebuilt" on the public showcase. Two things kept 
 - **Contrast as rendered:** 44 runs. Two flags come from rotated elements ("Room 3" on the door sign, "Standard + workshop" on the badge): the measuring box is upright, so it takes in stripes and the badge's rule. With the rotation switched off, every run passes; lowest 7.09:1.
 - **Weekdays:** `check_dates.py --year 2026` passes. With the payout written without its year, the tool took the event's year from the chart title nearby and flagged the weekday, so the row carries its year.
 - Preflight: no type or font errors.
+
+## Round 4 (owner review, 2026-10-18)
+**This section describes the page now.** Rebuilt after the round-4 audit scored it 5 of 10 (rebuild). Render: `shot.png`, 1440 x 900 at scale 2.
+
+**One idea:** An organiser sees 1,862 of 2,520 tickets issued as rows of Memphis shapes, one shape for every 20 tickets, solid when issued.
+
+**Why:** The round-4 audit: the ticket shapes sized by sales were good, but the hero used the floating, tilted-fragment tell (a tilted badge and a striped door sign), the headline needed its paragraph, and three textures plus a stats list cluttered it.
+
+### What changed
+- **A product screen, not a landing hero:** Plenary's Tickets tab for Kanteel Design Week 2027, with the count as the headline ('1,862 of 2,520 tickets issued', one colour), a totals row (gross, fees, net, next payout) and one action.
+- **Nothing tilted or floating:** the badge, the door sign and the lanyard are gone; every shape sits on a strict grid.
+- **The decoration carries data, as a count:** each ticket type is one Memphis shape (yellow circle, pink half disc, mint triangle, white square), one shape for every 20 tickets; solid is issued, outline is released and still on sale, and a partly issued shape is filled from the left until that share of its area is covered. This replaced shapes sized by area, which repeated weir (`styles/08`) at gallery size.
+- **One face, regular weight:** Bricolage Grotesque, sentence case. No squiggle, dots or stripes now: the outline is the only second state.
+- After the fresh audits: one-colour headline, no 'px²' unit, totals moved under the heading, labels centred, then the change from area to count. **After the third audit:** the partial shapes fill by area, not width (the tenth triangle is cut at 38.7% of its width to hold 30% of its area; the 61st half disc at 57.9% for 60%).
+
+### Type scale
+Bricolage Grotesque only. 12 labels, 16 body and rows, 21 totals, 51 the headline.
+
+### Blind pairwise test
+Three shipped references (Mobbin, cited by link only; images were kept in scratch and deleted). Each pair at the same height, sides random, no labels; fresh judges saw several pairs at once (four sets: 15, 9, 6 and 6 pairs, a new judge each time) and were told to weigh craft, not content. The table gives the result for the final render.
+
+| Reference | Result |
+|---|---|
+| Eventbrite, https://mobbin.com/screens/0470acb6-b4d1-4b88-a6b7-915d026eed75 | ours better by 4 |
+| Sweatpals, https://mobbin.com/screens/d2d7c5d3-5e48-4545-a7cb-d2ffce5e62e3 | ours better by 3 |
+| Posh, https://mobbin.com/screens/7d7f34b7-8502-440b-bc06-015b5ff09da6 | ours better by 4 |
+
+**Pass rule:** never lose by 3 or more, and equal or better in at least 2 of 3. Passes. The judges' flaws for ours: white legend swatches that don't match the coloured shapes, and a wide gutter between the labels and the shapes.
+
+### Fresh-eyes audit
+Round 1 was a fresh-context auditor given PRESENTATION.md, ROUND3-BRIEF.md, the owner's note, the B2B product screens (product/01, 02, 04, 06), Orbika, Holdfast and Lampwright as the bar, and the three references below. Rounds 2 and 3 went to the same auditor, so they check its own fixes rather than being fresh eyes. Scores: 3, 3, 4. Left open in round 3: Memphis now survives only as palette and shapes (the auditor suggested a flat offset second-colour shadow on each issued shape; not done, to keep the 126 shapes quiet).
+
+### Checks
+- `check_dates.py --year 2026` passes; the payout carries its year ('Fri 16 Oct 2026'), since without it the tool takes 2027 from the event line and flags a Saturday.
+- `check_names.py`: 0 errors; new words are UI words (Check-in, Payouts) and 'Kanteel Design Week', the registered 'Kanteel Design Week 2027' without its year.
+- `engine.py validate`: no errors, 2 warnings, both light-mode contrast of the yellow action colour; this page is dark only.
+- Preflight: no type or font errors.
+- Re-added from the page: issued 400 + 1,212 + 186 + 64 = 1,862; released 400 + 1,800 + 240 + 80 = 2,520 (74%); gross 116,000 + 509,040 + 22,320 = €647,360; fees 2.5% = 16,184 plus €0.50 x 1,798 paid tickets = 899, so €17,083; net €630,277. Shapes 20 + 90 + 12 + 4 = 126 x 20 = 2,520; issued 20 + 60.6 + 9.3 + 3.2 shapes.
+
+### Left
+Memphis is now mostly palette and shape; the legend swatches are white while the shapes are coloured.

@@ -65,3 +65,23 @@ Owner type and colour rule: moved the tag, clock and delta from 16 to Body 17, t
 
 ## Round 3 (2026-10-15): Fellrise, not Ridgeline
 "Ridgeline" is a real product name (Honda sells the Ridgeline truck), and `NAMES.md` had marked it "may be real", so the app is now **Fellrise** (a web search found no app or product of that name; the nearest are the Lake District walking apps Fellbase and Fells). Changed: the page title and aria-label, this file's title, the engine system (`engine.py set name "Fellrise" --set-by delegated`, then `build`, which regenerated DESIGN.md, PRODUCT.md and the exports; logged in `engine-log.txt`), `../PROCESS.md`, `../sheet.html` (and `sheet.png`, re-rendered), the audit file's title, and the mockups that show it (`mockups/03-watch-trio`, `mockups/08-made-with-opendesigner`). The face shows no brand name, so `shot.png` is unchanged in pixels (re-rendered with `../render.py 01-ridgeline-trail`). The folder keeps its name so links do not break.
+
+## Round 4 (owner review, 2026-10-18)
+The owner called the showcase "very very very cluttered and very unprofessional". The round-4 audit (`../../AUDIT-ROUND4.md`) and `../../PRESENTATION.md` set the watch rules: one glanceable thing, the time top right, colour only when it carries information.
+
+**One idea:** Mid-climb, a trail runner reads one number: their pace, 6′24″ per km.
+
+**Changed:**
+- One face, Archivo at normal width and upright, two weights; the slanted, wide and light cuts are gone
+- Tilted lime 'KM 14.2' tag, hatched fill, contour lines and the halo removed; the profile is one line, run so far in lime, the rest grey, a white dot for the runner, inset from the corners
+- Pace changed from 4'52" (reused on the Rallo footer) to 6′24″ with true primes; the climb label was dropped because the profile shows it
+- Profile redrawn to the numbers: a 25.4 km route, runner at 14.2 km, summit at 16.6 km
+- Title and clock in Inter as the stand-in for the watchOS system font; '14.2 km' in grey so lime has one job
+
+Common to all seven: black ground, the title and clock in Inter (SIL OFL) as the stand-in for San Francisco, which watchOS draws itself; the app's own face for everything else (two typefaces); sizes from the watchOS roles (Caption 2 15, Headline 17) plus one data numeral. Rendered with `../render.py` at the existing size, 205 x 251 pt at 3x (615 x 753), clipped to the display; the gallery copy (192 px) was checked first.
+
+**Blind pairwise (18 Oct, fresh judge, no labels, random sides; tested the first round-4 render, before the audit fixes):** won 3 vs Strava, won 4 vs Runna, won 2 vs Nike Run Club. References were App Store Apple Watch screenshots, kept in scratch and deleted.
+
+**Fresh-eyes audit:** 3 (18 Oct), 3, then 4 (20 Oct). Final: 4 of 5.
+
+**Checks:** `check_dates.py --year 2026` passes; `check_names.py` 0 errors; `preflight.py html` only warns about the HIG sizes and the display numeral outside the token scale (both on purpose, commented in the page).

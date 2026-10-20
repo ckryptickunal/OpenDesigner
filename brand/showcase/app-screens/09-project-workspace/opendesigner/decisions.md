@@ -414,3 +414,13 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: delegated · locked: no · date: 2026-10-15 · supersedes: D-0019 · source_ref: none
 - reason: an open (OFL) engineering face with tabular figures; not the default Inter
 - previous value: "Inter"
+
+## D-0022 · overrides.font.size.15 = {"value": 15, "unit": "px"}
+- set_by: delegated · locked: no · date: 2026-10-20 · supersedes: none · source_ref: none
+- reason: Round 5: table rows at 15 px; reviewers called 14 px small in a dense panel
+- new dimension token in primitives.tokens.json
+
+## D-0023 · overrides.font.size.13 = {"value": 13, "unit": "px"}
+- set_by: delegated · locked: no · date: 2026-10-20 · supersedes: none · source_ref: none
+- reason: Round 5: column heads, axis and secondary labels at 13 px
+- new dimension token in primitives.tokens.json

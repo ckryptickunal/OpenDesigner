@@ -812,3 +812,8 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: chosen · locked: no · date: 2026-10-14 · supersedes: D-0034 · source_ref: none
 - reason: Joinery is a real AI hiring product (teamjoinery, found by the fresh audit); Arrivant returned no HR or onboarding product
 - previous value: "Joinery"
+
+## D-0036 · raw.textFace = "Nunito"
+- set_by: chosen · locked: no · date: 2026-10-20 · supersedes: D-0016 · source_ref: none
+- reason: round 4: a rounded face for a clay study; Bricolage Grotesque is also in styles/06
+- previous value: "Bricolage Grotesque"

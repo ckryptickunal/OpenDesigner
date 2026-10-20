@@ -752,3 +752,41 @@ Appended by the round 4 app-screens session (app-c). Each name was searched in `
 - **Tried and dropped before shipping:** Wen Ashby (`components/10`; "Wen" is in `app-screens/09`), Godwit (`components/07`), Fisheries Act 1951 (`components/07`; could be a real law).
 - **False positives from `check_names.py`, checked by hand:** "Studio" in `components/08` is the word in "Studio speakers"; "Harb" in `components/07` is the typed query.
 - **Also a false positive:** "Christmas" in `components/09` is the bank holiday (Fri, Dec 25, 2026), not the `app-screens/09` title "Christmas slot booking".
+
+## Appended 2026-10-20: watch round 4 (01 to 05, 07, 09) and footers 06 and 07 (owner review)
+| Name | Kind | Pieces |
+|---|---|---|
+| Saltgrove | place (tram destination; replaces Northgate, which `check_names.py` flagged as two letters from Northcote and Northvale) | watch/04-headway-transit |
+| Kellan Bay | place (the tide station) | watch/03-tidemark-face |
+| Tansy | boat name | watch/07-leeward-sail |
+| Supper | title (lighting scene; replaces "Wind down", which was shared with app-screens/02) | watch/05-nook-home |
+
+- **Fixed from "Still shared between pieces":** "Wind down" is no longer used by `watch/05`, and "Harbour" is no longer shown by `watch/04`. `mockups/03-watch-trio` still shows the old Headway screen (Northgate, Harbour) until it is re-rendered.
+- **Removed:** the "Instagram" link from `footers/06` (a real brand). Real places on these pages (Rotterdam, Kanazawa, Higashiyama, Ishikawa) and words that `check_names.py` lists as new (Rd, Sev, Email, Stockists, English) are false positives.
+
+**Round 5 (components 01, 07, 08, 10; 2026-10-20):**
+- New: CT 014 (catalogue number on the Heat Lamp Lullabies cassette, `components/08`).
+- Removed from `components/07`: the long title "Harbour board minutes 1931–38" in the preview (now "Minutes of the harbour board, 1931 to 1938", so "Harbour" no longer reads as the `watch/04` place).
+- False positives from `check_names.py`, checked by hand: "Licences" in `components/07` is the word in "Licences renewed, four boats"; "Bea" in `components/10` is Bea Ashby, listed above; ArrowLeft and ArrowRight in `components/01` are key names in its script.
+
+## Appended 2026-10-20: heroes round 4 (01, 02, 03, 07, 11, 14; owner review)
+| Name | Kind | Pieces |
+|---|---|---|
+| Penhallow Cold Storage | vendor (the bill on the hero's review card; web search found no company of that name) | heroes/14-fennick-approvals |
+| Efua Osei | person (submitted the bill) | heroes/14-fennick-approvals |
+| Gregor Stenning | person (approver, Warehouse) | heroes/14-fennick-approvals |
+
+- **No longer on `heroes/14`:** Calloway Freight Brokers, Priya Raman and Lorna Petrakis (they belong to `product/02`; the hero no longer embeds that screen). Fennick is still shared with `product/02` on purpose: the hero is that product's marketing page.
+- **No longer on `heroes/01`:** the title block's "Section A–A" and the coordinates; Halde Architekten and Haus am Hang stay. `check_names.py` still reports Halde against Halden, which this file records as kept on purpose, and against "Halden Freight", whose row remains although it was renamed Ostrel Freight.
+- **Removed from `heroes/02`:** the "GitHub" nav link (a real brand), now "Open source".
+- **False positives from `check_names.py`, checked by hand:** Zurich, Chur and Flims (real places) in `heroes/01`; Benchmarks, Changelog, Circadian, Maze-route and Odour (words) in `heroes/02`; Chamomile, Loose-leaf and the page title "Lullwort Sleep Teas" in `heroes/03`; "Needs GL" (a status) in `heroes/11`.
+
+## Appended 2026-10-20: app-screens round 5 (01, 06, 07, 09; the owner hid them until better)
+| Name | Kind | Pieces |
+|---|---|---|
+| Imogen Ellery | person (the Voss household's private banker; searched in `brand/showcase`, no match) | app-screens/01-private-banking |
+| Piers Voss | person (co-signer under the household's joint mandate; replaces a draft "Hugo Voss", one letter from a real brand and founder) | app-screens/01-private-banking |
+
+- **No longer on `app-screens/01`:** the accounts list (Current account, Managed portfolio, Reserve deposit, Pension), "Council Tax" and "Voss household" as a heading; the page is now the payment to sign. Cardew Aske LLP and Eleanor Voss stay. `check_names.py` reports "Cardew Aske" as new because it reads "Cardew Aske’s"; the row "Cardew Aske LLP" already covers it.
+- **`app-screens/06`, `07` and `09`:** no new names. "Capacity" (a tab), "Too early" (a cell) and "Open to all customers" (a checkpoint) are UI words.
+- **Round 4 rebuild of `styles/02`, `03`, `05`, `06` and `08` (2026-10-18):** no new names. `check_names.py` flags "Fischer" (Lena Fischer, `styles/03`) as two letters from "Fishers", a common word in a `components/07` thread title, and "Northcote" as two letters from "Northgate", which `watch/04` has already replaced with Saltgrove (only the old `mockups/03` render still shows it); both kept. Its new-word lists are UI words (Airflow, Comms, Good, Onboarding, People, Blog, On-call, Postmortem, Postmortems, Runbooks, Check-in, Payouts, Databases) and "Kanteel Design Week", the registered "Kanteel Design Week 2027" without its year. No longer on `styles/05`: INC-4502 (the next-post link). No longer on `styles/03`: Imani Clarke's full name (the page shows "Imani" and the initials IC).

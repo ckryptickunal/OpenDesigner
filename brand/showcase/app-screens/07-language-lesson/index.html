@@ -39,34 +39,30 @@
   .top .bar i { display: block; width: 60%; height: 100%; background: var(--ink); border-radius: 3px; }
   .top .count { font: 500 var(--ds-font-size-13)/18px var(--ds-font-family-text); color: var(--ink-2); }
 
-  .prompt { position: absolute; top: 126px; left: var(--gutter); right: var(--gutter); }
-  .prompt p { font: 500 var(--ds-font-size-17)/22px var(--ds-font-family-text); }
-  .prompt p span { font-weight: 400; color: var(--ink-2); }
-
-  .said { position: absolute; top: 204px; left: var(--gutter); right: var(--gutter); }
+  /* Round 5: one subject, the stress in caffè, set in type. Each recording is drawn as its two syllables at the size
+     of their loudness, so the learner's caf is large and the native speaker's fè is large. The sentence and the score
+     are context, set smaller above. Spectral (Italian): 81 and 34 for the syllables, 22 for the sentence. */
+  .said { position: absolute; top: 120px; left: var(--gutter); right: var(--gutter); }
   .said .line { font: 400 var(--ds-font-size-22)/30px var(--ds-font-family-display); }
   .said .line u { text-decoration: underline 2px var(--fix); text-underline-offset: 5px; }
+  .said .score { margin-top: var(--ds-space-8); font: 400 var(--ds-font-size-15)/20px var(--ds-font-family-text); color: var(--ink-2); }
 
-  .said .play { margin-top: var(--ds-space-8); margin-left: -12px; display: flex; gap: var(--ds-space-8); }
-  .tb { height: 44px; padding: 0 var(--ds-space-12); font: 600 var(--ds-font-size-15)/1 var(--ds-font-family-text); color: var(--ink); gap: var(--ds-space-6); }
-  .tb span { font-weight: 400; color: var(--ink-2); }
-
-  .score { position: absolute; top: 344px; left: var(--gutter); right: var(--gutter); font: 600 var(--ds-font-size-17)/22px var(--ds-font-family-text); }
-  .score span { font-weight: 400; color: var(--ink-2); }
-
-  .fix { position: absolute; top: 400px; left: var(--gutter); right: var(--gutter); }
-  .fix header { display: flex; justify-content: space-between; align-items: center; }
-  .fix h2 { font: 400 var(--ds-font-size-34)/40px var(--ds-font-family-display); }
-  .fix .slow { margin-right: -12px; }
-  .fix h2 small { margin-left: var(--ds-space-8); font: 400 var(--ds-font-size-17)/22px var(--ds-font-family-text); color: var(--ink-2); }
-  .fix p { margin-top: var(--ds-space-8); font: 400 var(--ds-font-size-17)/22px var(--ds-font-family-text); color: var(--ink-2); }
-  .fix p b { color: var(--ink); font-weight: 500; }
-
-  /* Loudness across the word, both recordings on one baseline, the loudest moment of each marked. */
-  .curve { margin-top: var(--ds-space-40); }
-  .curve svg { display: block; overflow: visible; }
-  .curve text { font: 400 var(--ds-font-size-13)/1 var(--ds-font-family-text); fill: var(--ink-2); }
-  .curve .syl { font: 400 var(--ds-font-size-17)/1 var(--ds-font-family-display); fill: var(--ink); }
+  .fix { position: absolute; top: 246px; left: var(--gutter); right: var(--gutter); }
+  .fix h2 { font: 600 var(--ds-font-size-22)/28px var(--ds-font-family-text); letter-spacing: -0.01em; }
+  .fix .ipa { margin-top: var(--ds-space-4); font: 400 var(--ds-font-size-17)/22px var(--ds-font-family-text); color: var(--ink-2); }
+  .takes { margin-top: var(--ds-space-16); }
+  .take { display: grid; grid-template-columns: 44px 1fr; column-gap: var(--ds-space-16); align-items: end; padding: var(--ds-space-20) 0; }
+  .take .play { margin-bottom: var(--ds-space-20); }
+  .take + .take { padding-top: var(--ds-space-8); }
+  .take .who { font: 500 var(--ds-font-size-13)/18px var(--ds-font-family-text); color: var(--ink-2); }
+  .take .syl { display: flex; flex-wrap: wrap; align-content: flex-end; align-items: baseline; gap: 0 var(--ds-space-8); font-family: var(--ds-font-family-display); font-weight: 400; color: var(--ink-2); line-height: 1; height: 124px; padding-bottom: var(--ds-space-16); border-bottom: 1.5px solid var(--ds-color-neutral-light-5); } /* both syllables sit on one drawn baseline, set at the size of their loudness */
+  .take .syl .lo { font-size: var(--ds-font-size-34); }
+  .take .syl .hi { font-size: var(--ds-font-size-81); letter-spacing: -0.01em; color: var(--ink); }
+  .take .syl .hi.wrong { color: var(--fix); }
+  .take .syl .lo + .hi { letter-spacing: 0.04em; } /* clears the f's hook from the grave accent at display size */
+  .play { width: 44px; height: 44px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-3); color: var(--ink); }
+  .fix .why { margin-top: var(--ds-space-20); font: 400 var(--ds-font-size-17)/22px var(--ds-font-family-text); color: var(--ink-2); }
+  .fix .why b { color: var(--ink); font-weight: 500; }
 
   .actions { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 42px; display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-12); }
   .actions button { height: 52px; border-radius: var(--ds-radius-full); font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); }
@@ -93,40 +89,24 @@
 </div>
 
 <main>
-  <div class="prompt">
-    <p><span>Say it in Italian:</span> I’d like a coffee and a cornetto, please.</p>
-  </div>
-
   <div class="said">
     <p class="line it" lang="it">Vorrei un <u>caffè</u> e un&nbsp;cornetto, per&nbsp;favore.</p>
-    <div class="play">
-      <button class="tb" aria-label="Play your recording, 3.4 seconds"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5Z"/></svg>You <span class="num">3.4 s</span></button>
-      <button class="tb" aria-label="Play the native speaker, 2.6 seconds"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5Z"/></svg>Native <span class="num">2.6 s</span></button>
-    </div>
+    <p class="score num">7 of 8 words clear · 1 to practise</p>
   </div>
 
-  <p class="score num">7 of 8 words clear <span>· 1 to practise</span></p>
-
   <section class="fix" aria-labelledby="fix-word">
-    <header>
-      <h2 id="fix-word"><span class="it" lang="it">caffè</span><small>/kafˈfɛ/</small></h2>
-      <button class="tb slow" aria-label="Hear caffè at three-quarter speed"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5Z"/></svg>Slow <span class="num">0.75×</span></button>
-    </header>
-    <p><b>Stress the last syllable.</b> You leaned on the first, as in English “coffee”.</p>
-    <figure class="curve" aria-label="Loudness across caffè from both recordings. You were loudest on caf; the native speaker is loudest on fè.">
-      <svg width="350" height="164" viewBox="0 0 350 164" aria-hidden="true">
-        <text x="0" y="10">Loudness</text>
-        <line x1="0" x2="350" y1="134.5" y2="134.5" stroke="var(--ds-color-border-default)"/>
-        <line x1="147.5" x2="147.5" y1="20" y2="134" stroke="var(--ds-color-border-subtle)" stroke-dasharray="2 3"/>
-        <path fill="none" stroke="var(--ds-color-neutral-light-8)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" d="M4.0 134.0 L6.0 134.0 L8.0 134.0 L10.0 134.0 L12.0 134.0 L14.0 134.0 L16.0 134.0 L18.0 134.0 L20.0 134.0 L22.0 134.0 L24.0 134.0 L26.0 134.0 L28.0 133.8 L30.0 133.0 L32.0 131.5 L34.0 129.2 L36.0 126.3 L38.0 122.8 L40.0 119.1 L42.0 114.8 L44.0 112.0 L46.0 107.8 L48.0 102.5 L50.0 98.7 L52.0 94.5 L54.0 93.5 L56.0 90.9 L58.0 89.9 L60.0 88.3 L62.0 87.5 L64.0 89.1 L66.0 89.6 L68.0 90.0 L70.0 88.7 L72.0 89.0 L74.0 91.5 L76.0 91.4 L78.0 93.7 L80.0 94.1 L82.0 96.0 L84.0 97.8 L86.0 96.7 L88.0 98.3 L90.0 99.8 L92.0 99.9 L94.0 101.5 L96.0 105.1 L98.0 107.6 L100.0 111.4 L102.0 115.1 L104.0 119.2 L106.0 122.5 L108.0 125.8 L110.0 127.2 L112.0 126.9 L114.0 126.7 L116.0 126.5 L118.0 126.5 L120.0 126.5 L122.0 126.6 L124.0 126.5 L126.0 126.3 L128.0 126.5 L130.0 126.2 L132.0 126.3 L134.0 126.3 L136.0 126.1 L138.0 126.1 L140.0 126.2 L142.0 126.2 L144.0 126.1 L146.0 126.4 L148.0 126.0 L150.0 126.3 L152.0 126.1 L154.0 125.9 L156.0 126.3 L158.0 126.1 L160.0 126.2 L162.0 126.1 L164.0 126.4 L166.0 126.5 L168.0 126.5 L170.0 126.1 L172.0 126.3 L174.0 126.1 L176.0 126.0 L178.0 126.6 L180.0 128.1 L182.0 129.9 L184.0 131.0 L186.0 130.1 L188.0 127.6 L190.0 124.5 L192.0 119.5 L194.0 113.8 L196.0 107.2 L198.0 102.5 L200.0 93.7 L202.0 88.5 L204.0 81.2 L206.0 72.6 L208.0 63.0 L210.0 57.8 L212.0 48.4 L214.0 43.1 L216.0 39.5 L218.0 35.5 L220.0 32.9 L222.0 31.3 L224.0 29.4 L226.0 24.3 L228.0 19.3 L230.0 23.5 L232.0 26.6 L234.0 21.1 L236.0 22.1 L238.0 23.9 L240.0 26.4 L242.0 25.3 L244.0 23.4 L246.0 25.6 L248.0 27.5 L250.0 31.5 L252.0 27.8 L254.0 32.8 L256.0 32.5 L258.0 30.4 L260.0 34.9 L262.0 33.5 L264.0 31.9 L266.0 33.8 L268.0 34.3 L270.0 39.5 L272.0 40.5 L274.0 43.4 L276.0 40.8 L278.0 43.5 L280.0 44.3 L282.0 41.8 L284.0 41.8 L286.0 41.5 L288.0 44.8 L290.0 46.6 L292.0 46.3 L294.0 47.9 L296.0 49.9 L298.0 50.9 L300.0 54.4 L302.0 57.4 L304.0 59.3 L306.0 64.5 L308.0 72.9 L310.0 82.1 L312.0 91.7 L314.0 101.1 L316.0 109.4 L318.0 116.5 L320.0 122.8 L322.0 127.8 L324.0 130.9 L326.0 132.5 L328.0 133.2 L330.0 133.6 L332.0 133.8 L334.0 133.9 L336.0 134.0 L338.0 134.0 L340.0 134.0 L342.0 134.0 L344.0 134.0 L346.0 134.0"/>
-        <path fill="none" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" d="M4.0 134.0 L6.0 134.0 L8.0 134.0 L10.0 134.0 L12.0 134.0 L14.0 134.0 L16.0 134.0 L18.0 134.0 L20.0 134.0 L22.0 134.0 L24.0 134.0 L26.0 134.0 L28.0 133.3 L30.0 130.7 L32.0 125.8 L34.0 118.8 L36.0 110.2 L38.0 100.4 L40.0 89.2 L42.0 79.5 L44.0 67.4 L46.0 58.8 L48.0 49.1 L50.0 39.0 L52.0 32.4 L54.0 31.5 L56.0 26.4 L58.0 26.2 L60.0 27.1 L62.0 32.1 L64.0 31.4 L66.0 33.8 L68.0 32.8 L70.0 34.6 L72.0 33.9 L74.0 35.7 L76.0 36.5 L78.0 40.7 L80.0 41.8 L82.0 42.7 L84.0 43.4 L86.0 47.3 L88.0 47.1 L90.0 47.4 L92.0 49.1 L94.0 49.2 L96.0 51.2 L98.0 57.1 L100.0 63.2 L102.0 71.4 L104.0 77.2 L106.0 84.3 L108.0 93.5 L110.0 101.8 L112.0 109.8 L114.0 117.2 L116.0 123.3 L118.0 125.4 L120.0 126.3 L122.0 126.7 L124.0 127.0 L126.0 127.1 L128.0 127.1 L130.0 127.1 L132.0 127.1 L134.0 127.4 L136.0 127.5 L138.0 127.4 L140.0 127.3 L142.0 127.4 L144.0 127.6 L146.0 128.4 L148.0 129.9 L150.0 131.4 L152.0 131.3 L154.0 130.1 L156.0 128.0 L158.0 125.1 L160.0 121.4 L162.0 117.6 L164.0 113.4 L166.0 109.5 L168.0 104.3 L170.0 99.9 L172.0 95.1 L174.0 91.1 L176.0 89.0 L178.0 84.7 L180.0 85.4 L182.0 84.3 L184.0 84.3 L186.0 83.8 L188.0 84.8 L190.0 82.9 L192.0 83.7 L194.0 85.5 L196.0 84.7 L198.0 86.3 L200.0 85.8 L202.0 86.5 L204.0 86.4 L206.0 85.4 L208.0 85.7 L210.0 87.4 L212.0 87.4 L214.0 88.2 L216.0 89.8 L218.0 91.5 L220.0 91.4 L222.0 91.6 L224.0 90.9 L226.0 90.8 L228.0 92.0 L230.0 93.5 L232.0 93.0 L234.0 95.3 L236.0 96.3 L238.0 96.0 L240.0 96.6 L242.0 99.4 L244.0 101.3 L246.0 103.7 L248.0 107.9 L250.0 111.9 L252.0 116.2 L254.0 120.2 L256.0 123.6 L258.0 127.0 L260.0 129.7 L262.0 131.8 L264.0 132.9 L266.0 133.4 L268.0 133.7 L270.0 133.9 L272.0 133.9 L274.0 134.0 L276.0 134.0 L278.0 134.0 L280.0 134.0 L282.0 134.0 L284.0 134.0 L286.0 134.0 L288.0 134.0 L290.0 134.0 L292.0 134.0 L294.0 134.0 L296.0 134.0 L298.0 134.0 L300.0 134.0 L302.0 134.0 L304.0 134.0 L306.0 134.0 L308.0 134.0 L310.0 134.0 L312.0 134.0 L314.0 134.0 L316.0 134.0 L318.0 134.0 L320.0 134.0 L322.0 134.0 L324.0 134.0 L326.0 134.0 L328.0 134.0 L330.0 134.0 L332.0 134.0 L334.0 134.0 L336.0 134.0 L338.0 134.0 L340.0 134.0 L342.0 134.0 L344.0 134.0 L346.0 134.0"/>
-        <circle cx="58" cy="26.2" r="5" fill="var(--fix)" stroke="var(--ds-color-surface-raised)" stroke-width="2"/>
-        <circle cx="228" cy="19.3" r="4" fill="var(--ds-color-neutral-light-8)" stroke="var(--ds-color-surface-raised)" stroke-width="2"/>
-        <text x="68" y="23" style="fill: var(--ink); font-weight: 500">You</text>
-        <text x="237" y="16">Native</text>
-        <text class="syl" x="70" y="160" text-anchor="middle">caf</text><text class="syl" x="247" y="160" text-anchor="middle">fè</text>
-      </svg>
-    </figure>
+    <h2 id="fix-word">Stress the last syllable</h2>
+    <div class="takes">
+      <div class="take">
+        <button class="play" aria-label="Play your caffè"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5Z"/></svg></button>
+        <div><p class="who">You</p><p class="syl it" lang="it" aria-label="You stressed caf"><span class="hi wrong">caf</span><span class="lo">fè</span></p></div>
+      </div>
+      <div class="take">
+        <button class="play" aria-label="Play the native speaker’s caffè"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5Z"/></svg></button>
+        <div><p class="who">Native speaker</p><p class="syl it" lang="it" aria-label="The native speaker stresses fè"><span class="lo">caf</span><span class="hi">fè</span></p></div>
+      </div>
+    </div>
+    <p class="why"><span class="it" lang="it">caffè</span> is /kafˈfɛ/. You leaned on <b class="it" lang="it">caf</b>, as in English “coffee”.</p>
   </section>
 
   <div class="actions">

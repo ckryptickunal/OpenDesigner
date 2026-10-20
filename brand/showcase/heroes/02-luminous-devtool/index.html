@@ -44,33 +44,20 @@
   .nav .right { margin-left: auto; display: flex; gap: var(--ds-space-24); font-size: var(--ds-font-size-16); color: var(--ink-2); }
   .nav .right a { min-height: var(--ds-size-target-min); display: inline-flex; align-items: center; }
 
-  /* layout: both columns start on the same line */
-  .stage { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--ds-space-16); padding: var(--ds-space-48) var(--m) 0; align-items: stretch; }
-  .copy { grid-column: 1 / 5; display: flex; flex-direction: column; }
-  .kicker { font-size: var(--ds-font-size-16); color: var(--ink-2); line-height: 1.5; }
-  h1 { margin-top: var(--ds-space-24); font-weight: 500; }
-  /* The number is the headline: display size outside the scale on purpose, one step past the 90 px token. */
-  h1 .big { display: block; white-space: nowrap; font-size: min(148px, 10.3vw); line-height: .9; letter-spacing: -0.035em; margin-left: -0.05em; } /* od-ignore: display figure */
-  h1 .rest { display: block; margin-top: var(--ds-space-24); font-size: var(--ds-font-size-28); line-height: 1.3; letter-spacing: -0.015em; color: var(--ink-2); font-weight: 400; max-width: 19em; text-wrap: pretty; }
-  h1 .rest b { color: var(--ink); font-weight: 500; }
-  .bottom { margin-top: auto; }
-  .act { margin-top: var(--ds-space-40); flex-wrap: wrap; row-gap: var(--ds-space-8); display: flex; gap: var(--ds-space-24); align-items: center; }
+  /* layout: headline on the left, the statement beside it; the console below, cropped by the foot of the frame */
+  .stage { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--ds-space-16); padding: var(--ds-space-64) var(--m) 0; }
+  h1 { grid-column: 1 / 8; font-weight: 500; font-size: var(--ds-font-size-67); line-height: 1.04; letter-spacing: -0.03em; margin-left: -0.03em; }
+  .say { grid-column: 9 / 13; align-self: end; padding-bottom: var(--ds-space-8); display: flex; flex-direction: column; align-items: flex-start; gap: var(--ds-space-20); }
+  .say p { font-size: var(--ds-font-size-16); line-height: 1.5; color: var(--ink-2); text-wrap: pretty; }
+  .say p b { color: var(--ink); font-weight: 500; }
   .btn { white-space: nowrap; min-height: var(--ds-size-control-lg); padding: 0 var(--ds-space-24); display: inline-flex; align-items: center; border-radius: var(--ds-radius-control); font-size: var(--ds-font-size-16); font-weight: 500; background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); transition: background var(--ds-motion-duration-fast) var(--ds-motion-easing-standard); }
-  .install { white-space: nowrap; display: inline-flex; align-items: center; gap: var(--ds-space-8); font-family: var(--ds-font-family-mono); font-size: var(--ds-font-size-16); color: var(--ink-2); }
-  .install .pr { color: var(--ink-3); }
-  .install button { width: var(--ds-size-control-md); height: var(--ds-size-control-md); display: inline-grid; place-items: center; color: var(--ink-3); border-radius: var(--ds-radius-control); }
-  .facts { flex-wrap: wrap; row-gap: var(--ds-space-4); margin-top: 0; padding-top: var(--ds-space-16); border-top: var(--ds-border-width-1) solid var(--hair); display: flex; gap: var(--ds-space-32); font-size: var(--ds-font-size-16); color: var(--ink-2); }
-  .facts span { white-space: nowrap; }
-  .facts b { color: var(--ink); font-weight: 500; }
-  .foot { margin-top: var(--ds-space-12); font-size: var(--ui-sm); color: var(--ink-3); line-height: 1.5; }
   @media (hover: hover) and (pointer: fine) {
     .links a:hover, .nav .right a:hover { color: var(--ink); }
     .btn:hover { background: var(--ds-color-bg-action-primary-hover); }
-    .install button:hover { color: var(--ink); background: var(--field); }
   }
 
   /* the console: the product, flat and whole */
-  .console { grid-column: 5 / 13; margin-left: var(--ds-space-40); align-self: start; background: var(--panel); border: var(--ds-border-width-1) solid var(--hair-hi); border-radius: var(--ds-radius-overlay); overflow: hidden; font-size: var(--ds-font-size-16); }
+  .console { grid-column: 1 / 13; margin-top: var(--ds-space-48); border-bottom: 0; border-radius: var(--ds-radius-overlay) var(--ds-radius-overlay) 0 0; align-self: start; background: var(--panel); border: var(--ds-border-width-1) solid var(--hair-hi); border-radius: var(--ds-radius-overlay); overflow: hidden; font-size: var(--ds-font-size-16); }
   .c-head { height: var(--ds-space-48); display: flex; align-items: center; gap: var(--ds-space-12); padding: 0 var(--ds-space-20); border-bottom: var(--ds-border-width-1) solid var(--hair); }
   .crumb { color: var(--ink-3); }
   .crumb b { color: var(--ink); font-weight: 500; }
@@ -87,18 +74,15 @@
   .run { height: var(--ds-space-48); padding: 0 var(--ds-space-16); display: inline-flex; align-items: center; gap: var(--ds-space-8); background: var(--raised); border: var(--ds-border-width-1) solid var(--hair-hi); border-radius: var(--ds-radius-control); font-weight: 500; }
   .run kbd { font-family: var(--ds-font-family-mono); font-size: var(--ui-sm); color: var(--ink-3); }
 
-  .c-main { display: grid; grid-template-columns: 296px 1fr; border-bottom: var(--ds-border-width-1) solid var(--hair); } /* od-ignore: map column, shared with the plan's label column */
+  .c-main { display: grid; grid-template-columns: 1fr 336px; } /* od-ignore: map column */
   .sec-h { height: var(--ds-space-48); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--ds-space-20); }
   .sec-h b { font-weight: 500; }
   .sec-h span { font-size: var(--ui-sm); color: var(--ink-3); }
-  .map { border-right: var(--ds-border-width-1) solid var(--hair); }
+  .map { border-left: var(--ds-border-width-1) solid var(--hair); }
+  .map svg { width: 296px; height: 296px; }
   .map svg { display: block; margin: 0 var(--ds-space-20); }
-  .legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-6) var(--ds-space-16); padding: var(--ds-space-12) var(--ds-space-20) var(--ds-space-16); font-size: var(--ui-sm); color: var(--ink-2); }
-  .legend .note { color: var(--ink-3); }
-  .legend span { display: inline-flex; align-items: center; gap: var(--ds-space-6); }
-  .legend i { width: var(--ds-space-8); height: var(--ds-space-8); border-radius: var(--ds-radius-full); display: inline-block; }
   .res table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-  .res col.c1 { width: var(--ds-space-48); } .res col.c3 { width: 56px; } .res col.c4 { width: 112px; } /* od-ignore: table column widths for this frame */
+  .res col.c1 { width: 64px; } .res col.c3 { width: 96px; } .res col.c4 { width: 112px; } /* od-ignore: table column widths for this frame */
   .res th { text-align: left; font-weight: 400; font-size: var(--ui-sm); color: var(--ink-3); height: var(--ds-space-32); padding: 0 var(--ds-space-8); border-bottom: var(--ds-border-width-1) solid var(--hair); vertical-align: top; }
   .res td { height: var(--ds-space-40); padding: 0 var(--ds-space-8); border-bottom: var(--ds-border-width-1) solid var(--hair); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .res tr:last-child td { border-bottom: 0; }
@@ -107,21 +91,12 @@
   .res .k { font-family: var(--ds-font-family-mono); font-size: var(--ui-sm); color: var(--ink-3); }
   .res .y { font-size: var(--ui-sm); color: var(--ink-3); }
   .res .s { font-family: var(--ds-font-family-mono); }
+  .res .d { font-family: var(--ds-font-family-mono); color: var(--ink-3); }
+  .res td.r, .res th.r { text-align: right; }
   .res tr.sel td { background: var(--ds-color-neutral-alpha-dark-5); }
   .res tr.sel .y, .res tr.sel .k { color: var(--ink-2); }
-  .res tr.sel td:first-child { box-shadow: inset var(--ds-border-width-2) 0 0 var(--ink); color: var(--ink); } /* od-ignore: a 2 px left rule, not elevation */
+  .res tr.sel td:first-child { color: var(--ink); }
 
-  .c-plan { padding: 0 0 var(--ds-space-16); }
-  .wf { display: grid; grid-template-columns: 276px 1fr 72px; row-gap: var(--ds-space-4); padding: 0 var(--ds-space-20); align-items: center; font-size: var(--ui-sm); } /* od-ignore: label column ends on the map divider */
-  .wf .l { color: var(--ink-2); }
-  .wf .l b { color: var(--ink); font-weight: 500; }
-  .wf .t { position: relative; height: var(--ds-space-20); }
-  .wf .t i { position: absolute; top: var(--ds-space-6); height: var(--ds-space-8); background: var(--bar); border-radius: var(--ds-radius-detail); }
-  .wf .v { text-align: right; font-family: var(--ds-font-family-mono); color: var(--ink-2); }
-  .wf .axis { position: relative; height: var(--ds-space-20); color: var(--ink-2); font-family: var(--ds-font-family-mono); }
-  .wf .axis span { position: absolute; top: var(--ds-space-2); transform: translateX(-50%); }
-  .wf .axis span:first-child { transform: none; }
-  .wf .grid { position: absolute; top: 0; bottom: 0; width: var(--ds-border-width-1); background: var(--hair); }
 </style>
 </head>
 <body>
@@ -131,24 +106,17 @@
     Nearmost
   </a>
   <nav class="links" aria-label="Main"><a href="#">Product</a><a href="#">Docs</a><a href="#">Benchmarks</a><a href="#">Pricing</a><a href="#">Changelog <small>v3.2</small></a></nav>
-  <div class="right"><a href="#">GitHub</a><a href="#">Sign in</a></div>
+  <div class="right"><a href="#">Open source</a><a href="#">Sign in</a></div>
 </header>
 
 <main class="stage">
-  <section class="copy">
-    <p class="kicker">Open-source vector database</p>
-    <h1><span class="big">8.7 ms</span><span class="rest">to search <b>1.05 billion vectors</b> by meaning, at p99, with filters and hybrid ranking built in.</span></h1>
-    <div class="act">
-      <a class="btn" href="#">Start building</a>
-      <span class="install"><span><span class="pr">$</span> pip install nearmost</span><button aria-label="Copy install command"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M10.5 3.5V3a1.5 1.5 0 0 0-1.5-1.5H3.5A1.5 1.5 0 0 0 2 3v5.5A1.5 1.5 0 0 0 3.5 10H4" stroke="currentColor" stroke-width="1.3"/></svg></button></span>
-    </div>
-    <div class="bottom">
-    <p class="facts"><span><b>99.2%</b> recall at k = 10</span><span><b>Apache 2.0</b>, self-host or cloud</span></p>
-    <p class="foot">Measured on 1.05 billion 1,536-dimension vectors, 3 nodes, 64&nbsp;concurrent clients.</p>
-    </div>
-  </section>
+  <h1>Search a billion vectors<br>by meaning.</h1>
+  <div class="say">
+    <p>Nearmost is an open-source vector database. <b>8.7 ms at p99</b> on 1.05 billion vectors, with filters and hybrid ranking built in.</p>
+    <a class="btn" href="#">Start building</a>
+  </div>
 
-  <section class="console" aria-label="The Nearmost console running a hybrid query on a collection of research papers: 8 results in 7.9 milliseconds.">
+  <section class="console" aria-label="The Nearmost console running a hybrid query on a collection of research papers: the 10 nearest results in 7.9 milliseconds, and a map of the 2,000 nearest papers.">
     <div class="c-head">
       <span class="crumb">prod-eu-1 / <b>papers</b></span>
       <span class="state"><i aria-hidden="true"></i>Ready</span>
@@ -158,34 +126,29 @@
       <div class="field">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.4"/><path d="m10.4 10.4 3.4 3.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         <span class="q">why sleep helps memory</span>
-        <span class="tok">year ≥ 2019</span><span class="tok">hybrid 0.7</span><span class="tok">k 8</span>
+        <span class="tok">year ≥ 2019</span>
       </div>
       <span class="run">Run <kbd>⌘↵</kbd></span>
     </div>
     <div class="c-main">
-      <div class="map">
-        <div class="sec-h"><b>Map</b><span>UMAP of the 2,000 nearest</span></div>
-        <svg id="map" width="256" height="256" viewBox="0 0 256 256" aria-hidden="true"></svg>
-        <div class="legend"><span><i style="background: var(--aqua)"></i>result</span><span><i style="border: 1.5px solid var(--ink-2)"></i>before 2019</span><span><i style="background: var(--ink-3); width: var(--ds-space-4); height: var(--ds-space-4)"></i>other papers</span><span class="note">Rank follows score, not map distance.</span></div>
-      </div>
       <div class="res">
-        <div class="sec-h"><b>8 results</b><span>score = 0.7 dense + 0.3 sparse</span></div>
+        <div class="sec-h"><b>10 results</b><span>7.9 ms</span></div>
         <table>
-          <colgroup><col class="c1"><col><col class="c3"><col class="c4"></colgroup>
-          <tr><th>#</th><th>Title</th><th>Year</th><th>Score</th></tr>
+          <colgroup><col class="c1"><col><col class="c3"><col class="c3"><col class="c3"><col class="c4"></colgroup>
+          <tr><th>#</th><th>Title</th><th>Year</th><th class="r">Dense</th><th class="r">Sparse</th><th>Score</th></tr>
           <tbody id="rows"></tbody>
         </table>
       </div>
-    </div>
-    <div class="c-plan">
-      <div class="sec-h"><b>Query plan</b><span class="mono">7.9 ms total</span></div>
-      <div class="wf" id="wf"></div>
+      <div class="map">
+        <div class="sec-h"><b>Map</b><span>2,000 nearest</span></div>
+        <svg id="map" viewBox="0 0 256 256" aria-hidden="true"></svg>
+      </div>
     </div>
   </section>
 </main>
 
 <script>
-/* The map, the table and the plan are drawn from one set of numbers. Deterministic (seeded). */
+/* The map and the table are drawn from one set of numbers. Deterministic (seeded). */
 (function () {
   // results: title, year, dense cosine, sparse (BM25, normalised). Hybrid = 0.7 dense + 0.3 sparse.
   const R = [
@@ -197,11 +160,13 @@
     ['Naps vs caffeine, 40 sites', 2025, .842, .945],
     ['Teen consolidation windows', 2019, .871, .854],
     ['REM density and emotional tone', 2021, .866, .843],
+    ['Memory replay in older adults', 2022, .858, .842],
+    ['Spindles after skill training', 2020, .851, .839],
   ];
   const rows = document.getElementById('rows');
   R.forEach(([t, y, d, s], i) => {
     const h = .7 * d + .3 * s;
-    rows.insertAdjacentHTML('beforeend', `<tr${i ? '' : ' class="sel"'}><td class="k">${String(i + 1).padStart(2, '0')}</td><td>${t}</td><td class="y">${y}</td><td class="s">${h.toFixed(3)}</td></tr>`);
+    rows.insertAdjacentHTML('beforeend', `<tr${i ? '' : ' class="sel"'}><td class="k">${String(i + 1).padStart(2, '0')}</td><td>${t}</td><td class="y">${y}</td><td class="d r">${d.toFixed(3)}</td><td class="d r">${s.toFixed(3)}</td><td class="s">${h.toFixed(3)}</td></tr>`);
   });
 
   // the map: a UMAP projection of the 2,000 vectors nearest the query, in topic clusters
@@ -222,26 +187,21 @@
     ...Array.from({ length: 79 }, () => [8 + rnd() * 240, 8 + rnd() * 240]),          // strays: 79, so 1,989 in all
   ];
   const dots = el('g', { fill: 'var(--ink-3)' });
-  regions.forEach(([x, y]) => el('circle', { cx: Math.min(253, Math.max(3, x)).toFixed(1), cy: Math.min(253, Math.max(3, y)).toFixed(1), r: 1.1, opacity: .55 }, dots));
-  [['Sleep and memory', 6, 68, 'start'], ['Circadian', 252, 22, 'end'], ['Learning', 252, 250, 'end'], ['Anaesthesia', 6, 250, 'start']].forEach(([label, lx, ly, an]) => { const t = el('text', { x: lx, y: ly, 'font-size': 14, fill: 'var(--ink-2)', 'text-anchor': an, 'font-family': 'var(--ds-font-family-text)', 'paint-order': 'stroke', stroke: 'var(--panel)', 'stroke-width': 4 }); t.textContent = label; });
-  // the query, three closer papers the year filter removed, and the 8 results around it
+  regions.forEach(([x, y], k) => k % 2 || el('circle', { cx: Math.min(253, Math.max(3, x)).toFixed(1), cy: Math.min(253, Math.max(3, y)).toFixed(1), r: 1.1, opacity: .55 }, dots));
+  [['Sleep and memory', 6, 68, 'start'], ['Circadian', 252, 22, 'end'], ['Learning', 252, 250, 'end'], ['Anaesthesia', 6, 250, 'start']].forEach(([label, lx, ly, an]) => { const t = el('text', { x: lx, y: ly, 'font-size': 14, fill: 'var(--ink-3)', 'text-anchor': an, 'font-family': 'var(--ds-font-family-text)', 'paint-order': 'stroke', stroke: 'var(--panel)', 'stroke-width': 4 }); t.textContent = label; });
+  // the query, and the 10 results around it
   const Q = [112, 124];
-  [[-20, -14], [13, 22], [-6, 28]].forEach(([dx, dy]) => el('circle', { cx: Q[0] + dx, cy: Q[1] + dy, r: 3.6, fill: 'var(--panel)', stroke: 'var(--ink-2)', 'stroke-width': 1.5 }));
-  const P = [[15, -13], [-25, 9], [31, 6], [-9, -31], [36, -24], [-36, -19], [4, 38], [-40, 27]];
+  const P = [[15, -13], [-25, 9], [31, 6], [-9, -31], [36, -24], [-36, -19], [4, 38], [-40, 27], [44, 18], [-24, 46]];
   P.forEach(([dx, dy], i) => {
     const x = Q[0] + dx, y = Q[1] + dy;
-    el('circle', { cx: x, cy: y, r: 4, fill: 'var(--aqua)', stroke: 'var(--panel)', 'stroke-width': 1.2 });
-    if (i === 0) el('circle', { cx: x, cy: y, r: 7.5, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.2 });
-    const t = el('text', { x: x + (dx >= 0 ? 8 : -8), y: y + 4.5, 'font-size': 14, fill: 'var(--ink)', 'text-anchor': dx >= 0 ? 'start' : 'end', 'font-family': 'var(--ds-font-family-mono)', 'paint-order': 'stroke', stroke: 'var(--panel)', 'stroke-width': 3 }); t.textContent = String(i + 1);
+    el('circle', { cx: x, cy: y, r: i ? 3.4 : 4, fill: i ? 'var(--ink-2)' : 'var(--ink)', stroke: 'var(--panel)', 'stroke-width': 1.2 });
+    if (i === 0) {
+      el('circle', { cx: x, cy: y, r: 7.5, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.2 });
+      const t = el('text', { x: x + 11, y: y + 4.5, 'font-size': 14, fill: 'var(--ink)', 'font-family': 'var(--ds-font-family-mono)', 'paint-order': 'stroke', stroke: 'var(--panel)', 'stroke-width': 3 }); t.textContent = '1';
+    }
   });
   el('path', { d: `M${Q[0] - 7},${Q[1]} h14 M${Q[0]},${Q[1] - 7} v14`, stroke: 'var(--ink)', 'stroke-width': 1.6 });
 
-  // query plan: one time axis, 0 to 8 ms. Dense and sparse run side by side; the total is 7.9 ms.
-  const wf = document.getElementById('wf'), MS = 8, pct = v => (v / MS * 100) + '%';
-  [['Filter', 'year ≥ 2019, bitmap', 0, 0.4], ['Dense', 'HNSW, ef 128', 0.4, 5.0], ['Sparse', 'BM25', 0.4, 2.6], ['Fuse', '0.7 dense, 0.3 sparse', 5.0, 5.3], ['Fetch', '8 payloads', 5.3, 7.9]].forEach(([a, b, t0, t1]) => {
-    wf.insertAdjacentHTML('beforeend', `<span class="l"><b>${a}</b> ${b}</span><span class="t">${[2, 4, 6].map(g => `<span class="grid" style="left:${pct(g)}"></span>`).join('')}<i style="left:${pct(t0)};width:${pct(t1 - t0)}"></i></span><span class="v">${(t1 - t0).toFixed(1)} ms</span>`);
-  });
-  wf.insertAdjacentHTML('beforeend', `<span></span><span class="axis">${[0, 2, 4, 6, 8].map(g => `<span style="left:${pct(g)}">${g}</span>`).join('')}</span><span class="v">ms</span>`);
 })();
 </script>
 </body>

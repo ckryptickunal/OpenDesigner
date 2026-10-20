@@ -1,5 +1,7 @@
 # 01 · Pricing table, glass (Gloaming)
 
+Gallery: Gloaming is a fictional AI video studio; its pricing page is a cost estimator, and the cheapest plan is the answer to it.
+
 ## Direction
 Gloaming is a fictional AI video studio that renders short films from scripts. The page sells three plans to creators and small studios. The idea: the plans sit in a dark screening room and a projector beam falls on the plan most people pick. Teal-and-amber film grade, frosted glass cards, a film-title serif for names and prices. Feel words: **cinematic, sleek, vivid**.
 
@@ -91,3 +93,36 @@ What changed and why:
 **Fresh-eyes audit: 3, in six rounds.** Every price and the estimator logic checked out each time. The audits kept naming the same thing: a generic dark three-plan layout that is sparser than the B2B product screens, with the estimator as the only original idea. The last round's concrete notes were fixed afterwards and checked by measurement, not re-audited: the comparison rows now sit on the plan columns under a plan-name header, the estimator and meter text are 14 px, nothing wraps at 240 or 320 minutes in either billing mode (buttons and lists align in all three states), Spark's reason moved into its bill line. **This piece did not reach 4.** It needs the owner's call: a light page in the B2B screens' manner, or a different presentation of the estimator.
 
 **Checks:** check_dates pass; check_names 0 errors; preflight 0 errors; engine validate passes (2 light-mode warnings on a dark-only system, as recorded in round 1).
+
+## Round 5 (owner hid it until better, 2026-10-18)
+**What Kunal did:** he hid the piece "until better": it had won its blind test in round 4, but the fresh reviewer stayed at 3.
+
+**The idea, in one sentence:** you set how much finished 4K film you make a month, and the chart and the answer panel say what that month costs on each plan; the cheapest plan is the answer.
+
+**What changed**
+- A light page in the manner of the B2B screens (engine: `set raw.defaultTheme '"light"'`, then `build`; brand #F2A93B unchanged). The dark three-card layout, its feature lists and the comparison table are gone.
+- The estimator is the subject: a chart of what a month costs on Studio and on Premiere, from 0 to 300 minutes of finished 4K film, with the slider as its x axis. The slider is held at 90 min (1,350 render-minutes); a marker rises from it to Studio's $49 and Premiere's $144, and the crossing reads "Premiere costs less from 249 min".
+- The plans are the answer: the right panel names the cheapest plan at your usage (Studio, $49.00 a month: $19.00 billed yearly plus 750 extra render-minutes at $0.04 = $30.00), one trial button, a three-line spec, then the other plans at 90 min (Premiere $144.00, 3-seat minimum; Spark, no 4K). Everything follows the slider and the billing toggle.
+- Amber has one job, you: the slider's filled part and your dot, always behind ink, because amber on white is 2:1. Studio is a 4 px ink line, Premiere 3 px grey.
+- Removed after audits: the "save 20%" claim (monthly Studio is $24, so yearly saves 20.8%), the cropped comparison table, a full-width button, bullets (now a two-column spec), and the stale shot-monthly.png frame of the old design.
+
+**Type scale:** 12 (axis, spec labels), 14 (body), 18 (plan name), 22 (heading, your minutes), 43 (price). One face, Instrument Sans.
+
+**References (Mobbin, cited by link only; used for the blind test):**
+- Vercel sandbox cost estimator, https://mobbin.com/sites/sections/770b030a-8e99-4fc4-97a2-30e9a8a9a7b0 : a slider over an estimate with a plan-by-plan comparison and a breakdown; taught the answer panel.
+- Cartesia usage calculator, https://mobbin.com/sites/sections/f7fe4c69-1b50-448b-92f8-96f3bbae2568 : the recommended plan as the answer to the inputs.
+- Stripe Sigma estimate, https://mobbin.com/sites/sections/088a670f-2b5e-4b7a-ad9b-680405acd8fb : one slider and one estimated monthly cost; showed how little the estimator needs.
+
+**Blind pairwise test** (ours minus shipped, 1 to 5; neutral file names, random sides, no labels; one fresh judge saw all the round's pairs):
+
+| Round | Version | Vercel | Cartesia | Stripe |
+|---|---|---|---|---|
+| 1 | light estimator, chart and answer panel | +1 | +2 | +1 |
+| 2 | slider as the chart's axis, thicker lines, spec under the button | −1 | +2 | 0 |
+| 3 | two-column spec, no savings claim, button not full width | −1 | +2 | +1 |
+
+**Fresh-eyes audit:** round 1, 3.5 (thin lines at gallery size, the slider apart from its axis, a stretched answer panel; addressed); round 2, 3.5 (the idea drawn with the weakest marks, a stock answer card, the slider reading as a data series; partly addressed); round 3, **3.5** (the slider's amber fill on the $0 line reads as a third line, the answer panel stacks seven groups, the heavy Studio line outshouts the price).
+
+**Result: did not reach 4 in three rounds, honestly reported.** It passes the blind test in every round (worst margin −1, to Vercel), and every price checks out each time, but three fresh auditors in a row scored it 3.5. The estimator now has a structure of its own; what still holds it back is weight: the chart's strokes and the slider compete with the answer. Next step if the owner wants one: move the slider below the plot with its own axis labels, give the answer panel only the price, the breakdown and one action, and draw Studio at 2 px.
+
+**Checks (final render):** check_dates `--year 2026` passes; check_names 0 errors (the NEW words it lists are dictionary words, key names or the typed query); preflight 0 errors, 0 warnings; engine validate no errors (light-mode warnings as before); computed contrast of every HTML text run 4.6:1 or more.

@@ -9,7 +9,7 @@ colors:
   on-surface: "#222428"
   error: "#d93834"
 typography:
-  body-md: { fontFamily: "Shantell Sans", fontSize: 16px, lineHeight: 24px }
+  body-md: { fontFamily: "Inter", fontSize: 16px, lineHeight: 24px }
 rounded:
   control: 0px
   container: 0px
@@ -92,6 +92,17 @@ The tokens in `opendesigner/tokens/` (DTCG 2025.10 with `opendesigner.resolver.j
 Decisions: D-0002 (answers.Q-aud-01), D-0006 (macros), D-0009 (answers.Q-scope-06), D-0012 (dials.expression), D-0013 (dials.brandPresence), D-0014 (dials.density), D-0025 (answers.Q-dir-01).
 
 </details>
+
+**Taste card.** How it looks and feels, in five lines for you, your team and any AI that builds with it. Nothing on it is invented: each line says where it comes from.
+Designers: style brief, mood in words · Code: `taste.brief, taste.never`
+
+| Line | What it says | From |
+|---|---|---|
+| In your words | Not given yet. Describe the look as a picture, not adjectives (for example, "a quiet library at night"). | not asked yet |
+| Color | One accent color: a bright red picked for you (`#e3201b`) marks buttons, links and focus. Everything else stays neutral. Keep the accent to small areas, about 15% of a screen at most (a rule of thumb, DC-L15-03). | brand color; colorfulness 18/100 |
+| Shape | Buttons and fields have 0px corners; cards have 0px corners. Surfaces are separated by thin borders, with no shadows. | roundness 8/100, depth 0/100 |
+| Motion | Energetic. Most movements take 200ms. They turn into fades when a person asks for less motion. | energy 70/100 |
+| Never | Nothing yet. Say what it should never look like, or rate real screens in the taste poll. | not asked yet |
 
 ## Colors
 
@@ -233,8 +244,8 @@ Designers: type scale: base size and ratio · Code: `font.size.14`
 
 **Intent.** Body text is 16px; sizes follow `round(16 x 1.333^n)` for n from -2 to 6, reaching about 5.5x body (marketing surfaces in scope). Sizes: 12, 16, 21, 28, 38, 51, 67, 90px.
 
-- Text face: Shantell Sans, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif. Licence status (hook H-type): **pending**.
-- Licence by platform: text: Shantell Sans: licensed for web, apps, self-hosting.
+- Text face: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif. Licence status (hook H-type): **pending**.
+- Licence by platform: text: Inter (open licence or system font: web, apps and self-hosting); display: Shantell Sans: licensed for web, apps, self-hosting.
 - On iOS the Swift file uses Dynamic Type text styles (body 17 pt), so text follows the person's text size setting; Compose uses sp, which follows the Android font scale.
 - Weights: body 400, label 500, heading 750, display 850 (two or three distinct weights per view).
 - Emphasized variants (Expression 85, on from 67): 11 styles under `text.emphasized.*`, the same size one weight heavier, for the selected item, key actions and headlines (DC-L02-11).
@@ -267,7 +278,7 @@ Designers: type scale: base size and ratio · Code: `font.size.14`
 
 **Tailwind classes:** `text-body-md`, `text-label-lg`, `text-title-md`, `text-headline-md`.
 
-Decisions: D-0020 (raw.textFace), D-0021 (raw.displayFace), D-0022 (raw.monoFace), D-0024 (raw.marketingSurfaces).
+Decisions: D-0024 (raw.marketingSurfaces), D-0026 (raw.textFace), D-0027 (raw.displayFace), D-0028 (raw.monoFace).
 
 </details>
 
@@ -631,7 +642,7 @@ Designers: target platforms · Code: `raw.platforms; size.target.min`
 
 - Navigation, back, sheets and pickers stay native on every platform (DC-L10-02).
 - Swift and Compose files in `opendesigner/build/` use the same names as the CSS variables (Figma code syntax matches them).
-- Fonts by platform: text: Shantell Sans: licensed for web, apps, self-hosting.
+- Fonts by platform: text: Inter (open licence or system font: web, apps and self-hosting); display: Shantell Sans: licensed for web, apps, self-hosting.
 
 Decisions: D-0005 (answers.Q-plat-01).
 
@@ -639,7 +650,7 @@ Decisions: D-0005 (answers.Q-plat-01).
 
 ## Decisions
 
-**25 decisions so far.** Each one says who set it and why.
+**28 decisions so far.** Each one says who set it and why.
 Designers: decision history with reasons · Code: `opendesigner/decisions.md`
 
 <details><summary>More</summary>
@@ -664,12 +675,12 @@ Your own decisions first (the newest value per path), then your changes to stand
 | D-0017 | `dials.depth` | 0 | delegated | Printed ink: flat, no shadows |
 | D-0018 | `dials.colorfulness` | 18 | delegated | Noir: ink, paper, grey halftone and one alarm red |
 | D-0019 | `dials.warmth` | 30 | delegated | Cool newsprint white, never cream or brown |
-| D-0020 | `raw.textFace` | "Shantell Sans" | delegated | Hand-lettered comic face with real weights, SIL OFL (Arrow Type) |
-| D-0021 | `raw.displayFace` | "=textFace" | delegated | One lettering face for balloons, captions, title and SFX |
-| D-0022 | `raw.monoFace` | "JetBrains Mono" | delegated | Code, terminal and timestamps inside the panels are real data; SIL OFL |
 | D-0023 | `raw.fontLicence` | {"web": true, "app": true, "selfHost": true} | delegated | Shantell Sans and JetBrains Mono are SIL OFL |
 | D-0024 | `raw.marketingSurfaces` | true | delegated | The comic's title is lettered like a cover: needs a display step above 38 |
 | D-0025 | `answers.Q-dir-01` | "comic" | chosen | the engine now has a named comic style; the piece was built on neo-brutalist as the nearest preset |
+| D-0026 | `raw.textFace` | "Inter" | chosen | round 4: one calm face for the page; the comic lives only in the strip |
+| D-0027 | `raw.displayFace` | "Shantell Sans" | chosen | round 4: hand lettering only inside the strip |
+| D-0028 | `raw.monoFace` | "Inter" | chosen | round 4: no third face |
 | D-0010 | standards | House standards v2: 289 applied | standard (locked) | OpenDesigner's house standards (sources marked non-negotiable) are applied without asking and locked. Change one only when the person asks: engine.py... |
 
 </details>
@@ -680,7 +691,7 @@ Your own decisions first (the newest value per path), then your changes to stand
 
 - Still defaults (zoom 0, sketch): Colors, Typography, Layout, Elevation & Depth, Shapes, Components, Motion, Modes and Themes, Iconography and Imagery, Content and Voice, Accessibility, Platforms and Devices
 - Assets not final: Logo, wordmark, symbol, lockups (H-logo): pending; App icon (H-appicon): pending; Favicon set (H-favicon): pending; Custom icons, pictograms, spot icons (H-icons): pending; Illustration, characters, empty-state art (H-illus): pending; Photography and art direction (H-photo): pending; Brand typeface files (H-type): pending; Fixed brand colors (H-color): pending; Motion signature and rich media (H-motion): pending; Graphic devices, patterns, textures, brand gradients, signature shape (H-motif): pending; UI sounds and sonic logo (H-sound): pending; Custom haptic patterns (H-haptic): pending; Voice and tone guide (H-voice): pending; Brand guidelines PDF (H-brandbook): pending
-- Answers taken on assumption or delegated: answers.Q-aud-01 (delegated), context.audience (delegated), raw.brandColor (delegated), answers.Q-plat-01 (delegated), macros (delegated), taste.feelWords (delegated), answers.Q-theme-01 (delegated), answers.Q-scope-06 (delegated), dials.expression (delegated), dials.brandPresence (delegated), dials.density (delegated), dials.energy (delegated), dials.roundness (delegated), dials.depth (delegated), dials.colorfulness (delegated), dials.warmth (delegated), raw.textFace (delegated), raw.displayFace (delegated), raw.monoFace (delegated), raw.fontLicence (delegated), raw.marketingSurfaces (delegated)
+- Answers taken on assumption or delegated: answers.Q-aud-01 (delegated), context.audience (delegated), raw.brandColor (delegated), answers.Q-plat-01 (delegated), macros (delegated), taste.feelWords (delegated), answers.Q-theme-01 (delegated), answers.Q-scope-06 (delegated), dials.expression (delegated), dials.brandPresence (delegated), dials.density (delegated), dials.energy (delegated), dials.roundness (delegated), dials.depth (delegated), dials.colorfulness (delegated), dials.warmth (delegated), raw.fontLicence (delegated), raw.marketingSurfaces (delegated)
 - Waivers: none.
 - Licence risks: none found.
 - Validation: 0 errors, 0 warnings.
@@ -691,7 +702,7 @@ Your own decisions first (the newest value per path), then your changes to stand
 
 1. Before any visual work, read this file, PRODUCT.md and `opendesigner/tokens/` (start at `opendesigner/tokens/opendesigner.resolver.json`).
 2. Use tokens, never raw values: CSS `var(--ds-...)`, Tailwind classes from `opendesigner/build/tailwind/theme.css`, `DS.*` in Swift. In Compose: colors from `LocalDsColors.current` (provide `DsLightColors` or `DsDarkColors`), then `DsSpace`, `DsType` and `DsMotion`.
-3. Do not change a locked decision without asking the owner.
+3. Do not change a locked decision without asking the owner. Keep new screens inside the taste card at the top of the Overview, and never add anything on its Never list without asking.
 4. To change the system: `engine.py set <path> <value> --why "..."`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.
 5. To extend: add a decision (never hand-edit tokens or this file). Keep semantic names the same across modes. Deprecate instead of deleting.
 6. After any implementation, run `engine.py review` and re-read this file.

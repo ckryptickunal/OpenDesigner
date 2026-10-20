@@ -9,7 +9,7 @@ colors:
   on-surface: "#232426"
   error: "#b95850"
 typography:
-  body-md: { fontFamily: "IBM Plex Mono", fontSize: 17px, lineHeight: 24px }
+  body-md: { fontFamily: "IBM Plex Sans", fontSize: 17px, lineHeight: 24px }
 rounded:
   control: 4px
   container: 8px
@@ -58,7 +58,7 @@ No principles recorded yet (Q-brand-07). Until they are, the dials act as the ti
 
 - **Expression 35/100** (productive to expressive: leaning productive): type ratio 1.25, hero moments: significant-moments, expressive motion: significant-moments, brand color role: accent+signature-surface, containment: mixed.
 - **Brand presence 30/100** (native to brand-led: native): typeface suggestion: open-neutral-face, brand color placement: accent-only+content-layer, native component share about 88%, voice guidance: none.
-- **Density 60/100** (spacious to compact: leaning compact): body 14px on the web, default control 40px, density mode comfortable, icons 20px; hit areas never shrink.
+- **Density 60/100** (spacious to compact: leaning compact): body 16px on the web, default control 40px, density mode comfortable, icons 20px; hit areas never shrink.
 - **Energy 20/100** (calm to energetic: calm): standard easing [0.77, 0, 0.175, 1], duration multiplier 0.88, spring damping 1.0, heading weight 600, navigation: recessive.
 - **Roundness 30/100** (sharp to soft: sharp): control radius 4, icon corners default, caps square.
 - **Depth 0/100** (flat to deep: flat): depth model: borders.
@@ -87,6 +87,17 @@ The tokens in `opendesigner/tokens/` (DTCG 2025.10 with `opendesigner.resolver.j
 Decisions: D-0002 (answers.Q-aud-01), D-0006 (macros), D-0017 (dials.expression), D-0018 (dials.brandPresence), D-0019 (dials.density).
 
 </details>
+
+**Taste card.** How it looks and feels, in five lines for you, your team and any AI that builds with it. Nothing on it is invented: each line says where it comes from.
+Designers: style brief, mood in words · Code: `taste.brief, taste.never`
+
+| Line | What it says | From |
+|---|---|---|
+| In your words | Not given yet. Describe the look as a picture, not adjectives (for example, "a quiet library at night"). | not asked yet |
+| Color | One accent color: your brand color `#ede4cc` (exactly) marks buttons, links and focus. Everything else stays neutral. Keep the accent to small areas, about 15% of a screen at most (a rule of thumb, DC-L15-03). | brand color; colorfulness 15/100 |
+| Shape | Buttons and fields have 4px corners; cards have 8px corners. Surfaces are separated by thin borders, with no shadows. | roundness 30/100, depth 0/100 |
+| Motion | Calm. Most movements take 200ms. They turn into fades when a person asks for less motion. | energy 20/100 |
+| Never | Nothing yet. Say what it should never look like, or rate real screens in the taste poll. | not asked yet |
 
 ## Colors
 
@@ -135,16 +146,16 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `color.bg.accent.bold` | `#ede4cc` | `#cac4b2` | Solid accent fill. |
-| `color.bg.accent.bold-hover` | `#dad2be` | `#dbd5c3` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
-| `color.bg.accent.bold-pressed` | `#cec6b2` | `#e8e1cf` | Pressed: at least 1.3:1 from the solid. |
-| `color.bg.accent.subtle` | `#edebe8` | `#171613` | Selected rows, accent badges. |
-| `color.bg.accent.subtle-hover` | `#e5e3dd` | `#211f1b` | Hover on accent subtle fills. |
-| `color.bg.accent.subtle-pressed` | `#dddad2` | `#2c2a24` | Pressed accent subtle fills. |
-| `color.bg.action.primary` | `#ede4cc` | `#cac4b2` | Primary action. One per view (DC-L15-03, L15 P08). |
-| `color.bg.action.primary-hover` | `#dad2be` | `#dbd5c3` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
-| `color.bg.action.primary-pressed` | `#cec6b2` | `#e8e1cf` | Pressed: at least 1.3:1 from the solid. |
-| `color.bg.brand` | `#ede4cc` | `#cac4b2` | Brand fill for signature surfaces; carries text.on-brand (brandAnchor rule, DC-L01-09). |
+| `color.bg.accent.bold` | `#ede4cc` | `#ede4cc` | Solid accent fill. |
+| `color.bg.accent.bold-hover` | `#dad2be` | `#fff7e1` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
+| `color.bg.accent.bold-pressed` | `#cec6b2` | `#cec6b1` | Pressed: at least 1.3:1 from the solid. |
+| `color.bg.accent.subtle` | `#edebe8` | `#171612` | Selected rows, accent badges. |
+| `color.bg.accent.subtle-hover` | `#e5e3dd` | `#211f1a` | Hover on accent subtle fills. |
+| `color.bg.accent.subtle-pressed` | `#dddad2` | `#2c2a22` | Pressed accent subtle fills. |
+| `color.bg.action.primary` | `#ede4cc` | `#ede4cc` | Primary action. One per view (DC-L15-03, L15 P08). |
+| `color.bg.action.primary-hover` | `#dad2be` | `#fff7e1` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
+| `color.bg.action.primary-pressed` | `#cec6b2` | `#cec6b1` | Pressed: at least 1.3:1 from the solid. |
+| `color.bg.brand` | `#ede4cc` | `#ede4cc` | Brand fill for signature surfaces; carries text.on-brand (brandAnchor rule, DC-L01-09). |
 | `color.bg.danger.bold` | `#b95850` | `#ae6058` | Danger solid fill. |
 | `color.bg.danger.bold-hover` | `#a84e46` | `#bc6c64` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
 | `color.bg.danger.bold-pressed` | `#9f463e` | `#c6756d` | Pressed: at least 1.3:1 from the solid. |
@@ -167,17 +178,18 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 | `color.bg.warning.bold-hover` | `#d5a652` | `#f0c781` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
 | `color.bg.warning.bold-pressed` | `#ca9c47` | `#fdd48e` | Pressed: at least 1.3:1 from the solid. |
 | `color.bg.warning.subtle` | `#f3eadd` | `#1b150a` | Warning banner and badge background. |
-| `color.border.accent` | `#8b8677` | `#797466` | Selected card or accent outline. |
+| `color.border.accent` | `#8b8677` | `#7a7362` | Selected card or accent outline. |
 | `color.border.danger` | `#bc726a` | `#a5615a` | Danger boundary, for example an invalid field (3:1). |
 | `color.border.default` | `#c8c9cc` | `#3e3f42` | Outline buttons and table grids (decorative; the label carries meaning). |
-| `color.border.focus` | `#6a6454` | `#e5dfce` | Focus ring (3:1 against every surface, DC-L04-09). |
+| `color.border.focus` | `#6a6454` | `#ffffff` | Focus ring (3:1 against every surface, DC-L04-09). |
 | `color.border.info` | `#4a8cb8` | `#3c79a2` | Info boundary, for example an invalid field (3:1). |
 | `color.border.input` | `#858689` | `#6a6c6f` | Text field and select borders (3:1, DC-L01-16). |
+| `color.border.separator` | `#e2e3e5` | `#202122` | Hairlines between table rows and list items, lighter than border.subtle; decorative, so never the only cue (DC-L23-05). |
 | `color.border.strong` | `#858689` | `#6a6c6f` | Boundaries that are the only cue: inputs, checkboxes, switches (3:1, WCAG 1.4.11). |
 | `color.border.subtle` | `#d1d2d4` | `#2f3031` | Dividers and card edges (decorative). |
 | `color.border.success` | `#599365` | `#497f55` | Success boundary, for example an invalid field (3:1). |
 | `color.border.warning` | `#a48042` | `#8f6f34` | Warning boundary, for example an invalid field (3:1). |
-| `color.icon.accent` | `#6a6454` | `#e5dfce` | Selected and interactive icons. |
+| `color.icon.accent` | `#6a6454` | `#ffffff` | Selected and interactive icons. |
 | `color.icon.default` | `#56575a` | `#97989b` | Icons beside text; same color as secondary text (DC-L05-08). |
 | `color.icon.on-accent` | `#232426` | `#000000` | Icons on solid accent fills. |
 | `color.icon.subtle` | `#636468` | `#7e8083` | Decorative icons. |
@@ -187,12 +199,12 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 | `color.surface.overlay` | `#ffffff` | `#060607` | Menus, popovers, dialogs; always with elevation.floating or elevation.overlay. |
 | `color.surface.raised` | `#ffffff` | `#010101` | Cards and panels on the page. |
 | `color.surface.sunken` | `#f3f4f5` | `#000000` | Wells, code blocks, page gutters. |
-| `color.text.accent` | `#6a6454` | `#e5dfce` | Accent text and selected labels. |
+| `color.text.accent` | `#6a6454` | `#ffffff` | Accent text and selected labels. |
 | `color.text.danger` | `#8d4039` | `#d78a81` | Danger text and icons; pair with an icon or label (DC-L01-15). |
 | `color.text.disabled` | `#858689` | `#6a6c6f` | Disabled labels; exempt from contrast minimums (WCAG 1.4.3 exception). |
 | `color.text.info` | `#005c8a` | `#61a4d2` | Info text and icons; pair with an icon or label (DC-L01-15). |
 | `color.text.inverse` | `#ffffff` | `#000000` | Text on color.bg.inverse (tooltips, toasts). |
-| `color.text.link` | `#6a6454` | `#e5dfce` | Links. Underline them in running text so color is not the only cue. |
+| `color.text.link` | `#6a6454` | `#ffffff` | Links. Underline them in running text so color is not the only cue. |
 | `color.text.on-accent` | `#232426` | `#000000` | Text and icons on color.bg.accent.bold* (auto-picked light or dark, S-L06-094). |
 | `color.text.on-action` | `#232426` | `#000000` | Text on the primary action fill. |
 | `color.text.on-brand` | `#232426` | `#000000` | Text on color.bg.brand. |
@@ -230,8 +242,8 @@ Designers: type scale: base size and ratio · Code: `font.size.14`
 
 **Intent.** Body text is 17px; sizes follow `round(17 x 1.25^n)` for n from -2 to 4, reaching about 2.5x body (product surfaces only). Sizes: 14, 17, 21, 27, 33, 42px.
 
-- Text face: IBM Plex Mono, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif. Licence status (hook H-type): **pending**.
-- Licence by platform: text: IBM Plex Mono (open licence or system font: web, apps and self-hosting).
+- Text face: IBM Plex Sans, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif. Licence status (hook H-type): **pending**.
+- Licence by platform: text: IBM Plex Sans (open licence or system font: web, apps and self-hosting).
 - On iOS the Swift file uses Dynamic Type text styles (body 17 pt), so text follows the person's text size setting; Compose uses sp, which follows the Android font scale.
 - Weights: body 400, label 500, heading 600 (two or three distinct weights per view).
 - Emphasized variants: off (they turn on at Expression 67 and up, DC-L02-11).
@@ -262,7 +274,7 @@ Designers: type scale: base size and ratio · Code: `font.size.14`
 
 **Tailwind classes:** `text-body-md`, `text-label-lg`, `text-title-md`, `text-headline-md`.
 
-Decisions: D-0014 (raw.textFace), D-0015 (raw.monoFace), D-0016 (raw.baseSize).
+Decisions: D-0015 (raw.monoFace), D-0016 (raw.baseSize), D-0027 (raw.textFace).
 
 </details>
 
@@ -278,11 +290,11 @@ Designers: spacing scale, 0 to 96 · Code: `space.0 to space.96`
 
 **Intent.** Everything sits on a 4px unit: ladder 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96. Density is a mode on the semantic layer (default **comfortable**). Primitives and minimum tap areas never change.
 
-| Density | inset xs/sm/md/lg/xl | section sm/md/lg | control sm/md/lg | outer:inner |
-|---|---|---|---|---|
-| spacious | 6 / 12 / 16 / 20 / 32 | 64 / 80 / 96 | 40 / 48 / 56 | 3.5 |
-| comfortable (default) | 4 / 8 / 12 / 16 / 24 | 32 / 40 / 64 | 32 / 40 / 48 | 2.5 |
-| compact | 2 / 6 / 8 / 12 / 20 | 16 / 24 / 40 | 24 / 32 / 40 | 2.0 |
+| Density | inset xs/sm/md/lg/xl | section sm/md/lg | control sm/md/lg | row sm/md/lg/two-line | outer:inner |
+|---|---|---|---|---|---|
+| spacious | 6 / 12 / 16 / 20 / 32 | 64 / 80 / 96 | 40 / 48 / 56 | 52 / 56 / 64 / 80 | 3.5 |
+| comfortable (default) | 4 / 8 / 12 / 16 / 24 | 32 / 40 / 64 | 32 / 40 / 48 | 44 / 48 / 56 / 72 | 2.5 |
+| compact | 2 / 6 / 8 / 12 / 20 | 16 / 24 / 40 | 24 / 32 / 40 | 36 / 40 / 48 / 64 | 2.0 |
 
 - Target sizes: pointer 24px, touch 44px; `size.target.min` is the floor for the primary input, and `space.target.gap` separates adjacent targets.
 - Inner gaps stay below outer gaps (at least half), so grouping reads without borders (L15 P16).
@@ -626,7 +638,7 @@ Designers: target platforms · Code: `raw.platforms; size.target.min`
 
 - Navigation, back, sheets and pickers stay native on every platform (DC-L10-02).
 - Swift and Compose files in `opendesigner/build/` use the same names as the CSS variables (Figma code syntax matches them).
-- Fonts by platform: text: IBM Plex Mono (open licence or system font: web, apps and self-hosting).
+- Fonts by platform: text: IBM Plex Sans (open licence or system font: web, apps and self-hosting).
 
 Decisions: D-0005 (answers.Q-plat-01), D-0012 (answers.Q-plat-02), D-0013 (answers.Q-plat-04).
 
@@ -634,7 +646,7 @@ Decisions: D-0005 (answers.Q-plat-01), D-0012 (answers.Q-plat-02), D-0013 (answe
 
 ## Decisions
 
-**26 decisions so far.** Each one says who set it and why.
+**27 decisions so far.** Each one says who set it and why.
 Designers: decision history with reasons · Code: `opendesigner/decisions.md`
 
 <details><summary>More</summary>
@@ -653,7 +665,6 @@ Your own decisions first (the newest value per path), then your changes to stand
 | D-0011 | `answers.Q-color-21` | "black" | chosen | watch: pure black OLED edge-to-edge |
 | D-0012 | `answers.Q-plat-02` | "watch" | chosen | the product is a watch app |
 | D-0013 | `answers.Q-plat-04` | "watch" | chosen | used on the wrist, in seconds |
-| D-0014 | `raw.textFace` | "IBM Plex Mono" | chosen | open-licence face picked for the direction |
 | D-0015 | `raw.monoFace` | "IBM Plex Mono" | chosen | tabular readouts |
 | D-0016 | `raw.baseSize` | 17 | chosen | watchOS Body at the xLarge default for 44/45/49 mm is 17 pt (HIG typography, watchOS Dynamic Type) |
 | D-0017 | `dials.expression` | 35 | delegated | an instrument, not a poster |
@@ -664,6 +675,7 @@ Your own decisions first (the newest value per path), then your changes to stand
 | D-0022 | `dials.depth` | 0 | delegated | flat chart |
 | D-0024 | `dials.warmth` | 45 | delegated | chart paper |
 | D-0026 | `dials.colorfulness` | 15 | delegated | back to 15: raising it to 45 did not change the status (port/starboard) colours at all; only the unused accent ramp moved |
+| D-0027 | `raw.textFace` | "IBM Plex Sans" | chosen | Round 4: one monospace face for everything read like a terminal mock-up; Plex Sans keeps the Plex family's technical voice with proportional text (SIL OFL) |
 | D-0009 | standards | override STD-visual-details-24 (house standard) | chosen, overrides STD-visual-details-24 | Brief: smartwatch app, black background edge-to-edge (watch platform convention, OLED); no light mode |
 | D-0008 | standards | House standards v2: 194 applied | standard (locked) | OpenDesigner's house standards (sources marked non-negotiable) are applied without asking and locked. Change one only when the person asks: engine.py... |
 
@@ -685,8 +697,8 @@ Your own decisions first (the newest value per path), then your changes to stand
 **AI agents: read this file and the tokens before you change any screen.**
 
 1. Before any visual work, read this file, PRODUCT.md and `opendesigner/tokens/` (start at `opendesigner/tokens/opendesigner.resolver.json`).
-2. Use tokens, never raw values: CSS `var(--ds-...)`, Tailwind classes from `opendesigner/build/tailwind/theme.css`, `DS.*` in Swift, `DsTheme` in Compose.
-3. Do not change a locked decision without asking the owner.
+2. Use tokens, never raw values: CSS `var(--ds-...)`, Tailwind classes from `opendesigner/build/tailwind/theme.css`, `DS.*` in Swift. In Compose: colors from `LocalDsColors.current` (provide `DsLightColors` or `DsDarkColors`), then `DsSpace`, `DsType` and `DsMotion`.
+3. Do not change a locked decision without asking the owner. Keep new screens inside the taste card at the top of the Overview, and never add anything on its Never list without asking.
 4. To change the system: `engine.py set <path> <value> --why "..."`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.
 5. To extend: add a decision (never hand-edit tokens or this file). Keep semantic names the same across modes. Deprecate instead of deleting.
 6. After any implementation, run `engine.py review` and re-read this file.

@@ -94,3 +94,32 @@ The bathymetry is generated on canvas. Seeded value-noise fBm, plus a seamount, 
 It recomputed the graticule (164 and 110.6 px per degree), the float's position (47.598° N, 32.2125° W), the sea floor at the float (2,900 m) and the contour labels against the height field, and measured all text at 5.8:1 or better on the pixels. What it says keeps the piece below 5: the copy-left, panel-right structure and a seamount generated in code.
 
 **Still open.** `mockups/04-browser-cascade` and `mockups/08-made-with-opendesigner` embed this shot; their captions are unchanged.
+
+## Round 4 (owner review, 2026-10-18)
+
+**What he said.** The showcase pieces look "very very very cluttered and very unprofessional, which is not acceptable at all", and "None of them should feel like they are from a vibe coded app". This round followed `AUDIT-ROUND4.md` and `PRESENTATION.md` (hero: a headline, one line, one action or none, one subject).
+
+**One idea.** One float has just surfaced on the flank of a North Atlantic seamount and reported warm surface water.
+
+**What changed.**
+- Contours no longer run behind the copy: only the seamount is drawn, off centre to the right, so the copy sits on open sea; the legibility scrim is gone.
+- Removed: the graticule and its latitude and longitude labels, the scale bar, the dashed anomaly ring and its label, the float track, the profile card with its chart, legend and three stat cells, the eyebrow and the coordinates footer.
+- Contours every 200 m with brighter 1,000 m index lines (was every 100 m), two depth labels set along their lines (3,000 m and 5,000 m).
+- The float's reading sits beside its marker in two lines, lettered with a halo in the sea's colour instead of a box: 'Surfaced 13:52 UTC · +1.38 °C above the October mean'.
+- The button is an outline, so teal means depth and coral means warm water.
+
+**Type scale (round 4).** Display 64 px (outside the scale on purpose, as before) · Body large 20 px (lede) · Body 16 px (nav, button, float name) · Label 13 px (float reading, depth labels). IBM Plex Sans, and IBM Plex Mono for the depth labels.
+
+**Blind pairwise test** (our shot beside a shipped hero at the same height, random sides, no labels, fresh judges; reference images kept in scratch and deleted):
+- Grok (https://mobbin.com/sites/sections/30ab578c-5e08-4070-905a-146bc41a8e12): won 2 (three times)
+- Dovetail (https://mobbin.com/sites/sections/57c3f21b-b420-47cc-be74-8b45ab45aea5): won 3 (twice)
+- Visitors (https://mobbin.com/sites/sections/487e372c-a833-46ec-b112-e9ddc1dacd3f): won 4 (twice)
+
+The final round only moved the 5,000 m label inside the frame and the seamount 40 px left; it was not re-judged after that.
+
+**Fresh-eyes audit** (against the B2B product screens and Orbika): 3 (round 1), 3 (round 2), 3.5 (round 3), 4 (round 4, final).
+
+**Checks.** `check_dates.py --year 2026`: passes. `check_names.py`: only the false positives recorded in NAMES.md (2026-10-20 heroes block). `preflight.py html`: no errors.
+
+**Still open.** The seamount is generated in code. 'Float 4917-B' is an invented ID (real Argo floats use 7-digit WMO numbers); kept, so it cannot match a real float.
+

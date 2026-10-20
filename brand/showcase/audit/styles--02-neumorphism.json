@@ -124,5 +124,16 @@
     "what": "A plan with state in room fills and one clean selection edge"
    }
   ]
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "3 of 3 better on the final render (Google Analytics +4, Neon +3, Tailscale +3); an earlier render of this round scored Neon +3, Tailscale +2, Google Analytics +4",
+  "changed": [
+   "Floor plan of tiny boxes replaced by a flat six-zone list and today's curve",
+   "One soft zone: the dial field, with the dial raised, groove pressed, knob and chosen mode raised",
+   "Contrast: ink numerals, darker ticks, a 12 px cobalt arc, chosen mode in cobalt; the field one step darker",
+   "Cobalt only for the selected zone and its control; the fault said once",
+   "Dial and readings aligned at the top and centred in the field"
+  ]
  }
 }

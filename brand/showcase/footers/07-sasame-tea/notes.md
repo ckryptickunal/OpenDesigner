@@ -54,3 +54,22 @@ This replaces the round-3 design described above. The round-4 audit (`brand/show
 **Fresh audit:** 3 of 5. **Pairwise:** lost to VanMoof by 2 (not blind); the earlier blind test lost to Legora by 4. After the audit: all four of the final audit's Sasame fixes (muted headings, no underlines, 49 px statement, address) were applied after it scored 3 and were checked by eye, not re-judged; the score stays 3 until it is.
 
 **Checks:** `preflight.py html`: 0 errors, 0 warnings. `check_dates.py --year 2026`: passes. No invented domains on the page. Two typefaces at most, sizes on the token scale.
+
+## Round 5 (owner review, 2026-10-18)
+The owner hid this footer until it passes at 4 (round 4 scored 3; an earlier blind test lost to Legora by 4). This replaces the round-4 layout; the ensō, seal and vertical type described in the first sections are long gone.
+
+**One idea:** a tea house ends its page with one quiet note from the back room.
+
+**Changed:**
+- Ground changed from pale celadon to sumi ink (neutral-dark-2) with the paper-white section above, for strong tonal contrast
+- One signature element: 'Hojicha is roasting in the back room.' in Shippori Mincho at 76 px; the second sentence and the about paragraph removed
+- Name and 茶房ささめ (both in the Mincho) lead the column row; Visit, Hours, Seats and More in one text size, information muted, links in ink, headings 13 px
+- One rule above the columns, one legal line; the sliver above lists the five sittings
+
+Type: Shippori Mincho (name and note) and Zen Kaku Gothic New; sizes 13, 16, 25 and 76 from the token scale (39 on phones). Contrast on sumi: text 14:1, muted text 7.5:1. Renders: `shot.png` 1440 wide, natural height, scale 2; `shot-mobile.png` 390 wide. The 337 px gallery copy was checked first.
+
+**Blind pairwise (18 Oct, fresh judge, no labels, random sides; Mobbin footer sections, kept in scratch and deleted):** lost 1 vs MOUTHWASH Studio, won 3 vs Monte, won 2 vs In Common With (tested with the longer first version of the note).
+
+**Fresh-eyes audit:** 4 (18 Oct), 4 (20 Oct). Final: 4 of 5.
+
+**Checks:** `check_dates.py --year 2026` passes; `check_names.py` 0 errors (Kanazawa, Higashiyama, Ishikawa and English are false positives); `preflight.py html` 0 errors, 0 warnings. The five sittings from 10:00 end at the 17:30 close.

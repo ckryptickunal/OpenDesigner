@@ -73,5 +73,17 @@
    "The folder keeps its name (01-ridgeline-trail) so links do not break",
    "watch/sheet.html caption and iframe title renamed; sheet.png re-rendered (it also picks up Tidemark's WED 14)"
   ]
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "won 3 vs Strava, won 4 vs Runna, won 2 vs Nike Run Club (blind, 18 Oct; tested before the audit fixes)",
+  "changed": [
+   "One face, Archivo at normal width and upright, two weights; the slanted, wide and light cuts are gone",
+   "Tilted lime 'KM 14.2' tag, hatched fill, contour lines and the halo removed; the profile is one line, run so far in lime, the rest grey, a white dot for the runner, inset from the corners",
+   "Pace changed from 4'52\" (reused on the Rallo footer) to 6′24″ with true primes; the climb label was dropped because the profile shows it",
+   "Profile redrawn to the numbers: a 25.4 km route, runner at 14.2 km, summit at 16.6 km",
+   "Title and clock in Inter as the stand-in for the watchOS system font; '14.2 km' in grey so lime has one job"
+  ],
+  "date": "2026-10-20"
  }
 }

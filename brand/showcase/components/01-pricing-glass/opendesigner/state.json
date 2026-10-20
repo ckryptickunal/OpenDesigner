@@ -149,7 +149,7 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "dark",
+    "defaultTheme": "light",
     "borderDefault": null,
     "texture": null,
     "gradients": null
@@ -560,7 +560,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "7c78f65db94918c1",
+    "DESIGN.md": "7047d70c3a0c945b",
     "PRODUCT.md": "a7b413bd7bd8da82"
   },
   "exports": {

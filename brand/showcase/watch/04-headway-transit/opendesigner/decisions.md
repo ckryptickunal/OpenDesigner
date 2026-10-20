@@ -316,3 +316,13 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 ## D-0023 · dials.warmth = 55
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: none · source_ref: none
 - reason: sodium-lamp yellow
+
+## D-0024 · raw.textFace = "Overpass"
+- set_by: chosen · locked: no · date: 2026-10-18 · supersedes: D-0014 · source_ref: none
+- reason: Round 4: the audit called Big Shoulders 'a default-looking condensed face'; Overpass is an open interpretation of the US highway sign face, so the signage voice stays without the poster look (SIL OFL)
+- previous value: "Big Shoulders Display"
+
+## D-0025 · raw.fontLicence = {"web": true, "app": true, "selfHost": true}
+- set_by: chosen · locked: no · date: 2026-10-18 · supersedes: none · source_ref: none
+- reason: Overpass is SIL OFL, loaded from Google Fonts
+- previous value: {"web": null, "app": null, "selfHost": null}

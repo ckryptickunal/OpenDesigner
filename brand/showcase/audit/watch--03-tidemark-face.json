@@ -69,5 +69,15 @@
    "'TUE 14' is now 'WED 14' (14 Oct 2026 is a Wednesday)",
    "shot.png re-rendered with watch/render.py"
   ]
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "lost 2 vs Tide Guide, won 3 vs Tide Charts, won 2 vs Tides Near Me (tested as the face with the big clock) (blind, 18 Oct; tested before the audit fixes)",
+  "changed": [
+   "Painted night sky, sea gradient and stars removed; pure black",
+   "Now an app screen, not a face (watchOS has no third-party faces): the system time small at the top right, the place 'Kellan Bay' as the title, the height 2.1 m as the hero",
+   "Tide curve rebuilt from a two-component tide (high 4.3 m at 9:42, a lower high at 22:07, lows near 0.5 m), stroke colour only, past grey, now as a white dot, hours 6, 12 and 18 at 13 px"
+  ],
+  "date": "2026-10-20"
  }
 }

@@ -1,4 +1,6 @@
-# 01 · Halden Private: private banking home
+# 01 · Halden Private: a payment to sign
+
+Gallery: Halden Private is a fictional private bank; the second signature on a £150,000 house deposit, after the banker has confirmed the solicitor's account by phone.
 
 ## Direction
 Halden Private is a fictional private bank for people with complex wealth (founders, families, trustees). The home screen should feel like the inside of a good leather wallet: deep bottle green-black, one restrained gold, a metal card you want to touch, and numerals set like an engraved certificate. Feel words: **premium, calm, trusted**.
@@ -124,3 +126,36 @@ Six sizes, each at least 13% from its neighbour, nothing under 11. Changes made 
 **Outside this folder:** `mockups/01-phone-trio` shows this shot.png; its alt text describes the old screen (£4,862,310.54, the old approval line).
 
 **Focused pass (2026-10-18).** The range chips were removed (the period is in the change line), rows got 8 pt padding, a "Recent payments" section now starts under an iOS 26 floating glass tab bar (with a scroll-edge fade), and the wordmark moved from Newsreader to Inter 600, so the serif sets only the figure. The chart's high is now an unrounded close (£6,062,468 on Tue 6 Oct, the series' 17th close). Blind test of this version: ours won against Wealthfront by 3, Monarch by 2 and Mercury by 3. **Fresh-eyes audit: 3 again** ("it works, but it's the stock fintech home"; "nothing on it belongs to Halden"). Its small items were applied after it (heading clear of the bar, chevron on the wordmark line, head and label on one baseline, the unrounded high, 20 pt bar inset, one date) and not audited again. **Halden does not reach 4 after five audits.** The auditors' remaining objection is the structure itself, the standard wealth-home order; the owner should decide whether a different concept is wanted.
+
+## Round 5 (owner hid it until better, 2026-10-18)
+**What he said:** hide it until it passes at 4; it won the blind test but the fresh reviewer stayed at 3 ("the stock fintech home", "nothing on it belongs to Halden"). He chose a new idea: keep the brand, type and palette, and show one moment only a private bank has.
+
+**The idea in one sentence:** Eleanor Voss gives the second signature on a £150,000 house deposit to the family's solicitors, after her banker has confirmed the solicitors' account by phone.
+
+**What changed (a new screen for the same product):**
+- **Payment to sign** replaces the home: no total, chart, accounts list, recent payments or tab bar.
+- **What is paid:** Cardew Aske LLP, client account ending 7305; £150,000.00 in Newsreader 500 at 52 pt (the pence at 34); "House deposit, for exchange on Fri 16 Oct".
+- **The private-bank moments:** a shield line under the purpose, "Imogen Ellery, your banker, confirmed this account by phone at 10:05 on the number in Cardew Aske's letter" (the call-back that stops conveyancing fraud), and the joint mandate drawn as its two signature lines: Piers Voss signed at 10:31; your line dashed in green, due by 15:30 for same-day CHAPS.
+- **From where, and after:** Current account ending 0921, balance after £32,440.12, sent by CHAPS the same day. One account-ending format throughout.
+- **One action:** Sign with Face ID.
+- **One accent, one job:** Halden green marks what you act on: your signature slot (a pale fill), its label and dashed line, and the button. Finished steps are ink.
+- Status bar 11:42, Wed 14 Oct 2026.
+
+**Type (iOS roles):** Display 52 (the amount, Newsreader; its pence 34) · Title 3 20 (the payee, Inter 500) · Body 17 (nav title, section head, signature lines, button) · Subheadline 15 (secondary lines, the banker line, the rows) · Footnote 13 (signature times). Six sizes; Inter for everything read or tapped, Newsreader once.
+
+**Numbers, re-added from the page:** £182,440.12 − £150,000.00 = £32,440.12 (the current account balance is the one from round 4). 10:05 (call) < 10:31 (Piers signs) < 11:42 (now) < 15:30 (cut-off). Fri 16 Oct 2026 checked.
+
+**References (Mobbin, structure only; also the blind-test references):** Revolut review transfer https://mobbin.com/screens/bbb103e7-3764-40f6-bc45-e71294fd7ee7 (payee, bank and arrival before one Send), Chime review transfer https://mobbin.com/screens/10143a39-20d6-4cec-a56b-a44c08831bcf (the amount leads; also what to avoid: a dead half screen), Betterment review https://mobbin.com/screens/dc7325df-d713-4a63-940a-1094a914d678 (From, To and Amount rows; also what to avoid: a boxed disclaimer and a stock button).
+
+**Engine:** no token changes this round; the round 4 tokens (brand #14674A, neutral base #5E6460, Inter) cover the page. `engine.py validate` passes (1 warning: 18 text sizes in the scale). `preflight.py html`: 0 errors, 0 warnings (sizes 13, 15, 17, 20, 34, 52). Contrast: green label on the pale slot 8.1:1, grey on it 6.5:1, white on the button 6.8:1.
+
+**A. Blind pairwise** (one fresh judge per round for all twelve pairs of this batch, random sides, same height, neutral file names, craft not content): ours won every pair in all three rounds: Chime +2, +2, +2; Betterment +3, +3, +3; Revolut +3, +3, +3. **Passes.**
+
+**B. Fresh-eyes audit** (against the B2B screens): **4, 3.5, 4.**
+- Round 1 (4): too much bold; "Hugo Voss" is one letter from a real brand and founder (renamed Piers Voss); let the banker's line read at gallery size.
+- Round 2 (3.5): the layout was still the stock review-and-sign skeleton; the finished steps were as loud as yours; two account-ending formats. The three-step list became the banker line and the two-line mandate object.
+- Round 3 (4): "resolved: a moment no stock fintech home has". Not applied (the piece passed and was not changed after it): draw the mandate as two open rules with no box, drop the slot's tint, set the banker check as an ink detail row.
+
+**Checks:** `check_dates.py --year 2026`: every weekday matches. `check_names.py`: the 3 known flags (Halden against Halde, kept on purpose; the stale Halden Freight row) and "Cardew Aske" read from "Cardew Aske’s" (registered as Cardew Aske LLP); Imogen Ellery and Piers Voss added to NAMES.md. Shot re-rendered with `brand/tools/shot.py --w 390 --h 844 --scale 3`. Gallery copy at 192 px: the eye lands on £150,000.00, then the two signature lines.
+
+**Outside this folder (not edited):** `mockups/01-phone-trio` embeds this shot.png, so it now shows the payment to sign. Its alt text still describes the old home ("total wealth of £4,862,310.54 at close on 13 Oct…"), its caption "£150,000.00 to approve by Fri 16 Oct" still holds, and its own shot.png still shows the old screen until it is re-rendered.

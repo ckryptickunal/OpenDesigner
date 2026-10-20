@@ -3,127 +3,72 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=205, initial-scale=1">
-<title>Tidemark: dawn tide face</title>
+<title>Tidemark: today's tide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&family=Sora:wght@300..600&display=block" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-  :root { --display-w: 205px; --display-h: 251px; --display-r: 48px; }  /* hardware shape */
-  /* Type roles: watchOS text styles at xLarge (49 mm default). Footnote 1 14 and Body 17 are engine tokens;
-     Title 3 20 is the HIG value (the engine scale steps 17 -> 21); the face's time is the one display size. */
-  :root { --t-footnote: var(--ds-font-size-14); --t-body: var(--ds-font-size-17); --t-title3: 20px; --t-display: 72px; }
+  /* Round 4: an app screen, not a face (watchOS has no third-party faces). One glanceable thing: the water height now,
+     over today's tide. The system draws the time small at the top right. Black ground, no sky, no texture.
+     App face: Sora, two weights. Hardware, not design tokens: the 49 mm-class display is 205 x 251 pt with rounded corners. */
+  :root { --display-w: 205px; --display-h: 251px; --display-r: 48px; }
+  /* Type roles, watchOS text styles at xLarge: the hours at 13, Caption 2 15, Headline 17, and one data numeral (64, outside the HIG styles on purpose). */
+  :root {
+    --t-caption: 15px;                    /* HIG Caption 2; the engine scale steps 14 and 17 */
+    --t-display: 64px;
+    --sea: var(--ds-color-brand-seed);    /* the one colour: the water, from now on */
+  }
+  /* System chrome: watchOS draws the title and the time itself, in San Francisco; Inter (SIL OFL) stands in, the same in every watch piece. */
+  :root { --t-sys: 600 17px/1 "Inter", system-ui, sans-serif; }
   html, body { margin: 0; background: var(--ds-color-black); }
   .display {
-    position: relative; width: var(--display-w); height: var(--display-h); overflow: hidden; border-radius: var(--display-r);
-    background: var(--ds-color-surface-base); color: var(--ds-color-text-primary); font-family: var(--ds-font-family-text);
-    font-variant-numeric: tabular-nums;
+    position: relative; width: var(--display-w); height: var(--display-h); overflow: hidden;
+    border-radius: var(--display-r); background: var(--ds-color-surface-base);
+    color: var(--ds-color-white); font-family: var(--ds-font-family-text);
+    font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
   }
-  canvas { position: absolute; inset: 0; width: 205px; height: 251px; }
-  .comp { position: absolute; top: 14px; display: flex; align-items: center; gap: 5px; font: 600 var(--t-body)/1 var(--ds-font-family-text); letter-spacing: .03em; }
-  .date { left: 28px; color: var(--ds-color-accent-dark-11); text-transform: uppercase; }
-  .wx { right: 26px; color: var(--ds-color-text-primary); }
-  .wx svg { width: 17px; height: 17px; }
-  .time {
-    /* the face's one display size, above the type scale on purpose */
-    position: absolute; left: 0; right: 0; top: 36px; text-align: center;
-    font-weight: 200; font-size: var(--t-display); line-height: 1; letter-spacing: -0.04em; color: var(--ds-color-white);
-  }
-  .tide-now { position: absolute; left: 0; right: 0; top: 116px; text-align: center; display: flex; justify-content: center; align-items: baseline; gap: var(--ds-space-6); }
-  .tide-now .v { font: 600 var(--t-title3)/1 var(--ds-font-family-text); letter-spacing: -0.01em; }
-  .tide-now .k { font: 500 var(--t-body)/1 var(--ds-font-family-text); color: var(--ds-color-accent-dark-11); letter-spacing: .02em; }
-  .mark { position: absolute; font: 600 var(--t-body)/1 var(--ds-font-family-text); color: var(--ds-color-text-primary); text-align: center; transform: translateX(-50%); white-space: nowrap; }
-  .mark small { display: block; margin-top: 3px; font: 500 var(--t-footnote)/1 var(--ds-font-family-text); letter-spacing: .08em; text-transform: uppercase; color: var(--ds-color-text-secondary); }
+  .status { position: absolute; top: var(--ds-space-12); left: 20px; right: 22px; display: flex; justify-content: space-between; font: var(--t-sys); font-variant-numeric: tabular-nums; }
+  .status .place { color: var(--sea); }
+
+  .now { position: absolute; left: var(--ds-space-16); top: 44px; }
+  .now .v { display: block; font: 400 var(--t-display)/0.9 var(--ds-font-family-text); letter-spacing: -0.03em; }
+  .now .v small { font-size: 0.42em; letter-spacing: 0; margin-left: 4px; }
+  .now .s { display: block; margin-top: var(--ds-space-8); font: 400 var(--t-caption)/1.2 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+
+  .chart { position: absolute; left: var(--ds-space-16); width: 173px; top: 128px; height: 96px; }
+  .chart svg { display: block; width: 100%; height: 100%; overflow: visible; }
 </style>
 </head>
 <body>
-<main class="display" aria-label="Tidemark watch face: 6:18, 12 degrees, tide rising at 2.1 metres, high water 9:42">
-  <canvas id="sky" width="615" height="753" aria-hidden="true"></canvas>
-  <div class="comp date">Wed 14</div>
-  <div class="comp wx"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 12.5h7a3 3 0 0 0 .3-6 4 4 0 0 0-7.6 1A2.5 2.5 0 0 0 4.5 12.5Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>12°</div>
-  <div class="time">6:18</div>
-  <div class="tide-now"><span class="v">2.1 m</span><span class="k">rising</span></div>
-  <div class="mark" id="high">9:42<small>High</small></div>
+<main class="display" aria-label="Tidemark at Kellan Bay, 6:18: the water is 2.1 m and rising; high water 4.3 m at 9:42">
+  <div class="status"><span class="place">Kellan Bay</span><span class="clock">6:18</span></div>
+  <div class="now"><span class="v">2.1<small>m</small></span><span class="s">Rising · high at 9:42</span></div>
+  <div class="chart" aria-hidden="true"><svg id="tide" viewBox="0 0 173 96"></svg></div>
 </main>
+
 <script>
-/* Generative dawn: seeded stars fading into a cool horizon glow, thin lit cloud strata, a dark sea, and the tide curve. */
+/* Today's tide from midnight to midnight, a twice-daily tide with a small daily inequality:
+   h(t) = 2.25 + 1.83 cos(2 pi (t - 9.7) / 12.42) + 0.22 cos(2 pi (t - 9.7) / 24.84), in metres, t in hours.
+   That gives high water 4.3 m at 9:42, 2.1 m and rising at 6:18, a lower high (about 3.9 m) at 22:07 and lows near 0.5 m.
+   The water from now on is the accent line, the past is a grey line, a white dot is now; 6, 12 and 18 mark the hours. */
 (function () {
-  const c = document.getElementById('sky'), x = c.getContext('2d'), S = 3, W = 205, H = 251;
-  x.scale(S, S);
-  const cs = getComputedStyle(document.documentElement), tok = n => cs.getPropertyValue(n).trim();
-  const tint = tok('--ds-color-brand-seed'), deep = tok('--ds-color-accent-dark-5'), mid = tok('--ds-color-accent-dark-7');
-  const HZ = 158;  // horizon
-  let s = 1234; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
-  // sky
-  const g = x.createLinearGradient(0, 0, 0, HZ);
-  g.addColorStop(0, '#000'); g.addColorStop(.38, '#01060c'); g.addColorStop(.72, deep); g.addColorStop(.93, mid); g.addColorStop(1, '#2b7fae');
-  x.fillStyle = g; x.fillRect(0, 0, W, HZ);
-  // horizon glow
-  const hg = x.createRadialGradient(132, HZ, 2, 132, HZ, 120);
-  hg.addColorStop(0, 'rgba(160,226,255,.55)'); hg.addColorStop(.35, 'rgba(92,200,255,.18)'); hg.addColorStop(1, 'rgba(92,200,255,0)');
-  x.fillStyle = hg; x.fillRect(0, 0, W, HZ);
-  // stars, fading toward the horizon
-  for (let i = 0; i < 120; i++) {
-    const sx = r() * W, sy = Math.pow(r(), 1.6) * (HZ - 30);
-    const a = (1 - sy / (HZ - 20)) * (0.25 + r() * 0.75), rad = r() < .06 ? 0.9 : 0.35 + r() * 0.35;
-    x.fillStyle = `rgba(225,240,255,${a.toFixed(2)})`; x.beginPath(); x.arc(sx, sy, rad, 0, 7); x.fill();
-  }
-  // crescent moon
-  x.save(); x.translate(30, 147);
-  x.beginPath(); x.arc(0, 0, 4.4, 0, 7); x.clip();
-  x.beginPath(); x.arc(0, 0, 4.4, 0, 7); x.arc(2, -1.1, 4, 0, 7);
-  x.fillStyle = 'rgba(214,236,255,.9)'; x.fill('evenodd'); x.restore();
-  // cloud strata lit from below: clusters of soft ellipses, brighter and denser near the horizon
-  x.filter = 'blur(2.2px)';
-  for (let k = 0; k < 6; k++) {
-    const by = HZ - 6 - Math.pow(r(), 1.3) * 46, bx = r() * W, spread = 30 + r() * 60;
-    const near = 1 - (HZ - by) / 54;
-    for (let j = 0; j < 9; j++) {
-      const cx = bx + (r() - .5) * spread * 2, cy = by + (r() - .5) * 4, w = 10 + r() * 26, h = 1.2 + r() * 2.2;
-      x.fillStyle = `rgba(${185 + 40 * near | 0},${228 + 20 * near | 0},255,${(0.05 + 0.16 * near * r()).toFixed(3)})`;
-      x.beginPath(); x.ellipse(cx, cy, w, h, 0, 0, 7); x.fill();
-      // the lit underside
-      x.fillStyle = `rgba(220,245,255,${(0.04 + 0.12 * near).toFixed(3)})`;
-      x.beginPath(); x.ellipse(cx, cy + h * .7, w * .8, h * .45, 0, 0, 7); x.fill();
-    }
-  }
-  x.filter = 'none';
-  // sea
-  const sg = x.createLinearGradient(0, HZ, 0, H);
-  sg.addColorStop(0, '#0a2436'); sg.addColorStop(.25, '#03101a'); sg.addColorStop(1, '#000');
-  x.fillStyle = sg; x.fillRect(0, HZ, W, H - HZ);
-  // glints on the water under the glow
-  x.filter = 'blur(.5px)';
-  for (let i = 0; i < 26; i++) {
-    const gy = HZ + 2 + Math.pow(r(), 2.2) * 22, gx = 132 + (r() - .5) * (30 + (gy - HZ) * 2.4), gw = 2 + r() * 8;
-    x.fillStyle = `rgba(175,230,255,${(0.55 * (1 - (gy - HZ) / 26)).toFixed(2)})`; x.fillRect(gx, gy, gw, 0.7);
-  }
-  x.filter = 'none';
-  // tide curve
-  // the curve shows 03:00 to 17:00 across the width
-  const T0 = 172, A = 36, t0 = 3, span = 14, hr = h => (h - t0) / span, now = hr(6.3), high = hr(9.7), period = 12.42 / span;
-  const y = t => T0 + 40 - A * (0.5 + 0.5 * Math.cos(2 * Math.PI * (t - high) / period));
-  const ptsAll = []; for (let i = 0; i <= 120; i++) { const t = i / 120; ptsAll.push([t * W, y(t)]); }
-  const path = arr => { x.beginPath(); arr.forEach((p, i) => i ? x.lineTo(p[0], p[1]) : x.moveTo(p[0], p[1])); };
-  // water body under the curve
-  path(ptsAll); x.lineTo(W, H); x.lineTo(0, H); x.closePath();
-  const wg = x.createLinearGradient(0, T0 - 10, 0, H);
-  wg.addColorStop(0, 'rgba(92,200,255,.30)'); wg.addColorStop(1, 'rgba(92,200,255,0)');
-  x.fillStyle = wg; x.fill();
-  const nowI = Math.round(now * 120);
-  x.lineWidth = 2; x.lineJoin = 'round'; x.strokeStyle = tint;
-  path(ptsAll.slice(0, nowI + 1)); x.stroke();
-  x.setLineDash([1.5, 3.5]); x.lineCap = 'round'; x.strokeStyle = 'rgba(165,222,255,.75)';
-  path(ptsAll.slice(nowI)); x.stroke(); x.setLineDash([]);
-  // high-water tick and label
-  let hi = nowI; for (let i = nowI; i < 90; i++) if (ptsAll[i][1] < ptsAll[hi][1]) hi = i;
-  const [hx, hy] = ptsAll[hi];
-  x.fillStyle = 'rgba(215,240,255,.95)'; x.beginPath(); x.arc(hx, hy, 2.2, 0, 7); x.fill();
-  const m = document.getElementById('high'); m.style.left = hx + 'px'; m.style.top = (hy + 8) + 'px';
-  // now marker
-  const [nx, ny] = ptsAll[nowI];
-  x.fillStyle = 'rgba(92,200,255,.25)'; x.beginPath(); x.arc(nx, ny, 7, 0, 7); x.fill();
-  x.fillStyle = '#000'; x.strokeStyle = tint; x.lineWidth = 2; x.beginPath(); x.arc(nx, ny, 3.6, 0, 7); x.fill(); x.stroke();
+  const svg = document.getElementById('tide');
+  const css = getComputedStyle(document.documentElement);
+  const sea = css.getPropertyValue('--ds-color-brand-seed').trim();
+  const past = css.getPropertyValue('--ds-color-neutral-dark-7').trim();
+  const hours = css.getPropertyValue('--ds-color-neutral-dark-10').trim();
+  const W = 173, H = 96, CH = 76, NOW = 6.3, HIGH = 9.7;
+  const h = t => 2.25 + 1.83 * Math.cos(2 * Math.PI * (t - HIGH) / 12.42) + 0.22 * Math.cos(2 * Math.PI * (t - HIGH) / 24.84);
+  const x = t => t / 24 * W, y = v => 6 + (4.6 - v) / 4.6 * (CH - 8);
+  const NS = 'http://www.w3.org/2000/svg';
+  const add = (n, a, txt) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (txt) e.textContent = txt; svg.appendChild(e); return e; };
+  const line = (a, b) => { let d = ''; for (let t = a; t <= b + 1e-9; t += 0.1) d += (d ? 'L' : 'M') + x(t).toFixed(1) + ' ' + y(h(t)).toFixed(1); return d; };
+  add('path', { d: line(0, NOW), fill: 'none', stroke: past, 'stroke-width': 2, 'stroke-linecap': 'round' });
+  add('path', { d: line(NOW, 24), fill: 'none', stroke: sea, 'stroke-width': 2.5, 'stroke-linecap': 'round' });
+  add('circle', { cx: x(HIGH), cy: y(h(HIGH)), r: 3, fill: sea });
+  add('circle', { cx: x(NOW), cy: y(h(NOW)), r: 5, fill: '#fff', stroke: '#000', 'stroke-width': 2 });
+  [6, 12, 18].forEach(t => add('text', { x: x(t), y: H - 4, fill: hours, 'font-family': 'Sora, sans-serif', 'font-size': 13, 'text-anchor': 'middle' }, String(t)));
 })();
 </script>
 </body>

@@ -62,3 +62,21 @@ Owner colour rule: removed the red radial glows (they made a brown-black haze ar
 - The dark ramps cannot give a vivid sequential data scale; recorded (with 07).
 - Feel words 'strong' maps to authoritative, which fights 'warm'. The warning was clear.
 - Cross-piece findings are in `../PROCESS.md`; engine feedback is in `opendesigner/feedback.md` where this piece recorded one.
+
+## Round 4 (owner review, 2026-10-18)
+The owner called the showcase "very very very cluttered and very unprofessional". The round-4 audit (`../../AUDIT-ROUND4.md`) and `../../PRESENTATION.md` set the watch rules: one glanceable thing, the time top right, colour only when it carries information.
+
+**One idea:** During an interval, the runner sees their heart rate, 162, sitting in zone 4.
+
+**Changed:**
+- 162 set at weight 600 instead of the ultra-heavy cut, with 'bpm' beside it at its own size; the heart icon removed
+- Gradient zone bar and gradient trace removed; five flat segments, only zone 4 in red
+- Title 'Rep 3 of 6' in grey so red means only the zone; the group moved up under the numeral
+
+Common to all seven: black ground, the title and clock in Inter (SIL OFL) as the stand-in for San Francisco, which watchOS draws itself; the app's own face for everything else (two typefaces); sizes from the watchOS roles (Caption 2 15, Headline 17) plus one data numeral. Rendered with `../render.py` at the existing size, 205 x 251 pt at 3x (615 x 753), clipped to the display; the gallery copy (192 px) was checked first.
+
+**Blind pairwise (18 Oct, fresh judge, no labels, random sides; tested the first round-4 render, before the audit fixes):** won 4 vs WorkOutDoors, won 4 vs HeartWatch, won 3 vs Zones for Training. References were App Store Apple Watch screenshots, kept in scratch and deleted.
+
+**Fresh-eyes audit:** 4 (18 Oct), 4 (20 Oct). Final: 4 of 5.
+
+**Checks:** `check_dates.py --year 2026` passes; `check_names.py` 0 errors; `preflight.py html` only warns about the HIG sizes and the display numeral outside the token scale (both on purpose, commented in the page).

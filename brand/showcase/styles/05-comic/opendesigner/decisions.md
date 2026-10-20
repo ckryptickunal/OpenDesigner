@@ -429,3 +429,18 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - previous value: "neo-brutalist"
 - also set: preset = "neobrutal" (from Q-dir-01)
 - also set: style = "comic" (from Q-dir-01)
+
+## D-0026 · raw.textFace = "Inter"
+- set_by: chosen · locked: no · date: 2026-10-20 · supersedes: D-0020 · source_ref: none
+- reason: round 4: one calm face for the page; the comic lives only in the strip
+- previous value: "Shantell Sans"
+
+## D-0027 · raw.displayFace = "Shantell Sans"
+- set_by: chosen · locked: no · date: 2026-10-20 · supersedes: D-0021 · source_ref: none
+- reason: round 4: hand lettering only inside the strip
+- previous value: "=textFace"
+
+## D-0028 · raw.monoFace = "Inter"
+- set_by: chosen · locked: no · date: 2026-10-20 · supersedes: D-0022 · source_ref: none
+- reason: round 4: no third face
+- previous value: "JetBrains Mono"

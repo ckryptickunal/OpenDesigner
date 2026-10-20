@@ -72,5 +72,16 @@
    "Head, headphones, mug, key legends and app arrows redrawn; text versions match the drawings; curly quotes; calmer body lettering",
    "Reflow for 721 to 1,375 px and phones; engine pick Q-dir-01 comic"
   ]
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "2 of 3 better on the final render (Mailchimp +2, Dovetail +2, Linear -1); the first render of this round also scored +2, +2, -1; an intermediate render lost to Linear and Dovetail by 2 each, which led to the equal, boxless panels",
+  "changed": [
+   "3,402 px seven-panel page replaced by one 1440 x 900 article header with a three-panel strip",
+   "Two faces: Inter for the page, Shantell Sans only in the strip (JetBrains Mono removed), set through the engine",
+   "Each panel one caption and one data drawing; halftone only under measured lines; balloons, SFX and props removed",
+   "Queue drawn from 02:13 and labelled as every ledger caller's retries",
+   "After the third audit, unscored: caption borders removed, three equal panels, lettering 600"
+  ]
  }
 }

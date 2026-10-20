@@ -141,3 +141,24 @@ NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups
 Checked 164 color pairs in every mode, 12 mode combinations and 403 tokens.
 (exit 0)
 
+
+# Round 4 (2026-10-18): face changed from IBM Plex Mono to IBM Plex Sans
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/07-leeward-sail/opendesigner set raw.textFace "IBM Plex Sans" --set-by chosen --why Round 4: one monospace face for everything read like a terminal mock-up; Plex Sans keeps the Plex family's technical voice with proportional text (SIL OFL)
+D-0027 set raw.textFace = "IBM Plex Sans" (chosen)
+  previous value: "IBM Plex Mono"
+  tokens: 1 value change (font.family.text). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/07-leeward-sail/opendesigner build
+built brand/showcase/watch/07-leeward-sail/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg, artifact), DESIGN.md, PRODUCT.md, preview.html, overview.html
+Passes: no errors. 2 warnings, 6 notes.  (brand/showcase/watch/07-leeward-sail/opendesigner)
+WARN  In light mode, action primary background on base surface is too faint to see: contrast 1.244:1, needs 3.0:1.  [WCAG 2.2 SC 1.4.11 (advisory: a text-labelled button needs no boundary contrast); DC-L01-22, S-L01-022, S-L01-023]
+      Fix: Point the role at a step further from the background: steps 11-12 for text, 8 or higher for edges. Or remove the override that detached it. Generated steps always pass.
+WARN  In light mode, action primary background on raised surface is too faint to see: contrast 1.267:1, needs 3.0:1.  [WCAG 2.2 SC 1.4.11 (advisory: a text-labelled button needs no boundary contrast); DC-L01-22, S-L01-022, S-L01-023]
+      Fix: Point the role at a step further from the background: steps 11-12 for text, 8 or higher for edges. Or remove the override that detached it. Generated steps always pass.
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 47 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 47 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  11 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.0). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+NOTE  OpenDesigner's house standards moved to v3 (this system follows v2): none of the changes touch it. Run `engine.py standards --update`  [House standards (docs/KNOWLEDGE.md 6); standards.json v3]
+Checked 164 color pairs in every mode, 12 mode combinations and 408 tokens.

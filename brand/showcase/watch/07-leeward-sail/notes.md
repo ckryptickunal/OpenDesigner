@@ -62,3 +62,22 @@ Owner rule: the degree sign was a superscript at another size; it is now inline 
 - The Colorfulness dial does not reach the status colours on a near-neutral brand; recorded.
 - The tick labels 210/240 run off the display edge on purpose: a card bigger than the screen.
 - Cross-piece findings are in `../PROCESS.md`; engine feedback is in `opendesigner/feedback.md` where this piece recorded one.
+
+## Round 4 (owner review, 2026-10-18)
+The owner called the showcase "very very very cluttered and very unprofessional". The round-4 audit (`../../AUDIT-ROUND4.md`) and `../../PRESENTATION.md` set the watch rules: one glanceable thing, the time top right, colour only when it carries information.
+
+**One idea:** From the helm, the sailor reads the heading, 247°, with the wind on the starboard bow.
+
+**Changed:**
+- Face changed through the engine from IBM Plex Mono to IBM Plex Sans
+- The compass card is whole inside the display (it was cut by the edges, with 210 and both arcs clipped); heading-up, a tick every 30 degrees, none beside the lubber line, four letters
+- One green wedge for the apparent wind; 'AWS 14.2 kn'; port red removed because the wind is not on the port side
+- Title is the boat's name, 'Tansy', in the app's bone tint
+
+Common to all seven: black ground, the title and clock in Inter (SIL OFL) as the stand-in for San Francisco, which watchOS draws itself; the app's own face for everything else (two typefaces); sizes from the watchOS roles (Caption 2 15, Headline 17) plus one data numeral. Rendered with `../render.py` at the existing size, 205 x 251 pt at 3x (615 x 753), clipped to the display; the gallery copy (192 px) was checked first.
+
+**Blind pairwise (18 Oct, fresh judge, no labels, random sides; tested the first round-4 render, before the audit fixes):** won 3 vs ezRegatta PRO, won 4 vs Windy.com, won 3 vs SailFlow. References were App Store Apple Watch screenshots, kept in scratch and deleted.
+
+**Fresh-eyes audit:** 3 (18 Oct), 3, 3, then 4 (20 Oct). Final: 4 of 5.
+
+**Checks:** `check_dates.py --year 2026` passes; `check_names.py` 0 errors; `preflight.py html` only warns about the HIG sizes and the display numeral outside the token scale (both on purpose, commented in the page).

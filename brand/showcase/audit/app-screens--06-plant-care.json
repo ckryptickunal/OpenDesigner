@@ -62,9 +62,9 @@
   ],
   "audited": "2026-10-14",
   "owner": {
-    "verdict": "hold",
-    "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
-    "date": "2026-10-18"
+    "verdict": "returned",
+    "said": "Back in the gallery: it passed round 5 at 4, the owner's condition for hidden pieces (2026-10-18: hide until better)",
+    "date": "2026-10-20"
   },
   "round3": {
     "score": 4,
@@ -116,6 +116,37 @@
       "verdict": "improve",
       "said": "needs better UI",
       "date": "2026-10-14"
+    },
+    {
+      "verdict": "hold",
+      "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
+      "date": "2026-10-18"
     }
-  ]
+  ],
+  "round5": {
+    "score": 4,
+    "pairwise": "Passes. Ours better every round: MyDyson +3, +3, +2; Greg +1, +1, +1; The Outsiders +1, +2, +2.",
+    "changed": [
+      "The soil diary is the screen: one bar per 08:10 reading, 8 Sep to 15 Oct (38), moss the morning after each 250 ml drink, pale drying days, ink thirsty mornings below 20%",
+      "One drink label (Watered 4 Oct) and one bracket (3 dry mornings) instead of a label per drink",
+      "What Loam learned: Gus dries out about 9 days after a drink; you've watered every 12",
+      "Full-bleed photo became a 64 pt round photo; the fact rows and in-chart notes removed; 18% and Thirsty since Tue 22:30 stay; one action, Log 250 ml",
+      "Tried and dropped: forecast bars for the next cycle (judges called the chart busy)"
+    ],
+    "scores_by_round": [
+      4,
+      3.5,
+      4
+    ],
+    "references": [
+      "https://mobbin.com/screens/665b807e-283c-4bcb-9bfe-705d3e23ea0d",
+      "https://mobbin.com/screens/5f7af23e-ccf3-4567-bf7e-f4562f1feaf4",
+      "https://mobbin.com/screens/759363a4-d740-46ac-b90e-84020a56990f"
+    ],
+    "date": "2026-10-20",
+    "open": [
+      "Pale drying bars are 1.5:1 on white (shape only; meaning carried by ink 15.5:1, moss 6.2:1 and text)",
+      "Last audit's unapplied items: weekly date ticks, regular weight for the Thirsty line, a quiet Remind me every 9 days action"
+    ]
+  }
 }

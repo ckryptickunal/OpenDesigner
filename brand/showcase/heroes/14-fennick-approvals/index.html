@@ -9,60 +9,93 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-/* Fennick's own system (the product's state, extended with a display set: Q-brand-06 two-sets). */
+/* Fennick's own system (the product's state, extended with a display set: Q-brand-06 two-sets).
+   The picture is one moment from the product: the review card for one bill, at 1x, on one pale green panel. */
 :root {
   --page: var(--ds-color-white);
   --ink: var(--ds-color-text-primary);
   --muted: var(--ds-color-text-secondary);
   --faint: var(--ds-color-text-tertiary);
-  --edge: var(--ds-color-neutral-light-6);     /* the product's own warm-grey edge, not a green one */
-  --grid: 1344px;
-  --shot-scale: 0.93333;                        /* the product's 1440 px layout at 1344 px */
-  --shot-h: 488px;                              /* 523 product px: the list ends on a row boundary (after Ember Valley) and the drawer's
-                                                   sticky footer starts just under "If you approve"; the hero's footed sum above is
-                                                   that same ledger, so the screen and the claim join up */
+  --sep: var(--ds-color-neutral-light-4);
+  --line: var(--ds-color-neutral-light-5);
+  --stage: var(--ds-color-accent-light-3);       /* the one panel: the product's own green, at its palest useful step */
+  --card: 476px;                                  /* the product drawer's width */
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { background: var(--page); }
-body { font: var(--ds-text-body-lg); color: var(--ink); -webkit-font-smoothing: antialiased; min-width: 1440px; }
+html, body { background: var(--page); height: 100%; }
+body { font: var(--ds-text-body-md); color: var(--ink); -webkit-font-smoothing: antialiased; min-width: 1440px; overflow: hidden; }
 a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; }
 :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-control-sm); }
-.wrap { width: var(--grid); margin: 0 auto; }
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+svg.i { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+svg.i.s12 { width: 12px; height: 12px; stroke-width: 2; }
+.num { font-variant-numeric: tabular-nums; }
 
-/* Nav */
-.nav { height: 56px; /* od-ignore: marketing nav bar, no nav-height token */ display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
-.brand { justify-self: start; display: inline-flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-title-md); }
+.page { height: 100vh; display: grid; grid-template-columns: 1fr 608px; grid-template-rows: 56px 1fr; } /* od-ignore: the panel column, 560 plus the 48 margin */
+
+/* Nav, over both halves */
+.nav { grid-row: 1; grid-column: 1 / -1; position: relative; z-index: 2; display: flex; align-items: center; gap: var(--ds-space-40); padding: 0 var(--ds-space-48); }
+.brand { display: inline-flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-title-md); }
 .mark { width: var(--ds-size-icon-lg); height: var(--ds-size-icon-lg); color: var(--ds-color-text-inverse); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-inverse); display: grid; place-items: center; }
 .links { display: flex; gap: var(--ds-space-32); font: var(--ds-text-label-lg); font-weight: 400; color: var(--muted); }
-.signin { justify-self: end; font: var(--ds-text-label-lg); font-weight: 400; }
+.signin { margin-left: auto; font: var(--ds-text-label-lg); font-weight: 400; }
 
-/* Copy: the claim on the left; on the right, the drawer's "If you approve" ledger, footed the way an accountant foots a
-   column: tabular figures, a single rule over the total and a double rule under it, on the figures only */
-.copy { padding-top: var(--ds-space-48); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--ds-space-24); align-items: stretch; }
-.claim { grid-column: 1 / span 7; display: flex; flex-direction: column; align-items: flex-start; }
+/* The claim */
+.claim { grid-row: 2; grid-column: 1; align-self: center; padding: 0 var(--ds-space-64) var(--ds-space-24) var(--ds-space-48); }
 h1 { margin-left: -0.04em; /* optical: the K's side bearing */ font: var(--ds-text-display-md); font-weight: 400; letter-spacing: -0.025em; }
 h1 span { display: block; }
-.btn { margin-top: auto; /* ends level with the sum's double rule */ display: inline-flex; align-items: center; height: var(--ds-size-control-lg); padding: 0 var(--ds-space-24); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font: var(--ds-text-label-lg); font-size: var(--ds-font-size-17); font-weight: 500; white-space: nowrap; }
-@media (hover: hover) and (pointer: fine) { .btn:hover { background: var(--ds-color-accent-light-10); } }
+.claim p { margin-top: var(--ds-space-24); max-width: 30em; font: var(--ds-text-body-lg); color: var(--muted); text-wrap: pretty; }
+.btn-lg { margin-top: var(--ds-space-32); display: inline-flex; align-items: center; height: var(--ds-size-control-lg); padding: 0 var(--ds-space-24); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font: var(--ds-text-label-lg); font-size: var(--ds-font-size-17); font-weight: 500; white-space: nowrap; }
+@media (hover: hover) and (pointer: fine) { .btn-lg:hover { background: var(--ds-color-accent-light-10); } }
 
-/* 426 px wide: its left edge sits on the drawer's content edge below (48 + 984 x 0.9333 = 966 px), so the quote stands over its source */
-.foot { grid-column: 8 / span 5; justify-self: end; align-self: start; width: 426px; /* od-ignore: 1392 - 966 */ border-collapse: collapse; font-variant-numeric: tabular-nums; }
-.foot caption { caption-side: top; text-align: left; padding-bottom: var(--ds-space-4); font: var(--ds-text-body-md); color: var(--muted); }
-.foot caption span { float: right; } /* laid out like the drawer's own heading: label left, account right */
-.foot th { text-align: left; vertical-align: baseline; padding-right: var(--ds-space-24); font-weight: 400; color: var(--muted); white-space: nowrap; }
-.foot td { width: 1%; text-align: right; vertical-align: baseline; font-size: var(--ds-font-size-29); line-height: 40px; /* od-ignore: 29 px figures on a 40 px line */ letter-spacing: -0.01em; white-space: nowrap; }
-.foot tr.total th { color: var(--ink); font-weight: 500; }
-.foot tr.total td { font-weight: 500; border-top: 1px solid var(--ink); border-bottom: 3px double var(--ink); padding-top: var(--ds-space-4); }
+/* The panel and the product's review card on it, flat: one hairline, no shadow */
+.stage { grid-row: 2; grid-column: 2; align-self: center; width: 560px; height: 600px; margin-bottom: var(--ds-space-24); border-radius: var(--ds-radius-overlay); background: var(--stage); display: grid; place-items: center; } /* od-ignore: the panel, sized so the card fills it */
+.card { width: var(--card); background: var(--ds-color-surface-overlay); border: 1px solid var(--line); border-radius: var(--ds-radius-overlay); overflow: hidden; }
+.dh { display: flex; align-items: center; gap: var(--ds-space-8); height: 52px; padding: 0 var(--ds-space-20); border-bottom: 1px solid var(--sep); } /* od-ignore: the product's drawer header */
+.dh .t { font-weight: var(--ds-font-weight-heading); white-space: nowrap; }
+.dh .pos { margin-left: auto; font-size: var(--ds-font-size-12); color: var(--faint); }
+.badge { display: inline-flex; align-items: center; gap: var(--ds-space-4); height: 20px; padding: 0 6px 0 5px; border-radius: var(--ds-radius-control-sm); font-size: var(--ds-font-size-12); font-weight: var(--ds-font-weight-label); background: var(--ds-color-bg-neutral-subtle); color: var(--muted); white-space: nowrap; } /* od-ignore: the product's badge */
+.sec { margin: 0 var(--ds-space-20); padding: var(--ds-space-16) 0; border-bottom: 1px solid var(--sep); }
+.sec.end { border-bottom: 0; }
+.sec h3 { font-size: var(--ds-font-size-12); font-weight: var(--ds-font-weight-label); color: var(--muted); margin-bottom: var(--ds-space-8); display: flex; justify-content: space-between; }
+.sec h3 .meta { font-weight: 400; color: var(--faint); }
+.big { font-size: var(--ds-font-size-29); line-height: 1.15; font-weight: var(--ds-font-weight-label); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.big .c { font-size: var(--ds-font-size-20); color: var(--muted); letter-spacing: -0.01em; }
+.big .cur { font-size: var(--ds-font-size-12); color: var(--faint); font-weight: var(--ds-font-weight-label); letter-spacing: 0; margin-left: 6px; }
+.amtmeta { margin-top: var(--ds-space-4); color: var(--muted); }
+.sep { margin: 0 var(--ds-space-6); color: var(--faint); }
 
-/* The product, flat and whole */
-.shot { margin-top: var(--ds-space-64); }
-.screen { width: var(--grid); height: var(--shot-h); overflow: hidden; border-radius: var(--ds-radius-overlay); background: var(--ds-color-white); outline: 1px solid var(--edge); }
-.screen iframe { display: block; width: 1440px; height: calc(var(--shot-h) / var(--shot-scale)); border: 0; transform: scale(var(--shot-scale)); transform-origin: 0 0; pointer-events: none; }
+.tl { list-style: none; }
+.tl li { position: relative; display: grid; grid-template-columns: 20px 1fr auto; column-gap: 10px; padding-bottom: 10px; } /* od-ignore: the product's timeline */
+.tl li:last-child { padding-bottom: 0; }
+.tl li::before { content: ""; position: absolute; left: 9.5px; top: 20px; bottom: 0; width: 1px; background: var(--line); }
+.tl li:last-child::before { display: none; }
+.dot { width: 20px; height: 20px; border-radius: var(--ds-radius-person); display: grid; place-items: center; background: var(--ds-color-surface-raised); border: 1px solid var(--line); color: var(--ds-color-icon-subtle); position: relative; z-index: 1; }
+.dot.done { background: var(--ds-color-bg-accent-bold); border-color: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent); }
+.dot.now { border-color: var(--ds-color-bg-accent-bold); box-shadow: inset 0 0 0 3px var(--ds-color-surface-raised), inset 0 0 0 10px var(--ds-color-bg-accent-bold); } /* od-ignore: the product's current-step ring */
+.tl .what { line-height: 20px; }
+.tl .what b { font-weight: var(--ds-font-weight-label); }
+.tl .when { font-size: var(--ds-font-size-12); color: var(--faint); line-height: 20px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.big + .ledger { margin-top: var(--ds-space-12); padding-top: var(--ds-space-8); border-top: 1px solid var(--sep); }
+.ledger div { display: flex; justify-content: space-between; height: 24px; align-items: center; color: var(--muted); font-variant-numeric: tabular-nums; } /* od-ignore: ledger rows */
+.ledger div span:last-child { color: var(--ink); }
+.ledger .tot { border-top: 1px solid var(--line); margin-top: var(--ds-space-4); padding-top: var(--ds-space-4); height: 32px; color: var(--ink); font-weight: var(--ds-font-weight-label); } /* od-ignore: total row */
+.ledger .tot span:last-child { font-weight: var(--ds-font-weight-heading); }
+
+.df { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-12) var(--ds-space-20); border-top: 1px solid var(--sep); }
+.df .note2 { font-size: var(--ds-font-size-12); color: var(--faint); margin-right: auto; }
+.btn { display: inline-flex; align-items: center; gap: 6px; height: var(--ds-size-control-md); padding: 0 12px; border-radius: var(--ds-radius-control); font-weight: var(--ds-font-weight-label); white-space: nowrap; } /* od-ignore: the product's button */
+.btn.rej { box-shadow: inset 0 0 0 1px var(--line); color: var(--ink); }
+.btn.pri { background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
 </style>
 </head>
 <body data-density="comfortable"><!-- on body: on <html>, the later ":root, [data-density=compact]" block wins -->
-<div class="wrap">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="check" viewBox="0 0 24 24"><path d="M19.5 6.5 9 17l-4.5-4.5"/></symbol>
+  <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+</svg>
+<div class="page">
   <header class="nav">
     <a class="brand" href="#" aria-label="Fennick home">
       <span class="mark" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="6.2" y="1" width="1.6" height="12"/><path d="M6.2 4.2 2 2.4v1.8l4.2 1.8zM7.8 6.6 12 4.8v1.8L7.8 8.4zM6.2 9 2 7.2V9l4.2 1.8z"/></svg></span>
@@ -76,30 +109,43 @@ h1 span { display: block; }
     <a class="signin" href="#">Sign in</a>
   </header>
 
-  <main>
-    <section class="copy" aria-labelledby="h">
-      <div class="claim">
-        <h1 id="h"><span>Know what’s left in the bank</span> <span>before you approve a bill.</span></h1>
-        <a class="btn" href="#">Try it on your own bills</a>
-      </div>
-      <table class="foot">
-        <caption>If you approve Calloway Freight <span>Operating ••4410</span></caption>
-        <tbody>
-          <tr><th scope="row">Balance today</th><td>$63,904.52</td></tr>
-          <tr><th scope="row">6 bills scheduled before Oct 20</th><td>−15,277.75</td></tr>
-          <tr><th scope="row">This bill</th><td>−7,418.60</td></tr>
-          <tr class="total"><th scope="row">Left on Oct 20</th><td>$41,208.17</td></tr>
-        </tbody>
-      </table>
-    </section>
+  <section class="claim" aria-labelledby="h">
+    <h1 id="h"><span>Know what’s left in the bank</span> <span>before you approve a bill.</span></h1>
+    <p>Every bill shows the operating balance on the day it pays, after everything already scheduled.</p>
+    <a class="btn-lg" href="#">Try it on your own bills</a>
+  </section>
 
-    <figure class="shot">
-      <div class="screen" inert>
-        <iframe src="../../product/02-fennick-approvals/index.html" title="Fennick bills to approve" tabindex="-1" aria-hidden="true" scrolling="no"></iframe>
+  <div class="stage">
+    <article class="card" aria-label="Fennick's review card for a bill from Penhallow Cold Storage: $9,126.45 due Oct 23, waiting for the CFO's approval. If it is approved, $32,985.05 is left in the operating account on Oct 22.">
+      <div class="dh">
+        <span class="t">Penhallow Cold Storage</span>
+        <span class="badge"><svg class="i s12"><use href="#clock"/></svg>1/2 approved</span>
+        <span class="pos num">3 of 14</span>
       </div>
-      <figcaption class="sr-only">Fennick's bills to approve at Bramblecote Foods, with the review drawer open on Calloway Freight Brokers: $7,418.60 due Oct 21, over $5,000 so it needs CFO approval, and $41,208.17 left in the operating account on Oct 20 if it is approved.</figcaption>
-    </figure>
-  </main>
+      <div class="sec">
+        <h3><span>If you approve</span><span class="meta">Operating ••4410</span></h3>
+        <div class="big">$32,985<span class="c">.05</span><span class="cur">left on Oct 22</span></div>
+        <div class="ledger">
+          <div><span>Balance today</span><span>$58,316.40</span></div>
+          <div><span>5 bills scheduled through Oct 22</span><span>−$16,204.90</span></div>
+          <div><span>This bill, due Oct 23<span class="sep">·</span>Net 30</span><span>−$9,126.45</span></div>
+        </div>
+      </div>
+      <div class="sec end">
+        <h3>Approvals</h3>
+        <ol class="tl">
+          <li><span class="dot done"><svg class="i s12"><use href="#check"/></svg></span><span class="what">Submitted by <b>Efua Osei</b></span><span class="when">Oct 13, 10:42 AM</span></li>
+          <li><span class="dot done"><svg class="i s12"><use href="#check"/></svg></span><span class="what">Approved by <b>Gregor Stenning</b>, Warehouse</span><span class="when">Oct 13, 3:18 PM</span></li>
+          <li><span class="dot now"></span><span class="what">Waiting for <b>you</b>, CFO</span><span class="when">1 day</span></li>
+        </ol>
+      </div>
+      <div class="df">
+        <span class="note2">Approving schedules ACH for Oct 22</span>
+        <button class="btn rej" tabindex="-1">Reject</button>
+        <button class="btn pri" tabindex="-1"><svg class="i"><use href="#check"/></svg>Approve</button>
+      </div>
+    </article>
+  </div>
 </div>
 </body>
 </html>

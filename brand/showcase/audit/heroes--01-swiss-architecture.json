@@ -78,5 +78,36 @@
  "facts": [
   "Halde is one letter from Halden Private (app-screens/01) and Halden Freight (components/06); still unresolved in NAMES.md, and renaming would also change mockups/02 and mockups/08",
   "mockups/02-laptop-desk alt text still describes the removed numbered project index"
- ]
+ ],
+ "round4": {
+  "score": 4,
+  "pairwise": [
+   {
+    "reference": "Heron AI",
+    "url": "https://mobbin.com/sites/sections/76dab96c-c33d-4d52-944b-7d32dc2274fa",
+    "result": "won 4"
+   },
+   {
+    "reference": "Unseen Studio",
+    "url": "https://mobbin.com/sites/sections/1bdc4e01-2f7e-4e09-9aa1-27f02c13bcbe",
+    "result": "won 2"
+   },
+   {
+    "reference": "Cloudstudio",
+    "url": "https://mobbin.com/sites/sections/bd08f963-ed5b-425f-b282-a6040e95fff1",
+    "result": "won 4"
+   },
+   {
+    "note": "Judged on the first round-4 render; later rounds only removed things (the tree, the rays in open air, a figure) and ran the earth to the frame edges."
+   }
+  ],
+  "changed": [
+   "Headline moved to the top, two lines at the 95 px token (was one line at 88 px, tight to the bottom edge); the red full stop is gone",
+   "Nav reduced to the wordmark and four links: the 'Zurich and Chur, since 1998' line, the coordinates and the sunrise time are gone (the places moved into the one supporting line)",
+   "Drawing cleared to the building, its rooms and the light: dimension chains, level marks, angle arcs, the two-line key, the title block with its scale bar, the summer rays, the balustrade posts, the tree, the dashed rays in open air and one of the two figures in the lowest room are gone",
+   "The winter light is shown once per room: a pale wedge with a 1.2 px edge at 19.7 degrees, inside the room only",
+   "Drawn at 1 m = 36 px (was 32) so the section fills the frame; the cut earth is one flat tone from the cut ground to the foot of the frame, running to both frame edges (the hatched band read as a drop shadow)",
+   "One caption on the earth: 'Haus am Hang, Flims, 2025 · noon, 21 December'"
+  ]
+ }
 }

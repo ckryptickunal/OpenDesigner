@@ -94,3 +94,33 @@ All recorded with `engine.py feedback` in `opendesigner/feedback.md`.
 It recomputed the sun angles, the 7.24 m and the 0.06 m, measured the chains on the render (257 / 256 / 384 px at 32 px per metre) and measured text contrast on the pixels (key 6.1:1 on the paper, "19.7°" 10.2:1 on the wedge).
 
 **Still open.** "Halde" is one letter from "Halden" (`app-screens/01`, `components/06`); NAMES.md lists it as unresolved. Renaming this brand would also change `mockups/02` and `mockups/08`, so it is left to the orchestrator. `mockups/02-laptop-desk` alt text still describes the old project index.
+
+## Round 4 (owner review, 2026-10-18)
+
+**What he said.** The showcase pieces look "very very very cluttered and very unprofessional, which is not acceptable at all", and "None of them should feel like they are from a vibe coded app". This round followed `AUDIT-ROUND4.md` and `PRESENTATION.md` (hero: a headline, one line, one action or none, one subject).
+
+**One idea.** One section drawing shows the low winter sun reaching deep into every room of a house stepped down a slope.
+
+**What changed.**
+- Headline moved to the top, two lines at the 95 px token (was one line at 88 px, tight to the bottom edge); the red full stop is gone.
+- Nav reduced to the wordmark and four links: the 'Zurich and Chur, since 1998' line, the coordinates and the sunrise time are gone (the places moved into the one supporting line).
+- Drawing cleared to the building, its rooms and the light: dimension chains, level marks, angle arcs, the two-line key, the title block with its scale bar, the summer rays, the balustrade posts, the tree, the dashed rays in open air and one of the two figures in the lowest room are gone.
+- The winter light is shown once per room: a pale wedge with a 1.2 px edge at 19.7 degrees, inside the room only.
+- Drawn at 1 m = 36 px (was 32) so the section fills the frame; the cut earth is one flat tone from the cut ground to the foot of the frame, running to both frame edges (the hatched band read as a drop shadow).
+- One caption on the earth: 'Haus am Hang, Flims, 2025 · noon, 21 December'.
+
+**Type scale (round 4).** Display 95 px (token) · Body 16 px (statement, link, nav, caption) · Label 13 px (the 'Work 24' count). One face, Inter Tight.
+
+**Blind pairwise test** (our shot beside a shipped hero at the same height, random sides, no labels, fresh judges; reference images kept in scratch and deleted):
+- Heron AI (https://mobbin.com/sites/sections/76dab96c-c33d-4d52-944b-7d32dc2274fa): won 4
+- Unseen Studio (https://mobbin.com/sites/sections/1bdc4e01-2f7e-4e09-9aa1-27f02c13bcbe): won 2
+- Cloudstudio (https://mobbin.com/sites/sections/bd08f963-ed5b-425f-b282-a6040e95fff1): won 4
+
+Judged on the first round-4 render; later rounds only removed things (the tree, the rays in open air, a figure) and ran the earth to the frame edges.
+
+**Fresh-eyes audit** (against the B2B product screens and Orbika): 4 (round 1), 4 (round 2), 4 (round 3, final).
+
+**Checks.** `check_dates.py --year 2026`: passes. `check_names.py`: only the false positives recorded in NAMES.md (2026-10-20 heroes block). `preflight.py html`: no errors.
+
+**Still open.** Halde is still one letter from Halden (app-screens/01); NAMES.md records it as kept on purpose, and check_names.py still reports it. The drawing is still generated in code (an auditor's note, not a fault it scored down).
+

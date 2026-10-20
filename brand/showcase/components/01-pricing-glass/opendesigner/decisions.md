@@ -841,3 +841,8 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - reason: round 4: twilight blue-black greys (gloaming); amber is the last light
 - previous value: "cool"
 - also set: raw.neutralTint = "cool" (from Q-color-09)
+
+## D-0042 · raw.defaultTheme = "light"
+- set_by: delegated · locked: no · date: 2026-10-18 · supersedes: none · source_ref: none
+- reason: Round 5: a light page in the manner of the B2B product screens; the estimator is the subject
+- previous value: "dark"

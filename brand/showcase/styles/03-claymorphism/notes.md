@@ -1,10 +1,12 @@
 # 03 · Claymorphism · Arrivant new-hire first week
 
+Gallery: Arrivant is a fictional onboarding tool; a new hire's first week is six clay capsules, one bead per task.
+
 Arrivant, a people-ops onboarding page: clay on one object, the new hire's badge with a clay portrait drawn in SVG (a real person's photo until Round 3), beside a flat first-week list in one green. Fresh audit after the polish round: 4 of 5.
 
-The "Round 3 (polish)" section of 2026-10-15, the last one, describes this page. The polish round of 2026-10-14 before it describes the version that round started from. The sections between record the first build, the Wayfold page that the independent audit scored 3.
+The "Round 4 (owner review, 2026-10-18)" section, the last one, describes this page; the sections before it record earlier versions. The polish round of 2026-10-14 before it describes the version that round started from. The sections between record the first build, the Wayfold page that the independent audit scored 3.
 
-**Final score: 4 of 5** after three rounds (3.5, then 4, then 4). Render: 1440 x 900 at scale 2 (`shot.png`).
+Round 3 ended at 4 of 5; the round-4 audit then scored it 5 of 10 and it was rebuilt (last section).
 
 ## Direction
 Wayfold is a fictional people-ops platform. The screen is the onboarding page a new hire sees six days before starting: Tomás Reyes, Product Designer, joining Northcote Labs on Monday 20 October (2025 calendar; wrong for 2026, fixed in the polish round). On the left is the one object that matters on day one, his badge, drawn in clay. On the right is the first-week checklist: done, next, and later. The audience is a new employee, nervous and keen. Mood: kind, clear, a little playful, never childish.
@@ -257,3 +259,43 @@ The piece still carried "Being rebuilt" on the public showcase, against the bar 
 - **Weekdays:** `check_dates.py --year 2026` passes (Fri 9, Mon 12, Mon 19, Wed 21, Thu 22, Fri 23 Oct 2026); Thu 15 to Mon 19 October is 4 days.
 - **Facts re-added:** 5 + 3 + 4 = 12 tasks; 5 + 0 + 0 = 5 done; the bar fills 41.7%. The panel and the last task row end within 1 px of each other.
 - Preflight: no type or font errors.
+
+## Round 4 (owner review, 2026-10-18)
+**This section describes the page now.** Rebuilt after the round-4 audit scored it 5 of 10 (rebuild). Render: `shot.png`, 1440 x 900 at scale 2.
+
+**One idea:** Imani's first week is six clay capsules, one per day and as long as its tasks, with five beads already green before day one.
+
+**Why:** The round-4 audit: a clean checklist, but the clay avatar and the lanyard badge looked like stock AI renders.
+
+### What changed
+- **No person, no badge, no lanyard.** The clay object is the week: one raised clay capsule per day (before day one, then Mon 19 to Fri 23 Oct), as long as that day's tasks, with one bead per task, green with a check when done. The next task's bead has a green ring. The header avatar is initials.
+- **The decoration carries data:** 5 + 3 + 1 + 1 + 1 + 1 = 12 beads, the same 12 tasks as the list; 5 are green, matching '5 of 12 done'. 'Security and privacy basics' moved to Tue 20 Oct so every day has a task, and the list is in date order.
+- **Calm type:** Nunito, set through the engine (Bricolage Grotesque stays only in `styles/06`), two weights (400 and 600), the large titles regular.
+- **One surface:** the mint panel is gone; the capsules sit on the page under 'Your first week', and the first-day block is bottom-aligned with the last rule of the list.
+- After the fresh audits: the beads matte (soft shading, no gloss), 'One bead per task' and '12 tasks' deleted, the tubes sized to their counts. **After the third audit (unscored):** the white plate, two-thirds empty, was removed and the capsules turned into one row per day, so the object fills the column; this version was checked by the blind pairwise test only. Last, the capsules went one step deeper in mint (accent 4 to 6) so the white beads read at 337 px.
+
+### Type scale
+Nunito only. 12 captions, 16 body and task titles, 21 group and section titles, 28 'Monday 19 October', 38 the welcome headline.
+
+### Blind pairwise test
+Three shipped references (Mobbin, cited by link only; images were kept in scratch and deleted). Each pair at the same height, sides random, no labels; fresh judges saw several pairs at once (four sets: 15, 9, 6 and 6 pairs, a new judge each time) and were told to weigh craft, not content. The table gives the result for the final render.
+
+| Reference | Result |
+|---|---|
+| Aboard, https://mobbin.com/screens/4f90f332-e4d8-4201-b341-da664b1fdfe8 | ours better by 3 |
+| Remote, https://mobbin.com/screens/156170a2-7331-438f-9a0a-e7eba294b489 | ours better by 3 |
+| Deputy, https://mobbin.com/screens/555bcc50-9f56-4a55-a8cd-272c3f6f6dd6 | ours better by 4 |
+
+**Pass rule:** never lose by 3 or more, and equal or better in at least 2 of 3. Passes. Every judge named the same flaw for ours: the soft, puffy 3D week tracker looks dated or gimmicky.
+
+### Fresh-eyes audit
+Round 1 was a fresh-context auditor given PRESENTATION.md, ROUND3-BRIEF.md, the owner's note, the B2B product screens (product/01, 02, 04, 06), Orbika, Holdfast and Lampwright as the bar, and the three references below. Rounds 2 and 3 went to the same auditor, so they check its own fixes rather than being fresh eyes. Scores: 3, 3, 3 ('close to 4' in round 3). It did not reach 4 in three rounds. Its round-3 notes (the empty plate, the empty bottom left) were then fixed, but that version has not been audited.
+
+### Checks
+- `check_dates.py --year 2026` passes (Fri 9, Mon 12, Mon 19, Tue 20, Wed 21, Thu 22, Fri 23 Oct 2026).
+- `check_names.py`: 2 flags, both false positives: 'Fischer' (Lena Fischer) is two letters from 'Fishers', a common word in a `components/07` thread title; 'Northcote' is two letters from 'Northgate', which `watch/04` has already replaced with Saltgrove (only the old `mockups/03` render still shows it). New words (Good, Onboarding, People) are UI words.
+- `engine.py validate`: no errors, 0 warnings. Preflight: no type or font errors.
+- Re-added from the page: 5 + 3 + 1 + 1 + 1 + 1 = 12 beads; 5 + 3 + 4 = 12 tasks in the list; 5 of 12 = 41.7%, the bar's fill. Thu 15 Oct to Mon 19 Oct is 4 days.
+
+### Left
+Fresh audit 3, not 4. The judges call the puffy clay capsules dated; the empty space right of the short capsules is the data, not a hole.

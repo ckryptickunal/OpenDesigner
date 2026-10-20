@@ -3,207 +3,136 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plenary: ticketing for conferences</title>
+<title>Plenary: Kanteel Design Week 2027, tickets</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
+  /* Round 4. Memphis lives in one zone: the ticket rows, where each ticket type is one Memphis
+     shape and each shape is 20 tickets (an isotype count, not an area). Solid is issued; outline is
+     released and still on sale; a shape partly issued is filled from the left until that share of its area is covered.
+     The app around it is flat: one face at regular weight, hairlines, no tilt. */
   :root {
-    /* Memphis set: lemon, pink, mint, with black and white as the fourth and fifth colours.
-       Each colour and shape is one ticket type, and only that: the mark and the action are black and white. Lemon is the brand seed (accent step 9 in light);
-       the dark ramp dulls it to #d8c568, so it is used as is. */
     --lemon: var(--ds-color-accent-light-9);
     --pink: var(--ds-color-accent2-dark-9);
     --mint: var(--ds-color-accent3-dark-9);
-    --ground: var(--ds-color-neutral-dark-1);
     --chalk: var(--ds-color-neutral-dark-12);
+    --ground: var(--ds-color-neutral-dark-1);
     --dim: var(--ds-color-neutral-dark-11);
+    --hair: var(--ds-color-neutral-dark-5);
   }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--ground); }
-  body {
-    color: var(--chalk);
-    font: var(--ds-text-body-md);
-    font-family: var(--ds-font-family-text);
-    font-variant-numeric: tabular-nums;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh; min-height: 100svh; overflow: hidden;
-  }
-  a { color: inherit; }
-  :focus-visible { outline: var(--ds-focus-ring-width, 2px) solid var(--chalk); outline-offset: 3px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--ground); color: var(--chalk); font-family: var(--ds-font-family-text); font-size: var(--ds-font-size-16); line-height: 24px; -webkit-font-smoothing: antialiased; overflow: hidden; }
+  .num, .rail, .chart { font-feature-settings: "tnum" 1; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+  .dim { color: var(--dim); }
+  .sm { font-size: var(--ds-font-size-12); line-height: 16px; color: var(--dim); }
 
-  .page { position: relative; width: 1440px; height: 900px; margin: 0 auto; }
-  nav.top { position: absolute; inset: 0 80px auto; height: 88px; display: flex; align-items: center; gap: var(--ds-space-40); }
-  .mark { display: flex; align-items: center; gap: var(--ds-space-12); text-decoration: none; font-size: var(--ds-font-size-21); font-weight: 700; font-stretch: 85%; letter-spacing: -0.01em; }
-  nav.top .links { display: flex; gap: var(--ds-space-32); margin-left: var(--ds-space-24); }
-  nav.top a { text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
-  nav.top .right { margin-left: auto; }
+  .top { height: 64px; display: flex; align-items: center; gap: var(--ds-space-32); padding: 0 var(--ds-space-48); border-bottom: 1px solid var(--hair); }
+  .logo { font-size: var(--ds-font-size-21); font-weight: 500; letter-spacing: -0.02em; }
+  .ev { display: inline-flex; align-items: center; gap: var(--ds-space-8); height: 36px; padding: 0 var(--ds-space-12); border: 1px solid var(--hair); border-radius: var(--ds-radius-8); background: none; }
+  nav { display: flex; height: 64px; }
+  nav a { display: inline-flex; align-items: center; padding: 0 var(--ds-space-12); color: var(--dim); }
+  nav a[aria-current] { color: var(--chalk); box-shadow: inset 0 -2px 0 var(--chalk); }
+  .sp { flex: 1; }
+  .av { width: 32px; height: 32px; border-radius: 50%; background: var(--ds-color-neutral-dark-4); display: grid; place-items: center; font-size: var(--ds-font-size-12); }
 
-  .copy { position: absolute; left: 80px; top: 136px; width: 760px; }
-  h1 { margin: 0; max-width: 9.5em; text-wrap: balance; font-size: var(--ds-font-size-90); line-height: .96; font-weight: 400; font-stretch: 84%; font-variation-settings: "opsz" 96; letter-spacing: -0.01em; }
-  .lede { margin: var(--ds-space-20) 0 0; font-size: var(--ds-font-size-21); line-height: 1.4; color: var(--dim); max-width: 700px; text-wrap: pretty; font-variation-settings: "opsz" 21; }
-  .actions { display: flex; align-items: center; gap: var(--ds-space-20); margin-top: var(--ds-space-20); }
-  .btn { display: inline-flex; align-items: center; height: 52px; padding: 0 var(--ds-space-24); background: var(--chalk); color: var(--ds-color-neutral-light-12); font-weight: 600; font-size: var(--ds-font-size-16); text-decoration: none; border-radius: var(--ds-radius-4, 4px); }
-  .price { color: var(--dim); font-size: var(--ds-font-size-16); }
-
-  /* the badge, as printed at the door: the tier shapes are on it, big enough to read from a room's door */
-  .door { position: absolute; left: 1046px; top: 112px; width: 300px; height: 260px; transform: rotate(-7deg); overflow: visible; }
-  .badge { position: absolute; left: 872px; top: 150px; width: 240px; height: 320px; transform: rotate(4deg); background: var(--ds-color-neutral-light-1); color: var(--ds-color-neutral-light-12); border-radius: var(--ds-radius-8, 8px); padding: 32px 20px 16px; font-variation-settings: "opsz" 14; }
-  .badge .hole { position: absolute; left: 104px; top: 12px; width: 32px; height: 8px; border-radius: 4px; background: var(--ground); }
-  .badge .ev { font-size: var(--ds-font-size-12); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
-  .badge .ev span { display: block; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--ds-color-neutral-light-11); margin-top: 2px; }
-  .badge .who { margin-top: 20px; font-size: var(--ds-font-size-28); line-height: 1.05; font-weight: 700; font-stretch: 88%; letter-spacing: -0.015em; }
-  .badge .role { margin-top: 8px; font-size: var(--ds-font-size-16); color: var(--ds-color-neutral-light-11); }
-  .badge svg { position: absolute; left: 20px; bottom: 57px; width: 182px; height: 80px; }
-  .badge .tiers { position: absolute; left: 20px; right: 20px; bottom: 16px; font-size: var(--ds-font-size-12); line-height: 1.35; border-top: 1px solid var(--ds-color-border-subtle); padding-top: 8px; }
-
-  /* the sales chart: the same four shapes, filled to tickets issued, dashed to tickets released, area to scale */
-  .chart { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; pointer-events: none; }
-  .c-head { position: absolute; left: 80px; top: 516px; font-size: var(--ds-font-size-16); }
-  .c-head b { font-weight: 600; }
-  .c-head span { display: block; margin-top: 4px; color: var(--dim); font-size: var(--ds-font-size-12); }
-  .lab { position: absolute; top: 782px; font-size: var(--ds-font-size-16); line-height: 1.25; transform: translateX(-50%); text-align: center; white-space: nowrap; }
-  .lab small { display: block; font-size: var(--ds-font-size-16); color: var(--dim); margin-top: 2px; }
-  .lab small + small { font-size: var(--ds-font-size-12); }
-  .sum { position: absolute; left: 1060px; top: 516px; width: 300px; white-space: nowrap; }
-  .c-head .scale { color: var(--dim); font-size: var(--ds-font-size-12); display: flex; align-items: center; gap: 6px; }
-  .c-head .scale svg { flex: none; }
-  .c-head .scale i { font-style: normal; margin-right: 10px; }
-  .sum .big { font-size: var(--ds-font-size-38); line-height: 1; font-weight: 600; font-stretch: 88%; letter-spacing: -0.02em; }
-  .sum .of { margin: 8px 0 20px; color: var(--dim); font-size: var(--ds-font-size-16); line-height: 1.35; }
-  .sum dl { margin: 0; border-top: 1px solid var(--ds-color-neutral-dark-6); }
-  .sum dl div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--ds-color-neutral-dark-6); }
-  .sum dt { color: var(--dim); }
-  .sum dd { margin: 0; }
+  .main { padding: var(--ds-space-40) var(--ds-space-48) 0; position: relative; height: calc(100vh - 64px); }
+  .head { display: flex; justify-content: space-between; align-items: flex-end; }
+  .kick { display: flex; align-items: center; gap: var(--ds-space-12); }
+  .pill { font-size: var(--ds-font-size-12); line-height: 20px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-full); border: 1px solid var(--hair); color: var(--chalk); }
+  h1 { font-size: 51px; line-height: 60px; font-weight: 400; letter-spacing: -0.03em; margin-top: var(--ds-space-12); }
+  .key { display: flex; gap: var(--ds-space-24); margin-top: var(--ds-space-12); }
+  .key span { display: inline-flex; align-items: center; gap: var(--ds-space-8); }
+  .totals { display: flex; gap: var(--ds-space-64); list-style: none; margin-top: var(--ds-space-40); padding-top: var(--ds-space-20); border-top: 1px solid var(--hair); }
+  .totals li { display: flex; flex-direction: column; gap: var(--ds-space-4); }
+  .totals .v { font-size: var(--ds-font-size-21); line-height: 28px; }
+  .ghost { height: 40px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-8); border: 1px solid var(--hair); background: none; align-self: flex-start; margin-top: var(--ds-space-32); }
+  .chart { position: absolute; left: 48px; right: 48px; top: 320px; height: 472px; }
+  .chart svg { display: block; overflow: visible; }
 </style>
 </head>
 <body>
-<div class="page">
-  <nav class="top" aria-label="Main">
-    <a class="mark" href="#">
-      Plenary
-    </a>
-    <div class="links">
-      <a href="#">Product</a><a href="#">Pricing</a><a href="#">For venues</a><a href="#">Help</a>
+<header class="top">
+  <span class="logo">Plenary</span>
+  <button class="ev" aria-label="Event: Kanteel Design Week 2027">Kanteel Design Week 2027
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 5.5L7 9l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+  <nav aria-label="Event"><a href="#">Overview</a><a href="#" aria-current="page">Tickets</a><a href="#">Orders</a><a href="#">Check-in</a><a href="#">Payouts</a></nav>
+  <span class="sp"></span>
+  <span class="av" aria-label="Signed in as Femke Verhaegen">FV</span>
+</header>
+
+<section class="main" aria-labelledby="h">
+  <div class="head">
+    <div>
+      <div class="kick"><span class="pill">On sale</span><span class="dim">Ghent · Hall 4 · 11 to 13 March 2027</span></div>
+      <h1 id="h" class="num">1,862 of 2,520 tickets issued</h1>
+      <div class="key sm">
+        <span><svg width="14" height="14" aria-hidden="true"><rect width="14" height="14" fill="var(--chalk)"/></svg>Issued</span>
+        <span><svg width="14" height="14" aria-hidden="true"><rect x=".75" y=".75" width="12.5" height="12.5" fill="none" stroke="var(--chalk)" stroke-width="1.5"/></svg>Released, still on sale</span>
+        <span>One shape for every 20 tickets</span>
+      </div>
     </div>
-    <a class="right" href="#">Sign in</a>
-  </nav>
-
-  <section class="copy" aria-labelledby="h">
-    <h1 id="h">The workshop room lets in triangles.</h1>
-    <p class="lede">Plenary gives each ticket type a shape. It prints on every badge, so a volunteer at any door can see who belongs from across the room.</p>
-    <div class="actions">
-      <a class="btn" href="#">Start an event</a>
-      <span class="price">2.5% + €0.50 a ticket, paid out every Friday</span>
-    </div>
-  </section>
-
-  <!-- the workshop room's door sign: the triangle, big, at the door; the badge that matches it leans on it -->
-  <svg class="door" viewBox="0 0 300 260" role="img" aria-label="Door sign for workshop room 3: a large mint triangle">
-    <path d="M150 0 L300 260 L0 260 Z" fill="var(--mint)"/><g id="door-stripes"></g>
-    <text x="150" y="246" text-anchor="middle" font-size="21" font-weight="700" fill="var(--ds-color-neutral-light-12)" font-family="var(--ds-font-family-text)">Room 3</text>
-  </svg>
-  <!-- one badge, as the check-in desk prints it -->
-  <article class="badge" aria-label="Sample badge: Femke Verhaegen, type designer, with a standard ticket and the workshop add-on, room 3, Friday 12 March at 10:00">
-    <i class="hole" aria-hidden="true"></i>
-    <div class="ev">Kanteel Design Week 2027<span>Ghent · Hall 4 · 11–13 March</span></div>
-    <div class="who">Femke<br>Verhaegen</div>
-    <div class="role">Type designer</div>
-    <svg viewBox="0 0 236 104" aria-hidden="true">
-      <!-- standard: the pink half disc; workshop: the mint triangle. Printed with the chart's patterns, a second cue besides colour -->
-      <path d="M0 104 A72 72 0 0 1 144 104 Z" fill="var(--pink)"/><g id="b-squig"></g>
-      <path d="M112 104 L196 104 L154 31.3 Z" fill="var(--mint)"/><g id="b-tri"></g>
-    </svg>
-    <div class="tiers"><b>Standard + workshop</b><br>Workshop room 3 · Fri 10:00</div>
-  </article>
-
-  <div class="c-head"><b>Tickets issued, Kanteel Design Week 2027</b> <span class="scale"><i>Area to scale</i><svg width="20" height="8" aria-hidden="true"><rect width="20" height="8" fill="var(--dim)"/></svg><i>issued</i><svg width="20" height="8" aria-hidden="true"><rect x="1" y="1" width="18" height="6" fill="none" stroke="var(--dim)" stroke-width="2" stroke-dasharray="4 3"/></svg><i>released</i></span></div>
-  <svg class="chart" id="chart" viewBox="0 0 1440 900" role="img" aria-label="Tickets issued by type, each shape's area to scale, filled for issued and dashed for released: early bird 400 of 400, sold out; standard 1,212 of 1,800; workshop 186 of 240; speaker and press 64 of 80."></svg>
-  <div id="labels"></div>
-  <div class="sum">
-    <div class="big">1,862</div>
-    <p class="of">issued, 74% of 2,520</p>
-    <dl>
-      <div><dt>People</dt><dd>1,676</dd></div>
-      <div><dt>Workshop add-ons</dt><dd>186</dd></div>
-      <div><dt>Gross</dt><dd>€647,360</dd></div>
-      <div><dt>Payout</dt><dd>Fri 16 Oct 2026</dd></div>
-    </dl>
+    <button class="ghost">Edit ticket types</button>
   </div>
-</div>
+  <ul class="totals num" aria-label="Totals">
+      <li><span class="sm">Gross</span><span class="v">€647,360</span></li>
+      <li><span class="sm">Fees, 2.5% + €0.50 a paid ticket</span><span class="v">−€17,083</span></li>
+      <li><span class="sm">Net to you</span><span class="v">€630,277</span></li>
+      <li><span class="sm">Next payout</span><span class="v">Fri 16 Oct 2026</span></li>
+    </ul>
+  <div class="chart"><svg id="chart" width="1344" height="472" role="img" aria-label="Tickets by type, one shape for every 20 tickets, solid when issued. Early bird, yellow circles: 400 of 400 issued, sold out, 116,000 euros. Standard, pink half discs: 1,212 of 1,800, 509,040 euros. Workshop seats, mint triangles: 186 of 240, 22,320 euros. Speaker and press, white squares: 64 of 80, free."></svg></div>
+</section>
 <script>
-(() => {
-  // The four ticket types. Area = 28 px² per ticket, for the filled (issued) and the dashed (released) shape alike.
-  // Patterns cover about 20% of each shape inside (dots r 3.53 on a 14 px grid, stripes 2 of 10, zigzags and squiggles about 20%),
-  // so the visible colour stays close to scale. Dots, squiggles and stripes are whole, placed only where they sit 4 px inside the edge.
-  const K = 28, FLOOR = 768;
-  const T = [
-    { name: 'Early bird', price: '€290', sold: 400, cap: 400, shape: 'disc', fill: 'var(--lemon)', pat: 'dots', note: ['400 of 400', 'sold out, closed 30 Sep'] },
-    { name: 'Standard', price: '€420', sold: 1212, cap: 1800, shape: 'dome', fill: 'var(--pink)', pat: 'squig', note: ['1,212 of 1,800', 'on sale until 10 Mar'] },
-    { name: 'Workshop', price: '€120', sold: 186, cap: 240, shape: 'tri', fill: 'var(--mint)', pat: 'hstripes', note: ['186 of 240', '6 rooms of 40'] },
-    { name: 'Speaker & press', price: 'free', sold: 64, cap: 80, shape: 'square', fill: 'var(--chalk)', pat: 'zig', note: ['64 of 80', 'invite code'] }
+  // One Memphis shape = 20 tickets. Solid = issued, outline = released and still on sale.
+  // A shape partly issued is filled from the left until that share of its area is covered (1,212 = 60 x 20 + 12, so the 61st is 60% full).
+  const U = 20, PITCH = 50, SIZE = 40, PER_ROW = 20, NS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('chart');
+  const el = (n, a, p = svg) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+  const defs = el('defs', {});
+  const shapes = {
+    circle: (x, y) => `M${x + 40} ${y + 20} a20 20 0 1 1 -40 0 a20 20 0 1 1 40 0z`,
+    dome: (x, y) => `M${x} ${y + 30} A20 20 0 0 1 ${x + 40} ${y + 30} Z`,
+    tri: (x, y) => `M${x} ${y + 37} L${x + 20} ${y + 2.4} L${x + 40} ${y + 37} Z`,
+    square: (x, y) => `M${x + 3} ${y + 3} h34 v34 h-34 Z`,
+  };
+  const types = [
+    { name: 'Early bird · €290', a: '400 of 400 · €116,000', shape: 'circle', c: 'var(--lemon)', rel: 400, iss: 400 },
+    { name: 'Standard · €420', a: '1,212 of 1,800 · €509,040', shape: 'dome', c: 'var(--pink)', rel: 1800, iss: 1212 },
+    { name: 'Workshop seat · €120', a: '186 of 240 · €22,320', shape: 'tri', c: 'var(--mint)', rel: 240, iss: 186 },
+    { name: 'Speaker and press · free', a: '64 of 80', shape: 'square', c: 'var(--chalk)', rel: 80, iss: 64 },
   ];
-  // 48 px gaps between the released (outer) shapes from x 86 (so the first label stays inside the 80 px margin); 96 before the small square, whose label is wider than it
-  const width = (shape, n) => { const A = n * K; return shape === 'disc' ? 2 * Math.sqrt(A / Math.PI) : shape === 'dome' ? 2 * Math.sqrt(2 * A / Math.PI) : shape === 'tri' ? Math.sqrt(4 * A / Math.sqrt(3)) : Math.sqrt(A); };
-  const GAPS = [48, 48, 96];
-  let x = 86; T.forEach((t, i) => { const w = width(t.shape, t.cap); t.cx = x + w / 2; x += w + (GAPS[i] || 0); });
-  const RIGHT = x;
-  const outline = (shape, n, cx) => {
-    const A = n * K;
-    if (shape === 'dome') { const r = Math.sqrt(2 * A / Math.PI); return `M${cx - r} ${FLOOR} A${r} ${r} 0 0 1 ${cx + r} ${FLOOR}`; }
-    if (shape === 'tri') { const s = Math.sqrt(4 * A / Math.sqrt(3)), h = s * Math.sqrt(3) / 2; return `M${cx - s / 2} ${FLOOR} L${cx} ${FLOOR - h} L${cx + s / 2} ${FLOOR}`; }
-    const a = Math.sqrt(A) + 2; return `M${cx - a / 2} ${FLOOR} v${-a} h${a} v${a}`;   // drawn 1 px outside, so the dashes clear the fill
+  // A partly issued shape is cut at the width that holds that share of its area.
+  const cut = (shape, f) => {
+    if (shape === 'square') return f;
+    if (shape === 'tri') return f <= 0.5 ? Math.sqrt(f / 2) : 1 - Math.sqrt((1 - f) / 2);
+    // circle and half disc: area left of a vertical cut at t (-1..1) is (t√(1−t²) + asin t + π/2) / π
+    const F = t => (t * Math.sqrt(1 - t * t) + Math.asin(t) + Math.PI / 2) / Math.PI;
+    let lo = -1, hi = 1; for (let i = 0; i < 40; i++) { const m = (lo + hi) / 2; if (F(m) < f) lo = m; else hi = m; }
+    return (lo + 1) / 2;
   };
-  const path = (shape, n, cx) => {
-    const A = n * K;
-    if (shape === 'disc') { const r = Math.sqrt(A / Math.PI); return `M${cx - r} ${FLOOR - r} a${r} ${r} 0 1 0 ${2 * r} 0 a${r} ${r} 0 1 0 ${-2 * r} 0 Z`; }
-    if (shape === 'dome') { const r = Math.sqrt(2 * A / Math.PI); return `M${cx - r} ${FLOOR} A${r} ${r} 0 0 1 ${cx + r} ${FLOOR} Z`; }
-    if (shape === 'tri') { const s = Math.sqrt(4 * A / Math.sqrt(3)), h = s * Math.sqrt(3) / 2; return `M${cx - s / 2} ${FLOOR} L${cx + s / 2} ${FLOOR} L${cx} ${FLOOR - h} Z`; }
-    const a = Math.sqrt(A); return `M${cx - a / 2} ${FLOOR} h${a} v${-a} h${-a} Z`;
-  };
-  // whole glyphs inside a disc (dots) or a half disc on a floor (squiggles)
-  const dots = (cx, cy, r) => { let o = ''; for (let i = -12; i <= 12; i++) for (let j = -12; j <= 12; j++) { const px = cx + i * 14, py = cy + j * 14; if (Math.hypot(px - cx, py - cy) + 3.53 + 4 <= r) o += `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="3.53"/>`; } return `<g fill="var(--ground)">${o}</g>`; };
-  const squigs = (cx, floor, r) => {
-    let o = '';
-    for (let k = 0; k < 40; k++) { const y = floor - 10 - k * 13; if (y < floor - r) break;
-      for (let m = -12; m <= 12; m++) { const x0 = cx - 8 + m * 30 + (k % 2 ? 15 : 0);
-        const ok = [[x0 - 2, y - 5.5], [x0 + 18, y - 5.5], [x0 - 2, y + 5.5], [x0 + 18, y + 5.5]].every(([px, py]) => Math.hypot(px - cx, py - floor) <= r - 4 && py <= floor - 4);
-        if (ok) o += `<path d="M${x0.toFixed(1)} ${y}q4 -7 8 0t8 0"/>`; } }
-    return `<g fill="none" stroke="var(--ground)" stroke-width="3.5" stroke-linecap="round">${o}</g>`;
-  };
-  // whole horizontal stripes inside a triangle (apex, side), from its base (or a lower limit) up; none shorter than 8 px
-  const stripes = (ax, ay, side, bottom, step = 10, thick = 2) => {
-    const h = side * Math.sqrt(3) / 2; let o = '';
-    for (let y = ay + h - 6; y > ay + 10; y -= step) { if (y > bottom - 6) continue; const half = (y - ay) / h * side / 2 - 4 / Math.sin(Math.PI / 3);
-      if (half >= 4) o += `<rect x="${(ax - half).toFixed(1)}" y="${(y - thick / 2).toFixed(1)}" width="${(2 * half).toFixed(1)}" height="${thick}"/>`; }
-    return `<g fill="var(--ground)">${o}</g>`;
-  };
-  // whole zigzag rows inside a square (centre x, floor, side), 4 px in from every edge
-  const zigs = (cx, floor, a) => { let o = ''; const x0 = cx - a / 2 + 4, x1 = cx + a / 2 - 4; for (let y = floor - 8; y >= floor - a + 8; y -= 8) { let d = `M${x0.toFixed(1)} ${y}`, up = true; for (let x = x0 + 3; x <= x1 + 0.01; x += 3) { d += `L${x.toFixed(1)} ${up ? y - 3 : y}`; up = !up; } o += `<path d="${d}"/>`; } return `<g fill="none" stroke="var(--ground)" stroke-width="1.6" stroke-linejoin="round">${o}</g>`; };
-  const [sX, sY] = [T[3].cx, FLOOR];
-  let defs = `<defs>
-    <pattern id="zig" x="${sX}" y="${sY}" width="12" height="10" patternUnits="userSpaceOnUse"><path d="M0 7 L3 3 L6 7 L9 3 L12 7" fill="none" stroke="var(--ground)" stroke-width="2" stroke-linejoin="round"/></pattern>
-  </defs>`;
-  let g = '';
-  T.forEach((t, i) => {
-    if (t.cap > t.sold) g += `<path d="${outline(t.shape, t.cap, t.cx)}" fill="none" stroke="var(--chalk)" stroke-width="2" stroke-dasharray="6 6"/>`;
-    const d = path(t.shape, t.sold, t.cx), A = t.sold * K;
-    g += `<path d="${d}" fill="${t.fill}"/>`;
-    if (t.pat === 'dots') { const r = Math.sqrt(A / Math.PI); g += dots(t.cx, FLOOR - r, r); }
-    else if (t.pat === 'squig') g += squigs(t.cx, FLOOR, Math.sqrt(2 * A / Math.PI));
-    else if (t.pat === 'zig') { const a = Math.sqrt(A); g += zigs(t.cx, FLOOR, a); }
-    else if (t.pat === 'hstripes') { const side = Math.sqrt(4 * A / Math.sqrt(3)); g += stripes(t.cx, FLOOR - side * Math.sqrt(3) / 2, side, FLOOR); }
-    // stripes stay 3 px inside the edge, so they never bite the silhouette
-    else g += `<clipPath id="in${i}"><path d="${d}"/></clipPath><path d="${d}" fill="url(#${t.pat})"/><path d="${d}" fill="none" stroke="${t.fill}" stroke-width="6" clip-path="url(#in${i})"/>`;
-  });
-  g += `<path d="M80 ${FLOOR + 1} H${RIGHT}" stroke="var(--chalk)" stroke-width="2"/>`;
-  document.getElementById('chart').innerHTML = defs + g;
-  document.getElementById('b-squig').outerHTML = squigs(72, 104, 72);
-  document.getElementById('b-tri').outerHTML = stripes(154, 31.3, 84, 104);
-  document.getElementById('door-stripes').outerHTML = stripes(150, 0, 300, 214, 14, 4);
-  document.getElementById('labels').innerHTML = T.map(t => `<div class="lab" style="left:${t.cx}px">${t.name}<small>${t.price} · ${t.note[0]}</small><small>${t.note[1]}</small></div>`).join('');
-})();
+  const X0 = 344; let y = 0, clip = 0;
+  for (const t of types) {
+    const units = t.rel / U, rows = Math.ceil(units / PER_ROW);
+    const label = (txt, dy, fill) => { const e = el('text', { x: 0, y: y + dy, fill, 'font-size': 16 }); e.textContent = txt; };
+    label(t.name, 18, 'var(--chalk)'); label(t.a, 42, 'var(--dim)');
+    for (let i = 0; i < units; i++) {
+      const x = X0 + (i % PER_ROW) * PITCH, yy = y + Math.floor(i / PER_ROW) * PITCH;
+      const d = shapes[t.shape](x, yy), full = Math.min(1, Math.max(0, (t.iss - i * U) / U));
+      if (full < 1) el('path', { d, fill: 'none', stroke: t.c, 'stroke-width': 1.5, 'stroke-linejoin': 'round' });
+      if (full >= 1) el('path', { d, fill: t.c });
+      else if (full > 0) {
+        const id = 'c' + (clip++), cp = el('clipPath', { id }, defs);
+        el('rect', { x, y: yy, width: SIZE * cut(t.shape, full), height: SIZE }, cp);
+        el('path', { d, fill: t.c, 'clip-path': `url(#${id})` });
+      }
+    }
+    y += rows * PITCH + 24;
+  }
 </script>
 </body>
 </html>

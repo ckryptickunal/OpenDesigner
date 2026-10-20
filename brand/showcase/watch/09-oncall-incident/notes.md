@@ -77,3 +77,21 @@ Final score **4 of 5**: it would pass as a shipped watchOS long-look for an on-c
 - The shared scratchpad is wiped by parallel sessions: my scratch files and a downloaded reference photo disappeared twice mid-task. I moved scratch work to a session folder of its own.
 
 Fix 2026-10-14 (after the independent audit, score 4): the main button read "Acknowledge" although Noor and Bastian were already on the incident; it now reads "Join incident".
+
+## Round 4 (owner review, 2026-10-18)
+The owner called the showcase "very very very cluttered and very unprofessional". The round-4 audit (`../../AUDIT-ROUND4.md`) and `../../PRESENTATION.md` set the watch rules: one glanceable thing, the time top right, colour only when it carries information.
+
+**One idea:** A Sev 1 page shows card declines at 31% on card-auth, with one action: join.
+
+**Changed:**
+- One clear hierarchy: 'card-auth' small, 31% at 64 as the hero, one line 'of cards declined, usually 4%'
+- Second button moved below the fold; 'Join incident' is one dark watchOS platter inset from the corners
+- 'Open 14 min', INC-2291 and 'Noor and Bastian on it' removed so nothing competes with the number; 'Sev 1' is red text instead of a filled tag
+
+Common to all seven: black ground, the title and clock in Inter (SIL OFL) as the stand-in for San Francisco, which watchOS draws itself; the app's own face for everything else (two typefaces); sizes from the watchOS roles (Caption 2 15, Headline 17) plus one data numeral. Rendered with `../render.py` at the existing size, 205 x 251 pt at 3x (615 x 753), clipped to the display; the gallery copy (192 px) was checked first.
+
+**Blind pairwise (18 Oct, fresh judge, no labels, random sides; tested the first round-4 render, before the audit fixes):** won 4 vs PagerDuty, won 5 vs New Relic, won 3 vs Opsgenie. References were App Store Apple Watch screenshots, kept in scratch and deleted.
+
+**Fresh-eyes audit:** 3 (18 Oct), 3, then 4 (20 Oct). Final: 4 of 5.
+
+**Checks:** `check_dates.py --year 2026` passes; `check_names.py` 0 errors; `preflight.py html` only warns about the HIG sizes and the display numeral outside the token scale (both on purpose, commented in the page).

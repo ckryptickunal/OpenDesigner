@@ -3,217 +3,159 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>H2 2026 · Roadmaps · Soffit</title>
+<title>H2 2026 roadmap · Soffit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-/* Soffit: a roadmap planner that forecasts each project's finish from its own pace and shows how far that lands
-   from its target. Cool greys for the data, a near-black primary, one petrol accent whose only job is "today"
-   (the current week and the today line), and red only where a forecast lands after its target. */
+/* Round 5. Soffit forecasts each project's finish from its own pace. No sidebar and no side panel: the roadmap takes
+   the full width, and the project being decided opens in place, inside the timeline, with its checkpoints on its own bar.
+   Colour jobs: petrol for work (issues closed, solid; the rest of the plan, tint), red only where a forecast lands
+   after its target, ink for today and the one primary action. IBM Plex Sans only: 13 / 15 / 17 / 24 / 29. */
 :root {
   --ink: var(--ds-color-text-primary);
   --ink-2: var(--ds-color-text-secondary);
   --ink-3: var(--ds-color-text-tertiary);
-  --line: var(--ds-color-neutral-light-4);     /* row hairlines */
-  --edge: var(--ds-color-border-separator);    /* control and panel edges */
-  --grid: var(--ds-color-neutral-light-3);     /* week lines */
-  --mark: var(--ds-color-neutral-light-8);     /* bar outlines: 3.6:1 on white */
-  --fill: var(--ds-color-neutral-light-8);     /* closed issues and bar edges: 3.6:1 on white, 3.05:1 on the selected row */
-  --wash: var(--ds-color-surface-nav);
+  --line: var(--ds-color-neutral-light-4);
+  --grid: var(--ds-color-neutral-light-3);
+  --edge: var(--ds-color-border-separator);
   --page: var(--ds-color-surface-raised);
-  --accent: var(--ds-color-accent-light-9);
-  --selected: var(--ds-color-neutral-light-3);
+  --work: var(--ds-color-accent-light-9);      /* issues closed: 5.6:1 on white */
+  --plan: var(--ds-color-accent-light-4);      /* the rest of the plan */
+  --plan-edge: var(--ds-color-accent-light-8); /* plan outline: 3.9:1 on white */
   --late: var(--ds-color-text-danger);
   --late-mark: var(--ds-color-danger-light-9);
-  --primary: var(--ds-color-bg-inverse);       /* near-black primary; the engine has no such role (process finding) */
+  --primary: var(--ds-color-bg-inverse);
   --on-primary: var(--ds-color-text-inverse);
-  --row: var(--ds-size-row-sm);
-  --side: 192px;
-  --panel: 336px;
-  --table: 408px;
-  --week: 31px;                                /* timeline scale: 16 weeks from Mon 31 Aug, inset 8 px */
-  --inset: 8px;
+  --table: 540px;
+  --pad: 32px;
+  --indent: 50px;                              /* projects sit under their team's name */
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { background: var(--page); }
-body { width: 1440px; height: 900px; overflow: hidden; font: var(--ds-text-body-md); color: var(--ink); -webkit-font-smoothing: antialiased; }
+body { width: 1440px; height: 900px; overflow: hidden; font: 400 var(--ds-font-size-15)/20px var(--ds-font-family-text); color: var(--ink); -webkit-font-smoothing: antialiased; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-control-sm); }
 .num { font-variant-numeric: tabular-nums; }
-svg.i { width: var(--ds-size-icon-sm); height: var(--ds-size-icon-sm); flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+svg.i { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-.app { display: grid; grid-template-columns: var(--side) 1fr; height: 900px; }
-
-/* ---------- sidebar ---------- */
-.side { background: var(--wash); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: var(--ds-space-12) var(--ds-space-8); min-height: 0; }
-.ws { display: flex; align-items: center; gap: var(--ds-space-8); height: var(--ds-size-control-md); padding: 0 var(--ds-space-8); }
-.ws .tile { width: var(--ds-size-icon-md); height: var(--ds-size-icon-md); border-radius: var(--ds-radius-control-sm); background: var(--primary); color: var(--on-primary); display: grid; place-items: center; }
-.ws .tile svg { width: 12px; height: 12px; }
-.ws b { font: var(--ds-text-title-sm); }
+/* top bar: workspace, then the product's own sections as tabs */
+.top { height: 56px; display: flex; align-items: center; gap: var(--ds-space-24); padding: 0 var(--ds-space-24) 0 var(--pad); border-bottom: 1px solid var(--line); }
+.ws { display: flex; align-items: center; gap: var(--ds-space-8); font: 600 var(--ds-font-size-15)/20px var(--ds-font-family-text); }
+.ws .tile { width: 24px; height: 24px; border-radius: var(--ds-radius-control-sm); background: var(--primary); color: var(--on-primary); display: grid; place-items: center; }
+.ws .tile svg { width: 13px; height: 13px; }
 .ws .chev { color: var(--ink-3); width: 14px; height: 14px; }
-.find { margin: var(--ds-space-8) 0 var(--ds-space-12); height: var(--ds-size-control-md); display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-6) 0 var(--ds-space-8); border-radius: var(--ds-radius-control); background: var(--page); box-shadow: inset 0 0 0 1px var(--edge); color: var(--ink-3); }
-.find span { flex: 1; }
-kbd { font: var(--ds-text-body-sm); letter-spacing: 0; color: var(--ink-3); padding: 0 var(--ds-space-4); border-radius: var(--ds-radius-control-sm); box-shadow: inset 0 0 0 1px var(--edge); line-height: 18px; }
-nav { display: flex; flex-direction: column; gap: var(--ds-space-2); }
-nav a { display: flex; align-items: center; gap: var(--ds-space-8); height: var(--ds-size-control-md); padding: 0 var(--ds-space-8) 0 var(--ds-space-12); border-radius: var(--ds-radius-control); color: var(--ink-2); text-decoration: none; }
-nav a svg { color: var(--ink-3); }
-nav a .n { margin-left: auto; font: var(--ds-text-body-sm); color: var(--ink-3); }
-nav a[aria-current] { background: var(--ds-color-neutral-light-4); color: var(--ink); font-weight: 500; }
-nav a[aria-current] svg { color: var(--ink); }
-.sec { font: var(--ds-text-body-sm); font-weight: 500; color: var(--ink-3); padding: var(--ds-space-20) var(--ds-space-12) var(--ds-space-6); }
-.me { margin-top: auto; display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-12) var(--ds-space-8) var(--ds-space-4); border-top: 1px solid var(--line); }
-.me .who { flex: 1; display: grid; min-width: 0; }
-.me .who b { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.me .who span { font: var(--ds-text-body-sm); color: var(--ink-3); }
-.av { width: var(--ds-size-icon-lg); height: var(--ds-size-icon-lg); border-radius: 50%; background: var(--ds-color-neutral-light-3); color: var(--ink-2); display: inline-grid; place-items: center; font: var(--ds-text-body-sm); font-weight: 500; letter-spacing: -0.02em; flex: none; box-shadow: inset 0 0 0 1px var(--ds-color-neutral-light-5); }
-.iconbtn { width: 28px; height: 28px; display: grid; place-items: center; border-radius: var(--ds-radius-control); color: var(--ink-2); }
-
-/* ---------- main ---------- */
-.main { display: grid; grid-template-rows: 48px 1fr; min-width: 0; min-height: 0; }
-.top { display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-16) 0 var(--ds-space-20); border-bottom: 1px solid var(--line); }
-.crumb { display: flex; align-items: center; gap: var(--ds-space-8); color: var(--ink-2); }
-.crumb .sl { color: var(--ds-color-neutral-light-7); }
-.crumb h1 { font: var(--ds-text-title-sm); color: var(--ink); display: flex; align-items: center; gap: var(--ds-space-4); }
-.crumb h1 svg { width: 14px; height: 14px; color: var(--ink-3); }
+.tabs { display: flex; height: 56px; gap: var(--ds-space-24); margin-left: var(--ds-space-16); }
+.tabs a { display: flex; align-items: center; gap: var(--ds-space-6); color: var(--ink-2); text-decoration: none; font-weight: 500; box-shadow: inset 0 -2px 0 transparent; }
+.tabs a[aria-current] { color: var(--ink); box-shadow: inset 0 -2px 0 var(--ink); }
+.tabs .n { font: 500 var(--ds-font-size-13)/16px var(--ds-font-family-text); color: var(--ink-2); background: var(--ds-color-neutral-light-3); border-radius: var(--ds-radius-full); padding: 0 var(--ds-space-6); }
 .spacer { flex: 1; }
-.btn { height: var(--ds-size-control-md); display: inline-flex; align-items: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); white-space: nowrap; }
-.btn.line { box-shadow: inset 0 0 0 1px var(--edge); color: var(--ink); }
+.btn { height: 32px; display: inline-flex; align-items: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); font-weight: 500; white-space: nowrap; }
+.btn.line { box-shadow: inset 0 0 0 1px var(--edge); }
 .btn.dark { background: var(--primary); color: var(--on-primary); }
-.btn.ghost { color: var(--ink-2); padding: 0 var(--ds-space-8); }
-.btn.sm { height: 28px; }
+.iconbtn { width: 32px; height: 32px; display: grid; place-items: center; border-radius: var(--ds-radius-control); color: var(--ink-2); }
+.av { width: 28px; height: 28px; border-radius: 50%; background: var(--ds-color-neutral-light-3); color: var(--ink-2); display: inline-grid; place-items: center; font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-text); letter-spacing: -0.02em; flex: none; box-shadow: inset 0 0 0 1px var(--ds-color-neutral-light-5); }
 
-.work { display: grid; grid-template-columns: 1fr var(--panel); min-height: 0; }
+/* page head */
+.head { height: 96px; display: flex; align-items: center; gap: var(--ds-space-16); padding: 0 var(--ds-space-24) 0 var(--pad); }
+.head h1 { font: 600 var(--ds-font-size-24)/30px var(--ds-font-family-text); letter-spacing: -0.015em; display: flex; align-items: center; gap: var(--ds-space-6); }
+.head h1 svg { width: 18px; height: 18px; color: var(--ink-3); }
+.head p { margin-top: var(--ds-space-4); color: var(--ink-2); }
+.head p b { color: var(--late); font-weight: 600; }
+.seg { display: inline-flex; padding: 2px; gap: 2px; border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-2); box-shadow: inset 0 0 0 1px var(--line); }
+.seg button { height: 26px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control-sm); color: var(--ink-2); font-weight: 500; }
+.seg button[aria-pressed="true"] { background: var(--page); color: var(--ink); box-shadow: 0 0 0 1px var(--edge); }
 
-/* ---------- toolbar ---------- */
-.plan { display: grid; grid-template-rows: 44px 1fr 40px; min-width: 0; min-height: 0; }
-.bar { display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-12) 0 var(--ds-space-16); border-bottom: 1px solid var(--line); }
-.seg { display: inline-flex; padding: var(--ds-space-2); gap: var(--ds-space-2); border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-2); box-shadow: inset 0 0 0 1px var(--line); }
-.seg button { height: 24px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control-sm); color: var(--ink-2); display: inline-flex; align-items: center; gap: var(--ds-space-6); }
-.seg button[aria-pressed="true"] { background: var(--page); color: var(--ink); font-weight: 500; box-shadow: 0 0 0 1px var(--edge); }
-.vr { width: 1px; height: 18px; background: var(--line); margin: 0 var(--ds-space-4); }
-.tally { font: var(--ds-text-body-sm); color: var(--ink-3); margin-right: var(--ds-space-4); }
-
-/* ---------- timeline ---------- */
-.tl { position: relative; overflow: hidden; min-height: 0; display: flex; flex-direction: column; }
-.tl .thead { flex: none; }
+/* the roadmap */
+.tl { position: relative; border-top: 1px solid var(--line); }
 .thead, .row { display: grid; grid-template-columns: var(--table) 1fr; }
-.thead { height: 48px; border-bottom: 1px solid var(--edge); }
-.cols { display: grid; grid-template-columns: 1fr 36px 40px 40px 48px; column-gap: var(--ds-space-12); padding: 0 var(--ds-space-12) 0 var(--ds-space-16); border-right: 1px solid var(--line); }
-.thead .cols { align-items: end; padding-bottom: var(--ds-space-4); font: var(--ds-text-body-sm); color: var(--ink-3); line-height: 16px; }
+.thead { height: 44px; border-bottom: 1px solid var(--edge); }
+.cols { display: grid; grid-template-columns: 1fr 52px 56px 72px 76px; column-gap: var(--ds-space-12); padding: 0 var(--ds-space-24) 0 var(--indent); border-right: 1px solid var(--line); }
+.thead .cols { padding-left: var(--pad); align-items: center; font: 500 var(--ds-font-size-13)/16px var(--ds-font-family-text); color: var(--ink-2); }
 .thead .cols .r { text-align: right; }
-.thead .cols .r2 { text-align: right; white-space: nowrap; }
 .scale { position: relative; }
-.mo, .wk, .now { position: absolute; font: var(--ds-text-body-sm); line-height: 16px; white-space: nowrap; }
-.mo { top: 6px; color: var(--ink); font-weight: 500; }
-.mtick { position: absolute; top: 4px; height: 20px; width: 1px; background: var(--edge); }
-.wk { top: 28px; color: var(--ink-3); transform: translateX(-50%); }
-.tick { position: absolute; top: 24px; bottom: 0; width: 1px; background: var(--grid); }
-.now { top: 4px; height: 18px; line-height: 18px; padding: 0 var(--ds-space-4); border-radius: var(--ds-radius-control-sm); background: var(--accent); color: var(--ds-color-text-on-accent); font-weight: 600; transform: translateX(-50%); z-index: 2; }
+.mo, .wk { position: absolute; font: var(--ds-font-size-13)/16px var(--ds-font-family-text); white-space: nowrap; }
+.mo { top: 5px; color: var(--ink); font-weight: 600; }
+.wk { top: 23px; color: var(--ink-2); transform: translateX(-50%); }
+.mo { transform: translateX(-50%); }
+.frz { position: absolute; top: 5px; white-space: nowrap; font: 500 var(--ds-font-size-13)/16px var(--ds-font-family-text); color: var(--ink-2); }
+.now { position: absolute; top: 3px; height: 20px; line-height: 20px; padding: 0 var(--ds-space-6); border-radius: var(--ds-radius-control-sm); background: var(--ink); color: var(--on-primary); font: 600 var(--ds-font-size-13)/20px var(--ds-font-family-text); transform: translateX(-50%); z-index: 4; white-space: nowrap; }
 
-.rows { position: relative; flex: 1; }
-.rows::before { content: ""; position: absolute; top: 0; bottom: 0; left: calc(var(--table) - 1px); width: 1px; background: var(--line); }
-.row { height: var(--row); }
-.row .cols { align-items: center; border-bottom: 1px solid var(--grid); min-width: 0; }
+.rows { position: relative; }
+.row { height: 40px; }
+.row .cols { align-items: center; border-bottom: 1px solid var(--grid); }
 .row .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.row .c, .row .t, .row .f, .row .s { font: var(--ds-text-body-sm); white-space: nowrap; font-variant-numeric: tabular-nums; text-align: right; }
+.row .c, .row .t, .row .f, .row .s { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .row .c, .row .t { color: var(--ink-2); }
-.row .f { color: var(--ink); }
-.row .s { color: var(--ink-3); }
+.row .s { color: var(--ink-2); }
 .row .s.late { color: var(--late); font-weight: 600; }
 .row .na { color: var(--ink-3); }
-.row .track { position: relative; }
-.row.group { height: 32px; }
-.row.group .cols { display: flex; align-items: center; border-bottom-color: var(--line); gap: var(--ds-space-6); padding-left: var(--ds-space-12); }
-.row.group .cols svg { width: 12px; height: 12px; color: var(--ink-3); }
-.row.group b { font: var(--ds-text-label-lg); font-weight: 600; }
-.row.group .count { font: var(--ds-text-body-sm); color: var(--ink-3); }
-.row.sel .cols, .row.sel .track { background: var(--selected); }
-.row.foot b { font-weight: 400; color: var(--ink-2); }
+.row .track { position: relative; border-bottom: 1px solid var(--grid); }
+.row.group { height: 36px; }
+.row.group .cols { display: flex; align-items: center; gap: var(--ds-space-8); padding-left: var(--ds-space-24); border-bottom-color: var(--line); }
+.row.group svg { width: 14px; height: 14px; color: var(--ink-3); }
+.row.group b { font-weight: 600; }
+.row.group .count { color: var(--ink-3); }
+.row.group .track { border-bottom-color: var(--line); }
 
-.grid { position: absolute; top: 0; bottom: 0; left: calc(var(--table) + var(--inset)); right: 0; background: repeating-linear-gradient(to right, var(--ds-color-neutral-light-2) 0 1px, transparent 1px var(--week)); pointer-events: none; }
-.mline { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--grid); }
-.over { position: absolute; top: 0; bottom: 0; left: var(--table); right: 0; pointer-events: none; z-index: 3; }
-.freeze { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, var(--ds-color-neutral-light-6) 0 1px, transparent 1px 6px); border-left: 1px solid var(--mark); }
-.today { position: absolute; top: -26px; bottom: 0; width: 1px; background: var(--accent); }
+.grid { position: absolute; top: 0; bottom: 0; left: var(--table); right: 0; pointer-events: none; }
+.wline { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--ds-color-neutral-light-2); }
+.mline { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line); }
+.over { position: absolute; top: -44px; bottom: 0; left: var(--table); right: 0; pointer-events: none; z-index: 3; }
+.freeze { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, var(--ds-color-neutral-light-5) 0 1px, transparent 1px 7px); border-left: 1px solid var(--ds-color-neutral-light-8); }
+.today { position: absolute; top: 22px; bottom: 0; width: 1px; background: var(--ink-2); }
 
-/* bars: the plan from start to target, closed issues as an ink fill, and a red line where the forecast runs past the target */
-.b { position: absolute; top: 11px; height: 14px; border-radius: var(--ds-radius-control-sm); background: var(--page); box-shadow: inset 0 0 0 1px var(--mark); overflow: hidden; z-index: 1; }
-.b .done { position: absolute; left: 0; top: 0; bottom: 0; background: var(--fill); }
-.miss { position: absolute; top: 11px; height: 14px; margin-left: -1px; border-radius: 0 var(--ds-radius-control-sm) var(--ds-radius-control-sm) 0; background: var(--late-mark); z-index: 1; }
-.cslip { position: absolute; top: 17px; height: 2px; background: var(--late-mark); z-index: 2; }
-.cp { position: absolute; top: 14px; width: 8px; height: 8px; border-radius: 50%; transform: translateX(-50%); background: var(--page); box-shadow: inset 0 0 0 1.5px var(--ds-color-neutral-light-12), 0 0 0 1.5px var(--page); z-index: 2; }
-.cp.met { background: var(--ds-color-neutral-light-12); }
+/* bars: the plan from start to target (tint), issues closed (petrol), and red where the forecast passes the target */
+.b { position: absolute; top: 12px; height: 16px; border-radius: var(--ds-radius-control-sm); background: var(--plan); box-shadow: inset 0 0 0 1px var(--plan-edge); overflow: hidden; z-index: 1; }
+.b .done, .ob .done { position: absolute; left: 0; top: 0; bottom: 0; background: var(--work); max-width: 100%; }
+.b.plan, .ob.plan { background: var(--page); box-shadow: none; outline: 1.5px dashed var(--plan-edge); outline-offset: -1.5px; }
+.tick, .otick { position: absolute; width: 2px; margin-left: -1px; background: var(--ink-2); border-radius: 1px; z-index: 2; }
+.tick { top: 8px; height: 24px; }
+.otick { top: 90px; height: 36px; }
+.ofrz { position: absolute; top: 0; bottom: 0; right: 0; background: repeating-linear-gradient(135deg, var(--ds-color-neutral-light-5) 0 1px, transparent 1px 7px); border-left: 1px solid var(--ds-color-neutral-light-8); }
+.miss { position: absolute; top: 12px; height: 16px; margin-left: -2px; padding-left: 2px; border-radius: 0 var(--ds-radius-control-sm) var(--ds-radius-control-sm) 0; background: var(--late-mark); z-index: 1; }
 
-.legend { display: flex; align-items: center; gap: var(--ds-space-20); padding: 0 var(--ds-space-16); border-top: 1px solid var(--line); font: var(--ds-text-body-sm); color: var(--ink-3); background: var(--page); }
-.legend .rule { margin-left: auto; }
-.legend span { display: inline-flex; align-items: center; gap: var(--ds-space-6); }
-.legend i { display: inline-block; flex: none; }
-.lg-bar { width: 22px; height: 10px; border-radius: 3px; box-shadow: inset 0 0 0 1px var(--mark); background: linear-gradient(90deg, var(--fill) 0 50%, var(--page) 50%); }
-.lg-miss { width: 12px; height: 10px; border-radius: 0 3px 3px 0; background: var(--late-mark); }
-.lg-cp { width: 8px; height: 8px; border-radius: 50%; background: var(--ds-color-neutral-light-12); }
-.legend .lg-cp + .lg-cp { margin-left: -2px; }
-.lg-cp.open { background: var(--page); box-shadow: inset 0 0 0 1.5px var(--ds-color-neutral-light-12); }
-.lg-frz { width: 14px; height: 12px; background: repeating-linear-gradient(135deg, var(--ds-color-neutral-light-6) 0 1px, transparent 1px 4px); box-shadow: inset 1px 0 0 var(--mark); }
-
-/* ---------- side panel ---------- */
-.panel { border-left: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
-.ph { height: 44px; flex: none; display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-12) 0 var(--ds-space-20); border-bottom: 1px solid var(--line); color: var(--ink-2); }
-.ph .grow { flex: 1; }
-.pb { padding: var(--ds-space-16) var(--ds-space-20); display: flex; flex-direction: column; gap: var(--ds-space-16); min-height: 0; }
-.pb h2 { font: var(--ds-text-title-md); letter-spacing: -0.005em; }
-.desc { color: var(--ink-2); margin-top: var(--ds-space-4); }
-.sh { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-8); }
-.sh h3 { font: var(--ds-text-title-sm); }
-.sh span { font: var(--ds-text-body-sm); color: var(--ink-3); }
-.big { display: grid; gap: var(--ds-space-2); }
-.big .k { font: var(--ds-text-body-sm); color: var(--ink-3); }
-.big .fig { font: var(--ds-text-headline-md); font-weight: 500; letter-spacing: -0.015em; font-variant-numeric: tabular-nums; }
-.big .late { color: var(--late); font-weight: 600; }
-.big .props { margin-top: var(--ds-space-8); }
-.big .props dt, .big .props dd { min-height: 28px; height: 28px; }
-.cph { display: grid; grid-template-columns: 1fr 46px 52px; column-gap: var(--ds-space-8); align-items: baseline; padding-left: 22px; }
-.cph h3 { font: var(--ds-text-title-sm); margin-left: -22px; }
-.cph span { font: var(--ds-text-body-sm); color: var(--ink-3); text-align: right; }
-.decide { flex: none; margin-top: auto; padding: var(--ds-space-12) var(--ds-space-20) var(--ds-space-16); border-top: 1px solid var(--line); display: grid; gap: var(--ds-space-8); }
-.decide p { color: var(--ink-2); }
-.decide .acts { display: flex; gap: var(--ds-space-8); justify-content: flex-end; }
-.fc-line { margin-top: var(--ds-space-8); }
-.fc-line b { font-weight: 600; }
-.fc-line .late, .fc-risk .late { color: var(--late); font-weight: 600; }
-.lead { display: flex; align-items: center; gap: var(--ds-space-8); margin-top: var(--ds-space-12); color: var(--ink-2); }
-.fc-risk { color: var(--ink-2); margin-top: var(--ds-space-2); }
-.chart { display: block; margin-top: var(--ds-space-12); overflow: visible; }
-.chart text { font: var(--ds-text-body-sm); fill: var(--ink-3); font-variant-numeric: tabular-nums; }
-.chart .lbl { fill: var(--ink-2); }
-.chart .end { fill: var(--ink); font-weight: 600; }
-.cap { margin-top: var(--ds-space-8); font: var(--ds-text-body-sm); color: var(--ink-3); }
-hr { border: 0; border-top: 1px solid var(--line); }
-.props { display: grid; grid-template-columns: 76px 1fr; align-items: center; }
-.props dt { color: var(--ink-3); height: var(--ds-size-control-md); display: flex; align-items: center; }
-.props dd { display: flex; align-items: center; gap: var(--ds-space-8); min-height: var(--ds-size-control-md); }
-.cps { list-style: none; margin-top: var(--ds-space-4); }
-.cps li { display: grid; grid-template-columns: 14px 1fr 46px 52px;  align-items: center; column-gap: var(--ds-space-8); height: var(--ds-size-control-md); }
-.cps .d { width: 8px; height: 8px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--ds-color-neutral-light-12); justify-self: center; }
-.cps .d.met { background: var(--ds-color-neutral-light-12); box-shadow: none; }
-.cps .t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cps .c, .cps .w { font: var(--ds-text-body-sm); color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; }
-.cps .w { color: var(--ink-2); }
-.cps .v { font: var(--ds-text-body-sm); color: var(--ink-3); text-align: right; white-space: nowrap; }
-.cps .v.late { color: var(--late); font-weight: 600; }
-.note { font: var(--ds-text-body-sm); color: var(--ink-3); }
-.ci { margin-top: var(--ds-space-8); }
+/* the project being decided, open in place */
+.open { display: grid; grid-template-columns: var(--table) 1fr; height: 232px; background: var(--ds-color-neutral-light-2); border-bottom: 1px solid var(--line); position: relative; z-index: 2; }
+.open .info { padding: var(--ds-space-16) var(--ds-space-24) var(--ds-space-16) var(--indent); border-right: 1px solid var(--line); display: flex; flex-direction: column; }
+.open h2 { font: 600 var(--ds-font-size-17)/22px var(--ds-font-family-text); letter-spacing: -0.005em; display: flex; align-items: center; gap: var(--ds-space-8); }
+.open h2 svg { width: 14px; height: 14px; color: var(--ink-3); margin-left: -22px; }
+.open .lead { color: var(--ink-2); margin-top: var(--ds-space-2); }
+.fig { display: flex; align-items: baseline; gap: var(--ds-space-12); margin-top: var(--ds-space-16); }
+.fig b { font: 500 var(--ds-font-size-29)/34px var(--ds-font-family-text); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.fig span { color: var(--late); font-weight: 600; }
+.open .pace { margin-top: var(--ds-space-4); color: var(--ink-2); }
+.decide { margin-top: auto; display: flex; align-items: center; gap: var(--ds-space-8); }
+.decide p { flex: 1; color: var(--ink); min-width: 0; }
+.open .lane { position: relative; }
+.ob { position: absolute; top: 96px; height: 24px; border-radius: var(--ds-radius-control-sm); background: var(--plan); box-shadow: inset 0 0 0 1px var(--plan-edge); overflow: hidden; }
+.ob .done { position: absolute; left: 0; top: 0; bottom: 0; background: var(--work); }
+.omiss { position: absolute; top: 96px; height: 24px; margin-left: -2px; padding-left: 2px; border-radius: 0 var(--ds-radius-control-sm) var(--ds-radius-control-sm) 0; background: var(--late-mark); }
+.cp { position: absolute; top: 102px; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: var(--page); box-shadow: 0 0 0 2px var(--ink); z-index: 2; }
+.cp.met { background: var(--ink); box-shadow: 0 0 0 2px var(--page), 0 0 0 3.5px var(--ink); }
+.cpf { position: absolute; top: 103px; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; background: var(--late-mark); box-shadow: 0 0 0 2px var(--page); z-index: 2; }
+.tag { position: absolute; white-space: nowrap; background: var(--ds-color-neutral-light-2); }
+.tag.l { transform: translateX(-100%); text-align: right; padding-left: 0 !important; padding-right: var(--ds-space-8); }
+.tag.l::before { left: auto; right: 0; }
+.tag::before { content: ""; position: absolute; left: 0; width: 1px; background: var(--ds-color-neutral-light-8); }
+.tag.up { bottom: 144px; padding-left: var(--ds-space-8); }
+.tag.up::before { top: 0; height: calc(100% + 8px); }
+.tag.dn { top: 132px; padding-left: var(--ds-space-8); }
+.tag.dn::before { top: -12px; height: 48px; }
+.tag b { display: block; font-weight: 500; }
+.tag span { display: block; font: var(--ds-font-size-13)/16px var(--ds-font-family-text); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.tag span em { font-style: normal; color: var(--late); font-weight: 600; }
 
 @media (hover: hover) and (pointer: fine) {
-  nav a:hover:not([aria-current]) { background: var(--ds-color-neutral-light-3); color: var(--ink); }
-  .iconbtn:hover, .btn.ghost:hover, .seg button:hover:not([aria-pressed="true"]) { background: var(--ds-color-neutral-light-3); color: var(--ink); }
+  .tabs a:hover:not([aria-current]) { color: var(--ink); }
+  .iconbtn:hover { background: var(--ds-color-neutral-light-3); color: var(--ink); }
   .btn.line:hover { background: var(--ds-color-neutral-light-2); }
   .btn.dark:hover { background: var(--ds-color-neutral-light-11); }
-  .row:not(.group):not(.sel):hover .cols, .row:not(.group):not(.sel):hover .track { background: var(--ds-color-neutral-light-2); }
+  .row:not(.group):hover .cols, .row:not(.group):hover .track { background: var(--ds-color-neutral-light-2); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  nav a, .btn, .iconbtn, .row .cols, .row .track { transition: background-color var(--ds-motion-duration-micro) ease; }
+  .btn, .iconbtn, .row .cols, .row .track { transition: background-color var(--ds-motion-duration-micro) ease; }
 }
 </style>
 </head>
@@ -221,167 +163,67 @@ hr { border: 0; border-top: 1px solid var(--line); }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></symbol>
   <symbol id="i-chev" viewBox="0 0 16 16"><path d="m4.5 6.5 3.5 3.5 3.5-3.5"/></symbol>
-  <symbol id="i-right" viewBox="0 0 16 16"><path d="m6.5 4.5 3.5 3.5-3.5 3.5"/></symbol>
-  <symbol id="i-home" viewBox="0 0 16 16"><path d="M2.5 7 8 2.5 13.5 7v6a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z"/><path d="M6.5 13.5v-4h3v4"/></symbol>
-  <symbol id="i-road" viewBox="0 0 16 16"><path d="M2.5 4h6M5 8h7M7 12h6.5"/></symbol>
-  <symbol id="i-box" viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="11" rx="2"/><path d="M2.5 6.5h11M6.5 6.5v7"/></symbol>
-  <symbol id="i-check" viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="11" rx="2"/><path d="m5.5 8.25 1.75 1.75 3.25-3.5"/></symbol>
   <symbol id="i-plus" viewBox="0 0 16 16"><path d="M8 3.5v9M3.5 8h9"/></symbol>
   <symbol id="i-share" viewBox="0 0 16 16"><path d="M6.5 9.5 9.5 6.5"/><path d="M7.5 4.5 9 3a2.5 2.5 0 0 1 3.5 3.5L11 8M8.5 11.5 7 13a2.5 2.5 0 0 1-3.5-3.5L5 8"/></symbol>
-  <symbol id="i-filter" viewBox="0 0 16 16"><path d="M2.5 3.5h11l-4.25 5v4l-2.5 1.5v-5.5z"/></symbol>
-  <symbol id="i-rows" viewBox="0 0 16 16"><path d="M6 4h7.5M6 8h7.5M6 12h7.5"/><circle cx="3" cy="4" r=".6"/><circle cx="3" cy="8" r=".6"/><circle cx="3" cy="12" r=".6"/></symbol>
-  <symbol id="i-tl" viewBox="0 0 16 16"><rect x="2" y="2.75" width="6.5" height="2.5" rx="1"/><rect x="5" y="6.75" width="7" height="2.5" rx="1"/><rect x="8.5" y="10.75" width="5.5" height="2.5" rx="1"/></symbol>
-  <symbol id="i-group" viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="4" rx="1"/><rect x="2.5" y="9.5" width="11" height="4" rx="1"/></symbol>
-  <symbol id="i-x" viewBox="0 0 16 16"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"/></symbol>
-  <symbol id="i-expand" viewBox="0 0 16 16"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></symbol>
   <symbol id="i-leaf" viewBox="0 0 12 12"><path d="M2.5 9.5c0-4 2.5-7 7-7 0 4.5-3 7-7 7Z" fill="currentColor" stroke="none"/></symbol>
 </svg>
 
-<div class="app">
-  <aside class="side" aria-label="Workspace">
-    <div class="ws">
-      <span class="tile" aria-hidden="true"><svg class="i" viewBox="0 0 12 12"><use href="#i-leaf"/></svg></span>
-      <b>Whinberry</b>
-      <svg class="i chev" aria-hidden="true"><use href="#i-chev"/></svg>
-    </div>
-    <div class="find" role="search"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><span>Search</span><kbd>⌘K</kbd></div>
-    <nav aria-label="Main">
-      <a href="#"><svg class="i" aria-hidden="true"><use href="#i-home"/></svg>Home</a>
-      <a href="#" aria-current="page"><svg class="i" aria-hidden="true"><use href="#i-road"/></svg>Roadmaps</a>
-      <a href="#"><svg class="i" aria-hidden="true"><use href="#i-box"/></svg>Projects<span class="n num">19</span></a>
-      <a href="#"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Check-ins<span class="n num">4</span></a>
-    </nav>
-    <div class="sec">Teams</div>
-    <nav class="teams" aria-label="Teams">
-      <a href="#">Storefront</a>
-      <a href="#">Fulfilment</a>
-      <a href="#">Driver app</a>
-      <a href="#">Loyalty</a>
-      <a href="#">Payments</a>
-    </nav>
-    <div class="me">
-      <span class="av" aria-hidden="true">MQ</span>
-      <div class="who"><b>Martha Quayle</b><span>Head of product</span></div>
-    </div>
-  </aside>
+<header class="top">
+  <div class="ws"><span class="tile" aria-hidden="true"><svg class="i" viewBox="0 0 12 12"><use href="#i-leaf"/></svg></span>Whinberry<svg class="i chev" aria-hidden="true"><use href="#i-chev"/></svg></div>
+  <nav class="tabs" aria-label="Main">
+    <a href="#" aria-current="page">Roadmap</a>
+    <a href="#">Projects</a>
+    <a href="#">Check-ins<span class="n num">4</span></a>
+    <a href="#">Capacity</a>
+  </nav>
+  <span class="spacer"></span>
+  <button class="iconbtn" aria-label="Search"><svg class="i"><use href="#i-search"/></svg></button>
+  <button class="btn line"><svg class="i" aria-hidden="true"><use href="#i-share"/></svg>Share</button>
+  <span class="av" aria-label="Martha Quayle">MQ</span>
+</header>
 
-  <div class="main">
-    <header class="top">
-      <div class="crumb">
-        <span>Roadmaps</span><span class="sl" aria-hidden="true">/</span>
-        <h1>H2 2026 <svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></h1>
-      </div>
-      <span class="spacer"></span>
-      <button class="btn line"><svg class="i" aria-hidden="true"><use href="#i-share"/></svg>Share</button>
-      <button class="btn line"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg>New project</button>
-    </header>
-
-    <div class="work">
-      <section class="plan" aria-label="H2 2026 timeline">
-        <div class="bar">
-          <div class="seg" role="group" aria-label="View">
-            <button aria-pressed="true"><svg class="i" aria-hidden="true"><use href="#i-tl"/></svg>Timeline</button>
-            <button aria-pressed="false"><svg class="i" aria-hidden="true"><use href="#i-rows"/></svg>List</button>
-          </div>
-          <span class="vr" aria-hidden="true"></span>
-          <button class="btn ghost sm"><svg class="i" aria-hidden="true"><use href="#i-filter"/></svg>Filter</button>
-          <button class="btn ghost sm"><svg class="i" aria-hidden="true"><use href="#i-group"/></svg>Group: Team</button>
-          <span class="spacer"></span>
-          <span class="tally num">14 scheduled · 2 forecast late</span>
-          <div class="seg" role="group" aria-label="Zoom">
-            <button aria-pressed="true">Weeks</button>
-            <button aria-pressed="false">Months</button>
-          </div>
-          <button class="btn line sm">Today</button>
-        </div>
-
-        <div class="tl" role="table" aria-label="Projects by team, 31 Aug to 20 Dec 2026">
-          <div class="thead" role="row">
-            <div class="cols"><span role="columnheader">Project</span><span class="r" role="columnheader">Closed</span><span class="r" role="columnheader">Target</span><span class="r2" role="columnheader">Forecast</span><span class="r2" role="columnheader">vs target</span></div>
-            <div class="scale" id="scale" role="columnheader" aria-label="Weeks"></div>
-          </div>
-          <div class="rows" id="rows"></div>
-        </div>
-        <div class="legend" aria-hidden="true">
-          <span><i class="lg-bar"></i>Issues closed</span>
-          <span><i class="lg-miss"></i>Forecast past target</span>
-          <span><i class="lg-cp"></i><i class="lg-cp open"></i>Checkpoint met, open</span>
-          <span><i class="lg-frz"></i>Peak freeze from 14 Dec</span>
-        </div>
-      </section>
-
-      <aside class="panel" aria-label="Project details">
-        <div class="ph">
-          <span>Storefront</span>
-          <span class="grow"></span>
-          <button class="btn ghost sm"><svg class="i" aria-hidden="true"><use href="#i-expand"/></svg>Open</button>
-          <button class="iconbtn" aria-label="Close panel"><svg class="i"><use href="#i-x"/></svg></button>
-        </div>
-        <div class="pb">
-          <div>
-            <h2>Christmas slot booking</h2>
-            <p class="desc">Delivery slots for 21 to 24 Dec. Members book from 23 Nov, everyone else from 30 Nov.</p>
-            <div class="lead"><span class="av" aria-hidden="true">NE</span>Ngozi Eze leads, with 5 others</div>
-          </div>
-          <div class="big">
-            <span class="k">Forecast finish</span>
-            <b class="fig">Tue 8 Dec</b>
-            <span class="late">8 days past the 30 Nov target</span>
-            <dl class="props">
-              <dt>Closed</dt><dd class="num">41 of 89 issues</dd>
-              <dt>Pace</dt><dd class="num">25 issues in the last 4 weeks</dd>
-            </dl>
-          </div>
-          <hr>
-          <div>
-            <div class="cph"><h3>Checkpoints</h3><span>Due</span><span>Forecast</span></div>
-            <ul class="cps">
-              <li><span class="d met" aria-label="Met"></span><span class="t">Slot model and pricing</span><span class="w num">9 Oct</span><span class="v">met</span></li>
-              <li><span class="d" aria-label="Open, 11 issues"></span><span class="t">Load test at 9,000/min</span><span class="w num">22 Oct</span><span class="v late">28 Oct</span></li>
-              <li><span class="d" aria-label="Open, 22 issues"></span><span class="t">Members first</span><span class="w num">23 Nov</span><span class="v">on time</span></li>
-              <li><span class="d" aria-label="Open, 15 issues"></span><span class="t">Everyone else</span><span class="w num">30 Nov</span><span class="v late">8 Dec</span></li>
-            </ul>
-          </div>
-          <hr>
-          <div>
-            <div class="sh"><h3>Week 42 check-in</h3><span class="num">Ngozi Eze, Wed 14 Oct</span></div>
-            <p class="ci">Tuesday’s load test peaked at 6,200 bookings a minute. Opening night needs about 9,000: last year’s 7,400 plus 22% more members. We retest on Thu 22 Oct if the queue is in.</p>
-          </div>
-        </div>
-        <div class="decide">
-          <p>To keep 30 Nov at this pace, cut 7 of the 48 open issues.</p>
-          <div class="acts"><button class="btn line sm">Move target to 8 Dec</button><button class="btn dark sm">Choose 7 to cut</button></div>
-        </div>
-      </aside>
-    </div>
+<section class="head">
+  <div>
+    <h1>H2 2026 roadmap <svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></h1>
+    <p class="num">14 scheduled projects in 5 teams · <b>2 forecast late</b> · forecasts from each project’s pace, updated 08:00</p>
   </div>
+  <span class="spacer"></span>
+  <div class="seg" role="group" aria-label="Zoom"><button aria-pressed="true">Weeks</button><button aria-pressed="false">Months</button></div>
+  <button class="btn line">Today</button>
+  <button class="btn line"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg>New project</button>
+</section>
+
+<div class="tl" role="table" aria-label="Projects by team, 31 Aug to 20 Dec 2026">
+  <div class="thead" role="row">
+    <div class="cols"><span role="columnheader">Project</span><span class="r" role="columnheader">Closed</span><span class="r" role="columnheader">Target</span><span class="r" role="columnheader">Forecast</span><span class="r" role="columnheader">vs target</span></div>
+    <div class="scale" id="scale" role="columnheader" aria-label="Weeks"></div>
+  </div>
+  <div class="rows" id="rows"></div>
 </div>
 
 <script>
-// Timeline scale: day 0 is Mon 31 Aug 2026; 16 weeks of 31 px end on Sun 20 Dec.
-const D0 = Date.UTC(2026, 7, 31), WEEK = 31, PX = WEEK / 7, WEEKS = 16, IN = 8;   // IN: the timeline starts 8 px in from the table
+// Timeline: day 0 is Mon 31 Aug 2026; 16 weeks at 54.25 px (7.75 px a day) end on Sun 20 Dec; the plan starts 8 px in.
+const D0 = Date.UTC(2026, 7, 31), PX = 7.75, IN = 8, WEEKS = 16;
 const day = s => Math.round((Date.parse(s + 'T00:00:00Z') - D0) / 864e5);
-const xs = s => IN + day(s) * PX;            // start of a day
-const xe = s => IN + (day(s) + 1) * PX;      // end of a day: a target day is inside its bar
-const xm = s => IN + (day(s) + 0.5) * PX;
+const xs = s => IN + day(s) * PX, xe = s => IN + (day(s) + 1) * PX, xm = s => IN + (day(s) + 0.5) * PX;
 const fmt = s => new Date(s + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
 const TODAY = '2026-10-15';
 
-// s start, e target, c closed of t issues, f forecast (from each project's pace), cp checkpoints [date, met]
+// s start, e target, c closed of t issues, f forecast (from each project's pace since it started)
 const teams = [
   ['Storefront', [
-    { n: 'Christmas slot booking', s: '2026-08-31', e: '2026-11-30', c: 41, t: 89, f: '2026-12-08', sel: 1, cp: [['2026-10-09', 1], ['2026-10-22'], ['2026-11-23']] },
-    { n: 'Checkout substitutions', s: '2026-09-14', e: '2026-10-29', c: 39, t: 52, f: '2026-10-26', cp: [['2026-10-08', 1]] },
+    { n: 'Christmas slot booking', s: '2026-08-31', e: '2026-11-30', c: 41, t: 89, f: '2026-12-08', open: 1 },
+    { n: 'Checkout substitutions', s: '2026-09-14', e: '2026-10-29', c: 39, t: 52, f: '2026-10-26' },
     { n: 'Saved baskets', s: '2026-10-05', e: '2026-11-20', c: 9, t: 34, f: '2026-11-12' },
     { n: 'Search ranking v3', s: '2026-10-26', e: '2026-12-11' },
   ]],
   ['Fulfilment', [
-    { n: 'Depot 4 pick paths', s: '2026-09-07', e: '2026-11-06', c: 52, t: 80, f: '2026-11-05', cp: [['2026-10-13', 1], ['2026-11-02']] },
+    { n: 'Depot 4 pick paths', s: '2026-09-07', e: '2026-11-06', c: 52, t: 80, f: '2026-11-05' },
     { n: 'Short-pick alerts', s: '2026-09-21', e: '2026-10-23', c: 29, t: 36, f: '2026-10-21' },
-    { n: 'Cold-chain scan', s: '2026-10-12', e: '2026-12-04', c: 2, t: 45, early: 1 },
+    { n: 'Cold-chain scan', s: '2026-10-12', e: '2026-12-04', c: 2, t: 45 },
   ]],
   ['Driver app', [
-    { n: 'Offline delivery proof', s: '2026-09-21', e: '2026-11-12', c: 21, t: 55, f: '2026-11-23', cp: [['2026-10-26']] },
+    { n: 'Offline delivery proof', s: '2026-09-21', e: '2026-11-12', c: 21, t: 55, f: '2026-11-23' },
     { n: 'Age check at the door', s: '2026-10-05', e: '2026-11-19', c: 7, t: 30, f: '2026-11-17' },
     { n: 'Two-drop batching', s: '2026-11-02', e: '2026-12-11' },
   ]],
@@ -395,46 +237,77 @@ const teams = [
   ]],
 ];
 
-// header: each month at its first day, each Monday's date on its own tick line, today marked on the today line
+// scale: months, each Monday, the freeze and today
 let hs = '';
-[['Sep', '2026-09-01'], ['Oct', '2026-10-01'], ['Nov', '2026-11-01'], ['Dec', '2026-12-01']].forEach(([m, d]) => { hs += `<span class="mtick" style="left:${xs(d).toFixed(1)}px"></span><span class="mo" style="left:${(xs(d) + 4).toFixed(1)}px">${m}</span>`; });
-for (let k = 0; k < WEEKS; k++) {
-  const d = new Date(D0 + k * 7 * 864e5);
-  hs += `<span class="tick" style="left:${IN + k * WEEK}px"></span><span class="wk num" style="left:${IN + k * WEEK}px">${d.getUTCDate()}</span>`;
-}
-hs += `<span class="now num" style="left:${Math.round(xm(TODAY)) + 0.5}px" title="Today">15 Oct</span>`;
+[['Sep', '2026-09-07'], ['Oct', '2026-10-05'], ['Nov', '2026-11-02'], ['Dec', '2026-12-07']].forEach(([m, d]) => { hs += `<span class="mo" style="left:${xs(d)}px">${m}</span>`; });   // each month at its first Monday
+for (let k = 0; k < WEEKS; k++) { const d = new Date(D0 + k * 7 * 864e5); hs += `<span class="wk num" style="left:${IN + k * 7 * PX}px">${d.getUTCDate()}</span>`; }
+hs += `<span class="frz" style="right:8px">Peak freeze</span>`;
+hs += `<span class="now num" style="left:${xm(TODAY)}px">Today</span>`;
 document.getElementById('scale').innerHTML = hs;
 
-// rows
 const slack = (f, e) => { const n = day(f) - day(e); return n > 0 ? `${n}d late` : n < 0 ? `${-n}d early` : 'on time'; };
-let rs = '', first = true;
+const T = xm(TODAY);
+// every bar runs from its start to its forecast: solid petrol up to today (worked), tint after today (forecast still to go),
+// red past the target; a tick marks the target. A project with no forecast yet shows its plan as an outline.
+const bar = (p, tall) => {
+  const k = tall ? 'o' : '', x0 = xs(p.s), xt = xe(p.e), started = p.c !== undefined;
+  let h = '';
+  if (!started) return `<span class="${k}b plan" style="left:${x0}px;width:${xt - x0}px"></span><span class="${k}tick" style="left:${xt}px"></span>`;
+  const xf = p.f ? xe(p.f) : xt, end = p.f ? Math.min(xf, xt) : T;
+  if (!p.f) h += `<span class="${k}b plan" style="left:${T - 3}px;width:${xt - T + 3}px"></span>`;
+  h += `<span class="${k}b" style="left:${x0}px;width:${end - x0}px"><span class="done" style="width:${(T - x0).toFixed(1)}px"></span></span>`;
+  if (p.f && xf > xt) h += `<span class="${k}miss" style="left:${xt}px;width:${xf - xt + 2}px"></span>`;
+  h += `<span class="${k}tick" style="left:${xt}px"></span>`;
+  return h;
+};
+
+// the open project: checkpoints worked in order at this pace, each with its due and forecast dates
+const openLane = () => {
+  const cps = [
+    { d: '2026-10-09', n: 'Slot model and pricing', v: 'met 9 Oct', met: 1, pos: 'dn l' },
+    { d: '2026-10-22', n: 'Load test, 9,000 bookings/min', v: 'due 22 Oct · forecast <em>28 Oct</em>', f: '2026-10-28', pos: 'up' },
+    { d: '2026-11-23', n: 'Members first', v: 'due 23 Nov · on time', pos: 'up' },
+    { d: '2026-11-30', n: 'Open to all customers', v: 'due 30 Nov · forecast <em>8 Dec</em>', f: '2026-12-08', pos: 'dn l' },
+  ];
+  let h = `<span class="ofrz" style="left:${xs('2026-12-14')}px"></span>` + bar(teams[0][1][0], true);
+  for (const c of cps) {
+    h += `<span class="cp${c.met ? ' met' : ''}" style="left:${xm(c.d)}px"></span>`;
+    if (c.f && c.f !== teams[0][1][0].f) h += `<span class="cpf" style="left:${xm(c.f)}px"></span>`;
+    if (c.f) h += `<span class="tag ${c.pos}" style="left:${xm(c.d)}px"><b>${c.n}</b><span>${c.v}</span></span>`;   // only the late checkpoints are labelled
+  }
+  return h;
+};
+
+let rs = '';
 for (const [team, ps] of teams) {
-  rs += `<div class="row group${first ? ' first' : ''}" role="row"><div class="cols" role="rowheader"><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg><b>${team}</b><span class="count num">${ps.length}</span></div><div class="track" role="cell"></div></div>`;
-  first = false;
+  rs += `<div class="row group" role="row"><div class="cols" role="rowheader"><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg><b>${team}</b><span class="count num">${ps.length}</span></div><div class="track" role="cell"></div></div>`;
   for (const p of ps) {
-    const x0 = xs(p.s), x1 = xe(p.e), started = p.c !== undefined;
-    let bar = `<span class="b" style="left:${x0.toFixed(1)}px;width:${(x1 - x0).toFixed(1)}px">`;
-    if (started) bar += `<span class="done" style="width:${((x1 - x0) * p.c / p.t).toFixed(1)}px"></span>`;
-    bar += `</span>`;
-    const late = p.f && day(p.f) > day(p.e);
-    if (late) bar += `<span class="miss" style="left:${x1.toFixed(1)}px;width:${(xe(p.f) - x1).toFixed(1)}px"></span>`;
-    for (const [d, met, slip] of (p.cp || [])) {
-      bar += `<span class="cp${met ? ' met' : ''}" style="left:${xm(d).toFixed(1)}px"></span>`;
+    if (p.open) {
+      rs += `<div class="open" role="row" aria-selected="true">
+        <div class="info">
+          <h2><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg>${p.n}</h2>
+          <p class="lead">Ngozi Eze leads, with 5 others</p>
+          <div class="fig"><b>Tue 8 Dec</b><span>8 days past the 30 Nov target</span></div>
+          <p class="pace num">41 of 89 issues closed · 25 in the last 4 weeks</p>
+          <div class="decide"><p>To keep 30 Nov, cut 7 of 48 open&nbsp;issues.</p><button class="btn line">Move target</button><button class="btn dark">Choose 7 to cut</button></div>
+        </div>
+        <div class="lane" role="cell" aria-label="31 Aug to 30 Nov, 41 of 89 issues closed, forecast Tue 8 Dec">${openLane()}</div>
+      </div>`;
+      continue;
     }
+    const started = p.c !== undefined, late = p.f && day(p.f) > day(p.e);
     const fc = p.f ? `<span class="f" role="cell">${fmt(p.f)}</span><span class="s${late ? ' late' : ''}" role="cell">${slack(p.f, p.e)}</span>`
-                   : `<span class="f na" role="cell">–</span><span class="s" role="cell"${started ? ' title="No forecast in a project’s first week"' : ''}></span>`;
-    const label = `${fmt(p.s)} to ${fmt(p.e)}` + (started ? `, ${p.c} of ${p.t} issues closed` : ', not started') + (p.f ? `, forecast ${fmt(p.f)}` : started ? ', no forecast in its first week' : '');
-    rs += `<div class="row${p.sel ? ' sel' : ''}" role="row"${p.sel ? ' aria-selected="true"' : ''}>`
-        + `<div class="cols"><span class="name" role="rowheader">${p.n}</span>`
+                   : `<span class="f na" role="cell">${started ? 'Too early' : '–'}</span><span class="s" role="cell"></span>`;
+    rs += `<div class="row" role="row"><div class="cols"><span class="name" role="rowheader">${p.n}</span>`
         + `<span class="c${started ? '' : ' na'}" role="cell">${started ? `${p.c}/${p.t}` : '–'}</span><span class="t" role="cell">${fmt(p.e)}</span>${fc}</div>`
-        + `<div class="track" role="cell" aria-label="${label}">${bar}</div></div>`;
+        + `<div class="track" role="cell">${bar(p)}</div></div>`;
   }
 }
-rs += `<div class="row group foot" role="row"><div class="cols" role="rowheader"><svg class="i" aria-hidden="true"><use href="#i-right"/></svg><b>No dates yet</b><span class="count num">5</span></div><div class="track" role="cell"></div></div>`;
-const mlines = [1, 31, 62, 92].map(d => `<span class="mline" style="left:${(d * PX).toFixed(1)}px"></span>`).join('');
-document.getElementById('rows').innerHTML = `<div class="grid" aria-hidden="true">${mlines}</div>` + rs
-  + `<div class="over" aria-hidden="true"><span class="freeze" style="left:${xs('2026-12-14').toFixed(1)}px;right:0"></span><span class="today" style="left:${Math.round(xm(TODAY))}px"></span></div>`;
-
+let gl = '';
+for (let k = 0; k <= WEEKS; k++) gl += `<span class="${[1, 5, 9, 14].includes(k) ? 'mline' : 'wline'}" style="left:${IN + k * 7 * PX}px"></span>`;   // one line per week; the first Monday of a month is darker
+gl += `<span class="freeze" style="left:${xs('2026-12-14')}px;right:0"></span>`;
+document.getElementById('rows').innerHTML = `<div class="grid" aria-hidden="true">${gl}</div>` + rs
+  + `<div class="over" aria-hidden="true"><span class="today" style="left:${xm(TODAY)}px"></span></div>`;
 </script>
 </body>
 </html>

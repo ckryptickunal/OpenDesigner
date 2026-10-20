@@ -99,5 +99,15 @@
     "what": "Flat shapes that interlock firmly instead of grazing"
    }
   ]
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "2 of 3 better on the final render (Mixpanel +2, Airtable +3, Customer.io -2); the first render of this round scored Customer.io +2, Mixpanel +3, Airtable +3",
+  "changed": [
+   "Shapes no longer bleed: one 752 x 744 field, the three sources stacked 64 px apart and whole",
+   "Ledger table and black side panel removed; in-flight count set beside the weir; slimmer warehouse square",
+   "Sentence case everywhere except the lowercase wordmark; 'billion' spelled out",
+   "Lede rewritten to two lines; weir bar ends at the last input"
+  ]
  }
 }

@@ -55,5 +55,16 @@
   "verdict": "keep",
   "said": "most of the watch screens are okay",
   "date": "2026-10-14"
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "won 3 vs ezRegatta PRO, won 4 vs Windy.com, won 3 vs SailFlow (blind, 18 Oct; tested before the audit fixes)",
+  "changed": [
+   "Face changed through the engine from IBM Plex Mono to IBM Plex Sans",
+   "The compass card is whole inside the display (it was cut by the edges, with 210 and both arcs clipped); heading-up, a tick every 30 degrees, none beside the lubber line, four letters",
+   "One green wedge for the apparent wind; 'AWS 14.2 kn'; port red removed because the wind is not on the port side",
+   "Title is the boat's name, 'Tansy', in the app's bone tint"
+  ],
+  "date": "2026-10-20"
  }
 }

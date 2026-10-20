@@ -112,3 +112,31 @@ After the independent audit (`audit/heroes--11-spend-platform.json`). Render: `s
 - Round 2, **4**, "clearly better": the full-width ledger is the element only this brand would show, the ink button is more serious, rows show the nightly posting. Small notes: two labels on one line, a sidebar checklist that repeated the main area, journal-entry numbers with no rule, a floating footer, a drawer with no action.
 - Round 3, **4**: those fixed; its last nits (a padded last row, a phrase split across label and value, the journal-entry box reading as the whole entry) were then fixed.
 It re-added every total (27 nights = 1,206; 1,206 + 78 + 18 = 1,302; 11 + 5 + 2 = 18), checked every weekend dip against the 2026 calendar, Tue 3 Nov, EDT on 28 Oct, and the journal entry; text contrast on the pixels is 5.88:1 or better, bars 4.58:1. What it says keeps the piece below 5: the header is still the stock kicker, headline, paragraph and button, and the blue hue itself is generic.
+
+## Round 4 (owner review, 2026-10-18)
+
+**What he said.** The showcase pieces look "very very very cluttered and very unprofessional, which is not acceptable at all", and "None of them should feel like they are from a vibe coded app". This round followed `AUDIT-ROUND4.md` and `PRESENTATION.md` (hero: a headline, one line, one action or none, one subject).
+
+**One idea.** Tonight's 78 coded lines are about to post to the ledger: the one blue bar in October's nightly record.
+
+**What changed.**
+- Header: the kicker and the aside note are gone; the headline, one two-line statement and one button.
+- Product: the filter tabs, the journal-entry drawer, the ledger settings block, the connected-ledger footer, the screen's subtitle, the chart legend and the 'Books lock' and 'Tonight' labels inside the chart are gone; the chart header carries '1,206 posted · 78 queued' and 'Books lock Tue 3 Nov'.
+- The chart is 148 px tall (was 52) so weekend nights read as short bars, not 2 px dust; bars are lighter (neutral step 8, 3.6:1) and narrower; the axis says 'Nov 1' where the month turns.
+- The app is cropped by the foot of the frame through its table rows (two rows added, reusing this piece's merchants).
+
+**Type scale (round 4).** Unchanged: Display 57 · Product title 19 · Body 16 · Product body 13; Golos Text.
+
+**Blind pairwise test** (our shot beside a shipped hero at the same height, random sides, no labels, fresh judges; reference images kept in scratch and deleted):
+- Ramp (https://mobbin.com/sites/sections/83a61ac1-4ad8-48d0-91be-13ac7b374e22): won 3
+- Monarch (https://mobbin.com/sites/sections/24964640-6293-40e9-994e-591814a32ec5): won 4
+- Origin (https://mobbin.com/sites/sections/e922bd8f-9385-4ecd-8930-43b50e499fbc): won 2
+
+Judged on the first round-4 render; later changes only lightened and narrowed the bars and removed labels.
+
+**Fresh-eyes audit** (against the B2B product screens and Orbika): 4 (round 1), 4 (round 2, final).
+
+**Checks.** `check_dates.py --year 2026`: passes. `check_names.py`: only the false positives recorded in NAMES.md (2026-10-20 heroes block). `preflight.py html`: no errors.
+
+**Still open.** The last auditor would like the bars lighter still; a lighter grey would fall under the 3:1 floor for graphics, so they stay at 3.6:1. The brand blue is still the engine's generic seed.
+

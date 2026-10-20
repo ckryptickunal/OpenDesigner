@@ -87,7 +87,7 @@
     "focusColor": null,
     "neutralBase": null,
     "contrastTarget": "AA",
-    "textFace": "Bricolage Grotesque",
+    "textFace": "Nunito",
     "displayFace": "=textFace",
     "baseSize": null,
     "spaceUnit": 4,
@@ -542,7 +542,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "2570bcd9cc5fb82f",
+    "DESIGN.md": "f389daabb4054421",
     "PRODUCT.md": "347dc6aa6c32587c"
   },
   "exports": {

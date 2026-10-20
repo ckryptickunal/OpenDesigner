@@ -1,129 +1,145 @@
 {
- "piece": "styles/03-claymorphism",
- "title": "03 · Claymorphism · Wayfold new-hire onboarding",
- "pattern": "onboarding checklist",
- "platform": "web",
- "industry": "people ops / HR (B2B SaaS)",
- "style": [
-  "claymorphism",
-  "soft 3D",
-  "clay",
-  "playful"
- ],
- "tags": [
-  "style study",
-  "claymorphism",
-  "onboarding",
-  "checklist",
-  "HR",
-  "new hire",
-  "svg illustration",
-  "progress",
-  "B2B"
- ],
- "score": 3,
- "self_score": 4,
- "verdict": "polish",
- "strengths": [
-  "One object drawn with craft that is also the next task: the new hire's badge on its lanyard, clay-shaded in SVG (inner light, inner shade, cast shadow), showing only true data (name, role, company, floor)",
-  "A real first week: 6 of 12 done, before-day-one collapsed to '5 of 5 done', day one with times and rooms, buddy and manager by name, the rest of the week as three tiles",
-  "Two clay hues with one job each (violet = done and progress, lemon = next), dark ink everywhere except on violet, measured white-on-violet at 4.62:1 after capping the clay highlight"
- ],
- "slop_signals": [
-  "Violet #6D4AFF on lilac-white with a lemon second accent: the default AI palette that rules.md warns about",
-  "The badge carries initials 'TR' in a violet disc where a real badge has a photo, so the one crafted object still reads as a placeholder",
-  "The white task rows are soft UI, not clay (the builder says so); clay lives only in the checks, button and badge",
-  "'6 days to go' lemon pill and 'Next' tag are stock onboarding chips"
- ],
- "fixes": [
-  "Pick a palette that is not violet-on-lavender: one strong hue for progress and neutral greys, kept cool",
-  "Give the badge a portrait (an open-licence photo or an illustrated face) and real lanyard detail, so the object earns the page",
-  "Correct the start date for 2026 (Monday is 19 October, 5 days away; or keep 20 October and call it Tuesday) and recheck 'Wed 14:00' and 'due Wednesday'",
-  "Rename Tomás and Calder Street; both names are already used in three other showcase pieces"
- ],
- "references": [
-  {
-   "site": "Gusto",
-   "url": "https://mobbin.com/screens/030224c2-2326-4e00-938c-d6d90b7a087d",
-   "mobbin_url": "https://mobbin.com/screens/030224c2-2326-4e00-938c-d6d90b7a087d",
-   "what": "Onboarding checklist grouped 'Before Day 1' and 'On Day 1', flat rows"
-  },
-  {
-   "site": "Aboard",
-   "url": "https://mobbin.com/screens/351de562-7a37-40a0-9230-6ff2da1a293b",
-   "mobbin_url": "https://mobbin.com/screens/351de562-7a37-40a0-9230-6ff2da1a293b",
-   "what": "New-hire tasks with dated rows and a progress summary per category"
-  },
-  {
-   "site": "Remote",
-   "url": "https://mobbin.com/screens/20465b91-4ab1-4d34-8b86-5a00b1a0eb7a",
-   "mobbin_url": "https://mobbin.com/screens/20465b91-4ab1-4d34-8b86-5a00b1a0eb7a",
-   "what": "Self-enrollment steps with a 'Step 2 of 3' progress bar and a start date"
-  }
- ],
- "audited": "2026-10-14",
- "audited_by": "independent",
- "facts": [],
- "polish": {
-  "score": 4,
+  "piece": "styles/03-claymorphism",
+  "title": "03 · Claymorphism · Wayfold new-hire onboarding",
+  "pattern": "onboarding checklist",
+  "platform": "web",
+  "industry": "people ops / HR (B2B SaaS)",
+  "style": [
+    "claymorphism",
+    "soft 3D",
+    "clay",
+    "playful"
+  ],
+  "tags": [
+    "style study",
+    "claymorphism",
+    "onboarding",
+    "checklist",
+    "HR",
+    "new hire",
+    "svg illustration",
+    "progress",
+    "B2B"
+  ],
+  "score": 3,
+  "self_score": 4,
+  "verdict": "polish",
+  "strengths": [
+    "One object drawn with craft that is also the next task: the new hire's badge on its lanyard, clay-shaded in SVG (inner light, inner shade, cast shadow), showing only true data (name, role, company, floor)",
+    "A real first week: 6 of 12 done, before-day-one collapsed to '5 of 5 done', day one with times and rooms, buddy and manager by name, the rest of the week as three tiles",
+    "Two clay hues with one job each (violet = done and progress, lemon = next), dark ink everywhere except on violet, measured white-on-violet at 4.62:1 after capping the clay highlight"
+  ],
+  "slop_signals": [
+    "Violet #6D4AFF on lilac-white with a lemon second accent: the default AI palette that rules.md warns about",
+    "The badge carries initials 'TR' in a violet disc where a real badge has a photo, so the one crafted object still reads as a placeholder",
+    "The white task rows are soft UI, not clay (the builder says so); clay lives only in the checks, button and badge",
+    "'6 days to go' lemon pill and 'Next' tag are stock onboarding chips"
+  ],
+  "fixes": [
+    "Pick a palette that is not violet-on-lavender: one strong hue for progress and neutral greys, kept cool",
+    "Give the badge a portrait (an open-licence photo or an illustrated face) and real lanyard detail, so the object earns the page",
+    "Correct the start date for 2026 (Monday is 19 October, 5 days away; or keep 20 October and call it Tuesday) and recheck 'Wed 14:00' and 'due Wednesday'",
+    "Rename Tomás and Calder Street; both names are already used in three other showcase pieces"
+  ],
+  "references": [
+    {
+      "site": "Gusto",
+      "url": "https://mobbin.com/screens/030224c2-2326-4e00-938c-d6d90b7a087d",
+      "mobbin_url": "https://mobbin.com/screens/030224c2-2326-4e00-938c-d6d90b7a087d",
+      "what": "Onboarding checklist grouped 'Before Day 1' and 'On Day 1', flat rows"
+    },
+    {
+      "site": "Aboard",
+      "url": "https://mobbin.com/screens/351de562-7a37-40a0-9230-6ff2da1a293b",
+      "mobbin_url": "https://mobbin.com/screens/351de562-7a37-40a0-9230-6ff2da1a293b",
+      "what": "New-hire tasks with dated rows and a progress summary per category"
+    },
+    {
+      "site": "Remote",
+      "url": "https://mobbin.com/screens/20465b91-4ab1-4d34-8b86-5a00b1a0eb7a",
+      "mobbin_url": "https://mobbin.com/screens/20465b91-4ab1-4d34-8b86-5a00b1a0eb7a",
+      "what": "Self-enrollment steps with a 'Step 2 of 3' progress bar and a start date"
+    }
+  ],
   "audited": "2026-10-14",
-  "audited_by": "fresh-context agents, two rounds (4, then 4)",
-  "title": "03 · Claymorphism · Arrivant new-hire first week",
-  "changed": [
-   "Palette: one deep green (#0E7C5A) for done, progress and the action, on cool greys; violet and lemon removed",
-   "Clay on the one object that carries the story: the badge (engine clay elevation plus a deeper bulge) on a woven green lanyard with a steel crimp and clip; the badge is also the next task",
-   "A real portrait on the badge (Andre Styles, Unsplash), credited and linked; the badge shows only true data",
-   "Checklist flat: hairline rows, flat checks, one button on the next task; the Next chip and the countdown pill removed",
-   "Dates for 2026: first day Monday 19 October, in 5 days; Wed 21, Thu 22, Fri 23 Oct",
-   "Names: Tomás Reyes, Ama Owusu, 41 Calder Street and Rye & Fennel removed; Wayfold (close to Wayfern) and Joinery (a real AI hiring product) dropped; now Arrivant, Imani Clarke, Tove Nyström, Lena Fischer, 41 Ropewalk Lane",
-   "After the fresh audits: laptop choice before day one, security course moved to week one (5 + 3 + 4 = 12, 6 done), the summary row says 5 tasks"
-  ],
-  "references": [
-   {
-    "site": "Gusto",
-    "mobbin_url": "https://mobbin.com/screens/030224c2-2326-4e00-938c-d6d90b7a087d",
-    "what": "Before Day 1 and On Day 1 groups in flat rows"
-   },
-   {
-    "site": "Workable",
-    "mobbin_url": "https://mobbin.com/screens/32528886-f7f1-4e0c-96ad-ccf5e05bd78f",
-    "what": "Start date, progress bar and dated task rows"
-   },
-   {
-    "site": "Slack onboarding template",
-    "mobbin_url": "https://mobbin.com/screens/1dbdaef3-604a-4b37-9266-0632cbeb3adb",
-    "what": "First-week tasks, meetings and a buddy on one page"
-   }
-  ],
-  "facts_checked": "All seven weekdays, days to start, task counts per group and overall against the bar, times in order, photo credit"
- },
- "round3": {
-  "score": 4,
-  "audited": "2026-10-15",
-  "audited_by": "fresh-context agents, three rounds (3, 4, 4)",
-  "changed": [
-   "The badge photo of a real person, captioned as the invented Imani Clarke, replaced by a clay portrait drawn in SVG (eyes with lids, a raised nose tip, a jaw, a visible ear, a swept fringe, a collar); credit line removed",
-   "Badge face in pale mint clay with a deeper bottom-right shade; lanyard shows one whole NORTHCOTE LABS per strap",
-   "Green for done and progress only; ink for actions; the day-level calendar action is a link under the address",
-   "Welcome lunch is an unticked day-one event: 5 of 12 done, bar 41.7%; \"in 4 days\" from Thu 15 Oct",
-   "Panel and list end on one line; 60 px rows; times at body size in their own column; no repeated directions; no real street name"
-  ],
-  "references": [
-   {
-    "site": "GoDaddy",
-    "mobbin_url": "https://mobbin.com/screens/66d1dcdf-73d4-4364-9549-1629c474c326",
-    "what": "A shipped 3D clay person: lids, nose, hair with volume"
-   },
-   {
-    "site": "Pipedrive",
-    "mobbin_url": "https://mobbin.com/screens/e7f636d0-1d6f-4a07-a5fa-9baaffea7734",
-    "what": "Quiet task rows with the accent only on done"
-   },
-   {
-    "site": "Revolut Business",
-    "mobbin_url": "https://mobbin.com/screens/480acc51-97cd-45f9-b0dc-8feb37488e77",
-    "what": "One soft 3D object beside a flat list"
-   }
-  ]
- }
+  "audited_by": "independent",
+  "facts": [],
+  "polish": {
+    "score": 4,
+    "audited": "2026-10-14",
+    "audited_by": "fresh-context agents, two rounds (4, then 4)",
+    "title": "03 · Claymorphism · Arrivant new-hire first week",
+    "changed": [
+      "Palette: one deep green (#0E7C5A) for done, progress and the action, on cool greys; violet and lemon removed",
+      "Clay on the one object that carries the story: the badge (engine clay elevation plus a deeper bulge) on a woven green lanyard with a steel crimp and clip; the badge is also the next task",
+      "A real portrait on the badge (Andre Styles, Unsplash), credited and linked; the badge shows only true data",
+      "Checklist flat: hairline rows, flat checks, one button on the next task; the Next chip and the countdown pill removed",
+      "Dates for 2026: first day Monday 19 October, in 5 days; Wed 21, Thu 22, Fri 23 Oct",
+      "Names: Tomás Reyes, Ama Owusu, 41 Calder Street and Rye & Fennel removed; Wayfold (close to Wayfern) and Joinery (a real AI hiring product) dropped; now Arrivant, Imani Clarke, Tove Nyström, Lena Fischer, 41 Ropewalk Lane",
+      "After the fresh audits: laptop choice before day one, security course moved to week one (5 + 3 + 4 = 12, 6 done), the summary row says 5 tasks"
+    ],
+    "references": [
+      {
+        "site": "Gusto",
+        "mobbin_url": "https://mobbin.com/screens/030224c2-2326-4e00-938c-d6d90b7a087d",
+        "what": "Before Day 1 and On Day 1 groups in flat rows"
+      },
+      {
+        "site": "Workable",
+        "mobbin_url": "https://mobbin.com/screens/32528886-f7f1-4e0c-96ad-ccf5e05bd78f",
+        "what": "Start date, progress bar and dated task rows"
+      },
+      {
+        "site": "Slack onboarding template",
+        "mobbin_url": "https://mobbin.com/screens/1dbdaef3-604a-4b37-9266-0632cbeb3adb",
+        "what": "First-week tasks, meetings and a buddy on one page"
+      }
+    ],
+    "facts_checked": "All seven weekdays, days to start, task counts per group and overall against the bar, times in order, photo credit"
+  },
+  "round3": {
+    "score": 4,
+    "audited": "2026-10-15",
+    "audited_by": "fresh-context agents, three rounds (3, 4, 4)",
+    "changed": [
+      "The badge photo of a real person, captioned as the invented Imani Clarke, replaced by a clay portrait drawn in SVG (eyes with lids, a raised nose tip, a jaw, a visible ear, a swept fringe, a collar); credit line removed",
+      "Badge face in pale mint clay with a deeper bottom-right shade; lanyard shows one whole NORTHCOTE LABS per strap",
+      "Green for done and progress only; ink for actions; the day-level calendar action is a link under the address",
+      "Welcome lunch is an unticked day-one event: 5 of 12 done, bar 41.7%; \"in 4 days\" from Thu 15 Oct",
+      "Panel and list end on one line; 60 px rows; times at body size in their own column; no repeated directions; no real street name"
+    ],
+    "references": [
+      {
+        "site": "GoDaddy",
+        "mobbin_url": "https://mobbin.com/screens/66d1dcdf-73d4-4364-9549-1629c474c326",
+        "what": "A shipped 3D clay person: lids, nose, hair with volume"
+      },
+      {
+        "site": "Pipedrive",
+        "mobbin_url": "https://mobbin.com/screens/e7f636d0-1d6f-4a07-a5fa-9baaffea7734",
+        "what": "Quiet task rows with the accent only on done"
+      },
+      {
+        "site": "Revolut Business",
+        "mobbin_url": "https://mobbin.com/screens/480acc51-97cd-45f9-b0dc-8feb37488e77",
+        "what": "One soft 3D object beside a flat list"
+      }
+    ]
+  },
+  "round4": {
+    "score": 3,
+    "pairwise": "3 of 3 better on the final render (Aboard +3, Remote +3, Deputy +4); earlier renders of this round: Deputy +4, Remote +3, Aboard +3, then Deputy +4, Aboard +3, Remote +2",
+    "changed": [
+      "Clay avatar, badge and lanyard removed; the clay object is the week: one capsule per day, one bead per task, green when done",
+      "Tasks re-dated so every day has one; list in date order; 12 beads = 12 tasks, 5 done",
+      "Nunito through the engine (no longer shares Bricolage with styles/06); weights 400 and 600",
+      "Mint panel removed; first-day block bottom-aligned with the list",
+      "After the third audit, unscored: plate removed and capsules laid out one row per day"
+    ]
+  },
+  "owner": {
+    "verdict": "hold",
+    "said": "Hidden under the owner's rule for pieces below 4 (2026-10-18: hide until better); round 4 stopped at 3",
+    "date": "2026-10-20"
+  }
 }

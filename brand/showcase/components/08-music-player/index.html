@@ -8,10 +8,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
-<!-- Cover photo: Iván Martínez Díaz, "A young plant emerges from the darkness", Unsplash License, https://unsplash.com/photos/a-young-plant-emerges-from-the-darkness-uG9Z4qrbt5c (hotlinked as Unsplash asks). -->
 <style>
   /* Type roles (three sizes): caption 13, body 16, headline 25. Weights 400 / 500 / 600 / 700. */
-  /* Outside the tokens, on purpose: the room takes a deep tint of the cover's darkest green. */
+  /* Outside the tokens, on purpose: the room takes a deep tint of the cover's darkest green, and the cover's two greens
+     (the seedlings and the tray) are drawn colours, not tokens. The cover is the label's own art, drawn in code below. */
   :root { --room: rgb(12 16 13); --edge: 92px; }
   *, *::before, *::after { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; }
@@ -31,10 +31,9 @@
   .iconbtn { width: 36px; height: 36px; display: grid; place-items: center; border-radius: var(--ds-radius-full); color: var(--ds-color-text-secondary); }
   .iconbtn .ic { width: 18px; height: 18px; }
 
-  .stage { display: grid; grid-template-columns: 520px 1fr; column-gap: 64px; padding: 40px var(--edge) 0; }
-  .cover { width: 520px; height: 520px; border-radius: var(--ds-radius-8); overflow: hidden; background: var(--ds-color-neutral-dark-3); box-shadow: 0 0 0 1px var(--ds-color-neutral-alpha-dark-3); }
-  .cover { position: relative; }
-  .cover img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 64%; display: block; }
+  .stage { display: grid; grid-template-columns: 400px 1fr; column-gap: 64px; padding: 32px var(--edge) 0; }
+  .cover { width: 400px; height: 400px; border-radius: var(--ds-radius-8); overflow: hidden; position: relative; }
+  .cover svg { width: 100%; height: 100%; display: block; }
 
   .side { display: flex; flex-direction: column; }
   .kicker { font-size: var(--ds-font-size-13); line-height: 20px; color: var(--ds-color-text-secondary); font-weight: 500; }
@@ -65,21 +64,21 @@
   .qh b { font-weight: 600; }
   .qh span, .sub { font-size: var(--ds-font-size-13); color: var(--ds-color-text-secondary); }
   .sub { display: flex; justify-content: space-between; align-items: flex-end; height: 36px; padding-bottom: var(--ds-space-6); border-bottom: 1px solid var(--ds-color-neutral-alpha-dark-3); }
-  .row { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; height: 44px; border-bottom: 1px solid var(--ds-color-neutral-alpha-dark-3); }
+  .row { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; height: 40px; border-bottom: 1px solid var(--ds-color-neutral-alpha-dark-3); color: var(--ds-color-text-secondary); font-size: var(--ds-font-size-13); }
   .row:last-child { border-bottom: 0; }
   .row .n { font-size: var(--ds-font-size-13); color: var(--ds-color-text-tertiary); }
   .row .d { font-size: var(--ds-font-size-13); color: var(--ds-color-text-secondary); }
 
   /* The scrubber is the whole side of the tape: you hear a cassette a side at a time. */
   .tape { padding: 48px var(--edge) 0; }
-  .labels { position: relative; height: 20px; font-size: var(--ds-font-size-13); color: var(--ds-color-text-secondary); }
+  .labels { position: relative; height: 32px; font-size: var(--ds-font-size-25); line-height: 32px; font-weight: 500; letter-spacing: -0.01em; color: var(--ds-color-text-secondary); }
   .labels span { position: absolute; top: 0; white-space: nowrap; }
   .labels span b { font-weight: 500; color: var(--ds-color-text-tertiary); margin-right: var(--ds-space-6); }
-  .labels span.cur { color: var(--ds-color-text-primary); font-weight: 600; }
-  .wave { position: relative; height: 112px; margin-top: var(--ds-space-8); }
+  .labels span.cur { color: var(--ds-color-text-primary); font-weight: 700; }
+  .wave { position: relative; height: 176px; margin-top: var(--ds-space-16); }
   .wave canvas { width: 100%; height: 100%; display: block; }
   .head { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; border-radius: 1px; background: var(--ds-color-text-primary); }
-  .times { display: flex; justify-content: space-between; margin-top: var(--ds-space-8); font-size: var(--ds-font-size-13); color: var(--ds-color-text-secondary); }
+  .times { display: flex; justify-content: space-between; margin-top: var(--ds-space-12); font-size: var(--ds-font-size-16); color: var(--ds-color-text-secondary); }
   .times b { color: var(--ds-color-text-primary); font-weight: 500; }
 </style>
 </head>
@@ -103,16 +102,13 @@
   <span class="vr" aria-hidden="true"></span>
   <span class="room">Listening room</span>
   <div class="right">
-    <button class="iconbtn" type="button" aria-label="Liner notes"><svg class="ic"><use href="#i-notes"/></svg></button>
-    <button class="iconbtn" type="button" aria-label="More"><svg class="ic"><use href="#i-more"/></svg></button>
-    <span class="left">41 of 150 left</span>
     <button class="pill" type="button">Buy the cassette, $12</button>
   </div>
 </header>
 
 <main aria-label="Now playing">
   <div class="stage">
-    <div class="cover"><img src="https://images.unsplash.com/photo-1744566380959-b14d0cb6e88a?w=1200&q=80&auto=format&fit=crop" alt="Cover of Heat Lamp Lullabies: a young seedling lit against the dark"></div>
+    <div class="cover"><svg id="cover" viewBox="0 0 464 464" role="img" aria-label="Cover of Heat Lamp Lullabies: nine seedlings in a row of a seed tray under an orange heat lamp"></svg></div>
 
     <section class="side">
       <div class="kicker">Side A · track 3 of 9 · 1:47 of 3:53</div>
@@ -127,11 +123,9 @@
         <div class="vol">
           <svg class="ic"><use href="#i-vol"/></svg>
           <div class="track" role="slider" aria-label="Volume" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100"><i></i></div>
-          <svg class="ic"><use href="#i-speaker"/></svg>Studio speakers
         </div>
       </div>
 
-      <p class="liner">Recorded over one cold March in a greenhouse, with the heat lamps left on for the seedlings. You can hear them hum under side B.</p>
 
       <div class="queue">
         <div class="qh"><b>Then side B</b><span>14:18</span></div>
@@ -151,6 +145,56 @@
 </main>
 
 <script>
+  // The cover, drawn: the label's own art. One heat lamp over one row of the seed tray, seen from the side. There are nine
+  // cells, one per track, and each seedling's height is its track's length (2:58 to 5:02); a thicker wall parts side A from
+  // side B. Two inks, green and the lamp's pale light; the seedlings turn dark green where they stand in front of the lamp.
+  // Orange is kept for the player (what has played), so the cover does not use it.
+  (() => {
+    const svg = document.getElementById("cover"), NS = "http://www.w3.org/2000/svg", S = 464;
+    const mk = (tag, a, parent = svg, text) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); if (text) e.textContent = text; parent.appendChild(e); return e; };
+    let sd = 1931; const rn = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+    const LEN = [221, 260, 233, 178, 302, 247, 216, 199, 196];
+    const GROUND = 372, X0 = 36, X1 = 428, SIDE_GAP = 10;
+    const pitch = (X1 - X0 - SIDE_GAP) / 9;
+    const lamp = { x: 236, y: 196, r: 118 };
+    const C = { field: "#0e1a12", tray: "#0a120c", wall: "#1c2b20", leaf: "#5b8f4e", dark: "#123a1f", light: "#e9edd8", paper: "#e9edd8" };
+    mk("rect", { width: S, height: S, fill: C.field });
+    mk("circle", { cx: lamp.x, cy: lamp.y, r: lamp.r, fill: C.light });
+    // the tray row: soil line, nine cells, the side wall
+    mk("rect", { x: X0 - 8, y: GROUND, width: X1 - X0 + 16, height: 52, rx: 4, fill: C.tray });
+    for (let i = 0; i <= 9; i++) {
+      const x = X0 + i * pitch + (i > 5 ? SIDE_GAP : i === 5 ? SIDE_GAP / 2 : 0);
+      mk("rect", { x: (x - (i === 5 ? 3 : 1)).toFixed(1), y: GROUND, width: i === 5 ? 6 : 2, height: 52, fill: C.wall });
+    }
+    mk("rect", { x: X0 - 8, y: GROUND - 2, width: X1 - X0 + 16, height: 3, rx: 1.5, fill: C.wall });
+    // a seed leaf: narrow at the stem, round at its outer end
+    const leafD = (L, W) => `M0 0C${L * 0.25} ${-W * 0.5} ${L * 0.55} ${-W} ${L * 0.82} ${-W * 0.8}C${L * 1.06} ${-W * 0.58} ${L * 1.06} ${W * 0.58} ${L * 0.82} ${W * 0.8}C${L * 0.55} ${W} ${L * 0.25} ${W * 0.5} 0 0Z`;
+    const plants = LEN.map((len, i) => {
+      const cx = X0 + (i + 0.5) * pitch + (i >= 5 ? SIDE_GAP : 0);
+      const h = 92 + (len - 178) / (302 - 178) * 128, lean = (rn() - 0.5) * 18;
+      return { cx, h, lean, tilt: (rn() - 0.5) * 14, a1: 28 + rn() * 16, a2: 30 + rn() * 16, s: 0.92 + rn() * 0.2, tall: len > 240 };
+    });
+    function draw(color, parent) {
+      const g = mk("g", { fill: color, stroke: color }, parent);
+      plants.forEach((p) => {
+        const tx = p.cx + p.lean, ty = GROUND - p.h;
+        mk("path", { d: `M${p.cx} ${GROUND}Q${p.cx - p.lean * 0.4} ${GROUND - p.h * 0.55} ${tx} ${ty}`, fill: "none", "stroke-width": 3.2, "stroke-linecap": "round" }, g);
+        const top = mk("g", { transform: `translate(${tx.toFixed(1)} ${ty.toFixed(1)}) rotate(${p.tilt.toFixed(1)}) scale(${p.s.toFixed(2)})`, stroke: "none" }, g);
+        mk("path", { d: leafD(24, 10), transform: `rotate(${(-p.a1).toFixed(1)})` }, top);
+        mk("path", { d: leafD(22, 9.5), transform: `rotate(${(180 + p.a2).toFixed(1)})` }, top);
+        if (p.tall) { mk("path", { d: leafD(11, 5), transform: "rotate(-70)" }, top); mk("path", { d: leafD(10, 4.6), transform: "rotate(-112)" }, top); }
+      });
+    }
+    draw(C.leaf, svg);
+    const defs = mk("defs", {}); const cp = mk("clipPath", { id: "lamp" }, defs); mk("circle", { cx: lamp.x, cy: lamp.y, r: lamp.r }, cp);
+    draw(C.dark, mk("g", { "clip-path": "url(#lamp)" }));
+    // the sleeve lettering, set like a J-card
+    const t = { "font-family": "Manrope, sans-serif", fill: C.paper };
+    mk("text", { ...t, x: 32, y: 44, "font-size": 16, "font-weight": 700, "letter-spacing": "-0.01em" }, svg, "Juniper Static");
+    mk("text", { ...t, x: 32, y: 66, "font-size": 16, "font-weight": 400, opacity: 0.78 }, svg, "Heat Lamp Lullabies");
+    mk("text", { ...t, x: 432, y: 44, "font-size": 13, "font-weight": 600, "text-anchor": "end", opacity: 0.6 }, svg, "CT 014");
+  })();
+
   // Side A of the tape, track by track (seconds). The bars are drawn loudness, not decoded audio.
   const TRACKS = [["Low Bulb", 221], ["Neon Tidepool", 260], ["Sodium Summer", 233], ["Brooder", 178], ["Afterglow, Slowly", 302]];
   const LEN = TRACKS.reduce((a, t) => a + t[1], 0), POS = 221 + 260 + 107;   // 1194 s; 9:48
@@ -176,17 +220,24 @@
   const css = getComputedStyle(document.documentElement);
   const ahead = css.getPropertyValue("--ds-color-neutral-alpha-dark-8").trim();
   const accent = css.getPropertyValue("--ds-color-accent-dark-9").trim();
-  // drawn loudness, not decoded audio: each track's own level, a soft start and a fade, smoothed
-  const level = [0.5, 0.64, 0.72, 0.46, 0.58];
+  // drawn loudness, not decoded audio: each track has its own shape (intro, swell, fade), with seeded variation.
+  // Colour: what has played is orange, the rest of the side is grey.
+  const SHAPE = [
+    [[0, .14], [.22, .42], [.55, .6], [.82, .52], [1, .16]],
+    [[0, .3], [.28, .74], [.42, .32], [.56, .38], [.8, .86], [1, .22]],
+    [[0, .22], [.18, .34], [.27, .8], [.48, .84], [.57, .38], [.72, .92], [.92, .7], [1, .26]],
+    [[0, .26], [.1, .4], [.88, .43], [1, .14]],
+    [[0, .36], [.16, .82], [.32, .7], [1, .07]],
+  ];
+  const env = (k, u) => { const pts = SHAPE[k]; for (let i = 1; i < pts.length; i++) if (u <= pts[i][0]) { const [a, va] = pts[i - 1], [b, vb] = pts[i]; const f = (u - a) / (b - a); return va + (vb - va) * (0.5 - Math.cos(f * Math.PI) / 2); } return pts[pts.length - 1][1]; };
   let walk = 0;
   TRACKS.forEach(([, len], k) => {
     const x0 = xOf(starts[k]), w = len / LEN * usable, bars = Math.floor(w / step);
     for (let j = 0; j < bars; j++) {
       const u = j / bars, t = starts[k] + u * len;
-      const shape = Math.min(1, u / 0.08) * Math.min(1, (1 - u) / 0.14);
-      walk = walk * 0.8 + (rnd() - 0.5) * 0.3;
-      const h = Math.max(3, Math.min(1, level[k] * (0.3 + 0.7 * shape) * (0.9 + walk)) * r.height);
-      g.fillStyle = t <= POS ? accent : ahead;
+      walk = walk * 0.75 + (rnd() - 0.5) * 0.34;
+      const h = Math.max(3, Math.min(1, env(k, u) * (0.88 + walk + (rnd() - 0.5) * 0.16)) * r.height);
+      g.fillStyle = t > POS ? ahead : accent;
       g.beginPath(); g.roundRect(x0 + j * step, (r.height - h) / 2, bw, h, 1.5); g.fill();
     }
   });

@@ -1,5 +1,7 @@
 # 07 · AI composer · Oriel
 
+Gallery: Oriel is a fictional research assistant for historians; typing @harb opens its source picker mid-question.
+
 ## Direction
 Oriel is a fictional research assistant for historians and long-form writers: you bring PDFs, field data and archive links, and it reads them with you and cites every claim. The composer should feel like a reading room, not a chatbot: parchment, brown-black ink, one terracotta accent, an editorial serif (Newsreader) for the answer, the mode names and the small italic notes, and a warm grotesque (Instrument Sans) for the controls and what you type. Soft paper-card corners and pill controls. The page is set like a journal: a double-ruled masthead, small-caps labels, an issue number.
 Feel words: **warm, editorial, refined** (engine: warm → friendly, refined → premium, "editorial" unknown).
@@ -127,3 +129,36 @@ Passes in every round: never clearly weaker, better in all three.
 **Fresh-eyes audit:** round 1, 3 (empty start page, two controls for one job, mixed units); round 2, 3 (composer not the subject, accent used eight times, serif answer); round 3, 3 (a page-count contradiction, sources shown twice, grey tiles everywhere; fixed); round 4, 3 (component about 23% of the frame, popover white on white with two depth effects, accent nearly gone; addressed); final, **3** (the composer and picker still fill about a quarter of the frame, the stock AI-app layout, a prompt that compared the minutes with themselves, now reworded).
 
 **Result: fails the fresh-eyes bar after four rounds, honestly reported.** It wins every blind pairing in seven rounds, but the fresh auditors score it 3 four times running: at 1× the composer and picker fill about a quarter of a 1440 × 900 frame, and the layout (sidebar, thread, rounded composer, round send) reads as the stock AI-app pattern. More polish is not moving it. What would: a crop to a smaller viewport so the composer fills the frame, or a structure of its own (for example the source picker as a side panel with the page being cited).
+
+## Round 5 (owner hid it until better, 2026-10-18)
+**What Kunal did:** he hid the piece "until better": it had won its blind test in round 4, but the fresh reviewer stayed at 3.
+
+**The idea, in one sentence:** a historian cites a source mid-question by typing "@harb" and choosing the harbour board minutes.
+
+**What changed**
+- A tighter viewport: the page is shown in a 960 × 600 window rendered at 3× (`shot.py ... --w 960 --h 600 --scale 3`, so shot.png is still 2880 × 1800). At this width the sidebar folds into a button, and the composer and its picker fill most of the frame at their real size (PRESENTATION rule 4: render a smaller viewport rather than shrink).
+- A structure of its own: the source picker has two panes. The matches for "harb" on the left (three sources, with pages and whether Oriel has read them); on the right, the chosen source as the record office lists it: "Minutes of the harbour board, 1931 to 1938", its catalogue entries that mention dredging (12 Mar 1931, p. 14; 3 Oct 1934, p. 96, the minute Keller cites; 9 May 1936, p. 141), and "Not read yet: about 2 minutes to read all 212 pages."
+- Context reduced to one dimmed line of the last answer (secondary grey, 4.6:1); the question bubble, the sources line and the sidebar are gone; Share is an outline button.
+- Ink blue still means a source: the typed @harb, the chosen row and the 1934 entry. A pages-by-year bar chart was tried in round 1 and replaced (auditors read it as decoration, then as loading placeholders).
+- Fixes: the citation in the tail is numbered 1 (it read 2 before 1); its chip text is secondary grey (the dimmed grey was 3.9:1); the caret blinks only after 3 s, so renders always show it.
+
+**Type scale:** 12 (labels, meta), 14 (body), 17 (prompt). One face, Onest.
+
+**References (Mobbin, cited by link only; used for the blind test):**
+- Dropbox Dash, https://mobbin.com/screens/536f1280-e59b-43c4-8dd0-3f0e91e15695 : a menu tied to the composer that does not hide the prompt.
+- Gumloop model picker, https://mobbin.com/screens/a3f8b130-cfc5-4ddc-8fd9-b95a4a6927bf : a picker with a detail pane beside the list; taught the two panes.
+- Microsoft Copilot composer, https://mobbin.com/screens/2ff3d94d-adb2-4937-818d-de633b9757c3 : attachments as cards above the prompt; what the stock composer looks like.
+
+**Blind pairwise test** (ours minus shipped, 1 to 5; neutral file names, random sides, no labels; one fresh judge saw all the round's pairs):
+
+| Round | Version | Dropbox | Gumloop | Microsoft |
+|---|---|---|---|---|
+| 1 | 960 × 600 at 3×, two-pane picker with pages by year | +2 | +2 | +1 |
+| 2 | dimmed tail, tinted bars | +2 | +3 | +1 |
+| 3 | catalogue entries instead of the chart | +2 | +2 | +1 |
+
+**Fresh-eyes audit:** round 1, **4** (the blue bar outshouts the idea, the context not dimmed, everything labelled; addressed); round 2, 3.5 (the 3× render reads larger than its siblings, bars like loading placeholders, a stock composer; the chart replaced); round 3, **4** (passes, narrowly: a dead band under the one-line tail, three depth cues, why 1934 is blue is not said).
+
+**Result: 4 from the final fresh auditor; passes both tests.** Two of three auditors scored 4; the one at 3.5 objected mainly to the 3× render (one presentation per category, rule 8), which the owner asked for. It wins every blind pairing in all three rounds. Not changed after the last audit: the gap under the tail and the stock composer chrome.
+
+**Checks (final render):** check_dates `--year 2026` passes; check_names 0 errors (the NEW words it lists are dictionary words, key names or the typed query); preflight 0 errors, 0 warnings; engine validate no errors (light-mode warnings as before); computed contrast of every HTML text run 4.6:1 or more.

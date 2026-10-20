@@ -1,6 +1,6 @@
 # 10 · Settings panel · rackhound
 
-Gallery: Ackwire is a fictional on-call paging tool; its notification settings are open over the incidents page.
+Gallery: Ackwire is a fictional on-call paging tool; an engineer drags the end of his quiet hours from 07:00 to 08:30.
 
 ## Direction
 rackhound is a fictional self-hosted console for people who run a small server rack at home. Its settings panel lives in the browser but feels like a 1980s amber-phosphor terminal: mono everything, box-drawing frames, block-character switches and sliders, a tmux-style status line top and bottom, a pixel display face for titles and readouts, scanlines and a soft phosphor glow. It must still be a real, accessible settings UI: switches, segmented controls, sliders, an input, apply and revert.
@@ -132,3 +132,34 @@ It passed every round by the rule (never weaker by 3, equal or better at least t
 **Fresh-eyes audit:** round 1, 3 (icon tile on every row, 12 px descriptions, the menu hiding two controls); round 2, 3 (flat hierarchy, an on-call bar with no information, dark switch knobs); round 3, 3 (three heading levels, four depth effects on the dialog, the strip repeating its row; addressed); round 4, 3 ("the closest to a 4": stock dark dialog, dialog about 52% of the frame, title outweighed by the section headings; addressed); final, **3.5**, still the closest to the bar.
 
 **Result: fails the fresh-eyes bar after four rounds, honestly reported.** It wins or ties every blind pairing except two narrow losses to Perplexity (by 1 and 2, both before round 4), and the final auditor scores it 3.5: a resting state with nothing being changed, the dimmed page shows no useful context (the acknowledged #2214 sits behind the dialog), and green does two jobs. Next steps: show one setting mid-change (the quiet-hours end time being dragged on the strip), and place the dialog so the acknowledged incident stays visible.
+
+## Round 5 (owner hid it until better, 2026-10-18)
+**What Kunal did:** he hid the piece "until better": it had won its blind test in round 4, but the fresh reviewer stayed at 3.
+
+**The idea, in one sentence:** an on-call engineer is dragging the end of his quiet hours from 07:00 to 08:30, and sees what that changes.
+
+**What changed**
+- The settings page itself, not a dialog over a dimmed incidents page: a settings sidebar (back to Incidents, your account, Fernbank Grocery) and the Notifications pane, so there is no context that adds nothing.
+- Mid-change: quiet hours come first. The strip (Thu 07:00 to Fri 12:00, now 13:52) shows the end handle held at Fri 08:30 with its tooltip, the old end as a dashed line at 07:00, the heading "Weeknights 22:00 to 08:30, was 07:00", and what it changes: "90 more quiet minutes each weekday morning: low-urgency pages from 07:00 wait until 08:30. Last week, 4 did."
+- Green has one job: the 90 minutes being added. Switches are monochrome (white when on); the quiet block, the handle and the logo are neutral (the logo's green dot is gone).
+- Small fixes: the email summary moved to 09:00 (08:00 would fall in the new quiet hours); the on-call line is one sentence; Bea Ashby is never split across lines.
+
+**Type scale:** 12 (ticks, group labels), 14 (body; section headings semibold), 20 (title). One face, Mona Sans. A 16 px heading was tried, but the system has no 16 px token, so the CSS now says the 14 px that renders.
+
+**References (Mobbin, cited by link only; used for the blind test):**
+- Devin settings, https://mobbin.com/screens/93170d84-7435-4c89-82b5-647330913aba : a dark settings page with a back-to-app sidebar; taught the page shell.
+- Buffer notification settings, https://mobbin.com/screens/212b19ca-47d0-4574-aa67-6de419f6eb94 : grouped settings nav and rows with switches; what a long run of toggles looks like.
+- hilos preferences, https://mobbin.com/screens/2d37f928-46b4-47e7-98e2-434cb772354c : a settings dialog over the app; what the dimmed context costs.
+
+**Blind pairwise test** (ours minus shipped, 1 to 5; neutral file names, random sides, no labels; one fresh judge saw all the round's pairs):
+
+| Round | Version | Devin | Buffer | hilos |
+|---|---|---|---|---|
+| 1 | settings page, quiet hours being dragged, neutral hatch, green switches | +1 | +1 | +1 |
+| 2 | green only for the added 90 minutes, white switches, flat quiet block | +1 | +1 | +1 |
+
+**Fresh-eyes audit:** round 1, 3.5 (green on the switches instead of the change, the change not drawn, low tonal contrast; addressed); round 2, **4** (the eye lands on the "Fri 08:30" tooltip and handle; remaining: the empty daytime part of the strip, the added 90 minutes could be louder, three white switches). Stopped after round 2.
+
+**Result: 4 from the round 2 fresh auditor, and it passes the blind test (+1, +1, +1); stopped at round 2.** All dates check: Thu Oct 15, Fri Oct 16, Mon Oct 19, 2026, and the strip positions match their times.
+
+**Checks (final render):** check_dates `--year 2026` passes; check_names 0 errors (the NEW words it lists are dictionary words, key names or the typed query); preflight 0 errors, 0 warnings; engine validate no errors (light-mode warnings as before); computed contrast of every HTML text run 4.6:1 or more.

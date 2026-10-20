@@ -60,9 +60,9 @@
   ],
   "audited": "2026-10-14",
   "owner": {
-    "verdict": "hold",
-    "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
-    "date": "2026-10-18"
+    "verdict": "returned",
+    "said": "Back in the gallery: it passed round 5 at 4, the owner's condition for hidden pieces (2026-10-18: hide until better)",
+    "date": "2026-10-20"
   },
   "round4": {
     "score": 3,
@@ -77,14 +77,29 @@
     "date": "2026-10-18"
   },
   "facts": [
-    "all four of the final audit's Sasame fixes (muted headings, no underlines, 49 px statement, address) were applied after it scored 3 and were checked by eye, not re-judged; the score stays 3 until it is",
-    "Pairwise judging was not blind: the judge knew which side came from Mobbin"
+    "The blind pairwise test ran on the 18 Oct render; the note was shortened and the second sentence removed after it, and only the fresh-eyes audit saw the final render"
   ],
   "owner_history": [
     {
       "verdict": "improve",
       "said": "needs work",
       "date": "2026-10-14"
+    },
+    {
+      "verdict": "hold",
+      "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
+      "date": "2026-10-18"
     }
-  ]
+  ],
+  "round5": {
+    "score": 4,
+    "pairwise": "lost 1 vs MOUTHWASH Studio, won 3 vs Monte, won 2 vs In Common With (blind, 18 Oct; tested before the last audit polish)",
+    "changed": [
+      "Ground changed from pale celadon to sumi ink (neutral-dark-2) with the paper-white section above, for strong tonal contrast",
+      "One signature element: 'Hojicha is roasting in the back room.' in Shippori Mincho at 76 px; the second sentence and the about paragraph removed",
+      "Name and 茶房ささめ (both in the Mincho) lead the column row; Visit, Hours, Seats and More in one text size, information muted, links in ink, headings 13 px",
+      "One rule above the columns, one legal line; the sliver above lists the five sittings"
+    ],
+    "date": "2026-10-20"
+  }
 }

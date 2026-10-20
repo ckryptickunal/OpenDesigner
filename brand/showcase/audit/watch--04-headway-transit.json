@@ -56,5 +56,16 @@
   "verdict": "keep",
   "said": "most of the watch screens are okay",
   "date": "2026-10-14"
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "lost 2 vs Transit (nearby list), won 4 vs Citymapper, won 2 vs Transit (route) (blind, 18 Oct; tested before the audit fixes)",
+  "changed": [
+   "Face changed through the engine from Big Shoulders Display to Overpass (an open highway-sign face)",
+   "Yellow route squares, stop line, rule, rotated 'MIN' and the departure rows removed: one countdown, one route line, one 'Then 9 and 14 min' line",
+   "Yellow only on the countdown; the stop name in grey",
+   "Destination Northgate renamed Saltgrove (check_names.py: two letters from Northcote and Northvale); 'Harbour', shared with components/07, no longer shown"
+  ],
+  "date": "2026-10-20"
  }
 }

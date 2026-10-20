@@ -1,5 +1,7 @@
 # 07 · Parlo: Italian lesson (phone, 390×844 @3x)
 
+Gallery: Parlo is a fictional Italian course; after the learner says a sentence, the stress in caffè is set in type, each syllable as large as it was loud.
+
 ## Direction
 Parlo is a fictional language app that teaches Italian in five-minute lessons. The screen is a "translate this sentence" exercise just after a correct answer: tiles placed, the result sheet up, and the mascot Moka (an enamel coffee pot drawn in SVG) saying the sentence. It should feel like a toy: thick ink outlines, hard bottom edges that read as pressable, and bright primaries (cobalt, sunflower, tomato) on white. Feel words: **playful, bold, cheerful**.
 
@@ -96,3 +98,26 @@ None were needed. It already used two faces, a fill-box highlight and 4 sizes. I
 **Fresh-eyes audit (B), against the B2B screens:** 2, 3, 2.5, 2, 3 and 3 over six rounds: **does not pass**. The Italian, the stress, /kafˈfɛ/ and the counts were confirmed correct each time; the remaining verdict is weak craft around the idea (seven blocks at a similar volume, playback that looks like prototype links). Its chart was rebuilt three times (bars in cards, stress marks, smooth curves, then recording-like envelopes), and the asks reversed between rounds (smooth curves were called a maths diagram; the envelopes were then called randomly wiggly).
 
 **After the last audit:** no change to Parlo; `shot.png` (22:27) is the audited page.
+
+## Round 5 (owner hid it until better, 2026-10-18)
+**What he said:** hide it until it passes at 4; it won the blind test, but the fresh reviewer stayed at 3: seven blocks at a similar volume, and playback that looked like prototype links.
+
+**The idea in one sentence:** the stress in caffè, set in type: the learner's caf is large and red, the native speaker's fè is large and black.
+
+**What changed:**
+- **One subject.** Under "Stress the last syllable", two rows, You and Native speaker, each a 44 pt round play button and the word's two syllables on one drawn baseline, each syllable as large as it was loud (Spectral 81 for the stressed one, 34 for the other).
+- **Demoted:** the sentence (Spectral 22, caffè underlined in vermilion) and "7 of 8 words clear · 1 to practise" sit above as context; the English prompt, the caffè heading with its IPA, the Slow control and the loudness envelopes are gone. One line explains: "caffè is /kafˈfɛ/. You leaned on caf, as in English "coffee"."
+- **One accent, one job:** vermilion only under caffè and on the learner's caf.
+- **Tried and dropped:** syllables in fixed columns (judges read the gap as two words), middle dots between syllables, a tight pair with no baseline (judges read the size jump as a rendering bug).
+
+**Type:** Spectral 81, 34, 22 (Italian) · IBM Plex Sans 22 (heading), 17, 15, 13. Six sizes.
+
+**References (Mobbin, structure only; also the blind-test references):** Speak https://mobbin.com/screens/8a1471fc-b4f0-4bd5-9bef-83969238d426 (one phrase, one replay control), Duolingo https://mobbin.com/screens/33d32d0d-5778-45c9-bc6d-8496bab70db8 (repeat-after feedback that names one takeaway and continues), Quizlet https://mobbin.com/screens/609a3ede-102a-42c0-bf90-c216edda5713 ("you said" against the answer; also what to avoid: an emoji banner over ghosted text).
+
+**Engine:** no token changes (81 and 34 were already in the scale). `validate` passes (1 warning: 15 text sizes). `preflight.py html`: 0 errors, 0 warnings (13, 15, 17, 22, 34, 81). Vermilion on white 4.98:1 (large text).
+
+**A. Blind pairwise:** Speak +3, +3, +3; Quizlet +3, +3, +4; Duolingo −1, −1, +1. Never lost by more than 1, and better than two of three every round. **Passes.**
+
+**B. Fresh-eyes audit:** **4, 4, 4. Passes.** Round 1: four layers of text for one point (the IPA line went into the explanation), space in the wrong place, the f's hook touching the grave accent (letter-spacing on the native fè). Round 2: the fixed columns split the word (set tight on one baseline). Round 3 items not applied (it passed and was not changed after): columns again so the rows compare straight down (the opposite of round 2's ask), demote the sentence or the heading, tighten the labels.
+
+**Checks:** `check_dates.py --year 2026` passes. `check_names.py`: 0 errors ("English" and "Vorrei" are words). Gallery copy at 192 px: the eye lands on the red caf, then the black fè.

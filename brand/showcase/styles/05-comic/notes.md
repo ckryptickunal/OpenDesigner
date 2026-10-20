@@ -1,5 +1,7 @@
 # 05 Nightjar: an incident postmortem told as a comic
 
+Gallery: Nightjar is a fictional incident platform; its engineering blog tells a postmortem in three comic panels drawn from the data.
+
 **Direction.** Nightjar is a fictional on-call and incident-management platform. Its engineering blog publishes blameless postmortems; this one, INC-4471, is drawn as a seven-panel noir comic. The incident is a believable one: a gateway release (v4.18) renamed a config key, the 30-second ledger timeout was silently ignored, the HTTP client fell back to a 3-second default, the nightly settlement batch pushed ledger latency past 3 s, and two retry layers (app ×4, gateway ×4) turned one checkout call into 16. The rollback fixed nothing because 1.9 M queued retries kept hammering the ledger; opening the retry worker's breaker and draining the queue did. Audience: engineers and engineering managers who buy incident tooling. Feel words: **playful, bold, geeky**.
 
 Render: 1440 wide, full height (1701 px), scale 2 (`shot.png`).
@@ -106,3 +108,43 @@ After the independent audit (score 4, two fact errors). A fresh-context reviewer
 **References used by the re-audit (Mobbin, by URL):** Mailchimp Engineering (https://mobbin.com/sites/sections/b7000804-e14d-4dcf-958c-1c4320eaf4e7), Dollar Shave Club (https://mobbin.com/sites/sections/ae5d023c-3b8e-4d49-8a0b-204608c24649), Ragged Edge (https://mobbin.com/sites/sections/951aaab5-9615-49f5-85b1-f753090e9c83).
 
 **Left:** one 3 px vector line everywhere and simple props (the glass, mug and breaker). That is the gap to a 5.
+
+## Round 4 (owner review, 2026-10-18)
+**This section describes the page now.** Rebuilt after the round-4 audit scored it 5 of 10 (rebuild). Render: `shot.png`, 1440 x 900 at scale 2.
+
+**One idea:** A postmortem's lead illustration is a three-panel strip: the page at 02:13, the rollback that fixed nothing, the breaker that did.
+
+**Why:** The round-4 audit: three typefaces and dense halftone panels looked busy and amateur; every panel carried three or four text elements; at 3,402 px tall the gallery tile cropped it; it lost by 3 to Equals.
+
+### What changed
+- **One screen, 1440 x 900:** an engineering-blog article header (kicker, title, standfirst, byline, a four-row facts list) and one strip of three equal panels under it, the way Mailchimp, Linear and Dovetail put one lead illustration under a post title. The 3,402 px seven-panel page is gone.
+- **Two faces:** Inter for the page (the engine's text face), Shantell Sans only for the lettering inside the strip (the engine's display face). JetBrains Mono is gone; both set through the engine.
+- **Each panel holds one caption and one drawing, drawn from the data:** 02:13, the paged phone in ink outline with its SEV-2 notification (5xx at 38%); 02:24, the error rate with the rollback marked, falling only to 29%; 02:36, the retry queue from 02:13, 2.0 M at the breaker, empty at 02:44. Halftone only fills the area under a measured line, at a coarse 10 px pitch. Red only where something is broken.
+- **Removed:** the speech balloons, SFX (BZZZT, TAK!, KA-CHUNK), the keyboard, glass, mug, headphones figure and breaker drawing, the terminal, the retry counter, the action-items row and the footer.
+- After the fresh audits: five sizes and three weights; all panels white; no balloon and no tag; the phone as an outline, not the heaviest mass; the queue axis from 02:13 so the build-up is drawn; '2.0 M retries queued, from every ledger caller' (the queue is all callers, not only checkout, so it is not 16 x 33,712). **After the third audit (unscored):** the caption boxes lost their borders, the panels became equal widths and the lettering went from 700 to 600, after a blind judge called the unequal boxed panels home-made.
+
+### Type scale
+Page in Inter, lettering in Shantell Sans. 12 meta, axis labels; 16 body, chart notes; 21 standfirst, captions; 28 the big readings (38%, 29%, 5xx at 38%); 51 the title and the phone's clock. Weights: Inter 400 and 600, lettering 600.
+
+### Blind pairwise test
+Three shipped references (Mobbin, cited by link only; images were kept in scratch and deleted). Each pair at the same height, sides random, no labels; fresh judges saw several pairs at once (four sets: 15, 9, 6 and 6 pairs, a new judge each time) and were told to weigh craft, not content. The table gives the result for the final render.
+
+| Reference | Result |
+|---|---|
+| Mailchimp Engineering, https://mobbin.com/sites/sections/b7000804-e14d-4dcf-958c-1c4320eaf4e7 | ours better by 2 |
+| Linear blog, https://mobbin.com/sites/sections/5e1fc30a-f780-41cd-b546-f16b263ebf3b | ours worse by 1 (near tie) |
+| Dovetail blog, https://mobbin.com/sites/sections/dc74d364-db70-40a1-ac64-1fb5e73133df | ours better by 2 |
+
+**Pass rule:** never lose by 3 or more, and equal or better in at least 2 of 3. Passes. The judges' flaw for ours each time: the hand-lettered comic font reads as a novelty next to the article's type.
+
+### Fresh-eyes audit
+Round 1 was a fresh-context auditor given PRESENTATION.md, ROUND3-BRIEF.md, the owner's note, the B2B product screens (product/01, 02, 04, 06), Orbika, Holdfast and Lampwright as the bar, and the three references below. Rounds 2 and 3 went to the same auditor, so they check its own fixes rather than being fresh eyes. Scores: 3, 3, 4. Its round-3 note (remove the caption-box borders) was then done.
+
+### Checks
+- `check_dates.py --year 2026` passes (Tuesday 6 October 2026).
+- `check_names.py`: 0 errors; new words (Blog, On-call, Postmortem, Postmortems, Runbooks) are UI words.
+- `engine.py validate`: no errors, 0 warnings. Preflight: no type or font errors.
+- Re-added from the page: 4,180 / 33,712 = 12.4%; 02:06 to 02:47 = 41 min; 2.0 M at 4,000 a second = 500 s, so 02:36 + 8 min 20 s = 02:44; each chart's time scale is even.
+
+### Left
+The comic lettering still reads as a novelty to blind judges; it is the style, and it is confined to the strip.

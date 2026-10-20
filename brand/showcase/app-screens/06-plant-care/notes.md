@@ -1,5 +1,7 @@
 # 06 · Loam: plant care diary (phone, 390×844 @3x)
 
+Gallery: Loam is a fictional plant-care diary with a soil sensor; one bar a morning shows Gus drying out nine days after each drink and thirsty until the next.
+
 ## Direction
 Loam is a fictional plant care diary for people with a dozen houseplants and no green thumb. The "Today" screen answers one question: who needs water this morning? It has a week of watering, one hero plant with soil moisture and a big log button, and the rest of the day's tasks. The mood is a potting-shed notebook: paper, moss, clay pots and line drawings. Feel words: **gentle, cozy, natural** (the engine knew gentle and cozy; it did not know "natural" and left it out).
 
@@ -121,3 +123,30 @@ Three CC0 line drawings from CocoMaterial, found and recolored with **opendesign
 **Fresh-eyes audit (B), against the B2B screens:** 3 in all six rounds: **does not pass**. The data, dates and chart were confirmed true each time; the remaining verdict is that the layout (photo, title, number, chart, rows, button) is the standard detail-page template and that only the chart belongs to Loam.
 
 **After the last audit** (renders of 18 Oct, 22:22), two small changes went into the final `shot.png` (22:27): the in-chart "Water below 20%" note was removed (the final audit found it touching the 22 Sep low point), and the status line "Below 20% since Tue 22:30" is set in ink 600 instead of moss (the audit said moss read as healthy). They were not re-audited.
+
+## Round 5 (owner hid it until better, 2026-10-18)
+**What he said:** hide it until it passes at 4; it won the blind test, but the fresh reviewer stayed at 3: the layout read as the standard detail-page template and only the moisture chart belonged to Loam.
+
+**The idea in one sentence:** Gus's soil diary shows, one bar a morning, that he dries out about nine days after a drink and then waits thirsty until the next.
+
+**What changed:**
+- **The diary is the screen.** One bar per 08:10 reading from Tue 8 Sep to Thu 15 Oct (38 mornings), 300 pt tall, full width. Moss: the morning after each 250 ml drink. Pale grey: drying days (the shape). Ink: thirsty mornings below 20%. One label for the drinks ("Watered 4 Oct") and one bracket under the axis for the last full cycle's "3 dry mornings".
+- **What Loam learned, in one line:** "Gus dries out about 9 days after a drink. You've watered every 12."
+- **The header shrank:** the full-bleed photo became a 64 pt round photo beside "Gus" and "Rubber fig · Living room, east window"; the two fact rows and the in-chart notes are gone. 18% and "Thirsty since Tue 22:30" stay; "Log 250 ml" is the one action.
+- **Tried and dropped this round:** a forecast of the next cycle in outline bars (judges called the chart busy) and "250 ml" over every drink.
+
+**Model, re-checked from the page:** drinks at 19:00 on Sat 29 Aug, Thu 10 Sep, Tue 22 Sep and Sun 4 Oct (12 days apart) lift the soil to 55, 58, 54 and 57%; it then dries 14 to 15.5% a day of what is above a 9% floor. Each cycle crosses 20% after 8.8, 8.9, 9.3 and 9.1 days ("about 9 days"); this one crossed on Tue 13 Oct at 22:26 ("since Tue 22:30"); today's 08:10 reading is 17.8%, shown as 18%. Thirsty mornings: 8–10 Sep, 20–22 Sep, 2–4 Oct (3 each) and 14–15 Oct.
+
+**Type (iOS roles):** Display 64 (the reading) · Large Title 34 (its % sign) · Title 1 28 ("Gus") · Body 17 · Subheadline 15 · Footnote 13 · Caption 2 11 (chart labels). Onest only.
+
+**References (Mobbin, structure only; also the blind-test references):** Greg plant water level https://mobbin.com/screens/665b807e-283c-4bcb-9bfe-705d3e23ea0d (a plant app's own moisture timeline; also what to avoid: four unrelated accents), MyDyson air quality https://mobbin.com/screens/5f7af23e-ccf3-4567-bf7e-f4562f1feaf4 (a sensor history, then a status and one action), The Outsiders heart rate https://mobbin.com/screens/759363a4-d740-46ac-b90e-84020a56990f (one figure, one plain-language finding, then the chart).
+
+**Where I left the tokens, on purpose:** the chart geometry, and the pale drying bars (neutral 6, 1.5:1 on white): they draw the shape only; the states that carry meaning are ink (15.5:1) and moss (6.2:1), and every value that matters is also in words.
+
+**Engine:** no token changes this round. `validate` passes (1 warning: 16 text sizes). `preflight.py html`: 0 errors, 1 warning (11 px chart labels, iOS Caption 2).
+
+**A. Blind pairwise:** ours won every pair in all three rounds: MyDyson +3, +3, +2; Greg +1, +1, +1; The Outsiders +1, +2, +2. **Passes.** The judges' steady complaint was a busy multi-tone chart, which is why the forecast bars went and the drying days turned pale.
+
+**B. Fresh-eyes audit:** **4, 3.5, 4.** Round 1: empty height above the button, axis labels on two sides. Round 2: the healthy days carried the most ink; "250 ml" four times; the finding lived only in text. Round 3 (4): "resolved: the diary chart is now the screen". Not applied (it passed and was not changed after): weekly date ticks, "Thirsty since" in regular weight, a quiet "Remind me every 9 days" action.
+
+**Checks:** `check_dates.py --year 2026`: the page passes; the one flag is the old quoted date in this file's round 3 notes. `check_names.py`: 0 errors ("Plants" is a tab, "You’ve" a word). Gallery copy at 192 px: the eye lands on the three moss bars, then 18%.

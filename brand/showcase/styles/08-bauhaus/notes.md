@@ -1,6 +1,8 @@
 # 08 weir: a Bauhaus hero for a data-pipeline company
 
-**This page now:** the "Round 3 (polish)" section of 2026-10-15, the last one, describes it. The sections between record earlier versions.
+Gallery: weir is a fictional data-pipeline company; its hero is a Bauhaus diagram, each source shape sized by rows a day.
+
+**This page now:** the "Round 4 (owner review, 2026-10-18)" section, the last one, describes it. The sections between record earlier versions.
 
 **Direction.** weir is a fictional ETL company: it copies data from 312 kinds of source into a customer's warehouse and checks every row against where it came from. The hero is a Bauhaus poster in which the geometry *is* the pipeline diagram: three sources as the three elementary shapes, sized by rows a day; black bars as flows, weighted by rows a second; the weir itself as a vertical black bar with its job set along it; the warehouse as a black square. All type is lowercase, after Herbert Bayer's universal alphabet. Feel words: **bold, technical, clean**.
 
@@ -144,3 +146,43 @@ The piece still carried "Being rebuilt" on the public showcase. The poster held,
 - **Contrast as rendered:** 39 runs. The only flag is the headline: an upright 76 px text box is taller than the 104 px crest bar, so it takes in paper above and below. Measured with canvas text metrics, the glyphs sit inside the bar. Every other run passes; lowest 7.93:1.
 - **Weekdays:** `check_dates.py --year 2026` passes (no weekdays on the page).
 - Preflight: one warning, the 76 px headline outside the scale, on purpose (90 px runs into the weir, 67 px left the crest empty).
+
+## Round 4 (owner review, 2026-10-18)
+**This section describes the page now.** Rebuilt after the round-4 audit scored it 5 of 10 (rebuild). Render: `shot.png`, 1440 x 900 at scale 2.
+
+**One idea:** Three sources, a square, circle and triangle sized by rows a day, flow through the weir into one warehouse, every shape whole inside the frame.
+
+**Why:** The round-4 audit: the shapes carried data but bled off the bottom, so the page looked cropped, not composed; the black data panel was a second design bolted on; the all-lowercase headline and nav felt affected.
+
+### What changed
+- **Composed, not cropped:** the diagram is a 752 x 744 field inside the margins. The three sources stand in one column, 64 px apart (square, circle, triangle; areas 7,921, 70,686 and 27,498 px² for 0.18, 1.6 and 0.62 billion rows a day), each with a black bar to the weir weighted by rows a second; the weir bar ends at the last input.
+- **No bolted-on panel:** the ledger table and the black side panel are gone. The day's count is set beside the weir, where it is taken ('2,482,309 rows in flight, none older than 6 min, 0 missing'), and the warehouse is a slimmer black square at the end of the flow (not to scale; it is the destination).
+- **Sentence case:** headline, nav, labels and the lede ('Copy data from 287 kinds of source…'); the wordmark stays lowercase as a logotype. 'billion' is spelled out.
+- The hero is the rule's minimum: headline, one line, one action, one subject; the copy column is centred against the diagram.
+- After the fresh audits: the stacked column, the table removed, the lede rewritten to two lines, the bar trimmed. **After the third audit:** the warehouse box narrowed to 152 px and the weir note given 24 px of room.
+
+### Type scale
+Jost only. 16 labels and nav, 21 lede and source names, 28 the wordmark and '2.4 billion', 67 the headline.
+
+### Blind pairwise test
+Three shipped references (Mobbin, cited by link only; images were kept in scratch and deleted). Each pair at the same height, sides random, no labels; fresh judges saw several pairs at once (four sets: 15, 9, 6 and 6 pairs, a new judge each time) and were told to weigh craft, not content. The table gives the result for the final render.
+
+| Reference | Result |
+|---|---|
+| Mixpanel, https://mobbin.com/sites/sections/f23d55dd-c491-4722-9530-ce6deeebdca9 | ours better by 2 |
+| Customer.io, https://mobbin.com/sites/sections/6e31f38b-b744-4dbf-9369-7e7e3205c19a | ours worse by 2 |
+| Airtable, https://mobbin.com/sites/sections/56f4e48d-280e-40d2-bbe9-9afd7d3e55ad | ours better by 3 |
+
+**Pass rule:** never lose by 3 or more, and equal or better in at least 2 of 3. Passes. The judges' flaw for ours on the final render: flat primary shapes with plain black bars read as a classroom diagram or a toy.
+
+### Fresh-eyes audit
+Round 1 was a fresh-context auditor given PRESENTATION.md, ROUND3-BRIEF.md, the owner's note, the B2B product screens (product/01, 02, 04, 06), Orbika, Holdfast and Lampwright as the bar, and the three references below. Rounds 2 and 3 went to the same auditor, so they check its own fixes rather than being fresh eyes. Scores: 3, 4, 4.
+
+### Checks
+- `check_dates.py --year 2026` passes (no weekdays on the page).
+- `check_names.py`: 0 errors; 'Databases' is a UI word.
+- `engine.py validate`: no errors, 0 warnings. Preflight: no errors or warnings (the headline wraps at a non-breaking space, not a <br>).
+- Re-added from the page: 2,100 + 18,500 + 7,200 = 27,800 rows/s; x 86,400 s = 2.40 billion a day (0.18 + 1.6 + 0.62 = 2.4); 2,482,309 rows in flight is about 89 s of flow.
+
+### Left
+Blind judges call flat primary shapes with black bars a 'toy' or 'classroom' diagram; the Bauhaus field is the style, so this is the trade-off.

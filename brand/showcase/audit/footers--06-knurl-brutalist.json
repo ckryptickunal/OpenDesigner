@@ -74,9 +74,16 @@
   "changed": [
    "Ticker 'Thu 24.10' corrected to 'Sat 24.10' (24 Oct 2026 is a Saturday), in the ticker and its screen-reader label",
    "Time zone corrected to CEST (Central Europe is on summer time until 25 Oct 2026)",
-   "'41,208 on it' changed to '38,917 on it', so it no longer reuses product/02's figure"
+   "'41,208 on it' changed to '38,917 on it', so it no longer reuses product/02's figure",
+   "Rebuilt as a quiet footer: marquee, countdown, crosshatch panel, rotating stamp, every border box and every offset shadow removed",
+   "One signature element: the house rule 'Made once. No restocks.' in lime Big Shoulders Display at 90 px (it does not date, unlike a drop date)",
+   "Four link columns in Space Mono 16, sentence case; one muted 12 px heading style; non-link lines muted; one rule; one legal line",
+   "One action: an outline email field and Join button, top-aligned with the eyebrow; the 'Instagram' link (a real brand) removed",
+   "A sliver of the section above (Archive) so the shot reads as the end of a page"
   ],
-  "note": "Date and data fixes only; the layout the round-4 audit asked to rebuild was not changed",
-  "date": "2026-10-18"
+  "note": "The rebuild the round-4 audit asked for is done (2026-10-20); the earlier date and data fixes are kept above",
+  "date": "2026-10-20",
+  "score": 4,
+  "pairwise": "won 3 vs Shopify Supply, won 3 vs SOTF, lost 2 vs Graza (tested with the drop date as the statement) (blind, 18 Oct)"
  }
 }

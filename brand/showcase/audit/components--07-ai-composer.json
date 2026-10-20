@@ -60,9 +60,9 @@
   ],
   "audited": "2026-10-14",
   "owner": {
-    "verdict": "hold",
-    "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
-    "date": "2026-10-18"
+    "verdict": "returned",
+    "said": "Back in the gallery: it passed round 5 at 4, the owner's condition for hidden pieces (2026-10-18: hide until better)",
+    "date": "2026-10-20"
   },
   "round3": {
     "score": 4,
@@ -98,6 +98,22 @@
       "verdict": "improve",
       "said": "very good, but colors can be worked on",
       "date": "2026-10-14"
+    },
+    {
+      "verdict": "hold",
+      "said": "Hide until it passes at 4 (won the blind test, the reviewer stayed at 3)",
+      "date": "2026-10-18"
     }
-  ]
+  ],
+  "round5": {
+    "score": 4,
+    "pairwise": "Dash/Gumloop/Copilot (ours minus shipped, fresh judges, sides random): round 1 +2/+2/+1, round 2 +2/+3/+1, round 3 +2/+2/+1. Passes in every round.",
+    "changed": [
+      "Rendered in a 960 x 600 window at 3x (shot.png still 2880 x 1800); the sidebar folds away, so the composer and picker fill the frame at real size",
+      "Two-pane source picker: matches for 'harb' on the left; the chosen source on the right with its record office catalogue entries that mention dredging (12 Mar 1931 p. 14, 3 Oct 1934 p. 96, 9 May 1936 p. 141) and 'Not read yet: about 2 minutes to read all 212 pages'",
+      "Context cut to one dimmed line of the last answer; question bubble, sources line and sidebar removed; Share as an outline button",
+      "Pages-by-year chart tried and replaced; citation renumbered 1; chip contrast raised to 4.6:1 or more; caret blink delayed so renders always show it",
+      "Round 3 auditor: 4 (narrow); remaining: a dead band under the tail, three depth cues, the 1934 entry's blue unexplained"
+    ]
+  }
 }

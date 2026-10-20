@@ -1,4 +1,4 @@
-# 02 Orrery: luminous dev-tool hero
+# 02 Nearmost: vector database hero
 
 Gallery: Nearmost is a fictional open-source vector database.
 
@@ -95,3 +95,33 @@ Fonts: Geist and Geist Mono (SIL OFL), Google Fonts link.
 It recomputed every hybrid score, the 2,000 map points, the 7.9 ms plan and the years, and measured contrast on the pixels (tertiary 5.10:1 on the panel, secondary 7.0:1, tokens 5.59:1).
 
 **Still open.** `brand/showcase/mockups/04-browser-cascade/index.html` line 71 still captions this piece "Orrery", and the stale `opendesigner/build/dtcg/orrery.resolver.json` is still in this folder; both are outside what I may edit or delete.
+
+## Round 4 (owner review, 2026-10-18)
+
+**What he said.** The showcase pieces look "very very very cluttered and very unprofessional, which is not acceptable at all", and "None of them should feel like they are from a vibe coded app". This round followed `AUDIT-ROUND4.md` and `PRESENTATION.md` (hero: a headline, one line, one action or none, one subject).
+
+**One idea.** A query for 'why sleep helps memory' returns ten scored papers from a billion vectors in 7.9 ms.
+
+**What changed.**
+- Title in this file fixed: the '# ' line said Orrery, so the gallery captioned the piece with the old brand.
+- The 148 px '8.7 ms' headline is gone; the headline is now the claim in words, 'Search a billion vectors by meaning.', at the 67 px token, with 8.7 ms at p99 in the one supporting line.
+- Headline on the left, the statement and one button beside it (the pip install line, the facts row and the footnote are gone); the console runs full width below and is cropped by the foot of the frame through its result rows, so the 230 px dead band is gone.
+- Console cut from four panels to two: the results (now 10, with dense and sparse scores shown so the 0.7 + 0.3 score can be checked) and the map. The query plan, the map legend, two of the three filter chips, the hollow 'filtered' rings and the numbers on nine of the ten map dots are gone; half the background points are gone.
+- Teal has one job, the button; the selected row has one signal (a fill).
+- 'GitHub' in the nav (a real brand) is now 'Open source'.
+
+**Type scale (round 4).** Display 67 px (token) · Body 16 px (statement, button, nav, rows) · UI small 14 px (console meta, headers, years, scores; outside the token scale on purpose, as before). Geist, and Geist Mono for scores, times and the filter.
+
+**Blind pairwise test** (our shot beside a shipped hero at the same height, random sides, no labels, fresh judges; reference images kept in scratch and deleted):
+- Antimetal (https://mobbin.com/sites/sections/38557cd6-8934-4d5a-b186-89ac968d8332): won 3
+- Frontify (https://mobbin.com/sites/sections/67380933-75aa-40ed-b13c-617db6250c9c): won 3
+- Mixpanel (https://mobbin.com/sites/sections/76746e2a-bc5e-4f66-a541-e684aa10a3e0): won 3
+
+Judged on the first round-4 render; later changes only removed marks from the map and the teal from the result dots.
+
+**Fresh-eyes audit** (against the B2B product screens and Orbika): 4 (round 1), 4 (round 2, final).
+
+**Checks.** `check_dates.py --year 2026`: passes. `check_names.py`: only the false positives recorded in NAMES.md (2026-10-20 heroes block). `preflight.py html`: no errors.
+
+**Still open.** The stale opendesigner/build/dtcg/orrery.resolver.json and the 'Orrery' caption in mockups/04 are outside this folder's remit.
+

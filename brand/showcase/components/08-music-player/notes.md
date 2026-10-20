@@ -1,5 +1,7 @@
 # 08 · Music player · Calamondin Tapes
 
+Gallery: Calamondin Tapes is a fictional cassette label; its player's scrubber is the whole of side A, track by track.
+
 ## Direction
 Calamondin Tapes is a fictional indie cassette label; this is the embeddable player that sits on its release pages and artists' sites. It should feel like a piece of the record sleeve: the cover art is generated in code and its colours are sampled at runtime to paint the whole card, a record slides out from behind the sleeve while it plays, the track title is set huge in a wide display face, and the waveform is marked with the song's sections ("1:42 the drop"). Dark stage, vivid gradient, round everything.
 Feel words: **vibrant, expressive, bold** (engine: vibrant → rich + bold, bold → bold, "expressive" unknown).
@@ -132,3 +134,35 @@ Passes from round 2 on. Round 1 lost to TIDAL by 2 (flat charcoal, bars in the s
 **Result: fails the fresh-eyes bar after four rounds, honestly reported.** It wins every blind pairing from round 2 on, but four fresh auditors in a row score it 3. The cover is a stock photograph however it is cropped, and it is the largest thing in the frame. What would move it: cover art the label owns (commissioned, painted with `opendesigner-paint`, or the owner's own photo) at a smaller size, and the side-A scrubber given the frame's weight (larger labels, the side B list demoted).
 
 **For the owner:** `mockups/05-components-board` and `mockups/08-made-with-opendesigner` crop this shot.png with offsets set for an older layout; they need new crops.
+
+## Round 5 (owner hid it until better, 2026-10-18)
+**What Kunal did:** he hid the piece "until better": it had won its blind test in round 4, but the fresh reviewer stayed at 3.
+
+**The idea, in one sentence:** a cassette is heard a side at a time, so the scrubber is the whole of side A, track by track.
+
+**What changed**
+- The stock photo is gone. The cover is the label's own art, drawn in code (SVG, seeded so it never changes): one row of a seed tray under a heat lamp, nine cells for nine tracks with a thicker wall between side A and side B, each seedling as tall as its track is long (2:58 to 5:02). Two inks: green, and the lamp's pale light; the seedlings turn dark green in front of the lamp. The sleeve lettering is set like a J-card (Juniper Static, Heat Lamp Lullabies, CT 014). A first drawing, a seed tray from above with an orange pool of light, read as tiled wallpaper and was replaced.
+- Orange has one job again, what has played (and the logo). The cover does not use it.
+- The scrubber has the frame's weight: the cover dropped from 520 to 400 px, the waveform is 176 px tall, the track labels are 25 px (the current one bold), the times 16 px. Each track has its own drawn shape (intro, swell, fade), still drawn loudness, not decoded audio.
+- Removed as clutter: the liner-notes and more buttons, "41 of 150 left", the output device and the liner note. The side B list stays, at 13 px in secondary grey.
+
+**Type scale:** 13 (side B list, kicker), 16 (body, times), 25 (title, scrubber labels). One face, Manrope; the cover lettering uses it too.
+
+**References (Mobbin, cited by link only; used for the blind test):**
+- Apple Music now playing, https://mobbin.com/screens/7bd2ef54-565a-42a6-ad5d-2fa21b98f2a3 : title, transport and progress in one column under the art.
+- SoundCloud, https://mobbin.com/screens/301a21e9-d189-4959-9e06-efe024cc9c2b : the waveform as the scrubber, played part in orange.
+- The New York Times podcasts, https://mobbin.com/screens/159a9f86-1a78-43b0-9a8e-cb61341b1566 : a player where the art is the stage; what to avoid: type on a busy image.
+
+**Blind pairwise test** (ours minus shipped, 1 to 5; neutral file names, random sides, no labels; one fresh judge saw all the round's pairs):
+
+| Round | Version | Apple | SoundCloud | The |
+|---|---|---|---|---|
+| 1 | drawn tray-from-above cover, 464 px | +3 | +3 | +2 |
+| 2 | side-view tray row cover with lettering; heard tracks off-white | +1 | +3 | +2 |
+| 3 | pale lamp, orange only for played, 400 px cover, larger scrubber, less chrome | +3 | +3 | +2 |
+
+**Fresh-eyes audit:** round 1, 3.5 (the cover read as tiled wallpaper, two orange masses, generated-looking waveforms; addressed); round 2, 3 (the cover outshouts the component and shares the accent, the track-by-track idea lost at gallery size, competing chrome; addressed); round 3, **3.5** (the waveforms still look procedural, "Sodium Summer" set twice at display size, the cover reads as a card and its seedlings close to clip art).
+
+**Result: did not reach 4 in three rounds, honestly reported.** The stock photo is gone and the cover is the label's own, and the piece wins every blind pairing (worst +1), but three fresh auditors scored it 3.5, 3 and 3.5. What would move it: a painted cover (`opendesigner-paint`, which needs an `npm ci` install the owner has to approve), a waveform from real audio, and one display size (drop the scrubber labels to 16 px so the title is the only display moment).
+
+**Checks (final render):** check_dates `--year 2026` passes; check_names 0 errors (the NEW words it lists are dictionary words, key names or the typed query); preflight 0 errors, 0 warnings; engine validate no errors (light-mode warnings as before); computed contrast of every HTML text run 4.6:1 or more.

@@ -60,3 +60,22 @@ Owner rule: station and clock 18 to Body 17, destinations 22 to Title 3 20 (weig
 - The first two layouts collided (numeral over badge, MIN over the stop line); the engine has no layout help for a 205 x 251 canvas, as expected.
 - Mobbin has no watch platform; recorded as an idea for the skill.
 - Cross-piece findings are in `../PROCESS.md`; engine feedback is in `opendesigner/feedback.md` where this piece recorded one.
+
+## Round 4 (owner review, 2026-10-18)
+The owner called the showcase "very very very cluttered and very unprofessional". The round-4 audit (`../../AUDIT-ROUND4.md`) and `../../PRESENTATION.md` set the watch rules: one glanceable thing, the time top right, colour only when it carries information.
+
+**One idea:** The next tram to Saltgrove leaves Wharf Rd in 2 minutes.
+
+**Changed:**
+- Face changed through the engine from Big Shoulders Display to Overpass (an open highway-sign face)
+- Yellow route squares, stop line, rule, rotated 'MIN' and the departure rows removed: one countdown, one route line, one 'Then 9 and 14 min' line
+- Yellow only on the countdown; the stop name in grey
+- Destination Northgate renamed Saltgrove (check_names.py: two letters from Northcote and Northvale); 'Harbour', shared with components/07, no longer shown
+
+Common to all seven: black ground, the title and clock in Inter (SIL OFL) as the stand-in for San Francisco, which watchOS draws itself; the app's own face for everything else (two typefaces); sizes from the watchOS roles (Caption 2 15, Headline 17) plus one data numeral. Rendered with `../render.py` at the existing size, 205 x 251 pt at 3x (615 x 753), clipped to the display; the gallery copy (192 px) was checked first.
+
+**Blind pairwise (18 Oct, fresh judge, no labels, random sides; tested the first round-4 render, before the audit fixes):** lost 2 vs Transit (nearby list), won 4 vs Citymapper, won 2 vs Transit (route). References were App Store Apple Watch screenshots, kept in scratch and deleted.
+
+**Fresh-eyes audit:** 4 (18 Oct), 4 (20 Oct). Final: 4 of 5.
+
+**Checks:** `check_dates.py --year 2026` passes; `check_names.py` 0 errors; `preflight.py html` only warns about the HIG sizes and the display numeral outside the token scale (both on purpose, commented in the page).

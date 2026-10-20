@@ -86,8 +86,8 @@
     "focusColor": null,
     "neutralBase": null,
     "contrastTarget": "AA",
-    "textFace": "Shantell Sans",
-    "displayFace": "=textFace",
+    "textFace": "Inter",
+    "displayFace": "Shantell Sans",
     "baseSize": null,
     "spaceUnit": 4,
     "platforms": [
@@ -149,7 +149,7 @@
     "minTarget": null,
     "focusWidth": 2,
     "secondaryColors": [],
-    "monoFace": "JetBrains Mono",
+    "monoFace": "Inter",
     "scripts": [
       "Latn"
     ],
@@ -540,7 +540,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "7e9693303d6f63b5",
+    "DESIGN.md": "b726746251260781",
     "PRODUCT.md": "6d9ce12df19db121"
   },
   "exports": {

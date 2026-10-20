@@ -81,7 +81,7 @@
     "focusColor": null,
     "neutralBase": null,
     "contrastTarget": "AA",
-    "textFace": "Big Shoulders Display",
+    "textFace": "Overpass",
     "displayFace": "=textFace",
     "baseSize": 17,
     "spaceUnit": 4,
@@ -104,9 +104,9 @@
     "overrides": {},
     "brandFace": null,
     "fontLicence": {
-      "web": null,
-      "app": null,
-      "selfHost": null
+      "web": true,
+      "app": true,
+      "selfHost": true
     },
     "fontClass": null,
     "accentCount": null,
@@ -152,7 +152,10 @@
     "scripts": [
       "Latn"
     ],
-    "defaultTheme": "dark"
+    "defaultTheme": "dark",
+    "borderDefault": null,
+    "texture": null,
+    "gradients": null
   },
   "overrides": {
     "motion.duration.instant": {
@@ -489,7 +492,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "db6396d0d122acd8",
+    "DESIGN.md": "505efc5c9c98f7f2",
     "PRODUCT.md": "bf73d09f6bbe9ab9"
   },
   "exports": {
@@ -1913,5 +1916,7 @@
       "size.target.min": "dimension"
     },
     "snapshots": "standards-state.json"
-  }
+  },
+  "style": null,
+  "customStyles": {}
 }

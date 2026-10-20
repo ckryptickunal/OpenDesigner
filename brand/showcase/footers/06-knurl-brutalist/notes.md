@@ -1,5 +1,7 @@
 # 06 Knurl Supply: neo-brutalist footer
 
+Gallery: Knurl Supply is a fictional streetwear label that sells in drops; its footer says one thing, "Made once. No restocks."
+
 ## Direction
 Knurl Supply is a fictional streetwear label from Rotterdam that sells in timed drops and never restocks. Its footer is a poster wall: a black marquee announcing the next drop, then a grid of hard-edged blocks with 4 px ink borders and 6 px zero-blur offset shadows: acid lime newsletter block with a drop countdown, white link blocks, a black flagship-store block, and a knurled (diamond cross-hatch) block carrying a round stamp. Condensed black display type against a blunt mono.
 Feel words: bold, edgy, loud.
@@ -50,3 +52,23 @@ python3 $E --dir .../06-knurl-brutalist/opendesigner sketch --name "Knurl Supply
 The round-4 audit found that the ticker's "Thu 24.10" is a Saturday in 2026, and that "41,208 on it" reused a number from product/02. Changed to "Sat 24.10" and "38,917 on it"; nothing else changed. `shot.png` and `shot-mobile.png` were re-rendered at the same widths. `check_dates.py` does not read the day.month format, so this was checked by hand.
 
 The fresh audit then found the ticker still said CET; Central Europe is on summer time until 25 Oct 2026, so it now reads 'Sat 24.10 / 12:00 CEST' (ticker and screen-reader label). The rebuild the round-4 audit asked for was not done in this pass.
+
+## Round 4 (owner review, 2026-10-18)
+This replaces the poster-wall design described above (marquee, countdown, stamp, knurl block); the round-4 audit asked for a rebuild.
+
+**One idea:** a drop-only streetwear label ends its page on one line: made once, no restocks.
+
+**Changed:**
+- Rebuilt as a quiet footer: marquee, countdown, crosshatch panel, rotating stamp, every border box and every offset shadow removed
+- One signature element: the house rule 'Made once. No restocks.' in lime Big Shoulders Display at 90 px (it does not date, unlike a drop date)
+- Four link columns in Space Mono 16, sentence case; one muted 12 px heading style; non-link lines muted; one rule; one legal line
+- One action: an outline email field and Join button, top-aligned with the eyebrow; the 'Instagram' link (a real brand) removed
+- A sliver of the section above (Archive) so the shot reads as the end of a page
+
+Type: Big Shoulders Display (the statement only) and Space Mono; sizes 12, 16 and 90 from the token scale (67 on phones). Colour: near-black `neutral-dark-1`, text `neutral-dark-12`, muted `neutral-dark-10`, lime only on the statement. Renders: `shot.png` 1440 wide, natural height, scale 2; `shot-mobile.png` 390 wide. The 337 px gallery copy was checked first.
+
+**Blind pairwise (18 Oct, fresh judge, no labels, random sides; Mobbin footer sections, kept in scratch and deleted):** won 3 vs Shopify Supply, won 3 vs SOTF, lost 2 vs Graza (tested with the drop date as the statement).
+
+**Fresh-eyes audit:** 3 (18 Oct, it asked for a statement that does not date, quieter links and an outline button), then 4 (20 Oct). Final: 4 of 5.
+
+**Checks:** `check_dates.py --year 2026` passes (no dates left on the page); `check_names.py` 0 errors (Rotterdam, Stockists and Email are false positives); `preflight.py html` warns once about the `<br>` in the statement, which sets the two sentences on two lines on purpose.

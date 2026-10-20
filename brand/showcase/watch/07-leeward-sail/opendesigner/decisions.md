@@ -331,3 +331,8 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - set_by: delegated · locked: no · date: 2026-10-14 · supersedes: D-0025 · source_ref: none
 - reason: back to 15: raising it to 45 did not change the status (port/starboard) colours at all; only the unused accent ramp moved
 - previous value: 45
+
+## D-0027 · raw.textFace = "IBM Plex Sans"
+- set_by: chosen · locked: no · date: 2026-10-18 · supersedes: D-0014 · source_ref: none
+- reason: Round 4: one monospace face for everything read like a terminal mock-up; Plex Sans keeps the Plex family's technical voice with proportional text (SIL OFL)
+- previous value: "IBM Plex Mono"

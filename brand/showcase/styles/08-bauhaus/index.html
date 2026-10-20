@@ -6,131 +6,98 @@
 <title>weir: every row in, none lost</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
+  /* Round 4. Bauhaus lives in one zone: the composition on the right, which is the pipeline.
+     Kandinsky's pairing: blue circle, red square, yellow triangle. Each source's area is its rows a
+     day (databases 1.6 b, event streams 0.62 b, SaaS apps 0.18 b); each black bar's weight is its rows
+     a second. Every shape sits whole inside the frame's margins. The page around it is calm:
+     one face (Jost, the engine's text face), sentence case, a strict two-column grid.
+     The day's count (rows in flight, none missing) is set beside the weir, where it is taken. */
   :root {
-    /* The three primaries, exact. Red is the pinned brand token; the engine lifted
-       ultramarine #1E4AA8 to #256aff and moved the yellow, so those two are set by hand.
-       Red marks the saas-apps square only; the action is black. */
-    --red: var(--ds-color-accent-light-9);
-    --blue: #1E4AA8;
-    --yellow: #F2C200;
-    --black: var(--ds-color-neutral-light-12);
     --paper: var(--ds-color-neutral-light-1);
+    --ink: var(--ds-color-black);
+    --ink-2: var(--ds-color-text-secondary);
+    --hair: var(--ds-color-neutral-light-5);
+    --red: var(--ds-color-accent-light-9);
+    --blue: var(--ds-color-accent2-light-9);
+    --yellow: var(--ds-color-accent3-light-9);
   }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--paper); }
-  body {
-    color: var(--black);
-    font: var(--ds-text-body-md);
-    font-family: var(--ds-font-family-text);
-    font-variant-numeric: tabular-nums;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh; min-height: 100svh; overflow: hidden;
-  }
-  a { color: inherit; }
-  :focus-visible { outline: var(--ds-focus-ring-width, 2px) solid var(--red); outline-offset: 3px; }
-  .page { position: relative; width: 1440px; height: 900px; margin: 0 auto; overflow: hidden; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--ds-font-family-text); font-size: var(--ds-font-size-16); line-height: 24px; -webkit-font-smoothing: antialiased; overflow: hidden; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 
-  nav.top { position: absolute; left: 80px; top: 0; width: 780px; height: 88px; display: flex; align-items: center; gap: var(--ds-space-40); font-size: var(--ds-font-size-16); z-index: 2; }
-  .mark { display: flex; align-items: center; gap: var(--ds-space-12); text-decoration: none; font-size: var(--ds-font-size-28); font-weight: 500; letter-spacing: -0.01em; }
+  .top { height: 80px; display: flex; align-items: center; gap: var(--ds-space-40); padding: 0 64px; }
+  .mark { display: inline-flex; align-items: center; gap: var(--ds-space-12); font-size: var(--ds-font-size-28); font-weight: 500; letter-spacing: -0.01em; }
   .mark svg { width: 46px; height: 14px; }
-  nav.top .links { display: flex; gap: var(--ds-space-32); margin-left: var(--ds-space-32); }
-  nav.top a { text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
-  .signin { position: absolute; right: 80px; top: 22px; min-height: 44px; display: inline-flex; align-items: center; text-decoration: none; z-index: 2; }
+  .top nav { display: flex; gap: var(--ds-space-32); margin-left: var(--ds-space-24); }
+  .top .sp { flex: 1; }
 
-  .art { position: absolute; inset: 0; width: 1440px; height: 900px; pointer-events: none; z-index: 0; }
+  .hero { display: grid; grid-template-columns: 496px 752px; column-gap: 64px; padding: 40px 64px 0; align-items: center; }
+  h1 { font-size: 67px; line-height: 76px; font-weight: 500; letter-spacing: -0.02em; }
+  .lede { font-size: var(--ds-font-size-21); line-height: 32px; color: var(--ink-2); margin-top: var(--ds-space-24); max-width: 456px; }
+  .btn { display: inline-flex; align-items: center; height: 52px; padding: 0 var(--ds-space-24); margin-top: var(--ds-space-32); background: var(--ink); color: var(--paper); font-weight: 500; }
+
+  .art { display: block; width: 752px; height: 744px; overflow: visible; }
   .art text { font-family: var(--ds-font-family-text); }
-
-  /* the headline is set in the weir's crest: one black bar that runs into the weir itself */
-  h1 { position: absolute; left: 80px; top: 118px; height: 104px; margin: 0; display: flex; align-items: center; font-size: 76px; line-height: 1; font-weight: 500; letter-spacing: -0.02em; color: var(--paper); z-index: 1; }
-  .lede, .btn, .job { z-index: 1; }
-  .lede { position: absolute; left: 80px; top: 252px; width: 440px; margin: 0; font-size: var(--ds-font-size-21); line-height: 1.4; }
-  .btn { position: absolute; left: 80px; top: 356px; display: inline-flex; align-items: center; height: 52px; padding: 0 var(--ds-space-24); background: var(--black); color: var(--paper); font-weight: 500; text-decoration: none; }
-
-  /* the weir's job, set across beside the bar */
-  .job { position: absolute; left: 1002px; top: 112px; width: 358px; }
-  .job b { display: block; font-size: var(--ds-font-size-21); font-weight: 500; }
-  .job p { margin: var(--ds-space-4) 0 0; font-size: var(--ds-font-size-16); line-height: 1.4; }
-  /* the count itself: rows at each source against rows landed, today so far */
-  .job table { width: 100%; margin-top: var(--ds-space-20); border-collapse: collapse; font-size: var(--ds-font-size-16); }
-  .job caption { caption-side: top; text-align: left; font-size: var(--ds-font-size-16); padding-bottom: var(--ds-space-8); }
-  .job th { font-size: var(--ds-font-size-16); font-weight: 500; text-align: right; padding: 0 0 var(--ds-space-6); border-bottom: 1px solid var(--black); }
-  .job th:first-child, .job td:first-child { text-align: left; }
-  .job td { text-align: right; padding: var(--ds-space-6) 0; border-bottom: 1px solid var(--ds-color-neutral-light-6); }
-  .job td + td { padding-left: var(--ds-space-16); }
-  .job .foot { margin-top: var(--ds-space-8); font-size: var(--ds-font-size-16); line-height: 1.4; }
 </style>
 </head>
 <body>
-<div class="page">
-  <nav class="top" aria-label="Main">
-    <a class="mark" href="#"><svg viewBox="0 0 46 14" aria-hidden="true"><circle cx="7" cy="7" r="7" fill="var(--blue)"/><rect x="17" y="0" width="13" height="14" fill="var(--red)"/><path d="M33 14 L46 14 L39.5 1 Z" fill="var(--yellow)"/></svg>weir</a>
-    <div class="links"><a href="#">product</a><a href="#">connectors</a><a href="#">pricing</a><a href="#">docs</a></div>
-  </nav>
-  <a class="signin" href="#">sign in</a>
+<header class="top">
+  <a class="mark" href="#"><svg viewBox="0 0 46 14" aria-hidden="true"><circle cx="7" cy="7" r="7" fill="var(--blue)"/><rect x="17" y="0" width="13" height="14" fill="var(--red)"/><path d="M33 14 L46 14 L39.5 1 Z" fill="var(--yellow)"/></svg>weir</a>
+  <nav aria-label="Main"><a href="#">Product</a><a href="#">Connectors</a><a href="#">Pricing</a><a href="#">Docs</a></nav>
+  <span class="sp"></span>
+  <a href="#">Sign in</a>
+</header>
 
-  <h1 id="h">every row in, none lost.</h1>
-  <p class="lede">weir copies data from 287 kinds of source into your warehouse and checks every row against where it came from.</p>
-  <a class="btn" href="#">start a pipeline</a>
-
-  <div class="job">
-    <b>the weir</b>
-    <p>every row is counted here against its source. if one runs late, you hear at once.</p>
-    <table>
-      <caption>today, to 14:00 utc</caption>
-      <thead><tr><th>from</th><th>at source</th><th>landed</th></tr></thead>
-      <tbody>
-        <tr><td>databases</td><td>931,872,406</td><td>930,207,118</td></tr>
-        <tr><td>event streams</td><td>362,509,877</td><td>361,862,054</td></tr>
-        <tr><td>saas apps</td><td>106,114,239</td><td>105,945,041</td></tr>
-      </tbody>
-    </table>
-    <p class="foot">the gap is 2,482,309 rows in flight, none older than 6 min. missing: 0.</p>
+<main class="hero">
+  <div class="copy">
+    <h1>Every&nbsp;row&nbsp;in, none&nbsp;lost.</h1>
+    <p class="lede">Copy data from 287 kinds of source into your warehouse, and check every row against its source.</p>
+    <a class="btn" href="#">Start a pipeline</a>
   </div>
 
-  <!-- The poster is the pipeline. Shape = kind of source; area = rows a day (80,000 px² per billion);
-       bar weight = rows a second (16, 6 and 2 px in, 24 px out: 18,500 + 7,200 + 2,100 = 27,800). Flows that cross the blue get a paper edge.
-       Kandinsky's Bauhaus pairing: blue circle, red square, yellow triangle. Beyond the logo mark and the focus ring, red marks only the saas square. -->
-  <svg class="art" viewBox="0 0 1440 900" role="img" aria-label="Diagram: databases send 1.6 billion rows a day at 18,500 rows a second, event streams 0.62 billion at 7,200 a second and SaaS apps 0.18 billion at 2,100 a second. All three meet the weir, a black bar where every row is checked against its source, and leave as one flow of 27,800 rows a second into the warehouse: 2.4 billion rows a day, none lost, 4 minutes behind the source at p95.">
-    <!-- databases, 1.6 b rows a day: r = 202, sitting on the page's bottom edge -->
-    <circle cx="560" cy="698" r="202" fill="var(--blue)"/>
+  <!-- The composition, in its own 752 x 744 field. Areas: square 89 (7,921 px², 0.18 b a day);
+       circle r 150 (70,686 px², 1.6 b); triangle side 252 (27,498 px², 0.62 b), stacked with 64 px
+       between them. Bars: 3, 20 and 8 px for 2,100, 18,500 and 7,200 rows/s; 30 px out for 27,800.
+       The warehouse square is a destination and is not drawn to scale. -->
+  <svg class="art" viewBox="0 0 752 744" role="img" aria-label="Diagram: SaaS apps send 0.18 billion rows a day at 2,100 rows a second, databases 1.6 billion at 18,500 a second and event streams 0.62 billion at 7,200 a second. All three meet the weir, a black bar where every row is counted against its source: 2,482,309 rows in flight, none older than 6 minutes, 0 missing. One flow of 27,800 rows a second leaves it for the warehouse, 2.4 billion rows a day.">
+    <!-- flows into the weir -->
+    <rect x="240" y="43" width="240" height="3" fill="var(--ink)"/>
+    <rect x="340" y="293" width="140" height="20" fill="var(--ink)"/>
+    <rect x="250" y="636" width="230" height="8" fill="var(--ink)"/>
+    <!-- sources, one column, 64 px apart -->
+    <rect x="155.5" y="0" width="89" height="89" fill="var(--red)"/>
+    <circle cx="200" cy="303" r="150" fill="var(--blue)"/>
+    <path d="M74 735 L326 735 L200 517 Z" fill="var(--yellow)"/>
+    <!-- the weir, and the one flow out of it -->
+    <rect x="480" y="0" width="24" height="644" fill="var(--ink)"/>
+    <rect x="504" y="369" width="96" height="30" fill="var(--ink)"/>
+    <rect x="600" y="300" width="152" height="168" fill="var(--ink)"/>
 
-    <!-- flows into the weir, weighted by rows a second; the databases flow gets a paper edge where it crosses the blue -->
-    <rect x="560" y="687" width="340" height="22" fill="var(--paper)"/><rect x="560" y="690" width="340" height="16" fill="var(--black)"/>
-    <rect x="420" y="800" width="480" height="6" fill="var(--black)" stroke="var(--paper)" stroke-width="3" paint-order="stroke"/>
-    <rect x="490" y="436" width="410" height="2" fill="var(--black)"/>
-    <!-- the square and the triangle are drawn over their flows' ends -->
-    <!-- saas apps, 0.18 b: side 120, set into the circle's shoulder, 51 px above the triangle's apex; its flow leaves flush with its top -->
-    <rect x="370" y="436" width="120" height="120" fill="var(--red)"/>
-    <!-- event streams, 0.62 b: side 338.5, base on the bottom edge, apex on the square's left edge, over the circle's flank -->
-    <path d="M200.75 900 L539.25 900 L370 606.9 Z" fill="var(--yellow)"/>
-    <!-- the crest and the weir: one structure, bleeding off the left, top and bottom -->
-    <rect x="0" y="118" width="948" height="104" fill="var(--black)"/>
-    <rect x="900" y="0" width="48" height="900" fill="var(--black)"/>
-    <!-- out of the weir, 27,800 rows a second, into the warehouse (2.4 b: side 438, whole, flush in the corner) -->
-    <rect x="1002" y="462" width="438" height="438" fill="var(--black)"/>
-    <rect x="948" y="686" width="54" height="24" fill="var(--black)"/>
+    <text x="140" y="36" text-anchor="end" font-size="21" font-weight="500" fill="var(--ink)">SaaS apps</text>
+    <text x="140" y="62" text-anchor="end" font-size="16" fill="var(--ink)">0.18 billion rows a day</text>
+    <text x="200" y="299" text-anchor="middle" font-size="21" font-weight="500" fill="#fff">Databases</text>
+    <text x="200" y="325" text-anchor="middle" font-size="16" fill="#fff">1.6 billion rows a day</text>
+    <text x="200" y="685" text-anchor="middle" font-size="21" font-weight="500" fill="var(--ink)">Event streams</text>
+    <text x="200" y="711" text-anchor="middle" font-size="16" fill="var(--ink)">0.62 billion rows a day</text>
 
-    <g font-size="16" fill="var(--black)">
-      <text x="888" y="678" text-anchor="end">18,500 rows/s</text>
-      <text x="888" y="790" text-anchor="end">7,200 rows/s</text>
-      <text x="888" y="426" text-anchor="end">2,100 rows/s</text>
-    </g>
-    <text x="560" y="634" text-anchor="middle" font-size="21" font-weight="500" fill="var(--paper)">databases</text>
-    <text x="560" y="660" text-anchor="middle" font-size="16" fill="var(--paper)">1.6 b rows a day</text>
-    <text x="354" y="490" text-anchor="end" font-size="16" font-weight="500" fill="var(--black)">saas apps</text>
-    <text x="354" y="514" text-anchor="end" font-size="16" fill="var(--black)">0.18 b rows a day</text>
-    <text x="370" y="836" text-anchor="middle" font-size="16" font-weight="500" fill="var(--black)">event streams</text>
-    <text x="370" y="860" text-anchor="middle" font-size="16" fill="var(--black)">0.62 b rows a day</text>
+    <text x="468" y="34" text-anchor="end" font-size="16" fill="var(--ink)">2,100 rows/s</text>
+    <text x="468" y="283" text-anchor="end" font-size="16" fill="var(--ink)">18,500 rows/s</text>
+    <text x="468" y="626" text-anchor="end" font-size="16" fill="var(--ink)">7,200 rows/s</text>
 
-    <text x="1034" y="506" font-size="21" font-weight="500" fill="var(--paper)">warehouse</text>
-    <text x="1034" y="592" font-size="67" font-weight="400" letter-spacing="-.02em" fill="var(--paper)">2.4 b</text>
-    <text x="1034" y="624" font-size="16" fill="var(--paper)">rows a day, 0 lost</text>
-    <text x="1034" y="704" font-size="16" fill="var(--paper)">27,800 rows/s in</text>
-    <text x="1034" y="728" font-size="16" fill="var(--paper)">p95 4 min behind the source</text>
+    <text x="528" y="210" font-size="16" font-weight="500" fill="var(--ink)">Counted at the weir</text>
+    <text x="528" y="234" font-size="16" fill="var(--ink)">2,482,309 rows in flight</text>
+    <text x="528" y="258" font-size="16" fill="var(--ink)">none older than 6 min, 0 missing</text>
+
+    <text x="616" y="332" font-size="16" font-weight="500" fill="#fff">Warehouse</text>
+    <text x="616" y="394" font-size="28" fill="#fff">2.4 billion</text>
+    <text x="616" y="420" font-size="16" fill="#fff">rows a day</text>
+    <text x="616" y="452" font-size="16" fill="#fff">27,800 rows/s in</text>
   </svg>
-</div>
+</main>
 </body>
 </html>

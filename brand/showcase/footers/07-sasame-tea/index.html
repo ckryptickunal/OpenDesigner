@@ -9,84 +9,77 @@
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
-  /* Round 4: a quiet footer. Link columns in one text size, one muted heading style, one rule, one legal line,
-     and one signature element: this month's note from the tea house, set in the Mincho. The band at the top is the end of the section above, so the shot reads as the foot of a page. */
+  /* Round 5: a quiet footer on sumi ink. One signature element: this month's note from the tea house, set large in the Mincho.
+     Below it, the name and four link columns in one text size, one muted heading style, one rule and one legal line.
+     The band at the top is the end of the section above, on paper, so the shot reads as the foot of a page.
+     Type: Shippori Mincho (name, note) and Zen Kaku Gothic New (everything else). Sizes 13, 16, 25, 76 (tokens); 39 on phones. */
   :root {
-    --bg: var(--ds-color-neutral-light-3);       /* pale celadon */
+    --bg: var(--ds-color-neutral-dark-2);          /* sumi, with the system's green cast */
+    --ink: var(--ds-color-neutral-dark-12);
+    --muted: var(--ds-color-neutral-dark-11);
+    --rule: var(--ds-color-neutral-dark-5);
     --above: var(--ds-color-neutral-light-1);
-    --ink: var(--ds-color-neutral-light-12);
-    --muted: var(--ds-color-neutral-light-11);
-    --rule: var(--ds-color-neutral-light-7);
-    --accent: var(--ink);
     --above-ink: var(--ds-color-neutral-light-12);
     --above-muted: var(--ds-color-neutral-light-11);
-    --above-rule: var(--ds-color-neutral-light-6);
     --gutter: var(--ds-space-80);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { background: var(--bg); }
-  body { font-family: var(--ds-font-family-text); font-size: 16px; line-height: 1.5; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  body { font-family: var(--ds-font-family-text); font-size: var(--ds-font-size-16); line-height: 1.5; color: var(--ink); -webkit-font-smoothing: antialiased; }
   a { color: inherit; text-decoration: none; }
   :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
   .above { background: var(--above); padding: 0 var(--gutter); }
-  .above p { display: flex; justify-content: flex-start; gap: 16px; padding: 20px 0 24px; border-top: 1px solid var(--above-rule); font-size: 16px; line-height: 24px; color: var(--above-muted); }
+  .above p { display: flex; gap: var(--ds-space-16); padding: 24px 0 28px; border-top: 1px solid var(--ds-color-neutral-light-6); color: var(--above-muted); }
   .above b { font-weight: 500; color: var(--above-ink); }
-  .above u { color: var(--above-ink); text-underline-offset: 4px; }
-  footer { padding: 72px var(--gutter) 32px; }
-  .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--ds-space-24); }
-  .statement { grid-column: 1 / span 9; font-family: var(--ds-font-family-display); font-weight: 500; font-size: 39px; line-height: 52px; letter-spacing: -0.01em; text-wrap: balance; margin-bottom: 72px; }
-  .about { grid-column: 1 / span 4; }
-  .name { display: inline-block; font-family: var(--ds-font-family-display); font-weight: 500; font-size: 25px; line-height: 32px; letter-spacing: -0.01em; }
-  .name span { margin-left: 10px; font-size: 16px; color: var(--muted); }
-  .num { font-variant-numeric: tabular-nums; }
-  .about p { margin-top: 12px; color: var(--muted); max-width: 26em; text-wrap: pretty; }
-  nav.cols { grid-column: 6 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--ds-space-24); padding-top: 6px; }
-  .cols h3 { font-size: 16px; line-height: 24px; font-weight: 500; color: var(--muted); margin-bottom: 8px; }
+
+  footer { padding: 112px var(--gutter) 32px; }
+  .note { max-width: 15em; font-family: var(--ds-font-family-display); font-weight: 500; font-size: var(--ds-font-size-76); line-height: 1.12; letter-spacing: -0.01em; text-wrap: balance; }
+  
+  .grid { margin-top: 112px; padding-top: var(--ds-space-32); border-top: 1px solid var(--rule);
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--ds-space-24); }
+  .name { grid-column: 1 / span 4; font-family: var(--ds-font-family-display); font-weight: 500; font-size: var(--ds-font-size-25); line-height: 32px; }
+  .name span { display: block; margin-top: var(--ds-space-4); font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-16); line-height: 24px; color: var(--muted); }
+  nav.cols { grid-column: 5 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--ds-space-24); }
+  .cols h3 { font-size: var(--ds-font-size-13); line-height: 24px; font-weight: 500; letter-spacing: .04em; color: var(--muted); margin-bottom: var(--ds-space-12); }
   .cols ul { list-style: none; }
-  .cols li { font-size: 16px; line-height: 24px; padding: 4px 0; color: var(--ink); }
-  .cols li.t { color: var(--muted); }
+  .cols li { line-height: 24px; padding: 4px 0; color: var(--muted); }
+  .cols li a { color: var(--ink); }
   @media (hover: hover) and (pointer: fine) { .cols a:hover, .legal a:hover { text-decoration: underline; text-underline-offset: 4px; } }
-  .mark { display: inline-block; margin-top: 72px; font-family: var(--ds-font-family-display); font-weight: 500; color: var(--accent); line-height: .82; letter-spacing: -0.03em; white-space: nowrap; }
-  .legal { display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-24); margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 13px; line-height: 20px; color: var(--muted); }
+
+  .legal { display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-24); margin-top: 64px; padding-top: var(--ds-space-16);
+    font-size: var(--ds-font-size-13); line-height: 20px; color: var(--muted); }
   .legal nav { display: flex; gap: var(--ds-space-24); }
   .legal a { display: inline-flex; align-items: center; min-height: 32px; }
   .legal a[aria-current] { color: var(--ink); }
+
   @media (max-width: 1100px) {
-    .about { grid-column: 1 / -1; }
-    nav.cols { grid-column: 1 / -1; margin-top: 48px; }
-    .statement { grid-column: 1 / -1; }
+    .name { grid-column: 1 / -1; margin-bottom: var(--ds-space-40); }
+    nav.cols { grid-column: 1 / -1; }
   }
   @media (max-width: 760px) {
     :root { --gutter: var(--ds-space-20); }
     .above p { flex-direction: column; gap: 4px; padding: 16px 0 20px; }
-    footer { padding-top: 48px; }
-    .grid { grid-template-columns: 1fr; }
-    .statement { font-size: 25px; line-height: 36px; margin-bottom: 48px; }
-    nav.cols { grid-template-columns: 1fr 1fr; row-gap: 32px; margin-top: 40px; }
+    footer { padding-top: 64px; }
+    .note { font-size: var(--ds-font-size-39); line-height: 1.2; }
+    .grid { margin-top: 64px; grid-template-columns: 1fr; }
+    nav.cols { grid-template-columns: 1fr 1fr; row-gap: var(--ds-space-32); }
     .legal { flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 56px; }
     .legal nav { flex-wrap: wrap; column-gap: 20px; }
   }
-  .statement { grid-column: 7 / -1; margin-bottom: 0; font-size: 49px; line-height: 56px; }
-  nav.cols { grid-column: 1 / -1; margin-top: 72px; grid-template-columns: repeat(4, minmax(0, 1fr)); padding-top: 0; }
-  .cols li.t { color: var(--muted); }
-  @media (max-width: 1100px) { .about { grid-column: 1 / -1; } .statement { grid-column: 1 / -1; margin-top: 40px; } }
-  @media (max-width: 760px) { .name { font-size: 20px; } .statement { margin-top: 32px; font-size: 25px; line-height: 36px; } nav.cols { grid-template-columns: 1fr 1fr; margin-top: 40px; } }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
-<div class="above" aria-hidden="true"><p><b>Ask for a seat</b><span>Seats are held for fifteen minutes past each sitting.</span></p></div>
+<div class="above" aria-hidden="true"><p><b>Sittings</b><span>10:00, 11:30, 13:00, 14:30 and 16:00. Seats are held for fifteen minutes.</span></p></div>
 <footer aria-label="Site footer">
+  <p class="note">Hojicha is roasting in the back room.</p>
   <div class="grid">
-    <div class="about">
-      <a class="name" href="#">Sasame<span lang="ja">茶房ささめ</span></a>
-      <p>Eight seats at the edge of Higashiyama, Kanazawa. Tea from three farms we have visited every spring since 2011, poured one pot at a time.</p>
-    </div>
-    <p class="statement">Every October, the first hojicha of the season is roasted in the back room.</p>
+    <a class="name" href="#">Sasame<span lang="ja">茶房ささめ</span></a>
     <nav class="cols" aria-label="Footer">
-      <div><h3>Visit</h3><ul><li class="t">Higashiyama 2-chome</li><li class="t">Kanazawa, Ishikawa</li><li><a href="#">Directions</a></li></ul></div>
-      <div><h3>Hours</h3><ul><li class="t">Tue&ndash;Sun, 10:00&ndash;17:30</li><li class="t">Last pot at 17:00</li><li class="t">Closed 30 Dec&ndash;1 Jan</li></ul></div>
-      <div><h3>Seats</h3><ul><li class="t">Five sittings a day</li><li><a href="#">Ask for a seat</a></li></ul></div>
+      <div><h3>Visit</h3><ul><li>Higashiyama 2-chome</li><li>Kanazawa, Ishikawa</li><li><a href="#">Directions</a></li></ul></div>
+      <div><h3>Hours</h3><ul><li>Tue&ndash;Sun, 10:00&ndash;17:30</li><li>Last pot at 17:00</li><li>Closed 30 Dec&ndash;1 Jan</li></ul></div>
+      <div><h3>Seats</h3><ul><li>Eight at the counter</li><li>Five sittings a day</li><li><a href="#">Ask for a seat</a></li></ul></div>
       <div><h3>More</h3><ul><li><a href="#">Teas to take home</a></li><li><a href="#">Our three farms</a></li><li><a href="#">Journal</a></li><li><a href="#">Write to us</a></li></ul></div>
     </nav>
   </div>

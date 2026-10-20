@@ -61,5 +61,15 @@
   "verdict": "keep",
   "said": "most of the watch screens are okay",
   "date": "2026-10-14"
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "won 4 vs WorkOutDoors, won 4 vs HeartWatch, won 3 vs Zones for Training (blind, 18 Oct; tested before the audit fixes)",
+  "changed": [
+   "162 set at weight 600 instead of the ultra-heavy cut, with 'bpm' beside it at its own size; the heart icon removed",
+   "Gradient zone bar and gradient trace removed; five flat segments, only zone 4 in red",
+   "Title 'Rep 3 of 6' in grey so red means only the zone; the group moved up under the numeral"
+  ],
+  "date": "2026-10-20"
  }
 }

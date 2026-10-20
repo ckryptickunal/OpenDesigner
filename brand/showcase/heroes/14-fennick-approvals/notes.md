@@ -1,5 +1,7 @@
 # 14 Fennick: bill approvals hero (B2B)
 
+Gallery: Fennick's marketing hero: one bill's review card, showing what is left in the bank if it is approved.
+
 Built in round 3, after the owner's review (`brand/showcase/ROUND3-BRIEF.md`). It is one of three heroes made for the B2B product screens the owner loves, in place of the four heroes he removed. Render: `shot.png`, 1440 × 900 at 2×.
 
 ## Direction
@@ -106,3 +108,32 @@ The iframe is not focusable. A hidden figcaption says what the screen shows.
    - `product/02` has no `data-theme`, so under an OS dark preference the iframe shows the product's unfinished dark theme.
 
 Findings 1 to 3 are recorded with `engine.py feedback` in `opendesigner/feedback.md`. Nothing was posted.
+
+## Round 4 (owner review, 2026-10-18)
+
+**What he said.** The showcase pieces look "very very very cluttered and very unprofessional, which is not acceptable at all", and "None of them should feel like they are from a vibe coded app". This round followed `AUDIT-ROUND4.md` and `PRESENTATION.md` (hero: a headline, one line, one action or none, one subject).
+
+**One idea.** Before approving a $9,126.45 bill, the CFO sees $32,985.05 left in the bank on the day it pays.
+
+**What changed.**
+- The embedded product/02 screen is gone, so the gallery no longer shows that screen twice; the picture is one review card, built in this folder with product/02's components, at 1x on one pale green panel.
+- A different bill from product/02's: Penhallow Cold Storage, $9,126.45, submitted by Efua Osei and approved by Gregor Stenning on Tue 13 Oct (no weekend approval), due Fri 23 Oct.
+- Fresh figures (41,208 was shared with Knurl): $58,316.40 − $16,204.90 − $9,126.45 = $32,985.05 left on Thu 22 Oct, the ACH day.
+- The balance left is the card's display number, so the card proves the headline; the 29 px ledger in the page's header is gone, so nothing competes with the headline.
+- Headline two lines at 50 px; Reject is a neutral outline; separators spaced.
+
+**Type scale (round 4).** Display 50 px (display-md) · Body large 17 px (line, button) · the card's own sizes: 29 px total, 20 px cents, 14 px rows, 12 px meta. Instrument Sans.
+
+**Blind pairwise test** (our shot beside a shipped hero at the same height, random sides, no labels, fresh judges; reference images kept in scratch and deleted):
+- Origin (https://mobbin.com/sites/sections/7617d355-486e-4c61-88d3-2f42998f3e18): won 2 (twice)
+- Jeton (https://mobbin.com/sites/sections/091299d9-899c-4a1b-9759-4892aadd2a99): won 2, then lost 2 twice
+- Quicken (https://mobbin.com/sites/sections/c0a45bad-39fb-490e-972a-ffd56ae4cd19): won 3 (twice)
+
+The judges who preferred Jeton called the card on a mint panel tidy but un-art-directed. The final round only shortened the panel and changed 'before' to 'through' Oct 22.
+
+**Fresh-eyes audit** (against the B2B product screens and Orbika): 3 (round 1), 3.5 (round 2), 4 (round 3, final).
+
+**Checks.** `check_dates.py --year 2026`: passes. `check_names.py`: only the false positives recorded in NAMES.md (2026-10-20 heroes block). `preflight.py html`: no errors.
+
+**Still open.** product/02 still shows $41,208.17, the figure shared with the Knurl footer; that is outside this folder.
+
