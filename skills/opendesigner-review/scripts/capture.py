@@ -178,7 +178,8 @@ def focus_walk(page, out, tag, probe, opts):
             break
         if rec.get("active") and seen[rec["sel"]] >= 3:
             break
-    doc = {"kind": "focus", "url": probe["url"], "viewport": probe["viewport"], "media": probe["media"], "mode": probe.get("mode"), "stops": stops}
+    doc = {"kind": "focus", "url": probe["url"], "viewport": probe["viewport"], "media": probe["media"], "mode": probe.get("mode"), "stops": stops,
+           "tabbable": page.evaluate("__od.focusDoc().tabbable")}  # 0 means the page has nothing to focus, not a keyboard trap
     fp = out / "focus" / f"{tag}.json"
     review.write_json(fp, doc)
     return [str(fp)] + shots

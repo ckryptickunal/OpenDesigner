@@ -255,6 +255,16 @@ class FocusWalk(unittest.TestCase):
         self.assertEqual((fs[0]["severity"], fs[0]["case"]), ("error", "IN-01"))
         self.assertIn("header.sticky", fs[0]["measured"])
 
+    def test_a_page_with_nothing_to_focus_is_not_a_keyboard_error(self):
+        # checker evals, 2026-10-20: "Tab never reached any control" fired on pages with no links or buttons at all
+        F = rv.Findings()
+        idle = {"active": False, "sel": "body", "index": 0}
+        rv.check_focus({"kind": "focus", "url": "http://localhost:3000/", "viewport": {"w": 1280, "h": 800}, "media": {}, "stops": [idle], "tabbable": 0}, F)
+        self.assertEqual([f["severity"] for f in F.done()], ["info"])
+        F = rv.Findings()
+        rv.check_focus({"kind": "focus", "url": "http://localhost:3000/", "viewport": {"w": 1280, "h": 800}, "media": {}, "stops": [idle], "tabbable": 3}, F)
+        self.assertEqual([f["severity"] for f in F.done()], ["error"])
+
     def test_tab_order_heuristic_is_only_a_note(self):
         stops = [self.stop(0, "a", y=900), self.stop(1, "b", y=100), self.stop(2, "c", y=1000), self.stop(3, "d", y=100)]
         self.assertEqual([f["severity"] for f in self.run_walk(stops) if "jumps back up" in f["title"]], ["info"])

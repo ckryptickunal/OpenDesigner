@@ -131,16 +131,21 @@ MEASURE = r"""(cfg) => {
   const de = document.documentElement;
   if (de.scrollWidth > de.clientWidth) {
     const free = el => { for (let e = el.parentElement; e && e !== document.body; e = e.parentElement) if (cs(e).overflowX !== "visible") return false; return true; };
-    const offs = all.filter(e => (R(e).right > vw + 1 || R(e).left < -1) && free(e)), set = new Set(offs);
+    // an outer <svg> is a box like any other here (the shared element list leaves svg out, so check 1 adds it back by itself)
+    const svgs = [...document.body.querySelectorAll("svg")].filter(e => !(e.parentElement && e.parentElement.closest("svg")) && seen(e));
+    const offs = [...all, ...svgs].filter(e => (R(e).right > vw + 1 || R(e).left < -1) && free(e)), set = new Set(offs);
     const top = offs.filter(e => !set.has(e.parentElement)).sort((a, b) => R(b).right - R(a).right).slice(0, 3);
     add("page-overflow", "error", top[0] || de, `the page is ${de.scrollWidth} px wide in a ${de.clientWidth} px window; widest: ` +
       (top.map(e => `${path(e)} (right edge ${px(R(e).right)} px)`).join("; ") || "unknown"), top.map(R));
   }
 
+  // text for screen readers only sits in a 1 x 1 px box that hides its overflow on purpose (.visually-hidden); it is never clipped
+  // content and never runs past an edge (checker evals, 2026-10-20)
+  const srOnly = el => { for (let e = el; e && e !== document.body; e = e.parentElement) { const b = R(e); if (b.width <= 1 && b.height <= 1 && /hidden|clip/.test(cs(e).overflow)) return true; } return false; };
   // 2. scroll or clipping inside a figure, card or panel; ellipsis is a warning
   for (const el of all) {
     const s = cs(el);
-    if (s.display === "inline" || /^(IMG|VIDEO|IFRAME|CANVAS|INPUT|TEXTAREA|SELECT|svg)$/.test(el.tagName) || !inScope(el) || el.matches(any(cfg.scrollOk))) continue;
+    if (srOnly(el) || s.display === "inline" || /^(IMG|VIDEO|IFRAME|CANVAS|INPUT|TEXTAREA|SELECT|svg)$/.test(el.tagName) || !inScope(el) || el.matches(any(cfg.scrollOk))) continue;
     const ox = s.overflowX, oy = s.overflowY;
     if (ox === "visible" && oy === "visible") continue;
     if (s.textOverflow === "ellipsis" && el.scrollWidth > el.clientWidth + 1) {
@@ -240,7 +245,7 @@ MEASURE = r"""(cfg) => {
   const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), done = new Set();
   for (let n = walk.nextNode(); n; n = walk.nextNode()) {
     const el = n.parentElement;
-    if (!n.textContent.trim() || !el || el.closest("svg, script, style, noscript, template") || el.closest(any(cfg.marksOk)) || !seen(el)) continue;
+    if (!n.textContent.trim() || !el || el.closest("svg, script, style, noscript, template") || el.closest(any(cfg.marksOk)) || !seen(el) || srOnly(el)) continue;
     range.selectNodeContents(n);
     let r = range.getBoundingClientRect();
     if (r.width < 1 || r.right <= 0 || r.left >= vw) continue;  // empty, or parked off screen on purpose (the skip link)

@@ -77,7 +77,7 @@
   const cx = cv.getContext('2d', { willReadFrequently: true });
   const colorCache = new Map();
   function rgba(str) {
-    if (colorCache.has(str)) return colorCache.get(str);
+    if (colorCache.has(str)) return colorCache.get(str).slice();  // a copy: callers adjust alpha in place, and a shared entry would fade every later element (checker evals, 2026-10-20)
     let out = [0, 0, 0, 0];
     const m = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)(?:\s*[,/]\s*([\d.]+%?))?\s*\)$/.exec(str || '');
     if (m) {
@@ -90,7 +90,7 @@
       out = [d[0], d[1], d[2], d[3] / 255];
     }
     colorCache.set(str, out);
-    return out;
+    return out.slice();
   }
   const hex = (c) => '#' + c.slice(0, 3).map((v) => Math.round(v).toString(16).padStart(2, '0')).join('') +
     (c[3] < 0.995 ? Math.round(c[3] * 255).toString(16).padStart(2, '0') : '');
@@ -528,7 +528,9 @@
     od.stops.push(rec);
     return rec;
   };
-  od.focusDoc = () => ({ kind: 'focus', url: location.href, viewport: { w: document.documentElement.clientWidth, h: document.documentElement.clientHeight, dpr: devicePixelRatio }, media: od.probe().media, mode: { theme: document.documentElement.getAttribute('data-theme') }, stops: od.stops.slice() });
+  od.focusDoc = () => ({ kind: 'focus', url: location.href, viewport: { w: document.documentElement.clientWidth, h: document.documentElement.clientHeight, dpr: devicePixelRatio }, media: od.probe().media, mode: { theme: document.documentElement.getAttribute('data-theme') }, stops: od.stops.slice(),
+    // how many things a Tab could reach at all, so a page with none is not reported as a keyboard trap
+    tabbable: document.querySelectorAll('a[href], area[href], button:not([disabled]), input:not([disabled]):not([type=hidden]), select:not([disabled]), textarea:not([disabled]), summary, iframe, [contenteditable=""], [contenteditable="true"], [tabindex]:not([tabindex="-1"])').length });
 
   const STYLE_KEYS = ['color', 'backgroundColor', 'borderTopColor', 'borderTopWidth', 'borderRadius', 'boxShadow', 'outlineStyle', 'outlineWidth', 'outlineColor', 'opacity', 'transform', 'textDecorationLine', 'cursor', 'filter', 'fontWeight', 'transitionProperty', 'transitionDuration', 'transitionTimingFunction'];
   od.style = (selector) => {

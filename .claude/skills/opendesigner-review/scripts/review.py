@@ -463,6 +463,9 @@ def check_focus(f, F):
     if not stops:
         return
     real = [s for s in stops if s.get("active")]
+    if not real and f.get("tabbable") == 0:  # nothing on the page takes focus, so there is nothing to reach (older probe output has no count)
+        F.add("IN-01", "info", "The page has no controls to Tab to", w, f"{len(stops)} Tab presses, 0 focusable elements", "nothing to check for keyboard access", [], None, None, key="tab-none")
+        return
     if not real:
         F.add("IN-01", "error", "Tab never reached any control", w, f"{len(stops)} Tab presses, focus stayed on the page", "a keyboard user can reach every control", [], "check tabindex, display: none, and pointer-only handlers", "WCAG 2.1.1", key="tab-none")
         return
