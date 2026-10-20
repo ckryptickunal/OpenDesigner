@@ -177,6 +177,82 @@ class TypeScale(unittest.TestCase):
         self.assertEqual(p["type.ratio"], 1.2)
 
 
+class TrackingTableAndCorners(unittest.TestCase):
+    """Q-type-13 size-table applies Apple's SF Pro table, and Q-shape-04 reaches the exports (both were recorded but unused
+    before 2026-10-21). The table rows are from the HIG (S-L02-001)."""
+
+    def styles(self, **raw):
+        files, meta, _ = e.generate_system(state_with(**raw))
+        flat = e.resolve_all(files, {})
+        out = {k: (v["resolved"]["fontSize"]["value"], v["$extensions"]["opendesigner"]["letterSpacingEm"])
+               for k, v in flat.items() if v["type"] == "typography" and not k.startswith("text.emphasized.")}
+        return out, files, meta
+
+    def test_the_table_is_apples(self):
+        for size, em in ((6, 0.041), (11, 0.006), (12, 0), (17, -0.026), (20, -0.023), (24, 0.003), (28, 0.014), (80, 0), (96, 0)):
+            self.assertAlmostEqual(e.sf_pro_tracking(size), em, places=4, msg=size)
+        self.assertAlmostEqual(e.sf_pro_tracking(16.5), -0.023, places=4)   # straight line between 16 (-20) and 17 (-26)
+        self.assertEqual((e.sf_pro_tracking(4), e.sf_pro_tracking(120)), (0.041, 0))
+
+    def test_the_system_font_takes_the_whole_table(self):
+        out, _, _ = self.styles(tracking="sf-pro")
+        for k, (size, em) in out.items():
+            if k.startswith(("text.code.", "text.label.sm")):
+                continue  # code keeps the bands; uppercase labels stay at least +0.05em
+            self.assertAlmostEqual(em, e.sf_pro_tracking(size), places=4, msg=k)
+        self.assertTrue(any(size >= 24 and em > 0 for size, em in out.values()))  # SF Pro Display is loosened, as Apple sets it
+
+    def test_another_face_keeps_its_headings_tight(self):
+        out, _, _ = self.styles(tracking="sf-pro", textFace="Inter")
+        for k, (size, em) in out.items():
+            if size <= 19 and not k.startswith(("text.code.", "text.label.sm")):
+                self.assertAlmostEqual(em, e.sf_pro_tracking(size), places=4, msg=k)
+            if size >= 24:
+                self.assertLessEqual(em, 0, k)  # STD-visual-details-05: headings tighten, never loosen
+
+    def test_uppercase_labels_stay_looser(self):
+        out, _, _ = self.styles(tracking="sf-pro")
+        self.assertGreaterEqual(out["text.label.sm"][1], 0.05)  # STD-visual-details-04
+
+    def test_default_and_per_style_keep_the_bands(self):
+        default, _, _ = self.styles()
+        self.assertEqual(self.styles(tracking="per-style")[0], default)  # per-style is not the SF Pro table
+        self.assertEqual(e.ANSWER_TABLE["Q-type-13"]["per-style"], {"raw.tracking": "per-style"})
+
+    def test_states_from_before_keep_their_tracking_unless_the_person_chose_the_table(self):
+        """Every state before 2026-10-21 stored raw.tracking size-table as the default, when it meant the bands."""
+        self.assertEqual(e.ANSWER_TABLE["Q-type-13"]["size-table"], {"raw.tracking": "sf-pro"})
+        default, _, _ = self.styles()
+        self.assertEqual(self.styles(tracking="size-table")[0], default)
+        s = state_with(tracking="size-table")
+        s["answers"] = {"Q-type-13": "size-table"}
+        files, _, _ = e.generate_system(s)
+        body = e.resolve_all(files, {})["text.body.md"]
+        self.assertAlmostEqual(body["$extensions"]["opendesigner"]["letterSpacingEm"], e.sf_pro_tracking(body["resolved"]["fontSize"]["value"]), places=4)
+
+    def test_corner_shape_reaches_every_export(self):
+        self.assertEqual(e.ANSWER_TABLE["Q-shape-04"]["squircle-enhance"], {"raw.cornerShape": "squircle-enhance"})
+        _, files, meta = self.styles(cornerShape="squircle-enhance")
+        css = e.export_css(files, meta, "ds")
+        # Apple's continuous corner, not the squircle keyword, which is squarer than iOS (tools/fit_corner.py)
+        self.assertIn("@supports (corner-shape: superellipse(1.35)) { :root { --ds-corner-scale: 1.22; --ds-corner-shape: superellipse(1.35); } }", css)
+        self.assertIn(".ds-corners { border-radius: calc(var(--ds-corner-radius) * var(--ds-corner-scale)); corner-shape: var(--ds-corner-shape); }", css)
+        self.assertIn('@property --ds-corner-radius { syntax: "<length-percentage>"; inherits: false; initial-value: 0px; }', css)  # boxes inside keep their own radius
+        self.assertNotIn("squircle;", css)
+        self.assertIn("border-radius: calc(var(--ds-corner-radius) * var(--ds-corner-scale));", e.export_tailwind(files, meta, "ds"))
+        cont = e.levers()["formulas"]["radius"]["continuous"]
+        self.assertLess(cont["maxError"], cont["circleError"])  # the fit is closer to Apple's curve than a plain arc
+        self.assertLess(cont["circleError"], cont["squircleError"])  # and a plain arc is closer than the squircle keyword
+        self.assertEqual(e.export_figma(files, meta, state_with(), "ds")["corners"]["cornerSmoothing"], 0.6)
+        self.assertIn("RoundedRectangle(cornerRadius: radius, style: cornerStyle)", e.export_swift(files, meta, "ds"))
+
+    def test_circular_corners_add_nothing_to_the_web(self):
+        _, files, meta = self.styles()
+        self.assertNotIn("corner-shape", e.export_css(files, meta, "ds"))
+        self.assertEqual(e.export_figma(files, meta, state_with(), "ds")["corners"]["cornerSmoothing"], 0)
+        self.assertIn(".continuous", e.export_swift(files, meta, "ds"))  # iOS draws continuous corners whatever the web does (DC-L04-04)
+
+
 class Scales(unittest.TestCase):
     def test_space_ladders(self):
         self.assertEqual(e.space_ladder(4), [0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96])  # Atlassian set + 96 (spec 6.2)

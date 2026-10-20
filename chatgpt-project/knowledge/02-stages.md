@@ -1937,12 +1937,12 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-
 
 ## Q-shape-04 · Plain round corners, or smooth Apple-style corners?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L04-04
-- **Ask:** "Use standard round corners, or smooth Apple-style squircle corners where they work?"
-- **Why:** Smooth (continuous) corners blend into the edges. At the same radius they look softer and more "Apple" [DC-L04-04].
+- **Ask:** "Use standard round corners, or Apple's smooth corners where they work?"
+- **Why:** Smooth (continuous) corners ease into the straight edges instead of bending all at once, so they look softer and more "Apple". The difference is small: at the same radius a plain arc stays within 1.4% of the radius of Apple's curve [DC-L04-04].
 - **Options:**
   - `circular` Circular arc (CSS `border-radius`; every web system) [DC-L04-04].
-  - `continuous` Continuous curvature: SwiftUI `.continuous`, Figma corner smoothing (iOS preset 60%).
-  - `squircle-enhance` CSS `corner-shape: squircle` as progressive enhancement (experimental, not Baseline as of 2026-08-27) [DC-L04-04].
+  - `continuous` Continuous curvature: SwiftUI `.continuous`, Figma corner smoothing (iOS preset 60%); the web keeps plain arcs.
+  - `squircle-enhance` Continuous on the web too: CSS `corner-shape` drawn to match iOS, `superellipse(1.35)` at 1.22 times the radius, where the browser has it (experimental, not Baseline as of 2026-08-27) [DC-L04-04].
 - **Default:** `circular`: circular on the web; continuous on iOS-targeted components *Source:* card heuristic [DC-L04-04].
 - **Show:** magnified corner comparison.
 - **Use / avoid:** use continuous corners only where brand parity with iOS matters; avoid relying on `corner-shape` for anything functional [DC-L04-04].

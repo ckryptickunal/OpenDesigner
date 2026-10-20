@@ -41,6 +41,8 @@ Keep messages to one or two lines plus a file path; the content belongs in files
 | Findings another lane needs | Bottom of `BOARD.md` via `od.py note "L19 -> L07: ..."` |
 | Messages between sessions | `_coordination/inbox/` (read messages move to `read/`, never deleted) |
 
+Take formulas and exact numbers from a page's raw HTML or source data, not from a text conversion: converting drops superscripts, so 2<sup>K</sup> reads as 2K. Then test the formula on a case the source itself states (CSS `bevel` is `superellipse(0)`, a straight line) before you build on it. A corner fit was built on "2K" once and was wrong (2026-10-21).
+
 ## 6. If the tooling is missing or broken, make a way
 Everything above is plain files, so no tool is required:
 - Claim by editing your lane's row in `BOARD.md`; heartbeat by appending a line to `_coordination/sessions/<your-name>.md`.

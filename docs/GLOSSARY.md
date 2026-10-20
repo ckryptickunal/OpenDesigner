@@ -3940,9 +3940,9 @@ Designers: squircle corners, concentric nesting · Code: `radius.nested`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Circular arcs or continuous squircle corners, which look softer and more Apple-like. Nested shapes stay concentric: inner radius is outer radius minus padding, so the gap stays even.
+**Designer:** Circular arcs, or Apple's continuous corners, which ease into the edge. Nested shapes stay concentric: inner radius is outer radius minus padding, so the gap stays even.
 
-**Engineer:** Inner radius is computed at generation, max(outer - padding, smallest step), and emitted as radius.nested. The engine emits circular arcs; web corner-shape: squircle is an optional enhancement, not generated.
+**Engineer:** Inner radius is computed at generation, max(outer - padding, smallest step), and emitted as radius.nested. iOS uses .continuous; squircle-enhance adds CSS superellipse(1.35) corners at 1.22 times the radius.
 
 **Example:** Card 16px, padding 8px, so the photo inside gets 8px corners.
 

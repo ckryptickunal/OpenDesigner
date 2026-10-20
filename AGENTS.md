@@ -115,7 +115,7 @@ Use the skill's own folder path when it is installed elsewhere (for example a pl
 | `data/`, `skills/*/references/*.json`, `references/stages/`, `references/cards/`, `chatgpt-project/knowledge/` | Generated from `synthesis/` (including `glossary.json`) by `python3 tools/build_data.py`. Edit the source instead |
 | `.claude-plugin/`, `plugin.json` | Claude plugin and marketplace manifests, and the Agent Plugins 1.0 manifest. Keep `version` in step |
 | `design/` | Tokens and artboards written to Figma and Paper for review |
-| `tools/` | `od.py` (coordination), `jev_nav.py` (research navigation, Jev search, card export, decision graph, citation check), `wiki.py` (the learning wiki: add, remove, fetch, check, ingest, trace, cite-check, standards, map, next, upstream), `build_questionnaire.py`, `build_data.py`, `sync_skills.py`, `build_dist.py` |
+| `tools/` | `od.py` (coordination), `jev_nav.py` (research navigation, Jev search, card export, decision graph, citation check), `wiki.py` (the learning wiki: add, remove, fetch, check, ingest, trace, cite-check, standards, map, next, upstream), `build_questionnaire.py`, `build_data.py`, `sync_skills.py`, `build_dist.py`, `fit_corner.py` (measures Apple's continuous corner for the web export; macOS) |
 | `.claude/workflows/` | Saved Claude Code workflows for the learning wiki: `learn-analyze`, `learn-standards`, `learn-synthesis`, `learn-escalate`, `learn-personas` |
 | `dist/` | Release zips (git-ignored) |
 

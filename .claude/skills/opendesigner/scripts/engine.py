@@ -1452,6 +1452,24 @@ def _generic_face(name):
             or str(name).lower().startswith(("ui-", "sf ", "sf pro")))
 
 
+def sf_tracking_on(state):
+    """Q-type-13 size-table: Apple's SF Pro table. raw.tracking sf-pro, or a state from before 2026-10-21 whose answer was size-table
+    (raw.tracking was size-table then for every state, as the default, so only the answer says the person chose it)."""
+    return (state.get("raw") or {}).get("tracking") == "sf-pro" or (state.get("answers") or {}).get("Q-type-13") == "size-table"
+
+
+def sf_pro_tracking(size):
+    """Apple's SF Pro tracking for a size in points, in em: the HIG table (levers formulas.type.tracking.sfPro), straight-line
+    between its rows, and its end values beyond 6 and 96 pt."""
+    rows = levers()["formulas"]["type"]["tracking"]["sfPro"]["table"]
+    if size <= rows[0][0]:
+        return rows[0][1] / 1000
+    for (s0, t0), (s1, t1) in zip(rows, rows[1:]):
+        if size <= s1:
+            return round((t0 + (t1 - t0) * (size - s0) / (s1 - s0)) / 1000, 4)
+    return rows[-1][1] / 1000
+
+
 def font_faces(raw):
     """Which face each role uses and where its licence allows it (U5 F21). A brand face whose licence does not cover a
     platform falls back to the system font there: web in the tokens, apps in the Swift and Compose exports."""
@@ -2025,10 +2043,20 @@ def build_typography(ctx):
         return S[clamp(b + k, 0, len(S) - 1)]
 
     zero_tracking = raw.get("tracking") == "zero"
+    size_table = sf_tracking_on(ctx.state)
+    sf_until = levers()["formulas"]["type"]["tracking"]["sfPro"]["textUntil"]
+    same = disp in (None, "=textFace")  # the display styles use the text face
+    is_sf = {"text": _generic_face(tf["face"]), "display": _generic_face(tf["face"] if same else disp)}  # the Apple system font on Apple devices
 
-    def tracking(size, caps=False):
+    def tracking(size, caps=False, family="text"):
         if zero_tracking:  # Q-type-13 zero: the font's own spacing everywhere
             return 0.0
+        if size_table and family in is_sf and (is_sf[family] or size <= sf_until):  # code faces keep the bands
+            # Q-type-13 size-table: Apple's SF Pro table (S-L02-001). It is SF Pro's own tuning, so the system font takes all of it;
+            # another face takes it only through SF Pro's Text sizes, because from 20 pt Apple loosens SF Pro Display, which is
+            # drawn tighter, and a face without that drawing would loosen its headings (STD-visual-details-05)
+            em = sf_pro_tracking(size)
+            return max(em, 0.05) if caps else em  # uppercase stays looser than sentence case (STD-visual-details-04)
         if caps:
             return 0.05
         if size <= 12:
@@ -2071,7 +2099,7 @@ def build_typography(ctx):
     def add_style(root, path, s, role, fam_name, use, avoid, caps):
         lh = max(s + 2, snap(s * line_height_ratio(s)))
         used_lh[lh] = True
-        em = tracking(s, caps)
+        em = tracking(s, caps, fam_name)
         ext = {"lineHeightPx": lh, "letterSpacingEm": em, "use": use, "avoid": avoid}
         if caps:
             ext["textTransform"] = "uppercase"
@@ -2332,7 +2360,9 @@ def build_shape(ctx):
              "ring": {"width": tok(dim(focus_w)), "offset": tok(dim(offset))}}
     ctx.shape_info = {"control": "full" if full else control_v, "control-sm": control_sm, "detail": detail, "container": container,
                       "overlay": overlay, "nested": nested, "focusWidth": focus_w, "focusRadius": focus_r,
-                      "iconCorners": p["icon.cornerStyle"], "iconCaps": p["icon.caps"], "borderDefault": bd}
+                      "iconCorners": p["icon.cornerStyle"], "iconCaps": p["icon.caps"], "borderDefault": bd,
+                      # Q-shape-04 (DC-L04-04): corner geometry. The radii are the same on every platform; this says how each draws them
+                      "cornerShape": ctx.raw.get("cornerShape") or "circular"}
     return {"radius": radius, "border": border, "focus": focus}
 
 
@@ -3994,7 +4024,7 @@ ANSWER_TABLE = {
     "Q-type-11": {"4pt": {"raw.lineHeightGrid": 4}, "2pt": {"raw.lineHeightGrid": 2}},
     "Q-type-12": {"two": {"overrides.type.weightCount": 2}, "three": {"overrides.type.weightCount": 3}, "four": {"overrides.type.weightCount": 4},
                   "emphasized-twin": {"overrides.type.emphasizedVariants": True}, "strong-stronger": {"overrides.type.emphasizedVariants": True}},
-    "Q-type-13": {"size-table": {"raw.tracking": "size-table"}, "per-style": {"raw.tracking": "size-table"}, "zero": {"raw.tracking": "zero"}},
+    "Q-type-13": {"size-table": {"raw.tracking": "sf-pro"}, "per-style": {"raw.tracking": "per-style"}, "zero": {"raw.tracking": "zero"}},
     "Q-type-17": {"full": {"raw.textScaling": "full"}, "capped-chrome": {"raw.textScaling": "capped"}, "none": {"raw.textScaling": "none"}},
     "Q-space-02": {"hybrid": {"raw.spaceLadder": "hybrid"}, "linear": {"raw.spaceLadder": "linear"}, "geometric": {"raw.spaceLadder": "geometric"}},
     "Q-space-03": {"web-24-44": {"raw.minTarget": UNSET}, "ios-44": {"raw.minTarget": 44}, "android-48": {"raw.minTarget": 48},
@@ -4009,6 +4039,8 @@ ANSWER_TABLE = {
     "Q-layout-03": {"reading": {"raw.productType": "content"}, "working": {"raw.productType": "work-tool"},
                     "data": {"raw.productType": "work-tool", "raw.numericStyles": True}},
     "Q-shape-01": {"square": {"dials.roundness": 5}, "subtle": {"dials.roundness": 40}, "soft": {"dials.roundness": 55}, "pill": {"dials.roundness": 97}},
+    "Q-shape-04": {"circular": {"raw.cornerShape": "circular"}, "continuous": {"raw.cornerShape": "continuous"},
+                   "squircle-enhance": {"raw.cornerShape": "squircle-enhance"}},
     "Q-depth-01": {"borders": {"dials.depth": 8}, "ring-shadow": {"dials.depth": 25}, "tonal": {"dials.depth": 45}, "shadow": {"dials.depth": 68},
                    "glass": {"dials.depth": 90}},
     "Q-color-25": {"brand-only": {"raw.gradients": "brand-only"}, "none": {"raw.gradients": "none"},
@@ -4083,7 +4115,7 @@ RECORD_KINDS = {
 _R = {
     "rule": """Q-brand-05 Q-dir-05 Q-plat-06 Q-plat-10 Q-aud-04 Q-theme-02 Q-theme-03 Q-theme-04 Q-color-06 Q-color-07 Q-color-08 Q-color-10
                Q-color-12 Q-color-13 Q-color-16 Q-color-18 Q-color-22 Q-color-24 Q-color-26 Q-type-07 Q-type-10 Q-type-14 Q-type-15
-               Q-type-16 Q-space-06 Q-space-08 Q-space-09 Q-layout-02 Q-layout-04 Q-layout-05 Q-layout-06 Q-shape-02 Q-shape-03 Q-shape-04
+               Q-type-16 Q-space-06 Q-space-08 Q-space-09 Q-layout-02 Q-layout-04 Q-layout-05 Q-layout-06 Q-shape-02 Q-shape-03
                Q-shape-05 Q-depth-02 Q-depth-03 Q-motion-02 Q-motion-03 Q-motion-05 Q-motion-06 Q-motion-10 Q-icon-05 Q-icon-07 Q-icon-08
                Q-img-02 Q-img-03 Q-img-05 Q-viz-01 Q-voice-02 Q-voice-04 Q-voice-05 Q-voice-06 Q-comp-03 Q-comp-04 Q-comp-05 Q-state-01
                Q-state-05 Q-state-06 Q-state-07 Q-state-08 Q-form-02 Q-form-03 Q-form-04 Q-form-05 Q-pattern-01 Q-pattern-02 Q-pattern-03
@@ -4095,7 +4127,7 @@ _R = {
                 Q-comp-01 Q-comp-02 Q-aud-02 Q-brand-07""",
     "hook": "Q-brand-03 Q-brand-08 Q-icon-01 Q-icon-06 Q-img-01 Q-img-04 Q-img-06 Q-img-07 Q-motion-08 Q-voice-01 Q-type-02",
     "reference": "Q-ref-01",
-    "export": "Q-type-17 Q-tool-03",
+    "export": "Q-type-17 Q-tool-03 Q-shape-04",
 }
 ANSWER_RECORDS = {q: k for k, qs in _R.items() for q in qs.split()}
 ANSWER_NOTES = {  # one plain line for options the engine cannot build yet, so the reply stays honest
@@ -7446,7 +7478,28 @@ def export_css(files, meta, prefix):
     if any(k.endswith("focus-inner") for k in flatten(files[[s['$ref'] for s in theme_ctx[default_theme]][0]])):
         lines.append(f"  box-shadow: 0 0 0 var({css_var(prefix, 'focus.ring.offset')}) var({css_var(prefix, 'color.border.focus-inner')});")
     lines += ["}", "@media (forced-colors: active) {", f"  .{prefix}-focus-ring:focus-visible {{ outline-color: Highlight; }}", "}", ""]
+    lines += corner_shape_css(meta, prefix)
     return "\n".join(lines)
+
+
+def corner_shape_css(meta, prefix):
+    """Q-shape-04 squircle-enhance (DC-L04-04): Apple's continuous corner on the web where the browser can draw corner-shape.
+    superellipse(K) at radiusScale times the radius follows SwiftUI's curve within 0.4% of the radius (levers
+    formulas.radius.continuous, measured with tools/fit_corner.py); the plain squircle keyword is squarer than iOS. corner-shape
+    is CSS Borders 4, not Baseline yet, so it sits behind @supports and other browsers keep the circular arc at the token radius,
+    which is within 1.4% of the radius of Apple's curve. A surface sets --{p}-corner-radius instead of border-radius and takes the
+    class; the radius is registered as not inherited, so the boxes inside keep their own. Capsules and circles keep round ends."""
+    if ((meta.get("shape") or {}).get("cornerShape")) != "squircle-enhance":
+        return []
+    c = levers()["formulas"]["radius"]["continuous"]
+    k, scale, p = c["superellipse"], c["radiusScale"], prefix
+    return ["/* Corner shape (Q-shape-04 squircle-enhance): Apple's continuous corner where the browser draws corner-shape,",
+            f"   the same radius as a circular arc elsewhere. Use: .card {{ --{p}-corner-radius: var(--{p}-radius-container); }} with class=\"{p}-corners\".",
+            f"   superellipse({k}) at {scale} times the radius follows Apple's curve within {round(c['maxError'] * 100, 1):g}% of the radius. */",
+            f"@property --{p}-corner-radius {{ syntax: \"<length-percentage>\"; inherits: false; initial-value: 0px; }}",
+            f":root {{ --{p}-corner-scale: 1; --{p}-corner-shape: round; }}",
+            f"@supports (corner-shape: superellipse({k})) {{ :root {{ --{p}-corner-scale: {scale}; --{p}-corner-shape: superellipse({k}); }} }}",
+            f".{p}-corners {{ border-radius: calc(var(--{p}-corner-radius) * var(--{p}-corner-scale)); corner-shape: var(--{p}-corner-shape); }}", ""]
 
 
 TW_COLOR_MAP = [("color.surface.", "surface-"), ("color.text.", "fg-"), ("color.bg.", ""), ("color.border.", "line-"),
@@ -7521,6 +7574,11 @@ def export_tailwind(files, meta, prefix, reset=True):
     num = [p for p in flat if p.startswith("text.numeric.")]
     if num:
         lines += ["/* Tabular figures for amounts and tables (text.numeric.*). */", "@utility tabular {", "  font-variant-numeric: tabular-nums;", "}", ""]
+    if (meta.get("shape") or {}).get("cornerShape") == "squircle-enhance":  # the variable comes from tokens.css (corner_shape_css)
+        lines += ["/* Apple's continuous corner where the browser draws corner-shape (Q-shape-04 squircle-enhance).",
+                  f"   Set the radius with [--{prefix}-corner-radius:var(--{prefix}-radius-container)], not rounded-*. */",
+                  "@utility corners {", f"  border-radius: calc(var(--{prefix}-corner-radius) * var(--{prefix}-corner-scale));",
+                  f"  corner-shape: var(--{prefix}-corner-shape);", "}", ""]
     return "\n".join(lines)
 
 
@@ -7745,13 +7803,18 @@ def export_figma(files, meta, state, prefix):
                 {"type": "INNER_SHADOW" if l.get("inset") else "DROP_SHADOW", "color": _figma_rgba(l["color"]),
                  "offset": {"x": _px(l["offsetX"]), "y": _px(l["offsetY"])},
                  "radius": _px(l["blur"]), "spread": _px(l["spread"]), "visible": True, "blendMode": "NORMAL"} for l in eff]})
+    cs = (meta.get("shape") or {}).get("cornerShape") or "circular"
+    corners = {"shape": cs, "cornerSmoothing": 0.6 if cs in ("continuous", "squircle-enhance") else 0,
+               "about": "Corner smoothing is a layer property in Figma, not a variable (DC-L04-04, Q-shape-04). Set cornerSmoothing to this "
+                        "value on every frame and component that has a radius: 0.6 is Figma's iOS preset for continuous corners, 0 is a "
+                        "plain circular arc. Capsules and circles keep 0."}
     return {"$schema": "opendesigner/figma-variables/1", "generatedBy": f"OpenDesigner engine {ENGINE_VERSION}",
             "about": "Payload for the Figma MCP use_figma write flow (or a plugin): create collections in order, primitives first, "
                      "then alias semantic variables by name. Colors are sRGB 0-1. TIMING values are seconds and EASING values are "
                      "cubic-bezier or spring objects (plugin API, 5 Aug 2026, L07); if the file rejects them, use each variable's "
                      "fallback. Composite tokens become text styles and effect styles (light values; bind colors to the Color collection).",
             "plan": plan, "limits": {"modesPerCollection": limit, "variablesPerCollection": 5000, "codeSyntaxPlatforms": 3},
-            "warnings": warnings, "collections": final, "textStyles": text_styles, "effectStyles": effect_styles}
+            "warnings": warnings, "collections": final, "textStyles": text_styles, "effectStyles": effect_styles, "corners": corners}
 
 
 PAPER_TYPES = [("color", None), ("spacing", "space."), ("radius", "radius."), ("fontSize", "font.size."), ("lineHeight", "font.line-height."),
@@ -7852,6 +7915,10 @@ def export_swift(files, meta, prefix):
         t = base[p]
         if t["type"] == "dimension" and p.startswith(("radius.", "border.width.", "focus.ring.")):
             L.append(f"        public static let {camel(p.split('.'))}: CGFloat = {fmt_num(_px(t['resolved']))}")
+    L += ["        /// Continuous corners, as iOS draws its own controls (DC-L04-04, Q-shape-04): the same radii, a smoother curve.",
+          f"        /// Use {P}.Radius.shape({P}.Radius.radiusContainer) instead of a plain RoundedRectangle.",
+          "        public static let cornerStyle: RoundedCornerStyle = .continuous",
+          "        public static func shape(_ radius: CGFloat) -> RoundedRectangle { RoundedRectangle(cornerRadius: radius, style: cornerStyle) }"]
     faces = (meta.get("type") or {}).get("faces") or {}
     scaling = (meta.get("textScaling") or "full")
     notes = []
@@ -8932,6 +8999,14 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
              if tinfo.get("emphasized") else "- Emphasized variants: off (they turn on at Expression 67 and up, DC-L02-11)."),
             f"- Line heights snap to a {2 if raw.get('lineHeightGrid') == 2 else 4}px grid: 1.5 up to 17px, 1.4 to 26px, 1.25 to 44px, 1.12 above.",
             ("- Letter spacing: none beyond the font's own (Q-type-13 zero)." if raw.get("tracking") == "zero"
+             else ("- Letter spacing: Apple's SF Pro table by size (Q-type-13 size-table, HIG): +0.006em at 11px, 0 at 12px, -0.026em at 17px, "
+                   "+0.014em at 28px, 0 from 80px; uppercase labels at least +0.05em. On Apple devices the system font is SF Pro, and native "
+                   "apps get the same values from the OS."
+                   if _generic_face(raw.get("textFace")) else
+                   "- Letter spacing: Apple's SF Pro table up to 19px (Q-type-13 size-table: 0 at 12px, -0.026em at 17px), then -0.01em from "
+                   "32px and -0.02em from 48px. Above 19px Apple's values turn positive to correct SF Pro Display's tighter drawing, which "
+                   f"{raw.get('textFace')} does not have, so headings tighten instead (STD-visual-details-05).")
+             if sf_tracking_on(state)
              else "- Letter spacing: +0.02em at 11-12px, -0.01em from 32px, -0.02em from 48px."),
             "- Text scaling: CSS sizes are rem, line heights unitless, so text scales to 200% (WCAG 1.4.4); containers must grow with it.",
             "- Scripts: " + (", ".join(f"{k}: line height x{v.get('lineHeightFactor')}" + (", tracking 0" if v.get("zeroTracking") else "")
@@ -9012,12 +9087,20 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     out.append(section("Elevation & Depth", "\n".join(body), lead=lead_depth, term_key="Depth model"))
 
     # 6 Shapes
+    continuous_corner = levers()["formulas"]["radius"]["continuous"]  # Q-shape-04 squircle-enhance on the web (tools/fit_corner.py)
     body = [f"**Intent.** Roundness {dials['roundness']}/100 gives controls a **{shp['control']}** radius; details {shp['detail']}px, containers "
             f"{shp['container']}px, overlays {shp['overlay']}px, people full. Controls under 32px tall use `radius.control-sm` ({shp['control-sm'] if shp['control-sm'] < FULL else 'full'}).",
             "", f"- Nested radius: inner = max(outer - padding, smallest step). Here it is {shp['nested']}px inside a container with `space.inset.lg` "
             "padding. Equal radii on nested shapes look uneven (DC-L04-05).",
             f"- Focus ring: {shp['focusWidth']}px, 2px offset, radius = control radius + offset ({shp['focusRadius'] if shp['focusRadius'] < FULL else 'full'}).",
-            f"- Icons: {shp['iconCorners']} corners, {shp['iconCaps']} caps. On iOS, use continuous corners (DC-L04-04).",
+            f"- Icons: {shp['iconCorners']} corners, {shp['iconCaps']} caps.",
+            "- Corners (Q-shape-04, DC-L04-04): the radii are the same everywhere; iOS draws them continuous "
+            f"(`{prefix.upper()}.Radius.shape(...)`, `.continuous`), Android circular (`RoundedCornerShape`), "
+            + ({"squircle-enhance": f"the web continuous where the browser supports `corner-shape` (`superellipse({continuous_corner['superellipse']})` at "
+                                    f"{continuous_corner['radiusScale']} times the radius, which follows Apple's curve; set `--{prefix}-corner-radius` and add the class "
+                                    f"`{prefix}-corners` or Tailwind `corners`; a circular arc elsewhere), and Figma with corner smoothing 0.6.",
+                "continuous": "the web circular (`border-radius`), and Figma with corner smoothing 0.6 (the iOS preset)."}
+               .get(shp.get("cornerShape"), "the web and Figma circular.")),
             "- Signature shapes: none generated; a brand shape library is a designer asset (hook H-motif)."]
     out.append(section("Shapes", "\n".join(body), lead=shapes_lead(shp), term_key="corner radius"))
 
