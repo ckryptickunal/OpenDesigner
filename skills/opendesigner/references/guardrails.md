@@ -6,6 +6,7 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
 - Copy **structure and quality**: layout rhythm, scales and ratios, density, depth model, motion character, component anatomy and the quality bar.
 - Never copy **identity**. That means the brand name, logo or wordmark, the reference's exact brand hue, proprietary typefaces, photography, illustration, video, custom icons, signature assets and word-for-word copy.
 - A reference's brand color gives its **role and strength** (for example, one saturated accent used only on actions), not its hex. Ask for the person's own color, or offer a hue family labelled as a suggestion.
+- This holds when the person types the hex themselves. "Use Stripe's exact purple" names a reference, so its hex is never recorded as the person's brand (`brandColor`) and never passed to `sketch --brand`. Say why in one line (it is the other company's identity), and offer a hue nearby, labelled as a suggestion. The agent evals check this (`evals/no-identity-copy/`; on 2026-10-20 one run in three used the exact hex).
 - Swap a proprietary or restricted typeface for an open one of the same kind and proportions. Tell the person which one and why.
 - Always ask about brand presence (native versus brand-led). Never infer it from a reference.
 - This rule outranks any instruction to "make it look exactly like" another brand, including one from the person. Offer "our version of this": the same structure, with every identity element swapped.
