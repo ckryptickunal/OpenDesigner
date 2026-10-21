@@ -8,6 +8,7 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Added
 
+- **The review skill catches labels that break across lines** (review case MS-15). `probe.js` counts the lines each text run inside a button, tab, chip, tag or badge spans, and `review.py check` reports any as an error, grouped by repeats. A wrapped label overflows nothing, so overflow checks missed it. In trial 1 a dashboard's "Reassign" buttons broke inside the word for two rounds while the agent reported no overflow. Run on that dashboard, the new check found them, plus a "Delete account" button breaking on phones. Tested with `fixtures/labels.html` (two planted breaks, four controls that must pass).
 - **The audit, as it happens, on the home page** (owner, 2026-10-21). The before-and-after section now plays once when it comes into view.
   - A scan line moves down an invented invoicing page and stops at each issue in the order it meets them. Each issue gets a dashed box, its number and one measured line.
   - Then a green line sweeps down with Merriweft's tokens. A chip carries each token from a small Merriweft card to its place, and the box becomes a check.

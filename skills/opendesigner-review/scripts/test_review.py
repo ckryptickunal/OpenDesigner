@@ -172,6 +172,18 @@ class QuietWhenClean(unittest.TestCase):
     def test_clean_page_has_no_findings(self):
         self.assertEqual(findings_for(clean_probe()), [])
 
+    def test_a_label_breaking_across_lines_is_an_error_even_with_no_overflow(self):   # MS-15
+        p = clean_probe(labels={"checked": 4, "broken": [
+            {"sel": "button.reassign", "text": "Reassign", "lines": 3, "words": 1, "midWord": True, "w": 44},
+            {"sel": "span.chip", "text": "Needs review", "lines": 2, "words": 2, "midWord": False, "w": 64}]})
+        fs = by_case(findings_for(p))
+        self.assertEqual(list(fs), ["MS-15"])          # nothing overflows, and still one finding
+        f = fs["MS-15"][0]
+        self.assertEqual(f["severity"], "error")
+        self.assertIn("inside a word", f["measured"])
+        self.assertIn("button.reassign", f["evidence"])
+        self.assertEqual(findings_for(clean_probe(labels={"checked": 4, "broken": []})), [])
+
     def test_sparse_probe_does_not_crash(self):
         for probe in ({"v": 1}, {"v": 1, "url": "http://localhost/", "viewport": {"w": 320, "h": 600}}):
             findings_for(probe)

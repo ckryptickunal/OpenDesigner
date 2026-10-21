@@ -80,6 +80,19 @@ class Live(unittest.TestCase):
         self.assertTrue(p["overflow"]["scrollers"])
         self.assertTrue(p["overflow"]["clipped"][0]["ellipsis"])
 
+    def test_labels_breaking_across_lines_are_found_and_nothing_else(self):                     # MS-15
+        pg = _browser.new_page(viewport={"width": 800, "height": 600})
+        self.addCleanup(pg.close)
+        pg.goto(f"http://localhost:{self.port}/labels.html")
+        pg.wait_for_timeout(300)
+        lb = pg.evaluate(PROBE)["labels"]
+        broken = {x["sel"]: x for x in lb["broken"]}
+        self.assertEqual(set(broken), {"button#reassign", "span#chip"})   # the two-line button, the sentence and the card are not breaks
+        self.assertTrue(broken["button#reassign"]["midWord"])
+        self.assertGreaterEqual(broken["button#reassign"]["lines"], 3)
+        self.assertFalse(broken["span#chip"]["midWord"])
+        self.assertEqual(broken["span#chip"]["lines"], 2)
+
     def test_the_stored_fixture_still_matches_a_live_run(self):
         live = self.page().evaluate(PROBE)
         stored = json.loads((HERE / "fixtures" / "broken-390.probe.json").read_text())

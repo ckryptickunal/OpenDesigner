@@ -2,7 +2,7 @@
 
 Generated from `synthesis/review-cases.json` by `tools/build_data.py`. Edit the source, not this file.
 
-68 cases in 7 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
+69 cases in 7 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
 
 ## You only looked at part of it
 
@@ -484,6 +484,17 @@ Sources: S-R5-101
 **How to catch it.** For every rounded element inside another, closer than the outer radius, read both computed border-radius values and the gap between their edges (__od.measure). The inner radius should be the outer radius minus the gap, within 2 px, at every width.
 
 Sources: S-R5-102
+
+### MS-15 A label breaks across lines
+*How known: measured · default severity: error · applies to: always*
+
+**What goes wrong.** A button, tab, chip, tag or badge label wraps onto two or more lines, sometimes inside a word ("Re / as / sig / n"), because its column or row is too narrow. Nothing overflows, so overflow checks report the page clean.
+
+**Why it is missed.** Overflow and clipping checks only see content that leaves its box; a wrapped label stays inside it. At a glance in a dense table the broken label reads as an icon or a smudge.
+
+**How to catch it.** The probe counts the lines each text run inside a control spans (out.labels.broken), and review.py reports any as MS-15. A control built from two runs on purpose, such as a title and a subtitle, is not flagged, nor is a sentence over 40 characters. Fix it by keeping the label on one line (white-space: nowrap) and giving it room; let the row wrap, never the label. In an OpenDesigner demo trial on 2026-10-21, a dashboard's Reassign buttons broke inside the word at 1440 px for two rounds while the agent reported no overflow.
+
+Sources: S-R5-101
 
 ## It works for a mouse and a good pair of eyes, not for everyone
 

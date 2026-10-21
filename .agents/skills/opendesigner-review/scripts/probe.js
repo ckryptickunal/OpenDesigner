@@ -392,6 +392,41 @@
       if ((gone || inHidden) && hiddenFocusable.length < CAP) hiddenFocusable.push({ sel: sel(el), why: op === 0 ? 'opacity 0' : inHidden ? 'inside aria-hidden' : 'outside the page', x: round(r.left), y: round(r.top) });
     }
 
+    // labels that break across lines (MS-15): a button, tab, chip, tag, badge or pill whose text runs over more than one
+    // line, sometimes inside a word ("Re / as / sig / n"). Overflow checks miss it: a wrapped label overflows nothing.
+    // Each text run is counted on its own, so a control with a title and a subtitle on two lines is not a break.
+    const labels = { checked: 0, broken: [] };
+    const LABELISH = /(^|[\s_-])(btn|button|chip|tag|badge|pill|label|status|segment)s?($|[\s_-])/i;
+    for (const el of els) {
+      const isControl = el.matches('button,[role=button],[role=tab],[role=menuitem],[role=option],input[type=button],input[type=submit],input[type=reset]');
+      const cls = typeof el.className === 'string' ? el.className : '';
+      if (!isControl && !LABELISH.test(cls)) continue;
+      if (el.parentElement && el.parentElement.closest('button,[role=button],[role=tab],[role=menuitem]') && !isControl) continue;
+      const cs = getComputedStyle(el), r = el.getBoundingClientRect();
+      if (!visible(el, cs, r)) continue;
+      const text = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+      if (!text || text.length > 40) continue;   // a sentence in a button may wrap on purpose
+      labels.checked++;
+      let worst = null;
+      const tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      for (let n = tw.nextNode(); n; n = tw.nextNode()) {
+        const t = n.textContent.replace(/\s+/g, ' ').trim();
+        if (!t) continue;
+        const rg = document.createRange(); rg.selectNodeContents(n);
+        const fs = px(getComputedStyle(n.parentElement).fontSize) || 16;
+        const mids = [];
+        for (const q of rg.getClientRects()) {
+          if (q.width < 1 || q.height < 1) continue;
+          const mid = q.top + q.height / 2;
+          if (!mids.some((m) => Math.abs(m - mid) < fs * 0.6)) mids.push(mid);
+        }
+        const words = t.split(' ').length;
+        if (mids.length > 1 && (!worst || mids.length > worst.lines)) worst = { lines: mids.length, words, midWord: mids.length > words, run: t.slice(0, 40) };
+      }
+      if (worst && labels.broken.length < CAP)
+        labels.broken.push({ sel: sel(el), text: text.slice(0, 40), lines: worst.lines, words: worst.words, midWord: worst.midWord, w: round(r.width) });
+    }
+
     // headings, landmarks, duplicate ids
     const heads = Array.from(document.querySelectorAll('h1,h2,h3,h4,h5,h6,[role=heading]')).filter((h) => { const c = getComputedStyle(h); return c.display !== 'none' && c.visibility !== 'hidden'; })
       .map((h) => (h.localName.length === 2 ? +h.localName[1] : +(h.getAttribute('aria-level') || 2)));
@@ -408,6 +443,7 @@
     out.contrast = { checked: contrast.length, failing: contrast.filter((c) => c.ratio < (c.large ? 3 : 4.5)).sort((a, b) => a.ratio - b.ratio).slice(0, CAP * 2), lowest: contrast.slice().sort((a, b) => a.ratio - b.ratio).slice(0, 3) };
     out.overflow = { list: overflow.sort((a, b) => b.over - a.over).slice(0, CAP), clipped, scrollers };
     out.content = { placeholders };
+    out.labels = labels;
     out.fixed = fixed;
     out.targets = { count: targets.length, small, noName, hiddenFocusable, coarse: out.media.pointer === 'coarse' };
     out.images = images;

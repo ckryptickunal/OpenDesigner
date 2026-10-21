@@ -1148,6 +1148,20 @@
       "sources": [
         "S-R5-102"
       ]
+    },
+    {
+      "id": "MS-15",
+      "group": "measure",
+      "title": "A label breaks across lines",
+      "trap": "A button, tab, chip, tag or badge label wraps onto two or more lines, sometimes inside a word (\"Re / as / sig / n\"), because its column or row is too narrow. Nothing overflows, so overflow checks report the page clean.",
+      "why_missed": "Overflow and clipping checks only see content that leaves its box; a wrapped label stays inside it. At a glance in a dense table the broken label reads as an icon or a smudge.",
+      "catch": "The probe counts the lines each text run inside a control spans (out.labels.broken), and review.py reports any as MS-15. A control built from two runs on purpose, such as a title and a subtitle, is not flagged, nor is a sentence over 40 characters. Fix it by keeping the label on one line (white-space: nowrap) and giving it room; let the row wrap, never the label. In an OpenDesigner demo trial on 2026-10-21, a dashboard's Reassign buttons broke inside the word at 1440 px for two rounds while the agent reported no overflow.",
+      "evidence": "measured",
+      "severity": "error",
+      "when": "always",
+      "sources": [
+        "S-R5-101"
+      ]
     }
   ],
   "sources": {

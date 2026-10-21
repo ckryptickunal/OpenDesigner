@@ -15,7 +15,7 @@ Use this when a screen, page or app has been built and someone asks "does it loo
 This reviews built screens. To review the design system's own decisions and coverage, the router's critique step (P7) and `opendesigner-extend` do that.
 
 The idea: **a screenshot is one picture of one moment, and eyes cannot read numbers off pixels.** Agents that review UIs by looking at one screenshot miss what is below the fold, at other sizes, in dark mode, on hover, on Tab, in motion, and a 2 px error in spacing. So a review has three kinds of evidence, and every finding says which it rests on:
-- **measured**: a number read from the page (`probe.js`): sizes, colors, contrast, fonts, overflow, animations.
+- **measured**: a number read from the page (`probe.js`): sizes, colors, contrast, fonts, overflow, labels that break across lines (a wrapped label overflows nothing, so only this catches it), animations.
 - **operated**: you did something (pressed Tab, hovered, scrolled, switched a setting) and saw the result.
 - **seen**: you looked at pixels. Use this for "is anything obviously broken?", not for numbers.
 

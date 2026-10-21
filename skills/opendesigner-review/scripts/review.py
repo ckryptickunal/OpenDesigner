@@ -275,6 +275,23 @@ def check_probe(p, sysm, F):
         off = [h for h in hf if h["why"] == "outside the page"]
         if off:
             F.add("IN-08", "info", "Controls placed outside the page box", w, "; ".join(h["sel"] for h in off[:3]), "a skip link that appears on focus is fine; anything else is off-canvas content", [h["sel"] for h in off[:3]], "Tab to it and confirm it appears", None, key="offcanvas")
+    lb_all = (p.get("labels") or {}).get("broken") or []
+    lb, seen_lb = [], {}
+    for x in lb_all:   # the same button in every table row is one finding with a count
+        k = (x["sel"], x["text"])
+        if k in seen_lb:
+            seen_lb[k]["n"] += 1
+        else:
+            seen_lb[k] = dict(x, n=1)
+            lb.append(seen_lb[k])
+    if lb:
+        def says(x):
+            return (f"{x['sel']}: \"{x['text']}\" on {x['lines']} lines" + (" (inside a word)" if x.get("midWord") else "")
+                    + (f", {x['n']} times" if x["n"] > 1 else ""))
+        F.add("MS-15", "error", "Labels break across lines" + stress_txt, w, "; ".join(says(x) for x in lb[:4]) + (f" (+{len(lb) - 4} more)" if len(lb) > 4 else ""),
+              "every button, tab, chip and tag label on one line", [x["sel"] for x in lb[:4]],
+              "keep the label on one line (white-space: nowrap) and give it room: widen the column, drop the icon or shorten the label; let the row wrap, never the label",
+              None, key="label-break" + ("-stress" if stressed else ""))
     ph = (p.get("content") or {}).get("placeholders") or []
     if ph:
         F.add("ST-06", "warn", "Placeholder or broken template text on the page", w, "; ".join(f"{x['sel']}: {x['match']!r}" for x in ph[:4]), "real content", [x["sel"] for x in ph[:4]], "replace lorem ipsum; undefined, NaN, null and {{ }} mean data did not arrive or a template did not render", None, key="placeholders")
