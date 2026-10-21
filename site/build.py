@@ -1114,11 +1114,11 @@ def home(pages, facts, faq):
               {"@type": "HowToStep", "text": "/plugin marketplace add ckryptickunal/OpenDesigner"},
               {"@type": "HowToStep", "text": "/plugin install opendesigner@opendesigner"},
               {"@type": "HowToStep", "text": "Say: Create a design system for this project. Answer up to five questions."}]}]
-    return shell("/", "OpenDesigner: build a design system with the AI you already use", HOME_DESCRIPTION, body, pages, ld, home=True)
+    return shell("/", "OpenDesigner: design systems for the AI tool you already use", HOME_DESCRIPTION, body, pages, ld, home=True)
 
 
-HOME_DESCRIPTION = ("Make everything you build look like it belongs together. Free, open-source skills give Claude, ChatGPT, Codex or Cursor "
-                    "your design rules.")
+HOME_DESCRIPTION = ("Make everything you build look like it belongs together. Free skills turn your design rules into tokens, CSS, Tailwind "
+                    "and DESIGN.md that your AI follows.")
 
 # ---------------------------------------------------------------- docs pages, docs index, showcase, 404
 def faq_items(body):
