@@ -285,8 +285,8 @@ def md_to_html(md, toc=None):
         if fm:
             out.append(figure(fm.group(1))); i += 1
             continue
-        if ln.strip() == "{{changelog}}":  # CHANGELOG.md itself, so the page is never behind the repo
-            out.append(md_to_html(changelog_md(), toc)); i += 1
+        if ln.strip() in CHANGELOG_BLOCKS:  # the version, git's record and CHANGELOG.md, made when the site is built
+            out.append(md_to_html(CHANGELOG_BLOCKS[ln.strip()](), toc)); i += 1
             continue
         em = EVALS_RE.match(ln.strip())
         if em:
@@ -339,10 +339,93 @@ def md_to_html(md, toc=None):
 
 
 def changelog_md():
-    """CHANGELOG.md from its first version heading on, with links to repo files pointed at GitHub."""
+    """CHANGELOG.md from its first version heading on, a level down (it sits under the page's "Highlights" heading), with
+    links to repo files pointed at GitHub."""
     text = (ROOT / "CHANGELOG.md").read_text()
     text = re.sub(r"^## \[([^\]]+)\]", r"## \1", text[text.index("\n## ") + 1:], flags=re.M)  # "## [Unreleased]" reads "Unreleased"
+    text = re.sub(r"^(#{2,5}) ", r"#\1 ", text, flags=re.M)
     return re.sub(r"\]\((?!https?:|#|/|mailto:)([^)]+)\)", lambda m: f"]({GH}/blob/main/{m.group(1)})", text)
+
+VERSION = json.loads((ROOT / "plugin.json").read_text())["version"]  # in step with engine.py and .claude-plugin (build_dist.py --check)
+
+
+def git_out(*args):
+    r = subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
+    return r.stdout.strip() if r.returncode == 0 else ""
+
+
+def day_name(iso):
+    d = dt.date.fromisoformat(iso)
+    return f"{d.day} {d.strftime('%B')} {d.year}"
+
+
+def version_facts():
+    """The version every copy stamps into the systems it builds, the day a git tag v<version> released it (None until
+    then), and the day of the newest change."""
+    return {"version": VERSION, "released": git_out("log", "-1", "--format=%cs", f"v{VERSION}") or None,
+            "latest_change": git_out("log", "-1", "--format=%cs") or TODAY}
+
+
+def changes_by_day():
+    """Every change on main, newest first, grouped by the day it landed: git's own record, so it can't fall behind."""
+    days = {}
+    for line in git_out("log", "--first-parent", "--format=%H%x1f%cs%x1f%s").splitlines():
+        h, day, subject = line.split("\x1f", 2)
+        days.setdefault(day, []).append((h, subject))
+    return days
+
+
+def version_md():
+    v = version_facts()
+    state = (f"released on {day_name(v['released'])}" if v["released"]
+             else "in development. It isn't released yet, so every change on this page is part of it")
+    return f"""## Current version
+
+**OpenDesigner {v['version']}**, {state}. The newest change is from {day_name(v['latest_change'])}.
+
+| To find out | Run |
+|---|---|
+| Which version made your design system, and whether it is older than the copy you have | `engine.py version`, from the OpenDesigner skill's `scripts` folder, in your project (your AI knows where it is) |
+| Which version you have installed in Claude Code | `claude plugin list` |
+
+**To update in Claude Code,** run `claude plugin update opendesigner@opendesigner`, or open `/plugin`, find OpenDesigner on the Installed tab and choose Update now. Updates from this marketplace stay off until you turn them on: in `/plugin`, open the Marketplaces tab, select opendesigner and choose Enable auto-update. If you cloned the repository, run `git pull`. In the Claude app, upload the newest [opendesigner.zip]({SITE_URL}/.well-known/agent-skills/opendesigner.zip) again.
+
+Tools and AI agents can read the same facts from [version.json]({SITE_URL}/version.json), and follow new changes in the [Atom feed]({SITE_URL}/changelog.xml).
+"""
+
+
+def changes_md(days=60):
+    by_day = changes_by_day()
+    if not by_day:
+        return f"The full history is on GitHub: {GH}/commits/main"
+    out = []
+    for day in sorted(by_day, reverse=True)[:days]:
+        out += [f"### {day_name(day)}", ""] + [f"- {subject} ([{h[:7]}]({GH}/commit/{h}))" for h, subject in by_day[day]] + [""]
+    if len(by_day) > days:
+        out.append(f"Older changes are in [the full history on GitHub]({GH}/commits/main).")
+    return "\n".join(out).strip()
+
+
+def changes_feed(days=30):
+    """An Atom feed with one entry per day of changes, newest first, so anyone can follow them in a feed reader."""
+    by_day = changes_by_day()
+    ordered = sorted(by_day, reverse=True)[:days]
+    entries = "".join(
+        f'<entry><title>{esc(day_name(d))}: {len(by_day[d])} change{"s" if len(by_day[d]) != 1 else ""}</title>'
+        f'<id>{SITE_URL}/docs/changelog/#{slugify(day_name(d))}</id><updated>{d}T23:59:59Z</updated>'
+        f'<link href="{SITE_URL}/docs/changelog/#{slugify(day_name(d))}"/><content type="html">'
+        + esc("<ul>" + "".join(f'<li>{esc(s)} (<a href="{GH}/commit/{h}">{h[:7]}</a>)</li>' for h, s in by_day[d]) + "</ul>")
+        + "</content></entry>" for d in ordered)
+    updated = f"{ordered[0]}T23:59:59Z" if ordered else f"{TODAY}T00:00:00Z"
+    return ('<?xml version="1.0" encoding="utf-8"?>\n<feed xmlns="http://www.w3.org/2005/Atom">'
+            f'<title>OpenDesigner: every change</title><subtitle>Each change to OpenDesigner, by day. Version {VERSION}.</subtitle>'
+            f'<id>{SITE_URL}/changelog.xml</id><link href="{SITE_URL}/changelog.xml" rel="self"/><link href="{SITE_URL}/docs/changelog/"/>'
+            f'<updated>{updated}</updated><author><name>{NAME}</name></author>{entries}</feed>\n')
+
+
+CHANGELOG_BLOCKS = {"{{changelog}}": lambda: changelog_md(), "{{version}}": lambda: version_md(), "{{changes}}": lambda: changes_md()}
+FEED_LINK = f'<link rel="alternate" type="application/atom+xml" href="/changelog.xml" title="OpenDesigner: every change">\n'
+
 
 
 def plain(s):
@@ -381,7 +464,7 @@ def strip_figures(md):
     """The Markdown copies and llms-full.txt keep each figure as its caption, the changelog as its text, and each live
     evals block as a pointer to the page that shows it (no placeholder reaches a reader)."""
     md = re.sub(r"^\{\{figure:([a-z0-9-]+)\}\}$", lambda m: f"*Figure: {figure_caption(m.group(1))}*", md, flags=re.M)
-    md = re.sub(r"^\{\{changelog\}\}$", lambda m: changelog_md().strip(), md, flags=re.M)
+    md = re.sub(r"^(\{\{(?:changelog|version|changes)\}\})$", lambda m: CHANGELOG_BLOCKS[m.group(1)]().strip(), md, flags=re.M)
     return re.sub(r"^\{\{evals:([a-z-]+)\}\}$", lambda m: f"*The latest results for this part are on the page: {SITE_URL}/docs/evals/*", md, flags=re.M)
 
 
@@ -448,7 +531,7 @@ def sidebar(pages, current):
             f'<nav>{"".join(groups)}{show}</nav></details><nav class="side-desk">{"".join(groups)}{show}</nav></aside>')
 
 
-def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jpg", md=True, wide=False, robots="index, follow, max-image-preview:large", home=False, og_alt=None, preload=""):
+def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jpg", md=True, wide=False, robots="index, follow, max-image-preview:large", home=False, og_alt=None, preload=""):  # preload: extra head lines (a preload, a feed link)
     canon = SITE_URL + path
     md_link = f'<link rel="alternate" type="text/markdown" href="{path}index.md" title="Markdown">' if md else ""
     inner = (f'<main id="main" class="home">\n{main_html}\n</main>' if home else
@@ -512,7 +595,7 @@ def footer(pages):
     cols = "".join(f'<div><h2 class="foot-h kicker">{s}</h2><ul>' + "".join(f'<li><a href="{p["path"]}">{esc(p["title"])}</a></li>' for p in ps) + "</ul></div>"
                    for s, ps in by.items() if ps)
     trust = (f'<div><h2 class="foot-h kicker">Trust</h2><ul><li><a href="/docs/security/">Security and data</a></li><li><a href="{GH}/blob/main/SECURITY.md">Report a vulnerability</a></li>'
-             f'<li><a href="/docs/changelog/">Changelog</a></li><li><a href="{GH}/blob/main/LICENSE">Licence (MIT)</a></li></ul></div>')
+             f'<li><a href="/docs/changelog/">Changelog · v{VERSION}</a></li><li><a href="{GH}/blob/main/LICENSE">Licence (MIT)</a></li></ul></div>')
     proj = (f'<div><h2 class="foot-h kicker">Project</h2><ul><li><a href="{GH}">GitHub</a></li><li><a href="{GH}/issues/new/choose">Report a problem</a></li>'
             f'<li><a href="/docs/contribute/">Contribute</a></li><li><a href="/book/">Book a call</a></li><li><a href="/showcase/">Showcase</a></li><li><a href="/llms.txt">llms.txt</a></li><li><a href="/sitemap.xml">Sitemap</a></li></ul></div>')
     return (f'<footer class="foot"><div class="foot-in"><div class="foot-brand">{lockup()}<p>Free and open source. MIT for code, '
@@ -1087,7 +1170,7 @@ def home(pages, facts, faq):
 <ul class="status">{"".join(f"<li>{x}</li>" for x in HOME_STATUS)}</ul>
 <p class="h-lede">The most useful help right now: try it on a real project and tell us where it breaks.</p>
 <p class="h-contrib"><span class="kicker">Contribute</span><a href="/docs/contribute/">How to contribute</a><a href="{GH}/issues?q=is%3Aopen+label%3A%22good+first+issue%22">Good first issues</a><a href="{GH}/issues/new/choose">Report a problem</a></p>
-<p class="h-more"><a class="h-link" href="/docs/changelog/">See what changed lately {ARROW}</a></p></div>
+<p class="h-more"><a class="h-link" href="/docs/changelog/">Version {VERSION}: see every change {ARROW}</a></p></div>
 {gh_card(facts)}
 </div>
 </section>
@@ -1187,7 +1270,7 @@ def doc_page(p, pages):
     card = (CACHE / "og" / "docs" / f'{p["slug"]}.jpg').exists()  # og_images() draws one for every page; without it, the home card
     og = f'/og/docs/{p["slug"]}.jpg' if card else "/og/home.jpg"
     return shell(p["path"], p["seo_title"], p["description"], main_html, pages, ld, og=og,
-                 og_alt=f'{p["title"]}: a page of the OpenDesigner docs' if card else None)
+                 og_alt=f'{p["title"]}: a page of the OpenDesigner docs' if card else None, preload=FEED_LINK if p["slug"] == "changelog" else "")
 
 
 SHOW_INTRO = ("AI builder agents made every piece here through the whole OpenDesigner process: real references on Mobbin, a design system from the "
@@ -1635,6 +1718,7 @@ def vercel_json():
                 {"source": "/library/r/(.*)", "headers": [{"key": "X-Robots-Tag", "value": "noindex"}, {"key": "Content-Type", "value": "text/html; charset=utf-8"}, {"key": "Access-Control-Allow-Origin", "value": "*"}]},
                 {"source": "/(.*)\\.md", "headers": [{"key": "Content-Type", "value": "text/markdown; charset=utf-8"}, {"key": "X-Robots-Tag", "value": "noindex"}]},
                 {"source": "/(llms.txt|llms-full.txt|robots.txt)", "headers": [{"key": "Content-Type", "value": "text/plain; charset=utf-8"}]},
+                {"source": "/changelog.xml", "headers": [{"key": "Content-Type", "value": "application/atom+xml; charset=utf-8"}]},
                 {"source": "/", "headers": [{"key": "Link", "value": LINKS}, {"key": "Vary", "value": "Accept"}]},
                 {"source": "/(.*)/", "headers": [{"key": "Vary", "value": "Accept"}]},  # a page answers in HTML or, when asked, Markdown
                 {"source": "/.well-known/agent-skills/(.*)", "headers": [{"key": "Access-Control-Allow-Origin", "value": "*"}]}]}
@@ -1682,6 +1766,9 @@ def main():
     shutil.copy(SITE / "middleware.js", DIST / "middleware.js")  # Markdown for agents: Vercel builds it as Routing Middleware
     images()
     pages = load_docs()
+    for p in pages:
+        if p["slug"] == "changelog":  # the page changes whenever the repository does
+            p["updated"] = version_facts()["latest_change"]
     try:
         og_images(pages)  # only the cards whose HTML changed are drawn again
     except Exception as e:
@@ -1710,6 +1797,10 @@ def main():
         f.write_text(text)
     paths = ["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/"] + library_paths
     (DIST / "robots.txt").write_text(robots())
+    (DIST / "changelog.xml").write_text(changes_feed())
+    (DIST / "version.json").write_text(json.dumps({**version_facts(), "name": NAME, "changelog": f"{SITE_URL}/docs/changelog/",
+        "feed": f"{SITE_URL}/changelog.xml", "check_your_system": "engine.py version, from the opendesigner skill's scripts folder",
+        "update_in_claude_code": "claude plugin update opendesigner@opendesigner"}, indent=1) + "\n")
     agent_skills()
     (DIST / "llms.txt").write_text(llms_txt(pages))
     (DIST / "llms-full.txt").write_text(f"# {NAME} (full text of {SITE_URL})\n\n" + "\n\n---\n\n".join(mds.values()))

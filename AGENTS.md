@@ -158,7 +158,7 @@ python3 site/post_change_audit.py          after changing the website or the lib
 python3 tools/check_glossary.py --check           every glossary term passes the three-voice rules against today's engine, and docs/GLOSSARY.md is current
                                                    (edit synthesis/glossary.json, then: check_glossary.py --build, build_data.py, sync_skills.py)
 ```
-Releasing a version? Change `version` in `plugin.json`, in `.claude-plugin/plugin.json` and `OPENDESIGNER_VERSION` in `skills/opendesigner/scripts/engine.py` together (`build_dist.py --check` fails when they differ), move the CHANGELOG's Unreleased entries under the new version's heading, and tag the commit. Systems compare their stamp with that number, so a release that keeps the old number tells nobody they are out of date.
+Releasing a version? Change `version` in `plugin.json`, in `.claude-plugin/plugin.json` and `OPENDESIGNER_VERSION` in `skills/opendesigner/scripts/engine.py` together (`build_dist.py --check` fails when they differ), move the CHANGELOG's Unreleased entries under the new version's heading, and tag the commit. Systems compare their stamp with that number, so a release that keeps the old number tells nobody they are out of date. The tag `v<version>` is what makes the website's changelog and `/version.json` say "released on <date>"; until then they say "in development".
 Changed a skill? Also run its agent evals once (`python3 tools/agent_evals.py --case '<name>' --runs 1`; they cost model usage) and say the result in the pull request.
 Improving the app from the learning wiki? Read `learn/IMPROVING.md` first. `python3 tools/wiki.py next` lists what in the wiki is out of date.
 

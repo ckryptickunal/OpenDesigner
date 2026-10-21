@@ -1,14 +1,24 @@
 ---
-title: Changelog: what's new in OpenDesigner
-seo_title: OpenDesigner changelog: what changed and what we fixed
-description: Every change to OpenDesigner in one place: what was added, what was fixed, and why. Built from CHANGELOG.md in the repository.
+title: Changelog: the current version and every change
+seo_title: OpenDesigner changelog: version and every change
+description: The current OpenDesigner version, how to check yours and update, and every change day by day, built from the repository each time the site is published.
 section: Reference
 order: 8
-updated: 2026-10-21
+updated: 2026-10-22
 ---
 
-What we added, changed and fixed, newest first. This page is built from [`CHANGELOG.md`](https://github.com/ckryptickunal/OpenDesigner/blob/main/CHANGELOG.md) each time the site is published, so it shows the repository as it is. The reasons behind each product decision are in [`_coordination/DECISIONS.md`](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/DECISIONS.md).
+What version OpenDesigner is on, how to tell whether yours is behind, and everything that changed. This page is made from the repository each time the site is published, so it is never behind it: the day-by-day list comes from git, and the highlights from [`CHANGELOG.md`](https://github.com/ckryptickunal/OpenDesigner/blob/main/CHANGELOG.md). The reasons behind each product decision are in [`_coordination/DECISIONS.md`](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/DECISIONS.md).
 
-To see whether a design system you made is up to date, run `python3 skills/opendesigner/scripts/engine.py version` in your project. It compares your system with the copy of OpenDesigner you have installed. It never checks online.
+{{version}}
+
+## Every change, day by day
+
+Newest first. Each line is one change to the repository, linked to it on GitHub.
+
+{{changes}}
+
+## Highlights, explained
+
+The bigger changes in plain words: what each one does for you and why it was made.
 
 {{changelog}}
