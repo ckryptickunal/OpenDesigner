@@ -11,6 +11,12 @@ What version OpenDesigner is on, how to tell whether yours is behind, and everyt
 
 {{version}}
 
+## What's new
+
+Newest first, in plain words. Each one is explained under [Highlights, explained](#highlights-explained), and the full record is under [Every change, day by day](#every-change-day-by-day).
+
+{{whatsnew}}
+
 ## Every change, day by day
 
 Newest first. Each line is one change to the repository, linked to it on GitHub.

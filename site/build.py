@@ -423,7 +423,31 @@ def changes_feed(days=30):
             f'<updated>{updated}</updated><author><name>{NAME}</name></author>{entries}</feed>\n')
 
 
-CHANGELOG_BLOCKS = {"{{changelog}}": lambda: changelog_md(), "{{version}}": lambda: version_md(), "{{changes}}": lambda: changes_md()}
+def whats_new_md():
+    """CHANGELOG.md's highlights for visitors: one line each, newest first, dated by the day git says the line was
+    written (git blame), and marked when it is a fix. The explanation stays under "Highlights, explained"."""
+    import datetime as _dt
+    items, section, ts, when = [], "", 0, None
+    for line in git_out("blame", "--line-porcelain", "CHANGELOG.md").splitlines():
+        if line.startswith("committer-time "):
+            ts = int(line.split()[1])
+        elif line.startswith("committer-tz "):  # the day as the person who wrote it saw it, as git log %cs shows it
+            z = line.split()[1]
+            tz = _dt.timezone((-1 if z[0] == "-" else 1) * _dt.timedelta(hours=int(z[1:3]), minutes=int(z[3:5])))
+            when = _dt.datetime.fromtimestamp(ts, tz).date().isoformat()
+        elif line.startswith("\t"):
+            text = line[1:]
+            if text.startswith("### "):
+                section = text[4:].strip()
+            m = re.match(r"^- \*\*(.+?)\*\*", text)
+            if m and when:
+                items.append((ts, when, m.group(1).strip().rstrip(".:"), section == "Fixed"))
+    items.sort(key=lambda x: x[0], reverse=True)
+    return "\n".join(f"- {day_name(d)}: {t}" + (" (a fix)" if fixed else "") for _, d, t, fixed in items)
+
+
+CHANGELOG_BLOCKS = {"{{changelog}}": lambda: changelog_md(), "{{version}}": lambda: version_md(), "{{changes}}": lambda: changes_md(),
+                    "{{whatsnew}}": lambda: whats_new_md()}
 FEED_LINK = f'<link rel="alternate" type="application/atom+xml" href="/changelog.xml" title="OpenDesigner: every change">\n'
 
 
@@ -464,7 +488,7 @@ def strip_figures(md):
     """The Markdown copies and llms-full.txt keep each figure as its caption, the changelog as its text, and each live
     evals block as a pointer to the page that shows it (no placeholder reaches a reader)."""
     md = re.sub(r"^\{\{figure:([a-z0-9-]+)\}\}$", lambda m: f"*Figure: {figure_caption(m.group(1))}*", md, flags=re.M)
-    md = re.sub(r"^(\{\{(?:changelog|version|changes)\}\})$", lambda m: CHANGELOG_BLOCKS[m.group(1)]().strip(), md, flags=re.M)
+    md = re.sub(r"^(\{\{(?:changelog|version|changes|whatsnew)\}\})$", lambda m: CHANGELOG_BLOCKS[m.group(1)]().strip(), md, flags=re.M)
     return re.sub(r"^\{\{evals:([a-z-]+)\}\}$", lambda m: f"*The latest results for this part are on the page: {SITE_URL}/docs/evals/*", md, flags=re.M)
 
 
