@@ -17,6 +17,7 @@ import os
 import pathlib
 import re
 import shutil
+import subprocess
 import sys
 import urllib.request
 
@@ -247,6 +248,9 @@ def md_to_html(md, toc=None):
         if fm:
             out.append(figure(fm.group(1))); i += 1
             continue
+        if ln.strip() == "{{changelog}}":  # CHANGELOG.md itself, so the page is never behind the repo
+            out.append(md_to_html(changelog_md(), toc)); i += 1
+            continue
         em = EVALS_RE.match(ln.strip())
         if em:
             import evals_html
@@ -283,15 +287,22 @@ def md_to_html(md, toc=None):
             out.append(f"<blockquote><p>{inline(' '.join(quote))}</p></blockquote>")
             continue
         elif re.match(r"^(\d+\.|-) ", ln):
-            ordered, items = ln[0].isdigit(), []
+            ordered, items = ln[0].isdigit(), []  # each item: [text, sub-items]; "  - x" under an item is one level of nesting
             while i < len(lines) and (re.match(r"^(\d+\.|-) ", lines[i]) or (lines[i].startswith("  ") and items)):
-                if lines[i].startswith("  ") and items:
-                    items[-1] += " " + lines[i].strip()
+                sub = re.match(r"^  +(?:\d+\.|-) (.*)", lines[i])
+                if sub and items:
+                    items[-1][1].append(sub.group(1))
+                elif lines[i].startswith("  ") and items:
+                    if items[-1][1]:
+                        items[-1][1][-1] += " " + lines[i].strip()
+                    else:
+                        items[-1][0] += " " + lines[i].strip()
                 else:
-                    items.append(re.sub(r"^(\d+\.|-) ", "", lines[i]))
+                    items.append([re.sub(r"^(\d+\.|-) ", "", lines[i]), []])
                 i += 1
             tag = "ol" if ordered else "ul"
-            out.append(f"<{tag}>" + "".join(f"<li>{inline(x)}</li>" for x in items) + f"</{tag}>")
+            out.append(f"<{tag}>" + "".join(f"<li>{inline(x)}" + ("<ul>" + "".join(f"<li>{inline(s)}</li>" for s in subs) + "</ul>" if subs else "") + "</li>"
+                                            for x, subs in items) + f"</{tag}>")
             continue
         elif ln.strip():
             para = [ln]
@@ -300,6 +311,13 @@ def md_to_html(md, toc=None):
             out.append(f"<p>{inline(' '.join(para))}</p>")
         i += 1
     return "\n".join(out)
+
+
+def changelog_md():
+    """CHANGELOG.md from its first version heading on, with links to repo files pointed at GitHub."""
+    text = (ROOT / "CHANGELOG.md").read_text()
+    text = re.sub(r"^## \[([^\]]+)\]", r"## \1", text[text.index("\n## ") + 1:], flags=re.M)  # "## [Unreleased]" reads "Unreleased"
+    return re.sub(r"\]\((?!https?:|#|/|mailto:)([^)]+)\)", lambda m: f"]({GH}/blob/main/{m.group(1)})", text)
 
 
 def plain(s):
@@ -458,9 +476,9 @@ def footer(pages):
     cols = "".join(f'<div><h2 class="foot-h kicker">{s}</h2><ul>' + "".join(f'<li><a href="{p["path"]}">{esc(p["title"])}</a></li>' for p in ps) + "</ul></div>"
                    for s, ps in by.items() if ps)
     trust = (f'<div><h2 class="foot-h kicker">Trust</h2><ul><li><a href="/docs/security/">Security and data</a></li><li><a href="{GH}/blob/main/SECURITY.md">Report a vulnerability</a></li>'
-             f'<li><a href="{GH}/blob/main/CHANGELOG.md">Changelog</a></li><li><a href="{GH}/blob/main/LICENSE">Licence (MIT)</a></li></ul></div>')
+             f'<li><a href="/docs/changelog/">Changelog</a></li><li><a href="{GH}/blob/main/LICENSE">Licence (MIT)</a></li></ul></div>')
     proj = (f'<div><h2 class="foot-h kicker">Project</h2><ul><li><a href="{GH}">GitHub</a></li><li><a href="{GH}/issues/new/choose">Report a problem</a></li>'
-            f'<li><a href="{GH}/blob/main/CONTRIBUTING.md">Contribute</a></li><li><a href="/book/">Book a call</a></li><li><a href="/showcase/">Showcase</a></li><li><a href="/llms.txt">llms.txt</a></li><li><a href="/sitemap.xml">Sitemap</a></li></ul></div>')
+            f'<li><a href="/docs/contribute/">Contribute</a></li><li><a href="/book/">Book a call</a></li><li><a href="/showcase/">Showcase</a></li><li><a href="/llms.txt">llms.txt</a></li><li><a href="/sitemap.xml">Sitemap</a></li></ul></div>')
     return (f'<footer class="foot"><div class="foot-in"><div class="foot-brand">{lockup()}<p>Free and open source. MIT for code, '
             f'CC BY 4.0 for docs.</p></div>{cols}{trust}{proj}</div><p class="foot-legal">OpenDesigner is an independent open-source project. Claude, '
             f'ChatGPT, Codex, Cursor, Figma and other names belong to their owners and appear only to say where OpenDesigner runs. Photos: Unsplash '
@@ -581,6 +599,62 @@ OUTPUT_FILES = [("DESIGN.md", "your rules in plain words"), ("opendesigner/token
                 ("overview.html", "the system on one page"), ("decisions.md", "every choice and why")]
 OVERVIEW_IMG = ('<picture><source type="image/webp" srcset="/img/overview-1440.webp 1440w, /img/overview-720.webp 720w" sizes="(max-width: 1100px) 100vw, 640px">'
                 '<img src="/img/overview-1440.jpg" width="1440" height="900" loading="lazy" alt="The overview page generated for OpenDesigner\'s own brand, with each area marked Chosen, Default or Not enough information."></picture>')
+
+
+BA = SITE / "demo" / "before-after"  # the before-and-after demo: capture.py measured it with the review skill's own tools
+
+
+def demo_before_after_files():
+    """The demo's full-page screenshots as WebP (1x and 2x), and review.py compare's report at /demo/before-after/. The site's
+    policy allows no inline script, so the report's picker moves into its own file."""
+    from PIL import Image
+    out = DIST / "img" / "demo"
+    out.mkdir(parents=True, exist_ok=True)
+    if not all((BA / "shots" / f"{n}.png").exists() for n in ("before", "after")):  # git-ignored, like the showcase renders
+        raise SystemExit("site/demo/before-after/shots/ is missing: run python3 site/demo/before-after/capture.py first")
+    for name in ("before", "after"):
+        im = Image.open(BA / "shots" / f"{name}.png").convert("RGB")
+        im.save(out / f"{name}-2560.webp", "WEBP", quality=84)
+        im.resize((1280, round(im.height * 1280 / im.width)), Image.LANCZOS).save(out / f"{name}-1280.webp", "WEBP", quality=84)
+    tmp = CACHE / "before-after"
+    tmp.mkdir(parents=True, exist_ok=True)
+    subprocess.run([sys.executable, str(ROOT / "skills/opendesigner-review/scripts/review.py"), "compare", "--dir", str(tmp), "--out", str(tmp / "compare.html"),
+                    "--before", str(BA / "shots/before.png"), "--after", str(BA / "shots/after.png"), "--marks", str(BA / "review/marks-before.json"),
+                    "--after-marks", str(BA / "review/marks-after.json"), "--title", "Merriweft invoices: before and after"], check=True, capture_output=True)
+    report = (tmp / "compare.html").read_text()
+    m = re.search(r"<script>(.*)</script>", report, re.S)
+    (DIST / "demo" / "before-after").mkdir(parents=True, exist_ok=True)
+    (DIST / "demo" / "before-after" / "picker.js").write_text(m.group(1))
+    report = report[:m.start()] + '<script src="picker.js"></script>' + report[m.end():]
+    desc = ("An OpenDesigner review of an invented invoicing page: the page today, the audit drawn on it, and the fix, "
+            "each with what it makes better.")
+    report = report.replace("<title>", f'<meta name="description" content="{desc}">\n<meta name="robots" content="noindex">\n'
+                                       f'<link rel="canonical" href="{SITE_URL}/demo/before-after/">\n<title>', 1)
+    (DIST / "demo" / "before-after" / "index.html").write_text(report)
+
+
+def before_after():
+    """Home: the page today, the audit drawn on it and the fix, from the demo's measured marks (site/demo/before-after)."""
+    before, after = (json.loads((BA / "review" / f"marks-{n}.json").read_text()) for n in ("before", "after"))
+    tall = max(before["page"]["h"] / before["page"]["w"], after["page"]["h"] / after["page"]["w"])
+
+    def shot(name, marks, page, kind):
+        W, H = page["w"], page["h"]
+        boxes = "".join(f'<span class="ba-mk {kind}" style="left:{m["rect"][0] / W * 100:.2f}%;top:{m["rect"][1] / H * 100:.2f}%;width:{m["rect"][2] / W * 100:.2f}%;'
+                        f'height:{m["rect"][3] / H * 100:.2f}%"><b>{m["n"]}</b></span>' for m in marks)
+        alt = ("The invoices page before the fix: three colored buttons, gray text, status dots and left-aligned amounts" if name == "before"
+               else "The same page after the fix: one green button, readable text, labelled status and aligned amounts")
+        return (f'<div class="ba-pg"><img src="/img/demo/{name}-1280.webp" srcset="/img/demo/{name}-1280.webp 1280w, /img/demo/{name}-2560.webp 2560w" '
+                f'sizes="(max-width: 1200px) 100vw, 1150px" width="1280" height="{page["h"]}" loading="lazy" alt="{alt}">{boxes}</div>')
+
+    views = [("today", "Today", shot("before", [], before["page"], "")), ("audit", "Audit", shot("before", before["marks"], before["page"], "todo")),
+             ("fixed", "Fixed", shot("after", after["marks"], after["page"], "done"))]
+    tabs = "".join(f'<button type="button" role="tab" id="ba-tab-{k}" aria-controls="ba-{k}" aria-selected="{"true" if k == "audit" else "false"}">{n}</button>' for k, n, _ in views)
+    panels = "".join(f'<div class="ba-panel" role="tabpanel" tabindex="0" id="ba-{k}" aria-labelledby="ba-tab-{k}">{h}</div>' for k, _, h in views)
+    items = "".join(f'<li><span class="ba-n num">{m["n"]}</span><div><h3>{esc(m["title"])}</h3><p>Fixing this makes {esc(m["gives"])}.</p>'
+                    f'<p class="ba-num">{esc(m["before"])} &rarr; {esc(m["after"])}</p></div></li>' for m in before["marks"])
+    return (f'<div class="ba" data-tabs><div class="tablist ba-tabs" role="tablist" aria-label="The invoices page: today, the audit, and the fix">{tabs}</div>'
+            f'<div class="ba-frame" style="aspect-ratio:1 / {tall:.4f}">{panels}</div><ol class="ba-list">{items}</ol></div>')
 
 
 def overview_shot():
@@ -809,12 +883,12 @@ def home(pages, facts, faq):
     craft_html = "".join(f'<a class="craft-card {v}" href="/docs/{s}/"><span class="vg" aria-hidden="true"><i></i><i></i><i></i></span><h3>{t}</h3><p>{d}</p><span class="more">Open the guide {CHEVRON}</span></a>' for s, t, d, v in craft)
     craft_sec = f"""
 <section class="h-sec" id="craft">
-<div class="h-head">{idx("07", "Learn the craft")}<h2 class="h-h2">A field guide to interfaces that feel right.</h2>
+<div class="h-head">{idx("08", "Learn the craft")}<h2 class="h-h2">A field guide to interfaces that feel right.</h2>
 <p class="h-lede">The rules come from people who build loved interfaces, such as Emil Kowalski. See each one live, with its source.</p></div>
 <div class="craft">{craft_html}</div>
 </section>
 """ if craft else ""
-    news = ("/docs/motion/", "New: a field guide to motion, UX and UI") if craft else ("/showcase/", f"See {total} designs built through the process")
+    news = ("#before-after", "New: the audit, drawn on your own page")
     announce = (f'<p class="h-announce"><span class="h-pill-tag">Free and open source · MIT</span>'
                 f'<a href="{news[0]}">{news[1]} {ARROW}</a></p>')
     body = f"""
@@ -822,7 +896,7 @@ def home(pages, facts, faq):
 {announce}
 <h1 class="h-title g-wait">Make everything you build <strong>look like it belongs together.</strong></h1>
 <p class="h-lede">Your AI tools know what to build. OpenDesigner tells them how it should look: one set of design rules that every new screen follows, and that it updates when you change your mind.</p>
-<div class="h-cta"><a class="btn primary lg" href="#install">Get started free</a><a class="h-link" href="#fix">See it in action {ARROW}</a></div>
+<div class="h-cta"><a class="btn primary lg" href="#install">Get started free</a><a class="h-link" href="#before-after">See it in action {ARROW}</a></div>
 <div class="h-cmd-wrap"><p class="h-cmd-label">Two commands in Claude Code, then a few plain questions</p>
 <div class="cmd h-cmd"><code>/plugin marketplace add ckryptickunal/OpenDesigner</code><button class="copy" type="button" data-copy-text="/plugin marketplace add ckryptickunal/OpenDesigner
 /plugin install opendesigner@opendesigner">Copy both</button></div></div>
@@ -830,14 +904,21 @@ def home(pages, facts, faq):
 <div class="h-works"><p class="kicker">Works in the AI tool you already use</p><ul class="hosts">{"".join(f'<li><span class="host-tile">{logo(k, 22)}</span><span>{n}</span></li>' for n, k in HOSTS)}</ul></div>
 </section>
 
+<section class="h-sec" id="before-after">
+<div class="h-head">{idx("01", "On a page you already built")}<h2 class="h-h2">See what's wrong, then see it fixed.</h2>
+<p class="h-lede">Point OpenDesigner at a page you have. It measures the page, marks each problem on it, and fixes it with your own design system. Every fix says what it makes better.</p></div>
+{before_after()}
+<p class="h-fine">Real output from the review skill on an invented invoicing app: probe.js measured the page before and after, and <code>review.py compare</code> drew the boxes. Desktop, 1280 px wide. <a href="/demo/before-after/">Open the full report</a> · <a href="{GH}/tree/main/site/demo/before-after">How it was made</a></p>
+</section>
+
 <section class="h-sec" id="why">
-<div class="h-head">{idx("01", "The problem")}<h2 class="h-h2">Every new screen drifts a little.</h2>
+<div class="h-head">{idx("02", "The problem")}<h2 class="h-h2">Every new screen drifts a little.</h2>
 <p class="h-lede">One page gets rounded buttons, the next gets square ones, and a new blue appears. People notice: they judge how a page looks in 17 to 50 milliseconds, and simple, familiar screens are the ones they rate most appealing (<a href="{GH}/blob/main/research/L15-visual-design-principles.md">research</a>).</p></div>
 {figure("design-systems-one-source")}
 </section>
 
 <section class="h-sec" id="fix">
-<div class="h-head">{idx("02", "The fix")}<h2 class="h-h2">One set of rules that every screen follows.</h2>
+<div class="h-head">{idx("03", "The fix")}<h2 class="h-h2">One set of rules that every screen follows.</h2>
 <p class="h-lede">OpenDesigner turns a few plain answers into rules for color, type, spacing, corners and motion. Here are three products, each made from five answers.</p></div>
 <div class="tabs demo" data-tabs><div class="tablist demo-tabs" role="tablist" aria-label="Example products">{demo_tabs}</div>
 {"".join(demo_panel(e, i) for i, e in enumerate(DEMO["examples"]))}</div>
@@ -845,7 +926,7 @@ def home(pages, facts, faq):
 </section>
 
 <section class="h-sec" id="screens">
-<div class="h-head h-head-row"><div>{idx("03", "Real screens")}<h2 class="h-h2">What consistent looks like.</h2>
+<div class="h-head h-head-row"><div>{idx("04", "Real screens")}<h2 class="h-h2">What consistent looks like.</h2>
 <p class="h-lede">B2B screens built by AI agents through OpenDesigner and reviewed by the maintainer. Every brand is invented, and much of the identity work was done outside the tokens.</p></div>
 <a class="h-link" href="/showcase/">See all {total} designs {ARROW}</a></div>
 <div class="screens">{screens_html}</div>
@@ -853,17 +934,17 @@ def home(pages, facts, faq):
 </section>
 
 <section class="h-sec" id="how">
-<div class="h-head">{idx("04", "How it works")}<h2 class="h-h2">Five answers today. Consistent screens from then on.</h2></div>
+<div class="h-head">{idx("05", "How it works")}<h2 class="h-h2">Five answers today. Consistent screens from then on.</h2></div>
 <ol class="h-steps">{"".join(f'<li class="h-step">{A_PICTS[i]}<span class="h-n num">0{i + 1}</span><h3>{t}</h3><p>{d}</p><div class="vg">{v}</div></li>' for i, (t, d, v) in enumerate(STEPS))}</ol>
 </section>
 
 <section class="h-sec" id="use-cases">
-<div class="h-head">{idx("05", "What you can build")}<h2 class="h-h2">Websites, apps, dashboards and enterprise software.</h2></div>
+<div class="h-head">{idx("06", "What you can build")}<h2 class="h-h2">Websites, apps, dashboards and enterprise software.</h2></div>
 <div class="who">{"".join(f'<a class="who-card" href="{u}"><h3>{t}</h3><p>{d}</p><span class="more">{l} {CHEVRON}</span></a>' for t, d, u, l in USES)}</div>
 </section>
 
 <section class="h-sec" id="features">
-<div class="h-head">{idx("06", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together, not just to start it.</h2></div>
+<div class="h-head">{idx("07", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together, not just to start it.</h2></div>
 <div class="bento">{"".join(f'<article class="bento-card span-{sp}"><h3>{t}</h3><p>{d}</p><div class="vg">{v}</div></article>' for t, d, v, sp in INSIDE)}</div>
 <div class="h-split h-files">
 <div><h3 class="h-h3">Rules your code and your design tools can read</h3>
@@ -874,13 +955,13 @@ def home(pages, facts, faq):
 </section>
 {craft_sec}
 <section class="h-sec" id="install">
-<div class="h-head">{idx("08", "Get started")}<h2 class="h-h2">Add it to the AI tool you already use.</h2>
+<div class="h-head">{idx("09", "Get started")}<h2 class="h-h2">Add it to the AI tool you already use.</h2>
 <p class="h-lede">You need your own AI tool. Claude Code, the Claude app and other agents also need Python 3.10 or newer; ChatGPT needs nothing installed.</p></div>
 {install_tabs()}
 </section>
 
 <section class="h-sec" id="evals">
-<div class="h-head">{idx("09", "Tested in the open")}<h2 class="h-h2">We test it on itself, and publish the numbers.</h2>
+<div class="h-head">{idx("10", "Tested in the open")}<h2 class="h-h2">We test it on itself, and publish the numbers.</h2>
 <p class="h-lede">AI agents do real tasks with and without OpenDesigner. The engine builds systems from 18 fixed briefs. Our own checkers face pages with planted mistakes. When a test fails, the page says so.</p></div>
 {evals_block("summary")}
 <p class="h-more"><a class="h-link" href="/docs/evals/">See every test, and run them yourself {ARROW}</a></p>
@@ -891,7 +972,8 @@ def home(pages, facts, faq):
 <div><p class="kicker">Status</p><h2 class="h-h2">Early, and honest about it.</h2>
 <ul class="status">{"".join(f"<li>{x}</li>" for x in HOME_STATUS)}</ul>
 <p class="h-lede">The most useful help right now: try it on a real project and tell us where it breaks.</p>
-<p class="h-contrib"><span class="kicker">Contribute</span><a href="{GH}/blob/main/CONTRIBUTING.md">How to contribute</a><a href="{GH}/issues?q=is%3Aopen+label%3A%22good+first+issue%22">Good first issues</a><a href="{GH}/issues/new/choose">Report a problem</a></p></div>
+<p class="h-contrib"><span class="kicker">Contribute</span><a href="/docs/contribute/">How to contribute</a><a href="{GH}/issues?q=is%3Aopen+label%3A%22good+first+issue%22">Good first issues</a><a href="{GH}/issues/new/choose">Report a problem</a></p>
+<p class="h-more"><a class="h-link" href="/docs/changelog/">See what changed lately {ARROW}</a></p></div>
 {gh_card(facts)}
 </div>
 </section>
@@ -1293,6 +1375,7 @@ def images():
         im.save(DIST / "img/overview-1440.webp", "WEBP", quality=82)
         im.save(DIST / "img/overview-1440.jpg", "JPEG", quality=82, optimize=True, progressive=True)
         im.resize((720, 450), Image.LANCZOS).save(DIST / "img/overview-720.webp", "WEBP", quality=82)
+    demo_before_after_files()
     mark = BRAND / "kit" / "logo" / "avatar-light-800.png"
     if mark.exists():
         im = Image.open(mark).convert("RGB")

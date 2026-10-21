@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Invoices · Merriweft</title>
+<!-- The "after" page of the before-and-after demo: the same invoices page on Merriweft's OpenDesigner system
+     (opendesigner/, made with engine.py sketch and build). Every color, size, corner and space is a token. -->
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ds-color-surface-base); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); letter-spacing: var(--ds-text-body-md-tracking); }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+.top { display: flex; align-items: center; gap: var(--ds-space-32); height: 56px; padding: 0 var(--ds-space-32); background: var(--ds-color-surface-raised); border-bottom: 1px solid var(--ds-color-border-subtle); }
+.logo { display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-title-sm); color: var(--ds-color-text-primary); }
+.logo i { width: 20px; height: 20px; border-radius: var(--ds-radius-control-sm); background: var(--ds-color-bg-brand); }
+.top nav { display: flex; gap: var(--ds-space-4); }
+.top nav a { display: flex; align-items: center; height: 32px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); color: var(--ds-color-text-secondary); font: var(--ds-text-title-sm); }
+.top nav a:hover { color: var(--ds-color-text-primary); background: var(--ds-color-bg-neutral-subtle); }
+.top nav a[aria-current] { color: var(--ds-color-text-primary); background: var(--ds-color-bg-neutral-subtle); }
+.search { margin-left: auto; width: 240px; height: 32px; padding: 0 var(--ds-space-12); border: 1px solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-field); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
+.search::placeholder { color: var(--ds-color-text-secondary); }
+.avatar { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font: var(--ds-text-label-md); }
+main { max-width: 1200px; margin: 0 auto; padding: var(--ds-space-32) var(--ds-space-32) var(--ds-space-48); }
+.head { display: flex; align-items: flex-end; gap: var(--ds-space-16); flex-wrap: wrap; }
+h1 { margin: 0; font: var(--ds-text-headline-sm); letter-spacing: var(--ds-text-headline-sm-tracking); }
+.sub { margin: var(--ds-space-4) 0 0; color: var(--ds-color-text-secondary); }
+.acts { margin-left: auto; display: flex; gap: var(--ds-space-8); }
+.btn { display: inline-flex; align-items: center; gap: var(--ds-space-6); height: 32px; padding: 0 var(--ds-space-12); border: 1px solid var(--ds-color-border-default); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); font: var(--ds-text-title-sm); cursor: pointer; }
+.btn:hover { background: var(--ds-color-bg-neutral-subtle); }
+.btn.primary { border-color: transparent; background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
+.btn.primary:hover { background: var(--ds-color-bg-action-primary-hover); }
+.btn svg { width: 14px; height: 14px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); margin: var(--ds-space-24) 0; background: var(--ds-color-surface-raised); border: 1px solid var(--ds-color-border-default); border-radius: var(--ds-radius-container); }
+.stat { padding: var(--ds-space-16) var(--ds-space-20); }
+.stat + .stat { border-left: 1px solid var(--ds-color-border-subtle); }
+.stat p { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-title-sm); }
+.stat strong { display: block; margin-top: var(--ds-space-4); font: var(--ds-text-numeric-lg); }
+.stat span { display: block; margin-top: var(--ds-space-2); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); letter-spacing: var(--ds-text-body-sm-tracking); }
+.stat span.warn { color: var(--ds-color-text-danger); }
+.bar { display: flex; align-items: center; gap: var(--ds-space-12); margin-bottom: var(--ds-space-12); }
+.seg { display: inline-flex; padding: 2px; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-neutral-subtle); }
+.seg a { display: flex; align-items: center; gap: var(--ds-space-6); height: 28px; padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control-sm); color: var(--ds-color-text-secondary); font: var(--ds-text-title-sm); }
+.seg a[aria-current] { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); box-shadow: var(--ds-elevation-raised); }
+.seg b { font-weight: inherit; color: var(--ds-color-text-secondary); }
+.bar .count { margin-left: auto; color: var(--ds-color-text-secondary); }
+.card { background: var(--ds-color-surface-raised); border: 1px solid var(--ds-color-border-default); border-radius: var(--ds-radius-container); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+th { height: 36px; padding: 0 var(--ds-space-16); text-align: left; background: var(--ds-color-surface-sunken); color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); letter-spacing: var(--ds-text-label-sm-tracking); text-transform: uppercase; border-bottom: 1px solid var(--ds-color-border-subtle); }
+td { height: 52px; padding: 0 var(--ds-space-16); border-bottom: 1px solid var(--ds-color-border-subtle); }
+tr:last-child td { border-bottom: 0; }
+tbody tr:hover td { background: var(--ds-color-surface-sunken); }
+th.r, td.r { text-align: right; }
+.client strong { display: block; font: var(--ds-text-title-sm); }
+.client small { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); letter-spacing: var(--ds-text-body-sm-tracking); }
+.sec { color: var(--ds-color-text-secondary); }
+.amt { font: var(--ds-text-numeric-md); font-weight: var(--ds-font-weight-heading); }
+.pill { display: inline-flex; align-items: center; gap: var(--ds-space-4); height: 22px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control-sm); font: var(--ds-text-label-md); letter-spacing: var(--ds-text-label-md-tracking); }
+.pill svg { width: 12px; height: 12px; }
+.pill.paid { background: var(--ds-color-bg-success-subtle); color: var(--ds-color-text-success); }
+.pill.due { background: var(--ds-color-bg-warning-subtle); color: var(--ds-color-text-warning); }
+.pill.late { background: var(--ds-color-bg-danger-subtle); color: var(--ds-color-text-danger); }
+.row-acts { display: flex; justify-content: flex-end; gap: var(--ds-space-4); }
+.ic { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: var(--ds-radius-control); background: none; color: var(--ds-color-text-secondary); cursor: pointer; }
+.ic:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
+.ic svg { width: 16px; height: 16px; }
+.m { display: none; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 700px) {
+  .top { gap: var(--ds-space-12); padding: 0 var(--ds-space-16); } .top nav, .search { display: none; } .avatar { margin-left: auto; }
+  main { padding: var(--ds-space-24) var(--ds-space-16) var(--ds-space-32); }
+  .acts { margin-left: 0; width: 100%; } .acts .btn:not(.primary) { display: none; } .acts .btn.primary { width: 100%; justify-content: center; height: 40px; }
+  .stats { grid-template-columns: 1fr 1fr; } .stat:first-child { grid-column: 1 / -1; border-bottom: 1px solid var(--ds-color-border-subtle); }
+  .stat + .stat { border-left: 0; } .stat:last-child { border-left: 1px solid var(--ds-color-border-subtle); }
+  .bar .count { display: none; } .seg { width: 100%; } .seg a { flex: 1; justify-content: center; padding: 0 var(--ds-space-6); }
+  thead, td.d, td.inv, td.act { display: none; }
+  tr { display: grid; grid-template-columns: 1fr auto; gap: var(--ds-space-4) var(--ds-space-12); padding: var(--ds-space-12) var(--ds-space-16); border-bottom: 1px solid var(--ds-color-border-subtle); }
+  tbody tr:last-child { border-bottom: 0; }
+  td { display: block; height: auto; padding: 0; border: 0; }
+  tbody tr:hover td { background: none; }
+  td.client small { display: none; } td.m { display: block; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+  td.st { justify-self: end; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="logo"><i aria-hidden="true"></i>Merriweft</span>
+  <nav aria-label="Main"><a href="#">Dashboard</a><a href="#" aria-current="page">Invoices</a><a href="#">Clients</a><a href="#">Reports</a></nav>
+  <input class="search" placeholder="Search invoices" aria-label="Search invoices">
+  <span class="avatar" aria-label="Signed in as Juno Pell">JP</span>
+</header>
+<main>
+  <div class="head">
+    <div><h1>Invoices</h1><p class="sub">Track what you've billed and what's still out.</p></div>
+    <div class="acts">
+      <button class="btn" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 2v8m0 0 3-3m-3 3L5 7M3 13h10"/></svg>Export CSV</button>
+      <button class="btn" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 4l6 4 6-4M2 4v8h12V4"/></svg>Send reminders</button>
+      <button class="btn primary" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>New invoice</button>
+    </div>
+  </div>
+  <section class="stats" aria-label="Totals">
+    <div class="stat"><p>Outstanding</p><strong class="num">$48,210.00</strong><span>14 invoices</span></div>
+    <div class="stat"><p>Overdue</p><strong class="num">$6,940.50</strong><span class="warn">3 invoices, oldest 23 days</span></div>
+    <div class="stat"><p>Paid in October</p><strong class="num">$112,480.75</strong><span>31 invoices</span></div>
+  </section>
+  <div class="bar">
+    <nav class="seg" aria-label="Filter invoices"><a href="#" aria-current="true">All <b class="num">48</b></a><a href="#">Due <b class="num">11</b></a><a href="#">Overdue <b class="num">3</b></a><a href="#">Paid <b class="num">34</b></a></nav>
+    <span class="count">Showing 6 of 48</span>
+  </div>
+  <div class="card">
+    <table>
+      <thead><tr><th>Client</th><th>Invoice</th><th>Issued</th><th>Due</th><th class="r">Amount</th><th>Status</th><th><span class="sr">Actions</span></th></tr></thead>
+      <tbody>
+        <tr><td class="client"><strong>Ashvale Ceramics</strong><small>billing@ashvale.example</small></td><td class="inv sec num">MW-1042</td><td class="d sec num">Oct 2, 2026</td><td class="d sec num">Nov 1, 2026</td><td class="r amt num">$12,400.00</td><td class="m">MW-1042 · due Nov 1</td><td class="st"><span class="pill due"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="6" cy="6" r="4.5"/><path d="M6 3.5V6l1.6 1"/></svg>Due</span></td><td class="act"><div class="row-acts"><button class="ic" type="button" aria-label="Send MW-1042" title="Send"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h10m-3-3.5L12.5 8 9 11.5"/></svg></button><button class="ic" type="button" aria-label="More actions for MW-1042" title="More"><svg viewBox="0 0 16 16" fill="currentColor"><circle cx="3.5" cy="8" r="1.25"/><circle cx="8" cy="8" r="1.25"/><circle cx="12.5" cy="8" r="1.25"/></svg></button></div></td></tr>
+        <tr><td class="client"><strong>Tolland Print House</strong><small>accounts@tolland.example</small></td><td class="inv sec num">MW-1041</td><td class="d sec num">Sep 28, 2026</td><td class="d sec num">Oct 12, 2026</td><td class="r amt num">$3,180.50</td><td class="m">MW-1041 · due Oct 12</td><td class="st"><span class="pill late"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 1.5 11 10.5H1z"/><path d="M6 5v2.2M6 8.6v.1"/></svg>Overdue</span></td><td class="act"><div class="row-acts"><button class="ic" type="button" aria-label="Send MW-1041" title="Send"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h10m-3-3.5L12.5 8 9 11.5"/></svg></button><button class="ic" type="button" aria-label="More actions for MW-1041" title="More"><svg viewBox="0 0 16 16" fill="currentColor"><circle cx="3.5" cy="8" r="1.25"/><circle cx="8" cy="8" r="1.25"/><circle cx="12.5" cy="8" r="1.25"/></svg></button></div></td></tr>
+        <tr><td class="client"><strong>Saltbrae Coffee</strong><small>hello@saltbrae.example</small></td><td class="inv sec num">MW-1040</td><td class="d sec num">Sep 26, 2026</td><td class="d sec num">Oct 26, 2026</td><td class="r amt num">$860.00</td><td class="m">MW-1040 · paid Oct 20</td><td class="st"><span class="pill paid"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2.5 6.2 5 8.6l4.5-5"/></svg>Paid</span></td><td class="act"><div class="row-acts"><button class="ic" type="button" aria-label="Send MW-1040" title="Send"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h10m-3-3.5L12.5 8 9 11.5"/></svg></button><button class="ic" type="button" aria-label="More actions for MW-1040" title="More"><svg viewBox="0 0 16 16" fill="currentColor"><circle cx="3.5" cy="8" r="1.25"/><circle cx="8" cy="8" r="1.25"/><circle cx="12.5" cy="8" r="1.25"/></svg></button></div></td></tr>
+        <tr><td class="client"><strong>Durnell Architects</strong><small>finance@durnell.example</small></td><td class="inv sec num">MW-1039</td><td class="d sec num">Sep 21, 2026</td><td class="d sec num">Oct 21, 2026</td><td class="r amt num">$24,750.00</td><td class="m">MW-1039 · due Oct 21</td><td class="st"><span class="pill due"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="6" cy="6" r="4.5"/><path d="M6 3.5V6l1.6 1"/></svg>Due</span></td><td class="act"><div class="row-acts"><button class="ic" type="button" aria-label="Send MW-1039" title="Send"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h10m-3-3.5L12.5 8 9 11.5"/></svg></button><button class="ic" type="button" aria-label="More actions for MW-1039" title="More"><svg viewBox="0 0 16 16" fill="currentColor"><circle cx="3.5" cy="8" r="1.25"/><circle cx="8" cy="8" r="1.25"/><circle cx="12.5" cy="8" r="1.25"/></svg></button></div></td></tr>
+        <tr><td class="client"><strong>Tevelyn Botanicals</strong><small>ap@tevelyn.example</small></td><td class="inv sec num">MW-1038</td><td class="d sec num">Sep 15, 2026</td><td class="d sec num">Sep 29, 2026</td><td class="r amt num">$2,960.00</td><td class="m">MW-1038 · due Sep 29</td><td class="st"><span class="pill late"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 1.5 11 10.5H1z"/><path d="M6 5v2.2M6 8.6v.1"/></svg>Overdue</span></td><td class="act"><div class="row-acts"><button class="ic" type="button" aria-label="Send MW-1038" title="Send"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h10m-3-3.5L12.5 8 9 11.5"/></svg></button><button class="ic" type="button" aria-label="More actions for MW-1038" title="More"><svg viewBox="0 0 16 16" fill="currentColor"><circle cx="3.5" cy="8" r="1.25"/><circle cx="8" cy="8" r="1.25"/><circle cx="12.5" cy="8" r="1.25"/></svg></button></div></td></tr>
+        <tr><td class="client"><strong>Stavely Dental Group</strong><small>office@stavely.example</small></td><td class="inv sec num">MW-1037</td><td class="d sec num">Sep 9, 2026</td><td class="d sec num">Oct 9, 2026</td><td class="r amt num">$7,425.25</td><td class="m">MW-1037 · paid Oct 3</td><td class="st"><span class="pill paid"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2.5 6.2 5 8.6l4.5-5"/></svg>Paid</span></td><td class="act"><div class="row-acts"><button class="ic" type="button" aria-label="Send MW-1037" title="Send"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h10m-3-3.5L12.5 8 9 11.5"/></svg></button><button class="ic" type="button" aria-label="More actions for MW-1037" title="More"><svg viewBox="0 0 16 16" fill="currentColor"><circle cx="3.5" cy="8" r="1.25"/><circle cx="8" cy="8" r="1.25"/><circle cx="12.5" cy="8" r="1.25"/></svg></button></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+</body>
+</html>

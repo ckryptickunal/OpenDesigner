@@ -481,3 +481,32 @@ body:has(> main.home) :is(.bar-in, .foot-in, .foot-legal) { max-width: 1200px; }
 #evals .ev-stats { margin-top: 32px; }
 @media (min-width: 1024px) { #evals .ev-stats[data-n="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .h-more { margin: 20px 0 0; text-align: center; }
+
+/* Before and after (home #before-after): the demo page today, the audit drawn on it, and the fix. The boxes come from
+   site/demo/before-after/review/marks-*.json, measured by probe.js; build.py places them as a share of the page. */
+.ba { --ba-issue: #c8202e; margin-top: 8px; }
+.ba-tabs { justify-content: center; }
+.ba-frame { position: relative; margin-top: 16px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--r-panel); background: #f9fafb; box-shadow: var(--shadow-raised); }
+.ba-panel { position: absolute; inset: 0; }
+.ba-panel[hidden] { display: none; }
+.ba-panel:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -4px; }
+.ba-pg { position: relative; }
+.ba-pg img { display: block; width: 100%; height: auto; }
+.ba-mk { position: absolute; border: 2px dashed var(--ba-issue); border-radius: 4px; box-shadow: 0 0 0 1px rgb(255 255 255 / .9); pointer-events: none; }
+.ba-mk b { position: absolute; top: -11px; left: -11px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ba-issue); color: #fff; font: 600 12px/1 "Hanken Grotesk", system-ui, sans-serif; letter-spacing: 0; box-shadow: 0 0 0 2px #fff; }
+.ba-mk.done { border: 0; box-shadow: none; }
+.ba-mk.done b { background: var(--ok); }
+.ba-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 32px; margin: 28px 0 0; padding: 0; list-style: none; }
+.ba-list li { display: flex; gap: 12px; align-items: flex-start; }
+.ba-n { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--ba-issue); color: #fff; font: 600 12px/1 "Hanken Grotesk", system-ui, sans-serif; letter-spacing: 0; }
+.ba-list h3 { margin: 1px 0 4px; font-size: 16px; line-height: 22px; font-weight: 600; text-wrap: balance; }
+.ba-list p { margin: 0; color: var(--ink-muted); font-size: 15px; line-height: 22px; }
+.ba-list .ba-num { margin-top: 6px; font-size: 14px; line-height: 20px; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+@media (max-width: 1000px) { .ba-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) {
+  .ba-list { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .ba-mk { border-width: 1.5px; }
+  .ba-mk b { top: -9px; left: -9px; width: 18px; height: 18px; font-size: 11px; }
+  .ba-mk.done { display: none; }  /* at this size the fix's badges would cover what they point to; the list says the same */
+}
+@supports (corner-shape: superellipse(1.35)) { .ba-frame { corner-shape: superellipse(1.35); --corner-k: 1.22; } }

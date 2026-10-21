@@ -1,0 +1,19 @@
+{
+ "_about": "The issues drawn on the demo, each from review.py check on review/probe-before.json (measured) or by looking (seen). Numbers come from the probes; capture.py turns each selector into a box with __od.marks().",
+ "before": [
+  {"sel": ".acts", "title": "Three filled buttons compete, and white on green reads at 3.3:1", "gives": "the next step obvious: one filled button, New invoice, and every label readable", "before": "3 filled buttons; 3.3:1 on Send reminders", "after": "1 filled button; 6.02:1", "finding": "measured contrast (MS-04) and seen"},
+  {"sel": "tbody td.muted", "title": "Gray text is hard to read", "gives": "dates, emails and column titles readable for everyone", "before": "2.54:1 on 36 pieces of text", "after": "7.23:1", "finding": "measured contrast (MS-04)"},
+  {"sel": "tbody td:nth-child(5)", "title": "Amounts don't line up", "gives": "amounts quick to compare, right-aligned with digits of equal width", "before": "left-aligned, proportional digits", "after": "right-aligned, tabular digits", "finding": "seen on the page"},
+  {"sel": "tbody td:nth-child(6)", "title": "Status is shown by color alone", "gives": "status clear to everyone, including people who can't tell red from green: each one says Paid, Due or Overdue", "before": "a colored dot", "after": "a label and an icon", "finding": "seen on the page (WCAG 1.4.1)"},
+  {"sel": "tbody td:last-child", "title": "Row buttons are small, with vague names", "gives": "row actions easy to hit, and each button names its invoice for screen readers", "before": "20 x 20 px, \"Send\"", "after": "32 x 32 px, \"Send MW-1042\"", "finding": "measured target sizes"},
+  {"sel": ".stats", "title": "Corners, text sizes and colors are off the system", "gives": "the page look like one product: every corner, size and color comes from Merriweft's tokens", "before": "3 corner radii, 4 text sizes and 12 colors off Merriweft's tokens", "after": "none off the tokens", "finding": "measured against the tokens (MS-09, MS-02, MS-08)"}
+ ],
+ "after": [
+  {"sel": ".acts", "title": "One filled button"},
+  {"sel": "tbody td.d", "title": "Readable dates"},
+  {"sel": "tbody td.amt", "title": "Aligned amounts"},
+  {"sel": "tbody td.st", "title": "Labelled status"},
+  {"sel": "tbody td.act", "title": "32 px named buttons"},
+  {"sel": ".stats", "title": "System corners and type"}
+ ]
+}

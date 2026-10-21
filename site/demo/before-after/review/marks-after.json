@@ -1,0 +1,86 @@
+{
+ "url": "file:///Users/Kunal/Desktop/Design-System/site/demo/before-after/after.html",
+ "viewport": {
+  "w": 1280,
+  "h": 800,
+  "dpr": 2
+ },
+ "page": {
+  "w": 1280,
+  "h": 800
+ },
+ "marks": [
+  {
+   "sel": ".acts",
+   "title": "One filled button",
+   "n": 1,
+   "matched": 1,
+   "rect": [
+    786.88,
+    111.98,
+    421.13,
+    32
+   ]
+  },
+  {
+   "sel": "tbody td.d",
+   "title": "Readable dates",
+   "n": 2,
+   "matched": 12,
+   "rect": [
+    454.27,
+    376.97,
+    320.09,
+    312
+   ]
+  },
+  {
+   "sel": "tbody td.amt",
+   "title": "Aligned amounts",
+   "n": 3,
+   "matched": 6,
+   "rect": [
+    774.36,
+    376.97,
+    147.72,
+    312
+   ]
+  },
+  {
+   "sel": "tbody td.st",
+   "title": "Labelled status",
+   "n": 4,
+   "matched": 6,
+   "rect": [
+    922.08,
+    376.97,
+    152.19,
+    312
+   ]
+  },
+  {
+   "sel": "tbody td.act",
+   "title": "32 px named buttons",
+   "n": 5,
+   "matched": 6,
+   "rect": [
+    1074.27,
+    376.97,
+    132.73,
+    312
+   ]
+  },
+  {
+   "sel": ".stats",
+   "title": "System corners and type",
+   "n": 6,
+   "matched": 1,
+   "rect": [
+    72,
+    167.98,
+    1136,
+    103.98
+   ]
+  }
+ ]
+}

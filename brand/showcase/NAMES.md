@@ -790,3 +790,18 @@ Appended by the round 4 app-screens session (app-c). Each name was searched in `
 - **No longer on `app-screens/01`:** the accounts list (Current account, Managed portfolio, Reserve deposit, Pension), "Council Tax" and "Voss household" as a heading; the page is now the payment to sign. Cardew Aske LLP and Eleanor Voss stay. `check_names.py` reports "Cardew Aske" as new because it reads "Cardew Aske’s"; the row "Cardew Aske LLP" already covers it.
 - **`app-screens/06`, `07` and `09`:** no new names. "Capacity" (a tab), "Too early" (a cell) and "Open to all customers" (a checkpoint) are UI words.
 - **Round 4 rebuild of `styles/02`, `03`, `05`, `06` and `08` (2026-10-18):** no new names. `check_names.py` flags "Fischer" (Lena Fischer, `styles/03`) as two letters from "Fishers", a common word in a `components/07` thread title, and "Northcote" as two letters from "Northgate", which `watch/04` has already replaced with Saltgrove (only the old `mockups/03` render still shows it); both kept. Its new-word lists are UI words (Airflow, Comms, Good, Onboarding, People, Blog, On-call, Postmortem, Postmortems, Runbooks, Check-in, Payouts, Databases) and "Kanteel Design Week", the registered "Kanteel Design Week 2027" without its year. No longer on `styles/05`: INC-4502 (the next-post link). No longer on `styles/03`: Imani Clarke's full name (the page shows "Imani" and the initials IC).
+
+## Appended 2026-10-21: the home page's before-and-after demo (`site/demo/before-after/`)
+
+Web searches on 2026-10-21 found no business of any of these names. Brinlow, Orrin, Wexmoor and Quenby were tried first and dropped, because `check_names.py` found them one or two letters from Brantlow, Corrin and Fenmoor, or inside Quenby Door Systems.
+
+| Name | Kind | Pieces |
+|---|---|---|
+| Merriweft | brand (invoicing tool; merriweft.example) | site home page before-and-after demo |
+| Ashvale Ceramics | company (a client in the invoice list) | site home page before-and-after demo |
+| Tolland Print House | company (a client; Tolland is a real Connecticut town, no print house of that name found) | site home page before-and-after demo |
+| Saltbrae Coffee | company (a client) | site home page before-and-after demo |
+| Durnell Architects | company (a client) | site home page before-and-after demo |
+| Tevelyn Botanicals | company (a client) | site home page before-and-after demo |
+| Stavely Dental Group | company (a client) | site home page before-and-after demo |
+| Juno Pell | person (the signed-in user's avatar label) | site home page before-and-after demo |

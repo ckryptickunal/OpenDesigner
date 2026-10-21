@@ -1,0 +1,110 @@
+{
+ "url": "file:///Users/Kunal/Desktop/Design-System/site/demo/before-after/before.html",
+ "viewport": {
+  "w": 1280,
+  "h": 800,
+  "dpr": 2
+ },
+ "page": {
+  "w": 1280,
+  "h": 877
+ },
+ "marks": [
+  {
+   "sel": ".acts",
+   "title": "Three filled buttons compete, and white on green reads at 3.3:1",
+   "gives": "the next step obvious: one filled button, New invoice, and every label readable",
+   "before": "3 filled buttons; 3.3:1 on Send reminders",
+   "after": "1 filled button; 6.02:1",
+   "finding": "measured contrast (MS-04) and seen",
+   "n": 1,
+   "matched": 1,
+   "rect": [
+    803.06,
+    118,
+    404.94,
+    40
+   ]
+  },
+  {
+   "sel": "tbody td.muted",
+   "title": "Gray text is hard to read",
+   "gives": "dates, emails and column titles readable for everyone",
+   "before": "2.54:1 on 36 pieces of text",
+   "after": "7.23:1",
+   "finding": "measured contrast (MS-04)",
+   "n": 2,
+   "matched": 12,
+   "rect": [
+    468.83,
+    427.5,
+    341.66,
+    401.5
+   ]
+  },
+  {
+   "sel": "tbody td:nth-child(5)",
+   "title": "Amounts don't line up",
+   "gives": "amounts quick to compare, right-aligned with digits of equal width",
+   "before": "left-aligned, proportional digits",
+   "after": "right-aligned, tabular digits",
+   "finding": "seen on the page",
+   "n": 3,
+   "matched": 6,
+   "rect": [
+    810.48,
+    427.5,
+    152.83,
+    401.5
+   ]
+  },
+  {
+   "sel": "tbody td:nth-child(6)",
+   "title": "Status is shown by color alone",
+   "gives": "status clear to everyone, including people who can't tell red from green: each one says Paid, Due or Overdue",
+   "before": "a colored dot",
+   "after": "a label and an icon",
+   "finding": "seen on the page (WCAG 1.4.1)",
+   "n": 4,
+   "matched": 6,
+   "rect": [
+    963.31,
+    427.5,
+    121.05,
+    401.5
+   ]
+  },
+  {
+   "sel": "tbody td:last-child",
+   "title": "Row buttons are small, with vague names",
+   "gives": "row actions easy to hit, and each button names its invoice for screen readers",
+   "before": "20 x 20 px, \"Send\"",
+   "after": "32 x 32 px, \"Send MW-1042\"",
+   "finding": "measured target sizes",
+   "n": 5,
+   "matched": 6,
+   "rect": [
+    1084.36,
+    427.5,
+    123.64,
+    401.5
+   ]
+  },
+  {
+   "sel": ".stats",
+   "title": "Corners, text sizes and colors are off the system",
+   "gives": "the page look like one product: every corner, size and color comes from Merriweft's tokens",
+   "before": "3 corner radii, 4 text sizes and 12 colors off Merriweft's tokens",
+   "after": "none off the tokens",
+   "finding": "measured against the tokens (MS-09, MS-02, MS-08)",
+   "n": 6,
+   "matched": 1,
+   "rect": [
+    72,
+    186,
+    1136,
+    122
+   ]
+  }
+ ]
+}

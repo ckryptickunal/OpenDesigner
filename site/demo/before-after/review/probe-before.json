@@ -1,0 +1,728 @@
+{
+ "v": 1,
+ "url": "file:///Users/Kunal/Desktop/Design-System/site/demo/before-after/before.html",
+ "title": "Invoices \u00b7 Merriweft",
+ "at": "2026-10-21T14:13:19.160Z",
+ "viewport": {
+  "w": 1280,
+  "h": 800,
+  "innerW": 1280,
+  "innerH": 800,
+  "dpr": 2,
+  "docW": 1280,
+  "docH": 877,
+  "scale": 1
+ },
+ "media": {
+  "colorScheme": "light",
+  "reducedMotion": false,
+  "forcedColors": false,
+  "pointer": "fine",
+  "hover": true
+ },
+ "doc": {
+  "lang": "en",
+  "dir": "ltr",
+  "viewportMeta": "width=device-width,initial-scale=1",
+  "blocksZoom": false,
+  "dataTheme": null,
+  "colorScheme": "normal",
+  "hOverflow": 0,
+  "rootClipsX": false,
+  "elements": 170,
+  "truncated": false
+ },
+ "type": {
+  "sizes": {
+   "12": {
+    "n": 15,
+    "ex": [
+     "section.stats > div.stat:nth-of-type(1) > span"
+    ],
+    "chars": 214
+   },
+   "13": {
+    "n": 7,
+    "ex": [
+     "section.stats > div.stat:nth-of-type(1) > p"
+    ],
+    "chars": 50
+   },
+   "14": {
+    "n": 38,
+    "ex": [
+     "header.top > nav > a:nth-of-type(1)"
+    ],
+    "chars": 456
+   },
+   "19": {
+    "n": 1,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
+    ],
+    "chars": 9
+   },
+   "28": {
+    "n": 3,
+    "ex": [
+     "section.stats > div.stat:nth-of-type(1) > strong"
+    ],
+    "chars": 30
+   },
+   "30": {
+    "n": 1,
+    "ex": [
+     "div.head:nth-of-type(1) > div:nth-of-type(1) > h1"
+    ],
+    "chars": 8
+   }
+  },
+  "lineHeights": {
+   "normal": {
+    "n": 65,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
+    ],
+    "chars": 767
+   }
+  },
+  "weights": {
+   "400": {
+    "n": 40,
+    "ex": [
+     "header.top > nav > a:nth-of-type(1)"
+    ],
+    "chars": 518
+   },
+   "600": {
+    "n": 20,
+    "ex": [
+     "header.top > nav > a.on:nth-of-type(2)"
+    ],
+    "chars": 202
+   },
+   "800": {
+    "n": 5,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
+    ],
+    "chars": 47
+   }
+  },
+  "families": {
+   "system-ui": {
+    "n": 65,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
+    ],
+    "chars": 767
+   }
+  },
+  "letterSpacing": {
+   "0.48": {
+    "n": 6,
+    "ex": [
+     "thead > tr > th:nth-of-type(1)"
+    ]
+   },
+   "-0.38": {
+    "n": 1,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
+    ]
+   },
+   "-0.6": {
+    "n": 1,
+    "ex": [
+     "div.head:nth-of-type(1) > div:nth-of-type(1) > h1"
+    ]
+   }
+  },
+  "smallest": {
+   "px": 12,
+   "sel": "section.stats > div.stat:nth-of-type(1) > span",
+   "text": "14 invoices"
+  },
+  "lineHeightTight": [],
+  "longLines": [],
+  "textElements": 65
+ },
+ "space": {
+  "values": {
+   "6": {
+    "n": 16,
+    "ex": [
+     "div.head:nth-of-type(1) > div:nth-of-type(1) > p.sub"
+    ]
+   },
+   "7": {
+    "n": 8,
+    "ex": [
+     "main > div.chips:nth-of-type(2) > span.chip:nth-of-type(1)"
+    ]
+   },
+   "8": {
+    "n": 5,
+    "ex": [
+     "section.stats > div.stat:nth-of-type(1) > strong"
+    ]
+   },
+   "10": {
+    "n": 2,
+    "ex": [
+     "main > div.head:nth-of-type(1) > div.acts:nth-of-type(2)"
+    ]
+   },
+   "12": {
+    "n": 2,
+    "ex": [
+     "main > div.head:nth-of-type(1)"
+    ]
+   },
+   "14": {
+    "n": 22,
+    "ex": [
+     "main > div.chips:nth-of-type(2) > span.chip:nth-of-type(1)"
+    ]
+   },
+   "16": {
+    "n": 87,
+    "ex": [
+     "header.top > input.search"
+    ]
+   },
+   "18": {
+    "n": 6,
+    "ex": [
+     "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b1:nth-of-type(1)"
+    ]
+   },
+   "20": {
+    "n": 100,
+    "ex": [
+     "main > section.stats"
+    ]
+   },
+   "22": {
+    "n": 8,
+    "ex": [
+     "header.top > nav"
+    ]
+   },
+   "24": {
+    "n": 6,
+    "ex": [
+     "main > section.stats > div.stat:nth-of-type(1)"
+    ]
+   },
+   "28": {
+    "n": 4,
+    "ex": [
+     "header.top"
+    ]
+   },
+   "32": {
+    "n": 4,
+    "ex": [
+     "header.top"
+    ]
+   },
+   "36": {
+    "n": 1,
+    "ex": [
+     "main"
+    ]
+   },
+   "40": {
+    "n": 2,
+    "ex": [
+     "main"
+    ]
+   },
+   "48": {
+    "n": 1,
+    "ex": [
+     "main"
+    ]
+   },
+   "462.72": {
+    "n": 1,
+    "ex": [
+     "header.top > input.search"
+    ]
+   },
+   "434.77": {
+    "n": 1,
+    "ex": [
+     "main > div.head:nth-of-type(1) > div.acts:nth-of-type(2)"
+    ]
+   }
+  },
+  "negativeMargins": []
+ },
+ "radius": {
+  "4": {
+   "n": 12,
+   "ex": [
+    "tr:nth-of-type(1) > td:nth-of-type(7) > button.ic:nth-of-type(1)"
+   ]
+  },
+  "6": {
+   "n": 3,
+   "ex": [
+    "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b1:nth-of-type(1)"
+   ]
+  },
+  "10": {
+   "n": 4,
+   "ex": [
+    "main > div.chips:nth-of-type(2) > span.chip:nth-of-type(1)"
+   ]
+  },
+  "14": {
+   "n": 1,
+   "ex": [
+    "main > div.card:nth-of-type(3)"
+   ]
+  },
+  "18": {
+   "n": 3,
+   "ex": [
+    "main > section.stats > div.stat:nth-of-type(1)"
+   ]
+  },
+  "999": {
+   "n": 1,
+   "ex": [
+    "header.top > input.search"
+   ]
+  },
+  "50%": {
+   "n": 7,
+   "ex": [
+    "header.top > span.avatar:nth-of-type(2)"
+   ]
+  }
+ },
+ "shadows": {
+  "rgba(17, 24, 39, 0.08) 0px 10px 30px 0px": {
+   "n": 3,
+   "ex": [
+    "main > section.stats > div.stat:nth-of-type(1)"
+   ]
+  },
+  "rgba(37, 99, 235, 0.35) 0px 6px 16px 0px": {
+   "n": 1,
+   "ex": [
+    "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b3:nth-of-type(3)"
+   ]
+  },
+  "rgba(17, 24, 39, 0.06) 0px 4px 14px 0px": {
+   "n": 1,
+   "ex": [
+    "main > div.card:nth-of-type(3)"
+   ]
+  }
+ },
+ "colors": {
+  "text": {
+   "#9ca3af": {
+    "n": 37,
+    "ex": [
+     "header.top > nav > a:nth-of-type(1)"
+    ]
+   },
+   "#111827": {
+    "n": 23,
+    "ex": [
+     "header.top > nav > a.on:nth-of-type(2)"
+    ]
+   },
+   "#ffffff": {
+    "n": 3,
+    "ex": [
+     "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b1:nth-of-type(1)"
+    ]
+   },
+   "#4f46e5": {
+    "n": 2,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
+    ]
+   }
+  },
+  "bg": {
+   "#f3f4f6": {
+    "n": 12,
+    "ex": [
+     "tr:nth-of-type(1) > td:nth-of-type(7) > button.ic:nth-of-type(1)"
+    ]
+   },
+   "#ffffff": {
+    "n": 8,
+    "ex": [
+     "header.top"
+    ]
+   },
+   "#f9fafb": {
+    "n": 2,
+    "ex": [
+     "body"
+    ]
+   },
+   "#f59e0b": {
+    "n": 2,
+    "ex": [
+     "tr:nth-of-type(1) > td:nth-of-type(6) > span.dot.due"
+    ]
+   },
+   "#ef4444": {
+    "n": 2,
+    "ex": [
+     "tr:nth-of-type(2) > td:nth-of-type(6) > span.dot.late"
+    ]
+   },
+   "#22c55e": {
+    "n": 2,
+    "ex": [
+     "tr:nth-of-type(3) > td:nth-of-type(6) > span.dot.paid"
+    ]
+   },
+   "#7c3aed": {
+    "n": 1,
+    "ex": [
+     "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b1:nth-of-type(1)"
+    ]
+   },
+   "#16a34a": {
+    "n": 1,
+    "ex": [
+     "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b2:nth-of-type(2)"
+    ]
+   },
+   "#2563eb": {
+    "n": 1,
+    "ex": [
+     "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b3:nth-of-type(3)"
+    ]
+   },
+   "#eef2ff": {
+    "n": 1,
+    "ex": [
+     "main > div.chips:nth-of-type(2) > span.chip:nth-of-type(1)"
+    ]
+   }
+  },
+  "border": {
+   "#eeeeee": {
+    "n": 3,
+    "ex": [
+     "main > div.chips:nth-of-type(2) > span.chip.off:nth-of-type(2)"
+    ]
+   },
+   "#e5e7eb": {
+    "n": 1,
+    "ex": [
+     "header.top > input.search"
+    ]
+   }
+  }
+ },
+ "contrast": {
+  "checked": 10,
+  "failing": [
+   {
+    "sel": "div.head:nth-of-type(1) > div:nth-of-type(1) > p.sub",
+    "ratio": 2.43,
+    "fg": "#9ca3af",
+    "bg": "#f9fafb",
+    "fs": 14,
+    "large": false,
+    "backdrop": "solid",
+    "n": 1
+   },
+   {
+    "sel": "header.top > nav > a:nth-of-type(1)",
+    "ratio": 2.54,
+    "fg": "#9ca3af",
+    "bg": "#ffffff",
+    "fs": 14,
+    "large": false,
+    "backdrop": "solid",
+    "n": 36
+   },
+   {
+    "sel": "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b2:nth-of-type(2)",
+    "ratio": 3.3,
+    "fg": "#ffffff",
+    "bg": "#16a34a",
+    "fs": 14,
+    "large": false,
+    "backdrop": "solid",
+    "n": 1
+   }
+  ],
+  "lowest": [
+   {
+    "sel": "div.head:nth-of-type(1) > div:nth-of-type(1) > p.sub",
+    "ratio": 2.43,
+    "fg": "#9ca3af",
+    "bg": "#f9fafb",
+    "fs": 14,
+    "large": false,
+    "backdrop": "solid",
+    "n": 1
+   },
+   {
+    "sel": "header.top > nav > a:nth-of-type(1)",
+    "ratio": 2.54,
+    "fg": "#9ca3af",
+    "bg": "#ffffff",
+    "fs": 14,
+    "large": false,
+    "backdrop": "solid",
+    "n": 36
+   },
+   {
+    "sel": "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b2:nth-of-type(2)",
+    "ratio": 3.3,
+    "fg": "#ffffff",
+    "bg": "#16a34a",
+    "fs": 14,
+    "large": false,
+    "backdrop": "solid",
+    "n": 1
+   }
+  ]
+ },
+ "overflow": {
+  "list": [],
+  "clipped": [],
+  "scrollers": []
+ },
+ "content": {
+  "placeholders": []
+ },
+ "fixed": [],
+ "targets": {
+  "count": 20,
+  "small": [
+   {
+    "sel": "header.top > nav > a:nth-of-type(1)",
+    "w": 70.44,
+    "h": 17,
+    "spacingException": true
+   },
+   {
+    "sel": "header.top > nav > a.on:nth-of-type(2)",
+    "w": 55.52,
+    "h": 17,
+    "spacingException": true
+   },
+   {
+    "sel": "header.top > nav > a:nth-of-type(3)",
+    "w": 44.42,
+    "h": 17,
+    "spacingException": true
+   },
+   {
+    "sel": "header.top > nav > a:nth-of-type(4)",
+    "w": 50.45,
+    "h": 17,
+    "spacingException": true
+   },
+   {
+    "sel": "tr:nth-of-type(1) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "w": 20,
+    "h": 20,
+    "spacingException": true
+   },
+   {
+    "sel": "tr:nth-of-type(1) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "w": 20,
+    "h": 20,
+    "spacingException": true
+   },
+   {
+    "sel": "tr:nth-of-type(2) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "w": 20,
+    "h": 20,
+    "spacingException": true
+   },
+   {
+    "sel": "tr:nth-of-type(2) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "w": 20,
+    "h": 20,
+    "spacingException": true
+   },
+   {
+    "sel": "tr:nth-of-type(3) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "w": 20,
+    "h": 20,
+    "spacingException": true
+   },
+   {
+    "sel": "tr:nth-of-type(3) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "w": 20,
+    "h": 20,
+    "spacingException": true
+   },
+   {
+    "sel": "tr:nth-of-type(4) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "w": 20,
+    "h": 20,
+    "spacingException": true
+   },
+   {
+    "sel": "tr:nth-of-type(4) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "w": 20,
+    "h": 20,
+    "spacingException": true
+   },
+   {
+    "sel": "tr:nth-of-type(5) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "w": 20,
+    "h": 20,
+    "spacingException": true
+   },
+   {
+    "sel": "tr:nth-of-type(5) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "w": 20,
+    "h": 20,
+    "spacingException": true
+   },
+   {
+    "sel": "tr:nth-of-type(6) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "w": 20,
+    "h": 20,
+    "spacingException": true
+   },
+   {
+    "sel": "tr:nth-of-type(6) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "w": 20,
+    "h": 20,
+    "spacingException": true
+   }
+  ],
+  "noName": [],
+  "hiddenFocusable": [],
+  "coarse": false
+ },
+ "images": {
+  "total": 0,
+  "broken": [],
+  "noAlt": [],
+  "oversize": [],
+  "blurry": [],
+  "stretched": [],
+  "lazyPending": 0
+ },
+ "media_counts": {
+  "svg": 12,
+  "canvas": 0,
+  "video": 0,
+  "iframe": 0,
+  "iframeCross": 0,
+  "audio": 0,
+  "shadowHosts": 0,
+  "smil": 0,
+  "lottie": 0,
+  "autoplayVideo": 0
+ },
+ "a11y": {
+  "headings": {
+   "levels": [
+    1
+   ],
+   "h1": 1,
+   "skips": []
+  },
+  "landmarks": {
+   "main": 1,
+   "nav": 1
+  },
+  "duplicateIds": [],
+  "states": {
+   "noHover": [
+    "header.top > nav > a:nth-of-type(1)",
+    "header.top > nav > a.on:nth-of-type(2)",
+    "header.top > nav > a:nth-of-type(3)",
+    "header.top > nav > a:nth-of-type(4)",
+    "header.top > input.search",
+    "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b1:nth-of-type(1)",
+    "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b2:nth-of-type(2)",
+    "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b3:nth-of-type(3)",
+    "tr:nth-of-type(1) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "tr:nth-of-type(1) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "tr:nth-of-type(2) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "tr:nth-of-type(2) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "tr:nth-of-type(3) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "tr:nth-of-type(3) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "tr:nth-of-type(4) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "tr:nth-of-type(4) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "tr:nth-of-type(5) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "tr:nth-of-type(5) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "tr:nth-of-type(6) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "tr:nth-of-type(6) > td:nth-of-type(7) > button.ic:nth-of-type(2)"
+   ],
+   "noFocusStyle": [
+    "header.top > nav > a:nth-of-type(1)",
+    "header.top > nav > a.on:nth-of-type(2)",
+    "header.top > nav > a:nth-of-type(3)",
+    "header.top > nav > a:nth-of-type(4)",
+    "header.top > input.search",
+    "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b1:nth-of-type(1)",
+    "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b2:nth-of-type(2)",
+    "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b3:nth-of-type(3)",
+    "tr:nth-of-type(1) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "tr:nth-of-type(1) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "tr:nth-of-type(2) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "tr:nth-of-type(2) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "tr:nth-of-type(3) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "tr:nth-of-type(3) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "tr:nth-of-type(4) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "tr:nth-of-type(4) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "tr:nth-of-type(5) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "tr:nth-of-type(5) > td:nth-of-type(7) > button.ic:nth-of-type(2)",
+    "tr:nth-of-type(6) > td:nth-of-type(7) > button.ic:nth-of-type(1)",
+    "tr:nth-of-type(6) > td:nth-of-type(7) > button.ic:nth-of-type(2)"
+   ],
+   "focusRingRemoved": [],
+   "noActive": 20,
+   "blockedSheets": 0,
+   "checked": 20
+  }
+ },
+ "fonts": {
+  "faces": [],
+  "failed": 0,
+  "familyState": {
+   "system-ui": "generic"
+  },
+  "ready": "loaded"
+ },
+ "motion": {
+  "running": 0,
+  "infinite": 0,
+  "animations": [],
+  "transitionDurations": {},
+  "transitionProps": {},
+  "declared": {
+   "transitionAll": 0,
+   "layoutProps": [],
+   "willChange": 0,
+   "animatedNames": {},
+   "infiniteDeclared": []
+  },
+  "reducedMotionRules": 0,
+  "blockedSheets": 0,
+  "libs": {},
+  "note": "Only CSS and Web Animations are listed. Canvas, WebGL, video, SMIL and script-driven (requestAnimationFrame) motion is not introspectable here: sample frames instead."
+ },
+ "stress": [],
+ "mode": {
+  "theme": null,
+  "density": null,
+  "motion": null
+ }
+}
