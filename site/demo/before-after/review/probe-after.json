@@ -2,7 +2,7 @@
  "v": 1,
  "url": "file:///Users/Kunal/Desktop/Design-System/site/demo/before-after/after.html",
  "title": "Invoices \u00b7 Merriweft",
- "at": "2026-10-21T15:44:01.831Z",
+ "at": "2026-10-21T16:35:53.726Z",
  "viewport": {
   "w": 1280,
   "h": 800,
@@ -29,7 +29,7 @@
   "colorScheme": "light",
   "hOverflow": 0,
   "rootClipsX": false,
-  "elements": 302,
+  "elements": 307,
   "truncated": false
  },
  "type": {
@@ -39,7 +39,7 @@
     "ex": [
      "header.top > span.avatar:nth-of-type(2)"
     ],
-    "chars": 581
+    "chars": 590
    },
    "14": {
     "n": 48,
@@ -60,14 +60,28 @@
     "ex": [
      "div.money:nth-of-type(2) > section.tile.t-late:nth-of-type(3) > strong.fig.md"
     ],
-    "chars": 19
+    "chars": 13
    },
    "24": {
     "n": 3,
     "ex": [
      "div.head:nth-of-type(1) > div:nth-of-type(1) > h1"
     ],
-    "chars": 29
+    "chars": 23
+   },
+   "14.9": {
+    "n": 2,
+    "ex": [
+     "section.tile.t-cash:nth-of-type(1) > strong.fig > span.c"
+    ],
+    "chars": 6
+   },
+   "12.4": {
+    "n": 2,
+    "ex": [
+     "section.tile.t-late:nth-of-type(3) > strong.fig.md > span.c"
+    ],
+    "chars": 6
    }
   },
   "lineHeights": {
@@ -76,7 +90,7 @@
     "ex": [
      "header.top > span.avatar:nth-of-type(2)"
     ],
-    "chars": 581
+    "chars": 590
    },
    "20": {
     "n": 48,
@@ -97,14 +111,28 @@
     "ex": [
      "div.money:nth-of-type(2) > section.tile.t-late:nth-of-type(3) > strong.fig.md"
     ],
-    "chars": 19
+    "chars": 13
    },
    "32": {
     "n": 3,
     "ex": [
      "div.head:nth-of-type(1) > div:nth-of-type(1) > h1"
     ],
-    "chars": 29
+    "chars": 23
+   },
+   "19.8": {
+    "n": 2,
+    "ex": [
+     "section.tile.t-cash:nth-of-type(1) > strong.fig > span.c"
+    ],
+    "chars": 6
+   },
+   "17.4": {
+    "n": 2,
+    "ex": [
+     "section.tile.t-late:nth-of-type(3) > strong.fig.md > span.c"
+    ],
+    "chars": 6
    }
   },
   "weights": {
@@ -113,37 +141,37 @@
     "ex": [
      "div.head:nth-of-type(1) > div:nth-of-type(1) > p.sub"
     ],
-    "chars": 590
+    "chars": 599
    },
    "500": {
-    "n": 63,
+    "n": 71,
     "ex": [
      "header.top > nav > a:nth-of-type(1)"
     ],
-    "chars": 500
+    "chars": 540
    },
    "650": {
-    "n": 6,
+    "n": 2,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ],
-    "chars": 57
+    "chars": 17
    }
   },
   "families": {
    "system-ui": {
-    "n": 87,
+    "n": 94,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ],
-    "chars": 983
+    "chars": 1002
    },
    "ui-monospace": {
-    "n": 30,
+    "n": 27,
     "ex": [
      "div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1) > p.lbl:nth-of-type(1)"
     ],
-    "chars": 164
+    "chars": 154
    }
   },
   "letterSpacing": {
@@ -159,13 +187,13 @@
      "div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1) > p.meta:nth-of-type(2)"
     ]
    },
-   "-0.24": {
-    "n": 3,
+   "-0.48": {
+    "n": 2,
     "ex": [
-     "div.head:nth-of-type(1) > div:nth-of-type(1) > h1"
+     "div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1) > strong.fig"
     ]
    },
-   "-0.2": {
+   "-0.4": {
     "n": 2,
     "ex": [
      "div.money:nth-of-type(2) > section.tile.t-late:nth-of-type(3) > strong.fig.md"
@@ -176,6 +204,12 @@
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ]
+   },
+   "-0.24": {
+    "n": 1,
+    "ex": [
+     "div.head:nth-of-type(1) > div:nth-of-type(1) > h1"
+    ]
    }
   },
   "smallest": {
@@ -185,7 +219,7 @@
   },
   "lineHeightTight": [],
   "longLines": [],
-  "textElements": 117
+  "textElements": 121
  },
  "space": {
   "values": {
@@ -319,13 +353,13 @@
  "colors": {
   "text": {
    "#575757": {
-    "n": 71,
+    "n": 77,
     "ex": [
      "header.top > nav > a:nth-of-type(1)"
     ]
    },
    "#242424": {
-    "n": 33,
+    "n": 35,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ]
@@ -337,15 +371,9 @@
     ]
    },
    "#00652c": {
-    "n": 4,
-    "ex": [
-     "section.tile.t-cash:nth-of-type(1) > p.lbl:nth-of-type(1) > span.trend.good"
-    ]
-   },
-   "#006350": {
     "n": 2,
     "ex": [
-     "header.top > span.avatar:nth-of-type(2)"
+     "tr:nth-of-type(3) > td.st:nth-of-type(7) > span.pill.paid"
     ]
    },
    "#ffffff": {
@@ -363,7 +391,7 @@
     ]
    },
    "#ebebeb": {
-    "n": 10,
+    "n": 11,
     "ex": [
      "header.top > nav > a:nth-of-type(2)"
     ]
@@ -374,10 +402,10 @@
      "thead > tr > th:nth-of-type(1)"
     ]
    },
-   "#1f6f5c": {
-    "n": 5,
+   "#242424": {
+    "n": 4,
     "ex": [
-     "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.primary:nth-of-type(3)"
+     "div.weeks:nth-of-type(1) > div.wk:nth-of-type(1) > i.b"
     ]
    },
    "#868686": {
@@ -410,10 +438,10 @@
      "body"
     ]
    },
-   "#d1f2e7": {
+   "#1f6f5c": {
     "n": 1,
     "ex": [
-     "header.top > span.avatar:nth-of-type(2)"
+     "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.primary:nth-of-type(3)"
     ]
    }
   },
@@ -436,7 +464,7 @@
      "section.tile.t-cash:nth-of-type(1) > div.weeks:nth-of-type(1) > span.avg"
     ]
    },
-   "#1f6f5c": {
+   "#242424": {
     "n": 2,
     "ex": [
      "div.weeks:nth-of-type(1) > div.wk.now:nth-of-type(4) > i.b"
@@ -451,7 +479,7 @@
   }
  },
  "contrast": {
-  "checked": 15,
+  "checked": 12,
   "failing": [],
   "lowest": [
    {
@@ -475,14 +503,14 @@
     "n": 2
    },
    {
-    "sel": "header.top > span.avatar:nth-of-type(2)",
+    "sel": "div.bar:nth-of-type(3) > nav.seg > a:nth-of-type(2)",
     "ratio": 6.06,
-    "fg": "#006350",
-    "bg": "#d1f2e7",
-    "fs": 12,
+    "fg": "#575757",
+    "bg": "#ebebeb",
+    "fs": 14,
     "large": false,
     "backdrop": "solid",
-    "n": 1
+    "n": 8
    }
   ]
  },

@@ -7,7 +7,8 @@
 <!-- The "after" page of the before-and-after demo: the same invoices page on Merriweft's OpenDesigner system
      (opendesigner/, made with engine.py sketch and build). Every color, size, corner and space is a token. The money
      area is the bento direction the owner picked on 2026-10-21 from three shown on a review copy: one place for each
-     figure (the October total used to appear twice), small true charts, and the late money in red beside the totals. -->
+     figure (the October total used to appear twice), small true charts, and the late money in red beside the totals. Near-monochrome on the owner's taste notes (2026-10-21): the
+     pine green is the logo and the one filled button, charts are in ink, and red is only for late money. -->
 <link rel="stylesheet" href="opendesigner/build/css/tokens.css">
 <style>
 * { box-sizing: border-box; }
@@ -25,7 +26,7 @@ a { color: inherit; text-decoration: none; }
 .top nav a:hover, .top nav a[aria-current] { color: var(--ds-color-text-primary); background: var(--ds-color-bg-neutral-subtle); }
 .search { margin-left: auto; width: 240px; height: 32px; padding: 0 var(--ds-space-12); border: 1px solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-field); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
 .search::placeholder { color: var(--ds-color-text-secondary); }
-.avatar { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font: var(--ds-text-label-md); }
+.avatar { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); font: var(--ds-text-label-md); }
 main { max-width: 1200px; margin: 0 auto; padding: var(--ds-space-32) var(--ds-space-32) var(--ds-space-48); }
 .head { display: flex; align-items: flex-end; gap: var(--ds-space-16); flex-wrap: wrap; }
 h1 { margin: 0; font: var(--ds-text-headline-sm); letter-spacing: -0.01em; }
@@ -43,29 +44,31 @@ h1 { margin: 0; font: var(--ds-text-headline-sm); letter-spacing: -0.01em; }
 .t-cash { grid-column: span 2; grid-row: span 2; display: flex; flex-direction: column; }
 .t-open { grid-column: span 2; }
 .lbl { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-8); margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); font-family: var(--ds-font-family-mono); letter-spacing: 0.06em; text-transform: uppercase; }
-.fig { display: block; margin-top: var(--ds-space-8); font: var(--ds-text-headline-sm); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
-.fig.md { font: var(--ds-text-numeric-lg); }
+.fig { display: block; margin-top: var(--ds-space-8); font: var(--ds-text-headline-sm); font-weight: var(--ds-font-weight-label); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.fig .c { color: var(--ds-color-text-secondary); font-size: 0.62em; vertical-align: 0.5em; letter-spacing: 0; }
+.fig.md { font: var(--ds-text-numeric-lg); font-weight: var(--ds-font-weight-label); }
 .meta { margin: var(--ds-space-2) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); letter-spacing: var(--ds-text-body-sm-tracking); }
 .trend { display: inline-flex; align-items: center; gap: var(--ds-space-4); font: var(--ds-text-label-md); font-family: var(--ds-font-family-text); letter-spacing: 0; text-transform: none; }
 .trend svg { width: 12px; height: 12px; }
-.trend.good { color: var(--ds-color-text-success); } .trend.bad { color: var(--ds-color-text-danger); }
+.trend.good { color: var(--ds-color-text-secondary); } .trend.bad { color: var(--ds-color-text-danger); }
 /* weekly bars, drawn in HTML so the labels keep their size at every width; the plot fills the tile */
 .weeks { position: relative; flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ds-space-16); min-height: 160px; margin-top: var(--ds-space-16); border-bottom: 1px solid var(--ds-color-border-default); }
 .wk { position: relative; }
-.wk .b { position: absolute; bottom: 0; left: 50%; width: min(100%, 64px); height: calc(var(--p) * 0.85%); transform: translateX(-50%); border-radius: var(--ds-radius-control-sm) var(--ds-radius-control-sm) 0 0; background: var(--ds-color-bg-brand); }
-.wk.now .b { border: 1.5px solid var(--ds-color-bg-brand); border-bottom: 0; background: repeating-linear-gradient(-45deg, var(--ds-color-bg-brand) 0 2px, var(--ds-color-surface-raised) 2px 6px); }
+.wk .b { position: absolute; bottom: 0; left: 50%; width: min(100%, 64px); height: calc(var(--p) * 0.85%); transform: translateX(-50%); border-radius: var(--ds-radius-control-sm) var(--ds-radius-control-sm) 0 0; background: var(--ds-color-text-primary); transform-origin: 50% 100%; }
+.wk.now .b { border: 1.5px solid var(--ds-color-text-primary); border-bottom: 0; background: repeating-linear-gradient(-45deg, var(--ds-color-text-primary) 0 1.5px, var(--ds-color-surface-raised) 1.5px 6px); }
 .wk .v { position: absolute; z-index: 1; left: 50%; bottom: calc(var(--p) * 0.85% + 4px); transform: translateX(-50%); padding: 0 var(--ds-space-4); border-radius: var(--ds-radius-control-sm); background: var(--ds-color-surface-raised); white-space: nowrap; text-align: center; font: var(--ds-text-label-md); font-family: var(--ds-font-family-mono); letter-spacing: 0; }
 .avg { position: absolute; left: 0; right: 0; bottom: calc(25.9 / 40 * 85%); border-top: 1px dashed var(--ds-color-text-tertiary); pointer-events: none; }
 .xs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ds-space-16); margin-top: var(--ds-space-6); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); text-align: center; }
 .keys { display: flex; flex-wrap: wrap; gap: var(--ds-space-4) var(--ds-space-16); margin: var(--ds-space-12) 0 0; padding: 0; list-style: none; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
 .keys li { display: inline-flex; align-items: center; gap: var(--ds-space-6); }
-.key-now { width: 12px; height: 10px; border: 1.5px solid var(--ds-color-bg-brand); background: repeating-linear-gradient(-45deg, var(--ds-color-bg-brand) 0 2px, var(--ds-color-surface-raised) 2px 5px); }
+.key-now { width: 12px; height: 10px; border: 1.5px solid var(--ds-color-text-primary); background: repeating-linear-gradient(-45deg, var(--ds-color-text-primary) 0 1.5px, var(--ds-color-surface-raised) 1.5px 5px); }
 .key-avg { width: 14px; border-top: 1px dashed var(--ds-color-text-tertiary); }
 /* outstanding: the figure, eight weeks of it, and how much is late */
 .open-row { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-16); }
 .spark { width: 132px; height: 40px; flex: none; }
-.spark polyline { fill: none; stroke: var(--ds-color-bg-brand); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round; }
-.spark circle { fill: var(--ds-color-bg-brand); }
+.spark polyline { fill: none; stroke: var(--ds-color-text-primary); stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; }
+.spark .area { fill: var(--ds-color-bg-neutral-subtle); }
+.spark circle { fill: var(--ds-color-text-primary); }
 .meter { display: flex; gap: 2px; height: 8px; margin-top: var(--ds-space-16); border-radius: var(--ds-radius-control-sm); overflow: hidden; }
 .meter i { display: block; } .m-ok { background: var(--ds-color-neutral-light-8); } .m-late { background: var(--ds-color-bg-danger-bold); }
 .rows { display: grid; gap: var(--ds-space-4); margin: var(--ds-space-12) 0 0; padding: 0; list-style: none; font: var(--ds-text-body-sm); }
@@ -77,14 +80,14 @@ h1 { margin: 0; font: var(--ds-text-headline-sm); letter-spacing: -0.01em; }
 .late-list { display: grid; gap: var(--ds-space-6); margin: var(--ds-space-12) 0 0; padding: 0; list-style: none; font: var(--ds-text-body-sm); }
 .late-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--ds-space-8); }
 .late-list .who { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.late-list .d { color: var(--ds-color-text-danger); font-family: var(--ds-font-family-mono); }
+.late-list .d { color: var(--ds-color-text-danger); font-variant-numeric: tabular-nums; }
 .t-late .btn { margin-top: var(--ds-space-12); width: 100%; justify-content: center; }
 /* due this week: the seven days, today marked */
 .days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--ds-space-4); margin-top: var(--ds-space-16); }
 .day { display: grid; justify-items: center; gap: var(--ds-space-4); color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); font-family: var(--ds-font-family-mono); }
 .day i { width: 100%; height: 28px; border-radius: var(--ds-radius-control-sm); background: var(--ds-color-bg-neutral-subtle); }
-.day.due i { background: var(--ds-color-bg-brand); }
-.day.today { color: var(--ds-color-text-accent); font-weight: var(--ds-font-weight-label); }
+.day.due i { background: var(--ds-color-text-primary); }
+.day.today { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
 .next { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0 var(--ds-space-8); margin: var(--ds-space-16) 0 0; padding-top: var(--ds-space-12); border-top: 1px solid var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
 .next b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
 .next span:last-child { grid-column: 2 / 4; }
@@ -156,7 +159,7 @@ th.r, td.r { text-align: right; }
   <div class="money">
     <section class="tile t-cash" aria-label="Collected in October">
       <p class="lbl">Collected · October<span class="trend good"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 9.5v-7M3 5l3-3 3 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>8% on September</span></p>
-      <strong class="fig">$112,480.75</strong>
+      <strong class="fig">$112,480<span class="c">.75</span></strong>
       <p class="meta">31 invoices paid</p>
       <div class="weeks" role="img" aria-label="Collected each week of October: $24.1k, $38.2k, $31.6k, and $18.6k so far this week. September averaged $25.9k a week.">
         <span class="avg"></span>
@@ -171,22 +174,22 @@ th.r, td.r { text-align: right; }
 
     <section class="tile t-open" aria-label="Outstanding">
       <p class="lbl">Outstanding<span class="trend good"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 2.5v7M3 7l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>$3,240 since last week</span></p>
-      <div class="open-row"><div><strong class="fig">$48,210.00</strong><p class="meta">14 invoices</p></div>
-        <svg class="spark" viewBox="0 0 70 30" preserveAspectRatio="none" role="img" aria-label="Outstanding over eight weeks, from $58.4k down to $48.2k"><polyline points="0,6 10,11 20,7 30,15 40,12 50,18 60,18 70,24"/><circle cx="70" cy="24" r="2.4"/></svg></div>
+      <div class="open-row"><div><strong class="fig">$48,210<span class="c">.00</span></strong><p class="meta">14 invoices</p></div>
+        <svg class="spark" viewBox="0 0 132 40" role="img" aria-label="Outstanding over eight weeks, from $58.4k down to $48.2k"><path class="area" d="M3 40 L3 6 L21 13.8 L39 7.6 L57 20 L75 15.3 L93 24.7 L111 24.7 L129 34 L129 40Z"/><polyline points="3,6 21,13.8 39,7.6 57,20 75,15.3 93,24.7 111,24.7 129,34"/><circle cx="129" cy="34" r="3"/></svg></div>
       <div class="meter" role="img" aria-label="85.6% not due yet, 14.4% late"><i class="m-ok" style="width:85.6%"></i><i class="m-late" style="width:14.4%"></i></div>
       <ul class="rows"><li><i class="m-ok"></i><span>Not due yet</span><b>$41,269.50</b><span class="c">11</span></li><li><i class="m-late"></i><span>Late</span><b>$6,940.50</b><span class="c">3</span></li></ul>
     </section>
 
     <section class="tile t-late" aria-label="Overdue">
       <p class="lbl">Overdue<span class="trend bad">3 invoices</span></p>
-      <strong class="fig md">$6,940.50</strong>
-      <ul class="late-list"><li><span class="who">Tevelyn Botanicals</span><span class="d">22 d</span></li><li><span class="who">Tolland Print House</span><span class="d">9 d</span></li><li><span class="who">1 more</span><span class="d">4 d</span></li></ul>
+      <strong class="fig md">$6,940<span class="c">.50</span></strong>
+      <ul class="late-list"><li><span class="who">Tevelyn Botanicals</span><span class="d">22 days</span></li><li><span class="who">Tolland Print House</span><span class="d">9 days</span></li><li><span class="who">1 more</span><span class="d">4 days</span></li></ul>
       <button class="btn" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 4l6 4 6-4M2 4v8h12V4"/></svg>Send 3 reminders</button>
     </section>
 
     <section class="tile t-week" aria-label="Due this week">
       <p class="lbl">Due this week</p>
-      <strong class="fig md">$24,750.00</strong>
+      <strong class="fig md">$24,750<span class="c">.00</span></strong>
       <p class="meta">Durnell Architects, due today</p>
       <div class="days" role="img" aria-label="Monday to Sunday: one invoice due today, Wednesday"><span class="day"><i></i>M</span><span class="day"><i></i>T</span><span class="day today due"><i></i>W</span><span class="day"><i></i>T</span><span class="day"><i></i>F</span><span class="day"><i></i>S</span><span class="day"><i></i>S</span></div>
       <p class="next"><span>Next</span><b>Ashvale Ceramics</b><span class="mono num">$12,400.00</span><span>Nov 1</span></p>

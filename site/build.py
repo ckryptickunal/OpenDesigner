@@ -618,17 +618,10 @@ BA = SITE / "demo" / "before-after"  # the before-and-after demo: capture.py mea
 
 
 def demo_before_after_files():
-    """The demo's full-page screenshots as WebP (1x and 2x), and review.py compare's report at /demo/before-after/. The site's
-    policy allows no inline script, so the report's picker moves into its own file."""
-    from PIL import Image
-    out = DIST / "img" / "demo"
-    out.mkdir(parents=True, exist_ok=True)
+    """review.py compare's report at /demo/before-after/, from capture.py's screenshots and marks. The site's policy allows no
+    inline script, so the report's picker moves into its own file. The home page draws the pages themselves (before_after)."""
     if not all((BA / "shots" / f"{n}.png").exists() for n in ("before", "after")):  # git-ignored, like the showcase renders
         raise SystemExit("site/demo/before-after/shots/ is missing: run python3 site/demo/before-after/capture.py first")
-    for name in ("before", "after"):
-        im = Image.open(BA / "shots" / f"{name}.png").convert("RGB")
-        im.save(out / f"{name}-2560.webp", "WEBP", quality=84)
-        im.resize((1280, round(im.height * 1280 / im.width)), Image.LANCZOS).save(out / f"{name}-1280.webp", "WEBP", quality=84)
     tmp = CACHE / "before-after"
     tmp.mkdir(parents=True, exist_ok=True)
     subprocess.run([sys.executable, str(ROOT / "skills/opendesigner-review/scripts/review.py"), "compare", "--dir", str(tmp), "--out", str(tmp / "compare.html"),
@@ -647,32 +640,87 @@ def demo_before_after_files():
     (DIST / "demo" / "before-after" / "index.html").write_text(report)
 
 
+DEMO_W = 1200  # the width the demo pages are laid out at on the home page, then scaled to fit (site.js)
+
+
+def without_media(css):
+    """CSS without its @media blocks: the demo pages are always laid out at DEMO_W, whatever the screen."""
+    out, i = [], 0
+    while (j := css.find("@media", i)) >= 0:
+        out.append(css[i:j])
+        k, depth = css.index("{", j) + 1, 1
+        while depth:
+            depth += {"{": 1, "}": -1}.get(css[k], 0)
+            k += 1
+        i = k
+    return "".join(out + [css[i:]])
+
+
+def demo_tokens(src):
+    """Merriweft's token values that src uses (directly or through other tokens), from the blocks that apply by default: the
+    light theme, compact density, standard motion and a fine pointer. Written on :host, the demo page's root."""
+    css = re.sub(r"/\*.*?\*/", "", (BA / "opendesigner/build/css/tokens.css").read_text(), flags=re.S)
+    decl, stack, pos = {}, [], 0  # each block's prelude is the text since the last ; or brace before its {
+    for m in re.finditer(r"[{}]", css):
+        if m.group() == "{":
+            stack.append((css[pos:m.start()].strip().split(";")[-1].strip(), m.end()))
+        else:
+            prelude, at = stack.pop()
+            outer = [p for p, _ in stack]
+            if ":root" in [x.strip() for x in prelude.split(",")] and all(o == "@media (pointer: fine)" for o in outer):
+                decl.update(re.findall(r"(--ds-[\w-]+)\s*:\s*([^;{}]+);", css[at:m.start()]))
+        pos = m.end()
+    need, todo = [], re.findall(r"var\((--ds-[\w-]+)", src)
+    while todo:
+        v = todo.pop()
+        if v in decl and v not in need:
+            need.append(v)
+            todo += re.findall(r"var\((--ds-[\w-]+)", decl[v])
+    return ":host {" + "".join(f" {v}: {decl[v].strip()};" for v in decl if v in need) + " }\n"
+
+
+def demo_page(name):
+    """A demo page as a declarative shadow root: its own styles and markup, sealed off from the site's styles and the site's
+    from its own. It is a picture of a page, so nothing in it can be tabbed to, followed or typed into."""
+    page = (BA / f"{name}.html").read_text()
+    css = re.sub(r"/\*.*?\*/", "", "\n".join(re.findall(r"<style>(.*?)</style>", page, re.S)), flags=re.S)
+    body = re.search(r"<body>(.*)</body>", page, re.S).group(1).strip()
+    body = body.replace(' href="#"', "").replace("<button ", '<button tabindex="-1" ')
+    body = re.sub(r'<input class="search" placeholder="([^"]*)"[^>]*>', r'<span class="search">\1</span>', body)
+    body = body.replace('id="g"', f'id="mw-{name}-g"').replace("url(#g)", f"url(#mw-{name}-g)")
+    # no headings or landmarks of its own inside the home page: each becomes a box with its tag as a class
+    tags = ("h1", "main", "header", "nav", "section")
+    body = re.sub(r"<(/?)(" + "|".join(tags) + r")\b([^>]*)>", lambda m: "</div>" if m[1] else
+                  (f'<div{m[3]}>'.replace('class="', f'class="{m[2]} ', 1) if 'class="' in m[3] else f'<div class="{m[2]}"{m[3]}>'), body)
+    body = re.sub(r'\saria-current="[^"]*"', ' class="on"', body)  # the current nav item and filter keep their look
+    body = re.sub(r'\s(aria-label|role)="[^"]*"', "", body)
+    css = re.sub(r"[^{}]+(?=\{)", lambda m: re.sub(r"(?<![\w.#-])(" + "|".join(tags) + r")\b(?![\w-])", r".\1", m[0]), css)
+    css = re.sub(r"\[aria-current\]", ".on", css)
+    css = re.sub(r"(^|\n)body(\s*\{)", r"\1:host\2", without_media(css))
+    css = ":host { all: initial; display: block; }\n" + (demo_tokens(css + body) if "tokens.css" in page else "") + css
+    css += ".search { display: flex; align-items: center; }" + (" .search { color: var(--ds-color-text-secondary); }" if "tokens.css" in page else "")
+    css = re.sub(r"\n\s*\n+", "\n", css).strip()
+    return f'<template shadowrootmode="open"><style>{css}</style>{body}</template>'
+
+
 def before_after():
-    """Home #before-after: the audit as it happens on a real page. A scan finds each issue in the order it meets them (a
-    dashed box, a number and a short line each), then the fix sweeps down with Merriweft's tokens and each box becomes a
-    check. site.js runs it once in view; Today / Audit / Fixed and Replay stay for manual viewing and reduced motion.
-    Every box and number comes from site/demo/before-after/ (capture.py: probe.js and __od.marks())."""
-    before, after = (json.loads((BA / "review" / f"marks-{n}.json").read_text()) for n in ("before", "after"))
-    BW, BH, AH = before["page"]["w"], before["page"]["h"], after["page"]["h"]
-    pct = lambda r: [round(r[0] / BW * 100, 3), round(r[1] / BH * 100, 3), round(r[2] / BW * 100, 3), round(r[3] / BH * 100, 3)]
-    apct = lambda r: [round(r[0] / BW * 100, 3), round(r[1] / AH * 100, 3), round(r[2] / BW * 100, 3), round(r[3] / AH * 100, 3)]
-    tall = max(BH, AH) / BW
-    # each image fills the stage width; its boxes are a share of its own page, scaled to the taller page's height
-    sb, sa = BH / max(BH, AH), AH / max(BH, AH)
-    scale = lambda r, s: [r[0], round(r[1] * s, 3), r[2], round(r[3] * s, 3)]
-    amarks = {i + 1: m for i, m in enumerate(after["marks"])}
-    data = {"marks": [{"n": m["n"], "r": scale(pct(m["rect"]), sb), "a": scale(apct(amarks[m["n"]]["rect"]), sa) if m["n"] in amarks else None,
-                       "title": m["title"], "short": m["short"], "token": m["token"]} for m in before["marks"]]}
-    box = lambda r: f"left:{r[0]}%;top:{r[1]}%;width:{r[2]}%;height:{r[3]}%"
+    """Home #before-after: the audit as it happens, on the demo pages themselves (live HTML, not pictures). A scan finds each
+    issue in the order it meets them (a dashed box, a number and a short line each), then the fix sweeps down with
+    Merriweft's tokens: the fixed page builds itself as the line passes and each box becomes a check. site.js runs it once
+    in view, measuring every box on the page as drawn; Today / Audit / Fixed and Replay stay for manual viewing and reduced
+    motion. The issues are marks.in.json's, found by capture.py with the review skill's probe.js."""
+    spec = json.loads((BA / "marks.in.json").read_text())
+    after_sel = [m["sel"] for m in spec["after"]]
+    marks = [dict(m, n=i + 1, asel=after_sel[i] if i < len(after_sel) else None) for i, m in enumerate(spec["before"])]
+    shot = {n: json.loads((BA / "review" / f"marks-{n}.json").read_text())["page"] for n in ("before", "after")}
+    tall = max(shot["before"]["h"], shot["after"]["h"]) / shot["before"]["w"]  # until site.js measures the pages as drawn
+    data = {"width": DEMO_W, "marks": [{k: m[k] for k in ("n", "sel", "asel", "title", "short", "token")} for m in marks]}
     check = ('<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3 5 8.7l4.6-5.2" fill="none" stroke="currentColor" stroke-width="1.8" '
              'stroke-linecap="round" stroke-linejoin="round"/></svg>')
-    marks = "".join(f'<span class="au-mk" data-n="{m["n"]}" style="{box(m["r"])}"><b>{m["n"]}</b></span>' for m in data["marks"])
-    oks = "".join(f'<span class="au-ok" data-n="{m["n"]}" style="{box(m["a"] or m["r"])}"><b>{check}</b></span>' for m in data["marks"])
+    boxes = "".join(f'<span class="au-mk" data-n="{m["n"]}"><b>{m["n"]}</b></span><span class="au-ok" data-n="{m["n"]}"><b>{check}</b></span>' for m in marks)
     rows = "".join(f'<li data-n="{m["n"]}"><span class="n"><span>{m["n"]}</span>{check}</span><div><h3>{esc(m["title"])}</h3>'
                    f'<p class="m">{esc(m["before"])}</p><p class="g">Fixing this makes {esc(m["gives"])}.</p><p class="s">{esc(m["stat"])}</p></div></li>'
-                   for m in sorted(before["marks"], key=lambda m: m["n"]))
-    img = lambda name, h, alt: (f'<img src="/img/demo/{name}-1280.webp" srcset="/img/demo/{name}-1280.webp 1280w, /img/demo/{name}-2560.webp 2560w" '
-                                f'sizes="(max-width: 1000px) 100vw, 760px" width="1280" height="{h}" loading="lazy" alt="{alt}">')
+                   for m in marks)
     # the token card: Merriweft's system as a small drawing; during the fix a chip leaves it for each region
     palette = ('<div class="au-tokens" aria-hidden="true"><svg viewBox="0 0 132 40"><rect x="1" y="1" width="38" height="38" rx="8" fill="#1f6f5c"/>'
                '<path d="M11 28V13l9 9.5L29 13v15" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'
@@ -680,9 +728,11 @@ def before_after():
                '<path d="M80 30V18a8 8 0 0 1 8-8h12" fill="none" stroke="#242424" stroke-width="1.8" stroke-linecap="round"/>'
                '<path d="M110 16v14M110 23h12M122 16v14" fill="none" stroke="#575757" stroke-width="1.6" stroke-linecap="round"/></svg>'
                '<span>Merriweft tokens</span></div>')
+    label = "The Merriweft invoices page, drawn live: as it is today, with the issues an audit finds, and after the fix."
     stage_inner = (f'<div class="au-win"><div class="au-chrome"><span class="au-dots"><i></i><i></i><i></i></span><span class="au-url">merriweft.example/invoices</span></div>'
-                   f'<div class="au-stage" style="aspect-ratio:1 / {tall:.4f}">{img("before", BH, "The Merriweft invoices page before the fix")}'
-                   f'<div class="au-after">{img("after", AH, "The same page after the fix")}</div>{marks}{oks}'
+                   f'<div class="au-stage" role="img" aria-label="{label}" style="aspect-ratio:1 / {tall:.4f}">'
+                   f'<div class="au-page b" aria-hidden="true">{demo_page("before")}</div>'
+                   f'<div class="au-after"><div class="au-page a" aria-hidden="true">{demo_page("after")}</div></div>{boxes}'
                    f'<div class="au-line" aria-hidden="true"><span class="au-tag"></span></div><div class="au-callout" aria-hidden="true"></div>{palette}</div></div>')
     st, credit = stage("woods-sage", stage_inner, "au-photo")
     replay = ('<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.7-4M2.5 2.5v3h3" fill="none" stroke="currentColor" '
@@ -690,7 +740,7 @@ def before_after():
     tabs = "".join(f'<button type="button" role="tab" data-view="{k}" aria-selected="{"true" if k == "audit" else "false"}">{n}</button>'
                    for k, n in (("today", "Today"), ("audit", "Audit"), ("fixed", "Fixed")))
     return (f'<div class="au" data-au><div class="au-bar"><div class="tablist" role="tablist" aria-label="The invoices page: today, the audit, and the fix">{tabs}</div>'
-            f'<button type="button" class="au-replay">{replay}Replay</button><p class="au-status" aria-live="polite"><b>{len(data["marks"])} issues</b> found on this page.</p></div>'
+            f'<button type="button" class="au-replay">{replay}Replay</button><p class="au-status" aria-live="polite"><b>{len(marks)} issues</b> found on this page.</p></div>'
             f'<div class="au-body"><div>{st}<p class="au-cap" hidden></p></div>'
             f'<div><p class="au-empty" hidden>The page as it is today. Watch the audit, or press Audit to see what it finds.</p><ol class="au-list">{rows}</ol></div></div>'
             f'<script type="application/json" id="au-data">{json.dumps(data)}</script></div>'), credit
@@ -948,7 +998,7 @@ def home(pages, facts, faq):
 <div class="h-head">{idx("01", "On a page you already built")}<h2 class="h-h2">See what's wrong, then see it fixed.</h2>
 <p class="h-lede">Point OpenDesigner at a page you have. It measures the page, marks each problem on it, and fixes it with your own design system. Every fix says what it makes better.</p></div>
 {ba_html}
-<p class="h-fine">Real output from the review skill on an invented invoicing app: probe.js measured the page before and after, and its <code>__od.marks()</code> placed each box. Desktop, 1280 px wide. Photo: {ba_credit} on Unsplash. <a href="/demo/before-after/">Open the full report</a> · <a href="{GH}/tree/main/site/demo/before-after">How it was made</a></p>
+<p class="h-fine">Real output from the review skill on an invented invoicing app. Both pages are live HTML, not pictures: probe.js measured them before and after, and each box is measured on the page as drawn. Laid out at 1200 px and scaled to fit. Photo: {ba_credit} on Unsplash. <a href="/demo/before-after/">Open the full report</a> · <a href="{GH}/tree/main/site/demo/before-after">How it was made</a></p>
 </section>
 
 <section class="h-sec" id="why">

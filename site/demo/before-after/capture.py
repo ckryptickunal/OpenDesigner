@@ -5,9 +5,10 @@
 
 For before.html and after.html at 1280 px wide: run probe.js and save its measurements (review/probe-*.json, which
 `review.py check` reads), save a full-page screenshot at 2x (shots/*.png), and box each issue with __od.marks() from the
-lists in marks.in.json (review/marks-*.json). Then build the report with review.py compare. The site build turns the
-screenshots and marks into the home-page figure and serves the report at /demo/before-after/. The screenshots stay local
-(git-ignored, like the showcase renders), so run this once before the first site build.
+lists in marks.in.json (review/marks-*.json). Then build the report with review.py compare. The site build serves the
+report at /demo/before-after/. The home page does not use these screenshots: it draws the two pages themselves as live
+HTML and measures its boxes there (build.py before_after, site.js). The screenshots stay local (git-ignored, like the
+showcase renders), so run this once before the first site build.
 """
 import json
 import pathlib

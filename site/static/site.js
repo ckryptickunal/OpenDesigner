@@ -229,34 +229,66 @@
   }
 })();
 
-/* Home #before-after: the audit as it happens. Plays once when the page comes into view: a scan finds each issue in the
-   order it meets them (a dashed box, its number and one line), then the fix sweeps down: a chip carries each token from the
-   Merriweft card to its place, and the box becomes a check. Today / Audit / Fixed stop it and show that state at once;
-   Replay plays it again. With reduced motion it never plays by itself. Web Animations only: transform, opacity, clip-path. */
+/* Home #before-after: the audit as it happens, on the demo pages themselves. Both pages are live HTML in shadow roots, laid
+   out at their design width and scaled to the stage, so every box is measured on the page as drawn. Plays once when the
+   section comes into view: a scan finds each issue in the order it meets them (a dashed box, its number and one line), then
+   the fix sweeps down and the fixed page builds itself as the line passes (bars grow, the sparkline draws, totals count up,
+   rows and labels arrive) while a chip carries each token from the Merriweft card to its place and each box becomes a check.
+   Today / Audit / Fixed stop it and show that state at once; Replay plays it again. With reduced motion it never plays by
+   itself. Web Animations only: transform, opacity, clip-path. */
 (function () {
   "use strict";
   var root = document.querySelector("[data-au]");
   if (!root || !root.animate || !window.Promise) return;
+  var stage = root.querySelector(".au-stage"), after = stage.querySelector(".au-after");
+  var pb = stage.querySelector(".au-page.b"), pa = stage.querySelector(".au-page.a");
+  if (!pb || !pa || !pb.shadowRoot || !pa.shadowRoot) return;  // the list beside the page still says what the audit found
   var D = JSON.parse(document.getElementById("au-data").textContent);
   var EASE = "cubic-bezier(0.23, 1, 0.32, 1)", MOVE = "cubic-bezier(0.77, 0, 0.175, 1)";
-  var stage = root.querySelector(".au-stage"), after = stage.querySelector(".au-after"), card = stage.querySelector(".au-tokens");
-  var line = stage.querySelector(".au-line"), tag = line.querySelector(".au-tag"), callout = stage.querySelector(".au-callout");
-  var status = root.querySelector(".au-status"), cap = root.querySelector(".au-cap"), empty = root.querySelector(".au-empty");
-  var tabs = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]')), replay = root.querySelector(".au-replay");
-  var by = {}, run = 0, anims = [], timers = [], N = D.marks.length;
+  var card = stage.querySelector(".au-tokens"), line = stage.querySelector(".au-line"), tag = line.querySelector(".au-tag");
+  var callout = stage.querySelector(".au-callout"), status = root.querySelector(".au-status"), cap = root.querySelector(".au-cap");
+  var empty = root.querySelector(".au-empty"), replay = root.querySelector(".au-replay");
+  var tabs = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]'));
+  var by = {}, run = 0, anims = [], timers = [], undo = [], busy = false, N = D.marks.length;
+  var all = function (sr, sel) { return Array.prototype.slice.call(sr.querySelectorAll(sel)); };
   D.marks.forEach(function (m) {
     by[m.n] = { m: m, mk: stage.querySelector('.au-mk[data-n="' + m.n + '"]'), ok: stage.querySelector('.au-ok[data-n="' + m.n + '"]'),
                 row: root.querySelector('.au-list li[data-n="' + m.n + '"]') };
   });
   root.classList.add("on");
 
+  function box(sr, sel) {  // every match as one box, in stage pixels, a little larger than what it marks
+    if (!sel) return null;
+    var s = stage.getBoundingClientRect(), x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    all(sr, sel).forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      x0 = Math.min(x0, r.left); y0 = Math.min(y0, r.top); x1 = Math.max(x1, r.right); y1 = Math.max(y1, r.bottom);
+    });
+    if (x1 < x0) return null;
+    return { x: x0 - s.left - 4, y: y0 - s.top - 4, w: x1 - x0 + 8, h: y1 - y0 + 8 };
+  }
+  function put(el, r) { el.style.left = r.x + "px"; el.style.top = r.y + "px"; el.style.width = r.w + "px"; el.style.height = r.h + "px"; }
+  function fit() {  // scale both pages to the stage, make the stage as tall as the taller page, and measure every box
+    var k = stage.clientWidth / D.width;
+    stage.style.setProperty("--k", k);
+    stage.style.aspectRatio = D.width + " / " + Math.max(pb.offsetHeight, pa.offsetHeight);  // not a height: that would size the width too
+    D.marks.forEach(function (m) {
+      var b = by[m.n];
+      b.r = box(pb.shadowRoot, m.sel) || { x: 0, y: 0, w: 0, h: 0 };
+      b.a = box(pa.shadowRoot, m.asel) || b.r;
+      put(b.mk, b.r); put(b.ok, b.a);
+    });
+  }
+
   function A(el, kf, o) { var a = el.animate(kf, Object.assign({ fill: "forwards" }, o)); anims.push(a); return a; }
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
   function wait(ms, id) { return new Promise(function (ok, no) { later(function () { id === run ? ok() : no("stopped"); }, ms); }); }
   function stop() {
-    run++;
+    run++; busy = false;
     timers.forEach(clearTimeout); timers = [];
     anims.forEach(function (a) { a.cancel(); }); anims = [];
+    undo.forEach(function (fn) { fn(); }); undo = [];
     Array.prototype.slice.call(stage.querySelectorAll(".au-chip")).forEach(function (c) { c.remove(); });
   }
   function select(view) {
@@ -288,37 +320,33 @@
     caption(null);
   }
   function show(view) { stop(); reset(view); }
-  function px(r) {
-    var W = stage.clientWidth, H = stage.clientHeight;
-    return { x: r[0] * W / 100, y: r[1] * H / 100, w: r[2] * W / 100, h: r[3] * H / 100, W: W, H: H };
-  }
   function place(m) {  // beside its box, above it when there is room, never over a box already found
-    var p = px(m.r);
+    var p = by[m.n].r, W = stage.clientWidth, H = stage.clientHeight;
     callout.innerHTML = "<b>" + m.n + "</b><span>" + m.short + "</span>";
     callout.style.left = "0px"; callout.style.top = "0px";
-    var cw = callout.offsetWidth, ch = callout.offsetHeight, left = Math.min(Math.max(6, p.x), p.W - cw - 6);
+    var cw = callout.offsetWidth, ch = callout.offsetHeight, left = Math.min(Math.max(6, p.x), W - cw - 6);
     var hits = function (t) {
       return D.marks.some(function (o) {
-        if (o.n === m.n || !by[o.n].shown) return false;
-        var q = px(o.r);
-        return left < q.x + q.w && left + cw > q.x && t < q.y + q.h && t + ch > q.y;
+        var q = by[o.n].r;
+        return o.n !== m.n && by[o.n].shown && left < q.x + q.w && left + cw > q.x && t < q.y + q.h && t + ch > q.y;
       });
     };
-    var spots = [p.y - ch - 16, p.y + p.h + 12, p.y + 10].filter(function (t) { return t >= 6 && t + ch <= p.H - 6; });
+    var spots = [p.y - ch - 16, p.y + p.h + 12, p.y + 10].filter(function (t) { return t >= 6 && t + ch <= H - 6; });
     var top = spots.filter(function (t) { return !hits(t); })[0];
     if (top === undefined) top = spots[0] !== undefined ? spots[0] : 6;
     callout.style.left = left + "px"; callout.style.top = top + "px";
   }
   function groups() {  // issues at about the same height are found together, left to right
-    var list = D.marks.slice().sort(function (a, b) { return a.r[1] - b.r[1] || a.r[0] - b.r[0]; }), out = [];
-    list.forEach(function (m) { var g = out[out.length - 1]; if (g && Math.abs(g[0].r[1] - m.r[1]) < 2) g.push(m); else out.push([m]); });
+    var H = stage.clientHeight, out = [];
+    D.marks.slice().sort(function (a, b) { return by[a.n].r.y - by[b.n].r.y || by[a.n].r.x - by[b.n].r.x; }).forEach(function (m) {
+      var g = out[out.length - 1];
+      if (g && Math.abs(by[g[0].n].r.y - by[m.n].r.y) < H * 0.02) g.push(m); else out.push([m]);
+    });
     return out;
   }
   function fly(m, b) {  // a chip leaves the token card and lands where the fix goes; the check appears as it lands
-    var p = px(m.a || m.r), H = stage.clientHeight, small = stage.clientWidth < 520;
-    var land = function () {
-      A(b.ok, [{ opacity: 0, transform: "scale(0.9)" }, { opacity: 1, transform: "scale(1)" }], { duration: 240, easing: EASE });
-    };
+    var p = b.a, H = stage.clientHeight, small = stage.clientWidth < 520;
+    var land = function () { A(b.ok, [{ opacity: 0, transform: "scale(0.9)" }, { opacity: 1, transform: "scale(1)" }], { duration: 240, easing: EASE }); };
     if (small) { land(); return; }
     var chip = document.createElement("span");
     chip.className = "au-chip";
@@ -327,15 +355,62 @@
     var x0 = 24, y0 = H - 72, x1 = Math.min(Math.max(6, p.x + 10), stage.clientWidth - chip.offsetWidth - 6), y1 = Math.max(6, p.y - 30);
     A(chip, [{ transform: "translate(" + x0 + "px," + y0 + "px) scale(0.96)", opacity: 0 },
              { transform: "translate(" + x0 + "px," + (y0 - 8) + "px) scale(1)", opacity: 1, offset: 0.15 },
-             { transform: "translate(" + x1 + "px," + y1 + "px) scale(1)", opacity: 1 }], { duration: 620, easing: MOVE });
-    later(function () { land(); A(chip, [{ opacity: 1 }, { opacity: 0 }], { duration: 260, delay: 520, easing: "ease" }); }, 620);
-    later(function () { chip.remove(); }, 1500);
+             { transform: "translate(" + x1 + "px," + y1 + "px) scale(1)", opacity: 1 }], { duration: 560, easing: MOVE });
+    later(function () { land(); A(chip, [{ opacity: 1 }, { opacity: 0 }], { duration: 200, delay: 240, easing: "ease" }); }, 560);
+    later(function () { chip.remove(); }, 1100);
+  }
+
+  // How the fixed page builds itself as the line reaches each part: [selector, motion, stagger (ms), delay after reached (ms)]
+  var BUILD = [
+    [".top .nav a, .search, .avatar", "fade", 30, 0], [".head .h1, .head .sub", "rise", 60, 0], [".acts .btn", "pop", 70, 60],
+    [".money .tile", "rise", 80, 0], [".wk .b", "grow", 90, 140], [".wk .v", "rise", 90, 420], [".avg", "widen", 0, 640],
+    [".xs span, .keys li", "fade", 40, 320], [".spark", "draw", 0, 180], [".meter i", "widen", 180, 220],
+    [".rows li, .late-list li", "rise", 70, 260], [".t-late .btn", "pop", 0, 480], [".day i", "grow", 40, 180], [".next", "fade", 0, 460],
+    [".bar .seg, .bar .count", "fade", 60, 0], ["thead th", "fade", 25, 0], ["tbody tr", "rise", 0, 0], [".pill", "pop", 0, 160]
+  ];
+  var MOTION = {
+    fade: { o: 260 }, rise: { o: 260, t: ["translateY(8px)", "translateY(0)"], d: 460 }, pop: { o: 220, t: ["scale(0.94)", "scale(1)"], d: 320 },
+    grow: { t: ["scaleY(0)", "scaleY(1)"], d: 680, origin: "50% 100%" }, widen: { t: ["scaleX(0)", "scaleX(1)"], d: 620, origin: "0 50%" },
+    draw: { clip: ["inset(-4px 100% -4px -4px)", "inset(-4px -4px -4px -4px)"], d: 1000 }
+  };
+  function build(id, SWEEP) {
+    var s = stage.getBoundingClientRect(), H = stage.clientHeight;
+    var reach = function (el) { return Math.max(0, (el.getBoundingClientRect().top - s.top) / H * SWEEP); };
+    var F = pa.shadowRoot;
+    BUILD.forEach(function (step) {
+      var mo = MOTION[step[1]];
+      all(F, step[0]).forEach(function (el, i) {
+        var at = reach(el) + step[3] + i * step[2];
+        if (mo.o) A(el, [{ opacity: 0 }, { opacity: 1 }], { duration: mo.o, delay: at, easing: "ease", fill: "both" });
+        if (mo.origin) { var was = el.style.transformOrigin; el.style.transformOrigin = mo.origin; undo.push(function () { el.style.transformOrigin = was; }); }
+        if (mo.t) A(el, [{ transform: mo.t[0] }, { transform: mo.t[1] }], { duration: mo.d, delay: at, easing: EASE, fill: "both", composite: "add" });
+        if (mo.clip) A(el, [{ clipPath: mo.clip[0] }, { clipPath: mo.clip[1] }], { duration: mo.d, delay: at, easing: MOVE, fill: "both" });
+      });
+    });
+    all(F, ".money .fig").forEach(function (el) {  // each total counts up to its value as its tile arrives
+      var t = el.firstChild;
+      if (!t || t.nodeType !== 3 || !/\d/.test(t.data)) return;
+      var text = t.data, n = parseInt(text.replace(/\D/g, ""), 10), num = text.match(/[\d,]+/)[0];
+      t.data = text.replace(num, "0");
+      undo.push(function () { t.data = text; });
+      later(function () {
+        var t0 = performance.now();
+        requestAnimationFrame(function step(now) {
+          if (id !== run) return;
+          var p = Math.min(1, (now - t0) / 900), e = 1 - Math.pow(1 - p, 3);
+          t.data = text.replace(num, Math.round(n * e).toLocaleString("en-US"));
+          if (p < 1) requestAnimationFrame(step);
+        });
+      }, reach(el) + 120);
+    });
   }
 
   async function play() {
     stop();
     var id = run;
     reset("today");
+    fit();
+    busy = true;
     empty.hidden = true;
     var H = stage.clientHeight, y = 0;
     line.classList.remove("fix");
@@ -346,7 +421,7 @@
       await wait(300, id);
       var found = 0, gs = groups();
       for (var gi = 0; gi < gs.length; gi++) {
-        var top = px(gs[gi][0].r).y;
+        var top = by[gs[gi][0].n].r.y;
         A(line, [{ transform: "translateY(" + y + "px)" }, { transform: "translateY(" + top + "px)" }], { duration: 560, easing: MOVE });
         y = top;
         await wait(580, id);
@@ -373,28 +448,31 @@
       A(card, [{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 260, delay: 300, easing: EASE });
       await wait(1000, id);
 
-      var SWEEP = 3200, fixed = 0;
+      var SWEEP = 3400, fixed = 0;
       line.classList.add("fix");
       tag.textContent = "Applying Merriweft's tokens";
       A(line, [{ opacity: 0, transform: "translateY(0)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 160, easing: "ease" });
       await wait(180, id);
       A(line, [{ transform: "translateY(0)" }, { transform: "translateY(" + H + "px)" }], { duration: SWEEP, easing: "linear" });
       A(after, [{ clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)" }], { duration: SWEEP, easing: "linear" });
-      D.marks.slice().sort(function (a, b) { return a.r[1] - b.r[1] || a.r[0] - b.r[0]; }).forEach(function (m, i) {
-        var b = by[m.n], at = Math.min(px(m.r).y, px(m.a || m.r).y) / H * SWEEP + i * 90;
+      build(id, SWEEP);
+      var row = -1, inRow = 0, rowY = -Infinity;  // fixes on one row land one after another, so their chips never overlap
+      D.marks.slice().sort(function (a, b) { return Math.min(by[a.n].r.y, by[a.n].a.y) - Math.min(by[b.n].r.y, by[b.n].a.y); }).forEach(function (m) {
+        var b = by[m.n], y0 = Math.min(b.r.y, b.a.y);
+        if (y0 - rowY > H * 0.03) { row++; inRow = 0; rowY = y0; } else inRow++;
+        var at = y0 / H * SWEEP + inRow * 760;
+        later(function () { A(b.mk, [{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: "ease" }); }, b.r.y / H * SWEEP);  // the old page's box goes as the line passes it
         later(function () {
           if (id !== run) return;
           fixed++;
-          A(b.mk, [{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: "ease" });
           fly(m, b);
           b.row.classList.add("done");
-          tag.textContent = "✓ " + m.token;
           say("Fixed " + fixed + " of " + N + ": <b>" + m.title + "</b>");
           caption(m, true);
           if (fixed === 1) select("fixed");
         }, at);
       });
-      await wait(SWEEP + 1300, id);
+      await wait(SWEEP + 2200, id);
       A(line, [{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: "ease" });
       A(card, [{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: "ease" });
       await wait(260, id);
@@ -419,8 +497,17 @@
     b.row.addEventListener("mouseleave", function () { b.mk.classList.remove("hl"); });
   });
 
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches, width = 0;
+  fit();
   show(reduce ? "audit" : "today");
+  if ("ResizeObserver" in window) {
+    new ResizeObserver(function () {  // a new width moves every box: measure again (mid-play, skip to the end)
+      if (stage.clientWidth === width) return;
+      width = stage.clientWidth;
+      if (busy) show("fixed");
+      fit();
+    }).observe(stage);
+  }
   if (!reduce && "IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (es) {
       if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); play(); }
