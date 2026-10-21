@@ -69,7 +69,7 @@ def main():
     indexnow(site_url)
 
 
-CHECK_PATHS = ["/", "/docs/", "/docs/install/", "/library/", "/sitemap.xml", "/robots.txt", "/llms.txt", "/og/home.jpg", "/_vercel/speed-insights/script.js"]
+CHECK_PATHS = ["/", "/docs/", "/docs/install/", "/library/", "/sitemap.xml", "/robots.txt", "/llms.txt", "/og/home.jpg", "/_vercel/speed-insights/script.js", "/.well-known/agent-skills/index.json"]
 
 
 def status(path, deployment):
