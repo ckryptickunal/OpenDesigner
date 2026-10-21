@@ -1,6 +1,7 @@
 {
   "name": "Profile card",
   "summary": "One person at a glance: who they are, where and what time it is for them, three numbers about their work, and buttons to message or follow them.",
+  "use": "for a person's profile in a team directory or hover card",
   "type": "content",
   "style": "quiet",
   "industries": ["any"],

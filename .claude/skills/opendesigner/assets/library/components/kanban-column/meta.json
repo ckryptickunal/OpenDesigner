@@ -1,6 +1,7 @@
 {
   "name": "Kanban column",
   "summary": "One board column with its count and add button, holding task cards with labels, due date, assignee, comments and subtask progress; one card is lifted mid-drag.",
+  "use": "on a task board",
   "type": "data",
   "style": "dense",
   "industries": ["productivity", "saas", "devtools"],

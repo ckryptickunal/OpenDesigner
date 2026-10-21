@@ -51,6 +51,28 @@ def components():
     return sorted(out, key=lambda c: (order.index(c["type"]), c["width"] != "wide", c["name"]))
 
 
+def lead(c):
+    """The page's first sentence: what the part is, when to use it, and that it takes your design tokens (the line AI answers quote)."""
+    return f"{c['name']}: a free component, built on your design tokens, to use {c['use']}."
+
+
+def page_desc(c):
+    """A meta description of 110 to 160 characters that starts with the lead."""
+    l = lead(c)
+    for d in (f"{l} {c['summary']}", f"{l} One prompt adds it to your project.", f"{l} MIT licensed.", l):
+        if 110 <= len(d) <= 160:
+            return d
+    return fit_desc(l)
+
+
+def page_title(c):
+    """30 to 65 characters, the part first and the brand last."""
+    for t in (f"{c['name']}: a free, token-only component | OpenDesigner", f"{c['name']}: a free, token-only component", f"{c['name']} component | OpenDesigner"):
+        if 30 <= len(t) <= 65:
+            return t
+    return f"{c['name']} | OpenDesigner"
+
+
 def prompt(b, c):
     return (f'Add the OpenDesigner component {c["slug"]} to this project: {b.SITE_URL}/library/r/{c["slug"]}.html. '
             f"Keep its markup and states; map its --ds-* variables to my tokens.")
@@ -271,7 +293,7 @@ def detail(b, c, cs):
 <link rel="stylesheet" href="/library.css">
 <div class="shop part">
 {FAB}
-<nav class="crumbs" aria-label="Breadcrumb"><a href="/library/">Library</a><span aria-hidden="true">/</span><a href="/library/#shelf" data-goto-aisle="{c["type"]}">{TYPES[c["type"]]}</a><span aria-hidden="true">/</span><span aria-current="page">{esc(c["name"])}</span></nav>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/library/">Library</a><span aria-hidden="true">/</span><a href="/library/#aisle-{c["type"]}" data-goto-aisle="{c["type"]}">{TYPES[c["type"]]}</a><span aria-hidden="true">/</span><span aria-current="page">{esc(c["name"])}</span></nav>
 <div class="part-grid">
 <section class="part-view" aria-label="Preview">
 <div class="part-tools">
@@ -286,7 +308,7 @@ def detail(b, c, cs):
 <aside class="part-side">
 <div class="stickers">{stickers(c)}</div>
 <h1>{esc(c["name"])}</h1>
-<p class="part-sum">{esc(c["summary"])}</p>
+<p class="part-sum">{esc(lead(c))} {esc(c["summary"])}</p>
 <div class="part-prompt"><p class="kicker">Prompt for your coding agent</p><p class="part-prompt-text">{esc(prompt(b, c)).replace("/", "/<wbr>")}</p>
 <div class="part-acts">{kit_button(c["slug"], c["name"])}<button type="button" class="copy" data-copy-text="{esc(prompt(b, c))}">{COPY}<span>Copy prompt</span></button></div></div>
 <div class="cmd"><code>python3 &lt;skill&gt;/scripts/library.py add {c["slug"]}</code><button class="copy" type="button">Copy</button></div>
@@ -307,19 +329,25 @@ def detail(b, c, cs):
 {kit_ui(b)}
 <script src="/library.js" defer></script>
 """
-    title = f"{c['name']} component: free, in your design tokens"
-    if len(title) > 65:
-        title = f"{c['name']}: a free design-token component"
-    ld = [b.crumbs_ld([("Component library", "/library/"), (c["name"], f"/library/{c['slug']}/")]),
-          {"@context": "https://schema.org", "@type": "SoftwareSourceCode", "name": c["name"], "description": c["summary"],
+    aisle = (TYPES[c["type"]], f"/library/#aisle-{c['type']}")
+    ld = [b.crumbs_ld([("Component library", "/library/"), aisle, (c["name"], f"/library/{c['slug']}/")]),
+          {"@context": "https://schema.org", "@type": "SoftwareSourceCode", "name": c["name"], "description": lead(c) + " " + c["summary"],
            "url": f"{b.SITE_URL}/library/{c['slug']}/", "codeSampleType": "full", "programmingLanguage": "HTML",
-           "license": "https://opensource.org/license/mit"}]
-    md = f"# {c['name']}\n\n{c['summary']}\n\nPrompt: {prompt(b, c)}\n\nStates: {', '.join(c['states'])}.\n\nAccessibility: {c['a11y']}\n\nFile: {b.SITE_URL}/library/r/{c['slug']}.html\n"
-    return b.shell(f"/library/{c['slug']}/", title, fit_desc(c["summary"]), body, b.load_docs(), ld, home=True), md
+           "license": "https://opensource.org/license/mit", "codeRepository": b.GH,
+           "isPartOf": {"@type": "CollectionPage", "name": "OpenDesigner component library", "url": f"{b.SITE_URL}/library/"},
+           "keywords": ", ".join(c["tags"])}]
+    md = f"# {c['name']}\n\n{lead(c)} {c['summary']}\n\nPrompt: {prompt(b, c)}\n\nStates: {', '.join(c['states'])}.\n\nAccessibility: {c['a11y']}\n\nFile: {b.SITE_URL}/library/r/{c['slug']}.html\n"
+    return b.shell(f"/library/{c['slug']}/", page_title(c), page_desc(c), body, b.load_docs(), ld, home=True), md
 
 
 DESCRIPTION = ("Free, optional components made only of design tokens. Add them to a kit, try them in ten looks, and copy one prompt for your "
                "coding agent.")
+
+
+def llms_section(site_url):
+    """The library's section of llms.txt: the shop and every part, each with its first sentence."""
+    return ("## Component library\n\n" + f"- [Component library]({site_url}/library/index.md): {DESCRIPTION}\n"
+            + "\n".join(f"- [{c['name']}]({site_url}/library/{c['slug']}/index.md): {lead(c)}" for c in components()))
 
 
 def add(b, files, mds, paths):
@@ -327,7 +355,8 @@ def add(b, files, mds, paths):
     cs = components()
     ld = [b.crumbs_ld([("Component library", "/library/")]),
           {"@context": "https://schema.org", "@type": "CollectionPage", "name": "OpenDesigner component library", "url": f"{b.SITE_URL}/library/",
-           "description": DESCRIPTION, "hasPart": [{"@type": "SoftwareSourceCode", "name": c["name"], "url": f"{b.SITE_URL}/library/{c['slug']}/"} for c in cs]}]
+           "description": DESCRIPTION, "isPartOf": {"@type": "WebSite", "name": "OpenDesigner", "url": f"{b.SITE_URL}/"},
+           "hasPart": [{"@type": "SoftwareSourceCode", "name": c["name"], "url": f"{b.SITE_URL}/library/{c['slug']}/", "description": lead(c)} for c in cs]}]
     files["library/index.html"] = b.shell("/library/", "Component library: free parts that take your design tokens", DESCRIPTION, shop(b, cs), b.load_docs(), ld, home=True)
     mds["library/index.md"] = (f"# OpenDesigner component library\n\n{DESCRIPTION}\n\n"
                                + "\n".join(f"- [{c['name']}]({b.SITE_URL}/library/{c['slug']}/) ({TYPES[c['type']]}, {c['style']}): {c['summary']}" for c in cs) + "\n")

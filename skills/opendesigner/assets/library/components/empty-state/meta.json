@@ -1,6 +1,7 @@
 {
   "name": "Empty state",
   "summary": "What a list shows when there is nothing in it: a small drawing in the system's own colours, what it means, when that changes, and one thing to do.",
+  "use": "when a list or page has nothing in it yet",
   "type": "feedback",
   "style": "friendly",
   "industries": ["any"],

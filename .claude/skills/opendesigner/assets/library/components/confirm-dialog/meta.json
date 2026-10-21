@@ -1,6 +1,7 @@
 {
   "name": "Confirm dialog",
   "summary": "A destructive confirmation shown open: what will be deleted, what happens next, and a typed workspace name that unlocks the red Delete button. Placement and the backdrop are the project's.",
+  "use": "before an action that cannot be undone, such as deleting data",
   "type": "overlay",
   "style": "quiet",
   "industries": ["saas", "finance", "any"],

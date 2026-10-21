@@ -1,6 +1,7 @@
 {
   "name": "File dropzone",
   "summary": "A calm drop area for statements or documents, with a browse link, the accepted types, and each file's state: uploaded, uploading with progress, or failed with a retry.",
+  "use": "where people upload documents or statements",
   "type": "form",
   "style": "quiet",
   "industries": ["any"],

@@ -1,6 +1,7 @@
 {
   "name": "Page header with tabs",
   "summary": "The top of a record page: breadcrumb, title with a favourite star and summary chips, two actions, and an underline tab bar with counts that scrolls on its own when narrow.",
+  "use": "at the top of a record page with several tabs",
   "type": "navigation",
   "style": "quiet",
   "industries": ["crm", "saas", "any"],

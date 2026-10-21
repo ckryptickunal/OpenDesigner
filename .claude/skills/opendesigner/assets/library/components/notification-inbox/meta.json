@@ -1,6 +1,7 @@
 {
   "name": "Notification inbox",
   "summary": "A notifications panel with All and Mentions tabs, unread dots, Today and Earlier groups, and one inline action such as Approve or View.",
+  "use": "for a work app's notifications and mentions",
   "type": "data",
   "style": "quiet",
   "industries": ["saas", "finance", "productivity"],

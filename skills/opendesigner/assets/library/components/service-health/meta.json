@@ -1,6 +1,7 @@
 {
   "name": "Service health chart",
   "summary": "One service metric over a day against its objective, with yesterday for comparison, a deploy marker, a data gap and the moment it went wrong in the warning colour.",
+  "use": "on a status or monitoring page",
   "type": "chart",
   "style": "technical",
   "industries": ["devtools", "saas"],

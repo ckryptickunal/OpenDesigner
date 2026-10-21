@@ -1,6 +1,7 @@
 {
   "name": "AI suggestion",
   "summary": "A suggested rewrite of one sentence inside a text field, shown as a diff with the reason and where it came from, to accept, reject or swap for another.",
+  "use": "when an assistant proposes an edit a person should accept or reject",
   "type": "ai",
   "style": "quiet",
   "industries": ["saas", "productivity", "crm"],

@@ -1,6 +1,7 @@
 {
   "name": "Product card",
   "summary": "A card for a digital product or plan add-on: a cover drawn from the tokens, name, one-line description, rating, price with the old price struck out, an Add button and a save toggle.",
+  "use": "in a store or marketplace grid",
   "type": "commerce",
   "style": "friendly",
   "industries": ["saas", "retail", "any"],

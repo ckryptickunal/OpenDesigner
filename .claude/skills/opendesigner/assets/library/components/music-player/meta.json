@@ -1,6 +1,7 @@
 {
   "name": "Music player",
   "summary": "A compact player card: cover art drawn from the tokens, title and artist, a waveform you can seek, elapsed and total time, previous, play and next, and volume.",
+  "use": "in a media or podcast app",
   "type": "content",
   "style": "friendly",
   "industries": ["any"],

@@ -1,6 +1,7 @@
 {
   "name": "Answer with citations",
   "summary": "One assistant turn: the question, an answer still being written with numbered citations, the sources it cites with page numbers, and copy, retry and rating actions.",
+  "use": "for an assistant's answer that cites its sources",
   "type": "ai",
   "style": "editorial",
   "industries": ["productivity", "education", "saas"],

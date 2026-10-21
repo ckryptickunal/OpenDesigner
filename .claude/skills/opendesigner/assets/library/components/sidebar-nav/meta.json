@@ -1,6 +1,7 @@
 {
   "name": "Sidebar navigation",
   "summary": "The left rail of a work app: workspace switcher, search with a shortcut, grouped pages with counts, a collapsible group and the signed-in person.",
+  "use": "as the main navigation of a work app",
   "type": "navigation",
   "style": "quiet",
   "industries": ["saas", "finance", "any"],

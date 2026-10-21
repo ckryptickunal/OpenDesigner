@@ -1,6 +1,7 @@
 {
   "name": "Article card",
   "summary": "A card for one article or changelog post: a drawn cover, the category and reading time, a headline, a two-line summary, the author and date, and a button to save it.",
+  "use": "on a blog, changelog or help centre index",
   "type": "content",
   "style": "editorial",
   "industries": ["any"],

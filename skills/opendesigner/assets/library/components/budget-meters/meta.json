@@ -1,6 +1,7 @@
 {
   "name": "Usage meters",
   "summary": "Budget, seats and credit as three meters, with the forecast hatched past what is used and alert thresholds marked on the bar.",
+  "use": "on a billing or usage page, for limits that can run out",
   "type": "chart",
   "style": "quiet",
   "industries": ["saas", "devtools", "finance"],

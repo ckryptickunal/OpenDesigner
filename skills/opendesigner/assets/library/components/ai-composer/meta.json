@@ -1,6 +1,7 @@
 {
   "name": "AI composer",
   "summary": "Where a person asks an assistant something: attached sources (one still reading), a mode switch, and a send button that stays quiet until there is text.",
+  "use": "where people ask an assistant a question with files or sources attached",
   "type": "ai",
   "style": "editorial",
   "industries": ["productivity", "education", "saas"],

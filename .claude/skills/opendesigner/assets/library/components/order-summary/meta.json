@@ -1,6 +1,7 @@
 {
   "name": "Order summary",
   "summary": "A checkout summary: two line items with quantity steppers, a promo code with the applied code shown as a chip, the totals and a Pay button that shows the amount.",
+  "use": "at checkout, beside the payment step",
   "type": "commerce",
   "style": "quiet",
   "industries": ["saas", "retail", "any"],

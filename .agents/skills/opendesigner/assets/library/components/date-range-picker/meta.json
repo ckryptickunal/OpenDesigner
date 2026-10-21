@@ -1,6 +1,7 @@
 {
   "name": "Date range picker",
   "summary": "Pick a start and end day from two months side by side, or one quick range such as last 7 days, then apply it to a report.",
+  "use": "for filtering a report or table by dates",
   "type": "form",
   "style": "quiet",
   "industries": ["any"],

@@ -1,6 +1,7 @@
 {
   "name": "Audit log",
   "summary": "Who changed what, from where and when, with risky changes labelled and a switch that shows only the high-risk ones.",
+  "use": "in admin and security settings, to show who changed what",
   "type": "data",
   "style": "technical",
   "industries": ["security", "saas", "finance"],

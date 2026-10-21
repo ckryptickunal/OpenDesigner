@@ -1,6 +1,7 @@
 {
   "name": "Calendar day agenda",
   "summary": "One day's schedule: a date header with previous, today and next, an all-day event, and timed events on an hour rail with overlaps side by side and a now line.",
+  "use": "for one day's events in a scheduling or CRM tool",
   "type": "data",
   "style": "quiet",
   "industries": ["productivity", "saas", "any"],

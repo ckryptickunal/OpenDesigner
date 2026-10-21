@@ -12,7 +12,7 @@ assets/library/
   README.md                 this file
   components/<slug>/
     component.html          the component: one <style> block scoped to .odl-<slug>, then the markup (and, only when needed, one <script>)
-    meta.json               name, summary, type, style, industries, tags, states, source piece, accessibility notes
+    meta.json               name, summary, use, type, style, industries, tags, states, source piece, accessibility notes
 ```
 `scripts/library.py` reads these folders. There is no index file to keep in step: `library.py list --json` and the website build both read the folders.
 
@@ -21,6 +21,7 @@ assets/library/
 |---|---|
 | `name` | Plain name, sentence case ("Approval card") |
 | `summary` | One sentence: what it is for, in plain words |
+| `use` | When to use it, finishing "to use ..." ("at the top of a dashboard, for its headline numbers"). The website's first sentence for the part is built from it |
 | `type` | One of the types below |
 | `style` | One of the styles below |
 | `industries` | One or more of the industries below, or `["any"]` |

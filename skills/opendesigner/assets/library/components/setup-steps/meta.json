@@ -1,6 +1,7 @@
 {
   "name": "Setup checklist",
   "summary": "A short list of first steps with progress: what is done, the one step to do now with its time and a way to skip, and what comes next.",
+  "use": "for a new account's first steps",
   "type": "navigation",
   "style": "friendly",
   "industries": ["saas", "finance", "education", "health"],

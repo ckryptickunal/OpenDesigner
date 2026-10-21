@@ -1,6 +1,7 @@
 {
   "name": "Comment thread",
   "summary": "Comments on a record with an @mention, a resolved reply, reactions, an edited marker and a composer with a Comment button.",
+  "use": "on a record people discuss together",
   "type": "data",
   "style": "quiet",
   "industries": ["saas", "finance", "productivity"],

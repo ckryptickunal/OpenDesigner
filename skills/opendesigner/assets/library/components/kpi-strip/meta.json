@@ -1,6 +1,7 @@
 {
   "name": "Stat strip",
   "summary": "Four headline numbers in one band, each with a plain note under it, and a small bar where a share matters.",
+  "use": "at the top of a dashboard, for its headline numbers",
   "type": "data",
   "style": "quiet",
   "industries": ["finance", "saas", "any"],

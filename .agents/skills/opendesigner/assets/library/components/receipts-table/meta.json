@@ -1,6 +1,7 @@
 {
   "name": "Selectable table",
   "summary": "A dense table with row checkboxes, status pills and a bar of bulk actions that appears, with a live count, as soon as a row is picked.",
+  "use": "for dense lists people review and act on in bulk",
   "type": "data",
   "style": "dense",
   "industries": ["finance", "logistics", "saas"],

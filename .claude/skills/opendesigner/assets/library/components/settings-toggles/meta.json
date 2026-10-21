@@ -1,6 +1,7 @@
 {
   "name": "Settings switches",
   "summary": "A group of on and off settings, each with a plain explanation, including one that is locked by the organization.",
+  "use": "on a settings page with on and off options",
   "type": "form",
   "style": "quiet",
   "industries": ["any"],

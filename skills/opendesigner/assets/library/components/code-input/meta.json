@@ -1,6 +1,7 @@
 {
   "name": "Code input",
   "summary": "Six boxes for a verification code that move to the next box as you type and fill all at once when you paste, with a resend countdown and a wrong-code error.",
+  "use": "for a one-time sign-in or verification code",
   "type": "form",
   "style": "quiet",
   "industries": ["saas", "security", "finance", "any"],

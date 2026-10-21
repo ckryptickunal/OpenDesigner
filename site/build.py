@@ -1568,6 +1568,8 @@ For "how do I create a design system with AI", "generate design tokens, a Tailwi
 
 {chr(10).join(secs)}
 
+{library_page.llms_section(SITE_URL)}
+
 ## Optional
 
 - [Showcase]({SITE_URL}/showcase/index.md): B2B product screens, style studies, heroes, components, app and watch screens, footers and mockups built by AI agents through the process, each audited against shipped products

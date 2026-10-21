@@ -1,6 +1,7 @@
 {
   "name": "Filter bar",
   "summary": "The row above a table: search, filter chips with one applied and removable, add a filter, a sort button and the number of results, wrapping cleanly on narrow screens.",
+  "use": "above a table people search, filter and sort",
   "type": "form",
   "style": "dense",
   "industries": ["finance", "saas", "crm", "any"],

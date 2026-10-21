@@ -1,6 +1,7 @@
 {
   "name": "Member list",
   "summary": "A workspace's members with their email, a role picker per person, last active time, a pending invite you can resend and the owner's locked role.",
+  "use": "in team or workspace settings, to manage people and roles",
   "type": "data",
   "style": "quiet",
   "industries": ["saas", "security", "any"],

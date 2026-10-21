@@ -1,6 +1,7 @@
 {
   "name": "Sign-in form",
   "summary": "Work email and password with show and hide, remember this device, and a single sign-on option, shown with a wrong-password error.",
+  "use": "on a work app's sign-in page",
   "type": "form",
   "style": "quiet",
   "industries": ["saas", "any"],

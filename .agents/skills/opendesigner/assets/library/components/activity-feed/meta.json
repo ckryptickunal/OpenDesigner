@@ -1,6 +1,7 @@
 {
   "name": "Activity feed",
   "summary": "A record's history: who did what and when, with field changes shown as old value, new value and the difference.",
+  "use": "on a record page, to show its history of changes",
   "type": "data",
   "style": "quiet",
   "industries": ["crm", "saas", "any"],

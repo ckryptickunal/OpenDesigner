@@ -1,6 +1,7 @@
 {
   "name": "Plan picker",
   "summary": "Three plans as cards you select, with a monthly or yearly switch that changes the prices and one plan marked as the common choice.",
+  "use": "on a pricing or upgrade page",
   "type": "commerce",
   "style": "friendly",
   "industries": ["saas", "productivity", "education"],
