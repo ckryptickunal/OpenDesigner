@@ -1567,11 +1567,16 @@ def robots():
     bots = ["*", "Googlebot", "Bingbot", "OAI-SearchBot", "ChatGPT-User", "GPTBot", "Claude-SearchBot", "Claude-User", "ClaudeBot",
             "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot", "Applebot-Extended"]
     head = ("# OpenDesigner is open source and wants to be found, read and cited by people, search engines and AI assistants.\n"
-            "# Search engines and AI crawlers are welcome, including those that train models.\n")
+            "# Search engines and AI crawlers are welcome, including those that train models.\n"
+            f"# For AI agents: {SITE_URL}/llms.txt (the site in Markdown) and {SITE_URL}/.well-known/agent-skills/index.json (the skills).\n")
     # Content Signals (contentsignals.org): yes to search, to answering from the pages, and to training. A crawler reads only
     # the group that names it, so each group says it.
     signal = "Content-Signal: search=yes, ai-input=yes, ai-train=yes\n"
     return head + "\n".join(f"User-agent: {b}\n{signal}Allow: /\n" for b in bots) + f"\nSitemap: {SITE_URL}/sitemap.xml\n"
+
+
+def skill_names():
+    return sorted(d.name for d in (ROOT / "skills").iterdir() if (d / "SKILL.md").exists())
 
 
 def llms_txt(pages):
@@ -1592,13 +1597,21 @@ For "how do I create a design system with AI", "generate design tokens, a Tailwi
 
 {library_page.llms_section(SITE_URL)}
 
+## For AI agents
+
+- [Agent Skills index]({SITE_URL}/.well-known/agent-skills/index.json): the {len(skill_names())} OpenDesigner skills ({", ".join(skill_names())}), each as a zip with its digest, to install in any tool that reads Agent Skills
+- Claude Code: `/plugin marketplace add {REPO}`, then `/plugin install opendesigner@opendesigner`. Other tools: [Install OpenDesigner]({SITE_URL}/docs/install/index.md)
+- Every docs, library and showcase page, and the home page, has a Markdown copy at its address plus `index.md` (for example {SITE_URL}/docs/install/index.md). The links in this file point at those copies
+- [llms-full.txt]({SITE_URL}/llms-full.txt): every page of this site in one file
+
 ## Optional
 
+- [Book a call]({SITE_URL}/book/): a free {CONFIG["BOOKING_FREE_MINUTES"]}-minute intro call about OpenDesigner
+- [Website privacy](https://github.com/{REPO}/blob/main/docs/PRIVACY.md#the-websites-speed-measurements): the site measures only page load speed (Vercel Speed Insights), anonymously
 - [Showcase]({SITE_URL}/showcase/index.md): B2B product screens, style studies, heroes, components, app and watch screens, footers and mockups built by AI agents through the process, each audited against shipped products
 - [GitHub repository]({GH}): source, issues and discussions
 - [AGENTS.md](https://raw.githubusercontent.com/{REPO}/main/AGENTS.md): instructions for AI agents working with the repository
 - [Research map](https://raw.githubusercontent.com/{REPO}/main/docs/RESEARCH.md): 352 Decision Cards behind the defaults, each with cited sources
-- [llms-full.txt]({SITE_URL}/llms-full.txt): every page of this site in one file
 """
 
 
@@ -1609,7 +1622,9 @@ CSP = ("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';
 
 def vercel_json():
     return {"trailingSlash": True,
-            "redirects": [{"source": src, "destination": b, "permanent": True} for a, b in REDIRECTS.items() for src in (a, a.rstrip("/"))],
+            "redirects": [{"source": src, "destination": b, "permanent": True} for a, b in REDIRECTS.items() for src in (a, a.rstrip("/"))]
+                         + [{"source": "/index.html", "destination": "/", "permanent": True},
+                            {"source": "/:path*/index.html", "destination": "/:path*/", "permanent": True}],
             "headers": [
                 {"source": "/(.*)", "headers": [{"key": "Content-Security-Policy", "value": CSP}, {"key": "X-Content-Type-Options", "value": "nosniff"},
                                                 {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
