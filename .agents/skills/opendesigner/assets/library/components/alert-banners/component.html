@@ -1,0 +1,80 @@
+<style>
+.odl-alert-banners { box-sizing: border-box; inline-size: 100%; max-inline-size: 640px; margin: 0; padding: 0; list-style: none; display: grid; gap: var(--ds-space-stack-sm);
+  container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-alert-banners *, .odl-alert-banners *::before { box-sizing: border-box; }
+.odl-alert-banners li { display: grid; grid-template-columns: var(--ds-size-icon-md) minmax(0, 1fr) auto; column-gap: var(--ds-space-inline-sm); align-items: start;
+  padding: var(--ds-space-inset-xs) var(--ds-space-inset-xs) var(--ds-space-inset-xs) var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+.odl-alert-banners .is-info { background: var(--ds-color-bg-info-subtle); border-color: var(--ds-color-border-info); }
+.odl-alert-banners .is-success { background: var(--ds-color-bg-success-subtle); border-color: var(--ds-color-border-success); }
+.odl-alert-banners .is-warning { background: var(--ds-color-bg-warning-subtle); border-color: var(--ds-color-border-warning); }
+.odl-alert-banners .is-danger { background: var(--ds-color-bg-danger-subtle); border-color: var(--ds-color-border-danger); }
+.odl-alert-banners .odl-icon { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); margin-block-start: calc(var(--ds-space-inset-xs) + (1lh - var(--ds-size-icon-md)) / 2); }
+.odl-alert-banners .is-info .odl-icon { color: var(--ds-color-text-info); }
+.odl-alert-banners .is-success .odl-icon { color: var(--ds-color-text-success); }
+.odl-alert-banners .is-warning .odl-icon { color: var(--ds-color-text-warning); }
+.odl-alert-banners .is-danger .odl-icon { color: var(--ds-color-text-danger); }
+.odl-alert-banners .odl-body { display: grid; justify-items: start; min-block-size: var(--ds-size-target-min); align-content: center; }
+.odl-alert-banners p { margin: 0; padding-block: var(--ds-space-inset-xs); }
+.odl-alert-banners p strong { font-weight: var(--ds-font-weight-heading); margin-inline-end: var(--ds-space-2); }
+.odl-alert-banners .odl-body { padding-inline-end: var(--ds-space-inline-xs); }
+.odl-alert-banners .odl-acts { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-4) var(--ds-space-inline-sm); margin-inline-start: calc(-1 * var(--ds-space-inset-xs)); margin-block-end: var(--ds-space-4); }
+.odl-alert-banners button { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-xs);
+  min-block-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-xs); border: 0; border-radius: var(--ds-radius-control);
+  background: transparent; color: var(--ds-color-text-primary); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); cursor: pointer; white-space: nowrap;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
+.odl-alert-banners .odl-act { text-decoration: underline; text-decoration-thickness: var(--ds-border-width-default); text-underline-offset: var(--ds-space-4); }
+.odl-alert-banners .odl-act:hover, .odl-alert-banners .odl-close:hover { background: var(--ds-color-neutral-alpha-light-3); }
+.odl-alert-banners .odl-act-strong { margin-inline-start: var(--ds-space-inset-xs); background: var(--ds-color-bg-danger-bold); color: var(--ds-color-text-on-danger); padding: 0 var(--ds-space-inset-sm); text-decoration: none; }
+.odl-alert-banners .odl-act-strong:hover { background: var(--ds-color-bg-danger-bold-hover); }
+.odl-alert-banners .odl-close { min-inline-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); padding: 0; color: var(--ds-color-text-secondary); }
+.odl-alert-banners button svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-alert-banners button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-alert-banners li[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) { .odl-alert-banners, .odl-alert-banners *, .odl-alert-banners *::before { transition: none !important; animation: none !important; } }
+</style>
+<ul class="odl-alert-banners" aria-label="Notices">
+  <li class="is-info" role="status">
+    <svg class="odl-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="M10 9v4.5M10 6.5v.5"/></svg>
+    <div class="odl-body">
+      <p><strong>Bank feed paused tonight.</strong> Transactions from Oct 23, 1:00–3:00 AM will sync when the bank finishes maintenance.</p>
+      <span class="odl-acts"><button type="button" class="odl-act">See schedule</button></span>
+    </div>
+    <button type="button" class="odl-close" aria-label="Dismiss notice"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button>
+  </li>
+  <li class="is-success" role="status">
+    <svg class="odl-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="m6.5 10.2 2.3 2.3 4.7-5"/></svg>
+    <div class="odl-body">
+      <p><strong>October books closed.</strong> 318 bills paid and 1,204 receipts matched. Bettina Marangoni signed off on Nov 2.</p>
+    </div>
+    <button type="button" class="odl-close" aria-label="Dismiss notice"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button>
+  </li>
+  <li class="is-warning" role="status">
+    <svg class="odl-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 2.5 18 17H2z"/><path d="M10 8v4M10 14.5v.5"/></svg>
+    <div class="odl-body">
+      <p><strong>14 receipts are missing a GL account.</strong> They will not export to the ledger until each one has a category.</p>
+      <span class="odl-acts"><button type="button" class="odl-act">Review receipts</button></span>
+    </div>
+    <button type="button" class="odl-close" aria-label="Dismiss notice"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button>
+  </li>
+  <li class="is-danger" role="alert">
+    <svg class="odl-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="M10 6v4.5M10 13.5v.5"/></svg>
+    <div class="odl-body">
+      <p><strong>ACH payment to Penderel Fleet Maintenance failed.</strong> The bank returned R03: no account found. $1,947.52 is back in Operating ··4410.</p>
+      <span class="odl-acts"><button type="button" class="odl-act odl-act-strong">Update bank details</button><button type="button" class="odl-act">Pay by check</button></span>
+    </div>
+    <button type="button" class="odl-close" aria-label="Dismiss notice"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button>
+  </li>
+</ul>
+<script>
+document.querySelectorAll(".odl-alert-banners").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  root.querySelectorAll(".odl-close").forEach((b) => b.addEventListener("click", () => {
+    const li = b.closest("li"), next = li.nextElementSibling || li.previousElementSibling;
+    li.hidden = true;
+    const f = next && !next.hidden ? next.querySelector(".odl-close") : null;
+    if (f) f.focus();
+  }));
+});
+</script>

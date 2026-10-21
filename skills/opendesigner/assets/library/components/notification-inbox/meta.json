@@ -1,0 +1,12 @@
+{
+  "name": "Notification inbox",
+  "summary": "A notifications panel with All and Mentions tabs, unread dots, Today and Earlier groups, and one inline action such as Approve or View.",
+  "type": "data",
+  "style": "quiet",
+  "industries": ["saas", "finance", "productivity"],
+  "tags": ["notifications", "inbox", "mentions", "unread", "activity"],
+  "states": ["unread", "read", "hover", "focus", "tab selected", "approved", "filtered"],
+  "source": null,
+  "a11y": "Tabs follow the tab pattern with arrow keys; groups are labelled lists; Approve and View are real buttons and the result is shown as text. Placement as a popover is the project's.",
+  "width": "narrow"
+}

@@ -1,0 +1,55 @@
+<style>
+.odl-toast-stack { box-sizing: border-box; inline-size: 100%; max-inline-size: 380px; margin: 0; padding: 0; list-style: none; display: grid; gap: var(--ds-component-toast-gap); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-toast-stack li { display: grid; grid-template-columns: var(--ds-size-icon-md) minmax(0, 1fr) auto; gap: var(--ds-space-inline-sm); align-items: start; padding: var(--ds-space-inset-sm) var(--ds-space-inset-sm) var(--ds-space-inset-sm) var(--ds-space-inset-md);
+  background: var(--ds-color-surface-overlay); color: var(--ds-color-text-primary); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container);
+  box-shadow: var(--ds-elevation-floating); animation: odl-toast-in var(--ds-motion-duration-toast) var(--ds-motion-easing-toast) both; }
+.odl-toast-stack li:nth-child(2) { animation-delay: var(--ds-motion-duration-stagger); }
+.odl-toast-stack li:nth-child(3) { animation-delay: calc(2 * var(--ds-motion-duration-stagger)); }
+@keyframes odl-toast-in { from { opacity: 0; transform: translateY(var(--ds-space-8)) scale(var(--ds-motion-scale-enter)); } }
+.odl-toast-stack .odl-icon { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); margin-block-start: calc(var(--ds-space-2) + (1lh - var(--ds-size-icon-md)) / 2); }
+.odl-toast-stack .is-ok .odl-icon { color: var(--ds-color-text-success); }
+.odl-toast-stack .is-error .odl-icon { color: var(--ds-color-text-danger); }
+.odl-toast-stack .is-busy .odl-icon { color: var(--ds-color-icon-subtle); }
+.odl-toast-stack p { margin: 0; padding-block: var(--ds-space-2); font-weight: var(--ds-font-weight-label); }
+.odl-toast-stack p small { display: block; margin-block-start: var(--ds-space-2); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-toast-stack .odl-progress { display: block; block-size: var(--ds-space-4); margin-block-start: var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); overflow: hidden; }
+.odl-toast-stack .odl-progress::before { content: ""; display: block; inline-size: 62%; block-size: 100%; background: var(--ds-color-bg-action-primary); }
+.odl-toast-stack .odl-acts { display: flex; align-items: center; gap: var(--ds-space-2); margin-block-start: calc(var(--ds-space-2) + (1lh - max(var(--ds-size-control-sm), var(--ds-size-target-min))) / 2); }
+.odl-toast-stack button { display: inline-grid; place-items: center; min-inline-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); min-block-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-xs);
+  border: 0; border-radius: var(--ds-radius-control); background: transparent; color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); cursor: pointer; }
+.odl-toast-stack button:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
+.odl-toast-stack .odl-act { color: var(--ds-color-text-link); }
+.odl-toast-stack button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-toast-stack button svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+@media (prefers-reduced-motion: reduce) { .odl-toast-stack, .odl-toast-stack *, .odl-toast-stack *::before { transition: none !important; animation: none !important; } }
+</style>
+<ol class="odl-toast-stack" aria-label="Notifications">
+  <li class="is-ok" role="status">
+    <svg class="odl-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="m6.5 10.2 2.3 2.3 4.7-5"/></svg>
+    <p>Moved 3 receipts to credit<small>Quenwick Mutual · $21,162.82</small></p>
+    <span class="odl-acts"><button type="button" class="odl-act">Undo</button><button type="button" class="odl-close" aria-label="Dismiss"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button></span>
+  </li>
+  <li class="is-busy" role="status">
+    <svg class="odl-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M10 13V4M6.5 7.5 10 4l3.5 3.5M4 15.5h12"/></svg>
+    <p>Uploading statement.pdf<small>2.1 of 3.4 MB</small><span class="odl-progress" aria-hidden="true"></span></p>
+    <span class="odl-acts"><button type="button" class="odl-act">Cancel</button></span>
+  </li>
+  <li class="is-error" role="alert">
+    <svg class="odl-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="M10 6v4.5M10 13.5v.5"/></svg>
+    <p>Couldn’t send the reminder<small>The mail server didn’t answer. Your text is saved.</small></p>
+    <span class="odl-acts"><button type="button" class="odl-act">Retry</button><button type="button" class="odl-close" aria-label="Dismiss"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button></span>
+  </li>
+</ol>
+<script>
+document.querySelectorAll(".odl-toast-stack").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  root.addEventListener("click", (e) => {
+    const b = e.target.closest(".odl-close");
+    if (!b) return;
+    const li = b.closest("li"), next = li.nextElementSibling || li.previousElementSibling;
+    li.remove();
+    if (next) next.querySelector("button").focus(); // keep keyboard focus nearby
+  });
+});
+</script>

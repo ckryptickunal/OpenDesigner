@@ -23,6 +23,8 @@ def main():
     redirects = {r["source"] for r in json.loads((D / "vercel.json").read_text())["redirects"]}
     problems, n = [], 0
     for f in sorted(D.rglob("*.html")):
+        if f.parts[len(D.parts):len(D.parts) + 2] == ("library", "r"):  # raw component files for agents to fetch, not pages
+            continue
         n += 1
         h = f.read_text()
         rel = "/" + str(f.relative_to(D)).replace("index.html", "")

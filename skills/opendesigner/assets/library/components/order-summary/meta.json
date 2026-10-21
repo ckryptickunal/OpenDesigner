@@ -1,0 +1,12 @@
+{
+  "name": "Order summary",
+  "summary": "A checkout summary: two line items with quantity steppers, a promo code with the applied code shown as a chip, the totals and a Pay button that shows the amount.",
+  "type": "commerce",
+  "style": "quiet",
+  "industries": ["saas", "retail", "any"],
+  "tags": ["checkout", "cart", "promo code", "stepper", "payment"],
+  "states": ["code applied", "code removed", "invalid code", "quantity at minimum", "hover", "pressed", "focus"],
+  "source": null,
+  "a11y": "Steppers are labelled groups of real buttons with an output that announces the new quantity; the code field has a name, a wrong code is announced as an alert, and the chip's remove button names the code.",
+  "width": "narrow"
+}

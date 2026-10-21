@@ -14,6 +14,7 @@ Two kinds of check, kept apart (`docs/HOW-IT-WORKS.md` section 7 in the repo):
 | It holds at every size and theme | opendesigner-review: 375, 768 and 1440 px at least, light and dark, keyboard, hover |
 | Siblings line up | Cards and panels side by side share a top edge and a height; stacked rows share one centre line (preflight 35) |
 | One shell across pages | Sidebar, header, content width and padding measure the same on every page (preflight 44) |
+| Every owner-corrected rule | The post-change audit (`post-change-audit.md`), after every implementation |
 | No known mistake | opendesigner-preflight checklist (and `preflight.py` for type and fonts) |
 
 ## 2. The scorecard (judged, 1 to 5 each)

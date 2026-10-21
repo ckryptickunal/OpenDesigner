@@ -1,0 +1,12 @@
+{
+  "name": "Sidebar navigation",
+  "summary": "The left rail of a work app: workspace switcher, search with a shortcut, grouped pages with counts, a collapsible group and the signed-in person.",
+  "type": "navigation",
+  "style": "quiet",
+  "industries": ["saas", "finance", "any"],
+  "tags": ["sidebar", "navigation", "workspace switcher", "nav rail", "menu"],
+  "states": ["hover", "focus", "current page", "unread count", "collapsed group", "expanded group", "online"],
+  "source": "brand/showcase/product/02-fennick-approvals",
+  "a11y": "A nav landmark with labelled lists; the current page carries aria-current=\"page\", the collapsible group is a native details/summary, and the switcher and person menus are buttons with aria-haspopup.",
+  "width": "narrow"
+}

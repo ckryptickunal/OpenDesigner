@@ -1,7 +1,7 @@
 /* The home page (/): what OpenDesigner is, why, how, examples and install. Built on the same tokens, radii and tracking as the
    docs (site.css), without the docs sidebar. Owner, 2026-10-15: the root is the project's landing page; the docs home moved to /docs/. */
 .home { overflow-x: clip; }
-.h-hero, .h-sec, .h-end { max-width: 1200px; margin-inline: auto; padding-inline: 24px; }
+.h-hero, .h-sec, .h-end { max-width: var(--shell); margin-inline: auto; padding-inline: 24px; }
 @media (max-width: 640px) { .h-hero, .h-sec, .h-end { padding-inline: 16px; } }
 
 /* hero */
@@ -368,7 +368,7 @@
   border-radius: var(--r-panel); background: var(--accent) center / cover no-repeat; }
 .stage::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .26; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"); }
-.stage-in { --rim: 6px; --in-r: max(6px, calc(var(--r-panel) - var(--stage-pad))); position: relative; z-index: 2; width: 100%; padding: var(--rim); border-radius: var(--in-r); background: rgb(255 255 255 / .34);
+.stage-in { --rim: 6px; --in-r: max(2px, calc(var(--r-panel) - var(--stage-pad))); position: relative; z-index: 2; width: 100%; padding: var(--rim); border-radius: var(--in-r); background: rgb(255 255 255 / .34);
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / .5), 0 2px 4px rgb(10 14 40 / .12), 0 32px 64px -28px rgb(10 14 40 / .6);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 .stage-in img, .stage-in picture { display: block; width: 100%; height: auto; border-radius: max(2px, calc(var(--in-r) - var(--rim))); }
@@ -393,7 +393,7 @@
 
 /* Alignment and hierarchy audit, 2026-10-15 (measured at 390-1920 px) */
 /* 1. the header and footer share the sections' 1200 px content edges on the home page */
-body:has(> main.home) :is(.bar-in, .foot-in, .foot-legal) { max-width: 1200px; }
+/* header and footer width: one --shell for every page (site.css) */
 /* 2. step cards: title, text and vignette rows line up across the row */
 .h-steps { grid-auto-rows: auto; }
 .h-step { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; }
@@ -419,7 +419,10 @@ body:has(> main.home) :is(.bar-in, .foot-in, .foot-legal) { max-width: 1200px; }
 /* consistency: one padding, one fill and nested radii (inner = outer - inset) for every card */
 .craft-card { padding: 24px; }
 .h-step, .bento-card, .demo-panel, .who-card, .craft-card { background: var(--surface-raised); }
-.h-step .vg > *, .bento-card .vg > *, .craft-card .vg, .demo-stage { border-radius: var(--r-detail); }
+.h-step .vg > *, .bento-card .vg > *, .demo-stage { border-radius: var(--r-detail); }
+/* the picture sits 25 px inside the card (24 px padding and a 1 px border): its corner is the card's minus that */
+.craft-card { --cc-r: var(--r-panel); }
+.craft-card .vg { border-radius: max(2px, calc(var(--cc-r) - 25px)); }
 .hosts li { width: 96px; min-width: 0; white-space: normal; }
 .tablist:not(.demo-tabs) [role="tab"][aria-selected="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-text); box-shadow: inset 0 0 0 1px var(--accent); }
 .h-split .status { margin-top: 44px; }

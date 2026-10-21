@@ -1,0 +1,61 @@
+<style>
+.odl-plan-picker { box-sizing: border-box; inline-size: 100%; max-inline-size: 960px; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-plan-picker fieldset { margin: 0; padding: 0; border: 0; min-inline-size: 0; }
+.odl-plan-picker .odl-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-stack-sm) var(--ds-space-inline-md); margin-block-end: var(--ds-space-stack-lg); }
+.odl-plan-picker h3 { margin: 0; font: var(--ds-text-title-md); }
+.odl-plan-picker .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.odl-plan-picker .odl-period { display: flex; }
+.odl-plan-picker .odl-period div { display: inline-flex; padding: var(--ds-space-2); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-sunken); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-plan-picker .odl-period label { position: relative; }
+.odl-plan-picker .odl-period input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.odl-plan-picker .odl-period span { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); min-block-size: var(--ds-size-control-sm); padding: 0 var(--ds-space-inset-md);
+  border-radius: var(--ds-radius-control-sm); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); white-space: nowrap; }
+.odl-plan-picker .odl-period small { color: var(--ds-color-text-success); font: var(--ds-text-label-md); }
+.odl-plan-picker .odl-period input:checked + span { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); box-shadow: var(--ds-elevation-raised); }
+.odl-plan-picker .odl-plans { display: grid; gap: var(--ds-space-stack-md); }
+@container (min-width: 40rem) { .odl-plan-picker .odl-plans { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: var(--ds-space-stack-xs); }
+  .odl-plan-picker .odl-plan { grid-row: span 4; grid-template-rows: subgrid; } }
+.odl-plan-picker .odl-plan { position: relative; display: grid; align-content: start; gap: var(--ds-space-stack-xs); padding: var(--ds-space-inset-lg); cursor: pointer;
+  background: var(--ds-color-surface-raised); border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised);
+  transition: border-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), box-shadow var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-plan-picker .odl-plan:hover { border-color: var(--ds-color-border-strong); }
+.odl-plan-picker .odl-plan:has(input:checked) { border-color: var(--ds-color-border-accent); box-shadow: inset 0 0 0 var(--ds-border-width-default) var(--ds-color-border-accent), var(--ds-elevation-raised);
+  background: var(--ds-color-bg-accent-subtle); }
+.odl-plan-picker .odl-plan:has(input:focus-visible) { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-plan-picker .odl-plan input { position: absolute; inset-block-start: var(--ds-space-inset-lg); inset-inline-end: var(--ds-space-inset-lg); inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md);
+  margin: 0; accent-color: var(--ds-color-bg-action-primary); cursor: pointer; }
+.odl-plan-picker .odl-name { display: flex; flex-wrap: wrap; align-items: center; align-content: start; gap: var(--ds-space-4) var(--ds-space-inline-sm); font: var(--ds-text-title-md); padding-inline-end: var(--ds-space-32); }
+.odl-plan-picker .odl-tag { white-space: nowrap; padding: var(--ds-space-2) var(--ds-space-8); border-radius: var(--ds-radius-control-sm); background: var(--ds-color-bg-action-primary);
+  color: var(--ds-color-text-on-action); font: var(--ds-text-label-sm); letter-spacing: var(--ds-text-label-sm-tracking); }
+.odl-plan-picker .odl-price { margin-block-start: var(--ds-space-stack-sm); font: var(--ds-text-headline-sm); font-variant-numeric: tabular-nums; }
+.odl-plan-picker .odl-price small { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-plan-picker:has(input[value="year"]:checked) .odl-m, .odl-plan-picker:not(:has(input[value="year"]:checked)) .odl-y { display: none; }
+.odl-plan-picker .odl-for { color: var(--ds-color-text-secondary); text-wrap: pretty; }
+.odl-plan-picker ul { margin: var(--ds-space-stack-sm) 0 0; padding: 0; list-style: none; display: grid; align-content: start; gap: var(--ds-space-stack-xs); font: var(--ds-text-body-sm); }
+.odl-plan-picker li { display: flex; gap: var(--ds-space-inline-xs); }
+.odl-plan-picker li::before { content: ""; flex: none; inline-size: var(--ds-space-12); block-size: var(--ds-space-6); margin-block-start: var(--ds-space-4); border-inline-start: var(--ds-border-width-emphasis) solid var(--ds-color-icon-accent);
+  border-block-end: var(--ds-border-width-emphasis) solid var(--ds-color-icon-accent); transform: rotate(-45deg) scale(0.8); }
+.odl-plan-picker .odl-period input:focus-visible + span { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+@media (prefers-reduced-motion: reduce) { .odl-plan-picker, .odl-plan-picker *, .odl-plan-picker *::before { transition: none !important; animation: none !important; } }
+</style>
+<div class="odl-plan-picker">
+  <div class="odl-top"><h3 id="odl-pp-title">Choose a plan</h3>
+  <fieldset class="odl-period"><legend class="odl-sr">Billing period</legend><div>
+    <label><input type="radio" name="odl-plan-picker-period" value="month"><span>Monthly</span></label>
+    <label><input type="radio" name="odl-plan-picker-period" value="year" checked><span>Yearly <small>2 months free</small></span></label>
+  </div></fieldset></div>
+  <fieldset>
+    <legend class="odl-sr">Choose a plan</legend>
+    <div class="odl-plans">
+      <label class="odl-plan"><input type="radio" name="odl-plan-picker-plan" value="starter"><span class="odl-name">Starter</span>
+        <span class="odl-price">$0 <small>for up to 3 people</small></span><span class="odl-for">For trying it with a small team.</span>
+        <ul><li>Unlimited projects</li><li>7 days of history</li></ul></label>
+      <label class="odl-plan"><input type="radio" name="odl-plan-picker-plan" value="team" checked><span class="odl-name">Team <span class="odl-tag">Most teams pick this</span></span>
+        <span class="odl-price"><span class="odl-y">$10</span><span class="odl-m">$12</span> <small>per person a month</small></span><span class="odl-for">For teams who ship every week.</span>
+        <ul><li>Everything in Starter</li><li>Single sign-on</li><li>1 year of history</li></ul></label>
+      <label class="odl-plan"><input type="radio" name="odl-plan-picker-plan" value="business"><span class="odl-name">Business</span>
+        <span class="odl-price"><span class="odl-y">$20</span><span class="odl-m">$24</span> <small>per person a month</small></span><span class="odl-for">For companies with audits to pass.</span>
+        <ul><li>Everything in Team</li><li>Audit log and SCIM</li><li>Unlimited history</li></ul></label>
+    </div>
+  </fieldset>
+</div>

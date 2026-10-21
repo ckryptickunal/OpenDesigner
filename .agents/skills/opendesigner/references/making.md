@@ -206,7 +206,7 @@ In October 2026, AI builders made 54 showcase pieces through this process: heroe
 - In a decorative style, the decoration carries data. The style studies (`brand/showcase/styles/`) moved from 3 to 4 or 5 when it did: shapes sized by tickets sold, two inks whose overlap shows felt wait against actual wait, red only where something failed.
 
 ## 12. What people had to ask for by hand
-Each rule below is a correction a person had to type in a demo trial (`_coordination/TRIAL-LEDGER.md` in the repo). Do these without being asked.
+Each rule below is a correction a person had to type in a demo trial (`_coordination/TRIAL-LEDGER.md` in the repo). Do these without being asked. After every implementation, check them with the post-change audit (`post-change-audit.md`).
 
 **Every product**
 - **One shell for every page.** The sidebar, header, content width and page padding are the same on every page, so nothing jumps when the person moves between pages. Measure the shell's boxes on each page and compare them (preflight 44). In the trial, one page's wide table stretched its layout and "everything changes" when the person opened it.

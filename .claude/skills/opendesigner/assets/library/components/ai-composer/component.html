@@ -1,0 +1,108 @@
+<style>
+.odl-ai-composer { box-sizing: border-box; inline-size: 100%; max-inline-size: 48rem; margin-inline: auto; container-type: inline-size; display: grid; grid-template-columns: minmax(0, 1fr);
+  gap: var(--ds-space-stack-sm); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-ai-composer *, .odl-ai-composer *::before { box-sizing: border-box; }
+.odl-ai-composer .odl-box { --odl-pad: var(--ds-space-inset-sm); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-stack-sm); margin: 0; padding: var(--odl-pad);
+  background: var(--ds-color-surface-raised); border: var(--ds-border-width-default) solid var(--ds-color-border-default);
+  border-radius: var(--ds-radius-overlay); box-shadow: var(--ds-elevation-floating);
+  transition: border-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-ai-composer .odl-box:has(textarea:focus-visible) { border-color: var(--ds-color-border-focus); outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-ai-composer .odl-sources { display: flex; flex-wrap: wrap; gap: var(--ds-space-inline-xs); margin: 0; padding: 0; list-style: none; }
+.odl-ai-composer .odl-sources li { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); max-inline-size: 100%; min-inline-size: 0;
+  padding-inline: var(--ds-space-inset-xs) 0; border: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
+  border-radius: calc(var(--ds-radius-overlay) - var(--odl-pad) - var(--ds-border-width-default)); /* parallel to the box's corner */
+  background: var(--ds-color-surface-sunken); font: var(--ds-text-label-md); white-space: nowrap; }
+.odl-ai-composer .odl-sources li > svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); color: var(--ds-color-icon-subtle); }
+.odl-ai-composer .odl-sources .odl-name { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+.odl-ai-composer .odl-sources small { flex: none; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; }
+.odl-ai-composer .is-uploading > svg, .odl-ai-composer .is-uploading small { color: var(--ds-color-text-accent); }
+.odl-ai-composer textarea { box-sizing: border-box; inline-size: 100%; min-block-size: 4.5rem; max-block-size: 14rem; field-sizing: content; resize: none;
+  padding: var(--ds-space-inset-xs) var(--ds-space-4); border: 0; background: transparent; color: inherit; font: var(--ds-text-body-lg); outline: none; }
+.odl-ai-composer textarea::placeholder { color: var(--ds-color-text-tertiary); }
+.odl-ai-composer .odl-bar { display: flex; align-items: center; gap: var(--ds-space-inline-xs); }
+.odl-ai-composer .odl-modes { display: flex; padding: var(--ds-space-2); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-sunken); }
+.odl-ai-composer .odl-modes label { position: relative; }
+.odl-ai-composer .odl-modes input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.odl-ai-composer .odl-modes span { display: grid; place-items: center; min-block-size: var(--ds-size-target-min); padding: 0 var(--ds-space-inset-sm); border-radius: var(--ds-radius-control-sm);
+  color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); white-space: nowrap; }
+.odl-ai-composer .odl-modes input:checked + span { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); box-shadow: var(--ds-elevation-raised); }
+.odl-ai-composer .odl-modes input:focus-visible + span { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-ai-composer .odl-spacer { flex: 1; }
+.odl-ai-composer .odl-hint { color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); white-space: nowrap; }
+.odl-ai-composer .odl-hint kbd { padding: 0 var(--ds-space-4); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-detail);
+  background: var(--ds-color-surface-base); color: var(--ds-color-text-secondary); font: var(--ds-text-code-sm); }
+.odl-ai-composer button { display: inline-grid; place-items: center; flex: none; min-inline-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min));
+  padding: 0; border: 0; border-radius: var(--ds-radius-control); background: transparent; color: var(--ds-color-icon-default); cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-ai-composer button:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-ai-composer button svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
+.odl-ai-composer .odl-send { background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
+.odl-ai-composer .odl-send:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-ai-composer .odl-box:has(textarea:placeholder-shown) .odl-send { background: var(--ds-color-bg-disabled); color: var(--ds-color-text-disabled); cursor: default; }
+.odl-ai-composer button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-ai-composer .odl-remove { min-inline-size: var(--ds-size-target-min); min-block-size: var(--ds-size-target-min); color: var(--ds-color-icon-subtle); }
+.odl-ai-composer .odl-remove svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+/* Starter prompts under the box: quiet, one line each. */
+.odl-ai-composer .odl-starters { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--ds-space-inline-xs); margin: 0; padding: 0; list-style: none; }
+.odl-ai-composer .odl-starters button { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); min-inline-size: 0; padding: 0 var(--ds-space-inset-sm);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); background: var(--ds-color-surface-raised); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-ai-composer .odl-starters button:hover { border-color: var(--ds-color-border-default); color: var(--ds-color-text-primary); background: var(--ds-color-surface-raised); }
+.odl-ai-composer .odl-starters svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); color: var(--ds-color-icon-subtle); }
+/* Wide: more room to write, roomier padding, the shortcut shown. */
+@container (min-width: 36rem) {
+  .odl-ai-composer { gap: var(--ds-space-stack-md); }
+  .odl-ai-composer .odl-box { --odl-pad: var(--ds-space-inset-md); gap: var(--ds-space-stack-md); }
+  .odl-ai-composer textarea { min-block-size: 7rem; }
+}
+/* Narrow: the shortcut hint goes (phones have no Enter key habit); starters become one row that scrolls sideways. */
+@container (max-width: 30rem) {
+  .odl-ai-composer .odl-hint, .odl-ai-composer .odl-sources li:not(.is-uploading) small { display: none; }
+  .odl-ai-composer .odl-starters { flex-wrap: nowrap; justify-content: start; padding: var(--ds-space-4) var(--ds-space-2); margin-block: calc(-1 * var(--ds-space-4)); overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none;
+    mask-image: linear-gradient(to left, transparent, currentColor var(--ds-space-32)); }
+  .odl-ai-composer .odl-starters::-webkit-scrollbar { display: none; }
+  .odl-ai-composer .odl-starters button { white-space: nowrap; }
+}
+@container (max-width: 20rem) {
+  .odl-ai-composer .odl-bar { flex-wrap: wrap; }
+  .odl-ai-composer .odl-modes { order: -1; flex: 1 1 100%; }
+  .odl-ai-composer .odl-modes label { flex: 1 1 0; }
+}
+@media (prefers-reduced-motion: reduce) { .odl-ai-composer, .odl-ai-composer *, .odl-ai-composer *::before { transition: none !important; animation: none !important; } }
+</style>
+<div class="odl-ai-composer">
+  <form class="odl-box" aria-label="Ask about your sources">
+    <ul class="odl-sources" aria-label="Attached sources">
+      <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5H4z"/><path d="M9.5 1.5v3h3"/></svg><span class="odl-name">Quay commission minutes 1952–60</span><small>212 pages</small>
+        <button type="button" class="odl-remove" aria-label="Remove Quay commission minutes"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"/></svg></button></li>
+      <li class="is-uploading"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 11V3M5 6l3-3 3 3M3 13.5h10"/></svg><span class="odl-name">foreshore-order.pdf</span><small>reading, 64%</small>
+        <button type="button" class="odl-remove" aria-label="Cancel foreshore-order.pdf"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"/></svg></button></li>
+    </ul>
+    <textarea rows="2" aria-label="Your question" placeholder="Ask about these sources, or type @ to mention one"></textarea>
+    <div class="odl-bar">
+      <button type="button" aria-label="Attach a source"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M13.5 7.5 8 13a2.1 2.1 0 0 1-3-3l6-6a3.5 3.5 0 0 1 5 5l-6.5 6.5"/></svg></button>
+      <div class="odl-modes" role="radiogroup" aria-label="Mode">
+        <label><input type="radio" name="odl-ai-composer-mode" value="ask" checked><span>Ask</span></label>
+        <label><input type="radio" name="odl-ai-composer-mode" value="research"><span>Research</span></label>
+        <label><input type="radio" name="odl-ai-composer-mode" value="draft"><span>Draft</span></label>
+      </div>
+      <span class="odl-spacer"></span>
+      <span class="odl-hint"><kbd>Enter</kbd> to send</span>
+      <button type="submit" class="odl-send" aria-label="Send"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 15.5v-11M5.5 9 10 4.5 14.5 9"/></svg></button>
+    </div>
+  </form>
+  <ul class="odl-starters" aria-label="Suggested questions">
+    <li><button type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 4h10M3 8h10M3 12h6"/></svg>List every licence the board granted</button></li>
+    <li><button type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5.5 2.5v11M10.5 2.5v11M2.5 6h11M2.5 10h11"/></svg>Compare both sources on 1956</button></li>
+    <li><button type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 1.75 9.6 6.4 14.25 8 9.6 9.6 8 14.25 6.4 9.6 1.75 8 6.4 6.4z"/></svg>Summarise the closures</button></li>
+  </ul>
+</div>
+<script>
+document.querySelectorAll(".odl-ai-composer").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  const form = root.querySelector("form"), box = form.querySelector("textarea");
+  form.addEventListener("submit", (e) => { e.preventDefault(); if (box.value.trim()) box.value = ""; });
+  box.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } });
+  root.querySelectorAll(".odl-starters button").forEach((b) => b.addEventListener("click", () => { box.value = b.textContent.trim(); box.focus(); }));
+});
+</script>

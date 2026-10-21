@@ -1,0 +1,85 @@
+<style>
+.odl-profile-card { box-sizing: border-box; inline-size: 100%; max-inline-size: 400px; container-type: inline-size; display: grid; grid-template-columns: minmax(0, 1fr);
+  background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); text-wrap: pretty; overflow: hidden; }
+.odl-profile-card *, .odl-profile-card *::before { box-sizing: border-box; }
+.odl-profile-card .odl-band { block-size: var(--ds-space-64); background: linear-gradient(120deg, var(--ds-color-bg-accent-subtle-pressed), var(--ds-color-bg-accent-subtle) 60%, var(--ds-color-surface-sunken));
+  border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-profile-card .odl-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-stack-md); padding: 0 var(--ds-space-inset-lg) var(--ds-space-inset-lg); }
+.odl-profile-card .odl-who { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-stack-sm); }
+.odl-profile-card .odl-top { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-inline-sm); margin-block-start: calc(-1 * var(--ds-space-32)); }
+.odl-profile-card .odl-avatar { flex: none; display: grid; place-items: center; inline-size: var(--ds-space-64); block-size: var(--ds-space-64); border-radius: var(--ds-radius-person);
+  background: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent); font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading);
+  border: var(--ds-border-width-4) solid var(--ds-color-surface-raised); }
+.odl-profile-card .odl-presence { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); padding: var(--ds-space-2) var(--ds-space-8); border-radius: var(--ds-radius-full);
+  background: var(--ds-color-bg-success-subtle); color: var(--ds-color-text-success); font: var(--ds-text-label-md); white-space: nowrap; }
+.odl-profile-card .odl-presence::before { content: ""; inline-size: var(--ds-space-6); block-size: var(--ds-space-6); border-radius: var(--ds-radius-full); background: currentColor; }
+.odl-profile-card .odl-name { margin: 0; font: var(--ds-text-title-md); }
+.odl-profile-card .odl-role { margin: var(--ds-space-2) 0 0; color: var(--ds-color-text-secondary); }
+.odl-profile-card .odl-meta { display: flex; flex-wrap: wrap; gap: var(--ds-space-4) var(--ds-space-inline-md); margin: var(--ds-space-stack-xs) 0 0; padding: 0; list-style: none;
+  color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
+.odl-profile-card .odl-meta li { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); }
+.odl-profile-card .odl-meta svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); color: var(--ds-color-icon-subtle); }
+.odl-profile-card .odl-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; border: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-container); }
+.odl-profile-card .odl-stats div { display: grid; gap: var(--ds-space-2); padding: var(--ds-space-inset-sm) var(--ds-space-inset-sm); min-inline-size: 0; }
+.odl-profile-card .odl-stats div + div { border-inline-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-profile-card .odl-stats dt { order: 2; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-profile-card .odl-stats dd { order: 1; margin: 0; font: var(--ds-text-numeric-md); font-weight: var(--ds-font-weight-heading); font-variant-numeric: tabular-nums; }
+.odl-profile-card .odl-about { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-profile-card .odl-about strong { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
+.odl-profile-card .odl-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ds-space-inline-sm); }
+.odl-profile-card button { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-xs); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min));
+  padding: 0 var(--ds-space-inset-md); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), border-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-profile-card button svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-profile-card .odl-message { background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); border: var(--ds-border-width-default) solid var(--ds-color-bg-action-primary); }
+.odl-profile-card .odl-message:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-profile-card .odl-message:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-profile-card .odl-follow { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); border: var(--ds-border-width-default) solid var(--ds-color-border-default); }
+.odl-profile-card .odl-follow:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-profile-card .odl-follow .odl-on { display: none; }
+.odl-profile-card .odl-follow[aria-pressed="true"] { background: var(--ds-color-bg-accent-subtle); border-color: var(--ds-color-border-accent); color: var(--ds-color-text-accent); }
+.odl-profile-card .odl-follow[aria-pressed="true"] .odl-on { display: inline; }
+.odl-profile-card .odl-follow[aria-pressed="true"] .odl-off { display: none; }
+.odl-profile-card button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+@container (max-width: 20rem) { .odl-profile-card .odl-body { padding-inline: var(--ds-space-inset-md); } .odl-profile-card .odl-stats div { padding-inline: var(--ds-space-inset-xs); } }
+@media (prefers-reduced-motion: reduce) { .odl-profile-card, .odl-profile-card *, .odl-profile-card *::before { transition: none !important; animation: none !important; } }
+</style>
+<article class="odl-profile-card" aria-label="Profile of Margaux Lefèvre">
+  <div class="odl-band" aria-hidden="true"></div>
+  <div class="odl-body">
+    <header class="odl-who">
+    <div class="odl-top">
+      <span class="odl-avatar" aria-hidden="true">ML</span>
+      <span class="odl-presence">Available</span>
+    </div>
+    <div>
+      <h3 class="odl-name">Margaux Lefèvre</h3>
+      <p class="odl-role">Payments operations lead · Treasury team</p>
+      <ul class="odl-meta">
+        <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 14.5s4.5-4.2 4.5-7.75a4.5 4.5 0 0 0-9 0C3.5 10.3 8 14.5 8 14.5z"/><circle cx="8" cy="6.75" r="1.6"/></svg>Lyon, France</li>
+        <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M8 4.75V8l2.25 1.5"/></svg><span><time datetime="16:12">4:12 pm</time> local time</span></li>
+      </ul>
+    </div>
+    </header>
+    <dl class="odl-stats">
+      <div><dt>Reviews</dt><dd>128</dd></div>
+      <div><dt>Approvals</dt><dd>1,204</dd></div>
+      <div><dt>Response</dt><dd>2h</dd></div>
+    </dl>
+    <p class="odl-about"><strong>About.</strong> Runs the weekly payment batch and owns refunds over €2,000. Ask her before changing a payout schedule.</p>
+    <div class="odl-actions">
+      <button type="button" class="odl-message"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2.5 3.5h11v7.5H6.5L3.5 13.5v-2.5h-1z"/></svg>Message</button>
+      <button type="button" class="odl-follow" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path class="odl-off" d="M8 3v10M3 8h10"/><path class="odl-on" d="m3.5 8.5 3 3 6-7"/></svg><span class="odl-off">Follow</span><span class="odl-on">Following</span></button>
+    </div>
+  </div>
+</article>
+<script>
+document.querySelectorAll(".odl-profile-card").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  const follow = root.querySelector(".odl-follow");
+  follow.addEventListener("click", () => follow.setAttribute("aria-pressed", follow.getAttribute("aria-pressed") === "true" ? "false" : "true"));
+});
+</script>

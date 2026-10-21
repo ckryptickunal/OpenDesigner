@@ -1,0 +1,12 @@
+{
+  "name": "AI composer",
+  "summary": "Where a person asks an assistant something: attached sources (one still reading), a mode switch, and a send button that stays quiet until there is text.",
+  "type": "ai",
+  "style": "editorial",
+  "industries": ["productivity", "education", "saas"],
+  "tags": ["ai", "chat", "prompt", "attachments", "composer"],
+  "states": ["empty", "typing", "focus", "source uploading", "mode picked"],
+  "source": "brand/showcase/components/07-ai-composer",
+  "a11y": "A labelled form: the modes are a native radio group, every icon button has a name, and the focus ring wraps the whole box.",
+  "width": "medium"
+}

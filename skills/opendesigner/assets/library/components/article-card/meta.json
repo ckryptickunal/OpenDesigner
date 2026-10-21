@@ -1,0 +1,12 @@
+{
+  "name": "Article card",
+  "summary": "A card for one article or changelog post: a drawn cover, the category and reading time, a headline, a two-line summary, the author and date, and a button to save it.",
+  "type": "content",
+  "style": "editorial",
+  "industries": ["any"],
+  "tags": ["article", "blog", "changelog", "post", "card"],
+  "states": ["hover", "focus", "saved", "not saved"],
+  "source": null,
+  "a11y": "The headline is the one link and its click area covers the card; Save sits above it as a separate toggle button with aria-pressed, and the cover is decorative.",
+  "width": "narrow"
+}

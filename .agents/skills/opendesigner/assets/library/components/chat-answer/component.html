@@ -1,0 +1,120 @@
+<style>
+.odl-chat-answer { box-sizing: border-box; inline-size: 100%; max-inline-size: 46rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-chat-answer *, .odl-chat-answer *::before, .odl-chat-answer *::after { box-sizing: border-box; }
+.odl-chat-answer .odl-thread { display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-lg); background: var(--ds-color-surface-base);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); }
+.odl-chat-answer .odl-ask { justify-self: end; max-inline-size: 85%; margin: 0; padding: var(--ds-space-inset-sm) var(--ds-space-inset-md); border-radius: var(--ds-radius-container);
+  border-end-end-radius: var(--ds-radius-4); background: var(--ds-color-bg-neutral-subtle); }
+.odl-chat-answer .odl-turn { display: grid; grid-template-columns: var(--ds-size-control-sm) minmax(0, 1fr); gap: var(--ds-space-inline-sm); }
+.odl-chat-answer .odl-avatar { display: grid; place-items: center; inline-size: var(--ds-size-control-sm); block-size: var(--ds-size-control-sm); border-radius: var(--ds-radius-person);
+  background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-icon-accent); }
+.odl-chat-answer .odl-avatar svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-chat-answer .odl-main { display: grid; gap: var(--ds-space-stack-md); min-inline-size: 0; }
+.odl-chat-answer .odl-who { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-inline-xs) var(--ds-space-inline-sm); min-block-size: var(--ds-size-control-sm); margin: 0;
+  color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-chat-answer .odl-who b { color: var(--ds-color-text-primary); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-heading); }
+.odl-chat-answer .odl-live { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); color: var(--ds-color-text-accent); }
+.odl-chat-answer .odl-live::before { content: ""; inline-size: var(--ds-space-6); block-size: var(--ds-space-6); border-radius: var(--ds-radius-full); background: currentColor;
+  animation: odl-chat-answer-pulse var(--ds-motion-duration-extra) var(--ds-motion-easing-standard) infinite alternate; }
+.odl-chat-answer .odl-text p { margin: 0; }
+.odl-chat-answer .odl-nw { white-space: nowrap; }
+.odl-chat-answer .odl-text { display: grid; gap: var(--ds-space-stack-sm); }
+.odl-chat-answer .odl-cite { display: inline-grid; place-items: center; min-inline-size: 1.4em; block-size: 1.4em; margin-inline-start: var(--ds-space-2); padding: 0 var(--ds-space-4); vertical-align: 0.1em;
+  border-radius: var(--ds-radius-4); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; text-decoration: none;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-chat-answer .odl-cite:hover { background: var(--ds-color-bg-accent-subtle-hover); }
+.odl-chat-answer .odl-caret { display: inline-block; inline-size: 0.5em; block-size: 1.1em; margin-inline-start: var(--ds-space-2); vertical-align: -0.15em; border-radius: var(--ds-radius-2);
+  background: var(--ds-color-text-primary); animation: odl-chat-answer-blink var(--ds-motion-duration-extra) var(--ds-motion-easing-standard) infinite alternate; }
+@keyframes odl-chat-answer-blink { to { opacity: 0.25; } }
+@keyframes odl-chat-answer-pulse { to { opacity: 0.35; } }
+.odl-chat-answer .odl-sources { margin: 0; padding: var(--ds-space-inset-xs); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-nested);
+  background: var(--ds-color-surface-raised); list-style: none; display: grid; }
+.odl-chat-answer .odl-sources h4 { margin: 0; padding: var(--ds-space-4) var(--ds-space-8) var(--ds-space-6); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-chat-answer .odl-src { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; row-gap: 0; gap: var(--ds-space-inline-sm); min-block-size: var(--ds-size-target-min);
+  padding: var(--ds-space-6) var(--ds-space-8); border-radius: var(--ds-radius-nested); outline: none; transition: background-color var(--ds-motion-duration-medium) var(--ds-motion-easing-standard); }
+.odl-chat-answer .odl-src.is-flash { background: var(--ds-color-bg-accent-subtle); }
+.odl-chat-answer .odl-src:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: calc(-1 * var(--ds-focus-ring-width)); }
+.odl-chat-answer .odl-num { display: grid; place-items: center; min-inline-size: 1.6em; block-size: 1.6em; border-radius: var(--ds-radius-4); background: var(--ds-color-bg-neutral-subtle);
+  color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; }
+.odl-chat-answer .odl-src span:nth-child(2) { display: grid; min-inline-size: 0; }
+.odl-chat-answer .odl-src small { color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); }
+.odl-chat-answer .odl-pages { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.odl-chat-answer .odl-actions { display: flex; align-items: center; gap: var(--ds-space-2); margin-inline-start: calc(-1 * var(--ds-space-6)); }
+.odl-chat-answer .odl-actions button { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-xs);
+  min-inline-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); min-block-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); padding: 0 var(--ds-space-6);
+  border: 0; border-radius: var(--ds-radius-control); background: transparent; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-chat-answer .odl-actions button:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
+.odl-chat-answer .odl-actions button[aria-pressed="true"] { background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); }
+.odl-chat-answer .odl-actions svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-chat-answer .odl-actions .odl-sep { inline-size: var(--ds-border-width-default); block-size: var(--ds-space-16); margin-inline: var(--ds-space-4); background: var(--ds-color-border-subtle); }
+.odl-chat-answer .odl-actions output { margin-inline-start: auto; color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); }
+.odl-chat-answer a:focus-visible, .odl-chat-answer button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+@container (min-width: 40rem) { .odl-chat-answer .odl-thread { padding: var(--ds-space-inset-xl); } }
+@container (max-width: 26rem) {
+  .odl-chat-answer .odl-thread { padding: var(--ds-space-inset-md); }
+  .odl-chat-answer .odl-turn { grid-template-columns: minmax(0, 1fr); }
+  .odl-chat-answer .odl-avatar { display: none; }
+  .odl-chat-answer .odl-label { display: none; }
+  .odl-chat-answer .odl-src { grid-template-columns: auto minmax(0, 1fr); align-items: start; }
+  .odl-chat-answer .odl-pages { grid-column: 2; margin-block-start: calc(-1 * var(--ds-space-6)); }
+}
+@media (prefers-reduced-motion: reduce) { .odl-chat-answer, .odl-chat-answer *, .odl-chat-answer *::before { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-chat-answer" aria-label="Answer about dredging on the sands">
+  <div class="odl-thread">
+    <p class="odl-ask">Who did the board let dredge the sands, and when?</p>
+    <article class="odl-turn" aria-busy="true">
+      <span class="odl-avatar" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M8 1.75 9.6 6.4 14.25 8 9.6 9.6 8 14.25 6.4 9.6 1.75 8 6.4 6.4z"/></svg></span>
+      <div class="odl-main">
+        <p class="odl-who"><b>Saxifrage</b><span>Careful reading · 2 sources</span><span class="odl-live" role="status">Writing</span></p>
+        <div class="odl-text">
+          <p>The board licensed dredging on the east sands twice in the 1950s. It granted two licences on 12 March 1953
+            and renewed them for four boats on 9 May <span class="odl-nw">1958<a class="odl-cite" href="#sands-src-1" data-src="1" aria-label="Source 1, pages 14 and 141">1</a>.</span></p>
+          <p>In between, the cockle beds were closed: the minute of 3 October 1956 says so, and the pier master turned two boats away that same <span class="odl-nw">week<a class="odl-cite" href="#sands-src-2" data-src="2" aria-label="Source 2, page 41">2</a>.</span>
+            Okonjo leaves the closure out, so in her account the sands look open the whole time<span class="odl-caret" aria-hidden="true"></span></p>
+        </div>
+        <div class="odl-sources" role="group" aria-label="Sources">
+          <h4>Sources</h4>
+          <div class="odl-src" id="sands-src-1" data-src="1" tabindex="-1"><span class="odl-num">1</span><span>Quay commission minutes 1952–60<small>Scan · 212 pages · county record office</small></span><span class="odl-pages">pp. 14, 96, 141</span></div>
+          <div class="odl-src" id="sands-src-2" data-src="2" tabindex="-1"><span class="odl-num">2</span><span>Pier master’s log (1956)<small>Scan · 112 pages · read Oct 9</small></span><span class="odl-pages">p. 41</span></div>
+        </div>
+        <div class="odl-actions">
+          <button type="button" class="odl-copy" aria-label="Copy answer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.25" y="5.25" width="8.5" height="8.5" rx="1.5"/><path d="M10.75 5.25V3.5a1.25 1.25 0 0 0-1.25-1.25h-6A1.25 1.25 0 0 0 2.25 3.5v6a1.25 1.25 0 0 0 1.25 1.25h1.75"/></svg><span class="odl-label">Copy</span></button>
+          <button type="button" aria-label="Retry answer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M13.25 8a5.25 5.25 0 1 1-1.54-3.71"/><path d="M12.25 1.75v3h-3"/></svg><span class="odl-label">Retry</span></button>
+          <span class="odl-sep" aria-hidden="true"></span>
+          <button type="button" class="odl-vote" aria-label="Good answer" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M4.75 7.25v6.5h-2.5v-6.5zM4.75 7.25 7.5 2.25c1 0 1.75.75 1.75 1.75v2.25h3.4a1.25 1.25 0 0 1 1.23 1.47l-.9 5a1.25 1.25 0 0 1-1.23 1.03H4.75"/></svg></button>
+          <button type="button" class="odl-vote" aria-label="Bad answer" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M11.25 8.75v-6.5h2.5v6.5zM11.25 8.75 8.5 13.75c-1 0-1.75-.75-1.75-1.75V9.75h-3.4a1.25 1.25 0 0 1-1.23-1.47l.9-5a1.25 1.25 0 0 1 1.23-1.03h6.98"/></svg></button>
+          <output aria-live="polite"></output>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+<script>
+document.querySelectorAll(".odl-chat-answer").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  const note = root.querySelector("output");
+  root.querySelectorAll(".odl-cite").forEach((a) => a.addEventListener("click", (e) => {
+    const src = root.querySelector(`.odl-src[data-src="${a.dataset.src}"]`);
+    if (!src) return;
+    e.preventDefault();
+    src.focus(); // the person clicked the citation: moving to its source is expected
+    src.classList.add("is-flash");
+    setTimeout(() => src.classList.remove("is-flash"), 1200);
+  }));
+  root.querySelector(".odl-copy").addEventListener("click", () => {
+    const text = [...root.querySelectorAll(".odl-text p")].map((p) => p.textContent.replace(/\s+/g, " ").trim()).join("\n\n");
+    const done = () => { note.textContent = "Copied"; setTimeout(() => { note.textContent = ""; }, 2000); };
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, () => { note.textContent = "Could not copy"; });
+  });
+  const votes = root.querySelectorAll(".odl-vote");
+  votes.forEach((b) => b.addEventListener("click", () => {
+    const on = b.getAttribute("aria-pressed") !== "true";
+    votes.forEach((o) => o.setAttribute("aria-pressed", "false"));
+    b.setAttribute("aria-pressed", String(on));
+    note.textContent = on ? "Thanks, noted" : "";
+  }));
+});
+</script>

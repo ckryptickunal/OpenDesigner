@@ -1,0 +1,12 @@
+{
+  "name": "Kanban column",
+  "summary": "One board column with its count and add button, holding task cards with labels, due date, assignee, comments and subtask progress; one card is lifted mid-drag.",
+  "type": "data",
+  "style": "dense",
+  "industries": ["productivity", "saas", "devtools"],
+  "tags": ["kanban", "board", "cards", "tasks", "drag and drop"],
+  "states": ["hover", "focus", "dragging", "drop slot", "overdue", "done subtasks"],
+  "source": null,
+  "a11y": "Cards are focusable list items with a described keyboard-move hint; progress bars are role=progressbar with values, and counts have screen-reader words.",
+  "width": "narrow"
+}

@@ -33,7 +33,7 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 ## 2. Classify the request
 | Request | Treat it as | Do |
 |---|---|---|
-| "Add a date picker / pricing table / settings page" | New component or pattern | Build it from existing tokens only. List the tokens it uses. Add states and keyboard behavior |
+| "Add a date picker / pricing table / settings page" | New component or pattern | Build it from existing tokens only. List the tokens it uses. Add states and keyboard behavior. Before you design it, check the optional component library (`<opendesigner>/references/library.md`): offer a library part only as that file says (one pick for a novice; for a designer, only when the library has that part in a matching style and they have none of their own), and only if `profile.library` is not `"declined"` |
 | "Make buttons a bit rounder", "denser tables" | One decision | Find the question in the stage file. Show the current value and the options, then `set` it |
 | "Let's define colors properly", "more detail on type" | Zoom in | Run the next zoom level for that area (`<opendesigner>/references/zoom.md`), then record it, for example `set zoom.color '"defined"'` |
 | "Build the landing page", "redo this section", "show me some options" | A page built with the system | Follow `<opendesigner>/references/making.md`: one round at a time, options on a review copy of the page with the current version kept, every value from the tokens, and a check of the rendered page before you show it |

@@ -1,0 +1,12 @@
+{
+  "name": "Profile card",
+  "summary": "One person at a glance: who they are, where and what time it is for them, three numbers about their work, and buttons to message or follow them.",
+  "type": "content",
+  "style": "quiet",
+  "industries": ["any"],
+  "tags": ["profile", "person", "avatar", "team", "member"],
+  "states": ["hover", "pressed", "focus", "following", "not following"],
+  "source": null,
+  "a11y": "An article labelled with the person's name; the stats are a description list, and Follow is a toggle button that reports its state with aria-pressed.",
+  "width": "narrow"
+}

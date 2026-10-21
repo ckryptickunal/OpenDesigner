@@ -1,0 +1,12 @@
+{
+  "name": "Member list",
+  "summary": "A workspace's members with their email, a role picker per person, last active time, a pending invite you can resend and the owner's locked role.",
+  "type": "data",
+  "style": "quiet",
+  "industries": ["saas", "security", "any"],
+  "tags": ["members", "team", "roles", "invite", "permissions"],
+  "states": ["hover", "focus", "owner locked", "pending invite", "online"],
+  "source": "brand/showcase/product/06-ferrule-security",
+  "a11y": "Each role is a native select labelled with the person's name; the resend button names the invitee; on narrow widths the rows restack without hiding anything.",
+  "width": "medium"
+}

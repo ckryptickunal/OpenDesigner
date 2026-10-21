@@ -1,0 +1,12 @@
+{
+  "name": "Product card",
+  "summary": "A card for a digital product or plan add-on: a cover drawn from the tokens, name, one-line description, rating, price with the old price struck out, an Add button and a save toggle.",
+  "type": "commerce",
+  "style": "friendly",
+  "industries": ["saas", "retail", "any"],
+  "tags": ["product", "add-on", "price", "rating", "favourite", "card"],
+  "states": ["added", "not added", "saved", "not saved", "hover", "pressed", "focus"],
+  "source": null,
+  "a11y": "Add and save are toggle buttons with aria-pressed; the rating and the old price are read as words (\"Rated 4.6 out of 5\", \"was $32\"), and the cover is decorative.",
+  "width": "narrow"
+}

@@ -16,7 +16,7 @@
 .fig-scene::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .28; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"); }
 .fig-scene > * { position: relative; z-index: 2; }
-@media (max-width: 640px) { .fig-panel { padding: 16px; } .fig-scene { padding: 32px 16px; min-height: 280px; } }
+@media (max-width: 640px) { .fig-panel { padding: 16px; border-radius: 16px; } .fig-scene { padding: 32px 16px; min-height: 280px; } }
 
 /* the floating product card, as in a dashboard widget */
 .fig-card { width: 100%; max-width: 440px; background: var(--surface-raised); border: 1px solid color-mix(in srgb, var(--line) 80%, transparent); border-radius: var(--radius-detail); overflow: hidden;
@@ -201,3 +201,16 @@
 @container (max-width: 420px) { .fig .tier { grid-template-columns: minmax(0, 1fr); } .fig .tier > .kicker { grid-row: auto; } }
 /* Stacked Do and Don't panels on phones: room for the next panel's sticker, so it never touches the panel above. */
 @media (max-width: 640px) { .dodont { gap: 28px; } }
+
+/* nested corners (owner, 2026-10-21; site/check_layout.py check 14): a box close inside a rounded box takes the outer radius minus
+   the gap. The outer value is resolved on the outer element (each element resets --corner-k) and passed down as a variable. */
+.fig-scene { --scene-r: var(--r-panel); }
+.hh-file { --card-r: var(--r-card); }
+@media (max-width: 640px) {  /* here the scene's 16 px padding is less than its radius, so the cards nest */
+  .fig-scene .hh .fig-card { border-radius: calc(var(--scene-r) - 16px); }
+  .hh-file { --card-r: calc(var(--scene-r) - 16px); }
+}
+
+/* phones: the panel's 16 px corner is no larger than the 17 px gap to the boxes inside, so they need not nest (check 14). After
+   the corner rules above, so it wins. */
+@media (max-width: 640px) { .fig-panel { border-radius: 16px; } }

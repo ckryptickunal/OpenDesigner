@@ -805,3 +805,52 @@ Web searches on 2026-10-21 found no business of any of these names. Brinlow, Orr
 | Tevelyn Botanicals | company (a client) | site home page before-and-after demo |
 | Stavely Dental Group | company (a client) | site home page before-and-after demo |
 | Juno Pell | person (the signed-in user's avatar label) | site home page before-and-after demo |
+
+## Appended 2026-10-21: the component library (`skills/opendesigner/assets/library/components/`)
+
+The library's parts used to reuse names from the showcase pieces (Fennick, Ferrule, Corvane, Quoin, components/07 and 08). They now use the names below. Web searches on 2026-10-21 found no business, band or product of any of the company, title or product names. Vellum and Scholium were tried first for the reading assistant and dropped, because both are real AI products. Halvorsen, Ines, Ilse, Lindqvist, Mateus, Reyes, Tomasz Wierzbicki, Brennick, Fernhollow, Quillmere, Tolvane, Millrace and ledger-api were tried and dropped because `check_names.py` found them in other pieces or one or two letters from their names.
+
+| Name | Kind | Pieces |
+|---|---|---|
+| Thistlecombe Foods | workspace (thistlecombe.example) | library |
+| Quenwick Mutual | workspace (customer; quenwickmutual.example) | library |
+| Abernathy & Low | workspace (abernathylow.example) | library |
+| Oskarby Analytics | workspace (oskarby.example) | library |
+| Vessendon Airframes | customer (avatar VA) | library |
+| Pendrick Telecom | vendor | library |
+| Tressel Freight Brokers | vendor (TFB-118204) | library |
+| Tressel Freight | vendor (short form) | library |
+| Wyndell Staffing Partners | vendor | library |
+| Redwillow Produce | vendor | library |
+| Inchley Print Co. | vendor | library |
+| Yarrowby Software | vendor | library |
+| Penderel Fleet Maintenance | vendor | library |
+| Hollin Water Co. | vendor | library |
+| Penmarrow Bay Hotel | merchant | library |
+| Saffrey Coffee Co. | merchant | library |
+| Gullwharf Oyster Bar | merchant | library |
+| Kettleby Catering Ltd | merchant | library |
+| Ragnhild Torvik | person (avatar RT) | library |
+| Radek Nowicki | person (avatar RN) | library |
+| Thiago Carvalho | person (avatar TC) | library |
+| Yerlan Abenov | person (avatar YA) | library |
+| Nandini Iyer | person (avatar NI) | library |
+| Kwabena Asante | person (avatar KA) | library |
+| Bettina Marangoni | person (avatar BM) | library |
+| Margaux Lefèvre | person (avatar ML) | library |
+| Thandiwe Mokoena | person (avatar TM) | library |
+| Callum Strachan | person (avatar CS) | library |
+| Hamish Dalgleish | person | library |
+| Annelies Vermeulen | person | library |
+| Paloma Etxeberria | person | library |
+| Okonjo | person (historian) | library |
+| Saxifrage | product (reading assistant) | library |
+| Quay commission minutes 1952–60 | title (source) | library |
+| Pier master’s log (1956) | title (source) | library |
+| foreshore-order | title (source file) | library |
+| Last Ferry | title (song) | library |
+| Mosswater Telegraph | artist | library |
+| Small Hours, Bright Rooms | title (album) | library |
+| policy-vault | API key | library |
+| people-sync | service account | library |
+| settle-api | service | library |

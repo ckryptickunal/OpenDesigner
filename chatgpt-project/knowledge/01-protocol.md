@@ -42,6 +42,8 @@ A person in a hurry still gets a finished page in the first reply. What they don
 | `references/practices.md` | At the start of a session. Which tools and accesses to look for (Mobbin, a browser, image and video tools, the project's keys), how to use each, and what to suggest once when one is missing |
 | `references/styles.md` | When the person describes a look in their own words ("frosty", "like a comic", "soft buttons"): map the words to named styles, show them, say the name in plain words first, and record the pick with its dial settings. 28 styles with real examples, and a gradient and surface glossary |
 | `references/style-lab.md`, `references/style-catalog.md` | When no named style fits, when the person wants something new or experimental, or when they ask what else exists: search the full catalogue by their words, mix or change styles on 12 trait axes, explore new directions, and save one as their own. The floors never move |
+| `references/library.md`, `scripts/library.py`, `assets/library/` | At the first page, screen or component the person asks you to build, and whenever they ask for ready-made parts. The optional component library: when to offer it, to whom, and how to add one |
+| `references/post-change-audit.md` | After every implementation (a page, a component, a library), before you show it: the automatic checks, then each owner-corrected rule by eye, at phone, tablet and desktop |
 | `references/improve.md` | When something is missing, wrong or confusing |
 | `scripts/journey.py`, `references/report.schema.json` | The private journey log and the optional anonymous report (`rules.md` section 11) |
 | `references/questions.json`, `graph.json`, `cards/Lxx.json`, `levers.json`, `ontology-slim.json` | Machine index; what a choice changes; "why?" sources; dials and formulas; the full block map |
@@ -135,6 +137,8 @@ python3 <skill>/scripts/journey.py share [--dry-run] [--yes]           send the 
 ## Building pages with the system
 Once the system exists, people ask for pages, and then for changes to them. Follow `references/making.md`:
 - Have tokens before the first draft, and take every value from them.
+- **After every implementation, run the post-change audit** (`references/post-change-audit.md`) and fix what it finds before you show anything. Add any new kind of mistake the person points out to it, with how to check it.
+- **The component library is optional.** At the first build, before you design the part, follow `references/library.md`: a novice gets one recommended pick from `library.py suggest`; a designer hears about it only when the library has that part in a style that fits. Ask once, record the answer in `profile.library`, and never add a component without a yes.
 - A note applies to every instance of the same kind, and to nothing else.
 - Show options one at a time, full size, on a review copy of the page (never the live one), with the current version kept as an option.
 - Check the rendered page, in the person's own window, before you show it.
@@ -904,7 +908,7 @@ In October 2026, AI builders made 54 showcase pieces through this process: heroe
 - In a decorative style, the decoration carries data. The style studies (`brand/showcase/styles/`) moved from 3 to 4 or 5 when it did: shapes sized by tickets sold, two inks whose overlap shows felt wait against actual wait, red only where something failed.
 
 ## 12. What people had to ask for by hand
-Each rule below is a correction a person had to type in a demo trial (`_coordination/TRIAL-LEDGER.md` in the repo). Do these without being asked.
+Each rule below is a correction a person had to type in a demo trial (`_coordination/TRIAL-LEDGER.md` in the repo). Do these without being asked. After every implementation, check them with the post-change audit (`post-change-audit.md`).
 
 **Every product**
 - **One shell for every page.** The sidebar, header, content width and page padding are the same on every page, so nothing jumps when the person moves between pages. Measure the shell's boxes on each page and compare them (preflight 44). In the trial, one page's wide table stretched its layout and "everything changes" when the person opened it.

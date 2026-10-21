@@ -21,6 +21,9 @@ import subprocess
 import sys
 import urllib.request
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import library_page  # noqa: E402  (the component library page, /library/)
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
 DIST = pathlib.Path(os.environ.get("SITE_DIST") or SITE / "dist")  # SITE_DIST: build elsewhere while someone else builds here
@@ -423,7 +426,7 @@ def sidebar(pages, current):
             continue
         lis = "".join(f'<li><a href="{p["path"]}"{CUR if p["path"] == current else ""}>{esc(p["title"])}</a></li>' for p in items)
         groups.append(f'<div class="side-group"><h2 class="side-h kicker">{sec}</h2><ul>{lis}</ul></div>')
-    show = f'<div class="side-group"><h2 class="side-h kicker">Examples</h2><ul><li><a href="/showcase/"{CUR if current == "/showcase/" else ""}>Showcase</a></li></ul></div>'
+    show = f'<div class="side-group"><h2 class="side-h kicker">Examples</h2><ul><li><a href="/showcase/"{CUR if current == "/showcase/" else ""}>Showcase</a></li><li><a href="/library/">Component library</a></li></ul></div>'
     return (f'<aside class="side" aria-label="Documentation"><details class="side-mobile"><summary>Documentation menu</summary>'
             f'<nav>{"".join(groups)}{show}</nav></details><nav class="side-desk">{"".join(groups)}{show}</nav></aside>')
 
@@ -473,7 +476,7 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.pn
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar"><div class="bar-in">
 <a class="brand" href="/" aria-label="{NAME} home">{lockup()}</a>
-<nav class="top-nav" aria-label="Main"><a href="/docs/"{CUR if path.startswith("/docs/") else ""}>Docs</a><a href="/docs/install/">Install</a><a href="/docs/enterprise/">For teams</a><a href="/showcase/"{CUR if path == "/showcase/" else ""}>Showcase</a></nav>
+<nav class="top-nav" aria-label="Main"><a href="/docs/"{CUR if path.startswith("/docs/") else ""}>Docs</a><a href="/docs/install/">Install</a><a href="/docs/enterprise/">For teams</a><a href="/showcase/"{CUR if path == "/showcase/" else ""}>Showcase</a><a class="nav-lib" title="Component library" href="/library/"{CUR if path.startswith("/library/") else ""}><svg class="nav-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M17 13.5v7M13.5 17h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="nav-lib-t">Library</span></a></nav>
 <a class="nav-book" href="/book/">Book a call</a><a class="gh-btn" href="{GH}">{GH_ICON}<span>GitHub</span><span class="gh-count" data-stars>{STATE["stars"]}</span></a>
 </div></header>
 {inner}
@@ -1557,6 +1560,7 @@ def vercel_json():
                                                 {"key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains"}]},
                 {"source": "/fonts/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
                 {"source": "/img/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=604800"}]},
+                {"source": "/library/r/(.*)", "headers": [{"key": "X-Robots-Tag", "value": "noindex"}, {"key": "Content-Type", "value": "text/html; charset=utf-8"}, {"key": "Access-Control-Allow-Origin", "value": "*"}]},
                 {"source": "/(.*)\\.md", "headers": [{"key": "Content-Type", "value": "text/markdown; charset=utf-8"}, {"key": "X-Robots-Tag", "value": "noindex"}]},
                 {"source": "/(llms.txt|llms-full.txt|robots.txt)", "headers": [{"key": "Content-Type", "value": "text/plain; charset=utf-8"}]}]}
 
@@ -1600,11 +1604,13 @@ def main():
     mds["showcase/index.md"] = sh_md + "\n"
     files["404.html"] = not_found(pages)
     files["book/index.html"] = book_page(pages)
+    library_paths = []
+    library_page.add(sys.modules[__name__], files, mds, library_paths)  # /library/: the optional component library (its own module)
     for rel, text in {**files, **mds}.items():
         f = DIST / rel
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text(text)
-    paths = ["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/"]
+    paths = ["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/"] + library_paths
     (DIST / "robots.txt").write_text(robots())
     (DIST / "llms.txt").write_text(llms_txt(pages))
     (DIST / "llms-full.txt").write_text(f"# {NAME} (full text of {SITE_URL})\n\n" + "\n\n---\n\n".join(mds.values()))

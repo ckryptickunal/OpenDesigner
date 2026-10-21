@@ -1,0 +1,104 @@
+<style>
+.odl-product-card { box-sizing: border-box; inline-size: 100%; max-inline-size: 22.5rem; margin-inline: auto; container-type: inline-size; text-wrap: pretty; }
+.odl-product-card *, .odl-product-card *::before { box-sizing: border-box; }
+.odl-product-card .odl-card { display: grid; overflow: hidden; background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); }
+.odl-product-card .odl-cover { position: relative; display: grid; place-items: center; aspect-ratio: 16 / 10; overflow: hidden; background: var(--ds-color-bg-accent-subtle);
+  border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-product-card .odl-cover::before { content: ""; position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 120%, var(--ds-color-bg-accent-subtle-hover) 0 46%, transparent 46.5%), radial-gradient(circle at 50% 120%, var(--ds-color-bg-accent-subtle-pressed) 0 30%, transparent 30.5%); }
+.odl-product-card .odl-cover svg { position: relative; inline-size: 74%; max-inline-size: 15rem; overflow: visible; }
+.odl-product-card .odl-sheet { fill: var(--ds-color-surface-raised); stroke: var(--ds-color-border-subtle); stroke-width: 1; }
+.odl-product-card .odl-sheet.is-back { fill: var(--ds-color-surface-sunken); }
+.odl-product-card .odl-dot { fill: var(--ds-color-bg-accent-bold); }
+.odl-product-card .odl-dot.is-muted { fill: var(--ds-color-border-default); }
+.odl-product-card .odl-ln { fill: var(--ds-color-bg-neutral-subtle-pressed); }
+.odl-product-card .odl-ln.is-strong { fill: var(--ds-color-border-strong); }
+.odl-product-card .odl-seal { fill: var(--ds-color-bg-accent-bold); }
+.odl-product-card .odl-seal-mark { fill: none; stroke: var(--ds-color-icon-on-accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.odl-product-card .odl-tag { position: absolute; inset-block-start: var(--ds-space-inset-sm); inset-inline-start: var(--ds-space-inset-sm); display: inline-flex; align-items: center; min-block-size: var(--ds-size-control-sm); padding: 0 var(--ds-space-inset-xs);
+  border-radius: calc(var(--ds-radius-container) - var(--ds-space-inset-sm)); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); font: var(--ds-text-label-sm); box-shadow: var(--ds-elevation-raised); }
+/* The heart's visible circle lines up with the tag; its larger hit area hangs outside that circle. */
+.odl-product-card .odl-fav { --odl-hang: calc((max(var(--ds-size-control-sm), var(--ds-size-target-min)) - var(--ds-size-control-sm)) / 2);
+  position: absolute; inset-block-start: calc(var(--ds-space-inset-sm) - var(--odl-hang)); inset-inline-end: calc(var(--ds-space-inset-sm) - var(--odl-hang)); display: grid; place-items: center;
+  inline-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); block-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); padding: 0; border: 0; background: transparent; cursor: pointer; color: var(--ds-color-text-secondary); }
+.odl-product-card .odl-fav span { display: grid; place-items: center; inline-size: var(--ds-size-control-sm); block-size: var(--ds-size-control-sm); border-radius: var(--ds-radius-full);
+  background: var(--ds-color-surface-raised); box-shadow: var(--ds-elevation-raised); transition: color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-product-card .odl-fav:hover { color: var(--ds-color-text-primary); }
+.odl-product-card .odl-fav svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-product-card .odl-fav[aria-pressed="true"] { color: var(--ds-color-text-danger); }
+.odl-product-card .odl-fav[aria-pressed="true"] path { fill: currentColor; }
+.odl-product-card .odl-body { display: grid; gap: var(--ds-space-stack-sm); padding: var(--ds-space-inset-md) var(--ds-space-inset-lg) var(--ds-space-inset-lg); }
+.odl-product-card .odl-kind { margin: 0; color: var(--ds-color-text-accent); font: var(--ds-text-label-md); }
+.odl-product-card h3 { margin: 0; font: var(--ds-text-title-md); }
+.odl-product-card .odl-desc { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-product-card .odl-rate { display: flex; align-items: center; gap: var(--ds-space-inline-xs); margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
+.odl-product-card .odl-rate b { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
+.odl-product-card .odl-stars { display: inline-flex; gap: var(--ds-space-2); color: var(--ds-color-text-warning); }
+.odl-product-card .odl-stars svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: currentColor; }
+.odl-product-card .odl-stars svg:last-child { fill: none; stroke: currentColor; stroke-width: 1.25; }
+.odl-product-card .odl-buy { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-stack-sm) var(--ds-space-inline-sm);
+  margin-block-start: var(--ds-space-stack-xs); padding-block-start: var(--ds-space-stack-md); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-product-card .odl-price { display: grid; gap: var(--ds-space-2); font-variant-numeric: tabular-nums; }
+.odl-product-card .odl-price p { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--ds-space-inline-xs); margin: 0; }
+.odl-product-card .odl-price strong { font: var(--ds-text-numeric-md); font-weight: var(--ds-font-weight-heading); }
+.odl-product-card .odl-price span { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-product-card .odl-price s { color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); }
+.odl-product-card .odl-save { padding: 0 var(--ds-space-6); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-success-subtle); color: var(--ds-color-text-success); font: var(--ds-text-label-sm); }
+.odl-product-card .odl-add { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-xs); min-inline-size: 6.5rem;
+  min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md); border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control);
+  background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-product-card .odl-add:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-product-card .odl-add:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-product-card .odl-add svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-product-card .odl-add .is-on, .odl-product-card .odl-add[aria-pressed="true"] .is-off { display: none; }
+.odl-product-card .odl-add[aria-pressed="true"] .is-on { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); }
+.odl-product-card .odl-add[aria-pressed="true"] { background: var(--ds-color-bg-success-subtle); color: var(--ds-color-text-success); border-color: var(--ds-color-border-success); }
+.odl-product-card .odl-add .is-off { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); }
+.odl-product-card button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-product-card .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@container (max-width: 18rem) {
+  .odl-product-card .odl-body { padding: var(--ds-space-inset-sm) var(--ds-space-inset-md) var(--ds-space-inset-md); }
+  .odl-product-card .odl-add { inline-size: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .odl-product-card, .odl-product-card *, .odl-product-card *::before { transition: none !important; animation: none !important; } }
+</style>
+<article class="odl-product-card" aria-label="Extended audit log add-on">
+  <div class="odl-card">
+    <div class="odl-cover">
+      <svg viewBox="0 0 240 150" aria-hidden="true">
+        <rect class="odl-sheet is-back" x="34" y="14" width="172" height="112" rx="10"/>
+        <rect class="odl-sheet" x="20" y="28" width="200" height="112" rx="10"/>
+        <circle class="odl-dot" cx="42" cy="54" r="5"/><rect class="odl-ln is-strong" x="56" y="50" width="78" height="8" rx="4"/><rect class="odl-ln" x="160" y="50" width="40" height="8" rx="4"/>
+        <circle class="odl-dot is-muted" cx="42" cy="80" r="5"/><rect class="odl-ln is-strong" x="56" y="76" width="96" height="8" rx="4"/><rect class="odl-ln" x="168" y="76" width="32" height="8" rx="4"/>
+        <circle class="odl-dot is-muted" cx="42" cy="106" r="5"/><rect class="odl-ln is-strong" x="56" y="102" width="64" height="8" rx="4"/><rect class="odl-ln" x="156" y="102" width="44" height="8" rx="4"/>
+        <circle class="odl-seal" cx="206" cy="126" r="20"/><path class="odl-seal-mark" d="m197 126 6 6 12-12"/>
+      </svg>
+      <span class="odl-tag">Add-on</span>
+      <button type="button" class="odl-fav" aria-label="Save to favourites" aria-pressed="true"><span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M8 13.75S1.75 10.3 1.75 5.9A3.15 3.15 0 0 1 8 4.6a3.15 3.15 0 0 1 6.25 1.3C14.25 10.3 8 13.75 8 13.75z"/></svg></span></button>
+    </div>
+    <div class="odl-body">
+      <p class="odl-kind">Security</p>
+      <h3>Extended audit log</h3>
+      <p class="odl-desc">Keep every sign-in, export and permission change for 2 years instead of 90 days.</p>
+      <p class="odl-rate"><span class="odl-stars" aria-hidden="true">
+        <svg viewBox="0 0 16 16"><path d="m8 1.5 1.95 4.1 4.5.55-3.3 3.1.85 4.45L8 11.5l-4 2.2.85-4.45-3.3-3.1 4.5-.55z"/></svg><svg viewBox="0 0 16 16"><path d="m8 1.5 1.95 4.1 4.5.55-3.3 3.1.85 4.45L8 11.5l-4 2.2.85-4.45-3.3-3.1 4.5-.55z"/></svg><svg viewBox="0 0 16 16"><path d="m8 1.5 1.95 4.1 4.5.55-3.3 3.1.85 4.45L8 11.5l-4 2.2.85-4.45-3.3-3.1 4.5-.55z"/></svg><svg viewBox="0 0 16 16"><path d="m8 1.5 1.95 4.1 4.5.55-3.3 3.1.85 4.45L8 11.5l-4 2.2.85-4.45-3.3-3.1 4.5-.55z"/></svg><svg viewBox="0 0 16 16"><path d="m8 1.5 1.95 4.1 4.5.55-3.3 3.1.85 4.45L8 11.5l-4 2.2.85-4.45-3.3-3.1 4.5-.55z"/></svg></span>
+        <span class="odl-sr">Rated</span><b>4.6</b><span class="odl-sr">out of 5,</span><span>214 reviews</span></p>
+      <div class="odl-buy">
+        <div class="odl-price"><p><strong>$24</strong><span>per month</span></p><p><s><span class="odl-sr">was </span>$32</s><span class="odl-save">Save 25%</span></p></div>
+        <button type="button" class="odl-add" aria-pressed="false"><span class="is-off"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M3.5 8h9M8 3.5v9"/></svg>Add</span><span class="is-on"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3.5 8.5 3 3 6-7"/></svg>Added</span></button>
+      </div>
+    </div>
+  </div>
+</article>
+<script>
+document.querySelectorAll(".odl-product-card").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  root.querySelectorAll(".odl-add, .odl-fav").forEach((b) => b.addEventListener("click", () => {
+    const on = b.getAttribute("aria-pressed") !== "true";
+    b.setAttribute("aria-pressed", String(on));
+  }));
+});
+</script>

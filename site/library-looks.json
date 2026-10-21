@@ -1,0 +1,300 @@
+[
+ {
+  "key": "pebbleday",
+  "name": "Pebbleday",
+  "plain": "friendly, playful; a habit app for families",
+  "brand": "#E0457B",
+  "style": null,
+  "recipe": [
+   [
+    "sketch",
+    "--name",
+    "Pebbleday",
+    "--audience",
+    "regular",
+    "--platforms",
+    "ios,web",
+    "--feel",
+    "friendly,playful",
+    "--brand",
+    "#E0457B",
+    "--surfaces",
+    "experience"
+   ]
+  ],
+  "commands": [
+   "engine.py sketch --name Pebbleday --audience regular --platforms ios,web --feel friendly,playful --brand \"#E0457B\" --surfaces experience"
+  ]
+ },
+ {
+  "key": "fernhollow",
+  "name": "Fernhollow",
+  "plain": "calm, trustworthy; a public service for renewing a permit",
+  "brand": "#1E3A8A",
+  "style": null,
+  "recipe": [
+   [
+    "sketch",
+    "--name",
+    "Fernhollow",
+    "--audience",
+    "large",
+    "--platforms",
+    "web",
+    "--feel",
+    "calm,trustworthy",
+    "--brand",
+    "#1E3A8A",
+    "--surfaces",
+    "read"
+   ]
+  ],
+  "commands": [
+   "engine.py sketch --name Fernhollow --audience large --platforms web --feel calm,trustworthy --brand \"#1E3A8A\" --surfaces read"
+  ]
+ },
+ {
+  "key": "billerwick",
+  "name": "Billerwick",
+  "plain": "precise, calm; a finance tool for approving invoices",
+  "brand": "#15803D",
+  "style": null,
+  "recipe": [
+   [
+    "sketch",
+    "--name",
+    "Billerwick",
+    "--audience",
+    "dense",
+    "--platforms",
+    "web",
+    "--feel",
+    "calm",
+    "--brand",
+    "#15803D",
+    "--surfaces",
+    "operate"
+   ]
+  ],
+  "commands": [
+   "engine.py sketch --name Billerwick --audience dense --platforms web --feel calm --brand \"#15803D\" --surfaces operate"
+  ]
+ },
+ {
+  "key": "swiss",
+  "name": "Swiss",
+  "plain": "strict grid, sharp corners, plain bold type",
+  "brand": "#D92D20",
+  "style": "swiss",
+  "recipe": [
+   [
+    "sketch",
+    "--name",
+    "Swiss",
+    "--audience",
+    "regular",
+    "--platforms",
+    "web",
+    "--feel",
+    "serious,minimal",
+    "--brand",
+    "#D92D20"
+   ],
+   [
+    "pick",
+    "Q-dir-01",
+    "swiss"
+   ]
+  ],
+  "commands": [
+   "engine.py sketch --name Swiss --audience regular --platforms web --feel serious,minimal --brand \"#D92D20\"",
+   "engine.py pick Q-dir-01 swiss"
+  ]
+ },
+ {
+  "key": "glass",
+  "name": "Frosted glass",
+  "plain": "soft translucent panels and rounded corners",
+  "brand": "#3B6CF6",
+  "style": "glassmorphism",
+  "recipe": [
+   [
+    "sketch",
+    "--name",
+    "Frosted glass",
+    "--audience",
+    "regular",
+    "--platforms",
+    "web",
+    "--feel",
+    "calm,modern",
+    "--brand",
+    "#3B6CF6"
+   ],
+   [
+    "pick",
+    "Q-dir-01",
+    "glassmorphism"
+   ]
+  ],
+  "commands": [
+   "engine.py sketch --name \"Frosted glass\" --audience regular --platforms web --feel calm,modern --brand \"#3B6CF6\"",
+   "engine.py pick Q-dir-01 glassmorphism"
+  ]
+ },
+ {
+  "key": "playful",
+  "name": "Playful",
+  "plain": "round, colourful and friendly",
+  "brand": "#7C3AED",
+  "style": "playful",
+  "recipe": [
+   [
+    "sketch",
+    "--name",
+    "Playful",
+    "--audience",
+    "regular",
+    "--platforms",
+    "web",
+    "--feel",
+    "friendly,playful",
+    "--brand",
+    "#7C3AED"
+   ],
+   [
+    "pick",
+    "Q-dir-01",
+    "playful"
+   ]
+  ],
+  "commands": [
+   "engine.py sketch --name Playful --audience regular --platforms web --feel friendly,playful --brand \"#7C3AED\"",
+   "engine.py pick Q-dir-01 playful"
+  ]
+ },
+ {
+  "key": "mono",
+  "name": "Minimal mono",
+  "plain": "black and white, quiet and exact",
+  "brand": "#18181B",
+  "style": "minimal-monochrome",
+  "recipe": [
+   [
+    "sketch",
+    "--name",
+    "Minimal mono",
+    "--audience",
+    "regular",
+    "--platforms",
+    "web",
+    "--feel",
+    "minimal,serious",
+    "--brand",
+    "#18181B"
+   ],
+   [
+    "pick",
+    "Q-dir-01",
+    "minimal-monochrome"
+   ]
+  ],
+  "commands": [
+   "engine.py sketch --name \"Minimal mono\" --audience regular --platforms web --feel minimal,serious --brand \"#18181B\"",
+   "engine.py pick Q-dir-01 minimal-monochrome"
+  ]
+ },
+ {
+  "key": "terminal",
+  "name": "Terminal",
+  "plain": "dense, technical, figures first",
+  "brand": "#0E7C66",
+  "style": "terminal",
+  "recipe": [
+   [
+    "sketch",
+    "--name",
+    "Terminal",
+    "--audience",
+    "dense",
+    "--platforms",
+    "web",
+    "--feel",
+    "technical,serious",
+    "--brand",
+    "#0E7C66"
+   ],
+   [
+    "pick",
+    "Q-dir-01",
+    "terminal"
+   ]
+  ],
+  "commands": [
+   "engine.py sketch --name Terminal --audience dense --platforms web --feel technical,serious --brand \"#0E7C66\"",
+   "engine.py pick Q-dir-01 terminal"
+  ]
+ },
+ {
+  "key": "material",
+  "name": "Material You",
+  "plain": "tonal colour, pill buttons, generous touch",
+  "brand": "#6750A4",
+  "style": "material-you",
+  "recipe": [
+   [
+    "sketch",
+    "--name",
+    "Material You",
+    "--audience",
+    "regular",
+    "--platforms",
+    "web",
+    "--feel",
+    "friendly,modern",
+    "--brand",
+    "#6750A4"
+   ],
+   [
+    "pick",
+    "Q-dir-01",
+    "material-you"
+   ]
+  ],
+  "commands": [
+   "engine.py sketch --name \"Material You\" --audience regular --platforms web --feel friendly,modern --brand \"#6750A4\"",
+   "engine.py pick Q-dir-01 material-you"
+  ]
+ },
+ {
+  "key": "nordic",
+  "name": "Nordic",
+  "plain": "light, airy and calm",
+  "brand": "#2F6F8F",
+  "style": "scandinavian",
+  "recipe": [
+   [
+    "sketch",
+    "--name",
+    "Nordic",
+    "--audience",
+    "regular",
+    "--platforms",
+    "web",
+    "--feel",
+    "calm,friendly",
+    "--brand",
+    "#2F6F8F"
+   ],
+   [
+    "pick",
+    "Q-dir-01",
+    "scandinavian"
+   ]
+  ],
+  "commands": [
+   "engine.py sketch --name Nordic --audience regular --platforms web --feel calm,friendly --brand \"#2F6F8F\"",
+   "engine.py pick Q-dir-01 scandinavian"
+  ]
+ }
+]

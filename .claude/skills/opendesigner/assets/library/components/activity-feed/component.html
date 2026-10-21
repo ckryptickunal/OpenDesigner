@@ -1,0 +1,58 @@
+<style>
+.odl-activity-feed { box-sizing: border-box; container-type: inline-size; inline-size: 100%; max-inline-size: 640px; margin: 0; padding: var(--ds-space-inset-lg); list-style: none; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-stack-md);
+  background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-activity-feed > li { position: relative; display: grid; grid-template-columns: var(--ds-size-control-sm) minmax(0, 1fr); gap: var(--ds-space-inline-sm); }
+.odl-activity-feed > li:not(:last-child)::before { content: ""; position: absolute; inset-inline-start: calc(var(--ds-size-control-sm) / 2); inset-block: var(--ds-size-control-sm) calc(-1 * var(--ds-space-stack-md));
+  border-inline-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-activity-feed .odl-icon { inline-size: var(--ds-size-control-sm); block-size: var(--ds-size-control-sm); display: grid; place-items: center; border-radius: var(--ds-radius-control);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); background: var(--ds-color-surface-base); color: var(--ds-color-icon-subtle); }
+.odl-activity-feed .odl-icon svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-activity-feed .odl-line { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 var(--ds-space-inline-md); min-block-size: var(--ds-size-control-sm); align-items: center; }
+.odl-activity-feed .odl-line p { margin: 0; color: var(--ds-color-text-secondary); }
+.odl-activity-feed .odl-line strong { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
+.odl-activity-feed .odl-line p { text-wrap: balance; }
+.odl-activity-feed .odl-nb { white-space: nowrap; }
+.odl-activity-feed time { color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); white-space: nowrap; }
+.odl-activity-feed dl { margin: var(--ds-space-stack-xs) 0 0; border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); overflow: hidden;
+  background: var(--ds-color-surface-base); }
+.odl-activity-feed dl div { display: grid; grid-template-columns: minmax(6rem, 9rem) minmax(0, 1fr); gap: var(--ds-space-inline-sm); padding: var(--ds-space-inset-xs) var(--ds-space-inset-md); align-items: baseline;
+  font-variant-numeric: tabular-nums; }
+.odl-activity-feed dl div + div { border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+.odl-activity-feed dt { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-activity-feed dd { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--ds-space-4) var(--ds-space-inline-xs); }
+.odl-activity-feed .odl-to { white-space: nowrap; }
+.odl-activity-feed del { color: var(--ds-color-text-tertiary); }
+.odl-activity-feed ins { text-decoration: none; font-weight: var(--ds-font-weight-label); }
+.odl-activity-feed .odl-delta { color: var(--ds-color-text-success); font: var(--ds-text-label-md); }
+.odl-activity-feed blockquote { margin: var(--ds-space-stack-xs) 0 0; padding-inline-start: var(--ds-space-inset-sm); border-inline-start: var(--ds-border-width-emphasis) solid var(--ds-color-border-default);
+  color: var(--ds-color-text-secondary); }
+.odl-activity-feed a { color: var(--ds-color-text-link); text-underline-offset: 0.2em; }
+.odl-activity-feed dd { min-inline-size: 0; }
+@container (max-width: 22rem) { .odl-activity-feed dl div { grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-2); } }
+.odl-activity-feed a:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-detail); }
+</style>
+<ol class="odl-activity-feed" aria-label="Activity on Vessendon Airframes">
+  <li>
+    <span class="odl-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10.5 2.5 13.5 5.5 6 13H3v-3z"/></svg></span>
+    <div>
+      <div class="odl-line"><p><strong>Paloma Etxeberria</strong> changed 3 fields on <strong class="odl-nb">3-site rollout</strong></p><time>Today, 10:14</time></div>
+      <dl>
+        <div><dt>Deal value</dt><dd><del>$48,000.00</del><span class="odl-to"><span aria-hidden="true">→</span> <ins>$62,500.00</ins></span><span class="odl-delta">+$14,500</span></dd></div>
+        <div><dt>Seats</dt><dd><del>120</del><span class="odl-to"><span aria-hidden="true">→</span> <ins>155</ins></span></dd></div>
+        <div><dt>Stage</dt><dd><del>Evaluation</del><span class="odl-to"><span aria-hidden="true">→</span> <ins>Proposal</ins></span></dd></div>
+      </dl>
+    </div>
+  </li>
+  <li>
+    <span class="odl-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="m2.5 4.5 5.5 4 5.5-4"/></svg></span>
+    <div>
+      <div class="odl-line"><p><strong>Hamish Dalgleish</strong> replied to <a href="#" class="odl-nb">Revised order form</a></p><time>Mon, 16:52</time></div>
+      <blockquote>Procurement signed off on 155. Can you confirm single sign-on is in the Team plan?</blockquote>
+    </div>
+  </li>
+  <li>
+    <span class="odl-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 2.5h6M8 2.5v3M3.5 9a4.5 4.5 0 1 0 9 0 4.5 4.5 0 0 0-9 0zM8 7v2l1.5 1"/></svg></span>
+    <div><div class="odl-line"><p><strong>Paloma Etxeberria</strong> logged a <span class="odl-nb">34-minute call</span> with <strong>Annelies Vermeulen</strong></p><time>Mon, 11:30</time></div></div>
+  </li>
+</ol>

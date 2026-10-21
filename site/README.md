@@ -7,6 +7,9 @@ python3 site/build.py          # writes site/dist/ (static HTML, Markdown copies
 python3 site/build.py --og     # also re-renders the Open Graph images (Playwright + Chrome)
 python3 site/check.py          # checks the build: h1, canonical, title and description lengths, structured data, links, anchors, assets
 python3 site/check_layout.py   # every page at 13 widths: overflow, inner scroll, symmetry, overlap, targets, controls pinned off their content
+python3 site/library_systems.py # re-makes the component library's ten looks with the engine (site/static/library-systems.css, site/library-looks.json)
+python3 site/library_layout.py  # every library component, unscaled, at the 13 widths of check_layout.py
+python3 site/check_chrome.py     # the header and footer are the same on every page, at each width (compares with the home page)
 python3 site/demo_systems.py   # re-makes the home page's three example systems with the engine (site/demo-systems.json); run it after engine changes
 python3 site/deploy.py         # builds and publishes to Vercel (--preview for a preview URL)
 ```
@@ -16,7 +19,7 @@ python3 site/deploy.py         # builds and publishes to Vercel (--preview for a
 1. Build: `python3 site/build.py`. After engine changes, run `python3 site/demo_systems.py` first: the home page's example values come only from it.
 2. Open the build locally in the browser pane (`preview_start` with the `opendesigner-site` config in `.claude/launch.json`) and look at every page you changed, at full size.
 3. `python3 site/check.py` reports no problems.
-4. `python3 site/check_layout.py` reports 0 errors at all 13 widths (320 to 1920 px). Read each warning.
+4. `python3 site/post_change_audit.py` passes every automatic check, and section B of `skills/opendesigner/references/post-change-audit.md` is walked by eye. It runs: `python3 site/check_chrome.py` reports 0 pages whose header or footer differs from the home page. `python3 site/check_layout.py` reports 0 errors at all 13 widths (320 to 1920 px). Read each warning. Library components are scaled down on the site, so the checker skips them there; `python3 site/library_layout.py` checks each one unscaled at the same 13 widths, and must also report 0 errors.
 5. Check the real headers. The local server sends none, so a script, style or font the Content-Security-Policy in `vercel.json` blocks only fails once deployed: deploy a preview (`python3 site/deploy.py --preview`), open it, and confirm the console shows no CSP errors.
 6. Deploy (`python3 site/deploy.py`). It pings IndexNow. Never run `vercel deploy site/dist` by hand: the build recreates `site/dist/` without the project link, and Vercel then quietly creates a new project named "dist" and deploys there (it happened on 2026-10-18). `deploy.py` copies `site/.vercel/` in first.
 
@@ -26,6 +29,12 @@ What the owner's reviews settled for this site (`_coordination/OWNER-FEEDBACK.md
 - **Known tools show their own marks** beside their names (`logos.json`, Simple Icons, monochrome). Invented brands never use real marks.
 - **Short lines with no widows:** headings and short labels use `text-wrap: balance`, and no line ends on one word (preflight 8).
 - **Alignment holds at every width:** siblings share a top edge and height, stacked rows share one centre line, and a pinned control sits on the content's first line (preflight 35 and 38).
+- **Corners nest** (owner, 2026-10-21: "this issue is everywhere, fix it everywhere"): a rounded box set close inside another takes the outer radius minus the gap, so the curves run parallel. Photo stages set their padding as `--stage-pad` (in vw, so it means the same on the bezel) and the bezel and picture radii follow from it. `check_layout.py` check 14 (`nested-radius`) fails a page that breaks it.
+- **One shell on every page** (owner, 2026-10-21: "top nav changes in each and every page"): the header, footer, docs layout, showcase and library share `--shell` (1200 px), so nothing but the content moves between pages (`check_chrome.py`).
+- **Same view outside and inside** (owner, same day): a library card and its component page show a part at the same three widths (desktop 1280, tablet 768, phone 390), open on the same one for the screen, and a click carries the card's view (`?view=`). Hovering a card walks the views with a soft crossfade (fade and a 2 px blur, ease-out, under 300 ms; pointer only; never with reduced motion).
+- **Frames fit what they hold** (owner, same day): when a part is narrower than its view, the frame wraps the part instead of leaving it small in an empty field.
+- **One frame language**: every framed screen is the frosted-glass bezel (cards, the home page's screens, device views); no black device bezels.
+- **Calm, structured pages** (owner, same day: "so cluttered"): one backdrop for a set of cards, stickers below a picture and never on it, one rhythm of section spacing, tiles of one size in a grid.
 - **Invented names are checked** with `python3 brand/tools/check_names.py site/dist/index.html --gallery` and a web search.
 
 ## How the site is put together

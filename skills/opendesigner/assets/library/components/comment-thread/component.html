@@ -1,0 +1,124 @@
+<style>
+.odl-comment-thread { box-sizing: border-box; inline-size: 100%; max-inline-size: 36rem; margin-inline: auto; display: grid; gap: var(--ds-space-stack-md); padding: var(--ds-space-inset-lg);
+  background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); text-wrap: pretty; container-type: inline-size; }
+.odl-comment-thread *, .odl-comment-thread *::before { box-sizing: border-box; }
+.odl-comment-thread svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-comment-thread .odl-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-inline-sm); }
+.odl-comment-thread h3 { margin: 0; display: flex; align-items: baseline; gap: var(--ds-space-inline-sm); font: var(--ds-text-title-sm); }
+.odl-comment-thread h3 span, .odl-comment-thread .odl-head p { margin: 0; color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
+.odl-comment-thread ol { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ds-space-stack-md); }
+.odl-comment-thread .odl-comment { display: grid; grid-template-columns: var(--ds-size-control-sm) minmax(0, 1fr); gap: var(--ds-space-inline-sm); }
+.odl-comment-thread .odl-avatar { display: grid; place-items: center; inline-size: var(--ds-size-control-sm); block-size: var(--ds-size-control-sm); border-radius: var(--ds-radius-person);
+  background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font: var(--ds-text-label-sm); font-weight: var(--ds-font-weight-heading); }
+.odl-comment-thread .odl-avatar.is-b { background: var(--ds-color-bg-info-subtle); color: var(--ds-color-text-info); }
+.odl-comment-thread .odl-avatar.is-c { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); }
+.odl-comment-thread .odl-body { min-inline-size: 0; display: grid; gap: var(--ds-space-4); }
+.odl-comment-thread .odl-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--ds-space-inline-sm); min-block-size: var(--ds-size-control-sm); align-content: center; }
+.odl-comment-thread .odl-meta strong { font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); }
+.odl-comment-thread .odl-meta strong, .odl-comment-thread .odl-when { white-space: nowrap; }
+.odl-comment-thread .odl-meta time, .odl-comment-thread .odl-edited { color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
+.odl-comment-thread .odl-body > p { margin: 0; }
+.odl-comment-thread .odl-mention { padding: 0 var(--ds-space-2); border-radius: var(--ds-radius-detail); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font-weight: var(--ds-font-weight-label); }
+.odl-comment-thread .odl-tools { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-inline-xs); margin-block-start: var(--ds-space-2); }
+.odl-comment-thread button { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-4); min-block-size: var(--ds-size-target-min); min-inline-size: var(--ds-size-target-min);
+  padding: 0 var(--ds-space-inset-xs); border: 0; border-radius: var(--ds-radius-control); background: transparent; color: var(--ds-color-text-secondary);
+  font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); cursor: pointer; font-variant-numeric: tabular-nums;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-comment-thread button:hover { background: var(--ds-color-bg-neutral-subtle-hover); color: var(--ds-color-text-primary); }
+.odl-comment-thread button:focus-visible, .odl-comment-thread textarea:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-comment-thread .odl-reaction { min-block-size: var(--ds-size-control-sm); padding: 0 var(--ds-space-inset-xs); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-full); }
+.odl-comment-thread .odl-reaction[aria-pressed="true"] { border-color: var(--ds-color-border-accent); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); }
+.odl-comment-thread .odl-replies { margin-block-start: var(--ds-space-stack-sm); padding: var(--ds-space-inset-sm); border-radius: var(--ds-radius-nested); background: var(--ds-color-surface-sunken);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-comment-thread .odl-resolved { display: flex; align-items: center; gap: var(--ds-space-inline-xs); margin: 0 0 var(--ds-space-stack-sm); color: var(--ds-color-text-success); font: var(--ds-text-label-md); }
+.odl-comment-thread .odl-replies .odl-comment { grid-template-columns: var(--ds-size-icon-lg) minmax(0, 1fr); }
+.odl-comment-thread .odl-replies .odl-avatar { inline-size: var(--ds-size-icon-lg); block-size: var(--ds-size-icon-lg); }
+.odl-comment-thread .odl-replies .odl-meta { min-block-size: var(--ds-size-icon-lg); }
+.odl-comment-thread .is-resolved .odl-body > p { color: var(--ds-color-text-secondary); }
+.odl-comment-thread form { display: grid; grid-template-columns: var(--ds-size-control-sm) minmax(0, 1fr); gap: var(--ds-space-inline-sm); padding-block-start: var(--ds-space-stack-md);
+  border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-comment-thread .odl-box { display: grid; min-inline-size: 0; border: var(--ds-border-width-default) solid var(--ds-color-border-input); border-radius: var(--ds-radius-nested); background: var(--ds-color-bg-field); }
+.odl-comment-thread .odl-box:focus-within { border-color: var(--ds-color-border-focus); box-shadow: 0 0 0 var(--ds-border-width-default) var(--ds-color-border-focus); }
+.odl-comment-thread textarea { resize: none; field-sizing: content; min-block-size: var(--ds-size-row-two-line); max-block-size: 12rem; padding: var(--ds-space-inset-xs) var(--ds-space-inset-sm); border: 0; background: transparent;
+  color: var(--ds-color-text-primary); font: var(--ds-text-body-md); outline: none; }
+.odl-comment-thread textarea::placeholder { color: var(--ds-color-text-tertiary); }
+.odl-comment-thread .odl-bar { display: flex; align-items: center; gap: var(--ds-space-inline-xs); padding: 0 var(--ds-space-4) var(--ds-space-4) var(--ds-space-4); }
+.odl-comment-thread .odl-bar .odl-spacer { flex: 1; }
+.odl-comment-thread .odl-bar small { color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); }
+.odl-comment-thread .odl-send { min-block-size: var(--ds-size-control-sm); padding: 0 var(--ds-space-inset-sm); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); }
+.odl-comment-thread .odl-send:hover { background: var(--ds-color-bg-action-primary-hover); color: var(--ds-color-text-on-action); }
+.odl-comment-thread .odl-send:disabled { background: var(--ds-color-bg-disabled); color: var(--ds-color-text-disabled); cursor: not-allowed; }
+@container (max-width: 400px) { .odl-comment-thread .odl-bar small { display: none; } }
+/* Phone: the composer takes the full width (the avatar beside it only repeats who you are). */
+@container (max-width: 26rem) {
+  .odl-comment-thread form { grid-template-columns: minmax(0, 1fr); }
+  .odl-comment-thread form > .odl-avatar { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .odl-comment-thread, .odl-comment-thread *, .odl-comment-thread *::before { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-comment-thread" aria-labelledby="odl-ct-title">
+  <div class="odl-head"><h3 id="odl-ct-title">Comments <span>3</span></h3><p>TFB-118204 · $7,418.60</p></div>
+  <ol>
+    <li class="odl-comment">
+      <span class="odl-avatar" aria-hidden="true">NI</span>
+      <div class="odl-body">
+        <div class="odl-meta"><strong>Nandini Iyer</strong><time datetime="2026-10-09T16:12">Oct 9, 4:12 PM</time></div>
+        <p>This one is $612 higher than September. <span class="odl-mention">@Bettina Marangoni</span> can you check the fuel line before it goes to the CFO?</p>
+        <div class="odl-tools">
+          <button type="button" class="odl-reaction" aria-pressed="false" aria-label="Thumbs up, 1 reaction"><span aria-hidden="true">👍</span> 1</button>
+          <button type="button">Reply</button>
+        </div>
+        <div class="odl-replies is-resolved">
+          <p class="odl-resolved"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="m5.5 8.25 1.75 1.75 3.25-3.5"/></svg>Resolved by Bettina Marangoni · Oct 10</p>
+          <ol>
+            <li class="odl-comment">
+              <span class="odl-avatar is-b" aria-hidden="true">BM</span>
+              <div class="odl-body">
+                <div class="odl-meta"><strong>Bettina Marangoni</strong><time datetime="2026-10-10T09:03">Oct 10, 9:03 AM</time></div>
+                <p>Includes the fuel surcharge we agreed on Sep 2. Fine to pay.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </li>
+    <li class="odl-comment">
+      <span class="odl-avatar is-c" aria-hidden="true">KA</span>
+      <div class="odl-body">
+        <div class="odl-meta"><strong>Kwabena Asante</strong><span class="odl-when"><time datetime="2026-10-14T11:40">Oct 14, 11:40 AM</time> <span class="odl-edited">· edited</span></span></div>
+        <p>Approving today so it makes the Oct 20 ACH run. Next month let's get the surcharge on the PO.</p>
+        <div class="odl-tools">
+          <button type="button" class="odl-reaction" aria-pressed="true" aria-label="Thumbs up, 2 reactions, including yours"><span aria-hidden="true">👍</span> 2</button>
+          <button type="button" class="odl-reaction" aria-label="Add a reaction"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M5.75 9.5a2.75 2.75 0 0 0 4.5 0M6 6.5v.25M10 6.5v.25"/></svg></button>
+          <button type="button">Reply</button>
+        </div>
+      </div>
+    </li>
+  </ol>
+  <form>
+    <span class="odl-avatar is-c" aria-hidden="true">KA</span>
+    <div class="odl-box">
+      <textarea id="odl-ct-input" rows="2" aria-label="Write a comment" placeholder="Comment, or @mention a teammate"></textarea>
+      <div class="odl-bar">
+        <button type="button" aria-label="Mention someone"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="2.5"/><path d="M10.5 8v1a1.75 1.75 0 0 0 3.5 0V8a6 6 0 1 0-2.5 4.9"/></svg></button>
+        <button type="button" aria-label="Attach a file"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m13 7.5-5 5a3 3 0 0 1-4.25-4.25l5.5-5.5a2 2 0 0 1 2.8 2.8L6.6 11a1 1 0 0 1-1.4-1.4l4.8-4.85"/></svg></button>
+        <span class="odl-spacer"></span><small>⌘ ↵ to send</small>
+        <button type="submit" class="odl-send" disabled>Comment</button>
+      </div>
+    </div>
+  </form>
+</section>
+<script>
+document.querySelectorAll(".odl-comment-thread").forEach((root) => {
+  const input = root.querySelector("textarea"), send = root.querySelector(".odl-send"), form = root.querySelector("form");
+  input.addEventListener("input", () => { send.disabled = !input.value.trim(); });
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && !send.disabled) { e.preventDefault(); form.requestSubmit(); } });
+  form.addEventListener("submit", (e) => { e.preventDefault(); input.value = ""; send.disabled = true; });
+  root.querySelectorAll('.odl-reaction[aria-pressed]').forEach((b) => b.addEventListener("click", () => {
+    const on = b.getAttribute("aria-pressed") !== "true", label = b.lastChild, n = parseInt(label.textContent, 10) + (on ? 1 : -1);
+    b.setAttribute("aria-pressed", on ? "true" : "false"); label.textContent = " " + n;
+    b.setAttribute("aria-label", "Thumbs up, " + n + (n === 1 ? " reaction" : " reactions") + (on ? ", including yours" : ""));
+  }));
+});
+</script>

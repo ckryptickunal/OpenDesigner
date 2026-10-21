@@ -16,8 +16,8 @@
 
 /* the rubber stamp on the rules card (the card lets it hang over its corner) */
 .hh-file { overflow: visible; position: relative; }
-.hh-file > .fig-card-h { border-radius: var(--r-card) var(--r-card) 0 0; }
-.hh-file > .fig-card-f { border-radius: 0 0 var(--r-card) var(--r-card); }
+.hh-file > .fig-card-h { border-radius: calc(var(--card-r) - 1px) calc(var(--card-r) - 1px) 0 0; }
+.hh-file > .fig-card-f { border-radius: 0 0 calc(var(--card-r) - 1px) calc(var(--card-r) - 1px); }
 .a-stamp { --r: -5deg; position: absolute; z-index: 3; right: -20px; bottom: -30px; width: 84px; height: 84px; }
 @media (max-width: 1100px) { .a-stamp { display: none; } }
 

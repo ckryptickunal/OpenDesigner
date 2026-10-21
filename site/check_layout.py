@@ -38,6 +38,12 @@ GALLERIES = [".pieces", ".ex-grid", ".bento"]  # named in a partly filled last r
 SCROLL_OK = [".prose .code pre", ".prose .table-wrap", ".sl-track", ".filters"]  # may scroll sideways on purpose (a carousel; tag filters on phones)
 STUCK_OK = [".sticker", ".piece-stuck", ".a-stamp", ".a-rstamp"]  # sit on corners on purpose: never an overlap
 MARKS_OK = [".a-call", ".a-dim", ".a-crop", ".a-reg", ".a-stamp"]  # proof marks drawn outside a box on purpose: their text may pass its edge
+# Scaled previews (the component library): a live component laid out at its design width and zoomed down to a card, an aisle
+# tile or a device frame. Zoom makes their boxes unmeasurable here, and an aisle tile crops on purpose. They are checked
+# unscaled instead, one component per page at every width (skills/opendesigner/scripts/library.py check, site/library_layout.py).
+PREVIEWS = [".lib-fit", ".part-frame", ".aisle-prev"]
+# Illustrations of a mistake on purpose: the "Don't" side of a do and don't figure shows drifting corners. Check 14 skips them.
+NESTED_OK = [".dont"]
 
 HINTS = {
     "page-overflow": "something is wider than the screen: let it wrap or shrink (max-width: 100%, min-width: 0), or scroll it in its own box",
@@ -56,6 +62,7 @@ HINTS = {
     "label-break": "a label, chip or tag broke across lines (sometimes inside a word): keep it on one line (white-space: nowrap) and let its row wrap instead",
     "actions": "opposite actions belong on one row, the secondary on the left and the primary on the right, as far apart as the row allows",
     "text-left": "text blocks that sit one under another should start on one left edge: look for an auto or leftover margin, or an indent",
+    "nested-radius": "a rounded box close inside a rounded box: its radius should be the outer radius minus the gap between them, so the curves run parallel (set it with calc(outer - gap), and resolve the outer value on the outer element)",
     "widow": "the last line holds a single word: balance the text (text-wrap: balance for headings and short centred lines, pretty for paragraphs), or reword",
 }
 
@@ -65,7 +72,7 @@ MEASURE = r"""(cfg) => {
   const css = new Map(), cs = el => { if (!css.has(el)) css.set(el, getComputedStyle(el)); return css.get(el); };
   const rect = r => [Math.round(r.left + sx), Math.round(r.top + sy), Math.round(r.width), Math.round(r.height)];
   const px = v => Math.round(v * 10) / 10;
-  const seen = el => el.checkVisibility({ visibilityProperty: true, opacityProperty: true }) && R(el).width > 0 && R(el).height > 0;
+  const seen = el => !el.closest(any(cfg.previews)) && el.checkVisibility({ visibilityProperty: true, opacityProperty: true }) && R(el).width > 0 && R(el).height > 0;
   const name = el => {
     let s = el.tagName.toLowerCase();
     if (el.id) return s + "#" + el.id;
@@ -344,6 +351,30 @@ MEASURE = r"""(cfg) => {
     if (new Set(bs.map(b => Math.round(b.top))).size > 1) add("actions", "error", row, `${bs.length} actions on ${new Set(bs.map(b => Math.round(b.top))).size} rows`, bs);
     else if (prim >= 0 && prim !== bs.length - 1) add("actions", "error", row, "the primary action is not on the right", bs);
   }
+  // 14. nested corners (owner, 2026-10-21: "this issue is everywhere"): a rounded box set close inside a rounded box takes the
+  //     outer radius minus the gap between their edges (inner = outer - gap, within 2 px), so the two curves run parallel. Only
+  //     where the box sits evenly in the corner (both gaps within 2 px) and the gap is smaller than the outer radius; pills and
+  //     circles, whose radius comes from their size, are left out.
+  {
+    const rad = e => parseFloat(cs(e).borderTopLeftRadius) || 0;
+    const drawn = e => { const s = cs(e); return parseFloat(s.borderTopWidth) > 0 || !/rgba\(0, 0, 0, 0\)|transparent/.test(s.backgroundColor) || s.backgroundImage !== "none" || s.boxShadow !== "none"; };
+    const pill = (e, b) => rad(e) >= Math.min(b.width, b.height) / 2 - 1;
+    for (const inner of all) {
+      const ri = rad(inner), bi = R(inner);
+      if (ri <= 0 || inner.closest(any(cfg.nestedOk)) || !drawn(inner) || bi.width < 24 || bi.height < 24 || pill(inner, bi)) continue;
+      let outer = inner.parentElement;
+      while (outer && outer !== document.body && !(rad(outer) >= 6 && drawn(outer))) outer = outer.parentElement;
+      if (!outer || outer === document.body || !seen(outer)) continue;
+      const bo = R(outer), ro = rad(outer);
+      if (pill(outer, bo)) continue;
+      const dx = bi.left - bo.left, dy = bi.top - bo.top;
+      if (dx < 0 || dy < 0 || Math.abs(dx - dy) > 2) continue;
+      const gap = (dx + dy) / 2;
+      if (gap >= ro) continue;
+      const want = ro - gap;
+      if (Math.abs(ri - want) > 2) add("nested-radius", "error", inner, `radius ${px(ri)} px inside a ${px(ro)} px corner ${px(gap)} px away: it should be ${px(want)} px (outer minus the gap)`, [bo, bi]);
+    }
+  }
   return out;
 }"""
 
@@ -415,7 +446,7 @@ def main():
     for old in shots.glob("layout-*.png"):
         old.unlink()
     figs = figure_names()
-    cfg = {"cards": CARDS, "notCards": NOT_CARDS, "panels": PANELS, "galleries": GALLERIES, "scrollOk": SCROLL_OK, "stuckOk": STUCK_OK, "marksOk": MARKS_OK}
+    cfg = {"cards": CARDS, "notCards": NOT_CARDS, "panels": PANELS, "galleries": GALLERIES, "scrollOk": SCROLL_OK, "stuckOk": STUCK_OK, "marksOk": MARKS_OK, "previews": PREVIEWS, "nestedOk": NESTED_OK}
     errors = warnings = 0
     with sync_playwright() as p:
         browser = p.chromium.launch(channel="chrome")
