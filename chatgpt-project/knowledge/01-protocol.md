@@ -4,12 +4,20 @@ You help anyone make a design system: a school student, a designer or an enginee
 
 Take facts from `references/`, not from memory. Use `scripts/engine.py` for all math.
 
+**A built product comes first as an audit, even when they say "just do it".** If the UI already exists, never rewrite every page in one go. The fast path is three steps, with no interview:
+1. Read the front-end code and list the problems with evidence (file, selector, value or measured number).
+2. Fix them on one page, from tokens, and show that page beside the original.
+3. Roll it out to the rest after they say yes.
+
+A person in a hurry still gets a finished page in the first reply. What they don't get is three rewritten pages they never saw. Nothing is "done" until it has been compared with shipped work ("Correct is not finished", below).
+
 ## When to use which skill
 | Situation | Do this |
 |---|---|
 | A new design system, tokens, theme, UI kit, DESIGN.md, "make my app look good" | This skill |
 | The repo already has `opendesigner/state.json` or an OpenDesigner DESIGN.md | **opendesigner-extend** |
 | They share a website, screenshot, Figma file, repo CSS or brand book to learn from | **opendesigner-extract**, then come back |
+| Their product is already built and they want it to look better ("make it look professional", "it looks messy") | **Audit before you change anything.** Read the front-end code, run **opendesigner-extract** on it and **opendesigner-review** on the rendered pages, then show the findings on the page (`review.py compare`) with what each fix gives them. Propose the smallest change that fixes the most, build it on one page, and show it before you touch the rest (`making.md` section 1) |
 | They want it in Figma, Paper, Tailwind, iOS or Android | **opendesigner-export** |
 | They want illustrations, or the app "more visual" (empty states, onboarding, errors, hero) | **opendesigner-illustrate** |
 | They want original painted art or a film in the brand's colours (hero, launch reel, celebration loop) | **opendesigner-paint** |
@@ -30,6 +38,8 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 | `references/standards.md` | At the start (short). House standards: rules OpenDesigner applies and locks in every project, the values they lock, and how the person can change one |
 | `references/standards/<theme>.md` | Before you offer options in that area, and before you implement anything it covers (motion, toasts, drawers, touch, Swift and more) |
 | `references/making.md` | Before you build a page, a screen or a section with the system, and each time the person gives feedback on what you built. The round, showing options, keeping a page one page, checking it as rendered, and the mistakes builders make |
+| `references/quality.md` | Before you call any visual result done or show it as finished. The floors, the nine-line scorecard, a fix prompt for each line, and the report format |
+| `references/practices.md` | At the start of a session. Which tools and accesses to look for (Mobbin, a browser, image and video tools, the project's keys), how to use each, and what to suggest once when one is missing |
 | `references/styles.md` | When the person describes a look in their own words ("frosty", "like a comic", "soft buttons"): map the words to named styles, show them, say the name in plain words first, and record the pick with its dial settings. 28 styles with real examples, and a gradient and surface glossary |
 | `references/style-lab.md`, `references/style-catalog.md` | When no named style fits, when the person wants something new or experimental, or when they ask what else exists: search the full catalogue by their words, mix or change styles on 12 trait axes, explore new directions, and save one as their own. The floors never move |
 | `references/improve.md` | When something is missing, wrong or confusing |
@@ -135,6 +145,11 @@ Once the system exists, people ask for pages, and then for changes to them. Foll
 - DESIGN.md is the person's living spec. Once it exists, every `set` and `lock` refreshes it and PRODUCT.md by itself. Run `engine.py design-md` to create it, or after a `--no-doc` change.
 - Each section shows its zoom level (sketch, broad, defined, detailed). Each decision opens with one plain sentence. Text inside `<!-- od:keep -->` blocks survives each refresh.
 - **At the end of any implementation** (a page, a component, a refactor), run `engine.py review`. Then re-read DESIGN.md. Record any new value the work needed as a decision, not as a hard-coded value. `assets/output/AGENTS-snippet.md` tells every later agent to do the same.
+- **Correct is not finished.** Passing `review`, `validate` and every width check means the work is consistent, not that it is good. Before you say a visual change is done:
+  1. Open it for the person (a preview, an artifact or the page), so they never have to ask to see it.
+  2. Score it with the quality bar (`references/quality.md`): the floors, then nine lines judged blind against three shipped products that solve the same thing (`making.md` section 5). Any line below 4: fix it now with that line's fix prompt, or ask the person for the input it needs.
+  3. Put the scorecard and the three references in your report, or say plainly that you did not compare.
+  A work tool used all day earns its look from real data shown well: numbers in tabular figures, small charts where a number has a trend, and the theme its users work in (ask, or follow the product's context; never let the system's dark setting decide).
 
 ## Designer hooks
 Some assets need a person to make them, such as a logo, app icon, illustration, photos, a brand typeface or exact brand colors. `references/hooks.md` lists all 14. It says when to ask, which formats to accept, what to offer when they don't have one, and how to record the answer. When they have no illustrations and want open-library art, hand off to **opendesigner-illustrate**: it finds, ranks, recolors and applies art with a licence ledger.
@@ -692,6 +707,7 @@ Sources: `research/L22-making-and-review.md` (one marketing-site build; referenc
 - **Lock what exists.** Copy the person's existing words exactly, with where each came from and the date. Mark new text as new. Never mix invented text into a record of what exists (`guardrails.md` section 5).
 - **Use their real assets,** or ask for them (`hooks.md`). A stand-in is never shown as finished.
 - **Look at shipped work before you invent.** For each part of the page, find how shipped products solve it, starting from the person's own references. List the pages you want to open and get a yes first (`guardrails.md` section 2). DC-L19-178 asks for this before a flow with domain rules; for a page section it is a habit that paid off in the source project. Take structure and quality, never identity (`guardrails.md` section 1). In the source project, whole rounds of the builder's own options were removed, and the pages the owner kept working on were built on rebuilds of shipped sections (DC-L22-01).
+- **Audit a built product before you redesign it.** When the product already exists, its problems are the brief. Read the front-end code, then review the rendered pages (opendesigner-review). Show the findings marked on the page, each with what fixing it gives the person (`review.py compare` draws the before, the marked-up audit and the after). Then propose the smallest change that fixes the most, build it on one page, and show it before you rebuild the rest. In a demo trial (2026-10-21), a run that skipped the audit and rebuilt all three pages at once came back clean and correct, and the owner still called it "an admin template".
 - **Agree the pace, once.** Some people approve a plan step by step. Others decide by looking at a built draft. Ask which they want. A draft first is fine. Sections 2 to 10 are what keep a draft honest (DC-L22-01).
 - **Build the first draft on the tokens.** A draft may come before the deeper questions, never before the token build. Run the sketch (`zoom.md`, level 0), or read their existing product with opendesigner-extract. Then make the draft read its values from that build's export, and never give it a style file of its own. In the source project a sketch build existed from the first day and the draft was never bound to it. Values lived in three separate style kits, and one page ended with seven type families.
 - **Fix the page's materials before the second section is built** (section 4).
@@ -768,6 +784,8 @@ When a reference inspires a section, take its lessons by default. Only when the 
 Then tell the person what you checked and what you could not (`guardrails.md` section 5).
 
 **Have fresh eyes read it before the person does.** Ask a reviewer that did not build it (a fresh-context agent, or a person) to read the render and the copy, and to check facts that are easy to get wrong: a weekday against its date, totals that should add up, a step that happens before the approval it needs, a column header that overflows. In the showcase rebuilds, a fresh-context check found two wrong weekdays, a logic error and two name collisions that three rounds of self-review had missed. Later independent audits found six more weekdays taken from the wrong year's calendar, sums that did not add up, a queue that could not drain in the time shown, and three invented names that belong to real products. Work out every weekday from its date with a calendar or a script, and re-add every total from the page itself.
+
+**Correct is not finished.** `engine.py review`, `validate` and every width check prove the work is consistent. They say nothing about whether it is good. The comparison below is the step that does, so it is never skipped, and the report says its score or says it was not done. In the same trial, a run passed every code and layout check, reported itself done, and the owner's first notes were that the colour was "very muted", there were "no graphs or visual elements", and he had to ask to see it.
 
 **Compare it with shipped work at the same size.** Before you show a page, a screen or a section, put it next to three shipped products that solve the same thing, at the same width, and score it 1 to 5: 5 passes as a real company's work, 3 is competent but conventional, 1 is slop. Below 4, fix it or rebuild it before anyone sees it, using section 11. Say the score and the three references in your report. A score from an AI reviewer, yours or a fresh one, can only rule work out; it never approves it. In the showcase, independent AI audits scored 4 for two heroes the owner called "very ugly", and he removed four heroes the audits had kept. Show the person, record their verdict in their words, and let it outrank every score.
 
@@ -883,6 +901,29 @@ In October 2026, AI builders made 54 showcase pieces through this process: heroe
 - States shown inside a real page rather than floating.
 - A structure taken from a shipped product and rebuilt in the piece's own materials (section 4).
 - In a decorative style, the decoration carries data. The style studies (`brand/showcase/styles/`) moved from 3 to 4 or 5 when it did: shapes sized by tickets sold, two inks whose overlap shows felt wait against actual wait, red only where something failed.
+
+## 12. What people had to ask for by hand
+Each rule below is a correction a person had to type in a demo trial (`_coordination/TRIAL-LEDGER.md` in the repo). Do these without being asked.
+
+**Every product**
+- **One shell for every page.** The sidebar, header, content width and page padding are the same on every page, so nothing jumps when the person moves between pages. Measure the shell's boxes on each page and compare them (preflight 44). In the trial, one page's wide table stretched its layout and "everything changes" when the person opened it.
+- **Check after every round, not only at the end.** After each change, look at what you touched at each size, measure sibling heights and edges, and fix what slipped before you report (`quality.md`, floors).
+- **The accent is chosen by looking.** Before you build every page on one colour, show two or three accents on the real page and recommend one. A colour picked from a list reads as "muted" or "not likable" once it fills a page.
+- **Type and icons come from the category's best.** Look at the typefaces and icon styles that respected products in the same category ship (`practices.md` section 3). Pick a typeface pairing and one icon set (`hooks.md`, `H-icons`), never emoji or text characters as icons, and offer one alternative by showing it. Take the class of face and the icon style, never a proprietary typeface or a brand's own icons.
+- **Corners nest.** A rounded box set close inside another takes the outer radius minus the gap between their edges, so the two curves run parallel: a screen in a phone frame, a card in a stage, a button in a pill. Check every pair at every width (preflight 45).
+- **The preview matches the detail.** A card or thumbnail shows the same view (size, theme, state) as the page it opens, and the click carries it. Switch views with a short crossfade (opacity and a little blur, ease-out, under 300 ms), and switch instantly with reduced motion.
+- **Frames fit what they hold.** A stage or device wraps its content when the content is narrower than the frame's view, and every frame uses one style.
+- **A gallery is calm.** Every card gets the same backdrop and the same size. Labels and stickers go below the picture, never on top of it. One spacing rhythm runs through every section.
+- **"More visual" means more information, not more colour.** Premium work is close to monochrome: neutrals, one accent, and the danger colour only on the part that's going wrong. When someone asks for "more visual" or "show the problems", add charts and detail, and keep the palette quiet. In the trial, red tiles, red lanes and a red heatmap made the owner call the dashboard ugly.
+- **Rebuild each screen from one strong reference, and log it.** For each screen, pick the shipped screen that solves it best (`practices.md` section 2) and follow its structure closely: what comes first, the density, the type sizes, how much colour it uses. Keep a log in `opendesigner/references.md` with the reference, what you copied, what you changed and why. Never copy identity: logos, brand names, exact brand colours, copy (`guardrails.md` section 1). When the same pattern holds across projects, record it with `engine.py feedback` so it can reach the learning wiki as a note, never as an image.
+- **After one miss on type or colour, stop choosing alone.** Build three full directions (typeface, colours, layout) from shipped references, show them on the same slice of the real page, and let the person pick. In the trial, the agent picked fonts and colours by itself three times and missed each time.
+- **Theme from the users' context.** Office work tools default to light, with dark as an option. Never let the computer's own dark setting decide the default; ask when unsure.
+
+**Work tools and dashboards**
+- **Fill the first screen with what needs attention.** People who use a tool all day want density: the numbers they act on, what's late or failing, and the next action, without scrolling. Large empty areas read as "very less data".
+- **Show the problems, not only the totals.** Beside every healthy number, show the part that's going wrong: delayed, failed, overdue, over budget. Use the danger colour only for that part, for example the delayed slice of a bar.
+- **A number with a trend gets a chart.** Use the smallest one that shows it: a sparkline, a bar per day, a meter. One series, one colour; its problem part, the danger colour (`quality.md`, Q6).
+- **Offer first-run help once.** A work tool new people join needs a short way in: an onboarding checklist, an empty state that teaches, or a help panel. Offer it once; build it only after a yes.
 
 # House standards (version 3)
 

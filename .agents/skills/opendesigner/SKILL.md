@@ -1,6 +1,6 @@
 ---
 name: opendesigner
-description: Builds a design system with you, one decision at a time, with visual options. Writes DTCG tokens, CSS, DESIGN.md. Use for design tokens, themes, UI kits, brand-to-UI, or "make my app look good".
+description: Builds or fixes a product's design system, one decision at a time. Use to redesign a built UI ("make it look professional", "it looks messy") or for tokens, themes, UI kits, DESIGN.md.
 license: MIT
 compatibility: Python 3.10+ for scripts (standard library only, no network). Works in text-only hosts; visual steps use HTML templates when the host can show them.
 metadata:
@@ -14,12 +14,20 @@ You help anyone make a design system: a school student, a designer or an enginee
 
 Take facts from `references/`, not from memory. Use `scripts/engine.py` for all math.
 
+**A built product comes first as an audit, even when they say "just do it".** If the UI already exists, never rewrite every page in one go. The fast path is three steps, with no interview:
+1. Read the front-end code and list the problems with evidence (file, selector, value or measured number).
+2. Fix them on one page, from tokens, and show that page beside the original.
+3. Roll it out to the rest after they say yes.
+
+A person in a hurry still gets a finished page in the first reply. What they don't get is three rewritten pages they never saw. Nothing is "done" until it has been compared with shipped work ("Correct is not finished", below).
+
 ## When to use which skill
 | Situation | Do this |
 |---|---|
 | A new design system, tokens, theme, UI kit, DESIGN.md, "make my app look good" | This skill |
 | The repo already has `opendesigner/state.json` or an OpenDesigner DESIGN.md | **opendesigner-extend** |
 | They share a website, screenshot, Figma file, repo CSS or brand book to learn from | **opendesigner-extract**, then come back |
+| Their product is already built and they want it to look better ("make it look professional", "it looks messy") | **Audit before you change anything.** Read the front-end code, run **opendesigner-extract** on it and **opendesigner-review** on the rendered pages, then show the findings on the page (`review.py compare`) with what each fix gives them. Propose the smallest change that fixes the most, build it on one page, and show it before you touch the rest (`making.md` section 1) |
 | They want it in Figma, Paper, Tailwind, iOS or Android | **opendesigner-export** |
 | They want illustrations, or the app "more visual" (empty states, onboarding, errors, hero) | **opendesigner-illustrate** |
 | They want original painted art or a film in the brand's colours (hero, launch reel, celebration loop) | **opendesigner-paint** |
@@ -40,6 +48,8 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 | `references/standards.md` | At the start (short). House standards: rules OpenDesigner applies and locks in every project, the values they lock, and how the person can change one |
 | `references/standards/<theme>.md` | Before you offer options in that area, and before you implement anything it covers (motion, toasts, drawers, touch, Swift and more) |
 | `references/making.md` | Before you build a page, a screen or a section with the system, and each time the person gives feedback on what you built. The round, showing options, keeping a page one page, checking it as rendered, and the mistakes builders make |
+| `references/quality.md` | Before you call any visual result done or show it as finished. The floors, the nine-line scorecard, a fix prompt for each line, and the report format |
+| `references/practices.md` | At the start of a session. Which tools and accesses to look for (Mobbin, a browser, image and video tools, the project's keys), how to use each, and what to suggest once when one is missing |
 | `references/styles.md` | When the person describes a look in their own words ("frosty", "like a comic", "soft buttons"): map the words to named styles, show them, say the name in plain words first, and record the pick with its dial settings. 28 styles with real examples, and a gradient and surface glossary |
 | `references/style-lab.md`, `references/style-catalog.md` | When no named style fits, when the person wants something new or experimental, or when they ask what else exists: search the full catalogue by their words, mix or change styles on 12 trait axes, explore new directions, and save one as their own. The floors never move |
 | `references/improve.md` | When something is missing, wrong or confusing |
@@ -145,6 +155,11 @@ Once the system exists, people ask for pages, and then for changes to them. Foll
 - DESIGN.md is the person's living spec. Once it exists, every `set` and `lock` refreshes it and PRODUCT.md by itself. Run `engine.py design-md` to create it, or after a `--no-doc` change.
 - Each section shows its zoom level (sketch, broad, defined, detailed). Each decision opens with one plain sentence. Text inside `<!-- od:keep -->` blocks survives each refresh.
 - **At the end of any implementation** (a page, a component, a refactor), run `engine.py review`. Then re-read DESIGN.md. Record any new value the work needed as a decision, not as a hard-coded value. `assets/output/AGENTS-snippet.md` tells every later agent to do the same.
+- **Correct is not finished.** Passing `review`, `validate` and every width check means the work is consistent, not that it is good. Before you say a visual change is done:
+  1. Open it for the person (a preview, an artifact or the page), so they never have to ask to see it.
+  2. Score it with the quality bar (`references/quality.md`): the floors, then nine lines judged blind against three shipped products that solve the same thing (`making.md` section 5). Any line below 4: fix it now with that line's fix prompt, or ask the person for the input it needs.
+  3. Put the scorecard and the three references in your report, or say plainly that you did not compare.
+  A work tool used all day earns its look from real data shown well: numbers in tabular figures, small charts where a number has a trend, and the theme its users work in (ask, or follow the product's context; never let the system's dark setting decide).
 
 ## Designer hooks
 Some assets need a person to make them, such as a logo, app icon, illustration, photos, a brand typeface or exact brand colors. `references/hooks.md` lists all 14. It says when to ask, which formats to accept, what to offer when they don't have one, and how to record the answer. When they have no illustrations and want open-library art, hand off to **opendesigner-illustrate**: it finds, ranks, recolors and applies art with a licence ledger.

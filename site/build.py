@@ -1083,13 +1083,13 @@ def doc_page(p, pages):
     toc_html = ('<nav class="toc" aria-label="On this page"><h2 class="side-h kicker">On this page</h2><ul>' + "".join(f'<li><a href="#{a}">{esc(t)}</a></li>' for a, t in toc) + "</ul></nav>") if len(toc) > 1 else ""
     crumb = (f'<nav class="crumb" aria-label="Breadcrumb"><a href="/docs/">Docs</a><span aria-hidden="true">/</span><span>{p["section"]}</span>'
              + (f'<span aria-hidden="true">/</span><span aria-current="page">{esc(p["title"])}</span>' if p["slug"] != "index" else "") + "</nav>")
-    edit = f'{GH}/blob/main/site/docs/{p["slug"]}.md'
+    edit = f'{GH}/edit/main/site/docs/{p["slug"]}.md'
     same = [x for x in pages if x["section"] == p["section"]]
     pos = same.index(p) + 1
     kind = {"Getting started": "lime", "Guides": "", "Concepts": "sky", "Craft": "pink", "Reference": "paper"}.get(p["section"], "paper")
     icon = {"Getting started": "play", "Guides": "compass", "Concepts": "bulb", "Craft": "brush", "Reference": "book"}.get(p["section"], "tag")
     main_html = (f'<div class="doc-grid"><article class="doc">{crumb}<p class="doc-stickers a-doc"><span class="a-card"><span class="a-card-k">{esc(p["section"])}</span><span class="a-card-n">{pos:02d}<small>/{len(same):02d}</small></span></span></p><h1 class="t-h1">{esc(p["title"]).replace("-", NBH)}</h1>'
-                 f'<p class="meta">Updated <time datetime="{p.get("updated", TODAY)}">{p.get("updated", TODAY)}</time> · <a href="{edit}">Edit on GitHub</a></p>'
+                 f'<p class="meta">Updated <time datetime="{p.get("updated", TODAY)}">{p.get("updated", TODAY)}</time> · <a href="{edit}">Suggest a change</a></p>'
                  f'<div class="prose">{content}</div>{pn}</article>{toc_html}</div>')
     ld = [crumbs_ld([("Docs", "/docs/")] + ([] if p["slug"] == "index" else [(p["title"], p["path"])])),
           {"@context": "https://schema.org", "@type": "Article" if p["slug"] == "design-systems" else "TechArticle", "headline": p["title"],

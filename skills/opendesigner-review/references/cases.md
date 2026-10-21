@@ -2,7 +2,7 @@
 
 Generated from `synthesis/review-cases.json` by `tools/build_data.py`. Edit the source, not this file.
 
-65 cases in 7 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
+68 cases in 7 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
 
 ## You only looked at part of it
 
@@ -463,6 +463,28 @@ Sources: S-R5-017, S-R5-015
 
 Sources: S-R5-001, S-R5-002, S-R5-003, S-R5-004, S-R5-005, S-R5-007
 
+### MS-13 The layout jumps between pages
+*How known: measured · default severity: warn · applies to: always*
+
+**What goes wrong.** Each page is reviewed on its own and looks fine, but moving from one page to another shifts the sidebar, the header or the content column, because one page's wide content stretches the layout.
+
+**Why it is missed.** Reviews open one page at a time. A shift only shows when two pages are seen one after the other.
+
+**How to catch it.** At each width, measure the shell on every page: the sidebar's and header's boxes and the content column's left edge and width (getBoundingClientRect, or __od.measure). Compare them page by page; any difference is a finding. Check that wide content, such as a table, scrolls in its own container. In an OpenDesigner demo trial on 2026-10-21, the shipments page's table widened the layout while the dashboard and settings pages matched, and the owner caught it moving between pages.
+
+Sources: S-R5-101
+
+### MS-14 Corners that don't nest
+*How known: measured · default severity: warn · applies to: always*
+
+**What goes wrong.** A rounded box sits close inside another rounded box (a screen in a bezel, a card in a stage) and both use their own radius, so the gap between the curves is thick at the corners and thin on the sides.
+
+**Why it is missed.** Each radius is a valid token on its own; the fault only exists between two elements, and screenshots at a glance hide a few pixels.
+
+**How to catch it.** For every rounded element inside another, closer than the outer radius, read both computed border-radius values and the gap between their edges (__od.measure). The inner radius should be the outer radius minus the gap, within 2 px, at every width.
+
+Sources: S-R5-102
+
 ## It works for a mouse and a good pair of eyes, not for everyone
 
 ### IN-01 Keyboard only
@@ -725,6 +747,17 @@ Sources: S-R5-037, S-R5-038, S-R5-039
 
 Sources: S-R5-007, S-R5-030
 
+### PR-10 Clean, so it must be good
+*How known: operated · default severity: warn · applies to: always*
+
+**What goes wrong.** Every check passes (no hard-coded values, aligned at every width, contrast fine) and the reviewer calls the work done, though it reads as a template: muted colour, plain number boxes, no data shown as data, a placeholder mark.
+
+**Why it is missed.** The checks a reviewer can run measure consistency, not quality. A clean report feels like a verdict, and a reviewer who built the work scores it kindly.
+
+**How to catch it.** Report the checks as what they are: consistency. Then judge quality separately: compare the render blind with three shipped products that solve the same thing, at the same size, and give a score out of 5 with the three named. Below 4, say so as a finding, even when every check passed. In an OpenDesigner demo trial on 2026-10-21, a run passed every code and width check and the owner called it an admin template.
+
+Sources: S-R5-101
+
 ## Sources
 
 | Id | Source | Status |
@@ -829,3 +862,5 @@ Sources: S-R5-007, S-R5-030
 | S-R5-098 | [MDN: font-weight (matching rule)](https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight) | opened: above 500, the browser looks at heavier weights first, so 600 uses a real 700 face when one is loaded |
 | S-R5-099 | [Playwright API: page.emulateMedia](https://playwright.dev/docs/api/class-page#page-emulate-media) | opened: media, colorScheme, reducedMotion, forcedColors, contrast (contrast needs Playwright 1.51 or later) |
 | S-R5-100 | [CSS Font Loading Module (W3C draft)](https://drafts.csswg.org/css-font-loading/) | opened: further fonts may load after document.fonts.ready fulfils |
+| S-R5-101 | [OpenDesigner demo trial 1, owner review (2026-10-21)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: row 25: a run that passed every check was judged an admin template |
+| S-R5-102 | [OpenDesigner owner review of nested corners (2026-10-21)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: row 27: stages, bezels and frames whose corners did not nest |

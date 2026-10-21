@@ -4,7 +4,7 @@ seo_title: Install OpenDesigner in Claude, ChatGPT, Codex or Cursor
 description: How to add OpenDesigner to Claude Code, the Claude app, ChatGPT, Codex, Cursor and other agents, or run its engine with no AI. Which paths are tested so far.
 section: Getting started
 order: 2
-updated: 2026-10-15
+updated: 2026-10-21
 ---
 
 You add OpenDesigner to the AI tool you already use: two commands in Claude Code, or a skills folder, a skill zip or a ChatGPT Project in other tools. After that, open your project and say: **"Create a design system for this project."** There is no account to create.
@@ -21,6 +21,15 @@ Add the repository as a plugin marketplace, then install the plugin:
 /plugin marketplace add ckryptickunal/OpenDesigner
 /plugin install opendesigner@opendesigner
 ```
+
+In the Claude desktop app's Code tab, `/plugin` may not run as a command. Run the same two steps in a terminal instead:
+
+```
+claude plugin marketplace add ckryptickunal/OpenDesigner
+claude plugin install opendesigner@opendesigner
+```
+
+Then start a new session. Skills load when a session starts, so the session you installed from won't see them.
 
 The plugin installs eight skills: opendesigner, opendesigner-extract, opendesigner-extend, opendesigner-export, opendesigner-illustrate, opendesigner-review, opendesigner-paint and opendesigner-preflight.
 
@@ -80,9 +89,9 @@ It writes `DESIGN.md`, `PRODUCT.md` and an `opendesigner/` folder with tokens, e
 
 ## What has been tested so far
 
-OpenDesigner is new, so here is what was checked on 2026-10-14 and what was not.
+OpenDesigner is new, so here is what was checked, and when, and what was not.
 
-- **Claude Code:** the plugin manifest passes Claude Code's own check. An install in a fresh Claude Code session has not been tested yet.
+- **Claude Code:** the plugin manifest passes Claude Code's own check. On 2026-10-21 a demo trial installed it from GitHub with the two terminal commands above, and the skills loaded in a new session. Typing `/plugin` into the desktop app's chat did not run it as a command.
 - **Claude app:** the skill files pass the packaging check. Building the zip, uploading it and a run on claude.ai have not been recorded yet.
 - **Codex, Cursor and other agents:** the eight skill folders are in the public repository. A run in each of these tools has not been recorded yet.
 - **ChatGPT:** the instructions file and the five knowledge files are in the public repository. A run in ChatGPT has not been recorded yet.
