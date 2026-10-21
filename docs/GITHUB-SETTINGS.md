@@ -42,7 +42,7 @@ Compared with 2026-09-23, this drops `mcp` (no MCP server yet, issue #20) and `s
 
 ## Homepage
 
-https://opendesigner.vercel.app, the website built from `site/`. It is already set.
+https://opendesigner.dev, the website built from `site/` (since 2026-10-22; before that https://opendesigner.vercel.app, which now redirects). Update it with the command below.
 
 ## Social preview image
 
@@ -53,7 +53,7 @@ Upload `brand/kit/readme/social-preview.png` (1280x640) under **Settings > Gener
 ```bash
 gh repo edit "$REPO" \
   --description "A free, open-source add-on for Claude, ChatGPT, Codex and Cursor that turns a few plain answers into a design system, so everything you build looks like it belongs together." \
-  --homepage "https://opendesigner.vercel.app" \
+  --homepage "https://opendesigner.dev" \
   --remove-topic ai-design,design-systems,mcp,shadcn-ui,theming \
   --add-topic tailwind,cursor,ai-agents,figma-variables,open-source
 ```

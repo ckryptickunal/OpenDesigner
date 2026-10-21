@@ -23,7 +23,7 @@ from playwright.sync_api import sync_playwright
 
 SITE = pathlib.Path(__file__).resolve().parent
 _url = SITE / "site-url.txt"
-SITE_URL = (_url.read_text().strip() if _url.exists() else "https://opendesigner.vercel.app").rstrip("/")
+SITE_URL = (_url.read_text().strip() if _url.exists() else "https://opendesigner.dev").rstrip("/")
 WIDTHS = [320, 360, 390, 430, 600, 768, 820, 900, 1024, 1180, 1280, 1440, 1920]
 MAX_HEIGHT = 16000  # the viewport grows to the page's height, up to this
 

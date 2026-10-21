@@ -33,7 +33,7 @@ BRAND = ROOT / "brand"
 REPO = "ckryptickunal/OpenDesigner"
 GH = f"https://github.com/{REPO}"
 _url_file = SITE / "site-url.txt"
-SITE_URL = os.environ.get("SITE_URL") or (_url_file.read_text().strip() if _url_file.exists() else "https://opendesigner.vercel.app")
+SITE_URL = os.environ.get("SITE_URL") or (_url_file.read_text().strip() if _url_file.exists() else "https://opendesigner.dev")
 SITE_URL = SITE_URL.rstrip("/")
 TODAY = dt.date.today().isoformat()
 T = json.loads((BRAND / "design-system/project/tokens.json").read_text())
@@ -1104,7 +1104,10 @@ def home(pages, facts, faq):
            "author": {"@type": "Person", "name": "ckryptickunal", "url": "https://github.com/ckryptickunal"}},
           {"@context": "https://schema.org", "@type": "SoftwareSourceCode", "name": NAME, "codeRepository": GH, "programmingLanguage": ["Python", "Markdown"],
            "license": "https://opensource.org/license/mit", "dateModified": facts["pushed"]},
-          {"@context": "https://schema.org", "@type": "WebSite", "name": NAME, "url": SITE_URL + "/", "description": ONE_LINER, "inLanguage": "en"},
+          {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#org", "name": NAME, "url": SITE_URL + "/",
+           "logo": {"@type": "ImageObject", "url": f"{SITE_URL}/apple-touch-icon.png"}, "description": ONE_LINER, "sameAs": [GH]},
+          {"@context": "https://schema.org", "@type": "WebSite", "name": NAME, "url": SITE_URL + "/", "description": ONE_LINER, "inLanguage": "en",
+           "publisher": {"@id": SITE_URL + "/#org"}},
           {"@context": "https://schema.org", "@type": "HowTo", "name": "Make a design system with OpenDesigner in Claude Code", "step": [
               {"@type": "HowToStep", "text": "/plugin marketplace add ckryptickunal/OpenDesigner"},
               {"@type": "HowToStep", "text": "/plugin install opendesigner@opendesigner"},

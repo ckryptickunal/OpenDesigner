@@ -1,6 +1,6 @@
 # Evals
 
-How OpenDesigner tests itself. The results are published on the site at [/docs/evals/](https://opendesigner.vercel.app/docs/evals/), built from the `latest.json` files below, so the page shows the last real run with its date and commit.
+How OpenDesigner tests itself. The results are published on the site at [/docs/evals/](https://opendesigner.dev/docs/evals/), built from the `latest.json` files below, so the page shows the last real run with its date and commit.
 
 | Kind | What it tests | Run it | Cost | Results |
 |---|---|---|---|---|

@@ -39,7 +39,7 @@ What the owner's reviews settled for this site (`_coordination/OWNER-FEEDBACK.md
 
 ## How the site is put together
 
-- **Hosting:** Vercel, project `opendesigner`, at https://opendesigner.vercel.app (the address is in `site-url.txt`). Deploying needs the Vercel CLI, signed in. Each production deploy also pings IndexNow.
+- **Hosting:** Vercel, project `opendesigner`, at https://opendesigner.dev (the address is in `site-url.txt`). The old address, https://opendesigner.vercel.app, redirects there. Deploying needs the Vercel CLI, signed in. Each production deploy also pings IndexNow.
 - **Figures** live in `figures/*.html` and are placed in a docs page with `{{figure:name}}` on its own line (contract: `figures/README.md`).
 - **Showcase** tiles, tags and the lightbox come from `brand/showcase/` and its Mobbin audit files in `brand/showcase/audit/`.
 - **Edit the docs** in `docs/*.md`. Front matter: `title`, `seo_title` (50 to 60 characters), `description` (140 to 160), `section` (Getting started, Guides, Concepts or Reference), `order` and `updated`. Links are root-absolute (`/docs/install/`). Every claim must match the product facts; when in doubt, leave it out.

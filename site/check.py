@@ -16,7 +16,7 @@ import sys
 SITE = pathlib.Path(__file__).resolve().parent
 D = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else SITE / "dist"
 _url = SITE / "site-url.txt"
-SITE_URL = (_url.read_text().strip() if _url.exists() else "https://opendesigner.vercel.app").rstrip("/")
+SITE_URL = (_url.read_text().strip() if _url.exists() else "https://opendesigner.dev").rstrip("/")
 
 
 def main():

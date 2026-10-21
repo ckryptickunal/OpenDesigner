@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://opendesigner.vercel.app">
+  <a href="https://opendesigner.dev">
     <picture>
       <source media="(max-width: 600px)" srcset="https://raw.githubusercontent.com/ckryptickunal/OpenDesigner/main/brand/kit/readme/banner-narrow.png">
       <img src="brand/kit/readme/banner.png" width="1012" alt="OpenDesigner. Make everything you build look like it belongs together. Your AI tools know what to build. OpenDesigner tells them how it should look.">
@@ -8,9 +8,9 @@
 </p>
 
 <p align="center">
-  <a href="https://opendesigner.vercel.app"><b>Website</b></a> &nbsp;·&nbsp;
-  <a href="https://opendesigner.vercel.app/docs/">Docs</a> &nbsp;·&nbsp;
-  <a href="https://opendesigner.vercel.app/showcase/">Showcase</a> &nbsp;·&nbsp;
+  <a href="https://opendesigner.dev"><b>Website</b></a> &nbsp;·&nbsp;
+  <a href="https://opendesigner.dev/docs/">Docs</a> &nbsp;·&nbsp;
+  <a href="https://opendesigner.dev/showcase/">Showcase</a> &nbsp;·&nbsp;
   <a href="#quickstart">Install</a> &nbsp;·&nbsp;
   <a href="CONTRIBUTING.md">Contribute</a> &nbsp;·&nbsp;
   <a href="https://calendar.app.google/42qSQUrBiSL4CHfv6">Book a 20-minute intro call</a>
@@ -83,7 +83,7 @@ python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py sketch --name
 
 </details>
 
-You need your own AI tool and Python 3.10 or newer. The engine makes no network calls; your chat still goes to your AI provider, as with any prompt ([privacy](docs/PRIVACY.md)). Step-by-step help for each tool is in the [install guide](https://opendesigner.vercel.app/docs/install/).
+You need your own AI tool and Python 3.10 or newer. The engine makes no network calls; your chat still goes to your AI provider, as with any prompt ([privacy](docs/PRIVACY.md)). Step-by-step help for each tool is in the [install guide](https://opendesigner.dev/docs/install/).
 
 ## How it works
 
@@ -110,7 +110,7 @@ More: [How it works](docs/HOW-IT-WORKS.md) · [FAQ](docs/FAQ.md) · [Glossary](d
 
 <sub>B2B screens that AI agents built through OpenDesigner, reviewed by the maintainer. Every brand is made up, and much of the identity work was done outside the tokens. Photos: <a href="https://unsplash.com/photos/HVQnG6JxxY0">Photoholgic</a>, <a href="https://unsplash.com/photos/5yKrcO8FKwM">Annie Spratt</a> and <a href="https://unsplash.com/photos/BrzWSKWCuWo">Harshal Tandel</a> on Unsplash.</sub>
 
-See every piece in the [showcase](https://opendesigner.vercel.app/showcase/). Three worked example systems are in [`examples/`](examples/); their `DESIGN.md` files are out of date with the current engine ([#51](https://github.com/ckryptickunal/OpenDesigner/issues/51)).
+See every piece in the [showcase](https://opendesigner.dev/showcase/). Three worked example systems are in [`examples/`](examples/); their `DESIGN.md` files are out of date with the current engine ([#51](https://github.com/ckryptickunal/OpenDesigner/issues/51)).
 
 ## Why trust its advice
 
