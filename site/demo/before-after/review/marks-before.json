@@ -7,16 +7,19 @@
  },
  "page": {
   "w": 1280,
-  "h": 877
+  "h": 905
  },
  "marks": [
   {
    "sel": ".acts",
    "title": "Three filled buttons compete, and white on green reads at 3.3:1",
+   "short": "3 filled buttons, and white on green at 3.3:1",
    "gives": "the next step obvious: one filled button, New invoice, and every label readable",
+   "token": "1 primary action per view",
    "before": "3 filled buttons; 3.3:1 on Send reminders",
    "after": "1 filled button; 6.02:1",
    "finding": "measured contrast (MS-04) and seen",
+   "stat": "3 filled buttons \u2192 1; 3.3:1 \u2192 6.02:1",
    "n": 1,
    "matched": 1,
    "rect": [
@@ -29,15 +32,18 @@
   {
    "sel": "tbody td.muted",
    "title": "Gray text is hard to read",
+   "short": "Gray text at 2.54:1, where it needs 4.5:1",
    "gives": "dates, emails and column titles readable for everyone",
-   "before": "2.54:1 on 36 pieces of text",
+   "token": "color.text.secondary: 7.23:1",
+   "before": "2.54:1 on 40 pieces of text",
    "after": "7.23:1",
    "finding": "measured contrast (MS-04)",
+   "stat": "2.54:1 \u2192 7.23:1",
    "n": 2,
    "matched": 12,
    "rect": [
     468.83,
-    427.5,
+    455.5,
     341.66,
     401.5
    ]
@@ -45,15 +51,18 @@
   {
    "sel": "tbody td:nth-child(5)",
    "title": "Amounts don't line up",
+   "short": "Amounts left-aligned, in digits of uneven width",
    "gives": "amounts quick to compare, right-aligned with digits of equal width",
+   "token": "numbers: tabular, right-aligned",
    "before": "left-aligned, proportional digits",
    "after": "right-aligned, tabular digits",
    "finding": "seen on the page",
+   "stat": "proportional \u2192 tabular digits",
    "n": 3,
    "matched": 6,
    "rect": [
     810.48,
-    427.5,
+    455.5,
     152.83,
     401.5
    ]
@@ -61,15 +70,18 @@
   {
    "sel": "tbody td:nth-child(6)",
    "title": "Status is shown by color alone",
+   "short": "Status shown by color alone",
    "gives": "status clear to everyone, including people who can't tell red from green: each one says Paid, Due or Overdue",
+   "token": "status: a label and an icon",
    "before": "a colored dot",
    "after": "a label and an icon",
    "finding": "seen on the page (WCAG 1.4.1)",
+   "stat": "a dot \u2192 a label and an icon",
    "n": 4,
    "matched": 6,
    "rect": [
     963.31,
-    427.5,
+    455.5,
     121.05,
     401.5
    ]
@@ -77,33 +89,58 @@
   {
    "sel": "tbody td:last-child",
    "title": "Row buttons are small, with vague names",
+   "short": "Row buttons 20 px, named only \"Send\"",
    "gives": "row actions easy to hit, and each button names its invoice for screen readers",
+   "token": "size.target: 32 px",
    "before": "20 x 20 px, \"Send\"",
    "after": "32 x 32 px, \"Send MW-1042\"",
    "finding": "measured target sizes",
+   "stat": "20 px \u2192 32 px",
    "n": 5,
    "matched": 6,
    "rect": [
     1084.36,
-    427.5,
+    455.5,
     123.64,
     401.5
    ]
   },
   {
-   "sel": ".stats",
+   "sel": ".overview .stat",
    "title": "Corners, text sizes and colors are off the system",
+   "short": "Corners, sizes and colors from no system",
    "gives": "the page look like one product: every corner, size and color comes from Merriweft's tokens",
-   "before": "3 corner radii, 4 text sizes and 12 colors off Merriweft's tokens",
+   "token": "radius.container: 8 px",
+   "before": "3 corner radii, 5 text sizes and 12 colors off Merriweft's tokens",
    "after": "none off the tokens",
    "finding": "measured against the tokens (MS-09, MS-02, MS-08)",
+   "stat": "20 values off the tokens \u2192 0",
    "n": 6,
-   "matched": 1,
+   "matched": 3,
    "rect": [
     72,
     186,
-    1136,
-    122
+    765.39,
+    150
+   ]
+  },
+  {
+   "sel": ".chart",
+   "title": "The chart repeats a number and shows no values",
+   "short": "The chart repeats Paid in October, and shows no values",
+   "gives": "one place for each number, and a chart you can read: each week's total against September's average",
+   "token": "one figure, one tile",
+   "before": "$112.5k shown twice; 4 bars, no values, 8 px labels at 1.47:1",
+   "after": "shown once; a value on every bar; 12 px labels at 7.23:1",
+   "finding": "seen on the page, and measured label colors",
+   "stat": "$112.5k twice \u2192 once; no values \u2192 4",
+   "n": 7,
+   "matched": 1,
+   "rect": [
+    857.39,
+    186,
+    350.61,
+    150
    ]
   }
  ]

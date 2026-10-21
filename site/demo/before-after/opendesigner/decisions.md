@@ -369,3 +369,7 @@ Append-only, ADR-style (spec 7.9): one entry per decision, newest last. A later 
 - STD-process-review-taste-65: followed; it sets no values
 - STD-process-review-taste-66: followed; it sets no values
 - STD-process-review-taste-67: followed; it sets no values (DESIGN.md carries it)
+
+## D-0012 · dials.colorfulness = 85
+- set_by: chosen · locked: no · date: 2026-10-21 · supersedes: none · source_ref: none
+- reason: clean, high-contrast status colors: the owner called the muted reds and olives sloppy (2026-10-21)

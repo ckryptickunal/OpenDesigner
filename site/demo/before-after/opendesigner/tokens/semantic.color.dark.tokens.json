@@ -36,6 +36,10 @@
       "nav": {
         "$value": "{color.neutral.dark.2}",
         "$description": "Navigation on the page background."
+      },
+      "tinted": {
+        "$value": "{color.accent.dark.3}",
+        "$description": "Tinted container (Colorfulness 50+, L09 X rubric; Q-color-05)."
       }
     },
     "text": {
@@ -78,6 +82,22 @@
       "on-brand": {
         "$value": "{color.neutral.dark.1}",
         "$description": "Text on color.bg.brand."
+      },
+      "accent2": {
+        "$value": "{color.accent2.dark.11}",
+        "$description": "accent2 text."
+      },
+      "on-accent2": {
+        "$value": "{color.neutral.dark.1}",
+        "$description": "Text on accent2 solid."
+      },
+      "accent3": {
+        "$value": "{color.accent3.dark.11}",
+        "$description": "accent3 text."
+      },
+      "on-accent3": {
+        "$value": "{color.neutral.dark.1}",
+        "$description": "Text on accent3 solid."
       },
       "success": {
         "$value": "{color.success.dark.11}",
@@ -182,6 +202,42 @@
       "brand": {
         "$value": "{color.accent.dark.9}",
         "$description": "Brand fill for signature surfaces; carries text.on-brand (brandAnchor rule, DC-L01-09)."
+      },
+      "accent2": {
+        "subtle": {
+          "$value": "{color.accent2.dark.3}",
+          "$description": "accent2 subtle fill."
+        },
+        "bold": {
+          "$value": "{color.accent2.dark.9}",
+          "$description": "accent2 solid fill."
+        },
+        "bold-hover": {
+          "$value": "{color.accent2.dark.10}",
+          "$description": "Hover: one step, at least 1.15:1 from the solid (DC-L01-17)."
+        },
+        "bold-pressed": {
+          "$value": "{color.accent2.dark.solid-pressed}",
+          "$description": "Pressed: at least 1.3:1 from the solid."
+        }
+      },
+      "accent3": {
+        "subtle": {
+          "$value": "{color.accent3.dark.3}",
+          "$description": "accent3 subtle fill."
+        },
+        "bold": {
+          "$value": "{color.accent3.dark.9}",
+          "$description": "accent3 solid fill."
+        },
+        "bold-hover": {
+          "$value": "{color.accent3.dark.10}",
+          "$description": "Hover: one step, at least 1.15:1 from the solid (DC-L01-17)."
+        },
+        "bold-pressed": {
+          "$value": "{color.accent3.dark.solid-pressed}",
+          "$description": "Pressed: at least 1.3:1 from the solid."
+        }
       },
       "success": {
         "subtle": {

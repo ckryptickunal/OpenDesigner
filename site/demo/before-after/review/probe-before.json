@@ -2,7 +2,7 @@
  "v": 1,
  "url": "file:///Users/Kunal/Desktop/Design-System/site/demo/before-after/before.html",
  "title": "Invoices \u00b7 Merriweft",
- "at": "2026-10-21T14:13:19.160Z",
+ "at": "2026-10-21T15:44:01.450Z",
  "viewport": {
   "w": 1280,
   "h": 800,
@@ -10,7 +10,7 @@
   "innerH": 800,
   "dpr": 2,
   "docW": 1280,
-  "docH": 877,
+  "docH": 905,
   "scale": 1
  },
  "media": {
@@ -29,24 +29,31 @@
   "colorScheme": "normal",
   "hOverflow": 0,
   "rootClipsX": false,
-  "elements": 170,
+  "elements": 192,
   "truncated": false
  },
  "type": {
   "sizes": {
-   "12": {
-    "n": 15,
+   "8": {
+    "n": 4,
     "ex": [
-     "section.stats > div.stat:nth-of-type(1) > span"
+     "div.chart:nth-of-type(4) > svg > text:nth-of-type(1)"
     ],
-    "chars": 214
+    "chars": 16
+   },
+   "12": {
+    "n": 18,
+    "ex": [
+     "section.overview > div.stat:nth-of-type(1) > span:nth-of-type(1)"
+    ],
+    "chars": 274
    },
    "13": {
-    "n": 7,
+    "n": 8,
     "ex": [
-     "section.stats > div.stat:nth-of-type(1) > p"
+     "section.overview > div.stat:nth-of-type(1) > p"
     ],
-    "chars": 50
+    "chars": 70
    },
    "14": {
     "n": 38,
@@ -55,17 +62,17 @@
     ],
     "chars": 456
    },
-   "19": {
+   "18": {
     "n": 1,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ],
     "chars": 9
    },
-   "28": {
+   "26": {
     "n": 3,
     "ex": [
-     "section.stats > div.stat:nth-of-type(1) > strong"
+     "section.overview > div.stat:nth-of-type(1) > strong"
     ],
     "chars": 30
    },
@@ -79,20 +86,20 @@
   },
   "lineHeights": {
    "normal": {
-    "n": 65,
+    "n": 73,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ],
-    "chars": 767
+    "chars": 863
    }
   },
   "weights": {
    "400": {
-    "n": 40,
+    "n": 48,
     "ex": [
      "header.top > nav > a:nth-of-type(1)"
     ],
-    "chars": 518
+    "chars": 614
    },
    "600": {
     "n": 20,
@@ -101,21 +108,28 @@
     ],
     "chars": 202
    },
-   "800": {
-    "n": 5,
+   "700": {
+    "n": 1,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ],
-    "chars": 47
+    "chars": 9
+   },
+   "800": {
+    "n": 4,
+    "ex": [
+     "div.head:nth-of-type(1) > div:nth-of-type(1) > h1"
+    ],
+    "chars": 38
    }
   },
   "families": {
    "system-ui": {
-    "n": 65,
+    "n": 73,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ],
-    "chars": 767
+    "chars": 863
    }
   },
   "letterSpacing": {
@@ -125,7 +139,13 @@
      "thead > tr > th:nth-of-type(1)"
     ]
    },
-   "-0.38": {
+   "-0.26": {
+    "n": 3,
+    "ex": [
+     "section.overview > div.stat:nth-of-type(1) > strong"
+    ]
+   },
+   "-0.36": {
     "n": 1,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
@@ -139,18 +159,18 @@
    }
   },
   "smallest": {
-   "px": 12,
-   "sel": "section.stats > div.stat:nth-of-type(1) > span",
-   "text": "14 invoices"
+   "px": 8,
+   "sel": "div.chart:nth-of-type(4) > svg > text:nth-of-type(1)",
+   "text": "Wk 1"
   },
   "lineHeightTight": [],
   "longLines": [],
-  "textElements": 65
+  "textElements": 73
  },
  "space": {
   "values": {
    "6": {
-    "n": 16,
+    "n": 20,
     "ex": [
      "div.head:nth-of-type(1) > div:nth-of-type(1) > p.sub"
     ]
@@ -162,9 +182,9 @@
     ]
    },
    "8": {
-    "n": 5,
+    "n": 7,
     "ex": [
-     "section.stats > div.stat:nth-of-type(1) > strong"
+     "header.top > span.logo:nth-of-type(1)"
     ]
    },
    "10": {
@@ -180,9 +200,9 @@
     ]
    },
    "14": {
-    "n": 22,
+    "n": 23,
     "ex": [
-     "main > div.chips:nth-of-type(2) > span.chip:nth-of-type(1)"
+     "main > section.overview > div.chart:nth-of-type(4)"
     ]
    },
    "16": {
@@ -192,7 +212,7 @@
     ]
    },
    "18": {
-    "n": 6,
+    "n": 7,
     "ex": [
      "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b1:nth-of-type(1)"
     ]
@@ -200,11 +220,11 @@
    "20": {
     "n": 100,
     "ex": [
-     "main > section.stats"
+     "main > section.overview"
     ]
    },
    "22": {
-    "n": 8,
+    "n": 10,
     "ex": [
      "header.top > nav"
     ]
@@ -212,7 +232,7 @@
    "24": {
     "n": 6,
     "ex": [
-     "main > section.stats > div.stat:nth-of-type(1)"
+     "main > section.overview > div.stat:nth-of-type(1)"
     ]
    },
    "28": {
@@ -245,7 +265,7 @@
      "main"
     ]
    },
-   "462.72": {
+   "436.19": {
     "n": 1,
     "ex": [
      "header.top > input.search"
@@ -288,7 +308,13 @@
   "18": {
    "n": 3,
    "ex": [
-    "main > section.stats > div.stat:nth-of-type(1)"
+    "main > section.overview > div.stat:nth-of-type(1)"
+   ]
+  },
+  "24": {
+   "n": 1,
+   "ex": [
+    "main > section.overview > div.chart:nth-of-type(4)"
    ]
   },
   "999": {
@@ -306,9 +332,9 @@
  },
  "shadows": {
   "rgba(17, 24, 39, 0.08) 0px 10px 30px 0px": {
-   "n": 3,
+   "n": 4,
    "ex": [
-    "main > section.stats > div.stat:nth-of-type(1)"
+    "main > section.overview > div.stat:nth-of-type(1)"
    ]
   },
   "rgba(37, 99, 235, 0.35) 0px 6px 16px 0px": {
@@ -327,15 +353,15 @@
  "colors": {
   "text": {
    "#9ca3af": {
-    "n": 37,
+    "n": 41,
     "ex": [
      "header.top > nav > a:nth-of-type(1)"
     ]
    },
    "#111827": {
-    "n": 23,
+    "n": 28,
     "ex": [
-     "header.top > nav > a.on:nth-of-type(2)"
+     "header.top > span.logo:nth-of-type(1)"
     ]
    },
    "#ffffff": {
@@ -345,9 +371,9 @@
     ]
    },
    "#4f46e5": {
-    "n": 2,
+    "n": 1,
     "ex": [
-     "header.top > span.logo:nth-of-type(1)"
+     "main > div.chips:nth-of-type(2) > span.chip:nth-of-type(1)"
     ]
    }
   },
@@ -359,7 +385,7 @@
     ]
    },
    "#ffffff": {
-    "n": 8,
+    "n": 9,
     "ex": [
      "header.top"
     ]
@@ -429,7 +455,7 @@
   }
  },
  "contrast": {
-  "checked": 10,
+  "checked": 9,
   "failing": [
    {
     "sel": "div.head:nth-of-type(1) > div:nth-of-type(1) > p.sub",
@@ -449,7 +475,7 @@
     "fs": 14,
     "large": false,
     "backdrop": "solid",
-    "n": 36
+    "n": 40
    },
    {
     "sel": "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b2:nth-of-type(2)",
@@ -481,7 +507,7 @@
     "fs": 14,
     "large": false,
     "backdrop": "solid",
-    "n": 36
+    "n": 40
    },
    {
     "sel": "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.b2:nth-of-type(2)",
@@ -618,7 +644,7 @@
   "lazyPending": 0
  },
  "media_counts": {
-  "svg": 12,
+  "svg": 14,
   "canvas": 0,
   "video": 0,
   "iframe": 0,

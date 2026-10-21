@@ -361,14 +361,17 @@
 
 /* Screens on photos (owner, 2026-10-15): every product screen sits in a rounded container with a photo and grain, inside a soft
    glass bezel, like the hero. One component for the real screens, the overview page and the examples. */
-.stage { position: relative; isolation: isolate; overflow: hidden; display: grid; place-items: center; padding: clamp(16px, 4.5%, 56px);
+/* Nested corners (owner, 2026-10-21, "fix it everywhere"): the bezel's radius is the stage's minus the stage padding, and the
+   picture's is the bezel's minus its rim, so each pair of curves runs parallel (site/check_layout.py check 14). The padding is in
+   vw, not %, so it resolves to the same length on the stage and on the bezel inside it. */
+.stage { --stage-pad: clamp(16px, 3vw, 48px); position: relative; isolation: isolate; overflow: hidden; display: grid; place-items: center; padding: var(--stage-pad);
   border-radius: var(--r-panel); background: var(--accent) center / cover no-repeat; }
 .stage::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .26; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"); }
-.stage-in { position: relative; z-index: 2; width: 100%; padding: 6px; border-radius: calc(18px * var(--corner-k, 1)); background: rgb(255 255 255 / .34);
+.stage-in { --rim: 6px; --in-r: max(6px, calc(var(--r-panel) - var(--stage-pad))); position: relative; z-index: 2; width: 100%; padding: var(--rim); border-radius: var(--in-r); background: rgb(255 255 255 / .34);
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / .5), 0 2px 4px rgb(10 14 40 / .12), 0 32px 64px -28px rgb(10 14 40 / .6);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
-.stage-in img, .stage-in picture { display: block; width: 100%; height: auto; border-radius: calc(12px * var(--corner-k, 1)); }
+.stage-in img, .stage-in picture { display: block; width: 100%; height: auto; border-radius: max(2px, calc(var(--in-r) - var(--rim))); }
 @supports (corner-shape: superellipse(1.35)) { .stage, .stage-in, .stage-in img { corner-shape: superellipse(1.35); --corner-k: 1.22; } }
 .shot.staged { margin: 0; }
 .shot.staged figcaption { margin-top: 12px; font-size: 13px; line-height: 20px; color: var(--ink-muted); }
@@ -377,7 +380,7 @@
 .screens { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 .screen { margin: 0; min-width: 0; }
 .screen.big { grid-column: 1 / -1; }
-.screen.big .stage { padding: clamp(16px, 5%, 72px); }
+.screen.big .stage { --stage-pad: clamp(16px, 4vw, 64px); }
 .screen figcaption { display: flex; gap: 8px; align-items: baseline; margin-top: 12px; font-size: 15px; line-height: 22px; letter-spacing: -0.016em; }
 .screen figcaption strong { font-weight: 600; }
 .screen figcaption span { color: var(--ink-muted); }
@@ -482,31 +485,74 @@ body:has(> main.home) :is(.bar-in, .foot-in, .foot-legal) { max-width: 1200px; }
 @media (min-width: 1024px) { #evals .ev-stats[data-n="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .h-more { margin: 20px 0 0; text-align: center; }
 
-/* Before and after (home #before-after): the demo page today, the audit drawn on it, and the fix. The boxes come from
-   site/demo/before-after/review/marks-*.json, measured by probe.js; build.py places them as a share of the page. */
-.ba { --ba-issue: #c8202e; margin-top: 8px; }
-.ba-tabs { justify-content: center; }
-.ba-frame { position: relative; margin-top: 16px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--r-panel); background: #f9fafb; box-shadow: var(--shadow-raised); }
-.ba-panel { position: absolute; inset: 0; }
-.ba-panel[hidden] { display: none; }
-.ba-panel:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -4px; }
-.ba-pg { position: relative; }
-.ba-pg img { display: block; width: 100%; height: auto; }
-.ba-mk { position: absolute; border: 2px dashed var(--ba-issue); border-radius: 4px; box-shadow: 0 0 0 1px rgb(255 255 255 / .9); pointer-events: none; }
-.ba-mk b { position: absolute; top: -11px; left: -11px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ba-issue); color: #fff; font: 600 12px/1 "Hanken Grotesk", system-ui, sans-serif; letter-spacing: 0; box-shadow: 0 0 0 2px #fff; }
-.ba-mk.done { border: 0; box-shadow: none; }
-.ba-mk.done b { background: var(--ok); }
-.ba-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 32px; margin: 28px 0 0; padding: 0; list-style: none; }
-.ba-list li { display: flex; gap: 12px; align-items: flex-start; }
-.ba-n { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--ba-issue); color: #fff; font: 600 12px/1 "Hanken Grotesk", system-ui, sans-serif; letter-spacing: 0; }
-.ba-list h3 { margin: 1px 0 4px; font-size: 16px; line-height: 22px; font-weight: 600; text-wrap: balance; }
-.ba-list p { margin: 0; color: var(--ink-muted); font-size: 15px; line-height: 22px; }
-.ba-list .ba-num { margin-top: 6px; font-size: 14px; line-height: 20px; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
-@media (max-width: 1000px) { .ba-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 640px) {
-  .ba-list { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .ba-mk { border-width: 1.5px; }
-  .ba-mk b { top: -9px; left: -9px; width: 18px; height: 18px; font-size: 11px; }
-  .ba-mk.done { display: none; }  /* at this size the fix's badges would cover what they point to; the list says the same */
+/* The audit as it happens (home #before-after). site.js plays it once in view: a scan finds each issue in the order it
+   meets them, then the fix sweeps down with Merriweft's tokens. Today / Audit / Fixed and Replay stay for manual viewing;
+   with reduced motion it never plays by itself. Motion: transform, opacity and clip-path only. Without the script the
+   audit shows still, and the controls that need it stay hidden. The boxes come from site/demo/before-after/ (capture.py). */
+.au { --au-issue: #c8202e; --au-ok: #12804a; margin-top: 8px; }
+.au-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+.au:not(.on) .au-bar .tablist, .au:not(.on) .au-replay { display: none; }
+.au-replay { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: var(--r-pill); background: var(--surface-raised); color: var(--ink); font: 600 14px/20px "Hanken Grotesk", system-ui, sans-serif; cursor: pointer; transition: transform 160ms var(--ease-out-strong), border-color 150ms ease; }
+.au-replay svg { width: 15px; height: 15px; }
+.au-replay:active { transform: scale(0.97); }
+@media (hover: hover) and (pointer: fine) { .au-replay:hover { border-color: var(--line-strong); } }
+.au-status { flex: 1 1 260px; margin: 0; color: var(--ink-muted); font-size: 15px; line-height: 22px; text-align: right; }
+.au-status b { color: var(--ink); font-weight: 600; }
+.au-body { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 28px; margin-top: 16px; align-items: start; }
+.au-photo { --stage-pad: clamp(14px, 3vw, 40px); }
+.au .stage-in { --rim: 5px; }
+.au-win { overflow: hidden; border-radius: max(2px, calc(var(--in-r) - var(--rim))); background: #fdfdfd; }
+.au-chrome { display: flex; align-items: center; gap: 12px; height: 34px; padding: 0 12px; border-bottom: 1px solid #ebebeb; background: #f4f4f4; }
+.au-dots { display: flex; gap: 6px; } .au-dots i { width: 9px; height: 9px; border-radius: 50%; background: #d2d2d2; }
+.au-url { flex: 1; max-width: 340px; margin: 0 auto; padding: 2px 12px; border-radius: 7px; background: #fff; color: #575757; font: 500 12px/18px "Source Code Pro", ui-monospace, monospace; text-align: center; letter-spacing: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.au-stage { position: relative; overflow: hidden; background: #f9fafb; }
+.au .au-stage img { position: absolute; left: 0; top: 0; display: block; width: 100%; height: auto; border-radius: 0; }
+.au-after { position: absolute; inset: 0; background: #fdfdfd; clip-path: inset(0 0 100% 0); }  /* the after page's own background */
+.au.on .au-mk { opacity: 0; }
+.au-mk { position: absolute; border: 2px dashed var(--au-issue); border-radius: 5px; box-shadow: 0 0 0 1px rgb(255 255 255 / .9); pointer-events: none; }
+.au-mk b, .au-ok b { position: absolute; top: -11px; left: -11px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: #fff; font: 600 12px/1 "Hanken Grotesk", system-ui, sans-serif; letter-spacing: 0; box-shadow: 0 0 0 2px #fff; }
+.au-mk b { background: var(--au-issue); }
+.au-mk.hl { border-style: solid; }
+.au-ok { position: absolute; opacity: 0; pointer-events: none; }
+.au-ok b { background: var(--au-ok); } .au-ok b svg { width: 12px; height: 12px; }
+.au-line { position: absolute; left: 0; right: 0; top: 0; height: 0; opacity: 0; pointer-events: none; }
+.au-line::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 56px; background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--accent) 9%, transparent)); }
+.au-line::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--accent); box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 55%, transparent); }
+.au-line.fix::before { background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--au-ok) 12%, transparent)); }
+.au-line.fix::after { background: var(--au-ok); box-shadow: 0 0 12px color-mix(in srgb, var(--au-ok) 55%, transparent); }
+.au-tag { position: absolute; right: 12px; bottom: 8px; padding: 3px 9px; border-radius: 999px; background: var(--accent); color: var(--on-accent); font: 600 12px/18px "Hanken Grotesk", system-ui, sans-serif; letter-spacing: 0; white-space: nowrap; }
+.au-line.fix .au-tag { background: var(--au-ok); color: #fff; }
+.au-callout { position: absolute; z-index: 3; display: flex; gap: 8px; align-items: flex-start; max-width: 260px; padding: 8px 12px 9px 9px; border-radius: 10px; background: #1c1d21; color: #fff; font: 500 13px/18px "Hanken Grotesk", system-ui, sans-serif; letter-spacing: 0; box-shadow: 0 8px 24px rgb(0 0 0 / .22); opacity: 0; pointer-events: none; }
+.au-callout b { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--au-issue); font-size: 11px; }
+.au-tokens { position: absolute; z-index: 3; left: 14px; bottom: 14px; display: grid; gap: 4px; padding: 10px 12px 9px; border-radius: 12px; background: #fff; box-shadow: 0 0 0 1px rgb(0 0 0 / .06), 0 10px 30px rgb(10 14 40 / .16); opacity: 0; pointer-events: none; }
+.au-tokens svg { width: 132px; height: 40px; }
+.au-tokens span { color: #575757; font: 600 11px/14px "Source Code Pro", ui-monospace, monospace; letter-spacing: .04em; text-transform: uppercase; }
+.au-chip { position: absolute; z-index: 4; left: 0; top: 0; padding: 3px 9px 3px 7px; border-radius: 999px; background: #fff; color: var(--au-ok); box-shadow: 0 0 0 1px color-mix(in srgb, var(--au-ok) 45%, transparent), 0 6px 18px rgb(0 0 0 / .14); font: 600 12px/18px "Source Code Pro", ui-monospace, monospace; letter-spacing: 0; white-space: nowrap; pointer-events: none; }
+.au-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; }
+.au-list li { display: flex; gap: 12px; align-items: flex-start; padding: 9px 10px; border-radius: var(--r-card); transition: background-color 150ms ease; }
+.au-list li[hidden] { display: none; }
+@media (hover: hover) and (pointer: fine) { .au-list li:hover { background: var(--surface-sunken); } }
+.au-list .n { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--au-issue); color: #fff; font: 600 12px/1 "Hanken Grotesk", system-ui, sans-serif; letter-spacing: 0; transition: background-color 200ms ease; }
+.au-list .n svg { width: 12px; height: 12px; display: none; }
+.au-list li.done .n { background: var(--au-ok); }
+.au-list li.done .n span { display: none; } .au-list li.done .n svg { display: block; }
+.au-list h3 { margin: 1px 0 2px; font-size: 15px; line-height: 21px; font-weight: 600; text-wrap: balance; }
+.au-list p { margin: 0; color: var(--ink-muted); font-size: 14px; line-height: 20px; }
+.au-list .g, .au-list .s { display: none; }
+.au-list li.done h3, .au-list li.done .m { display: none; }
+.au-list li.done .g { display: block; margin-top: 1px; color: var(--ink); font-weight: 500; text-wrap: pretty; }
+.au-list li.done .s { display: block; margin-top: 2px; color: var(--au-ok); font-size: 13px; line-height: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.au-empty { margin: 0; padding: 9px 10px; color: var(--ink-muted); font-size: 15px; line-height: 22px; }
+.au-empty[hidden], .au-cap[hidden] { display: none; }
+.au-cap { display: none; }
+@media (max-width: 1000px) { .au-body { grid-template-columns: minmax(0, 1fr); gap: 12px; } .au-status { text-align: left; flex-basis: 100%; } }
+@media (max-width: 700px) {
+  .au-callout, .au-tag, .au-tokens, .au-chip { display: none; }  /* too small to read here: the caption under the page says it */
+  .au-cap:not([hidden]) { display: flex; gap: 8px; align-items: flex-start; min-height: 44px; margin: 10px 2px 0; color: var(--ink); font-size: 14px; line-height: 20px; }
+  .au-cap b { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--au-issue); color: #fff; font: 600 11px/1 "Hanken Grotesk", system-ui, sans-serif; }
+  .au-cap.ok b { background: var(--au-ok); }
+  .au-mk { border-width: 1.5px; } .au-mk b { top: -8px; left: -8px; width: 16px; height: 16px; font-size: 10px; box-shadow: 0 0 0 1.5px #fff; }
+  .au-ok b { top: -7px; left: -7px; width: 14px; height: 14px; box-shadow: 0 0 0 1.5px #fff; } .au-ok b svg { width: 9px; height: 9px; }
+  .au-chrome { height: 28px; } .au-url { font-size: 11px; }
+  .au-list li { padding: 8px 4px; }
 }
-@supports (corner-shape: superellipse(1.35)) { .ba-frame { corner-shape: superellipse(1.35); --corner-k: 1.22; } }

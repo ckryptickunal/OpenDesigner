@@ -1,19 +1,112 @@
 {
- "_about": "The issues drawn on the demo, each from review.py check on review/probe-before.json (measured) or by looking (seen). Numbers come from the probes; capture.py turns each selector into a box with __od.marks().",
+ "_about": "The issues drawn on the demo, from review.py check on review/probe-before.json (measured) or by looking (seen). capture.py turns each selector into a box with __od.marks(). short is the one line the animation shows as it finds the issue; token is what the fix applies.",
  "before": [
-  {"sel": ".acts", "title": "Three filled buttons compete, and white on green reads at 3.3:1", "gives": "the next step obvious: one filled button, New invoice, and every label readable", "before": "3 filled buttons; 3.3:1 on Send reminders", "after": "1 filled button; 6.02:1", "finding": "measured contrast (MS-04) and seen"},
-  {"sel": "tbody td.muted", "title": "Gray text is hard to read", "gives": "dates, emails and column titles readable for everyone", "before": "2.54:1 on 36 pieces of text", "after": "7.23:1", "finding": "measured contrast (MS-04)"},
-  {"sel": "tbody td:nth-child(5)", "title": "Amounts don't line up", "gives": "amounts quick to compare, right-aligned with digits of equal width", "before": "left-aligned, proportional digits", "after": "right-aligned, tabular digits", "finding": "seen on the page"},
-  {"sel": "tbody td:nth-child(6)", "title": "Status is shown by color alone", "gives": "status clear to everyone, including people who can't tell red from green: each one says Paid, Due or Overdue", "before": "a colored dot", "after": "a label and an icon", "finding": "seen on the page (WCAG 1.4.1)"},
-  {"sel": "tbody td:last-child", "title": "Row buttons are small, with vague names", "gives": "row actions easy to hit, and each button names its invoice for screen readers", "before": "20 x 20 px, \"Send\"", "after": "32 x 32 px, \"Send MW-1042\"", "finding": "measured target sizes"},
-  {"sel": ".stats", "title": "Corners, text sizes and colors are off the system", "gives": "the page look like one product: every corner, size and color comes from Merriweft's tokens", "before": "3 corner radii, 4 text sizes and 12 colors off Merriweft's tokens", "after": "none off the tokens", "finding": "measured against the tokens (MS-09, MS-02, MS-08)"}
+  {
+   "sel": ".acts",
+   "title": "Three filled buttons compete, and white on green reads at 3.3:1",
+   "short": "3 filled buttons, and white on green at 3.3:1",
+   "gives": "the next step obvious: one filled button, New invoice, and every label readable",
+   "token": "1 primary action per view",
+   "before": "3 filled buttons; 3.3:1 on Send reminders",
+   "after": "1 filled button; 6.02:1",
+   "finding": "measured contrast (MS-04) and seen",
+   "stat": "3 filled buttons → 1; 3.3:1 → 6.02:1"
+  },
+  {
+   "sel": "tbody td.muted",
+   "title": "Gray text is hard to read",
+   "short": "Gray text at 2.54:1, where it needs 4.5:1",
+   "gives": "dates, emails and column titles readable for everyone",
+   "token": "color.text.secondary: 7.23:1",
+   "before": "2.54:1 on 40 pieces of text",
+   "after": "7.23:1",
+   "finding": "measured contrast (MS-04)",
+   "stat": "2.54:1 → 7.23:1"
+  },
+  {
+   "sel": "tbody td:nth-child(5)",
+   "title": "Amounts don't line up",
+   "short": "Amounts left-aligned, in digits of uneven width",
+   "gives": "amounts quick to compare, right-aligned with digits of equal width",
+   "token": "numbers: tabular, right-aligned",
+   "before": "left-aligned, proportional digits",
+   "after": "right-aligned, tabular digits",
+   "finding": "seen on the page",
+   "stat": "proportional → tabular digits"
+  },
+  {
+   "sel": "tbody td:nth-child(6)",
+   "title": "Status is shown by color alone",
+   "short": "Status shown by color alone",
+   "gives": "status clear to everyone, including people who can't tell red from green: each one says Paid, Due or Overdue",
+   "token": "status: a label and an icon",
+   "before": "a colored dot",
+   "after": "a label and an icon",
+   "finding": "seen on the page (WCAG 1.4.1)",
+   "stat": "a dot → a label and an icon"
+  },
+  {
+   "sel": "tbody td:last-child",
+   "title": "Row buttons are small, with vague names",
+   "short": "Row buttons 20 px, named only \"Send\"",
+   "gives": "row actions easy to hit, and each button names its invoice for screen readers",
+   "token": "size.target: 32 px",
+   "before": "20 x 20 px, \"Send\"",
+   "after": "32 x 32 px, \"Send MW-1042\"",
+   "finding": "measured target sizes",
+   "stat": "20 px → 32 px"
+  },
+  {
+   "sel": ".overview .stat",
+   "title": "Corners, text sizes and colors are off the system",
+   "short": "Corners, sizes and colors from no system",
+   "gives": "the page look like one product: every corner, size and color comes from Merriweft's tokens",
+   "token": "radius.container: 8 px",
+   "before": "3 corner radii, 5 text sizes and 12 colors off Merriweft's tokens",
+   "after": "none off the tokens",
+   "finding": "measured against the tokens (MS-09, MS-02, MS-08)",
+   "stat": "20 values off the tokens → 0"
+  },
+  {
+   "sel": ".chart",
+   "title": "The chart repeats a number and shows no values",
+   "short": "The chart repeats Paid in October, and shows no values",
+   "gives": "one place for each number, and a chart you can read: each week's total against September's average",
+   "token": "one figure, one tile",
+   "before": "$112.5k shown twice; 4 bars, no values, 8 px labels at 1.47:1",
+   "after": "shown once; a value on every bar; 12 px labels at 7.23:1",
+   "finding": "seen on the page, and measured label colors",
+   "stat": "$112.5k twice → once; no values → 4"
+  }
  ],
  "after": [
-  {"sel": ".acts", "title": "One filled button"},
-  {"sel": "tbody td.d", "title": "Readable dates"},
-  {"sel": "tbody td.amt", "title": "Aligned amounts"},
-  {"sel": "tbody td.st", "title": "Labelled status"},
-  {"sel": "tbody td.act", "title": "32 px named buttons"},
-  {"sel": ".stats", "title": "System corners and type"}
+  {
+   "sel": ".acts",
+   "title": "One filled button"
+  },
+  {
+   "sel": "tbody td.d",
+   "title": "Readable dates"
+  },
+  {
+   "sel": "tbody td.amt",
+   "title": "Aligned amounts"
+  },
+  {
+   "sel": "tbody td.st",
+   "title": "Labelled status"
+  },
+  {
+   "sel": "tbody td.act",
+   "title": "32 px named buttons"
+  },
+  {
+   "sel": ".t-open, .t-late, .t-week",
+   "title": "System corners and type"
+  },
+  {
+   "sel": ".t-cash",
+   "title": "One figure, a chart with numbers"
+  }
  ]
 }

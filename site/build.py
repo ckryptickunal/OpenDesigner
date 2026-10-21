@@ -240,6 +240,28 @@ def inline(s):
     return s
 
 
+def render_list(block):
+    """A Markdown list at any depth: an item indented further than the one before it belongs to it, and a plain indented
+    line continues the latest item."""
+    root = {"children": [], "indent": -1}
+    stack = [root]
+    for raw in block:
+        m = re.match(r"^( *)(\d+\.|-) (.*)", raw)
+        if m:
+            node = {"text": m.group(3), "children": [], "indent": len(m.group(1)), "ordered": m.group(2)[0].isdigit()}
+            while len(stack) > 1 and stack[-1]["indent"] >= node["indent"]:
+                stack.pop()
+            stack[-1]["children"].append(node)
+            stack.append(node)
+        elif len(stack) > 1:
+            stack[-1]["text"] += " " + raw.strip()
+
+    def html_(items):
+        tag = "ol" if items[0]["ordered"] else "ul"
+        return f"<{tag}>" + "".join(f"<li>{inline(n['text'])}" + (html_(n["children"]) if n["children"] else "") + "</li>" for n in items) + f"</{tag}>"
+    return html_(root["children"])
+
+
 def md_to_html(md, toc=None):
     out, lines, i = [], md.strip().splitlines(), 0
     while i < len(lines):
@@ -287,22 +309,10 @@ def md_to_html(md, toc=None):
             out.append(f"<blockquote><p>{inline(' '.join(quote))}</p></blockquote>")
             continue
         elif re.match(r"^(\d+\.|-) ", ln):
-            ordered, items = ln[0].isdigit(), []  # each item: [text, sub-items]; "  - x" under an item is one level of nesting
-            while i < len(lines) and (re.match(r"^(\d+\.|-) ", lines[i]) or (lines[i].startswith("  ") and items)):
-                sub = re.match(r"^  +(?:\d+\.|-) (.*)", lines[i])
-                if sub and items:
-                    items[-1][1].append(sub.group(1))
-                elif lines[i].startswith("  ") and items:
-                    if items[-1][1]:
-                        items[-1][1][-1] += " " + lines[i].strip()
-                    else:
-                        items[-1][0] += " " + lines[i].strip()
-                else:
-                    items.append([re.sub(r"^(\d+\.|-) ", "", lines[i]), []])
-                i += 1
-            tag = "ol" if ordered else "ul"
-            out.append(f"<{tag}>" + "".join(f"<li>{inline(x)}" + ("<ul>" + "".join(f"<li>{inline(s)}</li>" for s in subs) + "</ul>" if subs else "") + "</li>"
-                                            for x, subs in items) + f"</{tag}>")
+            block = []  # the whole list, with its nested lines; render_list() builds any depth from the indents
+            while i < len(lines) and (re.match(r"^(\d+\.|-) ", lines[i]) or (lines[i].startswith("  ") and block)):
+                block.append(lines[i]); i += 1
+            out.append(render_list(block))
             continue
         elif ln.strip():
             para = [ln]
@@ -348,8 +358,11 @@ def figure_caption(name):
 
 
 def strip_figures(md):
-    """The Markdown copies and llms-full.txt keep each figure as its caption."""
-    return re.sub(r"^\{\{figure:([a-z0-9-]+)\}\}$", lambda m: f"*Figure: {figure_caption(m.group(1))}*", md, flags=re.M)
+    """The Markdown copies and llms-full.txt keep each figure as its caption, the changelog as its text, and each live
+    evals block as a pointer to the page that shows it (no placeholder reaches a reader)."""
+    md = re.sub(r"^\{\{figure:([a-z0-9-]+)\}\}$", lambda m: f"*Figure: {figure_caption(m.group(1))}*", md, flags=re.M)
+    md = re.sub(r"^\{\{changelog\}\}$", lambda m: changelog_md().strip(), md, flags=re.M)
+    return re.sub(r"^\{\{evals:([a-z-]+)\}\}$", lambda m: f"*The latest results for this part are on the page: {SITE_URL}/docs/evals/*", md, flags=re.M)
 
 
 def load_docs():
@@ -626,6 +639,7 @@ def demo_before_after_files():
     (DIST / "demo" / "before-after").mkdir(parents=True, exist_ok=True)
     (DIST / "demo" / "before-after" / "picker.js").write_text(m.group(1))
     report = report[:m.start()] + '<script src="picker.js"></script>' + report[m.end():]
+    report = report.replace('<link rel="icon" href="data:,">', '<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">')  # the site has its own
     desc = ("An OpenDesigner review of an invented invoicing page: the page today, the audit drawn on it, and the fix, "
             "each with what it makes better.")
     report = report.replace("<title>", f'<meta name="description" content="{desc}">\n<meta name="robots" content="noindex">\n'
@@ -634,27 +648,52 @@ def demo_before_after_files():
 
 
 def before_after():
-    """Home: the page today, the audit drawn on it and the fix, from the demo's measured marks (site/demo/before-after)."""
+    """Home #before-after: the audit as it happens on a real page. A scan finds each issue in the order it meets them (a
+    dashed box, a number and a short line each), then the fix sweeps down with Merriweft's tokens and each box becomes a
+    check. site.js runs it once in view; Today / Audit / Fixed and Replay stay for manual viewing and reduced motion.
+    Every box and number comes from site/demo/before-after/ (capture.py: probe.js and __od.marks())."""
     before, after = (json.loads((BA / "review" / f"marks-{n}.json").read_text()) for n in ("before", "after"))
-    tall = max(before["page"]["h"] / before["page"]["w"], after["page"]["h"] / after["page"]["w"])
-
-    def shot(name, marks, page, kind):
-        W, H = page["w"], page["h"]
-        boxes = "".join(f'<span class="ba-mk {kind}" style="left:{m["rect"][0] / W * 100:.2f}%;top:{m["rect"][1] / H * 100:.2f}%;width:{m["rect"][2] / W * 100:.2f}%;'
-                        f'height:{m["rect"][3] / H * 100:.2f}%"><b>{m["n"]}</b></span>' for m in marks)
-        alt = ("The invoices page before the fix: three colored buttons, gray text, status dots and left-aligned amounts" if name == "before"
-               else "The same page after the fix: one green button, readable text, labelled status and aligned amounts")
-        return (f'<div class="ba-pg"><img src="/img/demo/{name}-1280.webp" srcset="/img/demo/{name}-1280.webp 1280w, /img/demo/{name}-2560.webp 2560w" '
-                f'sizes="(max-width: 1200px) 100vw, 1150px" width="1280" height="{page["h"]}" loading="lazy" alt="{alt}">{boxes}</div>')
-
-    views = [("today", "Today", shot("before", [], before["page"], "")), ("audit", "Audit", shot("before", before["marks"], before["page"], "todo")),
-             ("fixed", "Fixed", shot("after", after["marks"], after["page"], "done"))]
-    tabs = "".join(f'<button type="button" role="tab" id="ba-tab-{k}" aria-controls="ba-{k}" aria-selected="{"true" if k == "audit" else "false"}">{n}</button>' for k, n, _ in views)
-    panels = "".join(f'<div class="ba-panel" role="tabpanel" tabindex="0" id="ba-{k}" aria-labelledby="ba-tab-{k}">{h}</div>' for k, _, h in views)
-    items = "".join(f'<li><span class="ba-n num">{m["n"]}</span><div><h3>{esc(m["title"])}</h3><p>Fixing this makes {esc(m["gives"])}.</p>'
-                    f'<p class="ba-num">{esc(m["before"])} &rarr; {esc(m["after"])}</p></div></li>' for m in before["marks"])
-    return (f'<div class="ba" data-tabs><div class="tablist ba-tabs" role="tablist" aria-label="The invoices page: today, the audit, and the fix">{tabs}</div>'
-            f'<div class="ba-frame" style="aspect-ratio:1 / {tall:.4f}">{panels}</div><ol class="ba-list">{items}</ol></div>')
+    BW, BH, AH = before["page"]["w"], before["page"]["h"], after["page"]["h"]
+    pct = lambda r: [round(r[0] / BW * 100, 3), round(r[1] / BH * 100, 3), round(r[2] / BW * 100, 3), round(r[3] / BH * 100, 3)]
+    apct = lambda r: [round(r[0] / BW * 100, 3), round(r[1] / AH * 100, 3), round(r[2] / BW * 100, 3), round(r[3] / AH * 100, 3)]
+    tall = max(BH, AH) / BW
+    # each image fills the stage width; its boxes are a share of its own page, scaled to the taller page's height
+    sb, sa = BH / max(BH, AH), AH / max(BH, AH)
+    scale = lambda r, s: [r[0], round(r[1] * s, 3), r[2], round(r[3] * s, 3)]
+    amarks = {i + 1: m for i, m in enumerate(after["marks"])}
+    data = {"marks": [{"n": m["n"], "r": scale(pct(m["rect"]), sb), "a": scale(apct(amarks[m["n"]]["rect"]), sa) if m["n"] in amarks else None,
+                       "title": m["title"], "short": m["short"], "token": m["token"]} for m in before["marks"]]}
+    box = lambda r: f"left:{r[0]}%;top:{r[1]}%;width:{r[2]}%;height:{r[3]}%"
+    check = ('<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3 5 8.7l4.6-5.2" fill="none" stroke="currentColor" stroke-width="1.8" '
+             'stroke-linecap="round" stroke-linejoin="round"/></svg>')
+    marks = "".join(f'<span class="au-mk" data-n="{m["n"]}" style="{box(m["r"])}"><b>{m["n"]}</b></span>' for m in data["marks"])
+    oks = "".join(f'<span class="au-ok" data-n="{m["n"]}" style="{box(m["a"] or m["r"])}"><b>{check}</b></span>' for m in data["marks"])
+    rows = "".join(f'<li data-n="{m["n"]}"><span class="n"><span>{m["n"]}</span>{check}</span><div><h3>{esc(m["title"])}</h3>'
+                   f'<p class="m">{esc(m["before"])}</p><p class="g">Fixing this makes {esc(m["gives"])}.</p><p class="s">{esc(m["stat"])}</p></div></li>'
+                   for m in sorted(before["marks"], key=lambda m: m["n"]))
+    img = lambda name, h, alt: (f'<img src="/img/demo/{name}-1280.webp" srcset="/img/demo/{name}-1280.webp 1280w, /img/demo/{name}-2560.webp 2560w" '
+                                f'sizes="(max-width: 1000px) 100vw, 760px" width="1280" height="{h}" loading="lazy" alt="{alt}">')
+    # the token card: Merriweft's system as a small drawing; during the fix a chip leaves it for each region
+    palette = ('<div class="au-tokens" aria-hidden="true"><svg viewBox="0 0 132 40"><rect x="1" y="1" width="38" height="38" rx="8" fill="#1f6f5c"/>'
+               '<path d="M11 28V13l9 9.5L29 13v15" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'
+               '<text x="50" y="27" font-size="18" font-weight="600" fill="#242424">Aa</text>'
+               '<path d="M80 30V18a8 8 0 0 1 8-8h12" fill="none" stroke="#242424" stroke-width="1.8" stroke-linecap="round"/>'
+               '<path d="M110 16v14M110 23h12M122 16v14" fill="none" stroke="#575757" stroke-width="1.6" stroke-linecap="round"/></svg>'
+               '<span>Merriweft tokens</span></div>')
+    stage_inner = (f'<div class="au-win"><div class="au-chrome"><span class="au-dots"><i></i><i></i><i></i></span><span class="au-url">merriweft.example/invoices</span></div>'
+                   f'<div class="au-stage" style="aspect-ratio:1 / {tall:.4f}">{img("before", BH, "The Merriweft invoices page before the fix")}'
+                   f'<div class="au-after">{img("after", AH, "The same page after the fix")}</div>{marks}{oks}'
+                   f'<div class="au-line" aria-hidden="true"><span class="au-tag"></span></div><div class="au-callout" aria-hidden="true"></div>{palette}</div></div>')
+    st, credit = stage("woods-sage", stage_inner, "au-photo")
+    replay = ('<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.7-4M2.5 2.5v3h3" fill="none" stroke="currentColor" '
+              'stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+    tabs = "".join(f'<button type="button" role="tab" data-view="{k}" aria-selected="{"true" if k == "audit" else "false"}">{n}</button>'
+                   for k, n in (("today", "Today"), ("audit", "Audit"), ("fixed", "Fixed")))
+    return (f'<div class="au" data-au><div class="au-bar"><div class="tablist" role="tablist" aria-label="The invoices page: today, the audit, and the fix">{tabs}</div>'
+            f'<button type="button" class="au-replay">{replay}Replay</button><p class="au-status" aria-live="polite"><b>{len(data["marks"])} issues</b> found on this page.</p></div>'
+            f'<div class="au-body"><div>{st}<p class="au-cap" hidden></p></div>'
+            f'<div><p class="au-empty" hidden>The page as it is today. Watch the audit, or press Audit to see what it finds.</p><ol class="au-list">{rows}</ol></div></div>'
+            f'<script type="application/json" id="au-data">{json.dumps(data)}</script></div>'), credit
 
 
 def overview_shot():
@@ -879,6 +918,7 @@ def home(pages, facts, faq):
     faq_html = "".join(f'<details class="qa"><summary><h3>{esc(q)}</h3></summary><div class="ans">{md_to_html(a)}</div></details>' for q, a in faq[:4])
     pid, author, page_id = SCENES["blue-waves"]
     cta_bg = f"background-image:url(https://images.unsplash.com/{pid}?auto=format&fit=crop&w=1600&q=70)"
+    ba_html, ba_credit = before_after()
     craft = [c for c in CRAFT if any(p["slug"] == c[0] for p in pages)]
     craft_html = "".join(f'<a class="craft-card {v}" href="/docs/{s}/"><span class="vg" aria-hidden="true"><i></i><i></i><i></i></span><h3>{t}</h3><p>{d}</p><span class="more">Open the guide {CHEVRON}</span></a>' for s, t, d, v in craft)
     craft_sec = f"""
@@ -907,8 +947,8 @@ def home(pages, facts, faq):
 <section class="h-sec" id="before-after">
 <div class="h-head">{idx("01", "On a page you already built")}<h2 class="h-h2">See what's wrong, then see it fixed.</h2>
 <p class="h-lede">Point OpenDesigner at a page you have. It measures the page, marks each problem on it, and fixes it with your own design system. Every fix says what it makes better.</p></div>
-{before_after()}
-<p class="h-fine">Real output from the review skill on an invented invoicing app: probe.js measured the page before and after, and <code>review.py compare</code> drew the boxes. Desktop, 1280 px wide. <a href="/demo/before-after/">Open the full report</a> · <a href="{GH}/tree/main/site/demo/before-after">How it was made</a></p>
+{ba_html}
+<p class="h-fine">Real output from the review skill on an invented invoicing app: probe.js measured the page before and after, and its <code>__od.marks()</code> placed each box. Desktop, 1280 px wide. Photo: {ba_credit} on Unsplash. <a href="/demo/before-after/">Open the full report</a> · <a href="{GH}/tree/main/site/demo/before-after">How it was made</a></p>
 </section>
 
 <section class="h-sec" id="why">

@@ -7,7 +7,7 @@ colors:
   on-primary: "#ffffff"
   surface: "#fdfdfd"
   on-surface: "#242424"
-  error: "#bc564d"
+  error: "#d93834"
 typography:
   body-md: { fontFamily: "system-ui", fontSize: 14px, lineHeight: 20px }
 rounded:
@@ -25,7 +25,7 @@ spacing:
 - **Screens:** app (screens where people get work done)
 - **Runs on:** web
 - **Feel:** calm (deferential, minimal)
-- **Brand color:** Your brand color (#1F6F5C) is on the buttons exactly, with white text that reads clearly on it. In dark mode, buttons use a lighter shade of it (#46917D), so their dark text reads clearly.
+- **Brand color:** Your brand color (#1F6F5C) is on the buttons exactly, with white text that reads clearly on it. In dark mode, buttons use a lighter shade of it (#00967A), so their dark text reads clearly.
 - **Decided:** 5 answers you gave; everything else uses sourced defaults
 - **Standards:** 289 house standards followed (locked, house standards v3); see the Standards section
 - **Next:** zoom into Colors, Typography, Layout, or stop here: each level works
@@ -65,7 +65,7 @@ No principles recorded yet (Q-brand-07). Until they are, the dials act as the ti
 - **Energy 35/100** (calm to energetic: leaning calm): standard easing [0.77, 0, 0.175, 1], duration multiplier 0.94, spring damping 1.0, heading weight 650, navigation: neutral.
 - **Roundness 45/100** (sharp to soft: balanced): control radius 6, icon corners default, caps round.
 - **Depth 30/100** (flat to deep: flat): depth model: ring+faint-shadow.
-- **Colorfulness 36/100** (monochrome to vivid: leaning monochrome): scheme tonalSpot, accent chroma 34.7 (HCT), 1 accent(s), surfaces: neutral+one-accent.
+- **Colorfulness 85/100** (monochrome to vivid: vivid): scheme expressive, accent chroma 76.8 (HCT), 3 accent(s), surfaces: brand-or-dynamic-surfaces.
 - **Warmth 50/100** (cool/formal to warm/friendly: balanced): neutral tint chroma 0.0 at hue 264, borders: default, sentence-case, contractions allowed.
 
 **Zoom by area** (sketch, broad, defined, detailed). You can stop at any level; each one works.
@@ -97,33 +97,35 @@ Designers: style brief, mood in words · Code: `taste.brief, taste.never`
 | Line | What it says | From |
 |---|---|---|
 | In your words | Not given yet. Describe the look as a picture, not adjectives (for example, "a quiet library at night"). | not asked yet |
-| Color | One accent color: your brand color `#1f6f5c` (exactly) marks buttons, links and focus. Everything else stays neutral. Keep the accent to small areas, about 15% of a screen at most (a rule of thumb, DC-L15-03). | brand color; colorfulness 36/100 |
+| Color | Three accent colors: your brand color `#1f6f5c` (exactly) marks buttons, links and focus; `#007ead`, `#747b00` add highlights. Everything else stays neutral. Keep the accent to small areas, about 15% of a screen at most (a rule of thumb, DC-L15-03). | brand color; colorfulness 85/100 |
 | Shape | Buttons and fields have 6px corners; cards have 8px corners. Cards get a faint outline and a very soft shadow. | roundness 45/100, depth 30/100 |
 | Motion | Leaning calm. Most movements take 200ms. They turn into fades when a person asks for less motion. | energy 35/100 |
 | Never | Nothing yet. Say what it should never look like, or rate real screens in the taste poll. | not asked yet |
 
 ## Colors
 
-> Zoom: sketch (0 of 3), 1 decision in this area. To zoom in, answer Q-color-02.
+> Zoom: sketch (0 of 3), 2 decisions in this area. To zoom in, answer Q-color-02.
 <!-- od:zoom area=color level=0 -->
 
-**One accent color: your brand color `#1f6f5c` (exactly) marks buttons, links and focus.** Everything else stays neutral.
+**Three accent colors: your brand color `#1f6f5c` (exactly) marks buttons, links and focus; `#007ead`, `#747b00` add highlights.** Everything else stays neutral.
 Designers: primary or brand accent · Code: `color.bg.accent`
 
 <details><summary>More</summary>
 
-**Intent.** Brand color `#1f6f5c` drives the accent ramp's hue; the Colorfulness dial (36) sets its chroma (scheme tonalSpot, peak HCT chroma 34.72). The brand's role is **reserved-accent** and it sits closest to accent step 9. Your brand color #1F6F5C is on the buttons exactly (white text on it reads at 6.02:1). In dark mode, buttons use #46917D, a lighter shade of it, because the dark text on dark-mode buttons would read at only 3.03:1 on the exact color.
+**Intent.** Brand color `#1f6f5c` drives the accent ramp's hue; the Colorfulness dial (85) sets its chroma (scheme expressive, peak HCT chroma 76.8). The brand's role is **reserved-accent** and it sits closest to accent step 9. Your brand color #1F6F5C is on the buttons exactly (white text on it reads at 6.02:1). In dark mode, buttons use #00967A, a lighter shade of it, because the dark text on dark-mode buttons would read at only 3.03:1 on the exact color.
 
 **How ramps are built.** Each hue gets twelve steps in OKLCH, placed by contrast. Step 8 reaches at least 3:1 (edges and focus). Steps 10 and 11 reach the text minimum on backgrounds 1-4. Step 12 reaches at least 7:1. Steps 2-6 are spaced evenly in lightness between step 1 and step 7. Light and dark ramps are solved separately. Dark solids are lighter and carry dark text (dark mode is a separate mapping, never an inversion). Text minimum: 4.5:1 (WCAG 2.2 AA).
 
 | Ramp | Light steps 1-12 | Solid carries |
 |---|---|---|
-| `accent` | `#fbfdfc` `#eff5f3` `#e2eeea` `#d4e7e0` `#c6e0d7` `#b8d9ce` `#a9d2c5` `#5b9080` `#1f6f5c` `#176351` `#1c5c4c` `#1d3931` | light |
-| `danger` | `#fffcfc` `#fcf2f1` `#fbe7e4` `#fcdcd8` `#fbd1cb` `#fbc5be` `#fabab2` `#be7168` `#bc564d` `#ab4d44` `#903e37` `#502925` | light |
-| `info` | `#fbfdff` `#eef5fb` `#deeefa` `#cde6f9` `#bcdff8` `#abd7f8` `#9ad0f7` `#438dbc` `#007cb7` `#0070a6` `#005c8a` `#0f374f` | light |
+| `accent` | `#f7fefc` `#e8f7f2` `#d1f2e7` `#b8eedd` `#9de9d2` `#7fe4c8` `#5bdfbd` `#00977b` `#1f6f5c` `#006451` `#006350` `#003c2f` | light |
+| `accent2` | `#fafdff` `#edf5fa` `#dceef9` `#cbe7f8` `#b9e0f6` `#a7d9f5` `#94d1f4` `#388eb9` `#007ead` `#00729c` `#005e82` `#06384e` | light |
+| `accent3` | `#fcfdf9` `#f4f5ed` `#ebeddd` `#e2e5cc` `#d9ddba` `#d0d6a9` `#c8ce98` `#848b44` `#747b00` `#696f00` `#565b00` `#333610` | light |
+| `danger` | `#fffcfc` `#fff1ef` `#ffe6e3` `#ffdbd6` `#ffcfc9` `#ffc4bc` `#ffb8af` `#d76258` `#d93834` `#c72f2c` `#a82321` `#5c201c` | light |
+| `info` | `#fbfdff` `#eaf6ff` `#d9efff` `#c7e7ff` `#b5e0ff` `#a3d8ff` `#8fd1ff` `#008ed0` `#007cb7` `#0070a6` `#005c8a` `#003755` | light |
 | `neutral` | `#fdfdfd` `#f4f4f4` `#ebebeb` `#e3e3e3` `#dadada` `#d2d2d2` `#c9c9c9` `#868686` `#757575` `#646464` `#575757` `#242424` | light |
-| `success` | `#fafefb` `#eff6f0` `#e1efe3` `#d2e8d5` `#c3e2c8` `#b4dcbb` `#a5d5ae` `#559363` `#298646` `#21793e` `#166431` `#1a3a22` | light |
-| `warning` | `#fffcf9` `#f8f4ed` `#f3eadc` `#efe1ca` `#ebd8b9` `#e7cfa7` `#e3c595` `#a5803f` `#e8b456` `#d6a54d` `#845d00` `#43310d` | dark |
+| `success` | `#f9fef9` `#ebf7ed` `#d9f1dd` `#c6eccc` `#b2e7bc` `#9de2ab` `#87dc9a` `#089a47` `#00883d` `#007b36` `#00652c` `#003d17` | light |
+| `warning` | `#fffcf8` `#f8f4ec` `#f5ead9` `#f1e1c6` `#eed8b3` `#ebce9f` `#e7c58b` `#aa7f2c` `#efb239` `#dda331` `#845d00` `#463001` | dark |
 
 **Step-distance guarantee** (neutral, light; WCAG contrast of a foreground step on background steps 1-5):
 
@@ -139,57 +141,65 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 
 | Fill | Base | Hover | Pressed |
 |---|---|---|---|
-| `color.bg.action.primary` | `#1f6f5c` | `#176351` (1.19:1) | `#085b4a` (1.34:1) |
-| `color.bg.accent.bold` | `#1f6f5c` | `#176351` (1.19:1) | `#085b4a` (1.34:1) |
+| `color.bg.action.primary` | `#1f6f5c` | `#006451` (1.19:1) | `#005b4a` (1.34:1) |
+| `color.bg.accent.bold` | `#1f6f5c` | `#006451` (1.19:1) | `#005b4a` (1.34:1) |
 
 **Semantic roles** (use these, never the ramps):
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `color.bg.accent.bold` | `#1f6f5c` | `#46917d` | Solid accent fill. |
-| `color.bg.accent.bold-hover` | `#176351` | `#539e89` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
-| `color.bg.accent.bold-pressed` | `#085b4a` | `#5da893` | Pressed: at least 1.3:1 from the solid. |
-| `color.bg.accent.subtle` | `#e2eeea` | `#1d2a26` | Selected rows, accent badges. |
-| `color.bg.accent.subtle-hover` | `#d4e7e0` | `#20332d` | Hover on accent subtle fills. |
-| `color.bg.accent.subtle-pressed` | `#c6e0d7` | `#223c35` | Pressed accent subtle fills. |
-| `color.bg.action.primary` | `#1f6f5c` | `#46917d` | Primary action. One per view (DC-L15-03, L15 P08). |
-| `color.bg.action.primary-hover` | `#176351` | `#539e89` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
-| `color.bg.action.primary-pressed` | `#085b4a` | `#5da893` | Pressed: at least 1.3:1 from the solid. |
-| `color.bg.brand` | `#1f6f5c` | `#46917d` | Brand fill for signature surfaces; carries text.on-brand (brandAnchor rule, DC-L01-09). |
-| `color.bg.danger.bold` | `#bc564d` | `#c06d64` | Danger solid fill. |
-| `color.bg.danger.bold-hover` | `#ab4d44` | `#cf7a70` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
-| `color.bg.danger.bold-pressed` | `#a1443d` | `#d9837a` | Pressed: at least 1.3:1 from the solid. |
-| `color.bg.danger.subtle` | `#fbe7e4` | `#332422` | Danger banner and badge background. |
+| `color.bg.accent.bold` | `#1f6f5c` | `#00967a` | Solid accent fill. |
+| `color.bg.accent.bold-hover` | `#006451` | `#00a486` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
+| `color.bg.accent.bold-pressed` | `#005b4a` | `#00af8f` | Pressed: at least 1.3:1 from the solid. |
+| `color.bg.accent.subtle` | `#d1f2e7` | `#012e24` | Selected rows, accent badges. |
+| `color.bg.accent.subtle-hover` | `#b8eedd` | `#00372b` | Hover on accent subtle fills. |
+| `color.bg.accent.subtle-pressed` | `#9de9d2` | `#004033` | Pressed accent subtle fills. |
+| `color.bg.accent2.bold` | `#007ead` | `#298dbb` | accent2 solid fill. |
+| `color.bg.accent2.bold-hover` | `#00729c` | `#3a9ac9` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
+| `color.bg.accent2.bold-pressed` | `#006991` | `#45a4d3` | Pressed: at least 1.3:1 from the solid. |
+| `color.bg.accent2.subtle` | `#dceef9` | `#1a2932` | accent2 subtle fill. |
+| `color.bg.accent3.bold` | `#747b00` | `#82893a` | accent3 solid fill. |
+| `color.bg.accent3.bold-hover` | `#696f00` | `#8f9647` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
+| `color.bg.accent3.bold-pressed` | `#616600` | `#99a051` | Pressed: at least 1.3:1 from the solid. |
+| `color.bg.accent3.subtle` | `#ebeddd` | `#27281b` | accent3 subtle fill. |
+| `color.bg.action.primary` | `#1f6f5c` | `#00967a` | Primary action. One per view (DC-L15-03, L15 P08). |
+| `color.bg.action.primary-hover` | `#006451` | `#00a486` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
+| `color.bg.action.primary-pressed` | `#005b4a` | `#00af8f` | Pressed: at least 1.3:1 from the solid. |
+| `color.bg.brand` | `#1f6f5c` | `#00967a` | Brand fill for signature surfaces; carries text.on-brand (brandAnchor rule, DC-L01-09). |
+| `color.bg.danger.bold` | `#d93834` | `#da5b51` | Danger solid fill. |
+| `color.bg.danger.bold-hover` | `#c72f2c` | `#e9695e` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
+| `color.bg.danger.bold-pressed` | `#bc2323` | `#f47367` | Pressed: at least 1.3:1 from the solid. |
+| `color.bg.danger.subtle` | `#ffe6e3` | `#39211f` | Danger banner and badge background. |
 | `color.bg.disabled` | `#ebebeb` | `#2d2d2d` | Disabled control fill. |
 | `color.bg.field` | `#ffffff` | `#252525` | Text field fill: outlined fields sit on the raised surface (Q-form-01). |
-| `color.bg.info.bold` | `#007cb7` | `#398bbf` | Info solid fill. |
-| `color.bg.info.bold-hover` | `#0070a6` | `#4798cd` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
-| `color.bg.info.bold-pressed` | `#006799` | `#52a2d7` | Pressed: at least 1.3:1 from the solid. |
-| `color.bg.info.subtle` | `#deeefa` | `#1b2932` | Info banner and badge background. |
+| `color.bg.info.bold` | `#007cb7` | `#008bcd` | Info solid fill. |
+| `color.bg.info.bold-hover` | `#0070a6` | `#0099e0` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
+| `color.bg.info.bold-pressed` | `#006799` | `#00a3ee` | Pressed: at least 1.3:1 from the solid. |
+| `color.bg.info.subtle` | `#d9efff` | `#062a40` | Info banner and badge background. |
 | `color.bg.inverse` | `#242424` | `#e9e9e9` | Tooltips and toasts: the inverted surface. |
 | `color.bg.neutral.subtle` | `#ebebeb` | `#363636` | Secondary buttons, chips, hovered rows. |
 | `color.bg.neutral.subtle-hover` | `#e3e3e3` | `#3f3f3f` | Hover: +1 step (DC-L01-17). |
 | `color.bg.neutral.subtle-pressed` | `#dadada` | `#484848` | Pressed or selected: +2 steps (DC-L01-17). |
-| `color.bg.success.bold` | `#298646` | `#4e925e` | Success solid fill. |
-| `color.bg.success.bold-hover` | `#21793e` | `#5b9f6a` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
-| `color.bg.success.bold-pressed` | `#157136` | `#64a974` | Pressed: at least 1.3:1 from the solid. |
-| `color.bg.success.subtle` | `#e1efe3` | `#1e2a20` | Success banner and badge background. |
-| `color.bg.warning.bold` | `#e8b456` | `#e0b76f` | Warning solid fill. |
-| `color.bg.warning.bold-hover` | `#d6a54d` | `#f2c77f` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
-| `color.bg.warning.bold-pressed` | `#cb9b42` | `#fed38b` | Pressed: at least 1.3:1 from the solid. |
-| `color.bg.warning.subtle` | `#f3eadc` | `#2e261a` | Warning banner and badge background. |
-| `color.border.accent` | `#5b9080` | `#4e8d7b` | Selected card or accent outline. |
-| `color.border.danger` | `#be7168` | `#b66e66` | Danger boundary, for example an invalid field (3:1). |
+| `color.bg.success.bold` | `#00883d` | `#009845` | Success solid fill. |
+| `color.bg.success.bold-hover` | `#007b36` | `#00a74c` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
+| `color.bg.success.bold-pressed` | `#007132` | `#19b155` | Pressed: at least 1.3:1 from the solid. |
+| `color.bg.success.subtle` | `#d9f1dd` | `#172c1b` | Success banner and badge background. |
+| `color.bg.warning.bold` | `#efb239` | `#e6b55d` | Warning solid fill. |
+| `color.bg.warning.bold-hover` | `#dda331` | `#f7c56e` | Hover: one step, at least 1.15:1 from the solid (DC-L01-17). |
+| `color.bg.warning.bold-pressed` | `#d29921` | `#ffd388` | Pressed: at least 1.3:1 from the solid. |
+| `color.bg.warning.subtle` | `#f5ead9` | `#2f2618` | Warning banner and badge background. |
+| `color.border.accent` | `#00977b` | `#009378` | Selected card or accent outline. |
+| `color.border.danger` | `#d76258` | `#cd6057` | Danger boundary, for example an invalid field (3:1). |
 | `color.border.default` | `#c9c9c9` | `#484848` | Outline buttons and table grids (decorative; the label carries meaning). |
-| `color.border.focus` | `#1f6f5c` | `#75b9a5` | Focus ring (3:1 against every surface, DC-L04-09). |
-| `color.border.info` | `#438dbc` | `#4488b4` | Info boundary, for example an invalid field (3:1). |
+| `color.border.focus` | `#1f6f5c` | `#00c29f` | Focus ring (3:1 against every surface, DC-L04-09). |
+| `color.border.info` | `#008ed0` | `#0089c9` | Info boundary, for example an invalid field (3:1). |
 | `color.border.input` | `#868686` | `#808080` | Text field and select borders (3:1, DC-L01-16). |
 | `color.border.separator` | `#e3e3e3` | `#363636` | Hairlines between table rows and list items, lighter than border.subtle; decorative, so never the only cue (DC-L23-05). |
 | `color.border.strong` | `#868686` | `#808080` | Boundaries that are the only cue: inputs, checkboxes, switches (3:1, WCAG 1.4.11). |
 | `color.border.subtle` | `#d2d2d2` | `#3f3f3f` | Dividers and card edges (decorative). |
-| `color.border.success` | `#559363` | `#548e61` | Success boundary, for example an invalid field (3:1). |
-| `color.border.warning` | `#a5803f` | `#9e7c40` | Warning boundary, for example an invalid field (3:1). |
-| `color.icon.accent` | `#1c5c4c` | `#75b9a5` | Selected and interactive icons. |
+| `color.border.success` | `#089a47` | `#199547` | Success boundary, for example an invalid field (3:1). |
+| `color.border.warning` | `#aa7f2c` | `#a47b2f` | Warning boundary, for example an invalid field (3:1). |
+| `color.icon.accent` | `#006350` | `#00c29f` | Selected and interactive icons. |
 | `color.icon.default` | `#575757` | `#ababab` | Icons beside text; same color as secondary text (DC-L05-08). |
 | `color.icon.on-accent` | `#ffffff` | `#151515` | Icons on solid accent fills. |
 | `color.icon.subtle` | `#646464` | `#959595` | Decorative icons. |
@@ -199,13 +209,18 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 | `color.surface.overlay` | `#ffffff` | `#2d2d2d` | Menus, popovers, dialogs; always with elevation.floating or elevation.overlay. |
 | `color.surface.raised` | `#ffffff` | `#252525` | Cards and panels on the page. |
 | `color.surface.sunken` | `#f4f4f4` | `#151515` | Wells, code blocks, page gutters. |
-| `color.text.accent` | `#1c5c4c` | `#75b9a5` | Accent text and selected labels. |
-| `color.text.danger` | `#903e37` | `#e8978d` | Danger text and icons; pair with an icon or label (DC-L01-15). |
+| `color.surface.tinted` | `#d1f2e7` | `#012e24` | Tinted container (Colorfulness 50+, L09 X rubric; Q-color-05). |
+| `color.text.accent` | `#006350` | `#00c29f` | Accent text and selected labels. |
+| `color.text.accent2` | `#005e82` | `#60b5e2` | accent2 text. |
+| `color.text.accent3` | `#565b00` | `#aab169` | accent3 text. |
+| `color.text.danger` | `#a82321` | `#ff8c80` | Danger text and icons; pair with an icon or label (DC-L01-15). |
 | `color.text.disabled` | `#868686` | `#808080` | Disabled labels; exempt from contrast minimums (WCAG 1.4.3 exception). |
-| `color.text.info` | `#005c8a` | `#6ab3e6` | Info text and icons; pair with an icon or label (DC-L01-15). |
+| `color.text.info` | `#005c8a` | `#3ab6ff` | Info text and icons; pair with an icon or label (DC-L01-15). |
 | `color.text.inverse` | `#ffffff` | `#151515` | Text on color.bg.inverse (tooltips, toasts). |
-| `color.text.link` | `#1c5c4c` | `#75b9a5` | Links. Underline them in running text so color is not the only cue. |
+| `color.text.link` | `#006350` | `#00c29f` | Links. Underline them in running text so color is not the only cue. |
 | `color.text.on-accent` | `#ffffff` | `#151515` | Text and icons on color.bg.accent.bold* (auto-picked light or dark, S-L06-094). |
+| `color.text.on-accent2` | `#ffffff` | `#151515` | Text on accent2 solid. |
+| `color.text.on-accent3` | `#ffffff` | `#151515` | Text on accent3 solid. |
 | `color.text.on-action` | `#ffffff` | `#151515` | Text on the primary action fill. |
 | `color.text.on-brand` | `#ffffff` | `#151515` | Text on color.bg.brand. |
 | `color.text.on-danger` | `#ffffff` | `#151515` | Text on bg.danger.bold. |
@@ -214,9 +229,9 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 | `color.text.on-warning` | `#242424` | `#151515` | Text on bg.warning.bold. |
 | `color.text.primary` | `#242424` | `#e9e9e9` | Body copy, headings, labels (guaranteed >= 7:1 on steps 1-5). |
 | `color.text.secondary` | `#575757` | `#ababab` | Supporting text (guaranteed >= the text minimum on surfaces and neutral fills 1-4). |
-| `color.text.success` | `#166431` | `#7aba87` | Success text and icons; pair with an icon or label (DC-L01-15). |
+| `color.text.success` | `#00652c` | `#47c26c` | Success text and icons; pair with an icon or label (DC-L01-15). |
 | `color.text.tertiary` | `#646464` | `#959595` | Captions and placeholders (still meets the text minimum on surfaces 1-4). |
-| `color.text.warning` | `#845d00` | `#f9d18f` | Warning text and icons; pair with an icon or label (DC-L01-15). |
+| `color.text.warning` | `#845d00` | `#fecf7f` | Warning text and icons; pair with an icon or label (DC-L01-15). |
 
 **Use / avoid.**
 - Use one solid accent fill per view for the primary action; spend chroma on small, meaningful elements.
@@ -226,7 +241,7 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 
 **Tailwind classes:** `bg-action-primary`, `hover:bg-action-primary-hover`, `active:bg-action-primary-pressed`, `text-on-action`, `bg-surface-base`, `bg-surface-raised`, `text-fg-primary`, `text-fg-secondary`, `text-fg-link`, `border-line-subtle`, `border-line-input`, `outline-line-focus`, `bg-danger-bold`.
 
-Decisions: D-0005 (raw.brandColor).
+Decisions: D-0005 (raw.brandColor), D-0012 (dials.colorfulness).
 
 </details>
 
@@ -435,7 +450,7 @@ Designers: guardrails and design linting · Code: `engine.py validate, engine.py
 - Don't use motion as the only signal, or flash more than three times a second.
 - Don't copy another brand's identity from a reference (colors, typeface, logo, imagery, copy).
 
-**Current validation findings:** none (errors 0, warnings 0).
+**Current validation findings:** warn: vivid color on a dense layout can feel noisy
 
 **Waivers:** none.
 
@@ -647,7 +662,7 @@ Decisions: D-0007 (answers.Q-plat-01).
 
 ## Decisions
 
-**11 decisions so far.** Each one says who set it and why.
+**12 decisions so far.** Each one says who set it and why.
 Designers: decision history with reasons · Code: `opendesigner/decisions.md`
 
 <details><summary>More</summary>
@@ -663,6 +678,7 @@ Your own decisions first (the newest value per path), then your changes to stand
 | D-0008 | `macros` | ["deferential", "minimal"] | chosen | sketch: Level 0 answer (their words: calm) |
 | D-0009 | `taste.feelWords` | ["calm"] | chosen | sketch: the person's own feel words |
 | D-0010 | `answers.Q-scope-06` | ["app:operate"] | chosen | sketch: Level 0 answer |
+| D-0012 | `dials.colorfulness` | 85 | chosen | clean, high-contrast status colors: the owner called the muted reds and olives sloppy (2026-10-21) |
 | D-0011 | standards | House standards v3: 289 applied | standard (locked) | OpenDesigner's house standards (sources marked non-negotiable) are applied without asking and locked. Change one only when the person asks: engine.py... |
 
 </details>
@@ -676,7 +692,7 @@ Your own decisions first (the newest value per path), then your changes to stand
 - Answers taken on assumption or delegated: defaults.work-tool (auto_default), context.audience (assumed)
 - Waivers: none.
 - Licence risks: none found.
-- Validation: 0 errors, 0 warnings.
+- Validation: 0 errors, 1 warnings.
 
 ## For Agents
 

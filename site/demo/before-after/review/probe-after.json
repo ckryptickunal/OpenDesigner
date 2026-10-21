@@ -2,7 +2,7 @@
  "v": 1,
  "url": "file:///Users/Kunal/Desktop/Design-System/site/demo/before-after/after.html",
  "title": "Invoices \u00b7 Merriweft",
- "at": "2026-10-21T14:13:19.608Z",
+ "at": "2026-10-21T15:44:01.831Z",
  "viewport": {
   "w": 1280,
   "h": 800,
@@ -10,7 +10,7 @@
   "innerH": 800,
   "dpr": 2,
   "docW": 1280,
-  "docH": 800,
+  "docH": 1055,
   "scale": 1
  },
  "media": {
@@ -25,117 +25,156 @@
   "dir": "ltr",
   "viewportMeta": "width=device-width,initial-scale=1",
   "blocksZoom": false,
-  "dataTheme": null,
+  "dataTheme": "light",
   "colorScheme": "light",
   "hOverflow": 0,
   "rootClipsX": false,
-  "elements": 213,
+  "elements": 302,
   "truncated": false
  },
  "type": {
   "sizes": {
    "12": {
-    "n": 23,
+    "n": 63,
     "ex": [
      "header.top > span.avatar:nth-of-type(2)"
     ],
-    "chars": 251
+    "chars": 581
    },
    "14": {
-    "n": 51,
+    "n": 48,
+    "ex": [
+     "header.top > nav > a:nth-of-type(1)"
+    ],
+    "chars": 509
+   },
+   "17": {
+    "n": 1,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ],
-    "chars": 535
+    "chars": 9
    },
    "20": {
-    "n": 3,
+    "n": 2,
     "ex": [
-     "section.stats > div.stat:nth-of-type(1) > strong.num"
+     "div.money:nth-of-type(2) > section.tile.t-late:nth-of-type(3) > strong.fig.md"
     ],
-    "chars": 30
+    "chars": 19
    },
    "24": {
-    "n": 1,
+    "n": 3,
     "ex": [
      "div.head:nth-of-type(1) > div:nth-of-type(1) > h1"
     ],
-    "chars": 8
+    "chars": 29
    }
   },
   "lineHeights": {
    "16": {
-    "n": 23,
+    "n": 63,
     "ex": [
      "header.top > span.avatar:nth-of-type(2)"
     ],
-    "chars": 251
+    "chars": 581
    },
    "20": {
-    "n": 51,
+    "n": 48,
+    "ex": [
+     "header.top > nav > a:nth-of-type(1)"
+    ],
+    "chars": 509
+   },
+   "24": {
+    "n": 1,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ],
-    "chars": 535
+    "chars": 9
    },
    "28": {
-    "n": 3,
+    "n": 2,
     "ex": [
-     "section.stats > div.stat:nth-of-type(1) > strong.num"
+     "div.money:nth-of-type(2) > section.tile.t-late:nth-of-type(3) > strong.fig.md"
     ],
-    "chars": 30
+    "chars": 19
    },
    "32": {
-    "n": 1,
+    "n": 3,
     "ex": [
      "div.head:nth-of-type(1) > div:nth-of-type(1) > h1"
     ],
-    "chars": 8
+    "chars": 29
    }
   },
   "weights": {
    "400": {
-    "n": 29,
+    "n": 48,
     "ex": [
      "div.head:nth-of-type(1) > div:nth-of-type(1) > p.sub"
     ],
-    "chars": 423
+    "chars": 590
    },
    "500": {
-    "n": 14,
+    "n": 63,
     "ex": [
-     "header.top > span.avatar:nth-of-type(2)"
+     "header.top > nav > a:nth-of-type(1)"
     ],
-    "chars": 71
+    "chars": 500
    },
    "650": {
-    "n": 35,
+    "n": 6,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ],
-    "chars": 330
+    "chars": 57
    }
   },
   "families": {
    "system-ui": {
-    "n": 78,
+    "n": 87,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ],
-    "chars": 824
+    "chars": 983
+   },
+   "ui-monospace": {
+    "n": 30,
+    "ex": [
+     "div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1) > p.lbl:nth-of-type(1)"
+    ],
+    "chars": 164
    }
   },
   "letterSpacing": {
-   "0.24": {
-    "n": 15,
+   "0.72": {
+    "n": 11,
     "ex": [
-     "section.stats > div.stat:nth-of-type(1) > span"
+     "div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1) > p.lbl:nth-of-type(1)"
     ]
    },
-   "0.6": {
-    "n": 7,
+   "0.24": {
+    "n": 9,
     "ex": [
-     "thead > tr > th:nth-of-type(1)"
+     "div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1) > p.meta:nth-of-type(2)"
+    ]
+   },
+   "-0.24": {
+    "n": 3,
+    "ex": [
+     "div.head:nth-of-type(1) > div:nth-of-type(1) > h1"
+    ]
+   },
+   "-0.2": {
+    "n": 2,
+    "ex": [
+     "div.money:nth-of-type(2) > section.tile.t-late:nth-of-type(3) > strong.fig.md"
+    ]
+   },
+   "-0.34": {
+    "n": 1,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
     ]
    }
   },
@@ -146,56 +185,56 @@
   },
   "lineHeightTight": [],
   "longLines": [],
-  "textElements": 78
+  "textElements": 117
  },
  "space": {
   "values": {
    "2": {
-    "n": 7,
+    "n": 9,
     "ex": [
-     "section.stats > div.stat:nth-of-type(1) > span"
+     "div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1) > p.meta:nth-of-type(2)"
     ]
    },
    "4": {
-    "n": 30,
+    "n": 60,
     "ex": [
      "header.top > nav"
     ]
    },
    "6": {
-    "n": 14,
+    "n": 23,
     "ex": [
      "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn:nth-of-type(1)"
     ]
    },
    "8": {
-    "n": 16,
+    "n": 39,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ]
    },
    "12": {
-    "n": 27,
+    "n": 36,
     "ex": [
      "header.top > nav > a:nth-of-type(1)"
     ]
    },
    "16": {
-    "n": 106,
+    "n": 119,
     "ex": [
      "main > div.head:nth-of-type(1)"
     ]
    },
    "20": {
-    "n": 6,
+    "n": 8,
     "ex": [
-     "main > section.stats > div.stat:nth-of-type(1)"
+     "main > div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1)"
     ]
    },
    "24": {
     "n": 2,
     "ex": [
-     "main > section.stats"
+     "main > div.money:nth-of-type(2)"
     ]
    },
    "32": {
@@ -216,44 +255,50 @@
      "main"
     ]
    },
-   "413.33": {
+   "406.83": {
     "n": 1,
     "ex": [
      "header.top > input.search"
     ]
    },
-   "414.58": {
+   "423.03": {
     "n": 1,
     "ex": [
      "main > div.head:nth-of-type(1) > div.acts:nth-of-type(2)"
     ]
    },
-   "697.8": {
+   "704.36": {
     "n": 1,
     "ex": [
-     "main > div.bar:nth-of-type(2) > span.count"
+     "main > div.bar:nth-of-type(3) > span.count"
     ]
    }
   },
   "negativeMargins": []
  },
  "radius": {
-  "4": {
-   "n": 11,
+  "2": {
+   "n": 2,
    "ex": [
-    "header.top > span.logo:nth-of-type(1) > i"
+    "ul.rows > li:nth-of-type(1) > i.m-ok"
+   ]
+  },
+  "4": {
+   "n": 26,
+   "ex": [
+    "div.weeks:nth-of-type(1) > div.wk:nth-of-type(1) > span.v"
    ]
   },
   "6": {
-   "n": 21,
+   "n": 22,
    "ex": [
     "header.top > nav > a:nth-of-type(1)"
    ]
   },
   "8": {
-   "n": 2,
+   "n": 5,
    "ex": [
-    "main > section.stats"
+    "main > div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1)"
    ]
   },
   "50%": {
@@ -267,44 +312,38 @@
   "rgba(36, 36, 36, 0.1) 0px 0px 0px 1px": {
    "n": 1,
    "ex": [
-    "div.bar:nth-of-type(2) > nav.seg > a:nth-of-type(1)"
+    "div.bar:nth-of-type(3) > nav.seg > a:nth-of-type(1)"
    ]
   }
  },
  "colors": {
   "text": {
    "#575757": {
-    "n": 48,
+    "n": 71,
     "ex": [
      "header.top > nav > a:nth-of-type(1)"
     ]
    },
    "#242424": {
-    "n": 21,
+    "n": 33,
     "ex": [
      "header.top > span.logo:nth-of-type(1)"
     ]
    },
-   "#903e37": {
-    "n": 3,
+   "#a82321": {
+    "n": 6,
     "ex": [
-     "section.stats > div.stat:nth-of-type(2) > span.warn"
+     "section.tile.t-late:nth-of-type(3) > p.lbl > span.trend.bad"
     ]
    },
-   "#845d00": {
+   "#00652c": {
+    "n": 4,
+    "ex": [
+     "section.tile.t-cash:nth-of-type(1) > p.lbl:nth-of-type(1) > span.trend.good"
+    ]
+   },
+   "#006350": {
     "n": 2,
-    "ex": [
-     "tr:nth-of-type(1) > td.st:nth-of-type(7) > span.pill.due"
-    ]
-   },
-   "#166431": {
-    "n": 2,
-    "ex": [
-     "tr:nth-of-type(3) > td.st:nth-of-type(7) > span.pill.paid"
-    ]
-   },
-   "#1c5c4c": {
-    "n": 1,
     "ex": [
      "header.top > span.avatar:nth-of-type(2)"
     ]
@@ -318,9 +357,15 @@
   },
   "bg": {
    "#ffffff": {
-    "n": 7,
+    "n": 15,
     "ex": [
      "header.top"
+    ]
+   },
+   "#ebebeb": {
+    "n": 10,
+    "ex": [
+     "header.top > nav > a:nth-of-type(2)"
     ]
    },
    "#f4f4f4": {
@@ -330,30 +375,30 @@
     ]
    },
    "#1f6f5c": {
-    "n": 2,
+    "n": 5,
     "ex": [
-     "header.top > span.logo:nth-of-type(1) > i"
+     "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.primary:nth-of-type(3)"
     ]
    },
-   "#ebebeb": {
+   "#868686": {
     "n": 2,
     "ex": [
-     "header.top > nav > a:nth-of-type(2)"
+     "section.tile.t-open:nth-of-type(2) > div.meter:nth-of-type(2) > i.m-ok:nth-of-type(1)"
     ]
    },
-   "#f3eadc": {
+   "#d93834": {
     "n": 2,
     "ex": [
-     "tr:nth-of-type(1) > td.st:nth-of-type(7) > span.pill.due"
+     "section.tile.t-open:nth-of-type(2) > div.meter:nth-of-type(2) > i.m-late:nth-of-type(2)"
     ]
    },
-   "#fbe7e4": {
+   "#ffe6e3": {
     "n": 2,
     "ex": [
      "tr:nth-of-type(2) > td.st:nth-of-type(7) > span.pill.late"
     ]
    },
-   "#e1efe3": {
+   "#d9f1dd": {
     "n": 2,
     "ex": [
      "tr:nth-of-type(3) > td.st:nth-of-type(7) > span.pill.paid"
@@ -365,7 +410,7 @@
      "body"
     ]
    },
-   "#e2eeea": {
+   "#d1f2e7": {
     "n": 1,
     "ex": [
      "header.top > span.avatar:nth-of-type(2)"
@@ -373,10 +418,28 @@
    }
   },
   "border": {
+   "#d2d2d2": {
+    "n": 6,
+    "ex": [
+     "main > div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1)"
+    ]
+   },
    "#c9c9c9": {
-    "n": 4,
+    "n": 3,
     "ex": [
      "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn:nth-of-type(1)"
+    ]
+   },
+   "#646464": {
+    "n": 2,
+    "ex": [
+     "section.tile.t-cash:nth-of-type(1) > div.weeks:nth-of-type(1) > span.avg"
+    ]
+   },
+   "#1f6f5c": {
+    "n": 2,
+    "ex": [
+     "div.weeks:nth-of-type(1) > div.wk.now:nth-of-type(4) > i.b"
     ]
    },
    "#868686": {
@@ -388,19 +451,9 @@
   }
  },
  "contrast": {
-  "checked": 13,
+  "checked": 15,
   "failing": [],
   "lowest": [
-   {
-    "sel": "tr:nth-of-type(1) > td.st:nth-of-type(7) > span.pill.due",
-    "ratio": 4.97,
-    "fg": "#845d00",
-    "bg": "#f3eadc",
-    "fs": 12,
-    "large": false,
-    "backdrop": "solid",
-    "n": 2
-   },
    {
     "sel": "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.primary:nth-of-type(3)",
     "ratio": 6.02,
@@ -413,13 +466,23 @@
    },
    {
     "sel": "tr:nth-of-type(2) > td.st:nth-of-type(7) > span.pill.late",
-    "ratio": 6.02,
-    "fg": "#903e37",
-    "bg": "#fbe7e4",
+    "ratio": 6.04,
+    "fg": "#a82321",
+    "bg": "#ffe6e3",
     "fs": 12,
     "large": false,
     "backdrop": "solid",
     "n": 2
+   },
+   {
+    "sel": "header.top > span.avatar:nth-of-type(2)",
+    "ratio": 6.06,
+    "fg": "#006350",
+    "bg": "#d1f2e7",
+    "fs": 12,
+    "large": false,
+    "backdrop": "solid",
+    "n": 1
    }
   ]
  },
@@ -433,7 +496,7 @@
  },
  "fixed": [],
  "targets": {
-  "count": 24,
+  "count": 25,
   "small": [],
   "noName": [],
   "hiddenFocusable": [],
@@ -449,7 +512,7 @@
   "lazyPending": 0
  },
  "media_counts": {
-  "svg": 21,
+  "svg": 26,
   "canvas": 0,
   "video": 0,
   "iframe": 0,
@@ -476,23 +539,24 @@
   "states": {
    "noHover": [
     "header.top > input.search",
-    "div.bar:nth-of-type(2) > nav.seg > a:nth-of-type(1)",
-    "div.bar:nth-of-type(2) > nav.seg > a:nth-of-type(2)",
-    "div.bar:nth-of-type(2) > nav.seg > a:nth-of-type(3)",
-    "div.bar:nth-of-type(2) > nav.seg > a:nth-of-type(4)"
+    "div.bar:nth-of-type(3) > nav.seg > a:nth-of-type(1)",
+    "div.bar:nth-of-type(3) > nav.seg > a:nth-of-type(2)",
+    "div.bar:nth-of-type(3) > nav.seg > a:nth-of-type(3)",
+    "div.bar:nth-of-type(3) > nav.seg > a:nth-of-type(4)"
    ],
    "noFocusStyle": [],
    "focusRingRemoved": [],
-   "noActive": 24,
+   "noActive": 25,
    "blockedSheets": 1,
-   "checked": 24
+   "checked": 25
   }
  },
  "fonts": {
   "faces": [],
   "failed": 0,
   "familyState": {
-   "system-ui": "generic"
+   "system-ui": "generic",
+   "ui-monospace": "generic"
   },
   "ready": "loaded"
  },
@@ -516,7 +580,7 @@
  },
  "stress": [],
  "mode": {
-  "theme": null,
+  "theme": "light",
   "density": null,
   "motion": null
  }

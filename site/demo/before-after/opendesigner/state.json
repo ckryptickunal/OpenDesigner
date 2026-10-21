@@ -36,7 +36,12 @@
     "energy": null,
     "roundness": null,
     "depth": null,
-    "colorfulness": null,
+    "colorfulness": {
+      "value": 85,
+      "set_by": "chosen",
+      "detached": true,
+      "decision": "D-0012"
+    },
     "warmth": null
   },
   "preset": null,
@@ -491,7 +496,7 @@
     ]
   },
   "hashes": {
-    "DESIGN.md": "2c4c068cb5ca93ed",
+    "DESIGN.md": "bd24470498f875b8",
     "PRODUCT.md": "bae671ac8248932a"
   },
   "exports": {
