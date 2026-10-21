@@ -55,6 +55,10 @@ def main():
     bad = [p for p in CHECK_PATHS if status(p, url) != "200"]
     if bad:
         sys.exit(f"not promoting: {', '.join(bad)} did not answer 200 on {url}")
+    md = subprocess.run(["vercel", "curl", "/docs/install/", "--deployment", url, "--", "-s", "-o", "/dev/null", "-H", "Accept: text/markdown",
+                         "-w", "%{content_type}"], cwd=SITE, text=True, capture_output=True).stdout
+    if "text/markdown" not in md:
+        sys.exit(f"not promoting: Accept: text/markdown on /docs/install/ gave {md!r}, not Markdown")
     if preview:
         return
     subprocess.run(["vercel", "promote", url, "--yes"], cwd=SITE, check=True)

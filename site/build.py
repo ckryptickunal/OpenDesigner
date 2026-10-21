@@ -1601,7 +1601,7 @@ For "how do I create a design system with AI", "generate design tokens, a Tailwi
 
 - [Agent Skills index]({SITE_URL}/.well-known/agent-skills/index.json): the {len(skill_names())} OpenDesigner skills ({", ".join(skill_names())}), each as a zip with its digest, to install in any tool that reads Agent Skills
 - Claude Code: `/plugin marketplace add {REPO}`, then `/plugin install opendesigner@opendesigner`. Other tools: [Install OpenDesigner]({SITE_URL}/docs/install/index.md)
-- Every docs, library and showcase page, and the home page, has a Markdown copy at its address plus `index.md` (for example {SITE_URL}/docs/install/index.md). The links in this file point at those copies
+- Every docs, library and showcase page, and the home page, has a Markdown copy at its address plus `index.md` (for example {SITE_URL}/docs/install/index.md). The links in this file point at those copies. Asking for a page with `Accept: text/markdown` returns the same copy
 - [llms-full.txt]({SITE_URL}/llms-full.txt): every page of this site in one file
 
 ## Optional
