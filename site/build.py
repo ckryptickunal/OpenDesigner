@@ -501,6 +501,7 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jp
 {inner}
 {footer(pages)}
 <script src="/site.js" defer></script>
+<script src="/_vercel/speed-insights/script.js" defer></script>
 </body>
 </html>
 """
@@ -819,7 +820,7 @@ def book_page(pages):
 <p class="h-soon">Opening soon</p>
 </article>
 </div>
-<p class="h-fine">The site has no analytics, and nothing you send through the booking form is used for anything but the call.</p>
+<p class="h-fine">The site measures only how fast pages load (<a href="{GH}/blob/main/docs/PRIVACY.md#the-websites-speed-measurements">anonymous, no visitor tracking</a>), and nothing you send through the booking form is used for anything but the call.</p>
 </section>
 """
     ld = [crumbs_ld([("Book a call", "/book/")])]

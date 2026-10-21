@@ -90,8 +90,17 @@ The reference receiver in `server/telemetry/` (a Cloudflare Worker, not deployed
 ## How long reports are kept
 Raw reports are kept for 12 months, then deleted automatically (a weekly cleanup in the receiver). Totals made from them are kept and may be published, because they can't be traced to anyone. These totals are the aggregate journey report: counts, rates and averages per question.
 
+## The website's speed measurements
+The OpenDesigner website (opendesigner.dev) runs Vercel Speed Insights, so the maintainers can see how fast pages load for real visitors. It is separate from the plugin: nothing about your project or your design system is involved.
+- **What is sent, per page load:** the page address, how fast it loaded (Web Vitals such as how long the main content took to appear), network speed (for example 4g), browser, operating system, device type (phone, tablet or desktop), country, and the time.
+- **Not sent:** your name, email, IP address or anything you type. Vercel says the data points are anonymous and can't be used to rebuild one visitor's path across pages.
+- **Who sees it:** the maintainers, as totals in the Vercel dashboard.
+- The script loads from the site's own address (`/_vercel/speed-insights/script.js`). Blocking it changes nothing on the site.
+
+Source: Vercel's [Speed Insights privacy page](https://vercel.com/docs/speed-insights/privacy-policy), checked on 2026-10-22.
+
 ## Everything else that can use the network
-This page is about the journey log and shared reports. For completeness, these are the only other places OpenDesigner's own scripts go online (checked against the code on 2026-10-15):
+This page is about the journey log, shared reports and the website's speed measurements. For completeness, these are the only other places OpenDesigner's own scripts go online (checked against the code on 2026-10-15):
 - **The engine (`engine.py`) never does.** It imports no network module.
 - **Illustrations:** `illustrate.py search` and `fetch` call open-licence art sites over HTTPS, after you say yes to the search. Your search words go to those sites. `--offline` prints the requests instead.
 - **Taste poll screens:** `taste.py add` downloads screen images into `~/.opendesigner/taste-screens/` when your AI tool is connected to Mobbin and the poll needs more. Nothing about your project is sent.

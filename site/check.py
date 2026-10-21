@@ -67,7 +67,7 @@ def main():
             if not target.exists() and path not in redirects:
                 problems.append(f"{rel}: broken link {href}")
         for src in set(re.findall(r'src="(/[^"]+)"', h)):
-            if not (D / src.lstrip("/")).exists():
+            if not src.startswith("/_vercel/") and not (D / src.lstrip("/")).exists():  # /_vercel/ is served by Vercel
                 problems.append(f"{rel}: missing asset {src}")
     print(f"{n} pages checked")
     print("\n".join(problems) or "no problems")
