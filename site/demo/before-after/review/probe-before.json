@@ -2,7 +2,7 @@
  "v": 1,
  "url": "file:///Users/Kunal/Desktop/Design-System/site/demo/before-after/before.html",
  "title": "Invoices \u00b7 Merriweft",
- "at": "2026-10-21T16:35:53.390Z",
+ "at": "2026-10-21T20:54:54.405Z",
  "viewport": {
   "w": 1280,
   "h": 800,
@@ -528,6 +528,10 @@
  },
  "content": {
   "placeholders": []
+ },
+ "labels": {
+  "checked": 8,
+  "broken": []
  },
  "fixed": [],
  "targets": {

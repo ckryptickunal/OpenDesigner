@@ -299,6 +299,9 @@
     var x = Math.min(0, Math.max(W - camW * z, W / 2 - c[0] * z)), y = Math.min(0, Math.max(H - camH * z, H / 2 - c[1] * z));
     return "translate(" + x + "px, " + y + "px) scale(" + z + ")";
   }
+  function zFor(r) {  // close enough to read, and out far enough that the whole box shows
+    return Math.max(1, Math.min(Z, 0.94 * stage.clientWidth / r.w, 0.9 * stage.clientHeight / r.h));
+  }
   function aim(c, z, ms) {  // move the camera; with the whole page on the stage there is nothing to move
     if (Z === 1) return;
     var to = shot(c, z || Z);
@@ -450,13 +453,17 @@
       var found = 0, gs = groups();
       for (var gi = 0; gi < gs.length; gi++) {
         var top = by[gs[gi][0].n].r.y;
-        aim(centre(by[gs[gi][0].n].r), Z, 620);
+        aim(centre(by[gs[gi][0].n].r), zFor(by[gs[gi][0].n].r), 620);
         A(line, [{ transform: "translateY(" + y + "px)" }, { transform: "translateY(" + top + "px)" }], { duration: 560, easing: MOVE });
         y = top;
         await wait(580, id);
         if (!found) select("audit");
         for (var k = 0; k < gs[gi].length; k++) {
           var m = gs[gi][k], b = by[m.n];
+          if (k > 0 && Z > 1) {  // zoomed in, the next issue in a row can be off screen: go to it before showing it
+            aim(centre(b.r), zFor(b.r), 520);
+            await wait(560, id);
+          }
           found++;
           b.shown = true;
           A(b.mk, [{ opacity: 0, clipPath: "inset(-16px 100% -16px -16px)" }, { opacity: 1, clipPath: "inset(-16px -16px -16px -16px)" }], { duration: 380, easing: EASE });

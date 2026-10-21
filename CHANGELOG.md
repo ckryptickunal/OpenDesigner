@@ -141,6 +141,7 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Fixed
 
+- **The home audit counts up as it scans** (owner, 2026-10-22). The scan found issues 1, then 6 and 7, then 2 to 5; they are now numbered in reading order, and the site build stops if they would not count up. On phones the view now goes to each issue as it is named, zooming out for a wide one, so none is off screen, and Replay sits on the tabs' row as an icon.
 - **The home page paints faster on phones** (2026-10-22). Lighthouse found the phone's largest element was the hero figure's photo, a CSS background the browser found only after the 37 KB stylesheet. It is now preloaded at high priority (one URL for both, so it is fetched once), and site.css is minified: 37 KB to 26 KB transferred. Layout is unchanged (check_layout.py 0 errors at 13 widths on five pages).
 - **Fixes from the fresh verifier's re-check (2026-10-21).**
   - `review.py compare`'s badges and help text now meet 4.5:1, a box at the edge keeps its number in view, and a mark with no number, a blank "gives" or numbers in place of text is refused or mended instead of crashing. An acronym keeps its capitals ("WCAG").

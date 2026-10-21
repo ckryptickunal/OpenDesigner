@@ -23,57 +23,9 @@
    ]
   },
   {
-   "sel": "tbody td.d",
-   "title": "Readable dates",
-   "n": 2,
-   "matched": 12,
-   "rect": [
-    455,
-    693.83,
-    320.69,
-    312
-   ]
-  },
-  {
-   "sel": "tbody td.amt",
-   "title": "Aligned amounts",
-   "n": 3,
-   "matched": 6,
-   "rect": [
-    775.69,
-    693.83,
-    148.06,
-    312
-   ]
-  },
-  {
-   "sel": "tbody td.st",
-   "title": "Labelled status",
-   "n": 4,
-   "matched": 6,
-   "rect": [
-    923.75,
-    693.83,
-    150.25,
-    312
-   ]
-  },
-  {
-   "sel": "tbody td.act",
-   "title": "32 px named buttons",
-   "n": 5,
-   "matched": 6,
-   "rect": [
-    1074,
-    693.83,
-    133,
-    312
-   ]
-  },
-  {
    "sel": ".t-open, .t-late, .t-week",
    "title": "System corners and type",
-   "n": 6,
+   "n": 2,
    "matched": 3,
    "rect": [
     646,
@@ -85,13 +37,61 @@
   {
    "sel": ".t-cash",
    "title": "One figure, a chart with numbers",
-   "n": 7,
+   "n": 3,
    "matched": 1,
    "rect": [
     72,
     167.98,
     562,
     420.84
+   ]
+  },
+  {
+   "sel": "tbody td.d",
+   "title": "Readable dates",
+   "n": 4,
+   "matched": 12,
+   "rect": [
+    455,
+    693.83,
+    320.69,
+    312
+   ]
+  },
+  {
+   "sel": "tbody td.amt",
+   "title": "Aligned amounts",
+   "n": 5,
+   "matched": 6,
+   "rect": [
+    775.69,
+    693.83,
+    148.06,
+    312
+   ]
+  },
+  {
+   "sel": "tbody td.st",
+   "title": "Labelled status",
+   "n": 6,
+   "matched": 6,
+   "rect": [
+    923.75,
+    693.83,
+    150.25,
+    312
+   ]
+  },
+  {
+   "sel": "tbody td.act",
+   "title": "32 px named buttons",
+   "n": 7,
+   "matched": 6,
+   "rect": [
+    1074,
+    693.83,
+    133,
+    312
    ]
   }
  ]

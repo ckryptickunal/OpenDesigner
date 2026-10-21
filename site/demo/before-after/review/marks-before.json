@@ -30,82 +30,6 @@
    ]
   },
   {
-   "sel": "tbody td.muted",
-   "title": "Gray text is hard to read",
-   "short": "Gray text at 2.54:1, where it needs 4.5:1",
-   "gives": "dates, emails and column titles readable for everyone",
-   "token": "color.text.secondary: 7.23:1",
-   "before": "2.54:1 on 40 pieces of text",
-   "after": "7.23:1",
-   "finding": "measured contrast (MS-04)",
-   "stat": "2.54:1 \u2192 7.23:1",
-   "n": 2,
-   "matched": 12,
-   "rect": [
-    468.83,
-    455.5,
-    341.66,
-    401.5
-   ]
-  },
-  {
-   "sel": "tbody td:nth-child(5)",
-   "title": "Amounts don't line up",
-   "short": "Amounts left-aligned, in digits of uneven width",
-   "gives": "amounts quick to compare, right-aligned with digits of equal width",
-   "token": "numbers: tabular, right-aligned",
-   "before": "left-aligned, proportional digits",
-   "after": "right-aligned, tabular digits",
-   "finding": "seen on the page",
-   "stat": "proportional \u2192 tabular digits",
-   "n": 3,
-   "matched": 6,
-   "rect": [
-    810.48,
-    455.5,
-    152.83,
-    401.5
-   ]
-  },
-  {
-   "sel": "tbody td:nth-child(6)",
-   "title": "Status is shown by color alone",
-   "short": "Status shown by color alone",
-   "gives": "status clear to everyone, including people who can't tell red from green: each one says Paid, Due or Overdue",
-   "token": "status: a label and an icon",
-   "before": "a colored dot",
-   "after": "a label and an icon",
-   "finding": "seen on the page (WCAG 1.4.1)",
-   "stat": "a dot \u2192 a label and an icon",
-   "n": 4,
-   "matched": 6,
-   "rect": [
-    963.31,
-    455.5,
-    121.05,
-    401.5
-   ]
-  },
-  {
-   "sel": "tbody td:last-child",
-   "title": "Row buttons are small, with vague names",
-   "short": "Row buttons 20 px, named only \"Send\"",
-   "gives": "row actions easy to hit, and each button names its invoice for screen readers",
-   "token": "size.target: 32 px",
-   "before": "20 x 20 px, \"Send\"",
-   "after": "32 x 32 px, \"Send MW-1042\"",
-   "finding": "measured target sizes",
-   "stat": "20 px \u2192 32 px",
-   "n": 5,
-   "matched": 6,
-   "rect": [
-    1084.36,
-    455.5,
-    123.64,
-    401.5
-   ]
-  },
-  {
    "sel": ".overview .stat",
    "title": "Corners, text sizes and colors are off the system",
    "short": "Corners, sizes and colors from no system",
@@ -115,7 +39,7 @@
    "after": "none off the tokens",
    "finding": "measured against the tokens (MS-09, MS-02, MS-08)",
    "stat": "20 values off the tokens \u2192 0",
-   "n": 6,
+   "n": 2,
    "matched": 3,
    "rect": [
     72,
@@ -134,13 +58,89 @@
    "after": "shown once; a value on every bar; 12 px labels at 7.23:1",
    "finding": "seen on the page, and measured label colors",
    "stat": "$112.5k twice \u2192 once; no values \u2192 4",
-   "n": 7,
+   "n": 3,
    "matched": 1,
    "rect": [
     857.39,
     186,
     350.61,
     150
+   ]
+  },
+  {
+   "sel": "tbody td.muted",
+   "title": "Gray text is hard to read",
+   "short": "Gray text at 2.54:1, where it needs 4.5:1",
+   "gives": "dates, emails and column titles readable for everyone",
+   "token": "color.text.secondary: 7.23:1",
+   "before": "2.54:1 on 40 pieces of text",
+   "after": "7.23:1",
+   "finding": "measured contrast (MS-04)",
+   "stat": "2.54:1 \u2192 7.23:1",
+   "n": 4,
+   "matched": 12,
+   "rect": [
+    468.83,
+    455.5,
+    341.66,
+    401.5
+   ]
+  },
+  {
+   "sel": "tbody td:nth-child(5)",
+   "title": "Amounts don't line up",
+   "short": "Amounts left-aligned, in digits of uneven width",
+   "gives": "amounts quick to compare, right-aligned with digits of equal width",
+   "token": "numbers: tabular, right-aligned",
+   "before": "left-aligned, proportional digits",
+   "after": "right-aligned, tabular digits",
+   "finding": "seen on the page",
+   "stat": "proportional \u2192 tabular digits",
+   "n": 5,
+   "matched": 6,
+   "rect": [
+    810.48,
+    455.5,
+    152.83,
+    401.5
+   ]
+  },
+  {
+   "sel": "tbody td:nth-child(6)",
+   "title": "Status is shown by color alone",
+   "short": "Status shown by color alone",
+   "gives": "status clear to everyone, including people who can't tell red from green: each one says Paid, Due or Overdue",
+   "token": "status: a label and an icon",
+   "before": "a colored dot",
+   "after": "a label and an icon",
+   "finding": "seen on the page (WCAG 1.4.1)",
+   "stat": "a dot \u2192 a label and an icon",
+   "n": 6,
+   "matched": 6,
+   "rect": [
+    963.31,
+    455.5,
+    121.05,
+    401.5
+   ]
+  },
+  {
+   "sel": "tbody td:last-child",
+   "title": "Row buttons are small, with vague names",
+   "short": "Row buttons 20 px, named only \"Send\"",
+   "gives": "row actions easy to hit, and each button names its invoice for screen readers",
+   "token": "size.target: 32 px",
+   "before": "20 x 20 px, \"Send\"",
+   "after": "32 x 32 px, \"Send MW-1042\"",
+   "finding": "measured target sizes",
+   "stat": "20 px \u2192 32 px",
+   "n": 7,
+   "matched": 6,
+   "rect": [
+    1084.36,
+    455.5,
+    123.64,
+    401.5
    ]
   }
  ]

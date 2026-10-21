@@ -843,6 +843,18 @@ def before_after():
     after_sel = [m["sel"] for m in spec["after"]]
     marks = [dict(m, n=i + 1, asel=after_sel[i] if i < len(after_sel) else None) for i, m in enumerate(spec["before"])]
     shot = {n: json.loads((BA / "review" / f"marks-{n}.json").read_text())["page"] for n in ("before", "after")}
+    # Numbers follow the scan (owner, 2026-10-22): site.js finds issues by height, those within 2% of the page's height
+    # together and left to right (groups()), and each issue's number is its place in marks.in.json, so the two must agree.
+    rows = []
+    for m in sorted(json.loads((BA / "review" / "marks-before.json").read_text())["marks"], key=lambda m: m["rect"][1]):
+        if rows and m["rect"][1] - rows[-1][0]["rect"][1] < shot["before"]["h"] * 0.02:
+            rows[-1].append(m)
+        else:
+            rows.append([m])
+    found = [m["n"] for r in rows for m in sorted(r, key=lambda m: m["rect"][0])]
+    if found != sorted(found):
+        raise SystemExit(f"site/demo/before-after/marks.in.json: list the issues in the order the scan meets them (top to bottom, "
+                         f"then left to right), so the numbers count up; it would find them as {found}")
     tall = max(shot["before"]["h"], shot["after"]["h"]) / shot["before"]["w"]  # until site.js measures the pages as drawn
     data = {"width": DEMO_W, "marks": [{k: m[k] for k in ("n", "sel", "asel", "title", "short", "token")} for m in marks]}
     check = ('<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3 5 8.7l4.6-5.2" fill="none" stroke="currentColor" stroke-width="1.8" '
@@ -871,7 +883,7 @@ def before_after():
     tabs = "".join(f'<button type="button" role="tab" data-view="{k}" aria-selected="{"true" if k == "audit" else "false"}">{n}</button>'
                    for k, n in (("today", "Today"), ("audit", "Audit"), ("fixed", "Fixed")))
     return (f'<div class="au" data-au><div class="au-bar"><div class="tablist" role="tablist" aria-label="The invoices page: today, the audit, and the fix">{tabs}</div>'
-            f'<button type="button" class="au-replay">{replay}Replay</button><p class="au-status" aria-live="polite"><b>{len(marks)} issues</b> found on this page.</p></div>'
+            f'<button type="button" class="au-replay">{replay}<span>Replay</span></button><p class="au-status" aria-live="polite"><b>{len(marks)} issues</b> found on this page.</p></div>'
             f'<div class="au-body"><div>{st}<p class="au-cap" hidden></p></div>'
             f'<div><p class="au-empty" hidden>The page as it is today. Watch the audit, or press Audit to see what it finds.</p><ol class="au-list">{rows}</ol></div></div>'
             f'<script type="application/json" id="au-data">{json.dumps(data)}</script></div>'), credit
