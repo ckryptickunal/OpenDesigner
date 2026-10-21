@@ -60,8 +60,11 @@ def main():
     subprocess.run(["vercel", "promote", url, "--yes"], cwd=SITE, check=True)
     site_url = env.get("SITE_URL", "")
     import time
-    time.sleep(5)
-    bad = [p for p in CHECK_PATHS if live_status(site_url + p) != 200]
+    for wait in (5, 10, 20):  # the domain can answer from the old deployment for a few seconds
+        time.sleep(wait)
+        bad = [p for p in CHECK_PATHS if live_status(site_url + p) != 200]
+        if not bad:
+            break
     print("live: every key path answers 200" if not bad else f"WARNING live paths not 200: {bad}")
     indexnow(site_url)
 
