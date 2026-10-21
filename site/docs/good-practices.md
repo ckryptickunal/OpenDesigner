@@ -4,7 +4,7 @@ seo_title: Good practices for designing with AI agents | OpenDesigner
 description: What to give your AI agent before it designs: a reference library, competitors to study, a browser, image tools, keys in the right place and real content.
 section: Guides
 order: 7
-updated: 2026-10-21
+updated: 2026-10-22
 ---
 
 An AI agent designs about as well as the material it can reach. With only your prompt, it falls back on the look every AI tool produces. Give it references, competitors, tools and real content, and its results start to look like work people ship. OpenDesigner checks for each of these at the start of a session and uses whatever it finds without being asked. If something useful is missing, it suggests it once.
@@ -18,6 +18,12 @@ The single biggest improvement is a library of real, shipped screens. [Mobbin](h
 - uses the same three to score its own work before calling it done ([how quality is checked](https://github.com/ckryptickunal/OpenDesigner/blob/main/skills/opendesigner/references/quality.md)).
 
 Mobbin's images stay on your machine. Its terms don't allow re-hosting them, so OpenDesigner never commits or publishes them.
+
+## Name the product that already solved your problem
+
+The most useful reference is often not a competitor. It's a product from any market that already solved the same interface problem. If people in your tool build pages from blocks they add, move and nest, that's what Notion solved. Starting from how Notion handles blocks, menus and empty pages can turn a confusing interface into a clear one quickly. A queue of items that each need a decision has its answer in good approval tools; a dense list of work, in tools like Linear.
+
+OpenDesigner looks for this product early. It describes what people do on the screen without the industry, finds who does that best, and asks you to confirm in one question. Then it takes that product's patterns: structure, interactions, density, empty states and onboarding. It never copies the logo, name, colours or copy. If you already know your analogous product, tell your agent. It's the fastest way to a clear brief.
 
 ## Name your competitors
 

@@ -21,6 +21,8 @@ Take facts from `references/`, not from memory. Use `scripts/engine.py` for all 
 
 A person in a hurry still gets a finished page in the first reply. What they don't get is three rewritten pages they never saw. Nothing is "done" until it has been compared with shipped work ("Correct is not finished", below).
 
+**Name the analogous product early.** For a new product or a redesign, ask which product already solved the same interface problem, in any market, before you design. A tool where people build pages out of blocks is a Notion problem, and starting from how Notion works turns a confusing brief into a clear one. Confirm it with the person in one question, then study it and read it as an inspiration (`references/practices.md` section 3). Competitors come after, as the baseline to beat.
+
 ## When to use which skill
 | Situation | Do this |
 |---|---|
