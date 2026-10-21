@@ -731,9 +731,10 @@ def before_after():
     label = "The Merriweft invoices page, drawn live: as it is today, with the issues an audit finds, and after the fix."
     stage_inner = (f'<div class="au-win"><div class="au-chrome"><span class="au-dots"><i></i><i></i><i></i></span><span class="au-url">merriweft.example/invoices</span></div>'
                    f'<div class="au-stage" role="img" aria-label="{label}" style="aspect-ratio:1 / {tall:.4f}">'
-                   f'<div class="au-page b" aria-hidden="true">{demo_page("before")}</div>'
+                   f'<div class="au-cam"><div class="au-page b" aria-hidden="true">{demo_page("before")}</div>'
                    f'<div class="au-after"><div class="au-page a" aria-hidden="true">{demo_page("after")}</div></div>{boxes}'
-                   f'<div class="au-line" aria-hidden="true"><span class="au-tag"></span></div><div class="au-callout" aria-hidden="true"></div>{palette}</div></div>')
+                   f'<div class="au-line" aria-hidden="true"><span class="au-tag"></span></div></div>'
+                   f'<div class="au-callout" aria-hidden="true"></div>{palette}</div></div>')
     st, credit = stage("woods-sage", stage_inner, "au-photo")
     replay = ('<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.7-4M2.5 2.5v3h3" fill="none" stroke="currentColor" '
               'stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>')

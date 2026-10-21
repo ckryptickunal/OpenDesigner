@@ -508,17 +508,20 @@ body:has(> main.home) :is(.bar-in, .foot-in, .foot-legal) { max-width: 1200px; }
 .au-stage { position: relative; overflow: hidden; background: #f9fafb; }
 /* the demo pages: live HTML laid out at 1200 px (DEMO_W in build.py) and scaled to the stage by site.js (--k) */
 .au-page { position: absolute; left: 0; top: 0; width: 1200px; transform-origin: 0 0; transform: scale(var(--k, 0.6)); }
+/* the camera: the pages, the boxes and the line move together. Fitted to the stage on a desktop; on a small stage site.js
+   zooms it to the desktop reading size and moves the view, and --zs keeps marks their size on screen (making.md section 6) */
+.au-cam { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transform-origin: 0 0; }
 @media (max-width: 1000px) { .au-stage { --k: 0.62; } } @media (max-width: 700px) { .au-stage { --k: 0.27; } }  /* until site.js measures */
 .au-after { position: absolute; inset: 0; background: #fdfdfd; clip-path: inset(0 0 100% 0); }  /* the after page's own background */
-.au-mk { position: absolute; opacity: 0; border: 2px dashed var(--au-issue); border-radius: 5px; box-shadow: 0 0 0 1px rgb(255 255 255 / .9); pointer-events: none; }
-.au-mk b, .au-ok b { position: absolute; top: -11px; left: -11px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: #fff; font: 600 12px/1 "Hanken Grotesk", system-ui, sans-serif; letter-spacing: 0; box-shadow: 0 0 0 2px #fff; }
+.au-mk { position: absolute; opacity: 0; border: calc(2px * var(--zs, 1)) dashed var(--au-issue); border-radius: calc(5px * var(--zs, 1)); box-shadow: 0 0 0 calc(1px * var(--zs, 1)) rgb(255 255 255 / .9); pointer-events: none; }
+.au-mk b, .au-ok b { position: absolute; top: calc(-11px * var(--zs, 1)); left: calc(-11px * var(--zs, 1)); display: grid; place-items: center; width: calc(22px * var(--zs, 1)); height: calc(22px * var(--zs, 1)); border-radius: 50%; color: #fff; font: 600 calc(12px * var(--zs, 1))/1 "Hanken Grotesk", system-ui, sans-serif; letter-spacing: 0; box-shadow: 0 0 0 calc(2px * var(--zs, 1)) #fff; }
 .au-mk b { background: var(--au-issue); }
 .au-mk.hl { border-style: solid; }
 .au-ok { position: absolute; opacity: 0; pointer-events: none; }
-.au-ok b { background: var(--au-ok); } .au-ok b svg { width: 12px; height: 12px; }
+.au-ok b { background: var(--au-ok); } .au-ok b svg { width: calc(12px * var(--zs, 1)); height: calc(12px * var(--zs, 1)); }
 .au-line { position: absolute; left: 0; right: 0; top: 0; height: 0; opacity: 0; pointer-events: none; }
-.au-line::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 56px; background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--accent) 9%, transparent)); }
-.au-line::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--accent); box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 55%, transparent); }
+.au-line::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: calc(56px * var(--zs, 1)); background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--accent) 9%, transparent)); }
+.au-line::after { content: ""; position: absolute; left: 0; right: 0; bottom: calc(-1px * var(--zs, 1)); height: calc(2px * var(--zs, 1)); background: var(--accent); box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 55%, transparent); }
 .au-line.fix::before { background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--au-ok) 12%, transparent)); }
 .au-line.fix::after { background: var(--au-ok); box-shadow: 0 0 12px color-mix(in srgb, var(--au-ok) 55%, transparent); }
 .au-tag { position: absolute; right: 12px; bottom: 8px; padding: 3px 9px; border-radius: 999px; background: var(--accent); color: var(--on-accent); font: 600 12px/18px "Hanken Grotesk", system-ui, sans-serif; letter-spacing: 0; white-space: nowrap; }
@@ -552,8 +555,9 @@ body:has(> main.home) :is(.bar-in, .foot-in, .foot-legal) { max-width: 1200px; }
   .au-cap:not([hidden]) { display: flex; gap: 8px; align-items: flex-start; min-height: 44px; margin: 10px 2px 0; color: var(--ink); font-size: 14px; line-height: 20px; }
   .au-cap b { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--au-issue); color: #fff; font: 600 11px/1 "Hanken Grotesk", system-ui, sans-serif; }
   .au-cap.ok b { background: var(--au-ok); }
-  .au-mk { border-width: 1.5px; } .au-mk b { top: -8px; left: -8px; width: 16px; height: 16px; font-size: 10px; box-shadow: 0 0 0 1.5px #fff; }
-  .au-ok b { top: -7px; left: -7px; width: 14px; height: 14px; box-shadow: 0 0 0 1.5px #fff; } .au-ok b svg { width: 9px; height: 9px; }
+  .au-mk { border-width: calc(1.5px * var(--zs, 1)); }
+  .au-mk b { top: calc(-9px * var(--zs, 1)); left: calc(-9px * var(--zs, 1)); width: calc(18px * var(--zs, 1)); height: calc(18px * var(--zs, 1)); font-size: calc(11px * var(--zs, 1)); box-shadow: 0 0 0 calc(1.5px * var(--zs, 1)) #fff; }
+  .au-ok b { top: calc(-9px * var(--zs, 1)); left: calc(-9px * var(--zs, 1)); width: calc(18px * var(--zs, 1)); height: calc(18px * var(--zs, 1)); box-shadow: 0 0 0 calc(1.5px * var(--zs, 1)) #fff; } .au-ok b svg { width: calc(11px * var(--zs, 1)); height: calc(11px * var(--zs, 1)); }
   .au-chrome { height: 28px; } .au-url { font-size: 11px; }
   .au-list li { padding: 8px 4px; }
 }

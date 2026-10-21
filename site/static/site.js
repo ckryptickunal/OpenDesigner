@@ -235,12 +235,14 @@
    the fix sweeps down and the fixed page builds itself as the line passes (bars grow, the sparkline draws, totals count up,
    rows and labels arrive) while a chip carries each token from the Merriweft card to its place and each box becomes a check.
    Today / Audit / Fixed stop it and show that state at once; Replay plays it again. With reduced motion it never plays by
-   itself. Web Animations only: transform, opacity, clip-path. */
+   itself. On a small stage a camera shows part of the page at the size it reads on a desktop and moves the view: to each
+   issue, out for the sweep, then onto the Collected chart (making.md section 6). Web Animations only: transform, opacity,
+   clip-path. */
 (function () {
   "use strict";
   var root = document.querySelector("[data-au]");
   if (!root || !root.animate || !window.Promise) return;
-  var stage = root.querySelector(".au-stage"), after = stage.querySelector(".au-after");
+  var stage = root.querySelector(".au-stage"), cam = stage.querySelector(".au-cam"), after = stage.querySelector(".au-after");
   var pb = stage.querySelector(".au-page.b"), pa = stage.querySelector(".au-page.a");
   if (!pb || !pa || !pb.shadowRoot || !pa.shadowRoot) return;  // the list beside the page still says what the audit found
   var D = JSON.parse(document.getElementById("au-data").textContent);
@@ -250,6 +252,7 @@
   var empty = root.querySelector(".au-empty"), replay = root.querySelector(".au-replay");
   var tabs = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]'));
   var by = {}, run = 0, anims = [], timers = [], undo = [], busy = false, N = D.marks.length;
+  var KVIEW = 0.58, Z = 1, camW = 0, camH = 0, cur = "", spot = {}, view = "today";  // KVIEW: the page's scale on a desktop stage
   var all = function (sr, sel) { return Array.prototype.slice.call(sr.querySelectorAll(sel)); };
   D.marks.forEach(function (m) {
     by[m.n] = { m: m, mk: stage.querySelector('.au-mk[data-n="' + m.n + '"]'), ok: stage.querySelector('.au-ok[data-n="' + m.n + '"]'),
@@ -257,28 +260,47 @@
   });
   root.classList.add("on");
 
-  function box(sr, sel) {  // every match as one box, in stage pixels, a little larger than what it marks
+  function box(sr, sel) {  // every match as one box, in the camera's pixels (the page fitted to the stage), a little larger
     if (!sel) return null;
-    var s = stage.getBoundingClientRect(), x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    var c = cam.getBoundingClientRect(), sx = c.width / cam.offsetWidth, sy = c.height / cam.offsetHeight, pad = 4 / Z;
+    var x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
     all(sr, sel).forEach(function (el) {
       var r = el.getBoundingClientRect();
       if (!r.width || !r.height) return;
       x0 = Math.min(x0, r.left); y0 = Math.min(y0, r.top); x1 = Math.max(x1, r.right); y1 = Math.max(y1, r.bottom);
     });
     if (x1 < x0) return null;
-    return { x: x0 - s.left - 4, y: y0 - s.top - 4, w: x1 - x0 + 8, h: y1 - y0 + 8 };
+    return { x: (x0 - c.left) / sx - pad, y: (y0 - c.top) / sy - pad, w: (x1 - x0) / sx + 2 * pad, h: (y1 - y0) / sy + 2 * pad };
   }
+  function centre(r) { return [r.x + r.w / 2, r.y + r.h / 2]; }
   function put(el, r) { el.style.left = r.x + "px"; el.style.top = r.y + "px"; el.style.width = r.w + "px"; el.style.height = r.h + "px"; }
-  function fit() {  // scale both pages to the stage, make the stage as tall as the taller page, and measure every box
-    var k = stage.clientWidth / D.width;
+  function fit() {  // fit both pages to the stage's width, choose the camera's zoom, and measure every box
+    var W = stage.clientWidth, k = W / D.width, ph = Math.max(pb.offsetHeight, pa.offsetHeight);
+    Z = KVIEW / k > 1.15 ? KVIEW / k : 1;
+    camW = W; camH = ph * k;
     stage.style.setProperty("--k", k);
-    stage.style.aspectRatio = D.width + " / " + Math.max(pb.offsetHeight, pa.offsetHeight);  // not a height: that would size the width too
+    stage.style.aspectRatio = Z > 1 ? "4 / 5" : D.width + " / " + ph;  // not a height: that would size the width too
+    cam.style.height = camH + "px";
+    cam.style.setProperty("--zs", 1 / Z);  // marks and the line keep their size on screen at the camera's zoom
     D.marks.forEach(function (m) {
       var b = by[m.n];
       b.r = box(pb.shadowRoot, m.sel) || { x: 0, y: 0, w: 0, h: 0 };
       b.a = box(pa.shadowRoot, m.asel) || b.r;
       put(b.mk, b.r); put(b.ok, b.a);
     });
+    var t = box(pa.shadowRoot, ".t-cash"), g = groups()[0];
+    spot = { today: [0, 0], audit: g ? centre(by[g[0].n].r) : [0, 0], fixed: t ? [t.x - 8 / Z + W / Z / 2, t.y + t.h / 2] : [0, 0] };  // the chart's left edge in view
+  }
+  function shot(c, z) {  // the camera transform that centres the page's point c at zoom z, kept inside the page
+    var W = stage.clientWidth, H = stage.clientHeight;
+    var x = Math.min(0, Math.max(W - camW * z, W / 2 - c[0] * z)), y = Math.min(0, Math.max(H - camH * z, H / 2 - c[1] * z));
+    return "translate(" + x + "px, " + y + "px) scale(" + z + ")";
+  }
+  function aim(c, z, ms) {  // move the camera; with the whole page on the stage there is nothing to move
+    if (Z === 1) return;
+    var to = shot(c, z || Z);
+    if (ms && cur) A(cam, [{ transform: cur }, { transform: to }], { duration: ms, easing: MOVE });
+    cur = to;
   }
 
   function A(el, kf, o) { var a = el.animate(kf, Object.assign({ fill: "forwards" }, o)); anims.push(a); return a; }
@@ -301,7 +323,10 @@
     cap.className = "au-cap" + (ok ? " ok" : "");
     cap.innerHTML = "<b>" + m.n + "</b><span>" + (ok ? m.token : m.short) + "</span>";
   }
-  function reset(view) {
+  function reset(v) {
+    view = v;
+    cam.style.transform = Z > 1 ? shot(spot[v], Z) : "";
+    cur = cam.style.transform;
     select(view);
     after.style.clipPath = view === "fixed" ? "inset(0 0 0 0)" : "inset(0 0 100% 0)";
     line.style.opacity = "0"; callout.style.opacity = "0"; card.style.opacity = "0";
@@ -337,15 +362,15 @@
     callout.style.left = left + "px"; callout.style.top = top + "px";
   }
   function groups() {  // issues at about the same height are found together, left to right
-    var H = stage.clientHeight, out = [];
+    var out = [];
     D.marks.slice().sort(function (a, b) { return by[a.n].r.y - by[b.n].r.y || by[a.n].r.x - by[b.n].r.x; }).forEach(function (m) {
       var g = out[out.length - 1];
-      if (g && Math.abs(by[g[0].n].r.y - by[m.n].r.y) < H * 0.02) g.push(m); else out.push([m]);
+      if (g && Math.abs(by[g[0].n].r.y - by[m.n].r.y) < camH * 0.02) g.push(m); else out.push([m]);
     });
     return out;
   }
   function fly(m, b) {  // a chip leaves the token card and lands where the fix goes; the check appears as it lands
-    var p = b.a, H = stage.clientHeight, small = stage.clientWidth < 520;
+    var p = b.a, H = stage.clientHeight, small = Z > 1 || stage.clientWidth < 520;
     var land = function () { A(b.ok, [{ opacity: 0, transform: "scale(0.9)" }, { opacity: 1, transform: "scale(1)" }], { duration: 240, easing: EASE }); };
     if (small) { land(); return; }
     var chip = document.createElement("span");
@@ -374,8 +399,8 @@
     draw: { clip: ["inset(-4px 100% -4px -4px)", "inset(-4px -4px -4px -4px)"], d: 1000 }
   };
   function build(id, SWEEP) {
-    var s = stage.getBoundingClientRect(), H = stage.clientHeight;
-    var reach = function (el) { return Math.max(0, (el.getBoundingClientRect().top - s.top) / H * SWEEP); };
+    var c = cam.getBoundingClientRect();
+    var reach = function (el) { return Math.max(0, (el.getBoundingClientRect().top - c.top) / c.height * SWEEP); };
     var F = pa.shadowRoot;
     BUILD.forEach(function (step) {
       var mo = MOTION[step[1]];
@@ -412,7 +437,7 @@
     fit();
     busy = true;
     empty.hidden = true;
-    var H = stage.clientHeight, y = 0;
+    var H = camH, y = 0;
     line.classList.remove("fix");
     tag.textContent = "Measuring contrast, sizes and spacing";
     say("Auditing the invoices page…");
@@ -422,6 +447,7 @@
       var found = 0, gs = groups();
       for (var gi = 0; gi < gs.length; gi++) {
         var top = by[gs[gi][0].n].r.y;
+        aim(centre(by[gs[gi][0].n].r), Z, 620);
         A(line, [{ transform: "translateY(" + y + "px)" }, { transform: "translateY(" + top + "px)" }], { duration: 560, easing: MOVE });
         y = top;
         await wait(580, id);
@@ -434,18 +460,21 @@
           A(b.mk.firstElementChild, [{ opacity: 0, transform: "scale(0.9)" }, { opacity: 1, transform: "scale(1)" }], { duration: 220, delay: 60, easing: EASE });
           b.row.hidden = false;
           A(b.row, [{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 240, easing: EASE });
-          place(m);
-          A(callout, [{ opacity: 0, transform: "translateY(4px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 200, delay: 120, easing: EASE });
+          if (Z === 1) {  // the callout sits beside its box; zoomed in, the caption under the page says it
+            place(m);
+            A(callout, [{ opacity: 0, transform: "translateY(4px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 200, delay: 120, easing: EASE });
+          }
           say("Found " + found + " of " + N + ": <b>" + m.title + "</b>");
           caption(m);
           await wait(1250, id);
-          A(callout, [{ opacity: 1 }, { opacity: 0 }], { duration: 140, easing: "ease" });
+          if (Z === 1) A(callout, [{ opacity: 1 }, { opacity: 0 }], { duration: 140, easing: "ease" });
         }
       }
       A(line, [{ transform: "translateY(" + y + "px)", opacity: 1 }, { transform: "translateY(" + H + "px)", opacity: 0 }], { duration: 520, easing: MOVE });
       caption(null);
       say("<b>" + N + " issues found.</b> Fixing them with Merriweft's design system…");
       A(card, [{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 260, delay: 300, easing: EASE });
+      aim([camW / 2, camH / 2], Math.max(1, stage.clientHeight / camH), 760);  // out to see the whole sweep
       await wait(1000, id);
 
       var SWEEP = 3400, fixed = 0;
@@ -475,7 +504,8 @@
       await wait(SWEEP + 2200, id);
       A(line, [{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: "ease" });
       A(card, [{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: "ease" });
-      await wait(260, id);
+      aim(spot.fixed, Z, 900);  // back in, onto the Collected chart
+      await wait(Z > 1 ? 920 : 260, id);
       show("fixed");
     } catch (e) { /* a tab or Replay stopped it */ }
   }
@@ -504,8 +534,9 @@
     new ResizeObserver(function () {  // a new width moves every box: measure again (mid-play, skip to the end)
       if (stage.clientWidth === width) return;
       width = stage.clientWidth;
-      if (busy) show("fixed");
+      if (busy) { stop(); view = "fixed"; }
       fit();
+      reset(view);
     }).observe(stage);
   }
   if (!reduce && "IntersectionObserver" in window) {
