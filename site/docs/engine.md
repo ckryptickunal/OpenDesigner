@@ -99,4 +99,4 @@ Every standard change is recorded in the decision log. See [For enterprise desig
 
 - The same `state.json` gives the same tokens.
 - When `set` or `pick` changes no tokens, the answer is still saved, as a `DESIGN.md` rule or a `PRODUCT.md` fact. The engine says so.
-- The engine has 157 tests, which pass on the maintainer's computer. No CI runs are recorded yet.
+- The engine has 171 tests, which pass on the maintainer's computer. No CI runs are recorded yet.

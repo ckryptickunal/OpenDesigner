@@ -8,7 +8,7 @@ How OpenDesigner tests itself. The results are published on the site at [/docs/e
 | Design evals | The engine builds a system from each brief in `design/briefs.json`, twice. No AI | `python3 tools/design_evals.py` | Free, about 2 minutes | `evals/design/latest.json` |
 | Checker evals | Our checkers (layout, preflight, review, dates, names) on pages with planted mistakes and on clean pages | `python3 tools/checker_evals.py` | Free | `evals/checkers/latest.json` |
 
-CI runs the design evals on every push and pull request (`--check --no-save`): a required check that fails stops the merge. The agent evals are not in CI. They cost model usage and need a credential, so a maintainer runs them and commits the summary with `--save`.
+The CI workflow (`.github/workflows/ci.yml`) is set up to run the design evals on every push and pull request (`--check --no-save`), but GitHub has no runs of it recorded yet (`docs/FIELD-PLAN.md`), so run them yourself before a merge. The agent evals are not in CI. They cost model usage and need a credential, so a maintainer runs them and commits the summary with `--save`.
 
 ## Agent eval cases
 

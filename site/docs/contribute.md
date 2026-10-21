@@ -19,7 +19,7 @@ OpenDesigner is free and open source, and most of what improves it starts with s
 ## Opening a pull request
 
 1. Fork the repository and make your change in `skills/`, `synthesis/` or `research/`. Some folders are generated from those, and the checks tell you to rebuild them.
-2. Run the checks listed under "Before you commit" in [`AGENTS.md`](https://github.com/ckryptickunal/OpenDesigner/blob/main/AGENTS.md#before-you-commit). CI runs most of them on every pull request.
+2. Run the checks listed under "Before you commit" in [`AGENTS.md`](https://github.com/ckryptickunal/OpenDesigner/blob/main/AGENTS.md#before-you-commit). The CI workflow (`.github/workflows/ci.yml`) is set up to run the same checks on every push and pull request, but GitHub has no runs of it recorded yet, so run them yourself.
 3. Say in the pull request what you changed, why, and what you checked.
 
 Every pull request gets a security scan, a check that it fits the project's goal, and a fact check before the maintainer decides. The process is in [`.claude/skills/od-pr-review/SKILL.md`](https://github.com/ckryptickunal/OpenDesigner/blob/main/.claude/skills/od-pr-review/SKILL.md).
