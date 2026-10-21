@@ -1620,7 +1620,8 @@ def vercel_json():
                 {"source": "/library/r/(.*)", "headers": [{"key": "X-Robots-Tag", "value": "noindex"}, {"key": "Content-Type", "value": "text/html; charset=utf-8"}, {"key": "Access-Control-Allow-Origin", "value": "*"}]},
                 {"source": "/(.*)\\.md", "headers": [{"key": "Content-Type", "value": "text/markdown; charset=utf-8"}, {"key": "X-Robots-Tag", "value": "noindex"}]},
                 {"source": "/(llms.txt|llms-full.txt|robots.txt)", "headers": [{"key": "Content-Type", "value": "text/plain; charset=utf-8"}]},
-                {"source": "/", "headers": [{"key": "Link", "value": LINKS}]},
+                {"source": "/", "headers": [{"key": "Link", "value": LINKS}, {"key": "Vary", "value": "Accept"}]},
+                {"source": "/(.*)/", "headers": [{"key": "Vary", "value": "Accept"}]},  # a page answers in HTML or, when asked, Markdown
                 {"source": "/.well-known/agent-skills/(.*)", "headers": [{"key": "Access-Control-Allow-Origin", "value": "*"}]}]}
 
 
@@ -1663,6 +1664,7 @@ def main():
     ff = "".join(f"@font-face{{font-family:'{fam}';font-style:normal;font-weight:{w};font-display:swap;src:url(/fonts/{f}) format('woff2')}}\n" for fam, w, f in rules)
     (DIST / "site.css").write_text(minify_css(ff + tokens_css() + corners_match_levers(apple_tracking((SITE / "static" / "site.css").read_text() + (SITE / "static" / "figures.css").read_text() + status_css() + (SITE / "static" / "home.css").read_text() + (SITE / "static" / "craft.css").read_text() + (SITE / "static" / "deco.css").read_text()))))
     shutil.copy(SITE / "static" / "site.js", DIST / "site.js")
+    shutil.copy(SITE / "middleware.js", DIST / "middleware.js")  # Markdown for agents: Vercel builds it as Routing Middleware
     images()
     pages = load_docs()
     try:

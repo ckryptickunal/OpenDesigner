@@ -30,6 +30,7 @@ HIGH_RISK = [  # (path regex, why a human must read every changed line)
     (r"^tools/.*\.py$|^skills/.*\.py$", "code maintainers and users run"),
     (r"opendesigner/assets/library/|^site/library_page\.py$|^site/static/library\.(js|css)$",
      "component library (2026-10-21): files people's agents copy into their projects and the website runs; a <script> may only wire its own root, with no network, storage or eval"),
+    (r"^site/middleware\.js$|^site/static/site\.js$", "code that runs for every website visitor: Routing Middleware on Vercel, site.js in the browser"),
     (r"\.html?$", "page that runs in a browser or artifact"),
 ]
 # The one place where a skill may carry Node code, an npm manifest and lockfile, Python analysis tools and images (owner decisions
