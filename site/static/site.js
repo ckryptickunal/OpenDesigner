@@ -61,7 +61,10 @@
     var gather = function () {
       var original = title.innerHTML, chars = [], texts = [], kerned = [];
       (function walk(node) {
-        Array.prototype.slice.call(node.childNodes).forEach(function (n) { if (n.nodeType === 1) walk(n); else if (n.nodeType === 3) texts.push(n); });
+        Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+          if (n.nodeType === 1) { if (!n.classList.contains("h-eyebrow")) walk(n); }  // the small category line above stays still
+          else if (n.nodeType === 3 && (n.textContent.trim() || texts.length)) texts.push(n);
+        });
       })(title);
       // where each letter sits in the real, kerned text, measured before splitting
       texts.forEach(function (n) {

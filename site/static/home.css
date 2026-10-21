@@ -10,6 +10,8 @@
 .h-flag .sticker { transform: rotate(-3deg); }
 .h-title { font-size: clamp(38px, 6.2vw, 76px); line-height: 1.04; font-weight: 400; letter-spacing: -0.01em; margin: 0 auto; max-width: 15em; text-wrap: balance; }
 .h-title strong { font-weight: 600; }
+/* the category, in the headline so search engines read it with the promise; set like the section kickers (owner's SEO pass, 2026-10-22) */
+.h-eyebrow { display: block; margin: 0 auto 14px; color: var(--ink-muted); font: 500 13px/18px "Source Code Pro", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; }
 .h-lede { font-size: 19px; line-height: 30px; letter-spacing: -0.024em; color: var(--ink-muted); max-width: 62ch; margin: 24px auto 0; text-wrap: pretty; }
 .h-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 36px; }
 .btn.lg { min-height: 52px; padding: 0 26px; font-size: 16px; line-height: 22px; letter-spacing: -0.02em; }

@@ -431,7 +431,7 @@ def sidebar(pages, current):
             f'<nav>{"".join(groups)}{show}</nav></details><nav class="side-desk">{"".join(groups)}{show}</nav></aside>')
 
 
-def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.png", md=True, wide=False, robots="index, follow, max-image-preview:large", home=False):
+def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jpg", md=True, wide=False, robots="index, follow, max-image-preview:large", home=False, og_alt=None):
     canon = SITE_URL + path
     md_link = f'<link rel="alternate" type="text/markdown" href="{path}index.md" title="Markdown">' if md else ""
     inner = (f'<main id="main" class="home">\n{main_html}\n</main>' if home else
@@ -455,10 +455,12 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.pn
 <meta property="og:image" content="{SITE_URL}{og}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{esc(og_alt or OG_ALT)}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(seo_title)}">
 <meta name="twitter:description" content="{esc(description)}">
 <meta name="twitter:image" content="{SITE_URL}{og}">
+<meta name="twitter:image:alt" content="{esc(og_alt or OG_ALT)}">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -988,8 +990,8 @@ def home(pages, facts, faq):
     body = f"""
 <section class="h-hero">
 {announce}
-<h1 class="h-title g-wait">Make everything you build <strong>look like it belongs together.</strong></h1>
-<p class="h-lede">Your AI tools know what to build. OpenDesigner tells them how it should look: one set of design rules that every new screen follows, and that it updates when you change your mind.</p>
+<h1 class="h-title g-wait"><span class="h-eyebrow">Design systems for AI coding tools</span> Make everything you build <strong>look like it belongs together.</strong></h1>
+<p class="h-lede">Your AI tools know what to build. OpenDesigner tells them how it should look: a design system, one set of rules that every new screen follows, and that it updates when you change your mind.</p>
 <div class="h-cta"><a class="btn primary lg" href="#install">Get started free</a><a class="h-link" href="#before-after">See it in action {ARROW}</a></div>
 <div class="h-cmd-wrap"><p class="h-cmd-label">Two commands in Claude Code, then a few plain questions</p>
 <div class="cmd h-cmd"><code>/plugin marketplace add ckryptickunal/OpenDesigner</code><button class="copy" type="button" data-copy-text="/plugin marketplace add ckryptickunal/OpenDesigner
@@ -1100,7 +1102,7 @@ def home(pages, facts, faq):
     ld = [{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": NAME, "url": SITE_URL + "/", "description": ONE_LINER,
            "applicationCategory": "DeveloperApplication", "applicationSubCategory": "Design system generator", "operatingSystem": "macOS, Windows, Linux",
            "isAccessibleForFree": True, "license": f"{GH}/blob/main/LICENSE", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
-           "image": f"{SITE_URL}/og/home.png", "downloadUrl": GH, "softwareHelp": f"{SITE_URL}/docs/", "sameAs": [GH],
+           "image": f"{SITE_URL}/og/home.jpg", "downloadUrl": GH, "softwareHelp": f"{SITE_URL}/docs/", "sameAs": [GH],
            "author": {"@type": "Person", "name": "ckryptickunal", "url": "https://github.com/ckryptickunal"}},
           {"@context": "https://schema.org", "@type": "SoftwareSourceCode", "name": NAME, "codeRepository": GH, "programmingLanguage": ["Python", "Markdown"],
            "license": "https://opensource.org/license/mit", "dateModified": facts["pushed"]},
@@ -1151,7 +1153,8 @@ def doc_page(p, pages):
     ld = [crumbs_ld([("Docs", "/docs/")] + ([] if p["slug"] == "index" else [(p["title"], p["path"])])),
           {"@context": "https://schema.org", "@type": "Article" if p["slug"] == "design-systems" else "TechArticle", "headline": p["title"],
            "description": p["description"], "url": SITE_URL + p["path"], "datePublished": "2026-10-14", "dateModified": p.get("updated", TODAY),
-           "inLanguage": "en", "image": f"{SITE_URL}/og/home.png", "mainEntityOfPage": SITE_URL + p["path"],
+           "inLanguage": "en", "image": f"{SITE_URL}/og/{'docs/' + p['slug'] if (CACHE / 'og' / 'docs' / (p['slug'] + '.jpg')).exists() else 'home'}.jpg",
+           "mainEntityOfPage": SITE_URL + p["path"],
            "author": {"@type": "Person", "name": "ckryptickunal", "url": "https://github.com/ckryptickunal"},
            "publisher": {"@type": "Organization", "name": NAME, "url": SITE_URL + "/", "logo": {"@type": "ImageObject", "url": f"{SITE_URL}/apple-touch-icon.png"}}}]
     if p["slug"] == "faq":
@@ -1162,8 +1165,10 @@ def doc_page(p, pages):
             {"@type": "HowToStep", "text": "/plugin marketplace add ckryptickunal/OpenDesigner"},
             {"@type": "HowToStep", "text": "/plugin install opendesigner@opendesigner"},
             {"@type": "HowToStep", "text": "Say: Create a design system for this project."}]})
-    og = "/og/guide.png" if p["slug"] == "design-systems" else ("/og/faq.png" if p["slug"] == "faq" else "/og/home.png")
-    return shell(p["path"], p["seo_title"], p["description"], main_html, pages, ld, og=og)
+    card = (CACHE / "og" / "docs" / f'{p["slug"]}.jpg').exists()  # og_images() draws one for every page; without it, the home card
+    og = f'/og/docs/{p["slug"]}.jpg' if card else "/og/home.jpg"
+    return shell(p["path"], p["seo_title"], p["description"], main_html, pages, ld, og=og,
+                 og_alt=f'{p["title"]}: a page of the OpenDesigner docs' if card else None)
 
 
 SHOW_INTRO = ("AI builder agents made every piece here through the whole OpenDesigner process: real references on Mobbin, a design system from the "
@@ -1482,36 +1487,61 @@ def images():
     (DIST / "favicon.svg").write_text(fav)
 
 
-def og_images():
+OG_ALT = "OpenDesigner: make everything you build look like it belongs together. A free, open-source design system builder for the AI tool you already use."
+
+
+def og_images(pages):
+    """Social previews (1200 x 630) in site/.cache/og/: the home card, a card for every docs page (its section and title beside
+    the home card's drawing, so a shared link says which page it is), and the showcase card. A card is drawn again only when its
+    HTML changes: manifest.json keeps a hash of each. Cards no page uses any more are removed."""
+    import hashlib
+    import io
+    from PIL import Image
     sys.path.insert(0, str(BRAND / "design-system"))
     import export_kit as K
-    from playwright.sync_api import sync_playwright
     out = CACHE / "og"
-    out.mkdir(parents=True, exist_ok=True)
-    cards = {"home.png": K.statement("light", 'Make everything you build<br><span class="od-strong">look like it belongs together.</span>', "Free and open source. Works in the AI tool you already use.", "opendesigner", 1200, 630, "social-subhead"),
-             "faq.png": K.statement("light", 'Questions, <span class="od-strong">plain answers.</span>', "OpenDesigner docs", "FAQ", 1200, 630, "social-subhead"),
-             "guide.png": K.statement("light", 'What is a <span class="od-strong">design system?</span>', "A plain guide, with AI.", "Guide", 1200, 630, "social-subhead"),
-             "showcase.png": K.statement("cobalt", 'B2B screens, styles and more. <span class="od-strong">One process.</span>', "Built by AI agents through OpenDesigner. Every brand is invented.", "Showcase", 1200, 630, "social-subhead")}
-    cards.pop("home.png")
-    home = (SITE / "og" / "home.html").read_text()
-    home = (home.replace("{{FONT_HANKEN}}", (CACHE / "hanken-300-700.woff2").resolve().as_uri())
-                .replace("{{FONT_MONO}}", (CACHE / "sourcecodepro-500.woff2").resolve().as_uri())
-                .replace("{{LOCKUP}}", (BRAND / "design-system/project/assets/Logos/lockup-dark.svg").read_text())
-                .replace("{{LOGOS}}", "".join(logo(k, 22) for k in ("claude", "openai", "cursor", "githubcopilot", "googlegemini"))))
-    (CACHE / "og-home.html").write_text(home)
-    with sync_playwright() as p:
-        b = p.chromium.launch(channel="chrome")
-        pg = b.new_page(viewport={"width": 1200, "height": 630}, device_scale_factor=1)
-        pg.goto((CACHE / "og-home.html").resolve().as_uri(), wait_until="networkidle")
-        pg.evaluate("document.fonts.ready")
-        pg.wait_for_timeout(300)
-        pg.screenshot(path=str(out / "home.png"))
-        for name, html_ in cards.items():
-            pg.set_content(html_, wait_until="networkidle")
-            pg.evaluate("document.fonts.ready")
-            pg.wait_for_timeout(200)
-            pg.locator(".od-post").first.screenshot(path=str(out / name))
-        b.close()
+    (out / "docs").mkdir(parents=True, exist_ok=True)
+    fill = lambda h: (h.replace("{{FONT_HANKEN}}", (CACHE / "hanken-300-700.woff2").resolve().as_uri())
+                       .replace("{{FONT_MONO}}", (CACHE / "sourcecodepro-500.woff2").resolve().as_uri())
+                       .replace("{{LOCKUP}}", (BRAND / "design-system/project/assets/Logos/lockup-dark.svg").read_text())
+                       .replace("{{DOMAIN}}", SITE_URL.split("//", 1)[-1]))
+    jobs = {"home.jpg": ("file", fill((SITE / "og" / "home.html").read_text()).replace(
+        "{{LOGOS}}", "".join(logo(k, 22) for k in ("claude", "openai", "cursor", "githubcopilot", "googlegemini"))))}
+    card = fill((SITE / "og" / "page.html").read_text())
+    for p in pages:
+        kicker = "Docs" if p["slug"] == "index" else f'Docs · {p["section"]}'
+        jobs[f'docs/{p["slug"]}.jpg'] = ("file", card.replace("{{KICKER}}", esc(kicker)).replace("{{TITLE}}", esc(p["title"])))
+    jobs["showcase.png"] = ("post", K.statement("cobalt", 'B2B screens, styles and more. <span class="od-strong">One process.</span>',
+                                                "Built by AI agents through OpenDesigner. Every brand is invented.", "Showcase", 1200, 630, "social-subhead"))
+    digest = lambda h: hashlib.sha256(h.encode()).hexdigest()
+    mf = out / "manifest.json"
+    seen = json.loads(mf.read_text()) if mf.exists() else {}
+    todo = {n: j for n, j in jobs.items() if seen.get(n) != digest(j[1]) or not (out / n).exists()}
+    if todo:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as pw:
+            b = pw.chromium.launch(channel="chrome")
+            pg = b.new_page(viewport={"width": 1200, "height": 630}, device_scale_factor=1)
+            for name, (kind, html_) in todo.items():
+                if kind == "file":  # fonts load from file:// URLs, so the page must be a file too
+                    (CACHE / "og-render.html").write_text(html_)
+                    pg.goto((CACHE / "og-render.html").resolve().as_uri(), wait_until="networkidle")
+                else:
+                    pg.set_content(html_, wait_until="networkidle")
+                pg.evaluate("document.fonts.ready")
+                pg.wait_for_timeout(150)
+                if kind == "file":  # JPEG: the film grain makes a PNG of this card about 800 KB; this is about 60 KB
+                    Image.open(io.BytesIO(pg.screenshot())).convert("RGB").save(out / name, "JPEG", quality=86, optimize=True, progressive=True)
+                else:
+                    pg.locator(".od-post").first.screenshot(path=str(out / name))
+                seen[name] = digest(html_)
+            b.close()
+    for f in [f for ext in ("png", "jpg") for f in list(out.glob(f"*.{ext}")) + list((out / "docs").glob(f"*.{ext}"))]:
+        if str(f.relative_to(out)) not in jobs:
+            f.unlink()
+            seen.pop(str(f.relative_to(out)), None)
+    mf.write_text(json.dumps({n: seen[n] for n in sorted(seen) if n in jobs}, indent=1))
+    print(f"OG cards: {len(todo)} drawn, {len(jobs) - len(todo)} unchanged")
 
 
 def robots():
@@ -1584,15 +1614,13 @@ def main():
     (DIST / "site.css").write_text(ff + tokens_css() + corners_match_levers(apple_tracking((SITE / "static" / "site.css").read_text() + (SITE / "static" / "figures.css").read_text() + status_css() + (SITE / "static" / "home.css").read_text() + (SITE / "static" / "craft.css").read_text() + (SITE / "static" / "deco.css").read_text())))
     shutil.copy(SITE / "static" / "site.js", DIST / "site.js")
     images()
-    if "--og" in sys.argv or not (CACHE / "og" / "home.png").exists():
-        try:
-            og_images()
-        except Exception as e:
-            print("OG images not rendered:", e)
-    if (CACHE / "og").exists():
-        shutil.copytree(CACHE / "og", DIST / "og", dirs_exist_ok=True)
-
     pages = load_docs()
+    try:
+        og_images(pages)  # only the cards whose HTML changed are drawn again
+    except Exception as e:
+        print("OG images not rendered:", e)
+    if (CACHE / "og").exists():
+        shutil.copytree(CACHE / "og", DIST / "og", dirs_exist_ok=True, ignore=shutil.ignore_patterns("manifest.json"))
     faq_page = next((p for p in pages if p["slug"] == "faq"), None)
     faq = faq_items(faq_page["body"]) if faq_page else []
     files = {"index.html": home(pages, facts, faq), "docs/index.html": docs_home(pages, facts, faq)}

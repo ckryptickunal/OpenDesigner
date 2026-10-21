@@ -30,6 +30,7 @@ h1 b { font-weight: 650; display: block; }
 .foot .label { font: 500 13px/16px "Source Code Pro", monospace; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.62); }
 .foot .marks { display: flex; gap: 14px; color: #fff; opacity: .92; }
 .foot .marks svg { width: 22px; height: 22px; display: block; }
+.domain { position: absolute; right: 60px; bottom: 56px; font: 500 15px/16px "Source Code Pro", monospace; letter-spacing: .02em; color: rgba(255,255,255,.72); }
 
 /* right: the illustration */
 .art { position: absolute; left: 660px; top: 0; width: 540px; height: 630px; }
@@ -68,8 +69,9 @@ h1 b { font-weight: 650; display: block; }
 <body>
 <div class="lockup">{{LOCKUP}}</div>
 <h1>Make everything you build<b>look like it<br>belongs together.</b></h1>
-<p class="sub">Your AI tools know what to build. OpenDesigner tells them how it should look.</p>
-<div class="foot"><span class="label">Free · Open source · Works in</span><span class="marks">{{LOGOS}}</span></div>
+<p class="sub">A free, open-source design system builder for the AI tool you already use.</p>
+<div class="foot"><span class="label">Works in</span><span class="marks">{{LOGOS}}</span></div>
+<span class="domain">{{DOMAIN}}</span>
 
 <div class="art" aria-hidden="true">
   <!-- alignment guides through the cards' shared edges -->
