@@ -158,6 +158,9 @@
   "macros",
   "mode",
   "name",
+  "opendesigner",
+  "opendesigner.created",
+  "opendesigner.version",
   "overrides",
   "preset",
   "principles",
@@ -354,7 +357,8 @@
   "standards",
   "style",
   "unlock",
-  "validate"
+  "validate",
+  "version"
  ],
  "flags": [
   "--accept",

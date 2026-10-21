@@ -1,15 +1,18 @@
 {
   "kind": "checkers",
-  "date": "2026-10-20",
-  "time": "2026-10-20T19:53:50",
-  "commit": "8a17e54",
-  "checkersChangedSinceCommit": [],
+  "date": "2026-10-21",
+  "time": "2026-10-21T19:23:04",
+  "commit": "2d41c08",
+  "checkersChangedSinceCommit": [
+    "skills/opendesigner-review/scripts/review.py",
+    "skills/opendesigner-review/scripts/probe.js"
+  ],
   "environment": {
     "python": "3.10.11",
     "chrome": "155.0.8059.85",
     "platform": "darwin"
   },
-  "runs": 2,
+  "runs": 1,
   "sameEveryRun": true,
   "scoring": "recall = planted defects caught / planted; precision = findings that match a planted defect / all findings; falseAlarms = findings on clean pages. Errors and warnings count; info notes do not. A layout finding at several widths counts once.",
   "checkers": {

@@ -35,6 +35,8 @@ The house standards already say how options are built and compared: STD-process-
 - Show one at a time, full size, with the rest of the page around it (-43). A small map or a thumbnail is not enough to decide from.
 - Flip through every option yourself first (-47). Say when each is the right choice and what it costs, and don't pick for them (-48).
 - When they pick, build only that one into the product (-49).
+- **Use the ready-made picker:** `assets/picker.js` is the house picker built to that spec, with its keys, its `?v=` address and its re-mount on every switch. Put each option in a `<template data-od-variant="Name">` inside one `<div data-od-stage>` on the review copy, keep the current version as the first option, and add the script. Add `data-od-motion` to an option with an entrance worth replaying, and `data-od-position="top"` on the stage when an option fills the bottom centre. Never restyle the picker.
+- **To show what a fix gives,** use the review skill's before and after: `review.py compare` draws the audit on the page today and puts the fix beside it, each fix with what it makes better (`opendesigner-review` SKILL.md section 7).
 
 What one project adds (DC-L22-02):
 - **Keep the current version as an option,** with a plain name such as "Today". People judge each new option against it. You test against it too (section 5).

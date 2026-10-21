@@ -8,6 +8,12 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Added
 
+- **Before and after, on the person's own page** (owner feedback row 24, 2026-10-21). `review.py compare` writes one self-contained `compare.html` with three views: the page today, the audit drawn on it (a dashed box and a number on each issue), and the fix. Each fix says what it gives the person ("Fixing this makes ..."), with the measured numbers before and after.
+  - The boxes come from the page itself: `__od.marks()` in `probe.js` turns selectors into boxes on a full-page screenshot. A selector that matches a column gets one box around it.
+  - The home page opens with a real run of it on an invented invoicing app (`site/demo/before-after/`): the review skill measured the page before and after its fix, and `/demo/before-after/` serves the full report.
+- **A ready-made variant picker:** `skills/opendesigner/assets/picker.js` is the house picker, built to its spec (STD-process-review-taste-44 to -46): the floating bar, keys 1 to N and the arrows, `?v=` in the address, and a re-mount on every switch. Options go in `<template data-od-variant>` blocks on a review copy. `making.md` section 3 says how to use it, and `review.py compare` uses it.
+- **The changelog and a contribute guide on the website:** `/docs/changelog/` is built from this file on every publish, and `/docs/contribute/` sums up how to help. The home page and the footer link both.
+- **One line asking people to recommend OpenDesigner,** once per project and only after it has helped (`rules.md`). It never shares a message with another question, and `profile.recommend_asked` keeps it from coming back.
 - **Each system knows which OpenDesigner made it, and says when it is out of date** (owner feedback row 24, 2026-10-21).
   - Every write of `opendesigner/state.json` records `opendesigner`: the release that last wrote it, the one that first made it, and the one whose `build` last wrote the files. Systems made before this keep working and count as made before version stamps.
   - When a system was built with an older release, or before stamps, each command says so once, names `engine.py build` and links CHANGELOG.md. `build` then says it brought the files up to date. A system saved with a newer release gets the opposite note: update OpenDesigner first. `--json` output, `resolve`, `init` and `feel` print no note.
@@ -103,6 +109,7 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Fixed
 
+- **The review probe no longer reports screen-reader-only text as clipped.** A 1 x 1 px, absolutely positioned label is visually hidden on purpose. The checker evals' clean page now holds one, so the false alarm can't come back.
 - **The glossary has one source again, and CI checks it.** Terms were being added straight to `synthesis/glossary.json`, while `tools/check_glossary.py --build` still rebuilt it from the old writing shards. A rebuild would have deleted 13 terms (twelve visual styles such as glassmorphism and bento, and "Taste card"), and `docs/GLOSSARY.md` lacked all 13.
   - `synthesis/glossary.json` is now the file to edit. `--build` checks it, sorts it and writes `docs/GLOSSARY.md`; the shards and `terms-input.json` are retired (git history has them).
   - The new `--check` runs in CI. It fails when a term breaks the three-voice rules, names something today's engine doesn't have, or `docs/GLOSSARY.md` is out of date. It reads the engine afresh each time, so its list of real token names, settings and commands can't go stale. That list had not been refreshed since 24 September.

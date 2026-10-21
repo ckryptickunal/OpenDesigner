@@ -24,7 +24,7 @@ IGNORE = {"__pycache__", ".DS_Store", "node_modules", "out", ".vite"}  # the pai
 BUNDLE = {p: p for p in ("scripts/engine.py", "scripts/journey.py", "references/levers.json", "references/hooks.json",
                           "references/graph.json", "references/questions.json", "references/pacing.json",
                           "references/report.schema.json", "references/rules.md", "references/zoom.md",
-                          "references/improve.md", "references/making.md")}  # engine.py imports journey.py, which reads pacing and the report schema
+                          "references/improve.md", "references/making.md", "assets/picker.js")}  # engine.py imports journey.py, which reads pacing and the report schema; review.py compare inlines picker.js
 
 
 def check(skill):

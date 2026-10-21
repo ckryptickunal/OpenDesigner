@@ -22,6 +22,10 @@ the bookkeeping and the arithmetic. Work goes in ./opendesigner/review/ (or --di
                                                    record something you judged by looking or by operating the page
     review.py report [--name N]                    review/REPORT.md: verdict, what was not checked, findings with evidence
     review.py sheet [DIR] [--open]                 review/sheet.html: every screenshot on one page, in order, with its name
+    review.py compare --before B.png --marks marks.json --after A.png [--after-marks M.json] [--title T] [--open]
+                                                   review/compare.html: the page today, the audit drawn on it (a dashed box and a
+                                                   number on each issue) and the fix, switched with the house variant picker; each
+                                                   fix says what it gives the person. marks.json comes from __od.marks() in probe.js
     review.py cases [--when motion,forms] [--group time] [--id CV-01] [--full]
                                                    the catalogue of things reviews miss (65 cases), filtered to what applies to this page
 
@@ -32,6 +36,7 @@ says so. The verdict is never "looks good": it is FAIL, INCOMPLETE, or NO ERRORS
 from __future__ import annotations
 
 import argparse
+import base64
 import datetime as dt
 import html
 import json
@@ -984,6 +989,120 @@ img{{width:100%;display:block;background:#8881}}figcaption{{padding:6px 8px;font
         webbrowser.open(out.resolve().as_uri())
 
 
+def image_size(path):
+    """Pixel width and height of a PNG or JPEG, read from its header (no imaging library)."""
+    b = Path(path).read_bytes()
+    if b[:8] == b"\x89PNG\r\n\x1a\n":
+        return int.from_bytes(b[16:20], "big"), int.from_bytes(b[20:24], "big")
+    if b[:2] == b"\xff\xd8":
+        i = 2
+        while i < len(b) - 9:
+            if b[i] != 0xFF:
+                i += 1
+                continue
+            m = b[i + 1]
+            if m in (0xC0, 0xC1, 0xC2):
+                return int.from_bytes(b[i + 7:i + 9], "big"), int.from_bytes(b[i + 5:i + 7], "big")
+            i += 2 + int.from_bytes(b[i + 2:i + 4], "big")
+    die(f"{path}: use a PNG or JPEG screenshot")
+
+
+def find_picker():
+    """The house variant picker (opendesigner/assets/picker.js): bundled beside this skill, or in the sibling skill."""
+    for p in (HERE.parent / "assets" / "picker.js", HERE.parent.parent / "opendesigner" / "assets" / "picker.js"):
+        if p.exists():
+            return p.read_text(encoding="utf-8")
+    die("picker.js not found: install the opendesigner skill beside this one")
+
+
+def read_marks(path, label):
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    marks = data.get("marks") if isinstance(data, dict) else data
+    page = (data.get("page") if isinstance(data, dict) else None) or {}
+    bad = [str(m.get("n", i + 1)) for i, m in enumerate(marks or []) if m.get("missing") or not m.get("rect")]
+    if bad:
+        die(f"{label}: marks {', '.join(bad)} found no element on the page; fix their selectors and run __od.marks() again")
+    return marks or [], page
+
+
+def cmd_compare(args):
+    """The value of a fix, shown on the person's own page: today, the audit drawn on it, then the fix."""
+    rd = review_dir(args)
+    marks, page = read_marks(args.marks, "marks")
+    if not marks:
+        die("marks.json has no marks: list the issues first (review.py check, then __od.marks([{sel, title, gives}]))")
+    for m in marks:
+        if not (m.get("title") and m.get("gives")):
+            die(f"mark {m.get('n')} needs a title (the issue) and gives (what fixing it makes better for the person)")
+    after_marks, after_page = read_marks(args.after_marks, "after marks") if args.after_marks else ([], {})
+    shots = {}
+    for key, path, pg in (("before", args.before, page), ("after", args.after, after_page)):  # no after marks: the shot's own size
+        w, h = image_size(path)
+        if pg.get("w") and pg.get("h") and abs(w / h - pg["w"] / pg["h"]) > 0.02 * (pg["w"] / pg["h"]):
+            print(f"warning: {path} is {w}x{h} px but the page measured {pg['w']}x{pg['h']} CSS px; take a full-page screenshot "
+                  "at the same width as __od.marks(), or the boxes will not sit on the issues")
+        mime = "image/png" if Path(path).read_bytes()[:4] == b"\x89PNG" else "image/jpeg"
+        shots[key] = (f"data:{mime};base64," + base64.b64encode(Path(path).read_bytes()).decode(), pg or {"w": w, "h": h})
+    esc = html.escape
+
+    def boxes(ms, pg, kind):
+        W, H = pg.get("w") or 1, pg.get("h") or 1
+        return "".join(f'<span class="mk {kind}" style="left:{m["rect"][0] / W * 100:.3f}%;top:{m["rect"][1] / H * 100:.3f}%;'
+                       f'width:{m["rect"][2] / W * 100:.3f}%;height:{m["rect"][3] / H * 100:.3f}%"><b>{m["n"]}</b></span>' for m in ms)
+
+    def view(key, overlay=""):
+        src, pg = shots[key]
+        alt = "The page before the fix" if key == "before" else "The page after the fix"
+        return f'<div class="shot"><div class="pg"><img src="{src}" alt="{alt}">{overlay}</div></div>'
+
+    def gives(m):
+        g = m["gives"].strip()
+        return g if g.lower().startswith("fixing this") else "Fixing this makes " + g[0].lower() + g[1:]
+
+    rows = "".join(f'<li><span class="n">{m["n"]}</span><div><p class="t">{esc(m["title"])}</p><p class="g">{esc(gives(m))}</p>'
+                   + (f'<p class="e">{esc(m["before"])}' + (f' &rarr; {esc(m["after"])}' if m.get("after") else "") + "</p>" if m.get("before") else "")
+                   + (f'<p class="e">Evidence: {esc(m["finding"])}</p>' if m.get("finding") else "") + "</div></li>" for m in marks)
+    tall = max(pg.get("h", 1) / max(pg.get("w", 1), 1) for _, pg in shots.values())  # both views get the taller page's height, so nothing jumps
+    title = args.title or "Before and after"
+    page_html = f"""<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{esc(title)}</title>
+<style>
+:root{{color-scheme:light}}*{{box-sizing:border-box}}body{{margin:0;background:#f4f4f5;color:#18181b;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}}
+main{{max-width:1200px;margin:0 auto;padding:24px 16px 120px}}h1{{font-size:22px;line-height:1.25;margin:0 0 4px;text-wrap:balance}}.lead{{margin:0 0 20px;color:#52525b;text-wrap:pretty}}
+.shot{{aspect-ratio:1 / {tall:.4f};border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.08);background:#fff}}
+.pg{{position:relative}}.pg img{{display:block;width:100%;height:auto}}
+.mk{{position:absolute;border:2px dashed #e5484d;border-radius:4px;box-shadow:0 0 0 1px rgba(255,255,255,.9),inset 0 0 0 1px rgba(255,255,255,.9)}}
+.mk.done{{border-style:solid;border-color:#12a150}}
+.mk b{{position:absolute;top:-11px;left:-11px;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:#e5484d;color:#fff;font:600 12px/22px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;text-align:center;box-shadow:0 0 0 2px #fff}}
+.mk.done b{{background:#12a150}}
+ol{{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}}
+li{{display:flex;gap:12px;padding:14px 16px;background:#fff;border-radius:12px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}}
+li .n{{flex:none;width:24px;height:24px;border-radius:12px;background:#e5484d;color:#fff;font-size:12px;font-weight:600;line-height:24px;text-align:center}}
+li p{{margin:0;text-wrap:pretty}}.t{{font-weight:600;text-wrap:balance}}.g{{color:#3f3f46}}.e{{margin-top:4px!important;color:#71717a;font-size:13px}}
+.help{{margin:16px 0 0;color:#71717a;font-size:13px}}
+</style>
+<main>
+<h1>{esc(title)}</h1>
+<p class="lead">{len(marks)} {"issue" if len(marks) == 1 else "issues"} found on this page. Switch between the page today, the audit and the fix with the bar at the bottom, or press 1, 2 and 3.</p>
+<div data-od-stage>
+<template data-od-variant="Today">{view("before")}</template>
+<template data-od-variant="Audit">{view("before", boxes(marks, shots["before"][1], "todo"))}</template>
+<template data-od-variant="Fixed">{view("after", boxes(after_marks, shots["after"][1], "done"))}</template>
+</div>
+<ol>{rows}</ol>
+<p class="help">Made by OpenDesigner (review.py compare). The boxes come from the page itself (probe.js __od.marks), measured at {shots["before"][1].get("w")} px wide.</p>
+</main>
+<script>{find_picker().replace("</", "<" + chr(92) + "/")}</script>
+</html>
+"""
+    out = Path(args.out) if args.out else rd / "compare.html"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(page_html, encoding="utf-8")
+    print(f"written: {out} ({len(marks)} issues, {len(after_marks)} marked after; {out.stat().st_size // 1024} KB, self-contained)")
+    if args.open:
+        webbrowser.open(out.resolve().as_uri())
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -1004,6 +1123,8 @@ def main(argv=None):
     p = sub.add_parser("cases"); p.add_argument("--when", help="comma list: motion, forms, overlays, data, i18n, touch, media (plus the always-relevant ones)")
     p.add_argument("--group"); p.add_argument("--id", help="one or more ids, comma separated"); p.add_argument("--full", action="store_true"); p.set_defaults(fn=cmd_cases)
     p = sub.add_parser("sheet"); common(p); p.add_argument("folder", nargs="?"); p.add_argument("--open", action="store_true"); p.set_defaults(fn=cmd_sheet)
+    p = sub.add_parser("compare"); common(p); p.add_argument("--before", required=True); p.add_argument("--after", required=True); p.add_argument("--marks", required=True)
+    p.add_argument("--after-marks"); p.add_argument("--title"); p.add_argument("--out"); p.add_argument("--open", action="store_true"); p.set_defaults(fn=cmd_compare)
     args = ap.parse_args(argv)
     args.fn(args)
 

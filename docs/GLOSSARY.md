@@ -6469,14 +6469,14 @@ Designers: live specimens, all modes side by side · Code: `preview.html bound t
 
 ### Review and visual diff
 
-How changes get checked before they go out, ideally with before and after views side by side.  
-Designers: visual diff, before and after · Code: `graph.json edges; visual diff (planned)`
+How changes get checked before they go out: the page before, the problems marked on it, then the page after.  
+Designers: visual diff, before and after · Code: `review.py compare; graph.json edges`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Planned: a visual diff page per change set, before and after in each mode, exported as a pull request. Today opendesigner-extend shows old and new values and git diff --stat.
+**Designer:** review.py compare shows the page today, the audit drawn on it and the fix, each with what it improves. Planned: a diff per change set, in every mode.
 
-**Engineer:** Planned: list changed tokens, walk the alias graph to find affected components. Today graph.json names the decisions a change moves, and engine.py review flags stale DESIGN.md sections.
+**Engineer:** review.py compare builds one HTML file from two screenshots and __od.marks() boxes. Planned: walk the alias graph to find the components a token change moves.
 
 </details>
 

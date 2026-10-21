@@ -524,12 +524,67 @@ class Serve(unittest.TestCase):
         self.assertIn("home-390-light", js)
 
 
+def tiny_png(w, h):
+    """A white PNG of w x h pixels, made with the standard library."""
+    import struct, zlib
+    def chunk(kind, data):
+        return struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data) & 0xFFFFFFFF)
+    raw = b"".join(b"\x00" + b"\xff\xff\xff" * w for _ in range(h))
+    return b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0)) + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b"")
+
+
+class Compare(unittest.TestCase):
+    """review.py compare: the page today, the audit drawn on it, and the fix, switched with the house picker."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        for name, (w, h) in (("before.png", (200, 100)), ("after.png", (200, 80))):
+            (self.tmp / name).write_bytes(tiny_png(w, h))
+        self.marks = {"page": {"w": 100, "h": 50}, "marks": [{"n": 1, "title": "Gray text is hard to read", "gives": "dates readable for everyone",
+                                                               "rect": [10, 5, 50, 10], "before": "2.5:1", "after": "7.2:1"}]}
+
+    def compare(self, marks, *extra):
+        (self.tmp / "marks.json").write_text(json.dumps(marks))
+        return run(["compare", "--dir", str(self.tmp), "--before", str(self.tmp / "before.png"), "--after", str(self.tmp / "after.png"),
+                    "--marks", str(self.tmp / "marks.json"), *extra])
+
+    def test_three_views_with_boxes_where_the_issues_are(self):
+        err, _ = self.compare(self.marks)
+        self.assertIsNone(err)
+        page = (self.tmp / "compare.html").read_text()
+        for view in ("Today", "Audit", "Fixed"):
+            self.assertIn(f'data-od-variant="{view}"', page)
+        self.assertIn("left:10.000%;top:10.000%;width:50.000%;height:20.000%", page)  # page coordinates as a share of the page
+        self.assertIn("Fixing this makes dates readable for everyone", page)
+        self.assertIn("2.5:1 &rarr; 7.2:1", page)
+        self.assertIn("aspect-ratio:1 / 0.5000", page)  # the taller page sets the height of every view (after.png is 200 x 80)
+        self.assertIn('aria-label", "Prototype variants"', page)  # the house picker, inlined
+        self.assertNotIn("</script>", page.split("<script>", 1)[1][:-len("</script>\n</html>\n")])  # nothing ends the inline script early
+
+    def test_every_fix_must_say_what_it_gives(self):
+        m = copy.deepcopy(self.marks)
+        del m["marks"][0]["gives"]
+        err, _ = self.compare(m)
+        self.assertIn("needs a title (the issue) and gives", err)
+
+    def test_a_mark_that_found_nothing_is_refused(self):
+        m = copy.deepcopy(self.marks)
+        m["marks"][0] = {"n": 1, "title": "x", "gives": "y", "missing": True}
+        err, _ = self.compare(m)
+        self.assertIn("found no element on the page", err)
+
+
 class Guarantees(unittest.TestCase):
     """The probe runs in the person's page. It must not send anything anywhere or run code it was not given."""
 
     def test_probe_js_makes_no_requests_and_evaluates_nothing(self):
         src = re.sub(r"/\*.*?\*/", "", (HERE / "probe.js").read_text(), flags=re.S)
         for banned in ("fetch(", "XMLHttpRequest", "WebSocket", "sendBeacon", "eval(", "new Function", "import(", "localStorage", "sessionStorage", "document.cookie", ".click(", ".submit("):
+            self.assertNotIn(banned, src, banned)
+
+    def test_picker_js_makes_no_requests_and_evaluates_nothing(self):
+        src = re.sub(r"/\*.*?\*/", "", (REPO / "skills" / "opendesigner" / "assets" / "picker.js").read_text(), flags=re.S)
+        for banned in ("fetch(", "XMLHttpRequest", "WebSocket", "sendBeacon", "eval(", "new Function", "import(", "localStorage", "sessionStorage", "document.cookie", "innerHTML"):
             self.assertNotIn(banned, src, banned)
 
     def test_review_py_uses_no_network_libraries_and_serves_loopback_only(self):

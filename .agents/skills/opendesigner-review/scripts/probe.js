@@ -21,6 +21,9 @@
  *   __od.vitals()         a Promise: layout shift (CLS) and long animation frames since page load
  *   __od.stress(kind, on) reversible stress: textSpacing (WCAG 1.4.12), text200 (1.4.4), rtl, longWords, pseudoloc (+40% text)
  *   __od.setMode(m)       {theme, density, motion} on <html>: the data-theme / data-density / data-motion switches OpenDesigner CSS reads
+ *   __od.marks(list)      boxes for the issues you will draw: [{sel, title, gives}] in (a selector matching several elements,
+ *                         such as a table column, gets one box around them all), page coordinates out (they match a
+ *                         full-page screenshot taken at the same width); save it as marks.json for review.py compare
  * seek(), scrollTo(), walk(), stress() and setMode() change the page; stress(kind, false) and setMode(prev) put it back.
  * Re-run this file after a reload.
  *
@@ -344,7 +347,8 @@
           const chs = w / chWidth(cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily);
           if (chs > 80 && longLines.length < CAP) longLines.push({ sel: sel(el), ch: round(chs, 1) });
         }
-        if ((el.scrollWidth > el.clientWidth + 1 && /hidden|clip/.test(cs.overflowX)) || (el.scrollHeight > el.clientHeight + 1 && /hidden|clip/.test(cs.overflowY))) {
+        const srOnly = cs.position === 'absolute' && el.offsetWidth <= 1 && el.offsetHeight <= 1;  // visually hidden on purpose, for screen readers
+        if (!srOnly && ((el.scrollWidth > el.clientWidth + 1 && /hidden|clip/.test(cs.overflowX)) || (el.scrollHeight > el.clientHeight + 1 && /hidden|clip/.test(cs.overflowY)))) {
           if (clipped.length < CAP) clipped.push({ sel: sel(el), text: txt.slice(0, 40), sw: el.scrollWidth, cw: el.clientWidth, sh: el.scrollHeight, ch: el.clientHeight, ellipsis: cs.textOverflow === 'ellipsis', clamp: !!cs.webkitLineClamp && cs.webkitLineClamp !== 'none' });
         }
         if (cs.backgroundClip !== 'text' && !el.matches(':disabled,[aria-disabled=true]')) {
@@ -602,6 +606,19 @@
     return { a: sel(A), b: sel(B), rectA: R(p), rectB: R(q), gapY: round(gapY), gapX: round(gapX), overlap: gapX === 0 && gapY === 0,
              leftDelta: round(q.left - p.left), rightDelta: round(q.right - p.right), topDelta: round(q.top - p.top), bottomDelta: round(q.bottom - p.bottom),
              centerXDelta: round((q.left + q.width / 2) - (p.left + p.width / 2)), centerYDelta: round((q.top + q.height / 2) - (p.top + p.height / 2)) };
+  };
+  od.marks = (list) => {
+    const root = document.documentElement;
+    const marks = (list || []).map((m, i) => {  // a selector that matches several elements (a column) gets one box around all of them
+      const els = (typeof m.sel === 'string' ? [...document.querySelectorAll(m.sel)] : [m.sel]).filter((e) => e && e.getClientRects().length);
+      if (!els.length) return Object.assign({}, m, { n: i + 1, missing: true });
+      const rs = els.map((e) => e.getBoundingClientRect());
+      const x0 = Math.min(...rs.map((r) => r.left)), y0 = Math.min(...rs.map((r) => r.top));
+      const x1 = Math.max(...rs.map((r) => r.right)), y1 = Math.max(...rs.map((r) => r.bottom));
+      return Object.assign({}, m, { n: i + 1, matched: els.length, rect: [round(x0 + scrollX), round(y0 + scrollY), round(x1 - x0), round(y1 - y0)] });
+    });
+    return { url: location.href, viewport: { w: innerWidth, h: innerHeight, dpr: devicePixelRatio },
+             page: { w: Math.max(root.scrollWidth, innerWidth), h: Math.max(root.scrollHeight, innerHeight) }, marks };
   };
   od.at = (x, y) => {
     const stack = document.elementsFromPoint(x, y).slice(0, 8).map((e) => { const cs = getComputedStyle(e); return { sel: sel(e), z: cs.zIndex, position: cs.position, pointerEvents: cs.pointerEvents, opacity: cs.opacity }; });

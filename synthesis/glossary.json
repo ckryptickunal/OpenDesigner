@@ -7621,14 +7621,15 @@
  {
   "id": "builder.review",
   "term": "Review and visual diff",
-  "plain": "How changes get checked before they go out, ideally with before and after views side by side.",
-  "designer": "Planned: a visual diff page per change set, before and after in each mode, exported as a pull request. Today opendesigner-extend shows old and new values and git diff --stat.",
-  "engineer": "Planned: list changed tokens, walk the alias graph to find affected components. Today graph.json names the decisions a change moves, and engine.py review flags stale DESIGN.md sections.",
+  "plain": "How changes get checked before they go out: the page before, the problems marked on it, then the page after.",
+  "designer": "review.py compare shows the page today, the audit drawn on it and the fix, each with what it improves. Planned: a diff per change set, in every mode.",
+  "engineer": "review.py compare builds one HTML file from two screenshots and __od.marks() boxes. Planned: walk the alias graph to find the components a token change moves.",
   "designer_says": "visual diff, before and after",
-  "code_name": "graph.json edges; visual diff (planned)",
+  "code_name": "review.py compare; graph.json edges",
   "source": [
    "builder.review",
-   "DC-L16-09"
+   "DC-L16-09",
+   "skills/opendesigner-review/SKILL.md"
   ],
   "layer": "builder"
  },

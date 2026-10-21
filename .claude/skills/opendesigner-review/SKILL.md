@@ -102,7 +102,14 @@ review.py check opendesigner/review          every probe and capture file in the
 
 Screenshots add up. Offer to git-ignore `opendesigner/review/shots/` and `opendesigner/review/probes/` (ask first: it edits a file outside `opendesigner/`), and keep `REPORT.md`, `plan.json` and `ledger.json`.
 
-Give the person: the verdict in one sentence, the one or two things they must decide, and the path to the report.
+Show the value on their own page. When you fix what they approved (or propose a fix on a review copy), show the page today, the audit drawn on it and the fix:
+1. For each issue to show, pick a selector (a column such as `tbody td:nth-child(5)` gets one box), a `title` (the issue, in plain words) and `gives` (what fixing it makes better for the person; it is shown as "Fixing this makes ..."). Add `before` and `after` with the measured numbers, and `finding` with how it is known (measured, operated or seen). Every claim needs its evidence; never write a number you did not measure.
+2. On the page before the fix, run `__od.marks([...])` and save the result as `marks.json`, and take a full-page screenshot at the same width. Do the same after the fix (the after boxes are optional).
+3. `review.py compare --before before.png --marks marks.json --after after.png --after-marks after-marks.json --open` writes `review/compare.html`: one self-contained file with the views Today, Audit (a dashed box and a number on each issue) and Fixed, switched with the house variant picker (keys 1 to 3).
+
+Make one per width you need to show, and open it at phone and desktop width before you hand it over.
+
+Give the person: the verdict in one sentence, the one or two things they must decide, and the path to the report (and to `compare.html` when you made one).
 
 ## Hosts
 - **Claude Code, Codex, Cursor and other shells:** `capture.py` if Playwright is there (ask before installing) and the app runs locally; else `review.py serve` with the browser tool the host has.
