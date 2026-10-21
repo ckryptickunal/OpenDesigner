@@ -1,0 +1,9 @@
+{
+  "name": "opendesigner",
+  "version": "0.1.0",
+  "description": "OpenDesigner - Free, open-source design system generator",
+  "private": true,
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
+}
