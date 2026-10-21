@@ -46,6 +46,9 @@ BRAND_THUMBS = r"^brand/showcase/_thumbs/[^/]+\.jpg$"
 # Brand kit images (owner decision 2026-10-15): the social posts, logo avatars and GitHub preview made from the brand
 # system, at the sizes each platform takes. Reviewed by eye, not blocked.
 BRAND_KIT = r"^brand/kit/.+\.png$"
+# Website illustrations (owner decision 2026-10-22): pictures the owner supplies for the site, such as the 404 illustration.
+# Reviewed by eye, not blocked; every other binary file still blocks.
+SITE_IMAGES = r"^site/static/[^/]+\.(webp|png|jpe?g)$"
 GENERATED = [(r"^\.agents/skills/opendesigner|^\.claude/skills/opendesigner", r"^skills/", "sync_skills.py"),
              (r"^data/|^skills/[^/]+/references/.*\.json$|^skills/opendesigner/references/(stages|cards)/"
               r"|^chatgpt-project/knowledge/", r"^synthesis/", "build_data.py")]
@@ -118,6 +121,8 @@ def main():
                 add("REVIEW", path, 0, "showcase gallery thumbnail (owner decision 2026-10-14): open it and look")
             elif re.search(BRAND_KIT, path):
                 add("REVIEW", path, 0, "brand kit image (owner decision 2026-10-15): open it and look")
+            elif re.search(SITE_IMAGES, path):
+                add("REVIEW", path, 0, "website illustration (owner decision 2026-10-22): open it and look")
             else:
                 add("BLOCK", path, 0, "binary file: cannot be reviewed as text")
     for path in paths:

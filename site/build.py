@@ -1563,10 +1563,50 @@ def showcase(pages):
     return html_, "\n".join(md)
 
 
+NOT_FOUND_ART = SITE / "static" / "404.webp"   # the owner's illustration; the page works without it
+NOT_FOUND_CSS = """<style>
+.nf { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: 40px; min-height: min(80vh, 780px);
+  max-width: var(--shell, 1200px); margin: 0 auto; padding: clamp(32px, 7vh, 88px) clamp(16px, 4vw, 32px) 0; }
+.nf-copy { max-width: 600px; }
+.nf-copy h1 { font-size: clamp(20px, 2.3vw, 24px); line-height: 1.45; font-weight: 400; color: var(--ink-muted); margin: 12px 0 0; text-wrap: pretty; }
+.nf-copy h1 b { color: var(--ink); font-weight: 600; }
+.nf-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+.nf-art { margin: 0; }
+.nf-art img { display: block; width: 100%; height: auto; }
+.nf.wide .nf-art { align-self: end; justify-self: center; }
+.nf.wide .nf-art img { width: auto; max-width: 100%; max-height: min(54vh, 560px); }
+.nf.tall { grid-template-columns: minmax(0, 1fr) minmax(0, .85fr); align-items: center; align-content: center; gap: clamp(24px, 5vw, 72px); padding-bottom: clamp(24px, 5vh, 56px); }
+.nf.tall .nf-art img { max-height: 76vh; width: auto; max-width: 100%; margin-left: auto; }
+@media (max-width: 767px) {
+  .nf, .nf.tall { grid-template-columns: minmax(0, 1fr); min-height: auto; gap: 32px; }
+  .nf.tall .nf-art img { max-height: 56vh; margin: 0 auto; }
+}
+</style>"""
+
+
+def not_found_section(art_url=None, size=None):
+    """The 404 block. A wide picture sits along the bottom; a tall one sits beside the copy (below it on phones)."""
+    kind, art = "", ""
+    if art_url and size:
+        w, h = size
+        kind = " wide" if w >= h else " tall"
+        art = f'<figure class="nf-art"><img src="{art_url}" alt="" width="{w}" height="{h}" decoding="async"></figure>'
+    return ('<section class="nf' + kind + '"><div class="nf-copy"><p class="kicker">Error 404</p>'
+            '<h1><b>This page isn&rsquo;t in the system.</b> It may have moved, or it was never made. OpenDesigner shows what&rsquo;s '
+            'missing instead of faking it, so here&rsquo;s the honest version: these links will get you back.</h1>'
+            '<div class="nf-actions"><a class="btn primary" href="/">Back to home</a><a class="btn ghost" href="/docs/">Read the docs</a>'
+            f'<a class="btn ghost" href="{GH}/issues/new?title=Broken%20link%20on%20opendesigner.dev">Report a broken link</a></div></div>'
+            f'{art}</section>')
+
+
 def not_found(pages):
-    body = (f'<div class="page-head"><h1 class="t-h1">Not enough information</h1><p class="lede">This page doesn\'t exist. Like a logo nobody has '
-            f'made yet, it shows as missing instead of being faked.</p><p><a class="btn primary" href="/docs/">Go to the docs</a></p></div>')
-    return shell("/404.html", "Page not found · OpenDesigner", "This page doesn't exist.", body, pages, md=False, robots="noindex")
+    size = None
+    if NOT_FOUND_ART.exists():
+        from PIL import Image
+        with Image.open(NOT_FOUND_ART) as im:
+            size = im.size
+    body = NOT_FOUND_CSS + not_found_section("/404.webp" if size else None, size)
+    return shell("/404.html", "Page not found · OpenDesigner", "This page doesn't exist.", body, pages, md=False, robots="noindex", home=True)
 
 
 # ---------------------------------------------------------------- images, OG, machine files, hosting config
@@ -1764,6 +1804,8 @@ def main():
     ff = "".join(f"@font-face{{font-family:'{fam}';font-style:normal;font-weight:{w};font-display:swap;src:url(/fonts/{f}) format('woff2')}}\n" for fam, w, f in rules)
     (DIST / "site.css").write_text(minify_css(ff + tokens_css() + corners_match_levers(apple_tracking((SITE / "static" / "site.css").read_text() + (SITE / "static" / "figures.css").read_text() + status_css() + (SITE / "static" / "home.css").read_text() + (SITE / "static" / "craft.css").read_text() + (SITE / "static" / "deco.css").read_text()))))
     shutil.copy(SITE / "static" / "site.js", DIST / "site.js")
+    if NOT_FOUND_ART.exists():
+        shutil.copy(NOT_FOUND_ART, DIST / "404.webp")
     shutil.copy(SITE / "middleware.js", DIST / "middleware.js")  # Markdown for agents: Vercel builds it as Routing Middleware
     images()
     pages = load_docs()
