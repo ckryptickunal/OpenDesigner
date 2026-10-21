@@ -1568,7 +1568,10 @@ def robots():
             "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot", "Applebot-Extended"]
     head = ("# OpenDesigner is open source and wants to be found, read and cited by people, search engines and AI assistants.\n"
             "# Search engines and AI crawlers are welcome, including those that train models.\n")
-    return head + "\n".join(f"User-agent: {b}\nAllow: /\n" for b in bots) + f"\nSitemap: {SITE_URL}/sitemap.xml\n"
+    # Content Signals (contentsignals.org): yes to search, to answering from the pages, and to training. A crawler reads only
+    # the group that names it, so each group says it.
+    signal = "Content-Signal: search=yes, ai-input=yes, ai-train=yes\n"
+    return head + "\n".join(f"User-agent: {b}\n{signal}Allow: /\n" for b in bots) + f"\nSitemap: {SITE_URL}/sitemap.xml\n"
 
 
 def llms_txt(pages):
@@ -1616,7 +1619,33 @@ def vercel_json():
                 {"source": "/img/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=604800"}]},
                 {"source": "/library/r/(.*)", "headers": [{"key": "X-Robots-Tag", "value": "noindex"}, {"key": "Content-Type", "value": "text/html; charset=utf-8"}, {"key": "Access-Control-Allow-Origin", "value": "*"}]},
                 {"source": "/(.*)\\.md", "headers": [{"key": "Content-Type", "value": "text/markdown; charset=utf-8"}, {"key": "X-Robots-Tag", "value": "noindex"}]},
-                {"source": "/(llms.txt|llms-full.txt|robots.txt)", "headers": [{"key": "Content-Type", "value": "text/plain; charset=utf-8"}]}]}
+                {"source": "/(llms.txt|llms-full.txt|robots.txt)", "headers": [{"key": "Content-Type", "value": "text/plain; charset=utf-8"}]},
+                {"source": "/", "headers": [{"key": "Link", "value": LINKS}]},
+                {"source": "/.well-known/agent-skills/(.*)", "headers": [{"key": "Access-Control-Allow-Origin", "value": "*"}]}]}
+
+
+# The home page's Link header (RFC 8288): where an agent finds the site as text, the docs and the skills index.
+LINKS = ('</llms.txt>; rel="describedby"; type="text/plain", </index.md>; rel="alternate"; type="text/markdown", '
+         '</docs/>; rel="service-doc", </.well-known/agent-skills/index.json>; rel="describedby"; type="application/json"')
+
+
+def agent_skills():
+    """/.well-known/agent-skills/: the eight skills for agents that read the Agent Skills discovery index (v0.2.0,
+    github.com/cloudflare/agent-skills-discovery-rfc). Each is the self-contained zip tools/build_dist.py makes for
+    claude.ai, and the index gives its SHA-256, so a client can check what it downloaded."""
+    import hashlib
+    subprocess.run([sys.executable, str(ROOT / "tools/build_dist.py")], check=True, capture_output=True)
+    out = DIST / ".well-known" / "agent-skills"
+    out.mkdir(parents=True, exist_ok=True)
+    skills = []
+    for d in sorted(x for x in (ROOT / "skills").iterdir() if (x / "SKILL.md").exists()):
+        zipped = out / f"{d.name}.zip"
+        shutil.copy(ROOT / "dist" / zipped.name, zipped)
+        desc = re.search(r"^description:\s*(.+)$", (d / "SKILL.md").read_text(), re.M).group(1).strip().strip('"')
+        skills.append({"name": d.name, "type": "archive", "description": desc[:1024], "url": f"/.well-known/agent-skills/{zipped.name}",
+                       "digest": "sha256:" + hashlib.sha256(zipped.read_bytes()).hexdigest()})
+    (out / "index.json").write_text(json.dumps({"$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json", "skills": skills}, indent=1) + "\n")
+    return len(skills)
 
 
 # ---------------------------------------------------------------- build
@@ -1664,6 +1693,7 @@ def main():
         f.write_text(text)
     paths = ["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/"] + library_paths
     (DIST / "robots.txt").write_text(robots())
+    agent_skills()
     (DIST / "llms.txt").write_text(llms_txt(pages))
     (DIST / "llms-full.txt").write_text(f"# {NAME} (full text of {SITE_URL})\n\n" + "\n\n---\n\n".join(mds.values()))
     (DIST / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
