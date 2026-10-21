@@ -8,18 +8,25 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Added
 
+- **The audit, as it happens, on the home page** (owner, 2026-10-21). The before-and-after section now plays once when it comes into view.
+  - A scan line moves down an invented invoicing page and stops at each issue in the order it meets them. Each issue gets a dashed box, its number and one measured line.
+  - Then a green line sweeps down with Merriweft's tokens. A chip carries each token from a small Merriweft card to its place, and the box becomes a check.
+  - Today, Audit and Fixed stop it and show that state; Replay plays it again. With reduced motion it never plays by itself, and without the script the audit shows still.
+  - The findings sit in a short list beside the page, not in cards under it. The page sits on a credited photo.
+- **The demo's fixed page is rebuilt as a bento** that the owner picked from three directions shown on a review copy. The October total no longer appears twice, and each tile holds one figure with a small true chart: weekly bars, an eight-week sparkline, a late-money meter and the week's due days. Red is kept for late money. The demo's system raises colorfulness to 85 for cleaner status colors, with the brand green unchanged.
+- **Agent notes stay out of design decisions:** `engine.py set profile.seen.<name> ...` stores a note, such as "the recommend line was said", without writing a decision.
 - **Before and after, on the person's own page** (owner feedback row 24, 2026-10-21). `review.py compare` writes one self-contained `compare.html` with three views: the page today, the audit drawn on it (a dashed box and a number on each issue), and the fix. Each fix says what it gives the person ("Fixing this makes ..."), with the measured numbers before and after.
   - The boxes come from the page itself: `__od.marks()` in `probe.js` turns selectors into boxes on a full-page screenshot. A selector that matches a column gets one box around it.
   - The home page opens with a real run of it on an invented invoicing app (`site/demo/before-after/`): the review skill measured the page before and after its fix, and `/demo/before-after/` serves the full report.
 - **A ready-made variant picker:** `skills/opendesigner/assets/picker.js` is the house picker, built to its spec (STD-process-review-taste-44 to -46): the floating bar, keys 1 to N and the arrows, `?v=` in the address, and a re-mount on every switch. Options go in `<template data-od-variant>` blocks on a review copy. `making.md` section 3 says how to use it, and `review.py compare` uses it.
 - **The changelog and a contribute guide on the website:** `/docs/changelog/` is built from this file on every publish, and `/docs/contribute/` sums up how to help. The home page and the footer link both.
-- **One line asking people to recommend OpenDesigner,** once per project and only after it has helped (`rules.md`). It never shares a message with another question, and `profile.recommend_asked` keeps it from coming back.
+- **One line asking people to recommend OpenDesigner,** once per project and only after it has helped (`rules.md`). It never shares a message with another question, and a note (`profile.seen.recommend`, kept out of the design decisions) keeps it from coming back.
 - **Each system knows which OpenDesigner made it, and says when it is out of date** (owner feedback row 24, 2026-10-21).
   - Every write of `opendesigner/state.json` records `opendesigner`: the release that last wrote it, the one that first made it, and the one whose `build` last wrote the files. Systems made before this keep working and count as made before version stamps.
   - When a system was built with an older release, or before stamps, each command says so once, names `engine.py build` and links CHANGELOG.md. `build` then says it brought the files up to date. A system saved with a newer release gets the opposite note: update OpenDesigner first. `--json` output, `resolve`, `init` and `feel` print no note.
   - `engine.py version` prints this copy's release and how the system compares with it. It never checks online, so it cannot see newer releases. The main and extend skills run it at the start of work on an existing system and say how to update the plugin in Claude Code.
   - Releases compare as numbers, so 0.10.0 is newer than 0.9.0. DESIGN.md's opening note, the overview page and feedback issue links name the release.
-  - `tools/build_dist.py --check` (run in CI) fails when the engine's release differs from `plugin.json` or `.claude-plugin/plugin.json`.
+  - `tools/build_dist.py --check` (which CI is set to run) fails when the engine's release differs from `plugin.json` or `.claude-plugin/plugin.json`.
 - **Taste: the poll, the taste index and the taste card** (`skills/opendesigner/references/taste.md`).
   - The taste poll: the person rates 20 to 30 real screens from shipped products, and the result recommends the eight dials. Images stay on the person's machine; the library holds links and dial values only.
   - The taste index (`taste.py index`) merges the poll, the person's own decisions, inspirations, the style pick and feel words into a value and a confidence per dial, with red lines. The option gallery is ordered by fit and leaves out directions past a red line, and `engine.py review` flags drift.
@@ -109,6 +116,11 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Fixed
 
+- **Fixes from the fresh verifier's re-check (2026-10-21).**
+  - `review.py compare`'s badges and help text now meet 4.5:1, a box at the edge keeps its number in view, and a mark with no number, a blank "gives" or numbers in place of text is refused or mended instead of crashing. An acronym keeps its capitals ("WCAG").
+  - The variant picker can no longer show two options when two switches land in one frame.
+  - A system made with a newer OpenDesigner keeps saying so after an older copy writes it, and pre-releases compare by number (beta.10 after beta.2).
+  - The Markdown copies of the changelog and evals pages, and llms-full.txt, no longer show raw `{{...}}` placeholders. Lists nest at any depth.
 - **The review probe no longer reports screen-reader-only text as clipped.** A 1 x 1 px, absolutely positioned label is visually hidden on purpose. The checker evals' clean page now holds one, so the false alarm can't come back.
 - **The glossary has one source again, and CI checks it.** Terms were being added straight to `synthesis/glossary.json`, while `tools/check_glossary.py --build` still rebuilt it from the old writing shards. A rebuild would have deleted 13 terms (twelve visual styles such as glassmorphism and bento, and "Taste card"), and `docs/GLOSSARY.md` lacked all 13.
   - `synthesis/glossary.json` is now the file to edit. `--build` checks it, sorts it and writes `docs/GLOSSARY.md`; the shards and `terms-input.json` are retired (git history has them).

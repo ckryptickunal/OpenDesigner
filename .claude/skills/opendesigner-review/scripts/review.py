@@ -1031,9 +1031,13 @@ def cmd_compare(args):
     marks, page = read_marks(args.marks, "marks")
     if not marks:
         die("marks.json has no marks: list the issues first (review.py check, then __od.marks([{sel, title, gives}]))")
-    for m in marks:
-        if not (m.get("title") and m.get("gives")):
-            die(f"mark {m.get('n')} needs a title (the issue) and gives (what fixing it makes better for the person)")
+    for i, m in enumerate(marks):
+        m.setdefault("n", i + 1)
+        for k in ("title", "gives", "before", "after", "finding"):
+            if m.get(k) is not None and not isinstance(m[k], str):
+                m[k] = str(m[k])
+        if not (str(m.get("title") or "").strip() and str(m.get("gives") or "").strip()):
+            die(f"mark {m['n']} needs a title (the issue) and gives (what fixing it makes better for the person)")
     after_marks, after_page = read_marks(args.after_marks, "after marks") if args.after_marks else ([], {})
     shots = {}
     for key, path, pg in (("before", args.before, page), ("after", args.after, after_page)):  # no after marks: the shot's own size
@@ -1047,7 +1051,7 @@ def cmd_compare(args):
 
     def boxes(ms, pg, kind):
         W, H = pg.get("w") or 1, pg.get("h") or 1
-        return "".join(f'<span class="mk {kind}" style="left:{m["rect"][0] / W * 100:.3f}%;top:{m["rect"][1] / H * 100:.3f}%;'
+        return "".join(f'<span class="mk {kind}{" edge" if m["rect"][0] < 12 or m["rect"][1] < 12 else ""}" style="left:{m["rect"][0] / W * 100:.3f}%;top:{m["rect"][1] / H * 100:.3f}%;'
                        f'width:{m["rect"][2] / W * 100:.3f}%;height:{m["rect"][3] / H * 100:.3f}%"><b>{m["n"]}</b></span>' for m in ms)
 
     def view(key, overlay=""):
@@ -1057,7 +1061,9 @@ def cmd_compare(args):
 
     def gives(m):
         g = m["gives"].strip()
-        return g if g.lower().startswith("fixing this") else "Fixing this makes " + g[0].lower() + g[1:]
+        if g.lower().startswith("fixing this"):
+            return g
+        return "Fixing this makes " + (g[0].lower() + g[1:] if g[1:2].islower() else g)  # "WCAG ..." keeps its capitals
 
     rows = "".join(f'<li><span class="n">{m["n"]}</span><div><p class="t">{esc(m["title"])}</p><p class="g">{esc(gives(m))}</p>'
                    + (f'<p class="e">{esc(m["before"])}' + (f' &rarr; {esc(m["after"])}' if m.get("after") else "") + "</p>" if m.get("before") else "")
@@ -1066,20 +1072,22 @@ def cmd_compare(args):
     title = args.title or "Before and after"
     page_html = f"""<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(title)}</title>
+<link rel="icon" href="data:,">
 <style>
 :root{{color-scheme:light}}*{{box-sizing:border-box}}body{{margin:0;background:#f4f4f5;color:#18181b;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}}
 main{{max-width:1200px;margin:0 auto;padding:24px 16px 120px}}h1{{font-size:22px;line-height:1.25;margin:0 0 4px;text-wrap:balance}}.lead{{margin:0 0 20px;color:#52525b;text-wrap:pretty}}
 .shot{{aspect-ratio:1 / {tall:.4f};border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.08);background:#fff}}
 .pg{{position:relative}}.pg img{{display:block;width:100%;height:auto}}
-.mk{{position:absolute;border:2px dashed #e5484d;border-radius:4px;box-shadow:0 0 0 1px rgba(255,255,255,.9),inset 0 0 0 1px rgba(255,255,255,.9)}}
-.mk.done{{border-style:solid;border-color:#12a150}}
-.mk b{{position:absolute;top:-11px;left:-11px;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:#e5484d;color:#fff;font:600 12px/22px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;text-align:center;box-shadow:0 0 0 2px #fff}}
-.mk.done b{{background:#12a150}}
+.mk{{position:absolute;border:2px dashed #c8202e;border-radius:4px;box-shadow:0 0 0 1px rgba(255,255,255,.9),inset 0 0 0 1px rgba(255,255,255,.9)}}
+.mk.done{{border-style:solid;border-color:#12804a}}
+.mk b{{position:absolute;top:-11px;left:-11px;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:#c8202e;color:#fff;font:600 12px/22px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;text-align:center;box-shadow:0 0 0 2px #fff}}
+.mk.done b{{background:#12804a}}
+.mk.edge b{{top:3px;left:3px}}
 ol{{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}}
 li{{display:flex;gap:12px;padding:14px 16px;background:#fff;border-radius:12px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}}
-li .n{{flex:none;width:24px;height:24px;border-radius:12px;background:#e5484d;color:#fff;font-size:12px;font-weight:600;line-height:24px;text-align:center}}
-li p{{margin:0;text-wrap:pretty}}.t{{font-weight:600;text-wrap:balance}}.g{{color:#3f3f46}}.e{{margin-top:4px!important;color:#71717a;font-size:13px}}
-.help{{margin:16px 0 0;color:#71717a;font-size:13px}}
+li .n{{flex:none;width:24px;height:24px;border-radius:12px;background:#c8202e;color:#fff;font-size:12px;font-weight:600;line-height:24px;text-align:center}}
+li p{{margin:0;text-wrap:pretty}}.t{{font-weight:600;text-wrap:balance}}.g{{color:#3f3f46}}.e{{margin-top:4px!important;color:#52525b;font-size:13px}}
+.help{{margin:16px 0 0;color:#52525b;font-size:13px}}
 </style>
 <main>
 <h1>{esc(title)}</h1>

@@ -567,6 +567,33 @@ class Compare(unittest.TestCase):
         err, _ = self.compare(m)
         self.assertIn("needs a title (the issue) and gives", err)
 
+    def test_odd_marks_are_refused_or_mended_never_a_crash(self):
+        m = copy.deepcopy(self.marks)
+        m["marks"][0]["gives"] = "   "
+        err, _ = self.compare(m)
+        self.assertIn("needs a title (the issue) and gives", err)
+        m = copy.deepcopy(self.marks)
+        del m["marks"][0]["n"]
+        m["marks"][0].update(before=2.5, after=7.2, gives="WCAG AA contrast on every label")
+        err, _ = self.compare(m)
+        self.assertIsNone(err)
+        page = (self.tmp / "compare.html").read_text()
+        self.assertIn("2.5 &rarr; 7.2", page)
+        self.assertIn("Fixing this makes WCAG AA contrast", page)  # an acronym keeps its capitals
+        self.assertIn('class="mk todo edge"', page)                 # a box near the edge keeps its number inside the frame
+
+    def test_the_report_itself_meets_the_contrast_floor(self):
+        self.compare(self.marks)
+        page = (self.tmp / "compare.html").read_text()
+        for gone in ("#e5484d", "#12a150", "#71717a"):  # white on these, or this on #f4f4f5, was under 4.5:1
+            self.assertNotIn(gone, page)
+        lum = lambda h: sum(w * (c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4)
+                            for w, c in zip((0.2126, 0.7152, 0.0722), (int(h[i:i + 2], 16) / 255 for i in (1, 3, 5))))
+        ratio = lambda a, b: (max(lum(a), lum(b)) + 0.05) / (min(lum(a), lum(b)) + 0.05)
+        for fg, bg in (("#ffffff", "#c8202e"), ("#ffffff", "#12804a"), ("#52525b", "#f4f4f5")):
+            self.assertIn(bg if bg != "#f4f4f5" else fg, page)
+            self.assertGreaterEqual(ratio(fg, bg), 4.5, (fg, bg))
+
     def test_a_mark_that_found_nothing_is_refused(self):
         m = copy.deepcopy(self.marks)
         m["marks"][0] = {"n": 1, "title": "x", "gives": "y", "missing": True}

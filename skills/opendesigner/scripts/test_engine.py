@@ -3732,6 +3732,29 @@ class VersionStamps(unittest.TestCase):
             with open(os.path.join(REPO, manifest), encoding="utf-8") as f:
                 self.assertEqual(json.load(f)["version"], self.V, manifest)
 
+    def test_an_older_copy_never_hides_a_newer_system(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._system(t, build=False)
+            self._restamp(d, {"version": "0.10.0", "created": "0.10.0"})  # made by a newer release, never built
+            quiet(e.main, ["--dir", d, "set", "dials.roundness", "50", "--no-doc"])  # this older copy writes the state
+            self.assertEqual(self._stamp(d)["version"], "0.10.0")
+            with open(os.path.join(d, "state.json"), encoding="utf-8") as f:
+                self.assertEqual(e.version_status(json.load(f))[0], "newer")
+
+    def test_an_agent_note_is_not_a_design_decision(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._system(t, build=False)
+            quiet(e.main, ["--dir", d, "set", "profile.seen.recommend", "true"])
+            with open(os.path.join(d, "state.json"), encoding="utf-8") as f:
+                self.assertIs(json.load(f)["profile"]["seen"]["recommend"], True)
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                self.assertNotIn("profile.seen", f.read())
+
+    def test_pre_releases_compare_by_number(self):
+        self.assertGreater(e.version_key("0.2.0-beta.10"), e.version_key("0.2.0-beta.2"))
+        self.assertGreater(e.version_key("0.2.0"), e.version_key("0.2.0-rc.1"))
+        self.assertGreater(e.version_key("0.2.0-rc.1"), e.version_key("0.2.0-beta.9"))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=1)

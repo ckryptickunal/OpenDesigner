@@ -41,7 +41,7 @@ Commands (run from the user's project; state lives in ./opendesigner/ unless --d
     engine.py standard remove PRJ-<nn> --why "..."   remove a project standard (house standards are only overridden)
     engine.py version                     this copy's OpenDesigner release, and whether the system here is up to date with it
 
-Version stamps: every write of state.json records `opendesigner` = {version: the release that last wrote it, created: the
+Version stamps: every write of state.json records `opendesigner` = {version: the newest release that has written it, created: the
 release that first made it (null: made before version stamps), built: the release whose `build` last wrote the files}.
 When a system was last built or saved with an older release, or made before stamps, each command (except init, feel,
 resolve and --json output) says so once and points to `build` and CHANGELOG.md; a system saved with a newer release
@@ -201,18 +201,24 @@ def read_json(path):
 # this copy only; it never checks online for newer releases.
 
 def version_key(v):
-    """A release number that sorts the way semver does ('0.10.0' > '0.9.0'; '0.2.0-beta' < '0.2.0'); None if it is not one."""
-    m = re.fullmatch(r"v?(\d+)\.(\d+)\.(\d+)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?", str(v or "").strip())
-    return (int(m[1]), int(m[2]), int(m[3]), 0 if m[4] else 1) if m else None
+    """A release number that sorts the way semver does ('0.10.0' > '0.9.0'; '0.2.0-beta' < '0.2.0';
+    '0.2.0-beta.10' > '0.2.0-beta.2'); None if it is not one."""
+    m = re.fullmatch(r"v?(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?(\+[0-9A-Za-z.-]+)?", str(v or "").strip())
+    if not m:
+        return None
+    pre = (1,) if not m[4] else (0, tuple((0, int(x)) if x.isdigit() else (1, x) for x in m[4].split(".")))
+    return (int(m[1]), int(m[2]), int(m[3]), pre)
 
 
 def stamp_version(state, built=False):
-    """The state as state.json is written: opendesigner.version is this release, created the release that first made the
-    system (None: made before version stamps), built the release whose build last wrote the files (None: not built since
-    version stamps; absent: never built). The caller's state is not changed."""
+    """The state as state.json is written: opendesigner.version is the newest release that has written it (an older copy
+    never lowers it, so the "newer system" note survives), created the release that first made the system (None: made
+    before version stamps), built the release whose build last wrote the files (None: not built since version stamps;
+    absent: never built). The caller's state is not changed."""
     od = state.get("opendesigner")
     od = dict(od) if isinstance(od, dict) else {"created": None, "built": None}  # a system made before version stamps
-    od["version"] = OPENDESIGNER_VERSION
+    seen = [v for v in (od.get("version"), od.get("created")) if version_key(v)]
+    od["version"] = max(seen + [OPENDESIGNER_VERSION], key=version_key)
     if built:
         od["built"] = OPENDESIGNER_VERSION
     return dict(state, opendesigner={k: od[k] for k in ("version", "created", "built") if k in od})
@@ -226,7 +232,7 @@ def version_status(state):
     if not isinstance(od, dict):
         return "unstamped", None
     here = version_key(OPENDESIGNER_VERSION)
-    newest = max((v for v in (od.get("version"), od.get("built")) if version_key(v)), key=version_key, default=None)
+    newest = max((v for v in (od.get("version"), od.get("built"), od.get("created")) if version_key(v)), key=version_key, default=None)
     if newest and version_key(newest) > here:
         return "newer", newest
     kind = "built" if "built" in od else "saved"
@@ -4782,6 +4788,12 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
     state = merge_defaults(read_json(sp))
     old_state = copy.deepcopy(state)
     path = normalize_path(path)
+    if path.startswith("profile.seen."):  # the agent's own notes (a line it has said once), not a design decision
+        state.setdefault("profile", {}).setdefault("seen", {})[path.split(".", 2)[2]] = value
+        dump_json(sp, state)
+        if not quiet:
+            print(f"noted {path} = {json.dumps(value, ensure_ascii=False)} (not a design decision, so not in decisions.md)")
+        return
     why, set_by = split_status(why, set_by)
     if set_by not in SET_BY:
         raise SystemExit(f"--set-by must be one of {', '.join(SET_BY)}")

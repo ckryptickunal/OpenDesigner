@@ -90,11 +90,17 @@
       hl.style.width = a.offsetWidth + "px";
       hl.style.transform = "translateX(" + a.offsetLeft + "px)";
     }
-    function mount(i) {  // clear the stage, then draw on the next frame so entrances run again
+    var frame = 0;
+    function clear() {
       Array.prototype.slice.call(stage.childNodes).forEach(function (n) {
         if (!(n.nodeType === 1 && n.tagName === "TEMPLATE")) stage.removeChild(n);
       });
-      requestAnimationFrame(function () {
+    }
+    function mount(i) {  // clear the stage, then draw on the next frame so entrances run again
+      cancelAnimationFrame(frame);  // two switches in one frame draw only the last one
+      clear();
+      frame = requestAnimationFrame(function () {
+        clear();
         stage.appendChild(templates[i].content.cloneNode(true));
         stage.dispatchEvent(new CustomEvent("od:variant", { detail: { index: i, name: names[i] } }));
       });

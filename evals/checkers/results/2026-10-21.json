@@ -1,11 +1,10 @@
 {
   "kind": "checkers",
   "date": "2026-10-21",
-  "time": "2026-10-21T19:23:04",
-  "commit": "2d41c08",
+  "time": "2026-10-21T21:32:02",
+  "commit": "6a01a78",
   "checkersChangedSinceCommit": [
-    "skills/opendesigner-review/scripts/review.py",
-    "skills/opendesigner-review/scripts/probe.js"
+    "skills/opendesigner-review/scripts/review.py"
   ],
   "environment": {
     "python": "3.10.11",

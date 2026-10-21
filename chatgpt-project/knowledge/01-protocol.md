@@ -480,7 +480,7 @@ A `--note` is optional: 12 words at most, about the step, never about the person
 
 > If OpenDesigner helped, a star on GitHub or a word to a colleague helps other people find it: https://github.com/ckryptickunal/OpenDesigner. To change or add something yourself, CONTRIBUTING.md there says how.
 
-Then record it with `engine.py set profile.recommend_asked true --no-doc`, and never ask again while that is true. Don't ask when they are frustrated, in a hurry or fixing something, and don't follow up if they ignore it. When they want to report a problem instead, use `improve.md`.
+Then note it with `engine.py set profile.seen.recommend true` (a note, not a design decision: it stays out of decisions.md and DESIGN.md), and never ask again while that is true. Don't ask when they are frustrated, in a hurry or fixing something, and don't follow up if they ignore it. When they want to report a problem instead, use `improve.md`.
 
 ## 12. Sources the person trusts (`docs/KNOWLEDGE.md` section 4)
 When the person shares a link or file and says to follow it or learn from it:
@@ -719,6 +719,7 @@ The house standards already say how options are built and compared: STD-process-
 - Flip through every option yourself first (-47). Say when each is the right choice and what it costs, and don't pick for them (-48).
 - When they pick, build only that one into the product (-49).
 - **Use the ready-made picker:** `assets/picker.js` is the house picker built to that spec, with its keys, its `?v=` address and its re-mount on every switch. Put each option in a `<template data-od-variant="Name">` inside one `<div data-od-stage>` on the review copy, keep the current version as the first option, and add the script. Add `data-od-motion` to an option with an entrance worth replaying, and `data-od-position="top"` on the stage when an option fills the bottom centre. Never restyle the picker.
+- **A fix that changes structure is a choice, not a fix** (owner, 2026-10-21). A wrong color, size or corner can be fixed with the token. Merging two parts that show the same number, reordering a section or a new layout (cards, one chart, a bento grid) can be done several good ways: show two or three small directions of just that part on a review copy, with the current version kept, each named by what it changes, and build only the one they pick. Keep each direction small: only the part that changes, the rest of the page as it is.
 - **To show what a fix gives,** use the review skill's before and after: `review.py compare` draws the audit on the page today and puts the fix beside it, each fix with what it makes better (`opendesigner-review` SKILL.md section 7).
 
 What one project adds (DC-L22-02):
