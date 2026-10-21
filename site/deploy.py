@@ -55,6 +55,10 @@ def main():
     bad = [p for p in CHECK_PATHS if status(p, url) != "200"]
     if bad:
         sys.exit(f"not promoting: {', '.join(bad)} did not answer 200 on {url}")
+    nf = subprocess.run(["vercel", "curl", "/no-such-page-od-check/", "--deployment", url, "--", "-s", "-w", "\\n%{http_code}"],
+                        cwd=SITE, text=True, capture_output=True).stdout
+    if not nf.endswith("404") or "noindex" not in nf:
+        sys.exit("not promoting: a missing page did not answer 404 with the noindex 404 page")
     md = subprocess.run(["vercel", "curl", "/docs/install/", "--deployment", url, "--", "-s", "-o", "/dev/null", "-H", "Accept: text/markdown",
                          "-w", "%{content_type}"], cwd=SITE, text=True, capture_output=True).stdout
     if "text/markdown" not in md:
@@ -73,7 +77,7 @@ def main():
     indexnow(site_url)
 
 
-CHECK_PATHS = ["/", "/docs/", "/docs/install/", "/library/", "/sitemap.xml", "/robots.txt", "/llms.txt", "/og/home.jpg", "/_vercel/speed-insights/script.js", "/.well-known/agent-skills/index.json"]
+CHECK_PATHS = ["/", "/docs/", "/docs/install/", "/library/", "/sitemap.xml", "/robots.txt", "/llms.txt", "/og/home.jpg", "/_vercel/speed-insights/script.js", "/.well-known/agent-skills/index.json", "/404.webp"]
 
 
 def status(path, deployment):
