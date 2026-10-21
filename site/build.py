@@ -153,6 +153,18 @@ def sf_tracking(px):
     return SF_PRO[-1][1] / 1000
 
 
+def minify_css(css):
+    """site.css without comments or extra whitespace (about 8 KB less to download before the first paint). Quoted strings
+    are kept as they are; spaces inside values (calc, media queries such as "and (") become one space, never none; an
+    empty custom property keeps its space."""
+    parts = re.split(r'("(?:[^"\\\n]|\\.)*"|\'(?:[^\'\\\n]|\\.)*\')', css)
+    for k in range(0, len(parts), 2):
+        t = re.sub(r"/\*.*?\*/", "", parts[k], flags=re.S)
+        t = re.sub(r"\s+", " ", t)
+        parts[k] = re.sub(r"\s*([{};,>])\s*", r"\1", t).replace(":;", ": ;")
+    return "".join(parts).strip() + "\n"
+
+
 def apple_tracking(css):
     """Give every rule that sets a text size up to 19px Apple's tracking for that size (owner, 2026-10-14: "iOS kerning everywhere").
     letter-spacing in em is turned into pixels where it is declared and inherited as pixels, so a 12px note inside 16px text
@@ -350,9 +362,14 @@ def figure(name):
         raise SystemExit(f"figure {name}: no scripts, images or external links inside figures")
     for key in re.findall(r'data-scene="([a-z0-9-]+)"', h):
         pid, author, page_id = SCENES[key]
-        h = h.replace(f'data-scene="{key}"', f'style="background-image:url(https://images.unsplash.com/{pid}?auto=format&fit=crop&w=1400&q=70)"', 1)
+        h = h.replace(f'data-scene="{key}"', f'style="background-image:url({scene_url(key)})"', 1)
         h = h.replace("</figcaption>", f' Photo: <a href="https://unsplash.com/photos/{page_id}">{esc(author)}</a> on Unsplash.</figcaption>', 1)
     return apple_tracking_inline(h)
+
+
+def scene_url(key, w=1400):
+    """A figure's photo: one address for its background and for any preload of it, so the browser fetches it once."""
+    return f"https://images.unsplash.com/{SCENES[key][0]}?auto=format&fit=crop&w={w}&q=70"
 
 
 def figure_caption(name):
@@ -431,7 +448,7 @@ def sidebar(pages, current):
             f'<nav>{"".join(groups)}{show}</nav></details><nav class="side-desk">{"".join(groups)}{show}</nav></aside>')
 
 
-def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jpg", md=True, wide=False, robots="index, follow, max-image-preview:large", home=False, og_alt=None):
+def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jpg", md=True, wide=False, robots="index, follow, max-image-preview:large", home=False, og_alt=None, preload=""):
     canon = SITE_URL + path
     md_link = f'<link rel="alternate" type="text/markdown" href="{path}index.md" title="Markdown">' if md else ""
     inner = (f'<main id="main" class="home">\n{main_html}\n</main>' if home else
@@ -467,7 +484,7 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jp
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/fonts/hanken-300-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://images.unsplash.com">
-<link rel="stylesheet" href="/site.css">
+{preload}<link rel="stylesheet" href="/site.css">
 <noscript><style>.g-wait{{animation-delay:60ms!important}}</style></noscript>
 {md_link}
 <link rel="sitemap" type="application/xml" href="/sitemap.xml">
@@ -1114,7 +1131,8 @@ def home(pages, facts, faq):
               {"@type": "HowToStep", "text": "/plugin marketplace add ckryptickunal/OpenDesigner"},
               {"@type": "HowToStep", "text": "/plugin install opendesigner@opendesigner"},
               {"@type": "HowToStep", "text": "Say: Create a design system for this project. Answer up to five questions."}]}]
-    return shell("/", "OpenDesigner: design systems for the AI tool you already use", HOME_DESCRIPTION, body, pages, ld, home=True)
+    hero = f'<link rel="preload" as="image" href="{scene_url("blue-gradient")}" fetchpriority="high">\n'  # the phone LCP: a background, found late
+    return shell("/", "OpenDesigner: design systems for the AI tool you already use", HOME_DESCRIPTION, body, pages, ld, home=True, preload=hero)
 
 
 HOME_DESCRIPTION = ("Make everything you build look like it belongs together. Free skills turn your design rules into tokens, CSS, Tailwind "
@@ -1613,7 +1631,7 @@ def main():
     for key, _f, _l in FONT_SPECS:
         shutil.copy(CACHE / f"{key}-OFL.txt", DIST / "fonts" / f"{key}-OFL.txt")
     ff = "".join(f"@font-face{{font-family:'{fam}';font-style:normal;font-weight:{w};font-display:swap;src:url(/fonts/{f}) format('woff2')}}\n" for fam, w, f in rules)
-    (DIST / "site.css").write_text(ff + tokens_css() + corners_match_levers(apple_tracking((SITE / "static" / "site.css").read_text() + (SITE / "static" / "figures.css").read_text() + status_css() + (SITE / "static" / "home.css").read_text() + (SITE / "static" / "craft.css").read_text() + (SITE / "static" / "deco.css").read_text())))
+    (DIST / "site.css").write_text(minify_css(ff + tokens_css() + corners_match_levers(apple_tracking((SITE / "static" / "site.css").read_text() + (SITE / "static" / "figures.css").read_text() + status_css() + (SITE / "static" / "home.css").read_text() + (SITE / "static" / "craft.css").read_text() + (SITE / "static" / "deco.css").read_text()))))
     shutil.copy(SITE / "static" / "site.js", DIST / "site.js")
     images()
     pages = load_docs()
