@@ -1608,18 +1608,27 @@ NOT_FOUND_CSS = """<style>
 </style>"""
 
 
-def not_found_section(art_url=None, size=None):
+NOT_FOUND_COPY = {
+    "label": "Error 404",
+    "lead": "Wrong room, right house.",
+    "rest": ("That link led somewhere we haven&rsquo;t finished, or somewhere we moved. Thanks for wandering in anyway. "
+             "Pick a door below and we&rsquo;ll take it from here."),
+    "home": "Front door", "docs": "The library of docs", "report": "Flag this room",
+}
+
+
+def not_found_section(art_url=None, size=None, copy=None):
     """The 404 block. A wide picture sits along the bottom; a tall one sits beside the copy (below it on phones)."""
+    c = dict(NOT_FOUND_COPY, **(copy or {}))
     kind, art = "", ""
     if art_url and size:
         w, h = size
         kind = " wide" if w >= h else " tall"
         art = f'<figure class="nf-art"><img src="{art_url}" alt="" width="{w}" height="{h}" decoding="async"></figure>'
-    return ('<section class="nf' + kind + '"><div class="nf-copy"><p class="kicker">Error 404</p>'
-            '<h1><b>This page isn&rsquo;t in the system.</b> It may have moved, or it was never made. OpenDesigner shows what&rsquo;s '
-            'missing instead of faking it, so here&rsquo;s the honest version: these links will get you back.</h1>'
-            '<div class="nf-actions"><a class="btn primary" href="/">Back to home</a><a class="btn ghost" href="/docs/">Read the docs</a>'
-            f'<a class="btn ghost" href="{GH}/issues/new?title=Broken%20link%20on%20opendesigner.dev">Report a broken link</a></div></div>'
+    return (f'<section class="nf{kind}"><div class="nf-copy"><p class="kicker">{c["label"]}</p>'
+            f'<h1><b>{c["lead"]}</b> {c["rest"]}</h1>'
+            f'<div class="nf-actions"><a class="btn primary" href="/">{c["home"]}</a><a class="btn ghost" href="/docs/">{c["docs"]}</a>'
+            f'<a class="btn ghost" href="{GH}/issues/new?title=Broken%20link%20on%20opendesigner.dev">{c["report"]}</a></div></div>'
             f'{art}</section>')
 
 
