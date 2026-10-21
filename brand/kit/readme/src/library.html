@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<!-- The component library for the README (1012 px wide, rendered at 2x): six of its 42 parts, one from each of six aisles,
+     as the library page shows them (captured by render.py --library-from, into the git-ignored src/shots/). Every part
+     is built only on design tokens; these are shown in Billerwick, one of the ten looks the engine makes. -->
+<style>
+{{CSS}}
+#canvas { width: 1012px; padding: 20px 20px 18px; }
+.parts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 16px; }
+.part img { display: block; width: 100%; height: auto; border-radius: var(--r-card); }
+figure figcaption { display: flex; gap: 8px; align-items: baseline; margin-top: 10px; padding-left: 2px; font-size: 15px; line-height: 22px; letter-spacing: -0.016em; }
+figcaption strong { font-weight: 600; }
+figcaption span { color: var(--ink-muted); }
+/* phone version (html.narrow, 358 px): four parts, two across */
+html.narrow #canvas { width: 358px; padding: 12px 12px 10px; border-radius: 24px; }
+html.narrow .parts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 10px; }
+html.narrow .part.more { display: none; }
+html.narrow .part img { border-radius: 14px; }
+html.narrow figcaption { flex-direction: column; gap: 0; margin-top: 6px; font-size: 13px; line-height: 18px; }
+</style></head>
+<body>
+<div id="canvas">
+<div class="parts">{{LIB_PARTS}}</div>
+</div>
+</body></html>

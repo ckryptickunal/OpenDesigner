@@ -40,3 +40,6 @@ videos/**/node_modules/
 
 # plugin eval raw runs (curated summaries live in evals/agent/)
 evals/results/
+
+# README image captures (brand/kit/readme/src/render.py --library-from)
+brand/kit/readme/src/shots/

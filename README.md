@@ -101,6 +101,17 @@ You need your own AI tool and Python 3.10 or newer. The engine makes no network 
 
 More: [How it works](docs/HOW-IT-WORKS.md) · [FAQ](docs/FAQ.md) · [Glossary](docs/GLOSSARY.md) · [Research](docs/RESEARCH.md)
 
+## Fix a page you already built
+
+<picture>
+  <source media="(max-width: 600px)" srcset="https://raw.githubusercontent.com/ckryptickunal/OpenDesigner/main/brand/kit/readme/before-after-narrow.png">
+  <img src="brand/kit/readme/before-after.png" width="1012" alt="Two versions of an invoices page. Today: seven issues boxed and numbered, such as three filled buttons, gray text at 2.54:1, amounts that don't line up and status shown by color alone. Fixed: the same page on its own design system, with a check where each fix landed and the money shown as a bento of small charts.">
+</picture>
+
+<sub>A real run of the review skill on Merriweft, a made-up invoicing app: it measured the page, marked each problem, and fixed it with the app's own design system. Photo: <a href="https://unsplash.com/photos/5yKrcO8FKwM">Annie Spratt</a> on Unsplash.</sub>
+
+Watch it run [on the website](https://opendesigner.dev/#before-after), or open [the full report](https://opendesigner.dev/demo/before-after/) with every measurement.
+
 ## Examples
 
 <picture>
@@ -111,6 +122,17 @@ More: [How it works](docs/HOW-IT-WORKS.md) · [FAQ](docs/FAQ.md) · [Glossary](d
 <sub>B2B screens that AI agents built through OpenDesigner, reviewed by the maintainer. Every brand is made up, and much of the identity work was done outside the tokens. Photos: <a href="https://unsplash.com/photos/HVQnG6JxxY0">Photoholgic</a>, <a href="https://unsplash.com/photos/5yKrcO8FKwM">Annie Spratt</a> and <a href="https://unsplash.com/photos/BrzWSKWCuWo">Harshal Tandel</a> on Unsplash.</sub>
 
 See every piece in the [showcase](https://opendesigner.dev/showcase/). Three worked example systems are in [`examples/`](examples/); their `DESIGN.md` files are out of date with the current engine ([#51](https://github.com/ckryptickunal/OpenDesigner/issues/51)).
+
+## Component library
+
+<picture>
+  <source media="(max-width: 600px)" srcset="https://raw.githubusercontent.com/ckryptickunal/OpenDesigner/main/brand/kit/readme/library-narrow.png">
+  <img src="brand/kit/readme/library.png" width="1012" alt="Six ready-made parts: an approval panel, a monthly spend chart, a command menu, an AI answer with citations, an order summary and settings switches.">
+</picture>
+
+<sub>Six of its 42 parts, shown in Billerwick, one of the ten looks the engine makes. Every part uses only design tokens, so it takes on your look.</sub>
+
+When you want finished parts, your AI can add any of them to your project. It's optional. [Browse the library](https://opendesigner.dev/library/).
 
 ## Why trust its advice
 

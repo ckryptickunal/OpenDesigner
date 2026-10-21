@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<!-- The before and after for the README (1012 px wide, rendered at 2x): the home page's audit as two stills. On the left,
+     today's page with each measured issue boxed and numbered; on the right, the same page fixed with its own design system,
+     a check where each fix landed. Screenshots and boxes are capture.py's (site/demo/before-after/, git-ignored shots);
+     the website shows the same audit live, in motion. Photo (free Unsplash photo): Annie Spratt, as on the home page. -->
+<style>
+{{CSS}}
+#canvas { width: 1012px; padding: 20px 20px 18px; }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.stage { display: grid; place-items: center; padding: 26px 22px; }
+.bezel { width: 100%; }
+/* both pages at today's height: the fixed one is taller and is cut at the bottom of its table */
+.shot { position: relative; overflow: hidden; border-radius: 11px; aspect-ratio: 1280 / 905; background: #f9fafb; }
+.bezel .shot img { position: absolute; left: 0; top: 0; width: 100%; height: auto; border-radius: 0; }
+.mk { position: absolute; border: 1.5px dashed #c8202e; border-radius: 4px; box-shadow: 0 0 0 1px rgb(255 255 255 / .85); }
+.ok { position: absolute; }
+.mk b, .ok b { position: absolute; top: -8px; left: -8px; display: grid; place-items: center; width: 17px; height: 17px; border-radius: 50%;
+  color: #fff; font: 600 10px/1 "Hanken Grotesk", sans-serif; letter-spacing: 0; box-shadow: 0 0 0 1.5px #fff; }
+.mk b { background: #c8202e; }
+.ok b { background: #12804a; }
+.ok b svg { width: 10px; height: 10px; }
+figure figcaption { display: flex; gap: 8px; align-items: baseline; margin-top: 10px; padding-left: 2px; font-size: 15px; line-height: 22px; letter-spacing: -0.016em; }
+figcaption strong { font-weight: 600; }
+figcaption span { color: var(--ink-muted); }
+/* phone version (html.narrow, 358 px): one above the other */
+html.narrow #canvas { width: 358px; padding: 12px 12px 10px; border-radius: 24px; }
+html.narrow .pair { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+html.narrow .stage { padding: 18px 16px; border-radius: 16px; }
+html.narrow figcaption { margin-top: 8px; font-size: 14px; line-height: 20px; }
+</style></head>
+<body>
+<div id="canvas">
+<div class="pair">
+  <figure>
+    <div class="stage" style="background-image:url(https://images.unsplash.com/photo-1737279722244-4b5f5b896c6b?auto=format&fit=crop&w=1400&q=80)">
+      <div class="bezel"><div class="shot"><img src="{{ROOT}}/site/demo/before-after/shots/before.png" alt="">{{BA_BEFORE}}</div></div>
+    </div>
+    <figcaption><strong>Today</strong><span>7 issues, each measured on the page</span></figcaption>
+  </figure>
+  <figure>
+    <div class="stage" style="background-image:url(https://images.unsplash.com/photo-1737279722244-4b5f5b896c6b?auto=format&fit=crop&w=1400&q=80)">
+      <div class="bezel"><div class="shot"><img src="{{ROOT}}/site/demo/before-after/shots/after.png" alt="">{{BA_AFTER}}</div></div>
+    </div>
+    <figcaption><strong>Fixed</strong><span>with the app's own design system</span></figcaption>
+  </figure>
+</div>
+</div>
+</body></html>
