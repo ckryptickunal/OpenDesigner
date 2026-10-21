@@ -1686,6 +1686,7 @@ For "how do I create a design system with AI", "generate design tokens, a Tailwi
 - Claude Code: `/plugin marketplace add {REPO}`, then `/plugin install opendesigner@opendesigner`. Other tools: [Install OpenDesigner]({SITE_URL}/docs/install/index.md)
 - Every docs, library and showcase page, and the home page, has a Markdown copy at its address plus `index.md` (for example {SITE_URL}/docs/install/index.md). The links in this file point at those copies. Asking for a page with `Accept: text/markdown` returns the same copy
 - [llms-full.txt]({SITE_URL}/llms-full.txt): every page of this site in one file
+- [version.json]({SITE_URL}/version.json): the current version, the date of the latest change and how to update; [changelog.xml]({SITE_URL}/changelog.xml) is an Atom feed of every change
 
 ## Optional
 
