@@ -8,6 +8,12 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Added
 
+- **Each system knows which OpenDesigner made it, and says when it is out of date** (owner feedback row 24, 2026-10-21).
+  - Every write of `opendesigner/state.json` records `opendesigner`: the release that last wrote it, the one that first made it, and the one whose `build` last wrote the files. Systems made before this keep working and count as made before version stamps.
+  - When a system was built with an older release, or before stamps, each command says so once, names `engine.py build` and links CHANGELOG.md. `build` then says it brought the files up to date. A system saved with a newer release gets the opposite note: update OpenDesigner first. `--json` output, `resolve`, `init` and `feel` print no note.
+  - `engine.py version` prints this copy's release and how the system compares with it. It never checks online, so it cannot see newer releases. The main and extend skills run it at the start of work on an existing system and say how to update the plugin in Claude Code.
+  - Releases compare as numbers, so 0.10.0 is newer than 0.9.0. DESIGN.md's opening note, the overview page and feedback issue links name the release.
+  - `tools/build_dist.py --check` (run in CI) fails when the engine's release differs from `plugin.json` or `.claude-plugin/plugin.json`.
 - **Taste: the poll, the taste index and the taste card** (`skills/opendesigner/references/taste.md`).
   - The taste poll: the person rates 20 to 30 real screens from shipped products, and the result recommends the eight dials. Images stay on the person's machine; the library holds links and dial values only.
   - The taste index (`taste.py index`) merges the poll, the person's own decisions, inspirations, the style pick and feel words into a value and a confidence per dial, with red lines. The option gallery is ordered by fit and leaves out directions past a red line, and `engine.py review` flags drift.

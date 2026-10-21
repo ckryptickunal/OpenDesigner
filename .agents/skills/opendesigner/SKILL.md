@@ -112,8 +112,11 @@ python3 <skill>/scripts/engine.py standard override <id> --why "<their words>" [
 python3 <skill>/scripts/engine.py standard restore <id> [--why "..."]      undo an override
 python3 <skill>/scripts/engine.py standard add --rule "..." --why "..." --source <url or "person, <date>"> [--path P --value <json>]... [--values '{...}'] [--review-pattern RE --review-message "..."] [--authority good-to-have] [--beats STD-a,STD-b]
 python3 <skill>/scripts/engine.py standard remove PRJ-<nn> --why "..."   project standards only
+python3 <skill>/scripts/engine.py version                    this copy's release, and whether the system here is older, newer or up to date
 ```
 After every change, run `build` before showing results, so the exports, overview and preview are never stale. Fix every error first. The report cites the rule it applied. When `pick` or `set` says an answer changes no tokens, it is still saved (as a DESIGN.md rule or a PRODUCT.md fact). Tell the person so, in a few words.
+
+**Versions.** Each system records the OpenDesigner release that made it and the one that last built it (`opendesigner` in `state.json`). At the start of work on an existing system, run `engine.py version`. It compares the system with this installed copy only. It never checks online, so it cannot know about newer releases. If the system is older, say so in one line, run `build`, and show what changed. If it is newer, tell the person before you change anything: this copy may miss features, so they should update OpenDesigner first. When they ask how to update: in Claude Code, `claude plugin marketplace update opendesigner`, then `claude plugin update opendesigner@opendesigner`, then restart Claude Code (or use `/plugin`). Elsewhere, get the new copy the way it was installed (pull the repo, or upload the new skill zip).
 
 ## The journey log (only after a yes)
 The journey log is a private diary of the person's steps, kept in their project files. It shows where the questions slow people down. `rules.md` section 11 says what to log and when.

@@ -227,6 +227,8 @@ You may come back later to change something, maybe in a different AI tool. The e
 
 The engine gives the same result every time: the same `state.json` makes the same tokens on any machine. That is what lets different models extend the same system without drift. Details: [SPEC.md section 9](SPEC.md#9-harmony-and-extension-across-sessions-and-models).
 
+Each system also records which OpenDesigner release made it and which one last built it. Open it with a newer copy and the engine says its files are out of date, with a link to what changed; `engine.py build` brings them up to date. If the system was saved with a newer release than your copy, it asks you to update OpenDesigner first. It compares the system with the copy you have installed and never checks online (`engine.py version`).
+
 ### Making and reviewing pages
 
 A design system is finished when pages are built with it, and most of the work happens there: you look at a page, say what is wrong, and the model changes it. The skills follow one guide for this, [`making.md`](../skills/opendesigner/references/making.md). In short:

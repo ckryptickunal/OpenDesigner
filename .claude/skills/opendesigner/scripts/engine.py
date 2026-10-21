@@ -39,6 +39,13 @@ Commands (run from the user's project; state lives in ./opendesigner/ unless --d
                            [--area A] [--values '{...}'] [--path P --value <json>]... [--beats STD-a,STD-b]
                            [--review-pattern RE --review-message M] [--title T]
     engine.py standard remove PRJ-<nn> --why "..."   remove a project standard (house standards are only overridden)
+    engine.py version                     this copy's OpenDesigner release, and whether the system here is up to date with it
+
+Version stamps: every write of state.json records `opendesigner` = {version: the release that last wrote it, created: the
+release that first made it (null: made before version stamps), built: the release whose `build` last wrote the files}.
+When a system was last built or saved with an older release, or made before stamps, each command (except init, feel,
+resolve and --json output) says so once and points to `build` and CHANGELOG.md; a system saved with a newer release
+gets the opposite note. The engine compares the system with this copy only: it never checks online for newer releases.
 
 Standards (docs/KNOWLEDGE.md): house standards ship as references/standards.json (OD_STANDARDS_FILE points elsewhere). init
 applies every one that maps to a token or setting, locked, with set_by "standard", as one grouped decision; a standard
@@ -72,6 +79,10 @@ import sys
 import webbrowser
 
 ENGINE_VERSION = "1.0.0"
+# The OpenDesigner release this copy belongs to, stamped into each system's state.json. tools/build_dist.py fails when it
+# differs from the version in plugin.json and .claude-plugin/plugin.json.
+OPENDESIGNER_VERSION = "0.1.0"
+CHANGELOG_URL = "https://github.com/ckryptickunal/OpenDesigner/blob/main/CHANGELOG.md"
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL_ROOT = os.path.dirname(HERE)
 REFERENCES = os.path.join(SKILL_ROOT, "references")
@@ -169,7 +180,7 @@ def _join_snapshots(path, state):
 def dump_json(path, data, compact=False):
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     if os.path.basename(path) == STATE_FILE and isinstance(data, dict):
-        data = _split_snapshots(path, data)
+        data = _split_snapshots(path, stamp_version(data))
     text = (json.dumps(data, separators=(",", ":"), ensure_ascii=False) if compact else json.dumps(data, indent=2, ensure_ascii=False)) + "\n"
     write_text(path, text)
 
@@ -184,6 +195,85 @@ def read_json(path):
     with open(path, encoding="utf-8") as f:
         data = json.load(f)
     return _join_snapshots(path, data) if os.path.basename(path) == STATE_FILE else data
+
+
+# Version stamps: which OpenDesigner release made, last saved and last built a system. The engine compares a system with
+# this copy only; it never checks online for newer releases.
+
+def version_key(v):
+    """A release number that sorts the way semver does ('0.10.0' > '0.9.0'; '0.2.0-beta' < '0.2.0'); None if it is not one."""
+    m = re.fullmatch(r"v?(\d+)\.(\d+)\.(\d+)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?", str(v or "").strip())
+    return (int(m[1]), int(m[2]), int(m[3]), 0 if m[4] else 1) if m else None
+
+
+def stamp_version(state, built=False):
+    """The state as state.json is written: opendesigner.version is this release, created the release that first made the
+    system (None: made before version stamps), built the release whose build last wrote the files (None: not built since
+    version stamps; absent: never built). The caller's state is not changed."""
+    od = state.get("opendesigner")
+    od = dict(od) if isinstance(od, dict) else {"created": None, "built": None}  # a system made before version stamps
+    od["version"] = OPENDESIGNER_VERSION
+    if built:
+        od["built"] = OPENDESIGNER_VERSION
+    return dict(state, opendesigner={k: od[k] for k in ("version", "created", "built") if k in od})
+
+
+def version_status(state):
+    """(kind, release) for a system against this copy. kind: 'current'; 'newer' (saved or built with a newer release);
+    'built' (last built with an older release); 'saved' (never built, last saved with an older release); 'unstamped'
+    (made before version stamps and not built since)."""
+    od = state.get("opendesigner") if isinstance(state, dict) else None
+    if not isinstance(od, dict):
+        return "unstamped", None
+    here = version_key(OPENDESIGNER_VERSION)
+    newest = max((v for v in (od.get("version"), od.get("built")) if version_key(v)), key=version_key, default=None)
+    if newest and version_key(newest) > here:
+        return "newer", newest
+    kind = "built" if "built" in od else "saved"
+    ref = od.get("built") if kind == "built" else od.get("version")
+    if not version_key(ref):
+        return "unstamped", None
+    return ("current" if version_key(ref) >= here else kind), ref
+
+
+def _made_with(kind, v):
+    return {"unstamped": "was made before OpenDesigner recorded its version", "built": f"was last built with OpenDesigner {v}",
+            "saved": f"was last saved with OpenDesigner {v}"}[kind]
+
+
+def version_notice(state):
+    """What to tell the person when their system is not current with this copy, in one or two plain sentences; else None."""
+    kind, v = version_status(state)
+    if kind == "current":
+        return None
+    if kind == "newer":
+        return (f"This system was last saved with OpenDesigner {v}, which is newer than this copy ({OPENDESIGNER_VERSION}). "
+                "Update OpenDesigner before you change it: this copy may miss some of its features.")
+    return (f"This system {_made_with(kind, v)}; you have {OPENDESIGNER_VERSION}. Run `engine.py build` to bring the files up "
+            f"to date. What changed: CHANGELOG.md ({CHANGELOG_URL}).")
+
+
+def state_or_none(d):
+    """state.json as written, or None when there is none or it cannot be read (the command then says why)."""
+    try:
+        with open(os.path.join(d, STATE_FILE), encoding="utf-8") as f:
+            st = json.load(f)
+    except (OSError, ValueError):
+        return None
+    return st if isinstance(st, dict) else None
+
+
+def cmd_version(d):
+    """`engine.py version`: this copy's release, and how the system in d compares with it. It never checks online."""
+    st = state_or_none(d)
+    head = f"OpenDesigner {OPENDESIGNER_VERSION}."
+    if st is None:
+        sp = os.path.join(d, STATE_FILE)
+        print(f"{head} {sp} could not be read as JSON." if os.path.exists(sp) else f"{head} There is no system in {d} yet.")
+    else:
+        print(f"{head} {version_notice(st) or 'This system is up to date with it.'}")
+    print("This compares the system with this copy of OpenDesigner only. It never checks online for newer releases.")
+    return 0
 
 
 def slug(s):
@@ -569,6 +659,7 @@ def default_state(name="Untitled design system"):
         "schema_version": 1,
         "engine_version": ENGINE_VERSION,
         "levers_version": f"{levers().get('schema')} {levers().get('date')}",
+        "opendesigner": {"version": OPENDESIGNER_VERSION, "created": OPENDESIGNER_VERSION},  # dump_json keeps it current
         "mode": "standard",
         "name": name,
         "summary": "",
@@ -600,6 +691,7 @@ def default_state(name="Untitled design system"):
 def merge_defaults(state):
     """Fill any keys missing from an older or hand-written state with defaults (never overwrites)."""
     base = default_state(state.get("name", "Untitled design system"))
+    base.pop("opendesigner")  # a state without a version stamp was made before stamps; a filled-in stamp would hide that
 
     def fill(dst, src):
         for k, v in src.items():
@@ -4916,7 +5008,7 @@ def standards_file():
     return os.environ.get("OD_STANDARDS_FILE") or os.path.join(REFERENCES, "standards.json")
 
 
-STD_RESERVED = ("locks", "standards", "hashes", "$schema", "schema_version", "engine_version", "levers_version")
+STD_RESERVED = ("locks", "standards", "hashes", "$schema", "schema_version", "engine_version", "levers_version", "opendesigner")
 # the fields of a house standard a system keeps with its record, so what it follows (rule text, values, review check) stays
 # consistent until `standards --update`, and still reads right when the house file is missing (another install)
 STD_SNAPSHOT = ("id", "theme", "area", "title", "rule", "why", "strength", "values", "applies_to", "sources", "engine", "review",
@@ -8887,7 +8979,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     ci = meta["color"]
     brand = raw.get("brandColor")
     out = ["\n".join(fm), f"# {state.get('name') or 'Design system'}", "", render_summary(d, state, meta, zoom), "",
-           f"> Generated by the OpenDesigner engine {ENGINE_VERSION} from `{R('state.json')}` and `{R('decisions.md')}`; `{R('tokens/')}` is "
+           f"> Generated from `{R('state.json')}` and `{R('decisions.md')}`. Made with OpenDesigner {OPENDESIGNER_VERSION}. `{R('tokens/')}` is "
            "the source of truth. "
            "Change the system with `engine.py set ...` and `engine.py build`, not by editing this file (notes inside "
            "`<!-- od:keep -->` blocks survive). Each section opens with one plain sentence; open **More** for the designer and engineer detail.", ""]
@@ -10085,7 +10177,7 @@ details summary{{cursor:pointer;color:{V('color.text.secondary')};margin:16px 0 
               + "})();</script>")
     return (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>{_esc(name)} design system</title>{font_css}'
-            f'<!-- Written by OpenDesigner engine.py build: your system as it stands today. Edit the system, not this file. -->'
+            f'<!-- Written by OpenDesigner {OPENDESIGNER_VERSION} (engine.py build): your system as it stands today. Edit the system, not this file. -->'
             f'<style>{css}\n{page_css}</style></head><body><div class="ov-wrap">'
             f'<nav class="ov-bar" aria-label="Sections"><b>{_esc(name)}</b>{nav}<span></span>{toggle}</nav>'
             f'{cover}{font_note}{"".join(sections)}</div>{script}</body></html>')
@@ -10385,7 +10477,9 @@ def cmd_resolve(d):
 
 def cmd_build(d, force=False):
     """generate -> validate -> (only if no errors, or --force) DESIGN.md + PRODUCT.md + export all + preview.
-    DESIGN.md comes first because the artifact export copies it into its README."""
+    DESIGN.md comes first because the artifact export copies it into its README. A build that writes the files stamps
+    opendesigner.built with this release."""
+    before = state_or_none(d)
     files, meta, _ = cmd_generate(d, quiet=True)
     rep = validate_dir(d)
     errors = rep.count("error")
@@ -10399,9 +10493,14 @@ def cmd_build(d, force=False):
     cmd_export(d, "all", files, meta, quiet=True)
     cmd_preview(d, files=files, meta=meta, quiet=True)
     cmd_overview(d, files=files, meta=meta, quiet=True)
+    dump_json(os.path.join(d, STATE_FILE), stamp_version(load_state(d), built=True))
     track(d, "export", kind="all")
     print(f"built {d}: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg, artifact), DESIGN.md, PRODUCT.md, preview.html, overview.html"
           + (" (exported with errors because of --force)" if errors else ""))
+    kind, v = version_status(before) if before else ("current", None)
+    if kind in ("built", "saved", "unstamped"):
+        print(f"This system {_made_with(kind, v)}; this build brought its files up to OpenDesigner {OPENDESIGNER_VERSION}. "
+              f"What changed: CHANGELOG.md ({CHANGELOG_URL}).")
     print_report(rep, d)
     return 1 if errors else 0
 
@@ -10446,6 +10545,8 @@ def main(argv=None):
         p.add_argument("path")
         p.add_argument("--no-doc", dest="no_doc", action="store_true")
     sub.add_parser("resolve", parents=[common], help="effective dials and derived parameters as JSON")
+    sub.add_parser("version", parents=[common], help="this copy's OpenDesigner release, and whether the system here is up to date "
+                                                     "with it (never checks online)")
     sub.add_parser("generate", parents=[common], help="write tokens/ (DTCG 2025.10 + resolver)")
     p = sub.add_parser("validate", parents=[common])
     p.add_argument("--json", action="store_true")
@@ -10550,6 +10651,10 @@ def main(argv=None):
         q.add_argument("--no-doc", dest="no_doc", action="store_true")
     a = ap.parse_args(argv)
     d = a.dir or DEFAULT_DIR
+    st = state_or_none(d) if a.cmd not in ("init", "feel", "resolve", "version") and not getattr(a, "json", False) else None
+    kind = version_status(st)[0] if st else "current"
+    if kind == "newer" or (kind != "current" and a.cmd not in ("build", "sketch")):  # build says it after it brings files up to date
+        print(version_notice(st))
     if a.cmd == "init":
         cmd_init(d, a.src, a.name, a.force)
     elif a.cmd in ("set", "pick"):
@@ -10569,6 +10674,8 @@ def main(argv=None):
             refresh_docs(d)
     elif a.cmd == "resolve":
         cmd_resolve(d)
+    elif a.cmd == "version":
+        return cmd_version(d)
     elif a.cmd == "generate":
         cmd_generate(d)
     elif a.cmd == "validate":
@@ -12264,7 +12371,7 @@ def cmd_feedback(d, text, kind="idea", quiet=False, area=None, question=None):
     title = f"[{kind}]" + (f"[{area}]" if area else "") + f" {text[:70]}" + ("..." if len(text) > 70 else "")
     where = ", ".join(x for x in (f"area {area}" if area else "", f"question {question}" if question else "") if x)
     body = (f"**Kind:** {kind}\n\n" + (f"**Where:** {where}\n\n" if where else "") + f"**What happened or what is missing:**\n{text}\n\n"
-            f"**Engine:** {ENGINE_VERSION} (Python {sys.version_info.major}.{sys.version_info.minor})\n\n"
+            f"**OpenDesigner:** {OPENDESIGNER_VERSION} (engine {ENGINE_VERSION}, Python {sys.version_info.major}.{sys.version_info.minor})\n\n"
             "_Filed from `engine.py feedback`. Please remove anything private before submitting._")
     url = f"{ISSUES_URL}?title={quote(title)}&body={quote(body)}&labels={quote(FEEDBACK_KINDS[kind] + ',from-engine')}"
     with open(fp, encoding="utf-8") as f:

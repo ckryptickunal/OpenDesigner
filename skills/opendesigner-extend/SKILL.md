@@ -22,10 +22,11 @@ The engine is `scripts/engine.py` in this skill when it was installed from a rel
    - `opendesigner/tokens/`.
    - `git log --oneline -15 -- opendesigner/ DESIGN.md`, if the project uses git.
 2. If `DESIGN.md.hand-edited` exists, someone edited the generated file by hand. Offer to turn each edit into a decision.
-3. Run `engine.py validate`. It checks the system and reports the house standards version. If it says OpenDesigner's house standards are newer than this system's, say so in one line, run `engine.py standards --update`, then `engine.py build`, and show what changed by area. Their overrides and project standards stay as they are.
-4. Run `engine.py review`. If it reports errors or drift, say so first. Fixing them may be the real task.
-5. Tell the person in three lines or fewer: the direction, the zoom level of the area they care about, and anything locked or open.
-6. Ask only about what is new. Never re-run the whole interview.
+3. Run `engine.py version`. It compares the system with this installed copy of OpenDesigner, never with releases online. If the system was built with an older release, say so in one line, run `engine.py build`, and show what changed. If it was saved with a newer release, tell the person before you change anything: this copy may miss features, so they should update OpenDesigner first (the main skill's "Versions" says how).
+4. Run `engine.py validate`. It checks the system and reports the house standards version. If it says OpenDesigner's house standards are newer than this system's, say so in one line, run `engine.py standards --update`, then `engine.py build`, and show what changed by area. Their overrides and project standards stay as they are.
+5. Run `engine.py review`. If it reports errors or drift, say so first. Fixing them may be the real task.
+6. Tell the person in three lines or fewer: the direction, the zoom level of the area they care about, and anything locked or open.
+7. Ask only about what is new. Never re-run the whole interview.
 
 In a chat-only host, ask the person to upload `state.json`, `decisions.md` and DESIGN.md before changing anything.
 

@@ -3620,5 +3620,118 @@ class TasteCard(unittest.TestCase):
             self.assertIn("Not given yet.", html)
 
 
+class VersionStamps(unittest.TestCase):
+    """OWNER-FEEDBACK row 24: each system records the OpenDesigner release that made, saved and built it, and the engine
+    says when the system is older or newer than this copy. It never checks online."""
+    V = e.OPENDESIGNER_VERSION
+
+    def _system(self, t, build=True):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_init, d, name="Stamps")
+        if build:
+            quiet(e.cmd_build, d)
+        return d
+
+    def _restamp(self, d, od):
+        """Write a stamp the way an older or newer copy would have, bypassing dump_json (which stamps this copy)."""
+        sp = os.path.join(d, "state.json")
+        with open(sp, encoding="utf-8") as f:
+            st = json.load(f)
+        if od is None:
+            st.pop("opendesigner", None)
+        else:
+            st["opendesigner"] = od
+        with open(sp, "w", encoding="utf-8") as f:
+            json.dump(st, f)
+
+    def _stamp(self, d):
+        with open(os.path.join(d, "state.json"), encoding="utf-8") as f:
+            return json.load(f).get("opendesigner")
+
+    def test_a_new_state_gets_the_stamp(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._system(t, build=False)
+            self.assertEqual(self._stamp(d), {"version": self.V, "created": self.V})   # never built yet
+            self.assertEqual(e.version_status(e.load_state(d)), ("current", self.V))
+            quiet(e.cmd_build, d)
+            self.assertEqual(self._stamp(d), {"version": self.V, "created": self.V, "built": self.V})
+            self.assertNotIn("opendesigner", e.merge_defaults({"name": "Old"}))         # never filled in for an old state
+            with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+                md = f.read()
+            self.assertEqual(len(re.findall(rf"^> Generated from .+\. Made with OpenDesigner {re.escape(self.V)}\. ", md, re.M)), 1)
+            code, out = run_cli("version", "--dir", d)
+            self.assertEqual(code, 0)
+            self.assertIn(f"OpenDesigner {self.V}. This system is up to date with it.", out)
+            self.assertIn("never checks online", out)
+
+    def test_an_older_stamp_prints_the_notice_and_build_updates_it(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._system(t)
+            self._restamp(d, {"version": "0.0.9", "created": "0.0.5", "built": "0.0.9"})
+            notice = (f"This system was last built with OpenDesigner 0.0.9; you have {self.V}. Run `engine.py build` to bring the "
+                      f"files up to date. What changed: CHANGELOG.md ({e.CHANGELOG_URL}).")
+            code, out = run_cli("validate", "--dir", d)
+            self.assertEqual(code, 0)
+            self.assertEqual(out.count(notice), 1)                       # once per command, not once per read of the state
+            code, out = run_cli("validate", "--json", "--dir", d)
+            self.assertNotIn("OpenDesigner 0.0.9", out)
+            json.loads(out)                                              # machine output stays plain JSON
+            code, out = run_cli("build", "--dir", d)
+            self.assertEqual(code, 0)
+            self.assertNotIn("Run `engine.py build`", out)               # build does not tell the person to run build
+            self.assertIn(f"This system was last built with OpenDesigner 0.0.9; this build brought its files up to OpenDesigner "
+                          f"{self.V}. What changed: CHANGELOG.md ({e.CHANGELOG_URL}).", out)
+            self.assertEqual(self._stamp(d), {"version": self.V, "created": "0.0.5", "built": self.V})
+            self.assertNotIn("CHANGELOG.md", run_cli("validate", "--dir", d)[1])   # up to date: nothing more to say
+
+    def test_a_state_without_a_stamp_works_and_counts_as_old(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._system(t)
+            self._restamp(d, None)
+            self.assertEqual(e.version_status(e.load_state(d)), ("unstamped", None))
+            code, out = run_cli("set", "dials.roundness", "60", "--why", "rounder", "--dir", d)
+            self.assertEqual(code, 0)
+            self.assertIn(f"This system was made before OpenDesigner recorded its version; you have {self.V}. Run `engine.py build`", out)
+            self.assertEqual(e.load_state(d)["dials"]["roundness"]["value"], 60)
+            self.assertEqual(self._stamp(d), {"version": self.V, "created": None, "built": None})
+            self.assertEqual(e.version_status(e.load_state(d))[0], "unstamped")      # saving alone does not rebuild the files
+            out = run_cli("build", "--dir", d)[1]
+            self.assertIn("made before OpenDesigner recorded its version; this build brought its files up to", out)
+            self.assertEqual(self._stamp(d), {"version": self.V, "created": None, "built": self.V})
+            self.assertEqual(e.version_status(e.load_state(d))[0], "current")
+
+    def test_a_newer_state_prints_the_other_notice(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._system(t)
+            self._restamp(d, {"version": "99.0.0", "created": self.V, "built": "99.0.0"})
+            self.assertEqual(e.version_status(e.load_state(d)), ("newer", "99.0.0"))
+            for cmd in (("validate",), ("version",)):
+                out = run_cli(*cmd, "--dir", d)[1]
+                self.assertIn(f"This system was last saved with OpenDesigner 99.0.0, which is newer than this copy ({self.V}). "
+                              "Update OpenDesigner before you change it", out)
+                self.assertNotIn("Run `engine.py build`", out)
+
+    def test_versions_compare_as_numbers(self):
+        self.assertGreater(e.version_key("0.10.0"), e.version_key("0.9.0"))
+        self.assertGreater(e.version_key("1.0.0"), e.version_key("0.99.99"))
+        self.assertLess(e.version_key("0.2.0-beta.1"), e.version_key("0.2.0"))
+        self.assertEqual(e.version_key("v0.1.0"), e.version_key("0.1.0"))
+        for bad in (None, "", "0.1", "latest"):
+            self.assertIsNone(e.version_key(bad))
+        st = {"opendesigner": {"version": "0.9.0", "created": "0.9.0", "built": "0.9.0"}}
+        from unittest import mock
+        with mock.patch.object(e, "OPENDESIGNER_VERSION", "0.10.0"):
+            self.assertEqual(e.version_status(st), ("built", "0.9.0"))   # as strings, "0.9.0" would look newer
+        with mock.patch.object(e, "OPENDESIGNER_VERSION", "0.9.1"):
+            self.assertEqual(e.version_status(st), ("built", "0.9.0"))
+        with mock.patch.object(e, "OPENDESIGNER_VERSION", "0.8.10"):
+            self.assertEqual(e.version_status(st), ("newer", "0.9.0"))
+
+    def test_engine_version_matches_the_manifests(self):
+        for manifest in ("plugin.json", os.path.join(".claude-plugin", "plugin.json")):
+            with open(os.path.join(REPO, manifest), encoding="utf-8") as f:
+                self.assertEqual(json.load(f)["version"], self.V, manifest)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)
