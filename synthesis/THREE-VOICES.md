@@ -23,4 +23,4 @@ Every term has three explanations in `synthesis/glossary.json`: **plain** (a sch
 Each control shows its plain label and the short line. Full designer and engineer detail appear on hover or tap ("More").
 
 ## Checking
-`python3 tools/check_glossary.py --build` enforces the word limits (plain 20, designer and engineer 30, designer_says and code_name 8), bans acronyms and jargon in the plain voice, and keeps the plain voice at a primary-school reading level (mean Flesch-Kincaid grade 6 or lower).
+`python3 tools/check_glossary.py --build` enforces the word limits (plain 20, designer and engineer 30, designer_says and code_name 8), bans acronyms and jargon in the plain voice, and keeps the plain voice at a primary-school reading level (mean Flesch-Kincaid grade 6 or lower). CI runs `--check`: the same rules, writing nothing, and `docs/GLOSSARY.md` must be current. Edit terms in `synthesis/glossary.json` (`synthesis/glossary/WRITING-RULES.md`).

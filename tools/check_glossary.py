@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
 """Check and build the three-voice glossary (plain, designer, engineer).
 
-  python3 tools/check_glossary.py synthesis/glossary/shard-a.json   check one shard while writing it
-  python3 tools/check_glossary.py --build                          merge shards, check coverage, write
-                                                                   synthesis/glossary.json and docs/GLOSSARY.md
-  python3 tools/check_glossary.py --refresh-tokens                 regenerate engine-token-paths.txt from the engine
+synthesis/glossary.json is the glossary: add and edit terms there. Each term has an id, a layer (one of LAYER_ORDER), the
+three voices and a source. Lane U1 first wrote the terms in shards under synthesis/glossary/; they were merged into
+glossary.json and retired on 2026-10-21 (git history has them).
+
+  python3 tools/check_glossary.py --build            re-read the engine, check every term, sort glossary.json by layer and
+                                                     write docs/GLOSSARY.md; then run tools/build_data.py
+  python3 tools/check_glossary.py --check            the same checks against the engine as it is now, writing nothing; fails
+                                                     if a term breaks a rule or docs/GLOSSARY.md is out of date (CI runs it)
+  python3 tools/check_glossary.py draft.json         check a draft array of terms before adding it to glossary.json
+  python3 tools/check_glossary.py --refresh-tokens   re-read the engine only: the token paths, state keys, commands and flags
+                                                     the checks accept (synthesis/glossary/engine-token-paths.txt, engine-truth.json)
 Exit code 1 when any error is found.
 """
 import json, re, sys
@@ -37,12 +44,18 @@ TOKEN_ROOTS = ("color", "space", "radius", "font", "text", "motion", "elevation"
 TOKEN_RE = re.compile(r"\b(?:%s)(?:\.[A-Za-z0-9*]+(?:-[A-Za-z0-9*]+)*)+" % "|".join(TOKEN_ROOTS))
 
 
-def refresh_tokens():
-    """Union of every token path the engine generates across the shipped examples, the default system,
-    and each dial at 0 and 100, so tokens that appear only under some settings count as real."""
+# State maps keyed by data (a question id, a token path, a standard id): their own key is real, and anything under it is accepted.
+RECORD_MAPS = ("answers", "overrides", "standards.records", "standards.types", "standards.snapshots")
+
+
+def engine_lists():
+    """What the engine has today: the union of every token path it generates across the shipped examples, the default
+    system and each dial at 0 and 100 (so tokens that appear only under some settings count as real), plus its state keys,
+    $extensions paths, resolver modifiers, commands and flags."""
     import subprocess, tempfile
     dials = [d["id"] for d in json.loads((ROOT / "synthesis/levers.json").read_text())["dials"]]
     runs = [[]] + [[["set", f"dials.{d}", str(v), "--no-doc"]] for d in dials for v in (0, 100)]
+    runs.append([["set", "taste.brief", "a quiet library at night", "--no-doc"], ["set", "taste.never", '["gradients"]', "--no-doc"]])  # set only by the person
     paths = set()
 
     def walk(node, prefix):
@@ -64,7 +77,7 @@ def refresh_tokens():
         if isinstance(node, dict):
             for k, v in node.items():
                 state_keys.add(".".join(prefix + [k]))
-                if k != "answers":
+                if ".".join(prefix + [k]) not in RECORD_MAPS:
                     state_walk(v, prefix + [k])
 
     def ext_walk(node, prefix):
@@ -109,10 +122,17 @@ def refresh_tokens():
     for c in commands:
         flags |= set(re.findall(r"(--[a-z][a-z-]+)", subprocess.run([sys.executable, str(ENGINE), c, "--help"],
                                                                         capture_output=True, text=True).stdout))
-    TRUTH_FILE.write_text(json.dumps(dict(state_keys=sorted(state_keys), extensions=sorted(ext), modifiers=sorted(modifiers),
-                                          commands=commands, flags=sorted(flags)), indent=1) + "\n")
+    truth = dict(state_keys=sorted(state_keys), record_maps=list(RECORD_MAPS), extensions=sorted(ext), modifiers=sorted(modifiers),
+                 commands=commands, flags=sorted(flags))
+    return paths, truth, len(runs)
+
+
+def refresh_tokens():
+    paths, truth, runs = engine_lists()
+    TRUTH_FILE.write_text(json.dumps(truth, indent=1) + "\n")
     TOKENS_FILE.write_text("\n".join(sorted(paths)) + "\n")
-    print(f"{len(paths)} token paths from {len(runs)} generated systems and the examples -> {TOKENS_FILE.relative_to(ROOT)}")
+    print(f"{len(paths)} token paths from {runs} generated systems and the examples -> {TOKENS_FILE.relative_to(ROOT)}")
+    return paths, truth
 
 
 def unknown_tokens(e, real):
@@ -154,7 +174,8 @@ def unknown_config(e, truth):
             return "(proposed)" in around or "planned" in around or "not generated" in around
         for m in STATE_RE.finditer(text):
             name = m.group(0).rstrip(".*").rstrip(".")
-            if name.startswith("answers.") or name in key_prefixes or excused(m) or re.search(r"\.(json|md|py)$", name):
+            under_record = any(name.startswith(r + ".") for r in truth.get("record_maps", ["answers"]))
+            if under_record or name in key_prefixes or excused(m) or re.search(r"\.(json|md|py)$", name):
                 continue
             bad.append(f"{field}: state key {name}")
         for m in EXT_RE.finditer(text):
@@ -192,16 +213,22 @@ def grade(text):
     return 0.39 * len(ws) / sentences + 11.8 * sum(syllables(w) for w in ws) / len(ws) - 15.59
 
 
-def check_entries(entries, label):
+def check_entries(entries, label, real=None, truth=None):
+    """Every rule in synthesis/THREE-VOICES.md that a script can check. real and truth are the engine lists; by default the
+    committed copies (fast, for drafts), which --check and --build replace with a fresh read of the engine."""
     errors, warnings, grades = [], [], []
     seen = set()
-    real = set(TOKENS_FILE.read_text().split()) if TOKENS_FILE.exists() else set()
-    truth = json.loads(TRUTH_FILE.read_text()) if TRUTH_FILE.exists() else None
+    if real is None:
+        real = set(TOKENS_FILE.read_text().split()) if TOKENS_FILE.exists() else set()
+    if truth is None:
+        truth = json.loads(TRUTH_FILE.read_text()) if TRUTH_FILE.exists() else None
     for e in entries:
         tag = f"{label}:{e.get('id', '?')}"
         for field in ("id", "term", "plain", "designer", "engineer", "source"):
             if not e.get(field):
                 errors.append(f"{tag} missing {field}")
+        if e.get("layer") not in LAYER_ORDER:
+            errors.append(f"{tag} layer {e.get('layer')!r} is not one of {', '.join(LAYER_ORDER)}")
         if e.get("id") in seen:
             errors.append(f"{tag} duplicate id")
         seen.add(e.get("id"))
@@ -234,30 +261,40 @@ def check_entries(entries, label):
     return errors, warnings, grades
 
 
-def build():
-    inputs = json.loads((G / "terms-input.json").read_text())
-    merged = {}
-    for shard in sorted(G.glob("shard-*.json")):
-        for e in json.loads(shard.read_text()):
-            merged[e["id"]] = e
-    missing = [t["id"] for t in inputs if t["id"] not in merged]
-    extra = [i for i in merged if i not in {t["id"] for t in inputs}]
-    layer = {t["id"]: t["layer"] for t in inputs}
-    ordered = sorted(merged.values(), key=lambda e: (LAYER_ORDER.index(layer.get(e["id"], "builder")), e["id"]))
-    for e in ordered:
-        e["layer"] = layer.get(e["id"], "builder")
+GLOSSARY = ROOT / "synthesis/glossary.json"
+DOC = ROOT / "docs/GLOSSARY.md"
+
+
+def load_sorted():
+    entries = json.loads(GLOSSARY.read_text())
+    for e in entries:
         if "aka" in e:  # writers may use either name; ship one
             e["aliases"] = e.pop("aka")
-    errors, _, grades = check_entries(ordered, "glossary")
-    errors += [f"missing term {m}" for m in missing] + [f"term not in terms-input.json {x}" for x in extra]
-    (ROOT / "synthesis/glossary.json").write_text(json.dumps(ordered, indent=1, ensure_ascii=False) + "\n")
-    write_markdown(ordered)
+    return sorted(entries, key=lambda e: (LAYER_ORDER.index(e["layer"]) if e.get("layer") in LAYER_ORDER else len(LAYER_ORDER), e.get("id", "")))
+
+
+def build(write):
+    """Check glossary.json against the engine as it is now. With write: also refresh the engine lists, sort glossary.json and
+    write docs/GLOSSARY.md. Without: report what --build would change."""
+    paths, truth = refresh_tokens() if write else engine_lists()[:2]
+    entries = load_sorted()
+    errors, _, grades = check_entries(entries, "glossary", set(paths), truth)
+    text, doc = json.dumps(entries, indent=1, ensure_ascii=False) + "\n", markdown(entries)
+    if write:
+        GLOSSARY.write_text(text)
+        DOC.parent.mkdir(exist_ok=True)
+        DOC.write_text(doc)
+    else:
+        if not DOC.exists() or DOC.read_text() != doc:
+            errors.append("docs/GLOSSARY.md is out of date: run python3 tools/check_glossary.py --build")
+        if GLOSSARY.read_text() != text:
+            errors.append("synthesis/glossary.json is not in build order: run python3 tools/check_glossary.py --build")
     mean = sum(grades) / len(grades) if grades else 0
-    print(f"{len(ordered)} terms, {len(missing)} missing, plain voice mean grade {mean:.1f}")
+    print(f"{len(entries)} terms, plain voice mean grade {mean:.1f}")
     return errors
 
 
-def write_markdown(entries):
+def markdown(entries):
     out = ["# Glossary", "",
            "Every term OpenDesigner uses, said three ways. Read the one that fits you.", "",
            "- **Plain**: anyone can follow it, no design or coding background needed.",
@@ -277,16 +314,15 @@ def write_markdown(entries):
                     *( [f"**Example:** {e['example']}", ""] if e.get("example") else [] ),
                     *( [f"**Also called:** {', '.join(e.get('aliases') or e.get('aka'))}", ""] if (e.get('aliases') or e.get('aka')) else [] ),
                     "</details>", ""]
-    (ROOT / "docs").mkdir(exist_ok=True)
-    (ROOT / "docs/GLOSSARY.md").write_text("\n".join(out))
+    return "\n".join(out)
 
 
 if __name__ == "__main__":
     if sys.argv[1:] == ["--refresh-tokens"]:
         refresh_tokens()
         sys.exit(0)
-    if sys.argv[1:] == ["--build"]:
-        errs = build()
+    if sys.argv[1:] in (["--build"], ["--check"]):
+        errs = build(write=sys.argv[1] == "--build")
     else:
         errs = []
         for path in sys.argv[1:]:

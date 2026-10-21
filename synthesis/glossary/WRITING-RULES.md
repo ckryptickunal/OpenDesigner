@@ -3,10 +3,12 @@
 OpenDesigner must be easy enough for a school student, useful to a designer, and precise for an engineer (`_coordination/BRIEF.md`, requirements 12-13). Every term gets three short explanations. `tools/check_glossary.py` enforces the limits below.
 
 ## Entry format (JSON)
+Terms live in `synthesis/glossary.json`, one object each. (Lane U1 wrote the first 399 in shard files, which were merged and retired on 2026-10-21.)
 ```json
 {
   "id": "found.color.ramp",
   "term": "Color ramp",
+  "layer": "found",
   "aka": ["tonal palette", "color scale"],
   "plain": "A row of shades of one color, from very light to very dark.",
   "designer": "A tonal scale of one hue with evenly stepped lightness, used to pick tints and shades consistently instead of by eye.",
@@ -15,7 +17,7 @@ OpenDesigner must be easy enough for a school student, useful to a designer, and
   "source": ["found.color.ramp", "DC-L01-02"]
 }
 ```
-Keep `id` and `term` exactly as given in your input batch. `aka` (or `aliases`: names other systems use, e.g. Snackbar = Toast), `see_also` (related term ids) and `example` are optional but welcome.
+The `id` starts with its `layer`, one of `core`, `use`, `dials`, `ctx`, `prin`, `found`, `tok`, `comp`, `pat`, `guard`, `deliver`, `gov` and `builder`, which decides its section in `docs/GLOSSARY.md`. `aka` (or `aliases`: names other systems use, e.g. Snackbar = Toast), `see_also` (related term ids) and `example` are optional but welcome.
 
 ## The three voices
 | Voice | Reader | Limit | Rules |
@@ -25,7 +27,7 @@ Keep `id` and `term` exactly as given in your input batch. `aka` (or `aliases`: 
 | **engineer** | A software engineer | 30 words | How it is represented and built: token names and tiers, DTCG 2025.10 types, CSS properties, platform APIs, file names. Be exact. |
 
 ## Accuracy
-- Take meanings from your batch's `context` and `source`, and from the files they point to (`synthesis/ONTOLOGY.md`, `synthesis/cards.json`, `research/*.md`). `python3 tools/jev_nav.py find "question"` searches all the research.
+- Take meanings from the sources the term names, and from the files they point to (`synthesis/ONTOLOGY.md`, `synthesis/cards.json`, `research/*.md`). `python3 tools/jev_nav.py find "question"` searches all the research.
 - Never invent numbers, names or standards. A number in any voice must come from the sources (for example 4.5:1 contrast, 24 CSS px targets, DTCG 2025.10).
 - If a building block is about a decision rather than a thing (for example "Starting point and system posture"), explain the decision: what is being chosen and why it matters.
 - The three voices must say the same thing at three depths. They must not contradict each other.
@@ -34,7 +36,12 @@ Keep `id` and `term` exactly as given in your input batch. `aka` (or `aliases`: 
 Short sentences. No filler ("simply", "just", "basically"), no marketing words, no exclamation marks, no em dashes. Complete sentences are fine without a final period only in `aka`.
 
 ## Check before you finish
+Check a draft array of new terms on its own while you write:
 ```
-python3 tools/check_glossary.py synthesis/glossary/shard-<x>.json
+python3 tools/check_glossary.py draft.json
 ```
-It must print `0 errors`. Fix every error, especially plain-voice grade, jargon and acronyms.
+Then add the terms to `synthesis/glossary.json` and build:
+```
+python3 tools/check_glossary.py --build
+```
+It must print `0 errors`. Fix every error, especially plain-voice grade, jargon and acronyms. The build sorts the file, re-reads the engine for the names the engineer voice may use, and writes `docs/GLOSSARY.md`. Then run `python3 tools/build_data.py` and `python3 tools/sync_skills.py`. CI runs `--check`, which fails when a term breaks a rule or `docs/GLOSSARY.md` is out of date.

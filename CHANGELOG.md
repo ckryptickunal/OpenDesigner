@@ -97,6 +97,10 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Fixed
 
+- **The glossary has one source again, and CI checks it.** Terms were being added straight to `synthesis/glossary.json`, while `tools/check_glossary.py --build` still rebuilt it from the old writing shards. A rebuild would have deleted 13 terms (twelve visual styles such as glassmorphism and bento, and "Taste card"), and `docs/GLOSSARY.md` lacked all 13.
+  - `synthesis/glossary.json` is now the file to edit. `--build` checks it, sorts it and writes `docs/GLOSSARY.md`; the shards and `terms-input.json` are retired (git history has them).
+  - The new `--check` runs in CI. It fails when a term breaks the three-voice rules, names something today's engine doesn't have, or `docs/GLOSSARY.md` is out of date. It reads the engine afresh each time, so its list of real token names, settings and commands can't go stale. That list had not been refreshed since 24 September.
+  - The checker no longer lists record data (house standards, overrides) as settings. "Taste card" was rewritten to fit the word limits and reading level.
 - **Apple's letter spacing and corners now change the files they promise to** (Q-type-13 `size-table`, Q-shape-04).
   - Letter spacing: `size-table` used to give the same coarse bands as the default. It now gives Apple's SF Pro tracking table from the HIG (64 sizes from 6 to 96 pt, `levers.json` `formulas.type.tracking.sfPro`), interpolated between sizes. A face other than the system font takes the table only up to 19px, because from 20 pt Apple loosens SF Pro Display and other faces would look loose. Uppercase labels stay at least +0.05em. Systems built before this keep their spacing unless the person chose the table.
   - Corners: Q-shape-04 used to be recorded only. `squircle-enhance` now adds Apple's continuous corner to the CSS and Tailwind exports where the browser draws `corner-shape`. `continuous` and `squircle-enhance` give Figma corner smoothing 0.6, and the Swift export uses `.continuous` (`Radius.shape(...)`). DESIGN.md says which platform draws which.

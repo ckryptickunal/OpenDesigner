@@ -8,7 +8,9 @@ Checked on 2026-10-14 against the repo as it stands: every engine command quoted
 
 These are the twelve style terms people meet most, including the four the owner named (glassmorphism, comic style, neumorphism, gradients as `mesh gradient`).
 
-**How to merge.** `synthesis/glossary.json` is generated: `tools/check_glossary.py --build` merges `synthesis/glossary/shard-*.json` and takes each term's layer from `synthesis/glossary/terms-input.json` (all 399 current terms come from shards). So:
+**Merged.** The twelve terms were added to `synthesis/glossary.json` directly. Since 2026-10-21 that file is the glossary's source: the shards and `terms-input.json` named below are retired, and new terms go straight into `glossary.json` (`synthesis/glossary/WRITING-RULES.md`). The steps below are kept as written.
+
+**How to merge (as proposed).** `synthesis/glossary.json` was generated: `tools/check_glossary.py --build` merges `synthesis/glossary/shard-*.json` and takes each term's layer from `synthesis/glossary/terms-input.json` (all 399 current terms come from shards). So:
 1. Save the array below as `synthesis/glossary/shard-styles.json`.
 2. Add the twelve ids to `synthesis/glossary/terms-input.json` with `"layer": "prin"`, `"kind": "style"`, a one-line `context` and `"source": ["skills/opendesigner/references/styles.md"]`.
 3. Run `python3 tools/check_glossary.py --build`, then `python3 tools/build_data.py` and `python3 tools/sync_skills.py`, then the checks in AGENTS.md.

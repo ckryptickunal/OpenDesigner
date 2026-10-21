@@ -57,6 +57,9 @@ jobs:
       - name: Design evals (the engine on 18 fixed briefs; required checks must all pass)
         run: python3 tools/design_evals.py --check --no-save
 
+      - name: Glossary (every term against the engine as it is; docs/GLOSSARY.md current)
+        run: python3 tools/check_glossary.py --check
+
       - name: Journey tracker tests (local log, anonymous report, consent texts)
         run: python3 skills/opendesigner/scripts/test_journey.py
 

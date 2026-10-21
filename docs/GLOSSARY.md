@@ -1709,6 +1709,23 @@ Designers: surface mode: persuade, operate, read, experience · Code: `answers.Q
 
 </details>
 
+### Taste card
+
+Five lines at the top of your design file: your picture of it, color, shape, motion, and what to avoid.  
+Designers: style brief, mood in words · Code: `taste.brief, taste.never`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** A one-glance style brief in the Overview. The picture and the Never list are only ever the person's own; color, shape and motion repeat each section's opening sentence.
+
+**Engineer:** Rendered into DESIGN.md's Overview by taste_card() in engine.py, from taste.brief (sketch --brief), taste.never and the taste index's red lines.
+
+**Example:** In your words: "a quiet library at night". Never: gradients, emoji (your words).
+
+**Also called:** taste summary, style brief, never list
+
+</details>
+
 ### visual template
 
 A small web page that shows each option as a real sample, so you can see it before you pick.  
@@ -2195,6 +2212,186 @@ Designers: ranked design principles · Code: `principles: ordered strings in sta
 **Engineer:** Not tokens: principles in state.json is an ordered list of statements; order is rank, and DESIGN.md and PRODUCT.md print them as tie-breakers.
 
 **Example:** Clarity over density: when unsure, show fewer items per screen.
+
+</details>
+
+### bento grid
+
+Content in neat boxes of different sizes, like the parts of a lunch box.  
+Designers: bento grid, bento box layout · Code: `grid-column: span 2`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Tiles of two or three spans in one grid with one gap; one idea per tile, the hero tile largest. A layout that borrows its look from another style.
+
+**Engineer:** CSS grid with grid-column and grid-row spans; Q-dir-04 containers. Keep DOM order equal to reading order (WCAG 1.3.2) and reflow to one column.
+
+**Also called:** bento, bento box, tile grid, feature tiles
+
+</details>
+
+### claymorphism
+
+Puffy, round shapes that look made of soft clay or toy plastic.  
+Designers: claymorphism, clay 3D · Code: `box-shadow with inset pairs`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Large radius, a soft outer shadow plus light and dark inner shadows, pastel color and 3D clay art. Friendly and cute; keep product controls calmer.
+
+**Engineer:** No preset of its own: start from soft, then raise roundness above 80 and colorfulness. Inner shadows are not generated yet (proposed); 3D art is an asset (Q-img-06).
+
+**Also called:** clay, puffy, squishy, inflated 3D, soft 3D
+
+</details>
+
+### comic style
+
+Looks like a comic book, with thick ink outlines, bright flat colors, dots and speech bubbles.  
+Designers: comic style, pop art, halftone · Code: `radial-gradient dot pattern`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Black outlines, primary colors, halftone dot shading, speech balloons and burst shapes; pop art is its gallery cousin. Keep hand lettering to short labels.
+
+**Engineer:** Start from the neobrutal preset with colorfulness above 88. Halftone is a radial-gradient dot pattern; drawings are assets (Q-img-04, opendesigner-illustrate).
+
+**Also called:** comic, comic book, pop art, cartoon, halftone, speech bubbles
+
+</details>
+
+### editorial style
+
+Pages that read like a good magazine: big titles, calm text and large photos.  
+Designers: editorial, magazine layout · Code: `max-width: 65ch`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Serif display headlines, dramatic size jumps (1.333 or more), 60-75 character lines, pull quotes and thin rules. For reading products and long content.
+
+**Engineer:** Q-type-03 serif, Q-dir-03 dramatic (type ratio 1.333) and Q-dir-04 lines. Body text stays 16px or larger; limit lines with max-width: 65ch.
+
+**Also called:** magazine style, magazine layout, long-form
+
+</details>
+
+### flat design
+
+Plain solid colors with no shadows, no shine and no texture.  
+Designers: flat design, flat 2.0 · Code: `box-shadow: none`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Solid fills, simple icons, hierarchy from color and size. Flat 2.0 brings subtle shadows back. Keep strong signs of what to click, or people search longer.
+
+**Engineer:** Depth 0-15 builds the borders model with no shadows. The default flat2 preset (Q-dir-01) sets Depth 30: a ring plus a faint shadow.
+
+**Also called:** flat, flat 2.0, semi-flat, no shadows
+
+</details>
+
+### glassmorphism
+
+See-through panels that look like frosted glass, so you see a blur of what is behind them.  
+Designers: glassmorphism, frosted glass · Code: `backdrop-filter, material.glass.blur`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Translucent fill, background blur and a thin light edge over rich content. Use it on bars, sheets and menus, never on reading surfaces, and give it a solid twin.
+
+**Engineer:** Q-dir-01 glass, or Depth above 80, builds the materials model: material.glass.blur (24px), color.surface.glass and color.surface.glass-fallback. Web uses backdrop-filter.
+
+**Also called:** frosted glass, frosty, glassy, see-through, backdrop blur
+
+</details>
+
+### grain texture
+
+A fine speckle over colors, like old film or printed paper.  
+Designers: grain, noise texture · Code: `feTurbulence overlay`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Fine noise at 3-8% strength over fills and gradients. It warms flat color and hides gradient banding; keep it off body text and keep it still.
+
+**Engineer:** An SVG feTurbulence image on a pseudo-element with mix-blend-mode: overlay. Not a token yet (proposed); record it with the H-motif hook (Q-img-07).
+
+**Also called:** grain, noise, film grain, grainy, paper texture
+
+</details>
+
+### mesh gradient
+
+Soft clouds of a few colors that melt into each other, like the northern lights.  
+Designers: mesh gradient, aurora gradient · Code: `radial-gradient layers`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Three to five colors blending in many directions, often blurred and slowly moving. Marketing and brand moments only, never on buttons or forms.
+
+**Engineer:** Stacked radial-gradient layers or blurred shapes, interpolated in OKLab. DTCG gradient tokens hold stops only; the engine does not generate gradients yet (proposed).
+
+**Also called:** aurora gradient, aurora, gradient blur, gradient background, northern lights
+
+</details>
+
+### neo-brutalism
+
+Bright flat colors with thick black lines and hard black shadows, like stickers.  
+Designers: neo-brutalism, neubrutalism · Code: `box-shadow: 4px 4px 0`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Thick borders, a solid 4px offset shadow, 2-3 bold colors, 24-32px padding and a quirky display face over a neutral body face. Loud and indie.
+
+**Engineer:** Q-dir-01 neo-brutalist selects the neobrutal preset (roundness 5, depth 0, colorfulness 80). Thick borders and the offset shadow need overrides of border.width.default and elevation.raised.
+
+**Also called:** neubrutalism, neo brutalist, black borders, chunky outlines
+
+</details>
+
+### neumorphism
+
+Soft buttons that look pushed up out of the page, or pressed in, all one color.  
+Designers: neumorphism, soft UI · Code: `paired box-shadow, inset`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Same-color surfaces with paired light and dark soft shadows. Tactile but vague: edges usually fail 3:1, so every control needs an added border or fill.
+
+**Engineer:** Q-dir-01 soft selects the soft preset (roundness 80, colorfulness 20) and the lint warns neumorphic-preset. Paired and inset shadows are not generated yet (proposed).
+
+**Also called:** soft UI, soft buttons, pillowy, new skeuomorphism
+
+</details>
+
+### skeuomorphism
+
+Screens that copy real objects and materials, like a record player, a tape or wood.  
+Designers: skeuomorphism, realism · Code: `layered gradients and box-shadow`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Realistic textures, lighting and shadows that mimic physical objects. Useful as a metaphor, like a folder or trash can; as full realism it clutters screens and loads slowly.
+
+**Engineer:** Mostly assets, not tokens: textures and objects use the H-motif hook (Q-img-07), custom controls Q-plat-06 custom, and Depth in the shadow-ladder band (56-80).
+
+**Also called:** realistic, real-world look, physical metaphor
+
+</details>
+
+### Swiss style
+
+A strict, tidy grid with plain bold letters lined up on the left and lots of space.  
+Designers: Swiss style, International Typographic Style · Code: `display: grid; text-align: start`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** International Typographic Style: a column grid, neo-grotesque type set flush left, big size jumps, asymmetric layouts, neutral colors plus one accent.
+
+**Engineer:** Q-type-03 neo-grotesque, Q-dir-05 start and the flat2 preset, with roundness 0-25 and colorfulness 11-45. The grid itself is layout, not a token.
+
+**Also called:** International Typographic Style, Swiss design, grid style, Helvetica look
 
 </details>
 
