@@ -1387,7 +1387,7 @@ def changelog_page(p, pages):
     older = (f'<p class="cl-older">Older changes are in <a href="{GH}/commits/main">the full history on GitHub</a>.</p>' if len(days) > len(shown) else "")
     update = md_to_html(update_md())
     head = (f'<header class="cl-head"><h1 class="t-h1">Changelog</h1>'
-            f'<p class="cl-lede">New features and fixes in OpenDesigner, newest first. This page is rebuilt from the repository every time the site is published.</p>'
+            f'<p class="cl-lede">What changed in OpenDesigner, newest first, built from the repository each time the site is published.</p>'
             f'<p class="cl-facts"><span class="cl-ver">v{v["version"]}</span><span>{state}</span>'
             f'<span>Latest change <time datetime="{v["latest_change"]}">{day_name(v["latest_change"])}</time></span></p>'
             f'<p class="cl-links"><a href="/changelog.xml">Atom feed</a><a href="/version.json">version.json</a>'
