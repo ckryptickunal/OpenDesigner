@@ -69,7 +69,7 @@ SCENES = {
 }
 SECTIONS = ["Getting started", "Guides", "Concepts", "Craft", "Reference"]
 REDIRECTS = {"/install/": "/docs/install/", "/how-it-works/": "/docs/how-it-works/", "/faq/": "/docs/faq/",
-             "/what-is-a-design-system/": "/docs/design-systems/"}
+             "/what-is-a-design-system/": "/docs/design-systems/", "/docs/changelog/": "/changelog/"}
 esc = html.escape
 
 # Free Unsplash photos (licence checked: not Unsplash+), shown in cobalt duotone.
@@ -417,14 +417,15 @@ def changes_feed(days=30):
     ordered = sorted(by_day, reverse=True)[:days]
     entries = "".join(
         f'<entry><title>{esc(day_name(d))}: {len(by_day[d])} change{"s" if len(by_day[d]) != 1 else ""}</title>'
-        f'<id>{SITE_URL}/docs/changelog/#{slugify(day_name(d))}</id><updated>{d}T23:59:59Z</updated>'
-        f'<link href="{SITE_URL}/docs/changelog/#{slugify(day_name(d))}"/><content type="html">'
+        f'<id>{SITE_URL}/docs/changelog/#{slugify(day_name(d))}</id>'  # ids keep the first address, so feed readers don't list entries again
+        f'<updated>{d}T23:59:59Z</updated>'
+        f'<link href="{SITE_URL}/changelog/#{slugify(day_name(d))}"/><content type="html">'
         + esc("<ul>" + "".join(f'<li>{esc(s)} (<a href="{GH}/commit/{h}">{h[:7]}</a>)</li>' for h, s in by_day[d]) + "</ul>")
         + "</content></entry>" for d in ordered)
     updated = f"{ordered[0]}T23:59:59Z" if ordered else f"{TODAY}T00:00:00Z"
     return ('<?xml version="1.0" encoding="utf-8"?>\n<feed xmlns="http://www.w3.org/2005/Atom">'
             f'<title>OpenDesigner: every change</title><subtitle>Each change to OpenDesigner, by day. Version {VERSION}.</subtitle>'
-            f'<id>{SITE_URL}/changelog.xml</id><link href="{SITE_URL}/changelog.xml" rel="self"/><link href="{SITE_URL}/docs/changelog/"/>'
+            f'<id>{SITE_URL}/changelog.xml</id><link href="{SITE_URL}/changelog.xml" rel="self"/><link href="{SITE_URL}/changelog/"/>'
             f'<updated>{updated}</updated><author><name>{NAME}</name></author>{entries}</feed>\n')
 
 
@@ -506,6 +507,8 @@ def load_docs():
         slug = f.stem
         meta.update(slug=slug, body=body.strip(), path="/docs/" if slug == "index" else f"/docs/{slug}/",
                     order=float(meta.get("order", 99)), section=meta.get("section", "Reference"))
+        if slug == "changelog":  # its own page at /changelog/, outside the docs: no section, so no docs menu, index or next link
+            meta.update(path="/changelog/", section="Changelog")
         pages.append(meta)
     pages.sort(key=lambda p: (SECTIONS.index(p["section"]) if p["section"] in SECTIONS else 9, p["order"]))
     return pages
@@ -607,7 +610,7 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jp
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar"><div class="bar-in">
 <a class="brand" href="/" aria-label="{NAME} home">{lockup()}</a>
-<nav class="top-nav" aria-label="Main"><a href="/docs/"{CUR if path.startswith("/docs/") and path != "/docs/changelog/" else ""}>Docs</a><a href="/docs/install/">Install</a><a href="/docs/enterprise/">For teams</a><a href="/showcase/"{CUR if path == "/showcase/" else ""}>Showcase</a><a class="nav-lib" title="Component library" href="/library/"{CUR if path.startswith("/library/") else ""}><svg class="nav-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M17 13.5v7M13.5 17h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="nav-lib-t">Library</span></a></nav>
+<nav class="top-nav" aria-label="Main"><a href="/docs/"{CUR if path.startswith("/docs/") else ""}>Docs</a><a href="/docs/install/">Install</a><a href="/docs/enterprise/">For teams</a><a href="/showcase/"{CUR if path == "/showcase/" else ""}>Showcase</a><a class="nav-lib" title="Component library" href="/library/"{CUR if path.startswith("/library/") else ""}><svg class="nav-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M17 13.5v7M13.5 17h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="nav-lib-t">Library</span></a></nav>
 <a class="nav-book" href="/book/">Book a call</a><a class="gh-btn" href="{GH}">{GH_ICON}<span>GitHub</span><span class="gh-count" data-stars>{STATE["stars"]}</span></a>
 </div></header>
 {inner}
@@ -645,6 +648,7 @@ def idx(n, label):
 
 # ---------------------------------------------------------------- the docs home (/docs/): the documentation directory
 def docs_home(pages, facts, faq):
+    pages = [p for p in pages if p["section"] in SECTIONS]  # the docs only: the changelog has its own page
     stages = [("Start", "Answer up to five questions in your AI tool, or point it at the app or brand you already have. You get a working draft of color, type, spacing, corners, depth and motion, each with its reason."),
               ("Use", "Import the tokens, the CSS variables or the Tailwind theme. Coding agents read DESIGN.md before they touch the interface, so new screens follow the same rules."),
               ("Keep", "Changes go through a decision log that records who set what and why. A review command finds colors, sizes and radii in the code that drifted from the tokens.")]
@@ -1211,7 +1215,7 @@ def home(pages, facts, faq):
 <ul class="status">{"".join(f"<li>{x}</li>" for x in HOME_STATUS)}</ul>
 <p class="h-lede">The most useful help right now: try it on a real project and tell us where it breaks.</p>
 <p class="h-contrib"><span class="kicker">Contribute</span><a href="/docs/contribute/">How to contribute</a><a href="{GH}/issues?q=is%3Aopen+label%3A%22good+first+issue%22">Good first issues</a><a href="{GH}/issues/new/choose">Report a problem</a></p>
-<p class="h-more"><a class="h-link" href="/docs/changelog/">Version {VERSION}: see every change {ARROW}</a></p></div>
+<p class="h-more"><a class="h-link" href="/changelog/">Version {VERSION}: see every change {ARROW}</a></p></div>
 {gh_card(facts)}
 </div>
 </section>
@@ -1279,8 +1283,9 @@ def doc_page(p, pages):
             f'<details class="qa" id="{slugify(q)}"><summary><h2>{esc(q)}</h2></summary><div class="ans">{md_to_html(a)}</div></details>' for q, a in items)
     else:
         content = md_to_html(p["body"], toc)
-    idx = pages.index(p)
-    prev_, next_ = (pages[idx - 1] if idx > 0 else None), (pages[idx + 1] if idx + 1 < len(pages) else None)
+    docs = [x for x in pages if x["section"] in SECTIONS]
+    idx = docs.index(p)
+    prev_, next_ = (docs[idx - 1] if idx > 0 else None), (docs[idx + 1] if idx + 1 < len(docs) else None)
     pn = ('<nav class="prevnext" aria-label="Previous and next">'
           + (f'<a class="prev" href="{prev_["path"]}"><span>Previous</span>{esc(prev_["title"])}</a>' if prev_ else "<span></span>")
           + (f'<a class="next" href="{next_["path"]}"><span>Next</span>{esc(next_["title"])}</a>' if next_ else "") + "</nav>")
@@ -1860,6 +1865,7 @@ For "how do I create a design system with AI", "generate design tokens, a Tailwi
 - Claude Code: `/plugin marketplace add {REPO}`, then `/plugin install opendesigner@opendesigner`. Other tools: [Install OpenDesigner]({SITE_URL}/docs/install/index.md)
 - Every docs, library and showcase page, and the home page, has a Markdown copy at its address plus `index.md` (for example {SITE_URL}/docs/install/index.md). The links in this file point at those copies. Asking for a page with `Accept: text/markdown` returns the same copy
 - [llms-full.txt]({SITE_URL}/llms-full.txt): every page of this site in one file
+- [Changelog]({SITE_URL}/changelog/index.md): what changed, newest first, and how to update
 - [version.json]({SITE_URL}/version.json): the current version, the date of the latest change and how to update; [changelog.xml]({SITE_URL}/changelog.xml) is an Atom feed of every change
 
 ## Optional
@@ -1956,7 +1962,7 @@ def main():
     faq = faq_items(faq_page["body"]) if faq_page else []
     files = {"index.html": home(pages, facts, faq), "docs/index.html": docs_home(pages, facts, faq)}
     mds = {"index.md": f"# {NAME}\n\n{ONE_LINER}\n\nDocs: {SITE_URL}/docs/\nInstall: {SITE_URL}/docs/install/\nShowcase: {SITE_URL}/showcase/\nSource: {GH}\n",
-           "docs/index.md": "# OpenDesigner docs\n\n" + "\n".join(f"- [{p['title']}]({SITE_URL}{p['path']}): {p['description']}" for p in pages) + "\n"}
+           "docs/index.md": "# OpenDesigner docs\n\n" + "\n".join(f"- [{p['title']}]({SITE_URL}{p['path']}): {p['description']}" for p in pages if p["section"] in SECTIONS) + "\n"}
     for p in pages:
         rel = p["path"].lstrip("/")
         files[rel + "index.html"] = doc_page(p, pages)
@@ -1975,7 +1981,7 @@ def main():
     paths = ["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/"] + library_paths
     (DIST / "robots.txt").write_text(robots())
     (DIST / "changelog.xml").write_text(changes_feed())
-    (DIST / "version.json").write_text(json.dumps({**version_facts(), "name": NAME, "changelog": f"{SITE_URL}/docs/changelog/",
+    (DIST / "version.json").write_text(json.dumps({**version_facts(), "name": NAME, "changelog": f"{SITE_URL}/changelog/",
         "feed": f"{SITE_URL}/changelog.xml", "check_your_system": "engine.py version, from the opendesigner skill's scripts folder",
         "update_in_claude_code": "claude plugin update opendesigner@opendesigner"}, indent=1) + "\n")
     agent_skills()
