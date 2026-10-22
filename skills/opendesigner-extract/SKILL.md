@@ -1,6 +1,6 @@
 ---
 name: opendesigner-extract
-description: Reads a reference (site, screenshot, Figma, repo CSS, brand book) and maps it to OpenDesigner dials, or writes a Taste Index of a look you love. Never copies logos, names, imagery or copy.
+description: Reads a reference (website, screenshot, Figma file, repo CSS, brand book) and maps its values to OpenDesigner dials. Copies structure and quality, never another brand's identity.
 license: MIT
 compatibility: Python 3.10+ (standard library). A browser tool or Figma MCP improves accuracy but is optional.
 metadata:
