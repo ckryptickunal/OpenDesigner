@@ -1,0 +1,28 @@
+{
+  "kind": "agent",
+  "date": "2026-10-23",
+  "commit": "b40b036",
+  "skillsRef": "working tree",
+  "label": "extend-grader",
+  "model": "sonnet",
+  "judgeModel": "haiku",
+  "runsPerArm": 1,
+  "claudeVersion": "2.1.302",
+  "overallScore": 1,
+  "meanDelta": 1,
+  "casesPassed": 1,
+  "casesTotal": 1,
+  "costUsd": 0.33894299999999994,
+  "durationSeconds": 181,
+  "partial": false,
+  "cases": [
+    {
+      "name": "extend-rounder",
+      "score": 1,
+      "without": 0.0,
+      "delta": 1,
+      "runs": 1,
+      "errors": []
+    }
+  ]
+}
