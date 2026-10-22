@@ -10,7 +10,7 @@
     python3 taste.py index [--json]      merge every taste signal in this project into opendesigner/taste-profile.json:
                                          the poll, the person's own decisions, inspirations, the style pick, feel words
     python3 taste.py fit OPTIONS|-       order options (a list with "dials", or an option-gallery payload) by fit; leave out
-                                         any past a red line
+                                         any past a red line on a dial they differ on (all past one: keep all, warn)
 
 The library (assets/taste/library.json) lists each screen: its source link, kind, platform, eight dial positions
 (expression, brandPresence, density, energy, roundness, depth, colorfulness, warmth; 0-100) and style tags. It holds
@@ -332,20 +332,41 @@ def sure(index):
     return any(r["conf"] >= SURE and not r.get("decided") for r in (index.get("dials") or {}).values())
 
 
+def shared(options):
+    """The dials every option sets to the same value. They cannot tell the options apart."""
+    sets = [o.get("dials") or {} for o in options]
+    return {n for n in (sets[0] if sets else {})
+            if all(isinstance(s.get(n), (int, float)) for s in sets) and len({s[n] for s in sets}) == 1}
+
+
 def rank(index, options, keep=None):
-    """(options, each with "fit", best first when the index is sure of something; options past a red line, each with
-    "redLines"). keep (the person's current answer) stays in even past a line: it is theirs, not an offer."""
+    """(shown, left out, past): the options to show, each with "fit", best first when the index is sure of something;
+    the options left out, each with "redLines"; and the shown options that are past a line only because leaving them out
+    would leave nothing, each with "redLines" (empty unless every option is past one: the caller warns, naming the lines).
+    A red line judges only the dials the options differ on: a dial they all share is the same whichever is picked, so it is
+    drift for `engine.py review`, never a reason to hide a choice. keep (the person's current answer) stays in even past a
+    line: it is theirs, not an offer."""
+    same = shared(options)
+    hits = [[r for r in crossed(index, o.get("dials")) if r["dial"] not in same] for o in options]
+    hide = [bool(h) and (keep is None or str(o.get("value")) != str(keep)) for o, h in zip(options, hits)]
+    every = bool(options) and all(hide)  # then show them all with a warning, never an empty list
     kept, out = [], []
-    for o in options:
-        hits = crossed(index, o.get("dials"))
-        if hits and (keep is None or str(o.get("value")) != str(keep)):
-            out.append(dict(o, redLines=hits))
+    for o, h, x in zip(options, hits, hide):
+        if x and not every:
+            out.append(dict(o, redLines=h))
             continue
         f = fit(index, o.get("dials"))
-        kept.append(o if f is None else dict(o, fit=f))
+        o = o if f is None else dict(o, fit=f)
+        kept.append(dict(o, redLines=h) if x else o)
     if sure(index):  # feel words alone are too weak to reorder what the person sees
         kept.sort(key=lambda o: (o.get("fit") is None, -(o.get("fit") or 0)))
-    return kept, out
+    return kept, out, (kept if every else [])
+
+
+def past_text(options, plain=True):
+    """'Glass (too deep, too soft); Flat 2.0 (too mono)': each option with the red lines it crosses."""
+    return "; ".join(f"{o.get('label') or o.get('value')} ({', '.join(line_text(r, plain) for r in o['redLines'])})"
+                     for o in options)
 
 
 def line_text(r, plain=False):
@@ -408,7 +429,7 @@ def offer(index):
     if done:
         lines.append("Decided by the person, so nothing to ask: " + ", ".join(f"{n} {r['value']} ({r['decided']})" for n, r in done))
     if index["redLines"]:
-        lines.append("Red lines (never offer an option past one): "
+        lines.append("Red lines (leave out an option past one, unless every option is; taste.md \"Using it\"): "
                      + "; ".join(f"{line_text(r)}, like {r['from']}" for r in index["redLines"]))
     return lines
 
@@ -438,11 +459,15 @@ def cmd_fit(a):
     if not has_evidence(index):
         sys.exit("No taste evidence yet, so there is nothing to order by. Show the options as they are.")
     payload = data if isinstance(data, dict) else {"options": data}
-    payload["options"], left = rank(index, payload.get("options") or [])
+    payload["options"], left, past = rank(index, payload.get("options") or [])
     payload["leftOut"] = [{"value": o.get("value"), "label": o.get("label"), "why": "; ".join(line_text(r) for r in o["redLines"])}
                           for o in left]
-    if "recommended" in payload and payload["options"] and payload["recommended"] not in [o.get("value") for o in payload["options"]]:
-        payload["recommended"] = payload["options"][0].get("value")  # never recommend an option past a red line
+    if past:
+        payload["warning"] = ("Every option is past a red line, so none is left out. Tell the person before they pick: "
+                              + past_text(past, plain=False) + ".")
+    shown = [str(o.get("value")) for o in payload["options"]]
+    if "recommended" in payload and shown and str(payload["recommended"]) not in shown:
+        payload["recommended"] = payload["options"][0].get("value")  # never recommend an option that was left out
     print(json.dumps(payload, indent=1, ensure_ascii=False))
 
 

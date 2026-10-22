@@ -58,7 +58,7 @@ Pick one, say "show me", or tell me what you want.
 - The plain sentence and the "Designers · Code" line appear only the first time the term comes up.
 - The question id (Q-shape-01) is the stable handle for later changes ("change Q-shape-01"). Show it only when the engineer voice leads or the person asks. The engine numbers log entries D-0001, D-0002 and so on.
 - Put the recommended option first. Show up to 4 options. If a question has more, show the 3 closest and put the rest behind "more options". Questions with weight `high` get one extra line on what the choice changes elsewhere. Nothing else.
-- When the project has a taste index (`taste.md`, "The taste index"), never show an option past one of its red lines, and put options in order of fit (`taste.py fit`).
+- When the project has a taste index (`taste.md`, "The taste index"), leave out an option past one of its red lines, and put options in order of fit (`taste.py fit`). If every option is past a line, show them all and say which line.
 
 ## 5. Answer statuses (`--set-by`)
 | Status | Meaning | Record with |

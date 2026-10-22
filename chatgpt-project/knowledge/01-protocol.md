@@ -67,7 +67,7 @@ Details are in `references/zoom.md`.
 - **Level 0, sketch:** up to 5 questions, one per message, fewer when their words already answer some. Then `engine.py sketch ...` records the answers and builds a complete first version. Show the first result: a plain line on what they got, the overview (`opendesigner/overview.html`), and one clear next step (`zoom.md`, "The first result").
 - **People in a hurry** ("just pick") get the sketch with `--delegated` and no optional questions. People who talk in plain words get fewer questions (`zoom.md`).
 - **The taste poll** (optional, about 5 minutes): the person rates 20 to 30 real screens from shipped products, and the result recommends the eight dials. Offer it when they can't put their taste into words ("I'll know it when I see it"), before level 1, or whenever they ask. It never replaces a question they already answered (`references/taste.md`).
-- **The taste index** (`taste.py index`) merges every taste signal in this project. Offer the dials it is sure about as "confirm this?", ask the rest directly, and never offer an option past one of its red lines. The engine's option gallery and `engine.py review` already use it (`references/taste.md`, "The taste index").
+- **The taste index** (`taste.py index`) merges every taste signal in this project. Offer the dials it is sure about as "confirm this?", ask the rest directly, and leave out an option past one of its red lines (unless every option is: then show them all and say which line). The engine's option gallery and `engine.py review` already use it (`references/taste.md`, "The taste index").
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
 - **Skip what a standard settles.** A question marked **Settled by: STD-...** in its stage file is skipped like a **Planned** one: ask nothing, record nothing. Never recommend an option marked **(breaks STD-...)** (`rules.md` section 6).
@@ -352,7 +352,7 @@ Pick one, say "show me", or tell me what you want.
 - The plain sentence and the "Designers · Code" line appear only the first time the term comes up.
 - The question id (Q-shape-01) is the stable handle for later changes ("change Q-shape-01"). Show it only when the engineer voice leads or the person asks. The engine numbers log entries D-0001, D-0002 and so on.
 - Put the recommended option first. Show up to 4 options. If a question has more, show the 3 closest and put the rest behind "more options". Questions with weight `high` get one extra line on what the choice changes elsewhere. Nothing else.
-- When the project has a taste index (`taste.md`, "The taste index"), never show an option past one of its red lines, and put options in order of fit (`taste.py fit`).
+- When the project has a taste index (`taste.md`, "The taste index"), leave out an option past one of its red lines, and put options in order of fit (`taste.py fit`). If every option is past a line, show them all and say which line.
 
 ## 5. Answer statuses (`--set-by`)
 | Status | Meaning | Record with |

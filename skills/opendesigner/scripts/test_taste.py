@@ -200,12 +200,32 @@ class Options(unittest.TestCase):
     def test_rank_orders_by_fit_and_leaves_out_red_lines(self):
         opts = [{"value": "a", "dials": {"depth": 50, "roundness": 30}}, {"value": "b", "dials": {"depth": 12, "roundness": 40}},
                 {"value": "c", "dials": {"depth": 90, "roundness": 30}}, {"value": "d", "dials": {"energy": 50}}]
-        kept, left = taste.rank(self.INDEX, opts)
+        kept, left, past = taste.rank(self.INDEX, opts)
         self.assertEqual([o["value"] for o in kept], ["b", "a", "d"])  # no fit (nothing sure about energy) goes last
         self.assertEqual([o["value"] for o in left], ["c"])
+        self.assertEqual(past, [])
         self.assertGreater(kept[0]["fit"], kept[1]["fit"])
-        kept, left = taste.rank(self.INDEX, opts, keep="c")  # their current answer is theirs, not an offer
-        self.assertEqual(left, [])
+        kept, left, past = taste.rank(self.INDEX, opts, keep="c")  # their current answer is theirs, not an offer
+        self.assertEqual((left, past), ([], []))
+
+    def test_a_dial_every_option_shares_never_hides_one(self):
+        ix = dict(self.INDEX, redLines=self.INDEX["redLines"] + [
+            {"dial": "brandPresence", "side": "low", "value": 10, "limit": 25, "from": "y"}])
+        opts = [{"value": v, "dials": {"brandPresence": 20, "depth": dep}} for v, dep in (("a", 50), ("b", 12), ("c", 90))]
+        self.assertEqual(taste.shared(opts), {"brandPresence"})
+        kept, left, past = taste.rank(ix, opts)
+        self.assertEqual([o["value"] for o in kept], ["b", "a"])  # all three are too native alike: that is drift, not a choice
+        self.assertEqual([[r["dial"] for r in o["redLines"]] for o in left], [["depth"]])
+        self.assertEqual(past, [])
+        self.assertTrue(all("redLines" not in o for o in kept))
+
+    def test_when_every_option_is_past_a_line_all_are_shown_with_their_lines(self):
+        opts = [{"value": "deep", "label": "Deep", "dials": {"depth": 95}}, {"value": "fairly", "dials": {"depth": 80}}]
+        kept, left, past = taste.rank(self.INDEX, opts)
+        self.assertEqual(([o["value"] for o in kept], left), (["fairly", "deep"], []))  # still best first
+        self.assertEqual(past, kept)
+        self.assertEqual(taste.past_text(past), "fairly (too deep); Deep (too deep)")
+        self.assertEqual(taste.rank(self.INDEX, []), ([], [], []))
 
     def test_drift_flags_far_and_past_a_line_but_not_a_decided_dial(self):
         ix = {"dials": {d: {"value": 50, "conf": 0.1} for d in taste.DIALS}, "redLines": self.INDEX["redLines"]}
@@ -227,6 +247,21 @@ class Options(unittest.TestCase):
             self.assertEqual([o["value"] for o in out["options"]], ["flat", "mid"])
             self.assertEqual(out["leftOut"][0]["value"], "deep")
             self.assertEqual(out["recommended"], "flat")  # never recommend an option past a red line
+            self.assertNotIn("warning", out)
+
+    def test_fit_command_keeps_every_option_when_all_are_past_a_line(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "taste-profile.json").write_text(json.dumps(poll()), encoding="utf-8")
+            payload = {"recommended": "deep", "options": [{"value": "deep", "dials": {"depth": 95, "warmth": 40}},
+                                                          {"value": "deeper", "dials": {"depth": 99, "warmth": 40}}]}
+            r = subprocess.run([sys.executable, str(HERE / "taste.py"), "fit", "-", "--dir", tmp], input=json.dumps(payload),
+                               text=True, capture_output=True, check=True)
+            out = json.loads(r.stdout)
+            self.assertEqual(sorted(o["value"] for o in out["options"]), ["deep", "deeper"])
+            self.assertEqual(out["leftOut"], [])
+            self.assertIn("Every option is past a red line", out["warning"])
+            self.assertIn("deep (too deep (depth ", out["warning"])  # names the line
+            self.assertIn(out["recommended"], [o["value"] for o in out["options"]])
 
 
 class Engine(Project):
@@ -243,6 +278,66 @@ class Engine(Project):
         self.assertEqual(set(payload["options"][0]["dials"]), set(taste.DIALS))
         plain = e.build_payload(st, "option-gallery")
         self.assertEqual([o["value"] for o in plain["options"]], ["flat2", "tonal", "glass"])  # no index, no change
+
+    def gallery_index(self, *lines, sure=()):
+        """A made-up index: every dial unsure except `sure`, with these red lines."""
+        dials = {d: {"value": 50, "conf": 0.8 if d in sure else 0.1} for d in taste.DIALS}
+        return {"dials": dials, "redLines": [dict(zip(("dial", "side", "limit"), x), value=x[2], **{"from": "x"}) for x in lines]}
+
+    def test_a_dial_all_directions_share_is_drift_not_a_reason_to_hide(self):
+        st = e.load_state(self.d)
+        plain = e.build_payload(st, "option-gallery")
+        self.assertIn("brandPresence", taste.shared(plain["options"]))  # no preset sets it, so all three inherit one value
+        bp = plain["options"][0]["dials"]["brandPresence"]
+        ix = self.gallery_index(("brandPresence", "low", bp + 5))
+        payload = e.build_payload(st, "option-gallery", taste=ix)
+        self.assertEqual([o["value"] for o in payload["options"]], [o["value"] for o in plain["options"]])
+        self.assertEqual((payload["recommended"], payload["subtitle"]), (plain["recommended"], plain["subtitle"]))
+        self.assertNotIn("warning", payload)
+        system = e.what_if(st)[1]["dials"]
+        self.assertIn("brandPresence", [x["dial"] for x in taste.drift(ix, system)])  # review flags it instead
+
+    def test_every_direction_past_a_line_shows_all_with_a_warning(self):
+        st = e.load_state(self.d)
+        plain = e.build_payload(st, "option-gallery")
+        low = min(o["dials"]["depth"] for o in plain["options"])
+        self.assertNotIn("depth", taste.shared(plain["options"]))
+        for sure in ((), ("roundness",)):
+            payload = e.build_payload(st, "option-gallery", taste=self.gallery_index(("depth", "high", low), sure=sure))
+            values = [o["value"] for o in payload["options"]]
+            self.assertEqual(sorted(values), sorted(o["value"] for o in plain["options"]))
+            self.assertIn("Every direction crosses a line you drew, so none is left out: ", payload["subtitle"])
+            self.assertIn("(too deep)", payload["warning"])
+            self.assertNotIn("Left out", payload["subtitle"])
+            self.assertIn(payload["recommended"], values)
+
+    def test_the_recommendation_is_never_a_hidden_direction(self):
+        st = e.load_state(self.d)
+        plain = e.build_payload(st, "option-gallery")
+        rec, opts = plain["recommended"], {o["value"]: o["dials"] for o in plain["options"]}
+        others = [v for k, v in opts.items() if k != rec]
+        dial, side = next((n, s) for n in taste.DIALS for s in ("low", "high")
+                          if (opts[rec][n] < min(o[n] for o in others) if s == "low" else opts[rec][n] > max(o[n] for o in others)))
+        for sure in ((), ("roundness",)):  # the index unsure (order kept) and sure (best fit first)
+            payload = e.build_payload(st, "option-gallery", taste=self.gallery_index((dial, side, opts[rec][dial]), sure=sure))
+            values = [o["value"] for o in payload["options"]]
+            self.assertNotIn(rec, values)
+            self.assertIn(payload["recommended"], values)
+
+    def test_hated_native_screens_never_empty_the_gallery(self):
+        """The bug found on 2026-10-23: hating native-looking screens drew a brandPresence line every direction shares."""
+        native = [s for s in LIB if s["d"][1] < 15][:6]
+        branded = [s for s in LIB if s["d"][1] > 70][:8]
+        mid = [s for s in LIB if 30 < s["d"][1] < 60][:8]
+        self.write_poll(poll(loved=branded, hated=native, extra=[[s["id"], "okay"] for s in mid]))
+        st = e.load_state(self.d)
+        ix = e.taste_index(self.d, st)
+        self.assertIn("brandPresence", [r["dial"] for r in ix["redLines"]])
+        payload = e.build_payload(st, "option-gallery", taste=ix)
+        values = [o["value"] for o in payload["options"]]
+        self.assertTrue(values)
+        self.assertIn(payload["recommended"], values)
+        self.assertNotIn("too native", payload["subtitle"])
 
     def test_feel_words_alone_leave_the_gallery_as_it_is(self):
         st = e.load_state(self.d)

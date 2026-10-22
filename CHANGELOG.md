@@ -141,6 +141,7 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Fixed
 
+- **The option gallery is never empty** (2026-10-23). Hating native-looking screens in the taste poll drew a red line on brand presence, a dial none of the three directions sets, so all three were hidden while one was still recommended. A red line now only judges the dials the directions differ on; a dial they all share is flagged by `engine.py review` as drift instead. If every direction is still past a line, all are shown with a warning that names each line. The recommendation is always a direction that is shown, and `taste.py fit` follows the same rule.
 - **The home audit counts up as it scans** (owner, 2026-10-22). The scan found issues 1, then 6 and 7, then 2 to 5; they are now numbered in reading order, and the site build stops if they would not count up. On phones the view now goes to each issue as it is named, zooming out for a wide one, so none is off screen, and Replay sits on the tabs' row as an icon.
 - **The home page paints faster on phones** (2026-10-22). Lighthouse found the phone's largest element was the hero figure's photo, a CSS background the browser found only after the 37 KB stylesheet. It is now preloaded at high priority (one URL for both, so it is fetched once), and site.css is minified: 37 KB to 26 KB transferred. Layout is unchanged (check_layout.py 0 errors at 13 widths on five pages).
 - **Fixes from the fresh verifier's re-check (2026-10-21).**

@@ -135,7 +135,7 @@ Some things the model never decides for you. It asks you and records your answer
 
 Taste can move the dials too, but only as a recommendation you confirm ([`references/taste.md`](../skills/opendesigner/references/taste.md)):
 - **The taste poll** (optional, about 5 minutes): you rate 20 to 30 real screens from shipped products, never AI-made ones. The screen images stay on your machine.
-- **The taste index** merges every taste signal in your project into a value and a confidence for each dial, plus red lines: the poll, your own decisions, your inspirations, a style you picked and your feel words. Dials it is sure about are offered as "confirm this?". Options past a red line are never offered. `engine.py review` points out when the system drifts from your taste.
+- **The taste index** merges every taste signal in your project into a value and a confidence for each dial, plus red lines: the poll, your own decisions, your inspirations, a style you picked and your feel words. Dials it is sure about are offered as "confirm this?". Options past a red line are left out. If every option is past one, they are all shown with a warning that names the line. `engine.py review` points out when the system drifts from your taste.
 - **The taste card** sits at the top of `DESIGN.md`'s Overview and on the overview page. It has five lines: your own picture of the look, color, shape, motion and what it should never look like. Each line says where it comes from. The picture and the Never list are only ever yours. Color, shape and motion repeat what the system already says.
 
 Taste never moves an accessibility floor or a house standard, and it stays in your project.

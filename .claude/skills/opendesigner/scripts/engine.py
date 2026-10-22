@@ -12203,7 +12203,8 @@ def taste_index(d, state=None):
 def build_payload(state, template, values=None, labels=None, taste=None):
     """The od-data payload for one template, from the current state and what-if copies (one per option). values and labels
     replace the template's own options (the style lab's tiles: any named or experimental style at Q-dir-01). taste: the
-    project's taste index; the option gallery is then ordered by fit and never offers a direction past a red line."""
+    project's taste index; the option gallery is then ordered by fit and leaves out a direction past a red line on a dial
+    the directions differ on (if every one is past a line, all stay, with a warning)."""
     if template not in TEMPLATE_QUESTIONS:
         raise SystemExit(f"unknown template {template!r}; choose one of: {', '.join(TEMPLATE_QUESTIONS)}")
     qid, values = TEMPLATE_QUESTIONS[template][0], values or TEMPLATE_QUESTIONS[template][1]
@@ -12321,17 +12322,20 @@ def build_payload(state, template, values=None, labels=None, taste=None):
                                        "risks": ([{"what": "Glass on bars", "gain": "depth and polish", "cost": "can hide content; needs solid fallbacks"}]
                                                  if v == "glass" else []),
                                        "dials": dw, "vars": template_vars(files, meta)})
-        if taste:  # the person's taste orders the directions, and one past a red line is never offered (references/taste.md)
-            payload["options"], left = taste_py.rank(taste, payload["options"], keep=cur)
+        if taste:  # the person's taste orders the directions and leaves out one past a red line (references/taste.md)
+            payload["options"], left, past = taste_py.rank(taste, payload["options"], keep=cur)
+            shown = [str(o["value"]) for o in payload["options"]]
             if left:
-                payload["subtitle"] += (" Left out, past a line you drew: " + "; ".join(
-                    f"{o['label']} ({', '.join(taste_py.line_text(r, plain=True) for r in o['redLines'])})" for o in left) + ".")
-            if taste_py.sure(taste) and payload["options"]:
+                payload["subtitle"] += " Left out, past a line you drew: " + taste_py.past_text(left) + "."
+            if past:  # every direction is past a line: show them all and say so, never an empty gallery
+                payload["warning"] = "Every direction crosses a line you drew, so none is left out: " + taste_py.past_text(past) + "."
+                payload["subtitle"] += " " + payload["warning"]
+            if taste_py.sure(taste) and shown:
                 payload["subtitle"] += " Ordered by how well each fits your taste, best first."
-                if str(cur) not in [str(o["value"]) for o in payload["options"]]:
-                    payload["recommended"] = str(payload["options"][0]["value"])
-            elif payload["recommended"] not in [str(o["value"]) for o in payload["options"]] and payload["options"]:
-                payload["recommended"] = str(payload["options"][0]["value"])  # never recommend a direction past a red line
+                if str(cur) not in shown:
+                    payload["recommended"] = shown[0]
+            if shown and payload["recommended"] not in shown:
+                payload["recommended"] = shown[0]  # never recommend a direction that was left out
     return payload
 
 
