@@ -137,6 +137,7 @@ Follow `_coordination/PROTOCOL.md`. In short:
 Processes that held up in use (details in each file):
 - **Website:** `site/README.md` "Before every deploy": local build, `site/check.py`, `site/check_layout.py` with 0 errors at 13 widths, a real-header check, then deploy and IndexNow.
 - **Showcase:** `brand/showcase/BRIEF.md` and `ROUND3-BRIEF.md`: the owner's verdict outranks AI scores; a fresh-eyes audit; `brand/tools/check_dates.py` and `check_names.py`; `.example` domains.
+- **Public copy** (videos, captions, posts, site, changelog): `docs/COPY.md`, then `python3 tools/copy_check.py <files>` and a read out loud. The bar: at most 1 reader in 10 should guess it was written by AI.
 - **Owner reviews:** `_coordination/OWNER-FEEDBACK.md`, then `skills/opendesigner/references/improve.md` step 5: each mistake becomes a preflight check, a `making.md` row and a review case.
 
 Never commit `.env` or other secrets. Never edit another owner's files. Use messages or `od.py note` for that. When you find a gap while using OpenDesigner here, fix the source (`skills/` or `synthesis/`, never the generated copies), run the checks below, and sync (`skills/opendesigner/references/improve.md`). The orchestrator session is **"OpenDesigner orchestrator"**.
