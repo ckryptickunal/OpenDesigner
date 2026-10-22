@@ -75,6 +75,7 @@ import json
 import math
 import os
 import re
+import shlex
 import sys
 import webbrowser
 
@@ -980,9 +981,10 @@ def profile_record(prof):
             "skipped": prof["skipped"]}
 
 
-def log_profile_change(d, old_state, state):
+def log_profile_change(d, old_state, state, write=True):
     """One auto_default entry in decisions.md when a default profile starts, stops, or hands an item over to the person's
-    own answer. Returns a one-line summary for the terminal, or None when nothing changed."""
+    own answer. Returns a one-line summary for the terminal, or None when nothing changed. write=False (a dry run) only
+    returns the line."""
     before, after = default_profile(old_state), default_profile(state)
     b, a = list((before or {}).get("items") or {}), list((after or {}).get("items") or {})
     if b == a and (before or {}).get("id") == (after or {}).get("id"):
@@ -999,7 +1001,8 @@ def log_profile_change(d, old_state, state):
                                                    if after else "its trigger no longer holds") + ".")
         extra = [f"no longer a default: {i} ({(after or {}).get('skipped', {}).get(i, 'trigger gone')})" for i in b]
         line = f"{prof['name'].lower()} defaults off"
-    log_decision(d, f"defaults.{prof['id']}", a, why, "auto_default", source_ref=", ".join(prof["evidence"]), extra=extra)
+    if write:
+        log_decision(d, f"defaults.{prof['id']}", a, why, "auto_default", source_ref=", ".join(prof["evidence"]), extra=extra)
     return line
 
 
@@ -3852,11 +3855,16 @@ def validate_dir(d, write_state_hash=True):
         # check what state.json says now, so a value a check refuses shows here and not first in build (R30)
         try:
             files = generate_system(read_json(state_path))[0]
-            meta = files["opendesigner.meta.json"]
             rep.add("warning", "setup", "the files in tokens/ are older than state.json, so this check used the current state.json. "
                     "Run `engine.py build` to write the tokens, exports and DESIGN.md", "", "", fix="engine.py build")
         except Exception:
             rep.add("warning", "setup", "the tokens are older than state.json. Run `engine.py build`", "", "", fix="engine.py build")
+    return validate_generated(files, state, rep)
+
+
+def validate_generated(files, state, rep):
+    """The checks validate runs on a set of token files and the state they came from (also a dry run's what-if copy)."""
+    meta = files.get("opendesigner.meta.json") or {}
     validate_files(files, state, rep)
     for note in meta.get("notes") or []:  # a token the engine could not write is missing from every export (R03)
         m = re.match(r"^override (\S+) skipped: (.*)$", str(note))
@@ -4724,6 +4732,107 @@ def change_lines(path, value, old_state, new_state, effects=None, skipped=False,
     return lines
 
 
+# What a dry run says differently from the real set: nothing is written, so there is nothing to build and no log entry yet
+DRY_WORDS = ((" Run `engine.py build` to refresh the tokens, exports and preview.", ""),
+             ("(auto_default; see decisions.md)", "(auto_default; recording it adds this to decisions.md)"))
+
+
+def dry_line(line):
+    for a, b in DRY_WORDS:
+        line = line.replace(a, b)
+    return line
+
+
+def _short_value(v):
+    """A resolved token value in a few characters: 12px, 200ms, a hex color, a CSS shadow, else compact JSON."""
+    if isinstance(v, dict) and "colorSpace" in v:
+        try:
+            return hex_of(v)
+        except ValueError:
+            pass
+    text = _css_shadow(v) if isinstance(v, (dict, list)) and '"offsetX"' in json.dumps(v) else _vw(v)
+    return text if len(text) <= 60 else text[:57] + "..."
+
+
+def token_changes(old_state, new_state, limit=10):
+    """'path: old -> new' for each token value a change moves, resolved, for a dry run: the tokens set counts, plus named
+    roles that change through an alias. A token that differs by mode shows each mode that changes. Named roles come first,
+    base values (primitives) last."""
+    paths = token_diff(old_state, new_state)
+    if not paths or paths[0].startswith("(tokens could not"):
+        return []
+
+    def views(state):
+        files = generate_system(state)[0]
+        mods = resolver_contexts(files["opendesigner.resolver.json"])
+        out = {(): resolve_all(files, {})}
+        for m, ctxs in mods.items():
+            for c in ctxs:
+                out[(m, c)] = resolve_all(files, {m: c})
+        return mods, out, set(flatten(files.get("primitives.tokens.json") or {}))
+    try:
+        mods, va, base_a = views(old_state)
+        _m, vb, base_b = views(new_state)
+    except Exception as ex:  # a value that breaks the tokens is said, never hidden: build would stop on it
+        return [f"token values: could not be worked out ({ex}); `engine.py build` would stop on this"]
+    base = base_a | base_b
+    show = lambda view, p: _short_value(view[p]["resolved"]) if p in view else None
+    # a named role that points at a base value changes through the alias, so its file does not change: list it too
+    named = {p for key in set(va) | set(vb) for p in set(va.get(key, {})) | set(vb.get(key, {}))
+             if p not in base and show(va.get(key, {}), p) != show(vb.get(key, {}), p)}
+    paths = sorted(set(paths) | named, key=lambda x: (x in base, x != "color.bg.action.primary", x))
+    lines = []
+    for p in paths:
+        if p == "modes":
+            lines.append("modes: the theme, density or motion modes change")
+            continue
+        pair = lambda key: (show(va.get(key, {}), p), show(vb.get(key, {}), p))
+        by = next((m for m in mods if len({pair((m, c)) for c in mods[m]}) > 1), None)
+        cells = [(None, pair(()))] if by is None else [(c, pair((by, c))) for c in mods[by]]
+        parts = [(f"{c} " if c else "") + (f"new, {n}" if o is None else f"removed (was {o})" if n is None else f"{o} -> {n}")
+                 for c, (o, n) in cells if o != n]
+        lines.append(f"{p}: " + ("; ".join(parts) if parts else f"stays {cells[0][1][1]}"))
+    if len(lines) > limit:
+        rest = paths[limit:]
+        lines = lines[:limit] + [f"... and {len(rest)} more" + ((" base value" + "s" * (len(rest) != 1)) if all(p in base for p in rest) else "")]
+    return lines
+
+
+def check_changes(old_state, new_state, limit=5):
+    """The errors and warnings validate would add or clear (floors such as contrast, targets and focus, and the standards),
+    for a dry run."""
+    def found(state):  # one line per finding; the same finding in several mode combinations is said once, with the count
+        rep = validate_generated(generate_system(state)[0], state, Report())
+        out = {}
+        for i in rep.items:
+            if i["severity"] in ("error", "warn"):
+                key = (i["severity"], re.sub(r"^permutation \{[^}]*\}: ", "", i["message"]))
+                out[key] = out.get(key, 0) + 1
+        return [(sev, msg + (f" (in {n} mode combinations)" if n > 1 else "")) for (sev, msg), n in out.items()]
+    try:
+        before, after = found(old_state), found(new_state)
+    except Exception as ex:  # a state the generator cannot read is reported, never hidden
+        return [f"checks: could not run ({ex})"]
+    new = [x for x in after if x not in before]
+    gone = [x for x in before if x not in after]
+    if not new and not gone:
+        return ["checks: validate would find nothing new"]
+    lines = [f"checks: new {'error' if sev == 'error' else 'warning'}: {msg}" for sev, msg in new[:limit]]
+    if len(new) > limit:
+        lines.append(f"checks: ... and {len(new) - limit} more new findings")
+    if gone:
+        lines.append(f"checks: clears {len(gone)} finding{'s' if len(gone) != 1 else ''} (first: {gone[0][1]})")
+    return lines
+
+
+def keep_command(path, value, set_by, lock):
+    """The command that records a previewed value."""
+    arg = value if isinstance(value, str) and parse_value(value) == value else json.dumps(value, ensure_ascii=False)
+    head = f"pick {path.split('.', 1)[1]}" if path.startswith("answers.") else f"set {path}"
+    return (f"engine.py {head} {shlex.quote(arg)} --why \"<the person's words>\""
+            + (f" --set-by {set_by}" if set_by != "chosen" else "") + (" --lock" if lock else ""))
+
+
 def _touch(state, path):
     """The person set this path: a value an override released is theirs now, no longer the standard's (provenance)."""
     sts = state.get("standards")
@@ -4778,10 +4887,13 @@ def std_answer_blocks(state, qid, value, effects, house=None):
     return None
 
 
-def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, lock=False, source_ref=None, via=None, resync=True):
+def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, lock=False, source_ref=None, via=None, resync=True,
+            dry_run=False):
     """Record one decision. A value a standard holds or forbids is refused, also with force (force opens only the person's
     own locks); the refusal names every standard involved and how to change it. After the platforms (Q-plat-01) or the
-    stack (raw.stack) change, the house standards are re-scoped to them (resync)."""
+    stack (raw.stack) change, the house standards are re-scoped to them (resync).
+    dry_run: the same checks and the same report, plus each token's old and new value and what validate would add, but
+    nothing is written (state.json, decisions.md, the journey log), so the person can compare values before choosing."""
     sp = os.path.join(d, "state.json")
     if not os.path.exists(sp):
         raise SystemExit(f"no state at {sp}; run `engine.py init --dir {d}` first")
@@ -4789,6 +4901,9 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
     old_state = copy.deepcopy(state)
     path = normalize_path(path)
     if path.startswith("profile.seen."):  # the agent's own notes (a line it has said once), not a design decision
+        if dry_run:
+            print(f"dry run: {path} is the agent's own note, not a design decision; nothing was written")
+            return state
         state.setdefault("profile", {}).setdefault("seen", {})[path.split(".", 2)[2]] = value
         dump_json(sp, state)
         if not quiet:
@@ -4803,9 +4918,10 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
             print(f"raw.brandColor is locked, so the hex you typed ({typed.upper()}) was not put back. "
                   "Unlock it first: engine.py unlock raw.brandColor")
         elif typed:
-            cmd_set(d, "raw.brandColor", typed, f"{path.split('.', 1)[1]} {value}: the hex the person typed, back in place of the "
-                                                 f"readable shade an older sketch put there ({shade_id})", force=force, quiet=quiet)
-            state = merge_defaults(read_json(sp))
+            put = cmd_set(d, "raw.brandColor", typed, f"{path.split('.', 1)[1]} {value}: the hex the person typed, back in place of the "
+                                                       f"readable shade an older sketch put there ({shade_id})", force=force, quiet=quiet,
+                          dry_run=dry_run)
+            state = merge_defaults(put if dry_run else read_json(sp))
             old_state = copy.deepcopy(state)
     if set_by == "standard":  # only the standard commands write it, so every such value traces to a real standard
         raise SystemExit("--set-by standard is written only by the standard commands, so each such value traces to a real standard. "
@@ -4920,6 +5036,20 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
             shown = "back to the default" if evalue == UNSET else json.dumps(evalue, ensure_ascii=False)
             extra.append(f"also set: {epath.rstrip('+')} = {shown} (from {qid})")
     _touch(state, path)
+    if dry_run:
+        prof_line = log_profile_change(d, old_state, state, write=False)
+        if not quiet:
+            print(f"dry run: {path} = {json.dumps(value, ensure_ascii=False)} ({set_by}{', locked' if lock else ''}) was not recorded. "
+                  "Recording it would do this:")
+            for line in extra + change_lines(path, value, old_state, state, effects, skipped, held_notes) + ([prof_line] if prof_line else []):
+                print("  " + dry_line(line))
+            for line in token_changes(old_state, state) + check_changes(old_state, state):
+                print("  " + line)
+            if resync and path in ("answers.Q-plat-01", "raw.stack") and std_state(state)["house_version"] is not None:
+                print("  note: recording it also re-scopes the house standards to the new platforms or stack; a dry run cannot show that part")
+            print("  nothing was written: state.json, decisions.md and the journey log are unchanged. To keep it: "
+                  + keep_command(path, value, set_by, lock))
+        return state
     dump_json(sp, state)
     log_decision(d, path, value, why, set_by, lock, source_ref, extra, supersedes=sup)
     prof_line = log_profile_change(d, old_state, state)
@@ -10552,6 +10682,8 @@ def main(argv=None):
         p.add_argument("--lock", action="store_true")
         p.add_argument("--force", action="store_true", help="change a locked decision (only with the owner's consent)")
         p.add_argument("--no-doc", dest="no_doc", action="store_true", help="do not refresh DESIGN.md and PRODUCT.md")
+        p.add_argument("--dry-run", dest="dry_run", action="store_true",
+                       help="show what the value would change (tokens old and new, checks) and record nothing, to compare values")
     for name in ("lock", "unlock"):
         p = sub.add_parser(name, parents=[common])
         p.add_argument("path")
@@ -10677,8 +10809,8 @@ def main(argv=None):
             raise SystemExit("give a value: engine.py set <path> <json-value>  (or path=value)")
         if a.cmd == "pick" and not path.startswith("answers."):
             path = "answers." + path
-        cmd_set(d, path, parse_value(value), a.why, a.force, set_by=a.set_by, lock=a.lock, source_ref=a.source_ref)
-        if not a.no_doc:
+        cmd_set(d, path, parse_value(value), a.why, a.force, set_by=a.set_by, lock=a.lock, source_ref=a.source_ref, dry_run=a.dry_run)
+        if not a.no_doc and not a.dry_run:
             refresh_docs(d)
     elif a.cmd in ("lock", "unlock"):
         cmd_lock(d, a.path, a.cmd == "lock")

@@ -34,7 +34,7 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 | Request | Treat it as | Do |
 |---|---|---|
 | "Add a date picker / pricing table / settings page" | New component or pattern | Build it from existing tokens only. List the tokens it uses. Add states and keyboard behavior. Before you design it, check the optional component library (`<opendesigner>/references/library.md`): offer a library part only as that file says (one pick for a novice; for a designer, only when the library has that part in a matching style and they have none of their own), and only if `profile.library` is not `"declined"` |
-| "Make buttons a bit rounder", "denser tables" | One decision | Find the question in the stage file. Show the current value and the options, then `set` it |
+| "Make buttons a bit rounder", "denser tables" | One decision | Find the question in the stage file. Show the current value and the options (section 4, step 1), then `set` the one they pick |
 | "Let's define colors properly", "more detail on type" | Zoom in | Run the next zoom level for that area (`<opendesigner>/references/zoom.md`), then record it, for example `set zoom.color '"defined"'` |
 | "Build the landing page", "redo this section", "show me some options" | A page built with the system | Follow `<opendesigner>/references/making.md`: one round at a time, options on a review copy of the page with the current version kept, every value from the tokens, and a check of the rendered page before you show it |
 | "These sections don't match", "it doesn't feel like one page" | A page that does not hang together | Change nothing yet. Run the cohesion audit (`<opendesigner>/references/making.md` section 4, with `<opendesigner>/assets/output/COHESION-AUDIT.md`), then build the directions they choose as options |
@@ -60,6 +60,9 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 
 ## 4. Make the change
 1. Show it first: the current value, the new value, and what else moves (`graph.json`). Use a template from `<opendesigner>/assets/templates/` when the host can show one.
+   - To see what a value would do, or to compare a few (roundness 55, 60 or 65; soft or pill corners), preview each one with `engine.py set <path> <value> --dry-run` or `engine.py pick <Q-id> <value> --dry-run`. It lists each token's old and new value and any check the value would break, and writes nothing. For corners, `engine.py show radius` also puts the options side by side.
+   - Never try a value with a real `set`: each one is a permanent entry in `decisions.md`. Record only the value the person picks, or the one you recommend when they asked for a single change.
+   - The dials move in steps, so two values can give the same corners. If two previews match, say so and offer one of them.
 2. Apply it with `engine.py set <Q-id or path> <value> --why "..."`. Add `--lock` if the owner wants it locked. `--force` is for person locks, never standards: use it only with the owner's consent to change a value they locked. A value a standard holds changes only through `standard override` (section 3, "Standards").
 3. Refresh with `engine.py build`. It generates, validates (fix errors first), and rewrites the exports, DESIGN.md and the preview.
 4. Show what changed: `git diff --stat opendesigner/ DESIGN.md` and a short table of changed values. Refresh `opendesigner/RATIONALE.md` if a big decision changed.
