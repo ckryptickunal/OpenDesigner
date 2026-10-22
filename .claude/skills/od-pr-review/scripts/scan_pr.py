@@ -50,8 +50,12 @@ BRAND_KIT = r"^brand/kit/.+\.png$"
 # Reviewed by eye, not blocked; every other binary file still blocks.
 SITE_IMAGES = r"^site/static/[^/]+\.(webp|png|jpe?g)$"
 GENERATED = [(r"^\.agents/skills/opendesigner|^\.claude/skills/opendesigner", r"^skills/", "sync_skills.py"),
-             (r"^data/|^skills/[^/]+/references/.*\.json$|^skills/opendesigner/references/(stages|cards)/"
-              r"|^chatgpt-project/knowledge/", r"^synthesis/", "build_data.py")]
+             (r"^data/|^skills/[^/]+/references/.*\.json$|^skills/opendesigner/references/(stages|cards)/",
+              r"^synthesis/", "build_data.py"),
+             # The ChatGPT bundle also copies skill files (build_data.py gpt_files): SKILL.md, the hand-written
+             # references (standards*.md there are generated, so they are not a source), the output templates, the engine.
+             (r"^chatgpt-project/knowledge/", r"^synthesis/|^skills/opendesigner/(SKILL\.md$|references/(?!standards)[^/]+\.md$"
+              r"|assets/output/|scripts/engine\.py$)", "build_data.py")]
 # Eval fixture pages plant mistakes on purpose (evals/README.md), such as a pipe-to-shell install line the preflight must catch.
 # They are HTML that agents read, never run, so that one rule is a REVIEW there. Prompts, graders and scripts stay BLOCK.
 EVAL_FIXTURE = r"^evals/.+\.html$"
