@@ -12325,7 +12325,9 @@ def build_payload(state, template, values=None, labels=None, taste=None):
         if taste:  # the person's taste orders the directions and leaves out one past a red line (references/taste.md)
             payload["options"], left, past = taste_py.rank(taste, payload["options"], keep=cur)
             shown = [str(o["value"]) for o in payload["options"]]
-            if left:
+            if left:  # the title counts the directions shown, not the ones left out
+                n = len(shown)
+                payload["title"] = f"{name}: {n if labels else ('one', 'two', 'three')[n - 1]} direction{'s' if n != 1 else ''}"
                 payload["subtitle"] += " Left out, past a line you drew: " + taste_py.past_text(left) + "."
             if past:  # every direction is past a line: show them all and say so, never an empty gallery
                 payload["warning"] = "Every direction crosses a line you drew, so none is left out: " + taste_py.past_text(past) + "."

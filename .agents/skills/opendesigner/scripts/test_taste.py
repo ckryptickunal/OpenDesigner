@@ -272,6 +272,7 @@ class Engine(Project):
         values = [o["value"] for o in payload["options"]]
         self.assertNotIn("glass", values)  # glass is deep; they hated deep screens
         self.assertIn("Left out, past a line you drew: ", payload["subtitle"])
+        self.assertEqual(payload["title"], "Ledger: " + {1: "one direction", 2: "two directions"}[len(values)])
         fits = [o["fit"] for o in payload["options"]]
         self.assertEqual(fits, sorted(fits, reverse=True))
         self.assertEqual(payload["recommended"], values[0])
@@ -309,6 +310,7 @@ class Engine(Project):
             self.assertIn("Every direction crosses a line you drew, so none is left out: ", payload["subtitle"])
             self.assertIn("(too deep)", payload["warning"])
             self.assertNotIn("Left out", payload["subtitle"])
+            self.assertEqual(payload["title"], plain["title"])  # all three are shown
             self.assertIn(payload["recommended"], values)
 
     def test_the_recommendation_is_never_a_hidden_direction(self):
@@ -323,6 +325,7 @@ class Engine(Project):
             values = [o["value"] for o in payload["options"]]
             self.assertNotIn(rec, values)
             self.assertIn(payload["recommended"], values)
+            self.assertEqual(payload["title"], "Ledger: two directions")
 
     def test_hated_native_screens_never_empty_the_gallery(self):
         """The bug found on 2026-10-23: hating native-looking screens drew a brandPresence line every direction shares."""
