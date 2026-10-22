@@ -24,7 +24,7 @@ trace_ids = set()
 for f in glob.glob(str(ROOT / "traces" / "*.md")) + glob.glob(str(ROOT / "research" / "*.md")) + [str(ROOT / "benchmarks" / "L09-benchmark-matrix.md")]:
     trace_ids |= set(re.findall(r"S-L\d\d-\d{3}", open(f, errors="ignore").read()))
 
-DC = re.compile(r"DC-L\d\d-\d{2,3}\b")  # three digits once a lane passes 99 cards (L19)
+DC = re.compile(r"DC-L\d\d-\d\d")
 SID = re.compile(r"S-L\d\d-\d{3}")
 QID = re.compile(r"\bQ-[a-z]+-\d\d\b")
 MODES = {"Quick": ["quick", "standard", "expert"], "Standard": ["standard", "expert"],
@@ -125,16 +125,17 @@ def finish(q):
 
 
 def table_section(text, title):
-    """Rows of every table under a '## <title>...' heading (several sections may share a title prefix)."""
+    m = re.search(r"^## " + re.escape(title) + r".*?\n(.*?)(?=\n## |\Z)", text, re.S | re.M)
     rows = []
-    for m in re.finditer(r"^## " + re.escape(title) + r".*?\n(.*?)(?=\n## |\Z)", text, re.S | re.M):
-        lines = [l for l in m.group(1).split("\n") if l.startswith("|")]
-        if len(lines) < 3:
-            continue
-        head = [h.strip().lower() for h in lines[0].strip("|").split("|")]
-        for l in lines[2:]:
-            cells = [c.strip() for c in l.strip("|").split("|")]
-            rows.append(dict(zip(head, cells)))
+    if not m:
+        return rows
+    lines = [l for l in m.group(1).split("\n") if l.startswith("|")]
+    if len(lines) < 3:
+        return rows
+    head = [h.strip().lower() for h in lines[0].strip("|").split("|")]
+    for l in lines[2:]:
+        cells = [c.strip() for c in l.strip("|").split("|")]
+        rows.append(dict(zip(head, cells)))
     return rows
 
 
@@ -239,7 +240,7 @@ def main():
         "interview_protocol": [
             "Start at zoom 0 (sketch): the five questions in references/zoom.md, then build. Nobody picks a mode. After each level, offer to stop or to zoom into one area (pacing.json areas, with rough minutes). Offer the reference panel (Q-ref-01) and keep it open.",
             "Walk the chosen area's stages in order. Open each with one sentence on what it decides; render its preview if the host can show visuals, else describe the example in words.",
-            "Ask each question at or below the zoom level being worked (questions.json zoom) whose show_if holds, using its ask line. Skip questions with status planned: the feature is not built yet, so ask nothing and record nothing. Skip questions a house standard settles the same way (questions.json settled_by; the stage file says Settled by STD-...): the standard already locked the answer. Never recommend an option marked breaks STD-... (built by tools/build_data.py from synthesis/standards.json).",
+            "Ask each question at or below the zoom level being worked (questions.json zoom) whose show_if holds, using its ask line. Skip questions with status planned: the feature is not built yet, so ask nothing and record nothing.",
             "time_weight high: explain why, show 2-3 options with effect and a real system, recommend the default with its source, state what it changes. medium: ask with the default and main alternatives. low: state the default in one line and confirm.",
             "Asset hooks (kind=hook): ask whether the person has the asset, accept hook.accepts formats, otherwise offer hook.if_no paths with their caveats.",
             "Record {question id, option value, set_by: chosen|confirmed_default|auto_default|reference}. Questions above the zoom level reached take their default and stay editable.",

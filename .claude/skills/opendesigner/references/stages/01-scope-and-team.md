@@ -8,7 +8,7 @@ Screen: what the system is for and who builds it. Graph step 0-2. Cycle kept tog
 
 Zoom 3 (detailed) questions: `01-scope-and-team.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-scope-01 · Which products and pages should this system cover, and which should it leave out?
 Zoom 0 sketch · weight high · changes 8 decisions · class I · cards DC-L11-02
@@ -16,17 +16,11 @@ Zoom 0 sketch · weight high · changes 8 decisions · class I · cards DC-L11-0
 - **Why:** What the system covers sets how general your components must be. It also sets how many layers of design tokens you need [DC-L11-02].
 - **Options:**
   - `product-app` Product app: tight, opinionated visuals are possible when this is the only surface [DC-L11-02, inferred].
-    - Now: Parts are built for your app alone, so the look can stay tight and specific. [inferred] As it grows: Adding a marketing site or emails later means making parts more general and adding token layers.
   - `marketing` Marketing site: adds an expressive layer next to the productive one (Carbon splits productive and expressive type and motion) [DC-L06-01].
-    - Now: Adds a louder, expressive layer for the marketing site next to the calm app layer, as Carbon does. As it grows: Marketing and app styles tend to drift apart, so someone must keep the shared colors and type in step.
   - `internal-tools` Internal or admin tools: usually dense (see Q-aud-01) [inferred].
-    - Now: In-house tools are usually dense: smaller text and tighter rows so more fits on screen. [inferred] As it grows: Each new tool reuses the same parts; dense screens get a compact mode instead of a second system.
   - `docs-content` Docs or content site: long-form reading pushes line length and paragraph rules (DC-L02-17) [inferred].
-    - Now: Long reading pages add rules for comfortable line length and paragraph spacing. [inferred] As it grows: If articles pass about a third of your pages, a second, bigger set of heading styles pays off.
   - `email` Email: a constrained rendering target the token pipeline must also output [DC-L11-02 options].
-    - Now: Email can show only simple styling, so the system must also write its colors and text out for email. As it grows: Every new email template reuses those outputs; anything email cannot show needs a plain fallback. [inferred]
   - `partner-embed` Inside partner sites or apps: need scoped, context-agnostic components ("card", not "product card").
-    - Now: Parts must work inside other people's sites, so they get general names like 'card', not 'product card'. As it grows: Partners build on your parts, so changes need public docs and stricter version numbers.
 - **Default:** `product-app`: product-app only *Source:* card heuristic, scope v1 to what the pilot touches [DC-L11-02].
 - **Show:** a strip with one sample screen per selected surface, all rendered from the same draft tokens.
 - **Skip:** yes, defaults to a single product app.

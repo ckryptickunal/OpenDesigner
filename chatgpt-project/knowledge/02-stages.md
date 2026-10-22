@@ -6,7 +6,7 @@ Area: `any` · open on every screen · visual: text or the host question tool
 
 Not a step in the sequence. The panel sits beside every stage; anything added here is read once and offered as pre-filled answers on the stages that follow, each marked "from reference" until the person confirms it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-ref-01 · Do you have a website, screenshot, Figma file or other example to learn from?
 Zoom any · weight medium · changes 0 decisions · class E
@@ -34,7 +34,7 @@ Screen: what the system is for and who builds it. Graph step 0-2. Cycle kept tog
 
 Zoom 3 (detailed) questions: `01-scope-and-team.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-scope-01 · Which products and pages should this system cover, and which should it leave out?
 Zoom 0 sketch · weight high · changes 8 decisions · class I · cards DC-L11-02
@@ -42,17 +42,11 @@ Zoom 0 sketch · weight high · changes 8 decisions · class I · cards DC-L11-0
 - **Why:** What the system covers sets how general your components must be. It also sets how many layers of design tokens you need [DC-L11-02].
 - **Options:**
   - `product-app` Product app: tight, opinionated visuals are possible when this is the only surface [DC-L11-02, inferred].
-    - Now: Parts are built for your app alone, so the look can stay tight and specific. [inferred] As it grows: Adding a marketing site or emails later means making parts more general and adding token layers.
   - `marketing` Marketing site: adds an expressive layer next to the productive one (Carbon splits productive and expressive type and motion) [DC-L06-01].
-    - Now: Adds a louder, expressive layer for the marketing site next to the calm app layer, as Carbon does. As it grows: Marketing and app styles tend to drift apart, so someone must keep the shared colors and type in step.
   - `internal-tools` Internal or admin tools: usually dense (see Q-aud-01) [inferred].
-    - Now: In-house tools are usually dense: smaller text and tighter rows so more fits on screen. [inferred] As it grows: Each new tool reuses the same parts; dense screens get a compact mode instead of a second system.
   - `docs-content` Docs or content site: long-form reading pushes line length and paragraph rules (DC-L02-17) [inferred].
-    - Now: Long reading pages add rules for comfortable line length and paragraph spacing. [inferred] As it grows: If articles pass about a third of your pages, a second, bigger set of heading styles pays off.
   - `email` Email: a constrained rendering target the token pipeline must also output [DC-L11-02 options].
-    - Now: Email can show only simple styling, so the system must also write its colors and text out for email. As it grows: Every new email template reuses those outputs; anything email cannot show needs a plain fallback. [inferred]
   - `partner-embed` Inside partner sites or apps: need scoped, context-agnostic components ("card", not "product card").
-    - Now: Parts must work inside other people's sites, so they get general names like 'card', not 'product card'. As it grows: Partners build on your parts, so changes need public docs and stricter version numbers.
 - **Default:** `product-app`: product-app only *Source:* card heuristic, scope v1 to what the pilot touches [DC-L11-02].
 - **Show:** a strip with one sample screen per selected surface, all rendered from the same draft tokens.
 - **Skip:** yes, defaults to a single product app.
@@ -110,7 +104,7 @@ Area: `overview` · zoom 3 detailed: 2 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-scope-03 · Who will use the system itself?
 Zoom 3 detailed · weight high · changes 8 decisions · class I · cards DC-L11-02
@@ -118,15 +112,10 @@ Zoom 3 detailed · weight high · changes 8 decisions · class I · cards DC-L11
 - **Why:** Each group that uses the system needs its own docs and file formats. AI coding agents need files a machine can read [DC-L11-02].
 - **Options:**
   - `engineers` Engineers: component API docs and code packages (DC-L11-18).
-    - Now: Adds component docs and code packages that engineers can install. As it grows: More engineers and projects mean more packages to version and keep in step. [inferred]
   - `designers` Designers: a design-tool library (DC-L16-13).
-    - Now: Adds a design-tool library, such as Figma, that mirrors the tokens. As it grows: Without automatic sync, the design library and the code drift apart, a common team complaint.
   - `content-pm` Writers and people in product or marketing: usage and voice guidance (DC-L06-18).
-    - Now: Adds usage and voice guidance, so writers know how the product talks. As it grows: As more people write copy, the shared voice traits settle arguments and keep screens sounding alike.
   - `partners` External partners: public docs and stricter versioning (DC-L11-14).
-    - Now: Adds public docs and stricter version numbers, because outside teams build on the system. As it grows: Every breaking change then affects people outside your team, so changes slow down and need notice. [inferred]
   - `ai-agents` AI coding agents: MCP server, DESIGN.md, llms.txt (12 of 25 benchmarked systems ship one) [L09 A1 row 10; DC-L11-23].
-    - Now: Adds files AI coding tools can read, such as DESIGN.md, so they follow the system. As it grows: Every screen an AI writes later reads the same written rules, so it needs less re-explaining. [inferred]
 - **Default:** `engineers`: engineers + designers + ai-agents *Source:* L09 shared pattern row 10 (agent-readable exports in 12 of 25 systems) [inferred choice].
 - **Show:** a list of the output files the builder will generate for each checked audience.
 - **Skip:** yes.
@@ -157,7 +146,7 @@ Area: `accessibility` · zoom 0 sketch: 1, zoom 2 defined: 3 · visual: text or 
 
 Screen: who the product is for and what it promises them. Graph step 0. These answers bound every later option.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-aud-01 · Who uses the product, and how often?
 Zoom 0 sketch · weight high · changes 0 decisions · class I · cards DC-L09-04
@@ -165,11 +154,8 @@ Zoom 0 sketch · weight high · changes 0 decisions · class I · cards DC-L09-0
 - **Why:** Who uses it sets density (how packed the screen is) and base text size. Across systems, body text runs 13-19px. Our L09 study puts this fourth on its list of ways systems look most different (an inferred ranking) [DC-L09-04; L09 A2 row 4].
 - **Options:**
   - `regular` Often, in an everyday app: body 16px, controls 36-40px (Radix, shadcn, Mantine, Chakra) [DC-L09-04; L09 A3 density].
-    - Now: Body text 16 px and controls 36-40 px: balanced for an everyday app. As it grows: The safe middle: data-heavy pages can add a compact mode later instead of a second system.
   - `dense` All day, in tools full of data: body 13-14px, controls 28-32px; compact and utilitarian (Polaris 13px, SLDS 13px, Carbon, Atlassian, Primer, Ant 14px) [DC-L09-04].
-    - Now: Body text 13-14 px and controls 28-32 px, so more rows fit; it looks professional and packed. As it grows: Fits data tools as they grow, but touch and occasional use need a roomier mode; tap targets never shrink.
   - `large` Now and then, on a phone or in public: body 17px or more, controls and targets 44-48px (iOS 17pt, GOV.UK 19px, Material, USWDS 48px targets) [DC-L09-04].
-    - Now: Body text 17 px or more and 44-48 px targets: calm and easy to read and tap on phones. As it grows: Suits public and phone use; dense admin screens added later would need a compact mode. [inferred]
 - **Default:** `regular`: regular *Source:* L09 shared default row 8 (body 16px general, 14px tools) [L09 A1].
 - **Show:** the same table-plus-form screen at the three densities side by side; hovering a row shows its height, padding and text size.
 - **Use / avoid:** use dense for tables, dashboards and editors people work in all day; avoid dense on touch-first, occasional or public surfaces, where it hurts legibility and forces the targets out of step with the visuals [DC-L09-04, DC-L15-04].
@@ -226,7 +212,7 @@ Screen: who the brand is, and which brand assets already exist. Graph step 0-1. 
 
 Zoom 3 (detailed) questions: `03-brand-personality-and-principles.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-brand-01 · Where does your brand sit on these scales?
 Zoom 0 sketch · weight high · changes 15 decisions · class I · cards DC-L06-02
@@ -234,19 +220,12 @@ Zoom 0 sketch · weight high · changes 15 decisions · class I · cards DC-L06-
 - **Why:** The sliders set starting values for color strength, corner radius and type. They also set font weight, motion, illustration and voice, through the L06 lever matrix [DC-L06-02].
 - **Options:**
   - `A playful-serious` Playful: saturated brand color on chrome, large radii and pills, springs with overshoot, characters. Serious: neutral or monochrome scheme, small radii, ease-out without bounce, pictograms (M3 Expressive vs Carbon).
-    - Now: Toward playful: strong color, big round corners, springier motion. Toward serious: neutral colors, small corners, calm motion. As it grows: Every new screen inherits this mood; Google's research warns that expressive styles may not suit banking.
   - `B friendly-authoritative` Friendly: warm neutrals, softer borders, rounded corners, sentence case, contractions. Authoritative: cool greys and deep blues or black, tighter radii, strong rules (Linear 2026 warm gray, Airbnb 2025 curves vs Uber black, IBM grid).
-    - Now: Toward friendly: warm grays, rounded corners, casual wording. Toward authoritative: cool grays or black, tighter corners, strong lines. As it grows: It also sets how the words sound, so new copy, errors and help text follow the same tone.
   - `C minimal-rich` Minimal: near-monochrome with one accent, whitespace instead of containers, fewer outlined icons, no hero moments (Notion, Linear). Rich: primary/secondary/tertiary mixing, visible containers, filled or colored icons, 1-2 hero moments (M3 Expressive).
-    - Now: Toward minimal: near gray, one accent, lots of space. Toward rich: several colors, visible boxes, filled icons, big moments. As it grows: Minimal stays calm as screens multiply; rich needs rules for where extra color goes, or screens get busy. [inferred]
   - `D calm-energetic` Calm: shorter, subtle motion (Carbon standard curve), lighter weights, low saturation. Energetic: Carbon expressive curve or springs, heavy weights, high saturation.
-    - Now: Toward calm: short, subtle motion, lighter weights, soft colors. Toward energetic: livelier motion, heavier weights, stronger colors. As it grows: Even when energetic, lively motion stays on rare moments; things people do many times a day stay quiet.
   - `E premium-everyday` Premium: taller, more elegant type, restrained palette, subtle materials. Everyday: sturdy type with tall x-height, bright primaries, flat fills (Google Sans Flex study; Airbnb Cereal).
-    - Now: Toward premium: taller, elegant type, restrained colors, subtle materials. Toward everyday: sturdy type, bright colors, flat fills. As it grows: Premium depends on restraint, so each new feature must resist adding color; everyday tolerates more variety. [inferred]
   - `F modern-heritage` Modern: geometric or grotesque sans, variable fonts, perceptual generated ramps, a mono companion. Heritage: serif or slab, fixed hand-picked palette (Cooper for Mailchimp).
-    - Now: Toward modern: geometric fonts, generated color shades, a code font. Toward heritage: serif fonts, hand-picked fixed colors. As it grows: Generated shades extend to new colors on their own; a hand-picked palette needs a person for every new shade. [inferred]
   - `G bold-deferential` Bold: brand color on large surfaces, custom components and typeface everywhere. Deferential: accent only on primary actions and status, native type and components (Apple HIG; Fluent reuses native patterns 80% of the time).
-    - Now: Toward bold: brand color on big areas, custom parts everywhere. Toward deferential: accent on key actions only, native fonts and controls. As it grows: Bold means rebuilding custom parts for every platform and OS update; deferential gets platform updates for free.
 - **Default:** 50 on every slider *Source:* L06 lever matrix convention (50 = system default) [DC-L06-02]. Q-aud-02 pre-positions A, B and D.
 - **Show:** 2-3 generated style tiles (type, color, radius, a button, a card) that update as sliders move; slider conflicts (for example "playful" wants large radii, "authoritative" wants small) are shown, not silently averaged [S-L06-078; L06 section 4.2].
 - **Skip:** yes; all sliders at 50 give the neutral-toolkit look that L09 warns every generated app starts from [L09 A3].
@@ -308,11 +287,8 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L06-
 - **Why:** In Google's tests, expressive design made products seem 34% more modern and key parts up to 4x faster to spot. Too much of it hurts ease of use, and a strong minority prefers calm [DC-L06-03].
 - **Options:**
   - `hero-moments` Calm, plus 1-2 big moments: expressive motion and type only at significant moments such as opening a page or the primary action (Carbon expressive motion; Material's own budget).
-    - Now: Calm everywhere, plus one or two big moments, such as a first success, with bolder type and motion. As it grows: Big moments stay rare, like first run or finishing a task; everyday actions stay quiet, per house standards.
   - `productive` Calm and steady only: calm, dense, efficient (Carbon product UI, Linear 2026 "calmer interface").
-    - Now: Calm and efficient everywhere, with no big animated moments, like Carbon's product screens. As it grows: Stays comfortable for daily use as features pile up; a strong minority prefers calm, though it can seem less modern.
   - `expressive` Lively throughout: varied shapes, rich color, emphasized type, fluid motion (M3 Expressive's seven tactics).
-    - Now: Lively throughout: varied shapes, rich color, bigger type and fluid motion; Google's tests found it feels more modern. As it grows: Overdone, it hurts ease of use; house standards still keep motion off things people do many times a day.
 - **Default:** `hero-moments`: hero-moments *Source:* card heuristic, Material's "one or two hero moments" rule [DC-L06-03]. Capped at productive when Q-aud-02 = high-trust.
 - **Show:** one screen shown in all three settings, with the hero moment (for example a success state) animated.
 - **Skip:** yes.
@@ -354,7 +330,7 @@ Area: `overview` · zoom 3 detailed: 1 · visual: `assets/templates/option-galle
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-brand-06 · Should marketing and article pages get their own, bolder set of text styles?
 Zoom 3 detailed · weight high · changes 5 decisions · class G · cards DC-L02-11
@@ -362,13 +338,9 @@ Zoom 3 detailed · weight high · changes 5 decisions · class G · cards DC-L02
 - **Why:** One product type scale keeps apps calm. A second, expressive set gives article pages big size jumps. Those "would be distracting if used in product" [DC-L02-11].
 - **Options:**
   - `two-sets` Two sets: productive base 14px with fixed headings, expressive base 16px with fluid headings (Carbon display from 42px to 156px across breakpoints).
-    - Now: A calm product text scale plus a separate, dramatic set with huge headings for marketing and articles. As it grows: Pays off once over a third of pages are marketing or editorial; two sets to keep in step across screen sizes.
   - `emphasized` One scale plus heavier styles: 15 baseline + 15 heavier styles for actions and headlines (M3 Expressive).
-    - Now: One scale, plus heavier versions of styles for actions and headlines, like Material 3 Expressive. As it grows: One scale to maintain; emphasis grows by weight rather than new sizes, so pages stay consistent. [inferred]
   - `brand-face` One scale plus a brand font for brand moments (Atlassian Charlie Sans).
-    - Now: One scale, with your brand font kept for special brand moments, like Atlassian's Charlie Sans. As it grows: Brand moments stay recognizable as you grow, but the extra font must be licensed and loaded everywhere. [inferred]
   - `productive-only` One product scale only (Polaris, Primer) [DC-L02-11].
-    - Now: One product scale only, like Polaris and Primer: calm, with small jumps between sizes. As it grows: Simplest to keep; if a marketing site arrives, it will likely need 3-4 bigger display styles added.
 - **Default:** one productive scale plus 3-4 expressive display styles; a full second set if more than a third of pages are marketing or editorial *Source:* card heuristic [DC-L02-11].
 - **Show:** a heading ladder at productive and expressive settings, across three breakpoints.
 - **Use / avoid:** use fluid, expressive display styles on marketing and editorial pages; avoid them inside product containers (Carbon: "Do not use these styles inside a container").
@@ -385,7 +357,7 @@ Screen: where the product runs and what people touch it with. Graph step 0-2. Cy
 
 Zoom 3 (detailed) questions: `04-platforms-and-devices.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-plat-01 · Which platforms ship in the first release?
 Zoom 0 sketch · weight high · changes 12 decisions · class I · cards DC-L10-01
@@ -393,15 +365,10 @@ Zoom 0 sketch · weight high · changes 12 decisions · class I · cards DC-L10-
 - **Why:** Each platform brings habits your brand must live with. It also has its own units, smallest target sizes and export files [DC-L10-01].
 - **Options:**
   - `web` Web: one delivery layer (CSS custom properties); the brand can show in every pixel (Polaris calls Shopify's platform "the web platform").
-    - Now: One set of CSS files, and your brand can show in every pixel. As it grows: Adding apps later brings each platform's own habits, units and screen readers to design and test for.
   - `ios` iOS/iPadOS: Liquid Glass chrome, pt units, Dynamic Type; bars, controls and sheets are styled by the OS.
-    - Now: Apple styles the bars, controls and sheets (Liquid Glass); sizes are in points, and text follows Dynamic Type. As it grows: Apple's redesigns reach standard parts for free; parts you custom-build must be updated by hand.
   - `android` Android: Material 3 conventions, dp/sp units, large-screen layouts mandatory at 600dp+.
-    - Now: Material 3 habits and dp units; layouts for large screens (600 dp and up) are required. As it grows: Tablets and foldables come with it, so wider layouts with panes are needed from day one.
   - `desktop` Desktop app (macOS, Windows, or built with web tech) [DC-L10-24].
-    - Now: A desktop app; built with web tech, it must respect the native window frame or it feels like a website. [inferred] As it grows: Windows resize freely, so layouts must change by window size, never by device type.
   - `secondary` Watch, TV, car or headset: see Q-plat-02 [DC-L10-24].
-    - Now: Watch, TV, car or headset: only colors, text roles and icons carry over, inside platform templates. As it grows: Each device adds its own text sizes and focus styles; the smaller or farther the screen, the less custom UI survives. [inferred]
 - **Default:** `web`: web *Source:* survey, 94% of systems support web, 35% iOS, 34% Android [DC-L11-01]. L10's own default for consumer products is web + iOS + Android phones with large-screen layouts [DC-L10-01] (see Disagreements).
 - **Show:** the same screen rendered in each platform's chrome (browser, iOS glass bars, Material top bar), side by side.
 - **Skip:** yes, web.
@@ -413,11 +380,8 @@ Zoom 2 defined · weight high · changes 11 decisions · class I · cards DC-L10
 - **Why:** Apps that look like the platform feel at home and get OS updates for free. Brand-first apps look the same everywhere but must redo every OS change [DC-L10-02].
 - **Options:**
   - `hybrid` A mix of both: shared brand foundations and signature moments, native navigation and controls (Fluent reuses native patterns 80% of the time).
-    - Now: Brand colors, type and signature moments, with native navigation, back gestures, sheets and pickers. As it grows: Share what people see as the brand, keep how the phone works native: about 80% native, 20% signature.
   - `native-first` Like the platform: system components almost everywhere; brand shows in content, accents, imagery and voice (Apple: "Express your brand with familiar components").
-    - Now: Uses the platform's own controls almost everywhere; your brand shows in content, accents, images and words. As it grows: OS updates and accessibility come built in, but the app looks more like other apps on the device.
   - `brand-first` Like your brand: identical custom UI on every platform (CRED NeoPOP); can feel foreign and must rebuild accessibility [DC-L06-14].
-    - Now: The same custom look on every platform; it can feel foreign, with the wrong back gestures or sheets. As it grows: Every OS change must be rebuilt by hand, and screen reader and text-size support must be rebuilt too.
 - **Default:** `hybrid`: hybrid *Source:* card heuristic, share what users perceive as the brand, adopt the platform's version of "how the phone works" [DC-L10-02, DC-L06-14].
 - **Show:** one screen as native-first, hybrid and brand-first on iOS and Android.
 - **Skip:** yes.
@@ -454,19 +418,12 @@ Zoom 2 defined · weight high · changes 10 decisions · class I · cards DC-L14
 - **Why:** Each device you fully design for adds a visibly different layout shape. Devices you only adapt look stretched. Google now penalizes that on large screens [DC-L14-01].
 - **Options:**
   - `phone` Phone [DC-L14-01].
-    - Now: Phones get layouts designed for them, because core tasks happen there. As it grows: Devices that only adapt the phone layout look stretched, which Google now penalizes on large screens.
   - `tablet-foldable` Tablet and foldable: rails, sidebars, 2-3 panes; Android ignores orientation locks at 600dp+.
-    - Now: Adds rails, sidebars and two or three panes; Android ignores orientation locks at 600 dp and up. As it grows: Android forces this size on apps anyway, so skipping it means a stretched phone layout there.
   - `desktop-web` Desktop and web [DC-L14-01].
-    - Now: Wide layouts for desktop and web are designed properly, not stretched from the phone. As it grows: Big screens add panes and sidebars that change the product's shape; iPad windows make any size normal.
   - `watch` Watch: dark, glanceable, Crown lists; foundations only travel [DC-L10-24].
-    - Now: A dark, glanceable version with scrolling lists; only colors, type and icons travel. As it grows: Adds its own watch text sizes and motion values to maintain alongside the main system.
   - `tv` TV: big type, focus rows, 66pt targets, overscan safe area.
-    - Now: Big type, focus rows you move through with a remote, 66 pt targets and a safe border. As it grows: Adds a TV text scale and focus styles to every component that appears there.
   - `car` Car: system templates, large sparse high-contrast screens.
-    - Now: Uses the car system's templates: large, sparse, high-contrast screens with little room for your brand. As it grows: Templates limit custom UI, so only colors, type and icons carry over from the main system.
   - `spatial` Headset: glass windows at a distance, 60pt targets.
-    - Now: Glass windows floating at a distance, with 60 pt targets. As it grows: Adds comfort rules, such as no motion at the edge of vision, to every animated part.
 - **Default:** `phone`: phone + tablet/foldable + desktop/web first-class; TV, watch, car and spatial out until a named use case exists *Source:* card heuristic [DC-L14-01, DC-L10-24].
 - **Show:** a device row (watch, phone, tablet, laptop, TV) showing the draft screen at each first-class size.
 - **Skip:** yes.
@@ -509,7 +466,7 @@ Area: `platforms` · zoom 3 detailed: 3 · visual: text or the host question too
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-plat-06 · In your iOS, Android or desktop apps, use built-in controls or your own?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L10-13
@@ -531,13 +488,9 @@ Zoom 3 detailed · weight high · changes 5 decisions · class I · cards DC-L10
 - **Why:** The more you share, the more your product looks the same on every platform, and the less it feels native [DC-L10-03].
 - **Options:**
   - `tokens` Same tokens, own components on each platform: same palette and rhythm, platform-shaped components (Spotify Encore, Fluent).
-    - Now: Same colors, type personality and spacing everywhere, with components built to fit each platform. As it grows: Share the what (names and decisions) everywhere and let each platform's code do the how, so it still feels native. [inferred]
   - `principles` Principles only: loosest alignment (Fluent's four principles).
-    - Now: Platforms share only ideas, so each app can look quite different. As it grows: Easiest to start, but the apps drift apart as teams grow, because nothing concrete is shared. [inferred]
   - `specs` Same component plans, own code per platform: one spec for 7 stacks including screen-reader specs (Uber Base).
-    - Now: One plan per component (parts, states, screen reader notes), coded separately per platform, like Uber Base. As it grows: One plan can serve many code stacks, but every plan change must then be built once per platform. [inferred]
   - `code` Shared component code: identical components everywhere [DC-L10-03].
-    - Now: Identical component code on every platform, so everything looks the same. As it grows: Features ship everywhere at once, but the app feels least native, and one bug reaches every platform. [inferred]
 - **Default:** `tokens`: tokens + shared specs, per-platform implementation *Source:* card heuristic [DC-L10-03].
 - **Show:** a diagram of which layers are shared, with the same card component rendered per platform.
 - **Skip:** yes.
@@ -567,7 +520,7 @@ Screen: design tool, source of truth and how engineers consume the output. Graph
 
 Zoom 3 (detailed) questions: `05-where-the-system-lives.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-tool-03 · Which design tool does your team use, and on which plan?
 Zoom 2 defined · weight medium · changes 3 decisions · class I · cards DC-L07-27
@@ -591,13 +544,9 @@ Zoom 1 broad · weight high · changes 9 decisions · class I · cards DC-L16-02
 - **Why:** Any copy that is not the master (the source of truth) drifts out of date unless it syncs on its own. 60% of teams have no token automation [DC-L07-08].
 - **Options:**
   - `builder` In the builder. It makes DTCG, CSS, native code and design files at once, and sends to design tools [DC-L16-02, DC-L11-16].
-    - Now: OpenDesigner's files are the master copy; one step writes tokens, CSS, native code and design-tool files. As it grows: Design tools stay mirrors refreshed from one master; 60% of teams have no such token automation.
   - `token-file` Git token file (DTCG plus Resolver). It feeds code and Figma (Tokens Studio, Penpot write DTCG) [DC-L07-08].
-    - Now: A token file in git is the master; code and Figma are fed from it. As it grows: Best once two or more code platforms exist, and it keeps colors Figma cannot hold, like OKLCH. [inferred]
   - `code` Code: tokens and components in code, design tools mirror it; the 2026 practitioner majority ("code is the source of truth") [DC-L11-16; COMMUNITY-SIGNAL].
-    - Now: Tokens and components live in code, and design tools copy from it, as most practitioners now work. As it grows: Real components can be tested automatically, but visual exploration becomes a second-class copy.
   - `design-file` In Figma, as variables: designers own tokens; fits a single web platform [DC-L07-08].
-    - Now: Figma variables are the master, and designers own the tokens. As it grows: Fits one web platform; Figma drops some color formats, so with more platforms the master should move to files. [inferred]
 - **Default:** `builder`: builder; design tools are mirrors: write to Figma through its remote MCP when a Full seat exists, otherwise emit one DTCG file per mode Figma imports natively; write to Paper through its MCP *Source:* card heuristics of L16 and L11 [DC-L16-02, DC-L11-16, DC-L16-13]; L07 prefers token-file (see Disagreements).
 - **Show:** a round-trip diagram: which targets are generated, which only mirror, and which direction sync runs.
 - **Skip:** yes, builder.
@@ -627,7 +576,7 @@ Area: `delivery` · zoom 3 detailed: 1 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-tool-04 · Should Figma components be linked to code for AI tools?
 Zoom 3 detailed · weight low · changes 0 decisions · class T · cards DC-L07-24
@@ -654,7 +603,7 @@ Screen: the overall look before any single foundation. Graph step 2-3. Cycle kep
 
 Zoom 3 (detailed) questions: `06-visual-direction.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-dir-01 · Which overall visual style fits the product?
 Zoom 1 broad · weight high · changes 13 decisions · class G · cards DC-L15-01
@@ -662,17 +611,11 @@ Zoom 1 broad · weight high · changes 13 decisions · class G · cards DC-L15-0
 - **Why:** The style preset sets depth, glass effects, corner radius, borders and color strength all at once. It steers 12 other choices (fan-out 12) [DC-L15-01].
 - **Options:**
   - `flat2` Flat 2.0: mostly flat surfaces, subtle shadows or tonal steps, clear signifiers; neutral, efficient, timeless (Carbon, Primer, Polaris, Fluent).
-    - Now: Mostly flat surfaces, subtle shadows or tone steps, and clear signs of what to click: neutral and efficient. As it grows: A durable base that ages well as screens pile up; keep neo-brutalist and maximal styles for marketing pages.
   - `tonal` Material tonal: tonal surface steps and dynamic color; friendly and systematic (M3; Expressive adds shapes and springs) [DC-L15-01].
-    - Now: Surfaces separate by soft color steps: friendly and systematic, like Material 3. As it grows: Needs 4-5 close gray steps and matches Android's own look as you add platforms. [inferred]
   - `glass` Glass: translucent controls and navigation only, 35% dimming under clear glass; premium and native on Apple, can obscure content (Liquid Glass, Fluent Acrylic).
-    - Now: See-through bars and controls over the content: premium and native on Apple, but it can hide content. As it grows: Every glass surface needs a solid version for people who reduce transparency or raise contrast; large blurs may also slow drawing. [inferred]
   - `neo-brutalist` Neo-brutalist: thick borders, solid 4px offset shadow, 2-3 bold colors, quirky display face; bold, indie, irreverent (Figma and Gumroad brands).
-    - Now: Thick borders, hard offset shadows and 2-3 bold colors: loud, indie and memorable. As it grows: Its solid borders go against a house standard, and research keeps it to marketing or indie products.
   - `soft` Soft 3D (neumorphic): extruded same-color surfaces with paired soft shadows; tactile but vague; offered only with a contrast warning.
-    - Now: Raised same-color surfaces with soft paired shadows: tactile but vague, and edges often fail contrast. As it grows: Every clickable part needs added borders to reach 3:1 contrast, which undoes much of the look. [inferred]
   - `maximal` Loud and busy (maximal): vibrant palettes, overlapping visuals, bold type; energetic but busy; marketing surfaces only.
-    - Now: Vibrant colors, overlapping visuals and bold type: energetic but busy. As it grows: Meant for marketing only; inside the app, the busyness grows with every screen. [inferred]
 - **Default:** `flat2`: flat2 with strong signifiers *Source:* card heuristic; keep the app on a durable base and reserve fashionable styles for marketing [DC-L15-01].
 - **Show:** one product screen (nav, card, form, table) rendered in each style, with contrast warnings on soft and glass.
 - **Use / avoid:** use flat 2.0 or tonal for app surfaces people use daily; use glass only on the functional layer (bars, controls, sheets) and never on reading surfaces; keep neo-brutalist and maximal for marketing or indie products; avoid soft/neumorphic for anything interactive unless borders are added to reach 3:1 [DC-L15-01; via DC-L10-12].
@@ -684,13 +627,9 @@ Zoom 1 broad · weight high · changes 8 decisions · class G · cards DC-L15-04
 - **Why:** Spacious screens look confident but slow down people who come back often. Compact screens look efficient but need strong grouping and clear signs of what you can click [DC-L15-04].
 - **Options:**
   - `comfortable` Comfortable: calmer, touch-friendly, consumer feel [DC-L08-13].
-    - Now: Calmer and touch-friendly, with room around each item. As it grows: A good base for app screens; data-heavy tables and lists can add a compact mode later.
   - `compact` Compact: serious, efficient, expert; more data per screen (Carbon table rows from 24px) [DC-L15-04].
-    - Now: More data per screen with tighter rows: looks efficient and expert. As it grows: Needs strong grouping and clear signs of what to click as screens fill; tap targets keep their minimum size.
   - `spacious` Spacious: calm, premium, focused message [DC-L15-04].
-    - Now: Lots of space: calm, premium and focused on one message. As it grows: Great for marketing and focused tasks, but it slows down people who come back often.
   - `user-selectable` Let people choose: default plus a compact mode (Atlassian `spacing="compact"`, Salesforce comfy/compact) [DC-L03-10].
-    - Now: A default density plus a compact mode people can switch on, like Atlassian and Salesforce. As it grows: Only data-heavy parts (tables, lists, menus, trees) need both sizes; targets never shrink in either mode.
 - **Default:** `comfortable`: comfortable for app surfaces, spacious for marketing, compact as a user option for data-heavy components (tables, lists, menus, trees) *Source:* card heuristic [DC-L15-04, DC-L08-13].
 - **Show:** a data table and a settings form at each density, with the target-size floor drawn so it visibly does not shrink [DC-L15-04].
 - **Use / avoid:** use compact for data-heavy components (tables, lists, menus, trees); use spacious for marketing and focused tasks; avoid shrinking targets with density; they stay at the floor in every mode [DC-L15-04, DC-L08-13].
@@ -731,7 +670,7 @@ Area: `overview` · zoom 3 detailed: 1 · visual: `assets/templates/option-galle
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-dir-05 · Should layouts line up on the side where reading starts, or be centered?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L15-08
@@ -757,7 +696,7 @@ Screen: which variations of the system exist. Graph step 0-2. Asked before color
 
 Zoom 3 (detailed) questions: `07-themes-and-modes.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-theme-01 · Which appearance modes does the product support?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L10-17, DC-L14-09
@@ -766,9 +705,9 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L10-1
 - **Options:**
   - `system-light-dark` Light and dark, matching the device setting: blends with the OS at night (Apple expects apps to respect the preference).
   - `light-dark-toggle` Light and dark, plus a switch in the app: web only, in addition to system-follow [DC-L10-17].
-  - `light-only` Light only [DC-L07-15]. (breaks STD-visual-details-24)
-  - `dark-only` Dark only (breaks STD-visual-details-24): brand colors glow, fewer and brighter accents (watch, TV, car at night) [DC-L14-09].
-- **Default:** `system-light-dark`: system-light-dark on every platform, a watch included (house standard STD-visual-details-24 gives each color role a light and a dark value; a watch app can still open in dark); day/night auto in cars *Source:* L09 shared default row 6 (21 of 25 systems) and platform convention [L09 A1; DC-L10-17, DC-L14-09].
+  - `light-only` Light only [DC-L07-15].
+  - `dark-only` Dark only: brand colors glow, fewer and brighter accents (watch, TV, car at night) [DC-L14-09].
+- **Default:** `system-light-dark`: system-light-dark on phone, tablet, desktop and web; dark-only on watch; day/night auto in cars *Source:* L09 shared default row 6 (21 of 25 systems) and platform convention [L09 A1; DC-L10-17, DC-L14-09].
 - **Show:** the draft screen split diagonally, light and dark.
 - **Use / avoid:** use system-following modes on Apple platforms; offer an in-app toggle only on web and only in addition; avoid an app-only appearance switch on Apple, which reads as broken [DC-L10-17].
 - **Skip:** yes.
@@ -795,7 +734,7 @@ Area: `modes` · zoom 3 detailed: 2 · visual: `assets/templates/palette.html`
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-theme-02 · Besides light and dark, which other theme switches should exist?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L07-15, DC-L11-25
@@ -837,7 +776,7 @@ Screen: one screen with four sections (brand input, strategy, ramps and neutrals
 
 Zoom 3 (detailed) questions: `08-color-system.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-color-01 · Do you have fixed brand colors, or should the builder generate the palette from one color?
 Zoom 0 sketch · weight high · changes 3 decisions · class E · cards DC-L09-03, DC-L01-09
@@ -845,13 +784,9 @@ Zoom 0 sketch · weight high · changes 3 decisions · class E · cards DC-L09-0
 - **Why:** Hand-picked colors keep the brand's exact feel; a seed color gives even shades. Contrast targets make text on every color easy to read, in a way you can predict [L09 divergence 6; DC-L09-03].
 - **Options:**
   - `keep-hex` Keep your exact brand colors and tune the shades by hand (Carbon, Primer, Atlassian, GOV.UK) [DC-L09-03].
-    - Now: Your exact brand colors stay, and a person tunes each shade by hand. As it grows: Keeps the brand's nuance, but every new color, mode or theme needs hand-tuning again. [inferred]
   - `seed` Generate from one seed color (Material HCT, Ant, Blade `createTheme`, Fluent brand ramp) [DC-L09-03].
-    - Now: One color generates even, matching shades for everything, like Material and Ant. As it grows: New colors and dark mode come out consistent; still check contrast, since Ant's own default blue fails with white text.
   - `seed-3` Generate from three inputs: brand color, neutral base and contrast (Linear replaced 98 per-theme variables with 3) [DC-L06-06].
-    - Now: Three inputs (brand color, gray base and contrast) generate the whole palette. As it grows: Easy to retheme later: Linear replaced 98 per-theme variables with these three.
   - `contrast-targets` Set each step by a contrast goal (Spectrum Leonardo, USWDS grades, Radix APCA steps) [DC-L09-03].
-    - Now: Each shade is set by a contrast goal, so text on every color stays readable. As it grows: Readability stays predictable across every new color and theme you add.
 - **Default:** seed-3 in OKLCH with contrast-checked steps; locked brand hexes are pinned to the nearest step, and the UI fill uses the step that reaches 4.5:1 with its text *Source:* card heuristics [DC-L09-03, DC-L06-06, DC-L01-09].
 - **Show:** the seed becomes ramps live; locked hexes show a pin on their step; a light brand color (yellow, cyan, lime) visibly switches its button text to dark (Spectrum does this) [S-L01-036].
 - **Use / avoid:** use the brand hex as a ramp anchor and pick UI steps by contrast; avoid using a brand color whose ratio with white is below 3:1 for small text; use it as a fill with dark text or as a tint [DC-L01-09].
@@ -864,15 +799,10 @@ Zoom 1 broad · weight high · changes 3 decisions · class G · cards DC-L06-04
 - **Why:** Where brand color goes (on actions only, on containers, or on whole surfaces) shapes the look. It is third on L09's (inferred) ranking of visual differences [L09 divergence 3; DC-L06-04].
 - **Options:**
   - `accent` Only on main actions, links, status and the selected tab: calm, content-first (Apple HIG, Carbon).
-    - Now: Brand color only on main buttons, links, status and the selected tab: calm and content-first. As it grows: Stays calm as screens multiply and suits Apple's glass look; each view gives the color to one key element.
   - `signature-surface` One standout area carries the brand: instantly recognizable silhouette (Slack aubergine sidebar).
-    - Now: One standout area, like Slack's purple sidebar, carries the brand: instantly recognizable. As it grows: Every new layout must keep room for that area, or the recognition fades. [inferred]
   - `flooded-chrome` Brand color on the app bars and floating buttons: playful, louder (M2 style, rated more playful).
-    - Now: Brand color on the app bars and floating buttons: louder and more playful. As it grows: Normal on Android, but on iOS 26 a tinted bar reads as dated and 'fighting the glass'. [inferred]
   - `content-layer` Brand color in the content, scrolling under glass controls: modern, dynamic (Apple 2026).
-    - Now: Brand color lives in the content, which scrolls under clear glass controls: modern, Apple 2026 style. As it grows: Each new screen needs colorful content to show the brand, and glass over bright content needs dimming for contrast. [inferred]
   - `neutral-first` Mostly gray, with a faint brand tint on bars and menus (Linear limited its blue there).
-    - Now: Mostly gray, with a faint brand tint on bars and menus, as Linear did with its blue. As it grows: Very calm at any size; the brand then relies on logo, type and words more than color. [inferred]
 - **Default:** `accent`: accent, with signature-surface optional; on Apple glass platforms brand color moves into content, on Android a brand seed, freer on web *Source:* card heuristics [DC-L06-04, DC-L10-04]; L09 shared pattern row 3 (neutral surfaces + one accent in all but one of 24 systems).
 - **Show:** the preview screen re-renders per option; on iOS, a tinted nav bar is flagged as "fighting the glass" [S-L10-009, S-L10-010].
 - **Use / avoid:** use brand color on the one element per view that matters most; avoid tinting several control backgrounds at once ("Using your brand color too broadly can overwhelm your interface").
@@ -884,15 +814,10 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L01-
 - **Why:** Color strength (chroma) sets how calm or lively the product feels. If all colors are strong, status colors lose their punch, because everything shouts [DC-L01-10].
 - **Options:**
   - `tonal` Tonal, low to medium color: friendly, balanced (Material TonalSpot, primary chroma 32-36).
-    - Now: Low to medium color: friendly and balanced, Material's default. As it grows: The safe default for work products: keep big surfaces soft and spend strong color on small, meaningful parts.
   - `monochrome` All gray or nearly gray: calm, premium, technical (Material Monochrome and Neutral variants, chroma 0 and 8-12; Polaris black brand).
-    - Now: All gray or nearly gray: calm, premium and technical, like Polaris's black brand. As it grows: Status colors stand out clearly because little else is colorful; charts still need their own colors. [inferred]
   - `vivid` Vivid: energetic, consumer-grade (Material Vibrant; Tailwind v4 P3-leaning OKLCH, blue-500 chroma 0.214).
-    - Now: Strong, saturated colors: energetic and consumer-grade. As it grows: As screens fill, everything shouts and status colors lose punch, so status also needs icons or words. [inferred]
   - `expressive` Hues turned away from the source color (Material Expressive).
-    - Now: Colors turned away from your brand hue: surprising and playful, like Material Expressive. As it grows: Your exact brand hue may barely appear, so recognition must come from other parts. [inferred]
   - `fidelity` Fidelity: the brand hue stays exact in containers; for hues that are a legal or recognition asset [DC-L06-05].
-    - Now: Your brand hue stays exact in containers and fills. As it grows: Best when the hue is a legal or recognition asset; light brand colors will need dark text on buttons.
 - **Default:** `tonal`: tonal for productivity products, vivid for consumer and marketing *Source:* card heuristic [DC-L01-10, DC-L06-05].
 - **Show:** a chroma slider under the five named stops; surfaces, accent and status chips update together.
 - **Use / avoid:** use low chroma on large areas (surfaces) and spend chroma on small, high-meaning elements (primary action, status, selection); avoid vivid surfaces in high-trust categories [DC-L01-10].
@@ -920,11 +845,8 @@ Zoom 2 defined · weight high · changes 5 decisions · class T · cards DC-L10-
 - **Why:** Taking colors from the device feels personal and native. But people remember the brand less, and screenshots look different for each user [DC-L10-05].
 - **Options:**
   - `static` Fixed brand color (Material static baseline; best for work apps and iOS).
-    - Now: Your brand colors stay fixed on every device; best for work apps and iOS. As it grows: Screenshots and brand recall stay the same for everyone as the product spreads. [inferred]
   - `dynamic-optional` Fixed, but people can turn on Android dynamic color (API 31+) [DC-L01-21].
-    - Now: Fixed brand colors by default; Android users can switch on colors from their wallpaper. As it grows: Brand and error colors stay fixed, but testing grows: each wallpaper and mode can change the colors.
   - `follow-os` Follow the device: Android dynamic color, Wear OS watch-face color, macOS accent.
-    - Now: Colors follow the wallpaper or device accent: personal and native. As it grows: Every user's screenshots differ and brand recall weakens; keep brand-critical and status colors fixed. [inferred]
 - **Default:** dynamic on Android for utility apps, fixed brand for brand-led consumer apps; brand-critical and status colors stay fixed; on Apple, design icon layers for all four icon looks *Source:* card heuristics [DC-L10-05, DC-L01-21].
 - **Show:** the Android preview recolored with three sample wallpapers; brand-critical colors stay put.
 - **Use / avoid:** let dynamic color own surfaces and secondary accents; avoid letting it change error and brand-critical colors [DC-L01-21].
@@ -950,13 +872,9 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L01-
 - **Why:** This decides how the page, cards and pop-ups stand apart: by shade steps, alternating layers or names by height. It also sets how dark mode shows depth [DC-L01-13].
 - **Options:**
   - `role-tiers` 4-5 layers named by job (base, raised, overlay, sunken), with their own colors in each mode [DC-L01-13].
-    - Now: 4-5 layers named by job (base, raised, overlay, sunken), each with its own light and dark color. As it grows: New parts pick a layer by its job, and dark mode shows depth with lighter surfaces, not glowing shadows.
   - `container-tiers` Named layers, not tied to shadow height: flat, calm, modern (Material 3 `surface-container-lowest` to `-highest`).
-    - Now: Named layers from lowest to highest, not tied to shadows: flat, calm and modern, like Material 3. As it grows: Works without shadows in both modes; clickable layers still need visible edges. [inferred]
   - `alternating` Alternating layers in light, stepping lighter in dark: crisp, grid-like enterprise (Carbon White/Gray 10, then Gray 100/90/80).
-    - Now: Layers alternate shades in light mode and step lighter in dark: crisp and grid-like, like Carbon. As it grows: Clear on dense enterprise screens; deep nesting needs care so layers don't blur together. [inferred]
   - `elevation-named` Layers named by height (Atlassian).
-    - Now: Layers named by height, like Atlassian's raised and overlay levels. As it grows: Names tie color to shadow height, so changing the depth style later touches both. [inferred]
 - **Default:** `role-tiers`: role-tiers; light mode separates with shadow or border plus a subtle tone, dark mode with lighter tones *Source:* card heuristic [DC-L01-13]; L09 shared pattern row 12.
 - **Show:** a page, card, popover and dialog stack in light and dark, with the tier of each labeled.
 - **Use / avoid:** use lighter-when-higher surfaces in dark mode; avoid separating interactive surfaces by tone alone when the edge carries meaning (needs 3:1) [DC-L01-13].
@@ -981,11 +899,8 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L01-
 - **Why:** AA allows mid-gray text for less important words and softer tints. AAA forces darker text and deeper accent colors [DC-L01-22].
 - **Options:**
   - `aa` WCAG 2.2 AA: text 4.5:1, large text 3:1, UI parts 3:1; no rounding (4.499:1 fails).
-    - Now: Text needs 4.5:1 contrast, large text and parts 3:1, which allows softer gray text and lighter tints. As it grows: Every new color pair is tested against it in every mode, at every build.
   - `aaa` WCAG 2.2 AAA: text 7:1, large text 4.5:1 (target for high-contrast themes: Primer, Material).
-    - Now: Text needs 7:1 contrast: darker gray text and deeper accents, which feels heavier and starker. [inferred] As it grows: Primer and Material keep it for high-contrast modes; applied everywhere, it limits every new color choice. [inferred]
   - `aa-apca` AA must pass, plus APCA as advice on body text (Radix and Geist use it) [DC-L01-22; L09 A1 row 11].
-    - Now: AA must pass, plus APCA advice on body text, as Radix and Geist do. As it grows: Keeps you at AA today and closer to WCAG 3, which is still a draft. [inferred]
 - **Default:** aa-apca: AA on all pairs in every mode, AAA for high-contrast modes, APCA advisory *Source:* accessibility rule [DC-L01-22]; WCAG 3 is still a draft [BOARD L01 note].
 - **Show:** the contrast matrix of all role pairs, pass/fail per mode, with the nearest passing step suggested for failures.
 - **Use / avoid:** test tokens as pairs, in every mode, at build time; avoid judging a single color by eye [DC-L01-22].
@@ -1014,7 +929,7 @@ Area: `color` · zoom 3 detailed: 9 · visual: `assets/templates/palette.html`
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-color-05 · How much of a screen may use accent color and emphasis?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L15-03
@@ -1035,17 +950,11 @@ Zoom 3 detailed · weight high · changes 6 decisions · class G · cards DC-L01
 - **Why:** In HSL, yellow at the same lightness looks lighter than blue. Perceptual or contrast-indexed ramps keep each step just as heavy in every color [DC-L01-01].
 - **Options:**
   - `oklch` OKLCH, perceptual (Tailwind v4 moved its palette to oklch in Jan 2025; CSS `oklch()` Baseline since May 2023).
-    - Now: Shades built so each step looks equally heavy in every color: the modern web method. As it grows: New colors slot in without shifting what looks important; contrast still gets checked after generation. [inferred]
   - `hct` HCT, numbered by tone: same tone gives the same brightness across hues (Material; tones 50 vs 98 give 3:1).
-    - Now: Material's method, numbered by tone, so the same tone gives the same brightness in every hue. As it grows: Needed if the system feeds Android dynamic color, and Material's tools read it on every platform.
   - `contrast-indexed` Steps set by contrast: every step has the same ratio across hues (Spectrum: every 700 is 3.01:1).
-    - Now: Every step has the same contrast in every color, like Spectrum's 700 steps. As it grows: Best if people can recolor the accent: every new accent passes the same text pairings.
   - `hand-tuned` Tuned by hand for each color: more character, less predictable (Tailwind 500 steps range L 62-77%).
-    - Now: Each color is tuned by hand: more character, less predictable. As it grows: Swapping or adding a hue can make buttons suddenly lighter or darker, so each one needs checking. [inferred]
   - `preset` Use a stock palette (Tailwind default, Radix Colors): a recognizable stock look.
-    - Now: A ready-made palette like Tailwind's or Radix's: fast, with a recognizable stock look. As it grows: Quick to extend, but your product shares its colors with many others. [inferred]
   - `lab-hsl` CIELAB/LCH or HSL: Lab was Stripe's 2019 fix; HSL is the legacy default that washes out yellows.
-    - Now: Older methods: Lab was Stripe's 2019 fix, and HSL washes out yellows and muddies blues. As it grows: HSL shades stay uneven with every color you add, so it is best avoided.
 - **Default:** `oklch`: OKLCH with contrast-indexed steps; HCT when the system must feed Material dynamic color *Source:* card heuristics [DC-L01-01, DC-L01-03, DC-L01-04].
 - **Show:** two accents side by side at the same step; switching the method shows whether they stay equally heavy, with the contrast of each step printed.
 - **Use / avoid:** use contrast-indexing when users can recolor the accent, so every accent passes the same pairings; avoid HSL-based lightness steps [DC-L01-03, DC-L01-01].
@@ -1127,11 +1036,8 @@ Zoom 3 detailed · weight high · changes 5 decisions · class G · cards DC-L01
 - **Why:** A mirrored mapping keeps what looks most important the same in every mode. Separate hand-tuned dark ramps look richer but drift [DC-L01-18].
 - **Options:**
   - `tone-reassign` Same colors, a new shade for each job (Material: primary 40 becomes 80, surface 98 becomes 6).
-    - Now: Same color families, with each job moved to a new shade in dark mode, like Material. As it grows: What looks most important stays the same in both modes as screens are added.
   - `mirrored` Mirrored ramp ("700 in light is 400 in dark") with separate dark neutrals (Atlassian).
-    - Now: A mirrored ramp (700 in light is 400 in dark) with separate dark grays, like Atlassian. As it grows: Each new color gets its dark version by role, and every pair is re-checked for contrast.
   - `separate` Separate dark scales with the same step jobs (Radix, Primer, Spectrum).
-    - Now: Separate hand-tuned dark scales, like Radix and Primer: richer darks. As it grows: Looks richer but drifts over time: every new color needs its own dark scale tuned. [inferred]
 - **Default:** shared hue ramps with a mirrored mapping plus separate dark neutral ramps; map by role, not by value *Source:* card heuristic [DC-L01-18].
 - **Show:** light and dark side by side with every pair re-checked; failing pairs light up in the contrast matrix.
 - **Use / avoid:** use role-based mapping so each token keeps its contrast relationship; avoid inverting colors [DC-L01-18].
@@ -1161,7 +1067,7 @@ Screen: the fine-grained color roles that follow from Stage 08, on the same live
 
 Zoom 3 (detailed) questions: `09-color-details-and-accessibility-modes.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-color-20 · How should hover and pressed states change color?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L01-17
@@ -1200,7 +1106,7 @@ Area: `color` · zoom 3 detailed: 5 · visual: `assets/templates/palette.html`
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-color-22 · How many text colors, and are they solid or transparent?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L01-14
@@ -1282,7 +1188,7 @@ Screen: which fonts, for which scripts. Graph step 2-4. Cycles kept together: DC
 
 Zoom 3 (detailed) questions: `10-typeface.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-type-01 · Should the product use the platform's font, a neutral open font, or your own brand typeface?
 Zoom 1 broad · weight high · changes 6 decisions · class T · cards DC-L09-05, DC-L02-01, DC-L06-07, DC-L10-06
@@ -1290,15 +1196,10 @@ Zoom 1 broad · weight high · changes 6 decisions · class T · cards DC-L09-05
 - **Why:** After color, the typeface may shape your brand's look the most; L09 infers this (L09 divergence 5). A system font feels native and fades away; a custom font is recognized at once [DC-L09-05].
 - **Options:**
   - `system` The device's built-in font: SF Pro, Roboto, Segoe UI Variable; native, content leads (Apple, Fluent, Ant, Radix, Mantine, SLDS) [; DC-L09-05].
-    - Now: Each device's own font, such as SF Pro or Roboto: native and invisible, so content leads. As it grows: Nothing to load or license, and native text-size settings work for free; the brand must show elsewhere.
   - `open-neutral` A free, plain font: the neutral SaaS look (Inter: Polaris, Chakra, Paste, Linear; Roboto: Material) [DC-L09-05].
-    - Now: A free, plain font like Inter: the neutral SaaS look. As it grows: Looks the same on every platform with no license cost, but many products share it. [inferred]
   - `open-custom` A free font with character: IBM Plex, Geist, Public Sans, Mona Sans [DC-L09-05].
-    - Now: A free font with character, like IBM Plex or Geist: recognizable without license fees. As it grows: Consistent across platforms; native apps must bundle it and support text-size settings themselves. [inferred]
   - `brand-display` Brand font for headlines, system font for body (Apple's advice).
-    - Now: Your brand font for headlines and the system font for body text, as Apple advises. As it grows: Headlines stay recognizable while small text stays legible on every new platform.
   - `brand-everywhere` Your own brand font everywhere: Uber Move, Adobe Clean, Cereal, Spotify Mix [DC-L09-05].
-    - Now: Your own font everywhere, like Uber Move or Airbnb Cereal: the strongest identity. As it grows: Every platform must bundle it and rebuild text scaling; keep it out of body text if it looks weak at 13 pt.
 - **Default:** `system`: system for productivity and internal tools; on native platforms any brand face goes in display roles only *Source:* card heuristics [DC-L02-01, DC-L10-06]; L09 suggests Inter or the system stack for a neutral start [DC-L09-05].
 - **Show:** the same screen set in each option, side by side with the OS chrome, so the "foreign next to OS chrome" effect is visible [DC-L02-01].
 - **Use / avoid:** use system fonts when the product lives inside another OS's chrome; use a brand face when recognition is a stated goal; avoid a brand face in body text if it needs size bumps to match system legibility at 13pt [DC-L02-01, DC-L10-06].
@@ -1361,7 +1262,7 @@ Area: `typography` · zoom 3 detailed: 3 · visual: `assets/templates/type-scale
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-type-05 · One type family, or a pair?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L02-03
@@ -1396,11 +1297,8 @@ Zoom 3 detailed · weight high · changes 5 decisions · class G · cards DC-L02
 - **Why:** Optical sizing makes small text sturdier and large text sleeker. Without it, big headings set in the body version of a font look clunky [DC-L02-04].
 - **Options:**
   - `variable-opsz` Variable weight plus optical size tied to font size (SF Pro, Segoe UI Variable 8-36pt, Inter opsz 14-32; Material sets opsz = font size).
-    - Now: Weights plus letter shapes that adjust to size: sturdier small text and sleeker headings. As it grows: Every new size looks right on its own where the font supports it; otherwise heading spacing is set by hand.
   - `static` Static fonts, set weights only (Roboto as applied by M3 components).
-    - Now: Fixed weights only, such as regular and bold: simplest, and works with any font. As it grows: Big headings need tighter letter spacing and line heights set by hand, since letters don't reshape by size.
   - `variable-wght` Variable weight, with in-between weights (Polaris 450/550/650).
-    - Now: In-between weights, like Polaris's 450 and 550, for finer steps of emphasis. As it grows: New text styles can use finer emphasis steps without adding font files. [inferred]
 - **Default:** `variable-opsz`: variable-opsz when the face has it; otherwise separate display tracking and line-height values above about 24px *Source:* card heuristic [DC-L02-04].
 - **Show:** a size ramp from 11px to 64px with opsz on and off.
 - **Use / avoid:** use opsz tied to size; avoid setting display sizes in a text cut without tracking adjustments [DC-L02-04, DC-L02-14].
@@ -1417,7 +1315,7 @@ Screen: sizes, line heights, weights and text behavior, on a live type ladder ne
 
 Zoom 3 (detailed) questions: `11-type-scale-and-text.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-type-08 · What size should body text be?
 Zoom 2 defined · weight medium · changes 3 decisions · class G · cards DC-L02-08
@@ -1441,7 +1339,7 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L02-2
 - **Options:**
   - `capped-chrome` Full for content, capped at about 1.5x for fixed parts like tab labels [DC-L10-07].
   - `full` Full scaling, no cap on body text: iOS AX1-AX5, Android nonlinear to 200%, web rem.
-  - `none` No scaling support (breaks STD-accessibility-motion-13): fails platform guidance (Apple asks for at least 200%).
+  - `none` No scaling support: fails platform guidance (Apple asks for at least 200%).
 - **Default:** `capped-chrome`: capped-chrome, with every text token in scalable units and no fixed-height text containers *Source:* platform convention and accessibility rule [DC-L10-07, DC-L02-21].
 - **Show:** a list row and a tab bar at default, 200% and AX5, restacking live.
 - **Use / avoid:** use containers that grow with text; avoid truncating at the largest sizes [DC-L02-21, DC-L10-07].
@@ -1456,7 +1354,7 @@ Area: `typography` · zoom 3 detailed: 8 · visual: `assets/templates/type-scale
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-type-15 · Should text sizes change with screen width?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L02-19
@@ -1535,7 +1433,7 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L02-
 - **Options:**
   - `size-table` A size-specific table (SF Pro: +41/1000 em at 6pt, 0 at 12pt, -26/1000 em at 17pt), applied automatically by the OS.
   - `per-style` Per-style tracking tokens (Material: Display Large -0.2sp, Body Large 0.5sp).
-  - `zero` No extra letter spacing beyond the font's defaults [DC-L02-14]. (breaks STD-visual-details-04, STD-visual-details-05)
+  - `zero` No extra letter spacing beyond the font's defaults [DC-L02-14].
 - **Default:** 0 at body sizes, +0.02 to +0.05em at 11-12px and all caps, -0.01 to -0.02em from about 32px, in em units *Source:* card heuristic [DC-L02-14].
 - **Show:** a headline and an all-caps label with tracking on and off.
 - **Use / avoid:** use em-based tracking so it scales; let optical-size fonts do most of the work; avoid tracking non-Latin scripts [DC-L02-14, DC-L02-25].
@@ -1546,7 +1444,7 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L02-
 - **Ask:** "How wide can paragraphs get, and how should long text be cut off?"
 - **Why:** Very long lines make readers lose their place. Centered or justified text (stretched to both edges) slows reading [DC-L02-17, DC-L02-18].
 - **Options:**
-  - `measure-45-75` 45-75 characters (Bringhurst) or 50-60 (Windows); WCAG 1.4.8 AAA caps at 80, 40 for CJK. (breaks STD-visual-details-01)
+  - `measure-45-75` 45-75 characters (Bringhurst) or 50-60 (Windows); WCAG 1.4.8 AAA caps at 80, 40 for CJK.
   - `wrap-then-ellipsis` Wrap first, then cut off with an ellipsis (...) and a way to read it all [DC-L02-18].
   - `para-1x` Paragraph spacing equal to the body size (Atlassian body 12px, body large 16px) [DC-L02-16].
   - `text-box-trim` Trim half-leading so spacing measures from cap height (CSS `text-box: trim-both`) [DC-L02-16].
@@ -1581,7 +1479,7 @@ Screen: the spacing scale, target sizes and control heights, shown on a live com
 
 Zoom 3 (detailed) questions: `12-space-sizing-and-density.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-space-01 · What should the base spacing unit be?
 Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-01
@@ -1589,13 +1487,9 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-
 - **Why:** The base unit sets the smallest step you can see between two spacings. 8 gives chunky, calm steps; 4 gives finer control [DC-L03-01].
 - **Options:**
   - `4-grid-8-rhythm` 4 as the grid, 8 as the rhythm: named on an 8 base with 2, 4, 6, 12 kept for internals (Material 3, Atlassian, Spectrum).
-    - Now: Spacing named in steps of 8, with 2, 4 and 6 kept for small gaps inside components. As it grows: What Material 3, Atlassian and Spectrum ship; 24, 44 and 48 px targets build from whole steps.
   - `4` 4 throughout (Fluent 2, Polaris, Primer, Tailwind `--spacing: 0.25rem`).
-    - Now: Steps of 4 everywhere: finer control and a more compact, tool-like feel. As it grows: Suits dense, data-heavy tools; with many close steps, people may pick gaps that look almost the same. [inferred]
   - `8` 8 with few sub-steps (Carbon's 8px mini unit).
-    - Now: Steps of 8 with few in-between: chunky, calm and clearly different gaps. As it grows: Rhythm stays obvious on marketing and content pages; tight spots like icon labels may need exceptions. [inferred]
   - `rem-16` 16px rem-based (Bootstrap `$spacer: 1rem`) [DC-L03-01].
-    - Now: Spacing in rem units based on 16 px, like Bootstrap, so it follows the person's text-size setting on the web. As it grows: Spacing grows when people enlarge text; native apps convert it to their own point and dp units. [inferred]
 - **Default:** 4-grid-8-rhythm *Source:* L09 shared default row 2 (4px base, 17 of 22 systems contain the 4-64 ladder) and card heuristic [L09 A1; DC-L03-01].
 - **Show:** a card, form and toolbar with spacing overlays; hovering any gap shows its token and value.
 - **Use / avoid:** use the 2/4/6 sub-steps inside components (icon-to-label, chip padding); avoid them between layout sections [DC-L03-01, DC-L03-04].
@@ -1607,11 +1501,8 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-
 - **Why:** Steps that grow in bigger jumps (hybrid or doubling) make levels of spacing easy to see at a glance. Even steps that sit close together get used in mixed-up ways [DC-L03-02].
 - **Options:**
   - `hybrid` Fine at the bottom, coarse at the top: 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80 (Atlassian's exact set; Carbon similar to 160).
-    - Now: Small steps at the bottom and bigger jumps at the top: tight inside groups, loose between them. As it grows: About 12-15 steps cover app and marketing pages, with the big top steps kept for page sections.
   - `linear` Even 4px steps (Tailwind open-ended, Fluent to 56, Primer to 48).
-    - Now: Even 4 px steps: many choices close together. As it grows: Near-identical gaps like 20, 24 and 28 creep in and read as inconsistency.
   - `geometric` Doubling: 2, 4, 8, 16, 32, 64 (Curtis: linear offers "too many choices too close together").
-    - Now: Each step doubles (2, 4, 8, 16, 32, 64): very clear levels. As it grows: Grouping reads instantly, but big jumps may leave no good size for some layouts. [inferred]
 - **Default:** `hybrid`: hybrid, 12-15 steps *Source:* card heuristic [DC-L03-02]; L09 shared default row 2 (0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96).
 - **Show:** the scale as bars; dragging a step shows where it is used on the component sheet.
 - **Use / avoid:** keep adjacent steps at least about 25% apart above 8px so the difference is visible; avoid adding steps nobody can tell apart [DC-L03-02].
@@ -1666,7 +1557,7 @@ Area: `layout` · zoom 3 detailed: 5 · visual: `assets/templates/spacing-ruler.
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-space-09 · Who controls density, and how is it stored?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L03-10, DC-L03-11, DC-L14-13
@@ -1748,7 +1639,7 @@ Screen: how pages reorganize across widths, shown on a resizable frame the perso
 
 Zoom 3 (detailed) questions: `13-layout-navigation-and-app-shell.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-layout-01 · At which widths should layouts reorganize?
 Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-14
@@ -1756,13 +1647,9 @@ Zoom 2 defined · weight high · changes 5 decisions · class G · cards DC-L03-
 - **Why:** At each breakpoint the layout changes: panes appear, the menu swaps and columns double [DC-L03-14].
 - **Options:**
   - `material` Material width breakpoints 600 / 840 / 1200 / 1600dp plus height classes 480 / 900 (Android and web).
-    - Now: Layouts change at 600, 840, 1200 and 1600: works for Android and the web. As it grows: One set shared across platforms; Material notes some products never need the largest sizes.
   - `tailwind` Tailwind 640 / 768 / 1024 / 1280 / 1536 (web-only products).
-    - Now: Layouts change at 640, 768, 1024, 1280 and 1536: the common web-only set. As it grows: Fine while you stay on the web; adding native apps later means mapping to their own size classes. [inferred]
   - `bootstrap` Bootstrap 576 / 768 / 992 / 1200 / 1400.
-    - Now: Layouts change at 576, 768, 992, 1200 and 1400: Bootstrap's set. As it grows: Familiar to Bootstrap teams; more breakpoints mean smoother changes but more design and testing. [inferred]
   - `apple-size-classes` Apple size classes, compact or regular for width and height, set by the system.
-    - Now: The system reports compact or regular width and height, and the layout follows that. As it grows: Handles any iPad window size, because layout follows window size, never device type.
 - **Default:** `material`: material for cross-platform products, tailwind for web-only; web values in rem; design compact first *Source:* card heuristic [DC-L03-14]; BOARD L03 note (Material renamed window size classes to breakpoints, May 2026).
 - **Show:** the resizable frame with breakpoint ticks; the layout snaps at each one.
 - **Use / avoid:** decide layout by window size, never by device type or orientation [DC-L10-10]; avoid breakpoints that only nudge padding.
@@ -1805,7 +1692,7 @@ Area: `layout` · zoom 3 detailed: 3 · visual: `assets/templates/spacing-ruler.
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-layout-02 · Should layouts stretch fluidly, switch between fixed designs, or both?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L03-22, DC-L10-10
@@ -1858,7 +1745,7 @@ Screen: corner radius, on a live component sheet (button, input, card, dialog, m
 
 Zoom 3 (detailed) questions: `14-shape.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-shape-01 · How soft should corners feel?
 Zoom 1 broad · weight high · changes 4 decisions · class G · cards DC-L09-01, DC-L04-02
@@ -1866,15 +1753,10 @@ Zoom 1 broad · weight high · changes 4 decisions · class G · cards DC-L09-01
 - **Why:** In L09's (inferred) ranking, corner radius is what differs most in how systems look (divergence 1). Every 2025-2026 update got rounder [DC-L09-01; L09 A2].
 - **Options:**
   - `square` 0-2px: official, engineered (GOV.UK, Carbon v11 buttons) [DC-L09-01, DC-L04-02].
-    - Now: Corners of 0-2 px: official and engineered, like GOV.UK and Carbon. As it grows: Sharp corners become a deliberate brand choice, since even Carbon is adding roundness; iOS rounds its own controls anyway. [inferred]
   - `subtle` 4-6px: businesslike (Fluent 4, Primer and Atlassian 6).
-    - Now: Corners of 4-6 px: businesslike, like Primer and Atlassian. As it grows: The safest default across audiences; containers get 8-12 px, and focus rings follow the corners.
   - `soft` 8-12px: friendly, modern (Polaris, Paste, Blade, Mantine v9 8px; Airbnb 12px) [DC-L09-01].
-    - Now: Corners of 8-12 px: friendly and modern, like Polaris and Airbnb. As it grows: Nested cards need matching inner corners, which iOS expects and the web must work out itself. [inferred]
   - `pill` Pill: consumer, playful, touch-first (Material 3, Spectrum 2, SLDS Cosmos; iOS 26 capsule controls) [DC-L09-01].
-    - Now: Fully round ends: consumer, playful and touch-first, like Material 3 and iOS 26. As it grows: Needs taller controls, so it fits poorly on dense, short controls in data tools.
   - `rule-based` Set by size (Spectrum 6-10 by size) or matched to the container's corners (Apple) [DC-L09-01].
-    - Now: Corners set by size, like Spectrum's 6-10 px, or matched to the container, as Apple does. As it grows: New parts get the right corner from their size or container, without a new decision. [inferred]
 - **Default:** 6px controls, 8-12px containers *Source:* L09 shared default row 7 (16 of 23 control defaults at 4-8px, median 6) [L09 A1; DC-L09-01]; a radius factor slider as Radix offers.
 - **Show:** the component sheet morphing as the slider moves; the focus ring follows the radius.
 - **Use / avoid:** use sharp corners when density and precision are brand values (data, developer tools) and pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
@@ -1889,7 +1771,7 @@ Area: `shape` · zoom 3 detailed: 4 · visual: `assets/templates/radius.html`
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-shape-05 · Should a signature shape from your brand appear in the UI?
 Zoom 3 detailed · weight medium · changes 2 decisions · class D · cards DC-L06-09
@@ -1957,7 +1839,7 @@ Screen: how surfaces separate and float, on a live stack (page, card, menu, dial
 
 Zoom 3 (detailed) questions: `15-depth-borders-and-materials.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-depth-01 · How should surfaces separate from each other?
 Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-02, DC-L04-10, DC-L08-15
@@ -1965,15 +1847,10 @@ Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-02
 - **Why:** Shadows feel real to the touch, color steps feel calm, borders feel technical, and glass feels premium. In L09's (inferred) ranking, this is the second biggest way systems differ in look (divergence 2) [DC-L09-02].
 - **Options:**
   - `shadow` Shadow ladder: tactile, layered (Fluent dual shadows, Polaris 7 levels, Tailwind 7) [DC-L09-02].
-    - Now: A ladder of shadows: tactile and clearly layered, like Fluent and Polaris. As it grows: Best kept for things that float, like menus and dialogs; static cards can use color steps instead.
   - `tonal` Tonal layers: flat, calm, color-forward (Carbon layers, Material surface containers, Linear) [DC-L09-02].
-    - Now: Layers separate by color steps: flat, calm and color-forward, like Carbon and Linear. As it grows: Suits data-dense tools; needs 4-5 close gray steps, and clickable card edges need 3:1 contrast.
   - `borders` Borders only: dense, technical (GOV.UK, Primer) [DC-L09-02].
-    - Now: Thin lines only: dense and technical, like GOV.UK and Primer. As it grows: A house standard prefers see-through shadows to solid borders, and clickable card edges need 3:1 contrast.
   - `ring-shadow` 1px ring plus soft shadow (Radix, Geist, Chakra, Airbnb) [DC-L09-02].
-    - Now: A faint 1 px ring plus a soft shadow: crisp edges, like Radix, Geist and Airbnb. As it grows: Matches the house standard's see-through edges; in dark mode, lighter surfaces replace shadows.
   - `glass` Materials and glass: premium, content-first (Apple Liquid Glass, Airbnb) [DC-L09-02].
-    - Now: Frosted, see-through materials: premium and content-first, like Apple's Liquid Glass. As it grows: Every glass surface needs a solid version for people who reduce transparency or raise contrast; large blurs may also slow drawing. [inferred]
 - **Default:** in-page containers flat with a border or tinted fill; shadows only for things that float (menus, popovers, dialogs, drag states); in light mode a 1px ring plus soft shadow, in dark mode a lighter surface per level *Source:* card heuristics [DC-L04-10, DC-L08-15]; L09 shared pattern row 12.
 - **Show:** the live stack re-rendered per option, light and dark.
 - **Use / avoid:** use tonal or borders for data-dense tools; avoid shadows on static in-page cards when the same color steps would do [DC-L09-02, DC-L04-10].
@@ -1984,9 +1861,9 @@ Zoom 2 defined · weight medium · changes 2 decisions · class T · cards DC-L0
 - **Ask:** "Should menus, bars and pop-ups be see-through glass, or stay solid?"
 - **Why:** Glass looks premium and matches 2025-26 operating systems, and keeps what is behind in view. The cost is lower contrast that shifts with the background [DC-L04-15, DC-L10-12].
 - **Options:**
-  - `none` Opaque surfaces (breaks STD-visual-details-16): most legible and cheapest [DC-L04-15].
+  - `none` Opaque surfaces: most legible and cheapest [DC-L04-15].
   - `control-layer` Glass on navigation and controls only, never on content (Apple Liquid Glass: regular for text-heavy parts, clear over media with a 35% dim).
-  - `transient` See-through menus and flyouts only; Mica for the window base (Fluent Acrylic). (breaks STD-visual-details-16)
+  - `transient` See-through menus and flyouts only; Mica for the window base (Fluent Acrylic).
   - `decorative` Decorative glass effect on cards: flagged for legibility (NN/g) [DC-L04-15].
 - **Default:** platform material for native chrome (glass on Apple, Mica on Windows, tonal surfaces on Android); opaque on web with optional blur plus an opaque fallback; content edge-to-edge under the bars with inset-aware components *Source:* platform convention [DC-L10-12, DC-L10-11, DC-L04-15].
 - **Show:** the toolbar and a sheet over a busy photo with live contrast readouts; the opaque fallback shown beside it.
@@ -2002,7 +1879,7 @@ Area: `elevation` · zoom 3 detailed: 4 · visual: `assets/templates/elevation.h
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-depth-02 · How many elevation levels, and how do they look in dark mode?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-11, DC-L04-13
@@ -2071,7 +1948,7 @@ Screen: motion feel on live interactions the person can trigger (open a menu, na
 
 Zoom 3 (detailed) questions: `16-motion-haptics-and-sound.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-motion-01 · Should motion feel quick and quiet, or physical and playful?
 Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-06, DC-L04-19, DC-L06-10
@@ -2079,26 +1956,21 @@ Zoom 1 broad · weight high · changes 5 decisions · class G · cards DC-L09-06
 - **Why:** Motion sets how lively the product feels (L09 divergence 7). Short, smooth moves feel efficient, bouncy springs feel alive, and no motion feels still but calm [DC-L09-06].
 - **Options:**
   - `two-mode` Plain for most actions, bold for 1-3 key moments per flow (Carbon expressive; Material standard vs expressive schemes) [DC-L04-19].
-    - Now: Quick, plain motion for most actions, with bolder motion kept for a few key moments. As it grows: Bold moments stay rare, like onboarding or a first success; daily actions stay quick and quiet, and core navigation doesn't animate.
   - `none` Minimal motion (GOV.UK) [DC-L09-06].
-    - Now: Almost nothing moves; press feedback and quick fades that explain a change stay. Still and calm, like GOV.UK. As it grows: Stays consistent as screens grow, but rare moments like a first success get no extra life. [inferred]
   - `productive` Quick, plain curves: fast, competent, no bounce (Carbon productive `cubic-bezier(0.2, 0, 0.38, 0.9)`).
-    - Now: Quick, plain movements with no bounce: fast and competent. As it grows: Fits frequent actions as features grow; things done 100+ times a day still get no animation at all.
-  - `springs` Springs throughout (breaks STD-springs-gestures-01): alive, physical, interruptible (Material spring tokens, Apple duration + bounce, Airbnb) [DC-L09-06].
-    - Now: Movement feels physical and can be caught mid-way; bounce stays for flicks, drags and rare playful moments, per house standards. As it grows: Springs drive whatever a finger moves; motion nobody touched keeps plain timing curves, and the web needs a JavaScript spring library.
-- **Default:** `two-mode`: two-mode: 7 durations 50-500ms, ease-out to enter and to exit (never ease-in on UI: house standards STD-easing-duration-01 and -03), springs only for spatial moves in the expressive mode, bounce at or below 0.2 *Source:* L09 shared default row 5 (all 16 systems with motion tokens stay in 100-300ms) and card heuristics [DC-L09-06, DC-L04-19]; capped at productive when Q-aud-02 is high-trust.
+  - `springs` Springs throughout: alive, physical, interruptible (Material spring tokens, Apple duration + bounce, Airbnb) [DC-L09-06].
+- **Default:** `two-mode`: two-mode: 7 durations 50-500ms, ease-out to enter, ease-in to exit, springs only for spatial moves in the expressive mode, bounce at or below 0.2 *Source:* L09 shared default row 5 (all 16 systems with motion tokens stay in 100-300ms) and card heuristics [DC-L09-06, DC-L04-19]; capped at productive when Q-aud-02 is high-trust.
 - **Show:** the live interactions replay on every change, with a slow-motion button.
 - **Use / avoid:** use expressive motion for page transitions, the primary action and alerts; avoid bounce on everyday controls and in high-trust products [DC-L06-10, DC-L04-19].
 - **Skip:** yes.
 
 ## Q-motion-07 · What happens when people ask for reduced motion, and how much motion fits each device?
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L04-25, DC-L14-08
-- **Settled by:** STD-accessibility-motion-02: Under reduced motion, remove movement (translation, scale, slides, springs, parallax, elastic and overshoot) and replace it with a short opacity cross-fade (the sources use 200ms, ease) or a static transition, while keeping the opacity and color changes that explain a state change; never remove all animation or feedback. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
 - **Ask:** "When someone turns on reduced motion, should things fade gently or stop moving?"
 - **Why:** A good reduced motion mode still feels polished, with crossfades instead of jumps. Where people have less attention to spare, motion shrinks, down to none in cars [DC-L04-25, DC-L14-08].
 - **Options:**
   - `replace` Replace movement with fades and color changes (MDN; WCAG's motion rule leaves out color, blur and opacity).
-  - `remove` Remove all non-essential motion (WCAG 2.3.3 AAA, technique C39) [DC-L04-25]. (breaks STD-accessibility-motion-02)
+  - `remove` Remove all non-essential motion (WCAG 2.3.3 AAA, technique C39) [DC-L04-25].
   - `per-device` Per device: system transitions plus brand micro-motion on phone and desktop; subtle focus scale on TV; minimal on watch; none in cars; slow and grounded in headsets [DC-L14-08].
 - **Default:** `replace`: replace, built as a token mode; 2.3.3 treated as a requirement although it is AAA; per-device budgets applied *Source:* accessibility rule and card heuristics [DC-L04-25, DC-L14-08].
 - **Show:** the reduced-motion toggle on every live interaction.
@@ -2112,7 +1984,7 @@ Zoom 2 defined · weight medium · changes 0 decisions · class D · cards DC-L0
 - **Options:**
   - `silent` Silent by default (most web systems; tvOS plays no alert sounds).
   - `rare-events` Sounds for rare, meaningful events, always behind mute and silent mode.
-  - `sound-forward` Lots of sound (games, spatial computing) [DC-L04-27]. (breaks STD-springs-gestures-61)
+  - `sound-forward` Lots of sound (games, spatial computing) [DC-L04-27].
 - **Default:** `silent`: silent on web and productivity apps *Source:* card heuristic [DC-L04-27].
 - **Show:** the event list with a play button per sound and the mute state.
 - **Use / avoid:** use sound only for rare, meaningful events that honor silent mode; avoid sounds on web and in shared-space products [DC-L04-27].
@@ -2128,18 +2000,17 @@ Area: `motion` · zoom 3 detailed: 7 · visual: `assets/templates/motion.html`
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-motion-04 · How should springs be defined and exported?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L04-22
-- **Settled by:** STD-springs-gestures-02: Specify each spring with two designer parameters, damping ratio (or bounce) and response (or duration), rather than mass, stiffness and damping, and never treat response as a fixed duration; STD-springs-gestures-04: Default every UI spring to critically damped (damping ratio 1.0, no overshoot) with a response of 0.3–0.4 s, and move or reposition elements with damping 1.0 and response 0.4 s; only a spring that follows a momentum gesture (STD-springs-gestures-06) or a deliberately playful or decorative moment (STD-springs-gestures-07, STD-springs-gestures-45) may be under-damped. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
 - **Show if:** Q-motion-01 is two-mode or springs
 - **Ask:** "How should springy motion be set up: time and easing only, spring physics, or Apple's bounce?"
 - **Why:** Spring animations keep their speed when cut off and come to rest in a natural way. The DTCG format has no spring type, so how you store them matters [DC-L04-22; BOARD L04/L07 note].
 - **Options:**
-  - `durations-only` Duration + easing only (Carbon, Fluent, Polaris, Primer). (breaks STD-springs-gestures-01)
-  - `spatial-effects` Two kinds of spring. Moves may overshoot; color and fade effects never do (Material fast/default/slow). (breaks STD-springs-gestures-04, STD-springs-gestures-05)
-  - `apple-bounce` Duration + bounce 0 / 0.15 / 0.3 (Apple) [DC-L09-06]. (breaks STD-springs-gestures-04)
+  - `durations-only` Duration + easing only (Carbon, Fluent, Polaris, Primer).
+  - `spatial-effects` Two kinds of spring. Moves may overshoot; color and fade effects never do (Material fast/default/slow).
+  - `apple-bounce` Duration + bounce 0 / 0.15 / 0.3 (Apple) [DC-L09-06].
 - **Default:** (dampingRatio, stiffness) plus derived (duration, bounce) for Apple and pre-sampled `linear()` for CSS; critically damped springs for effects *Source:* card heuristic [DC-L04-22].
 - **Show:** a switch and a sheet driven by the spring, dragged and released mid-flight.
 - **Use / avoid:** use springs for spatial moves; avoid overshoot on color and opacity [DC-L04-22].
@@ -2147,13 +2018,12 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L
 
 ## Q-motion-02 · Which durations should exist, and should exits be faster?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-20, DC-L04-24
-- **Settled by:** STD-easing-duration-07: Time each UI animation within its element's budget: button press feedback 100-160ms, tooltips and small popovers 125-200ms, dropdowns and selects 150-250ms, modals and drawers 200-500ms; on iOS and Android, press feedback 100-150ms, toggles, chips and small state changes 150-200ms, and sheets, modals and drawers a spring of about 300ms perceived; STD-easing-duration-11: Make exits faster than entrances, typically about 20% shorter (a 300ms toast entrance leaves in 250ms), rather than at the same speed. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
 - **Ask:** "How many animation lengths should there be, and should things leave faster than they arrive?"
 - **Why:** Past about 500ms, motion starts to feel slow. Quick exits that people can cut short respect their time [DC-L04-20, DC-L04-24].
 - **Options:**
-  - `6-steps` 6 steps (breaks STD-easing-duration-06, STD-easing-duration-07): instant 0, micro 100, short 150-200, medium 250-300, long 400-500, extra 700 [DC-L04-20].
+  - `6-steps` 6 steps: instant 0, micro 100, short 150-200, medium 250-300, long 400-500, extra 700 [DC-L04-20].
   - `4-semantic` 4 steps: micro, short, medium, long (Primer).
-  - `16-steps` 16 steps (Material 3). (breaks STD-easing-duration-06, STD-easing-duration-07)
+  - `16-steps` 16 steps (Material 3).
   - `asymmetric` Exits 20-35% shorter than entrances (Atlassian modal 250/200; Primer 300/200).
 - **Default:** `6-steps`: 6 steps; exits about 70-80% of the entrance; motion is interruptible and never blocks input longer than about 100ms *Source:* card heuristics [DC-L04-20, DC-L04-24]; Apple: "don't make people wait for an animation to complete".
 - **Show:** a timeline of each transition with its duration; clicking mid-animation shows retargeting.
@@ -2161,17 +2031,16 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-
 - **Skip:** yes.
 
 ## Q-motion-03 · Which easing curves?
-Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-21, DC-L19-85
-- **Settled by:** STD-easing-duration-01: Choose each animation's easing by asking in order whether it enters or exits the screen (ease-out), moves or morphs on screen (ease-in-out), is a hover or color change (ease), or is constant motion such as a spinner, marquee or progress fill (linear), and use ease-out when none applies. Never put linear on an entrance, and put bare ease on one only when the component's personality calls for it, as the toast recipe does (STD-easing-duration-13); STD-easing-duration-02: Use the strong custom curves cubic-bezier(0.23, 1, 0.32, 1) for ease-out and cubic-bezier(0.77, 0, 0.175, 1) for ease-in-out instead of the built-in CSS or Reanimated easings (only the ease and linear keywords stay allowed), and take any other curve from easing.dev or easings.co rather than hand-rolling one. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
+Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L04-21
 - **Ask:** "How should speed-up and slow-down curves be grouped: by job, strength or mood?"
 - **Why:** Easing curves that slow down hard make things feel fast as they arrive. Curves named by job are the easiest to use the same way everywhere [DC-L04-21].
 - **Options:**
-  - `role-based` By job: entering or leaving, moving on screen, hover and color, constant motion; one curve each, the house set. Carbon, Primer and Windows also name curves by role (standard / enter / exit).
-  - `intensity-based` Min / mid / max intensity (Fluent). (breaks STD-easing-duration-01, STD-easing-duration-02)
-  - `personality-based` Practical vs bold (Atlassian); productive vs expressive (Carbon). (breaks STD-easing-duration-01, STD-easing-duration-02)
-- **Default:** `role-based`: by job, one curve each: ease-out cubic-bezier(0.23, 1, 0.32, 1) for entering and leaving, cubic-bezier(0.77, 0, 0.175, 1) for moves on screen, CSS `ease` for hover and color changes, the drawer curve cubic-bezier(0.32, 0.72, 0, 1) for drawers and sheets, linear only for spinners and progress; no ease-in anywhere *Source:* house standards STD-easing-duration-01, STD-easing-duration-02, STD-easing-duration-03 and STD-components-toasts-drawers-40 [DC-L19-85]; replaces the accelerate exit (0.3, 0, 1, 1) of DC-L04-21.
+  - `role-based` Standard / enter / exit (Carbon, Primer, Windows).
+  - `intensity-based` Min / mid / max intensity (Fluent).
+  - `personality-based` Practical vs bold (Atlassian); productive vs expressive (Carbon).
+- **Default:** standard (0.2, 0, 0, 1), enter (0, 0, 0, 1) or (0.05, 0.7, 0.1, 1), exit (0.3, 0, 1, 1), linear only for spinners and progress *Source:* card heuristic [DC-L04-21]; L09 shared default row 5.
 - **Show:** the curve editor with a live card.
-- **Use / avoid:** use linear only for spinners, progress and other constant motion; never ease-in on UI (STD-easing-duration-03) [DC-L19-85].
+- **Use / avoid:** use linear only for continuous indicators; avoid ease-in for entrances [DC-L04-21].
 - **Skip:** yes.
 
 ## Q-motion-05 · Should shapes morph or use an expressive shape library?
@@ -2193,8 +2062,8 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L04-
 - **Ask:** "Which of the four standard ways to change screens should we use, and should list items show up one by one?"
 - **Why:** Using the same screen transitions every time helps people follow the app. They can feel whether they went deeper or sideways [DC-L04-23].
 - **Options:**
-  - `fade` Fade for in-screen enter and exit (dialogs, menus) [DC-L04-23]. (breaks STD-enter-exit-origin-02)
-  - `fade-through` Fade through for unrelated destinations such as tabs [DC-L04-23]. (breaks STD-when-to-animate-05, STD-when-to-animate-14)
+  - `fade` Fade for in-screen enter and exit (dialogs, menus) [DC-L04-23].
+  - `fade-through` Fade through for unrelated destinations such as tabs [DC-L04-23].
   - `shared-axis` Shared axis x, y or z to show where screens sit (onboarding x, stepper y, parent-child z) [DC-L04-23].
   - `container-transform` Container transform, where an item grows into a full page [DC-L04-23].
   - `stagger` A stagger (small delay between items) of 20-50ms, total at most 500ms [DC-L04-23].
@@ -2210,10 +2079,10 @@ Zoom 3 detailed · weight medium · changes 0 decisions · class T · cards DC-L
 - **Why:** When the system owns back gestures and transitions, the app feels native; Android's predictive back peeks at the screen behind. Custom vibrations (haptics) feel cheap if you use too many [DC-L10-14, DC-L04-26].
 - **Options:**
   - `os-nav-brand-micro` System screen changes and back gesture, with small brand springs inside content [DC-L10-14].
-  - `one-language` One brand motion language everywhere [DC-L10-14]. (breaks STD-mobile-touch-42)
-  - `haptics-system` System haptics only (standard controls already play them). (breaks STD-mobile-touch-62)
+  - `one-language` One brand motion language everywhere [DC-L10-14].
+  - `haptics-system` System haptics only (standard controls already play them).
   - `haptics-semantic` About 6 named vibrations (success, warning, error, selection, toggle, light impact).
-- **Default:** `os-nav-brand-micro`: os-nav-brand-micro and haptics-semantic: house standard STD-mobile-touch-62 maps each moment (a value ticking past a step, a snap, a commit) to one system haptic *Source:* card heuristics [DC-L10-14, DC-L04-26].
+- **Default:** `os-nav-brand-micro`: os-nav-brand-micro and haptics-system; a semantic map only for products with frequent confirmations *Source:* card heuristics [DC-L10-14, DC-L04-26].
 - **Show:** the event list with each haptic's platform mapping.
 - **Use / avoid:** use haptics sparingly ("less is more"); avoid long "buzzy" vibrations [DC-L04-26].
 - **Hook:** accepts Custom haptics accept Apple AHAP (.ahap JSON, intensity and sharpness 0-1) and Android `VibrationEffect` compositions If no: system patterns first (Apple notification, impact, selection; Android `HapticFeedbackConstants`).
@@ -2221,7 +2090,6 @@ Zoom 3 detailed · weight medium · changes 0 decisions · class T · cards DC-L
 
 ## Q-motion-10 · Which accessibility settings on the device must the system follow?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L10-16
-- **Settled by:** STD-accessibility-motion-01: Ship the prefers-reduced-motion variant of every animation that moves something (and, on the web, its hover gating) in the same change as the animation itself, including every prototype variant and every proposed motion recipe, never as a follow-up; STD-accessibility-motion-11: Handle prefers-reduced-transparency: reduce as its own signal, separate from reduced motion: make translucent surfaces frostier or solid by raising their background opacity and dropping the blur; STD-accessibility-motion-12: Handle prefers-contrast: more as its own signal: give surfaces near-solid backgrounds with a defined, contrasting border; STD-accessibility-motion-13: Respect the user's text-size setting (Dynamic Type) by scaling layout with the text; on the web write spacing in rem or em, not fixed px. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
 - **Ask:** "Which device settings should the design follow, like screen readers, bigger text or less motion?"
 - **Why:** Following these settings changes the look for that person. With high contrast on, borders get thicker; with reduced transparency on, bars turn solid [DC-L10-16].
 - **Options:**
@@ -2247,7 +2115,7 @@ Screen: an icon sheet in the product's own buttons, tabs and lists, next to body
 
 Zoom 3 (detailed) questions: `17-icons-app-icon-and-logo-use.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-icon-01 · Do you have a custom icon set, or should the system adopt a library?
 Zoom 2 defined · weight medium · changes 3 decisions · class T · cards DC-L05-01, DC-L10-25
@@ -2302,7 +2170,7 @@ Area: `iconography` · zoom 3 detailed: 5 · visual: `assets/templates/component
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-icon-03 · How thick should icon lines be?
 Zoom 3 detailed · weight medium · changes 3 decisions · class G · cards DC-L05-03
@@ -2383,7 +2251,7 @@ Screen: an empty state, onboarding card, hero and dashboard, with the person's o
 
 Zoom 3 (detailed) questions: `18-imagery-illustration-and-charts.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-img-01 · Does the product use photography, and do you have photos or a photo brief?
 Zoom 2 defined · weight medium · changes 3 decisions · class D · cards DC-L05-14
@@ -2440,7 +2308,7 @@ Area: `iconography` · zoom 3 detailed: 5 · visual: text or the host question t
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-img-02 · Which image shapes, and can text sit on top of images?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L05-15, DC-L05-16
@@ -2522,7 +2390,7 @@ Screen: the product's own buttons, errors, empty states and a success message, r
 
 Zoom 3 (detailed) questions: `19-content-and-voice.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-voice-01 · Do you have a voice and tone guide? If not, what 3-4 traits describe how the product talks?
 Zoom 2 defined · weight high · changes 5 decisions · class T · cards DC-L06-18
@@ -2530,15 +2398,10 @@ Zoom 2 defined · weight high · changes 5 decisions · class T · cards DC-L06-
 - **Why:** Your voice stays the same everywhere, while tone changes with the moment. The product's words and its look must match [DC-L06-18].
 - **Options:**
   - `upload` Upload an existing guide [DC-L06-18].
-    - Now: Your existing guide becomes the rules for all product words. As it grows: Every new screen, error and empty state follows it, and copy arguments settle by pointing to it.
   - `plainspoken` Plainspoken and genuine, dry humor (Mailchimp).
-    - Now: Plainspoken and genuine, with dry humor, like Mailchimp. As it grows: Voice stays the same everywhere while tone softens for errors and serious moments, so humor gets rationed. [inferred]
   - `warm-crisp` Warm and relaxed, crisp and clear, ready to lend a hand (Microsoft).
-    - Now: Warm and relaxed, crisp and clear, ready to help, like Microsoft. As it grows: Holds up as more writers join, as long as each trait has a 'but not' so it isn't vague. [inferred]
   - `bold-optimistic` Bold, optimistic, practical with a wink (Atlassian).
-    - Now: Bold, optimistic and practical with a wink, like Atlassian. As it grows: Optimism must not hide bad news, so error and billing messages need a plainer tone. [inferred]
   - `custom` Your own traits, set on NN/g's four tone scales, with words to avoid.
-    - Now: Your own 3-4 traits in 'X, but not Y' form, with words to avoid. As it grows: Example lines per trait let new writers and AI tools match it; a content designer should review it. [inferred]
 - **Default:** drafted from the personality sliders: 3-4 traits with "but not", 3 copy examples per trait *Source:* card heuristic [DC-L06-18].
 - **Show:** the error, empty state and success message rewritten in the chosen voice.
 - **Use / avoid:** use the traits to decide copy disputes; avoid traits every product could claim ("simple", "friendly") without a "but not" [DC-L06-18; DC-L11-05].
@@ -2593,7 +2456,7 @@ Area: `content` · zoom 3 detailed: 2 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-voice-05 · Which grammar and punctuation rules?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L06-21
@@ -2634,7 +2497,7 @@ Screen: the component catalog, rendered with every foundation chosen so far; eac
 
 Zoom 3 (detailed) questions: `20-component-base-and-inventory.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-comp-01 · What should your components be built on?
 Zoom 2 defined · weight low · changes 1 decisions · class T · cards DC-L08-03
@@ -2673,7 +2536,7 @@ Area: `components` · zoom 3 detailed: 3 · visual: `assets/templates/component-
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-comp-03 · Should components use settings, or be built from smaller pieces?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L08-04, DC-L07-22
@@ -2727,7 +2590,7 @@ Screen: a live component sheet where every control can be hovered, pressed, focu
 
 Zoom 3 (detailed) questions: `21-actions-states-and-focus.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-state-01 · How many button styles, and how many main buttons in each area?
 Zoom 2 defined · weight medium · changes 2 decisions · class G · cards DC-L08-05, DC-L13-18
@@ -2791,18 +2654,17 @@ Area: `components` · zoom 3 detailed: 4 · visual: `assets/templates/component-
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-state-04 · Which states get their own styling, per input type?
-Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-09, DC-L14-06, DC-L19-102, DC-L19-93
+Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-09, DC-L14-06
 - **Ask:** "How should states like hover, pressed and disabled get their look, and does it change by device?"
 - **Why:** A see-through tint gives any color its states for free; a token for each state lets you tune them to the brand. On TV, focus is large and moving; on desktop, the ring is thin and still [DC-L08-09, DC-L14-06].
 - **Options:**
   - `overlays` A see-through tint on hover and press (Material state layers).
   - `explicit` Its own token for each state and variant (Carbon).
   - `per-input` By how people use each device: desktop rest/hover/focus-visible/pressed/selected/disabled; TV focused with scale and elevation; tablet pointer lift.
-  - `press-scale` Shrink to 97% while pressed, plus a darker tint: the whole element, label and icons included, scales to 0.97 (`motion.scale.press`) on press-down over 100-160ms ease-out; overlays stay for hover.
-- **Default:** style all eight states; overlays for hover; on press, scale to 0.97 (from `motion.scale.press`) with a darker tint, 100-160ms ease-out, shown on press-down (`press-scale`); explicit tokens for selected and error; define states once, render the subset each context can trigger *Source:* house standard STD-mobile-touch-05 and card heuristics [DC-L19-102, DC-L19-93, DC-L08-09, DC-L14-06].
+- **Default:** style all eight states; overlays for hover and press, explicit tokens for selected and error; define states once, render the subset each context can trigger *Source:* card heuristics [DC-L08-09, DC-L14-06].
 - **Show:** the state matrix for every component.
 - **Use / avoid:** make hover content dismissible and persistent (WCAG 1.4.13); avoid hover-only affordances on touch [DC-L14-06].
 - **Skip:** yes.
@@ -2858,7 +2720,7 @@ Screen: a live sign-up form and a list with delete actions; the person fills fie
 
 Zoom 3 (detailed) questions: `22-forms-validation-and-feedback.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-form-01 · What style should form fields have, and where do labels go?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L08-16, DC-L13-05
@@ -2881,7 +2743,7 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L13-0
 - **Why:** Errors that show too early feel hostile, and checking on submit keeps forms calm. A disabled button hides why the action can't run [DC-L13-06, DC-L08-17, DC-L08-10].
 - **Options:**
   - `on-blur` When you leave a field ("reward early, punish late"): clear the error on the keystroke that fixes it; validate at complete length for ZIP and phone.
-  - `on-submit-summary` On submit, a list of errors at the top that takes focus, "Error:" prefix, notes by each field (GOV.UK). (breaks STD-visual-details-49)
+  - `on-submit-summary` On submit, a list of errors at the top that takes focus, "Error:" prefix, notes by each field (GOV.UK).
   - `disable-short-forms` Turn off submit on short forms until all is right, never on long ones (Carbon).
   - `never-disable` Never turn off submit; explain the problem instead (Atlassian).
 - **Default:** `on-blur`: on-blur for format checks, on submit otherwise, summary plus inline for forms over about 5 fields; never-disable, with `aria-disabled` and helper text when an action truly cannot run *Source:* card heuristics [DC-L13-06, DC-L08-17, DC-L08-10]; systems disagree (see Disagreements).
@@ -2904,13 +2766,12 @@ Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L08-1
 
 ## Q-form-05 · For deletes and other risky steps, offer undo or ask first?
 Zoom 2 defined · weight low · changes 1 decisions · class G · cards DC-L13-08
-- **Settled by:** STD-visual-details-40: Give easy undo for slips, and use a confirmation dialog only for genuinely destructive, irreversible actions, sparingly. Don't ask; the value is locked. Change it only through engine.py standard override when the person explicitly asks.
 - **Ask:** "When people delete something, should they get an undo button, an 'Are you sure?' step, or both?"
 - **Why:** Undo keeps work fast and calm. Asking "Are you sure?" too often feels like red tape, and people stop reading it [DC-L13-08].
 - **Options:**
   - `both` Undo when it can be undone, ask first when it can't or costs a lot [DC-L13-08].
   - `undo-first` Undo with trash or soft delete for actions you can reverse (NN/g calls undo superior; Shneiderman rule 6).
-  - `confirm` An 'Are you sure?' box with clear verb buttons, and Cancel as the safe choice [DC-L13-08]. (breaks STD-visual-details-40)
+  - `confirm` An 'Are you sure?' box with clear verb buttons, and Cancel as the safe choice [DC-L13-08].
 - **Default:** `both`: both *Source:* card heuristic [DC-L13-08].
 - **Show:** the list delete flow per option.
 - **Use / avoid:** use verb labels on confirmations; avoid "Are you sure?" dialogs for reversible actions [DC-L13-08].
@@ -2925,7 +2786,7 @@ Area: `components` · zoom 3 detailed: 1 · visual: `assets/templates/component-
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-form-03 · How should error messages be shown and written?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L13-07
@@ -2953,7 +2814,7 @@ Screen: small flows the person can click through: open a dialog and a side sheet
 
 Zoom 3 (detailed) questions: `23-patterns-and-ai-surfaces.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-pattern-01 · When should the product use a dialog, a sheet or a popover?
 Zoom 2 defined · weight low · changes 0 decisions · class G · cards DC-L08-20
@@ -3020,7 +2881,7 @@ Area: `components` · zoom 3 detailed: 3 · visual: `assets/templates/component-
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-pattern-02 · How should long lists load: pages, "load more", or infinite scroll?
 Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L08-21
@@ -3073,7 +2934,7 @@ Screen: a token browser beside the product preview; clicking any element shows i
 
 Zoom 3 (detailed) questions: `24-tokens-and-encoding.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-token-01 · How many token layers should sit between raw values and components?
 Zoom 2 defined · weight medium · changes 4 decisions · class G · cards DC-L07-01, DC-L07-02, DC-L01-26, DC-L02-27
@@ -3097,7 +2958,7 @@ Area: `delivery` · zoom 3 detailed: 9 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-token-04 · Which units should the source use?
 Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L07-11, DC-L10-08, DC-L03-26
@@ -3105,7 +2966,7 @@ Zoom 3 detailed · weight medium · changes 2 decisions · class G · cards DC-L
 - **Why:** px maps cleanly to pt, dp and Figma. rem follows browser zoom, and plain numbers carry over 1:1 to every platform [DC-L07-11, DC-L10-08].
 - **Options:**
   - `px-to-rem` px in source, rem on the web (DTCG allows px and rem only; Figma imports px).
-  - `unitless` Plain numbers in steps of 4, output 1:1 as pt, dp, epx or px; rem for web font sizes (Fluent's ramp). (breaks STD-accessibility-motion-13)
+  - `unitless` Plain numbers in steps of 4, output 1:1 as pt, dp, epx or px; rem for web font sizes (Fluent's ramp).
   - `rem-source` rem in the source, turned into dp, sp or CGFloat by the build [DC-L10-08].
 - **Default:** `px-to-rem`: px-to-rem (equivalently unitless numbers), rem for web type and breakpoints; "spacing scales with text size" is an explicit toggle, off by default; line height unitless *Source:* card heuristics [DC-L07-11, DC-L10-08, DC-L03-26].
 - **Show:** one value converted per platform.
@@ -3238,7 +3099,7 @@ Screen: a governance plan generated from earlier answers (team size, scope, plat
 
 Zoom 3 (detailed) questions: `25-team-governance-and-change.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-gov-01 · How strict should the system be: can product teams override or extend it?
 Zoom 2 defined · weight medium · changes 3 decisions · class I · cards DC-L11-03
@@ -3262,7 +3123,7 @@ Area: `delivery` · zoom 3 detailed: 6 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-gov-02 · In what order will you build, pilot and roll out?
 Zoom 3 detailed · weight medium · changes 3 decisions · class I · cards DC-L11-06, DC-L11-07, DC-L11-08
@@ -3359,7 +3220,7 @@ Screen: the export menu and a preview of every file the builder will produce: to
 
 Zoom 3 (detailed) questions: `26-output-documentation-and-ai-channels.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-dist-01 · How should the system leave the builder?
 Zoom 2 defined · weight low · changes 0 decisions · class T · cards DC-L16-12
@@ -3418,7 +3279,7 @@ Area: `delivery` · zoom 3 detailed: 1 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-dist-04 · Where do docs live, and what goes on each component page?
 Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L11-17, DC-L11-18, DC-L08-23
@@ -3445,7 +3306,7 @@ Screen: how the builder (or the interviewing model) behaves while the person kee
 
 Zoom 3 (detailed) questions: `27-builder-preferences.detailed.md`.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-pref-01 · How strict should the builder's critique be?
 Zoom 2 defined · weight medium · changes 0 decisions · class I · cards DC-L15-11
@@ -3471,7 +3332,7 @@ Area: `delivery` · zoom 3 detailed: 2 · visual: text or the host question tool
 
 Read the main stage file first; these questions refine it.
 
-Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
+Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned**: ask nothing and record nothing. Explain a term the first time with `glossary.json`.
 
 ## Q-pref-02 · How should AI edits and variations work?
 Zoom 3 detailed · weight medium · changes 3 decisions · class I · cards DC-L16-04, DC-L16-05

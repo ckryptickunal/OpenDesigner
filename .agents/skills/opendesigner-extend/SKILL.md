@@ -22,10 +22,9 @@ The engine is `scripts/engine.py` in this skill when it was installed from a rel
    - `opendesigner/tokens/`.
    - `git log --oneline -15 -- opendesigner/ DESIGN.md`, if the project uses git.
 2. If `DESIGN.md.hand-edited` exists, someone edited the generated file by hand. Offer to turn each edit into a decision.
-3. Run `engine.py validate`. It checks the system and reports the house standards version. If it says OpenDesigner's house standards are newer than this system's, say so in one line, run `engine.py standards --update`, then `engine.py build`, and show what changed by area. Their overrides and project standards stay as they are.
-4. Run `engine.py review`. If it reports errors or drift, say so first. Fixing them may be the real task.
-5. Tell the person in three lines or fewer: the direction, the zoom level of the area they care about, and anything locked or open.
-6. Ask only about what is new. Never re-run the whole interview.
+3. Run `engine.py review`. If it reports errors or drift, say so first. Fixing them may be the real task.
+4. Tell the person in three lines or fewer: the direction, the zoom level of the area they care about, and anything locked or open.
+5. Ask only about what is new. Never re-run the whole interview.
 
 In a chat-only host, ask the person to upload `state.json`, `decisions.md` and DESIGN.md before changing anything.
 
@@ -35,12 +34,9 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 | "Add a date picker / pricing table / settings page" | New component or pattern | Build it from existing tokens only. List the tokens it uses. Add states and keyboard behavior |
 | "Make buttons a bit rounder", "denser tables" | One decision | Find the question in the stage file. Show the current value and the options, then `set` it |
 | "Let's define colors properly", "more detail on type" | Zoom in | Run the next zoom level for that area (`<opendesigner>/references/zoom.md`), then record it, for example `set zoom.color '"defined"'` |
-| "Build the landing page", "redo this section", "show me some options" | A page built with the system | Follow `<opendesigner>/references/making.md`: one round at a time, options on a review copy of the page with the current version kept, every value from the tokens, and a check of the rendered page before you show it |
-| "These sections don't match", "it doesn't feel like one page" | A page that does not hang together | Change nothing yet. Run the cohesion audit (`<opendesigner>/references/making.md` section 4, with `<opendesigner>/assets/output/COHESION-AUDIT.md`), then build the directions they choose as options |
 | "New brand color", "dark mode", "add Android" | An area reopened | Ask that area's questions at its current zoom level |
 | "Make it feel more playful", a new direction | A challenge | It touches most decisions. Say what would move (`graph.json`), offer safe choices and risks, and change nothing without a clear yes |
-| "Why is X like this?" | A question | Answer from `decisions.md`, the standards (`engine.py standards`) and the cards. Change nothing |
-| "Follow this guide", "use this article as a rule", a link to learn from | A new source | `<opendesigner>/references/rules.md` section 12: agree its weight, read it with consent, keep the rules they pick |
+| "Why is X like this?" | A question | Answer from `decisions.md` and the cards. Change nothing |
 | A value that doesn't exist yet | A token addition | Add it through the engine with a reason (section 4, "Add a token"). Never hard-code it |
 
 ## 3. Locks and conflicts
@@ -48,17 +44,9 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 - A conflict with an earlier decision: show both and let the person choose. The new decision supersedes the old one. Nothing is edited or deleted.
 - "You decide" is recorded with `--set-by delegated`.
 
-### Standards
-- A value locked by a standard (house `STD-...` or project `PRJ-...`) changes only when the person explicitly asks to improve, remove or change that standard. Restate the rule and its reason once. Then their words pick the route:
-  - "Just this value", "just here": `engine.py standard override <id> --why "<their words>" --path <path> [--value <json>]` (it releases only that value; without `--path`, every value the standard sets). `engine.py standard restore <id>` undoes it.
-  - "It's our brand", "we always do it this way": a project standard that beats the house one, `engine.py standard add ... --beats STD-...` (`<opendesigner>/references/rules.md` section 12).
-- `engine.py set --force` never changes a value a standard holds. It is only for locks the person set.
-- "Follow this guide" or "this is non-negotiable for us": add it as a project standard (`<opendesigner>/references/rules.md` section 12).
-- `engine.py standards` lists what applies, what was overridden and why, and any pending house updates.
-
 ## 4. Make the change
 1. Show it first: the current value, the new value, and what else moves (`graph.json`). Use a template from `<opendesigner>/assets/templates/` when the host can show one.
-2. Apply it with `engine.py set <Q-id or path> <value> --why "..."`. Add `--lock` if the owner wants it locked. `--force` is for person locks, never standards: use it only with the owner's consent to change a value they locked. A value a standard holds changes only through `standard override` (section 3, "Standards").
+2. Apply it with `engine.py set <Q-id or path> <value> --why "..."`. Add `--lock` if the owner wants it locked. Use `--force` only with consent to change a locked value.
 3. Refresh with `engine.py build`. It generates, validates (fix errors first), and rewrites the exports, DESIGN.md and the preview.
 4. Show what changed: `git diff --stat opendesigner/ DESIGN.md` and a short table of changed values. Refresh `opendesigner/RATIONALE.md` if a big decision changed.
 
@@ -76,7 +64,7 @@ engine.py set compact:space.inset.md 10 --why "tighter cards in compact mode"
 - Tell the person the token's name and where to use it, in one line. Then use the token in the code, never the raw value.
 
 ## 5. End of every implementation: review
-After building anything with the system (a page, a component, a refactor). Review reads code and cannot see the page, so also check the page as rendered (`<opendesigner>/references/making.md` section 5):
+After building anything with the system (a page, a component, a refactor):
 1. Run `engine.py review` (add `--project <folder>` to scan a specific folder; `--strict` makes findings fail the run).
 2. Re-read the DESIGN.md sections you touched.
 3. For every new value the work needed, add a decision. Never inline it.
