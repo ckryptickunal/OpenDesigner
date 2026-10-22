@@ -1,0 +1,128 @@
+<style>
+.odl-delivery-tracker { box-sizing: border-box; inline-size: 100%; max-inline-size: 26rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-delivery-tracker *, .odl-delivery-tracker *::before, .odl-delivery-tracker *::after { box-sizing: border-box; }
+.odl-delivery-tracker .odl-card { --odl-tap: var(--ds-size-target-touch); display: grid; overflow: hidden; background: var(--ds-color-surface-raised); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); }
+/* The map, drawn: blocks, a park, a river, the route travelled (solid) and to go (dashed). */
+.odl-delivery-tracker .odl-map { position: relative; aspect-ratio: 16 / 10; background: var(--ds-color-neutral-light-2); }
+.odl-delivery-tracker .odl-map svg { display: block; inline-size: 100%; block-size: 100%; }
+.odl-delivery-tracker .odl-blk { fill: var(--ds-color-neutral-light-4); }
+.odl-delivery-tracker .odl-park { fill: var(--ds-color-success-light-4); }
+.odl-delivery-tracker .odl-water { fill: var(--ds-color-info-light-4); }
+.odl-delivery-tracker .odl-road { fill: none; stroke: var(--ds-color-neutral-light-1); stroke-width: 7; stroke-linecap: round; }
+.odl-delivery-tracker .odl-road.is-main { stroke-width: 11; }
+.odl-delivery-tracker .odl-done { fill: none; stroke: var(--ds-color-bg-accent-bold); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+.odl-delivery-tracker .odl-togo { fill: none; stroke: var(--ds-color-bg-accent-bold); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1 7; }
+.odl-delivery-tracker .odl-pin { fill: var(--ds-color-surface-raised); stroke: var(--ds-color-neutral-light-12); stroke-width: 2.5; }
+.odl-delivery-tracker .odl-pin-dot { fill: var(--ds-color-neutral-light-12); }
+.odl-delivery-tracker .odl-home { fill: var(--ds-color-neutral-light-12); }
+.odl-delivery-tracker .odl-home-ic { fill: none; stroke: var(--ds-color-white); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+.odl-delivery-tracker .odl-rider { fill: var(--ds-color-bg-accent-bold); stroke: var(--ds-color-white); stroke-width: 3; }
+.odl-delivery-tracker .odl-rider-ic { fill: none; stroke: var(--ds-color-text-on-accent); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.odl-delivery-tracker .odl-halo { fill: var(--ds-color-bg-accent-bold); opacity: .2; transform-box: fill-box; transform-origin: center; animation: odl-dt-pulse var(--ds-motion-duration-extra) var(--ds-motion-easing-standard) infinite alternate; }
+@keyframes odl-dt-pulse { from { transform: scale(.7); opacity: .35; } to { transform: scale(1.15); opacity: .12; } }
+.odl-delivery-tracker .odl-tag { position: absolute; inset-block-end: var(--ds-space-inset-sm); inset-inline-start: var(--ds-space-inset-sm); display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); min-block-size: var(--ds-size-control-sm);
+  padding: 0 var(--ds-space-inset-sm); border-radius: var(--ds-radius-control-sm); background: var(--ds-color-surface-raised); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-label-sm); }
+.odl-delivery-tracker .odl-tag i { inline-size: var(--ds-space-8); block-size: var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-success-bold); }
+/* Body */
+.odl-delivery-tracker .odl-body { display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-lg); }
+.odl-delivery-tracker .odl-eta { display: grid; gap: var(--ds-space-stack-sm); }
+.odl-delivery-tracker .odl-eta p { margin: 0; }
+.odl-delivery-tracker .odl-kicker { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-delivery-tracker h3 { margin: 0; font: var(--ds-text-headline-sm); font-variant-numeric: tabular-nums; }
+.odl-delivery-tracker .odl-by { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
+.odl-delivery-tracker .odl-segs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ds-space-4); }
+.odl-delivery-tracker .odl-segs i { block-size: var(--ds-space-4); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); }
+.odl-delivery-tracker .odl-segs i.is-done { background: var(--ds-color-bg-accent-bold); }
+.odl-delivery-tracker .odl-segs i.is-now { background: linear-gradient(90deg, var(--ds-color-bg-accent-bold) 60%, var(--ds-color-bg-neutral-subtle) 60%); }
+.odl-delivery-tracker .odl-courier { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-inline-md); padding: var(--ds-space-inset-sm) var(--ds-space-inset-sm) var(--ds-space-inset-sm) var(--ds-space-inset-md);
+  border-radius: var(--ds-radius-container); background: var(--ds-color-surface-sunken); }
+.odl-delivery-tracker .odl-av { position: relative; display: grid; place-items: center; inline-size: var(--ds-size-control-lg); block-size: var(--ds-size-control-lg); border-radius: var(--ds-radius-person);
+  background: linear-gradient(135deg, var(--ds-color-warning-light-5), var(--ds-color-warning-light-8)); color: var(--ds-color-warning-light-12); font: var(--ds-text-label-lg); }
+.odl-delivery-tracker .odl-who { min-inline-size: 0; }
+.odl-delivery-tracker .odl-who p { margin: 0; }
+.odl-delivery-tracker .odl-name { font: var(--ds-text-label-lg); }
+.odl-delivery-tracker .odl-sub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-delivery-tracker .odl-acts { display: flex; gap: var(--ds-space-inline-xs); }
+.odl-delivery-tracker .odl-round { display: grid; place-items: center; inline-size: var(--odl-tap); block-size: var(--odl-tap); padding: 0; border: 0; border-radius: var(--ds-radius-full); background: var(--ds-color-surface-raised);
+  color: var(--ds-color-text-primary); box-shadow: var(--ds-elevation-raised); cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-delivery-tracker .odl-round:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-delivery-tracker .odl-round svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
+/* Timeline */
+.odl-delivery-tracker ol { display: grid; margin: 0; padding: 0; list-style: none; }
+.odl-delivery-tracker li { position: relative; display: grid; grid-template-columns: var(--ds-space-24) minmax(0, 1fr) auto; column-gap: var(--ds-space-inline-sm); padding-block-end: var(--ds-space-stack-md); }
+.odl-delivery-tracker li:last-child { padding-block-end: 0; }
+.odl-delivery-tracker li::before { content: ""; position: absolute; inset-block: var(--ds-space-12) calc(-1 * var(--ds-space-12)); inset-inline-start: calc(var(--ds-space-12) - var(--ds-border-width-emphasis) / 2); border-inline-start: var(--ds-border-width-emphasis) solid var(--ds-color-border-subtle); }
+.odl-delivery-tracker li.is-done::before { border-color: var(--ds-color-border-accent); }
+.odl-delivery-tracker li:last-child::before { display: none; }
+.odl-delivery-tracker .odl-mark { position: relative; display: grid; place-items: center; inline-size: var(--ds-space-24); block-size: var(--ds-space-24); }
+.odl-delivery-tracker .odl-mark::before { content: ""; inline-size: var(--ds-space-12); block-size: var(--ds-space-12); border-radius: var(--ds-radius-full); border: var(--ds-border-width-emphasis) solid var(--ds-color-border-default); background: var(--ds-color-surface-raised); }
+.odl-delivery-tracker li.is-done .odl-mark::before { border-color: var(--ds-color-bg-accent-bold); background: var(--ds-color-bg-accent-bold); }
+.odl-delivery-tracker li.is-now .odl-mark::before { inline-size: var(--ds-space-16); block-size: var(--ds-space-16); border-color: var(--ds-color-bg-accent-bold); box-shadow: 0 0 0 var(--ds-space-4) var(--ds-color-bg-accent-subtle); }
+.odl-delivery-tracker .odl-step { margin: 0; font: var(--ds-text-label-lg); line-height: var(--ds-font-line-height-24); }
+.odl-delivery-tracker li:not(.is-done):not(.is-now) .odl-step { color: var(--ds-color-text-tertiary); }
+.odl-delivery-tracker .odl-note { grid-column: 2 / -1; margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-delivery-tracker li time { color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; line-height: var(--ds-font-line-height-24); }
+.odl-delivery-tracker .odl-order { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-inline-md); padding-block-start: var(--ds-space-stack-md);
+  border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+.odl-delivery-tracker .odl-order p { margin: 0; min-inline-size: 0; }
+.odl-delivery-tracker .odl-order b { display: block; font: var(--ds-text-label-lg); }
+.odl-delivery-tracker .odl-order span { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
+.odl-delivery-tracker .odl-view { flex: none; min-block-size: var(--odl-tap); padding: 0 var(--ds-space-inset-md); border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-control);
+  background: transparent; color: var(--ds-color-text-primary); font: var(--ds-text-label-md); cursor: pointer; }
+.odl-delivery-tracker .odl-view:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-delivery-tracker button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-delivery-tracker .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@container (max-width: 22rem) { .odl-delivery-tracker .odl-body { padding: var(--ds-space-inset-md); } }
+@media (prefers-reduced-motion: reduce) { .odl-delivery-tracker, .odl-delivery-tracker *, .odl-delivery-tracker *::before { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-delivery-tracker" aria-labelledby="odl-dt-eta">
+  <div class="odl-card">
+    <div class="odl-map" role="img" aria-label="Map: the courier is on Quayside Road, about two thirds of the way from the restaurant to you">
+      <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <path class="odl-water" d="M0 150c40-10 70 8 110 2s70-26 110-20 70 18 100 10v58H0z"/>
+        <rect class="odl-blk" x="12" y="10" width="62" height="40" rx="4"/><rect class="odl-blk" x="88" y="10" width="54" height="40" rx="4"/><rect class="odl-blk" x="156" y="10" width="70" height="40" rx="4"/>
+        <rect class="odl-blk" x="240" y="10" width="70" height="56" rx="4"/><rect class="odl-blk" x="12" y="64" width="62" height="56" rx="4"/><rect class="odl-blk" x="156" y="64" width="70" height="52" rx="4"/>
+        <rect class="odl-blk" x="240" y="80" width="70" height="40" rx="4"/>
+        <path class="odl-park" d="M88 64h54v52H96a8 8 0 0 1-8-8z"/>
+        <path class="odl-road is-main" d="M-5 57h330M81 -5v150M233 -5v150"/>
+        <path class="odl-road" d="M149 -5v130M-5 125c60 0 100-2 160-2s110 2 170 2M233 73h90"/>
+        <path class="odl-done" d="M40 37v20h41v66h72"/>
+        <path class="odl-togo" d="M153 123h80V73h44"/>
+        <circle class="odl-pin" cx="40" cy="34" r="7"/><circle class="odl-pin-dot" cx="40" cy="34" r="2.6"/>
+        <circle class="odl-home" cx="282" cy="73" r="11"/><path class="odl-home-ic" d="M277 74.5l5-4.5 5 4.5v4.5h-10z"/>
+        <circle class="odl-halo" cx="153" cy="123" r="22"/>
+        <circle class="odl-rider" cx="153" cy="123" r="11"/>
+        <path class="odl-rider-ic" d="M147.5 126.5a2.5 2.5 0 1 0 0-.1M158.5 126.5a2.5 2.5 0 1 0 0-.1M147.5 126.5l3-5h5l3 5M152 121.5l-1-2.5h-2"/>
+      </svg>
+      <span class="odl-tag"><i aria-hidden="true"></i>Live</span>
+    </div>
+    <div class="odl-body">
+      <div class="odl-eta">
+        <p class="odl-kicker">On the way from Pellanore Dumpling Bar</p>
+        <h3 id="odl-dt-eta">Arriving in 12 min</h3>
+        <p class="odl-by">Expected by 19:42 · 1.8 km away</p>
+        <div class="odl-segs" role="img" aria-label="Step 4 of 5: on the way"><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i><i class="is-now"></i></div>
+      </div>
+      <div class="odl-courier">
+        <span class="odl-av" aria-hidden="true">KE</span>
+        <div class="odl-who"><p class="odl-name">Kemal</p><p class="odl-sub">Cargo bike · <span aria-hidden="true">★</span><span class="odl-sr">rated</span> 4.9</p></div>
+        <div class="odl-acts">
+          <button type="button" class="odl-round" aria-label="Message Kemal"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 5.5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-3.5 3v-3h0a2 2 0 0 1-2-2z"/></svg></button>
+          <button type="button" class="odl-round" aria-label="Call Kemal"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 3.5H4.5a1 1 0 0 0-1 1.1c.6 6.3 5.6 11.3 11.9 11.9a1 1 0 0 0 1.1-1v-2.1a1 1 0 0 0-.8-1l-2.3-.5a1 1 0 0 0-1 .3l-1 1.1a9 9 0 0 1-4.3-4.3l1.1-1a1 1 0 0 0 .3-1l-.5-2.3a1 1 0 0 0-1-.8z"/></svg></button>
+        </div>
+      </div>
+      <ol aria-label="Order progress">
+        <li class="is-done"><span class="odl-mark" aria-hidden="true"></span><p class="odl-step">Order placed<span class="odl-sr">, done</span></p><time>19:05</time></li>
+        <li class="is-done"><span class="odl-mark" aria-hidden="true"></span><p class="odl-step">Being prepared<span class="odl-sr">, done</span></p><time>19:08</time></li>
+        <li class="is-done"><span class="odl-mark" aria-hidden="true"></span><p class="odl-step">Picked up<span class="odl-sr">, done</span></p><time>19:27</time></li>
+        <li class="is-now" aria-current="step"><span class="odl-mark" aria-hidden="true"></span><p class="odl-step">On the way</p><time>19:29</time><p class="odl-note">Kemal has your order and is riding to you.</p></li>
+        <li><span class="odl-mark" aria-hidden="true"></span><p class="odl-step">Delivered</p><time>~19:42</time></li>
+      </ol>
+      <div class="odl-order">
+        <p><b>3 items · $27.40</b><span>Order #4817 · paid by card</span></p>
+        <button type="button" class="odl-view">View order</button>
+      </div>
+    </div>
+  </div>
+</section>

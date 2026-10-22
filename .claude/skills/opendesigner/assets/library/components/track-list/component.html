@@ -1,0 +1,137 @@
+<style>
+.odl-track-list { box-sizing: border-box; inline-size: 100%; max-inline-size: 44rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-track-list *, .odl-track-list *::before, .odl-track-list *::after { box-sizing: border-box; }
+.odl-track-list .odl-card { display: grid; gap: var(--ds-space-stack-md); padding: var(--ds-space-inset-lg) var(--ds-space-inset-md); background: var(--ds-color-surface-raised);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); }
+.odl-track-list .odl-head { display: grid; gap: var(--ds-space-stack-md); padding-inline: var(--ds-space-inset-xs); }
+.odl-track-list .odl-cover { justify-self: center; inline-size: min(100%, 13rem); aspect-ratio: 1; overflow: hidden; border-radius: var(--ds-radius-nested); box-shadow: var(--ds-elevation-floating);
+  background: linear-gradient(170deg, var(--ds-color-accent-light-4) 0%, var(--ds-color-accent-light-8) 52%, var(--ds-color-info-light-10) 53%, var(--ds-color-info-light-12) 100%); }
+.odl-track-list .odl-cover svg { display: block; inline-size: 100%; block-size: 100%; }
+.odl-track-list .odl-moon { fill: var(--ds-color-accent-light-1); }
+.odl-track-list .odl-moon-b { fill: var(--ds-color-accent-light-6); }
+.odl-track-list .odl-wave { fill: none; stroke: var(--ds-color-info-light-6); stroke-width: 1.4; stroke-linecap: round; opacity: .7; }
+.odl-track-list .odl-card-s { fill: var(--ds-color-accent-light-1); }
+.odl-track-list .odl-card-l { fill: none; stroke: var(--ds-color-accent-light-9); stroke-width: 1; }
+.odl-track-list .odl-eyebrow { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); letter-spacing: var(--ds-text-label-md-tracking); }
+.odl-track-list h3 { margin: var(--ds-space-2) 0 var(--ds-space-stack-xs); font: var(--ds-text-headline-sm); }
+.odl-track-list .odl-by { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-4) var(--ds-space-8); margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-track-list .odl-by strong { color: var(--ds-color-text-primary); font: var(--ds-text-label-lg); }
+.odl-track-list .odl-av { display: inline-grid; place-items: center; inline-size: var(--ds-size-icon-lg); block-size: var(--ds-size-icon-lg); border-radius: var(--ds-radius-person);
+  background: linear-gradient(135deg, var(--ds-color-accent-light-9), var(--ds-color-info-light-10)); color: var(--ds-color-accent-light-1); font: var(--ds-text-label-sm); }
+.odl-track-list .odl-actions { display: flex; align-items: center; gap: var(--ds-space-inline-xs); }
+.odl-track-list button { display: grid; place-items: center; min-inline-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min));
+  padding: 0; border: 0; border-radius: var(--ds-radius-full); background: transparent; color: var(--ds-color-text-secondary); cursor: pointer; font: inherit;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-track-list button:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
+.odl-track-list button svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
+.odl-track-list button[aria-pressed="true"] { color: var(--ds-color-text-accent); }
+.odl-track-list .odl-like[aria-pressed="true"] path, .odl-track-list .odl-love[aria-pressed="true"] path { fill: currentColor; }
+.odl-track-list .odl-shuffle[aria-pressed="true"] { background: var(--ds-color-bg-accent-subtle); }
+.odl-track-list .odl-play { order: 1; margin-inline-start: auto; min-inline-size: max(calc(var(--ds-size-control-lg) * 1.25), var(--ds-size-target-min)); min-block-size: max(calc(var(--ds-size-control-lg) * 1.25), var(--ds-size-target-min));
+  background: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent); box-shadow: var(--ds-elevation-raised); }
+.odl-track-list .odl-play:hover { background: var(--ds-color-bg-accent-bold-hover); color: var(--ds-color-text-on-accent); }
+.odl-track-list .odl-play svg { inline-size: var(--ds-size-icon-lg); block-size: var(--ds-size-icon-lg); }
+.odl-track-list .odl-play .is-pause, .odl-track-list.is-playing .odl-play .is-play { display: none; }
+.odl-track-list.is-playing .odl-play .is-pause { display: block; }
+.odl-track-list ol { display: grid; margin: 0; padding: 0; list-style: none; }
+.odl-track-list li { position: relative; display: grid; grid-template-columns: var(--ds-space-32) minmax(0, 1fr) auto auto; align-items: center; column-gap: var(--ds-space-inline-sm);
+  min-block-size: var(--ds-size-row-two-line); padding-inline: var(--ds-space-inset-xs) var(--ds-space-2); border-radius: var(--ds-radius-nested);
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-track-list li:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-track-list li.is-current { background: var(--ds-color-bg-accent-subtle); }
+.odl-track-list .odl-n { justify-self: center; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-lg); font-variant-numeric: tabular-nums; }
+.odl-track-list .odl-pick { position: static; display: grid; justify-items: start; gap: var(--ds-space-2); min-inline-size: 0; padding: var(--ds-space-8) 0; border-radius: 0; background: transparent; color: inherit; text-align: start; }
+.odl-track-list .odl-pick::after { content: ""; position: absolute; inset: 0; border-radius: var(--ds-radius-nested); }
+.odl-track-list .odl-pick:hover { background: transparent; }
+.odl-track-list .odl-pick:focus-visible { outline: none; }
+.odl-track-list .odl-pick:focus-visible::after { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: calc(-1 * var(--ds-focus-ring-width)); }
+.odl-track-list .odl-t { max-inline-size: 100%; overflow: hidden; color: var(--ds-color-text-primary); font: var(--ds-text-label-lg); text-overflow: ellipsis; white-space: nowrap; }
+.odl-track-list .is-current .odl-t { color: var(--ds-color-text-accent); }
+.odl-track-list .odl-a { display: flex; align-items: center; gap: var(--ds-space-6); max-inline-size: 100%; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); white-space: nowrap; }
+.odl-track-list .odl-a span:last-child { overflow: hidden; text-overflow: ellipsis; }
+.odl-track-list .odl-e { flex: none; display: inline-grid; place-items: center; min-inline-size: var(--ds-space-16); block-size: var(--ds-space-16); padding: 0 var(--ds-space-2); border-radius: var(--ds-radius-control-sm);
+  background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); }
+.odl-track-list .odl-like { position: relative; z-index: 1; color: var(--ds-color-text-tertiary); }
+.odl-track-list .odl-d { min-inline-size: 2.75rem; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; text-align: end; }
+.odl-track-list .odl-eq { display: none; justify-self: center; align-items: end; gap: var(--ds-space-2); block-size: var(--ds-space-16); }
+.odl-track-list .odl-eq i { inline-size: var(--ds-space-4); block-size: 40%; border-radius: var(--ds-radius-full); background: var(--ds-color-icon-accent); }
+.odl-track-list .odl-eq i:nth-child(2) { block-size: 100%; }
+.odl-track-list .odl-eq i:nth-child(3) { block-size: 65%; }
+.odl-track-list .is-current .odl-eq { display: flex; }
+.odl-track-list .is-current .odl-n { display: none; }
+.odl-track-list.is-playing .is-current .odl-eq i { animation: odl-track-list-eq var(--ds-motion-duration-extra) var(--ds-motion-easing-standard) infinite alternate; }
+.odl-track-list.is-playing .is-current .odl-eq i:nth-child(2) { animation-delay: calc(var(--ds-motion-duration-short) * -1); }
+.odl-track-list.is-playing .is-current .odl-eq i:nth-child(3) { animation-delay: calc(var(--ds-motion-duration-medium) * -1); }
+@keyframes odl-track-list-eq { from { block-size: 25%; } to { block-size: 100%; } }
+.odl-track-list button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-track-list .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@container (min-width: 34rem) {
+  .odl-track-list .odl-card { padding: var(--ds-space-inset-xl) var(--ds-space-inset-lg); }
+  .odl-track-list .odl-head { grid-template-columns: 11rem minmax(0, 1fr); align-items: end; column-gap: var(--ds-space-inline-md); }
+  .odl-track-list .odl-cover { inline-size: 100%; grid-row: span 2; }
+  .odl-track-list .odl-actions { margin-block-start: var(--ds-space-stack-sm); }
+  .odl-track-list .odl-play { order: -1; margin-inline: 0 var(--ds-space-inline-xs); }
+}
+@media (prefers-reduced-motion: reduce) { .odl-track-list, .odl-track-list *, .odl-track-list *::before, .odl-track-list *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-track-list" aria-label="Album: Postcards from Low Tide">
+  <div class="odl-card">
+    <header class="odl-head">
+      <div class="odl-cover" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <circle class="odl-moon" cx="66" cy="30" r="15"/>
+          <circle class="odl-moon-b" cx="72" cy="26" r="12"/>
+          <path class="odl-wave" d="M6 64c8-4 14-4 22 0s14 4 22 0 14-4 22 0 14 4 22 0M0 74c8-4 14-4 22 0s14 4 22 0 14-4 22 0 14 4 22 0 14-4 22 0M10 84c8-4 14-4 22 0s14 4 22 0 14-4 22 0 14 4 22 0"/>
+          <g transform="rotate(-8 30 44)"><rect class="odl-card-s" x="16" y="32" width="30" height="20" rx="1.5"/><path class="odl-card-l" d="M20 38h12M20 42h16M20 46h9M39 36h4v5h-4z"/></g>
+        </svg>
+      </div>
+      <div class="odl-about">
+        <p class="odl-eyebrow">Album · 2026</p>
+        <h3>Postcards from Low Tide</h3>
+        <p class="odl-by"><span class="odl-av" aria-hidden="true">MD</span><strong>Mirelle Duvane</strong><span>9 songs, 36 min</span></p>
+      </div>
+      <div class="odl-actions">
+        <button type="button" class="odl-play" aria-label="Play Postcards from Low Tide"><svg class="is-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4.6v10.8a.6.6 0 0 0 .9.5l8.3-5.4a.6.6 0 0 0 0-1L7.9 4.1a.6.6 0 0 0-.9.5z" fill="currentColor"/></svg><svg class="is-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5.5" y="4.5" width="3" height="11" rx=".8" fill="currentColor"/><rect x="11.5" y="4.5" width="3" height="11" rx=".8" fill="currentColor"/></svg></button>
+        <button type="button" class="odl-shuffle" aria-label="Shuffle" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h2.6c1.6 0 2.6.7 3.6 2.2l1.6 3.6c1 1.5 2 2.2 3.6 2.2H17M3 14h2.6c1.3 0 2.2-.5 3-1.4M11.4 7.4c.8-.9 1.7-1.4 3-1.4H17M15 4l2 2-2 2M15 12l2 2-2 2"/></svg></button>
+        <button type="button" class="odl-love" aria-label="Save album to your library" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></button>
+        <button type="button" class="odl-more" aria-label="More options"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.5" cy="10" r="1.5" fill="currentColor"/><circle cx="10" cy="10" r="1.5" fill="currentColor"/><circle cx="15.5" cy="10" r="1.5" fill="currentColor"/></svg></button>
+      </div>
+    </header>
+    <ol aria-label="Tracks">
+      <li><span class="odl-n">1</span><span class="odl-eq" aria-hidden="true"><i></i><i></i><i></i></span><button type="button" class="odl-pick"><span class="odl-t">Cedar Light</span><span class="odl-a"><span>Mirelle Duvane</span></span></button><button type="button" class="odl-like" aria-label="Like Cedar Light" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></button><span class="odl-d">3:41</span></li>
+      <li><span class="odl-n">2</span><span class="odl-eq" aria-hidden="true"><i></i><i></i><i></i></span><button type="button" class="odl-pick"><span class="odl-t">Kite Weather</span><span class="odl-a"><abbr class="odl-e" title="Explicit">E</abbr><span>Mirelle Duvane, Bartek Zielony</span></span></button><button type="button" class="odl-like" aria-label="Like Kite Weather" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></button><span class="odl-d">4:02</span></li>
+      <li class="is-current" aria-current="true"><span class="odl-n">3</span><span class="odl-eq" aria-hidden="true"><i></i><i></i><i></i></span><button type="button" class="odl-pick"><span class="odl-t">Glasshouse Summer</span><span class="odl-a"><span>Mirelle Duvane</span></span></button><button type="button" class="odl-like" aria-label="Like Glasshouse Summer" aria-pressed="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></button><span class="odl-d">3:18</span></li>
+      <li><span class="odl-n">4</span><span class="odl-eq" aria-hidden="true"><i></i><i></i><i></i></span><button type="button" class="odl-pick"><span class="odl-t">Ninety Steps</span><span class="odl-a"><span>Mirelle Duvane</span></span></button><button type="button" class="odl-like" aria-label="Like Ninety Steps" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></button><span class="odl-d">2:56</span></li>
+      <li><span class="odl-n">5</span><span class="odl-eq" aria-hidden="true"><i></i><i></i><i></i></span><button type="button" class="odl-pick"><span class="odl-t">Saltwater Radio</span><span class="odl-a"><abbr class="odl-e" title="Explicit">E</abbr><span>Mirelle Duvane</span></span></button><button type="button" class="odl-like" aria-label="Like Saltwater Radio" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></button><span class="odl-d">4:27</span></li>
+      <li><span class="odl-n">6</span><span class="odl-eq" aria-hidden="true"><i></i><i></i><i></i></span><button type="button" class="odl-pick"><span class="odl-t">Hollow Bells</span><span class="odl-a"><span>Mirelle Duvane</span></span></button><button type="button" class="odl-like" aria-label="Like Hollow Bells" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></button><span class="odl-d">3:49</span></li>
+      <li><span class="odl-n">7</span><span class="odl-eq" aria-hidden="true"><i></i><i></i><i></i></span><button type="button" class="odl-pick"><span class="odl-t">Late Bus Home</span><span class="odl-a"><span>Mirelle Duvane</span></span></button><button type="button" class="odl-like" aria-label="Like Late Bus Home" aria-pressed="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></button><span class="odl-d">5:12</span></li>
+      <li><span class="odl-n">8</span><span class="odl-eq" aria-hidden="true"><i></i><i></i><i></i></span><button type="button" class="odl-pick"><span class="odl-t">Orchard Static</span><span class="odl-a"><span>Mirelle Duvane</span></span></button><button type="button" class="odl-like" aria-label="Like Orchard Static" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></button><span class="odl-d">3:33</span></li>
+      <li><span class="odl-n">9</span><span class="odl-eq" aria-hidden="true"><i></i><i></i><i></i></span><button type="button" class="odl-pick"><span class="odl-t">Riverglass</span><span class="odl-a"><span>Mirelle Duvane</span></span></button><button type="button" class="odl-like" aria-label="Like Riverglass" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></button><span class="odl-d">4:40</span></li>
+    </ol>
+  </div>
+</section>
+<script>
+document.querySelectorAll(".odl-track-list").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  const play = root.querySelector(".odl-play"), rows = [...root.querySelectorAll("li")];
+  const setPlaying = (on) => {
+    root.classList.toggle("is-playing", on);
+    const title = root.querySelector(".is-current .odl-t").textContent;
+    play.setAttribute("aria-label", on ? `Pause ${title}` : "Play Postcards from Low Tide");
+  };
+  play.addEventListener("click", () => setPlaying(!root.classList.contains("is-playing")));
+  rows.forEach((li) => {
+    const pick = li.querySelector(".odl-pick");
+    pick.setAttribute("aria-label", `Play ${li.querySelector(".odl-t").textContent}, track ${li.querySelector(".odl-n").textContent}, ${li.querySelector(".odl-d").textContent}`);
+    pick.addEventListener("click", () => {
+      rows.forEach((r) => { r.classList.remove("is-current"); r.removeAttribute("aria-current"); });
+      li.classList.add("is-current"); li.setAttribute("aria-current", "true");
+      setPlaying(true);
+    });
+  });
+  root.querySelectorAll("[aria-pressed]").forEach((b) => b.addEventListener("click", () => {
+    b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true"));
+  }));
+});
+</script>

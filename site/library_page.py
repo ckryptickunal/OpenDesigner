@@ -8,6 +8,7 @@ build.py calls add(); it writes the shop, the component pages, their Markdown co
 component files at /library/r/<slug>.html (what the prompts point to) and /library/index.json.
 """
 import html
+import hashlib
 import json
 import pathlib
 import re
@@ -22,10 +23,11 @@ TYPES = {"data": "Data", "chart": "Charts", "form": "Forms", "overlay": "Overlay
 BLURB = {"data": "Tables, feeds, records", "chart": "Meters, bars, trends", "form": "Inputs and pickers",
          "overlay": "Dialogs, drawers, menus", "navigation": "Menus, tabs, steps", "feedback": "Toasts and banners",
          "ai": "Composers and answers", "commerce": "Plans and checkout", "content": "Media and profiles"}  # one line in a tile
-INDUSTRY = {"saas": "SaaS", "crm": "CRM", "devtools": "Dev tools"}
+INDUSTRY = {"saas": "SaaS", "crm": "CRM", "devtools": "Dev tools", "money": "Personal finance", "food": "Food and delivery", "home": "Smart home"}
 STYLES = ["quiet", "dense", "technical", "friendly", "editorial"]
-INDUSTRIES = ["finance", "saas", "devtools", "security", "crm", "logistics", "health", "education", "retail", "productivity"]
-CONSUMER = {"retail", "health", "education"}
+INDUSTRIES = ["finance", "saas", "devtools", "security", "crm", "logistics", "productivity",
+              "social", "media", "retail", "food", "travel", "events", "health", "fitness", "money", "education", "home", "games"]
+CONSUMER = {"retail", "health", "education", "social", "media", "travel", "food", "fitness", "events", "home", "money", "games"}
 VIEW0 = {"narrow": "phone", "medium": "tablet", "wide": "desktop"}  # the view a part opens on, on its card and its page: the one it is designed for
 FRAME_W = {"narrow": 400, "medium": 560, "wide": 720}  # card previews: the parts reflow, so a card shows them whole, at a readable size
 # The bento: each aisle's cell span (columns x rows) on a 4-column grid, in order; together they fill 4 x 4.
@@ -36,6 +38,9 @@ PLUS = '<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path
 COPY = ('<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/>'
         '<path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h.5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>')
 DEVICES = [("phone", "Phone", 390), ("tablet", "Tablet", 768), ("desktop", "Desktop", 1280)]
+
+
+VER = "dev"  # set by add() from the CSS and JS it writes
 
 
 def components():
@@ -130,7 +135,7 @@ def kit_button(slug, name):
 
 
 def card(b, c, i):
-    return (f'<article class="item{" wide" if c["width"] == "wide" else ""}" id="item-{c["slug"]}" data-view0="{VIEW0[c["width"]]}" data-type="{c["type"]}" data-style="{c["style"]}" data-industries="{" ".join(c["industries"])}" '
+    return (f'<article class="item{" wide" if c["width"] == "wide" else ""}" id="item-{c["slug"]}" data-view0="{VIEW0[c["width"]]}" data-type="{c["type"]}" data-style="{c["style"]}" data-industries="{" ".join(c["industries"])}" data-who="{who(c).lower()}" '
             f'data-search="{esc(" ".join([c["name"], c["summary"], *c["tags"], c["type"], c["style"], *c["industries"]]).lower())}">'
             f'<div class="item-media stage lib-bg">'
             f'<div class="stage-in item-in">{live(c)}</div></div>'
@@ -218,7 +223,7 @@ def shop(b, cs):
     chips = (f'<button type="button" class="filter is-on" data-type="all" aria-pressed="true">All <span class="num">{n}</span></button>'
              + "".join(f'<button type="button" class="filter" data-type="{t}" aria-pressed="false">{TYPES[t]} <span class="num">{len(by[t])}</span></button>' for t in TYPES if by[t]))
     return f"""
-<link rel="stylesheet" href="/library.css">
+<link rel="stylesheet" href="/library.css?v={VER}">
 <div class="shop">
 {FAB}
 <header class="shop-hero">
@@ -247,6 +252,7 @@ def shop(b, cs):
 <div class="shelf-bar">
 <div class="lib-filters" role="group" aria-label="Filter by type">{chips}</div>
 <div class="shelf-more">
+<label class="lib-field"><span>For</span><select id="lib-who"><option value="">Anyone</option><option value="consumer">Consumer</option><option value="b2b">B2B</option></select></label>
 <label class="lib-field"><span>Style</span><select id="lib-style"><option value="">Any</option>{"".join(f'<option value="{s}">{s.capitalize()}</option>' for s in STYLES)}</select></label>
 <label class="lib-field"><span>Made for</span><select id="lib-industry"><option value="">Any industry</option>{"".join(f'<option value="{k}">{ind(k)}</option>' for k in INDUSTRIES)}</select></label>
 <p class="shelf-count" aria-live="polite"><span class="n">{n}</span> parts</p></div>
@@ -266,7 +272,7 @@ def shop(b, cs):
 </section>
 </div>
 {kit_ui(b)}
-<script src="/library.js" defer></script>
+<script src="/library.js?v={VER}" defer></script>
 """
 
 
@@ -290,7 +296,7 @@ def detail(b, c, cs):
     piece = " ".join(piece.split("-")[1:]).capitalize()  # "02-fennick-approvals" -> "Fennick approvals"
     src_link = f'Rebuilt from <a href="{b.GH}/tree/main/{c["source"]}">{esc(piece)}</a> in the showcase' if piece else "Made for the library"
     body = f"""
-<link rel="stylesheet" href="/library.css">
+<link rel="stylesheet" href="/library.css?v={VER}">
 <div class="shop part">
 {FAB}
 <nav class="crumbs" aria-label="Breadcrumb"><a href="/library/">Library</a><span aria-hidden="true">/</span><a href="/library/#aisle-{c["type"]}" data-goto-aisle="{c["type"]}">{TYPES[c["type"]]}</a><span aria-hidden="true">/</span><span aria-current="page">{esc(c["name"])}</span></nav>
@@ -327,7 +333,7 @@ def detail(b, c, cs):
 <div class="items">{"".join(card(b, x, i) for i, x in enumerate(related))}</div></section>
 </div>
 {kit_ui(b)}
-<script src="/library.js" defer></script>
+<script src="/library.js?v={VER}" defer></script>
 """
     aisle = (TYPES[c["type"]], f"/library/#aisle-{c['type']}")
     ld = [b.crumbs_ld([("Component library", "/library/"), aisle, (c["name"], f"/library/{c['slug']}/")]),
@@ -353,6 +359,12 @@ def llms_section(site_url):
 def add(b, files, mds, paths):
     """Write the shop, the component pages and their files into the build. b is the build module."""
     cs = components()
+    global VER
+    css_text = ((STATIC / "library-systems.css").read_text() + "\n" + "\n".join(c["css"] for c in cs) + "\n" + (STATIC / "library.css").read_text())
+    js_text = ((STATIC / "library.js").read_text() + "\n" + "\n".join(f"/* {c['slug']} */\n{c['js'].strip()}" for c in cs if c["js"].strip()) + "\n")
+    # a version in the file names' links, so a deploy never serves a page with last week's script (a reviewer's browser kept an
+    # old library.js that had no Consumer filter)
+    VER = hashlib.sha256((css_text + js_text).encode()).hexdigest()[:10]
     ld = [b.crumbs_ld([("Component library", "/library/")]),
           {"@context": "https://schema.org", "@type": "CollectionPage", "name": "OpenDesigner component library", "url": f"{b.SITE_URL}/library/",
            "description": DESCRIPTION, "isPartOf": {"@type": "WebSite", "name": "OpenDesigner", "url": f"{b.SITE_URL}/"},
@@ -370,7 +382,5 @@ def add(b, files, mds, paths):
     (b.DIST / "library" / "index.json").write_text(json.dumps(
         [{k: c[k] for k in ("slug", "name", "summary", "type", "style", "industries", "tags", "states", "a11y", "width")}
          | {"url": f"{b.SITE_URL}/library/r/{c['slug']}.html", "page": f"{b.SITE_URL}/library/{c['slug']}/", "prompt": prompt(b, c)} for c in cs], indent=1) + "\n")
-    (b.DIST / "library.css").write_text((STATIC / "library-systems.css").read_text() + "\n" + "\n".join(c["css"] for c in cs)
-                                        + "\n" + (STATIC / "library.css").read_text())
-    (b.DIST / "library.js").write_text((STATIC / "library.js").read_text() + "\n"
-                                       + "\n".join(f"/* {c['slug']} */\n{c['js'].strip()}" for c in cs if c["js"].strip()) + "\n")
+    (b.DIST / "library.css").write_text(css_text)
+    (b.DIST / "library.js").write_text(js_text)

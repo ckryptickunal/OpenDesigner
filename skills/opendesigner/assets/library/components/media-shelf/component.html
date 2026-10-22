@@ -1,0 +1,106 @@
+<style>
+.odl-media-shelf { box-sizing: border-box; inline-size: 100%; max-inline-size: 76rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-media-shelf *, .odl-media-shelf *::before, .odl-media-shelf *::after { box-sizing: border-box; }
+.odl-media-shelf .odl-shelf { display: grid; gap: var(--ds-space-stack-sm); }
+.odl-media-shelf .odl-shelf + .odl-shelf { margin-block-start: var(--ds-space-stack-xl); }
+.odl-media-shelf .odl-top { display: flex; align-items: center; gap: var(--ds-space-inline-sm); }
+.odl-media-shelf h3 { margin: 0; font: var(--ds-text-title-md); }
+.odl-media-shelf h3 em { font-style: normal; color: var(--ds-color-text-secondary); }
+.odl-media-shelf .odl-nav { display: none; gap: var(--ds-space-inline-xs); margin-inline-start: auto; }
+.odl-media-shelf .odl-nav button { display: grid; place-items: center; min-inline-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0;
+  border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-full); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-media-shelf .odl-nav button:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-media-shelf .odl-nav button:disabled { color: var(--ds-color-text-disabled); cursor: default; background: var(--ds-color-surface-raised); }
+.odl-media-shelf .odl-nav svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
+.odl-media-shelf ul { display: grid; grid-auto-flow: column; grid-auto-columns: 74%; gap: var(--ds-space-inline-md); margin: 0; padding: var(--ds-space-4) var(--ds-space-4) var(--ds-space-stack-sm); list-style: none;
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--ds-space-4); scrollbar-width: none; border-radius: var(--ds-radius-nested); }
+.odl-media-shelf ul::-webkit-scrollbar { display: none; }
+.odl-media-shelf .odl-posters ul { grid-auto-columns: 40%; }
+.odl-media-shelf li { scroll-snap-align: start; min-inline-size: 0; }
+.odl-media-shelf .odl-item { display: grid; gap: var(--ds-space-4); inline-size: 100%; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; text-align: start; cursor: pointer; border-radius: var(--ds-radius-container); }
+.odl-media-shelf .odl-art { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised);
+  transition: transform var(--ds-motion-duration-medium) var(--ds-motion-easing-standard), box-shadow var(--ds-motion-duration-medium) var(--ds-motion-easing-standard); }
+.odl-media-shelf .odl-posters .odl-art { aspect-ratio: 2 / 3; }
+.odl-media-shelf .odl-pic { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; }
+.odl-media-shelf .odl-item:hover .odl-art { transform: translateY(calc(-1 * var(--ds-space-2))); box-shadow: var(--ds-elevation-floating); }
+.odl-media-shelf .odl-item:focus-visible { outline: none; }
+.odl-media-shelf .odl-item:focus-visible .odl-art, .odl-media-shelf .odl-nav button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-media-shelf .odl-go { position: absolute; inset-inline-start: var(--ds-space-inset-sm); inset-block-end: calc(var(--ds-space-inset-sm) + var(--ds-space-4)); display: grid; place-items: center;
+  inline-size: var(--ds-size-control-md); block-size: var(--ds-size-control-md); border-radius: var(--ds-radius-full); background: var(--ds-color-overlay-scrim); color: var(--ds-color-neutral-dark-12); }
+.odl-media-shelf .odl-go svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-media-shelf .odl-bar { position: absolute; inset-inline: 0; inset-block-end: 0; block-size: var(--ds-space-4); background: var(--ds-color-neutral-alpha-dark-6); }
+.odl-media-shelf .odl-bar i { display: block; inline-size: var(--w); block-size: 100%; background: var(--ds-color-accent-dark-11); }
+.odl-media-shelf .odl-name { margin-block-start: var(--ds-space-6); overflow: hidden; font: var(--ds-text-label-lg); text-overflow: ellipsis; white-space: nowrap; }
+.odl-media-shelf .odl-sub { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
+.odl-media-shelf .odl-cap { position: absolute; inset-inline: 0; inset-block-end: 0; display: grid; gap: var(--ds-space-4); justify-items: start; padding: var(--ds-space-inset-xl) var(--ds-space-inset-sm) var(--ds-space-inset-sm);
+  background: linear-gradient(to top, var(--ds-color-overlay-scrim), var(--ds-color-overlay-scrim) 35%, transparent), linear-gradient(to top, var(--ds-color-overlay-scrim), transparent 60%); color: var(--ds-color-neutral-dark-12); }
+.odl-media-shelf .odl-cap b { font: var(--ds-text-title-sm); text-wrap: balance; }
+.odl-media-shelf .odl-tag { justify-self: start; margin-block-start: var(--ds-space-4); padding: var(--ds-space-2) var(--ds-space-6); border-radius: var(--ds-radius-control-sm);
+  background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font: var(--ds-text-label-sm); white-space: nowrap; }
+.odl-media-shelf .odl-pal-accent { background: linear-gradient(170deg, var(--ds-color-accent-dark-3) 0%, var(--ds-color-accent-dark-7) 100%); }
+.odl-media-shelf .odl-pal-accent .odl-a1 { fill: var(--ds-color-accent-dark-12); } .odl-media-shelf .odl-pal-accent .odl-a2 { fill: var(--ds-color-accent-dark-9); } .odl-media-shelf .odl-pal-accent .odl-a3 { fill: var(--ds-color-accent-dark-5); } .odl-media-shelf .odl-pal-accent .odl-a4 { fill: var(--ds-color-accent-dark-2); } .odl-media-shelf .odl-pal-accent .odl-ring { fill: none; stroke: var(--ds-color-accent-dark-11); stroke-width: 2.5; } .odl-media-shelf .odl-pal-accent .odl-beam { fill: var(--ds-color-accent-dark-12); opacity: .28; }
+.odl-media-shelf .odl-pal-warning { background: linear-gradient(170deg, var(--ds-color-warning-dark-3) 0%, var(--ds-color-warning-dark-7) 100%); }
+.odl-media-shelf .odl-pal-warning .odl-a1 { fill: var(--ds-color-warning-dark-12); } .odl-media-shelf .odl-pal-warning .odl-a2 { fill: var(--ds-color-warning-dark-9); } .odl-media-shelf .odl-pal-warning .odl-a3 { fill: var(--ds-color-warning-dark-5); } .odl-media-shelf .odl-pal-warning .odl-a4 { fill: var(--ds-color-warning-dark-2); } .odl-media-shelf .odl-pal-warning .odl-ring { fill: none; stroke: var(--ds-color-warning-dark-11); stroke-width: 2.5; } .odl-media-shelf .odl-pal-warning .odl-beam { fill: var(--ds-color-warning-dark-12); opacity: .28; }
+.odl-media-shelf .odl-pal-info { background: linear-gradient(170deg, var(--ds-color-info-dark-3) 0%, var(--ds-color-info-dark-7) 100%); }
+.odl-media-shelf .odl-pal-info .odl-a1 { fill: var(--ds-color-info-dark-12); } .odl-media-shelf .odl-pal-info .odl-a2 { fill: var(--ds-color-info-dark-9); } .odl-media-shelf .odl-pal-info .odl-a3 { fill: var(--ds-color-info-dark-5); } .odl-media-shelf .odl-pal-info .odl-a4 { fill: var(--ds-color-info-dark-2); } .odl-media-shelf .odl-pal-info .odl-ring { fill: none; stroke: var(--ds-color-info-dark-11); stroke-width: 2.5; } .odl-media-shelf .odl-pal-info .odl-beam { fill: var(--ds-color-info-dark-12); opacity: .28; }
+.odl-media-shelf .odl-pal-success { background: linear-gradient(170deg, var(--ds-color-success-dark-3) 0%, var(--ds-color-success-dark-7) 100%); }
+.odl-media-shelf .odl-pal-success .odl-a1 { fill: var(--ds-color-success-dark-12); } .odl-media-shelf .odl-pal-success .odl-a2 { fill: var(--ds-color-success-dark-9); } .odl-media-shelf .odl-pal-success .odl-a3 { fill: var(--ds-color-success-dark-5); } .odl-media-shelf .odl-pal-success .odl-a4 { fill: var(--ds-color-success-dark-2); } .odl-media-shelf .odl-pal-success .odl-ring { fill: none; stroke: var(--ds-color-success-dark-11); stroke-width: 2.5; } .odl-media-shelf .odl-pal-success .odl-beam { fill: var(--ds-color-success-dark-12); opacity: .28; }
+.odl-media-shelf .odl-pal-danger { background: linear-gradient(170deg, var(--ds-color-danger-dark-3) 0%, var(--ds-color-danger-dark-7) 100%); }
+.odl-media-shelf .odl-pal-danger .odl-a1 { fill: var(--ds-color-danger-dark-12); } .odl-media-shelf .odl-pal-danger .odl-a2 { fill: var(--ds-color-danger-dark-9); } .odl-media-shelf .odl-pal-danger .odl-a3 { fill: var(--ds-color-danger-dark-5); } .odl-media-shelf .odl-pal-danger .odl-a4 { fill: var(--ds-color-danger-dark-2); } .odl-media-shelf .odl-pal-danger .odl-ring { fill: none; stroke: var(--ds-color-danger-dark-11); stroke-width: 2.5; } .odl-media-shelf .odl-pal-danger .odl-beam { fill: var(--ds-color-danger-dark-12); opacity: .28; }
+.odl-media-shelf .odl-pal-neutral { background: linear-gradient(170deg, var(--ds-color-neutral-dark-3) 0%, var(--ds-color-neutral-dark-7) 100%); }
+.odl-media-shelf .odl-pal-neutral .odl-a1 { fill: var(--ds-color-neutral-dark-12); } .odl-media-shelf .odl-pal-neutral .odl-a2 { fill: var(--ds-color-neutral-dark-9); } .odl-media-shelf .odl-pal-neutral .odl-a3 { fill: var(--ds-color-neutral-dark-5); } .odl-media-shelf .odl-pal-neutral .odl-a4 { fill: var(--ds-color-neutral-dark-2); } .odl-media-shelf .odl-pal-neutral .odl-ring { fill: none; stroke: var(--ds-color-neutral-dark-11); stroke-width: 2.5; } .odl-media-shelf .odl-pal-neutral .odl-beam { fill: var(--ds-color-neutral-dark-12); opacity: .28; }
+@container (min-width: 36rem) {
+  .odl-media-shelf ul { grid-auto-columns: calc((100% - var(--ds-space-inline-md) * 2) / 2.35); }
+  .odl-media-shelf .odl-posters ul { grid-auto-columns: calc((100% - var(--ds-space-inline-md) * 3) / 3.6); }
+}
+@container (min-width: 48rem) {
+  .odl-media-shelf .odl-nav { display: flex; }
+  .odl-media-shelf ul { grid-auto-columns: calc((100% - var(--ds-space-inline-md) * 3) / 4); }
+  .odl-media-shelf .odl-posters ul { grid-auto-columns: calc((100% - var(--ds-space-inline-md) * 5) / 6); }
+  .odl-media-shelf .odl-cap b { font: var(--ds-text-title-md); }
+}
+@media (prefers-reduced-motion: reduce) { .odl-media-shelf, .odl-media-shelf *, .odl-media-shelf *::before, .odl-media-shelf *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+</style>
+<section class="odl-media-shelf" aria-label="Your shelves">
+  <div class="odl-shelf">
+    <div class="odl-top"><h3 id="odl-ms-cw">Continue watching</h3><div class="odl-nav"><button type="button" class="odl-prev" aria-label="Scroll Continue watching back"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 4.5-5.5 5.5 5.5 5.5"/></svg></button><button type="button" class="odl-next" aria-label="Scroll Continue watching forward"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 4.5 5.5 5.5L8 15.5"/></svg></button></div></div>
+    <ul aria-labelledby="odl-ms-cw" tabindex="0">
+      <li><button type="button" class="odl-item" aria-label="Resume Tidewater, season 2 episode 4, 22 minutes left"><span class="odl-art odl-pal-info"><svg class="odl-pic" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><circle class="odl-a1" cx="70" cy="30" r="11"/><path class="odl-a2" d="M0 62c10-5 20-5 30 0s20 5 30 0 20-5 30 0 10 3 10 3v35H0z"/><path class="odl-a3" d="M0 76c12-5 22-5 34 0s22 5 34 0 22-5 32 0v24H0z"/><path class="odl-a4" d="M0 90c14-4 26-4 40 0s26 4 40 0 14-3 20-2v12H0z"/></svg><span class="odl-go"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.9v12.2a.7.7 0 0 0 1 .6l9.4-6.1a.7.7 0 0 0 0-1.2L7 3.3a.7.7 0 0 0-1 .6z" fill="currentColor"/></svg></span><span class="odl-bar"><i style="--w: 58%"></i></span></span><span class="odl-name">Tidewater</span><span class="odl-sub">S2 · E4 · 22 min left</span></button></li>
+      <li><button type="button" class="odl-item" aria-label="Resume Lantern Season, episode 7, 41 minutes left"><span class="odl-art odl-pal-warning"><svg class="odl-pic" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path class="odl-beam" d="m56 30 44-16v22z"/><path class="odl-a1" d="M46 30h10l3 56H43z"/><path class="odl-a2" d="M44 26h14v6H44zm3-6h8v6h-8z"/><path class="odl-a3" d="M30 86c10-6 30-8 44-2l10 16H22z"/><path class="odl-a4" d="M0 90c14-3 26-3 40 0s26 3 40 0 14-2 20-1v11H0z"/></svg><span class="odl-go"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.9v12.2a.7.7 0 0 0 1 .6l9.4-6.1a.7.7 0 0 0 0-1.2L7 3.3a.7.7 0 0 0-1 .6z" fill="currentColor"/></svg></span><span class="odl-bar"><i style="--w: 18%"></i></span></span><span class="odl-name">Lantern Season</span><span class="odl-sub">E7 · 41 min left</span></button></li>
+      <li><button type="button" class="odl-item" aria-label="Resume The Copper Coast, film, 1 hour 12 minutes left"><span class="odl-art odl-pal-danger"><svg class="odl-pic" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><circle class="odl-a1" cx="34" cy="42" r="14"/><path class="odl-a2" d="M0 70q30-18 60-4t40-6v40H0z"/><path class="odl-a3" d="M0 84q40-16 100-2v18H0z"/><path class="odl-a4" d="M0 94q50-8 100 0v6H0z"/></svg><span class="odl-go"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.9v12.2a.7.7 0 0 0 1 .6l9.4-6.1a.7.7 0 0 0 0-1.2L7 3.3a.7.7 0 0 0-1 .6z" fill="currentColor"/></svg></span><span class="odl-bar"><i style="--w: 34%"></i></span></span><span class="odl-name">The Copper Coast</span><span class="odl-sub">Film · 1 h 12 min left</span></button></li>
+      <li><button type="button" class="odl-item" aria-label="Resume Driftwood Kings, season 1 episode 2, 9 minutes left"><span class="odl-art odl-pal-success"><svg class="odl-pic" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><circle class="odl-a1" cx="66" cy="34" r="12"/><path class="odl-a2" d="m8 100 14-46 14 46zm40 0 12-38 12 38zm30 0 12-42 12 42z"/><path class="odl-a3" d="m-4 100 16-34 16 34zm26 0 14-28 14 28zm34 0 16-36 16 36z"/><path class="odl-a4" d="M0 94h100v6H0z"/></svg><span class="odl-go"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.9v12.2a.7.7 0 0 0 1 .6l9.4-6.1a.7.7 0 0 0 0-1.2L7 3.3a.7.7 0 0 0-1 .6z" fill="currentColor"/></svg></span><span class="odl-bar"><i style="--w: 82%"></i></span></span><span class="odl-name">Driftwood Kings</span><span class="odl-sub">S1 · E2 · 9 min left</span></button></li>
+      <li><button type="button" class="odl-item" aria-label="Resume Coldspring Line, season 3 episode 1, 48 minutes left"><span class="odl-art odl-pal-accent"><svg class="odl-pic" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><circle class="odl-a2" cx="76" cy="24" r="8"/><path class="odl-a3" d="M4 100V58h12v-8h8v50zm24 0V40h14v60zm18 0V64h10V52h10v48zm24 0V46h12v54zm16 0V60h10v40z"/><path class="odl-a1" d="M31 46h3v3h-3zm6 0h3v3h-3zm-6 8h3v3h-3zm6 8h3v3h-3zm37-10h3v3h-3zm0 8h3v3h-3zm-14-2h3v3h-3zm-49 2h3v3h-3zm73 0h3v3h-3z"/><path class="odl-a4" d="M0 92h100v8H0z"/></svg><span class="odl-go"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.9v12.2a.7.7 0 0 0 1 .6l9.4-6.1a.7.7 0 0 0 0-1.2L7 3.3a.7.7 0 0 0-1 .6z" fill="currentColor"/></svg></span><span class="odl-bar"><i style="--w: 6%"></i></span></span><span class="odl-name">Coldspring Line</span><span class="odl-sub">S3 · E1 · 48 min left</span></button></li>
+    </ul>
+  </div>
+  <div class="odl-shelf odl-posters">
+    <div class="odl-top"><h3 id="odl-ms-bw"><em>Because you watched</em> Tidewater</h3><div class="odl-nav"><button type="button" class="odl-prev" aria-label="Scroll Because you watched back"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 4.5-5.5 5.5 5.5 5.5"/></svg></button><button type="button" class="odl-next" aria-label="Scroll Because you watched forward"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 4.5 5.5 5.5L8 15.5"/></svg></button></div></div>
+    <ul aria-labelledby="odl-ms-bw" tabindex="0">
+      <li><button type="button" class="odl-item" aria-label="Saltmarsh, new episodes"><span class="odl-art odl-pal-success"><svg class="odl-pic" viewBox="0 0 100 100" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><circle class="odl-a1" cx="70" cy="30" r="11"/><path class="odl-a2" d="M0 62c10-5 20-5 30 0s20 5 30 0 20-5 30 0 10 3 10 3v35H0z"/><path class="odl-a3" d="M0 76c12-5 22-5 34 0s22 5 34 0 22-5 32 0v24H0z"/><path class="odl-a4" d="M0 90c14-4 26-4 40 0s26 4 40 0 14-3 20-2v12H0z"/></svg><span class="odl-cap" aria-hidden="true"><b>Saltmarsh</b></span></span><span class="odl-tag">New episodes</span></button></li>
+      <li><button type="button" class="odl-item" aria-label="Ember Valley"><span class="odl-art odl-pal-danger"><svg class="odl-pic" viewBox="0 0 100 100" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><circle class="odl-a1" cx="28" cy="28" r="7"/><path class="odl-a2" d="m0 78 26-30 16 14 22-30 36 44v24H0z"/><path class="odl-a1" d="m64 32 8 10-4-1-4 4-3-3-5 3z"/><path class="odl-a3" d="m0 88 30-20 22 12 20-10 28 18v12H0z"/></svg><span class="odl-cap" aria-hidden="true"><b>Ember Valley</b></span></span></button></li>
+      <li><button type="button" class="odl-item" aria-label="The Ninth Lighthouse, film"><span class="odl-art odl-pal-info"><svg class="odl-pic" viewBox="0 0 100 100" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><path class="odl-beam" d="m56 30 44-16v22z"/><path class="odl-a1" d="M46 30h10l3 56H43z"/><path class="odl-a2" d="M44 26h14v6H44zm3-6h8v6h-8z"/><path class="odl-a3" d="M30 86c10-6 30-8 44-2l10 16H22z"/><path class="odl-a4" d="M0 90c14-3 26-3 40 0s26 3 40 0 14-2 20-1v11H0z"/></svg><span class="odl-cap" aria-hidden="true"><b>The Ninth Lighthouse</b></span></span><span class="odl-tag">Film</span></button></li>
+      <li><button type="button" class="odl-item" aria-label="Quiet Hours"><span class="odl-art odl-pal-accent"><svg class="odl-pic" viewBox="0 0 100 100" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><circle class="odl-a1" cx="14" cy="18" r="1"/><circle class="odl-a1" cx="84" cy="14" r="1.2"/><circle class="odl-a1" cx="76" cy="70" r=".9"/><circle class="odl-a1" cx="22" cy="74" r="1"/><circle class="odl-a2" cx="50" cy="48" r="20"/><path class="odl-a3" d="M50 28a20 20 0 0 1 0 40 26 20 0 0 0 0-40z"/><ellipse class="odl-ring" cx="50" cy="48" rx="34" ry="8" transform="rotate(-14 50 48)"/></svg><span class="odl-cap" aria-hidden="true"><b>Quiet Hours</b></span></span></button></li>
+      <li><button type="button" class="odl-item" aria-label="Pinewick, new season"><span class="odl-art odl-pal-warning"><svg class="odl-pic" viewBox="0 0 100 100" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><circle class="odl-a1" cx="66" cy="34" r="12"/><path class="odl-a2" d="m8 100 14-46 14 46zm40 0 12-38 12 38zm30 0 12-42 12 42z"/><path class="odl-a3" d="m-4 100 16-34 16 34zm26 0 14-28 14 28zm34 0 16-36 16 36z"/><path class="odl-a4" d="M0 94h100v6H0z"/></svg><span class="odl-cap" aria-hidden="true"><b>Pinewick</b></span></span><span class="odl-tag">New season</span></button></li>
+      <li><button type="button" class="odl-item" aria-label="Orbit Street"><span class="odl-art odl-pal-neutral"><svg class="odl-pic" viewBox="0 0 100 100" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><circle class="odl-a2" cx="76" cy="24" r="8"/><path class="odl-a3" d="M4 100V58h12v-8h8v50zm24 0V40h14v60zm18 0V64h10V52h10v48zm24 0V46h12v54zm16 0V60h10v40z"/><path class="odl-a1" d="M31 46h3v3h-3zm6 0h3v3h-3zm-6 8h3v3h-3zm6 8h3v3h-3zm37-10h3v3h-3zm0 8h3v3h-3zm-14-2h3v3h-3zm-49 2h3v3h-3zm73 0h3v3h-3z"/><path class="odl-a4" d="M0 92h100v8H0z"/></svg><span class="odl-cap" aria-hidden="true"><b>Orbit Street</b></span></span></button></li>
+    </ul>
+  </div>
+</section>
+<script>
+document.querySelectorAll(".odl-media-shelf").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  const still = matchMedia("(prefers-reduced-motion: reduce)");
+  root.querySelectorAll(".odl-shelf").forEach((shelf) => {
+    const list = shelf.querySelector("ul"), prev = shelf.querySelector(".odl-prev"), next = shelf.querySelector(".odl-next");
+    const sync = () => {
+      prev.disabled = list.scrollLeft <= 2;
+      next.disabled = list.scrollLeft + list.clientWidth >= list.scrollWidth - 2;
+    };
+    const go = (dir) => list.scrollBy({ left: dir * list.clientWidth * 0.9, behavior: still.matches ? "auto" : "smooth" });
+    prev.addEventListener("click", () => go(-1));
+    next.addEventListener("click", () => go(1));
+    list.addEventListener("scroll", sync, { passive: true });
+    sync();
+  });
+});
+</script>

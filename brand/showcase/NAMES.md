@@ -854,3 +854,108 @@ The library's parts used to reuse names from the showcase pieces (Fennick, Ferru
 | policy-vault | API key | library |
 | people-sync | service account | library |
 | settle-api | service | library |
+
+## Appended 2026-10-23: the component library, consumer parts
+
+Names in the 40 consumer parts (social, media, shop and food, travel and home, health, money and learning). Each was checked with check_names.py and web-searched where it is a brand.
+
+| Name | Kind | Pieces |
+|---|---|---|
+| Linen field overshirt | product | library |
+| Workroom line | product line | library |
+| Ribbed merino beanie | product | library |
+| Stoneware travel cup | product | library |
+| Trailcourt low sneaker | product | library |
+| Fig and cedar candle | product | library |
+| Crispy chilli tofu bowl | dish | library |
+| Solveig A. | person | library |
+| Tevita R. | person | library |
+| Kemal | person | library |
+| Wairimu Njoroge | person | library |
+| Pellanore Dumpling Bar | brand (web search found no restaurant of that name) | library |
+| Hollinby Bakehouse | brand (web search found none; replaces Velloway, two letters from Calloway) | library |
+| Saffrine Tandoor | brand (web search found no restaurant named Saffrine) | library |
+| Hoshiyagi Ramen Bar | brand (web search found none; replaces Kumoya, a real restaurant) | library |
+| Brindlecup Rewards | brand (web search found no Brindlecup) | library |
+| Quayside Road | place | library |
+| Canal Street | place | library |
+| Akosua Mensimah | person | library |
+| Astrid Holmqvist | person | library |
+| Bartek Zielony | person | library |
+| Cedar Light | title | library |
+| Chidi Nwosu | person | library |
+| Coldspring Line | title | library |
+| Corvelle Picturehouse | brand | library |
+| Devika Nair | person | library |
+| Driftwood Kings | title | library |
+| Ember Valley | title | library |
+| Emre Kaplan | person | library |
+| Field Notes from the Ridge | title | library |
+| Glasshouse Summer | title | library |
+| Hollow Bells | title | library |
+| Ilka Ferenczi | person | library |
+| Joaquim Teles | person | library |
+| Kite Weather | title | library |
+| Kwabena Asare | person | library |
+| Lantern Season | title | library |
+| Late Bus Home | title | library |
+| Leandro Pires | person | library |
+| Lucía Ferreyra | person | library |
+| Mei Aoyama | person | library |
+| Mirelle Duvane | person | library |
+| Ninety Steps | title | library |
+| Orbit Street | title | library |
+| Orchard Static | title | library |
+| Ottilie Brennholt | person | library |
+| Pinewick | title | library |
+| Postcards from Low Tide | title | library |
+| Quiet Hours | title | library |
+| Riverglass | title | library |
+| Ryota Ishikawa | person | library |
+| Saltmarsh | title | library |
+| Saltwater Radio | title | library |
+| Sefa Dlamini | person | library |
+| Snowmelt | title | library |
+| Teodor Okonjo | person | library |
+| The Copper Coast | title | library |
+| The Long Table | title | library |
+| The Ninth Lighthouse | title | library |
+| Tidewater | title | library |
+| Wynn Castellane | person | library |
+| Zainab Qureshi | person | library |
+| Élodie Marchand | person | library |
+| sefa-builds.example | domain | library |
+| Vellora Air | brand (airline) | library |
+| Brisaline | brand (airline) | library |
+| Peldra Airways | brand (airline) | library |
+| Tamsu Air | brand (airline) | library |
+| Inês Valadares | person | library |
+| Ingrid | person | library |
+| Cabin by the fjord | title (listing) | library |
+| Odalys Reyne | person (artist) | library |
+| Lowtide Tour | title (tour) | library |
+| Wrenfield Hall | venue | library |
+| Kanbe House | brand (guesthouse) | library |
+| Sobaya Ritsu | brand (restaurant) | library |
+| Yuki Mori | person | library |
+| Fernby Market | grocer (web search found no shop of that name) | library |
+| Lanternhall Cinema | cinema (web search found no venue of that name; nearest is Lanternhouse, Cumbernauld) | library |
+| Rasmus Ottesen | person | library |
+| Saltmarsh Bakery | bakery (web search found no bakery of that name) | library |
+| Rafał Ostrowiak | person | library |
+| rafal.makes | handle | library |
+| Ximena Quintana | person | library |
+| ximena.q | handle | library |
+| Kwesi Boateng-Ansah | person | library |
+| kwesi.frames | handle | library |
+| Henrik Strandberg | person | library |
+| henrik.sb | handle | library |
+| Arash Tehrani | person | library |
+| arash.t | handle | library |
+| Leilani Kahale | person | library |
+| leilani.k | handle | library |
+| Mireille Vasseur | person | library |
+| mireille.v | handle | library |
+| Yuki Hanabusa | person | library |
+| yuki_h | handle | library |
+| Harbourlight | brand (share link domain harbourlight.example; web search found no app or company of that name) | library |

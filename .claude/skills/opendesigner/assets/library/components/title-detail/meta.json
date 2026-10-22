@@ -1,0 +1,13 @@
+{
+  "name": "Title detail",
+  "summary": "A film or series page: a drawn backdrop with the title, year, age rating, seasons and score, then Resume and My list, the synopsis and cast, a season switch and episode rows with stills and progress.",
+  "use": "on the detail page of a series, film, course or show",
+  "type": "content",
+  "style": "editorial",
+  "industries": ["media", "education", "events"],
+  "tags": ["streaming", "series", "episodes", "seasons", "watchlist"],
+  "states": ["season 1", "season 2", "watched", "in progress", "in my list", "hover", "focus"],
+  "source": null,
+  "a11y": "An article named by its title; the season switch is a native radio group, My list is a toggle button with aria-pressed, and each episode row is one button that says its number, title and time left.",
+  "width": "wide"
+}

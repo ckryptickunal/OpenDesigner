@@ -1,0 +1,13 @@
+{
+  "name": "Restaurant cards",
+  "summary": "Restaurants or stores in a list: a cover drawn from the tokens, name, cuisine and price level, rating, delivery time and fee, a promo tag and a favourite toggle.",
+  "use": "in a food delivery or local shops app, for browsing places nearby",
+  "type": "commerce",
+  "style": "friendly",
+  "industries": ["food", "retail"],
+  "tags": ["restaurant", "store", "delivery", "rating", "favourite", "promo"],
+  "states": ["saved", "not saved", "promo", "new", "hover", "focus"],
+  "source": null,
+  "a11y": "Each card is one link (its name) that covers the card, with the focus ring on the cover; save is a separate toggle button named for its place, and the rating is read as words.",
+  "width": "wide"
+}

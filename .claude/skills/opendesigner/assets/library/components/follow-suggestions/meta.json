@@ -1,0 +1,13 @@
+{
+  "name": "Follow suggestions",
+  "summary": "\"People you may know\" as a sideways row of cards, each with a drawn avatar, name and handle, the mutual friends behind the suggestion, a follow button that turns into Following, and a way to remove the card.",
+  "use": "in a social feed or after sign-up, for finding people to follow",
+  "type": "content",
+  "style": "friendly",
+  "industries": ["social", "media"],
+  "tags": ["follow", "suggestions", "people", "carousel", "mutual friends"],
+  "states": ["follow", "following", "follow back", "removed", "all caught up", "hover", "focus"],
+  "source": null,
+  "a11y": "Follow buttons are toggles with aria-pressed and the person's name; removing a card says so in a polite live region and moves focus to the next card's remove button.",
+  "width": "medium"
+}

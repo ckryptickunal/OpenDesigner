@@ -1,0 +1,130 @@
+<style>
+.odl-restaurant-card { box-sizing: border-box; inline-size: 100%; max-inline-size: 56rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-restaurant-card *, .odl-restaurant-card *::before, .odl-restaurant-card *::after { box-sizing: border-box; }
+.odl-restaurant-card .odl-wrap { --odl-tap: max(var(--ds-size-target-min), var(--ds-size-control-md)); display: grid; gap: var(--ds-space-stack-md); }
+@container (max-width: 30rem) { .odl-restaurant-card .odl-wrap { --odl-tap: var(--ds-size-target-touch); } }
+.odl-restaurant-card .odl-top { display: grid; gap: var(--ds-space-2); }
+.odl-restaurant-card h3 { margin: 0; font: var(--ds-text-title-md); }
+.odl-restaurant-card .odl-top p { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-restaurant-card ul { display: grid; gap: var(--ds-space-stack-lg) var(--ds-space-inline-md); margin: 0; padding: 0; list-style: none; }
+@container (min-width: 34rem) { .odl-restaurant-card ul { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.odl-restaurant-card li { position: relative; display: grid; gap: var(--ds-space-stack-sm); }
+.odl-restaurant-card .odl-cover { position: relative; aspect-ratio: 16 / 9; border-radius: var(--ds-radius-container); overflow: hidden; }
+.odl-restaurant-card .odl-cover svg { pointer-events: none; display: block; inline-size: 100%; block-size: 100%; transition: transform var(--ds-motion-duration-medium) var(--ds-motion-easing-standard); }
+.odl-restaurant-card li:hover .odl-cover svg { transform: scale(1.03); }
+/* Covers drawn from the tokens: bread on a board, a curry pot, a ramen bowl. */
+.odl-restaurant-card .is-bake { background: linear-gradient(160deg, var(--ds-color-warning-light-3), var(--ds-color-warning-light-6)); }
+.odl-restaurant-card .is-curry { background: linear-gradient(160deg, var(--ds-color-danger-light-3), var(--ds-color-danger-light-6)); }
+.odl-restaurant-card .is-ramen { background: linear-gradient(160deg, var(--ds-color-neutral-light-11), var(--ds-color-neutral-light-12)); }
+.odl-restaurant-card .odl-a { fill: var(--ds-color-warning-light-9); } .odl-restaurant-card .odl-a2 { fill: var(--ds-color-warning-light-11); } .odl-restaurant-card .odl-a3 { fill: var(--ds-color-warning-light-7); }
+.odl-restaurant-card .odl-board { fill: var(--ds-color-warning-light-5); }
+.odl-restaurant-card .odl-score { fill: none; stroke: var(--ds-color-warning-light-5); stroke-width: 3; stroke-linecap: round; }
+.odl-restaurant-card .odl-pot { fill: var(--ds-color-neutral-light-12); } .odl-restaurant-card .odl-sauce { fill: var(--ds-color-warning-light-9); } .odl-restaurant-card .odl-herb { fill: var(--ds-color-success-light-8); }
+.odl-restaurant-card .odl-cream { fill: none; stroke: var(--ds-color-warning-light-3); stroke-width: 2.5; stroke-linecap: round; }
+.odl-restaurant-card .odl-steam { fill: none; stroke: var(--ds-color-white); stroke-width: 3; stroke-linecap: round; opacity: .55; }
+.odl-restaurant-card .odl-r-bowl { fill: var(--ds-color-danger-light-9); } .odl-restaurant-card .odl-broth { fill: var(--ds-color-warning-light-7); } .odl-restaurant-card .odl-noodle { fill: none; stroke: var(--ds-color-warning-light-3); stroke-width: 2.5; stroke-linecap: round; }
+.odl-restaurant-card .odl-egg { fill: var(--ds-color-white); } .odl-restaurant-card .odl-yolk { fill: var(--ds-color-warning-light-9); } .odl-restaurant-card .odl-nori { fill: var(--ds-color-neutral-light-12); }
+.odl-restaurant-card .odl-promo { position: absolute; inset-block-start: var(--ds-space-inset-sm); inset-inline-start: var(--ds-space-inset-sm); display: inline-flex; align-items: center; gap: var(--ds-space-4); min-block-size: var(--ds-size-control-sm);
+  padding: 0 var(--ds-space-inset-sm); border-radius: calc(var(--ds-radius-container) - var(--ds-space-inset-sm)); background: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent); font: var(--ds-text-label-sm); }
+.odl-restaurant-card .odl-promo { max-inline-size: calc(100% - var(--ds-size-target-touch) - var(--ds-space-inset-sm) * 2); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.odl-restaurant-card .odl-promo.is-new { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-restaurant-card .odl-promo svg { inline-size: var(--ds-space-12); block-size: var(--ds-space-12); }
+.odl-restaurant-card .odl-fav { --odl-hang: calc((var(--ds-size-target-touch) - var(--ds-size-control-sm)) / 2); position: absolute; z-index: 1; inset-block-start: calc(var(--ds-space-inset-sm) - var(--odl-hang)); inset-inline-end: calc(var(--ds-space-inset-sm) - var(--odl-hang)); display: grid; place-items: center; inline-size: var(--ds-size-target-touch); block-size: var(--ds-size-target-touch);
+  padding: 0; border: 0; border-radius: var(--ds-radius-full); background: transparent; color: var(--ds-color-text-primary); cursor: pointer; }
+.odl-restaurant-card .odl-fav span { display: grid; place-items: center; inline-size: var(--ds-size-control-sm); block-size: var(--ds-size-control-sm); border-radius: var(--ds-radius-full); background: var(--ds-color-surface-raised); box-shadow: var(--ds-elevation-raised);
+  transition: transform var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-restaurant-card .odl-fav:active span { transform: scale(var(--ds-motion-scale-press)); }
+.odl-restaurant-card .odl-fav svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-restaurant-card .odl-fav[aria-pressed="true"] { color: var(--ds-color-text-danger); }
+.odl-restaurant-card .odl-fav[aria-pressed="true"] path { fill: currentColor; }
+.odl-restaurant-card .odl-info { display: grid; gap: var(--ds-space-2); padding-inline: var(--ds-space-2); }
+.odl-restaurant-card .odl-row { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-inline-sm); }
+.odl-restaurant-card h4 { margin: 0; min-inline-size: 0; font: var(--ds-text-title-sm); }
+.odl-restaurant-card h4 a { color: inherit; text-decoration: none; border-radius: var(--ds-radius-control-sm); }
+.odl-restaurant-card h4 a::after { content: ""; position: absolute; inset: 0; }
+.odl-restaurant-card h4 a:focus-visible { outline: none; }
+.odl-restaurant-card li:has(h4 a:focus-visible) .odl-cover { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-restaurant-card .odl-rating { flex: none; display: inline-flex; align-items: center; gap: var(--ds-space-2); padding: var(--ds-space-2) var(--ds-space-8); border-radius: var(--ds-radius-control-sm); background: var(--ds-color-bg-neutral-subtle);
+  font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
+.odl-restaurant-card .odl-rating svg { inline-size: var(--ds-space-12); block-size: var(--ds-space-12); color: var(--ds-color-warning-light-9); }
+.odl-restaurant-card .odl-cuisine { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-restaurant-card .odl-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-2) var(--ds-space-inline-sm); margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
+.odl-restaurant-card .odl-meta span { display: inline-flex; align-items: center; gap: var(--ds-space-4); white-space: nowrap; }
+.odl-restaurant-card .odl-meta svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); color: var(--ds-color-icon-subtle); }
+.odl-restaurant-card .odl-meta .is-free { color: var(--ds-color-text-success); }
+.odl-restaurant-card button:focus-visible { outline: none; }
+.odl-restaurant-card button:focus-visible span { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-restaurant-card .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .odl-restaurant-card, .odl-restaurant-card *, .odl-restaurant-card *::before { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-restaurant-card" aria-labelledby="odl-rc-title">
+  <div class="odl-wrap">
+    <div class="odl-top"><h3 id="odl-rc-title">Near you</h3><p>Delivering to Canal Street</p></div>
+    <ul>
+      <li>
+        <div class="odl-cover is-bake">
+          <svg aria-hidden="true" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice">
+            <rect class="odl-board" x="40" y="96" width="240" height="64" rx="32"/>
+            <path class="odl-a" d="M70 120c0-30 30-52 70-52s70 22 70 52c0 8-6 12-14 12H84c-8 0-14-4-14-12z"/>
+            <path class="odl-score" d="M100 86l14 22M128 76l14 24M158 74l14 24M186 82l12 22"/>
+            <path class="odl-a3" d="M214 128c4-22 22-36 38-36s28 12 28 28c0 6-4 10-10 10h-48c-6 0-9-1-8-2z"/>
+            <path class="odl-a2" d="M232 104l6 22M250 96l2 30M266 104l-4 22" style="fill: none; stroke: var(--ds-color-warning-light-10); stroke-width: 2.5; stroke-linecap: round"/>
+          </svg>
+          <span class="odl-promo"><svg viewBox="0 0 12 12" fill="currentColor"><path d="M1 6.6V1.5a.5.5 0 0 1 .5-.5h5.1l4.4 4.4-5.6 5.6zM3.5 4.5a1 1 0 1 0 0-.1z"/></svg>20% off</span>
+          <button type="button" class="odl-fav" aria-label="Save Hollinby Bakehouse" aria-pressed="true"><span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></span></button>
+        </div>
+        <div class="odl-info">
+          <div class="odl-row"><h4><a href="#">Hollinby Bakehouse</a></h4><span class="odl-rating"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><span class="odl-sr">Rated </span>4.8<span class="odl-sr"> out of 5</span></span></div>
+          <p class="odl-cuisine">Bakery · Breakfast · $$</p>
+          <p class="odl-meta"><span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M8 4.5V8l2.5 1.5"/></svg>15–25 min</span><span class="is-free">Free delivery</span></p>
+        </div>
+      </li>
+      <li>
+        <div class="odl-cover is-curry">
+          <svg aria-hidden="true" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice">
+            <path class="odl-steam" d="M140 44c-8-10 8-16 0-28M162 40c-8-10 8-16 0-28M184 44c-8-10 8-16 0-28"/>
+            <ellipse class="odl-pot" cx="162" cy="112" rx="92" ry="46"/><rect class="odl-pot" x="56" y="98" width="20" height="10" rx="5"/><rect class="odl-pot" x="248" y="98" width="20" height="10" rx="5"/>
+            <ellipse class="odl-sauce" cx="162" cy="100" rx="78" ry="30"/>
+            <path class="odl-cream" d="M110 98c20-12 40 10 60-2s34 6 50 0"/>
+            <path class="odl-herb" d="M134 88l6-6 6 6-6 4zM190 104l6-6 6 6-6 4zM160 110l6-6 6 6-6 4zM206 88l5-5 5 5-5 3z"/>
+          </svg>
+          <span class="odl-promo">Buy 1, get 1</span>
+          <button type="button" class="odl-fav" aria-label="Save Saffrine Tandoor" aria-pressed="false"><span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></span></button>
+        </div>
+        <div class="odl-info">
+          <div class="odl-row"><h4><a href="#">Saffrine Tandoor</a></h4><span class="odl-rating"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><span class="odl-sr">Rated </span>4.6<span class="odl-sr"> out of 5</span></span></div>
+          <p class="odl-cuisine">North Indian · Curries · $$</p>
+          <p class="odl-meta"><span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M8 4.5V8l2.5 1.5"/></svg>25–35 min</span><span>$1.99 delivery</span></p>
+        </div>
+      </li>
+      <li>
+        <div class="odl-cover is-ramen">
+          <svg aria-hidden="true" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice">
+            <circle class="odl-r-bowl" cx="160" cy="92" r="70"/><circle class="odl-broth" cx="160" cy="92" r="58"/>
+            <path class="odl-noodle" d="M116 100c12-8 24 8 36 0s24 8 36 0M120 112c12-8 24 8 36 0s24 8 36 0M124 88c12-8 24 8 36 0"/>
+            <ellipse class="odl-egg" cx="186" cy="74" rx="16" ry="13"/><circle class="odl-yolk" cx="186" cy="74" r="7"/>
+            <rect class="odl-nori" x="120" y="50" width="20" height="40" rx="2" transform="rotate(-18 130 70)"/>
+            <path class="odl-herb" d="M160 66l5-5 5 5-5 3zM146 124l5-5 5 5-5 3zM200 104l5-5 5 5-5 3z"/>
+          </svg>
+          <span class="odl-promo is-new">New</span>
+          <button type="button" class="odl-fav" aria-label="Save Hoshiyagi Ramen Bar" aria-pressed="false"><span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></span></button>
+        </div>
+        <div class="odl-info">
+          <div class="odl-row"><h4><a href="#">Hoshiyagi Ramen Bar</a></h4><span class="odl-rating"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><span class="odl-sr">Rated </span>4.9<span class="odl-sr"> out of 5</span></span></div>
+          <p class="odl-cuisine">Japanese · Ramen · $$$</p>
+          <p class="odl-meta"><span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M8 4.5V8l2.5 1.5"/></svg>30–40 min</span><span>$2.49 delivery</span></p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+<script>
+document.querySelectorAll(".odl-restaurant-card").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  root.querySelectorAll(".odl-fav").forEach((b) => b.addEventListener("click", () => {
+    const on = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", String(on));
+  }));
+  root.querySelectorAll("h4 a").forEach((a) => a.addEventListener("click", (e) => { if (a.getAttribute("href") === "#") e.preventDefault(); }));
+});
+</script>

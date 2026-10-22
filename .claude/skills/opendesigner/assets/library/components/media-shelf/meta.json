@@ -1,0 +1,13 @@
+{
+  "name": "Media shelf",
+  "summary": "Two swipeable rows for a streaming home: Continue watching, with drawn stills, a progress bar and the time left, and Because you watched, with drawn posters and New season tags.",
+  "use": "on the home screen of a video, music or course app, for picking up where people left off",
+  "type": "content",
+  "style": "friendly",
+  "industries": ["media", "education", "games"],
+  "tags": ["streaming", "carousel", "posters", "continue watching", "recommendations"],
+  "states": ["hover", "focus", "in progress", "new", "scrolled to start", "scrolled to end"],
+  "source": null,
+  "a11y": "Each row is a labelled list that scrolls inside itself (swipe, shift-scroll or the arrow buttons, which turn off at each end); every title is one button whose name says the episode and time left.",
+  "width": "wide"
+}

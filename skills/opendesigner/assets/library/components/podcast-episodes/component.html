@@ -1,0 +1,147 @@
+<style>
+.odl-podcast-episodes { box-sizing: border-box; inline-size: 100%; max-inline-size: 44rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-podcast-episodes *, .odl-podcast-episodes *::before, .odl-podcast-episodes *::after { box-sizing: border-box; }
+.odl-podcast-episodes .odl-card { display: grid; gap: var(--ds-space-stack-sm); padding: var(--ds-space-inset-lg); background: var(--ds-color-surface-raised);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); }
+.odl-podcast-episodes .odl-head { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--ds-space-inline-md); padding-block-end: var(--ds-space-stack-sm); }
+.odl-podcast-episodes .odl-art { inline-size: calc(var(--ds-size-control-lg) * 1.5); aspect-ratio: 1; overflow: hidden; border-radius: var(--ds-radius-nested); box-shadow: var(--ds-elevation-raised);
+  background: linear-gradient(160deg, var(--ds-color-warning-light-5), var(--ds-color-warning-light-9)); }
+.odl-podcast-episodes .odl-art svg { display: block; inline-size: 100%; block-size: 100%; }
+.odl-podcast-episodes .odl-table { fill: var(--ds-color-warning-light-12); }
+.odl-podcast-episodes .odl-plate { fill: var(--ds-color-warning-light-1); }
+.odl-podcast-episodes .odl-cup { fill: var(--ds-color-accent-light-9); }
+.odl-podcast-episodes .odl-steam { fill: none; stroke: var(--ds-color-warning-light-1); stroke-width: 2; stroke-linecap: round; }
+.odl-podcast-episodes .odl-show { margin: 0; color: var(--ds-color-text-accent); font: var(--ds-text-label-md); letter-spacing: var(--ds-text-label-md-tracking); }
+.odl-podcast-episodes h3 { margin: var(--ds-space-2) 0; font: var(--ds-text-title-lg); }
+.odl-podcast-episodes .odl-count { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-podcast-episodes ol { display: grid; margin: 0; padding: 0; list-style: none; }
+.odl-podcast-episodes li { display: grid; gap: var(--ds-space-stack-xs); padding-block: var(--ds-space-stack-md); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+.odl-podcast-episodes .odl-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-4) var(--ds-space-8); margin: 0; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
+.odl-podcast-episodes .odl-new { padding: var(--ds-space-2) var(--ds-space-8); border-radius: var(--ds-radius-control-sm); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font: var(--ds-text-label-sm); }
+.odl-podcast-episodes h4 { margin: 0; font: var(--ds-text-title-sm); }
+.odl-podcast-episodes .odl-desc { display: -webkit-box; margin: 0; overflow: hidden; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+.odl-podcast-episodes .odl-row { display: flex; align-items: center; gap: var(--ds-space-inline-xs); margin-block-start: var(--ds-space-stack-xs); }
+.odl-podcast-episodes button { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-xs); min-inline-size: max(var(--ds-size-control-md), var(--ds-size-target-min));
+  min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0; border: 0; border-radius: var(--ds-radius-full); background: transparent; color: var(--ds-color-text-secondary);
+  font: var(--ds-text-label-lg); cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-podcast-episodes button:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
+.odl-podcast-episodes button svg { flex: none; inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
+.odl-podcast-episodes button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-podcast-episodes .odl-play { padding-inline: var(--ds-space-inset-sm) var(--ds-space-inset-md); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary);
+  font-variant-numeric: tabular-nums; white-space: nowrap; }
+.odl-podcast-episodes .odl-play:hover { background: var(--ds-color-bg-neutral-subtle-hover); }
+.odl-podcast-episodes .odl-play svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-podcast-episodes .odl-play .is-pause, .odl-podcast-episodes .is-playing .odl-play .is-play { display: none; }
+.odl-podcast-episodes .is-playing .odl-play .is-pause { display: block; }
+.odl-podcast-episodes .is-playing .odl-play { background: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent); }
+.odl-podcast-episodes .odl-bar { flex: none; inline-size: var(--ds-space-32); block-size: var(--ds-space-4); border-radius: var(--ds-radius-full); background: var(--ds-color-border-default); overflow: hidden; }
+.odl-podcast-episodes .odl-bar i { display: block; inline-size: var(--w); block-size: 100%; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-bold); }
+.odl-podcast-episodes .is-playing .odl-bar { background: var(--ds-color-neutral-alpha-light-6); }
+.odl-podcast-episodes .is-playing .odl-bar i { background: var(--ds-color-text-on-accent); }
+.odl-podcast-episodes .odl-played { display: inline-flex; align-items: center; gap: var(--ds-space-4); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); }
+.odl-podcast-episodes .odl-played svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-podcast-episodes .odl-dl { margin-inline-start: auto; }
+.odl-podcast-episodes .odl-dl .odl-ring { position: relative; display: none; inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); border-radius: var(--ds-radius-full);
+  background: conic-gradient(var(--ds-color-icon-accent) var(--d, 0%), var(--ds-color-border-default) 0); }
+.odl-podcast-episodes .odl-dl .odl-ring::after { content: ""; position: absolute; inset: var(--ds-border-width-emphasis); border-radius: var(--ds-radius-full); background: var(--ds-color-surface-raised); }
+.odl-podcast-episodes .odl-dl .odl-ring b { position: absolute; inset: 32%; z-index: 1; border-radius: var(--ds-radius-2); background: var(--ds-color-icon-accent); }
+.odl-podcast-episodes .odl-dl .is-done, .odl-podcast-episodes .odl-dl[data-state="loading"] .is-idle, .odl-podcast-episodes .odl-dl[data-state="done"] .is-idle { display: none; }
+.odl-podcast-episodes .odl-dl[data-state="loading"] .odl-ring { display: block; }
+.odl-podcast-episodes .odl-dl[data-state="done"] .is-done { display: block; color: var(--ds-color-text-accent); }
+.odl-podcast-episodes .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@container (min-width: 36rem) {
+  .odl-podcast-episodes .odl-card { padding: var(--ds-space-inset-xl); }
+}
+@media (prefers-reduced-motion: reduce) { .odl-podcast-episodes, .odl-podcast-episodes *, .odl-podcast-episodes *::before, .odl-podcast-episodes *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-podcast-episodes" aria-labelledby="odl-pe-title">
+  <div class="odl-card">
+    <header class="odl-head">
+      <div class="odl-art" aria-hidden="true">
+        <svg viewBox="0 0 60 60"><path class="odl-steam" d="M38 14c-2 3 2 5 0 8M44 12c-2 3 2 5 0 8"/><rect class="odl-table" y="40" width="60" height="20"/><ellipse class="odl-plate" cx="22" cy="40" rx="14" ry="4"/><path class="odl-cup" d="M34 26h14v10a5 5 0 0 1-5 5h-4a5 5 0 0 1-5-5zM48 29h2a3 3 0 0 1 0 6h-2v-2h2a1 1 0 0 0 0-2h-2z"/></svg>
+      </div>
+      <div>
+        <p class="odl-show">The Long Table · weekly</p>
+        <h3 id="odl-pe-title">Episodes</h3>
+        <p class="odl-count">128 episodes · newest first</p>
+      </div>
+    </header>
+    <ol>
+      <li>
+        <p class="odl-meta"><span class="odl-new">New</span><span>Thu 16 Oct</span><span aria-hidden="true">·</span><span>48 min</span></p>
+        <h4>What bakers know about patience</h4>
+        <p class="odl-desc">Ilka Ferenczi has run a night bakery for thirty years. We talk sourdough, broken sleep and why the best loaves take two days.</p>
+        <div class="odl-row">
+          <button type="button" class="odl-play" aria-label="Play What bakers know about patience, 48 minutes"><svg class="is-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.9v12.2a.7.7 0 0 0 1 .6l9.4-6.1a.7.7 0 0 0 0-1.2L7 3.3a.7.7 0 0 0-1 .6z" fill="currentColor"/></svg><svg class="is-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/><rect x="11.5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/></svg><span>48 min</span></button>
+          <button type="button" class="odl-dl" data-state="idle" aria-label="Download What bakers know about patience"><svg class="is-idle" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M10 6.5v6.5M7.25 10.5 10 13.25l2.75-2.75"/></svg><span class="odl-ring" aria-hidden="true"><b></b></span><svg class="is-done" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="currentColor"/><path d="m6.5 10.25 2.3 2.25 4.7-5" fill="none" stroke="var(--ds-color-surface-raised)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button type="button" class="odl-more" aria-label="More for What bakers know about patience"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.5" cy="10" r="1.5" fill="currentColor"/><circle cx="10" cy="10" r="1.5" fill="currentColor"/><circle cx="15.5" cy="10" r="1.5" fill="currentColor"/></svg></button>
+        </div>
+      </li>
+      <li>
+        <p class="odl-meta"><span>Thu 9 Oct</span><span aria-hidden="true">·</span><span>52 min</span></p>
+        <h4>A night shift at the river port</h4>
+        <p class="odl-desc">Crane drivers, a ship's cook and the woman who checks every container seal. What a port sounds like at three in the morning.</p>
+        <div class="odl-row">
+          <button type="button" class="odl-play" aria-label="Resume A night shift at the river port, 18 minutes left"><svg class="is-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.9v12.2a.7.7 0 0 0 1 .6l9.4-6.1a.7.7 0 0 0 0-1.2L7 3.3a.7.7 0 0 0-1 .6z" fill="currentColor"/></svg><svg class="is-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/><rect x="11.5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/></svg><span class="odl-bar" aria-hidden="true"><i style="--w: 65%"></i></span><span>18 min left</span></button>
+          <button type="button" class="odl-dl" data-state="done" aria-label="Downloaded. Remove download of A night shift at the river port"><svg class="is-idle" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M10 6.5v6.5M7.25 10.5 10 13.25l2.75-2.75"/></svg><span class="odl-ring" aria-hidden="true"><b></b></span><svg class="is-done" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="currentColor"/><path d="m6.5 10.25 2.3 2.25 4.7-5" fill="none" stroke="var(--ds-color-surface-raised)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button type="button" class="odl-more" aria-label="More for A night shift at the river port"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.5" cy="10" r="1.5" fill="currentColor"/><circle cx="10" cy="10" r="1.5" fill="currentColor"/><circle cx="15.5" cy="10" r="1.5" fill="currentColor"/></svg></button>
+        </div>
+      </li>
+      <li>
+        <p class="odl-meta"><span>Thu 2 Oct</span><span aria-hidden="true">·</span><span>39 min</span></p>
+        <h4>Learning Portuguese at sixty</h4>
+        <p class="odl-desc">Joaquim Teles moved back to his mother's village and found he had forgotten the language. A year of flashcards, market chats and one very patient neighbour.</p>
+        <div class="odl-row">
+          <button type="button" class="odl-play" aria-label="Play Learning Portuguese at sixty, 39 minutes"><svg class="is-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.9v12.2a.7.7 0 0 0 1 .6l9.4-6.1a.7.7 0 0 0 0-1.2L7 3.3a.7.7 0 0 0-1 .6z" fill="currentColor"/></svg><svg class="is-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/><rect x="11.5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/></svg><span>39 min</span></button>
+          <button type="button" class="odl-dl" data-state="loading" data-done="60" style="--d: 60%" aria-label="Downloading, 60%. Cancel download of Learning Portuguese at sixty"><svg class="is-idle" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M10 6.5v6.5M7.25 10.5 10 13.25l2.75-2.75"/></svg><span class="odl-ring" aria-hidden="true"><b></b></span><svg class="is-done" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="currentColor"/><path d="m6.5 10.25 2.3 2.25 4.7-5" fill="none" stroke="var(--ds-color-surface-raised)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button type="button" class="odl-more" aria-label="More for Learning Portuguese at sixty"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.5" cy="10" r="1.5" fill="currentColor"/><circle cx="10" cy="10" r="1.5" fill="currentColor"/><circle cx="15.5" cy="10" r="1.5" fill="currentColor"/></svg></button>
+        </div>
+      </li>
+      <li>
+        <p class="odl-meta"><span>Thu 25 Sep</span><span aria-hidden="true">·</span><span>44 min</span></p>
+        <h4>The town that rebuilt its cinema</h4>
+        <p class="odl-desc">When the last screen closed, four hundred neighbours bought it back, one seat at a time.</p>
+        <div class="odl-row">
+          <button type="button" class="odl-play" aria-label="Play again: The town that rebuilt its cinema, 44 minutes"><svg class="is-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.9v12.2a.7.7 0 0 0 1 .6l9.4-6.1a.7.7 0 0 0 0-1.2L7 3.3a.7.7 0 0 0-1 .6z" fill="currentColor"/></svg><svg class="is-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/><rect x="11.5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/></svg><span>44 min</span></button>
+          <span class="odl-played"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3.5 8.25 3 3 6-6.5"/></svg>Played</span>
+          <button type="button" class="odl-dl" data-state="idle" aria-label="Download The town that rebuilt its cinema"><svg class="is-idle" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M10 6.5v6.5M7.25 10.5 10 13.25l2.75-2.75"/></svg><span class="odl-ring" aria-hidden="true"><b></b></span><svg class="is-done" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="currentColor"/><path d="m6.5 10.25 2.3 2.25 4.7-5" fill="none" stroke="var(--ds-color-surface-raised)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button type="button" class="odl-more" aria-label="More for The town that rebuilt its cinema"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.5" cy="10" r="1.5" fill="currentColor"/><circle cx="10" cy="10" r="1.5" fill="currentColor"/><circle cx="15.5" cy="10" r="1.5" fill="currentColor"/></svg></button>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+<script>
+document.querySelectorAll(".odl-podcast-episodes").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  const items = [...root.querySelectorAll("li")];
+  items.forEach((li) => {
+    const title = li.querySelector("h4").textContent, play = li.querySelector(".odl-play"), first = play.getAttribute("aria-label");
+    play.addEventListener("click", () => {
+      const on = !li.classList.contains("is-playing");
+      items.forEach((o) => { o.classList.remove("is-playing"); const b = o.querySelector(".odl-play"); b.setAttribute("aria-label", b.dataset.label || b.getAttribute("aria-label")); });
+      play.dataset.label = first;
+      li.classList.toggle("is-playing", on);
+      play.setAttribute("aria-label", on ? `Pause ${title}` : first);
+    });
+    const dl = li.querySelector(".odl-dl");
+    let timer = null;
+    const set = (state, pct) => {
+      dl.dataset.state = state;
+      dl.style.setProperty("--d", (pct || 0) + "%");
+      dl.setAttribute("aria-label", state === "done" ? `Downloaded. Remove download of ${title}` : state === "loading" ? `Downloading, ${pct}%. Cancel download of ${title}` : `Download ${title}`);
+    };
+    const run = (from) => {
+      let pct = from;
+      clearInterval(timer);
+      timer = setInterval(() => { pct = Math.min(100, pct + 4); if (pct >= 100) { clearInterval(timer); timer = null; set("done"); } else set("loading", pct); }, 900);
+    };
+    dl.addEventListener("click", () => {
+      if (dl.dataset.state === "idle") { set("loading", 0); run(0); }
+      else { clearInterval(timer); timer = null; set("idle"); }
+    });
+    if (dl.dataset.state === "loading") run(Number(dl.dataset.done || 0));
+  });
+});
+</script>

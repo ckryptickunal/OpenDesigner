@@ -1,0 +1,13 @@
+{
+  "name": "Itinerary",
+  "summary": "A trip day by day: day tabs, a drawn map with a numbered pin per stop, and a timeline of trains, stays, meals and plans with times, details and confirmation codes.",
+  "use": "in a travel app's trip view, for following a trip one day at a time",
+  "type": "data",
+  "style": "friendly",
+  "industries": ["travel"],
+  "tags": ["itinerary", "trip", "timeline", "map", "bookings"],
+  "states": ["day 1 to 3", "pin shown", "hover", "focus"],
+  "source": null,
+  "a11y": "Days are a tablist (arrow keys move between them); each stop is a list item with its time, and its map button is a toggle named with the stop that highlights the matching numbered pin; the map is decorative.",
+  "width": "medium"
+}

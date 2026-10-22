@@ -1,0 +1,13 @@
+{
+  "name": "Wishlist grid",
+  "summary": "Saved items in a two-column grid that widens on larger screens: pictures drawn from the tokens, price drops marked, a sold-out item, Move to bag and remove, and a slot that hints where the next saved item goes.",
+  "use": "on a saved-items or wishlist tab of a shop",
+  "type": "commerce",
+  "style": "friendly",
+  "industries": ["retail"],
+  "tags": ["wishlist", "saved", "favourites", "price drop", "grid"],
+  "states": ["price drop", "in bag", "sold out", "removed", "hover", "focus"],
+  "source": null,
+  "a11y": "Move to bag is a toggle with aria-pressed and the sold-out one is disabled; each heart names the item it removes and moves focus on, changes are announced, and old prices are read as \"was\".",
+  "width": "wide"
+}

@@ -13,7 +13,9 @@
   var VIEWS = { desktop: 1280, tablet: 768, phone: 390 }, ORDER = ["desktop", "tablet", "phone"];
   // a part opens on the view it is designed for (narrow: phone, medium: tablet, wide: desktop); on a phone screen, on phone
   var HUG = window.matchMedia("(max-width: 640px)");
-  var defaultView = function (el) { return innerWidth < 768 ? "phone" : (el && el.getAttribute("data-view0")) || "desktop"; };
+  // every card and page opens on the desktop view on a wide screen, the phone view on a phone (owner, 2026-10-23: "show desktop
+  // view by default unless someone hovers"); hovering a card walks the other views
+  var defaultView = function () { return innerWidth < 768 ? "phone" : "desktop"; };
   // lay a part out at a view's width; when the part is narrower than the view (a 420 px panel on a 1280 px screen), the frame
   // wraps the part instead of leaving it small in an empty field (owner, same day). Returns the frame width used.
   var layout = function (live, w) {
@@ -52,13 +54,22 @@
     var pad = parseFloat(getComputedStyle(media).paddingTop) || 0;
     var room = { w: media.clientWidth - 2 * pad - 12, h: media.clientHeight - 2 * pad - 12 };  // inside the bezel's 6 px rim
     var z, crop, zw = room.w / used;
-    if (HUG.matches) {
-      // one column (a phone): the card is as tall as the part at full width, up to 1.3 times its width, then cropped at the bottom
+    if (HUG.matches && item._hugW === Math.round(room.w)) {
+      // one column, after the first fit: the card keeps its height whatever the view, so the page never jumps under a thumb
+      // (owner, 2026-10-23); the other views fit inside it, cropped at the bottom when tall
+      room.h = item._hugH;
+      var zh1 = room.h / Math.max(1, live.offsetHeight);
+      z = Math.min(1, zw, zh1); crop = z < Math.min(zw, 1) * 0.72;
+      if (crop) z = Math.min(1, zw);
+    } else if (HUG.matches) {
+      // one column (a phone), first fit at this width: the card is as tall as the part at full width, up to 1.3 times its
+      // width, then cropped at the bottom
       z = Math.min(1, zw); var h = live.offsetHeight * z, cap = room.w * 1.3;
       crop = h > cap; room.h = Math.ceil(Math.min(h, cap));
       media.style.height = (room.h + 12 + 2 * pad) + "px";
+      item._hugW = Math.round(room.w); item._hugH = room.h;
     } else {
-      media.style.height = "";
+      media.style.height = ""; item._hugW = null;
       // fit the whole part, centred; if that would make it too small to read, fit the width and crop the bottom instead
       var zh = room.h / Math.max(1, live.offsetHeight);
       z = Math.min(1, zw, zh); crop = z < Math.min(zw, 1) * 0.72;
@@ -77,15 +88,7 @@
   // a part's first view, the same rule on its card and on its page: the part's own view, or a narrower one when the part would
   // sit as a thin band (a short, wide strip at 1280 px; at 768 px it wraps into rows). Measured on the part alone, so the card
   // and the page always agree; the click carries it as ?view=. On a phone screen, always the phone view.
-  var firstView = function (el, live) {
-    var start = defaultView(el); if (!live || innerWidth < 768) return start;
-    for (var i = ORDER.indexOf(start); i < ORDER.length; i++) {
-      var used = layout(live, VIEWS[ORDER[i]]);
-      if (used > 700 && i < ORDER.length - 1) continue;  // 1280 and 768 px layouts shrink to about 0.4 in a card, too small to read: one hover or tab away
-      if (live.offsetHeight / used >= 0.34 || i === ORDER.length - 1) { live.style.width = ""; return ORDER[i]; }
-    }
-    return start;
-  };
+  var firstView = function () { return defaultView(); };
   var bestView = function (item) { var v = firstView(item, $(".lib-live", item)); item.setAttribute("data-view-first", v); return v; };
   // aisle tiles: a part laid out at a card width and zoomed to the tile
   var fitTile = function (box) {
@@ -101,7 +104,12 @@
   };
   var fitAll = function () {
     $$(".aisle-prev .lib-fit").forEach(fitTile);
-    $$(".item").forEach(function (item) { if (!item.hidden) fitCard(item, item.getAttribute("data-view") || bestView(item)); });
+    $$(".item").forEach(function (item) {
+      if (item.hidden) return;
+      var v = item.getAttribute("data-view");
+      if (!v || item.getAttribute("data-view-first") !== defaultView()) v = bestView(item);  // first fit, or the screen crossed 768 px
+      fitCard(item, v);
+    });
     fitDevice();
   };
   if (window.ResizeObserver) { var ro = new ResizeObserver(function () { fitAll(); }); $$(".item-media, .aisle-prev, .part-stage").forEach(function (el) { ro.observe(el); }); }
@@ -156,13 +164,14 @@
   $$(".part-look").forEach(function (s) { s.addEventListener("change", function () { useLook(s.value); }); });
 
   // filters: aisle tiles, type chips, style, industry and words, all at once
-  var type = "all", q = $("#lib-q"), style = $("#lib-style"), industry = $("#lib-industry");
+  var type = "all", q = $("#lib-q"), style = $("#lib-style"), industry = $("#lib-industry"), whoSel = $("#lib-who");
   var apply = function () {
     var words = q ? q.value.trim().toLowerCase().split(/\s+/).filter(Boolean) : [], shown = 0;
     $$(".shelf .item").forEach(function (c) {
       var ind = c.getAttribute("data-industries").split(" ");
       var ok = (type === "all" || c.getAttribute("data-type") === type)
         && (!style || !style.value || c.getAttribute("data-style") === style.value)
+        && (!whoSel || !whoSel.value || c.getAttribute("data-who") === whoSel.value)
         && (!industry || !industry.value || ind.indexOf(industry.value) >= 0 || ind.indexOf("any") >= 0)
         && words.every(function (w) { return c.getAttribute("data-search").indexOf(w) >= 0; });
       c.hidden = !ok; if (ok) shown++;
@@ -178,7 +187,7 @@
   };
   $$(".lib-filters .filter").forEach(function (b) { b.addEventListener("click", function () { setType(b.getAttribute("data-type")); }); });
   $$(".aisle[data-aisle]").forEach(function (a) { a.addEventListener("click", function () { setType(a.getAttribute("data-aisle")); }); });
-  [style, industry].forEach(function (el) { if (el) el.addEventListener("change", apply); });
+  [whoSel, style, industry].forEach(function (el) { if (el) el.addEventListener("change", apply); });
   if (q) q.addEventListener("input", function () { if (q.value && type !== "all") setType("all"); else apply(); });
   $$(".shop-pop [data-q]").forEach(function (b) {  // popular searches fill the search and jump to the results
     b.addEventListener("click", function () { q.value = b.getAttribute("data-q"); setType("all"); var sh = $("#shelf"); if (sh) sh.scrollIntoView({ block: "start" }); });

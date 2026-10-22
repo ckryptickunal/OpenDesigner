@@ -1,0 +1,13 @@
+{
+  "name": "Story rail",
+  "summary": "A row of story rings that scrolls sideways inside its box: your own add ring first, unseen stories in a colour ring, close friends in green, a live badge, and seen ones in grey.",
+  "use": "at the top of a social or media feed, for the stories people have posted today",
+  "type": "content",
+  "style": "friendly",
+  "industries": ["social", "media"],
+  "tags": ["stories", "avatars", "carousel", "feed", "rings"],
+  "states": ["unseen", "seen", "close friends", "live", "add", "hover", "focus", "scrolled to end"],
+  "source": null,
+  "a11y": "Each story is a button whose name says who posted it and whether it is new, live or seen; opening one marks it seen, and on wider screens two arrow buttons scroll the rail.",
+  "width": "medium"
+}

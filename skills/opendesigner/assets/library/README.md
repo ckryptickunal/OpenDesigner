@@ -33,7 +33,7 @@ assets/library/
 
 **Types:** `data` (tables, rows, feeds, stats), `chart`, `form` (inputs, toggles, pickers), `feedback` (toasts, banners, empty states), `navigation` (command menus, steppers, tabs, sidebars), `overlay` (dialogs, drawers, menus), `ai` (composers, answers), `commerce` (plans, checkout, products), `content` (profiles, media, cards).
 **Styles:** `quiet` (calm, lots of space), `dense` (many rows, small type, work tools), `technical` (mono figures, status), `friendly` (rounder, warmer copy), `editorial` (reading first).
-**Industries:** `finance`, `saas`, `devtools`, `security`, `crm`, `logistics`, `health`, `education`, `retail`, `productivity`, `any`.
+**Industries:** work tools: `finance`, `saas`, `devtools`, `security`, `crm`, `logistics`, `productivity`; consumer: `social`, `media`, `retail`, `food`, `travel`, `events`, `health`, `fitness`, `money` (personal finance), `education`, `home` (smart home), `games`; or `any`. The website labels a part Consumer when its industries are consumer ones.
 
 ### component.html rules
 `library.py check` enforces the first five, and checks each meta.json.

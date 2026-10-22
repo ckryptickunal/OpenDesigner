@@ -22,12 +22,16 @@ LIB = HERE.parent / "assets" / "library" / "components"
 ENGINE = HERE / "engine.py"
 TYPES = ["data", "chart", "form", "feedback", "navigation", "overlay", "ai", "commerce", "content"]
 STYLES = ["quiet", "dense", "technical", "friendly", "editorial"]
-INDUSTRIES = ["finance", "saas", "devtools", "security", "crm", "logistics", "health", "education", "retail", "productivity", "any"]
+INDUSTRIES = ["finance", "saas", "devtools", "security", "crm", "logistics", "health", "education", "retail", "productivity",
+              "social", "media", "travel", "food", "fitness", "events", "home", "money", "games", "any"]  # money: personal finance (finance is B2B)
 WIDTHS = ["narrow", "medium", "wide"]
 FIELDS = ["name", "summary", "use", "type", "style", "industries", "tags", "states", "source", "a11y", "width"]
 # Every CSS named colour (transparent, currentColor and inherit are fine).
 NAMED = r"(?<![-\w])(" + "|".join(sorted("""aliceblue antiquewhite aqua aquamarine azure beige bisque black blanchedalmond blue blueviolet brown burlywood cadetblue chartreuse chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan darkgoldenrod darkgray darkgreen darkgrey darkkhaki darkmagenta darkolivegreen darkorange darkorchid darkred darksalmon darkseagreen darkslateblue darkslategray darkslategrey darkturquoise darkviolet deeppink deepskyblue dimgray dimgrey dodgerblue firebrick floralwhite forestgreen fuchsia gainsboro ghostwhite gold goldenrod gray green greenyellow grey honeydew hotpink indianred indigo ivory khaki lavender lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan lightgoldenrodyellow lightgray lightgreen lightgrey lightpink lightsalmon lightseagreen lightskyblue lightslategray lightslategrey lightsteelblue lightyellow lime limegreen linen magenta maroon mediumaquamarine mediumblue mediumorchid mediumpurple mediumseagreen mediumslateblue mediumspringgreen mediumturquoise mediumvioletred midnightblue mintcream mistyrose moccasin navajowhite navy oldlace olive olivedrab orange orangered orchid palegoldenrod palegreen paleturquoise palevioletred papayawhip peachpuff peru pink plum powderblue purple rebeccapurple red rosybrown royalblue saddlebrown salmon sandybrown seagreen seashell sienna silver skyblue slateblue slategray slategrey snow springgreen steelblue tan teal thistle tomato turquoise violet wheat white whitesmoke yellow yellowgreen""".split(), key=len, reverse=True)) + r")(?![-\w])"
 SPACING = r"^(padding|margin|gap|row-gap|column-gap|inset)(-[a-z-]+)?$"  # spacing in raw px is not a token
+# attributes the OpenDesigner website's own scripts look for across the whole page: a part that used one would be rewritten
+# by the site (a review's data-stars once became the GitHub star count). Keep parts off them.
+RESERVED_ATTRS = ["stars", "forks", "issues", "pushed", "copy", "copy-text", "tabs", "slides", "au", "gallery", "kit-add", "look", "q", "rm", "thumb", "aisle", "goto-aisle"]
 SCRIPT_BANNED = r"scrollIntoView|\bfetch\(|XMLHttpRequest|WebSocket|sendBeacon|localStorage|sessionStorage|document\.cookie|document\.(body|documentElement)|\beval\(|new Function|\bimport\(|window\.open|innerHTML|outerHTML|insertAdjacentHTML"
 TOKEN_ONLY = ["font-size", "font-family", "font-weight", "border-radius", "box-shadow", "transition-duration", "animation-duration", "font"]
 
@@ -121,6 +125,10 @@ def cmd_add(a):
     return 0
 
 
+def reserved_attrs(src):
+    return sorted({m.group(1) for m in re.finditer(r"\sdata-([a-z-]+)(?=[\s=>])", src) if m.group(1) in RESERVED_ATTRS})
+
+
 def check_one(c, known):
     errs, slug = [], c["slug"]
     for f in FIELDS:
@@ -150,6 +158,8 @@ def check_one(c, known):
         errs.append("at most one <script>")
     if re.search(r"<(link|img|iframe)\b|<script\s+src|@import|url\(", html_):
         errs.append("loads something external (link, img, iframe, script src, @import or url())")
+    for a in reserved_attrs(html_):
+        errs.append(f"uses data-{a}, which the website's own scripts read across the page: rename it (data-{a}-value, or a word of your own)")
     body = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
     decls, stack, start = [], [], 0
     for m in re.finditer(r"[{}]", body):
@@ -189,11 +199,21 @@ def check_one(c, known):
     # a text highlight is a plain fill: no underline stroke along its bottom edge (owner, 2026-10-21: it curves at the line
     # ends). Any bottom inset shadow or bottom border on an inline or highlighted element is caught; a field's straight focus
     # line (a search box) is fine.
-    for sel, decl in re.findall(r"(?:^|})\s*([^{}@]+?)\s*\{([^{}]*)\}", body):
+    for sel, decl in re.findall(r"(?:^|(?<=[{};]))\s*([^{}@;]+?)\s*\{([^{}]*)\}", body):
         if re.search(r"search|input|field|:has\(", sel):
             continue
         if re.search(r"box-shadow:\s*inset 0 (calc\(-|-)", decl) or (re.search(r"border-(bottom|block-end)(-[a-z]+)?\s*:", decl) and re.search(r"(mark|target|highlight|\bhl\b|ins|del)\b", sel)):
             errs.append(f"underline stroke on {sel.strip()[:60]}: a highlight or text gets a plain fill, never a bottom stroke")
+    # nor a hard ledge under a box (a shadow pushed down with no blur, the "3D button" lip): the owner reads it as the same
+    # curved bottom stroke (2026-10-22, quiz answers and a lesson path)
+    for sel, decl in re.findall(r"(?:^|(?<=[{};]))\s*([^{}@;]+?)\s*\{([^{}]*)\}", body):
+        if re.search(r"box-shadow:[^;]*?(?<![\w-])0 (var\(--ds-space-[^)]+\)|calc\([^)]*\)|[1-9][\d.]*px) 0 (var\(--ds-color|var\(--[a-z]|#|rgb)", decl):
+            errs.append(f"hard bottom ledge on {sel.strip()[:60]}: a shadow pushed down with no blur reads as a bottom stroke; use a fill or a soft elevation token")
+    # a list row is sized by the row or control tokens; the touch-target floor is a minimum, not a size (a sidebar with 24 px
+    # rows read as cramped: Michael Filipiuk's sidebar clean-up, 2026-10-23)
+    for sel, decl in re.findall(r"(?:^|(?<=[{};]))\s*([^{}@;]+?)\s*\{([^{}]*)\}", body):
+        if re.search(r"\.odl-(item|row|opt|option|entry)\b|\[role=\"?(menuitem|option)|\bli\b", sel) and re.search(r"(?<![\w-])min-block-size:\s*var\(--ds-size-target-min\)", decl):
+            errs.append(f"row {sel.strip()[:60]} is sized by the target floor: use max(var(--ds-size-control-md), var(--ds-size-target-min)) or a --ds-size-row-* token")
     if moves and "prefers-reduced-motion" not in body:
         errs.append("it animates: add a @media (prefers-reduced-motion: reduce) block that turns its motion off")
     if not re.search(r":focus-visible", body) and re.search(r"<(button|input|a|select|textarea|summary)\b", rest):

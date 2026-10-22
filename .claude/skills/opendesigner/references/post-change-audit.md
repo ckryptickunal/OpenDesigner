@@ -37,13 +37,14 @@ How to use it:
 
 **Components**
 9. Radius roles: control radii only on single-line controls; a box that can hold more than one line uses the container radius. Check every look, including one with pill controls: no box becomes an oval. [2026-10-21]
-10. No curved underline strokes: a highlight is a plain fill; no bottom border or inset shadow under highlighted or inline text. [2026-10-21]
+10. No curved underline strokes: a highlight is a plain fill; no bottom border or inset shadow under highlighted or inline text, and no hard ledge under a box (a shadow pushed down with no blur, the "3D button" lip). `library.py check` catches both. [2026-10-21, ledge 2026-10-22]
 11. Every component looks like someone spent time on it, at phone, tablet and desktop: considered spacing, aligned edges, one focal point, nothing cramped, nothing lost. The phone view is designed for a phone. [2026-10-21]
 12. Form controls share one style (selects get the same padding and chevron as the other fields; no native arrow jammed at the edge). [2026-10-21]
 
 **Previews and detail**
-13. A preview shows the same thing its detail view opens on, and a click carries that view. [2026-10-21]
+13. A preview shows the same thing its detail view opens on, and a click carries that view. On a wide screen both open on the desktop view; other views show only while hovering. On a phone both open on the phone view. [2026-10-21, desktop first 2026-10-23]
 14. Moving between views is a soft crossfade (fade and a 2 px blur, ease-out, under 300 ms), pointer only, none with reduced motion. It can never get stuck half-faded. [2026-10-21]
+14a. A preview never changes height when its view changes on a phone (one column): the page would jump under the reader's thumb. Measure `scrollY` and the card's height before and after a view change. [2026-10-23]
 
 **Labels and stickers**
 15. Stickers sit below a picture, never on top of the thing being shown; one sticker beats three. [2026-10-21]
@@ -55,6 +56,7 @@ How to use it:
 
 **Layout safety**
 21. A grid or flex column that holds long unbroken text (a link, a command) sets `minmax(0, 1fr)` / `min-width: 0`, so wrapping rules never widen the column past the screen. Check `scrollWidth` and every element's right edge at 390 px. [2026-10-21]
+22. A part never uses an attribute the host page's own scripts read across the page: the site's star counter once wrote the GitHub star count into a review list that used `data-stars`. `library.py check` rejects the reserved names. [2026-10-22]
 
 **Process**
 19. Every step ends with proof (a check output, a measurement or a screenshot you looked at), and a fresh reviewer who did not build it re-checks the whole against the brief before it is shown. [2026-10-21]

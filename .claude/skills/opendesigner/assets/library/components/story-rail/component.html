@@ -1,0 +1,101 @@
+<style>
+.odl-story-rail { box-sizing: border-box; inline-size: 100%; max-inline-size: 40rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
+.odl-story-rail *, .odl-story-rail *::before, .odl-story-rail *::after { box-sizing: border-box; }
+.odl-story-rail .odl-card { --sz: calc(var(--ds-size-control-lg) * 1.45); display: grid; gap: var(--ds-space-stack-sm); padding-block: var(--ds-space-inset-md) var(--ds-space-inset-sm);
+  background: var(--ds-color-surface-raised); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); overflow: hidden; }
+.odl-story-rail .odl-head { display: flex; align-items: center; gap: var(--ds-space-inline-sm); padding-inline: var(--ds-space-inset-lg) var(--ds-space-inset-sm); }
+.odl-story-rail h3 { margin: 0; font: var(--ds-text-title-sm); }
+.odl-story-rail .odl-new { padding: var(--ds-space-2) var(--ds-space-8); border-radius: var(--ds-radius-control-sm); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.odl-story-rail .odl-arrows { display: flex; gap: var(--ds-space-2); margin-inline-start: auto; }
+.odl-story-rail .odl-arrow { display: grid; place-items: center; min-inline-size: var(--ds-size-target-touch); min-block-size: var(--ds-size-target-touch); padding: 0; border: 0; border-radius: var(--ds-radius-full);
+  background: transparent; color: var(--ds-color-icon-default); cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-story-rail .odl-arrow:hover:not(:disabled) { background: var(--ds-color-bg-neutral-subtle); }
+.odl-story-rail .odl-arrow:disabled { color: var(--ds-color-text-disabled); cursor: default; }
+.odl-story-rail .odl-arrow svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
+.odl-story-rail .odl-rail { display: flex; gap: var(--ds-space-inline-xs); margin: 0; padding: var(--ds-space-4) var(--ds-space-inset-lg) var(--ds-space-8); list-style: none; overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity; scroll-padding-inline: var(--ds-space-inset-lg); scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to right, var(--ds-color-black) calc(100% - var(--ds-space-40)), transparent); mask-image: linear-gradient(to right, var(--ds-color-black) calc(100% - var(--ds-space-40)), transparent); }
+.odl-story-rail .odl-rail::-webkit-scrollbar { display: none; }
+.odl-story-rail .odl-rail.is-end { -webkit-mask-image: none; mask-image: none; }
+.odl-story-rail .odl-rail li { flex: none; scroll-snap-align: start; }
+.odl-story-rail .odl-story { display: grid; justify-items: center; gap: var(--ds-space-6); inline-size: calc(var(--sz) + var(--ds-space-24)); padding: var(--ds-space-2) 0; border: 0; border-radius: var(--ds-radius-nested);
+  background: transparent; color: var(--ds-color-text-primary); font: var(--ds-text-label-md); cursor: pointer; }
+.odl-story-rail .odl-ring { position: relative; display: grid; inline-size: var(--sz); aspect-ratio: 1; padding: calc(var(--ds-border-width-emphasis) * 1.5); border-radius: var(--ds-radius-person);
+  background: linear-gradient(135deg, var(--ds-color-accent-light-7), var(--ds-color-accent-light-9) 45%, var(--ds-color-accent-light-11));
+  transition: transform var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-story-rail .odl-story:hover .odl-ring { transform: scale(1.04); }
+.odl-story-rail .odl-story:active .odl-ring { transform: scale(var(--ds-motion-scale-press)); }
+.odl-story-rail .odl-story.is-close .odl-ring { background: conic-gradient(from 210deg, var(--ds-color-success-light-8), var(--ds-color-success-light-10), var(--ds-color-success-light-8)); }
+.odl-story-rail .odl-story.is-seen .odl-ring, .odl-story-rail .odl-story.is-own .odl-ring { padding: var(--ds-border-width-emphasis); background: var(--ds-color-border-default); }
+.odl-story-rail .odl-gap { display: grid; padding: calc(var(--ds-border-width-emphasis) * 1.5); border-radius: var(--ds-radius-person); background: var(--ds-color-surface-raised); }
+.odl-story-rail .odl-av { display: grid; place-items: center; inline-size: 100%; block-size: 100%; border-radius: var(--ds-radius-person);
+  color: var(--ds-color-accent-light-12); background: linear-gradient(140deg, var(--ds-color-accent-light-4), var(--ds-color-accent-light-8)); font: var(--ds-text-title-sm); font-weight: var(--ds-font-weight-heading); }
+.odl-story-rail .odl-av.is-info { color: var(--ds-color-info-light-12); background: linear-gradient(140deg, var(--ds-color-info-light-4), var(--ds-color-info-light-8)); }
+.odl-story-rail .odl-av.is-success { color: var(--ds-color-success-light-12); background: linear-gradient(140deg, var(--ds-color-success-light-4), var(--ds-color-success-light-8)); }
+.odl-story-rail .odl-av.is-warning { color: var(--ds-color-warning-light-12); background: linear-gradient(140deg, var(--ds-color-warning-light-4), var(--ds-color-warning-light-8)); }
+.odl-story-rail .odl-av.is-danger { color: var(--ds-color-danger-light-12); background: linear-gradient(140deg, var(--ds-color-danger-light-4), var(--ds-color-danger-light-8)); }
+.odl-story-rail .odl-av.is-neutral { color: var(--ds-color-neutral-light-12); background: linear-gradient(140deg, var(--ds-color-neutral-light-3), var(--ds-color-neutral-light-7)); }
+.odl-story-rail .odl-plus { position: absolute; inset-inline-end: 0; inset-block-end: 0; display: grid; place-items: center; inline-size: calc(var(--sz) * 0.4); aspect-ratio: 1; border-radius: var(--ds-radius-full);
+  background: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent); border: var(--ds-border-width-emphasis) solid var(--ds-color-surface-raised); }
+.odl-story-rail .odl-plus svg { inline-size: 70%; block-size: 70%; }
+.odl-story-rail .odl-live { position: absolute; inset-inline: 0; inset-block-end: calc(-1 * var(--ds-space-4)); inline-size: max-content; margin-inline: auto; padding: 0 var(--ds-space-6); border-radius: var(--ds-radius-control-sm);
+  background: var(--ds-color-bg-danger-bold); color: var(--ds-color-text-on-danger); border: var(--ds-border-width-emphasis) solid var(--ds-color-surface-raised); font: var(--ds-text-label-sm); font-weight: var(--ds-font-weight-heading); letter-spacing: var(--ds-text-label-sm-tracking); }
+.odl-story-rail .odl-name { max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.odl-story-rail .odl-story.is-seen .odl-name { color: var(--ds-color-text-secondary); }
+.odl-story-rail .odl-story:focus-visible, .odl-story-rail .odl-arrow:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-story-rail .odl-story:focus-visible { outline-offset: calc(-1 * var(--ds-focus-ring-width)); }
+.odl-story-rail .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* Phones swipe the rail, so the arrows go. */
+@container (max-width: 30rem) { .odl-story-rail .odl-arrows { display: none; } .odl-story-rail .odl-head { padding-inline-end: var(--ds-space-inset-lg); } }
+@media (prefers-reduced-motion: reduce) { .odl-story-rail, .odl-story-rail *, .odl-story-rail *::before { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+</style>
+<section class="odl-story-rail" aria-labelledby="odl-sr-title">
+  <div class="odl-card">
+    <div class="odl-head">
+      <h3 id="odl-sr-title">Stories</h3><span class="odl-new">7 new</span>
+      <div class="odl-arrows">
+        <button type="button" class="odl-arrow" data-dir="-1" aria-label="Scroll stories back" disabled><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5 6.5 10l5.5 5.5"/></svg></button>
+        <button type="button" class="odl-arrow" data-dir="1" aria-label="Scroll stories forward"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 4.5 5.5 5.5L8 15.5"/></svg></button>
+      </div>
+    </div>
+    <ul class="odl-rail">
+      <li><button type="button" class="odl-story is-own" aria-label="Add to your story"><span class="odl-ring"><span class="odl-gap"><span class="odl-av is-neutral" aria-hidden="true">YO</span></span>
+        <span class="odl-plus" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 3.5v9M3.5 8h9"/></svg></span></span><span class="odl-name">Your story</span></button></li>
+      <li><button type="button" class="odl-story" aria-label="Mireille Vasseur, live now"><span class="odl-ring"><span class="odl-gap"><span class="odl-av is-danger" aria-hidden="true">MV</span></span><span class="odl-live" aria-hidden="true">LIVE</span></span><span class="odl-name">mireille.v</span></button></li>
+      <li><button type="button" class="odl-story" aria-label="Rafał Ostrowiak, new story"><span class="odl-ring"><span class="odl-gap"><span class="odl-av is-info" aria-hidden="true">RO</span></span></span><span class="odl-name">rafal.makes</span></button></li>
+      <li><button type="button" class="odl-story is-close" aria-label="Yuki Hanabusa, close friends story"><span class="odl-ring"><span class="odl-gap"><span class="odl-av is-success" aria-hidden="true">YH</span></span></span><span class="odl-name">yuki_h</span></button></li>
+      <li><button type="button" class="odl-story" aria-label="Kwesi Boateng-Ansah, new story"><span class="odl-ring"><span class="odl-gap"><span class="odl-av is-warning" aria-hidden="true">KB</span></span></span><span class="odl-name">kwesi.frames</span></button></li>
+      <li><button type="button" class="odl-story" aria-label="Ximena Quintana, new story"><span class="odl-ring"><span class="odl-gap"><span class="odl-av" aria-hidden="true">XQ</span></span></span><span class="odl-name">ximena.q</span></button></li>
+      <li><button type="button" class="odl-story" aria-label="Arash Tehrani, new story"><span class="odl-ring"><span class="odl-gap"><span class="odl-av is-info" aria-hidden="true">AT</span></span></span><span class="odl-name">arash.t</span></button></li>
+      <li><button type="button" class="odl-story is-seen" aria-label="Leilani Kahale, seen"><span class="odl-ring"><span class="odl-gap"><span class="odl-av is-success" aria-hidden="true">LK</span></span></span><span class="odl-name">leilani.k</span></button></li>
+      <li><button type="button" class="odl-story is-seen" aria-label="Henrik Strandberg, seen"><span class="odl-ring"><span class="odl-gap"><span class="odl-av is-neutral" aria-hidden="true">HS</span></span></span><span class="odl-name">henrik.sb</span></button></li>
+    </ul>
+  </div>
+</section>
+<script>
+document.querySelectorAll(".odl-story-rail").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  const rail = root.querySelector(".odl-rail"), arrows = root.querySelectorAll(".odl-arrow"), badge = root.querySelector(".odl-new");
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const edges = () => {
+    const max = rail.scrollWidth - rail.clientWidth - 1;
+    arrows[0].disabled = rail.scrollLeft <= 0;
+    arrows[1].disabled = rail.scrollLeft >= max;
+    rail.classList.toggle("is-end", rail.scrollLeft >= max);
+  };
+  arrows.forEach((b) => b.addEventListener("click", () => {
+    rail.scrollBy({ left: Number(b.dataset.dir) * rail.clientWidth * 0.8, behavior: still.matches ? "auto" : "smooth" });
+  }));
+  rail.addEventListener("scroll", edges, { passive: true });
+  // Opening a story marks it seen: the ring turns grey and the "new" count drops.
+  root.querySelectorAll(".odl-story:not(.is-own)").forEach((s) => s.addEventListener("click", () => {
+    if (s.classList.contains("is-seen")) return;
+    s.classList.add("is-seen");
+    s.setAttribute("aria-label", s.getAttribute("aria-label").replace(/, .*$/, ", seen"));
+    const left = root.querySelectorAll(".odl-story:not(.is-own):not(.is-seen)").length;
+    badge.textContent = left ? `${left} new` : "All seen";
+  }));
+  edges();
+});
+</script>

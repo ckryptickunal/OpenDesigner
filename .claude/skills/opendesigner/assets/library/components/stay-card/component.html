@@ -1,0 +1,169 @@
+<style>
+.odl-stay-card { box-sizing: border-box; inline-size: 100%; max-inline-size: 24rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-stay-card *, .odl-stay-card *::before, .odl-stay-card *::after { box-sizing: border-box; }
+.odl-stay-card .odl-media { position: relative; border-radius: var(--ds-radius-container); overflow: hidden; background: var(--ds-color-surface-sunken); }
+.odl-stay-card .odl-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+.odl-stay-card .odl-track::-webkit-scrollbar { display: none; }
+.odl-stay-card .odl-slide { flex: 0 0 100%; aspect-ratio: 20 / 19; scroll-snap-align: start; }
+.odl-stay-card .odl-slide svg { display: block; inline-size: 100%; block-size: 100%; }
+/* Drawn photos: every colour is a ramp step, so the pictures take on the system's palette. */
+.odl-stay-card .odl-s1 { background: linear-gradient(var(--ds-color-warning-light-4), var(--ds-color-accent-light-6)); }
+.odl-stay-card .odl-s2, .odl-stay-card .odl-s3 { background: linear-gradient(var(--ds-color-neutral-light-2), var(--ds-color-warning-light-3)); }
+.odl-stay-card .odl-s4 { background: linear-gradient(var(--ds-color-info-light-12), var(--ds-color-accent-light-11)); }
+.odl-stay-card .f-sea { fill: var(--ds-color-info-light-10); }
+.odl-stay-card .f-deep { fill: var(--ds-color-info-light-12); opacity: 0.5; }
+.odl-stay-card .f-sun { fill: var(--ds-color-warning-light-2); }
+.odl-stay-card .f-far { fill: var(--ds-color-accent-light-8); opacity: 0.55; }
+.odl-stay-card .f-mid { fill: var(--ds-color-info-light-11); }
+.odl-stay-card .f-near { fill: var(--ds-color-success-light-12); }
+.odl-stay-card .f-cabin { fill: var(--ds-color-accent-light-11); }
+.odl-stay-card .f-roof { fill: var(--ds-color-neutral-light-12); }
+.odl-stay-card .f-glow { fill: var(--ds-color-warning-light-7); }
+.odl-stay-card .f-glint { fill: var(--ds-color-white); opacity: 0.35; }
+.odl-stay-card .f-floor { fill: var(--ds-color-warning-light-6); }
+.odl-stay-card .f-win { fill: var(--ds-color-info-light-4); }
+.odl-stay-card .f-frame { fill: var(--ds-color-neutral-light-12); }
+.odl-stay-card .f-sofa { fill: var(--ds-color-accent-light-9); }
+.odl-stay-card .f-sofa2 { fill: var(--ds-color-accent-light-10); }
+.odl-stay-card .f-rug { fill: var(--ds-color-neutral-light-4); }
+.odl-stay-card .f-wood { fill: var(--ds-color-warning-light-9); }
+.odl-stay-card .f-leaf { fill: var(--ds-color-success-light-9); }
+.odl-stay-card .f-bed { fill: var(--ds-color-white); }
+.odl-stay-card .f-throw { fill: var(--ds-color-info-light-8); }
+.odl-stay-card .f-star { fill: var(--ds-color-warning-light-3); }
+.odl-stay-card .f-tub { fill: var(--ds-color-neutral-light-11); }
+.odl-stay-card .f-steam { fill: none; stroke: var(--ds-color-white); stroke-width: 2; stroke-linecap: round; opacity: 0.5; }
+.odl-stay-card .odl-badge { position: absolute; inset-block-start: var(--ds-space-inset-md); inset-inline-start: var(--ds-space-inset-md); padding: var(--ds-space-4) var(--ds-space-8);
+  border-radius: var(--ds-radius-control-sm); background: var(--ds-color-white); color: var(--ds-color-neutral-light-12); font: var(--ds-text-label-md); box-shadow: var(--ds-elevation-raised); white-space: nowrap; }
+.odl-stay-card .odl-over { position: absolute; inset: 0; pointer-events: none; }
+.odl-stay-card .odl-over button { pointer-events: auto; }
+.odl-stay-card button { display: grid; place-items: center; padding: 0; border: 0; cursor: pointer; font: inherit; }
+.odl-stay-card .odl-fav { position: absolute; inset-block-start: var(--ds-space-4); inset-inline-end: var(--ds-space-4); inline-size: var(--ds-size-target-min); block-size: var(--ds-size-target-min);
+  border-radius: var(--ds-radius-full); background: transparent; color: var(--ds-color-white); }
+.odl-stay-card .odl-fav svg { inline-size: var(--ds-size-icon-lg); block-size: var(--ds-size-icon-lg); filter: drop-shadow(0 var(--ds-space-2) var(--ds-space-4) var(--ds-color-shadow-key)); }
+.odl-stay-card .odl-fav path { fill: var(--ds-color-neutral-alpha-light-9); stroke: var(--ds-color-white); stroke-width: 2;
+  transition: fill var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-stay-card .odl-fav[aria-pressed="true"] path { fill: var(--ds-color-danger-light-9); }
+.odl-stay-card .odl-fav[aria-pressed="true"] svg { animation: odl-stay-pop var(--ds-motion-duration-medium) var(--ds-motion-easing-enter); }
+@keyframes odl-stay-pop { 50% { transform: scale(1.2); } }
+.odl-stay-card .odl-nav { position: absolute; inset-block-start: 50%; inline-size: var(--ds-size-target-min); block-size: var(--ds-size-target-min); transform: translateY(-50%);
+  border-radius: var(--ds-radius-full); background: transparent; opacity: 0; transition: opacity var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-stay-card .odl-nav span { display: grid; place-items: center; inline-size: var(--ds-size-control-sm); block-size: var(--ds-size-control-sm); border-radius: var(--ds-radius-full);
+  background: var(--ds-color-white); color: var(--ds-color-neutral-light-12); box-shadow: var(--ds-elevation-raised); }
+.odl-stay-card .odl-nav svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-stay-card .odl-prev { inset-inline-start: var(--ds-space-4); }
+.odl-stay-card .odl-next { inset-inline-end: var(--ds-space-4); }
+.odl-stay-card .odl-media:hover .odl-nav, .odl-stay-card .odl-nav:focus-visible { opacity: 1; }
+.odl-stay-card .odl-nav[disabled] { visibility: hidden; }
+@media (hover: none) { .odl-stay-card .odl-nav { display: none; } }
+.odl-stay-card .odl-dots { position: absolute; inset-inline: 0; inset-block-end: var(--ds-space-inset-md); display: flex; justify-content: center; gap: var(--ds-space-6); pointer-events: none; }
+.odl-stay-card .odl-dots i { inline-size: var(--ds-space-6); block-size: var(--ds-space-6); border-radius: var(--ds-radius-full); background: var(--ds-color-white); opacity: 0.55;
+  transition: opacity var(--ds-motion-duration-short) var(--ds-motion-easing-standard), transform var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-stay-card .odl-dots i.is-on { opacity: 1; transform: scale(1.25); }
+.odl-stay-card .odl-body { display: grid; gap: var(--ds-space-2); padding-block-start: var(--ds-space-stack-sm); }
+.odl-stay-card .odl-row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--ds-space-inline-sm); }
+.odl-stay-card h3 { margin: 0; min-inline-size: 0; text-wrap: balance; font: var(--ds-text-title-sm); }
+.odl-stay-card .odl-rate { display: inline-flex; align-items: center; gap: var(--ds-space-4); flex: none; font: var(--ds-text-label-lg); font-variant-numeric: tabular-nums; }
+.odl-stay-card .odl-rate svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); color: var(--ds-color-text-primary); }
+.odl-stay-card .odl-rate small { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-stay-card .odl-line { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-stay-card .odl-price { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: max(var(--ds-space-6), var(--ds-space-inline-xs)); margin: var(--ds-space-4) 0 0; font: var(--ds-text-body-md); }
+.odl-stay-card .odl-price strong { font: var(--ds-text-title-sm); font-variant-numeric: tabular-nums; }
+.odl-stay-card .odl-price s { color: var(--ds-color-text-tertiary); font-variant-numeric: tabular-nums; }
+.odl-stay-card .odl-total { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
+.odl-stay-card .odl-link { color: inherit; text-decoration: none; border-radius: var(--ds-radius-nested); }
+.odl-stay-card .odl-link::after { content: ""; position: absolute; inset: 0; }
+.odl-stay-card .odl-card { position: relative; display: grid; }
+.odl-stay-card .odl-media { z-index: 1; }
+.odl-stay-card button:focus-visible, .odl-stay-card .odl-link:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-stay-card .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .odl-stay-card, .odl-stay-card *, .odl-stay-card *::before { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+</style>
+<article class="odl-stay-card" aria-label="Cabin by the fjord in Ålesund">
+  <div class="odl-card">
+  <div class="odl-media">
+    <div class="odl-track" tabindex="-1" aria-roledescription="carousel" aria-label="Photos, 1 of 4">
+      <div class="odl-slide odl-s1" aria-hidden="true"><svg viewBox="0 0 400 380" preserveAspectRatio="xMidYMid slice">
+        
+        <circle class="f-sun" cx="270" cy="150" r="34"/>
+        <path class="f-far" d="M0 190 70 120l50 40 60-70 80 90 60-50 80 60v40H0z"/>
+        <path class="f-mid" d="M0 220 60 170l40 25 70-60 90 85 50-35 90 55v20H0z"/>
+        <rect class="f-sea" y="230" width="400" height="150"/><rect class="f-deep" y="290" width="400" height="90"/>
+        <path class="f-glint" d="M230 250h80v3h-80zM250 266h50v3h-50zM262 282h28v3h-28z"/>
+        <path class="f-near" d="M0 300c60-20 120-26 190-14 50 9 70 30 70 94H0z"/>
+        <path class="f-cabin" d="M70 270h70v40H70z"/><path class="f-roof" d="M60 272 105 236l45 36z"/>
+        <rect class="f-glow" x="84" y="282" width="14" height="14" rx="2"/><rect class="f-glow" x="112" y="282" width="14" height="14" rx="2"/>
+        <path class="f-near" d="M168 312l12-40 12 40zM186 316l10-30 10 30zM30 304l9-34 9 34z"/>
+      </svg></div>
+      <div class="odl-slide odl-s2" aria-hidden="true"><svg viewBox="0 0 400 380" preserveAspectRatio="xMidYMid slice">
+        
+        <rect class="f-frame" x="150" y="50" width="200" height="170" rx="6"/><rect class="f-win" x="158" y="58" width="184" height="154" rx="3"/>
+        <path class="f-mid" d="M158 170l50-40 40 25 50-45 44 40v62H158z"/><rect class="f-frame" x="246" y="58" width="6" height="154"/>
+        <rect class="f-floor" y="290" width="400" height="90"/><ellipse class="f-rug" cx="200" cy="330" rx="160" ry="26"/>
+        <rect class="f-sofa2" x="40" y="214" width="230" height="40" rx="14"/><rect class="f-sofa" x="30" y="246" width="250" height="56" rx="16"/>
+        <rect class="f-sofa2" x="30" y="296" width="12" height="14" rx="3"/><rect class="f-sofa2" x="268" y="296" width="12" height="14" rx="3"/>
+        <rect class="f-throw" x="190" y="222" width="54" height="42" rx="10"/>
+        <rect class="f-wood" x="330" y="250" width="40" height="60" rx="4"/><path class="f-leaf" d="M350 250c-30-20-26-60-4-80 4 30 30 40 4 80zm0 0c20-26 44-24 52-14-20 4-30 14-52 14z"/>
+      </svg></div>
+      <div class="odl-slide odl-s3" aria-hidden="true"><svg viewBox="0 0 400 380" preserveAspectRatio="xMidYMid slice">
+        
+        <rect class="f-wood" x="40" y="150" width="320" height="70" rx="10"/>
+        <rect class="f-bed" x="40" y="210" width="320" height="90" rx="14"/><rect class="f-throw" x="40" y="250" width="320" height="50" rx="12"/>
+        <rect class="f-bed" x="70" y="186" width="100" height="40" rx="14"/><rect class="f-bed" x="230" y="186" width="100" height="40" rx="14"/>
+        <rect class="f-floor" y="300" width="400" height="80"/>
+        <circle class="f-glow" cx="20" cy="120" r="22"/><rect class="f-frame" x="18" y="140" width="4" height="70"/>
+        <rect class="f-frame" x="150" y="40" width="100" height="70" rx="4"/><path class="f-sun" d="M156 104l30-34 22 22 16-14 20 26z"/>
+      </svg></div>
+      <div class="odl-slide odl-s4" aria-hidden="true"><svg viewBox="0 0 400 380" preserveAspectRatio="xMidYMid slice">
+        
+        <circle class="f-star" cx="60" cy="50" r="2"/><circle class="f-star" cx="140" cy="90" r="1.6"/><circle class="f-star" cx="220" cy="40" r="2.2"/><circle class="f-star" cx="320" cy="80" r="1.6"/><circle class="f-star" cx="360" cy="30" r="2"/>
+        <circle class="f-sun" cx="300" cy="120" r="22"/>
+        <path class="f-mid" d="M0 230 80 170l60 40 70-60 90 80 100-50v50H0z"/>
+        <rect class="f-wood" y="280" width="400" height="100"/><path class="f-tub" d="M110 270h180l-12 60H122z"/><rect class="f-throw" x="104" y="262" width="192" height="14" rx="7"/>
+        <path class="f-steam" d="M160 250c-8-12 8-18 0-30M200 246c-8-12 8-18 0-30M240 250c-8-12 8-18 0-30"/>
+      </svg></div>
+    </div>
+    <span class="odl-badge">Guest favourite</span>
+    <div class="odl-over">
+    <button type="button" class="odl-fav" aria-label="Save to favourites" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5S3.5 15.6 3.5 9.4A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 8.5 1.8c0 6.2-8.5 11.1-8.5 11.1z"/></svg></button>
+    <button type="button" class="odl-nav odl-prev" aria-label="Previous photo" disabled><span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg></span></button>
+    <button type="button" class="odl-nav odl-next" aria-label="Next photo"><span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg></span></button>
+    </div>
+    <div class="odl-dots" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="odl-body">
+    <div class="odl-row">
+      <h3><a class="odl-link" href="#stay">Cabin by the fjord, Ålesund</a></h3>
+      <span class="odl-rate"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="m8 1.5 1.9 4 4.4.5-3.3 3 .9 4.4L8 11.2l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg>4.92 <small>(128)</small></span>
+    </div>
+    <p class="odl-line">Hosted by Ingrid · 2 bedrooms · hot tub</p>
+    <p class="odl-line">12 to 17 Mar</p>
+    <p class="odl-price"><s aria-label="was €212">€212</s><strong>€184</strong> night<span class="odl-total">· €920 total</span></p>
+  </div>
+  </div>
+</article>
+<script>
+document.querySelectorAll(".odl-stay-card").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  const track = root.querySelector(".odl-track"), dots = root.querySelectorAll(".odl-dots i");
+  const prev = root.querySelector(".odl-prev"), next = root.querySelector(".odl-next"), n = dots.length;
+  const at = () => Math.round(track.scrollLeft / track.clientWidth);
+  const show = () => {
+    const i = Math.min(n - 1, Math.max(0, at()));
+    dots.forEach((d, k) => d.classList.toggle("is-on", k === i));
+    prev.disabled = i === 0; next.disabled = i === n - 1;
+    track.setAttribute("aria-label", `Photos, ${i + 1} of ${n}`);
+  };
+  const smooth = () => (matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth");
+  const go = (d) => track.scrollTo({ left: (at() + d) * track.clientWidth, behavior: smooth() });
+  prev.addEventListener("click", () => go(-1));
+  next.addEventListener("click", () => go(1));
+  track.addEventListener("scroll", show, { passive: true });
+  root.querySelector(".odl-fav").addEventListener("click", (e) => {
+    const b = e.currentTarget, on = b.getAttribute("aria-pressed") !== "true";
+    b.setAttribute("aria-pressed", String(on)); b.setAttribute("aria-label", on ? "Saved to favourites" : "Save to favourites");
+  });
+  show();
+});
+</script>

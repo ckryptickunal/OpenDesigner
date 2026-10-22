@@ -57,7 +57,7 @@ def main():
                 if href[1:] and href[1:] not in ids:
                     problems.append(f"{rel}: missing anchor {href}")
                 continue
-            path = href.split("#")[0]
+            path = href.split("#")[0].split("?")[0]  # a ?v= version on a stylesheet is not part of the file name
             if not path.startswith("/"):
                 problems.append(f"{rel}: relative link {href}")
                 continue
@@ -67,7 +67,7 @@ def main():
             if not target.exists() and path not in redirects:
                 problems.append(f"{rel}: broken link {href}")
         for src in set(re.findall(r'src="(/[^"]+)"', h)):
-            if not src.startswith("/_vercel/") and not (D / src.lstrip("/")).exists():  # /_vercel/ is served by Vercel
+            if not src.startswith("/_vercel/") and not (D / src.split("?")[0].lstrip("/")).exists():  # /_vercel/ is served by Vercel
                 problems.append(f"{rel}: missing asset {src}")
     print(f"{n} pages checked")
     print("\n".join(problems) or "no problems")

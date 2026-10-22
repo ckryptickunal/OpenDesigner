@@ -1,0 +1,13 @@
+{
+  "name": "Cart drawer",
+  "summary": "A shopping bag open as a side sheet over the dimmed page: items with drawn thumbnails, quantity steppers and Remove, a bar towards free delivery, the subtotal and total, and Checkout.",
+  "use": "when someone opens their bag from any page of a shop",
+  "type": "overlay",
+  "style": "friendly",
+  "industries": ["retail", "food"],
+  "tags": ["cart", "bag", "drawer", "quantity", "checkout", "free delivery"],
+  "states": ["items", "free delivery reached", "empty", "minimum quantity", "hover", "focus"],
+  "source": null,
+  "a11y": "The sheet is a labelled dialog; each stepper is a named group whose count is announced, Remove names its item and moves focus to the next one, and the free-delivery bar is a labelled progress bar.",
+  "width": "wide"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Share sheet",
+  "summary": "A share sheet shown open: recent people you can pick (picking one turns the bottom into a message and Send), apps drawn as token-coloured tiles, and a copy link row that confirms when the link is copied.",
+  "use": "in a social or media app, when someone taps Share on a post",
+  "type": "overlay",
+  "style": "friendly",
+  "industries": ["social", "media"],
+  "tags": ["share", "bottom sheet", "contacts", "copy link", "apps"],
+  "states": ["open", "person selected", "several selected", "sent", "link copied", "hover", "focus"],
+  "source": null,
+  "a11y": "The sheet is a labelled modal dialog; recent people are native checkboxes in a fieldset, the apps are named buttons, and \"Link copied\" and \"Sent\" are announced in a status region.",
+  "width": "narrow"
+}

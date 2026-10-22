@@ -1,0 +1,13 @@
+{
+  "name": "Activity list",
+  "summary": "Likes, follows and mentions grouped under Today and This week, each with drawn avatars and a small badge for its kind, a thumbnail of the post or a Follow back button, new items tinted, and filter chips.",
+  "use": "on the notifications tab of a social or creator app",
+  "type": "feedback",
+  "style": "friendly",
+  "industries": ["social", "media"],
+  "tags": ["activity", "notifications", "follow back", "likes", "mentions"],
+  "states": ["new", "read", "following", "filtered", "empty", "hover", "focus"],
+  "source": null,
+  "a11y": "The filter is a native radio group, each day is a labelled section, new items say \"New\" to screen readers, thumbnails have descriptions, and Follow back is a toggle with aria-pressed.",
+  "width": "narrow"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Video player",
+  "summary": "A video frame with a big play button, a seek bar that shows what has loaded, elapsed and total time, captions, mute and volume, and full screen; while it plays, the controls fade away until the pointer comes back.",
+  "use": "on a watch page or in a lesson, for playing one video",
+  "type": "content",
+  "style": "quiet",
+  "industries": ["media", "education", "events"],
+  "tags": ["video", "player", "captions", "scrubber", "streaming"],
+  "states": ["paused", "playing", "seeking", "buffered", "captions on", "muted", "hover", "focus"],
+  "source": null,
+  "a11y": "Seek and volume are native range inputs, and seek reads its time in words; play, captions and mute say their state, and the controls never hide while focus is inside them, on touch screens or with reduced motion.",
+  "width": "wide"
+}

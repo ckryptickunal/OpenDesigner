@@ -1,0 +1,13 @@
+{
+  "name": "Comment sheet",
+  "summary": "A bottom sheet of comments shown open over a dimmed post, with the author's replies marked, likes you can toggle, a reply button that fills in the name, and a comment box pinned at the bottom.",
+  "use": "in a social or video app, for the comments on a post",
+  "type": "overlay",
+  "style": "friendly",
+  "industries": ["social", "media"],
+  "tags": ["comments", "bottom sheet", "replies", "likes", "composer"],
+  "states": ["open", "liked", "replying", "post disabled", "new comment", "hover", "focus"],
+  "source": null,
+  "a11y": "The sheet is a labelled modal dialog with a close button, the list scrolls with the keyboard, each like button says its count and state, and Post stays disabled until there is text.",
+  "width": "narrow"
+}

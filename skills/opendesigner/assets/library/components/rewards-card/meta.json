@@ -1,0 +1,13 @@
+{
+  "name": "Rewards card",
+  "summary": "A loyalty card: the points balance, progress to the next tier, a member code drawn with the tokens for scanning at the till, and two offers to activate.",
+  "use": "in a shop or café app's wallet or account tab",
+  "type": "commerce",
+  "style": "friendly",
+  "industries": ["food", "retail"],
+  "tags": ["loyalty", "rewards", "points", "tier", "offers", "member code"],
+  "states": ["offer activated", "offer not activated", "hover", "focus"],
+  "source": null,
+  "a11y": "The tier bar is a progress bar read as \"1,240 of 2,000 points\", the code is an image named for scanning, and each offer's button is a toggle with aria-pressed that names its offer.",
+  "width": "narrow"
+}

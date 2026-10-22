@@ -1,0 +1,13 @@
+{
+  "name": "Live chat",
+  "summary": "A live stream with its chat: a drawn stream frame with a LIVE tag and viewer count, the host and Follow, then a chat panel with a pinned message, messages with host, moderator and subscriber badges, and a composer.",
+  "use": "on a live stream, live class or event broadcast page",
+  "type": "content",
+  "style": "friendly",
+  "industries": ["media", "games", "events", "social"],
+  "tags": ["live", "stream", "chat", "badges", "viewers"],
+  "states": ["live", "pinned", "new message", "following", "hover", "focus"],
+  "source": null,
+  "a11y": "The messages are a log region that announces new ones politely and scrolls inside itself; the composer is a labelled form that sends with Enter, Follow is a toggle with aria-pressed, and the LIVE dot stops pulsing with reduced motion.",
+  "width": "wide"
+}

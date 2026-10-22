@@ -78,4 +78,4 @@ Run this on any video, page, deck or image before you call it done. Each line is
 
 ## Found by the owner, from a reference he shared (2026-10-23)
 
-48. **Floors are not sizes.** No row, menu item or list entry is built at the accessibility minimum (24 px): rows use the control height. An icon's gap to its label is at least half the icon's size, the icon is quieter than the label, selected rows sit in from the container's edge, and the gap between groups is several times the gap between rows. [M49]
+48. **Floors are not sizes.** No row, menu item or list entry is built at the accessibility minimum (24 px): rows use the control height. An icon's gap to its label is at least half the icon's size, the icon is quieter than the label, selected rows sit in from the container's edge, and the gap between groups is several times the gap between rows. In this repo, `library.py check` flags rows sized only to `--ds-size-target-min`. [M49]

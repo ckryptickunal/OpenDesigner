@@ -1,0 +1,13 @@
+{
+  "name": "Social post",
+  "summary": "A feed post: the author with a follow button, a photo drawn from the tokens, like, comment, share and save, a like count that changes, a caption that opens with \"more\" and the top comment.",
+  "use": "in a social or creator feed, for one photo post",
+  "type": "content",
+  "style": "friendly",
+  "industries": ["social", "media"],
+  "tags": ["feed", "post", "like", "photo", "caption", "social"],
+  "states": ["liked", "saved", "following", "caption open", "double-tap like", "hover", "focus"],
+  "source": null,
+  "a11y": "Like, save and follow are toggle buttons with aria-pressed, the like count is announced politely when it changes, \"more\" opens the caption with aria-expanded, and the photo has a text description.",
+  "width": "narrow"
+}

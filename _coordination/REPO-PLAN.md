@@ -17,7 +17,7 @@ OpenDesigner/
 │   │   ├── references/        rules.md (interview rules), hooks.md (designer hooks), guardrails.md
 │   │   ├── assets/templates/  visual templates (.html, JSON-fed): palette, type scale, spacing ruler, radius, elevation, motion, component sheet, option gallery
 │   │   ├── assets/output/     DESIGN.md, decisions.md, state.json templates
-│   │   ├── assets/library/    the optional component library: 42 token-only HTML components (meta.json each); scripts/library.py lists, suggests, adds and checks them (stdlib only); shown on the site at /library/ by site/library_page.py
+│   │   ├── assets/library/    the optional component library: 82 token-only HTML components (meta.json each); scripts/library.py lists, suggests, adds and checks them (stdlib only); shown on the site at /library/ by site/library_page.py
 │   │   ├── references/post-change-audit.md  every owner-corrected rule, checked after each implementation (site/post_change_audit.py runs the automatic half)
 │   │   └── scripts/engine.py  R2  state, ramps, scales, contrast, validate, export (stdlib only, no network)
 │   ├── opendesigner-extract/  reference intake (repo CSS, URL, screenshot, Figma variables), never copies identity

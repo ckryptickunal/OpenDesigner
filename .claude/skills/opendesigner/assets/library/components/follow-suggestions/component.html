@@ -1,0 +1,113 @@
+<style>
+.odl-follow-suggestions { box-sizing: border-box; inline-size: 100%; max-inline-size: 40rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-follow-suggestions *, .odl-follow-suggestions *::before, .odl-follow-suggestions *::after { box-sizing: border-box; }
+.odl-follow-suggestions .odl-wrap { display: grid; gap: var(--ds-space-stack-sm); padding-block: var(--ds-space-inset-md); background: var(--ds-color-surface-base);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); overflow: hidden; }
+.odl-follow-suggestions .odl-head { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-inline-sm); padding-inline: var(--ds-space-inset-lg) var(--ds-space-inset-sm); }
+.odl-follow-suggestions h3 { margin: 0; font: var(--ds-text-title-sm); }
+.odl-follow-suggestions button { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-xs); min-inline-size: var(--ds-size-target-touch); min-block-size: var(--ds-size-target-touch);
+  padding: 0; border: 0; border-radius: var(--ds-radius-control); background: transparent; color: var(--ds-color-text-primary); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-follow-suggestions .odl-all { padding-inline: var(--ds-space-inset-sm); color: var(--ds-color-text-accent); }
+.odl-follow-suggestions .odl-all:hover { background: var(--ds-color-bg-accent-subtle); }
+.odl-follow-suggestions .odl-row { display: flex; gap: var(--ds-space-inline-sm); margin: 0; padding: var(--ds-space-4) var(--ds-space-inset-lg) var(--ds-space-8); list-style: none; overflow-x: auto;
+  overscroll-behavior-x: contain; scroll-snap-type: x proximity; scroll-padding-inline: var(--ds-space-inset-lg); scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to right, var(--ds-color-black) calc(100% - var(--ds-space-32)), transparent); mask-image: linear-gradient(to right, var(--ds-color-black) calc(100% - var(--ds-space-32)), transparent); }
+.odl-follow-suggestions .odl-row::-webkit-scrollbar { display: none; }
+.odl-follow-suggestions .odl-card { position: relative; flex: none; display: grid; grid-template-rows: auto auto auto 1fr auto; justify-items: center; gap: var(--ds-space-2); inline-size: 11.5rem; scroll-snap-align: start;
+  padding: var(--ds-space-4) var(--ds-space-4) var(--ds-space-inset-sm); text-align: center; background: var(--ds-color-surface-raised);
+  border-radius: var(--ds-radius-container); box-shadow: 0 0 0 var(--ds-border-width-default) var(--ds-color-border-subtle), var(--ds-elevation-raised); }
+.odl-follow-suggestions .odl-card.is-gone { animation: odl-follow-suggestions-out var(--ds-motion-duration-medium-exit) var(--ds-motion-easing-exit) forwards; }
+@keyframes odl-follow-suggestions-out { to { opacity: 0; transform: scale(0.92); } }
+/* The remove button shares the top row with the avatar (a grid, not pinned), so the avatar stays centred. */
+.odl-follow-suggestions .odl-top { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: start; inline-size: 100%; }
+.odl-follow-suggestions .odl-top .odl-av { grid-column: 2; grid-row: 1; margin-block-start: var(--ds-space-12); }
+.odl-follow-suggestions .odl-x { grid-column: 3; grid-row: 1; justify-self: end; border-radius: var(--ds-radius-full); color: var(--ds-color-icon-subtle); }
+.odl-follow-suggestions .odl-x:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-icon-default); }
+.odl-follow-suggestions .odl-x svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-follow-suggestions .odl-av { display: grid; place-items: center; inline-size: calc(var(--ds-size-control-lg) * 1.5); aspect-ratio: 1; margin-block-end: var(--ds-space-8); border-radius: var(--ds-radius-person);
+  color: var(--ds-color-accent-light-12); background: linear-gradient(140deg, var(--ds-color-accent-light-4), var(--ds-color-accent-light-8)); font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading); }
+.odl-follow-suggestions .odl-av.is-info { color: var(--ds-color-info-light-12); background: linear-gradient(140deg, var(--ds-color-info-light-4), var(--ds-color-info-light-8)); }
+.odl-follow-suggestions .odl-av.is-success { color: var(--ds-color-success-light-12); background: linear-gradient(140deg, var(--ds-color-success-light-4), var(--ds-color-success-light-8)); }
+.odl-follow-suggestions .odl-av.is-warning { color: var(--ds-color-warning-light-12); background: linear-gradient(140deg, var(--ds-color-warning-light-4), var(--ds-color-warning-light-8)); }
+.odl-follow-suggestions .odl-av.is-danger { color: var(--ds-color-danger-light-12); background: linear-gradient(140deg, var(--ds-color-danger-light-4), var(--ds-color-danger-light-8)); }
+.odl-follow-suggestions .odl-card > :not(.odl-top) { margin-inline: var(--ds-space-inset-xs); }
+.odl-follow-suggestions .odl-name { max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-heading); }
+.odl-follow-suggestions .odl-handle { max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-follow-suggestions .odl-why { display: flex; align-items: center; align-self: start; justify-content: center; gap: var(--ds-space-6); margin-block: var(--ds-space-6) var(--ds-space-12);
+  color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); text-align: start; }
+.odl-follow-suggestions .odl-mutual { display: flex; flex: none; }
+.odl-follow-suggestions .odl-mutual i { display: block; inline-size: var(--ds-space-20); block-size: var(--ds-space-20); border-radius: var(--ds-radius-person); border: var(--ds-border-width-emphasis) solid var(--ds-color-surface-raised);
+  background: linear-gradient(140deg, var(--ds-color-warning-light-5), var(--ds-color-warning-light-9)); }
+.odl-follow-suggestions .odl-mutual i + i { margin-inline-start: calc(-1 * var(--ds-space-8)); background: linear-gradient(140deg, var(--ds-color-info-light-5), var(--ds-color-info-light-9)); }
+.odl-follow-suggestions .odl-follow { inline-size: 100%; min-block-size: max(var(--ds-size-control-sm), var(--ds-size-target-touch)); padding-inline: var(--ds-space-inset-sm);
+  background: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent); }
+.odl-follow-suggestions .odl-follow:hover { background: var(--ds-color-bg-accent-bold-hover); }
+.odl-follow-suggestions .odl-follow:active { background: var(--ds-color-bg-accent-bold-pressed); }
+.odl-follow-suggestions .odl-follow svg { display: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-follow-suggestions .odl-follow[aria-pressed="true"] { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
+.odl-follow-suggestions .odl-follow[aria-pressed="true"]:hover { background: var(--ds-color-bg-neutral-subtle-hover); }
+.odl-follow-suggestions .odl-follow[aria-pressed="true"] svg { display: block; }
+.odl-follow-suggestions .odl-done { display: none; margin: 0; padding-inline: var(--ds-space-inset-lg); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-follow-suggestions .odl-wrap.is-empty .odl-done { display: block; }
+.odl-follow-suggestions .odl-wrap.is-empty .odl-row { display: none; }
+.odl-follow-suggestions button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-follow-suggestions .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@container (max-width: 24rem) { .odl-follow-suggestions .odl-card { inline-size: 10.5rem; } }
+@media (prefers-reduced-motion: reduce) { .odl-follow-suggestions, .odl-follow-suggestions *, .odl-follow-suggestions *::before { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-follow-suggestions" aria-labelledby="odl-fs-title">
+  <div class="odl-wrap">
+    <div class="odl-head"><h3 id="odl-fs-title">People you may know</h3><button type="button" class="odl-all">See all</button></div>
+    <ul class="odl-row">
+      <li class="odl-card"><span class="odl-top"><button type="button" class="odl-x" aria-label="Remove Arash Tehrani from suggestions"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="m4.5 4.5 7 7m0-7-7 7"/></svg></button><span class="odl-av is-info" aria-hidden="true">AT</span></span>
+        <span class="odl-name">Arash Tehrani</span><span class="odl-handle">@arash.t</span>
+        <span class="odl-why"><span class="odl-mutual" aria-hidden="true"><i></i><i></i></span><span>Followed by kwesi.frames and 3 others</span></span>
+        <button type="button" class="odl-follow" aria-pressed="false" aria-label="Follow Arash Tehrani"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3.5 8.5 3 3 6-7"/></svg><span>Follow</span></button></li>
+      <li class="odl-card"><span class="odl-top"><button type="button" class="odl-x" aria-label="Remove Leilani Kahale from suggestions"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="m4.5 4.5 7 7m0-7-7 7"/></svg></button><span class="odl-av is-success" aria-hidden="true">LK</span></span>
+        <span class="odl-name">Leilani Kahale</span><span class="odl-handle">@leilani.k</span>
+        <span class="odl-why"><span class="odl-mutual" aria-hidden="true"><i></i><i></i></span><span>Followed by yuki_h and 12 others</span></span>
+        <button type="button" class="odl-follow" aria-pressed="true" aria-label="Follow Leilani Kahale"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3.5 8.5 3 3 6-7"/></svg><span>Following</span></button></li>
+      <li class="odl-card"><span class="odl-top"><button type="button" class="odl-x" aria-label="Remove Henrik Strandberg from suggestions"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="m4.5 4.5 7 7m0-7-7 7"/></svg></button><span class="odl-av is-warning" aria-hidden="true">HS</span></span>
+        <span class="odl-name">Henrik Strandberg</span><span class="odl-handle">@henrik.sb</span>
+        <span class="odl-why"><span>New to the app</span></span>
+        <button type="button" class="odl-follow" aria-pressed="false" aria-label="Follow Henrik Strandberg"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3.5 8.5 3 3 6-7"/></svg><span>Follow</span></button></li>
+      <li class="odl-card"><span class="odl-top"><button type="button" class="odl-x" aria-label="Remove Mireille Vasseur from suggestions"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="m4.5 4.5 7 7m0-7-7 7"/></svg></button><span class="odl-av is-danger" aria-hidden="true">MV</span></span>
+        <span class="odl-name">Mireille Vasseur</span><span class="odl-handle">@mireille.v</span>
+        <span class="odl-why"><span class="odl-mutual" aria-hidden="true"><i></i></span><span>Follows you</span></span>
+        <button type="button" class="odl-follow" aria-pressed="false" aria-label="Follow Mireille Vasseur"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3.5 8.5 3 3 6-7"/></svg><span>Follow back</span></button></li>
+      <li class="odl-card"><span class="odl-top"><button type="button" class="odl-x" aria-label="Remove Yuki Hanabusa from suggestions"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="m4.5 4.5 7 7m0-7-7 7"/></svg></button><span class="odl-av" aria-hidden="true">YH</span></span>
+        <span class="odl-name">Yuki Hanabusa</span><span class="odl-handle">@yuki_h</span>
+        <span class="odl-why"><span class="odl-mutual" aria-hidden="true"><i></i><i></i></span><span>Followed by ximena.q and 8 others</span></span>
+        <button type="button" class="odl-follow" aria-pressed="false" aria-label="Follow Yuki Hanabusa"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3.5 8.5 3 3 6-7"/></svg><span>Follow</span></button></li>
+    </ul>
+    <p class="odl-done">You're all caught up. New suggestions show up here as your friends join.</p>
+    <p class="odl-sr" aria-live="polite"></p>
+  </div>
+</section>
+<script>
+document.querySelectorAll(".odl-follow-suggestions").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  const wrap = root.querySelector(".odl-wrap"), live = root.querySelector('[aria-live]');
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+  root.querySelectorAll(".odl-follow").forEach((b) => {
+    const label = b.querySelector("span"), idle = label.textContent === "Following" ? "Follow" : label.textContent;
+    b.addEventListener("click", () => {
+      const on = b.getAttribute("aria-pressed") !== "true";
+      b.setAttribute("aria-pressed", String(on)); label.textContent = on ? "Following" : idle;
+    });
+  });
+  root.querySelectorAll(".odl-x").forEach((x) => x.addEventListener("click", () => {
+    const card = x.closest(".odl-card"), name = card.querySelector(".odl-name").textContent;
+    const next = card.nextElementSibling || card.previousElementSibling;
+    const gone = () => {
+      card.remove(); live.textContent = `Removed ${name} from suggestions`;
+      if (!root.querySelector(".odl-card")) wrap.classList.add("is-empty");
+      else next.querySelector(".odl-x").focus({ preventScroll: true });
+    };
+    if (still.matches) return gone();
+    card.classList.add("is-gone"); card.addEventListener("animationend", gone, { once: true });
+  }));
+});
+</script>

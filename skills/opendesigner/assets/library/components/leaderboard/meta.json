@@ -1,0 +1,13 @@
+{
+  "name": "Leaderboard",
+  "summary": "A game or challenge leaderboard: a podium for the top three with a crown for first, ranked rows with how far each moved up or down, your own row pinned and highlighted, and a this week or all time switch.",
+  "use": "in a game, fitness challenge or learning streak, for showing who leads and where you stand",
+  "type": "data",
+  "style": "friendly",
+  "industries": ["games", "fitness", "education"],
+  "tags": ["leaderboard", "ranking", "podium", "scores", "challenge"],
+  "states": ["this week", "all time", "moved up", "moved down", "no change", "you", "focus"],
+  "source": null,
+  "a11y": "Ordered lists in rank order (the podium is reordered only visually); each rank change is said in words, your row has aria-current, and the period switch is a native radio group.",
+  "width": "medium"
+}
