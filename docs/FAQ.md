@@ -167,6 +167,8 @@ You can add any website, screenshot, Figma file or brand book as a reference at 
 
 It never copies identity. That means no logos, brand names, brand colors used as identity, proprietary typefaces, photography, illustration or copy. This is a hard rule.
 
+The exception is a Taste Index, which you ask for when you want everything new to match a look you love. It describes that look in full and, when first shown, keeps the site's exact colours and font names. You're told plainly that what you keep or change is your responsibility. Logos, brand names, images and written copy still never go in, font files are never downloaded or shipped, and your system follows an index only if you choose it.
+
 ### Does it make logos or icons?
 
 No. It asks whether you have them and checks the files. For example, it checks that a logo SVG has outlined text and works at 16 px on light and dark. It derives the favicon and app-icon sizes from your master file.

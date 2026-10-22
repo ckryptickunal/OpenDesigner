@@ -50,7 +50,7 @@ For each of the eight dials it records a value, a confidence (0 to 0.9) and its 
 | The person choosing a dial with no recommendation in the way | 5 | |
 | Poll: Cracked / I hate it | +3 / −3 | One item per dial per screen, at that screen's dial position |
 | Poll: Best, Crazy af, Okay okay, Generic | +2, +1, +0.25, −1 | As on the poll page |
-| An inspiration (opendesigner-extract) | 2.5 × its confidence (high 1, medium 0.8, low 0.5) | Their own product pulls at half that. A competitor never pulls: weight 0 |
+| An inspiration (opendesigner-extract) | 2.5 × its confidence (high 1, medium 0.8, low 0.5) | Their own product pulls at half that. A competitor never pulls: weight 0. A Taste Index counts the same way, as source `taste-index` |
 | Confirming a recommendation | 1.5 | Choosing the value we recommended, or `confirmed_default` |
 | A style pick | 1.5 | The dials the style and its preset set |
 | Feel words | 1 | The feel settings they chose, as offsets from the middle |
@@ -70,6 +70,11 @@ For each of the eight dials it records a value, a confidence (0 to 0.9) and its 
 - **Drift:** `engine.py review` lists dials that moved 20 or more from a value the index is sure of, and any dial past a red line. Show the person the difference and ask. If they want their taste back, set the taste value. If they keep the new one, record it as `chosen`, and the index follows. Drift is a note, not a failure: `--strict` ignores it, because taste is theirs to change.
 - **Accessibility floors stay locked.** Taste moves dials. It never moves a floor or a standard: the engine refuses those values whatever their source.
 
+## A Taste Index is something else
+The taste index above is a preference model: eight numbers with confidence and red lines, merged from everything the person said and rated. A **Taste Index** (capitals, `opendesigner-extract`, `scripts/taste_index.py`) is a full description of one look, measured from a site or screenshot the person loves: a one-line picture, 5 to 7 principles with their reasons, every colour with its job and area share, type roles with exact font names and free substitutes, component rules, motion, voice as counts, a Never list, a CSS variable for every value and a live specimen. The two meet in two places:
+- **Its dials are evidence.** Each Taste Index is registered as a reference, so its fitted dials pull the taste index as an inspiration (source `taste-index`). A project may hold several, one per surface or brand.
+- **Following one is the person's choice.** By owner decision (2026-10-23, SPEC 5.4) an index may keep the site's exact colours and font names when first presented, with a notice that what the person keeps is their responsibility. Ask which index the system should follow, or none, and never decide it for them. `taste_index.py use <id> --fonts exact|free` records their choice: the dials, the accent as the brand colour and the fonts (exact names or free substitutes, as they chose), and DESIGN.md then points every agent at the index. Its Never list is the site's, so it does not join the taste card's Never line; the card's line stays the person's own words and ratings.
+
 ## The taste card
 Five lines at the top of DESIGN.md's Overview (and in overview.html) that sum up how the system looks and feels, so the person, their team and any AI building with it hold the same picture. Each line says where it comes from.
 
@@ -85,5 +90,5 @@ Rules that keep it theirs:
 - **The picture and the Never list are never invented.** Ask for a picture inside the feel question (`references/zoom.md`, sketch question 4). Record a "never" whenever they say one, for example "no gradients" while looking at the overview. If you write either for them, record it with `--set-by delegated`. The card then says "picked for you".
 - **Color, shape and motion are not new claims.** They repeat the sentences that open those sections, so the card cannot disagree with the tokens. To change a line, change the decision, not the card.
 - **Never is taste, not a rule.** It is repeated in Do's and Don'ts. `engine.py review` flags red lines, and nothing on the list fails a build. Floors and standards are not on it: they are locked anyway.
-- **References give structure, never identity.** A site the person loves can move their dials through `opendesigner-extract`, but the card never carries its brand name, exact colors, typefaces or copy.
+- **References give structure, never identity.** A site the person loves can move their dials through `opendesigner-extract`, but the card never carries its brand name, exact colors, typefaces or copy. A Taste Index the person chose to follow is the one exception (below).
 - **It stays in the project,** like the taste index.

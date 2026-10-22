@@ -4,7 +4,7 @@ The read_page.js tests need Node and are skipped without it. Fixtures are small 
 
     python3 skills/opendesigner-extract/scripts/test_extract.py
 """
-import importlib.util, json, shutil, subprocess, sys, tempfile, unittest
+import contextlib, importlib.util, io, json, shutil, subprocess, sys, tempfile, unittest
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -308,6 +308,119 @@ class ReadPageJs(unittest.TestCase):
         self.assertEqual((t["families"], t["minorFaces"], t["primaryIsSystem"]), ([], ["Source Code Pro"], True))
 
 
+class SixMeasurementFixes(unittest.TestCase):
+    """The six bugs found on 2026-10-23 by reading typesafe.ai and davecto.com against davecto's Taste Index reel."""
+
+    def test_1_hard_shadows_frames_and_windows(self):
+        cls = lambda s: css_scan.classify_layer(css_scan.parse_shadow_layer(s))
+        self.assertEqual(cls("4px 4px 0 #000"), "hard")
+        self.assertEqual(cls("0 1px 0 rgba(31, 35, 40, 0.04)"), "line")  # a hairline under a button, not a shadow style
+        win = json.dumps({"bar": "#1e1e1e", "barHeight": 20, "body": "#c4c4c4", "border": "1px #1e1e1e", "radius": 0})
+        a = css_scan.analyse(capture(shadows={"rgba(0, 0, 0, 0.25) 0px 4px 4px 0px": 1}, borders={"1px drawn": 60}) | {
+            "patterns": {"windows": {win: 8}, "frames": {"3px #c4c4c4": 5}, "drawnOffsets": {}}})
+        d = a["depth"]
+        self.assertEqual(d["hint"], "borders")  # one soft shadow among 60 drawn borders is minor
+        self.assertEqual((d["windowCount"], d["windows"][0]["bar"], d["minorShadows"]), (8, "#1e1e1e", 1))
+        self.assertEqual(d["frames"][0]["band"], "3px")
+        h = css_scan.analyse(capture(shadows={"rgb(30, 30, 30) 3px 3px 0px 0px": 6}))["depth"]
+        self.assertEqual(h["hint"], "hard-offset")
+        o = css_scan.analyse(capture() | {"patterns": {"drawnOffsets": {"3px 3px 0px 0px #000000": 4}}})["depth"]
+        self.assertEqual(o["hint"], "hard-offset")
+        self.assertIn("(drawn with boxes)", o["hard"][0])
+
+    def test_2_loops_apart_from_ui_motion(self):
+        a = css_scan.analyse(capture(durations={"500": 7}, easings={"cubic-bezier(0.12, 0.23, 0.5, 1)": 7}, transitionKinds={"color": 7},
+                                     loops={"count": 10, "durations": {"2000": 5, "18248": 5}, "easings": {"linear": 10}}))
+        m = a["motion"]
+        self.assertEqual(m["durations"], [500.0])
+        self.assertTrue(m["fadesOnly"])
+        self.assertEqual((m["loops"]["count"], m["loops"]["character"]), (10, "linear"))
+        self.assertEqual([css_scan.ease_kind(e) for e in ("steps(4, end)", "linear", "cubic-bezier(0.3, 1.4, 0.6, 1)",
+                                                          "linear(0, 1.1 60%, 1)", "ease-out")],
+                         ["stepped", "linear", "springy", "springy", "eased"])
+        declared = scan(".ticker { animation: spin 18s linear infinite; } .btn { transition: color 150ms ease; }")["motion"]
+        self.assertEqual(declared["durations"], [150.0])
+        self.assertEqual(declared["loops"]["count"], 1)
+
+    def test_3_browser_link_blue_and_error_colours_never_win(self):
+        a = css_scan.analyse(capture(accentSources={"link": {"#0000ee": 13}, "button": {"#f386a1": 1}}))
+        self.assertEqual(a["color"]["accents"][0]["hex"], "#f386a1")
+        b = scan(":root { --accent: #0f766e; --ring: #0f766e; --destructive: #8c3b2e; } .error:focus-visible { outline: 2px solid #8c3b2e; }")
+        self.assertEqual(b["color"]["accents"][0]["hex"], "#0f766e")
+
+    def test_4_and_5_and_6_space_colour_area_and_sections(self):
+        surfaces = {"grid": 16, "pageBg": "#fefefe", "areas": {"#f386a1": 0.58, "#1e1e1e": 0.19, "#fefefe": 0.13, "#03aa5c": 0.08},
+                    "text": {"#1e1e1e": 0.9, "#fefefe": 0.1}, "textShare": 0.05, "whitespace": 0.83, "blankRows": 0.17, "air": 0.63,
+                    "sections": [{"hex": "#f386a1", "y": 2322, "h": 5946}, {"hex": "#03aa5c", "y": 8268, "h": 972},
+                                 {"hex": "#1e1e1e", "y": 9240, "h": 2092}], "gradients": 0, "imagery": 0.4}
+        a = css_scan.analyse(capture() | {"surfaces": surfaces, "layout": {"docHeight": 11362}})
+        sf = a["surfaces"]
+        self.assertEqual([w["hex"] for w in sf["worlds"]], ["#f386a1", "#1e1e1e", "#03aa5c"])
+        self.assertTrue(sf["colourIsPlace"])
+        self.assertAlmostEqual(sf["chromaticShare"], 0.66, places=2)
+        self.assertEqual((a["air"], a["blankRows"]), (0.63, 0.17))
+        quiet = css_scan.analyse(capture() | {"surfaces": {**surfaces, "areas": {"#f7f5f0": 1.0}, "sections": [],
+                                                           "text": {"#181614": 0.55, "#6b655c": 0.35, "#0f766e": 0.1}}})
+        self.assertLess(quiet["surfaces"]["chromaticShare"], 0.01)
+        self.assertFalse(quiet["surfaces"]["colourIsPlace"])
+
+    def test_type_roles_and_names(self):
+        self.assertEqual(css_scan.face_name("Die Grotesk C Medium"), "Die Grotesk C")
+        self.assertEqual(css_scan.face_name("'LisaTerminal Paper 2X3Y Medium'"), "LisaTerminal Paper 2X3Y")
+        self.assertEqual(css_scan.face_name("sohne-var"), "sohne-var")
+        roles = {"heading": {"families": {"Die Grotesk C Medium": 259}, "weights": {"500": 259}, "sizes": {"150": 140}, "tracking": {"-0.02": 259},
+                             "transform": {"capitalize": 200}, "lineHeight": {}, "chars": 259},
+                 "body": {"families": {"Die Grotesk C Regular": 2126, "LisaTerminal Paper 2X3Y Medium": 543}, "weights": {"400": 2126},
+                          "sizes": {"22": 1150}, "tracking": {}, "transform": {}, "lineHeight": {"1.2": 2000}, "chars": 2669},
+                 "noise": {"families": {"JetBrains Mono": 828}, "weights": {}, "sizes": {"12": 828}, "tracking": {}, "transform": {}, "lineHeight": {}, "chars": 828}}
+        t = css_scan.analyse(capture(typeRoles=roles))["type"]
+        self.assertEqual(t["roles"]["heading"]["family"], "Die Grotesk C")
+        self.assertEqual(t["roles"]["heading"]["case"], "capitalize")
+        self.assertEqual([v["family"] for v in t["voices"]], ["Die Grotesk C", "JetBrains Mono", "LisaTerminal Paper 2X3Y"])
+
+    def test_merge_two_pages(self):
+        p1 = capture(durations={"150": 4}) | {"surfaces": {"areas": {"#ffffff": 1.0}, "whitespace": 0.9, "blankRows": 0.5, "air": 3.0,
+                                                           "sections": [], "text": {}}, "layout": {"docHeight": 1000}, "viewport": [1000, 800]}
+        p2 = capture(durations={"150": 6}) | {"surfaces": {"areas": {"#0f766e": 1.0}, "whitespace": 0.5, "blankRows": 0.1, "air": 1.0,
+                                                           "sections": [{"hex": "#0f766e", "y": 0, "h": 900}], "text": {}},
+                                              "layout": {"docHeight": 1000}, "viewport": [1000, 800]}
+        m = css_scan.merge_captures([p1, p2])
+        self.assertEqual(m["values"]["durations"]["150"], 10)
+        self.assertEqual(m["surfaces"]["areas"], {"#ffffff": 0.5, "#0f766e": 0.5})
+        self.assertEqual(m["surfaces"]["sections"][0]["y"], 1000)
+        self.assertEqual(css_scan.analyse(m)["pages"], 2)
+        retro = capture(shadows={"rgba(30, 30, 30, 0.55) 3px 3px 0px 0px": 40}) | {"surfaces": {**p2["surfaces"], "areas": {"#f386a1": 0.7, "#ffffff": 0.3}}}
+        quiet = capture(borders={"1px": 30}) | {"surfaces": {**p1["surfaces"], "areas": {"#f7f5f0": 1.0}}}
+        self.assertEqual(css_scan.look_differences([quiet, quiet]), [])
+        self.assertIn("give a different look its own Taste Index", css_scan.look_differences([quiet, retro])[0])
+
+
+@unittest.skipUnless(NODE, "node not installed")
+class ReadPageCollect(unittest.TestCase):
+    def test_loops_links_noise_and_emphasis(self):
+        base = {"w": 100, "h": 20, "own": 0, "ctx": None, "prose": False, "fontSize": 16, "fontFamily": "Inter", "fontWeight": "400",
+                "lineHeight": "24px", "radius": "0px", "boxShadow": "none", "spacing": [], "color": {"hex": "#181614", "a": 1}}
+        items = [{**base, "animation": ["blink", "2s", "linear", "infinite"]},
+                 {**base, "transition": ["color", "0.5s", "ease-out"]},
+                 {**base, "link": True, "own": 0, "color": {"hex": "#0000ee", "a": 1}},  # a wrapper link: no text of its own
+                 {**base, "link": True, "own": 12, "color": {"hex": "#0000ee", "a": 1}},  # the browser's link blue
+                 {**base, "own": 900, "noise": True, "fontSize": 12},  # a base-64 string used as decoration
+                 {**base, "own": 30, "emphasis": True, "color": {"hex": "#0f766e", "a": 1}},
+                 {**base, "own": 300, "prose": True, "fontSize": 18, "border": {"hex": "#1e1e1e", "a": 1, "w": 1, "pseudo": True}}]
+        r = subprocess.run([NODE, "-e", "const a=require(process.env.RP);console.log(JSON.stringify(a.collect(" + json.dumps(items) + ",1280)))"],
+                           capture_output=True, text=True, timeout=30, env={"RP": str(HERE / "read_page.js"), "PATH": ""})
+        self.assertEqual(r.returncode, 0, r.stderr)
+        v = json.loads(r.stdout)["values"]
+        self.assertEqual(v["loops"]["count"], 1)
+        self.assertEqual(v["durations"], {"500": 1})
+        self.assertEqual(v["transitionKinds"], {"color": 1})
+        self.assertNotIn("link", v["accentSources"])
+        self.assertEqual(v["accentSources"]["emphasis"], {"#0f766e": 3})
+        self.assertNotIn("12", v["textSizes"].get("body", {}))
+        self.assertEqual(v["textSizes"]["noise"], {"12": 900})
+        self.assertEqual(v["borders"], {"1px drawn": 1})
+
+
 @unittest.skipUnless(ENGINE, "engine.py not found")
 class EngineIntakeCompat(unittest.TestCase):
     """engine.py intake reads css_scan --json output unchanged (read-only use of the engine)."""
@@ -326,6 +439,285 @@ class EngineIntakeCompat(unittest.TestCase):
         self.assertIn("16", by["dials.density"]["basis"])
         self.assertIn("dials.colorfulness", by)
         self.assertNotIn("raw.brandColor", by)  # inspiration: the accent hue is never proposed
+
+    def test_space_motion_and_colour_area_reach_the_dials(self):
+        spec = importlib.util.spec_from_file_location("od_engine", ENGINE)
+        eng = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(eng)
+        dial = lambda ref, k: {p["path"]: p["value"] for p in eng.fit_reference(ref)["proposals"]}.get("dials." + k)
+        airy = {"bodySize": 14, "air": 2.86, "blankRows": 0.48, "method": "computed"}
+        self.assertLess(dial(airy, "density"), 34)  # small type in a lot of empty space is spacious, not compact
+        self.assertGreater(dial({"bodySize": 13, "air": 0.7, "blankRows": 0.05, "method": "computed"}, "density"), 66)
+        retro = {"method": "computed", "motion": {"durationMultiplier": 1.82, "median": 500, "fadesOnly": True, "fades": 7,
+                                                  "loops": {"count": 10, "character": "linear"}}}
+        self.assertEqual(dial(retro, "energy"), 35)  # was 100: slow colour fades plus linear loops are not energetic
+        self.assertEqual(dial({"method": "computed", "depth": {"hint": "hard-offset"}}, "depth"), 5)
+        col = lambda share: {"method": "computed", "color": {"accents": [{"hex": "#f386a1"}], "chromaticShare": share}}
+        self.assertGreater(dial(col(0.66), "colorfulness"), 75)
+        self.assertLess(dial({"method": "computed", "color": {"accents": [{"hex": "#0f766e"}], "chromaticShare": 0.004}}, "colorfulness"), 35)
+
+
+def png_bytes(rows):
+    """A small 8-bit RGB PNG, each row with a different filter (0 to 4), so the reader's unfiltering is exercised."""
+    import struct, zlib
+
+    def paeth(a, b, c):
+        p = a + b - c
+        pa, pb, pc = abs(p - a), abs(p - b), abs(p - c)
+        return a if pa <= pb and pa <= pc else b if pb <= pc else c
+    raw, prev = b"", bytes(len(rows[0]) * 3)
+    for y, row in enumerate(rows):
+        line, f = bytes(v for px in row for v in px), y % 5
+        out = bytearray()
+        for i, v in enumerate(line):
+            a, b, c = (line[i - 3] if i >= 3 else 0), prev[i], (prev[i - 3] if i >= 3 else 0)
+            out.append((v - [0, a, b, (a + b) // 2, paeth(a, b, c)][f]) & 255)
+        raw += bytes([f]) + bytes(out)
+        prev = line
+    chunk = lambda t, d: struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xffffffff)
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", len(rows[0]), len(rows), 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b""))
+
+
+import taste_index  # noqa: E402
+
+
+class TasteIndexTool(unittest.TestCase):
+    """taste_index.py: the reel's structure from measurements, under the owner decision of 2026-10-23."""
+
+    @staticmethod
+    def retro_scan():
+        win = json.dumps({"bar": "#1e1e1e", "barHeight": 20, "body": "#c4c4c4", "border": "1px #1e1e1e", "radius": 0})
+        roles = {"heading": {"families": {"Die Grotesk C Medium": 260}, "weights": {"500": 260}, "sizes": {"150": 140, "64": 120}, "tracking": {},
+                             "transform": {"capitalize": 260}, "lineHeight": {"0.8": 260}, "chars": 260,
+                             "faces": {"Die Grotesk C Medium": {"sizes": {"150": 140, "64": 120}, "weights": {"500": 260}}}},
+                 "body": {"families": {"Die Grotesk C Regular": 2100}, "weights": {"400": 2100}, "sizes": {"22": 2100}, "tracking": {},
+                          "transform": {}, "lineHeight": {"1.2": 2100}, "chars": 2100, "faces": {}},
+                 "noise": {"families": {"JetBrains Mono": 800}, "weights": {"300": 800}, "sizes": {"12": 800}, "tracking": {}, "transform": {},
+                           "lineHeight": {}, "chars": 800, "faces": {}}}
+        cap = capture(radiiByRole={"control": {"0": 6}, "container": {"0": 4}}, borders={"1px drawn": 60}, borderColors={"#1e1e1e": 60},
+                      accentSources={"button": {"#f386a1": 2}}, typeRoles=roles, textSizes={"body": {"22": 2100}, "heading": {"150": 140}},
+                      durations={"500": 7}, easings={"cubic-bezier(0.12, 0.23, 0.5, 1)": 7}, transitionKinds={"color": 7},
+                      loops={"count": 10, "durations": {"2000": 10}, "easings": {"linear": 10}})
+        cap |= {"patterns": {"windows": {win: 8}, "frames": {"3px #c4c4c4": 5}},
+                "surfaces": {"pageBg": "#fefefe", "areas": {"#f386a1": 0.58, "#1e1e1e": 0.19, "#fefefe": 0.13, "#03aa5c": 0.08},
+                             "text": {"#1e1e1e": 0.7, "#3d3d3d": 0.3}, "textShare": 0.05, "whitespace": 0.8, "blankRows": 0.17, "air": 0.63,
+                             "sections": [{"hex": "#f386a1", "y": 2000, "h": 6000}, {"hex": "#03aa5c", "y": 8000, "h": 900},
+                                          {"hex": "#1e1e1e", "y": 8900, "h": 2000}], "gradients": 0},
+                "layout": {"docHeight": 11000, "maxTextWidth": 600},
+                "components": {"button": {json.dumps({"bg": "#f386a1", "text": "#111111", "border": None, "radius": 0, "height": 36, "padX": 12,
+                                                      "family": "Die Grotesk C Medium", "size": 16, "weight": "500", "case": None, "tracking": 0}): 2}},
+                "voice": {"heading": {"n": 11, "words": 4.4, "case": {"title": 8, "sentence": 3}, "period": 2, "exclaim": 0, "question": 0,
+                                      "digits": 3, "emoji": 0},
+                          "button": {"n": 25, "words": 3.1, "case": {"title": 15}, "period": 0, "exclaim": 0, "question": 0, "digits": 0, "emoji": 0},
+                          "prose": {"paragraphs": 14, "wordsPerSentence": 12.6, "you": 3, "contractions": 3, "exclaim": 0, "emoji": 1}}}
+        return css_scan.analyse(cap)
+
+    def test_draft_has_the_reels_structure(self):
+        ix = taste_index.draft(self.retro_scan(), "retro-os")
+        names = [p["name"] for p in ix["principles"] if p["keep"]]
+        self.assertEqual(names[:2], ["Everything is a window", "Colour is a place"])
+        self.assertIn("Square corners", names)
+        self.assertIn("Something small is always running", names)
+        self.assertTrue(all(p["status"] == "measured" and p["whyStatus"] == "inferred" and p["why"] for p in ix["principles"]))
+        jobs = {c["hex"]: c for c in ix["colors"]}
+        self.assertEqual(jobs["#fefefe"]["var"], "--ti-color-ground")
+        self.assertEqual(jobs["#1e1e1e"]["var"], "--ti-color-ink")
+        self.assertTrue(jobs["#f386a1"]["jobs"][0].startswith("world"))
+        self.assertAlmostEqual(jobs["#f386a1"]["area"], 0.58)
+        display = next(t for t in ix["type"] if t["role"] == "display")
+        self.assertEqual((display["family"], display["substitute"], display["licence"]), ("Die Grotesk C", "Inter Tight", "not known"))
+        mono = next(t for t in ix["type"] if t["family"] == "JetBrains Mono")
+        self.assertEqual((mono["substitute"], mono["licence"]), ("JetBrains Mono", "open"))
+        nevers = [n["rule"] for n in ix["never"]]
+        for rule in ("Rounded corners", "Gradients", "Bounce or overshoot", "Emoji in headlines, buttons or navigation"):
+            self.assertIn(rule, nevers)
+        self.assertTrue(any(c["name"] == "window" for c in ix["components"]))
+        self.assertIn("loop", " ".join(r["rule"] for r in ix["motion"]["rules"]))
+        self.assertEqual(ix["notice"], taste_index.NOTICE)
+        v = ix["variables"]
+        for k in ("--ti-color-ground", "--ti-font-display", "--ti-radius-control", "--ti-duration-loop", "--ti-ease-loop", "--ti-frame-band"):
+            self.assertIn(k, v)
+        self.assertIn('"Die Grotesk C", "Inter Tight"', v["--ti-font-display"])
+        errs, warns = taste_index.check(ix)
+        self.assertEqual(errs, [])
+        self.assertTrue(any("picture" in w for w in warns))
+
+    def test_render_files_and_no_copy(self):
+        ix = taste_index.draft(self.retro_scan(), "retro-os", picture="A desktop computer pinned onto pink paper")
+        md, css, page = taste_index.render_md(ix), taste_index.css_for(ix), taste_index.specimen(ix)
+        for part in ("## Principles", "## Colour", "## Type", "## Components", "## Motion", "## Voice", "## Never", "## Variables",
+                     "*(measured)*", "*(inferred)*", taste_index.NOTICE):
+            self.assertIn(part, md)
+        self.assertIn(":root {", css)
+        self.assertIn("prefers-reduced-motion", css)
+        self.assertIn('href="taste.css"', page)
+        self.assertNotIn("fonts.googleapis", page + css)  # fonts are named, never fetched
+        self.assertNotIn("@font-face", css)
+
+    def test_check_catches_gaps(self):
+        ix = taste_index.draft(self.retro_scan(), "retro-os")
+        ix["notice"] = "edited"
+        ix["never"] = []
+        for p in ix["principles"]:
+            p["keep"] = False
+        errs, _ = taste_index.check(ix)
+        self.assertTrue(any("notice" in e for e in errs))
+        self.assertTrue(any("Never" in e for e in errs))
+        self.assertTrue(any("principle" in e for e in errs))
+
+    def test_free_substitutes(self):
+        sub = taste_index.substitute
+        self.assertEqual(sub("Die Grotesk C", "heading"), "Inter Tight")
+        self.assertEqual(sub("Die Grotesk C", "body"), "Inter")
+        self.assertEqual(sub("LisaTerminal Paper 2X3Y"), "VT323")
+        self.assertEqual(sub("Tiempos Headline", "heading"), "Newsreader")
+        self.assertEqual(sub("Fraunces"), "Fraunces")
+        self.assertEqual(taste_index.licence("Fraunces"), "open")
+        self.assertEqual(taste_index.licence("Söhne"), "not known")
+
+    def test_screenshot_reference_for_intake(self):
+        pink, paper = (243, 134, 161), (254, 254, 254)
+        rows = [[pink] * 64 for _ in range(200)] + [[paper] * 64 for _ in range(240)]
+        rows[220][10:20] = [(30, 30, 30)] * 10  # a line of "text" in the paper band
+        d = Path(tempfile.mkdtemp())
+        try:
+            (d / "shot.png").write_bytes(png_bytes(rows))
+            w, h, px = taste_index.read_png(d / "shot.png")
+            self.assertEqual((w, h, px[0][0], px[439][63], px[220][15]), (64, 440, pink, paper, (30, 30, 30)))
+            with contextlib.redirect_stdout(io.StringIO()):
+                out = taste_index.cmd_screenshot(str(d / "shot.png"), "pink-paper", ["radius=0", "body=16"], str(d), "inspiration")
+            ref = json.loads(out.read_text())
+            self.assertEqual((ref["kind"], ref["method"], ref["estimated"]), ("screenshot", "estimated", {"radius": "0", "body": "16"}))
+            self.assertEqual(ref["surfaces"]["pageBg"], "#fefefe")
+            self.assertEqual(ref["surfaces"]["order"], ["#f386a1"])
+            self.assertAlmostEqual(ref["surfaces"]["worlds"][0]["share"], 0.44, places=1)
+            if ENGINE:
+                spec = importlib.util.spec_from_file_location("od_engine", ENGINE)
+                eng = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(eng)
+                fit = eng.fit_reference(ref)
+                paths = {p["path"] for p in fit["proposals"]}
+                self.assertEqual(fit["kind"], "screenshot")
+                self.assertIn("dials.roundness", paths)
+                self.assertNotIn("dials.energy", paths)  # a still image has no motion
+        finally:
+            shutil.rmtree(d)
+
+    @unittest.skipUnless(ENGINE, "engine.py not found")
+    def test_use_needs_the_persons_font_choice_then_follows(self):
+        d = Path(tempfile.mkdtemp())
+        try:
+            eng = taste_index.engine()
+            with contextlib.redirect_stdout(io.StringIO()):
+                eng.cmd_sketch(str(d / "opendesigner"), name="Trial", audience="regular", platforms="web", feel="friendly,minimal", quiet=True)
+            scan = d / "scan.json"
+            scan.write_text(json.dumps(self.retro_scan()))
+            with contextlib.redirect_stdout(io.StringIO()):
+                taste_index.cmd_draft(str(scan), "retro-os", "inspiration", None, str(d))
+            state = json.loads((d / "opendesigner" / "state.json").read_text())
+            self.assertTrue(state["references"]["retro-os"]["index"])  # taste.py reads its dials as inspiration evidence
+            self.assertNotIn("tasteIndex", state)  # drafting never decides which index the system follows
+            with self.assertRaises(SystemExit), contextlib.redirect_stdout(io.StringIO()):
+                taste_index.cmd_use("retro-os", None, str(d))
+            with contextlib.redirect_stdout(io.StringIO()):
+                taste_index.cmd_use("retro-os", "free", str(d))
+            state = json.loads((d / "opendesigner" / "state.json").read_text())
+            self.assertEqual(state["tasteIndex"]["follows"], "retro-os")
+            self.assertEqual(state["raw"]["brandColor"], "#f386a1")
+            self.assertEqual(state["raw"]["displayFace"], "Inter Tight")  # free substitute, as chosen
+            for f in ("index.json", "TASTE-INDEX.md", "taste.css", "specimen.html", "measured.json"):
+                self.assertTrue((d / "opendesigner" / "taste-indexes" / "retro-os" / f).exists(), f)
+        finally:
+            shutil.rmtree(d)
+
+
+class ReviewFixes(unittest.TestCase):
+    """Bugs a fresh-eyes review found on 2026-10-23, each reproduced before the fix."""
+
+    @unittest.skipUnless(NODE, "node not installed")
+    def test_noise_is_base64_not_cjk(self):
+        r = subprocess.run([NODE, "-e", "const a=require(process.env.RP);console.log(JSON.stringify(["
+                            "a.noiseText('ZmxvYXRpbmcgcG9pbnQgbnVtYmVycyBhcmUgYXBwcm94aW1hdGlvbnM='),"
+                            "a.noiseText('\u8fd9\u662f\u4e00\u4e2a\u5f88\u957f\u7684\u4e2d\u6587\u6bb5\u843d\u6ca1\u6709\u7a7a\u683c\u4f46\u662f\u5b83\u662f\u6b63\u5e38\u7684\u6587\u5b57\u5185\u5bb9\u800c\u4e0d\u662f\u88c5\u9970'),"
+                            "a.noiseText('A short line of ordinary words.')]))"],
+                           capture_output=True, text=True, timeout=30, env={"RP": str(HERE / "read_page.js"), "PATH": ""})
+        self.assertEqual(json.loads(r.stdout), [True, False, False])
+
+    def test_merge_skips_missing_numbers_and_averages_sentences(self):
+        a = capture() | {"voice": {"prose": {"paragraphs": 0, "wordsPerSentence": None}}}
+        b = capture() | {"voice": {"prose": {"paragraphs": 4, "wordsPerSentence": 12.6}}}
+        c = capture() | {"voice": {"prose": {"paragraphs": 4, "wordsPerSentence": 12.6}}}
+        self.assertEqual(css_scan.merge_captures([a, b])["voice"]["prose"]["wordsPerSentence"], 12.6)
+        self.assertEqual(css_scan.merge_captures([b, c])["voice"]["prose"]["wordsPerSentence"], 12.6)
+
+    def test_page_colour_is_not_the_accent_without_a_coloured_control(self):
+        cap = capture(accentSources={"button": {"#111111": 6}}) | {"surfaces": {"areas": {"#f386a1": 0.25, "#ffffff": 0.75}, "sections": [], "text": {}}}
+        self.assertNotIn("area", json.dumps(css_scan.analyse(cap)["color"]["accents"]))  # black buttons: no accent from the page's pink
+        cap["values"]["accentSources"]["button"]["#f386a1"] = 1
+        self.assertIn("area", css_scan.analyse(cap)["color"]["accents"][0]["sources"])  # a pink button: the pink area backs it
+
+    def test_set_numbering_and_validation(self):
+        d = Path(tempfile.mkdtemp())
+        try:
+            ix = taste_index.draft(TasteIndexTool.retro_scan(), "retro-os")
+            taste_index.save_index(str(d), ix)
+            quiet = contextlib.redirect_stdout(io.StringIO())
+            with quiet:
+                taste_index.cmd_set("retro-os", "principle", ["2"], str(d), drop=True)
+                taste_index.cmd_set("retro-os", "why", ["2", "A new reason"], str(d))
+            ps = taste_index.load_index(str(d), "retro-os")["principles"]
+            self.assertFalse(ps[1]["keep"])
+            self.assertEqual(ps[1]["why"], "A new reason")  # the same principle 2, kept or not
+            for args in (("why", ["99", "x"], None), ("never", [], None), ("picture", [], None), ("principle", ["0"], True)):
+                with self.assertRaises(SystemExit), contextlib.redirect_stdout(io.StringIO()):
+                    taste_index.cmd_set("retro-os", args[0], args[1], str(d), drop=args[2])
+            with contextlib.redirect_stdout(io.StringIO()):
+                taste_index.cmd_set("retro-os", "never", ["Paragraphs in pixel type"], str(d))
+            self.assertEqual(taste_index.load_index(str(d), "retro-os")["never"][-1]["status"], "inferred")
+        finally:
+            shutil.rmtree(d)
+
+    def test_screenshot_index_marks_estimates(self):
+        scan = css_scan.analyse({"method": "estimated", "values": {"colors": {"#f7f5f0": 900}},
+                                 "surfaces": {"pageBg": "#f7f5f0", "areas": {"#f7f5f0": 1.0}, "sections": [], "text": {}, "gradients": 0,
+                                              "whitespace": 0.9, "blankRows": 0.5}})
+        scan["radius"] = {"mostCommon": 0, "control": {"px": 0, "confidence": "low"}}
+        ix = taste_index.draft(scan, "shot")
+        rules = {n["rule"]: n["status"] for n in ix["never"]}
+        self.assertNotIn("Gradients", rules)  # a screenshot cannot show there are none
+        self.assertNotIn("Soft drop shadows", rules)
+        self.assertEqual(rules.get("Rounded corners"), "estimated")
+
+    def test_card_wears_what_the_depth_model_says(self):
+        flat = taste_index.draft(TasteIndexTool.retro_scan(), "retro-os")
+        self.assertEqual(flat["variables"]["--ti-shadow-card"], "none")
+        self.assertIn("var(--ti-shadow-card, none)", taste_index.css_for(flat))
+        hard = css_scan.analyse(capture(shadows={"rgb(30, 30, 30) 3px 3px 0px 0px": 6}))
+        self.assertEqual(taste_index.draft(hard, "hard")["variables"]["--ti-shadow-card"], "var(--ti-shadow-hard)")
+
+    def test_redraft_keeps_hand_written_parts(self):
+        d = Path(tempfile.mkdtemp())
+        try:
+            scan = d / "scan.json"
+            scan.write_text(json.dumps(TasteIndexTool.retro_scan()))
+            with contextlib.redirect_stdout(io.StringIO()):
+                taste_index.cmd_draft(str(scan), "retro-os", "inspiration", "A desktop on pink paper", str(d))
+                taste_index.cmd_set("retro-os", "never", ["Paragraphs in pixel type"], str(d))
+                taste_index.cmd_draft(str(scan), "retro-os", "inspiration", None, str(d))
+            ix = taste_index.load_index(str(d), "retro-os")
+            self.assertEqual(ix["picture"]["text"], "A desktop on pink paper")
+            self.assertIn("Paragraphs in pixel type", [n["rule"] for n in ix["never"]])
+            self.assertEqual(ix["source"], None if not ix["source"] else ix["source"].split("/")[0])  # host only, never a path
+        finally:
+            shutil.rmtree(d)
+
+    @unittest.skipUnless(ENGINE, "engine.py not found")
+    def test_exact_fonts_keep_their_free_substitute(self):
+        eng = taste_index.engine()
+        faces = eng.font_faces({"textFace": ["Die Grotesk C", "Inter"], "displayFace": ["Die Grotesk C", "Inter Tight"]})
+        self.assertEqual(faces["text"]["stack"], ["Die Grotesk C", "Inter"])
+        self.assertEqual(eng.font_faces({"textFace": "Inter"})["text"].get("stack"), None)
 
 
 if __name__ == "__main__":

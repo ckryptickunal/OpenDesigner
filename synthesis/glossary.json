@@ -2101,6 +2101,31 @@
   ]
  },
  {
+  "id": "use.taste-index-look",
+  "term": "Taste Index",
+  "plain": "A full write-up of one look you love, so your AI can make new pages that match it.",
+  "designer": "One look described in full: a picture, 5 to 7 principles with reasons, colour jobs and shares, type, components, motion, voice, a Never list and a live specimen.",
+  "engineer": "opendesigner-extract taste_index.py draft writes opendesigner/taste-indexes/<id>/: TASTE-INDEX.md, a CSS file of variables and specimen.html; use <id> --fonts exact|free makes the system follow it.",
+  "designer_says": "brand guide for one look",
+  "code_name": "taste_index.py",
+  "example": "Warm paper, near-black ink, one teal accent, a lot of empty space.",
+  "see_also": [
+   "use.taste-card",
+   "core.reference-intake"
+  ],
+  "source": [
+   "skills/opendesigner-extract/scripts/taste_index.py",
+   "skills/opendesigner/references/taste.md",
+   "learn/analysis/davecto-taste-index-reel-deddoxeujet.json",
+   "_coordination/DECISIONS.md 2026-10-23"
+  ],
+  "layer": "use",
+  "aliases": [
+   "look guide",
+   "taste index of a site"
+  ]
+ },
+ {
   "id": "use.template",
   "term": "visual template",
   "plain": "A small web page that shows each option as a real sample, so you can see it before you pick.",

@@ -265,9 +265,10 @@ def build_index(d, eng=None, state=None):
             for pr in ref.get("proposals") or []:
                 name = str(pr.get("path", "")).removeprefix("dials.")
                 if name in DIALS and str(pr.get("path")).startswith("dials.") and isinstance(pr.get("value"), (int, float)):
-                    add(name, "reference", rid, tag, pr["value"],
+                    src = "taste-index" if ref.get("index") else "reference"  # a Taste Index (opendesigner-extract) counts as an inspiration
+                    add(name, src, rid, tag, pr["value"],
                         WEIGHTS["inspiration"] * REF_CONFIDENCE.get(pr.get("confidence"), 0.8) * REF_TAGS.get(tag, 1.0))
-                    counts["reference"] = counts.get("reference", 0) + 1
+                    counts[src] = counts.get(src, 0) + 1
         entries = by_path.get("macros")
         if not entries or entries[-1]["set_by"] not in GUESSES:
             table = {m["id"]: m for m in eng.levers()["macros"]}

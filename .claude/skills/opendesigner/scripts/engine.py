@@ -1587,16 +1587,19 @@ def font_faces(raw):
         disp = "=rounded" if cls == "rounded" else "=serif"  # Q-type-03 with the device font: headings in the system serif or rounded
 
     def info(name):
-        if isinstance(name, list):
+        stack = [x for x in name if isinstance(x, str) and x] if isinstance(name, list) else []
+        if isinstance(name, list):  # a face with its own fallbacks, e.g. an exact face then its free substitute (Taste Index)
             name = name[0] if name else "system"
         if name == "=textFace":
             return None
         if _generic_face(name) or str(name).lower() in OPEN_FONTS:
-            return {"face": name, "web": True, "app": True, "selfHost": True, "open": True}
+            return dict({"face": name, "web": True, "app": True, "selfHost": True, "open": True}, **({"stack": stack} if len(stack) > 1 else {}))
         rec = {"face": name, "web": lic.get("web"), "app": lic.get("app"), "selfHost": lic.get("selfHost"), "open": False}
         cut = [k for k in ("web", "app") if rec[k] is False]
         if cut:
             rec["note"] = f"{name} is not licensed for {' or '.join('apps' if k == 'app' else k for k in cut)}, so the system font is used there"
+        if len(stack) > 1:
+            rec["stack"] = stack
         return rec
     t = info(text)
     d = info(disp) or dict(t, face="=textFace")
@@ -2107,15 +2110,15 @@ def build_typography(ctx):
         if not v or v == "system":
             return list(fallback)
         if isinstance(v, list):
-            return v
+            return v + [x for x in fallback if x not in v]
         return [v] + list(fallback)
     tf = faces["text"]
-    text_face = face(tf["face"] if tf["web"] is not False else "system", SYSTEM_SANS)
+    text_face = face((tf.get("stack") or tf["face"]) if tf["web"] is not False else "system", SYSTEM_SANS)
     df = faces["display"]
-    disp = df["face"] if df["web"] is not False else None
+    disp = (df.get("stack") or df["face"]) if df["web"] is not False else None
     note = " " + "; ".join(f["note"] for f in (tf, df) if f.get("note")) if (tf.get("note") or df.get("note")) else ""
     fam = {"text": tok(text_face, "Text face for UI and body (DC-L02-01)." + note),
-           "display": tok(A("font.family.text") if disp in (None, "=textFace", tf["face"]) else face(disp, text_face),
+           "display": tok(A("font.family.text") if disp in (None, "=textFace", tf["face"]) or (tf.get("stack") and disp == tf["stack"]) else face(disp, text_face),
                           "Display face for headings (Apple, Google and Linear split display and text faces, DC-L06-07)."),
            "mono": tok(face(raw.get("monoFace"), SYSTEM_MONO), "Code, tokens, tabular values.")}
     weights = {"$type": "fontWeight", "$description": f"{wc} weights: body 400, labels {w['label']}, headings {hw} (DC-L02-15; Energy sets heading weight, S-L06-031).",
@@ -9029,6 +9032,12 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     card_md = ("**Taste card.** How it looks and feels, in five lines for you, your team and any AI that builds with it. "
                "Nothing on it is invented: each line says where it comes from." + ("\n" + sl_card if sl_card else "") + "\n\n"
                + _md_table(["Line", "What it says", "From"], taste_card(d, state, meta, light, brand_delegated(d), t_index)))
+    follows = (state.get("tasteIndex") or {}).get("follows")
+    if follows:  # the person chose a Taste Index (opendesigner-extract taste_index.py use): every agent reads it first
+        card_md += (f"\n\n**This system follows the Taste Index `{follows}`, chosen by the person.** Before building any page, component or "
+                    f"animation, read `{R('taste-indexes/' + follows + '/TASTE-INDEX.md')}` and use `{R('taste-indexes/' + follows + '/taste.css')}`; "
+                    "follow its principles and Never list, and ask before going against one. It keeps the reference's exact colours and font "
+                    "names as first presented; keeping or changing them is the person's call and responsibility.")
     out.append(section("Overview", "\n".join(body), lead=lead_overview, term_key="Visual style direction", after=card_md))
 
     # 2 Colors
@@ -9244,7 +9253,10 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             "- Pair every status color with an icon or label; underline links in running text.",
             "", "**Don't**", "- Don't shrink hit areas in dense layouts; shrink visuals and extend the hit area.",
             "- Don't use motion as the only signal, or flash more than three times a second.",
-            "- Don't copy another brand's identity from a reference (colors, typeface, logo, imagery, copy).",
+            ("- Don't add a reference's logo, brand name, imagery or copy. The exact colours and font names of the Taste Index you chose "
+             "to follow are yours to keep or change (your call and responsibility); font files are never shipped."
+             if (state.get("tasteIndex") or {}).get("follows") else
+             "- Don't copy another brand's identity from a reference (colors, typeface, logo, imagery, copy)."),
             *(["", "**Never** (the person's taste, from the taste card; `engine.py review` flags red lines, and nothing here fails a "
                "build). Ask before going against one:"] + [f"- {w} ({src})" for w, src in nevers] if nevers else []),
             "", "**Current validation findings:** " + (", ".join(f"{i['severity']}: {i['message']}" for i in warns) if warns else "none (errors 0, warnings 0)."),
@@ -10329,10 +10341,19 @@ def fit_reference(ref, state=None):
     if ctl:
         guesses.append(_band_mid("density", "control.height.md", snap_to(float(ctl), [32, 40, 48])))
     if body:
-        guesses.append({13: 95, 14: 78, 15: 60, 16: 35, 17: 25, 18: 15, 19: 5}.get(int(round(float(body))), 50))
-    if guesses:
-        add("dials.density", int(round(sum(guesses) / len(guesses))), conf("density"),
-            f"body {body}px" + (f", controls {ctl}px" if ctl else "") + " -> A3 bands")
+        guesses.append({13: 95, 14: 78, 15: 60, 16: 35, 17: 25, 18: 15, 19: 5}.get(int(round(float(body))), 95 if float(body) < 13 else 5))
+    air, blank, room = m.get("air"), m.get("blankRows"), []
+    # empty space, read the way people see it (read_page.js): the gap between blocks of text in multiples of their type size,
+    # and the share of the page height left blank across its whole width. Each counts 1.5 against the body size's 1, so a
+    # page of small type in a lot of space reads spacious, not compact [inferred anchors, calibrated on 7 sites 2026-10-23]
+    if air is not None:
+        room.append(_inverse_anchors([[95, 0.4], [75, 0.8], [50, 1.4], [25, 2.2], [5, 3.2]], clamp(float(air), 0.4, 3.2)))
+    if blank is not None:
+        room.append(_inverse_anchors([[90, 0.02], [70, 0.08], [50, 0.18], [25, 0.35], [5, 0.55]], clamp(float(blank), 0.02, 0.55)))
+    if guesses or room:
+        add("dials.density", int(round((sum(guesses) + 1.5 * sum(room)) / (len(guesses) + 1.5 * len(room)))), conf("density"),
+            f"body {body}px" + (f", controls {ctl}px" if ctl else "") + (f", blocks {air} type sizes apart" if air is not None else "")
+            + (f", {round(float(blank) * 100)}% of the height blank" if blank is not None else "") + " -> A3 bands")
     # depth
     dep = m.get("depth") or {}
     shadows = dep.get("shadows") or m.get("shadows") or []
@@ -10340,13 +10361,17 @@ def fit_reference(ref, state=None):
         add("dials.depth", 90, conf("depth"), "backdrop blur on controls -> materials band")
     elif dep.get("hint") or shadows is not None:
         hint = dep.get("hint") or ("borders" if not shadows else "shadow-ladder")
-        v = {"borders": 8, "ring+faint-shadow": 25, "tonal": 45, "shadow-ladder": 68}.get(hint, 40)
+        v = {"borders": 8, "hard-offset": TRAIT_DIALS["depth"][1]["hard-offset"], "ring+faint-shadow": 25, "tonal": 45, "shadow-ladder": 68}.get(hint, 40)
         al = _shadow_strength(dep, shadows) or 0
         if al and hint in ("shadow-ladder", "ring+faint-shadow"):
             pos = 16 + (clamp(al, 0.08, 0.24) - 0.08) / 0.16 * 84
             lo, hi = (16, 35) if hint == "ring+faint-shadow" else (56, 80)
             v = int(round(clamp(pos, lo, hi)))
-        add("dials.depth", v, conf("depth"), f"{hint}" + (f", median shadow strength {al} (alpha weighted by softness)" if al else "") + " -> A6 bands")
+        drawn = ", ".join(x for x in (f"{dep['windowCount']} windows with a title bar" if dep.get("windowCount") else "",
+                                       f"{sum(f['count'] for f in dep['frames'])} drawn frames" if dep.get("frames") else "",
+                                       f"{dep['minorShadows']} minor soft shadow(s) ignored" if dep.get("minorShadows") else "") if x)
+        add("dials.depth", v, conf("depth"), f"{hint}" + (f", median shadow strength {al} (alpha weighted by softness)" if al else "")
+            + (f"; {drawn}" if drawn else "") + " -> A6 bands")
     # colorfulness and warmth
     col = m.get("color") or {}
     accents = col.get("accents") or []
@@ -10357,10 +10382,15 @@ def fit_reference(ref, state=None):
         v = _inverse_anchors(pts, hct)
         hues = {round(hex_to_oklch(a["hex"] if isinstance(a, dict) else a)[2] / 30) for a in accents[:6]
                 if hex_to_oklch(a["hex"] if isinstance(a, dict) else a)[1] > 0.06}
-        if len(hues) >= 3:
+        share = col.get("chromaticShare", m.get("chromaticShare"))
+        if share is not None:  # how much of the page is coloured outweighs how strong the accent is (3 to 2)
+            av = _inverse_anchors([[0, 0], [12, 0.01], [25, 0.05], [45, 0.15], [65, 0.35], [85, 0.6], [95, 0.9]], clamp(float(share), 0, 0.9))
+            v = 0.6 * av + 0.4 * v
+        elif len(hues) >= 3:
             v = max(v, 62)
         add("dials.colorfulness", int(round(clamp(v, 0, 100))), conf("colorfulness"),
-            f"top accent HCT chroma {rnd(hct, 1)}, {len(hues)} distinct accent hue(s) -> A7 anchors")
+            f"top accent HCT chroma {rnd(hct, 1)}" + (f", {rnd(float(share) * 100, 1)}% of the page in colour" if share is not None
+                                                      else f", {len(hues)} distinct accent hue(s)") + " -> A7 anchors")
         if tag == "our-product":
             add("raw.brandColor", top, "high", "the person's own product: its brand color may carry over")
         else:
@@ -10412,14 +10442,27 @@ def fit_reference(ref, state=None):
     if sp.get("unit"):
         add("raw.spaceUnit", int(sp["unit"]), "high" if conf_kind != "screenshot" else "low", f"largest of 4/5/8 dividing most values ({sp.get('shareDivisible')})")
     mo = m.get("motion") or {}
-    if mo.get("durationMultiplier") and conf("energy") != "none":
-        pts = next(d for d in levers()["dials"] if d["id"] == "energy")["drives"]
-        mp = next(x for x in pts if x["param"] == "motion.durationMultiplier")["map"]["points"]
-        v = _inverse_anchors(mp, clamp(float(mo["durationMultiplier"]), 0.8, 1.2))
-        eas = " ".join(str(e) for e in mo.get("easings") or [])
-        if re.search(r"cubic-bezier\([^)]*,\s*1\.\d+", eas) or "linear(" in eas:
-            v = max(v, 72)
-        add("dials.energy", int(round(v)), conf("energy"), f"median duration {mo.get('median')}ms -> multiplier {mo['durationMultiplier']} -> A4 anchors")
+    loops = mo.get("loops") or {}
+    if (mo.get("durationMultiplier") or loops.get("count")) and conf("energy") != "none":
+        v, why = None, []
+        if mo.get("durationMultiplier") and mo.get("fadesOnly"):  # colour and opacity fades move nothing: calm, however slow
+            v = 10 if float(mo.get("median") or 0) <= 200 else 20
+            why.append(f"only colour and opacity fades ({mo.get('fades')}), median {mo.get('median')}ms")
+        elif mo.get("durationMultiplier"):
+            pts = next(d for d in levers()["dials"] if d["id"] == "energy")["drives"]
+            mp = next(x for x in pts if x["param"] == "motion.durationMultiplier")["map"]["points"]
+            v = _inverse_anchors(mp, clamp(float(mo["durationMultiplier"]), 0.8, 1.2))
+            eas = " ".join(str(e) for e in mo.get("easings") or [])
+            if mo.get("overshoot") or re.search(r"cubic-bezier\([^)]*,\s*1\.\d+", eas):
+                v = max(v, 72)
+            why.append(f"median duration {mo.get('median')}ms -> multiplier {mo['durationMultiplier']}")
+        if (loops.get("count") or 0) >= 3 or (loops.get("count") and v is None):  # small things always running (one spinner is not a style):
+            # its easing is the trait (TRAIT_DIALS motion), never its length
+            lv = {"stepped": TRAIT_DIALS["motion"][1]["stepped"], "linear": 35, "eased": 50, "springy": TRAIT_DIALS["motion"][1]["springy"]}.get(
+                loops.get("character"), 40)
+            v = lv if v is None else max(v, lv)
+            why.append(f"{loops['count']} loop(s) always running, {loops.get('character')}")
+        add("dials.energy", int(round(v)), conf("energy") if mo.get("durationMultiplier") else "low", "; ".join(why) + " -> A4 anchors")
     notes.append("Brand presence is never inferred: it starts at 50 and is asked (LEVERS E2).")
     if tag == "competitor":
         props = []

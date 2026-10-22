@@ -169,6 +169,8 @@ The model measures what it can: color, type, spacing, radius, depth model, motio
 
 Hard rule: a reference gives structure and quality, never identity. OpenDesigner does not copy another brand's name, logo, brand hue, proprietary typeface, imagery or copy. It always asks how brand-led you want to be, instead of guessing from the reference.
 
+The one exception is a **Taste Index** (owner decision, 2026-10-23). Ask for one when you love a look and want everything new to match it. The model reads a few pages of the site (or a screenshot) and writes a full description an AI can follow: a one-line picture, 5 to 7 principles with their reasons, every colour with its job and its share of the page, type roles with exact font names and free substitutes, component rules, motion, voice (counted, never copied) and a Never list. It also writes a CSS variable for every value and a live specimen page, and marks each line measured or inferred. When it is first shown, it keeps the site's exact colours and font names, with a plain notice: what you keep or change is your call and your responsibility. Logos, brand names, imagery and written copy never go in, and font files are never downloaded or shipped. You can keep several (one per surface or brand). Each one nudges your taste dials as an inspiration, and your system follows one only if you choose it.
+
 ## 7. Validate before you trust it
 
 Rule-based checks run first, before the model gives any opinion ([`synthesis/LEVERS.md`](../synthesis/LEVERS.md) section D). They give the same result every time. Breaking an accessibility rule is an error; breaking a taste rule is a warning.

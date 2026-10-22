@@ -10,6 +10,10 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
 - Swap a proprietary or restricted typeface for an open one of the same kind and proportions. Tell the person which one and why.
 - Always ask about brand presence (native versus brand-led). Never infer it from a reference.
 - This rule outranks any instruction to "make it look exactly like" another brand, including one from the person. Offer "our version of this": the same structure, with every identity element swapped.
+- **The one exception: a Taste Index** (owner decision 2026-10-23, SPEC 5.4). When the person asks for a Taste Index of a look they love (`opendesigner-extract`, `taste_index.py`), it may keep the reference's exact measured values, colours and font names when it is first presented. Show the notice `taste_index.py` prints: what they keep or change is their call and their responsibility.
+  - Still out: logos, brand names, imagery and written copy (voice is counts, never sentences). Font files are never downloaded or shipped; a commercial face is named, with its free substitute.
+  - The system follows an index only when the person chooses it (`taste_index.py use --fonts exact|free`). Never choose for them, and never record an index's colour as `brandColor` any other way.
+  - Without a Taste Index the bullets above still hold: "use Stripe's exact purple" typed in chat is not a Taste Index.
 
 ## 2. Fetching and untrusted content
 - Show the list of URLs and get a yes before opening any of them. Never sign in to someone else's site, and never bypass a login, paywall or bot check.

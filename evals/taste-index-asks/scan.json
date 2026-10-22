@@ -1,0 +1,515 @@
+{
+ "method": "computed",
+ "source": "https://paper-studio.example/",
+ "files": null,
+ "elements": 240,
+ "color": {
+  "accents": [
+   {
+    "hex": "#2f5d50",
+    "count": 7,
+    "oklch": [
+     0.441,
+     0.056,
+     173
+    ],
+    "sources": {
+     "emphasis": 3,
+     "token": 2,
+     "focus": 2
+    },
+    "score": 0.78
+   }
+  ],
+  "neutrals": [
+   {
+    "hex": "#1b1a17",
+    "count": 40,
+    "oklch": [
+     0.218,
+     0.006,
+     92
+    ]
+   },
+   {
+    "hex": "#6e675c",
+    "count": 30,
+    "oklch": [
+     0.517,
+     0.019,
+     79
+    ]
+   },
+   {
+    "hex": "#e2dccf",
+    "count": 12,
+    "oklch": [
+     0.896,
+     0.019,
+     86
+    ]
+   },
+   {
+    "hex": "#f6f3ec",
+    "count": 5,
+    "oklch": [
+     0.965,
+     0.01,
+     87
+    ]
+   }
+  ],
+  "confidence": "high",
+  "count": 7,
+  "basis": "on emphasis, focus, token; ranked by count x chroma",
+  "borders": {
+   "#e2dccf": 14
+  },
+  "note": "the accent hex is the reference's identity, a measurement only: carry its role and chroma level, never the hue as the person's primary",
+  "neutralTint": {
+   "chroma": 0.019,
+   "hue": 79,
+   "count": 30,
+   "confidence": "high"
+  },
+  "accentChroma": 0.056,
+  "chromaticShare": 0.003
+ },
+ "type": {
+  "body": {
+   "px": 17.0,
+   "share": 1.0,
+   "count": 30,
+   "confidence": "high",
+   "basis": "100% of the running text by characters"
+  },
+  "largestHeading": {
+   "px": 64.0,
+   "count": 1
+  },
+  "headingRatio": {
+   "value": 3.76,
+   "confidence": "medium",
+   "basis": "largest heading / body size; one page can mislead"
+  },
+  "scale": {
+   "base": 17.0,
+   "ratio": 1.5,
+   "meanLogResidual": 0.0528,
+   "relativeResidual": 0.13,
+   "reading": "loose fit: keep measured sizes as overrides",
+   "sizes": [
+    12.0,
+    17.0,
+    40.0,
+    64.0
+   ]
+  },
+  "families": [
+   "Inter",
+   "Canela Text"
+  ],
+  "minorFaces": [],
+  "systemFaces": [],
+  "primaryIsSystem": false,
+  "weights": [
+   400,
+   500
+  ],
+  "roles": {
+   "heading": {
+    "family": "Canela Text",
+    "families": {
+     "Canela Text": 300
+    },
+    "faces": {
+     "Canela Text": {
+      "sizes": [
+       40.0,
+       64.0
+      ],
+      "weights": [
+       "400"
+      ]
+     }
+    },
+    "share": 0.139,
+    "weights": [
+     "400"
+    ],
+    "sizes": [
+     40.0,
+     64.0
+    ],
+    "tracking": -0.01,
+    "case": null,
+    "lineHeight": 1.1
+   },
+   "body": {
+    "family": "Inter",
+    "families": {
+     "Inter": 1800
+    },
+    "faces": {
+     "Inter": {
+      "sizes": [
+       17.0
+      ],
+      "weights": [
+       "400"
+      ]
+     }
+    },
+    "share": 0.833,
+    "weights": [
+     "400"
+    ],
+    "sizes": [
+     17.0
+    ],
+    "tracking": 0.0,
+    "case": null,
+    "lineHeight": 1.6
+   },
+   "nav": {
+    "family": "Inter",
+    "families": {
+     "Inter": 60
+    },
+    "faces": {
+     "Inter": {
+      "sizes": [
+       12.0
+      ],
+      "weights": [
+       "500"
+      ]
+     }
+    },
+    "share": 0.028,
+    "weights": [
+     "500"
+    ],
+    "sizes": [
+     12.0
+    ],
+    "tracking": 0.12,
+    "case": "uppercase",
+    "lineHeight": null
+   }
+  },
+  "voices": [
+   {
+    "family": "Inter",
+    "share": 0.861,
+    "roles": [
+     "body",
+     "nav"
+    ],
+    "system": false
+   },
+   {
+    "family": "Canela Text",
+    "share": 0.139,
+    "roles": [
+     "heading"
+    ],
+    "system": false
+   }
+  ]
+ },
+ "bodySize": 17.0,
+ "space": {
+  "unit": 8,
+  "shareDivisible": {
+   "8": 1.0,
+   "5": 0.0,
+   "4": 1.0
+  },
+  "steps": [
+   8,
+   16,
+   24,
+   32
+  ],
+  "count": 150,
+  "confidence": "high"
+ },
+ "radius": {
+  "control": {
+   "px": 2,
+   "count": 6,
+   "share": 1.0,
+   "confidence": "high",
+   "values": {
+    "2": 6
+   }
+  },
+  "ignored": {},
+  "basis": "controls (buttons, inputs) and containers (cards, dialogs, menus) apart; inline links, badges, decorative pills and images ignored",
+  "mostCommon": 2,
+  "roundnessDial": 19
+ },
+ "depth": {
+  "shadows": [],
+  "hint": "borders",
+  "levels": [],
+  "rings": 0,
+  "ignored": {},
+  "count": 14,
+  "confidence": "high",
+  "basis": "14 bordered box(es); white or transparent fades, glows, insets and text shadows ignored",
+  "borders": {
+   "1px": 14
+  }
+ },
+ "motion": {
+  "durations": [
+   160.0
+  ],
+  "median": 160.0,
+  "durationMultiplier": 0.58,
+  "easings": [
+   "cubic-bezier(0.4, 0, 0.2, 1)"
+  ],
+  "overshoot": false,
+  "count": 20,
+  "character": "eased",
+  "confidence": "medium",
+  "note": "CSS transitions and Web Animations only; canvas drawing and states that need interaction are not visible",
+  "moves": 0,
+  "fades": 20,
+  "fadesOnly": true
+ },
+ "surfaces": {
+  "pageBg": "#f6f3ec",
+  "areas": [
+   {
+    "hex": "#f6f3ec",
+    "share": 0.99,
+    "oklch": [
+     0.965,
+     0.01,
+     87
+    ],
+    "chromatic": false
+   },
+   {
+    "hex": "#1b1a17",
+    "share": 0.01,
+    "oklch": [
+     0.218,
+     0.006,
+     92
+    ],
+    "chromatic": false
+   }
+  ],
+  "text": [
+   {
+    "hex": "#1b1a17",
+    "share": 0.6,
+    "oklch": [
+     0.218,
+     0.006,
+     92
+    ],
+    "chromatic": false
+   },
+   {
+    "hex": "#6e675c",
+    "share": 0.34,
+    "oklch": [
+     0.517,
+     0.019,
+     79
+    ],
+    "chromatic": false
+   },
+   {
+    "hex": "#2f5d50",
+    "share": 0.06,
+    "oklch": [
+     0.441,
+     0.056,
+     173
+    ],
+    "chromatic": true
+   }
+  ],
+  "textShare": 0.05,
+  "chromaticShare": 0.003,
+  "chromaticBackground": 0,
+  "chromaticText": 0.003,
+  "worlds": [],
+  "order": [],
+  "colourIsPlace": false,
+  "gradients": 0,
+  "imagery": 0.02,
+  "whitespace": 0.9,
+  "blankRows": 0.45,
+  "air": 2.7,
+  "confidence": "medium",
+  "basis": "area of each background colour on a 16 px grid over the whole page (document order approximates paint order)"
+ },
+ "whitespace": 0.9,
+ "blankRows": 0.45,
+ "air": 2.7,
+ "components": {
+  "button": [
+   {
+    "bg": "#1b1a17",
+    "text": "#f6f3ec",
+    "border": null,
+    "radius": 2,
+    "height": 34,
+    "padX": 12,
+    "family": "Inter",
+    "size": 14,
+    "weight": "500",
+    "case": null,
+    "tracking": 0,
+    "count": 2
+   }
+  ],
+  "nav": [
+   {
+    "color": "#6e675c",
+    "family": "Inter",
+    "size": 12,
+    "weight": "500",
+    "case": "uppercase",
+    "tracking": 0.12,
+    "count": 6
+   }
+  ]
+ },
+ "voice": {
+  "heading": {
+   "n": 6,
+   "words": 5,
+   "case": {
+    "sentence": 6
+   },
+   "period": 4,
+   "exclaim": 0,
+   "question": 0,
+   "digits": 0,
+   "emoji": 0
+  },
+  "button": {
+   "n": 12,
+   "words": 2,
+   "case": {
+    "sentence": 12
+   },
+   "period": 0,
+   "exclaim": 0,
+   "question": 0,
+   "digits": 0,
+   "emoji": 0
+  },
+  "prose": {
+   "paragraphs": 9,
+   "wordsPerSentence": 16,
+   "you": 1,
+   "contractions": 2,
+   "exclaim": 0,
+   "emoji": 0
+  }
+ },
+ "layout": {
+  "docHeight": 4200,
+  "maxTextWidth": 640
+ },
+ "summary": {
+  "bodySize": {
+   "value": 17.0,
+   "confidence": "high",
+   "count": 30,
+   "basis": "100% of the running text by characters"
+  },
+  "headingRatio": {
+   "value": 3.76,
+   "confidence": "medium",
+   "count": 1,
+   "basis": "largest heading 64 px / body; one page can mislead"
+  },
+  "accent": {
+   "value": {
+    "chroma": 0.056,
+    "usedOn": [
+     "emphasis",
+     "focus",
+     "token"
+    ]
+   },
+   "confidence": "high",
+   "count": 7,
+   "basis": "on emphasis, focus, token; ranked by count x chroma; the hue is identity and is not carried"
+  },
+  "neutralTint": {
+   "value": {
+    "chroma": 0.019,
+    "hue": 79
+   },
+   "confidence": "high",
+   "count": 30,
+   "basis": "most-used mid-tone neutral"
+  },
+  "radiusControl": {
+   "value": 2,
+   "confidence": "high",
+   "count": 6,
+   "basis": "controls (buttons, inputs) and containers (cards, dialogs, menus) apart; inline links, badges, decorative pills and images ignored"
+  },
+  "depth": {
+   "value": "borders",
+   "confidence": "high",
+   "count": 14,
+   "basis": "14 bordered box(es); white or transparent fades, glows, insets and text shadows ignored"
+  },
+  "motionMedianMs": {
+   "value": 160.0,
+   "confidence": "medium",
+   "count": 20,
+   "basis": "CSS transitions and Web Animations only; canvas drawing and states that need interaction are not visible"
+  },
+  "spaceUnit": {
+   "value": 8,
+   "confidence": "high",
+   "count": 150,
+   "basis": "share divisible {8: 1.0, 5: 0.0, 4: 1.0}"
+  },
+  "whitespace": {
+   "value": 0.9,
+   "confidence": "medium",
+   "count": null,
+   "basis": "share of the page with no text, control or card-sized box (media is imagery)"
+  },
+  "air": {
+   "value": 2.7,
+   "confidence": "medium",
+   "count": null,
+   "basis": "median gap to the next block of text below, in multiples of its type size"
+  },
+  "colorShare": {
+   "value": 0.003,
+   "confidence": "medium",
+   "count": null,
+   "basis": "share of the page painted in a chromatic colour (backgrounds plus coloured text)"
+  }
+ },
+ "identity": {
+  "rule": "measurements of the reference's identity, never values to adopt: carry role, chroma level, structure and rhythm; ask for the person's own brand color and typeface",
+  "accentHue": "#2f5d50",
+  "typefaces": [
+   "Inter",
+   "Canela Text"
+  ]
+ },
+ "neverInferred": [
+  "brandPresence (always ask)",
+  "intent, audience, principles"
+ ]
+}

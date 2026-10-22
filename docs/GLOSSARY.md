@@ -1726,6 +1726,23 @@ Designers: style brief, mood in words · Code: `taste.brief, taste.never`
 
 </details>
 
+### Taste Index
+
+A full write-up of one look you love, so your AI can make new pages that match it.  
+Designers: brand guide for one look · Code: `taste_index.py`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** One look described in full: a picture, 5 to 7 principles with reasons, colour jobs and shares, type, components, motion, voice, a Never list and a live specimen.
+
+**Engineer:** opendesigner-extract taste_index.py draft writes opendesigner/taste-indexes/<id>/: TASTE-INDEX.md, a CSS file of variables and specimen.html; use <id> --fonts exact|free makes the system follow it.
+
+**Example:** Warm paper, near-black ink, one teal accent, a lot of empty space.
+
+**Also called:** look guide, taste index of a site
+
+</details>
+
 ### visual template
 
 A small web page that shows each option as a real sample, so you can see it before you pick.  

@@ -191,7 +191,7 @@ When a question, option or building block is missing, a step confuses the person
 
 ## Guardrails
 Read `references/guardrails.md` before writing files or reading a reference. Its hard rules:
-- Never copy another brand's identity. A color the person names as another company's ("their exact purple") is a reference, not the person's brand: never pass it to `sketch --brand`. Offer a hue in the same family, labelled as a suggestion, or ask for their own color.
+- Never copy another brand's identity. A color the person names as another company's ("their exact purple") is a reference, not the person's brand: never pass it to `sketch --brand`. Offer a hue in the same family, labelled as a suggestion, or ask for their own color. The one exception is a Taste Index the person chose to follow (`opendesigner-extract`, `references/guardrails.md` section 1).
 - Never invent owner inputs, licences or brand facts. Mark guesses `assumed`.
 - Accessibility floors stay locked unless the person raises them.
 - Standards stay locked unless the person explicitly asks to change one.
