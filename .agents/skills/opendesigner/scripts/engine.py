@@ -11298,6 +11298,29 @@ def _parse_traits(tokens):
     return traits, words
 
 
+def style_taste(d, state, ids):
+    """Each style's fit to the person's taste index and the red lines it crosses, judged only on the dials the style itself
+    sets (references/taste.md); {} when the project has no taste index. A style is never recommended without this."""
+    index = taste_index(d, state) if state is not None and taste_py else None
+    if not index:
+        return {}
+    eng = sys.modules[__name__]
+    out = {}
+    for sid in ids:
+        dials = taste_py._look_dials(eng, state, sid)
+        out[sid] = {"fit": taste_py.fit(index, dials), "redLines": taste_py.crossed(index, dials)}
+    return out
+
+
+def style_taste_words(t):
+    """' · fit 82%', or ' · past a line you drew: too soft' for one style; '' when the index says nothing about it."""
+    if not t:
+        return ""
+    if t["redLines"]:
+        return " · past a line you drew: " + ", ".join(taste_py.line_text(r, plain=True) for r in t["redLines"])
+    return f" · fit {round(t['fit'] * 100)}%" if t["fit"] is not None else ""
+
+
 def _print_style(s, state=None, full=False):
     built = {k: v for k, v in (s.get("build") or s.get("built") or {}).items() if v not in (None, 1)}
     print(f"{s['name']} ({s['id']}): {s.get('plain', '')}")
@@ -11348,9 +11371,14 @@ def cmd_style(d, action, args, n=4, seed=0, wild=False, save=None, name=None, pl
         for s in every.values():
             if all(s.get("traits", {}).get(ax) == v for ax, v in traits.items()) and (not fit or s.get("ui_fit") == fit):
                 fams.setdefault(s.get("preset") or s.get("kind"), []).append(s)
+        tt = style_taste(d, state, [s["id"] for v in fams.values() for s in v])
+        order = (lambda s: (bool(tt[s["id"]]["redLines"]), -(tt[s["id"]]["fit"] or 0), s["name"].lower())) if tt else \
+            (lambda s: s["name"].lower())
+        if tt:
+            print("Ordered by fit to your taste, best first. A style past a line you drew is marked: don't offer it.")
         for fam, items in sorted(fams.items()):
             print(f"{fam} ({len(items)}): " + ", ".join(f"{s['name']} ({s['id']})" + (" *yours" if s.get("custom") else "")
-                                                         for s in sorted(items, key=lambda s: s["name"].lower())))
+                                                         + style_taste_words(tt.get(s["id"])) for s in sorted(items, key=order)))
         print(f"{sum(len(v) for v in fams.values())} styles. Details: engine.py style show <id>. New ones: engine.py style explore <words>.")
         return 0
     if action == "show":
@@ -11359,12 +11387,24 @@ def cmd_style(d, action, args, n=4, seed=0, wild=False, save=None, name=None, pl
             if not s:
                 raise SystemExit(f"No style '{w}'. Try: engine.py style search {w}")
             _print_style(s, state, full=True)
+            t = style_taste(d, state, [w]).get(w)
+            if t and (t["redLines"] or t["fit"] is not None):
+                print("  your taste: " + style_taste_words(t)[3:] + (" (don't offer it)" if t["redLines"] else ""))
         return 0
     if action == "search":
         hits = search_styles(words + [f"{ax} {v}" for ax, v in traits.items()], state, n=max(n, 6))
         found = dict(words_to_traits(words)[0], **traits)
+        tt = style_taste(d, state, [sid for sid, _sc, _w in hits])
+        past = [sid for sid in tt if tt[sid]["redLines"]]
         for sid, _sc, why in hits:
-            print(f"{every[sid]['name']} ({sid}): {every[sid].get('plain', '')}  [{', '.join(why)}]")
+            if sid not in past:
+                print(f"{every[sid]['name']} ({sid}): {every[sid].get('plain', '')}  [{', '.join(why)}]" + style_taste_words(tt.get(sid)))
+        if past:
+            print("Past a line you drew, so don't offer: " + "; ".join(
+                f"{every[sid]['name']} ({', '.join(taste_py.line_text(r, plain=True) for r in tt[sid]['redLines'])})" for sid in past) + ".")
+        fits = [(tt[sid]["fit"], sid) for sid in tt if sid not in past and tt[sid]["fit"] is not None]
+        if fits:
+            print(f"Best fit for your taste: {every[max(fits)[1]]['name']} ({max(fits)[1]}), {round(max(fits)[0] * 100)}%.")
         if not hits:
             print("No named style matches those words yet.")
         if found:
