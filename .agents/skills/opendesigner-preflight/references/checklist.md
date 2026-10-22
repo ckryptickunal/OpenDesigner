@@ -75,3 +75,7 @@ Run this on any video, page, deck or image before you call it done. Each line is
 45. **Corners nest.** A rounded box set inside another, closer than the outer radius, has radius = outer radius - gap (within 2 px), at every width: a screen in a bezel, a card in a stage, a button in a pill. Resolve the outer value on the outer element. [M46]
 46. **The preview matches the detail.** A thumbnail, card or preview shows the same view (size, theme, state) as the page it opens, and the click carries that view across. Switching views is a short crossfade, under 300 ms and ease-out, and an instant change with reduced motion. [M47]
 47. **Frames fit what they hold.** A frame, stage or device wraps its content when the content is narrower than the frame's view, so nothing sits small in an empty field. Every frame on the site uses one style (one bezel, one material). [M48]
+
+## Found by the owner, from a reference he shared (2026-10-23)
+
+48. **Floors are not sizes.** No row, menu item or list entry is built at the accessibility minimum (24 px): rows use the control height. An icon's gap to its label is at least half the icon's size, the icon is quieter than the label, selected rows sit in from the container's edge, and the gap between groups is several times the gap between rows. [M49]

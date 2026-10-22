@@ -28,7 +28,7 @@ Score each line against three shipped products that solve the same thing, compar
 | Q2 | **Real content** | Real names, numbers with units, real product shots. No lorem, no placeholder logo, no invented proof |
 | Q3 | **One system** | One accent with one job, one or two typefaces, every spacing and radius from the scale |
 | Q4 | **Clear first read** | One thing reads first; one primary action per view; headlines say something specific |
-| Q5 | **Craft** | Aligned at every width; numbers in tabular figures; every state designed (empty, loading, error, long text) |
+| Q5 | **Craft** | Aligned at every width; numbers in tabular figures; every state designed (empty, loading, error, long text); rows at the control height, not the 24 px minimum, with room between icon and label (`making.md` section 12, "Lists and sidebars breathe") |
 | Q6 | **Data shown as data** | For tools: a number that has a trend gets a small chart; status has one signal plus text |
 | Q7 | **Restraint** | None of the tells in `making.md` section 11 (glow, blobs, emoji icons, decoration with no data) |
 | Q8 | **Motion with a job** | Moves only to explain or confirm; respects reduced motion |
