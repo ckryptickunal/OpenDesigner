@@ -4,6 +4,9 @@
     python3 tools/agent_evals.py                       every case, 3 runs per arm (the default; costs model usage)
     python3 tools/agent_evals.py --case 'contrast*' --runs 1     one case, one run per arm, while writing a case
     python3 tools/agent_evals.py --tag smoke           the quick set
+    python3 tools/agent_evals.py --case 'export*,extend*' --runs 1    several cases: a comma list, or repeat the flag
+    python3 tools/agent_evals.py --tag smoke,guardrail --list    which cases would run, with their tags (costs nothing)
+                                                       (a case runs if it matches any --case and has any --tag)
     python3 tools/agent_evals.py --save                also write the summary to evals/agent/results/<date>.json and latest.json
     python3 tools/agent_evals.py --ref 9dcd6ba --case 'no-identity*' --ablation none    the skills as they were at a commit
                                                        (before and after a change: same cases, same graders, older skills)
@@ -19,6 +22,7 @@ HTML report stay in dist/eval-plugin/evals/results/; only the summary below is c
 """
 import argparse
 import datetime
+import fnmatch
 import json
 import pathlib
 import shutil
@@ -31,7 +35,30 @@ OUT = ROOT / "evals" / "agent"
 SKIP = {"results", "design", "checkers", "agent"}
 
 
-def stage(ref=None):
+def case_tags(d):
+    """The tags in a case's prompt.md front matter, such as `tags: [smoke, interview]`."""
+    head = (d / "prompt.md").read_text().split("---")
+    for line in (head[1] if len(head) > 2 else "").splitlines():
+        if line.strip().startswith("tags:"):
+            return {t.strip(" '\"") for t in line.split(":", 1)[1].strip(" []").split(",") if t.strip(" '\"")}
+    return set()
+
+
+def split(values):
+    """--case 'a*,b' --case c -> ['a*', 'b', 'c']. Shell braces are not needed (and inside quotes they never expand)."""
+    return [v.strip() for x in values or [] for v in x.split(",") if v.strip()]
+
+
+def wanted(d, cases, tags):
+    return ((not cases or any(fnmatch.fnmatchcase(d.name, c) for c in cases))
+            and (not tags or bool(case_tags(d) & set(tags))))
+
+
+def available():
+    return [d for d in sorted((ROOT / "evals").iterdir()) if d.is_dir() and d.name not in SKIP and (d / "prompt.md").exists()]
+
+
+def stage(ref=None, cases=None, tags=None):
     if STAGE.exists():
         shutil.rmtree(STAGE)
     STAGE.mkdir(parents=True)
@@ -42,8 +69,8 @@ def stage(ref=None):
         shutil.copytree(ROOT / ".claude-plugin", STAGE / ".claude-plugin")
         shutil.copytree(ROOT / "skills", STAGE / "skills", ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "node_modules", ".DS_Store"))
     (STAGE / "evals").mkdir()
-    for d in sorted((ROOT / "evals").iterdir()):
-        if d.is_dir() and d.name not in SKIP and (d / "prompt.md").exists():
+    for d in available():  # only the chosen cases are staged, so the eval runs exactly these
+        if wanted(d, cases, tags):
             shutil.copytree(d, STAGE / "evals" / d.name)
     return sum(1 for _ in STAGE.rglob("*"))
 
@@ -70,8 +97,9 @@ def summary(agg, args):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--case", help="case name glob")
-    ap.add_argument("--tag", help="only cases with this tag")
+    ap.add_argument("--case", action="append", help="case name glob; comma-separated or repeated for several")
+    ap.add_argument("--tag", action="append", help="only cases with this tag; comma-separated or repeated for several")
+    ap.add_argument("--list", action="store_true", help="print the cases that would run, with their tags, and stop (costs nothing)")
     ap.add_argument("--runs", type=int, default=3)
     ap.add_argument("--model", default="sonnet")
     ap.add_argument("--judge-model", default="haiku")
@@ -82,16 +110,23 @@ def main():
     ap.add_argument("--ref", help="stage the skills from this git commit instead of the working tree")
     ap.add_argument("--label", help="a name for this run in the saved summary, such as before or after")
     a = ap.parse_args()
-    n = stage(a.ref)
+    cases, tags = split(a.case), split(a.tag)
+    chosen = [d for d in available() if wanted(d, cases, tags)]
+    if not chosen:  # before, a glob that matched nothing still "ran" and reported overall 0 with exit 0
+        print(f"no eval case matches --case {cases or 'any'} --tag {tags or 'any'}. The cases and their tags:", file=sys.stderr)
+        for d in available():
+            print(f"  {d.name:24} {', '.join(sorted(case_tags(d)))}", file=sys.stderr)
+        sys.exit(2)
+    if a.list:
+        for d in chosen:
+            print(f"{d.name:24} {', '.join(sorted(case_tags(d)))}")
+        return
+    n = stage(a.ref, cases, tags)
     print(f"staged the plugin and {len(list((STAGE / 'evals').iterdir()))} cases in {STAGE.relative_to(ROOT)} ({n} entries)")
     res = STAGE / "evals" / "results" / "last.json"
     cmd = ["claude", "plugin", "eval", str(STAGE), "--trust-plugin", "--scaffold", "--no-publish", "--allow-tools", "Bash", "Write", "Edit",
            "--model", a.model, "--judge-model", a.judge_model, "--runs", str(a.runs), "--ablation", a.ablation,
            "--max-cost-usd", a.max_cost_usd, "-j", a.concurrency, "--threshold", "0", "--json", str(res)]
-    if a.case:
-        cmd += ["--case", a.case]
-    if a.tag:
-        cmd += ["--tag", a.tag]
     p = subprocess.run(cmd)
     if not res.exists():
         sys.exit(p.returncode or 1)

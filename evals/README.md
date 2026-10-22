@@ -22,7 +22,7 @@ Each folder here with a `prompt.md` is one case:
 To add a case:
 1. Copy the closest folder and write the new prompt the way a real person would ask.
 2. Write graders that would fail on a plausible wrong answer. A check that always passes measures nothing.
-3. Run it once with each arm: `python3 tools/agent_evals.py --case '<name>' --runs 1`.
+3. Run it once with each arm: `python3 tools/agent_evals.py --case '<name>' --runs 1`. To run several, give a comma list (`--case 'export*,extend*'` or `--tag smoke,guardrail`), and add `--list` first to see which cases match without spending anything. A filter that matches nothing stops with the list of cases instead of reporting a score of 0.
 4. Read the report. If a grader failed on a good answer, fix the grader, not the prompt.
 5. Open a pull request with the case. A maintainer runs the full suite.
 
