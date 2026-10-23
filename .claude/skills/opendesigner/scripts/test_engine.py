@@ -715,6 +715,87 @@ class DryRun(unittest.TestCase):
             self.assertTrue(any(x.startswith("  checks: new error: ") and "24px" in x for x in dry), dry)
 
 
+class RadiusBetweenSteps(unittest.TestCase):
+    """`engine.py set radius.control 10` was recorded, then every role aliased {radius.10}, a step the scale did not have,
+    and build stopped in all 12 mode combinations. A radius between the steps now gets its own step; a value that cannot
+    be a radius is refused before anything is written."""
+
+    def system(self, t):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Round", "#2563eb", "dense", "web", "calm", quiet=True)
+        return d
+
+    def text(self, path):
+        with open(path, encoding="utf-8") as f:
+            return f.read()
+
+    def check(self, d):
+        state = e.load_state(d)
+        files, meta, _ = e.generate_system(state)
+        rep = e.validate_generated(files, state, e.Report())
+        return e.resolve_all(files, {}), files, [i["message"] for i in rep.items if i["severity"] in ("error", "warn")]
+
+    def test_a_radius_between_steps_builds(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            for key, value, stored in (("radius.control", 10, 10), ("radius.control", "12px", 12), ("radius.container", 10, 10),
+                                       ("radius.overlay", 14, 14), ("radius.detail", 3, 3), ("radius.detail", "full", "full")):
+                with self.subTest(key=key, value=value):
+                    quiet(e.cmd_set, d, key, value, "between steps")
+                    self.assertEqual(e.load_state(d)["overrides"][key], stored)
+                    flat, files, problems = self.check(d)
+                    self.assertEqual(problems, [])
+                    px = e.FULL if stored == "full" else stored
+                    self.assertEqual(flat[key]["resolved"]["value"], px)
+                    if px < e.FULL:
+                        self.assertEqual(files["semantic.tokens.json"]["radius"][key.split(".")[1]]["$value"], f"{{radius.{px}}}")
+                        self.assertIn(str(px), files["primitives.tokens.json"]["radius"])
+                    state = e.load_state(d)
+                    del state["overrides"][key]  # back to the Roundness dial for the next case
+                    e.dump_json(os.path.join(d, "state.json"), state)
+            quiet(e.cmd_set, d, "radius.control", 10, "between steps")
+            flat, files, _p = self.check(d)
+            self.assertEqual(flat["radius.control-sm"]["resolved"]["value"], 8)  # one step below 10, not below 8
+            self.assertNotIn("10", e.generate_system(e.default_state("Plain"))[0]["primitives.tokens.json"]["radius"])
+
+    def test_a_value_that_is_not_a_radius_is_refused_before_anything_is_written(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            paths = [os.path.join(d, fn) for fn in ("state.json", "decisions.md")]
+            before = [self.text(p) for p in paths]
+            for key, value in (("radius.control", -4), ("radius.control", 10.5), ("radius.control", "1rem"),
+                               ("radius.container", "full"), ("radius.overlay", "full"), ("icon.defaultSize", 19)):
+                for dry in (True, False):
+                    with self.subTest(key=key, value=value, dry=dry), self.assertRaises(SystemExit) as cm:
+                        quiet(e.cmd_set, d, key, value, "odd", dry_run=dry)
+                    self.assertTrue(str(cm.exception).startswith(f"Nothing was changed: {key} takes "), str(cm.exception))
+            with self.assertRaises(SystemExit) as cm:
+                quiet(e.cmd_set, d, "radius.control", -4, "odd")
+            self.assertIn("The scale has 0, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32 and full", str(cm.exception))  # names the steps
+            self.assertEqual([self.text(p) for p in paths], before)
+            quiet(e.cmd_set, d, "icon.defaultSize", "20px", "button-sized icons")
+            self.assertEqual(e.load_state(d)["overrides"]["icon.defaultSize"], 20)
+
+    def test_standards_are_checked_the_same_way(self):
+        state = e.default_state("Std")
+        self.assertEqual(e.std_target(state, "radius.control", 10, trial=False), ("overrides.radius.control", 10))
+        with self.assertRaises(ValueError):
+            e.std_target(state, "radius.control", -4, trial=False)
+
+    def test_a_bad_value_recorded_before_the_check_still_builds(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            dial = self.check(d)[0]["radius.control"]["resolved"]
+            state = e.load_state(d)
+            state["overrides"].update({"radius.control": -4, "radius.overlay": 10.5})  # what an older engine.py set recorded
+            e.dump_json(os.path.join(d, "state.json"), state)
+            flat, files, problems = self.check(d)
+            self.assertEqual(flat["radius.overlay"]["resolved"]["value"], 10)
+            self.assertEqual(flat["radius.control"]["resolved"], dial)  # the Roundness dial's value, and validate says so
+            self.assertEqual(len(problems), 1)
+            self.assertIn("radius.control is missing from every export", problems[0].lower())
+
+
 class JourneyTracking(unittest.TestCase):
     """The engine logs its own steps to the private journey log, and only after the person's yes (journey.py)."""
 
@@ -1894,7 +1975,7 @@ class Standards(unittest.TestCase):
             self.assertEqual(sorted(un), ["STD-t-02", "STD-t-03", "STD-t-04"])
             self.assertIn("would break a check the engine enforces", un["STD-t-02"])
             self.assertIn("needs 4.5:1", un["STD-t-02"])
-            self.assertIn("cannot build the tokens", un["STD-t-03"])
+            self.assertIn("radius.container takes a corner radius in whole px", un["STD-t-03"])  # names what it takes
             self.assertIn("cubicBezier token, but the standard gives a duration", un["STD-t-04"])
             with self.assertRaises(SystemExit) as cm:
                 quiet(e.cmd_standard, d, "override", sid="STD-t-01", why="ours", value=[0, 0, 1, 1])

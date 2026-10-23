@@ -2397,8 +2397,19 @@ def build_space_density(ctx, density):
 
 def build_shape(ctx):
     p = ctx.params
-    control = ctx.P("radius.control", p["radius.control"])
     rough = ctx.dials["roundness"]
+
+    def own(name, computed):
+        """A radius role in px: the person's value (radius_px) or the computed one. A stored value that is not a radius
+        (from before engine.py set checked it, or edited by hand) is skipped, and validate says so."""
+        v = ctx.P(name, computed)
+        px = radius_px(v, name in RADIUS_PILLS)
+        if px is None:
+            ctx.notes.append(f"override {name} skipped: {json.dumps(v)} is not a radius it can take; the Roundness dial's value is used")
+            ctx.used[name] = computed
+            return radius_px(computed)
+        return px
+    control = own("radius.control", eval_map(lever_index()["radius.control"]["map"], rough))  # params hold the override already
 
     def corners(c):
         """(control, container, detail) for a control radius."""
@@ -2418,24 +2429,24 @@ def build_shape(ctx):
     if drv and std_has_records(ctx.state) and "overrides.radius.control" in std_held(ctx.state):
         # a standard that fixes the control radius says nothing about cards and dialogs: they keep following the Roundness dial
         _c, container, detail = corners(eval_map(drv["map"], ctx.dials[drv["dial"]]))
-    container = ctx.P("radius.container", container)
-    overlay = ctx.P("radius.overlay", snap_to(min(32, container * 1.5), SNAP_RADII) if container else 0)
-    detail = ctx.P("radius.detail", detail)
+    container = own("radius.container", container)
+    overlay = own("radius.overlay", snap_to(min(32, container * 1.5), SNAP_RADII) if container else 0)
+    detail = own("radius.detail", detail)
     smallest = min([v for v in SNAP_RADII if v > 0])
-    if full:
-        control_sm = FULL
-    else:
-        i = SNAP_RADII.index(snap_to(control_v, SNAP_RADII))
-        control_sm = SNAP_RADII[max(0, i - 1)] if control_v > 0 else 0  # shapes under 32px drop one step (S-L04-007)
+    # shapes under 32px drop one step (S-L04-007): the step below the control radius, also when the person chose one between steps
+    control_sm = FULL if full else max((s for s in SNAP_RADII if s < control_v), default=0)
     pad = ctx.density_info[ctx.params["space.densityMode"]]["inset"]["lg"]
     nested = 0 if container == 0 else max(container - pad, smallest)  # DC-L04-05
     focus_w = int(ctx.raw.get("focusWidth") or 2)
     offset = int(ctx.raw.get("focusOffset") if isinstance(ctx.raw.get("focusOffset"), (int, float)) else 2)
     focus_r = FULL if full else (max(0, control_v + offset) if control_v > 0 else 0)
+    # a radius set between the steps (radius.control 10) gets its own step, so the role's alias has a target
+    chosen = sorted({v for v in (control_v, control_sm, detail, container, overlay) if v < FULL} - set(SNAP_RADII))
     radius = {"$type": "dimension",
-              "$description": "Radius scale snapped to 0, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32 plus full (LEVERS B9, [inferred] ratios checked against Atlassian).",
+              "$description": "Radius scale snapped to 0, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32 plus full (LEVERS B9, [inferred] ratios checked against Atlassian)."
+                              + (f" {', '.join(str(v) for v in chosen)} added: a radius chosen between the steps (overrides.radius.*)." if chosen else ""),
               "$extensions": {NS: {"evidence": ["DC-L04-02", "DC-L04-03", "DC-L04-05", "S-L04-016", "S-L04-007"]}}}
-    for v in sorted(set(SNAP_RADII)):
+    for v in sorted(set(SNAP_RADII) | set(chosen)):
         radius[str(v)] = tok(dim(v))
     radius["full"] = tok(dim(FULL), "Pills and avatars.")
     rr = lambda v: A("radius.full") if v >= FULL else A(f"radius.{v}")
@@ -2844,6 +2855,50 @@ MODE_WORDS = {"light": "theme", "dark": "theme", "spacious": "density", "comfort
 
 def is_param_override(key):
     return key in PARAM_OVERRIDES or key in lever_index()
+
+
+RADIUS_PARAMS = ("radius.control", "radius.container", "radius.overlay", "radius.detail")
+RADIUS_PILLS = ("radius.control", "radius.detail")  # pill buttons and tags; a pill card or dialog is not a shape the engine builds
+
+
+def _px_number(value):
+    """12, 12.5 or "12px" -> the number of px; None for anything else."""
+    if isinstance(value, str):
+        m = re.fullmatch(r"\s*(\d+(?:\.\d+)?)\s*px\s*", value)
+        return float(m.group(1)) if m else None
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+        return None
+    return value
+
+
+def radius_px(value, pill=True):
+    """A radius role's value in whole px as build_shape uses it: "full" (or anything from FULL up) is FULL, "10px" is 10.
+    None when it is not a radius (negative, another unit, words), or is full for a role that cannot be a pill."""
+    n = FULL if value == "full" else _px_number(value)
+    if n is None or n < 0 or (n >= FULL and not pill):
+        return None
+    return FULL if n >= FULL else int(round(n))
+
+
+def param_value(key, value):
+    """A lever parameter's value as stored, for the parameters whose number names a step. A radius between the steps of
+    the scale is added to the scale (build_shape), so radius.control 10 builds; the default icon size is one of the three
+    icon sizes. Raises ValueError, in plain words, for a value the engine cannot build. Other parameters pass through."""
+    if value is None:
+        return None
+    if key in RADIUS_PARAMS:
+        pill = key in RADIUS_PILLS
+        n = FULL if value == "full" else _px_number(value)
+        if n is None or n < 0 or n != int(n) or (n >= FULL and not pill):
+            raise ValueError(f"{key} takes a corner radius in whole px, such as 10 or \"10px\"" + (", or \"full\" for pill shapes" if pill else "")
+                             + f". The scale has {', '.join(str(s) for s in SNAP_RADII)} and full; a radius between those steps is added to it")
+        return "full" if n >= FULL else int(n)
+    if key == "icon.defaultSize":
+        n = _px_number(value)
+        if n not in (16, 20, 24):
+            raise ValueError("icon.defaultSize takes 16, 20 or 24, the three icon sizes (size.icon.sm, md and lg)")
+        return int(n)
+    return value
 
 
 def split_mode_key(key):
@@ -4978,6 +5033,11 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
     if m and value not in HOOK_STATUSES:
         raise SystemExit(f"hook status must be one of {', '.join(HOOK_STATUSES)}")
     plan_note = ""
+    if path.startswith("overrides.") and is_param_override(path.split(".", 1)[1]):
+        try:
+            value = param_value(path.split(".", 1)[1], value)  # radius.control 10 once built an alias to a step that did not exist
+        except ValueError as ex:
+            raise SystemExit(f"Nothing was changed: {ex}.")
     if path.startswith("overrides.") and not is_param_override(path.split(".", 1)[1]) and value is not None:
         files0, meta0, _c0 = generate_system(state)
         plan = override_plan(files0, path.split(".", 1)[1], value, meta0["params"]["space.densityMode"]["value"])
@@ -5532,7 +5592,7 @@ def std_target(state, path, value, typ=None, cache=None, trial=True):
             _std_trial(state, sp, value, cache, _trial_types([(sp, typ)]))
         return sp, value
     if parts[0] == "overrides":
-        pass  # a lever parameter: the trial build below checks the value
+        value = param_value(sp.split(".", 1)[1], value)  # a lever parameter: a radius or icon size first, then the trial build
     elif parts[0] == "dials":
         if len(parts) != 2 or parts[1] not in DIALS:
             raise ValueError(f"{sp} is not a dial; the dials are {', '.join(DIALS)}")
