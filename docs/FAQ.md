@@ -167,7 +167,7 @@ You can add any website, screenshot, Figma file or brand book as a reference at 
 
 It never copies identity. That means no logos, brand names, brand colors used as identity, proprietary typefaces, photography, illustration or copy. This is a hard rule.
 
-The exception is a Taste Index, which you ask for when you want everything new to match a look you love. It describes that look in full and, when first shown, keeps the site's exact colours and font names. You're told plainly that what you keep or change is your responsibility. Logos, brand names, images and written copy still never go in, font files are never downloaded or shipped, and your system follows an index only if you choose it.
+The exception is a Taste Index, which you ask for when you want everything new to match a look you love, and which OpenDesigner offers if you ask it to copy a brand's look. It describes that look in full and, when first shown, keeps the site's exact colours and font names. You're told plainly that what you keep or change is your responsibility. Logos, brand names, images and written copy still never go in, font files are never downloaded or shipped, and your system follows an index only if you choose it.
 
 ### Does it make logos or icons?
 
