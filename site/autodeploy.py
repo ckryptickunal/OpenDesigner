@@ -15,7 +15,8 @@ Why a Mac and not the cloud (owner, 2026-10-23: deploy on every push):
   every path (2026-10-22), so the project's Ignored Build Step stays `exit 0`.
 
 So the Mac deploys, with the same steps as a deploy by hand (site/README.md, "Before every deploy"):
-1. Move the clean worktree .worktrees/deploy to the exact commit. It keeps the git-ignored files between deploys.
+1. Move the clean worktree .worktrees/deploy to the exact commit, and copy in the git-ignored files the build reads
+   (showcase screenshots, demo shots, site images) from the main checkout, so new ones go live too.
 2. Run site/build.py and site/check.py.
 3. Run site/deploy.py: upload without the domain, check the key paths, promote, ping IndexNow.
 
@@ -93,6 +94,21 @@ def run(cmd, label, minutes=30):
     return r.returncode == 0
 
 
+# The git-ignored inputs the build reads (showcase screenshots and their systems, demo shots, site images), copied from the
+# main checkout before each build so new ones go live too. The same list the hosting session synced by hand on 2026-10-22.
+# site/.vercel and site/.cache stay the deploy worktree's own: it keeps its project link, draws its cards, fetches fonts.
+IGNORED_INPUTS = ["brand/showcase", "site/demo", "site/static", "site/og", "site/figures"]
+
+
+def sync_ignored():
+    r = git("ls-files", "-oi", "--exclude-standard", "--directory", *IGNORED_INPUTS, cwd=REPO)
+    files = "".join(f + "\n" for f in r.stdout.splitlines() if "__pycache__" not in f and ".DS_Store" not in f)
+    if not files:
+        return
+    s = subprocess.run(["rsync", "-a", "-r", "--files-from=-", f"{REPO}/", f"{WT}/"], input=files, text=True, capture_output=True)
+    log(f"synced {files.count(chr(10))} git-ignored inputs from the main checkout" + (f" (rsync: {s.stderr.strip()[-300:]})" if s.returncode else ""))
+
+
 def deploy(target, st):
     if git("status", "--porcelain", "--untracked-files=no").stdout.strip():
         msg = f"not deploying {target[:7]}: .worktrees/deploy has uncommitted changes"
@@ -102,6 +118,7 @@ def deploy(target, st):
     if git("checkout", "-q", "--detach", target).returncode:
         log(f"could not check out {target[:7]} in .worktrees/deploy")
         return False
+    sync_ignored()
     py = sys.executable
     ok = (run([py, "site/build.py"], "build") and run([py, "site/check.py"], "site/check.py", 10)
           and run([py, "site/deploy.py"], "deploy", 40))
