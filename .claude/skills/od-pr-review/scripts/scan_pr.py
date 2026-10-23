@@ -32,6 +32,7 @@ HIGH_RISK = [  # (path regex, why a human must read every changed line)
      "component library (2026-10-21): files people's agents copy into their projects and the website runs; a <script> may only wire its own root, with no network, storage or eval"),
     (r"^site/middleware\.js$|^site/static/site\.js$", "code that runs for every website visitor: Routing Middleware on Vercel, site.js in the browser"),
     (r"^site/static/ph\.js$|^site/analytics\.json$", "product analytics (2026-10-23): loads PostHog for every visitor through /ingest/; must stay cookieless, without session replay or autocapture, and match docs/PRIVACY.md"),
+    (r"^site/(autodeploy|build|check|deploy)\.py$", "runs on the maintainer's Mac within minutes of a merge (site/autodeploy.py, launchd, 2026-10-23): read every line and what it imports"),
     (r"\.html?$", "page that runs in a browser or artifact"),
 ]
 # The one place where a skill may carry Node code, an npm manifest and lockfile, Python analysis tools and images (owner decisions
