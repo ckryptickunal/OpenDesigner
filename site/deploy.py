@@ -4,9 +4,12 @@
   python3 site/deploy.py              build, upload to production without the domain, check key paths, then promote
   python3 site/deploy.py --preview    build, deploy a preview URL and check key paths
 
-Only this script deploys the site. The Vercel project is linked to GitHub, but its Ignored Build Step is `exit 0`,
-so pushes never deploy (a Git build has no Python build and served 404 on every path on 2026-10-22).
-Run it from a clean worktree of origin/main, so other sessions' uncommitted edits stay out.
+Only this script uploads the site. Pushing to main deploys through site/autodeploy.py on the maintainer's Mac, which
+runs this script in .worktrees/deploy (a clean worktree of origin/main); run it by hand only when the auto-deployer
+is uninstalled. Vercel's own Git builds stay off (Ignored Build Step `exit 0`): they have no Python build and served
+404 on every path on 2026-10-22.
+
+IndexNow hears only about pages whose content changed since the last accepted ping (site/.cache/indexnow.json).
 
 Needs the Vercel CLI, signed in (`vercel whoami`). The link to the Vercel project lives in site/.vercel/ and is
 copied into the build folder before each upload. Set SITE_URL in site/site-url.txt (the production address), so
@@ -96,6 +99,19 @@ def live_status(url):
         return getattr(e, "code", str(e))
 
 
+def page_hashes(urls, site_url):
+    """A hash per page of what the page says. The GitHub star count is left out: it changes every page at once."""
+    import hashlib
+    out = {}
+    for u in urls:
+        rel = u[len(site_url):].lstrip("/")
+        f = DIST / rel / "index.html" if not rel or rel.endswith("/") else DIST / rel
+        if f.exists():
+            text = re.sub(r"data-stars>[^<]*<", "data-stars><", f.read_text(errors="ignore"))
+            out[u] = hashlib.sha256(text.encode()).hexdigest()[:16]
+    return out
+
+
 def indexnow(site_url):
     """Tell IndexNow engines (Bing, Yandex, Seznam, Naver...) which pages changed. Google uses the sitemap instead."""
     import urllib.request
@@ -104,11 +120,23 @@ def indexnow(site_url):
         return
     key = key_file.read_text().strip()
     urls = re.findall(r"<loc>([^<]+)</loc>", (DIST / "sitemap.xml").read_text())
-    body = json.dumps({"host": site_url.split("//", 1)[1], "key": key, "keyLocation": f"{site_url}/{key}.txt", "urlList": urls}).encode()
+    sent_file = SITE / ".cache" / "indexnow.json"
+    try:
+        sent = json.loads(sent_file.read_text())
+    except (OSError, ValueError):
+        sent = {}
+    now = page_hashes(urls, site_url)
+    changed = [u for u in urls if now.get(u) != sent.get(u)]
+    if not changed:
+        print("IndexNow: no page changed, nothing sent")
+        return
+    body = json.dumps({"host": site_url.split("//", 1)[1], "key": key, "keyLocation": f"{site_url}/{key}.txt", "urlList": changed}).encode()
     req = urllib.request.Request("https://api.indexnow.org/indexnow", data=body, headers={"Content-Type": "application/json; charset=utf-8"})
     try:
         with urllib.request.urlopen(req, timeout=15) as r:
-            print(f"IndexNow: {r.status} for {len(urls)} URLs")
+            print(f"IndexNow: {r.status} for {len(changed)} changed of {len(urls)} URLs")
+            sent_file.parent.mkdir(exist_ok=True)
+            sent_file.write_text(json.dumps(now, indent=0, sort_keys=True))
     except Exception as e:
         print("IndexNow not accepted:", e)
 
