@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """A contact sheet of library components: each one at the three views the site shows (phone 390, tablet 768, desktop 1280 px),
-in four looks (Billerwick dense, Pebbleday regular, Fernhollow large, Playful with pill controls), unscaled, for reviewing them by eye.
+in four looks (Nordic, the default; Billerwick dense; Fernhollow large; Playful with pill controls), unscaled, for reviewing them by eye.
 
   python3 site/library_sheet.py <slug> [<slug> ...] --out <folder>
 
@@ -16,7 +16,7 @@ from playwright.sync_api import sync_playwright
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 LIB = ROOT / "skills/opendesigner/assets/library/components"
 VIEWS = [("Phone", 390), ("Tablet", 768), ("Desktop", 1280)]
-LOOKS = ["billerwick", "pebbleday", "fernhollow", "playful"]  # playful: pill controls, which show any box wrongly given a control radius
+LOOKS = ["nordic", "billerwick", "fernhollow", "playful"]  # playful: pill controls, which show any box wrongly given a control radius
 REFS = r'(id|for|aria-controls|aria-labelledby|aria-describedby|aria-activedescendant|name)="([^"]+)"'
 
 
@@ -48,7 +48,11 @@ def main():
         for s in a.slugs:
             f = out / f"{s}.html"
             f.write_text(page((LIB / s / "component.html").read_text(), css))
-            pg.goto(f.as_uri()); pg.wait_for_timeout(400)
+            pg.goto(f.as_uri())
+            # wait for every photo (Unsplash, hotlinked) to load or fail, up to 15 s, so a sheet never shows empty boxes
+            pg.evaluate("""() => Promise.race([Promise.all([...document.images].map(i => { i.loading = "eager"; return i.complete ? 0 :
+                new Promise(r => { i.onload = i.onerror = r; }); })), new Promise(r => setTimeout(r, 15000))])""")
+            pg.wait_for_timeout(400)
             pg.screenshot(path=str(out / f"{s}.jpg"), type="jpeg", quality=60, full_page=True)
             f.unlink()
             print(out / f"{s}.jpg")

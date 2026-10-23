@@ -9,5 +9,9 @@
   "states": ["field change", "reply with quote", "plain event", "link focus"],
   "source": "brand/showcase/product/03-corvane-record",
   "a11y": "An ordered list of events; old and new values use del and ins, so they are not told apart by colour alone.",
-  "width": "medium"
+  "width": "medium",
+  "photos": [
+    {"img": "photo-1601412436009-d964bd02edbc", "author": "OSPAN ALI", "page": "6xv4A1VA1rU"},
+    {"img": "photo-1523278669709-c05da80b6a65", "author": "JJ Jordan", "page": "JBqwqLG0SXw"}
+  ]
 }

@@ -156,8 +156,25 @@ def check_one(c, known):
     scripts = re.findall(r"<script>(.*?)</script>", html_, re.S)
     if len(scripts) > 1:
         errs.append("at most one <script>")
-    if re.search(r"<(link|img|iframe)\b|<script\s+src|@import|url\(", html_):
-        errs.append("loads something external (link, img, iframe, script src, @import or url())")
+    if re.search(r"<(link|iframe)\b|<script\s+src|@import|url\(", html_):
+        errs.append("loads something external (link, iframe, script src, @import or url())")
+    # photos: only free Unsplash photos, hotlinked from images.unsplash.com in an <img> with alt, size and lazy loading, each
+    # credited in meta.json "photos" (CRAFT.md section 5; owner, 2026-10-23: "wherever there is an image placeholder, use
+    # sample images from Unsplash")
+    credited = {ph.get("img") for ph in c.get("photos", []) if isinstance(ph, dict)}
+    for tag in re.findall(r"<img\b[^>]*>", html_):
+        src = (re.search(r'\ssrc="([^"]*)"', tag) or [None, ""])[1]
+        m = re.match(r"https://images\.unsplash\.com/(photo-[A-Za-z0-9-]+)\?", src)
+        if not m:
+            errs.append(f"<img> may only load a free Unsplash photo from images.unsplash.com (got {src[:60]!r})")
+            continue
+        for a in ("alt", "width", "height"):
+            if not re.search(rf'\s{a}="', tag):
+                errs.append(f"<img> {m.group(1)} needs {a}")
+        if 'loading="lazy"' not in tag:
+            errs.append(f'<img> {m.group(1)} needs loading="lazy"')
+        if m.group(1) not in credited:
+            errs.append(f'photo {m.group(1)} is not listed in meta.json "photos" with its author')
     for a in reserved_attrs(html_):
         errs.append(f"uses data-{a}, which the website's own scripts read across the page: rename it (data-{a}-value, or a word of your own)")
     body = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
@@ -221,6 +238,10 @@ def check_one(c, known):
     for js in scripts:
         for m in re.finditer(SCRIPT_BANNED, js):
             errs.append(f"script uses {m.group(0)}: a component script only wires its own root")
+        # the website shows each part several times (cards, previews) with ids and aria references stripped; a script that
+        # finds elements by id breaks there (trip-search and itinerary threw on load, 2026-10-23)
+        if re.search(r"getElementById|querySelector(All)?\(\s*[\"'`]#|[\"'`]#[\"'`]\s*\+|\[aria-(labelledby|controls|describedby)=", js):
+            errs.append("script finds elements by id or aria reference: copies of the part have no ids; find them by class, data attribute or order")
         if f'querySelectorAll(".odl-{slug}")' not in js:
             errs.append(f'script must start from document.querySelectorAll(".odl-{slug}")')
     for v in sorted(used_vars(html_) - known):

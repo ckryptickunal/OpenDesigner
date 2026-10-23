@@ -36,13 +36,15 @@ assets/library/
 **Industries:** work tools: `finance`, `saas`, `devtools`, `security`, `crm`, `logistics`, `productivity`; consumer: `social`, `media`, `retail`, `food`, `travel`, `events`, `health`, `fitness`, `money` (personal finance), `education`, `home` (smart home), `games`; or `any`. The website labels a part Consumer when its industries are consumer ones.
 
 ### component.html rules
+Every part also meets the craft standard in [CRAFT.md](CRAFT.md): generous spacing, one title, neutral colour with one accent, Lucide icons, real photos where a picture belongs.
 `library.py check` enforces the first five, and checks each meta.json.
 1. **Tokens only.** No colour literals (hex, `rgb()`, `hsl()`, `color-mix()`, any named colour), and no font sizes, families or weights, radii, shadows, durations (also inside `transition` and `animation`) or padding, margin and gap lengths outside `var(--ds-*)`. Layout numbers (`1fr`, `%`, `max-inline-size`) are fine.
 2. **Only variables every system writes.** Every `--ds-*` name must exist in three different engine systems (dense, regular and large audiences); some roles, such as `--ds-text-headline-md`, exist only in some.
 3. **Scoped.** Every selector, also inside `@media` and `@container`, starts with `.odl-<slug>`, so the component never restyles the page around it.
-4. **Self-contained.** One file. No framework, no build step, no external font, image or script. A `<script>`, when present, starts from `document.querySelectorAll(".odl-<slug>")` and only wires behaviour inside that root: no network, storage, `eval`, `scrollIntoView` (it scrolls the whole page; scroll only your own box) or writes to the document outside it. Guard it so each root is wired once.
+4. **Self-contained.** One file. No framework, no build step, no external font or script, and no image except free Unsplash photos hotlinked from `images.unsplash.com` (rule 7). A `<script>`, when present, starts from `document.querySelectorAll(".odl-<slug>")` and only wires behaviour inside that root: no network, storage, `eval`, `scrollIntoView` (it scrolls the whole page; scroll only your own box) or writes to the document outside it. Guard it so each root is wired once.
 5. **Floors.** Every clickable area is at least `--ds-size-target-min` (44 px on touch screens; a whole labelled row counts), focus uses `:focus-visible` with `--ds-color-border-focus`, and anything that moves has its own `@media (prefers-reduced-motion: reduce)` block that turns the motion off (the engine's raw duration tokens do not go to zero on their own).
 6. **Invented content only.** Names, companies and figures are made up; domains end in `.example` and invented brand names pass `brand/tools/check_names.py`.
+7. **Photos and icons.** A picture of a thing (a product, a dish, a place, a person, a post) is a photo from `photos.json`: free Unsplash License, hotlinked in an `<img>` with `alt`, `width`, `height` and `loading="lazy"`, credited in `meta.json` `photos`. Common icons are Lucide (ISC), copied inline, with a one-line licence comment. `library.py check` enforces the photo rules.
 
 ## Pulling one into a project
 - **With OpenDesigner installed** (the person's agent has the skill): `python3 <skill>/scripts/library.py add <slug> [--into src/components/odl]`. It copies the file and lists any `--ds-*` variable the project's tokens lack.
@@ -54,6 +56,8 @@ In React, Vue or Svelte the agent turns the file into one component in the proje
 
 ## Licence
 MIT, like the rest of OpenDesigner. Copy, change and ship them; no attribution in the UI.
+
+Third-party content inside parts: icons from [Lucide](https://lucide.dev) (ISC licence; icons derived from Feather, MIT), and photos hotlinked from [Unsplash](https://unsplash.com/license) under the Unsplash License (free to use; the website credits each photographer). The photos are not part of this repository.
 
 ## References studied (structure and presentation only; no code, copy or assets were taken)
 | Source | Licence (checked 2026-10-21) | What it taught |

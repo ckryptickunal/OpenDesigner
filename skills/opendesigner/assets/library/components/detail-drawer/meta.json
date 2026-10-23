@@ -4,10 +4,32 @@
   "use": "to open one record from a list without leaving the list",
   "type": "overlay",
   "style": "quiet",
-  "industries": ["finance", "saas", "crm"],
-  "tags": ["drawer", "side sheet", "panel", "details", "record"],
-  "states": ["open", "hover", "pressed", "focus"],
+  "industries": [
+    "finance",
+    "saas",
+    "crm"
+  ],
+  "tags": [
+    "drawer",
+    "side sheet",
+    "panel",
+    "details",
+    "record"
+  ],
+  "states": [
+    "open",
+    "hover",
+    "pressed",
+    "focus"
+  ],
   "source": "brand/showcase/product/02-fennick-approvals",
   "a11y": "A labelled dialog region; every icon button (previous, next, close, open file) has an accessible name, fields are a description list, and the footer actions are real buttons.",
-  "width": "narrow"
+  "width": "narrow",
+  "photos": [
+    {
+      "img": "photo-1725033489648-a819750348eb",
+      "author": "Arnab De",
+      "page": "WYwNK-zW7u4"
+    }
+  ]
 }

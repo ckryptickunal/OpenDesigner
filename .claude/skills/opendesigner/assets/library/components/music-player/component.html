@@ -1,29 +1,29 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
 <style>
 .odl-music-player { box-sizing: border-box; inline-size: 100%; max-inline-size: 28rem; margin-inline: auto; container-type: inline-size; text-wrap: pretty; }
 .odl-music-player *, .odl-music-player *::before { box-sizing: border-box; }
-.odl-music-player .odl-card { --p: 45.92%; display: grid; gap: var(--ds-space-stack-md); padding: var(--ds-space-inset-lg); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
+.odl-music-player svg { flex: none; stroke-width: var(--ds-icon-stroke-md); }
+.odl-music-player .odl-card { --p: 45.92%; display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
   border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); }
 .odl-music-player .odl-top { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-inline-md); }
-.odl-music-player .odl-art { inline-size: calc(var(--ds-size-control-lg) * 1.75); aspect-ratio: 1; border-radius: var(--ds-radius-nested); overflow: hidden; box-shadow: var(--ds-elevation-raised); }
-.odl-music-player .odl-art svg { display: block; inline-size: 100%; block-size: 100%; }
-.odl-music-player .odl-art .odl-bg { fill: var(--ds-color-accent-light-12); }
-.odl-music-player .odl-art .odl-sun { fill: var(--ds-color-accent-light-3); }
-.odl-music-player .odl-art .odl-stem { fill: none; stroke: var(--ds-color-accent-light-9); stroke-width: 1.6; stroke-linecap: round; }
-.odl-music-player .odl-art .odl-leaf { fill: var(--ds-color-accent-light-8); }
-.odl-music-player .odl-art .odl-soil { fill: var(--ds-color-accent-light-11); }
-.odl-music-player .odl-meta { display: grid; gap: var(--ds-space-2); min-inline-size: 0; }
-.odl-music-player .odl-eyebrow { margin: 0; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; }
+.odl-music-player .odl-art { display: block; inline-size: calc(var(--ds-size-control-lg) * 2.25); block-size: calc(var(--ds-size-control-lg) * 2.25); border-radius: var(--ds-radius-nested); object-fit: cover;
+  background: var(--ds-color-surface-sunken); box-shadow: var(--ds-elevation-raised); }
+.odl-music-player .odl-meta { display: grid; gap: var(--ds-space-stack-xs); min-inline-size: 0; }
+.odl-music-player .odl-eyebrow { margin: 0; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
 .odl-music-player h3 { margin: 0; font: var(--ds-text-title-md); }
-.odl-music-player .odl-by { display: flex; flex-wrap: wrap; column-gap: var(--ds-space-4); margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
-.odl-music-player .odl-by span { white-space: nowrap; }
+.odl-music-player .odl-by { display: grid; margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-music-player .odl-by span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .odl-music-player .odl-by .odl-album { color: var(--ds-color-text-tertiary); }
-.odl-music-player button { display: grid; place-items: center; min-inline-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); min-block-size: max(var(--ds-size-control-sm), var(--ds-size-target-min));
+.odl-music-player button { display: grid; place-items: center; min-inline-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min));
   padding: 0; border: 0; border-radius: var(--ds-radius-full); background: transparent; color: var(--ds-color-text-secondary); cursor: pointer;
   transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
 .odl-music-player button:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
 .odl-music-player button svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
-.odl-music-player .odl-like[aria-pressed="true"] { color: var(--ds-color-text-accent); }
+.odl-music-player .odl-like { align-self: start; }
+.odl-music-player .odl-like[aria-pressed="true"] { color: var(--ds-color-text-primary); }
 .odl-music-player .odl-like[aria-pressed="true"] path { fill: currentColor; }
+.odl-music-player .odl-prev svg, .odl-music-player .odl-next svg, .odl-music-player .odl-play svg { fill: currentColor; }
+.odl-music-player .odl-playback { display: grid; gap: var(--ds-space-stack-xs); }
 .odl-music-player .odl-seek { position: relative; block-size: calc(var(--ds-size-control-lg) * 1.1); }
 .odl-music-player .odl-wave { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; pointer-events: none; }
 .odl-music-player .odl-wave rect { fill: var(--ds-color-border-default); }
@@ -34,20 +34,19 @@
 .odl-music-player .odl-seek input::-moz-range-track { block-size: 100%; background: transparent; }
 .odl-music-player .odl-seek input::-webkit-slider-thumb { -webkit-appearance: none; inline-size: var(--ds-border-width-emphasis); block-size: 100%; border: 0; border-radius: var(--ds-radius-full); background: var(--ds-color-text-primary); }
 .odl-music-player .odl-seek input::-moz-range-thumb { inline-size: var(--ds-border-width-emphasis); block-size: 100%; border: 0; border-radius: var(--ds-radius-full); background: var(--ds-color-text-primary); }
-.odl-music-player .odl-times { display: flex; justify-content: space-between; margin: calc(-1 * var(--ds-space-4)) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; }
-.odl-music-player .odl-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: var(--ds-space-inline-sm); }
-.odl-music-player .odl-transport { grid-column: 2; }
-.odl-music-player .odl-volume { grid-column: 3; justify-self: end; }
-.odl-music-player .odl-transport { display: flex; align-items: center; gap: var(--ds-space-inline-xs); }
-.odl-music-player .odl-play { min-inline-size: max(var(--ds-size-control-lg), var(--ds-size-target-min)); min-block-size: max(var(--ds-size-control-lg), var(--ds-size-target-min));
+.odl-music-player .odl-times { display: flex; justify-content: space-between; margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
+.odl-music-player .odl-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: var(--ds-space-inline-md); }
+.odl-music-player .odl-transport { grid-column: 2; display: flex; align-items: center; gap: var(--ds-space-inline-md); }
+.odl-music-player .odl-volume { grid-column: 3; justify-self: end; inline-size: 100%; justify-content: end; padding-inline-start: var(--ds-space-inline-md); }
+.odl-music-player .odl-play { min-inline-size: calc(max(var(--ds-size-control-lg), var(--ds-size-target-min)) * 1.2); min-block-size: calc(max(var(--ds-size-control-lg), var(--ds-size-target-min)) * 1.2);
   background: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent); }
 .odl-music-player .odl-play:hover { background: var(--ds-color-bg-accent-bold-hover); color: var(--ds-color-text-on-accent); }
 .odl-music-player .odl-play:active { background: var(--ds-color-bg-accent-bold-pressed); }
 .odl-music-player .odl-play .is-pause, .odl-music-player .odl-play.is-playing .is-play { display: none; }
 .odl-music-player .odl-play.is-playing .is-pause { display: block; }
-.odl-music-player .odl-volume { display: flex; align-items: center; gap: var(--ds-space-inline-xs); color: var(--ds-color-text-secondary); }
-.odl-music-player .odl-volume svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
-.odl-music-player .odl-volume input { --v: 70%; inline-size: 6.5rem; min-block-size: var(--ds-size-target-min); margin: 0; background: transparent; cursor: pointer; appearance: none; -webkit-appearance: none; border-radius: var(--ds-radius-4); }
+.odl-music-player .odl-volume { display: flex; align-items: center; gap: var(--ds-space-inline-sm); color: var(--ds-color-text-secondary); }
+.odl-music-player .odl-volume svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-music-player .odl-volume input { --v: 70%; flex: 0 1 4.5rem; min-inline-size: 2.5rem; inline-size: 4.5rem; min-block-size: var(--ds-size-target-min); margin: 0; background: transparent; cursor: pointer; appearance: none; -webkit-appearance: none; border-radius: var(--ds-radius-4); }
 .odl-music-player .odl-volume input::-webkit-slider-runnable-track { block-size: var(--ds-space-4); border-radius: var(--ds-radius-full);
   background: linear-gradient(to right, var(--ds-color-text-secondary) var(--v), var(--ds-color-border-default) var(--v)); }
 .odl-music-player .odl-volume input::-moz-range-track { block-size: var(--ds-space-4); border-radius: var(--ds-radius-full); background: var(--ds-color-border-default); }
@@ -58,48 +57,39 @@
 .odl-music-player button:focus-visible, .odl-music-player input:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 .odl-music-player .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 /* Phone: the device's own buttons set the volume, so the slider goes and the transport sits centred. */
-@container (max-width: 24rem) {
-  .odl-music-player .odl-volume, .odl-music-player .odl-by [aria-hidden="true"] { display: none; }
-  .odl-music-player .odl-by { flex-direction: column; }
-}
-@container (max-width: 22rem) {
-  .odl-music-player .odl-card { padding: var(--ds-space-inset-md); }
-  .odl-music-player .odl-art { inline-size: calc(var(--ds-size-control-lg) * 1.4); }
+@container (max-width: 26rem) {
+  .odl-music-player .odl-card { padding: var(--ds-space-inset-lg); }
+  .odl-music-player .odl-volume { display: none; }
+  .odl-music-player .odl-art { inline-size: calc(var(--ds-size-control-lg) * 1.9); block-size: calc(var(--ds-size-control-lg) * 1.9); }
 }
 @media (prefers-reduced-motion: reduce) { .odl-music-player, .odl-music-player *, .odl-music-player *::before { transition: none !important; animation: none !important; } }
 </style>
 <section class="odl-music-player" aria-label="Now playing: Last Ferry by Mosswater Telegraph">
   <div class="odl-card">
     <div class="odl-top">
-      <div class="odl-art" aria-hidden="true">
-        <svg viewBox="0 0 80 80">
-          <rect class="odl-bg" width="80" height="80"/>
-          <circle class="odl-sun" cx="44" cy="34" r="20"/>
-          <path class="odl-stem" d="M18 66c0-10-2-16-4-22M30 66c0-14 1-22 3-30M44 66c0-12-1-18-1-26M56 66c0-9 2-15 4-20M66 66c0-8-1-12-3-16"/>
-          <path class="odl-leaf" d="M14 44c-4-1-6-4-6-6 3 0 5 2 6 6zm0 0c3-3 6-4 8-3-1 3-4 4-8 3zM33 36c-4-1-6-4-6-6 3 0 5 2 6 6zm0 0c3-3 6-4 8-3-1 3-4 4-8 3zM43 40c-3-2-5-5-4-7 3 1 4 3 4 7zm0 0c2-3 5-5 8-4-1 3-4 5-8 4zM60 46c-4-1-6-4-6-6 3 0 5 2 6 6zm0 0c3-3 6-4 8-3-1 3-4 4-8 3zM63 50c-3-2-5-4-5-6 3 0 5 2 5 6z"/>
-          <rect class="odl-soil" y="66" width="80" height="14"/>
-        </svg>
-      </div>
+      <img class="odl-art" src="https://images.unsplash.com/photo-1708778002531-5bb1c27c4ea3?w=224&h=224&fit=crop&auto=format&q=70" alt="" width="112" height="112" loading="lazy" decoding="async">
       <div class="odl-meta">
         <p class="odl-eyebrow">Side A · track 3 of 9</p>
         <h3>Last Ferry</h3>
-        <p class="odl-by"><span>Mosswater Telegraph</span><span class="odl-album" aria-hidden="true">·</span><span class="odl-album">Small Hours, Bright Rooms</span></p>
+        <p class="odl-by"><span>Mosswater Telegraph</span><span class="odl-album">Small Hours, Bright Rooms</span></p>
       </div>
-      <button type="button" class="odl-like" aria-label="Like Last Ferry" aria-pressed="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.75S2.75 12.6 2.75 7.4A3.65 3.65 0 0 1 10 5.9a3.65 3.65 0 0 1 7.25 1.5c0 5.2-7.25 9.35-7.25 9.35z"/></svg></button>
+      <button type="button" class="odl-like" aria-label="Like Last Ferry" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
     </div>
+    <div class="odl-playback">
     <div class="odl-seek">
       <svg class="odl-wave" viewBox="0 0 239 40" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="16.0" width="2.4" height="8.1" rx="1.2"/><rect x="4" y="12.9" width="2.4" height="14.3" rx="1.2"/><rect x="8" y="11.8" width="2.4" height="16.5" rx="1.2"/><rect x="12" y="9.5" width="2.4" height="21.1" rx="1.2"/><rect x="16" y="11.7" width="2.4" height="16.6" rx="1.2"/><rect x="20" y="11.3" width="2.4" height="17.4" rx="1.2"/><rect x="24" y="8.6" width="2.4" height="22.8" rx="1.2"/><rect x="28" y="8.9" width="2.4" height="22.1" rx="1.2"/><rect x="32" y="10.9" width="2.4" height="18.2" rx="1.2"/><rect x="36" y="9.3" width="2.4" height="21.5" rx="1.2"/><rect x="40" y="11.0" width="2.4" height="18.0" rx="1.2"/><rect x="44" y="9.6" width="2.4" height="20.8" rx="1.2"/><rect x="48" y="12.8" width="2.4" height="14.3" rx="1.2"/><rect x="52" y="12.5" width="2.4" height="15.0" rx="1.2"/><rect x="56" y="9.5" width="2.4" height="21.0" rx="1.2"/><rect x="60" y="11.7" width="2.4" height="16.6" rx="1.2"/><rect x="64" y="11.7" width="2.4" height="16.5" rx="1.2"/><rect x="68" y="8.5" width="2.4" height="23.1" rx="1.2"/><rect x="72" y="8.5" width="2.4" height="23.0" rx="1.2"/><rect x="76" y="10.4" width="2.4" height="19.2" rx="1.2"/><rect x="80" y="7.2" width="2.4" height="25.6" rx="1.2"/><rect x="84" y="5.6" width="2.4" height="28.8" rx="1.2"/><rect x="88" y="8.3" width="2.4" height="23.3" rx="1.2"/><rect x="92" y="4.4" width="2.4" height="31.3" rx="1.2"/><rect x="96" y="8.0" width="2.4" height="24.1" rx="1.2"/><rect x="100" y="6.3" width="2.4" height="27.4" rx="1.2"/><rect x="104" y="8.3" width="2.4" height="23.3" rx="1.2"/><rect x="108" y="7.8" width="2.4" height="24.4" rx="1.2"/><rect x="112" y="2.9" width="2.4" height="34.2" rx="1.2"/><rect x="116" y="7.5" width="2.4" height="25.0" rx="1.2"/><rect x="120" y="4.5" width="2.4" height="31.0" rx="1.2"/><rect x="124" y="8.6" width="2.4" height="22.9" rx="1.2"/><rect x="128" y="8.2" width="2.4" height="23.7" rx="1.2"/><rect x="132" y="7.1" width="2.4" height="25.7" rx="1.2"/><rect x="136" y="8.4" width="2.4" height="23.2" rx="1.2"/><rect x="140" y="11.5" width="2.4" height="17.1" rx="1.2"/><rect x="144" y="8.7" width="2.4" height="22.6" rx="1.2"/><rect x="148" y="8.1" width="2.4" height="23.8" rx="1.2"/><rect x="152" y="10.2" width="2.4" height="19.5" rx="1.2"/><rect x="156" y="10.3" width="2.4" height="19.4" rx="1.2"/><rect x="160" y="5.0" width="2.4" height="30.0" rx="1.2"/><rect x="164" y="6.8" width="2.4" height="26.3" rx="1.2"/><rect x="168" y="8.7" width="2.4" height="22.6" rx="1.2"/><rect x="172" y="6.9" width="2.4" height="26.2" rx="1.2"/><rect x="176" y="8.6" width="2.4" height="22.8" rx="1.2"/><rect x="180" y="5.2" width="2.4" height="29.6" rx="1.2"/><rect x="184" y="7.7" width="2.4" height="24.5" rx="1.2"/><rect x="188" y="10.8" width="2.4" height="18.3" rx="1.2"/><rect x="192" y="7.8" width="2.4" height="24.4" rx="1.2"/><rect x="196" y="12.5" width="2.4" height="15.1" rx="1.2"/><rect x="200" y="12.5" width="2.4" height="15.1" rx="1.2"/><rect x="204" y="14.2" width="2.4" height="11.5" rx="1.2"/><rect x="208" y="12.5" width="2.4" height="15.0" rx="1.2"/><rect x="212" y="15.1" width="2.4" height="9.8" rx="1.2"/><rect x="216" y="14.3" width="2.4" height="11.4" rx="1.2"/><rect x="220" y="15.7" width="2.4" height="8.5" rx="1.2"/><rect x="224" y="14.8" width="2.4" height="10.5" rx="1.2"/><rect x="228" y="14.2" width="2.4" height="11.7" rx="1.2"/><rect x="232" y="14.5" width="2.4" height="11.0" rx="1.2"/><rect x="236" y="14.8" width="2.4" height="10.5" rx="1.2"/></svg>
       <svg class="odl-wave is-played" viewBox="0 0 239 40" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="16.0" width="2.4" height="8.1" rx="1.2"/><rect x="4" y="12.9" width="2.4" height="14.3" rx="1.2"/><rect x="8" y="11.8" width="2.4" height="16.5" rx="1.2"/><rect x="12" y="9.5" width="2.4" height="21.1" rx="1.2"/><rect x="16" y="11.7" width="2.4" height="16.6" rx="1.2"/><rect x="20" y="11.3" width="2.4" height="17.4" rx="1.2"/><rect x="24" y="8.6" width="2.4" height="22.8" rx="1.2"/><rect x="28" y="8.9" width="2.4" height="22.1" rx="1.2"/><rect x="32" y="10.9" width="2.4" height="18.2" rx="1.2"/><rect x="36" y="9.3" width="2.4" height="21.5" rx="1.2"/><rect x="40" y="11.0" width="2.4" height="18.0" rx="1.2"/><rect x="44" y="9.6" width="2.4" height="20.8" rx="1.2"/><rect x="48" y="12.8" width="2.4" height="14.3" rx="1.2"/><rect x="52" y="12.5" width="2.4" height="15.0" rx="1.2"/><rect x="56" y="9.5" width="2.4" height="21.0" rx="1.2"/><rect x="60" y="11.7" width="2.4" height="16.6" rx="1.2"/><rect x="64" y="11.7" width="2.4" height="16.5" rx="1.2"/><rect x="68" y="8.5" width="2.4" height="23.1" rx="1.2"/><rect x="72" y="8.5" width="2.4" height="23.0" rx="1.2"/><rect x="76" y="10.4" width="2.4" height="19.2" rx="1.2"/><rect x="80" y="7.2" width="2.4" height="25.6" rx="1.2"/><rect x="84" y="5.6" width="2.4" height="28.8" rx="1.2"/><rect x="88" y="8.3" width="2.4" height="23.3" rx="1.2"/><rect x="92" y="4.4" width="2.4" height="31.3" rx="1.2"/><rect x="96" y="8.0" width="2.4" height="24.1" rx="1.2"/><rect x="100" y="6.3" width="2.4" height="27.4" rx="1.2"/><rect x="104" y="8.3" width="2.4" height="23.3" rx="1.2"/><rect x="108" y="7.8" width="2.4" height="24.4" rx="1.2"/><rect x="112" y="2.9" width="2.4" height="34.2" rx="1.2"/><rect x="116" y="7.5" width="2.4" height="25.0" rx="1.2"/><rect x="120" y="4.5" width="2.4" height="31.0" rx="1.2"/><rect x="124" y="8.6" width="2.4" height="22.9" rx="1.2"/><rect x="128" y="8.2" width="2.4" height="23.7" rx="1.2"/><rect x="132" y="7.1" width="2.4" height="25.7" rx="1.2"/><rect x="136" y="8.4" width="2.4" height="23.2" rx="1.2"/><rect x="140" y="11.5" width="2.4" height="17.1" rx="1.2"/><rect x="144" y="8.7" width="2.4" height="22.6" rx="1.2"/><rect x="148" y="8.1" width="2.4" height="23.8" rx="1.2"/><rect x="152" y="10.2" width="2.4" height="19.5" rx="1.2"/><rect x="156" y="10.3" width="2.4" height="19.4" rx="1.2"/><rect x="160" y="5.0" width="2.4" height="30.0" rx="1.2"/><rect x="164" y="6.8" width="2.4" height="26.3" rx="1.2"/><rect x="168" y="8.7" width="2.4" height="22.6" rx="1.2"/><rect x="172" y="6.9" width="2.4" height="26.2" rx="1.2"/><rect x="176" y="8.6" width="2.4" height="22.8" rx="1.2"/><rect x="180" y="5.2" width="2.4" height="29.6" rx="1.2"/><rect x="184" y="7.7" width="2.4" height="24.5" rx="1.2"/><rect x="188" y="10.8" width="2.4" height="18.3" rx="1.2"/><rect x="192" y="7.8" width="2.4" height="24.4" rx="1.2"/><rect x="196" y="12.5" width="2.4" height="15.1" rx="1.2"/><rect x="200" y="12.5" width="2.4" height="15.1" rx="1.2"/><rect x="204" y="14.2" width="2.4" height="11.5" rx="1.2"/><rect x="208" y="12.5" width="2.4" height="15.0" rx="1.2"/><rect x="212" y="15.1" width="2.4" height="9.8" rx="1.2"/><rect x="216" y="14.3" width="2.4" height="11.4" rx="1.2"/><rect x="220" y="15.7" width="2.4" height="8.5" rx="1.2"/><rect x="224" y="14.8" width="2.4" height="10.5" rx="1.2"/><rect x="228" y="14.2" width="2.4" height="11.7" rx="1.2"/><rect x="232" y="14.5" width="2.4" height="11.0" rx="1.2"/><rect x="236" y="14.8" width="2.4" height="10.5" rx="1.2"/></svg>
       <input type="range" min="0" max="233" step="1" value="107" aria-label="Seek" aria-valuetext="1:47 of 3:53">
     </div>
     <p class="odl-times"><span class="odl-now">1:47</span><span class="odl-sr"> of </span><span>3:53</span></p>
+    </div>
     <div class="odl-controls">
       <div class="odl-transport">
-        <button type="button" class="odl-prev" aria-label="Previous track"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5v11"/><path d="M15.25 4.75v10.5L7.5 10z" fill="currentColor"/></svg></button>
-        <button type="button" class="odl-play" aria-label="Play"><svg class="is-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4.6v10.8a.6.6 0 0 0 .9.5l8.3-5.4a.6.6 0 0 0 0-1L7.9 4.1a.6.6 0 0 0-.9.5z" fill="currentColor"/></svg><svg class="is-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5.5" y="4.5" width="3" height="11" rx=".8" fill="currentColor"/><rect x="11.5" y="4.5" width="3" height="11" rx=".8" fill="currentColor"/></svg></button>
-        <button type="button" class="odl-next" aria-label="Next track: Brooder"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M15 4.5v11"/><path d="M4.75 4.75v10.5L12.5 10z" fill="currentColor"/></svg></button>
+        <button type="button" class="odl-prev" aria-label="Previous track"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" x2="5" y1="19" y2="5"/></svg></button>
+        <button type="button" class="odl-play" aria-label="Play"><svg class="is-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg><svg class="is-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg></button>
+        <button type="button" class="odl-next" aria-label="Next track: Brooder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" x2="19" y1="5" y2="19"/></svg></button>
       </div>
-      <label class="odl-volume"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6.25v3.5h2.5L8 12.5v-9L4.5 6.25z"/><path d="M10.5 6a2.75 2.75 0 0 1 0 4M12.25 4a5.25 5.25 0 0 1 0 8"/></svg>
+      <label class="odl-volume"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.364 18.364a9 9 0 0 0 0-12.728"/></svg>
         <span class="odl-sr">Volume</span><input type="range" min="0" max="100" value="70"></label>
     </div>
   </div>

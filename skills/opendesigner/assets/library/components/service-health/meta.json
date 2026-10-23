@@ -9,5 +9,5 @@
   "states": ["above objective", "missing data", "deploy marker"],
   "source": "brand/showcase/product/04-sounding-observability",
   "a11y": "The chart is one image with a sentence that says what it shows; the key spells out each line style, so colour is never the only cue.",
-  "width": "narrow"
+  "width": "medium"
 }

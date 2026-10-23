@@ -276,7 +276,7 @@ MEASURE = r"""(cfg) => {
   // 8. controls pinned inside a box (a copy button in a code block): centred on the content's first line, with equal insets.
   //    Owner, 2026-10-15: the Copy button floated in a 48 px band above the code ("feels out of place").
   for (const el of document.querySelectorAll("button, a.btn, .copy, [role=button]")) {
-    if (cs(el).position !== "absolute" || !el.offsetParent || el.closest("dialog:not([open])")) continue;
+    if (cs(el).position !== "absolute" || !el.offsetParent || el.closest("dialog:not([open])") || el.closest(any(cfg.previews))) continue;  // a scaled preview is checked unscaled by library_layout.py
     const r = R(el); if (!r.width || !r.height) continue;
     const box = el.offsetParent, b = R(box);
     // text for screen readers only (a carousel's "Frame 1 of 3") is not a line the eye lines a control up with
@@ -322,7 +322,7 @@ MEASURE = r"""(cfg) => {
   }
   // 11. no text under a pinned control (owner, 2026-10-15: long commands scrolled under the Copy button on a phone)
   for (const el of document.querySelectorAll("button, a.btn, .copy, [role=button]")) {
-    if (cs(el).position !== "absolute" || !el.offsetParent || el.closest("dialog:not([open])")) continue;
+    if (cs(el).position !== "absolute" || !el.offsetParent || el.closest("dialog:not([open])") || el.closest(any(cfg.previews))) continue;  // a scaled preview is checked unscaled by library_layout.py
     const r = R(el); if (!r.width) continue;
     const tw = document.createTreeWalker(el.offsetParent, NodeFilter.SHOW_TEXT, { acceptNode: n => (!el.contains(n) && n.textContent.trim()) ? 1 : 3 });
     let hit = null;

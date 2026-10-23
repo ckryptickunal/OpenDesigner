@@ -1,4 +1,4 @@
-# Privacy: the journey log and shared reports
+# Privacy: the journey log, shared reports and the website
 
 **In plain words:** OpenDesigner can keep a private diary of the steps you take (the journey log). That diary stays in your project files and is never sent. Separately, and only if you say yes, it can send the OpenDesigner team a small anonymous report. The report says which questions came up, how long they took and where people got stuck. It never sends your answers, your brand, your files or anything you typed. You can see the exact report before it goes, and you can say no or change your mind at any time.
 
@@ -98,6 +98,26 @@ The OpenDesigner website (opendesigner.dev) runs Vercel Speed Insights, so the m
 - The script loads from the site's own address (`/_vercel/speed-insights/script.js`). Blocking it changes nothing on the site.
 
 Source: Vercel's [Speed Insights privacy page](https://vercel.com/docs/speed-insights/privacy-policy), checked on 2026-10-22.
+
+## The website
+The OpenDesigner website counts visits with Vercel Web Analytics, so the maintainers can see which pages people read and where they leave. It is separate from the plugin: nothing about your project or your design system is involved.
+- **No cookies,** and nothing is stored in your browser. Vercel tells visitors apart with a hash made from the request, and discards it after 24 hours.
+- **What is counted:** the page, the page that sent you there, your country, browser, operating system and device type (phone, tablet or desktop), and the time. Nothing ties these to you, and nothing is linked across other websites.
+- **Not counted:** your name, email, IP address, or anything you type. The booking form is used only for the call.
+- **Who sees it:** the maintainers, as totals per page in the Vercel dashboard. The free plan keeps one month of data.
+- The script loads from the site's own address (`/_vercel/insights/script.js`). Blocking it changes nothing on the site.
+
+Source: Vercel's [Web Analytics privacy page](https://vercel.com/docs/analytics/privacy-policy), checked on 2026-10-21.
+
+## The website's product analytics
+When the maintainers add a PostHog project key to `site/analytics.json`, the website also counts how people use it, so they can see which parts of the component library people open, add and copy, and where they stop. It is separate from the plugin: nothing about your project or your design system is involved.
+- **No cookies,** and nothing is stored in your browser: PostHog runs in its cookieless mode and keeps its state in page memory only. The PostHog project is set to discard IP addresses.
+- **What is counted:** page views and leaving a page, and named actions on the site: filtering or searching the library, changing a look, opening a part, switching its view, adding a part or a look to the kit, choosing a kit method, copying a prompt or a command, and clicking GitHub, Install or Book a call. Each comes with the page and, where it applies, the part's name.
+- **Not counted:** what you type (search words are not sent, only that you searched), your name or email, and no session recordings, heatmap recordings or surveys.
+- **Where it goes:** to PostHog's EU cloud (hosted in Frankfurt), through the site's own address (`/ingest/`). Browsers that send Do Not Track are not counted.
+- **Who sees it:** the maintainers, in PostHog.
+
+Source: PostHog's docs on [persistence and cookies](https://posthog.com/docs/libraries/js/persistence) and [PostHog Cloud EU](https://posthog.com/blog/posthog-cloud-eu), checked on 2026-10-23. The code is `site/static/ph.js`.
 
 ## Everything else that can use the network
 This page is about the journey log, shared reports and the website's speed measurements. For completeness, these are the only other places OpenDesigner's own scripts go online (checked against the code on 2026-10-15):

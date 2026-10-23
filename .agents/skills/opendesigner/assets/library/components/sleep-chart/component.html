@@ -1,15 +1,17 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
 <style>
 .odl-sleep-chart { box-sizing: border-box; inline-size: 100%; max-inline-size: 38rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
 .odl-sleep-chart *, .odl-sleep-chart *::before, .odl-sleep-chart *::after { box-sizing: border-box; }
 .odl-sleep-chart p, .odl-sleep-chart figure { margin: 0; }
 .odl-sleep-chart .odl-card { --awake: var(--ds-color-warning-light-9); --rem: var(--ds-color-info-light-8); --light: var(--ds-color-accent-light-8); --deep: var(--ds-color-accent-light-11);
-  display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-lg); background: var(--ds-color-surface-raised);
+  display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised);
   border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); }
-.odl-sleep-chart .odl-eyebrow { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
-.odl-sleep-chart h3 { margin: var(--ds-space-2) 0 0; font: var(--ds-text-headline-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.odl-sleep-chart .odl-bed { display: flex; flex-wrap: wrap; gap: var(--ds-space-2) var(--ds-space-inline-sm); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
-.odl-sleep-chart .odl-hyp { --lane: calc(var(--ds-size-icon-lg) * 1.5); display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--ds-space-inline-sm); }
-.odl-sleep-chart .odl-lanes { display: grid; grid-template-rows: repeat(4, var(--lane)); margin: 0; padding: 0; list-style: none; color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); }
+.odl-sleep-chart .odl-eyebrow { display: flex; align-items: center; gap: var(--ds-space-inline-sm); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-sleep-chart .odl-eyebrow svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); stroke-width: var(--ds-icon-stroke-md); color: var(--ds-color-icon-default); }
+.odl-sleep-chart h3 { margin: var(--ds-space-stack-sm) 0 0; font: var(--ds-text-headline-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.odl-sleep-chart .odl-bed { display: flex; flex-wrap: wrap; gap: var(--ds-space-stack-xs) var(--ds-space-inline-md); margin-block-start: var(--ds-space-stack-xs); color: var(--ds-color-text-secondary); font: var(--ds-text-body-md); font-variant-numeric: tabular-nums; }
+.odl-sleep-chart .odl-hyp { --lane: calc(var(--ds-size-icon-lg) * 1.6); display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--ds-space-inline-md); row-gap: var(--ds-space-stack-xs); }
+.odl-sleep-chart .odl-lanes { display: grid; grid-template-rows: repeat(4, var(--lane)); margin: 0; padding: 0; list-style: none; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
 .odl-sleep-chart .odl-lanes li { display: flex; align-items: center; }
 .odl-sleep-chart .odl-plot { position: relative; block-size: calc(var(--lane) * 4); border-radius: var(--ds-radius-nested);
   background: linear-gradient(to bottom, var(--ds-color-neutral-alpha-light-2) 25%, transparent 25% 50%, var(--ds-color-neutral-alpha-light-2) 50% 75%, transparent 75%); }
@@ -20,19 +22,19 @@
 .odl-sleep-chart .is-awake { --c: var(--awake); } .odl-sleep-chart .is-rem { --c: var(--rem); } .odl-sleep-chart .is-light { --c: var(--light); } .odl-sleep-chart .is-deep { --c: var(--deep); }
 .odl-sleep-chart .odl-axis { position: relative; grid-column: 2; block-size: var(--ds-space-24); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; }
 .odl-sleep-chart .odl-axis span { position: absolute; inset-block-end: 0; inset-inline-start: var(--x); transform: translateX(-50%); white-space: nowrap; }
-.odl-sleep-chart .odl-totals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ds-space-stack-sm) var(--ds-space-inline-sm); margin: 0; }
-.odl-sleep-chart .odl-totals div { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: baseline; column-gap: var(--ds-space-inline-xs); row-gap: var(--ds-space-2);
-  padding: var(--ds-space-inset-sm) var(--ds-space-inset-md); border-radius: var(--ds-radius-nested); background: var(--ds-color-bg-neutral-subtle); }
-.odl-sleep-chart .odl-totals div::before { content: ""; align-self: center; inline-size: var(--ds-space-8); block-size: var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--c); }
+.odl-sleep-chart .odl-totals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ds-space-inline-sm); margin: 0; }
+.odl-sleep-chart .odl-totals div { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: baseline; column-gap: var(--ds-space-inline-sm); row-gap: var(--ds-space-stack-xs);
+  padding: var(--ds-space-inset-md); border-radius: var(--ds-radius-nested); background: var(--ds-color-bg-neutral-subtle); }
+.odl-sleep-chart .odl-totals div::before { content: ""; align-self: center; inline-size: var(--ds-space-12); block-size: var(--ds-space-12); border-radius: var(--ds-radius-full); background: var(--c); }
 .odl-sleep-chart .odl-totals dt { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
-.odl-sleep-chart .odl-totals dd { grid-column: 1 / 4; margin: 0; font: var(--ds-text-title-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.odl-sleep-chart .odl-totals .odl-pct { grid-column: 3; grid-row: 1; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; }
-.odl-sleep-chart .odl-week { display: grid; gap: var(--ds-space-stack-sm); padding-block-start: var(--ds-space-stack-lg); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+.odl-sleep-chart .odl-totals dd { grid-column: 1 / 4; margin: 0; font: var(--ds-text-title-md); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.odl-sleep-chart .odl-totals .odl-pct { grid-column: 3; grid-row: 1; color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; }
+.odl-sleep-chart .odl-week { display: grid; gap: var(--ds-space-stack-md); padding-block-start: var(--ds-space-stack-lg); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
 .odl-sleep-chart .odl-week header { display: flex; justify-content: space-between; align-items: baseline; gap: var(--ds-space-inline-sm); }
 .odl-sleep-chart h4 { margin: 0; font: var(--ds-text-title-sm); }
-.odl-sleep-chart .odl-avg { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
+.odl-sleep-chart .odl-avg { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
 .odl-sleep-chart .odl-bars { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--ds-space-inline-xs); margin: 0; padding: 0; list-style: none; }
-.odl-sleep-chart .odl-bars li { display: grid; justify-items: center; gap: var(--ds-space-4); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); }
+.odl-sleep-chart .odl-bars li { display: grid; justify-items: center; gap: var(--ds-space-stack-sm); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
 .odl-sleep-chart .odl-col { position: relative; display: flex; flex-direction: column; justify-content: end; align-items: center; gap: var(--ds-space-4); inline-size: 100%; block-size: calc(var(--ds-size-control-lg) * 2.2); }
 .odl-sleep-chart .odl-col::after { content: ""; position: absolute; inset-inline: 0; inset-block-end: 80%; border-block-start: var(--ds-border-width-default) dashed var(--ds-color-border-strong); }
 .odl-sleep-chart .odl-col > span { flex: none; inline-size: min(100%, var(--ds-space-24)); block-size: var(--h); border-radius: var(--ds-radius-full) var(--ds-radius-full) var(--ds-radius-4) var(--ds-radius-4); background: var(--ds-color-accent-light-5); }
@@ -43,13 +45,13 @@
 .odl-sleep-chart .odl-goal { display: flex; align-items: center; gap: var(--ds-space-inline-xs); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); }
 .odl-sleep-chart .odl-goal::before { content: ""; inline-size: var(--ds-space-16); border-block-start: var(--ds-border-width-default) dashed var(--ds-color-border-strong); }
 .odl-sleep-chart .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-@container (min-width: 32rem) { .odl-sleep-chart .odl-totals { grid-template-columns: repeat(4, minmax(0, 1fr)); } .odl-sleep-chart .odl-hyp { --lane: calc(var(--ds-size-icon-lg) * 1.75); } }
-@container (max-width: 22rem) { .odl-sleep-chart .odl-card { padding: var(--ds-space-inset-md); } .odl-sleep-chart .odl-totals div { padding: var(--ds-space-inset-sm); } }
+@container (min-width: 34rem) { .odl-sleep-chart .odl-totals { grid-template-columns: repeat(4, minmax(0, 1fr)); } .odl-sleep-chart .odl-hyp { --lane: calc(var(--ds-size-icon-lg) * 1.75); } }
+@container (max-width: 26rem) { .odl-sleep-chart .odl-card { padding: var(--ds-space-inset-lg); } .odl-sleep-chart .odl-totals div { padding: var(--ds-space-inset-sm) var(--ds-space-inset-md); } }
 </style>
 <section class="odl-sleep-chart" aria-labelledby="odl-sc-title">
   <div class="odl-card">
     <header>
-      <p class="odl-eyebrow">Asleep last night · Wed 22 to Thu 23 Oct</p>
+      <p class="odl-eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>Asleep last night · Wed 22 to Thu 23 Oct</p>
       <h3 id="odl-sc-title">7 h 26 min</h3>
       <p class="odl-bed"><span>In bed 23:14 – 06:58</span><span>Awake 18 min</span></p>
     </header>

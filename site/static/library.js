@@ -5,6 +5,8 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var DATA = {}; try { DATA = JSON.parse(($("#lib-data") || {}).textContent || "{}"); } catch (e) {}
+  // analytics (site/static/ph.js; a no-op when analytics is off): what people try, open, add and copy, for funnels
+  var track = function (name, props) { if (window.odTrack) window.odTrack(name, props || {}); };
   var store = { get: function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
                 set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
 
@@ -79,7 +81,9 @@
     bezel.style.maxHeight = (room.h + 12) + "px"; fitBox.style.maxHeight = room.h + "px";  // a cropped part stays inside the rim
     media.style.borderRadius = "";
     var cap = (parseFloat(getComputedStyle(media).borderTopLeftRadius) || 0) * 0.8, rimR = nest(fitBox, bezel, live, z, cap);
-    if (rimR > cap + 0.5) media.style.borderRadius = (rimR / 0.8).toFixed(1) + "px";  // a very round part (an overlay in a pill look): the tile follows it out
+    // a very round part (an overlay in a pill look): the tile's corner grows with it, up to the tile's own padding, so the frame
+    // is never rounder than the tile and the gap stays at least the corner (where corners need not run parallel)
+    if (rimR > cap + 0.5) media.style.borderRadius = Math.min(rimR / 0.8, pad - 0.5).toFixed(1) + "px";  // a very round part (an overlay in a pill look): the tile follows it out
     item.setAttribute("data-view", view);
     $$(".item-views i", item).forEach(function (i) { i.classList.toggle("is-on", i.getAttribute("data-v") === view); });
     var label = $(".item-view-t", item); if (label) label.textContent = view[0].toUpperCase() + view.slice(1);
@@ -102,17 +106,36 @@
     var prevR = parseFloat(getComputedStyle(prev).borderTopLeftRadius) || 0;
     live.style.padding = Math.max(6, prevR / z - partR(live)).toFixed(1) + "px";
   };
+  // Lazy: a card is laid out and sized only when it comes within about 600 px of the screen (91 live previews measured at
+  // once cost over a second of layout on load). Photos inside previews already load lazily.
+  var near = [];
+  var fitItem = function (item) {
+    if (item.hidden) return;
+    var v = item.getAttribute("data-view");
+    if (!v || item.getAttribute("data-view-first") !== defaultView()) v = bestView(item);  // first fit, or the screen crossed 768 px
+    fitCard(item, v);
+  };
   var fitAll = function () {
     $$(".aisle-prev .lib-fit").forEach(fitTile);
-    $$(".item").forEach(function (item) {
-      if (item.hidden) return;
-      var v = item.getAttribute("data-view");
-      if (!v || item.getAttribute("data-view-first") !== defaultView()) v = bestView(item);  // first fit, or the screen crossed 768 px
-      fitCard(item, v);
-    });
+    near.forEach(fitItem);
     fitDevice();
   };
-  if (window.ResizeObserver) { var ro = new ResizeObserver(function () { fitAll(); }); $$(".item-media, .aisle-prev, .part-stage").forEach(function (el) { ro.observe(el); }); }
+  if (window.IntersectionObserver) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting || near.indexOf(e.target) >= 0) return;
+        near.push(e.target); fitItem(e.target); io.unobserve(e.target);
+      });
+    }, { rootMargin: "600px 0px" });
+    $$(".item").forEach(function (item) { io.observe(item); });
+  } else { near = $$(".item"); }
+  // refit on a real width change only (a card's own height change must not start another round)
+  var lastW = innerWidth, pending = 0;
+  window.addEventListener("resize", function () {
+    if (innerWidth === lastW || pending) return;
+    pending = requestAnimationFrame(function () { pending = 0; lastW = innerWidth; fitAll(); });
+  });
+  if (window.ResizeObserver) { var ro = new ResizeObserver(function () { $$(".aisle-prev .lib-fit").forEach(fitTile); fitDevice(); }); $$(".aisle-prev, .part-stage").forEach(function (el) { ro.observe(el); }); }
   window.addEventListener("load", fitAll);
 
   // a soft change of view: the old layout fades and blurs out fast, the new one fades in (Emil Kowalski: crossfade with a 2 px
@@ -139,7 +162,9 @@
         var v = ORDER[(ORDER.indexOf(item.getAttribute("data-view") || defaultView(item)) + 1) % ORDER.length];
         swap($(".lib-live", item), function () { fitCard(item, v); });
       };
-      item.addEventListener("pointerenter", function () { start = setTimeout(function () { next(); timer = setInterval(next, 1600); }, 450); });
+      item.addEventListener("pointerenter", function () {
+        start = setTimeout(function () { next(); timer = setInterval(next, 1600); if (!item._seenHover) { item._seenHover = 1; track("card_previewed", { part: item.id.slice(5) }); } }, 450);
+      });
       item.addEventListener("pointerleave", function () {
         clearTimeout(start); clearInterval(timer);
         var home = item.getAttribute("data-view-first") || defaultView(item);
@@ -149,8 +174,8 @@
   }
 
   // looks
-  var LOOK_KEY = "od-library-look";
-  var current = store.get(LOOK_KEY, "billerwick");
+  var LOOK_KEY = "od-library-look-v2";  // v2: the default moved to Nordic (2026-10-23); old saves were only the old default
+  var current = store.get(LOOK_KEY, document.documentElement.getAttribute("data-default-look") || "nordic");
   var useLook = function (key) {
     if (!DATA.looks || !DATA.looks[key]) return;
     current = key; store.set(LOOK_KEY, key);
@@ -160,8 +185,9 @@
     lookLabel();
     requestAnimationFrame(fitAll);
   };
-  $$(".look[data-look]").forEach(function (b) { b.addEventListener("click", function () { useLook(b.getAttribute("data-look")); }); });
-  $$(".part-look").forEach(function (s) { s.addEventListener("change", function () { useLook(s.value); }); });
+  $$(".look[data-look]").forEach(function (b) { b.addEventListener("click", function () { useLook(b.getAttribute("data-look")); track("look_changed", { look: b.getAttribute("data-look"), from: location.pathname }); }); });
+  $$(".item-link").forEach(function (a, i) { a.addEventListener("click", function () { var it = a.closest(".item"); track("part_opened", { part: it.id.slice(5), view: it.getAttribute("data-view"), position: i + 1, from: location.pathname }); }); });
+  $$(".part-look").forEach(function (s) { s.addEventListener("change", function () { useLook(s.value); track("look_changed", { look: s.value, from: location.pathname }); }); });
 
   // filters: aisle tiles, type chips, style, industry and words, all at once
   var type = "all", q = $("#lib-q"), style = $("#lib-style"), industry = $("#lib-industry"), whoSel = $("#lib-who");
@@ -186,7 +212,10 @@
     apply();
   };
   $$(".lib-filters .filter").forEach(function (b) { b.addEventListener("click", function () { setType(b.getAttribute("data-type")); }); });
-  $$(".aisle[data-aisle]").forEach(function (a) { a.addEventListener("click", function () { setType(a.getAttribute("data-aisle")); }); });
+  $$(".aisle[data-aisle]").forEach(function (a) { a.addEventListener("click", function () { setType(a.getAttribute("data-aisle")); track("aisle_clicked", { type: a.getAttribute("data-aisle") }); }); });
+  var filterT = 0, trackFilters = function () { clearTimeout(filterT); filterT = setTimeout(function () { track("library_filtered", { type: type, who: whoSel ? whoSel.value : "", style: style ? style.value : "", industry: industry ? industry.value : "", searched: !!(q && q.value), shown: +($(".shelf-count .n") || {}).textContent || 0 }); }, 1200); };
+  [whoSel, style, industry, q].forEach(function (el) { if (el) el.addEventListener(el === q ? "input" : "change", trackFilters); });
+  $$(".lib-filters .filter").forEach(function (b) { b.addEventListener("click", trackFilters); });
   [whoSel, style, industry].forEach(function (el) { if (el) el.addEventListener("change", apply); });
   if (q) q.addEventListener("input", function () { if (q.value && type !== "all") setType("all"); else apply(); });
   $$(".shop-pop [data-q]").forEach(function (b) {  // popular searches fill the search and jump to the results
@@ -224,7 +253,7 @@
   };
   pick(pageView, false);
   $$(".part-devices [role='tab']").forEach(function (t, i, all) {
-    t.addEventListener("click", function (e) { pick(t.getAttribute("data-device"), e.detail > 0); });  // keyboard switches stay instant
+    t.addEventListener("click", function (e) { pick(t.getAttribute("data-device"), e.detail > 0); track("view_switched", { part: location.pathname.split("/")[2], view: t.getAttribute("data-device") }); });  // keyboard switches stay instant
     t.addEventListener("keydown", function (e) {
       var j = e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : null; if (j === null) return;
       e.preventDefault(); var n = all[(j + all.length) % all.length]; if (getComputedStyle(n).display === "none") n = all[(j + (e.key === "ArrowRight" ? 1 : -1) + all.length) % all.length];
@@ -336,12 +365,14 @@
     b.addEventListener("click", function () {
       var s = b.getAttribute("data-kit-add"), i = kit.items.indexOf(s);
       if (i >= 0) kit.items.splice(i, 1); else { kit.items.push(s); bump(); }
+      track(i >= 0 ? "kit_removed" : "kit_added", { part: s, from: location.pathname, kit_size: kit.items.length });
       save();
     });
   });
-  $$(".look-add").forEach(function (b) { b.addEventListener("click", function () { kit.look = kit.look === current ? null : current; save(); if (kit.look) bump(); }); });
+  $$(".look-add").forEach(function (b) { b.addEventListener("click", function () { kit.look = kit.look === current ? null : current; save(); if (kit.look) bump(); track("kit_look_set", { look: kit.look || null }); }); });
   if (fab && dlg && dlg.showModal) {
     fab.addEventListener("click", function () {
+      track("kit_opened", { parts: kit.items.length, look: kit.look || null, from: location.pathname });
       render(); $(".co-next", dlg).hidden = true; $(".co-star", dlg).hidden = true;
       $$(".co-pay", dlg).forEach(function (pay) { pay.classList.remove("is-done"); $("span", pay).textContent = "Copy prompt"; });
       dlg.showModal();
@@ -349,7 +380,7 @@
     $(".kit-x", dlg).addEventListener("click", function () { dlg.close(); });
     var methods = $$(".co-method", dlg);
     methods.forEach(function (m, i) {
-      m.addEventListener("click", function () { out = m.getAttribute("data-out"); render(); });
+      m.addEventListener("click", function () { out = m.getAttribute("data-out"); render(); track("kit_method_chosen", { method: out }); });
       m.addEventListener("keydown", function (e) {
         var j = (e.key === "ArrowRight" || e.key === "ArrowDown") ? i + 1 : (e.key === "ArrowLeft" || e.key === "ArrowUp") ? i - 1 : null;
         if (j === null) return; e.preventDefault(); var n = methods[(j + methods.length) % methods.length]; n.click(); n.focus();
@@ -366,10 +397,11 @@
         (next || $(".kit-x", dlg)).focus(); return;  // focus stays in the open checkout
       }
       if (e.target.closest(".kit-clear")) { kit = { items: [], look: null }; save(); $(".kit-x", dlg).focus(); return; }
-      if (e.target.closest(".co-star-no")) { store.set(STAR_KEY, true); $(".co-star", dlg).hidden = true; return; }
+      if (e.target.closest(".co-star-no")) { store.set(STAR_KEY, true); $(".co-star", dlg).hidden = true; track("star_ask_dismissed"); return; }
       var cmd = e.target.closest(".kit-copy-cmd");
       if (cmd) {
         var cl = cmd.querySelector("span"), ok = function () { cl.textContent = "Copied. Run them, then copy step 2"; };
+        track("kit_commands_copied");
         if (navigator.clipboard) navigator.clipboard.writeText($(".kit-cmd", dlg).textContent).then(ok, ok); else ok();
         return;
       }
@@ -380,10 +412,11 @@
           $(".co-next", dlg).hidden = false;
           if (!store.get(STAR_KEY, false)) $(".co-star", dlg).hidden = false;  // a soft ask, once, after it helped; never a wall
         };
+        track("kit_prompt_copied", { method: out, parts: kit.items.length, look: kit.look || null });
         if (navigator.clipboard) navigator.clipboard.writeText(prompt()).then(done, done); else done();
       }
     });
-    $$(".co-star a", dlg).forEach(function (a) { a.addEventListener("click", function () { store.set(STAR_KEY, true); }); });
+    $$(".co-star a", dlg).forEach(function (a) { a.addEventListener("click", function () { store.set(STAR_KEY, true); track("star_ask_clicked"); }); });
   }
   useLook(current);
   render();

@@ -1,5 +1,6 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
 <style>
-.odl-article-card { box-sizing: border-box; position: relative; inline-size: 100%; max-inline-size: 760px; container-type: inline-size; display: grid; grid-template-columns: minmax(0, 1fr);
+.odl-article-card { box-sizing: border-box; position: relative; inline-size: 100%; max-inline-size: 760px; margin-inline: auto; container-type: inline-size; display: grid; grid-template-columns: minmax(0, 1fr);
   background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); text-wrap: pretty; overflow: hidden;
   transition: border-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), box-shadow var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
@@ -7,72 +8,53 @@
 .odl-article-card:hover { border-color: var(--ds-color-border-default); box-shadow: var(--ds-elevation-floating); }
 .odl-article-card:has(.odl-link:focus-visible) { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 .odl-article-card .odl-inner { display: grid; grid-template-columns: minmax(0, 1fr); }
-.odl-article-card .odl-cover { display: block; inline-size: 100%; aspect-ratio: 2 / 1; border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
-.odl-article-card .odl-cover .c-bg { fill: var(--ds-color-bg-accent-subtle); }
-.odl-article-card .odl-cover .c-ring { fill: none; stroke: var(--ds-color-border-accent); stroke-width: 1; opacity: 0.55; }
-.odl-article-card .odl-cover .c-sun { fill: var(--ds-color-bg-accent-bold); }
-.odl-article-card .odl-cover .c-sheet { fill: var(--ds-color-surface-raised); stroke: var(--ds-color-border-subtle); stroke-width: 1; }
-.odl-article-card .odl-cover .c-bar { fill: var(--ds-color-bg-neutral-subtle); }
-.odl-article-card .odl-cover .c-bar-strong { fill: var(--ds-color-text-tertiary); }
-.odl-article-card .odl-cover .c-chip { fill: var(--ds-color-bg-success-subtle); }
-.odl-article-card .odl-cover .c-chip-dot { fill: var(--ds-color-bg-success-bold); }
-.odl-article-card .odl-cover .c-tick { fill: none; stroke: var(--ds-color-icon-on-accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-.odl-article-card .odl-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-stack-sm); padding: var(--ds-space-inset-lg); }
-.odl-article-card .odl-kicker { margin: 0; color: var(--ds-color-text-accent); font: var(--ds-text-label-md); letter-spacing: var(--ds-text-label-md-tracking); font-variant-numeric: tabular-nums; }
-.odl-article-card .odl-kicker span { color: var(--ds-color-text-secondary); }
+.odl-article-card .odl-cover { display: block; inline-size: 100%; block-size: auto; aspect-ratio: 16 / 9; object-fit: cover; background: var(--ds-color-surface-sunken); }
+.odl-article-card .odl-body { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: var(--ds-space-stack-sm); padding: var(--ds-space-inset-lg); }
+.odl-article-card .odl-kicker { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); letter-spacing: var(--ds-text-label-md-tracking); font-variant-numeric: tabular-nums; }
+.odl-article-card .odl-kicker b { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
 .odl-article-card h3 { margin: 0; font: var(--ds-text-title-lg); text-wrap: balance; }
 .odl-article-card .odl-link { color: inherit; text-decoration: none; outline: none; }
 .odl-article-card .odl-link::after { content: ""; position: absolute; inset: 0; }
 .odl-article-card:hover .odl-link { text-decoration: underline; text-decoration-thickness: var(--ds-border-width-default); text-underline-offset: var(--ds-space-4); }
 .odl-article-card .odl-dek { margin: 0; color: var(--ds-color-text-secondary); }
-.odl-article-card footer { display: flex; align-items: center; gap: var(--ds-space-inline-sm); margin-block-start: var(--ds-space-stack-xs); padding-block-start: var(--ds-space-stack-sm);
+.odl-article-card footer { display: flex; align-items: center; gap: var(--ds-space-inline-md); margin-block-start: var(--ds-space-stack-md); padding-block-start: var(--ds-space-stack-md);
   border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
-.odl-article-card .odl-initials { flex: none; display: grid; place-items: center; inline-size: var(--ds-size-control-sm); block-size: var(--ds-size-control-sm); border-radius: var(--ds-radius-person);
-  background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-heading); }
-.odl-article-card .odl-byline { flex: 1; min-inline-size: 0; display: grid; font: var(--ds-text-body-sm); }
+.odl-article-card .odl-avatar { flex: none; display: block; inline-size: var(--ds-size-control-md); block-size: var(--ds-size-control-md); border-radius: var(--ds-radius-person); object-fit: cover;
+  background: var(--ds-color-surface-sunken); }
+.odl-article-card .odl-byline { flex: 1; min-inline-size: 0; display: grid; gap: var(--ds-space-2); font: var(--ds-text-body-sm); }
 .odl-article-card .odl-byline strong { font-weight: var(--ds-font-weight-label); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .odl-article-card .odl-byline time { color: var(--ds-color-text-tertiary); font-variant-numeric: tabular-nums; }
-.odl-article-card .odl-save { position: relative; z-index: 1; flex: none; display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-xs);
-  min-inline-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); min-block-size: var(--ds-size-target-min); padding: 0 var(--ds-space-inset-sm);
+.odl-article-card .odl-save { position: relative; z-index: 1; flex: none; display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm);
+  min-inline-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-sm);
   border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-raised);
-  color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
-.odl-article-card .odl-save:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
-.odl-article-card .odl-save svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; }
-.odl-article-card .odl-save[aria-pressed="true"] { border-color: var(--ds-color-border-accent); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); }
-.odl-article-card .odl-save[aria-pressed="true"] svg { fill: currentColor; }
+  color: var(--ds-color-text-primary); font: var(--ds-text-label-lg); cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-article-card .odl-save:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-article-card .odl-save svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); stroke-width: var(--ds-icon-stroke-md); }
+.odl-article-card .odl-save[aria-pressed="true"] { background: var(--ds-color-bg-accent-subtle); border-color: var(--ds-color-border-accent); color: var(--ds-color-text-accent); }
+.odl-article-card .odl-save[aria-pressed="true"] path { fill: currentColor; }
 .odl-article-card .odl-save .odl-on { display: none; }
 .odl-article-card .odl-save[aria-pressed="true"] .odl-on { display: inline; }
 .odl-article-card .odl-save[aria-pressed="true"] .odl-off { display: none; }
 .odl-article-card .odl-save:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+/* Wide: the photo sits beside the text and fills the card's height. */
 @container (min-width: 34rem) {
   .odl-article-card .odl-inner { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
-  .odl-article-card .odl-cover { block-size: 100%; aspect-ratio: auto; min-block-size: 100%; border-block-end: 0; border-inline-end: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+  .odl-article-card .odl-cover { block-size: 100%; aspect-ratio: auto; min-block-size: 18rem; }
   .odl-article-card .odl-body { align-content: center; padding: var(--ds-space-inset-xl); }
-  .odl-article-card footer { margin-block-start: var(--ds-space-stack-sm); }
 }
-@container (max-width: 20rem) { .odl-article-card .odl-body { padding: var(--ds-space-inset-md); } }
 @media (prefers-reduced-motion: reduce) { .odl-article-card, .odl-article-card *, .odl-article-card *::before, .odl-article-card *::after { transition: none !important; animation: none !important; } }
 </style>
 <article class="odl-article-card">
   <div class="odl-inner">
-  <svg class="odl-cover" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <rect class="c-bg" width="400" height="200"/>
-    <circle class="c-ring" cx="250" cy="62" r="44"/><circle class="c-ring" cx="250" cy="62" r="76"/><circle class="c-ring" cx="250" cy="62" r="110"/><circle class="c-ring" cx="250" cy="62" r="146"/>
-    <rect class="c-sheet" x="86" y="52" width="180" height="172" rx="10"/>
-    <rect class="c-bar-strong" x="106" y="74" width="80" height="8" rx="4"/>
-    <rect class="c-bar" x="106" y="98" width="140" height="22" rx="6"/><rect class="c-bar" x="106" y="128" width="140" height="22" rx="6"/><rect class="c-bar" x="106" y="158" width="140" height="22" rx="6"/>
-    <rect class="c-chip" x="190" y="102" width="46" height="14" rx="7"/><circle class="c-chip-dot" cx="199" cy="109" r="3"/>
-    <rect class="c-chip" x="190" y="132" width="46" height="14" rx="7"/><circle class="c-chip-dot" cx="199" cy="139" r="3"/>
-    <circle class="c-sun" cx="250" cy="62" r="22"/><path class="c-tick" d="m240 62 7 7 13-14"/>
-  </svg>
+  <img class="odl-cover" src="https://images.unsplash.com/photo-1762983870490-63e5ba07105b?w=800&h=600&fit=crop&auto=format&q=70" alt="A home office desk with a computer and plants" width="400" height="300" loading="lazy" decoding="async">
   <div class="odl-body">
-    <p class="odl-kicker">Changelog <span>· 6 min read</span></p>
+    <p class="odl-kicker"><b>Changelog</b> · 6 min read</p>
     <h3><a class="odl-link" href="#approvals-by-amount">Approvals now route by amount, not by team</a></h3>
     <p class="odl-dek">Bills over €5,000 now go straight to finance. Smaller ones stay with the budget owner, starting Nov 4.</p>
     <footer>
-      <span class="odl-initials" aria-hidden="true">KA</span>
+      <img class="odl-avatar" src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=96&h=96&fit=crop&crop=faces&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async">
       <span class="odl-byline"><strong>Kwabena Asante</strong><time datetime="2026-11-02">Nov 2, 2026</time></span>
-      <button type="button" class="odl-save" aria-pressed="false" aria-label="Save article"><svg viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 2.5h8v11L8 10.5l-4 3z" stroke-linejoin="round"/></svg><span class="odl-off">Save</span><span class="odl-on">Saved</span></button>
+      <button type="button" class="odl-save" aria-pressed="false" aria-label="Save article"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg><span class="odl-off">Save</span><span class="odl-on">Saved</span></button>
     </footer>
   </div>
   </div>

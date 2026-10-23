@@ -90,9 +90,10 @@
 .item-in { --in-r: calc(var(--r-panel) - var(--pad)); box-sizing: border-box; width: auto; height: auto; max-width: 100%; max-height: 100%; overflow: hidden; border-radius: var(--in-r); }
 .item-in .lib-fit { align-content: start; justify-items: center; overflow: hidden; border-radius: calc(var(--in-r) - 6px); background: var(--ds-color-surface-base, #fff); }
 .item-in .lib-live { border-radius: 0; padding: 16px; }
-.item-body { padding-top: 14px; }
+.item-body { min-width: 0; padding-top: 14px; }
+.item-body .item-tags { min-width: 0; }
 .item-body .item-tags { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; }
-.item-meta { font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+.item-meta { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; line-height: 18px; color: var(--ink-muted); }  /* one line, never wrapping beside the sticker */
 /* which view the card shows: the same three as the component page, outlined, the one on show filled */
 .item-views { display: inline-flex; align-items: flex-end; gap: 4px; margin-left: auto; color: var(--ink-muted); font-size: 12px; line-height: 16px; }
 .item-views i { display: block; box-sizing: border-box; border: 1.5px solid currentColor; border-radius: 2px; opacity: .45; transition: opacity 160ms ease, background-color 160ms ease; }
@@ -362,3 +363,6 @@
 /* the total stays in view at the bottom of a long order, like a payments checkout */
 .co-order .co-sum { position: sticky; bottom: -28px; margin-bottom: -28px; padding: 12px 0 28px; background: var(--surface-sunken); box-shadow: 0 -1px 0 var(--line), 0 -20px 16px -4px var(--surface-sunken); }
 @media (max-width: 760px) { .co-order .co-sum { position: static; margin-bottom: 0; padding: 0; box-shadow: none; } }
+
+/* lazy drawing: the browser skips layout and paint of previews far off screen; the box keeps its size meanwhile */
+.item-media, .aisle-prev { content-visibility: auto; contain-intrinsic-size: auto 300px; }

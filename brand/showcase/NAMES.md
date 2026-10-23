@@ -959,3 +959,11 @@ Names in the 40 consumer parts (social, media, shop and food, travel and home, h
 | Yuki Hanabusa | person | library |
 | yuki_h | handle | library |
 | Harbourlight | brand (share link domain harbourlight.example; web search found no app or company of that name) | library |
+| Oriane Valdmar | person (live-chat host) | library |
+| Quayside Room | venue | library |
+| Maya Sorvik | person | library |
+| Saffrine Greens | restaurant | library |
+| Fernlight Hours | title (replaces Riverglass, a 2024 chamber piece by Blake Buehler) | library |
+| Saltwater Radio | title (web search 2026-10-23: no show of that exact name) | library |
+| Weekday satchel | product | library |
+| Sesame chicken grain bowl | product | library |

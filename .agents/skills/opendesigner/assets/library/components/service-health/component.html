@@ -1,17 +1,24 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
 <style>
-.odl-service-health { box-sizing: border-box; inline-size: 100%; max-inline-size: 28rem; margin-inline: auto; display: grid; gap: var(--ds-space-stack-sm); padding: var(--ds-space-inset-md) var(--ds-space-inset-lg) var(--ds-space-inset-lg);
-  background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
-  border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); text-wrap: pretty; }
-.odl-service-health header { display: flex; justify-content: space-between; align-items: baseline; gap: var(--ds-space-inline-sm); }
-.odl-service-health h3 { margin: 0; font: var(--ds-text-title-sm); }
-.odl-service-health .odl-now { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); white-space: nowrap; }
-.odl-service-health .odl-now strong { color: var(--ds-color-text-warning); font: var(--ds-text-code-md); font-weight: var(--ds-font-weight-label); }
-.odl-service-health .odl-status { display: flex; align-items: center; gap: var(--ds-space-inline-xs); margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
-.odl-service-health .odl-status::before { content: ""; flex: none; inline-size: var(--ds-space-8); block-size: var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-warning-bold);
-  box-shadow: 0 0 0 var(--ds-space-2) var(--ds-color-bg-warning-subtle); }
-.odl-service-health figure { margin: 0; }
-.odl-service-health .odl-plot { position: relative; margin-block-start: var(--ds-space-24); }
-.odl-service-health svg { display: block; inline-size: 100%; block-size: 8rem; overflow: visible; }
+.odl-service-health { box-sizing: border-box; inline-size: 100%; max-inline-size: 38rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-service-health *, .odl-service-health *::before { box-sizing: border-box; }
+.odl-service-health .odl-card { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); }
+.odl-service-health .odl-icon { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-service-health header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: start; gap: var(--ds-space-stack-sm) var(--ds-space-inset-xl); }
+.odl-service-health h3 { margin: 0; font: var(--ds-text-title-md); }
+.odl-service-health .odl-meta { margin: var(--ds-space-stack-xs) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-service-health .odl-now { display: grid; justify-items: end; gap: var(--ds-space-stack-xs); margin: 0; }
+.odl-service-health .odl-now dt { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-service-health .odl-now dd { margin: 0; color: var(--ds-color-text-warning); font: var(--ds-text-title-lg); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.odl-service-health .odl-status { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-stack-xs) var(--ds-space-inline-md); margin: 0;
+  padding: var(--ds-space-inset-xs) var(--ds-space-inset-xs) var(--ds-space-inset-xs) var(--ds-space-inset-sm); border-radius: var(--ds-radius-nested); background: var(--ds-color-bg-warning-subtle); }
+.odl-service-health .odl-status > span { display: inline-flex; align-items: center; gap: var(--ds-space-inline-sm); }
+.odl-service-health .odl-status > span .odl-icon { color: var(--ds-color-text-warning); }
+.odl-service-health .odl-status a { padding-inline: var(--ds-space-inset-xs); border-radius: var(--ds-radius-control); }
+.odl-service-health figure { min-inline-size: 0; margin: 0; }
+.odl-service-health .odl-plot { position: relative; margin-block-start: var(--ds-space-stack-lg); }
+.odl-service-health .odl-plot svg { display: block; inline-size: 100%; block-size: 15rem; overflow: visible; }
 /* Labels and markers sit over the stretched chart in HTML, so they keep their shape at any width. */
 .odl-service-health .odl-pin { position: absolute; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .odl-service-health .odl-pin.is-max { inset-block-start: 0; inset-inline-start: 0; transform: translateY(-100%); padding-block-end: var(--ds-space-2); }
@@ -28,26 +35,39 @@
 .odl-service-health .odl-hot { stroke: var(--ds-color-text-warning); }
 .odl-service-health .odl-gap { fill: var(--ds-color-bg-neutral-subtle); }
 .odl-service-health .odl-deploy { stroke: var(--ds-color-border-strong); stroke-dasharray: 2 3; }
-.odl-service-health line, .odl-service-health path, .odl-service-health circle { vector-effect: non-scaling-stroke; stroke-width: 1.5; }
-.odl-service-health .odl-axis, .odl-service-health figcaption { display: flex; justify-content: space-between; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; }
-.odl-service-health figcaption { flex-wrap: wrap; gap: var(--ds-space-4) var(--ds-space-inline-md); justify-content: start; margin-block-start: var(--ds-space-stack-xs); }
-.odl-service-health figcaption span { display: inline-flex; align-items: center; gap: var(--ds-space-4); }
+.odl-service-health .odl-plot line, .odl-service-health .odl-plot path, .odl-service-health .odl-plot circle { vector-effect: non-scaling-stroke; stroke-width: 1.5; }
+.odl-service-health .odl-axis, .odl-service-health figcaption { display: flex; justify-content: space-between; margin-block-start: var(--ds-space-stack-xs); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; }
+.odl-service-health .odl-axis { position: relative; display: block; block-size: 1lh; }
+.odl-service-health .odl-axis span { position: absolute; inset-block-start: 0; inset-inline-start: calc(var(--x) * 1%); transform: translateX(calc(var(--x) * -1%)); white-space: nowrap; }
+.odl-service-health figcaption { flex-wrap: wrap; gap: var(--ds-space-stack-xs) var(--ds-space-inset-md); justify-content: start; margin-block-start: var(--ds-space-stack-lg); padding-block-start: var(--ds-space-stack-md);
+  border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-service-health figcaption span { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); }
 .odl-service-health figcaption i { display: inline-block; inline-size: var(--ds-space-12); border-block-start: var(--ds-border-width-emphasis) solid var(--ds-color-text-primary); }
 .odl-service-health figcaption .odl-k-prev { border-block-start-style: dotted; border-color: var(--ds-color-border-strong); }
 .odl-service-health figcaption .odl-k-obj { border-block-start-style: dashed; border-color: var(--ds-color-text-warning); }
 .odl-service-health figcaption .odl-k-gap { block-size: var(--ds-space-8); border: 0; border-radius: var(--ds-radius-2); background: var(--ds-color-bg-neutral-subtle); }
 .odl-service-health figcaption .odl-k-dep { inline-size: var(--ds-space-6); block-size: var(--ds-space-6); margin-inline: var(--ds-space-2); border: 0; border-radius: var(--ds-radius-2); background: var(--ds-color-icon-default); transform: rotate(45deg); }
-.odl-service-health a { color: var(--ds-color-text-link); font: var(--ds-text-body-sm); text-underline-offset: 0.2em; white-space: nowrap; }
+.odl-service-health a { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); min-block-size: var(--ds-size-target-min); color: var(--ds-color-text-link); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-underline-offset: 0.2em; white-space: nowrap; }
 .odl-service-health a:hover { text-decoration-thickness: var(--ds-border-width-emphasis); }
 .odl-service-health a:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-detail); }
+@container (max-width: 30rem) {
+  .odl-service-health .odl-plot svg { block-size: 13rem; }
+  .odl-service-health figcaption { display: grid; grid-template-columns: repeat(3, max-content); gap: var(--ds-space-stack-sm) var(--ds-space-inset-md); }
+  .odl-service-health .odl-card { padding: var(--ds-space-inset-lg); }
+  .odl-service-health .odl-now { justify-items: start; }
+}
 </style>
 <article class="odl-service-health" aria-label="settle-api latency">
-  <header><h3>Latency p95</h3><span class="odl-now">now <strong>547 ms</strong></span></header>
-  <p class="odl-status"><span>Above its 450 ms objective since 13:21 · <a href="#">View&nbsp;alert</a></span></p>
+  <div class="odl-card">
+  <header>
+    <div><h3>Latency p95</h3><p class="odl-meta">settle-api · last 24 hours</p></div>
+    <dl class="odl-now"><dt>Now</dt><dd>547 ms</dd></dl>
+  </header>
+  <p class="odl-status"><span><svg class="odl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Above its 450 ms objective since 13:21</span><a href="#">View alert<svg class="odl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a></p>
   <figure>
     <div class="odl-plot">
     <span class="odl-pin is-max" aria-hidden="true">600 ms</span><span class="odl-pin is-obj" aria-hidden="true">Objective 450 ms</span>
-    <svg viewBox="0 0 300 120" preserveAspectRatio="none" role="img" aria-label="p95 latency over the last 24 hours: steady near 380 ms, then rising to 547 ms in the last hour">
+    <svg viewBox="0 0 300 120" preserveAspectRatio="none" role="img" aria-label="p95 latency over the last 24 hours: steady near 380 ms, then rising to 547 ms in the last hour, shortly after deploy v2.41.0">
       <line class="odl-grid" x1="0" y1="0.5" x2="300" y2="0.5"/><line class="odl-grid" x1="0" y1="119.5" x2="300" y2="119.5"/>
       <rect class="odl-gap" x="150" y="1" width="14" height="118"/>
       <line class="odl-objective" x1="0" y1="45" x2="300" y2="45"/>
@@ -58,7 +78,8 @@
     </svg>
     <span class="odl-dep" aria-hidden="true"></span><span class="odl-end" aria-hidden="true"></span>
     </div>
-    <div class="odl-axis"><span>Oct 13, 14:00</span><span>Now</span></div>
-    <figcaption><span><i></i>Today</span><span><i class="odl-k-prev"></i>Previous day</span><span><i class="odl-k-obj"></i>Objective</span><span><i class="odl-k-gap"></i>No data</span><span><i class="odl-k-dep"></i>Deploy v2.41.0</span></figcaption>
+    <div class="odl-axis" aria-hidden="true"><span style="--x: 0">14:00</span><span style="--x: 25">20:00</span><span style="--x: 50">02:00</span><span style="--x: 75">08:00</span><span style="--x: 100">Now</span></div>
+    <figcaption><span><i></i>Today</span><span><i class="odl-k-prev"></i>Yesterday</span><span><i class="odl-k-obj"></i>Objective</span><span><i class="odl-k-gap"></i>No data</span><span><i class="odl-k-dep"></i>Deploy</span></figcaption>
   </figure>
+  </div>
 </article>

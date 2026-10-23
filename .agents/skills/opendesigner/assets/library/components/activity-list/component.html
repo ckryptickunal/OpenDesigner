@@ -1,102 +1,107 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
 <style>
-.odl-activity-list { box-sizing: border-box; inline-size: 100%; max-inline-size: 32rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-activity-list { box-sizing: border-box; inline-size: 100%; max-inline-size: 34rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
 .odl-activity-list *, .odl-activity-list *::before, .odl-activity-list *::after { box-sizing: border-box; }
-.odl-activity-list .odl-card { display: grid; gap: var(--ds-space-stack-sm); padding-block: var(--ds-space-inset-md); background: var(--ds-color-surface-raised);
+.odl-activity-list .odl-card { display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised);
   border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); }
-.odl-activity-list h3 { margin: 0; padding-inline: var(--ds-space-inset-lg); font: var(--ds-text-title-md); }
-.odl-activity-list .odl-filter { display: flex; gap: var(--ds-space-inline-xs); margin: 0; padding: var(--ds-space-2) var(--ds-space-inset-lg) var(--ds-space-4); border: 0; min-inline-size: 0; overflow-x: auto; scrollbar-width: none; }
+.odl-activity-list .odl-head { display: grid; gap: var(--ds-space-stack-md); }
+.odl-activity-list h3 { margin: 0; font: var(--ds-text-title-md); }
+/* Filter chips: one scrolling row; the radio's hit area reaches past the chip's visible height to the touch floor. */
+.odl-activity-list .odl-filter { display: flex; gap: var(--ds-space-inline-sm); margin: 0 calc(-1 * var(--ds-space-inset-xl)); padding: var(--ds-space-4) var(--ds-space-inset-xl); border: 0; min-inline-size: 0; overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain;
+  -webkit-mask-image: linear-gradient(to right, var(--ds-color-black) calc(100% - var(--ds-space-32)), transparent); mask-image: linear-gradient(to right, var(--ds-color-black) calc(100% - var(--ds-space-32)), transparent); }
 .odl-activity-list .odl-filter::-webkit-scrollbar { display: none; }
 .odl-activity-list .odl-filter label { position: relative; flex: none; }
 .odl-activity-list .odl-filter input { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; margin: 0; opacity: 0; cursor: pointer; }
-.odl-activity-list .odl-filter span { display: inline-flex; align-items: center; min-block-size: var(--ds-size-target-touch); padding: 0 var(--ds-space-inset-md); border-radius: var(--ds-radius-control);
+.odl-activity-list .odl-filter span { display: inline-flex; align-items: center; min-block-size: var(--ds-size-control-md); padding: 0 var(--ds-space-inset-md); border-radius: var(--ds-radius-control);
   border: var(--ds-border-width-default) solid var(--ds-color-border-default); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); white-space: nowrap;
   transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
 .odl-activity-list .odl-filter label:hover span { background: var(--ds-color-bg-neutral-subtle); }
 .odl-activity-list .odl-filter input:checked + span { border-color: transparent; background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); }
 .odl-activity-list .odl-filter input:focus-visible + span { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-.odl-activity-list .odl-group { display: grid; }
+.odl-activity-list .odl-groups { display: grid; gap: var(--ds-space-stack-lg); }
+.odl-activity-list .odl-group { display: grid; gap: var(--ds-space-stack-sm); }
 .odl-activity-list .odl-group[hidden] { display: none; }
-.odl-activity-list h4 { margin: var(--ds-space-stack-xs) 0 var(--ds-space-4); padding-inline: var(--ds-space-inset-lg); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-heading); }
-.odl-activity-list ul { margin: 0; padding: 0; list-style: none; }
-.odl-activity-list .odl-item { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-inline-md); min-block-size: var(--ds-size-row-two-line);
-  padding: var(--ds-space-8) var(--ds-space-inset-lg); }
+.odl-activity-list h4 { margin: 0; font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-heading); color: var(--ds-color-text-primary); }
+.odl-activity-list ul { display: grid; gap: var(--ds-space-stack-md); margin: 0; padding: 0; list-style: none; }
+.odl-activity-list .odl-item { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-inline-md);
+  min-block-size: var(--ds-size-row-lg); padding-block: var(--ds-space-stack-xs); }
 .odl-activity-list .odl-item[hidden] { display: none; }
-.odl-activity-list .odl-item.is-new { background: var(--ds-color-accent-light-2); }
-.odl-activity-list .odl-who { position: relative; display: grid; inline-size: var(--ds-size-control-md); block-size: var(--ds-size-control-md); }
-.odl-activity-list .odl-av { display: grid; place-items: center; inline-size: 100%; block-size: 100%; border-radius: var(--ds-radius-person); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-heading);
-  color: var(--ds-color-accent-light-12); background: linear-gradient(140deg, var(--ds-color-accent-light-4), var(--ds-color-accent-light-8)); }
-.odl-activity-list .odl-av.is-info { color: var(--ds-color-info-light-12); background: linear-gradient(140deg, var(--ds-color-info-light-4), var(--ds-color-info-light-8)); }
-.odl-activity-list .odl-av.is-success { color: var(--ds-color-success-light-12); background: linear-gradient(140deg, var(--ds-color-success-light-4), var(--ds-color-success-light-8)); }
-.odl-activity-list .odl-av.is-warning { color: var(--ds-color-warning-light-12); background: linear-gradient(140deg, var(--ds-color-warning-light-4), var(--ds-color-warning-light-8)); }
-.odl-activity-list .odl-av.is-danger { color: var(--ds-color-danger-light-12); background: linear-gradient(140deg, var(--ds-color-danger-light-4), var(--ds-color-danger-light-8)); }
-.odl-activity-list .odl-av.is-neutral { color: var(--ds-color-neutral-light-12); background: linear-gradient(140deg, var(--ds-color-neutral-light-3), var(--ds-color-neutral-light-7)); }
-/* Two people: a pair of smaller avatars, the front one cut out from the back one by a ring of the row's colour. */
-.odl-activity-list .odl-who.is-pair .odl-av { position: absolute; inline-size: 70%; block-size: 70%; color: transparent; }
-.odl-activity-list .odl-who.is-pair .odl-av.is-back { inset-block-start: 0; inset-inline-start: 0; }
-.odl-activity-list .odl-who.is-pair .odl-av.is-front { inset-block-end: 0; inset-inline-end: 0; box-shadow: 0 0 0 var(--ds-border-width-emphasis) var(--ds-color-surface-raised); }
-.odl-activity-list .odl-item.is-new .odl-who.is-pair .odl-av.is-front { box-shadow: 0 0 0 var(--ds-border-width-emphasis) var(--ds-color-accent-light-2); }
-.odl-activity-list .odl-kind { position: absolute; inset-inline-end: calc(-1 * var(--ds-space-4)); inset-block-end: calc(-1 * var(--ds-space-4)); display: grid; place-items: center; inline-size: max(var(--ds-space-16), 48%); aspect-ratio: 1;
-  border-radius: var(--ds-radius-full); border: var(--ds-border-width-emphasis) solid var(--ds-color-surface-raised); color: var(--ds-color-text-on-danger); background: var(--ds-color-bg-danger-bold); }
-.odl-activity-list .odl-item.is-new .odl-kind { border-color: var(--ds-color-accent-light-2); }
-.odl-activity-list .odl-kind.is-at { background: var(--ds-color-bg-info-bold); color: var(--ds-color-text-on-info); }
-.odl-activity-list .odl-kind.is-follow { background: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent); }
-.odl-activity-list .odl-kind svg { inline-size: 64%; block-size: 64%; }
-.odl-activity-list .odl-text { margin: 0; font: var(--ds-text-body-sm); color: var(--ds-color-text-primary); }
+/* New: a small accent dot after the time, inside the row; the row itself stays neutral. */
+.odl-activity-list .odl-item.is-new time::after { content: ""; display: inline-block; inline-size: var(--ds-space-8); block-size: var(--ds-space-8); margin-inline-start: var(--ds-space-6); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-bold); vertical-align: middle; }
+.odl-activity-list .odl-who { position: relative; display: grid; inline-size: var(--ds-size-control-lg); block-size: var(--ds-size-control-lg); }
+.odl-activity-list .odl-who img { display: block; inline-size: 100%; block-size: 100%; border-radius: var(--ds-radius-person); object-fit: cover; background: var(--ds-color-bg-neutral-subtle); }
+/* Two people: two smaller photos, the front one cut out from the back one by a ring of the card's colour. */
+.odl-activity-list .odl-who.is-pair img { position: absolute; inline-size: 68%; block-size: 68%; }
+.odl-activity-list .odl-who.is-pair img:first-child { inset-block-start: 0; inset-inline-start: 0; }
+.odl-activity-list .odl-who.is-pair img + img { inset-block-end: 0; inset-inline-end: 0; box-shadow: 0 0 0 var(--ds-border-width-emphasis) var(--ds-color-surface-raised); }
+.odl-activity-list .odl-kind { position: absolute; inset-inline-end: calc(-1 * var(--ds-space-2)); inset-block-end: calc(-1 * var(--ds-space-2)); display: grid; place-items: center;
+  inline-size: var(--ds-size-icon-lg); block-size: var(--ds-size-icon-lg); border-radius: var(--ds-radius-full); border: var(--ds-border-width-emphasis) solid var(--ds-color-surface-raised);
+  color: var(--ds-color-text-inverse); background: var(--ds-color-bg-inverse); }
+.odl-activity-list .odl-kind svg { inline-size: 58%; block-size: 58%; stroke-width: var(--ds-icon-stroke-lg); }
+.odl-activity-list .odl-kind.is-like svg { fill: currentColor; }
+.odl-activity-list .odl-text { margin: 0; color: var(--ds-color-text-primary); }
 .odl-activity-list .odl-text b { font-weight: var(--ds-font-weight-heading); }
 .odl-activity-list .odl-text q { color: var(--ds-color-text-secondary); quotes: "\201C" "\201D"; }
-.odl-activity-list .odl-text time { color: var(--ds-color-text-tertiary); white-space: nowrap; }
-.odl-activity-list .odl-thumb { inline-size: var(--ds-size-control-md); block-size: var(--ds-size-control-md); border-radius: var(--ds-radius-nested); }
-.odl-activity-list .odl-thumb.is-1 { background: radial-gradient(circle at 65% 40%, var(--ds-color-warning-light-2) 0 14%, transparent 15%), linear-gradient(180deg, var(--ds-color-accent-light-7), var(--ds-color-danger-light-5) 60%, var(--ds-color-accent-light-11) 61%); }
-.odl-activity-list .odl-thumb.is-2 { background: linear-gradient(160deg, var(--ds-color-info-light-5), var(--ds-color-info-light-9) 58%, var(--ds-color-success-light-9) 59%, var(--ds-color-success-light-11)); }
-.odl-activity-list .odl-thumb.is-3 { background: radial-gradient(circle at 50% 120%, var(--ds-color-neutral-light-11) 0 45%, transparent 46%), linear-gradient(180deg, var(--ds-color-neutral-light-4), var(--ds-color-neutral-light-7)); }
-.odl-activity-list .odl-thumb.is-story { border-radius: var(--ds-radius-person); padding: var(--ds-border-width-emphasis);
-  background: linear-gradient(135deg, var(--ds-color-accent-light-7), var(--ds-color-accent-light-9) 45%, var(--ds-color-accent-light-11)); }
-.odl-activity-list .odl-thumb.is-story i { display: block; inline-size: 100%; block-size: 100%; border-radius: var(--ds-radius-person); border: var(--ds-border-width-emphasis) solid var(--ds-color-surface-raised);
-  background: linear-gradient(160deg, var(--ds-color-warning-light-5), var(--ds-color-warning-light-9)); }
-.odl-activity-list .odl-item.is-new .odl-thumb.is-story i { border-color: var(--ds-color-accent-light-2); }
-.odl-activity-list .odl-back { display: inline-flex; align-items: center; justify-content: center; min-inline-size: calc(var(--ds-size-control-lg) * 2); min-block-size: max(var(--ds-size-control-sm), var(--ds-size-target-touch));
+.odl-activity-list .odl-text time { color: var(--ds-color-text-tertiary); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.odl-activity-list .odl-thumb { display: block; inline-size: var(--ds-size-control-lg); block-size: var(--ds-size-control-lg); border-radius: var(--ds-radius-detail); object-fit: cover; background: var(--ds-color-bg-neutral-subtle); }
+.odl-activity-list .odl-story { display: grid; inline-size: var(--ds-size-control-lg); block-size: var(--ds-size-control-lg); padding: var(--ds-border-width-emphasis); border-radius: var(--ds-radius-person);
+  border: var(--ds-border-width-emphasis) solid var(--ds-color-border-accent); }
+.odl-activity-list .odl-story img { display: block; inline-size: 100%; block-size: 100%; border-radius: var(--ds-radius-person); object-fit: cover; }
+/* Follow back: the accent fill; Following: a plain grey one. The hit area reaches the touch floor past the visible height. */
+.odl-activity-list .odl-back { position: relative; display: inline-flex; align-items: center; justify-content: center; min-inline-size: calc(var(--ds-size-control-lg) * 2); min-block-size: var(--ds-size-control-sm);
   padding: 0 var(--ds-space-inset-md); border: 0; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent);
   font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-activity-list .odl-back::after { content: ""; position: absolute; inset: calc((var(--ds-size-control-sm) - var(--ds-size-target-touch)) / 2) 0; }
 .odl-activity-list .odl-back:hover { background: var(--ds-color-bg-accent-bold-hover); }
 .odl-activity-list .odl-back[aria-pressed="true"] { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
 .odl-activity-list .odl-back[aria-pressed="true"]:hover { background: var(--ds-color-bg-neutral-subtle-hover); }
 .odl-activity-list .odl-back:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-.odl-activity-list .odl-empty { margin: 0; padding: var(--ds-space-inset-lg); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); text-align: center; }
+.odl-activity-list .odl-empty { margin: 0; padding: var(--ds-space-inset-xl) 0; color: var(--ds-color-text-secondary); text-align: center; }
 .odl-activity-list .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@container (inline-size < 28rem) {
+  .odl-activity-list .odl-filter { margin-inline: calc(-1 * var(--ds-space-inset-lg)); padding-inline: var(--ds-space-inset-lg); }
+  .odl-activity-list .odl-filter span { padding-inline: var(--ds-space-inset-sm); }
+  .odl-activity-list .odl-back { min-inline-size: 0; padding-inline: var(--ds-space-inset-sm); }
+  .odl-activity-list .odl-card { padding: var(--ds-space-inset-lg); }
+}
 @media (prefers-reduced-motion: reduce) { .odl-activity-list, .odl-activity-list *, .odl-activity-list *::before { transition: none !important; animation: none !important; } }
 </style>
 <section class="odl-activity-list" aria-labelledby="odl-al-title">
   <div class="odl-card">
-    <h3 id="odl-al-title">Activity</h3>
-    <fieldset class="odl-filter"><legend class="odl-sr">Show</legend>
-      <label><input type="radio" name="odl-al-kind" value="all" checked><span>All</span></label>
-      <label><input type="radio" name="odl-al-kind" value="like"><span>Likes</span></label>
-      <label><input type="radio" name="odl-al-kind" value="follow"><span>Follows</span></label>
-      <label><input type="radio" name="odl-al-kind" value="mention"><span>Mentions</span></label>
-    </fieldset>
-    <section class="odl-group" aria-labelledby="odl-al-today"><h4 id="odl-al-today">Today</h4>
-      <ul>
-        <li class="odl-item is-new" data-kind="like"><span class="odl-who is-pair" aria-hidden="true"><span class="odl-av is-success is-back">YH</span><span class="odl-av is-warning is-front">KB</span><span class="odl-kind"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 17.2S2.4 12.9 2.4 7.4A3.85 3.85 0 0 1 10 5.8a3.85 3.85 0 0 1 7.6 1.6c0 5.5-7.6 9.8-7.6 9.8z"/></svg></span></span>
-          <p class="odl-text"><span class="odl-sr">New. </span><b>yuki_h</b>, <b>kwesi.frames</b> and 212 others liked your photo. <time datetime="PT2H">2h</time></p><span class="odl-thumb is-1" role="img" aria-label="Your rooftop sunset photo"></span></li>
-        <li class="odl-item is-new" data-kind="follow"><span class="odl-who" aria-hidden="true"><span class="odl-av is-info">AT</span><span class="odl-kind is-follow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 4v8M4 8h8"/></svg></span></span>
-          <p class="odl-text"><span class="odl-sr">New. </span><b>arash.t</b> started following you. <time datetime="PT3H">3h</time></p><button type="button" class="odl-back" aria-pressed="false" aria-label="Follow back arash.t">Follow back</button></li>
-        <li class="odl-item" data-kind="mention"><span class="odl-who" aria-hidden="true"><span class="odl-av is-success">LK</span><span class="odl-kind is-at"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="8" r="2.4"/><path d="M10.4 8v1a1.6 1.6 0 0 0 3.2 0V8a5.6 5.6 0 1 0-2.2 4.5"/></svg></span></span>
-          <p class="odl-text"><b>leilani.k</b> mentioned you: <q>@rafal.makes is this the roof by the river?</q> <time datetime="PT5H">5h</time></p><span class="odl-thumb is-2" role="img" aria-label="Your river photo"></span></li>
-      </ul>
-    </section>
-    <section class="odl-group" aria-labelledby="odl-al-week"><h4 id="odl-al-week">This week</h4>
-      <ul>
-        <li class="odl-item" data-kind="follow"><span class="odl-who" aria-hidden="true"><span class="odl-av is-neutral">HS</span><span class="odl-kind is-follow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 4v8M4 8h8"/></svg></span></span>
-          <p class="odl-text"><b>henrik.sb</b> started following you. <time datetime="P2D">2d</time></p><button type="button" class="odl-back" aria-pressed="true" aria-label="Follow back henrik.sb">Following</button></li>
-        <li class="odl-item" data-kind="like"><span class="odl-who" aria-hidden="true"><span class="odl-av is-danger">MV</span><span class="odl-kind"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 17.2S2.4 12.9 2.4 7.4A3.85 3.85 0 0 1 10 5.8a3.85 3.85 0 0 1 7.6 1.6c0 5.5-7.6 9.8-7.6 9.8z"/></svg></span></span>
-          <p class="odl-text"><b>mireille.v</b> liked your comment: <q>The fog did the rest.</q> <time datetime="P3D">3d</time></p><span class="odl-thumb is-3" role="img" aria-label="The post you commented on"></span></li>
-        <li class="odl-item" data-kind="follow"><span class="odl-who" aria-hidden="true"><span class="odl-av">XQ</span><span class="odl-kind is-follow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 4v8M4 8h8"/></svg></span></span>
-          <p class="odl-text"><b>ximena.q</b> started following you. <time datetime="P4D">4d</time></p><button type="button" class="odl-back" aria-pressed="false" aria-label="Follow back ximena.q">Follow back</button></li>
-        <li class="odl-item" data-kind="mention"><span class="odl-who" aria-hidden="true"><span class="odl-av is-warning">KB</span><span class="odl-kind is-at"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="8" r="2.4"/><path d="M10.4 8v1a1.6 1.6 0 0 0 3.2 0V8a5.6 5.6 0 1 0-2.2 4.5"/></svg></span></span>
-          <p class="odl-text"><b>kwesi.frames</b> mentioned you in their story. <time datetime="P5D">5d</time></p><span class="odl-thumb is-story" role="img" aria-label="kwesi.frames's story"><i></i></span></li>
-      </ul>
-    </section>
-    <p class="odl-empty" hidden>Nothing here yet.</p>
+    <div class="odl-head">
+      <h3 id="odl-al-title">Activity</h3>
+      <fieldset class="odl-filter"><legend class="odl-sr">Show</legend>
+        <label><input type="radio" name="odl-al-kind" value="all" checked><span>All</span></label>
+        <label><input type="radio" name="odl-al-kind" value="like"><span>Likes</span></label>
+        <label><input type="radio" name="odl-al-kind" value="follow"><span>Follows</span></label>
+        <label><input type="radio" name="odl-al-kind" value="mention"><span>Mentions</span></label>
+      </fieldset>
+    </div>
+    <div class="odl-groups">
+      <section class="odl-group" aria-labelledby="odl-al-today"><h4 id="odl-al-today">Today</h4>
+        <ul>
+          <li class="odl-item is-new" data-kind="like"><span class="odl-who is-pair" aria-hidden="true"><img src="https://images.unsplash.com/photo-1684598273404-2d94d7a7ce2f?w=72&h=72&fit=crop&auto=format&q=70" alt="" width="36" height="36" loading="lazy" decoding="async"><img src="https://images.unsplash.com/photo-1596580817363-a4a8f67d4bc8?w=72&h=72&fit=crop&auto=format&q=70" alt="" width="36" height="36" loading="lazy" decoding="async"><span class="odl-kind is-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span></span>
+            <p class="odl-text"><span class="odl-sr">New. </span><b>yuki_h</b>, <b>kwesi.frames</b> and 212 others liked your photo. <time datetime="PT2H">2h</time></p><img class="odl-thumb" src="https://images.unsplash.com/photo-1512531123205-560f5974e686?w=96&h=96&fit=crop&auto=format&q=70" alt="Your rooftop sunset photo" width="48" height="48" loading="lazy" decoding="async"></li>
+          <li class="odl-item is-new" data-kind="follow"><span class="odl-who" aria-hidden="true"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=96&h=96&fit=crop&auto=format&q=70" alt="" width="48" height="48" loading="lazy" decoding="async"><span class="odl-kind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg></span></span>
+            <p class="odl-text"><span class="odl-sr">New. </span><b>arash.t</b> started following you. <time datetime="PT3H">3h</time></p><button type="button" class="odl-back" aria-pressed="false" aria-label="Follow back arash.t">Follow back</button></li>
+          <li class="odl-item" data-kind="mention"><span class="odl-who" aria-hidden="true"><img src="https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=96&h=96&fit=crop&auto=format&q=70" alt="" width="48" height="48" loading="lazy" decoding="async"><span class="odl-kind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></svg></span></span>
+            <p class="odl-text"><b>leilani.k</b> mentioned you: <q>@rafal.makes is this the roof by the river?</q> <time datetime="PT5H">5h</time></p><img class="odl-thumb" src="https://images.unsplash.com/photo-1505490096310-204ef067fe6b?w=96&h=96&fit=crop&auto=format&q=70" alt="Your river photo" width="48" height="48" loading="lazy" decoding="async"></li>
+        </ul>
+      </section>
+      <section class="odl-group" aria-labelledby="odl-al-week"><h4 id="odl-al-week">This week</h4>
+        <ul>
+          <li class="odl-item" data-kind="follow"><span class="odl-who" aria-hidden="true"><img src="https://images.unsplash.com/photo-1600603406200-5b2a104684ac?w=96&h=96&fit=crop&auto=format&q=70" alt="" width="48" height="48" loading="lazy" decoding="async"><span class="odl-kind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg></span></span>
+            <p class="odl-text"><b>henrik.sb</b> started following you. <time datetime="P2D">2d</time></p><button type="button" class="odl-back" aria-pressed="true" aria-label="Follow back henrik.sb">Following</button></li>
+          <li class="odl-item" data-kind="like"><span class="odl-who" aria-hidden="true"><img src="https://images.unsplash.com/photo-1607569708758-0270aa4651bd?w=96&h=96&fit=crop&auto=format&q=70" alt="" width="48" height="48" loading="lazy" decoding="async"><span class="odl-kind is-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span></span>
+            <p class="odl-text"><b>mireille.v</b> liked your comment: <q>The fog did the rest.</q> <time datetime="P3D">3d</time></p><img class="odl-thumb" src="https://images.unsplash.com/photo-1578429827733-272eb6d7972e?w=96&h=96&fit=crop&auto=format&q=70" alt="The foggy road post you commented on" width="48" height="48" loading="lazy" decoding="async"></li>
+          <li class="odl-item" data-kind="follow"><span class="odl-who" aria-hidden="true"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=96&h=96&fit=crop&auto=format&q=70" alt="" width="48" height="48" loading="lazy" decoding="async"><span class="odl-kind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg></span></span>
+            <p class="odl-text"><b>ximena.q</b> started following you. <time datetime="P4D">4d</time></p><button type="button" class="odl-back" aria-pressed="false" aria-label="Follow back ximena.q">Follow back</button></li>
+          <li class="odl-item" data-kind="mention"><span class="odl-who" aria-hidden="true"><img src="https://images.unsplash.com/photo-1596580817363-a4a8f67d4bc8?w=96&h=96&fit=crop&auto=format&q=70" alt="" width="48" height="48" loading="lazy" decoding="async"><span class="odl-kind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></svg></span></span>
+            <p class="odl-text"><b>kwesi.frames</b> mentioned you in their story. <time datetime="P5D">5d</time></p><span class="odl-story"><img src="https://images.unsplash.com/photo-1609194246158-702022cc4f13?w=96&h=96&fit=crop&auto=format&q=70" alt="kwesi.frames's story: a city skyline at sunset" width="48" height="48" loading="lazy" decoding="async"></span></li>
+        </ul>
+      </section>
+      <p class="odl-empty" hidden>Nothing here yet.</p>
+    </div>
   </div>
 </section>
 <script>

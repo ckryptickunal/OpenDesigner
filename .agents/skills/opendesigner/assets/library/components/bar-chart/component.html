@@ -1,19 +1,19 @@
 <style>
 .odl-bar-chart { box-sizing: border-box; inline-size: 100%; max-inline-size: 60rem; margin-inline: auto; container-type: inline-size; text-wrap: pretty; }
 .odl-bar-chart *, .odl-bar-chart *::before, .odl-bar-chart *::after { box-sizing: border-box; }
-.odl-bar-chart .odl-card { display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-lg); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
+.odl-bar-chart .odl-card { display: grid; gap: var(--ds-space-stack-xl); padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
   border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); }
-.odl-bar-chart .odl-head { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: var(--ds-space-stack-sm) var(--ds-space-inline-md); }
-.odl-bar-chart h3 { margin: 0; font: var(--ds-text-title-sm); }
-.odl-bar-chart .odl-sub { margin: var(--ds-space-2) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
-.odl-bar-chart .odl-stats { display: flex; gap: var(--ds-space-inline-md); margin: 0; font-variant-numeric: tabular-nums; }
-.odl-bar-chart .odl-stats div { display: grid; gap: var(--ds-space-2); }
+.odl-bar-chart .odl-head { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: var(--ds-space-stack-lg) var(--ds-space-inset-xl); }
+.odl-bar-chart h3 { margin: 0; font: var(--ds-text-title-md); }
+.odl-bar-chart .odl-sub { margin: var(--ds-space-stack-xs) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
+.odl-bar-chart .odl-stats { display: flex; flex-wrap: wrap; gap: var(--ds-space-stack-sm) var(--ds-space-inset-xl); margin: 0; font-variant-numeric: tabular-nums; }
+.odl-bar-chart .odl-stats div { display: grid; gap: var(--ds-space-stack-xs); }
 .odl-bar-chart .odl-stats dt { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); white-space: nowrap; }
 .odl-bar-chart .odl-stats dd { margin: 0; font: var(--ds-text-numeric-md); white-space: nowrap; }
-.odl-bar-chart .odl-over { display: inline-block; margin-inline-start: var(--ds-space-4); padding: 0 var(--ds-space-6); border-radius: var(--ds-radius-full); vertical-align: middle;
+.odl-bar-chart .odl-over { display: inline-block; margin-inline-start: var(--ds-space-inline-xs); padding: 0 var(--ds-space-inline-xs); border-radius: var(--ds-radius-full); vertical-align: middle;
   background: var(--ds-color-bg-warning-subtle); color: var(--ds-color-text-warning); font: var(--ds-text-label-sm); }
 
-.odl-bar-chart .odl-chart { padding-block-start: var(--ds-space-8); display: grid; grid-template-columns: 4.5ch minmax(0, 1fr); column-gap: var(--ds-space-8); row-gap: var(--ds-space-6); }
+.odl-bar-chart .odl-chart { padding-block-start: var(--ds-space-stack-sm); display: grid; grid-template-columns: 4.5ch minmax(0, 1fr); column-gap: var(--ds-space-inline-md); row-gap: var(--ds-space-stack-sm); }
 .odl-bar-chart .odl-axis, .odl-bar-chart .odl-plot { position: relative; block-size: 13.5rem; }
 .odl-bar-chart .odl-axis span { position: absolute; inset-inline-end: 0; inset-block-end: calc(var(--y) * 1%); transform: translateY(50%);
   color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -51,10 +51,10 @@
   color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); text-align: center; }
 .odl-bar-chart .odl-x .is-current { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-heading); }
 
-.odl-bar-chart .odl-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--ds-space-stack-xs) var(--ds-space-inline-md);
-  padding-block-start: var(--ds-space-stack-sm); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
-.odl-bar-chart .odl-legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-stack-xs) var(--ds-space-inline-md); margin: 0; padding: 0; list-style: none; }
-.odl-bar-chart .odl-legend li { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); }
+.odl-bar-chart .odl-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--ds-space-stack-sm) var(--ds-space-inset-md);
+  padding-block-start: var(--ds-space-stack-lg); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-bar-chart .odl-legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-stack-xs) var(--ds-space-inset-md); margin: 0; padding: 0; list-style: none; }
+.odl-bar-chart .odl-legend li { display: inline-flex; align-items: center; gap: var(--ds-space-inline-sm); }
 .odl-bar-chart .odl-key { inline-size: var(--ds-space-12); block-size: var(--ds-space-12); border-radius: var(--ds-radius-2); }
 .odl-bar-chart .odl-key.is-actual { background: var(--ds-color-bg-accent-bold); }
 .odl-bar-chart .odl-key.is-fc { border: var(--ds-border-width-default) solid var(--ds-color-border-accent);
@@ -63,14 +63,15 @@
 .odl-bar-chart .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 @container (min-width: 44rem) {
-  .odl-bar-chart .odl-card { padding: var(--ds-space-inset-xl); }
   .odl-bar-chart .odl-axis, .odl-bar-chart .odl-plot { block-size: 16rem; }
   .odl-bar-chart .odl-bar { inline-size: 52%; max-inline-size: 4rem; }
   .odl-bar-chart .odl-stats { gap: var(--ds-space-inset-xl); }
   .odl-bar-chart .odl-stats dd { font: var(--ds-text-numeric-lg); }
 }
 @container (max-width: 30rem) {
-  .odl-bar-chart .odl-card { padding: var(--ds-space-inset-md); }
+  .odl-bar-chart .odl-card { padding: var(--ds-space-inset-lg); gap: var(--ds-space-stack-lg); }
+  .odl-bar-chart .odl-head { gap: var(--ds-space-stack-md); }
+  .odl-bar-chart .odl-head > div:first-child { flex: 1 1 100%; }
   .odl-bar-chart .odl-axis, .odl-bar-chart .odl-plot { block-size: 11rem; }
   .odl-bar-chart .odl-cols, .odl-bar-chart .odl-x { gap: var(--ds-space-2); }
   .odl-bar-chart .odl-tip { min-inline-size: 9rem; padding: var(--ds-space-inset-xs) var(--ds-space-inset-sm); }

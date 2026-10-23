@@ -40,7 +40,18 @@ COPY = ('<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rec
 DEVICES = [("phone", "Phone", 390), ("tablet", "Tablet", 768), ("desktop", "Desktop", 1280)]
 
 
+# the look parts open in: a calm, regular-density system (owner, 2026-10-23: the dense Billerwick default read as congested)
+DEFAULT_LOOK = "nordic"
 VER = "dev"  # set by add() from the CSS and JS it writes
+
+
+# The shelf's first rows (owner, 2026-10-23: "rearrange the components based on the kind that might engage more people"):
+# photo-rich, familiar and interactive parts first, consumer and work-tool parts alternating so both audiences find theirs
+# in the first screens. A hypothesis until analytics shows which parts people open and add; then order by that.
+LEAD = ["social-post", "command-menu", "product-gallery", "stay-card", "ai-composer", "leaderboard",
+        "track-list", "receipts-table", "chat-thread", "plan-picker", "activity-rings", "trip-search",
+        "media-shelf", "sidebar-nav", "cart-drawer", "card-wallet", "chat-answer", "approval-panel",
+        "story-rail", "kanban-column", "event-ticket", "video-player", "menu-item", "savings-goal"]
 
 
 def components():
@@ -53,7 +64,17 @@ def components():
                     "markup": re.sub(r"<style>.*?</style>|<script>.*?</script>", "", src, flags=re.S).strip(),
                     "kb": round(len(src.encode()) / 1024, 1)})
     order = list(TYPES)
-    return sorted(out, key=lambda c: (order.index(c["type"]), c["width"] != "wide", c["name"]))
+    lead = {slug: i for i, slug in enumerate(LEAD)}
+    return sorted(out, key=lambda c: (lead.get(c["slug"], len(LEAD)), order.index(c["type"]), c["width"] != "wide", c["name"]))
+
+
+def photo_credits(c):
+    """A facts row naming each Unsplash photographer whose photo the part shows (the Unsplash License asks for none, but it is fair)."""
+    ph = [x for x in c.get("photos", []) if isinstance(x, dict) and x.get("author")]
+    if not ph:
+        return ""
+    names = ", ".join(dict.fromkeys(f'<a href="https://unsplash.com/photos/{esc(x.get("page", ""))}">{esc(x["author"])}</a>' if x.get("page") else esc(x["author"]) for x in ph))
+    return f'<div><dt>Photos</dt><dd>{names} on <a href="https://unsplash.com">Unsplash</a></dd></div>\n'
 
 
 def lead(c):
@@ -124,7 +145,7 @@ def quiet(markup):
     return demote(re.sub(r"<a\b", "<span", markup).replace("</a>", "</span>"))
 
 
-def live(c, look="billerwick"):
+def live(c, look=DEFAULT_LOOK):
     """The component in a look, inert: in cards and aisles the card is the link. Its own page has the live copy."""
     return (f'<div class="lib-fit" data-w="{FRAME_W[c["width"]]}"><div class="lib-live odl-sys-{look}" inert aria-hidden="true">{quiet(c["markup"])}</div></div>')
 
@@ -145,7 +166,7 @@ def card(b, c, i):
 
 
 def looks_bar():
-    sw = "".join(f'<button type="button" class="look" data-look="{lk["key"]}" aria-pressed="{"true" if lk["key"] == "billerwick" else "false"}" title="{esc(lk["plain"])}">'
+    sw = "".join(f'<button type="button" class="look" data-look="{lk["key"]}" aria-pressed="{"true" if lk["key"] == DEFAULT_LOOK else "false"}" title="{esc(lk["plain"])}">'
                  f'<span class="look-sw odl-sys-{lk["key"]}" aria-hidden="true"><i></i></span>{esc(lk["name"])}</button>' for lk in LOOKS)
     return (f'<div class="looks" role="group" aria-label="Try the components in a look">{sw}</div>')
 
@@ -307,7 +328,7 @@ def detail(b, c, cs):
 <label class="lib-field"><span>Look</span><select class="part-look">{"".join(f'<option value="{lk["key"]}">{esc(lk["name"])}</option>' for lk in LOOKS)}</select></label>
 </div>
 <div class="part-stage stage lib-bg">
-<div class="part-device" data-device="desktop" data-view0="{VIEW0[c["width"]]}"><div class="part-frame"><div class="lib-live odl-sys-billerwick">{anchors(c["markup"])}</div></div></div>
+<div class="part-device" data-device="desktop" data-view0="{VIEW0[c["width"]]}"><div class="part-frame"><div class="lib-live odl-sys-{DEFAULT_LOOK}">{anchors(c["markup"])}</div></div></div>
 </div>
 <p class="part-hint">It is live: hover, focus and its own controls respond. Actions that would change data (approve, send, delete) are for your app to wire. The width is a real {", ".join(f"{w} px" for _k, _l, w in DEVICES[:-1])} or {DEVICES[-1][2]} px box, shrunk to fit your screen.</p>
 </section>
@@ -323,7 +344,7 @@ def detail(b, c, cs):
 <div><dt>States</dt><dd><ul class="part-states">{states}</ul></dd></div>
 <div><dt>Accessibility</dt><dd>{esc(c["a11y"])}</dd></div>
 <div><dt>Fits</dt><dd>{", ".join(ind(x) if x != "any" else "Any product" for x in c["industries"])} · {c["style"].capitalize()} · designed {c["width"]}</dd></div>
-<div><dt>File</dt><dd><a href="/library/r/{c["slug"]}.html">{c["slug"]}.html</a>, {c["kb"]} KB, MIT{"" if not c["js"].strip() else ", with a short script"}</dd></div>
+{photo_credits(c)}<div><dt>File</dt><dd><a href="/library/r/{c["slug"]}.html">{c["slug"]}.html</a>, {c["kb"]} KB, MIT{"" if not c["js"].strip() else ", with a short script"}</dd></div>
 <div><dt>From</dt><dd>{src_link}</dd></div>
 </dl>
 </aside>

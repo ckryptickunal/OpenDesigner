@@ -9,5 +9,10 @@
   "states": ["all events", "high risk only", "person or service account", "focus"],
   "source": "brand/showcase/product/06-ferrule-security",
   "a11y": "The filter is a native radio group with visible focus; risk is written as a word, not shown by colour alone.",
-  "width": "medium"
+  "width": "medium",
+  "photos": [
+    {"img": "photo-1681097561932-36d0df02b379", "author": "Anky Lau", "page": "ntLkvt6OZvQ"},
+    {"img": "photo-1604072366595-e75dc92d6bdc", "author": "Jorik Kleen", "page": "lNNHyRbmm0o"},
+    {"img": "photo-1500648767791-00dcc994a43e", "author": "Jurica Koletić", "page": "7YVZYZeITc8"}
+  ]
 }

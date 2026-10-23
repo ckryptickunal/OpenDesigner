@@ -1,70 +1,59 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
 <style>
 .odl-event-ticket { box-sizing: border-box; inline-size: 100%; max-inline-size: 24rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
 .odl-event-ticket *, .odl-event-ticket *::before, .odl-event-ticket *::after { box-sizing: border-box; }
 .odl-event-ticket .odl-card { display: grid; overflow: hidden; background: var(--ds-color-surface-raised); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-floating); }
-.odl-event-ticket .odl-art { position: relative; display: grid; align-content: end; gap: var(--ds-space-4); min-block-size: calc(var(--ds-size-control-lg) * 4.6); padding: var(--ds-space-inset-lg);
-  color: var(--ds-color-white); background: linear-gradient(200deg, var(--ds-color-accent-light-9) 0%, var(--ds-color-accent-light-11) 45%, var(--ds-color-info-light-12) 100%); isolation: isolate; }
-.odl-event-ticket .odl-art svg { position: absolute; inset: 0; z-index: -1; inline-size: 100%; block-size: 100%; }
-.odl-event-ticket .odl-art .f-beam { fill: var(--ds-color-white); opacity: 0.12; }
-.odl-event-ticket .odl-art .f-ring { fill: none; stroke: var(--ds-color-warning-light-5); stroke-width: 1.5; opacity: 0.5; }
-.odl-event-ticket .odl-art .f-orb { fill: var(--ds-color-warning-light-4); }
-.odl-event-ticket .odl-art .f-crowd { fill: var(--ds-color-info-light-12); }
-.odl-event-ticket .odl-art::after { content: ""; position: absolute; inset: 40% 0 0; z-index: -1; background: linear-gradient(transparent, var(--ds-color-neutral-alpha-light-11)); }
-.odl-event-ticket .odl-kind { justify-self: start; margin: 0 0 auto; padding: var(--ds-space-2) var(--ds-space-8); border-radius: var(--ds-radius-control-sm); background: var(--ds-color-white); color: var(--ds-color-neutral-light-12);
+.odl-event-ticket .odl-art { position: relative; display: grid; align-content: end; gap: var(--ds-space-stack-xs); min-block-size: calc(var(--ds-size-control-lg) * 5); padding: var(--ds-space-inset-xl);
+  color: var(--ds-color-white); background: var(--ds-color-neutral-light-12); isolation: isolate; }
+.odl-event-ticket .odl-art img { position: absolute; inset: 0; z-index: -2; inline-size: 100%; block-size: 100%; object-fit: cover; }
+/* A dark scrim under the words so they stay readable on any photo. */
+.odl-event-ticket .odl-art::after { content: ""; position: absolute; inset: 30% 0 0; z-index: -1; background: linear-gradient(transparent, var(--ds-color-neutral-alpha-light-11)); }
+.odl-event-ticket .odl-kind { justify-self: start; margin: 0 0 auto; padding: var(--ds-space-2) var(--ds-space-inset-xs); border-radius: var(--ds-radius-control-sm); background: var(--ds-color-white); color: var(--ds-color-neutral-light-12);
   font: var(--ds-text-label-sm); letter-spacing: var(--ds-text-label-sm-tracking); text-transform: uppercase; }
-.odl-event-ticket .odl-art > .odl-kind { position: absolute; inset-block-start: var(--ds-space-inset-lg); inset-inline-start: var(--ds-space-inset-lg); }
-.odl-event-ticket .odl-tour { margin: 0; font: var(--ds-text-label-md); opacity: 0.9; }
+.odl-event-ticket .odl-art > .odl-kind { position: absolute; inset-block-start: var(--ds-space-inset-xl); inset-inline-start: var(--ds-space-inset-xl); }
+.odl-event-ticket .odl-tour { margin: 0; font: var(--ds-text-label-md); }
 .odl-event-ticket h3 { margin: 0; font: var(--ds-text-headline-sm); letter-spacing: var(--ds-text-headline-sm-tracking); }
-.odl-event-ticket .odl-venue { display: flex; align-items: center; gap: var(--ds-space-4); margin: 0; font: var(--ds-text-body-sm); opacity: 0.9; }
-.odl-event-ticket .odl-venue svg { flex: none; position: static; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); z-index: auto; }
-.odl-event-ticket .odl-body { display: grid; gap: var(--ds-space-stack-md); padding: var(--ds-space-inset-lg); }
+.odl-event-ticket .odl-venue { display: flex; align-items: center; gap: var(--ds-space-inline-xs); margin: 0; font: var(--ds-text-label-md); }
+.odl-event-ticket .odl-venue svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); stroke-width: var(--ds-icon-stroke-md); }
+.odl-event-ticket .odl-body { display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xl); }
 .odl-event-ticket dl { margin: 0; }
 .odl-event-ticket .odl-when { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ds-space-inline-sm); }
-.odl-event-ticket .odl-when div, .odl-event-ticket .odl-seat div { display: grid; gap: var(--ds-space-2); min-inline-size: 0; }
-.odl-event-ticket dt { color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); letter-spacing: var(--ds-text-label-sm-tracking); text-transform: uppercase; }
+.odl-event-ticket .odl-when div, .odl-event-ticket .odl-seat div { display: grid; gap: var(--ds-space-stack-xs); min-inline-size: 0; }
+.odl-event-ticket dt { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
 .odl-event-ticket dd { margin: 0; font: var(--ds-text-title-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.odl-event-ticket .odl-seat { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: var(--ds-space-inset-md); border-radius: var(--ds-radius-nested); background: var(--ds-color-surface-sunken); }
+.odl-event-ticket .odl-seat { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: var(--ds-space-inset-md) var(--ds-space-inset-sm); border-radius: var(--ds-radius-nested); background: var(--ds-color-surface-sunken); }
 .odl-event-ticket .odl-seat div { justify-items: center; text-align: center; }
 .odl-event-ticket .odl-seat div + div { border-inline-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
 .odl-event-ticket .odl-seat dd { font: var(--ds-text-title-lg); }
-.odl-event-ticket .odl-qr { display: grid; justify-items: center; gap: var(--ds-space-8); }
-.odl-event-ticket .odl-qr div { padding: var(--ds-space-12); border-radius: var(--ds-radius-nested); background: var(--ds-color-white); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
-.odl-event-ticket .odl-qr svg { display: block; inline-size: calc(var(--ds-size-control-lg) * 3.4); aspect-ratio: 1; }
+.odl-event-ticket .odl-qr { display: grid; justify-items: center; gap: var(--ds-space-stack-sm); }
+.odl-event-ticket .odl-qr div { padding: var(--ds-space-inset-md); border-radius: var(--ds-radius-nested); background: var(--ds-color-white); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-event-ticket .odl-qr svg { display: block; inline-size: calc(var(--ds-size-control-lg) * 3.8); aspect-ratio: 1; }
 .odl-event-ticket .odl-qr path { fill: var(--ds-color-black); }
-.odl-event-ticket .odl-qr p { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; text-align: center; }
+.odl-event-ticket .odl-qr p { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; text-align: center; }
 .odl-event-ticket .odl-actions { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--ds-space-inline-sm); }
-.odl-event-ticket button { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-xs); min-block-size: max(var(--ds-size-control-lg), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+.odl-event-ticket button { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-lg), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
   border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); font: var(--ds-text-label-lg); cursor: pointer; white-space: nowrap;
   transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
 .odl-event-ticket button:hover { background: var(--ds-color-bg-neutral-subtle); }
-.odl-event-ticket button svg { flex: none; inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
+.odl-event-ticket button svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); stroke-width: var(--ds-icon-stroke-md); }
 .odl-event-ticket .odl-wallet { border-color: var(--ds-color-bg-inverse); background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); }
 .odl-event-ticket .odl-wallet:hover { background: var(--ds-color-bg-inverse); opacity: 0.9; }
 .odl-event-ticket .odl-wallet .is-done, .odl-event-ticket .odl-wallet[aria-pressed="true"] .is-add { display: none; }
 .odl-event-ticket .odl-wallet[aria-pressed="true"] .is-done { display: inline; }
 .odl-event-ticket .odl-wallet[aria-pressed="true"] { border-color: var(--ds-color-border-success); background: var(--ds-color-bg-success-subtle); color: var(--ds-color-text-success); opacity: 1; }
 .odl-event-ticket button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-@container (max-width: 21rem) {
-  .odl-event-ticket .odl-body, .odl-event-ticket .odl-art { padding: var(--ds-space-inset-md); }
-  .odl-event-ticket .odl-actions { grid-template-columns: 1fr; }
-}
+@container (max-width: 21rem) { .odl-event-ticket .odl-actions { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .odl-event-ticket, .odl-event-ticket *, .odl-event-ticket *::before { transition: none !important; animation: none !important; } }
 </style>
 <article class="odl-event-ticket" aria-label="Ticket 1 of 2: Odalys Reyne, Lowtide Tour, Wrenfield Hall, Saturday 6 December">
   <div class="odl-card">
     <div class="odl-art">
-      <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <path class="f-beam" d="M200 70 60 240h50zM200 70l-30 170h30zM200 70l40 170h40zM200 70l150 170h50z"/>
-        <circle class="f-ring" cx="200" cy="70" r="40"/><circle class="f-ring" cx="200" cy="70" r="66"/><circle class="f-ring" cx="200" cy="70" r="96"/>
-        <circle class="f-orb" cx="200" cy="70" r="18"/>
-        <path class="f-crowd" d="M0 240v-34c8-10 18-10 24-2 4-14 20-16 26-2 6-12 20-12 26 0 6-14 22-14 28 0 6-10 18-10 24 2 6-14 22-14 28-2 4-10 16-12 24-2 8-14 22-12 26 0 6-12 20-12 26 2 6-14 20-14 26-2 6-10 18-10 24 0 6-12 20-12 26 2 6-10 16-10 22 0 8-12 20-10 26 2 4-6 10-8 20-4v40z"/>
-        <path class="f-crowd" d="M84 206l-8-30 6-2 8 30zM292 204l6-32 6 1-6 32z"/>
-              </svg>
+      <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=768&h=520&fit=crop&auto=format&q=70" alt="Stage lights over a concert crowd" width="384" height="260" loading="lazy" decoding="async">
       <span class="odl-kind">Ticket 1 of 2</span>
       <p class="odl-tour">Lowtide Tour 2026</p>
       <h3>Odalys Reyne</h3>
-      <p class="odl-venue"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M8 14.5S3.5 10.7 3.5 7a4.5 4.5 0 0 1 9 0c0 3.7-4.5 7.5-4.5 7.5z"/><circle cx="8" cy="7" r="1.6"/></svg>Wrenfield Hall, Glasgow</p>
+      <p class="odl-venue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Wrenfield Hall, Glasgow</p>
     </div>
     <div class="odl-body">
       <dl class="odl-when">
@@ -78,12 +67,12 @@
         <div><dt>Seat</dt><dd>18</dd></div>
       </dl>
       <div class="odl-qr">
-        <div><svg viewBox="0 0 25 25" shape-rendering="crispEdges" role="img" aria-label="Entry code for ticket 4417 0926 3381"><path d="M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM10 0h1v1h-1zM11 0h1v1h-1zM12 0h1v1h-1zM15 0h1v1h-1zM18 0h1v1h-1zM19 0h1v1h-1zM20 0h1v1h-1zM21 0h1v1h-1zM22 0h1v1h-1zM23 0h1v1h-1zM24 0h1v1h-1zM0 1h1v1h-1zM6 1h1v1h-1zM9 1h1v1h-1zM10 1h1v1h-1zM15 1h1v1h-1zM16 1h1v1h-1zM18 1h1v1h-1zM24 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM9 2h1v1h-1zM10 2h1v1h-1zM11 2h1v1h-1zM14 2h1v1h-1zM15 2h1v1h-1zM16 2h1v1h-1zM18 2h1v1h-1zM20 2h1v1h-1zM21 2h1v1h-1zM22 2h1v1h-1zM24 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM6 3h1v1h-1zM9 3h1v1h-1zM10 3h1v1h-1zM13 3h1v1h-1zM15 3h1v1h-1zM16 3h1v1h-1zM18 3h1v1h-1zM20 3h1v1h-1zM21 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM6 4h1v1h-1zM10 4h1v1h-1zM11 4h1v1h-1zM14 4h1v1h-1zM18 4h1v1h-1zM20 4h1v1h-1zM21 4h1v1h-1zM22 4h1v1h-1zM24 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM10 5h1v1h-1zM12 5h1v1h-1zM13 5h1v1h-1zM14 5h1v1h-1zM15 5h1v1h-1zM16 5h1v1h-1zM18 5h1v1h-1zM24 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM18 6h1v1h-1zM19 6h1v1h-1zM20 6h1v1h-1zM21 6h1v1h-1zM22 6h1v1h-1zM23 6h1v1h-1zM24 6h1v1h-1zM9 7h1v1h-1zM14 7h1v1h-1zM4 8h1v1h-1zM5 8h1v1h-1zM6 8h1v1h-1zM8 8h1v1h-1zM9 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM17 8h1v1h-1zM21 8h1v1h-1zM23 8h1v1h-1zM24 8h1v1h-1zM5 9h1v1h-1zM6 9h1v1h-1zM7 9h1v1h-1zM8 9h1v1h-1zM9 9h1v1h-1zM10 9h1v1h-1zM13 9h1v1h-1zM16 9h1v1h-1zM17 9h1v1h-1zM18 9h1v1h-1zM20 9h1v1h-1zM23 9h1v1h-1zM0 10h1v1h-1zM1 10h1v1h-1zM2 10h1v1h-1zM3 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM7 10h1v1h-1zM9 10h1v1h-1zM15 10h1v1h-1zM16 10h1v1h-1zM17 10h1v1h-1zM18 10h1v1h-1zM19 10h1v1h-1zM21 10h1v1h-1zM22 10h1v1h-1zM23 10h1v1h-1zM3 11h1v1h-1zM6 11h1v1h-1zM9 11h1v1h-1zM10 11h1v1h-1zM13 11h1v1h-1zM18 11h1v1h-1zM20 11h1v1h-1zM0 12h1v1h-1zM6 12h1v1h-1zM9 12h1v1h-1zM10 12h1v1h-1zM11 12h1v1h-1zM15 12h1v1h-1zM17 12h1v1h-1zM19 12h1v1h-1zM20 12h1v1h-1zM22 12h1v1h-1zM23 12h1v1h-1zM6 13h1v1h-1zM7 13h1v1h-1zM9 13h1v1h-1zM15 13h1v1h-1zM16 13h1v1h-1zM19 13h1v1h-1zM24 13h1v1h-1zM3 14h1v1h-1zM6 14h1v1h-1zM11 14h1v1h-1zM13 14h1v1h-1zM16 14h1v1h-1zM17 14h1v1h-1zM18 14h1v1h-1zM19 14h1v1h-1zM22 14h1v1h-1zM23 14h1v1h-1zM24 14h1v1h-1zM2 15h1v1h-1zM4 15h1v1h-1zM5 15h1v1h-1zM6 15h1v1h-1zM8 15h1v1h-1zM9 15h1v1h-1zM11 15h1v1h-1zM13 15h1v1h-1zM15 15h1v1h-1zM16 15h1v1h-1zM18 15h1v1h-1zM19 15h1v1h-1zM20 15h1v1h-1zM22 15h1v1h-1zM23 15h1v1h-1zM5 16h1v1h-1zM9 16h1v1h-1zM10 16h1v1h-1zM12 16h1v1h-1zM15 16h1v1h-1zM16 16h1v1h-1zM17 16h1v1h-1zM18 16h1v1h-1zM19 16h1v1h-1zM20 16h1v1h-1zM21 16h1v1h-1zM23 16h1v1h-1zM24 16h1v1h-1zM11 17h1v1h-1zM12 17h1v1h-1zM13 17h1v1h-1zM14 17h1v1h-1zM16 17h1v1h-1zM20 17h1v1h-1zM24 17h1v1h-1zM0 18h1v1h-1zM1 18h1v1h-1zM2 18h1v1h-1zM3 18h1v1h-1zM4 18h1v1h-1zM5 18h1v1h-1zM6 18h1v1h-1zM9 18h1v1h-1zM12 18h1v1h-1zM13 18h1v1h-1zM15 18h1v1h-1zM16 18h1v1h-1zM18 18h1v1h-1zM20 18h1v1h-1zM0 19h1v1h-1zM6 19h1v1h-1zM10 19h1v1h-1zM16 19h1v1h-1zM20 19h1v1h-1zM21 19h1v1h-1zM22 19h1v1h-1zM0 20h1v1h-1zM2 20h1v1h-1zM3 20h1v1h-1zM4 20h1v1h-1zM6 20h1v1h-1zM13 20h1v1h-1zM16 20h1v1h-1zM17 20h1v1h-1zM18 20h1v1h-1zM19 20h1v1h-1zM20 20h1v1h-1zM21 20h1v1h-1zM22 20h1v1h-1zM0 21h1v1h-1zM2 21h1v1h-1zM3 21h1v1h-1zM4 21h1v1h-1zM6 21h1v1h-1zM9 21h1v1h-1zM11 21h1v1h-1zM12 21h1v1h-1zM13 21h1v1h-1zM16 21h1v1h-1zM18 21h1v1h-1zM21 21h1v1h-1zM22 21h1v1h-1zM0 22h1v1h-1zM2 22h1v1h-1zM3 22h1v1h-1zM4 22h1v1h-1zM6 22h1v1h-1zM8 22h1v1h-1zM11 22h1v1h-1zM14 22h1v1h-1zM16 22h1v1h-1zM17 22h1v1h-1zM19 22h1v1h-1zM23 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM9 23h1v1h-1zM11 23h1v1h-1zM12 23h1v1h-1zM14 23h1v1h-1zM20 23h1v1h-1zM21 23h1v1h-1zM0 24h1v1h-1zM1 24h1v1h-1zM2 24h1v1h-1zM3 24h1v1h-1zM4 24h1v1h-1zM5 24h1v1h-1zM6 24h1v1h-1zM8 24h1v1h-1zM12 24h1v1h-1zM13 24h1v1h-1zM14 24h1v1h-1zM15 24h1v1h-1zM17 24h1v1h-1zM19 24h1v1h-1zM20 24h1v1h-1zM24 24h1v1h-1z"/></svg></div>
+        <div><svg viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="Entry code for ticket 4417 0926 3381"><path d="M0 0h7v1h-7zM10 0h3v1h-3zM14 0h3v1h-3zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM11 1h4v1h-4zM19 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM12 2h3v1h-3zM18 2h2v1h-2zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h1v1h-1zM12 3h2v1h-2zM15 3h3v1h-3zM19 3h2v1h-2zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM8 4h3v1h-3zM16 4h1v1h-1zM18 4h3v1h-3zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM11 5h2v1h-2zM15 5h1v1h-1zM17 5h1v1h-1zM19 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM11 7h2v1h-2zM15 7h1v1h-1zM17 7h4v1h-4zM0 8h2v1h-2zM3 8h2v1h-2zM6 8h1v1h-1zM8 8h1v1h-1zM10 8h1v1h-1zM12 8h5v1h-5zM19 8h1v1h-1zM23 8h1v1h-1zM25 8h1v1h-1zM27 8h2v1h-2zM0 9h1v1h-1zM3 9h1v1h-1zM5 9h1v1h-1zM7 9h2v1h-2zM10 9h5v1h-5zM17 9h2v1h-2zM21 9h2v1h-2zM24 9h2v1h-2zM0 10h1v1h-1zM3 10h1v1h-1zM5 10h2v1h-2zM9 10h1v1h-1zM11 10h4v1h-4zM16 10h4v1h-4zM22 10h2v1h-2zM26 10h1v1h-1zM2 11h4v1h-4zM7 11h2v1h-2zM10 11h1v1h-1zM12 11h2v1h-2zM15 11h1v1h-1zM17 11h3v1h-3zM22 11h2v1h-2zM1 12h1v1h-1zM3 12h2v1h-2zM6 12h1v1h-1zM8 12h1v1h-1zM12 12h1v1h-1zM14 12h1v1h-1zM17 12h1v1h-1zM19 12h2v1h-2zM22 12h4v1h-4zM0 13h2v1h-2zM5 13h1v1h-1zM13 13h1v1h-1zM15 13h1v1h-1zM18 13h4v1h-4zM23 13h1v1h-1zM25 13h1v1h-1zM0 14h2v1h-2zM3 14h1v1h-1zM6 14h3v1h-3zM10 14h1v1h-1zM12 14h6v1h-6zM19 14h1v1h-1zM21 14h1v1h-1zM26 14h1v1h-1zM28 14h1v1h-1zM0 15h1v1h-1zM4 15h2v1h-2zM8 15h1v1h-1zM10 15h1v1h-1zM12 15h3v1h-3zM22 15h2v1h-2zM26 15h1v1h-1zM28 15h1v1h-1zM2 16h1v1h-1zM5 16h3v1h-3zM9 16h1v1h-1zM12 16h1v1h-1zM14 16h1v1h-1zM16 16h1v1h-1zM18 16h1v1h-1zM22 16h1v1h-1zM25 16h3v1h-3zM0 17h3v1h-3zM8 17h2v1h-2zM12 17h1v1h-1zM14 17h1v1h-1zM22 17h3v1h-3zM1 18h2v1h-2zM4 18h8v1h-8zM16 18h2v1h-2zM21 18h1v1h-1zM25 18h3v1h-3zM0 19h1v1h-1zM3 19h3v1h-3zM8 19h6v1h-6zM16 19h1v1h-1zM19 19h2v1h-2zM25 19h2v1h-2zM1 20h1v1h-1zM3 20h1v1h-1zM5 20h3v1h-3zM11 20h1v1h-1zM14 20h3v1h-3zM18 20h8v1h-8zM8 21h2v1h-2zM11 21h1v1h-1zM13 21h1v1h-1zM19 21h2v1h-2zM24 21h5v1h-5zM0 22h7v1h-7zM8 22h1v1h-1zM11 22h1v1h-1zM13 22h1v1h-1zM18 22h1v1h-1zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h2v1h-2zM28 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM20 23h1v1h-1zM24 23h1v1h-1zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM11 24h1v1h-1zM13 24h5v1h-5zM20 24h6v1h-6zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h1v1h-1zM13 25h7v1h-7zM22 25h2v1h-2zM25 25h1v1h-1zM28 25h1v1h-1zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM11 26h3v1h-3zM15 26h1v1h-1zM17 26h1v1h-1zM19 26h1v1h-1zM21 26h2v1h-2zM24 26h2v1h-2zM0 27h1v1h-1zM6 27h1v1h-1zM9 27h1v1h-1zM11 27h5v1h-5zM17 27h1v1h-1zM20 27h1v1h-1zM22 27h1v1h-1zM25 27h4v1h-4zM0 28h7v1h-7zM8 28h1v1h-1zM11 28h3v1h-3zM17 28h1v1h-1zM19 28h1v1h-1zM22 28h1v1h-1zM25 28h1v1h-1zM27 28h2v1h-2z"/></svg></div>
         <p>4417 0926 3381 · Show at the door</p>
       </div>
       <div class="odl-actions">
-        <button type="button" class="odl-wallet" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><rect x="2.75" y="4.75" width="14.5" height="11" rx="2.5"/><path d="M2.75 8.5h14.5M12.5 12h2"/></svg><span class="is-add">Add to wallet</span><span class="is-done">In your wallet</span></button>
-        <button type="button" class="odl-send"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3 9 11M17 3l-5 14-3-6-6-3z"/></svg>Transfer</button>
+        <button type="button" class="odl-wallet" aria-pressed="false"><svg class="is-add" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg><svg class="is-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="is-add">Add to wallet</span><span class="is-done">In your wallet</span></button>
+        <button type="button" class="odl-send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>Transfer</button>
       </div>
     </div>
   </div>

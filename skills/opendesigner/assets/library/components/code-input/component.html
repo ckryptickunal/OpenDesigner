@@ -1,28 +1,30 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
 <style>
 .odl-code-input { box-sizing: border-box; container-type: inline-size; inline-size: 100%; max-inline-size: 420px; display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xl);
   background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container);
   box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); text-wrap: pretty; }
 .odl-code-input *, .odl-code-input *::before { box-sizing: border-box; }
-.odl-code-input .odl-mark { display: grid; place-items: center; inline-size: var(--ds-size-control-lg); block-size: var(--ds-size-control-lg); border-radius: var(--ds-radius-control);
-  background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-icon-accent); }
+.odl-code-input svg { stroke-width: var(--ds-icon-stroke-md); }
+.odl-code-input .odl-mark { display: grid; place-items: center; inline-size: var(--ds-size-control-lg); block-size: var(--ds-size-control-lg); border-radius: min(var(--ds-radius-control), var(--ds-radius-container), var(--ds-radius-12));
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-icon-default); }
 .odl-code-input .odl-mark svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
 .odl-code-input h2 { margin: 0; font: var(--ds-text-title-lg); }
-.odl-code-input .odl-head { display: grid; gap: var(--ds-space-stack-xs); }
+.odl-code-input .odl-head { display: grid; gap: var(--ds-space-stack-sm); }
 .odl-code-input .odl-head p { margin: 0; color: var(--ds-color-text-secondary); }
 .odl-code-input .odl-head strong { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); white-space: nowrap; }
-.odl-code-input fieldset { display: grid; gap: var(--ds-space-stack-sm); min-inline-size: 0; margin: 0; padding: 0; border: 0; }
+.odl-code-input fieldset { display: grid; gap: var(--ds-space-stack-md); min-inline-size: 0; margin: 0; padding: 0; border: 0; }
 .odl-code-input legend { padding: 0; margin-block-end: var(--ds-space-stack-sm); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); }
-.odl-code-input .odl-boxes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto repeat(3, minmax(0, 1fr)); align-items: center; gap: var(--ds-space-inline-xs); }
+.odl-code-input .odl-boxes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto repeat(3, minmax(0, 1fr)); align-items: center; gap: var(--ds-space-inline-sm); }
 .odl-code-input .odl-boxes input { inline-size: 100%; min-inline-size: 0; block-size: calc(var(--ds-size-control-lg) * 1.25); padding: 0; text-align: center;
-  border: var(--ds-border-width-default) solid var(--ds-color-border-input); border-radius: min(var(--ds-radius-control), var(--ds-radius-container)); background: var(--ds-color-bg-field); color: var(--ds-color-text-primary);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-input); border-radius: min(var(--ds-radius-control), var(--ds-radius-container), var(--ds-radius-12)); background: var(--ds-color-bg-field); color: var(--ds-color-text-primary);
   font: var(--ds-text-title-lg); font-family: var(--ds-font-family-mono); font-variant-numeric: tabular-nums; caret-color: var(--ds-color-border-focus);
   transition: border-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), box-shadow var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
 .odl-code-input .odl-boxes input:hover { border-color: var(--ds-color-border-strong); }
 .odl-code-input .odl-boxes input:focus-visible { outline: none; border-color: var(--ds-color-border-focus); box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-color-border-focus); }
-.odl-code-input .odl-boxes .odl-dash { inline-size: var(--ds-space-8); block-size: var(--ds-border-width-emphasis); border-radius: var(--ds-radius-full); background: var(--ds-color-border-default); }
-.odl-code-input fieldset.is-invalid .odl-boxes input { border-color: var(--ds-color-border-danger); background: var(--ds-color-bg-danger-subtle); }
+.odl-code-input .odl-boxes .odl-dash { inline-size: var(--ds-space-12); block-size: var(--ds-border-width-emphasis); border-radius: var(--ds-radius-full); background: var(--ds-color-border-default); }
+.odl-code-input fieldset.is-invalid .odl-boxes input { border-color: var(--ds-color-border-danger); }
 .odl-code-input fieldset.is-invalid .odl-boxes input:focus-visible { box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-color-border-danger); }
-.odl-code-input .odl-msg { display: flex; gap: var(--ds-space-inline-xs); margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-code-input .odl-msg { display: flex; gap: var(--ds-space-inline-sm); margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
 .odl-code-input .odl-msg svg { display: none; flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); margin-block-start: var(--ds-space-2); }
 .odl-code-input fieldset.is-invalid .odl-msg { color: var(--ds-color-text-danger); }
 .odl-code-input fieldset.is-invalid .odl-msg svg { display: block; }
@@ -32,16 +34,20 @@
 .odl-code-input .odl-verify:hover { background: var(--ds-color-bg-action-primary-hover); }
 .odl-code-input .odl-verify:disabled { background: var(--ds-color-bg-disabled); color: var(--ds-color-text-disabled); cursor: not-allowed; }
 .odl-code-input .odl-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-inline-sm); padding-block-start: var(--ds-space-stack-md);
-  border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
+  border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
 .odl-code-input .odl-link { display: inline-flex; align-items: center; min-block-size: var(--ds-size-target-min); padding: 0; border: 0; border-radius: var(--ds-radius-detail); background: transparent;
   color: var(--ds-color-text-link); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); cursor: pointer; }
 .odl-code-input .odl-link:hover:not(:disabled) { text-decoration: underline; text-underline-offset: var(--ds-space-2); }
 .odl-code-input .odl-link:disabled { color: var(--ds-color-text-secondary); font-weight: var(--ds-font-weight-body); cursor: default; }
 .odl-code-input .odl-verify:focus-visible, .odl-code-input .odl-link:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+@media (max-width: 30rem) {
+  .odl-code-input { padding: var(--ds-space-inset-lg); }
+  .odl-code-input .odl-mark { border-radius: min(var(--ds-radius-control), max(var(--ds-radius-detail), calc(var(--ds-radius-container) - var(--ds-space-inset-lg)))); }
+}
 @media (prefers-reduced-motion: reduce) { .odl-code-input, .odl-code-input *, .odl-code-input *::before { transition: none !important; animation: none !important; } }
 </style>
 <section class="odl-code-input" aria-labelledby="odl-ci-title">
-  <span class="odl-mark" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="4.5" width="15" height="11" rx="2"/><path d="m3 5.5 7 5 7-5"/></svg></span>
+  <span class="odl-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
   <div class="odl-head">
     <h2 id="odl-ci-title">Check your email</h2>
     <p>We sent a 6-digit code to <strong>c•••••@abernathylow.example</strong>. It works for 10 minutes.</p>
@@ -57,7 +63,7 @@
       <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 5 of 6" aria-invalid="true" aria-describedby="odl-ci-msg" value="0">
       <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 6 of 6" aria-invalid="true" aria-describedby="odl-ci-msg" value="3">
     </div>
-    <p class="odl-msg" id="odl-ci-msg" aria-live="polite"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6.25"/><path d="M8 4.75v4M8 10.75v.5"/></svg><span>That code does not match. Check the newest email from us; 2 tries left.</span></p>
+    <p class="odl-msg" id="odl-ci-msg" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span>That code does not match. Check the newest email from us; 2 tries left.</span></p>
   </fieldset>
   <button type="button" class="odl-verify">Verify</button>
   <div class="odl-foot">

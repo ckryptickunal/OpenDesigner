@@ -1,86 +1,86 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
 <style>
-.odl-review-summary { box-sizing: border-box; inline-size: 100%; max-inline-size: 56rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-review-summary { box-sizing: border-box; inline-size: 100%; max-inline-size: 60rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
 .odl-review-summary *, .odl-review-summary *::before, .odl-review-summary *::after { box-sizing: border-box; }
-.odl-review-summary .odl-wrap { --odl-tap: max(var(--ds-size-target-min), var(--ds-size-control-md)); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-stack-lg); }
-@container (max-width: 30rem) { .odl-review-summary .odl-wrap { --odl-tap: var(--ds-size-target-touch); } }
-@container (min-width: 46rem) { .odl-review-summary .odl-wrap { grid-template-columns: minmax(0, 18rem) minmax(0, 1fr); gap: var(--ds-space-section-sm); align-items: start; } }
+.odl-review-summary svg { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: var(--ds-icon-stroke-md); }
+.odl-review-summary .odl-wrap { --odl-tap: max(var(--ds-size-target-min), var(--ds-size-control-md)); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-stack-xl); padding: var(--ds-space-inset-xl);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-review-summary .odl-wrap { --odl-tap: var(--ds-size-target-touch); padding: var(--ds-space-inset-lg); gap: var(--ds-space-stack-lg); } }
+@container (min-width: 46rem) { .odl-review-summary .odl-wrap { grid-template-columns: minmax(0, 17rem) minmax(0, 1fr); gap: var(--ds-space-section-sm); align-items: start; } }
 .odl-review-summary h3 { margin: 0 0 var(--ds-space-stack-md); font: var(--ds-text-title-md); }
+/* Stars: neutral, like the text. */
+.odl-review-summary .odl-stars { display: inline-flex; gap: var(--ds-space-2); color: var(--ds-color-text-primary); }
+.odl-review-summary .odl-stars svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: currentColor; stroke-width: var(--ds-icon-stroke-sm); }
+.odl-review-summary .odl-stars svg.is-off { fill: none; color: var(--ds-color-border-strong); }
+.odl-review-summary .odl-part { position: relative; display: inline-flex; }
+.odl-review-summary .odl-part svg:last-child { position: absolute; inset: 0; clip-path: inset(0 40% 0 0); }
 /* Summary */
-.odl-review-summary .odl-score { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--ds-space-4) var(--ds-space-inline-md); margin-block-end: var(--ds-space-stack-md); }
+.odl-review-summary .odl-score { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--ds-space-stack-xs) var(--ds-space-inline-md); margin-block-end: var(--ds-space-stack-lg); }
 .odl-review-summary .odl-avg { grid-row: span 2; font: var(--ds-text-numeric-lg); font-variant-numeric: tabular-nums; line-height: 1; }
-.odl-review-summary .odl-stars { display: inline-flex; color: var(--ds-color-warning-light-9); }
-.odl-review-summary .odl-stars svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
-.odl-review-summary .odl-stars.is-sm svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
-.odl-review-summary .odl-stars .is-off { color: var(--ds-color-border-default); }
-.odl-review-summary .odl-count { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
-.odl-review-summary .odl-dist { display: grid; gap: var(--ds-space-2); margin: 0; padding: 0; list-style: none; }
-.odl-review-summary .odl-dist li { display: grid; grid-template-columns: var(--ds-space-24) minmax(0, 1fr) 2.75rem; align-items: center; gap: var(--ds-space-inline-sm); min-block-size: var(--ds-space-24);
+.odl-review-summary .odl-count { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-review-summary .odl-dist { display: grid; gap: var(--ds-space-stack-xs); margin: 0; padding: 0; list-style: none; }
+.odl-review-summary .odl-dist li { display: grid; grid-template-columns: var(--ds-space-16) minmax(0, 1fr) 2.75rem; align-items: center; gap: var(--ds-space-inline-md); min-block-size: var(--ds-space-24);
   font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; color: var(--ds-color-text-secondary); }
-.odl-review-summary .odl-dist li > span:first-child { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
-.odl-review-summary .odl-dist li > span:first-child svg { inline-size: var(--ds-space-12); block-size: var(--ds-space-12); color: var(--ds-color-text-tertiary); }
-.odl-review-summary .odl-bar { block-size: var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); overflow: hidden; }
-.odl-review-summary .odl-bar i { display: block; block-size: 100%; border-radius: var(--ds-radius-full); background: var(--ds-color-warning-light-9); }
+.odl-review-summary .odl-bar { block-size: var(--ds-space-4); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); overflow: hidden; }
+.odl-review-summary .odl-bar i { display: block; block-size: 100%; border-radius: var(--ds-radius-full); background: var(--ds-color-text-primary); }
 .odl-review-summary .odl-dist li > span:last-child { text-align: end; }
-.odl-review-summary .odl-fit { display: grid; gap: var(--ds-space-stack-xs); margin-block-start: var(--ds-space-stack-lg); padding: var(--ds-space-inset-md); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-sunken); font: var(--ds-text-body-sm); }
-.odl-review-summary .odl-fit p { margin: 0; display: flex; justify-content: space-between; gap: var(--ds-space-inline-sm); }
-.odl-review-summary .odl-fit b { font-weight: var(--ds-font-weight-label); }
-.odl-review-summary .odl-scale { position: relative; block-size: var(--ds-space-6); border-radius: var(--ds-radius-full); background: var(--ds-color-border-subtle); }
+.odl-review-summary .odl-fit { display: grid; gap: var(--ds-space-stack-sm); margin-block-start: var(--ds-space-stack-lg); padding-block-start: var(--ds-space-stack-lg); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); font: var(--ds-text-label-md); }
+.odl-review-summary .odl-fit p { margin: 0; display: flex; justify-content: space-between; gap: var(--ds-space-inline-sm); color: var(--ds-color-text-secondary); }
+.odl-review-summary .odl-fit b { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
+.odl-review-summary .odl-scale { position: relative; block-size: var(--ds-space-4); margin-block: var(--ds-space-stack-xs); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); }
 .odl-review-summary .odl-scale i { position: absolute; inset-block-start: 50%; inset-inline-start: 46%; inline-size: var(--ds-space-12); block-size: var(--ds-space-12); translate: -50% -50%; border-radius: var(--ds-radius-full);
-  background: var(--ds-color-text-primary); box-shadow: 0 0 0 var(--ds-border-width-emphasis) var(--ds-color-surface-sunken); }
+  background: var(--ds-color-text-primary); box-shadow: 0 0 0 var(--ds-border-width-emphasis) var(--ds-color-surface-raised); }
 .odl-review-summary .odl-ends { display: flex; justify-content: space-between; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); }
-/* Filters */
-.odl-review-summary .odl-list { display: grid; gap: var(--ds-space-stack-md); min-inline-size: 0; }
-/* Filter chips: one row that scrolls sideways inside its box, never a lone chip on a second line. */
-.odl-review-summary .odl-chips { display: flex; flex-wrap: nowrap; gap: var(--ds-space-inline-xs); min-inline-size: 0; margin: calc(-1 * var(--ds-space-4)); padding: var(--ds-space-4); overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain; }
+/* Filters: one row that scrolls sideways inside its box. */
+.odl-review-summary .odl-list { display: grid; gap: var(--ds-space-stack-lg); min-inline-size: 0; }
+.odl-review-summary .odl-chips { display: flex; flex-wrap: nowrap; gap: var(--ds-space-inline-sm); min-inline-size: 0; margin: calc(-1 * var(--ds-space-4)); padding: var(--ds-space-4); overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain; }
 .odl-review-summary .odl-chips::-webkit-scrollbar { display: none; }
-.odl-review-summary .odl-chips .odl-chip { white-space: nowrap; }
-.odl-review-summary .odl-chip { flex: none; max-inline-size: 100%; display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); min-block-size: var(--odl-tap); padding: 0 var(--ds-space-inset-sm);
+/* Phone: the row scrolls and fades at its end edge so a cut chip reads as "more". Wider: the chips wrap, nothing is cut. */
+@container (max-width: 30rem) { .odl-review-summary .odl-chips { -webkit-mask-image: linear-gradient(to right, currentColor calc(100% - var(--ds-space-32)), transparent); mask-image: linear-gradient(to right, currentColor calc(100% - var(--ds-space-32)), transparent); padding-inline-end: var(--ds-space-32); } }
+@container (min-width: 30.01rem) { .odl-review-summary .odl-chips { flex-wrap: wrap; overflow: visible; } }
+.odl-review-summary .odl-chip { flex: none; display: inline-flex; align-items: center; gap: var(--ds-space-inline-sm); min-block-size: var(--odl-tap); padding: 0 var(--ds-space-inset-md);
   border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
   font: var(--ds-text-label-md); white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), border-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
 .odl-review-summary .odl-chip:hover { border-color: var(--ds-color-border-strong); }
 .odl-review-summary .odl-chip svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
-.odl-review-summary .odl-chip small { margin-inline-start: var(--ds-space-2); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; }
+.odl-review-summary .odl-chip small { color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; }
 .odl-review-summary .odl-chip[aria-pressed="true"] { border-color: var(--ds-color-text-primary); background: var(--ds-color-text-primary); color: var(--ds-color-surface-raised); }
 .odl-review-summary .odl-chip[aria-pressed="true"] small { color: inherit; opacity: var(--ds-opacity-disabled-content); }
-/* Reviews */
-.odl-review-summary article { display: grid; gap: var(--ds-space-stack-sm); padding: var(--ds-space-inset-lg); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container);
-  background: var(--ds-color-surface-raised); }
+/* Reviews: a divided list, not boxes in a box. */
+.odl-review-summary article { display: grid; gap: var(--ds-space-stack-sm); padding-block: var(--ds-space-stack-lg); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
 .odl-review-summary article[hidden] { display: none; }
-.odl-review-summary .odl-who { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-inline-sm); }
-.odl-review-summary .odl-av { display: grid; place-items: center; inline-size: var(--ds-size-control-md); block-size: var(--ds-size-control-md); border-radius: var(--ds-radius-person); background: var(--ds-color-bg-accent-subtle);
-  color: var(--ds-color-text-accent); font: var(--ds-text-label-md); }
-.odl-review-summary .odl-av.is-b { background: var(--ds-color-bg-info-subtle); color: var(--ds-color-text-info); }
-.odl-review-summary .odl-name { margin: 0; font: var(--ds-text-label-lg); }
-.odl-review-summary .odl-ver { display: inline-flex; align-items: center; gap: var(--ds-space-2); margin: 0; color: var(--ds-color-text-success); font: var(--ds-text-label-sm); }
-.odl-review-summary .odl-ver svg { inline-size: var(--ds-space-12); block-size: var(--ds-space-12); }
+.odl-review-summary .odl-who { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-inline-md); margin-block-end: var(--ds-space-stack-xs); }
+.odl-review-summary .odl-av { display: block; inline-size: var(--ds-size-control-lg); block-size: var(--ds-size-control-lg); object-fit: cover; border-radius: var(--ds-radius-person); background: var(--ds-color-surface-sunken); }
+.odl-review-summary .odl-name { margin: 0 0 var(--ds-space-stack-xs); font: var(--ds-text-label-lg); }
+.odl-review-summary .odl-ver { display: inline-flex; align-items: center; gap: var(--ds-space-inline-sm); margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-review-summary .odl-ver svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); color: var(--ds-color-text-success); }
 .odl-review-summary .odl-ver.is-no { color: var(--ds-color-text-tertiary); }
-.odl-review-summary time { color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); white-space: nowrap; align-self: start; }
-.odl-review-summary h4 { margin: var(--ds-space-4) 0 0; font: var(--ds-text-title-sm); }
-.odl-review-summary .odl-rate { display: flex; align-items: center; gap: var(--ds-space-inline-sm); }
-.odl-review-summary .odl-text { margin: 0; color: var(--ds-color-text-secondary); }
-.odl-review-summary .odl-photos { display: flex; gap: var(--ds-space-inline-xs); }
-.odl-review-summary .odl-photos button { display: block; flex: 0 1 calc(var(--ds-size-control-lg) * 1.6); min-inline-size: 0; aspect-ratio: 1; padding: 0; border: 0; border-radius: var(--ds-radius-nested); overflow: hidden; cursor: pointer; }
-.odl-review-summary .odl-photos svg { display: block; inline-size: 100%; block-size: 100%; }
-.odl-review-summary .odl-p1 { fill: var(--ds-color-neutral-light-4); } .odl-review-summary .odl-p2 { fill: var(--ds-color-neutral-light-11); } .odl-review-summary .odl-p3 { fill: var(--ds-color-warning-light-3); }
-.odl-review-summary .odl-p4 { fill: var(--ds-color-warning-light-7); } .odl-review-summary .odl-p5 { fill: var(--ds-color-success-light-3); } .odl-review-summary .odl-p6 { fill: var(--ds-color-success-light-8); }
-.odl-review-summary .odl-meta { display: flex; flex-wrap: wrap; gap: var(--ds-space-4) var(--ds-space-inline-md); margin: 0; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); }
+.odl-review-summary time { color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); white-space: nowrap; align-self: start; }
+.odl-review-summary h4 { margin: var(--ds-space-stack-xs) 0 0; font: var(--ds-text-title-sm); }
+.odl-review-summary .odl-text { margin: 0; color: var(--ds-color-text-secondary); max-inline-size: 60ch; }
+.odl-review-summary .odl-photos { display: flex; gap: var(--ds-space-inline-sm); margin-block: var(--ds-space-stack-xs); }
+.odl-review-summary .odl-photos button { display: block; flex: 0 1 calc(var(--ds-size-control-lg) * 1.75); min-inline-size: 0; aspect-ratio: 1; padding: 0; border: 0; border-radius: var(--ds-radius-nested); overflow: hidden; background: var(--ds-color-surface-sunken); cursor: pointer; }
+.odl-review-summary .odl-photos img { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; transition: opacity var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-review-summary .odl-photos button:hover img { opacity: 0.85; }
+.odl-review-summary .odl-meta { display: flex; flex-wrap: wrap; gap: var(--ds-space-stack-xs) var(--ds-space-inline-md); margin: 0; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); }
 .odl-review-summary .odl-meta b { color: var(--ds-color-text-secondary); font-weight: var(--ds-font-weight-label); }
-.odl-review-summary .odl-help { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-inline-xs); padding-block-start: var(--ds-space-stack-sm); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator);
-  color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
-.odl-review-summary .odl-help span { margin-inline-end: auto; }
-.odl-review-summary .odl-vote { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); min-block-size: var(--odl-tap); padding: 0 var(--ds-space-inset-sm); border: var(--ds-border-width-default) solid var(--ds-color-border-default);
+.odl-review-summary .odl-help { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-inline-sm); margin-block-start: var(--ds-space-stack-xs); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-review-summary .odl-help > span:first-child { margin-inline-end: var(--ds-space-inline-sm); }
+.odl-review-summary .odl-votes { display: inline-flex; gap: var(--ds-space-inline-sm); }
+.odl-review-summary .odl-vote { display: inline-flex; align-items: center; gap: var(--ds-space-inline-sm); min-block-size: var(--odl-tap); padding: 0 var(--ds-space-inset-md); border: var(--ds-border-width-default) solid var(--ds-color-border-default);
   border-radius: var(--ds-radius-control); background: transparent; color: var(--ds-color-text-primary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; cursor: pointer; }
 .odl-review-summary .odl-vote:hover { background: var(--ds-color-bg-neutral-subtle); }
 .odl-review-summary .odl-vote svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
 .odl-review-summary .odl-vote[aria-pressed="true"] { border-color: var(--ds-color-border-accent); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); }
-.odl-review-summary .odl-none { margin: 0; padding: var(--ds-space-inset-lg); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-sunken); color: var(--ds-color-text-secondary); text-align: center; }
+.odl-review-summary .odl-none { margin: 0; padding: var(--ds-space-inset-xl); border-radius: var(--ds-radius-nested); background: var(--ds-color-surface-sunken); color: var(--ds-color-text-secondary); text-align: center; }
 .odl-review-summary .odl-none[hidden] { display: none; }
-.odl-review-summary .odl-more { justify-self: start; min-block-size: var(--odl-tap); padding: 0 var(--ds-space-inset-md); border: 0; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-neutral-subtle);
+.odl-review-summary .odl-more { justify-self: start; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-lg); border: var(--ds-border-width-default) solid var(--ds-color-border-strong); border-radius: var(--ds-radius-control); background: transparent;
   color: var(--ds-color-text-primary); font: var(--ds-text-label-lg); cursor: pointer; }
-.odl-review-summary .odl-more:hover { background: var(--ds-color-bg-neutral-subtle-hover); }
+.odl-review-summary .odl-more:hover { background: var(--ds-color-bg-neutral-subtle); }
 .odl-review-summary button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 .odl-review-summary .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-@container (max-width: 30rem) { .odl-review-summary article { padding: var(--ds-space-inset-md); } }
+@container (max-width: 30rem) { .odl-review-summary .odl-more { justify-self: stretch; } }
+@container (max-width: 46rem) { .odl-review-summary .odl-list { padding-block-start: var(--ds-space-stack-lg); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); } }
 @media (prefers-reduced-motion: reduce) { .odl-review-summary, .odl-review-summary *, .odl-review-summary *::before { transition: none !important; animation: none !important; } }
 </style>
 <section class="odl-review-summary" aria-labelledby="odl-rs-title">
@@ -89,15 +89,15 @@
       <h3 id="odl-rs-title">Reviews</h3>
       <div class="odl-score">
         <span class="odl-avg" aria-hidden="true">4.6</span>
-        <span class="odl-stars" role="img" aria-label="Rated 4.6 out of 5"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path class="is-off" fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/><path fill="currentColor" d="M8 1.5v9.8l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg></span>
+        <span class="odl-stars" role="img" aria-label="Rated 4.6 out of 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><span class="odl-part"><svg class="is-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></span></span>
         <p class="odl-count">1,284 ratings · 312 reviews</p>
       </div>
       <ul class="odl-dist" aria-label="Ratings by stars">
-        <li><span aria-hidden="true">5<svg viewBox="0 0 16 16"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg></span><span class="odl-bar" aria-hidden="true"><i style="inline-size: 74%"></i></span><span><span class="odl-sr">5 stars: </span>74%</span></li>
-        <li><span aria-hidden="true">4<svg viewBox="0 0 16 16"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg></span><span class="odl-bar" aria-hidden="true"><i style="inline-size: 17%"></i></span><span><span class="odl-sr">4 stars: </span>17%</span></li>
-        <li><span aria-hidden="true">3<svg viewBox="0 0 16 16"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg></span><span class="odl-bar" aria-hidden="true"><i style="inline-size: 5%"></i></span><span><span class="odl-sr">3 stars: </span>5%</span></li>
-        <li><span aria-hidden="true">2<svg viewBox="0 0 16 16"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg></span><span class="odl-bar" aria-hidden="true"><i style="inline-size: 2%"></i></span><span><span class="odl-sr">2 stars: </span>2%</span></li>
-        <li><span aria-hidden="true">1<svg viewBox="0 0 16 16"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg></span><span class="odl-bar" aria-hidden="true"><i style="inline-size: 2%"></i></span><span><span class="odl-sr">1 star: </span>2%</span></li>
+        <li><span aria-hidden="true">5</span><span class="odl-bar" aria-hidden="true"><i style="inline-size: 74%"></i></span><span><span class="odl-sr">5 stars: </span>74%</span></li>
+        <li><span aria-hidden="true">4</span><span class="odl-bar" aria-hidden="true"><i style="inline-size: 17%"></i></span><span><span class="odl-sr">4 stars: </span>17%</span></li>
+        <li><span aria-hidden="true">3</span><span class="odl-bar" aria-hidden="true"><i style="inline-size: 5%"></i></span><span><span class="odl-sr">3 stars: </span>5%</span></li>
+        <li><span aria-hidden="true">2</span><span class="odl-bar" aria-hidden="true"><i style="inline-size: 2%"></i></span><span><span class="odl-sr">2 stars: </span>2%</span></li>
+        <li><span aria-hidden="true">1</span><span class="odl-bar" aria-hidden="true"><i style="inline-size: 2%"></i></span><span><span class="odl-sr">1 star: </span>2%</span></li>
       </ul>
       <div class="odl-fit">
         <p><b>How it fits</b><span>True to size</span></p>
@@ -107,36 +107,36 @@
     </div>
     <div class="odl-list">
       <div class="odl-chips" role="group" aria-label="Filter reviews">
-        <button type="button" class="odl-chip" data-f="photos" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3.5" width="12" height="9.5" rx="2"/><circle cx="8" cy="8.25" r="2.25"/></svg>With photos <small>86</small></button>
-        <button type="button" class="odl-chip" data-f="verified" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>Verified <small>1,102</small></button>
+        <button type="button" class="odl-chip" data-f="photos" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>With photos <small>86</small></button>
+        <button type="button" class="odl-chip" data-f="verified" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>Verified <small>1,102</small></button>
         <button type="button" class="odl-chip" data-f="five" aria-pressed="false">5 stars <small>950</small></button>
         <button type="button" class="odl-chip" data-f="low" aria-pressed="false">1 to 3 stars <small>116</small></button>
       </div>
       <article data-photos="1" data-verified="1" data-rating="5">
-        <div class="odl-who"><span class="odl-av" aria-hidden="true">SA</span><div><p class="odl-name">Solveig A.</p><p class="odl-ver"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.5l2.25 2.25L9.5 3.5"/></svg>Verified buyer</p></div><time datetime="2026-10-12">12 Oct</time></div>
-        <div class="odl-rate"><span class="odl-stars is-sm" role="img" aria-label="5 out of 5"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg></span></div>
+        <div class="odl-who"><img class="odl-av" src="https://images.unsplash.com/photo-1699899657680-421c2c2d5064?w=96&h=96&fit=crop&auto=format&q=70" alt="" width="96" height="96" loading="lazy" decoding="async"><div><p class="odl-name">Solveig A.</p><p class="odl-ver"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>Verified buyer</p></div><time datetime="2026-10-12">12 Oct</time></div>
+        <span class="odl-stars" role="img" aria-label="5 out of 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></span>
         <h4>Softer after every wash</h4>
-        <p class="odl-text">Heavier than I expected for linen, which I like. It works as a light jacket in autumn and the pockets hold a phone without sagging.</p>
+        <p class="odl-text">Heavier cotton than I expected, which I like. It keeps its shape after washing and the collar hasn't stretched.</p>
         <div class="odl-photos">
-          <button type="button" aria-label="Photo 1 from Solveig A."><svg viewBox="0 0 60 60" aria-hidden="true"><rect class="odl-p1" width="60" height="60"/><path class="odl-p2" d="M20 14l10 3 10-3 10 5 5 16-6 2-4-8v31H15V29l-4 8-6-2 5-16z"/></svg></button>
-          <button type="button" aria-label="Photo 2 from Solveig A."><svg viewBox="0 0 60 60" aria-hidden="true"><rect class="odl-p5" width="60" height="60"/><circle class="odl-p6" cx="44" cy="16" r="9"/><path class="odl-p2" d="M8 60l14-24 10 12 8-8 20 20z"/></svg></button>
-          <button type="button" aria-label="Photo 3 from Solveig A."><svg viewBox="0 0 60 60" aria-hidden="true"><rect class="odl-p3" width="60" height="60"/><rect class="odl-p4" x="14" y="14" width="32" height="32" rx="4"/><circle class="odl-p1" cx="30" cy="22" r="2.5"/><circle class="odl-p1" cx="30" cy="38" r="2.5"/></svg></button>
+          <button type="button" aria-label="Photo 1 from Solveig A."><img src="https://images.unsplash.com/photo-1651761179569-4ba2aa054997?w=192&h=192&fit=crop&auto=format&q=70" alt="" width="192" height="192" loading="lazy" decoding="async"></button>
+          <button type="button" aria-label="Photo 2 from Solveig A."><img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=192&h=192&fit=crop&crop=focalpoint&fp-x=0.5&fp-y=0.62&fp-z=2.2&auto=format&q=70" alt="" width="192" height="192" loading="lazy" decoding="async"></button>
+          <button type="button" aria-label="Photo 3 from Solveig A."><img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=192&h=192&fit=crop&crop=focalpoint&fp-x=0.5&fp-y=0.5&fp-z=3.2&auto=format&q=70" alt="" width="192" height="192" loading="lazy" decoding="async"></button>
         </div>
         <p class="odl-meta"><span>Size bought <b>M</b></span><span>Height <b>178 cm</b></span><span>Usual size <b>M</b></span></p>
-        <div class="odl-help"><span>Was this helpful?</span>
-          <button type="button" class="odl-vote" aria-pressed="false" data-n="24"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M5 7l2.5-5c1.2 0 2 .8 2 2v2h3.2a1 1 0 0 1 1 1.2l-1 5a1 1 0 0 1-1 .8H5zM2 7h3v6.5H2z"/></svg>Yes <span class="odl-n">24</span></button>
-          <button type="button" class="odl-vote" aria-pressed="false" data-n="1">No <span class="odl-n">1</span></button>
+        <div class="odl-help"><span>Was this helpful?</span><span class="odl-votes">
+          <button type="button" class="odl-vote" aria-pressed="false" data-n="24"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>Yes <span class="odl-n">24</span></button>
+          <button type="button" class="odl-vote" aria-pressed="false" data-n="1">No <span class="odl-n">1</span></button></span>
         </div>
       </article>
       <article data-photos="0" data-verified="0" data-rating="3">
-        <div class="odl-who"><span class="odl-av is-b" aria-hidden="true">TR</span><div><p class="odl-name">Tevita R.</p><p class="odl-ver is-no">Not a verified purchase</p></div><time datetime="2026-09-28">28 Sep</time></div>
-        <div class="odl-rate"><span class="odl-stars is-sm" role="img" aria-label="3 out of 5"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path class="is-off" fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path class="is-off" fill="currentColor" d="M8 1.5l1.9 4.1 4.4.5-3.3 3 .9 4.4L8 11.3l-3.9 2.2.9-4.4-3.3-3 4.4-.5z"/></svg></span></div>
-        <h4>Good shirt, sleeves run long</h4>
-        <p class="odl-text">The fabric is lovely, but I had to roll the sleeves twice. Size down if you have shorter arms.</p>
+        <div class="odl-who"><img class="odl-av" src="https://images.unsplash.com/photo-1614247521228-d4184c975eff?w=96&h=96&fit=crop&auto=format&q=70" alt="" width="96" height="96" loading="lazy" decoding="async"><div><p class="odl-name">Tevita R.</p><p class="odl-ver is-no">Not a verified purchase</p></div><time datetime="2026-09-28">28 Sep</time></div>
+        <span class="odl-stars" role="img" aria-label="3 out of 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg class="is-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg class="is-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></span>
+        <h4>Good tee, runs a little long</h4>
+        <p class="odl-text">The fabric is lovely, but it sits longer than I like. Size down if you are between sizes.</p>
         <p class="odl-meta"><span>Size bought <b>L</b></span><span>Usual size <b>M</b></span></p>
-        <div class="odl-help"><span>Was this helpful?</span>
-          <button type="button" class="odl-vote" aria-pressed="true" data-n="8"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M5 7l2.5-5c1.2 0 2 .8 2 2v2h3.2a1 1 0 0 1 1 1.2l-1 5a1 1 0 0 1-1 .8H5zM2 7h3v6.5H2z"/></svg>Yes <span class="odl-n">9</span></button>
-          <button type="button" class="odl-vote" aria-pressed="false" data-n="0">No <span class="odl-n">0</span></button>
+        <div class="odl-help"><span>Was this helpful?</span><span class="odl-votes">
+          <button type="button" class="odl-vote" aria-pressed="true" data-n="8"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>Yes <span class="odl-n">9</span></button>
+          <button type="button" class="odl-vote" aria-pressed="false" data-n="0">No <span class="odl-n">0</span></button></span>
         </div>
       </article>
       <p class="odl-none" hidden>No reviews match these filters.</p>

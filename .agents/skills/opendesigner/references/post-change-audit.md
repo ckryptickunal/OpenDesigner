@@ -40,6 +40,7 @@ How to use it:
 10. No curved underline strokes: a highlight is a plain fill; no bottom border or inset shadow under highlighted or inline text, and no hard ledge under a box (a shadow pushed down with no blur, the "3D button" lip). `library.py check` catches both. [2026-10-21, ledge 2026-10-22]
 11. Every component looks like someone spent time on it, at phone, tablet and desktop: considered spacing, aligned edges, one focal point, nothing cramped, nothing lost. The phone view is designed for a phone. [2026-10-21]
 12. Form controls share one style (selects get the same padding and chevron as the other fields; no native arrow jammed at the edge). [2026-10-21]
+12a. Library parts meet `assets/library/CRAFT.md`: generous token spacing (outer padding `inset-xl`, sections `stack-lg` apart), neutral colour with one accent, Lucide icons (never a hand-drawn smiley), real Unsplash photos wherever a picture belongs, and phones that stack instead of squeezing. Judge it in the dense look too. [2026-10-23]
 
 **Previews and detail**
 13. A preview shows the same thing its detail view opens on, and a click carries that view. On a wide screen both open on the desktop view; other views show only while hovering. On a phone both open on the phone view. [2026-10-21, desktop first 2026-10-23]

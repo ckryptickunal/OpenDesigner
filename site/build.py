@@ -607,7 +607,7 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jp
 </div></header>
 {inner}
 {footer(pages)}
-<script src="/site.js" defer></script>
+<script src="/site.js" defer></script>{PH_TAG}
 <script src="/_vercel/speed-insights/script.js" defer></script>
 </body>
 </html>
@@ -1789,8 +1789,17 @@ CSP = ("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';
        "connect-src 'self' https://api.github.com; frame-ancestors 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests")
 
 
+# Product analytics: PostHog's EU cloud, cookieless, behind /ingest/ on this site (site/static/ph.js). Off while the key is empty.
+ANALYTICS = json.loads((SITE / "analytics.json").read_text()) if (SITE / "analytics.json").exists() else {}
+PH_KEY = ANALYTICS.get("posthog_key", "").strip()
+PH_TAG = f'\n<script src="/ph.js" data-key="{esc(PH_KEY)}" defer></script>' if PH_KEY else ""
+PH_REWRITES = [{"source": "/ingest/static/:path*", "destination": "https://eu-assets.i.posthog.com/static/:path*"},
+               {"source": "/ingest/:path*", "destination": "https://eu.i.posthog.com/:path*"}] if PH_KEY else []
+
+
 def vercel_json():
     return {"trailingSlash": True,
+            **({"rewrites": PH_REWRITES} if PH_REWRITES else {}),
             "redirects": [{"source": src, "destination": b, "permanent": True} for a, b in REDIRECTS.items() for src in (a, a.rstrip("/"))]
                          + [{"source": "/index.html", "destination": "/", "permanent": True},
                             {"source": "/:path*/index.html", "destination": "/:path*/", "permanent": True}],
@@ -1849,6 +1858,8 @@ def main():
     ff = "".join(f"@font-face{{font-family:'{fam}';font-style:normal;font-weight:{w};font-display:swap;src:url(/fonts/{f}) format('woff2')}}\n" for fam, w, f in rules)
     (DIST / "site.css").write_text(minify_css(ff + tokens_css() + corners_match_levers(apple_tracking((SITE / "static" / "site.css").read_text() + (SITE / "static" / "figures.css").read_text() + status_css() + (SITE / "static" / "home.css").read_text() + (SITE / "static" / "craft.css").read_text() + (SITE / "static" / "deco.css").read_text()))))
     shutil.copy(SITE / "static" / "site.js", DIST / "site.js")
+    if PH_KEY:
+        shutil.copy(SITE / "static" / "ph.js", DIST / "ph.js")
     if NOT_FOUND_ART.exists():
         shutil.copy(NOT_FOUND_ART, DIST / "404.webp")
     shutil.copy(SITE / "middleware.js", DIST / "middleware.js")  # Markdown for agents: Vercel builds it as Routing Middleware

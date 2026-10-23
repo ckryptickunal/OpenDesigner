@@ -1,48 +1,48 @@
 <style>
-.odl-donut-breakdown { box-sizing: border-box; inline-size: 100%; max-inline-size: 720px; container-type: inline-size; text-wrap: pretty; }
+.odl-donut-breakdown { box-sizing: border-box; inline-size: 100%; max-inline-size: 45rem; margin-inline: auto; container-type: inline-size; text-wrap: pretty; }
 .odl-donut-breakdown *, .odl-donut-breakdown *::before { box-sizing: border-box; }
-.odl-donut-breakdown .odl-card { display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-lg); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
+.odl-donut-breakdown .odl-card { display: grid; gap: var(--ds-space-stack-xl); padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
   border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); }
-.odl-donut-breakdown .odl-head { display: grid; justify-items: start; gap: var(--ds-space-2); }
-.odl-donut-breakdown h3 { margin: 0; font: var(--ds-text-title-sm); }
-.odl-donut-breakdown .odl-sub { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
-.odl-donut-breakdown .odl-body { display: grid; gap: var(--ds-space-stack-lg); justify-items: center; }
+.odl-donut-breakdown .odl-head { display: grid; justify-items: start; gap: var(--ds-space-stack-xs); }
+.odl-donut-breakdown h3 { margin: 0; font: var(--ds-text-title-md); }
+.odl-donut-breakdown .odl-sub { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
+.odl-donut-breakdown .odl-body { display: grid; gap: var(--ds-space-stack-xl); justify-items: center; }
 .odl-donut-breakdown figure { position: relative; display: grid; place-items: center; inline-size: 100%; max-inline-size: 12.5rem; margin: 0; aspect-ratio: 1; }
 .odl-donut-breakdown svg { grid-area: 1 / 1; inline-size: 100%; block-size: 100%; overflow: visible; }
 .odl-donut-breakdown circle { fill: none; stroke-width: 15; transition: stroke-width var(--ds-motion-duration-short) var(--ds-motion-easing-standard), opacity var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
 .odl-donut-breakdown .odl-s1 { stroke: var(--ds-color-bg-accent-bold); }
-.odl-donut-breakdown .odl-s2 { stroke: var(--ds-color-bg-info-bold); }
+.odl-donut-breakdown .odl-s2 { stroke: var(--ds-color-text-primary); }
 .odl-donut-breakdown .odl-s3 { stroke: var(--ds-color-bg-warning-bold); }
 .odl-donut-breakdown .odl-s4 { stroke: var(--ds-color-border-strong); }
-.odl-donut-breakdown .odl-total { grid-area: 1 / 1; display: grid; justify-items: center; gap: var(--ds-space-2); text-align: center; }
+.odl-donut-breakdown .odl-total { grid-area: 1 / 1; display: grid; justify-items: center; gap: var(--ds-space-stack-xs); text-align: center; }
 .odl-donut-breakdown .odl-total b { font: var(--ds-text-numeric-lg); font-variant-numeric: tabular-nums; }
 .odl-donut-breakdown .odl-total span { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
 .odl-donut-breakdown ul { inline-size: 100%; margin: 0; padding: 0; list-style: none; display: grid; font-variant-numeric: tabular-nums; }
-.odl-donut-breakdown li { display: grid; grid-template-columns: var(--ds-space-12) minmax(0, 1fr) auto 5ch; align-items: center; column-gap: var(--ds-space-inline-sm);
-  min-block-size: max(var(--ds-size-row-md), var(--ds-size-target-min)); padding-inline: var(--ds-space-8);
+.odl-donut-breakdown li { display: grid; grid-template-columns: var(--ds-space-12) minmax(0, 1fr) auto 5ch; align-items: center; column-gap: var(--ds-space-inline-md);
+  min-block-size: max(var(--ds-size-control-lg), var(--ds-size-target-min)); padding: var(--ds-space-inset-xs) var(--ds-space-inset-sm); border-radius: var(--ds-radius-nested);
   transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
-.odl-donut-breakdown li + li { border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-donut-breakdown ul { gap: var(--ds-space-2); }
 .odl-donut-breakdown li:hover { background: var(--ds-color-bg-neutral-subtle); }
-.odl-donut-breakdown .odl-sw { inline-size: var(--ds-space-12); block-size: var(--ds-space-12); border-radius: var(--ds-radius-detail); }
+.odl-donut-breakdown .odl-sw { inline-size: var(--ds-space-12); block-size: var(--ds-space-12); border-radius: var(--ds-radius-full); }
 .odl-donut-breakdown .odl-k1 { background: var(--ds-color-bg-accent-bold); }
-.odl-donut-breakdown .odl-k2 { background: var(--ds-color-bg-info-bold); }
+.odl-donut-breakdown .odl-k2 { background: var(--ds-color-text-primary); }
 .odl-donut-breakdown .odl-k3 { background: var(--ds-color-bg-warning-bold); }
 .odl-donut-breakdown .odl-k4 { background: var(--ds-color-border-strong); }
-.odl-donut-breakdown .odl-name { display: grid; min-inline-size: 0; padding-block: var(--ds-space-4); }
-.odl-donut-breakdown .odl-name small { color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); }
+.odl-donut-breakdown .odl-name { display: grid; gap: var(--ds-space-2); min-inline-size: 0; }
+.odl-donut-breakdown .odl-name small { color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); }
 .odl-donut-breakdown .odl-amt { text-align: end; }
-.odl-donut-breakdown .odl-pct { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); text-align: end; }
+.odl-donut-breakdown .odl-pct { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); text-align: end; }
 .odl-donut-breakdown:has(li:hover) circle { opacity: 0.3; }
 .odl-donut-breakdown:has(.odl-r1:hover) .odl-s1, .odl-donut-breakdown:has(.odl-r2:hover) .odl-s2,
 .odl-donut-breakdown:has(.odl-r3:hover) .odl-s3, .odl-donut-breakdown:has(.odl-r4:hover) .odl-s4 { opacity: 1; stroke-width: 19; }
-.odl-donut-breakdown .odl-foot { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-donut-breakdown .odl-foot { margin: 0; padding-block-start: var(--ds-space-stack-lg); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
 @container (min-width: 30rem) {
-  .odl-donut-breakdown .odl-body { grid-template-columns: 11rem minmax(0, 1fr); align-items: center; gap: var(--ds-space-inset-xl); }
+  .odl-donut-breakdown .odl-body { grid-template-columns: 12rem minmax(0, 1fr); align-items: center; gap: calc(var(--ds-space-inset-xl) * 1.5); }
 }
-@container (max-width: 22rem) {
-  .odl-donut-breakdown .odl-card { padding: var(--ds-space-inset-md); }
+@container (max-width: 26rem) {
+  .odl-donut-breakdown .odl-card { padding: var(--ds-space-inset-lg); gap: var(--ds-space-stack-lg); }
   .odl-donut-breakdown figure { max-inline-size: 10.5rem; }
-  .odl-donut-breakdown li { padding-inline: var(--ds-space-4); }
+  .odl-donut-breakdown li { padding-inline: var(--ds-space-inset-xs); }
 }
 @media (prefers-reduced-motion: reduce) { .odl-donut-breakdown, .odl-donut-breakdown *, .odl-donut-breakdown *::before { transition: none !important; animation: none !important; } }
 </style>
