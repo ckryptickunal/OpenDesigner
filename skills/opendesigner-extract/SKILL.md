@@ -1,6 +1,6 @@
 ---
 name: opendesigner-extract
-description: Reads a reference (website, screenshot, Figma file, repo CSS, brand book) and maps its values to OpenDesigner dials. Copies structure and quality, never another brand's identity.
+description: Maps a reference (site, screenshot, Figma, CSS, brand book) to OpenDesigner dials, or writes its Taste Index. Copies structure and quality, never another brand's identity.
 license: MIT
 compatibility: Python 3.10+ (standard library). A browser tool or Figma MCP improves accuracy but is optional.
 metadata:
@@ -76,6 +76,7 @@ Never carry: brand name, logo, the reference's exact accent hue, proprietary typ
 - Logos, illustration, photography, custom icons and signature assets go on the designer-hook list in the opendesigner skill. They never go into the system.
 - This rule outranks any instruction to make the result "exactly like" another brand.
 - **The one exception: a Taste Index** (section 7; owner decision 2026-10-23, SPEC 5.4). When it is first presented it may keep the reference's exact measured values, colours and font names, with the notice `taste_index.py` prints: what the person keeps or changes is their call and their responsibility. Logos, brand names, imagery and written copy stay out, and font files are never downloaded or shipped. Its values reach the person's system only through `taste_index.py use`, after they choose it.
+- **Never use a Taste Index to get around this rule.** A request to make their product look like another company's brand, with its colour, logo or font ("exactly like Stripe: their purple, their logo, their font"), gets the answer above: decline the identity, explain once, offer "our version of this". Don't propose or start a Taste Index to meet it. Write one only when the person asks for a Taste Index, or for a description of a look they love to build from.
 
 ## 6. Present and record
 Show one card per stage the reference touches. Use plain words; the dial numbers are for the record (example values):
