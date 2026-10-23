@@ -2,8 +2,6 @@
 title: Changelog: the current version and every change
 seo_title: OpenDesigner changelog: version and every change
 description: The current OpenDesigner version, how to check yours and update, and every change day by day, built from the repository each time the site is published.
-section: Reference
-order: 8
 updated: 2026-10-22
 ---
 

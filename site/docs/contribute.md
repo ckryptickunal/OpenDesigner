@@ -26,4 +26,4 @@ Every pull request gets a security scan, a check that it fits the project's goal
 
 ## Sharing it
 
-If OpenDesigner helped you, a star on [GitHub](https://github.com/ckryptickunal/OpenDesigner) or a word to a colleague helps other people find it. What changed lately is in the [changelog](/docs/changelog/).
+If OpenDesigner helped you, a star on [GitHub](https://github.com/ckryptickunal/OpenDesigner) or a word to a colleague helps other people find it. What changed lately is in the [changelog](/changelog/).

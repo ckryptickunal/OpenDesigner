@@ -1,6 +1,6 @@
 ---
 name: opendesigner
-description: Builds or fixes a product's design system, one decision at a time. Use to redesign a built UI ("make it look professional", "it looks messy") or for tokens, themes, UI kits, DESIGN.md.
+description: Design systems, one decision at a time. Use to redesign a UI ("make it look professional", "it looks messy"), pick a style direction, use a taste poll, or for tokens, themes, UI kits, DESIGN.md.
 license: MIT
 compatibility: Python 3.10+ for scripts (standard library only, no network). Works in text-only hosts; visual steps use HTML templates when the host can show them.
 metadata:
@@ -78,6 +78,7 @@ Details are in `references/zoom.md`.
 - **People in a hurry** ("just pick") get the sketch with `--delegated` and no optional questions. People who talk in plain words get fewer questions (`zoom.md`).
 - **The taste poll** (optional, about 5 minutes): the person rates 20 to 30 real screens from shipped products, and the result recommends the eight dials. Offer it when they can't put their taste into words ("I'll know it when I see it"), before level 1, or whenever they ask. It never replaces a question they already answered (`references/taste.md`).
 - **The taste index** (`taste.py index`) merges every taste signal in this project. Offer the dials it is sure about as "confirm this?", ask the rest directly, and leave out an option past one of its red lines (unless every option is: then show them all and say which line). The engine's option gallery and `engine.py review` already use it (`references/taste.md`, "The taste index").
+- **Style directions come from the option gallery first.** When someone asks which directions they can pick, or which you would choose, run `engine.py show option-gallery --json` (or open the page where the host can show it) and answer from it: its options in its order, its recommendation, and its subtitle, which says which directions taste left out or which red line each crosses. Repeat those lines in your answer. Go to the catalogue (`engine.py style search <words>`, `style list`, `style show <id>`) only when they want more choices or name a look of their own; it prints each style's fit and marks any past a red line. Never name a style direction without its fit: for one you thought of yourself, run `taste.py fit` first.
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
 - **Skip what a standard settles.** A question marked **Settled by: STD-...** in its stage file is skipped like a **Planned** one: ask nothing, record nothing. Never recommend an option marked **(breaks STD-...)** (`rules.md` section 6).
@@ -110,6 +111,7 @@ python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --plat
 python3 <skill>/scripts/engine.py feel [words...]            the feel words it knows, or how it reads theirs ("fun" is playful)
 python3 <skill>/scripts/engine.py style search|show|tiles|mix|mutate|explore|define ...   the style lab: find, show, blend, change or invent a look (style-lab.md)
 python3 <skill>/scripts/engine.py set <path> <json-value> --why "..." [--set-by delegated] [--lock]
+python3 <skill>/scripts/engine.py set <path> <json-value> --dry-run   preview a value (each token's old and new value, any check it breaks); writes nothing
 python3 <skill>/scripts/engine.py resolve                    current dials and derived values, for payloads
 python3 <skill>/scripts/engine.py generate                   opendesigner/tokens/ (DTCG 2025.10)
 python3 <skill>/scripts/engine.py validate [--json]          contrast, targets, lint; exit 1 on errors

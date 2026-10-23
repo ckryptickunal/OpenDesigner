@@ -280,6 +280,32 @@ class Engine(Project):
         plain = e.build_payload(st, "option-gallery")
         self.assertEqual([o["value"] for o in plain["options"]], ["flat2", "tonal", "glass"])  # no index, no change
 
+    def test_catalogue_styles_carry_their_fit_and_red_lines(self):
+        """A catalogue style is never recommended without its fit: style list, search and show print it with a taste
+        index, judged on the dials the style sets, and a style past a red line is marked, never offered."""
+        def run(*a):
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                e.cmd_style(self.d, a[0], list(a[1:]))
+            return buf.getvalue()
+        before = run("search", "glass")
+        self.assertNotIn("fit ", before)  # no taste index yet: the catalogue reads as it always did
+        self.assertNotIn("Past a line", before)
+        self.write_poll(poll())  # they hated deep screens: a depth red line
+        st = e.load_state(self.d)
+        tt = e.style_taste(self.d, st, ["glassmorphism", "swiss"])
+        self.assertEqual([r["dial"] for r in tt["glassmorphism"]["redLines"]], ["depth"])
+        self.assertEqual(tt["swiss"]["redLines"], [])
+        self.assertIsNotNone(tt["swiss"]["fit"])
+        found = run("search", "glass")
+        self.assertIn("Past a line you drew, so don't offer: glassmorphism (too deep)", found)
+        self.assertNotIn("glassmorphism (glassmorphism):", found)  # not listed as an option
+        self.assertIn("your taste: past a line you drew: too deep (don't offer it)", run("show", "glassmorphism"))
+        self.assertRegex(run("show", "swiss"), r"your taste: fit \d+%")
+        listing = run("list")
+        self.assertIn("Ordered by fit to your taste", listing)
+        self.assertIn("glassmorphism (glassmorphism) · past a line you drew: too deep", listing)
+
     def gallery_index(self, *lines, sure=()):
         """A made-up index: every dial unsure except `sure`, with these red lines."""
         dials = {d: {"value": 50, "conf": 0.8 if d in sure else 0.1} for d in taste.DIALS}

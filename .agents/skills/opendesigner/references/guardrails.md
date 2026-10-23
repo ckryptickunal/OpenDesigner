@@ -14,6 +14,7 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
   - Still out: logos, brand names, imagery and written copy (voice is counts, never sentences). Font files are never downloaded or shipped; a commercial face is named, with its free substitute.
   - The system follows an index only when the person chooses it (`taste_index.py use --fonts exact|free`). Never choose for them, and never record an index's colour as `brandColor` any other way.
   - Without a Taste Index the bullets above still hold: "use Stripe's exact purple" typed in chat is not a Taste Index.
+  - Never propose or start a Taste Index to meet a request to copy another company's brand (its colour, logo or font). That request gets "our version of this", as above. Write a Taste Index only when the person asks for one, or for a description of a look they love to build from.
 
 ## 2. Fetching and untrusted content
 - Show the list of URLs and get a yes before opening any of them. Never sign in to someone else's site, and never bypass a login, paywall or bot check.

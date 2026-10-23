@@ -9,6 +9,7 @@ import io
 import json
 import os
 import re
+import shlex
 import sys
 import tempfile
 import unittest
@@ -638,6 +639,80 @@ class ReviewAndFeedback(unittest.TestCase):
                 self.assertIn("## F-001", f.read())
             with self.assertRaises(SystemExit):
                 e.cmd_feedback(t, "x", "rant")
+
+
+class DryRun(unittest.TestCase):
+    """set and pick --dry-run preview a value so the person can compare before choosing: the same report a real set gives,
+    each token's old and new value, and nothing written. In the extend-rounder eval an agent compared roundness 55, 60 and
+    65 with real sets, which logged three decisions the person never made."""
+
+    def snapshot(self, root):
+        out = {}
+        for dp, _dn, fns in os.walk(root):
+            for fn in fns:
+                with open(os.path.join(dp, fn), "rb") as f:
+                    out[os.path.relpath(os.path.join(dp, fn), root)] = f.read()
+        return out
+
+    def lines(self, argv):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            e.main(argv)
+        return buf.getvalue().splitlines()
+
+    def system(self, t):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Dry", "#2563eb", "dense", "web", "calm", quiet=True)
+        quiet(e.cmd_build, d)  # DESIGN.md exists, so a real set would also refresh it
+        e.journey.set_tracking(d, True)
+        return d
+
+    def test_a_dry_run_writes_nothing_and_says_what_the_real_set_then_says(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            for argv, path in ((["set", "dials.roundness", "65"], "dials.roundness"),
+                               (["pick", "Q-shape-01", "pill"], "answers.Q-shape-01")):
+                with self.subTest(argv=argv):
+                    old_files = e.generate_system(e.load_state(d))[0]
+                    before = self.snapshot(t)
+                    dry = self.lines(["--dir", d] + argv + ["--why", "compare", "--dry-run"])
+                    self.assertEqual(self.snapshot(t), before)  # state.json, decisions.md, the journey log, DESIGN.md: byte for byte
+                    self.assertTrue(dry[0].startswith(f"dry run: {path} = "), dry[0])
+                    keep = dry[-1].split("To keep it: ", 1)[1]
+                    cmd = [("picked after comparing" if x == "<the person's words>" else x) for x in shlex.split(keep)]
+                    self.assertEqual(cmd[:2], ["engine.py", argv[0]])
+                    real = self.lines(["--dir", d] + cmd[1:])  # the command the dry run printed
+                    self.assertRegex(real[0], r"^D-\d{4} set " + re.escape(dry[0][len("dry run: "):].split(" was not recorded")[0]) + "$")
+                    body = [e.dry_line(x) for x in real[1:] if not x.startswith("  DESIGN.md and PRODUCT.md updated")]
+                    self.assertEqual(dry[1:1 + len(body)], body)  # the same lines, said for a value not recorded yet
+                    self.assertTrue(any(x.startswith("  tokens: ") for x in body), body)
+                    new_files = e.generate_system(e.load_state(d))[0]
+                    a, b = (e._short_value(e.resolve_all(f, {})["radius.control"]["resolved"]) for f in (old_files, new_files))
+                    self.assertNotEqual(a, b)
+                    self.assertIn(f"  radius.control: {a} -> {b}", dry)  # the corner sizes the real set then wrote
+            events = [x["event"] for x in e.journey.read_events(e.journey.jpath(d, "events.jsonl"))]
+            self.assertEqual(events.count("step_answered"), 1)  # the real pick only
+
+    def test_a_refused_value_is_refused_the_same_way(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            quiet(e.cmd_lock, d, "dials.roundness")
+            before = self.snapshot(t)
+            with self.assertRaises(SystemExit) as dry:
+                quiet(e.cmd_set, d, "dials.roundness", 80, "compare", dry_run=True)
+            with self.assertRaises(SystemExit) as real:
+                quiet(e.cmd_set, d, "dials.roundness", 80, "compare")
+            self.assertEqual(str(dry.exception), str(real.exception))
+            self.assertEqual(self.snapshot(t), before)
+
+    def test_it_names_a_floor_the_value_would_break(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            before = self.snapshot(t)
+            dry = self.lines(["--dir", d, "set", "size.target.pointer", '{"value": 20, "unit": "px"}', "--dry-run"])
+            self.assertEqual(self.snapshot(t), before)
+            self.assertIn("  size.target.pointer: 24px -> 20px", dry)
+            self.assertTrue(any(x.startswith("  checks: new error: ") and "24px" in x for x in dry), dry)
 
 
 class JourneyTracking(unittest.TestCase):
