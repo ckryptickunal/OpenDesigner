@@ -47,7 +47,7 @@ No. It does the repetitive system work: scales, tokens, states and contrast. It 
 
 ### Will my app look like every other AI-made app?
 
-That's a fair worry. OpenDesigner asks what people should remember about your product, sets eight dials from your answers, and asks for your own logo, fonts and art instead of faking them. It won't copy someone else's brand from a reference site. If you love a site's look, it can write a Taste Index of it: the whole look described for your AI, keeping the site's exact colors and font names when first shown. What you keep or change is up to you and your responsibility; logos, names, images and copy never go in.
+That's a fair worry. OpenDesigner asks what people should remember about your product, sets eight dials from your answers, and asks for your own logo, fonts and art instead of faking them. It won't copy someone else's brand from a reference site. If you love a site's look, or ask it to copy a brand, it offers a Taste Index of that look: the whole look described for your AI, keeping the site's exact colors and font names when first shown. What you keep or change is up to you and your responsibility; logos, names, images and copy never go in.
 
 To be honest about the limits: in our stress test, AI agents made 46 pieces by following the process, plus 8 mockups. An audit against shipped products on Mobbin then passed 28 of the 54, sent 20 back for polish and rebuilt 6; much of the striking work was made outside the tokens. The audit's lessons are now rules every builder checks against. The tokens give you consistency and readable contrast. A distinctive look still needs your input.
 
