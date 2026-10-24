@@ -39,6 +39,7 @@ def main():
     shutil.copytree(SITE / ".vercel", DIST / ".vercel", dirs_exist_ok=True)
     if not (DIST / "index.html").exists() or not (DIST / "og" / "home.jpg").exists():
         sys.exit("dist/ has no index.html or og/home.jpg: not deploying a broken build")
+    browser_check()
     preview = "--preview" in sys.argv
     # Production is uploaded without taking the domain (--skip-domain), checked, and only then promoted.
     args = ["vercel", "deploy", str(DIST), "--yes"] + ([] if preview else ["--prod", "--skip-domain"])
@@ -83,6 +84,28 @@ def main():
             break
     print("live: every key path answers 200" if not bad else f"WARNING live paths not 200: {bad}")
     indexnow(site_url)
+
+
+def browser_check():
+    """The library shop in WebKit (Safari's engine) and Chrome before anything is uploaded: every card drawn whole
+    (site/check_browsers.py). Preview URLs sit behind Vercel's login, so the built dist/ is served on this Mac instead."""
+    import functools
+    import http.server
+    import threading
+    handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(DIST))
+    http.server.SimpleHTTPRequestHandler.log_message = lambda *a: None
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    try:
+        r = subprocess.run([sys.executable, str(SITE / "check_browsers.py"), "--base", f"http://127.0.0.1:{server.server_port}",
+                            "--no-pages", "--widths", "1440"], text=True, capture_output=True, timeout=600)
+    except subprocess.TimeoutExpired:
+        sys.exit("not uploading: check_browsers.py ran over 10 minutes")
+    finally:
+        server.shutdown()
+    print((r.stdout.strip().splitlines() or ["browser check: no output"])[-1])
+    if r.returncode:
+        sys.exit("not uploading: check_browsers.py found problems in WebKit or Chrome\n" + (r.stdout + r.stderr).strip()[-1500:])
 
 
 CHECK_PATHS = ["/", "/docs/", "/docs/install/", "/library/", "/sitemap.xml", "/robots.txt", "/llms.txt", "/og/home.jpg", "/_vercel/speed-insights/script.js", "/.well-known/agent-skills/index.json", "/404.webp"]
