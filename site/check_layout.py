@@ -387,7 +387,7 @@ MEASURE = r"""(cfg) => {
     if (!p.width || !p.height) continue;
     const vh = Math.max(0, Math.min(f.bottom, p.bottom) - Math.max(f.top, p.top)) / p.height;
     const vw2 = Math.max(0, Math.min(f.right, p.right) - Math.max(f.left, p.left)) / p.width;
-    if (vh < 0.99 || vw2 < 0.99) add("preview-crop", "error", box, `the preview shows ${Math.round(vw2 * 100)}% of the part's width and ${Math.round(vh * 100)}% of its height${live.style.zoom ? "" : " (it was never fitted)"}`, [f, p]);
+    if (vh < 0.99 || vw2 < 0.99) add("preview-crop", "error", box, `the preview shows ${Math.round(vw2 * 100)}% of the part's width and ${Math.round(vh * 100)}% of its height${(live.style.zoom || live.style.transform || live._z) ? "" : " (it was never fitted)"}`, [f, p]);
   }
   return out;
 }"""

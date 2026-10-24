@@ -5,7 +5,8 @@ print one table: passed or failed, with the line that says why. Then walk sectio
   python3 site/post_change_audit.py [--base http://localhost:4173] [--dist site/dist] [--quick]
 
 Builds nothing: build first (python3 site/build.py, or with SITE_DIST) and serve the build at --base. --quick checks only the
-library pages, the home page and one docs page instead of every page. Needs Playwright and Chrome. Exits 1 if any check fails.
+library pages, the home page and one docs page instead of every page. Needs Playwright, Chrome and Playwright's WebKit
+(Safari's engine: python3 -m playwright install webkit). Exits 1 if any check fails.
 """
 import argparse
 import pathlib
@@ -47,6 +48,7 @@ def main():
         run("layout at 13 widths (incl. corners)", [py, "site/check_layout.py", "--base", a.base, "--pages", ",".join(pages), "--errors-only"], zero),
         run("library components (rules)", [py, "skills/opendesigner/scripts/library.py", "check"], zero),
         run("library components unscaled", [py, "site/library_layout.py", "--errors-only"], zero),
+        run("library previews in Safari and Chrome", [py, "site/check_browsers.py", "--base", a.base] + (["--no-pages"] if a.quick else []), zero),
         run("skill copies in sync", [py, "tools/sync_skills.py", "--check"], zero),
         run("generated knowledge current", [py, "tools/build_data.py", "--check"], zero),
     ]

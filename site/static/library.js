@@ -17,14 +17,26 @@
   var HUG = window.matchMedia("(max-width: 640px)");
   // every card and page opens on the desktop view on a wide screen, the phone view on a phone (owner, 2026-10-23: "show desktop
   // view by default unless someone hovers"); hovering a card walks the other views
+  // Scale a box with a transform, never CSS zoom (owner, 2026-10-24, Safari screenshots: cards drawn as one-letter columns).
+  // Safari keeps text at a minimum size inside a small zoom while the box shrinks, so text wraps letter by letter and the part
+  // grows thousands of pixels tall; a transform scales text and box together in every browser. Negative margins give the
+  // box its scaled size in the layout, as zoom did. Call it again after anything inside changes the box's size.
+  var scaleEl = function (el, z) {
+    el.style.zoom = ""; el.style.marginRight = el.style.marginBottom = "";
+    if (z >= 0.999) { el.style.transform = el.style.transformOrigin = ""; el._z = 1; return; }
+    el.style.transform = "scale(" + z.toFixed(4) + ")"; el.style.transformOrigin = "0 0"; el._z = z;
+    var w = el.offsetWidth, h = el.offsetHeight;  // the unscaled box (a transform does not change these)
+    el.style.marginRight = (w * z - w).toFixed(2) + "px"; el.style.marginBottom = (h * z - h).toFixed(2) + "px";
+  };
+  var rescale = function (el) { scaleEl(el, el._z || 1); };
   var defaultView = function () { return innerWidth < 768 ? "phone" : "desktop"; };
   // lay a part out at a view's width; when the part is narrower than the view (a 420 px panel on a 1280 px screen), the frame
   // wraps the part instead of leaving it small in an empty field (owner, same day). Returns the frame width used.
   var layout = function (live, w) {
-    live.style.zoom = 1; live.style.width = w + "px";
+    scaleEl(live, 1); live.style.width = w + "px";
     var part = live.firstElementChild, pad = parseFloat(getComputedStyle(live).paddingLeft) * 2 || 0;
     var used = part ? Math.ceil(part.getBoundingClientRect().width + pad) : w;
-    if (used < w - 1) { live.style.width = used + "px"; return used; }
+    if (used < w - 1 && used > Math.min(240, w / 2)) { live.style.width = used + "px"; return used; }  // a part measuring under 240 px was not drawn: keep the view width
     return w;
   };
   // Nested corners at every size (owner, 2026-10-21: "the edges are not adapted to the screen size"). A part is scaled to fit,
@@ -74,14 +86,15 @@
       item._hugW = null;
     }
     var z = Math.min(1, zw, room.h / Math.max(1, live.offsetHeight));
-    live.style.zoom = z.toFixed(3); fitBox.classList.remove("is-cropped");
+    scaleEl(live, z); fitBox.classList.remove("is-cropped");
     bezel.style.maxHeight = (room.h + 12) + "px"; fitBox.style.maxHeight = room.h + "px";
     media.style.borderRadius = "";
     var cap = (parseFloat(getComputedStyle(media).borderTopLeftRadius) || 0) * 0.8, rimR = nest(fitBox, bezel, live, z, cap);
+    rescale(live);  // nest() may change the margin around the part
     // nest() may change the margin around the part (which reflows it), and text rounds up at small scales: check the drawn
     // height and scale down again until the whole part is inside the room
     for (var k = 0, drawn; k < 3 && (drawn = live.getBoundingClientRect().height) > room.h + 0.5; k++) {
-      z *= room.h / drawn * 0.995; live.style.zoom = z.toFixed(3); rimR = nest(fitBox, bezel, live, z, cap);
+      z *= room.h / drawn * 0.995; scaleEl(live, z); rimR = nest(fitBox, bezel, live, z, cap); rescale(live);
     }
     // a very round part (an overlay in a pill look): the tile's corner grows with it, up to the tile's own padding, so the frame
     // is never rounder than the tile and the gap stays at least the corner (where corners need not run parallel)
@@ -99,23 +112,30 @@
   // aisle tiles: a part laid out at a card width and zoomed to the tile
   var fitTile = function (box) {
     var live = box.querySelector(".lib-live"); if (!live) return;
+    var pv = box.closest(".aisle-prev"); if (pv) pv.style.contentVisibility = "visible";  // measured fully drawn (see fitItem)
     var w = +box.getAttribute("data-w") || 640;
-    live.style.width = w + "px"; live.style.zoom = 1;
+    live.style.width = w + "px"; scaleEl(live, 1);
     var prev = box.closest(".aisle-prev"), z = Math.max(0.2, Math.min(1, prev.clientWidth / w));
-    live.style.zoom = z.toFixed(3);
+    scaleEl(live, z);
     // a tile keeps one corner (the tile's minus its 14 px margin); the margin around the part is set so the part's corner,
     // at this scale, runs parallel to it
     var prevR = parseFloat(getComputedStyle(prev).borderTopLeftRadius) || 0;
     live.style.padding = Math.max(6, prevR / z - partR(live)).toFixed(1) + "px";
+    rescale(live);
   };
   // Lazy: a card is laid out and sized only when it comes within about 600 px of the screen (91 live previews measured at
   // once cost over a second of layout on load). Photos inside previews already load lazily.
   var near = [];
   var fitItem = function (item) {
     if (item.hidden) return;
+    item._fitting = true;
+    // a card is measured fully drawn: under content-visibility the browser may skip a card's contents, and the part then
+    // measures 0 px wide and is fitted as a sliver (Chrome and Safari, 2026-10-24)
+    var m = $(".item-media", item); if (m) m.style.contentVisibility = "visible";
     var v = item.getAttribute("data-view");
     if (!v || item.getAttribute("data-view-first") !== defaultView()) v = bestView(item);  // first fit, or the screen crossed 768 px
     fitCard(item, v);
+    var l = $(".item-media .lib-live", item); item._lh = l ? l.offsetHeight : 0; item._fitting = false;
   };
   var fitAll = function () {
     $$(".aisle-prev .lib-fit").forEach(fitTile);
@@ -137,6 +157,17 @@
     if (innerWidth === lastW || pending) return;
     pending = requestAnimationFrame(function () { pending = 0; lastW = innerWidth; fitAll(); });
   });
+  // a part that changes its own height (a tab inside it, an opened row) is fitted again, so its card still shows all of it
+  if (window.ResizeObserver) {
+    var liveRo = new ResizeObserver(function (entries) {
+      entries.forEach(function (e) {
+        var it = e.target.closest(".item"); if (!it || it._fitting || near.indexOf(it) < 0) return;
+        if (Math.abs(e.target.offsetHeight - (it._lh || 0)) < 2) return;
+        requestAnimationFrame(function () { fitItem(it); });
+      });
+    });
+    $$(".item-media .lib-live").forEach(function (l) { liveRo.observe(l); });
+  }
   if (window.ResizeObserver) { var ro = new ResizeObserver(function () { $$(".aisle-prev .lib-fit").forEach(fitTile); fitDevice(); }); $$(".aisle-prev, .part-stage").forEach(function (el) { ro.observe(el); }); }
   window.addEventListener("load", fitAll);
 
@@ -233,14 +264,14 @@
   function fitDevice() {
     if (!dev || !frame) return;
     var view = dev.getAttribute("data-device") || pageView, w = VIEWS[view];
-    var live = $(".lib-live", frame); frame.style.zoom = 1; frame.style.minHeight = "";
+    var live = $(".lib-live", frame); scaleEl(frame, 1); frame.style.minHeight = "";
     var used = live ? layout(live, w) : w;
     live && (live.style.width = "");
     frame.style.width = used + "px";
     var avail = stage.clientWidth - parseFloat(getComputedStyle(stage).paddingLeft) * 2 - 12;  // 12: the glass rim, 6 px a side
     var z = Math.min(1, avail / used);
-    frame.style.zoom = z.toFixed(3);
-    var devR = nest(frame, null, live, z) ; dev.style.borderRadius = devR.toFixed(1) + "px";
+    scaleEl(frame, z);
+    var devR = nest(frame, null, live, z); rescale(frame); dev.style.borderRadius = devR.toFixed(1) + "px";
     // if the device sits close to the stage's corner (a phone screen), the stage's corner follows it too
     var sr = stage.getBoundingClientRect(), dr = dev.getBoundingClientRect(), gap = Math.min(dr.left - sr.left, dr.top - sr.top);
     stage.style.borderRadius = gap < 40 ? (devR + gap).toFixed(1) + "px" : "";
@@ -333,7 +364,7 @@
       clearTimeout(peekTimer);
       var s = t.getAttribute("data-thumb"), markup = thumbCache[s]; if (!markup) return;
       peek.innerHTML = '<span class="lib-live odl-sys-' + current + '" inert>' + markup + '</span><span class="kit-peek-n">' + esc(DATA.items[s].name) + '</span>';
-      var live = peek.firstChild; live.style.width = "390px"; live.style.zoom = "0.75";
+      var live = peek.firstChild; live.style.width = "390px"; scaleEl(live, 0.75);
       var r = t.getBoundingClientRect(), h = Math.min(innerHeight - 32, 440);
       peek.style.left = Math.round(r.right + 12) + "px";
       peek.style.top = Math.round(Math.max(16, Math.min(r.top - 8, innerHeight - h - 16))) + "px";
@@ -352,7 +383,7 @@
     var put = function (markup) {
       box.innerHTML = '<span class="kit-thumb-in lib-live odl-sys-' + current + '" inert>' + markup + '</span>';
       var live = box.firstChild; live.style.width = "390px";
-      live.style.zoom = (56 / 390).toFixed(3);  // the 56 px thumbnail shows the part at its phone width (fixed: the dialog may still be closed)
+      scaleEl(live, 56 / 390);  // the 56 px thumbnail shows the part at its phone width (fixed: the dialog may still be closed)
     };
     if (thumbCache[s]) return put(thumbCache[s]);
     var card = document.querySelector("#item-" + s + " .lib-live");

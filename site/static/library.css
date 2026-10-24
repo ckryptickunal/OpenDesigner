@@ -114,7 +114,7 @@
   color: var(--ink-muted); font: 600 14px/20px "Hanken Grotesk", system-ui, sans-serif; cursor: pointer; transition: color 160ms ease, background-color 160ms ease; }
 .item-copy:hover { color: var(--ink); background: var(--surface-sunken); }
 
-/* live components, scaled to fit their box by library.js (zoom keeps layout honest) */
+/* live components, scaled to fit their box by library.js (a transform plus negative margins; never CSS zoom, see scaleEl) */
 .lib-fit { display: grid; justify-items: center; max-width: 100%; }
 .lib-live { box-sizing: border-box; display: grid; justify-items: center; width: 100%; padding: 20px; border-radius: calc(12px * var(--corner-k, 1));
   background: var(--ds-color-surface-base); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-align: start; letter-spacing: normal; }
