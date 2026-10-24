@@ -62,6 +62,11 @@ def main():
                         cwd=SITE, text=True, capture_output=True).stdout
     if not nf.endswith("404") or "noindex" not in nf:
         sys.exit("not promoting: a missing page did not answer 404 with the noindex 404 page")
+    if '"/ingest/' in (DIST / "vercel.json").read_text():  # analytics on: events must reach PostHog, not our 404
+        ev = subprocess.run(["vercel", "curl", "/ingest/i/v0/e/", "--deployment", url, "--", "-s", "-o", "/dev/null", "-X", "POST",
+                             "-H", "Content-Type: application/json", "-d", "{}", "-w", "%{http_code}"], cwd=SITE, text=True, capture_output=True).stdout
+        if ev.strip()[-3:] in ("404", ""):
+            sys.exit(f"not promoting: POST /ingest/i/v0/e/ gave {ev!r}, so analytics events would not reach PostHog")
     md = subprocess.run(["vercel", "curl", "/docs/install/", "--deployment", url, "--", "-s", "-o", "/dev/null", "-H", "Accept: text/markdown",
                          "-w", "%{content_type}"], cwd=SITE, text=True, capture_output=True).stdout
     if "text/markdown" not in md:
