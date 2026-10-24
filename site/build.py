@@ -948,7 +948,7 @@ def book_page(pages):
 <p class="h-soon">Opening soon</p>
 </article>
 </div>
-<p class="h-fine">The site measures only how fast pages load (<a href="{GH}/blob/main/docs/PRIVACY.md#the-websites-speed-measurements">anonymous, no visitor tracking</a>), and nothing you send through the booking form is used for anything but the call.</p>
+<p class="h-fine">The site counts visits and clicks without cookies, and records a visit only if you allow it (<a href="{GH}/blob/main/docs/PRIVACY.md#the-websites-product-analytics">what we collect</a>). This page is never recorded, and nothing you send through the booking form is used for anything but the call.</p>
 </section>
 """
     ld = [crumbs_ld([("Book a call", "/book/")])]
@@ -1871,7 +1871,7 @@ For "how do I create a design system with AI", "generate design tokens, a Tailwi
 ## Optional
 
 - [Book a call]({SITE_URL}/book/): a free {CONFIG["BOOKING_FREE_MINUTES"]}-minute intro call about OpenDesigner
-- [Website privacy](https://github.com/{REPO}/blob/main/docs/PRIVACY.md#the-websites-speed-measurements): the site measures only page load speed (Vercel Speed Insights), anonymously
+- [Website privacy](https://github.com/{REPO}/blob/main/docs/PRIVACY.md#the-websites-product-analytics): the site measures page load speed (Vercel Speed Insights) and counts visits and clicks with PostHog without cookies; a visit is recorded only if the visitor allows it
 - [Showcase]({SITE_URL}/showcase/index.md): B2B product screens, style studies, heroes, components, app and watch screens, footers and mockups built by AI agents through the process, each audited against shipped products
 - [GitHub repository]({GH}): source, issues and discussions
 - [AGENTS.md](https://raw.githubusercontent.com/{REPO}/main/AGENTS.md): instructions for AI agents working with the repository
@@ -1884,12 +1884,12 @@ CSP = ("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';
        "connect-src 'self' https://api.github.com; frame-ancestors 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests")
 
 
-# Product analytics: PostHog's EU cloud, cookieless, behind /ingest/ on this site (site/static/ph.js). Off while the key is empty.
+# Product analytics: PostHog's US cloud, cookieless by default (session replay only after consent), behind /ingest/ on this site (site/static/ph.js). Off while the key is empty.
 ANALYTICS = json.loads((SITE / "analytics.json").read_text()) if (SITE / "analytics.json").exists() else {}
 PH_KEY = ANALYTICS.get("posthog_key", "").strip()
 PH_TAG = f'\n<script src="/ph.js" data-key="{esc(PH_KEY)}" defer></script>' if PH_KEY else ""
-PH_REWRITES = [{"source": "/ingest/static/:path*", "destination": "https://eu-assets.i.posthog.com/static/:path*"},
-               {"source": "/ingest/:path*", "destination": "https://eu.i.posthog.com/:path*"}] if PH_KEY else []
+PH_REWRITES = [{"source": "/ingest/static/:path*", "destination": "https://us-assets.i.posthog.com/static/:path*"},
+               {"source": "/ingest/:path*", "destination": "https://us.i.posthog.com/:path*"}] if PH_KEY else []
 
 
 def vercel_json():

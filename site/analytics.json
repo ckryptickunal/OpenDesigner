@@ -1,4 +1,4 @@
 {
- "posthog_key": "",
- "note": "PostHog public project key (EU cloud). Empty: no analytics script is added to the site. See site/static/ph.js and docs/PRIVACY.md."
+ "posthog_key": "phc_sXiQ5WJ86egfadyg8LDqJebdZxwmmsZCNgU7MmpynDKy",
+ "note": "PostHog public project key (US cloud). Empty: no analytics script is added to the site. See site/static/ph.js and docs/PRIVACY.md."
 }

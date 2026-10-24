@@ -100,14 +100,22 @@ The OpenDesigner website (opendesigner.dev) runs Vercel Speed Insights, so the m
 Source: Vercel's [Speed Insights privacy page](https://vercel.com/docs/speed-insights/privacy-policy), checked on 2026-10-22.
 
 ## The website's product analytics
-When the maintainers add a PostHog project key to `site/analytics.json`, the website also counts how people use it, so they can see which parts of the component library people open, add and copy, and where they stop. It is separate from the plugin: nothing about your project or your design system is involved.
-- **No cookies,** and nothing is stored in your browser: PostHog runs in its cookieless mode and keeps its state in page memory only. The PostHog project is set to discard IP addresses.
-- **What is counted:** page views and leaving a page, and named actions on the site: filtering or searching the library, changing a look, opening a part, switching its view, adding a part or a look to the kit, choosing a kit method, copying a prompt or a command, and clicking GitHub, Install or Book a call. Each comes with the page and, where it applies, the part's name.
-- **Not counted:** what you type (search words are not sent, only that you searched), your name or email, and no session recordings, heatmap recordings or surveys.
-- **Where it goes:** to PostHog's EU cloud (hosted in Frankfurt), through the site's own address (`/ingest/`). Browsers that send Do Not Track are not counted.
+The website counts how people use it with PostHog, so the maintainers can see where visitors come from, which parts of the component library they open, add and copy, and where they stop. It is separate from the plugin: nothing about your project or your design system is involved.
+
+**By default, without cookies.** Nothing is stored in your browser. PostHog tells visitors apart with a hash of the site, your IP address and browser, and a salt that changes every day and is then deleted, so the same person counts as new the next day. The PostHog project is set to discard IP addresses.
+- **What is counted:** page views and leaving a page; where the visit came from (the referring site, `utm_` tags or a `ref=` link, and the page you landed on); and named actions on the site: filtering or searching the library, changing a look, opening a part, switching its view, adding a part or a look to the kit, choosing a kit method, copying a prompt or a command, and clicking GitHub, Install or Book a call.
+- **Not counted:** what you type (search words are not sent, only that you searched), your name or email. No session recording.
+
+**Session recording, only if you allow it.** A small card asks once whether your visit may be recorded. If you choose Allow:
+- PostHog keeps an anonymous id in your browser (a first-party cookie and local storage), so your visits link up and the place you first came from is kept.
+- Your visit is recorded as a replay of the page (clicks, scrolling, what was on screen), so the maintainers can see where pages confuse people. Every text field is masked, and the booking page is never recorded.
+- Your choice (`od-analytics` in local storage) is kept so the site doesn't ask again. To change it, clear this site's data in your browser.
+If you choose No thanks, or don't choose, nothing changes from the default above.
+
+- **Where it goes:** to PostHog's US cloud, through the site's own address (`/ingest/`). Browsers that send Do Not Track are not counted or recorded.
 - **Who sees it:** the maintainers, in PostHog.
 
-Source: PostHog's docs on [persistence and cookies](https://posthog.com/docs/libraries/js/persistence) and [PostHog Cloud EU](https://posthog.com/blog/posthog-cloud-eu), checked on 2026-10-23. The code is `site/static/ph.js`.
+Source: PostHog's docs on [cookieless tracking](https://posthog.com/docs/privacy/cookieless-tracking) and [persistence and cookies](https://posthog.com/docs/libraries/js/persistence), checked on 2026-10-24. The code is `site/static/ph.js`.
 
 ## Everything else that can use the network
 This page is about the journey log, shared reports and the website's speed measurements. For completeness, these are the only other places OpenDesigner's own scripts go online (checked against the code on 2026-10-15):

@@ -416,6 +416,7 @@ code, pre, .mono, .num, .code, .tree code { letter-spacing: 0; }
 @media (prefers-reduced-motion: reduce) { .piece-stuck .sticker, .doc-stickers .sticker { transform: none; } }
 @media (max-width: 400px) { .top-nav a:nth-child(n+2) { display: none; } }
 @media (max-width: 420px) { .bar-in { gap: 12px; } .gh-btn > span:not(.gh-count) { display: none; } .gh-btn { padding: 0 10px; } }
+@media (max-width: 360px) { .bar-in { gap: 8px; } .top-nav { gap: 12px; } .gh-btn { padding: 0 8px; gap: 6px; } }  /* a two-digit star count fits at 320 px */
 
 /* Press feedback (house standard from Emil Kowalski's work): pressable things scale to 0.97 on press, 160 ms ease-out. */
 .btn, .copy, .gh-btn, .filter, .tablist [role="tab"], .lb-actions button { transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background-color 160ms ease, border-color 160ms ease, color 160ms ease; }
