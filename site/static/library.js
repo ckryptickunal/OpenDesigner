@@ -52,35 +52,37 @@
   };
   var fitCard = function (item, view) {
     var live = $(".lib-live", item), bezel = $(".item-in", item); if (!live || !bezel) return;
+    live.style.padding = "";  // measure at the default margin; nest() below may narrow it again
     var used = layout(live, VIEWS[view]), fitBox = $(".lib-fit", item), media = $(".item-media", item);
+    if (!HUG.matches) media.style.height = "";  // drop a phone fit's fixed height before measuring (it skews the 4:3 tile)
     var pad = parseFloat(getComputedStyle(media).paddingTop) || 0;
     var room = { w: media.clientWidth - 2 * pad - 12, h: media.clientHeight - 2 * pad - 12 };  // inside the bezel's 6 px rim
-    var z, crop, zw = room.w / used;
+    var zw = room.w / used;
+    // Every card shows the whole part, scaled down with its proportions kept, never a cropped slice (owner, 2026-10-24: a
+    // zoomed-in slice "hinders a person's ability to even see what they are choosing").
     if (HUG.matches && item._hugW === Math.round(room.w)) {
       // one column, after the first fit: the card keeps its height whatever the view, so the page never jumps under a thumb
-      // (owner, 2026-10-23); the other views fit inside it, cropped at the bottom when tall
+      // (owner, 2026-10-23); the other views are scaled to fit inside it
       room.h = item._hugH;
-      var zh1 = room.h / Math.max(1, live.offsetHeight);
-      z = Math.min(1, zw, zh1); crop = z < Math.min(zw, 1) * 0.72;
-      if (crop) z = Math.min(1, zw);
     } else if (HUG.matches) {
       // one column (a phone), first fit at this width: the card is as tall as the part at full width, up to 1.3 times its
-      // width, then cropped at the bottom
-      z = Math.min(1, zw); var h = live.offsetHeight * z, cap = room.w * 1.3;
-      crop = h > cap; room.h = Math.ceil(Math.min(h, cap));
+      // width; a taller part is scaled down to fit that height
+      room.h = Math.ceil(Math.min(live.offsetHeight * Math.min(1, zw), room.w * 1.3));
       media.style.height = (room.h + 12 + 2 * pad) + "px";
       item._hugW = Math.round(room.w); item._hugH = room.h;
     } else {
-      media.style.height = ""; item._hugW = null;
-      // fit the whole part, centred; if that would make it too small to read, fit the width and crop the bottom instead
-      var zh = room.h / Math.max(1, live.offsetHeight);
-      z = Math.min(1, zw, zh); crop = z < Math.min(zw, 1) * 0.72;
-      if (crop) z = Math.min(1, zw);
+      item._hugW = null;
     }
-    live.style.zoom = z.toFixed(3); fitBox.classList.toggle("is-cropped", crop);
-    bezel.style.maxHeight = (room.h + 12) + "px"; fitBox.style.maxHeight = room.h + "px";  // a cropped part stays inside the rim
+    var z = Math.min(1, zw, room.h / Math.max(1, live.offsetHeight));
+    live.style.zoom = z.toFixed(3); fitBox.classList.remove("is-cropped");
+    bezel.style.maxHeight = (room.h + 12) + "px"; fitBox.style.maxHeight = room.h + "px";
     media.style.borderRadius = "";
     var cap = (parseFloat(getComputedStyle(media).borderTopLeftRadius) || 0) * 0.8, rimR = nest(fitBox, bezel, live, z, cap);
+    // nest() may change the margin around the part (which reflows it), and text rounds up at small scales: check the drawn
+    // height and scale down again until the whole part is inside the room
+    for (var k = 0, drawn; k < 3 && (drawn = live.getBoundingClientRect().height) > room.h + 0.5; k++) {
+      z *= room.h / drawn * 0.995; live.style.zoom = z.toFixed(3); rimR = nest(fitBox, bezel, live, z, cap);
+    }
     // a very round part (an overlay in a pill look): the tile's corner grows with it, up to the tile's own padding, so the frame
     // is never rounder than the tile and the gap stays at least the corner (where corners need not run parallel)
     if (rimR > cap + 0.5) media.style.borderRadius = Math.min(rimR / 0.8, pad - 0.5).toFixed(1) + "px";  // a very round part (an overlay in a pill look): the tile follows it out

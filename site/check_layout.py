@@ -63,6 +63,7 @@ HINTS = {
     "actions": "opposite actions belong on one row, the secondary on the left and the primary on the right, as far apart as the row allows",
     "text-left": "text blocks that sit one under another should start on one left edge: look for an auto or leftover margin, or an indent",
     "nested-radius": "a rounded box close inside a rounded box: its radius should be the outer radius minus the gap between them, so the curves run parallel (set it with calc(outer - gap), and resolve the outer value on the outer element)",
+    "preview-crop": "a library preview crops its part: scale the whole part to fit its frame with its proportions kept (site/static/library.js fitCard and fitDevice), and make sure the card is fitted once it comes near the screen",
     "widow": "the last line holds a single word: balance the text (text-wrap: balance for headings and short centred lines, pretty for paragraphs), or reword",
 }
 
@@ -374,6 +375,19 @@ MEASURE = r"""(cfg) => {
       const want = ro - gap;
       if (Math.abs(ri - want) > 2) add("nested-radius", "error", inner, `radius ${px(ri)} px inside a ${px(ro)} px corner ${px(gap)} px away: it should be ${px(want)} px (outer minus the gap)`, [bo, bi]);
     }
+  }
+
+  // 15. A library card or device frame shows the whole part, scaled down, never a cropped slice (owner, 2026-10-24: a zoomed-in
+  // slice "hinders a person's ability to even see what they are choosing"). The part's drawn box must lie inside its frame.
+  // Aisle tiles are left out: they are category teasers that fade out on purpose.
+  for (const box of document.querySelectorAll(".item .lib-fit, .part-frame")) {
+    const live = box.querySelector(".lib-live"), part = live && live.firstElementChild;
+    if (!part || !box.checkVisibility()) continue;
+    const f = R(box), p = R(part);
+    if (!p.width || !p.height) continue;
+    const vh = Math.max(0, Math.min(f.bottom, p.bottom) - Math.max(f.top, p.top)) / p.height;
+    const vw2 = Math.max(0, Math.min(f.right, p.right) - Math.max(f.left, p.left)) / p.width;
+    if (vh < 0.99 || vw2 < 0.99) add("preview-crop", "error", box, `the preview shows ${Math.round(vw2 * 100)}% of the part's width and ${Math.round(vh * 100)}% of its height${live.style.zoom ? "" : " (it was never fitted)"}`, [f, p]);
   }
   return out;
 }"""

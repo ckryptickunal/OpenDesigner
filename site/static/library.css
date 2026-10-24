@@ -337,7 +337,6 @@
   .kit-add svg { transition: none; }
 }
 
-.item-in .lib-fit.is-cropped { align-content: start; }
 
 /* checkout: step 1 for Claude Code, and a bar that keeps the total and Copy in reach on a phone (post-change audit, rules 17-18) */
 .co-step1 { display: grid; gap: 10px; }
