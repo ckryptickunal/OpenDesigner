@@ -60,7 +60,13 @@ become one scrolling row or a full-width stack. Long labels wrap whole or trunca
 - The thing a person came for is the largest and first; secondary actions are quieter (text or secondary buttons).
 - A part fills its width cap (`max-inline-size`) and is centred at desktop; it never sits as a narrow strip on the left.
 
-## 7. Check before you show
+## 7. Our own shapes and words
+A part may follow a common pattern (a progress bar, a week strip, a product card), never one product's signature. Don't
+copy a component people recognise as a brand's, or its wording: `activity-rings` drew Apple's three nested Move, Exercise
+and Stand rings and said "close your Move ring", and had to become `daily-goals` (2026-10-24). If someone could name the
+product from the part alone, change the shape and the words.
+
+## 8. Check before you show
 1. `python3 skills/opendesigner/scripts/library.py check`
 2. `python3 site/library_layout.py <slugs> --errors-only`
 3. `python3 site/library_sheet.py <slugs> --out <scratch>`: read every image at phone, tablet and desktop in all four looks

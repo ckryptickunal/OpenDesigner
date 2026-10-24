@@ -69,7 +69,9 @@ SCENES = {
 }
 SECTIONS = ["Getting started", "Guides", "Concepts", "Craft", "Reference"]
 REDIRECTS = {"/install/": "/docs/install/", "/how-it-works/": "/docs/how-it-works/", "/faq/": "/docs/faq/",
-             "/what-is-a-design-system/": "/docs/design-systems/", "/docs/changelog/": "/changelog/"}
+             "/what-is-a-design-system/": "/docs/design-systems/", "/docs/changelog/": "/changelog/",
+             # the activity-rings part copied Apple's Activity rings; it became daily-goals (2026-10-24)
+             "/library/activity-rings/": "/library/daily-goals/", "/library/r/activity-rings.html": "/library/r/daily-goals.html"}
 esc = html.escape
 
 # Free Unsplash photos (licence checked: not Unsplash+), shown in cobalt duotone.
@@ -1898,7 +1900,7 @@ PH_REWRITES = [{"source": "/ingest/static/:path*", "destination": "https://us-as
 def vercel_json():
     return {"trailingSlash": True,
             **({"rewrites": PH_REWRITES} if PH_REWRITES else {}),
-            "redirects": [{"source": src, "destination": b, "permanent": True} for a, b in REDIRECTS.items() for src in (a, a.rstrip("/"))]
+            "redirects": [{"source": src, "destination": b, "permanent": True} for a, b in REDIRECTS.items() for src in dict.fromkeys((a, a.rstrip("/")))]
                          + [{"source": "/index.html", "destination": "/", "permanent": True},
                             {"source": "/:path*/index.html", "destination": "/:path*/", "permanent": True}],
             "headers": [

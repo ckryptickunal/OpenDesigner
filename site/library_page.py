@@ -49,7 +49,7 @@ VER = "dev"  # set by add() from the CSS and JS it writes
 # photo-rich, familiar and interactive parts first, consumer and work-tool parts alternating so both audiences find theirs
 # in the first screens. A hypothesis until analytics shows which parts people open and add; then order by that.
 LEAD = ["social-post", "command-menu", "product-gallery", "stay-card", "ai-composer", "leaderboard",
-        "track-list", "receipts-table", "chat-thread", "plan-picker", "activity-rings", "trip-search",
+        "track-list", "receipts-table", "chat-thread", "plan-picker", "daily-goals", "trip-search",
         "media-shelf", "sidebar-nav", "cart-drawer", "card-wallet", "chat-answer", "approval-panel",
         "story-rail", "kanban-column", "event-ticket", "video-player", "menu-item", "savings-goal"]
 
