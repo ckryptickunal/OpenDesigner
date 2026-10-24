@@ -33,6 +33,7 @@ import json
 import os
 import pathlib
 import plistlib
+import resource
 import shutil
 import subprocess
 import sys
@@ -49,6 +50,10 @@ LOG = pathlib.Path.home() / "Library" / "Logs" / "opendesigner-autodeploy.log"
 LABEL = "dev.opendesigner.autodeploy"
 PLIST = pathlib.Path.home() / "Library" / "LaunchAgents" / f"{LABEL}.plist"
 SETTLE = 300  # seconds origin/main must stay still before it deploys
+# launchd starts jobs with a soft limit of 256 open files, and rsync of the ignored inputs ran out of them (2026-10-24,
+# "Too many open files"). Raise it for this process and everything it starts.
+_soft, _hard = resource.getrlimit(resource.RLIMIT_NOFILE)
+resource.setrlimit(resource.RLIMIT_NOFILE, (max(_soft, min(65536, _hard)), _hard))
 STALE_LOCK = 2 * 3600  # longer than the steps' time limits together
 
 
@@ -104,9 +109,13 @@ def sync_ignored():
     r = git("ls-files", "-oi", "--exclude-standard", "--directory", *IGNORED_INPUTS, cwd=REPO)
     files = "".join(f + "\n" for f in r.stdout.splitlines() if "__pycache__" not in f and ".DS_Store" not in f)
     if not files:
-        return
+        return True
     s = subprocess.run(["rsync", "-a", "-r", "--files-from=-", f"{REPO}/", f"{WT}/"], input=files, text=True, capture_output=True)
-    log(f"synced {files.count(chr(10))} git-ignored inputs from the main checkout" + (f" (rsync: {s.stderr.strip()[-300:]})" if s.returncode else ""))
+    if s.returncode:  # a missed copy could ship a page without its new picture, so it stops the deploy
+        log(f"copying the git-ignored inputs failed (rsync exit {s.returncode}): {s.stderr.strip()[-400:]}")
+        return False
+    log(f"synced {files.count(chr(10))} git-ignored inputs from the main checkout")
+    return True
 
 
 def deploy(target, st):
@@ -118,9 +127,8 @@ def deploy(target, st):
     if git("checkout", "-q", "--detach", target).returncode:
         log(f"could not check out {target[:7]} in .worktrees/deploy")
         return False
-    sync_ignored()
     py = sys.executable
-    ok = (run([py, "site/build.py"], "build") and run([py, "site/check.py"], "site/check.py", 10)
+    ok = (sync_ignored() and run([py, "site/build.py"], "build") and run([py, "site/check.py"], "site/check.py", 10)
           and run([py, "site/deploy.py"], "deploy", 40))
     st.update(last_try=target, last_result="deployed" if ok else "failed", last_time=time.strftime("%Y-%m-%d %H:%M:%S"))
     if ok:
