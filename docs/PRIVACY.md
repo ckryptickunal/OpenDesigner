@@ -108,7 +108,7 @@ The website counts how people use it with PostHog, so the maintainers can see wh
 
 **Session recording, only if you allow it.** A small card asks once whether your visit may be recorded. If you choose Allow:
 - PostHog keeps an anonymous id in your browser (a first-party cookie and local storage), so your visits link up and the place you first came from is kept.
-- Your visit is recorded as a replay of the page (clicks, scrolling, what was on screen), so the maintainers can see where pages confuse people. Every text field is masked, and the booking page is never recorded.
+- Your visit is recorded as a replay of the page (clicks, scrolling, what was on screen), so the maintainers can see where pages confuse people. Every text field is masked, the browser console is not recorded, and the booking page is never recorded.
 - Your choice (`od-analytics` in local storage) is kept so the site doesn't ask again. To change it, clear this site's data in your browser.
 If you choose No thanks, or don't choose, nothing changes from the default above.
 

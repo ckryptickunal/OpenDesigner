@@ -40,6 +40,7 @@
       persistence: full ? "localStorage+cookie" : "memory",
       disable_session_recording: !full || noRecord,
       session_recording: { maskAllInputs: true, maskTextSelector: "[data-private], .h-form" },
+      enable_recording_console_log: false,  // replays never carry the browser console
       disable_surveys: true, autocapture: false, capture_pageview: true, capture_pageleave: true, respect_dnt: true,
       loaded: function (ph) {
         // first touch stays with the person (full mode); this visit's source goes on every event
@@ -59,11 +60,12 @@
     var show = function () {
       var b = document.createElement("div");
       b.className = "od-consent"; b.setAttribute("role", "region"); b.setAttribute("aria-label", "Session recording");
-      b.innerHTML = '<p>Help us improve OpenDesigner: may we record your visit anonymously? Inputs are hidden, and nothing is recorded until you say yes. <a href="https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/PRIVACY.md#the-websites-product-analytics">What we collect</a></p>' +
+      b.innerHTML = '<p class="od-consent-t">Help us make OpenDesigner better</p>' +
+        '<p>Allow anonymous usage tracking to help us improve OpenDesigner. Everything remains private, and nothing is recorded without your consent. <a href="https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/PRIVACY.md#the-websites-product-analytics">What we collect</a></p>' +
         '<div class="od-consent-acts"><button type="button" class="btn ghost" data-v="denied">No thanks</button><button type="button" class="btn primary" data-v="granted">Allow</button></div>';
       var st = document.createElement("style");
       st.textContent = ".od-consent{position:fixed;z-index:60;inset:auto 16px 16px auto;max-width:360px;padding:16px;border:1px solid var(--border,#d9d9d9);border-radius:var(--r-card,12px);background:var(--surface-raised,#fff);color:var(--ink,#111);box-shadow:0 8px 24px rgb(0 0 0/.12);font:400 14px/20px 'Hanken Grotesk',system-ui,sans-serif}" +
-        ".od-consent p{margin:0 0 12px}.od-consent a{color:inherit}.od-consent-acts{display:flex;gap:8px;justify-content:flex-end}" +
+        ".od-consent p{margin:0 0 12px}.od-consent .od-consent-t{margin:0 0 4px;font-weight:600;font-size:15px}.od-consent a{color:inherit}.od-consent-acts{display:flex;gap:8px;justify-content:flex-end}" +
         "@media (max-width:480px){.od-consent{inset:auto 16px 16px 16px;max-width:none}}";
       document.head.appendChild(st); document.body.appendChild(b);
       b.addEventListener("click", function (e) {
