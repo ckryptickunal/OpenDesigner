@@ -99,16 +99,6 @@ The OpenDesigner website (opendesigner.dev) runs Vercel Speed Insights, so the m
 
 Source: Vercel's [Speed Insights privacy page](https://vercel.com/docs/speed-insights/privacy-policy), checked on 2026-10-22.
 
-## The website
-The OpenDesigner website counts visits with Vercel Web Analytics, so the maintainers can see which pages people read and where they leave. It is separate from the plugin: nothing about your project or your design system is involved.
-- **No cookies,** and nothing is stored in your browser. Vercel tells visitors apart with a hash made from the request, and discards it after 24 hours.
-- **What is counted:** the page, the page that sent you there, your country, browser, operating system and device type (phone, tablet or desktop), and the time. Nothing ties these to you, and nothing is linked across other websites.
-- **Not counted:** your name, email, IP address, or anything you type. The booking form is used only for the call.
-- **Who sees it:** the maintainers, as totals per page in the Vercel dashboard. The free plan keeps one month of data.
-- The script loads from the site's own address (`/_vercel/insights/script.js`). Blocking it changes nothing on the site.
-
-Source: Vercel's [Web Analytics privacy page](https://vercel.com/docs/analytics/privacy-policy), checked on 2026-10-21.
-
 ## The website's product analytics
 When the maintainers add a PostHog project key to `site/analytics.json`, the website also counts how people use it, so they can see which parts of the component library people open, add and copy, and where they stop. It is separate from the plugin: nothing about your project or your design system is involved.
 - **No cookies,** and nothing is stored in your browser: PostHog runs in its cookieless mode and keeps its state in page memory only. The PostHog project is set to discard IP addresses.
