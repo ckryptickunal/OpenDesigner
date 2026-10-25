@@ -155,13 +155,40 @@ def kit_button(slug, name):
             f'<span class="t-add">Add to kit</span><span class="t-in">In your kit</span></button>')
 
 
+# What a person reads: one short line per part (owner, 2026-10-25: "way too much text to read for a person"). The full
+# description stays in the page's Details, its index.md, its structured data and the prompt, where agents read it.
+SHORT = {"card-wallet": "A bank card with its balance and recent spending.", "chat-answer": "One assistant answer with its sources.",
+         "social-post": "A feed post with a photo, likes and comments.", "code-input": "Six boxes for a verification code.",
+         "sleep-chart": "Last night's sleep, stage by stage.", "sign-in-form": "A work sign-in form.",
+         "lesson-streak": "A learning path with a daily streak.", "receipts-table": "A dense table with bulk actions.",
+         "story-rail": "A sideways row of story rings.", "filter-bar": "Search, filters and sort above a table.",
+         "comment-sheet": "Comments open in a bottom sheet."}
+
+
+def short(c):
+    """The part in one line: its own phrase before the colon, else its first clause."""
+    if c["slug"] in SHORT:
+        return SHORT[c["slug"]]
+    s = c["summary"].strip()
+    head = s.split(":")[0]
+    if ":" in s and 12 <= len(head) <= 90:
+        return head.rstrip(".") + "."
+    for m in re.finditer(r", (each|with|and a|plus|then|so|where|that)\b", s):
+        if 20 <= m.start() <= 90:
+            return s[:m.start()] + "."
+    for m in re.finditer(r", ", s):
+        if 30 <= m.start() <= 90:
+            return s[:m.start()] + "."
+    return s if len(s) <= 95 else s[:s.rfind(" ", 0, 90)] + "."
+
+
 def card(b, c, i):
     return (f'<article class="item{" wide" if c["width"] == "wide" else ""}" id="item-{c["slug"]}" data-view0="{VIEW0[c["width"]]}" data-type="{c["type"]}" data-style="{c["style"]}" data-industries="{" ".join(c["industries"])}" data-who="{who(c).lower()}" '
             f'data-search="{esc(" ".join([c["name"], c["summary"], *c["tags"], c["type"], c["style"], *c["industries"]]).lower())}">'
             f'<div class="item-media stage lib-bg">'
             f'<div class="stage-in item-in">{live(c)}</div></div>'
             f'<div class="item-body"><p class="item-tags"><span class="sticker{" sky" if who(c) == "Consumer" else ""}" data-icon="{"person" if who(c) == "Consumer" else "building"}">{who(c)}</span><span class="item-meta">{meta_line(c)}</span>'
-            f'<span class="item-views" aria-hidden="true"><i data-v="desktop"></i><i data-v="tablet"></i><i data-v="phone"></i><span class="item-view-t">Desktop</span></span></p><h3><a class="item-link" href="/library/{c["slug"]}/">{esc(c["name"])}</a></h3><p>{esc(c["summary"])}</p></div>'
+            f'<span class="item-views" aria-hidden="true"><i data-v="desktop"></i><i data-v="tablet"></i><i data-v="phone"></i><span class="item-view-t">Desktop</span></span></p><h3><a class="item-link" href="/library/{c["slug"]}/">{esc(c["name"])}</a></h3><p>{esc(short(c))}</p></div>'
             f'<div class="item-acts">{kit_button(c["slug"], c["name"])}<button type="button" class="item-copy" data-copy-text="{esc(prompt(b, c))}">{COPY}<span>Copy prompt</span></button></div></article>')
 
 
@@ -330,23 +357,26 @@ def detail(b, c, cs):
 <div class="part-stage stage lib-bg">
 <div class="part-device" data-device="desktop" data-view0="{VIEW0[c["width"]]}"><div class="part-frame"><div class="lib-live odl-sys-{DEFAULT_LOOK}">{anchors(c["markup"])}</div></div></div>
 </div>
-<p class="part-hint">It is live: hover, focus and its own controls respond. Actions that would change data (approve, send, delete) are for your app to wire. The width is a real {", ".join(f"{w} px" for _k, _l, w in DEVICES[:-1])} or {DEVICES[-1][2]} px box, shrunk to fit your screen.</p>
+<p class="part-hint">Live preview: try it.</p>
 </section>
 <aside class="part-side">
 <div class="stickers">{stickers(c)}</div>
 <h1>{esc(c["name"])}</h1>
-<p class="part-sum">{esc(lead(c))} {esc(c["summary"])}</p>
-<div class="part-prompt"><p class="kicker">Prompt for your coding agent</p><p class="part-prompt-text">{esc(prompt(b, c)).replace("/", "/<wbr>")}</p>
-<div class="part-acts">{kit_button(c["slug"], c["name"])}<button type="button" class="copy" data-copy-text="{esc(prompt(b, c))}">{COPY}<span>Copy prompt</span></button></div></div>
+<p class="part-sum">{esc(short(c))}</p>
+<div class="part-acts">{kit_button(c["slug"], c["name"])}<button type="button" class="copy" data-copy-text="{esc(prompt(b, c))}">{COPY}<span>Copy prompt</span></button></div>
+<ul class="part-states" aria-label="States">{states}</ul>
+<p class="part-fits">{", ".join(ind(x) if x != "any" else "Any product" for x in c["industries"])} · {c["style"].capitalize()}</p>
+<details class="part-info"><summary>Details</summary>
+<p class="part-full">{esc(c["summary"])}</p>
+<div class="part-prompt"><p class="kicker">Prompt for your coding agent</p><p class="part-prompt-text">{esc(prompt(b, c)).replace("/", "/<wbr>")}</p></div>
 <div class="cmd"><code>python3 &lt;skill&gt;/scripts/library.py add {c["slug"]}</code><button class="copy" type="button">Copy</button></div>
 <p class="part-cmd-note">With OpenDesigner installed: copies the file and lists any token your project lacks.</p>
 <dl class="part-facts">
-<div><dt>States</dt><dd><ul class="part-states">{states}</ul></dd></div>
 <div><dt>Accessibility</dt><dd>{esc(c["a11y"])}</dd></div>
-<div><dt>Fits</dt><dd>{", ".join(ind(x) if x != "any" else "Any product" for x in c["industries"])} · {c["style"].capitalize()} · designed {c["width"]}</dd></div>
 {photo_credits(c)}<div><dt>File</dt><dd><a href="/library/r/{c["slug"]}.html">{c["slug"]}.html</a>, {c["kb"]} KB, MIT{"" if not c["js"].strip() else ", with a short script"}</dd></div>
 <div><dt>From</dt><dd>{src_link}</dd></div>
 </dl>
+</details>
 </aside>
 </div>
 <details class="part-src"><summary>Source</summary><pre><code>{esc(c["src"])}</code></pre></details>

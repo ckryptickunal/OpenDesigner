@@ -365,3 +365,16 @@
 
 /* lazy drawing: the browser skips layout and paint of previews far off screen; the box keeps its size meanwhile */
 .item-media, .aisle-prev { content-visibility: auto; contain-intrinsic-size: auto 300px; }
+
+/* a part page reads in a glance: name, one line, the two actions, states and fit; everything else is folded into Details */
+.part-side .part-acts { margin-top: 0; }
+.part-fits { margin: 0; font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+.part-info { border-top: 1px solid var(--line); }
+.part-info > summary { min-height: 48px; display: flex; align-items: center; cursor: pointer; font-weight: 600; list-style: none; }
+.part-info > summary::-webkit-details-marker { display: none; }
+.part-info > summary::after { content: "+"; margin-left: auto; font-weight: 400; color: var(--ink-muted); }
+.part-info[open] > summary::after { content: "\2212"; }
+.part-info > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.part-info[open] { display: grid; gap: 16px; padding-bottom: 8px; }
+.part-full { margin: 0; font-size: 14px; line-height: 21px; color: var(--ink-muted); text-wrap: pretty; }
+.item-body > p:last-child { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }  /* a card says what the part is in a line or two */
