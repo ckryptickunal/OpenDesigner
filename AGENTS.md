@@ -41,6 +41,7 @@ Rule-based checks and judgment are kept apart: [docs/HOW-IT-WORKS.md](docs/HOW-I
 | `skills/opendesigner/references/stages/` | 28 stage files (zoom 0-2) plus `*.detailed.md` (zoom 3). Questions in order, with options, visual effects, real systems, defaults and skip rules |
 | `skills/opendesigner/references/*.json` | `questions` (193, each with an area and a zoom level except the reference panel; 6 are planned and skipped until built), `levers` (8 dials and formulas), `graph` (decision fan-out), `ontology-slim` (275 nodes in 10 layers), `hooks`, `pacing` (areas, questions per level, minutes), `glossary` (terms in plain, designer and engineer voices, when shipped), `cards/` (Decision Cards, slim) |
 | `skills/opendesigner/references/rules.md`, `hooks.md`, `guardrails.md`, `improve.md` | Message style and three voices, asset hooks, hard rules, the self-improvement loop |
+| `skills/opendesigner/references/research.md`, `scripts/research.py` | User research after the sketch: check the tools (web search, a browser, `/last30days`, Mobbin, analytics), one yes to a plan, research on its own, then findings with sources in `opendesigner/research/` that recommend answers to the audience questions (`set_by research`, only on a yes) |
 | `skills/opendesigner/references/quality.md`, `practices.md` | The quality bar every visual result must pass (floors, a nine-line scorecard judged against shipped work, a fix prompt per line), and the tools and accesses to look for at the start (Mobbin, a browser, image and video tools, keys kept in the project) |
 | `skills/opendesigner/references/standards.md`, `standards/<theme>.md` | House standards: rules from sources the owner marked non-negotiable, applied and locked in every project, changed only when the person explicitly asks ([docs/KNOWLEDGE.md](docs/KNOWLEDGE.md)) |
 | `skills/opendesigner/assets/templates/` | 9 visual templates (palette, type scale, spacing ruler, radius, elevation, motion, component sheet, option gallery, taste poll). Each is JSON-fed, and its "Copy my choice" button produces `OD:` lines |
@@ -71,6 +72,7 @@ python3 skills/opendesigner/scripts/engine.py overview --open   (overview.html: 
 python3 skills/opendesigner/scripts/engine.py review    (end of every implementation: hard-coded values, standards, stale DESIGN.md; reports only, edits nothing)
 python3 skills/opendesigner/scripts/engine.py version   (this copy's release, and whether the system was made or built with an older one; never checks online)
 python3 skills/opendesigner/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea
+python3 skills/opendesigner/scripts/engine.py research plan --brief "..." --tools web-search,browser,last30days   (then research add <findings.json> [--accept], or research skip --why "...")
 ```
 Use the skill's own folder path when it is installed elsewhere (for example a plugin cache).
 
@@ -91,6 +93,7 @@ Use the skill's own folder path when it is installed elsewhere (for example a pl
   - `opendesigner/overview.html`: the person's own design-system page, rebuilt by every `build`, with the visual templates filled in `opendesigner/preview/`
   - `DESIGN.md` and `PRODUCT.md` at the project root
   - `opendesigner/decisions.md`, `opendesigner/state.json`, `opendesigner/RATIONALE.md`
+  - `opendesigner/research/users.json` and `users.md`: the user research, with its sources
   - an AGENTS.md snippet (`skills/opendesigner/assets/output/AGENTS-snippet.md`), added after asking
 - DESIGN.md is living: refresh it after every confirmed decision; at the end of every implementation run `engine.py review` and re-read it.
 - When a step is missing, wrong or confusing, follow `skills/opendesigner/references/improve.md`: record it with `engine.py feedback`; nothing is posted without the person's OK.

@@ -70,6 +70,7 @@ Pick one, say "show me", or tell me what you want.
 | `assumed` | Owner input you took from their words or files instead of asking (a club website: visitors come now and then, on phones), or could not ask | `--set-by assumed`; say it in one line so they can correct it; list it at the end; never present it as decided |
 | `reference` | Accepted from a reference | `--set-by reference --source-ref <ref-id>` (opendesigner-extract) |
 | `asset` | Derived from an asset the person supplied (for example brand color from the logo) | `--set-by asset` |
+| `research` | Recommended by the user research, and the person said yes | `engine.py research add <file> --accept` writes it, with the findings file as its source (`research.md` section 7) |
 | `standard` | A house standard (`references/standards.md`) or a project standard the person added. Applied and locked without asking | `engine.py init` applies house standards; `engine.py standard add ...` records a project one (section 12) |
 | locked | Must not change without explicit consent (brand hexes, accessibility floors, anything they lock) | `--lock` on the set, or `engine.py lock <path>` |
 

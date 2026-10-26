@@ -54,6 +54,9 @@ jobs:
             echo "skills/opendesigner/scripts/test_engine.py not present yet; skipping"
           fi
 
+      - name: User research tests (findings checks, signals against the questions, never over the person's answer, reminders, review)
+        run: python3 skills/opendesigner/scripts/test_research.py
+
       - name: Design evals (the engine on 18 fixed briefs; required checks must all pass)
         run: python3 tools/design_evals.py --check --no-save
 
