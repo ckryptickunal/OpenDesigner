@@ -615,7 +615,7 @@ def gpt_files(ref_files, glossary=None):
     def read(p):
         return p.read_text(encoding="utf-8") if p.exists() else ""
     skill = re.sub(r"^---.*?---\n", "", read(SKILL / "SKILL.md"), flags=re.S)
-    parts = [skill] + [read(REF / n) for n in ("zoom.md", "rules.md", "improve.md", "guardrails.md", "hooks.md", "making.md")]
+    parts = [skill] + [read(REF / n) for n in ("zoom.md", "rules.md", "improve.md", "guardrails.md", "hooks.md", "making.md", "research.md")]
     if "standards.md" in ref_files:
         parts.append(ref_files["standards.md"])
     for n in ("DESIGN.md", "decisions.md", "RATIONALE.md", "AGENTS-snippet.md", "COHESION-AUDIT.md", "state.json"):

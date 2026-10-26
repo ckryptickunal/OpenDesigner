@@ -95,6 +95,7 @@ Keep it short, in plain words:
 > Stop here, or go deeper on one part:
 > **Colors** (about 6 min) · **Text** (about 2 min) · **Everything, in 8 quick screens** (about 8 min)
 
+- After the sketch, put the user research first, above the choices, unless it is done or skipped (`research.md` section 1): "Before we go deeper, I can research who your users are and which apps they already use, about 10 minutes, and I do the work. Shall I?" Send its plan in the same message (`research.md` section 4).
 - Offer at most 3 choices. Use each area's plain name and its minutes from `pacing.json` (`areas[].levels["<level>"].minutes`). Pick what matters most for this product. First come areas whose choices change the most (`pacing.json` → `top_decisions`). Then come areas their answers made risky, such as a light brand color or a dense product.
 - Accessibility is never an option to skip. Its floors (`guardrails.md` section 4) are already set at level 0.
 - "Stop" is a good answer. Finish with the Finish steps in SKILL.md, at whatever level they reached.

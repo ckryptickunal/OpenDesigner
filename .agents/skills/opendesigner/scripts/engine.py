@@ -99,6 +99,10 @@ try:
     import taste as taste_py  # scripts/taste.py: the taste poll and the project's taste index; optional
 except ImportError:
     taste_py = None
+try:
+    import research as research_py  # scripts/research.py: user research, its checks and what it recommends; optional
+except ImportError:
+    research_py = None
 
 
 def track(d, event, **kw):
@@ -612,7 +616,8 @@ CHARACTER = ("energy", "roundness", "depth", "colorfulness", "warmth")
 DIALS = POSTURE + CHARACTER
 
 HOOK_STATUSES = ["pending", "have", "commissioning", "tool", "open-library", "placeholder", "not-needed"]
-SET_BY = ["chosen", "confirmed_default", "auto_default", "assumed", "delegated", "reference", "asset", "standard"]  # spec 7.9; standard: KNOWLEDGE.md 1
+SET_BY = ["chosen", "confirmed_default", "auto_default", "assumed", "delegated", "reference", "asset", "standard", "research"]
+# spec 7.9; standard: KNOWLEDGE.md 1; research: a recommendation from the user research (research.py) the person said yes to
 # state["standards"] (docs/KNOWLEDGE.md): house_version, applied ids, overridden {id: {why, decision, date}}, project standards,
 # retired ids already handled, and records {id: {paths: {state path: value}, decision, locked, kept}} so each value points at its decision
 STD_STATE = {"house_version": None, "applied": [], "overridden": {}, "project": [], "retired_seen": [], "records": {}}
@@ -688,6 +693,7 @@ def default_state(name="Untitled design system"):
         "blocks": {},
         "references": {},
         "taste": {},
+        "research": {},  # user research summary (research.py): status, brief, counts, highlights, proposals
         "hashes": {},
         "exports": {"prefix": "ds", "figmaPlan": "professional", "tailwindReset": True},
         "locks": [],
@@ -8604,7 +8610,7 @@ def cmd_export(d, fmt, files=None, meta=None, quiet=False):
 DESIGN_SECTIONS = ["Overview", "Colors", "Typography", "Layout", "Elevation & Depth", "Shapes", "Components", "Do's and Don'ts",
                    "Motion", "Modes and Themes", "Iconography and Imagery", "Content and Voice", "Accessibility",
                    "Platforms and Devices", "Decisions", "Open Items", "For Agents"]
-PRODUCT_SECTIONS = ["Product", "Audience", "Surfaces", "Memorable Thing", "Principles", "Constraints", "Scope", "Team and Governance"]
+PRODUCT_SECTIONS = ["Product", "Audience", "Users", "Surfaces", "Memorable Thing", "Principles", "Constraints", "Scope", "Team and Governance"]
 SECTION_PATHS = {  # which decisions each DESIGN.md section rests on
     "Overview": r"^(dials\.(expression|brandPresence|density)|preset|macros|answers\.Q-(aud|brand|dir|scope)-)",
     "Colors": r"^(dials\.(colorfulness|warmth)|raw\.(brandColor|primaryActionColor|focusColor|neutralBase|secondaryColors|contrastTarget|flags)|answers\.Q-(color|theme)-)",
@@ -8678,7 +8684,7 @@ def _decision_log(d):
     return out
 
 
-PERSON_SET_BY = ("chosen", "confirmed_default", "assumed", "delegated", "reference", "asset")
+PERSON_SET_BY = ("chosen", "confirmed_default", "assumed", "delegated", "reference", "asset", "research")
 
 
 def decision_table_rows(d, limit=40):
@@ -8887,7 +8893,7 @@ def answer_counts(state, latest):
         if get_path(state, path) not in (None, "", [], {}, "pending") and _q not in ans:
             sb = (latest.get(path) or {}).get("set_by") or "chosen"
             by[sb] = by.get(sb, 0) + 1
-    return (by.get("chosen", 0) + by.get("confirmed_default", 0) + by.get("reference", 0) + by.get("asset", 0),
+    return (by.get("chosen", 0) + by.get("confirmed_default", 0) + by.get("reference", 0) + by.get("asset", 0) + by.get("research", 0),
             by.get("delegated", 0) + by.get("assumed", 0))
 
 
@@ -9631,6 +9637,8 @@ def render_product_md(state, existing=""):
     out.append(sec("Product", product_words(state) or "Not recorded yet (Q-scope-01)."))
     aw = audience_words(state)
     out.append(sec("Audience", (aw[:1].upper() + aw[1:] + ("" if aw.endswith(".") else ".")) if aw else "Not recorded yet (Q-aud-01)."))
+    if research_py:
+        out.append(sec("Users", research_py.product_section(state)))
     out.append(sec("Surfaces", "\n".join(f"- {s.get('name')}: {s.get('mode')} mode" + (f" ({surface_rule(s, 'set by the Density dial')})" if surface_rule(s, "") else "")
                                          if isinstance(s, dict) else f"- {s}" for s in surf)
                    or surface_words(state)
@@ -10036,7 +10044,7 @@ OVERVIEW_HEADINGS = [("Hero", "display", ("display.lg", "display.md", "display.s
 def _ov_area_status(decs, title):
     rx = SECTION_PATHS.get(title)
     sb = [v["set_by"] for k, v in decs.items() if rx and re.match(rx, k)]
-    if any(s in ("chosen", "confirmed_default", "reference", "asset") for s in sb):
+    if any(s in ("chosen", "confirmed_default", "reference", "asset", "research") for s in sb):
         return "chosen"
     if any(s in ("delegated", "assumed") for s in sb):
         return "picked"
@@ -10747,6 +10755,9 @@ def cmd_build(d, force=False):
         print(f"This system {_made_with(kind, v)}; this build brought its files up to OpenDesigner {OPENDESIGNER_VERSION}. "
               f"What changed: CHANGELOG.md ({CHANGELOG_URL}).")
     print_report(rep, d)
+    nudge = research_py.reminder(state_or_none(d)) if research_py else ""
+    if nudge:
+        print(nudge)
     return 1 if errors else 0
 
 
@@ -10850,6 +10861,25 @@ def main(argv=None):
     p.add_argument("--project", default=None, help="folder to scan (default: the project root)")
     p.add_argument("--strict", action="store_true", help="exit 1 when anything is found")
     p.add_argument("--json", action="store_true")
+    p = sub.add_parser("research", parents=[common], help="user research: plan it, check and add the findings, skip it, or see where it stands")
+    rsub = p.add_subparsers(dest="action", required=True)
+    q = rsub.add_parser("plan", parents=[common], help="the users line, what to find out, searches to start from, and the tools to look for")
+    q.add_argument("--brief", default=None, help="who the users are, in one line the person confirmed")
+    q.add_argument("--tools", default=None, help="the tools you have, comma list: web-search,browser,last30days,mobbin,deep-research,analytics")
+    q.add_argument("--json", action="store_true")
+    q = rsub.add_parser("check", parents=[common], help="check a findings file without saving it")
+    q.add_argument("file")
+    q.add_argument("--json", action="store_true")
+    q = rsub.add_parser("add", parents=[common], help="save the findings, render research/users.md, and list what they recommend")
+    q.add_argument("file")
+    q.add_argument("--accept", action="store_true", help="apply the recommendations the person said yes to (set_by research)")
+    q.add_argument("--only", default=None, help="with --accept: only these questions (comma list); also how to apply one that differs "
+                                                 "from the person's own answer, after they agree")
+    q.add_argument("--json", action="store_true")
+    q = rsub.add_parser("skip", parents=[common], help="the person does not want user research; the reminders stop")
+    q.add_argument("--why", required=True, help="the person's own words")
+    q = rsub.add_parser("status", parents=[common], help="where the user research stands")
+    q.add_argument("--json", action="store_true")
     p = sub.add_parser("feedback", parents=[common], help="record a gap, bug, confusing step or idea and print an issue link")
     p.add_argument("text", nargs="?", default="")
     p.add_argument("--kind", default=None, choices=list(FEEDBACK_KINDS), help="default: idea (confusing with --from-journey)")
@@ -10970,6 +11000,21 @@ def main(argv=None):
                      all_holders=getattr(a, "all_holders", False), beats=getattr(a, "beats", None))
         if not a.no_doc:
             refresh_docs(d)
+    elif a.cmd == "research":
+        if not research_py:
+            raise SystemExit("research.py is missing next to engine.py, so user research is not available in this copy.")
+        if a.action == "check":  # a findings file can be checked before any system exists
+            return research_py.check(a.file, a.json)
+        if not os.path.exists(os.path.join(d, STATE_FILE)):
+            raise SystemExit(f"no state at {os.path.join(d, STATE_FILE)}; run the sketch first (engine.py sketch ...).")
+        if a.action == "plan":
+            research_py.plan(sys.modules[__name__], d, a.brief, a.tools, a.json)
+        elif a.action == "add":
+            return research_py.add(sys.modules[__name__], d, a.file, a.accept, a.only, a.json)
+        elif a.action == "skip":
+            return research_py.skip(sys.modules[__name__], d, a.why)
+        elif a.action == "status":
+            return research_py.status(d, merge_defaults(load_state(d)), a.json)
     elif a.cmd == "feedback":
         os.makedirs(d, exist_ok=True)
         text = a.text
@@ -12266,8 +12311,10 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         by[f_["kind"]] = by.get(f_["kind"], 0) + 1
     taste = taste_index(d, state)  # dials that moved away from the person's taste: flagged, never a failure (taste is theirs)
     drift = taste_py.drift(taste, meta["dials"]) if taste else []
+    r_errs, r_notes = research_py.review(d, state) if research_py else ([], [])
     result = {"project": project, "filesScanned": scanned, "counts": by, "findings": findings[:500], "staleSections": stale,
-              "missing": missing, "untrue": sorted(set(untrue)), "tasteDrift": drift}
+              "missing": missing, "untrue": sorted(set(untrue)), "tasteDrift": drift,
+              "research": {"errors": r_errs, "notes": r_notes, "status": (state.get("research") or {}).get("status") or "none"}}
     if as_json:
         print(json.dumps(result, indent=2))
     else:
@@ -12318,8 +12365,12 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                   "if they keep it, record it as chosen and the index follows.")
         elif taste:
             print("The system matches the person's taste index.")
+        for t_ in r_errs:
+            print(f"User research: {t_}. Fix the file, then engine.py research add {research_py.FILE}.")
+        for t_ in r_notes:
+            print(f"User research: {t_}")
     track(d, "review")
-    return 1 if strict and (findings or stale or missing or untrue) else 0
+    return 1 if strict and (findings or stale or missing or untrue or r_errs) else 0
 
 
 # =============================================================================================
