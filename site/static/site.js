@@ -277,6 +277,43 @@
   }
   function centre(r) { return [r.x + r.w / 2, r.y + r.h / 2]; }
   function put(el, r) { el.style.left = r.x + "px"; el.style.top = r.y + "px"; el.style.width = r.w + "px"; el.style.height = r.h + "px"; }
+  function ink(sr) {  // what a check must never cover: every line of text, control, icon and chart on the page, in the camera's pixels
+    var c = cam.getBoundingClientRect(), sx = c.width / cam.offsetWidth, sy = c.height / cam.offsetHeight, out = [];
+    var add = function (r) { if (r.width > 2 && r.height > 2) out.push({ x: (r.left - c.left) / sx, y: (r.top - c.top) / sy, w: r.width / sx, h: r.height / sy }); };
+    var walk = document.createTreeWalker(sr, NodeFilter.SHOW_TEXT), range = document.createRange(), n;
+    while ((n = walk.nextNode())) {
+      if (!/\S/.test(n.data)) continue;
+      var p = n.parentElement && n.parentElement.getBoundingClientRect();
+      if (p && (p.width <= 2 || p.height <= 2)) continue;  // text only screen readers get takes no room
+      range.selectNodeContents(n);
+      Array.prototype.forEach.call(range.getClientRects(), add);
+    }
+    all(sr, "button, .search, .avatar, .pill, svg, .weeks, .meter, .days").forEach(function (el) { add(el.getBoundingClientRect()); });
+    return out;
+  }
+  function gutter(b, taken) {  // a check goes where it covers nothing: on its box's top-left corner, else along its top edge
+    // (a column's is the line under its header), else in the gutter above, else on the other corner, beside, an edge, below
+    var r = b.a, el = b.ok.firstElementChild, s = el.offsetWidth, h = s / 2 + 3 / Z, o = s / 2 + 2 / Z;  // h: half the badge and some air
+    if (!(s > 0)) return;  // a hidden stage has no size to place anything in
+    var x0 = r.x, y0 = r.y, x1 = r.x + r.w, y1 = r.y + r.h, p = 4 / Z, spots = [[x0, y0], [x0 + p, y0 + p]], t;  // p: box() padding
+    for (t = s; t < r.w; t += s / 2) spots.push([x0 + t, y0 + p]);
+    for (t = o; t <= r.w - o; t += s / 2) spots.push([x0 + t, y0 - o]);
+    spots.push([x1, y0], [x1 - p, y0 + p]);
+    for (t = o; t <= r.h - o; t += s / 2) spots.push([x0 - o, y0 + t], [x1 + o, y0 + t]);
+    for (t = s; t < r.h; t += s / 2) spots.push([x0, y0 + t], [x1, y0 + t]);
+    for (t = o; t <= r.w - o; t += s / 2) spots.push([x0 + t, y1 + o]);
+    spots.push([x0, y1], [x1, y1]);
+    var cover = function (p) {  // how much of the page the badge would hide there; off the page counts as hidden
+      var ax = p[0] - h, ay = p[1] - h, a = 0;
+      if (ax < 0 || ay < 0 || ax + 2 * h > camW || ay + 2 * h > camH) return Infinity;
+      taken.forEach(function (q) { a += Math.max(0, Math.min(ax + 2 * h, q.x + q.w) - Math.max(ax, q.x)) * Math.max(0, Math.min(ay + 2 * h, q.y + q.h) - Math.max(ay, q.y)); });
+      return a;
+    };
+    var best = spots[0], least = Infinity, graze = s * s / 100;  // the air around a check may graze a line by a pixel
+    for (var i = 0; i < spots.length && least > graze; i++) { var a = cover(spots[i]); if (a < least) { least = a; best = spots[i]; } }
+    el.style.left = best[0] - r.x - s / 2 + "px"; el.style.top = best[1] - r.y - s / 2 + "px";
+    taken.push({ x: best[0] - s / 2, y: best[1] - s / 2, w: s, h: s });  // and no two checks on one spot
+  }
   function fit() {  // fit both pages to the stage's width, choose the camera's zoom, and measure every box
     var W = stage.clientWidth, k = W / D.width, ph = Math.max(pb.offsetHeight, pa.offsetHeight);
     Z = KVIEW / k > 1.15 ? KVIEW / k : 1;
@@ -291,6 +328,8 @@
       b.a = box(pa.shadowRoot, m.asel) || b.r;
       put(b.mk, b.r); put(b.ok, b.a);
     });
+    var taken = ink(pa.shadowRoot);
+    D.marks.forEach(function (m) { gutter(by[m.n], taken); });
     var t = box(pa.shadowRoot, ".t-cash"), g = groups()[0];
     spot = { today: [0, 0], audit: g ? centre(by[g[0].n].r) : [0, 0], fixed: t ? [t.x - 8 / Z + W / Z / 2, t.y + t.h / 2] : [0, 0] };  // the chart's left edge in view
   }
@@ -549,6 +588,7 @@
       reset(view);
     }).observe(stage);
   }
+  if (document.fonts) document.fonts.ready.then(function () { if (!busy) { fit(); reset(view); } });  // the checks avoid text as it is finally set
   if (!reduce && "IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (es) {
       if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); play(); }

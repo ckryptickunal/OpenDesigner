@@ -27,6 +27,10 @@ def _pct(x):
     return f"{round(x * 100)}%" if isinstance(x, (int, float)) else "–"
 
 
+def _alarms(n):
+    return f"{n} false alarm" + ("" if n == 1 else "s")
+
+
 def _meta(parts):
     return '<p class="ev-meta">' + " · ".join(esc(str(p)) for p in parts if p) + "</p>"
 
@@ -84,7 +88,7 @@ def block(name):
             cs = ch["checkers"].values()
             planted, caught, alarms = sum(c.get("planted", 0) for c in cs), sum(c.get("caught", 0) for c in cs), sum(c.get("falseAlarms", 0) for c in cs)
             tiles.append(("Checker evals", f"{caught} of {planted} planted mistakes caught",
-                          f"{len(ch['checkers'])} checkers; {alarms} false alarms on clean pages"))
+                          f"{len(ch['checkers'])} checkers; {_alarms(alarms)} on clean pages"))
         tiles.append(("Showcase audit", f"{sc['passed']} of {sc['rebuilt']} rebuilt pieces pass",
                       f"before: ours lost {sc['before_lost']} of {sc['before_pairs']} blind pairs"))
         return f'<div class="ev-stats" data-n="{len(tiles)}">' + "".join(f'<div class="ev-stat"><p class="kicker">{esc(k)}</p><p class="ev-big">{esc(v)}</p><p class="ev-sub">{esc(s)}</p></div>'
@@ -147,7 +151,7 @@ def block(name):
         rows = []
         for f in chg["fixes"]:
             b, a = before["checkers"].get(f["checker"], {}), ch["checkers"].get(f["checker"], {})
-            fmt = lambda c: f'{c.get("caught")} of {c.get("planted")} caught, {_pct(c.get("precision"))} precise, {c.get("falseAlarms", 0)} false alarms'
+            fmt = lambda c: f'{c.get("caught")} of {c.get("planted")} caught, {_pct(c.get("precision"))} precise, {_alarms(c.get("falseAlarms", 0))}'
             rows.append([f'<strong>{esc(f["checker"])}</strong><br><span class="ev-desc">{esc(f["what"])}</span>', esc(fmt(b)), esc(fmt(a))])
         return _table(["Bug the evals found", "Before the fix", "After"], rows) + _meta(["same test pages, same scoring; only the checker changed"])
     if name == "showcase":

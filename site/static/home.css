@@ -438,7 +438,7 @@
 /* booking (owner, 2026-10-15: a free 20-minute intro call; paid sessions later, no prices yet) and the contribution links */
 .nav-book { font: 600 14px/20px "Hanken Grotesk", system-ui, sans-serif; letter-spacing: -0.011em; color: var(--ink); text-decoration: none; padding: 8px 4px; }
 .nav-book:hover { color: var(--accent-text); }
-.bar-in { gap: 24px; } .bar-in .top-nav { flex: 1; }
+@media (min-width: 421px) { .bar-in { gap: 24px; } } .bar-in .top-nav { flex: 1; }  /* phones keep site.css's 12 px, so the header fits at 320 px */
 @media (max-width: 720px) { .nav-book { display: none; } }
 .h-book { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px 48px; align-items: end; padding: 40px; border: 1px solid var(--line); border-radius: var(--r-panel); background: var(--surface-raised); }
 .h-book .h-lede { margin-top: 16px; }
