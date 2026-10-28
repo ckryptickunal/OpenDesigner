@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Tests for preflight.py (standard library only)."""
-import subprocess, sys, tempfile, unittest
+"""Tests for preflight.py (standard library only; the video tests need ffmpeg and skip without it)."""
+import shutil, subprocess, sys, tempfile, unittest
 from pathlib import Path
 
 SCRIPT = Path(__file__).with_name("preflight.py")
+sys.path.insert(0, str(SCRIPT.parent))
+import preflight  # noqa: E402
 
 BAD = """<!doctype html><html><head><style>
 :root { --t-big: 150px; --track: -0.06em; }
@@ -99,6 +101,50 @@ class TestHtml(unittest.TestCase):
         r = run(page)
         self.assertEqual(r.returncode, 0, r.stdout)
         self.assertIn('WARN   font "Proxima Nova"', r.stdout)
+
+
+def square_video(d, side, every, name="v.mkv"):
+    """2 s at 30 fps, 270 x 480, mid grey, with a centred square that swaps black and white every `every` frames.
+    Lossless RGB, so edges stay sharp and the flashing area is exactly side x side px."""
+    x, y, out = (270 - side) // 2, (480 - side) // 2, Path(d) / name
+    vf = (f"drawbox=x={x}:y={y}:w={side}:h={side}:color=black:t=fill,"
+          f"drawbox=x={x}:y={y}:w={side}:h={side}:color=white:t=fill:enable='mod(floor(n/{every}),2)'")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "color=c=0x808080:s=270x480:r=30:d=2",
+                    "-vf", vf, "-c:v", "ffv1", "-pix_fmt", "bgr0", str(out)], check=True)
+    return out
+
+
+def video(path, *args):
+    return subprocess.run([sys.executable, str(SCRIPT), "video", str(path), *args], capture_output=True, text=True)
+
+
+class TestFlash(unittest.TestCase):
+    def test_field_sizes(self):  # the two viewing cases measured for the reels (1080 x 1920)
+        self.assertEqual(round(preflight.flash_field(1080, 1920, "tablet")), 317)
+        self.assertEqual(round(preflight.flash_field(1080, 1920, "phone")), 435)
+        self.assertEqual(round(preflight.flash_field(1920, 1080, "tablet")), 317)  # turned to landscape
+
+    @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "needs ffmpeg")
+    def test_flashing_square(self):
+        # field 79 px, limit 1,235 px²: a 40 px square swapping every frame flashes 1,600 px², 130% of the limit
+        with tempfile.TemporaryDirectory() as d:
+            r = video(square_video(d, 40, 1), "--flash-where", str(Path(d) / "worst.png"))
+            self.assertEqual(r.returncode, 1, r.stdout)
+            self.assertIn("worst flashing area 1,600 px²", r.stdout)
+            self.assertIn("ERROR  flashing over the general flash threshold", r.stdout)
+            self.assertTrue((Path(d) / "worst.png").stat().st_size > 0)
+
+    @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "needs ffmpeg")
+    def test_flash_rate_and_size(self):
+        with tempfile.TemporaryDirectory() as d:
+            r = video(square_video(d, 40, 4))  # 7 or 8 swaps a second: more than three flashes
+            self.assertEqual(r.returncode, 1, r.stdout)
+            r = video(square_video(d, 40, 5, "slow.mkv"))  # 6 swaps a second: three flashes, allowed at any size
+            self.assertNotIn("ERROR", r.stdout)
+            self.assertIn("nothing flashes more than 3 times a second", r.stdout)
+            r = video(square_video(d, 20, 1, "small.mkv"))  # 400 px²: 32% of the limit
+            self.assertNotIn("ERROR", r.stdout)
+            self.assertIn("worst flashing area 400 px²", r.stdout)
 
 
 if __name__ == "__main__":
