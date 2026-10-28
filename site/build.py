@@ -1767,6 +1767,9 @@ def images():
         for size, name in ((180, "apple-touch-icon.png"), (32, "favicon-32.png"), (192, "icon-192.png"), (512, "icon-512.png")):
             im.resize((size, size), Image.LANCZOS).save(DIST / name)
     fav = (BRAND / "design-system/project/assets/Logos/mark-light.svg").read_text().replace('viewBox="0 0 100 100"', 'viewBox="-12 -12 124 124"')
+    # Dark browser tabs: the light mark's dark squares vanish, so switch to the dark mark's colors (Logos/mark-dark.svg).
+    fav = fav.replace('fill="#222428"', 'class="sq" fill="#222428"').replace('fill="#2338ff"', 'class="dot" fill="#2338ff"')
+    fav = fav.replace(">", '><style>@media (prefers-color-scheme: dark){.sq{fill:#e6e9ee}.dot{fill:#517cff}}</style>', 1)
     (DIST / "favicon.svg").write_text(fav)
 
 
