@@ -171,6 +171,15 @@ OpenDesigner is free and open source. Sponsorship pays for maintenance and for m
 <!-- Partners: large logos. Companies: small logos. Backers: names. Supported by: in-kind credit programs (never leave the wall empty). -->
 <!-- When GitHub Sponsors is approved, point the link above at https://github.com/sponsors/ckryptickunal (see docs/SPONSORSHIP.md). -->
 
+## Star history
+
+<a href="https://star-history.com/#ckryptickunal/OpenDesigner&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ckryptickunal/OpenDesigner&type=Date&theme=dark">
+    <img src="https://api.star-history.com/svg?repos=ckryptickunal/OpenDesigner&type=Date" width="600" alt="OpenDesigner's GitHub stars over time, redrawn from GitHub by star-history.com">
+  </picture>
+</a>
+
 ## License
 
 Code, skills, templates and data files are under the [MIT license](LICENSE). Written research and documentation are under [CC BY 4.0](LICENSE-CONTENT), so you can reuse them with credit. That covers `research/`, `benchmarks/`, `sources/`, `traces/`, `synthesis/` Markdown and `docs/`. Product and design-system names in the research belong to their owners. The tool marks in the "works in" row belong to their owners and only show where OpenDesigner runs (from [Simple Icons](https://simpleicons.org), CC0). Photos in the README images are from Unsplash: [Philipp Hubert](https://unsplash.com/photos/dVVjhUcdb30) (banner), [Sean Fahrenbruch](https://unsplash.com/photos/kxL6jPPNEWc) (how it works), and [Photoholgic](https://unsplash.com/photos/HVQnG6JxxY0), [Annie Spratt](https://unsplash.com/photos/5yKrcO8FKwM) and [Harshal Tandel](https://unsplash.com/photos/BrzWSKWCuWo) (examples).
