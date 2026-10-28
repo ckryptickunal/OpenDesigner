@@ -79,3 +79,7 @@ Run this on any video, page, deck or image before you call it done. Each line is
 ## Found by the owner, from a reference he shared (2026-10-23)
 
 48. **Floors are not sizes.** No row, menu item or list entry is built at the accessibility minimum (24 px): rows use the control height. An icon's gap to its label is at least half the icon's size, the icon is quieter than the label, selected rows sit in from the container's edge, and the gap between groups is several times the gap between rows. In this repo, `library.py check` flags rows sized only to `--ds-size-target-min`. [M49]
+
+## Found measuring 73 reels for Instagram (2026-10-26)
+
+49. **Flashing.** `preflight.py video` passes the flash measure on the final file (WCAG 2.2 SC 2.3.1): nothing that changes brightness more than three times in a second covers more than 25% of a 10-degree field, and you aimed for 90% of the limit or less. A video that loops, as reels do, is measured played twice in a row (`ffmpeg -stream_loop 1 -i out.mp4 -c copy twice.mp4`). Nothing flashes in saturated red more than three times a second; the helper does not measure red, so check it by eye. [M50]

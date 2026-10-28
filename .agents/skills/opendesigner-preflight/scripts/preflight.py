@@ -2,14 +2,15 @@
 """OpenDesigner preflight: catch the silly mistakes before an export. Read-only.
 
   preflight.py html  <file.html> [--medium web|app|watch|video]   type and font checks from the page's CSS
-  preflight.py video <file.mp4> [--ignore 0-17]         frozen time with timestamps, black frames, audio, length
+  preflight.py video <file.mp4> [--ignore 0-17]         frozen time with timestamps, black frames, flashing, audio, length
+               [--flash-field tablet|phone|PX] [--flash-where worst.png]
   preflight.py frames <file.mp4> [--every 0.5] [--out DIR]   full-size frames plus 390 px phone copies
   preflight.py audio <clip.wav> [...]                     noise bursts or clicks at the start or end of each clip
 
 Exit code 1 when an error is found. Standard library only, no network; video modes need ffmpeg and ffprobe.
 The html check reads CSS, not the rendered page. See ../references/checklist.md for the checks a script cannot make.
 """
-import argparse, html as htmllib, json, re, shutil, subprocess, sys
+import argparse, html as htmllib, json, math, re, shutil, subprocess, sys, tempfile
 from pathlib import Path
 
 GENERIC = {"serif", "sans-serif", "monospace", "system-ui", "ui-monospace", "ui-sans-serif", "ui-serif", "ui-rounded",
@@ -370,7 +371,109 @@ def need_ffmpeg():
         sys.exit("ffmpeg and ffprobe are needed for this check")
 
 
-def check_video(path: Path, ignore=()) -> Report:
+# WCAG 2.2 SC 2.3.1 (three flashes or below threshold): a 10-degree field at the closest likely viewing. Screens in cm
+# from Apple's specs (iPad Pro 13-inch: 2064 x 2752 px at 264 ppi; iPhone 15: 1179 x 2556 px at 460 ppi), held
+# closer than usual.
+VIEWS = {"tablet": ("a 13-inch tablet at 25 cm", 19.86, 26.48, 25.0), "phone": ("a phone at 15 cm", 6.51, 14.11, 15.0)}
+
+
+def flash_field(w, h, view: str) -> float:
+    """Video px across a 10-degree field, with the video fitted to the screen and turned the way that shows it biggest."""
+    _, sw, sh, dist = VIEWS[view]
+    cm_per_px = max(min(sw / w, sh / h), min(sh / w, sw / h))
+    return 2 * dist * math.tan(math.radians(5)) / cm_per_px
+
+
+ON = 65280  # full scale at 16 bits, for luminance and for "flashing": ffmpeg's lut stops at 65280 for gray16
+
+
+def flash_graph(src: str, aw: int, ah: int, n: int) -> str:
+    """ffmpeg filters from [src] to [bad]: ON where a pixel makes a general-flash transition at this frame and has made
+    7 or more in the last n frames (one second), else 0. Both directions count, which errs on the safe side."""
+    unit, f = ON // n, "format=gray16le"  # every step is pinned to 16 bits: ffmpeg would otherwise pick 8 bits for some
+    # sRGB to linear light, one plane at a time: 8-bit grey becomes 16-bit exactly (x 257), packed RGB does not
+    x = "(val/65535)"
+    lin = f"{ON}*if(lte({x},0.04045),{x}/12.92,pow(({x}+0.055)/1.055,2.4))"
+    return (f"[{src}]scale={aw}:{ah},format=rgb24,extractplanes=r+g+b[fr][fg][fb];"
+            + "".join(f"[f{c}]{f},lut=c0='{lin}',{f}[fl{c}];" for c in "rgb") +
+            f"[flr][flg][flb]mix=inputs=3:weights='0.2126 0.7152 0.0722':scale=1,{f},split=2[fa][fz];"  # relative luminance
+            f"[fa]tblend=all_mode=difference,lut=c0='if(gte(val,{0.1 * ON}),{ON},0)',{f}[fd];"  # changed by 0.1 or more
+            f"[fz]tblend=all_mode=darken,lut=c0='if(lt(val,{0.8 * ON}),{ON},0)',{f}[fm];"  # the darker state is below 0.8
+            f"[fd][fm]blend=all_mode=and,{f},split=2[ft][fu];"
+            # count over the last n frames; tmix fills its window with copies of the first frame, so a blank one goes first
+            f"[fu]lut=c0='if(val,{unit},0)',{f},tpad=start=1,tmix=frames={n}:weights=1:scale=1,{f},trim=start_frame=1,"
+            f"setpts=PTS-STARTPTS,lut=c0='if(gte(val,{6.5 * unit}),{ON},0)',{f}[fc];"
+            f"[ft]setpts=PTS-STARTPTS[fn];[fn][fc]blend=all_mode=and,{f}[bad]")
+
+
+def check_flash(r: Report, path: Path, w: int, h: int, fps: float, field="tablet", where=None):
+    """WCAG general flash threshold, measured in ffmpeg: the largest area flashing at once inside any 10-degree field
+    (a disk, summed by FFT convolution) must stay at or under 25% of that field."""
+    px = flash_field(w, h, field) if field in VIEWS else float(field)
+    n = max(1, round(fps))  # frames in one second
+    s = min(1.0, 960 / max(w, h))  # measured at up to 960 px on the long side: half size for 1080 x 1920
+    aw, ah = max(2, round(w * s)), max(2, round(h * s))
+    rad = px / 2 * s
+    p = math.ceil(rad) + 1  # a blank margin: convolve copies edge pixels outward, and its FFT wraps around
+    pw, ph = aw + 2 * p + (aw % 2), ah + 2 * p + (ah % 2)  # even, so the disk's centre is the kernel's origin
+    k = math.floor(rad)
+    disk = sum(1 for dy in range(-k, k + 1) for dx in range(-k, k + 1) if dx * dx + dy * dy <= rad * rad)
+    g = (flash_graph("0:v", aw, ah, n) + f";[bad]pad={pw}:{ph}:{p}:{p}:black[fp];"
+         f"color=c=black:s={pw}x{ph}:d=1:r=1,format=gray16le,"
+         f"geq=lum='if(lte((X-{pw // 2})*(X-{pw // 2})+(Y-{ph // 2})*(Y-{ph // 2}),{rad * rad}),65535,0)'[fk];"
+         f"[fp][fk]convolve=impulse=first,crop={aw}:{ah}:{p}:{p}")  # each pixel: share of the disk around it that flashes
+    pix = "gray16le" if sys.byteorder == "little" else "gray16be"
+    size, worst, at, i = aw * ah * 2, 0, 0, 0
+    zero = bytes(size)
+    with tempfile.TemporaryFile() as log:
+        proc = subprocess.Popen(["ffmpeg", "-v", "error", "-noautorotate", "-i", str(path), "-filter_complex", g,
+                                 "-f", "rawvideo", "-pix_fmt", pix, "-"], stdout=subprocess.PIPE, stderr=log)
+        while len(buf := proc.stdout.read(size)) == size:
+            if buf != zero:
+                m = max(memoryview(buf).cast("H"))
+                if m > worst:
+                    worst, at = m, i
+            i += 1
+        proc.wait()
+        log.seek(0)
+        errs = log.read().decode(errors="replace").strip().splitlines()
+    if proc.returncode:
+        r.warn(f"flashing was not measured: {errs[-1] if errs else 'ffmpeg failed'}  [M50]")
+        return
+    if not i:
+        r.info("flashing: a single frame cannot flash")
+        return
+    limit = 0.25 * math.pi * (px / 2) ** 2
+    seen = VIEWS[field][0] if field in VIEWS else "as given"
+    r.info(f"flashing (WCAG 2.2 SC 2.3.1, general flash): a 10-degree field is {px:.0f} px across ({seen}); "
+           f"the limit is 25% of it, {limit:,.0f} px²")
+    if not worst:
+        r.info("no pixel changes brightness 7 or more times within a second, so nothing flashes more than 3 times a second")
+        return
+    share, t = worst / ON / 0.25, (at + 1) / fps
+    area = worst / ON * disk * (w / aw) * (h / ah)
+    r.info(f"worst flashing area {area:,.0f} px² at {t:.1f} s: {share:.0%} of the limit")
+    if share > 1:
+        r.err(f"flashing over the general flash threshold at {t:.1f} s ({share:.0%} of the limit). It can trigger "
+              "seizures: slow the motion, shrink what changes or lower its brightness change, then measure again  [M50]")
+    elif share > 0.9:
+        r.warn(f"flashing at {share:.0%} of the limit at {t:.1f} s; aim for 90% or less, to leave a margin for "
+               "re-encoding, which changes the pixels  [M50]")
+    if where:
+        start = max(0, at + 1 - n)  # the second before the worst frame, so its count is complete
+        g2 = (f"[0:v]trim=start_frame={start}:end_frame={at + 2},setpts=PTS-STARTPTS,split=2[src][base];"
+              + flash_graph("src", aw, ah, n) +
+              f";[base]scale={aw}:{ah},trim=start_frame=1,setpts=PTS-STARTPTS,format=gbrp,split=2[b1][b2];"
+              "[b2]geq=r=255:g=0:b=255[mag];[bad]format=gray,format=gbrp[mask];[b1][mag][mask]maskedmerge")
+        out = run(["ffmpeg", "-v", "error", "-y", "-noautorotate", "-i", str(path), "-filter_complex", g2,
+                   "-update", "1", str(where)])
+        if out.returncode:
+            r.warn(f"the worst moment was not saved: {(out.stderr.strip().splitlines() or ['ffmpeg failed'])[-1]}")
+        else:
+            r.info(f"worst moment saved to {where}, with the flashing pixels in magenta")
+
+
+def check_video(path: Path, ignore=(), field="tablet", where=None) -> Report:
     need_ffmpeg()
     r = Report()
     info = json.loads(run(["ffprobe", "-v", "error", "-show_streams", "-show_format", "-of", "json", str(path)]).stdout)
@@ -413,6 +516,15 @@ def check_video(path: Path, ignore=()) -> Report:
     blacks = re.findall(r"black_start:([\d.]+)", bl)
     if blacks:
         r.warn(f"black frames at {blacks[:8]} s  [M15]")
+    if v:
+        def rate(s):
+            num, den = (int(x) for x in s.split("/"))
+            return num / den if num and den else 0
+        # the average rate: r_frame_rate jumps on uneven timestamps, such as the join of a looped copy (240 for 30)
+        fps = rate(v[0].get("avg_frame_rate", "0/0")) or rate(v[0]["r_frame_rate"]) or 30.0
+        check_flash(r, path, v[0]["width"], v[0]["height"], fps, field, where)
+        if ignore:
+            r.info("flashing was measured over the whole video, ignored ranges too: a flash is a risk whatever it is for")
     return r
 
 
@@ -466,7 +578,10 @@ def main():
     h = sub.add_parser("html"); h.add_argument("file")
     h.add_argument("--medium", choices=list(MIN), default="web", help="where it is seen: web page, app or watch screen (laid out in points), or video frame")
     v = sub.add_parser("video"); v.add_argument("file")
-    v.add_argument("--ignore", action="append", default=[], metavar="START-END", help="seconds to leave out, such as a deliberate 'before' act; repeatable")
+    v.add_argument("--ignore", action="append", default=[], metavar="START-END", help="seconds to leave out of the freeze measure, such as a deliberate 'before' act; repeatable")
+    v.add_argument("--flash-field", default="tablet", metavar="tablet|phone|PX",
+                   help="the 10-degree field for the flash measure: a viewing case, or its size in video px (default: tablet, the closest case)")
+    v.add_argument("--flash-where", metavar="PNG", help="save the worst flashing moment, with the flashing pixels in magenta")
     au = sub.add_parser("audio"); au.add_argument("files", nargs="+")
     f = sub.add_parser("frames"); f.add_argument("file"); f.add_argument("--every", type=float, default=0.5); f.add_argument("--out", default="preflight-frames")
     a = ap.parse_args()
@@ -480,7 +595,9 @@ def main():
     if a.cmd == "html":
         r = check_html(p, a.medium)
     elif a.cmd == "video":
-        r = check_video(p, [tuple(float(x) for x in g.split("-", 1)) for g in a.ignore])
+        if a.flash_field not in VIEWS and not re.fullmatch(r"\d+(\.\d+)?", a.flash_field):
+            ap.error("--flash-field takes tablet, phone or a size in px")
+        r = check_video(p, [tuple(float(x) for x in g.split("-", 1)) for g in a.ignore], a.flash_field, a.flash_where)
     else:
         r = extract_frames(p, a.every, Path(a.out))
     print(f"{r.errors} error(s), {r.warns} warning(s). The checklist covers what this script cannot see: references/checklist.md")
