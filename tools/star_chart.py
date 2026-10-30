@@ -184,7 +184,9 @@ def main():
         loaded = subprocess.run(["launchctl", "list", LABEL], capture_output=True).returncode == 0
         print(f"job        {'running every 3 hours' if loaded else 'not installed'}")
         print(f"last run   {LOG.read_text().strip().splitlines()[-1] if LOG.exists() else 'none'}")
-        print(f"chart      {chart_count(main_repo())} stars (main checkout)")
+        svg_on_github = git(main_repo(), "show", "origin/main:brand/kit/readme/stars-light.svg", check=False).stdout
+        m = re.search(r"GitHub stars: (\d+)", svg_on_github)
+        print(f"chart      {m.group(1) if m else 'not found'} stars (origin/main)")
         print(f"GitHub     {gh(f'repos/{REPO}')['stargazers_count']} stars")
     elif arg == "":
         print(f"drew {draw(ROOT)} stars into {pathlib.Path(*OUT)}")
