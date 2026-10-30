@@ -166,6 +166,10 @@ def install():
     print(f"installed: {LABEL} every 3 hours; log {LOG}")
 
 
+def main_repo():
+    return pathlib.Path((APP / "repo.txt").read_text().strip()) if (APP / "repo.txt").exists() else ROOT
+
+
 def main():
     arg = sys.argv[1] if len(sys.argv) > 1 else ""
     if arg == "--install":
@@ -175,13 +179,12 @@ def main():
         PLIST.unlink(missing_ok=True)
         print("uninstalled")
     elif arg == "--push":
-        repo = pathlib.Path((APP / "repo.txt").read_text().strip()) if (APP / "repo.txt").exists() else ROOT
-        push(repo)
+        push(main_repo())
     elif arg == "--status":
         loaded = subprocess.run(["launchctl", "list", LABEL], capture_output=True).returncode == 0
         print(f"job        {'running every 3 hours' if loaded else 'not installed'}")
         print(f"last run   {LOG.read_text().strip().splitlines()[-1] if LOG.exists() else 'none'}")
-        print(f"chart      {chart_count(ROOT)} stars (this checkout)")
+        print(f"chart      {chart_count(main_repo())} stars (main checkout)")
         print(f"GitHub     {gh(f'repos/{REPO}')['stargazers_count']} stars")
     elif arg == "":
         print(f"drew {draw(ROOT)} stars into {pathlib.Path(*OUT)}")
