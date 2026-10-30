@@ -154,7 +154,9 @@ def install():
     APP.mkdir(parents=True, exist_ok=True)
     script = APP / "star_chart.py"
     shutil.copy2(__file__, script)
-    (APP / "repo.txt").write_text(str(ROOT))
+    common = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--path-format=absolute", "--git-common-dir"],
+                            capture_output=True, text=True, check=True).stdout.strip()
+    (APP / "repo.txt").write_text(str(pathlib.Path(common).parent))  # the main checkout, even when run from a worktree
     PLIST.parent.mkdir(parents=True, exist_ok=True)
     plistlib.dump({"Label": LABEL, "ProgramArguments": [sys.executable, str(script), "--push"], "StartInterval": 3 * 3600,
                    "RunAtLoad": True, "StandardOutPath": str(LOG), "StandardErrorPath": str(LOG),
