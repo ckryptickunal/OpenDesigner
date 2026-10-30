@@ -173,10 +173,10 @@ OpenDesigner is free and open source. Sponsorship pays for maintenance and for m
 
 ## Star history
 
-<a href="https://star-history.com/#ckryptickunal/OpenDesigner&Date">
+<a href="https://github.com/ckryptickunal/OpenDesigner/stargazers">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ckryptickunal/OpenDesigner&type=Date&theme=dark">
-    <img src="https://api.star-history.com/svg?repos=ckryptickunal/OpenDesigner&type=Date" width="600" alt="OpenDesigner's GitHub stars over time, redrawn from GitHub by star-history.com">
+    <source media="(prefers-color-scheme: dark)" srcset="brand/kit/readme/stars-dark.svg">
+    <img src="brand/kit/readme/stars-light.svg" width="600" alt="OpenDesigner's GitHub stars over time, redrawn from GitHub every 3 hours">
   </picture>
 </a>
 
