@@ -620,8 +620,8 @@ def check_practice(p, sysm, w, F):
         over = len(order) > WEIGHTS_SYSTEM or bool(close)
         title = (f"{len(order)} font weights on one page" if len(order) > WEIGHTS_SYSTEM else "Font weights one step apart" if close else "Three font weights in one view")
         F.add("MS-02", "warn" if over else "info", title, w,
-              ", ".join(f"{k} on {ws[k].get('n', 0)} element(s)" for k in order) + "".join(f"; {a} and {b} are one step apart, so they read as a slip, not a level" for a, b in close[:2]),
-              "three weights at most in a system, and two in any one view, clearly apart, such as 400 and 600 (DC-L19-24; DC-L15-02: levels 200 apart in weight)",
+              ", ".join(f"{k} on {ws[k].get('n', 0)} element(s)" for k in order) + "".join(f"; {a} and {b} are one step apart, which can read as a mistake rather than a level" for a, b in close[:2]),
+              "three weights at most in a system, and two in any one view, clearly apart, such as 400 and 600 (DC-L19-24; it marks two neighbouring weights reading as a mistake as inferred)",
               [ws[k]["ex"][0] for k in order if ws[k].get("ex")][:4], "give each weight a job (body, labels, headings) and merge the near ones; try size or space before a third weight",
               "DC-L19-24", key="weights-count")
 
@@ -640,8 +640,8 @@ def check_practice(p, sysm, w, F):
         rows = sorted(fams.items(), key=lambda kv: -kv[1]["n"])
         F.add("MS-08", "warn" if len(fams) >= HUE_WARN else "info", f"{len(fams)} color families on one page", w,
               "; ".join(f"{name} ({', '.join(e['hexes'][:3])}) x{e['n']}" for name, e in rows),
-              "grays, one accent with one job, and status colors only on the part that is wrong or done (DC-L01-08; making.md section 12: \"More visual\" means more information, not more colour)",
-              [e["ex"][0] for _, e in rows if e["ex"]][:4], "pick the one accent; turn decorative colors gray; keep red, amber and green for status, on the part that carries it",
+              "grays, one accent with one job, and status colors (DC-L01-08), with the danger color only on the part that is going wrong (making.md section 12: \"More visual\" means more information, not more colour)",
+              [e["ex"][0] for _, e in rows if e["ex"]][:4], "pick the one accent; turn decorative colors gray; keep status colors for status, and red only on the part that is going wrong",
               "DC-L01-08", key="hues-count")
     tc = (p.get("colors") or {}).get("text") or {}
     greys = {k.lower(): v for k, v in tc.items() if len(k) == 7 and k.lower() != "#ffffff" and not hue_family(k)}
