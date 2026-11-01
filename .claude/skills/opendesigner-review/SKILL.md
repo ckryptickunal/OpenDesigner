@@ -24,7 +24,7 @@ Output, in the person's repo: `opendesigner/review/` with the plan, probe result
 Talk plainly: one idea and one question per message, and recommend one option with its reason. First time a term appears, give its plain meaning plus "Designers: X · Code: Y" (`references/rules.md` in the opendesigner skill).
 
 Helper: `scripts/review.py` (below: `review.py`). Run it from the person's project. Knowledge:
-- `references/cases.md` (generated; `review.py cases` prints it filtered): 65 ways a review goes wrong, each with how to catch it and where the claim comes from. Read the groups that match the page.
+- `references/cases.md` (generated; `review.py cases` prints it filtered): 70 ways a review goes wrong, each with how to catch it and where the claim comes from. Read the groups that match the page.
 - `references/capture.md`: how to capture with each kind of tool, and the traps in each.
 - `references/motion.md`: reviewing things that move.
 - `references/report.md`: finding format, severity, the verdict rules, and the prompt for a fresh-context verifier.

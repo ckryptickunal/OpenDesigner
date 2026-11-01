@@ -368,11 +368,16 @@ def version_facts():
             "latest_change": git_out("log", "-1", "--format=%cs") or TODAY}
 
 
+AUTO_COMMIT = re.compile(r"^README: star chart, \d+ stars?$")  # tools/star_chart.py --push
+
+
 def changes_by_day():
     """Every change on main, newest first, grouped by the day it landed: git's own record, so it can't fall behind."""
     days = {}
     for line in git_out("log", "--first-parent", "--format=%H%x1f%cs%x1f%s").splitlines():
         h, day, subject = line.split("\x1f", 2)
+        if AUTO_COMMIT.match(subject):  # the README's star count, redrawn by a timer: not a change anyone needs to read
+            continue
         days.setdefault(day, []).append((h, subject))
     return days
 
@@ -432,26 +437,9 @@ def changes_feed(days=30):
 
 
 def whats_new_md():
-    """CHANGELOG.md's highlights for visitors: one line each, newest first, dated by the day git says the line was
-    written (git blame), and marked when it is a fix. The explanation stays under "Highlights, explained"."""
-    import datetime as _dt
-    items, section, ts, when = [], "", 0, None
-    for line in git_out("blame", "--line-porcelain", "CHANGELOG.md").splitlines():
-        if line.startswith("committer-time "):
-            ts = int(line.split()[1])
-        elif line.startswith("committer-tz "):  # the day as the person who wrote it saw it, as git log %cs shows it
-            z = line.split()[1]
-            tz = _dt.timezone((-1 if z[0] == "-" else 1) * _dt.timedelta(hours=int(z[1:3]), minutes=int(z[3:5])))
-            when = _dt.datetime.fromtimestamp(ts, tz).date().isoformat()
-        elif line.startswith("\t"):
-            text = line[1:]
-            if text.startswith("### "):
-                section = text[4:].strip()
-            m = re.match(r"^- \*\*(.+?)\*\*", text)
-            if m and when:
-                items.append((ts, when, m.group(1).strip().rstrip(".:"), section == "Fixed"))
-    items.sort(key=lambda x: x[0], reverse=True)
-    return "\n".join(f"- {day_name(d)}: {t}" + (" (a fix)" if fixed else "") for _, d, t, fixed in items)
+    """CHANGELOG.md's highlights for visitors: one line each, newest first, dated like the changelog page, and marked
+    when it is a fix. The explanation stays under "Highlights, explained"."""
+    return "\n".join(f"- {day_name(e['day'])}: {e['title']}" + (" (a fix)" if e["kind"] == "Fixed" else "") for e in highlight_entries())
 
 
 CHANGELOG_BLOCKS = {"{{changelog}}": lambda: changelog_md(), "{{version}}": lambda: version_md(), "{{changes}}": lambda: changes_md(),
@@ -624,18 +612,26 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jp
 """
 
 
+FOOT_COLS = [  # four short columns; each label fits on one line down to 320 px (the docs list lives at /docs/)
+    ("Product", [("Install", "/docs/install/"), ("Showcase", "/showcase/"), ("Component library", "/library/"),
+                 ("For teams", "/docs/enterprise/"), ("Book a call", "/book/")]),
+    ("Learn", [("Introduction", "/docs/introduction/"), ("Quickstart", "/docs/quickstart/"), ("How it works", "/docs/how-it-works/"),
+               ("FAQ", "/docs/faq/"), ("All docs", "/docs/")]),
+    ("Project", [(f'Changelog <span class="foot-ver">v{VERSION}</span>', "/changelog/"), ("GitHub", GH), ("Contribute", "/docs/contribute/"),
+                 ("Report a problem", f"{GH}/issues/new/choose")]),
+    ("Trust", [("Security and data", "/docs/security/"), ("Report a vulnerability", f"{GH}/blob/main/SECURITY.md"),
+               ("Licence (MIT)", f"{GH}/blob/main/LICENSE")]),
+]
+
+
 def footer(pages):
-    by = {s: [p for p in pages if p["section"] == s and p["path"] != "/docs/security/"][:6] for s in SECTIONS}  # security is under Trust
-    cols = "".join(f'<div><h2 class="foot-h kicker">{s}</h2><ul>' + "".join(f'<li><a href="{p["path"]}">{esc(p["title"])}</a></li>' for p in ps) + "</ul></div>"
-                   for s, ps in by.items() if ps)
-    trust = (f'<div><h2 class="foot-h kicker">Trust</h2><ul><li><a href="/docs/security/">Security and data</a></li><li><a href="{GH}/blob/main/SECURITY.md">Report a vulnerability</a></li>'
-             f'<li><a href="/docs/changelog/">Changelog · v{VERSION}</a></li><li><a href="{GH}/blob/main/LICENSE">Licence (MIT)</a></li></ul></div>')
-    proj = (f'<div><h2 class="foot-h kicker">Project</h2><ul><li><a href="{GH}">GitHub</a></li><li><a href="{GH}/issues/new/choose">Report a problem</a></li>'
-            f'<li><a href="/docs/contribute/">Contribute</a></li><li><a href="/book/">Book a call</a></li><li><a href="/showcase/">Showcase</a></li><li><a href="/llms.txt">llms.txt</a></li><li><a href="/sitemap.xml">Sitemap</a></li></ul></div>')
-    return (f'<footer class="foot"><div class="foot-in"><div class="foot-brand">{lockup()}<p>Free and open source. MIT for code, '
-            f'CC BY 4.0 for docs.</p></div>{cols}{trust}{proj}</div><p class="foot-legal">OpenDesigner is an independent open-source project. Claude, '
-            f'ChatGPT, Codex, Cursor, Figma and other names belong to their owners and appear only to say where OpenDesigner runs. Photos: Unsplash '
-            f'photographers, credited where shown. Updated <time datetime="{TODAY}" style="white-space:nowrap">{TODAY}</time>.</p></footer>')
+    cols = "".join(f'<div class="foot-col"><h2 class="foot-h kicker">{h}</h2><ul>' + "".join(f'<li><a href="{u}">{t}</a></li>' for t, u in links)
+                   + "</ul></div>" for h, links in FOOT_COLS)
+    return (f'<footer class="foot"><div class="foot-in"><div class="foot-brand">{lockup()}<p>Free and open source.<br>MIT for code, CC BY 4.0 for docs.</p></div>'
+            f'<nav class="foot-cols" aria-label="Footer">{cols}</nav></div>'
+            f'<div class="foot-legal"><p>OpenDesigner is an independent open-source project. Claude, ChatGPT, Codex, Cursor, Figma and other names belong '
+            f'to their owners and appear only to say where OpenDesigner runs. Photos: Unsplash photographers, credited where shown.</p>'
+            f'<p class="foot-meta"><a href="/llms.txt">llms.txt</a><a href="/sitemap.xml">Sitemap</a><span>Updated&nbsp;<time datetime="{TODAY}">{TODAY}</time></span></p></div></footer>')
 
 
 # Decoration, direction A "Press proof" (owner's choice, 2026-10-15): marks from a printer's proof sheet; styles in static/deco.css.
@@ -1325,7 +1321,8 @@ def doc_page(p, pages):
 
 def highlight_entries():
     """CHANGELOG.md's highlights as entries for the changelog page: title, explanation and details, the kind of change
-    (its "### Added/Changed/Fixed" heading) and the day git says the entry was written, newest first."""
+    (its "### Added/Changed/Fixed" heading) and its day, newest first. The day is the date the entry states, or else
+    the day git says the line was written."""
     import datetime as _dt
     entries, section, ts, when, cur = [], "", 0, None, None
     for line in git_out("blame", "--line-porcelain", "CHANGELOG.md").splitlines():
@@ -1343,11 +1340,12 @@ def highlight_entries():
                 if text.startswith("### "):
                     section = text[4:].strip()
             if m and when:
-                cur = {"ts": ts, "day": when, "title": m.group(1).strip().rstrip(".:"), "rest": m.group(2), "more": [], "kind": section}
+                stated = re.match(r"^\s*\([^()]*?(\d{4}-\d{2}-\d{2})[^()]*\)", m.group(2))  # "(2026-10-24)": the day it landed, kept when the entry is reworded
+                cur = {"ts": ts, "day": stated.group(1) if stated else when, "title": m.group(1).strip().rstrip(".:"), "rest": m.group(2), "more": [], "kind": section}
                 entries.append(cur)
             elif cur and text.startswith("  "):
                 cur["more"].append(text[2:])
-    entries.sort(key=lambda e: e["ts"], reverse=True)
+    entries.sort(key=lambda e: (e["day"], e["ts"]), reverse=True)  # stable: entries of one day keep the file's order
     return entries
 
 

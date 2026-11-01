@@ -100,6 +100,9 @@ python3 skills/opendesigner/scripts/test_journey.py
 python3 tools/sync_skills.py --check
 python3 tools/build_dist.py --check
 
+# CHANGELOG.md entries are short and dated
+python3 tools/changelog_check.py
+
 # relative links in Markdown files resolve (offline)
 python3 tools/check_links.py
 ```
@@ -114,6 +117,7 @@ Working on the website or the showcase? Follow [`site/README.md`](site/README.md
 - For research changes, include the trace rows for every new source.
 - For skill or engine changes, include a short transcript, a screenshot of the visual, or test output.
 - If your change affects a decision other lanes rely on, add a line to "Cross-lane notes" in `_coordination/BOARD.md`.
+- Add one short entry per change to `CHANGELOG.md`: `- **Short title** (YYYY-MM-DD). One to three plain sentences.` The website's changelog shows it, so say what changed for the reader, not only where. `python3 tools/changelog_check.py` checks it.
 - Keep commits small. Maintainers squash on merge.
 
 ## Licensing of contributions

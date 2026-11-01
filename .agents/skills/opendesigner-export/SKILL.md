@@ -19,7 +19,7 @@ The engine is `scripts/engine.py` in this skill when it was installed from a rel
 ## 1. Code exports (always available)
 ```
 python3 <engine> build                      generate, validate, then every export, DESIGN.md and the preview
-python3 <engine> export --format tailwind   one format only: css tailwind dtcg figma paper swift compose, or all
+python3 <engine> export --format tailwind   one format only: css tailwind dtcg figma paper swift compose artifact, or all
 ```
 | Format | Output in `opendesigner/` | Use it |
 |---|---|---|
@@ -31,6 +31,7 @@ python3 <engine> export --format tailwind   one format only: css tailwind dtcg f
 | `compose` | `build/compose/DesignTokens.kt` | Add to the Android UI module |
 | `figma` | `build/figma/variables.json` and `build/figma/import/<Collection>.<Mode>.tokens.json` | Import in Figma (below) when there is no MCP |
 | `paper` | `build/paper/tokens.json`, `build/paper/tokens.light.css`, `tokens.dark.css` | Paper tokens (below) |
+| `artifact` | `build/artifact/project/` (the system as a Claude Design System artifact's files: index, tokens, README) | Publish the system as a browsable design-system page in Claude |
 
 **Tailwind v4 wiring.** In the main CSS file, for example `src/index.css`:
 ```css
