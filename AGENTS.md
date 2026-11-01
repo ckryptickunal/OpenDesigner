@@ -141,6 +141,7 @@ Follow `_coordination/PROTOCOL.md`. In short:
 Processes that held up in use (details in each file):
 - **Website:** `site/README.md` "Before every deploy": local build, `site/check.py`, `site/check_layout.py` with 0 errors at 13 widths, a real-header check, then deploy and IndexNow.
 - **Showcase:** `brand/showcase/BRIEF.md` and `ROUND3-BRIEF.md`: the owner's verdict outranks AI scores; a fresh-eyes audit; `brand/tools/check_dates.py` and `check_names.py`; `.example` domains.
+- **Changelog on every push** (owner, 2026-11-01): every push to main that changes what people get adds one `CHANGELOG.md` entry per change, so the website's changelog says what changed in its own words, not just a commit title or a link to the README. Write `- **Short title** (YYYY-MM-DD). One to three plain sentences.`, dated the day it lands, under 400 characters; the full story goes in the commit or PR. `python3 tools/changelog_check.py` checks the format.
 - **Public copy** (videos, captions, posts, site, changelog): `docs/COPY.md`, then `python3 tools/copy_check.py <files>` and a read out loud. The bar: at most 1 reader in 10 should guess it was written by AI.
 - **Owner reviews:** `_coordination/OWNER-FEEDBACK.md`, then `skills/opendesigner/references/improve.md` step 5: each mistake becomes a preflight check, a `making.md` row and a review case.
 
@@ -160,6 +161,7 @@ python3 tools/test_wiki.py               learning wiki tests (.venv-wiki/bin/pyt
 python3 tools/design_evals.py --check --no-save   the engine on 18 fixed briefs: every required check passes (evals/README.md)
 python3 skills/opendesigner/scripts/library.py check   every library component uses only tokens every engine system writes, is scoped, and has complete tags
 python3 site/post_change_audit.py          after changing the website or the library: every automatic check, then walk skills/opendesigner/references/post-change-audit.md by eye
+python3 tools/changelog_check.py                  every CHANGELOG.md entry is short, dated and in the format the website reads; add one entry per change you push
 python3 tools/check_glossary.py --check           every glossary term passes the three-voice rules against today's engine, and docs/GLOSSARY.md is current
                                                    (edit synthesis/glossary.json, then: check_glossary.py --build, build_data.py, sync_skills.py)
 ```
