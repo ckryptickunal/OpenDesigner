@@ -15,7 +15,7 @@ You help anyone make a design system: a school student, a designer or an enginee
 Take facts from `references/`, not from memory. Use `scripts/engine.py` for all math.
 
 **A built product comes first as an audit, even when they say "just do it".** If the UI already exists, never rewrite every page in one go. The fast path is three steps, with no interview:
-1. Read the front-end code and list the problems with evidence (file, selector, value or measured number).
+1. Audit it with `references/audit.md`: read the front-end code, measure the rendered pages, and go through every button, typeface, weight, size and colour. Each problem gets one row: where it is (file, selector, value or measured number), what is wrong in plain words, the fix, and what practice says with its source.
 2. Fix them on one page, from tokens, and show that page beside the original.
 3. Roll it out to the rest after they say yes.
 
@@ -29,7 +29,7 @@ A person in a hurry still gets a finished page in the first reply. What they don
 | A new design system, tokens, theme, UI kit, DESIGN.md, "make my app look good" | This skill |
 | The repo already has `opendesigner/state.json` or an OpenDesigner DESIGN.md | **opendesigner-extend** |
 | They share a website, screenshot, Figma file, repo CSS or brand book to learn from | **opendesigner-extract**, then come back |
-| Their product is already built and they want it to look better ("make it look professional", "it looks messy") | **Audit before you change anything.** Read the front-end code, run **opendesigner-extract** on it and **opendesigner-review** on the rendered pages, then show the findings on the page (`review.py compare`) with what each fix gives them. Propose the smallest change that fixes the most, build it on one page, and show it before you touch the rest (`making.md` section 1) |
+| Their product is already built and they want it to look better ("make it look professional", "it looks messy") | **Audit before you change anything** (`references/audit.md`). Read the front-end code, run **opendesigner-extract** on it and **opendesigner-review** on the rendered pages, then show the findings on the page (`review.py compare`) with what each fix gives them and where its rule comes from. Propose the smallest change that fixes the most, build it on one page, and show it before you touch the rest (`making.md` section 1) |
 | They want it in Figma, Paper, Tailwind, iOS or Android | **opendesigner-export** |
 | They want illustrations, or the app "more visual" (empty states, onboarding, errors, hero) | **opendesigner-illustrate** |
 | They want original painted art or a film in the brand's colours (hero, launch reel, celebration loop) | **opendesigner-paint** |
@@ -49,6 +49,7 @@ A person in a hurry still gets a finished page in the first reply. What they don
 | `references/guardrails.md` | Before writing files, before reading a reference, and whenever you are unsure |
 | `references/standards.md` | At the start (short). House standards: rules OpenDesigner applies and locks in every project, the values they lock, and how the person can change one |
 | `references/standards/<theme>.md` | Before you offer options in that area, and before you implement anything it covers (motion, toasts, drawers, touch, Swift and more) |
+| `references/audit.md` | When the product is already built, before you change anything (fast path step 1): the checklist for buttons, type, colour, spacing, corners and states, and the row each finding gets, with the source of its rule |
 | `references/making.md` | Before you build a page, a screen or a section with the system, and each time the person gives feedback on what you built. The round, showing options, keeping a page one page, checking it as rendered, and the mistakes builders make |
 | `references/quality.md` | Before you call any visual result done or show it as finished. The floors, the nine-line scorecard, a fix prompt for each line, and the report format |
 | `references/research.md`, `scripts/research.py` | After the sketch, before level 1, and whenever the person asks about their users: research who they are, the apps they use and what they expect, save the findings with sources, and turn them into recommended answers. Check your tools first (web search, a browser, `/last30days`, Mobbin, analytics); one yes covers the whole run |

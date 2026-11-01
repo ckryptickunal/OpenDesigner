@@ -21,7 +21,7 @@
  *   __od.vitals()         a Promise: layout shift (CLS) and long animation frames since page load
  *   __od.stress(kind, on) reversible stress: textSpacing (WCAG 1.4.12), text200 (1.4.4), rtl, longWords, pseudoloc (+40% text)
  *   __od.setMode(m)       {theme, density, motion} on <html>: the data-theme / data-density / data-motion switches OpenDesigner CSS reads
- *   __od.marks(list)      boxes for the issues you will draw: [{sel, title, gives}] in (a selector matching several elements,
+ *   __od.marks(list)      boxes for the issues you will draw: [{sel, title, gives, source}] in (a selector matching several elements,
  *                         such as a table column, gets one box around them all), page coordinates out (they match a
  *                         full-page screenshot taken at the same width); save it as marks.json for review.py compare
  * seek(), scrollTo(), walk(), stress() and setMode() change the page; stress(kind, false) and setMode(prev) put it back.
@@ -160,6 +160,8 @@
     return img.naturalWidth;
   }
 
+  const BUTTONISH = 'button,[role=button],input[type=submit],input[type=button],a[href]';
+  const NOT_AN_ACTION = '[aria-current]:not([aria-current=false]),[aria-selected=true],[aria-pressed=true],:disabled,[aria-disabled=true]';
   const INTERACTIVE = 'a[href],button,input:not([type=hidden]),select,textarea,summary,[role=button],[role=link],[role=checkbox],[role=radio],[role=switch],[role=tab],[role=menuitem],[role=option],[role=slider],[tabindex]:not([tabindex="-1"]),[contenteditable=""],[contenteditable=true]';
 
   function accName(el) {
@@ -245,7 +247,7 @@
     const bump = (map, key, el, extra) => { const e = map[key] || (map[key] = { n: 0, ex: [] }); e.n++; if (e.ex.length < 1) e.ex.push(sel(el)); if (extra) e.chars = (e.chars || 0) + extra; };
     const overflow = [], clipped = [], scrollers = [], fixed = [], contrast = [], contrastSeen = new Set(), longLines = [], negMargins = [];
     const targets = [], small = [], noName = [], images = { total: 0, broken: [], noAlt: [], oversize: [], blurry: [], stretched: [], lazyPending: 0 };
-    const interactiveEls = [];
+    const interactiveEls = [], filledButtons = []; let buttonsChecked = 0;
     const counts = { svg: 0, canvas: 0, video: 0, iframe: 0, iframeCross: 0, audio: 0, shadowHosts: 0, smil: 0, lottie: 0, autoplayVideo: 0 };
     const idSeen = new Map(); let minText = null, visibleN = 0, textN = 0;
     const multiLine = [], placeholders = [], hiddenFocusable = [];
@@ -325,6 +327,24 @@
         const t = { el, sel: sel(el), w: round(r.width), h: round(r.height), cx: r.left + r.width / 2, cy: r.top + r.height / 2, r, inline };
         targets.push(t);
         if (!accName(el) && noName.length < CAP) noName.push({ sel: sel(el), tag });
+      }
+
+      // buttons and button-like links with a fill of their own: how many actions stand out (review case MS-16). A
+      // selected tab or the current page's nav item is a state, not an action; a card that is a link is too big to be one
+      if (el.matches(BUTTONISH) && !el.matches(NOT_AN_ACTION)) {
+        buttonsChecked++;
+        const grad = /gradient\(/.test(cs.backgroundImage || '') ? /rgba?\([^)]*\)/.exec(cs.backgroundImage) : null;
+        const fill = grad ? rgba(grad[0]) : rgba(cs.backgroundColor);
+        const text = (accName(el) || '').replace(/\s+/g, ' ').trim();
+        if (fill[3] >= 0.5 && r.height <= 72 && r.width <= 480 && text.length <= 40) {
+          const behind = backdrop(parentEl(el) || de).color;
+          const solid = over(fill, behind);
+          const cr = round(ratio(solid, behind), 100);
+          const y = r.top + window.scrollY;
+          if (cr >= 1.1 && filledButtons.length < CAP * 3)
+            filledButtons.push({ sel: sel(el), text, fill: hex(solid), fg: hex(over(rgba(cs.color), solid)), behind: hex(behind), ratio: cr, gradient: !!grad,
+                                 x: round(r.left + window.scrollX), y: round(y), w: round(r.width), h: round(r.height), first: y < vh, group: sel(parentEl(el)) });
+        }
       }
 
       // text: type scale, weight, line height, family, contrast, clipping, line length
@@ -444,6 +464,7 @@
     out.overflow = { list: overflow.sort((a, b) => b.over - a.over).slice(0, CAP), clipped, scrollers };
     out.content = { placeholders };
     out.labels = labels;
+    out.buttons = { checked: buttonsChecked, filled: filledButtons };
     out.fixed = fixed;
     out.targets = { count: targets.length, small, noName, hiddenFocusable, coarse: out.media.pointer === 'coarse' };
     out.images = images;

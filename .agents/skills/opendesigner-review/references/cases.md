@@ -2,7 +2,7 @@
 
 Generated from `synthesis/review-cases.json` by `tools/build_data.py`. Edit the source, not this file.
 
-69 cases in 7 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
+70 cases in 7 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
 
 ## You only looked at part of it
 
@@ -349,7 +349,7 @@ Sources: S-R5-001, S-R5-003, S-R5-030, S-R5-031
 
 **Why it is missed.** Sizes that differ by one pixel look identical.
 
-**How to catch it.** Read type.sizes, type.weights and type.lineHeights. Off-scale sizes are listed with a count and the nearest scale step. A browser default (13.33 px on buttons, 18.72 px on an h3, measured in Chrome 154) means the element does not inherit the type style.
+**How to catch it.** Read type.sizes, type.weights and type.lineHeights. Off-scale sizes are listed with a count and the nearest scale step. A browser default (13.33 px on buttons, 18.72 px on an h3, measured in Chrome 154) means the element does not inherit the type style. With or without a system, review.py also counts against practice: more than two text typefaces (one interface family plus a mono, DC-L02-03), more than three weights or two weights one step apart (DC-L19-24), each a warning.
 
 Sources: S-R5-030, S-R5-029
 
@@ -415,7 +415,7 @@ Sources: S-R5-056, S-R5-057, S-R5-042
 
 **Why it is missed.** Close colors look the same.
 
-**How to catch it.** The probe lists every text, background and border color in use. review.py check names those that are not in the system's palette and the closest token. Also run engine.py review to find them in the source.
+**How to catch it.** The probe lists every text, background and border color in use. review.py check names those that are not in the system's palette and the closest token. Also run engine.py review to find them in the source. With or without a system, review.py also counts color families (one accent plus status colors, DC-L01-08), gray text colors (three, DC-L15-02) and, with no palette, colors within a few RGB steps of each other that were typed twice.
 
 Sources: S-R5-030, S-R5-031
 
@@ -495,6 +495,17 @@ Sources: S-R5-102
 **How to catch it.** The probe counts the lines each text run inside a control spans (out.labels.broken), and review.py reports any as MS-15. A control built from two runs on purpose, such as a title and a subtitle, is not flagged, nor is a sentence over 40 characters. Fix it by keeping the label on one line (white-space: nowrap) and giving it room; let the row wrap, never the label. In an OpenDesigner demo trial on 2026-10-21, a dashboard's Reassign buttons broke inside the word at 1440 px for two rounds while the agent reported no overflow.
 
 Sources: S-R5-101
+
+### MS-16 More than one primary action
+*How known: measured · default severity: warn · applies to: always · preflight 36*
+
+**What goes wrong.** Two or three filled buttons stand out on the same screen ("Get started", "Book a demo", "Sign up"), or two filled buttons sit side by side, or the main button is blue on one page and black on the next. The eye has no first step.
+
+**Why it is missed.** Every action feels important to whoever built it, and each button on its own looks right. The fault only shows when you count the buttons that shout in one view.
+
+**How to catch it.** The probe records every button and button-like link with a fill of its own (out.buttons.filled): its fill, what is behind it, how much it stands out, and whether it is in the first screen. review.py treats a fill that stands out 3:1 or more from what is behind it (the WCAG 1.4.11 bar for a control's edge) as primary, and warns when two or more are in the first screen, when two sit side by side, or when the primary fill differs across the page (a red fill is the danger button and is not counted). Then name the one action the view exists for (preflight 36, DC-L08-05). A selected tab or the current page's nav item is a state and is not counted [inferred].
+
+Sources: S-R5-103
 
 ## It works for a mouse and a good pair of eyes, not for everyone
 
@@ -754,7 +765,7 @@ Sources: S-R5-037, S-R5-038, S-R5-039
 
 **Why it is missed.** Without a yardstick, review becomes taste. Models give confident, generic design feedback.
 
-**How to catch it.** Name the yardstick first: the project's tokens and DESIGN.md, the design file, the reference screenshot, or the brief. In OpenDesigner, load opendesigner/tokens and run check with --project. With none, say the review can only judge accessibility floors and internal consistency.
+**How to catch it.** Name the yardstick first: the project's tokens and DESIGN.md, the design file, the reference screenshot, or the brief. In OpenDesigner, load opendesigner/tokens and run check with --project. With none, say the review can only judge accessibility floors, internal consistency and practice with a source (review.py check counts primary buttons, typefaces, weights and colors; opendesigner references/audit.md names the source of each).
 
 Sources: S-R5-007, S-R5-030
 
@@ -875,3 +886,4 @@ Sources: S-R5-101
 | S-R5-100 | [CSS Font Loading Module (W3C draft)](https://drafts.csswg.org/css-font-loading/) | opened: further fonts may load after document.fonts.ready fulfils |
 | S-R5-101 | [OpenDesigner demo trial 1, owner review (2026-10-21)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: row 25: a run that passed every check was judged an admin template |
 | S-R5-102 | [OpenDesigner owner review of nested corners (2026-10-21)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: row 27: stages, bezels and frames whose corners did not nest |
+| S-R5-103 | [OpenDesigner owner review of the website (2026-10-15)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: row 10: three calls to action in one row were "very bad UX"; became preflight check 36 (mistake M37) |

@@ -542,7 +542,7 @@
       "title": "Type scale drift",
       "trap": "Twelve different font sizes are on the page. Weights are 500 in one place and 600 in another. A button shows the browser's 13.33 px instead of the text style.",
       "why_missed": "Sizes that differ by one pixel look identical.",
-      "catch": "Read type.sizes, type.weights and type.lineHeights. Off-scale sizes are listed with a count and the nearest scale step. A browser default (13.33 px on buttons, 18.72 px on an h3, measured in Chrome 154) means the element does not inherit the type style.",
+      "catch": "Read type.sizes, type.weights and type.lineHeights. Off-scale sizes are listed with a count and the nearest scale step. A browser default (13.33 px on buttons, 18.72 px on an h3, measured in Chrome 154) means the element does not inherit the type style. With or without a system, review.py also counts against practice: more than two text typefaces (one interface family plus a mono, DC-L02-03), more than three weights or two weights one step apart (DC-L19-24), each a warning.",
       "evidence": "measured",
       "severity": "warn",
       "when": "always",
@@ -646,7 +646,7 @@
       "title": "Color drift from the tokens",
       "trap": "A hex value that is close to a token but is not the token. Fine in light mode, wrong in dark.",
       "why_missed": "Close colors look the same.",
-      "catch": "The probe lists every text, background and border color in use. review.py check names those that are not in the system's palette and the closest token. Also run engine.py review to find them in the source.",
+      "catch": "The probe lists every text, background and border color in use. review.py check names those that are not in the system's palette and the closest token. Also run engine.py review to find them in the source. With or without a system, review.py also counts color families (one accent plus status colors, DC-L01-08), gray text colors (three, DC-L15-02) and, with no palette, colors within a few RGB steps of each other that were typed twice.",
       "evidence": "measured",
       "severity": "warn",
       "when": "always",
@@ -1097,7 +1097,7 @@
       "title": "Reviewing against nothing",
       "trap": "The agent says a page looks 'clean' with no brief, no tokens and no reference to compare with.",
       "why_missed": "Without a yardstick, review becomes taste. Models give confident, generic design feedback.",
-      "catch": "Name the yardstick first: the project's tokens and DESIGN.md, the design file, the reference screenshot, or the brief. In OpenDesigner, load opendesigner/tokens and run check with --project. With none, say the review can only judge accessibility floors and internal consistency.",
+      "catch": "Name the yardstick first: the project's tokens and DESIGN.md, the design file, the reference screenshot, or the brief. In OpenDesigner, load opendesigner/tokens and run check with --project. With none, say the review can only judge accessibility floors, internal consistency and practice with a source (review.py check counts primary buttons, typefaces, weights and colors; opendesigner references/audit.md names the source of each).",
       "evidence": "operated",
       "severity": "warn",
       "when": "always",
@@ -1161,6 +1161,21 @@
       "when": "always",
       "sources": [
         "S-R5-101"
+      ]
+    },
+    {
+      "id": "MS-16",
+      "group": "measure",
+      "title": "More than one primary action",
+      "trap": "Two or three filled buttons stand out on the same screen (\"Get started\", \"Book a demo\", \"Sign up\"), or two filled buttons sit side by side, or the main button is blue on one page and black on the next. The eye has no first step.",
+      "why_missed": "Every action feels important to whoever built it, and each button on its own looks right. The fault only shows when you count the buttons that shout in one view.",
+      "catch": "The probe records every button and button-like link with a fill of its own (out.buttons.filled): its fill, what is behind it, how much it stands out, and whether it is in the first screen. review.py treats a fill that stands out 3:1 or more from what is behind it (the WCAG 1.4.11 bar for a control's edge) as primary, and warns when two or more are in the first screen, when two sit side by side, or when the primary fill differs across the page (a red fill is the danger button and is not counted). Then name the one action the view exists for (preflight 36, DC-L08-05). A selected tab or the current page's nav item is a state and is not counted [inferred].",
+      "evidence": "measured",
+      "severity": "warn",
+      "when": "always",
+      "standard": "preflight 36",
+      "sources": [
+        "S-R5-103"
       ]
     }
   ],
@@ -1728,6 +1743,12 @@
       "url": "https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md",
       "status": "opened",
       "note": "row 27: stages, bezels and frames whose corners did not nest"
+    },
+    "S-R5-103": {
+      "title": "OpenDesigner owner review of the website (2026-10-15)",
+      "url": "https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md",
+      "status": "opened",
+      "note": "row 10: three calls to action in one row were \"very bad UX\"; became preflight check 36 (mistake M37)"
     }
   }
 }

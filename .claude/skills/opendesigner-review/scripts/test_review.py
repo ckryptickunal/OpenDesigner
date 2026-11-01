@@ -247,6 +247,119 @@ class QuietWhenClean(unittest.TestCase):
         self.assertIn("IN-04", c)
 
 
+def btn(text, fill, ratio, first=True, group="section", sel=None):
+    return {"sel": sel or f"button#{text.lower().replace(' ', '-')}", "text": text, "fill": fill, "fg": "#ffffff", "behind": "#ffffff",
+            "ratio": ratio, "gradient": False, "x": 0, "y": 100 if first else 1500, "w": 100, "h": 40, "first": first, "group": group}
+
+
+class Practice(unittest.TestCase):
+    """Counts any built page can be judged on without a design system (the audit's checks): primary buttons per view,
+    typefaces, weights and colors. Each finding names the practice and its source, and none is ever an error."""
+
+    def fs(self, sysm=None, **over):
+        return findings_for(clean_probe(**over), sysm)
+
+    def titled(self, fs, case):
+        return {f["title"]: f for f in fs if f["case"] == case}
+
+    def test_three_filled_buttons_in_the_first_screen_compete(self):
+        fs = self.fs(buttons={"checked": 5, "filled": [btn("Sign up", "#2563eb", 5.17, group="nav"), btn("Get started", "#2563eb", 5.17), btn("Book a demo", "#2563eb", 5.17),
+                                                       btn("Take the tour", "#f4f4f5", 1.1)]})
+        f = self.titled(fs, "MS-16")["3 primary buttons in the first screen"]
+        self.assertEqual(f["severity"], "warn")
+        self.assertIn("\"Book a demo\" (#2563eb)", f["measured"])
+        self.assertNotIn("Take the tour", f["measured"])          # a light gray fill (1.1:1) is a quiet button, not a primary
+        self.assertIn("preflight 36", f["expected"])
+        self.assertIn("DC-L08-05", f["expected"])
+        self.assertEqual(f["standard"], "preflight 36")
+
+    def test_one_primary_and_quiet_others_is_quiet(self):
+        fs = self.fs(buttons={"checked": 3, "filled": [btn("Get started", "#2563eb", 5.17), btn("Tour", "#f4f4f5", 1.1), btn("Upgrade", "#2563eb", 5.17, first=False)]})
+        self.assertEqual(fs, [])
+
+    def test_two_filled_buttons_side_by_side_below_the_first_screen(self):
+        fs = self.fs(buttons={"checked": 2, "filled": [btn("Save", "#2563eb", 5.17, first=False, group="div#dialog"), btn("Publish", "#2563eb", 5.17, first=False, group="div#dialog")]})
+        f = self.titled(fs, "MS-16")["Two filled buttons side by side"]
+        self.assertIn("sit side by side, both filled", f["measured"])
+
+    def test_an_action_on_every_row_is_named(self):
+        rows = [btn("Approve", "#2563eb", 5.17, group=f"tr:nth-of-type({i})", sel=f"tr:nth-of-type({i}) > td > button") for i in range(1, 6)]
+        f = self.titled(self.fs(buttons={"checked": 5, "filled": rows}), "MS-16")["5 primary buttons in the first screen"]
+        self.assertIn("\"Approve\" repeats 5 times", f["measured"])
+
+    def test_different_main_button_fills_but_red_is_the_danger_level(self):
+        fs = self.fs(buttons={"checked": 3, "filled": [btn("Save", "#2563eb", 5.17), btn("Delete", "#dc2626", 4.83, first=False, group="x")]})
+        self.assertNotIn("MS-16", by_case(fs))
+        fs = self.fs(buttons={"checked": 3, "filled": [btn("Save", "#2563eb", 5.17), btn("Export", "#111827", 17.7, first=False, group="x")]})
+        f = self.titled(fs, "MS-16")["2 different fills for the main button"]
+        self.assertIn("STD-visual-details-36", f["expected"])
+
+    def test_typefaces_counted_against_one_family_plus_a_mono(self):
+        fam = lambda *names: {"families": {n: {"n": 5, "ex": [f"p.{i}"], "chars": 100 * (9 - i)} for i, n in enumerate(names)}}
+        ty = lambda *names: {**clean_probe()["type"], **fam(*names)}
+        self.assertEqual(self.fs(type=ty("Inter", "JetBrains Mono", "Material Symbols Outlined")), [])  # a mono and an icon font are not extra text faces
+        self.assertEqual(self.fs(type=ty("system-ui", "-apple-system", "sans-serif")), [])              # three names for the one system font
+        two = self.titled(self.fs(type=ty("Inter", "Fraunces")), "MS-02")["Two text typefaces"]
+        self.assertEqual(two["severity"], "info")
+        many = self.titled(self.fs(type=ty("Inter", "Roboto", "Georgia", "Menlo")), "MS-02")["4 typefaces on one page"]
+        self.assertEqual(many["severity"], "warn")
+        self.assertIn("Menlo on 5 element(s) (mono)", many["measured"])
+        self.assertIn("DC-L02-03", many["expected"])
+
+    def test_weights_counted_and_neighbours_one_step_apart(self):
+        wt = lambda *ws: {**clean_probe()["type"], "weights": {str(x): {"n": 4, "ex": ["p"]} for x in ws}}
+        self.assertEqual(self.fs(type=wt(400, 600)), [])
+        self.assertEqual(self.titled(self.fs(type=wt(400, 600, 800)), "MS-02")["Three font weights in one view"]["severity"], "info")
+        near = self.titled(self.fs(type=wt(400, 500)), "MS-02")["Font weights one step apart"]
+        self.assertEqual(near["severity"], "warn")
+        self.assertIn("400 and 500 are one step apart", near["measured"])
+        many = self.titled(self.fs(type=wt(300, 400, 600, 700, 800)), "MS-02")["5 font weights on one page"]
+        self.assertIn("DC-L19-24", many["expected"])
+
+    def test_color_families_gray_text_and_twins(self):
+        def cols(text=(), bg=(), border=()):
+            mk = lambda xs: {x: {"n": 3, "ex": [f"x{x[1:]}"]} for x in xs}
+            return {"text": mk(text), "bg": mk(bg), "border": mk(border)}
+        self.assertEqual(self.fs(colors=cols(text=["#18181b", "#52525b"], bg=["#ffffff", "#2563eb", "#dc2626"])), [])  # grays, one accent, one status color
+        fams = self.titled(self.fs(colors=cols(bg=["#2563eb", "#dc2626", "#16a34a"])), "MS-08")["3 color families on one page"]
+        self.assertEqual(fams["severity"], "info")
+        fams = self.titled(self.fs(colors=cols(bg=["#2563eb", "#dc2626", "#16a34a", "#f59e0b", "#9333ea"])), "MS-08")["5 color families on one page"]
+        self.assertEqual(fams["severity"], "warn")
+        self.assertIn("purple (#9333ea)", fams["measured"])
+        self.assertIn("DC-L01-08", fams["expected"])
+        greys = self.titled(self.fs(colors=cols(text=["#000000", "#18181b", "#3f3f46", "#52525b", "#71717a", "#ffffff"])), "MS-08")["5 gray text colors"]
+        self.assertEqual(greys["severity"], "warn")                # white text on filled buttons is not counted
+        self.assertIn("DC-L15-02", greys["expected"])
+        twins = self.titled(self.fs(colors=cols(text=["#333333"], bg=["#343434", "#f4f4f5", "#f5f5f5"])), "MS-08")
+        f = twins["Colors that look the same but are typed differently (2 groups)"]
+        self.assertIn("STD-visual-details-26", f["expected"])
+        self.assertIn("#333333 x3 = #343434 x3", f["measured"])
+
+    def test_twins_are_left_to_the_drift_check_when_a_palette_exists(self):
+        sysm = {"name": "S", "palette": {"#333333": "ds-ink", "#343434": "ds-ink-2"}, "type_sizes": [], "ladder": [], "radii": [], "radius_ladder": [], "faces": [], "weights": [], "durations": [], "unit": 4}
+        fs = self.fs(sysm, colors={"text": {"#333333": {"n": 9, "ex": ["p"]}, "#343434": {"n": 9, "ex": ["p"]}}, "bg": {}, "border": {}})
+        self.assertFalse([f for f in fs if "look the same" in f["title"]])
+
+    def test_counts_are_not_judged_under_stress_or_forced_colors(self):
+        crowded = dict(type={**clean_probe()["type"], "weights": {"300": {"n": 1, "ex": ["p"]}, "400": {"n": 1, "ex": ["p"]}, "500": {"n": 1, "ex": ["p"]}, "700": {"n": 1, "ex": ["p"]}}},
+                       buttons={"checked": 2, "filled": [btn("A", "#2563eb", 5.17), btn("B", "#2563eb", 5.17)]})
+        self.assertTrue({"MS-02", "MS-16"} <= set(by_case(self.fs(**crowded))))
+        self.assertFalse({"MS-02", "MS-16"} & set(by_case(self.fs(stress=["text200"], **crowded))))
+        self.assertFalse({"MS-02", "MS-16"} & set(by_case(self.fs(media={"colorScheme": "light", "forcedColors": True}, **crowded))))
+
+    def test_practice_findings_are_never_errors_and_always_name_a_source(self):
+        fs = self.fs(buttons={"checked": 3, "filled": [btn("A", "#2563eb", 5.17), btn("B", "#111827", 17.7)]},
+                     type={**clean_probe()["type"], "families": {n: {"n": 1, "ex": ["p"], "chars": 9} for n in ("Inter", "Roboto", "Lato")},
+                           "weights": {str(x): {"n": 1, "ex": ["p"]} for x in (300, 400, 500, 600)}},
+                     colors={"text": {x: {"n": 1, "ex": ["p"]} for x in ("#000000", "#111111", "#222222", "#333333", "#444444")},
+                             "bg": {x: {"n": 1, "ex": ["div"]} for x in ("#2563eb", "#dc2626", "#16a34a", "#f59e0b", "#9333ea")}, "border": {}})
+        self.assertGreaterEqual(len(fs), 6)
+        for f in fs:
+            self.assertIn(f["severity"], ("warn", "info"), f["title"])
+            self.assertTrue(f["standard"], f["title"])
+            self.assertRegex(f["expected"], r"STD-|DC-L|preflight|WCAG", f["title"])
+
+
 class FocusWalk(unittest.TestCase):
     def stop(self, i, sel="button.a", ring=True, obscured=0.0, name="Save", y=100, visible=True, fv=True):
         return {"active": True, "sel": sel, "index": i, "name": name, "focusVisible": fv, "inViewport": visible,
@@ -605,6 +718,24 @@ class Compare(unittest.TestCase):
         for fg, bg in (("#ffffff", "#c8202e"), ("#ffffff", "#12804a"), ("#52525b", "#f4f4f5")):
             self.assertIn(bg if bg != "#f4f4f5" else fg, page)
             self.assertGreaterEqual(ratio(fg, bg), 4.5, (fg, bg))
+
+    def test_each_fix_says_where_it_comes_from_and_the_page_ends_with_the_question(self):
+        m = copy.deepcopy(self.marks)
+        m["marks"] += [dict(m["marks"][0], n=2, source="STD-visual-details-29"), dict(m["marks"][0], n=3, source="MS-16"),
+                       dict(m["marks"][0], n=4, source="WCAG 2.2 SC 1.4.3"), dict(m["marks"][0], n=5, source="Linear's issue list (shipped product)"),
+                       dict(m["marks"][0], n=6, source="my own idea")]
+        err, out = self.compare(m)
+        self.assertIsNone(err)
+        page = (self.tmp / "compare.html").read_text()
+        for line in ("From: house standard STD-visual-details-29", "From: review case MS-16, More than one primary action", "From: WCAG 2.2 SC 1.4.3",
+                     "From: Linear&#x27;s issue list (shipped product)", "From: my own idea"):
+            self.assertIn(line, page)
+        self.assertIn("Keep the fix, keep today's, or try another?", page)
+        self.assertIn("mark(s) 1 do not say where the fix comes from", out)    # optional, but the gap is named
+        m["marks"][0]["source"] = "preflight 36"
+        _, out = self.compare(m)
+        self.assertNotIn("do not say where", out)
+        self.assertIn("From: preflight 36", (self.tmp / "compare.html").read_text())
 
     def test_a_mark_that_found_nothing_is_refused(self):
         m = copy.deepcopy(self.marks)

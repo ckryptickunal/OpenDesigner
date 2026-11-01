@@ -93,6 +93,29 @@ class Live(unittest.TestCase):
         self.assertFalse(broken["span#chip"]["midWord"])
         self.assertEqual(broken["span#chip"]["lines"], 2)
 
+    def test_competing_primary_buttons_are_counted_and_states_and_cards_are_not(self):          # MS-16
+        pg = _browser.new_page(viewport={"width": 1280, "height": 800})
+        self.addCleanup(pg.close)
+        pg.goto(f"http://localhost:{self.port}/actions.html")
+        pg.wait_for_timeout(300)
+        p = pg.evaluate(PROBE)
+        filled = {b["sel"]: b for b in p["buttons"]["filled"]}
+        self.assertNotIn("a#nav-home", filled)            # the current page's nav item is a state
+        self.assertNotIn("button#tab-day", filled)        # so is a selected tab
+        self.assertNotIn("a#card", filled)                # a card that is a link is too big to be a button
+        self.assertNotIn("button#pricing", filled)        # an outline button has no fill
+        self.assertLess(filled["button#tour"]["ratio"], rv.PRIMARY_RATIO)          # a quiet fill is measured but is not a primary
+        self.assertEqual(filled["a#signup"]["ratio"], 5.17)                       # #2563eb on white
+        self.assertTrue(filled["button#upgrade"]["gradient"])
+        self.assertEqual(filled["button#upgrade"]["fill"], "#7c3aed")              # a gradient counts by its first colour
+        self.assertFalse(filled["button#save"]["first"])
+        F = rv.Findings()
+        rv.check_probe(p, None, F)
+        ms16 = {f["title"]: f for f in F.done() if f["case"] == "MS-16"}
+        self.assertIn("3 primary buttons in the first screen", ms16)               # Sign up, Get started, Book a demo
+        self.assertIn("\"Save\" (#2563eb) and \"Delete\" (#dc2626) sit side by side", ms16["3 primary buttons in the first screen"]["measured"])
+        self.assertIn("3 different fills for the main button", ms16)               # blue, near-black and the purple gradient; red is the danger level
+
     def test_the_stored_fixture_still_matches_a_live_run(self):
         live = self.page().evaluate(PROBE)
         stored = json.loads((HERE / "fixtures" / "broken-390.probe.json").read_text())
