@@ -152,6 +152,7 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Fixed
 
+- **A calmer site footer** (owner, 2026-11-01: "fix the text alignment, the text length issue in the footer, make the footer spacious"). The footer had 8 columns and 42 links, so most names wrapped onto two or three lines. It now has 4 columns (Product, Learn, Project, Trust) with 20 links. Every name fits on one line down to 320 px, and the gaps follow the site's spacing steps. The docs list stays at /docs/ ("All docs"). The changelog link goes to /changelog/ with its version, and llms.txt, Sitemap and the date move to the small print. `site/check_chrome.py` finds the same footer on all 121 pages.
 - **Five small slips on the home page and in the library** (2026-10-25, found while capturing screens for the GTM stills).
   - The checker card said "1 false alarms"; it now says "1 false alarm".
   - In the audit's Fixed view, the green checks covered the AMOUNT column title and the Export CSV button. Each check is now placed by measuring the page: on its box's corner, along its top edge or in the gap above, never over text, a control or a chart, at every width.

@@ -624,18 +624,26 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jp
 """
 
 
+FOOT_COLS = [  # four short columns; each label fits on one line down to 320 px (the docs list lives at /docs/)
+    ("Product", [("Install", "/docs/install/"), ("Showcase", "/showcase/"), ("Component library", "/library/"),
+                 ("For teams", "/docs/enterprise/"), ("Book a call", "/book/")]),
+    ("Learn", [("Introduction", "/docs/introduction/"), ("Quickstart", "/docs/quickstart/"), ("How it works", "/docs/how-it-works/"),
+               ("FAQ", "/docs/faq/"), ("All docs", "/docs/")]),
+    ("Project", [(f'Changelog <span class="foot-ver">v{VERSION}</span>', "/changelog/"), ("GitHub", GH), ("Contribute", "/docs/contribute/"),
+                 ("Report a problem", f"{GH}/issues/new/choose")]),
+    ("Trust", [("Security and data", "/docs/security/"), ("Report a vulnerability", f"{GH}/blob/main/SECURITY.md"),
+               ("Licence (MIT)", f"{GH}/blob/main/LICENSE")]),
+]
+
+
 def footer(pages):
-    by = {s: [p for p in pages if p["section"] == s and p["path"] != "/docs/security/"][:6] for s in SECTIONS}  # security is under Trust
-    cols = "".join(f'<div><h2 class="foot-h kicker">{s}</h2><ul>' + "".join(f'<li><a href="{p["path"]}">{esc(p["title"])}</a></li>' for p in ps) + "</ul></div>"
-                   for s, ps in by.items() if ps)
-    trust = (f'<div><h2 class="foot-h kicker">Trust</h2><ul><li><a href="/docs/security/">Security and data</a></li><li><a href="{GH}/blob/main/SECURITY.md">Report a vulnerability</a></li>'
-             f'<li><a href="/docs/changelog/">Changelog · v{VERSION}</a></li><li><a href="{GH}/blob/main/LICENSE">Licence (MIT)</a></li></ul></div>')
-    proj = (f'<div><h2 class="foot-h kicker">Project</h2><ul><li><a href="{GH}">GitHub</a></li><li><a href="{GH}/issues/new/choose">Report a problem</a></li>'
-            f'<li><a href="/docs/contribute/">Contribute</a></li><li><a href="/book/">Book a call</a></li><li><a href="/showcase/">Showcase</a></li><li><a href="/llms.txt">llms.txt</a></li><li><a href="/sitemap.xml">Sitemap</a></li></ul></div>')
-    return (f'<footer class="foot"><div class="foot-in"><div class="foot-brand">{lockup()}<p>Free and open source. MIT for code, '
-            f'CC BY 4.0 for docs.</p></div>{cols}{trust}{proj}</div><p class="foot-legal">OpenDesigner is an independent open-source project. Claude, '
-            f'ChatGPT, Codex, Cursor, Figma and other names belong to their owners and appear only to say where OpenDesigner runs. Photos: Unsplash '
-            f'photographers, credited where shown. Updated <time datetime="{TODAY}" style="white-space:nowrap">{TODAY}</time>.</p></footer>')
+    cols = "".join(f'<div class="foot-col"><h2 class="foot-h kicker">{h}</h2><ul>' + "".join(f'<li><a href="{u}">{t}</a></li>' for t, u in links)
+                   + "</ul></div>" for h, links in FOOT_COLS)
+    return (f'<footer class="foot"><div class="foot-in"><div class="foot-brand">{lockup()}<p>Free and open source.<br>MIT for code, CC BY 4.0 for docs.</p></div>'
+            f'<nav class="foot-cols" aria-label="Footer">{cols}</nav></div>'
+            f'<div class="foot-legal"><p>OpenDesigner is an independent open-source project. Claude, ChatGPT, Codex, Cursor, Figma and other names belong '
+            f'to their owners and appear only to say where OpenDesigner runs. Photos: Unsplash photographers, credited where shown.</p>'
+            f'<p class="foot-meta"><a href="/llms.txt">llms.txt</a><a href="/sitemap.xml">Sitemap</a><span>Updated&nbsp;<time datetime="{TODAY}">{TODAY}</time></span></p></div></footer>')
 
 
 # Decoration, direction A "Press proof" (owner's choice, 2026-10-15): marks from a printer's proof sheet; styles in static/deco.css.
