@@ -559,7 +559,7 @@ def check_practice(p, sysm, w, F):
         if len(first) > 1:
             parts.append(f"{len(first)} filled buttons stand out in the first screen: " + ", ".join(label(b) for b in first[:5]) + (f" (+{len(first) - 5} more)" if len(first) > 5 else ""))
         for g in side[:2]:
-            parts.append(" and ".join(label(b) for b in g[:3]) + " sit side by side, both filled")
+            parts.append(" and ".join(label(b) for b in g[:3]) + " sit side by side, both filled" + ("" if any(b.get("first") for b in g) else ", further down"))
         texts = Counter(b.get("text") for b in strong if b.get("text"))
         rep = [t for t, n in texts.most_common() if n >= 3]
         if rep:
