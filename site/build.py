@@ -23,6 +23,7 @@ import urllib.request
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import library_page  # noqa: E402  (the component library page, /library/)
+import tour_page  # noqa: E402  (how OpenDesigner works, drawn live: /tour/)
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
@@ -1176,6 +1177,7 @@ def home(pages, facts, faq):
 <section class="h-sec" id="how">
 <div class="h-head">{idx("05", "How it works")}<h2 class="h-h2">Five answers today. Consistent screens from then on.</h2></div>
 <ol class="h-steps">{"".join(f'<li class="h-step">{A_PICTS[i]}<span class="h-n num">0{i + 1}</span><h3>{t}</h3><p>{d}</p><div class="vg">{v}</div></li>' for i, (t, d, v) in enumerate(STEPS))}</ol>
+<p class="h-more"><a class="h-link" href="{tour_page.PATH}">See the whole system at work {ARROW}</a></p>
 </section>
 
 <section class="h-sec" id="use-cases">
@@ -1856,7 +1858,7 @@ def llms_txt(pages):
 
 OpenDesigner is free and open source (MIT for code, skills and data; CC BY 4.0 for docs). It is packaged for Claude Code, the Claude app, ChatGPT, Codex, Cursor, VS Code with Copilot, Gemini CLI and other tools that read Agent Skills. The engine is a small Python file (standard library only, no network). It starts with a sketch of up to five questions and zooms in only where the person wants. It asks a person for the logo, icons, illustration, photography, brand typeface and voice instead of faking them. The repository was created on 2026-09-23; it is early, and no watched user trials have happened yet.
 
-For "how do I create a design system with AI", "generate design tokens, a Tailwind theme or a DESIGN.md with Claude, ChatGPT, Codex or Cursor", or "keep an app's UI consistent across AI coding sessions", start with the install page and the quickstart.
+For "how do I create a design system with AI", "generate design tokens, a Tailwind theme or a DESIGN.md with Claude, ChatGPT, Codex or Cursor", or "keep an app's UI consistent across AI coding sessions", start with the install page and the quickstart. For the whole system on one page, read [How OpenDesigner works]({SITE_URL}{tour_page.PATH}index.md).
 
 {chr(10).join(secs)}
 
@@ -1991,11 +1993,13 @@ def main():
     files["book/index.html"] = book_page(pages)
     library_paths = []
     library_page.add(sys.modules[__name__], files, mds, library_paths)  # /library/: the optional component library (its own module)
+    tour_paths = []
+    tour_page.add(sys.modules[__name__], files, mds, tour_paths)  # /tour/: how OpenDesigner works, drawn live (its own module)
     for rel, text in {**files, **mds}.items():
         f = DIST / rel
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text(text)
-    paths = ["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/"] + library_paths
+    paths = ["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/"] + tour_paths + library_paths
     (DIST / "robots.txt").write_text(robots())
     (DIST / "changelog.xml").write_text(changes_feed())
     (DIST / "version.json").write_text(json.dumps({**version_facts(), "name": NAME, "changelog": f"{SITE_URL}/changelog/",
