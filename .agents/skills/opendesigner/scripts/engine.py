@@ -676,7 +676,11 @@ def default_state(name="Untitled design system"):
         "name": name,
         "summary": "",
         "context": {"product": "", "audience": "", "surfaces": [], "entryPath": "", "memorable": "", "scope": {"in": [], "out": []},
-                    "constraints": [], "team": ""},
+                    "constraints": [], "team": "",
+                    # the alignment record (PRODUCT.md, Purpose and goals): from their words and README, never invented
+                    "mission": "", "vision": "", "purpose": "", "goals": [],
+                    # PRODUCT.md, Market: from the user research or their words
+                    "market": {"analogous": "", "competitors": [], "pattern": "", "gap": "", "conventions": []}},
         "dials": {d: None for d in DIALS},
         "preset": None,
         "style": None,  # the named look from references/styles.md (Q-dir-01), shown in DESIGN.md
@@ -1547,11 +1551,12 @@ SYSTEM_ROUNDED = ["ui-rounded", "SF Pro Rounded", "system-ui", "sans-serif"]
 OPEN_FACES = {"neo-grotesque": "Inter", "geometric": "Plus Jakarta Sans", "humanist": "Source Sans 3", "serif": "Source Serif 4",
               "slab": "Roboto Slab", "rounded": "Nunito"}
 # Open-licence faces (SIL OFL or Apache 2.0): usable on the web, in apps and self-hosted, so no licence scope is needed
-OPEN_FONTS = {f.lower() for f in list(OPEN_FACES.values()) + [
+OPEN_FONT_NAMES = list(OPEN_FACES.values()) + [
     "Roboto", "Roboto Mono", "Roboto Flex", "Atkinson Hyperlegible", "JetBrains Mono", "IBM Plex Sans", "IBM Plex Serif", "IBM Plex Mono",
     "Noto Sans", "Noto Serif", "Open Sans", "Lato", "Montserrat", "Poppins", "Work Sans", "DM Sans", "DM Serif Display", "Manrope",
     "Figtree", "Geist", "Geist Mono", "Fira Sans", "Fira Code", "Public Sans", "Lexend", "Outfit", "Space Grotesk", "Sora", "Karla",
-    "Rubik", "Merriweather", "Lora", "Playfair Display", "Source Code Pro", "Recursive", "Instrument Sans", "Onest", "Hanken Grotesk"]}
+    "Rubik", "Merriweather", "Lora", "Playfair Display", "Source Code Pro", "Recursive", "Instrument Sans", "Onest", "Hanken Grotesk"]
+OPEN_FONTS = {f.lower() for f in OPEN_FONT_NAMES}
 
 
 def _generic_face(name):
@@ -4292,7 +4297,7 @@ _R = {
                Q-pattern-04 Q-pattern-05 Q-pattern-06 Q-token-01 Q-token-02 Q-token-03 Q-token-04 Q-token-05 Q-token-06 Q-token-07 Q-token-08
                Q-token-09 Q-token-10 Q-brand-02 Q-shape-01 Q-type-06 Q-type-09 Q-type-11 Q-space-07 Q-space-10 Q-layout-03 Q-depth-05
                Q-motion-09 Q-voice-03 Q-form-01 Q-state-04 Q-ai-01 Q-icon-02 Q-color-23 Q-state-02""",
-    "owner": """Q-scope-01 Q-scope-02 Q-scope-03 Q-scope-04 Q-scope-05 Q-tool-01 Q-tool-02 Q-tool-04 Q-gov-01 Q-gov-02 Q-gov-03 Q-gov-04 Q-gov-05
+    "owner": """Q-scope-01 Q-scope-02 Q-scope-03 Q-scope-04 Q-scope-05 Q-scope-07 Q-tool-01 Q-tool-02 Q-tool-04 Q-gov-01 Q-gov-02 Q-gov-03 Q-gov-04 Q-gov-05
                 Q-gov-06 Q-gov-07 Q-dist-01 Q-dist-02 Q-dist-03 Q-dist-04 Q-pref-01 Q-pref-02 Q-pref-03 Q-plat-07 Q-plat-08 Q-plat-09
                 Q-comp-01 Q-comp-02 Q-aud-02 Q-brand-07""",
     "hook": "Q-brand-03 Q-brand-08 Q-icon-01 Q-icon-06 Q-img-01 Q-img-04 Q-img-06 Q-img-07 Q-motion-08 Q-voice-01 Q-type-02",
@@ -4714,7 +4719,7 @@ def _store(state, path, value, set_by, did, lock, via=None):
         rec = dict(old) if isinstance(old, dict) else {}
         rec.update({"value": value, "set_by": set_by, "decision": did})
         if via:
-            rec["via"] = via  # 'sketch': asked in the 5-question sketch, so it stays at zoom 0
+            rec["via"] = via  # 'sketch': asked in the 5-question sketch; 'repo': read from their files (detect_project); both stay at zoom 0
         else:
             rec.pop("via", None)
         rec.setdefault("locked", False)
@@ -5169,7 +5174,7 @@ def cmd_lock(d, path, on=True):
     print(f"{'locked' if on else 'unlocked'} {path}")
 
 
-def cmd_init(d, src=None, name=None, force=False, standards=True):
+def cmd_init(d, src=None, name=None, force=False, standards=True, detect=True):
     sp = os.path.join(d, "state.json")
     if os.path.exists(sp) and not force:
         raise SystemExit(f"{sp} already exists (use --force to replace it)")
@@ -5187,7 +5192,8 @@ def cmd_init(d, src=None, name=None, force=False, standards=True):
         log_decision(d, "init", None, "Start of the design system; every default traces to references/levers.json.", "auto_default",
                      title="init" + (f" from {os.path.basename(src)}" if src else " with defaults"))
     print(f"initialized {sp}")
-    record_stack(d, quiet=False)
+    if detect:  # look before you ask: what the repo already answers, each recorded as assumed (detect_project)
+        record_project(d, quiet=False)
     if standards:  # house standards (docs/KNOWLEDGE.md 3): applied, locked, said once; nothing when none ship
         std_sync(d, initial=True)
 
@@ -5466,6 +5472,581 @@ def detect_stack(root):
             if tag not in tags:
                 tags.append(tag)
     return tags, seen
+
+
+# =============================================================================================
+# Look before you ask (owner direction 2026-11-02, row 3): what the person's repo already answers
+# =============================================================================================
+
+DETECT_SKIP = {"node_modules", "dist", "build", "out", ".next", ".nuxt", ".svelte-kit", ".output", "vendor", "coverage", DEFAULT_DIR,
+               "Pods", "DerivedData", "venv", "env", "__pycache__", "target", "bower_components", "tmp", "temp"}
+DETECT_MAX_FILES = 5000  # a whole home folder is never walked: the scan stops here and says so
+DETECT_MAX_DEPTH = 6
+DETECT_MAX_STYLE = 300   # style files read for the brand colour and the font, smallest paths first
+OD_OWN = {"state.json", "decisions.md", "feedback.md", "RATIONALE.md", "standards.md",
+          "overview.html", "preview.html", "coverage.md", "assets.json", "tokens", "build", "preview", "journey", "research", "review",
+          "taste-indexes", "DESIGN.md", "PRODUCT.md", "DESIGN.md.hand-edited", "PRODUCT.md.hand-edited"}  # what OpenDesigner writes
+CODE_EXT = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".vue", ".svelte", ".astro", ".html", ".htm", ".css", ".scss", ".sass", ".less",
+            ".py", ".rb", ".php", ".go", ".rs", ".swift", ".kt", ".kts", ".java", ".dart", ".cs", ".ex", ".exs"}
+STYLE_EXT = {".css", ".scss", ".sass", ".less", ".html", ".htm", ".vue", ".svelte", ".astro", ".jsx", ".tsx"}
+CODE_MANIFESTS = {"package.json", "pubspec.yaml", "cargo.toml", "go.mod", "pyproject.toml", "requirements.txt", "gemfile", "composer.json",
+                  "build.gradle", "build.gradle.kts", "package.swift", "setup.py", "mix.exs"}
+DEPLOY_FILES = {"vercel.json", "netlify.toml", "fly.toml", "render.yaml", "dockerfile", "docker-compose.yml", "docker-compose.yaml",
+                "compose.yaml", "procfile", "apphosting.yaml", "firebase.json", "wrangler.toml", "wrangler.json", "wrangler.jsonc",
+                "amplify.yml", "eas.json", "railway.json", "railway.toml", "serverless.yml", "staticwebapp.config.json", "now.json"}
+DEPLOY_DIRS = {"fastlane", ".vercel", ".netlify"}
+DOC_EXT = {".md", ".markdown", ".txt", ".rst", ".pdf", ".doc", ".docx", ".rtf", ".pages", ".key", ".pptx", ".odt"}  # notes on an idea
+WEB_DEPS = ("next", "nuxt", "@sveltejs/kit", "astro", "gatsby", "@remix-run/react", "@angular/core", "react-dom", "vue", "svelte",
+            "solid-js", "preact", "lit", "@builder.io/qwik", "ember-source", "vite")  # frameworks first: their name is the clearer source
+GENERIC_NAMES = {"app", "my-app", "myapp", "web", "website", "site", "client", "frontend", "front-end", "project", "my-project", "untitled",
+                 "vite-project", "react-app", "my-react-app", "next-app", "nextjs", "starter", "template", "demo", "test", "example", "ui",
+                 "main", "root", "monorepo", "workspace", "src", "create-next-app", "hello-world"}
+TEMPLATE_TEXT = re.compile(r"bootstrapped with|create-next-app|create react app|created using create-react-app|"
+                           r"this template (provides a minimal setup|should help)|welcome to your expo app|^# react \+ (typescript \+ )?vite|"
+                           r"generated by create next app|a new flutter project|everything you need to build a svelte project", re.I | re.M)
+TEMPLATE_TITLE = re.compile(r"^\s*(vite \+ .*|vite app|create next app|react app|expo|svelte app|my app|app|home|document|untitled)\s*$", re.I)
+PHASES = ["idea", "building", "near-launch", "live"]  # Q-scope-07; zoom.md, "The project's phase", has the same order
+PHASE_WORDS = {"idea": "an idea, no code yet", "building": "being built", "near-launch": "close to launch", "live": "live, with real users"}
+PHASE_FIRST = {"idea": "the alignment (mission, vision, purpose, goals) and the analogous product, then the sketch",
+               "building": "the sketch, then the areas the screens being built need most",
+               "near-launch": "an audit of what exists, then copy and voice, then preflight before release",
+               "live": "an audit of what exists, then governance (who may change the system and how)"}
+
+
+def project_files(root, state_dir=None):
+    """(files, dirs, capped) under root, as sorted relative paths: skips dependencies, builds, hidden folders (but .github),
+    OpenDesigner's own folder and what it writes, and stops after DETECT_MAX_FILES files (capped True)."""
+    root = os.path.abspath(root)
+    own = os.path.abspath(state_dir) if state_dir else None
+    files, dirs = [], []
+    for dirpath, subdirs, names in os.walk(root):
+        rel = os.path.relpath(dirpath, root)
+        top = rel == "."
+        depth = 0 if top else rel.count(os.sep) + 1
+        keep = []
+        for s in sorted(subdirs):
+            r = s if top else os.path.join(rel, s)
+            full = os.path.join(dirpath, s)
+            if full == own or (top and own == root and s in OD_OWN):
+                continue
+            if s.endswith((".xcodeproj", ".xcworkspace")) or s in DEPLOY_DIRS:
+                dirs.append(r)  # a marker: its contents say nothing more
+                continue
+            if s in DETECT_SKIP or (s.startswith(".") and s != ".github"):
+                continue
+            dirs.append(r)
+            if depth + 1 < DETECT_MAX_DEPTH:
+                keep.append(s)
+        subdirs[:] = keep
+        for n in sorted(names):
+            if top and n in OD_OWN and (own == root or n.endswith(".hand-edited") or (n in ("DESIGN.md", "PRODUCT.md")
+                                                                                     and "OpenDesigner" in _read(root, n, 600))):
+                continue  # what OpenDesigner wrote; a DESIGN.md or PRODUCT.md the person wrote is their notes
+            files.append(n if top else os.path.join(rel, n))
+            if len(files) >= DETECT_MAX_FILES:
+                return files, dirs, True
+    return files, dirs, False
+
+
+def _read(root, rel, limit=400_000):
+    try:
+        with open(os.path.join(root, rel), encoding="utf-8", errors="ignore") as f:
+            return f.read(limit)
+    except OSError:
+        return ""
+
+
+def _md_plain(s):
+    """Markdown or HTML inline text as plain words: images and tags dropped, links kept as their text."""
+    s = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", s)
+    s = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", s)
+    s = re.sub(r"<[^>]+>", "", s)
+    s = re.sub(r"[`*_]{1,3}", "", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def _first_sentence(s, cap=200):
+    m = re.match(r"(.+?[.!?])(\s|$)", s)
+    s = m.group(1) if m else s
+    if len(s) > cap:
+        s = s[:cap].rsplit(" ", 1)[0].rstrip(",;:") + "..."
+    return s
+
+
+def _readme(root, files):
+    """(heading, first paragraph, file) of the README at the root, unless it is a starter template's README."""
+    rel = next((f for f in files if os.sep not in f and f.lower().startswith("readme")), None)
+    if not rel:
+        return None, None, None
+    text = _read(root, rel, 60_000)
+    if TEMPLATE_TEXT.search(text[:3000]):
+        return None, None, rel
+    lines = text.splitlines()
+    heading, para, i = None, None, 0
+    while i < len(lines) and not (heading and para):
+        ln = lines[i].strip()
+        nxt = lines[i + 1].strip() if i + 1 < len(lines) else ""
+        i += 1
+        if ln.startswith("```"):
+            while i < len(lines) and not lines[i].strip().startswith("```"):
+                i += 1
+            i += 1
+        elif not ln or re.fullmatch(r"[-=*_]{3,}", ln):
+            continue
+        elif ln.startswith("#"):
+            if heading is None and re.match(r"#\s", ln):
+                heading = _md_plain(ln.lstrip("#").strip()) or None
+        elif re.fullmatch(r"=+|-+", nxt):  # a setext heading: the line under it is all = or -
+            if heading is None and nxt.startswith("="):
+                heading = _md_plain(ln) or None
+            i += 1
+        elif ln.startswith("<"):  # centred HTML headers: <h1>Name</h1> and <p>what it is</p>
+            m = re.match(r"<h1[^>]*>(.*?)</h1>", ln, re.I)
+            if m and heading is None:
+                heading = _md_plain(m.group(1)) or None
+            m = re.match(r"<p[^>]*>(.*?)</p>", ln, re.I)
+            words = _md_plain(m.group(1)) if m else ""
+            if para is None and len(re.findall(r"[A-Za-z]{2,}", words)) >= 4:
+                para = _first_sentence(words)
+        elif para is None and not re.match(r"^([-*+]\s|\d+\.\s|\|)", ln):
+            block = [ln.lstrip("> ").strip()]
+            while i < len(lines) and lines[i].strip() and not re.match(r"^(#{1,6}\s|```|[-*+]\s|\d+\.\s|\||<)", lines[i].strip()):
+                block.append(lines[i].strip().lstrip("> ").strip())
+                i += 1
+            words = _md_plain(" ".join(block))
+            if len(re.findall(r"[A-Za-z]{2,}", words)) >= 4:  # badge rows and lone links are not a description
+                para = _first_sentence(words)
+    return heading, para, rel
+
+
+def _nice_name(n, text=""):
+    """'@acme/budget-buddy' -> 'Budget Buddy'; None for a starter's or a folder's generic name. text (the README) gives the
+    product's own capitals when it spells the same name: 'opendesigner' -> 'OpenDesigner'."""
+    n = str(n or "").strip()
+    if n.startswith("@") and "/" in n:
+        scope, n = n[1:].split("/", 1)
+        if n.lower() in GENERIC_NAMES:
+            n = scope
+    if not n or n.lower().replace("_", "-") in GENERIC_NAMES or not re.search(r"[A-Za-z]", n):
+        return None
+    if re.fullmatch(r"[a-z0-9]+([-_][a-z0-9]+)*", n):
+        words = re.split(r"[-_]", n)
+        spelled = (m.group(1) for m in re.finditer(r"\b(" + r"[\s_-]?".join(re.escape(w) for w in words) + r")\b", text or "", re.I))
+        n = next((x for x in spelled if x != x.lower()), None) or " ".join(w.capitalize() for w in words)
+    return n[:60]
+
+
+def _name_part(heading):
+    """A README heading as a product name: 'Acme: budgets for freelancers' -> ('Acme', 'budgets for freelancers')."""
+    parts = re.split(r"\s+[—–-]\s+|:\s+|\s+\|\s+", heading, maxsplit=1)
+    name = parts[0].strip()
+    if not name or len(name) > 60 or name.lower() in GENERIC_NAMES or name.lower() in ("readme", "about", "overview", "introduction"):
+        return None, None
+    return name, (parts[1].strip() if len(parts) > 1 else None)
+
+
+def _json_file(root, rel):
+    try:
+        data = json.loads(_read(root, rel, 2_000_000))
+    except ValueError:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _version_tuple(v):
+    m = re.match(r"\s*v?(\d+)\.(\d+)(?:\.(\d+))?", str(v or ""))
+    return tuple(int(x or 0) for x in m.groups()) if m else None
+
+
+_CSS_SCAN = []
+
+
+def _css_scan_module():
+    """opendesigner-extract's css_scan.py when that skill sits beside this one (the plugin and the repo), else None."""
+    if not _CSS_SCAN:
+        mod = None
+        path = os.path.join(os.path.dirname(SKILL_ROOT), "opendesigner-extract", "scripts", "css_scan.py")
+        if os.path.exists(path):
+            try:
+                import importlib.util
+                spec = importlib.util.spec_from_file_location("od_css_scan", path)
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)
+            except Exception:  # an older or broken copy: fall back to the light scan below
+                mod = None
+        _CSS_SCAN.append(mod)
+    return _CSS_SCAN[0]
+
+
+NAMED_COLOR = re.compile(r"(?:--|\b)(?:color-)?(primary|brand|accent|tint|seed)(?:[-_]?color)?(?:[-_]?(?:500|600|default))?\b[\"']?"
+                         r"\s*[:=]\s*(?:Color\(0x[fF]{2}([0-9a-fA-F]{6})\)|[\"']?(#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3})\b)", re.I)
+
+
+def _brand_candidate(root, style_files, code_files):
+    """(hex, why, confident) for the colour the project's own buttons, links and brand tokens use most, or None."""
+    css = _css_scan_module()
+    if css and style_files:
+        try:
+            cap = css.scan_files([os.path.join(root, f) for f in style_files])
+            ranked, conf = css.measure_accent(cap["values"], False, None)
+        except Exception:
+            ranked, conf = [], {"confidence": "none"}
+        if ranked and conf.get("confidence") in ("high", "medium"):
+            top = ranked[0]
+            used = ", ".join(sorted(top["sources"]))
+            return (normalize_hex(top["hex"]), f"the colour the CSS uses most on {used} ({top['count']} uses, "
+                                                f"{conf['confidence']} confidence)", True)
+        weak = ranked[0]["hex"] if ranked else None
+    else:
+        weak = None
+    named = {}
+    for f in code_files[:DETECT_MAX_STYLE]:
+        for _k, flutter, hx in NAMED_COLOR.findall(_read(root, f, 300_000)):
+            h = normalize_hex("#" + flutter if flutter else hx)
+            if h and hex_to_oklch(h)[1] >= 0.05 and 0.1 <= hex_to_oklch(h)[0] <= 0.97:
+                named.setdefault(h, [0, f])[0] += 1
+    if named:
+        h, (n, f) = max(named.items(), key=lambda kv: (kv[1][0], kv[0]))
+        return h, f"the colour named primary, brand or accent in {f} ({n} use{'s' if n != 1 else ''})", True
+    return (normalize_hex(weak), "the most colourful value in the CSS, with no button, link or brand token behind it", False) if weak else None
+
+
+def _font_name(slug):
+    """'plus-jakarta-sans' or 'Plus_Jakarta_Sans' -> 'Plus Jakarta Sans', with the capitals of a known open face."""
+    s = re.sub(r"\s+", " ", slug.replace("_", " ").replace("-", " ").replace("+", " ")).strip()
+    return {f.lower(): f for f in OPEN_FONT_NAMES}.get(s.lower()) or " ".join(w[:1].upper() + w[1:] for w in s.split())
+
+
+def _is_mono(face):
+    return bool(re.search(r"\b(mono|code|courier|consol)", face, re.I))
+
+
+def _not_text_face(face):
+    """Icon and symbol fonts (Font Awesome, Material Icons, icomoon) are never the text font."""
+    return bool(re.search(r"icon|awesome|symbol|glyph|emoji|icomoon|fontello|dashicons|codicon", face, re.I))
+
+
+def _font_candidate(root, style_files, code_files, deps):
+    """(face, why) for the text font the project loads, or None: next/font, @fontsource and Expo font packages, Google Fonts
+    links, @font-face rules, then the most common family in font-family declarations."""
+    loaded = []
+
+    def add(face, src):
+        if face and not _generic_face(face) and not _not_text_face(face) and face.lower() not in {x.lower() for x, _ in loaded}:
+            loaded.append((face, src))
+    for f in code_files[:DETECT_MAX_STYLE]:
+        t = _read(root, f, 200_000)
+        for names in re.findall(r"import\s*\{([^}]+)\}\s*from\s*[\"']next/font/google[\"']", t):
+            for n in names.split(","):
+                n = n.split(" as ")[0].strip()
+                if n:
+                    add(_font_name(n), f"next/font in {f}")
+        if re.search(r"from\s*[\"']geist/font/sans[\"']", t):
+            add("Geist", f"the geist package in {f}")
+    for dep in sorted(deps):
+        m = re.match(r"^@(?:fontsource(?:-variable)?|expo-google-fonts)/(.+)$", dep)
+        if m and m.group(1) not in ("dev", "vector-icons"):
+            add(_font_name(m.group(1)), f"the {dep} package")
+    used = {}
+    for f in style_files:
+        t = _read(root, f, 300_000)
+        for fam in re.findall(r"fonts\.googleapis\.com/css2?\?family=([^&\"':;)]+)", t):
+            add(_font_name(fam.split(":")[0]), f"a Google Fonts link in {f}")
+        for body in re.findall(r"@font-face\s*\{([^}]*)\}", t):
+            m = re.search(r"font-family\s*:\s*[\"']?([^;\"'}]+)", body)
+            if m:
+                add(m.group(1).strip(), f"an @font-face rule in {f}")
+        for decl in re.findall(r"(?<![\w-])font-family\s*:\s*([^;}\n]+)", t):
+            first = decl.split(",")[0].strip().strip("\"'")
+            if first and "var(" not in first and not _generic_face(first) and first.lower() not in GENERIC_FONTS \
+                    and not _not_text_face(first):
+                used[first] = used.get(first, 0) + 1
+    text_loaded = [(x, s) for x, s in loaded if not _is_mono(x)]
+    top_used = sorted(((n, x) for x, n in used.items() if not _is_mono(x)), key=lambda t: (-t[0], t[1]))
+    if top_used and (top_used[0][0] >= 2 or any(x.lower() == top_used[0][1].lower() for x, _ in text_loaded)):
+        n, face = top_used[0]
+        return face, f"the font the CSS names most ({n} font-family rule{'s' if n != 1 else ''})"
+    if text_loaded:
+        return text_loaded[0][0], text_loaded[0][1]
+    return None
+
+
+def _dark_mode(root, style_files, code_files, deps, app_json):
+    """(Q-theme-01 option, why) when the project already has a dark mode, or None. A lone .dark class (a starter's CSS often
+    has one) is not enough; light-only is never inferred, because a standard may forbid it."""
+    if "next-themes" in deps:
+        return "light-dark-toggle", "the next-themes package (light and dark, with a switch)"
+    for f in style_files + code_files[:DETECT_MAX_STYLE]:
+        t = _read(root, f, 300_000)
+        if re.search(r"prefers-color-scheme\s*:\s*dark", t):
+            return "system-light-dark", f"prefers-color-scheme: dark in {f}"
+        if re.search(r"\[data-theme=[\"']?dark", t) or re.search(r"setTheme\(|toggleTheme|theme-toggle", t):
+            return "light-dark-toggle", f"a theme switch in {f}"
+        if re.search(r"\buseColorScheme\(", t):
+            return "system-light-dark", f"useColorScheme() in {f}"
+    if str(((app_json.get("expo") or {}).get("userInterfaceStyle") or "")).lower() == "automatic":
+        return "system-light-dark", "userInterfaceStyle automatic in app.json"
+    return None
+
+
+def detect_project(root, state_dir=None):
+    """What the project folder already says, read-only: {findings: [{path, value, source, why}], notes: [...], readme,
+    files, capped}. Each finding is a state path the agent would otherwise ask about (zoom.md, level 0); notes are weaker
+    signals it can mention but that are never recorded. Reads files only: no network, nothing runs, nothing is written."""
+    root = os.path.abspath(root)
+    files, dirs, capped = project_files(root, state_dir)
+    low = {f.lower(): f for f in files}
+    tops = {f.lower(): f for f in files if os.sep not in f}
+    dnames = {os.path.basename(x).lower() for x in dirs}
+    found, notes = [], []
+
+    def put(path, value, source, why):
+        found.append({"path": path, "value": value, "source": source, "why": why})
+    pkg = _json_file(root, tops["package.json"]) if "package.json" in tops else {}
+    deps = {}
+    for k in ("dependencies", "devDependencies", "peerDependencies"):
+        if isinstance(pkg.get(k), dict):
+            deps.update(pkg[k])
+    app_json = _json_file(root, tops["app.json"]) if "app.json" in tops else {}
+    pubspec = _read(root, tops["pubspec.yaml"], 50_000) if "pubspec.yaml" in tops else ""
+    heading, para, readme = _readme(root, files)
+    readme_text = _read(root, readme, 60_000) if readme else ""
+    code = [f for f in files if os.path.splitext(f)[1].lower() in CODE_EXT]
+    style = sorted((f for f in files if os.path.splitext(f)[1].lower() in STYLE_EXT or os.path.basename(f).startswith("tailwind.config")),
+                   key=lambda f: (f.count(os.sep), f))[:DETECT_MAX_STYLE]
+    scripts = sorted((f for f in code if os.path.splitext(f)[1].lower() in {".js", ".jsx", ".ts", ".tsx", ".mjs", ".dart", ".swift", ".kt"}),
+                     key=lambda f: (f.count(os.sep), f))
+    title, meta_desc = None, None
+    for rel in [tops.get("index.html"), low.get(os.path.join("public", "index.html")), low.get(os.path.join("src", "index.html"))] + \
+            [f for f in files if re.fullmatch(r"(src/)?app/layout\.(t|j)sx?", f.replace(os.sep, "/"))]:
+        if not rel:
+            continue
+        t = _read(root, rel, 100_000)
+        m = re.search(r"<title>([^<]{1,80})</title>", t, re.I) or re.search(r"\btitle\s*:\s*[\"'`]([^\"'`]{1,80})[\"'`]", t)
+        if m and not title and not TEMPLATE_TITLE.search(m.group(1)) and not TEMPLATE_TEXT.search(m.group(1)):
+            title = (_md_plain(m.group(1)), rel)
+        m = re.search(r"<meta\s+name=[\"']description[\"']\s+content=[\"']([^\"']{8,300})", t, re.I) or \
+            re.search(r"\bdescription\s*:\s*[\"'`]([^\"'`]{8,300})[\"'`]", t)
+        if m and not meta_desc and not TEMPLATE_TEXT.search(m.group(1)):
+            meta_desc = (_first_sentence(_md_plain(m.group(1))), rel)
+
+    # the product's name and what it is (Q-scope-01's words)
+    name_h, tagline = _name_part(heading) if heading else (None, None)
+    flutter_name = re.search(r"^name:\s*([\w-]+)", pubspec, re.M)
+    expo_name = (app_json.get("expo") or {}).get("name") if isinstance(app_json.get("expo"), dict) else None
+    for cand, src in ((name_h, f"the first heading of {readme}"), (title and title[0], f"the page title in {title and title[1]}"),
+                      (expo_name if expo_name and not TEMPLATE_TITLE.search(str(expo_name)) else None, "the app name in app.json"),
+                      (_nice_name(pkg.get("name"), readme_text), "the name in package.json"),
+                      (_nice_name(flutter_name.group(1)) if flutter_name else None, "the name in pubspec.yaml")):
+        if cand:
+            put("name", cand, src, f"read from {src}")
+            break
+    desc = str(pkg.get("description") or "").strip()
+    flutter_desc = re.search(r"^description:\s*[\"']?(.+?)[\"']?\s*$", pubspec, re.M)
+    named = next((f["value"] for f in found if f["path"] == "name"), "")
+    if named and desc.lower().startswith(named.lower()):  # 'Acme - budgets for freelancers' -> 'budgets for freelancers'
+        desc = re.sub(r"^[\s:\u2014\u2013-]+", "", desc[len(named):]).strip() or desc
+    for cand, src in ((para, f"the first paragraph of {readme}"),
+                      (desc if desc and not TEMPLATE_TEXT.search(desc) else None, "the description in package.json"),
+                      (tagline, f"the first heading of {readme}"),
+                      (meta_desc and meta_desc[0], f"the page description in {meta_desc and meta_desc[1]}"),
+                      (flutter_desc.group(1) if flutter_desc and not TEMPLATE_TEXT.search(flutter_desc.group(1)) else None,
+                       "the description in pubspec.yaml")):
+        if cand:
+            put("context.product", _first_sentence(_md_plain(cand)), src, f"read from {src}")
+            break
+
+    # where it runs (Q-plat-01)
+    plats, why = [], []
+    native = "react-native" in deps or "expo" in deps
+    desktop = "electron" in deps or any(x.startswith("@tauri-apps/") for x in deps) or "src-tauri" in dnames
+    if native:
+        plats += ["ios", "android"]
+        why.append("react-native" if "react-native" in deps else "expo")
+    if pubspec:
+        sub = [p for p, dn in (("ios", "ios"), ("android", "android"), ("web", "web")) if dn in {x.lower() for x in dirs if os.sep not in x}]
+        sub += ["desktop"] if {"macos", "windows", "linux"} & {x.lower() for x in dirs if os.sep not in x} else []
+        plats += sub or ["ios", "android"]
+        why.append("pubspec.yaml (Flutter)" + (f" with {', '.join(sub)} folders" if sub else ""))
+    if desktop:
+        plats.append("desktop")
+        why.append("electron" if "electron" in deps else "tauri")
+    if any(x.endswith((".xcodeproj", ".xcworkspace")) for x in dirs) or "package.swift" in tops:
+        if "ios" not in plats:
+            plats.append("ios")
+            why.append("an Xcode project")
+    if not native and not pubspec and ("androidmanifest.xml" in {os.path.basename(f).lower() for f in files}
+                                       or "build.gradle.kts" in tops or "build.gradle" in tops):
+        if "android" not in plats:
+            plats.append("android")
+            why.append("an Android project")
+    web_dep = next((x for x in WEB_DEPS if x in deps), None)
+    if not native and not desktop and not pubspec and (web_dep or any(os.path.splitext(f)[1].lower() in (".html", ".htm") for f in files)):
+        plats.insert(0, "web")
+        why.insert(0, web_dep or "HTML pages")
+    plats = list(dict.fromkeys(plats))
+    if plats:
+        put("answers.Q-plat-01", plats, ", ".join(why), f"read from the files ({', '.join(why)})")
+
+    # brand colour candidate (Q-color-01), font (raw.textFace) and dark mode (Q-theme-01)
+    brand = _brand_candidate(root, style, scripts)
+    if brand and brand[2]:
+        put("raw.brandColor", brand[0], brand[1], f"read from the code: {brand[1]}")
+    elif brand:
+        notes.append(f"a possible brand colour {brand[0].upper()}: {brand[1]}, so it was not recorded")
+    font = _font_candidate(root, style, scripts, deps)
+    if font:
+        put("raw.textFace", font[0], font[1], f"read from {font[1]}")
+    dark = _dark_mode(root, style, scripts, deps, app_json)
+    if dark:
+        put("answers.Q-theme-01", dark[0], dark[1], f"read from {dark[1]}")
+    elif any(re.search(r"(^|[\s,}])\.dark\s*[{,]", _read(root, f, 300_000)) for f in style):
+        notes.append("a .dark class in your CSS but nothing that switches it on, so the light and dark question stays open")
+
+    # the project's phase (Q-scope-07): notes and no code, idea; code without deploy config, building; deploy config, near
+    # launch; a released changelog or a version past 1.0.0, live. A folder with neither code nor notes says nothing.
+    content = [f for f in files if not os.path.basename(f).startswith(".")]
+    notes_files = [f for f in content if os.path.splitext(f)[1].lower() in DOC_EXT or os.path.basename(f).lower().startswith("readme")]
+    has_code = bool(code) or bool({os.path.basename(f).lower() for f in files} & CODE_MANIFESTS) or \
+        any(x.endswith((".xcodeproj", ".xcworkspace")) for x in dirs)
+    deploy = sorted({os.path.basename(f) for f in files if os.sep not in f and f.lower() in DEPLOY_FILES} |
+                    {x for x in dirs if os.sep not in x and x in DEPLOY_DIRS} |
+                    {f.replace(os.sep, "/") for f in files if f.replace(os.sep, "/").startswith(".github/workflows/")
+                     and re.search(r"deploy|release|publish|pages|vercel|netlify|testflight|app-?store|play-?store",
+                                   os.path.basename(f) + " " + _read(root, f, 50_000), re.I)})
+    changelog = next((f for f in files if os.sep not in f and re.match(r"(changelog|changes|history)(\.md|\.txt)?$", f.lower())), None)
+    released = None
+    if changelog:
+        heads = re.findall(r"^#{1,3}\s*\[?v?(\d+\.\d+(?:\.\d+)?)\]?", _read(root, changelog, 200_000), re.M)
+        if heads:
+            released = f"{changelog} lists released versions (latest {heads[0]})"
+    versions = [(str(pkg.get("version")), "package.json")] if pkg.get("version") else []
+    m = re.search(r"^version:\s*([\w.+-]+)", pubspec, re.M)
+    if m:
+        versions.append((m.group(1), "pubspec.yaml"))
+    defaults = []
+    for v, src in versions:
+        vt = _version_tuple(v)
+        if vt and vt > (1, 0, 0) and not released:
+            released = f"version {v} in {src}"
+        elif vt == (1, 0, 0):
+            defaults.append(f"version {v} in {src} is the starter's default, so it says nothing about a release")
+    if not released:
+        notes += defaults
+    if not has_code and not notes_files:
+        notes.append("the folder has no code and no notes, so the phase is asked")
+    elif released:
+        put("answers.Q-scope-07", "live", released, f"read from the repo: {released}")
+    elif has_code and deploy:
+        put("answers.Q-scope-07", "near-launch", ", ".join(deploy[:3]),
+            f"read from the repo: code and deploy settings ({', '.join(deploy[:3])}), but no released version yet")
+    elif has_code:
+        put("answers.Q-scope-07", "building", "code without deploy settings", "read from the repo: code, but no deploy settings yet")
+    else:
+        n = len(notes_files)
+        put("answers.Q-scope-07", "idea", "notes, no code", f"read from the repo: {n} note{'s' if n != 1 else ''} "
+            f"({', '.join(notes_files[:2])}) and no code yet")
+    if capped:
+        notes.append(f"the folder has more than {DETECT_MAX_FILES} files, so only the first {DETECT_MAX_FILES} were read")
+    return {"root": root, "findings": found, "notes": notes, "files": len(files), "capped": capped,
+            "readme": {"file": readme, "heading": heading, "paragraph": para} if readme else None}
+
+
+DETECT_LABELS = {"name": "name", "context.product": "what it is", "answers.Q-plat-01": "where it runs", "raw.stack": "code stack",
+                 "raw.brandColor": "brand colour", "raw.textFace": "font", "answers.Q-theme-01": "light and dark",
+                 "answers.Q-scope-07": "phase"}
+
+
+def detect_value_words(path, value):
+    if path == "answers.Q-scope-07":
+        return PHASE_WORDS.get(value, value)
+    if path == "answers.Q-theme-01":
+        return answer_words("Q-theme-01", value)
+    if path == "raw.brandColor":
+        return f"{str(value).upper()} ({color_words(value)})"
+    if path == "raw.stack" and not value:
+        return "no UI framework"
+    if isinstance(value, list):
+        return ", ".join(str(x) for x in value)
+    return str(value)
+
+
+def _already_set(state, decs, path):
+    """True when the person (or an earlier step) already gave this value, so a repo reading must not replace it."""
+    if path == "name":
+        return state.get("name") not in (None, "", "Untitled design system")
+    if path.startswith("answers."):
+        return path.split(".", 1)[1] in (state.get("answers") or {})
+    if path == "raw.textFace":
+        return (state.get("raw") or {}).get("textFace") not in (None, "system") or path in decs
+    v = get_path(state, path)
+    return v not in (None, "", [], {}) or path in decs
+
+
+def record_project(d, quiet=True):
+    """Look before you ask (zoom.md, level 0): record what detect_project reads from the project folder, each as set_by
+    assumed with its source in the reason, unless it is already answered. The stack comes from record_stack. A value a
+    standard or a lock holds is left alone. Returns the findings recorded (each with its plain words)."""
+    state = merge_defaults(load_state(d))
+    decs = _decisions(d)
+    got = detect_project(doc_dir(d), d)
+    done = []
+    for f in got["findings"]:
+        if _already_set(state, decs, f["path"]) or std_holders(state, f["path"]) or is_locked(state, f["path"]):
+            continue
+        why = f["why"] + "; say if that's wrong"
+        try:
+            cmd_set(d, f["path"], f["value"], why, quiet=True, set_by="assumed", resync=False,
+                    via="repo" if f["path"].startswith("answers.") else None)
+        except SystemExit:  # a standard rules the value out: nothing recorded, the question stays open
+            continue
+        state = merge_defaults(load_state(d))
+        done.append(dict(f, words=detect_value_words(f["path"], f["value"])))
+    tags = record_stack(d)
+    if tags is not None:
+        done.append({"path": "raw.stack", "value": tags, "source": "package.json", "why": "detected from package.json",
+                     "words": ", ".join(tags) or "no UI framework"})
+    if not quiet:
+        for line in detect_lines(done):
+            print(line)
+    return done
+
+
+def detect_lines(done, lead="read from your repo (recorded as assumed; say if any is wrong):"):
+    if not done:
+        return []
+    return [f"  {lead}"] + [f"    {DETECT_LABELS.get(f['path'], f['path'])}: {f['words']} ({f['source']})" for f in done]
+
+
+def cmd_detect(d, project=None, as_json=False):
+    """engine.py detect: what the project folder already answers, before any question (read-only; nothing is written)."""
+    root = project or doc_dir(d)
+    got = detect_project(root, d if os.path.isdir(d) else None)
+    st = state_or_none(d)
+    state = merge_defaults(st) if st else None
+    decs = _decisions(d) if st else {}
+    tags, seen = detect_stack(root)
+    if tags is not None:
+        got["findings"].append({"path": "raw.stack", "value": tags, "source": "package.json",
+                                "why": f"detected from package.json ({', '.join(seen)})" if seen else "package.json names no UI framework"})
+    for f in got["findings"]:
+        f["words"] = detect_value_words(f["path"], f["value"])
+        f["recorded"] = bool(state) and _already_set(state, decs, f["path"])
+    if as_json:
+        print(json.dumps(got, indent=2, ensure_ascii=False))
+        return 0
+    print(f"Read {got['files']} files in {got['root']} (nothing was written).")
+    if not got["findings"]:
+        print("Nothing in the folder answers a sketch question yet: ask them.")
+    for f in got["findings"]:
+        print(f"  {DETECT_LABELS.get(f['path'], f['path'])}: {f['words']} ({f['source']})"
+              + ("  [already recorded]" if f["recorded"] else ""))
+    for n in got["notes"]:
+        print(f"  note: {n}")
+    if got.get("readme") and got["readme"].get("paragraph"):
+        print(f"  README says: \"{got['readme']['paragraph']}\" (for the line on what they're trying to do)")
+    print("Confirm each in one line instead of asking it (zoom.md, level 0). init and sketch record them as assumed.")
+    return 0
 
 
 def std_applies(s, state):
@@ -9619,7 +10200,76 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     return "\n".join(out).rstrip() + "\n"
 
 
-def render_product_md(state, existing=""):
+NOT_ENOUGH = "Not enough information"
+
+
+def project_phase(state):
+    """The project's phase (Q-scope-07): idea, building, near-launch or live; None while nobody said and nothing showed it."""
+    v = answer_value((state.get("answers") or {}).get("Q-scope-07"))
+    return v if v in PHASES else None
+
+
+def _ctx_words(v):
+    if isinstance(v, list):
+        return "; ".join(str(x).strip() for x in v if str(x).strip())
+    return str(v or "").strip()
+
+
+def _unconfirmed(decs, path):
+    """' (assumed, not confirmed yet)' when the latest decision for path was taken from their words or files, not given."""
+    return " *(assumed, not confirmed yet)*" if ((decs or {}).get(path) or {}).get("set_by") in ("assumed", "delegated") else ""
+
+
+def purpose_md(state, decs=None):
+    """PRODUCT.md, Purpose and goals: the alignment record (owner direction 2026-11-02, row 3). Each line comes from the
+    person's words or README; what nobody said reads 'Not enough information', never a guess."""
+    ctx = state.get("context") or {}
+    rows = [("Mission", "context.mission", "the change it exists to make"), ("Vision", "context.vision", "where it is heading"),
+            ("Purpose", "context.purpose", "what the person is trying to do with it")]
+    lines = []
+    for t, path, hint in rows:
+        v = _ctx_words(ctx.get(path.split(".")[1]))
+        lines.append(f"- **{t}** ({hint}): " + (f"{v.rstrip('.')}.{_unconfirmed(decs, path)}" if v else f"{NOT_ENOUGH}."))
+    goals = ctx.get("goals") or []
+    goals = [goals] if isinstance(goals, str) else goals
+    goals = [str(g).strip() for g in goals if str(g).strip()]
+    if goals:
+        lines.append(f"- **Goals**, most important first:{_unconfirmed(decs, 'context.goals')}")
+        lines += [f"  {i}. {g}" for i, g in enumerate(goals, 1)]
+    else:
+        lines.append(f"- **Goals**: {NOT_ENOUGH}.")
+    if not any(_ctx_words(ctx.get(k)) for k in ("mission", "vision", "purpose", "goals")):
+        lines.append("\nNothing here is invented: these come from the person's own words and README, are recorded as assumed, "
+                     "and are confirmed once. The principles are drafted from the goals (Q-brand-07).")
+    return "\n".join(lines)
+
+
+def phase_md(state, decs=None):
+    ph = project_phase(state)
+    if not ph:
+        return f"{NOT_ENOUGH} (Q-scope-07): an idea, being built, close to launch, or live with real users."
+    reason = re.sub(r";\s*say if that's wrong\s*$", "", ((decs or {}).get("answers.Q-scope-07") or {}).get("reason") or "")
+    head = f"**{answer_words('Q-scope-07', ph)}**" + (f" ({reason})" if reason else "") + "."
+    return head + _unconfirmed(decs, "answers.Q-scope-07") + f"\n\nWhat comes first in this phase: {PHASE_FIRST[ph]}."
+
+
+def market_md(state, decs=None):
+    """PRODUCT.md, Market: the analogous product, competitors, their shared pattern, the gap and the industry's conventions.
+    The user research or the person's words fill it; 'Not enough information' where nobody has looked yet."""
+    mk = (state.get("context") or {}).get("market") or {}
+    rows = [("Analogous product", "analogous", "a product from another field that solves the same kind of problem"),
+            ("Competitors", "competitors", "what people would use instead"),
+            ("Their shared pattern", "pattern", "what the competitors all do"),
+            ("The gap", "gap", "what none of them does well, and this product can"),
+            ("Industry conventions", "conventions", "the words, layouts and habits its users already know")]
+    lines = []
+    for t, k, hint in rows:
+        v = _ctx_words(mk.get(k))
+        lines.append(f"- **{t}** ({hint}): " + (f"{v.rstrip('.')}.{_unconfirmed(decs, 'context.market.' + k)}" if v else f"{NOT_ENOUGH}."))
+    return "\n".join(lines)
+
+
+def render_product_md(state, existing="", decs=None):
     ctx = state.get("context") or {}
     keeps = _keep_blocks(existing)
     raw = state["raw"]
@@ -9635,10 +10285,13 @@ def render_product_md(state, existing=""):
            "> Generated by the OpenDesigner engine from `state.json`. It is kept apart from DESIGN.md because it changes at a different pace. "
            "Hand-written notes survive only inside `<!-- od:keep -->` blocks.", ""]
     out.append(sec("Product", product_words(state) or "Not recorded yet (Q-scope-01)."))
+    out.append(sec("Purpose and goals", purpose_md(state, decs)))
+    out.append(sec("Phase", phase_md(state, decs)))
     aw = audience_words(state)
     out.append(sec("Audience", (aw[:1].upper() + aw[1:] + ("" if aw.endswith(".") else ".")) if aw else "Not recorded yet (Q-aud-01)."))
     if research_py:
         out.append(sec("Users", research_py.product_section(state)))
+    out.append(sec("Market", market_md(state, decs)))
     out.append(sec("Surfaces", "\n".join(f"- {s.get('name')}: {s.get('mode')} mode" + (f" ({surface_rule(s, 'set by the Density dial')})" if surface_rule(s, "") else "")
                                          if isinstance(s, dict) else f"- {s}" for s in surf)
                    or surface_words(state)
@@ -9652,7 +10305,7 @@ def render_product_md(state, existing=""):
     out.append(sec("Constraints", "\n".join(f"- {c}" for c in cons)))
     out.append(sec("Scope", "**In:** " + (", ".join(sc.get("in") or []) or "not recorded yet") + "\n\n**Out:** " + (", ".join(sc.get("out") or []) or "not recorded yet")))
     owner = [(qid, rec) for qid, rec in sorted((state.get("answers") or {}).items())
-             if ANSWER_RECORDS.get(qid) == "owner" and qid not in ("Q-brand-07", "Q-comp-01", "Q-comp-02")]
+             if ANSWER_RECORDS.get(qid) == "owner" and qid not in ("Q-brand-07", "Q-comp-01", "Q-comp-02", "Q-scope-07")]
     first_sentence = lambda q: re.split(r"(?<=[?.])\s", (questions().get(q) or {}).get("ask") or q)[0]
     lines = [f"- {first_sentence(q)} **{answer_words(q, answer_value(r))}** ({q})" for q, r in owner]
     out.append(sec("Team and Governance", "\n".join(x for x in [ctx.get("team") or ""] + lines if x) or "Not recorded yet (Q-scope-03, Q-scope-04, Q-gov-01)."))
@@ -9684,7 +10337,7 @@ def cmd_design_md(d, out_dir=None, files=None, meta=None, quiet=False):
     written = []
     hashes = state.setdefault("hashes", {})
     for name, render in (("DESIGN.md", lambda ex: render_design_md(d, files, meta, state, ex, out_dir=out_dir)),
-                         ("PRODUCT.md", lambda ex: render_product_md(state, ex))):
+                         ("PRODUCT.md", lambda ex: render_product_md(state, ex, _decisions(d)))):
         path = os.path.join(out_dir, name)
         existing = ""
         if os.path.exists(path):
@@ -10820,6 +11473,10 @@ def main(argv=None):
     p.add_argument("file")
     p.add_argument("--accept", action="store_true")
     p.add_argument("--json", action="store_true")
+    p = sub.add_parser("detect", parents=[common], help="read-only: what the project folder already answers (name, platforms, "
+                                                         "brand colour, font, dark mode, phase), before any question")
+    p.add_argument("--project", default=None, help="the project folder (default: the folder that holds the state directory)")
+    p.add_argument("--json", action="store_true")
     p = sub.add_parser("build", parents=[common], help="generate + validate, then (if no errors) export all + design-md + preview")
     p.add_argument("--force", action="store_true", help="export even when validation finds errors")
     p = sub.add_parser("sketch", parents=[common], help="Level 0: a complete coarse system from about five answers")
@@ -10928,7 +11585,7 @@ def main(argv=None):
         q.add_argument("--no-doc", dest="no_doc", action="store_true")
     a = ap.parse_args(argv)
     d = a.dir or DEFAULT_DIR
-    st = state_or_none(d) if a.cmd not in ("init", "feel", "resolve", "version") and not getattr(a, "json", False) else None
+    st = state_or_none(d) if a.cmd not in ("init", "feel", "resolve", "version", "detect") and not getattr(a, "json", False) else None
     kind = version_status(st)[0] if st else "current"
     if kind == "newer" or (kind != "current" and a.cmd not in ("build", "sketch")):  # build says it after it brings files up to date
         print(version_notice(st))
@@ -10949,6 +11606,8 @@ def main(argv=None):
         cmd_lock(d, a.path, a.cmd == "lock")
         if not a.no_doc:
             refresh_docs(d)
+    elif a.cmd == "detect":
+        return cmd_detect(d, a.project, a.json)
     elif a.cmd == "resolve":
         cmd_resolve(d)
     elif a.cmd == "version":
@@ -11037,8 +11696,8 @@ def answered_ids(state, decs=None, for_zoom=False):
     (context.product, raw.brandColor, macros, the logo hook; ANSWER_PATHS)."""
     out = {}
     for q, rec in (state.get("answers") or {}).items():
-        if for_zoom and isinstance(rec, dict) and rec.get("via") == "sketch" and (questions().get(q) or {}).get("zoom", 0):
-            continue  # a sketch answer (for example the theme) does not zoom its area in
+        if for_zoom and isinstance(rec, dict) and rec.get("via") in ("sketch", "repo") and (questions().get(q) or {}).get("zoom", 0):
+            continue  # a sketch answer (for example the theme) or a reading from the repo does not zoom its area in
         out[q] = (rec.get("set_by") if isinstance(rec, dict) else None) or "chosen"
     for path, (q, _how) in ANSWER_PATHS.items():
         v = get_path(state, path)
@@ -11747,7 +12406,7 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
                 trial, [], house, value=theme, breaks=[(s["id"], f"the standard lists {theme} for Q-theme-01 as an option that breaks it", s)
                                                        for s in bad]))
     if fresh:
-        cmd_init(d, name=name, standards=False)  # house standards follow the answers, so platform-only ones can be skipped
+        cmd_init(d, name=name, standards=False, detect=False)  # house standards follow the answers; the repo is read after them
     elif name and load_state(d).get("name") != name:
         cmd_set(d, "name", name, "sketch: the product's name", quiet=True, set_by=sb("name"))  # --name wins over init's folder name
     if audience:
@@ -11768,8 +12427,6 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
                 set_by=sb("platforms"), via="sketch", resync=False)
     if stack is not None:
         cmd_set(d, "raw.stack", stack, "sketch: the code stack the person named", quiet=True, resync=False)
-    elif not fresh:
-        record_stack(d)
     if macros:
         cmd_set(d, "macros", macros, why_of("feel") + (f" ({'feel words' if sb('feel') else 'their words'}: {', '.join(mapping)})"
                                                          if mapping else ""), quiet=True, set_by=sb("feel"))
@@ -11792,9 +12449,11 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
     if items:
         cmd_set(d, "answers.Q-scope-06", items if len(items) > 1 or ":" in items[0] else items[0], why_of("surfaces"), quiet=True,
                 set_by=sb("surfaces"), via="sketch")
+    read = record_project(d)  # what their files answer and they did not: assumed, said in one line with the result
     if fresh:
         std_sync(d, initial=True, quiet=quiet)
-    elif platforms or stack is not None:  # the standards follow the platforms and stack (R02), quietly, one line per theme
+    elif platforms or stack is not None or any(f["path"] in ("answers.Q-plat-01", "raw.stack") for f in read):
+        # the standards follow the platforms and stack (R02), quietly, one line per theme
         std_rescope(d, quiet=quiet)
     code = cmd_build(d) if not quiet else 0
     if not quiet:
@@ -11825,6 +12484,11 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
                           delegated=brand_delegated(d)) if os.path.exists(mp) else ""
         if line:
             print(line)
+        for line in detect_lines(read, lead="Read from your repo (recorded as assumed; say if any is wrong):"):
+            print(line[2:])
+        ph = project_phase(load_state(d))
+        if ph:
+            print(f"Phase: {PHASE_WORDS[ph]}. What comes first: {PHASE_FIRST[ph]} (zoom.md, \"The project's phase\").")
         print("This is a sketch: every part works, and most choices are still defaults. Zoom into any area later (see the Zoom lines in DESIGN.md).")
         if code == 0:
             track(d, "level_complete", level="sketch")

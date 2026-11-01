@@ -34,7 +34,7 @@ FIELD = re.compile(r"^- \*\*(.+?):\*\* ?(.*)$")
 CLASS_NAMES = {"G": "generatable", "E": "extractable", "D": "designer-owned", "T": "tool-assisted", "I": "owner input"}
 CLASS = {}
 for c, ids in {
-    "I": "scope-01 scope-02 scope-03 scope-04 scope-05 scope-06 aud-01 aud-02 aud-03 aud-04 brand-01 brand-02 brand-05 brand-07 "
+    "I": "scope-01 scope-02 scope-03 scope-04 scope-05 scope-06 scope-07 aud-01 aud-02 aud-03 aud-04 brand-01 brand-02 brand-05 brand-07 "
          "plat-01 plat-02 plat-03 plat-04 plat-05 plat-07 plat-08 plat-09 tool-01 tool-02 tool-03 theme-03 type-04 "
          "voice-06 comp-02 color-19 ai-01 pattern-05 pattern-06 gov-01 gov-02 gov-03 gov-04 gov-05 gov-06 pref-01 pref-02 pref-03",
     "E": "ref-01 color-01",

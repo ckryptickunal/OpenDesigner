@@ -66,6 +66,7 @@ A person in a hurry still gets a finished page in the first reply. What they don
 
 ## Start
 1. **Look before you ask.** Check for `opendesigner/`, `DESIGN.md`, `PRODUCT.md`, token files, `tailwind.config.*`, CSS custom properties, `package.json`, and logo or font files. Never ask something a file already answers. If `opendesigner/state.json` exists, switch to opendesigner-extend.
+   - Run `python3 <skill>/scripts/engine.py detect` first. It only reads: the product's name and what it is, where it runs, a brand colour candidate, the font, dark mode, the project's phase and the stack. Each sketch question it answers becomes one confirm line, not a question (`zoom.md`, level 0). `init` and `sketch` record each reading as `assumed`, with the file it came from.
    - `package.json` tells you the stack (React, React Native and so on). The stack and the platforms decide which house standards apply. The engine reads it at `init` and `sketch` and records it as `raw.stack`. Ask once which framework they use only when no file settles it (`rules.md` section 3).
 2. **Set up.** Run `python3 <skill>/scripts/engine.py init --name "<product or folder name>"`. Here `<skill>` means this skill's folder. The product name from the sketch (`sketch --name`) replaces the folder name later. `init` also applies the house standards (`references/standards.md`) and locks them. Don't ask about them; mention them once, in the first result.
 3. **Greet in 3 lines at most** (`rules.md` section 1). There is no mode to choose.

@@ -179,6 +179,26 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Time weight:** medium (fan-out 0)
 - **Evidence:** S-L17-007; DC-L02-08, DC-L02-11, DC-L03-10
 
+### Q-scope-07 · What phase is the project in: an idea, being built, close to launch, or live? · Standard
+- **Why:** The project's phase changes which questions come first. An idea needs its purpose and an analogous product before any screen; a product close to launch needs an audit of what exists, its copy and a preflight; a live product needs the audit and rules for who may change the system [DC-L11-04, DC-L19-179, DC-L11-21; inferred from the owner's direction of 2026-11-02, OWNER-FEEDBACK row 6].
+- **Ask:** "Where is the project now: an idea, being built, close to launch, or live with real users?"
+- **Example:** Show the four phases on one line, with the one read from the repo marked and the file that showed it.
+- **Control:** single choice, pre-filled from the repo (`engine.py detect`); asked only when the repo and their words say nothing, otherwise confirmed in one line
+- **Options:**
+  - `idea` An idea, no code yet: the alignment first (mission, vision, purpose, goals) and the analogous product, then the sketch; there is nothing to audit yet [S-L11-105; inferred].
+  - `building` Being built: the sketch, then the areas the screens being built need most [inferred].
+  - `near-launch` Close to launch: an audit of the screens that exist (the interface inventory), then copy and voice, then preflight before release; launch and share surfaces join the scope [DC-L11-04, DC-L19-179].
+  - `live` Live, with real users: the audit first, mapping onto the tokens the code already has, then governance and versioning [DC-L19-189, DC-L11-21].
+- **Default:** none: read from the repo first (no code: idea; code without deploy settings: building; code with deploy settings: near launch; a changelog with released versions, or a version past 1.0.0: live). An empty folder says nothing, so ask once. *Source:* the owner's direction of 2026-11-02 (OWNER-FEEDBACK row 6) and its proposal [inferred].
+- **Decides:** none (an owner input; it orders the questions and does not change tokens)
+- **Changes:** DC-L11-04, DC-L11-21, DC-L19-179 · blocks: Strategy > Scope; Process > Discovery > Audit
+- **Preview:** none visual; the next-step offer after the sketch leads with what this phase needs first (zoom.md, "The project's phase").
+- **Use / avoid:** use the phase to choose what to offer first; avoid asking a near-launch product the idea-phase questions again, and avoid reading npm's default version 1.0.0 as a release [inferred].
+- **Skip:** yes; when nothing shows the phase, the offer after the sketch stays as it is.
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** DC-L11-04, DC-L11-21, DC-L19-179, DC-L19-189; S-L11-105
+
 ### Q-scope-02 · Is there existing UI to clean up and merge, or is this a new product? · Standard
 - **Why:** Checking the screens you have (an audit) shows how much to merge. For example, 40 grays can merge into one 10-step color ramp [DC-L11-04, inferred].
 - **Ask:** "Do you have screens already that we should clean up and merge, or are we starting fresh?"
@@ -515,7 +535,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-brand-07 · What are your 3-5 design principles, and which one wins a tie? · Standard
 - **Why:** When two sliders pull the same setting in opposite ways, your ranked principles break the tie [DC-L06-15; L06 section 4.2].
-- **Ask:** "What 3-5 principles should break ties, and which one wins? I can draft some from your sliders."
+- **Ask:** "What 3-5 principles should break ties, and which one wins? I can draft some from your goals."
 - **Example:** Show GOV.UK-style imperatives and a do/don't pair per principle.
 - **Control:** text list (3-5) + drag to rank + single choice (format)
 - **Options:**
@@ -523,8 +543,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `pairs` Functional and emotional pairs (Fluent) [S-L06-043].
   - `imperatives` Commands that say what they give up (GOV.UK, 11 principles, updated 2 Apr 2025) [S-L06-044].
   - `value-words` Short value words (Carbon system principles) [S-L06-114].
-  - `generate` Let the builder draft principles from the sliders, for you to edit [inferred].
-- **Default:** generate, 3-5 principles, each naming what it outranks, with one making accessibility non-negotiable. *Source:* card heuristic [DC-L06-15; S-L06-077, S-L06-044].
+  - `generate` Let the builder draft principles from your goals and purpose (PRODUCT.md, Purpose and goals), then the sliders, for you to edit [inferred].
+- **Default:** generate, 3-5 principles drafted from the recorded goals and purpose first (one principle per goal it protects), then from the sliders where no goal is recorded; each names what it outranks, and one makes accessibility non-negotiable. Never invent a goal to draft from: with no goals recorded, draft from the sliders and say so. *Source:* card heuristic [DC-L06-15; S-L06-077, S-L06-044]; drafting from the goals follows the owner's direction of 2026-11-02 [inferred].
 - **Decides:** DC-L06-15, DC-L11-05
 - **Changes:** tie-break rules for slider conflicts; ADRs (DC-L11-12) · blocks: Foundations > Principles; Governance > Principles
 - **Preview:** each principle shown with a do/don't pair generated from the current draft.
