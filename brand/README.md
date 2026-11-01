@@ -11,7 +11,7 @@ OpenDesigner's own design system, made with OpenDesigner, plus the images we pos
 | `design-system/build_previews.py` | Writes the artifact's preview cards (the post templates) from `tokens.json` |
 | `TYPE-RULES.md` | Apple's and Google's type rules, checked against their live docs, plus measurements of two reference sites |
 | `TYPE-REVIEW.md` | What went wrong with the first kit's type, and what good type needs |
-| `showcase/` | 46 pieces made through OpenDesigner as a stress test, with the findings in `showcase/STRESS-TEST.md` |
+| `showcase/` | Designs made through OpenDesigner, listed on the website's showcase page. It began as a 46-piece stress test (findings in `showcase/STRESS-TEST.md`) and grew in later rounds |
 | `export/` | The first kit (warm black, ember, Geist). It's been replaced, and it stays until the new kit is approved and exported |
 
 ## The system in one paragraph

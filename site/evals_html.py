@@ -1,7 +1,8 @@
 """The evals page's live sections. A docs page writes {{evals:<name>}} on its own line; site/build.py swaps in the block below,
 built from the committed result files, so the page always shows the last real run and never a number typed by hand:
 
-    evals/agent/latest.json      tools/agent_evals.py --save   (claude plugin eval, with and without the plugin)
+    evals/agent/results/*.json   tools/agent_evals.py --save   (claude plugin eval, with and without the plugin; every run is shown)
+    evals/agent/latest.json      the last full run (its date, commit, models and cost go under the table)
     evals/design/latest.json     tools/design_evals.py         (the engine on fixed briefs, no AI)
     evals/checkers/latest.json   tools/checker_evals.py        (our checkers on pages with planted mistakes)
     brand/showcase/audit/*.json  the showcase audits: round 4 blind test, then each rebuilt piece's round 4 or 5 record
@@ -56,6 +57,79 @@ def _case_description(name):
     return m.group(1).strip() if m else ""
 
 
+# Agent tasks that need OpenDesigner's own engine and records (change one decision and rebuild, choose styles from a
+# taste poll). A plain AI cannot do them by design, so their "without" score is not a fair comparison and stays out of
+# the headline. Every other task is one a capable AI could attempt alone.
+NEEDS_TOOLS = {"extend-rounder", "taste-all-past", "taste-leaves-out", "taste-index-asks"}
+MONTHS = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split()
+
+
+def _day(d):
+    try:
+        y, m, dd = str(d).split("-")
+        return f"{int(dd)} {MONTHS[int(m) - 1]}"
+    except (ValueError, IndexError):
+        return str(d or "")
+
+
+def agent_runs():
+    """Every saved agent run (evals/agent/results/), in file order. Fix experiments (-before, -after) belong to the
+    before-and-after table, not here."""
+    runs = []
+    for f in sorted((ROOT / "evals/agent/results").glob("*.json")):
+        if f.stem.endswith(("-before", "-after")):
+            continue
+        j = json.loads(f.read_text())
+        label = (j.get("label") or "full run").replace("opendesigner-", "").replace("-", " ")
+        for c in j.get("cases", []):
+            runs.append({"case": c["name"], "date": j.get("date"), "label": label, "n": j.get("runsPerArm") or 1,
+                         "with": c.get("score"), "without": c.get("without"), "meta": j})
+    return runs
+
+
+def agent_cases():
+    """One row per task: its headline run (the newest with 3 or more tries per side, else the newest) and every other run."""
+    by = {}
+    for r in agent_runs():
+        by.setdefault(r["case"], []).append(r)
+    names = sorted(p.parent.name for p in (ROOT / "evals").glob("*/prompt.md"))
+    rows = []
+    for name in names:
+        rs = by.get(name, [])
+        repeated = [r for r in rs if r["n"] >= 3]
+        head = (repeated or rs or [None])[-1]
+        rows.append({"name": name, "head": head, "others": [r for r in rs if r is not head], "tools": name in NEEDS_TOOLS})
+    return rows
+
+
+def fair_comparison():
+    """Mean score with and without OpenDesigner over the tasks any AI could attempt, from their repeated runs only."""
+    picked = [c["head"] for c in agent_cases() if not c["tools"] and c["head"] and c["head"]["n"] >= 3 and c["head"]["without"] is not None]
+    if not picked:
+        return None
+    w = sum(r["with"] for r in picked) / len(picked)
+    wo = sum(r["without"] for r in picked) / len(picked)
+    return {"with": w, "without": wo, "tasks": len(picked), "date": max(r["date"] for r in picked), "n": min(r["n"] for r in picked)}
+
+
+def _agent_table(tools):
+    rows = []
+    for c in agent_cases():
+        if c["tools"] != tools:
+            continue
+        h = c["head"]
+        other = "; ".join(f'{_day(r["date"])} {esc(r["label"])} ×{r["n"]}: {_pct(r["with"])}'
+                          + (f' / {_pct(r["without"])}' if r["without"] is not None else "") for r in c["others"])
+        task = (f'<strong>{esc(c["name"])}</strong><br><span class="ev-desc">{esc(_case_description(c["name"]))}</span>'
+                + (f'<br><span class="ev-desc">Other runs, with / without: {other}</span>' if other else ""))
+        if not h:
+            rows.append([task, "–", "–", "not run yet"])
+            continue
+        runs = f'{h["n"]} run{"s" if h["n"] != 1 else ""}, {_day(h["date"])}' + ("" if h["n"] >= 3 else " (weak evidence)")
+        rows.append([task, _pct(h["with"]), _pct(h["without"]) if h["without"] is not None else "–", runs])
+    return _table(["Task", "With OpenDesigner", "Without", "Runs per side"], rows)
+
+
 def showcase_numbers():
     """Round 4 started with a blind test of the gallery as it stood: 37 pairs against shipped screens (AUDIT-ROUND4.md).
     After it, every rebuilt piece carries its own round 4 or 5 record with the fresh reviewer's score."""
@@ -76,37 +150,33 @@ def showcase_numbers():
 
 def block(name):
     if name == "summary":
-        ag, de, ch, sc = _load("evals/agent/latest.json"), _load("evals/design/latest.json"), _load("evals/checkers/latest.json"), showcase_numbers()
+        fc, de, ch, sc = fair_comparison(), _load("evals/design/latest.json"), _load("evals/checkers/latest.json"), showcase_numbers()
         tiles = []
-        if ag:
-            tiles.append(("Agent evals", f"{_pct(ag.get('overallScore'))} with OpenDesigner",
-                          f"{_pct((ag.get('overallScore') or 0) - (ag.get('meanDelta') or 0))} without it, on the same {ag.get('casesTotal')} tasks"))
+        if fc:
+            tiles.append(("Compared with a plain AI", f"{_pct(fc['with'])} with, {_pct(fc['without'])} without",
+                          f"{fc['tasks']} tasks any AI can attempt; {fc['n']} tries per side, {_day(fc['date'])}"))
         if de:
-            tiles.append(("Design evals", f"{de['passed']} of {de['checks']} required checks",
-                          f"{de['briefs']} briefs; {de.get('qualityPassed')} of {de.get('qualityChecks')} stricter quality checks"))
+            tiles.append(("Accessible and complete", f"{de['passed']} of {de['checks']} required checks",
+                          f"{de['briefs']} briefs, no AI; {de.get('qualityPassed')} of {de.get('qualityChecks')} stricter quality checks"))
+        tiles.append(("Looks, judged blind", f"{sc['passed']} of {sc['rebuilt']} rebuilt designs pass",
+                      f"before the rebuild, ours lost {sc['before_lost']} of {sc['before_pairs']} blind pairs"))
         if ch and ch.get("checkers"):
             cs = ch["checkers"].values()
             planted, caught, alarms = sum(c.get("planted", 0) for c in cs), sum(c.get("caught", 0) for c in cs), sum(c.get("falseAlarms", 0) for c in cs)
-            tiles.append(("Checker evals", f"{caught} of {planted} planted mistakes caught",
+            tiles.append(("Our own checkers", f"{caught} of {planted} planted mistakes caught",
                           f"{len(ch['checkers'])} checkers; {_alarms(alarms)} on clean pages"))
-        tiles.append(("Showcase audit", f"{sc['passed']} of {sc['rebuilt']} rebuilt pieces pass",
-                      f"before: ours lost {sc['before_lost']} of {sc['before_pairs']} blind pairs"))
         return f'<div class="ev-stats" data-n="{len(tiles)}">' + "".join(f'<div class="ev-stat"><p class="kicker">{esc(k)}</p><p class="ev-big">{esc(v)}</p><p class="ev-sub">{esc(s)}</p></div>'
                                                 for k, v, s in tiles) + "</div>"
-    if name == "agent":
-        ag = _load("evals/agent/latest.json")
-        if not ag:
+    if name in ("agent", "agent-tools"):
+        if not agent_runs():
             return '<p class="ev-meta">Not run yet.</p>'
-        rows = []
-        for c in ag["cases"]:
-            d = c.get("delta")
-            rows.append([f'<strong>{esc(c["name"])}</strong><br><span class="ev-desc">{esc(_case_description(c["name"]))}</span>', _pct(c.get("score")),
-                         _pct(c.get("without")) if c.get("without") is not None else "–",
-                         (("+" if d > 0 else "") + f"{round(d * 100)}" + " pts") if isinstance(d, (int, float)) else "–"])
-        return _table(["Task", "With OpenDesigner", "Without", "Difference"], rows) + _meta([
-            f"Run {ag['date']}", f"commit {ag.get('commit')}", f"agent model: {ag.get('model')}", f"judge: {ag.get('judgeModel')}",
-            f"{ag.get('runsPerArm')} runs per task per arm", f"Claude Code {ag.get('claudeVersion')}",
-            f"about ${ag.get('costUsd'):.2f}" if isinstance(ag.get("costUsd"), (int, float)) else ""])
+        out = _agent_table(tools=(name == "agent-tools"))
+        if name == "agent":
+            ag = _load("evals/agent/latest.json") or {}
+            out += _meta([f"Last full run {ag.get('date')}", f"commit {ag.get('commit')}", f"agent model: {ag.get('model')}", f"judge: {ag.get('judgeModel')}",
+                          f"Claude Code {ag.get('claudeVersion')}", f"about ${ag.get('costUsd'):.2f}" if isinstance(ag.get("costUsd"), (int, float)) else "",
+                          "every run is in evals/agent/results/"])
+        return out
     if name == "agent-changes":
         ch = _load("evals/agent/changes.json") or {"changes": []}
         rows = []

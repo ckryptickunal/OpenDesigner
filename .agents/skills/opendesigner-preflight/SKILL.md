@@ -54,3 +54,5 @@ Report each finding with its time or place, the evidence (frame path or measurem
 Fix, then run the helper and the checklist again. Say what you could not check.
 
 When you find a mistake that is not on the list, add it to `references/mistakes.md` and `references/checklist.md` in this skill's source (`skills/opendesigner-preflight/` in the OpenDesigner repo), then run `python3 tools/sync_skills.py`.
+
+If something in OpenDesigner itself was missing, wrong or confusing, record it with `engine.py feedback "..." --kind gap|bug|confusing|idea` (`references/improve.md` in the opendesigner skill). Nothing is posted without the person's OK.

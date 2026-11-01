@@ -10,6 +10,8 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Added
 
+- **The evals page compares fairly and shows every run** (2026-11-02). The headline compares OpenDesigner with a plain AI only on the 7 tasks a plain AI can attempt (92% with, 66% without). Every saved run is listed, including the two taste tasks that scored 0%, and the limits come first.
+- **A product direction proposal** (2026-11-02). Sixteen notes on direction are in `_coordination/OWNER-FEEDBACK.md`, answered by a proposal in `_coordination/proposals/`. The field plan records 59 stars and 4 forks.
 - **A star chart in the README** (2026-10-31). The README shows OpenDesigner's GitHub stars as its own chart, in light and dark. `tools/star_chart.py` redraws it from GitHub every 3 hours, and `tools/gh_snapshot.py` saves the repo's GitHub numbers as JSON.
 - **Preflight measures flashing** (2026-10-28). `preflight.py video` now checks the final video against the WCAG 2.2 flash limit (SC 2.3.1) with ffmpeg, and `--flash-where` saves the worst moment. 8 of 73 Instagram reels we measured flashed over the limit. Checklist item 49 lists the usual causes.
 - **User research before the defaults** (2026-10-26). After the sketch, OpenDesigner offers to research who the users are. After one yes it searches with the tools it has, cites every finding, and turns them into recommended answers to the audience questions. Nothing changes without the person's yes. See `references/research.md`.
@@ -75,6 +77,7 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Fixed
 
+- **Counts in the docs match the files again** (2026-11-02). Review case, export format, skill and library counts in the docs, SPEC, AGENTS.md and llms.txt now match the repo.
 - **A calmer site footer** (2026-11-02). The footer went from 8 columns and 42 links to 4 columns and 20 links. Every link fits on one line down to 320 px.
 - **Favicon on dark browser tabs** (2026-10-28). The favicon switches to the dark mark when the browser tab is dark, so its squares stay visible.
 - **Five small slips on the home page and in the library** (2026-10-26). "1 false alarms" became "1 false alarm", the audit's check marks no longer cover text, library dates use 2026 weekdays, and the header fits at 320 px again.
