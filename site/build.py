@@ -624,23 +624,48 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jp
 """
 
 
-FOOT_COLS = [  # four short columns; each label fits on one line down to 320 px (the docs list lives at /docs/)
+FOOT_COLS = [  # the top row: short labels that fit on one line down to 320 px
     ("Product", [("Install", "/docs/install/"), ("Showcase", "/showcase/"), ("Component library", "/library/"),
                  ("For teams", "/docs/enterprise/"), ("Book a call", "/book/")]),
-    ("Learn", [("Introduction", "/docs/introduction/"), ("Quickstart", "/docs/quickstart/"), ("How it works", "/docs/how-it-works/"),
-               ("FAQ", "/docs/faq/"), ("All docs", "/docs/")]),
     ("Project", [(f'Changelog <span class="foot-ver">v{VERSION}</span>', "/changelog/"), ("GitHub", GH), ("Contribute", "/docs/contribute/"),
                  ("Report a problem", f"{GH}/issues/new/choose")]),
     ("Trust", [("Security and data", "/docs/security/"), ("Report a vulnerability", f"{GH}/blob/main/SECURITY.md"),
                ("Licence (MIT)", f"{GH}/blob/main/LICENSE")]),
 ]
+# The docs rows link every docs page from every page of the site, as the old footer did (search engines and AI crawlers
+# follow these links). Labels are shortened so each fits on one line; a page missing here falls back to its title, and
+# the build warns when a label is longer than FOOT_MAX characters.
+FOOT_SHORT = {
+    "designers": "For designers", "enterprise": "For enterprise teams", "existing-product": "Existing app or brand",
+    "extend": "Change a system", "export": "Export to code", "good-practices": "Good practices",
+    "design-system-for-cursor": "Cursor design system", "design-tokens-for-claude-code": "Claude Code tokens",
+    "improve-vibe-coded-ui": "Improve vibe-coded UI", "ai-design-system-generator": "AI system generators",
+    "design-systems": "Design systems", "design-tokens": "Design tokens", "decisions": "Decisions and DESIGN.md",
+    "brand-assets": "Brand assets", "design-styles": "Design styles", "motion": "Motion", "ux-patterns": "UX patterns",
+    "ui-details": "Interface details", "resources": "Sources we learn from", "engine": "Engine commands",
+    "files": "Files it writes", "dials": "The eight dials", "evals": "Evals", "contribute": "Contribute",
+    "install": "Install", "quickstart": "Quickstart",
+}
+FOOT_MAX = 23
 
 
 def footer(pages):
     cols = "".join(f'<div class="foot-col"><h2 class="foot-h kicker">{h}</h2><ul>' + "".join(f'<li><a href="{u}">{t}</a></li>' for t, u in links)
                    + "</ul></div>" for h, links in FOOT_COLS)
+    docs = []
+    for sec in SECTIONS:
+        ps = [p for p in pages if p["section"] == sec and p["path"] != "/docs/security/"]  # security is under Trust
+        labels = [(FOOT_SHORT.get(p["slug"], p["title"]), p["path"]) for p in ps]
+        for label, path in labels:
+            if len(label) > FOOT_MAX:
+                print(f"footer: the label for {path} is {len(label)} characters and may wrap; add a shorter one to FOOT_SHORT", file=sys.stderr)
+        if labels:
+            docs.append(f'<div class="foot-col"><h3 class="foot-h kicker">{sec}</h3><ul>'
+                        + "".join(f'<li><a href="{u}">{esc(t)}</a></li>' for t, u in labels) + "</ul></div>")
     return (f'<footer class="foot"><div class="foot-in"><div class="foot-brand">{lockup()}<p>Free and open source.<br>MIT for code, CC BY 4.0 for docs.</p></div>'
             f'<nav class="foot-cols" aria-label="Footer">{cols}</nav></div>'
+            f'<nav class="foot-docs" aria-label="Documentation"><div class="foot-docs-head"><h2 class="kicker">Documentation</h2><a href="/docs/">All docs</a></div>'
+            f'<div class="foot-docs-cols">{"".join(docs)}</div></nav>'
             f'<div class="foot-legal"><p>OpenDesigner is an independent open-source project. Claude, ChatGPT, Codex, Cursor, Figma and other names belong '
             f'to their owners and appear only to say where OpenDesigner runs. Photos: Unsplash photographers, credited where shown.</p>'
             f'<p class="foot-meta"><a href="/llms.txt">llms.txt</a><a href="/sitemap.xml">Sitemap</a><span>Updated&nbsp;<time datetime="{TODAY}">{TODAY}</time></span></p></div></footer>')

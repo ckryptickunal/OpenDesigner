@@ -23,5 +23,6 @@
 - [ ] Every JSON file still parses, and `python3 tools/check_links.py` passes.
 - [ ] I edited source files (`research/`, `synthesis/`, `skills/`, `tools/`), not generated copies; if I changed them, I ran `python3 tools/build_data.py` and `python3 tools/sync_skills.py`, and the engine tests.
 - [ ] Nothing copies another brand's identity (logo, name, typeface files, illustrations).
+- [ ] If this changes the website's header, footer or navigation, no link that search engines or AI answer engines follow was dropped.
 - [ ] No secrets, keys or `.env` files are included.
 - [ ] If this changes a product decision, I added a line to `_coordination/DECISIONS.md` with `python3 tools/od.py log`.
