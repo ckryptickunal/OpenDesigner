@@ -10,6 +10,8 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Added
 
+- **How it works is easier to find** (2026-11-04). The "How OpenDesigner works" page is now linked from the top of the home page, two home page sections, the footer on every page, the top of the docs sidebar, the docs home and the Introduction.
+- **How OpenDesigner works, on one page** (2026-11-02). A new page at opendesigner.dev/tour/ draws the whole system in live HTML: the two ways in, the engine's dials, the files you keep, what protects you, and how a confirmed mistake becomes a check. Every number on it is read from the repository when the site is built.
 - **Reads your repo before asking** (2026-11-02). A new `engine.py detect` reads the product's name, where it runs, a brand colour, the font, dark mode and the project's phase from your files. `init` and `sketch` record each one as assumed, with its source, never over an answer you gave, and the sketch turns each answered question into one line to confirm.
 - **Purpose, goals and market in PRODUCT.md** (2026-11-02). PRODUCT.md gains Purpose and goals, Phase and Market sections, each saying "Not enough information" until your words or the research fill them. The user research gains a market topic: competitors, what they all do, the gap and an analogous product, with sources. Principles are drafted from the goals.
 - **The project's phase sets what comes first** (2026-11-02). A new question, Q-scope-07: an idea, being built, close to launch, or live, read from the repo first. An idea starts with its purpose and an analogous product, close to launch with an audit, copy and preflight, and live with the audit and governance.

@@ -51,7 +51,7 @@ TEAM_CHECKS = [("A decision log", "with the reason and who set each value, appen
 STARTS = [("Getting started", "Install", "Two commands in Claude Code, or a skills folder in other tools.", "/docs/install/"),
           ("Getting started", "Your first design system", "Five questions, the files you get, and what to look at first.", "/docs/quickstart/"),
           ("Guides", "For design-system teams", "Decision log, locks, standards, drift checks and a pilot plan.", "/docs/enterprise/"),
-          ("Reference", "How it works", "From your answers to tokens, exports and checks.", "/docs/how-it-works/")]
+          ("Overview", "How it works", "The whole system on one page: two ways in, the engine and the files you keep.", "/tour/")]
 HERO_LEDE = ("It asks the decisions a design system needs, one at a time, and suggests a sourced default for each. It checks contrast "
              "and writes design tokens, CSS, a Tailwind theme and a DESIGN.md that your team and your coding agents build from. Free and open source.")
 FIGURES = SITE / "figures"
@@ -550,8 +550,9 @@ def sidebar(pages, current):
         lis = "".join(f'<li><a href="{p["path"]}"{CUR if p["path"] == current else ""}>{esc(p["title"])}</a></li>' for p in items)
         groups.append(f'<div class="side-group"><h2 class="side-h kicker">{sec}</h2><ul>{lis}</ul></div>')
     show = f'<div class="side-group"><h2 class="side-h kicker">Examples</h2><ul><li><a href="/showcase/"{CUR if current == "/showcase/" else ""}>Showcase</a></li><li><a href="/library/">Component library</a></li></ul></div>'
+    tour = f'<a class="side-tour" href="{tour_page.PATH}"><span class="kicker">New here?</span><strong>See how it all works {ARROW}</strong></a>'
     return (f'<aside class="side" aria-label="Documentation"><details class="side-mobile"><summary>Documentation menu</summary>'
-            f'<nav>{"".join(groups)}{show}</nav></details><nav class="side-desk">{"".join(groups)}{show}</nav></aside>')
+            f'<nav>{tour}{"".join(groups)}{show}</nav></details><nav class="side-desk">{tour}{"".join(groups)}{show}</nav></aside>')
 
 
 def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jpg", md=True, wide=False, robots="index, follow, max-image-preview:large", home=False, og_alt=None, preload=""):  # preload: extra head lines (a preload, a feed link); home: True for the home layout, or a class name for another page without the docs sidebar
@@ -616,7 +617,7 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jp
 FOOT_COLS = [  # four short columns; each label fits on one line down to 320 px (the docs list lives at /docs/)
     ("Product", [("Install", "/docs/install/"), ("Showcase", "/showcase/"), ("Component library", "/library/"),
                  ("For teams", "/docs/enterprise/"), ("Book a call", "/book/")]),
-    ("Learn", [("Introduction", "/docs/introduction/"), ("Quickstart", "/docs/quickstart/"), ("How it works", "/docs/how-it-works/"),
+    ("Learn", [("Introduction", "/docs/introduction/"), ("Quickstart", "/docs/quickstart/"), ("How it works", tour_page.PATH),
                ("FAQ", "/docs/faq/"), ("All docs", "/docs/")]),
     ("Project", [(f'Changelog <span class="foot-ver">v{VERSION}</span>', "/changelog/"), ("GitHub", GH), ("Contribute", "/docs/contribute/"),
                  ("Report a problem", f"{GH}/issues/new/choose")]),
@@ -1129,7 +1130,7 @@ def home(pages, facts, faq):
 <div class="craft">{craft_html}</div>
 </section>
 """ if craft else ""
-    news = ("#before-after", "New: the audit, drawn on your own page")
+    news = (tour_page.PATH, "New: how it all works, on one page")
     announce = (f'<p class="h-announce"><span class="h-pill-tag">Free and open source · MIT</span>'
                 f'<a href="{news[0]}">{news[1]} {ARROW}</a></p>')
     body = f"""
@@ -1175,9 +1176,9 @@ def home(pages, facts, faq):
 </section>
 
 <section class="h-sec" id="how">
-<div class="h-head">{idx("05", "How it works")}<h2 class="h-h2">Five answers today. Consistent screens from then on.</h2></div>
+<div class="h-head h-head-row"><div>{idx("05", "How it works")}<h2 class="h-h2">Five answers today. Consistent screens from then on.</h2></div>
+<a class="h-link" href="{tour_page.PATH}">See the whole system at work {ARROW}</a></div>
 <ol class="h-steps">{"".join(f'<li class="h-step">{A_PICTS[i]}<span class="h-n num">0{i + 1}</span><h3>{t}</h3><p>{d}</p><div class="vg">{v}</div></li>' for i, (t, d, v) in enumerate(STEPS))}</ol>
-<p class="h-more"><a class="h-link" href="{tour_page.PATH}">See the whole system at work {ARROW}</a></p>
 </section>
 
 <section class="h-sec" id="use-cases">
@@ -1186,7 +1187,8 @@ def home(pages, facts, faq):
 </section>
 
 <section class="h-sec" id="features">
-<div class="h-head">{idx("07", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together, not just to start it.</h2></div>
+<div class="h-head h-head-row"><div>{idx("07", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together, not just to start it.</h2></div>
+<a class="h-link" href="{tour_page.PATH}#protect">See what protects you {ARROW}</a></div>
 <div class="bento">{"".join(f'<article class="bento-card span-{sp}"><h3>{t}</h3><p>{d}</p><div class="vg">{v}</div></article>' for t, d, v, sp in INSIDE)}</div>
 <div class="h-split h-files">
 <div><h3 class="h-h3">Rules your code and your design tools can read</h3>
