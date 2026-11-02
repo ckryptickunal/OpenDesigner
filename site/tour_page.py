@@ -91,8 +91,8 @@ def brand_excerpts():
     design = (BRAND / "DESIGN.md").read_text().splitlines()
     end = design.index("---", 1) if "---" in design[1:] else 16
     design_md = design[:end + 1] + [""] + [ln for ln in design if ln.startswith("# ")][:1]
-    product = (BRAND / "PRODUCT.md").read_text().split("\n## ")
-    product_md = [product[0].splitlines()[0]] + [ln for sec in product[1:3] for ln in ["", "## " + sec.strip().splitlines()[0], sec.strip().splitlines()[-1]]]
+    product = {sec.splitlines()[0]: sec.strip() for sec in (BRAND / "PRODUCT.md").read_text().split("\n## ")[1:]}
+    product_md = [(BRAND / "PRODUCT.md").read_text().splitlines()[0]] + [ln for k in ("Audience", "Surfaces") if k in product for ln in ["", "## " + product[k]]]
     color = json.loads((od / "tokens/semantic.color.light.tokens.json").read_text())["color"]["surface"]
     dtcg = {"color": {"surface": {k: {"$value": v["$value"], "$description": v["$description"]} for k, v in list(color.items()) if isinstance(v, dict) and "$value" in v}}}
     dtcg["color"]["surface"] = dict(list(dtcg["color"]["surface"].items())[:2])
@@ -103,6 +103,7 @@ def brand_excerpts():
     tw_block = tw[tw.index("@theme inline {"):].splitlines()
     dec = (od / "decisions.md").read_text()
     entry = re.search(r"^## D-0056 .*?(?=^## )", dec, re.M | re.S)
+    entries = re.search(r"^## D-0056 .*?(?=^## D-0058 )", dec, re.M | re.S)
     ov = (od / "overview.html").read_text()
     areas = re.findall(r'<tr><td><a href="#[^"]+">([^<]+)</a></td><td><span class="ov-tag ov-(\w+)"[^>]*>([^<]+)</span></td><td>(\w+)</td>', ov)
     return {
@@ -112,6 +113,7 @@ def brand_excerpts():
         "css": "/* opendesigner/build/css/tokens.css (part) */\n:root {\n" + "\n".join("  " + m.group(0).strip() for m in css_lines if m) + "\n}",
         "tailwind": "/* opendesigner/build/tailwind/theme.css (part) */\n" + "\n".join(tw_block[:5]) + "\n  …\n}",
         "decisions": entry.group(0).strip() if entry else "",
+        "decisions_more": entries.group(0).strip() if entries else (entry.group(0).strip() if entry else ""),
         "areas": [(html.unescape(a), cls, label, zoom) for a, cls, label, zoom in areas],
         "assets_h": html.unescape(m.group(1)) if (m := re.search(r"<h2>(Brand assets[^<]*)</h2>", ov)) else "",
         "assets": [(html.unescape(n), cls, html.unescape(lbl)) for n, cls, lbl in
@@ -126,13 +128,13 @@ def hero(b, f):
              ("fork", "Fix or build", "Audit what you built, or start a system from five answers."),
              ("engine", "The engine does the math", "Color, type, spacing, corners, depth and motion. Offline."),
              ("files", "Files land in your project", "Tokens, CSS, Tailwind, Figma, Swift, Compose and DESIGN.md."),
-             ("screen", "New screens follow them", "Your AI reads DESIGN.md first. A review flags any drift.")]
+             ("screen", "New screens follow them", "Your AI reads DESIGN.md first. A review flags values that skip the tokens.")]
     lis = "".join(f'<li class="tr-stop" style="--i:{i}"><span class="tr-dot" aria-hidden="true"></span>{icon(k)}<h2 class="tr-stop-t">{t}</h2><p>{d}</p></li>'
                   for i, (k, t, d) in enumerate(stops))
     pid, author, page_id = b.SCENES["blue-gradient"]
-    stats = [(f["questions"], f'questions it can ask, in {f["stages"]} topics. You answer up to five; the rest wait until you zoom in.'),
+    stats = [(f["questions"], f'questions it can ask. You answer up to five; the rest wait until you zoom in.'),
              (len(f["dials"]), "dials that set the look, each from 0 to 100, turned into values by fixed formulas."),
-             (f["standards"], "house standards from sources we trust, applied to every system and locked."),
+             (f["standards"], "house standards from sources we trust. The ones that set a value are locked."),
              (f["checks"], "checks before anything visual is shared: type, layout, motion and contrast."),
              (f["cases"], "known ways a design review goes wrong, each with how it is caught."),
              (f["components"], "finished components in the optional library, built only on your tokens.")]
@@ -142,12 +144,12 @@ def hero(b, f):
 <nav class="crumb" aria-label="Breadcrumb"><a href="/">{b.NAME}</a><span aria-hidden="true">/</span><span aria-current="page">How it works</span></nav>
 <p class="kicker tr-eyebrow">The whole system, on one page</p>
 <h1 class="tr-title">How OpenDesigner works</h1>
-<p class="h-lede tr-lede">OpenDesigner is a set of skills and a small engine that your AI tool loads. It reads your project, asks only what it can't find there, and writes the rules your screens follow into your own files. This page follows one request all the way through.</p>
+<p class="h-lede tr-lede">OpenDesigner is a set of skills and a small engine that your AI tool loads. It reads your project, asks only what it can't find there, and writes the rules your screens follow into your own files. This page shows each step, with the real numbers.</p>
 <p class="tr-hero-act"><a class="h-link" href="/docs/install/">Get started free {b.ARROW}</a></p>
 <figure class="tr-map-fig">
 <div class="stage tr-stage" style="background-image:url(https://images.unsplash.com/{pid}?auto=format&fit=crop&w=1800&q=70)"><div class="stage-in"><div class="tr-panel">
 <ol class="tr-map" aria-label="What happens, in order">{lis}</ol>
-<a class="tr-return" href="#learn">{icon("loop", 18)}<span>Whatever goes wrong comes back as a new check, and the next version ships it.</span></a>
+<a class="tr-return" href="#learn">{icon("loop", 18)}<span>A mistake the maintainer confirms comes back as a new check for everyone who updates.</span></a>
 </div></div></div>
 <figcaption>Drawn in HTML. Photo: <a href="https://unsplash.com/photos/{page_id}">{esc(author)}</a> on Unsplash.</figcaption>
 </figure>
@@ -169,11 +171,14 @@ def paths_section(b, f):
              "link": t["accentText"], "more": t["hControl"], "r2": t["rControl"]}
     c_before, c_after = (f'{b.contrast(v["muted"], v["raised"]):.1f}' for v in (before, after))
 
+    who, _, when = ui["sub"].partition(" · ")
+    sub = f'{who} · {when.replace(" ", "&nbsp;")}' if when else ui["sub"]
+
     def card(v, fixed):
         style = ";".join(f"--x-{k}:{val}" for k, val in v.items())
         fl = lambda n: f' tr-f{" ok" if fixed else ""}" data-n="{n}'
         return (f'<div class="x-card tr-xcard" style="{style}"><div class="x-head"><span class="x-title">{ui["title"]}</span><span class="x-chip{fl(3)}">{ui["chip"]}</span></div>'
-                f'<p class="x-sub{fl(1)}">{ui["sub"]}</p><p class="x-big num">{ui["big"]}</p>'
+                f'<p class="x-sub{fl(1)}">{sub}</p><p class="x-big num">{ui["big"]}</p>'
                 f'<div class="tr-meta"><span class="tr-link{fl(3)}">View the PDF</span><span class="tr-more{fl(4)}" role="img" aria-label="More actions"><i></i><i></i><i></i></span></div>'
                 f'<div class="x-actions"><span class="x-btn tr-r2{fl(2)}">{ui["secondary"]}</span><span class="x-btn primary{fl(2)}">Approve</span></div></div>')
 
@@ -194,6 +199,7 @@ def paths_section(b, f):
               f'<div class="tr-fx" role="tabpanel" id="fx-a" aria-labelledby="fx-tab-a" tabindex="0" hidden><div class="tr-well">{card(after, True)}</div>{legend(fixed, True)}</div></div></div>')
 
     levels = zoom_levels()
+    five = '<p class="tr-five">' + "".join(f"<span>{q}</span>" for q in ("What you're making", "Who it's for", "Where it runs", "How it should feel", "Brand color")) + "</p>"
     total = sum(lv["count"] for lv in levels) or 1
     so_far, rungs = 0, []
     for lv in levels:
@@ -201,7 +207,7 @@ def paths_section(b, f):
         size = esc(lv["size"]) if lv["n"] < 2 else f'{lv["count"]} questions across {lv["areas"]} areas'
         rungs.append(f'<li class="tr-rung{" on" if lv["n"] == 0 else ""}" style="--w:{max(4, round(100 * so_far / total))}%;--i:{lv["n"]}">'
                      f'<p class="tr-rung-h"><strong>{esc(lv["name"].capitalize())}</strong><span>{size}</span></p>'
-                     f'<span class="tr-track" aria-hidden="true"><i></i></span><p class="tr-rung-d">{esc(lv["what"])}</p></li>')
+                     f'<span class="tr-track" aria-hidden="true"><i></i></span><p class="tr-rung-d">{esc(lv["what"])}</p>{five if lv["n"] == 0 else ""}</li>')
     build_vg = (f'<div class="tr-vg tr-vg-col" data-play><p class="kicker">Zoom levels</p><ol class="tr-ladder">{"".join(rungs)}</ol>'
                 f'<p class="tr-stopnote">{icon("check", 16)}<span>Stop after any level. Each one leaves you a complete system.</span></p></div>')
 
@@ -242,7 +248,7 @@ def engine_section(b, f):
         tabs.append(f'<button type="button" role="tab" id="en-tab-{e["key"]}" aria-controls="en-{e["key"]}" aria-selected="{"true" if i == 0 else "false"}">'
                     f'<strong>{esc(e["name"])}</strong><span>{esc(e["making"])}</span></button>')
         answers = [("Who", e["who"]), ("Where", e["where"]), ("Feel", e["feel"]),
-                   ("Brand", f'<span class="hh-sw" style="background:{esc(e["brand"])}"></span><span class="mono">{esc(e["brand"])}</span>')]
+                   ("Brand", f'<span class="hh-sw" style="background:{esc(e["brand"])}"></span><span class="mono">{esc(e["brand"].lower())}</span>')]
         hl = lambda k: ' class="hl"' if k in ("roundness", "expression") else ""
         bars = "".join(f'<li{hl(k)} style="--v:{t["dials"][k]};--i:{j}"><span class="tr-dn">{DIAL_NAMES.get(k, k)}</span><span class="tr-bar" aria-hidden="true"><i></i></span>'
                        f'<span class="tr-dv num">{t["dials"][k]}</span></li>' for j, k in enumerate(d["id"] for d in f["dials"]) if k in t["dials"])
@@ -284,12 +290,13 @@ def files_section(b, f):
              ("PRODUCT.md", "Who it's for and what it's for, kept apart because it changes at its own pace.", f'<pre class="code-lines tr-code">{esc(x["PRODUCT.md"])}</pre>'),
              ("opendesigner/tokens/", "The source of truth, in the DTCG 2025.10 format other tools read.", f'<pre class="code-lines tr-code">{esc(x["tokens"])}</pre>'),
              ("opendesigner/build/", "Exports for " + ", ".join(b.EXPORTS[:-1]) + " and " + b.EXPORTS[-1] + ".", f'<pre class="code-lines tr-code">{esc(x["css"])}\n\n{esc(x["tailwind"])}</pre>'),
-             ("opendesigner/decisions.md", "Every decision, how it was set and why. Nothing is edited or deleted.", f'<pre class="code-lines tr-code">{esc(x["decisions"])}</pre>'),
+             ("opendesigner/decisions.md", "Every decision, how it was set and why. Nothing is edited or deleted.", f'<pre class="code-lines tr-code">{esc(x["decisions_more"])}</pre>'),
              ("opendesigner/overview.html", "Your whole system on one page, with what is still a default.", overview)]
-    tabs = "".join(f'<button type="button" role="tab" id="fl-tab-{i}" aria-controls="fl-{i}" aria-selected="{"true" if i == 0 else "false"}"><span class="mono">{esc(n)}</span><span>{esc(d)}</span></button>'
+    short = lambda n: n.rstrip("/").split("/")[-1] + ("/" if n.endswith("/") else "")
+    tabs = "".join(f'<button type="button" role="tab" id="fl-tab-{i}" aria-controls="fl-{i}" aria-selected="{"true" if i == 0 else "false"}"><span class="mono tr-full">{esc(n)}</span><span class="mono tr-short">{esc(short(n))}</span><span class="tr-fd">{esc(d)}</span></button>'
                    for i, (n, d, _) in enumerate(files))
-    panes = "".join(f'<div class="tr-pane" role="tabpanel" id="fl-{i}" aria-labelledby="fl-tab-{i}" tabindex="0"{"" if i == 0 else " hidden"}><p class="tr-pane-h mono">{esc(n)}</p>{body}</div>'
-                    for i, (n, _, body) in enumerate(files))
+    panes = "".join(f'<div class="tr-pane" role="tabpanel" id="fl-{i}" aria-labelledby="fl-tab-{i}" tabindex="0"{"" if i == 0 else " hidden"}><p class="tr-pane-h mono">{esc(n)}</p><p class="tr-pane-d">{esc(d)}</p>{body}</div>'
+                    for i, (n, d, body) in enumerate(files))
     return f"""
 <section class="h-sec" id="files">
 <div class="h-head">{b.idx("03", "What you keep")}<h2 class="h-h2">Plain files in your project, not an account somewhere.</h2>
@@ -306,7 +313,8 @@ def assets_html(x):
     keep = [a for a in x["assets"] if a[2] != "Not needed"]
     keep = [a for a in keep if a[1] != "missing"][:2] + [a for a in keep if a[1] == "missing"][:2]
     rows = "".join(f'<li><span>{esc(n.split(",")[0])}</span><span class="{"tag-missing" if c == "missing" else "tr-st chosen"}">{esc(lbl)}</span></li>' for n, c, lbl in keep)
-    return f'<div class="tr-assets"><p class="tr-assets-h">{esc(x["assets_h"])}</p><ul>{rows}</ul></div>'
+    return (f'<div class="tr-assets"><p class="tr-assets-h">{esc(x["assets_h"])}</p><ul>{rows}</ul>'
+            '<p class="tr-assets-n">OpenDesigner leaves a gap open instead of inventing the asset.</p></div>')
 
 
 def protect_section(b, f):
@@ -314,7 +322,7 @@ def protect_section(b, f):
     entry = x["decisions"].splitlines()
     head = entry[0].replace("## ", "") if entry else ""
     meta = re.search(r"set_by: (\w+)", x["decisions"])
-    why = re.search(r"reason: (.+)", x["decisions"])
+    why = re.search(r"reason: (?:[A-Z][a-z]+ \d{4}-\d{2}-\d{2}: )?(.+)", x["decisions"])
     set_by = meta.group(1) if meta else ""
     kinds = [("chosen", "chosen"), ("confirmed_default", "confirmed default"), ("delegated", "picked for you"), ("assumed", "assumed"), ("reference", "from a reference")]
     chips = "".join(f'<span class="chip{" accent" if k == set_by else ""}">{esc(v)}</span>' for k, v in kinds)
@@ -326,7 +334,7 @@ def protect_section(b, f):
          '<div><span class="tr-still"><i></i></span><span>Respected</span><small>reduced motion</small></div></div>'),
         ("Every value says how it was set", "Chosen by you, a default you confirmed, picked for you, assumed, or taken from a reference. A suggestion you skipped is never recorded as your answer.",
          f'<div class="tr-log"><p class="mono">{esc(head)}</p><p class="tr-chips">{chips}</p>'
-         + (f'<p class="tr-why">“{esc(why.group(1))}”</p>' if why else "") + f'<p class="tr-lockline">{icon("lock", 16)}<span>Locked values change only with the owner\'s yes.</span></p></div>'),
+         + (f'<p class="tr-why">“{esc(why.group(1)[:1].upper() + why.group(1)[1:])}”</p>' if why else "") + f'<p class="tr-lockline">{icon("lock", 16)}<span>Lock a value, and it changes only with your yes.</span></p></div>'),
         ("Checks report. They don't rewrite.", "The review lists values in your code that skip the tokens and names the token to use. A fix to code you already have waits for your yes.",
          '<pre class="code-lines tr-term"><span class="c">$</span> engine.py review\n3 hard-coded values skip the tokens.\n'
          '  card.css:2  <span class="bad">border-radius: 7px</span>\n    -&gt; use <span class="k">var(--ds-radius-container)</span>\n'
@@ -348,9 +356,9 @@ def protect_section(b, f):
 
 def learn_section(b, f):
     steps = [("ask", "You notice something", "A missing option, a wrong value, a step that confused you. Your AI notes it quietly and tells you once, at the end."),
-             ("files", "A note, never a post", "It saves the note in your project with a ready-to-file issue link. Nothing leaves your computer unless you submit it."),
-             ("check", "It becomes a check", f"Each confirmed mistake becomes a preflight check or a review case, so every later review looks for it. So far: {f['checks']} checks and {f['cases']} cases."),
-             ("screen", "Tested, then released", f"AI agents do real tasks with and without it, the engine builds {f['briefs']} fixed briefs, and the checkers face planted mistakes.")]
+             ("files", "A note, never a post", "It saves the note in your project with a ready-to-file issue link. It stays there unless you submit it."),
+             ("check", "It becomes a fix or a check", f"When the maintainer confirms it, a gap or a bug is fixed in the source, and a visual mistake becomes a preflight check or a review case. So far: {f['checks']} checks and {f['cases']} cases."),
+             ("screen", "Tested before it reaches you", f"AI agents do real tasks with and without it, the engine builds {f['briefs']} fixed briefs, and the checkers face planted mistakes.")]
     lis = "".join(f'<li class="tr-ls" style="--i:{i}"><span class="tr-ls-ic">{icon(k, 20)}</span><h3>{t}</h3><p>{esc(d)}</p></li>' for i, (k, t, d) in enumerate(steps))
     m = re.search(r"^(\d+)\. \*\*(Corners nest)\.\*\* (.+?)\s*\[M\d+\]$", f["checklist"], re.M)
     case = next((c for c in f["case_list"] if "nest" in (c.get("title") or c.get("name") or "").lower()), None)
@@ -363,9 +371,9 @@ def learn_section(b, f):
                  f'<li><span class="tr-when mono">{esc(cid)}</span><p>It became review case {esc(cid)}, “{esc(ctitle)}”, so every review now measures it on your pages too.</p></li></ol></div>')
     return f"""
 <section class="h-sec" id="learn">
-<div class="h-head">{b.idx("05", "How it learns")}<h2 class="h-h2">A mistake found once becomes a check for everyone.</h2>
-<p class="h-lede">OpenDesigner improves from use. Each confirmed mistake turns into a rule that a script or an agent can check, and the tests run again before the next version. <code>engine.py version</code> tells you when your system was built with an older one.</p></div>
-<div class="tr-loop" data-play><ol class="tr-loop-row">{lis}</ol><p class="tr-loop-back">{icon("loop", 18)}<span>Then you use the new version, and the loop starts again.</span></p></div>
+<div class="h-head">{b.idx("05", "How it learns")}<h2 class="h-h2">A confirmed mistake becomes a check for everyone.</h2>
+<p class="h-lede">OpenDesigner improves from use. Each mistake the maintainer confirms turns into a fix or a rule that a script or an agent can check, and the tests run again before the change reaches you. No version is tagged yet; <code>engine.py version</code> tells you when your system was built with an older copy.</p></div>
+<div class="tr-loop" data-play><ol class="tr-loop-row">{lis}</ol><p class="tr-loop-back">{icon("loop", 18)}<span>Then you update, and the loop starts again.</span></p></div>
 {trace}
 <p class="h-more"><a class="h-link" href="/docs/evals/">See every test result, and run them yourself {b.ARROW}</a></p>
 </section>
@@ -384,7 +392,7 @@ def end_section(b):
 <div class="h-end-card">
 <p class="kicker">Try it</p>
 <h2 class="h-h2">See it work on your own project.</h2>
-<p class="h-end-lede">Two commands in Claude Code, then a few plain questions. It's free and runs on your computer.</p>
+<p class="h-end-lede">Two commands in Claude Code, then a few plain questions. It's free, and the engine runs on your computer.</p>
 <div class="h-cta"><a class="btn primary lg" href="/docs/install/">Get started free</a><a class="h-link" href="/docs/how-it-works/">Read every step in the docs {b.ARROW}</a></div>
 </div>
 </div>
@@ -411,11 +419,11 @@ OpenDesigner is a set of skills and a small engine that your AI tool loads. It r
 3. It takes one of two paths: fix what you built, or build a system from five answers.
 4. The engine does the math (color, type, spacing, corners, depth, motion), offline.
 5. Files land in your project: tokens, CSS, Tailwind, Figma, Swift, Compose, DESIGN.md.
-6. New screens follow them. Your AI reads DESIGN.md first, and a review flags drift.
+6. New screens follow them. Your AI reads DESIGN.md first, and a review flags values that skip the tokens.
 
-Whatever goes wrong comes back as a new check, and the next version ships it.
+A mistake the maintainer confirms comes back as a new check for everyone who updates.
 
-In numbers, read from the repository: {f["questions"]} questions in {f["stages"]} topics ({f["planned"]} more planned), {len(f["dials"])} dials, {f["standards"]} house standards, {f["checks"]} preflight checks, {f["cases"]} review cases and {f["components"]} library components.
+In numbers, read from the repository: {f["questions"]} questions ({f["planned"]} more planned), {len(f["dials"])} dials, {f["standards"]} house standards (the ones that set a value are locked), {f["checks"]} preflight checks, {f["cases"]} review cases and {f["components"]} library components.
 
 ## 01 Two ways in
 
@@ -441,7 +449,7 @@ DESIGN.md, PRODUCT.md, opendesigner/tokens/ (DTCG 2025.10), opendesigner/build/ 
 
 ## 05 How it learns
 
-You notice something; your AI saves a note in your project with a ready-to-file issue link (nothing is posted unless you submit it); each confirmed mistake becomes a preflight check or a review case, so every later review looks for it; the tests run again before the next version. Test results: {b.SITE_URL}/docs/evals/
+You notice something; your AI saves a note in your project with a ready-to-file issue link (nothing is posted unless you submit it); when the maintainer confirms it, a gap or a bug is fixed in the source and a visual mistake becomes a preflight check or a review case; the tests run again before the change reaches you. No version is tagged yet. Test results: {b.SITE_URL}/docs/evals/
 
 Get started: {b.SITE_URL}/docs/install/ · Every step in detail: {b.SITE_URL}/docs/how-it-works/
 """

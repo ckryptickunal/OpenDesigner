@@ -262,7 +262,8 @@
 
 /* round 2 (2026-11-02, desktop pass): the Build vignette spreads its rungs to the row's height; brand assets as a list */
 .tr-vg-col { display: flex; flex-direction: column; }
-.tr-vg-col .tr-ladder { flex: 1; align-content: space-between; }
+.tr-vg-col .tr-ladder { align-content: start; }
+.tr-vg-col .tr-stopnote { margin-top: auto; padding-top: 18px; }
 .tr-floors > div { min-height: 112px; padding: 16px 14px; }
 .tr-assets { padding: 16px; background: var(--surface-sunken); border-radius: var(--r-card); }
 .tr-assets-h { margin: 0 0 6px; font-size: 14px; line-height: 20px; font-weight: 600; letter-spacing: -0.011em; }
@@ -275,3 +276,23 @@
 @media (max-width: 400px) { .tr-ov-t th:nth-child(3), .tr-ov-t td:nth-child(3) { display: none; } }
 .tr-hero .tr-hero-act { margin: 12px 0 0; }
 .tr-hero .tr-hero-act + .tr-map-fig { margin-top: 36px; }
+
+/* round 3 (2026-11-02, fresh-eyes review) */
+/* boxes set inside a card or panel take the small detail radius, so their corners sit inside the outer curve (as on the home page) */
+.tr-vg, .tr-well, .tr-log, .tr-assets, .tr-floors > div, .tr-worked li, .tr-pane .tr-code, .tr-card-vg .tr-term, .tr-ov { border-radius: var(--r-detail); }
+.tr-five { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
+.tr-five span { display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: var(--r-pill); background: var(--surface-raised); border: 1px solid var(--line); font-size: 12.5px; line-height: 16px; white-space: nowrap; }
+.tr-assets-n { margin: 10px 0 0; font-size: 13px; line-height: 19px; color: var(--ink-muted); }
+#learn .h-lede code, #protect .h-fine code { white-space: nowrap; }
+.tr-tree .tr-short, .tr-pane-d { display: none; }
+@media (max-width: 900px) {
+  .tr-tree { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+  .tr-tree [role="tab"] { padding: 10px 12px; }
+  .tr-tree .tr-full, .tr-tree .tr-fd { display: none; }
+  .tr-tree .tr-short { display: block; font-size: 13px; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tr-pane-d { display: block; margin: -6px 0 12px; font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+}
+/* each file's pane is as tall as its own excerpt; on wide screens it still fills the row beside the list */
+.tr-files { align-items: stretch; }
+.tr-viewer > [role="tabpanel"] { grid-area: auto; }
+.tr-viewer > [role="tabpanel"][hidden] { display: none; }
