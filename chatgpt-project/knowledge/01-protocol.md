@@ -290,8 +290,8 @@ The phase (Q-scope-07) says where the project is now: an idea, being built, clos
 |---|---|---|
 | Idea (`idea`) | Files, but no code yet (a README, notes) | The alignment: mission, vision, purpose and goals (above). Then the analogous product, a product from another field that solves the same kind of problem. Then the sketch. Nothing to audit yet |
 | Being built (`building`) | Code, but no deploy settings | The sketch, then the areas the screens being built need most |
-| Close to launch (`near-launch`) | Code and deploy settings (`vercel.json`, `netlify.toml`, a Dockerfile, `eas.json`, a deploy workflow) | An audit of what exists (`opendesigner-extract` measures it, `opendesigner-review` checks the built pages), then copy and voice (the Words area), then `opendesigner-preflight` before release |
-| Live (`live`) | A changelog with released versions, or a version past 1.0.0 (npm's default 1.0.0 does not count) | The audit, mapping onto the tokens the code already has, then governance: who may change the system, and how versions are numbered (Files, tools and team) |
+| Close to launch (`near-launch`) | Code and deploy settings (`vercel.json`, `netlify.toml`, a Dockerfile, `eas.json`, a deploy workflow) | The audit of what exists (`references/audit.md`), then copy and voice (the Words area), then `opendesigner-preflight` before release |
+| Live (`live`) | A changelog with released versions, or a version past 1.0.0 (npm's default 1.0.0 does not count) | The audit (`references/audit.md`), mapping onto the tokens the code already has, then governance: who may change the system, and how versions are numbered (Files, tools and team) |
 
 - Put the phase's first step at the top of the offer after the sketch (below). The engine prints it after the sketch as a `Phase:` line.
 - PRODUCT.md shows the phase and what comes first, in its own section.
