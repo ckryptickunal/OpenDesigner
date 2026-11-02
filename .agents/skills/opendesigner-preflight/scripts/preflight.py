@@ -269,11 +269,29 @@ def check_html(path: Path, medium: str) -> Report:
                 scale.add(round(x, 1))
 
     sizes, families, tracking, loose = [], set(), [], 0
+    kern = {"off": [], "px": [], "pct": [], "wide": [], "caps": [], "speed": []}  # kerning.md, checklist 50 [M51]
     for sel, body, at in blocks:
         if sel.startswith("@") or not used(sel):
             continue
         ds = decls(body)
         local = {p: v for p, v in ds if p.startswith("--")}
+        props = {p: resolve(v, local).strip().lower() for p, v in ds if not p.startswith("--")}
+        where = sel if sel != "[style]" else "a style attribute"
+        ls = props.get("letter-spacing", "")
+        caps = props.get("text-transform") == "uppercase" or "all-small-caps" in props.get("font-variant", "") + props.get("font-variant-caps", "")
+        if props.get("font-kerning") == "none" or re.search(r"[\"']kern[\"']\s*(0|off)\b", props.get("font-feature-settings", "")):
+            kern["off"].append(where)
+        if props.get("text-rendering") == "optimizespeed":
+            kern["speed"].append(where)
+        if re.search(r"(?<![\w.])-?(?:\d*\.)?\d*[1-9]\d*px\b", ls):
+            kern["px"].append(f"{where} {ls}")
+        if re.search(r"-?\d*\.?\d+%", ls):
+            kern["pct"].append(f"{where} {ls}")
+        ems = [float(x) for x in re.findall(r"(-?\d*\.?\d+)em\b", ls)]
+        if not caps and any(abs(e) >= 0.5 for e in ems):
+            kern["wide"].append(f"{where} {ls}")
+        if caps and (ems and max(ems) <= 0 or ls in ("0", "normal")):
+            kern["caps"].append(f"{where} {ls}")
         for prop, raw in ds:
             if prop.startswith("--"):
                 continue
@@ -352,6 +370,32 @@ def check_html(path: Path, medium: str) -> Report:
     tight = sorted(set(t for t in tracking if t < -0.03))
     if tight:
         r.warn(f"letter-spacing tighter than -0.03em: {tight}; check glyphs and word spaces at 200%  [M5]")
+    if kern["off"]:
+        r.err(f"kerning switched off (font-kerning: none or \"kern\" 0) in {', '.join(kern['off'][:6])}; remove it, and set "
+              "font-kerning: normal on display text  [M51]")
+    if kern["speed"]:
+        r.warn(f"text-rendering: optimizeSpeed in {', '.join(kern['speed'][:6])} can skip kerning and ligatures; remove it  [M51]")
+    if kern["px"]:
+        r.warn(f"letter-spacing in px: {'; '.join(kern['px'][:6])}; write tracking in em so it scales with the size and text zoom  [M51]")
+    if kern["pct"]:
+        r.warn(f"letter-spacing in %: {'; '.join(kern['pct'][:6])}; CSS % is a share of the space width, not Figma's percent "
+               "(Figma -2% is -0.02em)  [M51]")
+    if kern["wide"]:
+        r.warn(f"letter-spacing of 0.5em or more on mixed-case text: {'; '.join(kern['wide'][:6])}; usually a unit copied "
+               "from a mock (Figma -2% is -0.02em)  [M51]")
+    if kern["caps"]:
+        r.warn(f"uppercase text with no positive tracking: {'; '.join(kern['caps'][:6])}; capitals need about +0.04 to +0.1em  [M51]")
+    code = " ".join(re.findall(r"<script[^>]*>(.*?)</script>", page, flags=re.S | re.I))
+    splits = re.search(r"SplitText\([^)]*chars|type\s*:\s*[\"'][^\"']*chars|\bSplitting\("
+                       r"|(?:split\(\s*(?:\"\"|'')\s*\)|\[\s*\.\.\.\s*[\w.]+(?:textContent|innerText)\s*\]"
+                       r"|Array\.from\(\s*[\w.]+(?:textContent|innerText)\s*\))(?=[^;]{0,200}?span)", code)
+    if splits:  # a split string only counts when its letters are wrapped in spans
+        if re.search(r"kern|getBoundingClientRect", code, re.I):
+            r.info("text is split into letters; kerning seems to be measured and restored. Check that the last frame equals "
+                   "the plain text at 200%  [M51]")
+        else:
+            r.warn(f"text is split into one element per letter ({splits.group(0)[:40]}), which drops the font's kerning and "
+                   "ligatures; animate words or lines, or measure and restore kerning and put the markup back  [M51]")
     body = re.sub(r"<(script|style)[^>]*>.*?</\1>", "", page, flags=re.S | re.I)
     breaks = body if medium == "video" else " ".join(re.findall(r"<h[1-6][^>]*>.*?</h[1-6]>", body, re.S | re.I))
     if re.search(r"<br\s*/?>", breaks, re.I):

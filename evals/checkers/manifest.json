@@ -542,6 +542,42 @@
       ]
     },
     {
+      "page": "preflight/kerning.html",
+      "checker": "preflight",
+      "expect": [
+        {
+          "id": "P-kern-off",
+          "what": "font-kerning: none on the wordmark",
+          "check": "M51",
+          "text": "kerning switched off"
+        },
+        {
+          "id": "P-kern-px",
+          "what": "a title tracked in px",
+          "check": "M51",
+          "text": "letter-spacing in px"
+        },
+        {
+          "id": "P-kern-pct",
+          "what": "a lede tracked in CSS %",
+          "check": "M51",
+          "text": "letter-spacing in %"
+        },
+        {
+          "id": "P-kern-caps",
+          "what": "an uppercase eyebrow tracked below 0",
+          "check": "M51",
+          "text": "uppercase text with no positive tracking"
+        },
+        {
+          "id": "P-kern-split",
+          "what": "a headline split into one span per letter with no kerning restored",
+          "check": "M51",
+          "text": "split into one element per letter"
+        }
+      ]
+    },
+    {
       "page": "preflight/missing-sheet.html",
       "checker": "preflight",
       "expect": [

@@ -83,3 +83,7 @@ Run this on any video, page, deck or image before you call it done. Each line is
 ## Found measuring 73 reels for Instagram (2026-10-26)
 
 49. **Flashing.** `preflight.py video` passes the flash measure on the final file (WCAG 2.2 SC 2.3.1): nothing that changes brightness more than three times in a second covers more than 25% of a 10-degree field, and you aimed for 90% of the limit or less. A video that loops, as reels do, is measured played twice in a row (`ffmpeg -stream_loop 1 -i out.mp4 -c copy twice.mp4`). Nothing flashes in saturated red more than three times a second; the helper does not measure red, so check it by eye. [M50]
+
+## Kerning and tracking, in every project (2026-11-02)
+
+50. **Kerning kept, tracking from the system.** Nothing turns the font's kerning off (`font-kerning: none`, `"kern" 0`, `optimizeSpeed`). Every `letter-spacing` comes from a text style in em: no px, no CSS `%`, no Figma percent copied as is. Capitals are tracked positive; code, table numbers and joining or caseless scripts sit at 0. A word split into letters for motion has its kerning measured and restored and its markup put back, so the last frame equals plain text. Every weight you use is loaded and `font-synthesis: none` is set; a subset font keeps every feature the system uses. At 200%, centred tracked labels are centred, and with WCAG 1.4.12 spacing (0.12em letters) nothing clips. `preflight.py html` checks the rule-shaped parts; `references/kerning.md` has the rest. [M51]

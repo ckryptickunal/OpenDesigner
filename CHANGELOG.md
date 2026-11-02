@@ -10,6 +10,8 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Added
 
+- **Kerning and letter spacing, checked in every project** (2026-11-02). A new guide, `preflight/references/kerning.md`, lists the type-spacing mistakes that keep coming back and how to avoid each. `preflight.py html` now flags kerning switched off, tracking in px or %, untracked capitals and words split into letters without their kerning (check 50).
+- **Rules for references, samples and content** (2026-11-02). `making.md` now asks for a board of shipped samples to pick from before a new direction, live measurement instead of thumbnails, principles from a reference instead of its page, a content list that "less text" never cuts, and one system for every figure. Moving calls to action are banned.
 - **Reads your repo before asking** (2026-11-02). A new `engine.py detect` reads the product's name, where it runs, a brand colour, the font, dark mode and the project's phase from your files. `init` and `sketch` record each one as assumed, with its source, never over an answer you gave, and the sketch turns each answered question into one line to confirm.
 - **Purpose, goals and market in PRODUCT.md** (2026-11-02). PRODUCT.md gains Purpose and goals, Phase and Market sections, each saying "Not enough information" until your words or the research fill them. The user research gains a market topic: competitors, what they all do, the gap and an analogous product, with sources. Principles are drafted from the goals.
 - **The project's phase sets what comes first** (2026-11-02). A new question, Q-scope-07: an idea, being built, close to launch, or live, read from the repo first. An idea starts with its purpose and an analogous product, close to launch with an audit, copy and preflight, and live with the audit and governance.
@@ -83,6 +85,7 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Fixed
 
+- **Review no longer flags its own token files** (2026-11-02). `engine.py review` skips files that carry the engine's export header, so a `tokens.css` copied into an app no longer reports its own gaps and widths as hard-coded values.
 - **Counts in the docs match the files again** (2026-11-02). Review case, export format, skill and library counts in the docs, SPEC, AGENTS.md and llms.txt now match the repo.
 - **A calmer site footer** (2026-11-02). The footer went from 8 columns and 42 links to 4 columns and 20 links. Every link fits on one line down to 320 px.
 - **Favicon on dark browser tabs** (2026-10-28). The favicon switches to the dark mark when the browser tab is dark, so its squares stay visible.

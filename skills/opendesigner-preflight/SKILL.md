@@ -23,7 +23,7 @@ Before judging the output, ask whether it was built on a design system **made fo
 ## 2. Run the helper
 
 ```
-python3 scripts/preflight.py html index.html --medium web       # sizes (tokens and rem included), the token scale, tracking, fonts, small text, <br>
+python3 scripts/preflight.py html index.html --medium web       # sizes (tokens and rem included), the token scale, tracking and kerning, fonts, small text, <br>
 python3 scripts/preflight.py video out.mp4 --ignore 0-17          # frozen time (with timestamps), black frames, flashing, audio, length
 python3 scripts/preflight.py frames out.mp4 --every 0.5 --out frames/   # full-size frames plus phone-size copies
 python3 scripts/preflight.py audio audio/*.wav                    # clicks and noise bursts at clip edges
@@ -41,7 +41,7 @@ Thumbnails and contact sheets hide most of these mistakes. Open frames at 100% a
 
 ## 4. Walk the checklist
 
-Go through `references/checklist.md`: type, layout, motion, truth, sound and process. `references/mistakes.md` explains each mistake: what it looked like when it really happened, why it happens, and how to catch it.
+Go through `references/checklist.md`: type, layout, motion, truth, sound and process. Before you set tracking, animate letters, subset a font or move type between Figma and code, read `references/kerning.md`: the kerning and letter-spacing mistakes that recur in every kind of project, and how to avoid each. `references/mistakes.md` explains each mistake: what it looked like when it really happened, why it happens, and how to catch it.
 
 ## 5. Report, fix, re-run
 
