@@ -10255,8 +10255,10 @@ def phase_md(state, decs=None):
 
 def market_md(state, decs=None):
     """PRODUCT.md, Market: the analogous product, competitors, their shared pattern, the gap and the industry's conventions.
-    The user research or the person's words fill it; 'Not enough information' where nobody has looked yet."""
+    A line recorded in context.market (their words, or an assumption to confirm) comes first, then what the user research
+    found (research.py market_summary, with its sources); 'Not enough information' where nobody has looked yet."""
     mk = (state.get("context") or {}).get("market") or {}
+    found = ((state.get("research") or {}).get("market") or {}) if (state.get("research") or {}).get("status") == "done" else {}
     rows = [("Analogous product", "analogous", "a product from another field that solves the same kind of problem"),
             ("Competitors", "competitors", "what people would use instead"),
             ("Their shared pattern", "pattern", "what the competitors all do"),
@@ -10265,7 +10267,10 @@ def market_md(state, decs=None):
     lines = []
     for t, k, hint in rows:
         v = _ctx_words(mk.get(k))
-        lines.append(f"- **{t}** ({hint}): " + (f"{v.rstrip('.')}.{_unconfirmed(decs, 'context.market.' + k)}" if v else f"{NOT_ENOUGH}."))
+        r = _ctx_words(found.get(k))
+        lines.append(f"- **{t}** ({hint}): " + (f"{v.rstrip('.')}.{_unconfirmed(decs, 'context.market.' + k)}" if v else
+                                                 f"{r.rstrip('.')}. *(from the user research: opendesigner/research/users.md)*" if r else
+                                                 f"{NOT_ENOUGH}."))
     return "\n".join(lines)
 
 

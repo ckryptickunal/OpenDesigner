@@ -294,7 +294,7 @@ The phase (Q-scope-07) says where the project is now: an idea, being built, clos
 
 - Put the phase's first step at the top of the offer after the sketch (below). The engine prints it after the sketch as a `Phase:` line.
 - PRODUCT.md shows the phase and what comes first, in its own section.
-- Record what you learn about the market in PRODUCT.md's Market section, as assumed until they confirm it. `context.market.analogous` holds the analogous product. `context.market.competitors` holds the competitors, as a list. `pattern` is what the competitors all do, `gap` is what none of them does well, and `conventions` holds the words and habits the industry's users already know. The user research fills these with sources (`research.md`).
+- PRODUCT.md's Market section comes from the user research first: its market topic finds the competitors, what they all do, the gap and an analogous product, with sources (`research.md` sections 3 and 6). What the person tells you, or what you take from their words, is recorded in `context.market` as assumed until they confirm it, and wins over the research. `context.market.analogous` holds the analogous product and `context.market.competitors` the competitors, as a list. `pattern` is what the competitors all do, `gap` is what none of them does well, and `conventions` holds the words and habits the industry's users already know.
 - If they correct the phase, record their answer: `engine.py pick Q-scope-07 near-launch --why "<their words>"`.
 
 ## Level 1: broad (one screen per foundation)
@@ -1019,13 +1019,14 @@ Pass the ones you have to the plan: `engine.py research plan --tools web-search,
 With nothing that reads the web, say so in one line and offer two ways on: the person fills in the findings file themselves (`assets/output/research-users.example.json` shows the shape), or they skip it.
 
 ## 3. What to find out
-Six topics. Each gets at least one search, and the findings file says which ones found nothing.
+Seven topics. Each gets at least one search, and the findings file says which ones found nothing.
 1. **Who:** age range, region, languages and scripts, reading level, devices and network.
 2. **Context:** how often, for how long, where (desk, counter, street, bed), one hand or two, light, noise, interruptions.
 3. **Apps:** the apps they open every day, and the patterns those apps have taught them (a bottom tab bar, swipe actions, a confirmation before money moves).
 4. **Expectations:** what they expect and what frustrates them, from reviews of products like this one, forums and published studies.
 5. **Preferences that touch design:** text size, dark mode, density, how much colour, colour meanings in their culture.
 6. **Accessibility:** vision, motor, hearing and cognitive needs common in the group, and tough conditions (bright light, a moving bus).
+7. **Market:** what people would use instead (the competitors, including doing it by hand), what those products all do, the gap none of them fills, and an analogous product: one from another field that solves the same kind of problem. Store listings, reviews and the competitors' own pages are the sources.
 
 ## 4. Plan it, and get one yes
 1. **Write the users line.** One line on who they are, in the person's words where you have them, for example "pharmacists in small chemist shops, 30 to 55, at a counter all day, on Android". Never invent it: when the sketch said nothing specific, ask for it in the same message as the plan.
@@ -1049,6 +1050,7 @@ Save them as JSON in the shape of `assets/output/research-users.example.json`, t
 - `sources`: `id`, `title`, `url` (the page you opened, or `person, YYYY-MM-DD`, `interview, YYYY-MM-DD` or `analytics, YYYY-MM-DD`), `kind`, `date`, `accessed`.
 - `findings`: `id`, `topic` (one of the six), `text` (one sentence, plain words), `confidence` (`measured`: a statistic or a study; `reported`: people say so; `inferred`: your reasoning), `sources`, `signals` (below).
 - `apps` (name, why, sources), `patterns` (the patterns they already know) and `open_questions`.
+- `market` (optional): `analogous` (name, why, sources), `competitors` (a list of name, why, sources), `pattern` and `gap` (a sentence, or text and sources), and `conventions` (the words and habits the industry's users already know; without it, `patterns` stand in). PRODUCT.md's Market section shows it with its sources until the person's own line is recorded in `context.market` (`zoom.md`, "The project's phase").
 
 **Signals** are what a finding means for the design, from a closed list. A finding can carry several, or none.
 
@@ -1086,6 +1088,7 @@ Where the engine has no `research` command (a ChatGPT Project ships `engine.py` 
 
 ## 8. Use it for the rest of the work
 - **References:** the apps they live in are the first Mobbin searches and candidates for the analogous product (`practices.md` sections 2 and 3).
+- **Market:** the competitors' shared pattern and the gap are what the alignment is checked against: a recommendation that copies the pattern needs a reason, and one that closes the gap says so.
 - **Later stages:** read the `later` notes when you reach type, imagery, motion, voice and themes, and say which finding a recommendation comes from.
 - **Every session:** PRODUCT.md's Users section is what a later session or another agent reads first. `engine.py review` checks the findings again, says when they are older than 180 days, and fails `--strict` when the saved file has lost a source.
 

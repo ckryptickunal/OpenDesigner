@@ -28,7 +28,7 @@ PLAN = "research/plan.json"
 DOC = "research/users.md"
 STALE_DAYS = 180  # findings about people change; review asks for a refresh after about six months [inferred]
 
-# The six things the research answers (references/research.md section 3). Each topic gets at least one search.
+# The seven things the research answers (references/research.md section 3). Each topic gets at least one search.
 TOPICS = {
     "who": "Who they are: age range, region, languages, reading level, devices and network",
     "context": "Where and how they use it: how often, how long, one hand or two, light, noise, interruptions",
@@ -36,6 +36,7 @@ TOPICS = {
     "expectations": "What they expect and what frustrates them: reviews, forums, complaints, published studies",
     "preferences": "Preferences that touch design: text size, dark mode, density, colour meanings in their culture",
     "accessibility": "Access needs common in the group: vision, motor, hearing, cognitive, situational",
+    "market": "The market: the analogous product, what people would use instead, what those products all do, and the gap",
 }
 QUERY_TEMPLATES = {  # starting points; the agent rewrites them in the users' own words and adds the industry's terms
     "who": ["{users} demographics survey", "{users} devices smartphone usage statistics"],
@@ -44,7 +45,12 @@ QUERY_TEMPLATES = {  # starting points; the agent rewrites them in the users' ow
     "expectations": ["{product} app reviews complaints", "{users} frustrations with software forum"],
     "preferences": ["{users} preferences font size dark mode", "{users} design preferences study"],
     "accessibility": ["{users} accessibility needs", "{users} vision OR dexterity OR literacy statistics"],
+    "market": ["{product} alternatives", "apps like {product} for {users}"],
 }
+MARKET_LISTS = ("competitors",)                      # market entries with a name, a why and sources, like apps
+MARKET_ONE = ("analogous",)                          # one such entry
+MARKET_TEXT = ("pattern", "gap")                     # a sentence, or {text, sources}
+MARKET_WORDS = ("conventions",)                      # short lines: the words and habits the industry's users know
 CONFIDENCE = ("measured", "reported", "inferred")  # measured: a study or statistic; reported: people say so; inferred: reasoning
 SOURCE_KINDS = ("study", "survey", "official-stats", "app-store-reviews", "forum", "community", "article", "analytics", "interview",
                 "person", "mobbin")
@@ -287,7 +293,31 @@ def problems(rec):
         for r in a.get("sources") or []:
             if r not in sid:
                 err(f"app {a['name']} cites {r}, which is not in sources")
-    blob = json.dumps({k: rec.get(k) for k in ("findings", "apps", "patterns", "open_questions", "brief")}, ensure_ascii=False)
+    mk = rec.get("market")
+    if mk is not None and not isinstance(mk, dict):
+        err("market must be an object: analogous, competitors, pattern, gap, conventions")
+        mk = {}
+    for k, v in (mk or {}).items():
+        if k not in MARKET_LISTS + MARKET_ONE + MARKET_TEXT + MARKET_WORDS:
+            err(f"market.{k} is not a market field ({', '.join(MARKET_ONE + MARKET_LISTS + MARKET_TEXT + MARKET_WORDS)})")
+            continue
+        items = v if k in MARKET_LISTS else [v] if k in MARKET_ONE + MARKET_TEXT else []
+        if k in MARKET_LISTS and not isinstance(v, list):
+            err(f"market.{k} must be a list of {{name, why, sources}}")
+            items = []
+        if k in MARKET_WORDS and not (isinstance(v, list) and all(isinstance(x, str) for x in v)):
+            err(f"market.{k} must be a list of short lines")
+        for j, x in enumerate(items, 1):
+            if k in MARKET_TEXT and isinstance(x, str):
+                continue  # a sentence without sources is shown as the agent's own reading
+            key = "text" if k in MARKET_TEXT else "name"
+            if not isinstance(x, dict) or not str(x.get(key) or "").strip():
+                err(f"market.{k}{f' {j}' if k in MARKET_LISTS else ''} needs a {key}")
+                continue
+            for r in x.get("sources") or []:
+                if r not in sid:
+                    err(f"market.{k} {x[key]} cites {r}, which is not in sources")
+    blob = json.dumps({k: rec.get(k) for k in ("findings", "apps", "patterns", "open_questions", "brief", "market")}, ensure_ascii=False)
     if RX_EMAIL.search(blob) or RX_PHONE.search(blob) or RX_HANDLE.search(blob):
         err("the findings hold what looks like personal data (an email, phone number or @handle). Keep only facts about the group, "
             "never about a person")
@@ -431,6 +461,15 @@ def render_md(eng, state, rec, props, conflicts, notes):
     pats = rec.get("patterns") or []
     if pats:
         out += ["## Patterns they already know", ""] + [f"- {p}" for p in pats] + [""]
+    mk = market_summary(rec)
+    if mk:
+        out += ["## Market", ""]
+        labels = {"analogous": "Analogous product", "competitors": "Competitors", "pattern": "What they all do", "gap": "The gap",
+                  "conventions": "Conventions"}
+        for k, label in labels.items():
+            if mk.get(k):
+                out.append(f"- **{label}:** {'; '.join(mk[k]) if isinstance(mk[k], list) else mk[k]}")
+        out.append("")
     out += ["## What it means for the design system", ""]
     if props or conflicts or notes:
         for p in props:
@@ -502,7 +541,8 @@ def add(eng, d, path, accept=False, only=None, as_json=False):
               "tools": (rec.get("tools") or {}).get("used") or [],
               "highlights": [{"id": f["id"], "text": f.get("text", ""), "confidence": f.get("confidence")}
                              for f in (rec.get("findings") or [])[:5] if isinstance(f, dict)],
-              "proposals": props, "conflicts": [c["text"] for c in conflicts], "notes": [n["text"] for n in notes]})
+              "proposals": props, "conflicts": [c["text"] for c in conflicts], "notes": [n["text"] for n in notes],
+              "market": market_summary(rec)})
     r.pop("skipped_why", None)
     state["research"] = r
     eng.dump_json(os.path.join(d, eng.STATE_FILE), state)
@@ -587,6 +627,34 @@ def review(d, state):
         notes.append("The users have not been researched yet (optional, about 10 minutes): engine.py research plan, "
                      "or engine.py research skip --why \"...\".")
     return errs, notes
+
+
+def market_summary(rec):
+    """The market block of a findings file as PRODUCT.md shows it, each line with its sources: {analogous, competitors,
+    pattern, gap, conventions}. Conventions fall back to the patterns the users already know. Empty when nothing was found."""
+    mk = rec.get("market") if isinstance(rec.get("market"), dict) else {}
+    cite = lambda x: f" [{', '.join(x.get('sources'))}]" if isinstance(x, dict) and x.get("sources") else ""
+
+    def entry(x):
+        if isinstance(x, str):
+            return x.strip()
+        if not isinstance(x, dict):
+            return ""
+        head = str(x.get("name") or x.get("text") or "").strip()
+        return (head + (f": {str(x['why']).strip()}" if x.get("why") else "") + cite(x)) if head else ""
+    out = {}
+    if entry(mk.get("analogous")):
+        out["analogous"] = entry(mk["analogous"])
+    comp = [entry(x) for x in mk.get("competitors") or [] if entry(x)]
+    if comp:
+        out["competitors"] = comp
+    for k in MARKET_TEXT:
+        if entry(mk.get(k)):
+            out[k] = entry(mk[k])
+    conv = [str(x).strip() for x in (mk.get("conventions") or rec.get("patterns") or []) if str(x).strip()]
+    if conv:
+        out["conventions"] = conv
+    return out
 
 
 def product_section(state):

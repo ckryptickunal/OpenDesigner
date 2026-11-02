@@ -96,7 +96,7 @@ The phase (Q-scope-07) says where the project is now: an idea, being built, clos
 
 - Put the phase's first step at the top of the offer after the sketch (below). The engine prints it after the sketch as a `Phase:` line.
 - PRODUCT.md shows the phase and what comes first, in its own section.
-- Record what you learn about the market in PRODUCT.md's Market section, as assumed until they confirm it. `context.market.analogous` holds the analogous product. `context.market.competitors` holds the competitors, as a list. `pattern` is what the competitors all do, `gap` is what none of them does well, and `conventions` holds the words and habits the industry's users already know. The user research fills these with sources (`research.md`).
+- PRODUCT.md's Market section comes from the user research first: its market topic finds the competitors, what they all do, the gap and an analogous product, with sources (`research.md` sections 3 and 6). What the person tells you, or what you take from their words, is recorded in `context.market` as assumed until they confirm it, and wins over the research. `context.market.analogous` holds the analogous product and `context.market.competitors` the competitors, as a list. `pattern` is what the competitors all do, `gap` is what none of them does well, and `conventions` holds the words and habits the industry's users already know.
 - If they correct the phase, record their answer: `engine.py pick Q-scope-07 near-launch --why "<their words>"`.
 
 ## Level 1: broad (one screen per foundation)
