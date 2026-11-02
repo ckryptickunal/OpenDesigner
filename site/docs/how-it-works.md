@@ -4,10 +4,12 @@ seo_title: How OpenDesigner works, step by step, from install to review
 description: Every step OpenDesigner takes, in order: reading your project, the sketch, a first build, zooming in, the checks, the files it writes, and later changes.
 section: Reference
 order: 1
-updated: 2026-10-15
+updated: 2026-11-02
 ---
 
 OpenDesigner works inside the AI tool you already use: it reads your project, asks up to five questions, and builds a complete first version with a Python engine. You then zoom in only where you care. It checks the result with fixed rules, writes every decision down, and keeps later changes consistent.
+
+To see it drawn instead, with the real numbers, open [How OpenDesigner works](/tour/): the whole system on one page.
 
 ## The steps, from your side
 
