@@ -115,14 +115,14 @@ Zoom 2 defined · weight medium · changes 1 decisions · class I · cards DC-L0
 
 ## Q-brand-07 · What are your 3-5 design principles, and which one wins a tie?
 Zoom 2 defined · weight medium · changes 0 decisions · class I · cards DC-L06-15, DC-L11-05
-- **Ask:** "What 3-5 principles should break ties, and which one wins? I can draft some from your sliders."
+- **Ask:** "What 3-5 principles should break ties, and which one wins? I can draft some from your goals."
 - **Why:** When two sliders pull the same setting in opposite ways, your ranked principles break the tie [DC-L06-15; L06 section 4.2].
 - **Options:**
-  - `generate` Let the builder draft principles from the sliders, for you to edit [inferred].
+  - `generate` Let the builder draft principles from your goals and purpose (PRODUCT.md, Purpose and goals), then the sliders, for you to edit [inferred].
   - `checklist` Question checklists (IBM).
   - `pairs` Functional and emotional pairs (Fluent).
   - `imperatives` Commands that say what they give up (GOV.UK, 11 principles, updated 2 Apr 2025).
   - `value-words` Short value words (Carbon system principles).
-- **Default:** `generate`: generate, 3-5 principles, each naming what it outranks, with one making accessibility non-negotiable *Source:* card heuristic [DC-L06-15].
+- **Default:** `generate`: generate, 3-5 principles drafted from the recorded goals and purpose first (one principle per goal it protects), then from the sliders where no goal is recorded; each names what it outranks, and one makes accessibility non-negotiable. Never invent a goal to draft from: with no goals recorded, draft from the sliders and say so *Source:* card heuristic [DC-L06-15]; drafting from the goals follows the owner's direction of 2026-11-02 [inferred].
 - **Show:** each principle shown with a do/don't pair generated from the current draft.
 - **Skip:** yes.

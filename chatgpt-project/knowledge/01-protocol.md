@@ -57,6 +57,7 @@ A person in a hurry still gets a finished page in the first reply. What they don
 
 ## Start
 1. **Look before you ask.** Check for `opendesigner/`, `DESIGN.md`, `PRODUCT.md`, token files, `tailwind.config.*`, CSS custom properties, `package.json`, and logo or font files. Never ask something a file already answers. If `opendesigner/state.json` exists, switch to opendesigner-extend.
+   - Run `python3 <skill>/scripts/engine.py detect` first. It only reads: the product's name and what it is, where it runs, a brand colour candidate, the font, dark mode, the project's phase and the stack. Each sketch question it answers becomes one confirm line, not a question (`zoom.md`, level 0). `init` and `sketch` record each reading as `assumed`, with the file it came from.
    - `package.json` tells you the stack (React, React Native and so on). The stack and the platforms decide which house standards apply. The engine reads it at `init` and `sketch` and records it as `raw.stack`. Ask once which framework they use only when no file settles it (`rules.md` section 3).
 2. **Set up.** Run `python3 <skill>/scripts/engine.py init --name "<product or folder name>"`. Here `<skill>` means this skill's folder. The product name from the sketch (`sketch --name`) replaces the folder name later. `init` also applies the house standards (`references/standards.md`) and locks them. Don't ask about them; mention them once, in the first result.
 3. **Greet in 3 lines at most** (`rules.md` section 1). There is no mode to choose.
@@ -210,6 +211,16 @@ People never pick a mode. Everyone starts with a quick sketch of the whole syste
 ## Level 0: sketch (a few questions, one per message)
 Five answers shape the sketch. Ask only what their words and files don't already tell you.
 
+**Read the repo first.** Before the first question, run `engine.py detect`. It only reads files, and writes nothing. It reports:
+- the product's name and what it is (`package.json`, the README's first heading and paragraph, the page title);
+- where it runs (Expo or React Native: iPhone and Android; Electron or Tauri: desktop; `ios/`, `android/`, `pubspec.yaml` or an Xcode project; a web framework or HTML pages: web);
+- a brand colour candidate (the colour their CSS uses most on buttons, links and brand tokens);
+- the font (`next/font`, `@font-face`, a font package or a Google Fonts link);
+- dark mode (`prefers-color-scheme`, a theme switch);
+- the project's phase (below).
+
+A sketch question that a reading answers becomes one confirm line instead of a question: "I read *Budget Buddy, a web app* from your repo; say if that's wrong." Put the readings for several questions in that one line. `init` and `sketch` record each reading as `assumed`, with its file in the reason. An answer they give replaces it, and a confirmation is recorded again with `--set-by confirmed`. Ask the question only if they correct the reading, or if nothing in the folder answers it. A weaker signal, such as a colour on nothing clickable, appears as a `note:`. It is never recorded: mention it as a suggestion if it helps.
+
 1. **What are you making?** Take a free answer and record it in the third person, so DESIGN.md and PRODUCT.md read well to a teammate: "my school coding club" becomes `engine.py set context.product '"a website for a school coding club"'`. Keep their words otherwise. If the product has a name, pass it as `sketch --name`. It replaces the folder name that `init` used.
    - Take each surface's kind (Q-scope-06) from their words. Say it plainly, like "a site that shows off your club". Pass it with `--surfaces`. When you inferred it, record it before the sketch instead (below, "Assumed answers"). Name the kinds (Persuade, Operate, Read, Experience) only when the designer or engineer voice leads.
    - If they name several surfaces (an app and a landing page), confirm Q-scope-01 in one line. The main surface goes first.
@@ -231,7 +242,7 @@ Five answers shape the sketch. Ask only what their words and files don't already
 
 **Plain voice: ask fewer.** When the plain voice leads, ask questions 1, 4 and 5. Take who it's for and where it runs from their words when you can. For example, "a website for my school club" means visitors now and then, mostly on phones (`large`), on the web. Record those as assumed answers (below), and say them in one line with the result. Ask question 2 or 3 only when their words give no clue.
 
-**Assumed answers.** An owner input you took from their words, not from an answer, is `assumed` (`rules.md` section 5). Record it before the sketch, and leave its flag out of the `sketch` command, which keeps it:
+**Assumed answers.** An owner input you took from their words, not from an answer, is `assumed` (`rules.md` section 5). Readings from their files are recorded as `assumed` by `init` and `sketch` on their own; leave out of the `sketch` command each flag a reading answers, so the reading is kept as theirs to correct. Record an assumption from their words before the sketch, and leave its flag out of the `sketch` command too:
 ```
 engine.py pick Q-aud-01 large --set-by assumed --why "a club website: visitors come now and then, on phones"
 engine.py pick Q-plat-01 '["web"]' --set-by assumed --why "they said a website"
@@ -254,6 +265,12 @@ Then send the first result (below), and make the offer.
 ## The first result
 Show what they got, not how it was made. Send one message:
 1. **One plain line on what they got, in their words.** For example: "Robotics Club now has its colors, text and spacing, in your logo blue, with a fun feel."
+   - Then **what I understood you're trying to do**, in one line, from their words and README: the purpose, and the goal it serves. For example: "What I understood you're trying to do: get more students to join the club before the autumn fair." Record it before the build as an assumption, and confirm it once, in this message:
+     ```
+     engine.py set context.purpose '"get more students to join the club"' --set-by assumed --why "from their words and README"
+     engine.py set context.goals '["more sign-ups before the autumn fair"]' --set-by assumed --why "from their words"
+     ```
+     Record a mission (`context.mission`) or vision (`context.vision`) only when they said one. Never invent one. PRODUCT.md shows each line, or "Not enough information". Every later recommendation is checked against these lines, and the principles are drafted from the goals (Q-brand-07).
 2. **The visual,** on the best surface the host has (SKILL.md, visual ladder). Lead with the overview (`engine.py overview --open`): their system on one page, with what is still missing marked as such.
 3. **What you guessed,** in one line: answers you took from their words, and anything the engine changed. For example: "I guessed people visit now and then, mostly on phones. Say if that's wrong."
 4. **One clear next step,** the single most useful thing to do now:
@@ -263,6 +280,23 @@ Show what they got, not how it was made. Send one message:
 5. **The offer** (below).
 
 Never dump settings: no dial numbers, token names, hex lists or file trees unless they ask. Point a plain-voice person to the preview first. If they want to read something, DESIGN.md opens with a short plain summary.
+
+## The project's phase
+The phase (Q-scope-07) says where the project is now: an idea, being built, close to launch, or live. It decides what comes first after the sketch. "Stage" already means an interview topic in these files, so this is always called the phase.
+
+`engine.py detect` reads it from the folder, and `init` and `sketch` record it as `assumed`. An empty folder says nothing: then take it from their words, or ask once with the sketch's first question.
+
+| Phase | Read from the repo when | What comes first |
+|---|---|---|
+| Idea (`idea`) | Files, but no code yet (a README, notes) | The alignment: mission, vision, purpose and goals (above). Then the analogous product, a product from another field that solves the same kind of problem. Then the sketch. Nothing to audit yet |
+| Being built (`building`) | Code, but no deploy settings | The sketch, then the areas the screens being built need most |
+| Close to launch (`near-launch`) | Code and deploy settings (`vercel.json`, `netlify.toml`, a Dockerfile, `eas.json`, a deploy workflow) | An audit of what exists (`opendesigner-extract` measures it, `opendesigner-review` checks the built pages), then copy and voice (the Words area), then `opendesigner-preflight` before release |
+| Live (`live`) | A changelog with released versions, or a version past 1.0.0 (npm's default 1.0.0 does not count) | The audit, mapping onto the tokens the code already has, then governance: who may change the system, and how versions are numbered (Files, tools and team) |
+
+- Put the phase's first step at the top of the offer after the sketch (below). The engine prints it after the sketch as a `Phase:` line.
+- PRODUCT.md shows the phase and what comes first, in its own section.
+- PRODUCT.md's Market section comes from the user research first: its market topic finds the competitors, what they all do, the gap and an analogous product, with sources (`research.md` sections 3 and 6). What the person tells you, or what you take from their words, is recorded in `context.market` as assumed until they confirm it, and wins over the research. `context.market.analogous` holds the analogous product and `context.market.competitors` the competitors, as a list. `pattern` is what the competitors all do, `gap` is what none of them does well, and `conventions` holds the words and habits the industry's users already know.
+- If they correct the phase, record their answer: `engine.py pick Q-scope-07 near-launch --why "<their words>"`.
 
 ## Level 1: broad (one screen per foundation)
 Go in this order, with the listed templates:
@@ -293,6 +327,7 @@ Keep it short, in plain words:
 > Stop here, or go deeper on one part:
 > **Colors** (about 6 min) · **Text** (about 2 min) · **Everything, in 8 quick screens** (about 8 min)
 
+- When a phase is recorded, lead with what that phase needs first ("The project's phase", above). Close to launch, for example, the first choice is the audit, not Colors.
 - After the sketch, put the user research first, above the choices, unless it is done or skipped (`research.md` section 1): "Before we go deeper, I can research who your users are and which apps they already use, about 10 minutes, and I do the work. Shall I?" Send its plan in the same message (`research.md` section 4).
 - Offer at most 3 choices. Use each area's plain name and its minutes from `pacing.json` (`areas[].levels["<level>"].minutes`). Pick what matters most for this product. First come areas whose choices change the most (`pacing.json` → `top_decisions`). Then come areas their answers made risky, such as a light brand color or a dense product.
 - Accessibility is never an option to skip. Its floors (`guardrails.md` section 4) are already set at level 0.
@@ -333,7 +368,7 @@ Search `glossary.json` for each term (one term per line; match the term or one o
 9. **In files:** DESIGN.md decisions open with one plain sentence and the short line, with the rest collapsed. RATIONALE.md is plain first, then designer. Tokens and code comments use the engineer voice.
 
 ## 3. The rules, in the order they matter
-1. **Look before you ask.** Read the repo, CSS, tokens, brand files and any reference first. Ask only about taste, trade-offs and facts no file holds. If there are several candidates (two blues in the CSS), list them and recommend one.
+1. **Look before you ask.** Read the repo, CSS, tokens, brand files and any reference first (`engine.py detect` reads the name, platforms, brand colour, font, dark mode and phase). Ask only about taste, trade-offs and facts no file holds. If there are several candidates (two blues in the CSS), list them and recommend one.
    - **The stack comes from `package.json`.** Its dependencies say whether the project uses React, React Native and so on. The stack, with the platforms, decides which standards apply (`docs/KNOWLEDGE.md` section 3). `engine.py init` and `sketch` record it as `raw.stack`. Only when no file settles it, and the project has code to write, ask once which framework they use, then record it: `engine.py set raw.stack '["react"]' --why "<their words>"`.
 2. **Every question must do one of three things:** change the system, lock an assumption, or pick a trade-off. For small gaps, don't ask: assume, and label the assumption.
 3. **Zoom, don't march** (`zoom.md`).
@@ -395,7 +430,7 @@ A value outside the listed options is recorded as given, with the person's reaso
 | Mechanical, or low impact (weight low in `pacing.json`) | Keep the default (`auto_default`) | List it in the stage summary |
 | Handed over ("you pick") | Decide with a reason (`delegated`) | One line now, and again at the next gate |
 | Taste, identity, or high impact (weight high, or it changes many decisions) | Ask. Show 2-4 options as visual samples of the **same** real screen, recommended first | For each option, one **Now:** line (what changes today) and one **As it grows:** line (more screens, people, platforms, content), from the stage file when it has them |
-| Owner input (scope, audience, governance) | Always ask; never infer | - |
+| Owner input (scope, audience, governance, phase, purpose and goals) | Ask, unless their files or words point to an answer. Then record it as `assumed` with its source, and never invent one that nothing points to | When it was read, one line: "I read X from your repo; say if that's wrong". When they confirm, record it again with `--set-by confirmed` |
 
 ## 7. When answers are vague, skipped or conflicting
 - **Their own words.** Take answers in their words ("fun", "calm", "a website") and map them to the nearest option. Never make them pick from a list they didn't ask for. The engine maps common feel words to its own (`zoom.md`, question 4).
@@ -1132,13 +1167,14 @@ Pass the ones you have to the plan: `engine.py research plan --tools web-search,
 With nothing that reads the web, say so in one line and offer two ways on: the person fills in the findings file themselves (`assets/output/research-users.example.json` shows the shape), or they skip it.
 
 ## 3. What to find out
-Six topics. Each gets at least one search, and the findings file says which ones found nothing.
+Seven topics. Each gets at least one search, and the findings file says which ones found nothing.
 1. **Who:** age range, region, languages and scripts, reading level, devices and network.
 2. **Context:** how often, for how long, where (desk, counter, street, bed), one hand or two, light, noise, interruptions.
 3. **Apps:** the apps they open every day, and the patterns those apps have taught them (a bottom tab bar, swipe actions, a confirmation before money moves).
 4. **Expectations:** what they expect and what frustrates them, from reviews of products like this one, forums and published studies.
 5. **Preferences that touch design:** text size, dark mode, density, how much colour, colour meanings in their culture.
 6. **Accessibility:** vision, motor, hearing and cognitive needs common in the group, and tough conditions (bright light, a moving bus).
+7. **Market:** what people would use instead (the competitors, including doing it by hand), what those products all do, the gap none of them fills, and an analogous product: one from another field that solves the same kind of problem. Store listings, reviews and the competitors' own pages are the sources.
 
 ## 4. Plan it, and get one yes
 1. **Write the users line.** One line on who they are, in the person's words where you have them, for example "pharmacists in small chemist shops, 30 to 55, at a counter all day, on Android". Never invent it: when the sketch said nothing specific, ask for it in the same message as the plan.
@@ -1162,6 +1198,7 @@ Save them as JSON in the shape of `assets/output/research-users.example.json`, t
 - `sources`: `id`, `title`, `url` (the page you opened, or `person, YYYY-MM-DD`, `interview, YYYY-MM-DD` or `analytics, YYYY-MM-DD`), `kind`, `date`, `accessed`.
 - `findings`: `id`, `topic` (one of the six), `text` (one sentence, plain words), `confidence` (`measured`: a statistic or a study; `reported`: people say so; `inferred`: your reasoning), `sources`, `signals` (below).
 - `apps` (name, why, sources), `patterns` (the patterns they already know) and `open_questions`.
+- `market` (optional): `analogous` (name, why, sources), `competitors` (a list of name, why, sources), `pattern` and `gap` (a sentence, or text and sources), and `conventions` (the words and habits the industry's users already know; without it, `patterns` stand in). PRODUCT.md's Market section shows it with its sources until the person's own line is recorded in `context.market` (`zoom.md`, "The project's phase").
 
 **Signals** are what a finding means for the design, from a closed list. A finding can carry several, or none.
 
@@ -1199,6 +1236,7 @@ Where the engine has no `research` command (a ChatGPT Project ships `engine.py` 
 
 ## 8. Use it for the rest of the work
 - **References:** the apps they live in are the first Mobbin searches and candidates for the analogous product (`practices.md` sections 2 and 3).
+- **Market:** the competitors' shared pattern and the gap are what the alignment is checked against: a recommendation that copies the pattern needs a reason, and one that closes the gap says so.
 - **Later stages:** read the `later` notes when you reach type, imagery, motion, voice and themes, and say which finding a recommendation comes from.
 - **Every session:** PRODUCT.md's Users section is what a later session or another agent reads first. `engine.py review` checks the findings again, says when they are older than 180 days, and fails `--strict` when the saved file has lost a source.
 
@@ -1529,7 +1567,12 @@ Nothing below is built yet. Each one is a way to make the page read as one page.
    "out": []
   },
   "constraints": [],
-  "team": ""
+  "team": "",
+  "mission": "",
+  "vision": "",
+  "purpose": "",
+  "goals": [],
+  "market": {"analogous": "", "competitors": [], "pattern": "", "gap": "", "conventions": []}
  },
  "dials": {
   "expression": null,

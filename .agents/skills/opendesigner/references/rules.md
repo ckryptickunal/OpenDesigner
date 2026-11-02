@@ -30,7 +30,7 @@ Search `glossary.json` for each term (one term per line; match the term or one o
 9. **In files:** DESIGN.md decisions open with one plain sentence and the short line, with the rest collapsed. RATIONALE.md is plain first, then designer. Tokens and code comments use the engineer voice.
 
 ## 3. The rules, in the order they matter
-1. **Look before you ask.** Read the repo, CSS, tokens, brand files and any reference first. Ask only about taste, trade-offs and facts no file holds. If there are several candidates (two blues in the CSS), list them and recommend one.
+1. **Look before you ask.** Read the repo, CSS, tokens, brand files and any reference first (`engine.py detect` reads the name, platforms, brand colour, font, dark mode and phase). Ask only about taste, trade-offs and facts no file holds. If there are several candidates (two blues in the CSS), list them and recommend one.
    - **The stack comes from `package.json`.** Its dependencies say whether the project uses React, React Native and so on. The stack, with the platforms, decides which standards apply (`docs/KNOWLEDGE.md` section 3). `engine.py init` and `sketch` record it as `raw.stack`. Only when no file settles it, and the project has code to write, ask once which framework they use, then record it: `engine.py set raw.stack '["react"]' --why "<their words>"`.
 2. **Every question must do one of three things:** change the system, lock an assumption, or pick a trade-off. For small gaps, don't ask: assume, and label the assumption.
 3. **Zoom, don't march** (`zoom.md`).
@@ -92,7 +92,7 @@ A value outside the listed options is recorded as given, with the person's reaso
 | Mechanical, or low impact (weight low in `pacing.json`) | Keep the default (`auto_default`) | List it in the stage summary |
 | Handed over ("you pick") | Decide with a reason (`delegated`) | One line now, and again at the next gate |
 | Taste, identity, or high impact (weight high, or it changes many decisions) | Ask. Show 2-4 options as visual samples of the **same** real screen, recommended first | For each option, one **Now:** line (what changes today) and one **As it grows:** line (more screens, people, platforms, content), from the stage file when it has them |
-| Owner input (scope, audience, governance) | Always ask; never infer | - |
+| Owner input (scope, audience, governance, phase, purpose and goals) | Ask, unless their files or words point to an answer. Then record it as `assumed` with its source, and never invent one that nothing points to | When it was read, one line: "I read X from your repo; say if that's wrong". When they confirm, record it again with `--set-by confirmed` |
 
 ## 7. When answers are vague, skipped or conflicting
 - **Their own words.** Take answers in their words ("fun", "calm", "a website") and map them to the nearest option. Never make them pick from a list they didn't ask for. The engine maps common feel words to its own (`zoom.md`, question 4).

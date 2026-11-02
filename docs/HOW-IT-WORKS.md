@@ -77,7 +77,7 @@ You start with a rough version of the whole system. Then you zoom in only where 
 | 2 | defined | One area at a time, for example Color: ramps, roles, contrast | 1 to 15 questions per area |
 | 3 | detailed | Components, patterns and the fine print of each area | the rest |
 
-You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 193 questions has a zoom level, except the reference panel (Q-ref-01), which is open at every level. Six questions are marked planned: their feature is not built yet, so the interview skips them. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 93 and 192 questions).
+You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 194 questions has a zoom level, except the reference panel (Q-ref-01), which is open at every level. Six questions are marked planned: their feature is not built yet, so the interview skips them. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 94 and 193 questions).
 
 Every term is explained in three voices. Plain words come first, so a school student can follow. The designer's word and the code name sit on one line below. The [glossary](GLOSSARY.md) lists them all.
 

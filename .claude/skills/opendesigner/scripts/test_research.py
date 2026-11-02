@@ -83,6 +83,21 @@ class Checks(unittest.TestCase):
     def test_the_example_passes(self):
         self.assertEqual(errors(example()), [])
 
+    def test_the_market_block_is_checked_like_apps(self):
+        rec = example()
+        rec["market"]["competitors"][0]["sources"] = ["S9"]
+        self.assertTrue(any("market.competitors The pharmacy chains' own apps cites S9" in t for t in errors(rec)))
+        rec = example()
+        rec["market"]["rivals"] = []
+        self.assertTrue(any("market.rivals is not a market field" in t for t in errors(rec)))
+        rec = example()
+        rec["market"]["gap"] = "a sentence without sources is the agent's own reading"
+        self.assertEqual(errors(rec), [])
+        rec = example()
+        del rec["market"]
+        self.assertEqual(errors(rec), [])                                       # the block is optional
+        self.assertEqual(research.market_summary(rec)["conventions"], rec["patterns"])   # the patterns stand in
+
     def test_a_finding_without_a_source_fails_unless_inferred(self):
         rec = example()
         rec["findings"][0]["sources"] = []
@@ -211,7 +226,7 @@ class Project(unittest.TestCase):
         self.assertIn("## Users", self.product())
         self.assertIn("Researched", self.product())
         st = self.state()["research"]
-        self.assertEqual((st["status"], st["findings"], st["sources"]), ("done", 7, 4))
+        self.assertEqual((st["status"], st["findings"], st["sources"]), ("done", 8, 5))
         props = {p["question"]: p for p in st["proposals"]}
         self.assertEqual(props["Q-aud-01"]["status"], "differs")   # the sketch said regular: ask, never overwrite
         self.assertEqual(props["Q-aud-02"]["status"], "new")
@@ -252,7 +267,7 @@ class Project(unittest.TestCase):
 
     def test_findings_that_disagree_become_a_question(self):
         rec = example()
-        rec["findings"].append({"id": "F8", "topic": "context", "text": "Pharmacy staff use the same app all day at the counter.",
+        rec["findings"].append({"id": "F9", "topic": "context", "text": "Pharmacy staff use the same app all day at the counter.",
                                 "confidence": "reported", "sources": ["S2"], "signals": ["all-day-work"]})
         rec["findings"][4]["signals"] = []  # leave older-users (large) against all-day-work (dense)
         run(self.d, "research", "add", self.write(rec), "--accept")
@@ -288,6 +303,21 @@ class Project(unittest.TestCase):
         run(self.d, "research", "add", str(EXAMPLE))
         self.assertNotEqual(run(self.d, "research", "skip", "--why", "x").returncode, 0)
 
+    def test_product_md_market_comes_from_the_research_until_their_own_line(self):
+        self.assertIn("- **Competitors** (what people would use instead): Not enough information.", self.product())
+        quiet(research.add, e, self.d, self.write(example()))
+        product = self.product()
+        self.assertIn("- **Competitors** (what people would use instead): The pharmacy chains' own apps: search first, with offers "
+                      "on the home screen [S5]; Ordering by phone or WhatsApp from the local chemist: what many do today [S4]. "
+                      "*(from the user research: opendesigner/research/users.md)*", product)
+        self.assertIn("- **The gap** (what none of them does well, and this product can): Last month's order, ready to repeat", product)
+        self.assertIn("## Market", Path(self.d, research.DOC).read_text(encoding="utf-8"))
+        quiet(e.cmd_set, self.d, "context.market.gap", "repeat an order by voice", "their words")
+        quiet(e.cmd_design_md, self.d)
+        product = self.product()
+        self.assertIn("- **The gap** (what none of them does well, and this product can): repeat an order by voice.\n", product)
+        self.assertIn("Search and offers first", product)                       # the other lines still come from the research
+
     def test_product_md_never_claims_research_that_was_not_done(self):
         self.assertIn("Not researched yet", self.product() if Path(self.root, "PRODUCT.md").exists()
                       else research.product_section(self.state()))
@@ -317,7 +347,7 @@ class Process(unittest.TestCase):
             self.assertIn(f"`{sid}`", r, sid)
         for t in research.TOOL_IDS:
             self.assertIn(f"`{t}`", r, t)
-        self.assertEqual(len(re.findall(r"^\d\. \*\*(Who|Context|Apps|Expectations|Preferences that touch design|Accessibility):\*\*", r,
+        self.assertEqual(len(re.findall(r"^\d\. \*\*(Who|Context|Apps|Expectations|Preferences that touch design|Accessibility|Market):\*\*", r,
                                         flags=re.M)), len(research.TOPICS))
 
     def test_status_is_documented_and_extend_checks_it(self):

@@ -59,7 +59,9 @@ TEMPLATES = {
 # Zoom levels replace the questionnaire's depth modes (BRIEF requirement 14, lane U2). Level 0 and 1 are
 # hand-picked; the rest follow the questionnaire mode (Standard -> 2, Expert -> 3). [inferred; logged]
 ZOOM_NAMES = {0: "sketch", 1: "broad", 2: "defined", 3: "detailed"}
-ZOOM0 = ["Q-scope-01", "Q-scope-06", "Q-aud-01", "Q-plat-01", "Q-brand-01", "Q-color-01", "Q-brand-03"]  # Q-scope-06 rides with Q-scope-01, Q-brand-03 with Q-color-01
+# Q-scope-06 and Q-scope-07 (the project's phase, read from the repo and confirmed in one line) ride with Q-scope-01,
+# Q-brand-03 with Q-color-01
+ZOOM0 = ["Q-scope-01", "Q-scope-06", "Q-scope-07", "Q-aud-01", "Q-plat-01", "Q-brand-01", "Q-color-01", "Q-brand-03"]
 ZOOM1 = ["Q-dir-01", "Q-dir-02", "Q-color-02", "Q-type-01", "Q-shape-01", "Q-depth-01", "Q-motion-01", "Q-tool-01"]
 # Areas a person can zoom into; section = the DESIGN.md heading the engine renders for it.
 AREAS = [("overview", "The big picture", "Overview", ["S01", "S03", "S06"]),
