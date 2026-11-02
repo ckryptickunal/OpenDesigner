@@ -578,6 +578,18 @@
       ]
     },
     {
+      "page": "preflight/white-black.html",
+      "checker": "preflight",
+      "expect": [
+        {
+          "id": "P-white-black",
+          "what": "pure white cards and pure black text on one page",
+          "check": "M52",
+          "text": "pure white"
+        }
+      ]
+    },
+    {
       "page": "preflight/missing-sheet.html",
       "checker": "preflight",
       "expect": [

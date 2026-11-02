@@ -1,9 +1,9 @@
 {
   "$comment": "House standards from the owner's non-negotiable sources (learn/sources.json). Applied and locked in every OpenDesigner project; changed only when the person explicitly asks. Built by lane L19 from learn/analysis/; see learn/README.md.",
-  "version": 3,
-  "updated": "2026-10-14",
+  "version": 4,
+  "updated": "2026-11-02",
   "policy": {
-    "non-negotiable": "A standard backed by a non-negotiable source (Emil Kowalski's site, the Sonner docs, the public animations.dev pages, the emilkowalski/skills repo) is applied and locked in every project without asking, written into DESIGN.md and checked by engine.py validate and review.",
+    "non-negotiable": "A standard backed by a non-negotiable source (Emil Kowalski's site, the Sonner docs, the public animations.dev pages, the emilkowalski/skills repo, and the repository owner's own house rules in learn/analysis/owner-house-rules.json) is applied and locked in every project without asking, written into DESIGN.md and checked by engine.py validate and review.",
     "good-to-have": "A standard backed only by a good-to-have source (the Vaul docs) is a recommended default and always a should: OpenDesigner recommends it first and the person can change it freely. Vaul is unmaintained, so flag that before suggesting it as a dependency.",
     "override": "how a person changes one: they ask explicitly; the agent restates the standard and its reason once, records the change with engine.py and the person's words, and supersedes (never deletes) the record"
   },
@@ -16518,6 +16518,64 @@
       "conflicts": [],
       "since": 1,
       "changed": 1
+    },
+    {
+      "id": "STD-visual-details-65",
+      "theme": "visual-details",
+      "area": "color",
+      "title": "Known meanings keep their colours",
+      "rule": "Keep the commonly known colour for a meaning, unless the person asks otherwise: approved or success green, rejected or error red, pending or warning amber, info blue; a well-known app or channel keeps its own colour (Microsoft Teams purple, email in Outlook blue, a call green). The brand accent never takes a meaning that has a known colour.",
+      "why": "People recognise the known colours at a glance, and a product that uses them feels made with care, not by AI.",
+      "strength": "must",
+      "values": {
+        "success": "green",
+        "danger": "red",
+        "warning": "amber",
+        "info": "blue"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "owner-house-rules",
+          "evidence": "keep that consistency in things across whatever projects we are working"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [],
+      "since": 4,
+      "changed": 4
+    },
+    {
+      "id": "STD-visual-details-66",
+      "theme": "visual-details",
+      "area": "color",
+      "title": "Never pure white with pure black",
+      "rule": "A product that uses pure white (#FFFFFF) as a surface, text or icon colour never also uses pure black (#000000), and the reverse. Pair pure white with an off-black (such as #111111) and pure black with an off-white. Transparent black or white in shadows, scrims and overlays does not count.",
+      "why": "The owner's rule for every project: the two extremes together are harsh and cause problems later.",
+      "strength": "must",
+      "values": {
+        "pure-white": "#FFFFFF",
+        "pure-black": "#000000"
+      },
+      "applies_to": [
+        "all"
+      ],
+      "sources": [
+        {
+          "id": "owner-house-rules",
+          "evidence": "if somebody is using absolute white, then they should not use absolute black"
+        }
+      ],
+      "engine": null,
+      "review": null,
+      "design_md": true,
+      "conflicts": [],
+      "since": 4,
+      "changed": 4
     }
   ],
   "built_from": {
@@ -16555,6 +16613,7 @@
     "eks-skills-review-animations-skill": "s:4c2623268dd9",
     "eks-skills-review-animations-standards": "s:0b0219658c03",
     "eks-skills-write-swift-skill": "s:b05ac28e5357",
+    "owner-house-rules": "s:edcc68396e09",
     "sonner-getting-started": "s:b3222e0e89cd",
     "sonner-home": "s:d52427f9495a",
     "sonner-other": "s:7c950d51239e",
@@ -17112,8 +17171,19 @@
         "STD-accessibility-motion-12"
       ],
       "retired": []
+    },
+    {
+      "version": 4,
+      "date": "2026-11-02",
+      "why": "Owner house rules: STD-visual-details-65 (known meanings keep their colours) and -66 (never pure white with pure black), from learn/analysis/owner-house-rules.json",
+      "added": [
+        "STD-visual-details-65",
+        "STD-visual-details-66"
+      ],
+      "changed": [],
+      "retired": []
     }
   ],
-  "content_hash": "sha256:0a20a39016aa9231",
+  "content_hash": "sha256:e088c598a0597fce",
   "retired": []
 }

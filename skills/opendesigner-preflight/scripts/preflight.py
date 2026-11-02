@@ -210,6 +210,10 @@ def parse_font(val: str):
     return None, None
 
 
+PURE = {"white": re.compile(r"#(?:fff|ffffff)(?![0-9a-z])|\brgb\(\s*255\s*,\s*255\s*,\s*255\s*\)|\bwhite\b", re.I),
+        "black": re.compile(r"#(?:000|000000)(?![0-9a-z])|\brgb\(\s*0\s*,\s*0\s*,\s*0\s*\)|\bblack\b", re.I)}
+
+
 def check_html(path: Path, medium: str) -> Report:
     r = Report()
     page = path.read_text(encoding="utf-8", errors="replace")
@@ -270,6 +274,7 @@ def check_html(path: Path, medium: str) -> Report:
 
     sizes, families, tracking, loose = [], set(), [], 0
     kern = {"off": [], "px": [], "pct": [], "wide": [], "caps": [], "speed": []}  # kerning.md, checklist 50 [M51]
+    pure = {"white": [], "black": []}  # opaque #ffffff and #000000 as colours, checklist 51 [M52]
     for sel, body, at in blocks:
         if sel.startswith("@") or not used(sel):
             continue
@@ -279,6 +284,11 @@ def check_html(path: Path, medium: str) -> Report:
         where = sel if sel != "[style]" else "a style attribute"
         ls = props.get("letter-spacing", "")
         caps = props.get("text-transform") == "uppercase" or "all-small-caps" in props.get("font-variant", "") + props.get("font-variant-caps", "")
+        for p_, v_ in props.items():
+            if re.fullmatch(r"color|background(-color)?|fill|stroke|border(-[a-z]+)*|outline(-color)?|caret-color", p_):
+                for k_, rx_ in PURE.items():
+                    if rx_.search(v_):
+                        pure[k_].append(f"{where} {p_}: {v_[:40]}")
         if props.get("font-kerning") == "none" or re.search(r"[\"']kern[\"']\s*(0|off)\b", props.get("font-feature-settings", "")):
             kern["off"].append(where)
         if props.get("text-rendering") == "optimizespeed":
@@ -385,6 +395,9 @@ def check_html(path: Path, medium: str) -> Report:
                "from a mock (Figma -2% is -0.02em)  [M51]")
     if kern["caps"]:
         r.warn(f"uppercase text with no positive tracking: {'; '.join(kern['caps'][:6])}; capitals need about +0.04 to +0.1em  [M51]")
+    if pure["white"] and pure["black"]:
+        r.warn(f"pure white ({pure['white'][0]}) and pure black ({pure['black'][0]}) on one page; use an off-black such as "
+               "#111111 with white, or an off-white with black (house standard STD-visual-details-66)  [M52]")
     code = " ".join(re.findall(r"<script[^>]*>(.*?)</script>", page, flags=re.S | re.I))
     splits = re.search(r"SplitText\([^)]*chars|type\s*:\s*[\"'][^\"']*chars|\bSplitting\("
                        r"|(?:split\(\s*(?:\"\"|'')\s*\)|\[\s*\.\.\.\s*[\w.]+(?:textContent|innerText)\s*\]"

@@ -10,6 +10,7 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Added
 
+- **Two colour rules for every project** (2026-11-02). New house standards: colours with a known meaning keep it (approved green, rejected red, pending amber, info blue, and well-known apps in their own colour), and a product never uses pure white and pure black together. `engine.py validate`, `review` and `preflight.py html` enforce the second; three library parts now draw their codes in near-black.
 - **Kerning and letter spacing, checked in every project** (2026-11-02). A new guide, `preflight/references/kerning.md`, lists the type-spacing mistakes that keep coming back and how to avoid each. `preflight.py html` now flags kerning switched off, tracking in px or %, untracked capitals and words split into letters without their kerning (check 50).
 - **Rules for references, samples and content** (2026-11-02). `making.md` now asks for a board of shipped samples to pick from before a new direction, live measurement instead of thumbnails, principles from a reference instead of its page, a content list that "less text" never cuts, and one system for every figure. Moving calls to action are banned.
 - **Reads your repo before asking** (2026-11-02). A new `engine.py detect` reads the product's name, where it runs, a brand colour, the font, dark mode and the project's phase from your files. `init` and `sketch` record each one as assumed, with its source, never over an answer you gave, and the sketch turns each answered question into one line to confirm.

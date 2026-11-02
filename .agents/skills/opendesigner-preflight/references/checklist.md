@@ -87,3 +87,7 @@ Run this on any video, page, deck or image before you call it done. Each line is
 ## Kerning and tracking, in every project (2026-11-02)
 
 50. **Kerning kept, tracking from the system.** Nothing turns the font's kerning off (`font-kerning: none`, `"kern" 0`, `optimizeSpeed`). Every `letter-spacing` comes from a text style in em: no px, no CSS `%`, no Figma percent copied as is. Capitals are tracked positive; code, table numbers and joining or caseless scripts sit at 0. A word split into letters for motion has its kerning measured and restored and its markup put back, so the last frame equals plain text. Every weight you use is loaded and `font-synthesis: none` is set; a subset font keeps every feature the system uses. At 200%, centred tracked labels are centred, and with WCAG 1.4.12 spacing (0.12em letters) nothing clips. `preflight.py html` checks the rule-shaped parts; `references/kerning.md` has the rest. [M51]
+
+## House colour rules (owner, 2026-11-02)
+
+51. **Pure white or pure black, never both.** No page, screen or frame uses opaque #FFFFFF and #000000 together as surface, text, icon or border colours: pair white with an off-black such as #111111, or black with an off-white. Translucent black in shadows, scrims and masks doesn't count. Colours with a known meaning keep it: approved green, rejected red, pending amber, info blue, and a well-known app in its own colour (house standards STD-visual-details-65 and -66). [M52]

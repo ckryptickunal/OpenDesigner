@@ -36,13 +36,13 @@ Date: 2026-11-02. Inputs: the maritime B2B landing page notes (`learn/local-lear
 | RC2 | Section 1 says a reference gives principles, never its page, and that inheriting a parent system means its materials, not its compositions. The section 10 row and the section 12 rule now say when one reference may be followed closely (a named section the person asked for, or a screen pattern inside a product) and when it may not (a landing page or brand direction) |
 | RC3 | Content core list ("less text" never cuts facts); options never change settled fonts, palette or corners; directions differ in structure, not palette |
 | RC4 | Live measurement with `read_page.js` before building from a reference; figure audit by script at nine widths |
-| RC5 | The no-moving-CTA and meaning-colour rules are in `making.md` section 11, which every build reads. Promoting them to house standards needs a decision (below) |
+| RC5 | The owner can now be a house-standard source. The meaning-colour rule and the white-and-black rule are house standards that every system follows and the engine checks; the no-moving-CTA rule is in `making.md` section 11 |
 | RC6 | `preflight.py html` now checks kerning and tracking (checklist item 50, M51) against a new guide, `preflight/references/kerning.md`, with a scored eval page. `engine.py review` skips files carrying the engine's export header |
 
 ## 4. Not fixed here, and why
 
-- **House standards from the owner.** Needs a decision: allow an `owner` source in `standards.json` (strength must, locked), so rules like no moving CTAs and known meaning colours are enforced by `engine.py review`, not just read.
-- **Neutral defaults (#FFFFFF and #111111).** Needs a decision: OpenDesigner's default for everyone, or the owner's personal default kept in his project memory.
+- **House standards from the owner: decided and done (owner, 2026-11-02).** The colour rules became house standards with the owner as their source (`learn/analysis/owner-house-rules.json`): STD-visual-details-65 (known meanings keep their colours) and STD-visual-details-66 (never pure white with pure black, "enforced globally"; `engine.py validate`, `review` and `preflight.py html` check it). The no-moving-CTA rule stays a `making.md` rule until the owner says otherwise.
+- **Neutral defaults: decided (owner, 2026-11-02).** #FFFFFF with #111111 was that one project's choice, not a default for everyone.
 - **A blocking gate.** RC1 is only partly fixed by better wording. A real gate would be an `engine.py` step that records the picked samples and refuses to call a draft ready without them. Proposed, not built.
 - **Project-specific lessons** left for their own changes: inheriting from a parent codebase (3), `od-reason` markers (6), feel words "precise" and "industrial" (8), the video provider change (10, 23), brand names on stock photos (18), palette from the hero photo (19), oklab gradients (20), the `pathLength` bug (22), "rounded" for enterprise (28), real vendor logos (40), tree figures (41), the mix-and-match lab template (46).
 - **The local files.** The notes file and the 14 owner rows stay with the session that wrote them, to be committed there. This change repeats the two `making.md` section 11 rows word for word, so the two edits merge cleanly.
