@@ -7,6 +7,7 @@ browser is not available (nothing is installed or downloaded by this test). Stan
 import functools
 import http.server
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -222,6 +223,78 @@ class Live(unittest.TestCase):
                                     capture_output=True, text=True)
             self.assertNotEqual(sneaky.returncode, 0)
             self.assertIn("not a local address", sneaky.stderr + sneaky.stdout)
+
+
+    def open(self, name, w):
+        c = _browser.new_context(viewport={"width": w, "height": 844 if w < 700 else 900})
+        self.addCleanup(c.close)
+        import capture
+        c.add_init_script(capture.WATCH_JS)
+        pg = c.new_page()
+        pg.goto(f"http://localhost:{self.port}/{name}")
+        capture.settle(pg)
+        return pg
+
+    def test_type_layout_and_buttons_from_one_probe(self):                                        # MS-17, MS-18, MS-05, MS-19, EN-08
+        p = self.open("round.html", 390).evaluate(PROBE)
+        self.assertEqual([c["sel"] for c in p["type"]["capsTight"]], ["p#eyebrow"])
+        self.assertEqual(p["type"]["tracking"]["40|0.02|0"]["ex"], ["p#big"])
+        self.assertEqual([h["sel"] for h in p["type"]["headings"]["long"]], ["h1#head-long"])
+        mixed = p["layout"]["mixed"][0]
+        self.assertEqual((mixed["heading"], mixed["align"]), ("Built for operators", "center"))
+        self.assertEqual({i["sel"]: i["align"] for i in mixed["items"]}, {"p#mixed-p": "left", "div#mixed-ctas": "left"})
+        self.assertEqual([(o["sel"], o["off"]) for o in p["layout"]["offCentre"]], [("h2#off", 12)])
+        self.assertEqual({s["sel"]: (s["kind"], s["radius"]) for s in p["buttons"]["styles"]}, {"a#buy": ("filled", 8), "a#demo": ("filled", "pill"), "a#more": ("outline", 2)})
+        self.assertEqual(p["fonts"]["unused"], [{"family": "Fixture Unused", "faces": 1}])
+        self.assertEqual(p["motion"]["pending"], 0)
+        F = rv.Findings()
+        rv.check_probe(p, None, F)
+        fs = {f["case"] for f in F.done()}
+        self.assertTrue({"MS-17", "MS-18", "MS-05", "MS-19", "MS-02", "EN-08"} <= fs, fs)
+
+    def test_pixels_bars_toggles_and_kerning(self):                                               # MS-20, MS-04, CV-08, ST-10, ST-11, MS-17
+        import capture
+        pg = self.open("pixels.html", 1280)
+        p = pg.evaluate(PROBE)
+        html = pg.evaluate("document.body.innerHTML")
+        with tempfile.TemporaryDirectory() as d:
+            for fn in (capture.letter_reveals, capture.text_pixels, capture.floating_bars, capture.toggles):
+                fn(pg, Path(d), "px-1280", p, None)
+            self.assertEqual(pg.evaluate("document.body.innerHTML"), html)          # every toggle is put back, every mark removed
+            self.assertEqual(pg.evaluate("window.scrollY"), 0)
+            F = rv.Findings()
+            for sub in ("pixels", "kern", "bars", "states"):
+                doc = json.loads((Path(d) / sub / "px-1280.json").read_text())
+                rv.CAPTURE_CHECKS[doc["kind"]](doc, F)
+        by = {}
+        for f in F.done():
+            by.setdefault(f["case"], []).append(f)
+        self.assertEqual(by["MS-20"][0]["evidence"], ["p#crossed"])                       # not the clean paragraph, not the tabs
+        self.assertEqual(by["MS-04"][0]["evidence"], ["p#pale"])
+        self.assertEqual({h.split(" ")[0] for h in by["CV-08"][0]["evidence"]}, {"p#pin-caption", "p#foot", "div#bar"})
+        self.assertIn("div#panels", by["ST-10"][0]["evidence"])
+        self.assertEqual(by["ST-11"][0]["evidence"][0], "button#s-a")
+        self.assertIn("pixels", by["ST-11"][0]["measured"])
+        self.assertGreater(float(re.search(r"up to ([\d.]+) px", by["MS-17"][0]["measured"]).group(1)), 5)   # inline-block letters drop AV, To, Ty
+
+    def test_a_reveal_that_puts_plain_text_back_is_caught_jumping(self):                          # MS-17
+        pg = self.open("pixels.html", 1280)
+        pg.evaluate("""() => { const h = document.querySelector('#split'); h.textContent = h.getAttribute('aria-label'); }""")   # the reveal ends: plain text again
+        pg.wait_for_timeout(300)
+        swapped = pg.evaluate("__od.kern()")["swapped"]
+        self.assertEqual(swapped[0]["sel"], "h2#split")
+        self.assertGreater(swapped[0]["maxDx"], 5)
+
+    def test_settle_waits_for_a_reveal_and_ignores_loops(self):                                   # TM-01
+        pg = _browser.new_page()
+        self.addCleanup(pg.close)
+        pg.set_content('<style>@keyframes a{from{opacity:0}to{opacity:1}}@keyframes s{to{transform:rotate(1turn)}}</style>'
+                       '<p style="animation:a 600ms both">x</p><i style="display:block;width:9px;height:9px;animation:s 1s linear infinite"></i>')
+        pg.evaluate(PROBE)
+        r = pg.evaluate("__od.settle(3000)")
+        self.assertTrue(r["settled"])
+        self.assertGreater(r["waited"], 400)
+        self.assertLess(r["waited"], 2000)
 
 
 def png_size(data):

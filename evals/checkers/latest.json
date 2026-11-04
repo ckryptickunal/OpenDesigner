@@ -1,17 +1,20 @@
 {
   "kind": "checkers",
-  "date": "2026-10-21",
-  "time": "2026-10-21T21:32:02",
-  "commit": "6a01a78",
+  "date": "2026-11-05",
+  "time": "2026-11-05T04:02:30",
+  "commit": "98014ac",
   "checkersChangedSinceCommit": [
-    "skills/opendesigner-review/scripts/review.py"
+    "skills/opendesigner-preflight/scripts/preflight.py",
+    "skills/opendesigner-review/scripts/review.py",
+    "skills/opendesigner-review/scripts/probe.js",
+    "skills/opendesigner-review/scripts/capture.py"
   ],
   "environment": {
     "python": "3.10.11",
-    "chrome": "155.0.8059.85",
+    "chrome": "156.0.8078.80",
     "platform": "darwin"
   },
-  "runs": 1,
+  "runs": 2,
   "sameEveryRun": true,
   "scoring": "recall = planted defects caught / planted; precision = findings that match a planted defect / all findings; falseAlarms = findings on clean pages. Errors and warnings count; info notes do not. A layout finding at several widths counts once.",
   "checkers": {
@@ -336,11 +339,11 @@
     },
     "preflight": {
       "script": "skills/opendesigner-preflight/scripts/preflight.py",
-      "planted": 11,
-      "caught": 10,
-      "recall": 0.909,
-      "findings": 10,
-      "true": 10,
+      "planted": 14,
+      "caught": 13,
+      "recall": 0.929,
+      "findings": 13,
+      "true": 13,
       "false": 0,
       "precision": 1.0,
       "cleanPages": 1,
@@ -366,11 +369,11 @@
           "falseAlarms": 0
         },
         "M5": {
-          "planted": 1,
-          "caught": 1,
+          "planted": 3,
+          "caught": 3,
           "recall": 1.0,
-          "findings": 1,
-          "true": 1,
+          "findings": 3,
+          "true": 3,
           "precision": 1.0,
           "falseAlarms": 0
         },
@@ -393,11 +396,11 @@
           "falseAlarms": 0
         },
         "M8": {
-          "planted": 2,
-          "caught": 2,
+          "planted": 3,
+          "caught": 3,
           "recall": 1.0,
-          "findings": 2,
-          "true": 2,
+          "findings": 3,
+          "true": 3,
           "precision": 1.0,
           "falseAlarms": 0
         },
@@ -499,24 +502,54 @@
             "level": "warn",
             "msg": "stylesheet styles/theme.css is linked but not found next to the page, so its sizes and fonts were not read"
           }
+        ],
+        "P-caps-tight": [
+          {
+            "check": "M5",
+            "level": "error",
+            "msg": "capitals tracked tight: .eyebrow at -0.03em; uppercase needs open tracking (about +0.02 to +0.08em), never negative  [M5]"
+          }
+        ],
+        "P-track-back": [
+          {
+            "check": "M5",
+            "level": "warn",
+            "msg": "tracking gets looser as type gets bigger: .title is 40px at 0.02em, .lede is 14px at -0.01em; tighten as size grows  [M5]"
+          }
+        ],
+        "P-fluid-small": [
+          {
+            "check": "M8",
+            "level": "error",
+            "msg": "fluid text under 11px at 320 px wide: [7]; below 11 px is under every platform minimum; 12 px is the web floor for text people read, and 11 px fits only short labels (stage 11, Material label-small)  "
+          }
         ]
       },
-      "infoLines": 22
+      "infoLines": 28
     },
     "review": {
       "script": "skills/opendesigner-review/scripts/review.py",
-      "planted": 18,
-      "caught": 18,
+      "planted": 34,
+      "caught": 34,
       "recall": 1.0,
-      "findings": 20,
-      "true": 20,
+      "findings": 37,
+      "true": 37,
       "false": 0,
       "precision": 1.0,
-      "cleanPages": 1,
+      "cleanPages": 2,
       "falseAlarms": 0,
       "mislocated": 0,
       "perCheck": {
         "CV-05": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "CV-08": {
           "planted": 1,
           "caught": 1,
           "recall": 1.0,
@@ -547,6 +580,15 @@
           "planted": 0,
           "caught": 0,
           "recall": null,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "EN-08": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
           "findings": 1,
           "true": 1,
           "precision": 1.0,
@@ -589,11 +631,11 @@
           "falseAlarms": 0
         },
         "MS-02": {
-          "planted": 2,
-          "caught": 2,
+          "planted": 4,
+          "caught": 4,
           "recall": 1.0,
-          "findings": 2,
-          "true": 2,
+          "findings": 4,
+          "true": 4,
           "precision": 1.0,
           "falseAlarms": 0
         },
@@ -612,6 +654,15 @@
           "recall": 1.0,
           "findings": 1,
           "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "MS-05": {
+          "planted": 2,
+          "caught": 2,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
           "precision": 1.0,
           "falseAlarms": 0
         },
@@ -660,7 +711,70 @@
           "precision": 1.0,
           "falseAlarms": 0
         },
+        "MS-16": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "MS-17": {
+          "planted": 3,
+          "caught": 3,
+          "recall": 1.0,
+          "findings": 3,
+          "true": 3,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "MS-18": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "MS-19": {
+          "planted": 2,
+          "caught": 2,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "MS-20": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
         "ST-06": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "ST-10": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "ST-11": {
           "planted": 1,
           "caught": 1,
           "recall": 1.0,
@@ -808,9 +922,126 @@
             "level": "warn",
             "msg": "Most text is not in the system's typeface: most text is Georgia; the system says system-ui"
           }
+        ],
+        "R-caps-tight": [
+          {
+            "check": "MS-17",
+            "level": "error",
+            "msg": "Capitals with negative tracking: p#eyebrow \"For small finance teams\" at -0.04em, 12 px"
+          }
+        ],
+        "R-track-back": [
+          {
+            "check": "MS-17",
+            "level": "warn",
+            "msg": "Tracking gets looser as text gets bigger: 44 px is tracked 0.02em but 15 px is tracked -0.01em (9 pair(s) like this)"
+          }
+        ],
+        "R-head-lines": [
+          {
+            "check": "MS-18",
+            "level": "warn",
+            "msg": "Headings over 2 lines: h1 \"Every invoice, every receipt and every payment in \" runs to 5 lines at 44 px"
+          }
+        ],
+        "R-mixed-align": [
+          {
+            "check": "MS-05",
+            "level": "warn",
+            "msg": "Mixed alignment under one heading: \"Pick a plan\" is center-aligned; p#plans-lede is left; div#plans-row is left"
+          }
+        ],
+        "R-off-centre": [
+          {
+            "check": "MS-05",
+            "level": "warn",
+            "msg": "Centred items off the centre line: h2#proof-title \"Trusted by small teams\" is 14 px off the centre of section#proof"
+          }
+        ],
+        "R-button-styles": [
+          {
+            "check": "MS-19",
+            "level": "warn",
+            "msg": "Buttons with different corners or case: filled, 8 px corners, 40 px tall, 13 px: \"Start a trial\"; filled, pill, 48 px tall, 16 px: \"Book a call\"; outline, 2 px corners, 32 px tall, 12 px caps: \"Read t"
+          }
+        ],
+        "R-button-label": [
+          {
+            "check": "MS-19",
+            "level": "warn",
+            "msg": "Button labels too small: primary \"Start a trial\" at 13 px; capitals \"Read the guide\" at 12 px"
+          }
+        ],
+        "R-two-primary": [
+          {
+            "check": "MS-16",
+            "level": "warn",
+            "msg": "2 different fills for the main button: #1f4fd8 on \"Start a trial\"; #1c1c1e on \"Book a call\""
+          },
+          {
+            "check": "MS-16",
+            "level": "warn",
+            "msg": "2 primary buttons in the first screen: 2 filled buttons stand out in the first screen: \"Start a trial\" (#1f4fd8), \"Book a call\" (#1c1c1e); \"Start a trial\" (#1f4fd8) and \"Book a call\" (#1c1c1e) sit sid"
+          }
+        ],
+        "R-size-count": [
+          {
+            "check": "MS-02",
+            "level": "warn",
+            "msg": "12 font sizes: 12, 13, 14.5, 15, 16, 18.5, 21, 26, 28, 30, 32, 44; within 10% of each other: 12/13, 14.5/15, 15/16, 26/28"
+          }
+        ],
+        "R-size-frac": [
+          {
+            "check": "MS-02",
+            "level": "warn",
+            "msg": "Font sizes between whole pixels: 14.4 px x1; 18.7 px x1"
+          }
+        ],
+        "R-font-unused": [
+          {
+            "check": "EN-08",
+            "level": "warn",
+            "msg": "Fonts downloaded but not used: 1 of 1 loaded families draw no visible text: Fixture Display (1 face(s))"
+          }
+        ],
+        "R-art-text": [
+          {
+            "check": "MS-20",
+            "level": "warn",
+            "msg": "Art or an image is drawn through text: \"Every invoice, every receipt and every p\": 4.4% of its line box is crossed (svg under it)"
+          }
+        ],
+        "R-bar-pinned": [
+          {
+            "check": "CV-08",
+            "level": "error",
+            "msg": "A floating bar covers text that cannot scroll out from under it: \"Payments, laid out as they arrive.\" (p#scene-caption) under div#bar, pinned"
+          }
+        ],
+        "R-kern": [
+          {
+            "check": "MS-17",
+            "level": "warn",
+            "msg": "Letter-by-letter text loses its kerning: \"WAVE Toys\" letters sit up to 13.03 px from where the font puts them (worst at \"To\")"
+          }
+        ],
+        "R-height": [
+          {
+            "check": "ST-10",
+            "level": "warn",
+            "msg": "A box changes height when a toggle changes: div#panes is 27 / 113 px across tabs (Summary, Details)"
+          }
+        ],
+        "R-dead-control": [
+          {
+            "check": "ST-11",
+            "level": "warn",
+            "msg": "A control that changes nothing: segmented (Monthly, Yearly): no option changed anything in section#billing-sec (checked by pixels)"
+          }
         ]
       },
-      "infoNotes": 7,
+      "infoNotes": 21,
       "notes": []
     },
     "dates": {
@@ -1336,7 +1567,7 @@
       "date": "2026-10-20",
       "time": "2026-10-20T19:50:35+05:30",
       "subject": "Fix four checker bugs that the new checker evals found",
-      "current": true,
+      "current": false,
       "checkNumbers": [
         1,
         2,
@@ -1480,6 +1711,705 @@
       ],
       "falseAlarmsAdded": [],
       "note": "Newly catches 1 planted defects (page-overflow). Removes 2 clean-page false alarms (clipped, text-edge)."
+    },
+    {
+      "commit": "f17f182",
+      "date": "2026-10-21",
+      "time": "2026-10-21T23:54:52+05:30",
+      "subject": "Component library: 42 token-only parts, a shop at /library/, and the post-change audit",
+      "current": false,
+      "checkNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "findingTypes": [
+        "actions",
+        "anchor",
+        "clipped",
+        "edge",
+        "ellipsis",
+        "inner-scroll",
+        "label-break",
+        "nested-radius",
+        "overlap",
+        "page-overflow",
+        "partial-row",
+        "row-overflow",
+        "symmetry",
+        "target",
+        "text-edge",
+        "text-left",
+        "under-control",
+        "widow"
+      ],
+      "planted": 20,
+      "caught": 20,
+      "recall": 1.0,
+      "findings": 21,
+      "precision": 0.952,
+      "falseAlarms": 1,
+      "missed": [],
+      "perCheck": {
+        "actions": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "anchor": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "clipped": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "inner-scroll": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "label-break": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "overlap": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "page-overflow": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "partial-row": {
+          "planted": 0,
+          "caught": 0,
+          "falseAlarms": 1
+        },
+        "symmetry": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "target": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "text-edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "text-left": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "under-control": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "widow": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        }
+      },
+      "falseAlarmList": [
+        {
+          "page": "layout/clean-basics.html",
+          "check": "partial-row",
+          "element": "main"
+        }
+      ],
+      "newlyCaught": [],
+      "ownerFeedback": [],
+      "falseAlarmsRemoved": [],
+      "falseAlarmsAdded": [],
+      "note": "Adds check 14."
+    },
+    {
+      "commit": "79201d4",
+      "date": "2026-10-22",
+      "time": "2026-10-22T00:30:48+05:30",
+      "subject": "Site: move to opendesigner.dev, and add an Organization entity",
+      "current": false,
+      "checkNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "findingTypes": [
+        "actions",
+        "anchor",
+        "clipped",
+        "edge",
+        "ellipsis",
+        "inner-scroll",
+        "label-break",
+        "nested-radius",
+        "overlap",
+        "page-overflow",
+        "partial-row",
+        "row-overflow",
+        "symmetry",
+        "target",
+        "text-edge",
+        "text-left",
+        "under-control",
+        "widow"
+      ],
+      "planted": 20,
+      "caught": 20,
+      "recall": 1.0,
+      "findings": 21,
+      "precision": 0.952,
+      "falseAlarms": 1,
+      "missed": [],
+      "perCheck": {
+        "actions": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "anchor": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "clipped": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "inner-scroll": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "label-break": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "overlap": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "page-overflow": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "partial-row": {
+          "planted": 0,
+          "caught": 0,
+          "falseAlarms": 1
+        },
+        "symmetry": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "target": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "text-edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "text-left": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "under-control": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "widow": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        }
+      },
+      "falseAlarmList": [
+        {
+          "page": "layout/clean-basics.html",
+          "check": "partial-row",
+          "element": "main"
+        }
+      ],
+      "newlyCaught": [],
+      "ownerFeedback": [],
+      "falseAlarmsRemoved": [],
+      "falseAlarmsAdded": [],
+      "note": "No change on these fixtures."
+    },
+    {
+      "commit": "932ad40",
+      "date": "2026-10-23",
+      "time": "2026-10-23T15:26:53+05:30",
+      "subject": "Library: every part rebuilt to a craft standard, real photos and fitting portraits; lazy previews; PostHog analytics ready for a key",
+      "current": false,
+      "checkNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "findingTypes": [
+        "actions",
+        "anchor",
+        "clipped",
+        "edge",
+        "ellipsis",
+        "inner-scroll",
+        "label-break",
+        "nested-radius",
+        "overlap",
+        "page-overflow",
+        "partial-row",
+        "row-overflow",
+        "symmetry",
+        "target",
+        "text-edge",
+        "text-left",
+        "under-control",
+        "widow"
+      ],
+      "planted": 20,
+      "caught": 20,
+      "recall": 1.0,
+      "findings": 21,
+      "precision": 0.952,
+      "falseAlarms": 1,
+      "missed": [],
+      "perCheck": {
+        "actions": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "anchor": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "clipped": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "inner-scroll": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "label-break": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "overlap": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "page-overflow": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "partial-row": {
+          "planted": 0,
+          "caught": 0,
+          "falseAlarms": 1
+        },
+        "symmetry": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "target": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "text-edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "text-left": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "under-control": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "widow": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        }
+      },
+      "falseAlarmList": [
+        {
+          "page": "layout/clean-basics.html",
+          "check": "partial-row",
+          "element": "main"
+        }
+      ],
+      "newlyCaught": [],
+      "ownerFeedback": [],
+      "falseAlarmsRemoved": [],
+      "falseAlarmsAdded": [],
+      "note": "No change on these fixtures."
+    },
+    {
+      "commit": "3812bda",
+      "date": "2026-10-24",
+      "time": "2026-10-24T15:46:58+05:30",
+      "subject": "Library cards show the whole part, never a cropped slice",
+      "current": false,
+      "checkNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "findingTypes": [
+        "actions",
+        "anchor",
+        "clipped",
+        "edge",
+        "ellipsis",
+        "inner-scroll",
+        "label-break",
+        "nested-radius",
+        "overlap",
+        "page-overflow",
+        "partial-row",
+        "preview-crop",
+        "row-overflow",
+        "symmetry",
+        "target",
+        "text-edge",
+        "text-left",
+        "under-control",
+        "widow"
+      ],
+      "planted": 20,
+      "caught": 20,
+      "recall": 1.0,
+      "findings": 21,
+      "precision": 0.952,
+      "falseAlarms": 1,
+      "missed": [],
+      "perCheck": {
+        "actions": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "anchor": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "clipped": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "inner-scroll": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "label-break": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "overlap": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "page-overflow": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "partial-row": {
+          "planted": 0,
+          "caught": 0,
+          "falseAlarms": 1
+        },
+        "symmetry": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "target": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "text-edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "text-left": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "under-control": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "widow": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        }
+      },
+      "falseAlarmList": [
+        {
+          "page": "layout/clean-basics.html",
+          "check": "partial-row",
+          "element": "main"
+        }
+      ],
+      "newlyCaught": [],
+      "ownerFeedback": [],
+      "falseAlarmsRemoved": [],
+      "falseAlarmsAdded": [],
+      "note": "Adds check 15."
+    },
+    {
+      "commit": "b27f23d",
+      "date": "2026-10-25",
+      "time": "2026-10-25T01:31:49+05:30",
+      "subject": "Library cards render right in Safari: scale with a transform, measure cards fully drawn, check WebKit too",
+      "current": true,
+      "checkNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "findingTypes": [
+        "actions",
+        "anchor",
+        "clipped",
+        "edge",
+        "ellipsis",
+        "inner-scroll",
+        "label-break",
+        "nested-radius",
+        "overlap",
+        "page-overflow",
+        "partial-row",
+        "preview-crop",
+        "row-overflow",
+        "symmetry",
+        "target",
+        "text-edge",
+        "text-left",
+        "under-control",
+        "widow"
+      ],
+      "planted": 20,
+      "caught": 20,
+      "recall": 1.0,
+      "findings": 21,
+      "precision": 0.952,
+      "falseAlarms": 1,
+      "missed": [],
+      "perCheck": {
+        "actions": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "anchor": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "clipped": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "inner-scroll": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "label-break": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "overlap": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "page-overflow": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "partial-row": {
+          "planted": 0,
+          "caught": 0,
+          "falseAlarms": 1
+        },
+        "symmetry": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "target": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "text-edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "text-left": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "under-control": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "widow": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        }
+      },
+      "falseAlarmList": [
+        {
+          "page": "layout/clean-basics.html",
+          "check": "partial-row",
+          "element": "main"
+        }
+      ],
+      "newlyCaught": [],
+      "ownerFeedback": [],
+      "falseAlarmsRemoved": [],
+      "falseAlarmsAdded": [],
+      "note": "No change on these fixtures."
     }
   ],
   "historyChecker": "site/check_layout.py",

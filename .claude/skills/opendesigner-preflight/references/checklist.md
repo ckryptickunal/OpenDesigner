@@ -83,3 +83,14 @@ Run this on any video, page, deck or image before you call it done. Each line is
 ## Found measuring 73 reels for Instagram (2026-10-26)
 
 49. **Flashing.** `preflight.py video` passes the flash measure on the final file (WCAG 2.2 SC 2.3.1): nothing that changes brightness more than three times in a second covers more than 25% of a 10-degree field, and you aimed for 90% of the limit or less. A video that loops, as reels do, is measured played twice in a row (`ffmpeg -stream_loop 1 -i out.mp4 -c copy twice.mp4`). Nothing flashes in saturated red more than three times a second; the helper does not measure red, so check it by eye. [M50]
+
+## Found by the owner, on a private B2B landing page (2026-11-05)
+
+50. **Tracking.** Capitals are tracked open, never below zero, and tracking tightens as text gets bigger, with about four values in all. Letters split into spans for a reveal sit where the font puts them, within 0.5 px, during and after it. `review.py check` (MS-17), `preflight.py html`. [M51]
+51. **Nothing drawn through text.** With the text hidden, no line art, chart or picture edge shows inside any line box, at any width. `capture.py` text-pixels pass (MS-20). [M52]
+52. **Bars cover nothing for good.** No fixed or floating bar covers text that cannot scroll out from under it: pinned text, the top of the page, the end. `__od.bars()` (CV-08). [M53]
+53. **One alignment per heading.** A heading and the lede, list and buttons under it share one alignment, and centred means within 2 px of the section's centre. Headings stay within two lines at every width. (MS-05, MS-18) [M54]
+54. **States and controls.** No box changes height when a tab, toggle or variant changes, and every control changes something. `capture.py` toggles pass (ST-10, ST-11). [M55]
+55. **Counted against caps.** About 8 font sizes in whole pixels, two typefaces, three weights, three grey text colours, three button styles with one corner shape, one filled primary per screen with a label of 15 px or more, and no font loaded that nothing draws. (MS-02, MS-08, MS-16, MS-19, EN-08) [M56]
+56. **Judged at rest.** Every measurement and screenshot waits until no animation is running (`await __od.settle()`). [M57]
+

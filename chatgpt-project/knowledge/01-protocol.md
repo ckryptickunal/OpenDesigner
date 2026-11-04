@@ -1165,6 +1165,20 @@ An example, for an invented booking app. The opening sentence is the verdict; th
 
 **Step 3** rolls the kept fixes out to the other pages, only after they say yes.
 
+## 6. Every round: the check order
+
+Run this on every draft before you show it, not only when asked (owner review 2026-11-05 row 6). The checks report; you fix.
+
+1. **Settle.** Load the page and `await __od.settle()`, so nothing is judged mid-reveal (TM-01).
+2. **Capture.** `capture.py --url <local url>` at 320, 390, 768, 1024 and 1440 px. Without Playwright, run `probe.js`, `__od.kern()`, `await __od.bars()` and the toggles by hand at the narrowest and widest (`opendesigner-review` SKILL.md section 4).
+3. **Check.** `review.py check opendesigner/review`. Fix every error, then every warning in this order:
+   - text: tracking and kerning (MS-17), headings over two lines (MS-18), art through text and contrast on pixels (MS-20, MS-04);
+   - layout: mixed or off-centre alignment (MS-05), bars covering text (CV-08), boxes that change height (ST-10), controls that change nothing (ST-11);
+   - counts: sizes, typefaces, weights, greys (MS-02, MS-08), primary buttons and button styles (MS-16, MS-19), unused fonts (EN-08).
+4. **Preflight.** `preflight.py html <page>` and the checklist (`opendesigner-preflight`).
+5. **Look.** `review.py sheet --open`, at full size.
+6. **Show.** Before and after, with what was checked and what is still open.
+
 # User research: who the users are, before the defaults
 
 The sketch records what the person says about their users. This step checks it against the world, then ends in a positioning and three directions (sections 8 and 9). You research the group the product is for: who they are, how and where they use it, which apps they already live in, what they expect, what they prefer and what they need to read and use it. The findings are saved with their sources, and each one that touches the design becomes a recommended answer to a question the engine already asks. The person says yes before anything changes.
