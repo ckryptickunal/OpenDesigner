@@ -4252,5 +4252,115 @@ class LandingPageRules(unittest.TestCase):
             self.assertEqual(meta["profile"]["id"], "work-tool")
 
 
+class ProtocolRulesAndTokenUse(unittest.TestCase):
+    """Owner review 2026-11-05 (a private B2B landing page): a protocol in every project, repeated notes kept as rules, and a
+    review that says when the code has left the tokens behind."""
+
+    def test_init_and_sketch_write_the_protocol_once(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="P")
+            fp = os.path.join(d, "PROTOCOL.md")
+            with open(fp, encoding="utf-8") as f:
+                text = f.read()
+            for step in ("1 Discover", "2 Research", "3 System", "4 Structure", "5 Build", "6 Verify"):
+                self.assertIn(step, text)
+            self.assertIn("engine.py review", text)
+            self.assertIn("references/audit.md", text)
+            self.assertNotIn("{{", text)
+            with open(fp, "a", encoding="utf-8") as f:
+                f.write("| 2026-11-05 | Deploy? | At each gate |\n")
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            with open(fp, encoding="utf-8") as f:
+                self.assertIn("Deploy?", f.read())  # kept: never overwritten
+            os.remove(fp)
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            self.assertTrue(os.path.exists(fp))  # a system made before the protocol gets it at the next sketch
+        with open(os.path.join(e.SKILL_ROOT, "assets", "output", "AGENTS-snippet.md"), encoding="utf-8") as f:
+            self.assertIn("opendesigner/PROTOCOL.md` is binding", f.read())
+
+    def test_a_note_said_twice_becomes_a_rule(self):
+        with tempfile.TemporaryDirectory() as t:
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(e.cmd_feedback(t, "Centre every heading", "note")["said"], 1)
+                self.assertEqual(e.cmd_feedback(t, "center the headings", "note")["said"], 2)
+                self.assertEqual(e.cmd_feedback(t, "No full pills on buttons", "note")["id"], "N-02")
+                self.assertEqual(e.cmd_feedback(t, "keep the corners rounded, not pills", "note", same="N-02")["said"], 2)
+                self.assertEqual(e.cmd_feedback(t, "Centre all headings", "note")["said"], 3)
+            text = out.getvalue()
+            self.assertIn("Said twice: N-01 is now a rule", text)
+            self.assertEqual(text.count("draft a GitHub issue"), 1)  # offered once, at the third time, and only offered
+            self.assertNotIn("issues/new", text)
+            notes = e.read_notes(os.path.join(t, "RULES.md"))
+            self.assertEqual([(n["id"], n["said"]) for n in notes], [("N-01", 3), ("N-02", 2)])
+            self.assertFalse(os.path.exists(os.path.join(t, "feedback.md")))  # a note on the work is not OpenDesigner feedback
+            with self.assertRaises(SystemExit):
+                e.cmd_feedback(t, "x", "note", same="N-09")
+            with self.assertRaises(SystemExit):
+                e.cmd_feedback(t, "x", "gap", same="N-01")
+            q = lambda txt, **k: quiet(e.cmd_feedback, t, txt, "note", **k)
+            self.assertEqual(q("Use dark mode")["said"], 1)
+            self.assertEqual(q("Never use dark mode")["said"], 1)      # opposite notes never merge
+            self.assertEqual(q("Make headings bigger")["said"], 1)
+            self.assertEqual(q("Make headings smaller")["said"], 1)
+            self.assertEqual(q("centre every heading", same="new")["said"], 1)
+            self.assertEqual(e.read_notes(os.path.join(t, "RULES.md"))[0]["text"], "Centre every heading")  # first wording kept
+
+    def test_review_says_when_tokens_are_not_in_charge(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="R")
+            quiet(e.cmd_build, d)
+            os.makedirs(os.path.join(t, "site"))
+            css = os.path.join(t, "site", "a.css")
+            with open(css, "w") as f:
+                f.write(".h { color: #ff0000; padding: 12px; }\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d)
+            self.assertIn("Tokens are not in charge", out.getvalue())
+            with open(css, "a") as f:
+                f.write(".ok { color: var(--ds-color-text-primary); }\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            res = json.loads(out.getvalue())
+            self.assertEqual((res["tokenUses"], res["tokens"], res["systemBehind"]), (1, "losing", False))
+            with open(os.path.join(t, "site", "a.html"), "w") as f:
+                f.write('<a class="bg-action-primary text-fg-on-action rounded-control p-inset-md shadow-raised">Go</a>\n')
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            res = json.loads(out.getvalue())
+            self.assertEqual((res["tokenUses"], res["tokens"]), (6, "ok"))  # Tailwind theme classes are tokens at work
+
+    @unittest.skipUnless(__import__("shutil").which("git"), "needs git")
+    def test_review_says_when_the_system_is_behind_the_code(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="G")
+            quiet(e.cmd_build, d)
+            git = lambda *a: subprocess.run(["git", "-c", "user.email=t@t", "-c", "user.name=t", *a], cwd=t, capture_output=True, check=True)
+            git("init", "-q")
+            git("add", "-A")
+            git("commit", "-qm", "system")
+            os.makedirs(os.path.join(t, "site"))
+            for i in range(e.SYSTEM_AGE_COMMITS):
+                with open(os.path.join(t, "site", "a.css"), "a") as f:
+                    f.write(f".x{i} {{ color: var(--ds-color-text-primary); }}\n")
+                git("add", "-A")
+                git("commit", "-qm", f"page {i}")
+            with open(os.path.join(t, "notes.md"), "w") as f:
+                f.write("not code\n")
+            git("add", "-A")
+            git("commit", "-qm", "notes")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d)
+            self.assertIn(f"The system is behind the code: {e.SYSTEM_AGE_COMMITS} commits", out.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)

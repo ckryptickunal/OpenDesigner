@@ -1,6 +1,6 @@
 ---
 name: opendesigner
-description: Design systems, one decision at a time. Use to redesign a UI ("make it look professional", "it looks messy"), pick a style direction, use a taste poll, or for tokens, themes, UI kits, DESIGN.md.
+description: Design systems and the pages built on them, one decision at a time. Use for a landing page, an app or a redesign ("make it look professional"), a style direction, a taste poll, tokens or DESIGN.md.
 license: MIT
 compatibility: Python 3.10+ for scripts (standard library only, no network). Works in text-only hosts; visual steps use HTML templates when the host can show them.
 metadata:
@@ -37,6 +37,15 @@ A person in a hurry still gets a finished page in the first reply. What they don
 | Anything visual is about to be exported or shared (a page, video, deck or card): "is this ready?" | **opendesigner-preflight** |
 | A one-off UI task in a project that already has a system | Follow its DESIGN.md. Don't interview |
 
+**Run these without being asked.** Never wait for the person to name a tool.
+| When | Run |
+|---|---|
+| Before you show a built page | **opendesigner-review** on it |
+| Before anything is shared or deployed | **opendesigner-preflight** |
+| The person names a site or URL as a reference | **opendesigner-extract**: measure the live site. A thumbnail is not enough |
+| You are about to draw line art or illustrations by hand | **opendesigner-illustrate** first |
+| Before you propose colours or directions | Mobbin, when connected, for shipped references (`practices.md` section 2), then `engine.py research plan` |
+
 ## Files in this skill
 | Path | Read it when |
 |---|---|
@@ -70,6 +79,7 @@ A person in a hurry still gets a finished page in the first reply. What they don
    - Run `python3 <skill>/scripts/engine.py detect` first. It only reads: the product's name and what it is, where it runs, a brand colour candidate, the font, dark mode, the project's phase and the stack. Each sketch question it answers becomes one confirm line, not a question (`zoom.md`, level 0). `init` and `sketch` record each reading as `assumed`, with the file it came from.
    - `package.json` tells you the stack (React, React Native and so on). The stack and the platforms decide which house standards apply. The engine reads it at `init` and `sketch` and records it as `raw.stack`. Ask once which framework they use only when no file settles it (`rules.md` section 3).
 2. **Set up.** Run `python3 <skill>/scripts/engine.py init --name "<product or folder name>"`. Here `<skill>` means this skill's folder. The product name from the sketch (`sketch --name`) replaces the folder name later. `init` also applies the house standards (`references/standards.md`) and locks them. Don't ask about them; mention them once, in the first result.
+   - `init` (or `sketch`) writes `opendesigner/PROTOCOL.md`: six steps, each ending at an owner gate, and the checks every round runs. Follow it from step 1. For a built product, step 1 starts with the audit.
 3. **Greet in 3 lines at most** (`rules.md` section 1). There is no mode to choose.
    - If `profile.tracking` in `opendesigner/state.json` is not set, the greeting's one question is the log question from `rules.md` section 11, word for word. It says "on this computer" only when the scripts run on the person's own computer, and "in your project files" in a web chat. Record the answer with `journey.py consent on` or `journey.py consent off`. Then ask the first sketch question.
    - Otherwise, ask the first sketch question straight away.
@@ -125,8 +135,9 @@ python3 <skill>/scripts/engine.py overview [--open]          opendesigner/overvi
 python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html: every token
 python3 <skill>/scripts/engine.py show <template> [--open]   one visual template filled with real values (opendesigner/preview/)
 python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports, DESIGN.md, overview, filled templates and preview only if there are no errors
-python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections
+python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections; code that uses no tokens; a system older than the code
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
+python3 <skill>/scripts/engine.py feedback "<the rule>" --kind note [--same N-01]   the owner's note on the work, counted in opendesigner/RULES.md
 python3 <skill>/scripts/engine.py research plan --brief "<users line>" --tools web-search,browser,last30days   user research: what to find, searches, missing tools
 python3 <skill>/scripts/engine.py research check|add <findings.json> [--accept [--only Q-aud-01,...]]   check, save (research/users.md, PRODUCT.md Users), apply on a yes
 python3 <skill>/scripts/engine.py research status | skip --why "..."
@@ -156,22 +167,24 @@ python3 <skill>/scripts/journey.py share [--dry-run] [--yes]           send the 
 - Sharing an anonymous report with the OpenDesigner team is a separate yes. Ask it once, in the last message of the first session, after the outputs are written. Never ask it in the first message, and never again. Only a clear choice counts: "whatever" or no answer is a no (`rules.md` section 11).
 
 ## Building pages with the system
-Once the system exists, people ask for pages, and then for changes to them. Follow `references/making.md`:
-- Have tokens before the first draft, and take every value from them.
+Once the system exists, people ask for pages, and then for changes to them. Follow `opendesigner/PROTOCOL.md` and `references/making.md`:
+- Have tokens before the first draft, and take every value from them. When `engine.py review` says tokens are not in charge, or the system is behind the code, fix that before the next draft.
+- **Show every round without being asked:** screenshots at desktop and phone (or an artifact), before and after, and each check that ran with its result. Never announce a draft as only a local URL. Nothing is done until the checks ran.
 - **After every implementation, run the post-change audit** (`references/post-change-audit.md`) and fix what it finds before you show anything. Add any new kind of mistake the person points out to it, with how to check it.
 - **The component library is optional.** At the first build, before you design the part, follow `references/library.md`: a novice gets one recommended pick from `library.py suggest`; a designer hears about it only when the library has that part in a style that fits. Ask once, record the answer in `profile.library`, and never add a component without a yes.
 - A note applies to every instance of the same kind, and to nothing else.
 - Show options one at a time, full size, on a review copy of the page (never the live one), with the current version kept as an option.
 - Check the rendered page, in the person's own window, before you show it.
 - When a page stops looking like one page, run the cohesion audit (`assets/output/COHESION-AUDIT.md`) before restyling anything.
-- When the person repeats a note, stop patching: work out what you misread, and record the rule. "More like this one" usually asks for new ideas, not variations: say in one line how you read it (`making.md` section 10).
+- Record every note on the work: `engine.py feedback "<the rule>" --kind note`. Said twice, it is a rule in `opendesigner/RULES.md`. Read that file before every round.
+- When a note repeats, stop patching: work out what you misread. "More like this one" usually asks for new ideas, not variations: say in one line how you read it (`making.md` section 10).
 
 ## DESIGN.md stays alive
 - DESIGN.md is the person's living spec. Once it exists, every `set` and `lock` refreshes it and PRODUCT.md by itself. Run `engine.py design-md` to create it, or after a `--no-doc` change.
 - Each section shows its zoom level (sketch, broad, defined, detailed). Each decision opens with one plain sentence. Text inside `<!-- od:keep -->` blocks survives each refresh.
 - **At the end of any implementation** (a page, a component, a refactor), run `engine.py review`. Then re-read DESIGN.md. Record any new value the work needed as a decision, not as a hard-coded value. `assets/output/AGENTS-snippet.md` tells every later agent to do the same.
 - **Correct is not finished.** Passing `review`, `validate` and every width check means the work is consistent, not that it is good. Before you say a visual change is done:
-  1. Open it for the person (a preview, an artifact or the page), so they never have to ask to see it.
+  1. Show it to the person (screenshots or an artifact, never only a local link), so they never have to ask to see it.
   2. Score it with the quality bar (`references/quality.md`): the floors, then nine lines judged blind against three shipped products that solve the same thing (`making.md` section 5). Any line below 4: fix it now with that line's fix prompt, or ask the person for the input it needs.
   3. Put the scorecard and the three references in your report, or say plainly that you did not compare.
   A work tool used all day earns its look from real data shown well: numbers in tabular figures, small charts where a number has a trend, and the theme its users work in (ask, or follow the product's context; never let the system's dark setting decide).

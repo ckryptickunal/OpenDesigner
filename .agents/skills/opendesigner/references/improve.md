@@ -22,6 +22,8 @@ Don't interrupt the person for this. Record it quietly, and mention it once at t
 5. If they are offline or say no, the notes stay in `opendesigner/feedback.md`, and nothing leaves their machine.
 6. An anonymous report can go with an issue, only with their OK: `journey.py export --anon` writes it (`docs/PRIVACY.md`). Shared reports never go through GitHub issues, because an issue is posted under their account.
 
+**The owner's notes on the work** are not feedback about OpenDesigner. Record each with `engine.py feedback "<the rule>" --kind note`. Said twice, it is a rule in `opendesigner/RULES.md`. At the third time the engine prints one question offering a GitHub issue: ask it once, and file the issue only after a yes, about OpenDesigner, with nothing private.
+
 ## Inside the OpenDesigner repo itself
 You are in the repo when `_coordination/PROTOCOL.md` and `tools/od.py` exist. Then fix the source directly:
 1. Edit the source, never a generated copy.

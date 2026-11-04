@@ -12,6 +12,12 @@ People never pick a mode. Everyone starts with a quick sketch of the whole syste
 ## Level 0: sketch (a few questions, one per message)
 Five answers shape the sketch. Ask only what their words and files don't already tell you.
 
+**A Persuade surface** (a landing page, a marketing site) gets marketing questions, not app ones:
+- Question 2: who it's for, in their words (`context.audience`). Record Q-aud-01 as `large`, assumed.
+- Question 3: the one action a visitor takes, in every voice. Record it as `context.purpose`; the first result confirms it instead of guessing. It runs on the web (Q-plat-01, assumed).
+- After the sketch: the proof they can show, for the brief in `opendesigner/PROTOCOL.md`.
+- Never ask how often people use it, about a light or dark switch, or for a list of components.
+
 **Read the repo first.** Before the first question, run `engine.py detect`. It only reads files, and writes nothing. It reports:
 - the product's name and what it is (`package.json`, the README's first heading and paragraph, the page title);
 - where it runs (Expo or React Native: iPhone and Android; Electron or Tauri: desktop; `ios/`, `android/`, `pubspec.yaml` or an Xcode project; a web framework or HTML pages: web);
@@ -83,7 +89,7 @@ Show what they got, not how it was made. Send one message:
 Never dump settings: no dial numbers, token names, hex lists or file trees unless they ask. Point a plain-voice person to the preview first. If they want to read something, DESIGN.md opens with a short plain summary.
 
 ## The project's phase
-The phase (Q-scope-07) says where the project is now: an idea, being built, close to launch, or live. It decides what comes first after the sketch. "Stage" already means an interview topic in these files, so this is always called the phase.
+The phase (Q-scope-07) says where the project is now: an idea, being built, close to launch, or live. It decides what comes first after the sketch. "Stage" already means an interview topic in these files, so this is always called the phase. The phase decides what each step holds; the six steps in `opendesigner/PROTOCOL.md` still run in order. For a built product, step 1 starts with the audit.
 
 `engine.py detect` reads it from the folder, and `init` and `sketch` record it as `assumed`. An empty folder says nothing: then take it from their words, or ask once with the sketch's first question.
 

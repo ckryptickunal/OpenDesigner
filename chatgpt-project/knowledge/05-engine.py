@@ -5392,6 +5392,26 @@ def cmd_lock(d, path, on=True):
     print(f"{'locked' if on else 'unlocked'} {path}" + (f" and {', '.join(held)}" if held else ""))
 
 
+PROTOCOL_TEMPLATE = os.path.join(SKILL_ROOT, "assets", "output", "PROTOCOL.md")
+
+
+def write_protocol(d, quiet=True):
+    """opendesigner/PROTOCOL.md: the project's six steps with owner gates, and the checks every round runs. Written once
+    from assets/output/PROTOCOL.md; never overwritten, because the agent keeps its gates, brief and answers there."""
+    fp = os.path.join(d, "PROTOCOL.md")
+    if os.path.exists(fp):
+        return None
+    if not os.path.exists(PROTOCOL_TEMPLATE):  # an engine copied on its own (a ChatGPT project): the agent writes it
+        if not quiet:
+            print(f"no PROTOCOL.md template here: write {fp} from the opendesigner skill's assets/output/PROTOCOL.md")
+        return None
+    with open(PROTOCOL_TEMPLATE, encoding="utf-8") as f:
+        write_text(fp, f.read().replace("{{date}}", _dt.date.today().isoformat()))
+    if not quiet:
+        print(f"wrote {fp}: the steps, gates and checks every agent follows here")
+    return fp
+
+
 def cmd_init(d, src=None, name=None, force=False, standards=True, detect=True):
     sp = os.path.join(d, "state.json")
     if os.path.exists(sp) and not force:
@@ -5410,6 +5430,7 @@ def cmd_init(d, src=None, name=None, force=False, standards=True, detect=True):
         log_decision(d, "init", None, "Start of the design system; every default traces to references/levers.json.", "auto_default",
                      title="init" + (f" from {os.path.basename(src)}" if src else " with defaults"))
     print(f"initialized {sp}")
+    write_protocol(d, quiet=False)
     if detect:  # look before you ask: what the repo already answers, each recorded as assumed (detect_project)
         record_project(d, quiet=False)
     if standards:  # house standards (docs/KNOWLEDGE.md 3): applied, locked, said once; nothing when none ship
@@ -5701,7 +5722,7 @@ DETECT_SKIP = {"node_modules", "dist", "build", "out", ".next", ".nuxt", ".svelt
 DETECT_MAX_FILES = 5000  # a whole home folder is never walked: the scan stops here and says so
 DETECT_MAX_DEPTH = 6
 DETECT_MAX_STYLE = 300   # style files read for the brand colour and the font, smallest paths first
-OD_OWN = {"state.json", "decisions.md", "feedback.md", "RATIONALE.md", "standards.md",
+OD_OWN = {"state.json", "decisions.md", "feedback.md", "RATIONALE.md", "standards.md", "PROTOCOL.md", "RULES.md",
           "overview.html", "preview.html", "coverage.md", "assets.json", "tokens", "build", "preview", "journey", "research", "review",
           "taste-indexes", "DESIGN.md", "PRODUCT.md", "DESIGN.md.hand-edited", "PRODUCT.md.hand-edited"}  # what OpenDesigner writes
 CODE_EXT = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".vue", ".svelte", ".astro", ".html", ".htm", ".css", ".scss", ".sass", ".less",
@@ -11792,9 +11813,11 @@ def main(argv=None):
     q.add_argument("--why", required=True, help="the person's own words")
     q = rsub.add_parser("status", parents=[common], help="where the user research stands")
     q.add_argument("--json", action="store_true")
-    p = sub.add_parser("feedback", parents=[common], help="record a gap, bug, confusing step or idea and print an issue link")
+    p = sub.add_parser("feedback", parents=[common], help="record a gap, bug, confusing step or idea (issue link), or the owner's note on the work (--kind note)")
     p.add_argument("text", nargs="?", default="")
-    p.add_argument("--kind", default=None, choices=list(FEEDBACK_KINDS), help="default: idea (confusing with --from-journey)")
+    p.add_argument("--kind", default=None, choices=list(FEEDBACK_KINDS) + ["note"],
+                   help="default: idea (confusing with --from-journey); note: the owner's note on the work, counted in RULES.md")
+    p.add_argument("--same", default=None, help="with --kind note: the earlier note (N-01) this one repeats, or new")
     p.add_argument("--from-journey", dest="from_journey", action="store_true",
                    help="add the hotspots from the journey log: question ids and counts only, never notes")
     p.add_argument("--area", default=None)
@@ -11932,12 +11955,14 @@ def main(argv=None):
     elif a.cmd == "feedback":
         os.makedirs(d, exist_ok=True)
         text = a.text
+        if a.from_journey and a.kind == "note":
+            raise SystemExit("--from-journey adds log hotspots to feedback about OpenDesigner, not to a note.")
         if a.from_journey:
             hot = journey.feedback_text(d) if journey else ""
             if not hot:
                 raise SystemExit("There is no journey log yet, so there are no hotspots to add.")
             text = f"{text} {hot}".strip()
-        cmd_feedback(d, text, a.kind or ("confusing" if a.from_journey else "idea"), area=a.area, question=a.question)
+        cmd_feedback(d, text, a.kind or ("confusing" if a.from_journey else "idea"), area=a.area, question=a.question, same=a.same)
     return 0
 
 
@@ -12664,6 +12689,7 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
         cmd_init(d, name=name, standards=False, detect=False)  # house standards follow the answers; the repo is read after them
     elif name and load_state(d).get("name") != name:
         cmd_set(d, "name", name, "sketch: the product's name", quiet=True, set_by=sb("name"))  # --name wins over init's folder name
+    write_protocol(d, quiet=quiet)  # a system made before PROTOCOL.md existed gets it now
     if audience:
         cmd_set(d, "answers.Q-aud-01", audience, why_of("audience"), quiet=True, set_by=sb("audience"), via="sketch")
         if not (load_state(d).get("context") or {}).get("audience"):
@@ -12909,6 +12935,42 @@ def tw_class_for(path):
     return path
 
 
+def token_use_rx(prefix):
+    """What counts as code using the system: var(--ds-...), the Swift and Compose token types, or an import of a build file."""
+    P, K = prefix.upper(), prefix.capitalize()
+    tw = (r"\b(?:bg|text|border|fill|stroke|ring|outline|divide)-(?:surface|fg|line|icon|overlay|chart|workflow|action|accent|success|"
+          r"warning|danger|info|discovery)-[a-z0-9-]+|\b(?:p[xytblr]?|m[xytblr]?|gap(?:-[xy])?|space-[xy])-(?:inset|stack|inline)-[a-z0-9]+"
+          r"|\brounded-(?:detail|control|container|overlay|person)\b|\bshadow-(?:raised|floating|overlay)\b|\btransition-feedback\b")
+    return re.compile(rf"var\(\s*--{re.escape(prefix)}-|\b{P}\.(?:Colors|Space|Radius|Motion|Type|Elevation)\b|\bLocal{K}Colors\b"
+                      rf"|\b{K}(?:Space|Motion|Radius|Type)\b|opendesigner/build/|{tw}")
+
+
+SYSTEM_AGE_COMMITS = 10  # commits that changed code since the system last changed, before review says the system is behind
+
+
+def system_age(d, project):
+    """{commitsSince, since}: commits that changed the project's code after state.json or DESIGN.md last changed, read from
+    git. None without git, outside a repository, or when the system was never committed."""
+    import subprocess
+
+    def git(*args):
+        try:
+            r = subprocess.run(["git", *args], cwd=project, capture_output=True, text=True, timeout=10)
+        except (OSError, subprocess.SubprocessError):
+            return None
+        return r.stdout.strip() if r.returncode == 0 else None
+    sys_files = [p for p in (os.path.join(d, "state.json"), os.path.join(doc_dir(d), "DESIGN.md")) if os.path.exists(p)]
+    last = git("log", "-1", "--format=%H %cs", "--", *sys_files) if sys_files and git("rev-parse", "--git-dir") else None
+    if not last or git("status", "--porcelain", "--", *sys_files):  # never committed, or changed since the last commit
+        return None
+    sha, since = last.split()
+    code = [f"*{x}" for x in sorted(REVIEW_EXT - {".js", ".ts"})]  # UI files; plain .js and .ts are often servers and tests
+    rel = os.path.relpath(os.path.abspath(d), os.path.abspath(project))
+    skip = [f":(exclude){rel}"] if rel != "." and not rel.startswith("..") else []
+    n = git("rev-list", "--count", f"{sha}..HEAD", "--", *code, *skip)
+    return {"commitsSince": int(n), "since": since} if n and n.isdigit() else None
+
+
 def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     """End-of-implementation check: hard-coded colors, sizes, radii, shadows and durations that bypass tokens (CSS, JSX style
     objects, Tailwind arbitrary values and default scales, SwiftUI, Compose), role-appropriate token suggestions, and stale
@@ -13042,6 +13104,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         return (f"use var({css_var(prefix, 'motion.transition.' + role)}-duration) and its -easing "
                 f"(the {role} transition: {TR_WORDS[role]}; {why})")
     findings, scanned = [], 0
+    tok_rx, token_uses = token_use_rx(prefix), 0
     std_rules = std_review_rules(state)  # house standards followed and project standards that carry a review pattern
     locked_literals = std_locked_literals(state)
     stateroot = os.path.abspath(d)
@@ -13067,6 +13130,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             for i, line in enumerate(lines, 1):
                 if re.search(r"^\s*(//|/\*|\*|<!--)", line) or "od-ignore" in line:
                     continue
+                token_uses += len(tok_rx.findall(line))
                 hits = []  # every standard this line breaks, merged into one finding (R28)
                 for rx, std in std_rules:  # the first match that is not empty, in the first REVIEW_LINE_CAP characters
                     ms_ = next((m_ for m_ in rx.finditer(line[:REVIEW_LINE_CAP]) if m_.end() > m_.start()), None)
@@ -13231,7 +13295,12 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     taste = taste_index(d, state)  # dials that moved away from the person's taste: flagged, never a failure (taste is theirs)
     drift = taste_py.drift(taste, meta["dials"]) if taste else []
     r_errs, r_notes = research_py.review(d, state) if research_py else ([], [])
-    result = {"project": project, "filesScanned": scanned, "counts": by, "findings": findings[:500], "staleSections": stale,
+    hard = sum(1 for f_ in findings if f_["kind"] != "standard")
+    age = system_age(d, project) if scanned else None
+    result = {"project": project, "filesScanned": scanned, "counts": by, "tokenUses": token_uses, "systemAge": age,
+              "tokens": "none" if hard and not token_uses else "losing" if hard > token_uses else "ok",
+              "systemBehind": bool(age and age["commitsSince"] >= SYSTEM_AGE_COMMITS),
+              "findings": findings[:500], "staleSections": stale,
               "missing": missing, "untrue": sorted(set(untrue)), "tasteDrift": drift,
               "research": {"errors": r_errs, "notes": r_notes, "status": (state.get("research") or {}).get("status") or "none"}}
     if as_json:
@@ -13253,6 +13322,16 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             print("  To keep a raw value on purpose, add the comment od-ignore on that line.")
         else:
             print("No hard-coded colors, sizes, radii, shadows or durations found: the code uses the tokens.")
+        if result["tokens"] == "none":
+            print(f"Tokens are not in charge: the code uses none of them (no var(--{prefix}-...)). Import "
+                  "opendesigner/build/css/tokens.css, or the export for your stack, and move these values onto tokens before the next draft.")
+        elif result["tokens"] == "losing":
+            print(f"Tokens are losing: {token_uses} token use{'s' if token_uses != 1 else ''} against {hard} hard-coded values. "
+                  "Move values onto tokens before the next draft.")
+        if result["systemBehind"]:
+            print(f"The system is behind the code: {age['commitsSince']} commits changed code since state.json or DESIGN.md last "
+                  f"changed ({age['since']}). Record what the code decided since (engine.py set, then design-md), or bring the code "
+                  "back to the tokens, before the next draft.")
         if stdf:
             print(f"{len(stdf)} line{'s' if len(stdf) != 1 else ''} break{'s' if len(stdf) == 1 else ''} a standard:")
             for f_ in stdf[:limit]:
@@ -13619,9 +13698,112 @@ FEEDBACK_KINDS = {"gap": "gap", "bug": "bug", "confusing": "confusing", "idea": 
 ISSUES_URL = "https://github.com/ckryptickunal/OpenDesigner/issues/new"
 
 
-def cmd_feedback(d, text, kind="idea", quiet=False, area=None, question=None):
-    """Record feedback locally and print a pre-filled issue link. Nothing is posted: the person decides."""
+NOTE_STOP = frozenset("a all also an and are as at be by do does each every for from in is it its just make must of on or our "
+                      "please should so that the them then this to we with you your".split())
+NOTE_SPELLING = {"center": "centre", "centered": "centred", "centering": "centring", "color": "colour", "colors": "colours",
+                 "gray": "grey", "grays": "greys", "removed": "remove", "removing": "remove", "added": "add", "adding": "add",
+                 "doesnt": "dont"}
+RX_NOTE_ROW = re.compile(r"^\|\s*(N-\d+)\s*\|\s*(.*?)\s*\|\s*(\d+)\s*\|\s*([^|]*?)\s*\|")
+NOTE_MATCH = 0.6  # share of the shorter note's words that must match an earlier note for it to count as a repeat
+NOTE_POLAR = frozenset("no not never dont don without avoid more less bigger smaller larger lighter darker wider narrower add remove"
+                       .split())  # two notes that differ in these say opposite things, so they are never one note
+
+
+def note_words(text):
+    """The words that carry a note's meaning, roughly stemmed, so "Centre every heading" matches "center the headings"."""
+    out = set()
+    for w in re.findall(r"[a-z0-9#]+", text.lower()):
+        w = NOTE_SPELLING.get(w, w)
+        if w in NOTE_STOP or len(w) < 2:
+            continue
+        if w in NOTE_POLAR:
+            out.add(w)
+            continue
+        for suf in ("ings", "ing", "ed", "s"):
+            if w.endswith(suf) and len(w) - len(suf) >= 4:
+                w = w[:-len(suf)]
+                break
+        out.add(w[:-1] if len(w) > 4 and w.endswith("e") else w)
+    return out
+
+
+def read_notes(fp):
+    """[{id, text, said, last}] from opendesigner/RULES.md, in file order."""
+    if not os.path.exists(fp):
+        return []
+    with open(fp, encoding="utf-8") as f:
+        return [{"id": m.group(1), "text": m.group(2), "said": int(m.group(3)), "last": m.group(4)}
+                for m in (RX_NOTE_ROW.match(x.rstrip("\n")) for x in f) if m]
+
+
+def write_rules(fp, notes):
+    def table(rows, head):
+        return f"| # | {head} | Said | Last |\n|---|---|---|---|\n" + "".join(
+            f"| {n['id']} | {n['text']} | {n['said']} | {n['last']} |\n" for n in rows)
+    write_text(fp, "# Rules\n\nThe owner's notes on this project, from `engine.py feedback --kind note`. Read this before every round. "
+                   "A note said twice is a rule: apply it everywhere, in every later round. Edit rows in place; text outside the "
+                   "tables is not kept.\n\n"
+                   "## Rules (said twice or more)\n" + table([n for n in notes if n["said"] >= 2], "Rule") +
+                   "\n## Notes (said once)\n" + table([n for n in notes if n["said"] < 2], "Note"))
+
+
+def record_note(d, text, same=None, quiet=False):
+    """An owner's note on the work, counted. A repeat (same words, or --same N-xx) adds to the earlier note: said twice it is a
+    rule in RULES.md; at three times the agent offers a GitHub issue, which needs the person's yes."""
+    fp = os.path.join(d, "RULES.md")
+    notes, today = read_notes(fp), _dt.date.today().isoformat()
+    text = text.replace("|", "/")
+    if same and same.lower() == "new":
+        hit = None
+    elif same:
+        hit = next((n for n in notes if n["id"] == same.upper()), None)
+        if not hit:
+            raise SystemExit(f"{same} is not in {fp}. Nothing was written.")
+    else:
+        mine = note_words(text)
+
+        def score(n):
+            theirs = note_words(n["text"])
+            both = len(mine & theirs)
+            if not both or (mine & NOTE_POLAR) != (theirs & NOTE_POLAR):
+                return 0
+            return both / min(len(mine), len(theirs))
+        best = max(notes, key=score, default=None)
+        hit = best if best and score(best) >= NOTE_MATCH else None
+    if hit:  # the earlier wording stays; edit the row in RULES.md to restate the rule
+        hit.update(said=hit["said"] + 1, last=today)
+    else:
+        hit = {"id": f"N-{max([int(n['id'][2:]) for n in notes] + [0]) + 1:02d}", "text": text, "said": 1, "last": today}
+        notes.append(hit)
+    write_rules(fp, notes)
+    if not quiet:
+        nid, n = hit["id"], hit["said"]
+        if n == 1:
+            print(f"Noted as {nid} in {fp}. Apply it to every instance of the same kind.")
+        else:
+            print(f"Counted as a repeat of {nid}: \"{hit['text']}\". Wrong match? Edit {fp}, then run again with --same new.")
+        if n == 2:
+            print(f"Said twice: {nid} is now a rule in {fp}. Apply it in every later round. If it fixes a value or a pattern, "
+                  f"also lock it: engine.py standard add --rule {shlex.quote(hit['text'])} --why \"said twice\" "
+                  f"--source \"person, {today}\" ...")
+        elif n > 2:
+            print(f"Said {n} times: {nid}. Write a check that finds every case, and run it before every showing.")
+        if n == 3:
+            print("Ask once: \"Want me to draft a GitHub issue so OpenDesigner keeps notes like this?\" After a yes: "
+                  "engine.py feedback \"<the rule, about OpenDesigner, nothing private>\" --kind gap")
+    return hit
+
+
+def cmd_feedback(d, text, kind="idea", quiet=False, area=None, question=None, same=None):
+    """Record feedback locally and print a pre-filled issue link. Nothing is posted: the person decides. kind note is the
+    owner's note on the work: counted in RULES.md (record_note), with no link."""
     from urllib.parse import quote
+    if same and kind != "note":
+        raise SystemExit("--same goes with --kind note.")
+    if kind == "note":
+        if not " ".join(str(text).split()):
+            raise SystemExit("Add the note, in quotes: the rule in one line.")
+        return record_note(d, " ".join(str(text).split()), same=same, quiet=quiet)
     if kind not in FEEDBACK_KINDS:
         raise SystemExit(f"--kind must be one of {', '.join(FEEDBACK_KINDS)}")
     text = " ".join(str(text).split())
