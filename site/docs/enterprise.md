@@ -117,7 +117,7 @@ Questions, gaps and results from a pilot are the most useful thing you can send 
 
 - **No team pilots or watched user trials.** The usability tests so far were role-played by AI testers.
 - **No hosted service, accounts or SSO.** Access control is whatever your repository host gives you.
-- **No CI runs and no tagged release.** Version 0.1.0 is planned. No test pass in each AI tool is recorded yet.
+- **No CI runs.** Version 0.2.0 is the first tagged release (5 November 2026). No test pass in each AI tool is recorded yet.
 - **A small component set.** Only buttons, a text field and a card are previewed. The overview lists 25 components as planned.
 - **No React Native or Flutter export, and no translations.**
 

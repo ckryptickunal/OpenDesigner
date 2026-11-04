@@ -4,7 +4,7 @@ description: Checks anything visual before export or sharing (a video, page, dec
 license: MIT
 compatibility: Python 3.10+ (standard library, no network) for the helper. ffmpeg and ffprobe for the video, frame and audio checks.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 

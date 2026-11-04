@@ -4,12 +4,17 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 <!-- Every push that changes what people get adds one entry per change: `- **Short title** (YYYY-MM-DD). One to three plain sentences.` The date is the day it lands on main, and the website's changelog uses it. Keep each entry under 400 characters; put the full story in the commit or pull request. `python3 tools/changelog_check.py` checks the format. -->
 
-## [Unreleased]: planned as 0.1.0
+## [Unreleased]
 
-The first public version: the research base, the synthesis that turns it into an interview, and the first skills, engine and host packaging.
+Nothing yet.
+
+## [0.2.0]: 2026-11-05
+
+The first tagged release: the research base, the synthesis that turns it into an interview, eight skills, the engine and host packaging. Copies installed before it report 0.1.0; update to get everything below.
 
 ### Added
 
+- **A shorter README and home page that claim only what ships** (2026-11-05). Two ways in (fix what you built, build a system), what happens every round, and the status. Supporting paragraphs under the home page headings are gone, and the library count says 82.
 - **The research steps in the main flow** (2026-11-05). `engine.py research market`, `positioning` and `directions` run the competitor table, the positioning and the direction board, and the skill asks for them before any colour. PRODUCT.md gains its own Positioning section. `OD:direction` records a pick. An AI-made photo is named to the person, never captioned on the page.
 - **Landing pages get room and a hero** (2026-11-05). A marketing page now gets spacious spacing, 48 to 56px buttons and its own fluid display scale, 96 to 120px for the hero. Capitals never take negative tracking, text keeps three greys, and the system writes one container, columns, gutters and a reading measure.
 - **A button shape you choose holds** (2026-11-05). Feel words no longer make buttons square or pill; those are choices. A chosen shape is stored as the exact radius and locked, and typed values such as "6px", "400/500" or "major third" are stored as values. Each page's caps (8 sizes, 3 weights, 2 families) are written down for the review to check.

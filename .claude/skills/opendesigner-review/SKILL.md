@@ -4,7 +4,7 @@ description: Checks a built UI like a careful user would: every screen size and 
 license: MIT
 compatibility: Python 3.10+ (standard library) for the helper. A browser the agent can drive (Playwright, Chrome DevTools MCP, Claude in Chrome, the in-app browser) for the capture. capture.py also needs Playwright for Python, which the skill never installs on its own.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 

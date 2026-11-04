@@ -4,7 +4,7 @@ description: Changes or extends an existing OpenDesigner design system safely. R
 license: MIT
 compatibility: Python 3.10+ (standard library). Needs the opendesigner skill's engine for generate and validate.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 

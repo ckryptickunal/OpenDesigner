@@ -1,10 +1,10 @@
 ---
 name: opendesigner-illustrate
-description: Finds open-licence SVG illustrations for empty states, onboarding, errors or heroes, ranks them, recolors them to the design tokens and wires them in. Also finds licensed stock photos, screened for brand marks.
+description: Finds open-licence illustrations for empty states, onboarding, errors or heroes, recolors them to the design tokens and wires them in. Also finds licensed stock photos without brand marks.
 license: MIT
 compatibility: Python 3.10+ (standard library). Search and fetch need HTTPS access. A browser or image view helps you judge candidates; web search finds more sources.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 

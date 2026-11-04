@@ -82,7 +82,7 @@ import webbrowser
 ENGINE_VERSION = "1.0.0"
 # The OpenDesigner release this copy belongs to, stamped into each system's state.json. tools/build_dist.py fails when it
 # differs from the version in plugin.json and .claude-plugin/plugin.json.
-OPENDESIGNER_VERSION = "0.1.0"
+OPENDESIGNER_VERSION = "0.2.0"
 CHANGELOG_URL = "https://github.com/ckryptickunal/OpenDesigner/blob/main/CHANGELOG.md"
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL_ROOT = os.path.dirname(HERE)
