@@ -608,8 +608,10 @@ class DirectionsProject(Project):
         self.assertEqual((st["colors"]["ground"], st["colors"]["accent"]), ("#CFE3DA", "#B4361F"))
         self.assertEqual(json.loads(dest.read_text())["chosen"]["id"], "A")
         run(self.d, "design-md")
-        self.assertIn("Positioning (confirmed", self.product())
-        self.assertIn("Direction A, Kitchen table", self.product())
+        users, positioning = self.product().split("## Users", 1)[1].split("## Positioning", 1)
+        self.assertNotIn("Direction A", users)                                    # its own section, not inside Users
+        self.assertIn("Confirmed ", positioning)
+        self.assertIn("Direction A, Kitchen table", positioning)
 
 
 class PhotoGrades(unittest.TestCase):

@@ -4361,6 +4361,22 @@ class ProtocolRulesAndTokenUse(unittest.TestCase):
                 e.cmd_review(d)
             self.assertIn(f"The system is behind the code: {e.SYSTEM_AGE_COMMITS} commits", out.getvalue())
 
+    def test_research_steps_pass_through_and_positioning_has_its_own_section(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            quiet(e.cmd_design_md, d)
+            with open(os.path.join(t, "PRODUCT.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("## Positioning\n\nNot enough information", text)
+            self.assertLess(text.index("## Market"), text.index("## Positioning"))
+            with self.assertRaisesRegex(SystemExit, "research/users.json"):     # research.py answers: no findings yet
+                quiet(e.main, ["research", "market", "--dir", d])
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(e.main(["research", "positioning", "show", "--dir", d]), 0)
+            self.assertIn("No positioning yet", out.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=1)

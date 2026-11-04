@@ -8,7 +8,7 @@ Show what the gate names, get the owner's yes, tick the box with the date, then 
 | Step | Do | Show at the gate | Gate |
 |---|---|---|---|
 | 1 Discover | Read the repo and the owner's documents. Fill in the brief (below). A built product starts with the audit | The brief | [ ] |
-| 2 Research | Shipped references for each section (Mobbin when connected; live sites measured with opendesigner-extract). The users (`engine.py research plan`) | A board of samples to pick from, and what to take or leave from each | [ ] |
+| 2 Research | Shipped references for each section (Mobbin when connected; live sites measured with opendesigner-extract). The users and the market (`engine.py research plan`, `research market`) | The competitor table, the positioning the owner confirmed, and the direction board (`research directions board`) | [ ] |
 | 3 System | The OpenDesigner sketch (it may come earlier, as a draft), then the areas that matter. `engine.py build` | The overview, as screenshots or an artifact | [ ] |
 | 4 Structure | Pages, section order, the parts each needs, grey wireframes built from tokens | Wireframes at desktop and phone | [ ] |
 | 5 Build | Parts first, then pages. Every value from `opendesigner/build/` | Every round (below) | [ ] |

@@ -34,7 +34,7 @@ A person in a hurry still gets a finished page in the first reply. What they don
 | Before anything is shared or deployed | **opendesigner-preflight** |
 | The person names a site or URL as a reference | **opendesigner-extract**: measure the live site. A thumbnail is not enough |
 | You are about to draw line art or illustrations by hand | **opendesigner-illustrate** first |
-| Before you propose colours or directions | Mobbin, when connected, for shipped references (`practices.md` section 2), then `engine.py research plan` |
+| Before you propose colours or directions | Mobbin, when connected, for shipped references (`practices.md` section 2). Then `engine.py research market` and a positioning the person confirms (`research.md` section 8) |
 
 ## Files in this skill
 | Path | Read it when |
@@ -79,9 +79,10 @@ A person in a hurry still gets a finished page in the first reply. What they don
 Details are in `references/zoom.md`.
 - **Level 0, sketch:** up to 5 questions, one per message, fewer when their words already answer some. Then `engine.py sketch ...` records the answers and builds a complete first version. Show the first result: a plain line on what they got, the overview (`opendesigner/overview.html`), and one clear next step (`zoom.md`, "The first result").
 - **People in a hurry** ("just pick") get the sketch with `--delegated` and no optional questions. People who talk in plain words get fewer questions (`zoom.md`).
-- **User research** (about 10 minutes, you do it): right after the first result, offer to research who the users are, in one message with the plan (`references/research.md`). After one yes, run it on your own, save the findings with `engine.py research add`, and ask before applying what they recommend. The engine reminds you after each `sketch` and `build` until it is done or skipped (`engine.py research skip --why "..."`).
+- **User research** (about 10 minutes, you do it): right after the first result, offer to research who the users are, in one message with the plan (`references/research.md`). After one yes, run it on your own, save the findings with `engine.py research add`, and ask before applying what they recommend. The engine reminds you after each `sketch` and `build` until it is done or skipped (`engine.py research skip --why "..."`). Then, before any colour or direction: the competitor table, the positioning they confirm, and three directions on the board (`research.md` sections 8 and 9).
 - **The taste poll** (optional, about 5 minutes): the person rates 20 to 30 real screens from shipped products, and the result recommends the eight dials. Offer it when they can't put their taste into words ("I'll know it when I see it"), before level 1, or whenever they ask. It never replaces a question they already answered (`references/taste.md`).
 - **The taste index** (`taste.py index`) merges every taste signal in this project. Offer the dials it is sure about as "confirm this?", ask the rest directly, and leave out an option past one of its red lines (unless every option is: then show them all and say which line). The engine's option gallery and `engine.py review` already use it (`references/taste.md`, "The taste index").
+- **Three directions for the project** come after the positioning, on the direction board (`engine.py research directions board`, `research.md` section 9). The option gallery below is for the style (Q-dir-01).
 - **Style directions come from the option gallery first.** When someone asks which directions they can pick, or which you would choose, run `engine.py show option-gallery --json` (or open the page where the host can show it) and answer from it: its options in its order, its recommendation, and its subtitle, which says which directions taste left out or which red line each crosses. Repeat those lines in your answer. Go to the catalogue (`engine.py style search <words>`, `style list`, `style show <id>`) only when they want more choices or name a look of their own; it prints each style's fit and marks any past a red line. Never name a style direction without its fit: for one you thought of yourself, run `taste.py fit` first.
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
@@ -104,7 +105,7 @@ Use the best surface the host supports, and say which one you use. Never block o
 
 **The overview** (`opendesigner/overview.html`, rebuilt by every `build`) is the person's own design-system page: cover, brand book, colors per theme, headings h1 to h6, spacing, corners, depth, motion, components, brand assets and how it grew. Each area says Chosen, Picked for you or Default, and anything only a person can give (a logo, a voice guide, what the product is for) shows as **Not enough information**, with the question that fills it. Show it after the sketch and after each zoom. In Claude Code, also offer to keep it as a Design System artifact: `build` writes its files to `opendesigner/build/artifact/project/`; create one with the Artifact tool (quickstart, the Design System type) and publish that folder as its `root`, uploading the logo files the README lists. Republish after later builds.
 
-Templates: `palette` (color, light and dark), `type-scale` (text), `spacing-ruler` (spacing and density), `radius` (corners), `elevation` (depth), `motion`, `component-sheet` (components and states), `option-gallery` (3 to 8 directions side by side). `engine.py show <template>` fills one with real values, plus what-if options for its question, without changing any choice. It writes `opendesigner/preview/<template>.html` (`--open` opens it); `build` refreshes all of them, so the person always sees their own system, never sample data. Never fill a template with invented values.
+Templates: `palette` (color, light and dark), `type-scale` (text), `spacing-ruler` (spacing and density), `radius` (corners), `elevation` (depth), `motion`, `component-sheet` (components and states), `option-gallery` (3 to 8 directions side by side), `direction-board` (the project's three directions, with photos; `engine.py research directions board` fills it). `engine.py show <template>` fills one with real values, plus what-if options for its question, without changing any choice. It writes `opendesigner/preview/<template>.html` (`--open` opens it); `build` refreshes all of them, so the person always sees their own system, never sample data. Never fill a template with invented values.
 
 Each template has a **Copy my choice** button that produces `OD:` lines. When the person pastes them back, run each line with the engine (`rules.md` section 9) and confirm in one sentence. Record how each answer was set with `--set-by` (`rules.md` section 5).
 
@@ -131,6 +132,9 @@ python3 <skill>/scripts/engine.py feedback "<the rule>" --kind note [--same N-01
 python3 <skill>/scripts/engine.py research plan --brief "<users line>" --tools web-search,browser,last30days   user research: what to find, searches, missing tools
 python3 <skill>/scripts/engine.py research check|add <findings.json> [--accept [--only Q-aud-01,...]]   check, save (research/users.md, PRODUCT.md Users), apply on a yes
 python3 <skill>/scripts/engine.py research status | skip --why "..."
+python3 <skill>/scripts/engine.py research market [--json]                     the competitor table and benchmark: show it before any colour
+python3 <skill>/scripts/engine.py research positioning draft | confirm --proof "..." [--for --problem --claim] | show
+python3 <skill>/scripts/engine.py research directions check | board [--open] | pick <id> [--remix <axis>=<id>] --why "..."
 python3 <skill>/scripts/engine.py standards [--update]       house and project standards; --update applies newer house standards (overrides stay)
 python3 <skill>/scripts/engine.py standard override <id> --why "<their words>" [--path P [--value <json>]]...   only when the person explicitly asks; --path releases only that value, without it every value the standard sets
 python3 <skill>/scripts/engine.py standard restore <id> [--why "..."]      undo an override
@@ -318,7 +322,7 @@ The phase (Q-scope-07) says where the project is now: an idea, being built, clos
 - If they correct the phase, record their answer: `engine.py pick Q-scope-07 near-launch --why "<their words>"`.
 
 ## Level 1: broad (one screen per foundation)
-Go in this order, with the listed templates:
+After the research, open with the competitor table and the confirmed positioning, then the three directions on the direction board (`research.md` sections 8 and 9). The pick is a starting point for these screens. Then go in this order, with the listed templates:
 - Q-dir-01, style (`option-gallery`)
 - Q-dir-02, how much fits on a screen (`spacing-ruler`)
 - Q-color-02, where the brand color shows (`palette`)
@@ -333,7 +337,7 @@ Each screen is one message with one question. The person can say "skip", and the
 ## Levels 2 and 3: one area at a time
 There are 14 areas: overview, accessibility, platforms, modes, color, typography, layout, shape, elevation, motion, iconography, content, components and delivery. Their plain names are in `pacing.json`. The ids match the engine's, except `delivery`: the engine does not track its zoom level.
 1. Zooming into an area asks its skipped lower-level questions first (for Color after the sketch: Q-color-02 from level 1).
-2. Open the area's stage files. Ask its level-2 questions in stage order. Skip any marked **Planned** (not built yet) or **Settled by: STD-...** (a standard already locked the answer), and never recommend an option marked **(breaks STD-...)**. Then run `engine.py build` and show the change.
+2. Color opens with the competitor table when one exists (`engine.py research market`). Open the area's stage files. Ask its level-2 questions in stage order. Skip any marked **Planned** (not built yet) or **Settled by: STD-...** (a standard already locked the answer), and never recommend an option marked **(breaks STD-...)**. Then run `engine.py build` and show the change.
 3. **Plain voice: ask fewer.** When the plain voice leads, ask only three kinds of question: weight `high`, asset hooks, and owner inputs (block class I). Also ask a `medium` question when their words or assets make it matter: a logo with two colors makes Q-color-04 matter. The rest keep their defaults (`auto_default`: nothing to run). Name them in one line of the level summary, like "I also picked the grays and hover colors for you." They can say "ask me everything".
 4. Sometimes `pick` says an answer shapes DESIGN.md rules, not tokens. Then say it is saved as a rule, so they don't expect the preview to change.
 5. Record the level: `engine.py set zoom.color '"defined"'` (level names: `sketch`, `broad`, `defined`, `detailed`). The engine also infers the level from the decisions made in an area.
@@ -473,11 +477,12 @@ One line per decision. A line looks the same whether it comes from a template bu
 | `OD:lock <path>` / `OD:unlock <path>` | `engine.py lock <path>` / `engine.py unlock <path>`. Unlock only with consent |
 | `OD:accept <ref-id>:<path>` | `engine.py set <path> <value> --set-by reference --source-ref <ref-id>`, for a value pre-filled from a reference |
 | `OD:ignore <ref-id>:<path>` | Nothing: the pre-filled value is dropped |
-| `OD:remix <dimension>=<option-value>` | Option gallery only: take that dimension (color, type, shape or depth) from the named option, and `set` its values |
+| `OD:remix <dimension>=<option-value>` | Option gallery: take that dimension (color, type, shape or depth) from the named option, and `set` its values. Direction board: add `--remix <axis>=<id>` to the `OD:direction` line's command |
+| `OD:direction <id> [--why "reason"]` | `engine.py research directions pick <id> [--remix <axis>=<id>]... --why "reason"` (`research.md` section 9) |
 
 - Values are JSON: strings in double quotes (`"subtle"`, `"#167874"`), numbers bare (`45`). The engine also accepts a bare word.
 - Parse defensively. Ignore text outside `OD:` lines, and apply lines in order. If a value is not a listed option, confirm it as a custom value before recording it.
-- Examples: `OD:set Q-depth-01="ring-shadow"` · `OD:set dials.roundness=65 --why "a bit softer"` · `OD:lock raw.brandColor` · `OD:remix color="soft"`.
+- Examples: `OD:set Q-depth-01="ring-shadow"` · `OD:set dials.roundness=65 --why "a bit softer"` · `OD:lock raw.brandColor` · `OD:remix color="soft"` · `OD:direction "A" --why "calm, like our office"`.
 
 ## 10. Avoiding the generic AI look
 Vendors and NN/g have documented that AI-made interfaces converge on the same few looks (L17 finding 4). Flag it once when a choice lands there. Don't ban anything.
@@ -743,7 +748,7 @@ The **Ask** and **Question** columns are what you say to the person, in plain wo
 | `H-favicon` (with the logo) | Asked with the logo | Master SVG | Generated from the symbol: favicon.ico 32, icon.svg with dark-mode query, apple-touch 180, manifest 192/512 + maskable |
 | `H-icons` (Q-icon-01) | Do you have your own icons, or icons that free icon sets don't have? | SVG on the library grid, SF Symbol templates, Android vector drawables | Lucide, Phosphor, Tabler, Heroicons, Material Symbols (keep notices); custom icons on the 24 px keyline; commission pictograms |
 | `H-illus` (Q-img-04) | Do you have illustrations, or a drawing style or character? | Master SVG, Lottie for animation | Commission; open sets with their exact terms (the **opendesigner-illustrate** skill finds, recolors and applies them with a licence ledger); AI vector tools with plan terms; original art painted in code (**opendesigner-paint**); or no illustration and honest text empty states |
-| `H-photo` (Q-img-01) | Do you have photos, or a photo style to follow? | Highest-resolution originals | Commission; Unsplash or Pexels under their licences; AI images with ownership caveats and synthetic-media marking |
+| `H-photo` (Q-img-01) | Do you have photos, or a photo style to follow? | Highest-resolution originals | Commission; Unsplash or Pexels under their licences (opendesigner-illustrate, `illustrate.py photos`); an AI image: tell the person once, keep the file's own provenance data, never caption it "AI generated" on the page |
 | `H-type` (Q-type-02) | Do you have a brand font? Does its licence cover websites, apps and hosting the files yourself? | OTF/TTF masters, WOFF2 for web | Google Fonts (OFL/Apache, self-host OK); Fontshare (no subsetting or conversion, not offerable in a design tool's picker); Adobe Fonts (web embed only, no self-hosting or app embedding); buy the needed licences |
 | `H-color` (Q-color-01) | Do you have brand colors that must match exactly? | Hex, RGB, OKLCH, Pantone refs, Figma variables | Candidates from the logo or brand book; otherwise seeds from the personality dials, labelled a starting point |
 | `H-motion` (Q-img-06) | Do you have any animation: a moving logo, loading animations, animated drawings or 3D? | Lottie / dotLottie, Rive, glTF/GLB, USDZ | Commission a motion designer; a film or loop painted in code in the brand palette (**opendesigner-paint**, with the person's OK for its npm and Chromium installs); otherwise motion tokens only, no signature animation |
@@ -1543,7 +1548,7 @@ Show what the gate names, get the owner's yes, tick the box with the date, then 
 | Step | Do | Show at the gate | Gate |
 |---|---|---|---|
 | 1 Discover | Read the repo and the owner's documents. Fill in the brief (below). A built product starts with the audit | The brief | [ ] |
-| 2 Research | Shipped references for each section (Mobbin when connected; live sites measured with opendesigner-extract). The users (`engine.py research plan`) | A board of samples to pick from, and what to take or leave from each | [ ] |
+| 2 Research | Shipped references for each section (Mobbin when connected; live sites measured with opendesigner-extract). The users and the market (`engine.py research plan`, `research market`) | The competitor table, the positioning the owner confirmed, and the direction board (`research directions board`) | [ ] |
 | 3 System | The OpenDesigner sketch (it may come earlier, as a draft), then the areas that matter. `engine.py build` | The overview, as screenshots or an artifact | [ ] |
 | 4 Structure | Pages, section order, the parts each needs, grey wireframes built from tokens | Wireframes at desktop and phone | [ ] |
 | 5 Build | Parts first, then pages. Every value from `opendesigner/build/` | Every round (below) | [ ] |

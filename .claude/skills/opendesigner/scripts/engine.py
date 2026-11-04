@@ -10545,6 +10545,17 @@ def market_md(state, decs=None):
     return "\n".join(lines)
 
 
+def positioning_md(state):
+    """PRODUCT.md, Positioning: the four lines the person confirmed and the direction they picked (research.md sections 8 and 9).
+    A draft is not shown: only the person's yes makes it a positioning."""
+    r = research_py.summary(state) if research_py else {}
+    p, dr = r.get("positioning") or {}, r.get("direction") or {}
+    lines = ([f"Confirmed {p['confirmed']}.", ""] + [f"- {x}" for x in research_py.positioning_lines(p)]) if p.get("confirmed") else []
+    if dr.get("id"):
+        lines += ["", f"Direction {dr['id']}, {dr.get('name')} (chosen {dr.get('date')}): `opendesigner/{research_py.BOARD}`."]
+    return "\n".join(lines).strip() or f"{NOT_ENOUGH}. The positioning step fills this in: engine.py research positioning draft."
+
+
 def render_product_md(state, existing="", decs=None):
     ctx = state.get("context") or {}
     keeps = _keep_blocks(existing)
@@ -10566,8 +10577,9 @@ def render_product_md(state, existing="", decs=None):
     aw = audience_words(state)
     out.append(sec("Audience", (aw[:1].upper() + aw[1:] + ("" if aw.endswith(".") else ".")) if aw else "Not recorded yet (Q-aud-01)."))
     if research_py:
-        out.append(sec("Users", research_py.product_section(state)))
+        out.append(sec("Users", research_py._users_section(research_py.summary(state))))
     out.append(sec("Market", market_md(state, decs)))
+    out.append(sec("Positioning", positioning_md(state)))
     out.append(sec("Surfaces", "\n".join(f"- {s.get('name')}: {s.get('mode')} mode" + (f" ({surface_rule(s, 'set by the Density dial')})" if surface_rule(s, "") else "")
                                          if isinstance(s, dict) else f"- {s}" for s in surf)
                    or surface_words(state)
@@ -11813,6 +11825,14 @@ def main(argv=None):
     q.add_argument("--why", required=True, help="the person's own words")
     q = rsub.add_parser("status", parents=[common], help="where the user research stands")
     q.add_argument("--json", action="store_true")
+    # research.md sections 8 and 9 run in research.py; these pass their words through unchanged
+    q = rsub.add_parser("market", parents=[common], help="the competitor table and the benchmark: show it before any colour")
+    q.add_argument("--json", action="store_true")
+    for name, subs, what in (("positioning", ("draft", "confirm", "show"), "draft the positioning, confirm it with the person, or show it"),
+                             ("directions", ("check", "board", "pick"), "check the three directions, write their board, or record the pick")):
+        q = rsub.add_parser(name, parents=[common], help=what)
+        q.add_argument("sub", choices=subs)
+        q.add_argument("rest", nargs=argparse.REMAINDER, help="passed to research.py as they are")
     p = sub.add_parser("feedback", parents=[common], help="record a gap, bug, confusing step or idea (issue link), or the owner's note on the work (--kind note)")
     p.add_argument("text", nargs="?", default="")
     p.add_argument("--kind", default=None, choices=list(FEEDBACK_KINDS) + ["note"],
@@ -11942,6 +11962,11 @@ def main(argv=None):
             raise SystemExit("research.py is missing next to engine.py, so user research is not available in this copy.")
         if a.action == "check":  # a findings file can be checked before any system exists
             return research_py.check(a.file, a.json)
+        rest = list(getattr(a, "rest", []))
+        while "--dir" in rest[:-1]:  # --dir after the sub-word lands in rest; it is the engine's option, not research.py's
+            i = rest.index("--dir")
+            d = rest[i + 1]
+            del rest[i:i + 2]
         if not os.path.exists(os.path.join(d, STATE_FILE)):
             raise SystemExit(f"no state at {os.path.join(d, STATE_FILE)}; run the sketch first (engine.py sketch ...).")
         if a.action == "plan":
@@ -11952,6 +11977,10 @@ def main(argv=None):
             return research_py.skip(sys.modules[__name__], d, a.why)
         elif a.action == "status":
             return research_py.status(d, merge_defaults(load_state(d)), a.json)
+        elif a.action == "market":
+            return research_py.main(["--dir", d, "market"] + (["--json"] if a.json else []))
+        else:
+            return research_py.main(["--dir", d, a.action, a.sub, *rest])
     elif a.cmd == "feedback":
         os.makedirs(d, exist_ok=True)
         text = a.text

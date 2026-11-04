@@ -520,7 +520,7 @@ DESIGN.md is the readable view that later sessions and other models read first. 
 
 ### 7.3 PRODUCT.md
 
-Product truth kept apart from the visual system, because it has different readers and changes at a different rate (L17 A3 [S-L17-020]). Generated from `state.json` with the same keep-block and hash rules as DESIGN.md. Headings, in order: `## Product`, `## Audience`, `## Surfaces` (each with its Persuade, Operate, Read or Experience mode), `## Memorable Thing`, `## Principles` (ranked, with the tie-break rule), `## Constraints` (accessibility target, platforms, OS floors, legal or brand limits), `## Scope` (in and explicitly out, DC-L11-02), `## Team and Governance`. An existing PRODUCT.md is read as prior answers in P0 and rewritten into this shape only with consent [inferred].
+Product truth kept apart from the visual system, because it has different readers and changes at a different rate (L17 A3 [S-L17-020]). Generated from `state.json` with the same keep-block and hash rules as DESIGN.md. Headings, in order: `## Product`, `## Purpose and goals`, `## Phase`, `## Audience`, `## Users` (the user research), `## Market`, `## Positioning` (the four lines the person confirmed, and the direction they picked), `## Surfaces` (each with its Persuade, Operate, Read or Experience mode), `## Memorable Thing`, `## Principles` (ranked, with the tie-break rule), `## Constraints` (accessibility target, platforms, OS floors, legal or brand limits), `## Scope` (in and explicitly out, DC-L11-02), `## Team and Governance`. An existing PRODUCT.md is read as prior answers in P0 and rewritten into this shape only with consent [inferred].
 
 ### 7.4 DTCG 2025.10 tokens and the Resolver
 
