@@ -322,7 +322,7 @@ class Directory(unittest.TestCase):
                 self.assertTrue(set(s["kind"]) <= set(il.KINDS), s["kind"])
                 self.assertTrue(s["licence_url"].startswith("https://"))
                 if s["access"] == "api":
-                    self.assertIn(s["id"], il.CONNECTORS)
+                    self.assertTrue(s["id"] in il.CONNECTORS or s["id"] in il.PHOTO_CONNECTORS, s["id"])
                 else:
                     self.assertTrue(s.get("search_url"), "people need a link to start from")
                     self.assertTrue(s.get("navigate"), "steps for the agent or the person")
@@ -535,6 +535,174 @@ class Workflow(unittest.TestCase):
                 il.main(["check", str(f), "--tokens", str(EXAMPLE_CSS)])
             self.assertIn("<text>", buf.getvalue())
             self.assertIn("not in the palette", buf.getvalue())
+
+
+JPEG = b"\xff\xd8\xff\xe0" + b"\x00" * 64
+
+
+class Photos(unittest.TestCase):
+    """Stock photos for the research step: screened for AI images and brand marks, licensed, looked at, never captioned 'AI'."""
+
+    def setUp(self):
+        self.sources = {s["id"]: s for s in il.load_json(il.SOURCES)["sources"]}
+
+    def test_sources(self):
+        self.assertEqual(self.sources["unsplash"]["access"], "manual")      # robots blocks ClaudeBot; the API asks for hotlinks
+        self.assertEqual(self.sources["pexels"]["api"]["key_env"], "PEXELS_API_KEY")
+        for sid in ("openverse", "commons", "unsplash", "pexels"):
+            self.assertIn("photos", self.sources[sid]["kind"])
+        self.assertFalse(self.sources["pexels"].get("default"))             # never part of the illustration search
+        self.assertEqual(il.licence_verdict({"source": "unsplash", "licence": self.sources["unsplash"]["licence"]}, self.sources)[0], "ok")
+
+    def test_screen(self):
+        rej, _, _ = il.screen_photo({"title": "Midjourney: warehouse", "tags": []})
+        self.assertTrue(any("AI image tool" in r for r in rej))
+        rej, _, _ = il.screen_photo({"title": "Coffee shop logo wall", "tags": []})
+        self.assertTrue(any("brand" in r for r in rej))
+        rej, _, _ = il.screen_photo({"title": "Bulk carrier at anchor", "tags": ["Northwind Lines"]}, avoid=["Northwind Lines"])
+        self.assertTrue(any("competitor" in r for r in rej))
+        rej, look, hint = il.screen_photo({"title": "Container ship Zephyrine at dusk", "tags": []}, words=["container", "ship"])
+        self.assertEqual(rej, [])
+        self.assertTrue(any("Zephyrine" in x for x in look))
+        self.assertTrue(any("container often carries" in x for x in look))
+        self.assertEqual(hint, "warm")
+
+    def test_parsers_and_keys(self):
+        ov = {"results": [{"id": "9", "title": "Dock at noon", "url": "https://x/9.jpg", "foreign_landing_url": "https://x/9", "license": "cc0",
+                           "filetype": "jpg", "width": 3000, "height": 2000, "creator": "Ann", "thumbnail": "https://x/t9.jpg"}]}
+        c = il.parse_openverse_photo(json.dumps(ov), self.sources["openverse"])[0]
+        self.assertEqual((c["id"], c["licence"], c["width"]), ("openverse:9", "CC0", 3000))
+        cm = {"query": {"pages": [{"pageid": 5, "title": "File:Quay.jpg", "imageinfo": [{"mime": "image/jpeg", "width": 800, "height": 600,
+              "thumbwidth": 1920, "thumbheight": 1440, "thumburl": "https://x/q.jpg", "descriptionurl": "https://x/q",
+              "extmetadata": {"LicenseShortName": {"value": "CC BY 4.0"}}}]}]}}
+        c = il.parse_commons_photo(json.dumps(cm), self.sources["commons"])[0]
+        self.assertEqual((c["width"], c["download"]), (800, "https://x/q.jpg"))  # a small original is not reported as 1920 px
+        px = {"photos": [{"id": 7, "url": "https://www.pexels.com/photo/7/", "photographer": "Bo", "alt": "Office by a window",
+                          "width": 4000, "height": 3000, "src": {"large2x": "https://images.pexels.com/7.jpg", "medium": "https://images.pexels.com/7m.jpg"}}]}
+        c = il.parse_pexels(json.dumps(px), self.sources["pexels"])[0]
+        self.assertEqual((c["id"], c["author"], c["licence"]), ("pexels:7", "Bo", self.sources["pexels"]["licence"]))
+        a = mock.Mock(limit=20, orientation=None)
+        with mock.patch.dict(os.environ, {"PEXELS_API_KEY": ""}):
+            with tempfile.TemporaryDirectory() as tmp, contextlib.chdir(tmp) if hasattr(contextlib, "chdir") else contextlib.nullcontext():
+                self.assertEqual(il.req_pexels(self.sources["pexels"], "office", a), [])
+        with mock.patch.dict(os.environ, {"PEXELS_API_KEY": "secret-key"}):
+            (url, key_env), = il.req_pexels(self.sources["pexels"], "office", a)
+            line = il.fetch_line(url, "/tmp/x.json", key_env)
+        self.assertIn("$PEXELS_API_KEY", line)
+        self.assertNotIn("secret-key", line)                                 # a key is never printed
+        seen = []
+
+        class Resp:
+            def geturl(self): return url
+            def read(self, n): return b"{}"
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(os.environ, {"PEXELS_API_KEY": "secret-key"}), \
+                mock.patch.object(il.urllib.request, "urlopen", side_effect=lambda req, timeout: seen.append(req) or Resp()):
+            il.http_get(url, Path(tmp) / "r.json", key_env=key_env)
+        self.assertEqual(seen[0].unredirected_hdrs.get("Authorization"), "secret-key")  # sent, but never on a redirect
+        self.assertNotIn("Authorization", seen[0].headers)
+
+    def test_add_review_check_and_credits(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = str(Path(tmp) / "opendesigner" / "research" / "photos")
+            f = Path(tmp, "dock.jpg")
+            f.write_bytes(JPEG)
+            Path(tmp, "note.txt").write_text("not a photo")
+            with self.assertRaises(SystemExit):
+                run(["--dir", d, "photos", "add", str(Path(tmp, "note.txt")), "--source", "unsplash"])
+            with self.assertRaises(SystemExit):
+                run(["--dir", d, "photos", "add", str(f), "--ai"])           # --ai needs --tool
+            out = run(["--dir", d, "photos", "add", str(f), "--source", "unsplash", "--url", "https://unsplash.com/photos/x", "--name", "dock"])
+            self.assertIn("Unsplash+", out)
+            run(["--dir", d, "photos", "add", str(f), "--ai", "--tool", "an image model", "--name", "render"])
+            led = {e["name"]: e for e in json.loads(Path(d, "ledger.json").read_text())["items"]}
+            self.assertEqual(led["dock"]["brand_check"], "pending")
+            self.assertTrue(led["render"]["ai_generated"])
+            self.assertEqual(il.main(["--dir", d, "photos", "check"]), 1)     # nobody has looked yet
+            run(["--dir", d, "photos", "review", "dock", "--brands", "none", "--grade", "natural", "--alt", "A quiet dock"])
+            run(["--dir", d, "photos", "review", "render", "--brands", "none", "--grade", "natural", "--caption", "AI-generated image"])
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                self.assertEqual(il.main(["--dir", d, "photos", "check"]), 1)
+            self.assertIn("made with AI", buf.getvalue())
+            run(["--dir", d, "photos", "review", "render", "--caption", ""])
+            page = Path(tmp, "index.html")
+            page.write_text('<figure><img src="dock.jpg" alt=""><figcaption>Photo: AI generated</figcaption></figure>')
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(il.main(["--dir", d, "photos", "check"]), 0)
+                self.assertEqual(il.main(["--dir", d, "photos", "check", "--page", str(page)]), 1)
+            credits = Path(d, "CREDITS.md").read_text()
+            self.assertIn("| dock |", credits)
+            self.assertIn("## Made with AI", credits)
+            self.assertNotIn("| render |", credits)
+            run(["--dir", d, "photos", "review", "dock", "--brands", "found"])
+            self.assertEqual(json.loads(Path(d, "ledger.json").read_text())["items"][0]["status"], "rejected")
+
+    def test_review_fixes_from_the_fresh_eyes_pass(self):
+        page = ('<p>We never use AI generated photos.</p><figure><img src="a.jpg" alt=""><figcaption><em>AI-generated image</em>'
+                '</figcaption></figure><div class="photo-caption">Generated with Midjourney</div><img src="b.jpg" alt="Dock at noon">')
+        found = [w for w, t in il.image_texts(page) if il.AI_CAPTION.search(t)]
+        self.assertEqual(found, ["figure", "a caption"])                         # the paragraph is not about an image
+        with mock.patch.object(il, "http_get") as get:
+            il.fetch_all([("https://a.example/x", "/tmp/x", None)], False)
+        self.assertEqual(get.call_args.kwargs["limit"], il.MAX_BYTES)            # a short tuple keeps the size cap
+        with tempfile.TemporaryDirectory() as tmp:
+            d = str(Path(tmp) / "photos")
+            f = Path(tmp, "a.jpg")
+            f.write_bytes(JPEG)
+            run(["--dir", d, "photos", "add", str(f), "--source", "unsplash", "--name", "a"])
+            run(["--dir", d, "photos", "review", "a", "--brands", "found"])
+            run(["--dir", d, "photos", "review", "a", "--brands", "none", "--grade", "natural"])   # cropped, looked at again
+            e = json.loads(Path(d, "ledger.json").read_text())["items"][0]
+            self.assertEqual((e["status"], e["brand_check"]), ("candidate", "clear"))
+            c = {"id": "openverse:9", "source": "openverse", "title": "Midjourney: dock", "licence": "CC BY 2.0", "page": "javascript:x",
+                 "ai_suspected": True}
+            e = il.photo_entry("dock", c, "attribution", self.sources, "dock.jpg")
+            self.assertTrue(e["ai_generated"])                                    # --force never hides what the words said
+            self.assertEqual(e["page"], "")
+            pd = Path(tmp) / "p2"
+            with mock.patch.dict(os.environ, {"PEXELS_API_KEY": ""}):
+                run(["--dir", str(pd), "photos", "search", "warehouse", "--offline", "--source", "openverse"])
+                for r in json.loads((pd / "photo-requests.json").read_text())["requests"]:
+                    Path(r["save_as"]).write_text('{"results": [{"id": "w", "title": "Warehouse", "license": "cc0", "url": "https://x/w.jpg"}]}')
+                out = run(["--dir", str(pd), "photos", "search", "office desk", "--reuse", "--offline", "--source", "openverse"])
+            self.assertIn("0 usable photo(s) of 0", out)                         # another subject never reads old answers
+
+    def test_search_offline_and_fetch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp) / "opendesigner" / "research" / "photos"
+            users = d.parent / "users.json"
+            users.parent.mkdir(parents=True)
+            users.write_text(json.dumps({"market": {"competitors": [{"name": "Northwind Lines"}]}}))
+            with mock.patch.dict(os.environ, {"PEXELS_API_KEY": ""}):
+                out = run(["--dir", str(d), "photos", "search", "bulk carrier", "--offline"])
+            self.assertIn("curl -sL", out)
+            self.assertIn("pexels: no key", out)
+            self.assertIn("unsplash.com/s/photos/bulk%20carrier", out)
+            ov = {"results": [
+                {"id": "1", "title": "Bulk carrier at anchor, morning", "url": "https://x/1.jpg", "foreign_landing_url": "https://x/1", "license": "cc0",
+                 "filetype": "jpg", "width": 3000, "height": 2000, "creator": "Ann"},
+                {"id": "2", "title": "Midjourney bulk carrier", "url": "https://x/2.jpg", "foreign_landing_url": "https://x/2", "license": "by",
+                 "license_version": "2.0", "filetype": "jpg", "width": 1024, "height": 576, "creator": "Bo"},
+                {"id": "3", "title": "Northwind Lines bulk carrier", "url": "https://x/3.jpg", "foreign_landing_url": "https://x/3", "license": "cc0",
+                 "filetype": "jpg", "width": 3000, "height": 2000, "creator": "Cy"}]}
+            reqs = json.loads((d / "photo-requests.json").read_text())["requests"]
+            self.assertEqual({r["source"] for r in reqs}, {"openverse", "commons"})
+            for r in reqs:
+                Path(r["save_as"]).write_text(json.dumps(ov) if r["source"] == "openverse" else '{"query": {"pages": []}}')
+            with mock.patch.dict(os.environ, {"PEXELS_API_KEY": ""}):
+                out = run(["--dir", str(d), "photos", "search", "bulk carrier", "--reuse", "--offline"])
+            self.assertIn("1 usable photo(s) of 3", out)
+            self.assertIn("Rejected 2", out)
+            out = run(["--dir", str(d), "photos", "fetch", "openverse:2", "openverse:1", "--offline"])
+            self.assertIn("skip openverse:2", out)
+            dl = d / "downloads" / "openverse-1"
+            dl.write_bytes(JPEG)
+            out = run(["--dir", str(d), "photos", "fetch", "openverse:1", "--offline"])
+            self.assertIn("fetched", out)
+            e = json.loads((d / "ledger.json").read_text())["items"][0]
+            self.assertEqual((e["file"].endswith(".jpg"), e["brand_check"], e["verdict"]), (True, "pending", "ok"))
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 # User research: who the users are, before the defaults
 
-The sketch records what the person says about their users. This step checks it against the world. You research the group the product is for: who they are, how and where they use it, which apps they already live in, what they expect, what they prefer and what they need to read and use it. The findings are saved with their sources, and each one that touches the design becomes a recommended answer to a question the engine already asks. The person says yes before anything changes.
+The sketch records what the person says about their users. This step checks it against the world, then ends in a positioning and three directions (sections 8 and 9). You research the group the product is for: who they are, how and where they use it, which apps they already live in, what they expect, what they prefer and what they need to read and use it. The findings are saved with their sources, and each one that touches the design becomes a recommended answer to a question the engine already asks. The person says yes before anything changes.
 
 It is desk research: it describes a group, not this product's own users. Say so once, and suggest five short conversations with real users when the stakes are high.
 
@@ -61,6 +61,8 @@ Save them as JSON in the shape of `assets/output/research-users.example.json`, t
 - `findings`: `id`, `topic` (one of the six), `text` (one sentence, plain words), `confidence` (`measured`: a statistic or a study; `reported`: people say so; `inferred`: your reasoning), `sources`, `signals` (below).
 - `apps` (name, why, sources), `patterns` (the patterns they already know) and `open_questions`.
 - `market` (optional): `analogous` (name, why, sources), `competitors` (a list of name, why, sources), `pattern` and `gap` (a sentence, or text and sources), and `conventions` (the words and habits the industry's users already know; without it, `patterns` stand in). PRODUCT.md's Market section shows it with its sources until the person's own line is recorded in `context.market` (`zoom.md`, "The project's phase").
+  - **The competitor table.** For each competitor with a site, measure its page (opendesigner-extract: `read_page.js`, its CSS, a screenshot or Mobbin) and add `url` (the page you opened), `measured` (`browser`, `css`, `screenshot`, `mobbin`, `figma`), `colors` (a list of `hex` and `role`: `ground`, `ink`, `accent`, `cta`, `surface`, `band`), `type` (`display`, `text` and a `class`: `grotesk`, `geometric`, `humanist`, `serif`, `slab`, `mono`, `display`) and `cta` (`shape`: `square`, `subtle`, `rounded` or `pill`; `radius`, `fill` and `label` if you have them). Never guess a value. At least 3 rows need all of these before any colour is proposed.
+  - **The industry benchmark** (`benchmark`): shipped pages in the industry and its proven neighbours, section by section. Each row: `name`, `url` (the live page or its Mobbin link), `section`, `does`, `takes` (the principle you take) and `signature` (the device that stays theirs).
 
 **Signals** are what a finding means for the design, from a closed list. A finding can carry several, or none.
 
@@ -96,8 +98,22 @@ Rules for the text:
 
 Where the engine has no `research` command (a ChatGPT Project ships `engine.py` alone), keep the same file and checks by hand: write `opendesigner/research/users.json` and a `users.md` with the same sections, and record each answer the person agrees to with `engine.py pick <Q-id> <value> --why "user research F2: ..."`.
 
-## 8. Use it for the rest of the work
+## 8. Show the market, then agree the positioning
+Before any colour, palette or direction, in one message:
+1. **The competitor table and the benchmark:** `research.py market` prints both as Markdown with links, plus what the category does (its grounds, accent families, CTA shapes and type, and what nobody uses). Paste it; don't summarise it away.
+2. **The positioning draft:** `research.py positioning draft` writes four lines from the research and the repo: who it's for, the problem, the one claim, the proof. The proof stays empty: only the person has it (a number, a customer, a demo). Rewrite the lines in their words.
+3. **Ask one question:** "Is this right? And what proves it?" On a yes: `research.py positioning confirm --proof "..."` (add `--for`, `--problem` or `--claim` for any line they changed). It refuses an empty part or a placeholder. Never confirm for them.
+
+## 9. Three directions, shown with photos
+After the positioning is confirmed, propose exactly three directions. Each changes all five: the ground (`light`, `dark` or `tinted`), the type pairing, the photo grade (`natural`, `warm`, `cool`, `high-key`, `mono`, `low-key`), how the accent is used (`actions-only`, `highlight`, `one-band`, `field`, `none`) and the layout rhythm (`grid`, `editorial`, `split`, `stack`, `full-bleed`). Swapping the accent and the wordmark reads as one direction three times. What the person already settled (a font, the ground) goes in `fixed` and stays the same in all three; at least three axes still change.
+1. **Write `research/directions.json`** in the shape of `assets/output/research-directions.example.json`: id, name, one-line idea, the five axes, colours (ground, ink, accent), CTA shape, references, devices, photos, risks, and which one you recommend and why.
+2. **Learn from at least two shipped references per direction**, never a competitor. Each says what you take (structure: rhythm, scale, how a section works) and its `signature` device (what stays theirs). A signature device is identity, not structure: one copied device makes the page read as a copy (opendesigner-extract section 5).
+3. **Find 2 to 4 licensed stock photos per direction** (opendesigner-illustrate, "Stock photos"): `illustrate.py photos search "<scene>" --grade <grade>`, look at every candidate, `photos fetch` or `photos add`, then open each file and record what you saw: `photos review <name> --brands none|found --grade <grade>`. A real company's name or logo anywhere in the frame (a hull, a truck, a sign, a screen) means another photo. For business and work products, recommend the direction with natural light: dark, moody grades read dead there. A photo made with AI is named to the person once and never captioned on the page.
+4. **Check, then show:** `research.py directions check` (gate: the competitor table, unless the person skipped the research, and the confirmed positioning; contrast; a competitor's colour; the five axes, the ground read from its colour; references and signature devices; photos looked at), then `research.py directions board` writes `research/directions.html` from the `direction-board` template. Show it (an artifact or a screenshot), recommend one with its reason, and ask for one pick.
+5. **Record the pick:** their "Copy my choice" lines start `OD:direction`. Run `research.py directions pick <id> [--remix <axis>=<id>] --why "<their words>"`. A mixed ground brings its ink, a mixed accent use its accent, and a mix below the contrast floors is refused. The direction is a starting point: confirm each value at its own stage.
+
+## 10. Use it for the rest of the work
 - **References:** the apps they live in are the first Mobbin searches and candidates for the analogous product (`practices.md` sections 2 and 3).
-- **Market:** the competitors' shared pattern and the gap are what the alignment is checked against: a recommendation that copies the pattern needs a reason, and one that closes the gap says so.
+- **Market:** the competitors' shared pattern and the gap are what the alignment is checked against: a recommendation that copies the pattern needs a reason, and one that closes the gap says so. A colour within a hair of a competitor's is theirs: the directions check refuses it.
 - **Later stages:** read the `later` notes when you reach type, imagery, motion, voice and themes, and say which finding a recommendation comes from.
 - **Every session:** PRODUCT.md's Users section is what a later session or another agent reads first. `engine.py review` checks the findings again, says when they are older than 180 days, and fails `--strict` when the saved file has lost a source.

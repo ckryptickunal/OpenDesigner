@@ -86,7 +86,7 @@ class Checks(unittest.TestCase):
     def test_the_market_block_is_checked_like_apps(self):
         rec = example()
         rec["market"]["competitors"][0]["sources"] = ["S9"]
-        self.assertTrue(any("market.competitors The pharmacy chains' own apps cites S9" in t for t in errors(rec)))
+        self.assertTrue(any("market.competitors Pharmacy chain one cites S9" in t for t in errors(rec)))
         rec = example()
         rec["market"]["rivals"] = []
         self.assertTrue(any("market.rivals is not a market field" in t for t in errors(rec)))
@@ -307,8 +307,9 @@ class Project(unittest.TestCase):
         self.assertIn("- **Competitors** (what people would use instead): Not enough information.", self.product())
         quiet(research.add, e, self.d, self.write(example()))
         product = self.product()
-        self.assertIn("- **Competitors** (what people would use instead): The pharmacy chains' own apps: search first, with offers "
-                      "on the home screen [S5]; Ordering by phone or WhatsApp from the local chemist: what many do today [S4]. "
+        self.assertIn("- **Competitors** (what people would use instead): Pharmacy chain one: search first, with offers "
+                      "on the home screen [S5]; Pharmacy chain two: offers and categories first [S5]; Online pharmacy three: "
+                      "prescription upload first [S5]; Ordering by phone or WhatsApp from the local chemist: what many do today [S4]. "
                       "*(from the user research: opendesigner/research/users.md)*", product)
         self.assertIn("- **The gap** (what none of them does well, and this product can): Last month's order, ready to repeat", product)
         self.assertIn("## Market", Path(self.d, research.DOC).read_text(encoding="utf-8"))
@@ -322,6 +323,301 @@ class Project(unittest.TestCase):
         self.assertIn("Not researched yet", self.product() if Path(self.root, "PRODUCT.md").exists()
                       else research.product_section(self.state()))
         self.assertEqual(research.product_section({"research": {"status": "planned"}}).split(",")[0], "Research planned")
+
+
+DIR_EXAMPLE = SKILL / "assets/output/research-directions.example.json"
+TEMPLATE = SKILL / "assets/templates/direction-board.html"
+RESEARCH = HERE / "research.py"
+
+
+def directions():
+    return json.loads(DIR_EXAMPLE.read_text(encoding="utf-8"))
+
+
+def ledger_for(rec, **over):
+    """A photo ledger with every photo the directions name, looked at and clear."""
+    out = {}
+    for dr in rec["directions"]:
+        for n in [x for x in dr["photos"] if isinstance(x, str)]:
+            out[n] = {"name": n, "file": f"{n}.jpg", "source": "openverse", "licence": "CC0", "verdict": "ok", "brand_check": "clear",
+                      "grade": dr["photo_grade"], "title": n.replace("-", " "), **over}
+    return out
+
+
+def confirmed():
+    return {"status": "confirmed", "for": {"text": "people over 55"}, "problem": {"text": "reordering takes too long"},
+            "claim": {"text": "last month's order in one tap"}, "proof": [{"text": "a pilot with 40 customers"}]}
+
+
+def dprobs(rec, state=None, users="example", ledger=None, pos="confirmed", level="error"):
+    users = example() if users == "example" else users
+    pos = confirmed() if pos == "confirmed" else pos
+    ledger = ledger_for(rec) if ledger is None else ledger
+    return [t for l, t in research.directions_problems(rec, state or {}, users, ledger, pos) if l == level]
+
+
+class Market(unittest.TestCase):
+    """The competitor table and the benchmark the person sees before any colour."""
+
+    def test_example_table_is_ready_and_counted(self):
+        rec = example()
+        self.assertEqual(errors(rec), [])
+        self.assertEqual(len([x for x in research.competitors(rec) if research.table_ready(x)]), 3)
+        cat = research.category(rec)
+        self.assertEqual(cat["accents"], {"blue": 2, "green": 1})
+        self.assertEqual(cat["grounds"], {"light": 2, "dark": 1})
+        self.assertIn("orange", cat["unused_accents"])
+        self.assertIn("tinted", cat["unused_grounds"])
+        md = research.market_table_md(rec)
+        for bit in ("## Competitors, measured", "[Pharmacy chain one](https://chain-one.example)", "`#0A6CFF` cta", "## Industry benchmark",
+                    "Stays theirs", "Nobody uses"):
+            self.assertIn(bit, md)
+
+    def test_bad_rows_fail(self):
+        rec = example()
+        c = rec["market"]["competitors"]
+        c[0]["colors"][2]["hex"] = "blue"
+        c[1].pop("url")
+        c[2]["cta"]["shape"] = "blob"
+        rec["market"]["benchmark"][0].pop("takes")
+        errs = " | ".join(errors(rec))
+        for bit in ("needs a hex", "colours need the url", "cta needs a shape", "needs takes"):
+            self.assertIn(bit, errs)
+
+    def test_a_thin_table_warns(self):
+        rec = example()
+        rec["market"]["competitors"] = rec["market"]["competitors"][:1]
+        warns = [t for l, t in research.problems(rec) if l == "warning"]
+        self.assertTrue(any("before any colour" in t for t in warns))
+
+    def test_colour_maths(self):
+        self.assertEqual([research.hue_family(h) for h in ("#FF0000", "#0000FF", "#00A86B", "#808080", "#FF8C00", "#7E33FF")],
+                         ["red", "blue", "green", "neutral", "orange", "violet"])
+        self.assertEqual([research.ground_kind(h) for h in ("#FFFFFF", "#0A0A0A", "#F2E6C9")], ["light", "dark", "tinted"])
+        self.assertAlmostEqual(research.contrast("#FFFFFF", "#000000"), 21, places=3)
+        self.assertLess(research.distance("#0A6CFF", "#0B6DFF"), research.NEAR_ERROR)
+
+
+class Directions(unittest.TestCase):
+    """Three directions that truly differ, after the research, with licensed photos looked at for brands."""
+
+    def test_example_passes(self):
+        self.assertEqual(dprobs(directions()), [])
+
+    def test_research_and_positioning_come_first(self):
+        rec = directions()
+        self.assertTrue(any("research first" in t for t in dprobs(rec, users=None)))
+        self.assertTrue(any("positioning is not confirmed" in t for t in dprobs(rec, pos={"status": "draft"})))
+        thin = example()
+        thin["market"]["competitors"] = thin["market"]["competitors"][:2]
+        self.assertTrue(any("competitor table has 2" in t for t in dprobs(rec, users=thin)))
+        skipped = {"research": {"status": "skipped"}}
+        self.assertEqual(dprobs(rec, state=skipped, users=None), [])                 # skipped by the person: a warning
+        self.assertTrue(dprobs(rec, state=skipped, users=None, level="warning"))
+        self.assertTrue(any("positioning" in t for t in dprobs(rec, state=skipped, users=None, pos=None)))  # still needed
+
+    def test_ground_is_read_from_the_colour(self):
+        rec = directions()
+        for dr in rec["directions"]:
+            dr["colors"]["ground"], dr["colors"]["ink"] = "#FFFFFF", "#111111"
+        errs = " | ".join(dprobs(rec))
+        self.assertIn("reads light: the colour decides", errs)
+        self.assertIn("share the same ground", errs)
+
+    def test_odd_inputs_never_crash_the_board(self):
+        rec = directions()
+        rec["directions"][0]["photos"].append({"name": "x"})
+        self.assertTrue(any("must be names" in t for t in dprobs(rec)))
+        rec = directions()
+        rec["directions"][0]["colors"]["ground"] = "FFFFFF"
+        led = ledger_for(rec)
+        led["kitchen-table-morning"]["page"] = "javascript:alert(1)"
+        data = research.board_payload(rec, {}, example(), led, confirmed())
+        self.assertEqual(data["directions"][0]["colors"]["ground"], "#FFFFFF")
+        self.assertEqual(data["directions"][0]["photos"][0]["page"], "")
+        self.assertTrue(research.is_b2b({}, {"answers": {"Q-aud-02": "work, state-stressed"}}))
+
+    def test_a_rejected_photo_stays_off(self):
+        rec = directions()
+        led = ledger_for(rec)
+        led["clinic-window"]["status"] = "rejected"
+        self.assertTrue(any("was rejected" in t for t in dprobs(rec, ledger=led)))
+        self.assertTrue(research.AI_CAPTION.search("Created with Midjourney"))
+        self.assertFalse(research.AI_CAPTION.search("We photograph every order"))
+
+    def test_exactly_three(self):
+        rec = directions()
+        rec["directions"] = rec["directions"][:2]
+        self.assertTrue(any("exactly 3" in t for t in dprobs(rec)))
+
+    def test_accent_swaps_read_identical(self):
+        rec = directions()
+        a, b = rec["directions"][0], rec["directions"][1]
+        for k in ("ground", "type", "photo_grade", "rhythm"):
+            b[k] = copy.deepcopy(a[k])
+        b["colors"] = dict(a["colors"], accent="#1D6B3A")
+        errs = " | ".join(dprobs(rec, ledger={}))
+        self.assertIn("directions A and B share the same ground, type pairing, photo grade, layout rhythm", errs)
+
+    def test_settled_axes_stay_the_same(self):
+        rec = directions()
+        rec["fixed"] = ["type"]
+        self.assertTrue(any("settled by the person" in t for t in dprobs(rec)))
+        for dr in rec["directions"]:
+            dr["type"] = {"display": "Inter", "text": "Inter", "class": "grotesk"}
+        self.assertEqual(dprobs(rec), [])
+        rec["fixed"] = ["type", "ground", "rhythm"]
+        for dr in rec["directions"]:
+            dr["ground"], dr["rhythm"] = "light", "stack"
+            dr["colors"]["ground"], dr["colors"]["ink"] = "#FFFFFF", "#111111"
+        self.assertTrue(any("only 2 axes are left" in t for t in dprobs(rec)))
+
+    def test_a_competitors_colour_is_theirs(self):
+        rec = directions()
+        rec["directions"][0]["colors"]["accent"] = "#0A6CFF"
+        self.assertTrue(any("Pharmacy chain one's colour" in t for t in dprobs(rec)))
+        rec["directions"][0]["colors"]["accent"] = "#1F74F0"
+        self.assertTrue(any("close to" in t for t in dprobs(rec, level="warning")))
+
+    def test_contrast_floors(self):
+        rec = directions()
+        rec["directions"][0]["colors"]["ink"] = "#BBBBBB"
+        rec["directions"][1]["colors"]["accent"] = "#1A2026"
+        errs = " | ".join(dprobs(rec))
+        self.assertIn("text needs 4.5:1", errs)
+        self.assertIn("needs 3:1", errs)
+
+    def test_identity_firewall(self):
+        rec = directions()
+        rec["directions"][0]["devices"].append("Basket mascot in the hero")
+        rec["directions"][1]["references"][0]["name"] = "Pharmacy chain two"
+        rec["directions"][2]["references"] = rec["directions"][2]["references"][:1]
+        errs = " | ".join(dprobs(rec))
+        self.assertIn("signature device", errs)
+        self.assertIn("is the competitor Pharmacy chain two", errs)
+        self.assertIn("at least 2 references", errs)
+        rec = directions()
+        rec["directions"][0]["devices"] = ["a basket-shaped mascot"]                  # reworded, still theirs
+        rec["directions"][1]["references"][0]["url"] = "https://www.chain-one.example/home"   # a competitor's own site
+        rec["directions"][2]["references"][0].pop("signature")
+        errs = " | ".join(dprobs(rec))
+        self.assertIn("uses 'a basket-shaped mascot'", errs)
+        self.assertIn("is the competitor Pharmacy chain one", errs)
+        self.assertIn("name its signature device", errs)
+        self.assertFalse(research._same_device("crest over a closed grid", "closed grid"))
+
+    def test_photos_are_licensed_looked_at_and_uncaptioned(self):
+        rec = directions()
+        led = ledger_for(rec)
+        led["kitchen-table-morning"]["brand_check"] = "pending"
+        led["pharmacist-counter"]["verdict"] = "blocked"
+        led["family-phone-evening"]["caption"] = "AI-generated image"
+        led["medicine-shelf-warm"]["ai_generated"] = True
+        led["clinic-window"]["grade"] = "mono"
+        errs = " | ".join(dprobs(rec, ledger=led))
+        warns = " | ".join(dprobs(rec, ledger=led, level="warning"))
+        self.assertIn("look at it for brand names", errs)
+        self.assertIn("blocked by its licence", errs)
+        self.assertIn("'AI generated' caption", errs)
+        self.assertIn("AI-made: tell the person", warns)
+        self.assertIn("graded mono", warns)
+        rec["directions"][0]["photos"] = []
+        self.assertTrue(any("needs licensed stock photos" in t for t in dprobs(rec)))
+
+    def test_b2b_defaults_to_natural_light(self):
+        rec = directions()
+        rec["b2b"] = True
+        rec["recommended"] = "B"
+        rec["directions"][1]["photo_grade"] = "low-key"
+        warns = " | ".join(dprobs(rec, ledger=ledger_for(rec), level="warning"))
+        self.assertIn("natural light", warns)
+        self.assertIn("can read dead", warns)
+        self.assertTrue(research.is_b2b({}, {"answers": {"Q-aud-02": {"value": "work"}}}))
+
+    def test_template_is_self_contained_and_its_sample_differs(self):
+        page = TEMPLATE.read_text(encoding="utf-8")
+        self.assertIn('id="od-data"', page)
+        self.assertIn("Copy my choice", page)
+        self.assertIn("OD:direction", page)
+        self.assertNotRegex(page, r'(src|href)="https?://')
+        sample = json.loads(re.search(r'<script type="application/json" id="od-data">(.*?)</script>', page, re.S).group(1))
+        ds = sample["directions"]
+        self.assertEqual(len(ds), 3)
+        for k in research.AXES:
+            self.assertEqual(len({json.dumps(research._axis(x, k)) for x in ds}), 3, k)
+        self.assertFalse(any(research.AI_CAPTION.search(p["title"]) for x in ds for p in x["photos"]))
+
+
+class DirectionsProject(Project):
+    """The whole path in a project: findings, the table, positioning, photos, the board and the pick."""
+
+    def cli(self, *args):
+        return subprocess.run([sys.executable, str(RESEARCH), "--dir", self.d, *args], capture_output=True, text=True, timeout=120)
+
+    def test_end_to_end(self):
+        self.assertEqual(run(self.d, "research", "add", self.write(example())).returncode, 0)
+        users_md = Path(self.d, research.DOC).read_text(encoding="utf-8")
+        self.assertIn("## Competitors, measured", users_md)
+        r = self.cli("market")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("Pharmacy chain two", r.stdout)
+        r = self.cli("directions", "check", str(DIR_EXAMPLE))
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("positioning is not confirmed", r.stdout)
+        r = self.cli("positioning", "draft")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        p = json.loads(Path(self.d, research.POSITIONING).read_text(encoding="utf-8"))
+        self.assertEqual(p["status"], "draft")
+        self.assertEqual(p["proof"], [])                       # the proof is never invented
+        self.assertIn("The proof", p["needs"])
+        self.assertTrue(p["claim"]["text"])                    # from the market gap
+        self.assertNotEqual(self.cli("positioning", "confirm").returncode, 0)
+        p["proof"] = [{"text": "an invented number"}]                          # a proof the agent wrote is never confirmed
+        Path(self.d, research.POSITIONING).write_text(json.dumps(p), encoding="utf-8")
+        self.assertNotEqual(self.cli("positioning", "confirm").returncode, 0)
+        self.assertNotEqual(self.cli("positioning", "confirm", "--proof", "<a number>").returncode, 0)
+        r = self.cli("positioning", "confirm", "--proof", "a pilot with 40 customers")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertEqual(self.state()["research"]["positioning"]["proof"], ["a pilot with 40 customers"])
+        self.assertNotEqual(self.cli("positioning", "draft").returncode, 0)  # confirmed: never redrafted over
+        photos = Path(self.d, research.PHOTO_DIR)
+        photos.mkdir(parents=True)
+        rec = directions()
+        Path(photos, "ledger.json").write_text(json.dumps({"items": list(ledger_for(rec).values())}), encoding="utf-8")
+        dest = Path(self.d, research.DIRECTIONS)
+        dest.write_text(json.dumps(rec), encoding="utf-8")
+        r = self.cli("directions", "check")
+        self.assertEqual(r.returncode, 0, r.stdout)
+        r = self.cli("directions", "board")
+        self.assertEqual(r.returncode, 0, r.stdout)
+        board = Path(self.d, research.BOARD).read_text(encoding="utf-8")
+        data = json.loads(re.search(r'<script type="application/json" id="od-data">(.*?)</script>', board, re.S).group(1))
+        self.assertEqual([x["id"] for x in data["directions"]], ["A", "B", "C"])
+        self.assertEqual(data["directions"][0]["photos"][0]["src"], "photos/kitchen-table-morning.jpg")
+        self.assertTrue(data["positioning"][3].endswith("a pilot with 40 customers"))
+        self.assertTrue(data["category"]["swatches"])
+        self.assertNotEqual(self.cli("directions", "pick", "D").returncode, 0)
+        self.assertNotEqual(self.cli("directions", "pick", "A", "--remix", "colour=B").returncode, 0)
+        r = self.cli("directions", "pick", "A", "--remix", "accent_use=B")         # B's yellow accent on A's white ground: unreadable
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("contrast", r.stdout + r.stderr)
+        r = self.cli("directions", "pick", "A", "--remix", "photo_grade=C", "--remix", "ground=C", "--why", "liked: A")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        st = self.state()["research"]["direction"]
+        self.assertEqual((st["id"], st["remix"]), ("A", {"photo_grade": "C", "ground": "C"}))
+        self.assertEqual((st["colors"]["ground"], st["colors"]["accent"]), ("#CFE3DA", "#B4361F"))
+        self.assertEqual(json.loads(dest.read_text())["chosen"]["id"], "A")
+        run(self.d, "design-md")
+        self.assertIn("Positioning (confirmed", self.product())
+        self.assertIn("Direction A, Kitchen table", self.product())
+
+
+class PhotoGrades(unittest.TestCase):
+    def test_same_grades_in_research_and_illustrate(self):
+        sys.path.insert(0, str(SKILL.parent / "opendesigner-illustrate" / "scripts"))
+        import illustrate
+        self.assertEqual(research.PHOTO_GRADES, illustrate.PHOTO_GRADES)
+        self.assertEqual(research.PHOTO_DIR, illustrate.PHOTO_DIR.split("/", 1)[1])
 
 
 class Process(unittest.TestCase):
@@ -349,6 +645,14 @@ class Process(unittest.TestCase):
             self.assertIn(f"`{t}`", r, t)
         self.assertEqual(len(re.findall(r"^\d\. \*\*(Who|Context|Apps|Expectations|Preferences that touch design|Accessibility|Market):\*\*", r,
                                         flags=re.M)), len(research.TOPICS))
+
+    def test_research_md_documents_positioning_and_directions(self):
+        r = self.read("references/research.md")
+        for bit in ("research.py market", "research.py positioning", "research.py directions", "direction-board", "photos search",
+                    "natural light", "signature device"):
+            self.assertIn(bit, r, bit)
+        for v in research.PHOTO_GRADES + research.ACCENT_USES + research.RHYTHMS + research.CTA_SHAPES:
+            self.assertIn(f"`{v}`", r, v)
 
     def test_status_is_documented_and_extend_checks_it(self):
         self.assertIn("| `research` |", self.read("references/rules.md"))

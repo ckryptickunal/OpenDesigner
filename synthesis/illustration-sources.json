@@ -22,7 +22,8 @@
       "evidence": "https://api.openverse.org/v1/images/?q=team&extension=svg&category=illustration (live 2026-09-28)",
       "author": "",
       "kind": [
-        "search"
+        "search",
+        "photos"
       ],
       "style": "Creative Commons search across Wikimedia, Flickr and other collections",
       "formats": [
@@ -36,7 +37,8 @@
         "Agents use the API (illustrate.py search); the website turns away scripts",
         "category accepts only illustration, photograph or digitized_artwork; results stop at 240",
         "All words must match: search one noun (hedgehog + svg gave 40 results, \"hedgehog cartoon\" gave 0)",
-        "Every item's licence is its own: read it on the item's landing page"
+        "Every item's licence is its own: read it on the item's landing page",
+        "Photos: illustrate.py photos search \"<scene>\" (category photograph; items naming an AI image tool are dropped)"
       ],
       "navigate": [
         "illustrate.py search \"<words>\" --source openverse",
@@ -68,7 +70,8 @@
       "evidence": "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=rocket%20filemime:image/svg%2Bxml (live 2026-09-28)",
       "author": "",
       "kind": [
-        "search"
+        "search",
+        "photos"
       ],
       "style": "Wikimedia's media library: diagrams, emblems, clipart and some illustration",
       "formats": [
@@ -81,7 +84,8 @@
         "filemime:image/svg+xml keeps SVGs only (the script adds it); OR works: rocket OR astronaut",
         "hastemplate:\"Cc-zero\" keeps CC0 files; deepcat:\"SVG people icons\" searches a whole category tree (20,848 files)",
         "insource:\"openclipart\" finds Openclipart's CC0 art mirrored on Commons (4,032 files)",
-        "Copy the credit line from the file page (Use this file)"
+        "Copy the credit line from the file page (Use this file)",
+        "Photos: illustrate.py photos search \"<scene>\" (JPEGs, downloaded at 1920 px)"
       ],
       "navigate": [
         "illustrate.py search \"<words>\" --source commons",
@@ -1802,6 +1806,85 @@
       ],
       "author": "Sébastien Noël",
       "evidence": "https://fffuel.co/license/ (read 2026-09-28)"
+    },
+    {
+      "id": "unsplash",
+      "name": "Unsplash",
+      "url": "https://unsplash.com",
+      "access": "manual",
+      "default": false,
+      "licence": "Unsplash License (free, commercial use, changes allowed)",
+      "licence_url": "https://unsplash.com/license",
+      "attribution": "optional",
+      "commercial": true,
+      "restrictions": "Free photos only: skip Unsplash+ photos (marked +; a paid licence that bans use in digital templates). No selling unaltered copies. Its robots.txt blocks ClaudeBot and its API terms require hotlinked images, so the person searches and downloads, then illustrate.py photos add",
+      "evidence": "https://unsplash.com/license, https://unsplash.com/plus/license, https://unsplash.com/api-terms and https://unsplash.com/robots.txt (read 2026-11-05)",
+      "author": "",
+      "kind": [
+        "photos"
+      ],
+      "style": "photography from many photographers; strong on places, work and nature",
+      "formats": [
+        "JPG"
+      ],
+      "search_url": "https://unsplash.com/s/photos/{q}",
+      "filters": "License (All, Unsplash+, Free), orientation, colour",
+      "search_tips": [
+        "Set License to Free before choosing",
+        "Search the scene, not a company: \"warehouse aisle\", \"port at dawn\"",
+        "Zoom in on vehicles, signs, screens and clothing for names and logos"
+      ],
+      "navigate": [
+        "Give the person https://unsplash.com/s/photos/<q>",
+        "They set License to Free, open a photo and click Download",
+        "illustrate.py photos add FILE --source unsplash --url <photo page> --author \"<name>\""
+      ],
+      "best_for": [
+        "hero",
+        "feature"
+      ]
+    },
+    {
+      "id": "pexels",
+      "name": "Pexels",
+      "url": "https://www.pexels.com",
+      "access": "api",
+      "default": false,
+      "licence": "Pexels License (free, commercial use, changes allowed)",
+      "licence_url": "https://www.pexels.com/license/",
+      "attribution": "optional",
+      "commercial": true,
+      "restrictions": "Photos showing trademarks, logos or brands cannot be used commercially for goods or services; never imply that people shown endorse the product; no selling unaltered copies. Search needs the person's free API key in PEXELS_API_KEY; without it, the person searches the site (its robots.txt blocks ClaudeBot)",
+      "api": {
+        "endpoint": "https://api.pexels.com/v1/search",
+        "key_env": "PEXELS_API_KEY",
+        "limits": "200 requests an hour, 20,000 a month"
+      },
+      "attribution_template": "Photo by {author} on Pexels, {page}",
+      "evidence": "https://www.pexels.com/api/documentation/ and https://www.pexels.com/robots.txt (read 2026-11-05); licence limits from https://www.pexels.com/terms-of-service (the licence page refused automated reads)",
+      "author": "",
+      "kind": [
+        "photos"
+      ],
+      "style": "photography and video from many photographers; strong on people at work",
+      "formats": [
+        "JPG"
+      ],
+      "search_url": "https://www.pexels.com/search/{q}/",
+      "filters": "orientation, size, colour",
+      "search_tips": [
+        "Agents use the API with the person's key (illustrate.py photos search); never script the website",
+        "Credit the photographer and Pexels on review boards (API guidelines)",
+        "Zoom in on vehicles, signs, screens and clothing for names and logos"
+      ],
+      "navigate": [
+        "With PEXELS_API_KEY set: illustrate.py photos search \"<scene>\" --source pexels",
+        "Without it: give the person https://www.pexels.com/search/<q>/, they download, then illustrate.py photos add FILE --source pexels --url <photo page>"
+      ],
+      "best_for": [
+        "hero",
+        "feature"
+      ]
     },
     {
       "id": "other",
