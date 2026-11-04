@@ -936,15 +936,35 @@ def resolve_dials(state):
     return out, src, conflicts
 
 
+def main_surface(state):
+    """The main surface's mode (Persuade, Operate, Read, Experience) from Q-scope-06, else from raw.productType marketing."""
+    v = answer_value((state.get("answers") or {}).get("Q-scope-06"))
+    surfaces = surface_list(v) if v else []
+    if surfaces:
+        return surfaces[0]["mode"]
+    return "Persuade" if (state.get("raw") or {}).get("productType") == "marketing" else None
+
+
+def _profile_trigger(state, trig):
+    """The trigger's words when it holds ("Q-aud-01 = dense", "main surface: Persuade"), else None."""
+    if not trig:
+        return None
+    if "surface" in trig:
+        mode = main_surface(state)
+        return f"main surface: {mode}" if mode in trig["surface"] else None
+    v = answer_value((state.get("answers") or {}).get(trig["question"]))
+    return f"{trig['question']} = {v}" if str(v) in [str(x) for x in trig["values"]] else None
+
+
 def default_profile(state):
     """The default profile whose trigger holds (levers.json profiles), or None: {id, name, why, evidence, trigger, items
     it applies, skipped: {item: reason}}. A profile fills only what the person left open: an item is skipped when its
     question is answered, its dial or value was set, overridden or locked, or a brand color decides it. Applied items
     are recorded as auto_default (spec 7.9)."""
-    answers = state.get("answers") or {}
     for pid, prof in (levers().get("profiles") or {}).items():
         trig = prof.get("trigger") if isinstance(prof, dict) else None
-        if not trig or str(answer_value(answers.get(trig["question"]))) not in [str(v) for v in trig["values"]]:
+        said = _profile_trigger(state, trig)
+        if not said:
             continue
         items, skipped = {}, {}
         for iid, it in prof["items"].items():
@@ -954,7 +974,7 @@ def default_profile(state):
             else:
                 items[iid] = it
         return {"id": pid, "name": prof.get("name", pid), "why": prof.get("why", ""), "evidence": prof.get("evidence", []),
-                "trigger": f"{trig['question']} = {answer_value(answers[trig['question']])}", "items": items, "skipped": skipped}
+                "trigger": said, "items": items, "skipped": skipped}
     return None
 
 
@@ -966,6 +986,9 @@ def _profile_skip(state, rule):
             return f"you answered {q}"
         if q == "Q-dir-01" and (state.get("preset") or state.get("style")):  # a preset or named style set directly is a choice too
             return "you chose a style direction (Q-dir-01)"
+    for q, vals in (rule.get("answerIn") or {}).items():
+        if str(answer_value(answers.get(q))) in [str(x) for x in vals]:
+            return f"you answered {q} {answer_value(answers.get(q))}"
     for dial in rule.get("dials") or []:
         if dial_value(dials.get(dial)) is not None:
             return f"the {dial} dial is set"
@@ -1052,6 +1075,10 @@ def derive_params(state, dials):
             if isinstance(params.get(k), (int, float)) and params[k] < lo:
                 params[k] = lo
                 meta[k]["profile"] = prof["id"]
+        for k, v in (item.get("paramSet") or {}).items():  # a value that is not a number (a density mode, a hero rule)
+            if params.get(k) != v:
+                params[k] = v
+                meta.setdefault(k, {})["profile"] = prof["id"]
     for k, v in (state.get("overrides") or {}).items():
         params[k] = v
         meta.setdefault(k, {})["override"] = True
@@ -1843,7 +1870,8 @@ def build_color_semantic(ctx, mode):
         "text": {
             "primary": tok(n(12), "Body copy, headings, labels (guaranteed >= 7:1 on steps 1-5)."),
             "secondary": tok(n(11), "Supporting text (guaranteed >= the text minimum on surfaces and neutral fills 1-4)."),
-            "tertiary": tok(n(10), "Captions and placeholders (still meets the text minimum on surfaces 1-4)."),
+            "tertiary": tok(A("color.text.secondary"), "Captions and placeholders: the same grey as secondary, so text keeps three greys "
+                                                       "(primary, secondary, disabled; owner, 2026-11-05)."),
             "disabled": tok(n(8), "Disabled labels; exempt from contrast minimums (WCAG 1.4.3 exception)."),
             "inverse": tok(white if L else n(1), "Text on color.bg.inverse (tooltips, toasts)."),
             "link": tok(r("accent", 11), "Links. Underline them in running text so color is not the only cue."),
@@ -2063,8 +2091,9 @@ def build_type_scale(ctx):
         ctx.used["type.baseSize.native"] = base
     base = int(base or ctx.P("type.baseSize.web", p["type.baseSize.web"]))
     ratio = float(ctx.P("type.ratio", p["type.ratio"]))
-    marketing = bool(raw.get("marketingSurfaces"))
-    reach = float(p.get("type.displayReach") or (5.5 if marketing else 2.5))  # LEVERS B6 display reach [inferred bands]
+    # LEVERS B6 display reach [inferred bands]. Marketing surfaces get a separate fluid display scale (display_scale), so the
+    # UI scale keeps the product reach: one 1.2 scale stretched to 83px gave a landing page no hero (2026-11-05)
+    reach = float(p.get("type.displayReach") or 2.5)
     top_n = max(3, round_half_up(math.log(reach) / math.log(ratio)))
     sizes = type_scale_sizes(base, ratio, -2, top_n)
     # smallest size for text people read: 12px on the web (11 only for short labels; owner decision 2026-10-14, stage 11
@@ -2100,6 +2129,28 @@ def build_type_scale(ctx):
             "merged": sorted(set(merged)), "minSize": min_size}
 
 
+def display_scale(ctx, top):
+    """Marketing surfaces: {style: {key, min, max}} for the hero (display.lg) and section titles (display.md), fluid between
+    a phone and the container width (levers formulas.type.display). top is the largest UI size; whole px only."""
+    f = levers()["formulas"]["type"]["display"]
+    hero = int(ctx.P("type.displayMax", ctx.params.get("type.displayMax") or 96))
+    sec = f["section"]
+    sec_max = max(int(sec["max"]), int(math.ceil(top * 1.1)))  # a section title stays a visible step above the UI headings
+    hero = max(hero, int(math.ceil(sec_max * 1.25)))
+    snap = int(f["hero"]["snap"])
+    hero_min = max(sec["min"], int(round(hero * f["hero"]["minOfMax"] / snap) * snap))
+    return {"display.md": {"key": "display-md", "min": int(sec["min"]), "max": sec_max},
+            "display.lg": {"key": "display-lg", "min": min(hero_min, hero), "max": hero}}
+
+
+def fluid_css(lo, hi, vw=None):
+    """clamp() from lo px at the phone width to hi px at the container width, in rem so text zoom still works."""
+    a, z = vw or levers()["formulas"]["type"]["display"]["viewport"]
+    slope = (hi - lo) / (z - a)
+    rem = lambda px: f"{fmt_num(rnd(px / 16, 4))}rem"
+    return f"clamp({rem(lo)}, {rem(lo - slope * a)} + {fmt_num(rnd(slope * 100, 4))}vw, {rem(hi)})"
+
+
 def build_typography(ctx):
     p, raw = ctx.params, ctx.raw
     sc = build_type_scale(ctx)
@@ -2107,7 +2158,7 @@ def build_typography(ctx):
     b = S.index(base)
     wc = int(ctx.P("type.weightCount", p["type.weightCount"]))
     hw = int(ctx.P("type.headingWeight", p["type.headingWeight"]))
-    if wc <= 2:
+    if wc <= 2 and "type.headingWeight" not in (ctx.state.get("overrides") or {}):  # weights the person stated stay as stated
         hw = 600 if hw < 700 else 700
     w = {"body": 400, "label": 500 if wc >= 3 else 400, "heading": hw}
     if wc >= 4:
@@ -2159,6 +2210,10 @@ def build_typography(ctx):
 
     zero_tracking = raw.get("tracking") == "zero"
     size_table = sf_tracking_on(ctx.state)
+    jobs = levers()["formulas"]["type"]["tracking"]["jobs"]  # one value per job; capitals never negative
+
+    def caps_em(size):
+        return jobs["capsLabel"] if size <= jobs["capsLabelUntil"] else jobs["capsDisplay"]
     sf_until = levers()["formulas"]["type"]["tracking"]["sfPro"]["textUntil"]
     same = disp in (None, "=textFace")  # the display styles use the text face
     is_sf = {"text": _generic_face(tf["face"]), "display": _generic_face(tf["face"] if same else disp)}  # the Apple system font on Apple devices
@@ -2171,16 +2226,16 @@ def build_typography(ctx):
             # another face takes it only through SF Pro's Text sizes, because from 20 pt Apple loosens SF Pro Display, which is
             # drawn tighter, and a face without that drawing would loosen its headings (STD-visual-details-05)
             em = sf_pro_tracking(size)
-            return max(em, 0.05) if caps else em  # uppercase stays looser than sentence case (STD-visual-details-04)
+            return max(em, caps_em(size)) if caps else em  # uppercase stays looser than sentence case (STD-visual-details-04)
         if caps:
-            return 0.05
+            return caps_em(size)
         if size <= 12:
-            return 0.02
+            return jobs["small"]
         if size >= 48:
-            return -0.02
+            return jobs["display"]
         if size >= 32:
-            return -0.01
-        return 0.0
+            return jobs["heading"]
+        return float(jobs["body"])
 
     styles = []  # (path, size, weightRole, family, use, avoid, caps)
     styles += [("body.sm", sz(-1), "body", "text", "Helper text, timestamps, captions.", "Anything read at length.", False),
@@ -2194,7 +2249,12 @@ def build_typography(ctx):
                ("title.sm", base, "heading", "text", "Table headers, field-group titles.", "Paragraph emphasis.", False)]
     heading_names = ["title.md", "title.lg", "headline.sm", "headline.md", "headline.lg", "display.sm", "display.md", "display.lg"]
     H = S[b + 1:]
-    if len(H) > 6:  # 9 base styles + 6 headings = 15, the top of the usual range (DC-L02-10; U5 F8, F28): spread over the scale
+    fluid = display_scale(ctx, S[-1]) if raw.get("marketingSurfaces") else {}
+    if fluid:  # the display styles come from their own fluid scale; the UI scale names four titles and headlines (15 styles in all)
+        heading_names = heading_names[:4]
+        if len(H) > 4:
+            H = [H[i] for i in sorted({round(i * (len(H) - 1) / 3) for i in range(4)})]
+    elif len(H) > 6:  # 9 base styles + 6 headings = 15, the top of the usual range (DC-L02-10; U5 F8, F28): spread over the scale
         H = [H[i] for i in sorted({round(i * (len(H) - 1) / 5) for i in range(6)})]
         heading_names = ["title.md", "title.lg", "headline.sm", "headline.lg", "display.md", "display.lg"]
     uses = {"title": ("Card, panel and group titles.", "Page titles."), "headline": ("Page and section titles.", "Card titles."),
@@ -2204,6 +2264,13 @@ def build_typography(ctx):
         fam_name = "display" if not name.startswith("title") else "text"
         u, av = uses[name.split(".")[0]]
         styles.append((name, s, role, fam_name, u, av, False))
+    fluid_uses = {"display.md": ("Section titles on marketing pages; one per section.", "Cards and app screens."),
+                  "display.lg": ("The hero line: one per page, at most two lines.", "Section titles and repeated elements.")}
+    for name, f in fluid.items():
+        styles.append((name, f["max"], "display" if "display" in w else "heading", "display", *fluid_uses[name], False))
+    if fluid and base < 15:  # the call to action on a marketing page: at least 15px, sentence case (owner, 2026-11-05); else label.lg
+        styles.append(("label.cta", next((x for x in S if x >= max(15, base)), base), "label", "text",
+                       "Call-to-action buttons: sentence case, one filled per view.", "Capitals; body text.", False))
 
     if raw.get("numericStyles", True):  # tabular figures for amounts and tables; on unless set off (STD-visual-details-02 must)
         styles += [("numeric.md", base, "body", "text", "Amounts and table figures: tabular digits line up in columns; right-align "
@@ -2216,6 +2283,10 @@ def build_typography(ctx):
         used_lh[lh] = True
         em = tracking(s, caps, fam_name)
         ext = {"lineHeightPx": lh, "letterSpacingEm": em, "use": use, "avoid": avoid}
+        if path in fluid:
+            ext["fluid"] = {"minPx": fluid[path]["min"], "maxPx": fluid[path]["max"]}
+        if path == "label.cta":
+            ext["case"] = "sentence"
         if caps:
             ext["textTransform"] = "uppercase"
         if path.startswith("numeric."):
@@ -2226,15 +2297,25 @@ def build_typography(ctx):
         parts = path.split(".")
         for q in parts[:-1]:
             node = node.setdefault(q, {})
-        node[parts[-1]] = tok({"fontFamily": A(f"font.family.{fam_name}"), "fontSize": A(f"font.size.{s}"),
+        node[parts[-1]] = tok({"fontFamily": A(f"font.family.{fam_name}"), "fontSize": A(f"font.size.{fluid[path]['key'] if path in fluid else s}"),
                                "fontWeight": A(f"font.weight.{role}"), "letterSpacing": dim(rnd(s * em, 2)),
                                "lineHeight": rnd(lh / s, 4)}, None, ext)
     for st in styles:
         add_style(text, *st)
-    used_sizes = sorted({st[1] for st in styles} | {base})  # the font.size steps a named style uses (DC-L02-10: 8-10 sizes)
+    used_sizes = sorted({st[1] for st in styles if st[0] not in fluid} | {base})  # the font.size steps a named style uses (DC-L02-10: 8-10 sizes)
     for s in used_sizes:
         size_tok[str(s)] = tok(dim(s))
-    sc = dict(sc, sizes=used_sizes, scaleSizes=S)
+    for name, f in fluid.items():  # $value is the desktop size; CSS gets the clamp() (a DTCG dimension cannot hold one)
+        size_tok[f["key"]] = tok(dim(f["max"]), f"{name}: fluid from {f['min']}px on a phone to {f['max']}px at the container width.",
+                                 {"fluid": {"minPx": f["min"], "maxPx": f["max"], "viewport": levers()["formulas"]["type"]["display"]["viewport"]},
+                                  "css": fluid_css(f["min"], f["max"])})
+    tracking_tok = {"$type": "number", "$description": "Letter spacing in em, one value per job (levers formulas.type.tracking.jobs). Capitals "
+                                                       "never take negative tracking. The font shorthand drops letter-spacing: set it too, or use the text classes.",
+                    **{k: tok(v) for k, v in (("small", jobs["small"]), ("body", jobs["body"]), ("heading", jobs["heading"]),
+                                              ("display", jobs["display"]), ("caps-label", jobs["capsLabel"]), ("caps-display", jobs["capsDisplay"]))}}
+    if zero_tracking:
+        tracking_tok.update({k: tok(0) for k in ("small", "body", "heading", "display", "caps-label", "caps-display")})
+    sc = dict(sc, sizes=used_sizes, scaleSizes=S, fluid={k: {"min": f["min"], "max": f["max"]} for k, f in fluid.items()})
     # Emphasized variants: Expression 67 and up (levers.json type.emphasizedVariants). Material 3 Expressive pairs each
     # baseline style with a heavier one for selection, actions, headlines and editorial moments (DC-L02-11, S-L02-006).
     # Each uses the next heavier weight the system already has, so the weight count stays as DC-L02-15 set it.
@@ -2268,9 +2349,9 @@ def build_typography(ctx):
                                      "zeroTracking": sc_code in levers()["formulas"]["type"]["tracking"]["zeroScripts"]}
     text["$extensions"][NS]["scripts"] = script_notes
     ctx.type_info = dict(sc, weights=w, styles=[s[0] for s in styles], emphasized=emphasized, lineHeights=sorted(used_lh), scripts=script_notes,
-                         faces=faces)
+                         faces=faces, tracking={k: v["$value"] for k, v in tracking_tok.items() if not k.startswith("$")})
     font = {"family": dict({"$type": "fontFamily"}, **fam), "weight": weights, "size": size_tok,
-            "line-height": {k: v for k, v in lh_tok.items() if k.startswith("$") or int(k) in used_lh}}
+            "line-height": {k: v for k, v in lh_tok.items() if k.startswith("$") or int(k) in used_lh}, "tracking": tracking_tok}
     return {"font": font, "text": text}
 
 
@@ -2344,9 +2425,24 @@ def build_space_foundation(ctx):
     if bp:
         size["breakpoint"] = {"$description": f"Layout breakpoints ({ctx.raw['breakpoints']}, Q-layout-01): the minimum width where each layout starts.",
                               **{k: tok(dim(v)) for k, v in bp.items()}}
+    lay = levers()["formulas"]["layout"]
+    base_px = int(ctx.raw.get("baseSize") or 16)
+    measure = {k: tok(dim(int(round(lay["measure"][k] * 0.55 * base_px))),  # px is about the ch width of a sans at body size
+                      f"{lay['measure'][k]} characters per line ({'paragraphs' if k == 'prose' else 'the lead under a heading'}); CSS uses ch.",
+                      {"css": f"{lay['measure'][k]}ch"}) for k in ("prose", "lead")}
+    layout = {"$description": "One container for every section of the site; columns, gutters and margins by width class; a reading "
+                              "measure. A centred hero is fine; within a section the heading and its content share one alignment.",
+              "$extensions": {NS: {"evidence": lay["evidence"]}},
+              "container": {"$type": "dimension", "max": tok(dim(lay["container"]), "The one content width (Primer full pages, S-L03-008).")},
+              "columns": {"$type": "number", **{k: tok(v) for k, v in lay["columns"].items()}},
+              "gutter": {"$type": "dimension", **{k: tok(dim(v)) for k, v in lay["gutter"].items()}},
+              "margin": {"$type": "dimension", **{k: tok(dim(v)) for k, v in lay["margin"].items()}},
+              "measure": {"$type": "dimension", **measure}}
     ctx.space_info = {"unit": unit, "ladder": ladder, "targets": tg, "iconDefault": icon_default,
-                      "iconStroke": {16: stroke(16), 20: stroke(20), 24: stroke(24)}, "breakpoints": bp or {}}
-    return {"space": space, "size": size, "icon": icon}
+                      "iconStroke": {16: stroke(16), 20: stroke(20), 24: stroke(24)}, "breakpoints": bp or {},
+                      "layout": {"container": lay["container"], "columns": lay["columns"], "gutter": lay["gutter"], "margin": lay["margin"],
+                                 "measure": lay["measure"], "alignment": lay["alignment"]}}
+    return {"space": space, "size": size, "icon": icon, "layout": layout}
 
 
 def build_space_density(ctx, density):
@@ -2399,16 +2495,43 @@ def build_space_density(ctx, density):
     out["size"]["row"] = {"$description": f"List and table row heights, {density}: one line dense (sm), default (md) and roomy (lg), and a "
                                           "row whose cells hold two lines. Hairlines between rows; hit areas follow size.target.min (DC-L23-06).",
                           **{k: tok(dim(v)) for k, v in rows.items()}}
+    cta = clamp(lg, 48, 56) if ctx.raw.get("marketingSurfaces") else None
+    if cta:  # the call to action on a marketing page: 48 to 56px, text.label.cta, one filled per view
+        out["size"]["control"]["cta"] = tok(dim(cta), "Call-to-action buttons on marketing pages: 48 to 56px tall, one filled per view.")
     ctx.__dict__.setdefault("density_info", {})[density] = {"inset": inset, "stack": stack, "inline": inline, "section": section,
-                                                          "control": {"sm": sm, "md": md, "lg": lg}, "row": rows, "ratio": ratio}
+                                                          "control": dict({"sm": sm, "md": md, "lg": lg}, **({"cta": cta} if cta else {})),
+                                                          "row": rows, "ratio": ratio}
     return out
 
 
 # ---------------------------------------------------------------------------------------------- shape
 
+def roundness_chosen(ctx):
+    """True when the corners are a choice: the Roundness dial set (Q-shape-01 sets it), a named style, or a preset the
+    person picked. Coupling, feel words and the default preset are not."""
+    src = ctx.dial_src.get("roundness", "")
+    return src.startswith(("set", "style:")) or (src.startswith("preset:") and not effective_preset(ctx.state)[1])
+
+
+def unchosen_control(px):
+    """A control radius nobody chose: never square and never a pill (levers formulas.radius.unchosen); 0-2px -> 6px."""
+    u = levers()["formulas"]["radius"]["unchosen"]
+    if px == "full" or (isinstance(px, (int, float)) and px >= FULL):
+        return u["max"]
+    return u["to"] if px < u["raiseBelow"] else min(px, u["max"])
+
+
+def cta_shape(control):
+    """The button shape in words: square (0-2px), subtle (4-6px), rounded (8-12px) or pill."""
+    if control == "full" or control >= FULL:
+        return "pill"
+    return "square" if control <= 2 else "subtle" if control <= 6 else "rounded"
+
+
 def build_shape(ctx):
     p = ctx.params
     rough = ctx.dials["roundness"]
+    chosen = roundness_chosen(ctx)
 
     def own(name, computed):
         """A radius role in px: the person's value (radius_px) or the computed one. A stored value that is not a radius
@@ -2420,7 +2543,8 @@ def build_shape(ctx):
             ctx.used[name] = computed
             return radius_px(computed)
         return px
-    control = own("radius.control", eval_map(lever_index()["radius.control"]["map"], rough))  # params hold the override already
+    computed = eval_map(lever_index()["radius.control"]["map"], rough)
+    control = own("radius.control", computed if chosen else unchosen_control(computed))  # params hold the override already
 
     def corners(c):
         """(control, container, detail) for a control radius."""
@@ -2439,7 +2563,8 @@ def build_shape(ctx):
     drv = lever_index().get("radius.control")
     if drv and std_has_records(ctx.state) and "overrides.radius.control" in std_held(ctx.state):
         # a standard that fixes the control radius says nothing about cards and dialogs: they keep following the Roundness dial
-        _c, container, detail = corners(eval_map(drv["map"], ctx.dials[drv["dial"]]))
+        dial_c = eval_map(drv["map"], ctx.dials[drv["dial"]])
+        _c, container, detail = corners(dial_c if chosen else unchosen_control(dial_c))
     container = own("radius.container", container)
     overlay = own("radius.overlay", snap_to(min(32, container * 1.5), SNAP_RADII) if container else 0)
     detail = own("radius.detail", detail)
@@ -2461,13 +2586,14 @@ def build_shape(ctx):
         radius[str(v)] = tok(dim(v))
     radius["full"] = tok(dim(FULL), "Pills and avatars.")
     rr = lambda v: A("radius.full") if v >= FULL else A(f"radius.{v}")
+    roles = levers()["formulas"]["radius"]["roles"]  # the same kind of thing takes one corner everywhere
     radius.update({
-        "detail": tok(rr(detail), "Checkboxes, tags, small badges."),
-        "control": tok(rr(control_v), "Buttons, inputs, selects (Roundness dial, DC-L04-02)."),
+        "detail": tok(rr(detail), roles["detail"].capitalize() + "."),
+        "control": tok(rr(control_v), roles["control"].capitalize() + ": one corner for all of them (Roundness dial or Q-shape-01, DC-L04-02)."),
         "control-sm": tok(rr(control_sm), "Controls under 32px tall drop one step (Fluent, S-L04-007)."),
-        "container": tok(rr(container), "Cards and panels."),
-        "overlay": tok(rr(overlay), "Dialogs, sheets, popovers."),
-        "person": tok(A("radius.full"), "Avatars."),
+        "container": tok(rr(container), roles["container"].capitalize() + ": one corner for all of them."),
+        "overlay": tok(rr(overlay), roles["overlay"].capitalize() + "."),
+        "person": tok(A("radius.full"), roles["person"].capitalize() + "."),
         "nested": tok(dim(nested), "Inner radius for an element inset by space.inset.lg inside a container: max(outer - padding, smallest step) (DC-L04-05)."),
         "focus": tok(dim(focus_r), "Focus ring radius = control radius + ring offset (Atlassian radius + 2px, S-L04-016)."),
     })
@@ -2487,6 +2613,7 @@ def build_shape(ctx):
     ctx.shape_info = {"control": "full" if full else control_v, "control-sm": control_sm, "detail": detail, "container": container,
                       "overlay": overlay, "nested": nested, "focusWidth": focus_w, "focusRadius": focus_r,
                       "iconCorners": p["icon.cornerStyle"], "iconCaps": p["icon.caps"], "borderDefault": bd,
+                      "ctaShape": cta_shape(control_v), "chosen": chosen or "radius.control" in (ctx.state.get("overrides") or {}),
                       # Q-shape-04 (DC-L04-04): corner geometry. The radii are the same on every platform; this says how each draws them
                       "cornerShape": ctx.raw.get("cornerShape") or "circular"}
     return {"radius": radius, "border": border, "focus": focus}
@@ -3249,6 +3376,33 @@ def split_tree(tree, pred, prefix=""):
     return yes, no
 
 
+def page_limits(ctx):
+    """What one page built from the system may use (levers formulas.type.pageLimits), with the values themselves, so a
+    review can count a page against them: sizes, weights, families, tracking per job, text greys, accents, corners,
+    one container and one filled call to action per view."""
+    lim = levers()["formulas"]["type"]["pageLimits"]
+    t, shp, lay = ctx.type_info, ctx.shape_info, ctx.space_info.get("layout") or {}
+    faces = t.get("faces") or {}
+    fams = [f.get("face") for k, f in faces.items() if k in ("text", "display") and f.get("face") and f.get("face") != "=textFace"]
+    out = {"_about": "Caps for one page. opendesigner-review counts a built page against them; the values are the tokens.",
+           "sizes": {"max": lim["sizes"], "scale": t["sizes"], "fluid": t.get("fluid") or {}},
+           "weights": {"max": lim["weights"], "values": sorted(set(t["weights"].values()))},
+           "families": {"max": lim["families"], "values": list(dict.fromkeys(fams)) or ["system"], "note": "a code face only where code is shown"},
+           "tracking": dict(t.get("tracking") or {}, capsNeverNegative=True),
+           "textGreys": {"max": lim["textGreys"], "tokens": ["color.text.primary", "color.text.secondary", "color.text.disabled"]},
+           "accents": {"max": max(lim["accents"], int(ctx.cinfo.get("accentCount") or 1))},
+           "filledPrimaryPerView": lim["primaryPerView"],
+           "radius": {k: ("full" if isinstance(shp.get(k), (int, float)) and shp[k] >= FULL else shp.get(k))
+                      for k in ("control", "container", "overlay", "detail")},
+           "ctaShape": shp.get("ctaShape"),
+           "containers": {"max": lim["containers"], "width": lay.get("container")},
+           "alignment": lay.get("alignment"), "heroMaxLines": lim["heroMaxLines"], "evidence": lim["evidence"]}
+    if ctx.raw.get("marketingSurfaces"):
+        out["cta"] = {"height": [48, 56], "labelStyle": "text.label.cta" if "label.cta" in t["styles"] else "text.label.lg",
+                      "labelMinPx": 15, "case": "sentence"}
+    return out
+
+
 def generate_system(state, token_types=None):
     """Files follow the spec's tiering (7.4): primitives, semantic, semantic.color.<theme>, semantic.density.<mode>,
     motion.<standard|reduced>, plus the resolver and a meta file. token_types: see apply_token_overrides."""
@@ -3292,6 +3446,7 @@ def generate_system(state, token_types=None):
         "platforms": ctx.raw.get("platforms"), "inputs": ctx.raw.get("inputs"),
         "textScaling": ctx.raw.get("textScaling") or "full", "notes": ctx.notes,
     }
+    meta["limits"] = page_limits(ctx)
     meta["stateHash"] = state_hash(state)
     meta["profile"] = profile_record(ctx.profile)
     files["opendesigner.meta.json"] = meta
@@ -3730,6 +3885,17 @@ def validate_files(files, state, rep):
         rep.add("warning", "lint", f"{len(sizes)} text sizes; 8 to 10 is the usual range", "Type scale size count", "DC-L02-10")
     if sizes and sizes[0] < 11:
         rep.add("warning", "lint", f"the smallest text size, {sizes[0]:g}px, is under 11px", "Minimum legible size 11pt/sp", "S-L02-001, S-L02-005")
+    halves = [x for x in sizes if x != int(x)]
+    if halves:  # a private B2B landing page had 20 sizes at 18px and below in half-pixel steps (2026-11-05)
+        rep.add("warning", "lint", f"font sizes between whole pixels: {', '.join(f'{x:g}px' for x in halves)}. Use whole px",
+                "Whole-pixel type sizes", "DC-L02-09")
+    for k, v in toks.items():  # capitals never take negative tracking (levers formulas.type.tracking.jobs, STD-visual-details-04)
+        ext = (v.get("$extensions") or {}).get(NS) or {}
+        caps = (k.startswith("text.") and ext.get("textTransform") == "uppercase") or k in ("font.tracking.caps-label", "font.tracking.caps-display")
+        em = ext.get("letterSpacingEm") if k.startswith("text.") else v.get("resolved")
+        if caps and isinstance(em, (int, float)) and em < 0:
+            rep.add("error", "lint", f"{k} sets capitals with negative tracking ({em:g}em); capitals take 0 to +0.08em",
+                    "Capitals never take negative tracking", "STD-visual-details-04, S-L02-021", k)
     styles = {k: v["resolved"] for k, v in toks.items() if k.startswith("text.") and not k.startswith(("text.emphasized.", "text.numeric."))
               and v["type"] == "typography"}  # emphasized and numeric variants pair with a baseline style; they are not extra levels
     if len(styles) > 15:
@@ -3744,9 +3910,11 @@ def validate_files(files, state, rep):
         if s2 / s1 - 1 < 0.1 and abs(w2 - w1) < 200 and not (s1 == s2 and w1 == w2):
             rep.add("warning", "lint", f"{k1} ({s1:g}px/{w1}) and {k2} ({s2:g}px/{w2}) look almost the same: under 10% apart in size and under 200 in weight",
                     "Adjacent hierarchy levels must differ visibly", "DC-L15-02 (200 [inferred])")
-    text_tiers = [k for k in toks if re.fullmatch(r"color\.text\.(primary|secondary|tertiary|quaternary|muted|subtle)", k)]
+    text_tiers = {json.dumps(toks[k]["resolved"], sort_keys=True) for k in toks
+                  if re.fullmatch(r"color\.text\.(primary|secondary|tertiary|quaternary|muted|subtle|disabled)", k)}
     if len(text_tiers) > 3:
-        rep.add("warning", "lint", f"{len(text_tiers)} gray text colors; three is the most that stay distinct", "Hierarchy tiers: 3 text colors", "L15-P04, S-L15-038")
+        rep.add("warning", "lint", f"{len(text_tiers)} gray text colors; three (primary, secondary, disabled) is the most that stay distinct",
+                "Hierarchy tiers: 3 text colors", "L15-P04, S-L15-038")
 
     # ---- lint: motion
     if "motion" not in res.get("modifiers", {}) or "reduced" not in res["modifiers"]["motion"]["contexts"]:
@@ -4195,7 +4363,10 @@ ANSWER_TABLE = {
                   "sans-serif": {"raw.displayFace": "=serif"}, "display-face": {"raw.displayFace": "=brandFace"}},
     "Q-type-06": {"system-mono": {"raw.monoFace": "ui-monospace"}, "numeric-face": {"raw.numericStyles": True}},
     "Q-type-09": {"1.125": {"overrides.type.ratio": 1.125}, "1.2": {"overrides.type.ratio": 1.2}, "1.25": {"overrides.type.ratio": 1.25},
-                  "1.333": {"overrides.type.ratio": 1.333}},
+                  "1.333": {"overrides.type.ratio": 1.333},
+                  **{k: {"overrides.type.ratio": v} for k, v in (("major-second", 1.125), ("minor-third", 1.2), ("major-third", 1.25),
+                                                                   ("perfect-fourth", 1.333), ("augmented-fourth", 1.414),
+                                                                   ("perfect-fifth", 1.5), ("golden-ratio", 1.618))}},
     "Q-type-11": {"4pt": {"raw.lineHeightGrid": 4}, "2pt": {"raw.lineHeightGrid": 2}},
     "Q-type-12": {"two": {"overrides.type.weightCount": 2}, "three": {"overrides.type.weightCount": 3}, "four": {"overrides.type.weightCount": 4},
                   "emphasized-twin": {"overrides.type.emphasizedVariants": True}, "strong-stronger": {"overrides.type.emphasizedVariants": True}},
@@ -4213,7 +4384,8 @@ ANSWER_TABLE = {
                     "bootstrap": {"raw.breakpoints": "bootstrap"}, "apple-size-classes": {"raw.breakpoints": UNSET}},
     "Q-layout-03": {"reading": {"raw.productType": "content"}, "working": {"raw.productType": "work-tool"},
                     "data": {"raw.productType": "work-tool", "raw.numericStyles": True}},
-    "Q-shape-01": {"square": {"dials.roundness": 5}, "subtle": {"dials.roundness": 40}, "soft": {"dials.roundness": 55}, "pill": {"dials.roundness": 97}},
+    "Q-shape-01": {"square": {"dials.roundness": 5, "overrides.radius.control": 0}, "subtle": {"dials.roundness": 40, "overrides.radius.control": 6},
+                   "soft": {"dials.roundness": 55, "overrides.radius.control": 8}, "pill": {"dials.roundness": 97, "overrides.radius.control": "full"}},
     "Q-shape-04": {"circular": {"raw.cornerShape": "circular"}, "continuous": {"raw.cornerShape": "continuous"},
                    "squircle-enhance": {"raw.cornerShape": "squircle-enhance"}},
     "Q-depth-01": {"borders": {"dials.depth": 8}, "ring-shadow": {"dials.depth": 25}, "tonal": {"dials.depth": 45}, "shadow": {"dials.depth": 68},
@@ -4483,6 +4655,39 @@ def _merge_effects(into, eff):
     return into
 
 
+# A typed value is stored as the value, not only as reason text ("buttons 6px", "weights 400/500", "major third"; a private
+# B2B landing page kept these only in --why, 2026-11-05). Answers to these questions that the person chose are locked.
+HOLD_ANSWERS = {"Q-shape-01": ("overrides.radius.control",)}
+
+
+def exact_answer(qid, v):
+    """Effects for a stated value that is not one of the options, or {}."""
+    if isinstance(v, (dict, bool)) or v is None or str(v) in (ANSWER_TABLE.get(qid) or {}):
+        return {}
+    text = str(v).strip().lower()
+    if qid == "Q-shape-01":
+        px = radius_px(text if text.endswith("px") or text == "full" else (_px_number(f"{text}px") if re.fullmatch(r"\d+(\.\d+)?", text) else None))
+        if px is None:
+            return {}
+        return {"overrides.radius.control": "full" if px >= FULL else px,
+                "dials.roundness": _band_mid("roundness", "radius.control", "full" if px >= FULL else px)}
+    if qid == "Q-type-09":
+        key = re.sub(r"[\s_]+", "-", text)
+        if key in ANSWER_TABLE[qid]:
+            return dict(ANSWER_TABLE[qid][key])
+        try:
+            r = float(text)
+        except ValueError:
+            return {}
+        return {"overrides.type.ratio": r} if 1.05 <= r <= 1.7 else {}
+    if qid == "Q-type-12":
+        ws = sorted({int(x) for x in re.findall(r"\b[1-9]00\b", " ".join(map(str, v)) if isinstance(v, list) else text)})
+        if len(ws) < 2 or ws[0] != 400 or len(ws) > 3:  # body text is 400 in every system; three weights at most on a page
+            return {}
+        return {"overrides.type.weightCount": len(ws), "overrides.type.headingWeight": ws[-1]}
+    return {}
+
+
 def answer_effects(qid, value, state=None):
     """Engine inputs implied by a questionnaire answer (ANSWER_TABLE, plus the questions whose answers are free-form).
     UNSET removes an earlier value; LABEL stands for the option's plain label. A list answer merges its options."""
@@ -4553,9 +4758,15 @@ def answer_effects(qid, value, state=None):
         macros, _m, _u = feel_words(words)
         return {"macros": macros} if macros else {}
     if isinstance(v, list) and qid in ANSWER_TABLE:
+        exact = exact_answer(qid, v) if qid == "Q-type-12" else {}  # [400, 500] names weights, not options
+        if exact:
+            return exact
         for item in v:
             _merge_effects(eff, answer_effects(qid, item, state))
         return eff
+    exact = exact_answer(qid, v)
+    if exact:
+        return exact
     table = ANSWER_TABLE.get(qid) or {}
     if isinstance(v, str) and v.startswith("state-") and qid == "Q-aud-02":
         return {"context.feelings+": [v[len("state-"):]]}
@@ -5060,6 +5271,9 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
         breaks = std_constraint_breaks(state, path, value)
         if breaks:
             raise SystemExit("Nothing was changed. " + std_lock_message(state, [], path=path, value=value, breaks=breaks))
+    hold = HOLD_ANSWERS.get(path.split(".", 1)[1], ()) if path.startswith("answers.") and set_by == "chosen" else ()
+    if hold:  # the person's own button shape holds across iterations; changing it needs `engine.py unlock` first
+        lock = True
     if path.startswith("answers."):
         trial = copy.deepcopy(state)
         _store(trial, path, value, set_by, "D-0000", lock, via)
@@ -5093,9 +5307,10 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
         vals = value if isinstance(value, list) else [value]
         custom = [str(x) for x in vals if not isinstance(x, (dict, list)) and opts and str(x) not in opts
                   and not str(x).startswith("state-") and qid not in ("Q-brand-01", "Q-scope-06", "Q-brand-07") and not look_style]
-        if custom:
-            extra.append(f"note: {', '.join(custom)} is not one of the listed options for {qid}; kept as your own answer")
         effects = answer_effects(qid, value, state)
+        if custom:
+            extra.append(f"note: {', '.join(custom)} is not one of the listed options for {qid}; "
+                         + ("stored as the value itself" if effects else "kept as your own answer"))
         for epath, evalue in effects.items():
             holder = std_holder(state, epath.rstrip("+"))
             if holder:  # std_answer_blocks let it through, so the standard's value already matches
@@ -5105,7 +5320,7 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
                 extra.append(f"skipped {epath} (locked)")
                 skipped = True
                 continue
-            _store(state, epath, evalue, set_by, did, False)
+            _store(state, epath, evalue, set_by, did, epath in hold)
             _touch(state, epath.rstrip("+"))
             shown = "back to the default" if evalue == UNSET else json.dumps(evalue, ensure_ascii=False)
             extra.append(f"also set: {epath.rstrip('+')} = {shown} (from {qid})")
@@ -5165,13 +5380,16 @@ def cmd_lock(d, path, on=True):
             locks.append(path)
         if not on and path in locks:
             locks.remove(path)
+    held = HOLD_ANSWERS.get(parts[1], ()) if parts[0] == "answers" and len(parts) == 2 else ()
+    for hp in held:  # the value the answer stored (Q-shape-01: the button radius) locks and unlocks with it
+        _set_lock(state, hp, on)
     dump_json(sp, state)
     cur = state
     for q in parts:
         cur = cur.get(q) if isinstance(cur, dict) else None
     log_decision(d, path, answer_value(cur), "locked: change only with the owner's consent" if on else "unlocked for change",
                  "chosen", on, title=f"{'lock' if on else 'unlock'} {path}")
-    print(f"{'locked' if on else 'unlocked'} {path}")
+    print(f"{'locked' if on else 'unlocked'} {path}" + (f" and {', '.join(held)}" if held else ""))
 
 
 def cmd_init(d, src=None, name=None, force=False, standards=True, detect=True):
@@ -8175,10 +8393,15 @@ def css_decls(flat, prefix, paths, rem_fonts=True):
             if typ == "typography":
                 pass
             continue
+        css_lit = ((t.get("$extensions") or {}).get(NS) or {}).get("css")  # a fluid size or a ch measure that DTCG cannot hold
         if typ == "color":
             out.append(f"  {name}: {css_color(val)};")
+        elif typ == "dimension" and isinstance(css_lit, str):
+            out.append(f"  {name}: {css_lit};")
         elif typ == "dimension":
             out.append(f"  {name}: {css_dim(val, rem=rem_fonts and path.startswith('font.size.'))};")
+        elif typ == "number" and path.startswith("font.tracking."):
+            out.append(f"  {name}: {fmt_num(val)}em;")
         elif typ == "duration":
             out.append(f"  {name}: {css_duration(val)};")
         elif typ == "cubicBezier":
@@ -8263,7 +8486,8 @@ def export_css(files, meta, prefix):
     head = [f"/* {meta.get('name')} design tokens. Generated by the OpenDesigner engine {ENGINE_VERSION} from state.json;",
             "   do not edit by hand. Source of truth: tokens/*.tokens.json (DTCG 2025.10) + opendesigner.resolver.json.",
             "   Themes: prefers-color-scheme with a [data-theme] override. Density: [data-density]. Motion: prefers-reduced-motion",
-            "   with a [data-motion] override. Font sizes are rem so browser text zoom works (WCAG 1.4.4). */", ""]
+            "   with a [data-motion] override. Font sizes are rem so browser text zoom works (WCAG 1.4.4).",
+            f"   Text: use the .{prefix}-text-* classes, or set font and letter-spacing together; the font shorthand alone drops tracking. */", ""]
     lines = list(head)
 
     def block(selector, choice, fnames, indent=""):
@@ -8436,6 +8660,12 @@ def export_tailwind(files, meta, prefix, reset=True):
             v = css_var(prefix, path)
             lines += [f"  --text-{n}: var({v}-size);", f"  --text-{n}--line-height: var({v}-line-height);",
                       f"  --text-{n}--letter-spacing: var({v}-tracking);", f"  --text-{n}--font-weight: var({v}-weight);"]
+    for path in sorted(flat):  # tracking-caps-label, tracking-display (Tailwind's tracking-* namespace)
+        if path.startswith("font.tracking."):
+            lines.append(f"  --tracking-{kebab(path.split('.')[-1])}: var({css_var(prefix, path)});")
+    if "layout.container.max" in flat:  # max-w-page, max-w-prose, max-w-lead (Tailwind's container-* namespace)
+        lines += [f"  --container-page: var({css_var(prefix, 'layout.container.max')});"] + \
+                 [f"  --container-{k}: var({css_var(prefix, 'layout.measure.' + k)});" for k in ("prose", "lead") if f"layout.measure.{k}" in flat]
     for path in sorted(flat):
         if re.match(r"space\.(inset|stack|inline|section)\.", path):
             lines.append(f"  --spacing-{'-'.join(kebab(s_) for s_ in path.split('.')[1:])}: var({css_var(prefix, path)});")
@@ -8484,9 +8714,9 @@ def figma_scopes(path, typ):
         if path.startswith("color.shadow."):
             return ["EFFECT_COLOR"]
         return []
-    if path.startswith("space."):
+    if path.startswith(("space.", "layout.gutter", "layout.margin")):
         return ["GAP"]
-    if path.startswith(("size.control", "size.target", "size.icon")):
+    if path.startswith(("size.control", "size.target", "size.icon", "layout.container", "layout.measure")):
         return ["WIDTH_HEIGHT"]
     if path.startswith("radius."):
         return ["CORNER_RADIUS"]
@@ -9685,6 +9915,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     ctx = state.get("context") or {}
     prefix = meta.get("prefix", "ds")
     tinfo, sinfo, shp, mot, el = meta["type"], meta["space"], meta["shape"], meta["motion"], meta["elevation"]
+    lim, lay = meta.get("limits") or {}, sinfo.get("layout") or {}  # page caps and layout (older meta files have neither)
     H = lambda p: hex_of(light[p]["resolved"])
 
     def dec_ids(sec):
@@ -9897,10 +10128,18 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
                    "32px and -0.02em from 48px. Above 19px Apple's values turn positive to correct SF Pro Display's tighter drawing, which "
                    f"{raw.get('textFace')} does not have, so headings tighten instead (STD-visual-details-05).")
              if sf_tracking_on(state)
-             else "- Letter spacing: +0.02em at 11-12px, -0.01em from 32px, -0.02em from 48px."),
+             else "- Letter spacing, one value per job (`font.tracking.*`): +0.02em at 11-12px, 0 for body, -0.01em from 32px, "
+                  "-0.02em from 48px."),
+            "- Capitals never get negative tracking: small capital labels +0.06em, capital headings 0 to +0.02em. Set `font` and "
+            f"`letter-spacing` together, or use the `.{prefix}-text-*` classes: the `font` shorthand alone drops tracking.",
             "- Text scaling: CSS sizes are rem, line heights unitless, so text scales to 200% (WCAG 1.4.4); containers must grow with it.",
             "- Scripts: " + (", ".join(f"{k}: line height x{v.get('lineHeightFactor')}" + (", tracking 0" if v.get("zeroTracking") else "")
                                       for k, v in scripts.items()) if scripts else "Latin only; add scripts in raw.scripts to get per-script line heights (DC-L02-25)."),
+            *([f"- Display scale (marketing surfaces): its own fluid sizes, " + "; ".join(
+                f"`text.{k}` {v['min']}px on a phone to {v['max']}px at {lay.get('container', 1280)}px" for k, v in tinfo["fluid"].items())
+               + ". The hero takes at most two lines; section titles use `text.display.md`."] if tinfo.get("fluid") else []),
+            *([f"- Per page: at most {lim['sizes']['max']} sizes, {lim['weights']['max']} weights ({', '.join(str(x) for x in lim['weights']['values'])}) "
+               f"and {lim['families']['max']} families, whole px only (`limits` in `tokens/opendesigner.meta.json`)."] if lim else []),
             "", _md_table(["Style", "Size/line (px)", "Weight", "Tracking", "Use"], rows),
             "", "**Use / avoid.**", "- Use at most three sizes and two weights in one view; let color and weight carry hierarchy before size.",
             "- Avoid all caps for sentences and in scripts without case; use weight for emphasis there."]
@@ -9922,7 +10161,12 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             "", "- Target sizes: " + ", ".join(f"{k} {v}px" for k, v in sinfo["targets"].items())
             + f"; `size.target.min` is the floor for the primary input, and `space.target.gap` separates adjacent targets.",
             "- Inner gaps stay below outer gaps (at least half), so grouping reads without borders (L15 P16).",
-            "- Breakpoints and grid: not generated yet; use the platform defaults and keep layout spacing independent of density (DC-L03-17).",
+            *([f"- One container for the whole site: `layout.container.max` ({lay['container']}px). Columns {lay['columns']['compact']} / "
+               f"{lay['columns']['medium']} / {lay['columns']['expanded']} (`layout.columns.*`), gutters {lay['gutter']['compact']} / "
+               f"{lay['gutter']['expanded']}px, margins {lay['margin']['compact']} / {lay['margin']['expanded']}px; paragraphs at most "
+               f"{lay['measure']['prose']}ch (`layout.measure.prose`), leads {lay['measure']['lead']}ch (DC-L03-15, DC-L03-16, DC-L02-17).",
+               f"- Alignment: {lay['alignment']}"] if lay else
+              ["- Breakpoints and grid: not generated yet; use the platform defaults and keep layout spacing independent of density (DC-L03-17)."]),
             "", "**Use / avoid.**", "- Parents own spacing (padding and gap); children never set outer margins.",
             "- Avoid values off the ladder; if one is needed, add it as a decision."]
     out.append(section("Layout", "\n".join(body), lead=f"**Spacing comes in steps of {sinfo['unit']}px, and screens use {params['space.densityMode']} spacing by default.**", term_key="spacing scale"))
@@ -9980,7 +10224,11 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     continuous_corner = levers()["formulas"]["radius"]["continuous"]  # Q-shape-04 squircle-enhance on the web (tools/fit_corner.py)
     body = [f"**Intent.** Roundness {dials['roundness']}/100 gives controls a **{shp['control']}** radius; details {shp['detail']}px, containers "
             f"{shp['container']}px, overlays {shp['overlay']}px, people full. Controls under 32px tall use `radius.control-sm` ({shp['control-sm'] if shp['control-sm'] < FULL else 'full'}).",
-            "", f"- Nested radius: inner = max(outer - padding, smallest step). Here it is {shp['nested']}px inside a container with `space.inset.lg` "
+            (f"Buttons are **{shp['ctaShape']}**" + (" (your choice)." if shp.get("chosen") else
+                                                      "; square and pill corners are a choice (Q-shape-01), never a default.")) if shp.get("ctaShape") else "",
+            "", "- One corner per kind of thing: " + "; ".join(f"`radius.{k}` for {v}" for k, v in levers()["formulas"]["radius"]["roles"].items()
+                                                              if k != "rule") + ".",
+            f"- Nested radius: inner = max(outer - padding, smallest step). Here it is {shp['nested']}px inside a container with `space.inset.lg` "
             "padding. Equal radii on nested shapes look uneven (DC-L04-05).",
             f"- Focus ring: {shp['focusWidth']}px, 2px offset, radius = control radius + offset ({shp['focusRadius'] if shp['focusRadius'] < FULL else 'full'}).",
             f"- Icons: {shp['iconCorners']} corners, {shp['iconCaps']} caps.",
@@ -10005,7 +10253,9 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     base_c = (state.get("components") or {}).get("base")
     base_c = (answer_words("Q-comp-01", base_c) if base_c else None) or "not chosen yet (Q-comp-01)"
     body = [f"**Intent.** v1 components use the semantic tokens only. Base: {base_c}. "
-            f"Buttons are {ctl['md']}px tall ({params['space.densityMode']}), {shp['control']} radius, `text.label.lg`; one primary action per view.",
+            f"Buttons are {ctl['md']}px tall ({params['space.densityMode']}), {shp['control']} radius, `text.label.lg`; one primary action per view."
+            + (f" Calls to action on marketing pages: `size.control.cta` ({ctl.get('cta', 48)}px), `{lim['cta']['labelStyle']}` in sentence case, "
+               "one filled per view; the others outline or text." if lim.get("cta") else ""),
             "", _md_table(["Component", "Status"], rows) if rows else "No inventory recorded.",
             "", "**Contested policies:** " + "; ".join(f"{k}: {v if v is not None else 'pending'}" for k, v in pol) + ".",
             "", "**Use / avoid.**", "- Every interactive component shows hover, pressed, focus-visible and disabled states from the tokens.",
@@ -10839,7 +11089,7 @@ def render_overview(d, files, meta, state):
                          "Give 3 or 4 traits in the form 'X, but not Y', or a voice guide.")
 
     # ---- color: semantic roles per theme, with contrast on the base surface
-    groups = [("Text", ["color.text.primary", "color.text.secondary", "color.text.tertiary", "color.text.link", "color.text.accent"]),
+    groups = [("Text", ["color.text.primary", "color.text.secondary", "color.text.disabled", "color.text.link", "color.text.accent"]),
               ("Surfaces", ["color.surface.base", "color.surface.raised", "color.surface.sunken", "color.bg.accent.subtle"]),
               ("Action", ["color.bg.action.primary", "color.text.on-action", "color.border.focus", "color.border.default"]),
               ("Status", ["color.text.danger", "color.text.success", "color.text.warning", "color.text.info"])]

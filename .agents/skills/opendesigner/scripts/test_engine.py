@@ -822,6 +822,7 @@ class JourneyTracking(unittest.TestCase):
             self.assertIn(("export", None, {"kind": "all"}), got)
             self.assertEqual(got[-1][:2], ("level_complete", None))
             quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "soft", "--no-doc"])
+            quiet(e.main, ["--dir", d, "unlock", "answers.Q-shape-01"])  # a chosen button shape is locked until the owner changes it
             quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "subtle", "--set-by", "delegated", "--no-doc"])
             self.assertEqual(self.events(d)[-3:], [("step_answered", "Q-shape-01", {"how": "option"}),
                                                    ("step_changed", "Q-shape-01", {}),
@@ -4147,6 +4148,108 @@ class DetectProject(unittest.TestCase):
         self.assertEqual(q["zoom"], 0)
         with open(os.path.join(e.REFERENCES, "rules.md"), encoding="utf-8") as f:
             self.assertNotIn("Always ask; never infer", f.read())
+
+
+class LandingPageRules(unittest.TestCase):
+    """A private B2B landing page (2026-11-05) ended up using none of the engine's tokens: capitals tracked -0.03em, a 1.2
+    scale with no hero, 2px then pill buttons, six text greys. These hold the rules that came out of it."""
+
+    def build(self, t, feel="serious,minimal,authoritative", surfaces="landing page:persuade", audience="regular"):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Corvala", "#B8321F", audience, "web", feel, surfaces=surfaces, delegated="all", quiet=True)
+        return d, self.system(d)
+
+    def system(self, d):
+        files, meta, _ = e.generate_system(e.load_state(d))
+        return e.resolve_all(files, {}), files, meta
+
+    def test_serious_landing_page_gets_room_a_hero_and_subtle_buttons(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, (flat, files, meta) = self.build(t)
+            params = {k: v["value"] for k, v in meta["params"].items()}
+            self.assertEqual(meta["profile"]["id"], "persuade")
+            self.assertGreaterEqual(params["type.ratio"], 1.25)
+            self.assertEqual((params["emphasis.heroMoments"], params["space.densityMode"]), ("significant-moments", "spacious"))
+            hero, sec = flat["font.size.display-lg"], flat["font.size.display-md"]
+            self.assertGreaterEqual(hero["resolved"]["value"], 96)
+            self.assertLessEqual(sec["resolved"]["value"], 48)
+            css = e.export_css(files, meta, "ds")
+            self.assertRegex(css, r"--ds-font-size-display-lg: clamp\(2\.5rem, [\d.]+rem \+ [\d.]+vw, 6rem\);")
+            self.assertEqual(flat["text.display.lg"]["$value"]["fontSize"], "{font.size.display-lg}")
+            self.assertTrue(all(v["resolved"]["value"] == int(v["resolved"]["value"]) for k, v in flat.items() if k.startswith("font.size.")))
+            for k in ("display-md", "display-lg"):  # 200% text zoom still grows fluid text (WCAG 1.4.4)
+                fl = flat[f"font.size.{k}"]["$extensions"]["opendesigner"]["fluid"]
+                self.assertLess(fl["maxPx"], 2.5 * fl["minPx"], k)
+            self.assertEqual((meta["shape"]["control"], meta["shape"]["ctaShape"]), (6, "subtle"))  # feel words gave roundness 0
+            self.assertTrue(48 <= flat["size.control.cta"]["resolved"]["value"] <= 56)
+            self.assertEqual(flat["layout.container.max"]["resolved"]["value"], 1280)
+            self.assertIn("--ds-layout-measure-prose: 65ch;", css)
+            lim = meta["limits"]
+            self.assertEqual((lim["sizes"]["max"], lim["weights"]["max"], lim["families"]["max"], lim["containers"]["max"]), (8, 3, 2, 1))
+            self.assertLessEqual(len(lim["sizes"]["scale"]) + len(lim["sizes"]["fluid"]), 8)
+            self.assertEqual(lim["cta"]["case"], "sentence")
+            self.assertFalse(any(i["severity"] in ("error", "warn") for i in e.validate_generated(files, e.load_state(_d), e.Report()).items))
+
+    def test_capitals_never_take_negative_tracking(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, (flat, files, meta) = self.build(t)
+            caps = {k: v for k, v in flat.items() if k.startswith("text.") and (v.get("$extensions") or {}).get("opendesigner", {}).get("textTransform")}
+            self.assertTrue(caps)
+            for k, v in caps.items():
+                self.assertTrue(0.05 <= v["$extensions"]["opendesigner"]["letterSpacingEm"] <= 0.08, k)
+            self.assertTrue(0 <= flat["font.tracking.caps-display"]["resolved"] <= 0.02)
+            css = e.export_css(files, meta, "ds")
+            self.assertIn("--ds-font-tracking-caps-label: 0.06em;", css)
+            self.assertIn("the font shorthand alone drops tracking", css)
+            self.assertIn("--tracking-caps-label: var(--ds-font-tracking-caps-label);", e.export_tailwind(files, meta, "ds"))
+            state = e.load_state(d)
+            state["overrides"]["font.tracking.caps-label"] = -0.03
+            files2, _m, _c = e.generate_system(state)
+            rep = e.validate_generated(files2, state, e.Report())
+            self.assertTrue(any("negative tracking" in i["message"] for i in rep.items if i["severity"] == "error"))
+
+    def test_text_keeps_three_greys(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, (flat, files, meta) = self.build(t)
+            self.assertEqual(files["semantic.color.light.tokens.json"]["color"]["text"]["tertiary"]["$value"], "{color.text.secondary}")
+            greys = {json.dumps(flat[f"color.text.{k}"]["resolved"], sort_keys=True) for k in ("primary", "secondary", "tertiary", "disabled")}
+            self.assertEqual(len(greys), 3)
+
+    def test_square_and_pill_are_choices(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "a")
+            quiet(e.cmd_sketch, d, "Bubbly", "#E0457B", "regular", "web", "playful,friendly,rich", quiet=True)
+            flat, _f, meta = self.system(d)
+            self.assertNotEqual(meta["shape"]["control"], "full")
+            self.assertLessEqual(flat["radius.control"]["resolved"]["value"], 12)
+            quiet(e.cmd_set, d, "Q-shape-01", "pill", "we want pills")
+            self.assertEqual(self.system(d)[2]["shape"]["ctaShape"], "pill")
+
+    def test_a_chosen_button_shape_holds_and_stated_values_stay_values(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, _s = self.build(t)
+            quiet(e.cmd_set, d, "Q-shape-01", "6px", "buttons 6px")
+            st = e.load_state(d)
+            self.assertEqual(st["overrides"]["radius.control"], 6)
+            self.assertTrue(e.is_locked(st, "answers.Q-shape-01") and e.is_locked(st, "overrides.radius.control"))
+            with self.assertRaises(SystemExit):
+                quiet(e.cmd_set, d, "Q-shape-01", "pill", "the agent's idea")
+            quiet(e.cmd_set, d, "dials.roundness", 97, "rounder")  # the dial moves cards; the button keeps its radius
+            self.assertEqual(self.system(d)[0]["radius.control"]["resolved"]["value"], 6)
+            quiet(e.cmd_lock, d, "answers.Q-shape-01", on=False)
+            self.assertFalse(e.is_locked(e.load_state(d), "overrides.radius.control"))
+            quiet(e.cmd_set, d, "Q-type-12", "400/500", "weights 400/500")
+            quiet(e.cmd_set, d, "Q-type-09", "major third", "a major third scale")
+            flat, _f, meta = self.system(d)
+            self.assertEqual(sorted(set(meta["type"]["weights"].values())), [400, 500])
+            self.assertEqual(meta["params"]["type.ratio"]["value"], 1.25)
+
+    def test_product_screens_keep_one_scale(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, (flat, _f, meta) = self.build(t, feel="precise,calm", surfaces="app:operate", audience="dense")
+            self.assertNotIn("font.size.display-lg", flat)
+            self.assertNotIn("size.control.cta", flat)
+            self.assertEqual(meta["profile"]["id"], "work-tool")
 
 
 if __name__ == "__main__":

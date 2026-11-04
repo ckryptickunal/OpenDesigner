@@ -1895,7 +1895,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `size-table` A size-specific table (SF Pro: +41/1000 em at 6pt, 0 at 12pt, -26/1000 em at 17pt), applied automatically by the OS [S-L02-001].
   - `per-style` Per-style tracking tokens (Material: Display Large -0.2sp, Body Large 0.5sp) [S-L02-005].
   - `zero` No extra letter spacing beyond the font's defaults [DC-L02-14].
-- **Default:** 0 at body sizes, +0.02 to +0.05em at 11-12px and all caps, -0.01 to -0.02em from about 32px, in em units. *Source:* card heuristic [DC-L02-14].
+- **Default:** 0 at body sizes, +0.02em at 11-12px, -0.01 to -0.02em from about 32px, in em units; capitals never negative: small capital labels +0.06em (Spectrum 2 detail), capital headings 0 to +0.02em. *Source:* card heuristic [DC-L02-14; S-L02-021].
 - **Decides:** DC-L02-14
 - **Changes:** DC-L07-12 · blocks: Foundations > Typography > Metrics > Letter spacing
 - **Preview:** a headline and an all-caps label with tracking on and off.
@@ -2301,18 +2301,18 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Evidence:** DC-L06-09; S-L06-003, S-L06-009, S-L06-030, S-L06-073, S-L06-088
 
 
-### Q-shape-01 · How soft should corners feel? · Quick
+### Q-shape-01 · What shape should buttons be, with corners to match? · Quick
 - **Why:** In L09's (inferred) ranking, corner radius is what differs most in how systems look (divergence 1). Every 2025-2026 update got rounder [DC-L09-01; L09 A2].
-- **Ask:** "How soft should corners feel: square, slightly rounded, rounded, or pill?"
+- **Ask:** "What shape should buttons be: square, slightly rounded, rounded, or pill? Cards and dialogs follow."
 - **Example:** Show a button, input, card and dialog at 0, 6, 12px and pill side by side.
 - **Control:** single choice + radius factor slider (0, 0.75, 1, 1.5, full)
 - **Options:**
-  - `square` 0-2px: official, engineered (GOV.UK, Carbon v11 buttons) [DC-L09-01, DC-L04-02].
-  - `subtle` 4-6px: businesslike (Fluent 4, Primer and Atlassian 6) [S-L04-007, S-L04-024, S-L04-016].
-  - `soft` 8-12px: friendly, modern (Polaris, Paste, Blade, Mantine v9 8px; Airbnb 12px) [DC-L09-01].
+  - `square` 0px: official, engineered (GOV.UK, Carbon v11 buttons) [DC-L09-01, DC-L04-02].
+  - `subtle` 6px: businesslike (Fluent 4, Primer and Atlassian 6) [S-L04-007, S-L04-024, S-L04-016].
+  - `soft` 8px: friendly, modern (Polaris, Paste, Blade, Mantine v9 8px; Airbnb 12px) [DC-L09-01].
   - `pill` Pill: consumer, playful, touch-first (Material 3, Spectrum 2, SLDS Cosmos; iOS 26 capsule controls) [DC-L09-01; S-L04-038].
   - `rule-based` Set by size (Spectrum 6-10 by size) or matched to the container's corners (Apple) [DC-L09-01; S-L04-035].
-- **Default:** 6px controls, 8-12px containers. *Source:* L09 shared default row 7 (16 of 23 control defaults at 4-8px, median 6) [L09 A1; DC-L09-01]; a radius factor slider as Radix offers [S-L09-559].
+- **Default:** 6px controls, 8-12px containers; square and pill only when chosen. The answer stores the button radius itself (`radius.control`), and a typed value ("6px") is stored as that value. A chosen answer is locked, so the shape holds across iterations until the owner changes it. *Source:* L09 shared default row 7 (16 of 23 control defaults at 4-8px, median 6) [L09 A1; DC-L09-01]; a radius factor slider as Radix offers [S-L09-559].
 - **Decides:** DC-L09-01, DC-L04-02
 - **Changes:** DC-L04-01, DC-L04-03, DC-L04-04, DC-L04-06, DC-L04-19, DC-L04-09, DC-L05-18 · blocks: Foundations > Shape > Radius scale and default; Shape personality
 - **Preview:** the component sheet morphing as the slider moves; the focus ring follows the radius.

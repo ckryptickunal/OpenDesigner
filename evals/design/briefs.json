@@ -252,6 +252,22 @@
         "fun",
         "bold"
       ]
+    },
+    {
+      "id": "b2b-landing-serious",
+      "why": "A serious B2B landing page (a private client page, 2026-11-05): feel words once flattened it to a 1.2 scale, no hero and 2px buttons",
+      "name": "Corvala",
+      "brand": "#B8321F",
+      "audience": "regular",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "serious",
+        "minimal",
+        "authoritative"
+      ],
+      "surfaces": "landing page:persuade"
     }
   ]
 }
