@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
-<title>OpenDesigner GitHub stars: 67</title>
+<title>OpenDesigner GitHub stars: 68</title>
 <defs><linearGradient id="a" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2338ff" stop-opacity="0.26"/><stop offset="0.25" stop-color="#2338ff" stop-opacity="0.16"/><stop offset="0.5" stop-color="#2338ff" stop-opacity="0.08"/><stop offset="0.75" stop-color="#2338ff" stop-opacity="0.03"/><stop offset="1" stop-color="#2338ff" stop-opacity="0"/></linearGradient></defs>
-<text x="44" y="30" font-size="14" fill="#5b6170">GitHub stars · updated Nov 3, 2026</text>
-<text x="44" y="62" font-size="30" font-weight="300" fill="#141517">67</text>
+<text x="44" y="30" font-size="14" fill="#5b6170">GitHub stars · updated Nov 4, 2026</text>
+<text x="44" y="62" font-size="30" font-weight="300" fill="#141517">68</text>
 <line x1="44" x2="736" y1="266.0" y2="266.0" stroke="#e6e9ee" stroke-width="1"/>
 <text x="36" y="270.0" font-size="11" fill="#5b6170" text-anchor="end">0</text>
 <line x1="44" x2="736" y1="219.0" y2="219.0" stroke="#e6e9ee" stroke-width="1"/>
@@ -14,13 +14,13 @@
 <line x1="44" x2="736" y1="78.0" y2="78.0" stroke="#e6e9ee" stroke-width="1"/>
 <text x="36" y="82.0" font-size="11" fill="#5b6170" text-anchor="end">80</text>
 <text x="44.0" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Sep 23</text>
-<text x="162.1" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Sep 30</text>
-<text x="280.3" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Oct 7</text>
-<text x="398.4" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Oct 14</text>
-<text x="516.6" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Oct 21</text>
-<text x="634.7" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Oct 28</text>
-<polygon points="44,266.0 44.0,266.0 60.9,266.0 77.8,266.0 94.6,266.0 111.5,266.0 128.4,266.0 145.3,266.0 162.1,266.0 179.0,266.0 195.9,266.0 212.8,266.0 229.7,266.0 246.5,266.0 263.4,266.0 280.3,266.0 297.2,266.0 314.0,266.0 330.9,263.6 347.8,263.6 364.7,263.6 381.6,263.6 398.4,263.6 415.3,258.9 432.2,258.9 449.1,258.9 466.0,258.9 482.8,258.9 499.7,258.9 516.6,256.6 533.5,247.2 550.3,244.8 567.2,242.5 584.1,240.2 601.0,240.2 617.9,237.8 634.7,219.0 651.6,202.6 668.5,176.7 685.4,146.2 702.2,125.0 719.1,113.2 736.0,108.6 736.0,266.0" fill="url(#a)"/>
-<polyline points="44.0,266.0 60.9,266.0 77.8,266.0 94.6,266.0 111.5,266.0 128.4,266.0 145.3,266.0 162.1,266.0 179.0,266.0 195.9,266.0 212.8,266.0 229.7,266.0 246.5,266.0 263.4,266.0 280.3,266.0 297.2,266.0 314.0,266.0 330.9,263.6 347.8,263.6 364.7,263.6 381.6,263.6 398.4,263.6 415.3,258.9 432.2,258.9 449.1,258.9 466.0,258.9 482.8,258.9 499.7,258.9 516.6,256.6 533.5,247.2 550.3,244.8 567.2,242.5 584.1,240.2 601.0,240.2 617.9,237.8 634.7,219.0 651.6,202.6 668.5,176.7 685.4,146.2 702.2,125.0 719.1,113.2 736.0,108.6" fill="none" stroke="#2338ff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
-<circle cx="736.0" cy="108.6" r="4" fill="#2338ff"/>
-<text x="746.0" y="112.6" font-size="13" fill="#141517">67</text>
+<text x="159.3" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Sep 30</text>
+<text x="274.7" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Oct 7</text>
+<text x="390.0" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Oct 14</text>
+<text x="505.3" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Oct 21</text>
+<text x="620.7" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Oct 28</text>
+<polygon points="44,266.0 44.0,266.0 60.5,266.0 77.0,266.0 93.4,266.0 109.9,266.0 126.4,266.0 142.9,266.0 159.3,266.0 175.8,266.0 192.3,266.0 208.8,266.0 225.2,266.0 241.7,266.0 258.2,266.0 274.7,266.0 291.1,266.0 307.6,266.0 324.1,263.6 340.6,263.6 357.0,263.6 373.5,263.6 390.0,263.6 406.5,258.9 423.0,258.9 439.4,258.9 455.9,258.9 472.4,258.9 488.9,258.9 505.3,256.6 521.8,247.2 538.3,244.8 554.8,242.5 571.2,240.2 587.7,240.2 604.2,237.8 620.7,219.0 637.1,202.6 653.6,176.7 670.1,146.2 686.6,125.0 703.0,113.2 719.5,108.6 736.0,106.2 736.0,266.0" fill="url(#a)"/>
+<polyline points="44.0,266.0 60.5,266.0 77.0,266.0 93.4,266.0 109.9,266.0 126.4,266.0 142.9,266.0 159.3,266.0 175.8,266.0 192.3,266.0 208.8,266.0 225.2,266.0 241.7,266.0 258.2,266.0 274.7,266.0 291.1,266.0 307.6,266.0 324.1,263.6 340.6,263.6 357.0,263.6 373.5,263.6 390.0,263.6 406.5,258.9 423.0,258.9 439.4,258.9 455.9,258.9 472.4,258.9 488.9,258.9 505.3,256.6 521.8,247.2 538.3,244.8 554.8,242.5 571.2,240.2 587.7,240.2 604.2,237.8 620.7,219.0 637.1,202.6 653.6,176.7 670.1,146.2 686.6,125.0 703.0,113.2 719.5,108.6 736.0,106.2" fill="none" stroke="#2338ff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="736.0" cy="106.2" r="4" fill="#2338ff"/>
+<text x="746.0" y="110.2" font-size="13" fill="#141517">68</text>
 </svg>
