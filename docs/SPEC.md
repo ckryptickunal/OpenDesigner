@@ -501,7 +501,7 @@ DESIGN.md is the readable view that later sessions and other models read first. 
 | # | Heading | Contents |
 |---|---|---|
 | 1 | `## Overview` | the taste card, shown under the opening sentence (five lines: the person's own picture of the look, color, shape, motion and their Never list, each with its source; the picture and the Never list are never invented), one-line product description, audience, the memorable thing, surfaces and their modes, ranked principles, the chosen direction and its dial positions, platforms; a line saying the tokens in `opendesigner/tokens/` are canonical and this file is generated |
-| 2 | `## Colors` | brand color and its role, ramps and how steps are built, semantic roles, interaction states, dark-mode rule, the step-distance contrast table (LEVERS B5), chart palette pointer |
+| 2 | `## Colors` | brand color and its role, ramps and how steps are built, semantic roles, interaction states, dark-mode rule, the step-distance contrast table (LEVERS B5), the chart color roles (brand, categorical, sequential, diverging, status, axis, gridline, label) |
 | 3 | `## Typography` | faces with licence status, scale (size, line height, tracking, weight per style), per-script rules, text scaling |
 | 4 | `## Layout` | spacing ladder and semantic aliases, density modes, breakpoints, grid and containers, target sizes |
 | 5 | `## Elevation & Depth` | depth model, surfaces, shadows or materials with solid fallbacks, stacking layers, borders |

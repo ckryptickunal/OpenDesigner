@@ -190,6 +190,7 @@
   --ds-opacity-state-drag: 0.16;
   --ds-opacity-disabled-container: 0.12;
   --ds-opacity-disabled-content: 0.38;
+  --ds-opacity-chart-dimmed: 0.3;
   --ds-font-size-12: 0.75rem;
   --ds-font-size-14: 0.875rem;
   --ds-font-size-17: 1.0625rem;
@@ -534,6 +535,7 @@
   --ds-color-shadow-key: rgb(34 36 40 / 0.091);
   --ds-color-shadow-ambient: rgb(34 36 40 / 0.077);
   --ds-color-shadow-ring: rgb(34 36 40 / 0.1);
+  --ds-color-chart-brand: var(--ds-color-accent-light-9);
   --ds-color-chart-sequential-1: var(--ds-color-accent-light-3);
   --ds-color-chart-sequential-2: var(--ds-color-accent-light-5);
   --ds-color-chart-sequential-3: var(--ds-color-accent-light-7);
@@ -548,6 +550,22 @@
   --ds-color-chart-categorical-6: #397f00;
   --ds-color-chart-categorical-7: #e96500;
   --ds-color-chart-categorical-8: #00799c;
+  --ds-color-chart-diverging-1: #574500;
+  --ds-color-chart-diverging-2: #765e00;
+  --ds-color-chart-diverging-3: #977901;
+  --ds-color-chart-diverging-4: #868d9b;
+  --ds-color-chart-diverging-5: #6578c5;
+  --ds-color-chart-diverging-6: #4558bd;
+  --ds-color-chart-diverging-7: #2d33b5;
+  --ds-color-chart-status-success: var(--ds-color-success-light-9);
+  --ds-color-chart-status-warning: var(--ds-color-warning-light-11);
+  --ds-color-chart-status-danger: var(--ds-color-danger-light-9);
+  --ds-color-chart-status-info: var(--ds-color-info-light-9);
+  --ds-color-chart-status-discovery: var(--ds-color-discovery-light-9);
+  --ds-color-chart-axis: var(--ds-color-border-default);
+  --ds-color-chart-gridline: var(--ds-color-border-subtle);
+  --ds-color-chart-label: var(--ds-color-text-secondary);
+  --ds-color-chart-reference: var(--ds-color-chart-neutral);
 }
 
 [data-theme="dark"] {
@@ -643,6 +661,7 @@
   --ds-color-shadow-key: rgb(0 0 0 / 0.182);
   --ds-color-shadow-ambient: rgb(0 0 0 / 0.155);
   --ds-color-shadow-ring: rgb(230 233 238 / 0.12);
+  --ds-color-chart-brand: var(--ds-color-accent-dark-9);
   --ds-color-chart-sequential-1: var(--ds-color-accent-dark-3);
   --ds-color-chart-sequential-2: var(--ds-color-accent-dark-5);
   --ds-color-chart-sequential-3: var(--ds-color-accent-dark-7);
@@ -657,6 +676,22 @@
   --ds-color-chart-categorical-6: #489d00;
   --ds-color-chart-categorical-7: #b64d00;
   --ds-color-chart-categorical-8: #0095c0;
+  --ds-color-chart-diverging-1: #e6ba00;
+  --ds-color-chart-diverging-2: #bc9800;
+  --ds-color-chart-diverging-3: #977902;
+  --ds-color-chart-diverging-4: #676d7a;
+  --ds-color-chart-diverging-5: #6578c5;
+  --ds-color-chart-diverging-6: #7c95ff;
+  --ds-color-chart-diverging-7: #aabdff;
+  --ds-color-chart-status-success: var(--ds-color-success-dark-9);
+  --ds-color-chart-status-warning: var(--ds-color-warning-dark-9);
+  --ds-color-chart-status-danger: var(--ds-color-danger-dark-9);
+  --ds-color-chart-status-info: var(--ds-color-info-dark-9);
+  --ds-color-chart-status-discovery: var(--ds-color-discovery-dark-9);
+  --ds-color-chart-axis: var(--ds-color-border-default);
+  --ds-color-chart-gridline: var(--ds-color-border-subtle);
+  --ds-color-chart-label: var(--ds-color-text-secondary);
+  --ds-color-chart-reference: var(--ds-color-chart-neutral);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -753,6 +788,7 @@
     --ds-color-shadow-key: rgb(0 0 0 / 0.182);
     --ds-color-shadow-ambient: rgb(0 0 0 / 0.155);
     --ds-color-shadow-ring: rgb(230 233 238 / 0.12);
+    --ds-color-chart-brand: var(--ds-color-accent-dark-9);
     --ds-color-chart-sequential-1: var(--ds-color-accent-dark-3);
     --ds-color-chart-sequential-2: var(--ds-color-accent-dark-5);
     --ds-color-chart-sequential-3: var(--ds-color-accent-dark-7);
@@ -767,6 +803,22 @@
     --ds-color-chart-categorical-6: #489d00;
     --ds-color-chart-categorical-7: #b64d00;
     --ds-color-chart-categorical-8: #0095c0;
+    --ds-color-chart-diverging-1: #e6ba00;
+    --ds-color-chart-diverging-2: #bc9800;
+    --ds-color-chart-diverging-3: #977902;
+    --ds-color-chart-diverging-4: #676d7a;
+    --ds-color-chart-diverging-5: #6578c5;
+    --ds-color-chart-diverging-6: #7c95ff;
+    --ds-color-chart-diverging-7: #aabdff;
+    --ds-color-chart-status-success: var(--ds-color-success-dark-9);
+    --ds-color-chart-status-warning: var(--ds-color-warning-dark-9);
+    --ds-color-chart-status-danger: var(--ds-color-danger-dark-9);
+    --ds-color-chart-status-info: var(--ds-color-info-dark-9);
+    --ds-color-chart-status-discovery: var(--ds-color-discovery-dark-9);
+    --ds-color-chart-axis: var(--ds-color-border-default);
+    --ds-color-chart-gridline: var(--ds-color-border-subtle);
+    --ds-color-chart-label: var(--ds-color-text-secondary);
+    --ds-color-chart-reference: var(--ds-color-chart-neutral);
   }
 }
 

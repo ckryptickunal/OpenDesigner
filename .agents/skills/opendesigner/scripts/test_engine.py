@@ -4407,6 +4407,103 @@ class ProtocolRulesAndTokenUse(unittest.TestCase):
             self.assertIn("No positioning yet", out.getvalue())
 
 
+
+def chart_state(cp="categorical-8", brand=None, **raw):
+    st = e.default_state("Charts")
+    st["raw"]["chartPalette"] = cp
+    if brand:
+        st["raw"]["brandColor"] = brand
+    st["raw"].update(raw)
+    return st
+
+
+class ChartAndTableTokens(unittest.TestCase):
+    """Issue #23: chart tokens (brand, status, diverging, axis, gridline) and the table question (Q-pattern-07)."""
+
+    def hexes(self, files, mode):
+        fl = e.resolve_all(files, {"theme": mode})
+        return {p: t["resolved"]["hex"] for p, t in fl.items() if t["type"] == "color" and isinstance(t["resolved"], dict)}
+
+    def test_every_chart_palette_gets_brand_status_diverging_and_chrome(self):
+        for cp in ("brand-gray", "categorical-8", "categorical-14"):
+            for brand in (None, "#e11d48", "#facc15", "#16a34a"):
+                with self.subTest(cp=cp, brand=brand):
+                    files, meta, _ctx = e.generate_system(chart_state(cp, brand))
+                    for mode in meta["modes"]:
+                        hx = self.hexes(files, mode)
+                        page = hx["color.surface.base"]
+                        marks = ["color.chart.brand"] + [f"color.chart.diverging.{i}" for i in range(1, 8)] + \
+                                [f"color.chart.status.{x}" for x in ("success", "warning", "danger", "info")]
+                        for m in marks:
+                            self.assertGreaterEqual(e.contrast(hx[m], page), 3.0, f"{mode} {m} {hx[m]} on {page}")
+                        self.assertEqual(hx["color.chart.gridline"], hx["color.border.subtle"])
+                        self.assertEqual(hx["color.chart.axis"], hx["color.border.default"])
+                        self.assertEqual(hx["color.chart.label"], hx["color.text.secondary"])
+                        self.assertEqual(hx["color.chart.reference"], hx["color.chart.neutral"])
+                        L1, C1, H1 = e.hex_to_oklch(hx["color.chart.diverging.1"])
+                        L4, C4, _ = e.hex_to_oklch(hx["color.chart.diverging.4"])
+                        L7, C7, H7 = e.hex_to_oklch(hx["color.chart.diverging.7"])
+                        self.assertLess(C4, min(C1, C7))                               # the midpoint is the quietest
+                        self.assertGreater(min(abs(H1 - H7), 360 - abs(H1 - H7)), 120)  # two hues far apart
+                        if cp == "brand-gray":                                       # the brand series is a mark too
+                            self.assertEqual(hx["color.chart.categorical.1"], hx["color.chart.brand"])
+                    self.assertEqual(e.resolve_all(files, {})["opacity.chart.dimmed"]["resolved"], 0.3)
+                    rep = e.Report()
+                    e.validate_files(files, chart_state(cp, brand), rep)
+                    self.assertEqual([i["message"] for i in rep.items if "color.chart." in i["message"]], [])
+
+    def test_no_chart_palette_no_chart_tokens(self):
+        files, _m, _c = e.generate_system(chart_state("none"))
+        fl = e.resolve_all(files, {"theme": "light"})
+        self.assertFalse([p for p in fl if p.startswith(("color.chart.", "opacity.chart."))])
+
+    def test_chart_colors_reach_every_export(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Charts", "#2563eb", "dense", "web,ios,android", "calm", quiet=True)
+            quiet(e.cmd_set, d, "answers.Q-color-19", "categorical-6-8", "dashboards")
+            quiet(e.cmd_export, d, "all")
+            b = os.path.join(d, "build")
+            rd = lambda *p: open(os.path.join(b, *p), encoding="utf-8").read()
+            self.assertIn("--ds-color-chart-diverging-4:", rd("css", "tokens.css"))
+            self.assertIn("--ds-opacity-chart-dimmed:", rd("css", "tokens.css"))
+            self.assertIn("--color-chart-status-danger:", rd("tailwind", "theme.css"))
+            self.assertIn("chartDiverging4", rd("swift", "DesignTokens.swift"))
+            self.assertIn("chartGridline", rd("compose", "DesignTokens.kt"))
+            self.assertIn("chart-diverging-4", rd("paper", "tokens.json"))
+            figma = json.loads(rd("figma", "variables.json"))
+            chart = {v["name"]: v["scopes"] for c in figma["collections"] for v in c["variables"] if v["name"].startswith("color/chart/")}
+            self.assertEqual(chart["color/chart/label"], ["TEXT_FILL"])
+            self.assertEqual(chart["color/chart/brand"], ["SHAPE_FILL", "STROKE_COLOR"])
+
+    def test_the_table_question_sets_stripes_and_rules(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Ledger", "#167874", "dense", "web", "calm")
+            design = lambda: open(os.path.join(t, "DESIGN.md"), encoding="utf-8").read()
+            self.assertIn("**Tables** (defaults; Q-pattern-07 changes them):", design())
+            self.assertIn("- Rows: a 1px `color.border.subtle` line between rows", design())
+            files, _m, _c = e.generate_system(e.load_state(d))
+            self.assertNotIn("color.surface.row-alternate", e.resolve_all(files, {"theme": "light"}))
+            quiet(e.cmd_set, d, "answers.Q-pattern-07", ["zebra", "static-header", "numbers-right"], "dense finance tables")
+            st = e.load_state(d)
+            self.assertEqual((st["raw"]["tableRows"], st["raw"]["tableHeader"], st["raw"]["tableNumbers"]), ("zebra", "static", "right"))
+            files, meta, _c = e.generate_system(st)
+            for mode in meta["modes"]:
+                hx = self.hexes(files, mode)
+                self.assertNotEqual(hx["color.surface.row-alternate"], hx["color.surface.base"])
+                for fg in ("color.text.primary", "color.text.secondary"):
+                    self.assertGreaterEqual(e.contrast(hx[fg], hx["color.surface.row-alternate"]), 4.5)
+            quiet(e.cmd_design_md, d)
+            text = design()
+            self.assertIn("- Rows: every other row on `color.surface.row-alternate`", text)
+            self.assertIn("- Header: scrolls away with the rows", text)
+            self.assertIn("- Numbers: right-aligned in `text.numeric.*`", text)
+            self.assertNotIn("(defaults; Q-pattern-07 changes them)", text)
+            q = e.questions()["Q-pattern-07"]
+            self.assertEqual([o["v"] for o in q["options"]][:3], ["lines", "zebra", "space"])
+
+
 SITE = {
     "package.json": {"name": "acme-site", "dependencies": {"next": "16", "react-dom": "19"}},
     "README.md": "# Acme\n\nShipping software for freight teams.\n",

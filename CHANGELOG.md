@@ -8,6 +8,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Chart and table tokens for data-heavy tools** (2026-11-05). Chart colors now add a one-series brand color, status colors and a 7-step diverging ramp, each 3:1 against the page, plus axis, gridline and label colors, and every export carries them. A new table question sets striped rows, a header that stays on screen and right-aligned numbers.
 - **Brand colors from your logo** (2026-11-05). `engine.py sketch --logo logo.png` (or an SVG) shows up to three colors from the logo, how much of it each one covers, and the command that confirms one. White, black and see-through parts are left out, and nothing is recorded until the person picks.
 - **Build writes only the exports your platforms use** (2026-11-05). `engine.py build` writes CSS and Tailwind for the web, Swift for iOS and Compose for Android, and names what it left out. Figma, Paper, DTCG and artifact files are written for every platform, and `export --format all` still writes everything.
 - **More icons drawn like your own** (2026-11-05). If you have a few icons and need more, `illustrate.py icons` reads how yours are drawn (badge, glyph box, line weight, colour), ranks 24 open icon sets by how close they are, and redraws the glyphs you pick the same way. They are shown next to yours first, and each licence is recorded.

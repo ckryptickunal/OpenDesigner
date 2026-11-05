@@ -459,7 +459,11 @@
       }
     },
     "chart": {
-      "$description": "Chart colors (Q-color-19): categorical colors in a fixed order, each at least 3:1 against the page (WCAG 1.4.11); a sequential ramp from the accent; one neutral for 'other'.",
+      "$description": "Chart colors (Q-color-19): marks at least 3:1 against the page (WCAG 1.4.11). Categorical colors in a fixed order, a sequential ramp from the accent, a diverging ramp around a midpoint, status colors, and the chart's axis, gridline and label colors, which point at the border and text roles (DC-L05-23, DC-L05-24).",
+      "brand": {
+        "$value": "{color.accent.dark.9}",
+        "$description": "A chart with one series: the brand color (DC-L05-23)."
+      },
       "sequential": {
         "1": {
           "$value": "{color.accent.dark.3}"
@@ -570,6 +574,126 @@
             "hex": "#0095c0"
           }
         }
+      },
+      "diverging": {
+        "1": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8053,
+              0.1647,
+              91.67
+            ],
+            "hex": "#e6ba00"
+          },
+          "$description": "Furthest below the midpoint."
+        },
+        "2": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6921,
+              0.1415,
+              91.67
+            ],
+            "hex": "#bc9800"
+          }
+        },
+        "3": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5889,
+              0.12,
+              91.67
+            ],
+            "hex": "#977902"
+          }
+        },
+        "4": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5348,
+              0.0216,
+              264.0
+            ],
+            "hex": "#676d7a"
+          },
+          "$description": "The midpoint, or no change."
+        },
+        "5": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.5934,
+              0.12,
+              271.67
+            ],
+            "hex": "#6578c5"
+          }
+        },
+        "6": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.6986,
+              0.1575,
+              271.67
+            ],
+            "hex": "#7c95ff"
+          }
+        },
+        "7": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.8075,
+              0.0963,
+              271.67
+            ],
+            "hex": "#aabdff"
+          },
+          "$description": "Furthest above the midpoint."
+        }
+      },
+      "status": {
+        "success": {
+          "$value": "{color.success.dark.9}",
+          "$description": "Success in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1)."
+        },
+        "warning": {
+          "$value": "{color.warning.dark.9}",
+          "$description": "Warning in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1)."
+        },
+        "danger": {
+          "$value": "{color.danger.dark.9}",
+          "$description": "Danger in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1)."
+        },
+        "info": {
+          "$value": "{color.info.dark.9}",
+          "$description": "Info in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1)."
+        },
+        "discovery": {
+          "$value": "{color.discovery.dark.9}",
+          "$description": "Discovery in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1)."
+        }
+      },
+      "axis": {
+        "$value": "{color.border.default}",
+        "$description": "Axis lines and tick marks."
+      },
+      "gridline": {
+        "$value": "{color.border.subtle}",
+        "$description": "Gridlines: supportive, so they stay quiet (DC-L05-24)."
+      },
+      "label": {
+        "$value": "{color.text.secondary}",
+        "$description": "Tick labels, axis titles and legends: text, so they keep the text minimum."
+      },
+      "reference": {
+        "$value": "{color.chart.neutral}",
+        "$description": "Target, threshold and average lines."
       }
     }
   }

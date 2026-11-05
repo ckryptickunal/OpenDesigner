@@ -3191,13 +3191,13 @@ Designers: brand voice: 3-4 traits with but-nots · Code: `voice guide (H-voice)
 ### Data visualization
 
 Charts that match the rest of the app, with set colors, parts and rules so all can read them.  
-Designers: data viz, themed to the system · Code: `color.chart.* (proposed)`
+Designers: data viz, themed to the system · Code: `color.chart.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Charts as part of the system: a small set of chart types, palettes, shared anatomy and accessibility rules, so charts look native to the product rather than pasted in.
 
-**Engineer:** Planned via the H-dataviz hook: chart palettes as color tokens, with chrome reusing text, border and dimension tokens; no chart tokens are generated yet. DTCG has no chart-specific types.
+**Engineer:** Generated when Q-color-19 asks for chart colors: color.chart.* holds brand, categorical, sequential, diverging and status colors, each 3:1 on the page, plus axis, gridline and label aliases.
 
 **Also called:** charts, dataviz
 

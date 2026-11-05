@@ -409,6 +409,13 @@ Designers: core set of about 25 components · Code: `button.* (proposed), APG pa
 
 **Contested policies:** Validation timing and disabled submit: pending; Field style: Fields with a border (M3 outlined; Carbon); Toasts: pending; Undo versus confirm: pending; Danger actions: pending; Button emphasis levels: pending.
 
+**Tables** (defaults; Q-pattern-07 changes them):
+- Rows: a 1px `color.border.subtle` line between rows, none around the table (Carbon's default).
+- Row heights: `size.row.sm` (dense), `size.row.md` (default), `size.row.lg` (roomy) and `size.row.two-line`; the header row matches the body rows (Carbon, S-L08-092).
+- Header: stays in view while the rows scroll (`position: sticky`), with a scroll-edge fade where rows pass under it, never a 1px line (STD-visual-details-15).
+- Numbers: right-aligned in `text.numeric.*` (tabular digits), and their column headers right-aligned too, so digits line up and compare at a glance (DC-L19-121, DC-L02-26).
+- Text, status chips, row checkboxes and targets follow the same tokens as the rest of the system; a chip carries a word, never color alone (WCAG 1.4.1).
+
 **Use / avoid.**
 - Every interactive component shows hover, pressed, focus-visible and disabled states from the tokens.
 - Inputs keep a 3:1 boundary (`color.border.input`); signifier strength: minimal-allowed.

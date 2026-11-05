@@ -171,7 +171,7 @@ Zoom 2 defined · weight medium · changes 3 decisions · class I · cards DC-L0
   - `none` No charts.
   - `categorical-6-8` 6-8 group colors in set order, plus one light-to-dark ramp. Two-way only for above or below target (Atlassian) [DC-L05-23].
   - `carbon-14` A long list in set order (Carbon's 14 colors, starting Purple 70 #6929c4, Cyan 50 #1192e8).
-- **Default:** `brand-gray`: brand-gray by default, categorical-6-8 for dashboards *Source:* card heuristics [DC-L05-23, DC-L01-24].
+- **Default:** `brand-gray`: brand-gray by default, categorical-6-8 for dashboards. Every palette also gets a single-series brand color, status colors, a 7-step diverging ramp around a midpoint (the brand hue above it, the opposite hue below, every step 3:1 against the page) and axis, gridline and label colors taken from the border and text roles *Source:* card heuristics [DC-L05-23, DC-L05-24, DC-L01-24].
 - **Show:** a bar chart, line chart and heatmap in light and dark, with the 3:1 check against the surface.
 - **Use / avoid:** use direct labels or grouping beyond 8 categories; avoid adding more hues [DC-L01-24].
 - **Skip:** yes, none unless Q-scope-01 includes internal-tools.

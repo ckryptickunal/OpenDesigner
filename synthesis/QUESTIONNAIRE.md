@@ -1544,7 +1544,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `brand-gray` One brand chart color plus gray: calm, branded, focused [DC-L05-23].
   - `categorical-6-8` 6-8 group colors in set order, plus one light-to-dark ramp. Two-way only for above or below target (Atlassian) [S-L01-032; DC-L05-23].
   - `carbon-14` A long list in set order (Carbon's 14 colors, starting Purple 70 #6929c4, Cyan 50 #1192e8) [S-L01-056].
-- **Default:** brand-gray by default, categorical-6-8 for dashboards. *Source:* card heuristics [DC-L05-23, DC-L01-24].
+- **Default:** brand-gray by default, categorical-6-8 for dashboards. Every palette also gets a single-series brand color, status colors, a 7-step diverging ramp around a midpoint (the brand hue above it, the opposite hue below, every step 3:1 against the page) and axis, gridline and label colors taken from the border and text roles. *Source:* card heuristics [DC-L05-23, DC-L05-24, DC-L01-24].
 - **Decides:** DC-L01-24, DC-L05-23
 - **Changes:** DC-L05-22, DC-L05-24, DC-L05-25 · blocks: Foundations > Color > Data visualization palettes
 - **Preview:** a bar chart, line chart and heatmap in light and dark, with the 3:1 check against the surface.
@@ -3711,6 +3711,30 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L08-21; S-L08-017, S-L08-041, S-L08-073
 
+### Q-pattern-07 · How should data tables look: rows, header and numbers? · Standard
+- **Show if:** Q-scope-06 includes operate, or Q-scope-01 includes internal-tools
+- **Why:** Tables are where work tools are read most. Lines or stripes keep the eye on one row, a header that stays in view keeps each column's meaning on screen, and right-aligned digits compare at a glance [DC-L19-43, DC-L19-121; S-L08-092].
+- **Ask:** "How should your tables look: lines between rows or striped rows, a header that stays on screen, and numbers lined up on the right?"
+- **Example:** Show one table three ways (lines, stripes, space), scrolled so the header is over the rows, with a money column.
+- **Control:** single choice (rows) + yes or no (sticky header) + single choice (numbers)
+- **Options:**
+  - `lines` Lines between rows: a quiet 1px line under each row (Carbon's default) [S-L08-092; DC-L19-43].
+  - `zebra` Striped rows: every other row one step darker, no lines; reads well when rows sit tight. Sets the striped-row color [DC-L19-43; S-L19-070].
+  - `space` Space between rows: no lines or stripes; for short lists, not wide data tables [DC-L19-43].
+  - `sticky-header` Header stays on screen while rows scroll, with a soft fade where rows pass under it, not a line [S-L08-092].
+  - `static-header` Header scrolls away: for tables that fit on one screen [inferred].
+  - `numbers-right` Numbers right-aligned in tabular digits, with their headers right-aligned too [DC-L19-121, DC-L02-26].
+  - `numbers-left` Numbers left-aligned like text: only for IDs and codes people read rather than compare [inferred].
+- **Default:** lines, with sticky-header and numbers-right; striped rows instead of lines when the density is compact. *Source:* card heuristics [DC-L19-43, DC-L19-121, DC-L08-13].
+- **Decides:** DC-L19-43, DC-L19-121
+- **Changes:** DC-L08-13, DC-L02-26 · blocks: Patterns > Collections > Data tables
+- **Preview:** the same table with lines, stripes and space, header pinned, a right-aligned money column.
+- **Use / avoid:** use stripes or lines for wide tables people scan across; avoid stripes as the only cue for a selected or hovered row, and avoid left-aligned amounts [DC-L19-43, DC-L19-121].
+- **Skip:** yes, defaults to lines, sticky header and right-aligned numbers.
+- **Block class:** G (generatable)
+- **Time weight:** low (fan-out 0)
+- **Evidence:** DC-L19-43, DC-L19-121, DC-L08-13, DC-L02-26; S-L08-092, S-L19-070
+
 ### Q-pattern-03 · How much should be visible up front, and how much behind "more"? · Expert
 - **Why:** Keeping extras one step away (progressive disclosure) makes screens calm and short. Showing it all at once feels strong, but busy [DC-L13-03].
 - **Ask:** "Should people see every option at once, or the main ones first with the rest tucked away?"
@@ -4491,7 +4515,6 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-39 | Typographic punctuation in interface text | new question |
 | DC-L19-41 | Proximity ladder inside a content block | new question |
 | DC-L19-42 | When a card earns its place, and how deep cards may nest | new question |
-| DC-L19-43 | How list rows are separated | new question |
 | DC-L19-44 | Edge-built alignment inside compact components | new question |
 | DC-L19-45 | Axis for heroes and single-message sections (start, centered or split) | new question |
 | DC-L19-46 | Hierarchy recipe: which lever carries each text level | new question |
@@ -4559,7 +4582,6 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-117 | A command menu, and how it opens | Q-comp-02 |
 | DC-L19-118 | What goes in the sidebar, and in what order | Q-layout-04 |
 | DC-L19-119 | The phone tab bar and where the main action goes | Q-icon-05, Q-layout-04 |
-| DC-L19-121 | Tables and lists: the data picks the display form | new question |
 | DC-L19-122 | How charts are drawn on product dashboards | new question |
 | DC-L19-123 | How visible each action is (the spectrum of explicitness) | new question |
 | DC-L19-124 | Which surface a task opens in: popover, modal, sheet or new page | new question |
