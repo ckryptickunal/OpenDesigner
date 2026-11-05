@@ -14,8 +14,10 @@ Required (WCAG 2.2 AA and the files a person relies on; every one should always 
     text-contrast   the lowest text pair is at least 4.5:1 in light and in dark mode (SC 1.4.3)
     ui-contrast     the lowest input-border and focus pairs are at least 3:1 in both modes (SC 1.4.11)
     targets         pointer targets at least 24 px (SC 2.5.8); touch targets at least 44 px when a touch platform is named
-    brand-kept      the brand hex the person typed is stored and appears, exactly, in the tokens and the CSS
-    exports         every export (css, tailwind, figma, paper, swift, compose, dtcg) wrote files
+    brand-kept      the brand hex the person typed is stored and appears, exactly, in the tokens and the CSS (the DTCG
+                    resolver when no web platform is named)
+    exports         the exports the brief's platforms need wrote files (figma, paper and dtcg always; css and tailwind for web
+                    and desktop, swift for ios, compose for android), and no other code export was written (issue 24)
     design-md       DESIGN.md exists and names the brand color
     same-twice      a second build from the same answers gives the same files, ignoring timestamps
 
@@ -46,6 +48,7 @@ ENGINE = ROOT / "skills/opendesigner/scripts/engine.py"
 DIR = ROOT / "evals/design"
 TOUCH = {"ios", "android"}
 EXPORTS = ["css", "tailwind", "figma", "paper", "swift", "compose", "dtcg"]
+FOR_PLATFORM = {"web": ["css", "tailwind"], "desktop": ["css", "tailwind"], "ios": ["swift"], "android": ["compose"]}
 STAMP = re.compile(r'"(at|generated|created|updated|date|timestamp)"\s*:\s*"[^"]*"|\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?Z?')
 
 
@@ -106,6 +109,8 @@ def run_brief(b):
         checks["targets"] = tg.get("pointer", 0) >= 24 and (not TOUCH & set(b["platforms"]) or tg.get("touch", 0) >= 44)
         css_text = (one / "build/css/tokens.css").read_text() if (one / "build/css/tokens.css").exists() else ""
         sizes = sorted({int(n) for n in re.findall(r"--ds-font-size-(\d+):", css_text)})
+        if not css_text and (one / "tokens/primitives.tokens.json").exists():  # no web platform, so no CSS: the same sizes from the tokens
+            sizes = sorted(int(k) for k in json.loads((one / "tokens/primitives.tokens.json").read_text())["font"]["size"] if k.isdigit())
         quality["type-steps"] = bool(sizes) and min(sizes) >= 12 and all(b2 >= a * 1.1 for a, b2 in zip(sizes, sizes[1:]))
         notes["typeScale"] = sizes
         quality["button-visible"] = bool(fill) and min(fill.values()) >= 3.0
@@ -120,14 +125,17 @@ def run_brief(b):
         warned = {i.get("message", "") for i in v.get("items", []) if i.get("severity") == "warn"}
         quality["says-so"] = (quality["button-visible"] or any("bg.action.primary" in m for m in warned)) and \
                              (quality["type-steps"] or v.get("warnings", 0) > 0)
+        want = ["figma", "paper", "dtcg"] + [f for p in b["platforms"] for f in FOR_PLATFORM.get(p, ["css", "tailwind", "swift", "compose"])]
         hexv = b["brand"].lower()
         state = json.loads((one / "state.json").read_text())
         stored = str(state.get("raw", {}).get("brandColor", "")).lower()
         prims = (one / "tokens/primitives.tokens.json").read_text().lower() if (one / "tokens/primitives.tokens.json").exists() else ""
         css = (one / "build/css/tokens.css").read_text().lower() if (one / "build/css/tokens.css").exists() else ""
-        checks["brand-kept"] = stored == hexv and hexv in prims and hexv in css
+        code = css if "css" in want else "".join(x.read_text().lower() for x in (one / "build/dtcg").glob("*.json"))
+        checks["brand-kept"] = stored == hexv and hexv in prims and hexv in code
         notes["brandStored"] = stored
-        checks["exports"] = all((one / "build" / x).is_dir() and any((one / "build" / x).rglob("*.*")) for x in EXPORTS)
+        wrote = {x for x in EXPORTS if (one / "build" / x).is_dir() and any((one / "build" / x).rglob("*.*"))}
+        checks["exports"] = wrote == set(want)
         dm = one.parent / "DESIGN.md" if (one.parent / "DESIGN.md").exists() else one / "DESIGN.md"
         checks["design-md"] = dm.exists() and hexv in dm.read_text().lower()
         ok2, _ = sketch_and_build(two, b)

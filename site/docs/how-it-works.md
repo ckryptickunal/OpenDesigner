@@ -4,7 +4,7 @@ seo_title: How OpenDesigner works, step by step, from install to review
 description: Every step OpenDesigner takes, in order: reading your project, the sketch, a first build, zooming in, the checks, the files it writes, and later changes.
 section: Reference
 order: 1
-updated: 2026-11-02
+updated: 2026-11-05
 ---
 
 OpenDesigner works inside the AI tool you already use: it reads your project, asks up to five questions, and builds a complete first version with a Python engine. You then zoom in only where you care. It checks the result with fixed rules, writes every decision down, and keeps later changes consistent.
@@ -20,7 +20,7 @@ Other AI tools follow the same steps, and some show the choices as text.
 3. **It looks before it asks.** It reads your CSS, Tailwind config, `package.json`, token files, logo and font files. It doesn't ask what a file already answers.
 4. **It asks once about a private log** of your steps. Only a clear yes turns it on.
 5. **The sketch: up to five questions, one per message.** What you are making, who it is for, where it runs, how it should feel in 2 or 3 words, and your brand color or logo. Each question comes with a suggested answer and its reason. Answer in your own words, or say "just pick".
-6. **You get a complete first version.** The engine builds every token, every export, `DESIGN.md` and an overview page. The engine part takes about two seconds.
+6. **You get a complete first version.** The engine builds every token, the exports for your platforms, `DESIGN.md` and an overview page. The engine part takes about two seconds.
 7. **You see your whole system on one page.** `opendesigner/overview.html` marks each area Chosen, Picked for you or Default. Anything only you can give shows as "Not enough information", next to the question that fills it.
 8. **Zoom in only where you care, or stop.** After each level it offers "stop here, or zoom into" one area. See [Zoom levels](/docs/zoom-levels/).
 9. **It checks its own work.** Fixed rules check contrast, target sizes, focus rings and reduced motion before the AI gives any opinion. Errors block the build.

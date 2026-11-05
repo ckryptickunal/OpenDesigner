@@ -10,6 +10,7 @@ Commands (run from the user's project; state lives in ./opendesigner/ unless --d
     engine.py init [--name "Acme"] [--from path/to/state.json]
     engine.py sketch [--brand HEX] [--audience dense|regular|large] [--platforms web,ios] [--stack react] [--feel playful,...]
                      [--theme ...]        Level 0: a complete, coarse system from about five answers
+                     [--logo PNG|SVG]     without --brand: the logo's colors and the command that confirms one; writes nothing
     engine.py set <dotted.path> <json-value> [--why "reason"] [--set-by S] [--lock] [--source-ref R]
                                           also: set path=value; set Q-shape-01 '"soft"'; a status word may start --why
     engine.py pick <question-id> <option-value> [--why "reason"]
@@ -24,7 +25,7 @@ Commands (run from the user's project; state lives in ./opendesigner/ unless --d
     engine.py intake <measurements.json> [--accept] [--json]   reference values -> proposed dials (LEVERS E)
     engine.py review [--project P] [--strict] [--json]         hard-coded values that bypass tokens; stale DESIGN.md
     engine.py feedback "text" --kind gap|bug|confusing|idea [--from-journey]   local note + a pre-filled issue link (never posts)
-    engine.py build                       generate + export all + design-md + preview + validate
+    engine.py build                       generate + validate + the exports for the chosen platforms + design-md + preview
     engine.py show <template> [--open]    a visual template filled with real values (palette, radius, option-gallery, ...)
     engine.py feel [words...]             how plain feel words (fun, calm, techy) map to the feel settings
     engine.py standards [--json] [--update] [--all]   project standards and overrides, then the standards followed (by
@@ -64,6 +65,7 @@ Output layout inside the state directory (spec 7.1):
             opendesigner.resolver.json, opendesigner.meta.json
     build/  css/tokens.css, tailwind/theme.css, figma/variables.json + figma/import/*.tokens.json, paper/tokens.json,
             swift/DesignTokens.swift, compose/DesignTokens.kt, dtcg/<name>.resolver.json
+            (build writes the code files for the chosen platforms, build_formats; export --format all writes every one)
 """
 from __future__ import annotations
 
@@ -9429,12 +9431,35 @@ def export_artifact(d, files, meta, state, prefix):
     return files_out
 
 
+EXPORT_FORMATS = ("css", "tailwind", "figma", "paper", "swift", "compose", "dtcg", "artifact")
+NEUTRAL_FORMATS = ("figma", "paper", "dtcg", "artifact")  # for design tools and other token tools: written for every platform
+CODE_FORMATS = {"css": ("css", "tailwind"), "swift": ("swift",), "compose": ("compose",)}  # project tag -> the code exports it needs
+PLATFORM_OF = {"css": "web", "tailwind": "web", "swift": "ios", "compose": "android"}  # the platform each code export is for
+FORMAT_FILES = {"css": ("css", "tokens.css"), "tailwind": ("tailwind", "theme.css"), "swift": ("swift", "DesignTokens.swift"),
+                "compose": ("compose", "DesignTokens.kt")}
+
+
+def build_formats(state, d=None):
+    """(formats build writes, formats it leaves out), issue 24. The code exports follow the platforms named in Q-plat-01
+    through their tags (web and desktop: css and tailwind; ios: swift; android: compose; PLATFORM_TAGS, owner decision D01).
+    Everything is written while nobody has named the platforms, or when one has no tags of its own (secondary: watch, TV,
+    car or headset). A code export already in build/ is refreshed too, so no file there goes stale."""
+    plats = known_platforms(state)
+    if plats is None or plats - set(PLATFORM_TAGS):
+        return list(EXPORT_FORMATS), []
+    tags = project_tags(state) or set()
+    want = set(NEUTRAL_FORMATS) | {f for t, fs in CODE_FORMATS.items() if t in tags for f in fs}
+    if d:
+        want |= {f for f, parts in FORMAT_FILES.items() if os.path.exists(os.path.join(d, "build", *parts))}
+    return [f for f in EXPORT_FORMATS if f in want], [f for f in EXPORT_FORMATS if f not in want]
+
+
 def cmd_export(d, fmt, files=None, meta=None, quiet=False):
     state = merge_defaults(load_state(d))
     if files is None:
         files, meta, _ = generate_system(load_state(d))
     prefix = slug(meta.get("prefix") or state["exports"].get("prefix") or "ds").replace("-", "")
-    formats = ["css", "tailwind", "figma", "paper", "swift", "compose", "dtcg", "artifact"] if fmt == "all" else [fmt]
+    formats = list(EXPORT_FORMATS) if fmt == "all" else list(fmt) if isinstance(fmt, (list, tuple)) else [fmt]
     written = []
     for f in formats:
         if f == "css":
@@ -9983,6 +10008,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     ctx = state.get("context") or {}
     prefix = meta.get("prefix", "ds")
     tinfo, sinfo, shp, mot, el = meta["type"], meta["space"], meta["shape"], meta["motion"], meta["elevation"]
+    fmts = build_formats(state, d)[0]  # the code exports build writes for these platforms; only those are named below
     lim, lay = meta.get("limits") or {}, sinfo.get("layout") or {}  # page caps and layout (older meta files have neither)
     H = lambda p: hex_of(light[p]["resolved"])
 
@@ -10157,7 +10183,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             ("- Charts: use `color.chart.categorical.*` in order, `color.chart.sequential.*` for amounts, `color.chart.neutral` for other."
              if raw.get("chartPalette") not in (None, "none") else
              "- Charts: no chart palette yet (Q-color-19). Take chart colors from the status and accent hues, and check them separately.")]
-    tw = tailwind_classes(files)
+    tw = tailwind_classes(files) if "tailwind" in fmts else {}
     if tw.get("color"):
         body += ["", "**Tailwind classes:** " + ", ".join(f"`{c}`" for c in tw["color"]) + "."]
     out.append(section("Colors", "\n".join(body), lead=colors_lead(meta, state, light, delegated=brand_delegated(d)), term_key="accent color"))
@@ -10180,8 +10206,10 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             "", f"- Text face: {', '.join(fam) if isinstance(fam, list) else fam}. Licence status (hook H-type): **{h_type}**."
             + (" A system font needs no licence; it must not be embedded in apps." if raw.get("textFace") in (None, "system") else ""),
             "- Licence by platform: " + face_licence_words(tinfo.get("faces") or {}, raw),
-            "- On iOS the Swift file uses Dynamic Type text styles (body 17 pt), so text follows the person's text size setting; "
-            "Compose uses sp, which follows the Android font scale.",
+            *(["- " + " ".join(x for x in ("On iOS the Swift file uses Dynamic Type text styles (body 17 pt), so text follows the person's "
+                                           "text size setting." if "swift" in fmts else "",
+                                           "Compose uses sp, which follows the Android font scale." if "compose" in fmts else "") if x)]
+              if {"swift", "compose"} & set(fmts) else []),
             f"- Weights: {', '.join(f'{k} {v}' for k, v in tinfo['weights'].items())} (two or three distinct weights per view).",
             (f"- Emphasized variants (Expression {dials['expression']}, on from 67): {len(tinfo.get('emphasized') or [])} styles under "
              "`text.emphasized.*`, the same size one weight heavier, for the selected item, key actions and headlines (DC-L02-11)."
@@ -10425,7 +10453,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     rows = [(n, ", ".join(m["contexts"]), m.get("default")) for n, m in mods.items()]
     body = [f"**Intent.** Modes live in the DTCG resolver (`{R('tokens/opendesigner.resolver.json')}`); modifiers are orthogonal, so no two set the same token.",
             "", _md_table(["Modifier", "Contexts", "Default"], rows) if rows else "Single theme.",
-            "", f"- Web: `prefers-color-scheme` with a `[data-theme]` override; `[data-density]`; `prefers-reduced-motion` with `[data-motion]` (see `{R('build/css/tokens.css')}`).",
+            "", f"- Web: `prefers-color-scheme` with a `[data-theme]` override; `[data-density]`; `prefers-reduced-motion` with `[data-motion]`" + (f" (see `{R('build/css/tokens.css')}`)." if "css" in fmts else "."),
             "- High-contrast themes are not generated; set `raw.contrastTarget` to AAA for 7:1 text everywhere.",
             "- A second brand or a client re-skin may override the color primitives and `color.bg.brand`; semantic names never change."]
     out.append(section("Modes and Themes", "\n".join(body), lead=f"**The system has {'light and dark' if has_dark else 'one'} color {'modes' if has_dark else 'mode'}, three spacing densities and a reduced-motion mode.**", term_key="Modes and theming axes"))
@@ -10471,7 +10499,10 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             f"{'yes' if params['platform.overridesShapeAndMaterial'] else 'no'}; each platform keeps its own body text size: "
             f"{'yes' if params['platform.useNativeBaseSize'] else 'no'}.",
             "", "- Navigation, back, sheets and pickers stay native on every platform (DC-L10-02).",
-            f"- Swift and Compose files in `{R('build/')}` use the same names as the CSS variables (Figma code syntax matches them).",
+            f"- Code files in `{R('build/')}`: {', '.join(f for f in fmts if f in FORMAT_FILES)}"
+            + (" (each uses the same token names, and Figma code syntax matches them)" if len([f for f in fmts if f in FORMAT_FILES]) > 1 else "")
+            + (f". Not written for these platforms: {', '.join(f for f in EXPORT_FORMATS if f in FORMAT_FILES and f not in fmts)} "
+               "(`engine.py export --format <name>` writes one)." if any(f in FORMAT_FILES and f not in fmts for f in EXPORT_FORMATS) else "."),
             "- Fonts by platform: " + face_licence_words(tinfo.get("faces") or {}, raw)]
     out.append(section("Platforms and Devices", "\n".join(body), lead=f"**It runs on {', '.join(raw.get('platforms') or ['web'])}, and each platform keeps its own navigation.**", term_key="Target platforms"))
 
@@ -10499,9 +10530,12 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
 
     # 17 For Agents
     body = [f"1. Before any visual work, read this file, PRODUCT.md and `{R('tokens/')}` (start at `{R('tokens/opendesigner.resolver.json')}`).",
-            f"2. Use tokens, never raw values: CSS `var(--{prefix}-...)`, Tailwind classes from `{R('build/tailwind/theme.css')}`, `{prefix.upper()}.*` in Swift. "
-            f"In Compose: colors from `Local{prefix.capitalize()}Colors.current` (provide `{prefix.capitalize()}LightColors` or "
-            f"`{prefix.capitalize()}DarkColors`), then `{prefix.capitalize()}Space`, `{prefix.capitalize()}Type` and `{prefix.capitalize()}Motion`.",
+            "2. Use tokens, never raw values" + (": " + ", ".join(x for f, x in (
+                ("css", f"CSS `var(--{prefix}-...)`"), ("tailwind", f"Tailwind classes from `{R('build/tailwind/theme.css')}`"),
+                ("swift", f"`{prefix.upper()}.*` in Swift")) if f in fmts) if {"css", "tailwind", "swift"} & set(fmts) else "") + "."
+            + (f" In Compose: colors from `Local{prefix.capitalize()}Colors.current` (provide `{prefix.capitalize()}LightColors` or "
+               f"`{prefix.capitalize()}DarkColors`), then `{prefix.capitalize()}Space`, `{prefix.capitalize()}Type` and `{prefix.capitalize()}Motion`."
+               if "compose" in fmts else ""),
             "3. Do not change a locked decision without asking the owner. Keep new screens inside the taste card at the top of "
             "the Overview, and never add anything on its Never list without asking.",
             "4. To change the system: `engine.py set <path> <value> --why \"...\"`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.",
@@ -11716,8 +11750,18 @@ def cmd_resolve(d):
     print(json.dumps(out, indent=2, ensure_ascii=False))
 
 
+def skipped_line(state, skipped):
+    """One line on the code exports build left out, and how to get one anyway or add a platform."""
+    plats = sorted(known_platforms(state) or [])
+    words = lambda xs: ", ".join(xs[:-1]) + " and " + xs[-1] if len(xs) > 1 else xs[0]
+    return (f"Not written: {words(skipped)}, because it runs on {words(plats)} (Q-plat-01). "
+            f"To write one anyway: engine.py export --format {skipped[0]}. To add a platform: "
+            f"engine.py pick Q-plat-01 '{json.dumps(plats + [PLATFORM_OF.get(skipped[0], 'ios')])}'.")
+
+
 def cmd_build(d, force=False):
-    """generate -> validate -> (only if no errors, or --force) DESIGN.md + PRODUCT.md + export all + preview.
+    """generate -> validate -> (only if no errors, or --force) DESIGN.md + PRODUCT.md + exports + preview. The exports are
+    the ones for the chosen platforms (build_formats); `export --format all` writes every one.
     DESIGN.md comes first because the artifact export copies it into its README. A build that writes the files stamps
     opendesigner.built with this release."""
     before = state_or_none(d)
@@ -11731,13 +11775,16 @@ def cmd_build(d, force=False):
               f"Fix the error{'s' if errors != 1 else ''} above and run build again (--force exports anyway).")
         return 1
     cmd_design_md(d, files=files, meta=meta, quiet=True)
-    cmd_export(d, "all", files, meta, quiet=True)
+    fmts, skipped = build_formats(load_state(d), d)
+    cmd_export(d, fmts, files, meta, quiet=True)
     cmd_preview(d, files=files, meta=meta, quiet=True)
     cmd_overview(d, files=files, meta=meta, quiet=True)
     dump_json(os.path.join(d, STATE_FILE), stamp_version(load_state(d), built=True))
     track(d, "export", kind="all")
-    print(f"built {d}: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg, artifact), DESIGN.md, PRODUCT.md, preview.html, overview.html"
+    print(f"built {d}: tokens, build/ ({', '.join(fmts)}), DESIGN.md, PRODUCT.md, preview.html, overview.html"
           + (" (exported with errors because of --force)" if errors else ""))
+    if skipped:
+        print(skipped_line(load_state(d), skipped))
     kind, v = version_status(before) if before else ("current", None)
     if kind in ("built", "saved", "unstamped"):
         print(f"This system {_made_with(kind, v)}; this build brought its files up to OpenDesigner {OPENDESIGNER_VERSION}. "
@@ -11817,6 +11864,8 @@ def main(argv=None):
     p = sub.add_parser("sketch", parents=[common], help="Level 0: a complete coarse system from about five answers")
     p.add_argument("--name")
     p.add_argument("--brand", help="brand color hex")
+    p.add_argument("--logo", help="their logo, PNG or SVG. Without --brand it writes nothing: it prints up to 3 brand-color candidates "
+                                  "and the command that confirms one. With --brand it records the logo (hook H-logo)")
     p.add_argument("--audience", choices=["dense", "regular", "large"])
     p.add_argument("--platforms", help="comma list: web,ios,android,desktop,secondary")
     p.add_argument("--stack", help="comma list of the code stack (react, react-native, vue, ...); read from package.json when not given")
@@ -11980,7 +12029,7 @@ def main(argv=None):
         return cmd_build(d, a.force)
     elif a.cmd == "sketch":
         return cmd_sketch(d, a.name, a.brand, a.audience, a.platforms, a.feel, a.theme, surfaces=a.surfaces, delegated=a.delegated,
-                          stack=a.stack, brief=a.brief)
+                          stack=a.stack, brief=a.brief, logo=a.logo)
     elif a.cmd == "feel":
         return cmd_feel(a.words)
     elif a.cmd == "style":
@@ -12717,13 +12766,256 @@ def cmd_style(d, action, args, n=4, seed=0, wild=False, save=None, name=None, pl
     raise SystemExit("style actions: list, show, search, mix, mutate, explore, define, tiles")
 
 
+# ---- logo colors (issue 24, U5): sketch --logo proposes brand-color candidates; the person picks, nothing is recorded for them
+LOGO_HELP = "Export the logo as SVG (best) or PNG, or say its main color and pass it as --brand."
+CSS_NAMED = {"black": (0, 0, 0), "white": (255, 255, 255), "red": (255, 0, 0), "green": (0, 128, 0), "blue": (0, 0, 255),
+             "yellow": (255, 255, 0), "orange": (255, 165, 0), "purple": (128, 0, 128), "gray": (128, 128, 128),
+             "grey": (128, 128, 128), "silver": (192, 192, 192), "maroon": (128, 0, 0), "navy": (0, 0, 128), "teal": (0, 128, 128),
+             "olive": (128, 128, 0), "lime": (0, 255, 0), "aqua": (0, 255, 255), "fuchsia": (255, 0, 255)}
+
+
+def png_colors(data, max_pixels=9_000_000, samples=250_000):
+    """Counter of (r, g, b) for the visible pixels of a PNG (alpha 128 and up), sampled on a grid. Reads gray, RGB and
+    palette files, with alpha or tRNS, at 1 to 16 bits. Interlaced and very large files are refused with a plain fix."""
+    import struct
+    import zlib
+    from collections import Counter
+    bad = f"--logo could not read this PNG. {LOGO_HELP} Nothing was written."
+    pos, idat, plte, trns, hdr = 8, [], None, b"", None
+    while pos + 8 <= len(data):
+        n, typ = struct.unpack(">I4s", data[pos:pos + 8])
+        body = data[pos + 8:pos + 8 + n]
+        if typ == b"IHDR" and n == 13:
+            hdr = struct.unpack(">IIBBBBB", body)
+        elif typ == b"PLTE":
+            plte = [tuple(body[i:i + 3]) for i in range(0, len(body) - 2, 3)]
+        elif typ == b"tRNS":
+            trns = body
+        elif typ == b"IDAT":
+            idat.append(body)
+        elif typ == b"IEND":
+            break
+        pos += 12 + n
+    if not hdr or not idat or hdr[3] not in (0, 2, 3, 4, 6) or (hdr[3] == 3 and not plte):
+        raise SystemExit(bad)
+    w, h, depth, ctype, _c, _f, interlace = hdr
+    if interlace:
+        raise SystemExit("--logo reads ordinary PNGs, and this one is interlaced. Save a copy without interlacing (most "
+                         "editors do by default), then run it again. Nothing was written.")
+    if w * h > max_pixels:
+        raise SystemExit(f"This logo is {w}x{h} pixels, too large to read here. Save a copy about 1000 pixels wide, or use the SVG. "
+                         "Nothing was written.")
+    ch = {0: 1, 2: 3, 3: 1, 4: 2, 6: 4}[ctype]
+    bpp, stride = max(1, ch * depth // 8), (w * ch * depth + 7) // 8
+    try:
+        raw = zlib.decompress(b"".join(idat))
+    except zlib.error:
+        raise SystemExit(bad)
+    if len(raw) < h * (stride + 1):
+        raise SystemExit(bad)
+    step = max(1, int(math.sqrt(w * h / samples)))
+    mask = (1 << depth) - 1
+    key = int.from_bytes(trns[:2], "big") if ctype == 0 and len(trns) >= 2 else None
+    key3 = tuple(int.from_bytes(trns[i:i + 2], "big") for i in (0, 2, 4)) if ctype == 2 and len(trns) >= 6 else None
+    top = 65535 if depth == 16 else mask
+    eight = (lambda v: v >> 8) if depth == 16 else (lambda v: v * 255 // mask) if depth < 8 else (lambda v: v)
+    out, prev, off = Counter(), bytearray(stride), 0
+    for y in range(h):
+        f, line = raw[off], bytearray(raw[off + 1:off + 1 + stride])
+        off += 1 + stride
+        if f == 1:
+            for i in range(bpp, stride):
+                line[i] = (line[i] + line[i - bpp]) & 255
+        elif f == 2:
+            line = bytearray((x + y_) & 255 for x, y_ in zip(line, prev))
+        elif f == 3:
+            for i in range(stride):
+                line[i] = (line[i] + ((line[i - bpp] if i >= bpp else 0) + prev[i]) // 2) & 255
+        elif f == 4:
+            for i in range(stride):
+                a_, b_, c_ = (line[i - bpp] if i >= bpp else 0), prev[i], (prev[i - bpp] if i >= bpp else 0)
+                p = a_ + b_ - c_
+                pa, pb, pc = abs(p - a_), abs(p - b_), abs(p - c_)
+                line[i] = (line[i] + (a_ if pa <= pb and pa <= pc else b_ if pb <= pc else c_)) & 255
+        prev = line
+        if y % step:
+            continue
+        if depth == 8:
+            smp = line
+        elif depth == 16:
+            smp = [(line[i] << 8) | line[i + 1] for i in range(0, stride, 2)]
+        else:
+            smp = [(b >> s) & mask for b in line for s in range(8 - depth, -1, -depth)]
+        for x in range(0, w, step):
+            px = smp[x * ch:x * ch + ch]
+            if ctype == 3:
+                i = px[0]
+                if i >= len(plte) or (i < len(trns) and trns[i] < 128):
+                    continue
+                rgb = plte[i]
+            elif ctype == 0:
+                if px[0] == key:
+                    continue
+                rgb = (eight(px[0]),) * 3
+            elif ctype == 2:
+                if tuple(px) == key3:
+                    continue
+                rgb = tuple(eight(v) for v in px)
+            else:
+                if px[-1] * 255 < 128 * top:
+                    continue
+                rgb = (eight(px[0]),) * 3 if ctype == 4 else tuple(eight(v) for v in px[:3])
+            out[rgb] += 1
+    return out
+
+
+def svg_colors(text):
+    """(Counter of (r, g, b) for the fills, strokes and gradient stops of an SVG, 'fills'); a raster logo inside an SVG is
+    read as pixels instead ('area')."""
+    import base64
+    import colorsys
+    from collections import Counter
+    text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    out = Counter()
+    for m in re.finditer(r"(?<![\w-])(?:fill|stroke|stop-color)\s*[:=]\s*[\"']?\s*(#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)|[a-zA-Z]+)", text):
+        v = m.group(1).strip().lower()
+        rgb, alpha = None, 1.0
+        if v.startswith("#"):
+            hx = v[1:]
+            if len(hx) in (3, 4):
+                hx = "".join(c * 2 for c in hx)
+            if len(hx) in (6, 8):
+                rgb = tuple(int(hx[i:i + 2], 16) for i in (0, 2, 4))
+                alpha = int(hx[6:8], 16) / 255 if len(hx) == 8 else 1.0
+        elif v.startswith(("rgb", "hsl")):
+            nums = re.findall(r"-?[\d.]+%?", v)
+            if len(nums) >= 3:
+                val = lambda s, top: float(s[:-1]) * top / 100 if s.endswith("%") else float(s)
+                if len(nums) > 3:
+                    alpha = val(nums[3], 1.0)
+                if v.startswith("rgb"):
+                    rgb = tuple(max(0, min(255, round(val(s, 255)))) for s in nums[:3])
+                else:
+                    hue, sat, lig = (float(x.rstrip("%")) for x in nums[:3])
+                    rgb = tuple(round(c * 255) for c in colorsys.hls_to_rgb((hue % 360) / 360, min(lig, 100) / 100, min(sat, 100) / 100))
+        else:
+            rgb = CSS_NAMED.get(v)  # none, currentColor, url(...) and inherit carry no color of their own
+        if rgb and alpha >= 0.5:
+            out[rgb] += 1
+    if out:
+        return out, "fills"
+    m = re.search(r"data:image/png;base64,([A-Za-z0-9+/=\s]+)", text)
+    if m:
+        try:
+            return png_colors(base64.b64decode(re.sub(r"\s+", "", m.group(1)))), "area"
+        except (ValueError, SystemExit):
+            pass
+    return out, "fills"
+
+
+def logo_colors(path):
+    """(Counter of (r, g, b), 'area' or 'fills') from a PNG or SVG logo, read with the standard library only."""
+    try:
+        with open(path, "rb") as f:
+            data = f.read()
+    except OSError:
+        raise SystemExit(f"--logo: no file at {path}. Nothing was written.")
+    if data[:8] == b"\x89PNG\r\n\x1a\n":
+        return png_colors(data), "area"
+    head = data[:4096].decode("utf-8", "ignore").lower()
+    if "<svg" in head or (path.lower().endswith(".svg") and "<svg" in data.decode("utf-8", "ignore").lower()):
+        return svg_colors(data.decode("utf-8", "ignore"))
+    kind = "a JPEG" if data[:3] == b"\xff\xd8\xff" else "a PDF" if data[:4] == b"%PDF" else "not a PNG or SVG"
+    raise SystemExit(f"--logo reads PNG and SVG files, and this one is {kind}. {LOGO_HELP} Nothing was written.")
+
+
+def logo_candidates(path, n=3, ratio=4.5):
+    """Up to n brand-color candidates from a logo, largest share first, grays last: [{hex, share, words, text, gray}] and
+    the kind of share ('area' or 'fills'). White, black and see-through parts are left out, near-identical shades are
+    merged, and shades that only blend two other colors are dropped: anti-aliased edges, and tints of a bigger color, which
+    its ramp makes anyway. Nothing is recorded."""
+    counts, kind = logo_colors(path)
+    bins = {}
+    for rgb, c in counts.items():  # 32 levels a channel first, so a large logo stays quick
+        e = bins.setdefault((rgb[0] >> 3, rgb[1] >> 3, rgb[2] >> 3), [rgb, 0, 0])
+        if c > e[1]:
+            e[0], e[1] = rgb, c
+        e[2] += c
+    keep = []
+    for rgb, _c, tot in bins.values():
+        L, C, H = hex_to_oklch("#%02x%02x%02x" % rgb)
+        if C < 0.03 and (L > 0.93 or L < 0.3):
+            continue  # the background and the ink, not a brand color
+        keep.append([rgb, tot, (L, C * math.cos(math.radians(H)), C * math.sin(math.radians(H))), C])
+    total = sum(k[1] for k in keep)
+    clusters = []
+    dist = lambda p, q: math.dist(p, q)
+    for rgb, tot, lab, C in sorted(keep, key=lambda k: -k[1]):
+        near = min(clusters, key=lambda k: dist(k[2], lab), default=None)
+        if near and dist(near[2], lab) < 0.08:
+            near[1] += tot
+        elif tot >= 0.002 * total:
+            clusters.append([rgb, tot, lab, C])
+
+    def blend(x, a, b):  # x lies on the straight line between a and b (gamma-encoded, as edges are drawn)
+        ab = [q - p for p, q in zip(a, b)]
+        t = sum((xi - p) * d for xi, p, d in zip(x, a, ab)) / (sum(d * d for d in ab) or 1)
+        return 0.1 < t < 0.9 and math.dist(x, [p + t * d for p, d in zip(a, ab)]) < 14
+
+    out = []
+    for i, (rgb, tot, _lab, C) in enumerate(clusters):
+        share = tot / total
+        bigger = [k[0] for k in clusters[:i]]
+        if share < 0.02 or any(blend(rgb, a, b) for a in bigger for b in bigger + [(255, 255, 255), (0, 0, 0)] if a != b):
+            continue
+        hx = "#%02x%02x%02x" % rgb
+        out.append({"hex": hx, "share": share, "words": color_words(hx), "text": exact_text_on(hx, ratio), "gray": C < 0.04})
+    out.sort(key=lambda c: (c["gray"], -c["share"]))
+    return out[:n], kind
+
+
+def logo_lines(path, cands, kind, command):
+    """What sketch --logo prints: each candidate with its share and a plain note, then the command that confirms the first."""
+    name = os.path.basename(path)
+    if not cands:
+        return [f"No brand color in {name}: it is only white, black or gray. Run the sketch without --logo and suggest seed colors "
+                "that fit their words, or pass the person's own hex with --brand. Nothing was written."]
+    noun = "colored area" if kind == "area" else "color fills"
+    out = [f"Colors in {name}. Nothing is recorded until the person picks one:"]
+    for i, c in enumerate(cands, 1):
+        note = ("white text reads on it" if c["text"] == "light" else "dark text reads on it" if c["text"] == "dark" else
+                "buttons with text would use a readable shade of it, and the exact color stays for the logo and large areas")
+        out.append(f"  {i}. {c['hex']}, {c['words']}: {round(c['share'] * 100)}% of its {noun}; "
+                   + ("a gray, so it suits text and borders more than buttons." if c["gray"] else note + "."))
+    out.append("White, black and see-through parts were left out." + (" Shares count fills, not area." if kind == "fills" else ""))
+    out.append(f"Show these and let the person pick (or type their own hex). For {cands[0]['hex']}, run:")
+    out.append("  " + command.replace("__BRAND__", cands[0]["hex"]))
+    if len(cands) > 1:
+        out.append("For another, change the --brand hex. A second strong color can become a second accent later (Q-color-04).")
+    return out
+
+
+def sketch_command(d, flags):
+    """The sketch command line with these flags, for the person to run after a pick (__BRAND__ marks the brand hex)."""
+    parts = ["engine.py", "sketch"] + (["--dir", d] if d != DEFAULT_DIR else [])
+    for k in ("name", "audience", "platforms", "feel", "theme", "surfaces", "stack", "brief", "delegated", "logo", "brand"):
+        v = flags.get(k)
+        if v is None:
+            continue
+        v = ",".join(v) if isinstance(v, (list, tuple)) else str(v)
+        parts += ["--delegated"] if k == "delegated" and v == "all" else [f"--{k}", v]
+    return " ".join("'__BRAND__'" if p == "__BRAND__" else shlex.quote(p) for p in parts)
+
+
 def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=None, theme=None, quiet=False, surfaces=None, delegated=None,
-               stack=None, brief=None):
+               stack=None, brief=None, logo=None):
     """Level 0: about five answers give a complete, coarse system; everything else stays on defaults.
     Every input is checked before anything is written. delegated names the answers the person left to the model
     ('all' or a comma list of sketch flags); they are recorded as set_by delegated. A look word in --feel ("frosty") starts
     the system from a named style (Q-dir-01, set_by assumed), unless the style question was already answered. --brief keeps
-    the person's picture of the look ("a quiet library at night") for the taste card; it is never written for them."""
+    the person's picture of the look ("a quiet library at night") for the taste card; it is never written for them.
+    --logo (PNG or SVG) without --brand writes nothing: it prints up to three brand-color candidates from the logo and the
+    command that confirms one, because the person picks (issue 24). With --brand it records the logo (hook H-logo)."""
     macros, mapping, unknown, looks, look_only, start = feel_and_looks([w for w in re.split(r"\s*,\s*", feel or "") if w.strip()])
     items = [x.strip() for x in (surfaces or "").split(",") if x.strip()]
     if items and (not surface_list(items) or len(surface_list(items)) != len(items)):
@@ -12740,6 +13032,16 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
     bad = deleg - set(SKETCH_FLAGS) - {"all"}
     if bad:
         raise SystemExit(f"--delegated takes all or a comma list of: {', '.join(SKETCH_FLAGS)}.")
+    cands = []
+    if logo:
+        aaa = os.path.exists(os.path.join(d, "state.json")) and (load_state(d).get("raw") or {}).get("contrastTarget") == "AAA"
+        cands, kind = logo_candidates(logo, ratio=7.0 if aaa else 4.5)
+        if brand is None:  # the person picks: nothing is recorded from the logo on its own
+            if not quiet:
+                flags = {"name": name, "audience": audience, "platforms": platforms, "feel": feel, "theme": theme, "surfaces": surfaces,
+                         "stack": stack, "brief": brief, "delegated": delegated, "logo": logo, "brand": "__BRAND__"}
+                print("\n".join(logo_lines(logo, cands, kind, sketch_command(d, flags))))
+            return 0
 
     def sb(flag):
         if flag == "brand" and "brand" not in deleg:  # a hex given with --brand is the person's unless brand is named (STRESS-TEST 1)
@@ -12773,12 +13075,22 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
                     "sketch: plain words for Q-aud-01" + (", picked for them" if sb("audience") else ""), quiet=True,
                     set_by=sb("audience") or "assumed")
     if brand:
-        cmd_set(d, "raw.brandColor", brand, why_of("brand"), quiet=True, set_by=sb("brand"))
+        from_logo = brand in [c["hex"] for c in cands]
+        cmd_set(d, "raw.brandColor", brand, (("sketch: picked for them" if sb("brand") else "sketch: their pick") + " from the logo's colors")
+                if from_logo else why_of("brand"), quiet=True, set_by=sb("brand"))
         if sb("brand"):  # the model picked it: kept when white or dark text reads on it, else a shade white text reads on (R44)
             adj = readable_shade(brand, 7.0 if (load_state(d).get("raw") or {}).get("contrastTarget") == "AAA" else 4.5)
             if adj != brand:
                 cmd_set(d, "raw.brandColor", adj, f"sketch: picked for them, a readable shade of {brand} ({color_words(adj)})",
                         quiet=True, set_by="delegated")
+    if logo:  # the person gave their logo: the hook is answered, and the file is kept when it sits in the project
+        hk = (load_state(d).get("hooks") or {}).get("H-logo") or {}
+        if hk.get("status") != "have":
+            cmd_set(d, "hooks.H-logo.status", "have", f"sketch --logo {os.path.basename(logo)}", quiet=True, set_by="asset")
+        rel = os.path.relpath(os.path.abspath(logo), os.path.abspath(doc_dir(d))).replace(os.sep, "/")
+        if not rel.startswith("../") and rel not in (hk.get("files") or []):
+            cmd_set(d, "hooks.H-logo.files", (hk.get("files") or []) + [rel], "sketch --logo: the person's logo file", quiet=True,
+                    set_by="asset")
     if platforms:
         cmd_set(d, "answers.Q-plat-01", [p.strip() for p in platforms.split(",") if p.strip()], why_of("platforms"), quiet=True,
                 set_by=sb("platforms"), via="sketch", resync=False)

@@ -122,7 +122,7 @@ Each template has a **Copy my choice** button that produces `OD:` lines. When th
 ## The engine
 ```
 python3 <skill>/scripts/engine.py init [--name "Acme"]
-python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal [--brand "#167874"] [--surfaces app:operate] [--delegated feel,brand]
+python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal [--brand "#167874"] [--logo logo.svg] [--surfaces app:operate] [--delegated feel,brand]
 python3 <skill>/scripts/engine.py feel [words...]            the feel words it knows, or how it reads theirs ("fun" is playful)
 python3 <skill>/scripts/engine.py style search|show|tiles|mix|mutate|explore|define ...   the style lab: find, show, blend, change or invent a look (style-lab.md)
 python3 <skill>/scripts/engine.py set <path> <json-value> --why "..." [--set-by delegated] [--lock]

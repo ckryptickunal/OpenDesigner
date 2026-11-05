@@ -4,7 +4,7 @@ seo_title: OpenDesigner for engineers: tokens, CSS, Tailwind v4, Swift
 description: The tokens and code exports OpenDesigner writes, how to wire them into web, iOS and Android apps, how review finds hard-coded values, and how agents use them.
 section: Guides
 order: 3
-updated: 2026-10-15
+updated: 2026-11-05
 ---
 
 OpenDesigner turns design decisions into files you import: DTCG 2025.10 tokens, CSS variables, a Tailwind v4 theme, Swift and Jetpack Compose files, and a DTCG resolver. `engine.py review` finds values typed straight into your code that skip the tokens. `DESIGN.md` and a short note in `AGENTS.md` tell coding agents to use the tokens too.
@@ -19,6 +19,8 @@ All paths are inside `opendesigner/` in your project.
 - `build/swift/DesignTokens.swift`: SwiftUI values under `DS`.
 - `build/compose/DesignTokens.kt`: Jetpack Compose values.
 - `build/dtcg/`: one resolver file for tools that take a single entry point.
+
+`build` writes the code files for the platforms you chose: CSS and Tailwind for the web, Swift for iOS, Compose for Android. For another one, run `engine.py export --format swift` (or `compose`, `css`, `tailwind`, `all`).
 
 Never edit an export by hand. Change the decision and rebuild, and every export updates together.
 

@@ -1089,7 +1089,7 @@ Designers: end-of-step rebuild · Code: `engine.py build`
 
 **Designer:** The one command to run at the end of a step or session. It rebuilds values, exports, guides and preview, then reports any problems.
 
-**Engineer:** engine.py build runs generate, then validate. Only with no errors (or --force) does it run export --format all, design-md and preview. It exits 1 on errors.
+**Engineer:** engine.py build runs generate and validate, then (no errors, or --force) design-md, export and preview, exporting only the chosen platforms' code files. Exits 1 on errors.
 
 **Example:** Run build before you show the result to your team.
 
@@ -1348,7 +1348,7 @@ Designers: exports for each tool · Code: `opendesigner/build/`
 
 **Designer:** Where the exports land, one per tool the team uses: web styles, Tailwind theme, Figma import files, Paper, iOS and Android. Rebuilt, never edited by hand.
 
-**Engineer:** opendesigner/build/, written by engine.py export: css/tokens.css, tailwind/theme.css, figma/variables.json, paper/, swift/DesignTokens.swift, compose/DesignTokens.kt, dtcg/<name>.resolver.json.
+**Engineer:** opendesigner/build/: css and tailwind (web), swift (iOS), compose (Android), figma, paper, dtcg. build writes the chosen platforms' code files; export --format all writes every one.
 
 **Example:** Your web app imports the file in css.
 

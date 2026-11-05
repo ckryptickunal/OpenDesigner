@@ -4,7 +4,7 @@ seo_title: OpenDesigner engine commands: sketch, set, build, review
 description: Every OpenDesigner engine command with one line on what it does: starting a system, recording decisions, building and checking, standards, review and feedback.
 section: Reference
 order: 2
-updated: 2026-10-15
+updated: 2026-11-05
 ---
 
 The OpenDesigner engine is one Python file, `skills/opendesigner/scripts/engine.py`, that does the math and writes the tokens, exports and pages. Your AI usually runs these commands for you, but you can run them yourself from your project folder. It needs Python 3.10 or newer, uses only the standard library, and makes no network calls.
@@ -56,7 +56,7 @@ The sketch takes these options:
 
 ## Build and check
 
-- `engine.py build` generates the tokens and checks them. If there are no errors, it writes every export, `DESIGN.md`, the overview page and the preview pages. `--force` exports even with errors.
+- `engine.py build` generates the tokens and checks them. If there are no errors, it writes the exports for the platforms you chose, `DESIGN.md`, the overview page and the preview pages, and names any code file it left out (`export --format all` writes every one). `--force` exports even with errors.
 - `engine.py generate` writes the DTCG 2025.10 tokens to `opendesigner/tokens/`.
 - `engine.py validate` checks contrast, target sizes and lint rules, and exits with an error code if anything fails. `--json` prints the results as JSON.
 - `engine.py export --format tailwind` writes one export. The formats are `css`, `tailwind`, `figma`, `paper`, `swift`, `compose`, `dtcg`, `artifact` and `all`.

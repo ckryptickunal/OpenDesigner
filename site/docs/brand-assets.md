@@ -4,7 +4,7 @@ seo_title: Brand assets: what OpenDesigner asks you for, and why
 description: Which brand assets only a person should make, how OpenDesigner's 14 asset hooks ask for them, what it offers when you have none, and how it tracks licences.
 section: Concepts
 order: 6
-updated: 2026-10-14
+updated: 2026-11-05
 ---
 
 Some parts of a brand should be made by a person: a logo, an app icon, custom icons, illustration, photos, a brand typeface and a voice guide. OpenDesigner doesn't fake these. For each one it opens an asset hook: it asks whether you have it, checks the file if you do, and offers honest paths if you don't.
@@ -46,7 +46,7 @@ It asks for one master file and makes the other sizes from it.
 
 It checks each file. A logo, for example, should still work at 16 px on light and dark backgrounds.
 
-If you give it a logo file, it can use the logo's main color as your brand color seed.
+If you give it a logo as PNG or SVG (`engine.py sketch --logo logo.svg`), the engine shows up to three of its colors, each with how much of the logo it covers. You pick the brand color from them, or type your own. Nothing is recorded until you pick.
 
 ## If you don't have it
 
