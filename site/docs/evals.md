@@ -44,7 +44,7 @@ When an eval finds a real fault, the fix is measured the same way. The same task
 
 The engine builds a design system from each of 19 fixed briefs. No AI is involved, so the same answers always give the same files. Each brief is a person's five sketch answers: a name, a brand color, who uses the product, the platforms and a few feel words. The briefs include the cases that break design systems: yellow, cyan and lime brand colors, colors that are almost black or almost white, large text for older readers, and three platforms at once.
 
-There are two tiers of checks. The required checks are WCAG 2.2 AA and the files you rely on: text contrast at 4.5:1, borders and focus rings at 3:1, 24 px targets, the exact brand color, every export, and the same result twice. The quality checks are house rules that ask for more than WCAG does. A miss there shows where the engine can improve, and the engine must tell the person about it.
+There are two tiers of checks. The required checks are WCAG 2.2 AA and the files you rely on: text contrast at 4.5:1, borders and focus rings at 3:1, 24 px targets, the exact brand color, the exports its platforms need, and the same result twice. The quality checks are house rules that ask for more than WCAG does. A miss there shows where the engine can improve, and the engine must tell the person about it.
 
 {{evals:design}}
 
