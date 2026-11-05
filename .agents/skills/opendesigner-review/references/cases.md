@@ -101,7 +101,7 @@ Sources: S-R5-091, S-R5-045, S-R5-104
 
 **Why it is missed.** After a change the agent takes a screenshot straight away. Hot reload may not have finished, and nothing checks that the page is the one intended.
 
-**How to catch it.** Reload fresh, wait for the load event and for fonts, and confirm the URL, the page title and a build marker (a version string or a timestamp) match what you expect before you look at anything else. Close banners on purpose and say that you did.
+**How to catch it.** Reload fresh, wait for the load event and for fonts, and confirm the URL, the page title and a build marker (a version string or a timestamp) match what you expect before you look at anything else. Close banners on purpose and say that you did. A page drawn without its stylesheet is also the wrong page: capture.py loads it again when a stylesheet failed and says so, and measures nothing if it fails twice (an unstyled component page under three parallel captures, issue #76).
 
 Sources: S-R5-014, S-R5-007, S-R5-067
 
@@ -270,7 +270,7 @@ Sources: S-R5-033, S-R5-032, S-R5-029
 
 **Why it is missed.** Design and demo data are short. Flex children without min-width: 0 refuse to shrink.
 
-**How to catch it.** Apply __od.stress('longWords') and the +40% text stress, then run the probe again and screenshot. Read overflow.clipped: an ellipsis needs the full text reachable somewhere. Fix with min-width: 0, overflow-wrap: anywhere, or line-clamp.
+**How to catch it.** Apply __od.stress('longWords') and the +40% text stress, then run the probe again and screenshot. Read overflow.clipped: an ellipsis needs the full text reachable somewhere. Fix with min-width: 0, overflow-wrap: anywhere, or line-clamp. Text kept only for screen readers is not clipped text: a 1 px box, a clip or clip-path that leaves nothing, or a box of a few pixels with its overflow hidden (opendesigner.dev's library legends were 4 x 1 px, issue #76).
 
 Sources: S-R5-032, S-R5-018, S-R5-029
 
@@ -393,7 +393,7 @@ Sources: S-R5-054, S-R5-087, S-R5-091, S-R5-030, S-R5-098, S-R5-100
 
 **Why it is missed.** Contrast is a ratio, not an impression. Vision models are weak at color tasks (ColorBench) and cannot read a contrast ratio from a picture; light grey text is exactly what looks 'clean'.
 
-**How to catch it.** Compute it: the probe walks up to the real background, mixes semi-transparent layers, and reports every failing pair with its ratio (4.5 to 1 for normal text, 3 to 1 for large; no rounding up, 4.49 fails). Where the background is an image or gradient, it says so: sample pixels instead. Non-text parts (borders that are the only cue, focus rings) need 3 to 1. capture.py's text-pixels pass reads the real pixels behind each line with the text hidden, and takes the 5% of them closest to the text colour. A pass there overrules the probe's guessed colour backdrop; a failure on a photo or gradient is an error.
+**How to catch it.** Compute it: the probe walks up to the real background, mixes semi-transparent layers, and reports every failing pair with its ratio (4.5 to 1 for normal text, 3 to 1 for large; no rounding up, 4.49 fails). Where the background is an image or gradient, it says so: sample pixels instead. Non-text parts (borders that are the only cue, focus rings) need 3 to 1. capture.py's text-pixels pass reads the real pixels behind each line with the text hidden, and takes the 5% of them closest to the text colour. A pass there overrules the probe's guessed colour backdrop; a failure on a photo or gradient is an error. A lone arrow, bullet or dingbat is a graphic, held to 3:1 (WCAG 1.4.11) and reported as symbol contrast; words are held to 4.5:1 (issue #76).
 
 Sources: S-R5-006, S-R5-043, S-R5-029, S-R5-096, S-R5-104
 

@@ -273,8 +273,13 @@
     scaleEl(frame, z);
     var devR = nest(frame, null, live, z); rescale(frame); dev.style.borderRadius = devR.toFixed(1) + "px";
     // if the device sits close to the stage's corner (a phone screen), the stage's corner follows it too
-    var sr = stage.getBoundingClientRect(), dr = dev.getBoundingClientRect(), gap = Math.min(dr.left - sr.left, dr.top - sr.top);
-    stage.style.borderRadius = gap < 40 ? (devR + gap).toFixed(1) + "px" : "";
+    // close to the corner means close on both sides: a tall phone in a wide stage is near the top but far from the side
+    var sr = stage.getBoundingClientRect(), dr = dev.getBoundingClientRect(), gap = Math.max(dr.left - sr.left, dr.top - sr.top);
+    // corners nest whenever the device is closer than the stage's own corner (post-change audit, rule 4); a stage held at its
+    // tallest view's height (issue #73) can leave a shorter view's device 40 to 60 px from that corner
+    stage.style.borderRadius = "";
+    var outer = parseFloat(getComputedStyle(stage).borderTopLeftRadius) || 0;
+    stage.style.borderRadius = gap < Math.max(40, outer) ? (devR + gap).toFixed(1) + "px" : "";
     // the frame hugs the part's height too (post-change audit, rule 6): no forced phone shape around a short part
   }
   var pick = function (view, animate) {
@@ -285,6 +290,27 @@
     if (history.replaceState) history.replaceState(null, "", location.pathname + "?view=" + view);
   };
   pick(pageView, false);
+  // the stage keeps its tallest view's height, so switching views never moves the page (issue #73). The device frame
+  // still hugs the part (post-change audit, rule 6); the stage centres it in the spare room.
+  function holdHeight() {
+    if (!dev || !stage) return;
+    var cur = dev.getAttribute("data-device") || pageView, max = 0;
+    stage.style.minHeight = "";
+    $$(".part-devices [role='tab']").forEach(function (t) {
+      if (getComputedStyle(t).display === "none") return;  // no desktop view on a phone screen
+      dev.setAttribute("data-device", t.getAttribute("data-device")); fitDevice();
+      max = Math.max(max, stage.offsetHeight);
+    });
+    dev.setAttribute("data-device", cur); fitDevice();
+    if (max) stage.style.minHeight = max + "px";
+  }
+  if (dev && stage) {
+    holdHeight();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(holdHeight);
+    window.addEventListener("load", holdHeight);  // a part's photos can change its height when they arrive
+    var holdW = innerWidth, holdT = 0;
+    window.addEventListener("resize", function () { if (innerWidth === holdW) return; holdW = innerWidth; clearTimeout(holdT); holdT = setTimeout(holdHeight, 150); });
+  }
   $$(".part-devices [role='tab']").forEach(function (t, i, all) {
     t.addEventListener("click", function (e) { pick(t.getAttribute("data-device"), e.detail > 0); track("view_switched", { part: location.pathname.split("/")[2], view: t.getAttribute("data-device") }); });  // keyboard switches stay instant
     t.addEventListener("keydown", function (e) {

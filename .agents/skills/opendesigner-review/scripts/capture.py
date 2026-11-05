@@ -132,6 +132,31 @@ PIXELS_JS = """async ({b64, lines}) => {
 }"""
 
 
+# a stylesheet link whose sheet never arrived: the page is drawn unstyled, and every measurement of it would mislead
+# (Chrome gives a sheet that failed with 404 an empty CSSStyleSheet, so an empty sheet counts when its request failed)
+MISSING_CSS_JS = """Array.from(document.querySelectorAll('link[rel~="stylesheet"]')).filter((l) => {
+  if (l.disabled || /^print$/.test(l.media)) return false;
+  if (!l.sheet) return true;
+  let n = -1; try { n = l.sheet.cssRules.length; } catch (e) { return false; }   // another origin's sheet: assume it loaded
+  if (n > 0) return false;
+  const e = performance.getEntriesByName(l.href)[0];
+  return !e || (e.responseStatus || 0) >= 400 || e.decodedBodySize === 0;
+}).map((l) => l.href)"""
+
+
+def styles_loaded(page, cell, log):
+    """Load the page again once when a stylesheet failed, and say so; if it fails again, measure nothing (issue #76)."""
+    missing = page.evaluate(MISSING_CSS_JS)
+    if not missing:
+        return
+    log.append(f"{cell}: a stylesheet did not load ({', '.join(missing)[:200]}); loaded the page again")
+    page.reload(wait_until="load", timeout=30000)
+    settle(page)
+    missing = page.evaluate(MISSING_CSS_JS)
+    if missing:
+        raise RuntimeError(f"a stylesheet did not load twice ({', '.join(missing)[:200]}); nothing was measured")
+
+
 def run_cell(browser, url, route, vp, theme, out, opts, anchor, log):
     w, h = vp
     cell = f"{route}|{w}x{h}|{theme}"
@@ -151,6 +176,7 @@ def run_cell(browser, url, route, vp, theme, out, opts, anchor, log):
     try:
         page.goto(urljoin(url, route), wait_until="load", timeout=30000)
         settle(page)
+        styles_loaded(page, cell, log)
         if not is_loopback(urlparse(page.url).hostname):   # a redirect (a sign-in page, say) left the local app
             raise RuntimeError(f"the page moved to {urlparse(page.url).hostname}, which is not local; nothing was captured")
         if opts.theme_attr:

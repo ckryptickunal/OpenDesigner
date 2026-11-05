@@ -128,6 +128,47 @@ class Live(unittest.TestCase):
         pg.set_content('<!doctype html><body style="margin:0">' + head + side.format(top=0))
         self.assertTrue(any(h["text"] == "Link 0" for h in pinned()))             # stuck under the bar: lost for good
 
+    def test_visually_hidden_text_in_a_tiny_clipped_box_is_not_clipped_text(self):             # ST-04, issue #76
+        # opendesigner.dev's library legends: 4 x 1 px, clipped, for screen readers; a real squeezed label still counts
+        pg = _browser.new_page(viewport={"width": 800, "height": 600})
+        self.addCleanup(pg.close)
+        pg.set_content('<!doctype html><style>.sr{position:absolute;width:4px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}'
+                       '.cp{position:absolute;width:40px;height:20px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}'
+                       '.squeezed{width:60px;height:20px;overflow:hidden;white-space:nowrap}</style>'
+                       '<fieldset><legend class="sr">Choose the seats for this booking</legend></fieldset>'
+                       '<p class="cp">Hidden by clip-path for screen readers</p><p class="squeezed">A label squeezed into a box too small for it</p>')
+        clipped = [c["sel"].split(":")[0] for c in pg.evaluate(PROBE)["overflow"]["clipped"]]
+        self.assertEqual(clipped, ["p.squeezed"])
+
+    def test_a_lone_arrow_is_held_to_3_to_1_and_text_to_4_5(self):                             # MS-04, issue #76
+        pg = _browser.new_page(viewport={"width": 800, "height": 600})
+        self.addCleanup(pg.close)
+        # #808793 on white is 3.62:1: enough for a graphic (WCAG 1.4.11), not for text (1.4.3)
+        pg.set_content('<!doctype html><body style="background:#fff;font:14px sans-serif"><p>Tokens <span class="arrow" style="color:#808793">→</span> theme</p>'
+                       '<p class="words" style="color:#808793">Muted words at the same colour</p></body>')
+        p = pg.evaluate(PROBE)
+        failing = [c["sel"] for c in p["contrast"]["failing"]]
+        self.assertFalse([s for s in failing if "arrow" in s])
+        self.assertTrue([s for s in failing if s.startswith("p.words")])
+        arrow = [c for c in p["contrast"]["lowest"] + p["contrast"]["failing"] if c["sel"].endswith("span.arrow")]
+        self.assertTrue(arrow and arrow[0]["symbol"])
+
+    def test_capture_loads_a_page_again_when_its_stylesheet_failed(self):                      # CV-09, issue #76
+        import capture
+        pg = _browser.new_page(viewport={"width": 800, "height": 600})
+        self.addCleanup(pg.close)
+        log = []
+        pg.goto(f"http://localhost:{self.port}/labels.html"); pg.wait_for_timeout(200)
+        capture.styles_loaded(pg, "ok-cell", log)                                 # nothing missing: nothing said, nothing reloaded
+        self.assertEqual(log, [])
+        page_url = f"http://localhost:{self.port}/no-styles.html"             # served by a route, so a reload asks for the same broken sheet
+        pg.route(page_url, lambda r: r.fulfill(content_type="text/html", body=f'<!doctype html><link rel="stylesheet" href="http://localhost:{self.port}/missing-sheet.css"><p>x</p>'))
+        pg.goto(page_url); pg.wait_for_timeout(200)
+        with self.assertRaises(RuntimeError) as e:                                # missing twice: the cell measures nothing
+            capture.styles_loaded(pg, "bad-cell", log)
+        self.assertIn("did not load twice", str(e.exception))
+        self.assertTrue(log and "loaded the page again" in log[0])                # and the reload is said
+
     def test_text_in_a_closed_details_is_not_under_a_bar(self):                                # CV-08
         # Chrome reports line boxes for a closed <details>' hidden text; a component page's source code was "under" the consent card
         pg = _browser.new_page(viewport={"width": 800, "height": 600})
