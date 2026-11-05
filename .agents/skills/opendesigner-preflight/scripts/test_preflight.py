@@ -126,6 +126,19 @@ class TestHtml(unittest.TestCase):
         self.assertIn("font sizes in px: [13, 16]", r.stdout)
         self.assertIn("sizes outside the token scale [12, 16, 24]: [13]", r.stdout)
 
+    def test_scale_named_the_ways_people_name_one(self):              # checker evals P-off-scale-fs, 2026-11-05
+        for props in ("--fs-sm:14px;--fs-md:16px;--fs-lg:20px",                                              # hand-made
+                      "--text-sm:0.875rem;--text-sm--line-height:1.5rem;--text-base:1rem;--text-xl:1.25rem;--text-muted:#666",  # Tailwind v4
+                      "--md-sys-typescale-body-small-size:14px;--md-sys-typescale-body-small-line-height:22px;"
+                      "--md-sys-typescale-body-large-size:16px;--md-sys-typescale-title-large-size:20px",    # Material 3
+                      "--step-0:14px;--step-1:16px;--step-2:20px;--space-s:18px"):                            # Utopia
+            r = run(f"<html><head><style>:root{{{props}}}body{{font-size:16px}}.x{{font-size:18px}}</style></head>"
+                    "<body><p class=x>x</p></body></html>")
+            self.assertIn("sizes outside the token scale [14, 16, 20]: [18]", r.stdout, props)
+        self.assertTrue(preflight.size_token("--ds-font-size-14"))
+        for name in ("--text-sm--line-height", "--font-weight-bold", "--text-color", "--font-family-sans", "--fs-tracking", "--step"):
+            self.assertFalse(preflight.size_token(name), name)
+
     def test_unread_remote_sheet_warns_instead_of_failing(self):
         page = ('<html><head><link rel="stylesheet" href="https://use.typekit.net/abc.css">'
                 '<style>body{font:400 16px/1.5 "Proxima Nova",sans-serif}</style></head><body>x</body></html>')

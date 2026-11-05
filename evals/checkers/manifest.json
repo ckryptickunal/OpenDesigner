@@ -440,6 +440,12 @@
           "check": "M8",
           "text": "under 11px for web: \\[10\\]",
           "level": "error"
+        },
+        {
+          "id": "P-text-10-scale",
+          "what": "the same 10 px text is also off the page's --fs-* scale (14 to 32)",
+          "check": "M2",
+          "text": "\\[10\\]"
         }
       ]
     },
@@ -453,6 +459,12 @@
           "check": "M8",
           "text": "under 12px for web: \\[11\\]",
           "level": "warn"
+        },
+        {
+          "id": "P-text-11-scale",
+          "what": "the same 11 px captions are also off the page's --fs-* scale (14 to 32)",
+          "check": "M2",
+          "text": "\\[11\\]"
         }
       ]
     },
@@ -490,6 +502,12 @@
           "what": "a 15 px intro next to 16 px body text",
           "check": "M6",
           "text": "15/16"
+        },
+        {
+          "id": "P-close-sizes-scale",
+          "what": "the 15 px intro is also off the page's --fs-* scale (14 to 32)",
+          "check": "M2",
+          "text": "\\[15\\]"
         }
       ]
     },

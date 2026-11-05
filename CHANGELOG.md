@@ -14,6 +14,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **Three checkers at full marks again** (2026-11-05). The layout check no longer calls a narrow card under a wide one a half-empty row. Preflight finds sizes off a scale named `--fs-*`, `--text-*` and other common names. The name check catches two-word names one letter apart, like Vosberg Health and Vossberg Health.
 - **The worked examples match the engine again** (2026-11-05). The three systems in `examples/` were rebuilt from their `state.json`, and `python3 tools/build_examples.py --check` now fails, in CI too, when the engine writes something they do not show. The old replay script, which could wipe them, is gone.
 - **The link check knows the website's pages** (2026-11-05). A link like `/tour/` in the website's docs is now checked against the pages `site/build.py` makes, so real pages pass and a mistyped one still fails.
 - **The palette page shows its contrast checks** (2026-11-05). The table under the shades was always empty because the engine sent no colour pairs ([#47](https://github.com/ckryptickunal/OpenDesigner/issues/47)). Each option now carries the pairs people read most, in every mode and measured the same way as `engine.py validate`, and the page works out each ratio from the colours it shows.

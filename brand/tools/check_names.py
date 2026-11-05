@@ -8,7 +8,8 @@ often render their data from a script). Finds capitalised, name-like words and r
 checks them against the name registry, brand/showcase/NAMES.md, where every invented name belongs to one piece.
 
   ERROR  a registry name, or a distinctive word of one ("Calder" in "41 Calder Street"), that belongs to another piece
-  ERROR  a name one or two letters from another piece's name (Tellwick and Stellwick), or the same new name in two pieces
+  ERROR  a name one or two letters from another piece's name (Tellwick and Stellwick; Vosberg Health and Vossberg Health,
+         names that differ only in one distinctive word), or the same new name in two pieces
   WARN   another piece's one-word name that is also a dictionary word (Craft, Dispatch): check it is not used as a name here
   NEW    names that are not in the registry: search the web for each one, then add it to NAMES.md (append only)
 
@@ -155,6 +156,20 @@ def near(a, b):
     return n >= 5 and (d == 1 or (d == 2 and n >= 7))
 
 
+def near_names(a, b, words):
+    """Two names of several words that differ only in one distinctive word, and that word is one or two letters apart:
+    "Vosberg Health" and "Vossberg Health". Any other difference keeps them apart, so two real people (Mette Jensen and
+    Lars Jansen) or a dictionary word (Acme Health and Acme Wealth) never count."""
+    x, y = a.split(), b.split()
+    if len(x) != len(y) or len(x) < 2:
+        return False
+    diff = [(clean(p), clean(q)) for p, q in zip(x, y) if p.lower() != q.lower()]
+    if len(diff) != 1:
+        return False
+    p, q = diff[0]
+    return all(len(w) >= 4 and w.lower() not in STOP | GENERIC and not in_dict(w, words) for w in (p, q)) and near(p, q)
+
+
 def piece_of(path, given):
     """The piece a file belongs to: <cat>/<folder> in the showcase, "site" for the website, None for a gallery page."""
     if given:
@@ -239,7 +254,7 @@ def main(argv):
         if len(seen_new[n]) > 1:
             cross.append(f'WARN   "{n}" is new in {len(seen_new[n])} pieces: {", ".join(sorted(seen_new[n]))}. One name, one piece')
         for m in names[i + 1:]:
-            if " " not in n + m and near(n, m) and seen_new[n] != seen_new[m]:
+            if seen_new[n] != seen_new[m] and (near(n, m) if " " not in n + m else near_names(n, m, words)):
                 cross_errors += 1
                 cross.append(f'ERROR  "{n}" ({", ".join(sorted(seen_new[n]))}) is one or two letters from "{m}" ({", ".join(sorted(seen_new[m]))})')
     errors += cross_errors
