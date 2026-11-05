@@ -156,3 +156,12 @@ The project hand-wrote eleven check scripts for what the review missed, over abo
 
 **M59. Pure white beside pure black, and meanings in the wrong colour.** On a client landing page, a red brand button sat beside a red "rejected" state and Teams appeared in orange, and the owner asked for known colours "across whatever projects we are working". He then set a rule for every project: a product that uses pure white never also uses pure black, and the reverse. *Why it happens:* #fff and #000 are the defaults every tool reaches for, and an accent gets reused wherever a colour is needed. *Catch:* `preflight.py html` warns when one page uses both; `engine.py validate` fails a theme whose role colours use both, and `engine.py review` reports code that does.
 
+## Found reviewing opendesigner.dev with the review skill (2026-11-05)
+
+**M60. A consent card over the footer and the focus.** The site's consent card sat over the last footer line on every page, and Tab moved focus to links fully under it, on a visitor's first visit until they chose. The card was a quiet corner card, so nobody looked under it. *Catch:* `__od.bars()` (CV-08) and the Tab walk (IN-01); while the card shows, give the page its height as `padding-bottom` and `scroll-padding-bottom`.
+
+**M61. A label that turned into body text.** On the booking page, `.book-card > p` (16 px, -0.02em) also matched the card's `p.kicker`, so "Free · 20 minutes · Google Meet" rendered as 16 px capitals with negative tracking; the tour page's `.tr-trace p` did the same to its kicker. Each rule was right for the paragraphs it was written for. *Catch:* MS-17 in `review.py check`; scope paragraph rules away from labels.
+
+**M62. Quieted with opacity.** The device-width numbers on every component page ("Desktop 1280") were set at `opacity: .7`; on the selected tab's tint the number fell to 3.95:1 at 12 px, while the token pair underneath passed at 7.44:1. *Catch:* MS-04 measures the composited colour; use the muted ink instead.
+
+**M63. Links as tall as their text.** On phones the logo and nav links were 22 px tall and the breadcrumb links 18 px, in a 60 px header with room to spare. *Catch:* IN-04 on a phone profile.

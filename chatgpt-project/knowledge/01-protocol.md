@@ -955,6 +955,10 @@ These are mistakes an AI builder made in the source project (DC-L22-09). Most dr
 | Fixing a different fault | You fix something real that is not what they meant, and call it done | Say back what you think they saw, and where. If you cannot see it, say so |
 | Bringing a reference's style in with its structure | A rebuilt section arrives with the reference's type and corners | Rebuild it in the page's materials (section 4) |
 | Stating what you did not check | You say two things match, or that something does not move, without looking | `guardrails.md` section 5. When you find out you were wrong, say so in the open |
+| A corner card left over the page | A consent or chat card covers the last footer line and the control Tab just reached | While it shows, the page gets its height as bottom padding and scroll padding (preflight 52) |
+| A broad rule restyling a label | A rule for a card's paragraphs also turns the card's small uppercase label into 16 px body text | Scope paragraph rules away from labels and read the label's computed style (preflight 59) |
+| Quieting text with opacity | A count or unit set at 70% opacity passes on white and fails on a tinted, selected state | A muted colour token that passes where it sits (preflight 60) |
+| Links only as tall as their text | Header and breadcrumb links 18 to 22 px tall on phones | A 44 px hit area on touch, without moving anything (preflight 61) |
 
 **A repeated note is the strongest signal you get.** When the person says something a second time, or says "again" or "as I said", another small patch is the wrong answer.
 1. Stop, and re-read both of their messages word for word.

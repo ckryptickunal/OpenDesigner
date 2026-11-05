@@ -68,11 +68,20 @@
         ".od-consent p{margin:0 0 12px}.od-consent .od-consent-t{margin:0 0 4px;font-weight:600;font-size:15px}.od-consent a{color:inherit}.od-consent-acts{display:flex;gap:8px;justify-content:flex-end}" +
         "@media (max-width:480px){.od-consent{inset:auto 16px 16px 16px;max-width:none}}";
       document.head.appendChild(st); document.body.appendChild(b);
+      // nothing stays under the card: the page gets room to scroll the footer clear of it, and Tab scrolls a focused
+      // control above it (WCAG 2.4.11). Both go when the visitor chooses.
+      var de = document.documentElement, room = function () {
+        var h = b.offsetHeight + 32;
+        de.style.scrollPaddingBottom = h + "px"; document.body.style.paddingBottom = h + "px";
+      };
+      room(); window.addEventListener("resize", room);
       b.addEventListener("click", function (e) {
         var v = e.target.closest && e.target.closest("[data-v]"); if (!v) return;
         var val = v.getAttribute("data-v");
         try { localStorage.setItem(CHOICE, val); if (val === "granted") localStorage.setItem("od-first", JSON.stringify(src)); } catch (err) {}  // the visit they allowed on is their first touch
         window.odTrack("consent_chosen", { choice: val });
+        window.removeEventListener("resize", room);
+        de.style.removeProperty("scroll-padding-bottom"); document.body.style.removeProperty("padding-bottom");
         b.remove();  // recording starts from the next page, in full mode
       });
     };
