@@ -118,18 +118,18 @@ def compare(committed, built):
 
 
 def sync(committed, built):
-    """Make the committed example match the built one. Removes only files inside what the engine makes."""
+    """Make the committed example match the built one. A file is removed only when the build no longer makes it (the
+    build started from a copy of everything but MADE, so a person's own files are always there)."""
     changed, added, removed = compare(committed, built)
     for r in changed + added:
         (committed / r).parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(built / r, committed / r)
     for r in removed:
-        if r.split("/", 1)[0] in MADE:
-            (committed / r).unlink()
+        (committed / r).unlink()
     for d in sorted((p for p in committed.rglob("*") if p.is_dir()), key=lambda p: -len(p.parts)):
-        if d.relative_to(committed).parts[0] in MADE and not any(d.iterdir()):
+        if not any(d.iterdir()) and not (built / d.relative_to(committed)).exists():
             d.rmdir()
-    return changed, added, [r for r in removed if r.split("/", 1)[0] in MADE]
+    return changed, added, removed
 
 
 def png(d):
