@@ -159,7 +159,7 @@ python3 tools/wiki.py standards          house standards valid and versioned (el
 python3 tools/wiki.py map --check        learn/MAP.md is current (else: wiki.py map)
 python3 tools/wiki.py proposals --check  the pending-proposals table in synthesis/QUESTIONNAIRE.md is current
 python3 tools/test_wiki.py               learning wiki tests (.venv-wiki/bin/python also runs the OpenWiki ones)
-python3 tools/design_evals.py --check --no-save   the engine on 19 fixed briefs: every required check passes (evals/README.md)
+python3 tools/design_evals.py --check --no-save   the engine on 20 fixed briefs: every required check passes (evals/README.md)
 python3 skills/opendesigner/scripts/library.py check   every library component uses only tokens every engine system writes, is scoped, and has complete tags
 python3 site/post_change_audit.py          after changing the website or the library: every automatic check, then walk skills/opendesigner/references/post-change-audit.md by eye
 python3 tools/changelog_check.py                  every CHANGELOG.md entry is short, dated and in the format the website reads; add one entry per change you push
