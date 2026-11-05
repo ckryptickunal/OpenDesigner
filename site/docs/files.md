@@ -44,6 +44,7 @@ All of these are in `opendesigner/build/`. Every build rewrites them, so don't e
 - **`compose/DesignTokens.kt`:** the same values for Android apps built with Jetpack Compose.
 - **`dtcg/`:** one DTCG resolver file for token tools that take a single entry point.
 - **`artifact/project/`:** the system as files for a Claude Design System artifact: tokens, a brand book, a cover and a button preview.
+- **`brand/index.html`:** a brand and press page you can host as it is, with your logo and icon files to download in `brand/assets/`.
 
 See [Export](/docs/export/) for how to use each one.
 

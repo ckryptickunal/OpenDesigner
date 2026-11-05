@@ -16,7 +16,7 @@ A plain, high-contrast system for a fictional city benefits service: AAA text, g
 | Color | neutral scheme, accent solid `#075c63`, text minimum 7.0:1, themes light |
 | Validation | 0 errors, 0 warnings, 4 notes; 82 contrast pairs checked |
 
-**Files:** `state.json` (the input), `decisions.md` (why each choice), `tokens/` (DTCG 2025.10 + resolver, canonical), `build/` (artifact, css, dtcg, figma, paper, tailwind), `DESIGN.md`, `PRODUCT.md`, `overview.html` (the whole system on one page), `preview.html` and `preview/` (the visual templates, filled in).
+**Files:** `state.json` (the input), `decisions.md` (why each choice), `tokens/` (DTCG 2025.10 + resolver, canonical), `build/` (artifact, brand, css, dtcg, figma, paper, tailwind), `DESIGN.md`, `PRODUCT.md`, `overview.html` (the whole system on one page), `preview.html` and `preview/` (the visual templates, filled in).
 
 **Rebuild:** `python3 tools/build_examples.py public-service-accessible` runs `engine.py build` on `state.json` and rewrites this README. `python3 tools/build_examples.py --check` fails when a committed file differs from what the engine makes now.
 

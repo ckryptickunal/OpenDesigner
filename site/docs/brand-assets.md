@@ -46,6 +46,8 @@ It asks for one master file and makes the other sizes from it.
 
 It checks each file. A logo, for example, should still work at 16 px on light and dark backgrounds.
 
+The logo also gets two rules: clear space on every side, and the smallest size it may be shown at. They start as defaults: half the logo's height, and 16 px tall for the symbol (24 px with the wordmark). They say "Default" on the brand page until you set them, for example `engine.py set hooks.H-logo.clearSpace 0.75`. The brand page (`engine.py export --format brand`) shows your logo files with download links, and do and don't examples made from your own logo.
+
 If you give it a logo as PNG or SVG (`engine.py sketch --logo logo.svg`), the engine shows up to three of its colors, each with how much of the logo it covers. You pick the brand color from them, or type your own. Nothing is recorded until you pick.
 
 ## If you don't have it
