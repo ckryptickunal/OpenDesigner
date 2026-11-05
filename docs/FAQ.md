@@ -32,7 +32,7 @@ What it cannot generate well (a logo, custom icons, illustration, photography) i
 
 ### How long does it take?
 
-Start with a sketch. About 3 to 5 questions, in about 3 minutes, give you a complete, working system with sourced defaults. Then zoom into any area you care about, and stop whenever it is enough. The next level, one short screen per foundation, is 8 questions in about 8 minutes. Every default stays editable. The full interview has 194 questions, but you only answer the ones for the areas you zoom into.
+Start with a sketch. About 3 to 5 questions, in about 3 minutes, give you a complete, working system with sourced defaults. Then zoom into any area you care about, and stop whenever it is enough. The next level, one short screen per foundation, is 8 questions in about 8 minutes. Every default stays editable. The full interview has 195 questions, but you only answer the ones for the areas you zoom into.
 
 ### What do I get at the end?
 
