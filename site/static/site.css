@@ -273,23 +273,32 @@ svg.arrow { width: 14px; height: 14px; flex: none; }
 .lb-img { max-width: 100%; max-height: calc(100vh - 110px); width: auto; height: auto; object-fit: contain; }
 @media (max-width: 640px) { .lb-bar { flex-direction: column; } .lb-blurb { display: none; } .lb-stage { padding: 12px; } .lb-img { max-height: calc(100vh - 150px); } }
 
-/* footer: four short columns with room around them; every link stays on one line (owner, 2026-11-01: "make the footer spacious") */
+/* footer: three short columns, then every docs page by section, with room around them; every link stays on one line
+   (owner, 2026-11-01: "make the footer spacious"; and keep every link that matters for search and AI answers) */
 .foot { border-top: 1px solid var(--line); background: var(--surface-raised); }
 .foot-in { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); gap: var(--space-48); max-width: var(--shell); margin-inline: auto; padding: var(--space-80) 24px 0; }
 .foot-brand { color: var(--ink); display: grid; gap: var(--space-16); align-content: start; } .foot-brand p { margin: 0; color: var(--ink-muted); font-size: 14px; line-height: 22px; }
-.foot-cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-32); }
+.foot-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-32); }
+.foot-docs { width: calc(100% - 48px); max-width: calc(var(--shell) - 48px); margin: var(--space-64) auto 0; padding-top: var(--space-32); border-top: 1px solid var(--line); }
+.foot-docs-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-16); margin-bottom: var(--space-24); }
+.foot-docs-head .kicker { margin: 0; color: var(--ink); }
+.foot-docs-head a { color: var(--accent-text); font-size: 14px; line-height: 24px; display: inline-flex; align-items: center; min-height: 24px; }
+.foot-docs-cols { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-32); }
 .foot-h { margin: 0 0 var(--space-16); }
 .foot ul { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-12); }
 .foot ul a { color: var(--ink); text-decoration: none; font-size: 15px; line-height: 24px; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; min-height: 24px; }
 .foot ul a:hover { color: var(--accent-text); text-decoration: underline; }
+.foot-docs ul { gap: var(--space-8); }
+.foot-docs ul a { font-size: 14px; color: var(--ink-muted); } .foot-docs ul a:hover { color: var(--accent-text); }
+.foot-docs + .foot-legal { margin-top: var(--space-48); }
 .foot-ver { font: 500 11px/16px "Source Code Pro", ui-monospace, monospace; padding: 2px 8px; border-radius: var(--r-pill); background: var(--accent-soft); color: var(--accent-text); }
 .foot-legal { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-12) var(--space-32); width: calc(100% - 48px); max-width: calc(var(--shell) - 48px); margin: var(--space-64) auto 0; padding: var(--space-24) 0 var(--space-32); font-size: 12px; line-height: 18px; color: var(--ink-muted); border-top: 1px solid var(--line); }
 .foot-legal p { margin: 0; max-width: 92ch; }
 .foot-meta { display: flex; flex-wrap: wrap; gap: var(--space-8) var(--space-16); font-family: "Source Code Pro", ui-monospace, monospace; white-space: nowrap; }
 .foot-meta a { color: var(--ink-muted); display: inline-flex; align-items: center; min-height: 24px; } .foot-meta span { display: inline-flex; align-items: center; min-height: 24px; }
-@media (max-width: 1100px) { .foot-in { grid-template-columns: minmax(0, 1fr); } }
-@media (max-width: 700px) { .foot-in { padding: var(--space-64) 16px 0; } .foot-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-32) var(--space-16); } .foot-legal { width: calc(100% - 32px); margin-top: var(--space-48); } }
-@media (max-width: 360px) { .foot ul a { font-size: 14px; } }
+@media (max-width: 1100px) { .foot-in { grid-template-columns: minmax(0, 1fr); } .foot-docs-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-32); } }
+@media (max-width: 700px) { .foot-in { padding: var(--space-64) 16px 0; } .foot-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-32) var(--space-16); } .foot-legal { width: calc(100% - 32px); margin-top: var(--space-48); } .foot-docs { width: calc(100% - 32px); margin-top: var(--space-48); } .foot-docs-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-32) var(--space-16); } }
+@media (max-width: 400px) { .foot ul a { font-size: 14px; } .foot-docs-cols { grid-template-columns: minmax(0, 1fr); gap: var(--space-24); } }  /* the docs labels need one column on the smallest phones */
 
 /* Reduced motion means gentler, not none (house standard STD-accessibility-motion-02): movement stops, short fades and color
    changes stay. Each moving thing has its own reduced rule (here, home.css, craft.css, deco.css). */

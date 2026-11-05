@@ -12,6 +12,10 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 - **Kerning and letter spacing, checked in every project** (2026-11-05). A new guide, `preflight/references/kerning.md`, lists the type-spacing mistakes that keep coming back and how to avoid each. `preflight.py html` now flags kerning switched off, tracking in px or %, untracked capitals and words split into letters without their kerning (check 57).
 - **Rules for references, samples and content** (2026-11-05). `making.md` now asks for a board of shipped samples to pick from before a new direction, live measurement instead of thumbnails, principles from a reference instead of its page, a content list that "less text" never cuts, and one system for every figure. Moving calls to action are banned.
 
+### Fixed
+
+- **The footer links every docs page again** (2026-11-05). The footer had dropped to 20 links. It now links every docs page by section from every page, so search engines and AI crawlers reach them, and each label still fits on one line down to 320 px.
+
 ## [0.2.0]: 2026-11-05
 
 The first tagged release: the research base, the synthesis that turns it into an interview, eight skills, the engine and host packaging. Copies installed before it report 0.1.0; update to get everything below.
