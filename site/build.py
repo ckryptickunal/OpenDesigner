@@ -211,23 +211,33 @@ def apple_tracking_inline(html_):
 # size-based tracking above gives text up to 19px a small negative value. Each acronym gets <span class="caps">, set to 0 there.
 CAPS_RX = re.compile(r"(?<![\w./#&@-])([A-Z][A-Z0-9]*[A-Z][A-Z0-9]*)(?!\w)")
 CAPS_TAG = re.compile(r"""<!--.*?-->|<(?:[^>"']|"[^"]*"|'[^']*')*>""", re.S)
+CAPS_VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 CAPS_SKIP = {"head", "title", "script", "style", "svg", "code", "pre", "kbd", "samp", "textarea", "select", "option", "template"}
 
 
 def caps_spans(html_):
-    """Wrap acronyms in a page's text (never in tags, attributes, code or SVG) in <span class="caps">."""
-    out, skip, pos = [], [], 0
-    wrap = lambda t: t if skip else CAPS_RX.sub(r'<span class="caps">\1</span>', t)
+    """Wrap acronyms in a page's text (never in tags, attributes, code or SVG) in <span class="caps">. Text whose parent is set
+    inline as a flex or grid box (a figure's sticker) is left as it is: a span there would sit apart from the words around it."""
+    out, skip, stack, pos = [], [], [], 0
+    boxed = lambda: bool(stack) and re.search(r"display:\s*(?:inline-)?(?:flex|grid)", stack[-1][1])
+    wrap = lambda t: t if skip or boxed() else CAPS_RX.sub(r'<span class="caps">\1</span>', t)
     for m in CAPS_TAG.finditer(html_):
         out += [wrap(html_[pos:m.start()]), m.group(0)]
         pos = m.end()
         t = re.match(r"<(/?)([a-zA-Z][\w-]*)", m.group(0))
-        if t and t.group(2).lower() in CAPS_SKIP:
-            name = t.group(2).lower()
-            if t.group(1):
-                if name in skip:
-                    del skip[len(skip) - 1 - skip[::-1].index(name)]
-            elif not m.group(0).endswith("/>"):
+        if not t:
+            continue
+        name, closing = t.group(2).lower(), bool(t.group(1))
+        if closing:
+            if any(n == name for n, _ in stack):
+                while stack and stack.pop()[0] != name:
+                    pass
+            if name in CAPS_SKIP and name in skip:
+                del skip[len(skip) - 1 - skip[::-1].index(name)]
+        elif name not in CAPS_VOID and not m.group(0).endswith("/>"):
+            style = re.search(r"""\sstyle=(?:"([^"]*)"|'([^']*)')""", m.group(0))
+            stack.append((name, (style.group(1) or style.group(2) or "") if style else ""))
+            if name in CAPS_SKIP:
                 skip.append(name)
     out.append(wrap(html_[pos:]))
     return "".join(out)
@@ -243,7 +253,8 @@ def caps_css(css):
             continue
         sels += [x.strip() for x in m.group(1).split(",") if x.strip() and "::" not in x]
     sels += ['[style*="uppercase"]', '[style*="letter-spacing:."]', '[style*="letter-spacing:0."]', '[style*="letter-spacing: ."]']
-    return ".caps{letter-spacing:0}" + ",".join(dict.fromkeys(f"{x} .caps" for x in sels)) + "{letter-spacing:inherit}"
+    # display: contents keeps the acronym in its parent's text run, so a flex or grid parent never makes it a separate item
+    return ".caps{display:contents;letter-spacing:0}" + ",".join(dict.fromkeys(f"{x} .caps" for x in sels)) + "{letter-spacing:inherit}"
 
 
 def fmt_em(x):
