@@ -118,11 +118,11 @@ At the end of a session, OpenDesigner asks whether to add a short note to your `
 
 ## About the engine
 
-The engine is one Python file that needs Python 3.10 or newer. It uses only the standard library and makes no network calls. The same `state.json` gives the same tokens. It has 157 tests, which pass on the maintainer's computer. No CI runs are recorded yet.
+The engine is one Python file that needs Python 3.10 or newer. It uses only the standard library and makes no network calls. The same `state.json` gives the same tokens. It has more than 200 tests, which pass on the maintainer's computer. No CI runs are recorded yet.
 
 ## Not yet
 
 - No direct React Native or Flutter export.
-- Only buttons, a text field and a card are previewed as components.
+- The overview draws only buttons, a text field and a card. The component sheet shows more, and the optional [component library](/library/) has 82 finished components built on the tokens.
 
 See [Engine commands](/docs/engine/) and [Export](/docs/export/) for more.

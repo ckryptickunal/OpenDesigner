@@ -4,7 +4,7 @@ seo_title: Design tokens for Claude Code: DTCG, CSS and Tailwind v4
 description: Install the OpenDesigner plugin in Claude Code and get DTCG 2025.10 design tokens, CSS variables and a Tailwind v4 theme, plus a DESIGN.md Claude follows.
 section: Guides
 order: 21
-updated: 2026-10-15
+updated: 2026-11-05
 ---
 
 Install OpenDesigner as a Claude Code plugin, answer up to five questions, and you get design tokens in the open DTCG 2025.10 format. You also get CSS variables and a Tailwind v4 theme made from them. A `DESIGN.md` and an optional note in `AGENTS.md` tell Claude Code to use those tokens in later sessions, and a review command checks that it did.
@@ -89,7 +89,7 @@ Those two lines are from a test run on 2026-10-15. Add `--strict` to make the co
 ## Not yet
 
 - No direct React Native or Flutter export.
-- Only buttons, a text field and a card are previewed as components.
+- The overview draws only buttons, a text field and a card. The component sheet shows more, and the optional [component library](/library/) has 82 finished components built on the tokens.
 - No watched user trials yet.
 
 ## Next

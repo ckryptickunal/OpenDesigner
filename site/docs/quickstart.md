@@ -98,6 +98,7 @@ Check three things:
 ## What to do next
 
 - **Stop here.** Every level gives you working files.
+- **Research your users.** It offers this right after the first version: about 10 minutes, and it does the work. Then it shows the competitors, a positioning to confirm and three directions.
 - **Zoom in** on one area, such as colors or text. See [Zoom levels](/docs/zoom-levels/).
 - **Use it in code.** See [For engineers](/docs/engineers/).
 - **Let your other AI tools know.** At the end, it asks before adding a short note to your `AGENTS.md`, so later AI sessions follow the same rules.

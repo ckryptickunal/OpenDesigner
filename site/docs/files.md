@@ -7,7 +7,7 @@ order: 3
 updated: 2026-11-05
 ---
 
-OpenDesigner writes `DESIGN.md` and `PRODUCT.md` at the root of your project, and everything else into an `opendesigner/` folder. The token files in `opendesigner/tokens/` are the source of truth, and every other file is made from them. In a test run, one sketch and build wrote 50 files with no errors.
+OpenDesigner writes `DESIGN.md` and `PRODUCT.md` at the root of your project, and everything else into an `opendesigner/` folder. The token files in `opendesigner/tokens/` are the source of truth, and every other file is made from them. In a test run, one sketch and build wrote 51 files with no errors.
 
 {{figure:files-tree}}
 
@@ -59,6 +59,7 @@ See [Export](/docs/export/) for how to use each one.
 - **`opendesigner/standards.md`:** the house and project standards this project follows, locked, with their sources.
 - **`opendesigner/state.json`:** where you left off, so you or another AI tool can continue later. `DESIGN.md` and the tokens are made from it.
 - **`opendesigner/standards-state.json`:** a copy of each standard this system follows, as it follows it. Keep it next to `state.json`.
+- **`opendesigner/PROTOCOL.md`:** how work runs in this project: six steps, each ending at a gate where you say yes, and the checks every round runs. It is written once; edit it to fit.
 
 See [Decisions, DESIGN.md and the overview page](/docs/decisions/).
 
@@ -69,6 +70,8 @@ These are not part of an engine build:
 - **`opendesigner/RATIONALE.md`:** one page for the team on what was chosen, why, and what is still open. The skill writes it from a template.
 - **A short note in your `AGENTS.md`,** added only after you say yes. It tells later AI agents to read `DESIGN.md`, use the tokens and run `engine.py review`.
 - **`opendesigner/feedback.md`,** written only if you report something with `engine.py feedback`.
+- **`opendesigner/RULES.md`,** written when you give a note on the work. A note you give twice becomes a rule that later sessions follow.
+- **`opendesigner/research/`,** written only if you say yes to user research: the findings with their sources (`users.md`), the positioning and the direction board (`directions.html`).
 - **`opendesigner/references/`,** written only when you share a reference with the extract skill. It holds the measurements taken from it.
 - **`opendesigner/journey/`,** written only if you said yes to the private log. It is kept out of git.
 

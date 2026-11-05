@@ -13,7 +13,7 @@ Load OpenDesigner into the AI tool you already use: Claude Code, Claude, Codex, 
 The model reads your repo first. It starts with a short sketch, and you can zoom into any area. It shows each choice visually where your tool allows it. It writes DTCG design tokens, CSS variables, a Tailwind theme, a `DESIGN.md` and a decision log into your project. See [How it works](HOW-IT-WORKS.md).
 
 How is that different from typing "make me a design system"?
-- Every recommendation comes from a cited research base: more than 500 Decision Cards and 25 benchmarked systems.
+- Every recommendation comes from a cited research base: more than 500 Decision Cards and 32 benchmarked systems (25 in full).
 - The questions come in order of what depends on what.
 - Fixed checks (contrast, target sizes, scale steps) run before you see the result.
 
@@ -44,7 +44,7 @@ Files in your repo:
 - a `state.json` to continue later, and a preview page;
 - a snippet for your `AGENTS.md`, so later agents read the system first.
 
-See [what lands in your repo](HOW-IT-WORKS.md#8-export-and-what-lands-in-your-repo). The README's status table says which exporters have shipped.
+See [what lands in your repo](HOW-IT-WORKS.md#8-export-and-what-lands-in-your-repo). All of these exporters ship today (`engine.py export --format`).
 
 ### I already have a design system. Is this useful?
 
@@ -191,7 +191,7 @@ Yes, and it builds it in wherever possible. Every generated system gets:
 
 If your system uses see-through glass surfaces, each one also gets a solid version for people who turn transparency off. The CSS export swaps it in, with no blur, when the browser reports that the person wants less transparency (`prefers-reduced-transparency`: Chrome and Edge today; Safari does not report it and Firefox only behind a setting) or more contrast (`prefers-contrast: more`, in every major browser). A glass surface without one is a lint error.
 
-Lint errors block things like unlabeled fields or meaning shown only by color. WCAG 3 is still a draft, so WCAG 2.2 is the target that can be enforced. APCA appears as an advisory note.
+Token errors, such as targets under 24 px or contrast below the floor, block the build. On a built page, `review.py` reports controls with no accessible name; color-only meaning is not checked yet. WCAG 3 is still a draft, so WCAG 2.2 is the target that can be enforced. APCA appears as an advisory note.
 
 Automated checks catch only part of WCAG, so testing by people with assistive technology still matters. See [`synthesis/LEVERS.md`](../synthesis/LEVERS.md) section D.
 
@@ -211,4 +211,4 @@ You don't have to. Every recommendation cites a Decision Card. Every card cites 
 
 ### How can I help?
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) and the [good first issues](https://github.com/ckryptickunal/OpenDesigner/labels/good%20first%20issue). Research gaps, host support, translations and examples are all welcome. To report a problem you hit while using it, see [Report a problem](../README.md#report-a-problem-or-suggest-an-improvement).
+See [CONTRIBUTING.md](../CONTRIBUTING.md) and the [good first issues](https://github.com/ckryptickunal/OpenDesigner/labels/good%20first%20issue). Research gaps, host support, translations and examples are all welcome. To report a problem you hit while using it, see [Help it get better](../README.md#help-it-get-better).

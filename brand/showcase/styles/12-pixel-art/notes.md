@@ -1,5 +1,7 @@
 # 12 · Pixel art · Lampwright
 
+Gallery: Lampwright is the live-ops console of a fictional pixel-art game, on day 3 of a seven-day festival event.
+
 **This page now:** the "Round 3 (polish)" section of 2026-10-15, the last one, describes it. The sections between record earlier versions.
 
 **Final self-audit score: 4 / 5** (3 rounds). Render: `shot.png`, 1440 x 900 at scale 2, dark theme.
