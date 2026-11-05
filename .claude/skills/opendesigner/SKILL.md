@@ -43,7 +43,7 @@ A person in a hurry still gets a finished page in the first reply. What they don
 | Before you show a built page | **opendesigner-review** on it |
 | Before anything is shared or deployed | **opendesigner-preflight** |
 | The person names a site or URL as a reference | **opendesigner-extract**: measure the live site. A thumbnail is not enough |
-| You are about to draw line art or illustrations by hand | **opendesigner-illustrate** first |
+| You are about to draw line art, icons or illustrations by hand | **opendesigner-illustrate** first (a few icons of their own: `illustrate.py icons`) |
 | Before you propose colours or directions | Mobbin, when connected, for shipped references (`practices.md` section 2). Then `engine.py research market` and a positioning the person confirms (`research.md` section 8) |
 
 ## Files in this skill

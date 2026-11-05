@@ -27,16 +27,16 @@ private func dsColor(_ light: UInt32, _ dark: UInt32, _ la: Double = 1, _ da: Do
 
 public extension DS {
     enum Colors {
-        public static let bgAccentBold = dsColor(0x4A5CF0, 0x637BF2)
-        public static let bgAccentBoldHover = dsColor(0x4251DC, 0x6F89FF)
-        public static let bgAccentBoldPressed = dsColor(0x3B48D2, 0x7B95FF)
-        public static let bgAccentSubtle = dsColor(0xE5EBFF, 0x21273C)
-        public static let bgAccentSubtleHover = dsColor(0xD9E2FF, 0x262E4E)
-        public static let bgAccentSubtlePressed = dsColor(0xCEDAFF, 0x2B3560)
-        public static let bgActionPrimary = dsColor(0x4A5CF0, 0x637BF2)
-        public static let bgActionPrimaryHover = dsColor(0x4251DC, 0x6F89FF)
-        public static let bgActionPrimaryPressed = dsColor(0x3B48D2, 0x7B95FF)
-        public static let bgBrand = dsColor(0x4A5CF0, 0x637BF2)
+        public static let bgAccentBold = dsColor(0x4A5CF0, 0x6078FF)
+        public static let bgAccentBoldHover = dsColor(0x4251DC, 0x6F88FF)
+        public static let bgAccentBoldPressed = dsColor(0x3B48D2, 0x7B94FF)
+        public static let bgAccentSubtle = dsColor(0xE5EBFF, 0x1F2641)
+        public static let bgAccentSubtleHover = dsColor(0xD9E2FF, 0x242D55)
+        public static let bgAccentSubtlePressed = dsColor(0xCEDAFF, 0x28346A)
+        public static let bgActionPrimary = dsColor(0x4A5CF0, 0x6078FF)
+        public static let bgActionPrimaryHover = dsColor(0x4251DC, 0x6F88FF)
+        public static let bgActionPrimaryPressed = dsColor(0x3B48D2, 0x7B94FF)
+        public static let bgBrand = dsColor(0x4A5CF0, 0x6078FF)
         public static let bgDangerBold = dsColor(0xD93834, 0xDA5B51)
         public static let bgDangerBoldHover = dsColor(0xC72F2C, 0xE9695E)
         public static let bgDangerBoldPressed = dsColor(0xBC2323, 0xF47367)
@@ -63,13 +63,14 @@ public extension DS {
         public static let bgWarningBoldHover = dsColor(0xDDA331, 0xF7C56E)
         public static let bgWarningBoldPressed = dsColor(0xD29921, 0xFFD388)
         public static let bgWarningSubtle = dsColor(0xF5EAD9, 0x2F2618)
-        public static let borderAccent = dsColor(0x667EEC, 0x647BE1)
+        public static let borderAccent = dsColor(0x667EEC, 0x5F77F7)
         public static let borderDanger = dsColor(0xD76258, 0xCD6057)
         public static let borderDefault = dsColor(0x808793, 0x7A808C)
         public static let borderDiscovery = dsColor(0xA168F0, 0x9B67E6)
         public static let borderFocus = dsColor(0x4A5CF0, 0x91A8FF)
         public static let borderInfo = dsColor(0x008ED1, 0x0089C9)
         public static let borderInput = dsColor(0x808793, 0x7A808C)
+        public static let borderSeparator = dsColor(0xD6DBE3, 0x3B3F47)
         public static let borderStrong = dsColor(0x808793, 0x7A808C)
         public static let borderSubtle = dsColor(0xC4CAD5, 0x434852)
         public static let borderSuccess = dsColor(0x089A47, 0x199547)
@@ -105,7 +106,7 @@ public extension DS {
         public static let textPrimary = dsColor(0x222428, 0xE6E9EE)
         public static let textSecondary = dsColor(0x515762, 0xA5ABB8)
         public static let textSuccess = dsColor(0x00652C, 0x47C26C)
-        public static let textTertiary = dsColor(0x5E6471, 0x8F96A4)
+        public static let textTertiary = dsColor(0x515762, 0xA5ABB8)
         public static let textWarning = dsColor(0x845D00, 0xFECF7F)
     }
 
@@ -122,6 +123,10 @@ public extension DS {
         public static let sizeIconDefault: CGFloat = 16
         public static let sizeIconMd: CGFloat = 20
         public static let sizeIconLg: CGFloat = 24
+        public static let sizeRowSm: CGFloat = 36
+        public static let sizeRowMd: CGFloat = 40
+        public static let sizeRowLg: CGFloat = 48
+        public static let sizeRowTwoLine: CGFloat = 64
         public static let sizeTargetPointer: CGFloat = 24
         public static let sizeTargetMin: CGFloat = 24
         public static let space0: CGFloat = 0
@@ -187,6 +192,10 @@ public extension DS {
         public static let radiusNested: CGFloat = 2
         public static let radiusOverlay: CGFloat = 12
         public static let radiusPerson: CGFloat = 9999
+        /// Continuous corners, as iOS draws its own controls (DC-L04-04, Q-shape-04): the same radii, a smoother curve.
+        /// Use DS.Radius.shape(DS.Radius.radiusContainer) instead of a plain RoundedRectangle.
+        public static let cornerStyle: RoundedCornerStyle = .continuous
+        public static func shape(_ radius: CGFloat) -> RoundedRectangle { RoundedRectangle(cornerRadius: radius, style: cornerStyle) }
     }
 
     /// Text styles use Dynamic Type (U5 F22): iOS sizes come from the text style (body 17 pt), not the web scale,
@@ -200,9 +209,9 @@ public extension DS {
         public static let headlineLg = Font.custom("Inter", size: 28, relativeTo: .title).weight(.semibold)
         public static let headlineMd = Font.custom("Inter", size: 22, relativeTo: .title2).weight(.semibold)
         public static let headlineSm = Font.custom("Inter", size: 20, relativeTo: .title3).weight(.semibold)
-        public static let labelLg = Font.custom("Inter", size: 17, relativeTo: .body).weight(.regular)
-        public static let labelMd = Font.custom("Inter", size: 15, relativeTo: .subheadline).weight(.regular)
-        public static let labelSm = Font.custom("Inter", size: 12, relativeTo: .caption).weight(.regular)
+        public static let labelLg = Font.custom("Inter", size: 17, relativeTo: .body).weight(.medium)
+        public static let labelMd = Font.custom("Inter", size: 15, relativeTo: .subheadline).weight(.medium)
+        public static let labelSm = Font.custom("Inter", size: 12, relativeTo: .caption).weight(.medium)
         public static let numericLg = Font.custom("Inter", size: 22, relativeTo: .title2).weight(.semibold)
         public static let numericMd = Font.custom("Inter", size: 17, relativeTo: .body).weight(.regular)
         public static let titleLg = Font.custom("Inter", size: 20, relativeTo: .title3).weight(.semibold)
@@ -214,9 +223,9 @@ public extension DS {
         public static let durationExtra: Double = 0.62
         public static let durationInstant: Double = 0
         public static let durationLong: Double = 0.35
-        public static let durationLongExit: Double = 0.26
+        public static let durationLongExit: Double = 0.28
         public static let durationMedium: Double = 0.22
-        public static let durationMediumExit: Double = 0.16
+        public static let durationMediumExit: Double = 0.18
         public static let durationMicro: Double = 0.1
         public static let durationShort: Double = 0.15
         public static let springEffectsDefault = Animation.spring(duration: 0.157, bounce: 0)

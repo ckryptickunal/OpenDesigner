@@ -49,6 +49,7 @@
   --ds-color-border-focus: #4a5cf0;
   --ds-color-border-info: #008ed1;
   --ds-color-border-input: #808793;
+  --ds-color-border-separator: #d6dbe3;
   --ds-color-border-strong: #808793;
   --ds-color-border-subtle: #c4cad5;
   --ds-color-border-success: #089a47;
@@ -73,7 +74,7 @@
   --ds-color-text-on-success: #ffffff;
   --ds-color-text-on-warning: #222428;
   --ds-color-text-success: #00652c;
-  --ds-color-text-tertiary: #5e6471;
+  --ds-color-text-tertiary: #515762;
   --ds-color-text-warning: #845d00;
   --ds-color-neutral-light-1: #fcfdff;
   --ds-color-neutral-light-2: #f2f4f9;
@@ -219,7 +220,7 @@
   --ds-font-line-height-36: 36px;
   --ds-font-line-height-44: 44px;
   --ds-font-weight-body: 400;
-  --ds-font-weight-label: 400;
+  --ds-font-weight-label: 500;
   --ds-font-weight-heading: 600;
   --ds-font-family-display: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
   --ds-font-family-mono: JetBrains Mono, ui-monospace, SF Mono, Menlo, Consolas, Liberation Mono, monospace;

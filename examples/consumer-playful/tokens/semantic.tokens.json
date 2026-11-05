@@ -34,7 +34,7 @@
     },
     "weight": {
       "$type": "fontWeight",
-      "$description": "4 weights: body 400, labels 500, headings 750 (DC-L02-15; Energy sets heading weight, S-L06-031).",
+      "$description": "3 weights: body 400, labels 500, headings 750 (DC-L02-15; Energy sets heading weight, S-L06-031).",
       "body": {
         "$value": 400
       },
@@ -43,10 +43,28 @@
       },
       "heading": {
         "$value": 750
+      }
+    },
+    "tracking": {
+      "$type": "number",
+      "$description": "Letter spacing in em, one value per job (levers formulas.type.tracking.jobs). Capitals never take negative tracking. The font shorthand drops letter-spacing: set it too, or use the text classes.",
+      "small": {
+        "$value": 0.02
+      },
+      "body": {
+        "$value": 0
+      },
+      "heading": {
+        "$value": -0.01
       },
       "display": {
-        "$value": 850,
-        "$description": "Display sizes (32px and up) only."
+        "$value": -0.02
+      },
+      "caps-label": {
+        "$value": 0.06
+      },
+      "caps-display": {
+        "$value": 0.01
       }
     }
   },
@@ -134,7 +152,7 @@
           "fontSize": "{font.size.12}",
           "fontWeight": "{font.weight.label}",
           "letterSpacing": {
-            "value": 0.6,
+            "value": 0.72,
             "unit": "px"
           },
           "lineHeight": 1.3333
@@ -142,7 +160,7 @@
         "$extensions": {
           "opendesigner": {
             "lineHeightPx": 16,
-            "letterSpacingEm": 0.05,
+            "letterSpacingEm": 0.06,
             "use": "Overlines in capitals with wide tracking (DC-L02-18).",
             "avoid": "Sentences; scripts without case.",
             "textTransform": "uppercase"
@@ -314,66 +332,54 @@
             "avoid": "Card titles."
           }
         }
-      },
+      }
+    },
+    "display": {
       "md": {
         "$value": {
           "fontFamily": "{font.family.display}",
-          "fontSize": "{font.size.51}",
+          "fontSize": "{font.size.display-md}",
           "fontWeight": "{font.weight.heading}",
           "letterSpacing": {
-            "value": -1.02,
+            "value": -0.96,
             "unit": "px"
           },
-          "lineHeight": 1.098
+          "lineHeight": 1.0833
         },
         "$extensions": {
           "opendesigner": {
-            "lineHeightPx": 56,
+            "lineHeightPx": 52,
             "letterSpacingEm": -0.02,
-            "use": "Page and section titles.",
-            "avoid": "Card titles."
+            "use": "Section titles on marketing pages; one per section.",
+            "avoid": "Cards and app screens.",
+            "fluid": {
+              "minPx": 32,
+              "maxPx": 48
+            }
           }
         }
       },
       "lg": {
         "$value": {
           "fontFamily": "{font.family.display}",
-          "fontSize": "{font.size.67}",
+          "fontSize": "{font.size.display-lg}",
           "fontWeight": "{font.weight.heading}",
           "letterSpacing": {
-            "value": -1.34,
+            "value": -2.4,
             "unit": "px"
           },
-          "lineHeight": 1.1343
+          "lineHeight": 1.1333
         },
         "$extensions": {
           "opendesigner": {
-            "lineHeightPx": 76,
+            "lineHeightPx": 136,
             "letterSpacingEm": -0.02,
-            "use": "Page and section titles.",
-            "avoid": "Card titles."
-          }
-        }
-      }
-    },
-    "display": {
-      "sm": {
-        "$value": {
-          "fontFamily": "{font.family.display}",
-          "fontSize": "{font.size.90}",
-          "fontWeight": "{font.weight.display}",
-          "letterSpacing": {
-            "value": -1.8,
-            "unit": "px"
-          },
-          "lineHeight": 1.1111
-        },
-        "$extensions": {
-          "opendesigner": {
-            "lineHeightPx": 100,
-            "letterSpacingEm": -0.02,
-            "use": "One hero line per page: marketing, empty states.",
-            "avoid": "App chrome and repeated elements."
+            "use": "The hero line: one per page, at most two lines.",
+            "avoid": "Section titles and repeated elements.",
+            "fluid": {
+              "minPx": 52,
+              "maxPx": 120
+            }
           }
         }
       }
@@ -483,130 +489,6 @@
             }
           }
         }
-      },
-      "title": {
-        "sm": {
-          "$value": {
-            "fontFamily": "{font.family.text}",
-            "fontSize": "{font.size.16}",
-            "fontWeight": "{font.weight.display}",
-            "letterSpacing": {
-              "value": 0.0,
-              "unit": "px"
-            },
-            "lineHeight": 1.5
-          },
-          "$extensions": {
-            "opendesigner": {
-              "lineHeightPx": 24,
-              "letterSpacingEm": 0.0,
-              "use": "Emphasized title.sm: selection, actions, headlines.",
-              "avoid": "Whole paragraphs."
-            }
-          }
-        },
-        "md": {
-          "$value": {
-            "fontFamily": "{font.family.text}",
-            "fontSize": "{font.size.21}",
-            "fontWeight": "{font.weight.display}",
-            "letterSpacing": {
-              "value": 0.0,
-              "unit": "px"
-            },
-            "lineHeight": 1.3333
-          },
-          "$extensions": {
-            "opendesigner": {
-              "lineHeightPx": 28,
-              "letterSpacingEm": 0.0,
-              "use": "Emphasized title.md: selection, actions, headlines.",
-              "avoid": "Whole paragraphs."
-            }
-          }
-        },
-        "lg": {
-          "$value": {
-            "fontFamily": "{font.family.text}",
-            "fontSize": "{font.size.28}",
-            "fontWeight": "{font.weight.display}",
-            "letterSpacing": {
-              "value": 0.0,
-              "unit": "px"
-            },
-            "lineHeight": 1.2857
-          },
-          "$extensions": {
-            "opendesigner": {
-              "lineHeightPx": 36,
-              "letterSpacingEm": 0.0,
-              "use": "Emphasized title.lg: selection, actions, headlines.",
-              "avoid": "Whole paragraphs."
-            }
-          }
-        }
-      },
-      "headline": {
-        "sm": {
-          "$value": {
-            "fontFamily": "{font.family.display}",
-            "fontSize": "{font.size.38}",
-            "fontWeight": "{font.weight.display}",
-            "letterSpacing": {
-              "value": -0.38,
-              "unit": "px"
-            },
-            "lineHeight": 1.2632
-          },
-          "$extensions": {
-            "opendesigner": {
-              "lineHeightPx": 48,
-              "letterSpacingEm": -0.01,
-              "use": "Emphasized headline.sm: selection, actions, headlines.",
-              "avoid": "Whole paragraphs."
-            }
-          }
-        },
-        "md": {
-          "$value": {
-            "fontFamily": "{font.family.display}",
-            "fontSize": "{font.size.51}",
-            "fontWeight": "{font.weight.display}",
-            "letterSpacing": {
-              "value": -1.02,
-              "unit": "px"
-            },
-            "lineHeight": 1.098
-          },
-          "$extensions": {
-            "opendesigner": {
-              "lineHeightPx": 56,
-              "letterSpacingEm": -0.02,
-              "use": "Emphasized headline.md: selection, actions, headlines.",
-              "avoid": "Whole paragraphs."
-            }
-          }
-        },
-        "lg": {
-          "$value": {
-            "fontFamily": "{font.family.display}",
-            "fontSize": "{font.size.67}",
-            "fontWeight": "{font.weight.display}",
-            "letterSpacing": {
-              "value": -1.34,
-              "unit": "px"
-            },
-            "lineHeight": 1.1343
-          },
-          "$extensions": {
-            "opendesigner": {
-              "lineHeightPx": 76,
-              "letterSpacingEm": -0.02,
-              "use": "Emphasized headline.lg: selection, actions, headlines.",
-              "avoid": "Whole paragraphs."
-            }
-          }
-        }
       }
     }
   },
@@ -707,6 +589,100 @@
       }
     }
   },
+  "layout": {
+    "$description": "One container for every section of the site; columns, gutters and margins by width class; a reading measure. A centred hero is fine; within a section the heading and its content share one alignment.",
+    "$extensions": {
+      "opendesigner": {
+        "evidence": [
+          "DC-L03-15",
+          "DC-L03-16",
+          "DC-L02-17",
+          "S-L03-008",
+          "S-L03-026",
+          "S-L02-051"
+        ]
+      }
+    },
+    "container": {
+      "$type": "dimension",
+      "max": {
+        "$value": {
+          "value": 1280,
+          "unit": "px"
+        },
+        "$description": "The one content width (Primer full pages, S-L03-008)."
+      }
+    },
+    "columns": {
+      "$type": "number",
+      "compact": {
+        "$value": 4
+      },
+      "medium": {
+        "$value": 8
+      },
+      "expanded": {
+        "$value": 12
+      }
+    },
+    "gutter": {
+      "$type": "dimension",
+      "compact": {
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        }
+      },
+      "expanded": {
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        }
+      }
+    },
+    "margin": {
+      "$type": "dimension",
+      "compact": {
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        }
+      },
+      "expanded": {
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        }
+      }
+    },
+    "measure": {
+      "$type": "dimension",
+      "prose": {
+        "$value": {
+          "value": 572,
+          "unit": "px"
+        },
+        "$description": "65 characters per line (paragraphs); CSS uses ch.",
+        "$extensions": {
+          "opendesigner": {
+            "css": "65ch"
+          }
+        }
+      },
+      "lead": {
+        "$value": {
+          "value": 458,
+          "unit": "px"
+        },
+        "$description": "52 characters per line (the lead under a heading); CSS uses ch.",
+        "$extensions": {
+          "opendesigner": {
+            "css": "52ch"
+          }
+        }
+      }
+    }
+  },
   "radius": {
     "$type": "dimension",
     "$description": "Radius scale snapped to 0, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32 plus full (LEVERS B9, [inferred] ratios checked against Atlassian).",
@@ -727,7 +703,7 @@
     },
     "control": {
       "$value": "{radius.full}",
-      "$description": "Buttons, inputs, selects (Roundness dial, DC-L04-02)."
+      "$description": "Buttons and ctas, inputs, selects, chips, toggles, tabs, carousel arrows: one corner for all of them (Roundness dial or Q-shape-01, DC-L04-02)."
     },
     "control-sm": {
       "$value": "{radius.full}",
@@ -735,7 +711,7 @@
     },
     "container": {
       "$value": "{radius.24}",
-      "$description": "Cards and panels."
+      "$description": "Cards, panels, photos and media: one corner for all of them."
     },
     "overlay": {
       "$value": "{radius.32}",
@@ -743,7 +719,7 @@
     },
     "person": {
       "$value": "{radius.full}",
-      "$description": "Avatars."
+      "$description": "Avatars, dots and status pips only."
     },
     "nested": {
       "$value": {

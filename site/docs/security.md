@@ -16,7 +16,7 @@ OpenDesigner is files in your repository plus a small engine that runs on your o
 | The engine (`engine.py`) | On your computer, with Python 3.10 or newer and only the standard library | None. It makes no network calls |
 | The skills (instructions) | Inside the AI tool you already use | Your chat goes to that tool's AI provider, as any prompt does |
 | The Claude app | The engine runs in Claude's code-execution sandbox | Whatever that sandbox allows |
-| The illustration skill (`opendesigner-illustrate`) | On your computer | Searches and fetches open-licence art sites over HTTPS, only when you use it |
+| The illustration skill (`opendesigner-illustrate`) | On your computer | Searches and fetches open-licence art and icon sites over HTTPS, only when you use it |
 | The review skill (`opendesigner-review`) | On your computer | `review.py serve` listens on 127.0.0.1 only while you run it. The optional `capture.py` drives a browser to local addresses only and needs Playwright, which is installed only after you say yes |
 | The paint skill (`opendesigner-paint`) | On your computer | Its painting engine is installed with npm only after you say yes, and renders locally |
 

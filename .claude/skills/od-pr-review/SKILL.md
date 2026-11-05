@@ -88,6 +88,7 @@ Answer these in the log, briefly:
 | Decision log lines: `YYYY-MM-DD HH:MM IST [who] ...`, UTF-8 | `_coordination/DECISIONS.md` | The scanner flags both |
 | Manifest versions stay in step | AGENTS | `.claude-plugin/*.json` and `plugin.json` |
 | Skill frontmatter is portable | `build_dist.py` | `build_dist.py --check` |
+| Worked examples match the engine | `build_examples.py` | `build_examples.py --check` |
 
 ## 5. Verify correctness
 
