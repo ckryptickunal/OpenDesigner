@@ -131,6 +131,7 @@ python3 illustrate.py icons fetch <name> [...] --set <set>               drawn i
 python3 illustrate.py icons sheet                                        the new icons beside theirs, at their sizes
 python3 illustrate.py icons keep <name> [...] --to <their icon folder>   after a yes: status, ATTRIBUTION.md, the files
 ```
+- `measure` and `sets` work offline. Run both first, so you can recommend the one set at the top; `find` and `fetch` call Iconify, so ask before them as for any search.
 - Read the measured construction back to the person. Where `measure` says the glyph box or line is an estimate, check one icon and pass `--glyph-box` or `--line`.
 - Take every new glyph from one set. Two sets side by side read like two typefaces.
 - How the stroke scales: a glyph from a 512-unit grid placed in a 20-unit box is scaled by 20/512, so a 1.5-unit line needs a stroke of 1.5 / (20/512) = 38.4. Sets whose lines are filled shapes (Material Symbols, Phosphor, Remix) keep their weight, so `sets` ranks them lower.

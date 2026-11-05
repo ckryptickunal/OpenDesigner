@@ -795,7 +795,7 @@ class Icons(unittest.TestCase):
             self.assertRaises(SystemExit, run, ["--dir", d, "icons", "fetch", "../boat", "--set", "ion"])
             out = run(["--dir", d, "icons", "fetch", "boat", "--set", "ion", "--offline"])
             self.assertIn("https://api.iconify.design/collections?prefixes=ion", out)
-            self.assertIn("ion.json?icons=boat-outline\"", out)                                 # the outline glyph, never ion's solid "boat"
+            self.assertIn("ion.json?icons=boat,boat-outline\"", out)                            # the outline glyph first; plain only if drawn alike
             fulfil(out, {"collections": ION_INFO, "ion.json": ION_ICONS})
             out = run(["--dir", d, "icons", "fetch", "boat", "--set", "ion"])
             self.assertIn("drew boat.svg <- ion:boat-outline", out)
@@ -805,11 +805,12 @@ class Icons(unittest.TestCase):
             self.assertIn('fill="#E8EEFC"', svg)                                               # the owner's badge
             self.assertNotIn("currentColor", svg)
             self.assertIn('stroke="#1F3A8A"', svg)
+            self.assertIn('class="odi-boat"', svg)                                             # ids and classes scoped to this icon
             self.assertTrue(Path(d, "src", "boat.svg").exists())                               # the untouched original
             e = json.loads(Path(d, "ledger.json").read_text())["items"][0]
             self.assertEqual((e["licence_spdx"], e["verdict"], e["status"]), ("MIT", "ok", "candidate"))
             self.assertEqual(e["attribution"], "boat-outline from IonIcons by Ben Sperry, MIT")
-            Path(d, "downloads", "ion-info.json").write_text(json.dumps({"ion": {**ION_INFO["ion"], "license": {"title": "GPL", "spdx": "GPL-3.0"}}}))
+            next(Path(d, "downloads").glob("ion-info-*.json")).write_text(json.dumps({"ion": {**ION_INFO["ion"], "license": {"title": "GPL", "spdx": "GPL-3.0"}}}))
             with self.assertRaises(SystemExit) as cm:
                 run(["--dir", d, "icons", "fetch", "boat", "--set", "ion"])
             self.assertIn("not on the allowed list", str(cm.exception))
@@ -833,6 +834,82 @@ class Icons(unittest.TestCase):
             credits = Path(d, "ATTRIBUTION.md").read_text()
             self.assertIn("# Icon credits and licences", credits)
             self.assertIn("| boat (unassigned) | [iconify]", credits)
+
+    def test_review_fixes(self):
+        """The fresh-eyes review of issue 50's first draft: each case that went wrong then."""
+        with tempfile.TemporaryDirectory() as tmp:
+            d = str(Path(tmp, "opendesigner", "icons"))
+            # paint the badge takes from the root, a class or a gradient stays on the copied badge
+            figma = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19.25" '
+                     'stroke="#C9D5F0" stroke-width="1.5"/><path d="M13 20h14M20 13v14" stroke="#1F3A8A" stroke-width="1.5"/></svg>')
+            run(["--dir", d, "icons", "measure", *self.owner(tmp, figma, figma)])
+            ring = json.loads(Path(d, "construction.json").read_text())["container"][0]["xml"]
+            self.assertIn('fill="none"', ring)
+            classy = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><style>.b{fill:#E8EEFC}</style><defs><linearGradient id="g">'
+                      '<stop offset="0" stop-color="#E8EEFC"/></linearGradient></defs><circle class="b" cx="20" cy="20" r="20"/>'
+                      '<circle cx="20" cy="20" r="19" fill="url(#g)"/><path d="M13 20h14" stroke="#1F3A8A" stroke-width="1.5"/></svg>')
+            run(["--dir", d, "icons", "measure", *self.owner(tmp, classy, classy), "--glyph-box", "20"])
+            con = json.loads(Path(d, "construction.json").read_text())
+            self.assertIn('fill="#E8EEFC"', con["container"][0]["xml"])
+            self.assertTrue(any("linearGradient" in x for c in con["container"] for x in c["defs"]))
+            glyphs = {"prefix": "ion", "width": 512, "height": 512, "icons": {
+                "boat-outline": {"body": '<style>svg,body{display:none}</style><path fill="none" stroke="currentColor" stroke-width="32" d="M48 336h416"/>'},
+                "anchor": {"body": '<path fill="currentColor" d="M48 48h416v416H48z"/>'}}}
+            fulfil(run(["--dir", d, "icons", "fetch", "boat", "anchor", "--set", "ion", "--name", "../../escaped", "--offline"]),
+                   {"collections": ION_INFO, "ion.json": glyphs})
+            out = run(["--dir", d, "icons", "fetch", "boat", "anchor", "--set", "ion"])
+            self.assertIn("skip anchor: ion has no anchor-outline, and its anchor is solid", out)  # never the other style's glyph
+            svg = Path(d, "boat.svg").read_text()
+            self.assertNotIn("display:none", svg)                                              # a glyph's stylesheet is dropped
+            self.assertIn('url(#odi-boat-g)', svg)
+            self.assertIn('id="odi-boat-g"', svg)
+            fulfil(run(["--dir", d, "icons", "fetch", "boat", "--set", "ion", "--name", "../../escaped", "--offline"]),
+                   {"collections": ION_INFO, "ion.json": glyphs})
+            run(["--dir", d, "icons", "fetch", "boat", "--set", "ion", "--name", "../../escaped"])
+            self.assertTrue(Path(d, "escaped.svg").exists())                                   # --name is a slug, never a path
+            self.assertFalse(Path(tmp, "escaped.svg").exists())
+            with self.assertRaises(SystemExit) as cm:
+                run(["--dir", d, "icons", "fetch", "home-filled", "--set", "tabler"])        # tabler's solid glyph for outline icons
+            self.assertIn("solid glyphs of tabler", str(cm.exception))
+            app = Path(tmp, "app")
+            app.mkdir()
+            (app / "boat.svg").write_text("<svg/>")
+            self.assertRaises(SystemExit, run, ["--dir", d, "icons", "keep", "boat", "--to", str(app)])   # never overwrites
+            self.assertEqual((app / "boat.svg").read_text(), "<svg/>")
+            own = self.owner(tmp, classy)[0]
+            Path(d, "own-0.svg").write_text(Path(d, "boat.svg").read_text())
+            led = json.loads(Path(d, "ledger.json").read_text())
+            led["items"].append({**led["items"][0], "name": "own-0", "file": "own-0.svg"})
+            Path(d, "ledger.json").write_text(json.dumps(led))
+            con = json.loads(Path(d, "construction.json").read_text())
+            Path(d, "construction.json").write_text(json.dumps({**con, "files": [own]}))
+            with self.assertRaises(SystemExit) as cm:
+                run(["--dir", d, "icons", "keep", "own-0", "--to", tmp, "--force"])
+            self.assertIn("owner's own icons", str(cm.exception))
+
+    def test_icons_without_a_badge(self):
+        """A plain 24-unit set: the glyph box is the grid, and one large circle in one icon is not a badge."""
+        with tempfile.TemporaryDirectory() as tmp:
+            d = str(Path(tmp, "opendesigner", "icons"))
+            line = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
+            plain = [line + '<path d="M3 12h18M12 3v18"/></svg>', line + '<path d="M4 6h16M4 12h16M4 18h16"/></svg>',
+                     line + '<path d="M5 5l14 14M19 5L5 19"/></svg>', line + '<circle cx="12" cy="12" r="11"/><path d="M8 12l3 3 5-6"/></svg>']
+            out = run(["--dir", d, "icons", "measure", *self.owner(tmp, *plain)])
+            con = json.loads(Path(d, "construction.json").read_text())
+            self.assertEqual((con["container"], con["glyph_box"], con["weight"]), ([], 24, 0.0625))
+            self.assertIn("raw.iconStroke 1.5 ", out)
+            self.assertIn("read as part of the glyph", out)
+            top = il.rank_icon_sets(con, json.loads(il.SOURCES.read_text())["icon_sets"])[0]
+            self.assertAlmostEqual(top["weight"], 0.0625, delta=0.001)
+            frame = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="#111"><path d="M0 0h16v16H0zM1 1v14h14V1z"/>'
+                     '<path d="M2 4h12v1H2zM3 6h2v2H3zM7 6h2v2H7z M11 6h2v2h-2z M3 10h2v2H3z M7 10h2v2H7zM11 10h2v2h-2z"/></svg>')
+            self.assertEqual(il.measure_root(il.sanitize(frame)[0])["container"], [])          # a calendar's frame is not a badge
+            sprite = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><path id="p" d="M3 12h18" fill="none" '
+                      'stroke="#111" stroke-width="1.5"/></defs><use href="#p"/><use href="#p" y="4"/></svg>')
+            m = il.measure_root(il.sanitize(sprite)[0])
+            self.assertEqual((m["style"], m["line"]), ("outline", 1.5))                          # <use> is drawn, not skipped
+            with self.assertRaises(ValueError):
+                il.measure_root(il.sanitize('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"/>')[0])
 
     def test_find(self):
         with tempfile.TemporaryDirectory() as tmp:

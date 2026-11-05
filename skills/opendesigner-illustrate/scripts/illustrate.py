@@ -2070,6 +2070,7 @@ def photo_args(sub):
 ICON_DIR = "opendesigner/icons"
 ICON_LIVE = 20 / 24  # Material's 24 dp icon grid keeps the drawing in a 20 dp live area (S-L05-001); used when a set has no measured value
 ICON_COVER = 0.9  # a shape this wide and tall (share of the icon) is the badge or ring around the glyph, not the glyph
+ICON_INNER = 0.7  # the glyph inside a badge spans at most this share of it [inferred]
 ICON_SOLID = 0.16  # filled glyphs whose line (2 x area / perimeter) is under this share of the glyph read as outlines [inferred]
 ICON_NAME = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 ICON_SKIP = {"defs", "clipPath", "mask", "symbol", "pattern", "marker", "linearGradient", "radialGradient", "style", "title",
@@ -2297,10 +2298,19 @@ def icon_items(root):
                 if m:
                     classes.setdefault(m.group(1), {}).update(css_decls(body))
     items, boxes = [], []
+    ids = {el.get("id"): el for el in root.iter() if el.get("id")}
 
-    def visit(el, pm, inherited, top):
+    def visit(el, pm, inherited, top, depth=0):
         tag = local(el.tag)
-        if tag in ICON_SKIP:
+        if tag == "use":  # draw what it points at, where it says
+            ref = ids.get(next((el.get(k) for k in HREF_KEYS if el.get(k)), "#")[1:])
+            if ref is not None and depth < 4:
+                s = dict(inherited, **{k: el.get(k) for k in ICON_INHERIT if el.get(k) is not None})
+                s.update(css_decls(el.get("style")))
+                m = mat_mul(mat_mul(pm, parse_transform(el.get("transform"))), (1, 0, 0, 1, num(el.get("x")), num(el.get("y"))))
+                visit(ref, m, s, False, depth + 1)
+            return
+        if tag in ICON_SKIP and not (depth and tag == "symbol"):
             return
         m = mat_mul(pm, parse_transform(el.get("transform")))
         if tag == "svg" and not top:  # a nested <svg> is an explicit glyph box
@@ -2319,7 +2329,7 @@ def icon_items(root):
             items.append({"tag": tag, "el": el, "pm": pm, "style": s, "subs": [[xform(m, p) for p in sp] for sp in subs],
                           "scale": math.sqrt(abs(m[0] * m[3] - m[1] * m[2]))})
         for ch in el:
-            visit(ch, m, s, False)
+            visit(ch, m, s, False, depth)
 
     visit(root, (1, 0, 0, 1, 0, 0), {}, True)
     return items, boxes
@@ -2353,11 +2363,17 @@ def measure_root(root, file=""):
         it["stroke"] = stroke if painted(stroke) else None
         if it["fill"] or it["stroke"]:
             shown.append(it)
+    if not shown:
+        raise ValueError("no shapes to measure (only text, images or elements this reader does not draw)")
     container, glyph = [], []
     for it in shown:
         x0, y0, x1, y1 = _bbox([it])
         big = x1 - x0 >= ICON_COVER * vb[2] and y1 - y0 >= ICON_COVER * vb[3]
         (container if big and it["tag"] in ("circle", "ellipse", "rect", "path") else glyph).append(it)
+    if container and glyph:  # a badge or ring holds a clearly smaller glyph; an edge-to-edge frame is part of the drawing
+        cb, gb0 = _bbox(container), _bbox(glyph)
+        if max(gb0[2] - gb0[0], gb0[3] - gb0[1]) > ICON_INNER * max(cb[2] - cb[0], cb[3] - cb[1]):
+            glyph, container = shown, []
     if not glyph:
         glyph, container = container, []
     gb = _bbox(glyph) or [vb[0], vb[1], vb[0] + vb[2], vb[1] + vb[3]]
@@ -2372,24 +2388,38 @@ def measure_root(root, file=""):
             style, stroked, line, how = "outline", False, round(est, 2), "estimated from filled outlines (2 x area / perimeter)"
         else:
             style, stroked, line, how = "solid", False, None, ""
-    cont = []
+    cont, ids = [], {el.get("id"): el for el in root.iter() if el.get("id")}
     for it in container:
         el = copy.deepcopy(it["el"])
         el.tail = None
+        for k in ("style", "class"):  # its paint may come from a parent, a class or the root: write it on the shape itself
+            el.attrib.pop(k, None)
+        for k in ICON_INHERIT:
+            if k == "fill" or it["style"].get(k) is not None:
+                el.set(k, it["style"].get(k, "black"))
+        defs, todo = [], re.findall(r"url\(#([^)]+)\)", " ".join(it["style"].get(k, "") for k in ("fill", "stroke")))
+        while todo and len(defs) < 4:  # a gradient, and the one it inherits from
+            ref = ids.get(todo.pop())
+            if ref is not None:
+                d = copy.deepcopy(ref)
+                d.tail = None
+                defs.append(serialize(d))
+                todo += [v[1:] for k, v in ref.attrib.items() if local(k) == "href" and v.startswith("#")]
         if it["pm"] != (1, 0, 0, 1, 0, 0):
             g = ET.Element(f"{{{SVG_NS}}}g", {"transform": "matrix(%s)" % " ".join(_fmt(v, 6) for v in it["pm"])})
             g.append(el)
             el = g
         cont.append({"shape": it["tag"], "fill": it["fill"], "stroke": it["stroke"],
                      "stroke_width": round(num(it["style"].get("stroke-width"), 1.0) * it["scale"], 3) if it["stroke"] else None,
-                     "box": [round(v, 3) for v in _bbox([it])], "xml": serialize(el)})
+                     "box": [round(v, 3) for v in _bbox([it])], "xml": serialize(el), "defs": defs})
     size = root.get("width") if re.fullmatch(r"\s*[\d.]+\s*(px)?\s*", root.get("width") or "") else None
     return {"file": str(file), "viewBox": [round(v, 4) for v in vb], "size": num(size) if size else None, "style": style,
             "stroked": stroked, "line": line, "line_how": how,
             "caps": _most(it["style"].get("stroke-linecap", "butt") for it in glyph if it["stroke"]),
             "joins": _most(it["style"].get("stroke-linejoin", "miter") for it in glyph if it["stroke"]),
             "colour": _most((it["stroke"] if stroked else it["fill"]) for it in glyph),
-            "extent": round(extent, 3), "glyph_centre": [round((gb[0] + gb[2]) / 2, 3), round((gb[1] + gb[3]) / 2, 3)],
+            "extent": round(extent, 3), "extent_all": round(max((lambda b: (b[2] - b[0], b[3] - b[1]))(_bbox(shown))), 3),
+            "glyph_centre": [round((gb[0] + gb[2]) / 2, 3), round((gb[1] + gb[3]) / 2, 3)],
             "glyph_box": ([round(v, 3) for v in boxes[0]] if boxes else None), "container": cont}
 
 
@@ -2406,14 +2436,26 @@ def combine_icons(icons, glyph_box=None, line=None, sizes=None):
         warn.append(f"line weights differ ({', '.join(_fmt(v) for v in sorted(set(lines)))}); the most common one is used")
     stroked = _most(i["stroked"] for i in same if i["style"] == style)
     boxes = [max(b[2] - b[0], b[3] - b[1]) for b in (i["glyph_box"] for i in same) if b]
-    extent = statistics.median(i["extent"] for i in same)
+    framed = [i for i in same if i["container"]]
+    template = framed[0] if len(framed) * 2 > len(same) else None  # a badge or ring is part of the construction only if most icons have it
+    if template:
+        sig = lambda i: [(c["shape"], c["fill"], c["stroke"]) for c in i["container"]]
+        if any(sig(i) != sig(template) for i in framed[1:]):
+            warn.append(f"badges differ between icons; the one in {Path(template['file']).name} is used")
+        if len(framed) < len(same):
+            warn.append("no badge or ring in: " + ", ".join(Path(i["file"]).name for i in same if not i["container"]))
+    elif framed:
+        warn.append("a large shape was read as part of the glyph, since most icons have no badge: "
+                    + ", ".join(Path(i["file"]).name for i in framed))
+    extent = statistics.median(i["extent"] if template else i.get("extent_all", i["extent"]) for i in same)
     if glyph_box:
         gbox, gb_how = float(glyph_box), "given"
     elif boxes:
         gbox, gb_how = statistics.median(boxes), "the box drawn in your files"
+    elif not template:
+        gbox, gb_how = float(max(vb[2], vb[3])), "the icons' own grid (no badge)"
     else:
         gbox, gb_how = round(extent / ICON_LIVE, 3), "estimated"
-    template = next((i for i in same if i["container"]), None)
     if template:
         xs = [v for c in template["container"] for v in (c["box"][0], c["box"][2])]
         ys = [v for c in template["container"] for v in (c["box"][1], c["box"][3])]
@@ -2430,6 +2472,13 @@ def combine_icons(icons, glyph_box=None, line=None, sizes=None):
             "glyph_box_how": gb_how, "centre": centre, "container": template["container"] if template else [],
             "template": template["file"] if template else None,
             "weight": round(ln / gbox, 4) if ln and gbox else None, "warnings": warn}
+
+
+def weights(con, s):
+    """The owner's line and a set's, as shares of the same thing: the glyph box, or the drawing when the box is a guess."""
+    if con.get("glyph_box_how") == "estimated" and con.get("extent") and s.get("live"):
+        return con["line"] / con["extent"], s["weight"] / s["live"], "of the drawing"
+    return con["weight"], s["weight"], "of the box"
 
 
 def describe_construction(con):
@@ -2480,8 +2529,9 @@ def rank_icon_sets(con, sets):
                 why.append("no solid glyphs; yours are solid")
         else:
             if con.get("weight") and s.get("weight"):
-                score -= min(40.0, 100 * abs(math.log(con["weight"] / s["weight"])))
-                why.append(f"line {s['weight']:.3f} of the box against your {con['weight']:.3f}")
+                mine, theirs, of = weights(con, s)
+                score -= min(40.0, 100 * abs(math.log(mine / theirs)))
+                why.append(f"line {theirs:.3f} {of} against your {mine:.3f}")
             if not s.get("stroked"):
                 score -= 10
                 why.append("its lines are filled shapes, so their weight cannot be matched")
@@ -2496,9 +2546,12 @@ def rank_icon_sets(con, sets):
     return sorted(rows, key=lambda r: (-r["score"], -r.get("total", 0)))
 
 
-def compose_icon(con, groot, lib_vb, lib, live=None):
+def compose_icon(con, groot, lib_vb, lib, live=None, prefix=None):
     """Draw a library glyph into the owner's construction: their grid and badge, the glyph scaled into their glyph box,
-    its stroke set so it draws at their line weight, their caps, joins and colour. Returns (svg, what changed)."""
+    its stroke set so it draws at their line weight, their caps, joins and colour. Ids and classes get `prefix`, so two
+    icons inline on one page cannot clash. Returns (svg, what changed)."""
+    if min(lib_vb[2], lib_vb[3]) <= 0:
+        raise ValueError("the glyph has no size")
     box = con["glyph_box"] if con.get("glyph_box_how") != "estimated" or not live else con["extent"] / live
     s = box / max(lib_vb[2], lib_vb[3])
     cx, cy = con["centre"]
@@ -2507,8 +2560,16 @@ def compose_icon(con, groot, lib_vb, lib, live=None):
     if con.get("size"):  # the originals carry a width and height: so do the new ones
         attrs["width"] = attrs["height"] = _fmt(con["size"], 6)
     root = ET.Element(f"{{{SVG_NS}}}svg", attrs)
+    defs = [x for c in con.get("container", []) for x in c.get("defs", [])]
+    if defs:
+        d = ET.SubElement(root, f"{{{SVG_NS}}}defs")
+        for x in dict.fromkeys(defs):
+            d.append(ET.fromstring(x))
     for c in con.get("container", []):
         root.append(ET.fromstring(c["xml"]))
+    for parent in list(groot.iter()):  # a glyph needs no stylesheet, and one could restyle the page it lands on
+        for st in [ch for ch in parent if local(ch.tag) == "style"]:
+            parent.remove(st)
     g = ET.SubElement(root, f"{{{SVG_NS}}}g", {"transform": f"translate({_fmt(tx, 6)} {_fmt(ty, 6)}) scale({_fmt(s, 6)})"})
     for ch in list(groot):
         g.append(ch)
@@ -2545,6 +2606,8 @@ def compose_icon(con, groot, lib_vb, lib, live=None):
                 if el.get(key):
                     el.set(key, swap(el.get(key)))
         how.append(f"colour {colour}")
+    if prefix:
+        scope_names(root, prefix)
     return serialize(root), "; ".join(how)
 
 
@@ -2615,7 +2678,7 @@ def cmd_icon_find(a):
     _check_names(a.set, [])
     proj = Project(a.dir)
     url = _url(_iconify_endpoint() + "/search", {"query": a.words, "prefixes": a.set, "limit": 64})
-    dest = proj.dir / "downloads" / f"find-{a.set}-{slug(a.words)}.json"
+    dest = proj.dir / "downloads" / f"find-{a.set}-{hashlib.sha1(a.words.encode()).hexdigest()[:10]}.json"
     waiting = [] if dest.exists() else fetch_all([(url, dest)], a.offline)
     if waiting:
         print("Download this with your own tools, then run the same find again:\n  " + waiting[0])
@@ -2623,7 +2686,8 @@ def cmd_icon_find(a):
     con, meta = proj.load(proj.dir / "construction.json", {}), icon_sets().get(a.set) or {}
     suffix = set_suffix(meta, con)
     other = meta.get("suffix" if con.get("style") == "solid" else "solid", "")
-    names = [n.split(":", 1)[1] for n in json.loads(read_saved(dest)).get("icons", []) if n.startswith(a.set + ":")]
+    names = [n.split(":", 1)[1] for n in json.loads(read_saved(dest)).get("icons", []) if isinstance(n, str) and n.startswith(a.set + ":")]
+    names = [n for n in names if ICON_NAME.fullmatch(n)]  # fetched data: only well-formed names reach the agent
     if suffix:
         names = [n for n in names if n.endswith(suffix)] or names
     elif other:
@@ -2642,10 +2706,15 @@ def cmd_icon_fetch(a):
     if not meta:
         print(f"note: {a.set} is not one of the vetted sets (icons sets); its licence is checked live and its lines are read from the glyphs")
     suffix = set_suffix(meta, con)
-    full = {n: n if not suffix or n.endswith(suffix) else n + suffix for n in a.names}  # never the other variant's glyph
-    want = sorted(set(full.values()))
+    other = (meta or {}).get("suffix" if con.get("style") == "solid" else "solid", "")
+    wrong = [n for n in a.names if other and other != suffix and n.endswith(other)]
+    if wrong:
+        raise SystemExit(f"{', '.join(wrong)}: the {'outline' if con.get('style') == 'solid' else 'solid'} glyphs of {a.set}; "
+                         f"your icons are {con.get('style')}. Name them without {other}.")
+    full = {n: n if not suffix or n.endswith(suffix) else n + suffix for n in a.names}
+    want = sorted(set(full.values()) | set(a.names))  # the plain name too, used only when it is drawn like the owner's
     api = _iconify_endpoint()
-    info_dl = proj.dir / "downloads" / f"{a.set}-info.json"
+    info_dl = proj.dir / "downloads" / f"{a.set}-info-{datetime.date.today().isoformat()}.json"  # the licence, read again each day
     icons_dl = proj.dir / "downloads" / f"{a.set}-{hashlib.sha1(','.join(want).encode()).hexdigest()[:10]}.json"
     pairs = [(u, p) for u, p in ((_url(api + "/collections", {"prefixes": a.set}), info_dl),
                                  (f"{api}/{a.set}.json?icons={','.join(want)}", icons_dl)) if not p.exists()]
@@ -2667,23 +2736,39 @@ def cmd_icon_fetch(a):
     glyphs, aliases = data.get("icons", {}), data.get("aliases", {})
     W, H, L, T = data.get("width", 16), data.get("height", 16), data.get("left", 0), data.get("top", 0)
     missing = []
+    body = lambda k: glyphs.get(k) or (glyphs.get(aliases[k]["parent"], {}) if set(aliases.get(k, {})) == {"parent"} else {})
+
+    def glyph(k):
+        ic = body(k)
+        if not ic.get("body"):
+            return None
+        w, h, l, t = ic.get("width", W), ic.get("height", H), ic.get("left", L), ic.get("top", T)
+        if not (isinstance(w, (int, float)) and isinstance(h, (int, float)) and w > 0 and h > 0):
+            return None
+        root, notes = sanitize(f'<svg xmlns="{SVG_NS}" viewBox="{_fmt(l, 6)} {_fmt(t, 6)} {_fmt(w, 6)} {_fmt(h, 6)}">{ic["body"]}</svg>')
+        return root, notes, (l, t, w, h), measure_root(root)
+
     for n in a.names:
         pick = full[n]
-        ic = glyphs.get(pick) or (glyphs.get(aliases[pick]["parent"], {}) if set(aliases.get(pick, {})) == {"parent"} else {})
-        if not ic.get("body"):
-            missing.append(n)
-            continue
-        w, h, l, t = ic.get("width", W), ic.get("height", H), ic.get("left", L), ic.get("top", T)
         try:
-            groot, notes = sanitize(f'<svg xmlns="{SVG_NS}" viewBox="{_fmt(l, 6)} {_fmt(t, 6)} {_fmt(w, 6)} {_fmt(h, 6)}">{ic["body"]}</svg>')
+            got = glyph(pick)
+            if not got and pick != n:  # no twin with the ending: the plain glyph, if it is drawn the same way as the owner's
+                got = glyph(n)
+                if got and got[3]["style"] != con.get("style"):
+                    print(f"skip {n}: {a.set} has no {pick}, and its {n} is {got[3]['style']}")
+                    continue
+                pick = n if got else pick
         except (ValueError, ET.ParseError) as e:
             print(f"skip {n}: not a usable SVG ({e})")
             continue
-        lib = measure_root(groot)
-        original = serialize(groot)
-        svg, how = compose_icon(con, groot, (l, t, w, h), lib, (meta or {}).get("live"))
+        if not got:
+            missing.append(n)
+            continue
+        groot, notes, lib_vb, lib = got
         cid = f"iconify:{a.set}:{pick}"
-        name = unique_name(proj, a.name if a.name and len(a.names) == 1 else slug(n), cid)
+        name = unique_name(proj, slug(a.name) if a.name and len(a.names) == 1 else slug(n), cid)
+        original = serialize(groot)
+        svg, how = compose_icon(con, groot, lib_vb, lib, (meta or {}).get("live"), prefix=f"odi-{name}")
         proj.src.mkdir(parents=True, exist_ok=True)
         (proj.src / f"{name}.svg").write_text(original, encoding="utf-8")
         (proj.dir / f"{name}.svg").write_text(svg, encoding="utf-8")
@@ -2755,12 +2840,21 @@ def cmd_icon_keep(a):
     if not names:
         raise SystemExit("name the icons the owner said yes to, or pass --all")
     kept = [e for e in led["items"] if e["name"] in names]
-    for e in kept:
-        e["status"] = "chosen"
     for n in sorted(names - {e["name"] for e in kept}):
         print(f"skip {n}: not in {proj.ledger}")
     if not kept:
         raise SystemExit("nothing kept")
+    con = proj.load(proj.dir / "construction.json", {})
+    if a.to:
+        own = {Path(f).resolve() for f in con.get("files", [])}
+        there = [Path(a.to) / Path(e["file"]).name for e in kept]
+        if any(p.resolve() in own for p in there):
+            raise SystemExit("that would replace one of the owner's own icons: fetch it again with --name <another name>")
+        if any(p.exists() for p in there) and not a.force:
+            raise SystemExit(f"already in {a.to}: {', '.join(p.name for p in there if p.exists())}. "
+                             "Fetch with --name <another name>, or pass --force to replace them")
+    for e in kept:
+        e["status"] = "chosen"
     proj.save(proj.ledger, led)
     credits = write_attribution(proj, "Icon")
     if a.to:
@@ -2768,7 +2862,6 @@ def cmd_icon_keep(a):
         for e in kept:
             shutil.copyfile(proj.dir / e["file"], Path(a.to) / Path(e["file"]).name)
         print(f"copied {len(kept)} to {a.to}")
-    con = proj.load(proj.dir / "construction.json", {})
     sets = ", ".join(sorted({f"{e.get('set')} ({e.get('licence_spdx') or e.get('licence')})" for e in kept}))
     print(f"kept {', '.join(e['name'] for e in kept)}; credits and licences in {credits}")
     print("Record it: engine.py set hooks.H-icons.status '\"have\"' --set-by asset --why "
@@ -2799,6 +2892,7 @@ def icon_args(sub):
     q.set_defaults(fn=cmd_icon_sheet)
     q = ps.add_parser("keep", help="after the owner's yes: mark icons chosen, write ATTRIBUTION.md, copy them with --to")
     q.add_argument("names", nargs="*"); q.add_argument("--all", action="store_true"); q.add_argument("--to")
+    q.add_argument("--force", action="store_true", help="replace files of the same name in --to (never the owner's own icons)")
     q.set_defaults(fn=cmd_icon_keep)
 
 
