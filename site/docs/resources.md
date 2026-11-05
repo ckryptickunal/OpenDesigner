@@ -4,7 +4,7 @@ seo_title: Who OpenDesigner learns from: the sources behind its rules
 description: The people, docs, videos and standards behind OpenDesigner's rules, what each one teaches, how much say it has, and how a source becomes a house standard.
 section: Craft
 order: 4
-updated: 2026-10-15
+updated: 2026-11-05
 ---
 
 OpenDesigner's advice comes from a short list of sources its owner trusts. Each source has an authority, which decides what it is allowed to change. This page lists the sources, says what each one teaches, and explains how a source becomes a rule.
@@ -21,7 +21,7 @@ OpenDesigner's advice comes from a short list of sources its owner trusts. Each 
 
 ## Non-negotiable sources
 
-The 455 house standards in version 3 come from these four sources and the Vaul docs below. That includes every standard cited in [Motion](/docs/motion/), [UX patterns](/docs/ux-patterns/) and [Interface details](/docs/ui-details/).
+The 457 house standards in version 4 come from these four sources, the Vaul docs below and two rules the project owner set: a color with a known meaning keeps it, and a product never pairs pure white with pure black. That includes every standard cited in [Motion](/docs/motion/), [UX patterns](/docs/ux-patterns/) and [Interface details](/docs/ui-details/).
 
 ### Emil Kowalski
 

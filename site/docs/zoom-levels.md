@@ -4,7 +4,7 @@ seo_title: Zoom levels: from a five-question sketch to full detail
 description: How OpenDesigner's four zoom levels work: a five-question sketch, eight broad screens, one area at a time, then detail. You can stop at any level.
 section: Concepts
 order: 3
-updated: 2026-10-14
+updated: 2026-11-05
 ---
 
 OpenDesigner has four zoom levels: sketch, broad, defined and detailed. Everyone starts with the sketch, which gives a complete but rough system from up to five questions. After each level you can stop or zoom into one area, and every level leaves working files.
@@ -34,7 +34,7 @@ You can say "skip" on any screen, and the default stays.
 
 ### Level 2: defined
 
-One area at a time, with 1 to 15 questions per area. For example, Color covers color ramps, color roles and contrast.
+One area at a time, with up to 12 questions per area. For example, Color covers color ramps, color roles and contrast.
 
 ### Level 3: detailed
 
@@ -58,6 +58,7 @@ Colors (about 6 min) · Text (about 2 min) · Everything, in 8 quick screens (ab
 
 {{figure:zoom-levels-offer}}
 
+- After the sketch, it first offers to research your users (about 10 minutes, and it does the work), unless that is done or you said no.
 - It offers at most three choices.
 - It puts first the areas whose choices change the most, then areas your answers made risky, such as a light brand color or a dense product.
 - "Stop" is always a good answer.
@@ -73,7 +74,7 @@ For a small gap, it takes the default and labels it as an assumption instead of 
 
 - **Plain voice.** If you talk in plain words, it asks fewer questions. In the sketch, it may ask only what you are making, how it should feel and your brand color. It guesses the rest from your words, records the guesses as assumed, and tells you in one line.
 - **"Just pick."** Say "just pick", "just do it" or "you choose", and it stops asking. It picks values that fit your words and files, and records them as handed over to it.
-- **Questions a standard already settles** are skipped. So are questions marked as planned, whose feature isn't built yet. Six of the 193 questions are planned.
+- **Questions a standard already settles** are skipped. So are questions marked as planned, whose feature isn't built yet. Six of the 195 questions are planned.
 
 ## How you see your level
 

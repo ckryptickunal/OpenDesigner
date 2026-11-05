@@ -4,7 +4,7 @@ seo_title: Design system for Cursor: tokens, Tailwind and DESIGN.md
 description: Add OpenDesigner's skills to a Cursor project, ask for a design system, and get tokens, CSS, a Tailwind theme and a DESIGN.md the agent keeps following.
 section: Guides
 order: 20
-updated: 2026-10-15
+updated: 2026-11-05
 ---
 
 Copy OpenDesigner's skills into your project, ask Cursor's agent for a design system, and you get files it can follow in every later chat. You get tokens, CSS variables, a Tailwind v4 theme and a `DESIGN.md` with the rules in plain words. OpenDesigner is free and open source (MIT).
@@ -23,7 +23,7 @@ mkdir -p your-project/.agents/skills
 cp -R OpenDesigner/.agents/skills/opendesigner* your-project/.agents/skills/
 ```
 
-That copies eight skill folders. The main one, `opendesigner`, runs the interview. Others learn from your existing code, change the system later, or export it.
+That copies eight skill folders. The main one, `opendesigner`, runs the interview. Others learn from your existing code, change the system later, export it, find illustrations, paint brand art, and check built pages before you share them.
 
 The skill comes with a small Python engine that does the math. Cursor's agent runs it in your terminal, so you need Python 3.10 or newer. The engine uses only Python's standard library and makes no network calls.
 

@@ -74,7 +74,7 @@ You start with a rough version of the whole system. Then you zoom in only where 
 |---|---|---|---|
 | 0 | sketch | A complete but coarse system: every token exists, and every `DESIGN.md` section is filled from sourced defaults | 3 to 5 questions (3 in plain voice), about 3 minutes |
 | 1 | broad | One short screen for each foundation: style, density, color use, text, corners, depth, motion, and where the files live | 8 questions, about 8 minutes |
-| 2 | defined | One area at a time, for example Color: ramps, roles, contrast | 1 to 15 questions per area |
+| 2 | defined | One area at a time, for example Color: ramps, roles, contrast | Up to 12 questions per area |
 | 3 | detailed | Components, patterns and the fine print of each area | the rest |
 
 You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 195 questions has a zoom level, except the reference panel (Q-ref-01), which is open at every level. Six questions are marked planned: their feature is not built yet, so the interview skips them. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 95 and 194 questions).
@@ -159,7 +159,7 @@ How it is shown depends on your AI tool. The model picks the best option availab
 5. The host's multiple-choice question tool
 6. Plain text with hex values, ratios and numbered options, which works everywhere
 
-The same HTML templates feed every surface: palette, type scale, spacing ruler, radius, elevation, motion, component sheet and option gallery. Every visual also prints its values as text. [SPEC.md section 3.6](SPEC.md#36-visual-surfaces-per-host) says which host gets which surface.
+The same HTML templates feed every surface: palette, type scale, spacing ruler, radius, elevation, motion, component sheet, option gallery, taste poll and direction board. Every visual also prints its values as text. [SPEC.md section 3.6](SPEC.md#36-visual-surfaces-per-host) says which host gets which surface.
 
 ## 6. Reference intake, at any point
 
@@ -184,17 +184,17 @@ Rule-based checks run first, before the model gives any opinion ([`synthesis/LEV
   - A solid fallback for every see-through glass surface, if the system uses glass. The CSS export swaps it in when the browser reports reduced transparency or more contrast. A glass surface without one is a lint error.
   - Text that scales to 200%.
   - Inner spacing smaller than outer spacing.
-- **Lint errors** block publishing unless you waive them with a written reason. Examples: targets under 24 px, fields with no label, meaning shown by color alone, and dialogs with no way out.
+- **Lint errors** block publishing unless you waive them with a written reason. Today `engine.py validate` blocks token errors, such as targets under 24 px or contrast below the floor. Errors for fields with no label, meaning shown by color alone and dialogs with no way out are planned; `review.py` already reports controls with no accessible name on a built page.
 - **Warnings** you can override. Examples: too many type sizes or primary actions in one view, or very high colorfulness with high density. These come from practitioner advice and are labelled as guidance, not law.
 
-The model critiques the system only after it passes. The skills give no fixed scoring rubric yet; what they do give is the overview page, which marks every area Chosen, Picked for you, Default or Not enough information, so a gap shows instead of being skipped. `build` refuses to write exports while an error stands. To ship anyway, record the reason as a waiver (`engine.py set waivers.<rule> '"<reason>"' --why "..."`), which DESIGN.md lists, and run `build --force`.
+The model critiques the system only after it passes. The skills judge it with a nine-line scorecard, 1 to 5 each, against shipped work (`references/quality.md`); a score can rule work out, never approve it. The overview page marks every area Chosen, Picked for you, Default or Not enough information, so a gap shows instead of being skipped. `build` refuses to write exports while an error stands. To ship anyway, record the reason as a waiver (`engine.py set waivers.<rule> '"<reason>"' --why "..."`), which DESIGN.md lists, and run `build --force`.
 
 ### What the rules check, and what is judgment
 
 | Checked by rules (same result every time) | Judged by the AI or a person |
 |---|---|
 | Contrast, target sizes, focus rings and reduced motion in the tokens (`engine.py validate`) | Hierarchy: what the eye reads first, and whether that is the right thing |
-| Hard-coded values in code that skip the tokens, house-standard patterns, `DESIGN.md` sections that no longer match the state, and user research findings that lost a source or are more than 180 days old (`engine.py review`) | Personality: whether the page feels like the brand, or generic |
+| Hard-coded values in code that skip the tokens, code that uses no tokens or fewer tokens than raw values, a system more than 10 commits behind the code, house-standard patterns, `DESIGN.md` sections that no longer match the state, and user research findings that lost a source or are more than 180 days old (`engine.py review`) | Personality: whether the page feels like the brand, or generic |
 | On the rendered page: text contrast as styled, sizes and spacing off the scale, missing focus rings, overflow and fonts that did not load, and, with or without a design system, counts against practice: filled buttons competing in one view, typefaces, weights and colors (`opendesigner-review`'s `review.py`, from `probe.js` measurements) | Whether it reads as premium next to shipped work (`making.md` section 5 scores it 1 to 5) |
 | Type and font mistakes in a page's CSS, and frozen time, flashing or noise in a video (`preflight.py`) | Layout balance, variety and rhythm (`opendesigner-preflight`'s checklist marks these as looks) |
 | User research findings: each cites a page that was opened or says it is a guess, no personal data, and each recommendation lands on a real question and option (`engine.py research check`, `add`) | Whether a finding holds for this product's own users: the person decides, and five real conversations beat desk research |
@@ -222,7 +222,7 @@ The source of truth is `opendesigner/state.json` plus the DTCG tokens made from 
 | `opendesigner/coverage.md`, asset briefs | Every block's status; briefs a designer can act on |
 | `opendesigner/state.json`, `overview.html`, `preview.html` | Continue later; see your whole system on one page (`overview.html` grows with every decision and marks what is still missing) and every token (`preview.html`) |
 
-This is the full contract from [SPEC.md section 7](SPEC.md#7-outputs). Today the engine writes the core set: tokens, exports, `DESIGN.md`, `PRODUCT.md`, the decision log, `state.json` and the preview. The skill also writes `RATIONALE.md` from a template and, if you agree, adds a snippet to your `AGENTS.md`. The README's "Status and roadmap" section says what has shipped.
+This is the full contract from [SPEC.md section 7](SPEC.md#7-outputs). Today `build` writes tokens, exports, `DESIGN.md`, `PRODUCT.md`, the decision log, `state.json`, `PROTOCOL.md`, the standards, the overview and the preview. `coverage.md` and asset briefs are not written yet. The skill also writes `RATIONALE.md` from a template and, if you agree, adds a snippet to your `AGENTS.md`.
 
 ## 9. Keeping it coherent later
 

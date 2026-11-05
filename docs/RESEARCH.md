@@ -2,16 +2,16 @@
 
 Every default, formula and question in OpenDesigner traces back to a cited research base in this repo. This page is the map. It shows what each research lane covers, where the combined outputs live, and how to find an answer quickly.
 
-Counts on this page were read from the files on 2026-09-24, with `python3 tools/jev_nav.py status` and `python3 tools/jev_nav.py check`. Run those commands for the current numbers.
+Counts on this page were read from the files on 2026-09-24, or on the date a row gives, with `python3 tools/jev_nav.py status` and `python3 tools/jev_nav.py check`. Run those commands for the current numbers.
 
 ## At a glance
 
 | | Count | How it was counted |
 |---|---|---|
-| Research lanes finished | 18 | L00 to L18 on `_coordination/BOARD.md`; L12 is still open |
+| Research lanes finished | 20 on 2026-11-05 | L00 to L18, L22 and L23 on `_coordination/BOARD.md`; L12 and L20 are still open, and L19 (the learning wiki) keeps running |
 | Decision Cards | 543 on 2026-10-15: 352 from lanes L01 to L18 and the benchmark, 175 from the learning wiki (L19), 9 from L22, 7 from L23 | `### DC-` headings across `research/` and `benchmarks/` (`python3 tools/jev_nav.py check` prints the total) |
-| Sources logged | 2,740 | distinct source ids in the research lanes' traces (`traces/L*-trace.md`), including sources that were opened and rejected. With the sponsorship research (R4) and the verification pass (V1), `traces/` holds 3,225 |
-| Design systems benchmarked | 25 | files in `benchmarks/systems/` |
+| Sources logged | 2,740 | distinct source ids in the research lanes' traces (`traces/L*-trace.md`), including sources that were opened and rejected. With the sponsorship research (R4), the verification pass (V1) and later lanes, `traces/` holds 3,547 (2026-11-05) |
+| Design systems benchmarked | 32 on 2026-11-05: 25 in the matrix and 7 token-level teardowns | files in `benchmarks/systems/` |
 | Ontology nodes | 275, of which 211 are building blocks outside the builder layer: 156 generatable, 23 tool-assisted, 21 owner input, 9 designer-owned, 2 extractable | `synthesis/ontology.json` [S-V1b-091] |
 | Questions in the interview | 195 | `synthesis/questionnaire.json` (27 screens plus a reference panel; 6 are planned and skipped for now) |
 | Decision graph | 352 decisions, 470 edges, 12 cycles | `synthesis/decision-graph.json` |
