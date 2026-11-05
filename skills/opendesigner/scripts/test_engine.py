@@ -1596,6 +1596,34 @@ class ShowTemplates(unittest.TestCase):
             self.assertEqual(accents["tonal"], "#1f6f5c")                            # the brand stays exact in every option
             self.assertNotEqual(pal["options"][0]["ramps"][0]["light"][2], pal["options"][1]["ramps"][0]["light"][2])
 
+    def test_palette_contrast_table_has_rows(self):
+        """Issue #47: every palette option carries the pairs validate checks, per mode, measured the same way."""
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Showcase", "#1f6f5c", "regular", "web", "serious,minimal", quiet=True)
+            state = e.merge_defaults(e.read_json(os.path.join(d, "state.json")))
+            pal = e.build_payload(state, "palette")
+            for opt in pal["options"]:
+                files, meta, _s = e.what_if(state, pal["question"], opt["value"])
+                promised = {(pr["mode"], pr["fg"], pr["bg"]): pr["min"] for pr in meta["contrastPairs"]}
+                labels = [p["label"] for p in opt["pairs"]]
+                self.assertIn("Body text on the page", labels, opt["value"])
+                self.assertIn("Label on the main button", labels, opt["value"])
+                self.assertEqual(len(labels), len(set(labels)))
+                for p in opt["pairs"]:
+                    self.assertEqual(set(p["fg"]), set(meta["modes"]))
+                    self.assertIn(p["kind"], ("text", "edge"))
+                    for m in meta["modes"]:
+                        self.assertRegex(p["fg"][m], r"^#[0-9a-fA-F]{6}$")
+                        self.assertGreaterEqual(e.contrast(p["fg"][m], p["bg"][m]), p["min"], (opt["value"], p["label"], m))
+                    self.assertIn(p["min"], promised.values())
+            body = pal["options"][0]["pairs"][0]
+            self.assertEqual(body["min"], 4.5)
+            aaa = e.build_payload(dict(state, raw=dict(state.get("raw") or {}, contrastTarget="AAA")), "palette")
+            self.assertEqual(aaa["options"][0]["pairs"][0]["min"], 7.0)          # the table follows the person's target
+            html = open(os.path.join(e.HERE, "..", "assets", "templates", "palette.html"), encoding="utf-8").read()
+            self.assertIn("(o&&o.pairs)||D.pairs", html)                           # the page reads each option's own pairs
+
 
 class IntakeU5(unittest.TestCase):
     """Coordinator follow-ups: a tight key shadow no longer reads as deep; a face the person licenses may carry over."""

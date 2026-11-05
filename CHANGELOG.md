@@ -15,6 +15,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **The palette page shows its contrast checks** (2026-11-05). The table under the shades was always empty because the engine sent no colour pairs ([#47](https://github.com/ckryptickunal/OpenDesigner/issues/47)). Each option now carries the pairs people read most, in every mode and measured the same way as `engine.py validate`, and the page works out each ratio from the colours it shows.
 - **The footer links every docs page again** (2026-11-05). The footer had dropped to 20 links. It now links every docs page by section from every page, so search engines and AI crawlers reach them, and each label still fits on one line down to 320 px.
 
 ## [0.2.0]: 2026-11-05
