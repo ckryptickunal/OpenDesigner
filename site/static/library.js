@@ -273,8 +273,13 @@
     scaleEl(frame, z);
     var devR = nest(frame, null, live, z); rescale(frame); dev.style.borderRadius = devR.toFixed(1) + "px";
     // if the device sits close to the stage's corner (a phone screen), the stage's corner follows it too
-    var sr = stage.getBoundingClientRect(), dr = dev.getBoundingClientRect(), gap = Math.min(dr.left - sr.left, dr.top - sr.top);
-    stage.style.borderRadius = gap < 40 ? (devR + gap).toFixed(1) + "px" : "";
+    // close to the corner means close on both sides: a tall phone in a wide stage is near the top but far from the side
+    var sr = stage.getBoundingClientRect(), dr = dev.getBoundingClientRect(), gap = Math.max(dr.left - sr.left, dr.top - sr.top);
+    // corners nest whenever the device is closer than the stage's own corner (post-change audit, rule 4); a stage held at its
+    // tallest view's height (issue #73) can leave a shorter view's device 40 to 60 px from that corner
+    stage.style.borderRadius = "";
+    var outer = parseFloat(getComputedStyle(stage).borderTopLeftRadius) || 0;
+    stage.style.borderRadius = gap < Math.max(40, outer) ? (devR + gap).toFixed(1) + "px" : "";
     // the frame hugs the part's height too (post-change audit, rule 6): no forced phone shape around a short part
   }
   var pick = function (view, animate) {
