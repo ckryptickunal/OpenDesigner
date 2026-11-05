@@ -222,7 +222,7 @@ People never pick a mode. Everyone starts with a quick sketch of the whole syste
 |---|---|---|---|
 | 0 | sketch | A complete but coarse system: every token exists, every DESIGN.md section is filled from defaults | up to 5 questions, about 3 minutes |
 | 1 | broad | One short screen for each foundation: style, density, color use, text, corners, depth, motion, and where the files live | 8 questions, about 8 minutes |
-| 2 | defined | One area at a time (for example Color: ramps, roles, contrast) | 1 to 15 questions per area |
+| 2 | defined | One area at a time (for example Color: ramps, roles, contrast) | Up to 12 questions per area |
 | 3 | detailed | Blocks, components and patterns, and the fine print of each area (`stages/*.detailed.md`) | the rest |
 
 ## Level 0: sketch (a few questions, one per message)

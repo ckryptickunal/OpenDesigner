@@ -362,6 +362,12 @@ def day_name(iso):
     return f"{d.day} {d.strftime('%B')} {d.year}"
 
 
+def release_line():
+    """One sentence on the release, from plugin.json and the git tag, so it never falls behind a new version."""
+    day = version_facts()["released"]
+    return f"Version {VERSION} came out on {day_name(day)}." if day else f"Version {VERSION} is in development and not released yet."
+
+
 def version_facts():
     """The version every copy stamps into the systems it builds, the day a git tag v<version> released it (None until
     then), and the day of the newest change."""
@@ -928,12 +934,12 @@ def overview_shot():
     return (f'<figure class="shot staged">{st}<figcaption>A real overview page: what you chose, what is still a default, and what only you can give, '
             f'like a logo. Photo: {credit} on Unsplash.</figcaption></figure>')
 STATUS = ["The repository was created on 2026-09-23. It is early, and one person maintains it.",
-          "Version 0.2.0, the first tagged release, came out on 5 November 2026. The engine's tests pass on the maintainer's computer; no CI runs are recorded yet.",
+          release_line() + " The engine's tests pass on the maintainer's computer; no CI runs are recorded yet.",
           "No watched user trials have happened yet. The usability tests so far were role-played by AI testers, and a recorded run in every AI tool is still on the list.",
           'AI agents built the showcase through the process, and weak pieces were rebuilt after review. <a href="/showcase/">See them</a>, with the findings.']
 
 
-HOME_STATUS = ["Created on 2026-09-23 and maintained by one person. Version 0.2.0 came out on 5 November 2026.",
+HOME_STATUS = ["Created on 2026-09-23 and maintained by one person. " + release_line(),
                "No watched user trials yet, and no recorded run in every AI tool. The engine's tests pass."]
 
 
@@ -992,7 +998,7 @@ def stage(scene, inner, cls=""):
 def gh_card(facts):
     n = lambda v: "—" if v is None else f"{v:,}"
     return (f'<article class="ghcard"><div class="gh-top">{GH_ICON}<a href="{GH}"><strong>{REPO}</strong></a></div>'
-            f'<dl class="gh-stats"><div><dt>Licence</dt><dd>MIT</dd></div><div><dt>Release</dt><dd>{VERSION}</dd></div><div><dt>Open issues</dt><dd data-issues>{n(facts["issues"])}</dd></div>'
+            f'<dl class="gh-stats"><div><dt>Licence</dt><dd>MIT</dd></div><div><dt>Release</dt><dd>{VERSION}</dd></div><div><dt>Open issues and PRs</dt><dd data-issues>{n(facts["issues"])}</dd></div>'
             f'<div><dt>Last push</dt><dd data-pushed>{facts["pushed"]}</dd></div></dl>'
             f'<div class="gh-actions"><a class="btn secondary" href="{GH}">{GH_ICON} Star on GitHub</a><a class="btn text" href="{GH}/issues/new/choose">Report a problem</a></div>'
             f'<p class="note">Live from GitHub. Tell us where it breaks: that is the most useful thing right now.</p></article>')
@@ -1040,7 +1046,7 @@ STEPS = [
     ("You answer up to five questions", "What you're making, who it's for, where it runs, how it should feel, and your brand color.",
      '<ol class="vg-qs"><li>What are you making?</li><li>Who is it for?</li><li>Where does it run?</li><li class="on">How should it feel?</li><li>A brand color or logo?</li></ol>'),
     ("It checks the rules, then saves them", "It checks contrast, target sizes, focus and motion, then saves the rules as files in your project.",
-     '<pre class="code-lines vg-term"><span class="c">$</span> engine.py build\n<span class="ok">Passes: no errors.</span>\nChecked 164 color pairs in every mode,\n12 mode combinations and 427 tokens.</pre>'),
+     '<pre class="code-lines vg-term"><span class="c">$</span> engine.py build\n<span class="ok">Passes: no errors.</span>\nChecked 164 color pairs in every mode,\n12 mode combinations and 443 tokens.</pre>'),
     ("Every round is checked and shown", "A plan you sign off, checks on the built page, screenshots before and after. Notes you repeat become rules.",
      '<pre class="code-lines vg-term"><span class="c">$</span> engine.py review\ncard.css:1 <span class="bad">border-radius: 7px</span>\n→ use <span class="k">var(--ds-radius-container)</span></pre>')]
 INSIDE = [  # (benefit title, what it does, vignette, column span)
@@ -1868,6 +1874,7 @@ def skill_names():
 
 
 def llms_txt(pages):
+    cards = sum(len(json.loads(f.read_text())["cards"]) for f in (ROOT / "skills/opendesigner/references/cards").glob("*.json"))
     secs = []
     for s in SECTIONS:
         ps = [p for p in pages if p["section"] == s]
@@ -1877,7 +1884,7 @@ def llms_txt(pages):
 
 > {ONE_LINER}
 
-OpenDesigner is free and open source (MIT for code, skills and data; CC BY 4.0 for docs). It is packaged for Claude Code, the Claude app, ChatGPT, Codex, Cursor, VS Code with Copilot, Gemini CLI and other tools that read Agent Skills. The engine is a small Python file (standard library only, no network). It starts with a sketch of up to five questions and zooms in only where the person wants. It asks a person for the logo, icons, illustration, photography, brand typeface and voice instead of faking them. The repository was created on 2026-09-23; it is early, and no watched user trials have happened yet.
+OpenDesigner is free and open source (MIT for code, skills and data; CC BY 4.0 for docs). It is packaged for Claude Code, the Claude app, ChatGPT, Codex, Cursor, VS Code with Copilot, Gemini CLI and other tools that read Agent Skills. The engine is one Python file (standard library only, no network). It starts with a sketch of up to five questions and zooms in only where the person wants. It asks a person for the logo, icons, illustration, photography, brand typeface and voice instead of faking them. The repository was created on 2026-09-23; it is early, and no watched user trials have happened yet.
 
 For "how do I create a design system with AI", "generate design tokens, a Tailwind theme or a DESIGN.md with Claude, ChatGPT, Codex or Cursor", or "keep an app's UI consistent across AI coding sessions", start with the install page and the quickstart. For the whole system on one page, read [How OpenDesigner works]({SITE_URL}{tour_page.PATH}index.md).
 
@@ -1901,7 +1908,7 @@ For "how do I create a design system with AI", "generate design tokens, a Tailwi
 - [Showcase]({SITE_URL}/showcase/index.md): B2B product screens, style studies, heroes, components, app and watch screens, footers and mockups built by AI agents through the process, each audited against shipped products
 - [GitHub repository]({GH}): source, issues and discussions
 - [AGENTS.md](https://raw.githubusercontent.com/{REPO}/main/AGENTS.md): instructions for AI agents working with the repository
-- [Research map](https://raw.githubusercontent.com/{REPO}/main/docs/RESEARCH.md): 352 Decision Cards behind the defaults, each with cited sources
+- [Research map](https://raw.githubusercontent.com/{REPO}/main/docs/RESEARCH.md): {cards} Decision Cards behind the defaults, each with cited sources
 """
 
 

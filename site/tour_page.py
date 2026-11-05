@@ -268,7 +268,7 @@ def engine_section(b, f):
         panels.append(f'<div class="tr-en" role="tabpanel" id="en-{e["key"]}" aria-labelledby="en-tab-{e["key"]}" tabindex="0"{"" if i == 0 else " hidden"} data-play>'
                       f'<div class="tr-en-col"><p class="kicker">The answers</p><dl class="tr-dl">' + "".join(f"<div><dt>{a}</dt><dd>{v if a == 'Brand' else esc(v)}</dd></div>" for a, v in answers) + "</dl></div>"
                       f'<div class="tr-en-col"><p class="kicker">The eight dials</p><ol class="tr-dials">{bars}</ol></div>'
-                      f'<div class="tr-en-col"><p class="kicker">Two dials, worked through</p><ol class="tr-worked">{"".join(worked)}</ol></div></div>')
+                      f'<div class="tr-en-col"><p class="kicker">{"Two dials" if len(worked) == 2 else "One dial"}, worked through</p><ol class="tr-worked">{"".join(worked)}</ol></div></div>')
     return f"""
 <section class="h-sec" id="engine">
 <div class="h-head">{b.idx("02", "Inside the engine")}<h2 class="h-h2">Each answer moves a dial. Each dial sets real values.</h2>
@@ -372,7 +372,7 @@ def learn_section(b, f):
     return f"""
 <section class="h-sec" id="learn">
 <div class="h-head">{b.idx("05", "How it learns")}<h2 class="h-h2">A confirmed mistake becomes a check for everyone.</h2>
-<p class="h-lede">OpenDesigner improves from use. Each mistake the maintainer confirms turns into a fix or a rule that a script or an agent can check, and the tests run again before the change reaches you. No version is tagged yet; <code>engine.py version</code> tells you when your system was built with an older copy.</p></div>
+<p class="h-lede">OpenDesigner improves from use. Each mistake the maintainer confirms turns into a fix or a rule that a script or an agent can check, and the tests run again before the change reaches you. {b.release_line()} <code>engine.py version</code> tells you when your system was built with an older copy.</p></div>
 <div class="tr-loop" data-play><ol class="tr-loop-row">{lis}</ol><p class="tr-loop-back">{icon("loop", 18)}<span>Then you update, and the loop starts again.</span></p></div>
 {trace}
 <p class="h-more"><a class="h-link" href="/docs/evals/">See every test result, and run them yourself {b.ARROW}</a></p>
@@ -449,7 +449,7 @@ DESIGN.md, PRODUCT.md, opendesigner/tokens/ (DTCG 2025.10), opendesigner/build/ 
 
 ## 05 How it learns
 
-You notice something; your AI saves a note in your project with a ready-to-file issue link (nothing is posted unless you submit it); when the maintainer confirms it, a gap or a bug is fixed in the source and a visual mistake becomes a preflight check or a review case; the tests run again before the change reaches you. No version is tagged yet. Test results: {b.SITE_URL}/docs/evals/
+You notice something; your AI saves a note in your project with a ready-to-file issue link (nothing is posted unless you submit it); when the maintainer confirms it, a gap or a bug is fixed in the source and a visual mistake becomes a preflight check or a review case; the tests run again before the change reaches you. {b.release_line()} Test results: {b.SITE_URL}/docs/evals/
 
 Get started: {b.SITE_URL}/docs/install/ · Every step in detail: {b.SITE_URL}/docs/how-it-works/
 """

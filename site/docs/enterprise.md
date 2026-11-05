@@ -4,7 +4,7 @@ seo_title: OpenDesigner for enterprise design-system teams: governance
 description: What OpenDesigner offers a design-system team: a decision log, locks, house and project standards, drift checks and DTCG tokens, and where it does not fit yet.
 section: Guides
 order: 2
-updated: 2026-10-14
+updated: 2026-11-05
 ---
 
 OpenDesigner gives a design-system team a written record and a set of checks: a decision log with reasons, locks, house and project standards, a check for hard-coded values in code, and DTCG 2025.10 tokens. Everything lives as files in your repository. It is early for teams: nobody has run a team pilot yet, and there is no hosted service and no SSO.
@@ -15,7 +15,7 @@ OpenDesigner gives a design-system team a written record and a set of checks: a 
 |---|---|
 | Decision log, append-only, with reasons | Works |
 | Locked values | Works |
-| House standards (455 rules, version 3) and project standards | Works |
+| House standards (457 rules, version 4) and project standards | Works |
 | Drift check for hard-coded values in code | Works locally; not tested in CI yet |
 | DTCG 2025.10 tokens with a resolver for modes | Works |
 | Figma variables, one import file per mode | Works |
@@ -55,7 +55,7 @@ After that, the engine refuses to change it and says to ask the owner first. The
 
 ## House standards and project standards
 
-**House standards** are 455 rules (version 3, updated 2026-10-14) from sources the project owner marked non-negotiable. They cover areas such as motion, touch and components. The engine applies the ones that fit your platforms and locks them. In a test run, a web-only project got 289 of them. They are listed with their sources in `opendesigner/standards.md`.
+**House standards** are 457 rules (version 4, updated 2026-11-02) from sources the project owner marked non-negotiable. They cover areas such as motion, touch and components. The engine applies the ones that fit your platforms and locks them. In a test run on 5 November 2026, a web-only project got 291 of them. They are listed with their sources in `opendesigner/standards.md`.
 
 A house standard changes only when someone explicitly asks. `engine.py standard override` changes one value or the whole standard, and records the reason. `engine.py standard restore` undoes it. `engine.py standards --update` applies newer house standards and keeps your overrides.
 
@@ -118,7 +118,7 @@ Questions, gaps and results from a pilot are the most useful thing you can send 
 - **No team pilots or watched user trials.** The usability tests so far were role-played by AI testers.
 - **No hosted service, accounts or SSO.** Access control is whatever your repository host gives you.
 - **No CI runs.** Version 0.2.0 is the first tagged release (5 November 2026). No test pass in each AI tool is recorded yet.
-- **A small component set.** Only buttons, a text field and a card are previewed. The overview lists 25 components as planned.
+- **A small component set on the overview.** It draws only buttons, a text field and a card, and lists the rest as planned. The component sheet shows more, and the optional [component library](/library/) has 82 finished components built on the tokens.
 - **No React Native or Flutter export, and no translations.**
 
 Try it on one product, read the decision log with your team, and [tell us](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose) what is missing.

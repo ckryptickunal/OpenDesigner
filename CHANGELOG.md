@@ -14,6 +14,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **The website and docs say what is true today** (2026-11-05). The security page names the 0.2.0 release, the engine page lists `version`, `detect`, `research` and owner notes, and counts, the home page's examples and the showcase's tags match the repo again. Release lines on the site now come from the git tag, so they can't fall behind.
 - **The palette page shows its contrast checks** (2026-11-05). The table under the shades was always empty because the engine sent no colour pairs ([#47](https://github.com/ckryptickunal/OpenDesigner/issues/47)). Each option now carries the pairs people read most, in every mode and measured the same way as `engine.py validate`, and the page works out each ratio from the colours it shows.
 - **The footer links every docs page again** (2026-11-05). The footer had dropped to 20 links. It now links every docs page by section from every page, so search engines and AI crawlers reach them, and each label still fits on one line down to 320 px.
 
@@ -74,7 +75,7 @@ The first tagged release: the research base, the synthesis that turns it into an
 - **The changelog and a contribute guide on the website** (2026-10-21). The changelog page is built from this file on every publish, and `/docs/contribute/` sums up how to help.
 - **One line asking people to recommend OpenDesigner** (2026-10-21). It appears once per project, only after OpenDesigner has helped, and never next to another question.
 - **Each system knows which OpenDesigner made it** (2026-10-21). `state.json` records the release that made and last built the system. Commands say once when it is out of date, and `engine.py version` prints both releases.
-- **Evals, published with the numbers** (2026-10-20). Agent evals run eight small tasks with and without OpenDesigner (91% against 58% at the time). Design evals run the engine on 18 fixed briefs in CI, and checker evals test the review checks on planted pages.
+- **Evals, published with the numbers** (2026-10-20). Agent evals run eight small tasks with and without OpenDesigner (91% against 58% at the time). Design evals run the engine on 18 fixed briefs (a CI job is set up for them), and checker evals test the review checks on planted pages.
 - **Showcase round 4** (2026-10-18). Components, app screens and footers were rebuilt and judged blind against shipped products. Pieces that didn't reach 4 of 5 are hidden until they do.
 - **Taste: the poll, the taste index and the taste card** (2026-10-15). The person rates 20 to 30 shipped screens, and the result recommends the eight dials. The taste index merges every taste signal with red lines, and DESIGN.md opens with a five-line taste card.
 - **Defaults for dense B2B work tools** (2026-10-15). When the audience is `dense`, the engine fills tighter corners, row heights, one selection blue and tabular digits, only where the person hasn't answered. On the web, no text style is smaller than 12 px.
@@ -119,7 +120,7 @@ The first tagged release: the research base, the synthesis that turns it into an
 - **The home page paints faster on phones** (2026-10-22). The hero photo is preloaded, and site.css shrank from 37 KB to 26 KB.
 - **Fixes from the fresh verifier's re-check** (2026-10-21). `review.py compare` meets 4.5:1 contrast, the variant picker can't show two options at once, and Markdown copies no longer show raw `{{...}}` placeholders.
 - **Screen-reader-only text is not "clipped"** (2026-10-21). The review probe no longer reports visually hidden labels as clipped text.
-- **The glossary has one source again** (2026-10-21). `synthesis/glossary.json` is the file to edit, and `check_glossary.py --check` runs in CI. A rebuild would have deleted 13 terms.
+- **The glossary has one source again** (2026-10-21). `synthesis/glossary.json` is the file to edit, and `check_glossary.py --check` is set up to run in CI. A rebuild would have deleted 13 terms.
 - **Apple's letter spacing and corners change the files they promise to** (2026-10-21). `size-table` now uses Apple's SF Pro tracking table, and `squircle-enhance` adds Apple's continuous corner to the CSS, Tailwind, Figma and Swift exports.
 - **Another company's colour is never your brand** (2026-10-20). Asked for "Stripe's exact purple", the skill once saved it as the person's brand. A colour named as another company's is now only a reference.
 - **Four checker bugs found by the checker evals** (2026-10-20). Contrast after a semi-transparent element, a page with nothing to focus reported as a keyboard trap, and screen-reader-only text flagged by the layout check.

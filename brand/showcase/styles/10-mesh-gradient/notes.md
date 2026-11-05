@@ -1,5 +1,7 @@
 # 10 · Mesh gradient · Prill
 
+Gallery: Prill is a fictional AI evaluation platform; the hero shows one run, a new support agent tested against the one in production, case by case.
+
 **This page now:** the "Round 3 (polish)" section of 2026-10-15, the last one, describes it. The sections between record earlier versions.
 
 **Final self-audit score: 4 / 5** (4 rounds). Render: `shot.png`, 1440 x 900 at scale 2.
