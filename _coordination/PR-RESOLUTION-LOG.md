@@ -384,3 +384,26 @@ README.md went from 2,831 words to 1,366. It keeps the headings other documents 
   - `CHANGELOG.md`: both sides add bullets under Added. Keep both.
   - `README.md`: the local commits edit lines the new README no longer has. Keep the new README, and add the three new skills in its short form.
 - Nine files with uncommitted local changes were also changed by #53 or #54: `README.md`, `CHANGELOG.md`, `_coordination/BOARD.md`, `skills/opendesigner/SKILL.md` and its two generated copies, `tools/build_data.py`, `tools/build_dist.py` and `chatgpt-project/knowledge/01-protocol.md`.
+
+## Fourth review: PRs 64 and 66 (2026-11-05)
+
+Both PRs were opened by Claude sessions on 1 and 2 November and conflicted with `main` after the 0.2.0 release. Each branch got `origin/main` merged in a clean worktree, was re-checked, and was squash-merged with `--match-head-commit` on Kunal's yes in chat ("Merge both"). GitHub Actions is still off, so the local checks below are the only evidence. `main`'s tree after each merge is identical to the tree that was tested.
+
+### PR 64 (the footer links every docs page again): merged (`d822c5f`, reviewed head `3b9ec13`)
+
+- **Conflicts:** `site/build.py` (main had pointed "How it works" at `/tour/`; this PR removes that column, so the link moved to Product), `CHANGELOG.md` (a new Unreleased entry in the short format), the PR template (both new lines kept).
+- **Security:** `scan_pr.py` 0 block. `site/build.py` runs on the maintainer's Mac after a merge; every changed line read: footer markup, a label table and a length warning, no imports or network.
+- **Checks:** `site/check.py` no problems on 124 pages; `site/check_layout.py` 0 errors and 0 warnings at 13 widths on 122 pages; all 34 docs URLs in the sitemap are in the footer, and no link in the live footer was lost (19 before, 45 after); `changelog_check.py` passes.
+
+### PR 66 (kerning guide and checks, house colour standards v4, rules for references and content): merged (`a08d0be`, reviewed head `634e74e`)
+
+- **Conflicts:** main had added preflight checklist 50 to 56 and M51 to M57, so this PR's items became checklist 57 and 58, M58 and M59 everywhere they are cited. `preflight.py`: both sets of checks kept; capitals below 0 stay main's `[M5]` error, and this PR's warning covers capitals at exactly 0. `engine.py` review, `making.md`, `AGENTS.md` (58 checks, 59 mistakes) and `CHANGELOG.md` combined. Main's `tracking-caps.html` fixture writes tracking in px, which the new check reports; the manifest expects it. After #64 merged, `CHANGELOG.md` conflicted once more (both filled Unreleased): Added and Fixed both kept.
+- **Security:** `scan_pr.py` 0 block. The three library parts change only a CSS fill colour; no scripts.
+- **Privacy:** no client names; "maritime" appears only in a file name already on `main`.
+- **Checks:** checker evals: preflight recall 20 of 21 (the miss, P-off-scale-fs, predates this PR), precision 20 of 20; review 34 of 34; layout, dates and names unchanged from `main`. Engine tests 202 OK, research 65, journey 36, taste 25; `design_evals.py` 171 of 171 required. `build_data`, `sync_skills` and `build_dist --check`, `jev_nav check`, `wiki.py` check, standards (v4), map and proposals, `test_wiki.py`, `check_glossary.py --check`, `changelog_check.py` and `library.py check` pass. Probed by hand: a pure-black text colour fails `validate` with STD-visual-details-66, and a copied `tokens.css` is not reported by `review`. The site builds, `check.py` has no problems, and `check_layout.py` has 0 errors on the changed pages.
+
+### State after this review
+
+- `origin/main` is at `a08d0be`. One PR is open: #52 (changes requested on 2026-10-13).
+- The PR branches `claude/project-thread-zx6sje` and `claude/project-thread-a107a7` were left on GitHub; delete them when convenient.
+- The main working tree on Kunal's Mac was not touched and is behind `origin/main`.
