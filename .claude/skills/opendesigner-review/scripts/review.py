@@ -839,11 +839,14 @@ def check_focus(f, F):
         F.add("IN-03", "error", "Focused controls have no name", w, names(unnamed), "every control is announced with a name", [s["sel"] for s in unnamed[:4]], "add aria-label or text", "WCAG 4.1.2", key="focus-noname", basis="operated")
     run, last = 0, None
     for s in stops:
-        run = run + 1 if s.get("active") and s.get("sel") == last else 1
-        last = s.get("sel") if s.get("active") else None
+        # one control is the same selector in the same place: a list of look-alike rows (a changelog's days) shares a selector
+        rc = s.get("page") or s.get("rect") or {}   # page position: Tab scrolls each stop into the same place on screen
+        key = (s.get("sel"), rc.get("x"), rc.get("y")) if s.get("active") else None
+        run = run + 1 if key and key == last else 1
+        last = key
         if run >= 3 and last:
-            F.add("IN-01", "warn", "Focus stays on one control across Tab presses (a keyboard trap, or the end of the page)", w, f"{last}, {run} presses in a row", "Tab moves on; Esc leaves a dialog", [last],
-                  "if this is a dialog, make sure Esc closes it and focus returns to the trigger", "WCAG 2.1.2", key="trap:" + last, basis="operated")
+            F.add("IN-01", "warn", "Focus stays on one control across Tab presses (a keyboard trap, or the end of the page)", w, f"{last[0]}, {run} presses in a row", "Tab moves on; Esc leaves a dialog", [last[0]],
+                  "if this is a dialog, make sure Esc closes it and focus returns to the trigger", "WCAG 2.1.2", key="trap:" + last[0], basis="operated")
             break
     jumps = 0
     for a, b in zip(real, real[1:]):

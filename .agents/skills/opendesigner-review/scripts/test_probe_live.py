@@ -94,6 +94,67 @@ class Live(unittest.TestCase):
         self.assertFalse(broken["span#chip"]["midWord"])
         self.assertEqual(broken["span#chip"]["lines"], 2)
 
+    def test_a_demo_built_from_real_buttons_is_a_picture_not_unnamed_controls(self):            # IN-03, IN-08, PR-07
+        # opendesigner.dev's before-and-after demo draws an app from real buttons inside an aria-hidden shadow root, with
+        # tabindex -1: nobody can reach them, so "no accessible name" and "too small" were false alarms (2026-11-05)
+        pg = _browser.new_page(viewport={"width": 800, "height": 600})
+        self.addCleanup(pg.close)
+        pg.set_content('<main><h1>x</h1>'
+                       '<div aria-hidden="true"><button tabindex="-1" class="demo"><svg width="8" height="8"></svg></button></div>'
+                       '<div id="host" aria-hidden="true"></div>'
+                       '<div inert><button class="inert"></button></div>'
+                       '<div aria-hidden="true"><button class="reachable">Ghost</button></div>'
+                       '<button class="real"></button></main>')
+        pg.evaluate("document.getElementById('host').attachShadow({mode: 'open'}).innerHTML = '<button tabindex=\"-1\" class=\"shadow\"></button>'")
+        p = pg.evaluate(PROBE)
+        unnamed = [n["sel"] for n in p["targets"]["noName"]]
+        self.assertEqual(unnamed, ["main > button.real"])                 # only the control people can actually reach
+        self.assertFalse([s for s in p["targets"]["small"] if any(k in s["sel"] for k in ("demo", "shadow", "inert"))])
+        hidden = {h["sel"].split(" > ")[-1]: h["why"] for h in p["targets"]["hiddenFocusable"]}
+        self.assertEqual(hidden.get("button.reachable"), "inside aria-hidden")   # still reported, once, as reachable but unseen
+
+    def test_a_sticky_sidebar_pushed_loose_at_the_end_is_not_pinned_under_the_header(self):     # CV-08
+        # opendesigner.dev/docs/: near the footer the sticky sidebar runs out of container and scrolls up under the header like
+        # any content, so its links were reported as pinned there for good (2026-11-05). A sidebar stuck under the bar still is.
+        pg = _browser.new_page(viewport={"width": 1000, "height": 600})
+        self.addCleanup(pg.close)
+        head = '<header style="position:sticky;top:0;height:60px;background:#fff;z-index:2">Head</header>'
+        links = "".join(f'<a href="#{i}" style="display:block;height:25px">Link {i}</a>' for i in range(20))   # 500 px, like a docs sidebar
+        side = ('<div style="display:flex"><aside style="width:200px"><nav style="position:sticky;top:{top}px">' + links +
+                '</nav></aside><main style="flex:1;height:2000px">x</main></div><footer style="height:900px">foot</footer>')
+        pinned = lambda: [h for h in pg.evaluate(PROBE + ";__od.bars()")["hits"] if h["why"] == "pinned"]
+        pg.set_content('<!doctype html><body style="margin:0">' + head + side.format(top=60))
+        self.assertEqual(pinned(), [])                                            # loose at the end: it scrolls back out
+        pg.set_content('<!doctype html><body style="margin:0">' + head + side.format(top=0))
+        self.assertTrue(any(h["text"] == "Link 0" for h in pinned()))             # stuck under the bar: lost for good
+
+    def test_text_in_a_closed_details_is_not_under_a_bar(self):                                # CV-08
+        # Chrome reports line boxes for a closed <details>' hidden text; a component page's source code was "under" the consent card
+        pg = _browser.new_page(viewport={"width": 800, "height": 600})
+        self.addCleanup(pg.close)
+        code = "\n".join(f"line {i} " + "x" * 120 for i in range(200))   # long lines, so they reach under the card on the right
+        pg.set_content('<!doctype html><body style="margin:0"><p>Top</p><details><summary>Source</summary><pre>' + code + '</pre></details>'
+                       '<div style="height:400px"></div><div style="position:fixed;right:16px;bottom:16px;width:300px;height:160px;background:#fff">Card</div>'
+                       '<div style="height:200px"></div></body>')
+        self.assertEqual([h for h in pg.evaluate(PROBE + ";__od.bars()")["hits"] if h["text"].startswith("line")], [])
+
+    def test_a_ring_drawn_on_a_stretched_after_counts_as_a_focus_ring(self):                  # IN-02
+        # opendesigner.dev's library cards are one link whose ::after covers the card and carries the ring (2026-11-05)
+        pg = _browser.new_page(viewport={"width": 800, "height": 600})
+        self.addCleanup(pg.close)
+        pg.set_content('<!doctype html><style>.card{position:relative;padding:16px} .card a:focus-visible{outline:none}'
+                       '.card a::after{content:"";position:absolute;inset:0} .card a:focus-visible::after{outline:2px solid #2338ff;outline-offset:4px}'
+                       '.bare:focus-visible{outline:none}</style>'
+                       '<div class="card"><a href="#x">Card link</a></div><a class="bare" href="#y">No ring</a>')
+        pg.evaluate(PROBE)
+        pg.keyboard.press("Tab")
+        card = pg.evaluate("__od.focus()")
+        pg.keyboard.press("Tab")
+        bare = pg.evaluate("__od.focus()")
+        self.assertTrue(card["ring"]["visible"])
+        self.assertEqual(card["ring"]["on"], "::after")
+        self.assertFalse(bare["ring"]["visible"])                                 # a ring removed with nothing in its place still fails
+
     def test_competing_primary_buttons_are_counted_and_states_and_cards_are_not(self):          # MS-16
         pg = _browser.new_page(viewport={"width": 1280, "height": 800})
         self.addCleanup(pg.close)
