@@ -1847,6 +1847,9 @@ def alias_hex(ctx, alias):
     return ctx.ramp(name, mode).steps[int(step)]["hex"]
 
 
+OFF_BLACK, OFF_WHITE = "#111111", "#f5f5f5"  # what text and icons use when a ramp step would be pure black or pure white
+
+
 def build_color_semantic(ctx, mode):
     L = mode == "light"
     p = ctx.params
@@ -1895,6 +1898,18 @@ def build_color_semantic(ctx, mode):
                         {"stateLayer": {"over": r(name, 9), "color": lp, "alpha": ap}}))
         return (base, tok(r(name, 10), f"Hover: one step, at least {STATE_MIN['hover']}:1 from the solid (DC-L01-17)."),
                 tok(r(name, "solid-pressed"), f"Pressed: at least {STATE_MIN['pressed']}:1 from the solid."))
+    def ink(name, s, desc):
+        """Text or icons on a ramp step; an off-shade when that step is pure black in light mode or pure white in dark, as
+        with a near-black brand (issue 67): the engine never pairs pure white with pure black itself (STD-visual-details-66).
+        The off-shade has the lightness of #111111 (or #f5f5f5) and the ramp's own hue."""
+        if ctx.ramp(name, mode).steps[s]["hex"].lower() != ("#000000" if L else "#ffffff"):
+            return tok(r(name, s), desc)
+        _l, C, H = hex_to_oklch(ctx.ramp(name, mode).steps[9]["hex"])
+        Lo = hex_to_oklch(OFF_BLACK if L else OFF_WHITE)[0]
+        hx = oklch_to_hex(Lo, min(C, max_chroma(Lo, H)), H)
+        return tok(srgb_value(hx), desc + f" Step {s} of the {name} ramp is pure {'black' if L else 'white'}, so this is {hx}, an "
+                   "off-shade of the same hue (the engine never pairs pure white with pure black).", {"offShadeOf": r(name, s)})
+
     fs = raw.get("focusStyle") or "brand"
     focus_step = 9 if (lt("accent") == "light") else 11
     focus = (n(12) if fs in ("neutral", "two-tone") else (r("accent", focus_step) if L else r("accent", 11)))
@@ -1914,8 +1929,8 @@ def build_color_semantic(ctx, mode):
                                                        "(primary, secondary, disabled; owner, 2026-11-05)."),
             "disabled": tok(n(8), "Disabled labels; exempt from contrast minimums (WCAG 1.4.3 exception)."),
             "inverse": tok(white if L else n(1), "Text on color.bg.inverse (tooltips, toasts)."),
-            "link": tok(r("accent", 11), "Links. Underline them in running text so color is not the only cue."),
-            "accent": tok(r("accent", 11), "Accent text and selected labels."),
+            "link": ink("accent", 11, "Links. Underline them in running text so color is not the only cue."),
+            "accent": ink("accent", 11, "Accent text and selected labels."),
             "on-accent": tok(on("accent"), "Text and icons on color.bg.accent.bold* (auto-picked light or dark, S-L06-094)."),
         },
         "bg": {
@@ -1948,7 +1963,7 @@ def build_color_semantic(ctx, mode):
         "icon": {
             "default": tok(n(11), "Icons beside text; same color as secondary text (DC-L05-08)."),
             "subtle": tok(n(10), "Decorative icons."),
-            "accent": tok(r("accent", 11), "Selected and interactive icons."),
+            "accent": ink("accent", 11, "Selected and interactive icons."),
             "on-accent": tok(on("accent"), "Icons on solid accent fills."),
         },
     }
@@ -1980,7 +1995,7 @@ def build_color_semantic(ctx, mode):
         if extra in has:
             b_, h_, p_ = states(extra, f"{extra} solid fill.")
             out["bg"][extra] = {"subtle": tok(r(extra, 3), f"{extra} subtle fill."), "bold": b_, "bold-hover": h_, "bold-pressed": p_}
-            out["text"][extra] = tok(r(extra, 11), f"{extra} text.")
+            out["text"][extra] = ink(extra, 11, f"{extra} text.")
             out["text"]["on-" + extra] = tok(on(extra), f"Text on {extra} solid.")
     if raw.get("tableRows") == "zebra":  # Q-pattern-07: alternate table rows one neutral step from the page (DC-L19-43)
         base_step = int(surf["base"].strip("{}").split(".")[-1]) if surf["base"].startswith("{color.neutral.") else 1
@@ -7433,15 +7448,76 @@ def std_sync(d, initial=False, quiet=False, scope_only=False, result=None):
     return lines
 
 
+def std_refit(d, state):
+    """After the platforms or the stack changed (issue 68): a token value a standard holds that a check now refuses, such
+    as a 44 px touch target once Android needs 48, goes back to the engine's own value and is recorded as not mapped,
+    as a fresh sketch for these platforms does. A value the person set or locked is never changed; the conflict is said.
+    Changes state in place and returns (lines, conflicts)."""
+    try:
+        rep = Report()
+        validate_files(generate_system(state)[0], state, rep)
+    except Exception:  # a state the generator cannot read is validate's to report
+        return [], []
+    errors = [i for i in rep.items if i["severity"] == "error" and i.get("where")]
+    st, held, decs = std_state(state), std_held(state), _decisions(d)
+    lines, conflicts = [], []
+    for i in errors:
+        sp = "overrides." + i["where"]
+        if std_current(state, sp) is None:
+            continue  # the engine's own value: nothing stored to give back
+        sid = held.get(sp)
+        rec = st["records"].get(sid) or {}
+        mine = decs.get(sp) if (decs.get(sp) or {}).get("set_by") == "chosen" else None
+        if mine and sid and _dnum(mine["id"]) <= _dnum(std_path_decision(state, sp)):
+            mine = None  # the standard set it after the person's choice
+        if not sid or mine or sp in (rec.get("prelocked") or []):
+            if mine or is_locked(state, sp):
+                conflicts.append(f"{shown_path(sp)} stays {_vw(std_current(state, sp))}, as "
+                                 + (f"you set it ({mine['id']})" if mine else "you locked it") + f", but these platforms refuse it: "
+                                 f"{i['message']}. Nothing was changed. {i.get('fix') or ''}".rstrip()
+                                 + (f" It is locked: engine.py unlock {sp}, then set it." if is_locked(state, sp) else ""))
+            continue
+        trial = copy.deepcopy(state)
+        _store(trial, sp, UNSET, "standard", "D-0000", False)
+        try:
+            rep2 = Report()
+            validate_files(generate_system(trial)[0], trial, rep2)
+        except Exception:
+            continue
+        left = {x["message"] for x in rep2.items if x["severity"] == "error"}
+        if i["message"] in left or left - {x["message"] for x in errors}:
+            continue  # giving the value back does not clear this error, or breaks another check
+        v = rec["paths"].pop(sp)
+        _store(state, sp, UNSET, "standard", "D-0000", False)
+        _set_lock(state, sp, False)
+        rec["unmapped"] = [u for u in rec.get("unmapped") or [] if u.get("path") != i["where"]] + [
+            {"path": i["where"], "reason": f"it would break a check the engine enforces: {i['message']}"}]
+        lines.append(f"{sid}: {shown_path(sp)} went back to the engine's own value for these platforms; "
+                     f"{_vw(v)} would break a check ({i['message']})")
+    return lines, conflicts
+
+
 def std_rescope(d, quiet=False):
     """After Q-plat-01 or raw.stack is recorded: re-scope the house standards to the project's tags (only when the system
-    already follows them), quietly, and return the per-theme lines to say."""
+    already follows them), quietly, and return the per-theme lines to say. Then std_refit: a value a standard holds that
+    the new platforms refuse goes back to the engine's own, and a value of the person's that they refuse is said."""
     state = merge_defaults(load_state(d))
     if std_state(state)["house_version"] is None:
         return []
     res = {}
     std_sync(d, quiet=True, scope_only=True, result=res)
     lines = res.get("summary") or []
+    state = merge_defaults(load_state(d))
+    refit, conflicts = std_refit(d, state)
+    if refit:
+        dump_json(os.path.join(d, "state.json"), state)
+        did = _next_did(d)
+        log_decision(d, "standards", None, "The platforms changed, so a value a standard held no longer passes a check the engine "
+                     "enforces (accessibility floors outrank every standard, KNOWLEDGE.md 2). It went back to the engine's own "
+                     "value, as a fresh sketch for these platforms does.", "standard", False, extra=refit,
+                     title=f"House standards: {_plural(len(refit), 'value', 'values')} back to the engine's own for these platforms")
+        lines += [f"{did}: " + refit[0]] + refit[1:]
+    lines += conflicts
     if not quiet:
         for line in lines:
             print("  " + line)
@@ -10254,23 +10330,47 @@ def dial_side(dial, v):
             else f"leaning {L['right']}" if v < 67 else L["right"])
 
 
-def dial_words(dial, v, params, ci=None):
+def dial_words(dial, v, params, ci=None, meta=None):
+    """One DESIGN.md line per dial. Each value is the one the tokens hold (meta, from the build), and where the engine moved
+    it away from the dial's band (levers.json notes the rule), the line says so in a few words, so the two never disagree
+    unexplained (issue 69). Without meta (no build yet) it prints the band values."""
     L = {d["id"]: d for d in levers()["dials"]}[dial]
     side = dial_side(dial, v)
     pretty = re.sub(r"(?<=[a-z])([A-Z])", lambda m_: " " + m_.group(1).lower(), dial)
     head = f"**{pretty[0].upper() + pretty[1:]} {v}/100** ({L['left']} to {L['right']}: {side})"
+    m = meta or {}
+    ty, shp, mo, el = m.get("type") or {}, m.get("shape") or {}, m.get("motion") or {}, m.get("elevation") or {}
+    dens = (m.get("density") or {}).get(params["space.densityMode"]) or {}
+    px = lambda r: "full" if r == "full" or (isinstance(r, (int, float)) and r >= FULL) else f"{fmt_num(r)}px"
+    band_r, ctl = params["radius.control"], shp.get("control", params["radius.control"])
+    if px(ctl) == px(band_r):
+        radius = f"control radius {px(ctl)}"
+    elif not shp.get("chosen"):
+        u = levers()["formulas"]["radius"]["unchosen"]
+        radius = (f"control radius {px(ctl)} (the band gives {px(band_r)}; until someone picks a corner shape, Q-shape-01, corners stay "
+                  f"between {u['to']} and {u['max']}px)")
+    else:
+        radius = f"control radius {px(ctl)} (the band gives {px(band_r)}; an override or a standard sets it)"
+    band_w, hw = params["type.headingWeight"], (ty.get("weights") or {}).get("heading", params["type.headingWeight"])
+    weight = f"heading weight {hw}" + (f" (the band gives {band_w}; a page with two weights uses {hw})" if hw != band_w else "")
+    band_m, model = params["elevation.model"], el.get("model", params["elevation.model"])
+    look_m = (m.get("look") or {}).get("elevationModel")
+    depth = f"depth model: {model}" + ("" if model == band_m else
+                                       f" (the band gives {band_m}; {'the style builds its own' if model == look_m else 'an override sets it'})")
     say = {
-        "expression": f"type ratio {params['type.ratio']}, hero moments: {params['emphasis.heroMoments']}, expressive motion: "
+        "expression": f"type ratio {ty.get('ratio', params['type.ratio'])}, hero moments: {params['emphasis.heroMoments']}, expressive motion: "
                       f"{params['motion.expressiveScope']}, brand color role: {params['color.brandRole']}, containment: {params['layout.containment']}",
         "brandPresence": f"typeface suggestion: {params['type.faceSuggestion']}, brand color placement: {params['color.brandPlacement']}, "
                          f"native component share about {int(round(params['components.nativeShare'] * 100))}%, voice guidance: {params['content.voiceGuidance']}",
-        "density": f"body {params['type.baseSize.web']}px on the web, default control {params['control.height.md']}px, density mode "
-                   f"{params['space.densityMode']}, icons {params['icon.defaultSize']}px; hit areas never shrink",
-        "energy": f"standard easing {params['motion.easing.standard']}, duration multiplier {rnd(params['motion.durationMultiplier'], 2)}, "
-                  f"spring damping {rnd(params['motion.spring.spatial.dampingRatio'], 2)}, heading weight {params['type.headingWeight']}, "
+        "density": f"body {ty.get('base', params['type.baseSize.web'])}px on the web, default control "
+                   f"{(dens.get('control') or {}).get('md', params['control.height.md'])}px, density mode {params['space.densityMode']}, "
+                   f"icons {(m.get('space') or {}).get('iconDefault', params['icon.defaultSize'])}px; hit areas never shrink",
+        "energy": f"standard easing {mo.get('standard', params['motion.easing.standard'])}, duration multiplier "
+                  f"{rnd(mo.get('multiplier', params['motion.durationMultiplier']), 2)}, spring damping "
+                  f"{rnd((mo.get('spatial') or {}).get('dampingRatio', params['motion.spring.spatial.dampingRatio']), 2)}, {weight}, "
                   f"navigation: {params['chrome.navTreatment']}",
-        "roundness": f"control radius {params['radius.control']}, icon corners {params['icon.cornerStyle']}, caps {params['icon.caps']}",
-        "depth": f"depth model: {params['elevation.model']}",
+        "roundness": f"{radius}, icon corners {shp.get('iconCorners', params['icon.cornerStyle'])}, caps {shp.get('iconCaps', params['icon.caps'])}",
+        "depth": depth,
         "colorfulness": f"scheme {params['color.schemeVariant']}, accent chroma {rnd((ci or {}).get('peakHct', params['color.accentChroma.hct']), 1)} (HCT), "
                         f"{(ci or {}).get('accentCount', params['color.accentCount'])} accent(s), surfaces: {params['color.surfaces']}",
         "warmth": f"neutral tint chroma {rnd(params['color.neutral.tint.oklch'].get('c') or 0, 3)} at hue {params['color.neutral.tint.oklch'].get('h')}, "
@@ -10727,7 +10827,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             + ((" (words picked for you: " if (_decisions(d).get("taste.feelWords") or {}).get("set_by") == "delegated" else " (your words: ")
                + f"{', '.join((state.get('taste') or {}).get('feelWords') or [])})" if (state.get("taste") or {}).get("feelWords") else ""),
             "", "**Principles (ranked).**", pl, "", "**Dial positions.** Three posture dials set the overall stance. Five character dials fine-tune it.", ""]
-    body += [f"- {dial_words(k, dials[k], params, ci)}" for k in DIALS]
+    body += [f"- {dial_words(k, dials[k], params, ci, meta)}" for k in DIALS]
     body += ["", "**Zoom by area** (sketch, broad, defined, detailed). You can stop at any level; each one works.", "",
              _md_table(["Area", "Zoom", "Next questions"], [(t, zoom[k]["level"], ", ".join(zoom[k]["next"]) if zoom[k]["next"] else "-")
                                                            for k, t in ZOOM_AREAS if k != "overview"])]

@@ -4794,6 +4794,63 @@ class BuildFormats(unittest.TestCase):
             self.assertEqual(e.build_formats(e.load_state(d), d)[1], ["swift"])  # compose is in build/ already, so it is refreshed
 
 
+class NearBlackAndPlatformChanges(unittest.TestCase):
+    """Issue 67: a near-black brand builds, because the engine never pairs pure white with pure black itself. Issue 68:
+    adding a platform raises a value a standard held to that platform's floor, as a fresh sketch does. Both need the
+    shipped house standards (STD-visual-details-66, STD-mobile-touch-09)."""
+
+    def run(self, result=None):
+        with house_standards(os.path.join(e.REFERENCES, "standards.json")):
+            return super().run(result)
+
+    def test_near_black_brand_builds_with_an_off_shade(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            code, out = run_cli("sketch", "--dir", d, "--name", "Mono", "--feel", "minimal,precise", "--brand", "#18181B")
+            self.assertEqual(code, 0, out)
+            files, _m, _c = e.generate_system(e.load_state(d))
+            light = e.resolve_all(files, {"theme": "light"})
+            ink = {light[k]["resolved"]["hex"] for k in ("color.text.accent", "color.text.link", "color.icon.accent")}
+            self.assertEqual(len(ink), 1)
+            hx = ink.pop()
+            self.assertNotEqual(hx, "#000000")
+            self.assertAlmostEqual(e.hex_to_oklch(hx)[0], e.hex_to_oklch(e.OFF_BLACK)[0], places=2)
+            self.assertGreaterEqual(e.contrast(hx, "#ffffff"), 7)
+            quiet(e.cmd_set, d, "color.text.accent", "#000000", "the person asked for pure black")  # their own pair is still refused
+            self.assertTrue(any(e.WHITE_BLACK_RULE in i["message"] for i in e.validate_dir(d).items if i["severity"] == "error"))
+
+    def sketch_web(self, t):
+        d = os.path.join(t, "opendesigner")
+        self.assertEqual(run_cli("sketch", "--dir", d, "--name", "Web", "--audience", "regular", "--platforms", "web",
+                                 "--feel", "calm")[0], 0)
+        return d
+
+    def test_adding_android_raises_the_touch_target(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch_web(t)
+            code, out = run_cli("pick", "Q-plat-01", '["web", "android"]', "--dir", d)
+            self.assertIn("STD-mobile-touch-09: size.target.touch went back to the engine's own value", out)
+            st = e.load_state(d)
+            self.assertNotIn("size.target.touch", st["overrides"])
+            self.assertFalse(e.is_locked(st, "overrides.size.target.touch"))
+            rec = st["standards"]["records"]["STD-mobile-touch-09"]
+            self.assertEqual([u["path"] for u in rec["unmapped"]], ["size.target.touch"])
+            self.assertEqual(run_cli("build", "--dir", d)[0], 0)
+            sem = e.resolve_all(e.generate_system(e.load_state(d))[0], {"theme": "light"})
+            self.assertEqual(e._px(sem["size.target.touch"]["resolved"]), 48)
+
+    def test_a_touch_target_the_person_set_stays_and_the_conflict_is_said(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch_web(t)
+            quiet(e.main, ["standard", "override", "STD-mobile-touch-09", "--why", "we want 44 everywhere", "--dir", d])
+            quiet(e.main, ["set", "overrides.size.target.touch", '"44px"', "--why", "our own", "--lock", "--dir", d])
+            code, out = run_cli("pick", "Q-plat-01", '["web", "android"]', "--dir", d)
+            self.assertIn("size.target.touch stays 44px, as you set it", out)
+            self.assertIn("engine.py unlock overrides.size.target.touch", out)
+            st = e.load_state(d)
+            self.assertEqual(st["overrides"]["size.target.touch"], {"value": 44, "unit": "px"})
+            self.assertTrue(e.is_locked(st, "overrides.size.target.touch"))
+
 LOGO_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="#167874"/></svg>'
 ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="6" width="12" height="10"/></svg>'
 
@@ -4892,6 +4949,68 @@ class BrandPage(unittest.TestCase):
             code, out = run_cli("sketch", "--dir", d, "--name", "Fern", "--audience", "regular", "--platforms", "ios", "--feel", "calm")
             self.assertEqual(code, 0, out)
             self.assertTrue(os.path.exists(os.path.join(d, "build", "brand", "index.html")))
+
+
+
+class DialLinesMatchTheTokens(unittest.TestCase):
+    """Issue #69: each DESIGN.md dial line reports the value the tokens hold, and says why when the engine moved it off the band."""
+
+    def lines(self, t, *sketch):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, *sketch)
+        text = design_text(t)
+        return {m.group(1): m.group(0) for m in re.finditer(r"^- \*\*(\w[\w ]*?) \d+/100\*\*.*$", text, re.M)}, e.read_json(
+            os.path.join(d, "tokens", "opendesigner.meta.json"))
+
+    def test_corners_nobody_chose(self):
+        with tempfile.TemporaryDirectory() as t:                                   # issue 69's Fernhollow
+            dl, meta = self.lines(t, "Fernhollow", "#1E3A8A", "large", "web", "calm,trustworthy")
+            self.assertEqual(meta["shape"]["control"], 6)
+            self.assertIn("control radius 6px (the band gives 0px; until someone picks a corner shape, Q-shape-01, corners stay "
+                          "between 6 and 12px)", dl["Roundness"])
+            self.assertIn("Buttons and fields have 6px corners", design_text(t))
+        with tempfile.TemporaryDirectory() as t:                                   # Pebbleday: 16 from the band, 12 in the tokens
+            dl, meta = self.lines(t, "Pebbleday", "#E0457B", "regular", "ios,web", "friendly,playful")
+            self.assertEqual(meta["shape"]["control"], 12)
+            self.assertIn("control radius 12px (the band gives 16px;", dl["Roundness"])
+
+    def test_chosen_corners_need_no_note(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Sharp", "#1E3A8A", "dense", "web", "calm")
+            quiet(e.cmd_set, d, "dials.roundness", 0, "they want square corners")
+            quiet(e.cmd_design_md, d)
+            line = next(x for x in design_text(t).splitlines() if x.startswith("- **Roundness"))
+            self.assertIn("control radius 0px, icon corners", line)
+            self.assertNotIn("the band gives", line)
+
+    def test_every_dial_line_holds_the_token_value(self):
+        states = [{"macros": ["minimal"]}, {"macros": ["serious", "authoritative"]}, {"style": "neumorphism"}, {"style": "neo-brutalism"}]
+        for spec in states:
+            with self.subTest(spec=spec):
+                st = e.default_state("T")
+                st["macros"] = spec.get("macros", [])
+                if spec.get("style"):
+                    st["answers"]["Q-dir-01"] = {"value": spec["style"]}
+                    for k, v in e.answer_effects("Q-dir-01", spec["style"], st).items():
+                        if v != e.UNSET:
+                            e.set_path(st, k, v)
+                _f, meta, _c = e.generate_system(st)
+                P = {k: v["value"] for k, v in meta["params"].items()}
+                dials = {k: (x["value"] if isinstance(x, dict) else x) for k, x in meta["dials"].items()}
+                say = lambda dial: e.dial_words(dial, dials[dial], P, meta["color"], meta)
+                ctl = meta["shape"]["control"]
+                self.assertIn(f"control radius {'full' if ctl >= e.FULL else str(ctl) + 'px'}", say("roundness"))
+                self.assertIn(f"heading weight {meta['type']['weights']['heading']}", say("energy"))
+                self.assertIn(f"depth model: {meta['elevation']['model']}", say("depth"))
+                if meta["elevation"]["model"] != P["elevation.model"]:
+                    self.assertIn("the style builds its own", say("depth"))
+
+    def test_levers_says_where_the_engine_leaves_its_band(self):
+        drives = {x["param"]: x for d in e.levers()["dials"] for x in d["drives"]}
+        for param, words in (("radius.control", "formulas.radius.unchosen"), ("type.headingWeight", "two weights"),
+                             ("elevation.model", "style or preset")):
+            self.assertIn(words, drives[param].get("note", ""), param)
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ seo_title: OpenDesigner evals: how we test it, with every result
 description: How OpenDesigner tests itself, what each test can and can't show yet, and every saved result with its date and number of runs, failures included.
 section: Reference
 order: 7
-updated: 2026-11-05
+updated: 2026-11-06
 ---
 
 An eval here is a fixed task with fixed checks and a saved result. Each one answers a question you might ask before trusting OpenDesigner. Every number on this page is read from the result files in the repository, with its date and how many times it ran, and failures stay on the page until they pass.
@@ -42,7 +42,7 @@ When an eval finds a real fault, the fix is measured the same way. The same task
 
 ## Is what it makes accessible and complete?
 
-The engine builds a design system from each of 19 fixed briefs. No AI is involved, so the same answers always give the same files. Each brief is a person's five sketch answers: a name, a brand color, who uses the product, the platforms and a few feel words. The briefs include the cases that break design systems: yellow, cyan and lime brand colors, colors that are almost black or almost white, large text for older readers, and three platforms at once.
+The engine builds a design system from each of 20 fixed briefs. No AI is involved, so the same answers always give the same files. Each brief is a person's five sketch answers: a name, a brand color, who uses the product, the platforms and a few feel words. The briefs include the cases that break design systems: yellow, cyan and lime brand colors, colors that are almost black (two of them) or almost white, large text for older readers, and three platforms at once.
 
 There are two tiers of checks. The required checks are WCAG 2.2 AA and the files you rely on: text contrast at 4.5:1, borders and focus rings at 3:1, 24 px targets, the exact brand color, the exports its platforms need, and the same result twice. The quality checks are house rules that ask for more than WCAG does. A miss there shows where the engine can improve, and the engine must tell the person about it.
 

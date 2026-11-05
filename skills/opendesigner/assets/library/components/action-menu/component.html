@@ -31,7 +31,9 @@
   color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); font-family: var(--ds-font-family-text); white-space: nowrap; }
 .odl-action-menu .odl-sub > span:last-child svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); color: var(--ds-color-icon-subtle); display: block; }
 .odl-action-menu [aria-disabled="true"] { cursor: not-allowed; color: var(--ds-color-text-disabled); }
-.odl-action-menu [aria-disabled="true"] > svg, .odl-action-menu [aria-disabled="true"] small { color: var(--ds-color-text-disabled); }
+.odl-action-menu [aria-disabled="true"] > svg { color: var(--ds-color-text-disabled); }
+/* The note that says why an item is off is not part of the disabled control: it keeps 4.5:1. */
+.odl-action-menu [aria-disabled="true"] small { color: var(--ds-color-text-tertiary); }
 .odl-action-menu [aria-disabled="true"]:hover { background: transparent; }
 .odl-action-menu small { font: var(--ds-text-label-sm); white-space: nowrap; }
 .odl-action-menu .odl-danger, .odl-action-menu .odl-danger > svg { color: var(--ds-color-text-danger); }

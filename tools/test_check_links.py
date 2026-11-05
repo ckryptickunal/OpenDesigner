@@ -6,6 +6,8 @@ makes, so a real website route passes and a made-up one still fails.
 """
 import contextlib
 import io
+import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -59,6 +61,29 @@ class SiteLinks(unittest.TestCase):
         self.assertNotIn("page.md:1: /tour/", text)
         self.assertNotIn("/changelog/", text)
         self.assertIn("5 relative links checked, 2 broken", text)
+
+    @unittest.skipUnless(shutil.which("git"), "needs git")
+    def test_a_git_checkout_reads_only_what_git_would_commit(self):     # issue 72
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            (root / ".gitignore").write_text("site/.cache/\n")
+            (root / "site" / ".cache").mkdir(parents=True)
+            (root / "site" / ".cache" / "copied.md").write_text("[gone](missing.md)\n")       # ignored: never read
+            (root / "tracked.md").write_text("[ok](new.md)\n")
+            (root / "new.md").write_text("[gone](nowhere.md)\n")                              # untracked, not ignored: read
+            subprocess.run(["git", "-C", str(root), "add", "tracked.md"], check=True)
+            out = io.StringIO()
+            with mock.patch.object(C, "ROOT", root), mock.patch.object(C, "SITE_DOCS", root / "site" / "docs"), \
+                    contextlib.redirect_stdout(out):
+                code = C.main([])
+                named = C.main(["site/.cache/copied.md"])                                     # a file named on purpose is read
+        text = out.getvalue()
+        self.assertEqual((code, named), (1, 1))
+        self.assertIn("new.md:1: nowhere.md", text)
+        self.assertIn("2 relative links checked, 1 broken", text)
+        self.assertIn("site/.cache/copied.md:1: missing.md", text)
+        self.assertEqual(text.count("copied.md"), 1)
 
 
 if __name__ == "__main__":

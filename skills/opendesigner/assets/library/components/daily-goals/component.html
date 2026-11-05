@@ -106,7 +106,8 @@ document.querySelectorAll(".odl-daily-goals").forEach((root) => {
     met.textContent = String(count);
     date.textContent = d[3];
     const left = goals[0] - d[0];
-    note.textContent = left > 0 ? (i === 6 ? `${fmt(left)} steps to go. A 25-minute walk would do it.` : `${fmt(left)} steps short of the goal that day.`) : `Step goal met, with ${fmt(-left)} to spare.`;
+    const steps = left === 1 ? "step" : "steps";
+    note.textContent = left > 0 ? (i === 6 ? `${fmt(left)} ${steps} to go. A 25-minute walk would do it.` : `${fmt(left)} ${steps} short of the goal that day.`) : `Step goal met, with ${fmt(-left)} to spare.`;
     root.querySelectorAll(".odl-week button").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.day) === i)));
   };
   root.querySelectorAll(".odl-week button").forEach((b) => b.addEventListener("click", () => show(Number(b.dataset.day))));
