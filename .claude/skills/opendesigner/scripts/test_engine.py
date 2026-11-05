@@ -4794,6 +4794,63 @@ class BuildFormats(unittest.TestCase):
             self.assertEqual(e.build_formats(e.load_state(d), d)[1], ["swift"])  # compose is in build/ already, so it is refreshed
 
 
+class NearBlackAndPlatformChanges(unittest.TestCase):
+    """Issue 67: a near-black brand builds, because the engine never pairs pure white with pure black itself. Issue 68:
+    adding a platform raises a value a standard held to that platform's floor, as a fresh sketch does. Both need the
+    shipped house standards (STD-visual-details-66, STD-mobile-touch-09)."""
+
+    def run(self, result=None):
+        with house_standards(os.path.join(e.REFERENCES, "standards.json")):
+            return super().run(result)
+
+    def test_near_black_brand_builds_with_an_off_shade(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            code, out = run_cli("sketch", "--dir", d, "--name", "Mono", "--feel", "minimal,precise", "--brand", "#18181B")
+            self.assertEqual(code, 0, out)
+            files, _m, _c = e.generate_system(e.load_state(d))
+            light = e.resolve_all(files, {"theme": "light"})
+            ink = {light[k]["resolved"]["hex"] for k in ("color.text.accent", "color.text.link", "color.icon.accent")}
+            self.assertEqual(len(ink), 1)
+            hx = ink.pop()
+            self.assertNotEqual(hx, "#000000")
+            self.assertAlmostEqual(e.hex_to_oklch(hx)[0], e.hex_to_oklch(e.OFF_BLACK)[0], places=2)
+            self.assertGreaterEqual(e.contrast(hx, "#ffffff"), 7)
+            quiet(e.cmd_set, d, "color.text.accent", "#000000", "the person asked for pure black")  # their own pair is still refused
+            self.assertTrue(any(e.WHITE_BLACK_RULE in i["message"] for i in e.validate_dir(d).items if i["severity"] == "error"))
+
+    def sketch_web(self, t):
+        d = os.path.join(t, "opendesigner")
+        self.assertEqual(run_cli("sketch", "--dir", d, "--name", "Web", "--audience", "regular", "--platforms", "web",
+                                 "--feel", "calm")[0], 0)
+        return d
+
+    def test_adding_android_raises_the_touch_target(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch_web(t)
+            code, out = run_cli("pick", "Q-plat-01", '["web", "android"]', "--dir", d)
+            self.assertIn("STD-mobile-touch-09: size.target.touch went back to the engine's own value", out)
+            st = e.load_state(d)
+            self.assertNotIn("size.target.touch", st["overrides"])
+            self.assertFalse(e.is_locked(st, "overrides.size.target.touch"))
+            rec = st["standards"]["records"]["STD-mobile-touch-09"]
+            self.assertEqual([u["path"] for u in rec["unmapped"]], ["size.target.touch"])
+            self.assertEqual(run_cli("build", "--dir", d)[0], 0)
+            sem = e.resolve_all(e.generate_system(e.load_state(d))[0], {"theme": "light"})
+            self.assertEqual(e._px(sem["size.target.touch"]["resolved"]), 48)
+
+    def test_a_touch_target_the_person_set_stays_and_the_conflict_is_said(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch_web(t)
+            quiet(e.main, ["standard", "override", "STD-mobile-touch-09", "--why", "we want 44 everywhere", "--dir", d])
+            quiet(e.main, ["set", "overrides.size.target.touch", '"44px"', "--why", "our own", "--lock", "--dir", d])
+            code, out = run_cli("pick", "Q-plat-01", '["web", "android"]', "--dir", d)
+            self.assertIn("size.target.touch stays 44px, as you set it", out)
+            self.assertIn("engine.py unlock overrides.size.target.touch", out)
+            st = e.load_state(d)
+            self.assertEqual(st["overrides"]["size.target.touch"], {"value": 44, "unit": "px"})
+            self.assertTrue(e.is_locked(st, "overrides.size.target.touch"))
+
 LOGO_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="#167874"/></svg>'
 ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="6" width="12" height="10"/></svg>'
 

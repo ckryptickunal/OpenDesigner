@@ -100,6 +100,20 @@
       ]
     },
     {
+      "id": "zinc-ink",
+      "why": "A near-black brand whose accent ramp runs out of darker steps (issue 67)",
+      "name": "Mono",
+      "brand": "#18181B",
+      "audience": "regular",
+      "platforms": [
+        "web"
+      ],
+      "feel": [
+        "minimal",
+        "precise"
+      ]
+    },
+    {
       "id": "near-white",
       "why": "A brand color that is almost white",
       "name": "Paperlight",

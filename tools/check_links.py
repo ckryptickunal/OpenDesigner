@@ -4,13 +4,16 @@
   python3 tools/check_links.py            check every Markdown file in the repo
   python3 tools/check_links.py docs *.md  check only these files or folders
 
+In a git checkout it reads the Markdown files git would commit: tracked ones, and new ones that are not ignored. A
+git-ignored folder (site/.cache/, a copied build input) is never read. Outside git it reads every .md file under the
+folders given. A file named on the command line is always read.
 Web links (http, https, mailto) are skipped, so it needs no network. Anchors (#section) are ignored.
 A link that starts with / in site/docs/*.md is an address on the website, not a file: it must be a page site/build.py
 makes (site/build.py page_paths), that page's Markdown copy (index.md) or a file the build writes at the root. A link to an
 old address that only redirects is reported too, with the address to use.
 Exits 1 if any link is broken.
 """
-import importlib.util, re, sys
+import importlib.util, re, subprocess, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -20,13 +23,25 @@ LINK = re.compile(r"(?<!\!)\[[^\]\n]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)|!\[[^\]\n
 FENCE = re.compile(r"^\s*(```|~~~)")
 
 
+def git_md_files():
+    """The .md files git would commit (tracked, plus untracked and not ignored), or None outside a git checkout."""
+    try:
+        out = subprocess.run(["git", "-C", str(ROOT), "ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", "*.md"],
+                             capture_output=True, check=True).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return sorted({ROOT / f for f in out.decode().split("\0") if f and (ROOT / f).is_file()})
+
+
 def md_files(args):
     targets = [ROOT / a for a in args] or [ROOT]
+    known = git_md_files()
     for t in targets:
         if t.is_file() and t.suffix == ".md":
             yield t
         elif t.is_dir():
-            for p in sorted(t.rglob("*.md")):
+            found = sorted(t.rglob("*.md")) if known is None else [p for p in known if p.is_relative_to(t)]
+            for p in found:
                 if not SKIP_DIRS & set(p.relative_to(ROOT).parts):
                     yield p
 
