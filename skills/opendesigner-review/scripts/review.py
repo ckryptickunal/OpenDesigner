@@ -265,11 +265,11 @@ def check_probe(p, sysm, F):
     ct = p.get("contrast") or {}
     on_pixels = F.pixel_pass.get(w, set())
     for c in ct.get("failing", []):
-        need = CONTRAST_LARGE if c.get("large") else CONTRAST_TEXT
+        need = CONTRAST_LARGE if c.get("large") or c.get("symbol") else CONTRAST_TEXT   # a lone symbol is a graphic: 3:1 (WCAG 1.4.11)
         if c["sel"] in on_pixels:   # the pixels behind it were read and pass: the probe's colour backdrop was a guess (a photo in an <img>, say)
             continue
         unsure = c.get("backdrop") in ("image", "gradient")
-        F.add("MS-04", "info" if unsure else "error", f"Text contrast {c['ratio']}:1 is below {need}:1" + (" (background is an image or gradient: sample the pixels)" if unsure else ""),
+        F.add("MS-04", "info" if unsure else "error", f"{'Symbol' if c.get('symbol') else 'Text'} contrast {c['ratio']}:1 is below {need}:1" + (" (background is an image or gradient: sample the pixels)" if unsure else ""),
               w, f"{c['fg']} on {c['bg']}, {fmt(c['fs'])} px, {c['n']} element(s)", f"{need}:1 (no rounding up: 4.49 fails)", [c["sel"]],
               "darken the text or lighten the surface with a token pair that passes; check the same pair in dark mode", "WCAG 1.4.3", key=f"contrast:{c['fg']}:{c['bg']}:{c.get('large')}")
 

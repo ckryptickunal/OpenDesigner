@@ -184,6 +184,13 @@ class QuietWhenClean(unittest.TestCase):
         self.assertIn("button.reassign", f["evidence"])
         self.assertEqual(findings_for(clean_probe(labels={"checked": 4, "broken": []})), [])
 
+    def test_a_lone_symbol_is_judged_as_a_graphic_at_3_to_1(self):       # MS-04, issue #76
+        fail = lambda **c: {"checked": 2, "failing": [dict({"sel": "span.arrow", "ratio": 2.5, "fg": "#aaaaaa", "bg": "#ffffff", "fs": 14, "large": False, "backdrop": "solid", "n": 1}, **c)], "lowest": []}
+        f = by_case(findings_for(clean_probe(contrast=fail(symbol=True))))["MS-04"][0]
+        self.assertEqual(f["title"], "Symbol contrast 2.5:1 is below 3.0:1")
+        f = by_case(findings_for(clean_probe(contrast=fail())))["MS-04"][0]
+        self.assertTrue(f["title"].startswith("Text contrast 2.5:1 is below 4.5:1"))
+
     def test_sparse_probe_does_not_crash(self):
         for probe in ({"v": 1}, {"v": 1, "url": "http://localhost/", "viewport": {"w": 320, "h": 600}}):
             findings_for(probe)

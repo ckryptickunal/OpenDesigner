@@ -176,6 +176,15 @@
   const isCaps = (cs, t) => cs.textTransform === 'uppercase' || /all-small-caps|all-petite-caps/.test(cs.fontVariantCaps || '') ||
     (!/\p{Ll}/u.test(t) && (t.match(/\p{Lu}/gu) || []).length >= 3);
 
+  // clipped to nothing (clip: rect(0 0 0 0), clip-path: inset(50%)) or squeezed into a few pixels with its overflow hidden:
+  // text kept for screen readers, never meant to be read on screen
+  const clipArea = (c) => { const v = (c.match(/-?[\d.]+/g) || []).map(Number); return v.length === 4 ? Math.max(0, v[1] - v[3]) * Math.max(0, v[2] - v[0]) : Infinity; };
+  function hiddenByDesign(el, cs) {
+    if (cs.clip && cs.clip !== 'auto' && clipArea(cs.clip) <= 4) return true;
+    if (/inset\(\s*50%|circle\(\s*0(px)?\s*(at|\))/.test(cs.clipPath || '')) return true;
+    return (el.offsetWidth <= 4 || el.offsetHeight <= 4) && /hidden|clip/.test(cs.overflowX + ' ' + cs.overflowY);
+  }
+
   // visually hidden text for screen readers (a 1 px clipped box): its glyph boxes still report a position, so leave it out
   function srOnly(e, stop) {
     for (let n = e; n && n !== stop.parentElement; n = n.parentElement) {
@@ -213,6 +222,8 @@
 
   const BUTTONISH = 'button,[role=button],input[type=submit],input[type=button],a[href]';
   const NOT_AN_ACTION = '[aria-current]:not([aria-current=false]),[aria-selected=true],[aria-pressed=true],:disabled,[aria-disabled=true]';
+  // one or two arrows, dingbats, maths signs, bullets or guillemets with no letter or digit: a symbol, not words
+  const SYMBOL = /^[\p{So}\p{Sm}\u2022\u00b7\u2039\u203a\u00ab\u00bb]{1,2}$/u;
   const INTERACTIVE = 'a[href],button,input:not([type=hidden]),select,textarea,summary,[role=button],[role=link],[role=checkbox],[role=radio],[role=switch],[role=tab],[role=menuitem],[role=option],[role=slider],[tabindex]:not([tabindex="-1"]),[contenteditable=""],[contenteditable=true]';
 
   // 'inert', 'aria-hidden' or '': whether assistive tech is told to skip this element, looking up through shadow roots
@@ -534,7 +545,9 @@
           const chs = w / chWidth(cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily);
           if (chs > 80 && longLines.length < CAP) longLines.push({ sel: sel(el), ch: round(chs, 1) });
         }
-        const srOnly = cs.position === 'absolute' && el.offsetWidth <= 1 && el.offsetHeight <= 1;  // visually hidden on purpose, for screen readers
+        // visually hidden on purpose, for screen readers: a 1 px box, clipped away (clip, clip-path), or a box of a few pixels
+        // with its overflow hidden (opendesigner.dev's library legends were 4 x 1 px and reported as clipped text, issue #76)
+        const srOnly = (cs.position === 'absolute' && el.offsetWidth <= 1 && el.offsetHeight <= 1) || hiddenByDesign(el, cs);
         if (!srOnly && ((el.scrollWidth > el.clientWidth + 1 && /hidden|clip/.test(cs.overflowX)) || (el.scrollHeight > el.clientHeight + 1 && /hidden|clip/.test(cs.overflowY)))) {
           if (clipped.length < CAP) clipped.push({ sel: sel(el), text: txt.slice(0, 40), sw: el.scrollWidth, cw: el.clientWidth, sh: el.scrollHeight, ch: el.clientHeight, ellipsis: cs.textOverflow === 'ellipsis', clamp: !!cs.webkitLineClamp && cs.webkitLineClamp !== 'none' });
         }
@@ -544,11 +557,13 @@
           const fg = over(fgc, bd.color);
           const cr = round(ratio(fg, bd.color), 100);
           const large = fs >= 24 || (fs >= 18.66 && Number(fw) >= 700);
-          const key = hex(fg) + hex(bd.color) + large;
+          // a lone arrow, bullet or dingbat is a graphic, held to 3:1 (WCAG 1.4.11), not text at 4.5:1 (issue #76)
+          const symbol = SYMBOL.test(txt);
+          const key = hex(fg) + hex(bd.color) + large + symbol;
           if (!contrastSeen.has(key)) {
             contrastSeen.add(key);
-            contrast.push({ sel: sel(el), ratio: cr, fg: hex(fg), bg: hex(bd.color), fs, large, backdrop: bd.kind, n: 1 });
-          } else { const c = contrast.find((x) => x.fg === hex(fg) && x.bg === hex(bd.color) && x.large === large); if (c) c.n++; }
+            contrast.push({ sel: sel(el), ratio: cr, fg: hex(fg), bg: hex(bd.color), fs, large, symbol, backdrop: bd.kind, n: 1 });
+          } else { const c = contrast.find((x) => x.fg === hex(fg) && x.bg === hex(bd.color) && x.large === large && x.symbol === symbol); if (c) c.n++; }
         }
         const tc = rgba(cs.color); if (tc[3] > 0) bump(colors.text, hex(tc), el);
       }
@@ -640,7 +655,7 @@
     out.radius = top(radius, 20);
     out.shadows = top(shadows, 12);
     out.colors = { text: top(colors.text, 30), bg: top(colors.bg, 30), border: top(colors.border, 20) };
-    out.contrast = { checked: contrast.length, failing: contrast.filter((c) => c.ratio < (c.large ? 3 : 4.5)).sort((a, b) => a.ratio - b.ratio).slice(0, CAP * 2), lowest: contrast.slice().sort((a, b) => a.ratio - b.ratio).slice(0, 3) };
+    out.contrast = { checked: contrast.length, failing: contrast.filter((c) => c.ratio < (c.large || c.symbol ? 3 : 4.5)).sort((a, b) => a.ratio - b.ratio).slice(0, CAP * 2), lowest: contrast.slice().sort((a, b) => a.ratio - b.ratio).slice(0, 3) };
     out.overflow = { list: overflow.sort((a, b) => b.over - a.over).slice(0, CAP), clipped, scrollers };
     out.content = { placeholders };
     out.labels = labels;
