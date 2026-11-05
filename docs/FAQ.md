@@ -176,7 +176,8 @@ No. It asks whether you have them and checks the files. For example, it checks t
 If you don't have one, it gives you honest paths:
 - a designer brief;
 - a wordmark set in your chosen typeface;
-- open icon libraries such as Lucide, Phosphor, Tabler, Heroicons or Material Symbols, with their licenses kept.
+- open icon libraries such as Lucide, Phosphor, Tabler, Heroicons or Material Symbols, with their licenses kept;
+- if you have a few icons of your own, glyphs from the closest open set redrawn to match them (same badge, line weight and colour), shown next to yours before anything is used.
 
 ## Accessibility
 

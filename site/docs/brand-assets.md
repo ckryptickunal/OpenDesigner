@@ -93,7 +93,9 @@ For each asset, it keeps a record of the source, the licence, the credit line, w
 
 If you have no illustrations and want open-licence art, the opendesigner-illustrate skill can help. It searches open-licence sources, ranks what it finds, recolors the art to your tokens, applies it, and keeps the licence ledger. Its directory lists 46 sources, photo sources included. Most licences were checked on 2026-09-28, and Unsplash and Pexels on 2026-11-05.
 
-The engine makes no network calls. This skill does: it searches and downloads art over HTTPS, and only when you use it.
+It also helps when you have a few icons of your own and need more. It reads how yours are drawn: the badge or ring around each one, the box the drawing sits in, the line weight and the colour. It finds the open icon set closest to that, redraws the glyphs you pick the same way, and shows them next to yours. Nothing is used until you say yes, and each glyph's licence goes in the ledger.
+
+The engine makes no network calls. This skill does: it searches and downloads art and icons over HTTPS, and only when you use it.
 
 ## How the status is recorded
 

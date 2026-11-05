@@ -67,7 +67,7 @@ A skill is a set of instructions your AI tool loads when a task needs it.
 - **opendesigner-extract** learns from a website, screenshot, Figma file, repo or brand book.
 - **opendesigner-extend** changes or extends a system you already made.
 - **opendesigner-export** gets the system into code, Figma or Paper.
-- **opendesigner-illustrate** finds open-licence illustrations, ranks them and recolors them to your tokens.
+- **opendesigner-illustrate** finds open-licence illustrations, ranks them and recolors them to your tokens. It can also add icons drawn like the few you already have.
 - **opendesigner-review** checks a built interface like a careful user would: every screen size and theme, scrolling, hover, keyboard and motion, with measured spacing, type, fonts and contrast, and evidence for each finding.
 - **opendesigner-paint** makes original art painted in code in your palette: hero films, loops and still paintings in styles such as watercolour, sketch or woodcut.
 - **opendesigner-preflight** checks anything visual before you export or share it (a page, a deck, a video, a card) for the small mistakes that make it look cheap or wrong.
