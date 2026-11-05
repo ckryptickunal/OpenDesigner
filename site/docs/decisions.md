@@ -4,7 +4,7 @@ seo_title: Design decisions, DESIGN.md and the overview page explained
 description: How OpenDesigner records each design decision with its reason, keeps DESIGN.md current for people and AI agents, and shows the system on one overview page.
 section: Concepts
 order: 4
-updated: 2026-10-15
+updated: 2026-11-05
 ---
 
 OpenDesigner writes every decision into a log with how it was set and why. It turns the current decisions into `DESIGN.md`, a plain-words description of your system that people and AI tools read. It also builds `overview.html`, one page that shows your whole system and marks what is still missing.
@@ -62,7 +62,7 @@ You can lock any decision. A locked value changes only with the owner's OK. The 
 
 Don't edit `DESIGN.md` by hand, because the next refresh rewrites it. Notes you put inside special "keep" blocks survive each refresh. If someone does edit the generated file, the extend skill notices and offers to turn each edit into a decision.
 
-`PRODUCT.md` holds what the product is, who it is for and where it runs, so later sessions don't have to guess.
+`PRODUCT.md` holds what the product is, who it is for and where it runs, so later sessions don't have to guess. For a site that persuades, it also holds the site brief: the goal, the roles to convince, the proof, how people find it and its kinds of pages. A line nobody has answered says "Not enough information", with the question that fills it.
 
 ## The overview page
 
