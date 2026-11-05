@@ -71,7 +71,7 @@ def main():
             t = light_values((pathlib.Path(d) / "opendesigner/build/css/tokens.css").read_text())
             meta = json.loads((pathlib.Path(d) / "opendesigner/tokens/opendesigner.meta.json").read_text())
         dials = {k: (x["value"] if isinstance(x, dict) else x) for k, x in meta["dials"].items()}
-        t.update(ratio=meta["type"]["ratio"], dials=dials,
+        t.update(ratio=meta["type"]["ratio"], dials=dials, shapeChosen=bool(meta["shape"].get("chosen")),
                  cPrimary=contrast(t["primary"], t["onPrimary"]), cText=contrast(t["text"], t["bg"]), cMuted=contrast(t["muted"], t["bg"]),
                  cBrandWhite=contrast(ex["brand"], "#ffffff"), brandKept=t["primary"].lower() == ex["brand"].lower())
         out["examples"].append({**{k: ex[k] for k in ("key", "name", "making", "who", "where", "feel", "brand")}, "command": " ".join(

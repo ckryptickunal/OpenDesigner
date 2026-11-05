@@ -273,7 +273,7 @@ Every foreground/background pair is tested in every mode at build time (DC-L01-2
 
 - **Line height:** ratio by size, rounded to the nearest 4px: about 1.5 for 12-16px, 1.4 for 18-24px, 1.25 for 28-40px, 1.1-1.15 for 48px and up (DC-L02-13). Compact density adds a tighter variant for short text in components (Carbon 14/18 vs 14/20) [S-L02-011].
 - **Tracking in em:** 0 at body sizes; +0.02 to +0.05em at 11-12px and for all caps; -0.01 to -0.02em from about 32px (DC-L02-14). Brand-led systems go further (Geist -0.06em at 40-72px [S-L09-625]).
-- **Weights:** three by default (400 body, 500-600 labels, 600-700 headings); light 300 only at 32px and up (DC-L02-15). Energy moves heading weight (A4). Adjacent hierarchy levels differ by at least about 10% in size or 200 in weight (DC-L15-02; the 200 is [inferred]).
+- **Weights:** three by default (400 body, 500-600 labels, 600-700 headings); light 300 only at 32px and up (DC-L02-15). Energy moves heading weight (A4); on a two-weight page (Expression 0-33) headings snap to 600, or 700 when the band gives 700 or more, and DESIGN.md's Energy line reports that weight (issue 69). Adjacent hierarchy levels differ by at least about 10% in size or 200 in weight (DC-L15-02; the 200 is [inferred]).
 - **Per-script adjustments** (DC-L02-25): line height +7% for Arabic, Bangla, Chinese, Hindi, Japanese, Korean, Thai, Vietnamese and most non-Latin scripts; +30% for Burmese and Telugu; +100% for Nastaliq (Material language heights [S-L02-006]). CJK line height 1.5 headings / 1.7 body against Latin 1.3 / 1.5, and CJK sizes one step smaller (Spectrum 2 [S-L02-021]). Tracking is zeroed for Arabic and Devanagari [S-L02-055][S-L02-056]. Emphasis uses weight, not italics or all caps, for scripts without case.
 
 ### B8. Spacing scale from a base unit
@@ -286,7 +286,7 @@ Every foreground/background pair is tested in every mode at build time (DC-L01-2
 
 ### B9. Radius from the Roundness dial
 
-1. `radius.control` from the A5 table.
+1. `radius.control` from the A5 table, when the corners are a choice: Q-shape-01, the Roundness dial set by hand, a style or a picked preset. Otherwise `formulas.radius.unchosen` keeps it between 6 and 12px, so 0 or 2px becomes 6px and 16px or full becomes 12px (owner, 2026-11-04 and 2026-11-05: subtly rounded, not square or pill, unless someone chooses it). DESIGN.md's Roundness line reports the radius the tokens hold, not the band (issue 69).
 2. Role scale [inferred ratios, checked against Atlassian]: `radius.detail = max(2, control / 2)`; `radius.container = snap(control x 1.5)`, at least 8 when control > 0; `radius.overlay = snap(container x 1.5)`; `radius.person = full`. Snap to 0, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32. Atlassian check: control 6 gives container 8 and overlay 12, matching its medium, large and xlarge roles [S-L04-016]. When control is full, containers use 16-28 (Material uses 28 for large containers; SLDS Cosmos 20). Uber deliberately squares its containers (0 on cards and modals), which the builder allows as an override [S-L09-430].
 3. Shapes under 32px tall drop one step (Fluent 2px under 32px) [S-L04-007]; Spectrum makes radius size-dependent [S-L09-221].
 4. **Nested radius:** `inner = max(outer - padding, smallest non-zero step)`. Plain `outer - padding` collapses to square when padding exceeds the radius; Apple's `ConcentricRectangle` with `concentric(minimum:)` solves the same problem (DC-L04-05 [S-L04-057][S-L04-035]). Equal radii on nested elements trigger a warning.
@@ -295,7 +295,7 @@ Every foreground/background pair is tested in every mode at build time (DC-L01-2
 
 ### B10. Elevation from the Depth dial
 
-- **Band** from A6 picks the model.
+- **Band** from A6 picks the model, unless a style or preset brings its own build (`offset`, `extruded`, `clay`), and an override replaces both. DESIGN.md's Depth line reports the model in use (issue 69).
 - **Shadow ladder** (56-80): Fluent's formula is the cleanest to generate: level n in {2, 4, 8, 16, 28, 64} = ambient `0 0 2px` + key `0 (n/2)px (n)px`, alpha 0.12 / 0.14 in light and 0.24 / 0.28 in dark [S-L09-179][S-L04-008].
 - **Default two-layer recipe** (any band with shadows): a 1px contact shadow plus a soft blur scaled to elevation, neutral-tinted (Atlassian #1E1F21, Polaris rgba(26,26,26); no Tier A system uses hue-colored shadows), alpha 8-24% in light mode; in dark mode double the alpha and add a 1px light ring on overlays (Atlassian #BDBDBD at 12%) (DC-L04-12).
 - **Tonal** (36-55): surfaces sunken, default, raised, overlay (Atlassian) or five surface containers (Material); shadows only on floating UI (DC-L04-10, DC-L04-13).

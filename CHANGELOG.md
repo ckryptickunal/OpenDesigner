@@ -8,6 +8,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **DESIGN.md's dial lines match the tokens** (2026-11-06). Each dial line now reports the value the tokens hold, such as 6 px corners rather than the 0 px band when nobody chose the corners, and says why the two differ. The tour shows both worked dials again.
 - **Chart and table tokens for data-heavy tools** (2026-11-05). Chart colors now add a one-series brand color, status colors and a 7-step diverging ramp, each 3:1 against the page, plus axis, gridline and label colors, and every export carries them. A new table question sets striped rows, a header that stays on screen and right-aligned numbers.
 - **A brand and press page from your system** (2026-11-05). `engine.py export --format brand`, also written by every build, makes `build/brand/index.html` from your tokens. It shows your logo with clear space, smallest size and do and don't examples, each colour in hex, RGB and OKLCH, your fonts, and the icon grid with your icons. Your description, facts, leadership, figures and press contact say "Not enough information" until you give them.
 - **Brand colors from your logo** (2026-11-05). `engine.py sketch --logo logo.png` (or an SVG) shows up to three colors from the logo, how much of it each one covers, and the command that confirms one. White, black and see-through parts are left out, and nothing is recorded until the person picks.

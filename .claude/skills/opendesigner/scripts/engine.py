@@ -10254,23 +10254,47 @@ def dial_side(dial, v):
             else f"leaning {L['right']}" if v < 67 else L["right"])
 
 
-def dial_words(dial, v, params, ci=None):
+def dial_words(dial, v, params, ci=None, meta=None):
+    """One DESIGN.md line per dial. Each value is the one the tokens hold (meta, from the build), and where the engine moved
+    it away from the dial's band (levers.json notes the rule), the line says so in a few words, so the two never disagree
+    unexplained (issue 69). Without meta (no build yet) it prints the band values."""
     L = {d["id"]: d for d in levers()["dials"]}[dial]
     side = dial_side(dial, v)
     pretty = re.sub(r"(?<=[a-z])([A-Z])", lambda m_: " " + m_.group(1).lower(), dial)
     head = f"**{pretty[0].upper() + pretty[1:]} {v}/100** ({L['left']} to {L['right']}: {side})"
+    m = meta or {}
+    ty, shp, mo, el = m.get("type") or {}, m.get("shape") or {}, m.get("motion") or {}, m.get("elevation") or {}
+    dens = (m.get("density") or {}).get(params["space.densityMode"]) or {}
+    px = lambda r: "full" if r == "full" or (isinstance(r, (int, float)) and r >= FULL) else f"{fmt_num(r)}px"
+    band_r, ctl = params["radius.control"], shp.get("control", params["radius.control"])
+    if px(ctl) == px(band_r):
+        radius = f"control radius {px(ctl)}"
+    elif not shp.get("chosen"):
+        u = levers()["formulas"]["radius"]["unchosen"]
+        radius = (f"control radius {px(ctl)} (the band gives {px(band_r)}; until someone picks a corner shape, Q-shape-01, corners stay "
+                  f"between {u['to']} and {u['max']}px)")
+    else:
+        radius = f"control radius {px(ctl)} (the band gives {px(band_r)}; an override or a standard sets it)"
+    band_w, hw = params["type.headingWeight"], (ty.get("weights") or {}).get("heading", params["type.headingWeight"])
+    weight = f"heading weight {hw}" + (f" (the band gives {band_w}; a page with two weights uses {hw})" if hw != band_w else "")
+    band_m, model = params["elevation.model"], el.get("model", params["elevation.model"])
+    look_m = (m.get("look") or {}).get("elevationModel")
+    depth = f"depth model: {model}" + ("" if model == band_m else
+                                       f" (the band gives {band_m}; {'the style builds its own' if model == look_m else 'an override sets it'})")
     say = {
-        "expression": f"type ratio {params['type.ratio']}, hero moments: {params['emphasis.heroMoments']}, expressive motion: "
+        "expression": f"type ratio {ty.get('ratio', params['type.ratio'])}, hero moments: {params['emphasis.heroMoments']}, expressive motion: "
                       f"{params['motion.expressiveScope']}, brand color role: {params['color.brandRole']}, containment: {params['layout.containment']}",
         "brandPresence": f"typeface suggestion: {params['type.faceSuggestion']}, brand color placement: {params['color.brandPlacement']}, "
                          f"native component share about {int(round(params['components.nativeShare'] * 100))}%, voice guidance: {params['content.voiceGuidance']}",
-        "density": f"body {params['type.baseSize.web']}px on the web, default control {params['control.height.md']}px, density mode "
-                   f"{params['space.densityMode']}, icons {params['icon.defaultSize']}px; hit areas never shrink",
-        "energy": f"standard easing {params['motion.easing.standard']}, duration multiplier {rnd(params['motion.durationMultiplier'], 2)}, "
-                  f"spring damping {rnd(params['motion.spring.spatial.dampingRatio'], 2)}, heading weight {params['type.headingWeight']}, "
+        "density": f"body {ty.get('base', params['type.baseSize.web'])}px on the web, default control "
+                   f"{(dens.get('control') or {}).get('md', params['control.height.md'])}px, density mode {params['space.densityMode']}, "
+                   f"icons {(m.get('space') or {}).get('iconDefault', params['icon.defaultSize'])}px; hit areas never shrink",
+        "energy": f"standard easing {mo.get('standard', params['motion.easing.standard'])}, duration multiplier "
+                  f"{rnd(mo.get('multiplier', params['motion.durationMultiplier']), 2)}, spring damping "
+                  f"{rnd((mo.get('spatial') or {}).get('dampingRatio', params['motion.spring.spatial.dampingRatio']), 2)}, {weight}, "
                   f"navigation: {params['chrome.navTreatment']}",
-        "roundness": f"control radius {params['radius.control']}, icon corners {params['icon.cornerStyle']}, caps {params['icon.caps']}",
-        "depth": f"depth model: {params['elevation.model']}",
+        "roundness": f"{radius}, icon corners {shp.get('iconCorners', params['icon.cornerStyle'])}, caps {shp.get('iconCaps', params['icon.caps'])}",
+        "depth": depth,
         "colorfulness": f"scheme {params['color.schemeVariant']}, accent chroma {rnd((ci or {}).get('peakHct', params['color.accentChroma.hct']), 1)} (HCT), "
                         f"{(ci or {}).get('accentCount', params['color.accentCount'])} accent(s), surfaces: {params['color.surfaces']}",
         "warmth": f"neutral tint chroma {rnd(params['color.neutral.tint.oklch'].get('c') or 0, 3)} at hue {params['color.neutral.tint.oklch'].get('h')}, "
@@ -10727,7 +10751,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             + ((" (words picked for you: " if (_decisions(d).get("taste.feelWords") or {}).get("set_by") == "delegated" else " (your words: ")
                + f"{', '.join((state.get('taste') or {}).get('feelWords') or [])})" if (state.get("taste") or {}).get("feelWords") else ""),
             "", "**Principles (ranked).**", pl, "", "**Dial positions.** Three posture dials set the overall stance. Five character dials fine-tune it.", ""]
-    body += [f"- {dial_words(k, dials[k], params, ci)}" for k in DIALS]
+    body += [f"- {dial_words(k, dials[k], params, ci, meta)}" for k in DIALS]
     body += ["", "**Zoom by area** (sketch, broad, defined, detailed). You can stop at any level; each one works.", "",
              _md_table(["Area", "Zoom", "Next questions"], [(t, zoom[k]["level"], ", ".join(zoom[k]["next"]) if zoom[k]["next"] else "-")
                                                            for k, t in ZOOM_AREAS if k != "overview"])]

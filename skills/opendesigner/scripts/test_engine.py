@@ -4894,5 +4894,67 @@ class BrandPage(unittest.TestCase):
             self.assertTrue(os.path.exists(os.path.join(d, "build", "brand", "index.html")))
 
 
+
+class DialLinesMatchTheTokens(unittest.TestCase):
+    """Issue #69: each DESIGN.md dial line reports the value the tokens hold, and says why when the engine moved it off the band."""
+
+    def lines(self, t, *sketch):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, *sketch)
+        text = design_text(t)
+        return {m.group(1): m.group(0) for m in re.finditer(r"^- \*\*(\w[\w ]*?) \d+/100\*\*.*$", text, re.M)}, e.read_json(
+            os.path.join(d, "tokens", "opendesigner.meta.json"))
+
+    def test_corners_nobody_chose(self):
+        with tempfile.TemporaryDirectory() as t:                                   # issue 69's Fernhollow
+            dl, meta = self.lines(t, "Fernhollow", "#1E3A8A", "large", "web", "calm,trustworthy")
+            self.assertEqual(meta["shape"]["control"], 6)
+            self.assertIn("control radius 6px (the band gives 0px; until someone picks a corner shape, Q-shape-01, corners stay "
+                          "between 6 and 12px)", dl["Roundness"])
+            self.assertIn("Buttons and fields have 6px corners", design_text(t))
+        with tempfile.TemporaryDirectory() as t:                                   # Pebbleday: 16 from the band, 12 in the tokens
+            dl, meta = self.lines(t, "Pebbleday", "#E0457B", "regular", "ios,web", "friendly,playful")
+            self.assertEqual(meta["shape"]["control"], 12)
+            self.assertIn("control radius 12px (the band gives 16px;", dl["Roundness"])
+
+    def test_chosen_corners_need_no_note(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Sharp", "#1E3A8A", "dense", "web", "calm")
+            quiet(e.cmd_set, d, "dials.roundness", 0, "they want square corners")
+            quiet(e.cmd_design_md, d)
+            line = next(x for x in design_text(t).splitlines() if x.startswith("- **Roundness"))
+            self.assertIn("control radius 0px, icon corners", line)
+            self.assertNotIn("the band gives", line)
+
+    def test_every_dial_line_holds_the_token_value(self):
+        states = [{"macros": ["minimal"]}, {"macros": ["serious", "authoritative"]}, {"style": "neumorphism"}, {"style": "neo-brutalism"}]
+        for spec in states:
+            with self.subTest(spec=spec):
+                st = e.default_state("T")
+                st["macros"] = spec.get("macros", [])
+                if spec.get("style"):
+                    st["answers"]["Q-dir-01"] = {"value": spec["style"]}
+                    for k, v in e.answer_effects("Q-dir-01", spec["style"], st).items():
+                        if v != e.UNSET:
+                            e.set_path(st, k, v)
+                _f, meta, _c = e.generate_system(st)
+                P = {k: v["value"] for k, v in meta["params"].items()}
+                dials = {k: (x["value"] if isinstance(x, dict) else x) for k, x in meta["dials"].items()}
+                say = lambda dial: e.dial_words(dial, dials[dial], P, meta["color"], meta)
+                ctl = meta["shape"]["control"]
+                self.assertIn(f"control radius {'full' if ctl >= e.FULL else str(ctl) + 'px'}", say("roundness"))
+                self.assertIn(f"heading weight {meta['type']['weights']['heading']}", say("energy"))
+                self.assertIn(f"depth model: {meta['elevation']['model']}", say("depth"))
+                if meta["elevation"]["model"] != P["elevation.model"]:
+                    self.assertIn("the style builds its own", say("depth"))
+
+    def test_levers_says_where_the_engine_leaves_its_band(self):
+        drives = {x["param"]: x for d in e.levers()["dials"] for x in d["drives"]}
+        for param, words in (("radius.control", "formulas.radius.unchosen"), ("type.headingWeight", "two weights"),
+                             ("elevation.model", "style or preset")):
+            self.assertIn(words, drives[param].get("note", ""), param)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)
