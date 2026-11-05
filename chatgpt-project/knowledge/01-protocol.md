@@ -112,7 +112,7 @@ Each template has a **Copy my choice** button that produces `OD:` lines. When th
 ## The engine
 ```
 python3 <skill>/scripts/engine.py init [--name "Acme"]
-python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal [--brand "#167874"] [--surfaces app:operate] [--delegated feel,brand]
+python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal [--brand "#167874"] [--logo logo.svg] [--surfaces app:operate] [--delegated feel,brand]
 python3 <skill>/scripts/engine.py feel [words...]            the feel words it knows, or how it reads theirs ("fun" is playful)
 python3 <skill>/scripts/engine.py style search|show|tiles|mix|mutate|explore|define ...   the style lab: find, show, blend, change or invent a look (style-lab.md)
 python3 <skill>/scripts/engine.py set <path> <json-value> --why "..." [--set-by delegated] [--lock]
@@ -222,7 +222,7 @@ People never pick a mode. Everyone starts with a quick sketch of the whole syste
 |---|---|---|---|
 | 0 | sketch | A complete but coarse system: every token exists, every DESIGN.md section is filled from defaults | up to 5 questions, about 3 minutes |
 | 1 | broad | One short screen for each foundation: style, density, color use, text, corners, depth, motion, and where the files live | 8 questions, about 8 minutes |
-| 2 | defined | One area at a time (for example Color: ramps, roles, contrast) | 1 to 15 questions per area |
+| 2 | defined | One area at a time (for example Color: ramps, roles, contrast) | Up to 12 questions per area |
 | 3 | detailed | Blocks, components and patterns, and the fine print of each area (`stages/*.detailed.md`) | the rest |
 
 ## Level 0: sketch (a few questions, one per message)
@@ -258,7 +258,7 @@ A sketch question that a reading answers becomes one confirm line instead of a q
 5. **Do you have a brand color or a logo?** This is Q-color-01, asked together with Q-brand-03.
    - A hex color becomes the seed (`--brand`). The engine never replaces a hex they typed. It keeps it exact on main buttons with white or dark text, whichever reads. If neither reads, fills that carry text use a readable shade and the exact color stays for the logo and large areas. It prints one line either way: pass that line on.
    - A color word ("blue"): pick a hex of that color that fits their feel words, and pass it as `--brand`.
-   - A logo file: if you can see images, find its main color. If you can't, ask "What color is your logo mostly?" Before the sketch, record it with `engine.py set raw.brandColor '"<hex>"' --set-by asset --why "main color of their logo"`, and record the logo with `engine.py set hooks.H-logo.status '"have"' --set-by asset`. Then run `sketch` without `--brand`. A second strong logo color can become a second accent later (Q-color-04, `raw.secondaryColors`).
+   - A logo file (PNG or SVG): run `sketch` with the other answers and `--logo <file>`. It writes nothing yet. It prints up to three colors from the logo, each with its share and a plain note, and the command that confirms one. Show them and let the person pick, or type their own hex. Then run that command: with `--brand` it builds and records the logo (hook H-logo). If you can see images, check the colors against the logo. For a JPEG or PDF, or when it finds no color, ask "What color is your logo mostly?" and pass that as `--brand`. A second strong logo color can become a second accent later (Q-color-04, `raw.secondaryColors`).
    - With neither, suggest 3 seed colors that fit their words, and label them as a starting point.
 
 **Don't re-ask.** Skip a question their words or files already answered ("a website" answers where it runs). Log `step_skipped --step <Q-id> --reason known`, and still pass the answer to `sketch`. Say what you took from their words in one line with the result.

@@ -4,7 +4,7 @@ seo_title: Design decisions, DESIGN.md and the overview page explained
 description: How OpenDesigner records each design decision with its reason, keeps DESIGN.md current for people and AI agents, and shows the system on one overview page.
 section: Concepts
 order: 4
-updated: 2026-10-15
+updated: 2026-11-05
 ---
 
 OpenDesigner writes every decision into a log with how it was set and why. It turns the current decisions into `DESIGN.md`, a plain-words description of your system that people and AI tools read. It also builds `overview.html`, one page that shows your whole system and marks what is still missing.
@@ -95,4 +95,4 @@ Every default traces to the research: the dial formulas in `levers.json` and the
 
 ## Known issues
 
-- Only a few core components are shown so far: buttons, a text field and a card. The overview lists 25 components as planned.
+- The overview page draws only buttons, a text field and a card, and lists the rest by name (25 in a default system). The component sheet in `opendesigner/preview/` shows more parts in their states, and the [component library](/library/) has 82.

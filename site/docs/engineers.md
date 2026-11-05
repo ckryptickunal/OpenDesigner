@@ -4,7 +4,7 @@ seo_title: OpenDesigner for engineers: tokens, CSS, Tailwind v4, Swift
 description: The tokens and code exports OpenDesigner writes, how to wire them into web, iOS and Android apps, how review finds hard-coded values, and how agents use them.
 section: Guides
 order: 3
-updated: 2026-10-15
+updated: 2026-11-05
 ---
 
 OpenDesigner turns design decisions into files you import: DTCG 2025.10 tokens, CSS variables, a Tailwind v4 theme, Swift and Jetpack Compose files, and a DTCG resolver. `engine.py review` finds values typed straight into your code that skip the tokens. `DESIGN.md` and a short note in `AGENTS.md` tell coding agents to use the tokens too.
@@ -19,6 +19,8 @@ All paths are inside `opendesigner/` in your project.
 - `build/swift/DesignTokens.swift`: SwiftUI values under `DS`.
 - `build/compose/DesignTokens.kt`: Jetpack Compose values.
 - `build/dtcg/`: one resolver file for tools that take a single entry point.
+
+`build` writes the code files for the platforms you chose: CSS and Tailwind for the web, Swift for iOS, Compose for Android. For another one, run `engine.py export --format swift` (or `compose`, `css`, `tailwind`, `all`).
 
 Never edit an export by hand. Change the decision and rebuild, and every export updates together.
 
@@ -116,11 +118,11 @@ At the end of a session, OpenDesigner asks whether to add a short note to your `
 
 ## About the engine
 
-The engine is one Python file that needs Python 3.10 or newer. It uses only the standard library and makes no network calls. The same `state.json` gives the same tokens. It has 157 tests, which pass on the maintainer's computer. No CI runs are recorded yet.
+The engine is one Python file that needs Python 3.10 or newer. It uses only the standard library and makes no network calls. The same `state.json` gives the same tokens. It has more than 200 tests, which pass on the maintainer's computer. No CI runs are recorded yet.
 
 ## Not yet
 
 - No direct React Native or Flutter export.
-- Only buttons, a text field and a card are previewed as components.
+- The overview draws only buttons, a text field and a card. The component sheet shows more, and the optional [component library](/library/) has 82 finished components built on the tokens.
 
 See [Engine commands](/docs/engine/) and [Export](/docs/export/) for more.

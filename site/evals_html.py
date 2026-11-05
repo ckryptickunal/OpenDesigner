@@ -44,7 +44,7 @@ def _table(head, rows, cls=""):
 
 
 LABELS = {"builds": "builds", "no-errors": "no validation errors", "text-contrast": "text contrast 4.5:1", "ui-contrast": "borders and focus 3:1",
-          "targets": "target sizes", "brand-kept": "brand color kept exactly", "exports": "every export written", "design-md": "DESIGN.md written",
+          "targets": "target sizes", "brand-kept": "brand color kept exactly", "exports": "the exports its platforms need", "design-md": "DESIGN.md written",
           "same-twice": "same result twice", "type-steps": "type sizes 10% apart", "button-visible": "primary button stands out 3:1",
           "says-so": "the engine warns about each miss"}
 

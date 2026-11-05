@@ -25,13 +25,13 @@ It is packaged for Claude Code, the Claude app, ChatGPT (as a Project), and for 
 
 ### Does it send my code or data anywhere?
 
-The engine runs on your computer, uses Python's standard library and makes no network calls. Your chat still goes to whichever AI provider you use, as with any prompt. The illustration skill searches open-licence art sites, but only when you use it. In the Claude app, the scripts run in Claude's code-execution sandbox.
+The engine runs on your computer, uses Python's standard library and makes no network calls. Your chat still goes to whichever AI provider you use, as with any prompt. The illustration skill searches open-licence art and photo sites, but only when you use it. Library parts with a photo load it from Unsplash. In the Claude app, the scripts run in Claude's code-execution sandbox.
 
 The private log of your steps is off unless you say yes, and it stays in your project. Anonymous reports to the maintainers are a separate yes, and no server collects them yet, so nothing is sent today. See the [privacy page](https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/PRIVACY.md).
 
 ### How long does it take?
 
-The sketch is up to five questions. Its planned length is about 3 minutes, but nobody has timed real people yet. The engine part takes about two seconds. After that, you zoom in only where you want to. See [Zoom levels](/docs/zoom-levels/).
+The sketch is up to five questions. Its planned length is about 3 minutes, but nobody has timed real people yet. The engine part takes a few seconds. After that, you zoom in only where you want to. See [Zoom levels](/docs/zoom-levels/).
 
 ### How is it different from a shadcn theme generator?
 
