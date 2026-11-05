@@ -4763,20 +4763,20 @@ class BuildFormats(unittest.TestCase):
     def test_web_gets_css_and_tailwind_and_says_what_it_left_out(self):
         with tempfile.TemporaryDirectory() as t:
             d, out, built = self.build_dir(t, "web")
-            self.assertEqual(built, ["artifact", "css", "dtcg", "figma", "paper", "tailwind"])
-            self.assertIn("build/ (css, tailwind, figma, paper, dtcg, artifact)", out)
+            self.assertEqual(built, ["artifact", "brand", "css", "dtcg", "figma", "paper", "tailwind"])
+            self.assertIn("build/ (css, tailwind, figma, paper, dtcg, artifact, brand)", out)
             self.assertIn("Not written: swift and compose, because it runs on web (Q-plat-01). To write one anyway: "
                           "engine.py export --format swift.", out)
             agents = next(ln for ln in design_section(t, "For Agents").splitlines() if ln.startswith("2. "))
             self.assertNotIn("Swift", agents)
             self.assertNotIn("Compose", agents)
             quiet(e.main, ["export", "--dir", d, "--format", "all"])
-            self.assertEqual(len(os.listdir(os.path.join(d, "build"))), 8)
+            self.assertEqual(len(os.listdir(os.path.join(d, "build"))), len(e.EXPORT_FORMATS))
 
     def test_ios_gets_swift_only(self):
         with tempfile.TemporaryDirectory() as t:
             d, out, built = self.build_dir(t, "ios")
-            self.assertEqual(built, ["artifact", "dtcg", "figma", "paper", "swift"])
+            self.assertEqual(built, ["artifact", "brand", "dtcg", "figma", "paper", "swift"])
             agents = next(ln for ln in design_section(t, "For Agents").splitlines() if ln.startswith("2. "))
             self.assertEqual(agents, "2. Use tokens, never raw values: `DS.*` in Swift.")
 
@@ -4850,6 +4850,167 @@ class NearBlackAndPlatformChanges(unittest.TestCase):
             st = e.load_state(d)
             self.assertEqual(st["overrides"]["size.target.touch"], {"value": 44, "unit": "px"})
             self.assertTrue(e.is_locked(st, "overrides.size.target.touch"))
+
+LOGO_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="#167874"/></svg>'
+ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="6" width="12" height="10"/></svg>'
+
+
+class BrandPage(unittest.TestCase):
+    """Issue 49: export --format brand writes a brand and press page from the system. Owner facts stay 'Not enough
+    information' until the person gives them; logos and icons are only the person's own files; font files never ship."""
+
+    def sketch(self, t, **files):
+        write_tree(t, files)
+        d = os.path.join(t, "opendesigner")
+        with contextlib.redirect_stdout(io.StringIO()):
+            e.cmd_sketch(d, "Fennel", "#167874", "regular", "web", "calm", quiet=True)
+        return d
+
+    def page(self, d):
+        with contextlib.redirect_stdout(io.StringIO()):
+            e.cmd_export(d, "brand")
+        with open(os.path.join(d, "build", "brand", "index.html"), encoding="utf-8") as f:
+            return f.read()
+
+    def put(self, d, path, value, set_by=None):
+        with contextlib.redirect_stdout(io.StringIO()):
+            e.cmd_set(d, path, value, "their words", quiet=True, set_by=set_by)
+
+    def test_a_bare_sketch_shows_placeholders_and_invents_nothing(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t)
+            html = self.page(d)
+            for key, label, _h in e.PRESS_FIELDS:
+                self.assertIn(f"context.press.{key}", html)                       # each fact says what fills it
+            self.assertGreaterEqual(html.count('<div class="bp-missing">'), len(e.PRESS_FIELDS) + 3)  # plus logo, icons, voice
+            self.assertIn("Q-brand-03 and the H-logo asset", html)
+            self.assertNotIn("<img", html)                                       # no logo or icon that the person did not give
+            self.assertFalse(os.path.exists(os.path.join(d, "build", "brand", "assets")))
+            self.assertIn("--ds-color-surface-base", html)                       # built from the system's own tokens
+            self.assertIn("#167874", html.split("</style>", 1)[1])                # the brand colour, with RGB and OKLCH
+            self.assertRegex(html, r"RGB 22 120 116<br>OKLCH [\d.]+% [\d.]+ \d+")
+            self.assertEqual(html.count('class="bp-tag bp-default"'), 2)          # both logo rules: Default until confirmed
+            self.assertNotIn("fonts.googleapis.com", html)                        # the system font needs no link
+
+    def test_a_full_system_uses_only_what_the_person_gave(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, **{"brand/logo.svg": LOGO_SVG, "icons/truck.svg": ICON_SVG, "fonts/Brand.woff2": "not a font"})
+            self.put(d, "hooks.H-logo.files", ["brand/logo.svg"], "asset")
+            self.put(d, "hooks.H-icons.files", ["icons/truck.svg"], "asset")
+            self.put(d, "hooks.H-type.files", ["fonts/Brand.woff2"], "asset")
+            self.put(d, "hooks.H-icons.library", "lucide")
+            self.put(d, "hooks.H-logo.clearSpace", 0.75)
+            self.put(d, "context.press.boilerplate", "Fennel helps freight teams book pickups in one place.")
+            self.put(d, "context.press.facts", ["Founded in 2024"], "assumed")      # assumed is not the person's: not shown
+            self.put(d, "answers.Q-site-03", [{"kind": "figures", "what": "40% fewer missed pickups", "qualifier": "one client, six months"},
+                                               {"kind": "figures", "what": "2x faster booking"}])
+            self.put(d, "answers.Q-voice-01", "plainspoken")
+            self.put(d, "raw.textFace", "Inter")
+            html = self.page(d)
+            self.assertIn('href="https://fonts.googleapis.com/css2?family=Inter:wght@', html)  # an open face shows as itself
+            self.put(d, "raw.textFace", "Brand Grotesk")                          # a face only the owner has: a note, no file
+            self.assertIn("Brand Grotesk is not installed on this computer", self.page(d))
+            assets = os.path.join(d, "build", "brand", "assets")
+            self.assertEqual(sorted(os.listdir(assets)), ["icons", "logo"])        # the font file is never shipped
+            with open(os.path.join(assets, "logo", "logo.svg"), encoding="utf-8") as f:
+                self.assertEqual(f.read(), LOGO_SVG)
+            self.assertIn('href="assets/icons/truck.svg" download', html)
+            self.assertIn("Fennel helps freight teams book pickups in one place.", html)
+            self.assertNotIn("Founded in 2024", html)
+            self.assertIn("40% fewer missed pickups (one client, six months)", html)
+            self.assertIn("2x faster booking <span", html)                       # a figure with no qualifier is flagged
+            self.assertIn("no qualifier yet", html)
+            self.assertIn("0.75 × the logo", html)
+            self.assertEqual(html.count('class="bp-tag bp-chosen"'), 1)           # clear space chosen, smallest size still Default
+            self.assertIn("Do and don", html)
+            self.assertIn("<b>Lucide</b>, ISC licence", html)
+            self.assertIn("It is not bundled here", html)
+            self.assertNotIn("Mailchimp", html)                                  # a reference's name is never the brand's voice
+            self.assertIn("Plainspoken", html)
+            self.put(d, "hooks.H-icons.files", [], "asset")                       # a file the person removed leaves the page
+            self.page(d)
+            self.assertFalse(os.path.exists(os.path.join(assets, "icons")))
+
+    def test_logo_rules_and_library_are_checked(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t)
+            for path, v in (("hooks.H-logo.clearSpace", 9), ("hooks.H-logo.minSize", 4), ("hooks.H-logo.minSize", {"badge": 20}),
+                            ("hooks.H-icons.library", "Lucide Icons!")):
+                with self.assertRaises(SystemExit) as cm:
+                    e.cmd_set(d, path, v, "test", quiet=True)
+                self.assertIn("Nothing was changed", str(cm.exception))
+            self.put(d, "hooks.H-logo.minSize", 20)
+            self.assertEqual(e.logo_rules(e.load_state(d), e._decisions(d))["minSize"], ({"symbol": 20, "lockup": 24}, "chosen"))
+
+    def test_build_writes_it_for_every_platform(self):
+        self.assertIn("brand", e.NEUTRAL_FORMATS)
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            code, out = run_cli("sketch", "--dir", d, "--name", "Fern", "--audience", "regular", "--platforms", "ios", "--feel", "calm")
+            self.assertEqual(code, 0, out)
+            self.assertTrue(os.path.exists(os.path.join(d, "build", "brand", "index.html")))
+
+
+
+class DialLinesMatchTheTokens(unittest.TestCase):
+    """Issue #69: each DESIGN.md dial line reports the value the tokens hold, and says why when the engine moved it off the band."""
+
+    def lines(self, t, *sketch):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, *sketch)
+        text = design_text(t)
+        return {m.group(1): m.group(0) for m in re.finditer(r"^- \*\*(\w[\w ]*?) \d+/100\*\*.*$", text, re.M)}, e.read_json(
+            os.path.join(d, "tokens", "opendesigner.meta.json"))
+
+    def test_corners_nobody_chose(self):
+        with tempfile.TemporaryDirectory() as t:                                   # issue 69's Fernhollow
+            dl, meta = self.lines(t, "Fernhollow", "#1E3A8A", "large", "web", "calm,trustworthy")
+            self.assertEqual(meta["shape"]["control"], 6)
+            self.assertIn("control radius 6px (the band gives 0px; until someone picks a corner shape, Q-shape-01, corners stay "
+                          "between 6 and 12px)", dl["Roundness"])
+            self.assertIn("Buttons and fields have 6px corners", design_text(t))
+        with tempfile.TemporaryDirectory() as t:                                   # Pebbleday: 16 from the band, 12 in the tokens
+            dl, meta = self.lines(t, "Pebbleday", "#E0457B", "regular", "ios,web", "friendly,playful")
+            self.assertEqual(meta["shape"]["control"], 12)
+            self.assertIn("control radius 12px (the band gives 16px;", dl["Roundness"])
+
+    def test_chosen_corners_need_no_note(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Sharp", "#1E3A8A", "dense", "web", "calm")
+            quiet(e.cmd_set, d, "dials.roundness", 0, "they want square corners")
+            quiet(e.cmd_design_md, d)
+            line = next(x for x in design_text(t).splitlines() if x.startswith("- **Roundness"))
+            self.assertIn("control radius 0px, icon corners", line)
+            self.assertNotIn("the band gives", line)
+
+    def test_every_dial_line_holds_the_token_value(self):
+        states = [{"macros": ["minimal"]}, {"macros": ["serious", "authoritative"]}, {"style": "neumorphism"}, {"style": "neo-brutalism"}]
+        for spec in states:
+            with self.subTest(spec=spec):
+                st = e.default_state("T")
+                st["macros"] = spec.get("macros", [])
+                if spec.get("style"):
+                    st["answers"]["Q-dir-01"] = {"value": spec["style"]}
+                    for k, v in e.answer_effects("Q-dir-01", spec["style"], st).items():
+                        if v != e.UNSET:
+                            e.set_path(st, k, v)
+                _f, meta, _c = e.generate_system(st)
+                P = {k: v["value"] for k, v in meta["params"].items()}
+                dials = {k: (x["value"] if isinstance(x, dict) else x) for k, x in meta["dials"].items()}
+                say = lambda dial: e.dial_words(dial, dials[dial], P, meta["color"], meta)
+                ctl = meta["shape"]["control"]
+                self.assertIn(f"control radius {'full' if ctl >= e.FULL else str(ctl) + 'px'}", say("roundness"))
+                self.assertIn(f"heading weight {meta['type']['weights']['heading']}", say("energy"))
+                self.assertIn(f"depth model: {meta['elevation']['model']}", say("depth"))
+                if meta["elevation"]["model"] != P["elevation.model"]:
+                    self.assertIn("the style builds its own", say("depth"))
+
+    def test_levers_says_where_the_engine_leaves_its_band(self):
+        drives = {x["param"]: x for d in e.levers()["dials"] for x in d["drives"]}
+        for param, words in (("radius.control", "formulas.radius.unchosen"), ("type.headingWeight", "two weights"),
+                             ("elevation.model", "style or preset")):
+            self.assertIn(words, drives[param].get("note", ""), param)
 
 
 if __name__ == "__main__":

@@ -46,7 +46,7 @@
 
 ## What lands in your repo
 
-`DESIGN.md`, `PRODUCT.md`, design tokens (DTCG), CSS, Tailwind, Figma, Swift and Compose exports, and a log of every choice with its reason.
+`DESIGN.md`, `PRODUCT.md`, design tokens (DTCG), CSS, Tailwind, Figma, Swift and Compose exports, a brand and press page, and a log of every choice with its reason.
 
 ## Quickstart
 

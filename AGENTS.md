@@ -66,7 +66,7 @@ python3 skills/opendesigner/scripts/engine.py pick Q-shape-01 subtle --why "dens
 python3 skills/opendesigner/scripts/engine.py set dials.roundness 45 --why "..."   (--set-by delegated, --lock)
 python3 skills/opendesigner/scripts/engine.py generate && python3 skills/opendesigner/scripts/engine.py validate
 python3 skills/opendesigner/scripts/engine.py design-md        (DESIGN.md and PRODUCT.md at the project root)
-python3 skills/opendesigner/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|all
+python3 skills/opendesigner/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|brand|all
 python3 skills/opendesigner/scripts/engine.py build     (generate + validate; if no errors: exports + DESIGN.md + overview + preview; --force exports anyway)
 python3 skills/opendesigner/scripts/engine.py overview --open   (overview.html: the person's whole system on one page; what is missing says "Not enough information")
 python3 skills/opendesigner/scripts/engine.py review    (end of every implementation: hard-coded values, whether tokens are in charge, a system behind the code, standards, stale DESIGN.md; reports only, edits nothing)
@@ -89,7 +89,7 @@ Use the skill's own folder path when it is installed elsewhere (for example a pl
 - Checks report; they never rewrite the person's UI. A fix to code that already exists waits for their yes.
 - Say what has shipped and what is planned apart. A claim in a doc must match the repo today (`README.md` "Status").
 - Durable outputs go in the person's repo:
-  - `opendesigner/tokens/` (DTCG 2025.10, canonical) and `opendesigner/build/` (exports, including `build/artifact/`: the system as a Claude Design System artifact's files)
+  - `opendesigner/tokens/` (DTCG 2025.10, canonical) and `opendesigner/build/` (exports, including `build/artifact/`: the system as a Claude Design System artifact's files, and `build/brand/`: a brand and press page)
   - `opendesigner/overview.html`: the person's own design-system page, rebuilt by every `build`, with the visual templates filled in `opendesigner/preview/`
   - `DESIGN.md` and `PRODUCT.md` at the project root
   - `opendesigner/decisions.md`, `opendesigner/state.json`, `opendesigner/RATIONALE.md`

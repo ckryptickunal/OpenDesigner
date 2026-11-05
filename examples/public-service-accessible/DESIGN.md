@@ -64,7 +64,7 @@ Designers: visual style: flat, tonal, glass · Code: `preset in state.json`
 - **Brand presence 85/100** (native to brand-led: brand-led): typeface suggestion: proprietary-brand-face, brand color placement: large-surfaces+custom-components, native component share about 24%, voice guidance: full.
 - **Density 8/100** (spacious to compact: spacious): body 19px on the web, default control 48px, density mode spacious, icons 24px; hit areas never shrink.
 - **Energy 0/100** (calm to energetic: calm): standard easing [0.2, 0, 0.38, 0.9], duration multiplier 0.8, spring damping 1.0, heading weight 600, navigation: recessive.
-- **Roundness 0/100** (sharp to soft: sharp): control radius 0, icon corners sharp, caps square.
+- **Roundness 0/100** (sharp to soft: sharp): control radius 0px, icon corners sharp, caps square.
 - **Depth 5/100** (flat to deep: flat): depth model: borders.
 - **Colorfulness 35/100** (monochrome to vivid: leaning monochrome): scheme neutral, accent chroma 31.5 (HCT), 1 accent(s), surfaces: neutral+one-accent.
 - **Warmth 45/100** (cool/formal to warm/friendly: balanced): neutral tint chroma 0.005 at hue 264, borders: default, sentence-case, contractions allowed.
