@@ -4,7 +4,7 @@ seo_title: The eight design dials in OpenDesigner and what each sets
 description: OpenDesigner's eight dials, from Expression to Warmth: what each end means, the values each dial drives, how feel words move them, and their limits.
 section: Reference
 order: 4
-updated: 2026-10-14
+updated: 2026-11-06
 ---
 
 OpenDesigner sets most of a design system's look with eight dials. Each dial is a slider from 0 to 100, and each position maps to concrete values, such as a type scale ratio or a corner radius. Three posture dials set the overall stance, and five character dials tune the details.
@@ -79,9 +79,13 @@ How lively the interface feels in motion and intensity. It drives spring damping
 
 The corner radius of the default control, and everything made from it. It runs from 0 px through 2, 4, 6, 8, 12 and 16 px to fully round. It also sets icon corners and line caps, and whether a rounded display face is suggested.
 
+That full range is for corners someone chose: the corner question, this dial set by hand, or a style. Until then, buttons and fields stay between 6 and 12 px, because feel words alone never make square or pill buttons. The Roundness line in `DESIGN.md` shows the radius your tokens hold.
+
 ### Depth: flat to deep
 
 How strongly surfaces stand apart. From the flat end, the model goes from borders, to a ring with a faint shadow, to tonal layers, to a ladder of shadows, to materials. It also sets how strong the shadows are in light mode. In dark mode, raised surfaces get lighter instead.
+
+Some styles bring their own depth, such as the raised surfaces of neumorphism or the solid offset shadows of neo-brutalism. Then the Depth line in `DESIGN.md` names that model.
 
 ### Colorfulness: monochrome to vivid
 
