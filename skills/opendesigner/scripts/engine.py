@@ -4480,7 +4480,7 @@ _R = {
                Q-motion-09 Q-voice-03 Q-form-01 Q-state-04 Q-ai-01 Q-icon-02 Q-color-23 Q-state-02""",
     "owner": """Q-scope-01 Q-scope-02 Q-scope-03 Q-scope-04 Q-scope-05 Q-scope-07 Q-tool-01 Q-tool-02 Q-tool-04 Q-gov-01 Q-gov-02 Q-gov-03 Q-gov-04 Q-gov-05
                 Q-gov-06 Q-gov-07 Q-dist-01 Q-dist-02 Q-dist-03 Q-dist-04 Q-pref-01 Q-pref-02 Q-pref-03 Q-plat-07 Q-plat-08 Q-plat-09
-                Q-comp-01 Q-comp-02 Q-aud-02 Q-brand-07""",
+                Q-comp-01 Q-comp-02 Q-aud-02 Q-brand-07 Q-site-01 Q-site-02 Q-site-03 Q-site-04 Q-site-05""",
     "hook": "Q-brand-03 Q-brand-08 Q-icon-01 Q-icon-06 Q-img-01 Q-img-04 Q-img-06 Q-img-07 Q-motion-08 Q-voice-01 Q-type-02",
     "reference": "Q-ref-01",
     "export": "Q-type-17 Q-tool-03 Q-shape-04",
@@ -5260,6 +5260,10 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
             path = "zoom.all"
     if path == "profile.voice" and value not in VOICES:
         raise SystemExit(f"profile.voice is one of {', '.join(VOICES)}")
+    if path.startswith("answers.Q-site-"):  # the site brief (issue 48): one row per role, proof or page family
+        bad = site_problem(path.split(".", 1)[1], value)
+        if bad:
+            raise SystemExit(f"Nothing was changed: {bad}")
     m = re.match(r"^hooks\.(H-[a-z]+)\.status$", path)
     if m and value not in HOOK_STATUSES:
         raise SystemExit(f"hook status must be one of {', '.join(HOOK_STATUSES)}")
@@ -6037,6 +6041,79 @@ def _dark_mode(root, style_files, code_files, deps, app_json):
     return None
 
 
+# The site brief's readings (issue 48): page families from route names, languages from <html lang>, locale folders and
+# next.config. Recorded only for a site that persuades (record_project); detect always prints them.
+SITE_FAMILY_WORDS = {
+    "platform": {"product", "products", "platform", "features", "feature", "integrations", "capabilities", "modules"},
+    "industry": {"industries", "industry", "solutions", "use-cases", "usecases", "sectors", "verticals"},
+    "explainer": {"how-it-works", "guides", "guide", "learn", "blog", "resources", "articles", "insights", "faq", "faqs", "glossary",
+                  "academy"},
+    "company": {"about", "about-us", "company", "team", "careers", "jobs", "contact", "contact-us", "customers", "case-studies",
+                "casestudies", "stories", "testimonials", "press", "partners"},
+    "pricing": {"pricing", "plans"},
+    "legal": {"privacy", "privacy-policy", "terms", "terms-of-service", "tos", "legal", "cookies", "cookie-policy", "security", "trust",
+              "imprint", "impressum", "gdpr", "dpa", "accessibility"},
+}
+ROUTE_RX = re.compile(r"^(?:src/)?(?:app|pages|routes)/(.+?)(?:/(?:page|index|\+page)\.\w+|\.(?:tsx|jsx|ts|js|mdx|md|astro|vue|svelte))$")
+LANG_RX = re.compile(r"^[a-z]{2}(?:[-_][a-z]{2,4})?$", re.I)  # two-letter codes only: a three-letter file name is rarely a language
+LOCALE_DIRS = {"locales", "locale", "i18n", "messages", "lang", "langs", "translations"}
+
+
+def _site_family(segment):
+    s = segment.lower()
+    if s.startswith("for-"):
+        return "industry"
+    return next((fam for fam, words in SITE_FAMILY_WORDS.items() if s in words), None)
+
+
+def site_readings(root, files):
+    """[(path, value, source, why)] for the site brief: page families (Q-site-05) and languages (Q-site-04)."""
+    out, fams = [], {}
+    for f in files:
+        p = f.replace(os.sep, "/")
+        m = ROUTE_RX.match(p)
+        if m:
+            segs = [s for s in m.group(1).split("/") if not re.fullmatch(r"\(.*\)|\[.*\]|_.*|api", s)]
+        elif p.lower().endswith((".html", ".htm")) and p.count("/") <= 2:
+            segs = [s for s in re.sub(r"^(public|static|site|docs|dist)/", "", p).rsplit(".", 1)[0].split("/") if s != "index"]
+        else:
+            continue
+        fam = _site_family(segs[0]) if segs else None
+        if fam:
+            fams.setdefault(fam, p)
+    if fams:
+        order = [k for k in SITE_FAMILY_WORDS if k in fams]
+        ex = ", ".join(fams[k] for k in order[:3])
+        out.append(("answers.Q-site-05", order, ex, f"read from the page routes ({ex})"))
+    langs, srcs = [], []
+
+    def add(code, src):
+        if LANG_RX.match(code) and code.lower() not in {x.lower() for x in langs}:
+            langs.append(code)
+            if src not in srcs:
+                srcs.append(src)
+    for f in files:
+        p = f.replace(os.sep, "/")
+        parts = p.split("/")
+        low = [x.lower() for x in parts]
+        if p.lower().endswith((".html", ".htm")) or re.search(r"(^|/)app/layout\.(t|j)sx?$", p):
+            m = re.search(r"<html[^>]*\blang=[\"'{]*([A-Za-z_-]{2,8})", _read(root, f, 20_000))
+            if m:
+                add(m.group(1), p)
+        elif re.fullmatch(r"next\.config\.(js|mjs|ts|cjs)", parts[-1]):
+            m = re.search(r"\blocales\s*:\s*\[([^\]]{1,300})\]", _read(root, f, 50_000))
+            for code in re.findall(r"[\"']([A-Za-z_-]{2,8})[\"']", m.group(1)) if m else []:
+                add(code, p)
+        for i, part in enumerate(low[:-1]):
+            if part in LOCALE_DIRS and i + 1 < len(parts):
+                child = parts[i + 1] if i + 2 < len(parts) else parts[i + 1].rsplit(".", 1)[0]
+                if parts[-1].lower().endswith((".json", ".yml", ".yaml", ".po", ".ftl", ".ts", ".js")):
+                    add(child, "/".join(parts[:i + 1]) + "/")
+    if langs:
+        out.append(("answers.Q-site-04", {"languages": langs}, ", ".join(srcs[:3]), f"read from {', '.join(srcs[:3])}"))
+    return out
+
+
 def detect_project(root, state_dir=None):
     """What the project folder already says, read-only: {findings: [{path, value, source, why}], notes: [...], readme,
     files, capped}. Each finding is a state path the agent would otherwise ask about (zoom.md, level 0); notes are weaker
@@ -6194,6 +6271,8 @@ def detect_project(root, state_dir=None):
         n = len(notes_files)
         put("answers.Q-scope-07", "idea", "notes, no code", f"read from the repo: {n} note{'s' if n != 1 else ''} "
             f"({', '.join(notes_files[:2])}) and no code yet")
+    for path, value, source, why in site_readings(root, files):  # recorded only for a site that persuades (record_project)
+        put(path, value, source, why)
     if capped:
         notes.append(f"the folder has more than {DETECT_MAX_FILES} files, so only the first {DETECT_MAX_FILES} were read")
     return {"root": root, "findings": found, "notes": notes, "files": len(files), "capped": capped,
@@ -6202,7 +6281,7 @@ def detect_project(root, state_dir=None):
 
 DETECT_LABELS = {"name": "name", "context.product": "what it is", "answers.Q-plat-01": "where it runs", "raw.stack": "code stack",
                  "raw.brandColor": "brand colour", "raw.textFace": "font", "answers.Q-theme-01": "light and dark",
-                 "answers.Q-scope-07": "phase"}
+                 "answers.Q-scope-07": "phase", "answers.Q-site-04": "site languages", "answers.Q-site-05": "page families"}
 
 
 def detect_value_words(path, value):
@@ -6214,6 +6293,10 @@ def detect_value_words(path, value):
         return f"{str(value).upper()} ({color_words(value)})"
     if path == "raw.stack" and not value:
         return "no UI framework"
+    if path == "answers.Q-site-04" and isinstance(value, dict):
+        return ", ".join(value.get("languages") or [])
+    if path == "answers.Q-site-05" and isinstance(value, list):
+        return ", ".join(option_label("Q-site-05", x) or x for x in value)
     if isinstance(value, list):
         return ", ".join(str(x) for x in value)
     return str(value)
@@ -6242,6 +6325,8 @@ def record_project(d, quiet=True):
     for f in got["findings"]:
         if _already_set(state, decs, f["path"]) or std_holders(state, f["path"]) or is_locked(state, f["path"]):
             continue
+        if f["path"].startswith("answers.Q-site-") and not site_surface(state):
+            continue  # the site brief is only for a site that persuades
         why = f["why"] + "; say if that's wrong"
         try:
             cmd_set(d, f["path"], f["value"], why, quiet=True, set_by="assumed", resync=False,
@@ -9521,9 +9606,9 @@ def cmd_export(d, fmt, files=None, meta=None, quiet=False):
 DESIGN_SECTIONS = ["Overview", "Colors", "Typography", "Layout", "Elevation & Depth", "Shapes", "Components", "Do's and Don'ts",
                    "Motion", "Modes and Themes", "Iconography and Imagery", "Content and Voice", "Accessibility",
                    "Platforms and Devices", "Decisions", "Open Items", "For Agents"]
-PRODUCT_SECTIONS = ["Product", "Audience", "Users", "Surfaces", "Memorable Thing", "Principles", "Constraints", "Scope", "Team and Governance"]
+PRODUCT_SECTIONS = ["Product", "Audience", "Users", "Site brief", "Surfaces", "Memorable Thing", "Principles", "Constraints", "Scope", "Team and Governance"]
 SECTION_PATHS = {  # which decisions each DESIGN.md section rests on
-    "Overview": r"^(dials\.(expression|brandPresence|density)|preset|macros|answers\.Q-(aud|brand|dir|scope)-)",
+    "Overview": r"^(dials\.(expression|brandPresence|density)|preset|macros|answers\.Q-(aud|brand|dir|scope|site)-)",
     "Colors": r"^(dials\.(colorfulness|warmth)|raw\.(brandColor|primaryActionColor|focusColor|neutralBase|secondaryColors|contrastTarget|flags)|answers\.Q-(color|theme)-)",
     "Typography": r"^(raw\.(textFace|displayFace|monoFace|baseSize|scripts|marketingSurfaces)|overrides\.type|answers\.Q-type-)",
     "Layout": r"^(dials\.density|raw\.(spaceUnit|inputs|minTarget)|answers\.Q-(space|layout)-)",
@@ -10644,6 +10729,119 @@ def positioning_md(state):
     return "\n".join(lines).strip() or f"{NOT_ENOUGH}. The positioning step fills this in: engine.py research positioning draft."
 
 
+# The site brief (issue 48): what a site that persuades must do, for whom, with what proof, how it is found, and its page
+# families. Asked at zoom 1, only for such a site (questions.json "when": "persuade"). Each line is the person's answer,
+# a reading from their repo marked assumed, or "Not enough information" with the question that fills it. Proof is never drafted.
+SITE_BRIEF = [("Q-site-01", "Goal", "what the site must achieve, and how it is counted"),
+              ("Q-site-02", "Roles to convince", "and what each needs to see"),
+              ("Q-site-03", "Proof we can show", "only what the person gave"),
+              ("Q-site-04", "How people find it", "channels, languages and the questions it answers"),
+              ("Q-site-05", "Page families", "the kinds of pages, each with one layout")]
+SITE_DISCOVERY_KEYS = ("channels", "languages", "questions")
+
+
+def site_surface(state):
+    """True when a surface persuades: Q-scope-06 names a Persuade surface, or Q-scope-01 puts a marketing site in scope."""
+    ans = state.get("answers") or {}
+    if any(x["mode"] == "Persuade" for x in surface_list(answer_value(ans.get("Q-scope-06")))):
+        return True
+    scope = answer_value(ans.get("Q-scope-01"))
+    return "marketing" in (scope if isinstance(scope, list) else [scope])
+
+
+def _texts(v):
+    return isinstance(v, list) and all(isinstance(x, str) for x in v)
+
+
+def site_problem(qid, v):
+    """Why a site-brief answer has the wrong shape, or None. Free words are always fine; lists keep one item per row."""
+    rows = v if isinstance(v, list) else [v]
+    if qid == "Q-site-01":
+        ok = (isinstance(v, str) and v.strip()) or (isinstance(v, dict) and set(v) <= {"goal", "measure"} and v.get("goal")
+                                                     and all(isinstance(x, str) for x in v.values()))
+        return None if ok else 'Q-site-01 takes the goal in their words, or {"goal": "demos", "measure": "ten a month from heads of operations"}.'
+    if qid == "Q-site-02":
+        ok = all((isinstance(r, str) and r.strip()) or (isinstance(r, dict) and isinstance(r.get("role"), str) and r["role"].strip()
+                                                         and set(r) <= {"role", "needs"} and isinstance(r.get("needs", ""), str))
+                 for r in rows) and rows
+        return None if ok else 'Q-site-02 takes a list of roles: [{"role": "operations head", "needs": "the outcome in numbers"}, ...].'
+    if qid == "Q-site-03":
+        ok = all((isinstance(r, str) and r.strip()) or (isinstance(r, dict) and isinstance(r.get("what"), str) and r["what"].strip()
+                                                         and set(r) <= {"kind", "what", "qualifier"}
+                                                         and all(isinstance(x, str) for x in r.values()))
+                 for r in rows) and rows
+        return None if ok else ('Q-site-03 takes the proof in their words: [{"kind": "figures", "what": "40% fewer missed shipments", '
+                                '"qualifier": "one client, six months, against the year before"}, ...], or none-yet.')
+    if qid == "Q-site-04":
+        ok = _texts(v) or (isinstance(v, dict) and v and set(v) <= set(SITE_DISCOVERY_KEYS) and all(_texts(x) for x in v.values()))
+        return None if ok else 'Q-site-04 takes {"channels": ["search", "generative"], "languages": ["en", "de"], "questions": ["..."]}.'
+    if qid == "Q-site-05":
+        return None if (_texts(rows) and rows and all(x.strip() for x in rows)) else 'Q-site-05 takes a list of page families, for example ["platform", "company", "legal"].'
+    return None
+
+
+def _proof_line(r):
+    if isinstance(r, str):
+        return "Nothing to show yet: pages leave proof sections out." if r == "none-yet" else r
+    what, q = r.get("what", "").strip(), (r.get("qualifier") or "").strip()
+    figure = r.get("kind") == "figures" or re.search(r"\d", what)
+    return what + (f" ({q})" if q else " *(no qualifier yet: for whom, over what time, compared with what)*" if figure else "")
+
+
+def site_brief_lines(state, decs=None):
+    """[(qid, label, hint, [lines] or None)] for the site brief. None means nobody answered and nothing fills it."""
+    ans = state.get("answers") or {}
+    out = []
+    for qid, label, hint in SITE_BRIEF:
+        v = answer_value(ans.get(qid)) if qid in ans else None
+        lines = None
+        if qid == "Q-site-01" and v:
+            if isinstance(v, dict):
+                lines = [(option_label(qid, v["goal"]) or v["goal"]) + (f"; counted as {v['measure']}" if v.get("measure") else "")]
+            else:
+                lines = [option_label(qid, v) or v]
+        elif qid == "Q-site-02" and v:
+            rows = v if isinstance(v, list) else [v]
+            lines = [(f"{r['role']}: {r['needs']}" if r.get("needs") else r["role"]) if isinstance(r, dict) else option_label(qid, r) or r
+                     for r in rows]
+        elif qid == "Q-site-03":
+            if v:
+                lines = [_proof_line(r) for r in (v if isinstance(v, list) else [v])]
+            else:
+                r = research_py.summary(state) if research_py else {}
+                p = r.get("positioning") or {}
+                proof = [str(x).strip() for x in p.get("proof") or [] if str(x).strip()] if p.get("confirmed") else []
+                lines = [f"{x} *(from the confirmed positioning)*" for x in proof] or None
+        elif qid == "Q-site-04" and v:
+            v = {"channels": v} if isinstance(v, list) else v
+            lines = []
+            if v.get("channels"):
+                lines.append("Channels: " + ", ".join(option_label(qid, x) or x for x in v["channels"]))
+            if v.get("languages"):
+                lines.append("Languages: " + ", ".join(v["languages"]))
+            lines += [f"Answers: {x}" for x in v.get("questions") or []]
+        elif qid == "Q-site-05" and v:
+            lines = [", ".join(option_label(qid, x) or x for x in (v if isinstance(v, list) else [v]))]
+        out.append((qid, label, hint, lines))
+    return out
+
+
+def site_brief_md(state, decs=None):
+    """PRODUCT.md, Site brief: one line per question, its rows below it."""
+    out = []
+    for qid, label, hint, lines in site_brief_lines(state, decs):
+        mark = _unconfirmed(decs, f"answers.{qid}") if qid in (state.get("answers") or {}) else ""
+        if not lines:
+            out.append(f"- **{label}** ({hint}): {NOT_ENOUGH} ({qid})."
+                       + (" Pages leave proof sections out until then." if qid == "Q-site-03" else ""))
+        elif len(lines) == 1:
+            out.append(f"- **{label}** ({hint}): {lines[0].rstrip('.')}.{mark}")
+        else:
+            out.append(f"- **{label}** ({hint}):{mark}")
+            out += [f"  - {x}" for x in lines]
+    return "\n".join(out)
+
+
 def render_product_md(state, existing="", decs=None):
     ctx = state.get("context") or {}
     keeps = _keep_blocks(existing)
@@ -10668,6 +10866,8 @@ def render_product_md(state, existing="", decs=None):
         out.append(sec("Users", research_py._users_section(research_py.summary(state))))
     out.append(sec("Market", market_md(state, decs)))
     out.append(sec("Positioning", positioning_md(state)))
+    if site_surface(state) or any(q in (state.get("answers") or {}) for q, _l, _h in SITE_BRIEF):
+        out.append(sec("Site brief", site_brief_md(state, decs)))
     out.append(sec("Surfaces", "\n".join(f"- {s.get('name')}: {s.get('mode')} mode" + (f" ({surface_rule(s, 'set by the Density dial')})" if surface_rule(s, "") else "")
                                          if isinstance(s, dict) else f"- {s}" for s in surf)
                    or surface_words(state)
@@ -10681,7 +10881,8 @@ def render_product_md(state, existing="", decs=None):
     out.append(sec("Constraints", "\n".join(f"- {c}" for c in cons)))
     out.append(sec("Scope", "**In:** " + (", ".join(sc.get("in") or []) or "not recorded yet") + "\n\n**Out:** " + (", ".join(sc.get("out") or []) or "not recorded yet")))
     owner = [(qid, rec) for qid, rec in sorted((state.get("answers") or {}).items())
-             if ANSWER_RECORDS.get(qid) == "owner" and qid not in ("Q-brand-07", "Q-comp-01", "Q-comp-02", "Q-scope-07")]
+             if ANSWER_RECORDS.get(qid) == "owner" and qid not in ("Q-brand-07", "Q-comp-01", "Q-comp-02", "Q-scope-07")
+             and not qid.startswith("Q-site-")]  # the site brief has its own section
     first_sentence = lambda q: re.split(r"(?<=[?.])\s", (questions().get(q) or {}).get("ask") or q)[0]
     lines = [f"- {first_sentence(q)} **{answer_words(q, answer_value(r))}** ({q})" for q, r in owner]
     out.append(sec("Team and Governance", "\n".join(x for x in [ctx.get("team") or ""] + lines if x) or "Not recorded yet (Q-scope-03, Q-scope-04, Q-gov-01)."))
@@ -11323,6 +11524,16 @@ def render_overview(d, files, meta, state):
                  + "".join(f'<tr><td><code>{_esc(p)}</code></td><td>{_esc(sb.replace("_", " "))}</td><td>{dt}</td></tr>' for dt, _i, p, sb in recent)
                  + "</tbody></table>")
 
+    # ---- the site brief (issue 48), only for a site that persuades: what is answered, and what still needs the person
+    site_sec = ""
+    if site_surface(state):
+        brief_rows = site_brief_lines(state, decs)
+        mark = lambda q: _unconfirmed(decs, f"answers.{q}").replace("*", "") if q in (state.get("answers") or {}) else ""
+        body = "".join((f'<p><b>{_esc(label)}</b>{_esc(mark(qid))}: ' + "<br>".join(_esc(x.replace("*", "")) for x in lines) + "</p>")
+                       if lines else missing(f"{label}: {hint}.", qid) for qid, label, hint, lines in brief_rows)
+        site_sec = section("site", "Site brief", "missing" if any(r[3] is None for r in brief_rows) else "chosen", body,
+                           "What the site must do, for whom, with what proof, and how it is found. Nothing here is invented.")
+
     # ---- templates filled with this system
     tpl = "".join(f'<a class="ov-tpl" href="preview/{n}.html">{n.replace("-", " ")}</a>' for n in OVERVIEW_TEMPLATES
                   if os.path.exists(os.path.join(d, "preview", f"{n}.html")))
@@ -11331,6 +11542,7 @@ def render_overview(d, files, meta, state):
 
     sections = [
         section("brand", "Brand book", statuses["Content and Voice"] if voice.get("status") not in (None, "pending", "unknown") else "default", brand),
+        *([site_sec] if site_sec else []),
         section("progress", "How complete it is", None, progress,
                 "Each area works at every zoom level. Zoom into an area by answering its next question."),
         section("color", "Colors", statuses["Colors"], color, "Every text color shows its contrast on the theme's base surface; text meant for a fill is measured on that fill."),
@@ -11345,7 +11557,7 @@ def render_overview(d, files, meta, state):
         section("growth", "How it grew", None, timeline, "Each bar is a day. The filled part is decisions people made; the rest came from defaults and standards."),
         section("templates", "Visual templates", None, tpl, "Each template shows your system, not sample data."),
     ]
-    nav = "".join(f'<a href="#{sid}">{title}</a>' for sid, title in [("brand", "Brand"), ("progress", "Progress"), ("color", "Color"),
+    nav = "".join(f'<a href="#{sid}">{title}</a>' for sid, title in [("brand", "Brand")] + ([("site", "Site")] if site_sec else []) + [("progress", "Progress"), ("color", "Color"),
                   ("typography", "Type"), ("layout", "Space"), ("components", "Components"), ("iconography", "Assets"), ("growth", "History")])
     toggle = "".join(f'<button class="ov-th" data-set="{th}">{th.title()}</button>' for th in themes)
     page_css = f"""
@@ -12132,8 +12344,9 @@ def zoom_levels(d, state):
         rx = SECTION_PATHS.get(title)
         n = sum(1 for k, v in decs.items() if rx and re.match(rx, k) and v["set_by"] != "auto_default")
         by = {1: [], 2: [], 3: []}
+        site = site_surface(state)
         for q in qs.values():
-            if q.get("area") == key and q.get("zoom") in by:
+            if q.get("area") == key and q.get("zoom") in by and (site or q.get("when") != "persuade"):
                 by[q["zoom"]].append(q["id"])
         lvl = 0
         for k in (1, 2, 3):

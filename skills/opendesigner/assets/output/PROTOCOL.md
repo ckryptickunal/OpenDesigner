@@ -38,6 +38,8 @@ Record each one: `engine.py feedback "<the rule, one line>" --kind note`. Said t
 - Proof we can show:
 - Words we never use:
 
+A site that persuades also gets the site brief (Q-site-01 to 05: goal, roles, proof, how it is found, page families). Record it with `engine.py pick`; PRODUCT.md shows it, and step 4 builds one layout per page family.
+
 ## Answered
 Read before asking anything. Add every answer given outside the interview. Never ask one again.
 

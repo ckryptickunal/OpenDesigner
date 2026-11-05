@@ -4407,6 +4407,124 @@ class ProtocolRulesAndTokenUse(unittest.TestCase):
             self.assertIn("No positioning yet", out.getvalue())
 
 
+SITE = {
+    "package.json": {"name": "acme-site", "dependencies": {"next": "16", "react-dom": "19"}},
+    "README.md": "# Acme\n\nShipping software for freight teams.\n",
+    "app/layout.tsx": 'export default function L({ children }) { return <html lang="en"><body>{children}</body></html> }\n',
+    "app/pricing/page.tsx": "export default function P() { return null }\n",
+    "app/(marketing)/about/page.tsx": "export default function P() { return null }\n",
+    "app/industries/[slug]/page.tsx": "export default function P() { return null }\n",
+    "app/privacy/page.tsx": "export default function P() { return null }\n",
+    "app/api/leads/route.ts": "export async function GET() {}\n",
+    "messages/de.json": {}, "messages/en.json": {},
+    "i18n/api.ts": "export const x = 1\n",
+}
+
+
+class SiteBrief(unittest.TestCase):
+    """Issue 48: a site that persuades gets five owner questions at zoom 1 (goal, roles, proof, how it is found, page
+    families), drafted from the repo where it can be, and a PRODUCT.md section that says what is still missing."""
+
+    def sketch(self, t, surfaces):
+        d = os.path.join(t, "opendesigner")
+        with contextlib.redirect_stdout(io.StringIO()):
+            e.cmd_sketch(d, "Acme", None, "regular", "web", "calm", quiet=True, surfaces=surfaces)
+        return d
+
+    def product(self, d):
+        e.cmd_design_md(d, quiet=True)
+        with open(os.path.join(os.path.dirname(d), "PRODUCT.md"), encoding="utf-8") as f:
+            return f.read()
+
+    def test_questions_sit_at_zoom_1_apart_from_the_eight_screens(self):
+        qs = e.questions()
+        for i in range(1, 6):
+            q = qs[f"Q-site-0{i}"]
+            self.assertEqual((q["zoom"], q["area"], q["when"], q["class"]), (1, "overview", "persuade", "I"))
+        with open(os.path.join(e.REFERENCES, "pacing.json"), encoding="utf-8") as f:
+            pacing = json.load(f)
+        self.assertEqual(pacing["site_brief"]["questions"], [f"Q-site-0{i}" for i in range(1, 6)])
+        level1 = [q for a in pacing["areas"] for q in (a["levels"].get("1") or {}).get("questions", [])]
+        self.assertEqual(sorted(level1), sorted(pacing["zoom1"]))                # the eight screens everyone gets
+        self.assertEqual(e.ANSWER_RECORDS["Q-site-03"], "owner")
+
+    def test_detect_reads_page_families_and_languages(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, SITE)
+            got = findings(e.detect_project(t))
+            self.assertEqual(got["answers.Q-site-05"], ["industry", "company", "pricing", "legal"])  # route groups and [slug] skipped
+            self.assertEqual(got["answers.Q-site-04"], {"languages": ["en", "de"]})  # i18n/api.ts is not a language
+
+    def test_readings_are_recorded_only_for_a_site_that_persuades(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, SITE)
+            state = std_read(self.sketch(t, "site:persuade"))
+            self.assertEqual(state["answers"]["Q-site-05"]["set_by"], "assumed")
+            self.assertEqual(state["answers"]["Q-site-04"]["value"], {"languages": ["en", "de"]})
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, SITE)
+            d = self.sketch(t, "app:operate")
+            self.assertFalse([q for q in std_read(d)["answers"] if q.startswith("Q-site-")])
+            text = self.product(d)
+            self.assertNotIn("## Site brief", text)                               # an app has no site brief
+            self.assertEqual(e.zoom_levels(d, e.merge_defaults(std_read(d)))["overview"]["next"][:2], ["Q-dir-01", "Q-dir-02"])
+
+    def test_product_md_says_what_is_missing_and_never_drafts_proof(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, "persuade")
+            text = self.product(d)
+            for i in range(1, 6):
+                self.assertIn(f"Not enough information (Q-site-0{i})", text)
+            self.assertIn("Pages leave proof sections out until then.", text)
+            with contextlib.redirect_stdout(io.StringIO()):
+                e.cmd_set(d, "answers.Q-site-01", {"goal": "demos", "measure": "ten a month from heads of operations"}, "their words")
+                e.cmd_set(d, "answers.Q-site-02", [{"role": "operations head", "needs": "the outcome in numbers"}, "IT"], "their words")
+                e.cmd_set(d, "answers.Q-site-03", [{"kind": "figures", "what": "40% fewer missed pickups"},
+                                                   {"kind": "testimonials", "what": "a named quote", "qualifier": "permission given"}],
+                          "their words")
+                e.cmd_set(d, "answers.Q-site-04", {"channels": ["search", "generative"], "questions": ["How do I cut missed pickups?"]},
+                          "their words")
+                e.cmd_set(d, "answers.Q-site-05", ["platform", "company", "legal"], "their words")
+            text = self.product(d)
+            brief = text.split("## Site brief", 1)[1].split("\n## ", 1)[0]
+            self.assertNotIn("Not enough information", brief)
+            self.assertIn("Booked demos or sales calls; counted as ten a month from heads of operations.", brief)
+            self.assertIn("  - operations head: the outcome in numbers", brief)
+            self.assertIn("40% fewer missed pickups *(no qualifier yet", brief)    # a figure needs its qualifier
+            self.assertIn("a named quote (permission given)", brief)
+            self.assertIn("Answers: How do I cut missed pickups?", brief)
+            self.assertNotIn("Q-site-0", text.split("## Team and Governance", 1)[1])  # its own section, not owner inputs
+
+    def test_malformed_answers_are_refused(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, "persuade")
+            for qid, v in (("Q-site-02", [{"who": "IT"}]), ("Q-site-03", [{"what": ""}]), ("Q-site-04", {"engines": ["x"]}),
+                           ("Q-site-05", []), ("Q-site-01", {"measure": "ten"})):
+                with self.assertRaises(SystemExit) as cm:
+                    e.cmd_set(d, f"answers.{qid}", v, "test", quiet=True)
+                self.assertIn("Nothing was changed", str(cm.exception))
+            self.assertFalse([q for q in std_read(d)["answers"] if q.startswith("Q-site-")])
+
+    def test_confirmed_positioning_fills_the_proof_line(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, "persuade")
+            st = e.read_json(os.path.join(d, "state.json"))
+            st.setdefault("research", {})["positioning"] = {"confirmed": "2026-11-05", "proof": ["three named pilots"]}
+            e.dump_json(os.path.join(d, "state.json"), st)
+            self.assertIn("three named pilots *(from the confirmed positioning)*", self.product(d))
+
+    def test_overview_lists_the_missing_lines(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, "persuade")
+            with contextlib.redirect_stdout(io.StringIO()):
+                e.cmd_overview(d)
+            with open(os.path.join(d, "overview.html"), encoding="utf-8") as f:
+                html = f.read()
+            site = html.split('id="site"', 1)[1].split("</section>", 1)[0]
+            self.assertEqual(site.count('<div class="ov-missing">'), 5)           # one block for each unanswered line
+            self.assertIn("Q-site-03", site)
+
+
 def png_bytes(w, h, rows, ctype=6, depth=8, palette=None, trns=None, filt=0):
     """A PNG from rows of samples (one int per channel, or palette index), packed at depth and encoded with one filter."""
     import struct

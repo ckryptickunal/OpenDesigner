@@ -34,7 +34,7 @@ spacing:
 
 ## Overview
 
-> Zoom: sketch (0 of 3), 6 decisions in this area. To zoom in, answer Q-dir-01, Q-dir-02.
+> Zoom: sketch (0 of 3), 6 decisions in this area. To zoom in, answer Q-site-01, Q-site-02, Q-site-03.
 <!-- od:zoom area=overview level=0 -->
 
 **Consumer Playful feels playful and friendly. Screens are roomy, in a flat style.**
@@ -267,7 +267,7 @@ Designers: type scale: base size and ratio · Code: `font.size.14`
 
 - Text face: Nunito, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif. Licence status (hook H-type): **open-library**.
 - Licence by platform: text: Nunito (open licence or system font: web, apps and self-hosting).
-- On iOS the Swift file uses Dynamic Type text styles (body 17 pt), so text follows the person's text size setting; Compose uses sp, which follows the Android font scale.
+- On iOS the Swift file uses Dynamic Type text styles (body 17 pt), so text follows the person's text size setting. Compose uses sp, which follows the Android font scale.
 - Weights: body 400, label 500, heading 750 (two or three distinct weights per view).
 - Emphasized variants (Expression 82, on from 67): 5 styles under `text.emphasized.*`, the same size one weight heavier, for the selected item, key actions and headlines (DC-L02-11).
 - Line heights snap to a 4px grid: 1.5 up to 17px, 1.4 to 26px, 1.25 to 44px, 1.12 above.
@@ -631,7 +631,7 @@ Designers: target platforms · Code: `raw.platforms; size.target.min`
 **Intent.** Platforms: ios, android, web. Inputs: touch, pointer. Brand presence 70: each platform keeps its own shapes and materials: no; each platform keeps its own body text size: no.
 
 - Navigation, back, sheets and pickers stay native on every platform (DC-L10-02).
-- Swift and Compose files in `build/` use the same names as the CSS variables (Figma code syntax matches them).
+- Code files in `build/`: css, tailwind, swift, compose (each uses the same token names, and Figma code syntax matches them).
 - Fonts by platform: text: Nunito (open licence or system font: web, apps and self-hosting).
 
 Decisions: D-0011 (answers.Q-plat-01), D-0012 (raw.inputs).

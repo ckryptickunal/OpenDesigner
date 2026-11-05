@@ -231,7 +231,7 @@ Five answers shape the sketch. Ask only what their words and files don't already
 **A Persuade surface** (a landing page, a marketing site) gets marketing questions, not app ones:
 - Question 2: who it's for, in their words (`context.audience`). Record Q-aud-01 as `large`, assumed.
 - Question 3: the one action a visitor takes, in every voice. Record it as `context.purpose`; the first result confirms it instead of guessing. It runs on the web (Q-plat-01, assumed).
-- After the sketch: the proof they can show, for the brief in `opendesigner/PROTOCOL.md`.
+- The goal's measure, the roles, the proof, how people find the site and its page families wait for the site brief at level 1 (below). Never ask them in the sketch.
 - Never ask how often people use it, about a light or dark switch, or for a list of components.
 
 **Read the repo first.** Before the first question, run `engine.py detect`. It only reads files, and writes nothing. It reports:
@@ -322,7 +322,14 @@ The phase (Q-scope-07) says where the project is now: an idea, being built, clos
 - If they correct the phase, record their answer: `engine.py pick Q-scope-07 near-launch --why "<their words>"`.
 
 ## Level 1: broad (one screen per foundation)
-After the research, open with the competitor table and the confirmed positioning, then the three directions on the direction board (`research.md` sections 8 and 9). The pick is a starting point for these screens. Then go in this order, with the listed templates:
+**The site brief comes first for a site that persuades** (Q-scope-06 `persuade`, or Q-scope-01 `marketing`; `pacing.json` → `site_brief`). It is one screen with five lines, Q-site-01 to Q-site-05: the goal and how it is counted, the roles to convince and what each needs to see, the proof, how people find the site (search, AI answers, languages, the questions it answers), and the page families.
+- Draft every line before you ask. The goal comes from `context.purpose`, the roles from the user research, and the languages and page families from `engine.py detect` (`sketch` records them as assumed). The person corrects the draft in one reply.
+- Proof is the one line only they can give. Never draft it: take it word for word, with each figure's qualifier (for whom, over what time, compared with what). Until they give it, the confirmed positioning's proof fills the line.
+- The phase changes the page families: plan them for an idea, and read them from the routes or the live site for a built or live one, confirmed in one line.
+- Plain voice: ask only the goal and the proof, and take the rest from their words and files as assumed.
+- Record each answer: `engine.py pick Q-site-03 '[{"kind": "figures", "what": "...", "qualifier": "..."}]' --why "their words"`. PRODUCT.md's Site brief shows each line, or "Not enough information" with its question, and the overview lists what is missing.
+
+After the research and the site brief, open with the competitor table and the confirmed positioning, then the three directions on the direction board (`research.md` sections 8 and 9). The pick is a starting point for these screens. Then go in this order, with the listed templates:
 - Q-dir-01, style (`option-gallery`)
 - Q-dir-02, how much fits on a screen (`spacing-ruler`)
 - Q-color-02, where the brand color shows (`palette`)
@@ -1610,6 +1617,8 @@ Record each one: `engine.py feedback "<the rule, one line>" --kind note`. Said t
 - The one action:
 - Proof we can show:
 - Words we never use:
+
+A site that persuades also gets the site brief (Q-site-01 to 05: goal, roles, proof, how it is found, page families). Record it with `engine.py pick`; PRODUCT.md shows it, and step 4 builds one layout per page family.
 
 ## Answered
 Read before asking anything. Add every answer given outside the interview. Never ask one again.

@@ -32,6 +32,16 @@ One short screen for each foundation, 8 questions in all, planned at about 8 min
 
 You can say "skip" on any screen, and the default stays.
 
+For a site that has to persuade, such as a landing page or a marketing site, level 1 starts with a site brief. It is one screen with five lines:
+
+- the goal, and how you will count it;
+- the roles to convince, and what each needs to see;
+- the proof you can show;
+- how people find the site, in which languages, and the questions it answers;
+- the kinds of pages it needs.
+
+It drafts the lines from your words, your research and your repo, and you correct them. It never drafts the proof: only you can give that. Lines nobody has answered say "Not enough information" in `PRODUCT.md`, next to the question that fills them.
+
 ### Level 2: defined
 
 One area at a time, with up to 12 questions per area. For example, Color covers color ramps, color roles and contrast.
@@ -74,7 +84,7 @@ For a small gap, it takes the default and labels it as an assumption instead of 
 
 - **Plain voice.** If you talk in plain words, it asks fewer questions. In the sketch, it may ask only what you are making, how it should feel and your brand color. It guesses the rest from your words, records the guesses as assumed, and tells you in one line.
 - **"Just pick."** Say "just pick", "just do it" or "you choose", and it stops asking. It picks values that fit your words and files, and records them as handed over to it.
-- **Questions a standard already settles** are skipped. So are questions marked as planned, whose feature isn't built yet. Six of the 194 questions are planned.
+- **Questions a standard already settles** are skipped. So are questions marked as planned, whose feature isn't built yet. Six of the 199 questions are planned.
 
 ## How you see your level
 
