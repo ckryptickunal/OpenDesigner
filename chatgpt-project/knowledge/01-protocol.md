@@ -121,7 +121,7 @@ python3 <skill>/scripts/engine.py resolve                    current dials and d
 python3 <skill>/scripts/engine.py generate                   opendesigner/tokens/ (DTCG 2025.10)
 python3 <skill>/scripts/engine.py validate [--json]          contrast, targets, lint; exit 1 on errors
 python3 <skill>/scripts/engine.py design-md                  DESIGN.md and PRODUCT.md at the project root
-python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|all
+python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|brand|all
 python3 <skill>/scripts/engine.py overview [--open]          opendesigner/overview.html: the whole system, what is chosen and what is still missing
 python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html: every token
 python3 <skill>/scripts/engine.py show <template> [--open]   one visual template filled with real values (opendesigner/preview/)

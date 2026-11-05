@@ -1119,7 +1119,7 @@ Designers: hand off to every tool · Code: `engine.py export --format all`
 
 **Designer:** Hands the system to each place it lives: web styles, a Tailwind theme, Figma variables, Paper, iOS and Android code, all from one source.
 
-**Engineer:** engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all writes one subfolder per format in opendesigner/build/, for example css/tokens.css or swift/DesignTokens.swift.
+**Engineer:** engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|brand|all writes a folder per format in opendesigner/build/, like css/tokens.css or brand/index.html.
 
 **Example:** Export to Tailwind for the website and Swift for the iPhone app.
 

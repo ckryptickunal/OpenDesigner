@@ -8,6 +8,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **A brand and press page from your system** (2026-11-05). `engine.py export --format brand`, also written by every build, makes `build/brand/index.html` from your tokens. It shows your logo with clear space, smallest size and do and don't examples, each colour in hex, RGB and OKLCH, your fonts, and the icon grid with your icons. Your description, facts, leadership, figures and press contact say "Not enough information" until you give them.
 - **Brand colors from your logo** (2026-11-05). `engine.py sketch --logo logo.png` (or an SVG) shows up to three colors from the logo, how much of it each one covers, and the command that confirms one. White, black and see-through parts are left out, and nothing is recorded until the person picks.
 - **Build writes only the exports your platforms use** (2026-11-05). `engine.py build` writes CSS and Tailwind for the web, Swift for iOS and Compose for Android, and names what it left out. Figma, Paper, DTCG and artifact files are written for every platform, and `export --format all` still writes everything.
 - **More icons drawn like your own** (2026-11-05). If you have a few icons and need more, `illustrate.py icons` reads how yours are drawn (badge, glyph box, line weight, colour), ranks 24 open icon sets by how close they are, and redraws the glyphs you pick the same way. They are shown next to yours first, and each licence is recorded.

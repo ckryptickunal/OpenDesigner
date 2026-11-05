@@ -217,6 +217,7 @@ The source of truth is `opendesigner/state.json` plus the DTCG tokens made from 
 | CSS variables, Tailwind theme | Use in web code right away; for shadcn/ui, map its variables to the tokens once |
 | Figma variables, Paper tokens | Mirror the system in your design tool |
 | Swift and Jetpack Compose | Native apps |
+| `opendesigner/build/brand/` | A brand and press page: logo rules, colours, type, icons and the owner's facts, which stay empty until the owner gives them |
 | `opendesigner/decisions.md` | Every decision with its reason, source and what it changed, append-only |
 | `opendesigner/RATIONALE.md` | One page for the team: what was chosen, why, and what is still open |
 | `opendesigner/coverage.md`, asset briefs | Every block's status; briefs a designer can act on |

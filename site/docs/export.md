@@ -7,7 +7,7 @@ order: 6
 updated: 2026-11-05
 ---
 
-OpenDesigner exports your design system to CSS variables, a Tailwind v4 theme, Swift, Jetpack Compose, Figma variables, Paper tokens, a DTCG resolver and files for a Claude Design System artifact. One `engine.py build` writes the ones your platforms need from the DTCG token files, which stay the source of truth. The opendesigner-export skill can also write the system straight into Figma or Paper when their MCP servers are connected.
+OpenDesigner exports your design system to CSS variables, a Tailwind v4 theme, Swift, Jetpack Compose, Figma variables, Paper tokens, a DTCG resolver, files for a Claude Design System artifact and a brand and press page. One `engine.py build` writes the ones your platforms need from the DTCG token files, which stay the source of truth. The opendesigner-export skill can also write the system straight into Figma or Paper when their MCP servers are connected.
 
 ## One rule: change the decision, then rebuild
 
@@ -20,13 +20,13 @@ engine.py build
 
 {{figure:export-rebuild-not-edit}}
 
-`build` generates the tokens and checks them. If there are no errors, it writes the exports, `DESIGN.md`, the overview page and the preview pages. The code exports follow the platforms you chose: CSS and Tailwind for the web or a desktop app, Swift for iOS, Jetpack Compose for Android. Figma, Paper, DTCG and the artifact files are always written. The build names what it left out. To write one format, or all of them:
+`build` generates the tokens and checks them. If there are no errors, it writes the exports, `DESIGN.md`, the overview page and the preview pages. The code exports follow the platforms you chose: CSS and Tailwind for the web or a desktop app, Swift for iOS, Jetpack Compose for Android. Figma, Paper, DTCG, the artifact files and the brand page are always written. The build names what it left out. To write one format, or all of them:
 
 ```
 engine.py export --format tailwind
 ```
 
-The formats are `css`, `tailwind`, `figma`, `paper`, `swift`, `compose`, `dtcg`, `artifact` and `all`. A code file already in `build/` is refreshed by every build, so it never goes stale.
+The formats are `css`, `tailwind`, `figma`, `paper`, `swift`, `compose`, `dtcg`, `artifact`, `brand` and `all`. A code file already in `build/` is refreshed by every build, so it never goes stale.
 
 ## Code exports
 
@@ -43,6 +43,17 @@ All paths are inside `opendesigner/`.
 - **Claude Design System artifact** (`build/artifact/project/`): the system as files for an artifact in Claude, with tokens, a brand book, a cover and a button preview.
 
 The wiring for each one is on [For engineers](/docs/engineers/).
+
+## Brand and press page
+
+`build/brand/index.html` is a page about your brand that you can host as it is. It is made from your tokens, in light and dark. It shows:
+
+- your logo files with download links, the clear space and smallest size, and do and don't examples made from your own logo;
+- every colour role with its hex, RGB and OKLCH values, and what it is for;
+- each font with its weights, its jobs and a licence note;
+- the icon grid and its rules, your icon files, and the open icon set you chose, with its licence.
+
+Your short description, facts, leadership, figures and press contact are yours to give. Each one says "Not enough information" until you give it. Nothing on the page is made up: no logo, fact or number you didn't supply. Font files are never included: an open-licence font loads from Google Fonts when the page opens, and any other font shows only on computers that have it installed. See [Brand assets](/docs/brand-assets/) for the logo rules.
 
 If your brand font's licence doesn't cover apps, the Swift and Compose files use the system font instead and say so. Check this before you ship an app build.
 

@@ -1326,7 +1326,7 @@
   "term": "export (engine command)",
   "plain": "Copies your design into the forms that websites, phone apps and design tools can read.",
   "designer": "Hands the system to each place it lives: web styles, a Tailwind theme, Figma variables, Paper, iOS and Android code, all from one source.",
-  "engineer": "engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all writes one subfolder per format in opendesigner/build/, for example css/tokens.css or swift/DesignTokens.swift.",
+  "engineer": "engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|brand|all writes a folder per format in opendesigner/build/, like css/tokens.css or brand/index.html.",
   "designer_says": "hand off to every tool",
   "code_name": "engine.py export --format all",
   "example": "Export to Tailwind for the website and Swift for the iPhone app.",
