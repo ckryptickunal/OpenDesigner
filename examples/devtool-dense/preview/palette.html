@@ -56,6 +56,7 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
 .sw .kv{font-size:10px;color:inherit;opacity:.75}
 @media (max-width:720px){.sw{grid-template-columns:repeat(6,minmax(44px,1fr))}.ramp{grid-template-columns:1fr}}
 .pair{display:inline-block;padding:4px 10px;border-radius:6px;font-weight:500}
+.edge{display:inline-block;width:44px;height:18px;border:2px solid;border-radius:4px;vertical-align:middle}
 .dots{display:flex;gap:3px;margin-top:4px}.dots i{width:18px;height:18px;border-radius:4px;display:block;box-shadow:inset 0 0 0 1px rgba(128,128,128,.25)}
 </style>
 </head>
@@ -82,7 +83,7 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
  "recommended": "tonal",
  "generatedBy": "engine.py show palette (OpenDesigner engine 1.0.0); real values from Devtool Dense's state",
  "title": "Devtool Dense: how colorful",
- "subtitle": "Each option is your palette, built for real. The shades go from light to dark; the number under each is its contrast with the first shade. Your earlier answers fix brandPresence, colorfulness, density, depth, energy, expression, roundness, warmth, so the options differ in the rest.",
+ "subtitle": "Each option is your palette, built for real. The shades go from light to dark; the number under each is its contrast with the first shade. The table below checks the pairs people read most; engine.py validate checks every pair. Your earlier answers fix brandPresence, colorfulness, density, depth, energy, expression, roundness, warmth, so the options differ in the rest.",
  "options": [
   {
    "value": "tonal",
@@ -150,6 +151,102 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
       "#a5abb8",
       "#e6e9ee"
      ]
+    }
+   ],
+   "pairs": [
+    {
+     "label": "Body text on the page",
+     "fg": {
+      "light": "#222428",
+      "dark": "#e6e9ee"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text"
+    },
+    {
+     "label": "Muted text on the page",
+     "fg": {
+      "light": "#515762",
+      "dark": "#a5abb8"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text"
+    },
+    {
+     "label": "Link on the page",
+     "fg": {
+      "light": "#3a49c1",
+      "dark": "#91a8ff"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text",
+     "sample": "Read more"
+    },
+    {
+     "label": "Label on the main button",
+     "fg": {
+      "light": "#ffffff",
+      "dark": "#141517"
+     },
+     "bg": {
+      "light": "#4a5cf0",
+      "dark": "#6078ff"
+     },
+     "min": 4.5,
+     "kind": "text",
+     "sample": "Save"
+    },
+    {
+     "label": "Error text on the page",
+     "fg": {
+      "light": "#a82321",
+      "dark": "#ff8c80"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text",
+     "sample": "Try again"
+    },
+    {
+     "label": "Input border",
+     "fg": {
+      "light": "#808793",
+      "dark": "#7a808c"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 3.0,
+     "kind": "edge"
+    },
+    {
+     "label": "Focus ring",
+     "fg": {
+      "light": "#4a5cf0",
+      "dark": "#91a8ff"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 3.0,
+     "kind": "edge"
     }
    ]
   },
@@ -251,6 +348,102 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
       "#e6e9ee"
      ]
     }
+   ],
+   "pairs": [
+    {
+     "label": "Body text on the page",
+     "fg": {
+      "light": "#222428",
+      "dark": "#e6e9ee"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text"
+    },
+    {
+     "label": "Muted text on the page",
+     "fg": {
+      "light": "#515762",
+      "dark": "#a5abb8"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text"
+    },
+    {
+     "label": "Link on the page",
+     "fg": {
+      "light": "#3a27ff",
+      "dark": "#93aaff"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text",
+     "sample": "Read more"
+    },
+    {
+     "label": "Label on the main button",
+     "fg": {
+      "light": "#ffffff",
+      "dark": "#141517"
+     },
+     "bg": {
+      "light": "#4a5cf0",
+      "dark": "#6179ff"
+     },
+     "min": 4.5,
+     "kind": "text",
+     "sample": "Save"
+    },
+    {
+     "label": "Error text on the page",
+     "fg": {
+      "light": "#a82321",
+      "dark": "#ff8c80"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text",
+     "sample": "Try again"
+    },
+    {
+     "label": "Input border",
+     "fg": {
+      "light": "#808793",
+      "dark": "#7a808c"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 3.0,
+     "kind": "edge"
+    },
+    {
+     "label": "Focus ring",
+     "fg": {
+      "light": "#4a5cf0",
+      "dark": "#93aaff"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 3.0,
+     "kind": "edge"
+    }
    ]
   },
   {
@@ -319,6 +512,102 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
       "#a5abb8",
       "#e6e9ee"
      ]
+    }
+   ],
+   "pairs": [
+    {
+     "label": "Body text on the page",
+     "fg": {
+      "light": "#222428",
+      "dark": "#e6e9ee"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text"
+    },
+    {
+     "label": "Muted text on the page",
+     "fg": {
+      "light": "#515762",
+      "dark": "#a5abb8"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text"
+    },
+    {
+     "label": "Link on the page",
+     "fg": {
+      "light": "#575758",
+      "dark": "#acacad"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text",
+     "sample": "Read more"
+    },
+    {
+     "label": "Label on the main button",
+     "fg": {
+      "light": "#ffffff",
+      "dark": "#141517"
+     },
+     "bg": {
+      "light": "#222428",
+      "dark": "#e6e9ee"
+     },
+     "min": 4.5,
+     "kind": "text",
+     "sample": "Save"
+    },
+    {
+     "label": "Error text on the page",
+     "fg": {
+      "light": "#8d4039",
+      "dark": "#e6988f"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text",
+     "sample": "Try again"
+    },
+    {
+     "label": "Input border",
+     "fg": {
+      "light": "#808793",
+      "dark": "#7a808c"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 3.0,
+     "kind": "edge"
+    },
+    {
+     "label": "Focus ring",
+     "fg": {
+      "light": "#4a5cf0",
+      "dark": "#acacad"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 3.0,
+     "kind": "edge"
     }
    ]
   },
@@ -420,6 +709,102 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
       "#e6e9ee"
      ]
     }
+   ],
+   "pairs": [
+    {
+     "label": "Body text on the page",
+     "fg": {
+      "light": "#222428",
+      "dark": "#e6e9ee"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text"
+    },
+    {
+     "label": "Muted text on the page",
+     "fg": {
+      "light": "#515762",
+      "dark": "#a5abb8"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text"
+    },
+    {
+     "label": "Link on the page",
+     "fg": {
+      "light": "#3a49c1",
+      "dark": "#91a8ff"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text",
+     "sample": "Read more"
+    },
+    {
+     "label": "Label on the main button",
+     "fg": {
+      "light": "#ffffff",
+      "dark": "#141517"
+     },
+     "bg": {
+      "light": "#4a5cf0",
+      "dark": "#6078ff"
+     },
+     "min": 4.5,
+     "kind": "text",
+     "sample": "Save"
+    },
+    {
+     "label": "Error text on the page",
+     "fg": {
+      "light": "#a82321",
+      "dark": "#ff8c80"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 4.5,
+     "kind": "text",
+     "sample": "Try again"
+    },
+    {
+     "label": "Input border",
+     "fg": {
+      "light": "#808793",
+      "dark": "#7a808c"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 3.0,
+     "kind": "edge"
+    },
+    {
+     "label": "Focus ring",
+     "fg": {
+      "light": "#4a5cf0",
+      "dark": "#91a8ff"
+     },
+     "bg": {
+      "light": "#fcfdff",
+      "dark": "#1b1d20"
+     },
+     "min": 3.0,
+     "kind": "edge"
+    }
    ]
   }
  ]
@@ -469,8 +854,10 @@ OD.draw=()=>{const m=mode(),o=OD.sel;$('#ml').textContent='('+m+')';const box=$(
  else box.innerHTML=o.ramps.map(r=>{const st=r[m]||r.light,bg=st[0];return '<div class="ramp"><div class="ramp-n">'+esc(r.name)+'</div><ol class="sw">'+st.map((h,i)=>{const c=ratio(h,bg);
   return '<li><span class="chip" style="background:'+h+'" role="img" aria-label="'+esc(r.name)+' step '+(i+1)+', '+h+', '+fix(c)+' to 1 on step 1"></span><span class="kv">'+(i+1)+'</span><span class="kv">'+h+'</span><span class="kv">'+fix(c)+'</span></li>'}).join('')+'</ol></div>'}).join('');
  const n=(o&&o.ramps&&o.ramps.find(r=>r.name==='neutral'))||null;box.style.setProperty('--s-bg',n?(n[m]||n.light)[0]:'');box.style.setProperty('--s-fg',n?(n[m]||n.light)[11]:'');
- $('#pairs tbody').innerHTML=(D.pairs||[]).map(p=>{const f=res(p.fg,m),b=res(p.bg,m);if(!f||!b)return '';const c=ratio(f,b),ok=c>=p.min;
-  return '<tr><td>'+esc(p.label)+'</td><td><span class="pair" style="color:'+f+';background:'+b+'">Aa '+esc(p.sample||'Sample text')+'</span></td><td class="num">'+fix(c)+':1</td><td class="num">'+p.min+':1</td><td class="'+(ok?'ok':'bad')+'">'+(ok?'Pass':'Fail')+'</td></tr>'}).join('')};
+ $('#pairs tbody').innerHTML=((o&&o.pairs)||D.pairs||[]).map(p=>{const f=res(p.fg,m),b=res(p.bg,m);if(!f||!b)return '';const c=ratio(f,b);let ok=c>=p.min,how='';
+  const i=p.inner&&res(p.inner,m);if(!ok&&i&&ratio(i,b)>=3&&ratio(i,f)>=3){ok=true;how=' (two-tone ring)'} // the same rule as engine.py validate
+  const edge=p.kind==='edge'||p.sample==='border';
+  return '<tr><td>'+esc(p.label)+'</td><td><span class="pair" style="'+(edge?'':'color:'+f+';')+'background:'+b+'">'+(edge?'<span class="edge" style="border-color:'+f+'" role="img" aria-label="'+esc(p.label)+', '+f+' on '+b+'"></span>':'Aa '+esc(p.sample||'Sample text'))+'</span></td><td class="num">'+fix(c)+':1</td><td class="num">'+p.min+':1</td><td class="'+(ok?'ok':'bad')+'">'+(ok?'Pass':'Fail')+how+'</td></tr>'}).join('')};
 if(D.custom){$('#cs').hidden=false;const cc=$('#cc'),ct=$('#ct');let hex=D.custom.value||'#0F766E';cc.value=hex;ct.value=hex;
  const info=h=>{$('#ci').textContent='white text '+fix(ratio(h,'#ffffff'))+':1, black text '+fix(ratio(h,'#000000'))+':1'};info(hex);
  cc.oninput=()=>{ct.value=cc.value;info(cc.value)};ct.oninput=()=>{if(/^#[0-9a-f]{6}$/i.test(ct.value)){cc.value=ct.value;info(ct.value)}};
