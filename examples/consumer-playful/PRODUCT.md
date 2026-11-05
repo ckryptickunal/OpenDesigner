@@ -39,6 +39,14 @@ Not researched yet. The user research step (references/research.md) fills this i
 
 Not enough information. The positioning step fills this in: engine.py research positioning draft.
 
+## Site brief
+
+- **Goal** (what the site must achieve, and how it is counted): Not enough information (Q-site-01).
+- **Roles to convince** (and what each needs to see): Not enough information (Q-site-02).
+- **Proof we can show** (only what the person gave): Not enough information (Q-site-03). Pages leave proof sections out until then.
+- **How people find it** (channels, languages and the questions it answers): Not enough information (Q-site-04).
+- **Page families** (the kinds of pages, each with one layout): Not enough information (Q-site-05).
+
 ## Surfaces
 
 - Today feed: Experience mode (density spacious; hero moments and big imagery allowed; display styles welcome)
