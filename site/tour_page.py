@@ -54,11 +54,12 @@ def facts(b):
     std = json.loads((REF / "standards.json").read_text())
     checklist = (ROOT / "skills/opendesigner-preflight/references/checklist.md").read_text()
     cases = json.loads((ROOT / "skills/opendesigner-review/references/cases.json").read_text())["cases"]
-    dials = json.loads((REF / "levers.json").read_text())["dials"]
+    lev = json.loads((REF / "levers.json").read_text())
+    dials = lev["dials"]
     briefs = json.loads((ROOT / "evals/design/briefs.json").read_text())["briefs"]
     return {"questions": len(live), "planned": len(qs) - len(live), "stages": len(stages), "standards": len(std["standards"]),
             "standards_version": std.get("version"), "checks": len(re.findall(r"^\d+\. ", checklist, re.M)), "cases": len(cases),
-            "dials": dials, "components": len(b.library_page.components()), "briefs": len(briefs), "checklist": checklist, "case_list": cases}
+            "dials": dials, "levers": lev, "components": len(b.library_page.components()), "briefs": len(briefs), "checklist": checklist, "case_list": cases}
 
 
 def zoom_levels():
@@ -82,6 +83,17 @@ def band(dial, value):
     for lo, hi, out in m["bands"]:
         if lo <= value <= hi:
             return lo, hi, out
+    return None
+
+
+def unchosen_radius(out, formulas):
+    """What the engine does with a control radius nobody chose (levers.json formulas.radius.unchosen): never square, never a
+    pill. Returns (radius, the rule in words) when it moves the band's value, else None."""
+    u = formulas["radius"]["unchosen"]
+    if out == "full" or (isinstance(out, (int, float)) and out > u["max"]):
+        return u["max"], f"corners nobody chose stay at {u['max']} px or less"
+    if isinstance(out, (int, float)) and out < u["raiseBelow"]:
+        return u["to"], f"corners nobody chose stay at {u['to']} px or more"
     return None
 
 
@@ -255,14 +267,19 @@ def engine_section(b, f):
             if not hit:
                 continue
             lo, hi, out = hit
-            shown = f"{out}{' ' + unit if unit and isinstance(out, (int, float)) else ''}"
+            fmt = lambda v: f"{v}{' ' + unit if unit and isinstance(v, (int, float)) else ''}"
+            step = ""
+            moved = unchosen_radius(out, f["levers"]["formulas"]) if key == "roundness" and not t.get("shapeChosen") else None
+            if moved:  # the engine's own rule for corners nobody chose (levers.json notes it beside the bands)
+                step = f' <span class="num">{esc(fmt(out))}</span>, but {esc(moved[1])}, so it gives'
+                out = moved[0]
             if str(out) not in str(have):  # the band and the engine output disagree: show nothing rather than a wrong formula
                 print(f"tour: {e['key']} {key}={t['dials'][key]} gives {out}, engine wrote {have}; row left out")
                 continue
             shown_keys.append(key)
             worked.append(f'<li><p class="tr-w-in"><span>{DIAL_NAMES[key]}</span><b class="num">{t["dials"][key]}</b></p>'
-                          f'<p class="tr-w-band">falls in the band <span class="num">{lo} to {hi}</span>, which gives</p>'
-                          f'<p class="tr-w-out"><span>{param}</span><b class="num">{esc(shown)}</b></p></li>')
+                          f'<p class="tr-w-band">falls in the band <span class="num">{lo} to {hi}</span>, which gives{step}</p>'
+                          f'<p class="tr-w-out"><span>{param}</span><b class="num">{esc(fmt(out))}</b></p></li>')
         hl = lambda k: ' class="hl"' if k in shown_keys else ""
         bars = "".join(f'<li{hl(k)} style="--v:{t["dials"][k]};--i:{j}"><span class="tr-dn">{DIAL_NAMES.get(k, k)}</span><span class="tr-bar" aria-hidden="true"><i></i></span>'
                        f'<span class="tr-dv num">{t["dials"][k]}</span></li>' for j, k in enumerate(d["id"] for d in f["dials"]) if k in t["dials"])
