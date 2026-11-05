@@ -48,6 +48,7 @@
      "depth": 30,
      "warmth": 80
     },
+    "shapeChosen": false,
     "cPrimary": 4.57,
     "cText": 15.22,
     "cMuted": 7.02,
@@ -101,6 +102,7 @@
      "depth": 30,
      "warmth": 25
     },
+    "shapeChosen": false,
     "cPrimary": 10.36,
     "cText": 15.27,
     "cMuted": 7.13,
@@ -154,6 +156,7 @@
      "depth": 30,
      "warmth": 50
     },
+    "shapeChosen": false,
     "cPrimary": 5.02,
     "cText": 15.26,
     "cMuted": 7.1,
