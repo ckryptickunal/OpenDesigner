@@ -215,6 +215,16 @@
   const NOT_AN_ACTION = '[aria-current]:not([aria-current=false]),[aria-selected=true],[aria-pressed=true],:disabled,[aria-disabled=true]';
   const INTERACTIVE = 'a[href],button,input:not([type=hidden]),select,textarea,summary,[role=button],[role=link],[role=checkbox],[role=radio],[role=switch],[role=tab],[role=menuitem],[role=option],[role=slider],[tabindex]:not([tabindex="-1"]),[contenteditable=""],[contenteditable=true]';
 
+  // 'inert', 'aria-hidden' or '': whether assistive tech is told to skip this element, looking up through shadow roots
+  function hiddenFromAT(el) {
+    let ah = false;
+    for (let n = el; n && n.nodeType === 1; n = parentEl(n)) {
+      if (n.hasAttribute('inert')) return 'inert';
+      if (n.getAttribute('aria-hidden') === 'true') ah = true;
+    }
+    return ah ? 'aria-hidden' : '';
+  }
+
   function accName(el) {
     const al = el.getAttribute('aria-label'); if (al && al.trim()) return al.trim();
     const lb = el.getAttribute('aria-labelledby');
@@ -461,18 +471,22 @@
         }
       }
 
-      // interactive elements: size, name, gaps between them
-      if (el.matches(INTERACTIVE)) {
+      // interactive elements: size, name, gaps between them. A decorative demo (inert, or hidden from assistive tech and out
+      // of the Tab order, such as a picture of an app built from real buttons) is a picture, not a control
+      const offAT = el.matches(INTERACTIVE) ? hiddenFromAT(el) : '';
+      if (el.matches(INTERACTIVE) && !(offAT === 'inert' || (offAT && el.tabIndex < 0))) {
         interactiveEls.push(el);
         const inline = cs.display === 'inline' && tag === 'a';
         const t = { el, sel: sel(el), w: round(r.width), h: round(r.height), cx: r.left + r.width / 2, cy: r.top + r.height / 2, r, inline };
         targets.push(t);
-        if (!accName(el) && noName.length < CAP) noName.push({ sel: sel(el), tag });
+        // a focusable control inside aria-hidden is reported once, as reachable but unseen (hiddenFocusable below)
+        if (!offAT && !accName(el) && noName.length < CAP) noName.push({ sel: sel(el), tag });
       }
 
       // buttons and button-like links with a fill of their own: how many actions stand out (review case MS-16). A
       // selected tab or the current page's nav item is a state, not an action; a card that is a link is too big to be one
-      if (el.matches(BUTTONISH) && !el.matches(NOT_AN_ACTION)) {
+      const demo = el.matches(BUTTONISH) && (() => { const h = hiddenFromAT(el); return h === 'inert' || (h && el.tabIndex < 0); })();   // a picture of an app
+      if (el.matches(BUTTONISH) && !el.matches(NOT_AN_ACTION) && !demo) {
         buttonsChecked++;
         const grad = /gradient\(/.test(cs.backgroundImage || '') ? /rgba?\([^)]*\)/.exec(cs.backgroundImage) : null;
         const fill = grad ? rgba(grad[0]) : rgba(cs.backgroundColor);
@@ -558,10 +572,11 @@
     // controls a keyboard can reach but nobody can see: invisible (opacity 0 up the tree) or outside the page box
     for (const el of document.querySelectorAll(INTERACTIVE)) {
       const cs = getComputedStyle(el); if (cs.display === 'none' || cs.visibility === 'hidden' || el.getAttribute('tabindex') === '-1') continue;
+      const off = hiddenFromAT(el); if (off === 'inert') continue;   // inert takes it out of the Tab order
       const r = el.getBoundingClientRect(); if (!r.width && !r.height) continue;
       let op = 1; for (let n = el; n && n.nodeType === 1; n = parentEl(n)) op *= parseFloat(getComputedStyle(n).opacity);
       const gone = op === 0 || r.right <= 0 || r.bottom + window.scrollY <= 0 || r.left >= de.scrollWidth;
-      const inHidden = !!el.closest('[aria-hidden=true]');
+      const inHidden = off === 'aria-hidden';
       if ((gone || inHidden) && hiddenFocusable.length < CAP) hiddenFocusable.push({ sel: sel(el), why: op === 0 ? 'opacity 0' : inHidden ? 'inside aria-hidden' : 'outside the page', x: round(r.left), y: round(r.top) });
     }
 
@@ -742,9 +757,17 @@
     const el = document.activeElement;
     if (!el || el === document.body || el === document.documentElement) return { active: false, note: 'nothing has focus (the page, not an element)' };
     const cs = getComputedStyle(el), r = el.getBoundingClientRect();
-    const oStyle = cs.outlineStyle, oW = px(cs.outlineWidth);
-    const hasOutline = oStyle !== 'none' && oW > 0;
-    const hasShadow = cs.boxShadow && cs.boxShadow !== 'none';
+    let oStyle = cs.outlineStyle, oW = px(cs.outlineWidth), ringOn = null, ringCs = cs;
+    let hasOutline = oStyle !== 'none' && oW > 0;
+    let hasShadow = cs.boxShadow && cs.boxShadow !== 'none';
+    if (!hasOutline && !hasShadow) {   // a card that is one big link draws its ring on a stretched ::after (opendesigner.dev's library, 2026-11-05)
+      for (const pe of ['::after', '::before']) {
+        const p = getComputedStyle(el, pe);
+        if (!p.content || p.content === 'none' || p.display === 'none') continue;
+        const pOut = p.outlineStyle !== 'none' && px(p.outlineWidth) > 0, pSh = p.boxShadow && p.boxShadow !== 'none';
+        if (pOut || pSh) { ringOn = pe; ringCs = p; oStyle = p.outlineStyle; oW = px(p.outlineWidth); hasOutline = pOut; hasShadow = pSh; break; }
+      }
+    }
     const pts = [[0.5, 0.5], [0.1, 0.1], [0.9, 0.1], [0.1, 0.9], [0.9, 0.9]].map(([fx, fy]) => [r.left + r.width * fx, r.top + r.height * fy]);
     let covered = 0, coveredBy = null, tested = 0;
     for (const [x, y] of pts) {
@@ -756,8 +779,10 @@
     const rec = {
       active: true, sel: sel(el), tag: el.localName, role: el.getAttribute('role'), name: accName(el), tabindex: el.getAttribute('tabindex'),
       focusVisible: el.matches(':focus-visible'),
-      ring: { outlineStyle: oStyle, outlineWidth: oW, outlineColor: cs.outlineColor, outlineOffset: cs.outlineOffset, boxShadow: hasShadow ? cs.boxShadow.slice(0, 100) : 'none', visible: hasOutline || !!hasShadow },
+      ring: { outlineStyle: oStyle, outlineWidth: oW, outlineColor: ringCs.outlineColor, outlineOffset: ringCs.outlineOffset, boxShadow: hasShadow ? ringCs.boxShadow.slice(0, 100) : 'none',
+              visible: hasOutline || !!hasShadow, on: ringOn },
       rect: { x: round(r.left), y: round(r.top), w: round(r.width), h: round(r.height) },
+      page: { x: round(r.left + window.scrollX), y: round(r.top + window.scrollY) },   // Tab scrolls each stop into view, so look-alike rows share a viewport rect
       inViewport: r.bottom > 0 && r.top < document.documentElement.clientHeight && r.right > 0 && r.left < document.documentElement.clientWidth,
       obscured: tested ? { fraction: round(covered / tested), by: coveredBy } : null,
       index: od.stops.length,
@@ -991,7 +1016,10 @@
   // ---- floating bars over text that cannot scroll away (CV-08) -------------------------------------------------
   // Text that scrolls past a bar is normal. Text that never gets out from under it is lost: text inside something pinned,
   // text under a top bar at the top of the page, and text under a bottom bar at the very end.
-  const pinnedBy = (el) => { for (let n = el; n && n.nodeType === 1; n = parentEl(n)) { const p = getComputedStyle(n).position; if (p === 'fixed' || p === 'sticky') return n; } return null; };
+  // a sticky box counts only while it is stuck: at the end of its container it scrolls away with the page, and scrolling back
+  // brings its text out again (a docs sidebar near the footer, 2026-11-05)
+  const stuck = (n, cs) => { const r = n.getBoundingClientRect(); return Math.abs(r.top - px(cs.top)) < 1.5 || Math.abs(document.documentElement.clientHeight - r.bottom - px(cs.bottom)) < 1.5; };
+  const pinnedBy = (el) => { for (let n = el; n && n.nodeType === 1; n = parentEl(n)) { const cs = getComputedStyle(n); if (cs.position === 'fixed' || (cs.position === 'sticky' && stuck(n, cs))) return n; } return null; };
   od.bars = async (opts) => {
     const o = Object.assign({ step: 0.75, wait: 150, max: 40 }, opts), de = document.documentElement, start = window.scrollY, hits = new Map(), barSels = new Set();
     let y = 0, i = 0;
@@ -1011,6 +1039,7 @@
         const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), rg = document.createRange();
         for (let n = tw.nextNode(); n; n = tw.nextNode()) {
           const el = n.parentElement; if (!n.data.trim() || !el || SKIP.has(el.tagName) || bars.some((b) => b.contains(el))) continue;
+          if (el.checkVisibility && !el.checkVisibility()) continue;   // a closed <details> still reports line boxes for its hidden text
           rg.selectNodeContents(n);
           for (const q of rg.getClientRects()) {
             const bar = bars.find((b) => { const r = b.getBoundingClientRect(); return Math.min(q.right, r.right) - Math.max(q.left, r.left) > 2 && Math.min(q.bottom, r.bottom) - Math.max(q.top, r.top) > 2; });

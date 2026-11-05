@@ -202,6 +202,9 @@ MEASURE = r"""(cfg) => {
     const ragged = column && items.some(i => kind(i) === kind(items[0]) && Math.abs(R(i).left - R(items[0]).left) > 1);
     rows.slice(1).forEach((w, n) => {
       if (ragged) return;  // a one-column stack with ragged edges is reported once, as an edge finding
+      // a one-column stack aligns on its left edge (check 5), so a narrower box on that edge is neither off centre nor a
+      // partly filled row (a 320 px card under a full-width one, in plain document flow)
+      if (column && Math.abs(w.l - ref.l) <= 1) return;
       const off = w.c - ref.c;
       if (Math.abs(off) <= 2) return;
       const last = n === rows.length - 2, partial = last && w.r - w.l < ref.r - ref.l - 1 && Math.abs(w.l - ref.l) <= 1;

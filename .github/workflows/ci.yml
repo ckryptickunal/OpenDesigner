@@ -129,6 +129,9 @@ jobs:
           python3 tools/check_links.py
           python3 tools/test_check_links.py
 
+      - name: Showcase name check rules (brand/tools/check_names.py)
+        run: python3 tools/test_check_names.py
+
       - name: Worked examples are what the engine makes now (rebuilt in a temporary folder; writes nothing)
         run: |
           python3 tools/build_examples.py --check

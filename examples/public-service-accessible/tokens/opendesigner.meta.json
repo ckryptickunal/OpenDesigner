@@ -546,7 +546,8 @@
       "info"
     ],
     "accentCount": 1,
-    "chart": {}
+    "chart": {},
+    "chartDiverging": {}
   },
   "ramps": {
     "accent": {

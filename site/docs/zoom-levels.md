@@ -84,7 +84,7 @@ For a small gap, it takes the default and labels it as an assumption instead of 
 
 - **Plain voice.** If you talk in plain words, it asks fewer questions. In the sketch, it may ask only what you are making, how it should feel and your brand color. It guesses the rest from your words, records the guesses as assumed, and tells you in one line.
 - **"Just pick."** Say "just pick", "just do it" or "you choose", and it stops asking. It picks values that fit your words and files, and records them as handed over to it.
-- **Questions a standard already settles** are skipped. So are questions marked as planned, whose feature isn't built yet. Six of the 199 questions are planned.
+- **Questions a standard already settles** are skipped. So are questions marked as planned, whose feature isn't built yet. Six of the 200 questions are planned.
 
 ## How you see your level
 

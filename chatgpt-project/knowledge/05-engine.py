@@ -666,6 +666,8 @@ def default_state(name="Untitled design system"):
         "monoFace": "ui-monospace", "baseSize": None, "spaceUnit": 4, "platforms": ["web"],
         "inputs": ["pointer", "touch"], "productType": "work-tool", "marketingSurfaces": False,
         "scripts": ["Latn"], "domain": None, "defaultTheme": "system",
+        # Q-pattern-07: how data tables separate rows, whether the header stays in view, how numbers align
+        "tableRows": "lines", "tableHeader": "sticky", "tableNumbers": "right",
     })
     # brandExact on by default: a person's own brand hex that passes the contrast target stays exact (U5 F10, F3)
     raw["flags"] = {"brandExact": True, "tintTowardBrand": False, "motionOff": False, "darkMode": True, "p3": True}
@@ -1339,6 +1341,23 @@ def chart_colors(n, start_hue, chroma, bg_y, light):
     return out
 
 
+DIVERGING_RATIOS = (9.0, 6.0, 4.0, 3.2, 4.0, 6.0, 9.0)  # contrast with the page, step 1 to 7: both ends strongest, the middle a
+# mid neutral that still reaches 3:1, so every step is a visible mark (WCAG 1.4.11) [inferred: Carbon and ColorBrewer use a light
+# middle that fails 3:1, S-L05-075, S-L05-088]
+DIVERGING_CHROMA = (1.0, 0.8, 0.6, None, 0.6, 0.8, 1.0)  # share of the chart chroma; None: the neutral's own tint
+
+
+def diverging_colors(low_hue, high_hue, chroma, mid, bg_y, light):
+    """Seven chart colors for values below and above a midpoint (Q-color-19, DC-L05-23): steps 1-3 one hue, 4 a neutral at
+    the midpoint, 5-7 a second hue. The two hues sit 180 degrees apart, which never pairs red with green (S-L05-086)."""
+    out = []
+    for i, (ratio, share) in enumerate(zip(DIVERGING_RATIOS, DIVERGING_CHROMA)):
+        h, c = (mid if share is None else ((low_hue if i < 3 else high_hue) % 360, chroma * share))
+        L, C = solve_L(h, c, target_y(ratio * MARGIN, bg_y, light))
+        out.append({"L": L, "C": C, "H": h, "hex": oklch_to_hex(L, C, h)})
+    return out
+
+
 def exact_text_on(hx, text_min):
     """'light' or 'dark': the text that reaches text_min on this exact color in light mode (white, or the dark text neutral
     light 12 is solved to; white wins ties), or None when neither does (U5 F10, DC-L01-09)."""
@@ -1519,14 +1538,17 @@ def build_palette(state, params):
                 v = p3_variant(r.steps[i]) if r.name != "neutral" and not (r.pinned == i) and i <= 12 else None
                 if v:
                     r.p3[i] = v
-    charts = {}
+    charts, diverging = {}, {}
     cp = raw.get("chartPalette")
-    if cp in ("categorical-8", "categorical-14"):
+    if cp and cp != "none":
         cc = clamp(oklch_chroma_for_hct(max(peak, 40.0), 0.6, bH), 0.08, 0.2)
         for mode in ("light", "dark"):
             n = ramps[("neutral", mode)]
             bg_y = n.y(1) if mode == "light" else n.y(2)
-            charts[mode] = chart_colors(8 if cp == "categorical-8" else 14, bH, cc, bg_y, mode == "light")
+            if cp in ("categorical-8", "categorical-14"):
+                charts[mode] = chart_colors(8 if cp == "categorical-8" else 14, bH, cc, bg_y, mode == "light")
+            # below the midpoint: the hue opposite the brand; above it: the brand hue
+            diverging[mode] = diverging_colors(bH + 180, bH, cc, (n_h or 0.0, n_c), bg_y, mode == "light")
     adjusted = None
     if brand and not pin_ok:
         acc = ramps[("accent", "light")]
@@ -1543,8 +1565,10 @@ def build_palette(state, params):
             "secondary": [dict(typed_info[nm], ramp=nm, light=ramps[(nm, "light")].steps[9]["hex"], dark=ramps[(nm, "dark")].steps[9]["hex"])
                           for nm in ("accent2", "accent3") if nm in typed_info],
             "statusPeakHct": rnd(status_peak, 2), "textMin": text_min, "ramps": [s[0] for s in specs],
-            "accentCount": count, "chart": {m: [c["hex"] for c in v] for m, v in charts.items()}}
+            "accentCount": count, "chart": {m: [c["hex"] for c in v] for m, v in charts.items()},
+            "chartDiverging": {m: [c["hex"] for c in v] for m, v in diverging.items()}}
     info["_chart"] = charts
+    info["_diverging"] = diverging
     return ramps, info
 
 
@@ -1670,6 +1694,7 @@ class Ctx:
             self.params["type.ratio"] = min(self.look["typeRatio"], self.params.get("type.ratioCap") or self.look["typeRatio"])
         self.ramps, self.cinfo = build_palette(self.state, self.params)
         self.charts = self.cinfo.pop("_chart", {})
+        self.diverging = self.cinfo.pop("_diverging", {})
         self.modes = ["light", "dark"] if self.flags.get("darkMode", True) else ["light"]
         if self.raw.get("defaultTheme") == "dark" and "dark" not in self.modes:
             self.modes = ["dark"]
@@ -1792,6 +1817,9 @@ def build_color_primitives(ctx):
         "disabled": {"container": tok(0.12), "content": tok(0.38)},
         "$extensions": {NS: {"evidence": ["DC-L01-17", "S-L01-005", "S-L01-064"]}},
     }
+    if ctx.raw.get("chartPalette") not in (None, "none"):
+        opacity["chart"] = {"dimmed": tok(0.3, "Other series fade to this while one is hovered or picked in the legend (Carbon, "
+                                                "S-L05-091; DC-L05-24).")}
     return {"color": color}, {"opacity": opacity}
 
 
@@ -1808,6 +1836,15 @@ def _state_layer(base_hex, on_hex, ratio, start, tmin=4.5 * MARGIN):
                 return hx, rnd(a, 2), layer
             a += 0.01
     return composite(other, 0.3, base_hex), 0.3, other
+
+
+def alias_hex(ctx, alias):
+    """The hex an alias to a primitive names: '{color.neutral.light.1}' or '{color.white}'."""
+    path = alias.strip("{}")
+    if path in ("color.white", "color.black"):
+        return "#ffffff" if path == "color.white" else "#000000"
+    _c, name, mode, step = path.split(".")
+    return ctx.ramp(name, mode).steps[int(step)]["hex"]
 
 
 def build_color_semantic(ctx, mode):
@@ -1945,6 +1982,11 @@ def build_color_semantic(ctx, mode):
             out["bg"][extra] = {"subtle": tok(r(extra, 3), f"{extra} subtle fill."), "bold": b_, "bold-hover": h_, "bold-pressed": p_}
             out["text"][extra] = tok(r(extra, 11), f"{extra} text.")
             out["text"]["on-" + extra] = tok(on(extra), f"Text on {extra} solid.")
+    if raw.get("tableRows") == "zebra":  # Q-pattern-07: alternate table rows one neutral step from the page (DC-L19-43)
+        base_step = int(surf["base"].strip("{}").split(".")[-1]) if surf["base"].startswith("{color.neutral.") else 1
+        out["surface"]["row-alternate"] = tok(n(base_step + 1), "Every other table row (zebra stripes): one step from the page, so it "
+                                                               "groups a row without a line. Never the only cue; keep row hover and "
+                                                               "selection states (DC-L19-43).")
     surfaces_mode = p["color.surfaces"]
     if surfaces_mode in ("tinted-containers", "brand-or-dynamic-surfaces"):
         out["surface"]["tinted"] = tok(r("accent", 2 if surfaces_mode == "tinted-containers" else 3),
@@ -2001,14 +2043,33 @@ def build_color_semantic(ctx, mode):
         out["surface"]["glass-dimming"] = tok(srgb_value("#000000", 0.35), "35% dimming under clear glass over bright content (S-L15-073).")
     cp = raw.get("chartPalette")
     if cp and cp != "none":
-        chart = {"$description": "Chart colors (Q-color-19): categorical colors in a fixed order, each at least 3:1 against the page "
-                                 "(WCAG 1.4.11); a sequential ramp from the accent; one neutral for 'other'.",
+        page = alias_hex(ctx, surf["base"])
+
+        def mark(name, why):  # the first solid step from 9 that a chart mark can use: 3:1 against the page (WCAG 1.4.11)
+            step = next((s_ for s_ in (9, 10, 11) if contrast(ctx.ramp(name, mode).steps[s_]["hex"], page) >= 3.0 * MARGIN), 11)
+            return tok(r(name, step), why)
+        chart = {"$description": "Chart colors (Q-color-19): marks at least 3:1 against the page (WCAG 1.4.11). Categorical colors in a "
+                                 "fixed order, a sequential ramp from the accent, a diverging ramp around a midpoint, status colors, and "
+                                 "the chart's axis, gridline and label colors, which point at the border and text roles (DC-L05-23, DC-L05-24).",
+                 "brand": mark("accent", "A chart with one series: the brand color (DC-L05-23)."),
                  "sequential": {str(i + 1): tok(r("accent", s_)) for i, s_ in enumerate((3, 5, 7, 9, 11))},
                  "neutral": tok(n(9), "Other, baseline or comparison series.")}
         if cp == "brand-gray":
-            chart["categorical"] = {"1": tok(r("accent", 9), "The brand series."), "2": tok(n(9), "Everything else.")}
+            chart["categorical"] = {"1": mark("accent", "The brand series: the same step as color.chart.brand."),
+                                    "2": tok(n(9), "Everything else.")}
         else:
             chart["categorical"] = {str(i + 1): tok(color_value(c)) for i, c in enumerate(ctx.charts.get(mode, []))}
+        div = ctx.diverging.get(mode, [])
+        if div:
+            chart["diverging"] = {str(i + 1): tok(color_value(c), {0: "Furthest below the midpoint.", 3: "The midpoint, or no change.",
+                                                                    6: "Furthest above the midpoint."}.get(i))
+                                  for i, c in enumerate(div)}
+        chart["status"] = {s_: mark(s_, f"{s_.title()} in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1).")
+                           for s_ in ("success", "warning", "danger", "info", "discovery") if s_ in has}
+        chart["axis"] = tok(A("color.border.default"), "Axis lines and tick marks.")
+        chart["gridline"] = tok(A("color.border.subtle"), "Gridlines: supportive, so they stay quiet (DC-L05-24).")
+        chart["label"] = tok(A("color.text.secondary"), "Tick labels, axis titles and legends: text, so they keep the text minimum.")
+        chart["reference"] = tok(A("color.chart.neutral"), "Target, threshold and average lines.")
         out["chart"] = chart
     tree = {"color": dict({"$type": "color",
                            "$description": f"Semantic color roles, {mode} mapping. Names never change across modes; only values do. "
@@ -2939,9 +3000,16 @@ def contrast_pairs(ctx):
         cp = ctx.raw.get("chartPalette")
         if cp in ("categorical-8", "categorical-14", "brand-gray"):
             n_cat = {"categorical-8": 8, "categorical-14": 14, "brand-gray": 2}[cp]
-            for i in range(1, n_cat + 1):
-                pairs.append({"mode": mode, "fg": f"color.chart.categorical.{i}", "bg": "color.surface.base", "min": 3.0, "kind": "chart",
+            marks = [f"color.chart.categorical.{i}" for i in range(1, n_cat + 1)] + ["color.chart.brand"]
+            marks += [f"color.chart.diverging.{i}" for i in range(1, len(DIVERGING_RATIOS) + 1)]
+            marks += [f"color.chart.status.{x}" for x in ("success", "warning", "danger", "info", "discovery") if x in ctx.cinfo["ramps"]]
+            for fg in marks:
+                pairs.append({"mode": mode, "fg": fg, "bg": "color.surface.base", "min": 3.0, "kind": "chart",
                               "rule": "WCAG 2.2 SC 1.4.11 (chart marks)", "level": "warning"})
+        if ctx.raw.get("tableRows") == "zebra":  # text on striped rows keeps its minimum (Q-pattern-07)
+            for fg in ("color.text.primary", "color.text.secondary"):
+                pairs.append({"mode": mode, "fg": fg, "bg": "color.surface.row-alternate", "min": tmin, "kind": "text",
+                              "rule": "WCAG 2.2 SC 1.4.3 (text on zebra rows)", "level": "error"})
         if (ctx.elevation_model() == "materials" and ctx.raw.get("glass") is not False) or ctx.raw.get("glass") is True:
             # text on glass changes with whatever scrolls behind it, so check the worst case: black content under light glass,
             # white under dark glass (S-L15-078; STD-visual-details-13 asks for the strongest text on glass)
@@ -4348,6 +4416,9 @@ ANSWER_TABLE = {
                    "container-tiers": {"raw.surfaceLayers": UNSET}, "elevation-named": {"raw.surfaceLayers": UNSET}},
     "Q-color-15": {"classic-4": {"raw.statusSet": "classic-4"}, "discovery": {"raw.statusSet": "discovery"}, "workflow": {"raw.statusSet": "workflow"}},
     "Q-color-17": {"aa": {"raw.contrastTarget": "AA"}, "aaa": {"raw.contrastTarget": "AAA"}, "aa-apca": {"raw.contrastTarget": "AA"}},
+    "Q-pattern-07": {"lines": {"raw.tableRows": "lines"}, "zebra": {"raw.tableRows": "zebra"}, "space": {"raw.tableRows": "space"},
+                     "sticky-header": {"raw.tableHeader": "sticky"}, "static-header": {"raw.tableHeader": "static"},
+                     "numbers-right": {"raw.tableNumbers": "right"}, "numbers-left": {"raw.tableNumbers": "left"}},
     "Q-color-19": {"none": {"raw.chartPalette": "none"}, "brand-gray": {"raw.chartPalette": "brand-gray"},
                    "categorical-6-8": {"raw.chartPalette": "categorical-8"}, "carbon-14": {"raw.chartPalette": "categorical-14"}},
     "Q-color-20": {"overlay": {"raw.stateMethod": "overlay"}, "step-shift": {"raw.stateMethod": "step"}, "hybrid": {"raw.stateMethod": "hybrid"}},
@@ -8882,6 +8953,8 @@ def figma_scopes(path, typ):
             return ["SHAPE_FILL", "STROKE_COLOR"]
         if path.startswith("color.shadow."):
             return ["EFFECT_COLOR"]
+        if path.startswith("color.chart."):  # marks are shapes and lines; labels are text
+            return ["TEXT_FILL"] if path == "color.chart.label" else ["SHAPE_FILL", "STROKE_COLOR"]
         return []
     if path.startswith(("space.", "layout.gutter", "layout.margin")):
         return ["GAP"]
@@ -9115,7 +9188,7 @@ def export_paper(files, meta, prefix):
     for theme in themes:
         flat = resolve_all(files, {"theme": theme} if "theme" in mods else {})
         entries = []
-        sem = [p for p in flat if flat[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon)\.", p)]
+        sem = [p for p in flat if flat[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon|chart)\.", p)]
         sem.sort(key=lambda p: (0 if ("neutral" in p or p.startswith(("color.surface", "color.text.primary", "color.text.secondary"))) else 1, p))
         prim = [p for p in flat if flat[p]["type"] == "color" and re.match(rf"color\.(neutral|accent|action|accent2|accent3|success|warning|danger|info)\.{theme}\.", p)]
         order = {"neutral": 0, "accent": 1, "action": 2, "accent2": 3, "accent3": 4}
@@ -9183,7 +9256,7 @@ def export_swift(files, meta, prefix):
          "    #endif",
          "}", "", f"public extension {P} {{", "    enum Colors {"]
     for p in sorted(light):
-        if light[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon|overlay|shadow)\.", p):
+        if light[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon|overlay|shadow|chart)\.", p):
             lv, dv = light[p]["resolved"], dark[p]["resolved"]
             la, da = lv.get("alpha", 1), dv.get("alpha", 1)
             L.append(f"        public static let {camel(p.split('.')[1:])} = dsColor(0x{hex_of(lv)[1:].upper()}, 0x{hex_of(dv)[1:].upper()}"
@@ -9268,7 +9341,7 @@ def export_compose(files, meta, prefix):
     light = resolve_all(files, {"theme": "light"} if "theme" in mods else {})
     dark = resolve_all(files, {"theme": "dark"}) if "theme" in mods and "dark" in mods["theme"]["contexts"] else light
     base = resolve_all(files, {})
-    cols = [p for p in sorted(light) if light[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon|overlay|shadow)\.", p)]
+    cols = [p for p in sorted(light) if light[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon|overlay|shadow|chart)\.", p)]
 
     def argb(v):
         a = round_half_up((v.get("alpha", 1) if isinstance(v, dict) else 1) * 255)
@@ -9397,8 +9470,13 @@ ARTIFACT_COLORS = [  # Design System artifact token name -> semantic path (the r
     ("accent-soft", "color.bg.accent.subtle"), ("link", "color.text.link"), ("focus-ring", "color.border.focus"),
     ("danger", "color.text.danger"), ("danger-soft", "color.bg.danger.subtle"), ("success", "color.text.success"),
     ("success-soft", "color.bg.success.subtle"), ("warning", "color.text.warning"), ("warning-soft", "color.bg.warning.subtle"),
-    ("info", "color.text.info"), ("info-soft", "color.bg.info.subtle"),
-]
+    ("info", "color.text.info"), ("info-soft", "color.bg.info.subtle"), ("row-alternate", "color.surface.row-alternate"),
+    ("chart-brand", "color.chart.brand"), ("chart-neutral", "color.chart.neutral"), ("chart-axis", "color.chart.axis"),
+    ("chart-gridline", "color.chart.gridline"), ("chart-label", "color.chart.label"),
+] + [(f"chart-{i}", f"color.chart.categorical.{i}") for i in range(1, 15)] + \
+    [(f"chart-diverging-{i}", f"color.chart.diverging.{i}") for i in range(1, 8)] + \
+    [(f"chart-{x}", f"color.chart.status.{x}") for x in ("success", "warning", "danger", "info", "discovery")]
+# rows whose token does not exist in a system are left out (export_artifact keeps only paths with a value)
 
 
 def _css_theme_vars(css):
@@ -10711,7 +10789,12 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             "", "**Use / avoid.**", "- Use one solid accent fill per view for the primary action; spend chroma on small, meaningful elements.",
             "- Avoid gray text on colored fills; use the matching `text.on-*` role.",
             "- Avoid color as the only signal: pair status colors with an icon or label.",
-            ("- Charts: use `color.chart.categorical.*` in order, `color.chart.sequential.*` for amounts, `color.chart.neutral` for other."
+            ("- Charts: `color.chart.brand` for a chart with one series; `color.chart.categorical.*` in order for groups; "
+             "`color.chart.sequential.*` for amounts; `color.chart.diverging.1-7` for values below and above a midpoint (4 is the midpoint); "
+             "`color.chart.status.*` for success, warning and danger, always with a label; `color.chart.neutral` for other and baselines. "
+             "Axes use `color.chart.axis`, gridlines `color.chart.gridline`, tick labels and legends `color.chart.label`, targets "
+             "`color.chart.reference`; other series fade to `opacity.chart.dimmed` while one is hovered. Every mark is at least 3:1 against "
+             "the page; marks are not 3:1 against each other, so keep a gap or a line between neighbours (DC-L05-23, DC-L05-24)."
              if raw.get("chartPalette") not in (None, "none") else
              "- Charts: no chart palette yet (Q-color-19). Take chart colors from the status and accent hues, and check them separately.")]
     tw = tailwind_classes(files) if "tailwind" in fmts else {}
@@ -10885,6 +10968,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
                "one filled per view; the others outline or text." if lim.get("cta") else ""),
             "", _md_table(["Component", "Status"], rows) if rows else "No inventory recorded.",
             "", "**Contested policies:** " + "; ".join(f"{k}: {v if v is not None else 'pending'}" for k, v in pol) + ".",
+            *([""] + table_rules(state, prefix) if "table" in inv or "Q-pattern-07" in ans else []),
             "", "**Use / avoid.**", "- Every interactive component shows hover, pressed, focus-visible and disabled states from the tokens.",
             f"- Inputs keep a 3:1 boundary (`color.border.input`); signifier strength: {params['signifier.minStrength']}.",
             "- Component docs belong in `opendesigner/components/<name>.md` (spec 7.8)."]
@@ -11166,6 +11250,30 @@ def positioning_md(state):
     if dr.get("id"):
         lines += ["", f"Direction {dr['id']}, {dr.get('name')} (chosen {dr.get('date')}): `opendesigner/{research_py.BOARD}`."]
     return "\n".join(lines).strip() or f"{NOT_ENOUGH}. The positioning step fills this in: engine.py research positioning draft."
+
+
+def table_rules(state, prefix="ds"):
+    """DESIGN.md, Components: the data table rules from Q-pattern-07 (row separation, header, numbers) and the row heights."""
+    raw = state.get("raw") or {}
+    rows, head, nums = raw.get("tableRows") or "lines", raw.get("tableHeader") or "sticky", raw.get("tableNumbers") or "right"
+    asked = "Q-pattern-07" in (state.get("answers") or {})
+    lines = ["**Tables**" + ("" if asked else " (defaults; Q-pattern-07 changes them)") + ":"]
+    lines.append({"lines": "- Rows: a 1px `color.border.subtle` line between rows, none around the table (Carbon's default).",
+                  "zebra": "- Rows: every other row on `color.surface.row-alternate`, no lines between rows. Hover and selection keep "
+                           "their own fills, so the stripes are never the only cue (DC-L19-43).",
+                  "space": "- Rows: space between rows, no lines and no stripes; for short lists, not for wide data tables (DC-L19-43)."}
+                 .get(rows, f"- Rows: {rows}."))
+    lines.append("- Row heights: `size.row.sm` (dense), `size.row.md` (default), `size.row.lg` (roomy) and `size.row.two-line`; the header "
+                 "row matches the body rows (Carbon, S-L08-092).")
+    lines.append("- Header: stays in view while the rows scroll (`position: sticky`), with a scroll-edge fade where rows pass under it, "
+                 "never a 1px line (STD-visual-details-15)." if head == "sticky" else
+                 "- Header: scrolls away with the rows; keep tables short enough to read without it.")
+    lines.append("- Numbers: right-aligned in `text.numeric.*` (tabular digits), and their column headers right-aligned too, so digits line "
+                 "up and compare at a glance (DC-L19-121, DC-L02-26)." if nums == "right" else
+                 "- Numbers: left-aligned like text, in `text.numeric.*`; only for IDs and codes people read, not amounts they compare.")
+    lines.append("- Text, status chips, row checkboxes and targets follow the same tokens as the rest of the system; a chip carries a word, "
+                 "never color alone (WCAG 1.4.1).")
+    return lines
 
 
 # The site brief (issue 48): what a site that persuades must do, for whom, with what proof, how it is found, and its page

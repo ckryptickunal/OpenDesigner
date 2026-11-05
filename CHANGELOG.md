@@ -8,6 +8,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Chart and table tokens for data-heavy tools** (2026-11-05). Chart colors now add a one-series brand color, status colors and a 7-step diverging ramp, each 3:1 against the page, plus axis, gridline and label colors, and every export carries them. A new table question sets striped rows, a header that stays on screen and right-aligned numbers.
 - **A brand and press page from your system** (2026-11-05). `engine.py export --format brand`, also written by every build, makes `build/brand/index.html` from your tokens. It shows your logo with clear space, smallest size and do and don't examples, each colour in hex, RGB and OKLCH, your fonts, and the icon grid with your icons. Your description, facts, leadership, figures and press contact say "Not enough information" until you give them.
 - **Brand colors from your logo** (2026-11-05). `engine.py sketch --logo logo.png` (or an SVG) shows up to three colors from the logo, how much of it each one covers, and the command that confirms one. White, black and see-through parts are left out, and nothing is recorded until the person picks.
 - **Build writes only the exports your platforms use** (2026-11-05). `engine.py build` writes CSS and Tailwind for the web, Swift for iOS and Compose for Android, and names what it left out. Figma, Paper, DTCG and artifact files are written for every platform, and `export --format all` still writes everything.
@@ -19,6 +20,11 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **Three checkers at full marks again** (2026-11-05). The layout check no longer calls a narrow card under a wide one a half-empty row. Preflight finds sizes off a scale named `--fs-*`, `--text-*` and other common names. The name check catches two-word names one letter apart, like Vosberg Health and Vossberg Health.
+- **The consent card no longer hides the page** (2026-11-05). While the website's consent card shows, the page keeps room for it at the bottom. The footer's last line now scrolls clear of it, and a link reached with Tab scrolls above it.
+- **Header links are easier to tap on phones** (2026-11-05). On touch screens the logo, nav, breadcrumb and "more" links have a 44 px hit area, and nothing on the page moves.
+- **Small labels keep their style** (2026-11-05). The booking card's and the tour's small capital labels no longer grow into body text with tight spacing. The width numbers on component pages now pass contrast on the selected tab.
+- **The review raises fewer false alarms** (2026-11-05). A decorative demo built from real buttons, a sticky sidebar near the footer, a focus ring drawn on `::after`, and rows that share a selector were all reported as faults. A review of opendesigner.dev found each one, and `probe.js` and `review.py` now read them correctly.
 - **The website and docs say what is true today** (2026-11-05). The security page names the 0.2.0 release, the engine page lists `version`, `detect`, `research` and owner notes, and counts, the home page's examples and the showcase's tags match the repo again. Release lines on the site now come from the git tag, so they can't fall behind.
 - **The worked examples match the engine again** (2026-11-05). The three systems in `examples/` were rebuilt from their `state.json`, and `python3 tools/build_examples.py --check` now fails, in CI too, when the engine writes something they do not show. The old replay script, which could wipe them, is gone.
 - **The link check knows the website's pages** (2026-11-05). A link like `/tour/` in the website's docs is now checked against the pages `site/build.py` makes, so real pages pass and a mistyped one still fails.

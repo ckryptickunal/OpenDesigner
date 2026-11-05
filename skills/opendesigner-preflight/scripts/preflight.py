@@ -186,6 +186,18 @@ def size_px(val: str, root: float):
     return None if x is None else [x]
 
 
+# A custom property that holds a font size, by the common ways of naming one: --font-size-* and fontSize (most systems, the
+# engine's --ds-font-size-*), --fs-*, Tailwind v4's --text-*, --type-*, --font-sm, Material's --md-sys-typescale-*-size and
+# Utopia's --step-0. Never its line height, tracking, weight, family or colour, which share those prefixes.
+SIZE_TOKEN = re.compile(r"font-?size|typescale.*size$|(?:^--|[-_])(?:fs|text|type|font)(?:[-_]|$)|^--step--?\d+$", re.I)
+NOT_SIZE_TOKEN = re.compile(r"line-?height|leading|tracking|letter|spacing|weight|family|face|colou?r|shadow|decoration|"
+                            r"indent|offset|stroke|width|gap|radius|wrap|align", re.I)
+
+
+def size_token(name: str) -> bool:
+    return bool(SIZE_TOKEN.search(name)) and not NOT_SIZE_TOKEN.search(name)
+
+
 WIDTHS = (320, 390, 768, 1024, 1440, 1920)   # where a fluid size (vw, clamp) is measured, with a 900 px tall window
 UNITS = {"px": lambda v, c: v, "rem": lambda v, c: v * c[0], "pt": lambda v, c: v * 4 / 3, "pc": lambda v, c: v * 16,
          "vw": lambda v, c: v * c[1] / 100, "svw": lambda v, c: v * c[1] / 100, "lvw": lambda v, c: v * c[1] / 100, "dvw": lambda v, c: v * c[1] / 100,
@@ -349,7 +361,7 @@ def check_html(path: Path, medium: str) -> Report:
                     pct = re.fullmatch(r"(\d*\.?\d+)%", v.strip())
                     root_px = 16 * float(pct.group(1)) / 100 if pct else (length_px(v, 16) or root_px)
     for name, v in any_props.items():
-        if re.search(r"font-?size", name, re.I):
+        if size_token(name):
             for x in size_px(resolve(v, {}), root_px) or []:
                 scale.add(round(x, 1))
 

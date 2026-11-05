@@ -4,7 +4,7 @@ seo_title: Design tokens and the DTCG 2025.10 format, in plain words
 description: What design tokens are, the three tiers of tokens, what the DTCG 2025.10 format and its resolver do, and how OpenDesigner stores and exports its tokens.
 section: Concepts
 order: 2
-updated: 2026-10-14
+updated: 2026-11-05
 ---
 
 Design tokens are design decisions saved as named values, such as `color.text.primary` or `space.4`, so code, design tools and AI agents all read the same values. DTCG is the open file format for tokens from the Design Tokens Community Group, and 2025.10 is its first stable version. OpenDesigner keeps every token in this format and makes all its other files from it.
@@ -44,6 +44,22 @@ The semantic token points to it:
 In the CSS export, that becomes `--ds-color-text-primary`. Components use the semantic roles. They don't use the primitives directly. That way a dark-mode mapping can point the same role at a different shade.
 
 {{figure:design-tokens-tiers}}
+
+## Tokens for tables and charts
+
+Work tools show most of their data in tables and charts, so both get their own tokens.
+
+**Tables.** Rows come in four heights: `size.row.sm`, `md`, `lg` and `two-line`. Numbers use the `text.numeric.*` styles, whose digits all have the same width, so columns line up. One question (Q-pattern-07) decides how rows are separated (lines, striped rows or space), whether the header stays on screen, and how numbers align. Striped rows add one color, `color.surface.row-alternate`, one step away from the page. The other answers become rules in `DESIGN.md`.
+
+**Charts.** When the chart question (Q-color-19) asks for chart colors, the system adds:
+
+- `color.chart.brand` for a chart with one series, and `color.chart.categorical.*` for groups, in a fixed order.
+- `color.chart.sequential.*` for amounts, from light to dark.
+- `color.chart.diverging.1` to `7` for values below and above a midpoint. Step 4 is the midpoint.
+- `color.chart.status.*` for success, warning and danger, used with a label.
+- `color.chart.axis`, `gridline`, `label` and `reference`, which point at the border and text colors, so charts look like the rest of the app.
+
+Every chart mark reaches 3:1 against the page, the WCAG minimum for shapes people need to see. Marks don't reach 3:1 against each other, so leave a gap or a thin line between neighbors. Every export carries these tokens, from CSS and Tailwind to Swift, Compose and Figma.
 
 ## The DTCG format
 

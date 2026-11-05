@@ -3851,9 +3851,9 @@
   "term": "Data visualization",
   "plain": "Charts that match the rest of the app, with set colors, parts and rules so all can read them.",
   "designer": "Charts as part of the system: a small set of chart types, palettes, shared anatomy and accessibility rules, so charts look native to the product rather than pasted in.",
-  "engineer": "Planned via the H-dataviz hook: chart palettes as color tokens, with chrome reusing text, border and dimension tokens; no chart tokens are generated yet. DTCG has no chart-specific types.",
+  "engineer": "Generated when Q-color-19 asks for chart colors: color.chart.* holds brand, categorical, sequential, diverging and status colors, each 3:1 on the page, plus axis, gridline and label aliases.",
   "designer_says": "data viz, themed to the system",
-  "code_name": "color.chart.* (proposed)",
+  "code_name": "color.chart.*",
   "source": [
    "found.dataviz"
   ],

@@ -1,14 +1,9 @@
 {
   "kind": "checkers",
   "date": "2026-11-05",
-  "time": "2026-11-05T04:02:30",
-  "commit": "98014ac",
-  "checkersChangedSinceCommit": [
-    "skills/opendesigner-preflight/scripts/preflight.py",
-    "skills/opendesigner-review/scripts/review.py",
-    "skills/opendesigner-review/scripts/probe.js",
-    "skills/opendesigner-review/scripts/capture.py"
-  ],
+  "time": "2026-11-05T16:40:21",
+  "commit": "6b79bcf",
+  "checkersChangedSinceCommit": [],
   "environment": {
     "python": "3.10.11",
     "chrome": "156.0.8078.80",
@@ -23,12 +18,12 @@
       "planted": 20,
       "caught": 20,
       "recall": 1.0,
-      "findings": 21,
+      "findings": 20,
       "true": 20,
-      "false": 1,
-      "precision": 0.952,
+      "false": 0,
+      "precision": 1.0,
       "cleanPages": 2,
-      "falseAlarms": 1,
+      "falseAlarms": 0,
       "mislocated": 0,
       "perCheck": {
         "actions": {
@@ -103,15 +98,6 @@
           "precision": 1.0,
           "falseAlarms": 0
         },
-        "partial-row": {
-          "planted": 0,
-          "caught": 0,
-          "recall": null,
-          "findings": 1,
-          "true": 0,
-          "precision": 0.0,
-          "falseAlarms": 1
-        },
         "symmetry": {
           "planted": 1,
           "caught": 1,
@@ -168,31 +154,7 @@
         }
       },
       "missed": [],
-      "unexpected": [
-        {
-          "page": "layout/clean-basics.html",
-          "check": "partial-row",
-          "level": "warning",
-          "loc": [
-            "main"
-          ],
-          "msg": "row 2 (1 box, 16–336 px) is centred at 176 px; row 1 (1, 16–344 px) at 180 px: 4 px left",
-          "widths": [
-            360,
-            390,
-            430,
-            600,
-            768,
-            820,
-            900,
-            1024,
-            1180,
-            1280,
-            1440,
-            1920
-          ]
-        }
-      ],
+      "unexpected": [],
       "caughtBy": {
         "L-overflow-img": [
           {
@@ -335,15 +297,15 @@
           }
         ]
       },
-      "layoutInstances": 32
+      "layoutInstances": 20
     },
     "preflight": {
       "script": "skills/opendesigner-preflight/scripts/preflight.py",
-      "planted": 14,
-      "caught": 13,
-      "recall": 0.929,
-      "findings": 13,
-      "true": 13,
+      "planted": 24,
+      "caught": 24,
+      "recall": 1.0,
+      "findings": 24,
+      "true": 24,
       "false": 0,
       "precision": 1.0,
       "cleanPages": 1,
@@ -360,20 +322,38 @@
           "falseAlarms": 0
         },
         "M2": {
-          "planted": 2,
-          "caught": 1,
-          "recall": 0.5,
-          "findings": 1,
-          "true": 1,
+          "planted": 5,
+          "caught": 5,
+          "recall": 1.0,
+          "findings": 5,
+          "true": 5,
           "precision": 1.0,
           "falseAlarms": 0
         },
         "M5": {
-          "planted": 3,
-          "caught": 3,
+          "planted": 4,
+          "caught": 4,
           "recall": 1.0,
-          "findings": 3,
-          "true": 3,
+          "findings": 4,
+          "true": 4,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "M58": {
+          "planted": 5,
+          "caught": 5,
+          "recall": 1.0,
+          "findings": 5,
+          "true": 5,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "M59": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
           "precision": 1.0,
           "falseAlarms": 0
         },
@@ -423,14 +403,7 @@
           "falseAlarms": 0
         }
       },
-      "missed": [
-        {
-          "id": "P-off-scale-fs",
-          "page": "preflight/off-scale.html",
-          "check": "M2",
-          "what": "an 18 px label off a scale named --fs-* (14, 16, 20, 24, 32)"
-        }
-      ],
+      "missed": [],
       "unexpected": [],
       "caughtBy": {
         "P-text-10": [
@@ -440,11 +413,25 @@
             "msg": "text under 11px for web: [10]; below 11 px is under every platform minimum; 12 px is the web floor for text people read, and 11 px fits only short labels (stage 11, Material label-small)  [M8]"
           }
         ],
+        "P-text-10-scale": [
+          {
+            "check": "M2",
+            "level": "warn",
+            "msg": "sizes outside the token scale [14, 16, 20, 24, 32]: [10]  [M2, M6]"
+          }
+        ],
         "P-text-11": [
           {
             "check": "M8",
             "level": "warn",
             "msg": "text under 12px for web: [11]; below 11 px is under every platform minimum; 12 px is the web floor for text people read, and 11 px fits only short labels (stage 11, Material label-small)  [M8]"
+          }
+        ],
+        "P-text-11-scale": [
+          {
+            "check": "M2",
+            "level": "warn",
+            "msg": "sizes outside the token scale [14, 16, 20, 24, 32]: [11]  [M2, M6]"
           }
         ],
         "P-font-missing": [
@@ -466,6 +453,20 @@
             "check": "M6",
             "level": "warn",
             "msg": "sizes within 10% of each other: 14/15, 15/16  [M6]"
+          }
+        ],
+        "P-close-sizes-scale": [
+          {
+            "check": "M2",
+            "level": "warn",
+            "msg": "sizes outside the token scale [14, 16, 20, 24, 32]: [15]  [M2, M6]"
+          }
+        ],
+        "P-off-scale-fs": [
+          {
+            "check": "M2",
+            "level": "warn",
+            "msg": "sizes outside the token scale [14, 16, 20, 24, 32]: [18]  [M2, M6]"
           }
         ],
         "P-off-scale-ds": [
@@ -496,6 +497,48 @@
             "msg": "a tween animates width; layout properties snap to whole pixels, use x, y or scale  [M18]"
           }
         ],
+        "P-kern-off": [
+          {
+            "check": "M58",
+            "level": "error",
+            "msg": "kerning switched off (font-kerning: none or \"kern\" 0) in .wordmark; remove it, and set font-kerning: normal on display text  [M58]"
+          }
+        ],
+        "P-kern-px": [
+          {
+            "check": "M58",
+            "level": "warn",
+            "msg": "letter-spacing in px: .title -1px; write tracking in em so it scales with the size and text zoom  [M58]"
+          }
+        ],
+        "P-kern-pct": [
+          {
+            "check": "M58",
+            "level": "warn",
+            "msg": "letter-spacing in %: .lede -2%; CSS % is a share of the space width, not Figma's percent (Figma -2% is -0.02em)  [M58]"
+          }
+        ],
+        "P-kern-caps": [
+          {
+            "check": "M5",
+            "level": "error",
+            "msg": "capitals tracked tight: .eyebrow at -0.01em; uppercase needs open tracking (about +0.02 to +0.08em), never negative  [M5]"
+          }
+        ],
+        "P-kern-split": [
+          {
+            "check": "M58",
+            "level": "warn",
+            "msg": "text is split into one element per letter (split(\"\")), which drops the font's kerning and ligatures; animate words or lines, or measure and restore kerning and put the markup back  [M58]"
+          }
+        ],
+        "P-white-black": [
+          {
+            "check": "M59",
+            "level": "warn",
+            "msg": "pure white (.card background: #fff) and pure black (body color: #000000) on one page; use an off-black such as #111111 with white, or an off-white with black (house standard STD-visual-details-66)  [M"
+          }
+        ],
         "P-missing-sheet": [
           {
             "check": "missing-sheet",
@@ -517,6 +560,13 @@
             "msg": "tracking gets looser as type gets bigger: .title is 40px at 0.02em, .lede is 14px at -0.01em; tighten as size grows  [M5]"
           }
         ],
+        "P-track-px": [
+          {
+            "check": "M58",
+            "level": "warn",
+            "msg": "letter-spacing in px: .title 0.8px; write tracking in em so it scales with the size and text zoom  [M58]"
+          }
+        ],
         "P-fluid-small": [
           {
             "check": "M8",
@@ -525,7 +575,7 @@
           }
         ]
       },
-      "infoLines": 28
+      "infoLines": 32
     },
     "review": {
       "script": "skills/opendesigner-review/scripts/review.py",
@@ -1119,10 +1169,10 @@
     "names": {
       "script": "brand/tools/check_names.py",
       "planted": 5,
-      "caught": 4,
-      "recall": 0.8,
-      "findings": 4,
-      "true": 4,
+      "caught": 5,
+      "recall": 1.0,
+      "findings": 5,
+      "true": 5,
       "false": 0,
       "precision": 1.0,
       "cleanPages": 1,
@@ -1131,10 +1181,10 @@
       "perCheck": {
         "cross-near": {
           "planted": 2,
-          "caught": 1,
-          "recall": 0.5,
-          "findings": 1,
-          "true": 1,
+          "caught": 2,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
           "precision": 1.0,
           "falseAlarms": 0
         },
@@ -1166,14 +1216,7 @@
           "falseAlarms": 0
         }
       },
-      "missed": [
-        {
-          "id": "N-near-two-words",
-          "page": "names/piece-b.html",
-          "check": "cross-near",
-          "what": "\"Vosberg Health\" here, one letter from \"Vossberg Health\" in piece-a"
-        }
-      ],
+      "missed": [],
       "unexpected": [],
       "caughtBy": {
         "N-near-one-word": [
@@ -1181,6 +1224,13 @@
             "check": "cross-near",
             "level": "error",
             "msg": "\"Stellwick\" (piece-b) is one or two letters from \"Tellwick\" (piece-a)"
+          }
+        ],
+        "N-near-two-words": [
+          {
+            "check": "cross-near",
+            "level": "error",
+            "msg": "\"Vosberg Health\" (piece-b) is one or two letters from \"Vossberg Health\" (piece-a)"
           }
         ],
         "N-registry-name": [
@@ -2275,7 +2325,7 @@
       "date": "2026-10-25",
       "time": "2026-10-25T01:31:49+05:30",
       "subject": "Library cards render right in Safari: scale with a transform, measure cards fully drawn, check WebKit too",
-      "current": true,
+      "current": false,
       "checkNumbers": [
         1,
         2,
@@ -2410,6 +2460,142 @@
       "falseAlarmsRemoved": [],
       "falseAlarmsAdded": [],
       "note": "No change on these fixtures."
+    },
+    {
+      "commit": "6b79bcf",
+      "date": "2026-11-05",
+      "time": "2026-11-05T16:29:51+05:30",
+      "subject": "Checkers at 100%: layout partial rows, preflight scale names, two-word near names",
+      "current": true,
+      "checkNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "findingTypes": [
+        "actions",
+        "anchor",
+        "clipped",
+        "edge",
+        "ellipsis",
+        "inner-scroll",
+        "label-break",
+        "nested-radius",
+        "overlap",
+        "page-overflow",
+        "partial-row",
+        "preview-crop",
+        "row-overflow",
+        "symmetry",
+        "target",
+        "text-edge",
+        "text-left",
+        "under-control",
+        "widow"
+      ],
+      "planted": 20,
+      "caught": 20,
+      "recall": 1.0,
+      "findings": 20,
+      "precision": 1.0,
+      "falseAlarms": 0,
+      "missed": [],
+      "perCheck": {
+        "actions": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "anchor": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "clipped": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "inner-scroll": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "label-break": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "overlap": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "page-overflow": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "symmetry": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "target": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "text-edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "text-left": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "under-control": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "widow": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        }
+      },
+      "falseAlarmList": [],
+      "newlyCaught": [],
+      "ownerFeedback": [],
+      "falseAlarmsRemoved": [
+        {
+          "page": "layout/clean-basics.html",
+          "check": "partial-row",
+          "element": "main"
+        }
+      ],
+      "falseAlarmsAdded": [],
+      "note": "Removes 1 clean-page false alarms (partial-row)."
     }
   ],
   "historyChecker": "site/check_layout.py",
