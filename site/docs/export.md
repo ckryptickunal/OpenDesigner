@@ -44,6 +44,8 @@ All paths are inside `opendesigner/`.
 
 The wiring for each one is on [For engineers](/docs/engineers/).
 
+If your brand font's licence doesn't cover apps, the Swift and Compose files use the system font instead and say so. Check this before you ship an app build.
+
 ## Brand and press page
 
 `build/brand/index.html` is a page about your brand that you can host as it is. It is made from your tokens, in light and dark. It shows:
@@ -54,8 +56,6 @@ The wiring for each one is on [For engineers](/docs/engineers/).
 - the icon grid and its rules, your icon files, and the open icon set you chose, with its licence.
 
 Your short description, facts, leadership, figures and press contact are yours to give. Each one says "Not enough information" until you give it. Nothing on the page is made up: no logo, fact or number you didn't supply. Font files are never included: an open-licence font loads from Google Fonts when the page opens, and any other font shows only on computers that have it installed. See [Brand assets](/docs/brand-assets/) for the logo rules.
-
-If your brand font's licence doesn't cover apps, the Swift and Compose files use the system font instead and say so. Check this before you ship an app build.
 
 ## Figma
 
