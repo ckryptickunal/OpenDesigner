@@ -4,7 +4,7 @@ seo_title: AI design system generator: what it should and shouldn't do
 description: A good AI design system generator asks, recommends with reasons, checks accessibility and writes it all down. How OpenDesigner does each, and what it isn't.
 section: Guides
 order: 23
-updated: 2026-10-15
+updated: 2026-11-05
 ---
 
 A useful AI design system generator leaves you with rules you understand and files your code can use, not only a nice palette. A design system is the rules for how your app looks: colors, text sizes, spacing, corners and buttons.
@@ -17,7 +17,7 @@ OpenDesigner works this way: it asks a few questions, recommends sourced default
 
 **Ask only what only you can answer.** The first pass is up to five questions: what you are making, who it is for, where it runs, how it should feel, and your brand color or logo. Then you can stop, or zoom into one area such as color or type.
 
-**Recommend one answer, with its reason.** The defaults rest on 352 Decision Cards. Each card covers one design decision and cites logged sources, or is marked as an inference. You can always answer in your own words, or say "just pick".
+**Recommend one answer, with its reason.** The defaults rest on more than 500 Decision Cards. Each card covers one design decision and cites logged sources, or is marked as an inference. You can always answer in your own words, or say "just pick".
 
 **Do the math in code, not in the chat.** A Python engine works out the color ramps, type and spacing scales, contrast and every export. The same answers give the same tokens: we ran one command twice on 2026-10-15 and got identical token files.
 
@@ -48,8 +48,8 @@ Today: eight skills, the engine, every export, and an overview page of your whol
 
 Not yet:
 
-- Clicking choices inside your AI tool ([planned in issue #20](https://github.com/ckryptickunal/OpenDesigner/issues/20)). Today choices are HTML pages or text.
-- Previews of more components than buttons, a text field and a card.
+- Clicking choices inside your AI tool ([planned in issue #20](https://github.com/ckryptickunal/OpenDesigner/issues/20)). Today choices are HTML pages, artifacts, text, or your tool's own question buttons where it has them.
+- More components on the overview page. It draws buttons, a text field and a card. The component sheet shows more, and the [component library](/library/) has 82 you can add.
 - React Native or Flutter exports.
 - Watched user trials. "About 3 minutes" for the first pass is a design target, not a measurement.
 

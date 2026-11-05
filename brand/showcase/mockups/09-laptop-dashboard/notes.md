@@ -1,5 +1,7 @@
 # 09 · Quoin payments on a laptop
 
+Gallery: Quoin, a fictional payments platform, on a laptop: the payments table of a tableware and kitchen supplier.
+
 Replaces `mockups/02-laptop-desk` (audited 2 of 5, "remake"). Render: `shot.png`, 1600 x 1200 at scale 2 (3200 x 2400), made with `../render_still.py --wait 2500`. Page: `index.html`.
 
 ## Direction

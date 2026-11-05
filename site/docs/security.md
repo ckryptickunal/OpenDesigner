@@ -4,7 +4,7 @@ seo_title: OpenDesigner security and data: what runs where, what is sent
 description: Where OpenDesigner runs, what leaves your computer and what never does, the opt-in journey log, how to report a vulnerability, and its release status.
 section: Reference
 order: 6
-updated: 2026-10-15
+updated: 2026-11-05
 ---
 
 OpenDesigner is files in your repository plus a small engine that runs on your own computer. There is no hosted service, no account and no server that receives your design. This page lists what runs where and what can leave your machine, so a security or platform team can check it before a pilot.
@@ -16,7 +16,7 @@ OpenDesigner is files in your repository plus a small engine that runs on your o
 | The engine (`engine.py`) | On your computer, with Python 3.10 or newer and only the standard library | None. It makes no network calls |
 | The skills (instructions) | Inside the AI tool you already use | Your chat goes to that tool's AI provider, as any prompt does |
 | The Claude app | The engine runs in Claude's code-execution sandbox | Whatever that sandbox allows |
-| The illustration skill (`opendesigner-illustrate`) | On your computer | Searches and fetches open-licence art sites over HTTPS, only when you use it |
+| The illustration skill (`opendesigner-illustrate`) | On your computer | Searches and fetches open-licence art, icons and stock photos over HTTPS (Openverse, Wikimedia Commons, and Pexels with your own key), only when you use it |
 | The review skill (`opendesigner-review`) | On your computer | `review.py serve` listens on 127.0.0.1 only while you run it. The optional `capture.py` drives a browser to local addresses only and needs Playwright, which is installed only after you say yes |
 | The paint skill (`opendesigner-paint`) | On your computer | Its painting engine is installed with npm only after you say yes, and renders locally |
 
@@ -25,7 +25,8 @@ Everything OpenDesigner writes stays in your project, except taste poll screens,
 ## What can leave your computer
 
 - **Your conversation with your AI tool.** OpenDesigner adds instructions to it. Where that conversation goes is set by the tool you chose, not by OpenDesigner.
-- **Illustration searches,** when you ask for illustrations and say yes to the search.
+- **Illustration and photo searches,** when you ask for illustrations or photos and say yes to the search.
+- **Photos in library parts.** If you add a part from the component library that shows a photo, the page loads that photo from Unsplash when someone opens it.
 - **Package downloads for the paint engine** (npm and a browser for rendering), only after you say yes. Nothing about your project is sent.
 - **Taste poll screens,** if your AI tool is connected to Mobbin and the poll needs more. They are saved in `~/.opendesigner/` on your computer. Nothing about your project is sent.
 - **Nothing else by default.** The journey log and shared reports below are both off until you say yes.
@@ -56,7 +57,7 @@ You should get a first reply within 7 days. What counts, and how secrets are kep
 
 ## Release and maintenance status
 
-- **No tagged release yet.** Version 0.1.0 is planned, and security fixes land on `main`.
+- **Version 0.2.0 is the first tagged release,** from 5 November 2026. Security fixes land on `main` and ship in the next release.
 - **One maintainer.** There is no support agreement.
 - **No continuous integration runs are recorded yet.** The engine's tests pass on the maintainer's computer.
 - **Licence:** MIT for code, skills and data; CC BY 4.0 for the docs.
