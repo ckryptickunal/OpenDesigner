@@ -91,7 +91,7 @@ For each asset, it keeps a record of the source, the licence, the credit line, w
 
 ## The illustration skill
 
-If you have no illustrations and want open-licence art, the opendesigner-illustrate skill can help. It searches open-licence sources, ranks what it finds, recolors the art to your tokens, applies it, and keeps the licence ledger. Its directory lists 44 illustration sources, each with its licence checked on 2026-09-28.
+If you have no illustrations and want open-licence art, the opendesigner-illustrate skill can help. It searches open-licence sources, ranks what it finds, recolors the art to your tokens, applies it, and keeps the licence ledger. Its directory lists 46 illustration sources, each with its licence checked on 2026-09-28.
 
 The engine makes no network calls. This skill does: it searches and downloads art over HTTPS, and only when you use it.
 

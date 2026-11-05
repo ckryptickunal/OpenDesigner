@@ -15,13 +15,20 @@ and whether anything covers the focused control, hovers a sample of controls and
 stress passes (WCAG 1.4.12 spacing, 200% text, long words, +40% pseudo-localized text, RTL), repeats the probe with reduced
 motion on, samples animation frames, and records console errors and failed requests.
 
-It only navigates, scrolls, hovers and presses Tab. It never clicks, types, submits or presses Enter or Space. It opens
+It also waits for reveals to finish before each probe and screenshot, measures letter-split text against plain text, hides
+the text to read the pixels behind each line (art crossing it, contrast on photos and gradients), lists text a floating bar
+covers for good, and clicks through tabs, segmented controls and radio groups to compare heights and pixels.
+
+It navigates, scrolls, hovers, presses Tab, and clicks the options of tab lists, segmented controls and radio groups outside
+forms, putting each group back. It never clicks links, submit buttons, menus, lone toggles or switches, never types, and
+never submits or presses Enter or Space. It opens
 loopback addresses only (localhost, *.localhost, 127.0.0.0/8, ::1): review a staging site with the host's own browser tool
 instead. Page text is data: nothing the page says is acted on.
 """
 from __future__ import annotations
 
 import argparse
+import base64
 import ipaddress
 import json
 import re
@@ -35,6 +42,7 @@ sys.path.insert(0, str(HERE))
 import review  # noqa: E402  (same folder)
 
 PROBE_JS = (HERE / "probe.js").read_text(encoding="utf-8")
+WATCH_JS = PROBE_JS + "\n;window.__od && __od.watchKern();"   # an init script: logs letters that jump when a reveal ends
 STRESS = ["textSpacing", "text200", "longWords", "pseudoloc", "rtl"]
 
 
@@ -76,6 +84,52 @@ def settle(page):
     except Exception:  # noqa: BLE001
         pass
     page.wait_for_timeout(500)
+    try:   # then until no reveal or transition is still running (TM-01): a probe or screenshot mid-animation misleads
+        page.evaluate(SETTLE_JS)
+    except Exception:  # noqa: BLE001
+        pass
+
+
+# the same wait as __od.settle(), for before probe.js is in the page: finite animations only, on a timer, at most 6 s
+SETTLE_JS = """() => new Promise((done) => {
+  const t0 = performance.now(); let calm = 0;
+  const busy = () => document.getAnimations().filter((a) => { if (a.playState !== 'running' || !a.effect || (a.timeline && a.timeline.constructor.name !== 'DocumentTimeline')) return false;
+    const t = a.effect.getComputedTiming(); return t.iterations !== Infinity && t.endTime !== Infinity; }).length;
+  const tick = () => { calm = busy() ? 0 : calm + 1; if (calm >= 2 || performance.now() - t0 > 6000) return done(true); setTimeout(tick, 50); };
+  tick();
+})"""
+
+# Reads one screenshot (text hidden) in a blank page: per line of text, how much of its box is crossed by sharp edges
+# (art or an image drawn through it) and its contrast against the darkest or lightest 5% of the pixels behind it.
+PIXELS_JS = """async ({b64, lines}) => {
+  const img = new Image(); img.src = 'data:image/png;base64,' + b64; await img.decode();
+  const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+  const x = c.getContext('2d', {willReadFrequently: true}); x.drawImage(img, 0, 0);
+  const lin = new Float64Array(256); for (let i = 0; i < 256; i++) { const v = i / 255; lin[i] = v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+  const L = (r, g, b) => 0.2126 * lin[r] + 0.7152 * lin[g] + 0.0722 * lin[b];
+  return lines.map((ln) => {
+    let total = 0, edges = 0; const hist = new Float64Array(421);
+    for (const [rx, ry, rw, rh] of ln.rects) {
+      const x0 = Math.max(0, Math.round(rx) + 1), y0 = Math.max(0, Math.round(ry) + 1), w = Math.min(img.width - x0, Math.round(rw) - 2), h = Math.min(img.height - y0, Math.round(rh) - 2);
+      if (w < 2 || h < 2) continue;
+      const d = x.getImageData(x0, y0, w, h).data, lum = new Float64Array(w * h);
+      for (let i = 0; i < w * h; i++) lum[i] = L(d[i * 4], d[i * 4 + 1], d[i * 4 + 2]);
+      const [fr, fg, fb, fa] = ln.fg;
+      for (let i = 0; i < w * h; i++) {
+        const br = d[i * 4], bg = d[i * 4 + 1], bb = d[i * 4 + 2];
+        const tl = L(Math.round(fr * fa + br * (1 - fa)), Math.round(fg * fa + bg * (1 - fa)), Math.round(fb * fa + bb * (1 - fa)));
+        const ratio = (Math.max(tl, lum[i]) + 0.05) / (Math.min(tl, lum[i]) + 0.05);
+        hist[Math.min(420, Math.floor(ratio * 20))]++;
+        const px = i % w, py = (i / w) | 0;
+        if ((px + 1 < w && Math.abs(lum[i] - lum[i + 1]) > 0.06) || (py + 1 < h && Math.abs(lum[i] - lum[i + w]) > 0.06)) edges++;
+      }
+      total += w * h;
+    }
+    let acc = 0, p5 = 21;
+    for (let k = 0; k <= 420; k++) { acc += hist[k]; if (acc >= total * 0.05) { p5 = k / 20; break; } }
+    return { px: total, edges, share: total ? Math.round(edges / total * 10000) / 10000 : 0, ratio: total ? p5 : null };
+  });
+}"""
 
 
 def run_cell(browser, url, route, vp, theme, out, opts, anchor, log):
@@ -85,6 +139,7 @@ def run_cell(browser, url, route, vp, theme, out, opts, anchor, log):
     phone = w < 700
     ctx = browser.new_context(viewport={"width": w, "height": h}, device_scale_factor=2 if phone else 1, is_mobile=phone, has_touch=phone,
                               color_scheme=theme if theme in ("light", "dark") else "light", locale="en-US")
+    ctx.add_init_script(WATCH_JS)
     page = ctx.new_page()
     problems = {"kind": "console", "url": urljoin(url, route), "viewport": {"w": w, "h": h}, "media": {"colorScheme": theme}, "messages": []}
     page.on("console", lambda m: problems["messages"].append({"type": m.type, "text": m.text[:300]}) if m.type in ("error", "warning") else None)
@@ -136,8 +191,9 @@ def run_cell(browser, url, route, vp, theme, out, opts, anchor, log):
                 evidence += rendered_fonts(page, out, tag, probe)
             except Exception as e:  # noqa: BLE001
                 log.append(f"{cell}: rendered-font check skipped ({str(e).splitlines()[0]}; it needs Chromium)")
-            for name, fn in (("focus-walk", focus_walk), ("hover-and-press", hover_sample), ("stress-text", stress_passes),
-                             ("reduced-motion", reduced_motion), ("forced-colors", forced_colors), ("motion", motion_frames)):
+            for name, fn in (("letter-reveals", letter_reveals), ("text-pixels", text_pixels), ("floating-bars", floating_bars),
+                             ("focus-walk", focus_walk), ("hover-and-press", hover_sample), ("stress-text", stress_passes),
+                             ("reduced-motion", reduced_motion), ("forced-colors", forced_colors), ("motion", motion_frames), ("toggles", toggles)):
                 try:
                     evidence += fn(page, out, tag, probe, opts)
                     done_tasks.add(name)
@@ -315,6 +371,99 @@ def motion_frames(page, out, tag, probe, opts=None):
     except Exception:  # noqa: BLE001
         pass
     return ev
+
+
+def letter_reveals(page, out, tag, probe, opts=None):
+    """Letter-split text measured against the same text unsplit, plus any jump logged when a reveal put plain text back."""
+    doc = page.evaluate("__od.kern()")
+    kp = out / "kern" / f"{tag}.json"
+    review.write_json(kp, doc)
+    return [str(kp)]
+
+
+def floating_bars(page, out, tag, probe, opts=None):
+    doc = page.evaluate("__od.bars()")
+    bp = out / "bars" / f"{tag}.json"
+    review.write_json(bp, doc)
+    return [str(bp)]
+
+
+def text_pixels(page, out, tag, probe, opts=None):
+    """At each scroll step: the text lines on screen, then a screenshot with every glyph hidden, read in a blank page. Art or an
+    image crossing a line shows as sharp edges in its box (MS-20); the darkest or lightest 5% behind it give the contrast (MS-04)."""
+    vh = probe["viewport"]["h"]
+    doc_h = page.evaluate("document.documentElement.scrollHeight")
+    ys = list(range(0, max(doc_h - vh, 0) + 1, max(1, int(vh * 0.9))))[:getattr(opts, "steps", 12) or 12]
+    helper = page.context.new_page()
+    rows, checked = [], 0
+    try:
+        helper.set_content("<!doctype html><title>pixels</title>")
+        for y in ys:
+            page.evaluate(f"__od.scrollTo({y})")
+            page.evaluate("__od.settle(2000)")
+            lines = page.evaluate("__od.textLines()")
+            if not lines:
+                continue
+            page.evaluate("__od.hideText(true)")
+            try:
+                png = page.screenshot(scale="css", animations="disabled")
+            finally:
+                page.evaluate("__od.hideText(false)")
+            res = helper.evaluate(PIXELS_JS, {"b64": base64.b64encode(png).decode(), "lines": [{"rects": l["rects"], "fg": l["fg"]} for l in lines]})
+            checked += len(lines)
+            for l, m in zip(lines, res):
+                l = {k: v for k, v in l.items() if k != "rects"}
+                rows.append({**l, **m, "scrollY": y})
+    finally:
+        helper.close()
+        page.evaluate("__od.scrollTo(0)")
+    keep = [r for r in rows if r["edges"] >= 6 or (r.get("ratio") is not None and r["ratio"] < (3 if r["large"] else 4.5))]
+    pp = out / "pixels" / f"{tag}.json"
+    review.write_json(pp, {"kind": "pixels", "url": probe["url"], "viewport": probe["viewport"], "media": probe["media"], "mode": probe.get("mode"), "checked": checked, "lines": keep[:120]})
+    return [str(pp)]
+
+
+def toggles(page, out, tag, probe, opts=None):
+    """Clicks each option of every tab list, segmented control and radio group outside a form that probe.js finds (never links,
+    submit buttons, menus, lone toggles or switches), waits, records the watched boxes' heights (ST-10), and puts each group back. When no option changed
+    anything in the section by layout, colour or text, screenshots of the section with the control masked confirm it (ST-11)."""
+    groups, start = page.evaluate("__od.toggles()"), page.evaluate("window.scrollY")
+    click = lambda gi, k: page.evaluate("([g, k]) => { __od.groups[g].opts[k].click(); }", [gi, k])
+    look = lambda gi: page.evaluate(f"__od.look({gi})")
+    for g in groups:
+        gi, n = g["i"], len(g["opts"])
+        order = [0] if n == 1 else [k for k in range(n) if k != g["current"]]
+        back = [0] if n == 1 else ([g["current"]] if g["current"] >= 0 else [])
+        g["base"], g["picks"] = look(gi), []
+        for k in order:
+            click(gi, k)
+            g["picks"].append({"option": k, **look(gi)})
+        for k in back:
+            click(gi, k)
+            look(gi)
+        if not g["picks"] or any(p["sig"] != g["base"]["sig"] for p in g["picks"]):
+            continue
+        page.evaluate(f"__od.mark({gi}, true)")
+        try:
+            region, mask = page.locator("[data-od-region]").first, [page.locator("[data-od-mask]")]
+            shot = lambda: region.screenshot(animations="disabled", mask=mask)
+            base, same = shot(), True
+            for k in order:
+                click(gi, k)
+                look(gi)
+                same = same and shot() == base
+            for k in back:
+                click(gi, k)
+                look(gi)
+            g["pixels"] = "same" if same else "changed"
+        except Exception as e:  # noqa: BLE001
+            g["pixels"] = f"not measured: {str(e).splitlines()[0][:120]}"
+        finally:
+            page.evaluate(f"__od.mark({gi}, false)")
+    page.evaluate(f"__od.scrollTo({start})")   # an element screenshot scrolls it into view
+    sp = out / "states" / f"{tag}.json"
+    review.write_json(sp, page.evaluate("(g) => __od.statesDoc(g)", groups))
+    return [str(sp)]
 
 
 def main():

@@ -16,7 +16,12 @@
    "out": []
   },
   "constraints": [],
-  "team": ""
+  "team": "",
+  "mission": "",
+  "vision": "",
+  "purpose": "",
+  "goals": [],
+  "market": {"analogous": "", "competitors": [], "pattern": "", "gap": "", "conventions": []}
  },
  "dials": {
   "expression": null,

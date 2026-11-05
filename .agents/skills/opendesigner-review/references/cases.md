@@ -2,7 +2,7 @@
 
 Generated from `synthesis/review-cases.json` by `tools/build_data.py`. Edit the source, not this file.
 
-69 cases in 7 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
+77 cases in 7 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
 
 ## You only looked at part of it
 
@@ -90,9 +90,9 @@ Sources: S-R5-011, S-R5-012
 
 **Why it is missed.** Full-page capture draws fixed elements once, at the top. The agent never scrolls with the bar in place.
 
-**How to catch it.** Read the fixed list from the probe: its height and the share of the viewport it covers. Tab through the page and check that the focused control is never under the bar (see IN-01). Use scroll-padding-top on the scroller (WCAG technique C43) and scroll-margin-top on anchor targets [inferred] so focus and anchors land below it. At level AA the focused control must not be entirely hidden; keeping all of it visible is the stricter AAA criterion 2.4.12.
+**How to catch it.** Read the fixed list from the probe: its height and the share of the viewport it covers. Tab through the page and check that the focused control is never under the bar (see IN-01). Use scroll-padding-top on the scroller (WCAG technique C43) and scroll-margin-top on anchor targets [inferred] so focus and anchors land below it. At level AA the focused control must not be entirely hidden; keeping all of it visible is the stricter AAA criterion 2.4.12. __od.bars() scrolls the page and lists text a fixed or floating bar covers where it cannot scroll away: inside a pinned block, under a top bar at the top of the page, or under a bottom bar at the end. capture.py runs it and review.py reports it as an error. A pinned scene that fills the screen is not counted as a bar.
 
-Sources: S-R5-091, S-R5-045
+Sources: S-R5-091, S-R5-045, S-R5-104
 
 ### CV-09 The wrong page was photographed
 *How known: operated · default severity: error · applies to: always · inferred*
@@ -125,9 +125,9 @@ Sources: S-R5-002, S-R5-003, S-R5-091, S-R5-004, S-R5-083
 
 **Why it is missed.** The page is photographed the instant it loads, while entry animations are still running. Playwright's animations: disabled option jumps finite animations to their end, which hides the middle instead.
 
-**How to catch it.** Wait for motion to finish (motion.running is 0 in __od.motion()) before judging the resting layout. To judge the movement itself, pause and seek: __od.seek(0), 0.25, 0.5, 0.75, 1 gives the same frame every time.
+**How to catch it.** Wait for motion to finish (motion.running is 0 in __od.motion()) before judging the resting layout. To judge the movement itself, pause and seek: __od.seek(0), 0.25, 0.5, 0.75, 1 gives the same frame every time. Wait with __od.settle() before each probe and screenshot: it returns once no finite animation or transition is running (getAnimations()). capture.py waits like this on every load and scroll step, and a probe taken with animations still running gets a warning. A background browser pane is the usual cause: it pauses frames and timers.
 
-Sources: S-R5-067, S-R5-059, S-R5-091
+Sources: S-R5-067, S-R5-059, S-R5-091, S-R5-104
 
 ### TM-02 Motion that needs a trigger
 *How known: operated · default severity: warn · applies to: motion*
@@ -329,6 +329,28 @@ Sources: S-R5-047, S-R5-032, S-R5-095
 
 Sources: S-R5-033, S-R5-055
 
+### ST-10 A box changes height between states
+*How known: operated · default severity: warn · applies to: always*
+
+**What goes wrong.** Switching a tab, a toggle or a variant makes a card taller, and everything under it jumps.
+
+**Why it is missed.** Each state is checked on its own, and each looks right. The jump only shows when you switch.
+
+**How to catch it.** __od.toggles() lists tab lists, segmented controls, radio groups and switches, with the boxes each could resize. capture.py clicks every option (never links, submit buttons or menus), waits for motion to end (__od.look), records the heights and puts the group back. review.py warns when a watched box changes by more than 1 px. Fix: every state in one grid cell, so the box is as tall as its tallest state.
+
+Sources: S-R5-104
+
+### ST-11 A control that changes nothing
+*How known: operated · default severity: warn · applies to: always*
+
+**What goes wrong.** An Options row, a switcher or a toggle sets a class that nothing styles. It looks clickable and changes nothing.
+
+**Why it is missed.** Clicking it moves its own pressed state, which reads as success.
+
+**How to catch it.** capture.py's toggles pass compares the section before and after each option: the layout, colour, text and svg shapes of every element except the control. When nothing changed, it screenshots the section with the control masked and compares the pixels. review.py warns when no option changed anything.
+
+Sources: S-R5-104
+
 ## Eyes cannot read numbers off pixels
 
 ### MS-01 Spacing judged by eye
@@ -349,9 +371,9 @@ Sources: S-R5-001, S-R5-003, S-R5-030, S-R5-031
 
 **Why it is missed.** Sizes that differ by one pixel look identical.
 
-**How to catch it.** Read type.sizes, type.weights and type.lineHeights. Off-scale sizes are listed with a count and the nearest scale step. A browser default (13.33 px on buttons, 18.72 px on an h3, measured in Chrome 154) means the element does not inherit the type style.
+**How to catch it.** Read type.sizes, type.weights and type.lineHeights. Off-scale sizes are listed with a count and the nearest scale step. A browser default (13.33 px on buttons, 18.72 px on an h3, measured in Chrome 154) means the element does not inherit the type style. With or without a system, review.py also counts against practice: more than two text typefaces (one interface family plus a mono, DC-L02-03), more than three weights or two weights one step apart (DC-L19-24), each a warning. It also counts the sizes in use against about eight (preflight 7), and lists sizes that fall between whole pixels, which a fluid clamp() or vw size gives at most widths. preflight.py html measures clamp(), calc() and vw sizes at 320 to 1920 px instead of skipping them.
 
-Sources: S-R5-030, S-R5-029
+Sources: S-R5-030, S-R5-029, S-R5-104
 
 ### MS-03 The font is not the font
 *How known: measured · default severity: error · applies to: always*
@@ -371,20 +393,20 @@ Sources: S-R5-054, S-R5-087, S-R5-091, S-R5-030, S-R5-098, S-R5-100
 
 **Why it is missed.** Contrast is a ratio, not an impression. Vision models are weak at color tasks (ColorBench) and cannot read a contrast ratio from a picture; light grey text is exactly what looks 'clean'.
 
-**How to catch it.** Compute it: the probe walks up to the real background, mixes semi-transparent layers, and reports every failing pair with its ratio (4.5 to 1 for normal text, 3 to 1 for large; no rounding up, 4.49 fails). Where the background is an image or gradient, it says so: sample pixels instead. Non-text parts (borders that are the only cue, focus rings) need 3 to 1.
+**How to catch it.** Compute it: the probe walks up to the real background, mixes semi-transparent layers, and reports every failing pair with its ratio (4.5 to 1 for normal text, 3 to 1 for large; no rounding up, 4.49 fails). Where the background is an image or gradient, it says so: sample pixels instead. Non-text parts (borders that are the only cue, focus rings) need 3 to 1. capture.py's text-pixels pass reads the real pixels behind each line with the text hidden, and takes the 5% of them closest to the text colour. A pass there overrules the probe's guessed colour backdrop; a failure on a photo or gradient is an error.
 
-Sources: S-R5-006, S-R5-043, S-R5-029, S-R5-096
+Sources: S-R5-006, S-R5-043, S-R5-029, S-R5-096, S-R5-104
 
 ### MS-05 Alignment and grid
-*How known: measured · default severity: info · applies to: always · inferred*
+*How known: measured · default severity: warn · applies to: always · inferred*
 
 **What goes wrong.** Two things that should line up are off by 2 px. A label is not centered on its icon. A card edge does not match the heading above it.
 
 **Why it is missed.** A 2 px offset is easy to miss once a screenshot is scaled down (about 1.5 px after a 1920 px screenshot is shrunk to 1456 px on standard-tier models) [inferred].
 
-**How to catch it.** Pick the pair you suspect and call __od.measure(a, b): it gives the gap, the overlap and the left, right and center offsets. Repeat for the pairs that matter most: heading and content, icon and label, columns. At every width where a row of cards wraps into a column, compare each row's centre and outer edges with the rows above it: stacked groups should share one centre line. OpenDesigner's own site shipped a pair of cards 30 px off that line between 600 and 900 px, because it was only looked at on a desktop; the owner caught it on 2026-10-15.
+**How to catch it.** Pick the pair you suspect and call __od.measure(a, b): it gives the gap, the overlap and the left, right and center offsets. Repeat for the pairs that matter most: heading and content, icon and label, columns. At every width where a row of cards wraps into a column, compare each row's centre and outer edges with the rows above it: stacked groups should share one centre line. OpenDesigner's own site shipped a pair of cards 30 px off that line between 600 and 900 px, because it was only looked at on a desktop; the owner caught it on 2026-10-15. The probe does two of these on its own (layout.mixed and layout.offCentre). Under each h1 to h3 it sorts the heading and the lede, list and button rows in its column into left, centred or right by where their lines sit, and warns when they differ; body copy over three lines may stay left. It also measures every centred heading and line against its section's centre and warns past 2 px (preflight 35).
 
-Sources: S-R5-030, S-R5-031
+Sources: S-R5-030, S-R5-031, S-R5-104
 
 ### MS-06 Targets too small
 *How known: measured · default severity: error · applies to: always · WCAG 2.5.8*
@@ -415,7 +437,7 @@ Sources: S-R5-056, S-R5-057, S-R5-042
 
 **Why it is missed.** Close colors look the same.
 
-**How to catch it.** The probe lists every text, background and border color in use. review.py check names those that are not in the system's palette and the closest token. Also run engine.py review to find them in the source.
+**How to catch it.** The probe lists every text, background and border color in use. review.py check names those that are not in the system's palette and the closest token. Also run engine.py review to find them in the source. With or without a system, review.py also counts color families (one accent plus status colors, DC-L01-08), gray text colors (three, DC-L15-02) and, with no palette, colors within a few RGB steps of each other that were typed twice.
 
 Sources: S-R5-030, S-R5-031
 
@@ -495,6 +517,61 @@ Sources: S-R5-102
 **How to catch it.** The probe counts the lines each text run inside a control spans (out.labels.broken), and review.py reports any as MS-15. A control built from two runs on purpose, such as a title and a subtitle, is not flagged, nor is a sentence over 40 characters. Fix it by keeping the label on one line (white-space: nowrap) and giving it room; let the row wrap, never the label. In an OpenDesigner demo trial on 2026-10-21, a dashboard's Reassign buttons broke inside the word at 1440 px for two rounds while the agent reported no overflow.
 
 Sources: S-R5-101
+
+### MS-16 More than one primary action
+*How known: measured · default severity: warn · applies to: always · preflight 36*
+
+**What goes wrong.** Two or three filled buttons stand out on the same screen ("Get started", "Book a demo", "Sign up"), or two filled buttons sit side by side, or the main button is blue on one page and black on the next. The eye has no first step.
+
+**Why it is missed.** Every action feels important to whoever built it, and each button on its own looks right. The fault only shows when you count the buttons that shout in one view.
+
+**How to catch it.** The probe records every button and button-like link with a fill of its own (out.buttons.filled): its fill, what is behind it, how much it stands out, and whether it is in the first screen. review.py treats a fill that stands out 3:1 or more from what is behind it (the WCAG 1.4.11 bar for a control's edge) as primary, and warns when two or more are in the first screen, when two sit side by side, or when the primary fill differs across the page (a red fill is the danger button and is not counted). Then name the one action the view exists for (preflight 36, DC-L08-05). A selected tab or the current page's nav item is a state and is not counted [inferred].
+
+Sources: S-R5-103
+
+### MS-17 Tracking and kerning that break words
+*How known: measured · default severity: warn · applies to: always · preflight 5*
+
+**What goes wrong.** Capitals are tracked tighter than the font's default, so the letters touch. A 48 px heading is tracked looser than the 14 px text under it. A reveal wraps each letter in its own span, the font's kerning pairs (AV, To) are lost, and the letters jump when the plain text comes back.
+
+**Why it is missed.** Half a pixel per pair is invisible in a scaled-down screenshot, and the jump lasts one frame at the end of an animation. Asked to check the kerning, an agent looks and answers without measuring.
+
+**How to catch it.** The probe records tracking in em at every size (type.tracking) and every capital tracked below zero (type.capsTight). review.py reports capitals with negative tracking as an error, and warns when a bigger size is tracked looser than a smaller one or when there are more than four letter-spacing values. __od.kern() finds text split into one span per letter and measures each letter against the same text unsplit, drawn out of sight with the same font and width. capture.py also installs __od.watchKern() before the page loads, which logs the jump when a reveal puts plain text back; more than 0.5 px is reported. preflight.py html reads the same tracking from the CSS.
+
+Sources: S-R5-104
+
+### MS-18 Headings that run long
+*How known: measured · default severity: warn · applies to: always*
+
+**What goes wrong.** The hero title fits on two lines at 1440 px and runs to four at 390 px.
+
+**Why it is missed.** Headings are written and checked on a desktop. A size that shrinks with the window keeps the words, not the line count.
+
+**How to catch it.** The probe counts the lines of every h1 to h3 at the width it runs at (type.headings), and review.py warns past two lines, once per width. Run it at every planned width. Shorten the words, or step the size down at that width.
+
+Sources: S-R5-104
+
+### MS-19 Too many button styles, or labels too small
+*How known: measured · default severity: warn · applies to: always · DC-L08-07*
+
+**What goes wrong.** A filled 8 px button, a black pill and an outlined square button with an 11 px uppercase label share one screen, and the primary label is 13 px.
+
+**Why it is missed.** Each button was styled where it was used. The mismatch shows only when every button is listed side by side.
+
+**How to catch it.** The probe lists every button-shaped action with a word on it (buttons.styles): filled or outlined, corner radius or pill, height, label size and case. review.py warns at more than three styles or more than one corner shape or case (DC-L08-05, DC-L08-07), at a primary label under 15 px (the owner's floor, 2026-11-05), and at capitals under 14 px on a button.
+
+Sources: S-R5-104
+
+### MS-20 Art drawn through text
+*How known: measured · default severity: warn · applies to: media*
+
+**What goes wrong.** Line art, a chart or the edge of a picture runs through a line of text. The owner: "I see overlapping text with line art."
+
+**Why it is missed.** Overlap is worked out from boxes, and an svg's box covers the whole hero whether or not a line crosses the text. In a shrunken screenshot a 1 px line disappears.
+
+**How to catch it.** Judge it by pixels. capture.py's text-pixels pass hides every glyph (__od.hideText), screenshots each scroll step and reads the pixels inside each line box (__od.textLines). Sharp edges inside a box on a plain backdrop mean something is drawn through the text: review.py warns at 0.2% of the box or more. A photo laid under text on purpose is left to the contrast check (MS-04).
+
+Sources: S-R5-104
 
 ## It works for a mouse and a good pair of eyes, not for everyone
 
@@ -659,6 +736,17 @@ Sources: S-R5-019, S-R5-007, S-R5-021
 
 **How to catch it.** Look for overlays and badges in every shot. Review a production build where you can. Say in the report which mode you looked at.
 
+### EN-08 Fonts downloaded but not used
+*How known: measured · default severity: warn · applies to: always · preflight 10*
+
+**What goes wrong.** Five font families download and the page draws two. Every visitor pays for the other three, and they tempt the next edit to use them.
+
+**Why it is missed.** A font that loads looks like a font that works. Nobody compares what loaded with what is drawn.
+
+**How to catch it.** The probe compares the families document.fonts has loaded with every family named in a visible text element's font stack (fonts.unused), and review.py warns for each loaded family no text names. Text drawn only by ::before or ::after is not read, so check an icon font by hand. It also notes a public page with no share image, favicon or description, or a noindex (a note: fine on a draft).
+
+Sources: S-R5-104
+
 ## How a reviewer fools itself
 
 ### PR-01 Reviewing the code, not the page
@@ -754,7 +842,7 @@ Sources: S-R5-037, S-R5-038, S-R5-039
 
 **Why it is missed.** Without a yardstick, review becomes taste. Models give confident, generic design feedback.
 
-**How to catch it.** Name the yardstick first: the project's tokens and DESIGN.md, the design file, the reference screenshot, or the brief. In OpenDesigner, load opendesigner/tokens and run check with --project. With none, say the review can only judge accessibility floors and internal consistency.
+**How to catch it.** Name the yardstick first: the project's tokens and DESIGN.md, the design file, the reference screenshot, or the brief. In OpenDesigner, load opendesigner/tokens and run check with --project. With none, say the review can only judge accessibility floors, internal consistency and practice with a source (review.py check counts primary buttons, typefaces, weights and colors; opendesigner references/audit.md names the source of each).
 
 Sources: S-R5-007, S-R5-030
 
@@ -875,3 +963,5 @@ Sources: S-R5-101
 | S-R5-100 | [CSS Font Loading Module (W3C draft)](https://drafts.csswg.org/css-font-loading/) | opened: further fonts may load after document.fonts.ready fulfils |
 | S-R5-101 | [OpenDesigner demo trial 1, owner review (2026-10-21)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: row 25: a run that passed every check was judged an admin template |
 | S-R5-102 | [OpenDesigner owner review of nested corners (2026-10-21)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: row 27: stages, bezels and frames whose corners did not nest |
+| S-R5-103 | [OpenDesigner owner review of the website (2026-10-15)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: row 10: three calls to action in one row were "very bad UX"; became preflight check 36 (mistake M37) |
+| S-R5-104 | [OpenDesigner owner review of a private B2B landing page (2026-11-03 to 2026-11-05)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: 2026-11-03 rows 22 and 23, 2026-11-04 rows 27 to 40, 2026-11-05 rows 4 and 6: the project had to hand-write eleven check scripts for what the review missed |

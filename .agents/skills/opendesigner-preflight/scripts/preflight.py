@@ -186,6 +186,87 @@ def size_px(val: str, root: float):
     return None if x is None else [x]
 
 
+WIDTHS = (320, 390, 768, 1024, 1440, 1920)   # where a fluid size (vw, clamp) is measured, with a 900 px tall window
+UNITS = {"px": lambda v, c: v, "rem": lambda v, c: v * c[0], "pt": lambda v, c: v * 4 / 3, "pc": lambda v, c: v * 16,
+         "vw": lambda v, c: v * c[1] / 100, "svw": lambda v, c: v * c[1] / 100, "lvw": lambda v, c: v * c[1] / 100, "dvw": lambda v, c: v * c[1] / 100,
+         "vh": lambda v, c: v * c[2] / 100, "svh": lambda v, c: v * c[2] / 100, "lvh": lambda v, c: v * c[2] / 100, "dvh": lambda v, c: v * c[2] / 100,
+         "vmin": lambda v, c: v * min(c[1], c[2]) / 100, "vmax": lambda v, c: v * max(c[1], c[2]) / 100}
+
+
+def css_px(val: str, root: float, vw: float, vh: float = 900):
+    """A length as the browser computes it at one window size: px, rem, pt, vw, vh and calc(), min(), max(), clamp() of them.
+    None when it depends on the parent (em, %, ch, container units) or cannot be read."""
+    toks = re.findall(r"(-?\d*\.?\d+)([a-z%]*)|([a-z-]+)\(|([()+*/,-])", val.strip().lower())
+    pos = [0]
+
+    def peek():
+        return toks[pos[0]] if pos[0] < len(toks) else None
+
+    def take():
+        pos[0] += 1
+        return toks[pos[0] - 1]
+
+    def args():
+        out = [expr()]
+        while peek() and peek()[3] == ",":
+            take()
+            out.append(expr())
+        if not peek() or take()[3] != ")":
+            raise ValueError
+        return out
+
+    def factor():
+        t = take()
+        num, unit, fn, op = t
+        if num:
+            if not unit:
+                return (float(num), False)
+            if unit not in UNITS:
+                raise ValueError
+            return (UNITS[unit](float(num), (root, vw, vh)), True)
+        if fn in ("calc", "min", "max", "clamp"):
+            a = args()
+            if fn == "calc":
+                return a[0]
+            vals = [x[0] for x in a]
+            if fn == "clamp" and len(vals) == 3:
+                return (max(vals[0], min(vals[1], vals[2])), True)
+            return ((min if fn == "min" else max)(vals), True)
+        if op == "(":
+            v = expr()
+            take()
+            return v
+        if op == "-":
+            v = factor()
+            return (-v[0], v[1])
+        raise ValueError
+
+    def term():
+        v = factor()
+        while peek() and peek()[3] in ("*", "/"):
+            op = take()[3]
+            w = factor()
+            v = (v[0] * w[0], v[1] or w[1]) if op == "*" else (v[0] / w[0], v[1])
+        return v
+
+    def expr():
+        v = term()
+        while peek() and peek()[3] in ("+", "-") or (peek() and peek()[0].startswith("-") and peek()[0] != "-"):
+            if peek()[3] in ("+", "-"):
+                op = take()[3]
+                w = term()
+            else:                       # "1rem -0.5vw" tokenises the minus into the number
+                op, w = "+", term()
+            v = (v[0] + w[0] if op == "+" else v[0] - w[0], v[1] or w[1])
+        return v
+
+    try:
+        v = expr()
+        return round(v[0], 2) if v[1] and pos[0] == len(toks) else None
+    except (ValueError, IndexError, ZeroDivisionError):
+        return None
+
+
 def first_family(stack: str):
     names = split_top(stack, ",")
     if not names or names[0].startswith("var("):
@@ -269,11 +350,13 @@ def check_html(path: Path, medium: str) -> Report:
                 scale.add(round(x, 1))
 
     sizes, families, tracking, loose = [], set(), [], 0
+    rules, fluid = [], {}   # (selector, size at 1440 px, tracking, capitals) per rule; selector -> size at each width
     for sel, body, at in blocks:
         if sel.startswith("@") or not used(sel):
             continue
         ds = decls(body)
         local = {p: v for p, v in ds if p.startswith("--")}
+        rule = {"size": None, "ls": None, "caps": False}
         for prop, raw in ds:
             if prop.startswith("--"):
                 continue
@@ -291,13 +374,28 @@ def check_html(path: Path, medium: str) -> Report:
                 if f:
                     families.add(f)
             elif prop == "letter-spacing":
-                tracking += [float(x) for x in re.findall(r"(-?\d*\.?\d+)em\b", val)]
+                rule["ls"] = val.strip().lower()
+            elif (prop == "text-transform" and "uppercase" in val.lower()) or (prop == "font-variant-caps" and re.search(r"all-(small|petite)-caps", val, re.I)):
+                rule["caps"] = True
             if size_val is not None and size_val.lower() not in ("inherit", "initial", "unset", "revert"):
                 got = size_px(size_val, root_px)
+                at = [css_px(size_val, root_px, w) for w in WIDTHS]
                 if got:
                     sizes += got
+                elif None not in at:            # fluid (vw, calc): measured at each width, as a browser would draw it
+                    fluid[sel] = at
                 else:
                     loose += 1
+                rule["size"] = at[WIDTHS.index(1440)] if None not in at else (got[-1] if got else None)
+        if rule["ls"] is not None:
+            m = re.fullmatch(r"(-?\d*\.?\d+)em", rule["ls"])
+            px_ = css_px(rule["ls"], root_px, 1440) if not m else None
+            em = float(m.group(1)) if m else (px_ / rule["size"] if px_ is not None and rule["size"] else None)
+            if rule["ls"] == "normal":
+                em = 0.0
+            if em is not None:
+                tracking.append(round(em, 3))
+                rules.append((sel, rule["size"], round(em, 3), rule["caps"]))
     # families set from scripts (for example GSAP fontFamily)
     for f in re.findall(r"fontFamily\s*:\s*[\"']([^\"']+)[\"']", page):
         ff = first_family(f)
@@ -327,9 +425,20 @@ def check_html(path: Path, medium: str) -> Report:
     distinct = sorted(set(round(s, 1) for s in sizes))
     fmt = lambda xs: "[" + ", ".join(f"{x:g}" for x in xs) + "]"
     r.info(f"font sizes in px: {fmt(distinct)}" + (f" (1rem = {root_px:g}px)" if root_px != 16 else ""))
+    if fluid:
+        per = {w: sorted({round(v[i], 1) for v in fluid.values()} | set(distinct)) for i, w in enumerate(WIDTHS)}
+        frac = sorted({round(x, 1) for v in fluid.values() for x in v if abs(x - round(x)) >= 0.05})
+        r.info(f"{len(fluid)} fluid font size(s) (vw, clamp), measured at each width: " + "; ".join(f"{w} px: {fmt([round(v[i], 1) for v in fluid.values()])}" for i, w in enumerate(WIDTHS) if w in (390, 1440)))
+        worst = max(per, key=lambda w: len(per[w]))
+        if len(per[worst]) > 10 and len(distinct) <= 10:
+            r.warn(f"{len(per[worst])} distinct font sizes at {worst} px once fluid sizes are drawn; a scale has about 8  [M6]")
+        if frac:
+            r.info(f"fluid sizes land between whole pixels at most widths ({fmt(frac[:6])}); step them at breakpoints if sizes must match a scale  [M6]")
+        small = sorted({round(v[0], 1) for v in fluid.values() if v[0] < MIN[medium][0]})
+        if small:
+            r.err(f"fluid text under {MIN[medium][0]}px at 320 px wide: {fmt(small)}; {WHY[medium]}  [M8]")
     if loose:
-        r.info(f"{loose} font size(s) depend on the parent or the window (em, %, vw, calc) and were not counted; "
-               "measure them rendered")
+        r.info(f"{loose} font size(s) depend on the parent (em, %) and were not counted; measure them rendered")
     if not distinct:
         r.warn("no font sizes found; measure type in the rendered page instead  [M6]")
     if len(distinct) > 10:
@@ -352,6 +461,16 @@ def check_html(path: Path, medium: str) -> Report:
     tight = sorted(set(t for t in tracking if t < -0.03))
     if tight:
         r.warn(f"letter-spacing tighter than -0.03em: {tight}; check glyphs and word spaces at 200%  [M5]")
+    caps = [(s, em) for s, _, em, c in rules if c and em < 0]
+    if caps:
+        r.err("capitals tracked tight: " + ", ".join(f"{s} at {em:g}em" for s, em in caps[:4]) + "; uppercase needs open tracking (about +0.02 to +0.08em), never negative  [M5]")
+    sized = sorted((x for x in rules if x[1] and not x[3]), key=lambda x: x[1])
+    back = [(a, b) for i, a in enumerate(sized) for b in sized[i + 1:] if b[1] >= a[1] * 1.25 and b[2] > a[2] + 0.005]
+    if back:
+        a, b = max(back, key=lambda ab: ab[1][2] - ab[0][2])
+        r.warn(f"tracking gets looser as type gets bigger: {b[0]} is {b[1]:g}px at {b[2]:g}em, {a[0]} is {a[1]:g}px at {a[2]:g}em; tighten as size grows  [M5]")
+    if len(set(tracking)) > 4:
+        r.warn(f"{len(set(tracking))} letter-spacing values: {sorted(set(tracking))}; about 4 (body, display, capitals) come with the type styles  [M5]")
     body = re.sub(r"<(script|style)[^>]*>.*?</\1>", "", page, flags=re.S | re.I)
     breaks = body if medium == "video" else " ".join(re.findall(r"<h[1-6][^>]*>.*?</h[1-6]>", body, re.S | re.I))
     if re.search(r"<br\s*/?>", breaks, re.I):

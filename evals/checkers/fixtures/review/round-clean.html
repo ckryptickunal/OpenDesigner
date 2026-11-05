@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fixture Ledger</title>
+<!-- Checker eval fixture for skills/opendesigner-review. Clean control for the checks added after a private B2B landing
+     page (2026-11-05): capitals tracked open, display text tracked tighter than body; six whole-pixel sizes; a hero title
+     on two lines at most; a centred hero whose lede and buttons are centred too; left-aligned sections that stay left; one
+     filled button per screen, every button with the same corners and case; a drawing in its own box beside the text; white
+     text on a dark gradient band; a fixed header the page clears; tabs whose panels share one grid cell; a billing switch
+     that changes the price. Every error or warning here is a false alarm. Invented brand; .example domains only. -->
+<style>
+* { box-sizing: border-box; }
+:focus-visible { outline: 2px solid #1f4fd8; outline-offset: 2px; }
+body { margin: 0; padding-top: 64px; font: 16px/24px Arial, Helvetica, sans-serif; color: #1c1c1e; background: #ffffff; }
+header { position: fixed; top: 0; left: 0; right: 0; height: 64px; background: #ffffff; border-bottom: 1px solid #d1d1d6; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; z-index: 5; }
+.brand { font-weight: 700; }
+section { padding: 48px 24px; }
+.eyebrow { text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; line-height: 16px; margin: 0 0 8px; }
+h1 { font-size: 32px; line-height: 40px; letter-spacing: -0.02em; margin: 0 0 16px; }
+h2 { font-size: 20px; line-height: 28px; margin: 0 0 12px; }
+p { margin: 0 0 16px; max-width: 60ch; }
+.lede { font-size: 20px; line-height: 28px; color: #3a3a3c; }
+#hero { text-align: center; }
+#hero p { margin-left: auto; margin-right: auto; }
+.row { display: flex; gap: 12px; flex-wrap: wrap; }
+#hero .row { justify-content: center; }
+.btn { display: inline-flex; align-items: center; height: 40px; padding: 0 16px; border-radius: 8px; font-size: 16px; text-decoration: none; white-space: nowrap; }
+.primary { background: #1f4fd8; color: #ffffff; }
+.secondary { border: 1px solid #1c1c1e; color: #1c1c1e; }
+.split { display: flex; gap: 32px; align-items: center; }
+.split svg { flex: 0 0 160px; width: 160px; height: 120px; }
+#band { background: linear-gradient(90deg, #1c1c1e, #2c2c2e); color: #ffffff; }
+#band p { color: #ffffff; }
+.tabs, .billing { display: flex; gap: 8px; margin-bottom: 12px; }
+.tabs button, .billing button { font: inherit; height: 40px; padding: 0 16px; border-radius: 8px; border: 1px solid #1c1c1e; background: #ffffff; color: #1c1c1e; }
+.tabs [aria-selected=true], .billing [aria-pressed=true] { background: #1c1c1e; color: #ffffff; }
+.panes { display: grid; }
+.panes > [role=tabpanel] { grid-area: 1 / 1; }
+.panes > [data-off] { visibility: hidden; }
+footer { padding: 48px 24px; color: #3a3a3c; font-size: 12px; line-height: 16px; }
+@media (min-width: 768px) { h1 { font-size: 40px; line-height: 48px; } }
+</style>
+</head>
+<body>
+<header><span class="brand">Fixture Ledger</span><a class="btn secondary" href="#contact">Contact</a></header>
+<main>
+<section id="hero">
+  <p class="eyebrow">For small finance teams</p>
+  <h1>Invoices, in one place</h1>
+  <p class="lede">Invoices, receipts and payments, side by side.</p>
+  <div class="row"><a class="btn primary" href="#start">Start a trial</a><a class="btn secondary" href="#tour">Take the tour</a></div>
+</section>
+<section id="how">
+  <div class="split">
+    <svg viewBox="0 0 160 120" aria-hidden="true"><path d="M8 100 L80 20 L152 100 Z" fill="none" stroke="#1f4fd8" stroke-width="2"/></svg>
+    <div><h2>How it works</h2><p>Every invoice becomes one record, with its receipts attached.</p></div>
+  </div>
+</section>
+<section id="band"><h2>Quiet by design</h2><p>Nothing moves unless you move it.</p></section>
+<section id="views">
+  <h2>Two views</h2>
+  <div class="tabs" role="tablist"><button role="tab" aria-selected="true" aria-controls="v1">Summary</button><button role="tab" aria-selected="false" aria-controls="v2">Details</button></div>
+  <div class="panes"><div role="tabpanel" id="v1"><p>One line of summary.</p></div><div role="tabpanel" id="v2" data-off><p>Line one.</p><p>Line two.</p></div></div>
+</section>
+<section id="billing">
+  <h2>Billing</h2>
+  <div class="billing"><button aria-pressed="true">Monthly</button><button aria-pressed="false">Yearly</button></div>
+  <p id="price">29 per seat a month</p>
+</section>
+</main>
+<footer><p>Fixture Ledger, ledger.example</p></footer>
+<script>
+for (const t of document.querySelectorAll('[role=tab]')) t.addEventListener('click', () => {
+  for (const x of document.querySelectorAll('[role=tab]')) { x.setAttribute('aria-selected', String(x === t)); document.getElementById(x.getAttribute('aria-controls')).toggleAttribute('data-off', x !== t); }
+});
+for (const b of document.querySelectorAll('.billing button')) b.addEventListener('click', () => {
+  for (const x of document.querySelectorAll('.billing button')) x.setAttribute('aria-pressed', String(x === b));
+  document.getElementById('price').textContent = b.textContent === 'Yearly' ? '290 per seat a year' : '29 per seat a month';
+});
+</script>
+</body>
+</html>

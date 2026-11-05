@@ -822,6 +822,7 @@ class JourneyTracking(unittest.TestCase):
             self.assertIn(("export", None, {"kind": "all"}), got)
             self.assertEqual(got[-1][:2], ("level_complete", None))
             quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "soft", "--no-doc"])
+            quiet(e.main, ["--dir", d, "unlock", "answers.Q-shape-01"])  # a chosen button shape is locked until the owner changes it
             quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "subtle", "--set-by", "delegated", "--no-doc"])
             self.assertEqual(self.events(d)[-3:], [("step_answered", "Q-shape-01", {"how": "option"}),
                                                    ("step_changed", "Q-shape-01", {}),
@@ -3910,6 +3911,471 @@ class VersionStamps(unittest.TestCase):
         self.assertGreater(e.version_key("0.2.0-beta.10"), e.version_key("0.2.0-beta.2"))
         self.assertGreater(e.version_key("0.2.0"), e.version_key("0.2.0-rc.1"))
         self.assertGreater(e.version_key("0.2.0-rc.1"), e.version_key("0.2.0-beta.9"))
+
+
+
+def write_tree(root, files):
+    """Write {relative path: text or dict (as JSON)} under root, making folders as needed."""
+    for rel, body in files.items():
+        fp = os.path.join(root, rel)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
+        with open(fp, "w", encoding="utf-8") as f:
+            f.write(json.dumps(body) if isinstance(body, dict) else body)
+
+
+def findings(got):
+    return {f["path"]: f["value"] for f in got["findings"]}
+
+
+NEXT_APP = {
+    "package.json": {"name": "budget-buddy", "version": "0.1.0",
+                     "dependencies": {"next": "16", "react": "19", "react-dom": "19", "next-themes": "0.4"}},
+    "README.md": "# Budget Buddy\n\n![build](https://img.shields.io/badge/build-passing-green)\n\n"
+                 "Budget Buddy helps freelancers send invoices and get paid on time. It runs in the browser.\n\n## Setup\n\nnpm i\n",
+    "app/layout.tsx": 'import { Inter, Roboto_Mono } from "next/font/google";\nexport const metadata = { title: "Create Next App" };\n',
+    "app/globals.css": ":root { --primary: #2563eb; --primary-foreground: #ffffff; }\n.btn-primary { background: #2563eb; color: #fff; }\n"
+                       "a { color: #2563eb; }\nbody { color: #111827; background: #f9fafb; }\n",
+    "vercel.json": {"framework": "nextjs"},
+}
+
+
+class DetectProject(unittest.TestCase):
+    """Look before you ask (owner direction 2026-11-02): the repo answers what it can, each answer recorded as assumed."""
+
+    def test_a_next_app_close_to_launch(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, NEXT_APP)
+            before = sorted(os.listdir(t))
+            got = findings(e.detect_project(t))
+            self.assertEqual(sorted(os.listdir(t)), before)                       # read-only
+            self.assertEqual(got["name"], "Budget Buddy")                         # the README heading, not the package slug
+            self.assertEqual(got["context.product"], "Budget Buddy helps freelancers send invoices and get paid on time.")
+            self.assertEqual(got["answers.Q-plat-01"], ["web"])
+            self.assertEqual(got["raw.brandColor"], "#2563eb")
+            self.assertEqual(got["raw.textFace"], "Inter")                        # Roboto Mono is the code font
+            self.assertEqual(got["answers.Q-theme-01"], "light-dark-toggle")      # next-themes
+            self.assertEqual(got["answers.Q-scope-07"], "near-launch")            # code plus vercel.json
+
+    def test_sketch_records_readings_as_assumed_and_the_persons_answers_win(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, NEXT_APP)
+            d = os.path.join(t, "opendesigner")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_sketch(d, None, None, "regular", "ios", "calm")
+            state = std_read(d)
+            log = decision_text(d)
+            self.assertEqual(state["name"], "Budget Buddy")
+            self.assertEqual(state["answers"]["Q-plat-01"]["value"], ["ios"])     # what they said beats what the files say
+            self.assertEqual(state["answers"]["Q-plat-01"]["set_by"], "chosen")
+            self.assertEqual(state["raw"]["brandColor"], "#2563eb")
+            self.assertEqual(state["raw"]["textFace"], "Inter")
+            self.assertEqual(state["answers"]["Q-scope-07"], {"value": "near-launch", "set_by": "assumed",
+                                                              "decision": state["answers"]["Q-scope-07"]["decision"],
+                                                              "via": "repo", "locked": False})
+            self.assertEqual(state["answers"]["Q-theme-01"]["via"], "repo")
+            self.assertRegex(log, r'## D-\d+ · raw\.brandColor = "#2563eb"\n- set_by: assumed .*\n- reason: read from the code: '
+                                  r"the colour the CSS uses most on .*; say if that's wrong")
+            self.assertRegex(log, r"## D-\d+ · name = \"Budget Buddy\"\n- set_by: assumed .*\n- reason: read from the first heading of README.md")
+            self.assertNotIn("Q-plat-01 = [\"web\"]", log)                       # never recorded over their answer
+            text = out.getvalue()
+            self.assertIn("Read from your repo (recorded as assumed; say if any is wrong):", text)
+            self.assertIn("  brand colour: #2563EB", text)
+            self.assertIn("Phase: close to launch. What comes first: an audit of what exists", text)
+            zoom = e.zoom_levels(d, e.merge_defaults(state))
+            self.assertEqual(zoom["modes"]["level"], "sketch")                    # a reading does not zoom an area in
+            with open(os.path.join(t, "PRODUCT.md"), encoding="utf-8") as f:
+                product = f.read()
+            self.assertIn("## Phase\n\n**Close to launch** (read from the repo: code and deploy settings (vercel.json)", product)
+            self.assertIn("*(assumed, not confirmed yet)*\n\nWhat comes first in this phase: an audit of what exists", product)
+            # a second sketch keeps every reading and adds no decision for them
+            n = len(e._decision_entries(d))
+            quiet(e.cmd_sketch, d, None, None, None, None, None, quiet=True)
+            self.assertEqual(len(e._decision_entries(d)), n)
+
+    def test_init_prints_the_readings_and_detect_writes_nothing(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, NEXT_APP)
+            d = os.path.join(t, "opendesigner")
+            _r, out = std_run(e.cmd_detect, d)
+            self.assertFalse(os.path.exists(d))
+            self.assertIn("  where it runs: web (next)", out)
+            self.assertIn("  phase: close to launch (vercel.json)", out)
+            self.assertIn('README says: "Budget Buddy helps freelancers', out)
+            _r, out = std_run(e.cmd_init, d)
+            self.assertIn("read from your repo (recorded as assumed; say if any is wrong):", out)
+            self.assertIn("    name: Budget Buddy (the first heading of README.md)", out)
+            self.assertIn("    code stack: react (package.json)", out)
+            _r, out = std_run(e.cmd_detect, d)
+            self.assertIn("  font: Inter (next/font in app/layout.tsx)  [already recorded]", out)
+
+    def test_platforms_from_each_kind_of_project(self):
+        cases = [
+            ({"package.json": {"name": "trail-mix", "dependencies": {"expo": "54", "react-native": "0.81", "react-dom": "19",
+                                                                     "react-native-web": "0.21"}},
+              "app.json": {"expo": {"name": "Trail Mix", "version": "1.0.0", "userInterfaceStyle": "automatic"}}},
+             ["ios", "android"], "building"),
+            ({"package.json": {"name": "notes-desk", "dependencies": {"electron": "38", "react-dom": "19"}}}, ["desktop"], "building"),
+            ({"pubspec.yaml": "name: my_app\ndescription: \"A new Flutter project.\"\nversion: 1.0.0+1\n",
+              "ios/Runner/Info.plist": "<plist/>", "android/app/build.gradle": "", "lib/main.dart": "void main() {}"},
+             ["ios", "android"], "building"),
+            ({"index.html": "<!doctype html><title>Robotics Club</title><p>Hi</p>"}, ["web"], "building"),
+        ]
+        for files, plats, phase in cases:
+            with self.subTest(plats=plats, files=sorted(files)):
+                with tempfile.TemporaryDirectory() as t:
+                    write_tree(t, files)
+                    got = e.detect_project(t)
+                    self.assertEqual(findings(got)["answers.Q-plat-01"], plats)
+                    self.assertEqual(findings(got)["answers.Q-scope-07"], phase)
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, cases[0][0])
+            got = e.detect_project(t)
+            self.assertEqual(findings(got)["name"], "Trail Mix")
+            self.assertEqual(findings(got)["answers.Q-theme-01"], "system-light-dark")
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, cases[2][0])
+            got = e.detect_project(t)
+            self.assertNotIn("name", findings(got))                               # my_app is a starter's name
+            self.assertNotIn("context.product", findings(got))                    # and "A new Flutter project." its description
+            self.assertTrue(any("1.0.0+1 in pubspec.yaml is the starter's default" in n for n in got["notes"]))
+
+    def test_the_phase_from_notes_code_deploy_settings_and_releases(self):
+        cases = [({"README.md": "# Plant Pal\n\nAn app idea: remind people to water their plants, with photos.\n",
+                   "notes/ideas.txt": "screens"}, "idea"),
+                 ({"src/app.py": "print(1)"}, "building"),
+                 ({"src/app.py": "print(1)", ".github/workflows/ship.yml": "jobs:\n  deploy:\n    runs-on: ubuntu-latest\n"}, "near-launch"),
+                 ({"package.json": {"name": "acme", "version": "2.3.0"}, "Dockerfile": "FROM node"}, "live"),
+                 ({"index.html": "<p>x</p>", "CHANGELOG.md": "# Changelog\n\n## [Unreleased]\n\n## [1.2.0] - 2026-01-01\n- first\n"}, "live"),
+                 ({"index.html": "<p>x</p>", "CHANGELOG.md": "# Changelog\n\n## [Unreleased]: planned as 0.1.0\n"}, "building")]
+        for files, phase in cases:
+            with self.subTest(phase=phase, files=sorted(files)):
+                with tempfile.TemporaryDirectory() as t:
+                    write_tree(t, files)
+                    self.assertEqual(findings(e.detect_project(t)).get("answers.Q-scope-07"), phase)
+        with tempfile.TemporaryDirectory() as t:                                  # their own product brief is a note
+            write_tree(t, {"PRODUCT.md": "# Plant Pal\n\nA brief: remind people to water their plants.\n"})
+            self.assertEqual(findings(e.detect_project(t))["answers.Q-scope-07"], "idea")
+        with tempfile.TemporaryDirectory() as t:                                  # an icon font is not the text font
+            write_tree(t, {"a.css": "@font-face { font-family: 'icomoon'; }\n@font-face { font-family: 'Font Awesome 6 Free'; }\n"
+                                    ".i { font-family: 'icomoon'; } .j { font-family: 'icomoon'; }"})
+            self.assertNotIn("raw.textFace", findings(e.detect_project(t)))
+        for files in ({}, {"std.json": {"standards": []}}):                       # nothing to read: the phase is asked
+            with tempfile.TemporaryDirectory() as t:
+                write_tree(t, files)
+                got = e.detect_project(t)
+                self.assertNotIn("answers.Q-scope-07", findings(got))
+                self.assertIn("the folder has no code and no notes, so the phase is asked", got["notes"])
+
+    def test_starters_say_nothing_and_weak_signals_are_notes(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, {"package.json": {"name": "vite-project", "version": "0.0.0", "dependencies": {"react": "19", "react-dom": "19"},
+                                            "devDependencies": {"vite": "7"}},
+                           "README.md": "# React + TypeScript + Vite\n\nThis template provides a minimal setup to get React working in Vite.\n",
+                           "index.html": "<title>Vite + React + TS</title>",
+                           "src/index.css": ".dark { color: white; }\n.hero { background: #e11d48; }\n"})
+            got = e.detect_project(t)
+            self.assertNotIn("name", findings(got))
+            self.assertNotIn("context.product", findings(got))
+            self.assertNotIn("answers.Q-theme-01", findings(got))                 # a lone .dark class switches nothing on
+            self.assertNotIn("raw.brandColor", findings(got))                     # a colour on nothing clickable
+            notes = " ".join(got["notes"])
+            self.assertIn("a .dark class in your CSS but nothing that switches it on", notes)
+            self.assertIn("a possible brand colour #E11D48", notes)
+
+    def test_opendesigner_own_files_are_never_evidence(self):
+        with tempfile.TemporaryDirectory() as t:                                  # the state folder is the project root (--dir .)
+            quiet(e.cmd_sketch, t, "Club", "#167874", "large", "web", "fun", quiet=True)
+            quiet(e.cmd_build, t)
+            self.assertTrue(os.path.exists(os.path.join(t, "build")))
+            self.assertEqual(e.detect_project(t, t)["findings"], [])
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, {"design/x.css": ".btn { background: #2563eb; }"})
+            self.assertEqual(e.project_files(t, os.path.join(t, "design")), ([], [], False))
+
+    def test_a_big_folder_is_capped(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, {f"f{i}.txt": "x" for i in range(6)})
+            old = e.DETECT_MAX_FILES
+            try:
+                e.DETECT_MAX_FILES = 3
+                got = e.detect_project(t)
+            finally:
+                e.DETECT_MAX_FILES = old
+            self.assertTrue(got["capped"])
+            self.assertIn("the folder has more than 3 files, so only the first 3 were read", got["notes"])
+
+    def test_product_md_purpose_goals_and_market(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Club", "#167874", "large", "web", "fun")
+            with open(os.path.join(t, "PRODUCT.md"), encoding="utf-8") as f:
+                product = f.read()
+            for head in ("## Purpose and goals", "## Phase", "## Market"):
+                self.assertIn(head, product)
+            self.assertIn("- **Mission** (the change it exists to make): Not enough information.", product)
+            self.assertIn("- **Goals**: Not enough information.", product)
+            self.assertIn("- **Analogous product** (a product from another field that solves the same kind of problem): "
+                          "Not enough information.", product)
+            self.assertIn("## Phase\n\nNot enough information (Q-scope-07)", product)
+            self.assertLess(product.index("## Product"), product.index("## Purpose and goals"))
+            quiet(e.cmd_set, d, "context.purpose", "get more students to join the club", "from their words", set_by="assumed")
+            quiet(e.cmd_set, d, "context.goals", ["more sign-ups before the autumn fair", "a page teachers can share"], "their words")
+            quiet(e.cmd_set, d, "context.market.competitors", ["the school's own club list", "a Google Form"], "research", set_by="assumed")
+            quiet(e.cmd_set, d, "answers.Q-scope-07", "idea", "they said it is an idea")
+            quiet(e.cmd_design_md, d)
+            with open(os.path.join(t, "PRODUCT.md"), encoding="utf-8") as f:
+                product = f.read()
+            self.assertIn("- **Purpose** (what the person is trying to do with it): get more students to join the club. "
+                          "*(assumed, not confirmed yet)*", product)
+            self.assertIn("- **Goals**, most important first:\n  1. more sign-ups before the autumn fair\n  2. a page teachers can share", product)
+            self.assertIn("- **Competitors** (what people would use instead): the school's own club list; a Google Form. *(assumed", product)
+            self.assertIn("**An idea, no code yet** (they said it is an idea).\n\nWhat comes first in this phase: the alignment", product)
+            self.assertNotIn("Q-scope-07", product.split("## Team and Governance", 1)[1])
+            quiet(e.cmd_set, d, "context.purpose", "get more students to join the club", "they confirmed it", set_by="confirmed")
+            quiet(e.cmd_design_md, d)
+            with open(os.path.join(t, "PRODUCT.md"), encoding="utf-8") as f:
+                self.assertIn("get more students to join the club.\n", f.read())     # confirmed: no longer marked assumed
+
+    def test_zoom_md_names_every_phase_the_engine_knows(self):
+        with open(os.path.join(e.REFERENCES, "zoom.md"), encoding="utf-8") as f:
+            zoom = f.read()
+        table = zoom.split("## The project's phase", 1)[1].split("\n## ", 1)[0]
+        for ph in e.PHASES:
+            self.assertIn(f"(`{ph}`)", table)
+        q = e.questions()["Q-scope-07"]
+        self.assertEqual([o["v"] for o in q["options"]], e.PHASES)
+        self.assertEqual(q["zoom"], 0)
+        with open(os.path.join(e.REFERENCES, "rules.md"), encoding="utf-8") as f:
+            self.assertNotIn("Always ask; never infer", f.read())
+
+
+class LandingPageRules(unittest.TestCase):
+    """A private B2B landing page (2026-11-05) ended up using none of the engine's tokens: capitals tracked -0.03em, a 1.2
+    scale with no hero, 2px then pill buttons, six text greys. These hold the rules that came out of it."""
+
+    def build(self, t, feel="serious,minimal,authoritative", surfaces="landing page:persuade", audience="regular"):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Corvala", "#B8321F", audience, "web", feel, surfaces=surfaces, delegated="all", quiet=True)
+        return d, self.system(d)
+
+    def system(self, d):
+        files, meta, _ = e.generate_system(e.load_state(d))
+        return e.resolve_all(files, {}), files, meta
+
+    def test_serious_landing_page_gets_room_a_hero_and_subtle_buttons(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, (flat, files, meta) = self.build(t)
+            params = {k: v["value"] for k, v in meta["params"].items()}
+            self.assertEqual(meta["profile"]["id"], "persuade")
+            self.assertGreaterEqual(params["type.ratio"], 1.25)
+            self.assertEqual((params["emphasis.heroMoments"], params["space.densityMode"]), ("significant-moments", "spacious"))
+            hero, sec = flat["font.size.display-lg"], flat["font.size.display-md"]
+            self.assertGreaterEqual(hero["resolved"]["value"], 96)
+            self.assertLessEqual(sec["resolved"]["value"], 48)
+            css = e.export_css(files, meta, "ds")
+            self.assertRegex(css, r"--ds-font-size-display-lg: clamp\(2\.5rem, [\d.]+rem \+ [\d.]+vw, 6rem\);")
+            self.assertEqual(flat["text.display.lg"]["$value"]["fontSize"], "{font.size.display-lg}")
+            self.assertTrue(all(v["resolved"]["value"] == int(v["resolved"]["value"]) for k, v in flat.items() if k.startswith("font.size.")))
+            for k in ("display-md", "display-lg"):  # 200% text zoom still grows fluid text (WCAG 1.4.4)
+                fl = flat[f"font.size.{k}"]["$extensions"]["opendesigner"]["fluid"]
+                self.assertLess(fl["maxPx"], 2.5 * fl["minPx"], k)
+            self.assertEqual((meta["shape"]["control"], meta["shape"]["ctaShape"]), (6, "subtle"))  # feel words gave roundness 0
+            self.assertTrue(48 <= flat["size.control.cta"]["resolved"]["value"] <= 56)
+            self.assertEqual(flat["layout.container.max"]["resolved"]["value"], 1280)
+            self.assertIn("--ds-layout-measure-prose: 65ch;", css)
+            lim = meta["limits"]
+            self.assertEqual((lim["sizes"]["max"], lim["weights"]["max"], lim["families"]["max"], lim["containers"]["max"]), (8, 3, 2, 1))
+            self.assertLessEqual(len(lim["sizes"]["scale"]) + len(lim["sizes"]["fluid"]), 8)
+            self.assertEqual(lim["cta"]["case"], "sentence")
+            self.assertFalse(any(i["severity"] in ("error", "warn") for i in e.validate_generated(files, e.load_state(_d), e.Report()).items))
+
+    def test_capitals_never_take_negative_tracking(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, (flat, files, meta) = self.build(t)
+            caps = {k: v for k, v in flat.items() if k.startswith("text.") and (v.get("$extensions") or {}).get("opendesigner", {}).get("textTransform")}
+            self.assertTrue(caps)
+            for k, v in caps.items():
+                self.assertTrue(0.05 <= v["$extensions"]["opendesigner"]["letterSpacingEm"] <= 0.08, k)
+            self.assertTrue(0 <= flat["font.tracking.caps-display"]["resolved"] <= 0.02)
+            css = e.export_css(files, meta, "ds")
+            self.assertIn("--ds-font-tracking-caps-label: 0.06em;", css)
+            self.assertIn("the font shorthand alone drops tracking", css)
+            self.assertIn("--tracking-caps-label: var(--ds-font-tracking-caps-label);", e.export_tailwind(files, meta, "ds"))
+            state = e.load_state(d)
+            state["overrides"]["font.tracking.caps-label"] = -0.03
+            files2, _m, _c = e.generate_system(state)
+            rep = e.validate_generated(files2, state, e.Report())
+            self.assertTrue(any("negative tracking" in i["message"] for i in rep.items if i["severity"] == "error"))
+
+    def test_text_keeps_three_greys(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, (flat, files, meta) = self.build(t)
+            self.assertEqual(files["semantic.color.light.tokens.json"]["color"]["text"]["tertiary"]["$value"], "{color.text.secondary}")
+            greys = {json.dumps(flat[f"color.text.{k}"]["resolved"], sort_keys=True) for k in ("primary", "secondary", "tertiary", "disabled")}
+            self.assertEqual(len(greys), 3)
+
+    def test_square_and_pill_are_choices(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "a")
+            quiet(e.cmd_sketch, d, "Bubbly", "#E0457B", "regular", "web", "playful,friendly,rich", quiet=True)
+            flat, _f, meta = self.system(d)
+            self.assertNotEqual(meta["shape"]["control"], "full")
+            self.assertLessEqual(flat["radius.control"]["resolved"]["value"], 12)
+            quiet(e.cmd_set, d, "Q-shape-01", "pill", "we want pills")
+            self.assertEqual(self.system(d)[2]["shape"]["ctaShape"], "pill")
+
+    def test_a_chosen_button_shape_holds_and_stated_values_stay_values(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, _s = self.build(t)
+            quiet(e.cmd_set, d, "Q-shape-01", "6px", "buttons 6px")
+            st = e.load_state(d)
+            self.assertEqual(st["overrides"]["radius.control"], 6)
+            self.assertTrue(e.is_locked(st, "answers.Q-shape-01") and e.is_locked(st, "overrides.radius.control"))
+            with self.assertRaises(SystemExit):
+                quiet(e.cmd_set, d, "Q-shape-01", "pill", "the agent's idea")
+            quiet(e.cmd_set, d, "dials.roundness", 97, "rounder")  # the dial moves cards; the button keeps its radius
+            self.assertEqual(self.system(d)[0]["radius.control"]["resolved"]["value"], 6)
+            quiet(e.cmd_lock, d, "answers.Q-shape-01", on=False)
+            self.assertFalse(e.is_locked(e.load_state(d), "overrides.radius.control"))
+            quiet(e.cmd_set, d, "Q-type-12", "400/500", "weights 400/500")
+            quiet(e.cmd_set, d, "Q-type-09", "major third", "a major third scale")
+            flat, _f, meta = self.system(d)
+            self.assertEqual(sorted(set(meta["type"]["weights"].values())), [400, 500])
+            self.assertEqual(meta["params"]["type.ratio"]["value"], 1.25)
+
+    def test_product_screens_keep_one_scale(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, (flat, _f, meta) = self.build(t, feel="precise,calm", surfaces="app:operate", audience="dense")
+            self.assertNotIn("font.size.display-lg", flat)
+            self.assertNotIn("size.control.cta", flat)
+            self.assertEqual(meta["profile"]["id"], "work-tool")
+
+
+class ProtocolRulesAndTokenUse(unittest.TestCase):
+    """Owner review 2026-11-05 (a private B2B landing page): a protocol in every project, repeated notes kept as rules, and a
+    review that says when the code has left the tokens behind."""
+
+    def test_init_and_sketch_write_the_protocol_once(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="P")
+            fp = os.path.join(d, "PROTOCOL.md")
+            with open(fp, encoding="utf-8") as f:
+                text = f.read()
+            for step in ("1 Discover", "2 Research", "3 System", "4 Structure", "5 Build", "6 Verify"):
+                self.assertIn(step, text)
+            self.assertIn("engine.py review", text)
+            self.assertIn("references/audit.md", text)
+            self.assertNotIn("{{", text)
+            with open(fp, "a", encoding="utf-8") as f:
+                f.write("| 2026-11-05 | Deploy? | At each gate |\n")
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            with open(fp, encoding="utf-8") as f:
+                self.assertIn("Deploy?", f.read())  # kept: never overwritten
+            os.remove(fp)
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            self.assertTrue(os.path.exists(fp))  # a system made before the protocol gets it at the next sketch
+        with open(os.path.join(e.SKILL_ROOT, "assets", "output", "AGENTS-snippet.md"), encoding="utf-8") as f:
+            self.assertIn("opendesigner/PROTOCOL.md` is binding", f.read())
+
+    def test_a_note_said_twice_becomes_a_rule(self):
+        with tempfile.TemporaryDirectory() as t:
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(e.cmd_feedback(t, "Centre every heading", "note")["said"], 1)
+                self.assertEqual(e.cmd_feedback(t, "center the headings", "note")["said"], 2)
+                self.assertEqual(e.cmd_feedback(t, "No full pills on buttons", "note")["id"], "N-02")
+                self.assertEqual(e.cmd_feedback(t, "keep the corners rounded, not pills", "note", same="N-02")["said"], 2)
+                self.assertEqual(e.cmd_feedback(t, "Centre all headings", "note")["said"], 3)
+            text = out.getvalue()
+            self.assertIn("Said twice: N-01 is now a rule", text)
+            self.assertEqual(text.count("draft a GitHub issue"), 1)  # offered once, at the third time, and only offered
+            self.assertNotIn("issues/new", text)
+            notes = e.read_notes(os.path.join(t, "RULES.md"))
+            self.assertEqual([(n["id"], n["said"]) for n in notes], [("N-01", 3), ("N-02", 2)])
+            self.assertFalse(os.path.exists(os.path.join(t, "feedback.md")))  # a note on the work is not OpenDesigner feedback
+            with self.assertRaises(SystemExit):
+                e.cmd_feedback(t, "x", "note", same="N-09")
+            with self.assertRaises(SystemExit):
+                e.cmd_feedback(t, "x", "gap", same="N-01")
+            q = lambda txt, **k: quiet(e.cmd_feedback, t, txt, "note", **k)
+            self.assertEqual(q("Use dark mode")["said"], 1)
+            self.assertEqual(q("Never use dark mode")["said"], 1)      # opposite notes never merge
+            self.assertEqual(q("Make headings bigger")["said"], 1)
+            self.assertEqual(q("Make headings smaller")["said"], 1)
+            self.assertEqual(q("centre every heading", same="new")["said"], 1)
+            self.assertEqual(e.read_notes(os.path.join(t, "RULES.md"))[0]["text"], "Centre every heading")  # first wording kept
+
+    def test_review_says_when_tokens_are_not_in_charge(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="R")
+            quiet(e.cmd_build, d)
+            os.makedirs(os.path.join(t, "site"))
+            css = os.path.join(t, "site", "a.css")
+            with open(css, "w") as f:
+                f.write(".h { color: #ff0000; padding: 12px; }\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d)
+            self.assertIn("Tokens are not in charge", out.getvalue())
+            with open(css, "a") as f:
+                f.write(".ok { color: var(--ds-color-text-primary); }\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            res = json.loads(out.getvalue())
+            self.assertEqual((res["tokenUses"], res["tokens"], res["systemBehind"]), (1, "losing", False))
+            with open(os.path.join(t, "site", "a.html"), "w") as f:
+                f.write('<a class="bg-action-primary text-fg-on-action rounded-control p-inset-md shadow-raised">Go</a>\n')
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            res = json.loads(out.getvalue())
+            self.assertEqual((res["tokenUses"], res["tokens"]), (6, "ok"))  # Tailwind theme classes are tokens at work
+
+    @unittest.skipUnless(__import__("shutil").which("git"), "needs git")
+    def test_review_says_when_the_system_is_behind_the_code(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="G")
+            quiet(e.cmd_build, d)
+            git = lambda *a: subprocess.run(["git", "-c", "user.email=t@t", "-c", "user.name=t", *a], cwd=t, capture_output=True, check=True)
+            git("init", "-q")
+            git("add", "-A")
+            git("commit", "-qm", "system")
+            os.makedirs(os.path.join(t, "site"))
+            for i in range(e.SYSTEM_AGE_COMMITS):
+                with open(os.path.join(t, "site", "a.css"), "a") as f:
+                    f.write(f".x{i} {{ color: var(--ds-color-text-primary); }}\n")
+                git("add", "-A")
+                git("commit", "-qm", f"page {i}")
+            with open(os.path.join(t, "notes.md"), "w") as f:
+                f.write("not code\n")
+            git("add", "-A")
+            git("commit", "-qm", "notes")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d)
+            self.assertIn(f"The system is behind the code: {e.SYSTEM_AGE_COMMITS} commits", out.getvalue())
+
+    def test_research_steps_pass_through_and_positioning_has_its_own_section(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            quiet(e.cmd_design_md, d)
+            with open(os.path.join(t, "PRODUCT.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("## Positioning\n\nNot enough information", text)
+            self.assertLess(text.index("## Market"), text.index("## Positioning"))
+            with self.assertRaisesRegex(SystemExit, "research/users.json"):     # research.py answers: no findings yet
+                quiet(e.main, ["research", "market", "--dir", d])
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(e.main(["research", "positioning", "show", "--dir", d]), 0)
+            self.assertIn("No positioning yet", out.getvalue())
 
 
 if __name__ == "__main__":

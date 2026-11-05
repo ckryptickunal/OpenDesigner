@@ -82,7 +82,7 @@ import webbrowser
 ENGINE_VERSION = "1.0.0"
 # The OpenDesigner release this copy belongs to, stamped into each system's state.json. tools/build_dist.py fails when it
 # differs from the version in plugin.json and .claude-plugin/plugin.json.
-OPENDESIGNER_VERSION = "0.1.0"
+OPENDESIGNER_VERSION = "0.2.0"
 CHANGELOG_URL = "https://github.com/ckryptickunal/OpenDesigner/blob/main/CHANGELOG.md"
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL_ROOT = os.path.dirname(HERE)
@@ -676,7 +676,11 @@ def default_state(name="Untitled design system"):
         "name": name,
         "summary": "",
         "context": {"product": "", "audience": "", "surfaces": [], "entryPath": "", "memorable": "", "scope": {"in": [], "out": []},
-                    "constraints": [], "team": ""},
+                    "constraints": [], "team": "",
+                    # the alignment record (PRODUCT.md, Purpose and goals): from their words and README, never invented
+                    "mission": "", "vision": "", "purpose": "", "goals": [],
+                    # PRODUCT.md, Market: from the user research or their words
+                    "market": {"analogous": "", "competitors": [], "pattern": "", "gap": "", "conventions": []}},
         "dials": {d: None for d in DIALS},
         "preset": None,
         "style": None,  # the named look from references/styles.md (Q-dir-01), shown in DESIGN.md
@@ -932,15 +936,35 @@ def resolve_dials(state):
     return out, src, conflicts
 
 
+def main_surface(state):
+    """The main surface's mode (Persuade, Operate, Read, Experience) from Q-scope-06, else from raw.productType marketing."""
+    v = answer_value((state.get("answers") or {}).get("Q-scope-06"))
+    surfaces = surface_list(v) if v else []
+    if surfaces:
+        return surfaces[0]["mode"]
+    return "Persuade" if (state.get("raw") or {}).get("productType") == "marketing" else None
+
+
+def _profile_trigger(state, trig):
+    """The trigger's words when it holds ("Q-aud-01 = dense", "main surface: Persuade"), else None."""
+    if not trig:
+        return None
+    if "surface" in trig:
+        mode = main_surface(state)
+        return f"main surface: {mode}" if mode in trig["surface"] else None
+    v = answer_value((state.get("answers") or {}).get(trig["question"]))
+    return f"{trig['question']} = {v}" if str(v) in [str(x) for x in trig["values"]] else None
+
+
 def default_profile(state):
     """The default profile whose trigger holds (levers.json profiles), or None: {id, name, why, evidence, trigger, items
     it applies, skipped: {item: reason}}. A profile fills only what the person left open: an item is skipped when its
     question is answered, its dial or value was set, overridden or locked, or a brand color decides it. Applied items
     are recorded as auto_default (spec 7.9)."""
-    answers = state.get("answers") or {}
     for pid, prof in (levers().get("profiles") or {}).items():
         trig = prof.get("trigger") if isinstance(prof, dict) else None
-        if not trig or str(answer_value(answers.get(trig["question"]))) not in [str(v) for v in trig["values"]]:
+        said = _profile_trigger(state, trig)
+        if not said:
             continue
         items, skipped = {}, {}
         for iid, it in prof["items"].items():
@@ -950,7 +974,7 @@ def default_profile(state):
             else:
                 items[iid] = it
         return {"id": pid, "name": prof.get("name", pid), "why": prof.get("why", ""), "evidence": prof.get("evidence", []),
-                "trigger": f"{trig['question']} = {answer_value(answers[trig['question']])}", "items": items, "skipped": skipped}
+                "trigger": said, "items": items, "skipped": skipped}
     return None
 
 
@@ -962,6 +986,9 @@ def _profile_skip(state, rule):
             return f"you answered {q}"
         if q == "Q-dir-01" and (state.get("preset") or state.get("style")):  # a preset or named style set directly is a choice too
             return "you chose a style direction (Q-dir-01)"
+    for q, vals in (rule.get("answerIn") or {}).items():
+        if str(answer_value(answers.get(q))) in [str(x) for x in vals]:
+            return f"you answered {q} {answer_value(answers.get(q))}"
     for dial in rule.get("dials") or []:
         if dial_value(dials.get(dial)) is not None:
             return f"the {dial} dial is set"
@@ -1048,6 +1075,10 @@ def derive_params(state, dials):
             if isinstance(params.get(k), (int, float)) and params[k] < lo:
                 params[k] = lo
                 meta[k]["profile"] = prof["id"]
+        for k, v in (item.get("paramSet") or {}).items():  # a value that is not a number (a density mode, a hero rule)
+            if params.get(k) != v:
+                params[k] = v
+                meta.setdefault(k, {})["profile"] = prof["id"]
     for k, v in (state.get("overrides") or {}).items():
         params[k] = v
         meta.setdefault(k, {})["override"] = True
@@ -1547,11 +1578,12 @@ SYSTEM_ROUNDED = ["ui-rounded", "SF Pro Rounded", "system-ui", "sans-serif"]
 OPEN_FACES = {"neo-grotesque": "Inter", "geometric": "Plus Jakarta Sans", "humanist": "Source Sans 3", "serif": "Source Serif 4",
               "slab": "Roboto Slab", "rounded": "Nunito"}
 # Open-licence faces (SIL OFL or Apache 2.0): usable on the web, in apps and self-hosted, so no licence scope is needed
-OPEN_FONTS = {f.lower() for f in list(OPEN_FACES.values()) + [
+OPEN_FONT_NAMES = list(OPEN_FACES.values()) + [
     "Roboto", "Roboto Mono", "Roboto Flex", "Atkinson Hyperlegible", "JetBrains Mono", "IBM Plex Sans", "IBM Plex Serif", "IBM Plex Mono",
     "Noto Sans", "Noto Serif", "Open Sans", "Lato", "Montserrat", "Poppins", "Work Sans", "DM Sans", "DM Serif Display", "Manrope",
     "Figtree", "Geist", "Geist Mono", "Fira Sans", "Fira Code", "Public Sans", "Lexend", "Outfit", "Space Grotesk", "Sora", "Karla",
-    "Rubik", "Merriweather", "Lora", "Playfair Display", "Source Code Pro", "Recursive", "Instrument Sans", "Onest", "Hanken Grotesk"]}
+    "Rubik", "Merriweather", "Lora", "Playfair Display", "Source Code Pro", "Recursive", "Instrument Sans", "Onest", "Hanken Grotesk"]
+OPEN_FONTS = {f.lower() for f in OPEN_FONT_NAMES}
 
 
 def _generic_face(name):
@@ -1838,7 +1870,8 @@ def build_color_semantic(ctx, mode):
         "text": {
             "primary": tok(n(12), "Body copy, headings, labels (guaranteed >= 7:1 on steps 1-5)."),
             "secondary": tok(n(11), "Supporting text (guaranteed >= the text minimum on surfaces and neutral fills 1-4)."),
-            "tertiary": tok(n(10), "Captions and placeholders (still meets the text minimum on surfaces 1-4)."),
+            "tertiary": tok(A("color.text.secondary"), "Captions and placeholders: the same grey as secondary, so text keeps three greys "
+                                                       "(primary, secondary, disabled; owner, 2026-11-05)."),
             "disabled": tok(n(8), "Disabled labels; exempt from contrast minimums (WCAG 1.4.3 exception)."),
             "inverse": tok(white if L else n(1), "Text on color.bg.inverse (tooltips, toasts)."),
             "link": tok(r("accent", 11), "Links. Underline them in running text so color is not the only cue."),
@@ -2058,8 +2091,9 @@ def build_type_scale(ctx):
         ctx.used["type.baseSize.native"] = base
     base = int(base or ctx.P("type.baseSize.web", p["type.baseSize.web"]))
     ratio = float(ctx.P("type.ratio", p["type.ratio"]))
-    marketing = bool(raw.get("marketingSurfaces"))
-    reach = float(p.get("type.displayReach") or (5.5 if marketing else 2.5))  # LEVERS B6 display reach [inferred bands]
+    # LEVERS B6 display reach [inferred bands]. Marketing surfaces get a separate fluid display scale (display_scale), so the
+    # UI scale keeps the product reach: one 1.2 scale stretched to 83px gave a landing page no hero (2026-11-05)
+    reach = float(p.get("type.displayReach") or 2.5)
     top_n = max(3, round_half_up(math.log(reach) / math.log(ratio)))
     sizes = type_scale_sizes(base, ratio, -2, top_n)
     # smallest size for text people read: 12px on the web (11 only for short labels; owner decision 2026-10-14, stage 11
@@ -2095,6 +2129,28 @@ def build_type_scale(ctx):
             "merged": sorted(set(merged)), "minSize": min_size}
 
 
+def display_scale(ctx, top):
+    """Marketing surfaces: {style: {key, min, max}} for the hero (display.lg) and section titles (display.md), fluid between
+    a phone and the container width (levers formulas.type.display). top is the largest UI size; whole px only."""
+    f = levers()["formulas"]["type"]["display"]
+    hero = int(ctx.P("type.displayMax", ctx.params.get("type.displayMax") or 96))
+    sec = f["section"]
+    sec_max = max(int(sec["max"]), int(math.ceil(top * 1.1)))  # a section title stays a visible step above the UI headings
+    hero = max(hero, int(math.ceil(sec_max * 1.25)))
+    snap = int(f["hero"]["snap"])
+    hero_min = max(sec["min"], int(round(hero * f["hero"]["minOfMax"] / snap) * snap))
+    return {"display.md": {"key": "display-md", "min": int(sec["min"]), "max": sec_max},
+            "display.lg": {"key": "display-lg", "min": min(hero_min, hero), "max": hero}}
+
+
+def fluid_css(lo, hi, vw=None):
+    """clamp() from lo px at the phone width to hi px at the container width, in rem so text zoom still works."""
+    a, z = vw or levers()["formulas"]["type"]["display"]["viewport"]
+    slope = (hi - lo) / (z - a)
+    rem = lambda px: f"{fmt_num(rnd(px / 16, 4))}rem"
+    return f"clamp({rem(lo)}, {rem(lo - slope * a)} + {fmt_num(rnd(slope * 100, 4))}vw, {rem(hi)})"
+
+
 def build_typography(ctx):
     p, raw = ctx.params, ctx.raw
     sc = build_type_scale(ctx)
@@ -2102,7 +2158,7 @@ def build_typography(ctx):
     b = S.index(base)
     wc = int(ctx.P("type.weightCount", p["type.weightCount"]))
     hw = int(ctx.P("type.headingWeight", p["type.headingWeight"]))
-    if wc <= 2:
+    if wc <= 2 and "type.headingWeight" not in (ctx.state.get("overrides") or {}):  # weights the person stated stay as stated
         hw = 600 if hw < 700 else 700
     w = {"body": 400, "label": 500 if wc >= 3 else 400, "heading": hw}
     if wc >= 4:
@@ -2154,6 +2210,10 @@ def build_typography(ctx):
 
     zero_tracking = raw.get("tracking") == "zero"
     size_table = sf_tracking_on(ctx.state)
+    jobs = levers()["formulas"]["type"]["tracking"]["jobs"]  # one value per job; capitals never negative
+
+    def caps_em(size):
+        return jobs["capsLabel"] if size <= jobs["capsLabelUntil"] else jobs["capsDisplay"]
     sf_until = levers()["formulas"]["type"]["tracking"]["sfPro"]["textUntil"]
     same = disp in (None, "=textFace")  # the display styles use the text face
     is_sf = {"text": _generic_face(tf["face"]), "display": _generic_face(tf["face"] if same else disp)}  # the Apple system font on Apple devices
@@ -2166,16 +2226,16 @@ def build_typography(ctx):
             # another face takes it only through SF Pro's Text sizes, because from 20 pt Apple loosens SF Pro Display, which is
             # drawn tighter, and a face without that drawing would loosen its headings (STD-visual-details-05)
             em = sf_pro_tracking(size)
-            return max(em, 0.05) if caps else em  # uppercase stays looser than sentence case (STD-visual-details-04)
+            return max(em, caps_em(size)) if caps else em  # uppercase stays looser than sentence case (STD-visual-details-04)
         if caps:
-            return 0.05
+            return caps_em(size)
         if size <= 12:
-            return 0.02
+            return jobs["small"]
         if size >= 48:
-            return -0.02
+            return jobs["display"]
         if size >= 32:
-            return -0.01
-        return 0.0
+            return jobs["heading"]
+        return float(jobs["body"])
 
     styles = []  # (path, size, weightRole, family, use, avoid, caps)
     styles += [("body.sm", sz(-1), "body", "text", "Helper text, timestamps, captions.", "Anything read at length.", False),
@@ -2189,7 +2249,12 @@ def build_typography(ctx):
                ("title.sm", base, "heading", "text", "Table headers, field-group titles.", "Paragraph emphasis.", False)]
     heading_names = ["title.md", "title.lg", "headline.sm", "headline.md", "headline.lg", "display.sm", "display.md", "display.lg"]
     H = S[b + 1:]
-    if len(H) > 6:  # 9 base styles + 6 headings = 15, the top of the usual range (DC-L02-10; U5 F8, F28): spread over the scale
+    fluid = display_scale(ctx, S[-1]) if raw.get("marketingSurfaces") else {}
+    if fluid:  # the display styles come from their own fluid scale; the UI scale names four titles and headlines (15 styles in all)
+        heading_names = heading_names[:4]
+        if len(H) > 4:
+            H = [H[i] for i in sorted({round(i * (len(H) - 1) / 3) for i in range(4)})]
+    elif len(H) > 6:  # 9 base styles + 6 headings = 15, the top of the usual range (DC-L02-10; U5 F8, F28): spread over the scale
         H = [H[i] for i in sorted({round(i * (len(H) - 1) / 5) for i in range(6)})]
         heading_names = ["title.md", "title.lg", "headline.sm", "headline.lg", "display.md", "display.lg"]
     uses = {"title": ("Card, panel and group titles.", "Page titles."), "headline": ("Page and section titles.", "Card titles."),
@@ -2199,6 +2264,13 @@ def build_typography(ctx):
         fam_name = "display" if not name.startswith("title") else "text"
         u, av = uses[name.split(".")[0]]
         styles.append((name, s, role, fam_name, u, av, False))
+    fluid_uses = {"display.md": ("Section titles on marketing pages; one per section.", "Cards and app screens."),
+                  "display.lg": ("The hero line: one per page, at most two lines.", "Section titles and repeated elements.")}
+    for name, f in fluid.items():
+        styles.append((name, f["max"], "display" if "display" in w else "heading", "display", *fluid_uses[name], False))
+    if fluid and base < 15:  # the call to action on a marketing page: at least 15px, sentence case (owner, 2026-11-05); else label.lg
+        styles.append(("label.cta", next((x for x in S if x >= max(15, base)), base), "label", "text",
+                       "Call-to-action buttons: sentence case, one filled per view.", "Capitals; body text.", False))
 
     if raw.get("numericStyles", True):  # tabular figures for amounts and tables; on unless set off (STD-visual-details-02 must)
         styles += [("numeric.md", base, "body", "text", "Amounts and table figures: tabular digits line up in columns; right-align "
@@ -2211,6 +2283,10 @@ def build_typography(ctx):
         used_lh[lh] = True
         em = tracking(s, caps, fam_name)
         ext = {"lineHeightPx": lh, "letterSpacingEm": em, "use": use, "avoid": avoid}
+        if path in fluid:
+            ext["fluid"] = {"minPx": fluid[path]["min"], "maxPx": fluid[path]["max"]}
+        if path == "label.cta":
+            ext["case"] = "sentence"
         if caps:
             ext["textTransform"] = "uppercase"
         if path.startswith("numeric."):
@@ -2221,15 +2297,25 @@ def build_typography(ctx):
         parts = path.split(".")
         for q in parts[:-1]:
             node = node.setdefault(q, {})
-        node[parts[-1]] = tok({"fontFamily": A(f"font.family.{fam_name}"), "fontSize": A(f"font.size.{s}"),
+        node[parts[-1]] = tok({"fontFamily": A(f"font.family.{fam_name}"), "fontSize": A(f"font.size.{fluid[path]['key'] if path in fluid else s}"),
                                "fontWeight": A(f"font.weight.{role}"), "letterSpacing": dim(rnd(s * em, 2)),
                                "lineHeight": rnd(lh / s, 4)}, None, ext)
     for st in styles:
         add_style(text, *st)
-    used_sizes = sorted({st[1] for st in styles} | {base})  # the font.size steps a named style uses (DC-L02-10: 8-10 sizes)
+    used_sizes = sorted({st[1] for st in styles if st[0] not in fluid} | {base})  # the font.size steps a named style uses (DC-L02-10: 8-10 sizes)
     for s in used_sizes:
         size_tok[str(s)] = tok(dim(s))
-    sc = dict(sc, sizes=used_sizes, scaleSizes=S)
+    for name, f in fluid.items():  # $value is the desktop size; CSS gets the clamp() (a DTCG dimension cannot hold one)
+        size_tok[f["key"]] = tok(dim(f["max"]), f"{name}: fluid from {f['min']}px on a phone to {f['max']}px at the container width.",
+                                 {"fluid": {"minPx": f["min"], "maxPx": f["max"], "viewport": levers()["formulas"]["type"]["display"]["viewport"]},
+                                  "css": fluid_css(f["min"], f["max"])})
+    tracking_tok = {"$type": "number", "$description": "Letter spacing in em, one value per job (levers formulas.type.tracking.jobs). Capitals "
+                                                       "never take negative tracking. The font shorthand drops letter-spacing: set it too, or use the text classes.",
+                    **{k: tok(v) for k, v in (("small", jobs["small"]), ("body", jobs["body"]), ("heading", jobs["heading"]),
+                                              ("display", jobs["display"]), ("caps-label", jobs["capsLabel"]), ("caps-display", jobs["capsDisplay"]))}}
+    if zero_tracking:
+        tracking_tok.update({k: tok(0) for k in ("small", "body", "heading", "display", "caps-label", "caps-display")})
+    sc = dict(sc, sizes=used_sizes, scaleSizes=S, fluid={k: {"min": f["min"], "max": f["max"]} for k, f in fluid.items()})
     # Emphasized variants: Expression 67 and up (levers.json type.emphasizedVariants). Material 3 Expressive pairs each
     # baseline style with a heavier one for selection, actions, headlines and editorial moments (DC-L02-11, S-L02-006).
     # Each uses the next heavier weight the system already has, so the weight count stays as DC-L02-15 set it.
@@ -2263,9 +2349,9 @@ def build_typography(ctx):
                                      "zeroTracking": sc_code in levers()["formulas"]["type"]["tracking"]["zeroScripts"]}
     text["$extensions"][NS]["scripts"] = script_notes
     ctx.type_info = dict(sc, weights=w, styles=[s[0] for s in styles], emphasized=emphasized, lineHeights=sorted(used_lh), scripts=script_notes,
-                         faces=faces)
+                         faces=faces, tracking={k: v["$value"] for k, v in tracking_tok.items() if not k.startswith("$")})
     font = {"family": dict({"$type": "fontFamily"}, **fam), "weight": weights, "size": size_tok,
-            "line-height": {k: v for k, v in lh_tok.items() if k.startswith("$") or int(k) in used_lh}}
+            "line-height": {k: v for k, v in lh_tok.items() if k.startswith("$") or int(k) in used_lh}, "tracking": tracking_tok}
     return {"font": font, "text": text}
 
 
@@ -2339,9 +2425,24 @@ def build_space_foundation(ctx):
     if bp:
         size["breakpoint"] = {"$description": f"Layout breakpoints ({ctx.raw['breakpoints']}, Q-layout-01): the minimum width where each layout starts.",
                               **{k: tok(dim(v)) for k, v in bp.items()}}
+    lay = levers()["formulas"]["layout"]
+    base_px = int(ctx.raw.get("baseSize") or 16)
+    measure = {k: tok(dim(int(round(lay["measure"][k] * 0.55 * base_px))),  # px is about the ch width of a sans at body size
+                      f"{lay['measure'][k]} characters per line ({'paragraphs' if k == 'prose' else 'the lead under a heading'}); CSS uses ch.",
+                      {"css": f"{lay['measure'][k]}ch"}) for k in ("prose", "lead")}
+    layout = {"$description": "One container for every section of the site; columns, gutters and margins by width class; a reading "
+                              "measure. A centred hero is fine; within a section the heading and its content share one alignment.",
+              "$extensions": {NS: {"evidence": lay["evidence"]}},
+              "container": {"$type": "dimension", "max": tok(dim(lay["container"]), "The one content width (Primer full pages, S-L03-008).")},
+              "columns": {"$type": "number", **{k: tok(v) for k, v in lay["columns"].items()}},
+              "gutter": {"$type": "dimension", **{k: tok(dim(v)) for k, v in lay["gutter"].items()}},
+              "margin": {"$type": "dimension", **{k: tok(dim(v)) for k, v in lay["margin"].items()}},
+              "measure": {"$type": "dimension", **measure}}
     ctx.space_info = {"unit": unit, "ladder": ladder, "targets": tg, "iconDefault": icon_default,
-                      "iconStroke": {16: stroke(16), 20: stroke(20), 24: stroke(24)}, "breakpoints": bp or {}}
-    return {"space": space, "size": size, "icon": icon}
+                      "iconStroke": {16: stroke(16), 20: stroke(20), 24: stroke(24)}, "breakpoints": bp or {},
+                      "layout": {"container": lay["container"], "columns": lay["columns"], "gutter": lay["gutter"], "margin": lay["margin"],
+                                 "measure": lay["measure"], "alignment": lay["alignment"]}}
+    return {"space": space, "size": size, "icon": icon, "layout": layout}
 
 
 def build_space_density(ctx, density):
@@ -2394,16 +2495,43 @@ def build_space_density(ctx, density):
     out["size"]["row"] = {"$description": f"List and table row heights, {density}: one line dense (sm), default (md) and roomy (lg), and a "
                                           "row whose cells hold two lines. Hairlines between rows; hit areas follow size.target.min (DC-L23-06).",
                           **{k: tok(dim(v)) for k, v in rows.items()}}
+    cta = clamp(lg, 48, 56) if ctx.raw.get("marketingSurfaces") else None
+    if cta:  # the call to action on a marketing page: 48 to 56px, text.label.cta, one filled per view
+        out["size"]["control"]["cta"] = tok(dim(cta), "Call-to-action buttons on marketing pages: 48 to 56px tall, one filled per view.")
     ctx.__dict__.setdefault("density_info", {})[density] = {"inset": inset, "stack": stack, "inline": inline, "section": section,
-                                                          "control": {"sm": sm, "md": md, "lg": lg}, "row": rows, "ratio": ratio}
+                                                          "control": dict({"sm": sm, "md": md, "lg": lg}, **({"cta": cta} if cta else {})),
+                                                          "row": rows, "ratio": ratio}
     return out
 
 
 # ---------------------------------------------------------------------------------------------- shape
 
+def roundness_chosen(ctx):
+    """True when the corners are a choice: the Roundness dial set (Q-shape-01 sets it), a named style, or a preset the
+    person picked. Coupling, feel words and the default preset are not."""
+    src = ctx.dial_src.get("roundness", "")
+    return src.startswith(("set", "style:")) or (src.startswith("preset:") and not effective_preset(ctx.state)[1])
+
+
+def unchosen_control(px):
+    """A control radius nobody chose: never square and never a pill (levers formulas.radius.unchosen); 0-2px -> 6px."""
+    u = levers()["formulas"]["radius"]["unchosen"]
+    if px == "full" or (isinstance(px, (int, float)) and px >= FULL):
+        return u["max"]
+    return u["to"] if px < u["raiseBelow"] else min(px, u["max"])
+
+
+def cta_shape(control):
+    """The button shape in words: square (0-2px), subtle (4-6px), rounded (8-12px) or pill."""
+    if control == "full" or control >= FULL:
+        return "pill"
+    return "square" if control <= 2 else "subtle" if control <= 6 else "rounded"
+
+
 def build_shape(ctx):
     p = ctx.params
     rough = ctx.dials["roundness"]
+    chosen = roundness_chosen(ctx)
 
     def own(name, computed):
         """A radius role in px: the person's value (radius_px) or the computed one. A stored value that is not a radius
@@ -2415,7 +2543,8 @@ def build_shape(ctx):
             ctx.used[name] = computed
             return radius_px(computed)
         return px
-    control = own("radius.control", eval_map(lever_index()["radius.control"]["map"], rough))  # params hold the override already
+    computed = eval_map(lever_index()["radius.control"]["map"], rough)
+    control = own("radius.control", computed if chosen else unchosen_control(computed))  # params hold the override already
 
     def corners(c):
         """(control, container, detail) for a control radius."""
@@ -2434,7 +2563,8 @@ def build_shape(ctx):
     drv = lever_index().get("radius.control")
     if drv and std_has_records(ctx.state) and "overrides.radius.control" in std_held(ctx.state):
         # a standard that fixes the control radius says nothing about cards and dialogs: they keep following the Roundness dial
-        _c, container, detail = corners(eval_map(drv["map"], ctx.dials[drv["dial"]]))
+        dial_c = eval_map(drv["map"], ctx.dials[drv["dial"]])
+        _c, container, detail = corners(dial_c if chosen else unchosen_control(dial_c))
     container = own("radius.container", container)
     overlay = own("radius.overlay", snap_to(min(32, container * 1.5), SNAP_RADII) if container else 0)
     detail = own("radius.detail", detail)
@@ -2456,13 +2586,14 @@ def build_shape(ctx):
         radius[str(v)] = tok(dim(v))
     radius["full"] = tok(dim(FULL), "Pills and avatars.")
     rr = lambda v: A("radius.full") if v >= FULL else A(f"radius.{v}")
+    roles = levers()["formulas"]["radius"]["roles"]  # the same kind of thing takes one corner everywhere
     radius.update({
-        "detail": tok(rr(detail), "Checkboxes, tags, small badges."),
-        "control": tok(rr(control_v), "Buttons, inputs, selects (Roundness dial, DC-L04-02)."),
+        "detail": tok(rr(detail), roles["detail"].capitalize() + "."),
+        "control": tok(rr(control_v), roles["control"].capitalize() + ": one corner for all of them (Roundness dial or Q-shape-01, DC-L04-02)."),
         "control-sm": tok(rr(control_sm), "Controls under 32px tall drop one step (Fluent, S-L04-007)."),
-        "container": tok(rr(container), "Cards and panels."),
-        "overlay": tok(rr(overlay), "Dialogs, sheets, popovers."),
-        "person": tok(A("radius.full"), "Avatars."),
+        "container": tok(rr(container), roles["container"].capitalize() + ": one corner for all of them."),
+        "overlay": tok(rr(overlay), roles["overlay"].capitalize() + "."),
+        "person": tok(A("radius.full"), roles["person"].capitalize() + "."),
         "nested": tok(dim(nested), "Inner radius for an element inset by space.inset.lg inside a container: max(outer - padding, smallest step) (DC-L04-05)."),
         "focus": tok(dim(focus_r), "Focus ring radius = control radius + ring offset (Atlassian radius + 2px, S-L04-016)."),
     })
@@ -2482,6 +2613,7 @@ def build_shape(ctx):
     ctx.shape_info = {"control": "full" if full else control_v, "control-sm": control_sm, "detail": detail, "container": container,
                       "overlay": overlay, "nested": nested, "focusWidth": focus_w, "focusRadius": focus_r,
                       "iconCorners": p["icon.cornerStyle"], "iconCaps": p["icon.caps"], "borderDefault": bd,
+                      "ctaShape": cta_shape(control_v), "chosen": chosen or "radius.control" in (ctx.state.get("overrides") or {}),
                       # Q-shape-04 (DC-L04-04): corner geometry. The radii are the same on every platform; this says how each draws them
                       "cornerShape": ctx.raw.get("cornerShape") or "circular"}
     return {"radius": radius, "border": border, "focus": focus}
@@ -3244,6 +3376,33 @@ def split_tree(tree, pred, prefix=""):
     return yes, no
 
 
+def page_limits(ctx):
+    """What one page built from the system may use (levers formulas.type.pageLimits), with the values themselves, so a
+    review can count a page against them: sizes, weights, families, tracking per job, text greys, accents, corners,
+    one container and one filled call to action per view."""
+    lim = levers()["formulas"]["type"]["pageLimits"]
+    t, shp, lay = ctx.type_info, ctx.shape_info, ctx.space_info.get("layout") or {}
+    faces = t.get("faces") or {}
+    fams = [f.get("face") for k, f in faces.items() if k in ("text", "display") and f.get("face") and f.get("face") != "=textFace"]
+    out = {"_about": "Caps for one page. opendesigner-review counts a built page against them; the values are the tokens.",
+           "sizes": {"max": lim["sizes"], "scale": t["sizes"], "fluid": t.get("fluid") or {}},
+           "weights": {"max": lim["weights"], "values": sorted(set(t["weights"].values()))},
+           "families": {"max": lim["families"], "values": list(dict.fromkeys(fams)) or ["system"], "note": "a code face only where code is shown"},
+           "tracking": dict(t.get("tracking") or {}, capsNeverNegative=True),
+           "textGreys": {"max": lim["textGreys"], "tokens": ["color.text.primary", "color.text.secondary", "color.text.disabled"]},
+           "accents": {"max": max(lim["accents"], int(ctx.cinfo.get("accentCount") or 1))},
+           "filledPrimaryPerView": lim["primaryPerView"],
+           "radius": {k: ("full" if isinstance(shp.get(k), (int, float)) and shp[k] >= FULL else shp.get(k))
+                      for k in ("control", "container", "overlay", "detail")},
+           "ctaShape": shp.get("ctaShape"),
+           "containers": {"max": lim["containers"], "width": lay.get("container")},
+           "alignment": lay.get("alignment"), "heroMaxLines": lim["heroMaxLines"], "evidence": lim["evidence"]}
+    if ctx.raw.get("marketingSurfaces"):
+        out["cta"] = {"height": [48, 56], "labelStyle": "text.label.cta" if "label.cta" in t["styles"] else "text.label.lg",
+                      "labelMinPx": 15, "case": "sentence"}
+    return out
+
+
 def generate_system(state, token_types=None):
     """Files follow the spec's tiering (7.4): primitives, semantic, semantic.color.<theme>, semantic.density.<mode>,
     motion.<standard|reduced>, plus the resolver and a meta file. token_types: see apply_token_overrides."""
@@ -3287,6 +3446,7 @@ def generate_system(state, token_types=None):
         "platforms": ctx.raw.get("platforms"), "inputs": ctx.raw.get("inputs"),
         "textScaling": ctx.raw.get("textScaling") or "full", "notes": ctx.notes,
     }
+    meta["limits"] = page_limits(ctx)
     meta["stateHash"] = state_hash(state)
     meta["profile"] = profile_record(ctx.profile)
     files["opendesigner.meta.json"] = meta
@@ -3725,6 +3885,17 @@ def validate_files(files, state, rep):
         rep.add("warning", "lint", f"{len(sizes)} text sizes; 8 to 10 is the usual range", "Type scale size count", "DC-L02-10")
     if sizes and sizes[0] < 11:
         rep.add("warning", "lint", f"the smallest text size, {sizes[0]:g}px, is under 11px", "Minimum legible size 11pt/sp", "S-L02-001, S-L02-005")
+    halves = [x for x in sizes if x != int(x)]
+    if halves:  # a private B2B landing page had 20 sizes at 18px and below in half-pixel steps (2026-11-05)
+        rep.add("warning", "lint", f"font sizes between whole pixels: {', '.join(f'{x:g}px' for x in halves)}. Use whole px",
+                "Whole-pixel type sizes", "DC-L02-09")
+    for k, v in toks.items():  # capitals never take negative tracking (levers formulas.type.tracking.jobs, STD-visual-details-04)
+        ext = (v.get("$extensions") or {}).get(NS) or {}
+        caps = (k.startswith("text.") and ext.get("textTransform") == "uppercase") or k in ("font.tracking.caps-label", "font.tracking.caps-display")
+        em = ext.get("letterSpacingEm") if k.startswith("text.") else v.get("resolved")
+        if caps and isinstance(em, (int, float)) and em < 0:
+            rep.add("error", "lint", f"{k} sets capitals with negative tracking ({em:g}em); capitals take 0 to +0.08em",
+                    "Capitals never take negative tracking", "STD-visual-details-04, S-L02-021", k)
     styles = {k: v["resolved"] for k, v in toks.items() if k.startswith("text.") and not k.startswith(("text.emphasized.", "text.numeric."))
               and v["type"] == "typography"}  # emphasized and numeric variants pair with a baseline style; they are not extra levels
     if len(styles) > 15:
@@ -3739,9 +3910,11 @@ def validate_files(files, state, rep):
         if s2 / s1 - 1 < 0.1 and abs(w2 - w1) < 200 and not (s1 == s2 and w1 == w2):
             rep.add("warning", "lint", f"{k1} ({s1:g}px/{w1}) and {k2} ({s2:g}px/{w2}) look almost the same: under 10% apart in size and under 200 in weight",
                     "Adjacent hierarchy levels must differ visibly", "DC-L15-02 (200 [inferred])")
-    text_tiers = [k for k in toks if re.fullmatch(r"color\.text\.(primary|secondary|tertiary|quaternary|muted|subtle)", k)]
+    text_tiers = {json.dumps(toks[k]["resolved"], sort_keys=True) for k in toks
+                  if re.fullmatch(r"color\.text\.(primary|secondary|tertiary|quaternary|muted|subtle|disabled)", k)}
     if len(text_tiers) > 3:
-        rep.add("warning", "lint", f"{len(text_tiers)} gray text colors; three is the most that stay distinct", "Hierarchy tiers: 3 text colors", "L15-P04, S-L15-038")
+        rep.add("warning", "lint", f"{len(text_tiers)} gray text colors; three (primary, secondary, disabled) is the most that stay distinct",
+                "Hierarchy tiers: 3 text colors", "L15-P04, S-L15-038")
 
     # ---- lint: motion
     if "motion" not in res.get("modifiers", {}) or "reduced" not in res["modifiers"]["motion"]["contexts"]:
@@ -4190,7 +4363,10 @@ ANSWER_TABLE = {
                   "sans-serif": {"raw.displayFace": "=serif"}, "display-face": {"raw.displayFace": "=brandFace"}},
     "Q-type-06": {"system-mono": {"raw.monoFace": "ui-monospace"}, "numeric-face": {"raw.numericStyles": True}},
     "Q-type-09": {"1.125": {"overrides.type.ratio": 1.125}, "1.2": {"overrides.type.ratio": 1.2}, "1.25": {"overrides.type.ratio": 1.25},
-                  "1.333": {"overrides.type.ratio": 1.333}},
+                  "1.333": {"overrides.type.ratio": 1.333},
+                  **{k: {"overrides.type.ratio": v} for k, v in (("major-second", 1.125), ("minor-third", 1.2), ("major-third", 1.25),
+                                                                   ("perfect-fourth", 1.333), ("augmented-fourth", 1.414),
+                                                                   ("perfect-fifth", 1.5), ("golden-ratio", 1.618))}},
     "Q-type-11": {"4pt": {"raw.lineHeightGrid": 4}, "2pt": {"raw.lineHeightGrid": 2}},
     "Q-type-12": {"two": {"overrides.type.weightCount": 2}, "three": {"overrides.type.weightCount": 3}, "four": {"overrides.type.weightCount": 4},
                   "emphasized-twin": {"overrides.type.emphasizedVariants": True}, "strong-stronger": {"overrides.type.emphasizedVariants": True}},
@@ -4208,7 +4384,8 @@ ANSWER_TABLE = {
                     "bootstrap": {"raw.breakpoints": "bootstrap"}, "apple-size-classes": {"raw.breakpoints": UNSET}},
     "Q-layout-03": {"reading": {"raw.productType": "content"}, "working": {"raw.productType": "work-tool"},
                     "data": {"raw.productType": "work-tool", "raw.numericStyles": True}},
-    "Q-shape-01": {"square": {"dials.roundness": 5}, "subtle": {"dials.roundness": 40}, "soft": {"dials.roundness": 55}, "pill": {"dials.roundness": 97}},
+    "Q-shape-01": {"square": {"dials.roundness": 5, "overrides.radius.control": 0}, "subtle": {"dials.roundness": 40, "overrides.radius.control": 6},
+                   "soft": {"dials.roundness": 55, "overrides.radius.control": 8}, "pill": {"dials.roundness": 97, "overrides.radius.control": "full"}},
     "Q-shape-04": {"circular": {"raw.cornerShape": "circular"}, "continuous": {"raw.cornerShape": "continuous"},
                    "squircle-enhance": {"raw.cornerShape": "squircle-enhance"}},
     "Q-depth-01": {"borders": {"dials.depth": 8}, "ring-shadow": {"dials.depth": 25}, "tonal": {"dials.depth": 45}, "shadow": {"dials.depth": 68},
@@ -4292,7 +4469,7 @@ _R = {
                Q-pattern-04 Q-pattern-05 Q-pattern-06 Q-token-01 Q-token-02 Q-token-03 Q-token-04 Q-token-05 Q-token-06 Q-token-07 Q-token-08
                Q-token-09 Q-token-10 Q-brand-02 Q-shape-01 Q-type-06 Q-type-09 Q-type-11 Q-space-07 Q-space-10 Q-layout-03 Q-depth-05
                Q-motion-09 Q-voice-03 Q-form-01 Q-state-04 Q-ai-01 Q-icon-02 Q-color-23 Q-state-02""",
-    "owner": """Q-scope-01 Q-scope-02 Q-scope-03 Q-scope-04 Q-scope-05 Q-tool-01 Q-tool-02 Q-tool-04 Q-gov-01 Q-gov-02 Q-gov-03 Q-gov-04 Q-gov-05
+    "owner": """Q-scope-01 Q-scope-02 Q-scope-03 Q-scope-04 Q-scope-05 Q-scope-07 Q-tool-01 Q-tool-02 Q-tool-04 Q-gov-01 Q-gov-02 Q-gov-03 Q-gov-04 Q-gov-05
                 Q-gov-06 Q-gov-07 Q-dist-01 Q-dist-02 Q-dist-03 Q-dist-04 Q-pref-01 Q-pref-02 Q-pref-03 Q-plat-07 Q-plat-08 Q-plat-09
                 Q-comp-01 Q-comp-02 Q-aud-02 Q-brand-07""",
     "hook": "Q-brand-03 Q-brand-08 Q-icon-01 Q-icon-06 Q-img-01 Q-img-04 Q-img-06 Q-img-07 Q-motion-08 Q-voice-01 Q-type-02",
@@ -4478,6 +4655,39 @@ def _merge_effects(into, eff):
     return into
 
 
+# A typed value is stored as the value, not only as reason text ("buttons 6px", "weights 400/500", "major third"; a private
+# B2B landing page kept these only in --why, 2026-11-05). Answers to these questions that the person chose are locked.
+HOLD_ANSWERS = {"Q-shape-01": ("overrides.radius.control",)}
+
+
+def exact_answer(qid, v):
+    """Effects for a stated value that is not one of the options, or {}."""
+    if isinstance(v, (dict, bool)) or v is None or str(v) in (ANSWER_TABLE.get(qid) or {}):
+        return {}
+    text = str(v).strip().lower()
+    if qid == "Q-shape-01":
+        px = radius_px(text if text.endswith("px") or text == "full" else (_px_number(f"{text}px") if re.fullmatch(r"\d+(\.\d+)?", text) else None))
+        if px is None:
+            return {}
+        return {"overrides.radius.control": "full" if px >= FULL else px,
+                "dials.roundness": _band_mid("roundness", "radius.control", "full" if px >= FULL else px)}
+    if qid == "Q-type-09":
+        key = re.sub(r"[\s_]+", "-", text)
+        if key in ANSWER_TABLE[qid]:
+            return dict(ANSWER_TABLE[qid][key])
+        try:
+            r = float(text)
+        except ValueError:
+            return {}
+        return {"overrides.type.ratio": r} if 1.05 <= r <= 1.7 else {}
+    if qid == "Q-type-12":
+        ws = sorted({int(x) for x in re.findall(r"\b[1-9]00\b", " ".join(map(str, v)) if isinstance(v, list) else text)})
+        if len(ws) < 2 or ws[0] != 400 or len(ws) > 3:  # body text is 400 in every system; three weights at most on a page
+            return {}
+        return {"overrides.type.weightCount": len(ws), "overrides.type.headingWeight": ws[-1]}
+    return {}
+
+
 def answer_effects(qid, value, state=None):
     """Engine inputs implied by a questionnaire answer (ANSWER_TABLE, plus the questions whose answers are free-form).
     UNSET removes an earlier value; LABEL stands for the option's plain label. A list answer merges its options."""
@@ -4548,9 +4758,15 @@ def answer_effects(qid, value, state=None):
         macros, _m, _u = feel_words(words)
         return {"macros": macros} if macros else {}
     if isinstance(v, list) and qid in ANSWER_TABLE:
+        exact = exact_answer(qid, v) if qid == "Q-type-12" else {}  # [400, 500] names weights, not options
+        if exact:
+            return exact
         for item in v:
             _merge_effects(eff, answer_effects(qid, item, state))
         return eff
+    exact = exact_answer(qid, v)
+    if exact:
+        return exact
     table = ANSWER_TABLE.get(qid) or {}
     if isinstance(v, str) and v.startswith("state-") and qid == "Q-aud-02":
         return {"context.feelings+": [v[len("state-"):]]}
@@ -4714,7 +4930,7 @@ def _store(state, path, value, set_by, did, lock, via=None):
         rec = dict(old) if isinstance(old, dict) else {}
         rec.update({"value": value, "set_by": set_by, "decision": did})
         if via:
-            rec["via"] = via  # 'sketch': asked in the 5-question sketch, so it stays at zoom 0
+            rec["via"] = via  # 'sketch': asked in the 5-question sketch; 'repo': read from their files (detect_project); both stay at zoom 0
         else:
             rec.pop("via", None)
         rec.setdefault("locked", False)
@@ -5055,6 +5271,9 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
         breaks = std_constraint_breaks(state, path, value)
         if breaks:
             raise SystemExit("Nothing was changed. " + std_lock_message(state, [], path=path, value=value, breaks=breaks))
+    hold = HOLD_ANSWERS.get(path.split(".", 1)[1], ()) if path.startswith("answers.") and set_by == "chosen" else ()
+    if hold:  # the person's own button shape holds across iterations; changing it needs `engine.py unlock` first
+        lock = True
     if path.startswith("answers."):
         trial = copy.deepcopy(state)
         _store(trial, path, value, set_by, "D-0000", lock, via)
@@ -5088,9 +5307,10 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
         vals = value if isinstance(value, list) else [value]
         custom = [str(x) for x in vals if not isinstance(x, (dict, list)) and opts and str(x) not in opts
                   and not str(x).startswith("state-") and qid not in ("Q-brand-01", "Q-scope-06", "Q-brand-07") and not look_style]
-        if custom:
-            extra.append(f"note: {', '.join(custom)} is not one of the listed options for {qid}; kept as your own answer")
         effects = answer_effects(qid, value, state)
+        if custom:
+            extra.append(f"note: {', '.join(custom)} is not one of the listed options for {qid}; "
+                         + ("stored as the value itself" if effects else "kept as your own answer"))
         for epath, evalue in effects.items():
             holder = std_holder(state, epath.rstrip("+"))
             if holder:  # std_answer_blocks let it through, so the standard's value already matches
@@ -5100,7 +5320,7 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
                 extra.append(f"skipped {epath} (locked)")
                 skipped = True
                 continue
-            _store(state, epath, evalue, set_by, did, False)
+            _store(state, epath, evalue, set_by, did, epath in hold)
             _touch(state, epath.rstrip("+"))
             shown = "back to the default" if evalue == UNSET else json.dumps(evalue, ensure_ascii=False)
             extra.append(f"also set: {epath.rstrip('+')} = {shown} (from {qid})")
@@ -5160,16 +5380,39 @@ def cmd_lock(d, path, on=True):
             locks.append(path)
         if not on and path in locks:
             locks.remove(path)
+    held = HOLD_ANSWERS.get(parts[1], ()) if parts[0] == "answers" and len(parts) == 2 else ()
+    for hp in held:  # the value the answer stored (Q-shape-01: the button radius) locks and unlocks with it
+        _set_lock(state, hp, on)
     dump_json(sp, state)
     cur = state
     for q in parts:
         cur = cur.get(q) if isinstance(cur, dict) else None
     log_decision(d, path, answer_value(cur), "locked: change only with the owner's consent" if on else "unlocked for change",
                  "chosen", on, title=f"{'lock' if on else 'unlock'} {path}")
-    print(f"{'locked' if on else 'unlocked'} {path}")
+    print(f"{'locked' if on else 'unlocked'} {path}" + (f" and {', '.join(held)}" if held else ""))
 
 
-def cmd_init(d, src=None, name=None, force=False, standards=True):
+PROTOCOL_TEMPLATE = os.path.join(SKILL_ROOT, "assets", "output", "PROTOCOL.md")
+
+
+def write_protocol(d, quiet=True):
+    """opendesigner/PROTOCOL.md: the project's six steps with owner gates, and the checks every round runs. Written once
+    from assets/output/PROTOCOL.md; never overwritten, because the agent keeps its gates, brief and answers there."""
+    fp = os.path.join(d, "PROTOCOL.md")
+    if os.path.exists(fp):
+        return None
+    if not os.path.exists(PROTOCOL_TEMPLATE):  # an engine copied on its own (a ChatGPT project): the agent writes it
+        if not quiet:
+            print(f"no PROTOCOL.md template here: write {fp} from the opendesigner skill's assets/output/PROTOCOL.md")
+        return None
+    with open(PROTOCOL_TEMPLATE, encoding="utf-8") as f:
+        write_text(fp, f.read().replace("{{date}}", _dt.date.today().isoformat()))
+    if not quiet:
+        print(f"wrote {fp}: the steps, gates and checks every agent follows here")
+    return fp
+
+
+def cmd_init(d, src=None, name=None, force=False, standards=True, detect=True):
     sp = os.path.join(d, "state.json")
     if os.path.exists(sp) and not force:
         raise SystemExit(f"{sp} already exists (use --force to replace it)")
@@ -5187,7 +5430,9 @@ def cmd_init(d, src=None, name=None, force=False, standards=True):
         log_decision(d, "init", None, "Start of the design system; every default traces to references/levers.json.", "auto_default",
                      title="init" + (f" from {os.path.basename(src)}" if src else " with defaults"))
     print(f"initialized {sp}")
-    record_stack(d, quiet=False)
+    write_protocol(d, quiet=False)
+    if detect:  # look before you ask: what the repo already answers, each recorded as assumed (detect_project)
+        record_project(d, quiet=False)
     if standards:  # house standards (docs/KNOWLEDGE.md 3): applied, locked, said once; nothing when none ship
         std_sync(d, initial=True)
 
@@ -5466,6 +5711,581 @@ def detect_stack(root):
             if tag not in tags:
                 tags.append(tag)
     return tags, seen
+
+
+# =============================================================================================
+# Look before you ask (owner direction 2026-11-02, row 3): what the person's repo already answers
+# =============================================================================================
+
+DETECT_SKIP = {"node_modules", "dist", "build", "out", ".next", ".nuxt", ".svelte-kit", ".output", "vendor", "coverage", DEFAULT_DIR,
+               "Pods", "DerivedData", "venv", "env", "__pycache__", "target", "bower_components", "tmp", "temp"}
+DETECT_MAX_FILES = 5000  # a whole home folder is never walked: the scan stops here and says so
+DETECT_MAX_DEPTH = 6
+DETECT_MAX_STYLE = 300   # style files read for the brand colour and the font, smallest paths first
+OD_OWN = {"state.json", "decisions.md", "feedback.md", "RATIONALE.md", "standards.md", "PROTOCOL.md", "RULES.md",
+          "overview.html", "preview.html", "coverage.md", "assets.json", "tokens", "build", "preview", "journey", "research", "review",
+          "taste-indexes", "DESIGN.md", "PRODUCT.md", "DESIGN.md.hand-edited", "PRODUCT.md.hand-edited"}  # what OpenDesigner writes
+CODE_EXT = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".vue", ".svelte", ".astro", ".html", ".htm", ".css", ".scss", ".sass", ".less",
+            ".py", ".rb", ".php", ".go", ".rs", ".swift", ".kt", ".kts", ".java", ".dart", ".cs", ".ex", ".exs"}
+STYLE_EXT = {".css", ".scss", ".sass", ".less", ".html", ".htm", ".vue", ".svelte", ".astro", ".jsx", ".tsx"}
+CODE_MANIFESTS = {"package.json", "pubspec.yaml", "cargo.toml", "go.mod", "pyproject.toml", "requirements.txt", "gemfile", "composer.json",
+                  "build.gradle", "build.gradle.kts", "package.swift", "setup.py", "mix.exs"}
+DEPLOY_FILES = {"vercel.json", "netlify.toml", "fly.toml", "render.yaml", "dockerfile", "docker-compose.yml", "docker-compose.yaml",
+                "compose.yaml", "procfile", "apphosting.yaml", "firebase.json", "wrangler.toml", "wrangler.json", "wrangler.jsonc",
+                "amplify.yml", "eas.json", "railway.json", "railway.toml", "serverless.yml", "staticwebapp.config.json", "now.json"}
+DEPLOY_DIRS = {"fastlane", ".vercel", ".netlify"}
+DOC_EXT = {".md", ".markdown", ".txt", ".rst", ".pdf", ".doc", ".docx", ".rtf", ".pages", ".key", ".pptx", ".odt"}  # notes on an idea
+WEB_DEPS = ("next", "nuxt", "@sveltejs/kit", "astro", "gatsby", "@remix-run/react", "@angular/core", "react-dom", "vue", "svelte",
+            "solid-js", "preact", "lit", "@builder.io/qwik", "ember-source", "vite")  # frameworks first: their name is the clearer source
+GENERIC_NAMES = {"app", "my-app", "myapp", "web", "website", "site", "client", "frontend", "front-end", "project", "my-project", "untitled",
+                 "vite-project", "react-app", "my-react-app", "next-app", "nextjs", "starter", "template", "demo", "test", "example", "ui",
+                 "main", "root", "monorepo", "workspace", "src", "create-next-app", "hello-world"}
+TEMPLATE_TEXT = re.compile(r"bootstrapped with|create-next-app|create react app|created using create-react-app|"
+                           r"this template (provides a minimal setup|should help)|welcome to your expo app|^# react \+ (typescript \+ )?vite|"
+                           r"generated by create next app|a new flutter project|everything you need to build a svelte project", re.I | re.M)
+TEMPLATE_TITLE = re.compile(r"^\s*(vite \+ .*|vite app|create next app|react app|expo|svelte app|my app|app|home|document|untitled)\s*$", re.I)
+PHASES = ["idea", "building", "near-launch", "live"]  # Q-scope-07; zoom.md, "The project's phase", has the same order
+PHASE_WORDS = {"idea": "an idea, no code yet", "building": "being built", "near-launch": "close to launch", "live": "live, with real users"}
+PHASE_FIRST = {"idea": "the alignment (mission, vision, purpose, goals) and the analogous product, then the sketch",
+               "building": "the sketch, then the areas the screens being built need most",
+               "near-launch": "an audit of what exists, then copy and voice, then preflight before release",
+               "live": "an audit of what exists, then governance (who may change the system and how)"}
+
+
+def project_files(root, state_dir=None):
+    """(files, dirs, capped) under root, as sorted relative paths: skips dependencies, builds, hidden folders (but .github),
+    OpenDesigner's own folder and what it writes, and stops after DETECT_MAX_FILES files (capped True)."""
+    root = os.path.abspath(root)
+    own = os.path.abspath(state_dir) if state_dir else None
+    files, dirs = [], []
+    for dirpath, subdirs, names in os.walk(root):
+        rel = os.path.relpath(dirpath, root)
+        top = rel == "."
+        depth = 0 if top else rel.count(os.sep) + 1
+        keep = []
+        for s in sorted(subdirs):
+            r = s if top else os.path.join(rel, s)
+            full = os.path.join(dirpath, s)
+            if full == own or (top and own == root and s in OD_OWN):
+                continue
+            if s.endswith((".xcodeproj", ".xcworkspace")) or s in DEPLOY_DIRS:
+                dirs.append(r)  # a marker: its contents say nothing more
+                continue
+            if s in DETECT_SKIP or (s.startswith(".") and s != ".github"):
+                continue
+            dirs.append(r)
+            if depth + 1 < DETECT_MAX_DEPTH:
+                keep.append(s)
+        subdirs[:] = keep
+        for n in sorted(names):
+            if top and n in OD_OWN and (own == root or n.endswith(".hand-edited") or (n in ("DESIGN.md", "PRODUCT.md")
+                                                                                     and "OpenDesigner" in _read(root, n, 600))):
+                continue  # what OpenDesigner wrote; a DESIGN.md or PRODUCT.md the person wrote is their notes
+            files.append(n if top else os.path.join(rel, n))
+            if len(files) >= DETECT_MAX_FILES:
+                return files, dirs, True
+    return files, dirs, False
+
+
+def _read(root, rel, limit=400_000):
+    try:
+        with open(os.path.join(root, rel), encoding="utf-8", errors="ignore") as f:
+            return f.read(limit)
+    except OSError:
+        return ""
+
+
+def _md_plain(s):
+    """Markdown or HTML inline text as plain words: images and tags dropped, links kept as their text."""
+    s = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", s)
+    s = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", s)
+    s = re.sub(r"<[^>]+>", "", s)
+    s = re.sub(r"[`*_]{1,3}", "", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def _first_sentence(s, cap=200):
+    m = re.match(r"(.+?[.!?])(\s|$)", s)
+    s = m.group(1) if m else s
+    if len(s) > cap:
+        s = s[:cap].rsplit(" ", 1)[0].rstrip(",;:") + "..."
+    return s
+
+
+def _readme(root, files):
+    """(heading, first paragraph, file) of the README at the root, unless it is a starter template's README."""
+    rel = next((f for f in files if os.sep not in f and f.lower().startswith("readme")), None)
+    if not rel:
+        return None, None, None
+    text = _read(root, rel, 60_000)
+    if TEMPLATE_TEXT.search(text[:3000]):
+        return None, None, rel
+    lines = text.splitlines()
+    heading, para, i = None, None, 0
+    while i < len(lines) and not (heading and para):
+        ln = lines[i].strip()
+        nxt = lines[i + 1].strip() if i + 1 < len(lines) else ""
+        i += 1
+        if ln.startswith("```"):
+            while i < len(lines) and not lines[i].strip().startswith("```"):
+                i += 1
+            i += 1
+        elif not ln or re.fullmatch(r"[-=*_]{3,}", ln):
+            continue
+        elif ln.startswith("#"):
+            if heading is None and re.match(r"#\s", ln):
+                heading = _md_plain(ln.lstrip("#").strip()) or None
+        elif re.fullmatch(r"=+|-+", nxt):  # a setext heading: the line under it is all = or -
+            if heading is None and nxt.startswith("="):
+                heading = _md_plain(ln) or None
+            i += 1
+        elif ln.startswith("<"):  # centred HTML headers: <h1>Name</h1> and <p>what it is</p>
+            m = re.match(r"<h1[^>]*>(.*?)</h1>", ln, re.I)
+            if m and heading is None:
+                heading = _md_plain(m.group(1)) or None
+            m = re.match(r"<p[^>]*>(.*?)</p>", ln, re.I)
+            words = _md_plain(m.group(1)) if m else ""
+            if para is None and len(re.findall(r"[A-Za-z]{2,}", words)) >= 4:
+                para = _first_sentence(words)
+        elif para is None and not re.match(r"^([-*+]\s|\d+\.\s|\|)", ln):
+            block = [ln.lstrip("> ").strip()]
+            while i < len(lines) and lines[i].strip() and not re.match(r"^(#{1,6}\s|```|[-*+]\s|\d+\.\s|\||<)", lines[i].strip()):
+                block.append(lines[i].strip().lstrip("> ").strip())
+                i += 1
+            words = _md_plain(" ".join(block))
+            if len(re.findall(r"[A-Za-z]{2,}", words)) >= 4:  # badge rows and lone links are not a description
+                para = _first_sentence(words)
+    return heading, para, rel
+
+
+def _nice_name(n, text=""):
+    """'@acme/budget-buddy' -> 'Budget Buddy'; None for a starter's or a folder's generic name. text (the README) gives the
+    product's own capitals when it spells the same name: 'opendesigner' -> 'OpenDesigner'."""
+    n = str(n or "").strip()
+    if n.startswith("@") and "/" in n:
+        scope, n = n[1:].split("/", 1)
+        if n.lower() in GENERIC_NAMES:
+            n = scope
+    if not n or n.lower().replace("_", "-") in GENERIC_NAMES or not re.search(r"[A-Za-z]", n):
+        return None
+    if re.fullmatch(r"[a-z0-9]+([-_][a-z0-9]+)*", n):
+        words = re.split(r"[-_]", n)
+        spelled = (m.group(1) for m in re.finditer(r"\b(" + r"[\s_-]?".join(re.escape(w) for w in words) + r")\b", text or "", re.I))
+        n = next((x for x in spelled if x != x.lower()), None) or " ".join(w.capitalize() for w in words)
+    return n[:60]
+
+
+def _name_part(heading):
+    """A README heading as a product name: 'Acme: budgets for freelancers' -> ('Acme', 'budgets for freelancers')."""
+    parts = re.split(r"\s+[—–-]\s+|:\s+|\s+\|\s+", heading, maxsplit=1)
+    name = parts[0].strip()
+    if not name or len(name) > 60 or name.lower() in GENERIC_NAMES or name.lower() in ("readme", "about", "overview", "introduction"):
+        return None, None
+    return name, (parts[1].strip() if len(parts) > 1 else None)
+
+
+def _json_file(root, rel):
+    try:
+        data = json.loads(_read(root, rel, 2_000_000))
+    except ValueError:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _version_tuple(v):
+    m = re.match(r"\s*v?(\d+)\.(\d+)(?:\.(\d+))?", str(v or ""))
+    return tuple(int(x or 0) for x in m.groups()) if m else None
+
+
+_CSS_SCAN = []
+
+
+def _css_scan_module():
+    """opendesigner-extract's css_scan.py when that skill sits beside this one (the plugin and the repo), else None."""
+    if not _CSS_SCAN:
+        mod = None
+        path = os.path.join(os.path.dirname(SKILL_ROOT), "opendesigner-extract", "scripts", "css_scan.py")
+        if os.path.exists(path):
+            try:
+                import importlib.util
+                spec = importlib.util.spec_from_file_location("od_css_scan", path)
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)
+            except Exception:  # an older or broken copy: fall back to the light scan below
+                mod = None
+        _CSS_SCAN.append(mod)
+    return _CSS_SCAN[0]
+
+
+NAMED_COLOR = re.compile(r"(?:--|\b)(?:color-)?(primary|brand|accent|tint|seed)(?:[-_]?color)?(?:[-_]?(?:500|600|default))?\b[\"']?"
+                         r"\s*[:=]\s*(?:Color\(0x[fF]{2}([0-9a-fA-F]{6})\)|[\"']?(#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3})\b)", re.I)
+
+
+def _brand_candidate(root, style_files, code_files):
+    """(hex, why, confident) for the colour the project's own buttons, links and brand tokens use most, or None."""
+    css = _css_scan_module()
+    if css and style_files:
+        try:
+            cap = css.scan_files([os.path.join(root, f) for f in style_files])
+            ranked, conf = css.measure_accent(cap["values"], False, None)
+        except Exception:
+            ranked, conf = [], {"confidence": "none"}
+        if ranked and conf.get("confidence") in ("high", "medium"):
+            top = ranked[0]
+            used = ", ".join(sorted(top["sources"]))
+            return (normalize_hex(top["hex"]), f"the colour the CSS uses most on {used} ({top['count']} uses, "
+                                                f"{conf['confidence']} confidence)", True)
+        weak = ranked[0]["hex"] if ranked else None
+    else:
+        weak = None
+    named = {}
+    for f in code_files[:DETECT_MAX_STYLE]:
+        for _k, flutter, hx in NAMED_COLOR.findall(_read(root, f, 300_000)):
+            h = normalize_hex("#" + flutter if flutter else hx)
+            if h and hex_to_oklch(h)[1] >= 0.05 and 0.1 <= hex_to_oklch(h)[0] <= 0.97:
+                named.setdefault(h, [0, f])[0] += 1
+    if named:
+        h, (n, f) = max(named.items(), key=lambda kv: (kv[1][0], kv[0]))
+        return h, f"the colour named primary, brand or accent in {f} ({n} use{'s' if n != 1 else ''})", True
+    return (normalize_hex(weak), "the most colourful value in the CSS, with no button, link or brand token behind it", False) if weak else None
+
+
+def _font_name(slug):
+    """'plus-jakarta-sans' or 'Plus_Jakarta_Sans' -> 'Plus Jakarta Sans', with the capitals of a known open face."""
+    s = re.sub(r"\s+", " ", slug.replace("_", " ").replace("-", " ").replace("+", " ")).strip()
+    return {f.lower(): f for f in OPEN_FONT_NAMES}.get(s.lower()) or " ".join(w[:1].upper() + w[1:] for w in s.split())
+
+
+def _is_mono(face):
+    return bool(re.search(r"\b(mono|code|courier|consol)", face, re.I))
+
+
+def _not_text_face(face):
+    """Icon and symbol fonts (Font Awesome, Material Icons, icomoon) are never the text font."""
+    return bool(re.search(r"icon|awesome|symbol|glyph|emoji|icomoon|fontello|dashicons|codicon", face, re.I))
+
+
+def _font_candidate(root, style_files, code_files, deps):
+    """(face, why) for the text font the project loads, or None: next/font, @fontsource and Expo font packages, Google Fonts
+    links, @font-face rules, then the most common family in font-family declarations."""
+    loaded = []
+
+    def add(face, src):
+        if face and not _generic_face(face) and not _not_text_face(face) and face.lower() not in {x.lower() for x, _ in loaded}:
+            loaded.append((face, src))
+    for f in code_files[:DETECT_MAX_STYLE]:
+        t = _read(root, f, 200_000)
+        for names in re.findall(r"import\s*\{([^}]+)\}\s*from\s*[\"']next/font/google[\"']", t):
+            for n in names.split(","):
+                n = n.split(" as ")[0].strip()
+                if n:
+                    add(_font_name(n), f"next/font in {f}")
+        if re.search(r"from\s*[\"']geist/font/sans[\"']", t):
+            add("Geist", f"the geist package in {f}")
+    for dep in sorted(deps):
+        m = re.match(r"^@(?:fontsource(?:-variable)?|expo-google-fonts)/(.+)$", dep)
+        if m and m.group(1) not in ("dev", "vector-icons"):
+            add(_font_name(m.group(1)), f"the {dep} package")
+    used = {}
+    for f in style_files:
+        t = _read(root, f, 300_000)
+        for fam in re.findall(r"fonts\.googleapis\.com/css2?\?family=([^&\"':;)]+)", t):
+            add(_font_name(fam.split(":")[0]), f"a Google Fonts link in {f}")
+        for body in re.findall(r"@font-face\s*\{([^}]*)\}", t):
+            m = re.search(r"font-family\s*:\s*[\"']?([^;\"'}]+)", body)
+            if m:
+                add(m.group(1).strip(), f"an @font-face rule in {f}")
+        for decl in re.findall(r"(?<![\w-])font-family\s*:\s*([^;}\n]+)", t):
+            first = decl.split(",")[0].strip().strip("\"'")
+            if first and "var(" not in first and not _generic_face(first) and first.lower() not in GENERIC_FONTS \
+                    and not _not_text_face(first):
+                used[first] = used.get(first, 0) + 1
+    text_loaded = [(x, s) for x, s in loaded if not _is_mono(x)]
+    top_used = sorted(((n, x) for x, n in used.items() if not _is_mono(x)), key=lambda t: (-t[0], t[1]))
+    if top_used and (top_used[0][0] >= 2 or any(x.lower() == top_used[0][1].lower() for x, _ in text_loaded)):
+        n, face = top_used[0]
+        return face, f"the font the CSS names most ({n} font-family rule{'s' if n != 1 else ''})"
+    if text_loaded:
+        return text_loaded[0][0], text_loaded[0][1]
+    return None
+
+
+def _dark_mode(root, style_files, code_files, deps, app_json):
+    """(Q-theme-01 option, why) when the project already has a dark mode, or None. A lone .dark class (a starter's CSS often
+    has one) is not enough; light-only is never inferred, because a standard may forbid it."""
+    if "next-themes" in deps:
+        return "light-dark-toggle", "the next-themes package (light and dark, with a switch)"
+    for f in style_files + code_files[:DETECT_MAX_STYLE]:
+        t = _read(root, f, 300_000)
+        if re.search(r"prefers-color-scheme\s*:\s*dark", t):
+            return "system-light-dark", f"prefers-color-scheme: dark in {f}"
+        if re.search(r"\[data-theme=[\"']?dark", t) or re.search(r"setTheme\(|toggleTheme|theme-toggle", t):
+            return "light-dark-toggle", f"a theme switch in {f}"
+        if re.search(r"\buseColorScheme\(", t):
+            return "system-light-dark", f"useColorScheme() in {f}"
+    if str(((app_json.get("expo") or {}).get("userInterfaceStyle") or "")).lower() == "automatic":
+        return "system-light-dark", "userInterfaceStyle automatic in app.json"
+    return None
+
+
+def detect_project(root, state_dir=None):
+    """What the project folder already says, read-only: {findings: [{path, value, source, why}], notes: [...], readme,
+    files, capped}. Each finding is a state path the agent would otherwise ask about (zoom.md, level 0); notes are weaker
+    signals it can mention but that are never recorded. Reads files only: no network, nothing runs, nothing is written."""
+    root = os.path.abspath(root)
+    files, dirs, capped = project_files(root, state_dir)
+    low = {f.lower(): f for f in files}
+    tops = {f.lower(): f for f in files if os.sep not in f}
+    dnames = {os.path.basename(x).lower() for x in dirs}
+    found, notes = [], []
+
+    def put(path, value, source, why):
+        found.append({"path": path, "value": value, "source": source, "why": why})
+    pkg = _json_file(root, tops["package.json"]) if "package.json" in tops else {}
+    deps = {}
+    for k in ("dependencies", "devDependencies", "peerDependencies"):
+        if isinstance(pkg.get(k), dict):
+            deps.update(pkg[k])
+    app_json = _json_file(root, tops["app.json"]) if "app.json" in tops else {}
+    pubspec = _read(root, tops["pubspec.yaml"], 50_000) if "pubspec.yaml" in tops else ""
+    heading, para, readme = _readme(root, files)
+    readme_text = _read(root, readme, 60_000) if readme else ""
+    code = [f for f in files if os.path.splitext(f)[1].lower() in CODE_EXT]
+    style = sorted((f for f in files if os.path.splitext(f)[1].lower() in STYLE_EXT or os.path.basename(f).startswith("tailwind.config")),
+                   key=lambda f: (f.count(os.sep), f))[:DETECT_MAX_STYLE]
+    scripts = sorted((f for f in code if os.path.splitext(f)[1].lower() in {".js", ".jsx", ".ts", ".tsx", ".mjs", ".dart", ".swift", ".kt"}),
+                     key=lambda f: (f.count(os.sep), f))
+    title, meta_desc = None, None
+    for rel in [tops.get("index.html"), low.get(os.path.join("public", "index.html")), low.get(os.path.join("src", "index.html"))] + \
+            [f for f in files if re.fullmatch(r"(src/)?app/layout\.(t|j)sx?", f.replace(os.sep, "/"))]:
+        if not rel:
+            continue
+        t = _read(root, rel, 100_000)
+        m = re.search(r"<title>([^<]{1,80})</title>", t, re.I) or re.search(r"\btitle\s*:\s*[\"'`]([^\"'`]{1,80})[\"'`]", t)
+        if m and not title and not TEMPLATE_TITLE.search(m.group(1)) and not TEMPLATE_TEXT.search(m.group(1)):
+            title = (_md_plain(m.group(1)), rel)
+        m = re.search(r"<meta\s+name=[\"']description[\"']\s+content=[\"']([^\"']{8,300})", t, re.I) or \
+            re.search(r"\bdescription\s*:\s*[\"'`]([^\"'`]{8,300})[\"'`]", t)
+        if m and not meta_desc and not TEMPLATE_TEXT.search(m.group(1)):
+            meta_desc = (_first_sentence(_md_plain(m.group(1))), rel)
+
+    # the product's name and what it is (Q-scope-01's words)
+    name_h, tagline = _name_part(heading) if heading else (None, None)
+    flutter_name = re.search(r"^name:\s*([\w-]+)", pubspec, re.M)
+    expo_name = (app_json.get("expo") or {}).get("name") if isinstance(app_json.get("expo"), dict) else None
+    for cand, src in ((name_h, f"the first heading of {readme}"), (title and title[0], f"the page title in {title and title[1]}"),
+                      (expo_name if expo_name and not TEMPLATE_TITLE.search(str(expo_name)) else None, "the app name in app.json"),
+                      (_nice_name(pkg.get("name"), readme_text), "the name in package.json"),
+                      (_nice_name(flutter_name.group(1)) if flutter_name else None, "the name in pubspec.yaml")):
+        if cand:
+            put("name", cand, src, f"read from {src}")
+            break
+    desc = str(pkg.get("description") or "").strip()
+    flutter_desc = re.search(r"^description:\s*[\"']?(.+?)[\"']?\s*$", pubspec, re.M)
+    named = next((f["value"] for f in found if f["path"] == "name"), "")
+    if named and desc.lower().startswith(named.lower()):  # 'Acme - budgets for freelancers' -> 'budgets for freelancers'
+        desc = re.sub(r"^[\s:\u2014\u2013-]+", "", desc[len(named):]).strip() or desc
+    for cand, src in ((para, f"the first paragraph of {readme}"),
+                      (desc if desc and not TEMPLATE_TEXT.search(desc) else None, "the description in package.json"),
+                      (tagline, f"the first heading of {readme}"),
+                      (meta_desc and meta_desc[0], f"the page description in {meta_desc and meta_desc[1]}"),
+                      (flutter_desc.group(1) if flutter_desc and not TEMPLATE_TEXT.search(flutter_desc.group(1)) else None,
+                       "the description in pubspec.yaml")):
+        if cand:
+            put("context.product", _first_sentence(_md_plain(cand)), src, f"read from {src}")
+            break
+
+    # where it runs (Q-plat-01)
+    plats, why = [], []
+    native = "react-native" in deps or "expo" in deps
+    desktop = "electron" in deps or any(x.startswith("@tauri-apps/") for x in deps) or "src-tauri" in dnames
+    if native:
+        plats += ["ios", "android"]
+        why.append("react-native" if "react-native" in deps else "expo")
+    if pubspec:
+        sub = [p for p, dn in (("ios", "ios"), ("android", "android"), ("web", "web")) if dn in {x.lower() for x in dirs if os.sep not in x}]
+        sub += ["desktop"] if {"macos", "windows", "linux"} & {x.lower() for x in dirs if os.sep not in x} else []
+        plats += sub or ["ios", "android"]
+        why.append("pubspec.yaml (Flutter)" + (f" with {', '.join(sub)} folders" if sub else ""))
+    if desktop:
+        plats.append("desktop")
+        why.append("electron" if "electron" in deps else "tauri")
+    if any(x.endswith((".xcodeproj", ".xcworkspace")) for x in dirs) or "package.swift" in tops:
+        if "ios" not in plats:
+            plats.append("ios")
+            why.append("an Xcode project")
+    if not native and not pubspec and ("androidmanifest.xml" in {os.path.basename(f).lower() for f in files}
+                                       or "build.gradle.kts" in tops or "build.gradle" in tops):
+        if "android" not in plats:
+            plats.append("android")
+            why.append("an Android project")
+    web_dep = next((x for x in WEB_DEPS if x in deps), None)
+    if not native and not desktop and not pubspec and (web_dep or any(os.path.splitext(f)[1].lower() in (".html", ".htm") for f in files)):
+        plats.insert(0, "web")
+        why.insert(0, web_dep or "HTML pages")
+    plats = list(dict.fromkeys(plats))
+    if plats:
+        put("answers.Q-plat-01", plats, ", ".join(why), f"read from the files ({', '.join(why)})")
+
+    # brand colour candidate (Q-color-01), font (raw.textFace) and dark mode (Q-theme-01)
+    brand = _brand_candidate(root, style, scripts)
+    if brand and brand[2]:
+        put("raw.brandColor", brand[0], brand[1], f"read from the code: {brand[1]}")
+    elif brand:
+        notes.append(f"a possible brand colour {brand[0].upper()}: {brand[1]}, so it was not recorded")
+    font = _font_candidate(root, style, scripts, deps)
+    if font:
+        put("raw.textFace", font[0], font[1], f"read from {font[1]}")
+    dark = _dark_mode(root, style, scripts, deps, app_json)
+    if dark:
+        put("answers.Q-theme-01", dark[0], dark[1], f"read from {dark[1]}")
+    elif any(re.search(r"(^|[\s,}])\.dark\s*[{,]", _read(root, f, 300_000)) for f in style):
+        notes.append("a .dark class in your CSS but nothing that switches it on, so the light and dark question stays open")
+
+    # the project's phase (Q-scope-07): notes and no code, idea; code without deploy config, building; deploy config, near
+    # launch; a released changelog or a version past 1.0.0, live. A folder with neither code nor notes says nothing.
+    content = [f for f in files if not os.path.basename(f).startswith(".")]
+    notes_files = [f for f in content if os.path.splitext(f)[1].lower() in DOC_EXT or os.path.basename(f).lower().startswith("readme")]
+    has_code = bool(code) or bool({os.path.basename(f).lower() for f in files} & CODE_MANIFESTS) or \
+        any(x.endswith((".xcodeproj", ".xcworkspace")) for x in dirs)
+    deploy = sorted({os.path.basename(f) for f in files if os.sep not in f and f.lower() in DEPLOY_FILES} |
+                    {x for x in dirs if os.sep not in x and x in DEPLOY_DIRS} |
+                    {f.replace(os.sep, "/") for f in files if f.replace(os.sep, "/").startswith(".github/workflows/")
+                     and re.search(r"deploy|release|publish|pages|vercel|netlify|testflight|app-?store|play-?store",
+                                   os.path.basename(f) + " " + _read(root, f, 50_000), re.I)})
+    changelog = next((f for f in files if os.sep not in f and re.match(r"(changelog|changes|history)(\.md|\.txt)?$", f.lower())), None)
+    released = None
+    if changelog:
+        heads = re.findall(r"^#{1,3}\s*\[?v?(\d+\.\d+(?:\.\d+)?)\]?", _read(root, changelog, 200_000), re.M)
+        if heads:
+            released = f"{changelog} lists released versions (latest {heads[0]})"
+    versions = [(str(pkg.get("version")), "package.json")] if pkg.get("version") else []
+    m = re.search(r"^version:\s*([\w.+-]+)", pubspec, re.M)
+    if m:
+        versions.append((m.group(1), "pubspec.yaml"))
+    defaults = []
+    for v, src in versions:
+        vt = _version_tuple(v)
+        if vt and vt > (1, 0, 0) and not released:
+            released = f"version {v} in {src}"
+        elif vt == (1, 0, 0):
+            defaults.append(f"version {v} in {src} is the starter's default, so it says nothing about a release")
+    if not released:
+        notes += defaults
+    if not has_code and not notes_files:
+        notes.append("the folder has no code and no notes, so the phase is asked")
+    elif released:
+        put("answers.Q-scope-07", "live", released, f"read from the repo: {released}")
+    elif has_code and deploy:
+        put("answers.Q-scope-07", "near-launch", ", ".join(deploy[:3]),
+            f"read from the repo: code and deploy settings ({', '.join(deploy[:3])}), but no released version yet")
+    elif has_code:
+        put("answers.Q-scope-07", "building", "code without deploy settings", "read from the repo: code, but no deploy settings yet")
+    else:
+        n = len(notes_files)
+        put("answers.Q-scope-07", "idea", "notes, no code", f"read from the repo: {n} note{'s' if n != 1 else ''} "
+            f"({', '.join(notes_files[:2])}) and no code yet")
+    if capped:
+        notes.append(f"the folder has more than {DETECT_MAX_FILES} files, so only the first {DETECT_MAX_FILES} were read")
+    return {"root": root, "findings": found, "notes": notes, "files": len(files), "capped": capped,
+            "readme": {"file": readme, "heading": heading, "paragraph": para} if readme else None}
+
+
+DETECT_LABELS = {"name": "name", "context.product": "what it is", "answers.Q-plat-01": "where it runs", "raw.stack": "code stack",
+                 "raw.brandColor": "brand colour", "raw.textFace": "font", "answers.Q-theme-01": "light and dark",
+                 "answers.Q-scope-07": "phase"}
+
+
+def detect_value_words(path, value):
+    if path == "answers.Q-scope-07":
+        return PHASE_WORDS.get(value, value)
+    if path == "answers.Q-theme-01":
+        return answer_words("Q-theme-01", value)
+    if path == "raw.brandColor":
+        return f"{str(value).upper()} ({color_words(value)})"
+    if path == "raw.stack" and not value:
+        return "no UI framework"
+    if isinstance(value, list):
+        return ", ".join(str(x) for x in value)
+    return str(value)
+
+
+def _already_set(state, decs, path):
+    """True when the person (or an earlier step) already gave this value, so a repo reading must not replace it."""
+    if path == "name":
+        return state.get("name") not in (None, "", "Untitled design system")
+    if path.startswith("answers."):
+        return path.split(".", 1)[1] in (state.get("answers") or {})
+    if path == "raw.textFace":
+        return (state.get("raw") or {}).get("textFace") not in (None, "system") or path in decs
+    v = get_path(state, path)
+    return v not in (None, "", [], {}) or path in decs
+
+
+def record_project(d, quiet=True):
+    """Look before you ask (zoom.md, level 0): record what detect_project reads from the project folder, each as set_by
+    assumed with its source in the reason, unless it is already answered. The stack comes from record_stack. A value a
+    standard or a lock holds is left alone. Returns the findings recorded (each with its plain words)."""
+    state = merge_defaults(load_state(d))
+    decs = _decisions(d)
+    got = detect_project(doc_dir(d), d)
+    done = []
+    for f in got["findings"]:
+        if _already_set(state, decs, f["path"]) or std_holders(state, f["path"]) or is_locked(state, f["path"]):
+            continue
+        why = f["why"] + "; say if that's wrong"
+        try:
+            cmd_set(d, f["path"], f["value"], why, quiet=True, set_by="assumed", resync=False,
+                    via="repo" if f["path"].startswith("answers.") else None)
+        except SystemExit:  # a standard rules the value out: nothing recorded, the question stays open
+            continue
+        state = merge_defaults(load_state(d))
+        done.append(dict(f, words=detect_value_words(f["path"], f["value"])))
+    tags = record_stack(d)
+    if tags is not None:
+        done.append({"path": "raw.stack", "value": tags, "source": "package.json", "why": "detected from package.json",
+                     "words": ", ".join(tags) or "no UI framework"})
+    if not quiet:
+        for line in detect_lines(done):
+            print(line)
+    return done
+
+
+def detect_lines(done, lead="read from your repo (recorded as assumed; say if any is wrong):"):
+    if not done:
+        return []
+    return [f"  {lead}"] + [f"    {DETECT_LABELS.get(f['path'], f['path'])}: {f['words']} ({f['source']})" for f in done]
+
+
+def cmd_detect(d, project=None, as_json=False):
+    """engine.py detect: what the project folder already answers, before any question (read-only; nothing is written)."""
+    root = project or doc_dir(d)
+    got = detect_project(root, d if os.path.isdir(d) else None)
+    st = state_or_none(d)
+    state = merge_defaults(st) if st else None
+    decs = _decisions(d) if st else {}
+    tags, seen = detect_stack(root)
+    if tags is not None:
+        got["findings"].append({"path": "raw.stack", "value": tags, "source": "package.json",
+                                "why": f"detected from package.json ({', '.join(seen)})" if seen else "package.json names no UI framework"})
+    for f in got["findings"]:
+        f["words"] = detect_value_words(f["path"], f["value"])
+        f["recorded"] = bool(state) and _already_set(state, decs, f["path"])
+    if as_json:
+        print(json.dumps(got, indent=2, ensure_ascii=False))
+        return 0
+    print(f"Read {got['files']} files in {got['root']} (nothing was written).")
+    if not got["findings"]:
+        print("Nothing in the folder answers a sketch question yet: ask them.")
+    for f in got["findings"]:
+        print(f"  {DETECT_LABELS.get(f['path'], f['path'])}: {f['words']} ({f['source']})"
+              + ("  [already recorded]" if f["recorded"] else ""))
+    for n in got["notes"]:
+        print(f"  note: {n}")
+    if got.get("readme") and got["readme"].get("paragraph"):
+        print(f"  README says: \"{got['readme']['paragraph']}\" (for the line on what they're trying to do)")
+    print("Confirm each in one line instead of asking it (zoom.md, level 0). init and sketch record them as assumed.")
+    return 0
 
 
 def std_applies(s, state):
@@ -7594,10 +8414,15 @@ def css_decls(flat, prefix, paths, rem_fonts=True):
             if typ == "typography":
                 pass
             continue
+        css_lit = ((t.get("$extensions") or {}).get(NS) or {}).get("css")  # a fluid size or a ch measure that DTCG cannot hold
         if typ == "color":
             out.append(f"  {name}: {css_color(val)};")
+        elif typ == "dimension" and isinstance(css_lit, str):
+            out.append(f"  {name}: {css_lit};")
         elif typ == "dimension":
             out.append(f"  {name}: {css_dim(val, rem=rem_fonts and path.startswith('font.size.'))};")
+        elif typ == "number" and path.startswith("font.tracking."):
+            out.append(f"  {name}: {fmt_num(val)}em;")
         elif typ == "duration":
             out.append(f"  {name}: {css_duration(val)};")
         elif typ == "cubicBezier":
@@ -7682,7 +8507,8 @@ def export_css(files, meta, prefix):
     head = [f"/* {meta.get('name')} design tokens. Generated by the OpenDesigner engine {ENGINE_VERSION} from state.json;",
             "   do not edit by hand. Source of truth: tokens/*.tokens.json (DTCG 2025.10) + opendesigner.resolver.json.",
             "   Themes: prefers-color-scheme with a [data-theme] override. Density: [data-density]. Motion: prefers-reduced-motion",
-            "   with a [data-motion] override. Font sizes are rem so browser text zoom works (WCAG 1.4.4). */", ""]
+            "   with a [data-motion] override. Font sizes are rem so browser text zoom works (WCAG 1.4.4).",
+            f"   Text: use the .{prefix}-text-* classes, or set font and letter-spacing together; the font shorthand alone drops tracking. */", ""]
     lines = list(head)
 
     def block(selector, choice, fnames, indent=""):
@@ -7855,6 +8681,12 @@ def export_tailwind(files, meta, prefix, reset=True):
             v = css_var(prefix, path)
             lines += [f"  --text-{n}: var({v}-size);", f"  --text-{n}--line-height: var({v}-line-height);",
                       f"  --text-{n}--letter-spacing: var({v}-tracking);", f"  --text-{n}--font-weight: var({v}-weight);"]
+    for path in sorted(flat):  # tracking-caps-label, tracking-display (Tailwind's tracking-* namespace)
+        if path.startswith("font.tracking."):
+            lines.append(f"  --tracking-{kebab(path.split('.')[-1])}: var({css_var(prefix, path)});")
+    if "layout.container.max" in flat:  # max-w-page, max-w-prose, max-w-lead (Tailwind's container-* namespace)
+        lines += [f"  --container-page: var({css_var(prefix, 'layout.container.max')});"] + \
+                 [f"  --container-{k}: var({css_var(prefix, 'layout.measure.' + k)});" for k in ("prose", "lead") if f"layout.measure.{k}" in flat]
     for path in sorted(flat):
         if re.match(r"space\.(inset|stack|inline|section)\.", path):
             lines.append(f"  --spacing-{'-'.join(kebab(s_) for s_ in path.split('.')[1:])}: var({css_var(prefix, path)});")
@@ -7903,9 +8735,9 @@ def figma_scopes(path, typ):
         if path.startswith("color.shadow."):
             return ["EFFECT_COLOR"]
         return []
-    if path.startswith("space."):
+    if path.startswith(("space.", "layout.gutter", "layout.margin")):
         return ["GAP"]
-    if path.startswith(("size.control", "size.target", "size.icon")):
+    if path.startswith(("size.control", "size.target", "size.icon", "layout.container", "layout.measure")):
         return ["WIDTH_HEIGHT"]
     if path.startswith("radius."):
         return ["CORNER_RADIUS"]
@@ -9104,6 +9936,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     ctx = state.get("context") or {}
     prefix = meta.get("prefix", "ds")
     tinfo, sinfo, shp, mot, el = meta["type"], meta["space"], meta["shape"], meta["motion"], meta["elevation"]
+    lim, lay = meta.get("limits") or {}, sinfo.get("layout") or {}  # page caps and layout (older meta files have neither)
     H = lambda p: hex_of(light[p]["resolved"])
 
     def dec_ids(sec):
@@ -9316,10 +10149,18 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
                    "32px and -0.02em from 48px. Above 19px Apple's values turn positive to correct SF Pro Display's tighter drawing, which "
                    f"{raw.get('textFace')} does not have, so headings tighten instead (STD-visual-details-05).")
              if sf_tracking_on(state)
-             else "- Letter spacing: +0.02em at 11-12px, -0.01em from 32px, -0.02em from 48px."),
+             else "- Letter spacing, one value per job (`font.tracking.*`): +0.02em at 11-12px, 0 for body, -0.01em from 32px, "
+                  "-0.02em from 48px."),
+            "- Capitals never get negative tracking: small capital labels +0.06em, capital headings 0 to +0.02em. Set `font` and "
+            f"`letter-spacing` together, or use the `.{prefix}-text-*` classes: the `font` shorthand alone drops tracking.",
             "- Text scaling: CSS sizes are rem, line heights unitless, so text scales to 200% (WCAG 1.4.4); containers must grow with it.",
             "- Scripts: " + (", ".join(f"{k}: line height x{v.get('lineHeightFactor')}" + (", tracking 0" if v.get("zeroTracking") else "")
                                       for k, v in scripts.items()) if scripts else "Latin only; add scripts in raw.scripts to get per-script line heights (DC-L02-25)."),
+            *([f"- Display scale (marketing surfaces): its own fluid sizes, " + "; ".join(
+                f"`text.{k}` {v['min']}px on a phone to {v['max']}px at {lay.get('container', 1280)}px" for k, v in tinfo["fluid"].items())
+               + ". The hero takes at most two lines; section titles use `text.display.md`."] if tinfo.get("fluid") else []),
+            *([f"- Per page: at most {lim['sizes']['max']} sizes, {lim['weights']['max']} weights ({', '.join(str(x) for x in lim['weights']['values'])}) "
+               f"and {lim['families']['max']} families, whole px only (`limits` in `tokens/opendesigner.meta.json`)."] if lim else []),
             "", _md_table(["Style", "Size/line (px)", "Weight", "Tracking", "Use"], rows),
             "", "**Use / avoid.**", "- Use at most three sizes and two weights in one view; let color and weight carry hierarchy before size.",
             "- Avoid all caps for sentences and in scripts without case; use weight for emphasis there."]
@@ -9341,7 +10182,12 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             "", "- Target sizes: " + ", ".join(f"{k} {v}px" for k, v in sinfo["targets"].items())
             + f"; `size.target.min` is the floor for the primary input, and `space.target.gap` separates adjacent targets.",
             "- Inner gaps stay below outer gaps (at least half), so grouping reads without borders (L15 P16).",
-            "- Breakpoints and grid: not generated yet; use the platform defaults and keep layout spacing independent of density (DC-L03-17).",
+            *([f"- One container for the whole site: `layout.container.max` ({lay['container']}px). Columns {lay['columns']['compact']} / "
+               f"{lay['columns']['medium']} / {lay['columns']['expanded']} (`layout.columns.*`), gutters {lay['gutter']['compact']} / "
+               f"{lay['gutter']['expanded']}px, margins {lay['margin']['compact']} / {lay['margin']['expanded']}px; paragraphs at most "
+               f"{lay['measure']['prose']}ch (`layout.measure.prose`), leads {lay['measure']['lead']}ch (DC-L03-15, DC-L03-16, DC-L02-17).",
+               f"- Alignment: {lay['alignment']}"] if lay else
+              ["- Breakpoints and grid: not generated yet; use the platform defaults and keep layout spacing independent of density (DC-L03-17)."]),
             "", "**Use / avoid.**", "- Parents own spacing (padding and gap); children never set outer margins.",
             "- Avoid values off the ladder; if one is needed, add it as a decision."]
     out.append(section("Layout", "\n".join(body), lead=f"**Spacing comes in steps of {sinfo['unit']}px, and screens use {params['space.densityMode']} spacing by default.**", term_key="spacing scale"))
@@ -9399,7 +10245,11 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     continuous_corner = levers()["formulas"]["radius"]["continuous"]  # Q-shape-04 squircle-enhance on the web (tools/fit_corner.py)
     body = [f"**Intent.** Roundness {dials['roundness']}/100 gives controls a **{shp['control']}** radius; details {shp['detail']}px, containers "
             f"{shp['container']}px, overlays {shp['overlay']}px, people full. Controls under 32px tall use `radius.control-sm` ({shp['control-sm'] if shp['control-sm'] < FULL else 'full'}).",
-            "", f"- Nested radius: inner = max(outer - padding, smallest step). Here it is {shp['nested']}px inside a container with `space.inset.lg` "
+            (f"Buttons are **{shp['ctaShape']}**" + (" (your choice)." if shp.get("chosen") else
+                                                      "; square and pill corners are a choice (Q-shape-01), never a default.")) if shp.get("ctaShape") else "",
+            "", "- One corner per kind of thing: " + "; ".join(f"`radius.{k}` for {v}" for k, v in levers()["formulas"]["radius"]["roles"].items()
+                                                              if k != "rule") + ".",
+            f"- Nested radius: inner = max(outer - padding, smallest step). Here it is {shp['nested']}px inside a container with `space.inset.lg` "
             "padding. Equal radii on nested shapes look uneven (DC-L04-05).",
             f"- Focus ring: {shp['focusWidth']}px, 2px offset, radius = control radius + offset ({shp['focusRadius'] if shp['focusRadius'] < FULL else 'full'}).",
             f"- Icons: {shp['iconCorners']} corners, {shp['iconCaps']} caps.",
@@ -9424,7 +10274,9 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     base_c = (state.get("components") or {}).get("base")
     base_c = (answer_words("Q-comp-01", base_c) if base_c else None) or "not chosen yet (Q-comp-01)"
     body = [f"**Intent.** v1 components use the semantic tokens only. Base: {base_c}. "
-            f"Buttons are {ctl['md']}px tall ({params['space.densityMode']}), {shp['control']} radius, `text.label.lg`; one primary action per view.",
+            f"Buttons are {ctl['md']}px tall ({params['space.densityMode']}), {shp['control']} radius, `text.label.lg`; one primary action per view."
+            + (f" Calls to action on marketing pages: `size.control.cta` ({ctl.get('cta', 48)}px), `{lim['cta']['labelStyle']}` in sentence case, "
+               "one filled per view; the others outline or text." if lim.get("cta") else ""),
             "", _md_table(["Component", "Status"], rows) if rows else "No inventory recorded.",
             "", "**Contested policies:** " + "; ".join(f"{k}: {v if v is not None else 'pending'}" for k, v in pol) + ".",
             "", "**Use / avoid.**", "- Every interactive component shows hover, pressed, focus-visible and disabled states from the tokens.",
@@ -9619,7 +10471,92 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     return "\n".join(out).rstrip() + "\n"
 
 
-def render_product_md(state, existing=""):
+NOT_ENOUGH = "Not enough information"
+
+
+def project_phase(state):
+    """The project's phase (Q-scope-07): idea, building, near-launch or live; None while nobody said and nothing showed it."""
+    v = answer_value((state.get("answers") or {}).get("Q-scope-07"))
+    return v if v in PHASES else None
+
+
+def _ctx_words(v):
+    if isinstance(v, list):
+        return "; ".join(str(x).strip() for x in v if str(x).strip())
+    return str(v or "").strip()
+
+
+def _unconfirmed(decs, path):
+    """' (assumed, not confirmed yet)' when the latest decision for path was taken from their words or files, not given."""
+    return " *(assumed, not confirmed yet)*" if ((decs or {}).get(path) or {}).get("set_by") in ("assumed", "delegated") else ""
+
+
+def purpose_md(state, decs=None):
+    """PRODUCT.md, Purpose and goals: the alignment record (owner direction 2026-11-02, row 3). Each line comes from the
+    person's words or README; what nobody said reads 'Not enough information', never a guess."""
+    ctx = state.get("context") or {}
+    rows = [("Mission", "context.mission", "the change it exists to make"), ("Vision", "context.vision", "where it is heading"),
+            ("Purpose", "context.purpose", "what the person is trying to do with it")]
+    lines = []
+    for t, path, hint in rows:
+        v = _ctx_words(ctx.get(path.split(".")[1]))
+        lines.append(f"- **{t}** ({hint}): " + (f"{v.rstrip('.')}.{_unconfirmed(decs, path)}" if v else f"{NOT_ENOUGH}."))
+    goals = ctx.get("goals") or []
+    goals = [goals] if isinstance(goals, str) else goals
+    goals = [str(g).strip() for g in goals if str(g).strip()]
+    if goals:
+        lines.append(f"- **Goals**, most important first:{_unconfirmed(decs, 'context.goals')}")
+        lines += [f"  {i}. {g}" for i, g in enumerate(goals, 1)]
+    else:
+        lines.append(f"- **Goals**: {NOT_ENOUGH}.")
+    if not any(_ctx_words(ctx.get(k)) for k in ("mission", "vision", "purpose", "goals")):
+        lines.append("\nNothing here is invented: these come from the person's own words and README, are recorded as assumed, "
+                     "and are confirmed once. The principles are drafted from the goals (Q-brand-07).")
+    return "\n".join(lines)
+
+
+def phase_md(state, decs=None):
+    ph = project_phase(state)
+    if not ph:
+        return f"{NOT_ENOUGH} (Q-scope-07): an idea, being built, close to launch, or live with real users."
+    reason = re.sub(r";\s*say if that's wrong\s*$", "", ((decs or {}).get("answers.Q-scope-07") or {}).get("reason") or "")
+    head = f"**{answer_words('Q-scope-07', ph)}**" + (f" ({reason})" if reason else "") + "."
+    return head + _unconfirmed(decs, "answers.Q-scope-07") + f"\n\nWhat comes first in this phase: {PHASE_FIRST[ph]}."
+
+
+def market_md(state, decs=None):
+    """PRODUCT.md, Market: the analogous product, competitors, their shared pattern, the gap and the industry's conventions.
+    A line recorded in context.market (their words, or an assumption to confirm) comes first, then what the user research
+    found (research.py market_summary, with its sources); 'Not enough information' where nobody has looked yet."""
+    mk = (state.get("context") or {}).get("market") or {}
+    found = ((state.get("research") or {}).get("market") or {}) if (state.get("research") or {}).get("status") == "done" else {}
+    rows = [("Analogous product", "analogous", "a product from another field that solves the same kind of problem"),
+            ("Competitors", "competitors", "what people would use instead"),
+            ("Their shared pattern", "pattern", "what the competitors all do"),
+            ("The gap", "gap", "what none of them does well, and this product can"),
+            ("Industry conventions", "conventions", "the words, layouts and habits its users already know")]
+    lines = []
+    for t, k, hint in rows:
+        v = _ctx_words(mk.get(k))
+        r = _ctx_words(found.get(k))
+        lines.append(f"- **{t}** ({hint}): " + (f"{v.rstrip('.')}.{_unconfirmed(decs, 'context.market.' + k)}" if v else
+                                                 f"{r.rstrip('.')}. *(from the user research: opendesigner/research/users.md)*" if r else
+                                                 f"{NOT_ENOUGH}."))
+    return "\n".join(lines)
+
+
+def positioning_md(state):
+    """PRODUCT.md, Positioning: the four lines the person confirmed and the direction they picked (research.md sections 8 and 9).
+    A draft is not shown: only the person's yes makes it a positioning."""
+    r = research_py.summary(state) if research_py else {}
+    p, dr = r.get("positioning") or {}, r.get("direction") or {}
+    lines = ([f"Confirmed {p['confirmed']}.", ""] + [f"- {x}" for x in research_py.positioning_lines(p)]) if p.get("confirmed") else []
+    if dr.get("id"):
+        lines += ["", f"Direction {dr['id']}, {dr.get('name')} (chosen {dr.get('date')}): `opendesigner/{research_py.BOARD}`."]
+    return "\n".join(lines).strip() or f"{NOT_ENOUGH}. The positioning step fills this in: engine.py research positioning draft."
+
+
+def render_product_md(state, existing="", decs=None):
     ctx = state.get("context") or {}
     keeps = _keep_blocks(existing)
     raw = state["raw"]
@@ -9635,10 +10572,14 @@ def render_product_md(state, existing=""):
            "> Generated by the OpenDesigner engine from `state.json`. It is kept apart from DESIGN.md because it changes at a different pace. "
            "Hand-written notes survive only inside `<!-- od:keep -->` blocks.", ""]
     out.append(sec("Product", product_words(state) or "Not recorded yet (Q-scope-01)."))
+    out.append(sec("Purpose and goals", purpose_md(state, decs)))
+    out.append(sec("Phase", phase_md(state, decs)))
     aw = audience_words(state)
     out.append(sec("Audience", (aw[:1].upper() + aw[1:] + ("" if aw.endswith(".") else ".")) if aw else "Not recorded yet (Q-aud-01)."))
     if research_py:
-        out.append(sec("Users", research_py.product_section(state)))
+        out.append(sec("Users", research_py._users_section(research_py.summary(state))))
+    out.append(sec("Market", market_md(state, decs)))
+    out.append(sec("Positioning", positioning_md(state)))
     out.append(sec("Surfaces", "\n".join(f"- {s.get('name')}: {s.get('mode')} mode" + (f" ({surface_rule(s, 'set by the Density dial')})" if surface_rule(s, "") else "")
                                          if isinstance(s, dict) else f"- {s}" for s in surf)
                    or surface_words(state)
@@ -9652,7 +10593,7 @@ def render_product_md(state, existing=""):
     out.append(sec("Constraints", "\n".join(f"- {c}" for c in cons)))
     out.append(sec("Scope", "**In:** " + (", ".join(sc.get("in") or []) or "not recorded yet") + "\n\n**Out:** " + (", ".join(sc.get("out") or []) or "not recorded yet")))
     owner = [(qid, rec) for qid, rec in sorted((state.get("answers") or {}).items())
-             if ANSWER_RECORDS.get(qid) == "owner" and qid not in ("Q-brand-07", "Q-comp-01", "Q-comp-02")]
+             if ANSWER_RECORDS.get(qid) == "owner" and qid not in ("Q-brand-07", "Q-comp-01", "Q-comp-02", "Q-scope-07")]
     first_sentence = lambda q: re.split(r"(?<=[?.])\s", (questions().get(q) or {}).get("ask") or q)[0]
     lines = [f"- {first_sentence(q)} **{answer_words(q, answer_value(r))}** ({q})" for q, r in owner]
     out.append(sec("Team and Governance", "\n".join(x for x in [ctx.get("team") or ""] + lines if x) or "Not recorded yet (Q-scope-03, Q-scope-04, Q-gov-01)."))
@@ -9684,7 +10625,7 @@ def cmd_design_md(d, out_dir=None, files=None, meta=None, quiet=False):
     written = []
     hashes = state.setdefault("hashes", {})
     for name, render in (("DESIGN.md", lambda ex: render_design_md(d, files, meta, state, ex, out_dir=out_dir)),
-                         ("PRODUCT.md", lambda ex: render_product_md(state, ex))):
+                         ("PRODUCT.md", lambda ex: render_product_md(state, ex, _decisions(d)))):
         path = os.path.join(out_dir, name)
         existing = ""
         if os.path.exists(path):
@@ -10181,7 +11122,7 @@ def render_overview(d, files, meta, state):
                          "Give 3 or 4 traits in the form 'X, but not Y', or a voice guide.")
 
     # ---- color: semantic roles per theme, with contrast on the base surface
-    groups = [("Text", ["color.text.primary", "color.text.secondary", "color.text.tertiary", "color.text.link", "color.text.accent"]),
+    groups = [("Text", ["color.text.primary", "color.text.secondary", "color.text.disabled", "color.text.link", "color.text.accent"]),
               ("Surfaces", ["color.surface.base", "color.surface.raised", "color.surface.sunken", "color.bg.accent.subtle"]),
               ("Action", ["color.bg.action.primary", "color.text.on-action", "color.border.focus", "color.border.default"]),
               ("Status", ["color.text.danger", "color.text.success", "color.text.warning", "color.text.info"])]
@@ -10820,6 +11761,10 @@ def main(argv=None):
     p.add_argument("file")
     p.add_argument("--accept", action="store_true")
     p.add_argument("--json", action="store_true")
+    p = sub.add_parser("detect", parents=[common], help="read-only: what the project folder already answers (name, platforms, "
+                                                         "brand colour, font, dark mode, phase), before any question")
+    p.add_argument("--project", default=None, help="the project folder (default: the folder that holds the state directory)")
+    p.add_argument("--json", action="store_true")
     p = sub.add_parser("build", parents=[common], help="generate + validate, then (if no errors) export all + design-md + preview")
     p.add_argument("--force", action="store_true", help="export even when validation finds errors")
     p = sub.add_parser("sketch", parents=[common], help="Level 0: a complete coarse system from about five answers")
@@ -10880,9 +11825,19 @@ def main(argv=None):
     q.add_argument("--why", required=True, help="the person's own words")
     q = rsub.add_parser("status", parents=[common], help="where the user research stands")
     q.add_argument("--json", action="store_true")
-    p = sub.add_parser("feedback", parents=[common], help="record a gap, bug, confusing step or idea and print an issue link")
+    # research.md sections 8 and 9 run in research.py; these pass their words through unchanged
+    q = rsub.add_parser("market", parents=[common], help="the competitor table and the benchmark: show it before any colour")
+    q.add_argument("--json", action="store_true")
+    for name, subs, what in (("positioning", ("draft", "confirm", "show"), "draft the positioning, confirm it with the person, or show it"),
+                             ("directions", ("check", "board", "pick"), "check the three directions, write their board, or record the pick")):
+        q = rsub.add_parser(name, parents=[common], help=what)
+        q.add_argument("sub", choices=subs)
+        q.add_argument("rest", nargs=argparse.REMAINDER, help="passed to research.py as they are")
+    p = sub.add_parser("feedback", parents=[common], help="record a gap, bug, confusing step or idea (issue link), or the owner's note on the work (--kind note)")
     p.add_argument("text", nargs="?", default="")
-    p.add_argument("--kind", default=None, choices=list(FEEDBACK_KINDS), help="default: idea (confusing with --from-journey)")
+    p.add_argument("--kind", default=None, choices=list(FEEDBACK_KINDS) + ["note"],
+                   help="default: idea (confusing with --from-journey); note: the owner's note on the work, counted in RULES.md")
+    p.add_argument("--same", default=None, help="with --kind note: the earlier note (N-01) this one repeats, or new")
     p.add_argument("--from-journey", dest="from_journey", action="store_true",
                    help="add the hotspots from the journey log: question ids and counts only, never notes")
     p.add_argument("--area", default=None)
@@ -10928,7 +11883,7 @@ def main(argv=None):
         q.add_argument("--no-doc", dest="no_doc", action="store_true")
     a = ap.parse_args(argv)
     d = a.dir or DEFAULT_DIR
-    st = state_or_none(d) if a.cmd not in ("init", "feel", "resolve", "version") and not getattr(a, "json", False) else None
+    st = state_or_none(d) if a.cmd not in ("init", "feel", "resolve", "version", "detect") and not getattr(a, "json", False) else None
     kind = version_status(st)[0] if st else "current"
     if kind == "newer" or (kind != "current" and a.cmd not in ("build", "sketch")):  # build says it after it brings files up to date
         print(version_notice(st))
@@ -10949,6 +11904,8 @@ def main(argv=None):
         cmd_lock(d, a.path, a.cmd == "lock")
         if not a.no_doc:
             refresh_docs(d)
+    elif a.cmd == "detect":
+        return cmd_detect(d, a.project, a.json)
     elif a.cmd == "resolve":
         cmd_resolve(d)
     elif a.cmd == "version":
@@ -11005,6 +11962,11 @@ def main(argv=None):
             raise SystemExit("research.py is missing next to engine.py, so user research is not available in this copy.")
         if a.action == "check":  # a findings file can be checked before any system exists
             return research_py.check(a.file, a.json)
+        rest = list(getattr(a, "rest", []))
+        while "--dir" in rest[:-1]:  # --dir after the sub-word lands in rest; it is the engine's option, not research.py's
+            i = rest.index("--dir")
+            d = rest[i + 1]
+            del rest[i:i + 2]
         if not os.path.exists(os.path.join(d, STATE_FILE)):
             raise SystemExit(f"no state at {os.path.join(d, STATE_FILE)}; run the sketch first (engine.py sketch ...).")
         if a.action == "plan":
@@ -11015,15 +11977,21 @@ def main(argv=None):
             return research_py.skip(sys.modules[__name__], d, a.why)
         elif a.action == "status":
             return research_py.status(d, merge_defaults(load_state(d)), a.json)
+        elif a.action == "market":
+            return research_py.main(["--dir", d, "market"] + (["--json"] if a.json else []))
+        else:
+            return research_py.main(["--dir", d, a.action, a.sub, *rest])
     elif a.cmd == "feedback":
         os.makedirs(d, exist_ok=True)
         text = a.text
+        if a.from_journey and a.kind == "note":
+            raise SystemExit("--from-journey adds log hotspots to feedback about OpenDesigner, not to a note.")
         if a.from_journey:
             hot = journey.feedback_text(d) if journey else ""
             if not hot:
                 raise SystemExit("There is no journey log yet, so there are no hotspots to add.")
             text = f"{text} {hot}".strip()
-        cmd_feedback(d, text, a.kind or ("confusing" if a.from_journey else "idea"), area=a.area, question=a.question)
+        cmd_feedback(d, text, a.kind or ("confusing" if a.from_journey else "idea"), area=a.area, question=a.question, same=a.same)
     return 0
 
 
@@ -11037,8 +12005,8 @@ def answered_ids(state, decs=None, for_zoom=False):
     (context.product, raw.brandColor, macros, the logo hook; ANSWER_PATHS)."""
     out = {}
     for q, rec in (state.get("answers") or {}).items():
-        if for_zoom and isinstance(rec, dict) and rec.get("via") == "sketch" and (questions().get(q) or {}).get("zoom", 0):
-            continue  # a sketch answer (for example the theme) does not zoom its area in
+        if for_zoom and isinstance(rec, dict) and rec.get("via") in ("sketch", "repo") and (questions().get(q) or {}).get("zoom", 0):
+            continue  # a sketch answer (for example the theme) or a reading from the repo does not zoom its area in
         out[q] = (rec.get("set_by") if isinstance(rec, dict) else None) or "chosen"
     for path, (q, _how) in ANSWER_PATHS.items():
         v = get_path(state, path)
@@ -11747,9 +12715,10 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
                 trial, [], house, value=theme, breaks=[(s["id"], f"the standard lists {theme} for Q-theme-01 as an option that breaks it", s)
                                                        for s in bad]))
     if fresh:
-        cmd_init(d, name=name, standards=False)  # house standards follow the answers, so platform-only ones can be skipped
+        cmd_init(d, name=name, standards=False, detect=False)  # house standards follow the answers; the repo is read after them
     elif name and load_state(d).get("name") != name:
         cmd_set(d, "name", name, "sketch: the product's name", quiet=True, set_by=sb("name"))  # --name wins over init's folder name
+    write_protocol(d, quiet=quiet)  # a system made before PROTOCOL.md existed gets it now
     if audience:
         cmd_set(d, "answers.Q-aud-01", audience, why_of("audience"), quiet=True, set_by=sb("audience"), via="sketch")
         if not (load_state(d).get("context") or {}).get("audience"):
@@ -11768,8 +12737,6 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
                 set_by=sb("platforms"), via="sketch", resync=False)
     if stack is not None:
         cmd_set(d, "raw.stack", stack, "sketch: the code stack the person named", quiet=True, resync=False)
-    elif not fresh:
-        record_stack(d)
     if macros:
         cmd_set(d, "macros", macros, why_of("feel") + (f" ({'feel words' if sb('feel') else 'their words'}: {', '.join(mapping)})"
                                                          if mapping else ""), quiet=True, set_by=sb("feel"))
@@ -11792,9 +12759,11 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
     if items:
         cmd_set(d, "answers.Q-scope-06", items if len(items) > 1 or ":" in items[0] else items[0], why_of("surfaces"), quiet=True,
                 set_by=sb("surfaces"), via="sketch")
+    read = record_project(d)  # what their files answer and they did not: assumed, said in one line with the result
     if fresh:
         std_sync(d, initial=True, quiet=quiet)
-    elif platforms or stack is not None:  # the standards follow the platforms and stack (R02), quietly, one line per theme
+    elif platforms or stack is not None or any(f["path"] in ("answers.Q-plat-01", "raw.stack") for f in read):
+        # the standards follow the platforms and stack (R02), quietly, one line per theme
         std_rescope(d, quiet=quiet)
     code = cmd_build(d) if not quiet else 0
     if not quiet:
@@ -11825,6 +12794,11 @@ def cmd_sketch(d, name=None, brand=None, audience=None, platforms=None, feel=Non
                           delegated=brand_delegated(d)) if os.path.exists(mp) else ""
         if line:
             print(line)
+        for line in detect_lines(read, lead="Read from your repo (recorded as assumed; say if any is wrong):"):
+            print(line[2:])
+        ph = project_phase(load_state(d))
+        if ph:
+            print(f"Phase: {PHASE_WORDS[ph]}. What comes first: {PHASE_FIRST[ph]} (zoom.md, \"The project's phase\").")
         print("This is a sketch: every part works, and most choices are still defaults. Zoom into any area later (see the Zoom lines in DESIGN.md).")
         if code == 0:
             track(d, "level_complete", level="sketch")
@@ -11990,6 +12964,42 @@ def tw_class_for(path):
     return path
 
 
+def token_use_rx(prefix):
+    """What counts as code using the system: var(--ds-...), the Swift and Compose token types, or an import of a build file."""
+    P, K = prefix.upper(), prefix.capitalize()
+    tw = (r"\b(?:bg|text|border|fill|stroke|ring|outline|divide)-(?:surface|fg|line|icon|overlay|chart|workflow|action|accent|success|"
+          r"warning|danger|info|discovery)-[a-z0-9-]+|\b(?:p[xytblr]?|m[xytblr]?|gap(?:-[xy])?|space-[xy])-(?:inset|stack|inline)-[a-z0-9]+"
+          r"|\brounded-(?:detail|control|container|overlay|person)\b|\bshadow-(?:raised|floating|overlay)\b|\btransition-feedback\b")
+    return re.compile(rf"var\(\s*--{re.escape(prefix)}-|\b{P}\.(?:Colors|Space|Radius|Motion|Type|Elevation)\b|\bLocal{K}Colors\b"
+                      rf"|\b{K}(?:Space|Motion|Radius|Type)\b|opendesigner/build/|{tw}")
+
+
+SYSTEM_AGE_COMMITS = 10  # commits that changed code since the system last changed, before review says the system is behind
+
+
+def system_age(d, project):
+    """{commitsSince, since}: commits that changed the project's code after state.json or DESIGN.md last changed, read from
+    git. None without git, outside a repository, or when the system was never committed."""
+    import subprocess
+
+    def git(*args):
+        try:
+            r = subprocess.run(["git", *args], cwd=project, capture_output=True, text=True, timeout=10)
+        except (OSError, subprocess.SubprocessError):
+            return None
+        return r.stdout.strip() if r.returncode == 0 else None
+    sys_files = [p for p in (os.path.join(d, "state.json"), os.path.join(doc_dir(d), "DESIGN.md")) if os.path.exists(p)]
+    last = git("log", "-1", "--format=%H %cs", "--", *sys_files) if sys_files and git("rev-parse", "--git-dir") else None
+    if not last or git("status", "--porcelain", "--", *sys_files):  # never committed, or changed since the last commit
+        return None
+    sha, since = last.split()
+    code = [f"*{x}" for x in sorted(REVIEW_EXT - {".js", ".ts"})]  # UI files; plain .js and .ts are often servers and tests
+    rel = os.path.relpath(os.path.abspath(d), os.path.abspath(project))
+    skip = [f":(exclude){rel}"] if rel != "." and not rel.startswith("..") else []
+    n = git("rev-list", "--count", f"{sha}..HEAD", "--", *code, *skip)
+    return {"commitsSince": int(n), "since": since} if n and n.isdigit() else None
+
+
 def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     """End-of-implementation check: hard-coded colors, sizes, radii, shadows and durations that bypass tokens (CSS, JSX style
     objects, Tailwind arbitrary values and default scales, SwiftUI, Compose), role-appropriate token suggestions, and stale
@@ -12123,6 +13133,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         return (f"use var({css_var(prefix, 'motion.transition.' + role)}-duration) and its -easing "
                 f"(the {role} transition: {TR_WORDS[role]}; {why})")
     findings, scanned = [], 0
+    tok_rx, token_uses = token_use_rx(prefix), 0
     std_rules = std_review_rules(state)  # house standards followed and project standards that carry a review pattern
     locked_literals = std_locked_literals(state)
     stateroot = os.path.abspath(d)
@@ -12148,6 +13159,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             for i, line in enumerate(lines, 1):
                 if re.search(r"^\s*(//|/\*|\*|<!--)", line) or "od-ignore" in line:
                     continue
+                token_uses += len(tok_rx.findall(line))
                 hits = []  # every standard this line breaks, merged into one finding (R28)
                 for rx, std in std_rules:  # the first match that is not empty, in the first REVIEW_LINE_CAP characters
                     ms_ = next((m_ for m_ in rx.finditer(line[:REVIEW_LINE_CAP]) if m_.end() > m_.start()), None)
@@ -12312,7 +13324,12 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     taste = taste_index(d, state)  # dials that moved away from the person's taste: flagged, never a failure (taste is theirs)
     drift = taste_py.drift(taste, meta["dials"]) if taste else []
     r_errs, r_notes = research_py.review(d, state) if research_py else ([], [])
-    result = {"project": project, "filesScanned": scanned, "counts": by, "findings": findings[:500], "staleSections": stale,
+    hard = sum(1 for f_ in findings if f_["kind"] != "standard")
+    age = system_age(d, project) if scanned else None
+    result = {"project": project, "filesScanned": scanned, "counts": by, "tokenUses": token_uses, "systemAge": age,
+              "tokens": "none" if hard and not token_uses else "losing" if hard > token_uses else "ok",
+              "systemBehind": bool(age and age["commitsSince"] >= SYSTEM_AGE_COMMITS),
+              "findings": findings[:500], "staleSections": stale,
               "missing": missing, "untrue": sorted(set(untrue)), "tasteDrift": drift,
               "research": {"errors": r_errs, "notes": r_notes, "status": (state.get("research") or {}).get("status") or "none"}}
     if as_json:
@@ -12334,6 +13351,16 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             print("  To keep a raw value on purpose, add the comment od-ignore on that line.")
         else:
             print("No hard-coded colors, sizes, radii, shadows or durations found: the code uses the tokens.")
+        if result["tokens"] == "none":
+            print(f"Tokens are not in charge: the code uses none of them (no var(--{prefix}-...)). Import "
+                  "opendesigner/build/css/tokens.css, or the export for your stack, and move these values onto tokens before the next draft.")
+        elif result["tokens"] == "losing":
+            print(f"Tokens are losing: {token_uses} token use{'s' if token_uses != 1 else ''} against {hard} hard-coded values. "
+                  "Move values onto tokens before the next draft.")
+        if result["systemBehind"]:
+            print(f"The system is behind the code: {age['commitsSince']} commits changed code since state.json or DESIGN.md last "
+                  f"changed ({age['since']}). Record what the code decided since (engine.py set, then design-md), or bring the code "
+                  "back to the tokens, before the next draft.")
         if stdf:
             print(f"{len(stdf)} line{'s' if len(stdf) != 1 else ''} break{'s' if len(stdf) == 1 else ''} a standard:")
             for f_ in stdf[:limit]:
@@ -12700,9 +13727,112 @@ FEEDBACK_KINDS = {"gap": "gap", "bug": "bug", "confusing": "confusing", "idea": 
 ISSUES_URL = "https://github.com/ckryptickunal/OpenDesigner/issues/new"
 
 
-def cmd_feedback(d, text, kind="idea", quiet=False, area=None, question=None):
-    """Record feedback locally and print a pre-filled issue link. Nothing is posted: the person decides."""
+NOTE_STOP = frozenset("a all also an and are as at be by do does each every for from in is it its just make must of on or our "
+                      "please should so that the them then this to we with you your".split())
+NOTE_SPELLING = {"center": "centre", "centered": "centred", "centering": "centring", "color": "colour", "colors": "colours",
+                 "gray": "grey", "grays": "greys", "removed": "remove", "removing": "remove", "added": "add", "adding": "add",
+                 "doesnt": "dont"}
+RX_NOTE_ROW = re.compile(r"^\|\s*(N-\d+)\s*\|\s*(.*?)\s*\|\s*(\d+)\s*\|\s*([^|]*?)\s*\|")
+NOTE_MATCH = 0.6  # share of the shorter note's words that must match an earlier note for it to count as a repeat
+NOTE_POLAR = frozenset("no not never dont don without avoid more less bigger smaller larger lighter darker wider narrower add remove"
+                       .split())  # two notes that differ in these say opposite things, so they are never one note
+
+
+def note_words(text):
+    """The words that carry a note's meaning, roughly stemmed, so "Centre every heading" matches "center the headings"."""
+    out = set()
+    for w in re.findall(r"[a-z0-9#]+", text.lower()):
+        w = NOTE_SPELLING.get(w, w)
+        if w in NOTE_STOP or len(w) < 2:
+            continue
+        if w in NOTE_POLAR:
+            out.add(w)
+            continue
+        for suf in ("ings", "ing", "ed", "s"):
+            if w.endswith(suf) and len(w) - len(suf) >= 4:
+                w = w[:-len(suf)]
+                break
+        out.add(w[:-1] if len(w) > 4 and w.endswith("e") else w)
+    return out
+
+
+def read_notes(fp):
+    """[{id, text, said, last}] from opendesigner/RULES.md, in file order."""
+    if not os.path.exists(fp):
+        return []
+    with open(fp, encoding="utf-8") as f:
+        return [{"id": m.group(1), "text": m.group(2), "said": int(m.group(3)), "last": m.group(4)}
+                for m in (RX_NOTE_ROW.match(x.rstrip("\n")) for x in f) if m]
+
+
+def write_rules(fp, notes):
+    def table(rows, head):
+        return f"| # | {head} | Said | Last |\n|---|---|---|---|\n" + "".join(
+            f"| {n['id']} | {n['text']} | {n['said']} | {n['last']} |\n" for n in rows)
+    write_text(fp, "# Rules\n\nThe owner's notes on this project, from `engine.py feedback --kind note`. Read this before every round. "
+                   "A note said twice is a rule: apply it everywhere, in every later round. Edit rows in place; text outside the "
+                   "tables is not kept.\n\n"
+                   "## Rules (said twice or more)\n" + table([n for n in notes if n["said"] >= 2], "Rule") +
+                   "\n## Notes (said once)\n" + table([n for n in notes if n["said"] < 2], "Note"))
+
+
+def record_note(d, text, same=None, quiet=False):
+    """An owner's note on the work, counted. A repeat (same words, or --same N-xx) adds to the earlier note: said twice it is a
+    rule in RULES.md; at three times the agent offers a GitHub issue, which needs the person's yes."""
+    fp = os.path.join(d, "RULES.md")
+    notes, today = read_notes(fp), _dt.date.today().isoformat()
+    text = text.replace("|", "/")
+    if same and same.lower() == "new":
+        hit = None
+    elif same:
+        hit = next((n for n in notes if n["id"] == same.upper()), None)
+        if not hit:
+            raise SystemExit(f"{same} is not in {fp}. Nothing was written.")
+    else:
+        mine = note_words(text)
+
+        def score(n):
+            theirs = note_words(n["text"])
+            both = len(mine & theirs)
+            if not both or (mine & NOTE_POLAR) != (theirs & NOTE_POLAR):
+                return 0
+            return both / min(len(mine), len(theirs))
+        best = max(notes, key=score, default=None)
+        hit = best if best and score(best) >= NOTE_MATCH else None
+    if hit:  # the earlier wording stays; edit the row in RULES.md to restate the rule
+        hit.update(said=hit["said"] + 1, last=today)
+    else:
+        hit = {"id": f"N-{max([int(n['id'][2:]) for n in notes] + [0]) + 1:02d}", "text": text, "said": 1, "last": today}
+        notes.append(hit)
+    write_rules(fp, notes)
+    if not quiet:
+        nid, n = hit["id"], hit["said"]
+        if n == 1:
+            print(f"Noted as {nid} in {fp}. Apply it to every instance of the same kind.")
+        else:
+            print(f"Counted as a repeat of {nid}: \"{hit['text']}\". Wrong match? Edit {fp}, then run again with --same new.")
+        if n == 2:
+            print(f"Said twice: {nid} is now a rule in {fp}. Apply it in every later round. If it fixes a value or a pattern, "
+                  f"also lock it: engine.py standard add --rule {shlex.quote(hit['text'])} --why \"said twice\" "
+                  f"--source \"person, {today}\" ...")
+        elif n > 2:
+            print(f"Said {n} times: {nid}. Write a check that finds every case, and run it before every showing.")
+        if n == 3:
+            print("Ask once: \"Want me to draft a GitHub issue so OpenDesigner keeps notes like this?\" After a yes: "
+                  "engine.py feedback \"<the rule, about OpenDesigner, nothing private>\" --kind gap")
+    return hit
+
+
+def cmd_feedback(d, text, kind="idea", quiet=False, area=None, question=None, same=None):
+    """Record feedback locally and print a pre-filled issue link. Nothing is posted: the person decides. kind note is the
+    owner's note on the work: counted in RULES.md (record_note), with no link."""
     from urllib.parse import quote
+    if same and kind != "note":
+        raise SystemExit("--same goes with --kind note.")
+    if kind == "note":
+        if not " ".join(str(text).split()):
+            raise SystemExit("Add the note, in quotes: the rule in one line.")
+        return record_note(d, " ".join(str(text).split()), same=same, quiet=quiet)
     if kind not in FEEDBACK_KINDS:
         raise SystemExit(f"--kind must be one of {', '.join(FEEDBACK_KINDS)}")
     text = " ".join(str(text).split())

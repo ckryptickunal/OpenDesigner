@@ -23,6 +23,7 @@ import urllib.request
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import library_page  # noqa: E402  (the component library page, /library/)
+import tour_page  # noqa: E402  (how OpenDesigner works, drawn live: /tour/)
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
@@ -50,7 +51,7 @@ TEAM_CHECKS = [("A decision log", "with the reason and who set each value, appen
 STARTS = [("Getting started", "Install", "Two commands in Claude Code, or a skills folder in other tools.", "/docs/install/"),
           ("Getting started", "Your first design system", "Five questions, the files you get, and what to look at first.", "/docs/quickstart/"),
           ("Guides", "For design-system teams", "Decision log, locks, standards, drift checks and a pilot plan.", "/docs/enterprise/"),
-          ("Reference", "How it works", "From your answers to tokens, exports and checks.", "/docs/how-it-works/")]
+          ("Overview", "How it works", "The whole system on one page: two ways in, the engine and the files you keep.", "/tour/")]
 HERO_LEDE = ("It asks the decisions a design system needs, one at a time, and suggests a sourced default for each. It checks contrast "
              "and writes design tokens, CSS, a Tailwind theme and a DESIGN.md that your team and your coding agents build from. Free and open source.")
 FIGURES = SITE / "figures"
@@ -368,11 +369,16 @@ def version_facts():
             "latest_change": git_out("log", "-1", "--format=%cs") or TODAY}
 
 
+AUTO_COMMIT = re.compile(r"^README: star chart, \d+ stars?$")  # tools/star_chart.py --push
+
+
 def changes_by_day():
     """Every change on main, newest first, grouped by the day it landed: git's own record, so it can't fall behind."""
     days = {}
     for line in git_out("log", "--first-parent", "--format=%H%x1f%cs%x1f%s").splitlines():
         h, day, subject = line.split("\x1f", 2)
+        if AUTO_COMMIT.match(subject):  # the README's star count, redrawn by a timer: not a change anyone needs to read
+            continue
         days.setdefault(day, []).append((h, subject))
     return days
 
@@ -432,26 +438,9 @@ def changes_feed(days=30):
 
 
 def whats_new_md():
-    """CHANGELOG.md's highlights for visitors: one line each, newest first, dated by the day git says the line was
-    written (git blame), and marked when it is a fix. The explanation stays under "Highlights, explained"."""
-    import datetime as _dt
-    items, section, ts, when = [], "", 0, None
-    for line in git_out("blame", "--line-porcelain", "CHANGELOG.md").splitlines():
-        if line.startswith("committer-time "):
-            ts = int(line.split()[1])
-        elif line.startswith("committer-tz "):  # the day as the person who wrote it saw it, as git log %cs shows it
-            z = line.split()[1]
-            tz = _dt.timezone((-1 if z[0] == "-" else 1) * _dt.timedelta(hours=int(z[1:3]), minutes=int(z[3:5])))
-            when = _dt.datetime.fromtimestamp(ts, tz).date().isoformat()
-        elif line.startswith("\t"):
-            text = line[1:]
-            if text.startswith("### "):
-                section = text[4:].strip()
-            m = re.match(r"^- \*\*(.+?)\*\*", text)
-            if m and when:
-                items.append((ts, when, m.group(1).strip().rstrip(".:"), section == "Fixed"))
-    items.sort(key=lambda x: x[0], reverse=True)
-    return "\n".join(f"- {day_name(d)}: {t}" + (" (a fix)" if fixed else "") for _, d, t, fixed in items)
+    """CHANGELOG.md's highlights for visitors: one line each, newest first, dated like the changelog page, and marked
+    when it is a fix. The explanation stays under "Highlights, explained"."""
+    return "\n".join(f"- {day_name(e['day'])}: {e['title']}" + (" (a fix)" if e["kind"] == "Fixed" else "") for e in highlight_entries())
 
 
 CHANGELOG_BLOCKS = {"{{changelog}}": lambda: changelog_md(), "{{version}}": lambda: version_md(), "{{changes}}": lambda: changes_md(),
@@ -561,8 +550,9 @@ def sidebar(pages, current):
         lis = "".join(f'<li><a href="{p["path"]}"{CUR if p["path"] == current else ""}>{esc(p["title"])}</a></li>' for p in items)
         groups.append(f'<div class="side-group"><h2 class="side-h kicker">{sec}</h2><ul>{lis}</ul></div>')
     show = f'<div class="side-group"><h2 class="side-h kicker">Examples</h2><ul><li><a href="/showcase/"{CUR if current == "/showcase/" else ""}>Showcase</a></li><li><a href="/library/">Component library</a></li></ul></div>'
+    tour = f'<a class="side-tour" href="{tour_page.PATH}"><span class="kicker">New here?</span><strong>See how it all works {ARROW}</strong></a>'
     return (f'<aside class="side" aria-label="Documentation"><details class="side-mobile"><summary>Documentation menu</summary>'
-            f'<nav>{"".join(groups)}{show}</nav></details><nav class="side-desk">{"".join(groups)}{show}</nav></aside>')
+            f'<nav>{tour}{"".join(groups)}{show}</nav></details><nav class="side-desk">{tour}{"".join(groups)}{show}</nav></aside>')
 
 
 def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jpg", md=True, wide=False, robots="index, follow, max-image-preview:large", home=False, og_alt=None, preload=""):  # preload: extra head lines (a preload, a feed link); home: True for the home layout, or a class name for another page without the docs sidebar
@@ -626,7 +616,7 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jp
 
 FOOT_COLS = [  # the top row: short labels that fit on one line down to 320 px
     ("Product", [("Install", "/docs/install/"), ("Showcase", "/showcase/"), ("Component library", "/library/"),
-                 ("For teams", "/docs/enterprise/"), ("Book a call", "/book/")]),
+                 ("For teams", "/docs/enterprise/"), ("How it works", tour_page.PATH), ("Book a call", "/book/")]),
     ("Project", [(f'Changelog <span class="foot-ver">v{VERSION}</span>', "/changelog/"), ("GitHub", GH), ("Contribute", "/docs/contribute/"),
                  ("Report a problem", f"{GH}/issues/new/choose")]),
     ("Trust", [("Security and data", "/docs/security/"), ("Report a vulnerability", f"{GH}/blob/main/SECURITY.md"),
@@ -938,12 +928,12 @@ def overview_shot():
     return (f'<figure class="shot staged">{st}<figcaption>A real overview page: what you chose, what is still a default, and what only you can give, '
             f'like a logo. Photo: {credit} on Unsplash.</figcaption></figure>')
 STATUS = ["The repository was created on 2026-09-23. It is early, and one person maintains it.",
-          "There is no tagged release yet: 0.1.0 is planned. The engine's tests pass on the maintainer's computer; no CI runs are recorded yet.",
+          "Version 0.2.0, the first tagged release, came out on 5 November 2026. The engine's tests pass on the maintainer's computer; no CI runs are recorded yet.",
           "No watched user trials have happened yet. The usability tests so far were role-played by AI testers, and a recorded run in every AI tool is still on the list.",
           'AI agents built the showcase through the process, and weak pieces were rebuilt after review. <a href="/showcase/">See them</a>, with the findings.']
 
 
-HOME_STATUS = ["Created on 2026-09-23 and maintained by one person. There is no tagged release yet; 0.1.0 is planned.",
+HOME_STATUS = ["Created on 2026-09-23 and maintained by one person. Version 0.2.0 came out on 5 November 2026.",
                "No watched user trials yet, and no recorded run in every AI tool. The engine's tests pass."]
 
 
@@ -1002,7 +992,7 @@ def stage(scene, inner, cls=""):
 def gh_card(facts):
     n = lambda v: "—" if v is None else f"{v:,}"
     return (f'<article class="ghcard"><div class="gh-top">{GH_ICON}<a href="{GH}"><strong>{REPO}</strong></a></div>'
-            f'<dl class="gh-stats"><div><dt>Licence</dt><dd>MIT</dd></div><div><dt>Release</dt><dd>0.1.0 planned</dd></div><div><dt>Open issues</dt><dd data-issues>{n(facts["issues"])}</dd></div>'
+            f'<dl class="gh-stats"><div><dt>Licence</dt><dd>MIT</dd></div><div><dt>Release</dt><dd>{VERSION}</dd></div><div><dt>Open issues</dt><dd data-issues>{n(facts["issues"])}</dd></div>'
             f'<div><dt>Last push</dt><dd data-pushed>{facts["pushed"]}</dd></div></dl>'
             f'<div class="gh-actions"><a class="btn secondary" href="{GH}">{GH_ICON} Star on GitHub</a><a class="btn text" href="{GH}/issues/new/choose">Report a problem</a></div>'
             f'<p class="note">Live from GitHub. Tell us where it breaks: that is the most useful thing right now.</p></article>')
@@ -1051,7 +1041,7 @@ STEPS = [
      '<ol class="vg-qs"><li>What are you making?</li><li>Who is it for?</li><li>Where does it run?</li><li class="on">How should it feel?</li><li>A brand color or logo?</li></ol>'),
     ("It checks the rules, then saves them", "It checks contrast, target sizes, focus and motion, then saves the rules as files in your project.",
      '<pre class="code-lines vg-term"><span class="c">$</span> engine.py build\n<span class="ok">Passes: no errors.</span>\nChecked 164 color pairs in every mode,\n12 mode combinations and 427 tokens.</pre>'),
-    ("Every new screen follows them", "Your AI reads DESIGN.md before changing the interface, and a review flags any value that drifted.",
+    ("Every round is checked and shown", "A plan you sign off, checks on the built page, screenshots before and after. Notes you repeat become rules.",
      '<pre class="code-lines vg-term"><span class="c">$</span> engine.py review\ncard.css:1 <span class="bad">border-radius: 7px</span>\n→ use <span class="k">var(--ds-radius-container)</span></pre>')]
 INSIDE = [  # (benefit title, what it does, vignette, column span)
     ("Nobody has to guess why", "Every value records how it was set and why. Locked values change only with the owner's yes.",
@@ -1165,14 +1155,14 @@ def home(pages, facts, faq):
 <div class="craft">{craft_html}</div>
 </section>
 """ if craft else ""
-    news = ("#before-after", "New: the audit, drawn on your own page")
+    news = (tour_page.PATH, "New: how it all works, on one page")
     announce = (f'<p class="h-announce"><span class="h-pill-tag">Free and open source · MIT</span>'
                 f'<a href="{news[0]}">{news[1]} {ARROW}</a></p>')
     body = f"""
 <section class="h-hero">
 {announce}
 <h1 class="h-title g-wait"><span class="h-eyebrow">Design systems for AI coding tools</span> Make everything you build <strong>look like it belongs together.</strong></h1>
-<p class="h-lede">Your AI tools know what to build. OpenDesigner tells them how it should look: a design system, one set of rules that every new screen follows, and that it updates when you change your mind.</p>
+<p class="h-lede">Your AI knows what to build. OpenDesigner tells it how it should look, then checks every screen.</p>
 <div class="h-cta"><a class="btn primary lg" href="#install">Get started free</a><a class="h-link" href="#before-after">See it in action {ARROW}</a></div>
 <div class="h-cmd-wrap"><p class="h-cmd-label">Two commands in Claude Code, then a few plain questions</p>
 <div class="cmd h-cmd"><code>/plugin marketplace add ckryptickunal/OpenDesigner</code><button class="copy" type="button" data-copy-text="/plugin marketplace add ckryptickunal/OpenDesigner
@@ -1182,36 +1172,34 @@ def home(pages, facts, faq):
 </section>
 
 <section class="h-sec" id="before-after">
-<div class="h-head">{idx("01", "On a page you already built")}<h2 class="h-h2">See what's wrong, then see it fixed.</h2>
-<p class="h-lede">Point OpenDesigner at a page you have. It measures the page, marks each problem on it, and fixes it with your own design system. Every fix says what it makes better.</p></div>
+<div class="h-head">{idx("01", "Fix what you built")}<h2 class="h-h2">See what's wrong, then see it fixed.</h2></div>
 {ba_html}
-<p class="h-fine">Real output from the review skill on an invented invoicing app. Both pages are live HTML, not pictures: probe.js measured them before and after, and each box is measured on the page as drawn. Laid out at 1200 px and scaled to fit. Photo: {ba_credit} on Unsplash. <a href="/demo/before-after/">Open the full report</a> · <a href="{GH}/tree/main/site/demo/before-after">How it was made</a></p>
+<p class="h-fine">Real review output on an invented app, measured live. Photo: {ba_credit} on Unsplash. <a href="/demo/before-after/">Full report</a></p>
 </section>
 
 <section class="h-sec" id="why">
-<div class="h-head">{idx("02", "The problem")}<h2 class="h-h2">Every new screen drifts a little.</h2>
-<p class="h-lede">One page gets rounded buttons, the next gets square ones, and a new blue appears. People notice: they judge how a page looks in 17 to 50 milliseconds, and simple, familiar screens are the ones they rate most appealing (<a href="{GH}/blob/main/research/L15-visual-design-principles.md">research</a>).</p></div>
+<div class="h-head">{idx("02", "The problem")}<h2 class="h-h2">Every new screen drifts a little.</h2></div>
 {figure("design-systems-one-source")}
 </section>
 
 <section class="h-sec" id="fix">
-<div class="h-head">{idx("03", "The fix")}<h2 class="h-h2">One set of rules that every screen follows.</h2>
-<p class="h-lede">OpenDesigner turns a few plain answers into rules for color, type, spacing, corners and motion. Here are three products, each made from five answers.</p></div>
+<div class="h-head">{idx("03", "The fix")}<h2 class="h-h2">One set of rules that every screen follows.</h2></div>
 <div class="tabs demo" data-tabs><div class="tablist demo-tabs" role="tablist" aria-label="Example products">{demo_tabs}</div>
 {"".join(demo_panel(e, i) for i, e in enumerate(DEMO["examples"]))}</div>
-<p class="h-fine">Real engine output (<a href="{GH}/blob/main/site/demo_systems.py">site/demo_systems.py</a>), nothing tuned by hand. Each system also has dark mode, three densities and reduced motion. Photo: <a href="https://unsplash.com/photos/{SCENES["blue-soft"][2]}">{SCENES["blue-soft"][1]}</a> on Unsplash.</p>
+<p class="h-fine">Real engine output, nothing tuned by hand. Photo: <a href="https://unsplash.com/photos/{SCENES["blue-soft"][2]}">{SCENES["blue-soft"][1]}</a> on Unsplash.</p>
 </section>
 
 <section class="h-sec" id="screens">
 <div class="h-head h-head-row"><div>{idx("04", "Real screens")}<h2 class="h-h2">What consistent looks like.</h2>
-<p class="h-lede">B2B screens built by AI agents through OpenDesigner and reviewed by the maintainer. Every brand is invented, and much of the identity work was done outside the tokens.</p></div>
+<p class="h-lede">Invented brands, built by AI agents, reviewed by hand. Much of the identity work was done outside the tokens.</p></div>
 <a class="h-link" href="/showcase/">See all {total} designs {ARROW}</a></div>
 <div class="screens">{screens_html}</div>
 <p class="h-fine">Photos: {screen_credits} on Unsplash.</p>
 </section>
 
 <section class="h-sec" id="how">
-<div class="h-head">{idx("05", "How it works")}<h2 class="h-h2">Five answers today. Consistent screens from then on.</h2></div>
+<div class="h-head h-head-row"><div>{idx("05", "How it works")}<h2 class="h-h2">Five answers today. Consistent screens from then on.</h2></div>
+<a class="h-link" href="{tour_page.PATH}">See the whole system at work {ARROW}</a></div>
 <ol class="h-steps">{"".join(f'<li class="h-step">{A_PICTS[i]}<span class="h-n num">0{i + 1}</span><h3>{t}</h3><p>{d}</p><div class="vg">{v}</div></li>' for i, (t, d, v) in enumerate(STEPS))}</ol>
 </section>
 
@@ -1221,11 +1209,11 @@ def home(pages, facts, faq):
 </section>
 
 <section class="h-sec" id="features">
-<div class="h-head">{idx("07", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together, not just to start it.</h2></div>
+<div class="h-head h-head-row"><div>{idx("07", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together, not just to start it.</h2></div>
+<a class="h-link" href="{tour_page.PATH}#protect">See what protects you {ARROW}</a></div>
 <div class="bento">{"".join(f'<article class="bento-card span-{sp}"><h3>{t}</h3><p>{d}</p><div class="vg">{v}</div></article>' for t, d, v, sp in INSIDE)}</div>
 <div class="h-split h-files">
 <div><h3 class="h-h3">Rules your code and your design tools can read</h3>
-<p class="h-lede">The same answers always give the same tokens and exports, for your code, Figma and your next AI session.</p>
 <ul class="tree">{"".join(f'<li><code>{f}</code><span>{w}</span></li>' for f, w in HOME_FILES)}</ul></div>
 {overview_shot()}
 </div>
@@ -1233,13 +1221,12 @@ def home(pages, facts, faq):
 {craft_sec}
 <section class="h-sec" id="install">
 <div class="h-head">{idx("09", "Get started")}<h2 class="h-h2">Add it to the AI tool you already use.</h2>
-<p class="h-lede">You need your own AI tool. Claude Code, the Claude app and other agents also need Python 3.10 or newer; ChatGPT needs nothing installed.</p></div>
+<p class="h-lede">Your AI tool and Python 3.10 or newer. ChatGPT needs nothing installed.</p></div>
 {install_tabs()}
 </section>
 
 <section class="h-sec" id="evals">
-<div class="h-head">{idx("10", "Tested in the open")}<h2 class="h-h2">We test it on itself, and publish the numbers.</h2>
-<p class="h-lede">AI agents do real tasks with and without OpenDesigner. The engine builds systems from 18 fixed briefs. Our own checkers face pages with planted mistakes. When a test fails, the page says so.</p></div>
+<div class="h-head">{idx("10", "Tested in the open")}<h2 class="h-h2">We test it on itself, and publish the numbers.</h2></div>
 {evals_block("summary")}
 <p class="h-more"><a class="h-link" href="/docs/evals/">See every test, and run them yourself {ARROW}</a></p>
 </section>
@@ -1248,7 +1235,7 @@ def home(pages, facts, faq):
 <div class="h-split">
 <div><p class="kicker">Status</p><h2 class="h-h2">Early, and honest about it.</h2>
 <ul class="status">{"".join(f"<li>{x}</li>" for x in HOME_STATUS)}</ul>
-<p class="h-lede">The most useful help right now: try it on a real project and tell us where it breaks.</p>
+<p class="h-lede">Try it on a real project and tell us where it breaks.</p>
 <p class="h-contrib"><span class="kicker">Contribute</span><a href="/docs/contribute/">How to contribute</a><a href="{GH}/issues?q=is%3Aopen+label%3A%22good+first+issue%22">Good first issues</a><a href="{GH}/issues/new/choose">Report a problem</a></p>
 <p class="h-more"><a class="h-link" href="/changelog/">Version {VERSION}: see every change {ARROW}</a></p></div>
 {gh_card(facts)}
@@ -1258,7 +1245,7 @@ def home(pages, facts, faq):
 <section class="h-sec" id="talk">
 <div class="h-book">
 <div><p class="kicker">Talk it through</p><h2 class="h-h2">Work through your design with {CONFIG["HOST_NAME"]}.</h2>
-<p class="h-lede">A free {CONFIG["BOOKING_FREE_MINUTES"]}-minute call with {CONFIG["HOST_NAME"]}, {CONFIG["HOST_ROLE"]}, to see whether it fits your product and where to start. OpenDesigner stays free; you never need a call to use it.</p></div>
+<p class="h-lede">Free, {CONFIG["BOOKING_FREE_MINUTES"]} minutes. You never need a call to use OpenDesigner.</p></div>
 <div class="h-book-act">{book_link("Book a free " + str(CONFIG["BOOKING_FREE_MINUTES"]) + "-minute call", primary=True)}<a class="h-link" href="/book/">What the call covers {ARROW}</a></div>
 </div>
 </section>
@@ -1273,7 +1260,6 @@ def home(pages, facts, faq):
 <div class="h-end-card">
 <p class="kicker">Try it</p>
 <h2 class="h-h2">Make your next feature feel like it was always there.</h2>
-<p class="h-end-lede">One set of rules, and every screen after that follows it.</p>
 <div class="h-cta"><a class="btn primary lg" href="/docs/install/">Get started free</a>{book_link("Or book a free " + str(CONFIG["BOOKING_FREE_MINUTES"]) + "-minute call")}</div>
 </div>
 </div>
@@ -1358,7 +1344,8 @@ def doc_page(p, pages):
 
 def highlight_entries():
     """CHANGELOG.md's highlights as entries for the changelog page: title, explanation and details, the kind of change
-    (its "### Added/Changed/Fixed" heading) and the day git says the entry was written, newest first."""
+    (its "### Added/Changed/Fixed" heading) and its day, newest first. The day is the date the entry states, or else
+    the day git says the line was written."""
     import datetime as _dt
     entries, section, ts, when, cur = [], "", 0, None, None
     for line in git_out("blame", "--line-porcelain", "CHANGELOG.md").splitlines():
@@ -1376,11 +1363,12 @@ def highlight_entries():
                 if text.startswith("### "):
                     section = text[4:].strip()
             if m and when:
-                cur = {"ts": ts, "day": when, "title": m.group(1).strip().rstrip(".:"), "rest": m.group(2), "more": [], "kind": section}
+                stated = re.match(r"^\s*\([^()]*?(\d{4}-\d{2}-\d{2})[^()]*\)", m.group(2))  # "(2026-10-24)": the day it landed, kept when the entry is reworded
+                cur = {"ts": ts, "day": stated.group(1) if stated else when, "title": m.group(1).strip().rstrip(".:"), "rest": m.group(2), "more": [], "kind": section}
                 entries.append(cur)
             elif cur and text.startswith("  "):
                 cur["more"].append(text[2:])
-    entries.sort(key=lambda e: e["ts"], reverse=True)
+    entries.sort(key=lambda e: (e["day"], e["ts"]), reverse=True)  # stable: entries of one day keep the file's order
     return entries
 
 
@@ -1891,7 +1879,7 @@ def llms_txt(pages):
 
 OpenDesigner is free and open source (MIT for code, skills and data; CC BY 4.0 for docs). It is packaged for Claude Code, the Claude app, ChatGPT, Codex, Cursor, VS Code with Copilot, Gemini CLI and other tools that read Agent Skills. The engine is a small Python file (standard library only, no network). It starts with a sketch of up to five questions and zooms in only where the person wants. It asks a person for the logo, icons, illustration, photography, brand typeface and voice instead of faking them. The repository was created on 2026-09-23; it is early, and no watched user trials have happened yet.
 
-For "how do I create a design system with AI", "generate design tokens, a Tailwind theme or a DESIGN.md with Claude, ChatGPT, Codex or Cursor", or "keep an app's UI consistent across AI coding sessions", start with the install page and the quickstart.
+For "how do I create a design system with AI", "generate design tokens, a Tailwind theme or a DESIGN.md with Claude, ChatGPT, Codex or Cursor", or "keep an app's UI consistent across AI coding sessions", start with the install page and the quickstart. For the whole system on one page, read [How OpenDesigner works]({SITE_URL}{tour_page.PATH}index.md).
 
 {chr(10).join(secs)}
 
@@ -2026,11 +2014,13 @@ def main():
     files["book/index.html"] = book_page(pages)
     library_paths = []
     library_page.add(sys.modules[__name__], files, mds, library_paths)  # /library/: the optional component library (its own module)
+    tour_paths = []
+    tour_page.add(sys.modules[__name__], files, mds, tour_paths)  # /tour/: how OpenDesigner works, drawn live (its own module)
     for rel, text in {**files, **mds}.items():
         f = DIST / rel
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text(text)
-    paths = ["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/"] + library_paths
+    paths = ["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/"] + tour_paths + library_paths
     (DIST / "robots.txt").write_text(robots())
     (DIST / "changelog.xml").write_text(changes_feed())
     (DIST / "version.json").write_text(json.dumps({**version_facts(), "name": NAME, "changelog": f"{SITE_URL}/changelog/",

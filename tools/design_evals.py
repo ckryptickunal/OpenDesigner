@@ -25,6 +25,8 @@ Quality (house bars stricter than WCAG; a miss is a place the engine can improve
     button-visible  the primary button's fill is at least 3:1 against the page in both modes; WCAG asks for nothing here
                     when the button has a text label, but a near-white button on white reads as no button
     says-so         every quality miss above shows up as a warning in engine validate, so the person is told
+    landing-page    (briefs with a persuade surface) a fluid hero of 96px or more, buttons neither square nor pill, capitals never
+                    tracked negative, three text greys and one container (a private B2B landing page, 2026-11-05)
 
 Standard library only; it runs the engine as a subprocess and never touches the network.
 """
@@ -56,6 +58,8 @@ def sketch_and_build(state, b):
             "--feel", ",".join(b["feel"]), "--delegated", "all"]
     if b.get("theme"):
         args += ["--theme", b["theme"]]
+    if b.get("surfaces"):
+        args += ["--surfaces", b["surfaces"]]
     s = engine(state, *args)
     if s.returncode:
         return False, (s.stdout + s.stderr)[-400:]
@@ -105,6 +109,14 @@ def run_brief(b):
         quality["type-steps"] = bool(sizes) and min(sizes) >= 12 and all(b2 >= a * 1.1 for a, b2 in zip(sizes, sizes[1:]))
         notes["typeScale"] = sizes
         quality["button-visible"] = bool(fill) and min(fill.values()) >= 3.0
+        if "persuade" in str(b.get("surfaces", "")):
+            lim = json.loads((one / "tokens/opendesigner.meta.json").read_text()).get("limits", {})
+            hero = ((lim.get("sizes") or {}).get("fluid") or {}).get("display.lg", {}).get("max", 0)
+            track = lim.get("tracking") or {}
+            quality["landing-page"] = (hero >= 96 and lim.get("ctaShape") in ("subtle", "rounded") and "clamp(" in css_text
+                                       and min(track.get("caps-label", -1), track.get("caps-display", -1)) >= 0
+                                       and (lim.get("textGreys") or {}).get("max") == 3 and (lim.get("containers") or {}).get("max") == 1)
+            notes["limits"] = {k: lim.get(k) for k in ("sizes", "ctaShape", "tracking")}
         warned = {i.get("message", "") for i in v.get("items", []) if i.get("severity") == "warn"}
         quality["says-so"] = (quality["button-visible"] or any("bg.action.primary" in m for m in warned)) and \
                              (quality["type-steps"] or v.get("warnings", 0) > 0)

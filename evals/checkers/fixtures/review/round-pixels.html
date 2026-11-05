@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fixture Ledger: how it works</title>
+<!-- Checker eval fixture for skills/opendesigner-review, measured the way capture.py does at its anchor widths. Planted:
+     line art drawn through a paragraph; a pinned scene whose caption sits under a floating bar; tabs whose panel box
+     changes height; a billing switch (segmented buttons) that changes nothing else on the page; a heading split into one
+     inline-block span per letter, which loses the font's kerning. The paragraph on white, the other text and the toggles'
+     own labels must not be flagged. Invented brand; .example domains only. -->
+<style>
+* { box-sizing: border-box; }
+:focus-visible { outline: 2px solid #1f4fd8; outline-offset: 2px; }
+body { margin: 0; font: 18px/1.5 Arial, Helvetica, sans-serif; color: #1c1c1e; background: #ffffff; }
+h1, h2 { margin: 0 0 12px; font-size: 32px; line-height: 40px; }
+section { padding: 48px 24px; position: relative; }
+p { margin: 0 0 16px; }
+#route { height: 280px; }
+#route-art { position: absolute; left: 0; top: 0; width: 100%; height: 280px; }
+#route-copy { position: relative; margin: 0; padding-top: 72px; max-width: 520px; }
+#split { font-size: 64px; line-height: 72px; font-weight: 700; }
+#split .c { display: inline-block; }
+.tabs button, .billing button { font: inherit; font-size: 16px; min-height: 40px; padding: 0 16px; border: 1px solid #1c1c1e; background: #ffffff; color: #1c1c1e; }
+.tabs [aria-selected=true], .billing [aria-pressed=true] { background: #1c1c1e; color: #ffffff; }
+[role=tabpanel][hidden] { display: none; }
+#scene-wrap { height: 200vh; }
+#scene { position: sticky; top: 0; height: 100vh; background: #f2f2f4; }
+#scene-caption { position: absolute; left: 24px; right: 24px; bottom: 24px; margin: 0; text-align: center; }
+#bar { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); width: 320px; height: 56px; border-radius: 12px; background: #1c1c1e; color: #ffffff;
+       display: flex; align-items: center; justify-content: center; z-index: 10; }
+footer { padding: 48px 24px 120px; }
+</style>
+</head>
+<body>
+<main>
+<section id="route">
+  <svg id="route-art" viewBox="0 0 800 280" preserveAspectRatio="none" aria-hidden="true"><path d="M0 80 L800 170 M0 170 L800 80" stroke="#1f4fd8" stroke-width="2" fill="none"/></svg>
+  <p id="route-copy">Every invoice, every receipt and every payment, side by side.</p>
+</section>
+<section><h1>How it works</h1><p id="plain">A plain paragraph on white that nothing crosses.</p></section>
+<section><h2 id="split" aria-label="WAVE Toys"><span class="c">W</span><span class="c">A</span><span class="c">V</span><span class="c">E</span> <span class="c">T</span><span class="c">o</span><span class="c">y</span><span class="c">s</span></h2></section>
+<section id="tabs-sec">
+  <h2>Two views</h2>
+  <div class="tabs" role="tablist"><button role="tab" id="tab-short" aria-selected="true" aria-controls="pane-short">Summary</button><button role="tab" id="tab-long" aria-selected="false" aria-controls="pane-long">Details</button></div>
+  <div id="panes"><div role="tabpanel" id="pane-short"><p>One line of summary.</p></div><div role="tabpanel" id="pane-long" hidden><p>Line one.</p><p>Line two.</p><p>Line three.</p></div></div>
+</section>
+<section id="billing-sec">
+  <h2>Billing</h2>
+  <div class="billing"><button aria-pressed="true" id="bill-month">Monthly</button><button aria-pressed="false" id="bill-year">Yearly</button></div>
+  <p id="price">29 per seat</p>
+</section>
+<div id="scene-wrap"><div id="scene"><p id="scene-caption">Payments, laid out as they arrive.</p></div></div>
+</main>
+<footer><p>Fixture Ledger, ledger.example</p></footer>
+<div id="bar">Book a call</div>
+<script>
+for (const t of document.querySelectorAll('[role=tab]')) t.addEventListener('click', () => {
+  for (const x of document.querySelectorAll('[role=tab]')) { x.setAttribute('aria-selected', String(x === t)); document.getElementById(x.getAttribute('aria-controls')).hidden = x !== t; }
+});
+for (const b of document.querySelectorAll('.billing button')) b.addEventListener('click', () => { for (const x of document.querySelectorAll('.billing button')) x.setAttribute('aria-pressed', String(x === b)); });
+</script>
+</body>
+</html>

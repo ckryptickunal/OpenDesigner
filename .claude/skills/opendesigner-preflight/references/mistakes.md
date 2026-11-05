@@ -129,3 +129,22 @@ Every entry is a mistake that really happened. Most come from the first OpenDesi
 ## Found measuring 73 reels for Instagram (2026-10-26)
 
 **M50. Flashing that no single frame shows.** When 73 design reels were measured against WCAG 2.2's general flash threshold, 8 were over it. The causes were a generated clay character shaking (one shot measured 175% of the limit), a paragraph re-wrapping on every frame, fast crossfades, a halftone drawing sliding past, cut-out characters sliding in stop-motion steps, and a 940 px slide of a page of text. Every frame looked fine at full size. *Why:* reviews look at frames, and a flash lives between them. Generated clips jitter. Text that changes every frame (re-wrapping, counters, rotating words), and high-contrast text or line art that moves fast, flip thousands of pixels between light and dark several times a second. *Catch:* run `preflight.py video` on the final file, and add `--flash-where worst.png` to see what flashes. Fixes that worked: blending each frame with its neighbours only during a shake (175% down to 86%), slow even fades instead of quick ones, a short drift and a crossfade instead of a fast slide, and smaller changing text (a card whose rule text changes every frame went from 100% to 68% when that text went from 60 px to 50 px).
+
+## Found by the owner, on a private B2B landing page (2026-11-05)
+
+The project hand-wrote eleven check scripts for what the review missed, over about 25 drafts.
+
+**M51. Tight capitals and lost kerning.** Uppercase labels were tracked at -0.03em, 21 letter-spacing values were in use, and a heading reveal split every letter into its own span, so pairs like "To" lost their kerning and the letters jumped when the plain text came back. Asked to "please check kerning", the agent answered without measuring. *Catch:* MS-17: `review.py check` reads tracking per size from the probe, `__od.kern()` measures split letters against the same text unsplit.
+
+**M52. Line art through the text.** "I see overlapping text with line art." Box overlap said nothing: the drawing's box covered the whole hero either way. *Catch:* hide the text, screenshot, and look for art pixels inside each line box (`capture.py`, MS-20).
+
+**M53. A floating bar over pinned text.** A bottom bar covered a caption inside a pinned scene, and the last line of the page. *Catch:* `__od.bars()` scrolls and lists only text that can never get out from under a bar (CV-08).
+
+**M54. Centre and left in one section.** "CENTRE ALIGN ALL", nine times: centred headings over left-aligned ledes, lists and buttons, a heading a few pixels off centre, and a hero title on four lines at phone width. *Catch:* MS-05 and MS-18 from the probe, at every width.
+
+**M55. Boxes that jump, and controls that do nothing.** Cards grew when a toggle switched, and some Options rows changed no pixel. *Catch:* click every option, measure heights, compare the section before and after (ST-10, ST-11).
+
+**M56. Too many of everything.** About 50 font sizes, five loaded font families, "too many shades of grey" three times, and three filled calls to action in the first screen with a 13 px label. *Catch:* the counts in `review.py check` (MS-02, MS-08, MS-16, MS-19, EN-08).
+
+**M57. Judged mid-animation.** Screenshots from a background browser pane caught reveals half done and looked broken. *Catch:* `await __od.settle()` before every probe and screenshot; `capture.py` waits on every load and scroll step (TM-01).
+

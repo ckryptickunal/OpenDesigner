@@ -14,7 +14,9 @@ the bookkeeping and the arithmetic. Work goes in ./opendesigner/review/ (or --di
     review.py mark CELL done|skipped|blocked [--evidence PATH ...] [--why "reason"]     (CELL from plan; "task:" cells too)
     review.py check PROBE.json|DIR [...] [--project P] [--json]
                                                    findings from probe runs (and focus-walk files) against the accessibility
-                                                   floors and, when the project has an OpenDesigner system, its tokens;
+                                                   floors, against practice any product can be judged on (primary buttons
+                                                   per view, typefaces, weights, colors) and, when the project has an
+                                                   OpenDesigner system, its tokens;
                                                    prints what got fixed and what is new since the last check. A folder
                                                    (the review folder) stands for every probe and capture file in it
     review.py finding "what you saw" --severity error|warn|info --basis seen|operated|inferred --evidence PATH
@@ -25,9 +27,10 @@ the bookkeeping and the arithmetic. Work goes in ./opendesigner/review/ (or --di
     review.py compare --before B.png --marks marks.json --after A.png [--after-marks M.json] [--title T] [--open]
                                                    review/compare.html: the page today, the audit drawn on it (a dashed box and a
                                                    number on each issue) and the fix, switched with the house variant picker; each
-                                                   fix says what it gives the person. marks.json comes from __od.marks() in probe.js
+                                                   fix says what it gives the person and, with "source", where it comes from.
+                                                   marks.json comes from __od.marks() in probe.js
     review.py cases [--when motion,forms] [--group time] [--id CV-01] [--full]
-                                                   the catalogue of things reviews miss (65 cases), filtered to what applies to this page
+                                                   the catalogue of things reviews miss, filtered to what applies to this page
 
 Every finding says how it is known: measured (a number from the page), operated (you did it and saw the result), seen
 (you looked at pixels), inferred (reasoned, not observed). Findings that are not measured are less certain; the report
@@ -46,6 +49,7 @@ import re
 import secrets
 import sys
 import webbrowser
+from collections import Counter
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -63,6 +67,21 @@ CONTRAST_TEXT, CONTRAST_LARGE = 4.5, 3.0
 MAX_MEASURE_CH = 80          # WCAG 1.4.8 (AAA) upper bound
 UI_MOTION_MS = 300           # STD-easing-duration-06: UI motion under 300 ms unless justified
 TIGHT_LINE_HEIGHT = 1.3
+
+# Counts any built product can be judged on, with or without a design system (the audit, opendesigner references/audit.md).
+# Each is a practice with a source; they report, as warnings, and never decide.
+PRIMARY_RATIO = 3.0          # a fill that stands out from what is behind it as much as WCAG 1.4.11 asks of a control's edge
+TEXT_FACES = 2               # DC-L02-03: one interface family plus a mono; a second text face only with a named job
+WEIGHTS_SYSTEM = 3           # DC-L02-15 and DC-L19-24: three weights in a system, at most two in any one view
+TEXT_GREYS = 3               # DC-L15-02: three text colors (white on filled buttons is not counted)
+HUE_NOTE, HUE_WARN = 3, 5    # DC-L01-08: one accent plus status colors; making.md section 12: close to monochrome
+NEAR_SAME = 10               # RGB distance under which two colors look the same but are typed twice
+TYPE_SIZES = 8               # preflight 7: about 8 sizes at most, from one scale
+TRACKING_VALUES = 4          # body, display and caps tracking, plus one spare [inferred]; the owner counted 21 on one page
+BUTTON_STYLES = 3            # DC-L08-05: primary, secondary and a quiet third; DC-L08-07: one height scale (32, 40, 48)
+PRIMARY_LABEL = 15           # owner review 2026-11-05: a primary label under 15 px reads as fine print
+TINY_CAPS = 14               # capitals under 14 px on a button are hard to read (preflight 5) [inferred]
+HEADING_LINES = 2            # owner review 2026-11-03 row 23: a title runs to two lines at most, at every width
 
 DEFAULT_VIEWPORTS = [(320, 640), (390, 844), (768, 1024), (1024, 768), (1440, 900)]
 WIDE_VIEWPORT = (1920, 1080)
@@ -165,6 +184,7 @@ class Findings:
 
     def __init__(self):
         self.items = {}
+        self.pixel_pass = {}   # where -> selectors whose text passed contrast on the real pixels (check_pixels)
 
     def add(self, case, sev, title, where, measured=None, expected=None, evidence=None, fix=None, std=None, key=None, basis="measured"):
         k = (case, key or title)
@@ -243,8 +263,11 @@ def check_probe(p, sysm, F):
                   [c["sel"]], "let the box grow (min-height, not height; overflow: visible) or wrap the text", "WCAG 1.4.4 / 1.4.12", key="clip:" + c["sel"] + ("-stress" if stressed else ""))
 
     ct = p.get("contrast") or {}
+    on_pixels = F.pixel_pass.get(w, set())
     for c in ct.get("failing", []):
         need = CONTRAST_LARGE if c.get("large") else CONTRAST_TEXT
+        if c["sel"] in on_pixels:   # the pixels behind it were read and pass: the probe's colour backdrop was a guess (a photo in an <img>, say)
+            continue
         unsure = c.get("backdrop") in ("image", "gradient")
         F.add("MS-04", "info" if unsure else "error", f"Text contrast {c['ratio']}:1 is below {need}:1" + (" (background is an image or gradient: sample the pixels)" if unsure else ""),
               w, f"{c['fg']} on {c['bg']}, {fmt(c['fs'])} px, {c['n']} element(s)", f"{need}:1 (no rounding up: 4.49 fails)", [c["sel"]],
@@ -349,6 +372,8 @@ def check_probe(p, sysm, F):
     if ty.get("lineHeightTight"):
         t = ty["lineHeightTight"][0]
         F.add("MS-07", "info", "Wrapped text with tight line height", w, f"{t['sel']}: line height {t['ratio']}x its size over several lines", f"at least {TIGHT_LINE_HEIGHT}x for body text; 1.5x survives WCAG 1.4.12", [x["sel"] for x in ty["lineHeightTight"][:3]], None, "WCAG 1.4.12", key="tight-lh")
+    if judge_drift:
+        check_round(p, w, F)
     fam = p.get("fonts") or {}
     used = ty.get("families") or {}
     for name, state in (fam.get("familyState") or {}).items():
@@ -381,10 +406,6 @@ def check_probe(p, sysm, F):
             F.add("MS-02", "warn" if uses / total >= 0.1 else "info", f"Font sizes off the type scale ({len(off)} value(s), {uses} of {total} text elements)", w,
                   "; ".join(f"{k}px x{v['n']} (nearest {fmt(nearest(float(k), scale))})" for k, v in rows), f"sizes from the scale: {', '.join(fmt(s) for s in scale)}",
                   [v["ex"][0] for _, v in rows if v["ex"]], "use a text style; a browser default (buttons 13.33 px, h3 18.72 px) means the element does not inherit", "tokens", key="type-drift")
-    elif judge_drift and sizes:
-        n = len(sizes)
-        if n > 8:
-            F.add("MS-02", "info", f"{n} distinct font sizes", w, ", ".join(sorted(sizes, key=float)), "a scale of about 5-8 sizes", [], "consolidate into a scale", None, key="type-many")
 
     ladder = (sysm or {}).get("ladder")
     space = (p.get("space") or {}).get("values") or {}
@@ -426,9 +447,12 @@ def check_probe(p, sysm, F):
                 F.add("MS-08", "warn" if sum(v["n"] for v in off.values()) >= 5 else "info", f"{kind.capitalize()} colors that are not in the palette ({len(off)})", w,
                       "; ".join(f"{k} x{v['n']}{near(k)}" for k, v in rows), "colors from the tokens", [v["ex"][0] for _, v in rows if v["ex"]], "use a color token; check dark mode too", "tokens", key="color-drift-" + kind)
 
+    if judge_drift:
+        check_practice(p, sysm, w, F)
+
     # --- fixed bars ----------------------------------------------------------------------------------------
-    # bars only: a sticky sidebar runs top to bottom but covers nothing beside it
-    fx = [f for f in p.get("fixed") or [] if not vp.get("w") or f.get("w", 0) >= vp["w"] / 2]
+    # bars only: a sticky sidebar runs top to bottom but covers nothing beside it, and a pinned scene fills the screen on purpose
+    fx = [f for f in p.get("fixed") or [] if (not vp.get("w") or f.get("w", 0) >= vp["w"] / 2) and (not vp.get("h") or f.get("h", 0) < vp["h"] * 0.9)]   # a pinned full-screen scene is not a bar
     if fx and vp.get("h"):
         topcover = max([f["top"] + f["h"] for f in fx if f["top"] <= 1] or [0])
         botcover = max([f["h"] for f in fx if f["bottom"] <= 1 and f["top"] > 1] or [0])
@@ -477,6 +501,294 @@ def check_probe(p, sysm, F):
         F.add("CV-01", "info", "Cross-origin iframes were not measured", w, f"{mc['iframeCross']} frame(s)", "review each frame's own URL as its own page", ["iframe"], None, None, key="iframe")
     if doc.get("truncated"):
         F.add("CV-01", "info", "The probe stopped at its element limit", w, f"{doc.get('elements')} elements", "the page is bigger than what was measured", [], "probe a section, or raise MAX_EL", None, key="probe-truncated")
+
+
+# ------------------------------------------------------------------------- counts against practice (no system needed)
+def hsl(hx):
+    r, g, b = (v / 255 for v in hex_rgb(hx))
+    mx, mn = max(r, g, b), min(r, g, b)
+    l, d = (mx + mn) / 2, mx - mn
+    if d == 0:
+        return 0.0, 0.0, l
+    s = d / (1 - abs(2 * l - 1))
+    h = ((g - b) / d) % 6 if mx == r else (b - r) / d + 2 if mx == g else (r - g) / d + 4
+    return h * 60, s, l
+
+
+HUE_NAMES = ((15, "red"), (40, "orange"), (65, "yellow"), (165, "green"), (195, "teal"), (250, "blue"), (290, "purple"), (345, "pink"), (361, "red"))
+SYSTEM_FACE = {"system-ui": "the system font", "-apple-system": "the system font", "blinkmacsystemfont": "the system font", "ui-sans-serif": "the system font",
+               "ui-rounded": "the system font", "sans-serif": "the system font", "serif": "the browser's serif", "ui-serif": "the browser's serif",
+               "monospace": "the system mono", "ui-monospace": "the system mono"}
+MONO_FACE = re.compile(r"mono|code|courier|consol|menlo|monaco", re.I)
+ICON_FACE = re.compile(r"icon|awesome|symbol|glyph|emoji|dashicons", re.I)
+
+
+def hue_family(hx):
+    """A plain name for a chromatic color ("blue"), or None for grays, near-black and near-white."""
+    rgb = hex_rgb(hx)
+    h, s, l = hsl(hx)
+    if max(rgb) - min(rgb) < 30 or s < 0.2 or l < 0.12 or l > 0.94:
+        return None
+    return next(name for top, name in HUE_NAMES if h < top)
+
+
+def opaque_colors(p):
+    """Every opaque text, background and border color the probe saw, with its uses and one element. A translucent value
+    is left out: how it looks depends on what is behind it."""
+    out = {}
+    for kind in ("text", "bg", "border"):
+        for k, v in ((p.get("colors") or {}).get(kind) or {}).items():
+            if len(k) != 7:
+                continue
+            e = out.setdefault(k.lower(), {"n": 0, "ex": []})
+            e["n"] += v.get("n", 0)
+            if v.get("ex") and not e["ex"]:
+                e["ex"] = v["ex"][:1]
+    return out
+
+
+def check_practice(p, sysm, w, F):
+    """What any built page can be judged on without a design system: how many actions shout, and how many typefaces,
+    weights and colors are in use, each against a practice with its source. Warnings and notes only: a count past the
+    practice is a question for the person, not a fault (opendesigner references/audit.md)."""
+    ty = p.get("type") or {}
+    label = lambda b: f"\"{b.get('text') or b['sel']}\" ({b['fill']})"
+
+    # --- primary actions ------------------------------------------------------------------------------------
+    strong = [b for b in ((p.get("buttons") or {}).get("filled") or []) if (b.get("ratio") or 0) >= PRIMARY_RATIO and b.get("word", True)]   # icon buttons are not calls to action
+    first = [b for b in strong if b.get("first")]
+    groups = {}
+    for b in strong:
+        groups.setdefault(b.get("group") or b["sel"], []).append(b)
+    near = lambda a, b: abs(a.get("y", 0) - b.get("y", 0)) <= max(a.get("h", 0), b.get("h", 0)) + 16   # one row, or stacked with no gap to speak of
+    side = [pair for g in groups.values() for pair in [next(([a, b] for i, a in enumerate(g) for b in g[i + 1:] if near(a, b)), None)] if pair]
+    vh = (p.get("viewport") or {}).get("h") or 0
+    bands = Counter(int(b["y"] // vh) for b in strong if vh and not b.get("first") and b.get("y") is not None)
+    later = sorted(k for k, n in bands.items() if n > 1)
+    if len(first) > 1 or side or later:
+        parts = []
+        if len(first) > 1:
+            parts.append(f"{len(first)} filled buttons stand out in the first screen: " + ", ".join(label(b) for b in first[:5]) + (f" (+{len(first) - 5} more)" if len(first) > 5 else ""))
+        for g in side[:2]:
+            parts.append(" and ".join(label(b) for b in g[:3]) + " sit side by side, both filled" + ("" if any(b.get("first") for b in g) else ", further down"))
+        if later:
+            parts.append("further down, " + ", ".join(f"{bands[k]} in the screen at about {fmt(k * vh)} px" for k in later[:3]))
+        texts = Counter(b.get("text") for b in strong if b.get("text"))
+        rep = [t for t, n in texts.most_common() if n >= 3]
+        if rep:
+            parts.append(f"\"{rep[0]}\" repeats {texts[rep[0]]} times: an action on every row is usually a quiet one")
+        title = f"{len(first)} primary buttons in the first screen" if len(first) > 1 else "Two filled buttons side by side" if side else "More than one primary button in one screen"
+        F.add("MS-16", "warn", title, w, "; ".join(parts),
+              "one primary button per view, for the one action the view exists for; the others quieter (an outline or a text link), and nothing the header already offers repeated as a button "
+              "(preflight 36; DC-L08-05: one primary per view; DC-L13-18: at most one per group or dialog)",
+              [b["sel"] for b in (first if len(first) > 1 else side[0] if side else [x for x in strong if not x.get("first") and int(x["y"] // vh) in later])[:4]],
+              "keep the fill on the one action this view is for and make the others outline or text buttons; opposite actions go on one row, secondary left, primary right (preflight 41)",
+              "preflight 36", key="primary-many")
+    styles = {}
+    for b in strong:
+        if hue_family(b["fill"]) != "red":       # a red fill is the danger button, a level of its own (DC-L08-05)
+            styles.setdefault(b["fill"], []).append(b)
+    if len(styles) >= 2:
+        rows = sorted(styles.items(), key=lambda kv: -len(kv[1]))
+        F.add("MS-16", "warn", f"{len(styles)} different fills for the main button", w,
+              "; ".join(f"{fill} on " + ", ".join(f"\"{b.get('text') or b['sel']}\"" for b in bs[:3]) for fill, bs in rows[:4]),
+              "one primary style, the same on every page, plus red for an action that destroys something (DC-L08-05; STD-visual-details-36: same look, same behaviour)",
+              [bs[0]["sel"] for _, bs in rows[:4]], "pick one fill for the main action and use it everywhere; give the other buttons the secondary style",
+              "STD-visual-details-36", key="primary-styles")
+
+    # --- button styles and labels -----------------------------------------------------------------------------
+    btns = (p.get("buttons") or {}).get("styles") or []
+    kinds = {}
+    for b in btns:
+        kinds.setdefault((b["kind"], b["radius"], round(b["h"] / 4) * 4, b["fs"], b["upper"]), []).append(b)
+    radii, heights, cases = {k[1] for k in kinds}, {k[2] for k in kinds}, {k[4] for k in kinds}
+    if len(kinds) > BUTTON_STYLES or len(radii) > 1 or len(cases) > 1:
+        rows = sorted(kinds.items(), key=lambda kv: -len(kv[1]))
+        notes = ([f"{len(radii)} corner shapes"] if len(radii) > 1 else []) + ([f"{len(heights)} heights"] if len(heights) > 3 else []) + (["UPPERCASE and normal case mixed"] if len(cases) > 1 else [])
+        F.add("MS-19", "warn", f"{len(kinds)} button styles" if len(kinds) > BUTTON_STYLES else "Buttons with different corners or case", w,
+              "; ".join(f"{k[0]}, {'pill' if k[1] == 'pill' else fmt(k[1]) + ' px corners'}, {fmt(k[2])} px tall, {fmt(k[3])} px{' caps' if k[4] else ''}: \"{v[0]['text']}\"" for k, v in rows[:5]) + ("; " + ", ".join(notes) if notes else ""),
+              "a primary, a secondary and at most one quieter style, sharing one corner shape, one case and a height scale such as 32, 40 and 48 px (DC-L08-05; DC-L08-07; STD-visual-details-36)",
+              [v[0]["sel"] for _, v in rows[:4]], "make every button from one component with a size and a variant; the corner shape is one decision for all of them", "DC-L08-07", key="button-styles")
+    small = [b for b in strong if b.get("fs") and b["fs"] < PRIMARY_LABEL]
+    tiny = [b for b in btns if b.get("upper") and b.get("fs") and b["fs"] < TINY_CAPS]
+    if small or tiny:
+        F.add("MS-19", "warn", "Button labels too small", w,
+              "; ".join([f"primary \"{b['text']}\" at {fmt(b['fs'])} px" for b in small[:3]] + [f"capitals \"{b['text']}\" at {fmt(b['fs'])} px" for b in tiny[:3]]),
+              f"a primary label of {PRIMARY_LABEL} px or more (owner review 2026-11-05), and no capitals under {TINY_CAPS} px on a button",
+              [b["sel"] for b in (small + tiny)[:4]], "raise the label to the body size or a step above; drop uppercase on small labels", None, key="button-labels")
+
+    # --- type sizes -------------------------------------------------------------------------------------------
+    sizes = {}
+    for k, v in (ty.get("sizes") or {}).items():
+        try:
+            sizes[float(k)] = v
+        except ValueError:
+            continue
+    whole = sorted({round(s * 2) / 2 for s in sizes})
+    if len(whole) > TYPE_SIZES:
+        close = [(a, b) for a, b in zip(whole, whole[1:]) if a and (b - a) / a < 0.10]
+        F.add("MS-02", "warn", f"{len(whole)} font sizes", w, ", ".join(fmt(s) for s in whole) + (f"; within 10% of each other: {', '.join(f'{fmt(a)}/{fmt(b)}' for a, b in close[:4])}" if close else ""),
+              f"about {TYPE_SIZES} sizes at most, all from one scale, none within 10% of another (preflight 7)", [], "map each size to the nearest step of one scale", "preflight 7", key="type-count")
+    frac = {s: v for s, v in sizes.items() if abs(s - round(s)) >= 0.05}
+    if frac:
+        uses = sum(v["n"] for v in frac.values())
+        total = sum(v["n"] for v in sizes.values()) or 1
+        F.add("MS-02", "warn" if len(frac) >= 2 or uses / total >= 0.1 else "info", "Font sizes between whole pixels", w,
+              "; ".join(f"{fmt(s)} px x{v['n']}" for s, v in sorted(frac.items())[:6]),
+              "whole-pixel sizes from the scale: a fluid size (clamp, vw) or an rem step that does not land on a pixel gives a different size at every width, so nothing matches (preflight 7)",
+              [v["ex"][0] for v in frac.values() if v.get("ex")][:4], "step the size at breakpoints instead of a fluid clamp, or round the scale to whole pixels; 13.33 px on a button is the browser default", "preflight 7", key="type-frac")
+
+    # --- typefaces ------------------------------------------------------------------------------------------
+    faces = {}
+    for fam, v in (ty.get("families") or {}).items():
+        name = SYSTEM_FACE.get(fam.strip().lower(), fam.strip())
+        if not name or ICON_FACE.search(name):
+            continue
+        e = faces.setdefault(name, {"n": 0, "chars": 0, "ex": []})
+        e["n"] += v.get("n", 0)
+        e["chars"] += v.get("chars", 0)
+        if v.get("ex") and not e["ex"]:
+            e["ex"] = v["ex"][:1]
+    mono = [f for f in faces if MONO_FACE.search(f) or f == "the system mono"]
+    text = [f for f in faces if f not in mono]
+    if len(text) >= TEXT_FACES or len(mono) > 1:
+        rows = sorted(faces.items(), key=lambda kv: -kv[1]["chars"])
+        over = len(text) > TEXT_FACES or len(mono) > 1
+        F.add("MS-02", "warn" if over else "info", f"{len(faces)} typefaces on one page" if over else "Two text typefaces", w,
+              "; ".join(f"{f} on {v['n']} element(s)" + (" (mono)" if f in mono else "") for f, v in rows[:6]),
+              "one family for the interface, plus a mono for code; a second text face only with a named job, such as display headings on a marketing page (DC-L02-03; quality.md Q3: one or two typefaces)",
+              [v["ex"][0] for _, v in rows if v["ex"]][:4],
+              "move the text set in the extra faces to the main family; a face used on a handful of elements is usually a leftover" if over
+              else "keep the second face only if it has a named job (display headings, a marketing page); inside the product, one family is the default",
+              "DC-L02-03", key="faces-count")
+
+    # --- weights --------------------------------------------------------------------------------------------
+    ws = {}
+    for k, v in (ty.get("weights") or {}).items():
+        try:
+            ws[int(float(k))] = v
+        except ValueError:
+            continue
+    order = sorted(ws)
+    close = [(a, b) for a, b in zip(order, order[1:]) if b - a <= 100]
+    if len(order) >= WEIGHTS_SYSTEM or close:
+        over = len(order) > WEIGHTS_SYSTEM or bool(close)
+        title = (f"{len(order)} font weights on one page" if len(order) > WEIGHTS_SYSTEM else "Font weights one step apart" if close else "Three font weights in one view")
+        F.add("MS-02", "warn" if over else "info", title, w,
+              ", ".join(f"{k} on {ws[k].get('n', 0)} element(s)" for k in order) + "".join(f"; {a} and {b} are one step apart, which can read as a mistake rather than a level" for a, b in close[:2]),
+              "three weights at most in a system, and two in any one view, clearly apart, such as 400 and 600 (DC-L19-24; it marks two neighbouring weights reading as a mistake as inferred)",
+              [ws[k]["ex"][0] for k in order if ws[k].get("ex")][:4], "give each weight a job (body, labels, headings) and merge the near ones; try size or space before a third weight",
+              "DC-L19-24", key="weights-count")
+
+    # --- colors ---------------------------------------------------------------------------------------------
+    cols = opaque_colors(p)
+    fams = {}
+    for hx, v in cols.items():
+        f = hue_family(hx)
+        if f:
+            e = fams.setdefault(f, {"n": 0, "hexes": [], "ex": []})
+            e["n"] += v["n"]
+            e["hexes"].append(hx)
+            if v["ex"] and not e["ex"]:
+                e["ex"] = v["ex"]
+    if len(fams) >= HUE_NOTE:
+        rows = sorted(fams.items(), key=lambda kv: -kv[1]["n"])
+        F.add("MS-08", "warn" if len(fams) >= HUE_WARN else "info", f"{len(fams)} color families on one page", w,
+              "; ".join(f"{name} ({', '.join(e['hexes'][:3])}) x{e['n']}" for name, e in rows),
+              "grays, one accent with one job, and status colors (DC-L01-08), with the danger color only on the part that is going wrong (making.md section 12: \"More visual\" means more information, not more colour)",
+              [e["ex"][0] for _, e in rows if e["ex"]][:4], "pick the one accent; turn decorative colors gray; keep status colors for status, and red only on the part that is going wrong",
+              "DC-L01-08", key="hues-count")
+    tc = (p.get("colors") or {}).get("text") or {}
+    greys = {k.lower(): v for k, v in tc.items() if len(k) == 7 and k.lower() != "#ffffff" and not hue_family(k)}
+    if len(greys) > TEXT_GREYS:
+        rows = sorted(greys.items(), key=lambda kv: -kv[1].get("n", 0))
+        F.add("MS-08", "warn" if len(greys) > TEXT_GREYS + 1 else "info", f"{len(greys)} gray text colors", w,
+              "; ".join(f"{k} x{v.get('n', 0)}" for k, v in rows[:6]),
+              "three: main text, secondary text and hints (DC-L15-02), each at 4.5:1 or more on its background (WCAG 1.4.3)",
+              [v["ex"][0] for _, v in rows if v.get("ex")][:4], "give each gray one of the three jobs and replace the rest with it", "DC-L15-02", key="greys-count")
+    if not (sysm or {}).get("palette"):   # with a palette, the drift check above already names the nearest token
+        clusters = []
+        for hx, v in sorted(cols.items(), key=lambda kv: -kv[1]["n"]):
+            for c in clusters:
+                if math.dist(hex_rgb(hx), hex_rgb(c[0][0])) <= NEAR_SAME:
+                    c.append((hx, v))
+                    break
+            else:
+                clusters.append([(hx, v)])
+        twins = [c for c in clusters if len(c) > 1]
+        if twins:
+            uses = sum(v["n"] for c in twins for _, v in c[1:])
+            F.add("MS-08", "warn" if uses >= 5 else "info", f"Colors that look the same but are typed differently ({len(twins)} group{'s' if len(twins) > 1 else ''})", w,
+                  "; ".join(" = ".join(f"{hx} x{v['n']}" for hx, v in c[:4]) for c in twins[:4]) + f" ({len(cols)} opaque colors in all)",
+                  "one value per color, named once and reused (STD-visual-details-26: never a parallel set; preflight 2: count the values that do not come from one system)",
+                  [v["ex"][0] for c in twins for _, v in c[1:2] if v.get("ex")][:4], "keep the most used value in each group and replace the others with it: the first step towards a palette",
+                  "STD-visual-details-26", key="near-same")
+
+
+def check_round(p, w, F):
+    """What the owner kept catching on a private B2B landing page (owner review 2026-11-03 and 2026-11-05), read from one
+    probe run: tracking, heading length, alignment, fonts nobody uses, launch basics, and a page measured mid-animation."""
+    ty, mo = p.get("type") or {}, p.get("motion") or {}
+    if mo.get("pending") and not (p.get("media") or {}).get("reducedMotion"):
+        F.add("TM-01", "warn", "Measured while animations were still running", w, f"{mo['pending']} animation(s) or transition(s) not finished: " + "; ".join(mo.get("pendingOn") or []),
+              "the resting page: reveals finished before anything is measured or photographed", [], "await __od.settle() before probe.js and before each screenshot (capture.py does), then measure again", None, key="pending")
+
+    # --- tracking ---------------------------------------------------------------------------------------------
+    caps = ty.get("capsTight") or []
+    if caps:
+        F.add("MS-17", "error", "Capitals with negative tracking", w, "; ".join(f"{c['sel']} \"{c['text']}\" at {fmt(c['em'])}em, {fmt(c['fs'])} px" for c in caps[:4]),
+              "capitals tracked open (about +0.02 to +0.08em), never tight: capital shapes have no side bearings to spare, so negative tracking makes them collide (preflight 5)",
+              [c["sel"] for c in caps[:4]], "set letter-spacing on uppercase text to a positive caps token, for example 0.04em", "preflight 5", key="caps-tight")
+    rows = []
+    for k, v in (ty.get("tracking") or {}).items():
+        try:
+            fs, em, cap = k.split("|")
+            rows.append((float(fs), float(em), cap == "1", v))
+        except ValueError:
+            continue
+    plain = sorted((r for r in rows if not r[2] and r[3].get("chars", 0) >= 8), key=lambda r: r[0])
+    back = [(a, b) for i, a in enumerate(plain) for b in plain[i + 1:] if b[0] >= a[0] * 1.25 and b[1] > a[1] + 0.005]
+    if back:
+        a, b = max(back, key=lambda ab: ab[1][1] - ab[0][1])
+        F.add("MS-17", "warn", "Tracking gets looser as text gets bigger", w, f"{fmt(b[0])} px is tracked {fmt(b[1])}em but {fmt(a[0])} px is tracked {fmt(a[1])}em ({len(back)} pair(s) like this)",
+              "tracking tightens as size grows: body near 0, display text slightly negative, only capitals and tiny labels open (preflight 5; the system's tracking per size)",
+              [b[3]["ex"][0], a[3]["ex"][0]], "give the large sizes the tighter value; set tracking with each text style, not per element", "preflight 5", key="track-back")
+    values = sorted({round(r[1], 3) for r in rows if r[1]})
+    if len(values) > TRACKING_VALUES:
+        F.add("MS-17", "warn", f"{len(values)} letter-spacing values", w, ", ".join(f"{fmt(v)}em" for v in values[:12]),
+              f"about {TRACKING_VALUES}: one for body, one or two for display sizes, one for capitals; each comes with its text style [inferred]",
+              [], "fold letter-spacing into the type tokens and remove the per-element values", "preflight 5", key="track-count")
+
+    # --- headings that run long ------------------------------------------------------------------------------
+    long = (ty.get("headings") or {}).get("long") or []
+    if long:
+        F.add("MS-18", "warn", f"Headings over {HEADING_LINES} lines", w, "; ".join(f"h{h['level']} \"{h['text']}\" runs to {h['lines']} lines at {fmt(h['fs'])} px" for h in long[:3]),
+              f"a heading reads in one glance: {HEADING_LINES} lines at most at every width (owner review 2026-11-03)", [h["sel"] for h in long[:4]],
+              "shorten the words, or step the size down at this width (a smaller text style, not a fluid clamp that lands between steps)", None, key="head-lines")
+
+    # --- alignment ------------------------------------------------------------------------------------------
+    lay = p.get("layout") or {}
+    for m in (lay.get("mixed") or [])[:3]:
+        F.add("MS-05", "warn", "Mixed alignment under one heading", w,
+              f"\"{m['heading']}\" is {m['align']}-aligned; " + "; ".join(f"{i['sel']} is {i['align']}" for i in m["items"][:3]),
+              "a heading and the lede, list and buttons under it share one alignment (owner review 2026-11-04 rows 28 to 32: centre headings, lists aligned to them)",
+              [m["group"]] + [i["sel"] for i in m["items"][:3]], "align the items with their heading: text-align and the row's justify-content together", None, key="mixed:" + m["group"])
+    off = lay.get("offCentre") or []
+    if off:
+        F.add("MS-05", "warn", "Centred items off the centre line", w, "; ".join(f"{o['sel']} \"{o['text']}\" is {fmt(o['off'])} px off the centre of {o['section']}" for o in off[:3]),
+              "centred means within 2 px of its section's centre (preflight 35)", [o["sel"] for o in off[:4]],
+              "look for a one-sided padding, margin or a hidden icon on one side; centre the box, then the text in it", "preflight 35", key="off-centre")
+
+    # --- fonts nobody uses, and launch basics ----------------------------------------------------------------
+    fo = p.get("fonts") or {}
+    if fo.get("unused"):
+        F.add("EN-08", "warn", "Fonts downloaded but not used", w, f"{len(fo['unused'])} of {fo.get('loadedFamilies')} loaded families draw no visible text: " + ", ".join(f"{u['family']} ({u['faces']} face(s))" for u in fo["unused"][:5]),
+              "load only the families and weights the page draws (one or two families, preflight 10)", [], "remove the @font-face, preload or font link for these; text drawn only by ::before or ::after is not counted, so check an icon font first", "preflight 10", key="fonts-unused")
+    sh = p.get("share")
+    if sh and (not sh.get("image") or not sh.get("icon") or re.search(r"noindex", sh.get("robots") or "", re.I)):
+        miss = [x for x, ok in (("a share image (og:image)", sh.get("image")), ("a favicon", sh.get("icon")), ("a meta description", sh.get("description"))) if not ok]
+        F.add("EN-08", "info", "Before launch: share image, favicon or indexing", w, ("missing " + ", ".join(miss) if miss else "") + (("; " if miss else "") + f"robots says {sh['robots']}" if re.search(r"noindex", sh.get("robots") or "", re.I) else ""),
+              "a public page has a share image, a favicon and a description; noindex only on drafts", [], None, None, key="launch")
 
 
 def check_focus(f, F):
@@ -571,6 +883,76 @@ def check_hover(h, F):
         F.add("IN-05", "info", "Clickable controls without a pointer cursor", w, "; ".join(f"{r['sel']} ({r.get('cursor')})" for r in nopointer[:3]), "cursor: pointer on links and buttons, by house habit", [r["sel"] for r in nopointer[:3]], None, None, key="cursor", basis="operated")
 
 
+def check_states(d, F):
+    """capture.py toggles / __od.states(): every option of each tab list, segmented control, radio group and switch."""
+    w = where_of(d)
+    for g in d.get("groups") or []:
+        base, picks = g.get("base") or {}, g.get("picks") or []
+        if not picks:
+            continue
+        names = ", ".join(o["label"] or o["sel"] for o in g["opts"][:4])
+        for i, box in enumerate(g.get("boxes") or []):
+            hs = [x for x in [(base.get("heights") or [None] * 9)[i]] + [(pk.get("heights") or [None] * 9)[i] for pk in picks] if x is not None]
+            if hs and max(hs) - min(hs) > 1:
+                F.add("ST-10", "warn", "A box changes height when a toggle changes", w, f"{box} is {' / '.join(fmt(h) for h in sorted(set(hs)))} px across {g['kind']} ({names})",
+                      "one footprint for every state: the box is as tall as its tallest state, so nothing below it jumps (owner review 2026-11-03 row 22)", [box, g["opts"][0]["sel"]],
+                      "put every state in the same grid cell (grid-area: 1 / 1, visibility instead of display), or give the box the tallest state's height", None, key="height:" + box, basis="operated")
+                break
+        if all(pk.get("sig") == base.get("sig") for pk in picks) and g.get("pixels") != "changed":
+            F.add("ST-11", "warn", "A control that changes nothing", w, f"{g['kind']} ({names}): no option changed anything in {g.get('region')}" + (" (checked by pixels)" if g.get("pixels") == "same" else " (layout, colour and text compared)"),
+                  "every option visibly changes what it says it changes", [o["sel"] for o in g["opts"][:3]], "wire the control up, or remove it", None, key="dead:" + g["opts"][0]["sel"], basis="operated")
+
+
+def check_bars(d, F):
+    w = where_of(d)
+    hits = d.get("hits") or []
+    if hits:
+        F.add("CV-08", "error", "A floating bar covers text that cannot scroll out from under it", w,
+              "; ".join(f"\"{h['text']}\" ({h['sel']}) under {h['bar']}, {h['why']}" for h in hits[:4]),
+              "nothing readable stays under a fixed or floating bar: pinned text clears it, and the page ends with room below the last line", [h["sel"] for h in hits[:4]] + [hits[0]["bar"]],
+              "pad the pinned block or the page end by the bar's height (scroll-padding, padding-bottom), or hide the bar where it would cover", None, key="bar-covers", basis="operated")
+
+
+def check_kern(d, F):
+    w = where_of(d)
+    lost = [s for s in d.get("split") or [] if max(s.get("maxDx") or 0, s.get("maxDy") or 0) > 0.5]
+    if lost:
+        F.add("MS-17", "warn", "Letter-by-letter text loses its kerning", w, "; ".join(f"\"{s['text']}\" letters sit up to {fmt(max(s['maxDx'], s['maxDy']))} px from where the font puts them (worst at \"{s['pair']}\")" for s in lost[:3]),
+              "letters where the font puts them, within 0.5 px: one span per letter (inline-block above all) breaks kerning pairs such as AV and To",
+              [s["sel"] for s in lost[:4]], "split by word, or animate a clip or mask over whole lines; if letters must move, keep them inline and font-kerning: normal", None, key="kern-split")
+    jump = [s for s in d.get("swapped") or [] if max(s.get("maxDx") or 0, s.get("maxDy") or 0) > 0.5]
+    if jump:
+        F.add("MS-17", "warn", "Letters jump when a letter-by-letter reveal ends", w, "; ".join(f"\"{s['text']}\" jumps up to {fmt(max(s['maxDx'], s['maxDy']))} px (at \"{s['pair']}\")" for s in jump[:3]),
+              "the last frame of a reveal matches the plain text within 0.5 px", [s["sel"] for s in jump[:4]], "measure the split letters against the plain text and keep the kerning, or leave the spans in place", None, key="kern-jump")
+
+
+ART = ("svg", "canvas")
+
+
+def check_pixels(d, F):
+    """capture.py text_pixels: the text hidden and the pixels behind each line read."""
+    w = where_of(d)
+    crossed, low = {}, {}
+    for l in d.get("lines") or []:
+        photo = any(u["tag"] in ("img", "video") and u.get("covers") for u in l.get("under") or [])
+        if l.get("edges", 0) >= 6 and l.get("share", 0) >= 0.002 and l.get("backdrop") in ("solid", "assumed-white", "assumed-dark") and not photo:
+            crossed.setdefault(l["sel"], l)
+        need = CONTRAST_LARGE if l.get("large") else CONTRAST_TEXT
+        if l.get("ratio") is not None:
+            if l["ratio"] >= need:
+                F.pixel_pass.setdefault(w, set()).add(l["sel"])
+            elif (l.get("backdrop") != "solid" or l.get("under")) and l["sel"] not in crossed:   # a line art crosses is one finding (MS-20), not two
+                low.setdefault(l["sel"], l)
+    if crossed:
+        F.add("MS-20", "warn", "Art or an image is drawn through text", w,
+              "; ".join(f"\"{l['text']}\": {round(l['share'] * 100, 1)}% of its line box is crossed" + (f" ({', '.join(sorted({u['tag'] for u in l['under']}))} under it)" if l.get("under") else "") for l in list(crossed.values())[:4]),
+              "no line art, chart or picture runs through a line of text: hidden text, then a screenshot, shows nothing sharp inside any line box (owner review 2026-11-05 row 6)",
+              list(crossed)[:4], "move the art into its own box clear of the text, or give the text a solid backing", None, key="art-over-text")
+    for sel_, l in list(low.items())[:6]:
+        F.add("MS-04", "error", f"Text contrast {fmt(l['ratio'])}:1 on the pixels behind it", w, f"\"{l['text']}\" in {l['sel']} on a {l.get('backdrop')} backdrop: the 5% of pixels closest to the text colour give {fmt(l['ratio'])}:1",
+              f"{CONTRAST_LARGE if l.get('large') else CONTRAST_TEXT}:1 against the real backdrop (preflight 11)", [sel_], "darken the scrim or the photo behind it, or move the text onto a solid backing", "WCAG 1.4.3", key="px-contrast:" + sel_)
+
+
 GENERIC_FAMILY = re.compile(r"^(system-ui|ui-[a-z-]+|-apple-system|blinkmacsystemfont|serif|sans-serif|monospace|cursive|fantasy|emoji|math)$", re.I)
 
 
@@ -611,8 +993,10 @@ def cmd_probe(args):
 
 
 
-SAVE_KINDS = {"focus", "hover", "console", "vitals", "fonts"}
-CHECK_FOLDERS = ("probes", "focus", "hover", "console", "fonts", "vitals", "motion")   # where serve and capture.py write
+CAPTURE_CHECKS = {"focus": check_focus, "console": check_console, "hover": check_hover, "vitals": check_vitals, "fonts": check_fonts,
+                  "states": check_states, "bars": check_bars, "kern": check_kern, "pixels": check_pixels}
+SAVE_KINDS = set(CAPTURE_CHECKS)
+CHECK_FOLDERS = ("probes", "focus", "hover", "console", "fonts", "vitals", "motion", "states", "bars", "kern", "pixels")   # where serve and capture.py write
 MAX_POST = 4 * 1024 * 1024
 
 
@@ -675,7 +1059,7 @@ def make_handler(rd, token):
             elif kind in SAVE_KINDS:
                 folder = kind
             else:
-                return self._send(400, b"not a probe result (v: 1) or a capture document (kind: focus, hover, console, vitals, fonts)")
+                return self._send(400, ("not a probe result (v: 1) or a capture document (kind: " + ", ".join(sorted(SAVE_KINDS)) + ")").encode())
             out = rd / folder / f"{name}.json"
             write_json(out, doc)
             self._send(200, f"saved {out} ({n // 1024 + 1} KB)".encode())
@@ -733,7 +1117,8 @@ def cmd_plan(args):
     vps = sorted(set(vps))
     themes = [t.strip() for t in (args.themes or ",".join((sysm or {}).get("modes") or ["light", "dark"])).split(",") if t.strip()]
     cells = [f"{r}|{w}x{h}|{t}" for r in routes for (w, h) in vps for t in themes]
-    tasks = ["scroll-walk", "focus-walk", "hover-and-press", "states-and-data", "motion", "stress-text", "reduced-motion", "forced-colors", "console-and-network"]
+    tasks = ["scroll-walk", "focus-walk", "hover-and-press", "states-and-data", "motion", "stress-text", "reduced-motion", "forced-colors", "console-and-network",
+             "letter-reveals", "text-pixels", "floating-bars", "toggles"]
     task_cells = [f"task:{r}|{t}" for r in routes for t in tasks]
     plan = {"url": args.url, "routes": routes, "viewports": [f"{w}x{h}" for w, h in vps], "themes": themes, "tasks": tasks,
             "system": (sysm or {}).get("name"), "made": dt.date.today().isoformat(), "cells": cells, "task_cells": task_cells,
@@ -793,20 +1178,19 @@ def cmd_check(args):
     if not files:
         die(f"no probe or capture files in {', '.join(args.probes)}")
     args.probes = files
+    docs = []
     for path in args.probes:
         d = read_json(path)
-        docs = d if isinstance(d, list) else [d]
-        for p in docs:
-            kind = p.get("kind")
-            if kind == "focus":
-                check_focus(p, F)
-            elif kind in ("console", "hover", "vitals", "fonts"):
-                {"console": check_console, "hover": check_hover, "vitals": check_vitals, "fonts": check_fonts}[kind](p, F)
-            elif p.get("v") == 1:
-                check_probe(p, sysm, F)
-            else:
-                die(f"{path} is not a probe result (no v: 1) or a capture file (kind: focus, hover, console, vitals or fonts)")
-            n += 1
+        for p in d if isinstance(d, list) else [d]:
+            if p.get("kind") not in CAPTURE_CHECKS and p.get("v") != 1:
+                die(f"{path} is not a probe result (no v: 1) or a capture file (kind: {', '.join(CAPTURE_CHECKS)})")
+            docs.append(p)
+    for p in sorted(docs, key=lambda x: x.get("kind") != "pixels"):   # pixels first: they overrule a guessed backdrop
+        if p.get("kind") in CAPTURE_CHECKS:
+            CAPTURE_CHECKS[p["kind"]](p, F)
+        else:
+            check_probe(p, sysm, F)
+        n += 1
     findings = F.done()
     last = read_json(rd / "findings.measured.json", {"findings": []})
     prev, prev_inputs = last["findings"], last.get("inputs")
@@ -818,7 +1202,8 @@ def cmd_check(args):
         print(json.dumps(findings, indent=2, ensure_ascii=False))
         return
     counts = {s: sum(1 for f in findings if f["severity"] == s) for s in SEV}
-    print(f"checked {n} probe run(s) against " + (f"the floors and the {sysm['name']} system" if sysm else "the floors (no OpenDesigner system found: type and spacing are judged on a 4 px grid)")
+    print(f"checked {n} probe run(s) against " + (f"the floors, practice and the {sysm['name']} system" if sysm
+                                                 else "the floors and practice (no OpenDesigner system found: type and spacing are judged on a 4 px grid, buttons, typefaces, weights and colors by count)")
           + f": {counts['error']} error, {counts['warn']} warn, {counts['info']} info")
     for f in findings:
         if f["severity"] == "info" and not args.all:
@@ -1032,6 +1417,22 @@ def find_picker():
     die("picker.js not found: install the opendesigner skill beside this one")
 
 
+def source_line(src):
+    """Where a fix comes from, in one line: an id gets the kind of source it is; anything else (a WCAG criterion, a
+    shipped product, "my own idea") is shown as written."""
+    s = src.strip()
+    if re.match(r"^STD-[a-z-]+-\d+$", s):
+        return f"house standard {s}"
+    if re.match(r"^PRJ-\d+$", s):
+        return f"project standard {s}"
+    if re.match(r"^DC-L\d+-\d+$", s):
+        return f"research default {s}"
+    cases = {c["id"]: c["title"] for c in load_cases().get("cases", [])}
+    if s in cases:
+        return f"review case {s}, {cases[s]}"
+    return s
+
+
 def read_marks(path, label):
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     marks = data.get("marks") if isinstance(data, dict) else data
@@ -1050,11 +1451,15 @@ def cmd_compare(args):
         die("marks.json has no marks: list the issues first (review.py check, then __od.marks([{sel, title, gives}]))")
     for i, m in enumerate(marks):
         m.setdefault("n", i + 1)
-        for k in ("title", "gives", "before", "after", "finding"):
+        for k in ("title", "gives", "before", "after", "finding", "source"):
             if m.get(k) is not None and not isinstance(m[k], str):
                 m[k] = str(m[k])
         if not (str(m.get("title") or "").strip() and str(m.get("gives") or "").strip()):
             die(f"mark {m['n']} needs a title (the issue) and gives (what fixing it makes better for the person)")
+    unsourced = [str(m["n"]) for m in marks if not str(m.get("source") or "").strip()]
+    if unsourced:
+        print(f"note: mark(s) {', '.join(unsourced)} do not say where the fix comes from. Add \"source\": a house standard, a WCAG criterion, "
+              "a preflight check, a review case, a shipped product, or \"my own idea\" (making.md section 3)")
     after_marks, after_page = read_marks(args.after_marks, "after marks") if args.after_marks else ([], {})
     shots = {}
     for key, path, pg in (("before", args.before, page), ("after", args.after, after_page)):  # no after marks: the shot's own size
@@ -1084,7 +1489,8 @@ def cmd_compare(args):
 
     rows = "".join(f'<li><span class="n">{m["n"]}</span><div><p class="t">{esc(m["title"])}</p><p class="g">{esc(gives(m))}</p>'
                    + (f'<p class="e">{esc(m["before"])}' + (f' &rarr; {esc(m["after"])}' if m.get("after") else "") + "</p>" if m.get("before") else "")
-                   + (f'<p class="e">Evidence: {esc(m["finding"])}</p>' if m.get("finding") else "") + "</div></li>" for m in marks)
+                   + (f'<p class="e">Evidence: {esc(m["finding"])}</p>' if m.get("finding") else "")
+                   + (f'<p class="e">From: {esc(source_line(m["source"]))}</p>' if str(m.get("source") or "").strip() else "") + "</div></li>" for m in marks)
     tall = max(pg.get("h", 1) / max(pg.get("w", 1), 1) for _, pg in shots.values())  # both views get the taller page's height, so nothing jumps
     title = args.title or "Before and after"
     page_html = f"""<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -1104,7 +1510,7 @@ ol{{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:12px;grid-templat
 li{{display:flex;gap:12px;padding:14px 16px;background:#fff;border-radius:12px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}}
 li .n{{flex:none;width:24px;height:24px;border-radius:12px;background:#c8202e;color:#fff;font-size:12px;font-weight:600;line-height:24px;text-align:center}}
 li p{{margin:0;text-wrap:pretty}}.t{{font-weight:600;text-wrap:balance}}.g{{color:#3f3f46}}.e{{margin-top:4px!important;color:#52525b;font-size:13px}}
-.help{{margin:16px 0 0;color:#52525b;font-size:13px}}
+.ask{{margin:24px 0 0;font-weight:600}}.help{{margin:16px 0 0;color:#52525b;font-size:13px}}
 </style>
 <main>
 <h1>{esc(title)}</h1>
@@ -1115,6 +1521,7 @@ li p{{margin:0;text-wrap:pretty}}.t{{font-weight:600;text-wrap:balance}}.g{{colo
 <template data-od-variant="Fixed">{view("after", boxes(after_marks, shots["after"][1], "done"))}</template>
 </div>
 <ol>{rows}</ol>
+<p class="ask">Keep the fix, keep today's, or try another?</p>
 <p class="help">Made by OpenDesigner (review.py compare). The boxes come from the page itself (probe.js __od.marks), measured at {shots["before"][1].get("w")} px wide.</p>
 </main>
 <script>{find_picker().replace("</", "<" + chr(92) + "/")}</script>

@@ -77,7 +77,7 @@ You start with a rough version of the whole system. Then you zoom in only where 
 | 2 | defined | One area at a time, for example Color: ramps, roles, contrast | 1 to 15 questions per area |
 | 3 | detailed | Components, patterns and the fine print of each area | the rest |
 
-You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 193 questions has a zoom level, except the reference panel (Q-ref-01), which is open at every level. Six questions are marked planned: their feature is not built yet, so the interview skips them. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 93 and 192 questions).
+You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 194 questions has a zoom level, except the reference panel (Q-ref-01), which is open at every level. Six questions are marked planned: their feature is not built yet, so the interview skips them. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 94 and 193 questions).
 
 Every term is explained in three voices. Plain words come first, so a school student can follow. The designer's word and the code name sit on one line below. The [glossary](GLOSSARY.md) lists them all.
 
@@ -195,7 +195,7 @@ The model critiques the system only after it passes. The skills give no fixed sc
 |---|---|
 | Contrast, target sizes, focus rings and reduced motion in the tokens (`engine.py validate`) | Hierarchy: what the eye reads first, and whether that is the right thing |
 | Hard-coded values in code that skip the tokens, house-standard patterns, `DESIGN.md` sections that no longer match the state, and user research findings that lost a source or are more than 180 days old (`engine.py review`) | Personality: whether the page feels like the brand, or generic |
-| On the rendered page: text contrast as styled, sizes and spacing off the scale, missing focus rings, overflow and fonts that did not load (`opendesigner-review`'s `review.py`, from `probe.js` measurements) | Whether it reads as premium next to shipped work (`making.md` section 5 scores it 1 to 5) |
+| On the rendered page: text contrast as styled, sizes and spacing off the scale, missing focus rings, overflow and fonts that did not load, and, with or without a design system, counts against practice: filled buttons competing in one view, typefaces, weights and colors (`opendesigner-review`'s `review.py`, from `probe.js` measurements) | Whether it reads as premium next to shipped work (`making.md` section 5 scores it 1 to 5) |
 | Type and font mistakes in a page's CSS, and frozen time, flashing or noise in a video (`preflight.py`) | Layout balance, variety and rhythm (`opendesigner-preflight`'s checklist marks these as looks) |
 | User research findings: each cites a page that was opened or says it is a guess, no personal data, and each recommendation lands on a real question and option (`engine.py research check`, `add`) | Whether a finding holds for this product's own users: the person decides, and five real conversations beat desk research |
 

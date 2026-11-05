@@ -12,6 +12,22 @@ People never pick a mode. Everyone starts with a quick sketch of the whole syste
 ## Level 0: sketch (a few questions, one per message)
 Five answers shape the sketch. Ask only what their words and files don't already tell you.
 
+**A Persuade surface** (a landing page, a marketing site) gets marketing questions, not app ones:
+- Question 2: who it's for, in their words (`context.audience`). Record Q-aud-01 as `large`, assumed.
+- Question 3: the one action a visitor takes, in every voice. Record it as `context.purpose`; the first result confirms it instead of guessing. It runs on the web (Q-plat-01, assumed).
+- After the sketch: the proof they can show, for the brief in `opendesigner/PROTOCOL.md`.
+- Never ask how often people use it, about a light or dark switch, or for a list of components.
+
+**Read the repo first.** Before the first question, run `engine.py detect`. It only reads files, and writes nothing. It reports:
+- the product's name and what it is (`package.json`, the README's first heading and paragraph, the page title);
+- where it runs (Expo or React Native: iPhone and Android; Electron or Tauri: desktop; `ios/`, `android/`, `pubspec.yaml` or an Xcode project; a web framework or HTML pages: web);
+- a brand colour candidate (the colour their CSS uses most on buttons, links and brand tokens);
+- the font (`next/font`, `@font-face`, a font package or a Google Fonts link);
+- dark mode (`prefers-color-scheme`, a theme switch);
+- the project's phase (below).
+
+A sketch question that a reading answers becomes one confirm line instead of a question: "I read *Budget Buddy, a web app* from your repo; say if that's wrong." Put the readings for several questions in that one line. `init` and `sketch` record each reading as `assumed`, with its file in the reason. An answer they give replaces it, and a confirmation is recorded again with `--set-by confirmed`. Ask the question only if they correct the reading, or if nothing in the folder answers it. A weaker signal, such as a colour on nothing clickable, appears as a `note:`. It is never recorded: mention it as a suggestion if it helps.
+
 1. **What are you making?** Take a free answer and record it in the third person, so DESIGN.md and PRODUCT.md read well to a teammate: "my school coding club" becomes `engine.py set context.product '"a website for a school coding club"'`. Keep their words otherwise. If the product has a name, pass it as `sketch --name`. It replaces the folder name that `init` used.
    - Take each surface's kind (Q-scope-06) from their words. Say it plainly, like "a site that shows off your club". Pass it with `--surfaces`. When you inferred it, record it before the sketch instead (below, "Assumed answers"). Name the kinds (Persuade, Operate, Read, Experience) only when the designer or engineer voice leads.
    - If they name several surfaces (an app and a landing page), confirm Q-scope-01 in one line. The main surface goes first.
@@ -33,7 +49,7 @@ Five answers shape the sketch. Ask only what their words and files don't already
 
 **Plain voice: ask fewer.** When the plain voice leads, ask questions 1, 4 and 5. Take who it's for and where it runs from their words when you can. For example, "a website for my school club" means visitors now and then, mostly on phones (`large`), on the web. Record those as assumed answers (below), and say them in one line with the result. Ask question 2 or 3 only when their words give no clue.
 
-**Assumed answers.** An owner input you took from their words, not from an answer, is `assumed` (`rules.md` section 5). Record it before the sketch, and leave its flag out of the `sketch` command, which keeps it:
+**Assumed answers.** An owner input you took from their words, not from an answer, is `assumed` (`rules.md` section 5). Readings from their files are recorded as `assumed` by `init` and `sketch` on their own; leave out of the `sketch` command each flag a reading answers, so the reading is kept as theirs to correct. Record an assumption from their words before the sketch, and leave its flag out of the `sketch` command too:
 ```
 engine.py pick Q-aud-01 large --set-by assumed --why "a club website: visitors come now and then, on phones"
 engine.py pick Q-plat-01 '["web"]' --set-by assumed --why "they said a website"
@@ -56,6 +72,12 @@ Then send the first result (below), and make the offer.
 ## The first result
 Show what they got, not how it was made. Send one message:
 1. **One plain line on what they got, in their words.** For example: "Robotics Club now has its colors, text and spacing, in your logo blue, with a fun feel."
+   - Then **what I understood you're trying to do**, in one line, from their words and README: the purpose, and the goal it serves. For example: "What I understood you're trying to do: get more students to join the club before the autumn fair." Record it before the build as an assumption, and confirm it once, in this message:
+     ```
+     engine.py set context.purpose '"get more students to join the club"' --set-by assumed --why "from their words and README"
+     engine.py set context.goals '["more sign-ups before the autumn fair"]' --set-by assumed --why "from their words"
+     ```
+     Record a mission (`context.mission`) or vision (`context.vision`) only when they said one. Never invent one. PRODUCT.md shows each line, or "Not enough information". Every later recommendation is checked against these lines, and the principles are drafted from the goals (Q-brand-07).
 2. **The visual,** on the best surface the host has (SKILL.md, visual ladder). Lead with the overview (`engine.py overview --open`): their system on one page, with what is still missing marked as such.
 3. **What you guessed,** in one line: answers you took from their words, and anything the engine changed. For example: "I guessed people visit now and then, mostly on phones. Say if that's wrong."
 4. **One clear next step,** the single most useful thing to do now:
@@ -66,8 +88,25 @@ Show what they got, not how it was made. Send one message:
 
 Never dump settings: no dial numbers, token names, hex lists or file trees unless they ask. Point a plain-voice person to the preview first. If they want to read something, DESIGN.md opens with a short plain summary.
 
+## The project's phase
+The phase (Q-scope-07) says where the project is now: an idea, being built, close to launch, or live. It decides what comes first after the sketch. "Stage" already means an interview topic in these files, so this is always called the phase. The phase decides what each step holds; the six steps in `opendesigner/PROTOCOL.md` still run in order. For a built product, step 1 starts with the audit.
+
+`engine.py detect` reads it from the folder, and `init` and `sketch` record it as `assumed`. An empty folder says nothing: then take it from their words, or ask once with the sketch's first question.
+
+| Phase | Read from the repo when | What comes first |
+|---|---|---|
+| Idea (`idea`) | Files, but no code yet (a README, notes) | The alignment: mission, vision, purpose and goals (above). Then the analogous product, a product from another field that solves the same kind of problem. Then the sketch. Nothing to audit yet |
+| Being built (`building`) | Code, but no deploy settings | The sketch, then the areas the screens being built need most |
+| Close to launch (`near-launch`) | Code and deploy settings (`vercel.json`, `netlify.toml`, a Dockerfile, `eas.json`, a deploy workflow) | The audit of what exists (`references/audit.md`), then copy and voice (the Words area), then `opendesigner-preflight` before release |
+| Live (`live`) | A changelog with released versions, or a version past 1.0.0 (npm's default 1.0.0 does not count) | The audit (`references/audit.md`), mapping onto the tokens the code already has, then governance: who may change the system, and how versions are numbered (Files, tools and team) |
+
+- Put the phase's first step at the top of the offer after the sketch (below). The engine prints it after the sketch as a `Phase:` line.
+- PRODUCT.md shows the phase and what comes first, in its own section.
+- PRODUCT.md's Market section comes from the user research first: its market topic finds the competitors, what they all do, the gap and an analogous product, with sources (`research.md` sections 3 and 6). What the person tells you, or what you take from their words, is recorded in `context.market` as assumed until they confirm it, and wins over the research. `context.market.analogous` holds the analogous product and `context.market.competitors` the competitors, as a list. `pattern` is what the competitors all do, `gap` is what none of them does well, and `conventions` holds the words and habits the industry's users already know.
+- If they correct the phase, record their answer: `engine.py pick Q-scope-07 near-launch --why "<their words>"`.
+
 ## Level 1: broad (one screen per foundation)
-Go in this order, with the listed templates:
+After the research, open with the competitor table and the confirmed positioning, then the three directions on the direction board (`research.md` sections 8 and 9). The pick is a starting point for these screens. Then go in this order, with the listed templates:
 - Q-dir-01, style (`option-gallery`)
 - Q-dir-02, how much fits on a screen (`spacing-ruler`)
 - Q-color-02, where the brand color shows (`palette`)
@@ -82,7 +121,7 @@ Each screen is one message with one question. The person can say "skip", and the
 ## Levels 2 and 3: one area at a time
 There are 14 areas: overview, accessibility, platforms, modes, color, typography, layout, shape, elevation, motion, iconography, content, components and delivery. Their plain names are in `pacing.json`. The ids match the engine's, except `delivery`: the engine does not track its zoom level.
 1. Zooming into an area asks its skipped lower-level questions first (for Color after the sketch: Q-color-02 from level 1).
-2. Open the area's stage files. Ask its level-2 questions in stage order. Skip any marked **Planned** (not built yet) or **Settled by: STD-...** (a standard already locked the answer), and never recommend an option marked **(breaks STD-...)**. Then run `engine.py build` and show the change.
+2. Color opens with the competitor table when one exists (`engine.py research market`). Open the area's stage files. Ask its level-2 questions in stage order. Skip any marked **Planned** (not built yet) or **Settled by: STD-...** (a standard already locked the answer), and never recommend an option marked **(breaks STD-...)**. Then run `engine.py build` and show the change.
 3. **Plain voice: ask fewer.** When the plain voice leads, ask only three kinds of question: weight `high`, asset hooks, and owner inputs (block class I). Also ask a `medium` question when their words or assets make it matter: a logo with two colors makes Q-color-04 matter. The rest keep their defaults (`auto_default`: nothing to run). Name them in one line of the level summary, like "I also picked the grays and hover colors for you." They can say "ask me everything".
 4. Sometimes `pick` says an answer shapes DESIGN.md rules, not tokens. Then say it is saved as a rule, so they don't expect the preview to change.
 5. Record the level: `engine.py set zoom.color '"defined"'` (level names: `sketch`, `broad`, `defined`, `detailed`). The engine also infers the level from the decisions made in an area.
@@ -95,6 +134,7 @@ Keep it short, in plain words:
 > Stop here, or go deeper on one part:
 > **Colors** (about 6 min) · **Text** (about 2 min) · **Everything, in 8 quick screens** (about 8 min)
 
+- When a phase is recorded, lead with what that phase needs first ("The project's phase", above). Close to launch, for example, the first choice is the audit, not Colors.
 - After the sketch, put the user research first, above the choices, unless it is done or skipped (`research.md` section 1): "Before we go deeper, I can research who your users are and which apps they already use, about 10 minutes, and I do the work. Shall I?" Send its plan in the same message (`research.md` section 4).
 - Offer at most 3 choices. Use each area's plain name and its minutes from `pacing.json` (`areas[].levels["<level>"].minutes`). Pick what matters most for this product. First come areas whose choices change the most (`pacing.json` → `top_decisions`). Then come areas their answers made risky, such as a light brand color or a dense product.
 - Accessibility is never an option to skip. Its floors (`guardrails.md` section 4) are already set at level 0.
