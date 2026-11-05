@@ -124,7 +124,7 @@ Use the skill's own folder path when it is installed elsewhere (for example a pl
 | `data/`, `skills/*/references/*.json`, `references/stages/`, `references/cards/`, `chatgpt-project/knowledge/` | Generated from `synthesis/` (including `glossary.json`) by `python3 tools/build_data.py`. `chatgpt-project/knowledge/` also copies the main skill's `SKILL.md`, hand-written references, output templates and `engine.py`. Edit the source instead |
 | `.claude-plugin/`, `plugin.json` | Claude plugin and marketplace manifests, and the Agent Plugins 1.0 manifest. Keep `version` in step |
 | `design/` | Tokens and artboards written to Figma and Paper for review |
-| `tools/` | `od.py` (coordination), `jev_nav.py` (research navigation, Jev search, card export, decision graph, citation check), `wiki.py` (the learning wiki: add, remove, fetch, check, ingest, trace, cite-check, standards, map, next, upstream), `build_questionnaire.py`, `build_data.py`, `sync_skills.py`, `build_dist.py`, `fit_corner.py` (measures Apple's continuous corner for the web export; macOS) |
+| `tools/` | `od.py` (coordination), `jev_nav.py` (research navigation, Jev search, card export, decision graph, citation check), `wiki.py` (the learning wiki: add, remove, fetch, check, ingest, trace, cite-check, standards, map, next, upstream), `build_questionnaire.py`, `build_data.py`, `sync_skills.py`, `build_dist.py`, `build_examples.py` (rebuilds `examples/` with the engine; `--check` finds drift), `fit_corner.py` (measures Apple's continuous corner for the web export; macOS) |
 | `.claude/workflows/` | Saved Claude Code workflows for the learning wiki: `learn-analyze`, `learn-standards`, `learn-synthesis`, `learn-escalate`, `learn-personas` |
 | `dist/` | Release zips (git-ignored) |
 
@@ -163,10 +163,12 @@ python3 tools/design_evals.py --check --no-save   the engine on 18 fixed briefs:
 python3 skills/opendesigner/scripts/library.py check   every library component uses only tokens every engine system writes, is scoped, and has complete tags
 python3 site/post_change_audit.py          after changing the website or the library: every automatic check, then walk skills/opendesigner/references/post-change-audit.md by eye
 python3 tools/changelog_check.py                  every CHANGELOG.md entry is short, dated and in the format the website reads; add one entry per change you push
+python3 tools/build_examples.py --check          the worked examples in examples/ are what the engine makes now (else: build_examples.py, which rebuilds them)
+python3 tools/check_links.py                     every relative Markdown link resolves; a /link in site/docs must be a page the website makes
 python3 tools/check_glossary.py --check           every glossary term passes the three-voice rules against today's engine, and docs/GLOSSARY.md is current
                                                    (edit synthesis/glossary.json, then: check_glossary.py --build, build_data.py, sync_skills.py)
 ```
-Releasing a version? Change `version` in `plugin.json`, in `.claude-plugin/plugin.json` and `OPENDESIGNER_VERSION` in `skills/opendesigner/scripts/engine.py` together (`build_dist.py --check` fails when they differ), move the CHANGELOG's Unreleased entries under the new version's heading, and tag the commit. Systems compare their stamp with that number, so a release that keeps the old number tells nobody they are out of date. The tag `v<version>` is what makes the website's changelog and `/version.json` say "released on <date>"; until then they say "in development".
+Releasing a version? Change `version` in `plugin.json`, in `.claude-plugin/plugin.json` and `OPENDESIGNER_VERSION` in `skills/opendesigner/scripts/engine.py` together (`build_dist.py --check` fails when they differ), move the CHANGELOG's Unreleased entries under the new version's heading, run `python3 tools/build_examples.py` (the examples carry the version stamp), and tag the commit. Systems compare their stamp with that number, so a release that keeps the old number tells nobody they are out of date. The tag `v<version>` is what makes the website's changelog and `/version.json` say "released on <date>"; until then they say "in development".
 Changed a skill? Also run its agent evals once (`python3 tools/agent_evals.py --case '<name>' --runs 1`; they cost model usage) and say the result in the pull request.
 Improving the app from the learning wiki? Read `learn/IMPROVING.md` first. `python3 tools/wiki.py next` lists what in the wiki is out of date.
 

@@ -44,6 +44,28 @@
       "heading": {
         "$value": 600
       }
+    },
+    "tracking": {
+      "$type": "number",
+      "$description": "Letter spacing in em, one value per job (levers formulas.type.tracking.jobs). Capitals never take negative tracking. The font shorthand drops letter-spacing: set it too, or use the text classes.",
+      "small": {
+        "$value": 0.02
+      },
+      "body": {
+        "$value": 0
+      },
+      "heading": {
+        "$value": -0.01
+      },
+      "display": {
+        "$value": -0.02
+      },
+      "caps-label": {
+        "$value": 0.06
+      },
+      "caps-display": {
+        "$value": 0.01
+      }
     }
   },
   "text": {
@@ -130,7 +152,7 @@
           "fontSize": "{font.size.16}",
           "fontWeight": "{font.weight.label}",
           "letterSpacing": {
-            "value": 0.8,
+            "value": 0.96,
             "unit": "px"
           },
           "lineHeight": 1.5
@@ -138,7 +160,7 @@
         "$extensions": {
           "opendesigner": {
             "lineHeightPx": 24,
-            "letterSpacingEm": 0.05,
+            "letterSpacingEm": 0.06,
             "use": "Overlines in capitals with wide tracking (DC-L02-18).",
             "avoid": "Sentences; scripts without case.",
             "textTransform": "uppercase"
@@ -450,6 +472,100 @@
       }
     }
   },
+  "layout": {
+    "$description": "One container for every section of the site; columns, gutters and margins by width class; a reading measure. A centred hero is fine; within a section the heading and its content share one alignment.",
+    "$extensions": {
+      "opendesigner": {
+        "evidence": [
+          "DC-L03-15",
+          "DC-L03-16",
+          "DC-L02-17",
+          "S-L03-008",
+          "S-L03-026",
+          "S-L02-051"
+        ]
+      }
+    },
+    "container": {
+      "$type": "dimension",
+      "max": {
+        "$value": {
+          "value": 1280,
+          "unit": "px"
+        },
+        "$description": "The one content width (Primer full pages, S-L03-008)."
+      }
+    },
+    "columns": {
+      "$type": "number",
+      "compact": {
+        "$value": 4
+      },
+      "medium": {
+        "$value": 8
+      },
+      "expanded": {
+        "$value": 12
+      }
+    },
+    "gutter": {
+      "$type": "dimension",
+      "compact": {
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        }
+      },
+      "expanded": {
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        }
+      }
+    },
+    "margin": {
+      "$type": "dimension",
+      "compact": {
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        }
+      },
+      "expanded": {
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        }
+      }
+    },
+    "measure": {
+      "$type": "dimension",
+      "prose": {
+        "$value": {
+          "value": 572,
+          "unit": "px"
+        },
+        "$description": "65 characters per line (paragraphs); CSS uses ch.",
+        "$extensions": {
+          "opendesigner": {
+            "css": "65ch"
+          }
+        }
+      },
+      "lead": {
+        "$value": {
+          "value": 458,
+          "unit": "px"
+        },
+        "$description": "52 characters per line (the lead under a heading); CSS uses ch.",
+        "$extensions": {
+          "opendesigner": {
+            "css": "52ch"
+          }
+        }
+      }
+    }
+  },
   "radius": {
     "$type": "dimension",
     "$description": "Radius scale snapped to 0, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32 plus full (LEVERS B9, [inferred] ratios checked against Atlassian).",
@@ -470,7 +586,7 @@
     },
     "control": {
       "$value": "{radius.0}",
-      "$description": "Buttons, inputs, selects (Roundness dial, DC-L04-02)."
+      "$description": "Buttons and ctas, inputs, selects, chips, toggles, tabs, carousel arrows: one corner for all of them (Roundness dial or Q-shape-01, DC-L04-02)."
     },
     "control-sm": {
       "$value": "{radius.0}",
@@ -478,7 +594,7 @@
     },
     "container": {
       "$value": "{radius.0}",
-      "$description": "Cards and panels."
+      "$description": "Cards, panels, photos and media: one corner for all of them."
     },
     "overlay": {
       "$value": "{radius.0}",
@@ -486,7 +602,7 @@
     },
     "person": {
       "$value": "{radius.full}",
-      "$description": "Avatars."
+      "$description": "Avatars, dots and status pips only."
     },
     "nested": {
       "$value": {

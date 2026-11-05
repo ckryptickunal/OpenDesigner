@@ -1967,6 +1967,12 @@ def agent_skills():
     return len(skills)
 
 
+def page_paths(pages):
+    """Every page's address, in sitemap order. tools/check_links.py checks the docs' links to the site against it."""
+    return (["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/", tour_page.PATH, "/library/"]
+            + [f"/library/{c['slug']}/" for c in library_page.components()])
+
+
 # ---------------------------------------------------------------- build
 def main():
     if DIST.exists():
@@ -2020,7 +2026,8 @@ def main():
         f = DIST / rel
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text(text)
-    paths = ["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/"] + tour_paths + library_paths
+    paths = page_paths(pages)
+    assert set(tour_paths + library_paths) <= set(paths), "page_paths() is missing a page that was just built"
     (DIST / "robots.txt").write_text(robots())
     (DIST / "changelog.xml").write_text(changes_feed())
     (DIST / "version.json").write_text(json.dumps({**version_facts(), "name": NAME, "changelog": f"{SITE_URL}/changelog/",

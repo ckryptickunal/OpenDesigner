@@ -34,7 +34,7 @@
           },
           "timingFunction": "{motion.easing.exit}"
         },
-        "$description": "Leaving: shorter than enter (DC-L04-24)."
+        "$description": "Leaving the screen, shorter than entering (exit durations: STD-easing-duration-11)."
       },
       "move": {
         "$value": "{motion.spring.spatial.default}",

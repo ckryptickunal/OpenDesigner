@@ -48,8 +48,8 @@
         "$description": "Supporting text (guaranteed >= the text minimum on surfaces and neutral fills 1-4)."
       },
       "tertiary": {
-        "$value": "{color.neutral.dark.10}",
-        "$description": "Captions and placeholders (still meets the text minimum on surfaces 1-4)."
+        "$value": "{color.text.secondary}",
+        "$description": "Captions and placeholders: the same grey as secondary, so text keeps three greys (primary, secondary, disabled; owner, 2026-11-05)."
       },
       "disabled": {
         "$value": "{color.neutral.dark.8}",
@@ -306,6 +306,10 @@
       "accent": {
         "$value": "{color.accent.dark.8}",
         "$description": "Selected card or accent outline."
+      },
+      "separator": {
+        "$value": "{color.neutral.dark.6}",
+        "$description": "Hairlines between table rows and list items, lighter than border.subtle; decorative, so never the only cue (DC-L23-05)."
       },
       "success": {
         "$value": "{color.success.dark.8}",

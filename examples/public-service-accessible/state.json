@@ -358,13 +358,18 @@
   "references": {},
   "taste": {},
   "hashes": {
-    "DESIGN.md": "dc0434f3236c7b5a",
-    "PRODUCT.md": "2b7b0e8f8ae98976"
+    "DESIGN.md": "ff967b3eb261767b",
+    "PRODUCT.md": "b22ef0a122f41bbb"
   },
   "exports": {
     "prefix": "ds",
     "figmaPlan": "professional",
     "tailwindReset": true
   },
-  "locks": []
+  "locks": [],
+  "opendesigner": {
+    "version": "0.2.0",
+    "created": null,
+    "built": "0.2.0"
+  }
 }

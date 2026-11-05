@@ -14,6 +14,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **The worked examples match the engine again** (2026-11-05). The three systems in `examples/` were rebuilt from their `state.json`, and `python3 tools/build_examples.py --check` now fails, in CI too, when the engine writes something they do not show. The old replay script, which could wipe them, is gone.
+- **The link check knows the website's pages** (2026-11-05). A link like `/tour/` in the website's docs is now checked against the pages `site/build.py` makes, so real pages pass and a mistyped one still fails.
 - **The footer links every docs page again** (2026-11-05). The footer had dropped to 20 links. It now links every docs page by section from every page, so search engines and AI crawlers reach them, and each label still fits on one line down to 320 px.
 
 ## [0.2.0]: 2026-11-05
