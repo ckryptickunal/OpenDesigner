@@ -4525,7 +4525,8 @@ class LogoColors(unittest.TestCase):
     def test_logo_files_it_cannot_read(self):
         with tempfile.TemporaryDirectory() as t:
             for name, data, said in (("logo.jpg", b"\xff\xd8\xff\xe0", "this one is a JPEG"), ("missing.png", None, "no file at"),
-                                     ("line.png", png_bytes(4, 1, [[0, 0, 0, 255] * 4]), "No brand color in line.png")):
+                                     ("line.png", png_bytes(4, 1, [[0, 0, 0, 255] * 4]), "No brand color in line.png"),
+                                     ("photo.svg", '<svg><image href="logo.png"/></svg>', "this SVG holds a picture, not shapes")):
                 p = self.write(t, name, data) if data else os.path.join(t, name)
                 try:
                     code, out = run_cli("sketch", "--dir", os.path.join(t, "od"), "--logo", p)

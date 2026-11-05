@@ -12877,9 +12877,8 @@ def png_colors(data, max_pixels=9_000_000, samples=250_000):
 
 
 def svg_colors(text):
-    """(Counter of (r, g, b) for the fills, strokes and gradient stops of an SVG, 'fills'); a raster logo inside an SVG is
-    read as pixels instead ('area')."""
-    import base64
+    """(Counter of (r, g, b) for the fills, strokes and gradient stops of an SVG, 'fills'). An SVG that only wraps a
+    picture is refused with a plain fix: export that picture as PNG."""
     import colorsys
     from collections import Counter
     text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
@@ -12909,14 +12908,9 @@ def svg_colors(text):
             rgb = CSS_NAMED.get(v)  # none, currentColor, url(...) and inherit carry no color of their own
         if rgb and alpha >= 0.5:
             out[rgb] += 1
-    if out:
-        return out, "fills"
-    m = re.search(r"data:image/png;base64,([A-Za-z0-9+/=\s]+)", text)
-    if m:
-        try:
-            return png_colors(base64.b64decode(re.sub(r"\s+", "", m.group(1)))), "area"
-        except (ValueError, SystemExit):
-            pass
+    if not out and re.search(r"<image\b", text):
+        raise SystemExit("--logo: this SVG holds a picture, not shapes, so it has no colors to read. Export the logo as PNG "
+                         "and run it again. Nothing was written.")
     return out, "fills"
 
 
