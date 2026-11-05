@@ -18,7 +18,7 @@ Commands (run from the user's project; state lives in ./opendesigner/ unless --d
     engine.py resolve                     effective dials, zoom per area and every derived parameter (JSON)
     engine.py generate                    state.json + levers.json -> tokens/ (DTCG 2025.10 + resolver)
     engine.py validate [--json]           contrast, targets, lint; exit 1 on errors, 0 with warnings
-    engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all
+    engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|brand|all
     engine.py design-md [--out DIR]       DESIGN.md and PRODUCT.md (project root when the state is ./opendesigner)
     engine.py preview [--open]            preview.html (every token plus a few components, light and dark)
     engine.py overview [--open]           overview.html (the whole system on one page, what is chosen, what is missing)
@@ -78,6 +78,7 @@ import math
 import os
 import re
 import shlex
+import shutil
 import sys
 import webbrowser
 
@@ -5331,6 +5332,12 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
             path = "zoom.all"
     if path == "profile.voice" and value not in VOICES:
         raise SystemExit(f"profile.voice is one of {', '.join(VOICES)}")
+    if path in ("hooks.H-logo.clearSpace", "hooks.H-logo.minSize"):  # the logo rules on the brand page (issue 49)
+        bad = logo_rule_problem(path.rsplit(".", 1)[1], value)
+        if bad:
+            raise SystemExit(f"Nothing was changed: {bad}")
+    if path == "hooks.H-icons.library" and not (isinstance(value, str) and re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", value)):
+        raise SystemExit("Nothing was changed: hooks.H-icons.library takes the open icon set's short name, for example \"lucide\" or \"tabler\".")
     if path.startswith("answers.Q-site-"):  # the site brief (issue 48): one row per role, proof or page family
         bad = site_problem(path.split(".", 1)[1], value)
         if bad:
@@ -9601,8 +9608,426 @@ def export_artifact(d, files, meta, state, prefix):
     return files_out
 
 
-EXPORT_FORMATS = ("css", "tailwind", "figma", "paper", "swift", "compose", "dtcg", "artifact")
-NEUTRAL_FORMATS = ("figma", "paper", "dtcg", "artifact")  # for design tools and other token tools: written for every platform
+# =============================================================================================
+# Brand and press page (issue 49): what a finished system already holds, on one static page in build/brand/, built with
+# the system's own tokens. Logo, colour, type, icons and voice come from the system and the person's own files (copied
+# to build/brand/assets/ with download links). Facts, boilerplate, leadership, figures and the press contact are owner
+# input: they read "Not enough information" with what fills them until the person gives them. Nothing is invented: no
+# logo, icon, fact or figure that the person did not supply, and font files are never shipped.
+# =============================================================================================
+
+# Logo rules live on the H-logo hook. Each shows "Default" until the person sets it (engine.py set hooks.H-logo.clearSpace ...).
+LOGO_CLEAR_DEFAULT = 0.5  # clear space on every side, as a share of the logo's height [inferred: the research has no number]
+LOGO_MIN_DEFAULT = {"symbol": 16, "lockup": 24}  # px tall: the smallest logo size Atlassian ships is 16 px (DC-L05-13; S-L05-044),
+# and the H-logo check reads legibility at 16 px; a lockup carries a wordmark, so it gets more room [inferred]
+BRAND_IMG = (".svg", ".png", ".jpg", ".jpeg", ".webp", ".gif")
+BRAND_FILES = BRAND_IMG + (".pdf", ".eps", ".ai")
+PRESS_FIELDS = [("boilerplate", "Short description", "a paragraph on what the company does, in the owner's words, for a journalist"),
+                ("facts", "Facts", "founded, where, how many people: each one true today"),
+                ("leadership", "Leadership", "names and roles, shown only with each person's permission"),
+                ("figures", "Figures", "numbers, each with its qualifier: for whom, over what time, compared with what"),
+                ("contact", "Press contact", "a name and an address that answers")]
+PERSON_GAVE = ("chosen", "confirmed_default", "asset", "reference", "research")  # set by the person, not assumed or delegated
+
+
+def logo_rules(state, decs):
+    """{clear: (share of height, 'chosen'|'default'), minSize: ({symbol, lockup} px, status)} from the H-logo hook."""
+    hk = (state.get("hooks") or {}).get("H-logo") or {}
+    out = {}
+    for key, default in (("clearSpace", LOGO_CLEAR_DEFAULT), ("minSize", LOGO_MIN_DEFAULT)):
+        v = hk.get(key)
+        given = v is not None and (decs.get(f"hooks.H-logo.{key}") or {}).get("set_by") in PERSON_GAVE
+        if key == "minSize" and isinstance(v, (int, float)):
+            v = {"symbol": v, "lockup": max(v, LOGO_MIN_DEFAULT["lockup"])}
+        out[key] = (v if v is not None else default, "chosen" if given else "default")
+    return out
+
+
+def logo_rule_problem(key, v):
+    if key == "clearSpace":
+        ok = isinstance(v, (int, float)) and not isinstance(v, bool) and 0.1 <= v <= 2
+        return None if ok else "hooks.H-logo.clearSpace takes the clear space as a share of the logo's height, from 0.1 to 2 (for example 0.5)."
+    if key == "minSize":
+        num = lambda x: isinstance(x, (int, float)) and not isinstance(x, bool) and 8 <= x <= 400
+        ok = num(v) or (isinstance(v, dict) and v and set(v) <= {"symbol", "lockup"} and all(num(x) for x in v.values()))
+        return None if ok else 'hooks.H-logo.minSize takes px from 8 to 400: 16, or {"symbol": 16, "lockup": 24}.'
+    return None
+
+
+def _brand_file(root, rel):
+    p = rel if os.path.isabs(rel) else os.path.join(root, rel)
+    return p if os.path.isfile(p) else None
+
+
+def _icon_files(d, state):
+    """[(source path, licence note or '')]: the H-icons files, then icons kept in opendesigner/icons (illustrate.py icons keep)."""
+    root = doc_dir(d)
+    out = [(p, "") for p in (_brand_file(root, f) for f in ((state.get("hooks") or {}).get("H-icons") or {}).get("files") or []) if p]
+    led = os.path.join(d, "icons", "ledger.json")
+    if os.path.exists(led):
+        try:
+            items = read_json(led).get("items") or []
+        except ValueError:
+            items = []
+        for e in items:
+            p = _brand_file(os.path.join(d, "icons"), str(e.get("file") or ""))
+            if e.get("status") == "chosen" and p and p not in [x for x, _ in out]:
+                lic = " · ".join(x for x in (e.get("set"), e.get("licence_spdx") or e.get("licence")) if x)
+                out.append((p, lic))
+    return out
+
+
+def _icon_library(state):
+    """(name, licence, licence url) of the open icon set the person chose (hooks.H-icons.library, an Iconify prefix), else None.
+    The licence comes from the illustrate skill's icon_sets list when it sits beside this skill; it is never guessed."""
+    lib = ((state.get("hooks") or {}).get("H-icons") or {}).get("library")
+    if not lib:
+        return None
+    sets = {}
+    src = os.path.join(SKILL_ROOT, "..", "opendesigner-illustrate", "references", "sources.json")
+    if os.path.exists(src):
+        try:
+            sets = {s.get("prefix"): s for s in read_json(src).get("icon_sets") or []}
+        except ValueError:
+            pass
+    s = sets.get(str(lib)) or {}
+    return (s.get("name") or str(lib), s.get("licence"), s.get("licence_url"))
+
+
+def _ext_fill(n, what):
+    return f'engine.py set {n} \'"..."\' --why "their words"' if what == "text" else f"engine.py set {n} '[\"...\"]' --why \"their words\""
+
+
+def export_brand(d, files, meta, state, prefix):
+    """{relative path: text or bytes} for build/brand/: index.html and assets/ (the person's logo and icon files)."""
+    css = export_css(files, meta, prefix)
+    V = lambda p: f"var({css_var(prefix, p)})"
+    base = resolve_all(files, {})
+    res = files["opendesigner.resolver.json"]
+    themes = list((res.get("modifiers", {}).get("theme") or {}).get("contexts") or meta["modes"])
+    by_theme = {th: resolve_all(files, {"theme": th}) for th in themes}
+    hexv = lambda tree, p: (((tree.get(p) or {}).get("resolved") or {}).get("hex"))
+    has = lambda p: p in base
+    t = lambda p: (f"font: var({css_var(prefix, p)}); letter-spacing: var({css_var(prefix, p)}-tracking);" if has(p) else "")
+    decs = _decisions(d)
+    root = doc_dir(d)
+    name = state.get("name") or "Your product"
+    ctx = state.get("context") or {}
+    hooks = state.get("hooks") or {}
+    out, missing_n = {}, [0]
+
+    def gave(path):
+        return (decs.get(path) or {}).get("set_by") in PERSON_GAVE
+
+    def tag(status):
+        label = {"chosen": "Chosen", "default": "Default", "missing": NOT_ENOUGH}[status]
+        return f'<span class="bp-tag bp-{status}">{label}</span>'
+
+    def missing(what, fills):
+        missing_n[0] += 1
+        return f'<div class="bp-missing">{tag("missing")}<p>{_esc(what)}</p><p class="bp-how">{_esc(fills)}</p></div>'
+
+    def copy(src, sub):
+        rel, n = f"assets/{sub}/{os.path.basename(src)}", 1
+        while rel in out:  # two files with one name in different folders
+            n += 1
+            stem, ext = os.path.splitext(os.path.basename(src))
+            rel = f"assets/{sub}/{stem}-{n}{ext}"
+        with open(src, "rb") as fh:
+            out[rel] = fh.read()
+        return rel
+
+    # ---- about and facts: only what the person gave
+    press = ctx.get("press") or {}
+    about = []
+    product = product_words(state) if gave("context.product") else ""
+    if product:
+        about.append(f'<p class="bp-lede">{_esc(product)}</p>')
+    r = research_py.summary(state) if research_py else {}
+    pos = r.get("positioning") or {}
+    if pos.get("confirmed"):
+        about.append('<dl class="bp-dl">' + "".join(f"<dt>{_esc(k)}</dt><dd>{_esc(v)}</dd>" for k, v in (
+            ("Who it is for", pos.get("for")), ("The one claim", pos.get("claim"))) if str(v or "").strip())
+            + f'</dl><p class="bp-dim">From the positioning the owner confirmed on {_esc(pos["confirmed"])}.</p>')
+    site_figures = []
+    sa = answer_value(((state.get("answers") or {}).get("Q-site-03")))
+    if sa and gave("answers.Q-site-03"):
+        site_figures = [x for x in (sa if isinstance(sa, list) else [sa]) if isinstance(x, dict) and x.get("kind") == "figures"]
+    for key, label, hint in PRESS_FIELDS:
+        v = press.get(key) if gave(f"context.press.{key}") else None
+        if key == "figures" and not v and site_figures:
+            v = [f"{x['what']} ({x['qualifier']})" if x.get("qualifier") else x["what"] for x in site_figures]
+        if key == "leadership" and isinstance(v, list):
+            v = [f"{x.get('name')}, {x.get('role')}" if isinstance(x, dict) else x for x in v]
+        items = [str(x).strip() for x in (v if isinstance(v, list) else [v]) if str(x or "").strip()]
+        if not items:
+            about.append(f"<h3>{label}</h3>" + missing(f"{label}: {hint}.", _ext_fill(f"context.press.{key}",
+                                                                                    "text" if key in ("boilerplate", "contact") else "list")))
+        elif key == "figures":
+            about.append(f"<h3>{label}</h3><ul>" + "".join(
+                f"<li>{_esc(x)}" + ("" if "(" in x else ' <span class="bp-dim">(no qualifier yet: for whom, over what time, '
+                                     'compared with what)</span>') + "</li>" for x in items) + "</ul>")
+        elif len(items) == 1:
+            about.append(f"<h3>{label}</h3><p>{_esc(items[0])}</p>")
+        else:
+            about.append(f"<h3>{label}</h3><ul>" + "".join(f"<li>{_esc(x)}</li>" for x in items) + "</ul>")
+
+    # ---- logo: the person's files, the rules, and do and don't drawn from those rules
+    rules = logo_rules(state, decs)
+    clear, clear_st = rules["clearSpace"]
+    mins, mins_st = rules["minSize"]
+    logo_srcs = [p for p in (_brand_file(root, f) for f in (hooks.get("H-logo") or {}).get("files") or []) if p
+                 and os.path.splitext(p)[1].lower() in BRAND_FILES]
+    logos = [(copy(p, "logo"), os.path.splitext(p)[1].lower() in BRAND_IMG) for p in logo_srcs]
+    rule_rows = (f'<tr><th scope="row">Clear space</th><td>{fmt_num(clear)} × the logo\'s height on every side. Nothing else enters it.</td>'
+                 f'<td>{tag(clear_st)}</td></tr>'
+                 f'<tr><th scope="row">Smallest size</th><td>Symbol {fmt_num(mins.get("symbol", 16))} px tall; with the wordmark '
+                 f'{fmt_num(mins.get("lockup", 24))} px tall, on screen.</td><td>{tag(mins_st)}</td></tr>')
+    logo = (f'<table class="bp-table"><tbody>{rule_rows}</tbody></table><p class="bp-dim">Change a rule: '
+            f'<code>engine.py set hooks.H-logo.clearSpace 0.5</code> or <code>engine.py set hooks.H-logo.minSize 20</code>. '
+            '"Default" means nobody has confirmed it yet.</p>')
+    shown = [rel for rel, img in logos if img]
+    if not logos:
+        logo += missing("Your logo files: the symbol, the wordmark and each lockup, in colour, black and white.",
+                        "Q-brand-03 and the H-logo asset: engine.py sketch --logo <file>, or engine.py set hooks.H-logo.files '[\"brand/logo.svg\"]'")
+    else:
+        cards = "".join(
+            f'<figure class="bp-logo">' + (f'<div class="bp-grounds"><div class="bp-light"><img src="{_esc(rel)}" alt="{_esc(name)} logo, '
+                                            f'{_esc(os.path.basename(rel))}, on a light ground"></div><div class="bp-dark"><img src="{_esc(rel)}" '
+                                            f'alt="{_esc(name)} logo, {_esc(os.path.basename(rel))}, on a dark ground"></div></div>' if img else "")
+            + f'<figcaption><a href="{_esc(rel)}" download>Download {_esc(os.path.basename(rel))}</a></figcaption></figure>'
+            for rel, img in logos)
+        logo += f'<h3>Logo files</h3><div class="bp-logos">{cards}</div>'
+        if shown:
+            first, h = shown[0], 64
+            pad = round(clear * h)
+            logo += (f'<h3>Clear space</h3><div class="bp-clear"><div class="bp-zone" style="padding:{pad}px">'
+                     f'<img src="{_esc(first)}" alt="{_esc(name)} logo inside its clear space" style="height:{h}px"></div></div>'
+                     f'<p class="bp-dim">The dashed line is the clear space: {fmt_num(clear)} × the logo\'s height ({pad} px at {h} px tall).</p>')
+            small = mins.get("symbol", 16)
+            dos = [("Do", "On a plain ground, with its clear space.", f'<img src="{_esc(first)}" alt="" style="height:40px">', "bp-light"),
+                   ("Do", f"At {fmt_num(small)} px or larger.", f'<img src="{_esc(first)}" alt="" style="height:{fmt_num(small)}px">', "bp-light"),
+                   ("Don't", "Crowd it: text inside the clear space.", f'<span class="bp-crowd"><img src="{_esc(first)}" alt="" '
+                                                                         f'style="height:40px"><b>Text too close</b></span>', "bp-light"),
+                   ("Don't", "Stretch or squash it.", f'<img src="{_esc(first)}" alt="" style="height:40px;transform:scaleX(1.5)">', "bp-light"),
+                   ("Don't", "Recolour it.", f'<img src="{_esc(first)}" alt="" style="height:40px;filter:hue-rotate(140deg) saturate(1.6)">', "bp-light"),
+                   ("Don't", f"Use it smaller than {fmt_num(small)} px.", f'<img src="{_esc(first)}" alt="" style="height:{max(6, round(small / 2))}px">',
+                    "bp-light")]
+            logo += ('<h3>Do and don\'t</h3><p class="bp-dim">Each example is your own logo file, drawn from the rules above.</p>'
+                     '<div class="bp-dos">' + "".join(
+                         f'<figure class="bp-do bp-{"yes" if k == "Do" else "no"}"><div class="{g}">{img}</div>'
+                         f'<figcaption><b>{k}.</b> {_esc(txt)}</figcaption></figure>' for k, txt, img, g in dos) + "</div>")
+
+    # ---- colour: each role with hex, RGB and OKLCH, its job, in every theme
+    roles = [("color.bg.action.primary", "Primary action"), ("color.text.primary", "Text"), ("color.surface.base", "Page"),
+             ("color.text.accent", "Accent text"), ("color.bg.accent.subtle", "Accent fill"), ("color.border.default", "Lines"),
+             ("color.text.danger", "Danger"), ("color.text.success", "Success"), ("color.text.warning", "Warning"), ("color.text.info", "Information")]
+    sw = []
+    brand_hex = normalize_hex((state.get("raw") or {}).get("brandColor") or "") if (state.get("raw") or {}).get("brandColor") else None
+    if brand_hex:
+        sw.append(("Brand colour", "The exact colour the brand gave. Logos and large brand areas keep it exactly.", {th: brand_hex for th in themes}))
+    for p, label in roles:
+        if not has(p):
+            continue
+        desc = re.sub(r"\s*\([^)]*\)", "", base[p].get("$description") or "").strip()
+        sw.append((label, desc, {th: hexv(by_theme[th], p) for th in themes}))
+
+    def values(hx):
+        rr, gg, bb = hex_to_rgb8(hx)
+        L, C, H = hex_to_oklch(hx)
+        return f"{hx.upper()}<br>RGB {rr} {gg} {bb}<br>OKLCH {L * 100:.1f}% {C:.3f} {f'{H:.0f}' if C >= 0.002 else 'none'}"  # a grey has no hue
+    color = '<div class="bp-swatches">' + "".join(
+        f'<div class="bp-sw"><div class="bp-chips">' + "".join(f'<i style="background:{hx}" title="{_esc(th)}"></i>' for th, hx in vals.items() if hx)
+        + f'</div><b>{_esc(label)}</b><p class="bp-dim">{_esc(desc)}</p>'
+        + "".join(f'<p class="bp-val"><span>{_esc(th.title())}</span>{values(hx)}</p>' for th, hx in vals.items() if hx) + "</div>"
+        for label, desc, vals in sw) + "</div>"
+
+    # ---- type: each family, its weights and jobs, a specimen; files are never shipped
+    faces = font_faces(state.get("raw") or {})
+    fam_of = lambda p: (((base.get(p) or {}).get("resolved") or {}).get("fontFamily") or [None])
+    styles = [k for k in base if k.startswith("text.")]
+    typ = []
+    seen = set()
+    loaded = []  # (family, weights): open faces the page links from Google Fonts, so the specimens show the real face
+    for role in ("display", "text", "mono"):
+        fp = f"font.family.{role}"
+        if not has(fp):
+            continue
+        fam = (base[fp].get("resolved") or {}).get("value") if isinstance(base[fp].get("resolved"), dict) else base[fp].get("resolved")
+        fam = fam if isinstance(fam, list) else [fam]
+        if not fam or fam[0] in seen:
+            continue
+        seen.add(fam[0])
+        uses = [k for k in styles if fam_of(k)[:1] == fam[:1]]
+        weights = sorted({int((base[k].get("resolved") or {}).get("fontWeight") or 400) for k in uses})
+        jobs = sorted({k.split(".")[1] for k in uses})
+        first = str(fam[0])
+        generic = _generic_face(first) or first.lower() in GENERIC_FONTS
+        shown_name = "The system font" if generic else first  # each family's own token, never another role's record
+        f = faces.get(role) or {}
+        if generic:
+            lic = "It comes with each device, so there is nothing to license or ship."
+        else:
+            lic = ("An open licence. " if first.lower() in OPEN_FONTS or f.get("open") else (f.get("note") or "Licence not recorded.") + " ") \
+                + "Font files are not included here: get them from the foundry or the source, under its licence."
+        if first.lower() in OPEN_FONTS:
+            loaded.append((first, weights or [400]))
+        sample = next((k for k in ("text.display.md", "text.display.sm", "text.headline.lg", "text.title.lg", "text.body.md") if k in uses), None)
+        famtok = lambda r_: ((base.get(f"font.family.{r_}") or {}).get("resolved") or [None])
+        same = [r_ for r_ in ("display", "text", "mono") if has(f"font.family.{r_}") and isinstance(famtok(r_), list) and str(famtok(r_)[0]) == first]
+        typ.append(f'<div class="bp-face"><h3>{_esc(" and ".join(same).capitalize() or role.title())}: {_esc(shown_name)}</h3>'
+                   + (f'<p class="bp-spec" style="{t(sample)}">{_esc(name)}</p>' if sample else "")
+                   + f'<p style="font-family:var({css_var(prefix, fp)})" class="bp-glyphs">Aa Bb Cc 0123456789 &amp; ? !</p>'
+                   + f'<table class="bp-table"><tbody><tr><th scope="row">Weights</th><td>{", ".join(str(w) for w in weights) or "400"}</td></tr>'
+                   + f'<tr><th scope="row">Jobs</th><td>{_esc(", ".join(jobs) or "none yet")}</td></tr>'
+                   + f'<tr><th scope="row">Licence</th><td>{_esc(lic)}</td></tr></tbody></table></div>')
+    typ_html = "".join(typ)
+
+    # ---- icons: the construction grid and its rules from the tokens, the person's icons, the library they chose
+    sizes = [(k.split(".")[-1], (base[k].get("resolved") or {}).get("value")) for k in ("size.icon.sm", "size.icon.md", "size.icon.lg") if has(k)]
+    strokes = {k.split(".")[-1]: (base[k].get("resolved") or {}).get("value") for k in ("icon.stroke.sm", "icon.stroke.md", "icon.stroke.lg") if has(k)}
+    style_ans = answer_value((state.get("answers") or {}).get("Q-icon-02"))
+    style_ans = style_ans if isinstance(style_ans, list) else [style_ans] if style_ans else []
+    corners = "sharp" if "sharp" in style_ans else "rounded"
+    ends = "square caps, mitred joins" if corners == "sharp" else "round caps, round joins"
+    grid_lines = "".join(f'<line x1="{i}" y1="0" x2="{i}" y2="24"/><line x1="0" y1="{i}" x2="24" y2="{i}"/>' for i in range(1, 24))
+    sw_md = strokes.get("lg") or 2
+    grid = (f'<svg class="bp-grid" viewBox="0 0 24 24" role="img" aria-label="Icon construction grid: 24 by 24, a 20 by 20 live area, '
+            f'and the circle and square keylines"><rect x="0" y="0" width="24" height="24" class="g-pad"/><rect x="2" y="2" width="20" height="20" '
+            f'class="g-live"/><g class="g-lines">{grid_lines}</g><circle cx="12" cy="12" r="10" class="g-key"/>'
+            f'<rect x="3" y="3" width="18" height="18" rx="{2 if corners == "rounded" else 0}" class="g-key"/>'
+            f'<path d="M7 12.5l3.2 3.2L17 9" class="g-glyph" stroke-width="{sw_md}" stroke-linecap="{"round" if corners == "rounded" else "square"}" '
+            f'stroke-linejoin="{"round" if corners == "rounded" else "miter"}"/></svg>')
+    plain = {"sm": "Small", "md": "Medium", "lg": "Large"}
+    icon_rules = ("".join(f'<tr><th scope="row">{plain.get(n, n)}</th><td>{fmt_num(v)} px icon, {fmt_num(strokes.get(n, 0))} px line</td></tr>'
+                          for n, v in sizes)
+                  + '<tr><th scope="row">Live area</th><td>The drawing stays in the middle 20 of 24 units, so icons look the same size '
+                    '(Material\'s 24 dp grid).</td></tr>'
+                  + f'<tr><th scope="row">Corners and ends</th><td>{_esc(corners.title())} corners, {_esc(ends)}.</td></tr>'
+                  + '<tr><th scope="row">Keylines</th><td>A circle 20 units across and a square 18 units wide: round shapes touch the '
+                    'circle, square ones the square, so their weight matches.</td></tr>')
+    icons = (f'<div class="bp-grid-wrap">{grid}<table class="bp-table"><tbody>{icon_rules}</tbody></table></div>')
+    icon_srcs = [(p, lic) for p, lic in _icon_files(d, state) if os.path.splitext(p)[1].lower() in BRAND_IMG]
+    if icon_srcs:
+        icons += '<h3>Your icons</h3><div class="bp-icons">' + "".join(
+            f'<figure><div class="bp-light"><img src="{_esc(rel)}" alt="{_esc(os.path.splitext(os.path.basename(rel))[0])} icon" width="24" height="24"></div>'
+            f'<figcaption><a href="{_esc(rel)}" download>{_esc(os.path.basename(rel))}</a>'
+            + (f'<span class="bp-dim">{_esc(lic)}</span>' if lic else "") + "</figcaption></figure>"
+            for rel, lic in ((copy(p, "icons"), lic) for p, lic in icon_srcs)) + "</div>"
+    lib = _icon_library(state)
+    if lib:
+        nm, lc, url = lib
+        icons += (f'<p>Open icon set: <b>{_esc(nm)}</b>' + (f', {_esc(lc)} licence' if lc else ", licence not recorded")
+                  + (f' (<a href="{_esc(url)}" rel="noopener">licence text</a>)' if url and str(url).startswith("https://") else "")
+                  + ". It is not bundled here: install it from its source and keep its licence notice.</p>")
+    if not icon_srcs and not lib:
+        icons += missing("Your icon files, or the open icon set you chose.",
+                         "Q-icon-01 and the H-icons asset: engine.py set hooks.H-icons.files '[\"icons/cart.svg\", \"icons/truck.svg\"]', or "
+                         "engine.py set hooks.H-icons.library '\"lucide\"'")
+
+    # ---- voice: only when the person gave it
+    voice_words = ctx.get("voice") if (gave("context.voice") or gave("answers.Q-voice-01")
+                                       or (hooks.get("H-voice") or {}).get("status") == "have") else None
+    vlines = []
+    md_path = os.path.join(root, "DESIGN.md")
+    if voice_words and os.path.exists(md_path):
+        with open(md_path, encoding="utf-8") as fh:
+            m = re.search(r"^## Content and Voice\n(.*?)(?=^## |\Z)", fh.read(), flags=re.M | re.S)
+        vlines = [re.sub(r"\s*\([^)]*\)\.?$", ".", re.sub(r"[*`]", "", x[2:]).strip()) for x in (m.group(1).splitlines() if m else [])
+                  if x.startswith("- ") and "?" not in x and "not recorded" not in x][:6]  # the rules, not the interview's notes
+    voice_words = re.sub(r"\s*\([^)]*\)", "", str(voice_words or "")).strip() or None  # a reference's name is never the brand's voice
+    voice = (f'<p class="bp-lede">{_esc(voice_words)}</p>' + ("<ul>" + "".join(f"<li>{_esc(x)}</li>" for x in vlines) + "</ul>" if vlines else "")
+             if voice_words else missing("How the brand talks: three or four traits, or a voice guide.", "Q-voice-01 and the H-voice asset"))
+
+    # ---- downloads
+    dl = [rel for rel in out]
+    downloads = ("<ul>" + "".join(f'<li><a href="{_esc(rel)}" download>{_esc(rel[7:])}</a></li>' for rel in dl) + "</ul>") if dl else \
+        '<p class="bp-dim">Nothing to download yet: logo and icon files appear here once the owner adds them.</p>'
+
+    # open faces load from Google Fonts, one link per family so a missing weight drops only that family; any other face shows
+    # in the page only when it is installed, and a note says so instead of a silent fallback (font files are never shipped)
+    links = "".join(f'<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={fq}:wght@{wq}&amp;display=swap">'
+                    for fq, wq in ((f.replace(" ", "+"), ";".join(str(w) for w in ws)) for f, ws in loaded))
+    named = [str(((base.get(f"font.family.{r_}") or {}).get("resolved") or [None])[0] if isinstance((base.get(f"font.family.{r_}") or {}).get("resolved"), list)
+                 else "") for r_ in ("display", "text", "mono")]
+    local = sorted({n for n in named if n and not _generic_face(n) and n.lower() not in OPEN_FONTS and n.lower() not in GENERIC_FONTS})
+    font_note = ('<p id="bp-font" class="bp-dim" hidden>' + _esc(", ".join(local)) + " is not installed on this computer, so this page "
+                 "shows a fallback font in its place.</p>") if local else ""
+    check = ("var n=document.getElementById('bp-font');function w(f){var c=document.createElement('canvas').getContext('2d');"
+             "c.font='40px '+f;return c.measureText('mmmmmmmmmmlli WQ@#').width}var go=function(){if(n&&" + "||".join(
+                 f"w('\"{_esc(x).replace(chr(39), '')}\", monospace')===w('monospace')" for x in local) + ")n.hidden=false};"
+             "(document.fonts&&document.fonts.ready?document.fonts.ready.then(go):go());") if local else ""
+    sections = [("about", "About", "".join(about)), ("logo", "Logo", logo), ("color", "Colour", color), ("type", "Type", font_note + typ_html),
+                ("icons", "Icons", icons), ("voice", "Voice", voice), ("downloads", "Downloads", downloads)]
+    nav = "".join(f'<a href="#{sid}">{title}</a>' for sid, title, _b in sections)
+    toggle = "".join(f'<button class="bp-th" type="button" data-set="{th}">{_esc(th.title())}</button>' for th in themes)
+    dark = next((th for th in themes if "dark" in th), None)
+    light = next((th for th in themes if "light" in th), themes[0])
+    ink = lambda th, p, fb: hexv(by_theme.get(th) or base, p) or fb
+    page_css = f"""
+*,*::before,*::after{{box-sizing:border-box}}
+body{{margin:0;background:{V('color.surface.base')};color:{V('color.text.primary')};{t('text.body.md')}}}
+.bp-wrap{{max-width:1080px;margin:0 auto;padding:0 20px 96px}}
+.bp-bar{{position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center;padding:10px 0;background:{V('color.surface.base')};border-bottom:1px solid {V('color.border.subtle')}}}
+.bp-bar a{{color:{V('color.text.secondary')};text-decoration:none;display:inline-flex;align-items:center;min-height:24px}} .bp-bar a:hover{{color:{V('color.text.primary')}}}
+.bp-bar span{{flex:1}} .bp-th{{font:inherit;min-height:24px;background:none;border:1px solid {V('color.border.default')};color:{V('color.text.primary')};border-radius:{V('radius.control')};padding:2px 10px;cursor:pointer}}
+a:focus-visible,button:focus-visible{{outline:2px solid {V('color.border.focus')};outline-offset:2px}}
+.bp-head{{padding:48px 0 8px}} .bp-head h1{{margin:0;{t('text.display.sm') or t('text.headline.lg')}}}
+.bp-head p{{margin:10px 0 0;color:{V('color.text.secondary')}}}
+.bp-sec{{margin:48px 0 0;padding:24px 0 0;border-top:1px solid {V('color.border.subtle')}}} .bp-sec h2{{margin:0 0 16px;{t('text.headline.sm') or t('text.title.lg')}}}
+h3{{margin:24px 0 10px;{t('text.title.md') or t('text.title.sm')}}}
+.bp-lede{{max-width:62ch;{t('text.body.lg') or t('text.body.md')}}} .bp-dim{{color:{V('color.text.secondary')}}} p,li{{max-width:70ch}}
+.bp-dl dt{{color:{V('color.text.secondary')};{t('text.label.md') or t('text.body.sm')}}} .bp-dl dd{{margin:2px 0 12px}}
+.bp-tag{{display:inline-block;{t('text.label.sm') or t('text.body.sm')}padding:2px 8px;border-radius:999px;border:1px solid transparent;white-space:nowrap}}
+.bp-chosen{{background:{V('color.bg.accent.subtle')};color:{V('color.text.accent')}}} .bp-default{{color:{V('color.text.secondary')};border-color:{V('color.border.default')}}}
+.bp-missing{{color:{V('color.text.secondary')};border:1px dashed {V('color.border.default')}}}
+div.bp-missing{{display:block;border-radius:{V('radius.container')};padding:14px 16px;margin:8px 0}} div.bp-missing p{{margin:8px 0 0}}
+.bp-how{{{t('text.body.sm')}font-family:var({css_var(prefix, 'font.family.mono')})}}
+code{{font-family:var({css_var(prefix, 'font.family.mono')});font-size:.92em;overflow-wrap:anywhere}}
+.bp-table{{width:100%;border-collapse:collapse;margin:8px 0}} .bp-table th,.bp-table td{{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid {V('color.border.subtle')}}}
+.bp-table th{{color:{V('color.text.secondary')};font-weight:inherit;width:9em}}
+.bp-logos,.bp-dos{{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:16px}} figure{{margin:0}}
+.bp-grounds{{display:grid;grid-template-columns:1fr 1fr;border-radius:{V('radius.container')};overflow:hidden;border:1px solid {V('color.border.subtle')}}}
+.bp-light,.bp-dark{{display:flex;align-items:center;justify-content:center;min-height:120px;padding:20px}} .bp-light{{background:{ink(light, 'color.surface.base', '#ffffff')}}}
+.bp-dark{{background:{ink(dark, 'color.surface.base', '#111111') if dark else '#111111'}}} .bp-grounds img{{max-width:100%;max-height:64px}}
+figcaption{{margin:8px 0 0;{t('text.body.sm')}}} figcaption a,.bp-sec a{{color:{V('color.text.link')}}} figcaption .bp-dim{{display:block}}
+figcaption a,.bp-sec li a{{display:inline-flex;align-items:center;min-height:24px}}
+.bp-clear{{display:inline-block;padding:24px;background:{ink(light, 'color.surface.base', '#ffffff')};border:1px solid {V('color.border.subtle')};border-radius:{V('radius.container')}}}
+.bp-zone{{outline:1px dashed {V('color.border.strong') if has('color.border.strong') else V('color.border.default')}}} .bp-zone img{{display:block}}
+.bp-do .bp-light{{min-height:96px;border:1px solid {V('color.border.subtle')};border-radius:{V('radius.container')}}}
+.bp-crowd{{display:inline-flex;align-items:center;gap:0}} .bp-crowd b{{font-weight:inherit;color:{ink(light, 'color.text.primary', '#222222')};{t('text.body.sm')}}}
+.bp-no figcaption b{{color:{V('color.text.danger')}}} .bp-yes figcaption b{{color:{V('color.text.success')}}}
+.bp-swatches{{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:20px}}
+.bp-chips{{display:flex;border-radius:{V('radius.container')};overflow:hidden;border:1px solid {V('color.border.subtle')}}} .bp-chips i{{flex:1;height:72px}}
+.bp-sw b{{display:block;margin:10px 0 2px}} .bp-sw p{{margin:4px 0}} .bp-val{{{t('text.body.sm')}font-family:var({css_var(prefix, 'font.family.mono')})}}
+.bp-val span{{display:block;color:{V('color.text.secondary')}}}
+.bp-face{{margin:0 0 24px}} .bp-spec{{margin:8px 0;overflow-wrap:anywhere}} .bp-glyphs{{{t('text.title.lg') or t('text.body.lg')}margin:4px 0 8px;overflow-wrap:anywhere}}
+.bp-grid-wrap{{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:24px;align-items:start}}
+.bp-grid{{width:100%;max-width:240px;height:auto;background:{V('color.surface.raised') if has('color.surface.raised') else V('color.surface.base')};border:1px solid {V('color.border.subtle')};border-radius:{V('radius.container')}}}
+.bp-grid .g-pad{{fill:none}} .bp-grid .g-live{{fill:{V('color.bg.accent.subtle')}}} .bp-grid .g-lines line{{stroke:{V('color.border.subtle')};stroke-width:.04}}
+.bp-grid .g-key{{fill:none;stroke:{V('color.text.accent')};stroke-width:.08;stroke-dasharray:.4 .3}} .bp-grid .g-glyph{{fill:none;stroke:{V('color.text.primary')}}}
+.bp-icons{{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:16px}} .bp-icons figure{{text-align:center}}
+.bp-icons .bp-light{{min-height:72px;border:1px solid {V('color.border.subtle')};border-radius:{V('radius.container')}}} .bp-icons img{{display:block;width:32px;height:32px}}
+@media (max-width:640px){{.bp-grid-wrap{{grid-template-columns:1fr}}}}
+"""
+    script = ("<script>(function(){var r=document.documentElement;document.querySelectorAll('.bp-th').forEach(function(b){"
+              "b.addEventListener('click',function(){r.setAttribute('data-theme',b.dataset.set)})});" + check + "})();</script>")
+    lead = (f"{missing_n[0]} thing{'s' if missing_n[0] != 1 else ''} still need the owner." if missing_n[0] else "Everything here comes from the system and the owner.")
+    out["index.html"] = (
+        f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+        f'<title>{_esc(name)}: brand and press</title>{links}'
+        f'<!-- Written by OpenDesigner {OPENDESIGNER_VERSION} (engine.py export --format brand) from the system. Edit the system, not this file. -->'
+        f'<style>{css}\n{page_css}</style></head><body><div class="bp-wrap">'
+        f'<nav class="bp-bar" aria-label="Sections"><b>{_esc(name)}</b>{nav}<span></span>{toggle}</nav>'
+        f'<header class="bp-head"><h1>{_esc(name)}</h1><p>Brand and press. {_esc(lead)} Facts appear only once the owner gives them.</p></header>'
+        + "".join(f'<section class="bp-sec" id="{sid}" aria-labelledby="{sid}-h"><h2 id="{sid}-h">{title}</h2>{body}</section>'
+                  for sid, title, body in sections)
+        + f'</div>{script}</body></html>\n')
+    return out
+
+
+EXPORT_FORMATS = ("css", "tailwind", "figma", "paper", "swift", "compose", "dtcg", "artifact", "brand")
+NEUTRAL_FORMATS = ("figma", "paper", "dtcg", "artifact", "brand")  # for design tools, other token tools and people: every platform
 CODE_FORMATS = {"css": ("css", "tailwind"), "swift": ("swift",), "compose": ("compose",)}  # project tag -> the code exports it needs
 PLATFORM_OF = {"css": "web", "tailwind": "web", "swift": "ios", "compose": "android"}  # the platform each code export is for
 FORMAT_FILES = {"css": ("css", "tokens.css"), "tailwind": ("tailwind", "theme.css"), "swift": ("swift", "DesignTokens.swift"),
@@ -9668,8 +10093,22 @@ def cmd_export(d, fmt, files=None, meta=None, quiet=False):
             for rel, text in out.items():
                 write_text(os.path.join(d, "build", "artifact", rel), text)
             p = os.path.join(d, "build", "artifact", "project", "design-system.json")
+        elif f == "brand":  # issue 49: the brand and press page, with the person's logo and icon files beside it
+            out = export_brand(d, files, meta, state, prefix)
+            bdir = os.path.join(d, "build", "brand")
+            if os.path.isdir(os.path.join(bdir, "assets")):
+                shutil.rmtree(os.path.join(bdir, "assets"))  # a file the person removed leaves the page too
+            for rel, body in out.items():
+                fp = os.path.join(bdir, *rel.split("/"))
+                if isinstance(body, bytes):
+                    os.makedirs(os.path.dirname(fp), exist_ok=True)
+                    with open(fp, "wb") as fh:
+                        fh.write(body)
+                else:
+                    write_text(fp, body)
+            p = os.path.join(bdir, "index.html")
         else:
-            raise SystemExit(f"unknown format {f}; use css, tailwind, figma, paper, swift, compose, dtcg, artifact or all")
+            raise SystemExit(f"unknown format {f}; use css, tailwind, figma, paper, swift, compose, dtcg, artifact, brand or all")
         written.append(p)
     if not quiet:
         for p in written:
@@ -12171,7 +12610,7 @@ def main(argv=None):
     p = sub.add_parser("validate", parents=[common])
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("export", parents=[common])
-    p.add_argument("--format", required=True, choices=["css", "tailwind", "figma", "paper", "swift", "compose", "dtcg", "artifact", "all"])
+    p.add_argument("--format", required=True, choices=list(EXPORT_FORMATS) + ["all"])
     p = sub.add_parser("design-md", parents=[common], help="render DESIGN.md and PRODUCT.md")
     p.add_argument("--out", default=None, help="folder for DESIGN.md and PRODUCT.md (default: project root, or the state folder)")
     p = sub.add_parser("preview", parents=[common])

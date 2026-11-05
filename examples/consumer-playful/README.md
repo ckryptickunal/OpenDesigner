@@ -16,7 +16,7 @@ An expressive, rounded, colorful system for a fictional habit app shared between
 | Color | expressive scheme, accent solid `#ff5a36`, text minimum 4.5:1, themes light, dark |
 | Validation | 0 errors, 0 warnings, 7 notes; 192 contrast pairs checked |
 
-**Files:** `state.json` (the input), `decisions.md` (why each choice), `tokens/` (DTCG 2025.10 + resolver, canonical), `build/` (artifact, compose, css, dtcg, figma, paper, swift, tailwind), `DESIGN.md`, `PRODUCT.md`, `overview.html` (the whole system on one page), `preview.html` and `preview/` (the visual templates, filled in).
+**Files:** `state.json` (the input), `decisions.md` (why each choice), `tokens/` (DTCG 2025.10 + resolver, canonical), `build/` (artifact, brand, compose, css, dtcg, figma, paper, swift, tailwind), `DESIGN.md`, `PRODUCT.md`, `overview.html` (the whole system on one page), `preview.html` and `preview/` (the visual templates, filled in).
 
 **Rebuild:** `python3 tools/build_examples.py consumer-playful` runs `engine.py build` on `state.json` and rewrites this README. `python3 tools/build_examples.py --check` fails when a committed file differs from what the engine makes now.
 

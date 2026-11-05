@@ -61,7 +61,7 @@ The interview order is the questionnaire's: 27 sequential screens (Stages 01-27)
 | Phase | Questionnaire stages | Goal | Ends with | Questions Q / S / E (cumulative) | High-weight |
 |---|---|---|---|---|---|
 | P0 Orient | none yet; Q-ref-01 offered | read what exists, start at zoom 0 (the sketch), show the block map | found / assumed / missing summary | bundled opening question | 0 |
-| P1 Context and block map | 01 Scope and team, 02 Audience, 03 Brand personality and principles, 04 Platforms and devices, 05 Where the system lives | settle the highest-reach context; prune the block map | **Gate 1: block map and scope** | 4 / 24 / 31 | 11 |
+| P1 Context and block map | 01 Scope and team, 02 Audience, 03 Brand personality and principles, 04 Platforms and devices, 05 Where the system lives | settle the highest-reach context; prune the block map | **Gate 1: block map and scope** | 4 / 31 / 38 | 11 |
 | P2 Direction | 06 Visual direction, 07 Themes and modes, 08 Color system | pick one direction from three concepts; build the color system | **Gate 2: direction** | 2 / 16 / 28 | 10 |
 | P3 Foundations | 09 Color details, 10 Typeface, 11 Type scale, 12 Space and density, 13 Layout and shell, 14 Shape, 15 Depth, 16 Motion, haptics and sound | derive foundations from dials and raw inputs; tune where it matters | validator clean | 4 / 22 / 61 | 8 |
 | P4 Assets, imagery, voice | 17 Icons and logo use, 18 Imagery and charts, 19 Content and voice | give every hook a status; draft voice | **Gate 3: assets** | 0 / 10 / 22 | 1 |
@@ -71,7 +71,7 @@ The interview order is the questionnaire's: 27 sequential screens (Stages 01-27)
 | P8 Export and hand-off | none | write every output; mirror to design tools | validator exit 0 | confirmations only | |
 | P9 Extend (later sessions) | any | change the system without breaking it | superseding decision records | per change | |
 
-Totals: 10 / 94 / 193. The three gates follow DC-L17-12 and QUESTIONNAIRE protocol step 11. Gate 3 sits after Stage 19 rather than right after the Stage 03 checklist, because each asset brief must carry the system's tokens and direction (L17 H1 rule 6), which exist only after Stages 06-16 [inferred; logged]. Quick mode keeps only Gate 2 (DC-L17-12).
+Totals: 10 / 99 / 198. The three gates follow DC-L17-12 and QUESTIONNAIRE protocol step 11. Gate 3 sits after Stage 19 rather than right after the Stage 03 checklist, because each asset brief must carry the system's tokens and direction (L17 H1 rule 6), which exist only after Stages 06-16 [inferred; logged]. Quick mode keeps only Gate 2 (DC-L17-12).
 
 ### 3.2 Each phase in detail
 
@@ -467,7 +467,7 @@ The canonical source of a system is `opendesigner/state.json` plus the DTCG toke
 ```
 <project>/
 ├── DESIGN.md                     readable view of the system for people and agents (7.2)
-├── PRODUCT.md                    product truth: audience, purpose, surfaces, principles (7.3)
+├── PRODUCT.md                    product truth: audience, purpose, surfaces, principles, site brief (7.3)
 ├── AGENTS.md                     gets a short OpenDesigner block, after asking (7.12)
 └── opendesigner/
     ├── state.json                answers, dials, raw inputs, overrides, statuses (7.10)
@@ -477,7 +477,7 @@ The canonical source of a system is `opendesigner/state.json` plus the DTCG toke
     ├── assets.json, briefs/      asset ledger and briefs for missing assets (4.2)
     ├── references/<ref-id>.json  reference measurements (5.1)
     ├── tokens/                   DTCG 2025.10 files and one resolver (7.4)
-    ├── build/                    css/, tailwind/, swift/, compose/, figma/, paper/ (7.5-7.7)
+    ├── build/                    css/, tailwind/, swift/, compose/, figma/, paper/ (7.5-7.7), brand/ (7.13)
     ├── components/<name>.md      component doc pages (7.8)
     ├── lint/                     exported lint rules (7.12)
     └── preview.html              specimen of every token and the v1 components
@@ -518,7 +518,7 @@ DESIGN.md is the readable view that later sessions and other models read first. 
 
 ### 7.3 PRODUCT.md
 
-Product truth kept apart from the visual system, because it has different readers and changes at a different rate (L17 A3 [S-L17-020]). Generated from `state.json` with the same keep-block and hash rules as DESIGN.md. Headings, in order: `## Product`, `## Purpose and goals` (mission, vision, purpose and goals, from the person's words and README, each marked assumed until confirmed; "Not enough information" where nobody said), `## Phase` (Q-scope-07: idea, building, near launch or live, read from the repo first, and what comes first in it), `## Audience`, `## Users` (the user research), `## Market` (the analogous product, competitors, their shared pattern, the gap and the industry's conventions; "Not enough information" until researched or said), `## Positioning` (the four lines the person confirmed, and the direction they picked), `## Surfaces` (each with its Persuade, Operate, Read or Experience mode), `## Memorable Thing`, `## Principles` (ranked, with the tie-break rule), `## Constraints` (accessibility target, platforms, OS floors, legal or brand limits), `## Scope` (in and explicitly out, DC-L11-02), `## Team and Governance`. An existing PRODUCT.md is read as prior answers in P0 and rewritten into this shape only with consent [inferred].
+Product truth kept apart from the visual system, because it has different readers and changes at a different rate (L17 A3 [S-L17-020]). Generated from `state.json` with the same keep-block and hash rules as DESIGN.md. Headings, in order: `## Product`, `## Purpose and goals` (mission, vision, purpose and goals, from the person's words and README, each marked assumed until confirmed; "Not enough information" where nobody said), `## Phase` (Q-scope-07: idea, building, near launch or live, read from the repo first, and what comes first in it), `## Audience`, `## Users` (the user research), `## Market` (the analogous product, competitors, their shared pattern, the gap and the industry's conventions; "Not enough information" until researched or said), `## Positioning` (the four lines the person confirmed, and the direction they picked), `## Site brief` (only for a site that persuades: the goal, the roles to convince, the proof, how it is found and its page families, Q-site-01 to 05; "Not enough information" with the question until answered), `## Surfaces` (each with its Persuade, Operate, Read or Experience mode), `## Memorable Thing`, `## Principles` (ranked, with the tie-break rule), `## Constraints` (accessibility target, platforms, OS floors, legal or brand limits), `## Scope` (in and explicitly out, DC-L11-02), `## Team and Governance`. An existing PRODUCT.md is read as prior answers in P0 and rewritten into this shape only with consent [inferred].
 
 ### 7.4 DTCG 2025.10 tokens and the Resolver
 
@@ -584,6 +584,11 @@ REPO-PLAN defines the core: answers keyed by question id, dial values, raw input
 - `assets.json` and `briefs/<hook>.md`: the ledger (4.2) and one brief per missing asset, written so a designer can act without reading the system (L17 I2 Stage 3).
 - `lint/`: rules generated from the tokens for the person's CI: a stylelint strict-value config, the behavior rules (target size, labels, one primary action) and the anti-generic rules, plus a DESIGN.md lint step when Google's CLI is installed (DC-L18-11, DC-L11-24; L13 E3).
 - **Agent pointer:** after asking, a short block appended to the project's AGENTS.md (or CLAUDE.md when the project has no AGENTS.md import): "Design system: read DESIGN.md, PRODUCT.md and opendesigner/tokens before visual work; use tokens, never raw values; ask before changing a locked decision; run `engine.py validate` after changes." CLAUDE.md is context, not enforced configuration, which is why the validator and lint exist [S-L18-329] [S-L17-004].
+
+
+### 7.13 Brand and press page
+
+`engine.py export --format brand` writes `opendesigner/build/brand/index.html` and an `assets/` folder; `build` writes it for every platform (issue 49). The page is made from the system's tokens, in every theme, and passes the same floors. It shows the person's logo files with download links, the clear space and smallest size stored on the H-logo hook (`clearSpace`, `minSize`; "Default" until the person sets them; the 16 px symbol floor follows DC-L05-13, the clear space default is [inferred]), and do and don't examples drawn from those rules with the person's own file. It shows each colour role with hex, RGB and OKLCH and its job, each type family with its weights, jobs and a licence note, and the icon construction grid and rules from the tokens (sizes, line widths, the 20-of-24 live area, corners). It also shows the person's icon files, and the open set they chose (`hooks.H-icons.library`) with its licence, not bundled. The short description, facts, leadership, figures and press contact are owner input (`context.press.*`). Each reads "Not enough information" with the command that fills it until the person gives it, and an assumed value is not shown. Figures can come from the site brief's proof (Q-site-03). No logo, icon, fact or figure is invented, and font files are never shipped: an open-licence face is linked from Google Fonts, and any other face shows where it is installed, with a note when it is not.
 
 ---
 

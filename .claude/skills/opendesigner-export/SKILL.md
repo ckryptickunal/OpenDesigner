@@ -19,9 +19,9 @@ The engine is `scripts/engine.py` in this skill when it was installed from a rel
 ## 1. Code exports (always available)
 ```
 python3 <engine> build                      generate, validate, then the exports for the chosen platforms, DESIGN.md and the preview
-python3 <engine> export --format tailwind   one format only: css tailwind dtcg figma paper swift compose artifact, or all
+python3 <engine> export --format tailwind   one format only: css tailwind dtcg figma paper swift compose artifact brand, or all
 ```
-`build` writes the code exports for the platforms in Q-plat-01: web and desktop get `css` and `tailwind`, iOS gets `swift`, Android gets `compose`. `figma`, `paper`, `dtcg` and `artifact` are written for every platform. It names what it left out; `export --format <name>` or `--format all` writes it anyway, and a code export already in `build/` keeps being refreshed. Until the platforms are named, and for watch, TV, car or headset, it writes all of them.
+`build` writes the code exports for the platforms in Q-plat-01: web and desktop get `css` and `tailwind`, iOS gets `swift`, Android gets `compose`. `figma`, `paper`, `dtcg`, `artifact` and `brand` are written for every platform. It names what it left out; `export --format <name>` or `--format all` writes it anyway, and a code export already in `build/` keeps being refreshed. Until the platforms are named, and for watch, TV, car or headset, it writes all of them.
 
 | Format | Output in `opendesigner/` | Use it |
 |---|---|---|
@@ -34,6 +34,13 @@ python3 <engine> export --format tailwind   one format only: css tailwind dtcg f
 | `figma` | `build/figma/variables.json` and `build/figma/import/<Collection>.<Mode>.tokens.json` | Import in Figma (below) when there is no MCP |
 | `paper` | `build/paper/tokens.json`, `build/paper/tokens.light.css`, `tokens.dark.css` | Paper tokens (below) |
 | `artifact` | `build/artifact/project/` (the system as a Claude Design System artifact's files: index, tokens, README) | Publish the system as a browsable design-system page in Claude |
+| `brand` | `build/brand/index.html` and `build/brand/assets/` (the person's logo and icon files) | A brand and press page to host as it is (below) |
+
+**The brand and press page** (`--format brand`, issue 49) is made from the system's tokens, and passes the same floors.
+- It shows the logo files with download links, the clear space and smallest size (`hooks.H-logo.clearSpace`, `hooks.H-logo.minSize`; each says "Default" until the person sets it), and do and don't examples drawn from those rules with the person's own file.
+- It shows every colour role with hex, RGB and OKLCH, each family with its weights, jobs and a licence note, and the icon grid and rules from the tokens. It also shows the person's icon files, and the open set they chose (`hooks.H-icons.library`) with its licence, not bundled.
+- The facts are the owner's: a short description, facts, leadership, figures and the press contact (`engine.py set context.press.<field> ... --why "their words"`). Each reads "Not enough information" until they give it. Assumed values are not shown, and figures can come from the site brief's proof (Q-site-03).
+- Logos and icons are only the person's files, and font files are never shipped. An open-licence face loads from Google Fonts when the page opens, so its specimen is the real face; any other face shows only where it is installed, with a note when it is not. Run opendesigner-preflight on the page before anyone publishes it.
 
 **Tailwind v4 wiring.** In the main CSS file, for example `src/index.css`:
 ```css
