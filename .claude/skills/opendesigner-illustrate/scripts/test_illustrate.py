@@ -4,7 +4,7 @@ APIs returned on 2026-09-28, and every SVG is a small fixture written here (no t
 
     python3 skills/opendesigner-illustrate/scripts/test_illustrate.py
 """
-import contextlib, io, json, os, sys, tempfile, unittest
+import contextlib, io, json, os, re, sys, tempfile, unittest
 from pathlib import Path
 from unittest import mock
 
@@ -703,6 +703,145 @@ class Photos(unittest.TestCase):
             self.assertIn("fetched", out)
             e = json.loads((d / "ledger.json").read_text())["items"][0]
             self.assertEqual((e["file"].endswith(".jpg"), e["brand_check"], e["verdict"]), (True, "pending", "ok"))
+
+
+# A few invented owner icons: a 40-unit grid, a filled circle badge, a 1.5-unit line in a 20-unit glyph box (issue 50).
+BADGE = '<circle cx="20" cy="20" r="20" fill="#E8EEFC"/>'
+OWN_PLUS = ('<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">' + BADGE +
+            '<path d="M12 20h16M20 12v16" fill="none" stroke="#1F3A8A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+OWN_CLOCK = ('<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">' + BADGE +
+             '<g fill="none" stroke="#1F3A8A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
+             '<circle cx="20" cy="20" r="8"/><path d="M20 16v4l3 2"/></g></svg>')
+# The same line drawn as a filled ring (strokes outlined on export), with the arc flags run together as SVGO writes them.
+OWN_RING = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path fill="#1F3A8A" fill-rule="evenodd" '
+            'd="M20 11.25a8.75 8.75 0 110 17.5a8.75 8.75 0 110-17.5zM20 12.75a7.25 7.25 0 100 14.5a7.25 7.25 0 100-14.5z"/></svg>')
+ION_INFO = {"ion": {"name": "IonIcons", "total": 1357, "author": {"name": "Ben Sperry", "url": "https://github.com/ionic-team/ionicons"},
+                    "license": {"title": "MIT", "spdx": "MIT", "url": "https://github.com/ionic-team/ionicons/blob/main/LICENSE"}}}
+ION_ICONS = {"prefix": "ion", "width": 512, "height": 512, "icons": {
+    "boat-outline": {"body": '<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" '
+                             'd="M48 336h416M128 176h256M256 48v288"/>'},
+    "boat": {"body": '<path fill="currentColor" d="M48 336h416v32H48z"/>'}}}
+
+
+def fulfil(out, payloads):
+    """Stand in for the agent: save each requested download (from the printed curl lines) with a canned body."""
+    for url, dest in re.findall(r'"(https://[^"]+)" -o "([^"]+)"', out):
+        body = next(v for k, v in payloads.items() if k in url)
+        Path(dest).parent.mkdir(parents=True, exist_ok=True)
+        Path(dest).write_text(json.dumps(body))
+
+
+class Icons(unittest.TestCase):
+    """A few of the owner's icons, extended with open-library glyphs drawn in the same construction (GitHub issue 50)."""
+
+    def owner(self, tmp, *svgs):
+        files = []
+        for i, svg in enumerate(svgs):
+            files.append(Path(tmp, f"own-{i}.svg"))
+            files[-1].write_text(svg)
+        return [str(f) for f in files]
+
+    def test_paths_and_filled_outlines(self):
+        xs = [p[0] for sp in il.path_subpaths("M0 0a5 5 0 110 10") for p in sp]  # flags run together
+        self.assertAlmostEqual(max(xs), 5, delta=0.05)
+        self.assertEqual(len(il.path_subpaths("M0 0h10v10zM20 20l5 5")), 2)
+        con = il.measure_root(il.sanitize(OWN_RING)[0])
+        self.assertEqual((con["style"], con["stroked"]), ("outline", False))
+        self.assertAlmostEqual(con["line"], 1.5, delta=0.05)
+        self.assertTrue(con["line_how"].startswith("estimated"))
+        self.assertAlmostEqual(il.parse_transform("translate(2 3) scale(2)")[0], 2)
+        self.assertEqual(il.xform(il.parse_transform("rotate(90)"), (1, 0))[1], 1)
+
+    def test_measure_reads_the_construction(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = str(Path(tmp, "opendesigner", "icons"))
+            out = run(["--dir", d, "icons", "measure", *self.owner(tmp, OWN_PLUS, OWN_CLOCK)])
+            con = json.loads(Path(d, "construction.json").read_text())
+            self.assertEqual((con["style"], con["line"], con["caps"], con["joins"], con["colour"]), ("outline", 1.5, "round", "round", "#1F3A8A"))
+            self.assertEqual((con["centre"], con["sizes"], con["container"][0]["fill"]), ([20, 20], [40], "#E8EEFC"))
+            self.assertEqual((con["glyph_box"], con["glyph_box_how"]), (19.2, "estimated"))  # 16 units of drawing / (20/24)
+            self.assertIn("circle badge", out)
+            self.assertIn("--glyph-box", out)                                                 # an estimate says how to correct it
+            out = run(["--dir", d, "icons", "measure", *self.owner(tmp, OWN_PLUS, OWN_CLOCK), "--glyph-box", "20"])
+            self.assertIn("raw.iconStroke 1.8 --set-by asset", out)                           # 1.5 x 24 / 20
+            nested = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">' + BADGE + '<svg x="10" y="10" width="20" height="20" '
+                      'viewBox="0 0 24 24"><path d="M4 12h16" stroke="#1F3A8A" stroke-width="1.8" fill="none"/></svg></svg>')
+            run(["--dir", d, "icons", "measure", *self.owner(tmp, nested)])
+            con = json.loads(Path(d, "construction.json").read_text())
+            self.assertEqual((con["glyph_box"], con["glyph_box_how"], con["line"]), (20, "the box drawn in your files", 1.5))
+
+    def test_sets_rank_by_construction(self):
+        data = json.loads(il.SOURCES.read_text())
+        ok = next(s for s in data["sources"] if s["id"] == "iconify")["licences_ok"]
+        sets = data["icon_sets"]
+        self.assertGreaterEqual(len(sets), 10)
+        for s in sets:
+            self.assertTrue({"prefix", "name", "grid", "weight", "stroked", "live", "licence", "licence_url", "total"} <= set(s), s.get("prefix"))
+            self.assertIn(s["licence"], ok)
+            self.assertTrue(s["licence_url"].startswith("https://"))
+        con = {"style": "outline", "weight": 0.0625, "caps": "round", "joins": "round"}
+        top = il.rank_icon_sets(con, sets)[0]
+        self.assertTrue(top["stroked"])
+        self.assertAlmostEqual(top["weight"], 0.0625, delta=0.001)
+        solid = il.rank_icon_sets({"style": "solid"}, sets)
+        self.assertIn("solid", solid[0])
+        self.assertIn("no solid glyphs", " ".join(solid[-1]["why"]))
+
+    def test_fetch_draws_the_glyph_in_the_owner_construction(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = str(Path(tmp, "opendesigner", "icons"))
+            self.assertRaises(SystemExit, run, ["--dir", d, "icons", "fetch", "boat", "--set", "ion"])  # measure first
+            run(["--dir", d, "icons", "measure", *self.owner(tmp, OWN_PLUS, OWN_CLOCK), "--glyph-box", "20"])
+            self.assertRaises(SystemExit, run, ["--dir", d, "icons", "fetch", "../boat", "--set", "ion"])
+            out = run(["--dir", d, "icons", "fetch", "boat", "--set", "ion", "--offline"])
+            self.assertIn("https://api.iconify.design/collections?prefixes=ion", out)
+            self.assertIn("ion.json?icons=boat-outline\"", out)                                 # the outline glyph, never ion's solid "boat"
+            fulfil(out, {"collections": ION_INFO, "ion.json": ION_ICONS})
+            out = run(["--dir", d, "icons", "fetch", "boat", "--set", "ion"])
+            self.assertIn("drew boat.svg <- ion:boat-outline", out)
+            svg = Path(d, "boat.svg").read_text()
+            self.assertIn('stroke-width="38.4"', svg)                                          # 1.5 / (20/512), as in the issue
+            self.assertIn("scale(0.0390625)", svg)
+            self.assertIn('fill="#E8EEFC"', svg)                                               # the owner's badge
+            self.assertNotIn("currentColor", svg)
+            self.assertIn('stroke="#1F3A8A"', svg)
+            self.assertTrue(Path(d, "src", "boat.svg").exists())                               # the untouched original
+            e = json.loads(Path(d, "ledger.json").read_text())["items"][0]
+            self.assertEqual((e["licence_spdx"], e["verdict"], e["status"]), ("MIT", "ok", "candidate"))
+            self.assertEqual(e["attribution"], "boat-outline from IonIcons by Ben Sperry, MIT")
+            Path(d, "downloads", "ion-info.json").write_text(json.dumps({"ion": {**ION_INFO["ion"], "license": {"title": "GPL", "spdx": "GPL-3.0"}}}))
+            with self.assertRaises(SystemExit) as cm:
+                run(["--dir", d, "icons", "fetch", "boat", "--set", "ion"])
+            self.assertIn("not on the allowed list", str(cm.exception))
+
+    def test_sheet_and_keep(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = str(Path(tmp, "opendesigner", "icons"))
+            run(["--dir", d, "icons", "measure", *self.owner(tmp, OWN_PLUS, OWN_CLOCK), "--glyph-box", "20", "--sizes", "20"])
+            fulfil(run(["--dir", d, "icons", "fetch", "boat", "--set", "ion", "--offline"]), {"collections": ION_INFO, "ion.json": ION_ICONS})
+            run(["--dir", d, "icons", "fetch", "boat", "--set", "ion"])
+            self.assertIn('width="40"', Path(d, "boat.svg").read_text())                      # the originals' own size, not the 20 px row
+            page = Path(run(["--dir", d, "icons", "sheet"]).strip()).read_text()
+            for words in ("Yours", "New, drawn the same way", "Together", "20 px", "40 px", "data:image/svg+xml;base64,", "IonIcons · MIT"):
+                self.assertIn(words, page)
+            self.assertNotIn("http://", page.replace("http://www.w3.org", ""))                  # nothing remote on the sheet
+            app = Path(tmp, "app", "icons")
+            out = run(["--dir", d, "icons", "keep", "boat", "--to", str(app)])
+            self.assertTrue((app / "boat.svg").exists())
+            self.assertIn("hooks.H-icons.status", out)
+            self.assertIn("2 of the owner's icons plus 1 glyphs from IonIcons (MIT)", out)
+            credits = Path(d, "ATTRIBUTION.md").read_text()
+            self.assertIn("# Icon credits and licences", credits)
+            self.assertIn("| boat (unassigned) | [iconify]", credits)
+
+    def test_find(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = str(Path(tmp, "opendesigner", "icons"))
+            out = run(["--dir", d, "icons", "find", "boat", "--set", "ion", "--offline"])
+            self.assertIn("https://api.iconify.design/search?query=boat&prefixes=ion&limit=64", out)
+            fulfil(out, {"search": {"icons": ["ion:boat", "ion:boat-outline", "ion:boat-sharp", "lucide:sailboat"]}})
+            out = run(["--dir", d, "icons", "find", "boat", "--set", "ion"])
+            self.assertIn('ion, "boat": boat-outline', out)                                    # outline names only, this set only
 
 
 if __name__ == "__main__":
