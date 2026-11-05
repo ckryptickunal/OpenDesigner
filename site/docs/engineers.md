@@ -20,6 +20,8 @@ All paths are inside `opendesigner/` in your project.
 - `build/compose/DesignTokens.kt`: Jetpack Compose values.
 - `build/dtcg/`: one resolver file for tools that take a single entry point.
 
+`build` writes the code files for the platforms you chose: CSS and Tailwind for the web, Swift for iOS, Compose for Android. For another one, run `engine.py export --format swift` (or `compose`, `css`, `tailwind`, `all`).
+
 Never edit an export by hand. Change the decision and rebuild, and every export updates together.
 
 ## Wire it in

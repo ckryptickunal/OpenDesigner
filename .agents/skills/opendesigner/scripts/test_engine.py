@@ -2082,6 +2082,7 @@ class Standards(unittest.TestCase):
             self.assertEqual(set(sheet["$value"]), {"duration", "delay", "timingFunction"})
             ext = sheet["$extensions"]["opendesigner"]
             self.assertEqual((ext["spring"], ext["apple"]), ({"dampingRatio": 0.8, "stiffness": 438.6, "mass": 1}, {"duration": 0.3, "bounce": 0.2}))
+            quiet(e.cmd_export, d, "all")  # build writes only the web's code files; export --format all writes Swift and Compose too
             b = os.path.join(d, "build")
             with open(os.path.join(b, "css", "tokens.css"), encoding="utf-8") as f:
                 css = f.read()
@@ -4404,6 +4405,178 @@ class ProtocolRulesAndTokenUse(unittest.TestCase):
             with contextlib.redirect_stdout(out):
                 self.assertEqual(e.main(["research", "positioning", "show", "--dir", d]), 0)
             self.assertIn("No positioning yet", out.getvalue())
+
+
+def png_bytes(w, h, rows, ctype=6, depth=8, palette=None, trns=None, filt=0):
+    """A PNG from rows of samples (one int per channel, or palette index), packed at depth and encoded with one filter."""
+    import struct
+    import zlib
+    ch = {0: 1, 2: 3, 3: 1, 4: 2, 6: 4}[ctype]
+    bpp = max(1, ch * depth // 8)
+    prev, out = None, bytearray()
+    for row in rows:
+        if depth == 16:
+            line = bytearray(b for v in row for b in (v >> 8, v & 255))
+        elif depth == 8:
+            line = bytearray(row)
+        else:
+            per, line, acc, n = 8 // depth, bytearray(), 0, 0
+            for v in row:
+                acc, n = (acc << depth) | v, n + 1
+                if n == per:
+                    line.append(acc)
+                    acc, n = 0, 0
+            if n:
+                line.append(acc << (depth * (per - n)))
+        prev = prev or bytearray(len(line))
+        enc = bytearray(len(line))
+        for i, x in enumerate(line):
+            a, b, c = (line[i - bpp] if i >= bpp else 0), prev[i], (prev[i - bpp] if i >= bpp else 0)
+            pa, pb, pc = abs(b - c), abs(a - c), abs(a + b - 2 * c)
+            pred = (0, a, b, (a + b) // 2, a if pa <= pb and pa <= pc else b if pb <= pc else c)[filt]
+            enc[i] = (x - pred) & 255
+        out += bytes([filt]) + enc
+        prev = line
+    chunk = lambda t, b: struct.pack(">I", len(b)) + t + b + struct.pack(">I", zlib.crc32(t + b) & 0xffffffff)
+    body = chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, depth, ctype, 0, 0, 0))
+    if palette:
+        body += chunk(b"PLTE", bytes(c for rgb in palette for c in rgb))
+    if trns is not None:
+        body += chunk(b"tRNS", bytes(trns))
+    return b"\x89PNG\r\n\x1a\n" + body + chunk(b"IDAT", zlib.compress(bytes(out))) + chunk(b"IEND", b"")
+
+
+def logo_rows(w=100, h=50):
+    """A red mark (60%), a blue bar (10%), a near-black wordmark, a one-pixel pink edge and a see-through ground (RGBA)."""
+    def px(x, y):
+        if x < 60:
+            return (227, 6, 19, 255)
+        if x == 60:
+            return (241, 130, 137, 255)
+        if x < 70:
+            return (37, 99, 235, 255)
+        if x < 90 and y < 25:
+            return (29, 29, 27, 255)
+        return (255, 255, 255, 0)
+    return [[c for x in range(w) for c in px(x, y)] for y in range(h)]
+
+
+class LogoColors(unittest.TestCase):
+    """Issue 24: sketch --logo proposes brand-color candidates from a PNG or SVG, and records nothing until the person picks."""
+
+    def colors(self, p):
+        with open(p, "rb") as f:
+            return dict(e.png_colors(f.read()))
+
+    def write(self, t, name, data):
+        p = os.path.join(t, name)
+        with open(p, "wb" if isinstance(data, bytes) else "w") as f:
+            f.write(data)
+        return p
+
+    def test_png_candidates_leave_out_ground_ink_and_edges(self):
+        with tempfile.TemporaryDirectory() as t:
+            for filt in range(5):
+                cands, kind = e.logo_candidates(self.write(t, f"logo{filt}.png", png_bytes(100, 50, logo_rows(), filt=filt)))
+                self.assertEqual(kind, "area")
+                self.assertEqual([c["hex"] for c in cands], ["#e30613", "#2563eb"], filt)
+                self.assertAlmostEqual(cands[0]["share"], 60 / 70, places=2)
+                self.assertEqual({c["text"] for c in cands}, {"light"})
+
+    def test_png_kinds_palette_gray_and_16_bit(self):
+        with tempfile.TemporaryDirectory() as t:
+            pal = [(255, 255, 255), (15, 118, 110), (245, 158, 11), (0, 0, 0)]
+            rows = [[1 if x < 6 else 2 if x < 8 else 0 for x in range(10)] for _y in range(4)]
+            p = self.write(t, "pal.png", png_bytes(10, 4, rows, ctype=3, depth=2, palette=pal, trns=[0]))
+            self.assertEqual(self.colors(p), {(15, 118, 110): 24, (245, 158, 11): 8})
+            rows = [[v for x in range(8) for v in ((0x0f00, 0x7600, 0x6e00) if x < 5 else (0xffff, 0xffff, 0xffff))] for _y in range(2)]
+            p = self.write(t, "deep.png", png_bytes(8, 2, rows, ctype=2, depth=16, filt=4))
+            self.assertEqual(e.logo_candidates(p)[0][0]["hex"], "#0f766e")
+            p = self.write(t, "gray.png", png_bytes(8, 1, [[1, 0, 1, 1, 0, 0, 0, 0]], ctype=0, depth=1, trns=[0, 0]))
+            self.assertEqual(self.colors(p), {(255, 255, 255): 3})
+
+    def test_svg_fills_styles_and_stops(self):
+        svg = ('<svg xmlns="http://www.w3.org/2000/svg"><style>.a{fill:#0F766E}</style><!-- fill="#ff00ff" -->'
+               '<defs><linearGradient><stop stop-color="hsl(38, 92%, 50%)"/></linearGradient></defs>'
+               '<path class="a" d="M0 0"/><path fill="#0f766e"/><path fill="rgb(15 118 110)"/><path fill="#ff000040"/>'
+               '<path fill="currentColor"/><path fill="none" stroke="white"/><path fill="url(#g)"/></svg>')
+        with tempfile.TemporaryDirectory() as t:
+            cands, kind = e.logo_candidates(self.write(t, "logo.svg", svg))
+        self.assertEqual(kind, "fills")
+        self.assertEqual([(c["hex"], round(c["share"], 2)) for c in cands], [("#0f766e", 0.75), ("#f59f0a", 0.25)])
+        self.assertEqual(cands[1]["text"], "dark")
+
+    def test_sketch_logo_writes_nothing_until_the_person_picks(self):
+        with tempfile.TemporaryDirectory() as t:
+            logo = self.write(t, "logo.png", png_bytes(100, 50, logo_rows()))
+            d = os.path.join(t, "opendesigner")
+            code, out = run_cli("sketch", "--dir", d, "--name", "Acme", "--platforms", "web", "--feel", "calm", "--logo", logo)
+            self.assertEqual(code, 0)
+            self.assertFalse(os.path.exists(d))
+            self.assertIn("1. #e30613, a bright red: 86% of its colored area; white text reads on it.", out)
+            cmd = next(ln.strip() for ln in out.splitlines() if ln.strip().startswith("engine.py sketch "))
+            self.assertIn("--brand '#e30613'", cmd)
+            quiet(e.main, shlex.split(cmd)[1:])
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertEqual(st["raw"]["brandColor"], "#e30613")
+            self.assertEqual((st["hooks"]["H-logo"]["status"], st["hooks"]["H-logo"]["files"]), ("have", ["logo.png"]))
+            self.assertIn("their pick from the logo's colors", e._decisions(d)["raw.brandColor"]["reason"])
+
+    def test_logo_files_it_cannot_read(self):
+        with tempfile.TemporaryDirectory() as t:
+            for name, data, said in (("logo.jpg", b"\xff\xd8\xff\xe0", "this one is a JPEG"), ("missing.png", None, "no file at"),
+                                     ("line.png", png_bytes(4, 1, [[0, 0, 0, 255] * 4]), "No brand color in line.png"),
+                                     ("photo.svg", '<svg><image href="logo.png"/></svg>', "this SVG holds a picture, not shapes")):
+                p = self.write(t, name, data) if data else os.path.join(t, name)
+                try:
+                    code, out = run_cli("sketch", "--dir", os.path.join(t, "od"), "--logo", p)
+                except SystemExit as x:
+                    out = str(x)
+                self.assertIn(said, out)
+                self.assertFalse(os.path.exists(os.path.join(t, "od")))
+
+
+class BuildFormats(unittest.TestCase):
+    """Issue 24: build writes the code exports for the platforms in Q-plat-01; export --format all writes every one."""
+
+    def build_dir(self, t, platforms):
+        d = os.path.join(t, "opendesigner")
+        code, out = run_cli("sketch", "--dir", d, "--name", "Fern", "--audience", "regular", "--platforms", platforms, "--feel", "calm")
+        self.assertEqual(code, 0, out)
+        return d, out, sorted(os.listdir(os.path.join(d, "build")))
+
+    def test_web_gets_css_and_tailwind_and_says_what_it_left_out(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, out, built = self.build_dir(t, "web")
+            self.assertEqual(built, ["artifact", "css", "dtcg", "figma", "paper", "tailwind"])
+            self.assertIn("build/ (css, tailwind, figma, paper, dtcg, artifact)", out)
+            self.assertIn("Not written: swift and compose, because it runs on web (Q-plat-01). To write one anyway: "
+                          "engine.py export --format swift.", out)
+            agents = next(ln for ln in design_section(t, "For Agents").splitlines() if ln.startswith("2. "))
+            self.assertNotIn("Swift", agents)
+            self.assertNotIn("Compose", agents)
+            quiet(e.main, ["export", "--dir", d, "--format", "all"])
+            self.assertEqual(len(os.listdir(os.path.join(d, "build"))), 8)
+
+    def test_ios_gets_swift_only(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, out, built = self.build_dir(t, "ios")
+            self.assertEqual(built, ["artifact", "dtcg", "figma", "paper", "swift"])
+            agents = next(ln for ln in design_section(t, "For Agents").splitlines() if ln.startswith("2. "))
+            self.assertEqual(agents, "2. Use tokens, never raw values: `DS.*` in Swift.")
+
+    def test_unnamed_or_untagged_platforms_keep_everything_and_built_files_stay_fresh(self):
+        st = e.default_state("Test")
+        self.assertEqual(e.build_formats(st), (list(e.EXPORT_FORMATS), []))
+        st["answers"]["Q-plat-01"] = {"value": ["web", "secondary"]}
+        self.assertEqual(e.build_formats(st)[1], [])
+        st["answers"]["Q-plat-01"] = {"value": ["desktop"]}
+        self.assertEqual(e.build_formats(st)[1], ["swift", "compose"])
+        with tempfile.TemporaryDirectory() as t:
+            d, _out, built = self.build_dir(t, "web,android")
+            self.assertIn("compose", built)
+            quiet(e.cmd_set, d, "answers.Q-plat-01", ["web"], "web only now", resync=False)
+            self.assertEqual(e.build_formats(e.load_state(d), d)[1], ["swift"])  # compose is in build/ already, so it is refreshed
 
 
 if __name__ == "__main__":

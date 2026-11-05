@@ -20,7 +20,7 @@ Other AI tools follow the same steps, and some show the choices as text.
 3. **It looks before it asks.** It reads your CSS, Tailwind config, `package.json`, token files, logo and font files. It doesn't ask what a file already answers.
 4. **It asks once about a private log** of your steps. Only a clear yes turns it on.
 5. **The sketch: up to five questions, one per message.** What you are making, who it is for, where it runs, how it should feel in 2 or 3 words, and your brand color or logo. Each question comes with a suggested answer and its reason. Answer in your own words, or say "just pick".
-6. **You get a complete first version.** The engine builds every token, every export, `DESIGN.md` and an overview page. The engine part takes a few seconds.
+6. **You get a complete first version.** The engine builds every token, the exports for your platforms, `DESIGN.md` and an overview page. The engine part takes a few seconds.
 7. **You see your whole system on one page.** `opendesigner/overview.html` marks each area Chosen, Picked for you or Default. Anything only you can give shows as "Not enough information", next to the question that fills it.
 8. **It offers to research your users.** It takes about 10 minutes, and it does the work after one yes. Before any colour, it shows a table of competitors, a positioning for you to confirm and three directions on one board. Say no, and it doesn't ask again.
 9. **Zoom in only where you care, or stop.** After each level it offers "stop here, or zoom into" one area. See [Zoom levels](/docs/zoom-levels/).

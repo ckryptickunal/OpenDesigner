@@ -59,7 +59,7 @@ The sketch takes these options:
 
 ## Build and check
 
-- `engine.py build` generates the tokens and checks them. If there are no errors, it writes every export, `DESIGN.md`, the overview page and the preview pages. `--force` exports even with errors.
+- `engine.py build` generates the tokens and checks them. If there are no errors, it writes the exports for the platforms you chose, `DESIGN.md`, the overview page and the preview pages, and names any code file it left out (`export --format all` writes every one). `--force` exports even with errors.
 - `engine.py generate` writes the DTCG 2025.10 tokens to `opendesigner/tokens/`.
 - `engine.py validate` checks contrast, target sizes and lint rules, and exits with an error code if anything fails. `--json` prints the results as JSON.
 - `engine.py export --format tailwind` writes one export. The formats are `css`, `tailwind`, `figma`, `paper`, `swift`, `compose`, `dtcg`, `artifact` and `all`.

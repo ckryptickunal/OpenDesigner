@@ -18,9 +18,11 @@ The engine is `scripts/engine.py` in this skill when it was installed from a rel
 
 ## 1. Code exports (always available)
 ```
-python3 <engine> build                      generate, validate, then every export, DESIGN.md and the preview
+python3 <engine> build                      generate, validate, then the exports for the chosen platforms, DESIGN.md and the preview
 python3 <engine> export --format tailwind   one format only: css tailwind dtcg figma paper swift compose artifact, or all
 ```
+`build` writes the code exports for the platforms in Q-plat-01: web and desktop get `css` and `tailwind`, iOS gets `swift`, Android gets `compose`. `figma`, `paper`, `dtcg` and `artifact` are written for every platform. It names what it left out; `export --format <name>` or `--format all` writes it anyway, and a code export already in `build/` keeps being refreshed. Until the platforms are named, and for watch, TV, car or headset, it writes all of them.
+
 | Format | Output in `opendesigner/` | Use it |
 |---|---|---|
 | (canonical) | `tokens/` (DTCG sets plus `opendesigner.resolver.json` for modes) | Style Dictionary, Terrazzo, Tokens Studio, Penpot |
