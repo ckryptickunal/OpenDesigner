@@ -8,6 +8,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **A near-black brand builds** (2026-11-05). When the accent ramp's text step would be pure black (or pure white in dark mode), links, accent text and accent icons use an off-shade of the same hue, so the engine no longer breaks its own white-and-black rule.
+- **Adding a platform raises the touch target** (2026-11-05). After `pick Q-plat-01` adds Android, a standard's 44 px touch target goes back to the engine's own 48 px, as a fresh sketch does. A value the person set is kept, and the conflict is said.
 - **Chart and table tokens for data-heavy tools** (2026-11-05). Chart colors now add a one-series brand color, status colors and a 7-step diverging ramp, each 3:1 against the page, plus axis, gridline and label colors, and every export carries them. A new table question sets striped rows, a header that stays on screen and right-aligned numbers.
 - **Brand colors from your logo** (2026-11-05). `engine.py sketch --logo logo.png` (or an SVG) shows up to three colors from the logo, how much of it each one covers, and the command that confirms one. White, black and see-through parts are left out, and nothing is recorded until the person picks.
 - **Build writes only the exports your platforms use** (2026-11-05). `engine.py build` writes CSS and Tailwind for the web, Swift for iOS and Compose for Android, and names what it left out. Figma, Paper, DTCG and artifact files are written for every platform, and `export --format all` still writes everything.
