@@ -20,6 +20,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **Tabs no longer move the page** (2026-11-06). On the website, switching the install tabs, the example products, the tour's files or a component's device views keeps the same height, so the text below stays put. On phones, the before-and-after's list of findings opens from a button instead of growing under the picture.
+- **The review raises three fewer false alarms** (2026-11-06). Text kept only for screen readers in a tiny clipped box is no longer clipped text. A lone arrow or bullet is held to 3:1 as a graphic. `capture.py` loads a page again when its stylesheet failed, says so, and measures nothing if it fails twice.
 - **Three checkers at full marks again** (2026-11-05). The layout check no longer calls a narrow card under a wide one a half-empty row. Preflight finds sizes off a scale named `--fs-*`, `--text-*` and other common names. The name check catches two-word names one letter apart, like Vosberg Health and Vossberg Health.
 - **The consent card no longer hides the page** (2026-11-05). While the website's consent card shows, the page keeps room for it at the bottom. The footer's last line now scrolls clear of it, and a link reached with Tab scrolls above it.
 - **Header links are easier to tap on phones** (2026-11-05). On touch screens the logo, nav, breadcrumb and "more" links have a 44 px hit area, and nothing on the page moves.

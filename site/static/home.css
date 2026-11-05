@@ -572,3 +572,28 @@
   .au-chrome { height: 28px; } .au-url { font-size: 11px; }
   .au-list li { padding: 8px 4px; }
 }
+
+/* Tab sets keep one height (issue #73, review case ST-10). Once site.js has set up a tab set, its panels share one grid
+   cell and the hidden ones keep their space without showing, so switching tabs never moves the page below. Without the
+   script nothing is stacked, and every panel shows, one after another. The tour's main is .home too; its engine tabs
+   stack in tour.css. */
+.home .tabs.tabs-on:not(.tr-engine) { display: grid; grid-template-columns: minmax(0, 1fr); }
+.home .tabs.tabs-on:not(.tr-engine) > [role="tabpanel"] { grid-row: 2; grid-column: 1; min-width: 0; }
+.home .tabs.tabs-on:not(.tr-engine) > [role="tabpanel"][hidden] { display: block; visibility: hidden; }
+.home .tabs.demo.tabs-on:not(.tr-engine) > .demo-panel[hidden] { display: grid; }
+
+/* The before-and-after on phones (one column): the list of findings sits behind a button, so switching Today, Audit and
+   Fixed never moves the page (issue #73). Today's note and the button share one grid cell, so the column is as tall as
+   the taller of the two at every width. Opening the list is the reader's own choice. Wide screens keep the list beside
+   the page. */
+.au-more { display: none; }
+@media (max-width: 1000px) {
+  [data-au].on .au-side { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; }
+  [data-au].on .au-side > .au-empty, [data-au].on .au-side > .au-more { grid-row: 1; grid-column: 1; }
+  [data-au].on .au-side > .au-empty[hidden] { display: block; visibility: hidden; }
+  [data-au].on .au-more { display: inline-flex; justify-self: start; align-items: center; min-height: 44px; margin: 0; padding: 0 10px;
+    border: 0; background: none; color: var(--accent-text); font: 600 15px/22px "Hanken Grotesk", system-ui, sans-serif; cursor: pointer; }
+  [data-au].on .au-more[hidden] { visibility: hidden; }
+  [data-au].on .au-more:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; border-radius: var(--r-card); }
+  [data-au].on:not(.au-open) .au-list { display: none; }
+}

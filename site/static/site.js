@@ -50,6 +50,7 @@
       });
     });
     pick(tabs.filter(function (t) { return t.getAttribute("aria-selected") === "true"; })[0] || tabs[0], false, false);
+    box.classList.add("tabs-on");  // CSS may now stack the panels, so the box keeps its tallest panel's height (issue #73)
   });
 
   // home headline, "look like it belongs together": the letters arrive a little loose and settle together, as if tracking
@@ -262,6 +263,17 @@
                 row: root.querySelector('.au-list li[data-n="' + m.n + '"]') };
   });
   root.classList.add("on");
+  // phones (one column): the list sits behind a button, so Today, Audit and Fixed keep one height (issue #73)
+  var more = root.querySelector(".au-more"), moreView = "today";
+  function moreFor(v) {
+    if (!more) return;
+    moreView = v;
+    var open = root.classList.contains("au-open");
+    more.hidden = v === "today";
+    more.textContent = (open ? "Hide the " : "Show the ") + N + (v === "fixed" ? " fixes" : " findings");
+    more.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  if (more) more.addEventListener("click", function () { root.classList.toggle("au-open"); moreFor(moreView); });
 
   function box(sr, sel) {  // every match as one box, in the camera's pixels (the page fitted to the stage), a little larger
     if (!sel) return null;
@@ -376,6 +388,7 @@
     after.style.clipPath = view === "fixed" ? "inset(0 0 0 0)" : "inset(0 0 100% 0)";
     line.style.opacity = "0"; callout.style.opacity = "0"; card.style.opacity = "0";
     empty.hidden = view !== "today";
+    moreFor(view);
     D.marks.forEach(function (m) {
       var b = by[m.n];
       b.shown = view === "audit";
@@ -482,6 +495,7 @@
     fit();
     busy = true;
     empty.hidden = true;
+    moreFor("audit");
     var H = camH, y = 0;
     line.classList.remove("fix");
     tag.textContent = "Measuring contrast, sizes and spacing";

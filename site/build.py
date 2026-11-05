@@ -925,7 +925,8 @@ def before_after():
     return (f'<div class="au" data-au><div class="au-bar"><div class="tablist" role="tablist" aria-label="The invoices page: today, the audit, and the fix">{tabs}</div>'
             f'<button type="button" class="au-replay">{replay}<span>Replay</span></button><p class="au-status" aria-live="polite"><b>{len(marks)} issues</b> found on this page.</p></div>'
             f'<div class="au-body"><div>{st}<p class="au-cap" hidden></p></div>'
-            f'<div><p class="au-empty" hidden>The page as it is today. Watch the audit, or press Audit to see what it finds.</p><ol class="au-list">{rows}</ol></div></div>'
+            f'<div class="au-side"><p class="au-empty" hidden>The page as it is today. Watch the audit, or press Audit to see what it finds.</p>'
+            f'<button type="button" class="au-more" aria-expanded="false" aria-controls="au-list" hidden></button><ol class="au-list" id="au-list">{rows}</ol></div></div>'
             f'<script type="application/json" id="au-data">{json.dumps(data)}</script></div>'), credit
 
 

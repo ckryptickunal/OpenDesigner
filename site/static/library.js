@@ -285,6 +285,27 @@
     if (history.replaceState) history.replaceState(null, "", location.pathname + "?view=" + view);
   };
   pick(pageView, false);
+  // the stage keeps its tallest view's height, so switching views never moves the page (issue #73). The device frame
+  // still hugs the part (post-change audit, rule 6); the stage centres it in the spare room.
+  function holdHeight() {
+    if (!dev || !stage) return;
+    var cur = dev.getAttribute("data-device") || pageView, max = 0;
+    stage.style.minHeight = "";
+    $$(".part-devices [role='tab']").forEach(function (t) {
+      if (getComputedStyle(t).display === "none") return;  // no desktop view on a phone screen
+      dev.setAttribute("data-device", t.getAttribute("data-device")); fitDevice();
+      max = Math.max(max, stage.offsetHeight);
+    });
+    dev.setAttribute("data-device", cur); fitDevice();
+    if (max) stage.style.minHeight = max + "px";
+  }
+  if (dev && stage) {
+    holdHeight();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(holdHeight);
+    window.addEventListener("load", holdHeight);  // a part's photos can change its height when they arrive
+    var holdW = innerWidth, holdT = 0;
+    window.addEventListener("resize", function () { if (innerWidth === holdW) return; holdW = innerWidth; clearTimeout(holdT); holdT = setTimeout(holdHeight, 150); });
+  }
   $$(".part-devices [role='tab']").forEach(function (t, i, all) {
     t.addEventListener("click", function (e) { pick(t.getAttribute("data-device"), e.detail > 0); track("view_switched", { part: location.pathname.split("/")[2], view: t.getAttribute("data-device") }); });  // keyboard switches stay instant
     t.addEventListener("keydown", function (e) {

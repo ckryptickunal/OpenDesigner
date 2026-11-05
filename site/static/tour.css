@@ -292,7 +292,8 @@
   .tr-tree .tr-short { display: block; font-size: 13px; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .tr-pane-d { display: block; margin: -6px 0 12px; font-size: 14px; line-height: 20px; color: var(--ink-muted); }
 }
-/* each file's pane is as tall as its own excerpt; on wide screens it still fills the row beside the list */
+/* each file's pane is as tall as its own excerpt, and the viewer keeps the tallest pane's height, so the page below never
+   moves when another file is picked (issue #73): the panes stay stacked (above) and each one hugs its excerpt, so the
+   spare room sits below a short pane's frame, never inside it. On wide screens the viewer still fills the row beside the list */
 .tr-files { align-items: stretch; }
-.tr-viewer > [role="tabpanel"] { grid-area: auto; }
-.tr-viewer > [role="tabpanel"][hidden] { display: none; }
+.tr-viewer > [role="tabpanel"] { align-self: start; }
