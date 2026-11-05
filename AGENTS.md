@@ -163,8 +163,8 @@ python3 tools/design_evals.py --check --no-save   the engine on 18 fixed briefs:
 python3 skills/opendesigner/scripts/library.py check   every library component uses only tokens every engine system writes, is scoped, and has complete tags
 python3 site/post_change_audit.py          after changing the website or the library: every automatic check, then walk skills/opendesigner/references/post-change-audit.md by eye
 python3 tools/changelog_check.py                  every CHANGELOG.md entry is short, dated and in the format the website reads; add one entry per change you push
-python3 tools/build_examples.py --check          the worked examples in examples/ are what the engine makes now (else: build_examples.py, which rebuilds them)
-python3 tools/check_links.py                     every relative Markdown link resolves; a /link in site/docs must be a page the website makes
+python3 tools/build_examples.py --check           the worked examples in examples/ are what the engine makes now (else: build_examples.py, which rebuilds them)
+python3 tools/check_links.py                      every relative Markdown link resolves; a /link in site/docs must be a page the website makes
 python3 tools/check_glossary.py --check           every glossary term passes the three-voice rules against today's engine, and docs/GLOSSARY.md is current
                                                    (edit synthesis/glossary.json, then: check_glossary.py --build, build_data.py, sync_skills.py)
 ```
