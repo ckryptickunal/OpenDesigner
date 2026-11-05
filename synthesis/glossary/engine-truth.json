@@ -401,6 +401,7 @@
   "--json",
   "--kind",
   "--lock",
+  "--logo",
   "--name",
   "--no-doc",
   "--open",

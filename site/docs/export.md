@@ -4,10 +4,10 @@ seo_title: Export design tokens to CSS, Tailwind, Swift, Compose, Figma
 description: Every format OpenDesigner exports, where each file lands, how to use it, and how the export skill writes into Figma and Paper when their MCP servers are on.
 section: Guides
 order: 6
-updated: 2026-10-14
+updated: 2026-11-05
 ---
 
-OpenDesigner exports your design system to CSS variables, a Tailwind v4 theme, Swift, Jetpack Compose, Figma variables, Paper tokens, a DTCG resolver and files for a Claude Design System artifact. One `engine.py build` writes them all from the DTCG token files, which stay the source of truth. The opendesigner-export skill can also write the system straight into Figma or Paper when their MCP servers are connected.
+OpenDesigner exports your design system to CSS variables, a Tailwind v4 theme, Swift, Jetpack Compose, Figma variables, Paper tokens, a DTCG resolver and files for a Claude Design System artifact. One `engine.py build` writes the ones your platforms need from the DTCG token files, which stay the source of truth. The opendesigner-export skill can also write the system straight into Figma or Paper when their MCP servers are connected.
 
 ## One rule: change the decision, then rebuild
 
@@ -20,13 +20,13 @@ engine.py build
 
 {{figure:export-rebuild-not-edit}}
 
-`build` generates the tokens and checks them. If there are no errors, it writes every export, `DESIGN.md`, the overview page and the preview pages. To write one format only:
+`build` generates the tokens and checks them. If there are no errors, it writes the exports, `DESIGN.md`, the overview page and the preview pages. The code exports follow the platforms you chose: CSS and Tailwind for the web or a desktop app, Swift for iOS, Jetpack Compose for Android. Figma, Paper, DTCG and the artifact files are always written. The build names what it left out. To write one format, or all of them:
 
 ```
 engine.py export --format tailwind
 ```
 
-The formats are `css`, `tailwind`, `figma`, `paper`, `swift`, `compose`, `dtcg`, `artifact` and `all`.
+The formats are `css`, `tailwind`, `figma`, `paper`, `swift`, `compose`, `dtcg`, `artifact` and `all`. A code file already in `build/` is refreshed by every build, so it never goes stale.
 
 ## Code exports
 

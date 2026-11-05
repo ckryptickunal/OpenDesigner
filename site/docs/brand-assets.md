@@ -46,7 +46,7 @@ It asks for one master file and makes the other sizes from it.
 
 It checks each file. A logo, for example, should still work at 16 px on light and dark backgrounds.
 
-If you give it a logo file, it can use the logo's main color as your brand color seed.
+If you give it a logo as PNG or SVG (`engine.py sketch --logo logo.svg`), the engine shows up to three of its colors, each with how much of the logo it covers. You pick the brand color from them, or type your own. Nothing is recorded until you pick.
 
 ## If you don't have it
 

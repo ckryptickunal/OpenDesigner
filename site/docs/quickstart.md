@@ -54,7 +54,7 @@ The engine knows many plain feel words. It reads "calm" as minimal, with the bra
 
 Example answer: "Our color is #167874, a deep teal."
 
-The engine keeps your color exact on the main buttons when it passes the contrast check. If it doesn't pass, the engine changes it just enough and tells you. If you have neither a color nor a logo, it suggests three colors that fit your feel words.
+The engine keeps your color exact on the main buttons when it passes the contrast check. If it doesn't pass, the engine changes it just enough and tells you. If you have a logo file (PNG or SVG), the engine reads up to three of its colors and shows how much of the logo each one covers. You pick one; it never picks for you. If you have neither a color nor a logo, it suggests three colors that fit your feel words.
 
 ## The same build without an AI
 
@@ -70,7 +70,7 @@ In a test run on 2026-10-14, this took under two seconds and passed with no erro
 
 - `DESIGN.md` and `PRODUCT.md` at the root of your project.
 - `opendesigner/tokens/`: your rules as named values in the open DTCG 2025.10 format.
-- `opendesigner/build/`: CSS variables, a Tailwind v4 theme, Figma variables, Paper tokens, Swift and Jetpack Compose files, and more.
+- `opendesigner/build/`: Figma variables, Paper tokens and code files for the platforms you chose: CSS variables and a Tailwind v4 theme for the web, Swift for iOS, Jetpack Compose for Android.
 - `opendesigner/overview.html` and `opendesigner/preview.html`.
 - `opendesigner/decisions.md`: every decision with how it was set and why.
 

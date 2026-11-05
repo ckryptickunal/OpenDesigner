@@ -32,7 +32,7 @@ See [Design tokens and DTCG](/docs/design-tokens/).
 
 ## The exports
 
-All of these are in `opendesigner/build/`. Every build rewrites them, so don't edit them by hand.
+All of these are in `opendesigner/build/`. Every build rewrites them, so don't edit them by hand. The code files follow the platforms you chose: `css/` and `tailwind/` for the web, `swift/` for iOS, `compose/` for Android. `engine.py export --format all` writes every one.
 
 {{figure:files-edit-exports}}
 
