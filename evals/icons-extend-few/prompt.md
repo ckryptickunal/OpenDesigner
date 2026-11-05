@@ -6,4 +6,4 @@ timeout_seconds: 600
 allowed_tools: [Read, Glob, Grep, Skill, Bash]
 ---
 
-Our app has three icons of our own, in the extra folder you were given (icons/). A new Fleet page needs a ship, an anchor and a warehouse icon, and they have to look like ours. We don't have a designer this month. What do you suggest?
+Our app has three icons of our own, in the extra folder you were given (icons/). A new Billing page needs a wallet, a receipt and a calendar icon, and they have to look like ours. We don't have a designer this month. What do you suggest?

@@ -718,9 +718,9 @@ OWN_RING = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path f
 ION_INFO = {"ion": {"name": "IonIcons", "total": 1357, "author": {"name": "Ben Sperry", "url": "https://github.com/ionic-team/ionicons"},
                     "license": {"title": "MIT", "spdx": "MIT", "url": "https://github.com/ionic-team/ionicons/blob/main/LICENSE"}}}
 ION_ICONS = {"prefix": "ion", "width": 512, "height": 512, "icons": {
-    "boat-outline": {"body": '<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" '
+    "wallet-outline": {"body": '<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" '
                              'd="M48 336h416M128 176h256M256 48v288"/>'},
-    "boat": {"body": '<path fill="currentColor" d="M48 336h416v32H48z"/>'}}}
+    "wallet": {"body": '<path fill="currentColor" d="M48 336h416v32H48z"/>'}}}
 
 
 def fulfil(out, payloads):
@@ -790,50 +790,50 @@ class Icons(unittest.TestCase):
     def test_fetch_draws_the_glyph_in_the_owner_construction(self):
         with tempfile.TemporaryDirectory() as tmp:
             d = str(Path(tmp, "opendesigner", "icons"))
-            self.assertRaises(SystemExit, run, ["--dir", d, "icons", "fetch", "boat", "--set", "ion"])  # measure first
+            self.assertRaises(SystemExit, run, ["--dir", d, "icons", "fetch", "wallet", "--set", "ion"])  # measure first
             run(["--dir", d, "icons", "measure", *self.owner(tmp, OWN_PLUS, OWN_CLOCK), "--glyph-box", "20"])
-            self.assertRaises(SystemExit, run, ["--dir", d, "icons", "fetch", "../boat", "--set", "ion"])
-            out = run(["--dir", d, "icons", "fetch", "boat", "--set", "ion", "--offline"])
+            self.assertRaises(SystemExit, run, ["--dir", d, "icons", "fetch", "../wallet", "--set", "ion"])
+            out = run(["--dir", d, "icons", "fetch", "wallet", "--set", "ion", "--offline"])
             self.assertIn("https://api.iconify.design/collections?prefixes=ion", out)
-            self.assertIn("ion.json?icons=boat,boat-outline\"", out)                            # the outline glyph first; plain only if drawn alike
+            self.assertIn("ion.json?icons=wallet,wallet-outline\"", out)                            # the outline glyph first; plain only if drawn alike
             fulfil(out, {"collections": ION_INFO, "ion.json": ION_ICONS})
-            out = run(["--dir", d, "icons", "fetch", "boat", "--set", "ion"])
-            self.assertIn("drew boat.svg <- ion:boat-outline", out)
-            svg = Path(d, "boat.svg").read_text()
+            out = run(["--dir", d, "icons", "fetch", "wallet", "--set", "ion"])
+            self.assertIn("drew wallet.svg <- ion:wallet-outline", out)
+            svg = Path(d, "wallet.svg").read_text()
             self.assertIn('stroke-width="38.4"', svg)                                          # 1.5 / (20/512), as in the issue
             self.assertIn("scale(0.0390625)", svg)
             self.assertIn('fill="#E8EEFC"', svg)                                               # the owner's badge
             self.assertNotIn("currentColor", svg)
             self.assertIn('stroke="#1F3A8A"', svg)
-            self.assertIn('class="odi-boat"', svg)                                             # ids and classes scoped to this icon
-            self.assertTrue(Path(d, "src", "boat.svg").exists())                               # the untouched original
+            self.assertIn('class="odi-wallet"', svg)                                             # ids and classes scoped to this icon
+            self.assertTrue(Path(d, "src", "wallet.svg").exists())                               # the untouched original
             e = json.loads(Path(d, "ledger.json").read_text())["items"][0]
             self.assertEqual((e["licence_spdx"], e["verdict"], e["status"]), ("MIT", "ok", "candidate"))
-            self.assertEqual(e["attribution"], "boat-outline from IonIcons by Ben Sperry, MIT")
+            self.assertEqual(e["attribution"], "wallet-outline from IonIcons by Ben Sperry, MIT")
             next(Path(d, "downloads").glob("ion-info-*.json")).write_text(json.dumps({"ion": {**ION_INFO["ion"], "license": {"title": "GPL", "spdx": "GPL-3.0"}}}))
             with self.assertRaises(SystemExit) as cm:
-                run(["--dir", d, "icons", "fetch", "boat", "--set", "ion"])
+                run(["--dir", d, "icons", "fetch", "wallet", "--set", "ion"])
             self.assertIn("not on the allowed list", str(cm.exception))
 
     def test_sheet_and_keep(self):
         with tempfile.TemporaryDirectory() as tmp:
             d = str(Path(tmp, "opendesigner", "icons"))
             run(["--dir", d, "icons", "measure", *self.owner(tmp, OWN_PLUS, OWN_CLOCK), "--glyph-box", "20", "--sizes", "20"])
-            fulfil(run(["--dir", d, "icons", "fetch", "boat", "--set", "ion", "--offline"]), {"collections": ION_INFO, "ion.json": ION_ICONS})
-            run(["--dir", d, "icons", "fetch", "boat", "--set", "ion"])
-            self.assertIn('width="40"', Path(d, "boat.svg").read_text())                      # the originals' own size, not the 20 px row
+            fulfil(run(["--dir", d, "icons", "fetch", "wallet", "--set", "ion", "--offline"]), {"collections": ION_INFO, "ion.json": ION_ICONS})
+            run(["--dir", d, "icons", "fetch", "wallet", "--set", "ion"])
+            self.assertIn('width="40"', Path(d, "wallet.svg").read_text())                      # the originals' own size, not the 20 px row
             page = Path(run(["--dir", d, "icons", "sheet"]).strip()).read_text()
             for words in ("Yours", "New, drawn the same way", "Together", "20 px", "40 px", "data:image/svg+xml;base64,", "IonIcons · MIT"):
                 self.assertIn(words, page)
             self.assertNotIn("http://", page.replace("http://www.w3.org", ""))                  # nothing remote on the sheet
             app = Path(tmp, "app", "icons")
-            out = run(["--dir", d, "icons", "keep", "boat", "--to", str(app)])
-            self.assertTrue((app / "boat.svg").exists())
+            out = run(["--dir", d, "icons", "keep", "wallet", "--to", str(app)])
+            self.assertTrue((app / "wallet.svg").exists())
             self.assertIn("hooks.H-icons.status", out)
             self.assertIn("2 of the owner's icons plus 1 glyphs from IonIcons (MIT)", out)
             credits = Path(d, "ATTRIBUTION.md").read_text()
             self.assertIn("# Icon credits and licences", credits)
-            self.assertIn("| boat (unassigned) | [iconify]", credits)
+            self.assertIn("| wallet (unassigned) | [iconify]", credits)
 
     def test_review_fixes(self):
         """The fresh-eyes review of issue 50's first draft: each case that went wrong then."""
@@ -853,19 +853,19 @@ class Icons(unittest.TestCase):
             self.assertIn('fill="#E8EEFC"', con["container"][0]["xml"])
             self.assertTrue(any("linearGradient" in x for c in con["container"] for x in c["defs"]))
             glyphs = {"prefix": "ion", "width": 512, "height": 512, "icons": {
-                "boat-outline": {"body": '<style>svg,body{display:none}</style><path fill="none" stroke="currentColor" stroke-width="32" d="M48 336h416"/>'},
-                "anchor": {"body": '<path fill="currentColor" d="M48 48h416v416H48z"/>'}}}
-            fulfil(run(["--dir", d, "icons", "fetch", "boat", "anchor", "--set", "ion", "--name", "../../escaped", "--offline"]),
+                "wallet-outline": {"body": '<style>svg,body{display:none}</style><path fill="none" stroke="currentColor" stroke-width="32" d="M48 336h416"/>'},
+                "receipt": {"body": '<path fill="currentColor" d="M48 48h416v416H48z"/>'}}}
+            fulfil(run(["--dir", d, "icons", "fetch", "wallet", "receipt", "--set", "ion", "--name", "../../escaped", "--offline"]),
                    {"collections": ION_INFO, "ion.json": glyphs})
-            out = run(["--dir", d, "icons", "fetch", "boat", "anchor", "--set", "ion"])
-            self.assertIn("skip anchor: ion has no anchor-outline, and its anchor is solid", out)  # never the other style's glyph
-            svg = Path(d, "boat.svg").read_text()
+            out = run(["--dir", d, "icons", "fetch", "wallet", "receipt", "--set", "ion"])
+            self.assertIn("skip receipt: ion has no receipt-outline, and its receipt is solid", out)  # never the other style's glyph
+            svg = Path(d, "wallet.svg").read_text()
             self.assertNotIn("display:none", svg)                                              # a glyph's stylesheet is dropped
-            self.assertIn('url(#odi-boat-g)', svg)
-            self.assertIn('id="odi-boat-g"', svg)
-            fulfil(run(["--dir", d, "icons", "fetch", "boat", "--set", "ion", "--name", "../../escaped", "--offline"]),
+            self.assertIn('url(#odi-wallet-g)', svg)
+            self.assertIn('id="odi-wallet-g"', svg)
+            fulfil(run(["--dir", d, "icons", "fetch", "wallet", "--set", "ion", "--name", "../../escaped", "--offline"]),
                    {"collections": ION_INFO, "ion.json": glyphs})
-            run(["--dir", d, "icons", "fetch", "boat", "--set", "ion", "--name", "../../escaped"])
+            run(["--dir", d, "icons", "fetch", "wallet", "--set", "ion", "--name", "../../escaped"])
             self.assertTrue(Path(d, "escaped.svg").exists())                                   # --name is a slug, never a path
             self.assertFalse(Path(tmp, "escaped.svg").exists())
             with self.assertRaises(SystemExit) as cm:
@@ -873,11 +873,11 @@ class Icons(unittest.TestCase):
             self.assertIn("solid glyphs of tabler", str(cm.exception))
             app = Path(tmp, "app")
             app.mkdir()
-            (app / "boat.svg").write_text("<svg/>")
-            self.assertRaises(SystemExit, run, ["--dir", d, "icons", "keep", "boat", "--to", str(app)])   # never overwrites
-            self.assertEqual((app / "boat.svg").read_text(), "<svg/>")
+            (app / "wallet.svg").write_text("<svg/>")
+            self.assertRaises(SystemExit, run, ["--dir", d, "icons", "keep", "wallet", "--to", str(app)])   # never overwrites
+            self.assertEqual((app / "wallet.svg").read_text(), "<svg/>")
             own = self.owner(tmp, classy)[0]
-            Path(d, "own-0.svg").write_text(Path(d, "boat.svg").read_text())
+            Path(d, "own-0.svg").write_text(Path(d, "wallet.svg").read_text())
             led = json.loads(Path(d, "ledger.json").read_text())
             led["items"].append({**led["items"][0], "name": "own-0", "file": "own-0.svg"})
             Path(d, "ledger.json").write_text(json.dumps(led))
@@ -914,11 +914,11 @@ class Icons(unittest.TestCase):
     def test_find(self):
         with tempfile.TemporaryDirectory() as tmp:
             d = str(Path(tmp, "opendesigner", "icons"))
-            out = run(["--dir", d, "icons", "find", "boat", "--set", "ion", "--offline"])
-            self.assertIn("https://api.iconify.design/search?query=boat&prefixes=ion&limit=64", out)
-            fulfil(out, {"search": {"icons": ["ion:boat", "ion:boat-outline", "ion:boat-sharp", "lucide:sailboat"]}})
-            out = run(["--dir", d, "icons", "find", "boat", "--set", "ion"])
-            self.assertIn('ion, "boat": boat-outline', out)                                    # outline names only, this set only
+            out = run(["--dir", d, "icons", "find", "wallet", "--set", "ion", "--offline"])
+            self.assertIn("https://api.iconify.design/search?query=wallet&prefixes=ion&limit=64", out)
+            fulfil(out, {"search": {"icons": ["ion:wallet", "ion:wallet-outline", "ion:wallet-sharp", "lucide:sailwallet"]}})
+            out = run(["--dir", d, "icons", "find", "wallet", "--set", "ion"])
+            self.assertIn('ion, "wallet": wallet-outline', out)                                    # outline names only, this set only
 
 
 if __name__ == "__main__":
