@@ -66,6 +66,7 @@ public extension DS {
         public static let borderFocusInner = dsColor(0xFFFFFF, 0xFFFFFF)
         public static let borderInfo = dsColor(0x4A8CB8, 0x4A8CB8)
         public static let borderInput = dsColor(0x858689, 0x858689)
+        public static let borderSeparator = dsColor(0xE2E3E5, 0xE2E3E5)
         public static let borderStrong = dsColor(0x858689, 0x858689)
         public static let borderSubtle = dsColor(0xD1D2D4, 0xD1D2D4)
         public static let borderSuccess = dsColor(0x599365, 0x599365)
@@ -99,7 +100,7 @@ public extension DS {
         public static let textPrimary = dsColor(0x191A1B, 0x191A1B)
         public static let textSecondary = dsColor(0x3A3B3E, 0x3A3B3E)
         public static let textSuccess = dsColor(0x00451C, 0x00451C)
-        public static let textTertiary = dsColor(0x46484B, 0x46484B)
+        public static let textTertiary = dsColor(0x3A3B3E, 0x3A3B3E)
         public static let textWarning = dsColor(0x604200, 0x604200)
     }
 
@@ -111,6 +112,10 @@ public extension DS {
         public static let sizeIconMd: CGFloat = 20
         public static let sizeIconLg: CGFloat = 24
         public static let sizeIconDefault: CGFloat = 24
+        public static let sizeRowSm: CGFloat = 52
+        public static let sizeRowMd: CGFloat = 56
+        public static let sizeRowLg: CGFloat = 64
+        public static let sizeRowTwoLine: CGFloat = 80
         public static let sizeTargetPointer: CGFloat = 48
         public static let sizeTargetTouch: CGFloat = 48
         public static let sizeTargetMin: CGFloat = 48
@@ -175,6 +180,10 @@ public extension DS {
         public static let radiusNested: CGFloat = 0
         public static let radiusOverlay: CGFloat = 0
         public static let radiusPerson: CGFloat = 9999
+        /// Continuous corners, as iOS draws its own controls (DC-L04-04, Q-shape-04): the same radii, a smoother curve.
+        /// Use DS.Radius.shape(DS.Radius.radiusContainer) instead of a plain RoundedRectangle.
+        public static let cornerStyle: RoundedCornerStyle = .continuous
+        public static func shape(_ radius: CGFloat) -> RoundedRectangle { RoundedRectangle(cornerRadius: radius, style: cornerStyle) }
     }
 
     /// Text styles use Dynamic Type (U5 F22): iOS sizes come from the text style (body 17 pt), not the web scale,
@@ -200,9 +209,9 @@ public extension DS {
         public static let durationExtra: Double = 0.56
         public static let durationInstant: Double = 0
         public static let durationLong: Double = 0.32
-        public static let durationLongExit: Double = 0.24
+        public static let durationLongExit: Double = 0.26
         public static let durationMedium: Double = 0.2
-        public static let durationMediumExit: Double = 0.15
+        public static let durationMediumExit: Double = 0.16
         public static let durationMicro: Double = 0.1
         public static let durationShort: Double = 0.15
         public static let springEffectsDefault = Animation.spring(duration: 0.157, bounce: 0)

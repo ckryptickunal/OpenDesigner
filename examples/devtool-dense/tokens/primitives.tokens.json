@@ -67,7 +67,7 @@
           ],
           "hex": "#4a5cf0"
         },
-        "$description": "The brand color exactly as given. For logos and marketing; UI fills use color.bg.brand."
+        "$description": "The brand color exactly as given: logos, marketing, large color areas and other uses that carry no text. Fills that carry text use color.bg.brand."
       }
     },
     "neutral": {
@@ -551,11 +551,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.2098,
-              0.0143,
+              0.21,
+              0.0177,
               271.67
             ],
-            "hex": "#16181f"
+            "hex": "#151821"
           },
           "$description": "app background"
         },
@@ -563,11 +563,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.243,
-              0.0215,
+              0.2436,
+              0.0265,
               271.67
             ],
-            "hex": "#1c1f2a"
+            "hex": "#1b1f2d"
           },
           "$description": "subtle background"
         },
@@ -575,11 +575,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.2761,
-              0.0412,
+              0.2772,
+              0.0508,
               271.67
             ],
-            "hex": "#21273c"
+            "hex": "#1f2641"
           },
           "$description": "component background"
         },
@@ -587,11 +587,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.3093,
-              0.0592,
+              0.3109,
+              0.0728,
               271.67
             ],
-            "hex": "#262e4e"
+            "hex": "#242d55"
           },
           "$description": "component hover"
         },
@@ -599,11 +599,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.3424,
-              0.0771,
+              0.3445,
+              0.0949,
               271.67
             ],
-            "hex": "#2b3560"
+            "hex": "#28346a"
           },
           "$description": "component pressed or selected"
         },
@@ -611,11 +611,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.3755,
-              0.0951,
+              0.3781,
+              0.117,
               271.67
             ],
-            "hex": "#303c73"
+            "hex": "#2d3a7f"
           },
           "$description": "subtle border"
         },
@@ -623,11 +623,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.4087,
-              0.1202,
+              0.4118,
+              0.1479,
               271.67
             ],
-            "hex": "#34428a"
+            "hex": "#313f99"
           },
           "$description": "interactive border (decorative)"
         },
@@ -635,11 +635,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.6137,
-              0.156,
+              0.6184,
+              0.192,
               271.67
             ],
-            "hex": "#647be1"
+            "hex": "#5f77f7"
           },
           "$description": "strong border, focus, 3:1 boundary"
         },
@@ -647,32 +647,66 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.6244,
-              0.1793,
+              0.6268,
+              0.2005,
               271.67
             ],
-            "hex": "#637bf2"
+            "hex": "#6078ff"
           },
-          "$description": "solid fill (peak chroma)"
+          "$description": "solid fill (peak chroma)",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.386,
+                  0.4584,
+                  1.0
+                ],
+                "oklch": [
+                  0.6268,
+                  0.2162,
+                  271.67
+                ]
+              }
+            }
+          }
         },
         "10": {
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.6667,
-              0.1763,
+              0.6659,
+              0.1768,
               271.67
             ],
-            "hex": "#6f89ff"
+            "hex": "#6f88ff"
           },
-          "$description": "solid hover, tertiary text"
+          "$description": "solid hover, tertiary text",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.4452,
+                  0.5242,
+                  1.0
+                ],
+                "oklch": [
+                  0.6659,
+                  0.1912,
+                  271.67
+                ]
+              }
+            }
+          }
         },
         "11": {
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.7499,
-              0.128,
+              0.7504,
+              0.1278,
               271.67
             ],
             "hex": "#91a8ff"
@@ -683,13 +717,13 @@
               "p3": {
                 "colorSpace": "display-p3",
                 "components": [
-                  0.5784,
-                  0.6531,
+                  0.5792,
+                  0.6538,
                   1.0
                 ],
                 "oklch": [
-                  0.7499,
-                  0.1393,
+                  0.7504,
+                  0.139,
                   271.67
                 ]
               }
@@ -701,10 +735,10 @@
             "colorSpace": "oklch",
             "components": [
               0.8758,
-              0.0592,
+              0.0604,
               271.67
             ],
-            "hex": "#c8d5fe"
+            "hex": "#c8d5ff"
           },
           "$description": "high-contrast text"
         },
@@ -712,11 +746,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.6969,
-              0.1585,
+              0.6961,
+              0.1589,
               271.67
             ],
-            "hex": "#7b95ff"
+            "hex": "#7b94ff"
           },
           "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
         }
@@ -2719,7 +2753,7 @@
   "font": {
     "size": {
       "$type": "dimension",
-      "$description": "Type scale: round(14 x 1.2^n), n from -2 to 5; sizes under 11px dropped; adjacent sizes under 10% apart merged; only the steps a named text style uses are kept (DC-L02-09, DC-L02-10).",
+      "$description": "Type scale: round(14 x 1.2^n), n from -2 to 5; sizes under 12px dropped; adjacent sizes under 10% apart merged; only the steps a named text style uses are kept (DC-L02-09, DC-L02-10).",
       "$extensions": {
         "opendesigner": {
           "base": 14,
@@ -3053,7 +3087,7 @@
   "motion": {
     "duration": {
       "$type": "duration",
-      "$description": "Duration ladder (DC-L04-20); Energy multiplies medium and longer by 0.88 (0.8-1.2, A4). Exits 25% shorter.",
+      "$description": "Duration ladder (DC-L04-20); Energy multiplies medium and longer by 0.88 (0.8-1.2, A4). Exits about 20% shorter (STD-easing-duration-11).",
       "instant": {
         "$value": {
           "value": 0,
@@ -3088,24 +3122,27 @@
         "$value": {
           "value": 620,
           "unit": "ms"
-        }
+        },
+        "$description": "Illustrative and marketing motion only: UI animations stay under 300ms (house standard STD-easing-duration-06)."
       },
       "medium-exit": {
         "$value": {
-          "value": 160,
+          "value": 180,
           "unit": "ms"
-        }
+        },
+        "$description": "About 0.8 x medium, the entrance in force (STD-easing-duration-11)."
       },
       "long-exit": {
         "$value": {
-          "value": 260,
+          "value": 280,
           "unit": "ms"
-        }
+        },
+        "$description": "About 0.8 x long, the entrance in force (STD-easing-duration-11)."
       }
     },
     "easing": {
       "$type": "cubicBezier",
-      "$description": "Standard, enter (decelerate), exit (accelerate); linear only for spinners and progress (DC-L04-21).",
+      "$description": "Standard, enter (decelerate) and exit curves; linear only for spinners and progress (DC-L04-21).",
       "standard": {
         "$value": [
           0.2,
@@ -3126,12 +3163,12 @@
       },
       "exit": {
         "$value": [
-          0.2,
           0,
-          1,
+          0,
+          0.38,
           0.9
         ],
-        "$description": "Leaving: accelerate out of the way."
+        "$description": "Leaving the screen."
       },
       "linear": {
         "$value": [
@@ -3171,7 +3208,7 @@
                 "bounce": 0.0
               },
               "css": {
-                "easing": "cubic-bezier(0.2, 0, 0.38, 0.9)",
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
                 "durationMs": 250
               },
               "use": "small components (switches, buttons)"
@@ -3202,7 +3239,7 @@
                 "bounce": 0.0
               },
               "css": {
-                "easing": "cubic-bezier(0.2, 0, 0.38, 0.9)",
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
                 "durationMs": 350
               },
               "use": "partial-screen (sheets, drawers)"
@@ -3233,7 +3270,7 @@
                 "bounce": 0.0
               },
               "css": {
-                "easing": "cubic-bezier(0.2, 0, 0.38, 0.9)",
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
                 "durationMs": 520
               },
               "use": "full-screen"
@@ -3266,7 +3303,7 @@
                 "bounce": 0.0
               },
               "css": {
-                "easing": "cubic-bezier(0.2, 0, 0.38, 0.9)",
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
                 "durationMs": 150
               },
               "use": "small components (switches, buttons)"
@@ -3297,7 +3334,7 @@
                 "bounce": 0.0
               },
               "css": {
-                "easing": "cubic-bezier(0.2, 0, 0.38, 0.9)",
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
                 "durationMs": 230
               },
               "use": "partial-screen (sheets, drawers)"
@@ -3328,7 +3365,7 @@
                 "bounce": 0.0
               },
               "css": {
-                "easing": "cubic-bezier(0.2, 0, 0.38, 0.9)",
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
                 "durationMs": 330
               },
               "use": "full-screen"

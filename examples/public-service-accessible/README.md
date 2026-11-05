@@ -14,10 +14,10 @@ A plain, high-contrast system for a fictional city benefits service: AAA text, g
 | Depth | borders |
 | Motion | medium 200ms, spring damping 1.0, motion off (reduced everywhere) |
 | Color | neutral scheme, accent solid `#075c63`, text minimum 7.0:1, themes light |
-| Validation | 0 errors, 0 warnings, 3 notes; 82 contrast pairs checked |
+| Validation | 0 errors, 0 warnings, 4 notes; 82 contrast pairs checked |
 
-**Files:** `state.json` (the only input), `decisions.md` (why each choice), `tokens/` (DTCG 2025.10 + resolver, canonical), `build/` (css, tailwind, figma, paper, swift, compose, dtcg), `DESIGN.md`, `PRODUCT.md`, `preview.html`.
+**Files:** `state.json` (the input), `decisions.md` (why each choice), `tokens/` (DTCG 2025.10 + resolver, canonical), `build/` (artifact, compose, css, dtcg, figma, paper, swift, tailwind), `DESIGN.md`, `PRODUCT.md`, `overview.html` (the whole system on one page), `preview.html` and `preview/` (the visual templates, filled in).
 
-**Rebuild:** `python3 examples/make_examples.py public-service-accessible` replays the decisions; `python3 skills/opendesigner/scripts/engine.py build --dir examples/public-service-accessible` regenerates from `state.json`.
+**Rebuild:** `python3 tools/build_examples.py public-service-accessible` runs `engine.py build` on `state.json` and rewrites this README. `python3 tools/build_examples.py --check` fails when a committed file differs from what the engine makes now.
 
 The product is fictional; no real brand's identity is copied.

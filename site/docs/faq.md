@@ -91,6 +91,6 @@ You don't have to trust them. You can check them. The defaults rest on more than
 
 ### How early is it, and how do I report a problem?
 
-It's early. The repository was created on 2026-09-23, and version 0.2.0, the first tagged release, came out on 5 November 2026. No watched user trials have happened. The evidence so far is the engine's tests, three worked examples, usability tests role-played by AI testers, and a stress test in which AI agents made 46 pieces. The worked examples are out of date with the current engine.
+It's early. The repository was created on 2026-09-23, and version 0.2.0, the first tagged release, came out on 5 November 2026. No watched user trials have happened. The evidence so far is the engine's tests, three worked examples, usability tests role-played by AI testers, and a stress test in which AI agents made 46 pieces.
 
 To report a problem, tell your AI what went wrong. It saves a note in your project and gives you a ready-to-file GitHub link. You can also [open an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose) directly. Nothing is posted unless you submit it yourself.

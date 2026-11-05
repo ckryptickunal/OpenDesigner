@@ -45,6 +45,7 @@
   --ds-color-border-focus-inner: #ffffff;
   --ds-color-border-info: #4a8cb8;
   --ds-color-border-input: #858689;
+  --ds-color-border-separator: #e2e3e5;
   --ds-color-border-strong: #858689;
   --ds-color-border-subtle: #d1d2d4;
   --ds-color-border-success: #599365;
@@ -67,7 +68,7 @@
   --ds-color-text-on-success: #ffffff;
   --ds-color-text-on-warning: #191a1b;
   --ds-color-text-success: #00451c;
-  --ds-color-text-tertiary: #46484b;
+  --ds-color-text-tertiary: #3a3b3e;
   --ds-color-text-warning: #604200;
   --ds-color-neutral-light-1: #fcfdfd;
   --ds-color-neutral-light-2: #f3f4f5;

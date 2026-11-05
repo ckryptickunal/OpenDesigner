@@ -15,6 +15,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 ### Fixed
 
 - **The website and docs say what is true today** (2026-11-05). The security page names the 0.2.0 release, the engine page lists `version`, `detect`, `research` and owner notes, and counts, the home page's examples and the showcase's tags match the repo again. Release lines on the site now come from the git tag, so they can't fall behind.
+- **The worked examples match the engine again** (2026-11-05). The three systems in `examples/` were rebuilt from their `state.json`, and `python3 tools/build_examples.py --check` now fails, in CI too, when the engine writes something they do not show. The old replay script, which could wipe them, is gone.
+- **The link check knows the website's pages** (2026-11-05). A link like `/tour/` in the website's docs is now checked against the pages `site/build.py` makes, so real pages pass and a mistyped one still fails.
 - **The palette page shows its contrast checks** (2026-11-05). The table under the shades was always empty because the engine sent no colour pairs ([#47](https://github.com/ckryptickunal/OpenDesigner/issues/47)). Each option now carries the pairs people read most, in every mode and measured the same way as `engine.py validate`, and the page works out each ratio from the colours it shows.
 - **The footer links every docs page again** (2026-11-05). The footer had dropped to 20 links. It now links every docs page by section from every page, so search engines and AI crawlers reach them, and each label still fits on one line down to 320 px.
 
