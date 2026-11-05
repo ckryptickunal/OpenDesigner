@@ -22,6 +22,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 ### Fixed
 
 - **The link check skips git-ignored folders** (2026-11-06). In a git checkout, `tools/check_links.py` now reads only the Markdown files git would commit, so copied build inputs such as `site/.cache/` no longer show up as broken links. Outside git it reads every file, as before.
+- **Library text reads on every photo and beside disabled items** (2026-11-06). The social post's photo counter and the video player's time now sit on dark chips, and the note beside a disabled menu item and a sold-out size use a readable grey. All pass 4.5:1 in the ten looks.
+- **"1 place up", not "1 places up"** (2026-11-06). The leaderboard's screen-reader text, the video player's spoken time and the daily goals note now use the singular for 1.
 - **Three checkers at full marks again** (2026-11-05). The layout check no longer calls a narrow card under a wide one a half-empty row. Preflight finds sizes off a scale named `--fs-*`, `--text-*` and other common names. The name check catches two-word names one letter apart, like Vosberg Health and Vossberg Health.
 - **The consent card no longer hides the page** (2026-11-05). While the website's consent card shows, the page keeps room for it at the bottom. The footer's last line now scrolls clear of it, and a link reached with Tab scrolls above it.
 - **Header links are easier to tap on phones** (2026-11-05). On touch screens the logo, nav, breadcrumb and "more" links have a 44 px hit area, and nothing on the page moves.
