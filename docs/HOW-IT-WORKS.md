@@ -77,7 +77,7 @@ You start with a rough version of the whole system. Then you zoom in only where 
 | 2 | defined | One area at a time, for example Color: ramps, roles, contrast | Up to 12 questions per area |
 | 3 | detailed | Components, patterns and the fine print of each area | the rest |
 
-You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 195 questions has a zoom level, except the reference panel (Q-ref-01), which is open at every level. Six questions are marked planned: their feature is not built yet, so the interview skips them. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 95 and 194 questions).
+You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 200 questions has a zoom level, except the reference panel (Q-ref-01), which is open at every level. Six questions are marked planned: their feature is not built yet, so the interview skips them. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 100 and 199 questions).
 
 Every term is explained in three voices. Plain words come first, so a school student can follow. The designer's word and the code name sit on one line below. The [glossary](GLOSSARY.md) lists them all.
 
@@ -212,7 +212,7 @@ The source of truth is `opendesigner/state.json` plus the DTCG tokens made from 
 | Output | What it is for |
 |---|---|
 | `DESIGN.md` (project root) | The readable view of the system that you, your team and any AI tool can follow |
-| `PRODUCT.md` (project root) | Product truth: audience, purpose, surfaces, principles |
+| `PRODUCT.md` (project root) | Product truth: audience, purpose, surfaces, principles, and the site brief for a site that persuades |
 | `opendesigner/tokens/` | DTCG 2025.10 design tokens (the canonical format), with modes in one resolver file |
 | CSS variables, Tailwind theme | Use in web code right away; for shadcn/ui, map its variables to the tokens once |
 | Figma variables, Paper tokens | Mirror the system in your design tool |

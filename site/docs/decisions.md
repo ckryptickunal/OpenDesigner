@@ -62,7 +62,7 @@ You can lock any decision. A locked value changes only with the owner's OK. The 
 
 Don't edit `DESIGN.md` by hand, because the next refresh rewrites it. Notes you put inside special "keep" blocks survive each refresh. If someone does edit the generated file, the extend skill notices and offers to turn each edit into a decision.
 
-`PRODUCT.md` holds what the product is, who it is for and where it runs, so later sessions don't have to guess.
+`PRODUCT.md` holds what the product is, who it is for and where it runs, so later sessions don't have to guess. For a site that persuades, it also holds the site brief: the goal, the roles to convince, the proof, how people find it and its kinds of pages. A line nobody has answered says "Not enough information", with the question that fills it.
 
 ## The overview page
 

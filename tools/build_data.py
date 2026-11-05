@@ -63,6 +63,9 @@ ZOOM_NAMES = {0: "sketch", 1: "broad", 2: "defined", 3: "detailed"}
 # Q-brand-03 with Q-color-01
 ZOOM0 = ["Q-scope-01", "Q-scope-06", "Q-scope-07", "Q-aud-01", "Q-plat-01", "Q-brand-01", "Q-color-01", "Q-brand-03"]
 ZOOM1 = ["Q-dir-01", "Q-dir-02", "Q-color-02", "Q-type-01", "Q-shape-01", "Q-depth-01", "Q-motion-01", "Q-tool-01"]
+# The site brief (issue 48): zoom 1 too, asked only for a site that persuades (questions.json "when": "persuade"), so
+# pacing.json keeps it apart from the eight screens everyone gets.
+SITE_BRIEF = ["Q-site-01", "Q-site-02", "Q-site-03", "Q-site-04", "Q-site-05"]
 # Areas a person can zoom into; section = the DESIGN.md heading the engine renders for it.
 AREAS = [("overview", "The big picture", "Overview", ["S01", "S03", "S06"]),
          ("accessibility", "Access for everyone", "Accessibility", ["S02"]),
@@ -88,7 +91,7 @@ def zoom_of(x):
         return None
     if x["id"] in ZOOM0:
         return 0
-    if x["id"] in ZOOM1:
+    if x["id"] in ZOOM1 or x["id"] in SITE_BRIEF:
         return 1
     return 2 if x["mode"] in ("Quick", "Standard") else 3
 
@@ -204,7 +207,7 @@ def build_questions(q, marks=({}, {})):
                                                   **({"breaks": br[val(o["value"])]} if val(o["value"]) in br else {})}
                                                  for o in x["options"]],
                     "default_value": default_value(x), **({"default_follows": x["default_follows"]} if x.get("default_follows") else {}),
-                    "show_if": x["show_if"],
+                    "show_if": x["show_if"], **({"when": "persuade"} if x["id"] in SITE_BRIEF else {}),
                     "decides": x["decides"], "changes": x["changes"], "template": TEMPLATES.get(x["stage"]),
                     **({"status": "planned"} if x.get("status") == "planned" else {}),
                     **({"settled_by": [sid for sid, _ in settled[x["id"]]]} if x["id"] in settled else {})})
@@ -212,6 +215,7 @@ def build_questions(q, marks=({}, {})):
                       "default names exactly one option; the prose default and everything else is in stages/*.md. "
                       "default_follows: the default depends on an earlier answer ({question, map: {that answer: this option}}); "
                       "use default_value only while that question is unanswered. "
+                      "when persuade: asked only for a site that persuades (Q-scope-06 persuade, or Q-scope-01 marketing). "
                       "status planned: the feature is not built yet; the interview skips the question and records nothing. "
                       "settled_by: house standards already lock the answer; the interview skips the question like a planned one. "
                       "options[].breaks: the standards an option would break; never recommend it.",
@@ -441,7 +445,7 @@ def build_pacing(q, graph, settled=()):
     for aid, name, section, stages in AREAS:
         levels = {}
         for z in (0, 1, 2, 3):
-            ids = [x["id"] for x in qs if x["stage"] in stages and zoom_of(x) == z and not skip(x)]
+            ids = [x["id"] for x in qs if x["stage"] in stages and zoom_of(x) == z and not skip(x) and x["id"] not in SITE_BRIEF]
             secs = sum(SECONDS[x["time_weight"]] for x in qs if x["id"] in ids)
             if ids:
                 levels[str(z)] = {"questions": ids, "minutes": max(1, round(secs / 60))}
@@ -449,6 +453,9 @@ def build_pacing(q, graph, settled=()):
     return {"_about": STAMP + ". Where the interview spends time (DC-L18-08, DC-L17-08). minutes are rough "
                       "estimates from the time weight (high 60 s, medium 30 s, low 15 s) [inferred].",
             "zoom_levels": ZOOM_NAMES, "zoom0": ZOOM0, "zoom1": ZOOM1, "areas": areas,
+            "site_brief": {"when": "a site that persuades: Q-scope-06 persuade, or Q-scope-01 marketing", "zoom": 1, "area": "overview",
+                           "questions": [x["id"] for x in qs if x["id"] in SITE_BRIEF and not skip(x)],
+                           "minutes": max(1, round(sum(SECONDS[x["time_weight"]] for x in qs if x["id"] in SITE_BRIEF) / 60))},
             "counts": q["meta"]["counts"],
             "time_weight_rule": q["meta"]["time_weight_rule"],
             "thresholds": {"fanout_deep": 5, "show_visual_if_reach_gt": 20, "inferred": True},

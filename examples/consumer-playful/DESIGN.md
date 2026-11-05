@@ -34,7 +34,7 @@ spacing:
 
 ## Overview
 
-> Zoom: sketch (0 of 3), 6 decisions in this area. To zoom in, answer Q-dir-01, Q-dir-02.
+> Zoom: sketch (0 of 3), 6 decisions in this area. To zoom in, answer Q-site-01, Q-site-02, Q-site-03.
 <!-- od:zoom area=overview level=0 -->
 
 **Consumer Playful feels playful and friendly. Screens are roomy, in a flat style.**
