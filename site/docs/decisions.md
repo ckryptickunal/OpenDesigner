@@ -95,4 +95,4 @@ Every default traces to the research: the dial formulas in `levers.json` and the
 
 ## Known issues
 
-- Only a few core components are shown so far: buttons, a text field and a card. The overview lists 25 components as planned.
+- The overview page draws only buttons, a text field and a card, and lists the rest by name (25 in a default system). The component sheet in `opendesigner/preview/` shows more parts in their states, and the [component library](/library/) has 82.

@@ -4,7 +4,7 @@ seo_title: Quickstart: your first design system with OpenDesigner
 description: Make your first design system: the five sketch questions with example answers, the files you get, and why to open overview.html and DESIGN.md first.
 section: Getting started
 order: 3
-updated: 2026-10-14
+updated: 2026-11-05
 ---
 
 To make your first design system, say "Create a design system for this project" and answer up to five short questions. OpenDesigner then builds a complete first version: tokens, code exports, a `DESIGN.md` and an overview page. Open `opendesigner/overview.html` first to see the whole system, then read the summary at the top of `DESIGN.md`.
@@ -98,6 +98,7 @@ Check three things:
 ## What to do next
 
 - **Stop here.** Every level gives you working files.
+- **Research your users.** It offers this right after the first version: about 10 minutes, and it does the work. Then it shows the competitors, a positioning to confirm and three directions.
 - **Zoom in** on one area, such as colors or text. See [Zoom levels](/docs/zoom-levels/).
 - **Use it in code.** See [For engineers](/docs/engineers/).
 - **Let your other AI tools know.** At the end, it asks before adding a short note to your `AGENTS.md`, so later AI sessions follow the same rules.

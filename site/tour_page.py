@@ -249,10 +249,7 @@ def engine_section(b, f):
                     f'<strong>{esc(e["name"])}</strong><span>{esc(e["making"])}</span></button>')
         answers = [("Who", e["who"]), ("Where", e["where"]), ("Feel", e["feel"]),
                    ("Brand", f'<span class="hh-sw" style="background:{esc(e["brand"])}"></span><span class="mono">{esc(e["brand"].lower())}</span>')]
-        hl = lambda k: ' class="hl"' if k in ("roundness", "expression") else ""
-        bars = "".join(f'<li{hl(k)} style="--v:{t["dials"][k]};--i:{j}"><span class="tr-dn">{DIAL_NAMES.get(k, k)}</span><span class="tr-bar" aria-hidden="true"><i></i></span>'
-                       f'<span class="tr-dv num">{t["dials"][k]}</span></li>' for j, k in enumerate(d["id"] for d in f["dials"]) if k in t["dials"])
-        worked = []
+        worked, shown_keys = [], []
         for key, param, have, unit in (("roundness", "Corner radius of controls", t["rControl"], "px"), ("expression", "Type scale ratio", t["ratio"], "")):
             hit = band(dials[key], t["dials"][key])
             if not hit:
@@ -262,13 +259,17 @@ def engine_section(b, f):
             if str(out) not in str(have):  # the band and the engine output disagree: show nothing rather than a wrong formula
                 print(f"tour: {e['key']} {key}={t['dials'][key]} gives {out}, engine wrote {have}; row left out")
                 continue
+            shown_keys.append(key)
             worked.append(f'<li><p class="tr-w-in"><span>{DIAL_NAMES[key]}</span><b class="num">{t["dials"][key]}</b></p>'
                           f'<p class="tr-w-band">falls in the band <span class="num">{lo} to {hi}</span>, which gives</p>'
                           f'<p class="tr-w-out"><span>{param}</span><b class="num">{esc(shown)}</b></p></li>')
+        hl = lambda k: ' class="hl"' if k in shown_keys else ""
+        bars = "".join(f'<li{hl(k)} style="--v:{t["dials"][k]};--i:{j}"><span class="tr-dn">{DIAL_NAMES.get(k, k)}</span><span class="tr-bar" aria-hidden="true"><i></i></span>'
+                       f'<span class="tr-dv num">{t["dials"][k]}</span></li>' for j, k in enumerate(d["id"] for d in f["dials"]) if k in t["dials"])
         panels.append(f'<div class="tr-en" role="tabpanel" id="en-{e["key"]}" aria-labelledby="en-tab-{e["key"]}" tabindex="0"{"" if i == 0 else " hidden"} data-play>'
                       f'<div class="tr-en-col"><p class="kicker">The answers</p><dl class="tr-dl">' + "".join(f"<div><dt>{a}</dt><dd>{v if a == 'Brand' else esc(v)}</dd></div>" for a, v in answers) + "</dl></div>"
                       f'<div class="tr-en-col"><p class="kicker">The eight dials</p><ol class="tr-dials">{bars}</ol></div>'
-                      f'<div class="tr-en-col"><p class="kicker">Two dials, worked through</p><ol class="tr-worked">{"".join(worked)}</ol></div></div>')
+                      f'<div class="tr-en-col"><p class="kicker">{"Two dials" if len(worked) == 2 else "One dial"}, worked through</p><ol class="tr-worked">{"".join(worked)}</ol></div></div>')
     return f"""
 <section class="h-sec" id="engine">
 <div class="h-head">{b.idx("02", "Inside the engine")}<h2 class="h-h2">Each answer moves a dial. Each dial sets real values.</h2>
@@ -372,7 +373,7 @@ def learn_section(b, f):
     return f"""
 <section class="h-sec" id="learn">
 <div class="h-head">{b.idx("05", "How it learns")}<h2 class="h-h2">A confirmed mistake becomes a check for everyone.</h2>
-<p class="h-lede">OpenDesigner improves from use. Each mistake the maintainer confirms turns into a fix or a rule that a script or an agent can check, and the tests run again before the change reaches you. No version is tagged yet; <code>engine.py version</code> tells you when your system was built with an older copy.</p></div>
+<p class="h-lede">OpenDesigner improves from use. Each mistake the maintainer confirms turns into a fix or a rule that a script or an agent can check, and the tests run again before the change reaches you. {b.release_line()} <code>engine.py version</code> tells you when your system was built with an older copy, and what to do.</p></div>
 <div class="tr-loop" data-play><ol class="tr-loop-row">{lis}</ol><p class="tr-loop-back">{icon("loop", 18)}<span>Then you update, and the loop starts again.</span></p></div>
 {trace}
 <p class="h-more"><a class="h-link" href="/docs/evals/">See every test result, and run them yourself {b.ARROW}</a></p>
@@ -449,7 +450,7 @@ DESIGN.md, PRODUCT.md, opendesigner/tokens/ (DTCG 2025.10), opendesigner/build/ 
 
 ## 05 How it learns
 
-You notice something; your AI saves a note in your project with a ready-to-file issue link (nothing is posted unless you submit it); when the maintainer confirms it, a gap or a bug is fixed in the source and a visual mistake becomes a preflight check or a review case; the tests run again before the change reaches you. No version is tagged yet. Test results: {b.SITE_URL}/docs/evals/
+You notice something; your AI saves a note in your project with a ready-to-file issue link (nothing is posted unless you submit it); when the maintainer confirms it, a gap or a bug is fixed in the source and a visual mistake becomes a preflight check or a review case; the tests run again before the change reaches you. {b.release_line()} Test results: {b.SITE_URL}/docs/evals/
 
 Get started: {b.SITE_URL}/docs/install/ · Every step in detail: {b.SITE_URL}/docs/how-it-works/
 """

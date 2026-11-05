@@ -1,10 +1,10 @@
 ---
 title: Engine commands
 seo_title: OpenDesigner engine commands: sketch, set, build, review
-description: Every OpenDesigner engine command with one line on what it does: starting a system, recording decisions, building and checking, standards, review and feedback.
+description: Every OpenDesigner engine command in one line each: start a system, record decisions, build and check, research users, standards, review and feedback.
 section: Reference
 order: 2
-updated: 2026-10-15
+updated: 2026-11-05
 ---
 
 The OpenDesigner engine is one Python file, `skills/opendesigner/scripts/engine.py`, that does the math and writes the tokens, exports and pages. Your AI usually runs these commands for you, but you can run them yourself from your project folder. It needs Python 3.10 or newer, uses only the standard library, and makes no network calls.
@@ -23,6 +23,7 @@ The commands below write `engine.py` for short. If you installed the plugin, the
 
 ## Start a system
 
+- `engine.py detect` reads what your project folder already answers, such as the name, platforms, brand color, font and dark mode, before any question. It changes nothing.
 - `engine.py init --name "Acme"` creates `state.json` with defaults and applies the house standards that fit.
 - `engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal` records the five sketch answers and builds a complete first version.
 - `engine.py feel fun calm` shows how the engine reads your feel words. With no words, it lists every word it knows.
@@ -51,6 +52,8 @@ The sketch takes these options:
 - `--lock`: lock the value as you set it.
 - `--force`: change a locked value. Use it only with the owner's OK.
 - `--no-doc`: skip refreshing `DESIGN.md` and `PRODUCT.md`.
+- `--dry-run`: show what the value would change, old and new tokens and the checks, and record nothing.
+- `--source-ref`: where the value came from, such as a research file, saved with the decision.
 
 {{figure:engine-set-why}}
 
@@ -77,9 +80,16 @@ Run `build` after every change, so the exports and pages are never out of date.
 
 - `engine.py intake opendesigner/references/site.json` fits measurements from a reference to proposed dial positions, each with a confidence. `--accept` accepts them all. The extract skill makes the measurement file. See [Start from an existing app or brand](/docs/existing-product/).
 
+## Research your users
+
+- `engine.py research plan --brief "..."` writes the plan: who the users are, what to find out, searches to start from and the tools to look for.
+- `engine.py research add findings.json` checks and saves the findings, writes `research/users.md` and lists what they recommend. `research check` checks a file without saving it.
+- `engine.py research market`, `positioning` and `directions` show the competitor table, draft and confirm the positioning, and write the board with three directions.
+- `engine.py research skip --why "..."` records that you don't want research, and the reminders stop. `research status` says where it stands.
+
 ## Keep it consistent
 
-- `engine.py review` scans your code for hard-coded colors, sizes, radii, shadows and durations, and for out-of-date `DESIGN.md` sections. It only reports: it never edits your code. `--project src` scans one folder. `--strict` exits with an error when it finds anything.
+- `engine.py review` scans your code for hard-coded colors, sizes, radii, shadows and durations, and for out-of-date `DESIGN.md` sections. It also says when your code uses no tokens or more raw values than tokens, and when the system is 10 or more commits behind the code. It only reports: it never edits your code. `--project src` scans one folder. `--strict` exits with an error when it finds anything.
 
 ## Standards
 
@@ -94,9 +104,11 @@ Every standard change is recorded in the decision log. See [For enterprise desig
 ## Feedback
 
 - `engine.py feedback "the spacing question was confusing" --kind confusing` saves a note to `opendesigner/feedback.md` and prints a ready-to-file GitHub issue link. The kinds are `gap`, `bug`, `confusing` and `idea`. Nothing is posted unless you open the link and submit it.
+- `engine.py feedback "buttons feel too loud" --kind note` records your own note on the work in `opendesigner/RULES.md`. A note you give twice becomes a rule later sessions follow. `--same N-01` marks a repeat of an earlier note.
 
 ## Good to know
 
 - The same `state.json` gives the same tokens.
+- `engine.py version` shows this copy's release and whether the system here was made with an older or newer one. It never checks online.
 - When `set` or `pick` changes no tokens, the answer is still saved, as a `DESIGN.md` rule or a `PRODUCT.md` fact. The engine says so.
-- The engine has 171 tests, which pass on the maintainer's computer. No CI runs are recorded yet.
+- The engine has more than 200 tests, which pass on the maintainer's computer. No CI runs are recorded yet.

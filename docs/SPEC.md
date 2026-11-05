@@ -1,12 +1,12 @@
 # OpenDesigner specification
 
-> This is a copy of [`synthesis/OPENDESIGNER-SPEC.md`](../synthesis/OPENDESIGNER-SPEC.md), made on 2026-09-23. Edit the original, then copy it here again.
+> This is a copy of [`synthesis/OPENDESIGNER-SPEC.md`](../synthesis/OPENDESIGNER-SPEC.md), made on 2026-11-05. Edit the original, then copy it here again.
 
 Synthesis S1d, written 2026-09-23. This is the definitive description of what OpenDesigner is and how it works, written so people and agents can implement and extend it without re-reading the research. R1 copies it to `docs/SPEC.md` (`_coordination/REPO-PLAN.md`); edit this file, not the copy.
 
 **How to read the tags.** `DC-Lxx-nn` is a Decision Card (full text in `synthesis/cards.json`, or search with `python3 tools/jev_nav.py find`). `S-Lxx-nnn` is a source in `traces/Lxx-trace.md`. `Q-...` is a question in `synthesis/QUESTIONNAIRE.md` (machine copy `questionnaire.json`). References such as LEVERS B6 or L17 H2 point into `synthesis/LEVERS.md` or a research file. `[inferred]` marks a decision or reading made by this spec: treat it as a default to test, not a finding. Card text is not copied here; look it up by id. Product decisions made here are logged in `_coordination/DECISIONS.md` under "S1d spec (B)" (and three earlier entries under "S1d spec" at 19:01) and summarized in section 11. A first S1d instance wrote an alternative draft, `synthesis/OPENDESIGNER-SPEC.s1d-draft-b.md`; its useful content is merged here and it is not canonical.
 
-**Counts used throughout** (read from the files on 2026-09-23): the ontology has 271 nodes in 10 layers, 207 of them design-system blocks outside the builder meta layer (ONTOLOGY; L17 G1; dated note, 2026-09-24: `ontology.json` has 275 nodes and 211 blocks outside the builder layer [S-V1b-091], and it is now the canonical block classification (orchestrator decision in `_coordination/DECISIONS.md`), with the five classes of section 4.1); `decision-graph.json` has 352 decisions, 465 edges and 12 cycles (DECISION-GRAPH.md prose still says 325 and 431; the JSON wins; dated note, 2026-09-24: 470 edges after session F1 fixes added five L17/L18 edges); the questionnaire has 28 stages and 192 questions, of which Quick asks 10, Standard 92 and Expert 191, with 30 high, 82 medium and 80 low time weights (`questionnaire.json`).
+**Counts used throughout** (read from the files on 2026-09-23): the ontology has 271 nodes in 10 layers, 207 of them design-system blocks outside the builder meta layer (ONTOLOGY; L17 G1; dated note, 2026-09-24: `ontology.json` has 275 nodes and 211 blocks outside the builder layer [S-V1b-091], and it is now the canonical block classification (orchestrator decision in `_coordination/DECISIONS.md`), with the five classes of section 4.1); `decision-graph.json` has 352 decisions, 465 edges and 12 cycles (DECISION-GRAPH.md prose still says 325 and 431; the JSON wins; dated note, 2026-09-24: 470 edges after session F1 fixes added five L17/L18 edges); the questionnaire has 28 stages and 192 questions, of which Quick asks 10, Standard 92 and Expert 191, with 30 high, 82 medium and 80 low time weights (`questionnaire.json`; dated note, 2026-11-05: 194 questions, 6 of them planned; Quick 10, Standard 94 and Expert 193; 30 high, 84 medium and 80 low).
 
 **How the brief's requirements are met** (`_coordination/BRIEF.md`):
 
@@ -73,7 +73,7 @@ The interview order is the questionnaire's: 27 sequential screens (Stages 01-27)
 | P8 Export and hand-off | none | write every output; mirror to design tools | validator exit 0 | confirmations only | |
 | P9 Extend (later sessions) | any | change the system without breaking it | superseding decision records | per change | |
 
-Totals: 10 / 92 / 191. The three gates follow DC-L17-12 and QUESTIONNAIRE protocol step 11. Gate 3 sits after Stage 19 rather than right after the Stage 03 checklist, because each asset brief must carry the system's tokens and direction (L17 H1 rule 6), which exist only after Stages 06-16 [inferred; logged]. Quick mode keeps only Gate 2 (DC-L17-12).
+Totals: 10 / 94 / 193. The three gates follow DC-L17-12 and QUESTIONNAIRE protocol step 11. Gate 3 sits after Stage 19 rather than right after the Stage 03 checklist, because each asset brief must carry the system's tokens and direction (L17 H1 rule 6), which exist only after Stages 06-16 [inferred; logged]. Quick mode keeps only Gate 2 (DC-L17-12).
 
 ### 3.2 Each phase in detail
 
@@ -126,7 +126,7 @@ Totals: 10 / 92 / 191. The three gates follow DC-L17-12 and QUESTIONNAIRE protoc
 **P7 Critique and coverage** (medium).
 - *Runs:* `engine.py validate` first (section 6). Only on a passing system does the model critique, at the strictness chosen in Q-pref-01 (DC-L15-11): a 0-10 score per ontology layer with "what a 10 looks like" and one question per gap [S-L17-006]; a rubric fixed in advance and at least two critique runs for generated content, because one output is an example, not an evaluation [S-L17-130] [S-L17-132]; a warning when output looks polished but rests on unverified patterns [S-L17-133].
 - *Shows:* `coverage`: every block with its status and source; pending assets; assumed owner inputs; blocks still on unreviewed defaults; hard failures; warnings and waivers.
-- *Asks:* one question per remaining gap; confirmation of every `assumed` owner-input decision (in Quick mode, the 37 questions in `questionnaire.json` meta `quick_mode_assumed_owner_inputs`); the final review of taste decisions (DC-L17-12).
+- *Asks:* one question per remaining gap; confirmation of every `assumed` owner-input decision (in Quick mode, the 41 questions in `questionnaire.json` meta `quick_mode_assumed_owner_inputs`); the final review of taste decisions (DC-L17-12).
 - *Exit:* no unmet hard rule, every block has a status, and the person accepts any named remainder (DC-L17-09).
 
 **P8 Export and hand-off** (fast).
@@ -139,7 +139,7 @@ Totals: 10 / 92 / 191. The three gates follow DC-L17-12 and QUESTIONNAIRE protoc
 
 ### 3.3 Pacing: where the time goes
 
-- **Time weight per question** (QUESTIONNAIRE time-weight rule, [inferred] from the graph): `high` when a decided card has fan-out 5 or more, or the question is in Quick mode (30 questions); `medium` for fan-out 2-4, asset hooks, raw inputs, the reference panel and owner-input questions (82); `low` otherwise (80). Accessibility floors (Q-aud-03, Q-color-17, Q-motion-07) are treated as high regardless of fan-out, because a wrong answer there fails real users, not just taste [inferred].
+- **Time weight per question** (QUESTIONNAIRE time-weight rule, [inferred] from the graph): `high` when a decided card has fan-out 5 or more, or the question is in Quick mode (30 questions); `medium` for fan-out 2-4, asset hooks, raw inputs, the reference panel and owner-input questions (84); `low` otherwise (80). Accessibility floors (Q-aud-03, Q-color-17, Q-motion-07) are treated as high regardless of fan-out, because a wrong answer there fails real users, not just taste [inferred].
 - **What each weight gets:** high: say why it matters, show 2-3 options with their visual effect and a real system that uses each, recommend the default with its source, and say what it changes downstream. Medium: the recommended default and the main alternatives. Low: the default in one line, confirm or change, grouped up to three (DC-L18-08, DC-L18-09; QUESTIONNAIRE protocol step 3).
 - **Decision kinds** (gstack's split, mapped to classes by DC-L17-01): *mechanical* decisions (generatable blocks) take a visible default; *taste* decisions (designer-owned, taste-heavy tool-assisted and extractable blocks) are recommended and reviewed at the final gate; *user challenges* (owner input, and anything that changes the person's stated direction) are never decided without explicit consent [S-L17-015].
 
@@ -157,8 +157,8 @@ Totals: 10 / 92 / 191. The three gates follow DC-L17-12 and QUESTIONNAIRE protoc
 | Mode | Questions asked | For whom | Gates | Hooks | Everything else |
 |---|---|---|---|---|---|
 | **Quick** | 10: Q-aud-01, Q-brand-01, Q-plat-01, Q-tool-01, Q-color-01, Q-color-02, Q-type-01, Q-shape-01, Q-depth-01, Q-motion-01 | "a complete system in minutes" | direction only | not asked; fallbacks applied, asset tray stays open | generatable blocks take defaults; owner-input questions stored as `assumed` and confirmed in P7 |
-| **Standard** | 92 (Quick + Standard) | an engineer setting up a real product system | all three | asked | Expert questions take defaults and stay editable |
-| **Expert** | 191 (all sequential questions) | design-system leads; multi-platform or multi-brand systems | all three | asked | nothing is decided silently; defaults are still pre-filled |
+| **Standard** | 94 (Quick + Standard) | an engineer setting up a real product system | all three | asked | Expert questions take defaults and stay editable |
+| **Expert** | 193 (all sequential questions) | design-system leads; multi-platform or multi-brand systems | all three | asked | nothing is decided silently; defaults are still pre-filled |
 
 Quick mode's ten combine the highest fan-out step-0 decisions with the L09 divergence points that change the look most; everything L09 found nearly every system shares is pre-filled instead of asked (QUESTIONNAIRE "Depth modes"). The reference panel is available in every mode and never required. The person can deepen one stage at any time without switching mode (DC-L18-08 option c).
 
@@ -520,7 +520,7 @@ DESIGN.md is the readable view that later sessions and other models read first. 
 
 ### 7.3 PRODUCT.md
 
-Product truth kept apart from the visual system, because it has different readers and changes at a different rate (L17 A3 [S-L17-020]). Generated from `state.json` with the same keep-block and hash rules as DESIGN.md. Headings, in order: `## Product`, `## Purpose and goals`, `## Phase`, `## Audience`, `## Users` (the user research), `## Market`, `## Positioning` (the four lines the person confirmed, and the direction they picked), `## Surfaces` (each with its Persuade, Operate, Read or Experience mode), `## Memorable Thing`, `## Principles` (ranked, with the tie-break rule), `## Constraints` (accessibility target, platforms, OS floors, legal or brand limits), `## Scope` (in and explicitly out, DC-L11-02), `## Team and Governance`. An existing PRODUCT.md is read as prior answers in P0 and rewritten into this shape only with consent [inferred].
+Product truth kept apart from the visual system, because it has different readers and changes at a different rate (L17 A3 [S-L17-020]). Generated from `state.json` with the same keep-block and hash rules as DESIGN.md. Headings, in order: `## Product`, `## Purpose and goals` (mission, vision, purpose and goals, from the person's words and README, each marked assumed until confirmed; "Not enough information" where nobody said), `## Phase` (Q-scope-07: idea, building, near launch or live, read from the repo first, and what comes first in it), `## Audience`, `## Users` (the user research), `## Market` (the analogous product, competitors, their shared pattern, the gap and the industry's conventions; "Not enough information" until researched or said), `## Positioning` (the four lines the person confirmed, and the direction they picked), `## Surfaces` (each with its Persuade, Operate, Read or Experience mode), `## Memorable Thing`, `## Principles` (ranked, with the tie-break rule), `## Constraints` (accessibility target, platforms, OS floors, legal or brand limits), `## Scope` (in and explicitly out, DC-L11-02), `## Team and Governance`. An existing PRODUCT.md is read as prior answers in P0 and rewritten into this shape only with consent [inferred].
 
 ### 7.4 DTCG 2025.10 tokens and the Resolver
 

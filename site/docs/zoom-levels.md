@@ -44,7 +44,7 @@ It drafts the lines from your words, your research and your repo, and you correc
 
 ### Level 2: defined
 
-One area at a time, with 1 to 15 questions per area. For example, Color covers color ramps, color roles and contrast.
+One area at a time, with up to 12 questions per area. For example, Color covers color ramps, color roles and contrast.
 
 ### Level 3: detailed
 
@@ -68,6 +68,7 @@ Colors (about 6 min) · Text (about 2 min) · Everything, in 8 quick screens (ab
 
 {{figure:zoom-levels-offer}}
 
+- After the sketch, it first offers to research your users (about 10 minutes, and it does the work), unless that is done or you said no.
 - It offers at most three choices.
 - It puts first the areas whose choices change the most, then areas your answers made risky, such as a light brand color or a dense product.
 - "Stop" is always a good answer.
