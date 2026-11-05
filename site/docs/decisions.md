@@ -96,4 +96,3 @@ Every default traces to the research: the dial formulas in `levers.json` and the
 ## Known issues
 
 - Only a few core components are shown so far: buttons, a text field and a card. The overview lists 25 components as planned.
-- The palette page's contrast table is still empty ([issue #47](https://github.com/ckryptickunal/OpenDesigner/issues/47)). The overview page shows the contrast ratios.
