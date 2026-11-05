@@ -1,6 +1,6 @@
 ---
 name: opendesigner-illustrate
-description: Finds open-licence illustrations for empty states, onboarding, errors or heroes, recolors them to the design tokens and wires them in. Also finds licensed stock photos without brand marks.
+description: Finds open-licence illustrations and stock photos, recolors art to the tokens and wires it in. Also adds icons drawn like the few a product already has, from open sets, with their licences.
 license: MIT
 compatibility: Python 3.10+ (standard library). Search and fetch need HTTPS access. A browser or image view helps you judge candidates; web search finds more sources.
 metadata:
@@ -10,7 +10,7 @@ metadata:
 
 # OpenDesigner: illustrations
 
-Use this when someone asks for illustrations, "make it more visual", art for an empty state, onboarding, a 404 or error page, a sign-in panel, a hero or feature tiles. It is also the open-library path of the `H-illus` hook (`hooks.md` in the opendesigner skill). It works with or without an OpenDesigner system; with one, the art takes the system's colors and follows its theme.
+Use this when someone asks for illustrations, "make it more visual", art for an empty state, onboarding, a 404 or error page, a sign-in panel, a hero or feature tiles. It is also the open-library path of the `H-illus` hook (`hooks.md` in the opendesigner skill), and of `H-icons` when the person has a few icons of their own and needs more. It works with or without an OpenDesigner system; with one, the art takes the system's colors and follows its theme.
 
 Output: SVG files (or React components) recolored to the tokens, one CSS file that switches their colors with the theme, a licence ledger and `ATTRIBUTION.md`, all in the person's repo. Nothing is final until the person picks it.
 
@@ -18,6 +18,7 @@ Talk plainly: one idea and one question per message, and recommend one option wi
 
 Helper: `scripts/illustrate.py` (called `illustrate.py` below; run it from the person's project). Knowledge:
 - `references/directory.md`: every source (46, photo sources included), with its licence, credit rule, formats, search link, tips and steps. Generated from `references/sources.json`.
+- `references/sources.json`, `icon_sets`: 24 open icon sets with their licence and construction (grid, line, caps, joins), read live from Iconify.
 - `references/searching.md`: where to look first, how to word a search, file formats, and how to move through each kind of source.
 - `references/purposes.json`: slots and their search words.
 - `references/ranking.md`: how to judge fit.
@@ -119,6 +120,23 @@ python3 illustrate.py photos check [--page site/index.html]                     
 - **Natural light by default** for business and work products. Dark, moody grades need a reason.
 - **Made with AI:** `photos add FILE --ai --tool "<model>"`. Tell the person once. Never caption it on the page, and never strip the file's own provenance data.
 - Recognisable people: the licence covers the photo, not their likeness. Never imply they endorse the product.
+
+## A few icons of their own
+The `H-icons` path when the person has a handful of icons and needs more. Offer it before a designer brief. Files, `ledger.json` and `ATTRIBUTION.md` go in `opendesigner/icons/`.
+```
+python3 illustrate.py icons measure public/icons/*.svg [--sizes 20,40]    their construction: badge or ring, glyph box, line, caps, colour
+python3 illustrate.py icons sets                                         open sets ranked by how close they are
+python3 illustrate.py icons find "<object>" --set <set>                  glyph names in that set
+python3 illustrate.py icons fetch <name> [...] --set <set>               drawn into their construction, stroke scaled to their line
+python3 illustrate.py icons sheet                                        the new icons beside theirs, at their sizes
+python3 illustrate.py icons keep <name> [...] --to <their icon folder>   after a yes: status, ATTRIBUTION.md, the files
+```
+- `measure` and `sets` work offline. Run both first, so you can recommend the one set at the top; `find` and `fetch` call Iconify, so ask before them as for any search.
+- Read the measured construction back to the person. Where `measure` says the glyph box or line is an estimate, check one icon and pass `--glyph-box` or `--line`.
+- Take every new glyph from one set. Two sets side by side read like two typefaces.
+- How the stroke scales: a glyph from a 512-unit grid placed in a 20-unit box is scaled by 20/512, so a 1.5-unit line needs a stroke of 1.5 / (20/512) = 38.4. Sets whose lines are filled shapes (Material Symbols, Phosphor, Remix) keep their weight, so `sets` ranks them lower.
+- Show the sheet and wait for a yes. Then record the hook with the line `keep` prints, and the icon stroke with the line `measure` printed.
+- A glyph no open set has, or one customers should know as the brand's own, still goes to a designer, drawn in the same construction.
 
 ## Hosts
 - **Claude Code, Codex, Cursor and other agents with a shell:** everything above. Open the contact sheets in a browser tool, or publish one as an artifact, to look before you recommend.

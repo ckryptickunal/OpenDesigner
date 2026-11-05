@@ -33,7 +33,7 @@ A person in a hurry still gets a finished page in the first reply. What they don
 | Before you show a built page | **opendesigner-review** on it |
 | Before anything is shared or deployed | **opendesigner-preflight** |
 | The person names a site or URL as a reference | **opendesigner-extract**: measure the live site. A thumbnail is not enough |
-| You are about to draw line art or illustrations by hand | **opendesigner-illustrate** first |
+| You are about to draw line art, icons or illustrations by hand | **opendesigner-illustrate** first (a few icons of their own: `illustrate.py icons`) |
 | Before you propose colours or directions | Mobbin, when connected, for shipped references (`practices.md` section 2). Then `engine.py research market` and a positioning the person confirms (`research.md` section 8) |
 
 ## Files in this skill
@@ -753,7 +753,7 @@ The **Ask** and **Question** columns are what you say to the person, in plain wo
 | `H-logo` (Q-brand-03) | Do you have a logo? Which parts: the name written out (wordmark), a symbol, both together? A one-color version? | SVG or PDF, text outlined | Commission (brief + assignment reminder); AI logo tools with caveats and a trademark search; wordmark in the chosen typeface |
 | `H-appicon` (Q-icon-06) | Do you have app icon artwork? Separate layers are best. | Layered SVG/PDF (Apple Icon Composer), adaptive layers (Android), PNG for stores | Designer; Icon Composer; Android Studio Image Asset; Maskable.app |
 | `H-favicon` (with the logo) | Asked with the logo | Master SVG | Generated from the symbol: favicon.ico 32, icon.svg with dark-mode query, apple-touch 180, manifest 192/512 + maskable |
-| `H-icons` (Q-icon-01) | Do you have your own icons, or icons that free icon sets don't have? | SVG on the library grid, SF Symbol templates, Android vector drawables | Lucide, Phosphor, Tabler, Heroicons, Material Symbols (keep notices); custom icons on the 24 px keyline; commission pictograms |
+| `H-icons` (Q-icon-01) | Do you have your own icons, or icons that free icon sets don't have? | SVG on the library grid, SF Symbol templates, Android vector drawables | A few of their own: glyphs from the closest open set, drawn in their construction (badge, glyph box, line, colour) and shown beside them for a yes (opendesigner-illustrate, `illustrate.py icons`); Lucide, Phosphor, Tabler, Heroicons, Material Symbols (keep notices); custom icons on the 24 px keyline; commission pictograms |
 | `H-illus` (Q-img-04) | Do you have illustrations, or a drawing style or character? | Master SVG, Lottie for animation | Commission; open sets with their exact terms (the **opendesigner-illustrate** skill finds, recolors and applies them with a licence ledger); AI vector tools with plan terms; original art painted in code (**opendesigner-paint**); or no illustration and honest text empty states |
 | `H-photo` (Q-img-01) | Do you have photos, or a photo style to follow? | Highest-resolution originals | Commission; Unsplash or Pexels under their licences (opendesigner-illustrate, `illustrate.py photos`); an AI image: tell the person once, keep the file's own provenance data, never caption it "AI generated" on the page |
 | `H-type` (Q-type-02) | Do you have a brand font? Does its licence cover websites, apps and hosting the files yourself? | OTF/TTF masters, WOFF2 for web | Google Fonts (OFL/Apache, self-host OK); Fontshare (no subsetting or conversion, not offerable in a design tool's picker); Adobe Fonts (web embed only, no self-hosting or app embedding); buy the needed licences |
