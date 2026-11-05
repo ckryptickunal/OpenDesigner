@@ -6,7 +6,9 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ## [Unreleased]
 
-Nothing yet.
+### Fixed
+
+- **The footer links every docs page again** (2026-11-05). The footer had dropped to 20 links. It now links every docs page by section from every page, so search engines and AI crawlers reach them, and each label still fits on one line down to 320 px.
 
 ## [0.2.0]: 2026-11-05
 

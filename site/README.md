@@ -35,6 +35,7 @@ What the owner's reviews settled for this site (`_coordination/OWNER-FEEDBACK.md
 - **Frames fit what they hold** (owner, same day): when a part is narrower than its view, the frame wraps the part instead of leaving it small in an empty field.
 - **One frame language**: every framed screen is the frosted-glass bezel (cards, the home page's screens, device views); no black device bezels.
 - **Calm, structured pages** (owner, same day: "so cluttered"): one backdrop for a set of cards, stickers below a picture and never on it, one rhythm of section spacing, tiles of one size in a grid.
+- **The footer keeps every docs link** (owner, 2026-11-01: "do not remove them"): every page links every docs page by section, plus `/llms.txt` and `/sitemap.xml`, so search engines and AI crawlers reach the whole site from anywhere. Labels are short enough to stay on one line (`FOOT_SHORT` in `build.py`; the build warns when one is too long).
 - **Invented names are checked** with `python3 brand/tools/check_names.py site/dist/index.html --gallery` and a web search.
 
 ## How the site is put together
