@@ -9783,15 +9783,21 @@ def export_brand(d, files, meta, state, prefix):
         uses = [k for k in styles if fam_of(k)[:1] == fam[:1]]
         weights = sorted({int((base[k].get("resolved") or {}).get("fontWeight") or 400) for k in uses})
         jobs = sorted({k.split(".")[1] for k in uses})
-        f = faces.get(role) or faces.get("text") or {}
-        face = f.get("face") if f.get("face") not in (None, "=textFace") else (faces.get("text") or {}).get("face")
-        shown_name = "The system font" if face in (None, "system") or _generic_face(face or "") else face
-        if fam[0] and str(fam[0]).lower() in OPEN_FONTS:
-            loaded.append((str(fam[0]), weights or [400]))
-        lic = ("An open licence. " if f.get("open") else (f.get("note") or "Licence not recorded. ") + " ") \
-            + "Font files are not included here: get them from the foundry or the source, under its licence."
+        first = str(fam[0])
+        generic = _generic_face(first) or first.lower() in GENERIC_FONTS
+        shown_name = "The system font" if generic else first  # each family's own token, never another role's record
+        f = faces.get(role) or {}
+        if generic:
+            lic = "It comes with each device, so there is nothing to license or ship."
+        else:
+            lic = ("An open licence. " if first.lower() in OPEN_FONTS or f.get("open") else (f.get("note") or "Licence not recorded.") + " ") \
+                + "Font files are not included here: get them from the foundry or the source, under its licence."
+        if first.lower() in OPEN_FONTS:
+            loaded.append((first, weights or [400]))
         sample = next((k for k in ("text.display.md", "text.display.sm", "text.headline.lg", "text.title.lg", "text.body.md") if k in uses), None)
-        typ.append(f'<div class="bp-face"><h3>{_esc(role.title())}: {_esc(shown_name)}</h3>'
+        famtok = lambda r_: ((base.get(f"font.family.{r_}") or {}).get("resolved") or [None])
+        same = [r_ for r_ in ("display", "text", "mono") if has(f"font.family.{r_}") and isinstance(famtok(r_), list) and str(famtok(r_)[0]) == first]
+        typ.append(f'<div class="bp-face"><h3>{_esc(" and ".join(same).capitalize() or role.title())}: {_esc(shown_name)}</h3>'
                    + (f'<p class="bp-spec" style="{t(sample)}">{_esc(name)}</p>' if sample else "")
                    + f'<p style="font-family:var({css_var(prefix, fp)})" class="bp-glyphs">Aa Bb Cc 0123456789 &amp; ? !</p>'
                    + f'<table class="bp-table"><tbody><tr><th scope="row">Weights</th><td>{", ".join(str(w) for w in weights) or "400"}</td></tr>'
@@ -9838,7 +9844,7 @@ def export_brand(d, files, meta, state, prefix):
                   + ". It is not bundled here: install it from its source and keep its licence notice.</p>")
     if not icon_srcs and not lib:
         icons += missing("Your icon files, or the open icon set you chose.",
-                         "Q-icon-01 and the H-icons asset: engine.py set hooks.H-icons.files '[\"icons/*.svg\"]', or "
+                         "Q-icon-01 and the H-icons asset: engine.py set hooks.H-icons.files '[\"icons/cart.svg\", \"icons/truck.svg\"]', or "
                          "engine.py set hooks.H-icons.library '\"lucide\"'")
 
     # ---- voice: only when the person gave it
