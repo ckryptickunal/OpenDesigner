@@ -37,6 +37,8 @@ Before judging a PR, write one plain sentence about what it changes and why the 
 python3 .claude/skills/od-pr-review/scripts/scan_pr.py origin/main refs/od-review/pr-<N>
 ```
 
+When you resolve a conflict yourself, scan the merge commit too (`scan_pr.py origin/main <merge>`). Make it with `origin/main` as one of its parents (`git merge`, or `git commit-tree -p <pr-head> -p origin/main`). A commit without that parent makes main's own newer changes look like the PR's, and they show as false BLOCKs.
+
 The scanner reports BLOCK, REVIEW and NOTE findings. It catches known patterns, not intent, so read every changed line in the high-risk paths it lists. Threats specific to this repo:
 
 | Threat | Where it hides | What to look for |
@@ -109,6 +111,8 @@ Then run, in that worktree:
 - every test file: `skills/*/scripts/test_*.py` and `tools/test_*.py` (`test_journey` runs as `python3 -m unittest test_journey` from its folder);
 - a JSON parse of every `*.json`, and a UTF-8 decode of every `*.md`.
 
+When the PR changes a checker (`opendesigner-preflight/scripts/preflight.py`, `opendesigner-review/scripts/review.py`, `site/check_layout.py`, `brand/tools/check_dates.py` or `check_names.py`), also run `python3 tools/checker_evals.py --no-history --no-write` on the merge and on `origin/main`, and compare recall and precision. Without `--no-write` it rewrites the tracked `evals/checkers/latest.json` and the day's results file. A finding that matches no expectation lowers precision: add an expectation for a real mistake in a fixture, rather than weakening the check.
+
 Also run any test the PR adds. Append-only files such as `traces/*.md` conflict when several PRs append at the same end. The right resolution keeps both sides, which is what a `merge=union` attribute does. Confirm the ids do not collide. Remove the worktree afterwards.
 
 ## 7. Verdict and record
@@ -132,7 +136,7 @@ Append the results to `_coordination/PR-RESOLUTION-LOG.md`, one section per revi
    When several PRs conflict on append-only files, merge one, update the next branch (with union resolution, pushed if allowed), re-check, then merge.
 3. After each merge, fetch `origin/main`, re-run step 6 on it, and confirm it is green before the next one.
 4. Draft a short thank-you comment and ask before posting it. Close linked issues only when fully resolved. Say which parts of an issue remain open.
-5. Clean up: delete `refs/od-review/pr-<N>` and the worktrees you created. Do not pull `origin/main` into a dirty main working tree. Tell the maintainer it has moved.
+5. Clean up: delete `refs/od-review/pr-<N>` and the worktrees you created. Do not pull `origin/main` into a dirty main working tree. Tell the maintainer it has moved. If they ask you to bring it up to date, follow "Moving the shared `main`" in `_coordination/PROTOCOL.md` section 4.
 
 ## Comments to contributors
 

@@ -3,11 +3,11 @@
   "anthropics/claude-code#71523": "closed",
   "npm:@cloudscape-design/design-tokens": {
     "deprecated": false,
-    "latest": "3.0.114"
+    "latest": "3.0.117"
   },
   "npm:@duetds/tokens": {
     "deprecated": false,
-    "latest": "5.1.6"
+    "latest": "5.1.7"
   },
   "npm:@elastic/eui-theme-borealis": {
     "deprecated": false,
@@ -19,11 +19,11 @@
   },
   "npm:@nypl/design-system-react-components": {
     "deprecated": false,
-    "latest": "4.5.1"
+    "latest": "4.5.4-rc2"
   },
   "npm:@porsche-design-system/components-js": {
     "deprecated": false,
-    "latest": "4.8.0"
+    "latest": "4.10.1"
   },
   "npm:@workday/canvas-tokens-web": {
     "deprecated": false,
@@ -35,7 +35,7 @@
   "repo.open_prs": [
     52
   ],
-  "repo.stars": 59,
+  "repo.stars": 72,
   "tailwindlabs/tailwindcss#19570": "open",
   "tokens-studio/figma-plugin#3775": "open",
   "tokens-studio/figma-plugin#3778": "open"
