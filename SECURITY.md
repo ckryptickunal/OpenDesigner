@@ -27,4 +27,4 @@ Design disagreements, wrong research values and accessibility bugs are not secur
 
 ## Supported versions
 
-OpenDesigner has not had a tagged release yet. Security fixes land on `main`.
+The latest release is 0.2.0, tagged on 5 November 2026. Security fixes land on `main` and ship in the next release.

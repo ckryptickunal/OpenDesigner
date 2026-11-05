@@ -4,7 +4,7 @@ seo_title: Change or extend a design system with OpenDesigner
 description: How the opendesigner-extend skill changes a design system safely: it reads past decisions and locks first, asks only about what is new, and checks the result.
 section: Guides
 order: 5
-updated: 2026-10-14
+updated: 2026-11-05
 ---
 
 To change a design system you made with OpenDesigner, ask your AI for the change. The opendesigner-extend skill takes over when your project already has an `opendesigner/` folder. It reads your past decisions and locks first, asks only about what is new, records the change with its reason, and rebuilds every file.
@@ -31,7 +31,7 @@ Before it touches anything, it reads, in order:
 4. The token files in `opendesigner/tokens/`.
 5. Recent git history for these files, if the project uses git.
 
-Then it runs the checks. `engine.py validate` checks the system, and `engine.py review` looks for drift in your code. If either finds a problem, it tells you first, because fixing it may be the real task.
+Then it runs the checks. `engine.py version` checks whether the system was built with an older release of OpenDesigner, and rebuilds it if so. `engine.py validate` checks the system, and `engine.py review` looks for drift in your code. If either finds a problem, it tells you first, because fixing it may be the real task.
 
 It then sums up in three lines or fewer: the direction, the zoom level of the area you care about, and anything locked or still open. It never re-runs the whole interview.
 

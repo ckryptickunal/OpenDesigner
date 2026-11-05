@@ -4,7 +4,7 @@ seo_title: Start a design system from an existing app or brand
 description: How the opendesigner-extract skill reads your app, a website, screenshot, Figma file or brand book, measures its values, and turns them into suggested answers.
 section: Guides
 order: 4
-updated: 2026-10-14
+updated: 2026-11-05
 ---
 
 If you already have an app, a brand book or a site you like, OpenDesigner can learn from it with the opendesigner-extract skill. It measures values such as text sizes, spacing, corners, shadows and colors, shows you where each one came from, and offers them as suggested answers. Nothing is decided until you accept it, and it never copies another brand's identity.
@@ -78,7 +78,7 @@ A reference can shape the structure and quality of your system. It doesn't carry
 - a proprietary typeface;
 - photos, illustration, custom icons, signature shapes or copy.
 
-For the accent color, it keeps the role and how strong the color is, then asks for your own brand color. For a proprietary font, it suggests an open font of the same kind and says why. This rule wins over any request to make your app look exactly like another brand.
+For the accent color, it keeps the role and how strong the color is, then asks for your own brand color. For a proprietary font, it suggests an open font of the same kind and says why. For logos, names, images and copy, this rule wins over any request to copy another brand. If you want a brand's look, it offers a Taste Index instead. When first shown, a Taste Index may keep the site's exact colors and font names; what you keep is your call and your responsibility.
 
 {{figure:existing-product-structure-not-identity}}
 
