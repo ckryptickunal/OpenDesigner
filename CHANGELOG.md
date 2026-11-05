@@ -6,6 +6,12 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Added
+
+- **Two colour rules for every project** (2026-11-05). New house standards: colours with a known meaning keep it (approved green, rejected red, pending amber, info blue, and well-known apps in their own colour), and a product never uses pure white and pure black together. `engine.py validate`, `review` and `preflight.py html` enforce the second; three library parts now draw their codes in near-black.
+- **Kerning and letter spacing, checked in every project** (2026-11-05). A new guide, `preflight/references/kerning.md`, lists the type-spacing mistakes that keep coming back and how to avoid each. `preflight.py html` now flags kerning switched off, tracking in px or %, untracked capitals and words split into letters without their kerning (check 57).
+- **Rules for references, samples and content** (2026-11-05). `making.md` now asks for a board of shipped samples to pick from before a new direction, live measurement instead of thumbnails, principles from a reference instead of its page, a content list that "less text" never cuts, and one system for every figure. Moving calls to action are banned.
+
 ### Fixed
 
 - **The footer links every docs page again** (2026-11-05). The footer had dropped to 20 links. It now links every docs page by section from every page, so search engines and AI crawlers reach them, and each label still fits on one line down to 320 px.

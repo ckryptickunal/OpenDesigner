@@ -148,3 +148,11 @@ The project hand-wrote eleven check scripts for what the review missed, over abo
 
 **M57. Judged mid-animation.** Screenshots from a background browser pane caught reveals half done and looked broken. *Catch:* `await __od.settle()` before every probe and screenshot; `capture.py` waits on every load and scroll step (TM-01).
 
+## Kerning and tracking, in every project (2026-11-02)
+
+**M58. Kerning lost, tracking copied.** The same few type faults came back across the website, the videos and client pages. The owner asked for "iOS kerning everywhere" on the site; a headline animation split into letters dropped the font's kerning until each pair was measured and given back (`site/static/site.js`); a video tracked heavy display type so tight that "how it" read "howit" (M5). *Why it happens:* tracking is copied from a mock as a literal (Figma's -2% written as `-2%` or `-2px`), set once for every size, set on capitals the same as on lowercase, or broken by a letter-splitting animation, a missing weight, a fallback face or a subset font. None of it shows in a thumbnail. *Catch:* `preflight.py html` flags kerning switched off, px and % tracking, values of 0.5em or more on mixed case, capitals at 0 or less, and letters split into spans without kerning restored. Then read `references/kerning.md` and crop the type at 200%.
+
+## House colour rules (owner, 2026-11-02)
+
+**M59. Pure white beside pure black, and meanings in the wrong colour.** On a client landing page, a red brand button sat beside a red "rejected" state and Teams appeared in orange, and the owner asked for known colours "across whatever projects we are working". He then set a rule for every project: a product that uses pure white never also uses pure black, and the reverse. *Why it happens:* #fff and #000 are the defaults every tool reaches for, and an accent gets reused wherever a colour is needed. *Catch:* `preflight.py html` warns when one page uses both; `engine.py validate` fails a theme whose role colours use both, and `engine.py review` reports code that does.
+

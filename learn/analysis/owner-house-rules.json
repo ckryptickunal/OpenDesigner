@@ -1,0 +1,67 @@
+{
+ "summary": "House rules the repository owner set in his own words while reviewing client work built with OpenDesigner (2026-11-03 and 2026-11-02). Two concern colour and apply to every project: colours with a meaning people already know keep that colour, and a product never uses pure white and pure black together. They are recorded here so they can become house standards with a source, like rules from the other non-negotiable sources.",
+ "key_ideas": [
+  "Colours with a commonly known meaning keep it across every project unless the person asks otherwise: approved green, rejected red, pending amber, info blue; a well-known app keeps its own colour.",
+  "Using the known colours makes an interface feel familiar and less machine-made.",
+  "A product that uses pure white (#FFFFFF) does not also use pure black (#000000), and the reverse.",
+  "Per-project colour choices such as one client's neutrals are not house rules."
+ ],
+ "entities": [
+  {
+   "name": "Kunal (Billu)",
+   "type": "person",
+   "description": "The OpenDesigner repository owner, who set these rules."
+  }
+ ],
+ "topics": [
+  {
+   "name": "Color"
+  },
+  {
+   "name": "Design taste and judgement"
+  }
+ ],
+ "claims": [
+  "Commonly used colours are recognised by people and make an application feel less AI-made.",
+  "Mixing pure white and pure black brings issues later."
+ ],
+ "quotes": [
+  "keep that consistency in things across whatever projects we are working",
+  "if somebody is using absolute white, then they should not use absolute black",
+  "This should be enforced globally."
+ ],
+ "tags": [
+  "owner",
+  "color",
+  "house-rule"
+ ],
+ "authority": "non-negotiable",
+ "rules": [
+  {
+   "rule": "Keep the commonly known colour for a meaning: approved or success green, rejected or error red, pending or warning amber, info blue; a well-known app or channel keeps its own colour (Microsoft Teams purple, email in Outlook blue, a call green). The brand accent never takes a meaning that has a known colour.",
+   "why": "People recognise the known colours at a glance, and they make the product feel made with care, not by AI.",
+   "strength": "must",
+   "area": "color",
+   "kind": "do",
+   "applies_to": "all",
+   "product": "both"
+  },
+  {
+   "rule": "If a product uses pure white (#FFFFFF), it does not use pure black (#000000), and if it uses pure black it does not use pure white. Use an off-black such as #111111 with pure white, or an off-white with pure black.",
+   "why": "The owner's rule for every project: the two extremes together are harsh and cause problems later.",
+   "strength": "must",
+   "area": "color",
+   "kind": "dont",
+   "applies_to": "all",
+   "product": "both"
+  }
+ ],
+ "decisions": [],
+ "process": [],
+ "examples": [
+  "A landing page showed a red brand button beside a red 'rejected' state and Teams in orange; the owner asked for the known colours across every project."
+ ],
+ "caveats": [
+  "The neutrals #FFFFFF with #111111 were that one project's choice, not a default for everyone (owner, 2026-11-02)."
+ ]
+}

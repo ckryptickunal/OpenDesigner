@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kerning</title>
+<!-- Checker eval fixture for skills/opendesigner-preflight/scripts/preflight.py html (--medium web). Planted, all M58
+     (references/kerning.md): (1) kerning switched off on the wordmark (an error); (2) a title tracked in px; (3) a lede
+     tracked in CSS % (Figma's -2% copied as is); (4) an uppercase eyebrow tracked tighter than 0 (reported as M5, capitals tracked tight); (5) a script that splits
+     the headline into one span per letter with no kerning restored. Two errors and three warnings.
+     Expected findings are in evals/checkers/manifest.json. -->
+<style>
+:root { --fs-sm: 14px; --fs-md: 16px; --fs-lg: 20px; --fs-xl: 24px; --fs-2xl: 32px; }
+body { margin: 0; padding: 24px; font-family: system-ui, sans-serif; font-size: var(--fs-md); line-height: 1.5; }
+h1 { font-size: var(--fs-2xl); line-height: 1.2; }
+.wordmark { font-size: var(--fs-lg); font-kerning: none; }
+.title { letter-spacing: -1px; }
+.lede { font-size: var(--fs-lg); letter-spacing: -2%; }
+.eyebrow { font-size: var(--fs-sm); text-transform: uppercase; letter-spacing: -0.01em; }
+</style>
+</head>
+<body>
+<p class="wordmark">Avoca</p>
+<p class="eyebrow">New this week</p>
+<h1 class="title">Wave after wave</h1>
+<p class="lede">Tracking copied from a mock.</p>
+<script>
+  var h = document.querySelector(".title");
+  h.innerHTML = h.textContent.split("").map(function (c) { return "<span>" + c + "</span>"; }).join("");
+</script>
+</body>
+</html>

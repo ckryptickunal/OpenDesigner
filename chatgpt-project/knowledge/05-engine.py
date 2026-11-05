@@ -7933,6 +7933,7 @@ def std_validate(state, rep, files=None):
                 else f"put it back: engine.py standard restore {sid}, or engine.py standard remove {sid} --why \"<their words>\"")
     if files:
         std_motion_budget(state, rep, files, house)
+        std_white_black(state, rep, files, house)
     cons = std_constraints(state, house)
     if not cons:
         return
@@ -7963,6 +7964,52 @@ def std_validate(state, rep, files=None):
                          + (f"engine.py standard override {sid} --why \"<their words>\"" if kind == "house"
                             else f"engine.py standard remove {sid} --why \"<their words>\"")
                          + ("; for their own rule that always wins: engine.py standard add ... --beats " + sid if kind == "house" else "")))
+
+
+WHITE_BLACK_RULE = "STD-visual-details-66"  # house standard (owner): never pure white and pure black in one product
+WHITE_BLACK_ROLES = ("color.bg.", "color.surface.", "color.text.", "color.icon.", "color.border.")
+# opaque pure white and pure black written in code (CSS, Tailwind, SwiftUI, Compose); 8-digit hex, rgba and /alpha don't count
+_WB_PROPS = r"(?:color|background(?:-color)?|fill|stroke|border(?:-[a-z]+)?-?color|border|outline)\s*:\s*[^;{}]*?"
+RX_PURE = {k: re.compile(r"(?i)(?:#" + hx + r"(?![0-9a-z])|\brgb\(\s*" + rgb + r"\s*\)|" + _WB_PROPS + r"\b" + w + r"\b"
+                         r"|\b(?:bg|text|fill|stroke|border|from|to|via)-" + w + r"\b(?!/)|\bColor\." + w + r"\b|\(\s*\." + w + r"\s*\))")
+           for k, hx, rgb, w in (("white", r"(?:fff|ffffff)", r"255\s*,\s*255\s*,\s*255", "white"),
+                                 ("black", r"(?:000|000000)", r"0\s*,\s*0\s*,\s*0", "black"))}
+
+
+def white_black_roles(files):
+    """{theme: ({role paths that are opaque #ffffff}, {role paths that are opaque #000000})}. Only the colours people see as
+    surfaces, text, icons and borders count: the black and white primitives, the ramps, shadows, scrims and overlays don't."""
+    res = files.get("opendesigner.resolver.json") or {}
+    themes = list(((res.get("modifiers") or {}).get("theme") or {}).get("contexts") or {}) or [None]
+    out = {}
+    for th in themes:
+        w, b = set(), set()
+        for pth, t in resolve_all(files, {"theme": th} if th else {}).items():
+            v = t.get("resolved")
+            if t.get("type") != "color" or not isinstance(v, dict) or not pth.startswith(WHITE_BLACK_ROLES):
+                continue
+            if v.get("alpha") not in (None, 1, 1.0):
+                continue
+            hx = str(v.get("hex") or "").lower()
+            (w if hx == "#ffffff" else b if hx == "#000000" else set()).add(pth)
+        out[th or "default"] = (w, b)
+    return out
+
+
+def std_white_black(state, rep, files, house=None):
+    """validate: an error when one theme of this system uses pure white and pure black as role colours together, while
+    this system follows STD-visual-details-66."""
+    s = next((x for x in std_followed(state, house) if x.get("id") == WHITE_BLACK_RULE), None)
+    if not s:
+        return
+    for th, (w, b) in white_black_roles(files).items():
+        if w and b:
+            rep.add("error", "standards",
+                    f"the {th} theme uses pure white ({', '.join(sorted(w)[:3])}) and pure black ({', '.join(sorted(b)[:3])}) "
+                    f"together; house standard {WHITE_BLACK_RULE}: {s.get('rule', '').split('. ')[0]}",
+                    f"house standard {WHITE_BLACK_RULE}", _source_ids(s), where=sorted(b)[0], measured="#000000", threshold="not with #ffffff",
+                    fix=f"make one side an off-shade (for example engine.py set {sorted(b)[0]} '\"#111111\"'), or if the person asked "
+                        f"for both: engine.py standard override {WHITE_BLACK_RULE} --why \"<their words>\"")
 
 
 UI_MOTION_RULE = "STD-easing-duration-06"  # house standard: UI motion under 300ms unless a stated reason justifies it
@@ -13133,6 +13180,8 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         return (f"use var({css_var(prefix, 'motion.transition.' + role)}-duration) and its -easing "
                 f"(the {role} transition: {TR_WORDS[role]}; {why})")
     findings, scanned = [], 0
+    wb_std = next((x for x in std_followed(state) if x.get("id") == WHITE_BLACK_RULE), None)
+    wb_seen = {}  # "white" / "black" -> (file, line, text) of the first opaque use in code
     tok_rx, token_uses = token_use_rx(prefix), 0
     std_rules = std_review_rules(state)  # house standards followed and project standards that carry a review pattern
     locked_literals = std_locked_literals(state)
@@ -13153,6 +13202,9 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                     lines = f.readlines()
             except OSError:
                 continue
+            # a token export copied into the app (tokens.css, theme.css, Tokens.swift) is the system itself, not code that bypasses it
+            if "Generated by the OpenDesigner engine" in "".join(lines[:3]):
+                continue
             scanned += 1
             rel = os.path.relpath(path, project)
             jsx = ext in (".js", ".jsx", ".ts", ".tsx", ".vue", ".svelte")
@@ -13172,6 +13224,11 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                                 hits.append((m_.group(0).strip()[:80], f"{key} is {fmt_num(want)} in this system; use the "
                                              f"{css_var(prefix, key)} token instead of {m_.group(1)}", std))
                                 break
+                if wb_std:
+                    for k_, rx_ in RX_PURE.items():
+                        m_ = k_ not in wb_seen and rx_.search(line[:REVIEW_LINE_CAP])
+                        if m_:
+                            wb_seen[k_] = (rel, i, m_.group(0).strip()[:60])
                 if hits:
                     ids = list(dict.fromkeys(h[2]["id"] for h in hits))
                     findings.append({"kind": "standard", "file": rel, "line": i, "value": hits[0][0],
@@ -13318,6 +13375,12 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                             untrue.append(f"{fname} says {q} is not recorded, but it was answered")
     else:
         missing = ["DESIGN.md"]
+    if wb_std and len(wb_seen) == 2:  # one finding for the pair, placed at the black
+        (wf, wl, wv), (bf, bl, bv) = wb_seen["white"], wb_seen["black"]
+        findings.append({"kind": "standard", "file": bf, "line": bl, "value": bv,
+                         "fix": f"pure black here and pure white at {wf}:{wl} ({wv}): never both in one product; use an off-black "
+                                "such as #111111 with white, or an off-white with black",
+                         "standard": WHITE_BLACK_RULE, "standards": [WHITE_BLACK_RULE], "strength": "must", "severity": "warning"})
     by = {}
     for f_ in findings:
         by[f_["kind"]] = by.get(f_["kind"], 0) + 1
