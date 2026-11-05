@@ -14,7 +14,7 @@ A dense, calm console for a fictional CI and observability tool: productive, com
 | Depth | ring+faint-shadow |
 | Motion | medium 220ms, spring damping 1.0 |
 | Color | neutral scheme, accent solid `#4a5cf0`, text minimum 4.5:1, themes light, dark |
-| Validation | 0 errors, 0 warnings, 5 notes; 202 contrast pairs checked |
+| Validation | 0 errors, 0 warnings, 5 notes; 228 contrast pairs checked |
 
 **Files:** `state.json` (the input), `decisions.md` (why each choice), `tokens/` (DTCG 2025.10 + resolver, canonical), `build/` (artifact, css, dtcg, figma, paper, tailwind), `DESIGN.md`, `PRODUCT.md`, `overview.html` (the whole system on one page), `preview.html` and `preview/` (the visual templates, filled in).
 

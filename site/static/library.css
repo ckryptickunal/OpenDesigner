@@ -254,7 +254,9 @@
 .part-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-bottom: 12px; }
 .part-devices { gap: 6px; }
 .part-devices [role="tab"] { white-space: nowrap; }
-.part-devices [role="tab"] .num { opacity: .7; font-weight: 400; font-size: 12px; }
+/* the width is quieter by weight and a muted ink, never by opacity: at .7 the selected tab's number fell to 3.95:1 (2026-11-05) */
+.part-devices [role="tab"] .num { font-weight: 400; font-size: 12px; }
+.part-devices [role="tab"]:not([aria-selected="true"]) .num { color: var(--ink-muted); }
 .part-devices [role="tab"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .part-stage { min-height: 0; padding: clamp(16px, 4%, 40px); place-items: center; }
 /* one frame language across the site (owner, 2026-10-21: "outside it is glassmorphism, inside it is black"): every device is the

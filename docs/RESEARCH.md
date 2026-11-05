@@ -13,7 +13,7 @@ Counts on this page were read from the files on 2026-09-24, or on the date a row
 | Sources logged | 2,740 | distinct source ids in the research lanes' traces (`traces/L*-trace.md`), including sources that were opened and rejected. With the sponsorship research (R4), the verification pass (V1) and later lanes, `traces/` holds 3,547 (2026-11-05) |
 | Design systems benchmarked | 32 on 2026-11-05: 25 in the matrix and 7 token-level teardowns | files in `benchmarks/systems/` |
 | Ontology nodes | 275, of which 211 are building blocks outside the builder layer: 156 generatable, 23 tool-assisted, 21 owner input, 9 designer-owned, 2 extractable | `synthesis/ontology.json` [S-V1b-091] |
-| Questions in the interview | 194 | `synthesis/questionnaire.json` (27 screens plus a reference panel; 6 are planned and skipped for now) |
+| Questions in the interview | 200 | `synthesis/questionnaire.json` (27 screens plus a reference panel; 6 are planned and skipped for now) |
 | Decision graph | 352 decisions, 470 edges, 12 cycles | `synthesis/decision-graph.json` |
 | Claims re-checked (V1) | 161: 134 confirmed, 19 partly right, 5 wrong, 3 unverifiable | [`synthesis/VERIFICATION.md`](../synthesis/VERIFICATION.md) |
 

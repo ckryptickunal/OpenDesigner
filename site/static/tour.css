@@ -240,7 +240,7 @@
 .tr-trace li { padding-top: 14px; border-top: 2px solid var(--line-strong); min-width: 0; }
 .tr-trace li:last-child { border-top-color: var(--accent); }
 .tr-when { display: block; margin-bottom: 6px; font-size: 12px; line-height: 16px; color: var(--accent-text); }
-.tr-trace p { margin: 0; font-size: 15px; line-height: 23px; letter-spacing: -0.016em; text-wrap: pretty; }
+.tr-trace p:not(.kicker) { margin: 0; font-size: 15px; line-height: 23px; letter-spacing: -0.016em; text-wrap: pretty; }  /* the kicker keeps its own style */
 @media (max-width: 860px) { .tr-trace ol { grid-template-columns: minmax(0, 1fr); gap: 18px; } }
 @media (max-width: 640px) { .tr-trace { padding: 20px 16px; } }
 

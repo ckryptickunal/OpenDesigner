@@ -90,7 +90,7 @@ Sources: S-R5-011, S-R5-012
 
 **Why it is missed.** Full-page capture draws fixed elements once, at the top. The agent never scrolls with the bar in place.
 
-**How to catch it.** Read the fixed list from the probe: its height and the share of the viewport it covers. Tab through the page and check that the focused control is never under the bar (see IN-01). Use scroll-padding-top on the scroller (WCAG technique C43) and scroll-margin-top on anchor targets [inferred] so focus and anchors land below it. At level AA the focused control must not be entirely hidden; keeping all of it visible is the stricter AAA criterion 2.4.12. __od.bars() scrolls the page and lists text a fixed or floating bar covers where it cannot scroll away: inside a pinned block, under a top bar at the top of the page, or under a bottom bar at the end. capture.py runs it and review.py reports it as an error. A pinned scene that fills the screen is not counted as a bar.
+**How to catch it.** Read the fixed list from the probe: its height and the share of the viewport it covers. Tab through the page and check that the focused control is never under the bar (see IN-01). Use scroll-padding-top on the scroller (WCAG technique C43) and scroll-margin-top on anchor targets [inferred] so focus and anchors land below it. At level AA the focused control must not be entirely hidden; keeping all of it visible is the stricter AAA criterion 2.4.12. __od.bars() scrolls the page and lists text a fixed or floating bar covers where it cannot scroll away: inside a pinned block, under a top bar at the top of the page, or under a bottom bar at the end. capture.py runs it and review.py reports it as an error. A pinned scene that fills the screen is not counted as a bar. A sticky box counts as pinned only while it is stuck: at the end of its container it scrolls away with the page (a docs sidebar near the footer, a changelog's day heading), and scrolling back brings its text out (opendesigner.dev review, 2026-11-05).
 
 Sources: S-R5-091, S-R5-045, S-R5-104
 
@@ -525,7 +525,7 @@ Sources: S-R5-101
 
 **Why it is missed.** Every action feels important to whoever built it, and each button on its own looks right. The fault only shows when you count the buttons that shout in one view.
 
-**How to catch it.** The probe records every button and button-like link with a fill of its own (out.buttons.filled): its fill, what is behind it, how much it stands out, and whether it is in the first screen. review.py treats a fill that stands out 3:1 or more from what is behind it (the WCAG 1.4.11 bar for a control's edge) as primary, and warns when two or more are in the first screen, when two sit side by side, or when the primary fill differs across the page (a red fill is the danger button and is not counted). Then name the one action the view exists for (preflight 36, DC-L08-05). A selected tab or the current page's nav item is a state and is not counted [inferred].
+**How to catch it.** The probe records every button and button-like link with a fill of its own (out.buttons.filled): its fill, what is behind it, how much it stands out, and whether it is in the first screen. review.py treats a fill that stands out 3:1 or more from what is behind it (the WCAG 1.4.11 bar for a control's edge) as primary, and warns when two or more are in the first screen, when two sit side by side, or when the primary fill differs across the page (a red fill is the danger button and is not counted). Then name the one action the view exists for (preflight 36, DC-L08-05). A selected tab or the current page's nav item is a state and is not counted [inferred]. Buttons inside a decorative demo (inert, or aria-hidden and out of the Tab order) are left out of the count.
 
 Sources: S-R5-103
 
@@ -593,7 +593,7 @@ Sources: S-R5-047, S-R5-045, S-R5-039
 
 **Why it is missed.** The ring is only visible while a control has focus.
 
-**How to catch it.** The probe lists rules that remove the outline without a replacement. The keyboard walk reports each stop's ring: outline style and width, box-shadow, and whether focus-visible matched. House floor: a 2 px ring at a 2 px offset, not color alone. In forced-colors mode shadows disappear, so use a real outline.
+**How to catch it.** The probe lists rules that remove the outline without a replacement. The keyboard walk reports each stop's ring: outline style and width, box-shadow, and whether focus-visible matched. House floor: a 2 px ring at a 2 px offset, not color alone. In forced-colors mode shadows disappear, so use a real outline. A card that is one big link often draws its ring on a stretched ::after; __od.focus() reads ::after and ::before when the element has no ring of its own (opendesigner.dev's library, 2026-11-05).
 
 Sources: S-R5-044, S-R5-043, S-R5-048
 
@@ -604,7 +604,7 @@ Sources: S-R5-044, S-R5-043, S-R5-048
 
 **Why it is missed.** None of it shows in a picture.
 
-**How to catch it.** Read targets.noName, a11y.headings and doc.lang from the probe. Every control needs a name a screen reader can say. A screenshot tells you nothing about this.
+**How to catch it.** Read targets.noName, a11y.headings and doc.lang from the probe. Every control needs a name a screen reader can say. A screenshot tells you nothing about this. A picture of an app built from real buttons, inside aria-hidden with tabindex -1 or inside inert, is not a control: it is skipped for names and target size, and a focusable control inside aria-hidden is reported once, under IN-08 (opendesigner.dev's before-and-after demo, 2026-11-05).
 
 Sources: S-R5-032, S-R5-020
 

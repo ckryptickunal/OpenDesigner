@@ -665,6 +665,8 @@ def default_state(name="Untitled design system"):
         "monoFace": "ui-monospace", "baseSize": None, "spaceUnit": 4, "platforms": ["web"],
         "inputs": ["pointer", "touch"], "productType": "work-tool", "marketingSurfaces": False,
         "scripts": ["Latn"], "domain": None, "defaultTheme": "system",
+        # Q-pattern-07: how data tables separate rows, whether the header stays in view, how numbers align
+        "tableRows": "lines", "tableHeader": "sticky", "tableNumbers": "right",
     })
     # brandExact on by default: a person's own brand hex that passes the contrast target stays exact (U5 F10, F3)
     raw["flags"] = {"brandExact": True, "tintTowardBrand": False, "motionOff": False, "darkMode": True, "p3": True}
@@ -1338,6 +1340,23 @@ def chart_colors(n, start_hue, chroma, bg_y, light):
     return out
 
 
+DIVERGING_RATIOS = (9.0, 6.0, 4.0, 3.2, 4.0, 6.0, 9.0)  # contrast with the page, step 1 to 7: both ends strongest, the middle a
+# mid neutral that still reaches 3:1, so every step is a visible mark (WCAG 1.4.11) [inferred: Carbon and ColorBrewer use a light
+# middle that fails 3:1, S-L05-075, S-L05-088]
+DIVERGING_CHROMA = (1.0, 0.8, 0.6, None, 0.6, 0.8, 1.0)  # share of the chart chroma; None: the neutral's own tint
+
+
+def diverging_colors(low_hue, high_hue, chroma, mid, bg_y, light):
+    """Seven chart colors for values below and above a midpoint (Q-color-19, DC-L05-23): steps 1-3 one hue, 4 a neutral at
+    the midpoint, 5-7 a second hue. The two hues sit 180 degrees apart, which never pairs red with green (S-L05-086)."""
+    out = []
+    for i, (ratio, share) in enumerate(zip(DIVERGING_RATIOS, DIVERGING_CHROMA)):
+        h, c = (mid if share is None else ((low_hue if i < 3 else high_hue) % 360, chroma * share))
+        L, C = solve_L(h, c, target_y(ratio * MARGIN, bg_y, light))
+        out.append({"L": L, "C": C, "H": h, "hex": oklch_to_hex(L, C, h)})
+    return out
+
+
 def exact_text_on(hx, text_min):
     """'light' or 'dark': the text that reaches text_min on this exact color in light mode (white, or the dark text neutral
     light 12 is solved to; white wins ties), or None when neither does (U5 F10, DC-L01-09)."""
@@ -1518,14 +1537,17 @@ def build_palette(state, params):
                 v = p3_variant(r.steps[i]) if r.name != "neutral" and not (r.pinned == i) and i <= 12 else None
                 if v:
                     r.p3[i] = v
-    charts = {}
+    charts, diverging = {}, {}
     cp = raw.get("chartPalette")
-    if cp in ("categorical-8", "categorical-14"):
+    if cp and cp != "none":
         cc = clamp(oklch_chroma_for_hct(max(peak, 40.0), 0.6, bH), 0.08, 0.2)
         for mode in ("light", "dark"):
             n = ramps[("neutral", mode)]
             bg_y = n.y(1) if mode == "light" else n.y(2)
-            charts[mode] = chart_colors(8 if cp == "categorical-8" else 14, bH, cc, bg_y, mode == "light")
+            if cp in ("categorical-8", "categorical-14"):
+                charts[mode] = chart_colors(8 if cp == "categorical-8" else 14, bH, cc, bg_y, mode == "light")
+            # below the midpoint: the hue opposite the brand; above it: the brand hue
+            diverging[mode] = diverging_colors(bH + 180, bH, cc, (n_h or 0.0, n_c), bg_y, mode == "light")
     adjusted = None
     if brand and not pin_ok:
         acc = ramps[("accent", "light")]
@@ -1542,8 +1564,10 @@ def build_palette(state, params):
             "secondary": [dict(typed_info[nm], ramp=nm, light=ramps[(nm, "light")].steps[9]["hex"], dark=ramps[(nm, "dark")].steps[9]["hex"])
                           for nm in ("accent2", "accent3") if nm in typed_info],
             "statusPeakHct": rnd(status_peak, 2), "textMin": text_min, "ramps": [s[0] for s in specs],
-            "accentCount": count, "chart": {m: [c["hex"] for c in v] for m, v in charts.items()}}
+            "accentCount": count, "chart": {m: [c["hex"] for c in v] for m, v in charts.items()},
+            "chartDiverging": {m: [c["hex"] for c in v] for m, v in diverging.items()}}
     info["_chart"] = charts
+    info["_diverging"] = diverging
     return ramps, info
 
 
@@ -1669,6 +1693,7 @@ class Ctx:
             self.params["type.ratio"] = min(self.look["typeRatio"], self.params.get("type.ratioCap") or self.look["typeRatio"])
         self.ramps, self.cinfo = build_palette(self.state, self.params)
         self.charts = self.cinfo.pop("_chart", {})
+        self.diverging = self.cinfo.pop("_diverging", {})
         self.modes = ["light", "dark"] if self.flags.get("darkMode", True) else ["light"]
         if self.raw.get("defaultTheme") == "dark" and "dark" not in self.modes:
             self.modes = ["dark"]
@@ -1791,6 +1816,9 @@ def build_color_primitives(ctx):
         "disabled": {"container": tok(0.12), "content": tok(0.38)},
         "$extensions": {NS: {"evidence": ["DC-L01-17", "S-L01-005", "S-L01-064"]}},
     }
+    if ctx.raw.get("chartPalette") not in (None, "none"):
+        opacity["chart"] = {"dimmed": tok(0.3, "Other series fade to this while one is hovered or picked in the legend (Carbon, "
+                                                "S-L05-091; DC-L05-24).")}
     return {"color": color}, {"opacity": opacity}
 
 
@@ -1807,6 +1835,15 @@ def _state_layer(base_hex, on_hex, ratio, start, tmin=4.5 * MARGIN):
                 return hx, rnd(a, 2), layer
             a += 0.01
     return composite(other, 0.3, base_hex), 0.3, other
+
+
+def alias_hex(ctx, alias):
+    """The hex an alias to a primitive names: '{color.neutral.light.1}' or '{color.white}'."""
+    path = alias.strip("{}")
+    if path in ("color.white", "color.black"):
+        return "#ffffff" if path == "color.white" else "#000000"
+    _c, name, mode, step = path.split(".")
+    return ctx.ramp(name, mode).steps[int(step)]["hex"]
 
 
 def build_color_semantic(ctx, mode):
@@ -1944,6 +1981,11 @@ def build_color_semantic(ctx, mode):
             out["bg"][extra] = {"subtle": tok(r(extra, 3), f"{extra} subtle fill."), "bold": b_, "bold-hover": h_, "bold-pressed": p_}
             out["text"][extra] = tok(r(extra, 11), f"{extra} text.")
             out["text"]["on-" + extra] = tok(on(extra), f"Text on {extra} solid.")
+    if raw.get("tableRows") == "zebra":  # Q-pattern-07: alternate table rows one neutral step from the page (DC-L19-43)
+        base_step = int(surf["base"].strip("{}").split(".")[-1]) if surf["base"].startswith("{color.neutral.") else 1
+        out["surface"]["row-alternate"] = tok(n(base_step + 1), "Every other table row (zebra stripes): one step from the page, so it "
+                                                               "groups a row without a line. Never the only cue; keep row hover and "
+                                                               "selection states (DC-L19-43).")
     surfaces_mode = p["color.surfaces"]
     if surfaces_mode in ("tinted-containers", "brand-or-dynamic-surfaces"):
         out["surface"]["tinted"] = tok(r("accent", 2 if surfaces_mode == "tinted-containers" else 3),
@@ -2000,14 +2042,33 @@ def build_color_semantic(ctx, mode):
         out["surface"]["glass-dimming"] = tok(srgb_value("#000000", 0.35), "35% dimming under clear glass over bright content (S-L15-073).")
     cp = raw.get("chartPalette")
     if cp and cp != "none":
-        chart = {"$description": "Chart colors (Q-color-19): categorical colors in a fixed order, each at least 3:1 against the page "
-                                 "(WCAG 1.4.11); a sequential ramp from the accent; one neutral for 'other'.",
+        page = alias_hex(ctx, surf["base"])
+
+        def mark(name, why):  # the first solid step from 9 that a chart mark can use: 3:1 against the page (WCAG 1.4.11)
+            step = next((s_ for s_ in (9, 10, 11) if contrast(ctx.ramp(name, mode).steps[s_]["hex"], page) >= 3.0 * MARGIN), 11)
+            return tok(r(name, step), why)
+        chart = {"$description": "Chart colors (Q-color-19): marks at least 3:1 against the page (WCAG 1.4.11). Categorical colors in a "
+                                 "fixed order, a sequential ramp from the accent, a diverging ramp around a midpoint, status colors, and "
+                                 "the chart's axis, gridline and label colors, which point at the border and text roles (DC-L05-23, DC-L05-24).",
+                 "brand": mark("accent", "A chart with one series: the brand color (DC-L05-23)."),
                  "sequential": {str(i + 1): tok(r("accent", s_)) for i, s_ in enumerate((3, 5, 7, 9, 11))},
                  "neutral": tok(n(9), "Other, baseline or comparison series.")}
         if cp == "brand-gray":
-            chart["categorical"] = {"1": tok(r("accent", 9), "The brand series."), "2": tok(n(9), "Everything else.")}
+            chart["categorical"] = {"1": mark("accent", "The brand series: the same step as color.chart.brand."),
+                                    "2": tok(n(9), "Everything else.")}
         else:
             chart["categorical"] = {str(i + 1): tok(color_value(c)) for i, c in enumerate(ctx.charts.get(mode, []))}
+        div = ctx.diverging.get(mode, [])
+        if div:
+            chart["diverging"] = {str(i + 1): tok(color_value(c), {0: "Furthest below the midpoint.", 3: "The midpoint, or no change.",
+                                                                    6: "Furthest above the midpoint."}.get(i))
+                                  for i, c in enumerate(div)}
+        chart["status"] = {s_: mark(s_, f"{s_.title()} in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1).")
+                           for s_ in ("success", "warning", "danger", "info", "discovery") if s_ in has}
+        chart["axis"] = tok(A("color.border.default"), "Axis lines and tick marks.")
+        chart["gridline"] = tok(A("color.border.subtle"), "Gridlines: supportive, so they stay quiet (DC-L05-24).")
+        chart["label"] = tok(A("color.text.secondary"), "Tick labels, axis titles and legends: text, so they keep the text minimum.")
+        chart["reference"] = tok(A("color.chart.neutral"), "Target, threshold and average lines.")
         out["chart"] = chart
     tree = {"color": dict({"$type": "color",
                            "$description": f"Semantic color roles, {mode} mapping. Names never change across modes; only values do. "
@@ -2938,9 +2999,16 @@ def contrast_pairs(ctx):
         cp = ctx.raw.get("chartPalette")
         if cp in ("categorical-8", "categorical-14", "brand-gray"):
             n_cat = {"categorical-8": 8, "categorical-14": 14, "brand-gray": 2}[cp]
-            for i in range(1, n_cat + 1):
-                pairs.append({"mode": mode, "fg": f"color.chart.categorical.{i}", "bg": "color.surface.base", "min": 3.0, "kind": "chart",
+            marks = [f"color.chart.categorical.{i}" for i in range(1, n_cat + 1)] + ["color.chart.brand"]
+            marks += [f"color.chart.diverging.{i}" for i in range(1, len(DIVERGING_RATIOS) + 1)]
+            marks += [f"color.chart.status.{x}" for x in ("success", "warning", "danger", "info", "discovery") if x in ctx.cinfo["ramps"]]
+            for fg in marks:
+                pairs.append({"mode": mode, "fg": fg, "bg": "color.surface.base", "min": 3.0, "kind": "chart",
                               "rule": "WCAG 2.2 SC 1.4.11 (chart marks)", "level": "warning"})
+        if ctx.raw.get("tableRows") == "zebra":  # text on striped rows keeps its minimum (Q-pattern-07)
+            for fg in ("color.text.primary", "color.text.secondary"):
+                pairs.append({"mode": mode, "fg": fg, "bg": "color.surface.row-alternate", "min": tmin, "kind": "text",
+                              "rule": "WCAG 2.2 SC 1.4.3 (text on zebra rows)", "level": "error"})
         if (ctx.elevation_model() == "materials" and ctx.raw.get("glass") is not False) or ctx.raw.get("glass") is True:
             # text on glass changes with whatever scrolls behind it, so check the worst case: black content under light glass,
             # white under dark glass (S-L15-078; STD-visual-details-13 asks for the strongest text on glass)
@@ -4347,6 +4415,9 @@ ANSWER_TABLE = {
                    "container-tiers": {"raw.surfaceLayers": UNSET}, "elevation-named": {"raw.surfaceLayers": UNSET}},
     "Q-color-15": {"classic-4": {"raw.statusSet": "classic-4"}, "discovery": {"raw.statusSet": "discovery"}, "workflow": {"raw.statusSet": "workflow"}},
     "Q-color-17": {"aa": {"raw.contrastTarget": "AA"}, "aaa": {"raw.contrastTarget": "AAA"}, "aa-apca": {"raw.contrastTarget": "AA"}},
+    "Q-pattern-07": {"lines": {"raw.tableRows": "lines"}, "zebra": {"raw.tableRows": "zebra"}, "space": {"raw.tableRows": "space"},
+                     "sticky-header": {"raw.tableHeader": "sticky"}, "static-header": {"raw.tableHeader": "static"},
+                     "numbers-right": {"raw.tableNumbers": "right"}, "numbers-left": {"raw.tableNumbers": "left"}},
     "Q-color-19": {"none": {"raw.chartPalette": "none"}, "brand-gray": {"raw.chartPalette": "brand-gray"},
                    "categorical-6-8": {"raw.chartPalette": "categorical-8"}, "carbon-14": {"raw.chartPalette": "categorical-14"}},
     "Q-color-20": {"overlay": {"raw.stateMethod": "overlay"}, "step-shift": {"raw.stateMethod": "step"}, "hybrid": {"raw.stateMethod": "hybrid"}},
@@ -4480,7 +4551,7 @@ _R = {
                Q-motion-09 Q-voice-03 Q-form-01 Q-state-04 Q-ai-01 Q-icon-02 Q-color-23 Q-state-02""",
     "owner": """Q-scope-01 Q-scope-02 Q-scope-03 Q-scope-04 Q-scope-05 Q-scope-07 Q-tool-01 Q-tool-02 Q-tool-04 Q-gov-01 Q-gov-02 Q-gov-03 Q-gov-04 Q-gov-05
                 Q-gov-06 Q-gov-07 Q-dist-01 Q-dist-02 Q-dist-03 Q-dist-04 Q-pref-01 Q-pref-02 Q-pref-03 Q-plat-07 Q-plat-08 Q-plat-09
-                Q-comp-01 Q-comp-02 Q-aud-02 Q-brand-07""",
+                Q-comp-01 Q-comp-02 Q-aud-02 Q-brand-07 Q-site-01 Q-site-02 Q-site-03 Q-site-04 Q-site-05""",
     "hook": "Q-brand-03 Q-brand-08 Q-icon-01 Q-icon-06 Q-img-01 Q-img-04 Q-img-06 Q-img-07 Q-motion-08 Q-voice-01 Q-type-02",
     "reference": "Q-ref-01",
     "export": "Q-type-17 Q-tool-03 Q-shape-04",
@@ -5260,6 +5331,10 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
             path = "zoom.all"
     if path == "profile.voice" and value not in VOICES:
         raise SystemExit(f"profile.voice is one of {', '.join(VOICES)}")
+    if path.startswith("answers.Q-site-"):  # the site brief (issue 48): one row per role, proof or page family
+        bad = site_problem(path.split(".", 1)[1], value)
+        if bad:
+            raise SystemExit(f"Nothing was changed: {bad}")
     m = re.match(r"^hooks\.(H-[a-z]+)\.status$", path)
     if m and value not in HOOK_STATUSES:
         raise SystemExit(f"hook status must be one of {', '.join(HOOK_STATUSES)}")
@@ -6037,6 +6112,79 @@ def _dark_mode(root, style_files, code_files, deps, app_json):
     return None
 
 
+# The site brief's readings (issue 48): page families from route names, languages from <html lang>, locale folders and
+# next.config. Recorded only for a site that persuades (record_project); detect always prints them.
+SITE_FAMILY_WORDS = {
+    "platform": {"product", "products", "platform", "features", "feature", "integrations", "capabilities", "modules"},
+    "industry": {"industries", "industry", "solutions", "use-cases", "usecases", "sectors", "verticals"},
+    "explainer": {"how-it-works", "guides", "guide", "learn", "blog", "resources", "articles", "insights", "faq", "faqs", "glossary",
+                  "academy"},
+    "company": {"about", "about-us", "company", "team", "careers", "jobs", "contact", "contact-us", "customers", "case-studies",
+                "casestudies", "stories", "testimonials", "press", "partners"},
+    "pricing": {"pricing", "plans"},
+    "legal": {"privacy", "privacy-policy", "terms", "terms-of-service", "tos", "legal", "cookies", "cookie-policy", "security", "trust",
+              "imprint", "impressum", "gdpr", "dpa", "accessibility"},
+}
+ROUTE_RX = re.compile(r"^(?:src/)?(?:app|pages|routes)/(.+?)(?:/(?:page|index|\+page)\.\w+|\.(?:tsx|jsx|ts|js|mdx|md|astro|vue|svelte))$")
+LANG_RX = re.compile(r"^[a-z]{2}(?:[-_][a-z]{2,4})?$", re.I)  # two-letter codes only: a three-letter file name is rarely a language
+LOCALE_DIRS = {"locales", "locale", "i18n", "messages", "lang", "langs", "translations"}
+
+
+def _site_family(segment):
+    s = segment.lower()
+    if s.startswith("for-"):
+        return "industry"
+    return next((fam for fam, words in SITE_FAMILY_WORDS.items() if s in words), None)
+
+
+def site_readings(root, files):
+    """[(path, value, source, why)] for the site brief: page families (Q-site-05) and languages (Q-site-04)."""
+    out, fams = [], {}
+    for f in files:
+        p = f.replace(os.sep, "/")
+        m = ROUTE_RX.match(p)
+        if m:
+            segs = [s for s in m.group(1).split("/") if not re.fullmatch(r"\(.*\)|\[.*\]|_.*|api", s)]
+        elif p.lower().endswith((".html", ".htm")) and p.count("/") <= 2:
+            segs = [s for s in re.sub(r"^(public|static|site|docs|dist)/", "", p).rsplit(".", 1)[0].split("/") if s != "index"]
+        else:
+            continue
+        fam = _site_family(segs[0]) if segs else None
+        if fam:
+            fams.setdefault(fam, p)
+    if fams:
+        order = [k for k in SITE_FAMILY_WORDS if k in fams]
+        ex = ", ".join(fams[k] for k in order[:3])
+        out.append(("answers.Q-site-05", order, ex, f"read from the page routes ({ex})"))
+    langs, srcs = [], []
+
+    def add(code, src):
+        if LANG_RX.match(code) and code.lower() not in {x.lower() for x in langs}:
+            langs.append(code)
+            if src not in srcs:
+                srcs.append(src)
+    for f in files:
+        p = f.replace(os.sep, "/")
+        parts = p.split("/")
+        low = [x.lower() for x in parts]
+        if p.lower().endswith((".html", ".htm")) or re.search(r"(^|/)app/layout\.(t|j)sx?$", p):
+            m = re.search(r"<html[^>]*\blang=[\"'{]*([A-Za-z_-]{2,8})", _read(root, f, 20_000))
+            if m:
+                add(m.group(1), p)
+        elif re.fullmatch(r"next\.config\.(js|mjs|ts|cjs)", parts[-1]):
+            m = re.search(r"\blocales\s*:\s*\[([^\]]{1,300})\]", _read(root, f, 50_000))
+            for code in re.findall(r"[\"']([A-Za-z_-]{2,8})[\"']", m.group(1)) if m else []:
+                add(code, p)
+        for i, part in enumerate(low[:-1]):
+            if part in LOCALE_DIRS and i + 1 < len(parts):
+                child = parts[i + 1] if i + 2 < len(parts) else parts[i + 1].rsplit(".", 1)[0]
+                if parts[-1].lower().endswith((".json", ".yml", ".yaml", ".po", ".ftl", ".ts", ".js")):
+                    add(child, "/".join(parts[:i + 1]) + "/")
+    if langs:
+        out.append(("answers.Q-site-04", {"languages": langs}, ", ".join(srcs[:3]), f"read from {', '.join(srcs[:3])}"))
+    return out
+
+
 def detect_project(root, state_dir=None):
     """What the project folder already says, read-only: {findings: [{path, value, source, why}], notes: [...], readme,
     files, capped}. Each finding is a state path the agent would otherwise ask about (zoom.md, level 0); notes are weaker
@@ -6194,6 +6342,8 @@ def detect_project(root, state_dir=None):
         n = len(notes_files)
         put("answers.Q-scope-07", "idea", "notes, no code", f"read from the repo: {n} note{'s' if n != 1 else ''} "
             f"({', '.join(notes_files[:2])}) and no code yet")
+    for path, value, source, why in site_readings(root, files):  # recorded only for a site that persuades (record_project)
+        put(path, value, source, why)
     if capped:
         notes.append(f"the folder has more than {DETECT_MAX_FILES} files, so only the first {DETECT_MAX_FILES} were read")
     return {"root": root, "findings": found, "notes": notes, "files": len(files), "capped": capped,
@@ -6202,7 +6352,7 @@ def detect_project(root, state_dir=None):
 
 DETECT_LABELS = {"name": "name", "context.product": "what it is", "answers.Q-plat-01": "where it runs", "raw.stack": "code stack",
                  "raw.brandColor": "brand colour", "raw.textFace": "font", "answers.Q-theme-01": "light and dark",
-                 "answers.Q-scope-07": "phase"}
+                 "answers.Q-scope-07": "phase", "answers.Q-site-04": "site languages", "answers.Q-site-05": "page families"}
 
 
 def detect_value_words(path, value):
@@ -6214,6 +6364,10 @@ def detect_value_words(path, value):
         return f"{str(value).upper()} ({color_words(value)})"
     if path == "raw.stack" and not value:
         return "no UI framework"
+    if path == "answers.Q-site-04" and isinstance(value, dict):
+        return ", ".join(value.get("languages") or [])
+    if path == "answers.Q-site-05" and isinstance(value, list):
+        return ", ".join(option_label("Q-site-05", x) or x for x in value)
     if isinstance(value, list):
         return ", ".join(str(x) for x in value)
     return str(value)
@@ -6242,6 +6396,8 @@ def record_project(d, quiet=True):
     for f in got["findings"]:
         if _already_set(state, decs, f["path"]) or std_holders(state, f["path"]) or is_locked(state, f["path"]):
             continue
+        if f["path"].startswith("answers.Q-site-") and not site_surface(state):
+            continue  # the site brief is only for a site that persuades
         why = f["why"] + "; say if that's wrong"
         try:
             cmd_set(d, f["path"], f["value"], why, quiet=True, set_by="assumed", resync=False,
@@ -8790,6 +8946,8 @@ def figma_scopes(path, typ):
             return ["SHAPE_FILL", "STROKE_COLOR"]
         if path.startswith("color.shadow."):
             return ["EFFECT_COLOR"]
+        if path.startswith("color.chart."):  # marks are shapes and lines; labels are text
+            return ["TEXT_FILL"] if path == "color.chart.label" else ["SHAPE_FILL", "STROKE_COLOR"]
         return []
     if path.startswith(("space.", "layout.gutter", "layout.margin")):
         return ["GAP"]
@@ -9023,7 +9181,7 @@ def export_paper(files, meta, prefix):
     for theme in themes:
         flat = resolve_all(files, {"theme": theme} if "theme" in mods else {})
         entries = []
-        sem = [p for p in flat if flat[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon)\.", p)]
+        sem = [p for p in flat if flat[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon|chart)\.", p)]
         sem.sort(key=lambda p: (0 if ("neutral" in p or p.startswith(("color.surface", "color.text.primary", "color.text.secondary"))) else 1, p))
         prim = [p for p in flat if flat[p]["type"] == "color" and re.match(rf"color\.(neutral|accent|action|accent2|accent3|success|warning|danger|info)\.{theme}\.", p)]
         order = {"neutral": 0, "accent": 1, "action": 2, "accent2": 3, "accent3": 4}
@@ -9091,7 +9249,7 @@ def export_swift(files, meta, prefix):
          "    #endif",
          "}", "", f"public extension {P} {{", "    enum Colors {"]
     for p in sorted(light):
-        if light[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon|overlay|shadow)\.", p):
+        if light[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon|overlay|shadow|chart)\.", p):
             lv, dv = light[p]["resolved"], dark[p]["resolved"]
             la, da = lv.get("alpha", 1), dv.get("alpha", 1)
             L.append(f"        public static let {camel(p.split('.')[1:])} = dsColor(0x{hex_of(lv)[1:].upper()}, 0x{hex_of(dv)[1:].upper()}"
@@ -9176,7 +9334,7 @@ def export_compose(files, meta, prefix):
     light = resolve_all(files, {"theme": "light"} if "theme" in mods else {})
     dark = resolve_all(files, {"theme": "dark"}) if "theme" in mods and "dark" in mods["theme"]["contexts"] else light
     base = resolve_all(files, {})
-    cols = [p for p in sorted(light) if light[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon|overlay|shadow)\.", p)]
+    cols = [p for p in sorted(light) if light[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon|overlay|shadow|chart)\.", p)]
 
     def argb(v):
         a = round_half_up((v.get("alpha", 1) if isinstance(v, dict) else 1) * 255)
@@ -9305,8 +9463,13 @@ ARTIFACT_COLORS = [  # Design System artifact token name -> semantic path (the r
     ("accent-soft", "color.bg.accent.subtle"), ("link", "color.text.link"), ("focus-ring", "color.border.focus"),
     ("danger", "color.text.danger"), ("danger-soft", "color.bg.danger.subtle"), ("success", "color.text.success"),
     ("success-soft", "color.bg.success.subtle"), ("warning", "color.text.warning"), ("warning-soft", "color.bg.warning.subtle"),
-    ("info", "color.text.info"), ("info-soft", "color.bg.info.subtle"),
-]
+    ("info", "color.text.info"), ("info-soft", "color.bg.info.subtle"), ("row-alternate", "color.surface.row-alternate"),
+    ("chart-brand", "color.chart.brand"), ("chart-neutral", "color.chart.neutral"), ("chart-axis", "color.chart.axis"),
+    ("chart-gridline", "color.chart.gridline"), ("chart-label", "color.chart.label"),
+] + [(f"chart-{i}", f"color.chart.categorical.{i}") for i in range(1, 15)] + \
+    [(f"chart-diverging-{i}", f"color.chart.diverging.{i}") for i in range(1, 8)] + \
+    [(f"chart-{x}", f"color.chart.status.{x}") for x in ("success", "warning", "danger", "info", "discovery")]
+# rows whose token does not exist in a system are left out (export_artifact keeps only paths with a value)
 
 
 def _css_theme_vars(css):
@@ -9521,9 +9684,9 @@ def cmd_export(d, fmt, files=None, meta=None, quiet=False):
 DESIGN_SECTIONS = ["Overview", "Colors", "Typography", "Layout", "Elevation & Depth", "Shapes", "Components", "Do's and Don'ts",
                    "Motion", "Modes and Themes", "Iconography and Imagery", "Content and Voice", "Accessibility",
                    "Platforms and Devices", "Decisions", "Open Items", "For Agents"]
-PRODUCT_SECTIONS = ["Product", "Audience", "Users", "Surfaces", "Memorable Thing", "Principles", "Constraints", "Scope", "Team and Governance"]
+PRODUCT_SECTIONS = ["Product", "Audience", "Users", "Site brief", "Surfaces", "Memorable Thing", "Principles", "Constraints", "Scope", "Team and Governance"]
 SECTION_PATHS = {  # which decisions each DESIGN.md section rests on
-    "Overview": r"^(dials\.(expression|brandPresence|density)|preset|macros|answers\.Q-(aud|brand|dir|scope)-)",
+    "Overview": r"^(dials\.(expression|brandPresence|density)|preset|macros|answers\.Q-(aud|brand|dir|scope|site)-)",
     "Colors": r"^(dials\.(colorfulness|warmth)|raw\.(brandColor|primaryActionColor|focusColor|neutralBase|secondaryColors|contrastTarget|flags)|answers\.Q-(color|theme)-)",
     "Typography": r"^(raw\.(textFace|displayFace|monoFace|baseSize|scripts|marketingSurfaces)|overrides\.type|answers\.Q-type-)",
     "Layout": r"^(dials\.density|raw\.(spaceUnit|inputs|minTarget)|answers\.Q-(space|layout)-)",
@@ -10187,7 +10350,12 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             "", "**Use / avoid.**", "- Use one solid accent fill per view for the primary action; spend chroma on small, meaningful elements.",
             "- Avoid gray text on colored fills; use the matching `text.on-*` role.",
             "- Avoid color as the only signal: pair status colors with an icon or label.",
-            ("- Charts: use `color.chart.categorical.*` in order, `color.chart.sequential.*` for amounts, `color.chart.neutral` for other."
+            ("- Charts: `color.chart.brand` for a chart with one series; `color.chart.categorical.*` in order for groups; "
+             "`color.chart.sequential.*` for amounts; `color.chart.diverging.1-7` for values below and above a midpoint (4 is the midpoint); "
+             "`color.chart.status.*` for success, warning and danger, always with a label; `color.chart.neutral` for other and baselines. "
+             "Axes use `color.chart.axis`, gridlines `color.chart.gridline`, tick labels and legends `color.chart.label`, targets "
+             "`color.chart.reference`; other series fade to `opacity.chart.dimmed` while one is hovered. Every mark is at least 3:1 against "
+             "the page; marks are not 3:1 against each other, so keep a gap or a line between neighbours (DC-L05-23, DC-L05-24)."
              if raw.get("chartPalette") not in (None, "none") else
              "- Charts: no chart palette yet (Q-color-19). Take chart colors from the status and accent hues, and check them separately.")]
     tw = tailwind_classes(files) if "tailwind" in fmts else {}
@@ -10361,6 +10529,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
                "one filled per view; the others outline or text." if lim.get("cta") else ""),
             "", _md_table(["Component", "Status"], rows) if rows else "No inventory recorded.",
             "", "**Contested policies:** " + "; ".join(f"{k}: {v if v is not None else 'pending'}" for k, v in pol) + ".",
+            *([""] + table_rules(state, prefix) if "table" in inv or "Q-pattern-07" in ans else []),
             "", "**Use / avoid.**", "- Every interactive component shows hover, pressed, focus-visible and disabled states from the tokens.",
             f"- Inputs keep a 3:1 boundary (`color.border.input`); signifier strength: {params['signifier.minStrength']}.",
             "- Component docs belong in `opendesigner/components/<name>.md` (spec 7.8)."]
@@ -10644,6 +10813,143 @@ def positioning_md(state):
     return "\n".join(lines).strip() or f"{NOT_ENOUGH}. The positioning step fills this in: engine.py research positioning draft."
 
 
+def table_rules(state, prefix="ds"):
+    """DESIGN.md, Components: the data table rules from Q-pattern-07 (row separation, header, numbers) and the row heights."""
+    raw = state.get("raw") or {}
+    rows, head, nums = raw.get("tableRows") or "lines", raw.get("tableHeader") or "sticky", raw.get("tableNumbers") or "right"
+    asked = "Q-pattern-07" in (state.get("answers") or {})
+    lines = ["**Tables**" + ("" if asked else " (defaults; Q-pattern-07 changes them)") + ":"]
+    lines.append({"lines": "- Rows: a 1px `color.border.subtle` line between rows, none around the table (Carbon's default).",
+                  "zebra": "- Rows: every other row on `color.surface.row-alternate`, no lines between rows. Hover and selection keep "
+                           "their own fills, so the stripes are never the only cue (DC-L19-43).",
+                  "space": "- Rows: space between rows, no lines and no stripes; for short lists, not for wide data tables (DC-L19-43)."}
+                 .get(rows, f"- Rows: {rows}."))
+    lines.append("- Row heights: `size.row.sm` (dense), `size.row.md` (default), `size.row.lg` (roomy) and `size.row.two-line`; the header "
+                 "row matches the body rows (Carbon, S-L08-092).")
+    lines.append("- Header: stays in view while the rows scroll (`position: sticky`), with a scroll-edge fade where rows pass under it, "
+                 "never a 1px line (STD-visual-details-15)." if head == "sticky" else
+                 "- Header: scrolls away with the rows; keep tables short enough to read without it.")
+    lines.append("- Numbers: right-aligned in `text.numeric.*` (tabular digits), and their column headers right-aligned too, so digits line "
+                 "up and compare at a glance (DC-L19-121, DC-L02-26)." if nums == "right" else
+                 "- Numbers: left-aligned like text, in `text.numeric.*`; only for IDs and codes people read, not amounts they compare.")
+    lines.append("- Text, status chips, row checkboxes and targets follow the same tokens as the rest of the system; a chip carries a word, "
+                 "never color alone (WCAG 1.4.1).")
+    return lines
+
+
+# The site brief (issue 48): what a site that persuades must do, for whom, with what proof, how it is found, and its page
+# families. Asked at zoom 1, only for such a site (questions.json "when": "persuade"). Each line is the person's answer,
+# a reading from their repo marked assumed, or "Not enough information" with the question that fills it. Proof is never drafted.
+SITE_BRIEF = [("Q-site-01", "Goal", "what the site must achieve, and how it is counted"),
+              ("Q-site-02", "Roles to convince", "and what each needs to see"),
+              ("Q-site-03", "Proof we can show", "only what the person gave"),
+              ("Q-site-04", "How people find it", "channels, languages and the questions it answers"),
+              ("Q-site-05", "Page families", "the kinds of pages, each with one layout")]
+SITE_DISCOVERY_KEYS = ("channels", "languages", "questions")
+
+
+def site_surface(state):
+    """True when a surface persuades: Q-scope-06 names a Persuade surface, or Q-scope-01 puts a marketing site in scope."""
+    ans = state.get("answers") or {}
+    if any(x["mode"] == "Persuade" for x in surface_list(answer_value(ans.get("Q-scope-06")))):
+        return True
+    scope = answer_value(ans.get("Q-scope-01"))
+    return "marketing" in (scope if isinstance(scope, list) else [scope])
+
+
+def _texts(v):
+    return isinstance(v, list) and all(isinstance(x, str) for x in v)
+
+
+def site_problem(qid, v):
+    """Why a site-brief answer has the wrong shape, or None. Free words are always fine; lists keep one item per row."""
+    rows = v if isinstance(v, list) else [v]
+    if qid == "Q-site-01":
+        ok = (isinstance(v, str) and v.strip()) or (isinstance(v, dict) and set(v) <= {"goal", "measure"} and v.get("goal")
+                                                     and all(isinstance(x, str) for x in v.values()))
+        return None if ok else 'Q-site-01 takes the goal in their words, or {"goal": "demos", "measure": "ten a month from heads of operations"}.'
+    if qid == "Q-site-02":
+        ok = all((isinstance(r, str) and r.strip()) or (isinstance(r, dict) and isinstance(r.get("role"), str) and r["role"].strip()
+                                                         and set(r) <= {"role", "needs"} and isinstance(r.get("needs", ""), str))
+                 for r in rows) and rows
+        return None if ok else 'Q-site-02 takes a list of roles: [{"role": "operations head", "needs": "the outcome in numbers"}, ...].'
+    if qid == "Q-site-03":
+        ok = all((isinstance(r, str) and r.strip()) or (isinstance(r, dict) and isinstance(r.get("what"), str) and r["what"].strip()
+                                                         and set(r) <= {"kind", "what", "qualifier"}
+                                                         and all(isinstance(x, str) for x in r.values()))
+                 for r in rows) and rows
+        return None if ok else ('Q-site-03 takes the proof in their words: [{"kind": "figures", "what": "40% fewer missed shipments", '
+                                '"qualifier": "one client, six months, against the year before"}, ...], or none-yet.')
+    if qid == "Q-site-04":
+        ok = _texts(v) or (isinstance(v, dict) and v and set(v) <= set(SITE_DISCOVERY_KEYS) and all(_texts(x) for x in v.values()))
+        return None if ok else 'Q-site-04 takes {"channels": ["search", "generative"], "languages": ["en", "de"], "questions": ["..."]}.'
+    if qid == "Q-site-05":
+        return None if (_texts(rows) and rows and all(x.strip() for x in rows)) else 'Q-site-05 takes a list of page families, for example ["platform", "company", "legal"].'
+    return None
+
+
+def _proof_line(r):
+    if isinstance(r, str):
+        return "Nothing to show yet: pages leave proof sections out." if r == "none-yet" else r
+    what, q = r.get("what", "").strip(), (r.get("qualifier") or "").strip()
+    figure = r.get("kind") == "figures" or re.search(r"\d", what)
+    return what + (f" ({q})" if q else " *(no qualifier yet: for whom, over what time, compared with what)*" if figure else "")
+
+
+def site_brief_lines(state, decs=None):
+    """[(qid, label, hint, [lines] or None)] for the site brief. None means nobody answered and nothing fills it."""
+    ans = state.get("answers") or {}
+    out = []
+    for qid, label, hint in SITE_BRIEF:
+        v = answer_value(ans.get(qid)) if qid in ans else None
+        lines = None
+        if qid == "Q-site-01" and v:
+            if isinstance(v, dict):
+                lines = [(option_label(qid, v["goal"]) or v["goal"]) + (f"; counted as {v['measure']}" if v.get("measure") else "")]
+            else:
+                lines = [option_label(qid, v) or v]
+        elif qid == "Q-site-02" and v:
+            rows = v if isinstance(v, list) else [v]
+            lines = [(f"{r['role']}: {r['needs']}" if r.get("needs") else r["role"]) if isinstance(r, dict) else option_label(qid, r) or r
+                     for r in rows]
+        elif qid == "Q-site-03":
+            if v:
+                lines = [_proof_line(r) for r in (v if isinstance(v, list) else [v])]
+            else:
+                r = research_py.summary(state) if research_py else {}
+                p = r.get("positioning") or {}
+                proof = [str(x).strip() for x in p.get("proof") or [] if str(x).strip()] if p.get("confirmed") else []
+                lines = [f"{x} *(from the confirmed positioning)*" for x in proof] or None
+        elif qid == "Q-site-04" and v:
+            v = {"channels": v} if isinstance(v, list) else v
+            lines = []
+            if v.get("channels"):
+                lines.append("Channels: " + ", ".join(option_label(qid, x) or x for x in v["channels"]))
+            if v.get("languages"):
+                lines.append("Languages: " + ", ".join(v["languages"]))
+            lines += [f"Answers: {x}" for x in v.get("questions") or []]
+        elif qid == "Q-site-05" and v:
+            lines = [", ".join(option_label(qid, x) or x for x in (v if isinstance(v, list) else [v]))]
+        out.append((qid, label, hint, lines))
+    return out
+
+
+def site_brief_md(state, decs=None):
+    """PRODUCT.md, Site brief: one line per question, its rows below it."""
+    out = []
+    for qid, label, hint, lines in site_brief_lines(state, decs):
+        mark = _unconfirmed(decs, f"answers.{qid}") if qid in (state.get("answers") or {}) else ""
+        if not lines:
+            out.append(f"- **{label}** ({hint}): {NOT_ENOUGH} ({qid})."
+                       + (" Pages leave proof sections out until then." if qid == "Q-site-03" else ""))
+        elif len(lines) == 1:
+            out.append(f"- **{label}** ({hint}): {lines[0].rstrip('.')}.{mark}")
+        else:
+            out.append(f"- **{label}** ({hint}):{mark}")
+            out += [f"  - {x}" for x in lines]
+    return "\n".join(out)
+
+
 def render_product_md(state, existing="", decs=None):
     ctx = state.get("context") or {}
     keeps = _keep_blocks(existing)
@@ -10668,6 +10974,8 @@ def render_product_md(state, existing="", decs=None):
         out.append(sec("Users", research_py._users_section(research_py.summary(state))))
     out.append(sec("Market", market_md(state, decs)))
     out.append(sec("Positioning", positioning_md(state)))
+    if site_surface(state) or any(q in (state.get("answers") or {}) for q, _l, _h in SITE_BRIEF):
+        out.append(sec("Site brief", site_brief_md(state, decs)))
     out.append(sec("Surfaces", "\n".join(f"- {s.get('name')}: {s.get('mode')} mode" + (f" ({surface_rule(s, 'set by the Density dial')})" if surface_rule(s, "") else "")
                                          if isinstance(s, dict) else f"- {s}" for s in surf)
                    or surface_words(state)
@@ -10681,7 +10989,8 @@ def render_product_md(state, existing="", decs=None):
     out.append(sec("Constraints", "\n".join(f"- {c}" for c in cons)))
     out.append(sec("Scope", "**In:** " + (", ".join(sc.get("in") or []) or "not recorded yet") + "\n\n**Out:** " + (", ".join(sc.get("out") or []) or "not recorded yet")))
     owner = [(qid, rec) for qid, rec in sorted((state.get("answers") or {}).items())
-             if ANSWER_RECORDS.get(qid) == "owner" and qid not in ("Q-brand-07", "Q-comp-01", "Q-comp-02", "Q-scope-07")]
+             if ANSWER_RECORDS.get(qid) == "owner" and qid not in ("Q-brand-07", "Q-comp-01", "Q-comp-02", "Q-scope-07")
+             and not qid.startswith("Q-site-")]  # the site brief has its own section
     first_sentence = lambda q: re.split(r"(?<=[?.])\s", (questions().get(q) or {}).get("ask") or q)[0]
     lines = [f"- {first_sentence(q)} **{answer_words(q, answer_value(r))}** ({q})" for q, r in owner]
     out.append(sec("Team and Governance", "\n".join(x for x in [ctx.get("team") or ""] + lines if x) or "Not recorded yet (Q-scope-03, Q-scope-04, Q-gov-01)."))
@@ -11323,6 +11632,16 @@ def render_overview(d, files, meta, state):
                  + "".join(f'<tr><td><code>{_esc(p)}</code></td><td>{_esc(sb.replace("_", " "))}</td><td>{dt}</td></tr>' for dt, _i, p, sb in recent)
                  + "</tbody></table>")
 
+    # ---- the site brief (issue 48), only for a site that persuades: what is answered, and what still needs the person
+    site_sec = ""
+    if site_surface(state):
+        brief_rows = site_brief_lines(state, decs)
+        mark = lambda q: _unconfirmed(decs, f"answers.{q}").replace("*", "") if q in (state.get("answers") or {}) else ""
+        body = "".join((f'<p><b>{_esc(label)}</b>{_esc(mark(qid))}: ' + "<br>".join(_esc(x.replace("*", "")) for x in lines) + "</p>")
+                       if lines else missing(f"{label}: {hint}.", qid) for qid, label, hint, lines in brief_rows)
+        site_sec = section("site", "Site brief", "missing" if any(r[3] is None for r in brief_rows) else "chosen", body,
+                           "What the site must do, for whom, with what proof, and how it is found. Nothing here is invented.")
+
     # ---- templates filled with this system
     tpl = "".join(f'<a class="ov-tpl" href="preview/{n}.html">{n.replace("-", " ")}</a>' for n in OVERVIEW_TEMPLATES
                   if os.path.exists(os.path.join(d, "preview", f"{n}.html")))
@@ -11331,6 +11650,7 @@ def render_overview(d, files, meta, state):
 
     sections = [
         section("brand", "Brand book", statuses["Content and Voice"] if voice.get("status") not in (None, "pending", "unknown") else "default", brand),
+        *([site_sec] if site_sec else []),
         section("progress", "How complete it is", None, progress,
                 "Each area works at every zoom level. Zoom into an area by answering its next question."),
         section("color", "Colors", statuses["Colors"], color, "Every text color shows its contrast on the theme's base surface; text meant for a fill is measured on that fill."),
@@ -11345,7 +11665,7 @@ def render_overview(d, files, meta, state):
         section("growth", "How it grew", None, timeline, "Each bar is a day. The filled part is decisions people made; the rest came from defaults and standards."),
         section("templates", "Visual templates", None, tpl, "Each template shows your system, not sample data."),
     ]
-    nav = "".join(f'<a href="#{sid}">{title}</a>' for sid, title in [("brand", "Brand"), ("progress", "Progress"), ("color", "Color"),
+    nav = "".join(f'<a href="#{sid}">{title}</a>' for sid, title in [("brand", "Brand")] + ([("site", "Site")] if site_sec else []) + [("progress", "Progress"), ("color", "Color"),
                   ("typography", "Type"), ("layout", "Space"), ("components", "Components"), ("iconography", "Assets"), ("growth", "History")])
     toggle = "".join(f'<button class="ov-th" data-set="{th}">{th.title()}</button>' for th in themes)
     page_css = f"""
@@ -12132,8 +12452,9 @@ def zoom_levels(d, state):
         rx = SECTION_PATHS.get(title)
         n = sum(1 for k, v in decs.items() if rx and re.match(rx, k) and v["set_by"] != "auto_default")
         by = {1: [], 2: [], 3: []}
+        site = site_surface(state)
         for q in qs.values():
-            if q.get("area") == key and q.get("zoom") in by:
+            if q.get("area") == key and q.get("zoom") in by and (site or q.get("when") != "persuade"):
                 by[q["zoom"]].append(q["id"])
         lvl = 0
         for k in (1, 2, 3):

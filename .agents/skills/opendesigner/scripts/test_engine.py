@@ -4407,6 +4407,221 @@ class ProtocolRulesAndTokenUse(unittest.TestCase):
             self.assertIn("No positioning yet", out.getvalue())
 
 
+
+def chart_state(cp="categorical-8", brand=None, **raw):
+    st = e.default_state("Charts")
+    st["raw"]["chartPalette"] = cp
+    if brand:
+        st["raw"]["brandColor"] = brand
+    st["raw"].update(raw)
+    return st
+
+
+class ChartAndTableTokens(unittest.TestCase):
+    """Issue #23: chart tokens (brand, status, diverging, axis, gridline) and the table question (Q-pattern-07)."""
+
+    def hexes(self, files, mode):
+        fl = e.resolve_all(files, {"theme": mode})
+        return {p: t["resolved"]["hex"] for p, t in fl.items() if t["type"] == "color" and isinstance(t["resolved"], dict)}
+
+    def test_every_chart_palette_gets_brand_status_diverging_and_chrome(self):
+        for cp in ("brand-gray", "categorical-8", "categorical-14"):
+            for brand in (None, "#e11d48", "#facc15", "#16a34a"):
+                with self.subTest(cp=cp, brand=brand):
+                    files, meta, _ctx = e.generate_system(chart_state(cp, brand))
+                    for mode in meta["modes"]:
+                        hx = self.hexes(files, mode)
+                        page = hx["color.surface.base"]
+                        marks = ["color.chart.brand"] + [f"color.chart.diverging.{i}" for i in range(1, 8)] + \
+                                [f"color.chart.status.{x}" for x in ("success", "warning", "danger", "info")]
+                        for m in marks:
+                            self.assertGreaterEqual(e.contrast(hx[m], page), 3.0, f"{mode} {m} {hx[m]} on {page}")
+                        self.assertEqual(hx["color.chart.gridline"], hx["color.border.subtle"])
+                        self.assertEqual(hx["color.chart.axis"], hx["color.border.default"])
+                        self.assertEqual(hx["color.chart.label"], hx["color.text.secondary"])
+                        self.assertEqual(hx["color.chart.reference"], hx["color.chart.neutral"])
+                        L1, C1, H1 = e.hex_to_oklch(hx["color.chart.diverging.1"])
+                        L4, C4, _ = e.hex_to_oklch(hx["color.chart.diverging.4"])
+                        L7, C7, H7 = e.hex_to_oklch(hx["color.chart.diverging.7"])
+                        self.assertLess(C4, min(C1, C7))                               # the midpoint is the quietest
+                        self.assertGreater(min(abs(H1 - H7), 360 - abs(H1 - H7)), 120)  # two hues far apart
+                        if cp == "brand-gray":                                       # the brand series is a mark too
+                            self.assertEqual(hx["color.chart.categorical.1"], hx["color.chart.brand"])
+                    self.assertEqual(e.resolve_all(files, {})["opacity.chart.dimmed"]["resolved"], 0.3)
+                    rep = e.Report()
+                    e.validate_files(files, chart_state(cp, brand), rep)
+                    self.assertEqual([i["message"] for i in rep.items if "color.chart." in i["message"]], [])
+
+    def test_no_chart_palette_no_chart_tokens(self):
+        files, _m, _c = e.generate_system(chart_state("none"))
+        fl = e.resolve_all(files, {"theme": "light"})
+        self.assertFalse([p for p in fl if p.startswith(("color.chart.", "opacity.chart."))])
+
+    def test_chart_colors_reach_every_export(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Charts", "#2563eb", "dense", "web,ios,android", "calm", quiet=True)
+            quiet(e.cmd_set, d, "answers.Q-color-19", "categorical-6-8", "dashboards")
+            quiet(e.cmd_export, d, "all")
+            b = os.path.join(d, "build")
+            rd = lambda *p: open(os.path.join(b, *p), encoding="utf-8").read()
+            self.assertIn("--ds-color-chart-diverging-4:", rd("css", "tokens.css"))
+            self.assertIn("--ds-opacity-chart-dimmed:", rd("css", "tokens.css"))
+            self.assertIn("--color-chart-status-danger:", rd("tailwind", "theme.css"))
+            self.assertIn("chartDiverging4", rd("swift", "DesignTokens.swift"))
+            self.assertIn("chartGridline", rd("compose", "DesignTokens.kt"))
+            self.assertIn("chart-diverging-4", rd("paper", "tokens.json"))
+            figma = json.loads(rd("figma", "variables.json"))
+            chart = {v["name"]: v["scopes"] for c in figma["collections"] for v in c["variables"] if v["name"].startswith("color/chart/")}
+            self.assertEqual(chart["color/chart/label"], ["TEXT_FILL"])
+            self.assertEqual(chart["color/chart/brand"], ["SHAPE_FILL", "STROKE_COLOR"])
+
+    def test_the_table_question_sets_stripes_and_rules(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Ledger", "#167874", "dense", "web", "calm")
+            design = lambda: open(os.path.join(t, "DESIGN.md"), encoding="utf-8").read()
+            self.assertIn("**Tables** (defaults; Q-pattern-07 changes them):", design())
+            self.assertIn("- Rows: a 1px `color.border.subtle` line between rows", design())
+            files, _m, _c = e.generate_system(e.load_state(d))
+            self.assertNotIn("color.surface.row-alternate", e.resolve_all(files, {"theme": "light"}))
+            quiet(e.cmd_set, d, "answers.Q-pattern-07", ["zebra", "static-header", "numbers-right"], "dense finance tables")
+            st = e.load_state(d)
+            self.assertEqual((st["raw"]["tableRows"], st["raw"]["tableHeader"], st["raw"]["tableNumbers"]), ("zebra", "static", "right"))
+            files, meta, _c = e.generate_system(st)
+            for mode in meta["modes"]:
+                hx = self.hexes(files, mode)
+                self.assertNotEqual(hx["color.surface.row-alternate"], hx["color.surface.base"])
+                for fg in ("color.text.primary", "color.text.secondary"):
+                    self.assertGreaterEqual(e.contrast(hx[fg], hx["color.surface.row-alternate"]), 4.5)
+            quiet(e.cmd_design_md, d)
+            text = design()
+            self.assertIn("- Rows: every other row on `color.surface.row-alternate`", text)
+            self.assertIn("- Header: scrolls away with the rows", text)
+            self.assertIn("- Numbers: right-aligned in `text.numeric.*`", text)
+            self.assertNotIn("(defaults; Q-pattern-07 changes them)", text)
+            q = e.questions()["Q-pattern-07"]
+            self.assertEqual([o["v"] for o in q["options"]][:3], ["lines", "zebra", "space"])
+
+
+SITE = {
+    "package.json": {"name": "acme-site", "dependencies": {"next": "16", "react-dom": "19"}},
+    "README.md": "# Acme\n\nShipping software for freight teams.\n",
+    "app/layout.tsx": 'export default function L({ children }) { return <html lang="en"><body>{children}</body></html> }\n',
+    "app/pricing/page.tsx": "export default function P() { return null }\n",
+    "app/(marketing)/about/page.tsx": "export default function P() { return null }\n",
+    "app/industries/[slug]/page.tsx": "export default function P() { return null }\n",
+    "app/privacy/page.tsx": "export default function P() { return null }\n",
+    "app/api/leads/route.ts": "export async function GET() {}\n",
+    "messages/de.json": {}, "messages/en.json": {},
+    "i18n/api.ts": "export const x = 1\n",
+}
+
+
+class SiteBrief(unittest.TestCase):
+    """Issue 48: a site that persuades gets five owner questions at zoom 1 (goal, roles, proof, how it is found, page
+    families), drafted from the repo where it can be, and a PRODUCT.md section that says what is still missing."""
+
+    def sketch(self, t, surfaces):
+        d = os.path.join(t, "opendesigner")
+        with contextlib.redirect_stdout(io.StringIO()):
+            e.cmd_sketch(d, "Acme", None, "regular", "web", "calm", quiet=True, surfaces=surfaces)
+        return d
+
+    def product(self, d):
+        e.cmd_design_md(d, quiet=True)
+        with open(os.path.join(os.path.dirname(d), "PRODUCT.md"), encoding="utf-8") as f:
+            return f.read()
+
+    def test_questions_sit_at_zoom_1_apart_from_the_eight_screens(self):
+        qs = e.questions()
+        for i in range(1, 6):
+            q = qs[f"Q-site-0{i}"]
+            self.assertEqual((q["zoom"], q["area"], q["when"], q["class"]), (1, "overview", "persuade", "I"))
+        with open(os.path.join(e.REFERENCES, "pacing.json"), encoding="utf-8") as f:
+            pacing = json.load(f)
+        self.assertEqual(pacing["site_brief"]["questions"], [f"Q-site-0{i}" for i in range(1, 6)])
+        level1 = [q for a in pacing["areas"] for q in (a["levels"].get("1") or {}).get("questions", [])]
+        self.assertEqual(sorted(level1), sorted(pacing["zoom1"]))                # the eight screens everyone gets
+        self.assertEqual(e.ANSWER_RECORDS["Q-site-03"], "owner")
+
+    def test_detect_reads_page_families_and_languages(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, SITE)
+            got = findings(e.detect_project(t))
+            self.assertEqual(got["answers.Q-site-05"], ["industry", "company", "pricing", "legal"])  # route groups and [slug] skipped
+            self.assertEqual(got["answers.Q-site-04"], {"languages": ["en", "de"]})  # i18n/api.ts is not a language
+
+    def test_readings_are_recorded_only_for_a_site_that_persuades(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, SITE)
+            state = std_read(self.sketch(t, "site:persuade"))
+            self.assertEqual(state["answers"]["Q-site-05"]["set_by"], "assumed")
+            self.assertEqual(state["answers"]["Q-site-04"]["value"], {"languages": ["en", "de"]})
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, SITE)
+            d = self.sketch(t, "app:operate")
+            self.assertFalse([q for q in std_read(d)["answers"] if q.startswith("Q-site-")])
+            text = self.product(d)
+            self.assertNotIn("## Site brief", text)                               # an app has no site brief
+            self.assertEqual(e.zoom_levels(d, e.merge_defaults(std_read(d)))["overview"]["next"][:2], ["Q-dir-01", "Q-dir-02"])
+
+    def test_product_md_says_what_is_missing_and_never_drafts_proof(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, "persuade")
+            text = self.product(d)
+            for i in range(1, 6):
+                self.assertIn(f"Not enough information (Q-site-0{i})", text)
+            self.assertIn("Pages leave proof sections out until then.", text)
+            with contextlib.redirect_stdout(io.StringIO()):
+                e.cmd_set(d, "answers.Q-site-01", {"goal": "demos", "measure": "ten a month from heads of operations"}, "their words")
+                e.cmd_set(d, "answers.Q-site-02", [{"role": "operations head", "needs": "the outcome in numbers"}, "IT"], "their words")
+                e.cmd_set(d, "answers.Q-site-03", [{"kind": "figures", "what": "40% fewer missed pickups"},
+                                                   {"kind": "testimonials", "what": "a named quote", "qualifier": "permission given"}],
+                          "their words")
+                e.cmd_set(d, "answers.Q-site-04", {"channels": ["search", "generative"], "questions": ["How do I cut missed pickups?"]},
+                          "their words")
+                e.cmd_set(d, "answers.Q-site-05", ["platform", "company", "legal"], "their words")
+            text = self.product(d)
+            brief = text.split("## Site brief", 1)[1].split("\n## ", 1)[0]
+            self.assertNotIn("Not enough information", brief)
+            self.assertIn("Booked demos or sales calls; counted as ten a month from heads of operations.", brief)
+            self.assertIn("  - operations head: the outcome in numbers", brief)
+            self.assertIn("40% fewer missed pickups *(no qualifier yet", brief)    # a figure needs its qualifier
+            self.assertIn("a named quote (permission given)", brief)
+            self.assertIn("Answers: How do I cut missed pickups?", brief)
+            self.assertNotIn("Q-site-0", text.split("## Team and Governance", 1)[1])  # its own section, not owner inputs
+
+    def test_malformed_answers_are_refused(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, "persuade")
+            for qid, v in (("Q-site-02", [{"who": "IT"}]), ("Q-site-03", [{"what": ""}]), ("Q-site-04", {"engines": ["x"]}),
+                           ("Q-site-05", []), ("Q-site-01", {"measure": "ten"})):
+                with self.assertRaises(SystemExit) as cm:
+                    e.cmd_set(d, f"answers.{qid}", v, "test", quiet=True)
+                self.assertIn("Nothing was changed", str(cm.exception))
+            self.assertFalse([q for q in std_read(d)["answers"] if q.startswith("Q-site-")])
+
+    def test_confirmed_positioning_fills_the_proof_line(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, "persuade")
+            st = e.read_json(os.path.join(d, "state.json"))
+            st.setdefault("research", {})["positioning"] = {"confirmed": "2026-11-05", "proof": ["three named pilots"]}
+            e.dump_json(os.path.join(d, "state.json"), st)
+            self.assertIn("three named pilots *(from the confirmed positioning)*", self.product(d))
+
+    def test_overview_lists_the_missing_lines(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, "persuade")
+            with contextlib.redirect_stdout(io.StringIO()):
+                e.cmd_overview(d)
+            with open(os.path.join(d, "overview.html"), encoding="utf-8") as f:
+                html = f.read()
+            site = html.split('id="site"', 1)[1].split("</section>", 1)[0]
+            self.assertEqual(site.count('<div class="ov-missing">'), 5)           # one block for each unanswered line
+            self.assertIn("Q-site-03", site)
+
+
 def png_bytes(w, h, rows, ctype=6, depth=8, palette=None, trns=None, filt=0):
     """A PNG from rows of samples (one int per channel, or palette index), packed at depth and encoded with one filter."""
     import struct

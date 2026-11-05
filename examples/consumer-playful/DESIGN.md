@@ -34,7 +34,7 @@ spacing:
 
 ## Overview
 
-> Zoom: sketch (0 of 3), 6 decisions in this area. To zoom in, answer Q-dir-01, Q-dir-02.
+> Zoom: sketch (0 of 3), 6 decisions in this area. To zoom in, answer Q-site-01, Q-site-02, Q-site-03.
 <!-- od:zoom area=overview level=0 -->
 
 **Consumer Playful feels playful and friendly. Screens are roomy, in a flat style.**
@@ -430,6 +430,13 @@ Designers: core set of about 25 components · Code: `button.* (proposed), APG pa
 | accordion | planned (tokens ready) |
 
 **Contested policies:** Validation timing and disabled submit: pending; Field style: pending; Toasts: pending; Undo versus confirm: pending; Danger actions: pending; Button emphasis levels: pending.
+
+**Tables** (defaults; Q-pattern-07 changes them):
+- Rows: a 1px `color.border.subtle` line between rows, none around the table (Carbon's default).
+- Row heights: `size.row.sm` (dense), `size.row.md` (default), `size.row.lg` (roomy) and `size.row.two-line`; the header row matches the body rows (Carbon, S-L08-092).
+- Header: stays in view while the rows scroll (`position: sticky`), with a scroll-edge fade where rows pass under it, never a 1px line (STD-visual-details-15).
+- Numbers: right-aligned in `text.numeric.*` (tabular digits), and their column headers right-aligned too, so digits line up and compare at a glance (DC-L19-121, DC-L02-26).
+- Text, status chips, row checkboxes and targets follow the same tokens as the rest of the system; a chip carries a word, never color alone (WCAG 1.4.1).
 
 **Use / avoid.**
 - Every interactive component shows hover, pressed, focus-visible and disabled states from the tokens.

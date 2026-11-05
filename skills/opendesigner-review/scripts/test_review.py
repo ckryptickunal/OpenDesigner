@@ -398,6 +398,16 @@ class FocusWalk(unittest.TestCase):
         fs = self.run_walk([self.stop(i) for i in range(3)])
         self.assertTrue(any("keyboard trap" in f["title"] for f in fs))
 
+    def test_look_alike_rows_in_different_places_are_not_a_trap(self):
+        # opendesigner.dev/changelog/: every day's "details > summary" has the same selector (2026-11-05)
+        fs = self.run_walk([self.stop(i, "div.cl-items > details.cl-log > summary", y=100 + 60 * i) for i in range(4)])
+        self.assertFalse(any("keyboard trap" in f["title"] for f in fs))
+        # Tab scrolls each one into view, so they share a place on screen; their place on the page tells them apart
+        rows = [dict(self.stop(i, "div.cl-items > details.cl-log > summary", y=700), page={"x": 0, "y": 700 + 400 * i}) for i in range(4)]
+        self.assertFalse(any("keyboard trap" in f["title"] for f in self.run_walk(rows)))
+        same = [dict(self.stop(i, "div.dialog > button", y=300), page={"x": 0, "y": 300}) for i in range(3)]
+        self.assertTrue(any("keyboard trap" in f["title"] for f in self.run_walk(same)))
+
     def test_tab_order_that_jumps_back_up(self):
         stops = [self.stop(0, "a", y=900), self.stop(1, "b", y=100), self.stop(2, "c", y=1000), self.stop(3, "d", y=100)]
         self.assertTrue(any("jumps back up" in f["title"] for f in self.run_walk(stops)))

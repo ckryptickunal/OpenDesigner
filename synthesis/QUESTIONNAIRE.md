@@ -287,6 +287,118 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L17-02, DC-L11-01, DC-L17-03; S-L11-006, S-L11-071, S-L11-073, S-L17-003, S-L17-023
 - **Merges:** K0.5, K2.6 (starting library)
+
+### Q-site-01 · What must the site achieve, and how will you know it worked? · Standard
+- **Show if:** a site that persuades: Q-scope-06 includes `persuade`, or Q-scope-01 includes `marketing`
+- **Why:** The goal decides what every page leads with and which action gets the main button. Sections are chosen for the goal they serve [S-L19-038; DC-L15-03].
+- **Ask:** "What should the site get done, and how will you count it? For example: booked demos from senior buyers, about ten a month."
+- **Example:** Show the one action recorded at the sketch (`context.purpose`) as the draft, with a blank for who and how many.
+- **Control:** single choice for the kind of goal, then text for who and how it is counted; drafted from `context.purpose`, never asked twice
+- **Options:**
+  - `demos` Booked demos or sales calls: one main button to book, repeated after each proof section [S-L19-038; inferred].
+  - `signups` Sign-ups or trials: the button starts the product, and a real screen of it sits near the top [inferred].
+  - `purchases` Purchases: the price and what is included come before the button [inferred].
+  - `enquiries` Enquiries or quotes: a short form, and who answers it and how soon [inferred].
+  - `installs` App installs: store badges, and the app's own screens instead of a mock-up [inferred].
+  - `understanding` Understanding and trust, with no direct action: explainers lead and the button is secondary [inferred].
+- **Default:** none: drafted from the one action recorded at the sketch; the measure is theirs to give. *Source:* owner inputs are never invented [DC-L17-08].
+- **Decides:** none (an owner input; it orders sections and sets the main action, not tokens)
+- **Changes:** DC-L15-03, DC-L19-36 · blocks: Strategy > Scope
+- **Preview:** none visual; PRODUCT.md's Site brief shows the goal and its measure.
+- **Use / avoid:** use one goal per site, with a measure; avoid two equal main actions on one page [DC-L15-03].
+- **Skip:** yes; PRODUCT.md then says Not enough information (Q-site-01).
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** DC-L15-03, DC-L19-36, DC-L17-08; S-L19-038
+
+### Q-site-02 · Which roles must the site convince, and what does each need to see? · Standard
+- **Show if:** a site that persuades: Q-scope-06 includes `persuade`, or Q-scope-01 includes `marketing`
+- **Why:** A business purchase is often decided by several people with different questions: the person who will use it, the one who signs, the one who checks security or cost. One page for everyone answers none of them well [inferred; S-L19-038].
+- **Ask:** "Who has to say yes, and what does each of them need to see? For example: the operations head needs the outcome, IT needs security, finance needs the price."
+- **Example:** Show the roles drafted from the user research (`research/users.md`), each with an empty "needs to see" line.
+- **Control:** a list of rows, `{"role": ..., "needs": ...}`; drafted from the user research or their words, recorded as assumed until they confirm
+- **Options:**
+  - `user` The person who will use it every day: a real screen, and how their day gets easier [inferred].
+  - `buyer` The person who signs: the outcome in numbers, and named clients like them [inferred].
+  - `technical` The person who checks it fits (IT, security, engineering): integrations, security and data handling, on a page of their own [inferred].
+  - `finance` The person who checks the cost: the price, or how pricing works [inferred].
+  - `single` One kind of visitor who decides alone (a shop, a club, an app): one path and no role pages [inferred].
+- **Default:** none: drafted from the user research or their words. *Source:* owner inputs are never invented [DC-L17-08].
+- **Decides:** none (an owner input)
+- **Changes:** DC-L19-36 · blocks: Strategy > Scope
+- **Preview:** none visual; PRODUCT.md's Site brief lists each role and what it needs to see.
+- **Use / avoid:** use a role's need to choose its section or page; avoid one generic "for teams" message aimed at every role [inferred].
+- **Skip:** yes; PRODUCT.md then says Not enough information (Q-site-02).
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** DC-L19-36, DC-L17-08; S-L19-038
+
+### Q-site-03 · What can you prove, and may we show it? · Standard
+- **Show if:** a site that persuades: Q-scope-06 includes `persuade`, or Q-scope-01 includes `marketing`
+- **Why:** Proof carries a page that persuades: named clients, quotes, outcome figures. Invented proof is a deceptive pattern (fake social proof), and a figure without its qualifier overclaims [S-L13-071; DC-L13-15].
+- **Ask:** "What can you prove? Clients you may name, quotes with a name and role, and figures with what they mean: for whom, over what time, compared with what."
+- **Example:** Show three empty rows (a client, a quote, a figure) and the qualifier each one needs.
+- **Control:** a list of rows, `{"kind": ..., "what": ..., "qualifier": ...}`; only the person fills it, word for word
+- **Options:**
+  - `clients` Named clients, with their permission: a line of names or logos [inferred].
+  - `testimonials` Quotes with a real name and role [S-L19-038].
+  - `figures` Outcome figures with their qualifier: the number, for whom, over what time, compared with what [inferred].
+  - `credentials` Certifications, awards or standards met, with where to check them [inferred].
+  - `none-yet` Nothing to show yet: pages lead with how it works and a real product screen, with no placeholder logos or quotes [DC-L13-15].
+- **Default:** none: only the person has it. The proof in a confirmed positioning (research.md section 8) fills the line until they answer. *Source:* fake social proof is a deceptive pattern [S-L13-071; DC-L13-15].
+- **Decides:** none (an owner input)
+- **Changes:** DC-L13-15, DC-L19-36 · blocks: Principles > Ethics > Deceptive patterns
+- **Preview:** none visual; PRODUCT.md's Site brief lists each proof, and flags a figure with no qualifier.
+- **Use / avoid:** use only what they gave, in their words; avoid placeholder logos, "trusted by" with no names, and rounded-up figures [DC-L13-15].
+- **Skip:** yes; PRODUCT.md then says Not enough information (Q-site-03), and pages leave proof sections out.
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** DC-L13-15, DC-L19-36; S-L13-071, S-L19-038
+
+### Q-site-04 · How should people find the site, and in which languages? · Standard
+- **Show if:** a site that persuades: Q-scope-06 includes `persuade`, or Q-scope-01 includes `marketing`
+- **Why:** How people arrive shapes the pages: search needs a page for each question people ask, AI answer tools need those answers in the page's text, and each language needs its own pages [inferred].
+- **Ask:** "How do people find you: search, AI answers such as ChatGPT or Perplexity, links you send, or social posts? In which languages? And which questions should the site answer?"
+- **Example:** Show the languages read from the repo (`<html lang>`, locale folders) and three questions drafted from the user research.
+- **Control:** multi-select for channels, then lists for languages (read from the repo) and questions, recorded as `{"channels": [...], "languages": [...], "questions": [...]}`
+- **Options:**
+  - `search` Search engines: a page for each main question, each with its own title, description and one main heading [inferred].
+  - `answer` Answer boxes and voice answers: each question answered in the first sentence under its heading [inferred].
+  - `generative` AI answer tools (generative engines): ChatGPT, Perplexity and Google's AI answers read the page's text, so answers, names and figures sit in plain text, not only inside images or scripts [inferred].
+  - `links` Links you send (sales emails, decks, events): each link lands on a page that keeps the link's promise [inferred].
+  - `social` Social posts: each page has its own share image and title [inferred].
+- **Default:** none: languages read from the repo, else the language they write in; channels and questions are theirs. *Source:* [inferred].
+- **Decides:** none (an owner input)
+- **Changes:** DC-L19-36 · blocks: Strategy > Scope
+- **Preview:** none visual; PRODUCT.md's Site brief lists the channels, languages and questions.
+- **Use / avoid:** use the questions buyers really ask (from the research or sales calls); avoid keyword lists with no page that answers them [inferred].
+- **Skip:** yes; PRODUCT.md then says Not enough information (Q-site-04).
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** DC-L19-36
+
+### Q-site-05 · Which kinds of pages does the site need? · Standard
+- **Show if:** a site that persuades: Q-scope-06 includes `persuade`, or Q-scope-01 includes `marketing`
+- **Why:** Page families are the site's structure. Each family shares one layout and one job, so pages stay consistent and the structure is not invented page by page [inferred; S-L19-038].
+- **Ask:** "Which kinds of pages does the site need? I read these from your repo; add or remove any."
+- **Example:** Show the families read from the repo's routes (for example `app/pricing/page.tsx`), beside the ones the roles in Q-site-02 need.
+- **Control:** multi-select, read from the repo (`engine.py detect`): an idea gets a plan from the goal and roles; a built or live site is confirmed in one line
+- **Options:**
+  - `platform` Platform or product: what it does, a page per main feature [inferred].
+  - `industry` Industry or use case: a page per kind of customer, each with its own proof [inferred].
+  - `explainer` Explainers: how it works, guides, and the questions from Q-site-04 [inferred].
+  - `company` Company and proof: about, team, customers, case studies, contact [S-L19-038].
+  - `pricing` Pricing: the price, or how pricing works [inferred].
+  - `legal` Legal and trust: privacy, terms, cookies, security [inferred].
+- **Default:** none: read from the repo's routes; an idea gets the families its goal and roles need. *Source:* [inferred].
+- **Decides:** none (an owner input; step 4 of PROTOCOL.md builds the structure from it)
+- **Changes:** DC-L19-50 · blocks: Strategy > Scope; Patterns > Navigation
+- **Preview:** none visual; PRODUCT.md's Site brief lists the families, and the structure step draws one wireframe per family.
+- **Use / avoid:** use one layout per family; avoid a page that belongs to no family [inferred].
+- **Skip:** yes; PRODUCT.md then says Not enough information (Q-site-05).
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** DC-L19-50; S-L19-038
 ---
 
 ## Stage 02 · Audience and commitments
@@ -1432,7 +1544,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `brand-gray` One brand chart color plus gray: calm, branded, focused [DC-L05-23].
   - `categorical-6-8` 6-8 group colors in set order, plus one light-to-dark ramp. Two-way only for above or below target (Atlassian) [S-L01-032; DC-L05-23].
   - `carbon-14` A long list in set order (Carbon's 14 colors, starting Purple 70 #6929c4, Cyan 50 #1192e8) [S-L01-056].
-- **Default:** brand-gray by default, categorical-6-8 for dashboards. *Source:* card heuristics [DC-L05-23, DC-L01-24].
+- **Default:** brand-gray by default, categorical-6-8 for dashboards. Every palette also gets a single-series brand color, status colors, a 7-step diverging ramp around a midpoint (the brand hue above it, the opposite hue below, every step 3:1 against the page) and axis, gridline and label colors taken from the border and text roles. *Source:* card heuristics [DC-L05-23, DC-L05-24, DC-L01-24].
 - **Decides:** DC-L01-24, DC-L05-23
 - **Changes:** DC-L05-22, DC-L05-24, DC-L05-25 · blocks: Foundations > Color > Data visualization palettes
 - **Preview:** a bar chart, line chart and heatmap in light and dark, with the 3:1 check against the surface.
@@ -3599,6 +3711,30 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L08-21; S-L08-017, S-L08-041, S-L08-073
 
+### Q-pattern-07 · How should data tables look: rows, header and numbers? · Standard
+- **Show if:** Q-scope-06 includes operate, or Q-scope-01 includes internal-tools
+- **Why:** Tables are where work tools are read most. Lines or stripes keep the eye on one row, a header that stays in view keeps each column's meaning on screen, and right-aligned digits compare at a glance [DC-L19-43, DC-L19-121; S-L08-092].
+- **Ask:** "How should your tables look: lines between rows or striped rows, a header that stays on screen, and numbers lined up on the right?"
+- **Example:** Show one table three ways (lines, stripes, space), scrolled so the header is over the rows, with a money column.
+- **Control:** single choice (rows) + yes or no (sticky header) + single choice (numbers)
+- **Options:**
+  - `lines` Lines between rows: a quiet 1px line under each row (Carbon's default) [S-L08-092; DC-L19-43].
+  - `zebra` Striped rows: every other row one step darker, no lines; reads well when rows sit tight. Sets the striped-row color [DC-L19-43; S-L19-070].
+  - `space` Space between rows: no lines or stripes; for short lists, not wide data tables [DC-L19-43].
+  - `sticky-header` Header stays on screen while rows scroll, with a soft fade where rows pass under it, not a line [S-L08-092].
+  - `static-header` Header scrolls away: for tables that fit on one screen [inferred].
+  - `numbers-right` Numbers right-aligned in tabular digits, with their headers right-aligned too [DC-L19-121, DC-L02-26].
+  - `numbers-left` Numbers left-aligned like text: only for IDs and codes people read rather than compare [inferred].
+- **Default:** lines, with sticky-header and numbers-right; striped rows instead of lines when the density is compact. *Source:* card heuristics [DC-L19-43, DC-L19-121, DC-L08-13].
+- **Decides:** DC-L19-43, DC-L19-121
+- **Changes:** DC-L08-13, DC-L02-26 · blocks: Patterns > Collections > Data tables
+- **Preview:** the same table with lines, stripes and space, header pinned, a right-aligned money column.
+- **Use / avoid:** use stripes or lines for wide tables people scan across; avoid stripes as the only cue for a selected or hovered row, and avoid left-aligned amounts [DC-L19-43, DC-L19-121].
+- **Skip:** yes, defaults to lines, sticky header and right-aligned numbers.
+- **Block class:** G (generatable)
+- **Time weight:** low (fan-out 0)
+- **Evidence:** DC-L19-43, DC-L19-121, DC-L08-13, DC-L02-26; S-L08-092, S-L19-070
+
 ### Q-pattern-03 · How much should be visible up front, and how much behind "more"? · Expert
 - **Why:** Keeping extras one step away (progressive disclosure) makes screens calm and short. Showing it all at once feels strong, but busy [DC-L13-03].
 - **Ask:** "Should people see every option at once, or the main ones first with the rest tucked away?"
@@ -4379,7 +4515,6 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-39 | Typographic punctuation in interface text | new question |
 | DC-L19-41 | Proximity ladder inside a content block | new question |
 | DC-L19-42 | When a card earns its place, and how deep cards may nest | new question |
-| DC-L19-43 | How list rows are separated | new question |
 | DC-L19-44 | Edge-built alignment inside compact components | new question |
 | DC-L19-45 | Axis for heroes and single-message sections (start, centered or split) | new question |
 | DC-L19-46 | Hierarchy recipe: which lever carries each text level | new question |
@@ -4447,7 +4582,6 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-117 | A command menu, and how it opens | Q-comp-02 |
 | DC-L19-118 | What goes in the sidebar, and in what order | Q-layout-04 |
 | DC-L19-119 | The phone tab bar and where the main action goes | Q-icon-05, Q-layout-04 |
-| DC-L19-121 | Tables and lists: the data picks the display form | new question |
 | DC-L19-122 | How charts are drawn on product dashboards | new question |
 | DC-L19-123 | How visible each action is (the spectrum of explicitness) | new question |
 | DC-L19-124 | Which surface a task opens in: popover, modal, sheet or new page | new question |

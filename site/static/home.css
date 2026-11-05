@@ -458,7 +458,9 @@
 .book-card { display: flex; flex-direction: column; padding: 28px; border: 1px solid var(--line); border-radius: var(--r-panel); background: var(--surface-raised); }
 .book-card.later { background: var(--surface-sunken); }
 .book-card h2 { margin: 12px 0 8px; font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: 0.003em; }
-.book-card > p { margin: 0; font-size: 16px; line-height: 25px; color: var(--ink-muted); letter-spacing: -0.02em; }
+/* body paragraphs only: the card's small uppercase label keeps the kicker style (it had grown to 16 px at -0.02em, 2026-11-05) */
+.book-card > p:not(.kicker) { margin: 0; font-size: 16px; line-height: 25px; color: var(--ink-muted); letter-spacing: -0.02em; }
+.book-card > p.kicker { margin: 0; }
 .book-dl { margin: 20px 0 24px; border-top: 1px solid var(--line); }
 .book-dl > div { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
 .book-dl dt { font: 500 11px/18px "Source Code Pro", ui-monospace, monospace; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-muted); }

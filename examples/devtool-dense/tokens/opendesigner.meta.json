@@ -569,6 +569,26 @@
         "#b64d00",
         "#0095c0"
       ]
+    },
+    "chartDiverging": {
+      "light": [
+        "#574500",
+        "#765e00",
+        "#977901",
+        "#868d9b",
+        "#6578c5",
+        "#4558bd",
+        "#2d33b5"
+      ],
+      "dark": [
+        "#e6ba00",
+        "#bc9800",
+        "#977902",
+        "#676d7a",
+        "#6578c5",
+        "#7c95ff",
+        "#aabdff"
+      ]
     }
   },
   "ramps": {
@@ -2749,6 +2769,123 @@
     },
     {
       "mode": "light",
+      "fg": "color.chart.brand",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.1",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.2",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.3",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.4",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.5",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.6",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.7",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.status.success",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.status.warning",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.status.danger",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.status.info",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.status.discovery",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
       "fg": "color.bg.action.primary",
       "bg": "color.surface.base",
       "min": 3.0,
@@ -3650,6 +3787,123 @@
     {
       "mode": "dark",
       "fg": "color.chart.categorical.8",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.brand",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.1",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.2",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.3",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.4",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.5",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.6",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.7",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.status.success",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.status.warning",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.status.danger",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.status.info",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.status.discovery",
       "bg": "color.surface.base",
       "min": 3.0,
       "kind": "chart",

@@ -124,7 +124,7 @@ Totals: 10 / 94 / 193. The three gates follow DC-L17-12 and QUESTIONNAIRE protoc
 **P7 Critique and coverage** (medium).
 - *Runs:* `engine.py validate` first (section 6). Only on a passing system does the model critique, at the strictness chosen in Q-pref-01 (DC-L15-11): a 0-10 score per ontology layer with "what a 10 looks like" and one question per gap [S-L17-006]; a rubric fixed in advance and at least two critique runs for generated content, because one output is an example, not an evaluation [S-L17-130] [S-L17-132]; a warning when output looks polished but rests on unverified patterns [S-L17-133].
 - *Shows:* `coverage`: every block with its status and source; pending assets; assumed owner inputs; blocks still on unreviewed defaults; hard failures; warnings and waivers.
-- *Asks:* one question per remaining gap; confirmation of every `assumed` owner-input decision (in Quick mode, the 36 questions in `questionnaire.json` meta `quick_mode_assumed_owner_inputs`); the final review of taste decisions (DC-L17-12).
+- *Asks:* one question per remaining gap; confirmation of every `assumed` owner-input decision (in Quick mode, the 41 questions in `questionnaire.json` meta `quick_mode_assumed_owner_inputs`); the final review of taste decisions (DC-L17-12).
 - *Exit:* no unmet hard rule, every block has a status, and the person accepts any named remainder (DC-L17-09).
 
 **P8 Export and hand-off** (fast).
@@ -499,7 +499,7 @@ DESIGN.md is the readable view that later sessions and other models read first. 
 | # | Heading | Contents |
 |---|---|---|
 | 1 | `## Overview` | the taste card, shown under the opening sentence (five lines: the person's own picture of the look, color, shape, motion and their Never list, each with its source; the picture and the Never list are never invented), one-line product description, audience, the memorable thing, surfaces and their modes, ranked principles, the chosen direction and its dial positions, platforms; a line saying the tokens in `opendesigner/tokens/` are canonical and this file is generated |
-| 2 | `## Colors` | brand color and its role, ramps and how steps are built, semantic roles, interaction states, dark-mode rule, the step-distance contrast table (LEVERS B5), chart palette pointer |
+| 2 | `## Colors` | brand color and its role, ramps and how steps are built, semantic roles, interaction states, dark-mode rule, the step-distance contrast table (LEVERS B5), the chart color roles (brand, categorical, sequential, diverging, status, axis, gridline, label) |
 | 3 | `## Typography` | faces with licence status, scale (size, line height, tracking, weight per style), per-script rules, text scaling |
 | 4 | `## Layout` | spacing ladder and semantic aliases, density modes, breakpoints, grid and containers, target sizes |
 | 5 | `## Elevation & Depth` | depth model, surfaces, shadows or materials with solid fallbacks, stacking layers, borders |
