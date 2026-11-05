@@ -37,8 +37,9 @@
   border: 0; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-dark-12); box-shadow: var(--ds-elevation-raised); }
 .odl-video-player .odl-scrub::-moz-range-thumb { inline-size: var(--ds-space-16); block-size: var(--ds-space-16); border: 0; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-dark-12); }
 .odl-video-player .odl-row { display: flex; align-items: center; gap: var(--ds-space-inline-xs); }
-.odl-video-player .odl-time { margin-block: 0; margin-inline-start: var(--ds-space-inline-sm); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.odl-video-player .odl-time span + span { color: var(--ds-color-neutral-dark-11); }
+/* The time is text, so it gets its own dark chip: 4.5:1 on any frame, a white one included. */
+.odl-video-player .odl-time { margin-block: 0; margin-inline-start: var(--ds-space-inline-sm); padding: var(--ds-space-2) var(--ds-space-8); border-radius: var(--ds-radius-nested);
+  background: var(--ds-color-neutral-alpha-light-11); color: var(--ds-color-neutral-dark-12); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .odl-video-player .odl-push { margin-inline-start: auto; }
 .odl-video-player .odl-vol { inline-size: 5.5rem; min-block-size: var(--ds-size-target-min); margin: 0; background: transparent; cursor: pointer; appearance: none; -webkit-appearance: none; border-radius: var(--ds-radius-4); }
 .odl-video-player .odl-vol::-webkit-slider-runnable-track { block-size: var(--ds-space-4); border-radius: var(--ds-radius-full);
@@ -114,7 +115,8 @@ document.querySelectorAll(".odl-video-player").forEach((root) => {
   const cues = [[240, "The snow line moved forty metres up the valley this week."], [252, "Down here, the river already sounds different."],
     [266, "Louder. Faster. Colder than you would think."], [280, "We follow it from the first trickle to the lake."], [296, "It takes the water eleven hours."]];
   const clock = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
-  const spoken = (s) => `${Math.floor(s / 60)} minutes ${s % 60} seconds`;
+  const unit = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+  const spoken = (s) => `${unit(Math.floor(s / 60), "minute")} ${unit(s % 60, "second")}`;
   let timer = null, buffered = 420;
   const show = () => {
     const s = Number(seek.value);
