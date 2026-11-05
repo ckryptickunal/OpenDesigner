@@ -53,6 +53,7 @@ data class DsColors(
     val borderFocusInner: Color,
     val borderInfo: Color,
     val borderInput: Color,
+    val borderSeparator: Color,
     val borderStrong: Color,
     val borderSubtle: Color,
     val borderSuccess: Color,
@@ -130,6 +131,7 @@ val DsLightColors = DsColors(
     borderFocusInner = Color(0xFFFFFFFF),
     borderInfo = Color(0xFF4A8CB8),
     borderInput = Color(0xFF858689),
+    borderSeparator = Color(0xFFE2E3E5),
     borderStrong = Color(0xFF858689),
     borderSubtle = Color(0xFFD1D2D4),
     borderSuccess = Color(0xFF599365),
@@ -163,7 +165,7 @@ val DsLightColors = DsColors(
     textPrimary = Color(0xFF191A1B),
     textSecondary = Color(0xFF3A3B3E),
     textSuccess = Color(0xFF00451C),
-    textTertiary = Color(0xFF46484B),
+    textTertiary = Color(0xFF3A3B3E),
     textWarning = Color(0xFF604200),
 )
 
@@ -207,6 +209,7 @@ val DsDarkColors = DsColors(
     borderFocusInner = Color(0xFFFFFFFF),
     borderInfo = Color(0xFF4A8CB8),
     borderInput = Color(0xFF858689),
+    borderSeparator = Color(0xFFE2E3E5),
     borderStrong = Color(0xFF858689),
     borderSubtle = Color(0xFFD1D2D4),
     borderSuccess = Color(0xFF599365),
@@ -240,7 +243,7 @@ val DsDarkColors = DsColors(
     textPrimary = Color(0xFF191A1B),
     textSecondary = Color(0xFF3A3B3E),
     textSuccess = Color(0xFF00451C),
-    textTertiary = Color(0xFF46484B),
+    textTertiary = Color(0xFF3A3B3E),
     textWarning = Color(0xFF604200),
 )
 
@@ -282,6 +285,10 @@ object DsSpace {
     val sizeIconLg = 24.dp
     val sizeIconMd = 20.dp
     val sizeIconSm = 16.dp
+    val sizeRowLg = 64.dp
+    val sizeRowMd = 56.dp
+    val sizeRowSm = 52.dp
+    val sizeRowTwoLine = 80.dp
     val sizeTargetMin = 48.dp
     val sizeTargetPointer = 48.dp
     val sizeTargetTouch = 48.dp
@@ -331,7 +338,7 @@ object DsType {
     val headlineSm = TextStyle(fontFamily = DsTextFamily, fontSize = 33.sp, lineHeight = 40.sp, fontWeight = FontWeight(600), letterSpacing = -0.01.em)
     val labelLg = TextStyle(fontFamily = DsTextFamily, fontSize = 19.sp, lineHeight = 28.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
     val labelMd = TextStyle(fontFamily = DsTextFamily, fontSize = 16.sp, lineHeight = 24.sp, fontWeight = FontWeight(400), letterSpacing = 0.em)
-    val labelSm = TextStyle(fontFamily = DsTextFamily, fontSize = 16.sp, lineHeight = 24.sp, fontWeight = FontWeight(400), letterSpacing = 0.05.em)
+    val labelSm = TextStyle(fontFamily = DsTextFamily, fontSize = 16.sp, lineHeight = 24.sp, fontWeight = FontWeight(400), letterSpacing = 0.06.em)
     val titleLg = TextStyle(fontFamily = DsTextFamily, fontSize = 27.sp, lineHeight = 32.sp, fontWeight = FontWeight(600), letterSpacing = 0.em)
     val titleMd = TextStyle(fontFamily = DsTextFamily, fontSize = 23.sp, lineHeight = 32.sp, fontWeight = FontWeight(600), letterSpacing = 0.em)
     val titleSm = TextStyle(fontFamily = DsTextFamily, fontSize = 19.sp, lineHeight = 28.sp, fontWeight = FontWeight(600), letterSpacing = 0.em)
@@ -341,9 +348,9 @@ object DsMotion {
     const val durationExtraMs = 560
     const val durationInstantMs = 0
     const val durationLongMs = 320
-    const val durationLongExitMs = 240
+    const val durationLongExitMs = 260
     const val durationMediumMs = 200
-    const val durationMediumExitMs = 150
+    const val durationMediumExitMs = 160
     const val durationMicroMs = 100
     const val durationShortMs = 150
     fun <T> springEffectsDefault() = spring<T>(dampingRatio = 1f, stiffness = 1600f)

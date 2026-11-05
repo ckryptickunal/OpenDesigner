@@ -6,9 +6,38 @@
 
 A habit tracker where friends cheer each other on.
 
+## Purpose and goals
+
+- **Mission** (the change it exists to make): Not enough information.
+- **Vision** (where it is heading): Not enough information.
+- **Purpose** (what the person is trying to do with it): Not enough information.
+- **Goals**: Not enough information.
+
+Nothing here is invented: these come from the person's own words and README, are recorded as assumed, and are confirmed once. The principles are drafted from the goals (Q-brand-07).
+
+## Phase
+
+Not enough information (Q-scope-07): an idea, being built, close to launch, or live with real users.
+
 ## Audience
 
 Casual users on phones, a few minutes a day, many first-time visitors.
+
+## Users
+
+Not researched yet. The user research step (references/research.md) fills this in.
+
+## Market
+
+- **Analogous product** (a product from another field that solves the same kind of problem): Not enough information.
+- **Competitors** (what people would use instead): Not enough information.
+- **Their shared pattern** (what the competitors all do): Not enough information.
+- **The gap** (what none of them does well, and this product can): Not enough information.
+- **Industry conventions** (the words, layouts and habits its users already know): Not enough information.
+
+## Positioning
+
+Not enough information. The positioning step fills this in: engine.py research positioning draft.
 
 ## Surfaces
 

@@ -3744,6 +3744,20 @@ def _px(v):
     return v["value"] if v.get("unit") == "px" else v["value"] * 16
 
 
+def pair_hexes(toks, pr):
+    """The two colours of a contrast pair as people see them: a see-through background over the worst content behind it,
+    a see-through foreground over its background. validate and the palette preview both measure through this."""
+    bgv = toks[pr["bg"]]["resolved"]
+    bg = hex_of(bgv)
+    if pr.get("behind") and isinstance(bgv, dict) and bgv.get("alpha") is not None:
+        bg = composite(bg, bgv["alpha"], pr["behind"])
+    fgv = toks[pr["fg"]]["resolved"]
+    fg = hex_of(fgv)
+    if isinstance(fgv, dict) and fgv.get("alpha") is not None:
+        fg = composite(fg, fgv["alpha"], bg)
+    return fg, bg
+
+
 def validate_files(files, state, rep):
     meta = files.get("opendesigner.meta.json") or {}
     res = files.get("opendesigner.resolver.json")
@@ -3848,14 +3862,7 @@ def validate_files(files, state, rep):
         if pr["fg"] not in toks or pr["bg"] not in toks:
             rep.add("error", "contrast", f"{pr['mode']}: pair {pr['fg']} on {pr['bg']} names a missing token", pr["rule"], "DC-L01-22")
             continue
-        bgv = toks[pr["bg"]]["resolved"]
-        bg = hex_of(bgv)
-        if pr.get("behind") and isinstance(bgv, dict) and bgv.get("alpha") is not None:
-            bg = composite(bg, bgv["alpha"], pr["behind"])  # see-through surface: measured over the worst content behind it
-        fgv = toks[pr["fg"]]["resolved"]
-        fg = hex_of(fgv)
-        if isinstance(fgv, dict) and fgv.get("alpha") is not None:
-            fg = composite(fg, fgv["alpha"], bg)
+        fg, bg = pair_hexes(toks, pr)  # a see-through surface is measured over the worst content behind it
         ratio = contrast(fg, bg)
         n_pairs += 1
         ok = ratio >= pr["min"]
@@ -13724,6 +13731,45 @@ def taste_index(d, state=None):
     return index if taste_py.has_evidence(index) else None
 
 
+# The pairs the palette preview shows, in plain words: the ones a person reads most. validate checks every pair the system
+# promises (contrast_pairs); these are the same pairs, measured the same way, with the minimum validate uses.
+PALETTE_PAIRS = [("Body text on the page", "color.text.primary", "color.surface.base", None),
+                 ("Muted text on the page", "color.text.secondary", "color.surface.base", None),
+                 ("Faint text on the page", "color.text.tertiary", "color.surface.base", None),
+                 ("Link on the page", "color.text.link", "color.surface.base", "Read more"),
+                 ("Label on the main button", "color.text.on-action", "color.bg.action.primary", "Save"),
+                 ("Error text on the page", "color.text.danger", "color.surface.base", "Try again"),
+                 ("Input border", "color.border.input", "color.surface.base", None),
+                 ("Focus ring", "color.border.focus", "color.surface.base", None)]
+
+
+def palette_pairs(files, meta):
+    """PALETTE_PAIRS with each colour resolved per mode, for the palette template. The page measures the ratio itself from
+    these hex values, so the table cannot drift from the swatches."""
+    res = files["opendesigner.resolver.json"]
+    has_theme = "theme" in res.get("modifiers", {})
+    modes = meta.get("modes") or (list(res["modifiers"]["theme"]["contexts"]) if has_theme else ["light"])
+    toks = {m: resolve_all(files, {"theme": m} if has_theme else {}) for m in modes}
+    promised = {(pr["mode"], pr["fg"], pr["bg"]): pr for pr in meta.get("contrastPairs", [])}
+    out = []
+    for label, fg, bg, sample in PALETTE_PAIRS:
+        prs = {m: promised.get((m, fg, bg)) for m in modes}
+        if not all(prs.values()) or not all(fg in toks[m] and bg in toks[m] for m in modes):
+            continue  # this system has no such pair (for example no danger colour)
+        first = prs[modes[0]]
+        row = {"label": label, "fg": {}, "bg": {}, "min": first["min"], "kind": "text" if first["kind"] == "text" else "edge"}
+        for m in modes:
+            row["fg"][m], row["bg"][m] = pair_hexes(toks[m], prs[m])
+            if prs[m].get("inner") and prs[m]["inner"] in toks[m]:
+                row.setdefault("inner", {})[m] = hex_of(toks[m][prs[m]["inner"]]["resolved"])
+        if any(r["fg"] == row["fg"] and r["bg"] == row["bg"] for r in out):
+            continue  # same colours as a row above (faint text often shares the muted step): one row says it
+        if sample:
+            row["sample"] = sample
+        out.append(row)
+    return out
+
+
 def build_payload(state, template, values=None, labels=None, taste=None):
     """The od-data payload for one template, from the current state and what-if copies (one per option). values and labels
     replace the template's own options (the style lab's tiles: any named or experimental style at Q-dir-01). taste: the
@@ -13742,7 +13788,8 @@ def build_payload(state, template, values=None, labels=None, taste=None):
                "generatedBy": f"engine.py show {template} (OpenDesigner engine {ENGINE_VERSION}); real values from {name}'s state"}
     if template == "palette":
         payload.update(title=f"{name}: how colorful", subtitle="Each option is your palette, built for real. The shades go from light to dark; "
-                       "the number under each is its contrast with the first shade." + note_fixed, options=[])
+                       "the number under each is its contrast with the first shade. The table below checks the pairs people read "
+                       "most; engine.py validate checks every pair." + note_fixed, options=[])
         for v in values:
             files, meta, s2 = what_if(state, qid, v)
             ramps = [{"name": n, "light": meta["ramps"][n]["light"]["hex"], "dark": meta["ramps"][n]["dark"]["hex"]}
@@ -13752,7 +13799,7 @@ def build_payload(state, template, values=None, labels=None, taste=None):
                     "vibrant": "the strongest color"}.get(ci_["scheme"], ci_["scheme"])
             note += f", {ci_.get('accentCount', 1)} accent{'s' if ci_.get('accentCount', 1) != 1 else ''}"
             note += "; your brand color exactly on buttons" if ci_.get("pinnedStep") else (f"; buttons {ci_.get('brandAdjustedTo')}" if ci_.get("brandAdjustedTo") else "")
-            payload["options"].append({"value": v, "label": label(v), "note": note, "ramps": ramps})
+            payload["options"].append({"value": v, "label": label(v), "note": note, "ramps": ramps, "pairs": palette_pairs(files, meta)})
     elif template == "type-scale":
         files, meta, s2 = what_if(state)
         payload.update(title=f"{name}: text sizes", subtitle="Your body size with three ratios. Each size is the one below it times the ratio, "

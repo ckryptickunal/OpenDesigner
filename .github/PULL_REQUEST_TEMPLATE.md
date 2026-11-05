@@ -22,6 +22,7 @@
 - [ ] `python3 tools/jev_nav.py check` reports 0 files with dangling references.
 - [ ] Every JSON file still parses, and `python3 tools/check_links.py` passes.
 - [ ] I edited source files (`research/`, `synthesis/`, `skills/`, `tools/`), not generated copies; if I changed them, I ran `python3 tools/build_data.py` and `python3 tools/sync_skills.py`, and the engine tests.
+- [ ] If this changes what the engine writes, I ran `python3 tools/build_examples.py`, and `python3 tools/build_examples.py --check` passes.
 - [ ] Nothing copies another brand's identity (logo, name, typeface files, illustrations).
 - [ ] `CHANGELOG.md` has one short, dated entry per change, and `python3 tools/changelog_check.py` passes.
 - [ ] If this changes the website's header, footer or navigation, no link that search engines or AI answer engines follow was dropped.
