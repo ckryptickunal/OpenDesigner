@@ -200,6 +200,8 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 | `color.border.subtle` | `#c4cad5` | `#434852` | Dividers (strong rules: Warmth 0-33, S-L06-067 inverse). |
 | `color.border.success` | `#089a47` | `#199547` | Success boundary, for example an invalid field (3:1). |
 | `color.border.warning` | `#aa7f2c` | `#a47b2f` | Warning boundary, for example an invalid field (3:1). |
+| `color.chart.axis` | `#808793` | `#7a808c` | Axis lines and tick marks. |
+| `color.chart.brand` | `#4a5cf0` | `#6078ff` | A chart with one series: the brand color (DC-L05-23). |
 | `color.chart.categorical.1` | `#6a83ff` | `#4c5fe3` |  |
 | `color.chart.categorical.2` | `#886d00` | `#a78700` |  |
 | `color.chart.categorical.3` | `#f1528c` | `#ca296c` |  |
@@ -208,12 +210,27 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 | `color.chart.categorical.6` | `#397f00` | `#489d00` |  |
 | `color.chart.categorical.7` | `#e96500` | `#b64d00` |  |
 | `color.chart.categorical.8` | `#00799c` | `#0095c0` |  |
+| `color.chart.diverging.1` | `#574500` | `#e6ba00` | Furthest below the midpoint. |
+| `color.chart.diverging.2` | `#765e00` | `#bc9800` |  |
+| `color.chart.diverging.3` | `#977901` | `#977902` |  |
+| `color.chart.diverging.4` | `#868d9b` | `#676d7a` | The midpoint, or no change. |
+| `color.chart.diverging.5` | `#6578c5` | `#6578c5` |  |
+| `color.chart.diverging.6` | `#4558bd` | `#7c95ff` |  |
+| `color.chart.diverging.7` | `#2d33b5` | `#aabdff` | Furthest above the midpoint. |
+| `color.chart.gridline` | `#c4cad5` | `#434852` | Gridlines: supportive, so they stay quiet (DC-L05-24). |
+| `color.chart.label` | `#515762` | `#a5abb8` | Tick labels, axis titles and legends: text, so they keep the text minimum. |
 | `color.chart.neutral` | `#6f7683` | `#7c8290` | Other, baseline or comparison series. |
+| `color.chart.reference` | `#6f7683` | `#7c8290` | Target, threshold and average lines. |
 | `color.chart.sequential.1` | `#e5ebff` | `#1f2641` |  |
 | `color.chart.sequential.2` | `#cedaff` | `#28346a` |  |
 | `color.chart.sequential.3` | `#b8c8ff` | `#313f99` |  |
 | `color.chart.sequential.4` | `#4a5cf0` | `#6078ff` |  |
 | `color.chart.sequential.5` | `#3a49c1` | `#91a8ff` |  |
+| `color.chart.status.danger` | `#d93834` | `#da5b51` | Danger in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1). |
+| `color.chart.status.discovery` | `#9b40ff` | `#a263f8` | Discovery in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1). |
+| `color.chart.status.info` | `#007cb7` | `#008bcd` | Info in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1). |
+| `color.chart.status.success` | `#00883d` | `#009845` | Success in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1). |
+| `color.chart.status.warning` | `#845d00` | `#e6b55d` | Warning in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1). |
 | `color.icon.accent` | `#3a49c1` | `#91a8ff` | Selected and interactive icons. |
 | `color.icon.default` | `#515762` | `#a5abb8` | Icons beside text; same color as secondary text (DC-L05-08). |
 | `color.icon.on-accent` | `#ffffff` | `#141517` | Icons on solid accent fills. |
@@ -259,7 +276,7 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 - Use one solid accent fill per view for the primary action; spend chroma on small, meaningful elements.
 - Avoid gray text on colored fills; use the matching `text.on-*` role.
 - Avoid color as the only signal: pair status colors with an icon or label.
-- Charts: use `color.chart.categorical.*` in order, `color.chart.sequential.*` for amounts, `color.chart.neutral` for other.
+- Charts: `color.chart.brand` for a chart with one series; `color.chart.categorical.*` in order for groups; `color.chart.sequential.*` for amounts; `color.chart.diverging.1-7` for values below and above a midpoint (4 is the midpoint); `color.chart.status.*` for success, warning and danger, always with a label; `color.chart.neutral` for other and baselines. Axes use `color.chart.axis`, gridlines `color.chart.gridline`, tick labels and legends `color.chart.label`, targets `color.chart.reference`; other series fade to `opacity.chart.dimmed` while one is hovered. Every mark is at least 3:1 against the page; marks are not 3:1 against each other, so keep a gap or a line between neighbours (DC-L05-23, DC-L05-24).
 
 **Tailwind classes:** `bg-action-primary`, `hover:bg-action-primary-hover`, `active:bg-action-primary-pressed`, `text-on-action`, `bg-surface-base`, `bg-surface-raised`, `text-fg-primary`, `text-fg-secondary`, `text-fg-link`, `border-line-subtle`, `border-line-input`, `outline-line-focus`, `bg-danger-bold`.
 
@@ -448,6 +465,13 @@ Designers: core set of about 25 components · Code: `button.* (proposed), APG pa
 | accordion | planned (tokens ready) |
 
 **Contested policies:** Validation timing and disabled submit: pending; Field style: pending; Toasts: pending; Undo versus confirm: pending; Danger actions: pending; Button emphasis levels: pending.
+
+**Tables** (defaults; Q-pattern-07 changes them):
+- Rows: a 1px `color.border.subtle` line between rows, none around the table (Carbon's default).
+- Row heights: `size.row.sm` (dense), `size.row.md` (default), `size.row.lg` (roomy) and `size.row.two-line`; the header row matches the body rows (Carbon, S-L08-092).
+- Header: stays in view while the rows scroll (`position: sticky`), with a scroll-edge fade where rows pass under it, never a 1px line (STD-visual-details-15).
+- Numbers: right-aligned in `text.numeric.*` (tabular digits), and their column headers right-aligned too, so digits line up and compare at a glance (DC-L19-121, DC-L02-26).
+- Text, status chips, row checkboxes and targets follow the same tokens as the rest of the system; a chip carries a word, never color alone (WCAG 1.4.1).
 
 **Use / avoid.**
 - Every interactive component shows hover, pressed, focus-visible and disabled states from the tokens.

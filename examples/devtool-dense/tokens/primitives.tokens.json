@@ -2748,6 +2748,12 @@
       "content": {
         "$value": 0.38
       }
+    },
+    "chart": {
+      "dimmed": {
+        "$value": 0.3,
+        "$description": "Other series fade to this while one is hovered or picked in the legend (Carbon, S-L05-091; DC-L05-24)."
+      }
     }
   },
   "font": {
