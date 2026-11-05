@@ -8,16 +8,16 @@ A dense, calm console for a fictional CI and observability tool: productive, com
 
 | What | Result |
 |---|---|
-| Type | body 14px, ratio 1.2, sizes 12, 14, 17, 20, 24, 29, 35; weights body 400, label 400, heading 600 |
+| Type | body 14px, ratio 1.2, sizes 12, 14, 17, 20, 24, 29, 35; weights body 400, label 500, heading 600 |
 | Space | 4px unit; default density compact (controls 24/32/40px); hit areas pointer 24px |
 | Shape | control radius 4, containers 8px, focus ring 2px |
 | Depth | ring+faint-shadow |
 | Motion | medium 220ms, spring damping 1.0 |
 | Color | neutral scheme, accent solid `#4a5cf0`, text minimum 4.5:1, themes light, dark |
-| Validation | 0 errors, 0 warnings, 4 notes; 202 contrast pairs checked |
+| Validation | 0 errors, 0 warnings, 5 notes; 202 contrast pairs checked |
 
-**Files:** `state.json` (the only input), `decisions.md` (why each choice), `tokens/` (DTCG 2025.10 + resolver, canonical), `build/` (css, tailwind, figma, paper, swift, compose, dtcg), `DESIGN.md`, `PRODUCT.md`, `preview.html`.
+**Files:** `state.json` (the input), `decisions.md` (why each choice), `tokens/` (DTCG 2025.10 + resolver, canonical), `build/` (artifact, compose, css, dtcg, figma, paper, swift, tailwind), `DESIGN.md`, `PRODUCT.md`, `overview.html` (the whole system on one page), `preview.html` and `preview/` (the visual templates, filled in).
 
-**Rebuild:** `python3 examples/make_examples.py devtool-dense` replays the decisions; `python3 skills/opendesigner/scripts/engine.py build --dir examples/devtool-dense` regenerates from `state.json`.
+**Rebuild:** `python3 tools/build_examples.py devtool-dense` runs `engine.py build` on `state.json` and rewrites this README. `python3 tools/build_examples.py --check` fails when a committed file differs from what the engine makes now.
 
 The product is fictional; no real brand's identity is copied.

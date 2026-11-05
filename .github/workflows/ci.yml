@@ -124,5 +124,12 @@ jobs:
       - name: Standalone skill zips include visual templates
         run: python3 tools/test_build_dist.py
 
-      - name: Relative Markdown links resolve (offline)
-        run: python3 tools/check_links.py
+      - name: Relative Markdown links resolve (offline; /links in site/docs are checked against the pages site/build.py makes)
+        run: |
+          python3 tools/check_links.py
+          python3 tools/test_check_links.py
+
+      - name: Worked examples are what the engine makes now (rebuilt in a temporary folder; writes nothing)
+        run: |
+          python3 tools/build_examples.py --check
+          python3 tools/test_build_examples.py
