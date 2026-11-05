@@ -207,6 +207,45 @@ def apple_tracking_inline(html_):
     return re.sub(r'style="([^"]*)"', fix, html_)
 
 
+# Acronyms in running text ("MIT", "FAQ", "DTCG"): capitals are never tracked below zero (preflight 50, issue #75), but the
+# size-based tracking above gives text up to 19px a small negative value. Each acronym gets <span class="caps">, set to 0 there.
+CAPS_RX = re.compile(r"(?<![\w./#&@-])([A-Z][A-Z0-9]*[A-Z][A-Z0-9]*)(?!\w)")
+CAPS_TAG = re.compile(r"""<!--.*?-->|<(?:[^>"']|"[^"]*"|'[^']*')*>""", re.S)
+CAPS_SKIP = {"head", "title", "script", "style", "svg", "code", "pre", "kbd", "samp", "textarea", "select", "option", "template"}
+
+
+def caps_spans(html_):
+    """Wrap acronyms in a page's text (never in tags, attributes, code or SVG) in <span class="caps">."""
+    out, skip, pos = [], [], 0
+    wrap = lambda t: t if skip else CAPS_RX.sub(r'<span class="caps">\1</span>', t)
+    for m in CAPS_TAG.finditer(html_):
+        out += [wrap(html_[pos:m.start()]), m.group(0)]
+        pos = m.end()
+        t = re.match(r"<(/?)([a-zA-Z][\w-]*)", m.group(0))
+        if t and t.group(2).lower() in CAPS_SKIP:
+            name = t.group(2).lower()
+            if t.group(1):
+                if name in skip:
+                    del skip[len(skip) - 1 - skip[::-1].index(name)]
+            elif not m.group(0).endswith("/>"):
+                skip.append(name)
+    out.append(wrap(html_[pos:]))
+    return "".join(out)
+
+
+def caps_css(css):
+    """.caps is letter-spacing 0 where the text around it is tracked tight. Inside any rule that sets capitals or tracks text
+    open (labels, buttons, headings), it inherits that spacing instead, so a label keeps its rhythm."""
+    sels = []
+    for m in re.finditer(r"([^{}]+)\{([^{}]*)\}", re.sub(r"/\*.*?\*/", "", css, flags=re.S)):
+        ls = re.search(r"letter-spacing:\s*(-?[\d.]+)", m.group(2))
+        if "@" in m.group(1) or not ("uppercase" in m.group(2) or (ls and float(ls.group(1)) > 0)):
+            continue
+        sels += [x.strip() for x in m.group(1).split(",") if x.strip() and "::" not in x]
+    sels += ['[style*="uppercase"]', '[style*="letter-spacing:."]', '[style*="letter-spacing:0."]', '[style*="letter-spacing: ."]']
+    return ".caps{letter-spacing:0}" + ",".join(dict.fromkeys(f"{x} .caps" for x in sels)) + "{letter-spacing:inherit}"
+
+
 def fmt_em(x):
     return "0" if x == 0 else f"{x:g}em"
 
@@ -368,6 +407,11 @@ def release_line():
     return f"Version {VERSION} came out on {day_name(day)}." if day else f"Version {VERSION} is in development and not released yet."
 
 
+def since_label():
+    """The marker for CHANGELOG.md's Unreleased entries: what they come after, read like release_line(), so it moves with each release."""
+    return f"Since v{VERSION}" if version_facts()["released"] else "Not released yet"
+
+
 def version_facts():
     """The version every copy stamps into the systems it builds, the day a git tag v<version> released it (None until
     then), and the day of the newest change."""
@@ -446,7 +490,9 @@ def changes_feed(days=30):
 def whats_new_md():
     """CHANGELOG.md's highlights for visitors: one line each, newest first, dated like the changelog page, and marked
     when it is a fix. The explanation stays under "Highlights, explained"."""
-    return "\n".join(f"- {day_name(e['day'])}: {e['title']}" + (" (a fix)" if e["kind"] == "Fixed" else "") for e in highlight_entries())
+    since = since_label().lower()
+    return "\n".join(f"- {day_name(e['day'])}: {e['title']}" + (" (a fix)" if e["kind"] == "Fixed" else "")
+                     + (f" ({since})" if e["release"] == "Unreleased" else "") for e in highlight_entries())
 
 
 CHANGELOG_BLOCKS = {"{{changelog}}": lambda: changelog_md(), "{{version}}": lambda: version_md(), "{{changes}}": lambda: changes_md(),
@@ -701,7 +747,7 @@ def docs_home(pages, facts, faq):
     body = f"""
 <section class="hero">
 <nav class="crumb" aria-label="Breadcrumb"><a href="/">{NAME}</a><span aria-hidden="true">/</span><span aria-current="page">Docs</span></nav>
-<h1 class="t-hero">OpenDesigner docs: build a design system <strong>with the AI you already use</strong>, and keep it consistent.</h1>
+<h1 class="t-hero">Design systems <strong>with your own AI</strong>.</h1>
 <p class="lede">{HERO_LEDE}</p>
 <div class="cta-row">
 <a class="btn primary" href="/docs/install/">Install</a>
@@ -1353,7 +1399,7 @@ def highlight_entries():
     (its "### Added/Changed/Fixed" heading) and its day, newest first. The day is the date the entry states, or else
     the day git says the line was written."""
     import datetime as _dt
-    entries, section, ts, when, cur = [], "", 0, None, None
+    entries, section, release, ts, when, cur = [], "", "", 0, None, None
     for line in git_out("blame", "--line-porcelain", "CHANGELOG.md").splitlines():
         if line.startswith("committer-time "):
             ts = int(line.split()[1])
@@ -1368,9 +1414,11 @@ def highlight_entries():
                 cur = None
                 if text.startswith("### "):
                     section = text[4:].strip()
+                elif text.startswith("## "):  # "## [Unreleased]" or "## [0.2.0]: 2026-11-05": the release an entry belongs to
+                    release = re.sub(r"^## \[?([^\]:]+)\]?.*$", r"\1", text).strip()
             if m and when:
                 stated = re.match(r"^\s*\([^()]*?(\d{4}-\d{2}-\d{2})[^()]*\)", m.group(2))  # "(2026-10-24)": the day it landed, kept when the entry is reworded
-                cur = {"ts": ts, "day": stated.group(1) if stated else when, "title": m.group(1).strip().rstrip(".:"), "rest": m.group(2), "more": [], "kind": section}
+                cur = {"ts": ts, "day": stated.group(1) if stated else when, "title": m.group(1).strip().rstrip(".:"), "rest": m.group(2), "more": [], "kind": section, "release": release}
                 entries.append(cur)
             elif cur and text.startswith("  "):
                 cur["more"].append(text[2:])
@@ -1378,7 +1426,7 @@ def highlight_entries():
     return entries
 
 
-def _entry_html(e):
+def _entry_html(e, since=""):
     """One highlight: its explanation without the note on who asked and when, and any sub-points folded under Details."""
     gh = lambda md: re.sub(r"\]\((?!https?:|#|/|mailto:)([^)]+)\)", lambda m: f"]({GH}/blob/main/{m.group(1)})", md)
     rest = re.sub(r"^\s*\([^()]*(?:\([^()]*\)[^()]*)*\)", "", e["rest"]).lstrip(" .:").strip()
@@ -1388,7 +1436,7 @@ def _entry_html(e):
     body = md_to_html(gh(rest)) if rest else ""
     if body and more:
         more = f'<details class="cl-more"><summary>Details</summary>{more}</details>'
-    tag = '<span class="cl-tag">Fix</span>' if e["kind"] == "Fixed" else ""
+    tag = (f'<span class="cl-tag is-new">{since}</span>' if since and e["release"] == "Unreleased" else "") + ('<span class="cl-tag">Fix</span>' if e["kind"] == "Fixed" else "")
     return f'<article class="cl-entry"><div class="cl-title"><h3>{inline(e["title"])}</h3>{tag}</div><div class="prose cl-body">{body}{more}</div></article>'
 
 
@@ -1396,7 +1444,7 @@ def changelog_page(p, pages):
     """The changelog as its own page, not a docs page: no docs menu, breadcrumb or page index. One column of days, newest
     first. Each day shows its highlights from CHANGELOG.md in full, with that day's commits folded underneath."""
     v = version_facts()
-    by_day, entries = changes_by_day(), highlight_entries()
+    by_day, entries, since = changes_by_day(), highlight_entries(), since_label()
     days = sorted(set(by_day) | {e["day"] for e in entries}, reverse=True)
     shown = days[:60]
     state = f'Released {day_name(v["released"])}' if v["released"] else "In development"
@@ -1412,7 +1460,7 @@ def changelog_page(p, pages):
         dt_ = dt.date.fromisoformat(d)
         blocks.append(f'<section class="cl-day" id="{slugify(day_name(d))}" aria-labelledby="d-{d}"><h2 class="cl-date" id="d-{d}">'
                       f'<time datetime="{d}">{dt_.day} {dt_.strftime("%b")} {dt_.year}</time></h2>'
-                      f'<div class="cl-items">{"".join(_entry_html(e) for e in mine)}{log}</div></section>')
+                      f'<div class="cl-items">{"".join(_entry_html(e, since) for e in mine)}{log}</div></section>')
     older = (f'<p class="cl-older">Older changes are in <a href="{GH}/commits/main">the full history on GitHub</a>.</p>' if len(days) > len(shown) else "")
     update = md_to_html(update_md())
     head = (f'<header class="cl-head"><h1 class="t-h1">Changelog</h1>'
@@ -1993,7 +2041,10 @@ def main():
     for key, _f, _l in FONT_SPECS:
         shutil.copy(CACHE / f"{key}-OFL.txt", DIST / "fonts" / f"{key}-OFL.txt")
     ff = "".join(f"@font-face{{font-family:'{fam}';font-style:normal;font-weight:{w};font-display:swap;src:url(/fonts/{f}) format('woff2')}}\n" for fam, w, f in rules)
-    (DIST / "site.css").write_text(minify_css(ff + tokens_css() + corners_match_levers(apple_tracking((SITE / "static" / "site.css").read_text() + (SITE / "static" / "figures.css").read_text() + status_css() + (SITE / "static" / "home.css").read_text() + (SITE / "static" / "craft.css").read_text() + (SITE / "static" / "deco.css").read_text() + (SITE / "static" / "changelog.css").read_text()))))
+    raw_css = ((SITE / "static" / "site.css").read_text() + (SITE / "static" / "figures.css").read_text() + status_css() + (SITE / "static" / "home.css").read_text()
+               + (SITE / "static" / "craft.css").read_text() + (SITE / "static" / "deco.css").read_text() + (SITE / "static" / "changelog.css").read_text())
+    (DIST / "site.css").write_text(minify_css(ff + tokens_css() + corners_match_levers(apple_tracking(raw_css))
+                                              + caps_css(raw_css + (SITE / "static" / "tour.css").read_text())))
     shutil.copy(SITE / "static" / "site.js", DIST / "site.js")
     if PH_KEY:
         shutil.copy(SITE / "static" / "ph.js", DIST / "ph.js")
@@ -2030,6 +2081,8 @@ def main():
     tour_paths = []
     tour_page.add(sys.modules[__name__], files, mds, tour_paths)  # /tour/: how OpenDesigner works, drawn live (its own module)
     for rel, text in {**files, **mds}.items():
+        if rel.endswith(".html") and not rel.startswith("library/"):  # the library's parts keep their own markup
+            text = caps_spans(text)
         f = DIST / rel
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text(text)

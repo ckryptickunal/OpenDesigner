@@ -25,6 +25,7 @@
 .cl-title { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 10px; margin: 0 0 8px; }
 .cl-entry h3 { margin: 0; font-size: 20px; line-height: 28px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink); text-wrap: balance; }
 .cl-tag { flex: none; padding: 0 8px; position: relative; top: -2px; font: 500 11px/20px "Source Code Pro", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); border: 1px solid var(--line); border-radius: var(--r-pill); }
+.cl-tag.is-new { text-transform: none; letter-spacing: 0; color: var(--accent-text); background: var(--accent-soft); border-color: transparent; }  /* CHANGELOG.md's Unreleased entries (#70) */
 .cl-body.prose { margin-top: 0; color: var(--ink-muted); }
 .cl-body.prose p, .cl-body.prose li { font-size: 16px; line-height: 26px; }
 .cl-body > :last-child { margin-bottom: 0; }

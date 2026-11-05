@@ -293,7 +293,7 @@ svg.arrow { width: 14px; height: 14px; flex: none; }
 .foot-docs + .foot-legal { margin-top: var(--space-48); }
 .foot-ver { font: 500 11px/16px "Source Code Pro", ui-monospace, monospace; padding: 2px 8px; border-radius: var(--r-pill); background: var(--accent-soft); color: var(--accent-text); }
 .foot-legal { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-12) var(--space-32); width: calc(100% - 48px); max-width: calc(var(--shell) - 48px); margin: var(--space-64) auto 0; padding: var(--space-24) 0 var(--space-32); font-size: 12px; line-height: 18px; color: var(--ink-muted); border-top: 1px solid var(--line); }
-.foot-legal p { margin: 0; max-width: 92ch; }
+.foot-legal p { margin: 0; max-width: 65ch; }  /* STD-visual-details-01 */
 .foot-meta { display: flex; flex-wrap: wrap; gap: var(--space-8) var(--space-16); font-family: "Source Code Pro", ui-monospace, monospace; white-space: nowrap; }
 .foot-meta a { color: var(--ink-muted); display: inline-flex; align-items: center; min-height: 24px; } .foot-meta span { display: inline-flex; align-items: center; min-height: 24px; }
 @media (max-width: 1100px) { .foot-in { grid-template-columns: minmax(0, 1fr); } .foot-docs-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-32); } }

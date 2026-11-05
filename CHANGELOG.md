@@ -19,6 +19,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **The changelog marks what came after the release** (2026-11-05). On /changelog/, entries not yet in a release carry a "Since v0.2.0" tag, read from the version and its git tag, so it moves with each release ([#70](https://github.com/ckryptickunal/OpenDesigner/issues/70)).
+- **Calmer type on the docs** (2026-11-05). Figure captions and the footer's legal line stop at about 65 characters, the docs heading fits on two lines, and acronyms such as MIT and DTCG are no longer tracked tight ([#75](https://github.com/ckryptickunal/OpenDesigner/issues/75)).
 - **Three checkers at full marks again** (2026-11-05). The layout check no longer calls a narrow card under a wide one a half-empty row. Preflight finds sizes off a scale named `--fs-*`, `--text-*` and other common names. The name check catches two-word names one letter apart, like Vosberg Health and Vossberg Health.
 - **The consent card no longer hides the page** (2026-11-05). While the website's consent card shows, the page keeps room for it at the bottom. The footer's last line now scrolls clear of it, and a link reached with Tab scrolls above it.
 - **Header links are easier to tap on phones** (2026-11-05). On touch screens the logo, nav, breadcrumb and "more" links have a 44 px hit area, and nothing on the page moves.

@@ -3,7 +3,7 @@
    Numbers and labels inside figures are monospace; text is the brand face. Status colors below are the only colors not in tokens.json. */
 :root { --ok: #1a6b3a; --ok-soft: #e4f3e8; --warn: #8a5300; --warn-soft: #fff2d6; --bad: #a32d2d; --bad-soft: #fde7e7; }
 .fig { margin: 32px 0; }
-.fig > figcaption { font-size: 13px; line-height: 20px; color: var(--ink-muted); margin-top: 12px; }
+.fig > figcaption { font-size: 13px; line-height: 20px; color: var(--ink-muted); margin-top: 12px; max-width: 65ch; }  /* STD-visual-details-01 */
 .fig > figcaption a { color: var(--ink-muted); }
 .mono, .num, .kicker { font-family: "Source Code Pro", ui-monospace, Menlo, monospace; }
 .num { font-variant-numeric: tabular-nums; }
