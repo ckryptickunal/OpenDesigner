@@ -56,6 +56,7 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
 .sw .kv{font-size:10px;color:inherit;opacity:.75}
 @media (max-width:720px){.sw{grid-template-columns:repeat(6,minmax(44px,1fr))}.ramp{grid-template-columns:1fr}}
 .pair{display:inline-block;padding:4px 10px;border-radius:6px;font-weight:500}
+.edge{display:inline-block;width:44px;height:18px;border:2px solid;border-radius:4px;vertical-align:middle}
 .dots{display:flex;gap:3px;margin-top:4px}.dots i{width:18px;height:18px;border-radius:4px;display:block;box-shadow:inset 0 0 0 1px rgba(128,128,128,.25)}
 </style>
 </head>
@@ -337,7 +338,7 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
    "fg": "accent.8",
    "bg": "neutral.1",
    "min": 3,
-   "sample": "border"
+   "kind": "edge"
   }
  ],
  "custom": {
@@ -390,8 +391,10 @@ OD.draw=()=>{const m=mode(),o=OD.sel;$('#ml').textContent='('+m+')';const box=$(
  else box.innerHTML=o.ramps.map(r=>{const st=r[m]||r.light,bg=st[0];return '<div class="ramp"><div class="ramp-n">'+esc(r.name)+'</div><ol class="sw">'+st.map((h,i)=>{const c=ratio(h,bg);
   return '<li><span class="chip" style="background:'+h+'" role="img" aria-label="'+esc(r.name)+' step '+(i+1)+', '+h+', '+fix(c)+' to 1 on step 1"></span><span class="kv">'+(i+1)+'</span><span class="kv">'+h+'</span><span class="kv">'+fix(c)+'</span></li>'}).join('')+'</ol></div>'}).join('');
  const n=(o&&o.ramps&&o.ramps.find(r=>r.name==='neutral'))||null;box.style.setProperty('--s-bg',n?(n[m]||n.light)[0]:'');box.style.setProperty('--s-fg',n?(n[m]||n.light)[11]:'');
- $('#pairs tbody').innerHTML=(D.pairs||[]).map(p=>{const f=res(p.fg,m),b=res(p.bg,m);if(!f||!b)return '';const c=ratio(f,b),ok=c>=p.min;
-  return '<tr><td>'+esc(p.label)+'</td><td><span class="pair" style="color:'+f+';background:'+b+'">Aa '+esc(p.sample||'Sample text')+'</span></td><td class="num">'+fix(c)+':1</td><td class="num">'+p.min+':1</td><td class="'+(ok?'ok':'bad')+'">'+(ok?'Pass':'Fail')+'</td></tr>'}).join('')};
+ $('#pairs tbody').innerHTML=((o&&o.pairs)||D.pairs||[]).map(p=>{const f=res(p.fg,m),b=res(p.bg,m);if(!f||!b)return '';const c=ratio(f,b);let ok=c>=p.min,how='';
+  const i=p.inner&&res(p.inner,m);if(!ok&&i&&ratio(i,b)>=3&&ratio(i,f)>=3){ok=true;how=' (two-tone ring)'} // the same rule as engine.py validate
+  const edge=p.kind==='edge'||p.sample==='border';
+  return '<tr><td>'+esc(p.label)+'</td><td><span class="pair" style="'+(edge?'':'color:'+f+';')+'background:'+b+'">'+(edge?'<span class="edge" style="border-color:'+f+'" role="img" aria-label="'+esc(p.label)+', '+f+' on '+b+'"></span>':'Aa '+esc(p.sample||'Sample text'))+'</span></td><td class="num">'+fix(c)+':1</td><td class="num">'+p.min+':1</td><td class="'+(ok?'ok':'bad')+'">'+(ok?'Pass':'Fail')+how+'</td></tr>'}).join('')};
 if(D.custom){$('#cs').hidden=false;const cc=$('#cc'),ct=$('#ct');let hex=D.custom.value||'#0F766E';cc.value=hex;ct.value=hex;
  const info=h=>{$('#ci').textContent='white text '+fix(ratio(h,'#ffffff'))+':1, black text '+fix(ratio(h,'#000000'))+':1'};info(hex);
  cc.oninput=()=>{ct.value=cc.value;info(cc.value)};ct.oninput=()=>{if(/^#[0-9a-f]{6}$/i.test(ct.value)){cc.value=ct.value;info(ct.value)}};
