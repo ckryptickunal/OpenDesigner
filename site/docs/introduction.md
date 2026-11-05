@@ -4,10 +4,12 @@ seo_title: OpenDesigner docs: make a design system with your AI tool
 description: What OpenDesigner is, who it helps, and what it does not do. A free, open-source add-on that builds a design system with the AI tool you already use.
 section: Getting started
 order: 1
-updated: 2026-10-14
+updated: 2026-11-03
 ---
 
 OpenDesigner is a free, open-source (MIT) add-on that helps you make a design system with the AI tool you already use, such as Claude, ChatGPT, Codex or Cursor. A design system is the set of rules for how your app looks: colors, text sizes, spacing, corners, depth, motion and parts like buttons. OpenDesigner asks a few plain questions, suggests an answer for each with a reason, checks the result, and saves the rules as files in your project.
+
+To see the whole system drawn on one page, with the real numbers, open [How OpenDesigner works](/tour/).
 
 {{figure:index-how-it-works}}
 
@@ -72,7 +74,7 @@ A skill is a set of instructions your AI tool loads when a task needs it.
 
 ## How early it is
 
-- The repository was created on 2026-09-23. Version 0.1.0 is planned, and there is no tagged release yet.
+- The repository was created on 2026-09-23. Version 0.2.0, the first tagged release, came out on 5 November 2026.
 - No watched user trials have happened yet. The usability tests so far were role-played by AI testers.
 - The packaging for each AI tool is in the repository, but a recorded test run in each tool is still to do.
 - If something breaks or confuses you, please [open an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose). That is the most useful help right now.

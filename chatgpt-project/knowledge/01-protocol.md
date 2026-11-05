@@ -27,6 +27,15 @@ A person in a hurry still gets a finished page in the first reply. What they don
 | Anything visual is about to be exported or shared (a page, video, deck or card): "is this ready?" | **opendesigner-preflight** |
 | A one-off UI task in a project that already has a system | Follow its DESIGN.md. Don't interview |
 
+**Run these without being asked.** Never wait for the person to name a tool.
+| When | Run |
+|---|---|
+| Before you show a built page | **opendesigner-review** on it |
+| Before anything is shared or deployed | **opendesigner-preflight** |
+| The person names a site or URL as a reference | **opendesigner-extract**: measure the live site. A thumbnail is not enough |
+| You are about to draw line art or illustrations by hand | **opendesigner-illustrate** first |
+| Before you propose colours or directions | Mobbin, when connected, for shipped references (`practices.md` section 2). Then `engine.py research market` and a positioning the person confirms (`research.md` section 8) |
+
 ## Files in this skill
 | Path | Read it when |
 |---|---|
@@ -60,6 +69,7 @@ A person in a hurry still gets a finished page in the first reply. What they don
    - Run `python3 <skill>/scripts/engine.py detect` first. It only reads: the product's name and what it is, where it runs, a brand colour candidate, the font, dark mode, the project's phase and the stack. Each sketch question it answers becomes one confirm line, not a question (`zoom.md`, level 0). `init` and `sketch` record each reading as `assumed`, with the file it came from.
    - `package.json` tells you the stack (React, React Native and so on). The stack and the platforms decide which house standards apply. The engine reads it at `init` and `sketch` and records it as `raw.stack`. Ask once which framework they use only when no file settles it (`rules.md` section 3).
 2. **Set up.** Run `python3 <skill>/scripts/engine.py init --name "<product or folder name>"`. Here `<skill>` means this skill's folder. The product name from the sketch (`sketch --name`) replaces the folder name later. `init` also applies the house standards (`references/standards.md`) and locks them. Don't ask about them; mention them once, in the first result.
+   - `init` (or `sketch`) writes `opendesigner/PROTOCOL.md`: six steps, each ending at an owner gate, and the checks every round runs. Follow it from step 1. For a built product, step 1 starts with the audit.
 3. **Greet in 3 lines at most** (`rules.md` section 1). There is no mode to choose.
    - If `profile.tracking` in `opendesigner/state.json` is not set, the greeting's one question is the log question from `rules.md` section 11, word for word. It says "on this computer" only when the scripts run on the person's own computer, and "in your project files" in a web chat. Record the answer with `journey.py consent on` or `journey.py consent off`. Then ask the first sketch question.
    - Otherwise, ask the first sketch question straight away.
@@ -69,9 +79,10 @@ A person in a hurry still gets a finished page in the first reply. What they don
 Details are in `references/zoom.md`.
 - **Level 0, sketch:** up to 5 questions, one per message, fewer when their words already answer some. Then `engine.py sketch ...` records the answers and builds a complete first version. Show the first result: a plain line on what they got, the overview (`opendesigner/overview.html`), and one clear next step (`zoom.md`, "The first result").
 - **People in a hurry** ("just pick") get the sketch with `--delegated` and no optional questions. People who talk in plain words get fewer questions (`zoom.md`).
-- **User research** (about 10 minutes, you do it): right after the first result, offer to research who the users are, in one message with the plan (`references/research.md`). After one yes, run it on your own, save the findings with `engine.py research add`, and ask before applying what they recommend. The engine reminds you after each `sketch` and `build` until it is done or skipped (`engine.py research skip --why "..."`).
+- **User research** (about 10 minutes, you do it): right after the first result, offer to research who the users are, in one message with the plan (`references/research.md`). After one yes, run it on your own, save the findings with `engine.py research add`, and ask before applying what they recommend. The engine reminds you after each `sketch` and `build` until it is done or skipped (`engine.py research skip --why "..."`). Then, before any colour or direction: the competitor table, the positioning they confirm, and three directions on the board (`research.md` sections 8 and 9).
 - **The taste poll** (optional, about 5 minutes): the person rates 20 to 30 real screens from shipped products, and the result recommends the eight dials. Offer it when they can't put their taste into words ("I'll know it when I see it"), before level 1, or whenever they ask. It never replaces a question they already answered (`references/taste.md`).
 - **The taste index** (`taste.py index`) merges every taste signal in this project. Offer the dials it is sure about as "confirm this?", ask the rest directly, and leave out an option past one of its red lines (unless every option is: then show them all and say which line). The engine's option gallery and `engine.py review` already use it (`references/taste.md`, "The taste index").
+- **Three directions for the project** come after the positioning, on the direction board (`engine.py research directions board`, `research.md` section 9). The option gallery below is for the style (Q-dir-01).
 - **Style directions come from the option gallery first.** When someone asks which directions they can pick, or which you would choose, run `engine.py show option-gallery --json` (or open the page where the host can show it) and answer from it: its options in its order, its recommendation, and its subtitle, which says which directions taste left out or which red line each crosses. Repeat those lines in your answer. Go to the catalogue (`engine.py style search <words>`, `style list`, `style show <id>`) only when they want more choices or name a look of their own; it prints each style's fit and marks any past a red line. Never name a style direction without its fit: for one you thought of yourself, run `taste.py fit` first.
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
@@ -94,7 +105,7 @@ Use the best surface the host supports, and say which one you use. Never block o
 
 **The overview** (`opendesigner/overview.html`, rebuilt by every `build`) is the person's own design-system page: cover, brand book, colors per theme, headings h1 to h6, spacing, corners, depth, motion, components, brand assets and how it grew. Each area says Chosen, Picked for you or Default, and anything only a person can give (a logo, a voice guide, what the product is for) shows as **Not enough information**, with the question that fills it. Show it after the sketch and after each zoom. In Claude Code, also offer to keep it as a Design System artifact: `build` writes its files to `opendesigner/build/artifact/project/`; create one with the Artifact tool (quickstart, the Design System type) and publish that folder as its `root`, uploading the logo files the README lists. Republish after later builds.
 
-Templates: `palette` (color, light and dark), `type-scale` (text), `spacing-ruler` (spacing and density), `radius` (corners), `elevation` (depth), `motion`, `component-sheet` (components and states), `option-gallery` (3 to 8 directions side by side). `engine.py show <template>` fills one with real values, plus what-if options for its question, without changing any choice. It writes `opendesigner/preview/<template>.html` (`--open` opens it); `build` refreshes all of them, so the person always sees their own system, never sample data. Never fill a template with invented values.
+Templates: `palette` (color, light and dark), `type-scale` (text), `spacing-ruler` (spacing and density), `radius` (corners), `elevation` (depth), `motion`, `component-sheet` (components and states), `option-gallery` (3 to 8 directions side by side), `direction-board` (the project's three directions, with photos; `engine.py research directions board` fills it). `engine.py show <template>` fills one with real values, plus what-if options for its question, without changing any choice. It writes `opendesigner/preview/<template>.html` (`--open` opens it); `build` refreshes all of them, so the person always sees their own system, never sample data. Never fill a template with invented values.
 
 Each template has a **Copy my choice** button that produces `OD:` lines. When the person pastes them back, run each line with the engine (`rules.md` section 9) and confirm in one sentence. Record how each answer was set with `--set-by` (`rules.md` section 5).
 
@@ -115,11 +126,15 @@ python3 <skill>/scripts/engine.py overview [--open]          opendesigner/overvi
 python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html: every token
 python3 <skill>/scripts/engine.py show <template> [--open]   one visual template filled with real values (opendesigner/preview/)
 python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports, DESIGN.md, overview, filled templates and preview only if there are no errors
-python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections
+python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections; code that uses no tokens; a system older than the code
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
+python3 <skill>/scripts/engine.py feedback "<the rule>" --kind note [--same N-01]   the owner's note on the work, counted in opendesigner/RULES.md
 python3 <skill>/scripts/engine.py research plan --brief "<users line>" --tools web-search,browser,last30days   user research: what to find, searches, missing tools
 python3 <skill>/scripts/engine.py research check|add <findings.json> [--accept [--only Q-aud-01,...]]   check, save (research/users.md, PRODUCT.md Users), apply on a yes
 python3 <skill>/scripts/engine.py research status | skip --why "..."
+python3 <skill>/scripts/engine.py research market [--json]                     the competitor table and benchmark: show it before any colour
+python3 <skill>/scripts/engine.py research positioning draft | confirm --proof "..." [--for --problem --claim] | show
+python3 <skill>/scripts/engine.py research directions check | board [--open] | pick <id> [--remix <axis>=<id>] --why "..."
 python3 <skill>/scripts/engine.py standards [--update]       house and project standards; --update applies newer house standards (overrides stay)
 python3 <skill>/scripts/engine.py standard override <id> --why "<their words>" [--path P [--value <json>]]...   only when the person explicitly asks; --path releases only that value, without it every value the standard sets
 python3 <skill>/scripts/engine.py standard restore <id> [--why "..."]      undo an override
@@ -146,22 +161,24 @@ python3 <skill>/scripts/journey.py share [--dry-run] [--yes]           send the 
 - Sharing an anonymous report with the OpenDesigner team is a separate yes. Ask it once, in the last message of the first session, after the outputs are written. Never ask it in the first message, and never again. Only a clear choice counts: "whatever" or no answer is a no (`rules.md` section 11).
 
 ## Building pages with the system
-Once the system exists, people ask for pages, and then for changes to them. Follow `references/making.md`:
-- Have tokens before the first draft, and take every value from them.
+Once the system exists, people ask for pages, and then for changes to them. Follow `opendesigner/PROTOCOL.md` and `references/making.md`:
+- Have tokens before the first draft, and take every value from them. When `engine.py review` says tokens are not in charge, or the system is behind the code, fix that before the next draft.
+- **Show every round without being asked:** screenshots at desktop and phone (or an artifact), before and after, and each check that ran with its result. Never announce a draft as only a local URL. Nothing is done until the checks ran.
 - **After every implementation, run the post-change audit** (`references/post-change-audit.md`) and fix what it finds before you show anything. Add any new kind of mistake the person points out to it, with how to check it.
 - **The component library is optional.** At the first build, before you design the part, follow `references/library.md`: a novice gets one recommended pick from `library.py suggest`; a designer hears about it only when the library has that part in a style that fits. Ask once, record the answer in `profile.library`, and never add a component without a yes.
 - A note applies to every instance of the same kind, and to nothing else.
 - Show options one at a time, full size, on a review copy of the page (never the live one), with the current version kept as an option.
 - Check the rendered page, in the person's own window, before you show it.
 - When a page stops looking like one page, run the cohesion audit (`assets/output/COHESION-AUDIT.md`) before restyling anything.
-- When the person repeats a note, stop patching: work out what you misread, and record the rule. "More like this one" usually asks for new ideas, not variations: say in one line how you read it (`making.md` section 10).
+- Record every note on the work: `engine.py feedback "<the rule>" --kind note`. Said twice, it is a rule in `opendesigner/RULES.md`. Read that file before every round.
+- When a note repeats, stop patching: work out what you misread. "More like this one" usually asks for new ideas, not variations: say in one line how you read it (`making.md` section 10).
 
 ## DESIGN.md stays alive
 - DESIGN.md is the person's living spec. Once it exists, every `set` and `lock` refreshes it and PRODUCT.md by itself. Run `engine.py design-md` to create it, or after a `--no-doc` change.
 - Each section shows its zoom level (sketch, broad, defined, detailed). Each decision opens with one plain sentence. Text inside `<!-- od:keep -->` blocks survives each refresh.
 - **At the end of any implementation** (a page, a component, a refactor), run `engine.py review`. Then re-read DESIGN.md. Record any new value the work needed as a decision, not as a hard-coded value. `assets/output/AGENTS-snippet.md` tells every later agent to do the same.
 - **Correct is not finished.** Passing `review`, `validate` and every width check means the work is consistent, not that it is good. Before you say a visual change is done:
-  1. Open it for the person (a preview, an artifact or the page), so they never have to ask to see it.
+  1. Show it to the person (screenshots or an artifact, never only a local link), so they never have to ask to see it.
   2. Score it with the quality bar (`references/quality.md`): the floors, then nine lines judged blind against three shipped products that solve the same thing (`making.md` section 5). Any line below 4: fix it now with that line's fix prompt, or ask the person for the input it needs.
   3. Put the scorecard and the three references in your report, or say plainly that you did not compare.
   A work tool used all day earns its look from real data shown well: numbers in tabular figures, small charts where a number has a trend, and the theme its users work in (ask, or follow the product's context; never let the system's dark setting decide).
@@ -210,6 +227,12 @@ People never pick a mode. Everyone starts with a quick sketch of the whole syste
 
 ## Level 0: sketch (a few questions, one per message)
 Five answers shape the sketch. Ask only what their words and files don't already tell you.
+
+**A Persuade surface** (a landing page, a marketing site) gets marketing questions, not app ones:
+- Question 2: who it's for, in their words (`context.audience`). Record Q-aud-01 as `large`, assumed.
+- Question 3: the one action a visitor takes, in every voice. Record it as `context.purpose`; the first result confirms it instead of guessing. It runs on the web (Q-plat-01, assumed).
+- After the sketch: the proof they can show, for the brief in `opendesigner/PROTOCOL.md`.
+- Never ask how often people use it, about a light or dark switch, or for a list of components.
 
 **Read the repo first.** Before the first question, run `engine.py detect`. It only reads files, and writes nothing. It reports:
 - the product's name and what it is (`package.json`, the README's first heading and paragraph, the page title);
@@ -282,7 +305,7 @@ Show what they got, not how it was made. Send one message:
 Never dump settings: no dial numbers, token names, hex lists or file trees unless they ask. Point a plain-voice person to the preview first. If they want to read something, DESIGN.md opens with a short plain summary.
 
 ## The project's phase
-The phase (Q-scope-07) says where the project is now: an idea, being built, close to launch, or live. It decides what comes first after the sketch. "Stage" already means an interview topic in these files, so this is always called the phase.
+The phase (Q-scope-07) says where the project is now: an idea, being built, close to launch, or live. It decides what comes first after the sketch. "Stage" already means an interview topic in these files, so this is always called the phase. The phase decides what each step holds; the six steps in `opendesigner/PROTOCOL.md` still run in order. For a built product, step 1 starts with the audit.
 
 `engine.py detect` reads it from the folder, and `init` and `sketch` record it as `assumed`. An empty folder says nothing: then take it from their words, or ask once with the sketch's first question.
 
@@ -299,7 +322,7 @@ The phase (Q-scope-07) says where the project is now: an idea, being built, clos
 - If they correct the phase, record their answer: `engine.py pick Q-scope-07 near-launch --why "<their words>"`.
 
 ## Level 1: broad (one screen per foundation)
-Go in this order, with the listed templates:
+After the research, open with the competitor table and the confirmed positioning, then the three directions on the direction board (`research.md` sections 8 and 9). The pick is a starting point for these screens. Then go in this order, with the listed templates:
 - Q-dir-01, style (`option-gallery`)
 - Q-dir-02, how much fits on a screen (`spacing-ruler`)
 - Q-color-02, where the brand color shows (`palette`)
@@ -314,7 +337,7 @@ Each screen is one message with one question. The person can say "skip", and the
 ## Levels 2 and 3: one area at a time
 There are 14 areas: overview, accessibility, platforms, modes, color, typography, layout, shape, elevation, motion, iconography, content, components and delivery. Their plain names are in `pacing.json`. The ids match the engine's, except `delivery`: the engine does not track its zoom level.
 1. Zooming into an area asks its skipped lower-level questions first (for Color after the sketch: Q-color-02 from level 1).
-2. Open the area's stage files. Ask its level-2 questions in stage order. Skip any marked **Planned** (not built yet) or **Settled by: STD-...** (a standard already locked the answer), and never recommend an option marked **(breaks STD-...)**. Then run `engine.py build` and show the change.
+2. Color opens with the competitor table when one exists (`engine.py research market`). Open the area's stage files. Ask its level-2 questions in stage order. Skip any marked **Planned** (not built yet) or **Settled by: STD-...** (a standard already locked the answer), and never recommend an option marked **(breaks STD-...)**. Then run `engine.py build` and show the change.
 3. **Plain voice: ask fewer.** When the plain voice leads, ask only three kinds of question: weight `high`, asset hooks, and owner inputs (block class I). Also ask a `medium` question when their words or assets make it matter: a logo with two colors makes Q-color-04 matter. The rest keep their defaults (`auto_default`: nothing to run). Name them in one line of the level summary, like "I also picked the grays and hover colors for you." They can say "ask me everything".
 4. Sometimes `pick` says an answer shapes DESIGN.md rules, not tokens. Then say it is saved as a rule, so they don't expect the preview to change.
 5. Record the level: `engine.py set zoom.color '"defined"'` (level names: `sketch`, `broad`, `defined`, `detailed`). The engine also infers the level from the decisions made in an area.
@@ -372,7 +395,7 @@ Search `glossary.json` for each term (one term per line; match the term or one o
    - **The stack comes from `package.json`.** Its dependencies say whether the project uses React, React Native and so on. The stack, with the platforms, decides which standards apply (`docs/KNOWLEDGE.md` section 3). `engine.py init` and `sketch` record it as `raw.stack`. Only when no file settles it, and the project has code to write, ask once which framework they use, then record it: `engine.py set raw.stack '["react"]' --why "<their words>"`.
 2. **Every question must do one of three things:** change the system, lock an assumption, or pick a trade-off. For small gaps, don't ask: assume, and label the assumption.
 3. **Zoom, don't march** (`zoom.md`).
-4. **Order by downstream reach.** Product truth first (what it is, who it's for, where it runs, how it feels), then foundations, then components.
+4. **Order by downstream reach.** Product truth first (what it is, who it's for, where it runs, how it feels), then foundations, then components. A Persuade surface (a landing page) gets marketing questions, not app ones (`zoom.md`, level 0).
 5. **Offer 2 to 4 real options.** Recommend one with a short reason, and always allow a free answer. Accept their own words as an answer, and map them to the nearest option (section 7). The stage files list real systems that use each option. Show them when asked "why?" or when the designer voice leads. At the style screen (Q-dir-01), give 2 or 3 **safe choices** and at least 2 **risks**. Say what each one gains and what it costs. Directions must differ in type, palette and shape.
 6. **Ask for examples, including one they dislike.** Do this once, when they zoom into direction, color, type, corners or motion. Record what they name: `engine.py set taste.likes '["..."]'` and `engine.py set taste.dislikes '["..."]'`. "I don't know" is a fine answer: move on.
 7. **Word questions neutrally.** The recommendation lives in the options, not in the question.
@@ -436,6 +459,8 @@ A value outside the listed options is recorded as given, with the person's reaso
 - **Their own words.** Take answers in their words ("fun", "calm", "a website") and map them to the nearest option. Never make them pick from a list they didn't ask for. The engine maps common feel words to its own (`zoom.md`, question 4).
 - **Vague taste words** ("clean", "modern", "premium"): turn them into 3 to 5 precise visual keywords. For example, "clean" could become "gray surfaces, one accent color, thin 1 px borders, lots of space". At the sketch, don't spend a message confirming: say how you read their words in one line with the result, so they can correct it. At later levels, confirm before generating.
 - **Don't re-ask.** If their words already answered a question ("a website" answers where it runs), don't ask it. Say what you took from their words in one line, and log the skip with `--reason known`.
+- **Never ask twice.** Before any question, read `decisions.md`, the answers in `state.json` and the Answered table in `opendesigner/PROTOCOL.md`. Add every answer given outside the interview to that table.
+- **Deploying:** ask once per milestone, at a gate. Never every round.
 - **"You decide" / "skip":** take the default and record `delegated`. For a high fan-out owner input (scope, platforms, audience), push back once: ask only the one or two parts that matter most. If their words or files already point to an answer, don't push back: record it as `assumed` and say it in one line. If they decline again, respect it and mark it `assumed`.
 - **In a hurry** ("just pick", "just do it", "skip the rest"): stop asking optional questions. Pick what fits their words and files, record it as `delegated`, and list it in one line (`zoom.md`, "People in a hurry").
 - **Conflicting answers** inside one cycle: show both answers and the conflict. Settle it with their ranked principles (Q-brand-07). Never quietly split the difference.
@@ -452,11 +477,12 @@ One line per decision. A line looks the same whether it comes from a template bu
 | `OD:lock <path>` / `OD:unlock <path>` | `engine.py lock <path>` / `engine.py unlock <path>`. Unlock only with consent |
 | `OD:accept <ref-id>:<path>` | `engine.py set <path> <value> --set-by reference --source-ref <ref-id>`, for a value pre-filled from a reference |
 | `OD:ignore <ref-id>:<path>` | Nothing: the pre-filled value is dropped |
-| `OD:remix <dimension>=<option-value>` | Option gallery only: take that dimension (color, type, shape or depth) from the named option, and `set` its values |
+| `OD:remix <dimension>=<option-value>` | Option gallery: take that dimension (color, type, shape or depth) from the named option, and `set` its values. Direction board: add `--remix <axis>=<id>` to the `OD:direction` line's command |
+| `OD:direction <id> [--why "reason"]` | `engine.py research directions pick <id> [--remix <axis>=<id>]... --why "reason"` (`research.md` section 9) |
 
 - Values are JSON: strings in double quotes (`"subtle"`, `"#167874"`), numbers bare (`45`). The engine also accepts a bare word.
 - Parse defensively. Ignore text outside `OD:` lines, and apply lines in order. If a value is not a listed option, confirm it as a custom value before recording it.
-- Examples: `OD:set Q-depth-01="ring-shadow"` · `OD:set dials.roundness=65 --why "a bit softer"` · `OD:lock raw.brandColor` · `OD:remix color="soft"`.
+- Examples: `OD:set Q-depth-01="ring-shadow"` · `OD:set dials.roundness=65 --why "a bit softer"` · `OD:lock raw.brandColor` · `OD:remix color="soft"` · `OD:direction "A" --why "calm, like our office"`.
 
 ## 10. Avoiding the generic AI look
 Vendors and NN/g have documented that AI-made interfaces converge on the same few looks (L17 finding 4). Flag it once when a choice lands there. Don't ban anything.
@@ -590,6 +616,8 @@ Don't interrupt the person for this. Record it quietly, and mention it once at t
 5. If they are offline or say no, the notes stay in `opendesigner/feedback.md`, and nothing leaves their machine.
 6. An anonymous report can go with an issue, only with their OK: `journey.py export --anon` writes it (`docs/PRIVACY.md`). Shared reports never go through GitHub issues, because an issue is posted under their account.
 
+**The owner's notes on the work** are not feedback about OpenDesigner. Record each with `engine.py feedback "<the rule>" --kind note`. Said twice, it is a rule in `opendesigner/RULES.md`. At the third time the engine prints one question offering a GitHub issue: ask it once, and file the issue only after a yes, about OpenDesigner, with nothing private.
+
 ## Inside the OpenDesigner repo itself
 You are in the repo when `_coordination/PROTOCOL.md` and `tools/od.py` exist. Then fix the source directly:
 1. Edit the source, never a generated copy.
@@ -720,7 +748,7 @@ The **Ask** and **Question** columns are what you say to the person, in plain wo
 | `H-favicon` (with the logo) | Asked with the logo | Master SVG | Generated from the symbol: favicon.ico 32, icon.svg with dark-mode query, apple-touch 180, manifest 192/512 + maskable |
 | `H-icons` (Q-icon-01) | Do you have your own icons, or icons that free icon sets don't have? | SVG on the library grid, SF Symbol templates, Android vector drawables | Lucide, Phosphor, Tabler, Heroicons, Material Symbols (keep notices); custom icons on the 24 px keyline; commission pictograms |
 | `H-illus` (Q-img-04) | Do you have illustrations, or a drawing style or character? | Master SVG, Lottie for animation | Commission; open sets with their exact terms (the **opendesigner-illustrate** skill finds, recolors and applies them with a licence ledger); AI vector tools with plan terms; original art painted in code (**opendesigner-paint**); or no illustration and honest text empty states |
-| `H-photo` (Q-img-01) | Do you have photos, or a photo style to follow? | Highest-resolution originals | Commission; Unsplash or Pexels under their licences; AI images with ownership caveats and synthetic-media marking |
+| `H-photo` (Q-img-01) | Do you have photos, or a photo style to follow? | Highest-resolution originals | Commission; Unsplash or Pexels under their licences (opendesigner-illustrate, `illustrate.py photos`); an AI image: tell the person once, keep the file's own provenance data, never caption it "AI generated" on the page |
 | `H-type` (Q-type-02) | Do you have a brand font? Does its licence cover websites, apps and hosting the files yourself? | OTF/TTF masters, WOFF2 for web | Google Fonts (OFL/Apache, self-host OK); Fontshare (no subsetting or conversion, not offerable in a design tool's picker); Adobe Fonts (web embed only, no self-hosting or app embedding); buy the needed licences |
 | `H-color` (Q-color-01) | Do you have brand colors that must match exactly? | Hex, RGB, OKLCH, Pantone refs, Figma variables | Candidates from the logo or brand book; otherwise seeds from the personality dials, labelled a starting point |
 | `H-motion` (Q-img-06) | Do you have any animation: a moving logo, loading animations, animated drawings or 3D? | Lottie / dotLottie, Rive, glTF/GLB, USDZ | Commission a motion designer; a film or loop painted in code in the brand palette (**opendesigner-paint**, with the person's OK for its npm and Chromium installs); otherwise motion tokens only, no signature animation |
@@ -771,17 +799,18 @@ Sources: `research/L22-making-and-review.md` (one marketing-site build; referenc
 - **Audit a built product before you redesign it.** When the product already exists, its problems are the brief. Read the front-end code, then review the rendered pages (opendesigner-review). Show the findings marked on the page, each with what fixing it gives the person (`review.py compare` draws the before, the marked-up audit and the after). Then propose the smallest change that fixes the most, build it on one page, and show it before you rebuild the rest. In a demo trial (2026-10-21), a run that skipped the audit and rebuilt all three pages at once came back clean and correct, and the owner still called it "an admin template".
 - **Agree the pace, once.** Some people approve a plan step by step. Others decide by looking at a built draft. Ask which they want. A draft first is fine. Sections 2 to 10 are what keep a draft honest (DC-L22-01).
 - **Build the first draft on the tokens.** A draft may come before the deeper questions, never before the token build. Run the sketch (`zoom.md`, level 0), or read their existing product with opendesigner-extract. Then make the draft read its values from that build's export, and never give it a style file of its own. In the source project a sketch build existed from the first day and the draft was never bound to it. Values lived in three separate style kits, and one page ended with seven type families.
+- **Keep the tokens in charge.** When `engine.py review` says tokens are not in charge, or the system is behind the code, fix that before the next draft (owner, 2026-11-05).
 - **Fix the page's materials before the second section is built** (section 4).
 
 ## 2. One round
 Follow this order every time the person asks for something on a built page.
-1. **Say it back in one line.** Read `opendesigner/decisions.md` before you ask anything: it may already be decided.
+1. **Say it back in one line.** Read `opendesigner/RULES.md`, `decisions.md` and the Answered table in `PROTOCOL.md` before you ask anything: it may already be decided.
 2. **Find every place it applies** (DC-L22-08). A note on one card, one screen or one section is a note on every one of the same kind, and on nothing of another kind. Say in one line what you will apply it to, and list the places before you edit. When the kind can be counted (bare color markers, a heading style, a corner), count it before and after. A change to something that several pages show goes to all of them in the same round. Before you call the round done, name any page that still shows the old version.
 3. **Change only what was asked.** Add no element, and restyle no approved work, as a side effect. An option or a dial never changes what the person has settled: their fonts, their palette, their corners. Open a dial only for something they opened up (owner, 2026-11-03: "I never asked you to change the font. All the font should be same"). A restyle is not a resize. A new color, typeface or corner does not change a size, a gap or a structure. Compare sizes with the version before.
 4. **Take every value from the system.** Colors, sizes, corners, shadows and durations come from the tokens. If the round needs a value the system lacks, add it as a decision (opendesigner-extend, section 4) or list it as debt (section 9).
-5. **Check it as rendered** (section 5) before you show it.
-6. **Show it next to what was there before** (section 3).
-7. **Record the decision in their words.** Then remove the options it settled.
+5. **Check it as rendered** (section 5), and run the checks: `engine.py review`, opendesigner-review on each changed page, opendesigner-preflight before any share.
+6. **Show it without being asked:** screenshots at desktop and phone (or an artifact), next to what was there before (section 3), with each check and its result. Never only a local URL.
+7. **Record the decision in their words,** and the note: `engine.py feedback "<the rule>" --kind note`. Then remove the options it settled.
 
 **Ask, or act?** Act on what follows from the request, and report it. Ask only at a real fork, with your pick and a visible alternative. Keep waiting decisions in one numbered list under Open items in `opendesigner/decisions.md`, and ask one per message, the one that blocks the most (`rules.md` section 1): a question that is only logged never closes.
 
@@ -893,7 +922,7 @@ A drawing beside a number is a claim (DC-L22-07).
 
 ## 9. Debt, and when it is done
 - **Keep a debt list as you go:** every value that did not come from the system, every option still switched on, every check you could not run.
-- **A page is done when the list is empty or the person has accepted what is left.** Run `engine.py review`, then ask the eight cohesion questions (section 4) one more time.
+- **A page is done when the list is empty or the person has accepted what is left,** and the checks ran and were shown (section 2). Run `engine.py review`, then ask the eight cohesion questions (section 4) one more time.
 - **Record what any product would need for OpenDesigner** with `engine.py feedback` (`improve.md`). Write it about the method, never about the person's product. Nothing is posted without the person's OK.
 
 ## 10. Mistakes builders make, and what a repeated note means
@@ -907,7 +936,7 @@ These are mistakes an AI builder made in the source project (DC-L22-09). Most dr
 | Fixing everything that looks alike | A note about one kind of thing changes other kinds (2026-11-03: black-and-white photos asked for as card backgrounds were also put on the hero) | The thing named and its true siblings, and nothing else |
 | Taking a word to its extreme | "Lighter" becomes all white. "Sharp" becomes square. "Faster" becomes rushed. "Obvious" becomes a banner | A preference is a direction, not an absolute. Move one step that way and show it |
 | Inventing first, or following a reference loosely | You design options from your own idea of the problem, or draw something loosely "after" a reference, even after being told to study shipped work | Study shipped examples first, as a board the person picks from (section 1). Only when the person asks for their own version of one named section, rebuild its structure closely (section 4); a reference named for direction gives principles, never its page. A method the person names holds for the next section too |
-| Forgetting what was already said | A rule from an early round is broken on a page built later | Keep standing rules in one list, as decisions or project standards, and read it before each new piece |
+| Forgetting what was already said | A rule from an early round is broken on a page built later | Standing rules live in `opendesigner/RULES.md` and the project standards. Read them before each new piece |
 | Adding what nobody asked for | A new button, a label, a disclaimer, a tint | Add nothing as a side effect. Offer it in one line instead |
 | Staggering what should line up | Cards in a row start at different heights to look dynamic, or stacked cards sit off the centre line at some widths | Sibling cards share a top edge, a height and header rows; stacked rows share one centre line. Measure at every width (preflight 35) |
 | Three calls to action of equal weight | Two buttons and a link side by side in the hero | One primary button for the one action the view exists for, one quiet text link, the rest in the header (preflight 36) |
@@ -932,8 +961,8 @@ These are mistakes an AI builder made in the source project (DC-L22-09). Most dr
 2. Name what you got wrong the first time: too narrow, too wide, too literal, or the wrong thing.
 3. Write the rule behind the note in one line, and say it back.
 4. Apply it to every instance, counted (section 2).
-5. Record it as a decision or a project standard, so work built later keeps it.
-6. On a third time, write a small check that finds every case (inside `opendesigner/`, with no new dependency), and run it before every showing.
+5. Record it: `engine.py feedback "<the rule>" --kind note`. Said twice, it is a rule in `RULES.md`. If it fixes a value, also `engine.py standard add`.
+6. On a third time, write a small check that finds every case (inside `opendesigner/`, with no new dependency), and run it before every showing. Ask once whether to draft a GitHub issue; send nothing without a yes (`improve.md`).
 
 **Read each reply for what it says about your reading, not only for the fix.** "I only wanted that one changed" means your changes reach too far. The same fix asked for on five cards means they reach too little. "You just did more of the same" means "more" was a request for new ideas. Change how you read the next note, and say what you changed.
 
@@ -1151,9 +1180,23 @@ An example, for an invented booking app. The opening sentence is the verdict; th
 
 **Step 3** rolls the kept fixes out to the other pages, only after they say yes.
 
+## 6. Every round: the check order
+
+Run this on every draft before you show it, not only when asked (owner review 2026-11-05 row 6). The checks report; you fix.
+
+1. **Settle.** Load the page and `await __od.settle()`, so nothing is judged mid-reveal (TM-01).
+2. **Capture.** `capture.py --url <local url>` at 320, 390, 768, 1024 and 1440 px. Without Playwright, run `probe.js`, `__od.kern()`, `await __od.bars()` and the toggles by hand at the narrowest and widest (`opendesigner-review` SKILL.md section 4).
+3. **Check.** `review.py check opendesigner/review`. Fix every error, then every warning in this order:
+   - text: tracking and kerning (MS-17), headings over two lines (MS-18), art through text and contrast on pixels (MS-20, MS-04);
+   - layout: mixed or off-centre alignment (MS-05), bars covering text (CV-08), boxes that change height (ST-10), controls that change nothing (ST-11);
+   - counts: sizes, typefaces, weights, greys (MS-02, MS-08), primary buttons and button styles (MS-16, MS-19), unused fonts (EN-08).
+4. **Preflight.** `preflight.py html <page>` and the checklist (`opendesigner-preflight`).
+5. **Look.** `review.py sheet --open`, at full size.
+6. **Show.** Before and after, with what was checked and what is still open.
+
 # User research: who the users are, before the defaults
 
-The sketch records what the person says about their users. This step checks it against the world. You research the group the product is for: who they are, how and where they use it, which apps they already live in, what they expect, what they prefer and what they need to read and use it. The findings are saved with their sources, and each one that touches the design becomes a recommended answer to a question the engine already asks. The person says yes before anything changes.
+The sketch records what the person says about their users. This step checks it against the world, then ends in a positioning and three directions (sections 8 and 9). You research the group the product is for: who they are, how and where they use it, which apps they already live in, what they expect, what they prefer and what they need to read and use it. The findings are saved with their sources, and each one that touches the design becomes a recommended answer to a question the engine already asks. The person says yes before anything changes.
 
 It is desk research: it describes a group, not this product's own users. Say so once, and suggest five short conversations with real users when the stakes are high.
 
@@ -1214,6 +1257,8 @@ Save them as JSON in the shape of `assets/output/research-users.example.json`, t
 - `findings`: `id`, `topic` (one of the six), `text` (one sentence, plain words), `confidence` (`measured`: a statistic or a study; `reported`: people say so; `inferred`: your reasoning), `sources`, `signals` (below).
 - `apps` (name, why, sources), `patterns` (the patterns they already know) and `open_questions`.
 - `market` (optional): `analogous` (name, why, sources), `competitors` (a list of name, why, sources), `pattern` and `gap` (a sentence, or text and sources), and `conventions` (the words and habits the industry's users already know; without it, `patterns` stand in). PRODUCT.md's Market section shows it with its sources until the person's own line is recorded in `context.market` (`zoom.md`, "The project's phase").
+  - **The competitor table.** For each competitor with a site, measure its page (opendesigner-extract: `read_page.js`, its CSS, a screenshot or Mobbin) and add `url` (the page you opened), `measured` (`browser`, `css`, `screenshot`, `mobbin`, `figma`), `colors` (a list of `hex` and `role`: `ground`, `ink`, `accent`, `cta`, `surface`, `band`), `type` (`display`, `text` and a `class`: `grotesk`, `geometric`, `humanist`, `serif`, `slab`, `mono`, `display`) and `cta` (`shape`: `square`, `subtle`, `rounded` or `pill`; `radius`, `fill` and `label` if you have them). Never guess a value. At least 3 rows need all of these before any colour is proposed.
+  - **The industry benchmark** (`benchmark`): shipped pages in the industry and its proven neighbours, section by section. Each row: `name`, `url` (the live page or its Mobbin link), `section`, `does`, `takes` (the principle you take) and `signature` (the device that stays theirs).
 
 **Signals** are what a finding means for the design, from a closed list. A finding can carry several, or none.
 
@@ -1249,9 +1294,23 @@ Rules for the text:
 
 Where the engine has no `research` command (a ChatGPT Project ships `engine.py` alone), keep the same file and checks by hand: write `opendesigner/research/users.json` and a `users.md` with the same sections, and record each answer the person agrees to with `engine.py pick <Q-id> <value> --why "user research F2: ..."`.
 
-## 8. Use it for the rest of the work
+## 8. Show the market, then agree the positioning
+Before any colour, palette or direction, in one message:
+1. **The competitor table and the benchmark:** `research.py market` prints both as Markdown with links, plus what the category does (its grounds, accent families, CTA shapes and type, and what nobody uses). Paste it; don't summarise it away.
+2. **The positioning draft:** `research.py positioning draft` writes four lines from the research and the repo: who it's for, the problem, the one claim, the proof. The proof stays empty: only the person has it (a number, a customer, a demo). Rewrite the lines in their words.
+3. **Ask one question:** "Is this right? And what proves it?" On a yes: `research.py positioning confirm --proof "..."` (add `--for`, `--problem` or `--claim` for any line they changed). It refuses an empty part or a placeholder. Never confirm for them.
+
+## 9. Three directions, shown with photos
+After the positioning is confirmed, propose exactly three directions. Each changes all five: the ground (`light`, `dark` or `tinted`), the type pairing, the photo grade (`natural`, `warm`, `cool`, `high-key`, `mono`, `low-key`), how the accent is used (`actions-only`, `highlight`, `one-band`, `field`, `none`) and the layout rhythm (`grid`, `editorial`, `split`, `stack`, `full-bleed`). Swapping the accent and the wordmark reads as one direction three times. What the person already settled (a font, the ground) goes in `fixed` and stays the same in all three; at least three axes still change.
+1. **Write `research/directions.json`** in the shape of `assets/output/research-directions.example.json`: id, name, one-line idea, the five axes, colours (ground, ink, accent), CTA shape, references, devices, photos, risks, and which one you recommend and why.
+2. **Learn from at least two shipped references per direction**, never a competitor. Each says what you take (structure: rhythm, scale, how a section works) and its `signature` device (what stays theirs). A signature device is identity, not structure: one copied device makes the page read as a copy (opendesigner-extract section 5).
+3. **Find 2 to 4 licensed stock photos per direction** (opendesigner-illustrate, "Stock photos"): `illustrate.py photos search "<scene>" --grade <grade>`, look at every candidate, `photos fetch` or `photos add`, then open each file and record what you saw: `photos review <name> --brands none|found --grade <grade>`. A real company's name or logo anywhere in the frame (a hull, a truck, a sign, a screen) means another photo. For business and work products, recommend the direction with natural light: dark, moody grades read dead there. A photo made with AI is named to the person once and never captioned on the page.
+4. **Check, then show:** `research.py directions check` (gate: the competitor table, unless the person skipped the research, and the confirmed positioning; contrast; a competitor's colour; the five axes, the ground read from its colour; references and signature devices; photos looked at), then `research.py directions board` writes `research/directions.html` from the `direction-board` template. Show it (an artifact or a screenshot), recommend one with its reason, and ask for one pick.
+5. **Record the pick:** their "Copy my choice" lines start `OD:direction`. Run `research.py directions pick <id> [--remix <axis>=<id>] --why "<their words>"`. A mixed ground brings its ink, a mixed accent use its accent, and a mix below the contrast floors is refused. The direction is a starting point: confirm each value at its own stage.
+
+## 10. Use it for the rest of the work
 - **References:** the apps they live in are the first Mobbin searches and candidates for the analogous product (`practices.md` sections 2 and 3).
-- **Market:** the competitors' shared pattern and the gap are what the alignment is checked against: a recommendation that copies the pattern needs a reason, and one that closes the gap says so.
+- **Market:** the competitors' shared pattern and the gap are what the alignment is checked against: a recommendation that copies the pattern needs a reason, and one that closes the gap says so. A colour within a hair of a competitor's is theirs: the directions check refuses it.
 - **Later stages:** read the `later` notes when you reach type, imagery, motion, voice and themes, and say which finding a recommendation comes from.
 - **Every session:** PRODUCT.md's Users section is what a later session or another agent reads first. `engine.py review` checks the findings again, says when they are older than 180 days, and fails `--strict` when the saved file has lost a source.
 
@@ -1482,6 +1541,8 @@ Footnotes: {{Q-ids and D-numbers for each choice above}}
 ## Design system (OpenDesigner)
 This project's design system lives in `opendesigner/`, and `DESIGN.md` is its living spec.
 
+**`opendesigner/PROTOCOL.md` is binding.** Follow its steps, gates and checks in every session, whoever you are. Read `opendesigner/RULES.md` before each round: it holds the owner's repeated notes.
+
 **Before any UI, styling or visual work**
 1. Read `DESIGN.md` and `PRODUCT.md` at the project root.
 2. Use the tokens in `opendesigner/tokens/` (DTCG, canonical) or their exports in `opendesigner/build/` (for example `build/css/tokens.css` or `build/tailwind/theme.css`).
@@ -1490,16 +1551,67 @@ This project's design system lives in `opendesigner/`, and `DESIGN.md` is its li
 5. Follow the standards listed in DESIGN.md (for example: which easing, which properties to animate, which library for toasts). They are rules, not suggestions. Only the owner can change one, and only when they ask: `engine.py standard override <id> --why "<their words>"` for one value, or `engine.py standard add ... --beats <id>` when their own rule always wins. `engine.py set --force` never changes a standard's value.
 
 **At the end of every implementation** (a page, a component, a refactor)
-1. Run `python3 <opendesigner skill>/scripts/engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard, and DESIGN.md sections that are out of date.
+1. Run `python3 <opendesigner skill>/scripts/engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard, DESIGN.md sections that are out of date, code that uses no tokens, and a system older than the code.
 2. Re-read the DESIGN.md sections you touched.
 3. If the work needed a value the system lacks, add it as a decision: `engine.py set <path> <value> --why "..."`, then `engine.py design-md`. Don't inline it.
-4. Fix any drift `review` reports.
+4. Fix any drift `review` reports before the next draft.
+5. Show the result: screenshots or an artifact, before and after, with each check and its result.
 
 **To change or extend the system,** use the `opendesigner-extend` skill. The accessibility floors are part of the system, not options: WCAG 2.2 AA contrast, 24 px minimum targets, visible focus and reduced motion.
 
 **`opendesigner/journey/` is a private log of the owner's steps.** It stays out of git. Never commit it, share it or read it into other work.
 
 **If a step was missing, wrong or confusing,** record it with `engine.py feedback "..." --kind gap|bug|confusing|idea`. Nothing is posted without the owner's OK.
+```
+
+## Output template: PROTOCOL.md
+
+```
+# Protocol
+
+How work runs in this project. Every agent follows it. Written by OpenDesigner on {{date}}; edit it to fit.
+
+## Six steps, each ending at a gate
+Show what the gate names, get the owner's yes, tick the box with the date, then start the next step. Skip a step only when the owner says so ("just do it" counts); name the steps you skip, in one line.
+
+| Step | Do | Show at the gate | Gate |
+|---|---|---|---|
+| 1 Discover | Read the repo and the owner's documents. Fill in the brief (below). A built product starts with the audit | The brief | [ ] |
+| 2 Research | Shipped references for each section (Mobbin when connected; live sites measured with opendesigner-extract). The users and the market (`engine.py research plan`, `research market`) | The competitor table, the positioning the owner confirmed, and the direction board (`research directions board`) | [ ] |
+| 3 System | The OpenDesigner sketch (it may come earlier, as a draft), then the areas that matter. `engine.py build` | The overview, as screenshots or an artifact | [ ] |
+| 4 Structure | Pages, section order, the parts each needs, grey wireframes built from tokens | Wireframes at desktop and phone | [ ] |
+| 5 Build | Parts first, then pages. Every value from `opendesigner/build/` | Every round (below) | [ ] |
+| 6 Verify | The milestone checks (below) on every page | The audit and its fixes | [ ] |
+
+## Every round
+1. Read this file, `RULES.md` and `decisions.md`.
+2. Take every value from the tokens. A value the system lacks becomes a decision (`engine.py set`), never a literal.
+3. Render it. Run `engine.py review`, opendesigner-review on each changed page, and opendesigner-preflight before anything is shared.
+4. Screenshot desktop (1440) and phone (390).
+5. Show the screenshots or an artifact, before and after, with each check and its result. Never only a local link.
+
+Nothing is done until 3 to 5 have run.
+
+## At each milestone
+- Full audit: the opendesigner skill's `references/audit.md`, on every page.
+- Clean up: dead CSS, stale drafts, options nobody picked. `engine.py review` then says "DESIGN.md matches state.json" and prints no "Tokens are" or "behind the code" line.
+- Ask about deploying here, once. Never every round.
+
+## Owner notes
+Record each one: `engine.py feedback "<the rule, one line>" --kind note`. Said twice, it is a rule in `RULES.md`: apply it everywhere, in every later round.
+
+## Brief
+- What it is:
+- Who it's for:
+- The one action:
+- Proof we can show:
+- Words we never use:
+
+## Answered
+Read before asking anything. Add every answer given outside the interview. Never ask one again.
+
+| Date | Question | Answer |
+|---|---|---|
 ```
 
 ## Output template: COHESION-AUDIT.md

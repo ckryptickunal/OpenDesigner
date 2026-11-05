@@ -12,6 +12,12 @@ People never pick a mode. Everyone starts with a quick sketch of the whole syste
 ## Level 0: sketch (a few questions, one per message)
 Five answers shape the sketch. Ask only what their words and files don't already tell you.
 
+**A Persuade surface** (a landing page, a marketing site) gets marketing questions, not app ones:
+- Question 2: who it's for, in their words (`context.audience`). Record Q-aud-01 as `large`, assumed.
+- Question 3: the one action a visitor takes, in every voice. Record it as `context.purpose`; the first result confirms it instead of guessing. It runs on the web (Q-plat-01, assumed).
+- After the sketch: the proof they can show, for the brief in `opendesigner/PROTOCOL.md`.
+- Never ask how often people use it, about a light or dark switch, or for a list of components.
+
 **Read the repo first.** Before the first question, run `engine.py detect`. It only reads files, and writes nothing. It reports:
 - the product's name and what it is (`package.json`, the README's first heading and paragraph, the page title);
 - where it runs (Expo or React Native: iPhone and Android; Electron or Tauri: desktop; `ios/`, `android/`, `pubspec.yaml` or an Xcode project; a web framework or HTML pages: web);
@@ -83,7 +89,7 @@ Show what they got, not how it was made. Send one message:
 Never dump settings: no dial numbers, token names, hex lists or file trees unless they ask. Point a plain-voice person to the preview first. If they want to read something, DESIGN.md opens with a short plain summary.
 
 ## The project's phase
-The phase (Q-scope-07) says where the project is now: an idea, being built, close to launch, or live. It decides what comes first after the sketch. "Stage" already means an interview topic in these files, so this is always called the phase.
+The phase (Q-scope-07) says where the project is now: an idea, being built, close to launch, or live. It decides what comes first after the sketch. "Stage" already means an interview topic in these files, so this is always called the phase. The phase decides what each step holds; the six steps in `opendesigner/PROTOCOL.md` still run in order. For a built product, step 1 starts with the audit.
 
 `engine.py detect` reads it from the folder, and `init` and `sketch` record it as `assumed`. An empty folder says nothing: then take it from their words, or ask once with the sketch's first question.
 
@@ -100,7 +106,7 @@ The phase (Q-scope-07) says where the project is now: an idea, being built, clos
 - If they correct the phase, record their answer: `engine.py pick Q-scope-07 near-launch --why "<their words>"`.
 
 ## Level 1: broad (one screen per foundation)
-Go in this order, with the listed templates:
+After the research, open with the competitor table and the confirmed positioning, then the three directions on the direction board (`research.md` sections 8 and 9). The pick is a starting point for these screens. Then go in this order, with the listed templates:
 - Q-dir-01, style (`option-gallery`)
 - Q-dir-02, how much fits on a screen (`spacing-ruler`)
 - Q-color-02, where the brand color shows (`palette`)
@@ -115,7 +121,7 @@ Each screen is one message with one question. The person can say "skip", and the
 ## Levels 2 and 3: one area at a time
 There are 14 areas: overview, accessibility, platforms, modes, color, typography, layout, shape, elevation, motion, iconography, content, components and delivery. Their plain names are in `pacing.json`. The ids match the engine's, except `delivery`: the engine does not track its zoom level.
 1. Zooming into an area asks its skipped lower-level questions first (for Color after the sketch: Q-color-02 from level 1).
-2. Open the area's stage files. Ask its level-2 questions in stage order. Skip any marked **Planned** (not built yet) or **Settled by: STD-...** (a standard already locked the answer), and never recommend an option marked **(breaks STD-...)**. Then run `engine.py build` and show the change.
+2. Color opens with the competitor table when one exists (`engine.py research market`). Open the area's stage files. Ask its level-2 questions in stage order. Skip any marked **Planned** (not built yet) or **Settled by: STD-...** (a standard already locked the answer), and never recommend an option marked **(breaks STD-...)**. Then run `engine.py build` and show the change.
 3. **Plain voice: ask fewer.** When the plain voice leads, ask only three kinds of question: weight `high`, asset hooks, and owner inputs (block class I). Also ask a `medium` question when their words or assets make it matter: a logo with two colors makes Q-color-04 matter. The rest keep their defaults (`auto_default`: nothing to run). Name them in one line of the level summary, like "I also picked the grays and hover colors for you." They can say "ask me everything".
 4. Sometimes `pick` says an answer shapes DESIGN.md rules, not tokens. Then say it is saved as a rule, so they don't expect the preview to change.
 5. Record the level: `engine.py set zoom.color '"defined"'` (level names: `sketch`, `broad`, `defined`, `detailed`). The engine also infers the level from the decisions made in an area.

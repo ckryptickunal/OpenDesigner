@@ -10,8 +10,9 @@ findings it should produce. Clean pages expect none. The checkers under test are
 
     layout     site/check_layout.py (Playwright, channel="chrome"), on the fixtures served from 127.0.0.1
     preflight  skills/opendesigner-preflight/scripts/preflight.py html <page> --medium web
-    review     skills/opendesigner-review: probe.js in Chrome at each viewport, the Tab walk and drawn-font check from
-               capture.py at the narrowest and widest, console and failed requests, then review.py check --json
+    review     skills/opendesigner-review: probe.js in Chrome at each viewport, the Tab walk, drawn-font, letter-reveal, text-pixel,
+               floating-bar and toggle passes from capture.py at the narrowest and widest, console and failed requests, then
+               review.py check --json
     dates      brand/tools/check_dates.py --year 2026
     names      brand/tools/check_names.py --registry evals/checkers/fixtures/names/NAMES.md
 
@@ -161,7 +162,7 @@ def run_review(fixtures, base, work):
     from playwright.sync_api import sync_playwright
     cap = load_capture()
     out, info, notes = [], 0, []
-    opts = types.SimpleNamespace(tabs=20)
+    opts = types.SimpleNamespace(tabs=20, steps=12)
     with sync_playwright() as pw:
         browser = pw.chromium.launch(channel="chrome")
         for f in fixtures:
@@ -172,6 +173,7 @@ def run_review(fixtures, base, work):
                 phone = w < 700
                 ctx = browser.new_context(viewport={"width": w, "height": h}, device_scale_factor=2 if phone else 1, is_mobile=phone, has_touch=phone,
                                           color_scheme="light", locale="en-US")
+                ctx.add_init_script(cap.WATCH_JS)
                 page = ctx.new_page()
                 url = f"{base}/{f['page']}"
                 console = {"kind": "console", "url": url, "viewport": {"w": w, "h": h}, "media": {"colorScheme": "light"}, "messages": []}
@@ -190,6 +192,8 @@ def run_review(fixtures, base, work):
                         cap.rendered_fonts(page, d, tag, probe)
                     except Exception as e:  # noqa: BLE001
                         notes.append(f"{f['page']} {w}: drawn-font check skipped ({str(e).splitlines()[0]})")
+                    for fn in (cap.letter_reveals, cap.text_pixels, cap.floating_bars, cap.toggles):   # capture.py's anchor passes
+                        fn(page, d, tag, probe, opts)
                 cap.review.write_json(d / "console" / f"{tag}.json", console)
                 ctx.close()
             project = FIX / f["project"] if f.get("project") else work  # the work folder has no opendesigner/: floors only

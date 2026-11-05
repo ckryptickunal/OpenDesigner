@@ -440,6 +440,121 @@ class CaptureFiles(unittest.TestCase):
         self.assertTrue(F.done())
 
 
+class RoundChecks(unittest.TestCase):
+    """What a private B2B landing page had to hand-write checks for (owner review 2026-11-03 to 2026-11-05)."""
+    W = {"url": "http://localhost:3000/", "viewport": {"w": 390, "h": 844}, "media": {}}
+
+    def typed(self, **type_):
+        p = clean_probe()
+        p["type"] = dict(p["type"], **type_)
+        return by_case(findings_for(p))
+
+    def test_capitals_with_negative_tracking_are_an_error(self):                                   # MS-17
+        fs = self.typed(capsTight=[{"sel": "p.eyebrow", "text": "NEW", "fs": 12, "em": -0.03}])
+        self.assertEqual(fs["MS-17"][0]["severity"], "error")
+        self.assertIn("-0.03em", fs["MS-17"][0]["measured"])
+
+    def test_tracking_looser_on_bigger_text_and_too_many_values(self):                             # MS-17
+        tr = {"14|-0.01|0": {"n": 4, "ex": ["p.small"], "chars": 90}, "40|0.02|0": {"n": 1, "ex": ["h1"], "chars": 20},
+              "16|0|0": {"n": 9, "ex": ["p"], "chars": 400}, "12|0.08|1": {"n": 2, "ex": ["span.caps"], "chars": 20},
+              "20|0.01|0": {"n": 1, "ex": ["h3"], "chars": 9}, "24|-0.015|0": {"n": 1, "ex": ["h2"], "chars": 9}, "32|-0.02|0": {"n": 1, "ex": ["h2.big"], "chars": 9}}
+        titles = {f["title"]: f for f in self.typed(tracking=tr)["MS-17"]}
+        self.assertIn("40 px is tracked 0.02em", titles["Tracking gets looser as text gets bigger"]["measured"])
+        self.assertIn("6 letter-spacing values", titles)
+        quiet = {"16|0|0": tr["16|0|0"], "32|-0.02|0": tr["32|-0.02|0"], "12|0.08|1": tr["12|0.08|1"]}   # tighter as it grows; caps open
+        self.assertNotIn("MS-17", self.typed(tracking=quiet))
+
+    def test_headings_over_two_lines(self):                                                         # MS-18
+        fs = self.typed(headings={"checked": 3, "long": [{"sel": "h1#t", "level": 1, "lines": 4, "fs": 34, "text": "Every invoice"}]})
+        self.assertIn("runs to 4 lines", fs["MS-18"][0]["measured"])
+
+    def test_sizes_counted_and_sizes_between_pixels(self):                                         # MS-02
+        sizes = {str(s): {"n": 2, "ex": ["p.s" + str(s)], "chars": 40} for s in (11, 12, 13, 14, 16, 18, 21, 24, 30, 15.4, 18.7)}
+        titles = {f["title"]: f for f in self.typed(sizes=sizes)["MS-02"]}
+        self.assertIn("11 font sizes", titles)
+        self.assertIn("15.4 px", titles["Font sizes between whole pixels"]["measured"])
+        self.assertEqual(titles["Font sizes between whole pixels"]["severity"], "warn")
+
+    def test_mixed_and_off_centre_alignment(self):                                                  # MS-05
+        p = clean_probe(layout={"groups": 2, "mixed": [{"group": "div.head", "heading": "Built for operators", "align": "center", "items": [{"sel": "p.lede", "align": "left", "text": "x"}]}],
+                                "offCentre": [{"sel": "h2#off", "text": "Off", "off": 12, "section": "section#s"}]})
+        titles = {f["title"]: f for f in by_case(findings_for(p))["MS-05"]}
+        self.assertIn("p.lede is left", titles["Mixed alignment under one heading"]["measured"])
+        self.assertIn("12 px off", titles["Centred items off the centre line"]["measured"])
+        self.assertEqual(findings_for(clean_probe(layout={"groups": 3, "mixed": [], "offCentre": []})), [])
+
+    def test_button_styles_and_small_labels(self):                                                 # MS-19, MS-16
+        styles = [{"sel": "a#buy", "text": "Book a demo", "kind": "filled", "h": 40, "radius": 8, "fs": 13, "upper": False},
+                  {"sel": "a#demo", "text": "Start", "kind": "filled", "h": 48, "radius": "pill", "fs": 16, "upper": False},
+                  {"sel": "a#more", "text": "Learn more", "kind": "outline", "h": 32, "radius": 2, "fs": 11, "upper": True}]
+        filled = [{"sel": "a#buy", "text": "Book a demo", "fill": "#1d4ed8", "ratio": 6.7, "y": 300, "h": 40, "first": True, "group": "div", "fs": 13}]
+        p = clean_probe(buttons={"checked": 3, "filled": filled, "styles": styles})
+        titles = {f["title"]: f for f in by_case(findings_for(p))["MS-19"]}
+        self.assertIn("3 corner shapes", titles["Buttons with different corners or case"]["measured"])
+        self.assertIn("primary \"Book a demo\" at 13 px", titles["Button labels too small"]["measured"])
+        self.assertIn("capitals \"Learn more\" at 11 px", titles["Button labels too small"]["measured"])
+        same = [dict(s, radius=8, upper=False, fs=16) for s in styles[:2]]
+        self.assertEqual(findings_for(clean_probe(buttons={"checked": 2, "filled": [], "styles": same})), [])
+
+    def test_two_primary_buttons_in_a_later_screen(self):                                          # MS-16
+        b = lambda s, y: {"sel": s, "text": s, "fill": "#1d4ed8", "ratio": 6.7, "y": y, "h": 44, "first": False, "group": "g" + s}
+        p = clean_probe(buttons={"checked": 2, "filled": [b("a#x", 1700), b("a#y", 2300)]})
+        f = by_case(findings_for(p))["MS-16"][0]
+        self.assertEqual(f["title"], "More than one primary button in one screen")
+        self.assertIn("2 in the screen at about 1600 px", f["measured"])
+
+    def test_fonts_loaded_and_never_drawn_and_launch_basics(self):                                 # EN-08
+        p = clean_probe(fonts={"faces": [], "failed": 0, "familyState": {"Inter": "webfont"}, "loadedFamilies": 3, "unused": [{"family": "Display Sans", "faces": 2}]},
+                        share={"image": False, "icon": True, "description": True, "robots": "noindex"})
+        fs = {f["title"]: f for f in by_case(findings_for(p))["EN-08"]}
+        self.assertEqual(fs["Fonts downloaded but not used"]["severity"], "warn")
+        self.assertIn("Display Sans (2 face(s))", fs["Fonts downloaded but not used"]["measured"])
+        self.assertEqual(fs["Before launch: share image, favicon or indexing"]["severity"], "info")
+
+    def test_a_probe_taken_mid_animation_is_flagged_but_not_with_reduced_motion(self):            # TM-01
+        p = clean_probe(motion=dict(clean_probe()["motion"], pending=2, pendingOn=["rise on h1"]))
+        self.assertIn("rise on h1", by_case(findings_for(p))["TM-01"][0]["measured"])
+        p["media"]["reducedMotion"] = True
+        self.assertNotIn("TM-01", by_case(findings_for(p)))
+
+    def test_toggles_heights_and_dead_controls(self):                                              # ST-10, ST-11
+        F = rv.Findings()
+        opts = [{"sel": "button#a", "label": "Short"}, {"sel": "button#b", "label": "Long"}]
+        rv.check_states(dict(self.W, kind="states", groups=[
+            {"kind": "tabs", "opts": opts, "boxes": ["div#panels"], "region": "section#t", "base": {"heights": [87], "sig": 1}, "picks": [{"option": 1, "heights": [177], "sig": 2}]},
+            {"kind": "segmented", "opts": opts, "boxes": ["section#s"], "region": "section#s", "base": {"heights": [184], "sig": 5}, "picks": [{"option": 1, "heights": [184], "sig": 5}], "pixels": "same"},
+            {"kind": "radios", "opts": opts, "boxes": ["section#r"], "region": "section#r", "base": {"heights": [90], "sig": 7}, "picks": [{"option": 1, "heights": [90], "sig": 7}], "pixels": "changed"}]), F)
+        fs = by_case(F.done())
+        self.assertIn("87 / 177", fs["ST-10"][0]["measured"])
+        self.assertEqual(len(fs["ST-11"]), 1)                     # pixels changed for the radios: not dead
+        self.assertIn("checked by pixels", fs["ST-11"][0]["measured"])
+
+    def test_bars_kerning_and_pixels(self):                                                        # CV-08, MS-17, MS-20, MS-04
+        F = rv.Findings()
+        rv.check_bars(dict(self.W, kind="bars", hits=[{"sel": "p#cap", "text": "A caption", "bar": "div#bar", "why": "pinned", "scrollY": 900}]), F)
+        rv.check_kern(dict(self.W, kind="kern", split=[{"sel": "h2#s", "text": "WAVE", "maxDx": 3.2, "maxDy": 0, "pair": "AV"}, {"sel": "h2#ok", "text": "ok", "maxDx": 0.2, "maxDy": 0, "pair": "ok"}],
+                           swapped=[{"sel": "h1", "text": "Hi", "maxDx": 1.1, "maxDy": 0, "pair": "Hi"}]), F)
+        line = lambda **k: dict({"sel": "p#x", "text": "x", "fg": [17, 17, 17, 1], "fs": 18, "large": False, "backdrop": "solid", "under": [], "px": 900, "edges": 0, "share": 0, "ratio": 15}, **k)
+        rv.check_pixels(dict(self.W, kind="pixels", checked=4, lines=[line(sel="p#crossed", edges=60, share=0.009, under=[{"tag": "svg", "covers": True}]),
+                                                                      line(sel="p#pale", ratio=1.9, backdrop="gradient"),
+                                                                      line(sel="p#hero", edges=400, share=0.4, backdrop="solid", under=[{"tag": "img", "covers": True}])]), F)
+        fs = by_case(F.done())
+        self.assertEqual(fs["CV-08"][0]["severity"], "error")
+        self.assertEqual({f["title"] for f in fs["MS-17"]}, {"Letter-by-letter text loses its kerning", "Letters jump when a letter-by-letter reveal ends"})
+        self.assertNotIn("h2#ok", fs["MS-17"][0]["measured"])
+        self.assertEqual(fs["MS-20"][0]["evidence"], ["p#crossed"])     # a photo laid under the hero on purpose is not "art through text"
+        self.assertEqual(fs["MS-04"][0]["evidence"], ["p#pale"])
+
+    def test_pixels_that_pass_overrule_a_guessed_backdrop(self):                                   # MS-04
+        p = clean_probe(contrast={"checked": 1, "failing": [{"sel": "h1.hero", "ratio": 1.0, "fg": "#ffffff", "bg": "#ffffff", "fs": 48, "large": True, "backdrop": "assumed-white", "n": 1}], "lowest": []})
+        self.assertIn("MS-04", by_case(findings_for(p)))
+        F = rv.Findings()
+        rv.check_pixels({"kind": "pixels", "url": p["url"], "viewport": p["viewport"], "media": p["media"], "lines": [
+            {"sel": "h1.hero", "text": "Hi", "fg": [255, 255, 255, 1], "fs": 48, "large": True, "backdrop": "assumed-white", "under": [{"tag": "img", "covers": True}], "edges": 900, "share": 0.5, "ratio": 7.2}]}, F)
+        rv.check_probe(p, None, F)
+        self.assertNotIn("MS-04", by_case(F.done()))
+
+
 class Workflow(unittest.TestCase):
     """plan -> mark -> check -> finding -> report, in a temp project."""
 
@@ -461,7 +576,7 @@ class Workflow(unittest.TestCase):
         cells = [c for c in led["cells"] if not c.startswith("task:")]
         tasks = [c for c in led["cells"] if c.startswith("task:")]
         self.assertEqual(len(cells), 2 * 3 * 2)
-        self.assertEqual(len(tasks), 2 * 9)
+        self.assertEqual(len(tasks), 2 * 13)
         self.assertTrue(all(v["status"] == "todo" for v in led["cells"].values()))
 
     def test_plan_uses_the_systems_modes(self):
@@ -764,12 +879,22 @@ class Guarantees(unittest.TestCase):
         self.assertEqual(src.count("ThreadingHTTPServer("), 1)
         self.assertIn('ThreadingHTTPServer(("127.0.0.1", args.port)', src)
 
-    def test_capture_py_never_clicks_or_types(self):
+    def test_capture_py_never_types_and_clicks_only_the_toggles_probe_js_picked(self):
         src = (HERE / "capture.py").read_text()
         code = re.sub(r'""".*?"""', "", src, flags=re.S)
-        for banned in (".click(", ".fill(", ".type(", ".press('Enter", '.press("Enter', "press('Space", ".check(", ".select_option(", ".set_input_files"):
+        for banned in (".fill(", ".type(", ".press('Enter", '.press("Enter', "press('Space", ".check(", ".select_option(", ".set_input_files"):
             self.assertNotIn(banned, code, banned)
         self.assertNotIn("allow-remote", src)
+        # one click, on an option __od.toggles() chose: tab lists, segmented groups and radio groups outside forms (ST-10, ST-11)
+        self.assertEqual(code.count(".click("), 1)
+        self.assertIn("__od.groups[g].opts[k].click()", code)
+        probe = (HERE / "probe.js").read_text()
+        skip = re.search(r"const TOGGLE_SKIP = '([^']+)'", probe).group(1)
+        for never in ('a[href]:not([href^="#"])', "[type=submit]", "[aria-expanded]", "[aria-haspopup]", "form *"):
+            self.assertIn(never, skip)
+        picker = probe[probe.index("od.toggles = () =>"):probe.index("od.groups = groups")]
+        self.assertNotIn("switch", picker)                  # a switch may save a setting
+        self.assertNotIn("'toggle'", picker)                # a lone pressed button may be a like or a bookmark
 
     def test_capture_py_opens_loopback_addresses_only(self):
         import capture

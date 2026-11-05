@@ -1,6 +1,6 @@
 # RCA: why the same corrections keep coming back
 
-Date: 2026-11-02. Inputs: the maritime B2B landing page notes (`learn/local-learnings/2026-11-03-b2b-landing-maritime.md`, 47 lessons over 9 rounds, still uncommitted on the maintainer's Mac), the 14 rows of `_coordination/OWNER-FEEDBACK.md` "2026-11-03: a private B2B landing page" (also uncommitted), earlier owner rows on type, and `skills/opendesigner/references/making.md` as it stood on main (f528ea6).
+Date: 2026-11-02. Inputs: the maritime B2B landing page notes (`learn/local-learnings/2026-11-03-b2b-landing-maritime.md`, 47 lessons over 9 rounds; on main since 2026-11-05, anonymized), the 14 rows of `_coordination/OWNER-FEEDBACK.md` "2026-11-03: a private B2B landing page" (on main since 2026-11-05), earlier owner rows on type, and `skills/opendesigner/references/making.md` as it stood on main (f528ea6).
 
 ## 1. What keeps recurring
 
@@ -37,7 +37,7 @@ Date: 2026-11-02. Inputs: the maritime B2B landing page notes (`learn/local-lear
 | RC3 | Content core list ("less text" never cuts facts); options never change settled fonts, palette or corners; directions differ in structure, not palette |
 | RC4 | Live measurement with `read_page.js` before building from a reference; figure audit by script at nine widths |
 | RC5 | The owner can now be a house-standard source. The meaning-colour rule and the white-and-black rule are house standards that every system follows and the engine checks; the no-moving-CTA rule is in `making.md` section 11 |
-| RC6 | `preflight.py html` now checks kerning and tracking (checklist item 50, M51) against a new guide, `preflight/references/kerning.md`, with a scored eval page. `engine.py review` skips files carrying the engine's export header |
+| RC6 | `preflight.py html` now checks kerning and tracking (checklist item 57, M58) against a new guide, `preflight/references/kerning.md`, with a scored eval page. `engine.py review` skips files carrying the engine's export header |
 
 ## 4. Not fixed here, and why
 

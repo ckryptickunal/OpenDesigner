@@ -620,7 +620,7 @@ def gpt_files(ref_files, glossary=None):
     parts = [skill] + [read(REF / n) for n in ("zoom.md", "rules.md", "improve.md", "guardrails.md", "hooks.md", "making.md", "audit.md", "research.md")]
     if "standards.md" in ref_files:
         parts.append(ref_files["standards.md"])
-    for n in ("DESIGN.md", "decisions.md", "RATIONALE.md", "AGENTS-snippet.md", "COHESION-AUDIT.md", "state.json"):
+    for n in ("DESIGN.md", "decisions.md", "RATIONALE.md", "AGENTS-snippet.md", "PROTOCOL.md", "COHESION-AUDIT.md", "state.json"):
         body = read(SKILL / "assets" / "output" / n)
         if body:
             parts.append(f"## Output template: {n}\n\n```\n{body.strip()}\n```")

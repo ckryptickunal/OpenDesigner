@@ -1552,7 +1552,7 @@ Zoom 3 detailed · weight low · changes 1 decisions · class G · cards DC-L02-
   - `size-table` A size-specific table (SF Pro: +41/1000 em at 6pt, 0 at 12pt, -26/1000 em at 17pt), applied automatically by the OS.
   - `per-style` Per-style tracking tokens (Material: Display Large -0.2sp, Body Large 0.5sp).
   - `zero` No extra letter spacing beyond the font's defaults [DC-L02-14]. (breaks STD-visual-details-04, STD-visual-details-05)
-- **Default:** 0 at body sizes, +0.02 to +0.05em at 11-12px and all caps, -0.01 to -0.02em from about 32px, in em units *Source:* card heuristic [DC-L02-14].
+- **Default:** 0 at body sizes, +0.02em at 11-12px, -0.01 to -0.02em from about 32px, in em units; capitals never negative: small capital labels +0.06em (Spectrum 2 detail), capital headings 0 to +0.02em *Source:* card heuristic [DC-L02-14].
 - **Show:** a headline and an all-caps label with tracking on and off.
 - **Use / avoid:** use em-based tracking so it scales; let optical-size fonts do most of the work; avoid tracking non-Latin scripts [DC-L02-14, DC-L02-25].
 - **Skip:** yes.
@@ -1876,22 +1876,22 @@ Zoom 3 (detailed) questions: `14-shape.detailed.md`.
 
 Ask only the questions at or below the zoom level being worked, in this order, and only when *Show if* holds. Everything else keeps its default (`auto_default`). Skip questions marked **Planned** or **Settled by**: ask nothing and record nothing. Never recommend an option marked *breaks STD-...*. Explain a term the first time with `glossary.json`.
 
-## Q-shape-01 · How soft should corners feel?
+## Q-shape-01 · What shape should buttons be, with corners to match?
 Zoom 1 broad · weight high · changes 4 decisions · class G · cards DC-L09-01, DC-L04-02
-- **Ask:** "How soft should corners feel: square, slightly rounded, rounded, or pill?"
+- **Ask:** "What shape should buttons be: square, slightly rounded, rounded, or pill? Cards and dialogs follow."
 - **Why:** In L09's (inferred) ranking, corner radius is what differs most in how systems look (divergence 1). Every 2025-2026 update got rounder [DC-L09-01; L09 A2].
 - **Options:**
-  - `square` 0-2px: official, engineered (GOV.UK, Carbon v11 buttons) [DC-L09-01, DC-L04-02].
-    - Now: Corners of 0-2 px: official and engineered, like GOV.UK and Carbon. As it grows: Sharp corners become a deliberate brand choice, since even Carbon is adding roundness; iOS rounds its own controls anyway. [inferred]
-  - `subtle` 4-6px: businesslike (Fluent 4, Primer and Atlassian 6).
+  - `subtle` 6px: businesslike (Fluent 4, Primer and Atlassian 6).
     - Now: Corners of 4-6 px: businesslike, like Primer and Atlassian. As it grows: The safest default across audiences; containers get 8-12 px, and focus rings follow the corners.
-  - `soft` 8-12px: friendly, modern (Polaris, Paste, Blade, Mantine v9 8px; Airbnb 12px) [DC-L09-01].
+  - `square` 0px: official, engineered (GOV.UK, Carbon v11 buttons) [DC-L09-01, DC-L04-02].
+    - Now: Corners of 0-2 px: official and engineered, like GOV.UK and Carbon. As it grows: Sharp corners become a deliberate brand choice, since even Carbon is adding roundness; iOS rounds its own controls anyway. [inferred]
+  - `soft` 8px: friendly, modern (Polaris, Paste, Blade, Mantine v9 8px; Airbnb 12px) [DC-L09-01].
     - Now: Corners of 8-12 px: friendly and modern, like Polaris and Airbnb. As it grows: Nested cards need matching inner corners, which iOS expects and the web must work out itself. [inferred]
   - `pill` Pill: consumer, playful, touch-first (Material 3, Spectrum 2, SLDS Cosmos; iOS 26 capsule controls) [DC-L09-01].
     - Now: Fully round ends: consumer, playful and touch-first, like Material 3 and iOS 26. As it grows: Needs taller controls, so it fits poorly on dense, short controls in data tools.
   - `rule-based` Set by size (Spectrum 6-10 by size) or matched to the container's corners (Apple) [DC-L09-01].
     - Now: Corners set by size, like Spectrum's 6-10 px, or matched to the container, as Apple does. As it grows: New parts get the right corner from their size or container, without a new decision. [inferred]
-- **Default:** 6px controls, 8-12px containers *Source:* L09 shared default row 7 (16 of 23 control defaults at 4-8px, median 6) [L09 A1; DC-L09-01]; a radius factor slider as Radix offers.
+- **Default:** `subtle`: 6px controls, 8-12px containers; square and pill only when chosen. The answer stores the button radius itself (`radius.control`), and a typed value ("6px") is stored as that value. A chosen answer is locked, so the shape holds across iterations until the owner changes it *Source:* L09 shared default row 7 (16 of 23 control defaults at 4-8px, median 6) [L09 A1; DC-L09-01]; a radius factor slider as Radix offers.
 - **Show:** the component sheet morphing as the slider moves; the focus ring follows the radius.
 - **Use / avoid:** use 0-2px corners only as a deliberate brand statement (GOV.UK, Carbon v11 buttons): top-tier data and developer tools use about 6px controls, 8px panels and 12px overlays [DC-L23-02]; use pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
 - **Skip:** yes, 6px.

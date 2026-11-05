@@ -1,10 +1,10 @@
 ---
 name: opendesigner-illustrate
-description: Finds open-licence SVG illustrations for empty states, onboarding, errors or heroes, ranks them for fit, recolors them to the design tokens with light, dark and themed variants, and wires them in.
+description: Finds open-licence illustrations for empty states, onboarding, errors or heroes, recolors them to the design tokens and wires them in. Also finds licensed stock photos without brand marks.
 license: MIT
 compatibility: Python 3.10+ (standard library). Search and fetch need HTTPS access. A browser or image view helps you judge candidates; web search finds more sources.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 
@@ -17,7 +17,7 @@ Output: SVG files (or React components) recolored to the tokens, one CSS file th
 Talk plainly: one idea and one question per message, and recommend one option with its reason. The first time a term appears, give its plain meaning plus "Designers: X · Code: Y" (`references/rules.md` in the opendesigner skill).
 
 Helper: `scripts/illustrate.py` (called `illustrate.py` below; run it from the person's project). Knowledge:
-- `references/directory.md`: every source (44), with its licence, credit rule, formats, search link, tips and steps. Generated from `references/sources.json`.
+- `references/directory.md`: every source (46, photo sources included), with its licence, credit rule, formats, search link, tips and steps. Generated from `references/sources.json`.
 - `references/searching.md`: where to look first, how to word a search, file formats, and how to move through each kind of source.
 - `references/purposes.json`: slots and their search words.
 - `references/ranking.md`: how to judge fit.
@@ -104,6 +104,21 @@ python3 illustrate.py check src/components/illustrations/*.svg                  
 - Style first, if not set: `engine.py pick Q-img-04 <line|flat|hand-drawn|mascot|none> --why "..."`. This resets the hook to `placeholder`, so record the hook after it.
 - Hook: `engine.py set hooks.H-illus.status '"open-library"' --why "<source>, <slots>"` (`have` for their own art, `commissioning`, `placeholder`, or `not-needed`).
 - Then `engine.py review`, and re-read DESIGN.md. Commit `opendesigner/illustrations/ledger.json` and `ATTRIBUTION.md` with the art. `src/` holds the untouched originals; keep or delete them, but keep the ledger.
+
+## Stock photos
+For the research step's three directions (`references/research.md` section 9 in the opendesigner skill), and any photo a page needs. Files, `ledger.json` and `CREDITS.md` go in `opendesigner/research/photos/`.
+```
+python3 illustrate.py photos search "<the scene, not a company>" --grade natural   Openverse, Wikimedia Commons, Pexels (with PEXELS_API_KEY)
+python3 illustrate.py --dir opendesigner/research/photos sheet --candidates        look at every candidate before you fetch
+python3 illustrate.py photos fetch <id>          or   photos add FILE --source unsplash --url <photo page>
+python3 illustrate.py photos review <name> --brands none|found --grade <grade> --alt "..."
+python3 illustrate.py photos check [--page site/index.html]                         licence, looked at, no "AI generated" caption
+```
+- **Unsplash is "you download".** Its robots.txt blocks ClaudeBot and its API terms require hotlinked images. Give the person the link; they pick a free photo (never Unsplash+, marked +) and download it.
+- **No real brand in the frame.** Search drops items that name an AI tool, a logo or a competitor, and lists what to look at. Then open each file and look: hulls, containers, trucks, signs, screens, uniforms. A visible name or logo means `--brands found` and another photo. Pexels' terms bar using a photo that shows a trademark, logo or brand commercially for goods or services.
+- **Natural light by default** for business and work products. Dark, moody grades need a reason.
+- **Made with AI:** `photos add FILE --ai --tool "<model>"`. Tell the person once. Never caption it on the page, and never strip the file's own provenance data.
+- Recognisable people: the licence covers the photo, not their likeness. Never imply they endorse the product.
 
 ## Hosts
 - **Claude Code, Codex, Cursor and other agents with a shell:** everything above. Open the contact sheets in a browser tool, or publish one as an artifact, to look before you recommend.

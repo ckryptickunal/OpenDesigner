@@ -822,6 +822,7 @@ class JourneyTracking(unittest.TestCase):
             self.assertIn(("export", None, {"kind": "all"}), got)
             self.assertEqual(got[-1][:2], ("level_complete", None))
             quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "soft", "--no-doc"])
+            quiet(e.main, ["--dir", d, "unlock", "answers.Q-shape-01"])  # a chosen button shape is locked until the owner changes it
             quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "subtle", "--set-by", "delegated", "--no-doc"])
             self.assertEqual(self.events(d)[-3:], [("step_answered", "Q-shape-01", {"how": "option"}),
                                                    ("step_changed", "Q-shape-01", {}),
@@ -4147,6 +4148,234 @@ class DetectProject(unittest.TestCase):
         self.assertEqual(q["zoom"], 0)
         with open(os.path.join(e.REFERENCES, "rules.md"), encoding="utf-8") as f:
             self.assertNotIn("Always ask; never infer", f.read())
+
+
+class LandingPageRules(unittest.TestCase):
+    """A private B2B landing page (2026-11-05) ended up using none of the engine's tokens: capitals tracked -0.03em, a 1.2
+    scale with no hero, 2px then pill buttons, six text greys. These hold the rules that came out of it."""
+
+    def build(self, t, feel="serious,minimal,authoritative", surfaces="landing page:persuade", audience="regular"):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Corvala", "#B8321F", audience, "web", feel, surfaces=surfaces, delegated="all", quiet=True)
+        return d, self.system(d)
+
+    def system(self, d):
+        files, meta, _ = e.generate_system(e.load_state(d))
+        return e.resolve_all(files, {}), files, meta
+
+    def test_serious_landing_page_gets_room_a_hero_and_subtle_buttons(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, (flat, files, meta) = self.build(t)
+            params = {k: v["value"] for k, v in meta["params"].items()}
+            self.assertEqual(meta["profile"]["id"], "persuade")
+            self.assertGreaterEqual(params["type.ratio"], 1.25)
+            self.assertEqual((params["emphasis.heroMoments"], params["space.densityMode"]), ("significant-moments", "spacious"))
+            hero, sec = flat["font.size.display-lg"], flat["font.size.display-md"]
+            self.assertGreaterEqual(hero["resolved"]["value"], 96)
+            self.assertLessEqual(sec["resolved"]["value"], 48)
+            css = e.export_css(files, meta, "ds")
+            self.assertRegex(css, r"--ds-font-size-display-lg: clamp\(2\.5rem, [\d.]+rem \+ [\d.]+vw, 6rem\);")
+            self.assertEqual(flat["text.display.lg"]["$value"]["fontSize"], "{font.size.display-lg}")
+            self.assertTrue(all(v["resolved"]["value"] == int(v["resolved"]["value"]) for k, v in flat.items() if k.startswith("font.size.")))
+            for k in ("display-md", "display-lg"):  # 200% text zoom still grows fluid text (WCAG 1.4.4)
+                fl = flat[f"font.size.{k}"]["$extensions"]["opendesigner"]["fluid"]
+                self.assertLess(fl["maxPx"], 2.5 * fl["minPx"], k)
+            self.assertEqual((meta["shape"]["control"], meta["shape"]["ctaShape"]), (6, "subtle"))  # feel words gave roundness 0
+            self.assertTrue(48 <= flat["size.control.cta"]["resolved"]["value"] <= 56)
+            self.assertEqual(flat["layout.container.max"]["resolved"]["value"], 1280)
+            self.assertIn("--ds-layout-measure-prose: 65ch;", css)
+            lim = meta["limits"]
+            self.assertEqual((lim["sizes"]["max"], lim["weights"]["max"], lim["families"]["max"], lim["containers"]["max"]), (8, 3, 2, 1))
+            self.assertLessEqual(len(lim["sizes"]["scale"]) + len(lim["sizes"]["fluid"]), 8)
+            self.assertEqual(lim["cta"]["case"], "sentence")
+            self.assertFalse(any(i["severity"] in ("error", "warn") for i in e.validate_generated(files, e.load_state(_d), e.Report()).items))
+
+    def test_capitals_never_take_negative_tracking(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, (flat, files, meta) = self.build(t)
+            caps = {k: v for k, v in flat.items() if k.startswith("text.") and (v.get("$extensions") or {}).get("opendesigner", {}).get("textTransform")}
+            self.assertTrue(caps)
+            for k, v in caps.items():
+                self.assertTrue(0.05 <= v["$extensions"]["opendesigner"]["letterSpacingEm"] <= 0.08, k)
+            self.assertTrue(0 <= flat["font.tracking.caps-display"]["resolved"] <= 0.02)
+            css = e.export_css(files, meta, "ds")
+            self.assertIn("--ds-font-tracking-caps-label: 0.06em;", css)
+            self.assertIn("the font shorthand alone drops tracking", css)
+            self.assertIn("--tracking-caps-label: var(--ds-font-tracking-caps-label);", e.export_tailwind(files, meta, "ds"))
+            state = e.load_state(d)
+            state["overrides"]["font.tracking.caps-label"] = -0.03
+            files2, _m, _c = e.generate_system(state)
+            rep = e.validate_generated(files2, state, e.Report())
+            self.assertTrue(any("negative tracking" in i["message"] for i in rep.items if i["severity"] == "error"))
+
+    def test_text_keeps_three_greys(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, (flat, files, meta) = self.build(t)
+            self.assertEqual(files["semantic.color.light.tokens.json"]["color"]["text"]["tertiary"]["$value"], "{color.text.secondary}")
+            greys = {json.dumps(flat[f"color.text.{k}"]["resolved"], sort_keys=True) for k in ("primary", "secondary", "tertiary", "disabled")}
+            self.assertEqual(len(greys), 3)
+
+    def test_square_and_pill_are_choices(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "a")
+            quiet(e.cmd_sketch, d, "Bubbly", "#E0457B", "regular", "web", "playful,friendly,rich", quiet=True)
+            flat, _f, meta = self.system(d)
+            self.assertNotEqual(meta["shape"]["control"], "full")
+            self.assertLessEqual(flat["radius.control"]["resolved"]["value"], 12)
+            quiet(e.cmd_set, d, "Q-shape-01", "pill", "we want pills")
+            self.assertEqual(self.system(d)[2]["shape"]["ctaShape"], "pill")
+
+    def test_a_chosen_button_shape_holds_and_stated_values_stay_values(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, _s = self.build(t)
+            quiet(e.cmd_set, d, "Q-shape-01", "6px", "buttons 6px")
+            st = e.load_state(d)
+            self.assertEqual(st["overrides"]["radius.control"], 6)
+            self.assertTrue(e.is_locked(st, "answers.Q-shape-01") and e.is_locked(st, "overrides.radius.control"))
+            with self.assertRaises(SystemExit):
+                quiet(e.cmd_set, d, "Q-shape-01", "pill", "the agent's idea")
+            quiet(e.cmd_set, d, "dials.roundness", 97, "rounder")  # the dial moves cards; the button keeps its radius
+            self.assertEqual(self.system(d)[0]["radius.control"]["resolved"]["value"], 6)
+            quiet(e.cmd_lock, d, "answers.Q-shape-01", on=False)
+            self.assertFalse(e.is_locked(e.load_state(d), "overrides.radius.control"))
+            quiet(e.cmd_set, d, "Q-type-12", "400/500", "weights 400/500")
+            quiet(e.cmd_set, d, "Q-type-09", "major third", "a major third scale")
+            flat, _f, meta = self.system(d)
+            self.assertEqual(sorted(set(meta["type"]["weights"].values())), [400, 500])
+            self.assertEqual(meta["params"]["type.ratio"]["value"], 1.25)
+
+    def test_product_screens_keep_one_scale(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, (flat, _f, meta) = self.build(t, feel="precise,calm", surfaces="app:operate", audience="dense")
+            self.assertNotIn("font.size.display-lg", flat)
+            self.assertNotIn("size.control.cta", flat)
+            self.assertEqual(meta["profile"]["id"], "work-tool")
+
+
+class ProtocolRulesAndTokenUse(unittest.TestCase):
+    """Owner review 2026-11-05 (a private B2B landing page): a protocol in every project, repeated notes kept as rules, and a
+    review that says when the code has left the tokens behind."""
+
+    def test_init_and_sketch_write_the_protocol_once(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="P")
+            fp = os.path.join(d, "PROTOCOL.md")
+            with open(fp, encoding="utf-8") as f:
+                text = f.read()
+            for step in ("1 Discover", "2 Research", "3 System", "4 Structure", "5 Build", "6 Verify"):
+                self.assertIn(step, text)
+            self.assertIn("engine.py review", text)
+            self.assertIn("references/audit.md", text)
+            self.assertNotIn("{{", text)
+            with open(fp, "a", encoding="utf-8") as f:
+                f.write("| 2026-11-05 | Deploy? | At each gate |\n")
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            with open(fp, encoding="utf-8") as f:
+                self.assertIn("Deploy?", f.read())  # kept: never overwritten
+            os.remove(fp)
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            self.assertTrue(os.path.exists(fp))  # a system made before the protocol gets it at the next sketch
+        with open(os.path.join(e.SKILL_ROOT, "assets", "output", "AGENTS-snippet.md"), encoding="utf-8") as f:
+            self.assertIn("opendesigner/PROTOCOL.md` is binding", f.read())
+
+    def test_a_note_said_twice_becomes_a_rule(self):
+        with tempfile.TemporaryDirectory() as t:
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(e.cmd_feedback(t, "Centre every heading", "note")["said"], 1)
+                self.assertEqual(e.cmd_feedback(t, "center the headings", "note")["said"], 2)
+                self.assertEqual(e.cmd_feedback(t, "No full pills on buttons", "note")["id"], "N-02")
+                self.assertEqual(e.cmd_feedback(t, "keep the corners rounded, not pills", "note", same="N-02")["said"], 2)
+                self.assertEqual(e.cmd_feedback(t, "Centre all headings", "note")["said"], 3)
+            text = out.getvalue()
+            self.assertIn("Said twice: N-01 is now a rule", text)
+            self.assertEqual(text.count("draft a GitHub issue"), 1)  # offered once, at the third time, and only offered
+            self.assertNotIn("issues/new", text)
+            notes = e.read_notes(os.path.join(t, "RULES.md"))
+            self.assertEqual([(n["id"], n["said"]) for n in notes], [("N-01", 3), ("N-02", 2)])
+            self.assertFalse(os.path.exists(os.path.join(t, "feedback.md")))  # a note on the work is not OpenDesigner feedback
+            with self.assertRaises(SystemExit):
+                e.cmd_feedback(t, "x", "note", same="N-09")
+            with self.assertRaises(SystemExit):
+                e.cmd_feedback(t, "x", "gap", same="N-01")
+            q = lambda txt, **k: quiet(e.cmd_feedback, t, txt, "note", **k)
+            self.assertEqual(q("Use dark mode")["said"], 1)
+            self.assertEqual(q("Never use dark mode")["said"], 1)      # opposite notes never merge
+            self.assertEqual(q("Make headings bigger")["said"], 1)
+            self.assertEqual(q("Make headings smaller")["said"], 1)
+            self.assertEqual(q("centre every heading", same="new")["said"], 1)
+            self.assertEqual(e.read_notes(os.path.join(t, "RULES.md"))[0]["text"], "Centre every heading")  # first wording kept
+
+    def test_review_says_when_tokens_are_not_in_charge(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="R")
+            quiet(e.cmd_build, d)
+            os.makedirs(os.path.join(t, "site"))
+            css = os.path.join(t, "site", "a.css")
+            with open(css, "w") as f:
+                f.write(".h { color: #ff0000; padding: 12px; }\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d)
+            self.assertIn("Tokens are not in charge", out.getvalue())
+            with open(css, "a") as f:
+                f.write(".ok { color: var(--ds-color-text-primary); }\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            res = json.loads(out.getvalue())
+            self.assertEqual((res["tokenUses"], res["tokens"], res["systemBehind"]), (1, "losing", False))
+            with open(os.path.join(t, "site", "a.html"), "w") as f:
+                f.write('<a class="bg-action-primary text-fg-on-action rounded-control p-inset-md shadow-raised">Go</a>\n')
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            res = json.loads(out.getvalue())
+            self.assertEqual((res["tokenUses"], res["tokens"]), (6, "ok"))  # Tailwind theme classes are tokens at work
+
+    @unittest.skipUnless(__import__("shutil").which("git"), "needs git")
+    def test_review_says_when_the_system_is_behind_the_code(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="G")
+            quiet(e.cmd_build, d)
+            git = lambda *a: subprocess.run(["git", "-c", "user.email=t@t", "-c", "user.name=t", *a], cwd=t, capture_output=True, check=True)
+            git("init", "-q")
+            git("add", "-A")
+            git("commit", "-qm", "system")
+            os.makedirs(os.path.join(t, "site"))
+            for i in range(e.SYSTEM_AGE_COMMITS):
+                with open(os.path.join(t, "site", "a.css"), "a") as f:
+                    f.write(f".x{i} {{ color: var(--ds-color-text-primary); }}\n")
+                git("add", "-A")
+                git("commit", "-qm", f"page {i}")
+            with open(os.path.join(t, "notes.md"), "w") as f:
+                f.write("not code\n")
+            git("add", "-A")
+            git("commit", "-qm", "notes")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d)
+            self.assertIn(f"The system is behind the code: {e.SYSTEM_AGE_COMMITS} commits", out.getvalue())
+
+    def test_research_steps_pass_through_and_positioning_has_its_own_section(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            quiet(e.cmd_design_md, d)
+            with open(os.path.join(t, "PRODUCT.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("## Positioning\n\nNot enough information", text)
+            self.assertLess(text.index("## Market"), text.index("## Positioning"))
+            with self.assertRaisesRegex(SystemExit, "research/users.json"):     # research.py answers: no findings yet
+                quiet(e.main, ["research", "market", "--dir", d])
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(e.main(["research", "positioning", "show", "--dir", d]), 0)
+            self.assertIn("No positioning yet", out.getvalue())
 
 
 if __name__ == "__main__":

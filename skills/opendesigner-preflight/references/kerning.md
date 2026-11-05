@@ -1,6 +1,6 @@
 # Kerning and letter spacing: what goes wrong, and how to stop it
 
-Read this before you set `letter-spacing`, animate text letter by letter, ship a font file, or move type between Figma, CSS, Swift and Compose. It applies to every project: pages, apps, videos, decks and images. `preflight.py html` catches the rule-shaped cases automatically (checklist item 50, mistake M51). The rest needs a look at 200%.
+Read this before you set `letter-spacing`, animate text letter by letter, ship a font file, or move type between Figma, CSS, Swift and Compose. It applies to every project: pages, apps, videos, decks and images. `preflight.py html` catches the rule-shaped cases automatically (checklist item 57, mistake M58). The rest needs a look at 200%.
 
 Two words, kept apart:
 - **Kerning** is the font's own spacing for each pair of letters ("AV", "To", "r."). It lives inside the font file (the `kern` feature) and the browser or OS applies it. You rarely change it; you mostly stop things from breaking it.

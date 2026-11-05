@@ -33,8 +33,22 @@
   "patterns": ["Bottom tab bar with 4 or 5 items", "Big list rows with a photo and one line", "A confirmation screen before money moves"],
   "market": {
     "analogous": {"name": "A milk delivery subscription", "why": "the same order every month, changed only by exception", "sources": ["S4"]},
-    "competitors": [{"name": "The pharmacy chains' own apps", "why": "search first, with offers on the home screen", "sources": ["S5"]},
-                    {"name": "Ordering by phone or WhatsApp from the local chemist", "why": "what many do today", "sources": ["S4"]}],
+    "competitors": [
+      {"name": "Pharmacy chain one", "why": "search first, with offers on the home screen", "sources": ["S5"], "url": "https://chain-one.example", "measured": "browser",
+       "ground": "light", "colors": [{"hex": "#FFFFFF", "role": "ground"}, {"hex": "#1A1A1A", "role": "ink"}, {"hex": "#0A6CFF", "role": "cta"}],
+       "type": {"display": "Inter", "text": "Inter", "class": "grotesk"}, "cta": {"shape": "rounded", "radius": 8, "fill": "solid", "label": "Order now"}},
+      {"name": "Pharmacy chain two", "why": "offers and categories first", "sources": ["S5"], "url": "https://chain-two.example", "measured": "browser",
+       "colors": [{"hex": "#F4F7F6", "role": "ground"}, {"hex": "#14211C", "role": "ink"}, {"hex": "#11845B", "role": "cta"}],
+       "type": {"display": "Poppins", "text": "Roboto", "class": "geometric"}, "cta": {"shape": "pill", "fill": "solid", "label": "Shop medicines"}},
+      {"name": "Online pharmacy three", "why": "prescription upload first", "sources": ["S5"], "url": "https://pharmacy-three.example", "measured": "css",
+       "colors": [{"hex": "#0F1E3D", "role": "ground"}, {"hex": "#F5F7FA", "role": "ink"}, {"hex": "#2F80ED", "role": "cta"}],
+       "type": {"display": "Montserrat", "text": "Open Sans", "class": "geometric"}, "cta": {"shape": "subtle", "radius": 4, "fill": "solid", "label": "Upload prescription"}},
+      {"name": "Ordering by phone or WhatsApp from the local chemist", "why": "what many do today", "sources": ["S4"]}],
+    "benchmark": [
+      {"name": "A grocery subscription app, home", "url": "https://grocery.example/home", "section": "home", "does": "last order first, one tap to repeat it",
+       "takes": "the repeat order sits at the top", "signature": "its basket mascot"},
+      {"name": "A bank app, payment confirm", "url": "https://bank.example/pay", "section": "confirm", "does": "a full-screen confirm with the amount large",
+       "takes": "one big confirmation before money moves", "signature": "its gradient card art"}],
     "pattern": {"text": "Search and offers first; reordering takes four or more taps", "sources": ["S2", "S5"]},
     "gap": {"text": "Last month's order, ready to repeat in one tap, with a family member able to help", "sources": ["S2", "S4"]}
   },

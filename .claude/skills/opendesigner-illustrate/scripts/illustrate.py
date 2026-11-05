@@ -32,7 +32,7 @@ decision 2026-09-28; the one exception to "skills stay offline"). Responses are 
 opendesigner/illustrations/responses/ and downloads/ first, then parsed. With --offline, or when the network fails,
 they print the requests as curl lines; the agent fetches them with its own tools and runs the same command again.
 """
-import argparse, datetime, html, json, math, re, sys, urllib.error, urllib.parse, urllib.request
+import argparse, datetime, html, json, math, os, re, sys, urllib.error, urllib.parse, urllib.request
 import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -758,38 +758,44 @@ CONNECTORS = {"openverse": (req_openverse, parse_openverse, "json"), "cocomateri
               "opendoodles": (req_listing, parse_listing, "html"), "lukaszadam": (req_listing, parse_listing, "html")}
 
 
-def fetch_line(url, dest):
-    """How the agent fetches one file with its own tools. Only HTTPS URLs are ever offered."""
+def fetch_line(url, dest, key_env=None, limit=MAX_BYTES):
+    """How the agent fetches one file with its own tools. Only HTTPS URLs are ever offered. A key is named by its
+    environment variable, never printed."""
     if not url.lower().startswith("https://"):
         raise ValueError(f"only https:// URLs are fetched, not {url[:40]!r}")
-    return f'curl -sL --max-filesize {MAX_BYTES} -A "{UA}" "{url}" -o "{dest}"'
+    auth = f' -H "Authorization: ${key_env}"' if key_env else ""
+    return f'curl -sL --max-filesize {limit} -A "{UA}"{auth} "{url}" -o "{dest}"'
 
 
-def http_get(url, dest, timeout=30):
-    """Download one HTTPS URL to dest, at most MAX_BYTES. The only place this skill touches the network."""
-    fetch_line(url, dest)  # refuses anything but https://
+def http_get(url, dest, timeout=30, key_env=None, limit=MAX_BYTES):
+    """Download one HTTPS URL to dest, at most `limit` bytes. The only place this skill touches the network."""
+    fetch_line(url, dest, key_env, limit)  # refuses anything but https://
     req = urllib.request.Request(url, headers={"User-Agent": UA})
+    if key_env:  # never forwarded on a redirect, so a key cannot leak to another host
+        req.add_unredirected_header("Authorization", env_key(key_env))
     with urllib.request.urlopen(req, timeout=timeout) as r:
         if not r.geturl().lower().startswith("https://"):
             raise ValueError("redirected away from HTTPS")
-        body = r.read(MAX_BYTES + 1)
-    if len(body) > MAX_BYTES:
-        raise ValueError(f"over {MAX_BYTES // 1_000_000} MB")
+        body = r.read(limit + 1)
+    if len(body) > limit:
+        raise ValueError(f"over {limit // 1_000_000} MB")
     Path(dest).parent.mkdir(parents=True, exist_ok=True)
     Path(dest).write_bytes(body)
 
 
 def fetch_all(pairs, offline):
-    """Fetch (url, dest) pairs directly; return the curl lines for the ones left to the agent."""
+    """Fetch (url, dest[, key_env, limit]) tuples directly; return the curl lines for the ones left to the agent."""
     left = []
-    for url, dest in pairs:
+    for url, dest, *rest in pairs:
+        key_env = rest[0] if rest else None
+        limit = rest[1] if len(rest) > 1 and rest[1] else MAX_BYTES
         if not offline:
             try:
-                http_get(url, dest)
+                http_get(url, dest, key_env=key_env, limit=limit)
                 continue
             except (urllib.error.URLError, OSError, ValueError, TimeoutError) as e:
                 print(f"  network: {url[:70]} failed ({e.__class__.__name__}); fetch it yourself")
-        left.append(fetch_line(url, dest))
+        left.append(fetch_line(url, dest, key_env, limit))
     return left
 
 
@@ -930,7 +936,8 @@ def slug(s):
 
 KINDS = {"scenes": "Scenes and spot art", "people": "People and characters", "doodles": "Hand-drawn doodles",
          "spot": "Small multicolor spot art and emoji", "3d": "3D art", "animated": "Animated (Lottie, Rive)",
-         "generator": "Generators (shapes, blobs, waves, patterns)", "search": "Search engines over open collections"}
+         "generator": "Generators (shapes, blobs, waves, patterns)", "search": "Search engines over open collections",
+         "photos": "Stock photos"}
 ACCESS = {"api": "agent fetches", "open": "agent may browse", "manual": "you download"}
 CREDIT = {"none": "no credit needed", "optional": "credit optional", "required": "credit required",
           "notice": "keep the licence notice", "per-item": "depends on each item", "as given": "as given"}
@@ -1358,7 +1365,7 @@ def cmd_sheet(a):
     cards = []
     if a.candidates:
         cand = proj.load(proj.cand, {"items": []})
-        for c in [c for c in cand["items"] if c.get("licence_verdict") != "blocked"][:a.top]:
+        for c in [c for c in cand["items"] if c.get("licence_verdict") != "blocked" and not c.get("rejected")][:a.top]:
             cards.append((c["id"], c.get("preview") or c.get("download"), f"{c.get('score', '?')} · {c.get('licence', '')}", c.get("title", "")))
         title = f"Candidates for “{cand.get('purpose', '')}”"
     else:
@@ -1577,9 +1584,481 @@ def cmd_ledger(a):
     print(write_attribution(Project(a.dir)))
 
 
+# ---------------------------------------------------------------- stock photos (for the research step's directions)
+#
+# Photos follow the same rules as illustrations: sources that allow automation are searched over HTTPS, the rest are
+# "you download". Every photo gets a ledger row, and none reaches a board or a page until someone has looked at it for
+# brand names and logos (`photos review`). Business pages default to natural light. Files stay in the person's project
+# (opendesigner/research/photos/), never in OpenDesigner.
+
+PHOTO_DIR = "opendesigner/research/photos"
+PHOTO_MAX = 8_000_000  # photos are larger than SVGs; downloads ask for about 1900 px on the long side
+PHOTO_GRADES = ("natural", "warm", "cool", "high-key", "mono", "low-key")  # the same list as research.py
+PHOTO_SOURCES = ("openverse", "commons", "pexels")  # agent fetches; Unsplash is "you download"
+PHOTO_MAGIC = ((b"\xff\xd8\xff", ".jpg"), (b"\x89PNG", ".png"), (b"RIFF", ".webp"))
+# Items whose words name an AI image tool are rejected from stock search: Openverse lists some as photographs [checked
+# 2026-11-05: the top "warehouse" photographs were Midjourney images], and their licence is uncertain.
+AI_WORDS = re.compile(r"midjourney|dall[- ·]?e|stable[- ]?diffusion|\bsdxl\b|ai[- ]generated|\bai art\b|generative ai|"
+                      r"adobe firefly|leonardo ai|nightcafe|craiyon|\bimagen\b", re.I)
+AI_CAPTION = re.compile(r"\b(AI|artificial intelligence)[- ]?(generated|made|created|image|art)\b|"
+                        r"\b(generated|created|made|rendered) (by|with|using|in) (an? )?(AI|artificial intelligence|midjourney|dall[- ·]?e|"
+                        r"stable diffusion|firefly|imagen|an image model)\b", re.I)  # the same pattern as research.py
+BRAND_WORDS = re.compile(r"\blogos?\b|\bbrand(ed|ing)?\b|trademark|signage|billboard|advert|storefront|shopfront|packaging|"
+                         r"\blivery\b|\bjersey\b|mascot|sponsor", re.I)
+# Things that often carry a real company's name or mark: look at these closely (F-015: ship hulls showed real names).
+LOOK_WORDS = re.compile(r"ship|vessel|tanker|container|cargo|truck|lorry|van\b|bus\b|train|aircraft|plane|airline|stadium|"
+                        r"shop|store|street|city|screen|laptop|phone|uniform|crane|terminal|port\b|harbou?r|shel(f|ves)|bottle|packet|package|"
+                        r"\bbox(es)?\b|product|drugs?\b|medicine|food|drink|\bcans?\b", re.I)
+GRADE_WORDS = (("low-key", r"night|dark|moody|noir|silhouette|long exposure|low[- ]key"),
+               ("mono", r"black and white|monochrome|\bb&w\b|grayscale|greyscale"),
+               ("warm", r"sunset|sunrise|golden hour|dusk"), ("cool", r"fog|mist|blue hour|overcast|rain"),
+               ("high-key", r"high[- ]key|bright white|overexposed"))
+ORIENT = {"landscape": "wide", "portrait": "tall", "square": "square"}
+
+
+def env_key(name):
+    """An API key from the environment, else from a .env file in the current folder. Never printed or logged."""
+    if os.environ.get(name):
+        return os.environ[name]
+    env = Path(".env")
+    if env.is_file():
+        for line in env.read_text(encoding="utf-8", errors="replace").splitlines():
+            k, _, v = line.partition("=")
+            if k.strip() == name and v.strip():
+                return v.strip().strip('"').strip("'")
+    return ""
+
+
+def req_openverse_photo(src, q, a):
+    p = {"q": q, "category": "photograph", "license_type": "commercial,modification", "page_size": min(a.limit, 20), "mature": "false"}
+    if a.orientation:
+        p["aspect_ratio"] = ORIENT[a.orientation]
+    return [(_url(src["api"]["endpoint"], p), None)]
+
+
+def req_commons_photo(src, q, a):
+    params = {"action": "query", "format": "json", "formatversion": 2, "generator": "search", "gsrnamespace": 6,
+              "gsrlimit": min(a.limit, 30), "prop": "imageinfo", "iiprop": "url|mime|size|extmetadata", "iiurlwidth": 1920,
+              "iiextmetadatafilter": "LicenseShortName|LicenseUrl|Artist|AttributionRequired|ImageDescription|Categories",
+              "gsrsearch": f"{q} filemime:image/jpeg"}
+    return [(_url(src["api"]["endpoint"], params), None)]
+
+
+def req_pexels(src, q, a):
+    if not env_key(src["api"]["key_env"]):
+        return []
+    p = {"query": q, "per_page": min(a.limit, 40)}
+    if a.orientation:
+        p["orientation"] = a.orientation
+    return [(_url(src["api"]["endpoint"], p), src["api"]["key_env"])]
+
+
+def parse_openverse_photo(body, src):
+    out = []
+    for it in json.loads(body).get("results", []):
+        c = parse_openverse(json.dumps({"results": [it]}), {}, src, 1)[0]
+        c.update({"width": it.get("width") or 0, "height": it.get("height") or 0, "format": it.get("filetype") or "jpg"})
+        out.append(c)
+    return out
+
+
+def parse_commons_photo(body, src):
+    pages = (json.loads(body).get("query") or {}).get("pages", [])
+    out = []
+    for page in pages.values() if isinstance(pages, dict) else pages:
+        ii = (page.get("imageinfo") or [{}])[0]
+        if ii.get("mime") not in ("image/jpeg", "image/png", "image/webp"):
+            continue
+        meta = ii.get("extmetadata") or {}
+        val = lambda k: html.unescape(re.sub(r"<[^>]+>", "", str((meta.get(k) or {}).get("value", "")))).strip()
+        out.append({"id": f"commons:{page.get('pageid')}", "source": "commons",
+                    "title": page.get("title", "").replace("File:", "").rsplit(".", 1)[0].replace("_", " "),
+                    "tags": [t for t in val("Categories").split("|") if t][:8], "description": val("ImageDescription")[:300],
+                    "author": val("Artist")[:120], "page": ii.get("descriptionurl", ""), "download": ii.get("thumburl") or ii.get("url", ""),
+                    "preview": ii.get("thumburl") or ii.get("url", ""), "format": ii["mime"].split("/")[1],
+                    "width": min(ii.get("width") or 0, ii.get("thumbwidth") or 10**6), "height": min(ii.get("height") or 0, ii.get("thumbheight") or 10**6),
+                    "licence": val("LicenseShortName"), "licence_url": val("LicenseUrl"),
+                    "attribution_required": val("AttributionRequired") == "true"})
+    return out
+
+
+def parse_pexels(body, src):
+    out = []
+    for it in json.loads(body).get("photos", []):
+        s = it.get("src") or {}
+        out.append({"id": f"pexels:{it.get('id')}", "source": "pexels", "title": it.get("alt") or f"Pexels photo {it.get('id')}",
+                    "tags": [], "author": it.get("photographer") or "", "author_url": it.get("photographer_url") or "",
+                    "page": it.get("url") or "", "download": s.get("large2x") or s.get("original") or "", "preview": s.get("medium") or s.get("small") or "",
+                    "format": "jpg", "width": it.get("width") or 0, "height": it.get("height") or 0,
+                    "licence": src["licence"], "licence_url": src.get("licence_url", "")})
+    return out
+
+
+PHOTO_CONNECTORS = {"openverse": (req_openverse_photo, parse_openverse_photo), "commons": (req_commons_photo, parse_commons_photo),
+                    "pexels": (req_pexels, parse_pexels)}
+
+
+def avoid_names(proj, extra=""):
+    """Names a photo must never show: the competitors from research/users.json, plus --avoid."""
+    names = [n.strip() for n in (extra or "").split(",") if n.strip()]
+    users = proj.dir.parent / "users.json"
+    if users.is_file():
+        try:
+            mk = json.loads(users.read_text(encoding="utf-8")).get("market") or {}
+            names += [c["name"] for c in mk.get("competitors") or [] if isinstance(c, dict) and c.get("name")]
+        except ValueError:
+            pass
+    return [n for n in dict.fromkeys(names) if len(n) >= 3]
+
+
+COMMON_TITLE = {"photo", "photograph", "image", "picture", "view", "the", "and", "with", "from", "for", "file", "jpg", "png",
+                "img", "dsc", "untitled", "public", "domain", "free", "stock"}
+
+
+_DICT = []
+
+
+def dictionary():
+    """The system word list, when there is one (macOS and most Linux): plain words in a title are not names."""
+    if not _DICT:
+        words = set()
+        for p in ("/usr/share/dict/words", "/usr/dict/words"):
+            try:
+                words = {w.strip().lower() for w in open(p, encoding="utf-8", errors="ignore")}
+                break
+            except OSError:
+                continue
+        _DICT.append(words)
+    return _DICT[0]
+
+
+def screen_photo(c, avoid=(), words=()):
+    """What a photo's own words say before anyone looks: (reject reasons, things to look at, grade hint)."""
+    text = " ".join([c.get("title", ""), " ".join(c.get("tags") or []), c.get("description", "")])
+    reject, look = [], []
+    if AI_WORDS.search(text):
+        reject.append("its words name an AI image tool: not a photo, and its licence is uncertain")
+    if BRAND_WORDS.search(text):
+        reject.append(f"about a brand or a mark ({BRAND_WORDS.search(text).group(0)})")
+    for n in avoid:
+        if re.search(r"\b" + re.escape(n) + r"\b", text, re.I):
+            reject.append(f"names {n}, a competitor")
+    plain = lambda w: w in COMMON_TITLE or w in words or w in dictionary() or (w.endswith("s") and w[:-1] in dictionary())
+    names = [w for w in re.findall(r"\b[A-Z][A-Za-z0-9&]{2,}\b", c.get("title", "")) if not plain(w.lower())]
+    if names:
+        look.append(f"{', '.join(dict.fromkeys(names[:3]))} in the title may be a name: check the frame for a company's name or mark")
+    if LOOK_WORDS.search(text):
+        look.append(f"a {LOOK_WORDS.search(text).group(0).lower()} often carries a company name or mark: zoom in on it")
+    hint = next((g for g, rx in GRADE_WORDS if re.search(rx, text, re.I)), "")
+    return reject, look, hint
+
+
+def photo_score(c, words, grade, sources):
+    toks = tokens_of(c) | set(re.findall(r"[a-z0-9]+", c.get("description", "").lower()))
+    rel = 50 * (sum(1 for w in words if matches(w, toks)) / max(1, len(words)))
+    verdict, _ = licence_verdict(c, sources)
+    lic = {"ok": 20, "attribution": 12, "blocked": 0}[verdict]
+    side = min(c.get("width") or 0, c.get("height") or 0)
+    size = 15 if side >= 1200 else 8 if side >= 800 else 5 if not side else 0
+    hint = c.get("grade_hint")
+    fit = 15 if not hint or hint == grade else 3
+    return round(rel + lic + size + fit, 1), verdict
+
+
+def cmd_photo_search(a):
+    data = load_json(SOURCES)
+    sources = {s["id"]: s for s in data["sources"]}
+    proj = Project(a.dir)
+    words = [w for w in re.findall(r"[a-z0-9]+", a.subject.lower()) if len(w) > 2]
+    wanted = a.source.split(",") if a.source else list(PHOTO_SOURCES)
+    resp = proj.dir / "responses"
+    plan, notes = [], []
+    for sid in wanted:
+        if sid not in PHOTO_CONNECTORS:
+            notes.append(f"{sid}: not a photo source the script can search ({', '.join(PHOTO_SOURCES)})")
+            continue
+        build, _ = PHOTO_CONNECTORS[sid]
+        reqs = build(sources[sid], a.subject, a)
+        if sid == "pexels" and not reqs:
+            notes.append(f"pexels: no key. Set {sources[sid]['api']['key_env']} (free at https://www.pexels.com/api/) "
+                         f"or give the person the link: {search_link(sources[sid], a.subject)}")
+        for n, (url, key_env) in enumerate(reqs, 1):
+            plan.append({"source": sid, "url": url, "key_env": key_env, "save_as": str(resp / f"photo-{sid}-{n}.json")})
+    resp.mkdir(parents=True, exist_ok=True)
+    old = proj.load(proj.dir / "photo-requests.json", {})
+    same = [r.get("url") for r in old.get("requests", [])] == [r["url"] for r in plan]
+    for f in resp.glob("photo-*.json"):
+        if not (a.reuse and same):
+            f.unlink()  # answers to an older search must not be read as answers to this one
+    proj.save(proj.dir / "photo-requests.json", {"subject": a.subject, "requests": [{k: v for k, v in r.items()} for r in plan]})
+    left = fetch_all([(r["url"], r["save_as"], r["key_env"], MAX_BYTES) for r in plan if not Path(r["save_as"]).exists()], a.offline)
+    if left:
+        print(f"Fetch these {len(left)} HTTPS responses with your own tools (photo-requests.json lists them), then run the same "
+              "search again with --reuse" + (" (a key in .env is read by this script only: export it for curl)" if any(r["key_env"] for r in plan) else "") + ":")
+        for line in left:
+            print("  " + line)
+    avoid = avoid_names(proj, a.avoid)
+    found, seen = [], set()
+    for r in plan:
+        if not Path(r["save_as"]).exists():
+            continue
+        try:
+            items = PHOTO_CONNECTORS[r["source"]][1](read_saved(r["save_as"]), sources[r["source"]])
+        except (ValueError, KeyError, TypeError) as e:
+            notes.append(f"{r['source']}: could not read {r['save_as']} ({e.__class__.__name__})")
+            continue
+        for c in items:
+            if c["id"] in seen:
+                continue
+            seen.add(c["id"])
+            c["reject"], c["look"], c["grade_hint"] = screen_photo(c, avoid, words)
+            c["rejected"] = bool(c["reject"])
+            c["ai_suspected"] = any("AI image tool" in x for x in c["reject"])
+            c["score"], c["licence_verdict"] = photo_score(c, words, a.grade, sources)
+            c["licence_note"] = licence_verdict(c, sources)[1]
+            found.append(c)
+    found.sort(key=lambda c: (c["rejected"] or c["licence_verdict"] == "blocked", -c["score"]))
+    proj.save(proj.cand, {"purpose": a.subject, "kind": "photos", "grade": a.grade, "searched": datetime.date.today().isoformat(),
+                          "avoid": avoid, "items": found})
+    ok = [c for c in found if not c["rejected"] and c["licence_verdict"] != "blocked"]
+    print(f"{len(ok)} usable photo(s) of {len(found)} for {a.subject!r} -> {proj.cand}  (grade wanted: {a.grade})")
+    for c in ok[:a.top]:
+        side = f"{c.get('width') or '?'}x{c.get('height') or '?'}"
+        print(f"{c['score']:>5}  {c['licence_verdict']:<11} {c['id']:<30} {side:<10} {c['title'][:40]:<40} {c.get('licence', '')}"
+              + (f"  [{c['grade_hint']}]" if c["grade_hint"] and c["grade_hint"] != a.grade else ""))
+        for x in c["look"]:
+            print(f"{'':>7}look: {x}")
+    rej = [c for c in found if c["rejected"]]
+    if rej:
+        print(f"Rejected {len(rej)}: " + "; ".join(f"{c['id']} ({c['reject'][0]})" for c in rej[:4]) + (" ..." if len(rej) > 4 else ""))
+    for n in notes:
+        print("  " + n)
+    s = sources["unsplash"]
+    print(f"  you download   {s['name']}: {search_link(s, a.subject)}  ({s['licence']}; free photos only, never Unsplash+)")
+    print("Next: illustrate.py sheet --candidates (look at every one), then photos fetch <id>, then photos review <name>.")
+    return 0
+
+
+def _kind_of(body):
+    return next((ext for magic, ext in PHOTO_MAGIC if body.startswith(magic) and (ext != ".webp" or body[8:12] == b"WEBP")), None)
+
+
+def photo_entry(name, c, verdict, sources, file, ai=False, tool=""):
+    src = sources.get(c["source"], {})
+    https = lambda u: u if str(u or "").lower().startswith("https://") else ""
+    return {"name": name, "id": c.get("id") or c.get("page") or file, "status": "candidate", "file": file, "source": c["source"],
+            "title": c.get("title", ""), "page": https(c.get("page")), "download": c.get("download", ""), "author": c.get("author", ""),
+            "author_url": c.get("author_url", ""), "licence": c.get("licence", ""), "licence_url": c.get("licence_url", ""),
+            "attribution": c.get("attribution") or attribution_line(c, sources), "verdict": verdict,
+            "restrictions": src.get("restrictions", ""), "width": c.get("width") or 0, "height": c.get("height") or 0,
+            "screen": c.get("reject") or [],
+            "fetched": datetime.date.today().isoformat(), "brand_check": "pending", "look": c.get("look") or [], "grade": "",
+            "grade_hint": c.get("grade_hint", ""), "ai_generated": bool(ai or c.get("ai_suspected")),
+            "tool": tool or ("named in its title or tags" if c.get("ai_suspected") else ""), "alt": "", "caption": ""}
+
+
+def cmd_photo_fetch(a):
+    sources = {s["id"]: s for s in load_json(SOURCES)["sources"]}
+    proj = Project(a.dir)
+    cand = {c["id"]: c for c in proj.load(proj.cand, {"items": []})["items"]}
+    waiting = []
+    for cid in a.ids:
+        c = cand.get(cid)
+        if not c:
+            print(f"skip {cid}: not in {proj.cand} (run photos search first)")
+            continue
+        verdict, why = licence_verdict(c, sources)
+        if verdict == "blocked" or (c.get("rejected") and not a.force):
+            print(f"skip {cid}: {why if verdict == 'blocked' else c['reject'][0]}")
+            continue
+        dl = proj.dir / "downloads" / re.sub(r"[^a-zA-Z0-9]+", "-", cid).strip("-")
+        if not dl.exists():
+            dl.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                waiting += fetch_all([(c["download"], dl, None, PHOTO_MAX)], a.offline)
+            except ValueError as e:
+                print(f"skip {cid}: {e}")
+                continue
+            if not dl.exists():
+                continue
+        body = dl.read_bytes()
+        ext = _kind_of(body)
+        if not ext:
+            print(f"skip {cid}: not a JPEG, PNG or WebP file")
+            continue
+        name = unique_name(proj, a.name if a.name and len(a.ids) == 1 else slug(c["title"] or cid), cid)
+        (proj.dir / f"{name}{ext}").write_bytes(body)
+        proj.ledger_add(photo_entry(name, c, verdict, sources, f"{name}{ext}"))
+        print(f"fetched {name}{ext} <- {cid} ({verdict}: {why}). Look at it now: illustrate.py photos review {name} --brands none|found --grade ...")
+    if waiting:
+        print("Download these with your own tools, then run the same fetch again:")
+        for line in waiting:
+            print("  " + line)
+    return 0
+
+
+def cmd_photo_add(a):
+    sources = {s["id"]: s for s in load_json(SOURCES)["sources"]}
+    src = sources.get(a.source)
+    if a.ai:
+        if not a.tool:
+            raise SystemExit("--ai needs --tool \"<the generator>\" so the person knows what made it")
+    elif not src or "photos" not in src.get("kind", []) and a.source != "other":
+        raise SystemExit(f"--source must be a photo source ({', '.join(s['id'] for s in sources.values() if 'photos' in s.get('kind', []))}) "
+                         "or other with --licence; for an AI image use --ai --tool")
+    if a.source == "other" and not a.licence and not a.ai:
+        raise SystemExit("--source other needs --licence (never guess a licence)")
+    body = Path(a.file).read_bytes()
+    ext = _kind_of(body)
+    if not ext:
+        raise SystemExit(f"{a.file} is not a JPEG, PNG or WebP file")
+    proj = Project(a.dir)
+    name = unique_name(proj, a.name or slug(a.title or Path(a.file).stem), a.url or str(Path(a.file).resolve()))
+    proj.dir.mkdir(parents=True, exist_ok=True)
+    (proj.dir / f"{name}{ext}").write_bytes(body)
+    c = {"source": "other" if a.ai else a.source, "title": a.title or name, "author": a.author or "", "page": a.url or "",
+         "licence": (f"Made with {a.tool}: its terms apply" if a.ai else a.licence or src["licence"]),
+         "licence_url": "" if a.ai else src.get("licence_url", "")}
+    c["reject"], c["look"], c["grade_hint"] = screen_photo(c, avoid_names(proj))
+    c["ai_suspected"] = any("AI image tool" in x for x in c["reject"])
+    for x in c["reject"] + c["look"]:
+        print(f"  look: {x}")
+    verdict, why = ("ok", f"made with {a.tool}; tell the person, keep the file's provenance data, no caption on the page") if a.ai \
+        else licence_verdict(c, sources)
+    proj.ledger_add(photo_entry(name, c, verdict, sources, f"{name}{ext}", ai=bool(a.ai), tool=a.tool or ""))
+    print(f"added {name}{ext} ({verdict}: {why}). Look at it now: illustrate.py photos review {name} --brands none|found --grade ...")
+    if a.source == "unsplash":
+        print("  Unsplash: confirm it was not an Unsplash+ photo (marked +; a separate paid licence).")
+    return 0
+
+
+def cmd_photo_review(a):
+    proj = Project(a.dir)
+    led = proj.load(proj.ledger, {"items": []})
+    e = next((x for x in led["items"] if x["name"] == a.name), None)
+    if not e:
+        raise SystemExit(f"{a.name!r} is not in {proj.ledger}")
+    if a.brands:
+        e["brand_check"] = "clear" if a.brands == "none" else "found"
+        e["status"] = "rejected" if a.brands == "found" else ("candidate" if e.get("status") == "rejected" else e.get("status", "candidate"))
+    if a.grade:
+        e["grade"] = a.grade
+    for k in ("alt", "caption", "note"):
+        if getattr(a, k) is not None:
+            e[k] = getattr(a, k).strip()
+    if a.people:
+        e["people"] = a.people
+    e["reviewed"] = datetime.date.today().isoformat()
+    proj.save(proj.ledger, led)
+    probs = photo_problems(e)
+    print(f"{a.name}: brands {e['brand_check']}, grade {e.get('grade') or 'not set'}" + (f", people {e['people']}" if e.get("people") else ""))
+    for t in probs:
+        print(f"  error: {t}")
+    if e["brand_check"] == "found":
+        print("  Rejected: a real company's name or mark is in the frame. Find another, or crop it out and review again.")
+    if e.get("people") == "yes":
+        print("  People are recognisable: the licence covers the photo, not their likeness. Never imply they endorse the product.")
+    return 1 if probs else 0
+
+
+def photo_problems(e):
+    out = []
+    if e.get("verdict") == "blocked":
+        out.append(f"licence blocks it ({e.get('licence')})")
+    if e.get("brand_check") == "found":
+        out.append("a real company's name or mark is visible")
+    elif e.get("brand_check") != "clear":
+        out.append("nobody has looked at it for brand names and logos yet")
+    if any(AI_CAPTION.search(str(e.get(k) or "")) for k in ("caption", "alt")):
+        out.append("its caption or alt text says it was made with AI: take that off the page and tell the person instead")
+    if e.get("grade") and e["grade"] not in PHOTO_GRADES:
+        out.append(f"grade must be one of {', '.join(PHOTO_GRADES)}")
+    return out
+
+
+def cmd_photo_check(a):
+    proj = Project(a.dir)
+    items = proj.load(proj.ledger, {"items": []})["items"]
+    names = set(a.names or [e["name"] for e in items if e.get("status") != "rejected"])
+    errs = 0
+    for e in [x for x in items if x["name"] in names]:
+        probs = photo_problems(e)
+        errs += len(probs)
+        print(f"{'ok   ' if not probs else 'error'} {e['name']:<28} {e.get('licence', '')[:30]:<30} brands {e.get('brand_check')}, "
+              f"grade {e.get('grade') or '-'}" + (", made with AI (tell the person)" if e.get("ai_generated") else ""))
+        for t in probs:
+            print(f"      {t}")
+    for page in a.page or []:
+        for where, words in image_texts(Path(page).read_text(encoding="utf-8", errors="replace")):
+            if AI_CAPTION.search(words):
+                errs += 1
+                print(f"error {page}: {where} says the image is AI-made ({AI_CAPTION.search(words).group(0)!r}). Take it off the page; "
+                      "tell the person instead")
+    write_credits(proj)
+    print(f"{errs} problem(s). Credits: {proj.dir / 'CREDITS.md'}")
+    return 1 if errs else 0
+
+
+def image_texts(page):
+    """What a page says about its images: figure and caption text, and alt, title and aria-label on images."""
+    out = []
+    plain = lambda h: re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", h))).strip()
+    for m in re.finditer(r"<(figure|figcaption)\b[^>]*>(.*?)</\1>", page, re.I | re.S):
+        out.append((m.group(1).lower(), plain(m.group(2))))
+    for m in re.finditer(r"<(\w+)\b[^>]*class=[\"'][^\"']*caption[^\"']*[\"'][^>]*>(.*?)</\1>", page, re.I | re.S):
+        out.append(("a caption", plain(m.group(2))))
+    for m in re.finditer(r"<(img|picture|svg|video)\b[^>]*>", page, re.I):
+        for attr in re.finditer(r"\b(alt|title|aria-label)=[\"']([^\"']*)[\"']", m.group(0), re.I):
+            out.append((f"{m.group(1).lower()} {attr.group(1)}", html.unescape(attr.group(2))))
+    return out
+
+
+def write_credits(proj):
+    items = [e for e in proj.load(proj.ledger, {"items": []})["items"] if e.get("status") != "rejected"]
+    lines = ["# Photo credits and licences", "", "Generated by opendesigner-illustrate from ledger.json. One row per photo kept in this project.", "",
+             "| Photo | Source | Author | Licence | Credit to show | Limits |", "|---|---|---|---|---|---|"]
+    for e in [x for x in items if not x.get("ai_generated")]:
+        lines.append(f"| {e['name']} | [{e.get('source')}]({e.get('page') or ''}) | {e.get('author') or ''} | "
+                     f"[{e.get('licence')}]({e.get('licence_url') or ''}) | {e.get('attribution') or 'not required'} | {e.get('restrictions') or ''} |")
+    ai = [x for x in items if x.get("ai_generated")]
+    if ai:
+        lines += ["", "## Made with AI", "", "For the team, not for the page: no caption says so. Keep the file's provenance data.", ""]
+        lines += [f"- {e['name']}: {e.get('tool')}" for e in ai]
+    proj.dir.mkdir(parents=True, exist_ok=True)
+    (proj.dir / "CREDITS.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return proj.dir / "CREDITS.md"
+
+
+def photo_args(sub):
+    p = sub.add_parser("photos", help="licensed stock photos: search, fetch, add, review, check")
+    ps = p.add_subparsers(dest="photo_cmd", required=True)
+    q = ps.add_parser("search", help="search Openverse, Wikimedia Commons and Pexels (with a key) for photos")
+    q.add_argument("subject"); q.add_argument("--grade", default="natural", choices=PHOTO_GRADES)
+    q.add_argument("--source", help=f"comma list of {', '.join(PHOTO_SOURCES)} (default all)")
+    q.add_argument("--orientation", choices=list(ORIENT)); q.add_argument("--limit", type=int, default=20)
+    q.add_argument("--top", type=int, default=12); q.add_argument("--avoid", help="names a photo must never show, comma list")
+    q.add_argument("--offline", action="store_true", help="print the requests as curl lines instead of fetching them")
+    q.add_argument("--reuse", action="store_true", help="read responses already saved (after fetching them yourself)")
+    q.set_defaults(fn=cmd_photo_search)
+    q = ps.add_parser("fetch"); q.add_argument("ids", nargs="+"); q.add_argument("--name")
+    q.add_argument("--force", action="store_true", help="fetch a candidate the word screen rejected (never one blocked by licence)")
+    q.add_argument("--offline", action="store_true"); q.set_defaults(fn=cmd_photo_fetch)
+    q = ps.add_parser("add", help="a photo the person downloaded (Unsplash, Pexels), or an AI image (--ai --tool)")
+    q.add_argument("file"); q.add_argument("--source", default="other"); q.add_argument("--url"); q.add_argument("--title")
+    q.add_argument("--author"); q.add_argument("--licence"); q.add_argument("--name")
+    q.add_argument("--ai", action="store_true"); q.add_argument("--tool"); q.set_defaults(fn=cmd_photo_add)
+    q = ps.add_parser("review", help="record what you saw: brand names or logos, the grade, people, alt text")
+    q.add_argument("name"); q.add_argument("--brands", choices=["none", "found"]); q.add_argument("--grade", choices=PHOTO_GRADES)
+    q.add_argument("--people", choices=["yes", "no"]); q.add_argument("--alt"); q.add_argument("--caption"); q.add_argument("--note")
+    q.set_defaults(fn=cmd_photo_review)
+    q = ps.add_parser("check", help="every kept photo is licensed, looked at and uncaptioned; --page scans a built page")
+    q.add_argument("names", nargs="*"); q.add_argument("--page", action="append"); q.set_defaults(fn=cmd_photo_check)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--dir", default="opendesigner/illustrations", help="working folder in the person's project")
+    ap.add_argument("--dir", default=None, help="working folder in the person's project (default opendesigner/illustrations; "
+                    "photos: opendesigner/research/photos)")
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("sources", help="list sources; filter them, and print search links for a query")
     p.add_argument("--kind", choices=list(KINDS)); p.add_argument("--format", help="svg, png, lottie, glb, figma ...")
@@ -1622,9 +2101,11 @@ def main(argv=None):
     p.add_argument("--label", help="meaningful art: its accessible name; omit for decorative art (aria-hidden)")
     p.add_argument("--slot"); p.set_defaults(fn=cmd_apply)
     sub.add_parser("ledger").set_defaults(fn=cmd_ledger)
+    photo_args(sub)
     a = ap.parse_args(argv)
-    a.fn(a)
+    a.dir = a.dir or (PHOTO_DIR if a.cmd == "photos" else "opendesigner/illustrations")
+    return a.fn(a)
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

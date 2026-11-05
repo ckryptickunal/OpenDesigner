@@ -73,6 +73,37 @@ class TestHtml(unittest.TestCase):
         self.assertIn("font sizes in px: [11, 14]", r.stdout)          # rem read; 22px line height and unused 9px class not
         self.assertIn("text under 12px for web: [11]", r.stdout)       # web: 11 px warns, it does not fail
 
+    def test_tracking_capitals_and_size(self):                       # M51: owner review of a private B2B landing page, 2026-11-05
+        page = """<!doctype html><html><head><style>
+        .eyebrow { text-transform: uppercase; letter-spacing: -0.03em; font-size: 12px; }
+        .lede { font-size: 14px; letter-spacing: -0.01em; }
+        h1 { font-size: 40px; letter-spacing: 0.8px; }
+        </style></head><body><p class="eyebrow">x</p><p class="lede">y</p><h1>z</h1></body></html>"""
+        r = run(page)
+        self.assertEqual(r.returncode, 1, r.stdout)
+        self.assertIn("capitals tracked tight: .eyebrow at -0.03em", r.stdout)
+        self.assertIn("tracking gets looser as type gets bigger: h1 is 40px at 0.02em", r.stdout)   # 0.8 px / 40 px
+        ok = page.replace("-0.03em", "0.06em").replace("0.8px", "-0.8px")
+        self.assertEqual(run(ok).returncode, 0, run(ok).stdout)
+
+    def test_fluid_sizes_are_measured_at_each_width(self):
+        page = """<!doctype html><html><head><style>h1 { font-size: calc(1.5rem + 2.4vw); } h2 { font-size: 2.2vw; } p { font-size: 16px; }</style></head>
+        <body><h1>a</h1><h2>b</h2><p>c</p></body></html>"""
+        r = run(page)
+        self.assertIn("2 fluid font size(s)", r.stdout)
+        self.assertIn("390 px: [33.4, 8.6]", r.stdout)
+        self.assertIn("fluid text under 11px at 320 px wide: [7]", r.stdout)     # 2.2vw at 320 px
+        self.assertNotIn("depend on the parent or the window", r.stdout)
+
+    def test_css_px_evaluates_like_a_browser(self):
+        px = lambda v, w=390: preflight.css_px(v, 16, w)
+        self.assertEqual(px("clamp(2rem, 1.5rem + 2vw, 4rem)", 1440), 52.8)
+        self.assertEqual(px("min(5vw, 48px)", 1920), 48)
+        self.assertEqual(px("calc(100vw / 20)", 320), 16)
+        self.assertEqual(px("calc(1rem -0.5vw)", 400), 14)
+        self.assertIsNone(px("1.2em"))
+        self.assertIsNone(px("calc(50% + 1rem)"))
+
     def test_media_floors(self):
         self.assertNotIn("under", run(TOKEN_PAGE, "--medium", "app", files={"tokens.css": TOKENS}).stdout)
         r = run(TOKEN_PAGE, "--medium", "watch", files={"tokens.css": TOKENS})

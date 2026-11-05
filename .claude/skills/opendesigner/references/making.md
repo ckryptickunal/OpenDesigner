@@ -17,17 +17,18 @@ Sources: `research/L22-making-and-review.md` (one marketing-site build; referenc
 - **Audit a built product before you redesign it.** When the product already exists, its problems are the brief. Read the front-end code, then review the rendered pages (opendesigner-review). Show the findings marked on the page, each with what fixing it gives the person (`review.py compare` draws the before, the marked-up audit and the after). Then propose the smallest change that fixes the most, build it on one page, and show it before you rebuild the rest. In a demo trial (2026-10-21), a run that skipped the audit and rebuilt all three pages at once came back clean and correct, and the owner still called it "an admin template".
 - **Agree the pace, once.** Some people approve a plan step by step. Others decide by looking at a built draft. Ask which they want. A draft first is fine. Sections 2 to 10 are what keep a draft honest (DC-L22-01).
 - **Build the first draft on the tokens.** A draft may come before the deeper questions, never before the token build. Run the sketch (`zoom.md`, level 0), or read their existing product with opendesigner-extract. Then make the draft read its values from that build's export, and never give it a style file of its own. In the source project a sketch build existed from the first day and the draft was never bound to it. Values lived in three separate style kits, and one page ended with seven type families.
+- **Keep the tokens in charge.** When `engine.py review` says tokens are not in charge, or the system is behind the code, fix that before the next draft (owner, 2026-11-05).
 - **Fix the page's materials before the second section is built** (section 4).
 
 ## 2. One round
 Follow this order every time the person asks for something on a built page.
-1. **Say it back in one line.** Read `opendesigner/decisions.md` before you ask anything: it may already be decided.
+1. **Say it back in one line.** Read `opendesigner/RULES.md`, `decisions.md` and the Answered table in `PROTOCOL.md` before you ask anything: it may already be decided.
 2. **Find every place it applies** (DC-L22-08). A note on one card, one screen or one section is a note on every one of the same kind, and on nothing of another kind. Say in one line what you will apply it to, and list the places before you edit. When the kind can be counted (bare color markers, a heading style, a corner), count it before and after. A change to something that several pages show goes to all of them in the same round. Before you call the round done, name any page that still shows the old version.
 3. **Change only what was asked.** Add no element, and restyle no approved work, as a side effect. An option or a dial never changes what the person has settled: their fonts, their palette, their corners. Open a dial only for something they opened up (owner, 2026-11-03: "I never asked you to change the font. All the font should be same"). A restyle is not a resize. A new color, typeface or corner does not change a size, a gap or a structure. Compare sizes with the version before.
 4. **Take every value from the system.** Colors, sizes, corners, shadows and durations come from the tokens. If the round needs a value the system lacks, add it as a decision (opendesigner-extend, section 4) or list it as debt (section 9).
-5. **Check it as rendered** (section 5) before you show it.
-6. **Show it next to what was there before** (section 3).
-7. **Record the decision in their words.** Then remove the options it settled.
+5. **Check it as rendered** (section 5), and run the checks: `engine.py review`, opendesigner-review on each changed page, opendesigner-preflight before any share.
+6. **Show it without being asked:** screenshots at desktop and phone (or an artifact), next to what was there before (section 3), with each check and its result. Never only a local URL.
+7. **Record the decision in their words,** and the note: `engine.py feedback "<the rule>" --kind note`. Then remove the options it settled.
 
 **Ask, or act?** Act on what follows from the request, and report it. Ask only at a real fork, with your pick and a visible alternative. Keep waiting decisions in one numbered list under Open items in `opendesigner/decisions.md`, and ask one per message, the one that blocks the most (`rules.md` section 1): a question that is only logged never closes.
 
@@ -139,7 +140,7 @@ A drawing beside a number is a claim (DC-L22-07).
 
 ## 9. Debt, and when it is done
 - **Keep a debt list as you go:** every value that did not come from the system, every option still switched on, every check you could not run.
-- **A page is done when the list is empty or the person has accepted what is left.** Run `engine.py review`, then ask the eight cohesion questions (section 4) one more time.
+- **A page is done when the list is empty or the person has accepted what is left,** and the checks ran and were shown (section 2). Run `engine.py review`, then ask the eight cohesion questions (section 4) one more time.
 - **Record what any product would need for OpenDesigner** with `engine.py feedback` (`improve.md`). Write it about the method, never about the person's product. Nothing is posted without the person's OK.
 
 ## 10. Mistakes builders make, and what a repeated note means
@@ -153,7 +154,7 @@ These are mistakes an AI builder made in the source project (DC-L22-09). Most dr
 | Fixing everything that looks alike | A note about one kind of thing changes other kinds (2026-11-03: black-and-white photos asked for as card backgrounds were also put on the hero) | The thing named and its true siblings, and nothing else |
 | Taking a word to its extreme | "Lighter" becomes all white. "Sharp" becomes square. "Faster" becomes rushed. "Obvious" becomes a banner | A preference is a direction, not an absolute. Move one step that way and show it |
 | Inventing first, or following a reference loosely | You design options from your own idea of the problem, or draw something loosely "after" a reference, even after being told to study shipped work | Study shipped examples first, as a board the person picks from (section 1). Only when the person asks for their own version of one named section, rebuild its structure closely (section 4); a reference named for direction gives principles, never its page. A method the person names holds for the next section too |
-| Forgetting what was already said | A rule from an early round is broken on a page built later | Keep standing rules in one list, as decisions or project standards, and read it before each new piece |
+| Forgetting what was already said | A rule from an early round is broken on a page built later | Standing rules live in `opendesigner/RULES.md` and the project standards. Read them before each new piece |
 | Adding what nobody asked for | A new button, a label, a disclaimer, a tint | Add nothing as a side effect. Offer it in one line instead |
 | Staggering what should line up | Cards in a row start at different heights to look dynamic, or stacked cards sit off the centre line at some widths | Sibling cards share a top edge, a height and header rows; stacked rows share one centre line. Measure at every width (preflight 35) |
 | Three calls to action of equal weight | Two buttons and a link side by side in the hero | One primary button for the one action the view exists for, one quiet text link, the rest in the header (preflight 36) |
@@ -178,8 +179,8 @@ These are mistakes an AI builder made in the source project (DC-L22-09). Most dr
 2. Name what you got wrong the first time: too narrow, too wide, too literal, or the wrong thing.
 3. Write the rule behind the note in one line, and say it back.
 4. Apply it to every instance, counted (section 2).
-5. Record it as a decision or a project standard, so work built later keeps it.
-6. On a third time, write a small check that finds every case (inside `opendesigner/`, with no new dependency), and run it before every showing.
+5. Record it: `engine.py feedback "<the rule>" --kind note`. Said twice, it is a rule in `RULES.md`. If it fixes a value, also `engine.py standard add`.
+6. On a third time, write a small check that finds every case (inside `opendesigner/`, with no new dependency), and run it before every showing. Ask once whether to draft a GitHub issue; send nothing without a yes (`improve.md`).
 
 **Read each reply for what it says about your reading, not only for the fix.** "I only wanted that one changed" means your changes reach too far. The same fix asked for on five cards means they reach too little. "You just did more of the same" means "more" was a request for new ideas. Change how you read the next note, and say what you changed.
 

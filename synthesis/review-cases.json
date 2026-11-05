@@ -157,14 +157,15 @@
       "title": "Fixed bars repeated, missing or covering things",
       "trap": "A sticky header shows once at the top of a stitched screenshot, or is missing. On a short screen it covers a third of the page or hides the control that has focus.",
       "why_missed": "Full-page capture draws fixed elements once, at the top. The agent never scrolls with the bar in place.",
-      "catch": "Read the fixed list from the probe: its height and the share of the viewport it covers. Tab through the page and check that the focused control is never under the bar (see IN-01). Use scroll-padding-top on the scroller (WCAG technique C43) and scroll-margin-top on anchor targets [inferred] so focus and anchors land below it. At level AA the focused control must not be entirely hidden; keeping all of it visible is the stricter AAA criterion 2.4.12.",
+      "catch": "Read the fixed list from the probe: its height and the share of the viewport it covers. Tab through the page and check that the focused control is never under the bar (see IN-01). Use scroll-padding-top on the scroller (WCAG technique C43) and scroll-margin-top on anchor targets [inferred] so focus and anchors land below it. At level AA the focused control must not be entirely hidden; keeping all of it visible is the stricter AAA criterion 2.4.12. __od.bars() scrolls the page and lists text a fixed or floating bar covers where it cannot scroll away: inside a pinned block, under a top bar at the top of the page, or under a bottom bar at the end. capture.py runs it and review.py reports it as an error. A pinned scene that fills the screen is not counted as a bar.",
       "evidence": "measured",
       "severity": "warn",
       "when": "always",
       "standard": "WCAG 2.4.11 (AA), 2.4.12 (AAA)",
       "sources": [
         "S-R5-091",
-        "S-R5-045"
+        "S-R5-045",
+        "S-R5-104"
       ]
     },
     {
@@ -208,14 +209,15 @@
       "title": "Captured in the middle of a movement",
       "trap": "The screenshot shows an element half faded, half moved or half drawn. The agent judges spacing, color or opacity from a frame that is not the resting state.",
       "why_missed": "The page is photographed the instant it loads, while entry animations are still running. Playwright's animations: disabled option jumps finite animations to their end, which hides the middle instead.",
-      "catch": "Wait for motion to finish (motion.running is 0 in __od.motion()) before judging the resting layout. To judge the movement itself, pause and seek: __od.seek(0), 0.25, 0.5, 0.75, 1 gives the same frame every time.",
+      "catch": "Wait for motion to finish (motion.running is 0 in __od.motion()) before judging the resting layout. To judge the movement itself, pause and seek: __od.seek(0), 0.25, 0.5, 0.75, 1 gives the same frame every time. Wait with __od.settle() before each probe and screenshot: it returns once no finite animation or transition is running (getAnimations()). capture.py waits like this on every load and scroll step, and a probe taken with animations still running gets a warning. A background browser pane is the usual cause: it pauses frames and timers.",
       "evidence": "operated",
       "severity": "warn",
       "when": "motion",
       "sources": [
         "S-R5-067",
         "S-R5-059",
-        "S-R5-091"
+        "S-R5-091",
+        "S-R5-104"
       ]
     },
     {
@@ -542,14 +544,15 @@
       "title": "Type scale drift",
       "trap": "Twelve different font sizes are on the page. Weights are 500 in one place and 600 in another. A button shows the browser's 13.33 px instead of the text style.",
       "why_missed": "Sizes that differ by one pixel look identical.",
-      "catch": "Read type.sizes, type.weights and type.lineHeights. Off-scale sizes are listed with a count and the nearest scale step. A browser default (13.33 px on buttons, 18.72 px on an h3, measured in Chrome 154) means the element does not inherit the type style. With or without a system, review.py also counts against practice: more than two text typefaces (one interface family plus a mono, DC-L02-03), more than three weights or two weights one step apart (DC-L19-24), each a warning.",
+      "catch": "Read type.sizes, type.weights and type.lineHeights. Off-scale sizes are listed with a count and the nearest scale step. A browser default (13.33 px on buttons, 18.72 px on an h3, measured in Chrome 154) means the element does not inherit the type style. With or without a system, review.py also counts against practice: more than two text typefaces (one interface family plus a mono, DC-L02-03), more than three weights or two weights one step apart (DC-L19-24), each a warning. It also counts the sizes in use against about eight (preflight 7), and lists sizes that fall between whole pixels, which a fluid clamp() or vw size gives at most widths. preflight.py html measures clamp(), calc() and vw sizes at 320 to 1920 px instead of skipping them.",
       "evidence": "measured",
       "severity": "warn",
       "when": "always",
       "standard": "tokens",
       "sources": [
         "S-R5-030",
-        "S-R5-029"
+        "S-R5-029",
+        "S-R5-104"
       ]
     },
     {
@@ -577,7 +580,7 @@
       "title": "Contrast judged by eye",
       "trap": "Grey text on white looks readable to the agent. It measures 2.3 to 1. Or it passes in light mode and fails in dark, or sits on a gradient or photo.",
       "why_missed": "Contrast is a ratio, not an impression. Vision models are weak at color tasks (ColorBench) and cannot read a contrast ratio from a picture; light grey text is exactly what looks 'clean'.",
-      "catch": "Compute it: the probe walks up to the real background, mixes semi-transparent layers, and reports every failing pair with its ratio (4.5 to 1 for normal text, 3 to 1 for large; no rounding up, 4.49 fails). Where the background is an image or gradient, it says so: sample pixels instead. Non-text parts (borders that are the only cue, focus rings) need 3 to 1.",
+      "catch": "Compute it: the probe walks up to the real background, mixes semi-transparent layers, and reports every failing pair with its ratio (4.5 to 1 for normal text, 3 to 1 for large; no rounding up, 4.49 fails). Where the background is an image or gradient, it says so: sample pixels instead. Non-text parts (borders that are the only cue, focus rings) need 3 to 1. capture.py's text-pixels pass reads the real pixels behind each line with the text hidden, and takes the 5% of them closest to the text colour. A pass there overrules the probe's guessed colour backdrop; a failure on a photo or gradient is an error.",
       "evidence": "measured",
       "severity": "error",
       "when": "always",
@@ -586,7 +589,8 @@
         "S-R5-006",
         "S-R5-043",
         "S-R5-029",
-        "S-R5-096"
+        "S-R5-096",
+        "S-R5-104"
       ]
     },
     {
@@ -595,13 +599,14 @@
       "title": "Alignment and grid",
       "trap": "Two things that should line up are off by 2 px. A label is not centered on its icon. A card edge does not match the heading above it.",
       "why_missed": "A 2 px offset is easy to miss once a screenshot is scaled down (about 1.5 px after a 1920 px screenshot is shrunk to 1456 px on standard-tier models) [inferred].",
-      "catch": "Pick the pair you suspect and call __od.measure(a, b): it gives the gap, the overlap and the left, right and center offsets. Repeat for the pairs that matter most: heading and content, icon and label, columns. At every width where a row of cards wraps into a column, compare each row's centre and outer edges with the rows above it: stacked groups should share one centre line. OpenDesigner's own site shipped a pair of cards 30 px off that line between 600 and 900 px, because it was only looked at on a desktop; the owner caught it on 2026-10-15.",
+      "catch": "Pick the pair you suspect and call __od.measure(a, b): it gives the gap, the overlap and the left, right and center offsets. Repeat for the pairs that matter most: heading and content, icon and label, columns. At every width where a row of cards wraps into a column, compare each row's centre and outer edges with the rows above it: stacked groups should share one centre line. OpenDesigner's own site shipped a pair of cards 30 px off that line between 600 and 900 px, because it was only looked at on a desktop; the owner caught it on 2026-10-15. The probe does two of these on its own (layout.mixed and layout.offCentre). Under each h1 to h3 it sorts the heading and the lede, list and button rows in its column into left, centred or right by where their lines sit, and warns when they differ; body copy over three lines may stay left. It also measures every centred heading and line against its section's centre and warns past 2 px (preflight 35).",
       "evidence": "measured",
-      "severity": "info",
+      "severity": "warn",
       "when": "always",
       "sources": [
         "S-R5-030",
-        "S-R5-031"
+        "S-R5-031",
+        "S-R5-104"
       ],
       "inferred": true
     },
@@ -1177,6 +1182,107 @@
       "sources": [
         "S-R5-103"
       ]
+    },
+    {
+      "id": "MS-17",
+      "group": "measure",
+      "title": "Tracking and kerning that break words",
+      "trap": "Capitals are tracked tighter than the font's default, so the letters touch. A 48 px heading is tracked looser than the 14 px text under it. A reveal wraps each letter in its own span, the font's kerning pairs (AV, To) are lost, and the letters jump when the plain text comes back.",
+      "why_missed": "Half a pixel per pair is invisible in a scaled-down screenshot, and the jump lasts one frame at the end of an animation. Asked to check the kerning, an agent looks and answers without measuring.",
+      "catch": "The probe records tracking in em at every size (type.tracking) and every capital tracked below zero (type.capsTight). review.py reports capitals with negative tracking as an error, and warns when a bigger size is tracked looser than a smaller one or when there are more than four letter-spacing values. __od.kern() finds text split into one span per letter and measures each letter against the same text unsplit, drawn out of sight with the same font and width. capture.py also installs __od.watchKern() before the page loads, which logs the jump when a reveal puts plain text back; more than 0.5 px is reported. preflight.py html reads the same tracking from the CSS.",
+      "evidence": "measured",
+      "severity": "warn",
+      "when": "always",
+      "standard": "preflight 5",
+      "sources": [
+        "S-R5-104"
+      ]
+    },
+    {
+      "id": "MS-18",
+      "group": "measure",
+      "title": "Headings that run long",
+      "trap": "The hero title fits on two lines at 1440 px and runs to four at 390 px.",
+      "why_missed": "Headings are written and checked on a desktop. A size that shrinks with the window keeps the words, not the line count.",
+      "catch": "The probe counts the lines of every h1 to h3 at the width it runs at (type.headings), and review.py warns past two lines, once per width. Run it at every planned width. Shorten the words, or step the size down at that width.",
+      "evidence": "measured",
+      "severity": "warn",
+      "when": "always",
+      "sources": [
+        "S-R5-104"
+      ]
+    },
+    {
+      "id": "MS-19",
+      "group": "measure",
+      "title": "Too many button styles, or labels too small",
+      "trap": "A filled 8 px button, a black pill and an outlined square button with an 11 px uppercase label share one screen, and the primary label is 13 px.",
+      "why_missed": "Each button was styled where it was used. The mismatch shows only when every button is listed side by side.",
+      "catch": "The probe lists every button-shaped action with a word on it (buttons.styles): filled or outlined, corner radius or pill, height, label size and case. review.py warns at more than three styles or more than one corner shape or case (DC-L08-05, DC-L08-07), at a primary label under 15 px (the owner's floor, 2026-11-05), and at capitals under 14 px on a button.",
+      "evidence": "measured",
+      "severity": "warn",
+      "when": "always",
+      "standard": "DC-L08-07",
+      "sources": [
+        "S-R5-104"
+      ]
+    },
+    {
+      "id": "MS-20",
+      "group": "measure",
+      "title": "Art drawn through text",
+      "trap": "Line art, a chart or the edge of a picture runs through a line of text. The owner: \"I see overlapping text with line art.\"",
+      "why_missed": "Overlap is worked out from boxes, and an svg's box covers the whole hero whether or not a line crosses the text. In a shrunken screenshot a 1 px line disappears.",
+      "catch": "Judge it by pixels. capture.py's text-pixels pass hides every glyph (__od.hideText), screenshots each scroll step and reads the pixels inside each line box (__od.textLines). Sharp edges inside a box on a plain backdrop mean something is drawn through the text: review.py warns at 0.2% of the box or more. A photo laid under text on purpose is left to the contrast check (MS-04).",
+      "evidence": "measured",
+      "severity": "warn",
+      "when": "media",
+      "sources": [
+        "S-R5-104"
+      ]
+    },
+    {
+      "id": "ST-10",
+      "group": "states",
+      "title": "A box changes height between states",
+      "trap": "Switching a tab, a toggle or a variant makes a card taller, and everything under it jumps.",
+      "why_missed": "Each state is checked on its own, and each looks right. The jump only shows when you switch.",
+      "catch": "__od.toggles() lists tab lists, segmented controls, radio groups and switches, with the boxes each could resize. capture.py clicks every option (never links, submit buttons or menus), waits for motion to end (__od.look), records the heights and puts the group back. review.py warns when a watched box changes by more than 1 px. Fix: every state in one grid cell, so the box is as tall as its tallest state.",
+      "evidence": "operated",
+      "severity": "warn",
+      "when": "always",
+      "sources": [
+        "S-R5-104"
+      ]
+    },
+    {
+      "id": "ST-11",
+      "group": "states",
+      "title": "A control that changes nothing",
+      "trap": "An Options row, a switcher or a toggle sets a class that nothing styles. It looks clickable and changes nothing.",
+      "why_missed": "Clicking it moves its own pressed state, which reads as success.",
+      "catch": "capture.py's toggles pass compares the section before and after each option: the layout, colour, text and svg shapes of every element except the control. When nothing changed, it screenshots the section with the control masked and compares the pixels. review.py warns when no option changed anything.",
+      "evidence": "operated",
+      "severity": "warn",
+      "when": "always",
+      "sources": [
+        "S-R5-104"
+      ]
+    },
+    {
+      "id": "EN-08",
+      "group": "environment",
+      "title": "Fonts downloaded but not used",
+      "trap": "Five font families download and the page draws two. Every visitor pays for the other three, and they tempt the next edit to use them.",
+      "why_missed": "A font that loads looks like a font that works. Nobody compares what loaded with what is drawn.",
+      "catch": "The probe compares the families document.fonts has loaded with every family named in a visible text element's font stack (fonts.unused), and review.py warns for each loaded family no text names. Text drawn only by ::before or ::after is not read, so check an icon font by hand. It also notes a public page with no share image, favicon or description, or a noindex (a note: fine on a draft).",
+      "evidence": "measured",
+      "severity": "warn",
+      "when": "always",
+      "standard": "preflight 10",
+      "sources": [
+        "S-R5-104"
+      ]
     }
   ],
   "sources": {
@@ -1749,6 +1855,12 @@
       "url": "https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md",
       "status": "opened",
       "note": "row 10: three calls to action in one row were \"very bad UX\"; became preflight check 36 (mistake M37)"
+    },
+    "S-R5-104": {
+      "title": "OpenDesigner owner review of a private B2B landing page (2026-11-03 to 2026-11-05)",
+      "url": "https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md",
+      "status": "opened",
+      "note": "2026-11-03 rows 22 and 23, 2026-11-04 rows 27 to 40, 2026-11-05 rows 4 and 6: the project had to hand-write eleven check scripts for what the review missed"
     }
   }
 }

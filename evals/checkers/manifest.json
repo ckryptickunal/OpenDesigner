@@ -548,31 +548,32 @@
         {
           "id": "P-kern-off",
           "what": "font-kerning: none on the wordmark",
-          "check": "M51",
+          "check": "M58",
           "text": "kerning switched off"
         },
         {
           "id": "P-kern-px",
           "what": "a title tracked in px",
-          "check": "M51",
+          "check": "M58",
           "text": "letter-spacing in px"
         },
         {
           "id": "P-kern-pct",
           "what": "a lede tracked in CSS %",
-          "check": "M51",
+          "check": "M58",
           "text": "letter-spacing in %"
         },
         {
           "id": "P-kern-caps",
           "what": "an uppercase eyebrow tracked below 0",
-          "check": "M51",
-          "text": "uppercase text with no positive tracking"
+          "check": "M5",
+          "text": "capitals tracked tight",
+          "level": "error"
         },
         {
           "id": "P-kern-split",
           "what": "a headline split into one span per letter with no kerning restored",
-          "check": "M51",
+          "check": "M58",
           "text": "split into one element per letter"
         }
       ]
@@ -584,7 +585,7 @@
         {
           "id": "P-white-black",
           "what": "pure white cards and pure black text on one page",
-          "check": "M52",
+          "check": "M59",
           "text": "pure white"
         }
       ]
@@ -931,6 +932,211 @@
       "page": "names/piece-clean.html",
       "checker": "names",
       "registry": "names/NAMES.md",
+      "expect": [],
+      "clean": true
+    },
+    {
+      "page": "preflight/tracking-caps.html",
+      "checker": "preflight",
+      "expect": [
+        {
+          "id": "P-caps-tight",
+          "what": "an uppercase eyebrow tracked at -0.03em",
+          "check": "M5",
+          "text": "capitals tracked tight",
+          "level": "error",
+          "owner_note": "owner review of a private B2B landing page, 2026-11-03 to 2026-11-05"
+        },
+        {
+          "id": "P-track-back",
+          "what": "a 40 px title tracked looser than the 14 px lede",
+          "check": "M5",
+          "text": "looser as type gets bigger",
+          "owner_note": "owner review of a private B2B landing page, 2026-11-03 to 2026-11-05"
+        },
+        {
+          "id": "P-track-px",
+          "what": "the title's tracking written in px (0.8px), not em",
+          "check": "M58",
+          "text": "letter-spacing in px"
+        }
+      ]
+    },
+    {
+      "page": "preflight/fluid.html",
+      "checker": "preflight",
+      "expect": [
+        {
+          "id": "P-fluid-small",
+          "what": "a 2.2vw caption is 7 px at 320 px wide",
+          "check": "M8",
+          "text": "fluid text under 11px at 320 px wide: \\[7\\]",
+          "level": "error"
+        }
+      ]
+    },
+    {
+      "page": "review/round-type.html",
+      "checker": "review",
+      "viewports": [
+        390,
+        1280
+      ],
+      "expect": [
+        {
+          "id": "R-caps-tight",
+          "what": "an uppercase eyebrow tracked at -0.04em",
+          "check": "MS-17",
+          "elements": [
+            "p#eyebrow"
+          ],
+          "text": "^Capitals with negative tracking"
+        },
+        {
+          "id": "R-track-back",
+          "what": "a 44 px title tracked looser than 15 px text",
+          "check": "MS-17",
+          "elements": [
+            "h1#hero-title"
+          ],
+          "text": "looser as text gets bigger"
+        },
+        {
+          "id": "R-head-lines",
+          "what": "the hero title runs past two lines at 390 px",
+          "check": "MS-18",
+          "elements": [
+            "h1#hero-title"
+          ]
+        },
+        {
+          "id": "R-mixed-align",
+          "what": "a centred heading over a left-aligned lede and button row",
+          "check": "MS-05",
+          "elements": [
+            "div#plans-head",
+            "p#plans-lede"
+          ],
+          "text": "^Mixed alignment"
+        },
+        {
+          "id": "R-off-centre",
+          "what": "a centred heading 14 px off its section's centre",
+          "check": "MS-05",
+          "elements": [
+            "h2#proof-title"
+          ],
+          "text": "off the centre line"
+        },
+        {
+          "id": "R-button-styles",
+          "what": "three button styles with three corner shapes and mixed case",
+          "check": "MS-19",
+          "elements": [
+            "a#trial",
+            "a#call",
+            "a#guide"
+          ],
+          "text": "corners or case|button styles"
+        },
+        {
+          "id": "R-button-label",
+          "what": "a 13 px primary label and 12 px capitals on a button",
+          "check": "MS-19",
+          "elements": [
+            "a#trial"
+          ],
+          "text": "^Button labels too small"
+        },
+        {
+          "id": "R-two-primary",
+          "what": "two filled buttons side by side in the first screen, in two fills",
+          "check": "MS-16",
+          "elements": [
+            "a#trial",
+            "a#call"
+          ]
+        },
+        {
+          "id": "R-size-count",
+          "what": "12 font sizes",
+          "check": "MS-02",
+          "text": "^12 font sizes"
+        },
+        {
+          "id": "R-size-frac",
+          "what": "14.4 px and 18.72 px sizes",
+          "check": "MS-02",
+          "text": "between whole pixels"
+        },
+        {
+          "id": "R-font-unused",
+          "what": "a face loaded by script that no text uses",
+          "check": "EN-08",
+          "text": "Fixture Display"
+        }
+      ]
+    },
+    {
+      "page": "review/round-pixels.html",
+      "checker": "review",
+      "viewports": [
+        390,
+        1280
+      ],
+      "expect": [
+        {
+          "id": "R-art-text",
+          "what": "line art drawn through a paragraph",
+          "check": "MS-20",
+          "elements": [
+            "p#route-copy"
+          ]
+        },
+        {
+          "id": "R-bar-pinned",
+          "what": "a floating bar over a pinned scene's caption",
+          "check": "CV-08",
+          "elements": [
+            "p#scene-caption"
+          ],
+          "text": "cannot scroll out"
+        },
+        {
+          "id": "R-kern",
+          "what": "a heading split into inline-block letters loses its kerning",
+          "check": "MS-17",
+          "elements": [
+            "h2#split"
+          ]
+        },
+        {
+          "id": "R-height",
+          "what": "tabs whose panel box changes height",
+          "check": "ST-10",
+          "elements": [
+            "div#panes"
+          ]
+        },
+        {
+          "id": "R-dead-control",
+          "what": "a billing switch that changes nothing else",
+          "check": "ST-11",
+          "elements": [
+            "button#bill-month"
+          ]
+        }
+      ]
+    },
+    {
+      "page": "review/round-clean.html",
+      "checker": "review",
+      "viewports": [
+        320,
+        390,
+        768,
+        1280
+      ],
       "expect": [],
       "clean": true
     }

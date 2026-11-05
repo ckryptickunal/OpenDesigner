@@ -4,15 +4,29 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 <!-- Every push that changes what people get adds one entry per change: `- **Short title** (YYYY-MM-DD). One to three plain sentences.` The date is the day it lands on main, and the website's changelog uses it. Keep each entry under 400 characters; put the full story in the commit or pull request. `python3 tools/changelog_check.py` checks the format. -->
 
-## [Unreleased]: planned as 0.1.0
-
-The first public version: the research base, the synthesis that turns it into an interview, and the first skills, engine and host packaging.
+## [Unreleased]
 
 ### Added
 
-- **Two colour rules for every project** (2026-11-02). New house standards: colours with a known meaning keep it (approved green, rejected red, pending amber, info blue, and well-known apps in their own colour), and a product never uses pure white and pure black together. `engine.py validate`, `review` and `preflight.py html` enforce the second; three library parts now draw their codes in near-black.
-- **Kerning and letter spacing, checked in every project** (2026-11-02). A new guide, `preflight/references/kerning.md`, lists the type-spacing mistakes that keep coming back and how to avoid each. `preflight.py html` now flags kerning switched off, tracking in px or %, untracked capitals and words split into letters without their kerning (check 50).
-- **Rules for references, samples and content** (2026-11-02). `making.md` now asks for a board of shipped samples to pick from before a new direction, live measurement instead of thumbnails, principles from a reference instead of its page, a content list that "less text" never cuts, and one system for every figure. Moving calls to action are banned.
+- **Two colour rules for every project** (2026-11-05). New house standards: colours with a known meaning keep it (approved green, rejected red, pending amber, info blue, and well-known apps in their own colour), and a product never uses pure white and pure black together. `engine.py validate`, `review` and `preflight.py html` enforce the second; three library parts now draw their codes in near-black.
+- **Kerning and letter spacing, checked in every project** (2026-11-05). A new guide, `preflight/references/kerning.md`, lists the type-spacing mistakes that keep coming back and how to avoid each. `preflight.py html` now flags kerning switched off, tracking in px or %, untracked capitals and words split into letters without their kerning (check 57).
+- **Rules for references, samples and content** (2026-11-05). `making.md` now asks for a board of shipped samples to pick from before a new direction, live measurement instead of thumbnails, principles from a reference instead of its page, a content list that "less text" never cuts, and one system for every figure. Moving calls to action are banned.
+
+## [0.2.0]: 2026-11-05
+
+The first tagged release: the research base, the synthesis that turns it into an interview, eight skills, the engine and host packaging. Copies installed before it report 0.1.0; update to get everything below.
+
+### Added
+
+- **A shorter README and home page that claim only what ships** (2026-11-05). Two ways in (fix what you built, build a system), what happens every round, and the status. Supporting paragraphs under the home page headings are gone, and the library count says 82.
+- **The research steps in the main flow** (2026-11-05). `engine.py research market`, `positioning` and `directions` run the competitor table, the positioning and the direction board, and the skill asks for them before any colour. PRODUCT.md gains its own Positioning section. `OD:direction` records a pick. An AI-made photo is named to the person, never captioned on the page.
+- **Landing pages get room and a hero** (2026-11-05). A marketing page now gets spacious spacing, 48 to 56px buttons and its own fluid display scale, 96 to 120px for the hero. Capitals never take negative tracking, text keeps three greys, and the system writes one container, columns, gutters and a reading measure.
+- **A button shape you choose holds** (2026-11-05). Feel words no longer make buttons square or pill; those are choices. A chosen shape is stored as the exact radius and locked, and typed values such as "6px", "400/500" or "major third" are stored as values. Each page's caps (8 sizes, 3 weights, 2 families) are written down for the review to check.
+- **A protocol in every project** (2026-11-05). `init` writes `opendesigner/PROTOCOL.md`: six steps with owner gates, and checks every round, shown as screenshots before and after. `engine.py review` says when code uses no tokens or the system is behind the code. A note said twice becomes a rule in `RULES.md`; landing pages get marketing questions.
+- **Research before colour, then three directions** (2026-11-05). Research now ends with a table of competitors, linked, with their colours, fonts and button shapes, to show before any colour. Then comes a positioning you confirm, and three directions that each change the ground, fonts, photo style, accent and layout, on one board with licensed stock photos checked for brand logos.
+- **A stronger audit, every round** (2026-11-05). The review now measures what an owner kept catching by eye: tight capitals, lost kerning, art drawn through text, bars covering text, mixed alignment, boxes that jump between tabs, controls that do nothing, and too many sizes, buttons and fonts. audit.md lists the checks to run on every draft.
+- **How it works is easier to find** (2026-11-04). The "How OpenDesigner works" page is now linked from the top of the home page, two home page sections, the footer on every page, the top of the docs sidebar, the docs home and the Introduction.
+- **How OpenDesigner works, on one page** (2026-11-02). A new page at opendesigner.dev/tour/ draws the whole system in live HTML: the two ways in, the engine's dials, the files you keep, what protects you, and how a confirmed mistake becomes a check. Every number on it is read from the repository when the site is built.
 - **Reads your repo before asking** (2026-11-02). A new `engine.py detect` reads the product's name, where it runs, a brand colour, the font, dark mode and the project's phase from your files. `init` and `sketch` record each one as assumed, with its source, never over an answer you gave, and the sketch turns each answered question into one line to confirm.
 - **Purpose, goals and market in PRODUCT.md** (2026-11-02). PRODUCT.md gains Purpose and goals, Phase and Market sections, each saying "Not enough information" until your words or the research fill them. The user research gains a market topic: competitors, what they all do, the gap and an analogous product, with sources. Principles are drafted from the goals.
 - **The project's phase sets what comes first** (2026-11-02). A new question, Q-scope-07: an idea, being built, close to launch, or live, read from the repo first. An idea starts with its purpose and an analogous product, close to launch with an audit, copy and preflight, and live with the audit and governance.
@@ -86,7 +100,6 @@ The first public version: the research base, the synthesis that turns it into an
 
 ### Fixed
 
-- **Review no longer flags its own token files** (2026-11-02). `engine.py review` skips files that carry the engine's export header, so a `tokens.css` copied into an app no longer reports its own gaps and widths as hard-coded values.
 - **Counts in the docs match the files again** (2026-11-02). Review case, export format, skill and library counts in the docs, SPEC, AGENTS.md and llms.txt now match the repo.
 - **A calmer site footer** (2026-11-02). The footer went from 8 columns and 42 links to 4 columns and 20 links. Every link fits on one line down to 320 px.
 - **Favicon on dark browser tabs** (2026-10-28). The favicon switches to the dark mark when the browser tab is dark, so its squares stay visible.

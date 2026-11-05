@@ -473,3 +473,12 @@ code .w { white-space: nowrap; }
 @media (max-width: 720px) { .top-nav .nav-lib { order: 3; } }
 @media (max-width: 1024px) { .top-nav .nav-lib-t { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } .top-nav .nav-lib { min-width: 24px; min-height: 24px; justify-content: center; } }
 @media (max-width: 480px) and (min-width: 401px) { .top-nav a:nth-child(2) { display: none; } }
+
+/* the tour (/tour/, "How OpenDesigner works"): one quiet entry at the top of the docs sidebar, on every docs page
+   (owner, 2026-11-03: "there should be many entry points so that this is not missed") */
+.side a.side-tour { display: grid; gap: 2px; margin: 0 -10px 24px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--accent-soft); color: var(--ink); }
+.side a.side-tour:hover { background: var(--accent-soft); border-color: var(--accent); }
+.side-tour .kicker { color: var(--accent-text); }
+.side-tour strong { display: flex; align-items: center; gap: 6px; font-weight: 600; }
+.side-mobile a.side-tour { margin: 0; }
+@supports (corner-shape: superellipse(1.35)) { .side a.side-tour { corner-shape: superellipse(1.35); --corner-k: 1.22; } }
