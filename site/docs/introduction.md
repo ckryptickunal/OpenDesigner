@@ -44,7 +44,7 @@ To see the whole system drawn on one page, open [How OpenDesigner works](/tour/)
 - Your own AI tool and plan. Your chat goes to your AI provider, as with any prompt.
 - Python 3.10 or newer for the engine. In the Claude app, turn code execution on.
 
-## The eight skills
+## The nine skills
 
 A skill is a set of instructions your AI tool loads when a task needs it.
 
@@ -56,6 +56,7 @@ A skill is a set of instructions your AI tool loads when a task needs it.
 - **opendesigner-review** checks a built interface at every screen size and theme, with evidence for each finding.
 - **opendesigner-paint** paints original art in code, in your palette: hero films, loops and stills.
 - **opendesigner-preflight** checks anything visual before you share it, for the small mistakes that make it look cheap.
+- **opendesigner-search** helps your site get found by search engines and AI answers, and proposes page fixes.
 
 ## How early it is
 

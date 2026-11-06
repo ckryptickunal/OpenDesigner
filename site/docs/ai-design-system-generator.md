@@ -4,7 +4,7 @@ seo_title: AI design system generator: what it should and shouldn't do
 description: A good AI design system generator asks, recommends with reasons, checks accessibility and writes it all down. How OpenDesigner does each, and what it isn't.
 section: Guides
 order: 23
-updated: 2026-11-05
+updated: 2026-11-07
 ---
 
 A useful AI design system generator leaves you with rules you understand and files your code can use, not only a nice palette. A design system is the rules for how your app looks: colors, text sizes, spacing, corners and buttons.
@@ -44,7 +44,7 @@ OpenDesigner works one step earlier. It asks who the app is for, where it runs a
 
 ## Today, and not yet
 
-Today: eight skills, the engine, every export, and an overview page of your whole system.
+Today: nine skills, the engine, every export, and an overview page of your whole system.
 
 Not yet:
 
