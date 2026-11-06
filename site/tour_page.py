@@ -166,7 +166,7 @@ def hero(b, f):
 <figcaption>Drawn in HTML. Photo: <a href="https://unsplash.com/photos/{page_id}">{esc(author)}</a> on Unsplash.</figcaption>
 </figure>
 <div class="tr-stats">{stat_html}</div>
-<p class="h-fine">Counted from the repository's own files when this page was built: the question bank, house standards v{esc(str(f["standards_version"]))}, the preflight checklist, the review cases and the component library. {f["planned"]} more questions are planned and skipped until they are built.</p>
+<p class="h-fine">Counted from the repository when this page was built (house standards v{esc(str(f["standards_version"]))}). {f["planned"]} more questions are planned.</p>
 </section>
 """
 
@@ -235,14 +235,14 @@ def paths_section(b, f):
     return f"""
 <section class="h-sec" id="paths">
 <div class="h-head">{b.idx("01", "Two ways in")}<h2 class="h-h2">Fix what you have, or build a system from the start.</h2>
-<p class="h-lede">Your AI picks the path from what you ask and what it finds in your project. Both use the same engine, the same accessibility floors and the same decision log.</p></div>
+<p class="h-lede">Your AI picks the path from what you ask. Both share one engine, the same accessibility floors and one decision log.</p></div>
 <div class="tr-paths">
 <article class="tr-path"><p class="tr-path-k"><span class="tr-tag">Fix</span>You already built something</p><h3>It looks off, and you want it to look like one product.</h3>
 {fix_vg}{steps(fix_steps)}<a class="h-link tr-path-more" href="/#before-after">See a full audit drawn on a real page {b.ARROW}</a></article>
 <article class="tr-path"><p class="tr-path-k"><span class="tr-tag">Build</span>You're starting, or want the whole system</p><h3>Five answers give you a complete first version.</h3>
 {build_vg}{steps(build_steps)}<a class="h-link tr-path-more" href="/docs/quickstart/">Your first design system {b.ARROW}</a></article>
 </div>
-<p class="h-fine">The card is drawn in HTML. Its "today" values are invented mistakes, and its "after" values are the engine's real output for Billerwick, one of the three example systems on the home page. Zoom levels and their question counts come from the skill's own <a href="{b.GH}/blob/main/skills/opendesigner/references/zoom.md">zoom.md</a> and pacing file.</p>
+<p class="h-fine">Drawn in HTML: the "today" values are invented mistakes, the "after" values are real engine output for Billerwick. Zoom levels and counts come from the skill's <a href="{b.GH}/blob/main/skills/opendesigner/references/zoom.md">zoom.md</a> and pacing file.</p>
 </section>
 """
 
@@ -290,7 +290,7 @@ def engine_section(b, f):
     return f"""
 <section class="h-sec" id="engine">
 <div class="h-head">{b.idx("02", "Inside the engine")}<h2 class="h-h2">Each answer moves a dial. Each dial sets real values.</h2>
-<p class="h-lede">Your answers and your feel words set {len(f["dials"])} dials, from 0 to 100. Fixed formulas turn each position into values, like a corner radius or a type ratio. The same answers always give the same files, and you can run the engine with no AI at all.</p></div>
+<p class="h-lede">Your answers set {len(f["dials"])} dials from 0 to 100, and fixed formulas turn each into values like a corner radius. The same answers always give the same files.</p></div>
 <div class="tabs tr-engine" data-tabs><div class="tablist demo-tabs" role="tablist" aria-label="Example systems">{"".join(tabs)}</div>
 {"".join(panels)}</div>
 <p class="h-fine">Real engine output (<a href="{b.GH}/blob/main/site/demo_systems.py">site/demo_systems.py</a>) and the band formulas from <a href="{b.GH}/blob/main/skills/opendesigner/references/levers.json">levers.json</a>, read when this page was built. <a href="/docs/dials/">What each dial does</a></p>
@@ -321,7 +321,7 @@ def files_section(b, f):
 <p class="h-lede">Your team, your design tools and your next AI session all read the same rules, and you can open every file.</p></div>
 <div class="tr-files" data-tabs><div class="tr-tree" role="tablist" aria-label="Files OpenDesigner writes" aria-orientation="vertical">{tabs}</div>
 <div class="tr-viewer">{panes}</div></div>
-<p class="h-fine">Excerpts from OpenDesigner's own design system, which was made with OpenDesigner, read from <a href="{b.GH}/tree/main/brand/opendesigner">brand/opendesigner</a> when this page was built.</p>
+<p class="h-fine">From OpenDesigner's own design system, made with OpenDesigner (<a href="{b.GH}/tree/main/brand/opendesigner">brand/opendesigner</a>).</p>
 </section>
 """
 
@@ -365,9 +365,9 @@ def protect_section(b, f):
     return f"""
 <section class="h-sec" id="protect">
 <div class="h-head">{b.idx("04", "What protects you")}<h2 class="h-h2">The floors hold, and every choice is on record.</h2>
-<p class="h-lede">Rule-based checks run before the AI gives any opinion, and they give the same result every time. Breaking an accessibility floor is an error that stops the build.</p></div>
+<p class="h-lede">Rule-based checks run before the AI gives any opinion, with the same result every time. Breaking an accessibility floor stops the build.</p></div>
 <div class="tr-cards">{html_cards}</div>
-<p class="h-fine">The review lines are real output, shortened, from <code>engine.py review</code> on a test file checked against OpenDesigner\'s own system. The decision is a real entry from OpenDesigner's own log. <a href="/docs/accessibility/">Accessibility floors</a> · <a href="/docs/decisions/">Decisions and DESIGN.md</a></p>
+<p class="h-fine">Real output from <code>engine.py review</code> and a real entry from OpenDesigner's own decision log, shortened. <a href="/docs/accessibility/">Accessibility floors</a> · <a href="/docs/decisions/">Decisions and DESIGN.md</a></p>
 </section>
 """
 
