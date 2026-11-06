@@ -8,7 +8,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
-- **Shorter craft pages** (2026-11-07). The motion, UX patterns, interface details, sources and design styles pages lose repeated and meta lines, and say what is true today: 32 benchmarked systems, and the two house colour rules (known meanings keep their colours; never pure white with pure black).
+- **Shorter craft pages** (2026-11-07). The motion, UX patterns, interface details, sources and design styles pages are 15 to 24% shorter, with every rule, number and source kept. They also say what is true today: 32 benchmarked systems, and the two house colour rules (known meanings keep their colours; never pure white with pure black).
 - **A near-black brand builds** (2026-11-06). When the accent ramp's text step would be pure black (or pure white in dark mode), links, accent text and accent icons use an off-shade of the same hue, so the engine no longer breaks its own white-and-black rule.
 - **Adding a platform raises the touch target** (2026-11-06). After `pick Q-plat-01` adds Android, a standard's 44 px touch target goes back to the engine's own 48 px, as a fresh sketch does. A value the person set is kept, and the conflict is said.
 - **DESIGN.md's dial lines match the tokens** (2026-11-06). Each dial line now reports the value the tokens hold, such as 6 px corners rather than the 0 px band when nobody chose the corners, and says why the two differ. The tour shows both worked dials again.
