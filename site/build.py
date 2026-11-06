@@ -1231,7 +1231,7 @@ INSIDE = [  # (benefit title, what it does, vignette, column span)
      '<p class="vg-from"><span class="tag-missing">Logo · Not enough information</span><span class="tag-missing">Voice guide · Not enough information</span></p>', 1),
     ("Ask for a look in plain words", "Each style is named, shown and mapped to settings.",
      '<p class="a-tags"><span class="a-tag a-sty">Glassmorphism</span><span class="a-tag a-sty">Bento grid</span><span class="a-tag a-sty">Risograph</span><span class="a-tag a-sty">Swiss</span></p>', 1),
-    ("Your work stays on your computer", "No account and no server. The engine is one Python file with no network calls.",
+    ("Your work stays on your computer", "No account and no server; the engine makes no network calls.",
      '<pre class="code-lines vg-term"><span class="c">$</span> python3 engine.py --help\n<span class="c">… stdlib only, no network</span></pre>', 2)]
 USES = [("Websites and landing pages", "One type scale, one spacing rhythm, one set of buttons.", "/docs/quickstart/", "Your first design system"),
         ("Mobile and web apps", "One system exports to CSS, Tailwind, Swift and Jetpack Compose.", "/docs/export/", "Export to code"),
@@ -1332,8 +1332,6 @@ def home(pages, facts, faq):
 <div class="craft">{craft_html}</div>
 </section>
 """ if craft else ""
-    # the problem figure's caption restates its two cards; it stays on /docs/design-systems/ and in the Markdown copies
-    why_fig = re.sub(r"<figcaption>.*?</figcaption>", "", figure("design-systems-one-source"), flags=re.S)
     news = (tour_page.PATH, "New: how it all works, on one page")
     announce = (f'<p class="h-announce"><span class="h-pill-tag">Free and open source · MIT</span>'
                 f'<a href="{news[0]}">{news[1]} {ARROW}</a></p>')
@@ -1358,7 +1356,7 @@ def home(pages, facts, faq):
 
 <section class="h-sec" id="why">
 <div class="h-head">{idx("02", "The problem")}<h2 class="h-h2">Every new screen drifts a little.</h2></div>
-{why_fig}
+{figure("design-systems-one-source")}
 </section>
 
 <section class="h-sec" id="fix">
