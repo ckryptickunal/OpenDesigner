@@ -15,7 +15,7 @@ Say "Create a design system for this project" and answer up to five short questi
 
 ## What happens first
 
-1. **It reads your project:** CSS, a Tailwind config, `package.json`, token files, and logo or font files. It skips any question these answer.
+1. **It reads your project:** your styles, logo and fonts. It skips any question these already answer.
 2. **It asks once about a private log** of your steps. Only a clear yes turns it on.
 
 ## The five questions, with example answers
@@ -30,20 +30,27 @@ The example is a made-up study planner called Studyhall. Each question comes wit
 4. **How should it feel?** Two or three words, like fun, calm, serious or bold. "Calm and friendly." The engine reads "calm" as minimal, with the brand in the background, and "friendly" as warmer grays and rounder corners. If it doesn't know a word, it asks you one short question.
 5. **Do you have a brand color or a logo?** "Our color is #167874, a deep teal." Your color stays exact on the main buttons if it passes the contrast check; if not, the engine changes it just enough and tells you. From a logo file (PNG or SVG), it reads up to three colors for you to pick from. With neither, it suggests three colors that fit your feel words.
 
-## The same build without an AI
-
-```
-python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py sketch --name "Studyhall" --audience regular --platforms web,ios --feel calm,friendly --brand "#167874"
-```
-
 ## What you get
 
+- **Your design rules in plain words,** for your team and your AI tools.
+- **Your whole system on one page,** with what is still a default.
+- **Files your code and design tools use:** tokens, plus code for the platforms you chose and Figma variables.
+- **A log of every decision** and why it was made.
+
+:::dev
 - `DESIGN.md` and `PRODUCT.md` at the root of your project.
 - `opendesigner/tokens/`: your rules in the open DTCG 2025.10 format.
 - `opendesigner/build/`: Figma variables, Paper tokens and code for your platforms: CSS and Tailwind for the web, Swift for iOS, Jetpack Compose for Android.
 - `opendesigner/overview.html`, `preview.html`, and `decisions.md` with every decision and why.
 
+The same build without an AI:
+
+```
+python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py sketch --name "Studyhall" --audience regular --platforms web,ios --feel calm,friendly --brand "#167874"
+```
+
 The full list is on [The files it writes](/docs/files/).
+:::
 
 ## Look at these first
 

@@ -46,7 +46,11 @@ mkdir -p your-project/.agents/skills
 cp -R OpenDesigner/.agents/skills/opendesigner* your-project/.agents/skills/
 ```
 
-Tools that support Agent Plugins can read the repository's `plugin.json` instead. If your tool can't show pictures in the chat, you get the choices as text or as a local HTML page.
+If your tool can't show pictures in the chat, you get the choices as text or as a local HTML page.
+
+:::dev
+Tools that support Agent Plugins can read the repository's `plugin.json` instead of the copied folder.
+:::
 
 ## ChatGPT
 
@@ -58,15 +62,17 @@ There is nothing to install.
 
 ## No AI at all: the engine on its own
 
-The engine builds a complete system from a few answers:
+You can build a complete system without any AI: the engine turns a few answers into the same files the skills make.
 
+{{figure:install-engine-run}}
+
+:::dev
 ```
 python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py sketch --name "Acme" --feel friendly,minimal
 ```
 
-It writes `DESIGN.md`, `PRODUCT.md` and an `opendesigner/` folder. See [Engine commands](/docs/engine/).
-
-{{figure:install-engine-run}}
+It writes `DESIGN.md`, `PRODUCT.md` and an `opendesigner/` folder. Every command is on [Engine commands](/docs/engine/).
+:::
 
 ## What you need
 
