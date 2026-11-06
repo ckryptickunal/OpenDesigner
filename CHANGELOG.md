@@ -23,6 +23,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **A shorter home page and showcase** (2026-11-07). Lines that repeated a heading, a button or a nearby line are gone. Two claims are corrected: the example system writes 50 files, not 51, and a reference never brings in another brand's logo, name, images or copy.
 - **The changelog marks what came after the release** (2026-11-06). On /changelog/, entries not yet in a release carry a "Since v0.2.0" tag, read from the version and its git tag, so it moves with each release ([#70](https://github.com/ckryptickunal/OpenDesigner/issues/70)).
 - **Calmer type on the docs** (2026-11-06). Figure captions and the footer's legal line stop at about 65 characters, the docs heading fits on two lines, and acronyms such as MIT and DTCG are no longer tracked tight ([#75](https://github.com/ckryptickunal/OpenDesigner/issues/75)).
 - **Tabs no longer move the page** (2026-11-06). On the website, switching the install tabs, the example products, the tour's files or a component's device views keeps the same height, so the text below stays put. On phones, the before-and-after's list of findings opens from a button instead of growing under the picture.

@@ -1101,7 +1101,7 @@ STEPS = [
     ("It reads what you have", "It reads your CSS, Tailwind config, tokens, logo and fonts, and never asks what they already answer.",
      '<ul class="vg-files"><li><span class="mono">globals.css</span><span class="chip">colors</span></li><li><span class="mono">tailwind.config.ts</span><span class="chip">theme</span></li>'
      '<li><span class="mono">package.json</span><span class="chip">react</span></li><li><span class="mono">logo.svg</span><span class="chip">main color</span></li></ul>'),
-    ("You answer up to five questions", "What you're making, who it's for, where it runs, how it should feel, and your brand color.",
+    ("You answer up to five questions", "Each one comes with a suggested answer and its reason.",
      '<ol class="vg-qs"><li>What are you making?</li><li>Who is it for?</li><li>Where does it run?</li><li class="on">How should it feel?</li><li>A brand color or logo?</li></ol>'),
     ("It checks the rules, then saves them", "It checks contrast, target sizes, focus and motion, then saves the rules as files in your project.",
      '<pre class="code-lines vg-term"><span class="c">$</span> engine.py build\n<span class="ok">Passes: no errors.</span>\nChecked 164 color pairs in every mode,\n12 mode combinations and 443 tokens.</pre>'),
@@ -1112,7 +1112,7 @@ INSIDE = [  # (benefit title, what it does, vignette, column span)
      '<div class="vg-log"><p class="mono">D-0056 · dials.roundness = 75</p><p><span class="chip accent">chosen</span> <span class="chip">supersedes D-0033</span></p><p class="vg-why">“Use iOS style rounded edges with iOS kerning everywhere instead of sharp corners.”</p></div>', 2),
     ("Readable for everyone", "WCAG 2.2 AA contrast, 24 px targets, focus rings and reduced motion: a floor, not a certificate.",
      '<div class="vg-floor"><span class="vg-aa">Aa</span><span class="num">4.5:1</span><span class="vg-target"></span><span class="num">24 px</span></div>', 1),
-    ("Start from what you have", "Point it at a website, screenshot, Figma file or repo. It keeps the structure, never another brand's identity.",
+    ("Start from what you have", "Point it at a website, screenshot, Figma file or repo. It keeps the structure, never another brand's logo, name, images or copy.",
      '<p class="vg-from"><span class="chip">Website</span><span class="chip">Screenshot</span><span class="chip">Figma file</span><span class="chip">Repository</span><span class="chip">Brand book</span></p>', 1),
     ("Your brand stays yours", "It asks you for the logo, photos, typeface and voice, and never fakes them.",
      '<p class="vg-from"><span class="tag-missing">Logo · Not enough information</span><span class="tag-missing">Voice guide · Not enough information</span></p>', 1),
@@ -1273,7 +1273,7 @@ def home(pages, facts, faq):
 </section>
 
 <section class="h-sec" id="features">
-<div class="h-head h-head-row"><div>{idx("07", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together, not just to start it.</h2></div>
+<div class="h-head h-head-row"><div>{idx("07", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together.</h2></div>
 <a class="h-link" href="{tour_page.PATH}#protect">See what protects you {ARROW}</a></div>
 <div class="bento">{"".join(f'<article class="bento-card span-{sp}"><h3>{t}</h3><p>{d}</p><div class="vg">{v}</div></article>' for t, d, v, sp in INSIDE)}</div>
 <div class="h-split h-files">
@@ -1299,7 +1299,6 @@ def home(pages, facts, faq):
 <div class="h-split">
 <div><p class="kicker">Status</p><h2 class="h-h2">Early, and honest about it.</h2>
 <ul class="status">{"".join(f"<li>{x}</li>" for x in HOME_STATUS)}</ul>
-<p class="h-lede">Try it on a real project and tell us where it breaks.</p>
 <p class="h-contrib"><span class="kicker">Contribute</span><a href="/docs/contribute/">How to contribute</a><a href="{GH}/issues?q=is%3Aopen+label%3A%22good+first+issue%22">Good first issues</a><a href="{GH}/issues/new/choose">Report a problem</a></p>
 <p class="h-more"><a class="h-link" href="/changelog/">Version {VERSION}: see every change {ARROW}</a></p></div>
 {gh_card(facts)}
@@ -1309,7 +1308,7 @@ def home(pages, facts, faq):
 <section class="h-sec" id="talk">
 <div class="h-book">
 <div><p class="kicker">Talk it through</p><h2 class="h-h2">Work through your design with {CONFIG["HOST_NAME"]}.</h2>
-<p class="h-lede">Free, {CONFIG["BOOKING_FREE_MINUTES"]} minutes. You never need a call to use OpenDesigner.</p></div>
+<p class="h-lede">You never need a call to use OpenDesigner.</p></div>
 <div class="h-book-act">{book_link("Book a free " + str(CONFIG["BOOKING_FREE_MINUTES"]) + "-minute call", primary=True)}<a class="h-link" href="/book/">What the call covers {ARROW}</a></div>
 </div>
 </section>
@@ -1492,9 +1491,9 @@ def changelog_page(p, pages):
                  og_alt=f'{p["title"]}: OpenDesigner' if card else None, preload=FEED_LINK, home="cl-page")
 
 
-SHOW_INTRO = ("AI builder agents made every piece here through the whole OpenDesigner process: real references on Mobbin, a design system from the "
-              "engine for each piece, the build, then checks. Every brand is invented. Each piece was then audited against shipped products and reviewed by "
-              "the maintainer. The pieces called ugly were removed or rebuilt, and the ones marked Being rebuilt are next.")
+SHOW_INTRO = ("AI agents made every piece with the whole OpenDesigner process: real references on Mobbin, a design system from the engine, the "
+              "build, then checks. Every brand is invented. Each piece was then audited against shipped products and reviewed by the maintainer. "
+              "Pieces judged ugly were removed or rebuilt, and those marked Being rebuilt are next.")
 MOCKUP_CAPTIONS = {
     "01-phone-trio": "Three evening apps (sleep, podcast, banking) in generic phones over a lilac field.",
     "02-laptop-desk": "The Swiss architecture hero on a laptop, on a real desk photo with matched perspective.",

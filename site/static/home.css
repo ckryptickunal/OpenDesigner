@@ -441,7 +441,7 @@
 @media (min-width: 421px) { .bar-in { gap: 24px; } } .bar-in .top-nav { flex: 1; }  /* phones keep site.css's 12 px, so the header fits at 320 px */
 @media (max-width: 720px) { .nav-book { display: none; } }
 .h-book { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px 48px; align-items: end; padding: 40px; border: 1px solid var(--line); border-radius: var(--r-panel); background: var(--surface-raised); }
-.h-book .h-lede { margin-top: 16px; }
+.h-book .h-lede { margin-top: 16px; text-wrap: balance; }
 .h-book-act { display: grid; justify-items: start; gap: 12px; }
 @media (max-width: 860px) { .h-book { grid-template-columns: minmax(0, 1fr); padding: 28px 20px; } }
 .h-soon { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; font-weight: 600; color: var(--ink-muted); }
