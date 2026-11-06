@@ -21,6 +21,10 @@ Partly: the skills are written instructions your AI follows. A Python engine doe
 
 It is packaged for Claude Code, the Claude app, ChatGPT (as a Project), and Codex, Cursor, VS Code with Copilot, Gemini CLI and other agents that read `.agents/skills/`. A recorded test run in each of them is still to do. See [Install](/docs/install/).
 
+### Is OpenDesigner a Claude skill?
+
+Yes. In Claude Code the plugin installs its eight skills, and in the Claude app you upload them as a skill zip; the same skill folders also work in Codex, Cursor and other agents that read skills. See [Install](/docs/install/).
+
 ### How do I install OpenDesigner?
 
 In Claude Code it takes two commands and a new session; the Claude app, ChatGPT, Codex, Cursor and other agents each have a short path too. Then open your project and say "Create a design system for this project." See [Install](/docs/install/).
@@ -81,6 +85,10 @@ No. It does the repetitive system work: scales, tokens, states and contrast. It 
 That's a fair worry. OpenDesigner asks what people should remember about your product, sets eight dials from your answers, and asks for your own logo, fonts and art instead of faking them. It won't copy another brand; if you love a site's look, it can write a Taste Index of it, and what you keep is your call and your responsibility. Logos, names, images and copy never go in.
 
 The limits, honestly: in our stress test, AI agents made 46 pieces plus 8 mockups by following the process. An audit against shipped products passed 28 of the 54, sent 20 back for polish and rebuilt 6, and much of the striking work was made outside the tokens. The tokens give you consistency and readable contrast; a distinctive look still needs your input.
+
+### Does it check color contrast?
+
+Yes. Every text, border and focus-ring color pair the tokens produce is checked against WCAG 2.2 AA, in light and dark mode and every mode combination, including text on hover and pressed fills, and a failure is an error that blocks the build. See [Accessibility floors](/docs/accessibility/).
 
 ### Does it make my app meet WCAG?
 
