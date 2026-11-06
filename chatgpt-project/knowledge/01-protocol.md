@@ -25,6 +25,7 @@ A person in a hurry still gets a finished page in the first reply. What they don
 | They want original painted art or a film in the brand's colours (hero, launch reel, celebration loop) | **opendesigner-paint** |
 | A screen or page is built and they ask "does it look right?", "review this" or "QA this", or you built it and are about to say it is done | **opendesigner-review** |
 | Anything visual is about to be exported or shared (a page, video, deck or card): "is this ready?" | **opendesigner-preflight** |
+| They want the site found: "do SEO", AEO, GEO, "show up in ChatGPT or Google", or a site is about to launch | **opendesigner-search**. Give it the Site brief in PRODUCT.md: Q-site-04 (how people find it, languages, the questions it answers) and Q-site-05 (page families) |
 | A one-off UI task in a project that already has a system | Follow its DESIGN.md. Don't interview |
 
 **Run these without being asked.** Never wait for the person to name a tool.
@@ -601,7 +602,7 @@ When the person shares a link or file and says to follow it or learn from it:
 
 # Improving OpenDesigner (the self-improvement loop)
 
-OpenDesigner gets better when you say what went wrong. This covers BRIEF requirement 16 and lane U3. All eight skills link here.
+OpenDesigner gets better when you say what went wrong. This covers BRIEF requirement 16 and lane U3. All nine skills link here.
 
 ## When to use it
 Record feedback the moment you notice one of these:

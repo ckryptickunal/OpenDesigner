@@ -106,7 +106,7 @@ To change the system later, just ask: "make the buttons a bit rounder". The exte
 
 ## What was checked, and what wasn't
 
-- The eight skill folders are in the public repository under `.agents/skills/` (checked 2026-10-15).
+- The skill folders are in the public repository under `.agents/skills/` (checked 2026-10-15).
 - Cursor's documentation lists `.agents/skills/` as a project skill folder and says Cursor reads `AGENTS.md` (checked 2026-10-15). Its rules page documents `.cursor/rules/*.mdc` files with `alwaysApply` and `@` file references (checked 2026-11-07).
 - The engine on its own was tested with Python 3.10.11.
 - A run inside Cursor has not been recorded yet. If you try it, please [open an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose) and tell us what happened.

@@ -20,7 +20,7 @@ In Claude Code, add the repository as a plugin marketplace, then install the plu
 /plugin install opendesigner@opendesigner
 ```
 
-The plugin installs eight skills. Start a new session afterwards, because skills load when a session starts. Using the Claude app instead? The same Claude skill installs from a zip: see [Install](/docs/install/).
+The plugin installs nine skills. Start a new session afterwards, because skills load when a session starts. Using the Claude app instead? The same Claude skill installs from a zip: see [Install](/docs/install/).
 
 Then open your project and say: **"Create a design system for this project."** It reads your files first, then asks up to five questions, each with a recommended answer and its reason. Choices show as an artifact or a local HTML page.
 

@@ -25,7 +25,7 @@ claude plugin marketplace add ckryptickunal/OpenDesigner
 claude plugin install opendesigner@opendesigner
 ```
 
-Then start a new session, because skills load when a session starts. You get all eight skills ([what each one does](/docs/introduction/#the-eight-skills)).
+Then start a new session, because skills load when a session starts. You get all nine skills ([what each one does](/docs/introduction/#the-nine-skills)).
 
 ## Claude app (claude.ai or Claude Desktop)
 

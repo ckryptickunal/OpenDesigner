@@ -1557,6 +1557,51 @@ Designers: recommended option with a reason · Code: `--set-by confirmed_default
 
 </details>
 
+### AEO (answer engine optimisation)
+
+Writing each page so tools that answer questions pick it to quote.  
+Designers: be the quoted answer · Code: `references/probe.md`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Each page answers one real question in its first sentence, under a heading in the words people type.
+
+**Engineer:** references/probe.md: a few questions by hand, logged out; record each engine's searches, sources and follow-ups. fixes.md turns them into page changes.
+
+**Example:** Answer "how much does it cost?" in the first line of the pricing page.
+
+</details>
+
+### GEO (generative engine optimisation)
+
+Helping AI chat tools like ChatGPT read your site and name it in their answers.  
+Designers: get named by AI · Code: `search.py robots robots.txt`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Real facts, quotes and named sources make AI answers more likely to use a page; repeating keywords makes it less likely.
+
+**Engineer:** Allow OAI-SearchBot, PerplexityBot and Claude-SearchBot in robots.txt; GPTBot and ClaudeBot only gather training data. search.py robots lists each bot.
+
+**Example:** Let ChatGPT's search crawler in, even if training crawlers stay out.
+
+</details>
+
+### SEO (search engine optimisation)
+
+Making your pages easy for search sites like Google to find, read and show.  
+Designers: get found in search · Code: `search.py audit dist/`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** How pages are named, titled, linked and described, so search results show them and people choose to click.
+
+**Engineer:** search.py audit <build folder> checks robots.txt, sitemap.xml, canonicals, titles, descriptions, the h1 and JSON-LD in the served HTML. Read-only.
+
+**Example:** Give the pricing page its own title so search shows it.
+
+</details>
+
 ### standard
 
 A rule your design always follows. It is set for you, and only you can ask to change it.  

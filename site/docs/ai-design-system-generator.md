@@ -52,7 +52,7 @@ If your components expect their own variable names, you point those names at the
 
 ## Today, and not yet
 
-Today: eight skills, the engine, every export, and an overview page of your whole system.
+Today: nine skills, the engine, every export, and an overview page of your whole system.
 
 Not yet:
 
