@@ -23,7 +23,7 @@ It is packaged for Claude Code, the Claude app, ChatGPT (as a Project), and Code
 
 ### Is OpenDesigner a Claude skill?
 
-Yes. In Claude Code the plugin installs its eight skills, and in the Claude app you upload them as a skill zip; the same skill folders also work in Codex, Cursor and other agents that read skills. See [Install](/docs/install/).
+Yes. In Claude Code the plugin installs its nine skills, and in the Claude app you upload them as a skill zip; the same skill folders also work in Codex, Cursor and other agents that read skills. See [Install](/docs/install/).
 
 ### How do I install OpenDesigner?
 

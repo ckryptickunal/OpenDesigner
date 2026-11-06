@@ -4,7 +4,7 @@ seo_title: Design tokens for Claude Code: DTCG, CSS and Tailwind v4
 description: Install the OpenDesigner plugin in Claude Code and get DTCG 2025.10 design tokens, CSS variables and a Tailwind v4 theme, plus a DESIGN.md Claude follows.
 section: Guides
 order: 21
-updated: 2026-11-05
+updated: 2026-11-07
 ---
 
 Install OpenDesigner as a Claude Code plugin, answer up to five questions, and you get design tokens in the open DTCG 2025.10 format. You also get CSS variables and a Tailwind v4 theme made from them. A `DESIGN.md` and an optional note in `AGENTS.md` tell Claude Code to use those tokens in later sessions, and a review command checks that it did.
@@ -18,7 +18,7 @@ In Claude Code, add the repository as a plugin marketplace, then install the plu
 /plugin install opendesigner@opendesigner
 ```
 
-The plugin has eight skills. Its manifest passes Claude Code's own check, `claude plugin validate .`, with one warning: the repository's `CLAUDE.md` isn't loaded as plugin context (checked 2026-10-15). An install in a fresh Claude Code session has not been recorded yet.
+The plugin has nine skills. Its manifest passes Claude Code's own check, `claude plugin validate .`, with one warning: the repository's `CLAUDE.md` isn't loaded as plugin context (checked 2026-10-15). An install in a fresh Claude Code session has not been recorded yet.
 
 Then open your project and say: **"Create a design system for this project."** OpenDesigner reads your files first, then asks up to five questions. Each comes with a recommended answer and its reason. In Claude Code it can show choices as an artifact or as a local HTML page.
 
