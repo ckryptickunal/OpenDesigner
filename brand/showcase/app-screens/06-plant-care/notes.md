@@ -1,6 +1,6 @@
 # 06 · Loam: plant care diary (phone, 390×844 @3x)
 
-Gallery: Loam is a fictional plant-care diary with a soil sensor; one bar a morning shows Gus drying out nine days after each drink and thirsty until the next.
+Gallery: A plant-care diary with a soil sensor, one bar for each morning's reading.
 
 ## Direction
 Loam is a fictional plant care diary for people with a dozen houseplants and no green thumb. The "Today" screen answers one question: who needs water this morning? It has a week of watering, one hero plant with soil moisture and a big log button, and the rest of the day's tasks. The mood is a potting-shed notebook: paper, moss, clay pots and line drawings. Feel words: **gentle, cozy, natural** (the engine knew gentle and cozy; it did not know "natural" and left it out).

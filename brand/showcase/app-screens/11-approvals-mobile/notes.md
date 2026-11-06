@@ -1,5 +1,7 @@
 # 11 Quillon: purchase request approval (iPhone)
 
+Gallery: A purchasing app for mid-size companies.
+
 Replaces `app-screens/02-sleep-meditation` (audited 2 of 5, "remake"). Render: 390 x 844 pt at scale 3 (1170 x 2532 PNG, `shot.png`), the same as the earlier app screens.
 
 ## Direction

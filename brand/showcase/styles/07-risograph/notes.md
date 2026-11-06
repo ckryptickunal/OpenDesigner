@@ -1,5 +1,7 @@
 # 07 Tessin & Ström: a risograph annual report section
 
+Gallery: A design-research consultancy in Copenhagen.
+
 **Direction.** Tessin & Ström is a fictional design-research consultancy in Copenhagen. Its 2026 annual report, chapter 03, presents an invented study: 412 hours in 14 outpatient waiting rooms in Denmark and Sweden, 1,860 timed waits, 96 exit interviews. People felt they had waited 61 minutes; the clock said 38. A 2026 pilot in six clinics (a live queue board and a text ten minutes before each turn) left the real wait almost unchanged (35 min) and cut the felt wait to 37. The page is printed, in spirit, on a two-drum duplicator: Medium Blue and Fluorescent Pink. The technique carries the finding: **pink is the felt wait, blue is the actual wait, and where they overprint is the part that was real.** Feel words: **vivid, detailed, credible**.
 
 Render: 1440 x 900, scale 2 (`shot.png`), light paper by design (`data-theme="light"`).

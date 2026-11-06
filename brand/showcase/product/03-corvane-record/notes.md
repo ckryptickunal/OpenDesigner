@@ -1,5 +1,7 @@
 # 03 · Company record · Corvane
 
+Gallery: A CRM for B2B sales teams.
+
 ## Direction
 Corvane is a fictional CRM for B2B sales teams; the workspace belongs to the fictional vendor Aldermoor Systems. The screen is one company record, "Lathom Aerostructures" (invented aerospace supplier), as an account executive or RevOps sees it: breadcrumb and "12 of 214 in Enterprise pipeline" with up/down, the record header (logo tile, name, star, Add to list, Compose email), chips for owner, last interaction and open deal value, tabs with counts, an activity timeline that records changes, and a details panel with inline-editable empty values ("Set parent company…") and one field being edited. A second frame (`?state=palette`, `shot-palette.png`) shows the ⌘K command menu scoped to the record.
 Feel words: **focused, trustworthy, precise** (the engine dropped "precise").

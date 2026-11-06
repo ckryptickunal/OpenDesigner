@@ -1,6 +1,6 @@
 # 01 · Halden Private: a payment to sign
 
-Gallery: Halden Private is a fictional private bank; the second signature on a £150,000 house deposit, after the banker has confirmed the solicitor's account by phone.
+Gallery: The second signature on a £150,000 house deposit, after the banker has confirmed the solicitor's account by phone.
 
 ## Direction
 Halden Private is a fictional private bank for people with complex wealth (founders, families, trustees). The home screen should feel like the inside of a good leather wallet: deep bottle green-black, one restrained gold, a metal card you want to touch, and numerals set like an engraved certificate. Feel words: **premium, calm, trusted**.

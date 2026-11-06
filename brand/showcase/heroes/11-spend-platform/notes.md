@@ -1,5 +1,7 @@
 # 11 Purlin: spend management hero (B2B)
 
+Gallery: For finance teams: one customer's October close, at real size.
+
 Replaces `heroes/06-playful-fintech` (audited 2 of 5, "remake"). Render: 1440 x 900 at scale 2 (`shot.png`).
 
 ## Direction

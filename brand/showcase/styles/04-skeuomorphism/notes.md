@@ -1,5 +1,7 @@
 # 04 · Skeuomorphism · Fenmoor STEM-8 post console
 
+Gallery: A plugin that puts a re-recording mixer's console in a post-production session.
+
 **Final score: 5 of 5** after three rounds (4, then 4.5, then 5). Render: 1440 x 900 at scale 2 (`shot.png`).
 
 ## Direction

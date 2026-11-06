@@ -1,6 +1,6 @@
 # 02 · Neumorphism · Ostwell zone dial
 
-Gallery: Ostwell is a fictional building-management system; the East open office's zone dial is the one soft object in a flat app.
+Gallery: A building-management system where one zone dial is the only soft object in a flat app.
 
 Ostwell, a building-management system: a flat Level 6 floor plan with live desks and one fault, and one soft object, the zone dial. Fresh audit after the polish round: 4 of 5.
 

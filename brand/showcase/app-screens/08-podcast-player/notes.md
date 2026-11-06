@@ -1,5 +1,7 @@
 # 08 · Undertow: podcast now playing (phone, 390×844 @3x, dark)
 
+Gallery: Long-form podcasts for late-night listening.
+
 ## Direction
 Undertow is a fictional podcast app for long-form, late-night listening. The screen is now playing, chapters and a live transcript for "Night Cartography", episode 41, "Maps of places that moved". It should feel like a magazine at midnight: full-bleed generated cover art (a contour map lit by a moon), a large quiet serif title, a scrubber split into chapters, and chapters set like a table of contents. Feel words: **sophisticated, moody, editorial** (the engine knew only "sophisticated"; it left out "moody" and "editorial").
 

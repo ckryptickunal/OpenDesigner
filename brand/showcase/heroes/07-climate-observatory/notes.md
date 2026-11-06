@@ -1,5 +1,7 @@
 # 07 Isobath Ocean Observatory: climate data hero
 
+Gallery: An ocean and climate data institute that publishes its North Atlantic readings openly.
+
 **Direction.** Isobath is a fictional ocean and climate data institute. It runs floats, moorings and gliders in the North Atlantic and publishes the readings openly. The audience is scientists, journalists and policy staff who want to trust the numbers before they read them. Mood: a chart room at night. Feel words: **calm, precise, technical**.
 
 Render: 1440 x 900 at scale 2 (`shot.png`).

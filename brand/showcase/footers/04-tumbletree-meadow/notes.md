@@ -1,5 +1,7 @@
 # 04 Tumbletree: playful illustrated footer with a meadow and a mascot
 
+Gallery: A learning app for children aged 4 to 8, ten minutes a day.
+
 ## Direction
 Tumbletree is a fictional learning app for children aged 4 to 8 (reading, numbers, ten minutes a day). The footer is read by parents and teachers, but it should make a child smile if they are on the lap: a meadow at the end of the page, a rising sun, and Pip, a round tangerine creature with a sprout, waving with one hand and flying a kite with the other, saying "See you tomorrow!". Chunky rounded type, thick ink outlines, "sticker" buttons with a hard drop.
 Feel words: playful, cheerful, warm.

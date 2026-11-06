@@ -1,5 +1,7 @@
 # 05 · Usage and billing · Kilnworks
 
+Gallery: A cloud compute platform.
+
 Final render: `shot.png` (1440 × 900 at 2×). Final self-audit score: **4 of 5**.
 
 ## Direction

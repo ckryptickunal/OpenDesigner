@@ -25,10 +25,12 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Changed
 
+- **Shorter showcase captions** (2026-11-07). Each piece on /showcase/ now has a one-sentence caption that says what it shows and who it is for. Captions no longer repeat the brand name from the title or say "fictional", since the page says once that every brand is invented, and none stops mid-sentence.
 - **"Add to kit" is a secondary button** (2026-11-07). On /library/ and the component pages, each card's "Add to kit" no longer has a solid dark fill, so the kit stays the page's main action. A part already in the kit shows an accent outline.
 
 ### Fixed
 
+- **A shorter home page and showcase** (2026-11-07). Lines that repeated a heading, a button, a picture or another line on the page are gone. Two claims are corrected: the example system writes 50 files, not 51, and a reference never brings in another brand's logo, name, images or copy.
 - **Text over photos stays readable in three more library parts** (2026-11-07). The live chat's viewer count, the video player's captions and the title detail's play icons now sit on dark chips. On a white frame the text measures 5.89:1, up from 2.25:1, in all ten looks.
 - **The home page's example buttons stay on one line on phones** (2026-11-07). Below 440 px wide, the two buttons on each example card use 13 px labels, so "Skip today" and "Mark today done" keep their words and sit on one row instead of wrapping ([#77](https://github.com/ckryptickunal/OpenDesigner/issues/77)).
 - **Saying no to tracking is as easy as saying yes** (2026-11-07). On the site's consent card, "No thanks" and "Allow" now look the same. On phones the card is one line and the two buttons, so it covers far less of the first screen ([#78](https://github.com/ckryptickunal/OpenDesigner/issues/78)).

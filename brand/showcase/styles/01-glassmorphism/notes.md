@@ -1,5 +1,7 @@
 # 01 · Glassmorphism · Kadrel asset review
 
+Gallery: A brand-asset review tool, with glass only on the controls that float over the campaign photo.
+
 Kadrel, a brand-asset review tool: glass only on the controls that float over a campaign photo, which is the content. Fresh audit after the polish round: 4 of 5.
 
 The "Round 3 (polish)" section of 2026-10-15, the last one, describes this page. The polish round of 2026-10-14 before it describes the version that round started from. The sections between record the first build, the Corvale revenue overview that the independent audit scored 3.

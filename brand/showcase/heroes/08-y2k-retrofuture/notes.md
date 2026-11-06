@@ -1,5 +1,7 @@
 # 08 Orbika SR-1: Y2K retro-future hardware hero
 
+Gallery: A pocket satellite radio that gets about 2,400 stations from orbit, with no towers and no account.
+
 **Direction.** Orbika is a fictional maker of a pocket satellite radio. The SR-1 receives about 2,400 stations from orbit, with no towers and no account. The audience is travellers and gadget lovers who miss physical buttons. Mood: a chrome toy from 2001 that still works, played straight. Feel words: **playful, futuristic, techy**.
 
 Render: 1440 x 900 at scale 2 (`shot.png`).

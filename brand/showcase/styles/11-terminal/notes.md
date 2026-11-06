@@ -1,5 +1,7 @@
 # 11 · Terminal · coppice
 
+Gallery: An embedded SQL database in one 4 MB binary that branches a 2.1 GB database in 41 ms.
+
 **Final self-audit score: 4 / 5** (4 rounds). Render: `shot.png`, 1440 x 900 at scale 2.
 
 ## Direction

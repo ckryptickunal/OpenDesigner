@@ -1,5 +1,7 @@
 # 09 Millrace: footer for a B2B data platform
 
+Gallery: A managed event-streaming platform.
+
 Replaces `footers/03-quietfield-horizon` (audited 2 of 5, "remake"). Render: 1440 wide, natural height, scale 2 (`shot.png`), dark theme.
 
 ## Direction

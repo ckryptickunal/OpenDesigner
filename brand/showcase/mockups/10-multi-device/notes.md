@@ -1,5 +1,7 @@
 # 10 · Quillon on a laptop and a phone
 
+Gallery: One purchase request on both screens, staged like a studio product shot.
+
 Replaces `mockups/03-watch-trio` (audited 2 of 5, "remake"). Render: `shot.png`, 1600 x 1200 at scale 2 (3200 x 2400), path-traced, made with `render.py` (256 samples, about 4 minutes). Page: `index.html`.
 
 ## Direction
