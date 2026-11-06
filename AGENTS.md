@@ -137,7 +137,7 @@ Follow `_coordination/PROTOCOL.md`. In short:
 5. Cite every claim with a source id or mark it `[inferred]`.
 6. Post heartbeats (`od.py heartbeat "..."`).
 7. Log product decisions (`od.py log "decision and why"`).
-8. Sync with `python3 tools/od.py sync -m "<lane>: what changed"`.
+8. Open a pull request for the owner to review and merge (owner, 2026-11-07). Push straight to `main` (`python3 tools/od.py sync -m "<lane>: what changed"`) only when the owner says so.
 
 Processes that held up in use (details in each file):
 - **Website:** `site/README.md` "Before every deploy": local build, `site/check.py`, `site/check_layout.py` with 0 errors at 13 widths, a real-header check, then deploy and IndexNow.

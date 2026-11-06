@@ -314,3 +314,10 @@ Kunal's verdict after five iterations: the skills "betrayed" him. Evidence: the 
 | 7 | "It should be able to collect the right relevant artifacts, the right relevant stock images. It should be able to do the right relevant research, figure things out, and propose a positioning and multiple directions." | Research ends in a positioning statement and three distinct directions, each a visual board with sourced references and licensed stock photos. | open |
 | 8 | "If there is some miscommunication in the messaging of what this repo does, please stand up to it ... Avoid too much text. Avoid any supporting text." | The README and the website say only what ships, in fewer words. | open |
 | 9 | Found in the diagnosis: every session loaded the plugin copy from 21 October, because the version stayed 0.1.0. | A shipped change bumps the version, so installed copies update. | open |
+
+## 2026-11-07: fixes go through pull requests (Claude Code, Opus 5.5)
+
+| # | Feedback | What it means for the project | Status |
+|---|---|---|---|
+| 1 | "if you say you have solved things then why are they not resolved in the issues and why is there no PR?" | The 17 issues (#23, #24, #47 to #51, #67 to #76) were closed on GitHub, but each by a direct push to `main` and a closing comment, so there was nothing to review and the word "fixed" hid how. A report now says where the work is: the pull request, or the commit on `main`. | done |
+| 2 | Asked "Should future fixes go through a pull request you review before they merge?", the owner answered "Yes, use PRs". | Every change a session makes goes on a branch and a pull request that names the issues it fixes; the owner merges. Rule in `_coordination/PROTOCOL.md` section 4 and AGENTS.md "How to work here", step 8. | done |
