@@ -361,6 +361,15 @@ def brand_type_inline(html_):
     return re.sub(r'(\sfont-weight=")(\d{3})(")', lambda x: f"{x.group(1)}{snap_weight(x.group(2))}{x.group(3)}", html_)
 
 
+def title_html(t):
+    """A docs title that never ends on one word: its last two words stay together. Hyphens elsewhere never break; in the last
+    two words one may, so a long title ends "design- / system teams" rather than leaving "teams" alone (preflight 53, #79)."""
+    words = esc(t).split(" ")
+    if len(words) < 3:
+        return esc(t).replace("-", NBH)
+    return " ".join(words[:-2]).replace("-", NBH) + " " + "\u00a0".join(words[-2:])
+
+
 def fmt_em(x):
     return "0" if x == 0 else f"{x:g}em"
 
@@ -1486,7 +1495,7 @@ def doc_page(p, pages):
     pos = same.index(p) + 1
     kind = {"Getting started": "lime", "Guides": "", "Concepts": "sky", "Craft": "pink", "Reference": "paper"}.get(p["section"], "paper")
     icon = {"Getting started": "play", "Guides": "compass", "Concepts": "bulb", "Craft": "brush", "Reference": "book"}.get(p["section"], "tag")
-    main_html = (f'<div class="doc-grid"><article class="doc">{crumb}<p class="doc-stickers a-doc"><span class="a-card"><span class="a-card-k">{esc(p["section"])}</span><span class="a-card-n">{pos:02d}<small>/{len(same):02d}</small></span></span></p><h1 class="t-h1">{esc(p["title"]).replace("-", NBH)}</h1>'
+    main_html = (f'<div class="doc-grid"><article class="doc">{crumb}<p class="doc-stickers a-doc"><span class="a-card"><span class="a-card-k">{esc(p["section"])}</span><span class="a-card-n">{pos:02d}<small>/{len(same):02d}</small></span></span></p><h1 class="t-h1">{title_html(p["title"])}</h1>'
                  f'<p class="meta">Updated <time datetime="{p.get("updated", TODAY)}">{p.get("updated", TODAY)}</time> · <a href="{edit}">Suggest a change</a></p>'
                  f'<div class="prose">{content}</div>{pn}</article>{toc_html}</div>')
     ld = [crumbs_ld([("Docs", "/docs/")] + ([] if p["slug"] == "index" else [(p["title"], p["path"])])),
