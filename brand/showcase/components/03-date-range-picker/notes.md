@@ -1,6 +1,6 @@
 # 03 · Date range picker (Wayfern)
 
-Gallery: Gridlark is a fictional solar-farm monitoring tool; the date range picker is open on its generation dashboard.
+Gallery: A solar-farm monitoring tool, open on its generation dashboard.
 
 ## Direction
 Wayfern is a fictional booking site for small cabins and guesthouses. The picker should feel like the start of a holiday: cream paper, terracotta, apricot, a low sun and rolling hills, soft round shapes, a wonky friendly serif. Every night shows its price, and the price colours the cell from cream (lower) to coral (higher), so cheap stretches jump out. A tiny fern marks the four best-priced nights. Feel words: **playful, warm, sunny**.

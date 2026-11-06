@@ -1,6 +1,6 @@
 # 09 · Onboarding stepper · Mossby
 
-Gallery: Sedge is a fictional payroll tool; this is step 3 of 6, setting paydays for a 14-person bike shop.
+Gallery: A payroll tool, setting paydays for a 14-person bike shop.
 
 ## Direction
 Mossby is a fictional plant-care app for first-time plant owners, many of whom have already killed a plant and feel a bit guilty about it. Onboarding has four short steps (your space, your plants, your rhythm, all set) and should feel like a friendly storybook: pastel sage, peach, lilac and butter; ink-line plant drawings on soft blobs; a progress line that is a growing vine and sprouts a leaf for each finished step; very round cards and pill buttons; a guilt-free "I'm not sure yet" on every question.

@@ -1,5 +1,7 @@
 # 04 · File upload, neo-brutalist (Halftone Yard)
 
+Gallery: A print shop for small runs.
+
 ## Direction
 Halftone Yard is a fictional print shop for small runs: business cards, posters, zines. Customers upload print files and the shop checks them before they go to press. The look is the shop floor: newsprint paper, process inks (cyan, magenta, yellow, key black), thick black keylines, square corners, hard offset shadows that buttons slam into, registration marks, a halftone rosette and a colour control strip. The file rows read like job tickets. Feel words: **bold, loud, workmanlike** ("brutal" is not a word the engine knows).
 

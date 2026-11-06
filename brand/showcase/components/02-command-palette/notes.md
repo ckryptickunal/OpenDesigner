@@ -1,5 +1,7 @@
 # 02 · Command palette (Margin)
 
+Gallery: A writing tool for novelists: one long manuscript and a lot of keyboard.
+
 ## Direction
 Margin is a fictional writing tool for novelists: one long manuscript, many drafts, a lot of keyboard. The palette is the fastest way around, so it is quiet, exact and monochrome: paper, ink and 1 px rules, no hue at all. The sheet is drawn like a manuscript page with margin notes, because the brand is about margins. Feel words: **minimal, quiet, literary**.
 

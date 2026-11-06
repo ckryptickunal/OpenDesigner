@@ -1,6 +1,6 @@
 # 05 Nook: notes
 
-Gallery: Nook is a fictional home app; the wrist dims the living-room lamps to 40% with one slider.
+Gallery: A home app; one slider on the wrist dims the living-room lamps to 40%.
 
 Render: `shot.png` (205 x 251 CSS px at 3x, clipped to the display shape by `../render.py`). Page: `index.html`.
 

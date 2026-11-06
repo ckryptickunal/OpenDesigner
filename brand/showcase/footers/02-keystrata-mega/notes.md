@@ -1,5 +1,7 @@
 # 02 Keystrata: enterprise mega footer
 
+Gallery: A cloud security company selling to security teams at banks, hospitals and governments.
+
 ## Direction
 Keystrata is a fictional cloud security company (workload protection, posture, identity) selling to security teams at banks, hospitals and governments. Its footer has to carry a lot (six link columns, status, certifications, disclosure, region and language) and still look calm and exact: the visual promise is "we are precise". The signature is a live status console (90 days of uptime bars, region latencies) where most companies put a plain "All systems normal" dot. Light, cool, graphite type, one deep teal.
 Feel words: trustworthy, technical, precise.

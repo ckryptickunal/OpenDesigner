@@ -23,6 +23,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Changed
 
+- **Shorter showcase captions** (2026-11-07). Each piece on /showcase/ now has a one-sentence caption that says what it shows and who it is for. Captions no longer repeat the brand name from the title or say "fictional", since the page says once that every brand is invented, and none stops mid-sentence.
 - **"Add to kit" is a secondary button** (2026-11-07). On /library/ and the component pages, each card's "Add to kit" no longer has a solid dark fill, so the kit stays the page's main action. A part already in the kit shows an accent outline.
 
 ### Fixed

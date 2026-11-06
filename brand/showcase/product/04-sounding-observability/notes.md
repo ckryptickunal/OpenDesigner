@@ -1,5 +1,7 @@
 # 04 · Service overview · Sounding
 
+Gallery: An API observability tool.
+
 Final renders: `shot.png` and `shot-tooltip.png` (`?state=tooltip`), each 1440 × 900 at 2×. Final self-audit score: **4 of 5**.
 
 ## Direction

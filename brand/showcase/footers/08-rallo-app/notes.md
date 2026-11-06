@@ -1,5 +1,7 @@
 # 08 Rallo: app-download footer with a phone peeking up
 
+Gallery: A running and strength coaching app whose footer has one job: the install.
+
 ## Direction
 Rallo is a fictional running and strength coaching app ("for people who run before work and lift after it"). The footer's job is one install. A full cobalt panel carries a big italic promise, two generic store-style badges ("Get it on your phone", "Also on your watch"), a decorative scan square and a rating line; on the right a phone rises from the panel's bottom edge, tilted, showing a live tempo run (distance ring, pace, heart rate), with two floating cards (VO₂ max trend, an 18-day streak) for depth, over faint running-track lanes. Normal link columns sit calmly below the panel.
 Feel words: energetic, modern, confident.

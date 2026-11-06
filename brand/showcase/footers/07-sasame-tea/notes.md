@@ -1,5 +1,7 @@
 # 07 Sasame: Japanese-minimal tea house footer
 
+Gallery: An eight-seat tea house in Kanazawa's old quarter.
+
 ## Direction
 Sasame (茶房 ささめ) is a fictional eight-seat tea house in Kanazawa's old quarter. The footer is quiet and mostly paper: on the left, the name, one sentence, and three small notes (visit, hours, a seasonal note for October about the first hōjicha roast); on the right, a hanging-scroll moment: a brush ensō, a vertical line of place names, and a vertical phrase, 一服の、静けさを。("a bowl's worth of stillness"), signed with a vermilion seal. A pale celadon paper ground with a faint fibre texture (first warm washi; changed under the owner colour rule), sumi ink, matcha for the kanji labels, one red seal.
 Feel words: calm, quiet, timeless.

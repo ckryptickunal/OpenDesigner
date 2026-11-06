@@ -1,6 +1,6 @@
 # 06 Knurl Supply: neo-brutalist footer
 
-Gallery: Knurl Supply is a fictional streetwear label that sells in drops; its footer says one thing, "Made once. No restocks."
+Gallery: A streetwear label that sells in drops; its footer says one thing: "Made once. No restocks."
 
 ## Direction
 Knurl Supply is a fictional streetwear label from Rotterdam that sells in timed drops and never restocks. Its footer is a poster wall: a black marquee announcing the next drop, then a grid of hard-edged blocks with 4 px ink borders and 6 px zero-blur offset shadows: acid lime newsletter block with a drop countdown, white link blocks, a black flagship-store block, and a knurled (diamond cross-hatch) block carrying a round stamp. Condensed black display type against a blunt mono.

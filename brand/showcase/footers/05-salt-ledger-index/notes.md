@@ -1,5 +1,7 @@
 # 05 Salt Ledger: editorial magazine index footer
 
+Gallery: An independent print quarterly from Leith, Scotland.
+
 ## Direction
 Salt Ledger is a fictional independent print quarterly from Leith, Scotland: essays, fiction and field notes about place, work and weather. Its website footer is set like the contents page of the printed issue: a double rule, a running head, a huge italic issue number in oxblood, and the site's sections as a numbered table of contents with dotted leaders and page numbers. One serif family, warm uncoated-paper ground, ink and one oxblood.
 Feel words: classic, literary, refined.

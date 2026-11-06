@@ -1,6 +1,6 @@
 # 08 weir: a Bauhaus hero for a data-pipeline company
 
-Gallery: weir is a fictional data-pipeline company; its hero is a Bauhaus diagram, each source shape sized by rows a day.
+Gallery: A data-pipeline company; each source shape is sized by rows a day.
 
 **This page now:** the "Round 4 (owner review, 2026-10-18)" section, the last one, describes it. The sections between record earlier versions.
 

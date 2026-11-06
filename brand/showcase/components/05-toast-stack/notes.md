@@ -1,6 +1,6 @@
 # 05 · Toast stack (Kinroom)
 
-Gallery: Panelwise is a fictional hiring tool; three toasts stack over its candidate pipeline, the last with Undo.
+Gallery: Three toasts over a hiring tool's candidate pipeline, the last with Undo.
 
 ## Direction
 Kinroom is a fictional team chat app. Toasts here confirm small things you just did (sent, deleted, saved), bring you a mention, or tell you an upload failed, and each one offers one way back: Undo, Retry or Reply. The mood is a soft lilac fog with white, pillowy toasts stacked in depth, ink text, one iris accent and mint for success. Built after the owner's type and colour rules, so it follows them from the start. Feel words: **soft, calm, friendly**.
