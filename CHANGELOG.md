@@ -28,6 +28,9 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **Text over photos stays readable in three more library parts** (2026-11-07). The live chat's viewer count, the video player's captions and the title detail's play icons now sit on dark chips. On a white frame the text measures 5.89:1, up from 2.25:1, in all ten looks.
+- **The home page's example buttons stay on one line on phones** (2026-11-07). Below 440 px wide, the two buttons on each example card use 13 px labels, so "Skip today" and "Mark today done" keep their words and sit on one row instead of wrapping ([#77](https://github.com/ckryptickunal/OpenDesigner/issues/77)).
+- **Saying no to tracking is as easy as saying yes** (2026-11-07). On the site's consent card, "No thanks" and "Allow" now look the same. On phones the card is one line and the two buttons, so it covers far less of the first screen ([#78](https://github.com/ckryptickunal/OpenDesigner/issues/78)).
 - **Shorter getting-started pages** (2026-11-07). Introduction, Install, Quickstart, How it works and FAQ are a fifth to two fifths shorter, and the tour's captions are tighter. Every command, number, limit and privacy fact stays. They also now say that code exports cover only your platforms, and that the engine takes a few seconds.
 - **Docs type follows the brand scale** (2026-11-07). Docs pages, and the header and footer every page shares, now use only the brand's type sizes (13, 16, 20, 25, 39 and 49 px) and two weights, 400 and 500. The docs home went from 14 sizes and four weights to five sizes and two weights ([#79](https://github.com/ckryptickunal/OpenDesigner/issues/79)).
 - **The changelog marks what came after the release** (2026-11-06). On /changelog/, entries not yet in a release carry a "Since v0.2.0" tag, read from the version and its git tag, so it moves with each release ([#70](https://github.com/ckryptickunal/OpenDesigner/issues/70)).

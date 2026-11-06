@@ -69,7 +69,9 @@
 .odl-title-detail .odl-thumb .odl-pic { position: absolute; inset: 0; display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
 .odl-title-detail .odl-thumb .odl-go { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ds-color-neutral-dark-12); opacity: 0; background: var(--ds-color-overlay-scrim);
   transition: opacity var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
-.odl-title-detail .odl-thumb .odl-go svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); fill: currentColor; }
+/* The play icon sits on its own dark chip, so it reads on a light thumbnail too. */
+.odl-title-detail .odl-thumb .odl-go svg { box-sizing: content-box; inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); padding: var(--ds-space-8);
+  border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-alpha-light-11); fill: currentColor; }
 .odl-title-detail .odl-ep:hover .odl-go, .odl-title-detail .odl-ep:focus-visible .odl-go { opacity: 1; }
 .odl-title-detail .odl-bar { position: absolute; inset-inline: var(--ds-space-inset-xs); inset-block-end: var(--ds-space-inset-xs); block-size: var(--ds-space-4); overflow: hidden; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-alpha-dark-7); }
 .odl-title-detail .odl-bar i { display: block; inline-size: var(--w); block-size: 100%; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-dark-12); }
