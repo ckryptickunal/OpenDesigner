@@ -4,10 +4,10 @@ seo_title: Design styles named: from glassmorphism to brutalism
 description: Glassmorphism, neumorphism, brutalism and 25 more design styles, each drawn in code with its name, the words people use for it, where it fits and how it fails.
 section: Concepts
 order: 7
-updated: 2026-10-15
+updated: 2026-11-07
 ---
 
-You don't need to know the names of design styles. Describe the look in your own words, like "frosty", "like a comic" or "soft buttons", and OpenDesigner shows you the named styles that match, side by side, so you can point at the one you mean. This page draws 28 of them in code, each with its name, the words people use for it, where it fits and how it goes wrong. The engine knows 133 named styles, and `engine.py style search` finds them from your words.
+You don't need to know the names of design styles. Describe the look in your own words, like "frosty" or "soft buttons", and OpenDesigner shows the matching styles side by side, so you can point at the one you mean. This page draws 28 of the 133 it knows; `engine.py style search` finds the rest from your words.
 
 ## Your words, and the styles they mean
 
@@ -56,7 +56,7 @@ Ink, outlines, shapes and printing processes.
 
 ## Layout and digital
 
-How content is arranged, and looks born on screens. Bento grid and isometric drawing are structures: they borrow their colors and surfaces from another style.
+How content is arranged, and looks born on screens. Bento grid and isometric drawing borrow their colors and surfaces from another style.
 
 {{figure:styles-layout-1}}
 
@@ -74,7 +74,7 @@ The mood a whole surface gives off, from quiet to loud.
 
 ## Gradients and surfaces, named
 
-The smaller effects that styles are built from. They follow the same pattern: plain words first, then the name, then the code.
+The smaller effects that styles are built from.
 
 {{figure:styles-glossary-1}}
 
@@ -84,13 +84,13 @@ The smaller effects that styles are built from. They follow the same pattern: pl
 
 ## A style is a direction, not decoration
 
-A style applies to a whole surface, never to one corner of it. One glass card on a flat page, or one comic burst on a calm dashboard, reads as a mistake. Use the style on every instance of the same kind, keep one base style per surface, and spend boldness in one signature place. A product can carry two: a durable style for the app and a louder one for its marketing pages. When you pick a style in the interview, OpenDesigner records its name and sets the [dials](/docs/dials/) that build it.
+A style applies to a whole surface: one glass card on a flat page reads as a mistake. Use it on every instance of the same kind, keep one base style per surface, and spend boldness in one signature place. A product can carry two: a durable style for the app and a louder one for its marketing pages. When you pick a style, OpenDesigner records it and sets the [dials](/docs/dials/) that build it.
 
-The [accessibility floors](/docs/accessibility/) stay locked whatever the style: 4.5:1 text contrast, 3:1 for control edges and icons, 24 px targets, visible focus, reduced motion and reduced transparency. Some styles push against them:
+The [accessibility floors](/docs/accessibility/) stay locked whatever the style. Some styles push against them:
 
-- **Text on glass** changes contrast with whatever scrolls behind it, so it is checked at the worst spot, and every glass surface gets a solid twin for people who turn transparency off.
-- **Neumorphism** fails the 3:1 edge contrast by design. Every control needs a visible border or a darker fill, and a pressed state needs a second signal besides the inset shadow.
-- **Pastel and bright fills** often fail with white text, and fluorescent pink or yellow fails as text on white. Keep text dark on light fills and check every pair.
+- **Text on glass** changes contrast with what scrolls behind it, so it is checked at the worst spot, and every glass surface gets a solid twin for people who turn transparency off.
+- **Neumorphism** fails the 3:1 edge contrast by design: every control needs a visible border or a darker fill, and a pressed state a second signal besides the inset shadow.
+- **Pastel and bright fills** often fail with white text, and fluorescent pink or yellow fails as text on white. Keep text dark on light fills.
 - **Textures** such as grain, halftone and scanlines lower contrast. Check text with the effect on, or keep text on plain fills.
 
-To see styles applied to whole pages, browse the style studies in the [showcase](/showcase/).
+To see styles on whole pages, browse the [showcase](/showcase/).
