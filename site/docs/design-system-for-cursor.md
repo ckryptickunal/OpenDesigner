@@ -19,20 +19,21 @@ One honest note first: the packaging for Cursor is in the repository, but nobody
 
 ```
 your-app/
-├── .cursor/rules/opendesigner.mdc   the rule: read DESIGN.md first (you add it)
-├── .agents/skills/opendesigner*     OpenDesigner's skills
-├── DESIGN.md                        your design rules in plain words
-├── PRODUCT.md                       what the product is and who it's for
+├── .cursor/
+│   └── rules/opendesigner.mdc
+├── .agents/skills/opendesigner*
+├── DESIGN.md
+├── PRODUCT.md
 ├── opendesigner/
-│   ├── tokens/                      the tokens, the source of truth
-│   ├── build/css/tokens.css         CSS variables
-│   ├── build/tailwind/theme.css     a Tailwind v4 theme
-│   ├── decisions.md                 every choice and why
-│   └── overview.html                your design system playground
-└── src/components/                  components that use only the tokens
+│   ├── tokens/
+│   ├── build/css/tokens.css
+│   ├── build/tailwind/theme.css
+│   ├── decisions.md
+│   └── overview.html
+└── src/components/
 ```
 
-*Where each file sits once you're set up. Everything under `opendesigner/` is written by OpenDesigner.*
+*Where each file sits. You add the rule in `.cursor/rules/`. OpenDesigner writes `DESIGN.md`, `PRODUCT.md` and everything in `opendesigner/`: the tokens, CSS and Tailwind files, the decision log and `overview.html`, your design system playground. Your components use only the tokens.*
 
 ## Set it up
 
