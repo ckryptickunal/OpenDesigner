@@ -477,6 +477,9 @@
    at every width (owner, 2026-10-15: "maximum distance between two opposite CTAs so that there is no wrong action"). */
 .x-actions, .hh-actions { justify-content: space-between; flex-wrap: nowrap; }
 .x-btn, .hh-btn { height: auto; min-height: var(--x-h); padding-block: 6px; white-space: normal; text-align: center; line-height: 1.2; }
+/* on phones the labels get smaller instead of wrapping: same words at every width, one row (#77). They wrapped from 320 to
+   about 429 px, so the rule runs to 439 px. */
+@media (max-width: 439px) { .x-btn { font-size: 13px; padding-inline: 8px; white-space: nowrap; } }
 @media (max-width: 640px) {
   .demo-panel { padding: 16px; }
   .demo-stage { padding: 20px 8px; }

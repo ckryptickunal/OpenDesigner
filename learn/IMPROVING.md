@@ -36,6 +36,7 @@ In every case:
 - **Where to start.** Part B of [../research/L19-learning-wiki.md](../research/L19-learning-wiki.md) lists every change the cards propose, with evidence. Part C lists where they disagree with older research. Both are good places to start.
 
 Rules:
+- **Check research before you build from it** (owner, 2026-11-07). For every idea from a paper, article or reference, write down: the files, rules or checks it touches; what in `skills/`, `synthesis/`, `learn/` or the house standards already covers it (if anything does, drop it); what it could break or contradict (rules, evals, tests); how strong the evidence is (sample, setting, replication); and the smallest step that can be undone. The owner picks before anything is built. A paper review on 2026-11-07 kept 2 of 10 ideas this way.
 - **Reference material proposes; it doesn't decide.** A single video's number or "always/never" claim is opinion until another source or the existing research agrees. The card says which.
 - **Never silently override older research.** If a card disagrees with an existing Decision Card, settle it openly: log the decision, and update or supersede the older card's default.
 - **Every value traces to a source.** That means a card id, a standard id, or an `S-` id.

@@ -60,6 +60,8 @@ The checker (`python3 tools/copy_check.py`) finds most of these. One tell alone 
 - **Video on-screen text.** 3 to 7 words per card. Readable muted. One claim per card, and the screen shows the proof of it. Read every card in order, out loud, before render (preflight M26).
 - **Captions.** One line and a link. Write it the way Kunal would text it to a friend. Different first words for each platform, same fact.
 - **Website and docs.** Outcome, then what it does, then how. Sentences under about 20 words. `python3 tools/readability.py <file>` for grade level.
+  - **Show it instead of writing it** (owner, 2026-11-07). When something takes a paragraph to explain (a process, a structure, a comparison, a before and after), use an existing figure, a table or a small HTML figure (`site/figures/README.md`). Keep a one-line caption with the key fact: AI engines read `llms.txt` and the Markdown copies, where only the words survive. Don't add a figure where one sentence does it.
+  - **Plain first** (owner, 2026-11-07). Open each page with what it means for the reader in plain words. Commands, file paths, flags, JSON and long numbers come after, folded under a developer heading or on a Reference page. A normal reader should never have to wade through them to get the point.
 - **Changelog.** What changed for the reader, in past tense, with the file or command. "The review now flags hard-coded radii" beats "Improved review capabilities". One entry per change, one to three sentences, under 400 characters (`tools/changelog_check.py`); the full story goes in the commit.
 - **Footer and small UI.** Nouns and verbs only. No slogans.
 
