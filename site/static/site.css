@@ -31,7 +31,7 @@ svg.arrow { width: 14px; height: 14px; flex: none; }
 .bar { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--surface-raised) 92%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
 /* one shell on every page (owner, 2026-10-21: "top nav changes in each and every page"; preflight check 44): the header, footer,
    docs layout, showcase and library all share --shell, so nothing but the content moves between pages. site/check_chrome.py checks it. */
-:root { --shell: 1200px; }
+:root { --shell: 1280px; }
 .bar-in { display: flex; align-items: center; gap: 40px; height: 60px; max-width: var(--shell); margin-inline: auto; padding-inline: 24px; }
 .brand { color: var(--ink); display: flex; width: 224px; flex: none; }
 .lockup { height: 22px; width: auto; }
@@ -45,7 +45,7 @@ svg.arrow { width: 14px; height: 14px; flex: none; }
 @media (max-width: 720px) { .top-nav { gap: 16px; justify-content: flex-end; } .top-nav a:nth-child(n+3):not(.nav-lib) { display: none; } .bar-in { gap: 16px; padding-inline: 16px; } .brand { width: auto; } }
 
 /* docs shell: sidebar, content, table of contents */
-.layout { display: grid; grid-template-columns: 248px minmax(0, 1fr); max-width: var(--shell); margin-inline: auto; }
+.layout { display: grid; grid-template-columns: 224px minmax(0, 1fr); max-width: var(--shell); margin-inline: auto; }
 .side { border-right: 1px solid var(--line); }
 .side-desk { position: sticky; top: 60px; max-height: calc(100vh - 60px); overflow-y: auto; padding: 32px 24px 48px; }
 .side-mobile { display: none; }
@@ -55,7 +55,7 @@ svg.arrow { width: 14px; height: 14px; flex: none; }
 .side a { display: block; padding: 5px 10px; margin-inline: -10px; color: var(--ink); text-decoration: none; font-size: 14px; line-height: 20px; }
 .side a:hover { background: var(--surface-sunken); }
 .side a[aria-current] { background: var(--accent-soft); color: var(--accent-text); font-weight: 500; }
-.main { min-width: 0; padding: 40px 56px 96px; }
+.main { min-width: 0; padding: 40px 40px 96px; }
 @media (max-width: 1000px) {
   .layout { grid-template-columns: 1fr; }
   .side { border-right: 0; border-bottom: 1px solid var(--line); }
@@ -180,8 +180,8 @@ svg.arrow { width: 14px; height: 14px; flex: none; }
 .qa .ans p { margin: 0 0 12px; }
 
 /* docs pages */
-.doc-grid { display: grid; grid-template-columns: minmax(0, 760px) 200px; gap: 64px; justify-content: space-between; }
-@media (max-width: 1240px) { .doc-grid { grid-template-columns: minmax(0, 760px); } .toc { display: none; } }
+.doc-grid { display: grid; grid-template-columns: minmax(0, 1fr) 168px; gap: 48px; }  /* the content column takes the room; prose keeps its measure below */
+@media (max-width: 1240px) { .doc-grid { grid-template-columns: minmax(0, 1fr); } .toc { display: none; } }
 .toc { position: sticky; top: 92px; align-self: start; max-height: calc(100vh - 120px); overflow-y: auto; }
 .toc .side-h { margin-bottom: 10px; }
 .toc ul { list-style: none; margin: 0; padding: 0 0 0 12px; border-left: 1px solid var(--line); display: grid; gap: 8px; }
@@ -194,16 +194,18 @@ svg.arrow { width: 14px; height: 14px; flex: none; }
 .meta a { color: var(--ink-muted); }
 .prose { margin-top: 36px; }
 .prose > :first-child { margin-top: 0; }
-.prose h2 { font-size: clamp(22px, 2.2vw, 26px); line-height: 1.25; font-weight: 500; letter-spacing: -0.02em; margin: 56px 0 12px; padding-top: 24px; border-top: 1px solid var(--line); }
+.prose h2 { font-size: clamp(22px, 2.2vw, 26px); line-height: 1.25; font-weight: 500; letter-spacing: -0.02em; margin: 72px 0 16px; padding-top: 24px; border-top: 1px solid var(--line); }
 .prose h3 { font-size: 18px; line-height: 26px; font-weight: 600; margin: 32px 0 8px; }
 .prose p, .prose li { font-size: 17px; line-height: 27px; }
-.prose p { margin: 0 0 16px; }
+.prose p { margin: 0 0 20px; }
+/* running text keeps a readable measure (STD-visual-details-01) while figures, tables and code use the full column */
+.prose > p, .prose > ul, .prose > ol, .prose > h2, .prose > h3, .prose > blockquote, .dev-body > p, .dev-body > ul, .dev-body > ol { max-width: 70ch; }
 .prose li { margin: 6px 0; } .prose ul, .prose ol { padding-left: 22px; margin: 0 0 16px; }
 .prose li::marker { color: var(--ink-muted); }
 .prose blockquote { margin: 24px 0; padding: 12px 20px; border-left: 2px solid var(--accent); }
 .prose blockquote p { margin: 0; color: var(--ink); }
 .prose .qa summary h2 { border: 0; padding: 0; margin: 0; font-size: 17px; }
-.table-wrap { overflow-x: auto; margin: 24px 0; border: 1px solid var(--line); }
+.table-wrap { overflow-x: auto; margin: 32px 0; border: 1px solid var(--line); }
 .prose table { border-collapse: collapse; width: 100%; font-size: 14.5px; line-height: 22px; }
 .prose th, .prose td { text-align: left; vertical-align: top; padding: 10px 14px; border-top: 1px solid var(--line); }
 .prose thead th { border-top: 0; background: var(--surface-sunken); font: 500 11px/16px "Source Code Pro", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); }
@@ -503,3 +505,13 @@ code .w { white-space: nowrap; }
 .side-tour strong { display: flex; align-items: center; gap: 6px; font-weight: 600; }
 .side-mobile a.side-tour { margin: 0; }
 @supports (corner-shape: superellipse(1.35)) { .side a.side-tour { corner-shape: superellipse(1.35); --corner-k: 1.22; } }
+
+/* "For developers": commands, paths and flags folded after the plain explanation (site/README.md, "Plain first") */
+.dev-fold { margin: 40px 0; border-block: 1px solid var(--line); }
+.dev-fold > summary { display: flex; align-items: center; gap: 10px; min-height: 48px; cursor: pointer; list-style: none; font: 500 13px/20px "Source Code Pro", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); }
+.dev-fold > summary::-webkit-details-marker { display: none; }
+.dev-fold > summary::before { content: "+"; flex: none; width: 12px; }
+.dev-fold[open] > summary::before { content: "\2212"; }
+.dev-fold > summary:hover { color: var(--ink); }
+.dev-fold > .dev-body { padding: 4px 0 24px; }
+.dev-fold > .dev-body > :last-child { margin-bottom: 0; }

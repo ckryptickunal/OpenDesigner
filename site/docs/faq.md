@@ -21,6 +21,39 @@ Partly: the skills are written instructions your AI follows. A Python engine doe
 
 It is packaged for Claude Code, the Claude app, ChatGPT (as a Project), and Codex, Cursor, VS Code with Copilot, Gemini CLI and other agents that read `.agents/skills/`. A recorded test run in each of them is still to do. See [Install](/docs/install/).
 
+### Is OpenDesigner a Claude skill?
+
+Yes. In Claude Code the plugin installs its nine skills, and in the Claude app you upload them as a skill zip; the same skill folders also work in Codex, Cursor and other agents that read skills. See [Install](/docs/install/).
+
+### How do I install OpenDesigner?
+
+In Claude Code it takes two commands and a new session; the Claude app, ChatGPT, Codex, Cursor and other agents each have a short path too. Then open your project and say "Create a design system for this project." See [Install](/docs/install/).
+
+:::dev
+```
+/plugin marketplace add ckryptickunal/OpenDesigner
+/plugin install opendesigner@opendesigner
+```
+:::
+
+### What does it ask during setup?
+
+Up to five questions: what you're making, who it's for, where it runs, how it should feel, and your brand color or logo. Each comes with a suggested answer and its reason, and you can say "just pick". It also asks once whether it may keep a private log of your steps. See [Your first design system](/docs/quickstart/).
+
+### What files does OpenDesigner create in my project?
+
+`DESIGN.md` and `PRODUCT.md` at the root, and an `opendesigner/` folder with DTCG tokens, code exports for your platforms, an overview page and the decision log. See [The files it writes](/docs/files/).
+
+{{figure:files-tree}}
+
+### How does it work with Tailwind CSS?
+
+It reads your Tailwind config before asking anything. When your platforms include the web, every build writes a Tailwind CSS v4 theme, so utility classes use your colors, spacing, radii and type. See [Export](/docs/export/).
+
+### How do AI coding agents use DESIGN.md?
+
+`DESIGN.md` holds your design rules in plain words, and coding agents read it before they touch the interface. OpenDesigner asks before adding a short note to your `AGENTS.md` that tells agents to read it, use the tokens and run `engine.py review` when they finish. See [Decisions, DESIGN.md and the overview page](/docs/decisions/).
+
 ### Does it send my code or data anywhere?
 
 The engine runs on your computer and makes no network calls. Your chat goes to your AI provider, as any prompt does. The illustration skill searches open-licence art and photo sites only when you use it, and library parts with a photo load it from Unsplash. In the Claude app, the scripts run in Claude's code-execution sandbox.
@@ -39,6 +72,10 @@ If you only need colors for shadcn/ui, a theme generator such as tweakcn is a go
 
 Figma Make builds apps and prototypes by chat, and a Make kit packages a design system you already have. OpenDesigner creates and documents the system itself, with the reason for each choice, and exports Figma variables. It doesn't draw on a canvas. See [For product designers](/docs/designers/).
 
+### How is it different from UI UX Pro Max?
+
+UI UX Pro Max is an open-source (MIT) design knowledge base for your AI: it recommends a style, color palette, fonts and page pattern for your kind of product, with guidelines for many tech stacks, and can save the result as a Markdown master file. OpenDesigner builds the system from your own answers into DTCG tokens and code exports, records why each value was chosen, and blocks the build when contrast or target sizes fail. Pick UI UX Pro Max for quick, broad style recommendations; pick OpenDesigner when you want tokens your code imports and decisions your team can review. See [How it works](/docs/how-it-works/).
+
 ### Does it replace designers?
 
 No. It does the repetitive system work: scales, tokens, states and contrast. It asks a person for the logo, icons, illustration, photos, typeface and voice, and it can't tell you whether real users understand your app. See [Brand assets](/docs/brand-assets/).
@@ -48,6 +85,10 @@ No. It does the repetitive system work: scales, tokens, states and contrast. It 
 That's a fair worry. OpenDesigner asks what people should remember about your product, sets eight dials from your answers, and asks for your own logo, fonts and art instead of faking them. It won't copy another brand; if you love a site's look, it can write a Taste Index of it, and what you keep is your call and your responsibility. Logos, names, images and copy never go in.
 
 The limits, honestly: in our stress test, AI agents made 46 pieces plus 8 mockups by following the process. An audit against shipped products passed 28 of the 54, sent 20 back for polish and rebuilt 6, and much of the striking work was made outside the tokens. The tokens give you consistency and readable contrast; a distinctive look still needs your input.
+
+### Does it check color contrast?
+
+Yes. Every text, border and focus-ring color pair the tokens produce is checked against WCAG 2.2 AA, in light and dark mode and every mode combination, including text on hover and pressed fills, and a failure is an error that blocks the build. See [Accessibility floors](/docs/accessibility/).
 
 ### Does it make my app meet WCAG?
 

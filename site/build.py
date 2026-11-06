@@ -111,6 +111,13 @@ def fetch(url, binary=False):
     return data if binary else data.decode("utf-8")
 
 
+def font_url(block):
+    """The font file in one @font-face block of Google's CSS. Google serves either a URL ending in .woff2 or a kit URL
+    (fonts.gstatic.com/l/font?kit=...) with format('woff2'); prefer woff2 by its format or ending, else the first URL."""
+    urls = re.findall(r"url\((https://[^)]+)\)(?:\s*format\('([^']+)'\))?", block)
+    return next((u for u, f in urls if f == "woff2" or u.endswith(".woff2")), urls[0][0])
+
+
 def fonts():
     CACHE.mkdir(exist_ok=True)
     rules = []
@@ -119,12 +126,15 @@ def fonts():
         if not css_path.exists():
             css_path.write_text(fetch(f"https://fonts.googleapis.com/css2?family={fam}&display=swap"))
         for block in re.findall(r"/\* latin \*/\s*(@font-face\s*{[^}]*})", css_path.read_text()):
-            url = re.search(r"url\((https://[^)]+\.woff2)\)", block).group(1)
+            url = font_url(block)
             weight = re.search(r"font-weight:\s*([^;]+);", block).group(1).strip()
             family = re.search(r"font-family:\s*'([^']+)'", block).group(1)
             fname = f"{key}-{weight.replace(' ', '-')}.woff2"
             if not (CACHE / fname).exists():
-                (CACHE / fname).write_bytes(fetch(url, binary=True))
+                data = fetch(url, binary=True)
+                if data[:4] != b"wOF2":
+                    raise SystemExit(f"fonts: {family} {weight} from {url[:80]} is not a woff2 file")
+                (CACHE / fname).write_bytes(data)
             rules.append((family, weight, fname))
         if not (CACHE / f"{key}-OFL.txt").exists():
             (CACHE / f"{key}-OFL.txt").write_text(fetch(lic))
@@ -459,6 +469,13 @@ def md_to_html(md, toc=None):
             import evals_html
             out.append(evals_html.block(em.group(1))); i += 1
             continue
+        if ln.strip() == ":::dev":  # a "For developers" fold: commands, paths and flags after the plain explanation (site/README.md)
+            j, inner = i + 1, []
+            while j < len(lines) and lines[j].strip() != ":::":
+                inner.append(lines[j]); j += 1
+            out.append(f'<details class="dev-fold"><summary>For developers</summary><div class="dev-body">{md_to_html(chr(10).join(inner))}</div></details>')
+            i = j + 1
+            continue
         if ln.startswith("```"):
             j, code = i + 1, []
             while j < len(lines) and not lines[j].startswith("```"):
@@ -627,6 +644,7 @@ FEED_LINK = f'<link rel="alternate" type="application/atom+xml" href="/changelog
 
 def plain(s):
     s = re.sub(r"\{\{figure:[a-z0-9-]+\}\}", "", s)
+    s = re.sub(r"^:::(?:dev)?$", "", s, flags=re.M)  # a fold's markers, not its text
     return re.sub(r"[`*]", "", re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s)).strip()
 
 
@@ -661,6 +679,8 @@ def strip_figures(md):
     """The Markdown copies and llms-full.txt keep each figure as its caption, the changelog as its text, and each live
     evals block as a pointer to the page that shows it (no placeholder reaches a reader)."""
     md = re.sub(r"^\{\{figure:([a-z0-9-]+)\}\}$", lambda m: f"*Figure: {figure_caption(m.group(1))}*", md, flags=re.M)
+    md = re.sub(r"^:::dev$", "**For developers**", md, flags=re.M)  # a fold on the page, printed in full here
+    md = re.sub(r"^:::$\n?", "", md, flags=re.M)
     md = re.sub(r"^(\{\{(?:changelog|version|changes|whatsnew)\}\})$", lambda m: CHANGELOG_BLOCKS[m.group(1)]().strip(), md, flags=re.M)
     return re.sub(r"^\{\{evals:([a-z-]+)\}\}$", lambda m: f"*The latest results for this part are on the page: {SITE_URL}/docs/evals/*", md, flags=re.M)
 

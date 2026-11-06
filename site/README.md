@@ -42,6 +42,15 @@ What the owner's reviews settled for this site (`_coordination/OWNER-FEEDBACK.md
 
 - **Hosting:** Vercel, project `opendesigner`, at https://opendesigner.dev (the address is in `site-url.txt`). The old address, https://opendesigner.vercel.app, redirects there. Deploying needs the Vercel CLI, signed in. Each production deploy also pings IndexNow.
 - **Figures** live in `figures/*.html` and are placed in a docs page with `{{figure:name}}` on its own line (contract: `figures/README.md`).
+- **Plain first** (owner, 2026-11-07): every docs page opens with what it means for the reader, in plain words, with a figure where a picture says it faster. Commands, file paths, flags, JSON, token names and long numbers go after that, in a fold:
+
+  ```
+  :::dev
+  Any Markdown: code blocks, lists, tables.
+  :::
+  ```
+
+  On the page it is a closed `<details>` titled "For developers" (keyboard accessible, styled in `static/site.css`, `.dev-fold`). The Markdown copies and `llms-full.txt` print it in full under a "For developers" line, and the FAQ's structured data keeps its text, so AI engines still get the detail. Reference pages (engine, files, dials) can stay technical, but each starts with a plain summary. Running text keeps a measure of about 70 characters while figures, tables and code use the full column.
 - **Showcase** tiles, tags and the lightbox come from `brand/showcase/` and its Mobbin audit files in `brand/showcase/audit/`.
 - **Edit the docs** in `docs/*.md`. Front matter: `title`, `seo_title` (50 to 60 characters), `description` (140 to 160), `section` (Getting started, Guides, Concepts or Reference), `order` and `updated`. Links are root-absolute (`/docs/install/`). Every claim must match the product facts; when in doubt, leave it out.
 - **The home page** (`/`) is `home()` in `build.py`, styled by `static/home.css`, with the hero figure `figures/home-hero.html`. Its three examples (Billerwick, Pebbleday, Fernhollow; invented names, each in `brand/showcase/NAMES.md`) are real engine output from `demo_systems.py`: never edit their values by hand. Every claim on it must match `brand/gtm/research/facts.md` and the repo.
