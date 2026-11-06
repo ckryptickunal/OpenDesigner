@@ -111,6 +111,13 @@ def fetch(url, binary=False):
     return data if binary else data.decode("utf-8")
 
 
+def font_url(block):
+    """The font file in one @font-face block of Google's CSS. Google serves either a URL ending in .woff2 or a kit URL
+    (fonts.gstatic.com/l/font?kit=...) with format('woff2'); prefer woff2 by its format or ending, else the first URL."""
+    urls = re.findall(r"url\((https://[^)]+)\)(?:\s*format\('([^']+)'\))?", block)
+    return next((u for u, f in urls if f == "woff2" or u.endswith(".woff2")), urls[0][0])
+
+
 def fonts():
     CACHE.mkdir(exist_ok=True)
     rules = []
@@ -119,12 +126,15 @@ def fonts():
         if not css_path.exists():
             css_path.write_text(fetch(f"https://fonts.googleapis.com/css2?family={fam}&display=swap"))
         for block in re.findall(r"/\* latin \*/\s*(@font-face\s*{[^}]*})", css_path.read_text()):
-            url = re.search(r"url\((https://[^)]+\.woff2)\)", block).group(1)
+            url = font_url(block)
             weight = re.search(r"font-weight:\s*([^;]+);", block).group(1).strip()
             family = re.search(r"font-family:\s*'([^']+)'", block).group(1)
             fname = f"{key}-{weight.replace(' ', '-')}.woff2"
             if not (CACHE / fname).exists():
-                (CACHE / fname).write_bytes(fetch(url, binary=True))
+                data = fetch(url, binary=True)
+                if data[:4] != b"wOF2":
+                    raise SystemExit(f"fonts: {family} {weight} from {url[:80]} is not a woff2 file")
+                (CACHE / fname).write_bytes(data)
             rules.append((family, weight, fname))
         if not (CACHE / f"{key}-OFL.txt").exists():
             (CACHE / f"{key}-OFL.txt").write_text(fetch(lic))
