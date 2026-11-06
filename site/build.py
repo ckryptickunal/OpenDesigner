@@ -257,6 +257,119 @@ def caps_css(css):
     return ".caps{display:contents;letter-spacing:0}" + ",".join(dict.fromkeys(f"{x} .caps" for x in sels)) + "{letter-spacing:inherit}"
 
 
+# Docs type on the brand's scale (issue #79, owner 2026-11-05): every font size on a docs page, and in the header and footer every
+# page shares, maps to a step of OpenDesigner's own type scale, and every weight to its two weights. The source CSS keeps its
+# values; the build adds overrides inside the docs layout, the header and the footer, so the home page's own type is untouched.
+BRAND_SIZES = (13, 16, 20, 25, 39, 49, 76, 95)  # brand/opendesigner tokens: --ds-font-size-*
+TYPE_SCOPE = ":is(.layout, .bar, .foot)"
+FLUID = {".t-hero": (39, 49), ".t-h1": (39, 49), ".t-h2": (25, 25), ".prose h2": (25, 25)}  # (below 1024px, from 1024px)
+
+
+def snap_px(px):
+    return min(BRAND_SIZES, key=lambda step: (abs(step - px), -step))  # a tie goes to the larger step
+
+
+def snap_weight(w):
+    return 400 if int(w) < 450 else 500
+
+
+def css_blocks(css):
+    """Top-level blocks of a stylesheet as (head, body): a rule, or an at-rule with its inner rules."""
+    i, n = 0, len(css)
+    while i < n:
+        j = css.find("{", i)
+        if j < 0:
+            return
+        depth, k = 1, j + 1
+        while depth and k < n:
+            depth += {"{": 1, "}": -1}.get(css[k], 0)
+            k += 1
+        yield css[i:j].strip(), css[j + 1:k - 1]
+        i = k
+
+
+def split_selectors(sel):
+    out, depth, cur = [], 0, ""
+    for ch in sel:
+        depth += {"(": 1, ")": -1}.get(ch, 0)
+        if ch == "," and depth == 0:
+            out.append(cur.strip())
+            cur = ""
+        else:
+            cur += ch
+    return [x for x in out + [cur.strip()] if x]
+
+
+def brand_type_css(css):
+    """Overrides that put every font size and weight in `css` on the brand scale, inside the docs layout, header and footer."""
+    css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+
+    def rule(sel, body, wide=False):
+        size = re.search(r"(?:^|;)\s*font-size:\s*([^;]+)", body)
+        short = re.search(r"(?:^|;)\s*font:\s*(?:(?:italic|normal)\s+)?(?:(\d{3})\s+)?([\d.]+)(px|rem)\b", body)
+        weight = re.search(r"(?:^|;)\s*font-weight:\s*(\d{3})", body) or (short if short and short.group(1) else None)
+        decl, value = [], None
+        if size:
+            v = size.group(1).strip()
+            fluid = next((pair for key, pair in FLUID.items() if re.search(re.escape(key) + r"(?![\w-])", sel)), None)
+            if v.startswith("clamp(") and fluid:
+                value = fluid[1] if wide else fluid[0]
+            elif re.fullmatch(r"[\d.]+px", v):
+                value = snap_px(float(v[:-2]))
+            elif re.fullmatch(r"[\d.]+rem", v):
+                value = snap_px(float(v[:-3]) * 16)
+            elif re.fullmatch(r"0?\.\d+em", v) and "code" in sel:
+                value = 13
+        elif short:
+            value = snap_px(float(short.group(2)) * (16 if short.group(3) == "rem" else 1))
+        if value:
+            decl.append(f"font-size:{value}px")
+        if weight:
+            decl.append(f"font-weight:{snap_weight(weight.group(1))}")
+        if not decl:
+            return ""
+        sels = [x for x in split_selectors(sel) if not re.match(r"(?:html|body|:root)\b", x)]
+        sels = [f"{TYPE_SCOPE} {x}" for x in sels] + [x for x in sels if re.match(r"\.(?:bar|foot)(?![\w-])", x)]
+        return f"{','.join(sels)}{{{';'.join(decl)}}}" if sels else ""
+
+    out, wide = [], []
+    for head, body in css_blocks(css):
+        if head.startswith("@media"):
+            inner = "".join(rule(h, b) for h, b in css_blocks(body) if not h.startswith("@"))
+            if inner:
+                out.append(f"{head}{{{inner}}}")
+        elif not head.startswith("@"):
+            out.append(rule(head, body))
+            if any(re.search(re.escape(key) + r"(?![\w-])", head) for key in FLUID) and "clamp(" in body:
+                wide.append(rule(head, body, wide=True))
+    code = f"{TYPE_SCOPE} :not(pre) > code{{font-size:13px}}{TYPE_SCOPE} :is(h1,h2,h3,h4) code{{font-size:inherit}}"
+    defaults = f":where(.layout, .bar, .foot) :where(strong, b, th, h1, h2, h3, h4, h5, h6){{font-weight:500}}"
+    return defaults + "".join(out) + code + (f"@media (min-width: 1024px){{{''.join(wide)}}}" if wide else "")
+
+
+def brand_type_inline(html_):
+    """The same steps for a docs page's inline styles and SVG text (the figures): sizes to the scale, weights to 400 or 500."""
+    def style(m):
+        st = re.sub(r"(font-size:\s*)([\d.]+)px", lambda x: f"{x.group(1)}{snap_px(float(x.group(2)))}px", m.group(1))
+        st = re.sub(r"(font:\s*(?:(?:italic|normal)\s+)?)(\d{3})(\s+)([\d.]+)px",
+                    lambda x: f"{x.group(1)}{snap_weight(x.group(2))}{x.group(3)}{snap_px(float(x.group(4)))}px", st)
+        st = re.sub(r"(font:\s*(?:(?:italic|normal)\s+)?)([\d.]+)px", lambda x: f"{x.group(1)}{snap_px(float(x.group(2)))}px", st)
+        st = re.sub(r"(font-weight:\s*)(\d{3})", lambda x: f"{x.group(1)}{snap_weight(x.group(2))}", st)
+        return f'style="{st}"'
+    html_ = re.sub(r'style="([^"]*)"', style, html_)
+    html_ = re.sub(r'(\sfont-size=")([\d.]+)(")', lambda x: f"{x.group(1)}{snap_px(float(x.group(2)))}{x.group(3)}", html_)
+    return re.sub(r'(\sfont-weight=")(\d{3})(")', lambda x: f"{x.group(1)}{snap_weight(x.group(2))}{x.group(3)}", html_)
+
+
+def title_html(t):
+    """A docs title that never ends on one word: its last two words stay together. Hyphens elsewhere never break; in the last
+    two words one may, so a long title ends "design- / system teams" rather than leaving "teams" alone (preflight 53, #79)."""
+    words = esc(t).split(" ")
+    if len(words) < 3:
+        return esc(t).replace("-", NBH)
+    return " ".join(words[:-2]).replace("-", NBH) + " " + "\u00a0".join(words[-2:])
+
+
 def fmt_em(x):
     return "0" if x == 0 else f"{x:g}em"
 
@@ -1382,7 +1495,7 @@ def doc_page(p, pages):
     pos = same.index(p) + 1
     kind = {"Getting started": "lime", "Guides": "", "Concepts": "sky", "Craft": "pink", "Reference": "paper"}.get(p["section"], "paper")
     icon = {"Getting started": "play", "Guides": "compass", "Concepts": "bulb", "Craft": "brush", "Reference": "book"}.get(p["section"], "tag")
-    main_html = (f'<div class="doc-grid"><article class="doc">{crumb}<p class="doc-stickers a-doc"><span class="a-card"><span class="a-card-k">{esc(p["section"])}</span><span class="a-card-n">{pos:02d}<small>/{len(same):02d}</small></span></span></p><h1 class="t-h1">{esc(p["title"]).replace("-", NBH)}</h1>'
+    main_html = (f'<div class="doc-grid"><article class="doc">{crumb}<p class="doc-stickers a-doc"><span class="a-card"><span class="a-card-k">{esc(p["section"])}</span><span class="a-card-n">{pos:02d}<small>/{len(same):02d}</small></span></span></p><h1 class="t-h1">{title_html(p["title"])}</h1>'
                  f'<p class="meta">Updated <time datetime="{p.get("updated", TODAY)}">{p.get("updated", TODAY)}</time> · <a href="{edit}">Suggest a change</a></p>'
                  f'<div class="prose">{content}</div>{pn}</article>{toc_html}</div>')
     ld = [crumbs_ld([("Docs", "/docs/")] + ([] if p["slug"] == "index" else [(p["title"], p["path"])])),
@@ -2056,7 +2169,7 @@ def main():
     raw_css = ((SITE / "static" / "site.css").read_text() + (SITE / "static" / "figures.css").read_text() + status_css() + (SITE / "static" / "home.css").read_text()
                + (SITE / "static" / "craft.css").read_text() + (SITE / "static" / "deco.css").read_text() + (SITE / "static" / "changelog.css").read_text())
     (DIST / "site.css").write_text(minify_css(ff + tokens_css() + corners_match_levers(apple_tracking(raw_css))
-                                              + caps_css(raw_css + (SITE / "static" / "tour.css").read_text())))
+                                              + caps_css(raw_css + (SITE / "static" / "tour.css").read_text()) + brand_type_css(raw_css)))
     shutil.copy(SITE / "static" / "site.js", DIST / "site.js")
     if PH_KEY:
         shutil.copy(SITE / "static" / "ph.js", DIST / "ph.js")
@@ -2095,6 +2208,8 @@ def main():
     for rel, text in {**files, **mds}.items():
         if rel.endswith(".html") and not rel.startswith("library/"):  # the library's parts keep their own markup
             text = caps_spans(text)
+        if rel.startswith("docs/") and rel.endswith(".html"):  # docs figures on the brand type scale (#79)
+            text = brand_type_inline(text)
         f = DIST / rel
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text(text)

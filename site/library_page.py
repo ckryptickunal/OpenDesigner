@@ -151,7 +151,7 @@ def live(c, look=DEFAULT_LOOK):
 
 
 def kit_button(slug, name):
-    return (f'<button type="button" class="btn kit-add" data-kit-add="{slug}" aria-pressed="false" aria-label="Add to kit: {esc(name)}">{PLUS}'
+    return (f'<button type="button" class="btn secondary kit-add" data-kit-add="{slug}" aria-pressed="false" aria-label="Add to kit: {esc(name)}">{PLUS}'
             f'<span class="t-add">Add to kit</span><span class="t-in">In your kit</span></button>')
 
 
