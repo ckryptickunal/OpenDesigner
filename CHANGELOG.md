@@ -8,6 +8,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Guides that answer the question asked** (2026-11-07). The Cursor guide opens with the three things Cursor needs, a file tree, a rule file to copy and an audit-first prompt. The vibe-coded guide is now "Make a vibe-coded app look professional", with five steps and a rule list. The other guides drop repeated lines, and say what the contrast check covers.
 - **Wider, calmer docs pages** (2026-11-07). The docs content column is about a third wider and running text keeps a readable line length, with more space between sections. Pages open in plain words, and commands, file paths and flags sit in a folded "For developers" section that AI tools still read in full.
 - **Shorter craft pages** (2026-11-07). The motion, UX patterns, interface details, sources and design styles pages are 15 to 24% shorter, with every rule, number and source kept. They also say what is true today: 32 benchmarked systems, and the two house colour rules (known meanings keep their colours; never pure white with pure black).
 - **Six new FAQ answers** (2026-11-07). The FAQ now answers how to install OpenDesigner, what it asks during setup, which files it creates, how it works with Tailwind CSS, how coding agents use DESIGN.md, and how it differs from UI UX Pro Max.

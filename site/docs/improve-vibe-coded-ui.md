@@ -1,23 +1,48 @@
 ---
-title: Improve a vibe-coded UI
-seo_title: Improve a vibe-coded UI with a design system you confirm
-description: How OpenDesigner reads the values in an app built fast with AI, lets you confirm the rules, and lists every hard-coded value that still skips them.
+title: Make a vibe-coded app look professional
+seo_title: How to make a vibe-coded app look professional
+description: Make a vibe-coded app look professional: set the design language, choose a direction from real references, write DESIGN.md, build with tokens, check every size.
 section: Guides
 order: 22
-updated: 2026-10-15
+updated: 2026-11-07
 ---
 
-If you built an app quickly by prompting an AI, it probably works but looks a little off. OpenDesigner can help in three steps. It reads the values already in your code. You confirm which ones become the rules. Then it lists every place your code still skips those rules, with the token to use instead.
-
-It doesn't rewrite your UI by itself. You, or your AI, make the fixes, and a review command shows what is left.
+To make a vibe-coded app look professional, stop each prompt from choosing its own values. Decide the design language once, write it down where your AI reads it, and check the page as people see it, not only the code. OpenDesigner takes the repetitive part off your hands, but it doesn't rewrite your UI on its own: you or your AI make the fixes.
 
 ## Why it looks off
 
-Each prompt picks its own values. One button gets 7 px corners, a card gets 12 px, and a gray is typed in by hand. No single value is wrong, but together they don't match. A design system puts the rules in one place, so every screen uses the same ones.
+Each prompt picks its own values. One button gets 7 px corners, a card gets 12 px, and a gray is typed in by hand. No single value is wrong, but together they don't match.
 
-## The example on this page
+## Five steps
 
-We wrote a six-line style sheet with that kind of drift and ran it through the real engine on 2026-10-15, with Python 3.10.11. Every output below is copied from that run. Here are three of its lines, numbers 2, 4 and 5:
+| Step | What you do | What OpenDesigner does |
+|---|---|---|
+| 1. Set the design language | Confirm your colors, type, spacing, corners, depth and motion | Reads the values already in your code and proposes them as tokens |
+| 2. Choose a direction from real references | Pick by looking at shipped products, not AI mockups | Runs a taste poll of real screens, or shows three directions on one board |
+| 3. Write the rules down | Commit `DESIGN.md` | Writes `DESIGN.md`, with a section your AI reads before any UI work |
+| 4. Build with the tokens | Ask your AI for the screens | `engine.py review` lists every value typed by hand, with the token to use |
+| 5. Check the rendered page | Look at it at every size and theme | The opendesigner-review skill checks the page in a browser, with evidence for each finding |
+
+*The five steps, and the part OpenDesigner takes off your hands.*
+
+The taste poll needs your own Mobbin access. The three directions come with the optional user research step, which runs only after you say yes.
+
+## Rules your AI can follow
+
+OpenDesigner holds every screen to these lines from its quality bar and accessibility floors:
+
+- **Fit the job.** A dispatch board is dense; a launch page is quiet.
+- **Real content.** Real names, and numbers with units. No lorem ipsum, placeholder logo or invented proof.
+- **One system.** One accent with one job, one or two typefaces, and every spacing and radius from the scale.
+- **A clear first read.** One thing reads first, and each view has one primary action.
+- **Every state designed:** empty, loading, error and long text, aligned at every width.
+- **Restraint.** No glow, blobs, emoji icons or decoration that carries no data.
+- **Motion with a job.** Things move only to explain or confirm, and reduced motion is respected.
+- **The floors.** Text contrast of 4.5:1, borders and focus rings at 3:1, targets of at least 24 px, and a visible focus ring.
+
+## The example, step by step
+
+We wrote a six-line style sheet with that kind of drift and ran it through the engine on 2026-10-15, with Python 3.10.11. Every output below is copied from that run. Here are lines 2, 4 and 5:
 
 ```css
 .btn { background: #4f46e5; color: #ffffff; border-radius: 7px; padding: 8px 16px; }
@@ -25,9 +50,7 @@ We wrote a six-line style sheet with that kind of drift and ran it through the r
 .card { background: #f9fafb; border-radius: 12px; padding: 24px; }
 ```
 
-## Step 1: It reads what is there
-
-The opendesigner-extract skill asks before it reads anything, and asks you to tag the source. Here it is tagged as your own product. A helper script measures the CSS, then the engine turns the measurements into proposals:
+**It reads what is there.** The opendesigner-extract skill asks before it reads anything, and you tag the source as your own product. Then it measures the CSS and proposes values:
 
 ```
 Reference our-app (our-product, code): 7 proposal(s), pending until accepted
@@ -36,15 +59,11 @@ Reference our-app (our-product, code): 7 proposal(s), pending until accepted
   raw.brandColor             "#4f46e5"  high    the person's own product: its brand color may carry over
 ```
 
-In plain words: your 7 px button corners set the roundness, your 16 px body text sets the density, and your indigo stays as the brand color because the app is yours. When the source is someone else's site, the exact color is never copied. See [Start from an existing app or brand](/docs/existing-product/).
+Your 7 px button corners set the roundness, your 16 px body text sets the density, and your indigo stays as the brand color because the app is yours. From someone else's site, the exact color is never copied.
 
-## Step 2: You confirm
+**You confirm.** Nothing is decided until you accept, adjust or ignore each line. Here all seven were accepted, and the decision log records each one as coming from your app. `DESIGN.md` notes that white text on the indigo reads at 6.29:1, above the 4.5:1 floor.
 
-Nothing is decided until you accept, adjust or ignore each line. In the example, all seven were accepted. The decision log records each one as coming from your app, with its reason. The brand color stayed exact on the buttons. `DESIGN.md` notes that white text on it reads at 6.29:1, above the 4.5:1 floor.
-
-## Step 3: Review finds the drift
-
-Run `engine.py review --project src`. Here is part of its output:
+**Review finds the drift.** `engine.py review --project src` found 16 hard-coded values, plus 4 lines that broke a house standard because their spacing was in pixels. Part of its output:
 
 ```
   app.css:2  #4f46e5  ->  use var(--ds-color-bg-action-primary)
@@ -53,30 +72,19 @@ Run `engine.py review --project src`. Here is part of its output:
   app.css:5  border-radius: 12px  ->  use var(--ds-radius-container) (8px, the container radius)
 ```
 
-In all, it found 16 hard-coded values. It also found 4 lines that break a house standard, because their spacing was in pixels.
+"Closest match" means no token fits exactly, so you choose. For the input border, we chose `--ds-color-border-input` instead.
 
-Each suggestion names a role and its value, so you can see what would change. "Closest match" means no token fits exactly, so you choose. For the input border, we chose `--ds-color-border-input` instead.
-
-## Step 4: You decide, and extend records it
-
-The review shows that the cards' 12 px corners would become 8 px. If you'd rather keep 12 px, say so. The extend skill records the change, with your reason, and rebuilds:
+**You decide.** Review shows the cards' 12 px corners would become 8 px. To keep 12 px, say so. The extend skill records your reason, and the corners of dialogs move up to 16 px with it:
 
 ```
 engine.py set radius.container 12 --why "cards keep the 12px corners the app has today"
 ```
 
-```
-D-0015 set overrides.radius.container = 12 (chosen)
-  tokens: 2 values change (radius.container, radius.overlay). Run `engine.py build` to refresh the tokens, exports and preview.
-```
-
-The radius for overlays, such as dialogs, moved up to 16 px with it.
-
-## Step 5: You fix the code
+**You fix the code.** We made the edits by hand. Your AI can make them when you ask.
 
 {{figure:intent-vibe-before-after}}
 
-We made these edits by hand, following the suggestions. Your AI agent can make the same edits when you ask it to. Then review again:
+Review again:
 
 ```
 No hard-coded colors, sizes, radii, shadows or durations found: the code uses the tokens.
@@ -84,9 +92,9 @@ No hard-coded colors, sizes, radii, shadows or durations found: the code uses th
 
 With `--strict`, review exited with an error before the edits and passed after them.
 
-## What review can't tell you
+## What this can't tell you
 
-Review reads code. It can't see the rendered page, so it can't judge layout, hierarchy or whether people understand your app. Values read from a screenshot are estimates. OpenDesigner hasn't had watched user trials yet. If a value looks wrong, adjust it, and please [report it](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose).
+`engine.py review` reads code, so it can't judge layout or hierarchy. The review skill checks the rendered page for those. Neither tells you whether people understand your app. Values read from a screenshot are estimates, and OpenDesigner hasn't had watched user trials yet. If a value looks wrong, adjust it, and please [report it](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose).
 
 ## Next
 

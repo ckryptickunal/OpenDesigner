@@ -1,21 +1,43 @@
 ---
 title: A design system for Cursor
-seo_title: Design system for Cursor: tokens, Tailwind and DESIGN.md
-description: Add OpenDesigner's skills to a Cursor project, ask for a design system, and get tokens, CSS, a Tailwind theme and a DESIGN.md the agent keeps following.
+seo_title: Give Cursor your design tokens so every screen matches
+description: Cursor needs three things to keep every screen consistent: design tokens, components built on them, and a rule that points at DESIGN.md. Here is each one.
 section: Guides
 order: 20
-updated: 2026-11-05
+updated: 2026-11-07
 ---
 
-Copy OpenDesigner's skills into your project, ask Cursor's agent for a design system, and you get files it can follow in every later chat. You get tokens, CSS variables, a Tailwind v4 theme and a `DESIGN.md` with the rules in plain words. OpenDesigner is free and open source (MIT).
+To make every screen match, give Cursor three things:
 
-One honest note first. The packaging for Cursor is in the repository, but nobody has recorded a test run inside Cursor yet. The end of this page says what was checked.
+1. **Design tokens:** your colors, text sizes, spacing, corners and shadows as named values, so no screen invents its own.
+2. **Components built only on those tokens:** your own, or ones from OpenDesigner's optional [component library](/library/).
+3. **A project rule** that tells Cursor to read `DESIGN.md` and use the tokens before any UI work.
 
-{{figure:intent-cursor-loop}}
+OpenDesigner writes the first part for you: the tokens, a `DESIGN.md` with your rules in plain words, and a design system playground page that shows it all. You add the rule file below once. OpenDesigner is free and open source (MIT).
 
-## Install it in your project
+One honest note first: the packaging for Cursor is in the repository, but nobody has recorded a test run inside Cursor yet.
 
-Cursor loads skills from a folder called `.agents/skills/` in your project. Copy the OpenDesigner skills there:
+```
+your-app/
+├── .cursor/
+│   └── rules/opendesigner.mdc
+├── .agents/skills/opendesigner*
+├── DESIGN.md
+├── PRODUCT.md
+├── opendesigner/
+│   ├── tokens/
+│   ├── build/css/tokens.css
+│   ├── build/tailwind/theme.css
+│   ├── decisions.md
+│   └── overview.html
+└── src/components/
+```
+
+*Where each file sits. You add the rule in `.cursor/rules/`. OpenDesigner writes `DESIGN.md`, `PRODUCT.md` and everything in `opendesigner/`: the tokens, CSS and Tailwind files, the decision log and `overview.html`, your design system playground. Your components use only the tokens.*
+
+## Set it up
+
+**1. Copy the skills into your project.** Cursor loads skills from `.agents/skills/`:
 
 ```
 git clone https://github.com/ckryptickunal/OpenDesigner
@@ -23,55 +45,70 @@ mkdir -p your-project/.agents/skills
 cp -R OpenDesigner/.agents/skills/opendesigner* your-project/.agents/skills/
 ```
 
-That copies eight skill folders. The main one, `opendesigner`, runs the interview. Others learn from your existing code, change the system later, export it, find illustrations, paint brand art, and check built pages before you share them.
+The skills come with a small Python engine that does the math. You need Python 3.10 or newer. The engine uses only Python's standard library and makes no network calls.
 
-The skill comes with a small Python engine that does the math. Cursor's agent runs it in your terminal, so you need Python 3.10 or newer. The engine uses only Python's standard library and makes no network calls.
+**2. Ask for the system.** In Cursor's agent chat, say: **"Create a design system for this project."** It reads your CSS, Tailwind config, `package.json` and token files first, and doesn't ask what they already answer. Then it asks up to five questions, each with a recommended answer and its reason. Answer in your own words, or say "just pick". Choices show as text, or as a local HTML page you open in your browser.
 
-## What you ask
+**3. Add the rule.** Save this as `.cursor/rules/opendesigner.mdc`:
 
-In Cursor's agent chat, say: **"Create a design system for this project."** Cursor picks a skill by its description. You can also type `/` and choose `opendesigner` yourself.
+```
+---
+alwaysApply: true
+---
 
-It looks before it asks. It reads your CSS, Tailwind config, `package.json` and any token files, and it doesn't ask what a file already answers. Then it asks up to five questions, one per message: what you are making, who it is for, where it runs, how it should feel, and your brand color or logo. Each comes with a recommended answer and its reason. Answer in your own words, or say "just pick".
+# Design system (OpenDesigner)
 
-OpenDesigner can't show its picture choices inside Cursor's chat yet. Instead, it shows choices as text, or writes a local HTML page you open in your browser.
+Before any UI, styling or visual work:
+- Read @DESIGN.md and @PRODUCT.md.
+- Style with the tokens in @opendesigner/build/css/tokens.css, or the Tailwind classes from @opendesigner/build/tailwind/theme.css.
+- Never hard-code colors, font sizes, spacing, radii, shadows or durations.
+- Reuse existing components before you make a new one. A new component uses tokens only.
+- Leave locked decisions alone. If you need a value the system lacks, add it with the opendesigner-extend skill and a reason.
 
-## What you get
+When you finish:
+- Run `python3 .agents/skills/opendesigner/scripts/engine.py review --project src` and fix what it lists.
+- Open the page in a browser at phone and desktop width, and fix what looks wrong.
+```
 
-- `DESIGN.md`: your design rules in plain words, with a section written for AI agents.
-- `PRODUCT.md`: what the product is and who it is for.
-- `opendesigner/tokens/`: the rules as named values in the open DTCG 2025.10 format.
-- `opendesigner/build/css/tokens.css` and `opendesigner/build/tailwind/theme.css`, plus Swift, Jetpack Compose and Figma files.
-- `opendesigner/decisions.md`: every choice and why it was made.
-- `opendesigner/overview.html`: the whole system on one page.
+`alwaysApply: true` puts the rule in every chat. Each `@` line points Cursor at a file instead of copying it, so the rule never goes out of date. At the end of a session, OpenDesigner also offers to add the same rules to `AGENTS.md`, which Cursor reads too. It adds them only after you say yes.
 
-On 2026-10-15, a fresh run of the engine wrote 50 files. It checked the contrast of 164 color pairs across 12 combinations of light and dark, density and motion. A contrast error stops the build.
-
-## How Cursor keeps following it
-
-Two things carry the system into later chats.
-
-**DESIGN.md.** Its last section tells AI agents to read the file and the tokens before changing any screen. It also tells them to use tokens instead of raw values, and to leave locked decisions alone.
-
-**A note in AGENTS.md.** At the end, OpenDesigner asks whether to add a short note to your `AGENTS.md`. It adds it only after you say yes. Cursor reads `AGENTS.md` at your project root. The note tells the agent to:
-
-- read `DESIGN.md` and `PRODUCT.md` before any visual work;
-- never hard-code colors, sizes, spacing, radii, shadows or durations;
-- run `engine.py review` at the end of every piece of work and fix what it finds.
-
-Instructions guide an agent, but they don't force it. So the real check is a command:
+**4. Check the code.** A rule guides Cursor, but it doesn't force it. The review command checks:
 
 ```
 python3 .agents/skills/opendesigner/scripts/engine.py review --project src
 ```
 
-It lists every color, size, radius, shadow and duration typed straight into your code, and names the token to use instead. With `--strict`, it exits with an error when it finds anything. A script can stop on that.
+It lists every color, size, radius, shadow and duration typed straight into your code, and names the token to use instead.
+
+{{figure:intent-cursor-loop}}
+
+## Already have screens? Audit first
+
+Don't let an agent restyle a working app in one go. Paste this instead:
+
+```
+Create a design system from this project's existing styles.
+Audit first: read the CSS, Tailwind config and components, and list the colors,
+text sizes, spacing, radii and shadows in use, with where each one comes from.
+Show me the values you propose before you change any file.
+Then run engine.py review and list every hard-coded value with the token to use.
+Don't restyle any screen until I say yes.
+```
+
+OpenDesigner shows each proposed value with where it was measured, and nothing is decided until you accept it. [Make a vibe-coded app look professional](/docs/improve-vibe-coded-ui/) shows a full run.
+
+## Your design system playground
+
+`opendesigner/overview.html` is the design system playground people otherwise build by hand. It shows every color in light and dark with its contrast ratio, every text style, spacing, corners, depth, motion and the core components, all on one page. Every build rewrites it, and it works offline. Components in their states are in `opendesigner/preview/`.
+
+Contrast is checked for you. OpenDesigner checks every text, border, icon and focus-ring color pair your tokens promise, in light and dark mode, including text on hover and pressed fills, and a failing pair stops the build.
 
 To change the system later, just ask: "make the buttons a bit rounder". The extend skill reads the decision log first, then records the change and its reason.
 
 ## What was checked, and what wasn't
 
-- The eight skill folders are in the public repository under `.agents/skills/` (checked 2026-10-15).
-- Cursor's documentation lists `.agents/skills/` as a project skill folder and says Cursor supports `AGENTS.md` (checked 2026-10-15).
+- The skill folders are in the public repository under `.agents/skills/` (checked 2026-10-15).
+- Cursor's documentation lists `.agents/skills/` as a project skill folder and says Cursor reads `AGENTS.md` (checked 2026-10-15). Its rules page documents `.cursor/rules/*.mdc` files with `alwaysApply` and `@` file references (checked 2026-11-07).
 - The engine on its own was tested with Python 3.10.11.
 - A run inside Cursor has not been recorded yet. If you try it, please [open an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose) and tell us what happened.
 
