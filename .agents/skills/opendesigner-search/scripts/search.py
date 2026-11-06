@@ -168,8 +168,13 @@ def aliases(path):
     return out
 
 
+def squash(text):
+    """Letters and digits only: inline tags split words with spaces (<abbr>AI</abbr>-made), so compare without them."""
+    return re.sub(r"[\W_]+", "", text.lower())
+
+
 def jsonld_findings(page, rel, add):
-    shown = page.visible().lower()
+    shown = squash(page.visible())
     for raw in page.jsonld:
         try:
             data = json.loads(raw)
@@ -182,7 +187,7 @@ def jsonld_findings(page, rel, add):
             kinds = kind if isinstance(kind, list) else [kind]
             if "FAQPage" in kinds:
                 qs = [q.get("name", "") for q in it.get("mainEntity", []) if isinstance(q, dict)]
-                hidden = [q for q in qs if q and q.lower().strip() not in shown]
+                hidden = [q for q in qs if q and squash(q) not in shown]
                 if hidden:
                     add("SE-09", "warn", "FAQ markup the page does not show", f"{len(hidden)} of {len(qs)} questions: {hidden[0][:60]}",
                         rel, "markup must match the visible page (Google's structured data policies)")
@@ -223,14 +228,21 @@ def audit(folder, base=None):
     else:
         add("SE-10", "info", "No llms.txt", "a proposal, not a standard; Google says it is not needed for Search", "llms.txt", "")
 
-    pages = {}
+    pages, fragments = {}, 0
     for f in sorted(root.rglob("*.html")):
         rel = f.relative_to(root).as_posix()
         if rel.split("/")[0] in ("node_modules",) or rel in ("404.html", "500.html"):
             continue
+        text = f.read_text(encoding="utf-8", errors="replace")
+        if not re.search(r"<html[\s>]", text[:5000], re.I):  # a fragment another page loads, not a page a crawler lands on
+            fragments += 1
+            continue
         pg = Page()
-        pg.feed(f.read_text(encoding="utf-8", errors="replace"))
+        pg.feed(text)
         pages[url_path(rel)] = (rel, pg)
+    if fragments:
+        add("SE-00", "info", f"{fragments} HTML fragments skipped", "files with no <html> element are parts other pages load, not pages",
+            "", "")
     titles, descs, canon_owner, inbound = {}, {}, {}, {p: 0 for p in pages}
     for path, (rel, pg) in pages.items():
         noindex = "noindex" in pg.robots

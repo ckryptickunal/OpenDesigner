@@ -1,7 +1,7 @@
 ---
 title: Get found in search and AI answers
-seo_title: SEO, AEO and GEO with OpenDesigner: get found in search and AI answers
-description: How the opendesigner-search skill checks a site for search engines and AI answer engines, asks ChatGPT and Perplexity a few questions by hand, and proposes page fixes.
+seo_title: "SEO, AEO and GEO: get found in search and AI answers"
+description: How OpenDesigner checks a site for search and AI answer engines, asks ChatGPT and Perplexity a few questions by hand, and proposes page fixes.
 section: Guides
 order: 8
 updated: 2026-11-07

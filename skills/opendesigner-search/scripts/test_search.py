@@ -94,6 +94,18 @@ class Pages(unittest.TestCase):
         self.assertTrue(all("no Google rich result" in f["title"] for f in se09))
         self.assertNotIn("remove", " ".join(f["evidence"] + f["fix"] for f in se09).lower())
 
+    def test_faq_text_split_by_inline_tags_still_matches(self):
+        faq = ('<script type="application/ld+json">{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is it an '
+               'AI-made app?"}]}</script>')
+        html_ = page(head=faq, canonical="https://a.example/", body="Is it an <abbr>AI</abbr>-made app? No. " * 8)
+        r = s.audit(site(dict(BASE, **{"index.html": html_})), "https://a.example")
+        self.assertEqual([f["severity"] for f in r["findings"] if f["code"] == "SE-09"], ["info"])
+
+    def test_fragments_are_not_pages(self):
+        r = s.audit(site(dict(BASE, **{"parts/card.html": "<style>.c{}</style><div class=c>Card</div>"})))
+        self.assertEqual(r["pages"], 1)
+        self.assertIn(("SE-00", "info"), codes(r))
+
     def test_broken_json_ld_and_heading_and_title_problems(self):
         r = s.audit(site(dict(BASE, **{
             "index.html": page(head='<script type="application/ld+json">{oops</script>', canonical="https://a.example/"),
