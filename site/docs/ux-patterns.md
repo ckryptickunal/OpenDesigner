@@ -15,11 +15,14 @@ Every rule here is an OpenDesigner house standard or [accessibility floor](/docs
 
 A toast is a short message that appears for a moment and goes away on its own, such as "Link copied".
 
-**Put toasts in one corner, bottom-right by default,** choosing only from the four corners and the top or bottom center. *(STD-components-toasts-drawers-29)* Keep them 32 px from the screen edges, or 16 px on screens under 600 px wide. *(STD-components-toasts-drawers-30)*
-
-**Show three at most, stacked with depth.** Each toast behind the front one sits 14 px higher and 5% smaller. Hovering spreads the stack with 14 px gaps that stay part of the hover area, so it doesn't collapse under the pointer. The stack moves with Sonner's `transform 400ms ease`, longer than the 300 ms limit and allowed for this component. *(STD-easing-duration-13, STD-components-toasts-drawers-14, STD-components-toasts-drawers-10, STD-components-toasts-drawers-12, STD-components-toasts-drawers-13)*
-
-**Close a toast after 4 seconds, but pause the timer while the pointer is over it or the tab is hidden,** so people don't lose a message they're reading. *(STD-components-toasts-drawers-15, STD-components-toasts-drawers-16, STD-components-toasts-drawers-17)* **A toast with an action, such as Undo, stays until it's used or closed,** so the action has no time limit. This one is OpenDesigner's inference from WCAG's Timing Adjustable rule. *(STD-components-toasts-drawers-15)*
+| Toast | The rule | Standard |
+|---|---|---|
+| Where | One corner, bottom-right by default; only the four corners or the top or bottom center | STD-components-toasts-drawers-29 |
+| Edge distance | 32 px, or 16 px on screens under 600 px wide | STD-components-toasts-drawers-30 |
+| How many | Three at most. Each one behind sits 14 px higher and 5% smaller; on hover the stack spreads with 14 px gaps that stay part of the hover area | STD-components-toasts-drawers-14, STD-components-toasts-drawers-10, STD-components-toasts-drawers-12, STD-components-toasts-drawers-13 |
+| Stack motion | Sonner's `transform 400ms ease`: longer than the 300 ms limit, allowed for this component | STD-easing-duration-13 |
+| How long | 4 seconds, paused while the pointer is over it or the tab is hidden, so people don't lose a message they're reading | STD-components-toasts-drawers-15, STD-components-toasts-drawers-16, STD-components-toasts-drawers-17 |
+| With an action, such as Undo | Stays until it's used or closed, so the action has no time limit (OpenDesigner's inference from WCAG's Timing Adjustable rule) | STD-components-toasts-drawers-15 |
 
 {{figure:craft-ux-toasts}}
 

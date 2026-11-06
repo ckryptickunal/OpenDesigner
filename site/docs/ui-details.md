@@ -13,11 +13,16 @@ Each rule is an OpenDesigner house standard or one of its [accessibility floors]
 
 ## Letter spacing and line height change with size
 
-**Never use one letter spacing for every size.** Tighten large headings, for example to -0.02em, give small text slightly more space, and leave body text near 0. *(STD-visual-details-05)*
+**Never use one letter spacing for every size, and set line height inversely to size.** *(STD-visual-details-05, STD-visual-details-06)* Capitals need more room, or they look cramped. *(STD-visual-details-04)*
 
-**Give capitals more room,** or uppercase labels look cramped. OpenDesigner's tokens give small capital labels +0.06em and never tighten capitals. *(STD-visual-details-04)*
+| Text | Letter spacing | Line height |
+|---|---|---|
+| Large headings | tightened, for example -0.02em | tight, for example 1.05 |
+| Body text | near 0 | looser, for example 1.5 |
+| Small text | slightly more | |
+| Small capital labels | +0.06em in OpenDesigner's tokens; capitals are never tightened | |
 
-**Set line height inversely to size:** tight on large headings, for example 1.05, looser on body text, for example 1.5. *(STD-visual-details-06)* Build hierarchy from weight, size and line height together, not size alone. *(STD-visual-details-07)*
+Build hierarchy from weight, size and line height together, not size alone. *(STD-visual-details-07)*
 
 **Keep lines of body text to about 65 characters.** *(STD-visual-details-01)*
 
@@ -57,9 +62,14 @@ Source: the README and the apple-design skill in emilkowalski/skills.
 
 ## Targets and focus, measured
 
-**Make every touch target at least 44 by 44 points on iOS, 48 dp on Android and 44 px on the touch web.** When the drawn control is smaller, grow its hit area (a pseudo-element on the web, hitSlop in React Native), never the drawing. *(STD-mobile-touch-09)*
+| Target | At least | Source |
+|---|---|---|
+| Touch, iOS | 44 × 44 pt | STD-mobile-touch-09 |
+| Touch, Android | 48 dp | STD-mobile-touch-09 |
+| Touch, web | 44 px | STD-mobile-touch-09 |
+| Any web target, mouse or finger | 24 × 24 CSS px | Accessibility floor, WCAG 2.2 [2.5.8 Target Size (Minimum)](https://www.w3.org/TR/WCAG22/#target-size-minimum) |
 
-**No web target is smaller than 24 by 24 CSS pixels,** an accessibility floor from WCAG 2.2 [2.5.8 Target Size (Minimum)](https://www.w3.org/TR/WCAG22/#target-size-minimum).
+**When the drawn control is smaller, grow its hit area,** with a pseudo-element on the web or hitSlop in React Native, never the drawing. *(STD-mobile-touch-09)*
 
 **Every focusable element shows a focus ring,** 2 px wide, 2 px from the element, with at least 3:1 contrast against its surroundings: a floor from [2.4.7 Focus Visible](https://www.w3.org/TR/WCAG22/#focus-visible) and [1.4.11 Non-text Contrast](https://www.w3.org/TR/WCAG22/#non-text-contrast).
 
