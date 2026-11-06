@@ -22,8 +22,13 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 - **Kerning and letter spacing, checked in every project** (2026-11-05). A new guide, `preflight/references/kerning.md`, lists the type-spacing mistakes that keep coming back and how to avoid each. `preflight.py html` now flags kerning switched off, tracking in px or %, untracked capitals and words split into letters without their kerning (check 57).
 - **Rules for references, samples and content** (2026-11-05). `making.md` now asks for a board of shipped samples to pick from before a new direction, live measurement instead of thumbnails, principles from a reference instead of its page, a content list that "less text" never cuts, and one system for every figure. Moving calls to action are banned.
 
+### Changed
+
+- **"Add to kit" is a secondary button** (2026-11-07). On /library/ and the component pages, each card's "Add to kit" no longer has a solid dark fill, so the kit stays the page's main action. A part already in the kit shows an accent outline.
+
 ### Fixed
 
+- **Docs type follows the brand scale** (2026-11-07). Docs pages, and the header and footer every page shares, now use only the brand's type sizes (13, 16, 20, 25, 39 and 49 px) and two weights, 400 and 500. The docs home went from 14 sizes and four weights to five sizes and two weights ([#79](https://github.com/ckryptickunal/OpenDesigner/issues/79)).
 - **The changelog marks what came after the release** (2026-11-06). On /changelog/, entries not yet in a release carry a "Since v0.2.0" tag, read from the version and its git tag, so it moves with each release ([#70](https://github.com/ckryptickunal/OpenDesigner/issues/70)).
 - **Calmer type on the docs** (2026-11-06). Figure captions and the footer's legal line stop at about 65 characters, the docs heading fits on two lines, and acronyms such as MIT and DTCG are no longer tracked tight ([#75](https://github.com/ckryptickunal/OpenDesigner/issues/75)).
 - **Tabs no longer move the page** (2026-11-06). On the website, switching the install tabs, the example products, the tour's files or a component's device views keeps the same height, so the text below stays put. On phones, the before-and-after's list of findings opens from a button instead of growing under the picture.
