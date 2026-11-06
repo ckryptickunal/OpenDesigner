@@ -61,7 +61,7 @@ The owner asked five questions in their own, signed-in ChatGPT and exported the 
 - **"Best free AI design-system generator for developers?"** We were first of three, described much as our introduction page describes us.
 - **"How do I make a vibe-coded app look professional?"** We appeared only in a table of tools. The answer itself was steps it could quote: a checklist, products worth studying, a prompt of quality rules, and a build, look, critique and fix loop. Our guide doesn't present our own flow as such steps.
 - **"How do I give Cursor my design tokens so every screen matches?"** We were not named. The answer wanted things to copy: a file tree, a tokens file, a ready Cursor rule that says "read DESIGN.md first", a first prompt that audits, and a page that shows every token. We have all of these (the overview page is that page), but our Cursor guide does not lead with them.
-- **"A Claude skill that builds a design system and checks contrast?"** We were mentioned only in passing. Its main point, contrast checked on real text and background pairs in every state and in dark mode, is what our engine does, but no page says so in one quotable sentence. People say "Claude skill"; our pages mostly said "plugin".
+- **"A Claude skill that builds a design system and checks contrast?"** We were mentioned only in passing. Its main point, contrast checked on real text and background pairs, including hover and pressed fills and dark mode, is what our engine does, but no page says so in one quotable sentence. People say "Claude skill"; our pages mostly said "plugin".
 
 The engine also repeated our own notes on how early the project is. Honest limits get quoted too.
 
