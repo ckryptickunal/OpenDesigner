@@ -1875,7 +1875,7 @@ def showcase(pages):
             cards = []
             for p in gp:
                 cards.append(piece_card(p, i, frame)); i += 1
-                items.append({"@type": "ImageObject", "name": p["title"], "contentUrl": f"{SITE_URL}/img/show/{p['key']}-{FULL_W}.webp", "thumbnailUrl": f"{SITE_URL}/img/show/{p['key']}.webp", "description": p["blurb"], "keywords": ", ".join(p["tags"])})
+                items.append({"@type": "ImageObject", "name": p["title"], "contentUrl": f"{SITE_URL}/img/show/{p['key']}-{FULL_W}.webp", "thumbnailUrl": f"{SITE_URL}/img/show/{p['key']}.webp", "description": p["blurb"] + " Made by AI agents with OpenDesigner; every brand shown is invented.", "keywords": ", ".join(p["tags"])})
                 md.append(f"- **{p['title']}**" + (f" ({', '.join(p['tags'])})" if p["tags"] else "") + f": {p['blurb']}")
             grids.append((f'<h3 class="t-h3 sub">{sub}</h3>' if sub else "") + f'<div class="pieces {cat}{" portrait" if frame.startswith("9") or frame.startswith("615") else ""}">{"".join(cards)}</div>')
         md.append("")
