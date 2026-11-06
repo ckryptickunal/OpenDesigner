@@ -4,10 +4,10 @@ seo_title: UX patterns compared: toasts, tooltips, errors and hover
 description: Common interface patterns shown as Do and Don't pairs, from toasts and swipe to dismiss to tooltips, form errors, undo, drawers and hover on touch screens.
 section: Craft
 order: 2
-updated: 2026-10-15
+updated: 2026-11-07
 ---
 
-Each pattern on this page is shown twice: once in a way that works against people, and once in a way that works for them. The rule comes first, then the reason, then where it comes from. Many of the drawings are live, so hover over them, press them or tab through them.
+Each pattern on this page is shown twice: once in a way that works against people, and once in a way that works for them. Many of the drawings are live, so hover over them, press them or tab through them.
 
 Every rule here is an OpenDesigner house standard or one of its accessibility floors, and OpenDesigner applies them in every project. Most come from Emil Kowalski's writing on building Sonner, his toast library, and Vaul, his drawer library, and from his [emilkowalski/skills](https://github.com/emilkowalski/skills) repo. OpenDesigner is not affiliated with him.
 
@@ -39,7 +39,7 @@ Source: Emil Kowalski's [Building a toast component](https://emilkowal.ski/ui/bu
 
 **Never animate an action started from the keyboard.** That covers shortcuts, opening a command menu (a search box of actions, often opened with Cmd K) and moving a highlight with the arrow keys. People repeat these hundreds of times a day, and any motion makes the interface lag behind their fingers. *(STD-when-to-animate-06)*
 
-**Give no animation to anything used 100 or more times a day,** such as a launcher or a command menu. *(STD-when-to-animate-05)* When a review finds one, delete the animation before trying to tune it. *(STD-when-to-animate-17)*
+The same goes for anything used 100 or more times a day ([Should it move at all?](/docs/motion/#should-it-move-at-all)). *(STD-when-to-animate-05)* When a review finds one animated, delete the animation before trying to tune it. *(STD-when-to-animate-17)*
 
 {{figure:craft-ux-keyboard}}
 
@@ -59,7 +59,7 @@ Source: Emil Kowalski's [7 practical animation tips](https://emilkowal.ski/ui/7-
 
 ## Errors: next to the field, before submit
 
-**Check form input inline, not on submit.** Feedback should come as soon as possible, so the interface feels like it is listening. *(STD-visual-details-49)* In the drawing, the message sits under the field it is about.
+**Check form input inline, not on submit.** Feedback should come as soon as possible, so the interface feels like it is listening. *(STD-visual-details-49)*
 
 **Never show an error with color alone.** Add an icon or words, so people who cannot tell the colors apart still see it. This is one of the [accessibility floors](/docs/accessibility/).
 
@@ -101,7 +101,7 @@ Source: the mobile-native and animate skills in emilkowalski/skills.
 
 ## Loading spinners
 
-No house standard chooses between skeleton screens and spinners, so this guide does not either. For spinners there are two rules. Make them spin fast, because a fast spinner makes the same wait feel shorter. And spin at a constant speed, with linear easing. *(STD-easing-duration-15, STD-easing-duration-01)*
+No house standard chooses between skeleton screens and spinners, so this guide does not either. A spinner spins fast, because a fast spinner makes the same wait feel shorter, and at a constant speed, with linear easing. *(STD-easing-duration-15, STD-easing-duration-01)*
 
 ## Where these rules come from
 

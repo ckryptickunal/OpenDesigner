@@ -4,10 +4,10 @@ seo_title: Interface details: type, numbers, edges, targets, contrast
 description: Small interface details every OpenDesigner system follows, drawn and measured: letter spacing by size, tabular digits, soft edges, tap targets and contrast.
 section: Craft
 order: 3
-updated: 2026-10-15
+updated: 2026-11-07
 ---
 
-Most of these details go unnoticed one at a time. Together they decide whether an interface feels careful. When something works exactly as people expect, they carry on without a second thought, and in the aggregate the small details become visible. *(STD-visual-details-50)*
+Most of these details go unnoticed one at a time. Together they decide whether an interface feels careful. *(STD-visual-details-50)*
 
 Each rule below is an OpenDesigner house standard or one of its [accessibility floors](/docs/accessibility/), with its source named. The drawings use this site's own type and colors, and the measurements in them are real.
 
@@ -15,7 +15,7 @@ Each rule below is an OpenDesigner house standard or one of its [accessibility f
 
 **Never use one letter spacing for every size.** Tighten large headings, for example to -0.02em. Give small text slightly more space, and leave body text near 0. Letters look further apart as text grows. *(STD-visual-details-05)*
 
-**Give capitals more room.** Uppercase labels need looser letter spacing than the same words in sentence case, or they look cramped. *(STD-visual-details-04)*
+**Give capitals more room.** Uppercase labels need looser letter spacing than the same words in sentence case, or they look cramped. OpenDesigner's tokens give small capital labels +0.06em and never tighten capitals. *(STD-visual-details-04)*
 
 **Set line height inversely to size.** Keep it tight on large headings, for example 1.05, and looser on body text, for example 1.5. *(STD-visual-details-06)* Build hierarchy from weight, size and line height together, not from size alone. *(STD-visual-details-07)*
 
@@ -49,7 +49,7 @@ Source: Emil Kowalski's [Agents with taste](https://emilkowal.ski/ui/agents-with
 
 ## Soft edges, not hard lines
 
-**Separate surfaces with a semi-transparent shadow rather than a solid, opaque border.** A solid border where a shadow belongs is one of the small mistakes that add up to an interface that is not great. *(STD-visual-details-14)*
+**Separate surfaces with a semi-transparent shadow rather than a solid, opaque border.** *(STD-visual-details-14)*
 
 {{figure:craft-ui-edges}}
 
@@ -75,15 +75,19 @@ Source: the README and the apple-design skill in emilkowalski/skills.
 
 Source: the mobile-native, animate-expo and apple-design skills in emilkowalski/skills, and Emil Kowalski's [Agents with taste](https://emilkowal.ski/ui/agents-with-taste).
 
-## Text on colored fills
+## Color: contrast and meaning
 
 **Text on a fill needs at least 4.5:1 contrast, or 3:1 when it is large.** OpenDesigner measures with the WCAG 2 formula and never rounds up, so 4.49:1 fails. This is an accessibility floor, from [1.4.3 Contrast (Minimum)](https://www.w3.org/TR/WCAG22/#contrast-minimum).
 
 **Put color on solid layers, not on see-through ones.** Over a translucent surface, use higher-contrast text, a slightly heavier weight and a little more letter spacing. *(STD-visual-details-21, STD-visual-details-13)*
 
+**Never pair pure white with pure black.** Use an off-black such as #111111 with white, or an off-white with black. *(STD-visual-details-66)*
+
+**Keep the colors people already know:** green for success, red for errors, amber for pending, blue for information. *(STD-visual-details-65)*
+
 {{figure:craft-ui-contrast}}
 
-Source: the apple-design skill in emilkowalski/skills, for the rules on translucent surfaces.
+Source: the apple-design skill in emilkowalski/skills, for the rules on translucent surfaces. The last two rules are OpenDesigner's own house rules.
 
 ## Build from the tokens
 

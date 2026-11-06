@@ -4,7 +4,7 @@ seo_title: Motion that feels right: easing, duration and origin rules
 description: The motion rules every OpenDesigner system follows, with live demos: when to animate, easing, durations under 300 ms, origin, stagger and reduced motion.
 section: Craft
 order: 1
-updated: 2026-11-05
+updated: 2026-11-07
 ---
 
 Motion in an interface has a job. It shows what changed, where something came from, or that a press was heard. This page shows the motion rules every OpenDesigner design system follows, each with a demo you can watch or touch.
@@ -160,4 +160,4 @@ Motion can be correct in code and still feel wrong. Before you call it done:
 
 ## Where these rules come from
 
-The rules on this page are OpenDesigner house standards, version 4. Most come from Emil Kowalski's essays at [emilkowal.ski](https://emilkowal.ski/), the public pages of [animations.dev](https://animations.dev/) and his [emilkowalski/skills](https://github.com/emilkowalski/skills) repo. OpenDesigner is not affiliated with or endorsed by him; it cites his work because that work shaped these standards. [Who OpenDesigner learns from](/docs/resources/) lists every source and explains how one becomes a standard.
+Most of these rules come from Emil Kowalski's essays at [emilkowal.ski](https://emilkowal.ski/), the public pages of [animations.dev](https://animations.dev/) and his [emilkowalski/skills](https://github.com/emilkowalski/skills) repo. OpenDesigner is not affiliated with or endorsed by him; it cites his work because that work shaped these standards. [Who OpenDesigner learns from](/docs/resources/) lists every source and explains how one becomes a standard.

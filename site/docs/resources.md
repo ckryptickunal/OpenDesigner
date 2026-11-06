@@ -4,10 +4,10 @@ seo_title: Who OpenDesigner learns from: the sources behind its rules
 description: The people, docs, videos and standards behind OpenDesigner's rules, what each one teaches, how much say it has, and how a source becomes a house standard.
 section: Craft
 order: 4
-updated: 2026-11-05
+updated: 2026-11-07
 ---
 
-OpenDesigner's advice comes from a short list of sources its owner trusts. Each source has an authority, which decides what it is allowed to change. This page lists the sources, says what each one teaches, and explains how a source becomes a rule.
+OpenDesigner's advice comes from a short list of sources its owner trusts. Each source has an authority, which decides what it is allowed to change.
 
 > OpenDesigner is not affiliated with or endorsed by these people or companies; we cite them because their published work shaped the house standards.
 
@@ -21,7 +21,7 @@ OpenDesigner's advice comes from a short list of sources its owner trusts. Each 
 
 ## Non-negotiable sources
 
-The 457 house standards in version 4 come from these four sources, the Vaul docs below and two rules the project owner set: a color with a known meaning keeps it, and a product never pairs pure white with pure black. That includes every standard cited in [Motion](/docs/motion/), [UX patterns](/docs/ux-patterns/) and [Interface details](/docs/ui-details/).
+The 457 house standards in version 4 come from these four sources, the Vaul docs below and two rules of OpenDesigner's own: a color with a known meaning keeps it, and a product never pairs pure white with pure black. That includes every standard cited in [Motion](/docs/motion/), [UX patterns](/docs/ux-patterns/) and [Interface details](/docs/ui-details/).
 
 ### Emil Kowalski
 
@@ -29,7 +29,7 @@ The 457 house standards in version 4 come from these four sources, the Vaul docs
 
 ### animations.dev
 
-[animations.dev](https://animations.dev/) is Emil Kowalski's course on web animation. OpenDesigner reads only its public pages, the home page and the changelog, because the course itself is paid. They teach that three ingredients decide whether an animation works: the easing, the duration and which properties move. **If you want to go deeper into motion than this guide, go to animations.dev.**
+[animations.dev](https://animations.dev/) is Emil Kowalski's course on web animation. OpenDesigner reads only its public pages, because the course itself is paid. They teach that three ingredients decide whether an animation works: the easing, the duration and which properties move. **If you want to go deeper into motion than this guide, go to animations.dev.**
 
 ### Sonner docs
 
@@ -37,7 +37,7 @@ The 457 house standards in version 4 come from these four sources, the Vaul docs
 
 ### The emilkowalski/skills repo
 
-[github.com/emilkowalski/skills](https://github.com/emilkowalski/skills), under the MIT licence, is a set of agent skills: written instructions that an AI coding tool follows. They cover building, reviewing and auditing animation, React Native motion, the mobile web, Apple-style interaction, picking UI libraries, prototyping and writing Swift. The standards link to its files at commit 85e8e23.
+[github.com/emilkowalski/skills](https://github.com/emilkowalski/skills), under the MIT licence, is a set of agent skills: written instructions that an AI coding tool follows. They cover building, reviewing and auditing animation, React Native motion, the mobile web, Apple-style interaction, picking UI libraries, prototyping and writing Swift.
 
 ## Good to have
 
@@ -60,7 +60,7 @@ These shape the options, examples and explanations OpenDesigner offers. They nev
 ## Standards and benchmarked systems
 
 - **[WCAG 2.2](https://www.w3.org/TR/WCAG22/)**, the W3C's Web Content Accessibility Guidelines. Its level AA is the basis of OpenDesigner's accessibility floors: text contrast, target size and a visible focus ring. OpenDesigner also treats 2.3.3 Animation from Interactions, a level AAA rule, as required. See [Accessibility floors](/docs/accessibility/).
-- **[Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)** and **[Material 3](https://m3.material.io/)**, Google's design system, are two of the 25 systems in OpenDesigner's [benchmark of famous design systems](https://github.com/ckryptickunal/OpenDesigner/blob/main/benchmarks/L09-benchmark-matrix.md). The benchmark records their real values, such as type scales, corner radii and target sizes, and the research draws on it.
+- **[Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)** and **[Material 3](https://m3.material.io/)**, Google's design system, are two of the 32 systems in OpenDesigner's [benchmark of famous design systems](https://github.com/ckryptickunal/OpenDesigner/blob/main/benchmarks/L09-benchmark-matrix.md). The benchmark records their real values, such as type scales, corner radii and target sizes, and the research draws on it.
 
 ## Tools for easing curves
 
