@@ -81,11 +81,11 @@ Source: the mobile-native, animate-expo and apple-design skills in emilkowalski/
 
 **Put color on solid layers, not on see-through ones.** Over a translucent surface, use higher-contrast text, a slightly heavier weight and a little more letter spacing. *(STD-visual-details-21, STD-visual-details-13)*
 
+{{figure:craft-ui-contrast}}
+
 **Never pair pure white with pure black.** Use an off-black such as #111111 with white, or an off-white with black. *(STD-visual-details-66)*
 
 **Keep the colors people already know:** green for success, red for errors, amber for pending, blue for information. *(STD-visual-details-65)*
-
-{{figure:craft-ui-contrast}}
 
 Source: the apple-design skill in emilkowalski/skills, for the rules on translucent surfaces. The last two rules are OpenDesigner's own house rules.
 
