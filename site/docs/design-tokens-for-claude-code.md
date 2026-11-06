@@ -1,7 +1,7 @@
 ---
 title: Design tokens for Claude Code
 seo_title: A Claude Code skill for design tokens, CSS and Tailwind
-description: OpenDesigner is a free Claude Code skill. The plugin installs its skills, which write DTCG design tokens, CSS variables, a Tailwind v4 theme and a DESIGN.md Claude follows.
+description: OpenDesigner is a free Claude Code skill that writes DTCG design tokens, CSS variables, a Tailwind v4 theme and a DESIGN.md Claude follows.
 section: Guides
 order: 21
 updated: 2026-11-07
