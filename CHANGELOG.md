@@ -28,7 +28,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
-- **A shorter home page and showcase** (2026-11-07). Lines that repeated a heading, a button or a nearby line are gone. Two claims are corrected: the example system writes 50 files, not 51, and a reference never brings in another brand's logo, name, images or copy.
+- **A shorter home page and showcase** (2026-11-07). Lines that repeated a heading, a button, a picture or another line on the page are gone. Two claims are corrected: the example system writes 50 files, not 51, and a reference never brings in another brand's logo, name, images or copy.
 - **Docs type follows the brand scale** (2026-11-07). Docs pages, and the header and footer every page shares, now use only the brand's type sizes (13, 16, 20, 25, 39 and 49 px) and two weights, 400 and 500. The docs home went from 14 sizes and four weights to five sizes and two weights ([#79](https://github.com/ckryptickunal/OpenDesigner/issues/79)).
 - **The changelog marks what came after the release** (2026-11-06). On /changelog/, entries not yet in a release carry a "Since v0.2.0" tag, read from the version and its git tag, so it moves with each release ([#70](https://github.com/ckryptickunal/OpenDesigner/issues/70)).
 - **Calmer type on the docs** (2026-11-06). Figure captions and the footer's legal line stop at about 65 characters, the docs heading fits on two lines, and acronyms such as MIT and DTCG are no longer tracked tight ([#75](https://github.com/ckryptickunal/OpenDesigner/issues/75)).
