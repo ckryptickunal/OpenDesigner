@@ -4,7 +4,7 @@ seo_title: OpenDesigner for engineers: tokens, CSS, Tailwind v4, Swift
 description: The tokens and code exports OpenDesigner writes, how to wire them into web, iOS and Android apps, how review finds hard-coded values, and how agents use them.
 section: Guides
 order: 3
-updated: 2026-11-05
+updated: 2026-11-07
 ---
 
 OpenDesigner turns design decisions into files you import: DTCG 2025.10 tokens, CSS variables, a Tailwind v4 theme, Swift and Jetpack Compose files, and a DTCG resolver. `engine.py review` finds values typed straight into your code that skip the tokens. `DESIGN.md` and a short note in `AGENTS.md` tell coding agents to use the tokens too.
@@ -20,7 +20,7 @@ All paths are inside `opendesigner/` in your project.
 - `build/compose/DesignTokens.kt`: Jetpack Compose values.
 - `build/dtcg/`: one resolver file for tools that take a single entry point.
 
-`build` writes the code files for the platforms you chose: CSS and Tailwind for the web, Swift for iOS, Compose for Android. For another one, run `engine.py export --format swift` (or `compose`, `css`, `tailwind`, `all`).
+`build` writes the code files for the platforms you chose: CSS and Tailwind for the web, Swift for iOS, Compose for Android. For another, run `engine.py export --format swift` (or `compose`, `css`, `tailwind`, `all`).
 
 Never edit an export by hand. Change the decision and rebuild, and every export updates together.
 
@@ -45,7 +45,7 @@ Dark mode follows `prefers-color-scheme`. Set `data-theme="light"` or `data-them
 
 ### Tailwind v4
 
-Add two lines to your main CSS file, for example `src/index.css`. Adjust the path to where that file sits:
+Add two lines to your main CSS file, such as `src/index.css`, and adjust the path:
 
 ```css
 @import "tailwindcss";
@@ -91,7 +91,7 @@ Run this at the end of any piece of work:
 engine.py review --project src
 ```
 
-It reads style sheets, JavaScript and TypeScript, Vue, Svelte, HTML, Swift and Kotlin files. It finds colors, sizes, radii, shadows and durations typed in by hand and names the token to use instead. Here is part of the output from a test run:
+It reads style sheets, JavaScript and TypeScript, Vue, Svelte, HTML, Swift and Kotlin files, finds colors, sizes, radii, shadows and durations typed in by hand, and names the token to use instead. Part of the output from a test run:
 
 ```
 card.css:1  #f3f4f6  ->  use var(--ds-color-surface-sunken)
@@ -105,24 +105,19 @@ It also lists code that breaks a standard, and `DESIGN.md` sections that are out
 
 ## DESIGN.md and AGENTS.md for coding agents
 
-`DESIGN.md` has a section for AI agents. It tells them to read the file and the tokens before changing any screen, to use tokens instead of raw values, and to leave locked decisions alone.
+`DESIGN.md` has a section for AI agents: read the file and the tokens before changing any screen, use tokens instead of raw values, and leave locked decisions alone. At the end of a session, OpenDesigner offers to add a short note to your `AGENTS.md` that says the same, points to `opendesigner/decisions.md` for why a value is what it is, and asks for `engine.py review` at the end of every implementation. It adds the note only after you say yes.
 
 {{figure:engineers-agent-rules}}
 
-At the end of a session, OpenDesigner asks whether to add a short note to your `AGENTS.md`. It adds it only after you say yes. The note tells later agents to:
-
-- read `DESIGN.md` and `PRODUCT.md` before any visual work;
-- use the tokens or their exports, and never hard-code colors, sizes, spacing, radii, shadows or durations;
-- check `opendesigner/decisions.md` for why a value is what it is;
-- run `engine.py review` at the end of every implementation and fix what it finds.
+For a Cursor rule file and a `CLAUDE.md` line that point at `DESIGN.md`, see [A design system for Cursor](/docs/design-system-for-cursor/) and [Design tokens for Claude Code](/docs/design-tokens-for-claude-code/).
 
 ## About the engine
 
-The engine is one Python file that needs Python 3.10 or newer. It uses only the standard library and makes no network calls. The same `state.json` gives the same tokens. It has more than 200 tests, which pass on the maintainer's computer. No CI runs are recorded yet.
+The engine is one Python file that needs Python 3.10 or newer. It uses only the standard library and makes no network calls, and the same `state.json` gives the same tokens. Every build checks every text, border, icon and focus-ring color pair the tokens promise, in light and dark mode, including text on hover and pressed fills; a failing pair stops the build. It has more than 200 tests, which pass on the maintainer's computer. No CI runs are recorded yet.
 
 ## Not yet
 
 - No direct React Native or Flutter export.
-- The overview draws only buttons, a text field and a card. The component sheet shows more, and the optional [component library](/library/) has 82 finished components built on the tokens.
+- The overview page draws only buttons, a text field and a card. The optional [component library](/library/) has 82 finished components built on the tokens.
 
 See [Engine commands](/docs/engine/) and [Export](/docs/export/) for more.

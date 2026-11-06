@@ -4,22 +4,12 @@ seo_title: Change or extend a design system with OpenDesigner
 description: How the opendesigner-extend skill changes a design system safely: it reads past decisions and locks first, asks only about what is new, and checks the result.
 section: Guides
 order: 5
-updated: 2026-11-05
+updated: 2026-11-07
 ---
 
-To change a design system you made with OpenDesigner, ask your AI for the change. The opendesigner-extend skill takes over when your project already has an `opendesigner/` folder. It reads your past decisions and locks first, asks only about what is new, records the change with its reason, and rebuilds every file.
+To change a design system you made with OpenDesigner, ask your AI for the change. The opendesigner-extend skill takes over when your project has `opendesigner/state.json`, or a `DESIGN.md` OpenDesigner made. It reads your past decisions and locks first, asks only about what is new, records the change with its reason, and rebuilds every file.
 
 {{figure:extend-flow}}
-
-## When it runs
-
-It runs when `opendesigner/state.json` exists, or when the root `DESIGN.md` was made by OpenDesigner. Common requests:
-
-- "Add a date picker" or "build the settings page."
-- "Make the buttons a bit rounder."
-- "Let's define the colors properly."
-- "Add dark mode" or "we need Android too."
-- "Why is this blue?"
 
 ## What it reads first
 
@@ -31,7 +21,7 @@ Before it touches anything, it reads, in order:
 4. The token files in `opendesigner/tokens/`.
 5. Recent git history for these files, if the project uses git.
 
-Then it runs the checks. `engine.py version` checks whether the system was built with an older release of OpenDesigner, and rebuilds it if so. `engine.py validate` checks the system, and `engine.py review` looks for drift in your code. If either finds a problem, it tells you first, because fixing it may be the real task.
+Then it runs the checks. `engine.py version` finds a system built with an older release and rebuilds it, `engine.py validate` checks the system, and `engine.py review` looks for drift in your code. If either finds a problem, it tells you first, because fixing it may be the real task.
 
 It then sums up in three lines or fewer: the direction, the zoom level of the area you care about, and anything locked or still open. It never re-runs the whole interview.
 
@@ -39,30 +29,34 @@ In a chat-only tool, it asks you to upload `state.json`, `decisions.md` and `DES
 
 ## How it sorts a request
 
-- **A new component or page.** It builds it from existing tokens only, lists the tokens it used, and adds states and keyboard behavior.
-- **One decision,** such as rounder buttons. It finds the matching question, shows the current value and the options, and records your pick.
-- **Zooming in,** such as defining colors properly. It runs the next zoom level for that area. See [Zoom levels](/docs/zoom-levels/).
-- **A reopened area,** such as a new brand color or a new platform. It asks that area's questions at its current zoom level.
-- **A new direction,** such as "make it more playful". This touches most decisions. It says what would move, offers safe choices and risky ones, and changes nothing without a clear yes.
-- **A question,** such as "why is this blue?" It answers from the decision log and the standards, and changes nothing.
-- **A value the system lacks.** It adds a new token through the engine with a reason, and never hard-codes it.
+| You ask | What it does |
+|---|---|
+| "Add a date picker" or "build the settings page" | Builds it from existing tokens only, lists the tokens it used, and adds states and keyboard behavior |
+| "Make the buttons a bit rounder" | Finds the matching question, shows the current value and the options, and records your pick |
+| "Let's define the colors properly" | Runs the next [zoom level](/docs/zoom-levels/) for that area |
+| "Add dark mode" or "we need Android too" | Asks that area's questions again at its current zoom level |
+| "Make it more playful" | Says what would move, offers safe and risky choices, and changes nothing without a clear yes |
+| "Why is this blue?" | Answers from the decision log and the standards, and changes nothing |
+| Work that needs a value the system lacks | Adds a token through the engine with a reason, and never hard-codes it |
+
+*Each kind of request, and what the skill does with it.*
 
 ## Locks and conflicts
 
 - A locked value changes only with the owner's explicit OK. The skill names the lock and asks.
 - If a request clashes with an earlier decision, it shows both and you choose. The new decision replaces the old one in the log, and nothing is deleted.
-- A value set by a standard changes only when you explicitly ask to change that standard. You can change one value, or add your own project standard that wins over it. See [For enterprise design-system teams](/docs/enterprise/).
+- A value set by a standard changes only when you explicitly ask to change that standard, or add your own project standard that wins over it. See [For enterprise design-system teams](/docs/enterprise/).
 
 ## Making the change
 
 1. **It shows the change first:** the current value, the new value, and what else moves.
-2. **It records it** with `engine.py set` and your reason. It adds a lock if you want one.
-3. **It rebuilds** with `engine.py build`, which checks the system and rewrites the exports, `DESIGN.md` and the preview. It fixes errors before showing you anything.
+2. **It records it** with `engine.py set` and your reason, plus a lock if you want one.
+3. **It rebuilds** with `engine.py build`, which checks the system and rewrites the exports, `DESIGN.md` and the preview, and fixes errors before showing you anything.
 4. **It shows what changed:** a short list of the values that moved.
 
 ### Adding a token
 
-When the work needs a value the system doesn't have, it first checks that no existing token fits. Reusing a token is better than making a near-copy. Then it adds the new one with a plain name for its role:
+When the work needs a value the system doesn't have, it first checks that no existing token fits, because reusing one beats making a near-copy. Then it adds the new one with a plain name for its role:
 
 ```
 engine.py set color.bg.highlight '"#fff4c2"' --why "highlighted search matches"
@@ -85,7 +79,7 @@ The review reads code. It can't see the page, so the skill also checks the page 
 
 ## A note for your team
 
-It ends with a change note that takes about 20 seconds to read:
+It ends with a change note that takes about 20 seconds to read. The values here are an example:
 
 ```
 Design system change, 2026-10-14
@@ -96,13 +90,11 @@ Validation: pass
 Decision log: opendesigner/decisions.md, D-0012
 ```
 
-The values above are an example.
-
 {{figure:extend-change-note}}
 
 ## Using a different AI tool later
 
-You can make the change in a different AI tool from the one you started in. The engine gives the same result for the same `state.json`, and the extend skill reads the same files. This is meant to keep the system consistent across sessions and tools. We have not recorded a test of it in each tool yet.
+You can make the change in a different AI tool from the one you started in. The engine gives the same result for the same `state.json`, and the extend skill reads the same files. We have not recorded a test of this in each tool yet.
 
 ## What is early
 
