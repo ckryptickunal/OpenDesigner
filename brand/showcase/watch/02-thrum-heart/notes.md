@@ -1,5 +1,7 @@
 # 02 Thrum: notes
 
+Gallery: A heart-rate trainer for interval sessions.
+
 Render: `shot.png` (205 x 251 CSS px at 3x, clipped to the display shape by `../render.py`). Page: `index.html`.
 
 ## Direction

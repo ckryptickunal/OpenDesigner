@@ -1,6 +1,6 @@
 # 10 · Vigil: ward vitals (tablet, 1180×820 @2x)
 
-Gallery: Wardlight is a fictional ward dashboard for the nurse in charge on a night shift, on an iPad at the nurses' station.
+Gallery: For the nurse in charge on a night shift, on an iPad at the nurses' station.
 
 ## Direction
 Vigil is a fictional ward dashboard for the nurse in charge on a night shift, used on an iPad at the nurses' station. The screen shows Ward 4B: a patient list sorted by early-warning score (NEWS2), the selected patient (bed 7, NEWS2 7, urgent review), an escalation banner with a response countdown, six vital-sign tiles with 2-hour traces against the usual range, and a 12-hour NEWS2 strip. Clinical clarity comes first. **Status never relies on color alone**: every state has a shape and a word (green circle with a check and "In range" or "Low", amber triangle and "Watch" or "Medium", red octagon and "Urgent" or "High"), plus the score as a number. Feel words: **trustworthy, clean, accessible**. All patients and staff are fictional.

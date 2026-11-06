@@ -1,5 +1,7 @@
 # 04 · Voltfield: live workout
 
+Gallery: A run-coaching app for people who train with intervals.
+
 ## Direction
 Voltfield is a fictional run-coaching app for people who train with intervals. This is the screen you glance at mid-stride: the heart rate has to be readable at arm's length while bouncing, the zone obvious in one color, and the plan for the next 300 m one line long. Black, acid lime, one hot pink for the top zone, giant condensed numerals, chamfered hard edges. Feel words: **energetic, bold, techy**.
 

@@ -1,6 +1,6 @@
 # 10 · Settings panel · rackhound
 
-Gallery: Ackwire is a fictional on-call paging tool; an engineer drags the end of his quiet hours from 07:00 to 08:30.
+Gallery: An on-call paging tool; an engineer drags the end of his quiet hours to 08:30.
 
 ## Direction
 rackhound is a fictional self-hosted console for people who run a small server rack at home. Its settings panel lives in the browser but feels like a 1980s amber-phosphor terminal: mono everything, box-drawing frames, block-character switches and sliders, a tmux-style status line top and bottom, a pixel display face for titles and readouts, scanlines and a soft phosphor glow. It must still be a real, accessible settings UI: switches, segmented controls, sliders, an input, apply and revert.

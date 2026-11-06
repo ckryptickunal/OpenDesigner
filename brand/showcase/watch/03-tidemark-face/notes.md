@@ -1,6 +1,6 @@
 # 03 Tidemark: notes
 
-Gallery: Tidemark is a fictional tide app; one glance shows the water height now over today's tide at Kellan Bay.
+Gallery: One glance shows the water height now over today's tide.
 
 Render: `shot.png` (205 x 251 CSS px at 3x, clipped to the display shape by `../render.py`). Page: `index.html`.
 

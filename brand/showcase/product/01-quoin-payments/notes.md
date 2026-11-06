@@ -1,5 +1,7 @@
 # 01 · Payments table · Quoin
 
+Gallery: A payments platform.
+
 ## Direction
 Quoin is a fictional payments platform. The screen is the "Payments" table that a mid-market company's finance operations and support agents keep open all day The workspace is the fictional "Tamsin & Rowe", a wholesale supplier of tableware and kitchen equipment to restaurants, hotels and caterers in the US, UK and EU, so every customer in the table is a hospitality business paying for an order or an invoice. One job: find and act on payments. Status tiles that double as quick filters, filter chips that show their values, a dense table, and three rows selected with the bulk bar. Two more frames show one temporary state each: `?state=columns` (`shot-columns.png`) opens Edit columns with nothing selected, and `?state=empty` (`shot-empty.png`) shows the table filtered to nothing.
 Feel words: **precise, quiet, trustworthy** (the engine knew "quiet" and "trustworthy"; it dropped "precise").

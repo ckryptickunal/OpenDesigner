@@ -1,5 +1,7 @@
 # 01 Halde Architekten: Swiss architecture hero
 
+Gallery: Eleven architects in Zurich and Chur who design houses around the path of the sun.
+
 ## Direction
 Halde Architekten is a fictional studio of eleven architects in Zurich and Chur who design houses around the path of the sun ("Halde" is a hillside). The audience is private clients and juries who judge rigour before charm. The hero reads like an International Style poster: a visible 12-column grid, a numbered project index, a generated building section with a sun-path study, and an enormous tight grotesk headline. Feel words: **minimal, authoritative, bold**.
 

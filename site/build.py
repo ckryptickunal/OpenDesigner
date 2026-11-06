@@ -1211,12 +1211,12 @@ INSTALL = [
      'git clone https://github.com/ckryptickunal/OpenDesigner\npython3 OpenDesigner/skills/opendesigner/scripts/engine.py sketch --name "Acme" --feel friendly,minimal\npython3 OpenDesigner/skills/opendesigner/scripts/engine.py build',
      "Then open opendesigner/overview.html.")]
 STEPS = [
-    ("It reads what you have", "It reads your CSS, Tailwind config, tokens, logo and fonts, and never asks what they already answer.",
+    ("It reads what you have", "It never asks what your files already answer.",
      '<ul class="vg-files"><li><span class="mono">globals.css</span><span class="chip">colors</span></li><li><span class="mono">tailwind.config.ts</span><span class="chip">theme</span></li>'
      '<li><span class="mono">package.json</span><span class="chip">react</span></li><li><span class="mono">logo.svg</span><span class="chip">main color</span></li></ul>'),
-    ("You answer up to five questions", "What you're making, who it's for, where it runs, how it should feel, and your brand color.",
+    ("You answer up to five questions", "Each one comes with a suggested answer and its reason.",
      '<ol class="vg-qs"><li>What are you making?</li><li>Who is it for?</li><li>Where does it run?</li><li class="on">How should it feel?</li><li>A brand color or logo?</li></ol>'),
-    ("It checks the rules, then saves them", "It checks contrast, target sizes, focus and motion, then saves the rules as files in your project.",
+    ("It checks the rules, then saves them", "The files live in your project, where your AI reads them.",
      '<pre class="code-lines vg-term"><span class="c">$</span> engine.py build\n<span class="ok">Passes: no errors.</span>\nChecked 164 color pairs in every mode,\n12 mode combinations and 443 tokens.</pre>'),
     ("Every round is checked and shown", "A plan you sign off, checks on the built page, screenshots before and after. Notes you repeat become rules.",
      '<pre class="code-lines vg-term"><span class="c">$</span> engine.py review\ncard.css:1 <span class="bad">border-radius: 7px</span>\n→ use <span class="k">var(--ds-radius-container)</span></pre>')]
@@ -1225,18 +1225,18 @@ INSIDE = [  # (benefit title, what it does, vignette, column span)
      '<div class="vg-log"><p class="mono">D-0056 · dials.roundness = 75</p><p><span class="chip accent">chosen</span> <span class="chip">supersedes D-0033</span></p><p class="vg-why">“Use iOS style rounded edges with iOS kerning everywhere instead of sharp corners.”</p></div>', 2),
     ("Readable for everyone", "WCAG 2.2 AA contrast, 24 px targets, focus rings and reduced motion: a floor, not a certificate.",
      '<div class="vg-floor"><span class="vg-aa">Aa</span><span class="num">4.5:1</span><span class="vg-target"></span><span class="num">24 px</span></div>', 1),
-    ("Start from what you have", "Point it at a website, screenshot, Figma file or repo. It keeps the structure, never another brand's identity.",
+    ("Start from what you have", "It keeps the structure, never another brand's logo, name, images or copy.",
      '<p class="vg-from"><span class="chip">Website</span><span class="chip">Screenshot</span><span class="chip">Figma file</span><span class="chip">Repository</span><span class="chip">Brand book</span></p>', 1),
     ("Your brand stays yours", "It asks you for the logo, photos, typeface and voice, and never fakes them.",
      '<p class="vg-from"><span class="tag-missing">Logo · Not enough information</span><span class="tag-missing">Voice guide · Not enough information</span></p>', 1),
-    ("Ask for a look in plain words", "Glassmorphism, bento, risograph, Swiss: each style is named, shown and mapped to settings.",
+    ("Ask for a look in plain words", "Each style is named, shown and mapped to settings.",
      '<p class="a-tags"><span class="a-tag a-sty">Glassmorphism</span><span class="a-tag a-sty">Bento grid</span><span class="a-tag a-sty">Risograph</span><span class="a-tag a-sty">Swiss</span></p>', 1),
-    ("Your work stays on your computer", "No account and no server. The engine is one Python file with no network calls.",
+    ("Your work stays on your computer", "No account and no server; the engine makes no network calls.",
      '<pre class="code-lines vg-term"><span class="c">$</span> python3 engine.py --help\n<span class="c">… stdlib only, no network</span></pre>', 2)]
-USES = [("Websites and landing pages", "One type scale, one spacing rhythm, one set of buttons. A new page looks like it was always there.", "/docs/quickstart/", "Your first design system"),
-        ("Mobile and web apps", "One system exports to CSS, Tailwind, Swift and Jetpack Compose, so every platform shares one look.", "/docs/export/", "Export to code"),
+USES = [("Websites and landing pages", "One type scale, one spacing rhythm, one set of buttons.", "/docs/quickstart/", "Your first design system"),
+        ("Mobile and web apps", "One system exports to CSS, Tailwind, Swift and Jetpack Compose.", "/docs/export/", "Export to code"),
         ("SaaS dashboards", "Compact rows, tabular numbers and hairline separators keep dense tables and forms easy to scan.", "/docs/engineers/", "For engineers"),
-        ("Enterprise software", "A decision log, locked values and house standards. Every change records why it was made.", "/docs/enterprise/", "For design-system teams")]
+        ("Enterprise software", "A decision log, locked values and house standards.", "/docs/enterprise/", "For design-system teams")]
 CRAFT = [("motion", "Motion that feels right", "Easing, timing and where things enter from, shown live.", "craft-motion"),
          ("ux-patterns", "UX patterns, compared", "Side-by-side choices for toasts, drawers, errors and touch.", "craft-ux"),
          ("ui-details", "Interface details", "The small things that add up: radii, numbers, borders, focus.", "craft-ui"),
@@ -1314,7 +1314,7 @@ def home(pages, facts, faq):
                f'sizes="{"(max-width: 900px) 100vw, 1150px" if size else "(max-width: 900px) 100vw, 570px"}" width="1800" height="1125" loading="lazy" alt="{esc(pc["title"])}">')
         st, cr = stage(scene, img)
         credits.append(cr)
-        name, what = pc["title"].split(" · ")[-1], pc["title"].split(" · ")[1]
+        name, what = pc["title"].split(" · ")[0], pc["title"].split(" · ")[-1]
         screens.append(f'<figure class="screen {size}">{st}<figcaption><strong>{esc(name)}</strong><span>{esc(what)}</span></figcaption></figure>')
     screens_html, screen_credits = "".join(screens), ", ".join(dict.fromkeys(credits))
     examples = "".join(f'<a class="ex" href="/showcase/#product"><span class="ex-img"><img src="/img/show/{p["key"]}.webp" width="900" height="563" loading="lazy" alt="{esc(p["title"])}"></span>'
@@ -1328,7 +1328,7 @@ def home(pages, facts, faq):
     craft_sec = f"""
 <section class="h-sec" id="craft">
 <div class="h-head">{idx("08", "Learn the craft")}<h2 class="h-h2">A field guide to interfaces that feel right.</h2>
-<p class="h-lede">The rules come from people who build loved interfaces, such as Emil Kowalski. See each one live, with its source.</p></div>
+<p class="h-lede">See each rule live, with its source.</p></div>
 <div class="craft">{craft_html}</div>
 </section>
 """ if craft else ""
@@ -1386,7 +1386,7 @@ def home(pages, facts, faq):
 </section>
 
 <section class="h-sec" id="features">
-<div class="h-head h-head-row"><div>{idx("07", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together, not just to start it.</h2></div>
+<div class="h-head h-head-row"><div>{idx("07", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together.</h2></div>
 <a class="h-link" href="{tour_page.PATH}#protect">See what protects you {ARROW}</a></div>
 <div class="bento">{"".join(f'<article class="bento-card span-{sp}"><h3>{t}</h3><p>{d}</p><div class="vg">{v}</div></article>' for t, d, v, sp in INSIDE)}</div>
 <div class="h-split h-files">
@@ -1397,7 +1397,7 @@ def home(pages, facts, faq):
 </section>
 {craft_sec}
 <section class="h-sec" id="install">
-<div class="h-head">{idx("09", "Get started")}<h2 class="h-h2">Add it to the AI tool you already use.</h2>
+<div class="h-head">{idx("09", "Get started")}<h2 class="h-h2">Add it to your AI tool.</h2>
 <p class="h-lede">Your AI tool and Python 3.10 or newer. ChatGPT needs nothing installed.</p></div>
 {install_tabs()}
 </section>
@@ -1412,9 +1412,8 @@ def home(pages, facts, faq):
 <div class="h-split">
 <div><p class="kicker">Status</p><h2 class="h-h2">Early, and honest about it.</h2>
 <ul class="status">{"".join(f"<li>{x}</li>" for x in HOME_STATUS)}</ul>
-<p class="h-lede">Try it on a real project and tell us where it breaks.</p>
 <p class="h-contrib"><span class="kicker">Contribute</span><a href="/docs/contribute/">How to contribute</a><a href="{GH}/issues?q=is%3Aopen+label%3A%22good+first+issue%22">Good first issues</a><a href="{GH}/issues/new/choose">Report a problem</a></p>
-<p class="h-more"><a class="h-link" href="/changelog/">Version {VERSION}: see every change {ARROW}</a></p></div>
+<p class="h-more"><a class="h-link" href="/changelog/">See every change {ARROW}</a></p></div>
 {gh_card(facts)}
 </div>
 </section>
@@ -1422,7 +1421,7 @@ def home(pages, facts, faq):
 <section class="h-sec" id="talk">
 <div class="h-book">
 <div><p class="kicker">Talk it through</p><h2 class="h-h2">Work through your design with {CONFIG["HOST_NAME"]}.</h2>
-<p class="h-lede">Free, {CONFIG["BOOKING_FREE_MINUTES"]} minutes. You never need a call to use OpenDesigner.</p></div>
+<p class="h-lede">You never need a call to use OpenDesigner.</p></div>
 <div class="h-book-act">{book_link("Book a free " + str(CONFIG["BOOKING_FREE_MINUTES"]) + "-minute call", primary=True)}<a class="h-link" href="/book/">What the call covers {ARROW}</a></div>
 </div>
 </section>
@@ -1605,9 +1604,9 @@ def changelog_page(p, pages):
                  og_alt=f'{p["title"]}: OpenDesigner' if card else None, preload=FEED_LINK, home="cl-page")
 
 
-SHOW_INTRO = ("AI builder agents made every piece here through the whole OpenDesigner process: real references on Mobbin, a design system from the "
-              "engine for each piece, the build, then checks. Every brand is invented. Each piece was then audited against shipped products and reviewed by "
-              "the maintainer. The pieces called ugly were removed or rebuilt, and the ones marked Being rebuilt are next.")
+SHOW_INTRO = ("AI agents made every piece with the whole OpenDesigner process: real references on Mobbin, a design system from the engine, the "
+              "build, then checks. Every brand is invented. Each piece was then audited against shipped products and reviewed by the maintainer. "
+              "Pieces judged ugly were removed or rebuilt, and those marked Being rebuilt are next.")
 MOCKUP_CAPTIONS = {
     "01-phone-trio": "Three evening apps (sleep, podcast, banking) in generic phones over a lilac field.",
     "02-laptop-desk": "The Swiss architecture hero on a laptop, on a real desk photo with matched perspective.",
@@ -1876,7 +1875,7 @@ def showcase(pages):
             cards = []
             for p in gp:
                 cards.append(piece_card(p, i, frame)); i += 1
-                items.append({"@type": "ImageObject", "name": p["title"], "contentUrl": f"{SITE_URL}/img/show/{p['key']}-{FULL_W}.webp", "thumbnailUrl": f"{SITE_URL}/img/show/{p['key']}.webp", "description": p["blurb"], "keywords": ", ".join(p["tags"])})
+                items.append({"@type": "ImageObject", "name": p["title"], "contentUrl": f"{SITE_URL}/img/show/{p['key']}-{FULL_W}.webp", "thumbnailUrl": f"{SITE_URL}/img/show/{p['key']}.webp", "description": p["blurb"] + " Made by AI agents with OpenDesigner; every brand shown is invented.", "keywords": ", ".join(p["tags"])})
                 md.append(f"- **{p['title']}**" + (f" ({', '.join(p['tags'])})" if p["tags"] else "") + f": {p['blurb']}")
             grids.append((f'<h3 class="t-h3 sub">{sub}</h3>' if sub else "") + f'<div class="pieces {cat}{" portrait" if frame.startswith("9") or frame.startswith("615") else ""}">{"".join(cards)}</div>')
         md.append("")

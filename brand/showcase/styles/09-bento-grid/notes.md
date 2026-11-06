@@ -1,5 +1,7 @@
 # 09 · Bento grid · Holdfast
 
+Gallery: A help desk for B2B support teams with contracts to keep.
+
 **Final self-audit score: 4 / 5** (3 rounds). Render: `shot.png`, 1440 x 900 at scale 2.
 
 ## Direction
