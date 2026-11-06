@@ -38,7 +38,7 @@ The three share most of their work. Say one plain sentence, then the term.
    - the brand question ("What is <name>?");
    - two or three category questions, in the customers' words from Q-site-04;
    - one how-to question.
-4. **Turn what they searched and cited into page fixes:** `references/fixes.md`.
+4. **Turn what they searched and cited into page fixes:** `references/fixes.md`. Engines quote pages that answer the question directly in the asker's words, give something to copy (a file tree, a rule file, a prompt), and state each capability in one plain sentence. A page that only describes the product wins "which tool" questions and loses "how do I" questions.
 5. **List off-site places** where the engines found the category answers: directories, awesome-lists, comparison roundups. These are proposals only: each submission or post needs the owner's yes.
 6. **Report:** `references/report.md`.
 

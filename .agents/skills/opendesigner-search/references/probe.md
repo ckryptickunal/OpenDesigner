@@ -55,4 +55,21 @@ Engines change. When one shows less or more than this table, note it in the repo
 | How do I make my vibe-coded app look professional? | Perplexity | the question verbatim | No | Guides whose URL and title repeat the question |
 | How do I write a DESIGN.md so Claude Code or Cursor follows it? | Perplexity | "Claude Code CLAUDE.md design system documentation official" and three more on Cursor rules | No | Only the official Claude Code and Cursor docs |
 
-What it led to is in `fixes.md`.
+### A second run: five questions in one person's own ChatGPT (2026-11-07)
+The owner asked five questions in their own, signed-in ChatGPT and exported the chat; the export stays private. Signed in, answers can be personal, so treat it as one more sample, not the logged-out view.
+- **"Which open-source tool keeps every screen consistent with Claude Code or Cursor?"** We were named first. Our title, repository description and docs use those exact words.
+- **"Best free AI design-system generator for developers?"** We were first of three, described much as our introduction page describes us.
+- **"How do I make a vibe-coded app look professional?"** We appeared only in a table of tools. The answer itself was steps it could quote: a checklist, products worth studying, a prompt of quality rules, and a build, look, critique and fix loop. Our guide doesn't present our own flow as such steps.
+- **"How do I give Cursor my design tokens so every screen matches?"** We were not named. The answer wanted things to copy: a file tree, a tokens file, a ready Cursor rule that says "read DESIGN.md first", a first prompt that audits, and a page that shows every token. We have all of these (the overview page is that page), but our Cursor guide does not lead with them.
+- **"A Claude skill that builds a design system and checks contrast?"** We were mentioned only in passing. Its main point, contrast checked on real text and background pairs in every state and in dark mode, is what our engine does, but no page says so in one quotable sentence. People say "Claude skill"; our pages mostly said "plugin".
+
+The engine also repeated our own notes on how early the project is. Honest limits get quoted too.
+
+**The lesson.** Answer engines quote pages that:
+- answer the question directly, in the asker's words;
+- give something to copy: a file tree, a rule file or a prompt;
+- say each capability in one plain sentence.
+
+A tool page that only describes itself wins "which tool" questions and loses "how do I" questions to general advice.
+
+What both runs led to is in `fixes.md`.
