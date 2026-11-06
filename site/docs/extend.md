@@ -56,15 +56,15 @@ In a chat-only tool, it asks you to upload `state.json`, `decisions.md` and `DES
 
 ### Adding a token
 
-When the work needs a value the system doesn't have, it first checks that no existing token fits, because reusing one beats making a near-copy. Then it adds the new one with a plain name for its role:
+When the work needs a value the system doesn't have, it first checks that no existing token fits, because reusing one beats making a near-copy. Then it adds the new one with a plain name for its role. A new color still has to pass the contrast check.
 
+:::dev
 ```
 engine.py set color.bg.highlight '"#fff4c2"' --why "highlighted search matches"
 engine.py set dark:color.bg.highlight '"#3a3000"' --why "the same highlight in dark mode"
 engine.py build
 ```
-
-A new color still has to pass the contrast check.
+:::
 
 ## After building anything
 

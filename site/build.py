@@ -826,12 +826,12 @@ FOOT_SHORT = {
     "designers": "For designers", "enterprise": "For enterprise teams", "existing-product": "Existing app or brand",
     "extend": "Change a system", "export": "Export to code", "good-practices": "Good practices",
     "design-system-for-cursor": "Cursor design system", "design-tokens-for-claude-code": "Claude Code tokens",
-    "improve-vibe-coded-ui": "Improve vibe-coded UI", "ai-design-system-generator": "AI system generators",
+    "improve-vibe-coded-ui": "Polish a vibe-coded app", "ai-design-system-generator": "AI system generators",
     "design-systems": "Design systems", "design-tokens": "Design tokens", "decisions": "Decisions and DESIGN.md",
     "brand-assets": "Brand assets", "design-styles": "Design styles", "motion": "Motion", "ux-patterns": "UX patterns",
     "ui-details": "Interface details", "resources": "Sources we learn from", "engine": "Engine commands",
     "files": "Files it writes", "dials": "The eight dials", "evals": "Evals", "contribute": "Contribute",
-    "install": "Install", "quickstart": "Quickstart",
+    "install": "Install", "quickstart": "Quickstart", "search": "Search and AI answers",
 }
 FOOT_MAX = 23
 

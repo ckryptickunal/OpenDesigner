@@ -20,7 +20,9 @@ In Claude Code, add the repository as a plugin marketplace, then install the plu
 /plugin install opendesigner@opendesigner
 ```
 
-The plugin installs nine skills. Start a new session afterwards, because skills load when a session starts. Using the Claude app instead? The same Claude skill installs from a zip: see [Install](/docs/install/).
+The plugin installs nine skills. Start a new session afterwards, because skills load when a session starts. The install from GitHub was tested on 2026-10-21, and the manifest passes `claude plugin validate .` with one warning, about the repository's own `CLAUDE.md`.
+
+In the desktop app's Code tab, `/plugin` may not run, and the Claude app installs the same Claude skill from a zip. [Install](/docs/install/) has both.
 
 Then open your project and say: **"Create a design system for this project."** It reads your files first, then asks up to five questions, each with a recommended answer and its reason. Choices show as an artifact or a local HTML page.
 
@@ -64,8 +66,11 @@ The format is DTCG 2025.10, the open format from the W3C Design Tokens Community
 
 {{figure:intent-token-chain}}
 
-## For developers
+## Wire it in
 
+Import the CSS once, or add the Tailwind theme, and every color, size and corner in your app comes from the tokens. Review can also fail a script when it finds a raw value.
+
+:::dev
 **CSS variables.** `opendesigner/build/css/tokens.css` holds every token as a custom property, named `--ds-...`. Import it once at the root of your app:
 
 ```css
@@ -89,8 +94,7 @@ Dark mode follows the system setting, and `data-theme="light"` or `data-theme="d
 Classes follow the token roles: `bg-action-primary`, `text-fg-primary`, `rounded-control`. By default the theme switches off Tailwind's own colors, text sizes, radii and shadows, so a stray `bg-blue-600` adds no style. `DESIGN.md` lists the classes.
 
 **Review.** Add `--strict` to `engine.py review` to make it fail when it finds anything. Swift, Jetpack Compose, Figma variables, Paper and a DTCG resolver file come from the same build: see [For engineers](/docs/engineers/).
-
-**What was tested.** The manifest passes `claude plugin validate .` with one warning, about the repository's own `CLAUDE.md` (checked 2026-10-15). The install from GitHub was tested on 2026-10-21. In the desktop app's Code tab, `/plugin` may not run: [Install](/docs/install/) has the terminal commands.
+:::
 
 ## Not yet
 

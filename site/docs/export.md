@@ -11,22 +11,28 @@ OpenDesigner exports your design system to code and design tools: CSS variables,
 
 ## One rule: change the decision, then rebuild
 
-Every export is made from the files in `opendesigner/tokens/`. Don't edit an export by hand, because the next build overwrites it. Change the decision instead, then rebuild:
+Every export is made from the files in `opendesigner/tokens/`. Don't edit an export by hand, because the next build overwrites it. Change the decision instead, then rebuild.
+
+{{figure:export-rebuild-not-edit}}
+
+`build` generates the tokens and checks them. If there are no errors, it writes the exports, `DESIGN.md`, the overview page and the preview pages. Code exports follow the platforms you chose, and the build names what it left out. Figma, Paper, DTCG, the artifact files and the brand page are always written, and a code file already in `build/` is refreshed by every build.
+
+:::dev
+Change a decision and rebuild:
 
 ```
 engine.py set dials.roundness 60 --why "softer corners for a friendlier feel"
 engine.py build
 ```
 
-{{figure:export-rebuild-not-edit}}
-
-`build` generates the tokens and checks them. If there are no errors, it writes the exports, `DESIGN.md`, the overview page and the preview pages. Code exports follow the platforms you chose, and the build names what it left out. Figma, Paper, DTCG, the artifact files and the brand page are always written, and a code file already in `build/` is refreshed by every build. To write one format, or all of them:
+Write one format, or all of them:
 
 ```
 engine.py export --format tailwind
 ```
 
 The formats are `css`, `tailwind`, `figma`, `paper`, `swift`, `compose`, `dtcg`, `artifact`, `brand` and `all`.
+:::
 
 ## Code exports
 

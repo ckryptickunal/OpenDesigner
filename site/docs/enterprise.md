@@ -60,15 +60,19 @@ After that, the engine refuses to change it and says to ask the owner first. The
 
 **House standards** are 457 rules (version 4, updated 2026-11-02) from sources OpenDesigner's maintainer treats as non-negotiable, in areas such as motion, touch and components. The engine applies the ones that fit your platforms and locks them: a web-only test project on 5 November 2026 got 291. They are listed with their sources in `opendesigner/standards.md`.
 
-A house standard changes only when someone explicitly asks. `engine.py standard override` changes one value or the whole standard and records the reason, `standard restore` undoes it, and `standards --update` applies newer house standards while keeping your overrides.
+A house standard changes only when someone explicitly asks, and the change is recorded with its reason. **Project standards** are your team's own rules, such as "Buttons use sentence case". They can lock token values, let review flag code that breaks them, and win over a house standard you name. Each change is recorded in the decision log.
 
-**Project standards** are your team's own rules:
+:::dev
+`engine.py standard override` changes one value or the whole standard and records the reason, `standard restore` undoes it, and `standards --update` applies newer house standards while keeping your overrides.
+
+Add a project standard:
 
 ```
 engine.py standard add --rule "Buttons use sentence case" --why "Our content guide requires it" --source "design team, 2026-10-14"
 ```
 
-`--path` and `--value` lock the token values a rule sets, `--review-pattern` lets `engine.py review` flag code that breaks it, `--authority` marks it non-negotiable or good-to-have, and `--beats` names the house standards it wins over. Each change is recorded in the decision log.
+`--path` and `--value` lock the token values a rule sets, `--review-pattern` lets `engine.py review` flag code that breaks it, `--authority` marks it non-negotiable or good-to-have, and `--beats` names the house standards it wins over.
+:::
 
 ## Changes and drift
 
