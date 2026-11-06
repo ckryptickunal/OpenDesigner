@@ -84,7 +84,13 @@ Bigger elements and longer distances get longer durations. *(STD-easing-duration
 
 {{figure:craft-motion-origin}}
 
-The house recipes: dropdowns enter from scale(0.95) over 200 ms, tooltips from scale(0.97) over 125 ms and modals from scale(0.96) over 250 ms, all with opacity, on the house ease-out curve. *(STD-enter-exit-origin-08, STD-enter-exit-origin-09, STD-enter-exit-origin-11)*
+The house recipes, each with opacity on the house ease-out curve: *(STD-enter-exit-origin-08, STD-enter-exit-origin-09, STD-enter-exit-origin-11)*
+
+| Element | Enters from | Over |
+|---|---|---|
+| Dropdown | scale(0.95) | 200 ms |
+| Tooltip | scale(0.97) | 125 ms |
+| Modal | scale(0.96) | 250 ms |
 
 ## Show the press
 
@@ -148,7 +154,15 @@ Some people set their device to reduce motion, because movement on screen can ma
 
 ## Check it before you ship it
 
-Motion can be correct in code and still feel wrong. Before you call it done, play it at two to five times its length or frame by frame, and look for the wrong origin, an abrupt start or properties out of step. *(STD-process-review-taste-30)* Use it the way people will: open and close it fast, and flip the toggle again and again. *(STD-process-review-taste-32)* Look again the next day. *(STD-process-review-taste-31)* Try anything touched or dragged on a real phone, not an emulator. *(STD-process-review-taste-33)* Then turn on reduced motion and check that the movement is gone and the fades remain. *(STD-accessibility-motion-05)*
+Motion can be correct in code and still feel wrong. Before you call it done:
+
+| Check | How | Standard |
+|---|---|---|
+| Slow it down | Play it at 2 to 5 times its length, or frame by frame. Look for the wrong origin, an abrupt start or properties out of step | STD-process-review-taste-30 |
+| Use it like people will | Open and close it fast; flip the toggle again and again | STD-process-review-taste-32 |
+| Look again | The next day | STD-process-review-taste-31 |
+| Use a real phone | For anything touched or dragged; an emulator does not count | STD-process-review-taste-33 |
+| Turn on reduced motion | The movement is gone and the fades remain | STD-accessibility-motion-05 |
 
 ## Where these rules come from
 
