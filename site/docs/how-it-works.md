@@ -13,27 +13,38 @@ OpenDesigner works inside the AI tool you already use, and a small Python engine
 
 1. **Add it to your AI tool** with one or two commands. See [Install](/docs/install/).
 2. **Say "Create a design system for this project."**
-3. **It reads before it asks:** your CSS, Tailwind config, `package.json`, tokens, logo and fonts. It skips what a file already answers.
+3. **It reads before it asks:** your styles, tokens, logo and fonts. It skips what a file already answers.
 4. **It asks once about a private log** of your steps. Only a clear yes turns it on.
 5. **The sketch: up to five questions, one per message.** What you are making, who it is for, where it runs, how it should feel, and your brand color or logo. Each comes with a suggested answer and its reason. Answer in your own words, or say "just pick".
-6. **You get a complete first version** in a few seconds: every token, the exports for your platforms, `DESIGN.md`, and an overview page that marks each area Chosen, Picked for you, Default or Not enough information.
+6. **You get a complete first version** in a few seconds: every token, the code for your platforms, your rules in plain words, and an overview page that marks each area Chosen, Picked for you, Default or Not enough information.
 7. **It offers to research your users.** About 10 minutes, and it does the work after one yes: a table of competitors, a positioning for you to confirm and three directions on one board. Say no, and it doesn't ask again.
 8. **Zoom in only where you care, or stop.** See [Zoom levels](/docs/zoom-levels/).
 9. **It checks its own work.** Fixed rules check contrast, target sizes, focus rings and reduced motion before the AI gives any opinion. Errors block the build.
-10. **It writes everything down,** and asks before adding a short note to your `AGENTS.md`, so later AI sessions follow the same rules.
-11. **Later changes** go through the extend skill, which reads the decision log first. `engine.py review` finds hard-coded values in your code and names the token to use.
+10. **It writes everything down,** and asks before adding a short note for your other AI agents, so later sessions follow the same rules.
+11. **Later changes** read the decision log first. A review finds values in your code that skip the system and names the right one to use.
 12. **If something is confusing or broken,** it saves a note with a ready-to-file GitHub link. Nothing is posted unless you submit it.
 
 ## Four things you can ask for
 
 Your AI picks the skill from your words; there are no extra commands to learn.
 
-| Ask for | What happens | What runs |
-|---|---|---|
-| **Audit** what you have | It measures your site, repo, Figma file or brand book, then checks the built screens at every size and theme | the extract skill, then the review skill |
-| **Establish** a system | The five-question sketch and a complete first build | `engine.py sketch`, then `engine.py build` |
-| **Improve** it | A change to the system, with what it would move named first | the extend skill |
-| **Check** the work | Fixed rules on the code and the page, then what still needs your eye | `engine.py review`, the review skill, the preflight skill |
+| Ask for | What happens |
+|---|---|
+| **Audit** what you have | It measures your site, repo, Figma file or brand book, then checks the built screens at every size and theme |
+| **Establish** a system | The five-question sketch and a complete first build |
+| **Improve** it | A change to the system, with what it would move named first |
+| **Check** the work | Fixed rules on the code and the page, then what still needs your eye |
+
+:::dev
+| Job | What runs |
+|---|---|
+| Audit | the extract skill, then the review skill |
+| Establish | `engine.py sketch`, then `engine.py build` |
+| Improve | the extend skill, which reads `opendesigner/decisions.md` first |
+| Check | `engine.py review` on the code, the review skill on the page, the preflight skill before you share |
+
+The note for other agents goes in your `AGENTS.md`. The overview page is `opendesigner/overview.html`.
+:::
 
 ## Two parts: written instructions and an engine
 
@@ -50,7 +61,7 @@ Your answers move [eight dials](/docs/dials/), such as Density and Roundness, ea
 Your taste can move the dials too, but only as a suggestion you confirm.
 
 - **The taste poll** (optional, about 5 minutes): you rate 20 to 30 real screens from shipped products. The screens come from Mobbin, so the poll needs your own Mobbin access, and the images stay on your computer.
-- **The taste index** merges every taste signal in your project into a value and a confidence per dial, plus red lines. It asks you to confirm what it's sure of, never offers an option past a red line, and `engine.py review` tells you when the system drifts from your taste.
+- **The taste index** merges every taste signal in your project into a value and a confidence per dial, plus red lines. It asks you to confirm what it's sure of, never offers an option past a red line, and a review tells you when the system drifts from your taste.
 - **The taste card** is five lines at the top of `DESIGN.md`. Your picture of the look and the Never list only ever come from you.
 
 Taste never moves an accessibility floor or a house standard, and it stays in your project.

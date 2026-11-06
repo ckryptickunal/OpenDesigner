@@ -23,7 +23,14 @@ It is packaged for Claude Code, the Claude app, ChatGPT (as a Project), and Code
 
 ### How do I install OpenDesigner?
 
-In Claude Code, run `/plugin marketplace add ckryptickunal/OpenDesigner` and `/plugin install opendesigner@opendesigner`, then start a new session. The Claude app, ChatGPT, Codex, Cursor and other agents each have a short path too. Then open your project and say "Create a design system for this project." See [Install](/docs/install/).
+In Claude Code it takes two commands and a new session; the Claude app, ChatGPT, Codex, Cursor and other agents each have a short path too. Then open your project and say "Create a design system for this project." See [Install](/docs/install/).
+
+:::dev
+```
+/plugin marketplace add ckryptickunal/OpenDesigner
+/plugin install opendesigner@opendesigner
+```
+:::
 
 ### What does it ask during setup?
 
@@ -37,7 +44,7 @@ Up to five questions: what you're making, who it's for, where it runs, how it sh
 
 ### How does it work with Tailwind CSS?
 
-It reads your Tailwind config before asking anything. When your platforms include the web, every build writes `opendesigner/build/tailwind/theme.css`, a Tailwind CSS v4 theme, so utility classes use your colors, spacing, radii and type. See [Export](/docs/export/).
+It reads your Tailwind config before asking anything. When your platforms include the web, every build writes a Tailwind CSS v4 theme, so utility classes use your colors, spacing, radii and type. See [Export](/docs/export/).
 
 ### How do AI coding agents use DESIGN.md?
 
