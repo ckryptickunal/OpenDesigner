@@ -1893,6 +1893,63 @@
   "layer": "use"
  },
  {
+  "id": "use.search-aeo",
+  "term": "AEO (answer engine optimisation)",
+  "plain": "Writing each page so tools that answer questions pick it to quote.",
+  "designer": "Each page answers one real question in its first sentence, under a heading in the words people type.",
+  "engineer": "references/probe.md: a few questions by hand, logged out; record each engine's searches, sources and follow-ups. fixes.md turns them into page changes.",
+  "designer_says": "be the quoted answer",
+  "code_name": "references/probe.md",
+  "example": "Answer \"how much does it cost?\" in the first line of the pricing page.",
+  "see_also": [
+   "use.search-seo",
+   "use.search-geo"
+  ],
+  "source": [
+   "skills/opendesigner-search/SKILL.md"
+  ],
+  "layer": "use"
+ },
+ {
+  "id": "use.search-geo",
+  "term": "GEO (generative engine optimisation)",
+  "plain": "Helping AI chat tools like ChatGPT read your site and name it in their answers.",
+  "designer": "Real facts, quotes and named sources make AI answers more likely to use a page; repeating keywords makes it less likely.",
+  "engineer": "Allow OAI-SearchBot, PerplexityBot and Claude-SearchBot in robots.txt; GPTBot and ClaudeBot only gather training data. search.py robots lists each bot.",
+  "designer_says": "get named by AI",
+  "code_name": "search.py robots robots.txt",
+  "example": "Let ChatGPT's search crawler in, even if training crawlers stay out.",
+  "see_also": [
+   "use.search-seo",
+   "use.search-aeo"
+  ],
+  "source": [
+   "skills/opendesigner-search/SKILL.md",
+   "Aggarwal et al., GEO, KDD 2024 (arXiv 2311.09735)",
+   "OpenAI crawler docs (read 2026-11-07)"
+  ],
+  "layer": "use"
+ },
+ {
+  "id": "use.search-seo",
+  "term": "SEO (search engine optimisation)",
+  "plain": "Making your pages easy for search sites like Google to find, read and show.",
+  "designer": "How pages are named, titled, linked and described, so search results show them and people choose to click.",
+  "engineer": "search.py audit <build folder> checks robots.txt, sitemap.xml, canonicals, titles, descriptions, the h1 and JSON-LD in the served HTML. Read-only.",
+  "designer_says": "get found in search",
+  "code_name": "search.py audit dist/",
+  "example": "Give the pricing page its own title so search shows it.",
+  "see_also": [
+   "use.search-aeo",
+   "use.search-geo"
+  ],
+  "source": [
+   "skills/opendesigner-search/SKILL.md",
+   "Google Search Central, AI features and your website (read 2026-11-07)"
+  ],
+  "layer": "use"
+ },
+ {
   "id": "use.standard",
   "term": "standard",
   "plain": "A rule your design always follows. It is set for you, and only you can ask to change it.",

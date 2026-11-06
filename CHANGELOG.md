@@ -8,6 +8,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Get found in search and AI answers** (2026-11-07). A new skill, opendesigner-search, checks a built site for search engines and AI answer engines (SEO, AEO, GEO): which bots may read it, canonicals, titles, headings and structured data. It asks ChatGPT and Perplexity a few questions by hand, and proposes page fixes from what they searched for and cited. Nothing changes without your yes.
 - **Shorter craft pages** (2026-11-07). The motion, UX patterns, interface details, sources and design styles pages are 15 to 28% shorter, with every rule, number and source kept, and tables where text compared values. They also say what is true today: 32 benchmarked systems, and the two house colour rules (known meanings keep their colours; never pure white with pure black).
 - **A near-black brand builds** (2026-11-06). When the accent ramp's text step would be pure black (or pure white in dark mode), links, accent text and accent icons use an off-shade of the same hue, so the engine no longer breaks its own white-and-black rule.
 - **Adding a platform raises the touch target** (2026-11-06). After `pick Q-plat-01` adds Android, a standard's 44 px touch target goes back to the engine's own 48 px, as a fresh sketch does. A value the person set is kept, and the conflict is said.

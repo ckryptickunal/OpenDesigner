@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+Sitemap: https://ledgerly.example/sitemap.xml
