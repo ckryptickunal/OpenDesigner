@@ -14,7 +14,8 @@
 .odl-live-chat .odl-live i { inline-size: var(--ds-space-6); block-size: var(--ds-space-6); border-radius: var(--ds-radius-full); background: currentColor; animation: odl-live-chat-pulse var(--ds-motion-duration-extra) var(--ds-motion-easing-standard) infinite alternate; }
 @keyframes odl-live-chat-pulse { from { opacity: 1; } to { opacity: .35; } }
 /* The viewer count sits on the photo: a dark scrim behind light text keeps its contrast whatever the frame shows. */
-.odl-live-chat .odl-viewers { background: var(--ds-color-overlay-scrim); color: var(--ds-color-neutral-dark-12); }
+/* A dark chip from the fixed dark alpha ramp: 4.5:1 on any frame, a white one included. */
+.odl-live-chat .odl-viewers { background: var(--ds-color-neutral-alpha-light-11); color: var(--ds-color-neutral-dark-12); }
 .odl-live-chat .odl-viewers svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
 .odl-live-chat .odl-about { display: grid; gap: var(--ds-space-stack-sm); padding-inline: var(--ds-space-inset-xs); }
 .odl-live-chat h3 { margin: 0; font: var(--ds-text-title-lg); text-wrap: balance; }

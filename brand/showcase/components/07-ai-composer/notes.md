@@ -1,6 +1,6 @@
 # 07 · AI composer · Oriel
 
-Gallery: Oriel is a fictional research assistant for historians; typing @harb opens its source picker mid-question.
+Gallery: A research assistant for historians; typing @harb opens its source picker mid-question.
 
 ## Direction
 Oriel is a fictional research assistant for historians and long-form writers: you bring PDFs, field data and archive links, and it reads them with you and cites every claim. The composer should feel like a reading room, not a chatbot: parchment, brown-black ink, one terracotta accent, an editorial serif (Newsreader) for the answer, the mode names and the small italic notes, and a warm grotesque (Instrument Sans) for the controls and what you type. Soft paper-card corners and pill controls. The page is set like a journal: a double-ruled masthead, small-caps labels, an issue number.

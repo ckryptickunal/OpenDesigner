@@ -1,6 +1,6 @@
 # 06 Plenary: Memphis ticket counts for a conference organiser
 
-Gallery: Plenary is a fictional ticketing tool; each ticket type is a row of Memphis shapes, one for every 20 tickets.
+Gallery: A ticketing tool; each ticket type is a row of shapes, one for every 20 tickets.
 
 **This page now:** the "Round 4 (owner review, 2026-10-18)" section, the last one, describes it. The sections between record earlier versions.
 

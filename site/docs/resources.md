@@ -66,8 +66,8 @@ The house standard for easing (STD-easing-duration-02) names two sites to take a
 
 ## How a source becomes a standard
 
-Each source is listed in `learn/sources.json` with an authority. An agent reads it in full and writes down its rules, values and examples, and a second, fresh agent tries to refute each one before it is kept. Rules from non-negotiable sources become versioned house standards, each with an id and links to its sources. Only you can override one, by asking explicitly, and your reason is recorded.
-
 {{figure:craft-resources-pipeline}}
+
+Sources and their authority are listed in `learn/sources.json`. Only you can override a standard, by asking explicitly, and your reason is recorded.
 
 The full rules are in [How OpenDesigner learns](https://github.com/ckryptickunal/OpenDesigner/blob/main/docs/KNOWLEDGE.md) and the [learning wiki's README](https://github.com/ckryptickunal/OpenDesigner/blob/main/learn/README.md). To suggest a source, open an issue on [GitHub](https://github.com/ckryptickunal/OpenDesigner/issues).

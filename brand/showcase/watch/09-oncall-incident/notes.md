@@ -1,6 +1,6 @@
 # 09 Pagewright: on-call page
 
-Gallery: Pagewright is a fictional incident-management tool; an on-call engineer is paged at 3:12 a.m. into a severity-1 incident on the watch.
+Gallery: An incident tool paging an on-call engineer at 3:12 a.m. into a severity-1 incident.
 
 Replaces `watch/06-hush-breathe` (audited 2 of 5, "remake"). Render: `shot.png`, 205 x 251 CSS px at scale 3 (615 x 753), clipped to the display shape by `../render.py`, the same as the other watch pieces. Page: `index.html`.
 

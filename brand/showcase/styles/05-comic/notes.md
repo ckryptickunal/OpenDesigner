@@ -1,6 +1,6 @@
 # 05 Nightjar: an incident postmortem told as a comic
 
-Gallery: Nightjar is a fictional incident platform; its engineering blog tells a postmortem in three comic panels drawn from the data.
+Gallery: Nightjar's engineering blog tells an incident postmortem in three comic panels drawn from the data.
 
 **Direction.** Nightjar is a fictional on-call and incident-management platform. Its engineering blog publishes blameless postmortems; this one, INC-4471, is drawn as a seven-panel noir comic. The incident is a believable one: a gateway release (v4.18) renamed a config key, the 30-second ledger timeout was silently ignored, the HTTP client fell back to a 3-second default, the nightly settlement batch pushed ledger latency past 3 s, and two retry layers (app ×4, gateway ×4) turned one checkout call into 16. The rollback fixed nothing because 1.9 M queued retries kept hammering the ledger; opening the retry worker's breaker and draining the queue did. Audience: engineers and engineering managers who buy incident tooling. Feel words: **playful, bold, geeky**.
 

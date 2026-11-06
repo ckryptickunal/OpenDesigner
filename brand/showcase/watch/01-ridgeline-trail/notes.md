@@ -1,5 +1,7 @@
 # 01 Fellrise: notes
 
+Gallery: A trail-running app for people who race in the mountains.
+
 Render: `shot.png` (205 x 251 CSS px at 3x, clipped to the display shape by `../render.py`). Page: `index.html`.
 
 ## Direction

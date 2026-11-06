@@ -1,6 +1,6 @@
 # 06 · Security settings and audit log · Ferrule
 
-Gallery: Ferrule is a fictional data platform; its security settings and audit log for an insurer's IT admins and security engineers.
+Gallery: A data platform, for an insurer's IT admins and security engineers.
 
 Final renders, each 1440 × 900 at 2×:
 - `shot.png`: Settings › Security

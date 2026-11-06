@@ -1,5 +1,7 @@
 # 01 Brask: giant wordmark footer
 
+Gallery: An independent creative studio in Copenhagen, Lisbon and Mexico City.
+
 ## Direction
 Brask is a fictional independent creative studio (identity, type, motion) in Copenhagen, Lisbon and Mexico City. The footer is the last thing a prospective client sees, so it is the studio's signature: the name set edge to edge, oversized and cropped by the bottom of the page, with one invitation above it. Monochrome warm black and bone, one signal orange used three times only (the open-slot dot, the "Send it over." line, the full stop of the wordmark).
 Feel words: bold, minimal, confident.

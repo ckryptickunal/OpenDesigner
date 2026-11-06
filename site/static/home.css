@@ -441,7 +441,7 @@
 @media (min-width: 421px) { .bar-in { gap: 24px; } } .bar-in .top-nav { flex: 1; }  /* phones keep site.css's 12 px, so the header fits at 320 px */
 @media (max-width: 720px) { .nav-book { display: none; } }
 .h-book { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px 48px; align-items: end; padding: 40px; border: 1px solid var(--line); border-radius: var(--r-panel); background: var(--surface-raised); }
-.h-book .h-lede { margin-top: 16px; }
+.h-book .h-lede { margin-top: 16px; text-wrap: balance; }
 .h-book-act { display: grid; justify-items: start; gap: 12px; }
 @media (max-width: 860px) { .h-book { grid-template-columns: minmax(0, 1fr); padding: 28px 20px; } }
 .h-soon { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; font-weight: 600; color: var(--ink-muted); }
@@ -477,6 +477,9 @@
    at every width (owner, 2026-10-15: "maximum distance between two opposite CTAs so that there is no wrong action"). */
 .x-actions, .hh-actions { justify-content: space-between; flex-wrap: nowrap; }
 .x-btn, .hh-btn { height: auto; min-height: var(--x-h); padding-block: 6px; white-space: normal; text-align: center; line-height: 1.2; }
+/* on phones the labels get smaller instead of wrapping: same words at every width, one row (#77). They wrapped from 320 to
+   about 429 px, so the rule runs to 439 px. */
+@media (max-width: 439px) { .x-btn { font-size: 13px; padding-inline: 8px; white-space: nowrap; } }
 @media (max-width: 640px) {
   .demo-panel { padding: 16px; }
   .demo-stage { padding: 20px 8px; }

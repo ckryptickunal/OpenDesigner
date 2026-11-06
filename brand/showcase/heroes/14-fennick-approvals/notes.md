@@ -1,6 +1,6 @@
 # 14 Fennick: bill approvals hero (B2B)
 
-Gallery: Fennick's marketing hero: one bill's review card, showing what is left in the bank if it is approved.
+Gallery: One bill's review card shows what is left in the bank if it is approved.
 
 Built in round 3, after the owner's review (`brand/showcase/ROUND3-BRIEF.md`). It is one of three heroes made for the B2B product screens the owner loves, in place of the four heroes he removed. Render: `shot.png`, 1440 × 900 at 2×.
 

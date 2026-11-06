@@ -1,5 +1,7 @@
 # 06 · Data table · Tarrow Freight
 
+Gallery: A freight-operations platform.
+
 ## Direction
 Tarrow Freight is a fictional freight-operations platform. Dispatchers watch hundreds of live shipments a shift and need to scan, sort, filter and act on many rows at once. The table should feel like an engineered instrument: exact, compact and calm, with one signal colour (freight-label orange) for selection, sort state and the one primary action. Shape language is square (radius 0), rules instead of shadows, a faint manifest grid in the gutters.
 Feel words: **technical, precise, dense** (the engine only knew "technical"; "precise" and "dense" were left out).

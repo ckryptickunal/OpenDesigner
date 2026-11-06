@@ -1,5 +1,7 @@
 # 05 · Aerlo: boarding pass
 
+Gallery: A short-haul airline app.
+
 ## Direction
 Aerlo is a fictional short-haul airline app. The boarding pass is the screen people pull up in a queue with a bag in one hand: it must answer "which gate, which seat, when" in one glance and scan at the gate, and it should feel like the first minute of the trip: high, light, blue. White perforated ticket, a dot-matrix route map, crisp geometric type. Feel words: **airy, crisp, trustworthy** ("airy" and "crisp" are not in the engine's feel list).
 

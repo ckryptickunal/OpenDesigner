@@ -1,5 +1,7 @@
 # 04 Headway: notes
 
+Gallery: A countdown for commuters on a city tram and train network.
+
 Render: `shot.png` (205 x 251 CSS px at 3x, clipped to the display shape by `../render.py`). Page: `index.html`.
 
 ## Direction

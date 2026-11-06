@@ -1,6 +1,6 @@
 # 07 · Parlo: Italian lesson (phone, 390×844 @3x)
 
-Gallery: Parlo is a fictional Italian course; after the learner says a sentence, the stress in caffè is set in type, each syllable as large as it was loud.
+Gallery: An Italian course that sets each spoken syllable as large as it was loud.
 
 ## Direction
 Parlo is a fictional language app that teaches Italian in five-minute lessons. The screen is a "translate this sentence" exercise just after a correct answer: tiles placed, the result sheet up, and the mascot Moka (an enamel coffee pot drawn in SVG) saying the sentence. It should feel like a toy: thick ink outlines, hard bottom edges that read as pressable, and bright primaries (cobalt, sunflower, tomato) on white. Feel words: **playful, bold, cheerful**.

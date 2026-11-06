@@ -1,5 +1,7 @@
 # 02 · Bill approvals · Fennick
 
+Gallery: An accounts-payable product.
+
 ## Direction
 Fennick is a fictional accounts-payable product. The screen is "Bills → To approve" as the CFO of the fictional company Bramblecote Foods sees it: a queue of 14 bills with approval progress and inline ✓/× on each row, and the review drawer open on one bill. The drawer states the amount, the policy that applies ("Over $5,000: needs CFO approval"), the approval timeline, the consequence before the decision ("If you approve … Left on Oct 20 $41,208.17"), the GL account and department, the invoice PDF, a comment, and a sticky footer with Reject ▾ and Approve. Two more frames show the temporary states one at a time: `?state=toast` (`shot-toast.png`) confirms the bill approved a moment ago, names the next step and offers Undo; `?state=tooltip` (`shot-tooltip.png`) is the Approve hover, where the ⌘↵ shortcut lives instead of on the page.
 Feel words: **calm, trustworthy, precise** (the engine dropped "precise").

@@ -1,6 +1,6 @@
 # 03 · Larder: recipe detail
 
-Gallery: Sorrelby is a fictional cooking quarterly turned into an app: one recipe, read like a magazine page.
+Gallery: A cooking quarterly turned into an app, read like a magazine page.
 
 ## Direction
 Larder is a fictional cooking quarterly turned into an app: recipes read like a magazine spread, with one big plate image, a strong serif headline, and the practical parts (ingredient checklist, step timer) set like good print furniture. Warm off-white paper, ink, tomato red, an olive check. Feel words: **warm, editorial, rich** ("editorial" is not in the engine's feel list).
