@@ -602,7 +602,7 @@ When the person shares a link or file and says to follow it or learn from it:
 
 # Improving OpenDesigner (the self-improvement loop)
 
-OpenDesigner gets better when you say what went wrong. This covers BRIEF requirement 16 and lane U3. All eight skills link here.
+OpenDesigner gets better when you say what went wrong. This covers BRIEF requirement 16 and lane U3. All nine skills link here.
 
 ## When to use it
 Record feedback the moment you notice one of these:

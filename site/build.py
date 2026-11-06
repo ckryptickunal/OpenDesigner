@@ -2129,7 +2129,7 @@ LINKS = ('</llms.txt>; rel="describedby"; type="text/plain", </index.md>; rel="a
 
 
 def agent_skills():
-    """/.well-known/agent-skills/: the eight skills for agents that read the Agent Skills discovery index (v0.2.0,
+    """/.well-known/agent-skills/: every skill, for agents that read the Agent Skills discovery index (v0.2.0,
     github.com/cloudflare/agent-skills-discovery-rfc). Each is the self-contained zip tools/build_dist.py makes for
     claude.ai, and the index gives its SHA-256, so a client can check what it downloaded."""
     import hashlib

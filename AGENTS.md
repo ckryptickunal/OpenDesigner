@@ -121,7 +121,7 @@ Use the skill's own folder path when it is installed elsewhere (for example a pl
 | `traces/` | Append-only log of every source each lane opened |
 | `synthesis/` | Combined outputs: ontology, questionnaire, levers (dials and formulas), decision graph, cards, builder spec, house standards (`standards.json`) and impact notes (`impact.json`) |
 | `learn/` | **The learning wiki** (lane L19), kept on its own: trusted sources and their authority, one analysis per source, an OpenWiki Markdown wiki with cross-source topic pages and Decision Cards. Start at `learn/MAP.md`; to change the app from it, `learn/IMPROVING.md`; the rules, `docs/KNOWLEDGE.md`. Third-party text (`learn/raw/`) is never committed |
-| `skills/` | **Source of truth** for the eight skills (Agent Skills format, portable frontmatter only) |
+| `skills/` | **Source of truth** for the nine skills (Agent Skills format, portable frontmatter only) |
 | `.agents/skills/`, `.claude/skills/` | Generated copies of `skills/`. Never edit them. Run `python3 tools/sync_skills.py` |
 | `data/`, `skills/*/references/*.json`, `references/stages/`, `references/cards/`, `chatgpt-project/knowledge/` | Generated from `synthesis/` (including `glossary.json`) by `python3 tools/build_data.py`. `chatgpt-project/knowledge/` also copies the main skill's `SKILL.md`, hand-written references, output templates and `engine.py`. Edit the source instead |
 | `.claude-plugin/`, `plugin.json` | Claude plugin and marketplace manifests, and the Agent Plugins 1.0 manifest. Keep `version` in step |

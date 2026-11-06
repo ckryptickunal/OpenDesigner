@@ -74,3 +74,5 @@ If the site has five pages, the limit is content and links, not technical fixes.
 - `references/fixes.md`: from the engines' searches and citations to page fixes.
 - `references/practices.md`: each practice with its source and how strong it is: platform docs, studies, practice.
 - `references/report.md`: the report's shape.
+
+If something in OpenDesigner itself was missing, wrong or confusing, record it with `engine.py feedback "..." --kind gap|bug|confusing|idea` (`references/improve.md` in the opendesigner skill). Nothing is posted without the person's OK.
