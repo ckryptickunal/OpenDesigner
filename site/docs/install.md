@@ -4,7 +4,7 @@ seo_title: Install OpenDesigner in Claude, ChatGPT, Codex or Cursor
 description: How to add OpenDesigner to Claude Code, the Claude app, ChatGPT, Codex, Cursor and other agents, or run its engine with no AI. Which paths are tested so far.
 section: Getting started
 order: 2
-updated: 2026-10-21
+updated: 2026-11-07
 ---
 
 You add OpenDesigner to the AI tool you already use: two commands in Claude Code, or a skills folder, a skill zip or a ChatGPT Project in other tools. After that, open your project and say: **"Create a design system for this project."** There is no account to create.
@@ -31,7 +31,7 @@ claude plugin install opendesigner@opendesigner
 
 Then start a new session. Skills load when a session starts, so the session you installed from won't see them.
 
-The plugin installs eight skills: opendesigner, opendesigner-extract, opendesigner-extend, opendesigner-export, opendesigner-illustrate, opendesigner-review, opendesigner-paint and opendesigner-preflight.
+The plugin installs all eight skills. See [what each one does](/docs/introduction/#the-eight-skills).
 
 ## Claude app (claude.ai or Claude Desktop)
 
@@ -42,7 +42,7 @@ git clone https://github.com/ckryptickunal/OpenDesigner && cd OpenDesigner
 python3 tools/build_dist.py
 ```
 
-The second command writes the zip files into `dist/`. In the Claude app, the engine runs in Claude's code-execution sandbox.
+In the Claude app, the engine runs in Claude's code-execution sandbox.
 
 ## Codex, Cursor, VS Code with Copilot, Gemini CLI and other agents
 
@@ -70,7 +70,7 @@ The files are in the [repository](https://github.com/ckryptickunal/OpenDesigner)
 
 ## No AI at all: the engine on its own
 
-The engine is a Python file. It needs Python 3.10 or newer, uses only Python's standard library and makes no network calls. It builds a complete system from a few answers:
+The engine is one Python file and needs Python 3.10 or newer. It builds a complete system from a few answers:
 
 ```
 python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py sketch --name "Acme" --feel friendly,minimal
@@ -88,8 +88,6 @@ It writes `DESIGN.md`, `PRODUCT.md` and an `opendesigner/` folder with tokens, e
 - **To write into Paper:** Paper Desktop running on your computer.
 
 ## What has been tested so far
-
-OpenDesigner is new, so here is what was checked, and when, and what was not.
 
 - **Claude Code:** the plugin manifest passes Claude Code's own check. On 2026-10-21 a demo trial installed it from GitHub with the two terminal commands above, and the skills loaded in a new session. Typing `/plugin` into the desktop app's chat did not run it as a command.
 - **Claude app:** the skill files pass the packaging check. Building the zip, uploading it and a run on claude.ai have not been recorded yet.

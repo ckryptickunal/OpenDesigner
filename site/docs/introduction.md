@@ -4,7 +4,7 @@ seo_title: OpenDesigner docs: make a design system with your AI tool
 description: What OpenDesigner is, who it helps, and what it does not do. A free, open-source add-on that builds a design system with the AI tool you already use.
 section: Getting started
 order: 1
-updated: 2026-11-03
+updated: 2026-11-07
 ---
 
 OpenDesigner is a free, open-source (MIT) add-on that helps you make a design system with the AI tool you already use, such as Claude, ChatGPT, Codex or Cursor. A design system is the set of rules for how your app looks: colors, text sizes, spacing, corners, depth, motion and parts like buttons. OpenDesigner asks a few plain questions, suggests an answer for each with a reason, checks the result, and saves the rules as files in your project.
@@ -19,7 +19,7 @@ To see the whole system drawn on one page, with the real numbers, open [How Open
 - **It starts with a sketch.** Up to five questions give you a complete first version.
 - **You zoom in only where you care.** Go deeper on color, text, spacing or motion, or stop. See [Zoom levels](/docs/zoom-levels/).
 - **It checks its own work.** Fixed rules check contrast, target sizes, focus rings and reduced motion. Errors block the build.
-- **It writes files you keep.** Design tokens in the open DTCG 2025.10 format, CSS variables, a Tailwind v4 theme, Figma variables, Paper tokens, and Swift and Jetpack Compose files.
+- **It writes files you keep.** Design tokens in the open DTCG 2025.10 format, Figma variables, and code for the platforms you use: CSS and Tailwind, Swift or Jetpack Compose. See [Export](/docs/export/).
 - **It writes down every decision and its reason,** in a log and in a `DESIGN.md` that people and AI tools can read.
 - **It asks you for what a person should make,** such as a logo, icons, illustration, photos or a brand typeface.
 
@@ -68,7 +68,7 @@ A skill is a set of instructions your AI tool loads when a task needs it.
 - **opendesigner-extend** changes or extends a system you already made.
 - **opendesigner-export** gets the system into code, Figma or Paper.
 - **opendesigner-illustrate** finds open-licence illustrations, ranks them and recolors them to your tokens. It can also add icons drawn like the few you already have.
-- **opendesigner-review** checks a built interface like a careful user would: every screen size and theme, scrolling, hover, keyboard and motion, with measured spacing, type, fonts and contrast, and evidence for each finding.
+- **opendesigner-review** checks a built interface like a careful user would, at every screen size and theme, with evidence for each finding.
 - **opendesigner-paint** makes original art painted in code in your palette: hero films, loops and still paintings in styles such as watercolour, sketch or woodcut.
 - **opendesigner-preflight** checks anything visual before you export or share it (a page, a deck, a video, a card) for the small mistakes that make it look cheap or wrong.
 

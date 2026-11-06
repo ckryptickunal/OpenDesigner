@@ -4,10 +4,10 @@ seo_title: Quickstart: your first design system with OpenDesigner
 description: Make your first design system: the five sketch questions with example answers, the files you get, and why to open overview.html and DESIGN.md first.
 section: Getting started
 order: 3
-updated: 2026-11-05
+updated: 2026-11-07
 ---
 
-To make your first design system, say "Create a design system for this project" and answer up to five short questions. OpenDesigner then builds a complete first version: tokens, code exports, a `DESIGN.md` and an overview page. Open `opendesigner/overview.html` first to see the whole system, then read the summary at the top of `DESIGN.md`.
+To make your first design system, say "Create a design system for this project" and answer up to five short questions. OpenDesigner then builds a complete first version: tokens, code exports, a `DESIGN.md` and an overview page.
 
 ## Before you start
 
@@ -64,8 +64,6 @@ You can run the same sketch with the engine alone:
 python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py sketch --name "Studyhall" --audience regular --platforms web,ios --feel calm,friendly --brand "#167874"
 ```
 
-In a test run on 2026-10-14, this took under two seconds and passed with no errors.
-
 ## What you get
 
 - `DESIGN.md` and `PRODUCT.md` at the root of your project.
@@ -80,7 +78,7 @@ The full list is on [The files it writes](/docs/files/).
 
 ### 1. The overview page
 
-Open `opendesigner/overview.html` in your browser. It shows your whole system on one page: colors with their contrast ratios, headings h1 to h6, every text style, spacing, corners, depth, motion and core components. It works offline.
+Open `opendesigner/overview.html` in your browser. It shows your whole system on one page, from colors with their contrast ratios to every text style and the core components. It works offline.
 
 Each area is marked **Chosen**, **Picked for you** or **Default**. Anything only you can give, such as a logo or a voice guide, shows as **Not enough information**, next to the question that fills it.
 
@@ -105,6 +103,6 @@ Check three things:
 
 ## Known rough edges
 
-- "About 3 minutes" is the planned length of the sketch. Nobody has timed real people yet.
+- The sketch is planned to take about 3 minutes. Nobody has timed real people yet.
 - If you give no brand color and pick a calm feel, the stand-in accent color can come out gray. Give a brand color, or zoom into colors.
 - If something is confusing, tell your AI. It saves a note in your project and gives you a ready-to-file GitHub link. Nothing is posted unless you submit it.

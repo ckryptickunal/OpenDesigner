@@ -4,10 +4,10 @@ seo_title: How OpenDesigner works, step by step, from install to review
 description: Every step OpenDesigner takes, in order: reading your project, the sketch, a first build, zooming in, the checks, the files it writes, and later changes.
 section: Reference
 order: 1
-updated: 2026-11-05
+updated: 2026-11-07
 ---
 
-OpenDesigner works inside the AI tool you already use: it reads your project, asks up to five questions, and builds a complete first version with a Python engine. You then zoom in only where you care. It checks the result with fixed rules, writes every decision down, and keeps later changes consistent.
+OpenDesigner works inside the AI tool you already use, and a small Python engine does the math.
 
 To see it drawn instead, with the real numbers, open [How OpenDesigner works](/tour/): the whole system on one page.
 
@@ -66,7 +66,7 @@ Taste never moves an accessibility floor or a house standard, and it stays in yo
 
 ## Showing choices
 
-It shows each choice in the most visual way your AI tool allows: a page in the chat (such as a Claude artifact), Figma or Paper, a local HTML page, the tool's own multiple-choice question, or plain text with numbered options. It never waits on a picture to move on. The pictures come from ten templates, each with a button that copies your choice as lines you paste back into the chat. Clicking choices directly inside the AI tool is planned ([issue #20](https://github.com/ckryptickunal/OpenDesigner/issues/20)).
+It shows each choice in the most visual way your AI tool allows, from a page in the chat to plain text with numbered options, and never waits on a picture to move on. The pictures come from ten templates, each with a button that copies your choice as lines you paste back into the chat. Clicking choices directly inside the AI tool is planned ([issue #20](https://github.com/ckryptickunal/OpenDesigner/issues/20)).
 
 ## References and assets
 

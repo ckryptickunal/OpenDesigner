@@ -4,10 +4,8 @@ seo_title: OpenDesigner FAQ: AI design systems, tokens, teams, privacy
 description: Plain answers about OpenDesigner: what it is, which AI tools it works with, privacy, accessibility, how it compares, team governance, and how early it is.
 section: Reference
 order: 5
-updated: 2026-11-05
+updated: 2026-11-07
 ---
-
-These are short answers to the questions people ask most about OpenDesigner. They cover what it does, which tools it works with, privacy, accessibility, use by teams, and how early the project is. Most answers link to a longer page.
 
 ### What is OpenDesigner?
 
@@ -47,7 +45,7 @@ No. It does the repetitive system work: scales, tokens, states and contrast. It 
 
 ### Will my app look like every other AI-made app?
 
-That's a fair worry. OpenDesigner asks what people should remember about your product, sets eight dials from your answers, and asks for your own logo, fonts and art instead of faking them. It won't copy someone else's brand from a reference site. If you love a site's look, or ask it to copy a brand, it offers a Taste Index of that look: the whole look described for your AI, keeping the site's exact colors and font names when first shown. What you keep or change is up to you and your responsibility; logos, names, images and copy never go in.
+That's a fair worry. OpenDesigner asks what people should remember about your product, sets eight dials from your answers, and asks for your own logo, fonts and art instead of faking them. It won't copy another brand from a reference site. If you love a site's look, it can write a Taste Index of it: the look described for your AI, with the site's exact colors and font names. What you keep is your call and your responsibility; logos, names, images and copy never go in.
 
 To be honest about the limits: in our stress test, AI agents made 46 pieces by following the process, plus 8 mockups. An audit against shipped products on Mobbin then passed 28 of the 54, sent 20 back for polish and rebuilt 6; much of the striking work was made outside the tokens. The audit's lessons are now rules every builder checks against. The tokens give you consistency and readable contrast. A distinctive look still needs your input.
 
@@ -91,6 +89,6 @@ You don't have to trust them. You can check them. The defaults rest on more than
 
 ### How early is it, and how do I report a problem?
 
-It's early. The repository was created on 2026-09-23, and version 0.2.0, the first tagged release, came out on 5 November 2026. No watched user trials have happened. The evidence so far is the engine's tests, three worked examples, usability tests role-played by AI testers, and a stress test in which AI agents made 46 pieces.
+It's early. The repository was created on 2026-09-23, and version 0.2.0, the first tagged release, came out on 5 November 2026. No watched user trials have happened. The evidence so far is the engine's tests, three worked examples, usability tests role-played by AI testers, and the stress test above.
 
 To report a problem, tell your AI what went wrong. It saves a note in your project and gives you a ready-to-file GitHub link. You can also [open an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose) directly. Nothing is posted unless you submit it yourself.
