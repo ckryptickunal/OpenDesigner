@@ -31,7 +31,9 @@ Up to five questions: what you're making, who it's for, where it runs, how it sh
 
 ### What files does OpenDesigner create in my project?
 
-`DESIGN.md` and `PRODUCT.md` at the root, and an `opendesigner/` folder with DTCG tokens, code exports for your platforms, an overview page and the decision log. Everything stays in your project, except taste poll screens, which stay in `~/.opendesigner/` on your computer. See [The files it writes](/docs/files/).
+`DESIGN.md` and `PRODUCT.md` at the root, and an `opendesigner/` folder with DTCG tokens, code exports for your platforms, an overview page and the decision log. See [The files it writes](/docs/files/).
+
+{{figure:files-tree}}
 
 ### How does it work with Tailwind CSS?
 
