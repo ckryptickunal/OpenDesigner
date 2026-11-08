@@ -432,3 +432,18 @@ Every change now goes through a pull request (#84, owner 2026-11-07), batched an
 - `origin/main` passed every check in AGENTS.md "Before you commit" and every test file on 2026-11-08 (`0ba6958`).
 - One PR is open: #52 (changes requested on 2026-10-13; conflicts with `main`).
 - Lesson: confirm the head is the commit you read immediately before merging, not only before the review (#96).
+
+## Sixth review: PRs 100 to 103 (2026-11-08)
+
+Merged by the coordinator session at the reviewed head with `--match-head-commit`, the head re-fetched right before each merge.
+
+| PR | What | Reviewed head | Merge | Review |
+|---|---|---|---|---|
+| #100 | PR log for #84 to #99; owner feedback rows 5 to 7 | `fe44c48` | `e415626` | docs only |
+| #101 | From the paper review: vague accessible names (info under IN-03), the GEO source on Q-site-04 (S-L06-124), the `search-traps` agent eval and SE-04 for a noindex behind a Disallow | `616c5e3` | `6b70bf8` | code read; test_review, test_search, data, sync, dist, citations, links, changelog and design evals rerun. On 30 example pages and 82 library parts the new note fired 7 times, all "More" and all fine in context, so it stays info. search-traps: 1.0 with the plugin, 0.8 without |
+| #102 | Concepts and reference docs, plain first: 10,730 to 8,928 open words, 22 tables, four stale claims fixed | `66282ac` | `715d863` | the coordinator added one commit: a consent sentence the trim dropped from security.md was restored, and files.md's "51 files" became the measured 50 for a web-only system (51 with iOS, 52 with the default platforms) |
+| #103 | Library parts follow today's tokens (#82: 41 layout errors to 0 in all ten looks), titles of 48 to 60 characters, plain-first shop copy | `3a9cd59` | `3dea026` | the checker change (a link in a library actions row counts as a control) is a real false alarm: the empty-state centres a button and a link together. It also makes those links meet the target-size check. library.py check, data, sync, dist, links and changelog rerun; title lengths computed for all 82 parts |
+
+### State after this review
+- One PR is open: #52 (changes requested on 2026-10-13; conflicts with `main`).
+- Issue #81 waits for Kunal's decision on light chart steps.
