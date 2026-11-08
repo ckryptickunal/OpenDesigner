@@ -37,6 +37,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **Concept and reference docs, plain first** (2026-11-08). Thirteen docs pages, from accessibility and tokens to the engine and security, now open in plain words. Commands, paths and JSON moved into "For developers" folds, and long passages became tables. Open text is 17% shorter, and every number, limit and privacy fact stays.
 - **A shorter home page and showcase** (2026-11-07). Lines that repeated a heading, a button, a picture or another line on the page are gone. Two claims are corrected: the example system writes 50 files, not 51, and a reference never brings in another brand's logo, name, images or copy.
 - **Text over photos stays readable in three more library parts** (2026-11-07). The live chat's viewer count, the video player's captions and the title detail's play icons now sit on dark chips. On a white frame the text measures 5.89:1, up from 2.25:1, in all ten looks.
 - **The home page's example buttons stay on one line on phones** (2026-11-07). Below 440 px wide, the two buttons on each example card use 13 px labels, so "Skip today" and "Mark today done" keep their words and sit on one row instead of wrapping ([#77](https://github.com/ckryptickunal/OpenDesigner/issues/77)).

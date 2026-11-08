@@ -4,72 +4,80 @@ seo_title: The eight design dials in OpenDesigner and what each sets
 description: OpenDesigner's eight dials, from Expression to Warmth: what each end means, the values each dial drives, how feel words move them, and their limits.
 section: Reference
 order: 4
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
-OpenDesigner sets most of a design system's look with eight dials. Each dial is a slider from 0 to 100, and each position maps to concrete values, such as a type scale ratio or a corner radius. Three posture dials set the overall stance, and five character dials tune the details.
+Eight sliders, each from 0 to 100, set most of how your design system looks. Your answers and feel words move them for you, and each position becomes real values, such as a type scale ratio or a corner radius. Read this page to see what a dial changes before you move one yourself.
 
 {{figure:dials-sliders}}
 
 ## How the dials work
 
-- **50 is a sensible middle** for most dials. Depth starts at 40.
-- **Your feel words move them.** Words like "playful", "serious", "friendly" or "premium" each shift several dials at once. The engine reads plain words too: "fun" counts as playful.
-- **Some dials follow others until you move them.** Energy, Roundness, Colorfulness and Depth follow Expression. Roundness also follows Density, and Colorfulness also follows Energy. Once you set a dial yourself, it stays where you put it.
-- **A few raw inputs sit beside the dials:** your brand color, typeface, base text size, platforms and contrast target.
-- **Style presets are named dial settings.** Examples are flat, tonal, glass and neo-brutalist.
+- **50 is the middle** for most dials. Depth starts at 40.
+- **Feel words move them.** "Playful" or "serious" shifts several dials at once, and plain words count too: "fun" reads as playful.
+- **Some dials follow others until you move them.** Four follow Expression. Roundness also follows Density, and Colorfulness also follows Energy. Once you set a dial yourself, it stays where you put it.
+- **Raw inputs sit beside the dials:** your brand color, typeface, base text size, platforms and contrast target.
+- **Style presets are named dial settings,** such as flat, tonal, glass and neo-brutalist.
 
 {{figure:dials-coupling}}
 
-You can set a dial directly:
+:::dev
+Set a dial yourself, then rebuild:
 
 ```
 engine.py set dials.roundness 60 --why "softer corners for a friendlier feel"
 engine.py build
 ```
 
+The formulas, their sources and their weak spots are in [the levers document](https://github.com/ckryptickunal/OpenDesigner/blob/main/synthesis/LEVERS.md).
+:::
+
 ## The three posture dials
+
+These set the overall stance. Each range runs from the left end to the right.
 
 ### Expression: productive to expressive
 
 How much the interface performs on everyday screens. It drives:
 
-- the type scale ratio, from 1.2 at the productive end to 1.333 at the expressive end;
+- the type scale ratio, 1.2 to 1.333;
 - how many font weights are used;
-- hero moments, from none to one or two per product;
-- where expressive motion appears, from nowhere to throughout;
-- the brand color's role, from a reserved accent to brand-colored chrome;
-- containment, from whitespace to visible containers;
-- the icon style at rest, from outline to filled or colored.
+- hero moments, none to one or two per product;
+- expressive motion, nowhere to throughout;
+- the brand color's role, a reserved accent to brand-colored chrome;
+- containment, whitespace to visible containers;
+- icons at rest, outline to filled or colored.
 
 At every position, each view gets one primary action.
 
 ### Brand presence: native to brand-led
 
-How much the product looks like the brand, compared with the platform it runs on. It drives:
+How much the product looks like your brand rather than its platform. It drives:
 
-- the typeface suggestion, from the system font on each platform, through open typefaces, to your own brand typeface;
-- where the brand color appears, from accents only to large surfaces;
-- how many components are the platform's own, from all of them to none;
+- the suggested typeface: the platform's system font, then open typefaces, then your own brand typeface;
+- where the brand color appears, accents only to large surfaces;
+- how many components are the platform's own, all of them to none;
 - whether the platform's base text size and shapes win;
 - how much voice guidance to write.
 
-Navigation always follows the platform's own patterns, whatever this dial says. The engine never guesses this dial from a reference. It always asks you.
+Navigation always follows the platform's own patterns. The engine never guesses this dial from a reference: it always asks you.
 
 ### Density: spacious to compact
 
 How much information fits on a screen. It drives:
 
-- the base text size on the web, from 19 px down to 13 px;
-- the control height, 48, 40 or 32 px;
+- the base text size on the web, 19 px down to 13 px;
+- the control height: 48, 40 or 32 px;
 - the density mode: spacious, comfortable or compact;
 - the ratio of inner to outer spacing;
-- the default icon size, 24, 20 or 16 px;
+- the default icon size: 24, 20 or 16 px;
 - a cap on the type scale ratio in dense layouts.
 
 Density never shrinks tap and click targets.
 
 ## The five character dials
+
+These tune the details.
 
 ### Energy: calm to energetic
 
@@ -77,32 +85,30 @@ How lively the interface feels in motion and intensity. It drives spring damping
 
 ### Roundness: sharp to soft
 
-The corner radius of the default control, and everything made from it. It runs from 0 px through 2, 4, 6, 8, 12 and 16 px to fully round. It also sets icon corners and line caps, and whether a rounded display face is suggested.
+The corner radius of the default control and everything made from it: 0, 2, 4, 6, 8, 12 or 16 px, or fully round. It also sets icon corners and line caps, and whether to suggest a rounded display face.
 
-That full range is for corners someone chose: the corner question, this dial set by hand, or a style. Until then, buttons and fields stay between 6 and 12 px, because feel words alone never make square or pill buttons. The Roundness line in `DESIGN.md` shows the radius your tokens hold.
+Until someone chooses the corners, with the corner question, this dial or a style, buttons and fields stay between 6 and 12 px: feel words alone never make square or pill buttons. The Roundness line in `DESIGN.md` shows the radius your tokens hold.
 
 ### Depth: flat to deep
 
-How strongly surfaces stand apart. From the flat end, the model goes from borders, to a ring with a faint shadow, to tonal layers, to a ladder of shadows, to materials. It also sets how strong the shadows are in light mode. In dark mode, raised surfaces get lighter instead.
+How strongly surfaces stand apart. From flat to deep, the model runs from borders to a ring with a faint shadow, tonal layers, a ladder of shadows, and materials. It also sets shadow strength in light mode; in dark mode, raised surfaces get lighter instead.
 
-Some styles bring their own depth, such as the raised surfaces of neumorphism or the solid offset shadows of neo-brutalism. Then the Depth line in `DESIGN.md` names that model.
+Some styles bring their own depth, such as the solid offset shadows of neo-brutalism. The Depth line in `DESIGN.md` then names that model.
 
 ### Colorfulness: monochrome to vivid
 
-How much color the palette carries and how much of the screen it covers. It drives the accent's chroma, the color scheme from monochrome through neutral and tonal to vibrant, whether surfaces are tinted, how many accent colors there are, and whether text may use the accent.
+How much color the palette carries and how much of the screen it covers. It drives the accent's chroma, the scheme from monochrome through neutral and tonal to vibrant, whether surfaces are tinted, how many accent colors there are, and whether text may use the accent.
 
 ### Warmth: cool and formal to warm and friendly
 
-The temperature of the neutral grays and the formality of the details around them. It drives the gray tint, from cool blue-gray to warm stone, how soft the borders are, title case or sentence case, how freely the copy uses contractions, and the kind of typeface suggested.
+The temperature of the neutral grays and the formality of the details around them. It drives the gray tint (cool blue-gray to warm stone), how soft the borders are, title or sentence case, how freely the copy uses contractions, and the kind of typeface suggested.
 
 ## Where the dials come from
 
-The dials were tested against 13 real systems, including Material 3 Expressive, Apple HIG, Carbon, Fluent 2, Polaris, Primer, GOV.UK and shadcn/ui. Dials plus raw inputs reproduce the signature look of 6 of them. The other 7 need one or two overrides or a signature asset.
+The dials were tested against 13 real systems, such as Material 3 Expressive, Carbon and GOV.UK. Dials plus raw inputs reproduce the signature look of 6 of them; the other 7 need one or two overrides or a signature asset.
 
-The dial values were set by reading that same benchmark. So this shows the mapping is consistent with those systems. It does not show that the dials predict systems they haven't seen. Some mappings are marked as inferred in the source file.
+But the dial values were set by reading that same benchmark. So this shows they agree with those systems, not that they predict systems they haven't seen. Some mappings are marked as inferred in the source file.
 
 ## What you decide
 
-The dials do the arithmetic. You decide the brand personality and the dial positions, and OpenDesigner records your answer. The formulas, their sources and their weak spots are in [the levers document](https://github.com/ckryptickunal/OpenDesigner/blob/main/synthesis/LEVERS.md).
-
-See [How it works](/docs/how-it-works/) for how your answers reach the dials.
+The dials do the arithmetic. You decide the brand personality and the dial positions, and OpenDesigner records your answer. [How it works](/docs/how-it-works/) shows how your answers reach the dials.
