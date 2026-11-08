@@ -50,6 +50,13 @@ class Fixture(unittest.TestCase):
         gpt = [f for f in r["findings"] if f["title"] == "Training crawlers blocked"]
         self.assertEqual((gpt[0]["severity"], "GPTBot" in gpt[0]["evidence"]), ("info", True))  # the owner's choice
 
+    def test_the_trap_site_shows_only_its_two_real_problems(self):
+        r = s.audit(HERE.parents[2] / "evals" / "search-traps" / "site", "https://ledgerly.example")
+        loud = sorted((f["code"], f["severity"], f["where"]) for f in r["findings"] if f["severity"] != "info")
+        self.assertEqual(loud, [("SE-04", "error", "old-pricing.html"), ("SE-04", "warn", "drafts/launch.html")])
+        info = {f["title"] for f in r["findings"] if f["severity"] == "info"}
+        self.assertEqual(info, {"Training crawlers blocked", "FAQPage: no Google rich result"})   # the owner's choice; keep the markup
+
     def test_read_only(self):
         before = sorted((str(p), p.stat().st_mtime) for p in FIXTURE.rglob("*"))
         s.audit(FIXTURE)
@@ -123,6 +130,18 @@ class Pages(unittest.TestCase):
             "https://a.example")
         self.assertIn(("SE-04", "error"), codes(r))
         self.assertIn(("SE-03", "error"), codes(r))
+
+    def test_noindex_behind_a_disallow_is_named(self):
+        noidx = '<meta name="robots" content="noindex">'
+        r = s.audit(site(dict(BASE, **{"robots.txt": "User-agent: *\nAllow: /\nDisallow: /drafts/\nSitemap: https://a.example/sitemap.xml\n",
+                                       "drafts/plan.html": page(head=noidx, canonical=None)})))
+        hit = [f for f in r["findings"] if f["title"] == "noindex behind a robots.txt Disallow"]
+        self.assertEqual([(f["severity"], f["where"]) for f in hit], [("warn", "drafts/plan.html")])
+        self.assertFalse([f for f in r["findings"] if f["code"] == "SE-11"])     # a noindex page needs no inbound links
+        g, _m = s.parse_robots("User-agent: *\nDisallow: /a\nAllow: /a/ok\n")
+        self.assertTrue(s.disallowed(g, "Googlebot", "/a/x"))
+        self.assertFalse(s.disallowed(g, "Googlebot", "/a/ok/page"))            # the longer Allow wins
+        self.assertFalse(s.disallowed(g, "Googlebot", "/b"))
 
     def test_orphans_duplicates_and_sitemap_gaps(self):
         r = s.audit(site(dict(BASE, **{"lost.html": page(canonical="/lost.html"), "twin.html": page(canonical="/twin.html")})))

@@ -114,6 +114,22 @@ def blocked_everywhere(groups, bot):
     return any(k == "disallow" and v == "/" for k, v in rules) and not any(k == "allow" and v in ("/", "/*") for k, v in rules)
 
 
+def disallowed(groups, bot, path):
+    """True when robots.txt keeps this bot (its own group, else '*') from fetching the path: the longest matching rule
+    wins, and Allow wins a tie (Google's documented matching; * and $ supported)."""
+    rules = groups.get(bot.lower(), groups.get("*", []))
+    best = None
+    for kind, val in rules:
+        if not val:
+            continue
+        rx = "^" + re.escape(val).replace(r"\*", ".*").replace(r"\$", "$")
+        if re.match(rx, path):
+            key = (len(val), kind == "allow")
+            if best is None or key > best[0]:
+                best = (key, kind)
+    return bool(best and best[1] == "disallow")
+
+
 def robots_findings(text, add):
     groups, sitemaps = parse_robots(text)
     for bot, where in SEARCH_BOTS.items():
@@ -206,8 +222,9 @@ def audit(folder, base=None):
     def add(code, sev, title, evidence, where, fix):
         found.append({"code": code, "severity": sev, "title": title, "evidence": evidence, "where": where, "fix": fix})
     robots = root / "robots.txt"
+    groups = {}
     if robots.exists():
-        robots_findings(robots.read_text(encoding="utf-8", errors="replace"), add)
+        groups = robots_findings(robots.read_text(encoding="utf-8", errors="replace"), add)
     else:
         add("SE-01", "warn", "No robots.txt", "robots.txt is missing from the build", "robots.txt",
             "add one that allows the search bots and names the sitemap")
@@ -246,6 +263,10 @@ def audit(folder, base=None):
     titles, descs, canon_owner, inbound = {}, {}, {}, {p: 0 for p in pages}
     for path, (rel, pg) in pages.items():
         noindex = "noindex" in pg.robots
+        if noindex and disallowed(groups, "Googlebot", path):
+            add("SE-04", "warn", "noindex behind a robots.txt Disallow", "robots.txt stops crawlers fetching this page, so they never "
+                "see its noindex; if it was ever indexed, it can stay in results", rel,
+                "allow the crawl so the noindex is read; use Disallow only for pages that were never indexed")
         if not pg.lang:
             add("SE-13", "warn", "No page language", "<html> has no lang", rel, "add lang, for example lang=\"en\"")
         if len(pg.canonicals) > 1:
@@ -306,7 +327,7 @@ def audit(folder, base=None):
             add("SE-03", "info", f"{len(rels)} pages point their canonical at {target}", ", ".join(rels[:3]), "",
                 "fine for true duplicates; otherwise each page names itself")
     for path, n in inbound.items():
-        if n == 0 and path != "/":
+        if n == 0 and path != "/" and "noindex" not in pages[path][1].robots:
             add("SE-11", "warn", "No page links here", path, pages[path][0], "link it from a related page or the footer")
     found.sort(key=lambda f: (SEV[f["severity"]], f["code"], f["where"]))
     return {"folder": str(root), "pages": len(pages), "findings": found}
