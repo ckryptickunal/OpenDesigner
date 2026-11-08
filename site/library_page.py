@@ -92,9 +92,9 @@ def page_desc(c):
 
 
 def page_title(c):
-    """30 to 65 characters, the part first and the brand last."""
-    for t in (f"{c['name']}: a free, token-only component | OpenDesigner", f"{c['name']}: a free, token-only component", f"{c['name']} component | OpenDesigner"):
-        if 30 <= len(t) <= 65:
+    """30 to 60 characters, the part first and the brand last."""
+    for t in (f"{c['name']}: free, uses your tokens | OpenDesigner", f"{c['name']}: free, uses your tokens", f"{c['name']} component | OpenDesigner"):
+        if 30 <= len(t) <= 60:
             return t
     return f"{c['name']} | OpenDesigner"
 
@@ -276,8 +276,8 @@ def shop(b, cs):
 {FAB}
 <header class="shop-hero">
 <p class="shop-kicker"><span class="sticker lime" data-icon="tag">Free · MIT</span><span>{n} parts · {len(LOOKS)} looks · one prompt</span></p>
-<h1>Ready-made parts that take <strong>your design tokens.</strong></h1>
-<p class="shop-sub">Pick the parts you need, see them in your look, and give your coding agent one prompt. Nothing to install.</p>
+<h1>Ready-made parts that <strong>match your design.</strong></h1>
+<p class="shop-sub">Pick the parts you need and give your coding agent one prompt. Nothing to install.</p>
 <label class="shop-search"><span class="visually-hidden">Search components</span>
 <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="9" cy="9" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m13 13 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
 <input id="lib-q" type="search" placeholder="Search {n} parts: table, toast, pricing…" autocomplete="off"></label>
@@ -285,12 +285,12 @@ def shop(b, cs):
 </header>
 
 <section class="shop-sec" aria-labelledby="aisles-h">
-<div class="sec-head"><h2 id="aisles-h">Browse by aisle</h2><p>{len(TYPES)} kinds of parts. Pick an aisle to see what is in it.</p></div>
+<div class="sec-head"><h2 id="aisles-h">Browse by aisle</h2><p>{len(TYPES)} kinds of parts.</p></div>
 <nav class="aisles" aria-label="Aisles">{"".join(tiles)}</nav>
 </section>
 
 <section class="shop-sec looks-sec" id="looks" aria-labelledby="looks-h">
-<div class="sec-head sec-head-row"><div><h2 id="looks-h">Try them on</h2><p>Every part re-renders in the look you pick. Each look is a real system from the engine.</p></div>
+<div class="sec-head sec-head-row"><div><h2 id="looks-h">Try them on</h2><p>Pick a look and every part changes to match it. Each look is a full design system that OpenDesigner made.</p></div>
 <button type="button" class="btn secondary look-add" data-kit-look="">{PLUS}<span>Add this look to your kit</span></button></div>
 {looks_bar()}
 </section>
@@ -314,9 +314,9 @@ def shop(b, cs):
 <ol class="how-steps">
 <li><span class="num">1</span><div><h3>Fill a kit</h3><p>Add the parts you need, and a look if you want the whole system.</p></div></li>
 <li><span class="num">2</span><div><h3>Copy one prompt</h3><p>For Claude, Codex, Cursor or any coding agent. It points to small files, so your agent copies a finished part instead of designing one.</p></div></li>
-<li><span class="num">3</span><div><h3>They take your tokens</h3><p>Each part uses only <code>--ds-*</code> variables: in an OpenDesigner project they fit as they are.</p></div></li>
+<li><span class="num">3</span><div><h3>They match your app</h3><p>Each part takes its colours, type, spacing and corners from your design tokens (the <code>--ds-*</code> variables), so in an OpenDesigner project it fits as it is.</p></div></li>
 </ol>
-<p class="h-fine">Free and MIT, never forced: OpenDesigner suggests a part only when it fits what you are building. Every name and number in the parts is invented. Inspired by how <a href="https://opensourceui.in">Opensource UI</a>, <a href="https://ui.shadcn.com">shadcn/ui</a> and <a href="https://magicui.design">Magic UI</a> present components (all MIT); no code was copied. <a href="{b.GH}/blob/main/skills/opendesigner/assets/library/README.md">The format and the rules</a>.</p>
+<p class="h-fine">OpenDesigner suggests a part only when it fits what you're building. Every name and number in the parts is invented. How the shop shows parts is inspired by <a href="https://opensourceui.in">Opensource UI</a>, <a href="https://ui.shadcn.com">shadcn/ui</a> and <a href="https://magicui.design">Magic UI</a> (all MIT); no code was copied. <a href="{b.GH}/blob/main/skills/opendesigner/assets/library/README.md">The format and the rules</a>.</p>
 </section>
 </div>
 {kit_ui(b)}
@@ -397,8 +397,8 @@ def detail(b, c, cs):
     return b.shell(f"/library/{c['slug']}/", page_title(c), page_desc(c), body, b.load_docs(), ld, home=True), md
 
 
-DESCRIPTION = ("Free, optional components made only of design tokens. Add them to a kit, try them in ten looks, and copy one prompt for your "
-               "coding agent.")
+DESCRIPTION = (f"Free, optional parts built on your design tokens. Try them in {len(LOOKS)} looks, add them to a kit and copy one prompt for "
+               "your coding agent.")
 
 
 def llms_section(site_url):

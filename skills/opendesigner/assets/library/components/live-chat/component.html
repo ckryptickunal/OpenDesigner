@@ -90,6 +90,9 @@
   .odl-live-chat .odl-channel { grid-template-columns: auto minmax(0, 1fr); row-gap: var(--ds-space-stack-sm); }
   .odl-live-chat .odl-follow { grid-column: 2; justify-self: start; }
   .odl-live-chat .odl-chat-top, .odl-live-chat .odl-log, .odl-live-chat .odl-compose { padding-inline: var(--ds-space-inset-md); }
+  /* Messages wrap to more lines on a phone: the log grows with the page rather than scrolling inside it, so the newest message
+     is never hidden below a fixed height. */
+  .odl-live-chat .odl-log { max-block-size: none; }
 }
 @media (prefers-reduced-motion: reduce) { .odl-live-chat, .odl-live-chat *, .odl-live-chat *::before, .odl-live-chat *::after { transition: none !important; animation: none !important; } }
 </style>

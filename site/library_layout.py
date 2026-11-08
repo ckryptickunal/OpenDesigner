@@ -2,8 +2,8 @@
 """Check every library component's own layout, unscaled, at all 13 widths of site/check_layout.py.
 
 The shop shows components zoomed down to cards, which the layout checker cannot measure, so this makes one plain test page per
-component (in three looks: Billerwick dense, Pebbleday regular, Fernhollow large), serves them on a loopback port and runs
-site/check_layout.py on them.
+component (in four looks: Billerwick dense, Pebbleday regular, Fernhollow large, and Nordic, the look the shop opens in), serves
+them on a loopback port and runs site/check_layout.py on them.
 
   python3 site/library_layout.py [slug ...] [--widths 320,390,768]
 
@@ -21,7 +21,7 @@ import threading
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 LIB = ROOT / "skills/opendesigner/assets/library/components"
-LOOKS = ["billerwick", "pebbleday", "fernhollow"]
+LOOKS = ["billerwick", "pebbleday", "fernhollow", "nordic"]
 
 
 REFS = r'(id|for|aria-controls|aria-labelledby|aria-describedby|aria-activedescendant|name)="([^"]+)"'
