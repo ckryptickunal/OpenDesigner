@@ -11,7 +11,7 @@ OpenDesigner writes your design system into your own project as plain files. `DE
 
 {{figure:files-tree}}
 
-In a test run, one sketch and build wrote 51 files with no errors.
+A web-only sketch and build writes 50 files with no errors, and each extra platform adds its own export (51 with iOS).
 
 ## At the root of your project
 

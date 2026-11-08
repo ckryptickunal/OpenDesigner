@@ -40,7 +40,7 @@ In your project: `opendesigner/` (tokens, exports, the decision log), `DESIGN.md
 - **Photos in library parts.** If you add a library part with a photo, the page loads that photo from Unsplash when someone opens it.
 - **Package downloads for the paint engine** (npm and a browser for rendering), only after you say yes. Nothing about your project is sent.
 - **Taste poll screens,** if your AI tool is connected to Mobbin and the poll needs more. They're saved on your computer, and nothing about your project is sent.
-- **Nothing else by default.**
+- **Nothing else by default.** The journey log and shared reports below are both off until you say yes.
 
 ## The journey log and shared reports
 
