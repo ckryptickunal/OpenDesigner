@@ -407,3 +407,28 @@ Both PRs were opened by Claude sessions on 1 and 2 November and conflicted with 
 - `origin/main` is at `a08d0be`. One PR is open: #52 (changes requested on 2026-10-13).
 - The PR branches `claude/project-thread-zx6sje` and `claude/project-thread-a107a7` were left on GitHub; delete them when convenient.
 - The main working tree on Kunal's Mac was not touched and is behind `origin/main`.
+
+## Fifth review: PRs 84 to 99 (2026-11-06 and 2026-11-07)
+
+Every change now goes through a pull request (#84, owner 2026-11-07), batched and handed over only when it merges cleanly with `main` (#93). Kunal merged #84, #86, #89, #91 to #95; the coordinator session merged #90 and #96 to #99 after he said "Merge the PRs yourself". Each was squash-merged with `--match-head-commit` at the reviewed head (GitHub shows Kunal's account for all of them, since `gh` runs as him). Every merge deployed through `site/autodeploy.py`.
+
+| PR | What | Reviewed head | Merge | Review |
+|---|---|---|---|---|
+| #84 | Coordination: changes go through pull requests | `5301ec1` | `078266e` | docs only; scan 0 block |
+| #85, #87, #88 | Text on photos (#83), home demo buttons (#77), consent card (#78) | `e40249d`, `d138450`, `4132840` | closed into #95 | each merge of one broke the others' CHANGELOG |
+| #86 | Library "Add to kit" is a secondary button (#80) | `7e2d27f` | `bae3356` | contrast of both states measured: 13.1:1 and 8.8:1, outline 6.8:1; rendered in a combined build |
+| #89 | Docs type on the brand scale (#79) | `4384b83` | `535ad0f` | sizes and weights counted on 6 docs pages in a combined build; concern noted: overrides are generated at build time |
+| #90 | Home page, showcase and all 57 showcase captions | `77cf974` | `6dd966f` | coordinator added "every brand shown is invented" to each image's JSON-LD before merging, since captions lost "fictional" |
+| #91, #94 | Craft pages trimmed 15 to 28%, tables where they compared values | `4ae2b06`, `035906e` | `cb01402`, `7a15827` | merged by Kunal |
+| #92 | Tour and getting started, 19% shorter after a second pass | `31ff6fc` | `9cc8d22` | first pass cut 3%; the brief was sharpened to COPY.md rule 10 |
+| #93 | Rules: batched conflict-free PRs, research checked first, show it, plain first | `3ba88c8` | `50644e7` | docs only |
+| #95 | #77, #78, #83 in one PR | `eef3a20` | `bbf211e` | site built on main, `check.py` clean; 320 px buttons and "No thanks" checked in a browser |
+| #96 | `opendesigner-search` skill (ninth skill) | `89f2cb1` | `3ce6062` | skill text, probe method and sources read; `search.py` has no network until `--live` is approved; 15 tests and all repo checks rerun. **Miss:** a commit pushed minutes before the merge (`b786c09`) was merged unread; read afterwards and fixed in #97 |
+| #97 | Duplicate fix row removed; contrast wording matches the engine | `49dff1f` | `4155128` | "in every state" overclaimed; the engine checks hover and pressed fills, not disabled |
+| #98 | Docs wider, "For developers" fold, eight FAQ answers, font download fix | `2ebd38b` | `fa31196` | built and looked at 1440 and 1920 px and on a phone; FAQ structured data matches 24 visible questions; UI UX Pro Max licence checked in its own LICENSE |
+| #99 | Guides plain first; Cursor, Claude skill, vibe-coded and contrast answers; `sameAs` | `b14e21d` | `2ee9301` | build, checks and browser; the Cursor rule's frontmatter is valid; overall cut only 4%, two guides grew on purpose |
+
+### State after this review
+- `origin/main` passed every check in AGENTS.md "Before you commit" and every test file on 2026-11-08 (`0ba6958`).
+- One PR is open: #52 (changes requested on 2026-10-13; conflicts with `main`).
+- Lesson: confirm the head is the commit you read immediately before merging, not only before the review (#96).
