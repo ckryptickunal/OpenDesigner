@@ -172,7 +172,7 @@ Zoom 1 broad · weight medium · changes 0 decisions · class I
 - **Options:**
   - `search` Search engines: a page for each main question, each with its own title, description and one main heading [inferred].
   - `answer` Answer boxes and voice answers: each question answered in the first sentence under its heading [inferred].
-  - `generative` AI answer tools (generative engines): ChatGPT, Perplexity and Google's AI answers read the page's text, so answers, names and figures sit in plain text, not only inside images or scripts [inferred].
+  - `generative` AI answer tools (generative engines): ChatGPT, Perplexity and Google's AI answers read the page's text, so answers, names and figures sit in plain text, not only inside images or scripts [inferred]. In one study with a 2023 engine, real quotations, statistics and cited sources raised a page's share of the answer by 27 to 41% and keyword stuffing lowered it; the quotes and figures must be the owner's own proof from Q-site-03, with its qualifiers.
   - `links` Links you send (sales emails, decks, events): each link lands on a page that keeps the link's promise [inferred].
   - `social` Social posts: each page has its own share image and title [inferred].
 - **Default:** none: languages read from the repo, else the language they write in; channels and questions are theirs *Source:* [inferred].
