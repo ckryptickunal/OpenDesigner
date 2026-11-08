@@ -364,7 +364,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Options:**
   - `search` Search engines: a page for each main question, each with its own title, description and one main heading [inferred].
   - `answer` Answer boxes and voice answers: each question answered in the first sentence under its heading [inferred].
-  - `generative` AI answer tools (generative engines): ChatGPT, Perplexity and Google's AI answers read the page's text, so answers, names and figures sit in plain text, not only inside images or scripts [inferred].
+  - `generative` AI answer tools (generative engines): ChatGPT, Perplexity and Google's AI answers read the page's text, so answers, names and figures sit in plain text, not only inside images or scripts [inferred]. In one study with a 2023 engine, real quotations, statistics and cited sources raised a page's share of the answer by 27 to 41% and keyword stuffing lowered it; the quotes and figures must be the owner's own proof from Q-site-03, with its qualifiers [S-L06-124].
   - `links` Links you send (sales emails, decks, events): each link lands on a page that keeps the link's promise [inferred].
   - `social` Social posts: each page has its own share image and title [inferred].
 - **Default:** none: languages read from the repo, else the language they write in; channels and questions are theirs. *Source:* [inferred].
@@ -375,7 +375,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Skip:** yes; PRODUCT.md then says Not enough information (Q-site-04).
 - **Block class:** I (owner input)
 - **Time weight:** medium (fan-out 0)
-- **Evidence:** DC-L19-36
+- **Evidence:** DC-L19-36; S-L06-124
 
 ### Q-site-05 · Which kinds of pages does the site need? · Standard
 - **Show if:** a site that persuades: Q-scope-06 includes `persuade`, or Q-scope-01 includes `marketing`

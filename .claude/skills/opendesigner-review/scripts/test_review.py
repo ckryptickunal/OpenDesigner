@@ -247,6 +247,17 @@ class QuietWhenClean(unittest.TestCase):
         self.assertFalse({"MS-01", "MS-02", "MS-08"} & cases(stress=["text200"]))
         self.assertFalse({"MS-01", "MS-02", "MS-08"} & cases(media={"colorScheme": "light", "forcedColors": True}))
 
+    def test_names_that_say_nothing_are_one_info_note_under_in03(self):
+        vague = [{"sel": "a.more", "name": "Read more", "kind": "link"}, {"sel": "a.more2", "name": "Read more", "kind": "link"},
+                 {"sel": "img.hero", "name": "image", "kind": "image"}]
+        fs = findings_for(clean_probe(targets={"count": 3, "small": [], "noName": [], "vague": vague, "hiddenFocusable": [], "coarse": False}))
+        notes = [f for f in fs if f.get("key") == "vague-names" or "may not say" in f["title"]]
+        self.assertEqual(len(notes), 1)
+        self.assertEqual((notes[0]["case"], notes[0]["severity"]), ("IN-03", "info"))   # never an error: context can justify it
+        self.assertIn("Read more \u00d72", notes[0]["measured"])
+        self.assertEqual(notes[0]["title"], "3 names may not say what they do")
+        self.assertFalse([f for f in findings_for(clean_probe()) if "may not say" in f["title"]])
+
     def test_touch_page_warns_below_44_but_only_errors_below_24_without_spacing(self):
         p = clean_probe(targets={"count": 4, "coarse": True, "noName": [], "hiddenFocusable": [], "small": [{"sel": "a.x", "w": 30, "h": 30, "spacingException": True}]})
         c = by_case(findings_for(p))
