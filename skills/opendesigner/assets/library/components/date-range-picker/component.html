@@ -67,12 +67,13 @@
 .odl-date-range-picker .odl-presets button:focus-visible, .odl-date-range-picker .odl-nav:focus-visible, .odl-date-range-picker .odl-actions button:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 @container (max-width: 30rem) {
-  /* phone: the presets fill two even columns (each well over 140 px), and Custom closes the set across both */
-  .odl-date-range-picker .odl-presets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: var(--ds-space-inset-lg); }
+  /* phone: the presets fill two even columns (each well over 140 px), and Custom closes the set across both. Content is inset at
+     least the panel's corner radius, so no preset or button sits inside the curve, and every section keeps one edge. */
+  .odl-date-range-picker .odl-presets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: max(var(--ds-space-inset-lg), calc(var(--ds-radius-overlay) - var(--ds-border-width-default))); }
   .odl-date-range-picker .odl-presets button { text-align: center; }
   .odl-date-range-picker .odl-presets button:last-child { grid-column: 1 / -1; }
-  .odl-date-range-picker .odl-main { padding: var(--ds-space-inset-lg); }
-  .odl-date-range-picker footer { row-gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-lg); }
+  .odl-date-range-picker .odl-main { padding: max(var(--ds-space-inset-lg), calc(var(--ds-radius-overlay) - var(--ds-border-width-default))); }
+  .odl-date-range-picker footer { row-gap: var(--ds-space-stack-lg); padding: max(var(--ds-space-inset-lg), calc(var(--ds-radius-overlay) - var(--ds-border-width-default))); }
   .odl-date-range-picker .odl-actions { flex: 1 1 100%; }
   .odl-date-range-picker .odl-actions button { flex: 1; }
 }

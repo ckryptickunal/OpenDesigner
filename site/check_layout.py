@@ -32,7 +32,8 @@ MAX_HEIGHT = 16000  # the viewport grows to the page's height, up to this
 CARDS = [".fig-card", ".h-step", ".bento-card", ".who-card", ".demo-panel", ".start", ".ex", ".dodont > div", ".opt", ".role",
          ".ghcard", ".x-card"]
 NOT_CARDS = ["a.btn", "button", "[role=tab]", "input", "select", "textarea", ".chip", ".sticker", ".copy", ".filter", ".cmd",
-             ".ui-btn", ".ui-input", ".x-btn", ".x-input", ".hh-btn", ".tag-missing", ".swatch"]  # controls, also when drawn in figures
+             ".ui-btn", ".ui-input", ".x-btn", ".x-input", ".hh-btn", ".tag-missing", ".swatch",
+             ".odl-acts > a", ".odl-actions > a"]  # controls, also when drawn in figures; a link in a library actions row is drawn as a button
 PANELS = [".fig", ".fig-panel", ".fig-scene", ".demo-stage", ".h-end-photo", ".h-end-card", ".starts", ".tree"]  # check 2 looks inside these too
 GALLERIES = [".pieces", ".ex-grid", ".bento"]  # named in a partly filled last row warning
 SCROLL_OK = [".prose .code pre", ".prose .table-wrap", ".sl-track", ".filters"]  # may scroll sideways on purpose (a carousel; tag filters on phones)

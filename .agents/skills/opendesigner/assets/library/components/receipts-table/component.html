@@ -62,6 +62,12 @@
   .odl-receipts-table div.odl-bulk span { display: none; }
   .odl-receipts-table div.odl-bulk button { flex: 1 1 auto; min-inline-size: 0; padding-inline: var(--ds-space-inset-sm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
+@container (40rem < width <= 52rem) {
+  /* Tablet width: the next smaller inset, so all five columns fit without scrolling sideways. */
+  .odl-receipts-table th, .odl-receipts-table td { padding-inline: var(--ds-space-inset-sm); }
+  .odl-receipts-table th:first-child, .odl-receipts-table td:first-child { padding-inline: var(--ds-space-inset-md) 0; }
+  .odl-receipts-table th:last-child, .odl-receipts-table td:last-child { padding-inline-end: var(--ds-space-inset-lg); }
+}
 .odl-receipts-table .odl-bulk { display: flex; align-items: center; gap: var(--ds-space-inline-sm); margin: var(--ds-space-inset-sm) var(--ds-space-inset-lg) var(--ds-space-inset-lg); padding: var(--ds-space-inset-xs) var(--ds-space-inset-xs) var(--ds-space-inset-xs) var(--ds-space-inset-lg);
   border-radius: var(--ds-radius-container); background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); box-shadow: var(--ds-elevation-floating); flex-wrap: wrap;
   transition: opacity var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }

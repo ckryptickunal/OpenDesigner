@@ -32,12 +32,15 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Changed
 
+- **Library page titles fit in search results** (2026-11-08). Every component page title is now 60 characters or fewer, such as "Data table: free, uses your tokens | OpenDesigner".
+- **Plainer library shop** (2026-11-08). The shop's headline says the parts match your design, and lines that repeated what the page shows are gone. Tokens and the `--ds-*` variables come after the plain words.
 - **Shorter showcase captions** (2026-11-07). Each piece on /showcase/ now has a one-sentence caption that says what it shows and who it is for. Captions no longer repeat the brand name from the title or say "fictional", since the page says once that every brand is invented, and none stops mid-sentence.
 - **"Add to kit" is a secondary button** (2026-11-07). On /library/ and the component pages, each card's "Add to kit" no longer has a solid dark fill, so the kit stays the page's main action. A part already in the kit shows an accent outline.
 
 ### Fixed
 
 - **Concept and reference docs, plain first** (2026-11-08). Thirteen docs pages, from accessibility and tokens to the engine and security, now open in plain words. Commands, paths and JSON moved into "For developers" folds, and long passages became tables. Open text is 17% shorter, and every number, limit and privacy fact stays.
+- **Library parts follow today's tokens** (2026-11-08). The ten looks in the component library are rebuilt with today's engine, and five parts now take their corners and spacing from those tokens: the chat quote's corner is the bubble's minus its gap, the date picker clears its corner on phones, and the receipts table fits at tablet width ([#82](https://github.com/ckryptickunal/OpenDesigner/issues/82)).
 - **A shorter home page and showcase** (2026-11-07). Lines that repeated a heading, a button, a picture or another line on the page are gone. Two claims are corrected: the example system writes 50 files, not 51, and a reference never brings in another brand's logo, name, images or copy.
 - **Text over photos stays readable in three more library parts** (2026-11-07). The live chat's viewer count, the video player's captions and the title detail's play icons now sit on dark chips. On a white frame the text measures 5.89:1, up from 2.25:1, in all ten looks.
 - **The home page's example buttons stay on one line on phones** (2026-11-07). Below 440 px wide, the two buttons on each example card use 13 px labels, so "Skip today" and "Mark today done" keep their words and sit on one row instead of wrapping ([#77](https://github.com/ckryptickunal/OpenDesigner/issues/77)).

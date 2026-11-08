@@ -34,7 +34,8 @@
 .odl-trip-search .odl-sugg li { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--ds-space-inline-md); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min));
   padding: var(--ds-space-inset-xs); border-radius: max(0px, calc(min(var(--ds-radius-control), var(--ds-radius-container)) - var(--ds-space-inset-xs))); cursor: pointer; }
 .odl-trip-search .odl-sugg li:hover, .odl-trip-search .odl-sugg li.is-active { background: var(--ds-color-bg-neutral-subtle); }
-.odl-trip-search .odl-sugg img { display: block; inline-size: 3.75rem; block-size: 3.75rem; border-radius: var(--ds-radius-nested); object-fit: cover; background: var(--ds-color-surface-sunken); }
+.odl-trip-search .odl-sugg img { display: block; inline-size: 3.75rem; block-size: 3.75rem;
+  border-radius: max(0px, calc(min(var(--ds-radius-control), var(--ds-radius-container)) - var(--ds-border-width-default) - 2 * var(--ds-space-inset-xs))); object-fit: cover; background: var(--ds-color-surface-sunken); }
 .odl-trip-search .odl-sugg b { display: block; font: var(--ds-text-label-lg); }
 .odl-trip-search .odl-sugg b mark { background: transparent; color: var(--ds-color-text-accent); font: inherit; }
 .odl-trip-search .odl-sugg small { display: block; margin-block-start: var(--ds-space-2); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
