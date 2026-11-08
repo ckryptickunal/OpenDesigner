@@ -224,6 +224,12 @@
   const NOT_AN_ACTION = '[aria-current]:not([aria-current=false]),[aria-selected=true],[aria-pressed=true],:disabled,[aria-disabled=true]';
   // one or two arrows, dingbats, maths signs, bullets or guillemets with no letter or digit: a symbol, not words
   const SYMBOL = /^[\p{So}\p{Sm}\u2022\u00b7\u2039\u203a\u00ab\u00bb]{1,2}$/u;
+  // names that exist but say nothing (Calo et al., CHI EA 2026: generic buttons and vague links were over half of the
+  // semantic faults in 300 LLM-made UIs). English only; names from aria-label and menu or disclosure triggers are left
+  // alone, and nearby text can make one fine (WCAG 2.4.4), so review.py reports these as info, never as errors
+  const VAGUE_NAME = /^(read more|learn more|more|click|click here|here|submit|link|button|details|more info)$/i;
+  const VAGUE_ALT = /^(image|img|photo|picture|icon|graphic|banner|screenshot)$|\.(png|jpe?g|gif|webp|svg|avif)$/i;
+  const VAGUE_FIELD = /^(field|input|text|value)\s*\d*$/i;
   const INTERACTIVE = 'a[href],button,input:not([type=hidden]),select,textarea,summary,[role=button],[role=link],[role=checkbox],[role=radio],[role=switch],[role=tab],[role=menuitem],[role=option],[role=slider],[tabindex]:not([tabindex="-1"]),[contenteditable=""],[contenteditable=true]';
 
   // 'inert', 'aria-hidden' or '': whether assistive tech is told to skip this element, looking up through shadow roots
@@ -408,6 +414,7 @@
     const space = {}, radius = {}, colors = { text: {}, bg: {}, border: {} }, shadows = {};
     const bump = (map, key, el, extra) => { const e = map[key] || (map[key] = { n: 0, ex: [] }); e.n++; if (e.ex.length < 1) e.ex.push(sel(el)); if (extra) e.chars = (e.chars || 0) + extra; };
     const overflow = [], clipped = [], scrollers = [], fixed = [], contrast = [], contrastSeen = new Set(), longLines = [], negMargins = [];
+    const vague = [], english = !de.lang || /^en\b/i.test(de.lang);
     const targets = [], small = [], noName = [], images = { total: 0, broken: [], noAlt: [], oversize: [], blurry: [], stretched: [], lazyPending: 0 };
     const interactiveEls = [], filledButtons = []; let buttonsChecked = 0;
     const counts = { svg: 0, canvas: 0, video: 0, iframe: 0, iframeCross: 0, audio: 0, shadowHosts: 0, smil: 0, lottie: 0, autoplayVideo: 0 };
@@ -470,6 +477,8 @@
       // images
       if (tag === 'img') {
         images.total++;
+        const altText = (el.getAttribute('alt') || '').trim();
+        if (english && altText && VAGUE_ALT.test(altText) && vague.length < CAP) vague.push({ sel: sel(el), name: altText, kind: 'image' });
         const nw = el.naturalWidth, nh = el.naturalHeight;
         if (el.complete && nw === 0) { if (images.broken.length < CAP) images.broken.push(sel(el)); }
         else if (!el.complete && el.loading === 'lazy') images.lazyPending++;
@@ -492,6 +501,11 @@
         targets.push(t);
         // a focusable control inside aria-hidden is reported once, as reachable but unseen (hiddenFocusable below)
         if (!offAT && !accName(el) && noName.length < CAP) noName.push({ sel: sel(el), tag });
+        if (english && !offAT && vague.length < CAP && !el.hasAttribute('aria-label') && !el.hasAttribute('aria-haspopup') && !el.hasAttribute('aria-expanded')) {
+          const nm = accName(el).replace(/\s*\(placeholder only\)$/, '').replace(/[\s.\u2026:!?\u203a\u00bb\u2192>]+$/, '').trim();
+          const field = /^(input|select|textarea)$/.test(tag);
+          if (nm && (field ? VAGUE_FIELD.test(nm) : VAGUE_NAME.test(nm))) vague.push({ sel: sel(el), name: nm, kind: field ? 'field' : tag === 'a' ? 'link' : 'button' });
+        }
       }
 
       // buttons and button-like links with a fill of their own: how many actions stand out (review case MS-16). A
@@ -661,7 +675,7 @@
     out.labels = labels;
     out.buttons = { checked: buttonsChecked, filled: filledButtons, styles: ctaStyles };
     out.fixed = fixed;
-    out.targets = { count: targets.length, small, noName, hiddenFocusable, coarse: out.media.pointer === 'coarse' };
+    out.targets = { count: targets.length, small, noName, vague, hiddenFocusable, coarse: out.media.pointer === 'coarse' };
     out.images = images;
     out.media_counts = counts;
     out.a11y = {

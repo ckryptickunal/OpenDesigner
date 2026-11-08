@@ -288,6 +288,16 @@ def check_probe(p, sysm, F):
         nn = tg["noName"]
         F.add("IN-03", "error", "Controls with no accessible name", w, f"{len(nn)} control(s): " + "; ".join(n["sel"] for n in nn[:4]), "every control has a name a screen reader can say",
               [n["sel"] for n in nn[:4]], "add aria-label, visible text, or a <label>", "WCAG 4.1.2 / 1.1.1", key="noname")
+    if tg.get("vague"):  # names that exist but say nothing (Calo et al., CHI EA 2026); context may justify one, so info only
+        vg = tg["vague"]
+        cnt = {}
+        for v in vg:
+            cnt[v["name"]] = cnt.get(v["name"], 0) + 1
+        F.add("IN-03", "info", f"{len(vg)} name{'s' if len(vg) != 1 else ''} may not say what {'they do' if len(vg) != 1 else 'it does'}", w,
+              ", ".join(f"{n} \u00d7{c}" if c > 1 else n for n, c in sorted(cnt.items(), key=lambda kv: -kv[1])[:5]),
+              "each link, button, field and image says what it does or shows, read on its own (WCAG 2.4.4, 2.4.6, 1.1.1)",
+              [v["sel"] for v in vg[:4]], "name the action or the destination (\"Read the pricing guide\"), or describe the image; "
+              "nearby text may already make it clear", "WCAG 2.4.4 / 2.4.6 / 1.1.1", key="vague-names")
 
     hf = tg.get("hiddenFocusable") or []
     if hf:

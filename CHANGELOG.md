@@ -8,6 +8,9 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **The review notes names that say nothing** (2026-11-08). A link, button, field or image named "Read more", "Click here", "Submit", "image" or "Field 1" now gets one note in the review, with where each one is. It is a note, not an error: the text around it may already make it clear.
+- **The search check finds a hidden noindex** (2026-11-08). The search skill now warns when robots.txt blocks a page that also says noindex, because search engines never get to read the noindex. It also stops asking for links to pages marked noindex.
+- **AI-search advice now cites its study** (2026-11-08). The site brief's answer for AI search names the study behind it (GEO, KDD 2024): real quotes, figures and sources helped pages get used, and stuffing keywords hurt. The figures must be your own.
 - **Guides that answer the question asked** (2026-11-07). The Cursor guide opens with the three things Cursor needs, a file tree, a rule file to copy and an audit-first prompt. The vibe-coded guide is now "Make a vibe-coded app look professional", with five steps and a rule list. The other guides drop repeated lines, and say what the contrast check covers.
 - **Wider, calmer docs pages** (2026-11-07). The docs content column is about a third wider and running text keeps a readable line length, with more space between sections. Pages open in plain words, and commands, file paths and flags sit in a folded "For developers" section that AI tools still read in full.
 - **Shorter craft pages** (2026-11-07). The motion, UX patterns, interface details, sources and design styles pages are 15 to 24% shorter, with every rule, number and source kept. They also say what is true today: 32 benchmarked systems, and the two house colour rules (known meanings keep their colours; never pure white with pure black).
