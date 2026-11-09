@@ -33,6 +33,13 @@ DESCRIPTION = (50, 160)
 THIN_TEXT = 150         # visible characters in the served HTML below which the words may only arrive with JavaScript
 SEV = {"error": 0, "warn": 1, "info": 2}
 LIVE_APPROVED = False   # live fetching waits for the owner's yes (design note 2026-11-07); until then it refuses
+STOPWORDS = set("""a an and are as at be but by can do for from get has have how in into is it its just more most new no not now
+of off on one or our out over so than that the their them then there these they this to up us was we what when where which who
+why will with you your all any every each also been being here home page site website welcome official""".split())
+LLMS_SECTIONS = {"docs", "documentation", "optional", "pages", "links", "resources", "guides", "examples", "reference", "api",
+                 "blog", "about", "contact", "company", "legal", "support", "main", "key", "other", "product", "products"}
+CLAIM_WORDS = 3      # [inferred] a sentence with 3 or more meaning words states something a page should say too
+CLAIM_FOUND = 0.5    # [inferred] half of those words on one page; a figure must appear exactly
 
 
 class Page(HTMLParser):
@@ -41,7 +48,7 @@ class Page(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.title, self.lang, self.description, self.robots = None, None, None, ""
-        self.canonicals, self.h1, self.links, self.images, self.jsonld = [], [], [], [], []
+        self.canonicals, self.h1, self.h2, self.links, self.images, self.jsonld = [], [], [], [], [], []
         self.text, self._in, self._buf = [], [], []
 
     def handle_starttag(self, tag, attrs):
@@ -58,7 +65,7 @@ class Page(HTMLParser):
             self.links.append(a["href"])
         elif tag == "img":
             self.images.append(a)
-        if tag in ("title", "h1", "script", "style", "noscript", "template") or (tag == "script" and "ld+json" in a.get("type", "")):
+        if tag in ("title", "h1", "h2", "script", "style", "noscript", "template") or (tag == "script" and "ld+json" in a.get("type", "")):
             self._in.append((tag, a.get("type", "")))
             self._buf.append([])
 
@@ -67,11 +74,11 @@ class Page(HTMLParser):
             (t, typ), buf = self._in.pop(), "".join(self._buf.pop())
             if t == "title" and self.title is None:
                 self.title = re.sub(r"\s+", " ", buf).strip()
-            elif t == "h1":
-                self.h1.append(re.sub(r"\s+", " ", buf).strip())
+            elif t in ("h1", "h2"):
+                (self.h1 if t == "h1" else self.h2).append(re.sub(r"\s+", " ", buf).strip())
             elif t == "script" and "ld+json" in typ:
                 self.jsonld.append(buf)
-            if t in ("title", "h1") and self._in:
+            if t in ("title", "h1", "h2") and self._in:
                 self._buf[-1].append(buf)
 
     def handle_data(self, data):
@@ -189,6 +196,79 @@ def squash(text):
     return re.sub(r"[\W_]+", "", text.lower())
 
 
+def words(text):
+    """The words that carry meaning, cut to a rough stem so 'invoices' meets 'invoicing' and 'chase' meets 'chasing'."""
+    out = set()
+    for w in re.findall(r"[a-z0-9]+", (text or "").lower()):
+        if len(w) < 3 or w in STOPWORDS:
+            continue
+        for suf in ("ing", "ed", "es", "s", "e"):
+            if w.endswith(suf) and len(w) - len(suf) >= 4:
+                w = w[: -len(suf)]
+                break
+        out.add(w[:6])
+    return out
+
+
+def figures(text):
+    """Numbers a claim rests on (40%, 2,000, 14): two digits or more, or a percentage; years are left out."""
+    out = set()
+    for n in re.findall(r"\d[\d,.]*\d%?|\d%", text or ""):
+        n = n.replace(",", "")
+        if len(n.rstrip("%")) >= 2 and not re.fullmatch(r"(19|20)\d\d", n):
+            out.add(n)
+    return out
+
+
+def llms_findings(text, pages, base, root, add):
+    """llms.txt against the pages (llmstxt.org): lines no page states, links to pages the build lacks, and home-page
+    sections it leaves out once it describes some of them. A summary written for an earlier page goes stale quietly."""
+    claims, links, code = [], [], False
+    for ln in text.splitlines():
+        s = ln.strip()
+        if s.startswith("```"):
+            code = not code
+            continue
+        if code or not s:
+            continue
+        m = re.match(r"^(#{1,6})\s+(.*)", s)
+        if m:   # the H1 is the site's name; an H2 is a claim only when it says more than a section name
+            if len(m.group(1)) >= 2 and len(words(m.group(2)) - LLMS_SECTIONS) >= 2:
+                claims.append((2, m.group(2)))
+            continue
+        s = re.sub(r"^>\s*|^[-*+]\s+|^\d+\.\s+", "", s)
+        links += re.findall(r"\[[^\]]*\]\(([^)\s]+)[^)]*\)", s)
+        s = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", s)
+        claims += [(CLAIM_WORDS, x) for x in re.split(r"(?<=[.!?])\s+", s) if x]
+    said = [(words(" ".join([pg.visible(), pg.title or "", pg.description or ""]))) for _, pg in pages.values()]
+    shown = set().union(*[figures(pg.visible()) for _, pg in pages.values()]) if pages else set()
+    unsaid = []
+    for need, c in claims:
+        ws, nums = words(c), sorted(figures(c) - shown)
+        best = max((len(ws & pw) / len(ws) for pw in said), default=0) if len(ws) >= need else 1
+        if nums or best < CLAIM_FOUND:
+            unsaid.append(f"\"{c[:90]}\"" + (f" (no page shows {', '.join(nums[:3])})" if nums else ""))
+    if unsaid:
+        add("SE-10", "warn", "llms.txt says what no page says", f"{len(unsaid)} line(s): " + " | ".join(unsaid[:4]), "llms.txt",
+            "rewrite those lines from the pages as they are now, or put the claim on a page first; answer engines may repeat it")
+    gone = []
+    for url in links:
+        path = norm(url, "/", base)
+        if path and not any(path in aliases(p) for p in pages) and not (root / path.lstrip("/")).is_file():
+            gone.append(url)
+    if gone:
+        add("SE-10", "warn", "llms.txt links pages the build does not have", ", ".join(gone[:4]), "llms.txt", "point each link at a page that exists, or drop it")
+    home = pages.get("/")
+    if home:
+        lw = words(text)
+        secs = [h for h in dict.fromkeys(home[1].h2) if words(h)]   # once each: a page can repeat a heading for small screens
+        covered = [h for h in secs if len(words(h) & lw) / len(words(h)) >= 0.5]
+        gaps = [h for h in secs if h not in covered]
+        if covered and gaps:   # it describes the page's sections, but not all of them: likely written for an earlier page
+            add("SE-10", "warn", "Home page sections llms.txt does not cover", f"it covers {len(covered)} of {len(secs)}; not: " + " | ".join(g[:50] for g in gaps[:5]),
+                "llms.txt", "add a line for each, or leave them out on purpose")
+
+
 def jsonld_findings(page, rel, add):
     shown = squash(page.visible())
     for raw in page.jsonld:
@@ -238,8 +318,9 @@ def audit(folder, base=None):
     else:
         add("SE-02", "warn", "No sitemap.xml", "sitemap.xml is missing from the build", "sitemap.xml", "list every public page in it")
     llms = root / "llms.txt"
-    if llms.exists():
-        if not llms.read_text(encoding="utf-8", errors="replace").lstrip().startswith("# "):
+    llms_text = llms.read_text(encoding="utf-8", errors="replace") if llms.exists() else None
+    if llms_text is not None:
+        if not llms_text.lstrip().startswith("# "):
             add("SE-10", "warn", "llms.txt has no H1", "the proposal's one required part is an H1 with the site's name", "llms.txt",
                 "start it with '# <name>'")
     else:
@@ -329,6 +410,8 @@ def audit(folder, base=None):
     for path, n in inbound.items():
         if n == 0 and path != "/" and "noindex" not in pages[path][1].robots:
             add("SE-11", "warn", "No page links here", path, pages[path][0], "link it from a related page or the footer")
+    if llms_text is not None:
+        llms_findings(llms_text, pages, base, root, add)
     found.sort(key=lambda f: (SEV[f["severity"]], f["code"], f["where"]))
     return {"folder": str(root), "pages": len(pages), "findings": found}
 
