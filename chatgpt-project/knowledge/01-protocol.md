@@ -121,6 +121,7 @@ python3 <skill>/scripts/engine.py set <path> <json-value> --dry-run   preview a 
 python3 <skill>/scripts/engine.py resolve                    current dials and derived values, for payloads
 python3 <skill>/scripts/engine.py generate                   opendesigner/tokens/ (DTCG 2025.10)
 python3 <skill>/scripts/engine.py validate [--json]          contrast, targets, lint; exit 1 on errors
+python3 <skill>/scripts/engine.py contrast "#767676" "#fff" [--min 4.5]   the WCAG ratio of any two colors, rounded down; exit 1 under --min
 python3 <skill>/scripts/engine.py design-md                  DESIGN.md and PRODUCT.md at the project root
 python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|brand|all
 python3 <skill>/scripts/engine.py overview [--open]          opendesigner/overview.html: the whole system, what is chosen and what is still missing
@@ -876,7 +877,7 @@ When a reference inspires a section, take its lessons by default. Only when the 
 - **Check symmetry where a row stacks.** When cards in a row wrap into a column, every row should share one centre line and the same outer edges, and nothing inside a card should scroll. Measure it at each width, because a screenshot at one size hides it (review case MS-05).
 - **Test without hover.** Anything that changes on hover must also change another way: by itself on a timer, or on a tap (DC-L19-143). Hover styles themselves sit behind a fine-pointer query (STD-accessibility-motion-15).
 - **Measure text as rendered** wherever something is scaled down. A screen shown at reduced scale can pass every type check while its text renders at 8 to 10 px.
-- **Measure contrast against the pixels behind the text** wherever text sits on glass, a photo, a gradient, a texture or a drawn object. The token check only knows the colors it assigned, so it passes text that fails on screen. Hide the text, render again, and compare each line of text with the brightest (or darkest) 5% of pixels in its box. In the showcase's style studies, the token checks passed 21 such failures, the worst at 2.47:1; this check caught every one.
+- **Measure contrast against the pixels behind the text** wherever text sits on glass, a photo, a gradient, a texture or a drawn object. The token check only knows the colors it assigned, so it passes text that fails on screen. Hide the text, render again, and compare each line of text with the brightest (or darkest) 5% of pixels in its box (`engine.py contrast <text> <pixel>` gives the ratio, rounded down). In the showcase's style studies, the token checks passed 21 such failures, the worst at 2.47:1; this check caught every one.
 - **Compare with the version before** for everything you did not mean to change. Compare computed styles or screenshots, section by section.
 - **Emulation is not a device** (STD-process-review-taste-33). When the person reports a fault you cannot reproduce, say so, say what you tried, remove every difference your change introduced, and ask them to look again. Never report it as fixed.
 - **Wait for reveals before you judge a screenshot.** A tab in the background pauses `IntersectionObserver` and Web Animations, so headings caught mid-reveal look blurred or empty. Check `document.getAnimations()` or the revealed state, in the visible tab, before you call it a bug.

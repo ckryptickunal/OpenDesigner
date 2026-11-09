@@ -8,6 +8,10 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Review reads the page that ships** (2026-11-09). When the folder given to `engine.py review` has fewer than three style files, it also reads the newest `index.html` (in `public/` first) and the files it loads, and lists what it skipped. It takes a single file, counts "behind the code" across the whole repository, lists the newest files first and skips `docs/`.
+- **DESIGN.md checked against the code** (2026-11-09). When the code uses no color, font or text tokens, `engine.py review` says if the brand color or fonts in `DESIGN.md` appear nowhere in it, and names the ones the code uses instead.
+- **`engine.py contrast`** (2026-11-09). `engine.py contrast "#767676" "#ffffff"` prints the contrast ratio, rounded down, and which WCAG minimums it meets. `--min 4.5` exits with an error under 4.5:1, for scripts.
+- **One version number** (2026-11-09). Generated files and the feedback issue text show the OpenDesigner release (0.2.0), not a separate engine number.
 - **The review notes names that say nothing** (2026-11-08). A link, button, field or image named "Read more", "Click here", "Submit", "image" or "Field 1" now gets one note in the review, with where each one is. It is a note, not an error: the text around it may already make it clear.
 - **The search check finds a hidden noindex** (2026-11-08). The search skill now warns when robots.txt blocks a page that also says noindex, because search engines never get to read the noindex. It also stops asking for links to pages marked noindex.
 - **AI-search advice now cites its study** (2026-11-08). The site brief's answer for AI search names the study behind it (GEO, KDD 2024): real quotes, figures and sources helped pages get used, and stuffing keywords hurt. The figures must be your own.
@@ -40,6 +44,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **design-md keeps every od:keep block** (2026-11-09). A kept block that holds its own heading, or sits in a section the file no longer has, is no longer deleted; the second kind moves to a Notes section. The `.hand-edited` backup is now the whole previous file, not a 201-byte fragment.
+- **Review never calls token-free code clean** (2026-11-09). When no token is in use, `engine.py review` says "no tokens in use" instead of "the code uses the tokens", and counts radii, not "radiuss".
 - **Concept and reference docs, plain first** (2026-11-08). Thirteen docs pages, from accessibility and tokens to the engine and security, now open in plain words. Commands, paths and JSON moved into "For developers" folds, and long passages became tables. Open text is 17% shorter, and every number, limit and privacy fact stays.
 - **Library parts follow today's tokens** (2026-11-08). The ten looks in the component library are rebuilt with today's engine, and five parts now take their corners and spacing from those tokens: the chat quote's corner is the bubble's minus its gap, the date picker clears its corner on phones, and the receipts table fits at tablet width ([#82](https://github.com/ckryptickunal/OpenDesigner/issues/82)).
 - **A shorter home page and showcase** (2026-11-07). Lines that repeated a heading, a button, a picture or another line on the page are gone. Two claims are corrected: the example system writes 50 files, not 51, and a reference never brings in another brand's logo, name, images or copy.

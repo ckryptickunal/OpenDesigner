@@ -4,7 +4,7 @@ seo_title: OpenDesigner engine commands: sketch, set, build, review
 description: Every OpenDesigner engine command in one line each: start a system, record decisions, build and check, research users, standards, review and feedback.
 section: Reference
 order: 2
-updated: 2026-11-08
+updated: 2026-11-09
 ---
 
 The engine is the part of OpenDesigner that does the math and writes your files: the tokens, the exports, `DESIGN.md` and the pages. Your AI usually runs it for you, so use this page when you want to run a command yourself or check what one does. It runs on your computer and makes no network calls.
@@ -82,6 +82,7 @@ Its options:
 | `engine.py build` | Generates the tokens and checks them. If there are no errors, it writes the exports for the platforms you chose, `DESIGN.md`, the overview page and the preview pages, and names any code file it left out. `--force` exports even with errors. |
 | `engine.py generate` | Writes the DTCG 2025.10 tokens to `opendesigner/tokens/`. |
 | `engine.py validate` | Checks contrast, target sizes and lint rules, and exits with an error code if anything fails. `--json` prints the results as JSON. |
+| `engine.py contrast "#767676" "#ffffff"` | Prints the contrast ratio of two colors, rounded down, and which WCAG minimums it meets. `--min 4.5` exits with an error when the pair is under 4.5:1. |
 | `engine.py export --format tailwind` | Writes one export. `--format all` writes every one. |
 | `engine.py design-md` | Writes `DESIGN.md` and `PRODUCT.md` at the project root. |
 | `engine.py resolve` | Prints the current dial positions and the values made from them, as JSON. |
@@ -121,12 +122,12 @@ The templates `show` fills are `palette`, `type-scale`, `spacing-ruler`, `radius
 
 ## Keep it consistent
 
-`engine.py review` scans your code for hard-coded colors, sizes, radii, shadows and durations, and for out-of-date `DESIGN.md` sections. It also says when your code uses no tokens or more raw values than tokens, and when the system is 10 or more commits behind the code. It only reports: it never edits your code.
+`engine.py review` scans your code for hard-coded colors, sizes, radii, shadows and durations, and for out-of-date `DESIGN.md` sections. It also says when your code uses no tokens or more raw values than tokens, when the brand color or fonts in `DESIGN.md` appear nowhere in your code, and when the system is 10 or more commits behind the code. It only reports: it never edits your code.
 
 {{figure:engineers-review-terminal}}
 
 :::dev
-`--project src` scans one folder. `--strict` exits with an error when it finds anything.
+`--project src` scans one folder, or one file. When that folder has fewer than three style files, review also reads the page the site ships (the newest `index.html`, in `public/` first) and the files it loads, and lists what it skipped. Findings come newest file first. `docs/` and OpenDesigner's own exports are skipped. `--strict` exits with an error when it finds anything.
 :::
 
 ## Standards
