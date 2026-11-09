@@ -35,7 +35,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Changed
 
-- **Binding rules come first in the skill** (2026-11-09). After a long chat, Claude keeps only about the first 20,000 characters of a skill, and the main skill was 32,864. It is now 19,235, and its first 2,000 hold seven binding rules, among them tokens only, one question at a time, show every round and review at the end. The detail moved to reference files, unchanged.
+- **Binding rules come first in the skill** (2026-11-09). After a long chat, Claude keeps only about the first 20,000 characters of a skill, and the main skill was 32,864. It is now 19,296, and its first 2,000 hold seven binding rules, among them tokens only, one question at a time, show every round and review at the end. The detail moved to reference files, unchanged.
 - **One question per call** (2026-11-09). The skill now says it outright: one question per message and one per call of a question tool, the log question alone and first. Ask for "something new" and you get three options to pick from, never one picked for you. A new eval case fails any turn that asks two.
 - **Skill descriptions name the jobs** (2026-11-09). Each skill's one-line description now names what people ask for, such as a taste index, a launch checklist, a share image, "review this" or SEO, so the right skill is picked without being named.
 - **Four open research questions checked at their sources** (2026-11-09). The hover and pressed steps have no published minimum, so they stay an engine estimate. Polaris now publishes keywords, not values, so its old numbers are marked historical. Material 3 tracking for Roboto products, and the Material 3 focus ring (3 px, 2 px outside), now cite Google's own token files.
