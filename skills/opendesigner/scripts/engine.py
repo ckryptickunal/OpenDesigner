@@ -10300,17 +10300,47 @@ def decision_table_rows(d, limit=40):
     return rows[:limit], max(0, len(rows) - limit)
 
 
+RX_KEEP = re.compile(r"<!-- od:keep -->.*?<!-- /od:keep -->", re.S)
+KEEP_NOTES = "Notes"  # where a kept block goes when the section it sat in is no longer written
+
+
+def _mask_code(text):
+    """text with fenced code blocks and inline code blanked to spaces, same length, so a marker quoted in code is not read."""
+    blank = lambda m: re.sub(r"[^\n]", " ", m.group(0))
+    text = re.sub(r"^(```|~~~)[^\n]*\n.*?^\1[^\n]*$", blank, text, flags=re.S | re.M)
+    return re.sub(r"(`+)[^\n]*?\1", blank, text)
+
+
 def _keep_blocks(text):
-    """od:keep blocks by section heading, so hand-written prose survives regeneration (spec 7.2)."""
-    keeps = {}
+    """Every od:keep block, found by its markers, as (section title, block) in document order, so hand-written prose survives
+    regeneration (spec 7.2). The title is the last `## ` heading before the block and outside any block (None before the
+    first), so a block may hold headings of its own. A marker quoted in code is not a marker."""
     if not text:
-        return keeps
-    for sec in re.split(r"^## ", text, flags=re.M)[1:]:
-        title = sec.split("\n", 1)[0].strip()
-        m = re.search(r"<!-- od:keep -->.*?<!-- /od:keep -->", sec, flags=re.S)
-        if m:
-            keeps[title] = m.group(0)
-    return keeps
+        return []
+    masked = _mask_code(text)
+    spans = [(m.start(), m.end()) for m in RX_KEEP.finditer(masked)]
+    heads = [(h.start(), h.group(1).strip()) for h in re.finditer(r"^## (.+)$", masked, flags=re.M)
+             if not any(a <= h.start() < b for a, b in spans)]
+    return [(next((t for at, t in reversed(heads) if at < a), None), text[a:b]) for a, b in spans]
+
+
+class _Keeps:
+    """The kept blocks of one file while it is rendered: each printed section takes its own, and notes() returns the rest
+    under a Notes section, so no block is ever dropped."""
+
+    def __init__(self, text):
+        self.blocks, self.used = _keep_blocks(text), set()
+
+    def take(self, title):
+        self.used.add(title)
+        return [x for t, b in self.blocks if t == title for x in (b, "")]
+
+    def notes(self):
+        left = [b for t, b in self.blocks if t not in self.used or t == KEEP_NOTES]
+        if not left:
+            return ""
+        return "\n".join([f"## {KEEP_NOTES}", "", "Hand-written notes kept from sections this file no longer has.", ""]
+                         + [x for b in left for x in (b, "")]).rstrip() + "\n"
 
 
 def _direction_words(state):
@@ -10712,7 +10742,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     params = {k: v["value"] for k, v in meta["params"].items()}
     dials = meta["dials"]
     decs = std_decision_rows(state, _decisions(d))  # plus values standards set (their grouped titles name no path)
-    keeps = _keep_blocks(existing)
+    keeps = _Keeps(existing)
     raw = state["raw"]
     ctx = state.get("context") or {}
     prefix = meta.get("prefix", "ds")
@@ -10780,8 +10810,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
         parts += (["<details><summary>More</summary>", ""] + detail + ["</details>", ""]) if fold and lead else detail
         if after:
             parts += [after, ""]
-        if title in keeps:
-            parts += [keeps[title], ""]
+        parts += keeps.take(title)
         return "\n".join(parts)
 
     # ---- front matter: Google DESIGN.md keys, kept as short as the template (assets/output/DESIGN.md); tokens/ has the rest
@@ -11264,6 +11293,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
                  + ("; Tailwind's default colors, text sizes, radii and shadows are switched off, so only these exist" if (state.get("exports") or {}).get("tailwindReset", True) else "")
                  + "):", "", _md_table(["Area", "Classes"], [(k.title(), ", ".join(f"`{c}`" for c in v)) for k, v in tw.items() if v])]
     out.append(section("For Agents", "\n".join(body), lead="**AI agents: read this file and the tokens before you change any screen.**", fold=False))
+    out.append(keeps.notes())  # kept blocks whose section is no longer written: never dropped
     return "\n".join(out).rstrip() + "\n"
 
 
@@ -11491,13 +11521,11 @@ def site_brief_md(state, decs=None):
 
 def render_product_md(state, existing="", decs=None):
     ctx = state.get("context") or {}
-    keeps = _keep_blocks(existing)
+    keeps = _Keeps(existing)
     raw = state["raw"]
 
     def sec(t, body):
-        parts = [f"## {t}", "", body.strip(), ""]
-        if t in keeps:
-            parts += [keeps[t], ""]
+        parts = [f"## {t}", "", body.strip(), ""] + keeps.take(t)
         return "\n".join(parts)
     surf = ctx.get("surfaces") or []
     sc = ctx.get("scope") or {}
@@ -11533,6 +11561,7 @@ def render_product_md(state, existing="", decs=None):
     first_sentence = lambda q: re.split(r"(?<=[?.])\s", (questions().get(q) or {}).get("ask") or q)[0]
     lines = [f"- {first_sentence(q)} **{answer_words(q, answer_value(r))}** ({q})" for q, r in owner]
     out.append(sec("Team and Governance", "\n".join(x for x in [ctx.get("team") or ""] + lines if x) or "Not recorded yet (Q-scope-03, Q-scope-04, Q-gov-01)."))
+    out.append(keeps.notes())  # kept blocks whose section is no longer written: never dropped
     return "\n".join(out).rstrip() + "\n"
 
 
@@ -11568,11 +11597,10 @@ def cmd_design_md(d, out_dir=None, files=None, meta=None, quiet=False):
             with open(path, encoding="utf-8") as f:
                 existing = f.read()
             if hashes.get(name) and _sha(existing) != hashes[name]:
-                stripped_old = re.sub(r"<!-- od:keep -->.*?<!-- /od:keep -->", "", existing, flags=re.S)
                 if not quiet:
-                    print(f"note: {name} was edited outside od:keep blocks; the previous text is saved as {name}.hand-edited "
-                          "so the extend skill can turn the edits into decisions")
-                write_text(path + ".hand-edited", stripped_old)
+                    print(f"note: {name} was edited by hand since the engine last wrote it; the previous text is saved, as it was, "
+                          f"as {name}.hand-edited so the extend skill can turn the edits into decisions")
+                write_text(path + ".hand-edited", existing)
         text = render(existing)
         write_text(path, text)
         hashes[name] = _sha(text)

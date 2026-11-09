@@ -570,6 +570,49 @@ class Intake(unittest.TestCase):
         self.assertEqual(e.fit_reference(dict(self.SCAN, tag="competitor"))["proposals"], [])
 
 
+class KeepBlocks(unittest.TestCase):
+    """Owner text inside od:keep blocks survives design-md, whatever it holds (a real project lost two blocks, 2026-11-09)."""
+
+    ICP = ("<!-- od:keep -->\n## ICP: who buys first\n\nChartering managers at mid-size dry bulk operators.\n\n"
+           "- They run 10 to 40 ships.\n<!-- /od:keep -->")
+    HERO = "<!-- od:keep -->\nThe hero headline stays at 48 px.\n<!-- /od:keep -->"
+
+    def test_blocks_are_found_by_their_markers(self):
+        text = ("# T\n\n> Notes survive only inside `<!-- od:keep -->` blocks.\n\n## Audience\n\nWords.\n\n" + self.ICP
+                + "\n\n## Gone section\n\n" + self.HERO + "\n\n```\n<!-- od:keep -->quoted<!-- /od:keep -->\n```\n")
+        self.assertEqual(e._keep_blocks(text), [("Audience", self.ICP), ("Gone section", self.HERO)])
+        self.assertEqual(e._keep_blocks(""), [])
+
+    def test_design_md_round_trip_keeps_every_block(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Hull", "#b8321f", "regular", "web", "calm,serious")
+            quiet(e.cmd_design_md, d)
+            for name, section in (("PRODUCT.md", "## Audience\n"), ("DESIGN.md", "## Colors\n")):
+                path = os.path.join(t, name)
+                with open(path, encoding="utf-8") as f:
+                    text = f.read()
+                self.assertIn("`<!-- od:keep -->`", text)           # the header quotes the marker; it must not count
+                head, rest = text.split(section, 1)
+                body, tail = rest.split("\n## ", 1)
+                edited = head + section + body.rstrip("\n") + "\n\n" + self.ICP + "\n\n## " + tail.rstrip("\n") \
+                    + "\n\n## Pricing notes\n\n" + self.HERO + "\n"
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write(edited)
+                quiet(e.cmd_design_md, d)
+                with open(path + ".hand-edited", encoding="utf-8") as f:
+                    self.assertEqual(f.read(), edited)               # the backup is the file as it was, not a fragment
+                with open(path, encoding="utf-8") as f:
+                    once = f.read()
+                for block in (self.ICP, self.HERO):
+                    self.assertEqual(once.count(block), 1, name)
+                self.assertLess(once.index(section), once.index(self.ICP))                   # still under its own section
+                self.assertLess(once.index("\n## Notes\n"), once.index(self.HERO))         # unknown section: under Notes
+                quiet(e.cmd_design_md, d)
+                with open(path, encoding="utf-8") as f:
+                    self.assertEqual(f.read(), once, name)          # a second run changes nothing
+
+
 class ReviewAndFeedback(unittest.TestCase):
     def test_review_finds_bypasses_and_stale_sections(self):
         with tempfile.TemporaryDirectory() as t:
