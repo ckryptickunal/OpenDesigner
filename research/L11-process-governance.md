@@ -298,7 +298,7 @@ Note on the template: these are process and governance decisions, not visual one
 - **Questions the designer answers:** Which conformance target? What does the system guarantee, and what must product teams still do? How is each component tested?
 - **Options:** Target: WCAG 2.2 AA is the current norm. GOV.UK commits to WCAG 2.2 AA and supports the latest version once it has been available for at least a year [S-L11-093]. Testing: automated tools (jest-axe, @axe-core/puppeteer, html-validate), but GOV.UK notes "only about 30% of issues are found by automated testing tools". Manual assistive-technology testing covers screen readers, magnifiers, high contrast, and speech recognition [S-L11-093]. Carbon publishes per-component status: default state, advanced states and keyboard navigation tested automatically; screen reader tested manually with JAWS, VoiceOver, NVDA [S-L11-091]. Responsibility split: "Using the GOV.UK Design System in a service does not immediately make that service accessible" [S-L11-092]. Some success criteria apply at page level (for example redundant entry), so they stay with the consuming team [S-L11-094].
 - **Visual effect:** The target bounds the color, type size, focus ring and target-size options in every other lane (L01-L04, L08).
-- **Depends on (upstream):** legal context (for example public sector, EU accessibility rules; see gaps), principles.
+- **Depends on (upstream):** legal context (EU, US, UK and India in DC-L11-26 to DC-L11-30; none requires more than Level AA), principles.
 - **Affects (downstream):** contrast minimums in color ramps (L01), minimum type sizes (L02), target sizes (L03), focus indicators (L04), per-component ARIA patterns (L08), the component Ready gate (DC-L11-13).
 - **Token encoding:** `system.a11yTarget = "WCAG 2.2 AA"`; the builder validates token pairs against it. DESIGN.md's linter already checks WCAG contrast [S-L11-047].
 - **Platform notes:** Native targets have their own guidance (Apple HIG, Material); see L10.
@@ -413,6 +413,102 @@ Note on the template: these are process and governance decisions, not visual one
 **What is hype or weak (evidence-backed):** unconstrained AI design generation (net satisfaction -53, the top concern at 61%); expecting prose docs alone to steer agents; "agentic design system" as a label with no new substance [S-L11-031, S-L11-030, S-L11-108, COMMUNITY-SIGNAL].
 
 ---
+
+**Accessibility law by jurisdiction (issue #8, researched 2026-11-09).** These cards feed Q-aud-03, the accessibility target question. They summarize what each law asks of websites and apps. **This is not legal advice**: scope, exemptions and deadlines need a lawyer's reading for a given product. Every value below was read in the legal text or on the regulator's own page.
+
+| Jurisdiction | Who | WCAG version and level | Key dates |
+|---|---|---|---|
+| EU, European Accessibility Act | Listed consumer products and services, including e-commerce and banking; microenterprises exempt for services | None named in the Act; EN 301 549 V4.1.1 (WCAG 2.2 AA) published but not yet cited in the Official Journal | Applies since 2025-06-28 [S-L11-128] [S-L11-132] [S-L11-135] |
+| EU, Web Accessibility Directive | Public sector bodies | WCAG 2.1 AA through EN 301 549 V3.2.1 | All dates passed (apps 2021-06-23) [S-L11-129] [S-L11-131] |
+| US, ADA Title II | State and local government | WCAG 2.1 AA | 2027-04-26 (50,000+ people), 2028-04-26 (smaller and special districts), after a 2026 delay [S-L11-109] [S-L11-111] |
+| US, ADA Title III | Private businesses open to the public | No regulation; DOJ points to WCAG as guidance, no version | n/a [S-L11-117] |
+| US, Section 508 | Federal agencies | WCAG 2.0 AA | Since 2018-01-18 [S-L11-119] [S-L11-120] |
+| UK, public sector regulations | Public sector bodies | WCAG A and AA "as amended"; GDS tests WCAG 2.2 since October 2024 | All dates passed (apps 2021-06-22) [S-L11-138] [S-L11-140] [S-L11-142] |
+| UK, Equality Act 2010 | Service providers, including private | No technical standard | n/a [S-L11-139] |
+| India, RPwD Act and Rules | Government and private service providers | WCAG 2.1 AA through IS 17802 (= EN 301 549 v3.2.1); GIGW 3.0 for government | ICT standards mandatory since 2023-05-11 [S-L11-148] [S-L11-152] |
+
+None of these laws requires more than Level AA, and Level A alone meets none of them. Content that conforms to WCAG 2.2 also conforms to 2.0 and 2.1, except 4.1.1 Parsing, which was removed in 2.2 and which W3C's erratum treats as always met for HTML and XML [S-L11-153] [S-L11-154]. So WCAG 2.2 AA covers the WCAG part of every regime here [inferred from S-L11-153]. It does not cover what these laws add beyond WCAG: accessibility statements, information about the service, support services, documentation and hardware [S-L11-128] [S-L11-135] [S-L11-138] [S-L11-119].
+
+### DC-L11-26: Accessibility law, EU (European Accessibility Act and Web Accessibility Directive)
+- **Block path:** Foundations > Accessibility > Program > Legal context > EU
+- **Questions the designer answers:** Do we sell to consumers in the EU? Is the product one of the Act's listed products or services? Are we a microenterprise? Are we a public sector body?
+- **Options:** what applies to whom:
+  - *European Accessibility Act* (Directive (EU) 2019/882) [S-L11-128]:
+    - **Products** placed on the market after 2025-06-28 (Art. 2(1)): consumer computers and their operating systems, self-service terminals (payment terminals, ATMs, ticketing and check-in machines), consumer devices for phone, internet, messaging and audiovisual media, and e-readers.
+    - **Services to consumers** after 2025-06-28 (Art. 2(2)): phone, internet and messaging, access to audiovisual media, air, bus, rail and waterborne passenger transport (websites, apps, e-tickets, travel information), consumer banking, e-books, and e-commerce (distance selling "with a view to concluding a consumer contract", Art. 3(30)).
+    - **Microenterprises** (fewer than 10 staff and no more than EUR 2 million turnover or balance sheet, Art. 3(23)) are exempt from the services requirements (Art. 4(5)), but not from the product requirements (Art. 14(4)).
+    - **What a website or app must be:** perceivable, operable, understandable and robust (Annex I Section III(c)). Service providers also publish accessibility information (Art. 13(2), Annex V). The Act names no WCAG version.
+  - *Web Accessibility Directive* (Directive (EU) 2016/2102), for public sector bodies' websites and apps; public broadcasters and most NGOs are excluded (Art. 1(2)-(4)) [S-L11-131].
+- **Visual effect:** none directly; it decides which conformance target a team must be able to show (DC-L11-19).
+- **Depends on (upstream):** market (EU consumers), product type, company size, public or private.
+- **Affects (downstream):** Q-aud-03 target; the accessibility statement and service information a team publishes [inferred].
+- **Token encoding:** none; recorded as the legal reason for `system.a11yTarget` (DC-L11-19) [inferred].
+- **Platform notes:** covers websites and mobile apps alike (Annex I Section III(c)) [S-L11-128].
+- **Accessibility constraints (the technical standard):**
+  - Following a harmonised standard cited in the Official Journal gives a presumption of conformity (Art. 15(1)) [S-L11-128]. **As of 2026-11-09, no standard is cited under the Act** [S-L11-132].
+  - EN 301 549 V4.1.1 was made for the Act and published by ETSI on 2026-09-02. Its clause 9.0 maps WCAG 2.2 Level AA to its web clauses, and AAA stays informative. It gives a presumption of conformity only once cited [S-L11-134] [S-L11-135].
+  - EN 301 549 V3.2.1 (WCAG 2.1 AA) is cited only under the Web Accessibility Directive (Implementing Decision (EU) 2021/1339) [S-L11-129] [S-L11-136].
+- **Default + heuristic:** for an EU consumer product or service in scope, target WCAG 2.2 AA: it matches the standard written for the Act (V4.1.1) and also meets V3.2.1's WCAG 2.1 AA [S-L11-135] [S-L11-153]. Dates: the Act applies since 2025-06-28 (Art. 31). Products a service provider already used may stay in use until 2030-06-28; service contracts agreed before 2025-06-28 run until they expire, at most 5 years; existing self-service terminals may run up to 20 years where a country allows it (Art. 32). Directive dates have all passed: new websites 2019-09-23, all websites 2020-09-23, apps 2021-06-23 (Art. 12(3)) [S-L11-131]. Enforcement is national: market surveillance authorities for products (Art. 19), authorities each country names for services (Art. 23), with penalties set nationally (Art. 30) [S-L11-128]. Not legal advice.
+- **Evidence:** [S-L11-128, S-L11-129, S-L11-131, S-L11-132, S-L11-133, S-L11-134, S-L11-135, S-L11-136, S-L11-137, S-L11-153]
+
+### DC-L11-27: Accessibility law, US ADA (Title II and Title III)
+- **Block path:** Foundations > Accessibility > Program > Legal context > US ADA
+- **Questions the designer answers:** Are we a state or local government, or building for one? Are we a private business open to the public? Does our funding come from the US health department?
+- **Options:**
+  - *Title II, state and local governments*, including content and apps provided through contractors: the 2024 rule (89 FR 31320, effective 2024-06-24) requires WCAG 2.1 Level A and AA, with exceptions for archived content, preexisting documents, third-party content, individualized secured documents and preexisting social media posts [S-L11-111] [S-L11-112] [S-L11-114].
+  - *Title III, private businesses open to the public:* there is no web regulation. DOJ's 2022 guidance says WCAG and the Section 508 standards "provide helpful guidance" and leaves businesses flexibility; it names no version [S-L11-117]. DOJ withdrew its earlier advance notices in 2017 [S-L11-118].
+- **Visual effect:** none directly.
+- **Depends on (upstream):** customer type (government or public), market (US).
+- **Affects (downstream):** Q-aud-03 target; procurement requirements in government contracts [inferred].
+- **Token encoding:** none; the legal reason for `system.a11yTarget` [inferred].
+- **Platform notes:** Title II covers web content and mobile apps [S-L11-111].
+- **Accessibility constraints:** WCAG 2.1 is incorporated by reference in 28 CFR 35.200(b)(3); DOJ calls WCAG 2.2 "not incorporated by the 2024 rule" [S-L11-109] [S-L11-111].
+- **Default + heuristic:** WCAG 2.2 AA also meets Title II's WCAG 2.1 AA [S-L11-153]. **Dates changed in 2026:** an interim final rule (91 FR 20902, effective 2026-04-20) moved the deadlines a year: places with 50,000 or more people from 2026-04-24 to **2027-04-26**, smaller places and special districts from 2027-04-26 to **2028-04-26**. DOJ says it may propose changes to the rule's substance; nothing was published by 2026-11-09 [S-L11-109] [S-L11-111] [S-L11-113] [S-L11-115]. Side finding: the US health department's Section 504 rule for organisations it funds also requires WCAG 2.1 AA, moved to 2027-05-11 (15 or more employees) and 2028-05-10 (fewer than 15) [S-L11-126]. Enforcement: DOJ and private lawsuits [S-L11-109] [S-L11-117]. Not legal advice.
+- **Evidence:** [S-L11-109, S-L11-111, S-L11-112, S-L11-113, S-L11-114, S-L11-115, S-L11-117, S-L11-118, S-L11-126, S-L11-153]
+
+### DC-L11-28: Accessibility law, US Section 508 (federal agencies)
+- **Block path:** Foundations > Accessibility > Program > Legal context > US Section 508
+- **Questions the designer answers:** Do we build for, or sell to, a US federal agency?
+- **Options:** Section 508 applies to every federal department and agency, including USPS (29 U.S.C. 794d(a)(1)(A)) [S-L11-125]. The Revised 508 Standards (36 CFR part 1194) are mandatory for agencies (E101.1) and apply WCAG 2.0 Level A and AA to public-facing content, official communications and software (E205, E207.2); further chapters cover hardware, support documentation and services [S-L11-119].
+- **Visual effect:** none directly.
+- **Depends on (upstream):** customer type (US federal).
+- **Affects (downstream):** Q-aud-03 target; procurement documentation such as conformance reports [inferred].
+- **Token encoding:** none [inferred].
+- **Platform notes:** software and mobile apps are covered through E207 [S-L11-119].
+- **Accessibility constraints:** WCAG 2.0 (2008-12-11) is incorporated by reference at 702.10.1 [S-L11-119]. No update to WCAG 2.1 or 2.2 has been proposed or adopted: the standards were last amended 2018-03-23, and none of the Access Board's 41 Federal Register documents since 2020 touch them [S-L11-121] [S-L11-122] [S-L11-123] [S-L11-124].
+- **Default + heuristic:** WCAG 2.2 AA meets 2.0 AA, except that 4.1.1 Parsing may still need to be tested and reported under a rule that cites 2.0 [S-L11-153] [S-L11-154]. Dates: published 2017-01-18 (82 FR 5790), compliance from **2018-01-18**; legacy ICT is exempt until it is changed (E202.2) [S-L11-119] [S-L11-120]. Enforcement: complaints through the agency's Section 504 procedures, and civil actions [S-L11-125]. Not legal advice.
+- **Evidence:** [S-L11-119, S-L11-120, S-L11-121, S-L11-122, S-L11-123, S-L11-124, S-L11-125, S-L11-153, S-L11-154]
+
+### DC-L11-29: Accessibility law, UK (public sector regulations and Equality Act)
+- **Block path:** Foundations > Accessibility > Program > Legal context > UK
+- **Questions the designer answers:** Are we a UK public sector body, or building for one? Do we provide services to the public in Great Britain?
+- **Options:**
+  - *Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018* (SI 2018/952): public sector bodies' websites and apps; public service broadcasters and most NGOs are exempt, and schools and nurseries except for "essential online administrative functions" (reg 4). Bodies publish an accessibility statement (reg 8) [S-L11-138].
+  - *Equality Act 2010*, for service providers including private ones: no discrimination and reasonable adjustments (ss. 20, 29). It names no technical standard [S-L11-139].
+- **Visual effect:** none directly.
+- **Depends on (upstream):** customer type (UK public sector), market.
+- **Affects (downstream):** Q-aud-03 target; the accessibility statement [S-L11-138].
+- **Token encoding:** none [inferred].
+- **Platform notes:** websites and mobile apps [S-L11-138].
+- **Accessibility constraints:** regulation 9, as substituted on 2022-10-26, requires WCAG Level A and AA "as amended from time to time" [S-L11-138]. GOV.UK tells bodies to meet WCAG 2.2 AA, and GDS monitoring has tested against WCAG 2.2 A and AA since October 2024 [S-L11-140] [S-L11-141] [S-L11-142] [S-L11-143].
+- **Default + heuristic:** WCAG 2.2 AA, which is what the regulator tests. Dates: in force 2018-09-23; the duties applied to new websites after 2019-09-22, other websites from 2020-09-22 and apps from 2021-06-22 (reg 5). Enforcement: the Equality and Human Rights Commission in Great Britain and the Equality Commission for Northern Ireland (reg 11), with GDS monitoring [S-L11-138] [S-L11-140]. Not legal advice.
+- **Evidence:** [S-L11-138, S-L11-139, S-L11-140, S-L11-141, S-L11-142, S-L11-143]
+
+### DC-L11-30: Accessibility law, India (RPwD Act 2016, Rules, GIGW)
+- **Block path:** Foundations > Accessibility > Program > Legal context > India
+- **Questions the designer answers:** Do we provide a service in India, as government or as a private provider? Do we build Indian government websites or apps?
+- **Options:**
+  - *Rights of Persons with Disabilities Act 2016:* section 40 has the government set accessibility standards, including for information and communications technology; section 46 has "service providers whether Government or private" comply within two years of those rules, with extensions possible [S-L11-147].
+  - *Rights of Persons with Disabilities (Amendment) Rules 2023* (G.S.R. 359(E), in force 2023-05-11): rule 15(1)(c)(iii) requires websites, apps and ICT products and services to meet IS 17802 Parts 1 and 2 "as amended from time to time" [S-L11-148].
+  - *GIGW 3.0* (NIC and MeitY), for government websites and apps [S-L11-151] [S-L11-152].
+- **Visual effect:** none directly.
+- **Depends on (upstream):** market (India), public or private.
+- **Affects (downstream):** Q-aud-03 target; the script and font questions an India-facing product already answers (DC-L02-25) [inferred].
+- **Token encoding:** none [inferred].
+- **Platform notes:** websites and mobile apps [S-L11-148] [S-L11-152].
+- **Accessibility constraints:** IS 17802 Part 1 is the technical adoption of EN 301 549 v3.2.1, so WCAG 2.1 AA [S-L11-148] [S-L11-136]. GIGW 3.0 "ensures conformity with Level AA of WCAG 2.1" [S-L11-152].
+- **Default + heuristic:** WCAG 2.2 AA meets the WCAG 2.1 AA these point to [S-L11-153]. Dates: the Act took effect 2017-04-19, and the ICT standards have been mandatory since 2023-05-11 [S-L11-145] [S-L11-148]. When the two-year period in section 46 ends is a legal question [inferred]. Enforcement: the Chief Commissioner and State Commissioners (s. 75); fines up to Rs 10,000 for a first breach, then Rs 50,000 to 5 lakh (s. 89) [S-L11-147]. A 2024 Supreme Court judgment and a draft 2026 rules amendment are reported only in secondary sources and are not confirmed here. Not legal advice.
+- **Evidence:** [S-L11-145, S-L11-146, S-L11-147, S-L11-148, S-L11-151, S-L11-152, S-L11-136, S-L11-153]
 
 ## Part F. Roles and skills
 
@@ -623,7 +719,7 @@ Each question lists why it matters and what it changes downstream. "Src" gives t
 4. **The zeroheight State of AI 2026 full report** is client-rendered. Only the landing-page summary was verified [S-L11-031]; the MCP (48%) and bypass (59%) numbers rest on that summary.
 5. **Several competitor pages were client-rendered** (shadcn themes and create, Stitch app, Material Theme Builder web app, tweakcn site). I used changelogs, blogs or GitHub READMEs instead. The Eva Design summary is low-confidence [S-L11-075].
 6. **Material Theme Builder's GitHub repo was archived on 23 Jul 2026** [S-L11-067]. Whether the tool moved elsewhere (for example into m3.material.io or a Figma plugin) was not verified.
-7. **The legal accessibility landscape** (EU European Accessibility Act, ADA, Section 508 dates and scope) was not researched; it affects question 4.1.
+7. **The legal accessibility landscape** (EU European Accessibility Act, ADA, Section 508 dates and scope) was not researched; it affects question 4.1. **Answered on 2026-11-09 (issue #8):** DC-L11-26 to DC-L11-30 cover the EU, US ADA, US Section 508, UK and India from the legal texts and regulators' pages. Watch: DOJ may propose changes to the Title II rule before 2027-04-26 [S-L11-109]; the Commission may cite EN 301 549 V4.1.1 under the EAA [S-L11-135].
 8. **Pricing** for Supernova, zeroheight, Knapsack, Tokens Studio, v0, Lovable, Bolt and Claude Design was not captured.
 9. **WebSearch budget ran out** late in the session (200 calls shared across agents), and Perplexity had no quota. Final checks relied on WebFetch of known URLs.
 10. **No hands-on testing** of any competitor. All competitor descriptions come from official pages.

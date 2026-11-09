@@ -8,6 +8,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Research on script sizes, corner radius and accessibility law** (2026-11-09). Seven new Decision Cards. No official size ratio exists for Devanagari, Arabic or CJK against Latin. Five studies isolate corner radius on interfaces, and none supports "rounded reads trustworthy". EU, US, UK and India law all point to WCAG Level AA, with the 2026 delay to the ADA Title II dates.
 - **The review notes names that say nothing** (2026-11-08). A link, button, field or image named "Read more", "Click here", "Submit", "image" or "Field 1" now gets one note in the review, with where each one is. It is a note, not an error: the text around it may already make it clear.
 - **The search check finds a hidden noindex** (2026-11-08). The search skill now warns when robots.txt blocks a page that also says noindex, because search engines never get to read the noindex. It also stops asking for links to pages marked noindex.
 - **AI-search advice now cites its study** (2026-11-08). The site brief's answer for AI search names the study behind it (GEO, KDD 2024): real quotes, figures and sources helped pages get used, and stuffing keywords hurt. The figures must be your own.
