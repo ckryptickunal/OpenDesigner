@@ -37,9 +37,10 @@
 .odl-sleep-chart .odl-bars li { display: grid; justify-items: center; gap: var(--ds-space-stack-sm); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
 .odl-sleep-chart .odl-col { position: relative; display: flex; flex-direction: column; justify-content: end; align-items: center; gap: var(--ds-space-4); inline-size: 100%; block-size: calc(var(--ds-size-control-lg) * 2.2); }
 .odl-sleep-chart .odl-col::after { content: ""; position: absolute; inset-inline: 0; inset-block-end: 80%; border-block-start: var(--ds-border-width-default) dashed var(--ds-color-border-strong); }
-.odl-sleep-chart .odl-col > span { flex: none; inline-size: min(100%, var(--ds-space-24)); block-size: var(--h); border-radius: var(--ds-radius-full) var(--ds-radius-full) var(--ds-radius-4) var(--ds-radius-4); background: var(--ds-color-accent-light-5); }
+.odl-sleep-chart .odl-col > span { flex: none; inline-size: min(100%, var(--ds-space-24)); block-size: var(--h); border-radius: var(--ds-radius-full) var(--ds-radius-full) var(--ds-radius-4) var(--ds-radius-4); background: var(--ds-color-accent-light-8); }
 .odl-sleep-chart .odl-bars .is-last { color: var(--ds-color-text-primary); }
-.odl-sleep-chart .odl-bars .is-last .odl-col > span { background: var(--ds-color-accent-light-9); }
+/* A bar stands alone, so even the quiet nights keep 3:1 against the card (WCAG 1.4.11): step 8, and last night darker. */
+.odl-sleep-chart .odl-bars .is-last .odl-col > span { background: var(--ds-color-accent-light-11); }
 .odl-sleep-chart .odl-chart { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--ds-space-inline-xs); }
 .odl-sleep-chart .odl-8 { align-self: start; margin-block-start: calc(var(--ds-size-control-lg) * 2.2 * 0.2 - var(--ds-space-8)); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); }
 .odl-sleep-chart .odl-goal { display: flex; align-items: center; gap: var(--ds-space-inline-xs); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); }
