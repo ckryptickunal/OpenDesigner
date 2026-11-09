@@ -652,7 +652,7 @@ Upstream inputs (from other lanes), then L04 decisions, then downstream effects.
 6. **Material sound guidance** (M2) could not be retrieved [S-L04-072]. No design system inspected ships sound or haptic tokens. Absence of evidence was checked only in the token packages listed in Part G.
 7. **Web haptics** (Vibration API support, especially on iOS Safari) not checked.
 8. **Carbon elevation/layering** (the `$layer` tokens and whether shadows exist) not checked. Carbon is left out of table C1.
-9. **Polaris web components era.** The Polaris React token docs redirect to shopify.dev, and token values came from the GitHub source (`polaris-tokens`) [S-L04-019] [S-L04-022]. Whether the web-components Polaris uses the same token values is unconfirmed.
+9. **Polaris web components era (re-checked 2026-11-09).** Polaris v2.0 web components publish no radius or shadow values: radius is a keyword (`small-200` to `large-200`), and a shadow appears only in an example's comment [S-L09-849] [S-L09-850]. The values taken from `polaris-tokens` are historical [S-L04-019] [S-L04-022].
 10. **Fluent focus ring default width and color** not confirmed from source [S-L04-053].
 11. **Research on "how radius reads".** The only measured evidence is Google's M3 Expressive research, which bundles shape with color, size and containment [S-L04-063]. No study was found that isolates corner radius and perceived personality (Perplexity and WebSearch budgets were exhausted mid-lane).
 12. **WCAG texts not fetched:** 1.4.3 (disabled exemption), 1.4.11 (fetched only through the 2.4.13 Understanding page), 2.2.2. Claims that depend on them are tagged [inferred].
