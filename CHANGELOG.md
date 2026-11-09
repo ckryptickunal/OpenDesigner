@@ -8,6 +8,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Share cards and llms.txt that keep up with the page** (2026-11-09). The review now warns when a page's share title or description says something its headline no longer says, and `engine.py review` warns when the share image is older than a change to the headline, hero picture, logo or brand colour. The search check now lists llms.txt lines no page states, new sections it leaves out and links to pages that are gone.
+- **Nothing for reviewers on the live site** (2026-11-09). `preflight.py public` checks a build folder before a deploy for the variant picker, scripts and pictures no page uses, dev pages and local paths in served files, and the review warns about a picker it finds on a public address. The preflight checklist and the website checklist gained the launch items: the share card, llms.txt, robots.txt and an owner decision on AI-training crawlers.
 - **The review notes names that say nothing** (2026-11-08). A link, button, field or image named "Read more", "Click here", "Submit", "image" or "Field 1" now gets one note in the review, with where each one is. It is a note, not an error: the text around it may already make it clear.
 - **The search check finds a hidden noindex** (2026-11-08). The search skill now warns when robots.txt blocks a page that also says noindex, because search engines never get to read the noindex. It also stops asking for links to pages marked noindex.
 - **AI-search advice now cites its study** (2026-11-08). The site brief's answer for AI search names the study behind it (GEO, KDD 2024): real quotes, figures and sources helped pages get used, and stuffing keywords hurt. The figures must be your own.

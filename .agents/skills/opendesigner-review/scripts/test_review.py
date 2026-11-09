@@ -534,10 +534,54 @@ class RoundChecks(unittest.TestCase):
     def test_fonts_loaded_and_never_drawn_and_launch_basics(self):                                 # EN-08
         p = clean_probe(fonts={"faces": [], "failed": 0, "familyState": {"Inter": "webfont"}, "loadedFamilies": 3, "unused": [{"family": "Display Sans", "faces": 2}]},
                         share={"image": False, "icon": True, "description": True, "robots": "noindex"})
-        fs = {f["title"]: f for f in by_case(findings_for(p))["EN-08"]}
+        c = by_case(findings_for(p))
+        fs = {f["title"]: f for f in c["EN-08"] + c["EN-09"]}
         self.assertEqual(fs["Fonts downloaded but not used"]["severity"], "warn")
         self.assertIn("Display Sans (2 face(s))", fs["Fonts downloaded but not used"]["measured"])
         self.assertEqual(fs["Before launch: share image, favicon or indexing"]["severity"], "info")
+        self.assertEqual(fs["Before launch: share image, favicon or indexing"]["case"], "EN-09")
+
+    SHARED = {"image": True, "icon": True, "description": True, "robots": None, "siteName": "Ledgerly", "imageUrl": "https://ledgerly.example/og.png?v=6"}
+
+    def test_share_text_that_the_page_no_longer_says_is_a_warning(self):                           # EN-09
+        p = clean_probe(url="https://ledgerly.example/", share=dict(self.SHARED, title="Ledgerly | The AI operating system for dental clinics",
+                        ogTitle="The AI operating system for dental clinics", metaDescription="Every chart audited, every clinic covered, for dental groups.",
+                        h1="Invoices that chase themselves", lead="Reminders go out on day 3, 7 and 14, so you stop chasing clients."))
+        [f] = [f for f in by_case(findings_for(p))["EN-09"] if f["title"] == "Share text says something the page does not"]
+        self.assertEqual(f["severity"], "warn")
+        self.assertIn('<title> "Ledgerly | The AI operating system for dental clinics": 0 of its 4 words', f["measured"])
+        self.assertIn("meta description", f["measured"])
+        self.assertIn('og:title "The AI operating system for dental clinics"', f["measured"])   # what the card shows, named on its own
+        self.assertIn('The h1 says "Invoices that chase themselves"', f["measured"])
+
+    def test_share_text_that_matches_the_page_is_quiet(self):                                       # EN-09
+        p = clean_probe(url="https://ledgerly.example/", share=dict(self.SHARED, title="Invoices that chase themselves · Ledgerly", ogTitle="Invoices that chase themselves",
+                        metaDescription="Ledgerly sends invoice reminders on day 3, 7 and 14, so you stop chasing clients.",
+                        ogDescription="Reminders that go out for you.", h1="Invoices that chase themselves", lead="Reminders go out on day 3, 7 and 14, so you stop chasing clients."))
+        self.assertNotIn("Share text says something the page does not", [f["title"] for f in findings_for(p)])
+
+    def test_a_page_with_no_share_tags_is_not_judged_on_its_title(self):                            # EN-09: a test page titled "Clean"
+        p = clean_probe(share={"image": False, "icon": True, "description": False, "robots": None, "title": "Clean", "h1": "Release board", "lead": None})
+        self.assertNotIn("Share text says something the page does not", [f["title"] for f in findings_for(p)])
+
+    def test_a_variant_picker_is_flagged_on_a_public_address_only(self):                            # EN-07
+        pk = {"scripts": ["https://acme.io/picker.js"], "markup": 3, "switchers": [{"sel": "div#options-bar", "buttons": 4}]}
+        [f] = by_case(findings_for(clean_probe(url="https://acme.io/", picker=pk)))["EN-07"]
+        self.assertEqual((f["title"], f["severity"], f["standard"]), ("A variant picker on a public address", "warn", "STD-process-review-taste-41"))
+        self.assertIn("loads picker.js; 3 house picker element(s)", f["measured"])
+        self.assertIn("div#options-bar holds 4 switch buttons", f["measured"])
+        for url in ("http://localhost:3000/", "http://127.0.0.1:7788/", "file:///tmp/review.html", "http://192.168.1.4/", "https://acme.test/", "https://ledgerly.example/"):
+            self.assertNotIn("EN-07", by_case(findings_for(clean_probe(url=url, picker=pk))), url)
+        self.assertNotIn("EN-07", by_case(findings_for(clean_probe(url="https://acme.io/", picker={"scripts": [], "markup": 0, "switchers": []}))))
+
+    def test_check_saves_the_share_card_facts_for_engine_review(self):                             # EN-09
+        p = clean_probe(url="https://ledgerly.example/", share=dict(self.SHARED, title="x", h1="Invoices that chase themselves", hero="https://ledgerly.example/hero.jpg", logo="inline svg"))
+        with tempfile.TemporaryDirectory() as t:
+            (Path(t) / "p.json").write_text(json.dumps(p))
+            run(["check", str(Path(t) / "p.json"), "--dir", t])
+            share = json.loads((Path(t) / "share.json").read_text())["pages"]
+        self.assertEqual(share, {"/": {"url": "https://ledgerly.example/", "image": "https://ledgerly.example/og.png?v=6", "h1": "Invoices that chase themselves",
+                                       "hero": "https://ledgerly.example/hero.jpg", "logo": "inline svg"}})
 
     def test_a_probe_taken_mid_animation_is_flagged_but_not_with_reduced_motion(self):            # TM-01
         p = clean_probe(motion=dict(clean_probe()["motion"], pending=2, pendingOn=["rise on h1"]))

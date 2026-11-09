@@ -14259,6 +14259,124 @@ def system_age(d, project):
     return {"commitsSince": int(n), "since": since} if n and n.isdigit() else None
 
 
+SHARE_TEXT_EXT = (".html", ".htm", ".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".vue", ".svelte", ".astro", ".mdx", ".njk",
+                  ".liquid", ".hbs", ".ejs", ".php", ".erb", ".json", ".yml", ".yaml")   # where a headline is written (Markdown: content folders)
+SHARE_SKIP = {"node_modules", ".git", DEFAULT_DIR, ".next", ".nuxt", ".svelte-kit", ".cache", ".turbo", ".vercel", "vendor"}
+SHARE_BUILD = ("dist/", "out/", "build/", "_site/", ".output/")
+
+
+def share_card_age(d, project, seed=None):
+    """Share images older than what they show (review case EN-09). review.py check saves, per page, the share image, h1,
+    hero picture and logo the browser saw (review/share.json); this dates each against git, read-only: the image file's
+    last commit against the last commit that changed the headline's text, the hero or logo file, or the brand colour in
+    state.json. A file edited since its last commit, or outside git, is dated by its file time. [] without share.json."""
+    import subprocess
+    from urllib.parse import unquote, urlparse
+    path = os.path.join(d, "review", "share.json")
+    if not os.path.exists(path):
+        return []
+    def slurp(p):
+        with open(p, encoding="utf-8", errors="ignore") as f:
+            return f.read()
+    try:
+        pages = (json.loads(slurp(path)) or {}).get("pages") or {}
+    except (OSError, ValueError):
+        return []
+
+    def git(*args):
+        try:
+            r = subprocess.run(["git", "-C", project, *args], capture_output=True, text=True, timeout=30)
+        except (OSError, subprocess.SubprocessError):
+            return None
+        return r.stdout if r.returncode == 0 else None
+
+    out = git("ls-files", "-co", "--exclude-standard", "-z")
+    if out is not None:
+        files = [n for n in out.split("\0") if n]
+    else:
+        files = []
+        for root, dirs, fs in os.walk(project):
+            dirs[:] = [x for x in dirs if x not in SHARE_SKIP]
+            files += [os.path.relpath(os.path.join(root, f), project).replace(os.sep, "/") for f in fs]
+            if len(files) > 20000:
+                break
+    files = [n for n in files if not set(n.split("/")[:-1]) & SHARE_SKIP]
+
+    def changed(rel, needle=None):
+        status = git("status", "--porcelain", "--", rel)
+        edited = bool(status and status.strip())
+        if status is not None and not status.startswith("??"):
+            if edited and needle is not None:   # an edit since the last commit counts only if it touched the text
+                edited = bool((git("diff", "HEAD", "--name-only", "-S", needle, "--", rel) or "").strip())
+            if not edited:
+                o = (git("log", "-1", "--format=%cI %h", *(["-S", needle] if needle is not None else []), "--", rel) or "").split()
+                if o:
+                    return _dt.datetime.fromisoformat(o[0].replace("Z", "+00:00")), f"commit {o[1]}"
+        try:
+            t = _dt.datetime.fromtimestamp(os.path.getmtime(os.path.join(project, rel))).astimezone()
+        except OSError:
+            return None, None
+        return t, ("an uncommitted edit" if edited or (status or "").startswith("??") else "the file's time")
+
+    def file_for(url):
+        if not url or url == "inline svg" or url.startswith("data:"):
+            return None
+        p = unquote(urlparse(url).path).lstrip("/")
+        hits = [f for f in files if p and (f == p or f.endswith("/" + p))]
+        if not hits and p:
+            hits = [f for f in files if f.rsplit("/", 1)[-1] == p.rsplit("/", 1)[-1]]
+            hits = hits if len(hits) == 1 else []
+        return sorted(hits, key=lambda f: (f.startswith(SHARE_BUILD), len(f)))[0] if hits else None   # the source over a build copy
+
+    def headline_files(text):
+        words = re.findall(r"[A-Za-z0-9]+", text or "")[:6]
+        if len(words) < 2:
+            return []
+        rx = re.compile(r"(?:[^A-Za-z0-9<&]|<[^>]*>|&[#A-Za-z0-9]+;)+".join(map(re.escape, words)), re.I)
+        hits = []
+        for rel in files:
+            if not (rel.endswith(SHARE_TEXT_EXT) or (rel.endswith(".md") and {"content", "src", "pages", "posts", "_posts"} & set(rel.split("/")[:-1]))):
+                continue
+            try:
+                if os.path.getsize(os.path.join(project, rel)) > 2_000_000:
+                    continue
+                m = rx.search(slurp(os.path.join(project, rel)))
+            except OSError:
+                continue
+            if m:
+                hits.append((rel, m.group(0)))   # the text exactly as written there, for git's -S
+                if len(hits) >= 8:
+                    break
+        return hits
+
+    stamp = lambda t: t.strftime("%Y-%m-%d %H:%M")
+    found = []
+    for route, pg in sorted(pages.items()):
+        img = file_for(pg.get("image"))
+        when, how = changed(img) if img else (None, None)
+        if not when:
+            continue
+        later = []
+        for rel, needle in headline_files(pg.get("h1")):
+            t, h = changed(rel, needle)
+            if t and t > when:
+                later.append((t, f"the headline \"{(pg.get('h1') or '')[:60]}\" in {rel} ({h}, {stamp(t)})"))
+        for label, url in (("the hero picture", pg.get("hero")), ("the logo", pg.get("logo"))):
+            f = file_for(url)
+            t, h = changed(f) if f and f != img else (None, None)
+            if t and t > when:
+                later.append((t, f"{label} {f} ({h}, {stamp(t)})"))
+        st = os.path.relpath(os.path.join(d, "state.json"), project).replace(os.sep, "/")
+        m = seed and os.path.exists(os.path.join(project, st)) and re.search(re.escape(seed), slurp(os.path.join(project, st)), re.I)
+        t, h = changed(st, m.group(0)) if m else (None, None)
+        if t and t > when:
+            later.append((t, f"the brand colour {seed} in {st} ({h}, {stamp(t)})"))
+        if later:
+            later.sort(key=lambda x: x[0], reverse=True)
+            found.append({"route": route, "image": img, "imageDate": stamp(when), "imageHow": how, "since": [x for _, x in later[:3]]})
+    return found
+
+
 def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     """End-of-implementation check: hard-coded colors, sizes, radii, shadows and durations that bypass tokens (CSS, JSX style
     objects, Tailwind arbitrary values and default scales, SwiftUI, Compose), role-appropriate token suggestions, and stale
@@ -14621,7 +14739,9 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     r_errs, r_notes = research_py.review(d, state) if research_py else ([], [])
     hard = sum(1 for f_ in findings if f_["kind"] not in ("standard", "chart"))
     age = system_age(d, project) if scanned else None
-    result = {"project": project, "filesScanned": scanned, "counts": by, "tokenUses": token_uses, "systemAge": age,
+    seed = (light.get("color.brand.seed") or {}).get("resolved")
+    share = share_card_age(d, project, seed.get("hex") if isinstance(seed, dict) else None)
+    result = {"project": project, "filesScanned": scanned, "counts": by, "tokenUses": token_uses, "systemAge": age, "shareCards": share,
               "tokens": "none" if hard and not token_uses else "losing" if hard > token_uses else "ok",
               "systemBehind": bool(age and age["commitsSince"] >= SYSTEM_AGE_COMMITS),
               "findings": findings[:500], "staleSections": stale,
@@ -14657,6 +14777,10 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             print(f"The system is behind the code: {age['commitsSince']} commits changed code since state.json or DESIGN.md last "
                   f"changed ({age['since']}). Record what the code decided since (engine.py set, then design-md), or bring the code "
                   "back to the tokens, before the next draft.")
+        for s_ in share:
+            print(f"The share image for {s_['route']} is older than what it shows: {s_['image']} dates from {s_['imageDate']} "
+                  f"({s_['imageHow']}); since then {'; '.join(s_['since'])}. Rebuild it from the page as it is now, then post a link "
+                  "once to check the card (review case EN-09).")
         if stdf:
             print(f"{len(stdf)} line{'s' if len(stdf) != 1 else ''} break{'s' if len(stdf) == 1 else ''} a standard:")
             for f_ in stdf[:limit]:

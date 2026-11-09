@@ -165,3 +165,11 @@ The project hand-wrote eleven check scripts for what the review missed, over abo
 **M62. Quieted with opacity.** The device-width numbers on every component page ("Desktop 1280") were set at `opacity: .7`; on the selected tab's tint the number fell to 3.95:1 at 12 px, while the token pair underneath passed at 7.44:1. *Catch:* MS-04 measures the composited colour; use the muted ink instead.
 
 **M63. Links as tall as their text.** On phones the logo and nav links were 22 px tall and the breadcrumb links 18 px, in a 60 px header with room to spare. *Catch:* IN-04 on a phone profile.
+
+## Found auditing a private B2B landing page built with OpenDesigner (2026-11-09)
+
+**M64. A share card a week behind the page.** The share image came from scripts someone had to run by hand, with a version number in its address bumped by hand. For most of a week the card showed an earlier headline, an old accent and a photo the page no longer used, and after the fix the share title still said something the h1 no longer said. Nothing checked it, so each fix waited for the owner to notice. *Catch:* rebuild the card after every change to the hero, headline, accent or logo; `review.py check` for the text and `engine.py review` for the image's date (EN-09).
+
+**M65. llms.txt written for an earlier page.** The same site's robots.txt and llms.txt were written once and never touched again while the page changed. llms.txt described the page from four days earlier: it missed two new sections and kept a claim and a word the owner had since removed. robots.txt let AI-training crawlers in with no recorded decision, and both files sat in a docs folder the site did not serve. The owner: "I hope we keep updating the llms.txt and robots.txt of their website." *Catch:* after every content change, run `search.py audit` and refresh llms.txt, the share text and image, and the sitemap (opendesigner-search, "After every content change").
+
+**M66. Review tools served to visitors.** The live page loaded every design direction from the review rounds and showed the options picker to visitors, and its public folder served two dozen screenshots no page used and a dev script with a local path from the builder's machine. *Catch:* `preflight.py public <build folder>` before each deploy, and `review.py check` on the live address (EN-07).
