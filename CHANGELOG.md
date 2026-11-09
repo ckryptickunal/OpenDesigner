@@ -33,6 +33,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Changed
 
+- **Four open research questions checked at their sources** (2026-11-09). The hover and pressed steps have no published minimum, so they stay an engine estimate. Polaris now publishes keywords, not values, so its old numbers are marked historical. Material 3 tracking for Roboto products, and the Material 3 focus ring (3 px, 2 px outside), now cite Google's own token files.
+- **Light chart shades are for heatmaps** (2026-11-09). The palest `color.chart.sequential` steps stay under 3:1 against the page, and their descriptions and DESIGN.md now say they're only for cells that touch, with a 1 px gap or the value in each cell. `engine.py review` warns when a line uses one ([#81](https://github.com/ckryptickunal/OpenDesigner/issues/81)).
 - **Library page titles fit in search results** (2026-11-08). Every component page title is now 60 characters or fewer, such as "Data table: free, uses your tokens | OpenDesigner".
 - **Plainer library shop** (2026-11-08). The shop's headline says the parts match your design, and lines that repeated what the page shows are gone. Tokens and the `--ds-*` variables come after the plain words.
 - **Shorter showcase captions** (2026-11-07). Each piece on /showcase/ now has a one-sentence caption that says what it shows and who it is for. Captions no longer repeat the brand name from the title or say "fictional", since the page says once that every brand is invented, and none stops mid-sentence.

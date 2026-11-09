@@ -560,7 +560,7 @@ Visual levers a builder can expose as sliders, with their main visible effect:
 
 ## Open questions / gaps
 
-- **Polaris web components pixel values**: the Stack page lists keyword sizes (`small-500` to `large-500`) but I did not find their px values on the pages read [S-L03-006].
+- **Polaris web components pixel values (re-checked 2026-11-09, Polaris v2.0):** padding and gap are keywords only (`small-500` to `large-500` around `base`), and so is radius (`small-200` to `large-200`); no pixel values are published [S-L03-006] [S-L09-849]. The numeric Polaris spacing in this lane is historical (tokens 9.4.2).
 - **Material 3 spacing tokens on web and Views**: marked "Unavailable" for MDC-Android and web; Compose only today [S-L03-030]. Whether Material Web will adopt `md.sys.measurement.space*` is unknown.
 - **Material navigation rail and drawer widths** and Apple layout margin values (for example 16/20pt system margins) were not verified this session; Apple's HIG exposes layout guides but the page read gives no numeric margins for iOS [S-L03-032].
 - **Atlassian avatar pixel sizes** beyond 16px, and Atlassian component heights (for example button default/compact), not verified [S-L03-064].

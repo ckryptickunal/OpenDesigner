@@ -4,6 +4,8 @@ _Lane L09 teardown. Verified against live sources on 2026-09-23. Every value car
 
 > Status note (Sept 2026): Polaris is now a web component library served from Shopify's CDN. Polaris React is deprecated and its repo is archived. The token values below come from `@shopify/polaris-tokens` 9.4.2, the last published token package. Shopify does not publish a CSS token file for the web components [inferred: none found on shopify.dev].
 
+> Re-checked 2026-11-09 (issue 4): the App Home web components are now Polaris v2.0 (`polaris-2.js`). They publish no token values: spacing, radius, border and colour are keyword props (`padding="base"`, `borderRadius="large-100"`, `background="subdued"`), and the merchant's admin theme sets the colours [S-L09-848] [S-L09-849] [S-L09-314]. So every numeric value below from tokens 9.4.2 is **historical**: it describes Polaris React v12-13, not what the web components draw today.
+
 ## Snapshot (this block feeds the benchmark matrix; keep one line per field)
 
 | Field | Value (real values, not adjectives) | Evidence |
@@ -11,17 +13,19 @@ _Lane L09 teardown. Verified against live sources on 2026-09-23. Every value car
 | Owner | Shopify (Polaris team) | [S-L09-304] |
 | Launch and major versions | React 1.0.0 on 2017-04-20. v2 2018-05, v3 2018-11, v4 2019-08, v5 2020-07, v6 2021-01, v7 2021-09, v8 2022-01, v9 2022-02, v10 2022-08, v11 2023-05, v12 2023-10-09 (new admin design language, Inter), v13 2024-04-09. Web components: early access 2025-05-21 (Editions Summer '25), stable 2025-10-01 with API version 2025-10 | [S-L09-300] [S-L09-307] [S-L09-316] [S-L09-315] |
 | Current version (Sept 2026) | Polaris web components 1.1 (`polaris-1.1.js`; the stable channel `polaris-1.js` currently serves 1.1). React `@shopify/polaris` 13.9.5 (2025-03-26) is marked deprecated on npm. Tokens 9.4.2 (2025-03-17) | [S-L09-313] [S-L09-300] [S-L09-301] |
+| Current version (Nov 2026) | Polaris web components v2.0: `https://cdn.shopify.com/shopifycloud/polaris-2.js` is the stable channel for 2.x, `polaris-2.0.js` pins 2.0, and `polaris.js` is the legacy 1.x entry point. A 2.0 bundle follows the merchant's admin theme | [S-L09-848] |
 | Platforms | Shopify surfaces: App Home (iframe and UI extension), Admin UI extensions, Checkout UI extensions, Customer account UI extensions, POS UI extensions | [S-L09-311] |
 | Open source + license | React and tokens: MIT text plus a Shopify clause (use only for apps that integrate with Shopify; stand-alone apps must be "visually distinct" from Shopify). Web components: shipped from `cdn.shopify.com`, no public source repo found | [S-L09-302] [S-L09-313] [inferred] |
 | Code frameworks | Web Components (`s-` custom elements, built on remote-dom; UI extensions scaffold with Preact). TypeScript types in `@shopify/polaris-types`. React library deprecated | [S-L09-314] [S-L09-313] [S-L09-304] |
 | Figma kit | Figma Community files "Polaris components", "Polaris styles", "Polaris icons" (updated for v12). Variables for color, space and size: yes | [S-L09-307] |
 | Token tiers + naming | 2 tiers since v12: primitive and semantic. Grammar `--p-{category}-{concept}-{variant}-{state}`. Primitive: `--p-space-100`, `--p-border-radius-200`, `--p-font-size-325`. Semantic: `--p-color-bg-surface`, `--p-color-text-secondary`, `--p-space-table-cell-padding`, `--p-text-heading-lg-font-size`. Web components use keyword props instead (`padding="base"`, `large-100`) | [S-L09-307] [S-L09-303] [S-L09-317] |
-| Color model | 13 ramps (gray, azure, blue, cyan, green, lime, magenta, orange, purple, red, rose, teal, yellow) x 16 steps (1-16), plus blackAlpha and whiteAlpha. sRGB `rgba()`. 225 `--p-color-*` semantic tokens in light theme. Brand fill is near-black `rgba(48,48,48,1)` (`--p-color-bg-fill-brand`); blue `rgba(0,91,211,1)` is used for emphasis, links and focus | [S-L09-305] [S-L09-303] |
+| Styling vocabulary today (v2.0) | Keywords, no values. Padding and gap: `none`, `small-500`..`small-100`, `small`, `base`, `large`, `large-100`..`large-500`. Radius: `small-200`, `small-100`, `small`, `base`, `large`, `large-100`, `large-200`, `none`. Border width: `small-100`..`large-100`, `none`. Background: `transparent`, `subdued`, `base`, `strong`. Section padding `base` or `none`. Icons: `s-icon` with about 600 names from Shopify's icon library; custom SVGs not supported | [S-L09-849] [S-L09-850] [S-L09-851] |
+| Color model | Historical (tokens 9.4.2). 13 ramps (gray, azure, blue, cyan, green, lime, magenta, orange, purple, red, rose, teal, yellow) x 16 steps (1-16), plus blackAlpha and whiteAlpha. sRGB `rgba()`. 225 `--p-color-*` semantic tokens in light theme. Brand fill is near-black `rgba(48,48,48,1)` (`--p-color-bg-fill-brand`); blue `rgba(0,91,211,1)` is used for emphasis, links and focus | [S-L09-305] [S-L09-303] |
 | Typeface | Inter web font (since v12), then -apple-system, San Francisco, Segoe UI, Roboto. Mono: ui-monospace, SFMono-Regular, SF Mono, Consolas | [S-L09-303] [S-L09-307] |
 | Type scale | 11 named styles: heading 3xl/2xl/xl/lg/md/sm/xs + body lg/md/sm/xs. Body-md = 13px / 20px, weight 450. Sizes 11, 12, 13, 14, 16, 18, 20, 22, 24, 30, 32, 36, 40px. Weights 450 / 550 / 650 / 700. Hand-tuned. Token number / 25 = px (`font-size-400` = 16px) | [S-L09-303] |
-| Spacing | Base 4px (`--p-space-100`). Steps: 0, 025=1, 050=2, 100=4, 150=6, 200=8, 300=12, 400=16, 500=20, 600=24, 800=32, 1000=40, 1200=48, 1600=64, 2000=80, 2400=96, 2800=112, 3200=128px. Semantic: card padding 16, card gap 16, button-group gap 8, table cell 6 | [S-L09-303] |
-| Radius | 0, 050=2, 100=4, 150=6, 200=8, 300=12, 400=16, 500=20, 750=30px, full. Button radius 8px (`--p-border-radius-200`) | [S-L09-303] [S-L09-377] |
-| Elevation | Shadows plus bevels. `--p-shadow-0` none, 100 `0 1px 0 rgba(26,26,26,.07)`, 200 `0 3px 1px -1px .07`, 300 `0 4px 6px -2px .20`, 400 `0 8px 16px -4px .22`, 500 `0 12px 20px -8px .24`, 600 `0 20px 20px -8px .28`. Plus `shadow-bevel-100`, `shadow-inset-100/200` and 12 button shadow tokens (inset highlights) | [S-L09-303] |
+| Spacing | Historical (tokens 9.4.2). Base 4px (`--p-space-100`). Steps: 0, 025=1, 050=2, 100=4, 150=6, 200=8, 300=12, 400=16, 500=20, 600=24, 800=32, 1000=40, 1200=48, 1600=64, 2000=80, 2400=96, 2800=112, 3200=128px. Semantic: card padding 16, card gap 16, button-group gap 8, table cell 6 | [S-L09-303] |
+| Radius | Historical (tokens 9.4.2). 0, 050=2, 100=4, 150=6, 200=8, 300=12, 400=16, 500=20, 750=30px, full. Button radius 8px (`--p-border-radius-200`) | [S-L09-303] [S-L09-377] |
+| Elevation | Historical (tokens 9.4.2). Shadows plus bevels. `--p-shadow-0` none, 100 `0 1px 0 rgba(26,26,26,.07)`, 200 `0 3px 1px -1px .07`, 300 `0 4px 6px -2px .20`, 400 `0 8px 16px -4px .22`, 500 `0 12px 20px -8px .24`, 600 `0 20px 20px -8px .28`. Plus `shadow-bevel-100`, `shadow-inset-100/200` and 12 button shadow tokens (inset highlights) | [S-L09-303] |
 | Motion | Durations 0 to 500ms in 50ms steps, plus 5000ms. `ease-in` cubic-bezier(0.42,0,1,1), `ease-out` (0.19,0.91,0.38,1), `ease-in-out` (0.42,0,0.58,1). Keyframes: bounce, fade-in, pulse, spin, appear-above, appear-below. No springs. No reduced-motion rule found in the archived motion guidance | [S-L09-303] [S-L09-345] |
 | Theming + modes | Token CSS ships `.p-theme-light` (default), `.p-theme-light-mobile`, `.p-theme-light-high-contrast-experimental`, `.p-theme-dark-experimental`. Switched by class. No brand theming: apps are meant to look native to the admin. Web component theming: not public | [S-L09-303] [S-L09-304] |
 | Component count | Web components (App Home): 50 on 2026-09-23, counted from shopify.dev index links (6 actions, 5 feedback, 17 forms, 10 layout, 4 media, 2 overlays, 6 typography). Plus 4 App Bridge components and 15 patterns. POS surface had 31 at GA. Archived React docs: 67 current + 22 deprecated + 7 internal pages | [S-L09-312] [S-L09-315] [S-L09-306] |
@@ -45,6 +49,7 @@ _Lane L09 teardown. Verified against live sources on 2026-09-23. Every value car
 - 2025-10-01: web components stable with API 2025-10. +14 App Home components, +36 for Checkout and Customer Accounts, new POS surface with 31 components. [S-L09-315]
 - 2026-08-04/05: polaris.shopify.com converted to a static archive on GitHub Pages; npm deprecation workflow added. The repo is now `Shopify/polaris-react-archive` (archived). polaris.shopify.com 301-redirects to shopify.dev/docs/api/polaris. [S-L09-304] [S-L09-318]
 - By Sept 2026: versioned script tags `polaris-1.0.js`, `polaris-1.1.js`, channel `polaris-1.js`. [S-L09-313]
+- By Nov 2026: Polaris v2.0 (`polaris-2.js`, `polaris-2.0.js`); `polaris.js` kept as the legacy 1.x entry point. [S-L09-848]
 
 ## Builder takeaways
 - Offer a "pro admin" preset: neutral R=G=B grays, near-black primary, blue reserved for links/focus, 13px body, 8px radius, bevel shadows on buttons.
@@ -54,7 +59,7 @@ _Lane L09 teardown. Verified against live sources on 2026-09-23. Every value car
 
 ## Gaps / unverified
 - The exact release date of Polaris web components 1.1 is not shown on the versioning page.
-- No public token file for the web components, so current (post-React) color and radius values may differ from tokens 9.4.2.
-- Dark mode exists only as `dark-experimental` in the token CSS; web component dark mode is not documented.
+- Confirmed 2026-11-09: the v2.0 web components publish keywords only, with no pixel or colour values, and their CSS can't be overridden [S-L09-849] [S-L09-314]. Today's sizes behind each keyword are unknown.
+- Dark mode: the token CSS had only `dark-experimental`; the v2.0 docs say a bundle "follows whichever theme the merchant's admin is using" and document no dark-mode values [S-L09-848].
 - No current Figma kit for the web components was confirmed; the Figma links are from the v12 (2023) release notes.
 - The Medium "Uplifting Shopify Polaris" article returned HTTP 403, so v12 details come from Shopify's own release notes only.

@@ -3453,7 +3453,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Control:** single choice + width/offset numbers
 - **Options:**
   - `outer-2-2` 2px ring, 2px gap, corners = the part's radius + the gap (Atlassian radius.focus, Primer 2px) [S-L04-016, S-L04-024].
-  - `material-3` 3px ring, 2px gap outside, or -3px inside where an outer ring would be cut off (Material 3) [S-L04-003].
+  - `material-3` 3px ring, 2px gap outside, or -3px inside where an outer ring would be cut off (Material 3) [S-L04-003; S-L08-123].
   - `inset` Border drawn inside, for tight grids (Carbon $focus + $focus-inset) [S-L08-062].
   - `two-tone` Two-tone ring (inner white, outer dark) that is 3:1 on every surface [DC-L08-11].
 - **Default:** outer-2-2 in a high-contrast brand or neutral color with light and dark values, plus a forced-colors fallback (an outline, not a box-shadow alone). *Source:* card heuristics and accessibility rule [DC-L04-09, DC-L08-11; S-L10-031].
