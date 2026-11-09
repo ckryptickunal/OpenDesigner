@@ -221,11 +221,11 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 | `color.chart.label` | `#515762` | `#a5abb8` | Tick labels, axis titles and legends: text, so they keep the text minimum. |
 | `color.chart.neutral` | `#6f7683` | `#7c8290` | Other, baseline or comparison series. |
 | `color.chart.reference` | `#6f7683` | `#7c8290` | Target, threshold and average lines. |
-| `color.chart.sequential.1` | `#e5ebff` | `#1f2641` |  |
-| `color.chart.sequential.2` | `#cedaff` | `#28346a` |  |
-| `color.chart.sequential.3` | `#b8c8ff` | `#313f99` |  |
-| `color.chart.sequential.4` | `#4a5cf0` | `#6078ff` |  |
-| `color.chart.sequential.5` | `#3a49c1` | `#91a8ff` |  |
+| `color.chart.sequential.1` | `#e5ebff` | `#1f2641` | Under 3:1 against the page: for cells that touch, as in a heatmap, with a 1 px gap between cells that shows the surface behind, or the value in each cell; never for a line, bar or dot on its own (WCAG 1.4.11). |
+| `color.chart.sequential.2` | `#cedaff` | `#28346a` | Under 3:1 against the page: for cells that touch, as in a heatmap, with a 1 px gap between cells that shows the surface behind, or the value in each cell; never for a line, bar or dot on its own (WCAG 1.4.11). |
+| `color.chart.sequential.3` | `#b8c8ff` | `#313f99` | Under 3:1 against the page: for cells that touch, as in a heatmap, with a 1 px gap between cells that shows the surface behind, or the value in each cell; never for a line, bar or dot on its own (WCAG 1.4.11). |
+| `color.chart.sequential.4` | `#4a5cf0` | `#6078ff` | At least 3:1 against the page: also for a line, bar or dot. |
+| `color.chart.sequential.5` | `#3a49c1` | `#91a8ff` | At least 3:1 against the page: also for a line, bar or dot. |
 | `color.chart.status.danger` | `#d93834` | `#da5b51` | Danger in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1). |
 | `color.chart.status.discovery` | `#9b40ff` | `#a263f8` | Discovery in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1). |
 | `color.chart.status.info` | `#007cb7` | `#008bcd` | Info in a chart: pair it with a label or pattern, never color alone (WCAG 1.4.1). |
@@ -276,7 +276,7 @@ Designers: primary or brand accent · Code: `color.bg.accent`
 - Use one solid accent fill per view for the primary action; spend chroma on small, meaningful elements.
 - Avoid gray text on colored fills; use the matching `text.on-*` role.
 - Avoid color as the only signal: pair status colors with an icon or label.
-- Charts: `color.chart.brand` for a chart with one series; `color.chart.categorical.*` in order for groups; `color.chart.sequential.*` for amounts; `color.chart.diverging.1-7` for values below and above a midpoint (4 is the midpoint); `color.chart.status.*` for success, warning and danger, always with a label; `color.chart.neutral` for other and baselines. Axes use `color.chart.axis`, gridlines `color.chart.gridline`, tick labels and legends `color.chart.label`, targets `color.chart.reference`; other series fade to `opacity.chart.dimmed` while one is hovered. Every mark is at least 3:1 against the page; marks are not 3:1 against each other, so keep a gap or a line between neighbours (DC-L05-23, DC-L05-24).
+- Charts: `color.chart.brand` for a chart with one series; `color.chart.categorical.*` in order for groups; `color.chart.sequential.*` for amounts; `color.chart.diverging.1-7` for values below and above a midpoint (4 is the midpoint); `color.chart.status.*` for success, warning and danger, always with a label; `color.chart.neutral` for other and baselines. Axes use `color.chart.axis`, gridlines `color.chart.gridline`, tick labels and legends `color.chart.label`, targets `color.chart.reference`; other series fade to `opacity.chart.dimmed` while one is hovered. A mark that stands alone on the page (a line, a bar, a dot) is at least 3:1 against it (WCAG 1.4.11). The light end of `color.chart.sequential` (steps 1-3) is under 3:1, so use it only for cells that touch, as in a heatmap, with a 1 px gap between cells that shows the surface behind, or the value in each cell; never for a line, bar or dot on its own. Marks are not 3:1 against each other, so keep a gap or a line between neighbours (DC-L05-23, DC-L05-24).
 
 **Tailwind classes:** `bg-action-primary`, `hover:bg-action-primary-hover`, `active:bg-action-primary-pressed`, `text-on-action`, `bg-surface-base`, `bg-surface-raised`, `text-fg-primary`, `text-fg-secondary`, `text-fg-link`, `border-line-subtle`, `border-line-input`, `outline-line-focus`, `bg-danger-bold`.
 
