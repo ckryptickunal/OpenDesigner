@@ -1,6 +1,6 @@
 ---
 name: opendesigner-export
-description: Exports an OpenDesigner system to CSS variables, Tailwind, DTCG, Swift, Compose, Figma and Paper, and writes it into Figma or Paper through their MCP servers when connected.
+description: Exports an OpenDesigner system to CSS variables, Tailwind, DTCG, Swift, Compose, Figma or Paper, and writes it into Figma or Paper when connected. Use for "export tokens" or "put it in Figma".
 license: MIT
 compatibility: Python 3.10+ (standard library). Figma writes need Figma's remote MCP (signed in, Full seat); Paper writes need Paper Desktop running.
 metadata:

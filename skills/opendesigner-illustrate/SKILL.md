@@ -1,6 +1,6 @@
 ---
 name: opendesigner-illustrate
-description: Finds open-licence illustrations and stock photos, recolors art to the tokens and wires it in. Also adds icons drawn like the few a product already has, from open sets, with their licences.
+description: Illustrations, stock photos and icons. Finds open-licence art, recolours it to the tokens and wires it in (empty states, onboarding, hero), with a licence ledger. Draws icons like a product's own.
 license: MIT
 compatibility: Python 3.10+ (standard library). Search and fetch need HTTPS access. A browser or image view helps you judge candidates; web search finds more sources.
 metadata:

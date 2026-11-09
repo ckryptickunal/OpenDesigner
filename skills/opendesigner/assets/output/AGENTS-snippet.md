@@ -1,7 +1,14 @@
 ## Design system (OpenDesigner)
-This project's design system lives in `opendesigner/`, and `DESIGN.md` is its living spec.
+This project's design system lives in `opendesigner/`, and `DESIGN.md` is its living spec. `engine.py` below means `python3 <opendesigner skill>/scripts/engine.py`, from the OpenDesigner skill or plugin.
 
-**`opendesigner/PROTOCOL.md` is binding.** Follow its steps, gates and checks in every session, whoever you are. Read `opendesigner/RULES.md` before each round: it holds the owner's repeated notes.
+**`opendesigner/PROTOCOL.md` is binding.** Follow its steps, gates and checks in every session, whoever you are.
+
+**Every session and every round**
+1. **DESIGN.md first.** Read `DESIGN.md`, then `opendesigner/RULES.md` (the owner's repeated notes) and `opendesigner/PROTOCOL.md`, before any UI work. Read RULES.md again at the start of every round.
+2. **After a context reset or in a new session,** run `engine.py status`. It prints the step, what waits for the owner and the next command.
+3. **Review before every draft and every commit.** Run `engine.py review`, fix what it reports, then re-read the DESIGN.md sections you touched.
+4. **Owner notes go to `engine.py feedback "<the rule, one line>" --kind note`.** Said twice, a note becomes a rule in RULES.md: apply it everywhere.
+5. **One question at a time,** one per message and one per call of a question tool.
 
 **Before any UI, styling or visual work**
 1. Read `DESIGN.md` and `PRODUCT.md` at the project root.
@@ -11,7 +18,7 @@ This project's design system lives in `opendesigner/`, and `DESIGN.md` is its li
 5. Follow the standards listed in DESIGN.md (for example: which easing, which properties to animate, which library for toasts). They are rules, not suggestions. Only the owner can change one, and only when they ask: `engine.py standard override <id> --why "<their words>"` for one value, or `engine.py standard add ... --beats <id>` when their own rule always wins. `engine.py set --force` never changes a standard's value.
 
 **At the end of every implementation** (a page, a component, a refactor)
-1. Run `python3 <opendesigner skill>/scripts/engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard, DESIGN.md sections that are out of date, code that uses no tokens, and a system older than the code.
+1. Run `engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard, DESIGN.md sections that are out of date, code that uses no tokens, and a system older than the code.
 2. Re-read the DESIGN.md sections you touched.
 3. If the work needed a value the system lacks, add it as a decision: `engine.py set <path> <value> --why "..."`, then `engine.py design-md`. Don't inline it.
 4. Fix any drift `review` reports before the next draft.

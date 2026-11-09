@@ -1,6 +1,6 @@
 ---
 name: opendesigner-paint
-description: Turns a design system into original painted art made in code (watercolour, pointillism, charcoal, sketch, woodcut, 2D cel): hero films, launch reels, loops and paintings in the brand's palette.
+description: Original art painted in code in the brand's palette. A hero or launch film, a celebration loop, or a still in watercolour, pointillism, charcoal, sketch, woodcut or 2D cel.
 license: MIT
 compatibility: Python 3.10+ (standard library) for the bridge. Painting runs the bundled engine in a film project and needs Node 18+, npm packages, Playwright's Chromium and ffmpeg, installed with the person's OK.
 metadata:

@@ -1,6 +1,6 @@
 ---
 name: opendesigner-review
-description: Checks a built UI like a careful user would: every screen size and theme, scrolling, hover, keyboard, motion frames, and measured spacing, type, fonts and contrast. Reports findings with evidence.
+description: Audits every draft of a built UI before it is shown, like a careful user. Every screen size and theme, scroll, hover, keyboard, motion, measured spacing, type and contrast. "Review this", "QA this".
 license: MIT
 compatibility: Python 3.10+ (standard library) for the helper. A browser the agent can drive (Playwright, Chrome DevTools MCP, Claude in Chrome, the in-app browser) for the capture. capture.py also needs Playwright for Python, which the skill never installs on its own.
 metadata:

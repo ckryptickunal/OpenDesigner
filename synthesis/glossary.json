@@ -1593,7 +1593,7 @@
   "term": "AGENTS.md snippet",
   "plain": "A short note, added only if you say yes, that tells new AI helpers to read your design rules first.",
   "designer": "Keeps later AI sessions on-system: they read the design guide and values before touching UI, stop hard-coding values, and ask before changing locked decisions.",
-  "engineer": "assets/output/AGENTS-snippet.md, appended to AGENTS.md or CLAUDE.md after asking: read DESIGN.md, PRODUCT.md and tokens first, never hard-code values, run engine.py review after implementation.",
+  "engineer": "engine.py handoff writes it into AGENTS.md and CLAUDE.md imports it: read DESIGN.md and RULES.md first, no hard-coded values, review before each draft and commit.",
   "designer_says": "rules for later AI sessions",
   "code_name": "assets/output/AGENTS-snippet.md",
   "example": "A new AI session reads it before styling a page.",

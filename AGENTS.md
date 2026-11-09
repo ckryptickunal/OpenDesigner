@@ -73,6 +73,8 @@ python3 skills/opendesigner/scripts/engine.py build     (generate + validate; if
 python3 skills/opendesigner/scripts/engine.py overview --open   (overview.html: the person's whole system on one page; what is missing says "Not enough information")
 python3 skills/opendesigner/scripts/engine.py review    (end of every implementation: hard-coded values, whether tokens are in charge, a system behind the code, standards, stale DESIGN.md; reports only, edits nothing)
 python3 skills/opendesigner/scripts/engine.py version   (this copy's release, and whether the system was made or built with an older one; never checks online)
+python3 skills/opendesigner/scripts/engine.py status    (the Now line: the step, what waits for the owner, the next command; first after a context reset or in a new session)
+python3 skills/opendesigner/scripts/engine.py handoff yes|no   (after asking once: the AGENTS.md snippet and a CLAUDE.md that imports it, or nothing; recorded either way)
 python3 skills/opendesigner/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea   (--kind note: the owner's note on the work, counted in opendesigner/RULES.md)
 python3 skills/opendesigner/scripts/engine.py research plan --brief "..." --tools web-search,browser,last30days   (then research add <findings.json> [--accept], or research skip --why "...")
 ```
@@ -95,9 +97,9 @@ Use the skill's own folder path when it is installed elsewhere (for example a pl
   - `opendesigner/overview.html`: the person's own design-system page, rebuilt by every `build`, with the visual templates filled in `opendesigner/preview/`
   - `DESIGN.md` and `PRODUCT.md` at the project root
   - `opendesigner/decisions.md`, `opendesigner/state.json`, `opendesigner/RATIONALE.md`
-  - `opendesigner/PROTOCOL.md` (written at `init`: six steps with owner gates, and the checks every round runs) and `opendesigner/RULES.md` (the owner's notes; said twice, a rule)
+  - `opendesigner/PROTOCOL.md` (written at `init`: six steps with owner gates, the checks every round runs, and a Now line the engine keeps current; `engine.py status` prints it) and `opendesigner/RULES.md` (the owner's notes; said twice, a rule)
   - `opendesigner/research/users.json` and `users.md`: the user research, with its sources
-  - an AGENTS.md snippet (`skills/opendesigner/assets/output/AGENTS-snippet.md`), added after asking
+  - the hand-off: the AGENTS.md snippet (`skills/opendesigner/assets/output/AGENTS-snippet.md`) and a CLAUDE.md that imports it, written by `engine.py handoff yes` after asking once (a no is recorded too)
 - DESIGN.md is living: refresh it after every confirmed decision; at the end of every implementation run `engine.py review` and re-read it.
 - When a step is missing, wrong or confusing, follow `skills/opendesigner/references/improve.md`: record it with `engine.py feedback`; nothing is posted without the person's OK.
 

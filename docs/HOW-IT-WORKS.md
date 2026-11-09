@@ -223,7 +223,7 @@ The source of truth is `opendesigner/state.json` plus the DTCG tokens made from 
 | `opendesigner/coverage.md`, asset briefs | Every block's status; briefs a designer can act on |
 | `opendesigner/state.json`, `overview.html`, `preview.html` | Continue later; see your whole system on one page (`overview.html` grows with every decision and marks what is still missing) and every token (`preview.html`) |
 
-This is the full contract from [SPEC.md section 7](SPEC.md#7-outputs). Today `build` writes tokens, exports, `DESIGN.md`, `PRODUCT.md`, the decision log, `state.json`, `PROTOCOL.md`, the standards, the overview and the preview. `coverage.md` and asset briefs are not written yet. The skill also writes `RATIONALE.md` from a template and, if you agree, adds a snippet to your `AGENTS.md`.
+This is the full contract from [SPEC.md section 7](SPEC.md#7-outputs). Today `build` writes tokens, exports, `DESIGN.md`, `PRODUCT.md`, the decision log, `state.json`, `PROTOCOL.md`, the standards, the overview and the preview. `coverage.md` and asset briefs are not written yet. The skill also writes `RATIONALE.md` from a template. If you agree, `engine.py handoff yes` writes a short note into your `AGENTS.md` and a `CLAUDE.md` that imports it, so later sessions follow the system after a context reset.
 
 ## 9. Keeping it coherent later
 

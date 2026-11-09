@@ -5013,5 +5013,106 @@ class DialLinesMatchTheTokens(unittest.TestCase):
             self.assertIn(words, drives[param].get("note", ""), param)
 
 
+class SurvivesContextResets(unittest.TestCase):
+    """Real projects (2026-11-09): after a context reset Claude stopped using OpenDesigner. The rules lived only in chat, the
+    re-attached skill was cut at 20,000 characters, and no project file carried them. So: binding rules first in SKILL.md,
+    a Now line in PROTOCOL.md that the engine keeps current, engine.py status, and a hand-off file every host reads."""
+
+    def protocol(self, d):
+        with open(os.path.join(d, "PROTOCOL.md"), encoding="utf-8") as f:
+            return f.read()
+
+    def test_commands_that_change_the_system_keep_the_now_line(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.main, ["--dir", d, "init", "--name", "P"])
+            text = self.protocol(d)
+            self.assertEqual(text.count("**Now:**"), 1)
+            self.assertIn("**Now:** step 1 Discover", text)
+            self.assertIn("Last engine command: `init`", text)
+            self.assertIn("the log question", text)
+            quiet(e.main, ["--dir", d, "review"])  # read-only commands never touch it
+            quiet(e.main, ["--dir", d, "status"])
+            self.assertEqual(self.protocol(d), text)
+            with open(os.path.join(d, "PROTOCOL.md"), "w", encoding="utf-8") as f:
+                f.write(text.replace("| The brief | [ ] |", "| The brief | [x] 2026-11-09 |"))
+            quiet(e.main, ["--dir", d, "set", "dials.roundness", "40", "--why", "test"])
+            text = self.protocol(d)
+            self.assertIn("**Now:** step 2 Research", text)
+            self.assertIn("Last engine command: `set`", text)
+            self.assertEqual(text.count("**Now:**"), 1)
+
+    def test_status_prints_the_step_the_wait_and_the_next_command(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(e.cmd_status(d), 0)
+            self.assertIn("No OpenDesigner system", out.getvalue())
+            quiet(e.main, ["--dir", d, "init", "--name", "P"])
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            quiet(e.cmd_build, d)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_status(d)
+            said = out.getvalue()
+            for bit in ("Now: step 1 Discover", "Waiting for the owner:", "hand-off", "Next:", "handoff yes", "engine.py review"):
+                self.assertIn(bit, said)
+            f = e.now_facts(d)
+            self.assertEqual(f["step"], "step 1 Discover")
+
+    def test_handoff_writes_agents_and_claude_once_and_records_either_answer(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="P")
+            with open(os.path.join(t, "CLAUDE.md"), "w", encoding="utf-8") as f:
+                f.write("# Ours\n\nKeep it short.\n")
+            quiet(e.cmd_handoff, d, "yes", "yes please")
+            quiet(e.cmd_handoff, d, "yes")
+            with open(os.path.join(t, "AGENTS.md"), encoding="utf-8") as f:
+                agents = f.read()
+            with open(os.path.join(t, "CLAUDE.md"), encoding="utf-8") as f:
+                claude = f.read()
+            self.assertEqual(agents.count(e.HANDOFF_START), 1)
+            self.assertIn("engine.py status", agents)
+            self.assertIn("--kind note", agents)
+            self.assertIn("Keep it short.", claude)
+            self.assertEqual(claude.count("@AGENTS.md"), 1)
+            self.assertEqual(e.load_state(d)["profile"]["handoff"], "yes")
+            self.assertEqual(e.handoff_reminder(e.load_state(d)), "")
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="P")
+            self.assertIn("handoff yes", e.handoff_reminder(e.load_state(d)))
+            quiet(e.cmd_handoff, d, "no")
+            self.assertFalse(os.path.exists(os.path.join(t, "AGENTS.md")))
+            self.assertFalse(os.path.exists(os.path.join(t, "CLAUDE.md")))
+            self.assertEqual(e.load_state(d)["profile"]["handoff"], "no")
+
+    def test_an_older_protocol_gets_the_now_block_under_its_first_paragraph(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="P")
+            fp = os.path.join(d, "PROTOCOL.md")
+            text = re.sub(r"<!-- od:now.*?<!-- /od:now -->\n", "", self.protocol(d), flags=re.S)
+            self.assertNotIn("**Now:**", text)
+            with open(fp, "w", encoding="utf-8") as f:
+                f.write(text)
+            e.refresh_now(d, "build")
+            new = self.protocol(d)
+            self.assertLess(new.index("How work runs"), new.index("**Now:**"))
+            self.assertLess(new.index("**Now:**"), new.index("## Six steps"))
+            self.assertIn("Last engine command: `build`", new)
+
+    def test_skill_md_fits_the_reattach_cap_with_binding_rules_first(self):
+        with open(os.path.join(e.SKILL_ROOT, "SKILL.md"), encoding="utf-8") as f:
+            skill = f.read()
+        self.assertLess(len(skill), 20000)  # re-attached after compaction only up to about this length
+        head = skill[:2500].lower()
+        for bit in ("tokens only", "one question per call", "engine.py review", "design.md", "--kind note", "protocol.md",
+                    "rules.md", "engine.py status", "handoff"):
+            self.assertIn(bit, head, bit)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)
