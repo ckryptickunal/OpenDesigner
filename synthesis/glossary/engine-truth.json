@@ -400,6 +400,7 @@
   "--from",
   "--from-journey",
   "--help",
+  "--hook",
   "--json",
   "--kind",
   "--lock",

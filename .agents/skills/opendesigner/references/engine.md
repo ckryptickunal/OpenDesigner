@@ -34,6 +34,7 @@ python3 <skill>/scripts/engine.py standard add --rule "..." --why "..." --source
 python3 <skill>/scripts/engine.py standard remove PRJ-<nn> --why "..."   project standards only
 python3 <skill>/scripts/engine.py version                    this copy's release, and whether the system here is older, newer or up to date
 python3 <skill>/scripts/engine.py status [--json]           the Now line: the step, what waits for the owner and the next command; first after a context reset or in a new session
+python3 <skill>/scripts/engine.py status --hook             the same in five lines, and nothing without a system: the Claude Code plugin's start-of-session hook runs it
 python3 <skill>/scripts/engine.py handoff [yes|no] [--why "..."]   after asking once: yes writes the OpenDesigner note into AGENTS.md and a CLAUDE.md that imports it, no writes nothing; recorded either way
 ```
 

@@ -1351,6 +1351,34 @@ DIVERGING_RATIOS = (9.0, 6.0, 4.0, 3.2, 4.0, 6.0, 9.0)  # contrast with the page
 # mid neutral that still reaches 3:1, so every step is a visible mark (WCAG 1.4.11) [inferred: Carbon and ColorBrewer use a light
 # middle that fails 3:1, S-L05-075, S-L05-088]
 DIVERGING_CHROMA = (1.0, 0.8, 0.6, None, 0.6, 0.8, 1.0)  # share of the chart chroma; None: the neutral's own tint
+# color.chart.sequential.1-5 are these accent steps. The light end stays under 3:1 against the page on purpose (owner,
+# 2026-11-09, issue #81: "Keep, add separators"): it is for cells that touch, as in a heatmap, with a 1 px gap between cells
+# or the value in each cell. A mark that stands alone on the page (a line, a bar, a dot) needs 3:1 (WCAG 2.2 SC 1.4.11).
+CHART_SEQ_STEPS = (3, 5, 7, 9, 11)
+SEQ_CELLS = ("for cells that touch, as in a heatmap, with a 1 px gap between cells that shows the surface behind, or the "
+             "value in each cell; never for a line, bar or dot on its own")
+
+
+def light_sequential(hexes, page):
+    """Which color.chart.sequential steps (1-5) are under 3:1 against the page: hexes in step order, page a hex."""
+    return [i + 1 for i, hx in enumerate(hexes) if hx and contrast(hx, page) < 3.0 * MARGIN]
+
+
+def light_sequential_resolved(res):
+    """light_sequential for one mode's resolved tokens (resolve_all); [] when the system has no chart palette."""
+    if not res or "color.chart.sequential.1" not in res or "color.surface.base" not in res:
+        return []
+    return light_sequential([hex_of(res[f"color.chart.sequential.{i}"]["resolved"]) if f"color.chart.sequential.{i}" in res else None
+                             for i in range(1, len(CHART_SEQ_STEPS) + 1)], hex_of(res["color.surface.base"]["resolved"]))
+
+
+def step_span(steps):
+    """[1, 2, 3] -> "steps 1-3"; [1] -> "step 1"; [1, 3] -> "steps 1 and 3"."""
+    if len(steps) == 1:
+        return f"step {steps[0]}"
+    if steps == list(range(steps[0], steps[-1] + 1)):
+        return f"steps {steps[0]}-{steps[-1]}"
+    return "steps " + ", ".join(map(str, steps[:-1])) + f" and {steps[-1]}"
 
 
 def diverging_colors(low_hue, high_hue, chroma, mid, bg_y, light):
@@ -2069,11 +2097,16 @@ def build_color_semantic(ctx, mode):
         def mark(name, why):  # the first solid step from 9 that a chart mark can use: 3:1 against the page (WCAG 1.4.11)
             step = next((s_ for s_ in (9, 10, 11) if contrast(ctx.ramp(name, mode).steps[s_]["hex"], page) >= 3.0 * MARGIN), 11)
             return tok(r(name, step), why)
-        chart = {"$description": "Chart colors (Q-color-19): marks at least 3:1 against the page (WCAG 1.4.11). Categorical colors in a "
-                                 "fixed order, a sequential ramp from the accent, a diverging ramp around a midpoint, status colors, and "
-                                 "the chart's axis, gridline and label colors, which point at the border and text roles (DC-L05-23, DC-L05-24).",
+        light_seq = light_sequential([ctx.ramp("accent", mode).steps[s_]["hex"] for s_ in CHART_SEQ_STEPS], page)
+        chart = {"$description": "Chart colors (Q-color-19). A mark that stands alone on the page (a line, a bar, a dot) is at least 3:1 "
+                                 "against it (WCAG 1.4.11)" + (f"; sequential {step_span(light_seq)} are under 3:1, so they are only {SEQ_CELLS}. " if light_seq else ". ")
+                                 + "Categorical colors in a fixed order, a sequential ramp from the accent, a diverging ramp around a midpoint, "
+                                 "status colors, and the chart's axis, gridline and label colors, which point at the border and text roles "
+                                 "(DC-L05-23, DC-L05-24).",
                  "brand": mark("accent", "A chart with one series: the brand color (DC-L05-23)."),
-                 "sequential": {str(i + 1): tok(r("accent", s_)) for i, s_ in enumerate((3, 5, 7, 9, 11))},
+                 "sequential": {str(i + 1): tok(r("accent", s_), f"Under 3:1 against the page: {SEQ_CELLS} (WCAG 1.4.11)." if i + 1 in light_seq else
+                                                "At least 3:1 against the page: also for a line, bar or dot.")
+                                for i, s_ in enumerate(CHART_SEQ_STEPS)},
                  "neutral": tok(n(9), "Other, baseline or comparison series.")}
         if cp == "brand-gray":
             chart["categorical"] = {"1": mark("accent", "The brand series: the same step as color.chart.brand."),
@@ -5600,10 +5633,15 @@ def now_facts(d, state=None, text=None):
             "waiting": waiting, "next": nxt, "last": {"command": last.group(1), "date": last.group(2)} if last else None}
 
 
-def now_block(f):
+def now_text(f, bold=True):
+    b = "**" if bold else ""
     last = f" Last engine command: `{f['last']['command']}` ({f['last']['date']})." if f.get("last") else ""
-    return (f"{NOW_START}\n**Now:** {f['step']}. **Waiting for the owner:** {'; '.join(f['waiting']) or 'nothing the engine can see'}. "
-            f"**Next:** {f['next']}.{last}\n{NOW_END}\n")
+    return (f"{b}Now:{b} {f['step']}. {b}Waiting for the owner:{b} {'; '.join(f['waiting']) or 'nothing the engine can see'}. "
+            f"{b}Next:{b} {f['next']}.{last}")
+
+
+def now_block(f):
+    return f"{NOW_START}\n{now_text(f)}\n{NOW_END}\n"
 
 
 def refresh_now(d, command=None):
@@ -5631,9 +5669,13 @@ def refresh_now(d, command=None):
         return None
 
 
-def cmd_status(d, as_json=False):
-    """`engine.py status`: the Now line and what to read before the next round. Read-only: it writes nothing."""
+def cmd_status(d, as_json=False, hook=False):
+    """`engine.py status`: the Now line and what to read before the next round. Read-only: it writes nothing.
+    hook: the plugin's SessionStart hook (hooks/hooks.json). Nothing at all without a system; otherwise five short lines
+    that go into Claude's context at startup, on resume, after /clear and after compaction."""
     if not os.path.exists(os.path.join(d, STATE_FILE)):
+        if hook:
+            return 0
         msg = f"No OpenDesigner system in {d} (no {STATE_FILE}). To start one: engine.py init"
         print(json.dumps({"system": None, "message": msg}) if as_json else msg)
         return 0
@@ -5642,6 +5684,16 @@ def cmd_status(d, as_json=False):
     notes = read_notes(os.path.join(d, "RULES.md"))
     rules = sum(1 for n in notes if n["said"] >= 2)
     root = doc_dir(d)
+    if hook:
+        print(f"OpenDesigner: this project has a design system, {state.get('name')}, in opendesigner/. Use the opendesigner "
+              "skills for any UI, styling or visual work.")
+        print(now_text(f, bold=False))
+        print(f"Owner notes in opendesigner/RULES.md: {rules} rule{'s' if rules != 1 else ''} and {len(notes) - rules} "
+              f"note{'s' if len(notes) - rules != 1 else ''}." if notes else "No owner notes in opendesigner/RULES.md yet.")
+        print("Read DESIGN.md and opendesigner/RULES.md first; end every implementation with engine.py review and a re-read "
+              "of DESIGN.md; owner corrections go to engine.py feedback \"<the rule>\" --kind note.")
+        print("engine.py here is: python3 " + shlex.quote(os.path.abspath(__file__)))
+        return 0
     read = [p for p in (os.path.join(d, "PROTOCOL.md"), os.path.join(d, "RULES.md"), os.path.join(root, "DESIGN.md")) if os.path.exists(p)]
     if as_json:
         print(json.dumps(dict(f, system=state.get("name"), dir=d, read=read, rules=rules, notes=len(notes) - rules,
@@ -11075,6 +11127,11 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
         if light[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon|overlay|chart|workflow)\.", p):
             lv, dv = _hex_pair(light, dark, p)
             rows.append((f"`{p}`", lv, dv, light[p]["$description"]))
+    seq_by_mode = {m_: light_sequential_resolved(res_) for m_, res_ in (("light", light), ("dark", dark)) if res_}
+    seq_steps = sorted({x for v in seq_by_mode.values() for x in v})
+    seq_where = "" if not seq_steps else (step_span(seq_steps) if len({tuple(v) for v in seq_by_mode.values()}) == 1 else
+                                          "; ".join(f"{step_span(v)} in {m_}" for m_, v in seq_by_mode.items() if v))
+    seq_rule = (f" The light end of `color.chart.sequential` ({seq_where}) is under 3:1, so use it only {SEQ_CELLS}." if seq_steps else "")
     nl = [luminance(hx) for hx in meta["ramps"]["neutral"]["light"]["hex"]]
     step_rows = []
     for fg in (8, 9, 10, 11, 12):
@@ -11111,8 +11168,9 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
              "`color.chart.sequential.*` for amounts; `color.chart.diverging.1-7` for values below and above a midpoint (4 is the midpoint); "
              "`color.chart.status.*` for success, warning and danger, always with a label; `color.chart.neutral` for other and baselines. "
              "Axes use `color.chart.axis`, gridlines `color.chart.gridline`, tick labels and legends `color.chart.label`, targets "
-             "`color.chart.reference`; other series fade to `opacity.chart.dimmed` while one is hovered. Every mark is at least 3:1 against "
-             "the page; marks are not 3:1 against each other, so keep a gap or a line between neighbours (DC-L05-23, DC-L05-24)."
+             "`color.chart.reference`; other series fade to `opacity.chart.dimmed` while one is hovered. A mark that stands alone on the "
+             "page (a line, a bar, a dot) is at least 3:1 against it (WCAG 1.4.11)." + seq_rule + " Marks are not 3:1 against each other, "
+             "so keep a gap or a line between neighbours (DC-L05-23, DC-L05-24)."
              if raw.get("chartPalette") not in (None, "none") else
              "- Charts: no chart palette yet (Q-color-19). Take chart colors from the status and accent hues, and check them separately.")]
     tw = tailwind_classes(files) if "tailwind" in fmts else {}
@@ -12942,6 +13000,8 @@ def _main(argv=None):
     p = sub.add_parser("status", parents=[common], help="the Now line: the step, what waits for the owner and the next command "
                                                        "(read-only; run it first after a context reset or in a new session)")
     p.add_argument("--json", action="store_true")
+    p.add_argument("--hook", action="store_true", help="the plugin's start-of-session hook: silent without a system, "
+                                                       "otherwise five short lines")
     p = sub.add_parser("handoff", parents=[common], help="the hand-off later sessions read: yes writes the OpenDesigner note into "
                                                         "AGENTS.md and a CLAUDE.md that imports it; no writes nothing; both are recorded")
     p.add_argument("answer", nargs="?", choices=["yes", "no"])
@@ -13116,7 +13176,7 @@ def _main(argv=None):
     elif a.cmd == "version":
         return cmd_version(d)
     elif a.cmd == "status":
-        return cmd_status(d, a.json)
+        return cmd_status(d, a.json, a.hook)
     elif a.cmd == "handoff":
         return cmd_handoff(d, a.answer, a.why)
     elif a.cmd == "generate":
@@ -14478,6 +14538,18 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         project = os.path.dirname(os.path.abspath(d)) if os.path.basename(os.path.abspath(d)) == DEFAULT_DIR else os.getcwd()
     light = resolve_all(files, {"theme": meta["modes"][0]} if "theme" in files["opendesigner.resolver.json"].get("modifiers", {}) else {})
     ladder = meta["space"]["ladder"]
+    # A line drawn in a light color.chart.sequential step: a stroke is always a mark on its own, never a heatmap cell, so this is
+    # the one misuse a line scan can tell apart. A bar or dot fill looks like a cell fill in code, so those rest on DESIGN.md.
+    seq_light = set(light_sequential_resolved(light))
+    for m_ in meta["modes"][1:]:
+        seq_light |= set(light_sequential_resolved(resolve_all(files, {"theme": m_})))
+    seq_ok = min(set(range(1, len(CHART_SEQ_STEPS) + 1)) - seq_light, default=None)
+    seq_rx = None
+    if seq_light:
+        n_ = "|".join(str(x) for x in sorted(seq_light))
+        seq_rx = re.compile(rf"\bstroke\s*[:=]\s*\{{?\s*[\"'`]?\s*var\(\s*--{re.escape(prefix)}-color-chart-sequential-({n_})\b"
+                            rf"|\bstroke-chart-sequential-({n_})\b|\.stroke\([^)]*\bchartSequential({n_})\b"
+                            rf"|\bdrawLine\([^)]*\bchartSequential({n_})\b")
     # radii and durations as the tokens have them (after the person's values and the standards), not the lever ladder (R18)
     radii = {}
     for k in ("detail", "control", "container", "overlay", "person"):
@@ -14649,6 +14721,14 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                         m_ = k_ not in wb_seen and rx_.search(line[:REVIEW_LINE_CAP])
                         if m_:
                             wb_seen[k_] = (rel, i, m_.group(0).strip()[:60])
+                ms_ = seq_rx.search(line[:REVIEW_LINE_CAP]) if seq_rx else None
+                if ms_:
+                    k_ = next(g for g in ms_.groups() if g)
+                    findings.append({"kind": "chart", "file": rel, "line": i, "value": ms_.group(0).strip()[:80],
+                                     "fix": f"color.chart.sequential.{k_} is under 3:1 against the page, so a line in it is hard to see; "
+                                            + (f"use color.chart.sequential.{seq_ok} or a later step" if seq_ok else "use color.chart.brand")
+                                            + ". The light steps are only for cells that touch, as in a heatmap",
+                                     "rule": "WCAG 2.2 SC 1.4.11", "severity": "warning"})
                 if hits:
                     ids = list(dict.fromkeys(h[2]["id"] for h in hits))
                     findings.append({"kind": "standard", "file": rel, "line": i, "value": hits[0][0],
@@ -14807,7 +14887,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     taste = taste_index(d, state)  # dials that moved away from the person's taste: flagged, never a failure (taste is theirs)
     drift = taste_py.drift(taste, meta["dials"]) if taste else []
     r_errs, r_notes = research_py.review(d, state) if research_py else ([], [])
-    hard = sum(1 for f_ in findings if f_["kind"] != "standard")
+    hard = sum(1 for f_ in findings if f_["kind"] not in ("standard", "chart"))
     age = system_age(d, project) if scanned else None
     result = {"project": project, "filesScanned": scanned, "counts": by, "tokenUses": token_uses, "systemAge": age,
               "tokens": "none" if hard and not token_uses else "losing" if hard > token_uses else "ok",
@@ -14818,15 +14898,16 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     if as_json:
         print(json.dumps(result, indent=2))
     else:
-        tokf = [f_ for f_ in findings if f_["kind"] != "standard"]
+        tokf = [f_ for f_ in findings if f_["kind"] not in ("standard", "chart")]
         stdf = [f_ for f_ in findings if f_["kind"] == "standard"]
+        chf = [f_ for f_ in findings if f_["kind"] == "chart"]
         total = len(tokf)
         print(f"Review of {project}: {scanned} files scanned.")
         if not scanned:
             print("No code yet, so there is nothing to check.")
         elif total:
             print(f"{total} hard-coded value{'s' if total != 1 else ''} skip the tokens: "
-                  + ", ".join(f"{n} {k}{'s' if n != 1 else ''}" for k, n in sorted(by.items()) if k != "standard") + ".")
+                  + ", ".join(f"{n} {k}{'s' if n != 1 else ''}" for k, n in sorted(by.items()) if k not in ("standard", "chart")) + ".")
             for f_ in tokf[:limit]:
                 print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']}")
             if total > limit:
@@ -14857,6 +14938,12 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             if any(i.startswith("PRJ-") for i in ids_):
                 print("  Fix the code. A project standard (PRJ-...) is the person's own rule; it goes only when they ask: "
                       "engine.py standard remove <id> --why \"<their words>\".")
+        if chf:
+            print(f"{len(chf)} chart line{'s' if len(chf) != 1 else ''} use{'s' if len(chf) == 1 else ''} a light sequential step (a warning, WCAG 1.4.11):")
+            for f_ in chf[:limit]:
+                print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']}")
+            if len(chf) > limit:
+                print(f"  ... and {len(chf) - limit} more (use --json for all).")
         for u in sorted(set(untrue)):
             print(f"Untrue: {u}. Fix: run `engine.py design-md`.")
         if missing == ["DESIGN.md"]:

@@ -16,6 +16,9 @@ HIGH_RISK = [  # (path regex, why a human must read every changed line)
     (r"^\.(claude|agents)/skills/opendesigner", "generated copy of skills/: sync_skills.py --check proves it matches"),
     (r"^\.claude/|^\.agents/|^\.mcp\.json$|^\.cursor/|^\.vscode/", "agent config: hooks, settings, MCP servers or skills run on the maintainer's machine"),
     (r"^\.claude-plugin/|^plugin\.json$", "plugin manifest: what every user installs"),
+    (r"^hooks/", "plugin hooks (owner decision 2026-11-09): commands Claude Code runs on every plugin user's machine at session start; "
+                 "they must stay one read-only, offline, fast SessionStart hook that is silent without opendesigner/state.json "
+                 "(tools/test_plugin_hook.py)"),
     (r"(^|/)(AGENTS|CLAUDE|GEMINI)\.md$|^llms\.txt$|SKILL\.md$|^chatgpt-project/instructions\.md$"
      r"|references/(rules|guardrails|hooks|improve)\.md$", "instructions that other people's AI models follow"),
     (r"illustration-sources\.json$|opendesigner-illustrate/references/(sources\.json|searching\.md)$",

@@ -4476,6 +4476,85 @@ class ChartAndTableTokens(unittest.TestCase):
             self.assertEqual(chart["color/chart/label"], ["TEXT_FILL"])
             self.assertEqual(chart["color/chart/brand"], ["SHAPE_FILL", "STROKE_COLOR"])
 
+    def test_light_sequential_steps_say_they_are_for_cells(self):
+        """Issue #81 (owner, 2026-11-09): the light end stays under 3:1, described as for touching cells, never a lone mark."""
+        for brand in (None, "#e11d48", "#facc15", "#16a34a", "#2f6f8f"):
+            with self.subTest(brand=brand):
+                files, meta, _ctx = e.generate_system(chart_state("categorical-8", brand))
+                for mode in meta["modes"]:
+                    fl = e.resolve_all(files, {"theme": mode})
+                    hx = self.hexes(files, mode)
+                    light = [i for i in range(1, 6) if e.contrast(hx[f"color.chart.sequential.{i}"], hx["color.surface.base"]) < 3.0 * e.MARGIN]
+                    self.assertEqual(e.light_sequential_resolved(fl), light)
+                    self.assertIn(1, light)                       # the light end is kept, not moved to darker steps
+                    for i in range(1, 6):
+                        desc = fl[f"color.chart.sequential.{i}"]["$description"]
+                        if i in light:
+                            self.assertIn("Under 3:1 against the page", desc)
+                            self.assertIn("heatmap", desc)
+                            self.assertIn("never for a line, bar or dot on its own (WCAG 1.4.11)", desc)
+                        else:
+                            self.assertEqual(desc, "At least 3:1 against the page: also for a line, bar or dot.")
+                    tree = json.loads(json.dumps(files[f"semantic.color.{mode}.tokens.json"]))
+                    group = tree["color"]["chart"]["$description"]
+                    self.assertIn("A mark that stands alone on the page (a line, a bar, a dot) is at least 3:1 against it", group)
+                    self.assertIn(f"sequential {e.step_span(light)} are under 3:1", group)
+                rep = e.Report()
+                e.validate_files(files, chart_state("categorical-8", brand), rep)   # a heatmap's light end is never an error
+                self.assertEqual([i for i in rep.items if "sequential" in i["message"]], [])
+        self.assertEqual((e.step_span([1]), e.step_span([1, 2, 3]), e.step_span([1, 3])), ("step 1", "steps 1-3", "steps 1 and 3"))
+
+    def test_design_md_states_the_chart_contrast_rule(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Heat", "#2f6f8f", "regular", "web", "calm", quiet=True)
+            quiet(e.cmd_set, d, "answers.Q-color-19", "categorical-6-8", "dashboards")
+            quiet(e.cmd_design_md, d)
+            with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("A mark that stands alone on the page (a line, a bar, a dot) is at least 3:1 against it (WCAG 1.4.11).", text)
+            self.assertRegex(text, r"The light end of `color\.chart\.sequential` \(steps? [0-9]")
+            self.assertIn("with a 1 px gap between cells that shows the surface behind, or the value in each cell", text)
+            self.assertNotIn("Every mark is at least 3:1", text)
+            self.assertRegex(text, r"\| `color\.chart\.sequential\.1` \| `#[0-9a-f]{6}` \| `#[0-9a-f]{6}` \| Under 3:1 against the page")
+
+    def test_review_warns_only_for_a_line_in_a_light_sequential_step(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Heat", "#2f6f8f", "regular", "web,ios,android", "calm", quiet=True)
+            quiet(e.cmd_set, d, "answers.Q-color-19", "categorical-6-8", "dashboards")
+            files, meta, _c = e.generate_system(e.load_state(d))
+            light = e.light_sequential_resolved(e.resolve_all(files, {"theme": "light"}))
+            dark_step = min(set(range(1, 6)) - set(light))
+            os.makedirs(os.path.join(t, "src"))
+            def w(name, text):
+                with open(os.path.join(t, "src", name), "w") as f:
+                    f.write(text)
+            w("chart.css", ".trend { stroke: var(--ds-color-chart-sequential-1); }\n"          # a line: warned
+                           ".cell { fill: var(--ds-color-chart-sequential-1); }\n"             # a heatmap cell: fine
+                           ".cell-2 { background: var(--ds-color-chart-sequential-2); }\n"
+                           f".trend-ok {{ stroke: var(--ds-color-chart-sequential-{dark_step}); }}\n"
+                           ".kept { stroke: var(--ds-color-chart-sequential-1); } /* od-ignore */\n")
+            w("Chart.tsx", 'export const L = () => <path stroke="var(--ds-color-chart-sequential-1)" d="M0 0" />;\n'
+                           'export const H = () => <rect className="fill-chart-sequential-1 stroke-chart-sequential-1" />;\n')
+            w("Chart.swift", "Path { p in p.move(to: .zero) }.stroke(DS.Colors.chartSequential1, lineWidth: 2)\n"
+                             "Rectangle().fill(DS.Colors.chartSequential1)\n")
+            w("Chart.kt", "drawLine(color = colors.chartSequential1, start = a, end = b)\ndrawRect(color = colors.chartSequential1)\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            res = json.loads(out.getvalue())
+            got = sorted((f_["file"].split(os.sep)[-1], f_["line"]) for f_ in res["findings"] if f_["kind"] == "chart")
+            self.assertEqual(got, [("Chart.kt", 1), ("Chart.swift", 1), ("Chart.tsx", 1), ("Chart.tsx", 2), ("chart.css", 1)])
+            self.assertTrue(all(f_["severity"] == "warning" and f_["rule"] == "WCAG 2.2 SC 1.4.11" for f_ in res["findings"] if f_["kind"] == "chart"))
+            self.assertEqual(res["tokens"], "ok")                 # a warning is not a hard-coded value
+            text = io.StringIO()
+            with contextlib.redirect_stdout(text):
+                e.cmd_review(d)
+            self.assertIn("5 chart lines use a light sequential step (a warning, WCAG 1.4.11):", text.getvalue())
+            self.assertIn(f"use color.chart.sequential.{dark_step} or a later step", text.getvalue())
+            self.assertNotIn("chart", text.getvalue().split("skip the tokens:")[-1].split("\n")[0] if "skip the tokens:" in text.getvalue() else "")
+
     def test_the_table_question_sets_stripes_and_rules(self):
         with tempfile.TemporaryDirectory() as t:
             d = os.path.join(t, "opendesigner")
