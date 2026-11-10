@@ -782,6 +782,17 @@ class HandoffAndRemovalsSecondReview(unittest.TestCase):
             quiet(e.main, ["--dir", d, "pick", "Q-gov-01", "loose", "--set-by", "chosen", "--quote", "keep it loose for now"])
             self.assertIn(e.HANDOFF_LIGHT, self.note(t))                         # loosened: the first-version note again
 
+    def test_strict_rules_on_a_first_version_get_the_full_note(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            quiet(e.cmd_handoff, d, "yes")
+            self.assertIn(e.HANDOFF_LIGHT, self.note(t))                         # a sketch, no strictness answer yet
+            quiet(e.main, ["--dir", d, "pick", "Q-gov-01", "strict", "--set-by", "chosen", "--quote", "keep it tight from day one"])
+            text = self.note(t)
+            self.assertNotIn(e.HANDOFF_LIGHT, text)                              # still zoom 0 everywhere, but the owner asked for strict
+            self.assertIn("Restyle or reword a screen", text)
+            self.assert_clean(text)
+
     def test_a_comment_above_the_note_in_the_asset_never_reaches_the_file(self):
         with tempfile.TemporaryDirectory() as t:
             d = self.system(t)

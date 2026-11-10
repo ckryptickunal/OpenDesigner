@@ -5877,9 +5877,12 @@ HANDOFF_LIGHT = ("This project has a first version of its design system in `open
 
 
 def handoff_light(d, state):
-    """True when the note should be the lighter one: Q-gov-01 is "loose", or every area is still at zoom 0."""
-    if answer_value((state.get("answers") or {}).get("Q-gov-01")) == "loose":
-        return True
+    """True when the note should be the lighter one. The owner's strictness answer (Q-gov-01) decides when there is one:
+    "loose" is light, "strict" or "canon-expanded" is the full note even on a first version. With no answer, a system
+    still at zoom 0 in every area gets the lighter note."""
+    gov = answer_value((state.get("answers") or {}).get("Q-gov-01"))
+    if gov:
+        return gov == "loose"
     return all(v["level"] == ZOOM_LEVELS[0] for v in zoom_levels(d, state).values())
 
 
