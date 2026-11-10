@@ -595,6 +595,49 @@ class ReviewAndFeedback(unittest.TestCase):
                 f.write(text.replace("## Motion\n", "## Motion\n\nold text\n"))
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
 
+    def test_review_dates_the_share_image_against_what_it_shows(self):                                  # review case EN-09
+        import shutil
+        import subprocess
+        if not shutil.which("git"):
+            self.skipTest("git is not installed")
+        with tempfile.TemporaryDirectory() as t:
+            def git(*a, when=None):
+                env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t.example", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t.example")
+                if when:
+                    env.update(GIT_AUTHOR_DATE=when, GIT_COMMITTER_DATE=when)
+                subprocess.run(["git", "-C", t, *a], check=True, capture_output=True, env=env)
+
+            def write(rel, text):
+                os.makedirs(os.path.dirname(os.path.join(t, rel)), exist_ok=True)
+                with open(os.path.join(t, rel), "w", encoding="utf-8") as f:
+                    f.write(text)
+            d = os.path.join(t, "opendesigner")
+            git("init", "-q")
+            write("public/og.png", "png v1")
+            write("public/hero.jpg", "jpg v1")
+            write("src/index.html", "<h1>Invoices that <em>chase</em>\n  themselves</h1><p>Old lead.</p>")
+            write("opendesigner/state.json", '{"brandColor": "#FF5A36"}')
+            git("add", "-A")
+            git("commit", "-qm", "first", when="2026-11-01T10:00:00+00:00")
+            self.assertEqual(e.share_card_age(d, t), [])   # no review/share.json yet: nothing to date
+            write("opendesigner/review/share.json", json.dumps({"pages": {"/": {"image": "https://draft.example/og.png?v=6", "h1": "Invoices that chase themselves",
+                                                                                "hero": "http://localhost:3000/hero.jpg", "logo": "inline svg"}}}))
+            self.assertEqual(e.share_card_age(d, t, "#ff5a36"), [])   # everything landed with the image
+            write("src/index.html", "<h1>Invoices that <em>chase</em>\n  themselves</h1><p>A new lead, same headline.</p>")
+            git("commit", "-qam", "lead only", when="2026-11-03T10:00:00+00:00")
+            self.assertEqual(e.share_card_age(d, t, "#ff5a36"), [])   # the headline's text did not change
+            write("opendesigner/state.json", '{"brandColor": "#0051FF"}')
+            git("commit", "-qam", "new accent", when="2026-11-04T10:00:00+00:00")
+            [hit] = e.share_card_age(d, t, "#0051ff")
+            self.assertEqual((hit["route"], hit["image"], hit["imageDate"]), ("/", "public/og.png", "2026-11-01 10:00"))
+            self.assertIn("the brand colour #0051ff in opendesigner/state.json (commit", hit["since"][0])
+            write("public/og.png", "png v2")
+            git("commit", "-qam", "new card", when="2026-11-05T10:00:00+00:00")
+            self.assertEqual(e.share_card_age(d, t, "#0051ff"), [])
+            write("public/hero.jpg", "jpg v2")   # a new hero picture, not committed yet
+            [hit] = e.share_card_age(d, t, "#0051ff")
+            self.assertIn("the hero picture public/hero.jpg (an uncommitted edit", hit["since"][0])
+
     def test_review_finds_shadows_and_durations(self):
         with tempfile.TemporaryDirectory() as t:
             d = os.path.join(t, "opendesigner")

@@ -6,6 +6,8 @@
                [--flash-field tablet|phone|PX] [--flash-where worst.png]
   preflight.py frames <file.mp4> [--every 0.5] [--out DIR]   full-size frames plus 390 px phone copies
   preflight.py audio <clip.wav> [...]                     noise bursts or clicks at the start or end of each clip
+  preflight.py public <build-folder> [--src DIR]          before a deploy: the variant picker, scripts and pictures no page
+                                                          names, dev pages, local paths in served files
 
 Exit code 1 when an error is found. Standard library only, no network; video modes need ffmpeg and ffprobe.
 The html check reads CSS, not the rendered page. See ../references/checklist.md for the checks a script cannot make.
@@ -760,6 +762,88 @@ def extract_frames(path: Path, every: float, out: Path) -> Report:
     return r
 
 
+# ---- public: what a build folder serves that no visitor should get --------------------------------------------
+# Files served at a known address, which no page has to name.
+WELL_KNOWN = {"robots.txt", "sitemap.xml", "llms.txt", "llms-full.txt", "humans.txt", "ads.txt", "security.txt", "favicon.ico",
+              "favicon.svg", "apple-touch-icon.png", "apple-touch-icon-precomposed.png", "site.webmanifest", "manifest.json",
+              "manifest.webmanifest", "browserconfig.xml", "cname", "_headers", "_redirects", "404.html", "500.html", "index.html",
+              "sw.js", "service-worker.js"}
+READ_EXT = (".html", ".htm", ".css", ".js", ".mjs", ".cjs", ".json", ".webmanifest", ".xml", ".svg", ".txt", ".jsx", ".tsx", ".ts",
+            ".vue", ".svelte", ".astro", ".md", ".mdx", ".njk", ".liquid", ".hbs", ".php", ".erb", ".yml", ".yaml", ".toml")
+SCRIPT_EXT = (".cjs", ".mjs", ".js", ".ts", ".sh", ".py", ".rb", ".ps1", ".bat")
+MEDIA_EXT = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".bmp", ".tif", ".tiff", ".heic", ".mov", ".mp4", ".webm")
+# folders next to the served one whose files name what it serves (Next, Vite, Astro, Eleventy, Jekyll and plain sites)
+SOURCE_DIRS = ("src", "app", "pages", "components", "lib", "layouts", "content", "templates", "includes", "_includes", "_layouts",
+               "views", "styles", "theme")
+LOCAL_PATH = re.compile(r"/Users/[A-Za-z0-9._-]+/|/home/[A-Za-z0-9._-]+/|[A-Z]:\\\\Users\\\\[A-Za-z0-9._-]+")
+DEV_PAGE = re.compile(r"preview|draft|test|debug|sandbox|scratch|tmp|backup|old|copy|review", re.I)
+PICKER = re.compile(r"proto-picker|data-od-variant|data-od-stage|(?:^|[\"'/])(?:od-|proto-|variants?-|options?-)?picker(?:\.min)?\.js", re.I)
+
+
+def check_public(folder: Path, src=()) -> Report:
+    """A build folder (public/, dist/, out/, _site/) before it is deployed: the variant picker, which is for review copies
+    only (STD-process-review-taste-41); scripts and pictures no page names; dev pages nobody links; local paths."""
+    r = Report()
+    served = [p for p in folder.rglob("*") if p.is_file() and not ({"node_modules", ".git", ".well-known"} & set(p.parts))
+              and not p.name.startswith(".")]
+    project = folder.resolve().parent
+    readers = [p for p in served if p.suffix.lower() in READ_EXT]
+    for d in [project / x for x in SOURCE_DIRS] + [Path(x) for x in src]:
+        if d.is_dir() and d.resolve() != folder.resolve():
+            readers += [p for p in d.rglob("*") if p.is_file() and p.suffix.lower() in READ_EXT and "node_modules" not in p.parts]
+    readers += [p for p in project.glob("*.html")] if project != folder.resolve() else []
+    named, pickers, leaks = set(), [], []
+    for p in readers:
+        try:
+            text = p.read_text(encoding="utf-8", errors="ignore") if p.stat().st_size < 20_000_000 else ""
+        except OSError:
+            continue
+        # every file name the text mentions, in any form (src="img/a.png?v=2", url(/a.png), "a%20b.jpg", import "./x.js")
+        named |= {unquote_url(m).rsplit("/", 1)[-1].lower() for m in re.findall(r"[\w@%+.\-/]+\.[A-Za-z0-9]{2,5}\b", text)}
+        if p in served:
+            rel = p.relative_to(folder).as_posix()
+            if PICKER.search(text):
+                pickers.append(rel)
+            m = LOCAL_PATH.search(text)
+            if m:
+                line = text.count("\n", 0, m.start()) + 1
+                leaks.append(f"{rel} (line {line}: {m.group(0)}...)")
+    for leak in leaks:
+        r.err(f"A served file shows a local path: {leak}. Anyone can read it; remove the file or the path")
+    if pickers:
+        r.warn(f"The variant picker ships to visitors: {', '.join(pickers[:5])}. It is for review copies only "
+               "(STD-process-review-taste-41): build the chosen variant without it, and keep the picker on the review copy")
+    scripts, media, pages, other, media_bytes = [], [], [], [], 0
+    for p in served:
+        rel, name = p.relative_to(folder).as_posix(), p.name.lower()
+        if name in WELL_KNOWN or name in named:
+            continue
+        ext = p.suffix.lower()
+        if ext in SCRIPT_EXT:
+            scripts.append(rel)
+        elif ext in MEDIA_EXT:
+            media.append(rel)
+            media_bytes += p.stat().st_size
+        elif ext in (".html", ".htm"):
+            (pages if DEV_PAGE.search(p.stem) else other).append(rel)
+        else:
+            other.append(rel)
+    if scripts:
+        r.warn(f"{len(scripts)} script(s) no page loads, served to anyone who asks: {', '.join(scripts[:6])}. Dev scripts belong "
+               "outside the served folder")
+    if media:
+        r.warn(f"{len(media)} picture(s) or video(s) no page names ({media_bytes / 1e6:.1f} MB): {', '.join(media[:8])}"
+               f"{' ...' if len(media) > 8 else ''}. Screenshots and drafts belong outside the served folder; check first for "
+               "names a script builds")
+    if pages:
+        r.warn(f"Pages nobody links, named like dev pages: {', '.join(pages[:6])}. Remove them from the build, or noindex them")
+    if other:
+        r.info(f"{len(other)} other file(s) no page names: {', '.join(other[:6])}{' ...' if len(other) > 6 else ''}")
+    if not (leaks or pickers or scripts or media or pages):
+        print(f"OK     {len(served)} served files: no variant picker, and every script and picture is named by a page")
+    return r
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -772,7 +856,15 @@ def main():
     v.add_argument("--flash-where", metavar="PNG", help="save the worst flashing moment, with the flashing pixels in magenta")
     au = sub.add_parser("audio"); au.add_argument("files", nargs="+")
     f = sub.add_parser("frames"); f.add_argument("file"); f.add_argument("--every", type=float, default=0.5); f.add_argument("--out", default="preflight-frames")
+    pu = sub.add_parser("public"); pu.add_argument("folder", help="the folder the site serves: public/, dist/, out/, _site/")
+    pu.add_argument("--src", action="append", default=[], metavar="DIR", help="another folder whose files name what it serves; repeatable")
     a = ap.parse_args()
+    if a.cmd == "public":
+        if not Path(a.folder).is_dir():
+            sys.exit(f"not a folder: {a.folder}")
+        r = check_public(Path(a.folder), a.src)
+        print(f"{r.errors} error(s), {r.warns} warning(s). The checklist covers what this script cannot see: references/checklist.md")
+        sys.exit(1 if r.errors else 0)
     if a.cmd == "audio":
         r = check_audio([Path(x) for x in a.files])
         print(f"{r.errors} error(s), {r.warns} warning(s). The checklist covers what this script cannot see: references/checklist.md")

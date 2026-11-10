@@ -147,6 +147,43 @@ class TestHtml(unittest.TestCase):
         self.assertIn('WARN   font "Proxima Nova"', r.stdout)
 
 
+def public(files):
+    """Run `preflight.py public` on <tmp>/public, with files written under <tmp> (paths may reach src/ too)."""
+    d = tempfile.mkdtemp()
+    for rel, text in files.items():
+        p = Path(d) / rel
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(text)
+    try:
+        return subprocess.run([sys.executable, str(SCRIPT), "public", str(Path(d) / "public")], capture_output=True, text=True)
+    finally:
+        shutil.rmtree(d)
+
+
+class TestPublic(unittest.TestCase):                                   # owner audit of a private B2B landing page, 2026-11-09
+    def test_review_tools_dev_files_and_local_paths_are_named(self):
+        r = public({"public/index.html": '<img src="img/hero.jpg?v=2"><script src="picker.js"></script><script src="app.js"></script>',
+                    "public/app.js": 'logo.src = "/logo.svg";', "public/picker.js": ".proto-picker{position:fixed}",
+                    "public/img/hero.jpg": "x", "public/logo.svg": "<svg/>", "public/team.jpg": "x", "public/robots.txt": "User-agent: *",
+                    "public/shots/shot-1.png": "x" * 2000, "public/og.cjs": "const out = '/Users/someone/Desktop/site/og.png';",
+                    "public/preview.html": "<p>draft</p>", "src/App.jsx": '<img src="/team.jpg" alt="">'})
+        self.assertEqual(r.returncode, 1, r.stdout)
+        self.assertIn("ERROR  A served file shows a local path: og.cjs (line 1: /Users/someone/...)", r.stdout)
+        self.assertIn("WARN   The variant picker ships to visitors: index.html, picker.js.", r.stdout)
+        self.assertIn("WARN   1 script(s) no page loads, served to anyone who asks: og.cjs.", r.stdout)
+        self.assertIn("WARN   1 picture(s) or video(s) no page names (0.0 MB): shots/shot-1.png.", r.stdout)
+        self.assertIn("WARN   Pages nobody links, named like dev pages: preview.html.", r.stdout)
+        unnamed = "\n".join(line for line in r.stdout.splitlines() if "no page" in line or "nobody links" in line)
+        for named in ("hero.jpg", "logo.svg", "team.jpg", "robots.txt", "app.js"):   # named by a page, a script or src/, or a known address
+            self.assertNotIn(named, unnamed)
+
+    def test_a_clean_build_passes(self):
+        r = public({"public/index.html": '<link rel="icon" href="favicon.svg"><img src="a%20b.png" alt="">', "public/a b.png": "x",
+                    "public/favicon.svg": "<svg/>", "public/sitemap.xml": "<urlset/>"})
+        self.assertEqual(r.returncode, 0, r.stdout)
+        self.assertIn("OK     4 served files", r.stdout)
+
+
 def square_video(d, side, every, name="v.mkv"):
     """2 s at 30 fps, 270 x 480, mid grey, with a centred square that swaps black and white every `every` frames.
     Lossless RGB, so edges stay sharp and the flashing area is exactly side x side px."""

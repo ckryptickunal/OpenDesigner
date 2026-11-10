@@ -16,7 +16,9 @@ the bookkeeping and the arithmetic. Work goes in ./opendesigner/review/ (or --di
                                                    findings from probe runs (and focus-walk files) against the accessibility
                                                    floors, against practice any product can be judged on (primary buttons
                                                    per view, typefaces, weights, colors) and, when the project has an
-                                                   OpenDesigner system, its tokens;
+                                                   OpenDesigner system, its tokens; saves what each page's share
+                                                   card and hero show in review/share.json, which engine.py review
+                                                   dates against git (a share image older than what it shows);
                                                    prints what got fixed and what is new since the last check. A folder
                                                    (the review folder) stands for every probe and capture file in it
     review.py finding "what you saw" --severity error|warn|info --basis seen|operated|inferred --evidence PATH
@@ -794,11 +796,104 @@ def check_round(p, w, F):
     if fo.get("unused"):
         F.add("EN-08", "warn", "Fonts downloaded but not used", w, f"{len(fo['unused'])} of {fo.get('loadedFamilies')} loaded families draw no visible text: " + ", ".join(f"{u['family']} ({u['faces']} face(s))" for u in fo["unused"][:5]),
               "load only the families and weights the page draws (one or two families, preflight 10)", [], "remove the @font-face, preload or font link for these; text drawn only by ::before or ::after is not counted, so check an icon font first", "preflight 10", key="fonts-unused")
-    sh = p.get("share")
-    if sh and (not sh.get("image") or not sh.get("icon") or re.search(r"noindex", sh.get("robots") or "", re.I)):
+    check_launch(p, w, F)
+
+
+# ---- launch files: share text and image, and review tools left on a public address (EN-07, EN-09) ---------------
+STOPWORDS = set("""a an and are as at be but by can do for from get has have how in into is it its just more most new no not now
+of off on one or our out over so than that the their them then there these they this to up us was we what when where which who
+why will with you your all any every each also been being here home page site website welcome official""".split())
+SHARE_TITLE_MIN = 0.34   # [inferred] a title shares at least a third of its words with the h1 and the line under it
+SHARE_TEXT_MIN = 0.25    # [inferred] a description, a quarter: descriptions paraphrase
+
+
+def content_words(text):
+    """The words that carry meaning, cut to a rough stem so 'invoices' meets 'invoicing' and 'chase' meets 'chasing'."""
+    out = set()
+    for w in re.findall(r"[a-z0-9]+", (text or "").lower()):
+        if len(w) < 3 or w in STOPWORDS:
+            continue
+        for suf in ("ing", "ed", "es", "s", "e"):
+            if w.endswith(suf) and len(w) - len(suf) >= 4:
+                w = w[: -len(suf)]
+                break
+        out.add(w[:6])
+    return out
+
+
+def said_on_page(field, page, brand, split):
+    """(words found, words, missing) for a share field against the page's words; a title is judged by its best part,
+    so 'Invoices that chase themselves | Acme' is not marked down for the brand. None when there is too little to judge."""
+    best = None
+    for part in [field] + (re.split(r"\s+[|·•–—-]\s+|:\s+", field) if split else []):
+        ws = content_words(part) - brand
+        if len(ws) < 2:
+            continue
+        r = (len(ws & page), len(ws), sorted(ws - page))
+        if best is None or r[0] / r[1] > best[0] / best[1]:
+            best = r
+    return best
+
+
+def public_host(url):
+    """An address visitors can reach: not a file, loopback, private network or reserved test name."""
+    u = urlparse(url or "")
+    h = (u.hostname or "").lower()
+    if u.scheme not in ("http", "https") or not h:
+        return False
+    return not (h in ("localhost", "::1") or h.startswith(("127.", "0.")) or h.endswith((".localhost", ".local", ".test", ".example", ".internal"))
+                or re.match(r"^(10|192\.168|172\.(1[6-9]|2\d|3[01]))\.", h))
+
+
+def check_launch(p, w, F):
+    sh = p.get("share") or {}
+    noindex = re.search(r"noindex", sh.get("robots") or "", re.I)
+    if sh and (not sh.get("image") or not sh.get("icon") or noindex):
         miss = [x for x, ok in (("a share image (og:image)", sh.get("image")), ("a favicon", sh.get("icon")), ("a meta description", sh.get("description"))) if not ok]
-        F.add("EN-08", "info", "Before launch: share image, favicon or indexing", w, ("missing " + ", ".join(miss) if miss else "") + (("; " if miss else "") + f"robots says {sh['robots']}" if re.search(r"noindex", sh.get("robots") or "", re.I) else ""),
+        F.add("EN-09", "info", "Before launch: share image, favicon or indexing", w, ("missing " + ", ".join(miss) if miss else "") + (("; " if miss else "") + f"robots says {sh['robots']}" if noindex else ""),
               "a public page has a share image, a favicon and a description; noindex only on drafts", [], None, None, key="launch")
+    route = urlparse(p.get("url") or "").path or "/"
+    # the share text against the page: judged only on a page set up for sharing, where a stale title or card is seen
+    if sh.get("h1") and (sh.get("image") or any(sh.get(k) for k in ("ogTitle", "ogDescription", "twitterTitle", "twitterDescription"))):
+        page = content_words(sh["h1"] + " " + (sh.get("lead") or ""))
+        host = (urlparse(p.get("url") or "").hostname or "").split(".")
+        brand = content_words(" ".join([sh.get("siteName") or "", sh.get("logoName") or ""] + [x.replace("-", " ") for x in host[:-1] if x != "www"]))
+        rows, done = [], set()
+        for label, key, split, floor in (("<title>", "title", True, SHARE_TITLE_MIN), ("og:title", "ogTitle", True, SHARE_TITLE_MIN),
+                                         ("twitter:title", "twitterTitle", True, SHARE_TITLE_MIN), ("meta description", "metaDescription", False, SHARE_TEXT_MIN),
+                                         ("og:description", "ogDescription", False, SHARE_TEXT_MIN), ("twitter:description", "twitterDescription", False, SHARE_TEXT_MIN)):
+            text = sh.get(key)
+            r = said_on_page(text, page, brand, split) if text and text not in done else None
+            if r and r[0] / r[1] < floor:
+                done.add(text)
+                rows.append(f'{label} "{text[:80]}": {r[0]} of its {r[1]} words are in the h1 or the line under it')
+        if rows:
+            F.add("EN-09", "warn", "Share text says something the page does not", w, "; ".join(rows[:4]) + f'. The h1 says "{sh["h1"][:80]}"',
+                  "the title, description and share text say what the h1 and the line under it say, or differ on purpose", [],
+                  "rewrite them from the h1 and its lead, or record why they differ; if the share image shows the old words too, rebuild it", None, key="share-text:" + route)
+    pk = p.get("picker") or {}
+    if public_host(p.get("url")) and (pk.get("scripts") or pk.get("markup") or pk.get("switchers")):
+        bits = ["loads " + ", ".join(os.path.basename(urlparse(s).path) for s in pk["scripts"])] if pk.get("scripts") else []
+        if pk.get("markup"):
+            bits.append(f"{pk['markup']} house picker element(s) (.proto-picker, data-od-stage, data-od-variant)")
+        bits += [f"{s['sel']} holds {s['buttons']} switch buttons" for s in pk.get("switchers") or []]
+        F.add("EN-07", "warn", "A variant picker on a public address", w, "; ".join(bits),
+              "options are shown on a review copy (a local file, a review route or a preview address), never to visitors", [s["sel"] for s in pk.get("switchers") or []][:3],
+              "ship the chosen variant without the picker and its other variants; keep the picker on the review copy. If this address is the review copy, say so in the report",
+              "STD-process-review-taste-41", key="picker")
+
+
+def save_share(docs, rd):
+    """review/share.json: per route, the share image and what it should show (headline, hero picture, logo), as the browser
+    saw them. engine.py review dates these files against git; this script reads no files outside the review folder."""
+    pages = {}
+    for p in docs:
+        sh = p.get("share") or {}
+        route = urlparse(p.get("url") or "").path or "/"
+        if p.get("v") == 1 and sh.get("imageUrl") and route not in pages:
+            pages[route] = {"url": p.get("url"), "image": sh["imageUrl"], "h1": sh.get("h1"), "hero": sh.get("hero"), "logo": sh.get("logo")}
+    if pages:
+        write_json(rd / "share.json", {"made": dt.datetime.now().isoformat(timespec="seconds"), "pages": pages})
 
 
 def check_focus(f, F):
@@ -1204,6 +1299,7 @@ def cmd_check(args):
         else:
             check_probe(p, sysm, F)
         n += 1
+    save_share(docs, rd)
     findings = F.done()
     last = read_json(rd / "findings.measured.json", {"findings": []})
     prev, prev_inputs = last["findings"], last.get("inputs")

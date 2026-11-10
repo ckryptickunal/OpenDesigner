@@ -113,6 +113,37 @@ class Live(unittest.TestCase):
         hidden = {h["sel"].split(" > ")[-1]: h["why"] for h in p["targets"]["hiddenFocusable"]}
         self.assertEqual(hidden.get("button.reachable"), "inside aria-hidden")   # still reported, once, as reachable but unseen
 
+    def test_share_tags_headline_hero_logo_and_a_picker_are_read(self):                          # EN-09, EN-07
+        # a page on a public address (answered by the test itself, nothing leaves the machine) whose share text is older
+        # than its headline, and which still ships a variant picker
+        page = ('<!doctype html><html lang="en"><head><title>Acme | Dental clinics, run by AI</title><meta name="description" content="The AI operating system for dental clinics.">'
+                '<meta property="og:title" content="Dental clinics, run by AI"><meta property="og:image" content="/og.png?v=6"><meta property="og:site_name" content="Acme"></head>'
+                '<body><header><a href="/" aria-label="Acme home"><img src="/logo.svg" alt="Acme" width="80" height="24"></a></header>'
+                '<section><h1>Invoices that <em>chase</em> themselves</h1><p>Reminders go out on day 3, 7 and 14.</p>'
+                '<img src="/hero.jpg" width="900" height="500" alt=""></section>'
+                '<div class="variant-picker"><button>Calm</button><button>Dense</button></div><script src="/picker.js"></script></body></html>')
+
+        def answer(route):
+            if route.request.url == "https://acme.io/":
+                route.fulfill(status=200, content_type="text/html", body=page)
+            else:
+                route.fulfill(status=404, body="")
+        pg = _browser.new_page(viewport={"width": 1280, "height": 800})
+        self.addCleanup(pg.close)
+        pg.route("**/*", answer)
+        pg.goto("https://acme.io/")
+        p = pg.evaluate(PROBE)
+        sh = p["share"]
+        self.assertEqual((sh["title"], sh["ogTitle"], sh["siteName"], sh["imageUrl"]), ("Acme | Dental clinics, run by AI", "Dental clinics, run by AI", "Acme", "https://acme.io/og.png?v=6"))
+        self.assertEqual((sh["h1"], sh["lead"]), ("Invoices that chase themselves", "Reminders go out on day 3, 7 and 14."))
+        self.assertEqual((sh["hero"], sh["logo"], sh["logoName"]), ("https://acme.io/hero.jpg", "https://acme.io/logo.svg", "Acme"))
+        self.assertEqual((p["picker"]["scripts"], p["picker"]["markup"], [s["buttons"] for s in p["picker"]["switchers"]]), (["https://acme.io/picker.js"], 0, [2]))
+        F = rv.Findings()
+        rv.check_probe(p, None, F)
+        got = {(f["case"], f["title"]) for f in F.done()}
+        self.assertIn(("EN-09", "Share text says something the page does not"), got)
+        self.assertIn(("EN-07", "A variant picker on a public address"), got)
+
     def test_a_sticky_sidebar_pushed_loose_at_the_end_is_not_pinned_under_the_header(self):     # CV-08
         # opendesigner.dev/docs/: near the footer the sticky sidebar runs out of container and scrolls up under the header like
         # any content, so its links were reported as pinned there for good (2026-11-05). A sidebar stuck under the bar still is.
