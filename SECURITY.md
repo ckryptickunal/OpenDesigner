@@ -27,4 +27,4 @@ Design disagreements, wrong research values and accessibility bugs are not secur
 
 ## Supported versions
 
-The latest release is 0.3.0, tagged on 10 November 2026. Security fixes land on `main` and ship in the next release.
+The latest release is 0.3.1, tagged on 11 November 2026. Security fixes land on `main` and ship in the next release.

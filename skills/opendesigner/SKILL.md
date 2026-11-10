@@ -4,7 +4,7 @@ description: Design systems and the pages built on them, one question at a time.
 license: MIT
 compatibility: Python 3.10+ for scripts (standard library only, no network). Works in text-only hosts; visual steps use HTML templates when the host can show them.
 metadata:
-  version: "0.3.0"
+  version: "0.3.1"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 

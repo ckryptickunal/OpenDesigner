@@ -514,3 +514,8 @@ Updated onto today's `main` by a session, as a fast-forward each time.
 - PR 52's seven changelog entries sit under Unreleased. Plugin users get them only with the next version (0.3.1), which waits for the owner's yes.
 - The deploy of `eb14aae` (the star chart) was not promoted at 22:58 IST: `/404.webp` did not answer 200 on the uploaded copy, in a check that asks once per path. The live site stayed on the 0.3.0 build. The deployer shows a notification on a failure and, by design, tries again only at the next push; `c484cd7` is that push.
 - Lesson: the release order is now in AGENTS.md, "Releasing a version?".
+
+### After the eighth review: PR 120 and the 0.3.1 release (2026-11-11)
+- **#120** (this log's eighth review and the release order in AGENTS.md): docs only, written by the coordinator, reviewed head `8be49ad`, merged as `6b37790`. Scan: 0 BLOCK, 1 REVIEW (the one paragraph added to AGENTS.md, read).
+- **Deploy:** the deployer's log says `LIVE 6b37790 on opendesigner.dev` at 01:15 IST, with PR 52's docs in it. The check that failed once on `eb14aae` passed this time, so that failure was a one-off.
+- **0.3.1:** the owner said yes in chat on 2026-11-11 ("Yes, release 0.3.1"). The version pull request changes the number in the manifests, the package files, nine skills and the engine, moves PR 52's seven entries under `[0.3.1]`, and rebuilds the examples. Those entries are now dated 2026-11-11, the day they reached `main` (00:58 IST); the pull request had dated them a day earlier. The tag and the GitHub Release follow its merge; the next review records their commit.

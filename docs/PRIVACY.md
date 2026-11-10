@@ -60,7 +60,7 @@ Every object in the schema is closed. Every piece of text is a fixed word or a f
 |---|---|---|
 | `schema` | `opendesigner-report/1` | The report format |
 | `report_id` | `8fa132f9b5e9a9b9` | Random and new for every report, so two reports can't be linked |
-| `version` | `0.3.0` | The OpenDesigner version |
+| `version` | `0.3.1` | The OpenDesigner version |
 | `host` | `claude-code` | The AI tool, as one word from a fixed list (or `unknown`) |
 | `week` | `2026-W39` | The week the report was made: no day, time or timezone |
 | `sessions` | `2` | How many sittings the report covers |
