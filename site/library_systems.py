@@ -86,7 +86,7 @@ def looks():
     for s in STYLED:
         out.append({**{k: s[k] for k in ("key", "name", "plain", "brand", "style")},
                     "recipe": [["sketch", "--name", s["name"], "--audience", s["audience"], "--platforms", "web", "--feel", known(s["feel"]), "--brand", s["brand"]],
-                               ["pick", "Q-dir-01", s["style"]]]})
+                               ["pick", "Q-dir-01", s["style"], "--set-by", "reference", "--why", f"the {s['name']} look from the OpenDesigner library"]]})
     return out
 
 

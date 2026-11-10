@@ -9,6 +9,9 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 ### Added
 
 - **Three style extractors, measured on one site** (2026-11-10). OpenDesigner's extractor, Dembrandt and Project Wallace's analyzer were scored against Primer's published tokens on primer.style. The two browser tools reported real values 84-100% of the time but got one or two colour roles wrong; reading the CSS without a browser listed 900 colours, 2% of them on the page. Our accent bug is #110.
+- **Review runs without a system** (2026-11-10). With no `opendesigner/state.json`, `engine.py review` still scans the code and says "No design system is bound here", with the count of hard-coded values. It names any system found in a subfolder and the command that checks the code against it.
+- **`review --strict` for commits** (2026-11-10). `engine.py review --strict` exits with an error on any finding, tokens not in charge, a `DESIGN.md` that disagrees with the code or validate errors, and its last line names each reason.
+- **An opt-in commit check** (2026-11-10). `engine.py guard install` adds a git pre-commit hook that runs `review --strict`; `git commit --no-verify` skips it once and `guard remove` takes it out. The skill asks once and installs it only on a yes. It never replaces another hook or writes into a shared `core.hooksPath`.
 - **Review reads the page that ships** (2026-11-09). When the folder given to `engine.py review` has fewer than three style files, it also reads the newest `index.html` (in `public/` first) and the files it loads, and lists what it skipped. It takes a single file, counts "behind the code" across the whole repository, lists the newest files first and skips `docs/`.
 - **DESIGN.md checked against the code** (2026-11-09). When the code uses no color, font or text tokens, `engine.py review` says if the brand color or fonts in `DESIGN.md` appear nowhere in it, and names the ones the code uses instead.
 - **`engine.py contrast`** (2026-11-09). `engine.py contrast "#767676" "#ffffff"` prints the contrast ratio, rounded down, and which WCAG minimums it meets. `--min 4.5` exits with an error under 4.5:1, for scripts.
@@ -43,6 +46,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Changed
 
+- **Fonts, brand color, dials and answers say who chose them** (2026-11-10). `engine.py set` and `pick` now need `--set-by` for these values, and `chosen` needs the person's words in `--quote`, so an agent's own pick is no longer recorded as the owner's. Older systems still load.
 - **Binding rules come first in the skill** (2026-11-09). After a long chat, Claude keeps only about the first 20,000 characters of a skill, and the main skill was 32,864. It is now 19,296, and its first 2,000 hold seven binding rules, among them tokens only, one question at a time, show every round and review at the end. The detail moved to reference files, unchanged.
 - **One question per call** (2026-11-09). The skill now says it outright: one question per message and one per call of a question tool, the log question alone and first. Ask for "something new" and you get three options to pick from, never one picked for you. A new eval case fails any turn that asks two.
 - **Skill descriptions name the jobs** (2026-11-09). Each skill's one-line description now names what people ask for, such as a taste index, a launch checklist, a share image, "review this" or SEO, so the right skill is picked without being named.
@@ -55,6 +59,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **A missing system is caught** (2026-11-10). When `AGENTS.md`, `CLAUDE.md` or `DESIGN.md` say the system lives in `opendesigner/` and that folder is missing, `engine.py review` fails and says so.
 - **design-md keeps every od:keep block** (2026-11-09). A kept block that holds its own heading, or sits in a section the file no longer has, is no longer deleted; the second kind moves to a Notes section. The `.hand-edited` backup is now the whole previous file, not a 201-byte fragment.
 - **Review never calls token-free code clean** (2026-11-09). When no token is in use, `engine.py review` says "no tokens in use" instead of "the code uses the tokens", and counts radii, not "radiuss".
 - **Concept and reference docs, plain first** (2026-11-08). Thirteen docs pages, from accessibility and tokens to the engine and security, now open in plain words. Commands, paths and JSON moved into "For developers" folds, and long passages became tables. Open text is 17% shorter, and every number, limit and privacy fact stays.

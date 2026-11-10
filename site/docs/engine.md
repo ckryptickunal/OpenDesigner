@@ -4,7 +4,7 @@ seo_title: OpenDesigner engine commands: sketch, set, build, review
 description: Every OpenDesigner engine command in one line each: start a system, record decisions, build and check, research users, standards, review and feedback.
 section: Reference
 order: 2
-updated: 2026-11-09
+updated: 2026-11-10
 ---
 
 The engine is the part of OpenDesigner that does the math and writes your files: the tokens, the exports, `DESIGN.md` and the pages. Your AI usually runs it for you, so use this page when you want to run a command yourself or check what one does. It runs on your computer and makes no network calls.
@@ -57,8 +57,8 @@ Its options:
 
 | Command | What it does |
 |---|---|
-| `engine.py set dials.roundness 45 --why "softer corners"` | Records one decision with its reason. |
-| `engine.py pick Q-shape-01 subtle --why "dense work tool"` | Answers one interview question by its id. |
+| `engine.py set dials.roundness 45 --set-by delegated --why "softer corners"` | Records one decision with its reason and how it was set: `chosen` with `--quote "<their words>"`, `confirmed_default`, `delegated`, `assumed` or `reference`. Fonts, the brand color, dials and answers must say which. |
+| `engine.py pick Q-shape-01 subtle --set-by chosen --quote "keep corners small"` | Answers one interview question by its id. |
 | `engine.py lock raw.brandColor` | Locks a value. `engine.py unlock raw.brandColor` undoes it. |
 
 {{figure:engine-set-why}}
@@ -126,8 +126,10 @@ The templates `show` fills are `palette`, `type-scale`, `spacing-ruler`, `radius
 
 {{figure:engineers-review-terminal}}
 
+With no system in the project, it still counts the hard-coded values and names any system it finds in a subfolder. It fails when `AGENTS.md`, `CLAUDE.md` or `DESIGN.md` point at an `opendesigner/` folder that isn't there.
+
 :::dev
-`--project src` scans one folder, or one file. When that folder has fewer than three style files, review also reads the page the site ships (the newest `index.html`, in `public/` first) and the files it loads, and lists what it skipped. Findings come newest file first. `docs/` and OpenDesigner's own exports are skipped. `--strict` exits with an error when it finds anything.
+`--project src` scans one folder, or one file. When that folder has fewer than three style files, review also reads the page the site ships (the newest `index.html`, in `public/` first) and the files it loads, and lists what it skipped. Findings come newest file first. `docs/` and OpenDesigner's own exports are skipped. `--strict` exits with an error on any finding, tokens not in charge, a `DESIGN.md` that disagrees with the code or validate errors, and names each reason. `engine.py guard install` runs it before every commit, after you say yes; `git commit --no-verify` skips it once and `guard remove` takes it out.
 :::
 
 ## Standards

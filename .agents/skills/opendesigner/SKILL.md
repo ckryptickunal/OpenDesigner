@@ -18,7 +18,7 @@ They hold in every round, after a context reset and in a new session. `engine.py
 4. **Every implementation ends with `engine.py review`, then a re-read of DESIGN.md.** Fix what it reports before the next draft.
 5. **Owner corrections go to `engine.py feedback "<the rule>" --kind note`.** Said twice, a note is a rule in `opendesigner/RULES.md`.
 6. **Each round starts by reading `opendesigner/PROTOCOL.md`, `opendesigner/RULES.md` and `DESIGN.md`.** After a context reset or in a new session, run `engine.py status` first: the step, what waits for the owner, the next command.
-7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md, and a CLAUDE.md that imports it)? Then `engine.py handoff yes` or `handoff no`.
+7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md, and a CLAUDE.md that imports it)? Then `engine.py handoff yes` or `handoff no`. Right after, ask once whether commits should be checked: "Want each commit to run the design check first? It stops a commit with hard-coded values or a DESIGN.md that no longer matches the code; `git commit --no-verify` skips it once." Then `engine.py guard install` or `guard no`. Never install it without a yes.
 
 ## What it does
 You help anyone make a design system: a school student, a designer or an engineer. Start with a quick sketch of the whole system. Then zoom into only the parts the person cares about. Recommend one choice at every step, with its reason. Show the effect instead of describing it. Ask for the assets only a person can make. Write everything to files, so the next session can build on it.
@@ -106,7 +106,7 @@ Use the best surface the host supports, and say which one you use. Never block o
 Show the overview (`opendesigner/overview.html`) after the sketch and after each zoom, and fill a template only with real values (`engine.py show <template>`). What the overview holds, the templates, the Design System artifact and **Copy my choice**: `references/visuals.md`.
 
 ## The engine
-Every command and its flags: `references/engine.md`. The ones most sessions use: `status`, `detect`, `init`, `sketch`, `pick` and `set --why`, `build`, `review`, `feedback`, `handoff` and `version`.
+Every command and its flags: `references/engine.md`. The ones most sessions use: `status`, `detect`, `init`, `sketch`, `pick` and `set` (with `--set-by`: your own pick is never `chosen`; `chosen` needs `--quote` with their words), `build`, `review`, `feedback`, `handoff`, `guard` and `version`.
 
 After every change, run `build` before showing results, so the exports, overview and preview are never stale. Fix every error first. The report cites the rule it applied. When `pick` or `set` says an answer changes no tokens, it is still saved (as a DESIGN.md rule or a PRODUCT.md fact). Tell the person so, in a few words.
 
@@ -154,7 +154,7 @@ One question per message here, as everywhere.
 1. `engine.py build`. Validation passes, or each warning has a written reason. For a warning the defaults raise, write the reason yourself; don't ask the person about it.
 2. Check the outputs: `opendesigner/tokens/` (canonical), `opendesigner/build/` (exports), `DESIGN.md` and `PRODUCT.md` at the root, `opendesigner/decisions.md` and `state.json`. Write `opendesigner/RATIONALE.md` for the team from `assets/output/RATIONALE.md`.
 3. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend"). Add coverage in one line (decided, defaulted, not applicable, pending). For the plain voice, point to the preview and the short summary at the top of DESIGN.md, not the rest of the file. For the engineer voice, name the export files they will import.
-4. If the hand-off is not answered yet (`engine.py status` lists it), ask in its own message: "Want me to add a short note to AGENTS.md, and a CLAUDE.md that imports it, so other AI helpers and later sessions follow these choices?" Ask even when the project has no agent files yet. Then run `engine.py handoff yes` or `handoff no`: both are recorded, so it is asked once.
+4. If the hand-off is not answered yet (`engine.py status` lists it), ask in its own message: "Want me to add a short note to AGENTS.md, and a CLAUDE.md that imports it, so other AI helpers and later sessions follow these choices?" Ask even when the project has no agent files yet. Then run `engine.py handoff yes` or `handoff no`: both are recorded, so it is asked once. If `engine.py guard status` says off and decisions.md has no "Commit guard" entry, ask the commit-check question from step 7 the same way, then `guard install` or `guard no`.
 5. If you recorded feedback, mention it and offer the issue link (`references/improve.md`).
 6. If the log is on: `journey.py log session_end`, then `journey.py report`. The report line and the sharing question follow `rules.md` section 11.
 

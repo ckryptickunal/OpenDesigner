@@ -1211,7 +1211,7 @@ Designers: answer a question by id · Code: `engine.py pick <Q-id> <option-value
 
 **Designer:** The shortcut for answering an interview question by its id. One answer can also move linked dials, such as corner softness setting roundness.
 
-**Engineer:** engine.py pick <Q-id> <option-value> --why "reason". Same as set on answers.<Q-id>; mapped answers also set dials or raw inputs (Q-shape-01 subtle sets dials.roundness to 40).
+**Engineer:** engine.py pick <Q-id> <value> --set-by chosen --quote "their words" (or delegated, assumed): set on answers.<Q-id>; mapped answers also set dials (Q-shape-01 subtle sets roundness 40).
 
 **Example:** Pick subtle corners for a busy work tool.
 

@@ -78,6 +78,8 @@ LINE_RULES = [  # (severity, label, regex, file regex it applies to or None for 
      r"|^\+\s*(-\s*)?(run:\s*)?(curl|wget)\b", r"\.(py|js|mjs|ts|html?|sh|ya?ml)$"),
     ("REVIEW", "process or dynamic code execution", r"\b(subprocess|os\.system|os\.popen|pty\.spawn|ctypes|pickle\.loads?|marshal\.loads?"
      r"|__import__|importlib)\b|(?<![\w.])(eval|exec|compile)\s*\(|new Function\(|child_process", r"\.(py|js|mjs|ts|html?|sh)$"),
+    ("REVIEW", "git hook written on a user's machine (engine.py guard, owner decision 2026-11-09)",
+     r"(?i)hooks[/\\]pre-commit|core\.hooksPath|\bpre-commit\b.*(write|chmod|install)|GUARD_MARK|git-path\b.*hooks", r"\.(py|js|sh)$"),
     ("REVIEW", "external script, style or frame", r"<(script|iframe|link|img)[^>]+(src|href)=[\"']https?://", r"\.html?$"),
     ("REVIEW", "writes outside the project or to home/system paths", r"^\+(?!#!).*(expanduser|Path\.home\(\)|~/\.|/etc/|/usr/|AppData|\.ssh|\.aws|\.config)", r"\.(py|js|sh)$"),
     ("REVIEW", "text aimed at an AI model rather than a reader", r"(?i)ignore (all |any )?(previous|prior|above) (instructions|rules)|you are now|do not (tell|inform) the user"

@@ -8,7 +8,7 @@ They hold in every round, after a context reset and in a new session. `engine.py
 4. **Every implementation ends with `engine.py review`, then a re-read of DESIGN.md.** Fix what it reports before the next draft.
 5. **Owner corrections go to `engine.py feedback "<the rule>" --kind note`.** Said twice, a note is a rule in `opendesigner/RULES.md`.
 6. **Each round starts by reading `opendesigner/PROTOCOL.md`, `opendesigner/RULES.md` and `DESIGN.md`.** After a context reset or in a new session, run `engine.py status` first: the step, what waits for the owner, the next command.
-7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md, and a CLAUDE.md that imports it)? Then `engine.py handoff yes` or `handoff no`.
+7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md, and a CLAUDE.md that imports it)? Then `engine.py handoff yes` or `handoff no`. Right after, ask once whether commits should be checked: "Want each commit to run the design check first? It stops a commit with hard-coded values or a DESIGN.md that no longer matches the code; `git commit --no-verify` skips it once." Then `engine.py guard install` or `guard no`. Never install it without a yes.
 
 ## What it does
 You help anyone make a design system: a school student, a designer or an engineer. Start with a quick sketch of the whole system. Then zoom into only the parts the person cares about. Recommend one choice at every step, with its reason. Show the effect instead of describing it. Ask for the assets only a person can make. Write everything to files, so the next session can build on it.
@@ -96,7 +96,7 @@ Use the best surface the host supports, and say which one you use. Never block o
 Show the overview (`opendesigner/overview.html`) after the sketch and after each zoom, and fill a template only with real values (`engine.py show <template>`). What the overview holds, the templates, the Design System artifact and **Copy my choice**: `references/visuals.md`.
 
 ## The engine
-Every command and its flags: `references/engine.md`. The ones most sessions use: `status`, `detect`, `init`, `sketch`, `pick` and `set --why`, `build`, `review`, `feedback`, `handoff` and `version`.
+Every command and its flags: `references/engine.md`. The ones most sessions use: `status`, `detect`, `init`, `sketch`, `pick` and `set` (with `--set-by`: your own pick is never `chosen`; `chosen` needs `--quote` with their words), `build`, `review`, `feedback`, `handoff`, `guard` and `version`.
 
 After every change, run `build` before showing results, so the exports, overview and preview are never stale. Fix every error first. The report cites the rule it applied. When `pick` or `set` says an answer changes no tokens, it is still saved (as a DESIGN.md rule or a PRODUCT.md fact). Tell the person so, in a few words.
 
@@ -144,7 +144,7 @@ One question per message here, as everywhere.
 1. `engine.py build`. Validation passes, or each warning has a written reason. For a warning the defaults raise, write the reason yourself; don't ask the person about it.
 2. Check the outputs: `opendesigner/tokens/` (canonical), `opendesigner/build/` (exports), `DESIGN.md` and `PRODUCT.md` at the root, `opendesigner/decisions.md` and `state.json`. Write `opendesigner/RATIONALE.md` for the team from `assets/output/RATIONALE.md`.
 3. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend"). Add coverage in one line (decided, defaulted, not applicable, pending). For the plain voice, point to the preview and the short summary at the top of DESIGN.md, not the rest of the file. For the engineer voice, name the export files they will import.
-4. If the hand-off is not answered yet (`engine.py status` lists it), ask in its own message: "Want me to add a short note to AGENTS.md, and a CLAUDE.md that imports it, so other AI helpers and later sessions follow these choices?" Ask even when the project has no agent files yet. Then run `engine.py handoff yes` or `handoff no`: both are recorded, so it is asked once.
+4. If the hand-off is not answered yet (`engine.py status` lists it), ask in its own message: "Want me to add a short note to AGENTS.md, and a CLAUDE.md that imports it, so other AI helpers and later sessions follow these choices?" Ask even when the project has no agent files yet. Then run `engine.py handoff yes` or `handoff no`: both are recorded, so it is asked once. If `engine.py guard status` says off and decisions.md has no "Commit guard" entry, ask the commit-check question from step 7 the same way, then `guard install` or `guard no`.
 5. If you recorded feedback, mention it and offer the issue link (`references/improve.md`).
 6. If the log is on: `journey.py log session_end`, then `journey.py report`. The report line and the sharing question follow `rules.md` section 11.
 
@@ -256,7 +256,7 @@ The phase (Q-scope-07) says where the project is now: an idea, being built, clos
 - Put the phase's first step at the top of the offer after the sketch (below). The engine prints it after the sketch as a `Phase:` line.
 - PRODUCT.md shows the phase and what comes first, in its own section.
 - PRODUCT.md's Market section comes from the user research first: its market topic finds the competitors, what they all do, the gap and an analogous product, with sources (`research.md` sections 3 and 6). What the person tells you, or what you take from their words, is recorded in `context.market` as assumed until they confirm it, and wins over the research. `context.market.analogous` holds the analogous product and `context.market.competitors` the competitors, as a list. `pattern` is what the competitors all do, `gap` is what none of them does well, and `conventions` holds the words and habits the industry's users already know.
-- If they correct the phase, record their answer: `engine.py pick Q-scope-07 near-launch --why "<their words>"`.
+- If they correct the phase, record their answer: `engine.py pick Q-scope-07 near-launch --set-by chosen --quote "<their words>"`.
 
 ## Level 1: broad (one screen per foundation)
 **The site brief comes first for a site that persuades** (Q-scope-06 `persuade`, or Q-scope-01 `marketing`; `pacing.json` → `site_brief`). It is one screen with five lines, Q-site-01 to Q-site-05: the goal and how it is counted, the roles to convince and what each needs to see, the proof, how people find the site (search, AI answers, languages, the questions it answers), and the page families.
@@ -264,7 +264,7 @@ The phase (Q-scope-07) says where the project is now: an idea, being built, clos
 - Proof is the one line only they can give. Never draft it: take it word for word, with each figure's qualifier (for whom, over what time, compared with what). Until they give it, the confirmed positioning's proof fills the line.
 - The phase changes the page families: plan them for an idea, and read them from the routes or the live site for a built or live one, confirmed in one line.
 - Plain voice: ask only the goal and the proof, and take the rest from their words and files as assumed.
-- Record each answer: `engine.py pick Q-site-03 '[{"kind": "figures", "what": "...", "qualifier": "..."}]' --why "their words"`. PRODUCT.md's Site brief shows each line, or "Not enough information" with its question, and the overview lists what is missing.
+- Record each answer: `engine.py pick Q-site-03 '[{"kind": "figures", "what": "...", "qualifier": "..."}]' --set-by chosen --quote "<their words>"`. PRODUCT.md's Site brief shows each line, or "Not enough information" with its question, and the overview lists what is missing.
 
 After the research and the site brief, open with the competitor table and the confirmed positioning, then the three directions on the direction board (`research.md` sections 8 and 9). The pick is a starting point for these screens. Then go in this order, with the listed templates:
 - Q-dir-01, style (`option-gallery`)
@@ -555,7 +555,8 @@ python3 <skill>/scripts/engine.py init [--name "Acme"]
 python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal [--brand "#167874"] [--logo logo.svg] [--surfaces app:operate] [--delegated feel,brand]
 python3 <skill>/scripts/engine.py feel [words...]            the feel words it knows, or how it reads theirs ("fun" is playful)
 python3 <skill>/scripts/engine.py style search|show|tiles|mix|mutate|explore|define ...   the style lab: find, show, blend, change or invent a look (style-lab.md)
-python3 <skill>/scripts/engine.py set <path> <json-value> --why "..." [--set-by delegated] [--lock]
+python3 <skill>/scripts/engine.py set <path> <json-value> --set-by <how> --why "..." [--lock]   fonts, brand color, dials and Q-* answers must say how:
+                                                             chosen --quote "<their words>", confirmed_default, delegated, assumed or reference
 python3 <skill>/scripts/engine.py set <path> <json-value> --dry-run   preview a value (each token's old and new value, any check it breaks); writes nothing
 python3 <skill>/scripts/engine.py resolve                    current dials and derived values, for payloads
 python3 <skill>/scripts/engine.py generate                   opendesigner/tokens/ (DTCG 2025.10)
@@ -567,7 +568,8 @@ python3 <skill>/scripts/engine.py overview [--open]          opendesigner/overvi
 python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html: every token
 python3 <skill>/scripts/engine.py show <template> [--open]   one visual template filled with real values (opendesigner/preview/)
 python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports, DESIGN.md, overview, filled templates and preview only if there are no errors
-python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections; code that uses no tokens; a system older than the code
+python3 <skill>/scripts/engine.py review [--project src/] [--strict]   end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections; code that uses no tokens; a system older than the code. Runs with no system too. Exit 1 when AGENTS.md, CLAUDE.md or DESIGN.md point at a missing opendesigner/; --strict also exits 1 on any finding, tokens not in charge, DESIGN.md that disagrees with the code, or validate errors
+python3 <skill>/scripts/engine.py guard install|no|remove|status   after asking once: a pre-commit hook that runs review --strict (git commit --no-verify skips it once); no records the answer. Never writes over another hook or into a shared core.hooksPath
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
 python3 <skill>/scripts/engine.py feedback "<the rule>" --kind note [--same N-01]   the owner's note on the work, counted in opendesigner/RULES.md
 python3 <skill>/scripts/engine.py research plan --brief "<users line>" --tools web-search,browser,last30days   user research: what to find, searches, missing tools
@@ -782,7 +784,7 @@ The **Ask** and **Question** columns are what you say to the person, in plain wo
 | `H-voice` (Q-voice-01) | Do you have a guide for how your product writes, or a word list? | PDF, Markdown, existing product copy | Model drafts voice from the personality answers, marked draft until a content designer or owner reviews it |
 | `H-brandbook` (Q-ref-01) | Do you have a brand book? | PDF | Hand to opendesigner-extract: colors, font names, embedded logos; ask for the SVG master of any logo found |
 
-**Brand font licence, per platform.** When they name a brand font, record what its licence covers with `engine.py pick Q-type-02 yes|web-only|app-only|license-only|no --why "<their words>"`. For any other mix, set it directly: `engine.py set raw.fontLicence '{"web": true, "app": false, "selfHost": true}'`. Name the font with `engine.py set raw.brandFace '"<font name>"'`. Then say in one line what it means for each platform in scope. For example: "Your licence covers websites only, so the iPhone app will use the system font."
+**Brand font licence, per platform.** When they name a brand font, record what its licence covers with `engine.py pick Q-type-02 yes|web-only|app-only|license-only|no --set-by chosen --quote "<their words>"`. For any other mix, set it directly: `engine.py set raw.fontLicence '{"web": true, "app": false, "selfHost": true}'`. Name the font with `engine.py set raw.brandFace '"<font name>"'`. Then say in one line what it means for each platform in scope. For example: "Your licence covers websites only, so the iPhone app will use the system font."
 The Swift and Compose exports fall back to the system font by themselves when `app` is not true. If they don't know what the licence covers, record nothing, and list it as an open item: never guess.
 
 ## Tool hooks
@@ -1329,7 +1331,7 @@ Rules for the text:
 3. **Apply what they say yes to:** `engine.py research add opendesigner/research/users.json --accept`, or `--only Q-aud-01,Q-aud-04` for some. A question whose answer differs changes only when they agree and you name it in `--only`. Values are recorded with `set_by research` and the file as their source.
 4. `engine.py build`, then show what changed.
 
-Where the engine has no `research` command (a ChatGPT Project ships `engine.py` alone), keep the same file and checks by hand: write `opendesigner/research/users.json` and a `users.md` with the same sections, and record each answer the person agrees to with `engine.py pick <Q-id> <value> --why "user research F2: ..."`.
+Where the engine has no `research` command (a ChatGPT Project ships `engine.py` alone), keep the same file and checks by hand: write `opendesigner/research/users.json` and a `users.md` with the same sections, and record each answer the person agrees to with `engine.py pick <Q-id> <value> --set-by research --why "user research F2: ..."`.
 
 ## 8. Show the market, then agree the positioning
 Before any colour, palette or direction, in one message:

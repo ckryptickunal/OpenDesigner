@@ -54,7 +54,7 @@ def engine_lists():
     $extensions paths, resolver modifiers, commands and flags."""
     import subprocess, tempfile
     dials = [d["id"] for d in json.loads((ROOT / "synthesis/levers.json").read_text())["dials"]]
-    runs = [[]] + [[["set", f"dials.{d}", str(v), "--no-doc"]] for d in dials for v in (0, 100)]
+    runs = [[]] + [[["set", f"dials.{d}", str(v), "--set-by", "assumed", "--no-doc"]] for d in dials for v in (0, 100)]
     runs.append([["set", "taste.brief", "a quiet library at night", "--no-doc"], ["set", "taste.never", '["gradients"]', "--no-doc"]])  # set only by the person
     paths = set()
 

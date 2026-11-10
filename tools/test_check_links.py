@@ -6,6 +6,7 @@ makes, so a real website route passes and a made-up one still fails.
 """
 import contextlib
 import io
+import os
 import shutil
 import subprocess
 import sys
@@ -66,6 +67,10 @@ class SiteLinks(unittest.TestCase):
     def test_a_git_checkout_reads_only_what_git_would_commit(self):     # issue 72
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
+            iso = mock.patch.dict(os.environ, {"HOME": tmp, "XDG_CONFIG_HOME": tmp, "GIT_CONFIG_GLOBAL": os.devnull,
+                                               "GIT_CONFIG_NOSYSTEM": "1"})  # never the real home or the machine's git config
+            iso.start()
+            self.addCleanup(iso.stop)
             subprocess.run(["git", "init", "-q", str(root)], check=True)
             (root / ".gitignore").write_text("site/.cache/\n")
             (root / "site" / ".cache").mkdir(parents=True)

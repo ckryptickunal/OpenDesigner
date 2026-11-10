@@ -1441,7 +1441,7 @@
   "term": "pick (engine command)",
   "plain": "Saves your answer to one question in the chat, along with your reason.",
   "designer": "The shortcut for answering an interview question by its id. One answer can also move linked dials, such as corner softness setting roundness.",
-  "engineer": "engine.py pick <Q-id> <option-value> --why \"reason\". Same as set on answers.<Q-id>; mapped answers also set dials or raw inputs (Q-shape-01 subtle sets dials.roundness to 40).",
+  "engineer": "engine.py pick <Q-id> <value> --set-by chosen --quote \"their words\" (or delegated, assumed): set on answers.<Q-id>; mapped answers also set dials (Q-shape-01 subtle sets roundness 40).",
   "designer_says": "answer a question by id",
   "code_name": "engine.py pick <Q-id> <option-value>",
   "example": "Pick subtle corners for a busy work tool.",

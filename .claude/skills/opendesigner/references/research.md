@@ -96,7 +96,7 @@ Rules for the text:
 3. **Apply what they say yes to:** `engine.py research add opendesigner/research/users.json --accept`, or `--only Q-aud-01,Q-aud-04` for some. A question whose answer differs changes only when they agree and you name it in `--only`. Values are recorded with `set_by research` and the file as their source.
 4. `engine.py build`, then show what changed.
 
-Where the engine has no `research` command (a ChatGPT Project ships `engine.py` alone), keep the same file and checks by hand: write `opendesigner/research/users.json` and a `users.md` with the same sections, and record each answer the person agrees to with `engine.py pick <Q-id> <value> --why "user research F2: ..."`.
+Where the engine has no `research` command (a ChatGPT Project ships `engine.py` alone), keep the same file and checks by hand: write `opendesigner/research/users.json` and a `users.md` with the same sections, and record each answer the person agrees to with `engine.py pick <Q-id> <value> --set-by research --why "user research F2: ..."`.
 
 ## 8. Show the market, then agree the positioning
 Before any colour, palette or direction, in one message:

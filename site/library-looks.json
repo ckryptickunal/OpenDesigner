@@ -103,12 +103,16 @@
    [
     "pick",
     "Q-dir-01",
-    "swiss"
+    "swiss",
+    "--set-by",
+    "reference",
+    "--why",
+    "the Swiss look from the OpenDesigner library"
    ]
   ],
   "commands": [
    "engine.py sketch --name Swiss --audience regular --platforms web --feel serious,minimal --brand \"#D92D20\"",
-   "engine.py pick Q-dir-01 swiss"
+   "engine.py pick Q-dir-01 swiss --set-by reference --why \"the Swiss look from the OpenDesigner library\""
   ]
  },
  {
@@ -134,12 +138,16 @@
    [
     "pick",
     "Q-dir-01",
-    "glassmorphism"
+    "glassmorphism",
+    "--set-by",
+    "reference",
+    "--why",
+    "the Frosted glass look from the OpenDesigner library"
    ]
   ],
   "commands": [
    "engine.py sketch --name \"Frosted glass\" --audience regular --platforms web --feel calm,modern --brand \"#3B6CF6\"",
-   "engine.py pick Q-dir-01 glassmorphism"
+   "engine.py pick Q-dir-01 glassmorphism --set-by reference --why \"the Frosted glass look from the OpenDesigner library\""
   ]
  },
  {
@@ -165,12 +173,16 @@
    [
     "pick",
     "Q-dir-01",
-    "playful"
+    "playful",
+    "--set-by",
+    "reference",
+    "--why",
+    "the Playful look from the OpenDesigner library"
    ]
   ],
   "commands": [
    "engine.py sketch --name Playful --audience regular --platforms web --feel friendly,playful --brand \"#7C3AED\"",
-   "engine.py pick Q-dir-01 playful"
+   "engine.py pick Q-dir-01 playful --set-by reference --why \"the Playful look from the OpenDesigner library\""
   ]
  },
  {
@@ -196,12 +208,16 @@
    [
     "pick",
     "Q-dir-01",
-    "minimal-monochrome"
+    "minimal-monochrome",
+    "--set-by",
+    "reference",
+    "--why",
+    "the Minimal mono look from the OpenDesigner library"
    ]
   ],
   "commands": [
    "engine.py sketch --name \"Minimal mono\" --audience regular --platforms web --feel minimal,serious --brand \"#18181B\"",
-   "engine.py pick Q-dir-01 minimal-monochrome"
+   "engine.py pick Q-dir-01 minimal-monochrome --set-by reference --why \"the Minimal mono look from the OpenDesigner library\""
   ]
  },
  {
@@ -227,12 +243,16 @@
    [
     "pick",
     "Q-dir-01",
-    "terminal"
+    "terminal",
+    "--set-by",
+    "reference",
+    "--why",
+    "the Terminal look from the OpenDesigner library"
    ]
   ],
   "commands": [
    "engine.py sketch --name Terminal --audience dense --platforms web --feel technical,serious --brand \"#0E7C66\"",
-   "engine.py pick Q-dir-01 terminal"
+   "engine.py pick Q-dir-01 terminal --set-by reference --why \"the Terminal look from the OpenDesigner library\""
   ]
  },
  {
@@ -258,12 +278,16 @@
    [
     "pick",
     "Q-dir-01",
-    "material-you"
+    "material-you",
+    "--set-by",
+    "reference",
+    "--why",
+    "the Material You look from the OpenDesigner library"
    ]
   ],
   "commands": [
    "engine.py sketch --name \"Material You\" --audience regular --platforms web --feel friendly,modern --brand \"#6750A4\"",
-   "engine.py pick Q-dir-01 material-you"
+   "engine.py pick Q-dir-01 material-you --set-by reference --why \"the Material You look from the OpenDesigner library\""
   ]
  },
  {
@@ -289,12 +313,16 @@
    [
     "pick",
     "Q-dir-01",
-    "scandinavian"
+    "scandinavian",
+    "--set-by",
+    "reference",
+    "--why",
+    "the Nordic look from the OpenDesigner library"
    ]
   ],
   "commands": [
    "engine.py sketch --name Nordic --audience regular --platforms web --feel calm,friendly --brand \"#2F6F8F\"",
-   "engine.py pick Q-dir-01 scandinavian"
+   "engine.py pick Q-dir-01 scandinavian --set-by reference --why \"the Nordic look from the OpenDesigner library\""
   ]
  }
 ]
