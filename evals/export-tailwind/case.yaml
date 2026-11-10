@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: export-tailwind
+context:
+  scaffold_script: setup.sh

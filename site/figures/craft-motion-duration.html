@@ -1,0 +1,18 @@
+<figure class="fig cr">
+<div class="dodont">
+<div class="dont"><p class="dd-h">A 400&nbsp;ms dropdown</p><p class="dd-why">The menu is still opening when you want to read it, so the interface feels slower than it is.</p>
+<div class="dd-art"><div class="cr-stage" tabindex="0" role="group" aria-label="A dropdown that opens and closes in 400 milliseconds. Hover or focus to pause.">
+<div class="cr-meta"><span><b>400&nbsp;ms</b></span><span>cubic-bezier(0.23, 1, 0.32, 1)</span></div>
+<div class="cr-scene cr-ui"><span class="cr-pill cr-trigger">Sort</span>
+<div class="cr-menu cr-pop cr-loop cr-d400"><span class="on">Newest first</span><span>Oldest first</span><span>Name</span></div></div>
+</div></div></div>
+<div class="do"><p class="dd-h">A 180&nbsp;ms dropdown</p><p class="dd-why">Same curve, same distance. It is open by the time the eye gets there, so it feels like it is listening.</p>
+<div class="dd-art"><div class="cr-stage" tabindex="0" role="group" aria-label="A dropdown that opens and closes in 180 milliseconds. Hover or focus to pause.">
+<div class="cr-meta"><span><b>180&nbsp;ms</b></span><span>cubic-bezier(0.23, 1, 0.32, 1)</span></div>
+<div class="cr-scene cr-ui"><span class="cr-pill cr-trigger">Sort</span>
+<div class="cr-menu cr-pop cr-loop cr-d180"><span class="on">Newest first</span><span>Oldest first</span><span>Name</span></div></div>
+</div></div></div>
+</div>
+<div class="cr-foot"><span>Both menus scale from <span class="num">0.95</span> with opacity, out of the Sort button.</span><span class="cr-hint" aria-hidden="true"><span class="cr-hint-play">Hover or focus to pause.</span><span class="cr-hint-paused">Paused.</span></span><span class="cr-rm">Reduced motion is on, so both menus stay open.</span></div>
+<figcaption>The same dropdown at two speeds, on the same curve. At 180 ms it feels like a response to your click; at 400 ms it feels like a wait. The house budget for dropdowns is 150 to 250 ms.</figcaption>
+</figure>

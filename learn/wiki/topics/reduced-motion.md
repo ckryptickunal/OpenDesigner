@@ -2,7 +2,7 @@
 type: topic
 title: Reduced motion
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -30,3 +30,4 @@ Screen transitions switch to animation: 'fade' when reduced motion is on.
 - [[sources/eks-skills-review-animations-skill-emilkowalski-skills-skills-review-animations-skill-md|emilkowalski/skills: skills/review-animations/SKILL.md]]: prefers-reduced-motion must be honored by keeping opacity and color and dropping movement, not by removing everything.
 - [[sources/eks-skills-review-animations-standards-emilkowalski-skills-skills-review-animations-standards-md|emilkowalski/skills: skills/review-animations/STANDARDS.md]]: Keep opacity and color, drop transform-based movement; fewer and gentler animations, not zero; useReducedMotion example.
 - See also: [[synthesis/reduced-motion|Reduced motion synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-motion-referodesign-refero-skill-skills-refero-design-references-motion-md|referodesign/refero_skill: skills/refero-design/references/motion.md]]: Mandatory reduced-motion variant: fade only instead of slide or scale, remove parallax, pause loops; token overrides and a CSS shortcut.

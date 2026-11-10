@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tessin &amp; Ström annual report 2026: the waiting room study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root {
+    /* Two drums on the duplicator: Medium Blue and Fluorescent Pink. Everything else is paper or overprint. */
+    --blue: var(--ds-color-accent-light-9);
+    --pink: var(--ds-color-accent2-light-9);
+    --paper: var(--ds-color-neutral-light-2);
+    --reg-x: 3px; --reg-y: 2px;   /* pink drum sits off register */
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); }
+  body {
+    color: var(--blue);
+    font: var(--ds-text-body-md);
+    font-family: var(--ds-font-family-text);
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh; min-height: 100svh; overflow: hidden;
+  }
+  a { color: inherit; }
+  .page { position: relative; width: 1440px; height: 900px; margin: 0 auto; isolation: isolate; }
+  .ink { mix-blend-mode: multiply; filter: url(#ink-fine); }   /* type: crisp, a few voids */
+  .solid { filter: url(#ink); }                               /* big solids: starved drum, wandering edge */
+  .pink { color: var(--pink); transform: translate(var(--reg-x), var(--reg-y)) rotate(.12deg); }
+
+  /* running head and foot */
+  .run { position: absolute; left: 64px; right: 64px; display: flex; justify-content: space-between; font-size: var(--ds-font-size-12); letter-spacing: .06em; text-transform: uppercase; }
+  .run.head { top: 28px; padding-bottom: var(--ds-space-12); border-bottom: 1.5px solid var(--blue); }
+  .run.foot { bottom: 24px; padding-top: var(--ds-space-12); border-top: 1.5px solid var(--blue); }
+  .run b { font-weight: 700; }
+
+  /* left page: the finding */
+  .left { position: absolute; left: 64px; top: 104px; width: 600px; }
+  .chap { font-size: var(--ds-font-size-12); letter-spacing: .06em; text-transform: uppercase; margin: 0 0 var(--ds-space-16); }
+  h1 { margin: 0; font-size: var(--ds-font-size-51); line-height: 1; font-weight: 400; font-stretch: 88%; letter-spacing: -0.02em; }
+  .stand { margin: var(--ds-space-20) 0 0; font-size: var(--ds-font-size-21); line-height: 1.38; max-width: 27em; }
+  .stand b { font-weight: 700; }
+  .nums { position: absolute; left: 50px; top: 318px; width: 660px; height: 420px; }
+  .num { position: absolute; top: 0; margin: 0; font-size: 440px; line-height: .8; font-weight: 800; font-stretch: 62%; letter-spacing: -0.03em; }  /* art: outside the type scale */
+  .num.felt { left: 0; }
+  .num.real { left: 262px; top: 96px; }
+  .keys { position: absolute; left: 64px; top: 776px; width: 600px; display: flex; gap: var(--ds-space-32); font-size: var(--ds-font-size-16); }
+  .keys span { display: flex; align-items: center; gap: var(--ds-space-8); }
+  .keys i { width: 16px; height: 16px; display: inline-block; }
+
+  /* right page: the evidence */
+  .right { position: absolute; left: 760px; top: 104px; width: 616px; }
+  .toc { display: flex; gap: var(--ds-space-20); font-size: var(--ds-font-size-12); letter-spacing: .02em; padding-bottom: var(--ds-space-12); border-bottom: 1px solid var(--blue); margin-bottom: var(--ds-space-20); }
+  .toc b { font-weight: 700; }
+  .cols { columns: 2; column-gap: var(--ds-space-32); font-size: var(--ds-font-size-16); line-height: 1.5; }
+  .cols p { margin: 0 0 var(--ds-space-12); }
+  .chart { margin-top: var(--ds-space-24); }
+  .chart h2 { margin: 0 0 var(--ds-space-12); font-size: var(--ds-font-size-16); font-weight: 700; }
+  .rows { position: relative; }
+  .row { display: grid; grid-template-columns: 136px 1fr; align-items: center; height: 64px; }
+  .track { margin-right: 9.5rem; }  /* room for the value label */
+  .row .lab { font-size: var(--ds-font-size-12); line-height: 1.35; }
+  .row .lab b { display: block; font-size: var(--ds-font-size-16); font-weight: 700; letter-spacing: 0; }
+  .track { position: relative; height: 40px; }
+  .bar { position: absolute; left: 0; top: 0; height: 40px; }
+  .bar.real { background: var(--blue); }
+  .bar.felt { background: var(--pink); transform: translate(var(--reg-x), var(--reg-y)); }
+  .val { position: absolute; top: 10px; font-size: var(--ds-font-size-16); font-weight: 700; white-space: nowrap; }
+  .axis { display: grid; grid-template-columns: 136px 1fr; font-size: var(--ds-font-size-12); margin-top: var(--ds-space-4); }
+  .ticks { position: relative; height: 16px; border-top: 1px solid var(--blue); margin-right: 9.5rem; }
+  .ticks span { position: absolute; top: 2px; transform: translateX(-50%); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-24); margin-top: var(--ds-space-32); }
+  .stat { border-top: 1.5px solid var(--blue); padding-top: var(--ds-space-8); }
+  .stat .n { font-size: var(--ds-font-size-38); line-height: 1.05; font-weight: 700; font-stretch: 80%; letter-spacing: -0.01em; }
+  .stat p { margin: var(--ds-space-4) 0 0; font-size: var(--ds-font-size-12); line-height: 1.4; }
+  .method { margin: var(--ds-space-20) 0 0; font-size: var(--ds-font-size-12); line-height: 1.45; max-width: 60em; }
+
+  /* uncoated paper tooth over everything */
+  .tooth { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .55;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.35  0 0 0 0 0.36  0 0 0 0 0.4  0 0 0 0.16 0'/></filter><rect width='240' height='240' filter='url(%23n)'/></svg>"); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- Riso ink: tiny voids where the drum starves, and a soft wander at the edges -->
+  <filter id="ink" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -7 0 0 0 4.55" result="speck"/>
+    <!-- drum banding: ink runs thin in horizontal streaks across big solids -->
+    <feTurbulence type="fractalNoise" baseFrequency="0.002 0.022" numOctaves="2" seed="21" result="band"/>
+    <feColorMatrix in="band" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -0.9 0 0 0 1.42" result="bandA"/>
+    <feComposite in="speck" in2="bandA" operator="arithmetic" k1="1" result="mask"/>
+    <feComposite in="SourceGraphic" in2="mask" operator="in" result="inked"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11" result="low"/>
+    <feDisplacementMap in="inked" in2="low" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="ink-fine" x="-2%" y="-10%" width="104%" height="120%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="1" seed="2" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -11 0 0 0 7.9" result="speck"/>
+    <feComposite in="SourceGraphic" in2="speck" operator="in" result="inked"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" seed="5" result="low"/>
+    <feDisplacementMap in="inked" in2="low" scale="0.9" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<div class="page">
+  <div class="run head ink"><span><b>Tessin &amp; Ström</b> · Design research, Copenhagen</span><span>Annual report 2026</span><span>Chapter 03 of 05 · Health</span></div>
+
+  <section class="left" aria-labelledby="t">
+    <p class="chap ink">03 · Findings</p>
+    <h1 id="t" class="ink">The waiting room study</h1>
+    <p class="stand ink">In 14 outpatient clinics, people felt they had waited <b>61 minutes</b>. The clock said <b>38</b>. Telling them where they stood closed most of the gap.</p>
+  </section>
+
+  <div class="nums" aria-hidden="true">
+    <p class="num felt ink solid pink">61</p>
+    <p class="num real ink solid">38</p>
+  </div>
+  <div class="keys ink">
+    <span><i style="background:var(--pink)"></i>Minutes the wait felt like</span>
+    <span><i style="background:var(--blue)"></i>Minutes it was, on average</span>
+  </div>
+
+  <section class="right" aria-label="Evidence">
+    <div class="toc ink"><span><b>3.1</b> What we measured</span><span><b>3.2</b> Felt and actual</span><span><b>3.3</b> The pilot</span><span><b>3.4</b> What clinics kept</span></div>
+    <div class="cols ink">
+      <p>We spent 412 hours in 14 waiting rooms at three hospital groups in Denmark and Sweden, timing 1,860 waits from check-in to call-up. On the way out, 96 patients told us how long it had felt.</p>
+      <p>The gap was widest where nothing showed people their place in the queue. In 2026, six clinics piloted a live queue board and a text message ten minutes before each turn. The real wait barely moved. The felt wait fell by 24 minutes.</p>
+    </div>
+
+    <figure class="chart" style="margin-left:0;margin-right:0">
+      <h2 class="ink">Felt and actual wait, minutes</h2>
+      <div class="rows">
+        <div class="row">
+          <div class="lab ink"><b>Before</b>14 clinics, 2025</div>
+          <div class="track">
+            <div class="bar real ink solid" style="width:calc(38 / 70 * 100%)"></div>
+            <div class="bar felt ink solid" style="width:calc(61 / 70 * 100%)"></div>
+            <span class="val ink" style="left:calc(61 / 70 * 100% + 12px)">61 felt · 38 actual</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="lab ink"><b>Pilot</b>6 clinics, 2026</div>
+          <div class="track">
+            <div class="bar real ink solid" style="width:calc(35 / 70 * 100%)"></div>
+            <div class="bar felt ink solid" style="width:calc(37 / 70 * 100%)"></div>
+            <span class="val ink" style="left:calc(37 / 70 * 100% + 12px)">37 felt · 35 actual</span>
+          </div>
+        </div>
+      </div>
+      <div class="axis ink"><span></span><div class="ticks"><span style="left:0">0</span><span style="left:calc(15/70*100%)">15</span><span style="left:calc(30/70*100%)">30</span><span style="left:calc(45/70*100%)">45</span><span style="left:calc(60/70*100%)">60</span><span style="left:100%">70</span></div></div>
+      <figcaption class="method ink" style="margin-top:var(--ds-space-8)">Where pink runs past blue is the wait people felt but did not have; where the inks overprint, both.</figcaption>
+    </figure>
+
+    <div class="stats">
+      <div class="stat ink"><div class="n">412 h</div><p>of observation in 14 waiting rooms, Jan to May 2025</p></div>
+      <div class="stat ink"><div class="n">−41%</div><p>written complaints in the six pilot clinics, year on year</p></div>
+      <div class="stat ink"><div class="n">4.1 → 1.6%</div><p>of patients left before being seen, before and during the pilot</p></div>
+    </div>
+    <p class="method ink">Method. Actual wait from check-in and call-up timestamps (n = 1,860 before, 1,204 pilot). Felt wait from exit interviews (n = 96 before, 88 pilot), asked before patients saw a clock. Pilot clinics were matched on size and specialty; full tables in appendix C.</p>
+  </section>
+
+  <div class="run foot ink"><span>24</span><span>Printed on a two-drum duplicator: Medium Blue and Fluorescent Pink, on 100 g uncoated paper</span><span>tessin-strom.example/report-2026</span></div>
+  <div class="tooth"></div>
+</div>
+</body>
+</html>

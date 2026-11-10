@@ -1,0 +1,99 @@
+{
+ "piece": "footers/04-tumbletree-meadow",
+ "title": "04 Tumbletree: playful illustrated footer with a meadow and a mascot",
+ "pattern": "footer-brand",
+ "platform": "web",
+ "industry": "kids education",
+ "style": [
+  "playful",
+  "organic"
+ ],
+ "tags": [
+  "footer-brand",
+  "kids education",
+  "playful",
+  "mascot",
+  "illustration",
+  "meadow",
+  "sticker buttons"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "The link panel is a good object: a rounded white card with a thick ink border and a hard shadow, four columns with a coloured dot per group",
+  "Pip has a pose and a line ('See you tomorrow!') and the kite gives the scene a diagonal; the ink outline and the sticker buttons share one drawing rule",
+  "Palette is clean: sky, two greens, yellow, tangerine; Fredoka plus Nunito is a sensible two-face pair"
+ ],
+ "slop_signals": [
+  "'big curiosity.' in a yellow highlight block inside the headline",
+  "Two sticker buttons and then three check-mark pills ('No ads', 'No in-app buying', 'Made with teachers'): the hero stack placed in a footer",
+  "Stock scenery: four lobed clouds, a semicircle sun with a glow, two 'm' birds, lollipop trees; the shapes every kids template ships",
+  "Pip is the round-blob-with-eyes-and-blush mascot; no detail says Tumbletree rather than any app",
+  "Tiny white dots scattered on the grass as 'detail'"
+ ],
+ "fixes": [
+  "Remove the highlight block and the check pills; keep one button",
+  "Give the scene one specific idea: Pip's kite string tied to the link panel, or a lesson card in Pip's hand; cut the clouds, sun and birds",
+  "Make Pip particular: the sprout is the start; add one odd feature (a satchel, one tooth, a stripe) so the mascot is ownable",
+  "Draw the grass as one flat shape; drop the scattered dots"
+ ],
+ "references": [
+  {
+   "site": "Swap",
+   "url": "https://mobbin.com/sites/sections/0cc6183c-2921-48ea-bfe9-d7c3d60bfed4",
+   "what": "A line-art street scene along the bottom edge with characters doing things, plus a hand-drawn email field with a bird; the scene has stories, not shapes"
+  },
+  {
+   "site": "Duolingo",
+   "url": "https://mobbin.com/sites/sections/3b111b67-ae46-4cf4-b069-fdedd09e1805",
+   "what": "The mascot as a huge photographed plush cropped by the green band, links tiny; one object, enormous"
+  },
+  {
+   "site": "Corgi",
+   "url": "https://mobbin.com/sites/sections/63e60bfc-1a20-41d0-a3b3-2da8a43a3723",
+   "what": "A painted landscape as the ground with the link grid in bordered cells above; our panel-over-scene follows this"
+  },
+  {
+   "site": "Duna",
+   "url": "https://mobbin.com/sites/sections/f9a40fbf-6a5c-4bf1-ba33-0b914ba9d5bb",
+   "what": "Links set directly over a painted sky with the landscape below; no buttons in the footer"
+  },
+  {
+   "site": "Opennote",
+   "url": "https://mobbin.com/sites/sections/3dbc7c17-d1c9-4490-a394-33c61e52f471",
+   "what": "Pencil sketches along the bottom as the reward for scrolling; playful without a template"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "needs work",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "Removed the meadow, sun, clouds, birds, trees, kite, speech bubble, the mascot, the highlighted headline, both buttons and the check pills",
+   "Rebuilt as a quiet index on a flat night ground: wordmark, two factual paragraphs, four link columns with lesson counts and a total of 1,036",
+   "One detail only this brand has: a handwriting-formation specimen of the first eight Phase 2 phonics sounds (Set 1 s a t p, Set 2 i n m d) on four writing lines, with yellow used only for start dots, first-direction arrows and stroke numbers",
+   "Neutral white-alpha text (7.5:1) and rules; one accent with one job",
+   "Layouts checked at 1440, 1240, 1100, 960 and 390 px; phone frame re-rendered"
+  ]
+ },
+ "facts": [
+  "placeholder mark removed and the about text cut to one line (both from the final audit, checked by eye)",
+  "Pairwise judging was not blind: the judge knew which side came from Mobbin"
+ ],
+ "round4": {
+  "score": 4,
+  "pairwise": "won against Loom by 1 (not blind: the judge knew which side came from Mobbin)",
+  "changed": [
+   "Round-3 writing specimen, lesson counts and second paragraph removed (audit round 4: 'letter-formation diagram with numbered yellow arrows', 'corporate navy')",
+   "Pale sky ground (accent2 step 2) instead of navy; the one signature element is the product's rule in Fredoka: 'Ten minutes a day, then the app locks until morning.'",
+   "Four link columns of four links, one muted heading style, one rule, one legal line; a placeholder logo square removed after the fresh audit",
+   "The last row of the FAQ above as the top sliver"
+  ],
+  "after_audit": "placeholder mark removed and the about text cut to one line (both from the final audit, checked by eye)",
+  "date": "2026-10-18"
+ }
+}

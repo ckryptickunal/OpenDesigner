@@ -1,0 +1,114 @@
+{
+ "piece": "heroes/14-fennick-approvals",
+ "title": "14 Fennick: bill approvals hero",
+ "pattern": "product hero",
+ "platform": "web",
+ "industry": "fintech, B2B accounts payable",
+ "style": [
+  "minimal",
+  "product-led",
+  "flat"
+ ],
+ "tags": [
+  "product hero",
+  "b2b",
+  "fintech",
+  "accounts payable",
+  "bill approvals",
+  "finance teams",
+  "controllers",
+  "product screenshot",
+  "footed ledger",
+  "light"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "The proof is the product's own feature set as an accountant would set it: the drawer's 'If you approve' ledger as a footed column ($63,904.52 − 15,277.75 − 7,418.60 = $41,208.17), tabular figures, $ only on the first line and the total, a single rule over the total and a double rule under it on the figures only",
+  "Exact alignment between claim, proof and picture: the ledger's left edge stands on the drawer's content edge in the screen below (966 px), its double rule ends level with the button, and the 1344 px window sits on the 48 px margins",
+  "Restraint: one regular-weight two-line headline in the buyer's words, one green action (the product's Approve green), no kicker, pill, glow or invented proof; the real bills screen flat and whole, cropped where the list ends on a row boundary and the drawer's sticky footer starts under its own 'If you approve' heading"
+ ],
+ "slop_signals": [
+  "At thumbnail size it is a sibling of heroes/11 (Purlin): a white finance page, a two-line headline on the left, a block on the right, the product below",
+  "The Fennick frond appears twice: in the nav and, inside the product, as the customer's workspace icon (product-side)"
+ ],
+ "fixes": [
+  "Product-side: give Bramblecote Foods its own workspace icon in product/02, and set data-theme=\"light\" on its <html> so an OS dark preference doesn't flip the embedded screen",
+  "If the owner wants more distance from heroes/11: make the ledger carry the page (larger figures over the drawer column) or set the product on a pale stage band"
+ ],
+ "references": [
+  {
+   "site": "Ramp",
+   "url": "https://mobbin.com/sites/sections/83a61ac1-4ad8-48d0-91be-13ac7b374e22",
+   "what": "Regular one-line headline, a live figure, then the product on a pale stage; our live figure is the cash-left sum"
+  },
+  {
+   "site": "Slash",
+   "url": "https://mobbin.com/sites/sections/a5e87e77-0bc7-4b65-8f28-7cb0ecee16bb",
+   "what": "Large flat screenshot of a list with a detail drawer under the copy; ours keeps it whole at 0.9333"
+  },
+  {
+   "site": "Sequence",
+   "url": "https://mobbin.com/sites/sections/ca1841d9-bfa2-43c6-ad49-ba6eceddf894",
+   "what": "Blurred colour wash and a small product beside a serif headline; what to avoid"
+  }
+ ],
+ "audited": "2026-10-15",
+ "self_score": 4,
+ "audited_by": "independent",
+ "facts": [
+  "The selected Calloway row (7 of 14) is below the crop; a taller crop that shows it does not fit 900 px with the copy",
+  "Product-side: the Fennick frond doubles as the customer's workspace icon; product/02 has no data-theme"
+ ],
+ "fixed": [
+  "Dropped 'bills arrive matched to their PO' (the screen shows one PO match, not forwarding)",
+  "Ledger re-labelled to the product's own words ('6 bills scheduled before Oct 20'), signed the accountant's way, rules on the figures only, total at 500",
+  "Ledger aligned to the drawer's content edge; button bottom level with the double rule",
+  "Crop measured in Chrome at 523 product px so no line is cut and the drawer heading meets its sticky footer",
+  "Kicker removed and nav changed so it no longer echoes heroes/11; page white instead of mint so the product's sidebar reads as its own column",
+  "Unused DM Mono link removed; hover only on fine pointers"
+ ],
+ "owner": {
+  "verdict": "new",
+  "said": "built after the owner's review",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "New piece: marketing hero for product/02 Fennick, using the product's own system extended with a display set (Q-brand-06 two-sets)",
+   "Seven fresh-eyes audit rounds: 3, 3, 3, 3, 3, 3, then 4 (final)",
+   "Recipe moved from a centred one-liner over the screen to a claim-and-footed-sum split, so it shares no recipe with heroes/12 (dark, product first) or heroes/13 (centred, open frame)"
+  ]
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": [
+   {
+    "reference": "Origin",
+    "url": "https://mobbin.com/sites/sections/7617d355-486e-4c61-88d3-2f42998f3e18",
+    "result": "won 2 (twice)"
+   },
+   {
+    "reference": "Jeton",
+    "url": "https://mobbin.com/sites/sections/091299d9-899c-4a1b-9759-4892aadd2a99",
+    "result": "won 2, then lost 2 twice"
+   },
+   {
+    "reference": "Quicken",
+    "url": "https://mobbin.com/sites/sections/c0a45bad-39fb-490e-972a-ffd56ae4cd19",
+    "result": "won 3 (twice)"
+   },
+   {
+    "note": "The judges who preferred Jeton called the card on a mint panel tidy but un-art-directed. The final round only shortened the panel and changed 'before' to 'through' Oct 22."
+   }
+  ],
+  "changed": [
+   "The embedded product/02 screen is gone, so the gallery no longer shows that screen twice; the picture is one review card, built in this folder with product/02's components, at 1x on one pale green panel",
+   "A different bill from product/02's: Penhallow Cold Storage, $9,126.45, submitted by Efua Osei and approved by Gregor Stenning on Tue 13 Oct (no weekend approval), due Fri 23 Oct",
+   "Fresh figures (41,208 was shared with Knurl): $58,316.40 − $16,204.90 − $9,126.45 = $32,985.05 left on Thu 22 Oct, the ACH day",
+   "The balance left is the card's display number, so the card proves the headline; the 29 px ledger in the page's header is gone, so nothing competes with the headline",
+   "Headline two lines at 50 px; Reject is a neutral outline; separators spaced"
+  ]
+ }
+}

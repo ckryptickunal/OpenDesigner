@@ -3,7 +3,16 @@ still a sketch (zoom 0), replace the first paragraph with this lighter one, and 
 "This project has a first version of its design system in `opendesigner/`, and `DESIGN.md` describes it. Follow it, and suggest
 changes to the owner instead of making them quietly." Then delete these comments; the "strict" markers are harmless if left. -->
 ## Design system (OpenDesigner)
-This project's design is decided. The system lives in `opendesigner/`, and `DESIGN.md` is its living spec. This note keeps later AI sessions from undoing it by accident. Keep this note, `DESIGN.md` and `opendesigner/` on the branch new work starts from: a branch without them builds the old look.
+This project's design system lives in `opendesigner/`, and `DESIGN.md` is its living spec. `engine.py` below means `python3 <opendesigner skill>/scripts/engine.py`, from the OpenDesigner skill or plugin. This note keeps later AI sessions from undoing the decided design by accident. Keep this note, `DESIGN.md` and `opendesigner/` on the branch new work starts from: a branch without them builds the old look.
+
+**`opendesigner/PROTOCOL.md` is binding.** Follow its steps, gates and checks in every session, whoever you are.
+
+**Every session and every round**
+1. **DESIGN.md first.** Read `DESIGN.md`, then `opendesigner/RULES.md` (the owner's repeated notes) and `opendesigner/PROTOCOL.md`, before any UI work. Read RULES.md again at the start of every round.
+2. **After a context reset or in a new session,** run `engine.py status`. It prints the step, what waits for the owner and the next command.
+3. **Review before every draft and every commit.** Run `engine.py review`, fix what it reports, then re-read the DESIGN.md sections you touched.
+4. **Owner notes go to `engine.py feedback "<the rule, one line>" --kind note`.** Said twice, a note becomes a rule in RULES.md: apply it everywhere.
+5. **One question at a time,** one per message and one per call of a question tool.
 
 **Which file decides what.** Before you change something, read the row that covers it.
 
@@ -29,10 +38,11 @@ This project's design is decided. The system lives in `opendesigner/`, and `DESI
 **In a merge conflict** in `opendesigner/` or `DESIGN.md`, keep every entry from both sides of `decisions.md`. For `state.json`, keep the side with the newer decisions, then record the other side's decisions again with `engine.py set` and its removals with `engine.py removed add`. Never hand-merge tokens or exports: run `engine.py build`. In a UI file, keep the design side and re-apply your logic change on top.
 
 **At the end of every implementation** (a page, a component, a refactor)
-1. Run `python3 <opendesigner skill>/scripts/engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard or brings back something removed, `od-ignore` comments without a reason, missing system files, a token file edited after the last build, tokens older than `state.json`, a locked decision that changed, errors from `engine.py validate` (contrast, target sizes, standards), and `DESIGN.md` sections that are out of date. Its last line is `Review: ok` when nothing is left.
+1. Run `engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard or brings back something removed, `od-ignore` comments without a reason, missing system files, a token file edited after the last build, tokens older than `state.json`, a locked decision that changed, errors from `engine.py validate` (contrast, target sizes, standards), `DESIGN.md` sections that are out of date, code that uses no tokens, and a system older than the code. Its last line is `Review: ok` when nothing is left.
 2. Re-read the `DESIGN.md` sections you touched.
-3. If the work needed a value the system lacks, add it as a decision: `engine.py set <path> <value> --why "..."`, then `engine.py design-md`. Don't inline it.
-4. Fix any drift `review` reports.
+3. If the work needed a value the system lacks, add it as a decision: `engine.py set <path> <value> --set-by <how> --why "..."` (`chosen` needs `--quote` with the owner's words), then `engine.py design-md`. Don't inline it.
+4. Fix any drift `review` reports before the next draft.
+5. Show the result: screenshots or an artifact, before and after, with each check and its result.
 
 **Before you open a pull request or merge,** run `engine.py review --strict` and paste its last line in your report. `Review: ok` covers the code and the checks above; it cannot see the rendered page. <!-- strict -->
 Report "written", "built" and "verified" separately, and never call something verified that did not run.

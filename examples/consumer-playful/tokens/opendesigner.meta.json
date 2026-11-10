@@ -29,6 +29,10 @@
     "playful",
     "friendly"
   ],
+  "style": null,
+  "look": {
+    "gradient": null
+  },
   "params": {
     "behavior.navigationNative": {
       "value": true,
@@ -207,14 +211,15 @@
       "inferred": true
     },
     "emphasis.heroMoments": {
-      "value": "1-2-per-product",
+      "value": "significant-moments",
       "dial": "expression",
       "evidence": [
         "DC-L06-03",
         "S-L06-002",
         "S-L06-009"
       ],
-      "inferred": false
+      "inferred": false,
+      "profile": "persuade"
     },
     "emphasis.maxPrimaryPerView": {
       "value": 1,
@@ -430,6 +435,15 @@
       ],
       "inferred": false
     },
+    "type.displayMax": {
+      "value": 120,
+      "dial": "expression",
+      "evidence": [
+        "DC-L02-09",
+        "S-L19-052"
+      ],
+      "inferred": true
+    },
     "type.emphasizedVariants": {
       "value": true,
       "dial": "expression",
@@ -493,7 +507,7 @@
       "inferred": false
     },
     "type.weightCount": {
-      "value": 4,
+      "value": 3,
       "dial": "expression",
       "evidence": [
         "DC-L02-15"
@@ -521,6 +535,11 @@
     "brandPinFailed": false,
     "brandAdjustedTo": null,
     "brandContrastWhite": 3.1,
+    "brandContrastDark": 5.0,
+    "brandPinnedDark": true,
+    "brandContrastDarkMode": 5.88,
+    "brandDark": "#ff5a36",
+    "secondary": [],
     "statusPeakHct": 84.0,
     "textMin": 4.5,
     "ramps": [
@@ -533,74 +552,75 @@
       "info"
     ],
     "accentCount": 3,
-    "chart": {}
+    "chart": {},
+    "chartDiverging": {}
   },
   "ramps": {
     "accent": {
       "dark": {
         "hex": [
-          "#1e1715",
-          "#291d1b",
-          "#38221d",
-          "#47271f",
-          "#572c22",
-          "#673024",
-          "#793223",
-          "#ca654e",
-          "#e97156",
-          "#f97f64",
+          "#1f1614",
+          "#2b1d1a",
+          "#3c211a",
+          "#4c241b",
+          "#5d281c",
+          "#6f2a1c",
+          "#832916",
+          "#d95a3e",
+          "#ff5a36",
+          "#ff7759",
           "#ff8d73",
-          "#f7ccc2"
+          "#fecabd"
         ],
         "textOnSolid": "dark",
         "oklch": [
           [
             0.212,
-            0.012
+            0.015
           ],
           [
-            0.245,
-            0.019
+            0.246,
+            0.023
           ],
           [
-            0.279,
-            0.035
+            0.28,
+            0.044
           ],
           [
-            0.313,
-            0.051
+            0.314,
+            0.063
           ],
           [
-            0.346,
-            0.066
-          ],
-          [
-            0.38,
+            0.348,
             0.082
           ],
           [
-            0.414,
-            0.103
+            0.383,
+            0.101
           ],
           [
-            0.622,
-            0.134
+            0.417,
+            0.127
+          ],
+          [
+            0.625,
+            0.165
           ],
           [
             0.684,
-            0.154
+            0.207
           ],
           [
-            0.73,
-            0.154
+            0.724,
+            0.173
           ],
           [
             0.761,
             0.144
           ],
           [
-            0.88,
-            0.051
+            0.881,
+            0.063
           ]
         ]
       },
@@ -1632,46 +1652,46 @@
   "type": {
     "base": 16,
     "ratio": 1.333,
-    "reach": 5.5,
-    "nTop": 6,
+    "reach": 2.5,
+    "nTop": 3,
     "raw": [
       9,
       12,
       16,
       21,
       28,
-      38,
-      51,
-      67,
-      90
+      38
     ],
     "sizes": [
       12,
       16,
       21,
       28,
-      38,
-      51,
-      67,
-      90
+      38
     ],
     "merged": [],
-    "minSize": 11,
+    "minSize": 12,
     "scaleSizes": [
       12,
       16,
       21,
       28,
-      38,
-      51,
-      67,
-      90
+      38
     ],
+    "fluid": {
+      "display.md": {
+        "min": 32,
+        "max": 48
+      },
+      "display.lg": {
+        "min": 52,
+        "max": 120
+      }
+    },
     "weights": {
       "body": 400,
       "label": 500,
-      "heading": 750,
-      "display": 850
+      "heading": 750
     },
     "styles": [
       "body.sm",
@@ -1686,22 +1706,15 @@
       "title.md",
       "title.lg",
       "headline.sm",
-      "headline.md",
-      "headline.lg",
-      "display.sm"
+      "display.md",
+      "display.lg"
     ],
     "emphasized": [
       "emphasized.body.sm",
       "emphasized.body.md",
       "emphasized.body.lg",
       "emphasized.label.md",
-      "emphasized.label.lg",
-      "emphasized.title.sm",
-      "emphasized.title.md",
-      "emphasized.title.lg",
-      "emphasized.headline.sm",
-      "emphasized.headline.md",
-      "emphasized.headline.lg"
+      "emphasized.label.lg"
     ],
     "lineHeights": [
       16,
@@ -1709,9 +1722,8 @@
       28,
       36,
       48,
-      56,
-      76,
-      100
+      52,
+      136
     ],
     "scripts": {},
     "faces": {
@@ -1729,6 +1741,14 @@
         "selfHost": true,
         "open": true
       }
+    },
+    "tracking": {
+      "small": 0.02,
+      "body": 0,
+      "heading": -0.01,
+      "display": -0.02,
+      "caps-label": 0.06,
+      "caps-display": 0.01
     }
   },
   "space": {
@@ -1760,7 +1780,29 @@
       "20": 2.0,
       "24": 2.5
     },
-    "breakpoints": {}
+    "breakpoints": {},
+    "layout": {
+      "container": 1280,
+      "columns": {
+        "compact": 4,
+        "medium": 8,
+        "expanded": 12
+      },
+      "gutter": {
+        "compact": 16,
+        "expanded": 24
+      },
+      "margin": {
+        "compact": 16,
+        "expanded": 24
+      },
+      "measure": {
+        "prose": 65,
+        "lead": 52,
+        "unit": "ch"
+      },
+      "alignment": "A centred hero is fine; within a section the heading and its content share one alignment."
+    }
   },
   "density": {
     "spacious": {
@@ -1791,7 +1833,14 @@
       "control": {
         "sm": 40,
         "md": 48,
-        "lg": 56
+        "lg": 56,
+        "cta": 56
+      },
+      "row": {
+        "sm": 52,
+        "md": 56,
+        "lg": 64,
+        "two-line": 80
       },
       "ratio": 3.5
     },
@@ -1823,7 +1872,14 @@
       "control": {
         "sm": 32,
         "md": 40,
-        "lg": 48
+        "lg": 48,
+        "cta": 48
+      },
+      "row": {
+        "sm": 44,
+        "md": 48,
+        "lg": 56,
+        "two-line": 72
       },
       "ratio": 2.5
     },
@@ -1855,7 +1911,14 @@
       "control": {
         "sm": 24,
         "md": 32,
-        "lg": 40
+        "lg": 40,
+        "cta": 48
+      },
+      "row": {
+        "sm": 36,
+        "md": 40,
+        "lg": 48,
+        "two-line": 64
       },
       "ratio": 2.0
     }
@@ -1870,7 +1933,11 @@
     "focusWidth": 2,
     "focusRadius": 9999,
     "iconCorners": "rounded",
-    "iconCaps": "round"
+    "iconCaps": "round",
+    "borderDefault": 1,
+    "ctaShape": "pill",
+    "chosen": false,
+    "cornerShape": "circular"
   },
   "elevation": {
     "model": "shadow-ladder",
@@ -1884,8 +1951,8 @@
       "medium": 280,
       "long": 450,
       "extra": 780,
-      "medium-exit": 210,
-      "long-exit": 340
+      "medium-exit": 220,
+      "long-exit": 360
     },
     "multiplier": 1.1199999999999999,
     "standard": [
@@ -1901,9 +1968,9 @@
       1
     ],
     "exit": [
-      0.4,
-      0.14,
-      1,
+      0,
+      0,
+      0.3,
       1
     ],
     "spatial": {
@@ -2744,6 +2811,26 @@
     },
     {
       "mode": "light",
+      "fg": "color.text.primary",
+      "bg": "color.surface.glass",
+      "behind": "#000000",
+      "min": 4.5,
+      "kind": "text-on-glass",
+      "rule": "WCAG 2.2 SC 1.4.3, worst content behind the glass",
+      "level": "error"
+    },
+    {
+      "mode": "light",
+      "fg": "color.icon.default",
+      "bg": "color.surface.glass",
+      "behind": "#000000",
+      "min": 3.0,
+      "kind": "icon-on-glass",
+      "rule": "WCAG 2.2 SC 1.4.11, worst content behind the glass",
+      "level": "error"
+    },
+    {
+      "mode": "light",
       "fg": "color.bg.action.primary",
       "bg": "color.surface.base",
       "min": 3.0,
@@ -3590,6 +3677,26 @@
     },
     {
       "mode": "dark",
+      "fg": "color.text.primary",
+      "bg": "color.surface.glass",
+      "behind": "#ffffff",
+      "min": 4.5,
+      "kind": "text-on-glass",
+      "rule": "WCAG 2.2 SC 1.4.3, worst content behind the glass",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.icon.default",
+      "bg": "color.surface.glass",
+      "behind": "#ffffff",
+      "min": 3.0,
+      "kind": "icon-on-glass",
+      "rule": "WCAG 2.2 SC 1.4.11, worst content behind the glass",
+      "level": "error"
+    },
+    {
+      "mode": "dark",
       "fg": "color.bg.action.primary",
       "bg": "color.surface.base",
       "min": 3.0,
@@ -3619,5 +3726,132 @@
   ],
   "textScaling": "full",
   "notes": [],
-  "stateHash": "706e55906e00aea8"
+  "limits": {
+    "_about": "Caps for one page. opendesigner-review counts a built page against them; the values are the tokens.",
+    "sizes": {
+      "max": 8,
+      "scale": [
+        12,
+        16,
+        21,
+        28,
+        38
+      ],
+      "fluid": {
+        "display.md": {
+          "min": 32,
+          "max": 48
+        },
+        "display.lg": {
+          "min": 52,
+          "max": 120
+        }
+      }
+    },
+    "weights": {
+      "max": 3,
+      "values": [
+        400,
+        500,
+        750
+      ]
+    },
+    "families": {
+      "max": 2,
+      "values": [
+        "Nunito"
+      ],
+      "note": "a code face only where code is shown"
+    },
+    "tracking": {
+      "small": 0.02,
+      "body": 0,
+      "heading": -0.01,
+      "display": -0.02,
+      "caps-label": 0.06,
+      "caps-display": 0.01,
+      "capsNeverNegative": true
+    },
+    "textGreys": {
+      "max": 3,
+      "tokens": [
+        "color.text.primary",
+        "color.text.secondary",
+        "color.text.disabled"
+      ]
+    },
+    "accents": {
+      "max": 3
+    },
+    "filledPrimaryPerView": 1,
+    "radius": {
+      "control": "full",
+      "container": 24,
+      "overlay": 32,
+      "detail": 4
+    },
+    "ctaShape": "pill",
+    "containers": {
+      "max": 1,
+      "width": 1280
+    },
+    "alignment": "A centred hero is fine; within a section the heading and its content share one alignment.",
+    "heroMaxLines": 2,
+    "evidence": [
+      "DC-L02-10",
+      "DC-L02-15",
+      "L15-P04",
+      "DC-L15-03",
+      "S-L15-038"
+    ],
+    "cta": {
+      "height": [
+        48,
+        56
+      ],
+      "labelStyle": "text.label.lg",
+      "labelMinPx": 15,
+      "case": "sentence"
+    }
+  },
+  "stateHash": "706e55906e00aea8",
+  "profile": {
+    "id": "persuade",
+    "name": "Marketing page",
+    "trigger": "main surface: Experience",
+    "why": "A page that sells needs room, one hero line and a clear button. Feel words such as serious or minimal otherwise give it a 1.2 scale, no hero moment and comfortable spacing, as on a private B2B landing page (2026-11-05).",
+    "evidence": [
+      "DC-L03-16",
+      "DC-L06-03",
+      "S-L03-074",
+      "S-L06-002"
+    ],
+    "applied": [
+      {
+        "item": "spacing",
+        "what": "Spacious spacing by default, with 48px controls (buttons on the page 48 to 56px)",
+        "set_by": "auto_default",
+        "reason": "Marketing page default (main surface: Experience); nothing you answered, set or locked decides it",
+        "evidence": [
+          "DC-L03-07",
+          "S-L03-082",
+          "S-L03-074"
+        ],
+        "inferred": true
+      },
+      {
+        "item": "hero",
+        "what": "Headings step up by at least 1.25, with hero moments and a separate display scale",
+        "set_by": "auto_default",
+        "reason": "Marketing page default (main surface: Experience); nothing you answered, set or locked decides it",
+        "evidence": [
+          "DC-L06-03",
+          "S-L06-002",
+          "DC-L02-09"
+        ],
+        "inferred": true
+      }
+    ],
+    "skipped": {}
+  }
 }

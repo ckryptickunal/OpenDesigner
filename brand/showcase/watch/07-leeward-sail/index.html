@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=205, initial-scale=1">
+<title>Leeward: heading and wind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&family=IBM+Plex+Sans:wght@400;500;600&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Round 4: one glanceable thing, the heading, inside a whole compass card (nothing clipped by the display edge).
+     One face (IBM Plex Sans, replacing Plex Mono), three weights. Hardware, not design tokens: the 49 mm-class display is 205 x 251 pt. */
+  :root { --display-w: 205px; --display-h: 251px; --display-r: 48px; }
+  /* Type roles, watchOS text styles at xLarge: Caption 2 15, Headline 17, the card letters at 13, and the heading at 42 (an engine token). */
+  :root {
+    --t-caption: 15px;                    /* HIG Caption 2; the engine scale steps 14 and 17 */
+    --t-headline: var(--ds-font-size-17);
+    --t-display: var(--ds-font-size-42);
+    --stbd: oklch(0.80 0.19 150);         /* starboard green: the only colour, it says which side the wind is on (12:1 on black) */
+  }
+  /* System chrome: watchOS draws the title and the time itself, in San Francisco; Inter (SIL OFL) stands in, the same in every watch piece. */
+  :root { --t-sys: 600 17px/1 "Inter", system-ui, sans-serif; }
+  html, body { margin: 0; background: var(--ds-color-black); }
+  .display {
+    position: relative; width: var(--display-w); height: var(--display-h); overflow: hidden;
+    border-radius: var(--display-r); background: var(--ds-color-surface-base);
+    color: var(--ds-color-white); font-family: var(--ds-font-family-text);
+    font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+  }
+  .status { position: absolute; top: var(--ds-space-12); left: 20px; right: 22px; display: flex; justify-content: space-between; font: var(--t-sys); font-variant-numeric: tabular-nums; }
+  .status .title { color: var(--ds-color-brand-seed); }
+  .card { position: absolute; left: 0; top: 0; width: 205px; height: 251px; }
+  .card svg { display: block; width: 100%; height: 100%; }
+  .read { position: absolute; left: 0; right: 0; top: 124px; text-align: center; }
+  .read .num { display: block; font: 500 var(--t-display)/1 var(--ds-font-family-text); letter-spacing: -0.02em; }
+  .read .num sup { font-size: 0.5em; vertical-align: 0.8em; margin-left: 1px; font-weight: 400; }
+  .read .wind { display: block; margin-top: var(--ds-space-6); font: 500 var(--t-caption)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+  .read .wind b { font-weight: 600; color: var(--stbd); }
+</style>
+</head>
+<body>
+<main class="display" aria-label="Leeward on the boat Tansy: heading 247 degrees; apparent wind 14.2 knots, 38 degrees off the starboard bow">
+  <div class="card" aria-hidden="true"><svg id="card" viewBox="0 0 205 251"></svg></div>
+  <div class="status"><span class="title">Tansy</span><span class="clock">11:04</span></div>
+  <div class="read"><span class="num">247<sup>°</sup></span><span class="wind">AWS <b>14.2 kn</b></span></div>
+</main>
+
+<script>
+/* A heading-up compass card, whole inside the display: a tick every 30 degrees, longer at the four points, the four letters,
+   the lubber line at the top and one green mark where the apparent wind comes from (heading 247, wind 38 to starboard). */
+(function () {
+  const svg = document.getElementById('card');
+  const css = getComputedStyle(document.documentElement);
+  const minor = css.getPropertyValue('--ds-color-neutral-dark-7').trim();
+  const major = css.getPropertyValue('--ds-color-neutral-dark-10').trim();
+  const label = css.getPropertyValue('--ds-color-text-secondary').trim();
+  const stbd = 'oklch(0.80 0.19 150)';
+  const CX = 102.5, CY = 151, R = 80, HEAD = 247, WIND = 38;
+  const NS = 'http://www.w3.org/2000/svg';
+  const add = (n, a, txt) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (txt) e.textContent = txt; svg.appendChild(e); return e; };
+  const pt = (deg, r) => { const a = (deg - 90) * Math.PI / 180; return [CX + r * Math.cos(a), CY + r * Math.sin(a)]; };
+  for (let b = 0; b < 360; b += 30) {
+    const s = (b - HEAD + 360) % 360, big = b % 90 === 0;
+    if (s < 12 || s > 348) continue;  // the lubber line owns the top; no tick beside it
+    const [x1, y1] = pt(s, R), [x2, y2] = pt(s, R - (big ? 10 : 7));
+    add('line', { x1, y1, x2, y2, stroke: big ? major : minor, 'stroke-width': big ? 2 : 1.5, 'stroke-linecap': 'round' });
+  }
+  [['N', 0], ['E', 90], ['S', 180], ['W', 270]].forEach(([t, b]) => {
+    const [x, y] = pt((b - HEAD + 360) % 360, R - 18);
+    add('text', { x, y, fill: major, 'font-family': 'IBM Plex Sans, sans-serif', 'font-size': 13, 'font-weight': 500, 'text-anchor': 'middle', 'dominant-baseline': 'central' }, t);
+  });
+  // lubber line: the boat's bow, straight up
+  add('line', { x1: CX, y1: CY - R - 6, x2: CX, y2: CY - R + 12, stroke: '#fff', 'stroke-width': 2.5, 'stroke-linecap': 'round' });
+  // apparent wind: a green wedge outside the card, pointing in
+  const [tx, ty] = pt(WIND, R + 1), [lx, ly] = pt(WIND - 3, R + 16), [rx, ry] = pt(WIND + 3, R + 16);
+  add('path', { d: `M ${tx} ${ty} L ${lx} ${ly} L ${rx} ${ry} Z`, fill: stbd });
+})();
+</script>
+</body>
+</html>

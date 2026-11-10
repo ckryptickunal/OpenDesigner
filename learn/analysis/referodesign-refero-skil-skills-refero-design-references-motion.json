@@ -1,0 +1,754 @@
+{
+  "summary": "Refero's motion guide for product UI says every animation must serve feedback, continuity or hierarchy, or be removed. It orders motion as a pyramid from micro feedback to rare expressive motion, and gives purpose-based duration bands, enter/exit/change easing curves, spring settings, and concrete specs for buttons, inputs, lists, modals and drawers. It defines a minimum and a complete set of motion tokens with a component mapping, and makes a reduced-motion variant mandatory. It ends with anti-patterns (slow hovers, linear easing, transition: all, endless loops) and a pre-ship checklist. For a design system it supplies ready duration, easing, distance and spring token values and the rules for applying them.",
+  "key_ideas": [
+    "Every animation must provide feedback, continuity or hierarchy; otherwise remove it",
+    "Decide context first: product UI is subtle and fast, marketing can be more expressive",
+    "Higher-frequency and smaller-distance actions get shorter durations",
+    "Start with micro feedback; add state transitions, layout continuity and expressive motion only when justified",
+    "Use duration bands by purpose rather than one duration for everything",
+    "Ease-out for entering, ease-in for exiting, ease-in-out for state changes",
+    "Springs suit drag, swipe and physical elements but must settle quickly",
+    "Define motion tokens for durations, easings and distances to keep a team consistent",
+    "Always ship a prefers-reduced-motion variant: swap slide and scale for fades, remove parallax",
+    "Never use transition: all; list the animated properties",
+    "Set transform-origin to where the element comes from",
+    "Animations must be interruptible by user input",
+    "In product UI nothing should exceed 500ms"
+  ],
+  "entities": [
+    {
+      "name": "Refero",
+      "type": "company",
+      "description": "Publisher of the refero_skill repo this guide comes from"
+    },
+    {
+      "name": "Motion / Framer Motion",
+      "type": "library",
+      "description": "Suggested React library for layout animations, springs and variants"
+    },
+    {
+      "name": "Web Animations API",
+      "type": "library",
+      "description": "Native, dependency-free animation option"
+    },
+    {
+      "name": "GSAP",
+      "type": "library",
+      "description": "Heavy but powerful library for complex timelines and marketing"
+    },
+    {
+      "name": "Rive",
+      "type": "tool",
+      "description": "Interactive illustrations and icons, suggested for empty states and onboarding"
+    },
+    {
+      "name": "Lottie",
+      "type": "library",
+      "description": "Illustrative animations; watch file size and export quality"
+    },
+    {
+      "name": "Material Design Motion",
+      "type": "product",
+      "description": "Listed resource; the standard easings are described as Material-inspired"
+    },
+    {
+      "name": "Apple HIG Motion",
+      "type": "product",
+      "description": "Listed resource for platform conventions and reduced-motion criteria"
+    },
+    {
+      "name": "prefers-reduced-motion",
+      "type": "concept",
+      "description": "Media query the guide requires a variant for"
+    }
+  ],
+  "topics": [
+    {
+      "name": "Motion principles",
+      "summary": "Motion must serve feedback, continuity or hierarchy; the motion pyramid; context first; anti-patterns."
+    },
+    {
+      "name": "Easing and timing",
+      "summary": "Duration bands (90-150, 160-240, 240-360, 360-500ms), duration and easing tokens, and enter/exit/change curves."
+    },
+    {
+      "name": "Spring animation",
+      "summary": "Use springs for gestures and physical elements; snappy, smooth and bouncy stiffness/damping presets; must decay quickly."
+    },
+    {
+      "name": "Reduced motion",
+      "summary": "Mandatory reduced-motion variant: fade only instead of slide or scale, remove parallax, pause loops; token overrides and a CSS shortcut."
+    },
+    {
+      "name": "Micro-interactions",
+      "summary": "Specs for hover, press, focus, input focus/error/success, and list add/remove animations."
+    },
+    {
+      "name": "Animation performance",
+      "summary": "transition: all causes layout recalculation; test on slower devices; animate reorder only if performant."
+    },
+    {
+      "name": "Modals and popovers",
+      "summary": "Overlay fades 200ms in and 150ms out; modal fades and scales from 0.95; dropdown transform-origin at the trigger corner."
+    },
+    {
+      "name": "Design systems and tokens",
+      "summary": "Minimum and complete motion token sets with component mapping."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "CSS transition examples, SVG transform-box fix, and library choice for React/Next."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "500ms or more in product UI almost always feels slow.",
+      "evidence": "Timing Rules: 500ms+ in product UI almost always feels slow"
+    },
+    {
+      "claim": "Linear easing feels robotic and unnatural.",
+      "evidence": "Anti-Patterns: Linear easing"
+    },
+    {
+      "claim": "300-600ms on hover or buttons feels sluggish.",
+      "evidence": "Anti-Patterns: Red Flags"
+    },
+    {
+      "claim": "transition: all animates unintended properties, causes layout recalculation every frame and hurts performance on low-end devices.",
+      "evidence": "Why transition: all is dangerous"
+    },
+    {
+      "claim": "Transforms on SVG elements behave differently and need a wrapping g with transform-box: fill-box.",
+      "evidence": "SVG Animation"
+    },
+    {
+      "claim": "For most SaaS products CSS plus Motion is sufficient.",
+      "evidence": "Libraries and Tools"
+    },
+    {
+      "claim": "The standard easing tokens are Material-inspired.",
+      "evidence": "Appendix: Standard (Material-inspired)"
+    }
+  ],
+  "quotes": [
+    "When in doubt — shorter, subtler, or none.",
+    "Motion that doesn't serve function is noise.",
+    "Spring must decay quickly. No prolonged \"jello\" effect."
+  ],
+  "tags": [
+    "motion",
+    "easing",
+    "duration",
+    "motion-tokens",
+    "reduced-motion",
+    "springs",
+    "micro-interactions",
+    "refero"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Remove any animation that does not provide feedback, continuity or hierarchy, or whose removal would not hurt the UX.",
+      "why": "Motion that doesn't serve function is noise.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Motion serves three purposes; Quick Test"
+    },
+    {
+      "rule": "Use 90-150ms for hover, press, toggle and focus; 160-240ms for accordions, tabs and small panels; 240-360ms for modals, drawers and route transitions; 360-500ms only for rare large layout reflows.",
+      "why": "Purpose-based categories instead of 500ms for everything.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "90–150ms",
+        "160–240ms",
+        "240–360ms",
+        "360–500ms"
+      ],
+      "evidence": "Duration Reference"
+    },
+    {
+      "rule": "Make smaller-distance and higher-frequency actions shorter; make anything users do 100 times a day instant.",
+      "why": "Timing rules.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "100x/day"
+      ],
+      "evidence": "Timing Rules"
+    },
+    {
+      "rule": "Keep every product UI animation at or under 500ms.",
+      "why": "500ms+ almost always feels slow.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "500ms"
+      ],
+      "evidence": "Pre-Ship Checklist: Nothing exceeds 500ms"
+    },
+    {
+      "rule": "Use ease-out for elements entering, ease-in for elements exiting and ease-in-out for state changes, with cubic-bezier(0.0, 0.0, 0.2, 1), cubic-bezier(0.4, 0.0, 1, 1) and cubic-bezier(0.4, 0.0, 0.2, 1).",
+      "why": "Enter: fast start, soft landing; exit: soft start, fast exit; change: smooth both ways.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "cubic-bezier(0.0, 0.0, 0.2, 1)",
+        "cubic-bezier(0.4, 0.0, 1, 1)",
+        "cubic-bezier(0.4, 0.0, 0.2, 1)"
+      ],
+      "evidence": "Easing: CSS Tokens"
+    },
+    {
+      "rule": "Never use linear easing in product UI.",
+      "why": "Robotic, unnatural.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Red Flags; Pre-Ship Checklist"
+    },
+    {
+      "rule": "Use springs for drag, swipe, gesture responses and physical-feeling elements, and make them settle quickly; snappy is stiffness 400 / damping 30, smooth is stiffness 200 / damping 20.",
+      "why": "Springs suit physical motion, but a spring that does not settle reads as jello.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "react",
+      "values": [
+        "stiffness: 400, damping: 30",
+        "stiffness: 200, damping: 20"
+      ],
+      "evidence": "When to Use Spring"
+    },
+    {
+      "rule": "Use the bouncy spring (stiffness 300, damping 15) sparingly.",
+      "why": "Marked use sparingly.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "motion",
+      "applies_to": "react",
+      "values": [
+        "stiffness: 300, damping: 15"
+      ],
+      "evidence": "Appendix: SPRINGS"
+    },
+    {
+      "rule": "On buttons, shift background color on hover in 120ms, scale to 0.98 on press in 90-120ms, show the focus ring in 120ms, and do not animate the disabled state.",
+      "why": "Micro-interactions with maximum effect, minimum risk.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "120ms",
+        "scale: 0.98",
+        "90–120ms"
+      ],
+      "evidence": "Buttons and Controls"
+    },
+    {
+      "rule": "Show a clear loading state on buttons, not just a spinner.",
+      "why": "Listed in Buttons and Controls.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Buttons and Controls: Loading"
+    },
+    {
+      "rule": "Highlight input focus with border or underline without layout shift; shake on error only on submit, about 200ms, never on every keystroke.",
+      "why": "Input micro-interaction guidance.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [
+        "200ms"
+      ],
+      "evidence": "Inputs"
+    },
+    {
+      "rule": "Animate added list rows with a fade plus 4-8px slide over 200ms and removed rows with a fade plus collapse over 180ms; animate reorder only if performant.",
+      "why": "Lists and Tables guidance.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "4–8px",
+        "200ms",
+        "180ms"
+      ],
+      "evidence": "Lists and Tables"
+    },
+    {
+      "rule": "Fade overlays in over 200ms and out over 150ms; fade and scale modals from 0.95 on enter and to 0.95 on exit; slide drawers from and to their edge.",
+      "why": "Modals and Drawers table.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "200ms",
+        "150ms",
+        "scale(0.95)"
+      ],
+      "evidence": "Modals and Drawers"
+    },
+    {
+      "rule": "Define motion tokens for durations (120ms / 200ms / 320ms), easings and micro-slide distances (4px / 8px / 16px) and use them instead of random values.",
+      "why": "Prevents chaos across a team.",
+      "kind": "do",
+      "strength": "must",
+      "area": "tokens",
+      "applies_to": "css",
+      "values": [
+        "--duration-fast: 120ms",
+        "--duration-default: 200ms",
+        "--duration-slow: 320ms",
+        "--motion-distance-sm: 4px",
+        "--motion-distance-md: 8px",
+        "--motion-distance-lg: 16px"
+      ],
+      "evidence": "Minimum Token Set"
+    },
+    {
+      "rule": "Map hover/press and tooltips to --duration-fast with --ease-out, accordion/tabs to --duration-default with --ease-in-out, and modal/drawer to --duration-slow with --ease-out entering and --ease-in exiting.",
+      "why": "Component Mapping table.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tokens",
+      "applies_to": "all",
+      "values": [
+        "--duration-fast",
+        "--duration-default",
+        "--duration-slow",
+        "--ease-out",
+        "--ease-in-out",
+        "--ease-in"
+      ],
+      "evidence": "Component Mapping"
+    },
+    {
+      "rule": "Always provide a prefers-reduced-motion variant: replace slide or scale plus fade with fade only, make spring bounce instant or a short tween, remove parallax and pause or remove auto-playing loops.",
+      "why": "Reduced motion is not optional.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [
+        "prefers-reduced-motion: reduce"
+      ],
+      "evidence": "Reduced Motion: Not Optional"
+    },
+    {
+      "rule": "In reduced motion, set fast and default durations to 0ms, slow durations to 100ms and motion distances to 0px.",
+      "why": "Reference token overrides.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "accessibility",
+      "applies_to": "css",
+      "values": [
+        "0ms",
+        "100ms",
+        "0px"
+      ],
+      "evidence": "Appendix: REDUCED MOTION"
+    },
+    {
+      "rule": "Never use transition: all; list the transitioned properties explicitly.",
+      "why": "It animates unintended properties, causes layout recalculation and makes debugging hard.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "transition: all"
+      ],
+      "evidence": "Critical: Never Use transition: all"
+    },
+    {
+      "rule": "Set transform-origin explicitly for scale and rotate: center for modals and button presses, the trigger corner (top left or top right) for dropdowns, and the edge nearest the trigger for tooltips.",
+      "why": "The source's common origins place it where the trigger is; scale and rotate need an explicit origin.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "center",
+        "top left",
+        "top right"
+      ],
+      "evidence": "Transform Origin"
+    },
+    {
+      "rule": "To transform SVG parts, wrap them in a g with transform-box: fill-box and transform-origin: center.",
+      "why": "Transforms on SVG elements behave differently.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "transform-box: fill-box",
+        "transform-origin: center"
+      ],
+      "evidence": "SVG Animation"
+    },
+    {
+      "rule": "Make animations interruptible; avoid fill modes or delays that block interaction.",
+      "why": "User input should interrupt any animation mid-flight.",
+      "kind": "do",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Animations Must Be Interruptible"
+    },
+    {
+      "rule": "Do not run infinite loops in product screens or animate everything at once.",
+      "why": "Listed as red flags that instantly make motion feel cheap: loops distract, and animating everything at once leaves no attention hierarchy.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Red Flags"
+    },
+    {
+      "rule": "Do not use 300-600ms durations on hover or buttons.",
+      "why": "Feels sluggish.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "300–600ms"
+      ],
+      "evidence": "Red Flags"
+    },
+    {
+      "rule": "Use CSS transitions for micro feedback and simple states and Motion for layout animations and springs in React; reach for GSAP, Rive or Lottie only for complex timelines or illustrative motion.",
+      "why": "For most SaaS products CSS + Motion is sufficient.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "tooling",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "Libraries and Tools"
+    },
+    {
+      "rule": "Keep timings consistent across similar components; do not use 200ms in one place and 400ms in a similar one.",
+      "why": "Inconsistent timings are a red flag: chaos.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [
+        "200ms",
+        "400ms"
+      ],
+      "evidence": "Red Flags: Inconsistent timings; Pre-Ship Checklist"
+    },
+    {
+      "rule": "Keep product UI motion subtle, fast and functional; allow more expressive motion only on marketing surfaces.",
+      "why": "Context first: product UI or marketing changes how much motion is acceptable.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "0. Context First"
+    },
+    {
+      "rule": "Show input success with a subtle checkmark or color change, without overdoing it.",
+      "why": "Inputs table: Don't overdo it.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Inputs"
+    },
+    {
+      "rule": "Performance-test motion on slower devices before shipping.",
+      "why": "Pre-ship checklist item; transition: all is a performance killer on low-end devices.",
+      "kind": "do",
+      "strength": "should",
+      "area": "motion",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Pre-Ship Checklist"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "How much motion should the product use?",
+      "options": [
+        {
+          "name": "Level 1 micro feedback",
+          "effect": "Responsive feel without noticeable animation on hover, press, focus, toggles, inline validation",
+          "when": "Always; the starting point"
+        },
+        {
+          "name": "Level 2 state transitions",
+          "effect": "Movement instead of teleportation for accordions, tabs, modals, drawers, popovers",
+          "when": "When state changes need continuity"
+        },
+        {
+          "name": "Level 3 layout continuity",
+          "effect": "Elements resize, reorder, add or remove while keeping context",
+          "when": "Reorder, filter chips, drag and drop, lists"
+        },
+        {
+          "name": "Level 4 expressive",
+          "effect": "Hero animations, illustrations, onboarding sequences",
+          "when": "Rarely in product; marketing pages"
+        }
+      ],
+      "recommendation": "Start at Level 1 and add higher levels only when justified; when in doubt, shorter, subtler or none.",
+      "maps_to": "Q-motion-01",
+      "evidence": "The Motion Pyramid"
+    },
+    {
+      "question": "Which easing curve for each kind of movement?",
+      "options": [
+        {
+          "name": "ease-out cubic-bezier(0.0, 0.0, 0.2, 1)",
+          "effect": "Fast start, soft landing",
+          "when": "Elements entering"
+        },
+        {
+          "name": "ease-in cubic-bezier(0.4, 0.0, 1, 1)",
+          "effect": "Soft start, fast exit",
+          "when": "Elements exiting"
+        },
+        {
+          "name": "ease-in-out cubic-bezier(0.4, 0.0, 0.2, 1)",
+          "effect": "Smooth both ways",
+          "when": "State changes"
+        },
+        {
+          "name": "emphasized cubic-bezier(0.2, 0.0, 0, 1)",
+          "effect": "Slightly more alive",
+          "when": "Alternative when more character is wanted"
+        }
+      ],
+      "recommendation": "Group easings by job: enter, exit, change.",
+      "maps_to": "Q-motion-03",
+      "evidence": "Easing: Basic Principle; CSS Tokens"
+    },
+    {
+      "question": "How should springy motion be set up?",
+      "options": [
+        {
+          "name": "Snappy spring",
+          "effect": "Stiffness 400, damping 30: quick and settled",
+          "when": "Snappy, quick response"
+        },
+        {
+          "name": "Smooth spring",
+          "effect": "Stiffness 200, damping 20: softer",
+          "when": "Smoother physical movement"
+        },
+        {
+          "name": "Bouncy spring",
+          "effect": "Stiffness 300, damping 15: visible bounce",
+          "when": "Sparingly"
+        },
+        {
+          "name": "Duration and easing only",
+          "effect": "CSS tweens with tokens",
+          "when": "Micro feedback and simple states"
+        }
+      ],
+      "recommendation": "Springs for drag, swipe and physical elements, decaying quickly; CSS tweens elsewhere.",
+      "maps_to": "Q-motion-04",
+      "evidence": "When to Use Spring; Appendix SPRINGS"
+    },
+    {
+      "question": "How many duration steps should the token set have?",
+      "options": [
+        {
+          "name": "Minimum set",
+          "effect": "fast 120ms, default 200ms, slow 320ms",
+          "when": "Most teams"
+        },
+        {
+          "name": "Complete set",
+          "effect": "instant 0ms, fast 120ms, default 200ms, slow 320ms, slower 400ms",
+          "when": "Reference implementation"
+        }
+      ],
+      "recommendation": "Start with the three-step minimum set.",
+      "maps_to": "Q-motion-02",
+      "evidence": "Minimum Token Set; Appendix"
+    },
+    {
+      "question": "What should happen when the user asks for reduced motion?",
+      "options": [
+        {
+          "name": "Fade only",
+          "effect": "Slide or scale plus fade becomes a plain fade",
+          "when": "Modals, slides"
+        },
+        {
+          "name": "Instant or short tween",
+          "effect": "Spring bounce removed",
+          "when": "Spring animations"
+        },
+        {
+          "name": "Remove",
+          "effect": "Parallax gone; auto-playing loops paused or removed",
+          "when": "Parallax and loops"
+        }
+      ],
+      "recommendation": "Always provide the variant; the CSS shortcut sets durations to 0.01ms.",
+      "maps_to": "Q-motion-07",
+      "evidence": "Reduced Motion: What to Change"
+    }
+  ],
+  "process": [
+    {
+      "step": "Answer context questions",
+      "detail": "Product UI or marketing? How often is it triggered? Does it help or distract?"
+    },
+    {
+      "step": "Pick the pyramid level",
+      "detail": "Start with micro feedback; justify each step up."
+    },
+    {
+      "step": "Choose duration band and easing",
+      "detail": "Match purpose and frequency to a duration category; ease-out to enter, ease-in to exit, ease-in-out to change."
+    },
+    {
+      "step": "Use tokens",
+      "detail": "Apply duration, easing and distance tokens through the component mapping."
+    },
+    {
+      "step": "Write the reduced-motion variant",
+      "detail": "Fade only, no parallax, paused loops; override tokens under prefers-reduced-motion."
+    },
+    {
+      "step": "Run the quick test",
+      "detail": "Purpose, frequency-appropriate duration, non-linear easing, reduced-motion variant, would removing it hurt? Remove if no to purpose or removal."
+    },
+    {
+      "step": "Pre-ship checklist",
+      "detail": "Check bands, tokens, no linear, under 500ms, no transition: all, transform-origin set, interruptible, tested on slower devices."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Button CSS: transition background-color 120ms and transform 90ms with --ease-out, :active scale(0.98)",
+      "where": "Buttons and Controls",
+      "visual_note": "A button that tints quickly on hover and presses in slightly when clicked."
+    },
+    {
+      "what": "List item enter: opacity 0 and translateY(-8px) to 1 and 0 over 200ms ease-out",
+      "where": "Lists and Tables",
+      "visual_note": "New rows drop in a few pixels while fading in."
+    },
+    {
+      "what": "Modal: opacity 0 and scale(0.95) to 1 over 200ms ease-out; reduced motion keeps opacity only over 150ms",
+      "where": "Modals and Drawers; Reduced Motion",
+      "visual_note": "Modal grows slightly as it fades in; with reduced motion it only fades."
+    },
+    {
+      "what": "Dropdown with transform-origin: top right scaling from 0.95",
+      "where": "Transform Origin",
+      "visual_note": "Menu appears to grow out of its trigger corner."
+    },
+    {
+      "what": "Reduced-motion CSS shortcut setting animation and transition durations to 0.01ms on all elements",
+      "where": "CSS Shortcut",
+      "visual_note": "Global kill switch for motion."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "90–150ms",
+      "context": "Instant category: hover, press, toggle, focus",
+      "evidence": "Duration Reference"
+    },
+    {
+      "value": "160–240ms",
+      "context": "State change: accordion, tabs, small panels",
+      "evidence": "Duration Reference"
+    },
+    {
+      "value": "240–360ms",
+      "context": "Page/large: modal, drawer, route transition",
+      "evidence": "Duration Reference"
+    },
+    {
+      "value": "360–500ms",
+      "context": "Complex: large layout reflow (rare)",
+      "evidence": "Duration Reference"
+    },
+    {
+      "value": "120ms / 200ms / 320ms",
+      "context": "Fast, default and slow duration tokens",
+      "evidence": "Practical Preset"
+    },
+    {
+      "value": "400ms",
+      "context": "--duration-slower in the complete token system",
+      "evidence": "Appendix"
+    },
+    {
+      "value": "cubic-bezier(0.2, 0.0, 0, 1)",
+      "context": "--ease-emphasized",
+      "evidence": "CSS Tokens"
+    },
+    {
+      "value": "cubic-bezier(0.05, 0.7, 0.1, 1)",
+      "context": "--ease-emphasized-decel",
+      "evidence": "Appendix"
+    },
+    {
+      "value": "2px / 4px / 8px / 16px / 24px",
+      "context": "Motion distance tokens xs to xl",
+      "evidence": "Appendix: DISTANCES"
+    },
+    {
+      "value": "0.98",
+      "context": "Button press scale",
+      "evidence": "Buttons and Controls"
+    },
+    {
+      "value": "0.95",
+      "context": "Modal and dropdown start scale",
+      "evidence": "Modals and Drawers"
+    },
+    {
+      "value": "0.01ms",
+      "context": "Reduced-motion shortcut durations",
+      "evidence": "CSS Shortcut"
+    },
+    {
+      "value": "500ms",
+      "context": "Upper limit for product UI motion",
+      "evidence": "Pre-Ship Checklist"
+    }
+  ],
+  "caveats": [
+    "Opinionated guide from Refero's design skill; values are presented as defaults, not measured research.",
+    "Easing curves are described as Material-inspired; the source does not cite the Material spec version.",
+    "Spring presets are Framer Motion / Motion parameters and do not transfer directly to other spring APIs [inferred].",
+    "The 0.01ms reduced-motion shortcut removes all motion including fades, which differs from the guide's own fade-only recommendation [inferred]."
+  ]
+}

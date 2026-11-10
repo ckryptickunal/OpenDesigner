@@ -10,6 +10,7 @@ OpenDesigner/
 ├── CLAUDE.md, GEMINI.md       R3  "@AGENTS.md" plus host notes
 ├── plugin.json                R3  Agent Plugins 1.0 manifest (Codex, ChatGPT, Cursor, VS Code, Copilot, Kiro)
 ├── .claude-plugin/            R3  plugin.json + marketplace.json (the repo doubles as a Claude marketplace)
+├── hooks/                     R3  hooks.json: one read-only SessionStart hook for Claude Code, `engine.py status --hook` when opendesigner/state.json exists (owner 2026-11-09; tools/test_plugin_hook.py)
 ├── skills/                    R3  SOURCE OF TRUTH, Agent Skills format, portable frontmatter only
 │   ├── opendesigner/          router skill: interview flow, depth modes, pacing, visual ladder, output contract
 │   │   ├── SKILL.md           (<500 lines)
@@ -17,7 +18,9 @@ OpenDesigner/
 │   │   ├── references/        rules.md (interview rules), hooks.md (designer hooks), guardrails.md
 │   │   ├── assets/templates/  visual templates (.html, JSON-fed): palette, type scale, spacing ruler, radius, elevation, motion, component sheet, option gallery
 │   │   ├── assets/output/     DESIGN.md, decisions.md, state.json templates
-│   │   └── scripts/engine.py  R2  state, ramps, scales, contrast, validate, export (stdlib only, no network)
+│   │   ├── assets/library/    the optional component library: 82 token-only HTML components (meta.json each); scripts/library.py lists, suggests, adds and checks them (stdlib only); shown on the site at /library/ by site/library_page.py
+│   │   ├── references/post-change-audit.md  every owner-corrected rule, checked after each implementation (site/post_change_audit.py runs the automatic half)
+│   │   └── scripts/engine.py  R2  state, ramps, scales, contrast, validate, export, review (stdlib only, no network); `guard install` writes the opt-in pre-commit hook (owner 2026-11-09)
 │   ├── opendesigner-extract/  reference intake (repo CSS, URL, screenshot, Figma variables), never copies identity
 │   ├── opendesigner-extend/   later-session protocol: read DESIGN.md + tokens + decisions before changing anything
 │   └── opendesigner-export/   DTCG, CSS variables, Tailwind, Figma (use_figma), Paper
@@ -25,6 +28,7 @@ OpenDesigner/
 ├── data/                      R3  chunked knowledge built from synthesis/ by tools/build_data.py (ontology, graph, levers, questions per stage, hooks, pacing)
 ├── examples/                  R2  complete worked examples, each with DESIGN.md, decisions.md, tokens/, css/, preview.html
 ├── chatgpt-project/           R3  instructions.md + at most 5 knowledge files, for ChatGPT Projects
+├── brand/                     --  OpenDesigner's own brand system, its Design System artifact files, and the showcase stress test (brand/README.md)
 ├── docs/                      R1  SPEC.md (from S1d), HOW-IT-WORKS.md, RESEARCH.md (map of the research), FAQ.md
 ├── research/, benchmarks/, sources/, traces/, synthesis/   unchanged: the evidence base
 ├── _coordination/, tools/od.py, tools/jev_nav.py           unchanged: multi-session collaboration
@@ -48,19 +52,22 @@ Phase 2 (`server/`, a stateless MCP server with MCP Apps views reusing the templ
 Run from the user's project; state lives in `./opendesigner/` unless `--dir` is given.
 ```
 python3 <skill>/scripts/engine.py init [--dir D] [--from examples/<name>/state.json]   create state.json with defaults
-python3 <skill>/scripts/engine.py set <dotted.path> <json-value>                       record one decision (appends to decisions.md with --why "reason")
+python3 <skill>/scripts/engine.py set <dotted.path> <json-value> --set-by <how>        record one decision (appends to decisions.md with --why "reason"; fonts, brand color, dials and answers need --set-by, and chosen needs --quote)
 python3 <skill>/scripts/engine.py generate                                           state.json + levers.json -> tokens/ (DTCG 2025.10 + resolver)
 python3 <skill>/scripts/engine.py validate [--json]                                  contrast, targets, lint; exit 1 on errors; report cites the rule
 python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg
 python3 <skill>/scripts/engine.py design-md                                          render DESIGN.md from state + tokens + decisions
 python3 <skill>/scripts/engine.py preview [--open]                                   render preview.html (specimen of every token and a few components)
+python3 <skill>/scripts/engine.py review [--strict]                                  hard-coded values and drift; runs without a system; --strict exits 1 so it can guard commits
+python3 <skill>/scripts/engine.py guard install|no|remove|status                     the pre-commit hook that runs review --strict, only after the person says yes; never over another hook or into core.hooksPath
 ```
 `state.json` holds the person's answers keyed by questionnaire question id, the dial values (0-100), raw inputs (brand color, typefaces, base sizes, platforms, devices), and asset-hook status (have / commissioning / using tool / skipped). The engine reads `levers.json` from the skill's own `references/` folder so the skill works offline and self-contained.
 
 `FUNDING.yml` is owned by R4 (not R1).
 
 ## Shared conventions
-- Python 3.10+, standard library only, no network in anything that ships inside `skills/`.
+- Python 3.10+, standard library only, no network in anything that ships inside `skills/`. One exception (owner decision, 2026-09-28): `skills/opendesigner-illustrate/scripts/illustrate.py` `search` and `fetch` may call the illustration sources that allow automation, over HTTPS only. A second (owner decision, 2026-10-04): `skills/opendesigner-paint/` vendors the generative-painting engine (`engine/`, `styles/`: Node, npm packages pinned by `engine/package-lock.json` and installed with `npm ci`, Playwright, ffmpeg, optional numpy and scipy tools, example images). It runs only in a film project the person scaffolds, after they agree to the installs; `scripts/paint.py` stays standard-library and offline. A third (owner decision, 2026-10-14): `skills/opendesigner-review/` has two optional helpers. `scripts/capture.py` imports Playwright for Python (installed only after the person agrees, never by the skill) and opens loopback addresses only (localhost, `*.localhost`, 127.0.0.0/8, ::1); `review.py serve` listens on 127.0.0.1 only, under a random path, and writes only into the review folder. Neither is required: the rest of `review.py` and `probe.js` stay standard-library and offline, and pasting `probe.js` into the host's browser tool does the same job.
+- Binary files are blocked by the PR scanner (`scan_pr.py`). Exception (owner decision, 2026-10-14): the showcase gallery thumbnails `brand/showcase/_thumbs/*.jpg`, reported for review instead; the full-size renders stay out of git (`brand/.gitignore`). Second exception (owner decision, 2026-10-15): the brand kit images `brand/kit/**/*.png`, also reported for review. Third exception (owner decision, 2026-10-22): website illustrations in `site/static/` (`.webp`, `.png`, `.jpg`), such as the 404 picture, reported for review. Dependency manifests block too, except the painting engine's (reviewed) and, by owner decision on 2026-10-15, the video projects' `videos/*/package.json` (no dependencies or install hooks; reviewed).
 - Every value the engine produces traces to `synthesis/levers.json` or a Decision Card; keep `[inferred]` honesty in docs.
 - DTCG 2025.10 is the canonical token format; DESIGN.md is the readable view.
 - Reference intake copies structure and quality, never another brand's identity (hard rule).

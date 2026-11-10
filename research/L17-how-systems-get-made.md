@@ -250,29 +250,29 @@ L16 covers how these tools are operated and how designs move to code; L11 Part G
 
 | Tool | Input | What it extracts | Reliability and limits (official) | Ethics notes | Evidence |
 |---|---|---|---|---|---|
-| **Dembrandt** (open-source CLI) | URL rendered in Playwright; multi-page crawl, dark mode and mobile flags | Logo, colors (including CSS variables and gradients), typography with font file URLs, spacing, borders, shadows, motion durations and easing, breakpoints, icons; exports DTCG, Tailwind v4, shadcn, DESIGN.md; WCAG checks on real DOM pairs; a CI drift gate | Hover and focus read from CSS, not by interacting; canvas and WebGL sites unreadable; dynamic content can be missed | The only tool found that forbids reproducing third-party identities, logos and trademarks; own or permitted sites only | [S-L17-237] |
+| **Dembrandt** (open-source CLI) | URL rendered in Playwright; multi-page crawl, dark mode and mobile flags | Logo, colors (including CSS variables and gradients), typography with font file URLs, spacing, borders, shadows, motion durations and easing, breakpoints, icons; exports DTCG, Tailwind v4, shadcn, DESIGN.md; WCAG checks on real DOM pairs; a CI drift gate | Hover and focus read from CSS, not by interacting; canvas and WebGL sites unreadable; dynamic content can be missed. Measured on one site in F2b: 95% of reported colours and every reported size, radius and shadow were on the page; missed the 12 px spacing step | The only tool found that forbids reproducing third-party identities, logos and trademarks; own or permitted sites only | [S-L17-237] [S-L17-604] |
 | **Firecrawl `branding` format** (API) | URL | Color scheme, logo, colors, fonts, type sizes, spacing, radius, button and input styles, icons, animations, layout, and "personality" (tone, energy, audience) | v2 (6 Feb 2026) fixed logos in background images and Wix/Framer sites; no accuracy numbers published; personality fields are interpretive [inferred] | None found | [S-L17-238] [S-L17-239] |
 | **Brandfetch Brand API** | Domain, email, ticker | Logos (light/dark), icons, symbols, colors, fonts, images | Published coverage on 542 brands: any logo 95%, dark logo 87.5%, light 58.3%, symbols 33.4%, colors 97%; returns nulls rather than guesses | Assets belong to the brands; suitable for the person's own brand [inferred] | [S-L17-240] [S-L17-241] |
 | **Figma code to canvas** | A running app or site | Editable layers bound to *existing* color, number and string variables | Binds only variables already in the file or added libraries; colors with opacity stay unbound; does not create a token set [inferred from S-L17-243] | None stated | [S-L17-243] |
 | **html.to.design** | URL, HTML, ZIP, logged-in page via extension | Layers, auto layout, local styles and variables (colors, type, spacing, button and form styles), components with hover variants | Free 10 imports per 30 days; no mode handling stated | No guidance on third-party content found | [S-L17-245] [S-L17-246] |
-| **Project Wallace** | URL, CSS files | Colors, font sizes and families, line heights, gradients, shadows, radii, animation durations and timing functions | Static CSS analysis: declared values, not what renders [inferred] | None stated | [S-L17-249] [S-L17-335] |
+| **Project Wallace** | URL, CSS files | Colors, font sizes and families, line heights, gradients, shadows, radii, animation durations and timing functions | Static CSS analysis: declared values, not what renders. Measured on one site in F2b: 2% of its 900 colours were on the page, 70% of font sizes were variables with no value, and no spacing output | None stated | [S-L17-249] [S-L17-335] [S-L17-605] |
 | **Stitch, Polymet, Superdesign, Uizard, Magic Patterns, Claude Design, tweakcn** | URL, screenshot or image | Colors, fonts, spacing, radius, button and input styles (varies by tool) | Stitch's URL extraction is documented only in its launch blog; Polymet keeps the screenshot in chat so the person sees what was read; Superdesign takes 60-120 s and continues without the extraction if it fails; tweakcn maps gradients to solid colors | None found | [S-L17-216] [S-L17-250] [S-L17-251] [S-L17-225] [S-L17-205] [S-L17-219] [S-L17-232] |
 
 Across extractors, color, font family and size, radius, shadow and spacing values are read reliably; interaction states, modes, motion beyond CSS durations, component anatomy and variants, semantic roles and usage intent are weak or absent [inferred from the limits above]. Figma's own documentation makes the same point about agents reading components: without descriptions, an agent may not know when to use a component or its states [S-L17-261].
 
 ### F2. What can be extracted reliably, by reference type
 
-Reliability ratings are this lane's synthesis of F1, the extractor rows in F1b and L16/L07 findings [inferred unless a row cites a source].
+Reliability ratings are this lane's synthesis of F1, the extractor rows in F1b and L16/L07 findings [inferred unless a row cites a source]. The live-URL ratings for color, type, spacing, radius and shadows were then measured on one site on 2026-11-10 (F2b, [S-L17-600]); the other columns are still synthesis.
 
 | Layer | Live URL (browser, computed styles) | Screenshot / image | Figma file (MCP read) | Code / tokens file | Brand book (PDF) |
 |---|---|---|---|---|---|
-| Color values | High: computed colors and CSS custom properties [S-L17-022] [S-L17-008] | Medium: pixel sampling; antialiasing, gradients and photos confuse it; roles are guesses | High: variables and styles (`get_variable_defs`, L16 A1) | High: exact | High for brand colors |
-| Color roles (which color means what) | Medium: inferred from usage (buttons, links, borders) | Low | High when variables are semantically named | High when tokens are tiered | Medium |
+| Color values | High: computed colors and CSS custom properties [S-L17-022] [S-L17-008]. Measured: 84-95% of reported colors were on the page; 61-78% of the page's token colors were found (F2b). Shipped CSS read without a browser: Low, 2% of its colors were on the page | Medium: pixel sampling; antialiasing, gradients and photos confuse it; roles are guesses | High: variables and styles (`get_variable_defs`, L16 A1) | High: exact | High for brand colors |
+| Color roles (which color means what) | Medium: inferred from usage (buttons, links, borders). Measured: each browser tool got one or two of four main roles wrong (F2b) | Low | High when variables are semantically named | High when tokens are tiered | Medium |
 | Typefaces | High for family names; the licence is not extractable and proprietary faces cannot be reused [S-L17-022] | Low: face identification is a guess | High | High | High, often with licence notes |
-| Type scale, weights, line heights | High (computed) | Medium: ratios only, estimated | High | High | Medium |
-| Spacing scale | Medium-high: sampled paddings and gaps, scale inferred by clustering | Low-medium | High if variables are used, otherwise sampled from auto layout | High | Rare |
-| Radius, borders | High | Medium | High | High | Rare |
-| Shadows, elevation | High (box-shadow strings) | Low | High (effect styles) | High | Rare |
+| Type scale, weights, line heights | High (computed). Measured: 9 or 10 of 11 rendered sizes found, every token size found (F2b) | Medium: ratios only, estimated | High | High | Medium |
+| Spacing scale | Medium-high: sampled paddings and gaps, scale inferred by clustering. Measured: 13 of 14 and 12 of 12 reported values were on the page; 7 or 11 of 11 token steps found; both tools called a 4 px scale 8 px (F2b) | Low-medium | High if variables are used, otherwise sampled from auto layout | High | Rare |
+| Radius, borders | High. Measured: every reported radius was on the page (F2b) | Medium | High | High | Rare |
+| Shadows, elevation | High (box-shadow strings). Measured: exact strings; 1 or 3 of 3 token shadows found, depending on whether 1 px offset shadows count as lines (F2b) | Low | High (effect styles) | High | Rare |
 | Breakpoints, grid, containers | High (media queries, computed widths) | Low (one width only) | Medium (frames per breakpoint) | High | Rare |
 | Motion (durations, easing, choreography) | Medium, and only with a live browser observing over time; static HTML gives almost nothing [S-L17-022] [S-L17-023] | None | Partial (Figma motion and timing variables where used, L07/L16) | High if motion tokens exist | Rare |
 | Component inventory | Medium: DOM patterns and class names | Medium: a vision model can list component types | High: component sets, variants and properties | High: component files, Storybook | Low |
@@ -287,6 +287,65 @@ Reliability ratings are this lane's synthesis of F1, the extractor rows in F1b a
 - Every extracted value carries its method and confidence: measured (computed style, variable, token), estimated (pixels, vision model), or inferred (usage pattern). Estimated values are shown as ranges or with a warning, and none is decided until the person accepts it.
 - Motion needs a live browser and time. A builder that only fetches HTML should not claim to have extracted motion.
 - Extracted colors must be re-validated in the new context: a reference's brand color on the new product's surfaces may fail the contrast target.
+
+### F2b. Hands-on test: three extractors on one site (2026-11-10, issue #11)
+
+F2's ratings were a synthesis. This test measures five of them on one site with published tokens. The scripts and raw scores are in [`research/L17-extractor-test/`](L17-extractor-test/README.md).
+
+**Setup**
+- **Site:** the Button page of Primer's documentation [S-L17-600]. robots.txt allows every crawler [S-L17-601]. GitHub's acceptable-use policy allows research use of public, non-personal information when the results are published openly [S-L17-602].
+- **Answer key:** `@primer/primitives` 11.10.0, the light theme plus the size and typography files: 1,140 variables [S-L17-603]. The page's own CSS defines 1,134 of them, all with the same values once notation is normalised (`.75rem` against `0.75rem`). It lacks only six newer `--space-*` aliases. So the published package is what the site ships ([benchmarks/systems/primer.md](../benchmarks/systems/primer.md) has the teardown).
+- **What the page renders:** a probe read every visible element's computed values in Chrome at 1440 px. It found 26 colours, 11 font sizes, 18 spacing values, 5 radii and 4 shadows. Of those, 18 colours, 6 sizes, 11 spacing values, 3 radii and 3 shadows are Primer tokens. The rest come from the docs site itself: code highlighting, Markdown headings, an 8 px radius.
+- **The tools:**
+  1. **OpenDesigner** (`opendesigner-extract`): `read_page.js` in Chrome at 1440 px, then `css_scan.py --from-json`.
+  2. **Dembrandt** 0.39.2 [S-L17-604]: computed styles at its default 1920 px. It ran in the installed Chrome over CDP, with no account and cloud sync off.
+  3. **Project Wallace's css-analyzer** 9.9.7 [S-L17-605], the engine behind projectwallace.com: the page's 30 stylesheets and 13 inline style blocks (1.5 MB of CSS), with no browser.
+- **Left out:** Firecrawl and Brandfetch need an API key, and html.to.design needs a Figma account (F1b). CSS Stats reads declared CSS like Project Wallace, and its last release was in 2022 [S-L17-606].
+- **Scoring:**
+  - *On page:* the probe found the value. Lengths count within 0.06 px; colours count as the exact hex, with alpha.
+  - *Found:* the share of the page's rendered token values that the tool reported.
+  - A CSS variable with no fallback has no number, so it doesn't count as reported.
+
+**What each tool got**
+
+| Layer | OpenDesigner | Dembrandt | Project Wallace (shipped CSS) |
+|---|---|---|---|
+| Colours | 19 reported, 16 on the page. Found 11 of 18 token colours: missed the danger red, two control background grays and four translucent colours | 19 reported (a palette of 10), 18 on the page. Found 14 of 18: missed the four translucent colours | 900 reported, 21 on the page (2%). Found 18 of 18 |
+| Font sizes | 9 reported, all on the page. Found 6 of 6 token sizes, plus the site's own 18, 22 and 28 px | 10 reported, all on the page. Found 6 of 6, plus 18, 22, 24 and 28 px | 60 reported; 42 are variables with no value. Of the 11 it gives a number for, 6 are on the page. Found 4 of 6 |
+| Spacing | 14 steps, 13 on the page (it rounds to whole pixels, so 2.72 px became 3). Found 11 of 11 | 12 values, all on the page. Found 7 of 11: missed 2, 12, 32 and 36 px, and the page uses 12 px 131 times | No spacing output |
+| Radii | Reports roles: 6 px controls and 12 px containers. Found 2 of 3, because pill shapes are set aside as decoration on purpose | 5 values, all on the page. Found 3 of 3 | 54 reported; 36 are variables with no value. Of the 11 with a number, 5 are on the page. Found 3 of 3 |
+| Shadows | 1 elevation shadow, exactly `--shadow-resting-small`. Found 1 of 3: it counts the two 1 px offset button shadows as lines, on purpose | 4 of 4 rendered shadows, exact. Found 3 of 3 | 58 reported; 18 have a number, 3 of them on the page. Found 3 of 3 |
+
+**The summary a person would see**
+
+| What the page uses | OpenDesigner | Dembrandt | Project Wallace |
+|---|---|---|---|
+| Body text 16 px (`--text-body-size-large`, 258 text elements) | 16 px, high confidence | No single answer. Its style named "body" is 13 px monospace code (584 uses); prose is "text", 16 px (405) | Not given |
+| Text colour `#1f2328` (`--fgColor-default`) | `#1f2328`, 67% of the text area | Wrong: "text" is `#000000`, which paints 20 code elements | Not given |
+| Accent `#0969da` (`--fgColor-accent`, the focus ring) | Wrong: `#0377ff`, with `#0969da` second. 37 `:focus` rules for components that aren't on the page outvoted the rendered links ([#110](https://github.com/ckryptickunal/OpenDesigner/issues/110)) | "primary" `#0969da`, right. "accent" is `#dafbe1`, a pale success background | Not given |
+| Typeface Mona Sans | Right | Right | Its top families are unresolved variables from a second Primer system the site loads, Primer Brand [inferred from the `--brand-*` names] |
+| Control radius 6 px (`--borderRadius-medium`) | 6 px on 62 controls | 6 px is its most common radius (447), with no role | Its most common value is 0; its top variable is a Primer Brand radius |
+| Spacing scale: published in 4 px steps (2, 4, 6, 8, 12, 16...) | "8 px": 72% of values divide by 8, 90% by 4 | "8px" | Not given |
+
+**What it changes in F2** [measured, one site]
+- **Values from a live page in a browser are trustworthy.** 84-100% of what each browser tool reported was on the page. Colour values, type, radius and shadows stay High.
+- **Recovering the spacing scale is Medium.** The values are right, but Dembrandt missed the 12 px step, which the page uses 131 times. Both tools called a 4 px scale 8 px, because 8 is the most common gap.
+- **Colour roles stay Medium.** Each browser tool got one or two of the four main roles wrong. Show the measured roles and let the person confirm them.
+- **Shipped CSS without a browser lists what exists in the code, not what a page uses.**
+  - 2% of its colours and 17% of its readable shadows were on the page.
+  - 70% of font sizes and 67% of radii had no value, only a variable name.
+  - Its most-used families, sizes and radii belonged to a second design system the page barely renders.
+  - Rate it Low for "what does this page look like" and High for "what values exist in the codebase".
+- **OpenDesigner's own gaps:**
+  - The accent bug, [#110](https://github.com/ckryptickunal/OpenDesigner/issues/110), filed with the evidence and not fixed here.
+  - Whole-pixel rounding of spacing.
+  - Fewer colours by design: it reports colours by role, not every colour on the page.
+
+**Limits.**
+- One page of one site. Each tool read one width (1440 or 1920 px) and one theme.
+- A site that ships its own tokens is the easy case.
+- These tools change often: Dembrandt 0.39.2 dates from 2026-10-11 and the Project Wallace analyzer from 2026-11-08.
+- A second site, such as Carbon or Atlassian, would show whether these numbers hold.
 
 ### F3. Ethics and the identity firewall
 - **Copy structure and quality, never identity.** The builder carries the system (layout, rhythm, scales, component anatomy, motion character, quality bar) and never the identity layer: brand name, wordmark and logo, photography, video and illustration, verbatim copy, and proprietary typefaces. site-soul-extractor puts this boundary at the top of its precedence ladder, above even an explicit operator instruction, and calls reproducing identity "passing-off, not replication" [S-L17-023]. design-system-extractor logs every proprietary-font substitution and teaches the recipe with original copy [S-L17-022]. NN/g reaches the same conclusion from the product side: copying another brand's visual identity is not sustainable [S-L17-121]. BRIEF requirement 4 states it directly.
@@ -607,7 +666,7 @@ Every block classed D or T in Part G, and the E blocks that depend on the person
 
 | Hook | "Do you have this?" | Accepted formats | What the builder does with it | Fallbacks when the answer is no | Quality checks the builder can automate | Evidence |
 |---|---|---|---|---|---|---|
-| **H-logo** Logo, wordmark, symbol, lockups (`found.imagery.brand-marks`; Q-brand-03) | "Do you have a logo? Which versions: symbol only, horizontal and stacked lockups, one-color?" | Master SVG or PDF with text outlined (EPS legacy); derived transparent PNG in color, black and white | Places it in the app bar, sign-in and emails per the logo rules in DC-L05-13; proposes brand-color candidates from its fills; derives app icon, favicon and social image drafts | Commission a designer (brief + assignment reminder). AI logo generators (Looka, Brandmark) with caveats: Looka says its icons and fonts come from a shared database and stay available to others, and trademark filing needs an attorney; run a trademark search before adoption. Wordmark-only fallback: the brand name set in the chosen typeface (OFL, Google Fonts, Adobe Fonts and ITF FFL all allow fonts in logos) | SVG parses; no `<text>` nodes; no embedded raster in the master; viewBox present; SVGO pass; one-fill mono variant; legibility at 16 and 32px; renders on light and dark surfaces | [S-L17-534] [S-L17-535] [S-L17-536] [S-L17-537] [S-L17-564] [S-L17-565] [S-L17-566] [S-L17-567] [S-L17-568] |
+| **H-logo** Logo, wordmark, symbol, lockups (`found.imagery.brand-marks`; Q-brand-03) | "Do you have a logo? Which versions: symbol only, horizontal and stacked lockups, one-color?" | Master SVG or PDF with text outlined (EPS legacy); derived transparent PNG in color, black and white | Places it in the app bar, sign-in and emails per the logo rules in DC-L05-13; proposes brand-color candidates from its fills (`engine.py sketch --logo`, PNG or SVG; the person picks); derives app icon, favicon and social image drafts | Commission a designer (brief + assignment reminder). AI logo generators (Looka, Brandmark) with caveats: Looka says its icons and fonts come from a shared database and stay available to others, and trademark filing needs an attorney; run a trademark search before adoption. Wordmark-only fallback: the brand name set in the chosen typeface (OFL, Google Fonts, Adobe Fonts and ITF FFL all allow fonts in logos) | SVG parses; no `<text>` nodes; no embedded raster in the master; viewBox present; SVGO pass; one-fill mono variant; legibility at 16 and 32px; renders on light and dark surfaces | [S-L17-534] [S-L17-535] [S-L17-536] [S-L17-537] [S-L17-564] [S-L17-565] [S-L17-566] [S-L17-567] [S-L17-568] |
 | **H-appicon** App icon (part of brand marks; Q-icon-06) | "Do you have app icon artwork, ideally as layers?" | Apple: layers as SVG/PDF (preferred) or PNG, assembled in Icon Composer. Android: adaptive foreground, background and monochrome layers (vector preferred). Play: 32-bit PNG. PWA: PNG, WebP or SVG in the manifest | Builds each platform set from the layered master | Designer (brief lists the sizes below); Icon Composer (macOS Tahoe 26.4+); Android Studio Image Asset Studio; Maskable.app | Apple: 1024x1024 canvas (1088 watchOS; tvOS 800x480 with 2-5 layers); appearances Default, Dark, Clear and Tinted (the system generates missing ones); no custom shadows or bevels; no photos. Android: 108dp layers, 66dp safe zone, monochrome layer for themed icons (API 33+). Play: 512x512 sRGB PNG, 1024 KB or less, no pre-rounding. PWA: a maskable icon inside a centered circle of radius 40% | [S-L17-500] [S-L17-501] [S-L17-502] [S-L17-503] [S-L17-504] [S-L17-505] [S-L17-506] [S-L17-507] |
 | **H-favicon** Favicon set (tool-assisted derivative) | Asked with the logo | Master SVG; derived ICO, PNGs, manifest | Generates the set from the symbol | Generated from the logo; SVGO, Squoosh, Inkscape | Files exist at stated sizes: favicon.ico 32x32, icon.svg with a dark-mode media query, apple-touch-icon 180x180, manifest 192 and 512 plus a 512 maskable | [S-L17-508] [S-L17-507] (L05 DC-L05-13) |
 | **H-icons** Custom icons, pictograms, spot icons (`found.icon.*` T and D blocks; Q-icon-01) | "Do you have an icon set, or icons the libraries lack (domain objects, brand concepts)?" | SVG on the library's grid; icon font or sprite; SF Symbol template SVG; Android Vector Drawable | Matches stroke, corners and size scale to the typeface (DC-L05-03); ships icons as components; maps to SF Symbols on Apple platforms | Open libraries: Lucide (ISC; Feather-derived icons MIT), Phosphor, Tabler, Heroicons (MIT), Material Symbols (Apache 2.0), all keeping their notices; custom icons drawn on the Material 24dp keyline template or an exported SF Symbols template; IcoMoon and SVGO for packaging; Recraft vector output with its plan terms. Pictograms and spot icons: commission | viewBox matches the grid (for example 0 0 24 24); stroke width consistent with the chosen library; SF Symbols template validates (filled paths, no strokes, equal path counts); SVGO pass; licence file carried into the build; labels present (NN/g: 19 of 20 intranet icon sets were bad) | [S-L17-509] [S-L17-510] [S-L17-511] [S-L17-512] [S-L17-513] [S-L17-514] [S-L17-515] [S-L17-516] [S-L17-518] [S-L17-526] [S-L17-149] [S-L17-150] |
@@ -965,7 +1024,7 @@ These are decisions about how the builder makes a system, so "Visual effect" des
 - **EightShapes material** could not be read (domain did not resolve); Nathan Curtis now works as Directed Edges [S-L17-353] [S-L17-354].
 - **Legal notes are US and EU only.** Copyright and trademark rules for AI assets in India (Kunal's context) were not researched.
 - **Unverified details:** the Icon Composer file extension, the Lottie spec version, and the extraction reliability of screenshot-based tools (no vendor publishes accuracy numbers except Brandfetch) [S-L17-241].
-- **Reliability ratings in F2** are a synthesis, not a benchmark; a hands-on test of three extractors on the same site would firm them up.
+- **Reliability ratings in F2** were a synthesis. The live-URL ratings for color, type, spacing, radius and shadows were measured on one site on 2026-11-10 (F2b). The screenshot, Figma and brand-book columns, and a second site, are still untested.
 
 ## Confidence
 - **High (read from primary sources or counted):** gstack's methods (read from its source files); NN/g claims (dated articles); official platform and product limits (Apple, Android, Figma help, Storybook, Tokens Studio); licence terms (read from licence pages); designsystems.surf counts (scripted over 90 live pages); DESIGN.md structure (GitHub repo).

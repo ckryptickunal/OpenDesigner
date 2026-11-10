@@ -1,0 +1,70 @@
+{
+ "piece": "heroes/04-neobrutalist-festival",
+ "title": "04 Howl Hill Weekender: neo-brutalist festival hero",
+ "pattern": "brand hero",
+ "platform": "web",
+ "industry": "music festival",
+ "style": [
+  "brutalist",
+  "playful",
+  "retro"
+ ],
+ "tags": [
+  "brand hero",
+  "music festival",
+  "brutalist",
+  "poster",
+  "condensed type",
+  "marquee",
+  "stickers",
+  "yellow"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "The poster idea is real: Big Shoulders Display at full width with a hard offset shadow, bordered-cell nav, the date and 'BUY TICKETS' as cells",
+  "Copy has a voice and facts: '41 loud bands, three tiny stages, a lake to cool off in... No VIP. Ever.'; the lineup ticker names bands that sound like bands",
+  "Three colours only (yellow, blue, black) with strong tonal contrast; Space Grotesk for small text is a good second face"
+ ],
+ "slop_signals": [
+  "Four stickers on one screen: the '41 bands, 3 stages' circle, the tilted 'WEEKENDER' label, the 'SOLD OUT' stamp and the 'ALL AGES' starburst; the starburst is the most-used badge shape there is",
+  "The poster card is generic line art: a yellow moon with craters, three four-point stars, black hills with white peaks",
+  "Two crossing tickers with star separators; one marquee is a device, two is a pattern",
+  "Two buttons ('GET TICKETS £89' filled, 'PLAY LINEUP' outlined) in the stock pair",
+  "Neo-brutalism (flat yellow, 3 px borders, hard shadows) is now a default theme in AI page builders; Mobbin shows almost no shipped festival site in it"
+ ],
+ "fixes": [
+  "Keep one sticker (the date) and remove the starburst and the stamp; put 'sold out' as a struck-through line in the ticket button",
+  "Replace the moon-and-hills card with something only Howl Hill has: a hand-drawn site map of the three stages and the lake, or last year's crowd photo in a bordered cell",
+  "One ticker, the lineup, running under the headline; move the practical notes (jumper, trains, kids) into plain text",
+  "Reduce the shadow offset on the display word so it reads as print, not as a CSS effect"
+ ],
+ "references": [
+  {
+   "site": "Eventbrite",
+   "url": "https://mobbin.com/sites/sections/d2ac77c3-af65-4cfb-9f59-227d98a51578",
+   "what": "Condensed display across the full width with the date set small above it, over a real photograph; proves the type alone carries it"
+  },
+  {
+   "site": "Maze",
+   "url": "https://mobbin.com/sites/sections/a77d89bd-bdc0-4fd5-a618-c7b38671c9f2",
+   "what": "One marquee band with an object sitting on it and one rotated date sticker; the same ingredients used once each"
+  },
+  {
+   "site": "Yellowbird",
+   "url": "https://mobbin.com/sites/sections/52ad00dc-133b-4d95-8b9a-c3c7bde88887",
+   "what": "Flat yellow with thick black outline art and a bordered header; its art is a drawn idea (peppers, a sun face), not stock shapes"
+  },
+  {
+   "site": "DICE",
+   "url": "https://mobbin.com/sites/sections/5b9d580b-c51e-4ffb-aec8-7de30a877d49",
+   "what": "Shipped festival pages lean on crowd photography and one line of type; a reminder of what the audience sees elsewhere"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "remove",
+  "said": "very ugly",
+  "date": "2026-10-14"
+ }
+}

@@ -1,0 +1,268 @@
+{
+  "summary": "This README describes Refero, a package of one design skill plus a read-only MCP connection that gives AI agents access to curated visual styles, 150,000+ real app screens and 6,000+ user flows. Its core idea is that research is mandatory before implementation: the agent researches styles, then real screens and flows, extracts concrete patterns and locks references before building. It bundles guidance on typography, color, spacing, motion, icons and copywriting, and checks substantial visual work against the chosen direction before handoff. For someone building a design system, it is a model of an evidence-first AI design workflow and of how to ship one skill across many AI hosts. Most of the file is install and packaging instructions rather than design guidance.",
+  "key_ideas": [
+    "Make research a required step before any design implementation",
+    "Research visual styles first, then real screens and user flows only when the task needs them",
+    "Extract concrete patterns and lock the chosen references before building",
+    "Tie design decisions to evidence rather than generic AI defaults",
+    "Check substantial visual work against the selected direction before handing it off",
+    "Bundle craft guidance for typography, color, spacing, motion, icons and copywriting with the skill",
+    "Ship one canonical skill folder and per-host manifests that all point to the same MCP endpoint",
+    "Keep a skill's references folder beside its SKILL.md when installing manually",
+    "Validate a release for manifests, versions, links, package boundaries and secret leaks"
+  ],
+  "entities": [
+    {
+      "name": "Refero",
+      "type": "product",
+      "description": "Package of one design skill plus a read-only MCP connection to curated visual styles, real app screens and user flows"
+    },
+    {
+      "name": "Refero MCP",
+      "type": "tool",
+      "description": "Read-only MCP connection at api.refero.design/mcp that serves styles, screens and flows; uses OAuth"
+    },
+    {
+      "name": "refero-design skill",
+      "type": "tool",
+      "description": "The single canonical skill that enforces research-first design and holds bundled craft references"
+    },
+    {
+      "name": "Claude Code",
+      "type": "product",
+      "description": "One of the hosts the plugin installs into via a plugin marketplace"
+    },
+    {
+      "name": "Codex",
+      "type": "product",
+      "description": "OpenAI host that installs Refero from the Plugins Directory or GitHub marketplace"
+    },
+    {
+      "name": "Gemini CLI",
+      "type": "product",
+      "description": "Host that installs Refero as an extension"
+    },
+    {
+      "name": "Cursor",
+      "type": "product",
+      "description": "Host that installs Refero from its plugin marketplace once approved"
+    },
+    {
+      "name": "MCP Registry",
+      "type": "tool",
+      "description": "Official registry described by the package's server.json"
+    }
+  ],
+  "topics": [
+    {
+      "name": "AI-assisted design",
+      "summary": "Describes an AI design workflow where the agent must research real references, lock them and check the result against the selected direction instead of using generic AI defaults."
+    },
+    {
+      "name": "Design process",
+      "summary": "Lays out a five-step order: research styles, then screens and flows, extract patterns and lock references, apply craft guidance, check work before handoff."
+    },
+    {
+      "name": "Design resources",
+      "summary": "Refero offers curated visual styles, 150,000+ real app screens and 6,000+ user flows; live research needs a paid plan, bundled craft references need no account."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "With live Refero research, agents can use curated visual styles, 150,000+ real app screens and 6,000+ user flows from well-designed products",
+      "evidence": "150,000+ real app screens, and 6,000+ user flows from"
+    },
+    {
+      "claim": "Live Refero research requires a paid Refero plan",
+      "evidence": "Live research requires a paid Refero plan"
+    },
+    {
+      "claim": "No account is required for the bundled craft references",
+      "evidence": "No account is required for the bundled craft references"
+    },
+    {
+      "claim": "All connection manifests use the same production endpoint and contain no access tokens",
+      "evidence": "All connection manifests use the same production endpoint and contain no access tokens"
+    },
+    {
+      "claim": "Keeping both the old root SKILL.md layout and the new layout creates duplicate skills",
+      "evidence": "keeping both layouts creates duplicate skills"
+    },
+    {
+      "claim": "The release check validates manifests, versions, local links, the canonical MCP URL, package boundaries and common secret leaks",
+      "evidence": "The check validates manifests, versions, local links, the canonical MCP URL, package"
+    }
+  ],
+  "quotes": [
+    "The skill makes research mandatory before implementation.",
+    "Keeps design decisions tied to evidence instead of generic AI defaults."
+  ],
+  "tags": [
+    "ai-design",
+    "research-first",
+    "references",
+    "mcp",
+    "agent-skills",
+    "plugin-packaging",
+    "refero"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Research visual references before implementing any design; do not start building from generic AI defaults",
+      "why": "Keeps design decisions tied to evidence instead of generic AI defaults",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "The skill makes research mandatory before implementation"
+    },
+    {
+      "rule": "Research visual styles first, and only then real screens and user flows when the task needs them",
+      "why": "The source states the order but gives no reason; style sets the direction before concrete screens are sought [inferred]",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Researches visual styles first, then real screens and user flows when the task needs them"
+    },
+    {
+      "rule": "Extract concrete patterns from the references and lock the chosen references before implementation",
+      "why": "Keeps design decisions tied to evidence instead of generic AI defaults",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Extracts concrete patterns and locks references before implementation"
+    },
+    {
+      "rule": "Check substantial visual work against the selected direction before handoff",
+      "why": "The source gives no reason; catches drift from the chosen direction before handoff [inferred]",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Checks substantial visual work against the selected direction before handoff"
+    },
+    {
+      "rule": "When installing a skill manually, copy the whole skill directory so its references/ files stay beside SKILL.md",
+      "why": "So the skill's references/ files remain beside SKILL.md",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [
+        "skills/refero-design/"
+      ],
+      "evidence": "copy the entire `skills/refero-design/` directory into the client's skills directory so its `references/` files remain beside `SKILL.md`"
+    },
+    {
+      "rule": "Do not keep an old root-level SKILL.md install alongside the new skills/ layout",
+      "why": "Keeping both layouts creates duplicate skills",
+      "kind": "dont",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "keeping both layouts creates duplicate skills"
+    },
+    {
+      "rule": "Point every host's connection manifest at the same production endpoint and keep access tokens out of them",
+      "why": "The source states this as a fact about its manifests, not a reason; one endpoint avoids drift and no tokens avoids leaking secrets [inferred]",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [
+        "https://api.refero.design/mcp"
+      ],
+      "evidence": "All connection manifests use the same production endpoint and contain no access tokens"
+    },
+    {
+      "rule": "Before tagging a release, run the release check plus platform-native validation and clean-profile install tests",
+      "why": "The check covers manifests, versions, local links, the canonical MCP URL, package boundaries and common secret leaks; platform-native and clean-profile install tests cover what it does not",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [
+        "scripts/check-release"
+      ],
+      "evidence": "Platform-native validation and clean-profile install tests are still run before tagging a release"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "How should the agent install the design skill: full plugin with live research, or the standalone skill only?",
+      "options": [
+        {
+          "name": "Plugin (skill plus MCP)",
+          "effect": "Agent gets live research over styles, screens and flows plus the methodology; needs Refero sign-in, and live research needs a paid plan",
+          "when": "The person wants live reference research"
+        },
+        {
+          "name": "Standalone skill",
+          "effect": "Agent gets the design methodology and bundled craft references without an account",
+          "when": "The client already has Refero MCP configured or only the methodology is needed"
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Use this when the client already has Refero MCP configured or only the design methodology"
+    }
+  ],
+  "process": [
+    {
+      "step": "Research styles",
+      "detail": "Research visual styles first, then real screens and user flows when the task needs them"
+    },
+    {
+      "step": "Extract and lock",
+      "detail": "Extract concrete patterns and lock references before implementation"
+    },
+    {
+      "step": "Apply craft guidance",
+      "detail": "Apply bundled guidance for typography, color, spacing, motion, icons and copywriting"
+    },
+    {
+      "step": "Tie to evidence",
+      "detail": "Keep each design decision tied to the researched evidence instead of generic AI defaults"
+    },
+    {
+      "step": "Check before handoff",
+      "detail": "Check substantial visual work against the selected direction before handoff"
+    },
+    {
+      "step": "Validate release",
+      "detail": "Run scripts/check-release to validate manifests, versions, local links, the MCP URL, package boundaries and secret leaks; run platform-native validation and clean-profile install tests before tagging"
+    }
+  ],
+  "examples": [
+    {
+      "what": "One canonical skill folder plus per-host manifests (.mcp.json, mcp.json, gemini-extension.json, .codex-plugin/, .claude-plugin/, .cursor-plugin/, server.json)",
+      "where": "refero_skill repository",
+      "visual_note": "Shows how a single design skill is packaged for Claude Code, Codex, Cursor and Gemini CLI from one source"
+    }
+  ],
+  "numbers": [
+    {
+      "value": "150,000+",
+      "context": "Real app screens available through live Refero research",
+      "evidence": "150,000+ real app screens, and 6,000+ user flows"
+    },
+    {
+      "value": "6,000+",
+      "context": "User flows available through live Refero research",
+      "evidence": "150,000+ real app screens, and 6,000+ user flows"
+    }
+  ],
+  "caveats": [
+    "This is a product README and partly promotional: live research requires a paid Refero plan",
+    "Most of the file is install and packaging instructions; the design guidance itself lives in the skill's references, which this file does not include",
+    "Install commands and the Cursor listing status are as of commit a9b54a3 and may change"
+  ]
+}

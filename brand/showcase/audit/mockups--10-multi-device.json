@@ -1,0 +1,141 @@
+{
+ "piece": "mockups/10-multi-device",
+ "title": "10 · Quillon on a laptop and a phone",
+ "pattern": "multi-device mockup",
+ "platform": "web",
+ "industry": "procurement / approvals (B2B)",
+ "style": [
+  "studio",
+  "product shot",
+  "minimal",
+  "3D"
+ ],
+ "tags": [
+  "multi-device",
+  "laptop",
+  "phone",
+  "product shot",
+  "path tracing",
+  "studio sweep",
+  "B2B",
+  "approvals"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "One product on two screens, and the data agrees to the cent: vendor, amount, budget, policy, the four-step chain and the times match between laptop and phone",
+  "The light is one scene: one softbox from the upper left, soft shadows falling right with dark contact lines; nothing is pasted",
+  "Neither device copies a brand's outline, and the screens read at 100%: the phone's amounts and chain, the laptop's title, amount and both buttons"
+ ],
+ "slop_signals": [
+  "The laptop reads as a 3D model, not a product: a thick flat slab with a rounded rim, keys in a black well, a flat grey trackpad, and a barrel hinge that sits on top of the deck and covers half of the function-key row",
+  "The keyboard has both an 'opt' and an 'alt' key on the bottom row ('fn ctrl opt alt'), which no real layout has",
+  "Platform mismatch: the phone runs an iOS screen (left clock, '< Approvals' back label, iOS tab bar) on Android-style hardware with a centred punch-hole and side keys",
+  "Composition: the top fifth of the frame is empty set, and the devices sit low and small; shipped multi-device sections fill the frame or show the screens flat",
+  "No shipped B2B reference found uses a chunky path-traced laptop; they use flat frontal device outlines or no device"
+ ],
+ "fixes": [
+  "Replace the 3D laptop with a flat, frontal, generic frame (as Riverside does) or show the web screen flat with the phone overlapping its corner (as Wispr Flow does); if the render stays, thin the base, move the hinge behind the keyboard and use one real layout ('fn ctrl alt' or 'fn control option command')",
+  "Make the phone hardware match its iOS screen without copying Apple: no visible camera cut-out at all, or a plain rounded slab",
+  "Crop or reframe so the devices fill about 85% of the width and the empty set above them goes",
+  "Fix the 'Waiting on others · 6' count (the list holds 5) or add the sixth row"
+ ],
+ "references": [
+  {
+   "site": "Riverside",
+   "url": "https://mobbin.com/sites/sections/601ce269-1efe-407c-9fb5-7272f7504f43",
+   "mobbin_url": "https://mobbin.com/sites/sections/601ce269-1efe-407c-9fb5-7272f7504f43",
+   "what": "Tablet, laptop and phone as flat, frontal, generic frames filling the width; the screens carry everything"
+  },
+  {
+   "site": "Wispr Flow",
+   "url": "https://mobbin.com/sites/sections/ddc48c4a-43de-4cdc-89f0-791148ca1b3e",
+   "mobbin_url": "https://mobbin.com/sites/sections/ddc48c4a-43de-4cdc-89f0-791148ca1b3e",
+   "what": "Desktop screen and phone overlapping, flat, over a photo; no rendered hardware"
+  },
+  {
+   "site": "Notion",
+   "url": "https://mobbin.com/sites/sections/e86e1b83-aeb8-4702-a085-f326a47c883a",
+   "mobbin_url": "https://mobbin.com/sites/sections/e86e1b83-aeb8-4702-a085-f326a47c883a",
+   "what": "Phone beside a browser window, the same content on both, no studio set"
+  }
+ ],
+ "audited": "2026-10-14",
+ "self_score": 4,
+ "facts": [
+  "shot.png shows the phone screen as it was at 00:56 on Oct 15; app-screens/11 changed after that (outlined neutral Decline, sentence-case 'If you approve', the policy line moved into the CFO step, no tab badge) and is still changing. When it is final, desktop.html should take the same Decline style and wording and render.py should run again",
+  "desktop.html copies the phone's facts by hand instead of reading one shared data file (making.md section 6)",
+  "Minor: the With column names a team ('Procurement') on three rows and the procurement approver ('Owen Marchetti') on two; the phone never shows PR-2207, which the caption names",
+  "Every fact shared by the two screens matches; totals re-added ($28,698.90 waiting on you; line items $14,860.00; budget 60.2% spent, 15.5% this request); check_dates.py --year 2026 passes"
+ ],
+ "audited_by": "independent",
+ "owner": {
+  "verdict": "improve",
+  "said": "when designs are bad, mockups will also be bad; work on them",
+  "date": "2026-10-14"
+ },
+ "rework": {
+  "date": "2026-10-14",
+  "score": 4,
+  "audited_by": "fresh-context agent (did not build it), then a second fresh agent verified the fixes",
+  "references": [
+   {
+    "site": "Riverside",
+    "url": "https://mobbin.com/sites/sections/601ce269-1efe-407c-9fb5-7272f7504f43",
+    "what": "Flat, frontal frames filling the width; its laptop has a notch, ours copies no brand"
+   },
+   {
+    "site": "Wispr Flow",
+    "url": "https://mobbin.com/sites/sections/ddc48c4a-43de-4cdc-89f0-791148ca1b3e",
+    "what": "Desktop screen with the phone overlapping its lower-left corner; ours follows the same structure"
+   },
+   {
+    "site": "Canva",
+    "url": "https://mobbin.com/sites/sections/b8ad8173-8057-41e6-b304-ec1f237bde80",
+    "what": "A flat laptop with a smaller device in front of one corner on a quiet grey panel; closest in structure and finish"
+   }
+  ],
+  "changed": [
+   "Path-traced 3D scene replaced by flat, front-on generic frames in HTML/CSS: a laptop lid with an even bezel and a plain camera dot over a thin base lip (no keyboard, hinge, notch or logo), and a phone that is a plain rounded slab with no camera cut-out, so the hardware no longer contradicts the iOS screen",
+   "One graphite material and one corner rule for both devices; system shadows only (overlay under the phone, floating under the lip)",
+   "Composition: the pair fills 85.6% of the width, centred, with about 13% above and below; the phone covers only the web app's sidebar",
+   "desktop.html: a sixth 'Waiting on others' row (Floor line repainting, aisles 1-8, Brantlow Floor Marking, Elif Demir, $4,738.60, with Owen Marchetti); tabs now 'Open 10 · Done 312'; the three requests under $10,000 waiting on you show '2 of 3'; Hexley Fire Service renamed Moydell Fire Service (one letter from Wexley Freight)",
+   "Engine: dials.depth 80 to 30 and dials.expression 40 to 30, then build, design-md, validate (0 warnings) and review (clean)",
+   "render.py now renders desktop.png and then shot.png through brand/tools/shot.py",
+   "Caption 13.1:1 and 6.1:1 measured on the render",
+   "Re-rendered desktop.png and shot.png (1600 x 1200, 2x)"
+  ]
+ },
+ "round3": {
+  "date": "2026-10-15",
+  "score": 4,
+  "audited_by": "fresh-context agent (did not build it)",
+  "references": [
+   {
+    "site": "Wispr Flow",
+    "url": "https://mobbin.com/sites/sections/ddc48c4a-43de-4cdc-89f0-791148ca1b3e"
+   },
+   {
+    "site": "Monarch",
+    "url": "https://mobbin.com/sites/sections/2ad09b8b-3ebf-4a76-8159-f8da92880c38"
+   },
+   {
+    "site": "Ramp",
+    "url": "https://mobbin.com/sites/sections/c97365f0-4fee-4ad0-8ad9-c7ef4849bc6d"
+   }
+  ],
+  "changed": [
+   "desktop.html synced with the final phone (app-screens/11, the source of truth): cobalt accent, '$14,860' without grey cents, 'Quote valid until Fri 16 Oct · Q-5571.pdf' with a clock, 'Budget after approval' with '$23,340 of $96,000 left' and the legend under its own segment, a Details card (PO-10482 to Ashbury, Net 30; GL account 6420 Equipment upkeep; Deliver by Wed 21 Oct), 'Sign-off · 1 of 3 approved' with the requester as an arrow and times or states in their own column, CFO ring neutral-light-8, meter neutral-light-6 and 9, Decline white with border-strong",
+   "Queue progress counts approvals only, like the phone: PR-2207 '1 of 3', the three requests under $10,000 '1 of 2'",
+   "Tabular figures only on amounts (they had widened the hyphens in PR-2207, PO-10482 and 'three-phase')",
+   "Caption '$14,860'; desktop.png and shot.png re-rendered with render.py",
+   "Vendor 'Stellwick Packaging' renamed 'Ashlund Packaging' (two letters from Pellwick Press in components/05, found by check_names.py); re-rendered"
+  ],
+  "remaining": [
+   "GL account 6420 is also used by heroes/11 and product/02; change it in app-screens/11 first, then here",
+   "The phone's PO-10482 Details row has the same wide-hyphen bug (app-screens/11)",
+   "Not in the gallery yet (build_gallery.py)",
+   "With column mixes a team and a person; Q-5571.pdf appears twice on the laptop; FL-07, Q-5571, PO-10482 and FIN-04 not in NAMES.md"
+  ]
+ }
+}

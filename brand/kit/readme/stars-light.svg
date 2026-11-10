@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>OpenDesigner GitHub stars: 124</title>
+<defs><linearGradient id="a" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2338ff" stop-opacity="0.26"/><stop offset="0.25" stop-color="#2338ff" stop-opacity="0.16"/><stop offset="0.5" stop-color="#2338ff" stop-opacity="0.08"/><stop offset="0.75" stop-color="#2338ff" stop-opacity="0.03"/><stop offset="1" stop-color="#2338ff" stop-opacity="0"/></linearGradient></defs>
+<text x="44" y="30" font-size="14" fill="#5b6170">GitHub stars · updated Nov 10, 2026</text>
+<text x="44" y="62" font-size="30" font-weight="300" fill="#141517">124</text>
+<line x1="44" x2="736" y1="266.0" y2="266.0" stroke="#e6e9ee" stroke-width="1"/>
+<text x="36" y="270.0" font-size="11" fill="#5b6170" text-anchor="end">0</text>
+<line x1="44" x2="736" y1="219.0" y2="219.0" stroke="#e6e9ee" stroke-width="1"/>
+<text x="36" y="223.0" font-size="11" fill="#5b6170" text-anchor="end">50</text>
+<line x1="44" x2="736" y1="172.0" y2="172.0" stroke="#e6e9ee" stroke-width="1"/>
+<text x="36" y="176.0" font-size="11" fill="#5b6170" text-anchor="end">100</text>
+<line x1="44" x2="736" y1="125.0" y2="125.0" stroke="#e6e9ee" stroke-width="1"/>
+<text x="36" y="129.0" font-size="11" fill="#5b6170" text-anchor="end">150</text>
+<line x1="44" x2="736" y1="78.0" y2="78.0" stroke="#e6e9ee" stroke-width="1"/>
+<text x="36" y="82.0" font-size="11" fill="#5b6170" text-anchor="end">200</text>
+<text x="44.0" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Sep 23</text>
+<text x="144.9" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Sep 30</text>
+<text x="245.8" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Oct 7</text>
+<text x="346.8" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Oct 14</text>
+<text x="447.7" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Oct 21</text>
+<text x="548.6" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Oct 28</text>
+<text x="649.5" y="288" font-size="11" fill="#5b6170" text-anchor="middle">Nov 4</text>
+<polygon points="44,266.0 44.0,266.0 58.4,266.0 72.8,266.0 87.2,266.0 101.7,266.0 116.1,266.0 130.5,266.0 144.9,266.0 159.3,266.0 173.8,266.0 188.2,266.0 202.6,266.0 217.0,266.0 231.4,266.0 245.8,266.0 260.2,266.0 274.7,266.0 289.1,265.1 303.5,265.1 317.9,265.1 332.3,265.1 346.8,265.1 361.2,263.2 375.6,263.2 390.0,263.2 404.4,263.2 418.8,263.2 433.2,263.2 447.7,262.2 462.1,258.5 476.5,257.5 490.9,256.6 505.3,255.7 519.8,255.7 534.2,254.7 548.6,247.2 563.0,240.6 577.4,230.3 591.8,218.1 606.2,209.6 620.7,204.9 635.1,203.0 649.5,198.3 663.9,196.4 678.3,195.5 692.8,191.7 707.2,183.3 721.6,151.3 736.0,149.4 736.0,266.0" fill="url(#a)"/>
+<polyline points="44.0,266.0 58.4,266.0 72.8,266.0 87.2,266.0 101.7,266.0 116.1,266.0 130.5,266.0 144.9,266.0 159.3,266.0 173.8,266.0 188.2,266.0 202.6,266.0 217.0,266.0 231.4,266.0 245.8,266.0 260.2,266.0 274.7,266.0 289.1,265.1 303.5,265.1 317.9,265.1 332.3,265.1 346.8,265.1 361.2,263.2 375.6,263.2 390.0,263.2 404.4,263.2 418.8,263.2 433.2,263.2 447.7,262.2 462.1,258.5 476.5,257.5 490.9,256.6 505.3,255.7 519.8,255.7 534.2,254.7 548.6,247.2 563.0,240.6 577.4,230.3 591.8,218.1 606.2,209.6 620.7,204.9 635.1,203.0 649.5,198.3 663.9,196.4 678.3,195.5 692.8,191.7 707.2,183.3 721.6,151.3 736.0,149.4" fill="none" stroke="#2338ff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="736.0" cy="149.4" r="4" fill="#2338ff"/>
+<text x="746.0" y="153.4" font-size="13" fill="#141517">124</text>
+</svg>

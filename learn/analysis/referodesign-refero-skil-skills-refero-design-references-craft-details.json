@@ -1,0 +1,716 @@
+{
+  "summary": "This Refero guide collects web implementation details that separate polished products from rough ones, which it says most AI models miss. It covers focus states (:focus-visible, never bare outline: none, :focus-within for compound controls), form attributes (type, inputmode, autocomplete, spellcheck, clickable labels, placeholder format, submit states, inline errors, unsaved-changes warning), images (explicit dimensions, fetchpriority and lazy loading), touch details, performance patterns (virtualizing 50+ item lists, avoiding layout reads in render, uncontrolled inputs, preconnect and font preload), accessibility quick wins, URL state and destructive-action confirmation, plus short copy rules. It ends with an anti-pattern list for code review and a pre-ship checklist. For a design system it is a component-implementation checklist that keeps accessibility floors and interaction quality in shipped web code.",
+  "key_ideas": [
+    "Use :focus-visible so focus rings show for keyboard users, not on mouse clicks.",
+    "Never remove the outline without a visible custom focus replacement.",
+    "Use :focus-within to highlight a compound control when any child is focused.",
+    "Correct input type, inputmode and autocomplete bring up the right mobile keyboard and help password managers.",
+    "Never block paste in inputs.",
+    "Images without width and height cause layout shift; load hero images eagerly and lower images lazily.",
+    "touch-action: manipulation removes the mobile tap delay; overscroll-behavior: contain stops scroll chaining in modals.",
+    "Autofocus only on desktop, at most one primary input per page, and only with a reason.",
+    "Virtualize lists of 50+ items and avoid reading layout during render.",
+    "Use semantic button and link elements, keyboard handlers for custom controls, and an unbroken heading order.",
+    "Reflect filters, tabs and pagination in the URL and use real links so Cmd+click and back work.",
+    "Destructive actions need a confirmation or an undo window.",
+    "Flag transition: all, disabled zoom, div buttons, unlabelled inputs and icon buttons without aria-label in code review."
+  ],
+  "entities": [
+    {
+      "name": "virtua",
+      "type": "library",
+      "description": "List virtualization library shown in the VList example."
+    },
+    {
+      "name": "react-window",
+      "type": "library",
+      "description": "Alternative list virtualization library."
+    },
+    {
+      "name": "nuqs",
+      "type": "library",
+      "description": "Library suggested for syncing state with URL query params."
+    },
+    {
+      "name": "Next.js",
+      "type": "library",
+      "description": "Image component example with priority and lazy loading."
+    },
+    {
+      "name": "ResizeObserver",
+      "type": "concept",
+      "description": "Browser API recommended instead of reading offsetHeight in render."
+    },
+    {
+      "name": "CLS",
+      "type": "concept",
+      "description": "Cumulative layout shift; images are named its number one cause."
+    },
+    {
+      "name": "Intl.DateTimeFormat / Intl.NumberFormat",
+      "type": "concept",
+      "description": "Recommended over hardcoded date and number formats."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Accessibility",
+      "summary": ":focus-visible focus rings, semantic elements, keyboard handlers for custom controls, heading hierarchy, aria-live announcements, labels, aria-label on icon buttons, and never disabling zoom."
+    },
+    {
+      "name": "Forms and inputs",
+      "summary": "type/inputmode/autocomplete values, no paste blocking, spellcheck off for codes and emails, clickable labels with no dead zones, placeholders ending in an ellipsis, spinner on submit, inline errors focused on submit, unsaved-changes warning."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "CSS and JSX snippets for focus, touch, images, virtualization, ResizeObserver, uncontrolled inputs, preconnect and font preload, URL state with nuqs."
+    },
+    {
+      "name": "Animation performance",
+      "summary": "Flags transition: all as a performance killer and recommends virtualizing long lists and avoiding forced synchronous layout."
+    },
+    {
+      "name": "Mobile app patterns",
+      "summary": "Remove the 300ms tap delay, set tap highlight intentionally, contain overscroll in modals and sheets, avoid autofocus on mobile."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "URL reflects app state; use real links instead of onClick navigation so Cmd+click and middle-click work."
+    },
+    {
+      "name": "Content and microcopy",
+      "summary": "Active voice, Title Case headings and buttons, numerals for counts, specific labels, errors with the fix, second person, & in tight spaces."
+    },
+    {
+      "name": "Modals and popovers",
+      "summary": "overscroll-behavior: contain on modals, drawers and sheets; confirmation modal before destructive actions."
+    },
+    {
+      "name": "Toasts and notifications",
+      "summary": "Async messages such as toasts use role=\"status\" aria-live=\"polite\"; an undo toast can replace a confirmation for deletes."
+    }
+  ],
+  "claims": [
+    {
+      "claim": ":focus triggers on any focus including mouse clicks, while :focus-visible only triggers for keyboard navigation.",
+      "evidence": "The Rule: :focus-visible, Not :focus"
+    },
+    {
+      "claim": "Removing outline on focus without a replacement breaks keyboard navigation.",
+      "evidence": "Never Remove Focus Without Replacement"
+    },
+    {
+      "claim": "Correct input types trigger the right keyboard on mobile, and meaningful names help password managers.",
+      "evidence": "Input Types and Attributes"
+    },
+    {
+      "claim": "Blocking paste is an accessibility violation and user hostile.",
+      "evidence": "Never Block Paste"
+    },
+    {
+      "claim": "Images are the number one cause of layout shift (CLS).",
+      "evidence": "3. Images"
+    },
+    {
+      "claim": "touch-action: manipulation removes the 300ms tap delay on mobile.",
+      "evidence": "Tap Delay Removal"
+    },
+    {
+      "claim": "Reading offsetHeight in render forces synchronous layout recalculation.",
+      "evidence": "Avoid Layout Reads in Render"
+    },
+    {
+      "claim": "Controlled inputs re-render on every keystroke; uncontrolled inputs do not.",
+      "evidence": "Uncontrolled Inputs When Possible"
+    },
+    {
+      "claim": "onClick navigation breaks Cmd+click and middle-click.",
+      "evidence": "Links Support Browser Features"
+    },
+    {
+      "claim": "user-scalable=no or maximum-scale=1 disables zoom and is an accessibility violation.",
+      "evidence": "9. Anti-Patterns Checklist"
+    }
+  ],
+  "quotes": [
+    "Images are the #1 cause of layout shift (CLS). Fix them.",
+    "URL should reflect app state.",
+    "These patterns are the difference between \"works\" and \"feels right.\""
+  ],
+  "tags": [
+    "focus-visible",
+    "forms",
+    "autocomplete",
+    "cls",
+    "images",
+    "touch",
+    "performance",
+    "virtualization",
+    "semantic-html",
+    "url-state",
+    "anti-patterns",
+    "refero"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Style focus rings with :focus-visible, not :focus, for example a 2px outline in the primary color with a 2px offset.",
+      "why": ":focus also fires on mouse click, which is annoying; :focus-visible fires only for keyboard navigation.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "css",
+      "values": [
+        "outline: 2px solid var(--primary)",
+        "outline-offset: 2px"
+      ],
+      "evidence": "The Rule: :focus-visible, Not :focus"
+    },
+    {
+      "rule": "Never set outline: none without a visible replacement such as a two-ring box-shadow on :focus-visible.",
+      "why": "It breaks keyboard navigation.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "css",
+      "values": [
+        "box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--primary)"
+      ],
+      "evidence": "Never Remove Focus Without Replacement"
+    },
+    {
+      "rule": "Use :focus-within on compound controls, such as a search input with an icon, to highlight the wrapper.",
+      "why": "Focus on any child should highlight the parent.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "css",
+      "values": [
+        "box-shadow: 0 0 0 3px var(--primary-tint)"
+      ],
+      "evidence": "Compound Controls: :focus-within"
+    },
+    {
+      "rule": "Set the correct input type, inputmode and autocomplete on every field (email, tel, url, numeric; current-password for login, new-password for signup; off for non-auth fields). Give fields meaningful name attributes.",
+      "why": "Correct types trigger the right mobile keyboard, and meaningful names help password managers.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "email",
+        "current-password",
+        "new-password",
+        "name",
+        "tel",
+        "street-address",
+        "cc-number",
+        "cc-exp",
+        "cc-csc",
+        "off"
+      ],
+      "evidence": "Autocomplete Matters"
+    },
+    {
+      "rule": "Never block paste in inputs.",
+      "why": "It is an accessibility violation and user hostile.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Never Block Paste"
+    },
+    {
+      "rule": "Turn spellcheck off for emails, codes, usernames and URLs.",
+      "why": "The source lists these fields for spellcheck off; it gives no further reason.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "spellcheck=\"false\""
+      ],
+      "evidence": "Disable Spellcheck Where Appropriate"
+    },
+    {
+      "rule": "Make labels clickable and let a checkbox and its label share a single hit target with no dead zone between them.",
+      "why": "Clickable labels and a shared checkbox hit target leave no dead zones between control and label.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "gap: 8px"
+      ],
+      "evidence": "Labels and Hit Targets"
+    },
+    {
+      "rule": "End placeholders with an ellipsis and show the expected format.",
+      "why": "Placeholders should show format.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "web",
+      "values": [
+        "name@company.com…",
+        "(555) 123-4567…",
+        "Search products…"
+      ],
+      "evidence": "Placeholder Formatting"
+    },
+    {
+      "rule": "Keep the submit button enabled until the request starts, then disable it and show a spinner.",
+      "why": "Shows submission state.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "Submit Button States"
+    },
+    {
+      "rule": "Show errors inline, tie them to inputs with aria-invalid and aria-describedby, use role=\"alert\", and focus the first error on submit.",
+      "why": "The source shows this as the correct pattern without stating a reason.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "react",
+      "values": [
+        "aria-invalid",
+        "aria-describedby",
+        "role=\"alert\""
+      ],
+      "evidence": "Error Handling"
+    },
+    {
+      "rule": "Warn before the user leaves a page with unsaved changes.",
+      "why": "Prevents lost work [inferred].",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [
+        "beforeunload"
+      ],
+      "evidence": "Unsaved Changes Warning"
+    },
+    {
+      "rule": "Always set width and height on images.",
+      "why": "It reserves space and prevents layout shift.",
+      "kind": "do",
+      "strength": "must",
+      "area": "platforms",
+      "applies_to": "web",
+      "values": [
+        "width=\"400\" height=\"300\""
+      ],
+      "evidence": "Always Set Dimensions"
+    },
+    {
+      "rule": "Load above-the-fold images with fetchpriority=\"high\" (priority in Next.js) and lazy-load images below the fold.",
+      "why": "Loading strategy by position.",
+      "kind": "do",
+      "strength": "should",
+      "area": "platforms",
+      "applies_to": "web",
+      "values": [
+        "fetchpriority=\"high\"",
+        "loading=\"lazy\""
+      ],
+      "evidence": "Loading Strategy"
+    },
+    {
+      "rule": "Set touch-action: manipulation to remove the mobile tap delay.",
+      "why": "Removes the 300ms tap delay.",
+      "kind": "do",
+      "strength": "should",
+      "area": "platforms",
+      "applies_to": "css",
+      "values": [
+        "touch-action: manipulation",
+        "300ms"
+      ],
+      "evidence": "Tap Delay Removal"
+    },
+    {
+      "rule": "Set the tap highlight color intentionally instead of just disabling it.",
+      "why": "Set intentionally, don't just disable.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "platforms",
+      "applies_to": "css",
+      "values": [
+        "-webkit-tap-highlight-color: rgba(0, 0, 0, 0.1)"
+      ],
+      "evidence": "Tap Highlight"
+    },
+    {
+      "rule": "Set overscroll-behavior: contain on modals, drawers and sheets.",
+      "why": "Prevents scroll chaining.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "css",
+      "values": [
+        "overscroll-behavior: contain"
+      ],
+      "evidence": "Modal Scroll Lock"
+    },
+    {
+      "rule": "Autofocus only on desktop, on at most one primary input per page, and only when justified.",
+      "why": "On mobile it opens the keyboard unexpectedly.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "AutoFocus Rules"
+    },
+    {
+      "rule": "Virtualize lists with 50+ items, or use content-visibility: auto with contain-intrinsic-size for simpler cases.",
+      "why": "Prevents jank.",
+      "kind": "do",
+      "strength": "should",
+      "area": "platforms",
+      "applies_to": "react",
+      "values": [
+        "50+",
+        "content-visibility: auto",
+        "contain-intrinsic-size: 0 50px"
+      ],
+      "evidence": "Virtualize Large Lists"
+    },
+    {
+      "rule": "Do not read layout (offsetHeight) during render; use ResizeObserver or CSS.",
+      "why": "It forces synchronous layout recalculation.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "platforms",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "Avoid Layout Reads in Render"
+    },
+    {
+      "rule": "Prefer uncontrolled inputs and read the value on submit when possible.",
+      "why": "Controlled inputs re-render on every keystroke.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "platforms",
+      "applies_to": "react",
+      "values": [],
+      "evidence": "Uncontrolled Inputs When Possible"
+    },
+    {
+      "rule": "Preconnect to asset and font domains and preload critical fonts.",
+      "why": "Performance pattern.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "platforms",
+      "applies_to": "web",
+      "values": [
+        "rel=\"preconnect\"",
+        "rel=\"preload\"",
+        "as=\"font\"",
+        "type=\"font/woff2\""
+      ],
+      "evidence": "Preconnect to CDNs"
+    },
+    {
+      "rule": "Use <button> for actions and <a> for navigation instead of clickable div or span.",
+      "why": "Semantic elements are a high-impact accessibility win.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Semantic Elements"
+    },
+    {
+      "rule": "Give custom interactive elements role, tabIndex={0} and Enter/Space key handlers.",
+      "why": "Interactive custom elements need keyboard support.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "react",
+      "values": [
+        "role=\"button\"",
+        "tabIndex={0}",
+        "Enter",
+        " "
+      ],
+      "evidence": "Keyboard Handlers"
+    },
+    {
+      "rule": "Keep heading levels in order without skipping (h1, h2, h3).",
+      "why": "Skipping levels is wrong.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Heading Hierarchy"
+    },
+    {
+      "rule": "Set scroll-margin-top on anchor targets to the fixed header height plus a buffer.",
+      "why": "Prevents the fixed header from covering anchor targets.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "css",
+      "values": [
+        "scroll-margin-top: 80px"
+      ],
+      "evidence": "Scroll Margin for Anchors"
+    },
+    {
+      "rule": "Announce async updates such as toasts and validation messages with role=\"status\" aria-live=\"polite\".",
+      "why": "Async updates need announcements.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "web",
+      "values": [
+        "role=\"status\"",
+        "aria-live=\"polite\""
+      ],
+      "evidence": "Async Updates Need Announcements"
+    },
+    {
+      "rule": "Keep filters, tabs and pagination in the URL.",
+      "why": "Users expect to bookmark, share and use the back button.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "URL Reflects State"
+    },
+    {
+      "rule": "Use real links, not onClick handlers, for navigation.",
+      "why": "onClick navigation breaks Cmd+click and middle-click.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Links Support Browser Features"
+    },
+    {
+      "rule": "Put a confirmation modal or an undo window in front of destructive actions.",
+      "why": "Immediate destructive actions are an anti-pattern.",
+      "kind": "do",
+      "strength": "must",
+      "area": "patterns",
+      "applies_to": "all",
+      "values": [
+        "Undo (10s)"
+      ],
+      "evidence": "Destructive Actions Need Confirmation"
+    },
+    {
+      "rule": "Write copy in active voice and second person (\"Your account\"), use Title Case for headings and buttons, numerals for counts (\"8 deployments\"), specific labels (\"Save API Key\" not \"Continue\"), errors that include the fix, and & instead of \"and\" where space is tight.",
+      "why": "Content copy rules that convert.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "8. Content Copy Rules"
+    },
+    {
+      "rule": "Never disable zoom with user-scalable=no or maximum-scale=1.",
+      "why": "It is an accessibility violation.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "web",
+      "values": [
+        "user-scalable=no",
+        "maximum-scale=1"
+      ],
+      "evidence": "9. Anti-Patterns Checklist"
+    },
+    {
+      "rule": "Do not use transition: all.",
+      "why": "It is a performance killer and unpredictable.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "motion",
+      "applies_to": "css",
+      "values": [
+        "transition: all"
+      ],
+      "evidence": "9. Anti-Patterns Checklist"
+    },
+    {
+      "rule": "Give every icon-only button an aria-label and every input a label.",
+      "why": "Missing labels are an accessibility fail.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "web",
+      "values": [
+        "aria-label"
+      ],
+      "evidence": "9. Anti-Patterns Checklist"
+    },
+    {
+      "rule": "Format dates and numbers with Intl.DateTimeFormat and Intl.NumberFormat instead of hardcoding.",
+      "why": "Hardcoded formats are an anti-pattern.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "web",
+      "values": [
+        "Intl.DateTimeFormat",
+        "Intl.NumberFormat"
+      ],
+      "evidence": "9. Anti-Patterns Checklist"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "When people delete something, should they confirm first or get an undo?",
+      "options": [
+        {
+          "name": "Confirmation modal",
+          "effect": "An extra step before the action runs.",
+          "when": "Destructive actions such as deleting an account."
+        },
+        {
+          "name": "Undo window",
+          "effect": "The action runs, and a toast offers \"Undo (10s)\".",
+          "when": "When the action can be reversed for a short time."
+        },
+        {
+          "name": "Immediate action",
+          "effect": "No safety net.",
+          "when": "Never for destructive actions."
+        }
+      ],
+      "recommendation": "Either a confirmation or an undo window; never immediate.",
+      "maps_to": "Q-form-05",
+      "evidence": "Destructive Actions Need Confirmation"
+    },
+    {
+      "question": "Sentence case or Title Case for headings and buttons?",
+      "options": [
+        {
+          "name": "Title Case",
+          "effect": "\"Save Changes\".",
+          "when": "The guide's recommendation."
+        },
+        {
+          "name": "Sentence case",
+          "effect": "\"Save changes\".",
+          "when": "Not this guide's choice."
+        }
+      ],
+      "recommendation": "Title Case for headings and buttons.",
+      "maps_to": "Q-voice-03",
+      "evidence": "Title Case for headings/buttons"
+    },
+    {
+      "question": "Should the submit button ever be disabled?",
+      "options": [
+        {
+          "name": "Enabled until the request starts",
+          "effect": "Clickable while filling in; shows a spinner and disables during submission.",
+          "when": "The guide's pattern."
+        }
+      ],
+      "recommendation": "Enabled until the request starts, then disabled with a spinner.",
+      "maps_to": "Q-form-02",
+      "evidence": "Submit Button States"
+    },
+    {
+      "question": "How should long lists render?",
+      "options": [
+        {
+          "name": "Virtualized list (virtua, react-window)",
+          "effect": "Only visible rows render.",
+          "when": "50+ items."
+        },
+        {
+          "name": "CSS content-visibility: auto",
+          "effect": "Browser skips off-screen rendering.",
+          "when": "Simpler cases."
+        }
+      ],
+      "recommendation": "Virtualize lists with 50+ items.",
+      "maps_to": null,
+      "evidence": "Virtualize Large Lists"
+    }
+  ],
+  "process": [
+    {
+      "step": "Review against the anti-patterns list",
+      "detail": "During code review flag disabled zoom, paste blocking, transition: all, bare outline: none, div navigation, div buttons, images without dimensions, unvirtualized 50+ lists, unlabelled inputs, icon buttons without aria-label, hardcoded formats and unjustified autoFocus."
+    },
+    {
+      "step": "Run the pre-ship checklist",
+      "detail": "Check focus, form attributes and labels, image dimensions and lazy loading, touch settings, list virtualization, semantic HTML and headings, URL state and links, and copy rules."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Two-ring custom focus",
+      "where": null,
+      "visual_note": "box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--primary) draws a background-colored gap and then a primary ring around the control."
+    },
+    {
+      "what": "Search wrapper with :focus-within",
+      "where": null,
+      "visual_note": "The whole search field border turns primary with a 3px tinted halo when the inner input is focused."
+    },
+    {
+      "what": "Undo toast",
+      "where": null,
+      "visual_note": "\"Account deleted. Undo (10s)\" instead of a confirm dialog."
+    },
+    {
+      "what": "URL state",
+      "where": null,
+      "visual_note": "/products?category=shoes&sort=price&page=2 keeps filters, sort and page shareable."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "2px",
+      "context": "Focus outline width and offset.",
+      "evidence": "outline: 2px solid var(--primary); outline-offset: 2px"
+    },
+    {
+      "value": "300ms",
+      "context": "Mobile tap delay removed by touch-action: manipulation.",
+      "evidence": "Remove 300ms tap delay on mobile"
+    },
+    {
+      "value": "50+",
+      "context": "List length above which to virtualize.",
+      "evidence": "Lists with 50+ items should be virtualized"
+    },
+    {
+      "value": "80px",
+      "context": "Example scroll-margin-top for anchor targets under a fixed header.",
+      "evidence": "scroll-margin-top: 80px"
+    },
+    {
+      "value": "10s",
+      "context": "Example undo window after a destructive action.",
+      "evidence": "Account deleted. Undo (10s)"
+    },
+    {
+      "value": "8px",
+      "context": "Gap between checkbox and label in a shared hit target.",
+      "evidence": ".checkbox-wrapper gap: 8px"
+    }
+  ],
+  "caveats": [
+    "Web and React specific; native platforms are not covered.",
+    "Library recommendations (virtua, react-window, nuqs, Next.js Image) are examples, not requirements.",
+    "The 300ms tap delay claim reflects older mobile browser behaviour; the source does not date it [inferred].",
+    "The Title Case rule here conflicts with sentence-case button examples in the same repo's copywriting guide [inferred]."
+  ]
+}

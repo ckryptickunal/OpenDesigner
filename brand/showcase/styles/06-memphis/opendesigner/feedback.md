@@ -1,0 +1,23 @@
+# Feedback
+
+Gaps, bugs, confusing steps and ideas found while using OpenDesigner. Each entry has a ready-to-file issue link. Nothing is posted unless you open the link and submit it yourself.
+
+## F-001 · 2026-10-14 · bug
+Sketch with --delegated swapped the lemon brand #FFE45C for olive #877400 so white text would pass, and said only 'I picked an olive'. Same bug as the Orbika hero (lime to olive). For a Memphis or neon brand this destroys the identity; dark text on the true hue passes 12:1.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bbug%5D%20Sketch%20with%20--delegated%20swapped%20the%20lemon%20brand%20%23FFE45C%20for%20olive%20%23877...&body=%2A%2AKind%3A%2A%2A%20bug%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0ASketch%20with%20--delegated%20swapped%20the%20lemon%20brand%20%23FFE45C%20for%20olive%20%23877400%20so%20white%20text%20would%20pass%2C%20and%20said%20only%20%27I%20picked%20an%20olive%27.%20Same%20bug%20as%20the%20Orbika%20hero%20%28lime%20to%20olive%29.%20For%20a%20Memphis%20or%20neon%20brand%20this%20destroys%20the%20identity%3B%20dark%20text%20on%20the%20true%20hue%20passes%2012%3A1.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=bug%2Cfrom-engine)
+
+## F-002 · 2026-10-14 · bug
+In dark mode the brand ramp dulls lemon to #d8c568 at step 9, while accent2 (set from raw.secondaryColors) keeps its exact hex #ff8fb8 at step 9. A style that depends on saturated colour on black (Memphis) has to bypass the dark brand ramp by hand.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bbug%5D%20In%20dark%20mode%20the%20brand%20ramp%20dulls%20lemon%20to%20%23d8c568%20at%20step%209%2C%20while%20ac...&body=%2A%2AKind%3A%2A%2A%20bug%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AIn%20dark%20mode%20the%20brand%20ramp%20dulls%20lemon%20to%20%23d8c568%20at%20step%209%2C%20while%20accent2%20%28set%20from%20raw.secondaryColors%29%20keeps%20its%20exact%20hex%20%23ff8fb8%20at%20step%209.%20A%20style%20that%20depends%20on%20saturated%20colour%20on%20black%20%28Memphis%29%20has%20to%20bypass%20the%20dark%20brand%20ramp%20by%20hand.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=bug%2Cfrom-engine)
+
+## F-003 · 2026-10-14 · gap
+With three accents the triadic default from a lemon brand gives green #238557 and terracotta #b55c41: brownish, wrong for Memphis pastels. raw.secondaryColors fixes it but is only mentioned in zoom.md; no stage question asks for named secondary colours.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bgap%5D%20With%20three%20accents%20the%20triadic%20default%20from%20a%20lemon%20brand%20gives%20green%20...&body=%2A%2AKind%3A%2A%2A%20gap%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AWith%20three%20accents%20the%20triadic%20default%20from%20a%20lemon%20brand%20gives%20green%20%23238557%20and%20terracotta%20%23b55c41%3A%20brownish%2C%20wrong%20for%20Memphis%20pastels.%20raw.secondaryColors%20fixes%20it%20but%20is%20only%20mentioned%20in%20zoom.md%3B%20no%20stage%20question%20asks%20for%20named%20secondary%20colours.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=gap%2Cfrom-engine)
+
+## F-004 · 2026-10-14 · gap
+Memphis has no preset: Q-dir-01 'maximal' is the nearest. Pattern laminates (squiggles, dot screens, stripes), shape language and the rule that decoration must carry data are not expressible as dials.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bgap%5D%20Memphis%20has%20no%20preset%3A%20Q-dir-01%20%27maximal%27%20is%20the%20nearest.%20Pattern%20lami...&body=%2A%2AKind%3A%2A%2A%20gap%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AMemphis%20has%20no%20preset%3A%20Q-dir-01%20%27maximal%27%20is%20the%20nearest.%20Pattern%20laminates%20%28squiggles%2C%20dot%20screens%2C%20stripes%29%2C%20shape%20language%20and%20the%20rule%20that%20decoration%20must%20carry%20data%20are%20not%20expressible%20as%20dials.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=gap%2Cfrom-engine)

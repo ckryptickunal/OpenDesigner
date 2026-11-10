@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>White and black</title>
+<!-- Checker eval fixture for skills/opendesigner-preflight/scripts/preflight.py html (--medium web). Planted: pure white
+     cards and pure black text on one page (house standard STD-visual-details-66, M59). A translucent black shadow and an
+     8-digit white do not count. One warning. Expected findings are in evals/checkers/manifest.json. -->
+<style>
+:root { --fs-sm: 14px; --fs-md: 16px; --fs-xl: 24px; }
+body { margin: 0; padding: 24px; font-family: system-ui, sans-serif; font-size: var(--fs-md); line-height: 1.5; background: #f4f4f2; color: #000000; }
+h1 { font-size: var(--fs-xl); line-height: 1.2; }
+.card { background: #fff; padding: 16px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); }
+.note { font-size: var(--fs-sm); background: #ffffff80; }
+</style>
+</head>
+<body>
+<h1>Orders</h1>
+<div class="card"><p class="note">Two waiting for approval.</p></div>
+</body>
+</html>

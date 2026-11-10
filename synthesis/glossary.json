@@ -1284,7 +1284,7 @@
   "term": "build (engine command)",
   "plain": "Does every making step in one go, then checks the result for problems.",
   "designer": "The one command to run at the end of a step or session. It rebuilds values, exports, guides and preview, then reports any problems.",
-  "engineer": "engine.py build runs generate, then validate. Only with no errors (or --force) does it run export --format all, design-md and preview. It exits 1 on errors.",
+  "engineer": "engine.py build runs generate and validate, then (no errors, or --force) design-md, export and preview, exporting only the chosen platforms' code files. Exits 1 on errors.",
   "designer_says": "end-of-step rebuild",
   "code_name": "engine.py build",
   "example": "Run build before you show the result to your team.",
@@ -1326,7 +1326,7 @@
   "term": "export (engine command)",
   "plain": "Copies your design into the forms that websites, phone apps and design tools can read.",
   "designer": "Hands the system to each place it lives: web styles, a Tailwind theme, Figma variables, Paper, iOS and Android code, all from one source.",
-  "engineer": "engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all writes one subfolder per format in opendesigner/build/, for example css/tokens.css or swift/DesignTokens.swift.",
+  "engineer": "engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|brand|all writes a folder per format in opendesigner/build/, like css/tokens.css or brand/index.html.",
   "designer_says": "hand off to every tool",
   "code_name": "engine.py export --format all",
   "example": "Export to Tailwind for the website and Swift for the iPhone app.",
@@ -1441,7 +1441,7 @@
   "term": "pick (engine command)",
   "plain": "Saves your answer to one question in the chat, along with your reason.",
   "designer": "The shortcut for answering an interview question by its id. One answer can also move linked dials, such as corner softness setting roundness.",
-  "engineer": "engine.py pick <Q-id> <option-value> --why \"reason\". Same as set on answers.<Q-id>; mapped answers also set dials or raw inputs (Q-shape-01 subtle sets dials.roundness to 40).",
+  "engineer": "engine.py pick <Q-id> <value> --set-by chosen --quote \"their words\" (or delegated, assumed): set on answers.<Q-id>; mapped answers also set dials (Q-shape-01 subtle sets roundness 40).",
   "designer_says": "answer a question by id",
   "code_name": "engine.py pick <Q-id> <option-value>",
   "example": "Pick subtle corners for a busy work tool.",
@@ -1593,7 +1593,7 @@
   "term": "AGENTS.md snippet",
   "plain": "A short note, added only if you say yes, that tells new AI helpers to read your design rules first.",
   "designer": "Keeps later AI sessions on-system: they read the design guide and values before touching UI, stop hard-coding values, and ask before changing locked decisions.",
-  "engineer": "assets/output/AGENTS-snippet.md, appended to AGENTS.md or CLAUDE.md after asking: read DESIGN.md, PRODUCT.md and tokens first, never hard-code values, run engine.py review after implementation.",
+  "engineer": "engine.py handoff writes it into AGENTS.md and CLAUDE.md imports it: read DESIGN.md and RULES.md first, no hard-coded values, review before each draft and commit.",
   "designer_says": "rules for later AI sessions",
   "code_name": "assets/output/AGENTS-snippet.md",
   "example": "A new AI session reads it before styling a page.",
@@ -1616,7 +1616,7 @@
   "term": "build folder",
   "plain": "The folder with ready copies of your design for web pages, phone apps and design tools.",
   "designer": "Where the exports land, one per tool the team uses: web styles, Tailwind theme, Figma import files, Paper, iOS and Android. Rebuilt, never edited by hand.",
-  "engineer": "opendesigner/build/, written by engine.py export: css/tokens.css, tailwind/theme.css, figma/variables.json, paper/, swift/DesignTokens.swift, compose/DesignTokens.kt, dtcg/<name>.resolver.json.",
+  "engineer": "opendesigner/build/: css and tailwind (web), swift (iOS), compose (Android), figma, paper, dtcg. build writes the chosen platforms' code files; export --format all writes every one.",
   "designer_says": "exports for each tool",
   "code_name": "opendesigner/build/",
   "example": "Your web app imports the file in css.",
@@ -1893,6 +1893,63 @@
   "layer": "use"
  },
  {
+  "id": "use.search-aeo",
+  "term": "AEO (answer engine optimisation)",
+  "plain": "Writing each page so tools that answer questions pick it to quote.",
+  "designer": "Each page answers one real question in its first sentence, under a heading in the words people type.",
+  "engineer": "references/probe.md: a few questions by hand, logged out; record each engine's searches, sources and follow-ups. fixes.md turns them into page changes.",
+  "designer_says": "be the quoted answer",
+  "code_name": "references/probe.md",
+  "example": "Answer \"how much does it cost?\" in the first line of the pricing page.",
+  "see_also": [
+   "use.search-seo",
+   "use.search-geo"
+  ],
+  "source": [
+   "skills/opendesigner-search/SKILL.md"
+  ],
+  "layer": "use"
+ },
+ {
+  "id": "use.search-geo",
+  "term": "GEO (generative engine optimisation)",
+  "plain": "Helping AI chat tools like ChatGPT read your site and name it in their answers.",
+  "designer": "Real facts, quotes and named sources make AI answers more likely to use a page; repeating keywords makes it less likely.",
+  "engineer": "Allow OAI-SearchBot, PerplexityBot and Claude-SearchBot in robots.txt; GPTBot and ClaudeBot only gather training data. search.py robots lists each bot.",
+  "designer_says": "get named by AI",
+  "code_name": "search.py robots robots.txt",
+  "example": "Let ChatGPT's search crawler in, even if training crawlers stay out.",
+  "see_also": [
+   "use.search-seo",
+   "use.search-aeo"
+  ],
+  "source": [
+   "skills/opendesigner-search/SKILL.md",
+   "Aggarwal et al., GEO, KDD 2024 (arXiv 2311.09735)",
+   "OpenAI crawler docs (read 2026-11-07)"
+  ],
+  "layer": "use"
+ },
+ {
+  "id": "use.search-seo",
+  "term": "SEO (search engine optimisation)",
+  "plain": "Making your pages easy for search sites like Google to find, read and show.",
+  "designer": "How pages are named, titled, linked and described, so search results show them and people choose to click.",
+  "engineer": "search.py audit <build folder> checks robots.txt, sitemap.xml, canonicals, titles, descriptions, the h1 and JSON-LD in the served HTML. Read-only.",
+  "designer_says": "get found in search",
+  "code_name": "search.py audit dist/",
+  "example": "Give the pricing page its own title so search shows it.",
+  "see_also": [
+   "use.search-aeo",
+   "use.search-geo"
+  ],
+  "source": [
+   "skills/opendesigner-search/SKILL.md",
+   "Google Search Central, AI features and your website (read 2026-11-07)"
+  ],
+  "layer": "use"
+ },
+ {
   "id": "use.standard",
   "term": "standard",
   "plain": "A rule your design always follows. It is set for you, and only you can ask to change it.",
@@ -2078,6 +2135,52 @@
    "S-L17-007"
   ],
   "layer": "use"
+ },
+ {
+  "id": "use.taste-card",
+  "term": "Taste card",
+  "plain": "Five lines at the top of your design file: your picture of it, color, shape, motion, and what to avoid.",
+  "designer": "A one-glance style brief in the Overview. The picture and the Never list are only ever the person's own; color, shape and motion repeat each section's opening sentence.",
+  "engineer": "Rendered into DESIGN.md's Overview by taste_card() in engine.py, from taste.brief (sketch --brief), taste.never and the taste index's red lines.",
+  "designer_says": "style brief, mood in words",
+  "code_name": "taste.brief, taste.never",
+  "example": "In your words: \"a quiet library at night\". Never: gradients, emoji (your words).",
+  "source": [
+   "skills/opendesigner/scripts/engine.py (taste_card)",
+   "skills/opendesigner/references/taste.md",
+   "DC-L15-03"
+  ],
+  "layer": "use",
+  "aliases": [
+   "taste summary",
+   "style brief",
+   "never list"
+  ]
+ },
+ {
+  "id": "use.taste-index-look",
+  "term": "Taste Index",
+  "plain": "A full write-up of one look you love, so your AI can make new pages that match it.",
+  "designer": "One look described in full: a picture, 5 to 7 principles with reasons, colour jobs and shares, type, components, motion, voice, a Never list and a live specimen.",
+  "engineer": "opendesigner-extract taste_index.py draft writes opendesigner/taste-indexes/<id>/: TASTE-INDEX.md, a CSS file of variables and specimen.html; use <id> --fonts exact|free makes the system follow it.",
+  "designer_says": "brand guide for one look",
+  "code_name": "taste_index.py",
+  "example": "Warm paper, near-black ink, one teal accent, a lot of empty space.",
+  "see_also": [
+   "use.taste-card",
+   "core.reference-intake"
+  ],
+  "source": [
+   "skills/opendesigner-extract/scripts/taste_index.py",
+   "skills/opendesigner/references/taste.md",
+   "learn/analysis/davecto-taste-index-reel-deddoxeujet.json",
+   "_coordination/DECISIONS.md 2026-10-23"
+  ],
+  "layer": "use",
+  "aliases": [
+   "look guide",
+   "taste index of a site"
+  ]
  },
  {
   "id": "use.template",
@@ -2661,6 +2764,257 @@
    "DC-L11-05"
   ],
   "layer": "prin"
+ },
+ {
+  "id": "prin.style.bento",
+  "term": "bento grid",
+  "plain": "Content in neat boxes of different sizes, like the parts of a lunch box.",
+  "designer": "Tiles of two or three spans in one grid with one gap; one idea per tile, the hero tile largest. A layout that borrows its look from another style.",
+  "engineer": "CSS grid with grid-column and grid-row spans; Q-dir-04 containers. Keep DOM order equal to reading order (WCAG 1.3.2) and reflow to one column.",
+  "designer_says": "bento grid, bento box layout",
+  "code_name": "grid-column: span 2",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "S-L15-065",
+   "S-L15-062"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "bento",
+   "bento box",
+   "tile grid",
+   "feature tiles"
+  ]
+ },
+ {
+  "id": "prin.style.claymorphism",
+  "term": "claymorphism",
+  "plain": "Puffy, round shapes that look made of soft clay or toy plastic.",
+  "designer": "Large radius, a soft outer shadow plus light and dark inner shadows, pastel color and 3D clay art. Friendly and cute; keep product controls calmer.",
+  "engineer": "No preset of its own: start from soft, then raise roundness above 80 and colorfulness. Inner shadows are not generated yet (proposed); 3D art is an asset (Q-img-06).",
+  "designer_says": "claymorphism, clay 3D",
+  "code_name": "box-shadow with inset pairs",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L15-01"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "clay",
+   "puffy",
+   "squishy",
+   "inflated 3D",
+   "soft 3D"
+  ]
+ },
+ {
+  "id": "prin.style.comic",
+  "term": "comic style",
+  "plain": "Looks like a comic book, with thick ink outlines, bright flat colors, dots and speech bubbles.",
+  "designer": "Black outlines, primary colors, halftone dot shading, speech balloons and burst shapes; pop art is its gallery cousin. Keep hand lettering to short labels.",
+  "engineer": "Start from the neobrutal preset with colorfulness above 88. Halftone is a radial-gradient dot pattern; drawings are assets (Q-img-04, opendesigner-illustrate).",
+  "designer_says": "comic style, pop art, halftone",
+  "code_name": "radial-gradient dot pattern",
+  "source": [
+   "skills/opendesigner/references/styles.md"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "comic",
+   "comic book",
+   "pop art",
+   "cartoon",
+   "halftone",
+   "speech bubbles"
+  ]
+ },
+ {
+  "id": "prin.style.editorial",
+  "term": "editorial style",
+  "plain": "Pages that read like a good magazine: big titles, calm text and large photos.",
+  "designer": "Serif display headlines, dramatic size jumps (1.333 or more), 60-75 character lines, pull quotes and thin rules. For reading products and long content.",
+  "engineer": "Q-type-03 serif, Q-dir-03 dramatic (type ratio 1.333) and Q-dir-04 lines. Body text stays 16px or larger; limit lines with max-width: 65ch.",
+  "designer_says": "editorial, magazine layout",
+  "code_name": "max-width: 65ch",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L15-02",
+   "DC-L15-05"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "magazine style",
+   "magazine layout",
+   "long-form"
+  ]
+ },
+ {
+  "id": "prin.style.flat",
+  "term": "flat design",
+  "plain": "Plain solid colors with no shadows, no shine and no texture.",
+  "designer": "Solid fills, simple icons, hierarchy from color and size. Flat 2.0 brings subtle shadows back. Keep strong signs of what to click, or people search longer.",
+  "engineer": "Depth 0-15 builds the borders model with no shadows. The default flat2 preset (Q-dir-01) sets Depth 30: a ring plus a faint shadow.",
+  "designer_says": "flat design, flat 2.0",
+  "code_name": "box-shadow: none",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L15-01",
+   "S-L15-009",
+   "S-L15-004"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "flat",
+   "flat 2.0",
+   "semi-flat",
+   "no shadows"
+  ]
+ },
+ {
+  "id": "prin.style.glassmorphism",
+  "term": "glassmorphism",
+  "plain": "See-through panels that look like frosted glass, so you see a blur of what is behind them.",
+  "designer": "Translucent fill, background blur and a thin light edge over rich content. Use it on bars, sheets and menus, never on reading surfaces, and give it a solid twin.",
+  "engineer": "Q-dir-01 glass, or Depth above 80, builds the materials model: material.glass.blur (24px), color.surface.glass and color.surface.glass-fallback. Web uses backdrop-filter.",
+  "designer_says": "glassmorphism, frosted glass",
+  "code_name": "backdrop-filter, material.glass.blur",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L15-01",
+   "DC-L04-15",
+   "DC-L04-16"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "frosted glass",
+   "frosty",
+   "glassy",
+   "see-through",
+   "backdrop blur"
+  ]
+ },
+ {
+  "id": "prin.style.grain",
+  "term": "grain texture",
+  "plain": "A fine speckle over colors, like old film or printed paper.",
+  "designer": "Fine noise at 3-8% strength over fills and gradients. It warms flat color and hides gradient banding; keep it off body text and keep it still.",
+  "engineer": "An SVG feTurbulence image on a pseudo-element with mix-blend-mode: overlay. Not a token yet (proposed); record it with the H-motif hook (Q-img-07).",
+  "designer_says": "grain, noise texture",
+  "code_name": "feTurbulence overlay",
+  "source": [
+   "skills/opendesigner/references/styles.md"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "grain",
+   "noise",
+   "film grain",
+   "grainy",
+   "paper texture"
+  ]
+ },
+ {
+  "id": "prin.style.mesh-gradient",
+  "term": "mesh gradient",
+  "plain": "Soft clouds of a few colors that melt into each other, like the northern lights.",
+  "designer": "Three to five colors blending in many directions, often blurred and slowly moving. Marketing and brand moments only, never on buttons or forms.",
+  "engineer": "Stacked radial-gradient layers or blurred shapes, interpolated in OKLab. DTCG gradient tokens hold stops only; the engine does not generate gradients yet (proposed).",
+  "designer_says": "mesh gradient, aurora gradient",
+  "code_name": "radial-gradient layers",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L01-25"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "aurora gradient",
+   "aurora",
+   "gradient blur",
+   "gradient background",
+   "northern lights"
+  ]
+ },
+ {
+  "id": "prin.style.neo-brutalism",
+  "term": "neo-brutalism",
+  "plain": "Bright flat colors with thick black lines and hard black shadows, like stickers.",
+  "designer": "Thick borders, a solid 4px offset shadow, 2-3 bold colors, 24-32px padding and a quirky display face over a neutral body face. Loud and indie.",
+  "engineer": "Q-dir-01 neo-brutalist selects the neobrutal preset (roundness 5, depth 0, colorfulness 80). Thick borders and the offset shadow need overrides of border.width.default and elevation.raised.",
+  "designer_says": "neo-brutalism, neubrutalism",
+  "code_name": "box-shadow: 4px 4px 0",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L15-01",
+   "S-L15-006"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "neubrutalism",
+   "neo brutalist",
+   "black borders",
+   "chunky outlines"
+  ]
+ },
+ {
+  "id": "prin.style.neumorphism",
+  "term": "neumorphism",
+  "plain": "Soft buttons that look pushed up out of the page, or pressed in, all one color.",
+  "designer": "Same-color surfaces with paired light and dark soft shadows. Tactile but vague: edges usually fail 3:1, so every control needs an added border or fill.",
+  "engineer": "Q-dir-01 soft selects the soft preset (roundness 80, colorfulness 20) and the lint warns neumorphic-preset. Paired and inset shadows are not generated yet (proposed).",
+  "designer_says": "neumorphism, soft UI",
+  "code_name": "paired box-shadow, inset",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L15-01",
+   "S-L15-060"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "soft UI",
+   "soft buttons",
+   "pillowy",
+   "new skeuomorphism"
+  ]
+ },
+ {
+  "id": "prin.style.skeuomorphism",
+  "term": "skeuomorphism",
+  "plain": "Screens that copy real objects and materials, like a record player, a tape or wood.",
+  "designer": "Realistic textures, lighting and shadows that mimic physical objects. Useful as a metaphor, like a folder or trash can; as full realism it clutters screens and loads slowly.",
+  "engineer": "Mostly assets, not tokens: textures and objects use the H-motif hook (Q-img-07), custom controls Q-plat-06 custom, and Depth in the shadow-ladder band (56-80).",
+  "designer_says": "skeuomorphism, realism",
+  "code_name": "layered gradients and box-shadow",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "S-L15-008",
+   "DC-L15-01"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "realistic",
+   "real-world look",
+   "physical metaphor"
+  ]
+ },
+ {
+  "id": "prin.style.swiss",
+  "term": "Swiss style",
+  "plain": "A strict, tidy grid with plain bold letters lined up on the left and lots of space.",
+  "designer": "International Typographic Style: a column grid, neo-grotesque type set flush left, big size jumps, asymmetric layouts, neutral colors plus one accent.",
+  "engineer": "Q-type-03 neo-grotesque, Q-dir-05 start and the flat2 preset, with roundness 0-25 and colorfulness 11-45. The grid itself is layout, not a token.",
+  "designer_says": "Swiss style, International Typographic Style",
+  "code_name": "display: grid; text-align: start",
+  "source": [
+   "skills/opendesigner/references/styles.md",
+   "DC-L02-02"
+  ],
+  "layer": "prin",
+  "aliases": [
+   "International Typographic Style",
+   "Swiss design",
+   "grid style",
+   "Helvetica look"
+  ]
  },
  {
   "id": "prin.ux",
@@ -3554,9 +3908,9 @@
   "term": "Data visualization",
   "plain": "Charts that match the rest of the app, with set colors, parts and rules so all can read them.",
   "designer": "Charts as part of the system: a small set of chart types, palettes, shared anatomy and accessibility rules, so charts look native to the product rather than pasted in.",
-  "engineer": "Planned via the H-dataviz hook: chart palettes as color tokens, with chrome reusing text, border and dimension tokens; no chart tokens are generated yet. DTCG has no chart-specific types.",
+  "engineer": "color.chart.* (Q-color-19): brand, categorical, sequential, diverging, status colors; axis, gridline and label aliases. Lines, bars, dots are 3:1 on the page; light sequential steps suit touching cells.",
   "designer_says": "data viz, themed to the system",
-  "code_name": "color.chart.* (proposed)",
+  "code_name": "color.chart.*",
   "source": [
    "found.dataviz"
   ],
@@ -3611,9 +3965,9 @@
   "term": "Data-visualization palettes",
   "plain": "Chart colors: one per group, light to dark for how much, and two-way for above or below the middle.",
   "designer": "One brand chart color plus grey by default; 6-8 categorical colors in fixed order for neighbor contrast; one sequential ramp per primary hue and one diverging ramp, per mode.",
-  "engineer": "Not generated yet: per-mode color tokens color.chart.categorical.1 (proposed) onward, color.chart.sequential (proposed) and color.chart.diverging (proposed) ramps, plus brand, neutral and status sets.",
+  "engineer": "Per-mode tokens: color.chart.categorical.1 onward, color.chart.sequential.1 to .5 (the light end for heatmap cells), color.chart.diverging.1 to .7, plus brand, neutral and status.",
   "designer_says": "categorical, sequential, diverging palettes",
-  "code_name": "color.chart.categorical (proposed), .sequential, .diverging",
+  "code_name": "color.chart.categorical, .sequential, .diverging",
   "example": "This year in brand blue, last year in grey for context.",
   "source": [
    "found.dataviz.color",
@@ -3633,9 +3987,9 @@
   "term": "Chart scope and library",
   "plain": "Which kinds of charts the app has, like bars and lines, and which ready-made chart kit it styles.",
   "designer": "Start with 5-6 types (bar, line, area, stacked bar, donut or meter, scatter) plus a KPI big number. Fewer types stay consistent; theme a library rather than build one.",
-  "engineer": "Not a token: the Q-viz-01 scope answer in state.json. The themed chart library would consume color.chart.* (proposed) and existing chrome tokens, as would native chart frameworks.",
+  "engineer": "Not a token: the Q-viz-01 scope answer in state.json. The themed chart library reads color.chart.* and the existing chrome tokens, as do native chart frameworks.",
   "designer_says": "5-6 chart types plus KPI number",
-  "code_name": "color.chart.* (proposed)",
+  "code_name": "color.chart.*",
   "example": "A dashboard with bars, lines and one big number, all from one library.",
   "source": [
    "found.dataviz.scope",
@@ -4677,8 +5031,8 @@
   "id": "found.shape.geometry",
   "term": "Corner geometry and nesting",
   "plain": "The kind of curve a corner has, and how a box inside a box gets corners that fit.",
-  "designer": "Circular arcs or continuous squircle corners, which look softer and more Apple-like. Nested shapes stay concentric: inner radius is outer radius minus padding, so the gap stays even.",
-  "engineer": "Inner radius is computed at generation, max(outer - padding, smallest step), and emitted as radius.nested. The engine emits circular arcs; web corner-shape: squircle is an optional enhancement, not generated.",
+  "designer": "Circular arcs, or Apple's continuous corners, which ease into the edge. Nested shapes stay concentric: inner radius is outer radius minus padding, so the gap stays even.",
+  "engineer": "Inner radius is computed at generation, max(outer - padding, smallest step), and emitted as radius.nested. iOS uses .continuous; squircle-enhance adds CSS superellipse(1.35) corners at 1.22 times the radius.",
   "designer_says": "squircle corners, concentric nesting",
   "code_name": "radius.nested",
   "example": "Card 16px, padding 8px, so the photo inside gets 8px corners.",
@@ -7349,14 +7703,15 @@
  {
   "id": "builder.review",
   "term": "Review and visual diff",
-  "plain": "How changes get checked before they go out, ideally with before and after views side by side.",
-  "designer": "Planned: a visual diff page per change set, before and after in each mode, exported as a pull request. Today opendesigner-extend shows old and new values and git diff --stat.",
-  "engineer": "Planned: list changed tokens, walk the alias graph to find affected components. Today graph.json names the decisions a change moves, and engine.py review flags stale DESIGN.md sections.",
+  "plain": "How changes get checked before they go out: the page before, the problems marked on it, then the page after.",
+  "designer": "review.py compare shows the page today, the audit drawn on it and the fix, each with what it improves. Planned: a diff per change set, in every mode.",
+  "engineer": "review.py compare builds one HTML file from two screenshots and __od.marks() boxes. Planned: walk the alias graph to find the components a token change moves.",
   "designer_says": "visual diff, before and after",
-  "code_name": "graph.json edges; visual diff (planned)",
+  "code_name": "review.py compare; graph.json edges",
   "source": [
    "builder.review",
-   "DC-L16-09"
+   "DC-L16-09",
+   "skills/opendesigner-review/SKILL.md"
   ],
   "layer": "builder"
  },

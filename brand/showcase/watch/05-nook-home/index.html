@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=205, initial-scale=1">
+<title>Nook: dim the living room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&family=Nunito:wght@600..800&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Round 4: one glanceable thing, how bright the room is. Turning the Digital Crown moves the bar; no tiles, no gradient.
+     One face (Nunito), two weights. Hardware, not design tokens: the 49 mm-class display is 205 x 251 pt with rounded corners. */
+  :root { --display-w: 205px; --display-h: 251px; --display-r: 48px; }
+  /* Type roles, watchOS text styles at xLarge: Caption 2 15, Headline 17, and one data numeral (64, outside the HIG styles on purpose). */
+  :root {
+    --t-caption: 15px;                    /* HIG Caption 2; the engine scale steps 14 and 17 */
+    --t-headline: var(--ds-font-size-17);
+    --t-display: 64px;
+    --lamp: var(--ds-color-brand-seed);   /* the one colour: lamp light, and how much of it */
+    --track: var(--ds-color-neutral-dark-5);
+    --level: 40;
+  }
+  /* System chrome: watchOS draws the title and the time itself, in San Francisco; Inter (SIL OFL) stands in, the same in every watch piece. */
+  :root { --t-sys: 600 17px/1 "Inter", system-ui, sans-serif; }
+  html, body { margin: 0; background: var(--ds-color-black); }
+  .display {
+    position: relative; width: var(--display-w); height: var(--display-h); overflow: hidden;
+    border-radius: var(--display-r); background: var(--ds-color-surface-base);
+    color: var(--ds-color-white); font-family: var(--ds-font-family-text);
+    font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+  }
+  .status { position: absolute; top: var(--ds-space-12); left: 20px; right: 22px; display: flex; justify-content: space-between; font: var(--t-sys); font-variant-numeric: tabular-nums; }
+  .status .room { color: var(--lamp); }
+
+  .level { position: absolute; top: 62px; left: var(--ds-space-16); }
+  .level .num { display: block; font: 800 var(--t-display)/0.9 var(--ds-font-family-text); letter-spacing: -0.03em; }
+  .level .num small { font-size: 0.5em; letter-spacing: 0; margin-left: 2px; }
+  .scene { display: block; margin-top: var(--ds-space-16); font: 700 var(--t-headline)/1 var(--ds-font-family-text); }
+  .lamps { display: block; margin-top: var(--ds-space-6); font: 600 var(--t-caption)/1.2 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+
+  .dimmer { position: absolute; right: 24px; top: 54px; bottom: 42px; width: 40px; border-radius: 20px; background: var(--track); overflow: hidden; }
+  .dimmer i { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--level) * 1%); background: var(--lamp); }
+</style>
+</head>
+<body>
+<main class="display" aria-label="Nook, living room: Supper scene, 4 lamps at 2700 K, dimmed to 40 percent">
+  <div class="status"><span class="room">Living room</span><span class="clock">9:12</span></div>
+  <section class="level">
+    <span class="num">40<small>%</small></span>
+    <span class="scene">Supper</span>
+    <span class="lamps">4 lamps, 2700 K</span>
+  </section>
+  <div class="dimmer" role="slider" aria-label="Brightness" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40"><i></i></div>
+</main>
+</body>
+</html>

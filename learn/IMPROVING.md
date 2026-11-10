@@ -36,9 +36,17 @@ In every case:
 - **Where to start.** Part B of [../research/L19-learning-wiki.md](../research/L19-learning-wiki.md) lists every change the cards propose, with evidence. Part C lists where they disagree with older research. Both are good places to start.
 
 Rules:
+- **Check research before you build from it** (owner, 2026-11-07). For every idea from a paper, article or reference, write down: the files, rules or checks it touches; what in `skills/`, `synthesis/`, `learn/` or the house standards already covers it (if anything does, drop it); what it could break or contradict (rules, evals, tests); how strong the evidence is (sample, setting, replication); and the smallest step that can be undone. The owner picks before anything is built. A paper review on 2026-11-07 kept 2 of 10 ideas this way.
 - **Reference material proposes; it doesn't decide.** A single video's number or "always/never" claim is opinion until another source or the existing research agrees. The card says which.
 - **Never silently override older research.** If a card disagrees with an existing Decision Card, settle it openly: log the decision, and update or supersede the older card's default.
 - **Every value traces to a source.** That means a card id, a standard id, or an `S-` id.
+- **Check the mission before you adopt an outside format** ([../docs/PRODUCT-VISION.md](../docs/PRODUCT-VISION.md), [../docs/SPEC.md](../docs/SPEC.md) section 2). A creator's template or another tool's card can shape how OpenDesigner presents things. It still has to pass four checks:
+  - it shows the person's own taste and choices, never a copied site's identity (SPEC 5.4);
+  - an owner input it needs is asked, or shown as "Not given yet", never invented;
+  - where its numbers disagree with the repo's evidence, the evidence wins;
+  - output contracts stay intact (DESIGN.md's headings and its one-plain-sentence opening per section; `test_engine.py` checks both).
+
+  Example: the taste card (c3873a9) took the five-line format from davecto's "Taste Index" reel. It left out the copying and the reel's 90/9/1 colour ratio, and uses DC-L15-03's 15% accent guide instead.
 
 ## 4. Change a house standard (maintainers only)
 

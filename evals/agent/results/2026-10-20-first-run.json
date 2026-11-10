@@ -1,0 +1,86 @@
+{
+  "kind": "agent",
+  "date": "2026-10-20",
+  "commit": "9dcd6ba",
+  "model": "sonnet",
+  "judgeModel": "haiku",
+  "runsPerArm": 3,
+  "claudeVersion": "2.1.302",
+  "overallScore": 0.5034722222222223,
+  "meanDelta": 0.00972222222222223,
+  "casesPassed": 8,
+  "casesTotal": 8,
+  "costUsd": 4.0361243,
+  "durationSeconds": 1162,
+  "partial": false,
+  "cases": [
+    {
+      "name": "contrast-floor",
+      "score": 1,
+      "without": 1.0,
+      "delta": 0,
+      "runs": 3,
+      "errors": []
+    },
+    {
+      "name": "export-tailwind",
+      "score": 0,
+      "without": 0.0,
+      "delta": 0,
+      "runs": 3,
+      "errors": []
+    },
+    {
+      "name": "extend-rounder",
+      "score": 0,
+      "without": 0.0,
+      "delta": 0,
+      "runs": 3,
+      "errors": []
+    },
+    {
+      "name": "no-identity-copy",
+      "score": 0,
+      "without": 0.0,
+      "delta": 0,
+      "runs": 3,
+      "errors": [
+        "exit 1: Reached maximum number of turns (8)"
+      ]
+    },
+    {
+      "name": "one-question-first",
+      "score": 0.16666666666666666,
+      "without": 0.5,
+      "delta": -0.33333333333333337,
+      "runs": 3,
+      "errors": []
+    },
+    {
+      "name": "preflight-before-share",
+      "score": 0.9166666666666666,
+      "without": 0.917,
+      "delta": 0,
+      "runs": 3,
+      "errors": []
+    },
+    {
+      "name": "review-planted-page",
+      "score": 0.9444444444444445,
+      "without": 1.0,
+      "delta": -0.05555555555555547,
+      "runs": 3,
+      "errors": []
+    },
+    {
+      "name": "sketch-five-answers",
+      "score": 1,
+      "without": 0.533,
+      "delta": 0.4666666666666667,
+      "runs": 3,
+      "errors": []
+    }
+  ],
+  "label": "first-run",
+  "note": "The first full run, kept for the record. Not comparable with later runs: two cases (extend-rounder, export-tailwind) could not copy their fixture inside the sandbox, so both arms scored 0; two rubrics were later corrected (one-question-first asked for a recommendation even on an open question; no-identity-copy required an explanation of why), and two judge calls failed on network errors."
+}

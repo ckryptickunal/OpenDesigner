@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panelwise · Toasts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+/* Panelwise: a hiring pipeline board with the toast stack expanded under the pointer.
+   Shown at 1x, the whole app in the 1440 x 900 frame (PRESENTATION.md: the component at its real size, the rest kept quiet).
+   Colour, space, radius, type and motion are --ds-* tokens; OFF-TOKEN values say why.
+   Green has one job: work still running (the export's progress). */
+:root {
+  --rule: var(--ds-color-neutral-light-4);      /* OFF-TOKEN: hairline; border.subtle is too heavy for card edges */
+  --rule-strong: var(--ds-color-neutral-light-6);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background: var(--ds-color-surface-raised); -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.i { width: var(--ds-size-icon-sm); height: var(--ds-size-icon-sm); flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.app { width: 100vw; height: 100vh; height: 100dvh; position: relative; display: grid; grid-template-columns: 56px 1fr;
+  color: var(--ds-color-text-primary); font: var(--ds-text-body-md); font-variant-numeric: tabular-nums; background: var(--ds-color-surface-raised); }
+.rail { border-right: 1px solid var(--rule); background: var(--ds-color-surface-sunken); display: flex; flex-direction: column; align-items: center; gap: var(--ds-space-8); padding-top: var(--ds-space-12); color: var(--ds-color-icon-subtle); }
+.rail .mark { width: 28px; height: 28px; border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-12); color: var(--ds-color-white); display: grid; place-items: center; font: 600 var(--ds-font-size-14)/1 var(--ds-font-family-text); margin-bottom: var(--ds-space-12); }
+.rail span { width: 36px; height: 36px; display: grid; place-items: center; border-radius: var(--ds-radius-control); }
+.rail span.on { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); box-shadow: var(--ds-elevation-raised); }
+.main { min-width: 0; display: flex; flex-direction: column; position: relative; }
+.top { height: 52px; flex: none; display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-24); border-bottom: 1px solid var(--rule); color: var(--ds-color-text-secondary); }
+.top b { color: var(--ds-color-text-primary); font-weight: 500; }
+.top .end { margin-left: auto; display: flex; align-items: center; gap: var(--ds-space-16); color: var(--ds-color-icon-default); }
+.avatar { width: 28px; height: 28px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-4); display: grid; place-items: center; font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+
+.job { padding: var(--ds-space-16) var(--ds-space-24) 0; display: flex; align-items: center; gap: var(--ds-space-12); }
+.job h1 { margin: 0; font: var(--ds-text-title-lg); letter-spacing: -0.01em; }
+.job .meta { color: var(--ds-color-text-tertiary); }
+.job .acts { margin-left: auto; display: flex; gap: var(--ds-space-8); }
+.btn { height: var(--ds-size-control-md); display: inline-flex; align-items: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: 500; border: 1px solid var(--rule-strong); background: var(--ds-color-surface-raised); white-space: nowrap; }
+.btn.ink { background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); border-color: transparent; }
+.seg { display: inline-flex; padding: var(--ds-space-2); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-sunken); }
+.seg span { height: 28px; padding: 0 var(--ds-space-12); display: flex; align-items: center; border-radius: calc(var(--ds-radius-control) - 2px); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); }
+.seg .on { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); font-weight: 500; box-shadow: var(--ds-elevation-raised); }
+.sub { padding: var(--ds-space-12) var(--ds-space-24); display: flex; gap: var(--ds-space-16); font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); }
+.sub b { color: var(--ds-color-text-secondary); font-weight: 500; }
+.sub .r { margin-left: auto; }
+
+/* ---------- board ---------- */
+.board { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--ds-space-12); padding: 0 var(--ds-space-24); overflow: hidden; }
+.col { background: var(--ds-color-surface-sunken); border-radius: var(--ds-radius-container) var(--ds-radius-container) 0 0; padding: var(--ds-space-8); display: flex; flex-direction: column; gap: var(--ds-space-8); }
+.col h2 { margin: 0; height: 28px; display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-4); font: var(--ds-text-label-lg); font-weight: 600; }
+.col h2 span { color: var(--ds-color-text-tertiary); font-weight: 400; }
+.card { background: var(--ds-color-surface-raised); border: 1px solid var(--rule); border-radius: var(--ds-radius-control); padding: var(--ds-space-12); }
+.card b { display: block; font-weight: 500; }
+.card .m { margin-top: var(--ds-space-2); font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); }
+.card .f { margin-top: var(--ds-space-12); display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+.pips { display: inline-flex; gap: var(--ds-space-2); }
+.pips i { width: 6px; height: 6px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-5); }
+.pips i.on { background: var(--ds-color-neutral-light-12); }
+.card .f .r { margin-left: auto; color: var(--ds-color-text-tertiary); }
+
+/* ---------- the toast stack (expanded: the pointer is over it) ---------- */
+.stack { position: absolute; right: var(--ds-space-24); bottom: var(--ds-space-24); width: 400px; display: flex; flex-direction: column; gap: var(--ds-space-8); }
+.toast { display: grid; grid-template-columns: 20px 1fr auto; column-gap: var(--ds-space-12); row-gap: var(--ds-space-2); align-items: start; padding: var(--ds-space-12) var(--ds-space-12) var(--ds-space-12) var(--ds-space-16);
+  border-radius: var(--ds-radius-container); background: var(--ds-color-neutral-light-12); color: var(--ds-color-white);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / .06), 0 2px 4px var(--ds-color-shadow-key), 0 12px 32px var(--ds-color-shadow-ambient); } /* OFF-TOKEN: a hairline ring in black at 6% keeps the ink toast's edge crisp on the grey column */
+.toast .ic { grid-row: 1 / span 2; width: 20px; height: 20px; display: grid; place-items: center; color: var(--ds-color-neutral-dark-12); }
+.toast .ic .i { width: 18px; height: 18px; }
+.toast .t { font: var(--ds-text-label-lg); font-weight: 500; }
+.toast .d { grid-column: 2; font: var(--ds-text-body-sm); color: var(--ds-color-neutral-dark-11); }
+.toast .act { grid-row: 1 / span 2; grid-column: 3; align-self: center; }
+.toast .act button { height: 28px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: 500; color: var(--ds-color-white); background: rgb(255 255 255 / .12); display: inline-flex; align-items: center; gap: var(--ds-space-6); } /* OFF-TOKEN: white at 12% is the button fill on the ink toast; the token neutrals have no tint for an inverse surface */
+.toast { position: relative; }
+.toast .x { position: absolute; right: -6px; top: -6px; width: 20px; height: 20px; border-radius: var(--ds-radius-full); display: grid; place-items: center; background: var(--ds-color-neutral-light-12); color: var(--ds-color-neutral-dark-11); box-shadow: 0 0 0 1px rgb(255 255 255 / .16); }
+.toast .x .i { width: 12px; height: 12px; stroke-width: 2.5; }
+.toast .prog { grid-column: 2 / 4; margin-top: var(--ds-space-8); height: 4px; border-radius: var(--ds-radius-full); background: rgb(255 255 255 / .14); overflow: hidden; }
+.toast .prog b { display: block; height: 100%; border-radius: var(--ds-radius-full); background: var(--ds-color-accent-dark-10); }
+@media (prefers-reduced-motion: no-preference) {
+  .toast { animation: toast-in var(--ds-motion-transition-enter-duration) var(--ds-motion-transition-enter-easing) both; }
+  @keyframes toast-in { from { opacity: 0; transform: translateY(8px); } }
+}
+@media (hover: hover) and (pointer: fine) { .toast .act button:hover { background: rgb(255 255 255 / .2); } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.2 2.4 2.4 4.6-4.8"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M20.5 3.5 10 14M20.5 3.5 14 20.5l-4-6.5-6.5-4z"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4.5v11M7 10.5l5 5 5-5M5 19.5h14"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4.5 9.5 9 5"/><path d="M4.5 9.5H14a5.5 5.5 0 0 1 0 11h-3"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-jobs" viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M9 7V5h6v2M4 12h16"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.5"/><path d="M3.5 19.5c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5M15.5 5.2a3.5 3.5 0 0 1 0 6.6M17.5 14.3c1.8.8 3 2.7 3 5.2"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16M7 16.5V11M12 16.5V6M17 16.5v-8"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6.5 16.5V11a5.5 5.5 0 0 1 11 0v5.5l1.5 2H5z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+</svg>
+
+<div class="app">
+  <nav class="rail" aria-label="Main">
+    <span class="mark" aria-label="Panelwise"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="2" y="3" width="8" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="6" y="3" width="8" height="10" rx="2" fill="currentColor" opacity=".55"/></svg></span>
+    <span class="on" aria-label="Jobs"><svg class="i"><use href="#i-jobs"/></svg></span>
+    <span aria-label="Candidates"><svg class="i"><use href="#i-people"/></svg></span>
+    <span aria-label="Interviews"><svg class="i"><use href="#i-cal"/></svg></span>
+    <span aria-label="Reports"><svg class="i"><use href="#i-chart"/></svg></span>
+  </nav>
+  <main class="main">
+    <header class="top">Jobs<span>/</span><b>Engineering</b>
+      <div class="end"><svg class="i" aria-label="Search"><use href="#i-search"/></svg><svg class="i" aria-label="Notifications"><use href="#i-bell"/></svg><span class="avatar" aria-label="Signed in as LF">LF</span></div>
+    </header>
+    <div class="job">
+      <h1>Staff Data Engineer</h1><span class="meta">Remote, CET ± 2 h · 2 openings</span>
+      <div class="acts"><div class="seg" aria-label="View"><span class="on">Board</span><span>List</span></div><button class="btn ink"><svg class="i"><use href="#i-plus"/></svg>Add candidate</button></div>
+    </div>
+    <div class="sub"><span><b>296</b> applicants</span><span><b>53</b> not screened yet</span><span><b>188</b> archived</span><span class="r">Cards sorted by last activity</span></div>
+    <div class="board" id="board"></div>
+
+    <section class="stack" aria-label="Notifications" aria-live="polite">
+      <div class="toast" role="status">
+        <span class="ic"><svg class="i"><use href="#i-down"/></svg></span>
+        <div class="t">Exporting pipeline</div>
+        <div class="act"><button>Cancel</button></div>
+        <div class="d">184 of 296 applicants · CSV, with scorecards</div>
+        <div class="prog" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Export progress"><b style="width:62%"></b></div>
+      </div>
+      <div class="toast" role="status">
+        <span class="ic"><svg class="i"><use href="#i-send"/></svg></span>
+        <div class="t">Scorecard reminders sent</div>
+        <div class="act"><button>View</button></div>
+        <div class="d">Lucia, Yaw, Hana and Gaurav · due Fri 16 Oct, 17:00</div>
+      </div>
+      <div class="toast hovered" role="status">
+        <span class="ic"><svg class="i"><use href="#i-ok"/></svg></span>
+        <div class="t">Moved 3 candidates to Onsite</div>
+        <div class="act"><button>Undo</button></div>
+        <div class="d">Marisol, Tomasz and Ifeoma · from Technical</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+// Stages and counts: 53 not screened + 23 + 17 + 12 + 2 + 1 + 188 archived = 296 applicants. Now: Thu 15 Oct 2026, 10:24.
+// Card: name, place and years, scorecards [in, of] or null, right-hand note.
+const COLS = [
+  ["Screen", "23", [
+    ["Mateus Lacerda", "Porto · 7 yrs", [1, 1], "Ready to move"],
+    ["Jarrah Whitfield", "Rotterdam · 6 yrs", [0, 1], "Call Mon 19 Oct"],
+    ["Tobias Engel", "Hamburg · 9 yrs", [0, 1], "Call Fri 16 Oct"],
+    ["Lina Haddou", "Lyon · 6 yrs", [1, 1], "Ready to move"],
+    ["Felix Aurand", "Vienna · 8 yrs", [0, 1], "Call Tue 20 Oct"],
+    ["Pau Ferrando", "Girona · 7 yrs", [0, 1], "Call Wed 21 Oct"],
+  ]],
+  ["Technical", "17", [
+    ["Saoirse Kavanagh", "Dublin · 11 yrs", [3, 3], "Ready to move"],
+    ["Hyun-woo Baek", "Berlin · 8 yrs", [2, 3], "1 scorecard due"],
+    ["Daniela Restrepo", "Madrid · 5 yrs", [1, 3], "2 scorecards due"],
+    ["Priyanka Venkatesan", "Amsterdam · 10 yrs", [0, 3], "Today, 15:30"],
+    ["Kenji Morimoto", "Warsaw · 9 yrs", [0, 3], "Fri 16 Oct, 11:00"],
+    ["Wiktoria Zielińska", "Gdańsk · 7 yrs", [0, 3], "Mon 19 Oct, 14:00"],
+  ]],
+  ["Onsite", "12", [
+    ["Marisol Ortega", "Lisbon · 7 yrs", null, "Onsite not scheduled"],
+    ["Tomasz Wierzbicki", "Kraków · 9 yrs", null, "Onsite not scheduled"],
+    ["Ifeoma Chukwu", "Lagos · 6 yrs", null, "Onsite not scheduled"],
+    ["Noemi Castell", "Barcelona · 12 yrs", null, "Onsite Tue 20 Oct"],
+    ["Abena Boakye", "Accra · 8 yrs", null, "Onsite Wed 21 Oct"],
+    ["Raoul Lemaire", "Marseille · 11 yrs", null, "Onsite Thu 22 Oct"],
+  ]],
+  ["Offer", "2", [
+    ["Selin Aydın", "Istanbul · 8 yrs", null, "Sent Mon 12 Oct"],
+    ["Joaquín Ferrer", "Valencia · 10 yrs", null, "Verbal yes"],
+  ]],
+  ["Hired", "1 of 2", [
+    ["Nadia Benali", "Brussels · 9 yrs", null, "Starts Mon 2 Nov"],
+  ]],
+];
+document.getElementById("board").innerHTML = COLS.map(([stage, n, cards]) => `
+  <section class="col" aria-label="${stage}"><h2>${stage}<span>${n}</span></h2>
+  ${cards.map(([name, meta, sc, note]) => `<article class="card"><b>${name}</b><div class="m">${meta}</div>
+    <div class="f"><span class="r">${note}</span></div></article>`).join("")}
+  </section>`).join("");
+</script>
+</body>
+</html>

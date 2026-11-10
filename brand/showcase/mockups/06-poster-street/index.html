@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Howl Hill billboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Scene: the Howl Hill hero printed on a large roadside board at golden hour.
+     Photo: Charlie Deets on Unsplash (free Unsplash licence), hotlinked. The print is the hero's own
+     index.html in an iframe (1760 x 880 viewport) with its navigation scrolled out of frame and its on-screen pause
+     button (a web control, meaningless in print) left outside the 1680 x 784 print window, mapped onto the
+     board with a homography (matrix3d) from four measured corners, then multiplied into the photo so the
+     corrugation, the tree shadow and the low sun stay on top of the print.
+     Type, spacing and the caption colours are tokens; the photo and the print are the art. */
+  html, body { margin: 0; }
+  body {
+    width: 1600px; height: 1200px; overflow: hidden; position: relative;
+    background: var(--ds-color-neutral-dark-2);
+    font-family: var(--ds-font-family-text);
+    -webkit-font-smoothing: antialiased;
+  }
+  .photo { position: absolute; left: -100px; top: 0; width: 1800px; height: 1200px; object-fit: cover; }
+  .print {
+    position: absolute; left: 0; top: 0; width: 1680px; height: 784px; overflow: hidden;
+    transform-origin: 0 0; mix-blend-mode: multiply;
+  }
+  .print iframe { position: absolute; left: 0; top: -96px; width: 1760px; height: 880px; border: 0; filter: saturate(1.05) brightness(1.08); }
+  /* the board's own light falls off toward its right edge; a second multiply pass keeps the print honest */
+  .shade { position: absolute; inset: 0; mix-blend-mode: multiply; pointer-events: none;
+    background: linear-gradient(90deg, rgb(255 246 230 / 1) 0%, rgb(255 240 220 / 1) 60%, rgb(232 222 210 / 1) 100%); } /* od-ignore: device or photo art */
+
+  .far { position: absolute; left: 1120px; right: 0; top: 884px; height: 108px; backdrop-filter: blur(2.4px);
+    -webkit-mask: linear-gradient(90deg, transparent, #000 14%), linear-gradient(180deg, transparent, #000 32%, #000 68%, transparent); /* od-ignore: device or photo art */
+    -webkit-mask-composite: source-in;
+    mask: linear-gradient(90deg, transparent, #000 14%), linear-gradient(180deg, transparent, #000 32%, #000 68%, transparent); /* od-ignore: device or photo art */
+    mask-composite: intersect; }
+  .caption {
+    position: absolute; left: var(--ds-space-64); right: var(--ds-space-64); bottom: var(--ds-space-48);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font: var(--ds-text-body-md); color: var(--ds-color-white);
+  }
+  .caption b { font-weight: var(--ds-font-weight-heading); }
+  .caption span { color: color-mix(in oklab, var(--ds-color-white) 82%, transparent); }
+</style>
+</head>
+<body>
+  <img class="photo" src="https://images.unsplash.com/photo-1599803654935-5b9d1c93578c?w=3600&q=80&auto=format&fit=crop" alt="">
+  <div class="print" id="print">
+    <iframe src="../../heroes/04-neobrutalist-festival/index.html" title="Howl Hill Weekender hero, printed on the board" scrolling="no"></iframe>
+    <div class="shade"></div>
+  </div>
+  <!-- far background (shop signs behind the fence) softened like a shallow depth of field, so no real business name reads -->
+  <div class="far" aria-hidden="true"></div>
+  <p class="caption" style="margin:0"><b>Howl Hill Weekender, roadside board</b><span>17–19 July 2027</span></p>
+
+<script>
+  // Homography from the print rectangle to the board's four corners (measured on the photo as placed:
+  // 1800 x 1200 at left -100). Order: top-left, top-right, bottom-right, bottom-left.
+  const W = 1680, H = 784;
+  const dst = [[223, 206], [1368, 131], [1386, 709], [202, 730]];
+  function solve(A, b) { // Gaussian elimination
+    const n = b.length;
+    for (let i = 0; i < n; i++) {
+      let m = i; for (let r = i + 1; r < n; r++) if (Math.abs(A[r][i]) > Math.abs(A[m][i])) m = r;
+      [A[i], A[m]] = [A[m], A[i]]; [b[i], b[m]] = [b[m], b[i]];
+      for (let r = i + 1; r < n; r++) { const f = A[r][i] / A[i][i]; for (let c = i; c < n; c++) A[r][c] -= f * A[i][c]; b[r] -= f * b[i]; }
+    }
+    const x = Array(n).fill(0);
+    for (let i = n - 1; i >= 0; i--) { let s = b[i]; for (let c = i + 1; c < n; c++) s -= A[i][c] * x[c]; x[i] = s / A[i][i]; }
+    return x;
+  }
+  const src = [[0, 0], [W, 0], [W, H], [0, H]], A = [], b = [];
+  for (let i = 0; i < 4; i++) {
+    const [x, y] = src[i], [u, v] = dst[i];
+    A.push([x, y, 1, 0, 0, 0, -u * x, -u * y]); b.push(u);
+    A.push([0, 0, 0, x, y, 1, -v * x, -v * y]); b.push(v);
+  }
+  const [a, bb, c, d, e, f, g, h] = solve(A, b);
+  const m = [a, d, 0, g, bb, e, 0, h, 0, 0, 1, 0, c, f, 0, 1];
+  document.getElementById('print').style.transform = `matrix3d(${m.join(',')})`;
+</script>
+</body>
+</html>

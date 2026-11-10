@@ -2,7 +2,7 @@
 type: topic
 title: Dashboards and data display
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -34,3 +34,5 @@ Charts need a full-spectrum palette at equal perceived brightness, made in OKLCH
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: Builds a project management dashboard with a Gantt chart; fixes progress bars that used the completed color for unfinished work and replaces 'in progress' with a percent.
 - [[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]: The whole video: beyond hierarchy, spacing and charts, memorable dashboards add insights and next steps, choose visuals that make data instantly clear, stay clean, and increasingly add AI to explain changes.
 - See also: [[synthesis/dashboards-and-data-display|Dashboards and data display synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-copywriting-referodesign-refero-skill-skills-refero-design-references-copywriting-md|referodesign/refero_skill: skills/refero-design/references/copywriting.md]]: Dashboard headings should be descriptive ("Revenue This Month"), and operators should understand a page from headings, labels and numbers alone.
+- [[sources/palantir-workshop-applic-application-design-best-practices-palantir|Palantir]]: Work-tool layouts: metric cards for key numbers across the top, a filter panel on the left, an object table that fits its columns to the width, and a list, table and detail panel side by side.

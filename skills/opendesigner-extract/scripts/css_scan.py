@@ -14,15 +14,22 @@ rendered) or "computed" (read from a live page). Values are measured by role:
                   count x OKLCH chroma; grays, near-neutrals, black and white are skipped
   radius          control radius (buttons, inputs) and container radius (cards, dialogs, menus) apart;
                   inline links, badges, pills used as decoration and images are ignored
-  depth           elevation shadows classified by blur and offset; white or transparent fades, glows,
-                  insets and text shadows are ignored; 1 px rings are counted apart
-  motion          durations and easings per transition layer (cubic-bezier(...) and linear(...) intact)
+  depth           elevation shadows classified by blur and offset; hard shadows (no blur) apart; white or
+                  transparent fades, glows, insets and text shadows are ignored; 1 px rings are counted
+                  apart; from read_page.js also borders drawn by ::before/::after, offset slabs, frames
+                  and windows drawn with stacked boxes
+  motion          UI transitions (durations and easings, cubic-bezier(...) and linear(...) intact; moves
+                  versus colour fades) apart from loops that always run and one-shot entrances
+  surfaces        (read_page.js) the area share of every background colour, full-width sections in page
+                  order (colour as a place), imagery, gradients and whitespace; text colour shares
+  type roles      (read_page.js) family, weights, sizes, tracking and case per text role; loaded faces
+Several captures of one site (different pages) merge: --from-json a.json --from-json b.json.
 Each measurement carries a confidence (high, medium, low, none) and the element or rule count behind
 it. The accent hex and typeface names are measurements of the reference's identity, never values to
 adopt. Nothing here decides anything: the person accepts, adjusts or ignores each value.
 Standard library only; no network.
 """
-import argparse, json, math, re
+import argparse, json, math, re, sys
 from collections import Counter
 from pathlib import Path
 
@@ -33,8 +40,12 @@ RULE_EXT = {".css", ".scss", ".less", ".html", ".htm", ".vue", ".svelte"}
 SKIP = {"node_modules", ".git", "dist", "build", ".next", "vendor", "coverage", "opendesigner"}
 NUM = r"(-?\d*\.?\d+)(px|rem|em|ms|s)?"
 NEUTRAL_MAX_C = 0.05   # OKLCH chroma under this is a gray or tinted neutral (slate reaches about 0.046)
-ACCENT_WEIGHT = {"button": 3, "focus": 3, "selected": 2, "control": 2, "ring": 2, "buttonBorder": 1,
+ACCENT_WEIGHT = {"button": 3, "focus": 3, "selected": 2, "area": 1, "control": 2, "ring": 2, "emphasis": 2, "buttonBorder": 1,
                  "buttonText": 1, "link": 1, "hover": 1, "token": 1, "fieldBorder": 0.5}
+UA_LINK = {"#0000ee", "#551a8b", "#ee0000"}  # the browser's own link colours: shown on wrapper links, never chosen
+ERROR_STATE = re.compile(r"invalid|error|destructive|danger|warning|alert|success", re.I)
+WEIGHT_WORDS = re.compile(r"\s+(thin|hairline|extra ?light|ultra ?light|light|book|regular|normal|roman|medium|semi ?bold|demi ?bold|"
+                          r"bold|extra ?bold|ultra ?bold|heavy|black|italic|oblique|placeholder|fallback|variable|var)$", re.I)
 SYSTEM_FACES = {"-apple-system", "blinkmacsystemfont", "system-ui", "ui-sans-serif", "ui-serif", "ui-monospace",
                 "ui-rounded", "sans-serif", "serif", "monospace", "cursive", "fantasy", "segoe ui", "helvetica neue",
                 "helvetica", "arial", "sf pro text", "sf pro display", "sf mono", "menlo", "monaco", "consolas",
@@ -219,6 +230,8 @@ def radius_role(sel):
 
 
 def accent_source(sel, prop, value):
+    if ERROR_STATE.search(sel):
+        return None  # error, warning and success states carry status colours, never the accent
     tag, words, attrs, pseudos = parse_compound(compounds(sel)[-1])
     if prop in ("outline", "outline-color") or (pseudos & {"focus", "focus-visible", "focus-within"} and prop in ("box-shadow", "border-color", "border")):
         return "focus"
@@ -283,6 +296,7 @@ def decls(body):
 def scan_files(paths):
     V = {k: Counter() for k in ("colors", "fontFamilies", "fontSizes", "lineHeights", "fontWeights",
                                 "spacing", "radii", "shadows", "durations", "easings")}
+    loops = {"durations": Counter(), "easings": Counter(), "count": 0}
     R = {k: {} for k in ("textSizes", "textElements", "radiiByRole", "accentSources")}
     props, files, rules, raw_families = {}, 0, [], Counter()
 
@@ -335,7 +349,11 @@ def scan_files(paths):
                 for layer in split_top(rest):
                     times = re.findall(r"(-?\d*\.?\d+)(ms|s)\b", layer)
                     ease = EASING_RE.search(layer)
-                    if times and float(times[0][0]) > 0:
+                    if prop == "animation" and re.search(r"\binfinite\b", layer) and times and float(times[0][0]) > 0:
+                        loops["count"] += 1  # an animation that never stops is ambient motion, not UI timing
+                        loops["durations"][round(float(times[0][0]) * (1000 if times[0][1] == "s" else 1))] += 1
+                        loops["easings"][ease.group(0) if ease else "ease"] += 1
+                    elif times and float(times[0][0]) > 0:
                         V["durations"][round(float(times[0][0]) * (1000 if times[0][1] == "s" else 1))] += 1
                         if ease:
                             V["easings"][ease.group(0)] += 1
@@ -357,7 +375,8 @@ def scan_files(paths):
         if v and v != "none" and "var(" not in v:
             V["shadows"][v] += n
     for k, v in props.items():
-        if re.search(r"primary|accent|brand|link|focus|ring|interactive|action|cta|highlight", k) and not re.search(r"foreground|-fg|on-|contrast|text", k):
+        if re.search(r"primary|accent|brand|link|focus|ring|interactive|action|cta|highlight", k) and not re.search(r"foreground|-fg|on-|contrast|text|muted", k) \
+                and not ERROR_STATE.search(k):
             c = parse_color(resolve_vars(v, props))
             if c and c[1] >= 0.5:
                 add("accentSources", "token", c[0])
@@ -390,6 +409,7 @@ def scan_files(paths):
                             if c and c[1] >= 0.5:
                                 add("accentSources", src, c[0])
     vals = {k: dict(v.most_common(40)) for k, v in V.items()}
+    vals["loops"] = {"durations": dict(loops["durations"]), "easings": dict(loops["easings"]), "count": loops["count"]}
     for k, groups in R.items():
         vals[k] = {role: dict(c.most_common(40)) for role, c in groups.items()}
     return {"method": "declared", "files": files, "customProperties": props, "values": vals}
@@ -504,7 +524,7 @@ def measure_type(vals, computed):
     out["scale"] = fit_type(pool or vals.get("fontSizes", {}), out["body"]["px"] if out.get("body") else None)
     fams = Counter()
     for k, n in (vals.get("fontFamilies") or {}).items():
-        fams[k.strip(" '\"")] += n
+        fams[face_name(k)] += n
     total = sum(fams.values()) or 1
     faces = [f for f, n in fams.most_common() if f and f.lower() not in SYSTEM_FACES and n / total >= 0.05]
     out["families"] = faces[:5]  # the reference's own typefaces (identity): named, never recommended
@@ -516,15 +536,21 @@ def measure_type(vals, computed):
     return out
 
 
-def measure_accent(vals, computed, rings):
+def measure_accent(vals, computed, rings, areas=None):
     src = {k: dict(v) for k, v in (vals.get("accentSources") or {}).items()}
     if rings:
         src["ring"] = rings
+    if areas:  # a chromatic colour that paints much of the page is evidence too, capped so it never outvotes real buttons
+        big = {hex_norm(h): min(10, round(v * 100)) for h, v in areas.items() if hex_norm(h) and not is_neutral(hex_norm(h)) and v >= 0.02}
+        chromatic = any(hex_norm(h) and not is_neutral(hex_norm(h)) and 0.1 <= oklch(hex_norm(h))[0] <= 0.97
+                        for s_, colors in src.items() if s_ != "link" for h in colors)
+        if big and chromatic:  # only when a button, link, focus ring or token already has a colour of its own
+            src["area"] = big
     cand = {}
     for source, colors in src.items():
         for h, n in colors.items():
             h = hex_norm(h)
-            if not h:
+            if not h or (source == "link" and h in UA_LINK):
                 continue
             L, C, H = oklch(h)
             if C < NEUTRAL_MAX_C or L > 0.97 or L < 0.1:
@@ -586,6 +612,10 @@ def classify_layer(s):
         return "fade"
     if s["x"] == 0 and s["y"] == 0 and s["spread"] >= s["blur"]:
         return "glow"
+    if s["blur"] == 0:  # a solid offset copy with no blur is drawn depth (retro, neo-brutalist), not elevation;
+        # a faint 1 px offset is a hairline under a button, not a shadow style
+        strong = (s["alpha"] if s["alpha"] is not None else 1) >= 0.3 and max(abs(s["x"]), abs(s["y"])) >= 2
+        return "hard" if strong else "line"
     b = max(s["blur"], abs(s["y"]) * 2)
     return "low" if b <= 4 else "medium" if b <= 16 else "high" if b <= 32 else "overlay"
 
@@ -595,8 +625,21 @@ def fmt_layer(s):
     return f"{s['x']:g}px {s['y']:g}px {s['blur']:g}px {s['spread']:g}px {col}"
 
 
-def measure_depth(vals, computed, elements):
-    ignored, levels, elev, rings = Counter(), {}, Counter(), Counter()
+def _parse_windows(raw):
+    out = []
+    for k, n in (raw or {}).items():
+        try:
+            w = json.loads(k) if isinstance(k, str) else dict(k)
+        except ValueError:
+            continue
+        out.append({**w, "count": n})
+    return sorted(out, key=lambda w: -w["count"])
+
+
+def measure_depth(vals, computed, elements, patterns=None):
+    """Elevation shadows by level, hard (no-blur) shadows apart, and from read_page.js the depth drawn with elements:
+    borders drawn by ::before/::after, offset slabs and twins (hard shadows built from boxes), frames and windows."""
+    ignored, levels, elev, rings, hard = Counter(), {}, Counter(), Counter(), Counter()
     with_ring = only_ring = 0
     for value, n in (vals.get("shadows") or {}).items():
         layers = [s for s in (parse_shadow_layer(l) for l in split_top(value)) if s]
@@ -605,7 +648,9 @@ def measure_depth(vals, computed, elements):
         for s, k in zip(layers, kinds):
             if k == "ring" and s["hex"]:
                 rings[s["hex"]] += n
-            if k not in ("low", "medium", "high", "overlay", "ring"):
+            if k == "hard":
+                hard[fmt_layer(s)] += n
+            if k not in ("low", "medium", "high", "overlay", "ring", "hard"):
                 ignored[k] += n
         if keep:
             elev[", ".join(fmt_layer(s) for s in keep)] += n
@@ -616,19 +661,45 @@ def measure_depth(vals, computed, elements):
             with_ring += n if "ring" in kinds else 0
         elif "ring" in kinds:
             only_ring += n
-    E = sum(elev.values())
-    if not E:
-        hint = "borders"
-        conf = ("medium" if (elements or 0) >= 100 else "low") if computed else "low"
-    else:
+    pat = patterns or {}
+    drawn = Counter(pat.get("drawnOffsets") or {})
+    frames = Counter(pat.get("frames") or {})
+    windows = _parse_windows(pat.get("windows"))
+    borders = vals.get("borders")
+    B = sum(borders.values()) if isinstance(borders, dict) else None
+    E, H = sum(elev.values()), sum(hard.values()) + sum(drawn.values())
+    minor = 0
+    if H >= 2 and H >= E:
+        hint = "hard-offset"
+        conf = level(H, 1, (5, 0), (2, 0))
+    elif E and not (B is not None and E < 3 and E * 4 < B):
         hint = "ring+faint-shadow" if with_ring * 2 >= E else "shadow-ladder"
         conf = level(E, 1, (5, 0), (2, 0)) if computed else level(E, 1, (3, 0), (1, 0))
+    else:
+        hint, minor = "borders", E
+        conf = ("high" if (B or 0) >= 10 else "medium" if (elements or 0) >= 100 or B else "low") if computed else "low"
     order = ["low", "medium", "high", "overlay"]
+    basis = {"hard-offset": f"{H} hard shadow(s) with no blur" + (f", {sum(drawn.values())} drawn with stacked boxes" if drawn else ""),
+             "borders": (f"{B} bordered box(es)" if B else "no elevation shadows")
+             + (f", {minor} minor soft shadow(s) on {minor} element(s) only" if minor else "")}.get(hint,
+            f"{E} element(s) with elevation shadows, levels by blur and offset")
+    if ignored or not E:
+        basis += "; white or transparent fades, glows, insets and text shadows ignored"
     out = {"shadows": [s for s, _ in elev.most_common(5)], "hint": hint,
            "levels": sorted(levels.values(), key=lambda l: order.index(l["level"])),
-           "rings": only_ring + with_ring, "ignored": dict(ignored), "count": E, "confidence": conf,
-           "basis": (f"{E} element(s) with elevation shadows, levels by blur and offset" if E else "no elevation shadows")
-           + ("; white or transparent fades, glows, insets and text shadows ignored" if ignored or not E else "")}
+           "rings": only_ring + with_ring, "ignored": dict(ignored), "count": H if hint == "hard-offset" else E if hint != "borders" else (B or 0),
+           "confidence": conf, "basis": basis}
+    if hard or drawn:
+        out["hard"] = [k for k, _ in (hard + Counter({f"{k} (drawn with boxes)": n for k, n in drawn.items()})).most_common(4)]
+    if B is not None:
+        out["borders"] = dict(sorted(borders.items(), key=lambda kv: -kv[1])[:4])
+    if frames:
+        out["frames"] = [{"band": k.split()[0], "color": k.split()[1], "count": n} for k, n in frames.most_common(3)]
+    if windows:
+        out["windows"] = windows[:4]
+        out["windowCount"] = sum(w["count"] for w in windows)
+    if minor:
+        out["minorShadows"] = minor
     chroma_rings = {h: n for h, n in rings.items() if not is_neutral(h)}
     return out, chroma_rings
 
@@ -671,26 +742,244 @@ def measure_radius(vals, computed, dials):
     return out
 
 
-def measure_motion(vals, computed):
-    du = [(float(k), n) for k, n in (vals.get("durations") or {}).items() if _num(k) and float(k) > 0]
-    if not du:
-        return {"note": "no motion found; do not infer Energy from this source", "count": 0, "confidence": "none"}
-    du.sort()
-    total = sum(n for _, n in du)
-    acc, med = 0, du[-1][0]
-    for d, n in du:
+def ease_kind(e):
+    """linear, stepped, springy (overshoots) or eased."""
+    e = str(e).strip()
+    if e.startswith("steps(") or e in ("step-start", "step-end"):
+        return "stepped"
+    if e == "linear":
+        return "linear"
+    if e.startswith("linear("):
+        nums = [float(x) for x in re.findall(r"-?\d*\.?\d+", re.sub(r"-?\d*\.?\d+%", "", e[7:-1]))]
+        return "springy" if any(v > 1.0001 or v < -0.0001 for v in nums) else "eased"
+    if e.startswith("cubic-bezier("):
+        n = [float(x) for x in re.findall(r"-?\d*\.?\d+", e)]
+        return "springy" if len(n) == 4 and not (0 <= n[1] <= 1 and 0 <= n[3] <= 1) else "eased"
+    return "eased"
+
+
+def _median(pairs):
+    pairs = sorted(pairs)
+    total, acc = sum(n for _, n in pairs), 0
+    for d, n in pairs:
         acc += n
         if acc * 2 >= total:
-            med = d
-            break
-    eas = Counter({k: n for k, n in (vals.get("easings") or {}).items()})
-    overshoot = any(any(float(v) > 1 or float(v) < 0 for v in re.findall(r"-?\d*\.?\d+", e)[1::2])
-                    for e in eas if e.startswith("cubic-bezier("))
-    return {"durations": [d for d, _ in du][:10], "median": med, "durationMultiplier": round(med / 275, 2),
-            "easings": [e for e, _ in eas.most_common(5)], "overshoot": overshoot, "count": total,
-            "confidence": "medium" if total >= (10 if computed else 5) else "low",
-            "note": "CSS transitions and animations only; JavaScript-driven motion is not visible" + (
-                "; declared, not necessarily rendered" if not computed else "")}
+            return d
+    return pairs[-1][0] if pairs else None
+
+
+def measure_motion(vals, computed):
+    """UI transitions (the Energy dial reads these) apart from loops that always run and one-shot entrances. Easing is kept
+    as a trait (linear, stepped, eased, springy), and transitions are split into moves and colour or opacity fades."""
+    lp = vals.get("loops") or {}
+    loops = None
+    if lp.get("count"):
+        le = Counter(lp.get("easings") or {})
+        kinds = Counter()
+        for e, n in le.items():
+            kinds[ease_kind(e)] += n
+        loops = {"count": lp["count"], "durations": sorted({float(k) for k in lp.get("durations") or {}})[:8],
+                 "easings": [e for e, _ in le.most_common(4)], "character": kinds.most_common(1)[0][0] if kinds else "eased",
+                 "basis": "animations that repeat forever (or run 2 s or longer, more than once): ambient motion, not UI timing"}
+    ent = vals.get("entrances") or {}
+    entrances = {"count": sum(ent.values()), "median": _median([(float(k), n) for k, n in ent.items()])} if ent else None
+    du = [(float(k), n) for k, n in (vals.get("durations") or {}).items() if _num(k) and float(k) > 0]
+    if not du:
+        out = {"note": "no UI transitions found" + ("; loops are listed apart" if loops else "; do not infer Energy from this source"),
+               "count": 0, "confidence": "low" if loops else "none"}
+    else:
+        total = sum(n for _, n in du)
+        med = _median(du)
+        eas = Counter({k: n for k, n in (vals.get("easings") or {}).items()})
+        overshoot = any(ease_kind(e) == "springy" for e in eas)
+        ekinds = Counter()
+        for e, n in eas.items():
+            ekinds[ease_kind(e)] += n
+        out = {"durations": sorted(d for d, _ in du)[:10], "median": med, "durationMultiplier": round(med / 275, 2),
+               "easings": [e for e, _ in eas.most_common(5)], "overshoot": overshoot, "count": total,
+               "character": ekinds.most_common(1)[0][0] if ekinds else "eased",
+               "confidence": "medium" if total >= (10 if computed else 5) else "low",
+               "note": "CSS transitions and Web Animations only; canvas drawing and states that need interaction are not visible" + (
+                   "; declared, not necessarily rendered" if not computed else "")}
+        tk = vals.get("transitionKinds") or {}
+        if tk:
+            out["moves"] = tk.get("spatial", 0)
+            out["fades"] = tk.get("color", 0) + tk.get("opacity", 0)
+            out["fadesOnly"] = out["moves"] == 0
+    if loops:
+        out["loops"] = loops
+    if entrances:
+        out["entrances"] = entrances
+    return out
+
+
+def face_name(f):
+    """'Die Grotesk C Medium' -> 'Die Grotesk C' (the family, without a weight or style word a builder put in the name)."""
+    f = str(f or "").strip(" '\"")
+    prev = None
+    while prev != f:
+        prev, f = f, WEIGHT_WORDS.sub("", f).strip()
+    return f or prev
+
+
+def measure_roles(vals, loaded=None):
+    """Per text role: the family (exact name), its share of the characters, weights, sizes, tracking, case and line height;
+    then the voices: the families that carry at least 5% of the text, with the roles each speaks in."""
+    roles, total = {}, sum((r.get("chars") or 0) for r in (vals.get("typeRoles") or {}).values()) or 1
+    voices = Counter()
+    where = {}
+    for role, R in (vals.get("typeRoles") or {}).items():
+        fams = Counter()
+        for f, n in (R.get("families") or {}).items():
+            fams[face_name(f)] += n
+        if not fams:
+            continue
+        top = lambda c, k=3: [x for x, _ in Counter(c).most_common(k)]
+        tr = Counter(R.get("transform") or {})
+        faces = {}
+        for f, fc in (R.get("faces") or {}).items():  # sizes and weights of each face within the role
+            g = faces.setdefault(face_name(f), {"sizes": Counter(), "weights": Counter()})
+            g["sizes"].update(fc.get("sizes") or {})
+            g["weights"].update(fc.get("weights") or {})
+        roles[role] = {"family": fams.most_common(1)[0][0], "families": dict(fams.most_common(3)),
+                       "faces": {f: {"sizes": [float(x) for x, _ in g["sizes"].most_common(4)], "weights": [x for x, _ in g["weights"].most_common(3)]}
+                                 for f, g in faces.items()},
+                       "share": round((R.get("chars") or 0) / total, 3),
+                       "weights": top(R.get("weights") or {}), "sizes": [float(x) for x in top(R.get("sizes") or {}, 6)],
+                       "tracking": float(top(R.get("tracking") or {0: 1}, 1)[0]),
+                       "case": tr.most_common(1)[0][0] if tr and tr.most_common(1)[0][1] * 2 >= (R.get("chars") or 1) else None,
+                       "lineHeight": float(top(R.get("lineHeight") or {}, 1)[0]) if R.get("lineHeight") else None}
+        for f, n in fams.items():
+            voices[f] += n
+            where.setdefault(f, set()).add(role)
+    vt = sum(voices.values()) or 1
+    out = {"roles": roles,
+           "voices": [{"family": f, "share": round(n / vt, 3), "roles": sorted(where[f]), "system": f.lower() in SYSTEM_FACES}
+                      for f, n in voices.most_common() if n / vt >= 0.05]}
+    if loaded:
+        fl = {}
+        for k in loaded:
+            fam, _, rest = str(k).partition("|")
+            fl.setdefault(face_name(fam), set()).add(rest.split("|")[0])
+        out["loaded"] = {f: sorted(w) for f, w in fl.items()}
+    return out
+
+
+def measure_surfaces(cap):
+    """The page as painted: the area share of each background colour, text colour shares, full-width sections in page order
+    (colour as a place), imagery, gradients and whitespace. None for captures without read_page.js surfaces."""
+    s = cap.get("surfaces")
+    if not s:
+        return None
+    areas, text = Counter(), Counter()
+    for h, v in (s.get("areas") or {}).items():
+        if hex_norm(h):
+            areas[hex_norm(h)] += v
+    for h, v in (s.get("text") or {}).items():
+        if hex_norm(h):
+            text[hex_norm(h)] += v
+    ts = float(s.get("textShare") or 0)
+    doc_h = (cap.get("layout") or {}).get("docHeight") or 0
+    ground = hex_norm(s.get("pageBg") or "#ffffff")  # a band in the page's own colour is ground, not another place
+    secs = [x for x in s.get("sections") or [] if (not doc_h or x["h"] < 0.9 * doc_h) and hex_norm(x["hex"]) != ground]
+    worlds = Counter()
+    for x in secs:
+        worlds[hex_norm(x["hex"])] += x["h"]
+    covered = sum(worlds.values())
+    chroma_bg = sum(v for h, v in areas.items() if not is_neutral(h))
+    chroma_text = sum(v for h, v in text.items() if not is_neutral(h)) * ts
+    row = lambda h, v: {"hex": h, "share": round(v, 3), "oklch": list(oklch(h)), "chromatic": not is_neutral(h)}
+    out = {"pageBg": ground,
+           "areas": [row(h, v) for h, v in areas.most_common(12) if v >= 0.001],
+           "text": [row(h, v) for h, v in text.most_common(8) if v >= 0.005], "textShare": ts,
+           "chromaticShare": round(chroma_bg + chroma_text, 3), "chromaticBackground": round(chroma_bg, 3), "chromaticText": round(chroma_text, 3),
+           "worlds": [{**row(h, n / doc_h if doc_h else 0), "sections": sum(1 for x in secs if hex_norm(x["hex"]) == h)} for h, n in worlds.most_common(8)],
+           "order": [hex_norm(x["hex"]) for x in secs],
+           "colourIsPlace": len(worlds) >= 2 and doc_h > 0 and covered / doc_h >= 0.4,
+           "gradients": int(s.get("gradients") or 0), "imagery": s.get("imagery"), "whitespace": s.get("whitespace"),
+           "blankRows": s.get("blankRows"), "air": s.get("air"),
+           "confidence": "medium" if cap.get("pages", 1) == 1 else "high",
+           "basis": "area of each background colour on a 16 px grid over the whole page (document order approximates paint order)"}
+    return out
+
+
+def _parse_sigs(raw):
+    out = {}
+    for group, sigs in (raw or {}).items():
+        rows = []
+        for k, n in sigs.items():
+            try:
+                rows.append({**json.loads(k), "count": n})
+            except ValueError:
+                continue
+        out[group] = sorted(rows, key=lambda r: -r["count"])
+    return out
+
+
+def _add(into, other):
+    """Add nested counters (dicts of numbers) from other into into."""
+    for k, v in (other or {}).items():
+        if isinstance(v, dict):
+            _add(into.setdefault(k, {}), v)
+        elif isinstance(v, (int, float)) and not isinstance(v, bool):
+            into[k] = (into.get(k) or 0) + v
+        else:
+            into.setdefault(k, v)
+    return into
+
+
+def merge_captures(caps):
+    """Several read_page.js captures of one site (different pages) as one: counters add, areas and whitespace are weighted by
+    page area, sections keep page order."""
+    if len(caps) == 1:
+        return caps[0]
+    out = {"method": "computed", "source": ", ".join(str(c.get("source")) for c in caps), "pages": len(caps),
+           "elements": sum(c.get("elements") or 0 for c in caps), "values": {}, "customProperties": {}, "patterns": {},
+           "components": {}, "targetsUnder24": sum(c.get("targetsUnder24") or 0 for c in caps), "fontsLoaded": [],
+           "viewport": caps[0].get("viewport")}
+    weights, offset, sections, areas, text, voice = [], 0, [], Counter(), Counter(), {}
+    for c in caps:
+        _add(out["values"], c.get("values"))
+        for k, v in (c.get("customProperties") or {}).items():
+            out["customProperties"].setdefault(k, v)
+        _add(out["patterns"], c.get("patterns"))
+        _add(out["components"], c.get("components"))
+        out["fontsLoaded"] += [f for f in c.get("fontsLoaded") or [] if f not in out["fontsLoaded"]]
+        _add(voice, c.get("voice"))
+        s, lay = c.get("surfaces") or {}, c.get("layout") or {}
+        h = lay.get("docHeight") or 1
+        w = (c.get("viewport") or [1440])[0] * h
+        weights.append((w, s))
+        for k, v in (s.get("areas") or {}).items():
+            areas[k] += v * w
+        for k, v in (s.get("text") or {}).items():
+            text[k] += v * w * float(s.get("textShare") or 0)
+        sections += [{**x, "y": x["y"] + offset} for x in s.get("sections") or []]
+        offset += h
+    W = sum(w for w, _ in weights) or 1
+    tw = sum(text.values()) or 1
+    surf = [s for _, s in weights if s]
+    if surf:
+        out["surfaces"] = {"grid": surf[0].get("grid"), "pageBg": Counter(s.get("pageBg") for s in surf).most_common(1)[0][0],
+                           "areas": {k: round(v / W, 3) for k, v in areas.items()}, "text": {k: round(v / tw, 3) for k, v in text.items()},
+                           "textShare": round(sum(float(s.get("textShare") or 0) * w for w, s in weights) / W, 3), "sections": sections,
+                           "imagery": round(sum(float(s.get("imagery") or 0) * w for w, s in weights) / W, 3),
+                           "whitespace": round(sum(float(s.get("whitespace") or 0) * w for w, s in weights) / W, 3),
+                           "blankRows": round(sum(float(s.get("blankRows") or 0) * w for w, s in weights) / W, 3),
+                           "air": _median([(float(s["air"]), w) for w, s in weights if s.get("air") is not None]),
+                           "gradients": sum(int(s.get("gradients") or 0) for s in surf),
+                           "imageBackgrounds": sum(int(s.get("imageBackgrounds") or 0) for s in surf)}
+    for role, v in voice.items():  # words per line were averaged per page: average again by line count
+        if isinstance(v, dict) and v.get("n") and "words" in v:
+            v["words"] = round(sum((c.get("voice") or {}).get(role, {}).get("words", 0) * (c.get("voice") or {}).get(role, {}).get("n", 0)
+                                   for c in caps) / v["n"], 1)
+    pr = [(c.get("voice") or {}).get("prose") or {} for c in caps]
+    if (voice.get("prose") or {}).get("paragraphs"):  # words per sentence: averaged by paragraphs, never added
+        n = sum(p.get("paragraphs") or 0 for p in pr if p.get("wordsPerSentence") is not None)
+        voice["prose"]["wordsPerSentence"] = round(sum((p.get("wordsPerSentence") or 0) * (p.get("paragraphs") or 0) for p in pr) / n, 1) if n else None
+    out["voice"] = voice
+    out["layout"] = {"docHeight": offset, "maxTextWidth": max(((c.get("layout") or {}).get("maxTextWidth") or 0) for c in caps) or None}
+    return out
 
 
 def analyse(cap):
@@ -698,8 +987,8 @@ def analyse(cap):
     computed = cap.get("method") == "computed"
     dials = {d["id"]: d for d in json.loads(INTAKE.read_text())["dials"]} if INTAKE.exists() else {}
     out = {"method": cap.get("method"), "source": cap.get("source"), "files": cap.get("files"), "elements": cap.get("elements")}
-    depth, ring_colors = measure_depth(vals, computed, cap.get("elements"))
-    accents, aconf = measure_accent(vals, computed, ring_colors)
+    depth, ring_colors = measure_depth(vals, computed, cap.get("elements"), cap.get("patterns"))
+    accents, aconf = measure_accent(vals, computed, ring_colors, (cap.get("surfaces") or {}).get("areas"))
     neutrals = []
     for h, n in (vals.get("colors") or {}).items():
         h = hex_norm(h)
@@ -707,6 +996,7 @@ def analyse(cap):
             neutrals.append({"hex": h, "count": n, "oklch": list(oklch(h))})
     neutrals.sort(key=lambda x: -x["count"])
     out["color"] = {"accents": accents[:6], "neutrals": neutrals[:8], **aconf,
+                    "borders": {hex_norm(h): n for h, n in sorted((vals.get("borderColors") or {}).items(), key=lambda kv: -kv[1])[:4] if hex_norm(h)},
                     "note": "the accent hex is the reference's identity, a measurement only: carry its role and chroma level, never the hue as the person's primary"}
     mids = [x for x in neutrals if 0.25 <= x["oklch"][0] <= 0.85]
     if mids or neutrals:
@@ -716,6 +1006,8 @@ def analyse(cap):
     if accents:
         out["color"]["accentChroma"] = accents[0]["oklch"][1]
     ty = measure_type(vals, computed)
+    if vals.get("typeRoles"):
+        ty.update(measure_roles(vals, cap.get("fontsLoaded")))
     out["type"] = ty
     if ty.get("body"):
         out["bodySize"] = ty["body"]["px"]  # engine.py intake reads this before type.scale.base
@@ -725,6 +1017,19 @@ def analyse(cap):
         out["radius"] = rad
     out["depth"] = depth
     out["motion"] = measure_motion(vals, computed)
+    surf = measure_surfaces(cap)
+    if surf:
+        out["surfaces"] = surf
+        for k in ("whitespace", "blankRows", "air"):  # engine.py intake reads air and blankRows for the Density dial
+            out[k] = surf.get(k)
+        out["color"]["chromaticShare"] = surf["chromaticShare"]  # and this for Colorfulness
+    if cap.get("components"):
+        out["components"] = _parse_sigs(cap["components"])
+    for k in ("voice", "layout"):
+        if cap.get(k):
+            out[k] = cap[k]
+    if cap.get("pages"):
+        out["pages"] = cap["pages"]
     out["summary"] = summarize(out)
     out["identity"] = {"rule": "measurements of the reference's identity, never values to adopt: carry role, chroma level, "
                                "structure and rhythm; ask for the person's own brand color and typeface",
@@ -761,6 +1066,14 @@ def summarize(a):
     put("motionMedianMs", m.get("median"), m, m.get("note"))
     if a.get("space"):
         put("spaceUnit", a["space"]["unit"], a["space"], f"share divisible {a['space']['shareDivisible']}")
+    sf = a.get("surfaces")
+    if sf:
+        put("whitespace", sf["whitespace"], sf, "share of the page with no text, control or card-sized box (media is imagery)")
+        if sf.get("air") is not None:
+            put("air", sf["air"], sf, "median gap to the next block of text below, in multiples of its type size")
+        put("colorShare", sf["chromaticShare"], sf, "share of the page painted in a chromatic colour (backgrounds plus coloured text)")
+    if m.get("loops"):
+        put("loops", m["loops"]["count"], {"confidence": "medium", "count": m["loops"]["count"]}, m["loops"]["basis"])
     return S
 
 
@@ -783,6 +1096,23 @@ def report(a):
          line("Depth", "depth", str),
          line("Motion", "motionMedianMs", lambda v: f"median {v:g} ms, multiplier {a['motion']['durationMultiplier']}"),
          line("Spacing unit", "spaceUnit", str)]
+    if "whitespace" in S:
+        L.append(line("Whitespace", "whitespace", lambda v: f"{round(v * 100)}% of the page"
+                      + (f"; {round(a['surfaces']['blankRows'] * 100)}% of its height blank" if a["surfaces"].get("blankRows") is not None else "")))
+        if "air" in S:
+            L.append(line("Air", "air", lambda v: f"text blocks {v} type sizes apart (median)"))
+        L.append(line("Colour area", "colorShare", lambda v: f"{round(v * 100, 1):g}% of the page is chromatic"))
+        sf = a["surfaces"]
+        if sf.get("worlds"):
+            L.append("Sections: " + ", ".join(f"{w['hex']} {round(w['share'] * 100)}%" for w in sf["worlds"]) + (
+                " (colour as a place)" if sf.get("colourIsPlace") else ""))
+    m = a["motion"]
+    if m.get("loops"):
+        L.append(f"Loops: {m['loops']['count']} always running, {m['loops']['character']} ({', '.join(f'{d:g} ms' for d in m['loops']['durations'][:4])})")
+    if m.get("fadesOnly"):
+        L.append(f"UI motion: colour and opacity fades only ({m['fades']}), nothing moves in space")
+    if a["depth"].get("windowCount"):
+        L.append(f"Windows: {a['depth']['windowCount']} boxes with a title bar ({a['depth']['windows'][0]['bar']})")
     t = a["type"]
     if t.get("scale"):
         L.append(f"Type scale: base {t['scale']['base']:g} x {t['scale']['ratio']} ({t['scale']['reading']})")
@@ -798,17 +1128,49 @@ def report(a):
     return "\n".join(L)
 
 
+def look_differences(caps):
+    """Pages that do not share one look should not be merged: one Taste Index per look (the reel keeps one per surface).
+    Compares each page's depth model, control corners and share of colour with the first page's."""
+    if len(caps) < 2:
+        return []
+    read = [analyse(c) for c in caps]
+    out = []
+    first = read[0]
+    for i, r in enumerate(read[1:], 2):
+        diffs = []
+        if r["depth"]["hint"] != first["depth"]["hint"]:
+            diffs.append(f"depth {first['depth']['hint']} vs {r['depth']['hint']}")
+        c0, c1 = (((x.get("radius") or {}).get("control") or {}).get("px") for x in (first, r))
+        if (isinstance(c0, (int, float)) and isinstance(c1, (int, float)) and abs(c0 - c1) > 4) or (c0 == "full") != (c1 == "full"):
+            diffs.append(f"control corners {c0} vs {c1} px")
+        s0, s1 = ((x.get("surfaces") or {}).get("chromaticShare") for x in (first, r))
+        if s0 is not None and s1 is not None and abs(s0 - s1) > 0.3:
+            diffs.append(f"{round(s0 * 100)}% vs {round(s1 * 100)}% of the page in colour")
+        if len(diffs) >= 2:
+            out.append(f"page {i} looks different from page 1 ({'; '.join(diffs)}). Merge only pages that share one look; "
+                       "give a different look its own Taste Index.")
+    return out
+
+
+def load_capture(path):
+    cap = json.loads(Path(path).read_text(encoding="utf-8"))
+    if isinstance(cap, str):  # a browser tool may hand back the JSON as a quoted string
+        cap = json.loads(cap)
+    cap.setdefault("method", "computed")
+    return cap
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("paths", nargs="*")
-    ap.add_argument("--from-json", help="output of read_page.js saved to a file")
+    ap.add_argument("--from-json", action="append", help="output of read_page.js saved to a file; repeat for several pages of one site")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args()
     if a.from_json:
-        cap = json.loads(Path(a.from_json).read_text(encoding="utf-8"))
-        if isinstance(cap, str):  # a browser tool may hand back the JSON as a quoted string
-            cap = json.loads(cap)
-        cap.setdefault("method", "computed")
+        caps = [load_capture(f) for f in a.from_json]
+        for line in look_differences(caps):
+            print("warning: " + line, file=sys.stderr)
+        cap = merge_captures(caps)
     elif a.paths:
         cap = scan_files(a.paths)
         cap["source"] = ", ".join(a.paths)

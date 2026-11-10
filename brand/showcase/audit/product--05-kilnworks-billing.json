@@ -1,0 +1,72 @@
+{
+ "piece": "product/05-kilnworks-billing",
+ "title": "05 · Usage and billing · Kilnworks",
+ "pattern": "billing and usage",
+ "platform": "web",
+ "industry": "cloud infrastructure",
+ "style": [
+  "enterprise",
+  "minimal",
+  "finance"
+ ],
+ "tags": [
+  "billing",
+  "usage",
+  "budget",
+  "forecast",
+  "meters",
+  "ledger",
+  "invoices",
+  "dense",
+  "b2b"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "Every figure ties out: 9 product charges (each quantity × rate) add up to $6,932.38; plan $480.00 + usage − $1,000.00 credit = $6,412.38, which is the chart headline, the ledger subtotal and the amount due; the forecast ($15,536.26, 129%, passes budget Oct 26) is computed from the same daily values",
+  "Burnt orange spent in two places only: the 'Edit budget' primary and the forecast crossing (marker, dotted segment past the budget, 'Forecast passes budget on Oct 26 / Over by $3,536.26 at month end'); cool greys elsewhere, no brown",
+  "Billing facts stated plainly: one-line plan ('$480.00 per month for 10 seats · Includes a $1,000 usage credit · Renews Nov 1, 2026'), meters with alert ticks and reset dates, overage in words ('no overage multiplier'), a quiet 'Cancel plan', invoices with mono references and a part refund"
+ ],
+ "slop_signals": [
+  "The orange accent is spent on both the primary 'Edit budget' button and the warning ('Forecast passes budget on Oct 26', the forecast line), so the brand color also means 'over budget'; plus a green 'Active' pill",
+  "Many bordered cards on one page (meters, chart, ledger, invoices, usage) where Vercel separates with whitespace and hairlines; the page carries several jobs at once"
+ ],
+ "fixes": [
+  "Correct 'Alerts at 50% (sent Oct 13)' to Oct 14: the page's own data puts spend at $5,798 (48%) at the end of Oct 13 and crosses $6,000 on Oct 14",
+  "Use a neutral or dark primary (or keep orange only for the primary) and give the over-budget warning its own status color",
+  "Make 'Active' a quiet text or grey badge",
+  "Rename Tidewell Analytics (Quoin has Tidewell Marine Supply) and change 'card ending 4417' (also in heroes/11 and app-screens/01)"
+ ],
+ "references": [
+  {
+   "site": "Vercel",
+   "url": "https://mobbin.com/screens/51ef7780-7659-4dae-a7fe-039d26fb20b7",
+   "what": "Usage by product grouped by family with sparklines and right-aligned charges; ours matches and adds rates"
+  },
+  {
+   "site": "Snowflake",
+   "url": "https://mobbin.com/screens/acf53a58-0fc7-49b7-93e0-f62c164ecc79",
+   "what": "'Aug 2026 · Day 3 of 31 · Avg 3.1 credits/day' with actual vs forecast; ours mirrors it with a likely range"
+  },
+  {
+   "site": "Cofounder",
+   "url": "https://mobbin.com/screens/e9c05b3d-54e8-44db-9995-15ab9a95078a",
+   "what": "Spend overview plus a signed receipt ledger; ours has the same ledger logic"
+  }
+ ],
+ "audited": "2026-10-14",
+ "self_score": 4,
+ "audited_by": "independent",
+ "facts": [],
+ "fixed": [
+  "The 50% alert date is computed from the chart's daily values: 'sent Oct 14' ($5,798 at end of Oct 13, past $6,000 on Oct 14)",
+  "'updated 09:40 UTC' is now 'updated 22:40 UTC', since Oct 14 carries a full day of usage in the sparklines and the actual line",
+  "Names and numbers: Tidewell Analytics → Marlpit Analytics; card ending 4417 → 2861; invoice references KW-4410-… → KW-2783-…",
+  "Re-rendered shot.png at 1440 × 900, 2×"
+ ],
+ "owner": {
+  "verdict": "keep",
+  "said": "I love the B2B product screens; they look absolutely crazy",
+  "date": "2026-10-14"
+ }
+}

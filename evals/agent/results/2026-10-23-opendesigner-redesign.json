@@ -1,0 +1,28 @@
+{
+  "kind": "agent",
+  "date": "2026-10-23",
+  "commit": "ffdf89d",
+  "skillsRef": "working tree",
+  "label": "opendesigner-redesign",
+  "model": "sonnet",
+  "judgeModel": "haiku",
+  "runsPerArm": 1,
+  "claudeVersion": "2.1.302",
+  "overallScore": 1,
+  "meanDelta": 0.6666666666666667,
+  "casesPassed": 1,
+  "casesTotal": 1,
+  "costUsd": 0.5656059,
+  "durationSeconds": 144,
+  "partial": false,
+  "cases": [
+    {
+      "name": "redesign-audits-first",
+      "score": 1,
+      "without": 0.333,
+      "delta": 0.6666666666666667,
+      "runs": 1,
+      "errors": []
+    }
+  ]
+}

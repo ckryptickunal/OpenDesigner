@@ -1,0 +1,68 @@
+{
+ "piece": "styles/04-skeuomorphism",
+ "title": "04 · Skeuomorphism · Fenmoor STEM-8 post console",
+ "pattern": "plugin panel",
+ "platform": "web",
+ "industry": "audio post-production (B2B pro tools)",
+ "style": [
+  "skeuomorphism",
+  "hardware",
+  "brushed metal",
+  "dark"
+ ],
+ "tags": [
+  "style study",
+  "skeuomorphism",
+  "mixing console",
+  "faders",
+  "knobs",
+  "LED meters",
+  "loudness",
+  "LKFS",
+  "5.1",
+  "B2B"
+ ],
+ "score": 4,
+ "self_score": 5,
+ "verdict": "keep",
+ "strengths": [
+  "Hardware drawn with consistent light: knurled aluminium knobs with pointers on 270° scales, ridged fader caps in inset slots, LED ladders with dim unlit segments, LCD glass with backlit text, a brushed aluminium faceplate with engraved legends",
+  "Every mark is a value: fader caps sit at their dB on a console scale and plates repeat it, meters light to their stated peaks with zones at −18 and −6 dBFS and their own dBFS scale, the loudness section reads −24.1 LKFS integrated, −3.2 dBTP true peak, 6.4 LU range against a −24 ±2 spec",
+  "Post-production truth a re-recording mixer would check: DX boom and lav (lav muted), ADR, Foley, hard FX, backgrounds, score, reverb return, HPF corners per stem, dialog-gated loudness, a 5.1 bus with LFE, Ep 104 reel 3 at 01:12:46:08"
+ ],
+ "slop_signals": [
+  "The loudness history is a smooth sine wave around −24; real short-term loudness is jagged and stepped, so the one live graph looks generated",
+  "Every knob is the same CSS-rendered disc with the same highlight; next to a rendered product (Telepathic Instruments) the metal has no material variety or wear",
+  "The brushed header with letter-spaced 'FENMOOR' is a stock hardware-skin move"
+ ],
+ "fixes": [
+  "Replace the sine with a realistic short-term trace: dialogue peaks, quiet stretches, a step where a cue starts",
+  "Vary the caps (trim against EQ colours, as consoles do) and add a little anisotropic highlight so the knobs read as turned metal",
+  "Check the reel and timecode convention with someone from post: reels usually run at their own hour (Reel 3 at 03:00:00:00)"
+ ],
+ "references": [
+  {
+   "site": "Telepathic Instruments",
+   "url": "https://mobbin.com/sites/sections/e19b1448-2e4b-4614-b64d-9f2cda0540c5",
+   "mobbin_url": "https://mobbin.com/sites/sections/e19b1448-2e4b-4614-b64d-9f2cda0540c5",
+   "what": "A rendered hardware instrument lit like a real object: the bar for knob and cap material"
+  },
+  {
+   "site": "Riverside",
+   "url": "https://mobbin.com/screens/cdb3df5f-84aa-4e18-92cf-beea895c41a7",
+   "mobbin_url": "https://mobbin.com/screens/cdb3df5f-84aa-4e18-92cf-beea895c41a7",
+   "what": "Shipped web audio editing: flat tracks and waveforms, the opposite approach"
+  },
+  {
+   "site": "ElevenLabs",
+   "url": "https://mobbin.com/screens/0dc11fae-0a5d-4a8e-b9d6-35b1210a8cda",
+   "mobbin_url": "https://mobbin.com/screens/0dc11fae-0a5d-4a8e-b9d6-35b1210a8cda",
+   "what": "Dubbing editor with per-speaker tracks; how audio tools on the web usually look"
+  }
+ ],
+ "audited": "2026-10-14",
+ "audited_by": "independent",
+ "facts": [
+  "[convention, low confidence] 'Reel 3' with timecode 01:12:46:08: in film post each reel usually starts at its own hour (03:00:00:00); a TV mix on 01: would not normally be called by reel"
+ ]
+}

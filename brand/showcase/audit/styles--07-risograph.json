@@ -1,0 +1,62 @@
+{
+ "piece": "styles/07-risograph",
+ "title": "07 Tessin & Ström: a risograph annual report section",
+ "pattern": "report section",
+ "platform": "web",
+ "industry": "design research consultancy (B2B services, healthcare clients)",
+ "style": [
+  "risograph",
+  "print",
+  "editorial",
+  "two-ink"
+ ],
+ "tags": [
+  "style study",
+  "risograph",
+  "annual report",
+  "overprint",
+  "misregistration",
+  "grain",
+  "data storytelling",
+  "B2B"
+ ],
+ "score": 4,
+ "self_score": 5,
+ "verdict": "keep",
+ "strengths": [
+  "The technique carries the finding: pink is the felt wait (61 min), blue the actual (38), and the overprint is the part that was real; the same rule drives the before and pilot bars",
+  "Two spot inks only (Medium Blue, Fluorescent Pink) with misregistration, starved-ink voids and soft drum banding on solids, while small type stays crisp and readable",
+  "Report-grade content: 412 h in 14 waiting rooms, 1,860 timed waits, 96 and 88 exit interviews, -41% complaints, 4.1% to 1.6% left before being seen, and a method note with n values"
+ ],
+ "slop_signals": [
+  "The giant pink '61' and blue '38' overlap so the left half reads as '6138' at a glance",
+  "The grain is uniform digital noise on every solid; real riso shows drum banding, starved edges and uneven density"
+ ],
+ "fixes": [
+  "Overlap the numerals only at an edge, or stack them, so each number reads first and the overprint second",
+  "Use one scanned riso texture (licensed) or vary ink density per drum instead of a single noise filter"
+ ],
+ "references": [
+  {
+   "site": "Duolingo",
+   "url": "https://mobbin.com/sites/sections/a40eacc2-89cf-4088-a4ce-6801531d6f8e",
+   "mobbin_url": "https://mobbin.com/sites/sections/a40eacc2-89cf-4088-a4ce-6801531d6f8e",
+   "what": "A before/after research finding with a bar chart and a link to the full report"
+  },
+  {
+   "site": "Kalstore",
+   "url": "https://mobbin.com/sites/sections/60914286-db24-444f-90d1-0fa17f71456c",
+   "mobbin_url": "https://mobbin.com/sites/sections/60914286-db24-444f-90d1-0fa17f71456c",
+   "what": "Oversized statistics in different ink colours with a plain caption"
+  },
+  {
+   "site": "Aave",
+   "url": "https://mobbin.com/sites/sections/02770c29-a1ea-4602-894f-9a59a779f0ea",
+   "mobbin_url": "https://mobbin.com/sites/sections/02770c29-a1ea-4602-894f-9a59a779f0ea",
+   "what": "Large figures with a small graphic that carries the number"
+  }
+ ],
+ "audited": "2026-10-14",
+ "audited_by": "independent",
+ "facts": []
+}

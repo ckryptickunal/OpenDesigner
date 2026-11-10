@@ -1,0 +1,30 @@
+<figure class="fig cr">
+<div class="dodont">
+<div class="dont"><p class="dd-h">Only distance counts</p><p class="dd-why">A quick, short flick never reaches the line, so the toast springs back. People have to drag all the way past the line.</p>
+<div class="dd-art"><div class="cr-swipe">
+<div class="cr-lanebox cr-ui" aria-hidden="true">
+<div class="cr-toast">Link copied</div>
+<span class="cr-flick" style="left:142px;width:34px"></span>
+<span class="cr-mark" style="left:88%"><span>threshold</span></span>
+</div>
+<div class="cr-meta"><span>quick flick, short of the line</span><span class="chip bad">springs back</span></div>
+<pre class="code-lines">const d = Math.abs(swipeAmount);
+if (d &gt;= SWIPE_THRESHOLD)
+  dismiss();</pre>
+</div></div></div>
+<div class="do"><p class="dd-h">Distance or speed</p><p class="dd-why">The same quick flick is fast enough, so the toast leaves along the way it was pushed. Dragging past the line still works too.</p>
+<div class="dd-art"><div class="cr-swipe">
+<div class="cr-lanebox cr-ui" aria-hidden="true">
+<div class="cr-toast cr-ghost">Link copied</div>
+<div class="cr-toast" style="left:auto;right:-24px">Link copied</div>
+<span class="cr-mark" style="left:88%"><span>threshold</span></span>
+</div>
+<div class="cr-meta"><span>the same quick flick</span><span class="chip ok">dismissed</span></div>
+<pre class="code-lines">const d = Math.abs(swipeAmount);
+const v = d / timeTaken;
+if (d &gt;= SWIPE_THRESHOLD
+    || v &gt; 0.11) dismiss();</pre>
+</div></div></div>
+</div>
+<figcaption>Two toasts flicked to the right, quickly and only a short way. Judged by distance alone, the flick falls short of the dashed line and the toast springs back. Judged by distance or speed, where speed is the distance divided by the milliseconds since the drag began, a speed over 0.11 dismisses it.</figcaption>
+</figure>

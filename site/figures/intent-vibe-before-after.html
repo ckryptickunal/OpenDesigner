@@ -1,0 +1,32 @@
+<figure class="fig">
+<div class="fig-panel">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px">
+
+<div style="display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-content:start;min-width:0">
+<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center"><span class="kicker" style="font-size:12px">Before · src/app.css</span><span class="chip bad dot">review --strict: exit 1</span></div>
+<pre class="code-lines">.btn { background: <span class="bad">#4f46e5</span>; color: <span class="bad">#ffffff</span>;
+  border-radius: <span class="bad">7px</span>; padding: <span class="bad">8px</span> 16px; }
+.btn:hover { background: <span class="bad">#4338ca</span>; }
+.input { border: 1px solid <span class="bad">#d1d5db</span>;
+  border-radius: <span class="bad">7px</span>; padding: <span class="bad">8px</span> 12px; }
+.card { background: <span class="bad">#f9fafb</span>;
+  border-radius: <span class="bad">12px</span>; padding: <span class="bad">24px</span>; }</pre>
+<div style="font-size:13px;line-height:18px;color:var(--ink-muted)">Review found 16 hard-coded values in the whole file (7 colors, 4 radii, 5 sizes) and 4 lines that break a house standard.</div>
+</div>
+
+<div style="display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-content:start;min-width:0">
+<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center"><span class="kicker" style="font-size:12px">After · edited by hand</span><span class="chip ok dot">review --strict: exit 0</span></div>
+<pre class="code-lines">.btn { background: <span class="ok">var(--ds-color-bg-action-primary)</span>;
+  color: <span class="ok">var(--ds-color-text-on-action)</span>;
+  border-radius: <span class="ok">var(--ds-radius-control)</span>;
+  padding: <span class="ok">var(--ds-space-8) var(--ds-space-16)</span>; }
+.btn:hover { background: <span class="ok">var(--ds-color-bg-action-primary-hover)</span>; }
+.card { background: <span class="ok">var(--ds-color-surface-base)</span>;
+  border-radius: <span class="ok">var(--ds-radius-container)</span>; padding: <span class="ok">var(--ds-space-24)</span>; }</pre>
+<div class="mono" style="font-size:12px;line-height:18px;color:var(--ink-muted)">No hard-coded colors, sizes, radii, shadows or durations found: the code uses the tokens.</div>
+</div>
+
+</div>
+</div>
+<figcaption style="text-wrap:balance">Part of the style sheet on this page, before and after. On the left are the raw values review flagged. On the right, the same rules are rewritten by hand with the tokens it suggested. Both verdicts are real engine output from a run on 2026-10-15.</figcaption>
+</figure>

@@ -1,0 +1,80 @@
+{
+ "piece": "footers/09-b2b-platform",
+ "title": "09 Millrace: footer for a B2B data platform",
+ "pattern": "footer-directory",
+ "platform": "web",
+ "industry": "developer tools, data infrastructure",
+ "style": [
+  "dark",
+  "minimal",
+  "technical"
+ ],
+ "tags": [
+  "footer-directory",
+  "b2b",
+  "developer platform",
+  "event streaming",
+  "status",
+  "data residency",
+  "compliance",
+  "dark",
+  "mono"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "A detail only this brand would have: a live retention clock ('An event sent now stays readable until' a date and time computed as now plus the default 30 days, in UTC), the product's promise applied to this minute, set in amber mono as the footer's one object",
+  "Trust facts written honestly for an invented company, with no badges: SOC 2 Type II 'Audit period ends 31 Dec; report due Feb 2027', 'ISO 27001 · Not certified yet; planned after SOC 2', encryption stated plainly, Sydney marked 'Preview', and a status cell that names the last incident ('9 Oct on dub-1 ... No events were lost') and lets a developer check it ('curl api.millrace.dev/v1/health')",
+  "Quiet structure: four link columns on grid columns 5 to 12, fact cells aligned to the same grid lines, hairlines only, Hanken Grotesk for words and Fragment Mono only for data"
+ ],
+ "slop_signals": [
+  "The large amber mono date is a device; it carries real data (retention) but is the only colored element and pulls the eye from the links",
+  "Link text is larger than shipped footers (about 16 px against 13-14 px on Railway, Dub, Customer.io), and the lower band reads like a separate trust section stacked into the footer"
+ ],
+ "fixes": [
+  "Drop link text to 14 px and tighten the gap between the link block and the status, residency and compliance band",
+  "Keep one amber element; make the date smaller or set it in the text face with the time in mono"
+ ],
+ "references": [
+  {
+   "site": "Railway",
+   "url": "https://mobbin.com/sites/sections/59cdf49d-e039-4904-a90e-aebfb09a9771",
+   "what": "Dark footer, five link columns, mono 'All systems operational', compliance badges; ours replaces badges with honest dated facts"
+  },
+  {
+   "site": "Midday",
+   "url": "https://mobbin.com/sites/sections/503872ca-2331-4a6f-8cc6-66889b8586f8",
+   "what": "'Soc2 In progress' stated plainly; ours does the same with dates"
+  },
+  {
+   "site": "Customer.io",
+   "url": "https://mobbin.com/sites/sections/c25553c8-d4a9-46a9-be78-ea63abc9ffed",
+   "what": "Quiet dark footer with a status dot; ours carries more information at similar calm"
+  }
+ ],
+ "audited": "2026-10-14",
+ "self_score": 4,
+ "audited_by": "independent",
+ "facts": [
+  "the closing sentence raised to 39 px and phone links to 16 px after the final audit, checked by eye. The shot's date is the render time plus 30 days (17 Nov 2026), so the shot needs re-rendering after that date",
+  "Pairwise judging was not blind: the judge knew which side came from Mobbin"
+ ],
+ "fixed": [],
+ "owner": {
+  "verdict": "improve",
+  "said": "needs work",
+  "date": "2026-10-14"
+ },
+ "round4": {
+  "score": 4,
+  "pairwise": "lost to Linear by 1 (not blind); the earlier blind test lost to Railway by 2",
+  "changed": [
+   "Status, residency and compliance mini-tables and the curl command removed; api.millrace.dev is gone, so no invented domain remains",
+   "The amber monospace date replaced by one sentence at the foot, 'An event sent now stays readable until <date>.', the date live (now plus 30 days, UTC) and the only amber",
+   "Fragment Mono dropped: one typeface (Hanken Grotesk)",
+   "Four link columns including a Trust column; the 'Ready to stream?' row of the section above has a real link"
+  ],
+  "after_audit": "the closing sentence raised to 39 px and phone links to 16 px after the final audit, checked by eye. The shot's date is the render time plus 30 days (17 Nov 2026), so the shot needs re-rendering after that date",
+  "date": "2026-10-18"
+ }
+}

@@ -13,7 +13,7 @@ Load OpenDesigner into the AI tool you already use: Claude Code, Claude, Codex, 
 The model reads your repo first. It starts with a short sketch, and you can zoom into any area. It shows each choice visually where your tool allows it. It writes DTCG design tokens, CSS variables, a Tailwind theme, a `DESIGN.md` and a decision log into your project. See [How it works](HOW-IT-WORKS.md).
 
 How is that different from typing "make me a design system"?
-- Every recommendation comes from a cited research base: 352 Decision Cards and 25 benchmarked systems.
+- Every recommendation comes from a cited research base: more than 500 Decision Cards and 32 benchmarked systems (25 in full).
 - The questions come in order of what depends on what.
 - Fixed checks (contrast, target sizes, scale steps) run before you see the result.
 
@@ -32,7 +32,7 @@ What it cannot generate well (a logo, custom icons, illustration, photography) i
 
 ### How long does it take?
 
-Start with a sketch. About 3 to 5 questions, in about 3 minutes, give you a complete, working system with sourced defaults. Then zoom into any area you care about, and stop whenever it is enough. The next level, one short screen per foundation, is 8 questions in about 8 minutes. Every default stays editable. The full interview has 192 questions, but you only answer the ones for the areas you zoom into.
+Start with a sketch. About 3 to 5 questions, in about 3 minutes, give you a complete, working system with sourced defaults. Then zoom into any area you care about, and stop whenever it is enough. The next level, one short screen per foundation, is 8 questions in about 8 minutes. Every default stays editable. The full interview has 200 questions, but you only answer the ones for the areas you zoom into.
 
 ### What do I get at the end?
 
@@ -44,7 +44,7 @@ Files in your repo:
 - a `state.json` to continue later, and a preview page;
 - a snippet for your `AGENTS.md`, so later agents read the system first.
 
-See [what lands in your repo](HOW-IT-WORKS.md#8-export-and-what-lands-in-your-repo). The README's status table says which exporters have shipped.
+See [what lands in your repo](HOW-IT-WORKS.md#8-export-and-what-lands-in-your-repo). All of these exporters ship today (`engine.py export --format`).
 
 ### I already have a design system. Is this useful?
 
@@ -109,7 +109,7 @@ Yes. Tailwind is one of the export formats. The tokens become a Tailwind theme, 
 
 ### Does it work with shadcn/ui?
 
-Yes. shadcn/ui is one of the 25 benchmarked systems and one of the dial recipes. The export's CSS variables and Tailwind theme are what shadcn/ui components read. OpenDesigner decides the system (roles, scales, states, accessibility targets) that a shadcn theme expresses. A note from L08: shadcn/ui changed its default base library from Radix to Base UI in July 2026.
+Yes. shadcn/ui is one of the 25 benchmarked systems and one of the dial recipes. The exports use their own `--ds-*` variable names, not the ones shadcn/ui components read (`--primary`, `--background` and so on), so map them once in your global CSS, for example `--primary: var(--ds-color-bg-action-primary)` and `--background: var(--ds-color-surface-base)`. OpenDesigner decides the system (roles, scales, states, accessibility targets) that a shadcn theme expresses. A note from L08: shadcn/ui changed its default base library from Radix to Base UI in July 2026.
 
 ### Does it work with Figma?
 
@@ -167,6 +167,8 @@ You can add any website, screenshot, Figma file or brand book as a reference at 
 
 It never copies identity. That means no logos, brand names, brand colors used as identity, proprietary typefaces, photography, illustration or copy. This is a hard rule.
 
+The exception is a Taste Index, which you ask for when you want everything new to match a look you love, and which OpenDesigner offers if you ask it to copy a brand's look. It describes that look in full and, when first shown, keeps the site's exact colours and font names. You're told plainly that what you keep or change is your responsibility. Logos, brand names, images and written copy still never go in, font files are never downloaded or shipped, and your system follows an index only if you choose it.
+
 ### Does it make logos or icons?
 
 No. It asks whether you have them and checks the files. For example, it checks that a logo SVG has outlined text and works at 16 px on light and dark. It derives the favicon and app-icon sizes from your master file.
@@ -174,7 +176,8 @@ No. It asks whether you have them and checks the files. For example, it checks t
 If you don't have one, it gives you honest paths:
 - a designer brief;
 - a wordmark set in your chosen typeface;
-- open icon libraries such as Lucide, Phosphor, Tabler, Heroicons or Material Symbols, with their licenses kept.
+- open icon libraries such as Lucide, Phosphor, Tabler, Heroicons or Material Symbols, with their licenses kept;
+- if you have a few icons of your own, glyphs from the closest open set redrawn to match them (same badge, line weight and colour), shown next to yours before anything is used.
 
 ## Accessibility
 
@@ -184,9 +187,11 @@ Yes, and it builds it in wherever possible. Every generated system gets:
 - WCAG 2.2 AA text contrast: 4.5:1 for body text, 3:1 for large text;
 - 3:1 contrast for borders, focus rings and meaningful icons;
 - target sizes that fit the input type: at least 24 CSS px on the web, 44pt on iOS, 48dp on Android;
-- a focus ring, reduced-motion and reduced-transparency modes, and text that can scale to 200%.
+- a focus ring, a reduced-motion mode in the tokens, and text that can scale to 200%.
 
-Lint errors block things like unlabeled fields or meaning shown only by color. WCAG 3 is still a draft, so WCAG 2.2 is the target that can be enforced. APCA appears as an advisory note.
+If your system uses see-through glass surfaces, each one also gets a solid version for people who turn transparency off. The CSS export swaps it in, with no blur, when the browser reports that the person wants less transparency (`prefers-reduced-transparency`: Chrome and Edge today; Safari does not report it and Firefox only behind a setting) or more contrast (`prefers-contrast: more`, in every major browser). A glass surface without one is a lint error.
+
+Token errors, such as targets under 24 px or contrast below the floor, block the build. On a built page, `review.py` reports controls with no accessible name; color-only meaning is not checked yet. WCAG 3 is still a draft, so WCAG 2.2 is the target that can be enforced. APCA appears as an advisory note.
 
 Automated checks catch only part of WCAG, so testing by people with assistive technology still matters. See [`synthesis/LEVERS.md`](../synthesis/LEVERS.md) section D.
 
@@ -206,4 +211,4 @@ You don't have to. Every recommendation cites a Decision Card. Every card cites 
 
 ### How can I help?
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) and the [good first issues](https://github.com/ckryptickunal/OpenDesigner/labels/good%20first%20issue). Research gaps, host support, translations and examples are all welcome. To report a problem you hit while using it, see [Report a problem](../README.md#report-a-problem-or-suggest-an-improvement).
+See [CONTRIBUTING.md](../CONTRIBUTING.md) and the [good first issues](https://github.com/ckryptickunal/OpenDesigner/labels/good%20first%20issue). Research gaps, host support, translations and examples are all welcome. To report a problem you hit while using it, see [Help it get better](../README.md#help-it-get-better).

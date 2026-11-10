@@ -1,0 +1,107 @@
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/03-watch-trio/opendesigner sketch --name "Wrist Studio" --brand #5CC8FF --audience regular --platforms web --feel premium,sleek,bold --surfaces "case study:experience" --delegated feel,audience,platforms
+initialized brand/showcase/mockups/03-watch-trio/opendesigner/state.json
+Applied 289 OpenDesigner house standards (v2) for accessibility, color, components, elevation, layout, motion, platforms, process, tokens, tooling, typography. They are locked; say if you want to change one (`engine.py standards` lists them).
+built brand/showcase/mockups/03-watch-trio/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg), DESIGN.md, PRODUCT.md, preview.html
+Passes: no errors. 2 warnings, 5 notes.  (brand/showcase/mockups/03-watch-trio/opendesigner)
+WARN  In light mode, action primary background on base surface is too faint to see: contrast 1.711:1, needs 3.0:1.  [WCAG 2.2 SC 1.4.11 (advisory: a text-labelled button needs no boundary contrast); DC-L01-22, S-L01-022, S-L01-023]
+      Fix: Point the role at a step further from the background: steps 11-12 for text, 8 or higher for edges. Or remove the override that detached it. Generated steps always pass.
+WARN  In light mode, action primary background on raised surface is too faint to see: contrast 1.85:1, needs 3.0:1.  [WCAG 2.2 SC 1.4.11 (advisory: a text-labelled button needs no boundary contrast); DC-L01-22, S-L01-022, S-L01-023]
+      Fix: Point the role at a step further from the background: steps 11-12 for text, 8 or higher for edges. Or remove the override that detached it. Generated steps always pass.
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 55 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 54 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  10 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.0). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+Checked 164 color pairs in every mode, 12 mode combinations and 423 tokens.
+Feel: premium -> premium; sleek -> premium + modern; bold -> bold.
+Your brand color is on the buttons exactly, with dark text on it, because white text would be too faint.
+This is a sketch: every part works, and most choices are still defaults. Zoom into any area later (see the Zoom lines in DESIGN.md).
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/03-watch-trio/opendesigner set raw.textFace "Sora" --set-by chosen --why "open-licence face (SIL OFL) picked for this scene; one family per scene"
+D-0010 set raw.textFace = "Sora" (chosen)
+  previous value: "system"
+  tokens: 1 value change (font.family.text). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/03-watch-trio/opendesigner set raw.fontLicence "{\"web\": true, \"app\": true, \"selfHost\": true}" --set-by chosen --why "Sora is SIL OFL, loaded from Google Fonts"
+D-0011 set raw.fontLicence = {"web": true, "app": true, "selfHost": true} (chosen)
+  previous value: {"web": null, "app": null, "selfHost": null}
+  recorded; this changes the files in build/ on the next build, not the tokens.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/03-watch-trio/opendesigner pick Q-color-21 near-black --set-by chosen --why "dark studio scene"
+D-0012 set answers.Q-color-21 = "near-black" (chosen)
+  also set: raw.darkBase = "near-black" (from Q-color-21)
+  recorded; the tokens already match this answer.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/03-watch-trio/opendesigner set dials.expression 60 --set-by delegated --why "product photography: light is the drama"
+D-0013 set dials.expression = 60 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/03-watch-trio/opendesigner set dials.brandPresence 25 --set-by delegated --why "blue only as a caption dot"
+D-0014 set dials.brandPresence = 25 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/03-watch-trio/opendesigner set dials.density 10 --set-by delegated --why "three objects"
+D-0015 set dials.density = 10 (delegated)
+  previous value: 50
+  tokens: 43 values change (modes, size.icon.default, text.body.lg, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/03-watch-trio/opendesigner set dials.energy 35 --set-by delegated --why "still, but crisp highlights"
+D-0016 set dials.energy = 35 (delegated)
+  note: motion.spring.spatial.dampingRatio stays 1.0: house standard STD-springs-gestures-04 holds it; everything else this dial drives follows the new value
+  note: motion.spring.spatial.stiffness stays 246.7: house standard STD-springs-gestures-04 holds it; everything else this dial drives follows the new value
+  note: motion.easing.standard stays [0.77, 0, 0.175, 1]: house standard STD-easing-duration-02 holds it; everything else this dial drives follows the new value
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/03-watch-trio/opendesigner set dials.roundness 70 --set-by delegated --why "watch cases are rounded squares"
+D-0017 set dials.roundness = 70 (delegated)
+  tokens: 6 values change (radius.container, radius.control, radius.control-sm, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/03-watch-trio/opendesigner set dials.depth 90 --set-by delegated --why "specular light, reflections, contact shadow"
+D-0018 set dials.depth = 90 (delegated)
+  tokens: 20 values change (color.bg.field, color.shadow.ambient, color.shadow.key, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/03-watch-trio/opendesigner set dials.colorfulness 25 --set-by delegated --why "graphite; the screens bring colour"
+D-0019 set dials.colorfulness = 25 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/03-watch-trio/opendesigner set dials.warmth 20 --set-by delegated --why "cool studio grey"
+D-0020 set dials.warmth = 20 (delegated)
+  tokens: 88 values change (color.border.default, color.border.subtle, color.overlay.scrim, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/03-watch-trio/opendesigner build
+built brand/showcase/mockups/03-watch-trio/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg), DESIGN.md, PRODUCT.md, preview.html
+Passes: no errors. 2 warnings, 5 notes.  (brand/showcase/mockups/03-watch-trio/opendesigner)
+WARN  In light mode, action primary background on base surface is too faint to see: contrast 1.849:1, needs 3.0:1.  [WCAG 2.2 SC 1.4.11 (advisory: a text-labelled button needs no boundary contrast); DC-L01-22, S-L01-022, S-L01-023]
+      Fix: Point the role at a step further from the background: steps 11-12 for text, 8 or higher for edges. Or remove the override that detached it. Generated steps always pass.
+WARN  In light mode, action primary background on raised surface is too faint to see: contrast 1.882:1, needs 3.0:1.  [WCAG 2.2 SC 1.4.11 (advisory: a text-labelled button needs no boundary contrast); DC-L01-22, S-L01-022, S-L01-023]
+      Fix: Point the role at a step further from the background: steps 11-12 for text, 8 or higher for edges. Or remove the override that detached it. Generated steps always pass.
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 55 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 54 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  10 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.0). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+Checked 164 color pairs in every mode, 12 mode combinations and 433 tokens.
+(exit 0)
+

@@ -1,0 +1,160 @@
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner sketch --name "Quillon Studio Set" --brand #1f7a4c --audience regular --platforms web --feel calm,premium,minimal --surfaces "case study:experience" --delegated feel,audience,platforms
+initialized brand/showcase/mockups/10-multi-device/opendesigner/state.json
+Applied 289 OpenDesigner house standards (v2) for accessibility, color, components, elevation, layout, motion, platforms, process, tokens, tooling, typography. They are locked; say if you want to change one (`engine.py standards` lists them).
+built brand/showcase/mockups/10-multi-device/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg, artifact), DESIGN.md, PRODUCT.md, preview.html, overview.html
+Passes: no errors. 0 warnings, 5 notes.  (brand/showcase/mockups/10-multi-device/opendesigner)
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 55 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 54 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  10 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.0). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+Checked 164 color pairs in every mode, 12 mode combinations and 427 tokens.
+Feel: calm -> deferential + minimal; premium -> premium; minimal -> minimal.
+Your brand color is on the buttons exactly, with white text that reads clearly on it.
+This is a sketch: every part works, and most choices are still defaults. Zoom into any area later (see the Zoom lines in DESIGN.md).
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner set raw.textFace "Inter" --set-by chosen --why "the product's own face (Quillon is set in Inter, SIL OFL); one family for the scene"
+D-0010 set raw.textFace = "Inter" (chosen)
+  previous value: "system"
+  tokens: 1 value change (font.family.text). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner set raw.fontLicence "{\"web\": true, \"app\": true, \"selfHost\": true}" --set-by chosen --why "Inter is SIL OFL, loaded from Google Fonts"
+D-0011 set raw.fontLicence = {"web": true, "app": true, "selfHost": true} (chosen)
+  previous value: {"web": null, "app": null, "selfHost": null}
+  recorded; this changes the files in build/ on the next build, not the tokens.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner set dials.expression 40 --set-by delegated --why "a studio product shot: light and material carry it"
+D-0012 set dials.expression = 40 (delegated)
+  tokens: 31 values change (font.weight.heading, font.weight.label, icon.stroke.lg, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner set dials.brandPresence 20 --set-by delegated --why "green only inside the product screens"
+D-0013 set dials.brandPresence = 20 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner set dials.density 10 --set-by delegated --why "two objects on a set"
+D-0014 set dials.density = 10 (delegated)
+  previous value: 50
+  tokens: 43 values change (modes, size.icon.default, text.body.lg, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner set dials.energy 15 --set-by delegated --why "still, one key light"
+D-0015 set dials.energy = 15 (delegated)
+  tokens: 3 values change (color.surface.nav, font.weight.heading, motion.duration.extra). Run `engine.py build` to refresh the tokens, exports and preview.
+  note: motion.spring.spatial.dampingRatio stays 1.0: house standard STD-springs-gestures-04 holds it; everything else this dial drives follows the new value
+  note: motion.spring.spatial.stiffness stays 246.7: house standard STD-springs-gestures-04 holds it; everything else this dial drives follows the new value
+  note: motion.easing.standard stays [0.77, 0, 0.175, 1]: house standard STD-easing-duration-02 holds it; everything else this dial drives follows the new value
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner set dials.roundness 45 --set-by delegated --why "device corners; the product's own 8 px controls"
+D-0016 set dials.roundness = 45 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner set dials.depth 80 --set-by delegated --why "real shadows and reflections are the whole idea"
+D-0017 set dials.depth = 80 (delegated)
+  tokens: 15 values change (color.bg.field, color.shadow.ambient, color.shadow.key, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner set dials.colorfulness 15 --set-by delegated --why "a pale cool set; the screens bring the colour"
+D-0018 set dials.colorfulness = 15 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner set dials.warmth 30 --set-by delegated --why "cool daylight grey; no cream, no brown"
+D-0019 set dials.warmth = 30 (delegated)
+  tokens: 97 values change (color.border.default, color.border.subtle, color.overlay.scrim, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner build
+built brand/showcase/mockups/10-multi-device/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg, artifact), DESIGN.md, PRODUCT.md, preview.html, overview.html
+Passes: no errors. 0 warnings, 5 notes.  (brand/showcase/mockups/10-multi-device/opendesigner)
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 55 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 54 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  10 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.0). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+Checked 164 color pairs in every mode, 12 mode combinations and 433 tokens.
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner design-md
+wrote /Users/Kunal/Desktop/Design-System/brand/showcase/mockups/10-multi-device/DESIGN.md
+wrote /Users/Kunal/Desktop/Design-System/brand/showcase/mockups/10-multi-device/PRODUCT.md
+wrote brand/showcase/mockups/10-multi-device/opendesigner/standards.md
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner feedback "engine.py review applies the folder's system to every HTML in the folder. desktop.html here is styled with the phone app's own tokens (app-screens/11-approvals-mobile) so both screens are one product, but review suggested the scene system's tokens for it. Review should read the stylesheet each file links." --kind bug
+Saved to brand/showcase/mockups/10-multi-device/opendesigner/feedback.md.
+To report it, open this link, check it, and submit it yourself (nothing was posted):
+https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bbug%5D%20engine.py%20review%20applies%20the%20folder%27s%20system%20to%20every%20HTML%20in%20the%20fold...&body=%2A%2AKind%3A%2A%2A%20bug%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0Aengine.py%20review%20applies%20the%20folder%27s%20system%20to%20every%20HTML%20in%20the%20folder.%20desktop.html%20here%20is%20styled%20with%20the%20phone%20app%27s%20own%20tokens%20%28app-screens/11-approvals-mobile%29%20so%20both%20screens%20are%20one%20product%2C%20but%20review%20suggested%20the%20scene%20system%27s%20tokens%20for%20it.%20Review%20should%20read%20the%20stylesheet%20each%20file%20links.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=bug%2Cfrom-engine
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/10-multi-device/opendesigner feedback "A 'one product on several devices' scene needs the same product on each screen, but the showcase's phone (Quillon) and desktop (Fennick) approval pieces are two different products with different greens and fonts. I had to design the desktop companion from the phone's system. A product brief should name every surface it ships on so companion screens exist." --kind gap
+Saved to brand/showcase/mockups/10-multi-device/opendesigner/feedback.md.
+To report it, open this link, check it, and submit it yourself (nothing was posted):
+https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bgap%5D%20A%20%27one%20product%20on%20several%20devices%27%20scene%20needs%20the%20same%20product%20on%20eac...&body=%2A%2AKind%3A%2A%2A%20gap%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AA%20%27one%20product%20on%20several%20devices%27%20scene%20needs%20the%20same%20product%20on%20each%20screen%2C%20but%20the%20showcase%27s%20phone%20%28Quillon%29%20and%20desktop%20%28Fennick%29%20approval%20pieces%20are%20two%20different%20products%20with%20different%20greens%20and%20fonts.%20I%20had%20to%20design%20the%20desktop%20companion%20from%20the%20phone%27s%20system.%20A%20product%20brief%20should%20name%20every%20surface%20it%20ships%20on%20so%20companion%20screens%20exist.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=gap%2Cfrom-engine
+(exit 0)
+
+$ (in brand/showcase/mockups/10-multi-device) python3 skills/opendesigner/scripts/engine.py set dials.depth 30 --set-by delegated --why flat frontal device frames: a metal ring on each frame and one faint shadow under the phone, no rendered light (audit rebuild)
+D-0020 set dials.depth = 30 (delegated)
+  previous value: 80
+  tokens: 11 values change (color.shadow.ambient, color.shadow.key, elevation.floating, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ (in brand/showcase/mockups/10-multi-device) python3 skills/opendesigner/scripts/engine.py set dials.expression 30 --set-by delegated --why a flat presentation plate: the scene does not perform, the two product screens carry it; two weights in the caption
+D-0021 set dials.expression = 30 (delegated)
+  previous value: 40
+  tokens: 36 values change (font.weight.label, icon.stroke.lg, icon.stroke.md, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ (in brand/showcase/mockups/10-multi-device) python3 skills/opendesigner/scripts/engine.py build
+built opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg, artifact), DESIGN.md, PRODUCT.md, preview.html, overview.html
+Passes: no errors. 0 warnings, 6 notes.  (opendesigner)
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 55 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 54 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  10 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.0). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+NOTE  OpenDesigner's house standards moved to v3 (this system follows v2): none of the changes touch it. Run `engine.py standards --update`  [House standards (docs/KNOWLEDGE.md 6); standards.json v3]
+Checked 164 color pairs in every mode, 12 mode combinations and 428 tokens.
+(exit 0)
+
+$ (in brand/showcase/mockups/10-multi-device) python3 skills/opendesigner/scripts/engine.py design-md
+wrote /Users/Kunal/Desktop/Design-System/brand/showcase/mockups/10-multi-device/DESIGN.md
+wrote /Users/Kunal/Desktop/Design-System/brand/showcase/mockups/10-multi-device/PRODUCT.md
+wrote opendesigner/standards.md
+(exit 0)
+
+$ (in brand/showcase/mockups/10-multi-device) python3 skills/opendesigner/scripts/engine.py validate
+Passes: no errors. 0 warnings, 6 notes.  (opendesigner)
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 55 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 54 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  10 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.0). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+NOTE  OpenDesigner's house standards moved to v3 (this system follows v2): none of the changes touch it. Run `engine.py standards --update`  [House standards (docs/KNOWLEDGE.md 6); standards.json v3]
+Checked 164 color pairs in every mode, 12 mode combinations and 428 tokens.
+(exit 0)
+
+$ (in brand/showcase/mockups/10-multi-device) python3 skills/opendesigner/scripts/engine.py review --project .
+Review of .: 2 files scanned.
+No hard-coded colors, sizes, radii, shadows or durations found: the code uses the tokens.
+DESIGN.md matches state.json.
+(exit 0)
+

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inner scroll fixture</title>
+<!-- Checker eval fixture for site/check_layout.py. Planted: (1) a pre inside a .fig-card with overflow-x: auto and a long unbroken command, so the card scrolls sideways at 320 px; (2) a note with overflow: hidden and a fixed 48 px height that cuts its third line off.
+     The planted defects and where each must be found are listed in evals/checkers/manifest.json. -->
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font: 16px/1.5 system-ui, -apple-system, sans-serif; color: #1c1c1e; background: #ffffff; }
+body { margin: 0; }
+main { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 28px; line-height: 1.2; margin: 0 0 16px; text-wrap: balance; }
+h2 { font-size: 20px; line-height: 1.3; margin: 24px 0 8px; text-wrap: balance; }
+p { margin: 0 0 16px; text-wrap: pretty; }
+.x-card { border: 1px solid #d1d1d6; border-radius: 12px; padding: 16px; background: #f7f7f8; }
+button { font: inherit; font-size: 15px; min-height: 40px; padding: 0 16px; border: 1px solid #8e8e93; border-radius: 8px; background: #ffffff; color: #1c1c1e; }
+button.primary { background: #1f4fd8; border-color: #1f4fd8; color: #ffffff; }
+.fig-card { border: 1px solid #d1d1d6; border-radius: 12px; padding: 16px; margin: 0 0 16px; background: #f7f7f8; }
+.fig-card pre { margin: 0; overflow-x: auto; font: 14px/24px ui-monospace, Menlo, monospace; }
+.clip-note { overflow: hidden; height: 48px; margin: 0; line-height: 24px; }
+</style>
+</head>
+<body>
+<main>
+<h1>Inner scroll fixture</h1>
+<div class="fig-card">
+  <pre id="scroll-pre">python3 tools/build_data.py --check --source synthesis/questionnaire.json --out data/</pre>
+</div>
+<div class="fig-card">
+  <p id="clip-note" class="clip-note">The engine writes tokens first. Then it checks every pair for contrast. Then it writes the exports, the overview and the preview, and only then the DESIGN.md file at the root.</p>
+</div>
+</main>
+</body>
+</html>

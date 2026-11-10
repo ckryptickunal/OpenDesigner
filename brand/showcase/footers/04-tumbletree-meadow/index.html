@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tumbletree footer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Round 4: a quiet footer. Link columns in one text size, one muted heading style, one rule, one legal line,
+     and one signature element: a statement of the product's own rule, set in the display face. The band at the top is the end of the section above, so the shot reads as the foot of a page. */
+  :root {
+    --bg: var(--ds-color-accent2-light-2);      /* sky */
+    --above: var(--ds-color-neutral-light-1);
+    --ink: var(--ds-color-neutral-light-12);
+    --muted: var(--ds-color-neutral-light-11);   /* 6.5:1 on the sky */
+    --rule: var(--ds-color-accent2-light-6);
+    --accent: var(--ink);
+    --above-ink: var(--ds-color-neutral-light-12);
+    --above-muted: var(--ds-color-neutral-light-11);
+    --above-rule: var(--ds-color-neutral-light-6);
+    --sun: var(--ds-color-accent-light-9);
+    --gutter: var(--ds-space-80);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); }
+  body { font-family: var(--ds-font-family-text); font-size: 16px; line-height: 1.5; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .above { background: var(--above); padding: 0 var(--gutter); }
+  .above p { display: flex; justify-content: flex-start; gap: 16px; padding: 20px 0 24px; border-top: 1px solid var(--above-rule); font-size: 16px; line-height: 24px; color: var(--above-muted); }
+  .above b { font-weight: 500; color: var(--above-ink); }
+  .above u { color: var(--above-ink); text-underline-offset: 4px; }
+  footer { padding: 72px var(--gutter) 32px; }
+  .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--ds-space-24); }
+  .statement { grid-column: 1 / span 9; font-family: var(--ds-font-family-display); font-weight: 500; font-size: 51px; line-height: 56px; letter-spacing: -0.01em; text-wrap: balance; margin-bottom: 72px; }
+  .about { grid-column: 1 / span 4; }
+  .name { display: inline-block; font-family: var(--ds-font-family-display); font-weight: 600; font-size: 28px; line-height: 32px; letter-spacing: -0.01em; }
+  .name span { margin-left: 10px; font-size: 16px; color: var(--muted); }
+  .num { font-variant-numeric: tabular-nums; }
+  .about p { margin-top: 12px; color: var(--muted); max-width: 26em; text-wrap: pretty; }
+  nav.cols { grid-column: 6 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--ds-space-24); padding-top: 6px; }
+  .cols h3 { font-size: 16px; line-height: 24px; font-weight: 500; color: var(--muted); margin-bottom: 8px; }
+  .cols ul { list-style: none; }
+  .cols li { font-size: 16px; line-height: 24px; padding: 4px 0; color: var(--ink); }
+  .cols li.t { color: var(--muted); }
+  @media (hover: hover) and (pointer: fine) { .cols a:hover, .legal a:hover { text-decoration: underline; text-underline-offset: 4px; } }
+  .mark { display: inline-block; margin-top: 72px; font-family: var(--ds-font-family-display); font-weight: 500; color: var(--accent); line-height: .82; letter-spacing: -0.03em; white-space: nowrap; }
+  .legal { display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-24); margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 16px; line-height: 20px; color: var(--muted); }
+  .legal nav { display: flex; gap: var(--ds-space-24); }
+  .legal a { display: inline-flex; align-items: center; min-height: 32px; }
+  .legal a[aria-current] { color: var(--ink); }
+  @media (max-width: 1100px) {
+    .about { grid-column: 1 / -1; }
+    nav.cols { grid-column: 1 / -1; margin-top: 48px; }
+    .statement { grid-column: 1 / -1; }
+  }
+  @media (max-width: 760px) {
+    :root { --gutter: var(--ds-space-20); }
+    .above p { flex-direction: column; gap: 4px; padding: 16px 0 20px; }
+    footer { padding-top: 48px; }
+    .grid { grid-template-columns: 1fr; }
+    .statement { font-size: 28px; line-height: 36px; margin-bottom: 48px; }
+    nav.cols { grid-template-columns: 1fr 1fr; row-gap: 32px; margin-top: 40px; }
+    .legal { flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 56px; }
+    .legal nav { flex-wrap: wrap; column-gap: 20px; }
+  }
+  @media (max-width: 760px) { .name { font-size: 21px; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="above" aria-hidden="true"><p><b>Can my child use it without me?</b><span>Yes. Lessons talk them through every step, and you get a note when they finish.</span></p></div>
+<footer aria-label="Site footer">
+  <div class="grid"><p class="statement">Ten minutes a day, then the app locks until morning.</p></div>
+  <div class="grid">
+    <div class="about">
+      <a class="name" href="#">Tumbletree</a>
+      <p>Phonics, reading and numbers for ages 4&nbsp;to&nbsp;7, following England&rsquo;s EYFS framework and Key&nbsp;Stage&nbsp;1.</p>
+    </div>
+    
+    <nav class="cols" aria-label="Footer">
+      <div><h3>Lessons</h3><ul><li><a href="#">Phonics</a></li><li><a href="#">Reading</a></li><li><a href="#">Numbers</a></li><li><a href="#">Shapes and time</a></li></ul></div>
+      <div><h3>Families</h3><ul><li><a href="#">How it works</a></li><li><a href="#">Pricing</a></li><li><a href="#">Parent guides</a></li><li><a href="#">Family sign-in</a></li></ul></div>
+      <div><h3>Teachers</h3><ul><li><a href="#">Curriculum map</a></li><li><a href="#">Classroom kit</a></li><li><a href="#">School pricing</a></li><li><a href="#">Teacher sign-in</a></li></ul></div>
+      <div><h3>Company</h3><ul><li><a href="#">Our story</a></li><li><a href="#">Safeguarding</a></li><li><a href="#">Jobs</a></li><li><a href="#">Contact us</a></li></ul></div>
+    </nav>
+  </div>
+  <div class="legal">
+    <p>&copy; 2026 Tumbletree Learning Ltd, Bristol. Registered in England and Wales.</p>
+    <nav aria-label="Legal"><a href="#">Privacy for families</a><a href="#">Accessibility</a><a href="#">Terms</a></nav>
+  </div>
+</footer>
+</body>
+</html>

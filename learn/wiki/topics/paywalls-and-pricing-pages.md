@@ -2,7 +2,7 @@
 type: topic
 title: Paywalls and pricing pages
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -25,3 +25,5 @@ Paywalls that block content, pointless premium subscriptions, ad-gated access an
 - [[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]: 22% of the sample shows a paywall during onboarding; examples pair it with quizzes, one-time offers, social proof, tailored plans and a playful ticket design.
 - [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: One consistent paywall beat contextual per-feature paywalls; a soft paywall won globally and a hard one in the US; images, titles, social proof, fine print, a lifetime-plan anchor, weekly price units and a one-time offer instead of a free trial were all tested.
 - See also: [[synthesis/paywalls-and-pricing-pages|Paywalls and pricing pages synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-example-workflow-referodesign-refero-skill-skills-refero-design-references-example-workflow-md|referodesign/refero_skill: skills/refero-design/references/example-workflow.md]]: 3 plan cards with Pro highlighted, monthly/annual toggle above cards with exact savings, ROI strip, compact comparison table, Enterprise 'Talk to sales' with security cues, FAQ.
+- [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: Example pattern: billing toggle above plan cards, one highlighted plan, detailed comparison below.

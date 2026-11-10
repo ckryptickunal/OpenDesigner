@@ -2,7 +2,7 @@
 type: topic
 title: Landing pages
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -45,3 +45,6 @@ Lay out pages so all information is clearly laid out and the next click is obvio
 - [[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily|Awful To AMAZING Web Designs Easily]]: The video is about making websites captivating rather than merely well made, using layout, imagery, depth, background and motion variety; examples include Shopify, Apple and dvlpmedicines.com.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Builds and polishes a marketing home page: navbar, split hero with product screenshot, logo cloud, feature section, stats, image-backed testimonials, CTA and footer.
 - See also: [[synthesis/landing-pages|Landing pages synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop-referodesign-refero-skill-skills-refero-design-references-anti-ai-slop-md|referodesign/refero_skill: skills/refero-design/references/anti-ai-slop.md]]: Flags left-text/right-image heroes and generic section stacks; offers image, brand, identity and editorial litmus tests for the first viewport.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-copywriting-referodesign-refero-skill-skills-refero-design-references-copywriting-md|referodesign/refero_skill: skills/refero-design/references/copywriting.md]]: A marketing hero must say who it is for, what problem, what outcome, why trust it and what to do next; use scenes, proof, rhythm and a sticky line.
+- [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: Styles cover marketing pages; avoid the generic hero, features grid, pricing, FAQ, CTA sequence unless research supports it.

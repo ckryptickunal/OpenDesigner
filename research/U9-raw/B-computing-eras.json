@@ -1,0 +1,1611 @@
+[
+ {
+  "id": "web-1-vernacular",
+  "name": "Web 1.0 vernacular (GeoCities)",
+  "aliases": [
+   "GeoCities style",
+   "90s homepage",
+   "vernacular web",
+   "amateur web",
+   "Neocities style"
+  ],
+  "plain": "Homemade 90s web page: tiled backgrounds, blinking GIFs, everything at once.",
+  "people_say": [
+   "old internet",
+   "90s website",
+   "GeoCities",
+   "under construction",
+   "personal homepage",
+   "starry background",
+   "retro web",
+   "early internet look"
+  ],
+  "origin": "Amateur personal home pages of the mid 1990s, hosted on services like GeoCities (1994 to 2009) [S1][S3]",
+  "defining": [
+   "Repeating tiled backgrounds, very often starry outer space, behind everything [S2]",
+   "Animated GIFs everywhere: 'Under Construction' signs, blinking yellow 'New!' buttons, glitter text later on [S2]",
+   "Background MIDI music and collections of ready-made web graphics [S2]",
+   "No clear structure: blocks of graphics and text dropped on a background, pages left permanently under construction [S2][S3]",
+   "Browser-default type and colours (serif body text, blue underlined links) [inferred]"
+  ],
+  "code": "body{background:#000 url(stars.gif) repeat;color:#ff0;font-family:'Times New Roman',serif} a{color:#0ff} /* [inferred] values */",
+  "traits": {
+   "surface": "textured",
+   "edge": "beveled",
+   "depth": "flat",
+   "shape": "sharp",
+   "color": "rainbow",
+   "contrast": "high",
+   "type": "serif",
+   "texture": "pattern",
+   "ornament": "stickers",
+   "layout": "collage",
+   "motion": "stepped",
+   "theme": "both"
+  },
+  "ui_fit": "marketing",
+  "fits": "Fan pages, personal sites, zines, playful portfolios and nostalgic campaigns.",
+  "goes_wrong": "Pastiche without content: moving GIFs and clashing colours bury the message and slow the page.",
+  "accessibility": "Blinking GIFs and busy tiled backgrounds hurt reading and can trigger seizures; keep text on a solid panel at 4.5:1, never flash more than 3 times a second, and stop animation under prefers-reduced-motion.",
+  "related": [
+   "y2k",
+   "pixel-art",
+   "brutalism",
+   "windows-95-classic"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "http://art.teleportacia.org/observation/vernacular/",
+    "supports": "Olia Lialina's essay: the mid-90s amateur web was bright, personal, slow and under construction"
+   },
+   {
+    "id": "S2",
+    "url": "http://contemporary-home-computing.org/vernacular-web-2/",
+    "supports": "Under Construction signs, outer space and starry backgrounds, MIDI files, blinking New! buttons, glitter graphics, repeating backgrounds, no clear structure"
+   },
+   {
+    "id": "S3",
+    "url": "https://www.cameronsworld.net/",
+    "supports": "GeoCities hosted personal homepages 1994 to 2009, over 38 million pages; spaces were expected to be always under construction"
+   }
+  ],
+  "examples": [
+   {
+    "name": "Cameron's World",
+    "url": "https://www.cameronsworld.net/",
+    "what": "A web collage of text and images taken from archived GeoCities pages"
+   },
+   {
+    "name": "Neocities",
+    "url": "https://neocities.org/about",
+    "what": "A free host for handmade personal static sites, in the GeoCities spirit, since 2013"
+   }
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "classic-mac-1bit",
+  "name": "Classic Mac (1-bit System software)",
+  "aliases": [
+   "System 6 look",
+   "1-bit Mac",
+   "original Macintosh UI",
+   "monochrome Mac"
+  ],
+  "plain": "Black and white early Mac screen: striped title bars, tiny pixel fonts.",
+  "people_say": [
+   "old Mac",
+   "black and white computer",
+   "1984 Mac",
+   "classic Macintosh",
+   "retro Apple",
+   "pixel windows",
+   "early computer desktop"
+  ],
+  "origin": "Apple Macintosh System software, 1984 to 1991; System 6 was the last monochrome version [S1]",
+  "defining": [
+   "Pure black and white pixels only; tone comes from dither patterns such as checkerboards [S2][S3]",
+   "Window title bars filled with thin horizontal black stripes [S3]",
+   "Rounded-rectangle buttons about 59 x 20 px; dialogs with a 2px border and a 2px hard offset shadow [S1][S3]",
+   "Bitmap system fonts: Chicago for menus and titles, Geneva for small text, Monaco for code [S3]",
+   "Differs from pixel-art: this is window chrome and controls, not illustration [inferred]"
+  ],
+  "code": ".dialog{background:#fff;border:2px solid #000;box-shadow:2px 2px 0 #000;font-family:Chicago,Geneva,monospace}",
+  "traits": {
+   "surface": "solid",
+   "edge": "outline",
+   "depth": "hard-offset",
+   "shape": "subtle",
+   "color": "monochrome",
+   "contrast": "high",
+   "type": "pixel",
+   "texture": "dither",
+   "ornament": "none",
+   "layout": "layered",
+   "motion": "still",
+   "theme": "light"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Writing apps, indie tools, retro games, nostalgic product pages and personal sites.",
+  "goes_wrong": "Tiny bitmap type and dense dither patterns at modern screen sizes become hard to read and feel like a costume.",
+  "accessibility": "Black on white passes easily, but dither patterns behind text fail; keep text on solid white, scale bitmap fonts in whole multiples, and add a clear focus outline.",
+  "related": [
+   "pixel-art",
+   "minimal-monochrome",
+   "mac-os-platinum",
+   "palm-pda"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://sakofchit.github.io/system.css/",
+    "supports": "Recreates Apple System software 1984 to 1991, based on System 6 as the last monochrome version; standard button 59 x 20 px, buttons are rounded rectangles"
+   },
+   {
+    "id": "S2",
+    "url": "https://hyperallergic.com/sketches-for-first-mac-icons-acquired-by-moma",
+    "supports": "Susan Kare drew the first Mac icons with basic black-and-white pixels, one graph-paper box per pixel; sketches acquired by MoMA"
+   },
+   {
+    "id": "S3",
+    "url": "https://unpkg.com/@sakun/system.css/dist/system.css",
+    "supports": "Stylesheet values: striped title bar gradient, 2px dialog border and 2px offset shadow, checkerboard pattern, Chicago, Geneva and Monaco fonts"
+   }
+  ],
+  "examples": [
+   {
+    "name": "system.css",
+    "url": "https://sakofchit.github.io/system.css/",
+    "what": "A CSS library that rebuilds System 6 windows, buttons and menus"
+   }
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "windows-95-classic",
+  "name": "Windows 95 classic",
+  "aliases": [
+   "Windows 98 look",
+   "Win95",
+   "bevelled grey UI",
+   "Windows Classic theme",
+   "retro OS UI"
+  ],
+  "plain": "Grey 90s PC windows with raised buttons and a blue title bar.",
+  "people_say": [
+   "Windows 95",
+   "old Windows",
+   "grey buttons",
+   "retro computer",
+   "90s PC",
+   "start menu look",
+   "old desktop app"
+  ],
+  "origin": "Microsoft Windows 95 (1995); the bevelled 3D look was popularised earlier by NeXTSTEP and OS/2 2.0 [S1]",
+  "defining": [
+   "Silver grey (#c0c0c0) windows and buttons [S2]",
+   "Raised bevels from stacked 1px inset shadows: white and light grey top-left, grey and near-black bottom-right; pressed buttons flip to sunken [S2]",
+   "Navy title bar, fading to a lighter blue in the Windows 98 version [S2]",
+   "Small pixel-style sans type; buttons at least 75 x 23 px [S2]",
+   "A taskbar with one Start button as the home base for every task [S3]"
+  ],
+  "code": "button{background:#c0c0c0;border:0;border-radius:0;box-shadow:inset -1px -1px #0a0a0a,inset 1px 1px #fff,inset -2px -2px grey,inset 2px 2px #dfdfdf}",
+  "traits": {
+   "surface": "solid",
+   "edge": "beveled",
+   "depth": "extruded",
+   "shape": "sharp",
+   "color": "neutral-accent",
+   "contrast": "high",
+   "type": "pixel",
+   "texture": "none",
+   "ornament": "none",
+   "layout": "layered",
+   "motion": "still",
+   "theme": "light"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Retro games, developer and internal tools with a wink, playful portfolios, nostalgia campaigns.",
+  "goes_wrong": "Rebuilding a whole fake desktop inside a web page so real navigation hides behind toy windows.",
+  "accessibility": "Bevels are the only state cue; keep near-black text on silver (well above 4.5:1), add a visible focus outline, and do not rely on a 1px bevel alone to tell pressed from disabled.",
+  "related": [
+   "skeuomorphism",
+   "windows-xp-luna",
+   "mac-os-platinum",
+   "classic-mac-1bit"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://toastytech.com/guis/win95.html",
+    "supports": "Windows 95 controls, dialogs and menus have a bevelled 3D look popularised by NeXTSTEP and OS/2 2.0; single Start button"
+   },
+   {
+    "id": "S2",
+    "url": "https://jdan.github.io/98.css/",
+    "supports": "98.css: silver surfaces, inset-shadow bevels, raised borders become sunken when pressed, navy to blue title bar, 75 x 23 px minimum buttons, pixel MS Sans Serif"
+   },
+   {
+    "id": "S3",
+    "url": "https://socket3.wordpress.com/2018/02/03/designing-windows-95s-user-interface/",
+    "supports": "Kent Sullivan's Microsoft usability paper: Start menu as a single-button home base, taskbar for switching windows"
+   }
+  ],
+  "examples": [
+   {
+    "name": "98.css",
+    "url": "https://jdan.github.io/98.css/",
+    "what": "A semantic, accessible CSS library that recreates Windows 98 controls"
+   }
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "mac-os-platinum",
+  "name": "Mac OS Platinum",
+  "aliases": [
+   "Mac OS 8 look",
+   "Mac OS 9 look",
+   "Platinum appearance",
+   "classic Mac OS grey"
+  ],
+  "plain": "Soft grey late-90s Mac windows with gentle 3D buttons.",
+  "people_say": [
+   "Mac OS 9",
+   "old Mac grey",
+   "classic Mac",
+   "late 90s Apple",
+   "retro Mac desktop",
+   "platinum grey"
+  ],
+  "origin": "Apple Mac OS 8 and 9, first built for the cancelled Copland system [S4]",
+  "defining": [
+   "Many shades of light grey, replacing the mostly black and white System 7 look, as a system-wide appearance people could switch off [S1][S4]",
+   "Bevel buttons are a standard control next to push buttons, radio buttons and checkboxes [S3]",
+   "People pick accent and highlight colours, used for selections, progress bars and scroll thumbs [S2][S4]",
+   "Charcoal as the system font, with Chicago as an option [S4]",
+   "Keeps System 7 shapes and positions; only the rendering turned grey and 3D [S4]"
+  ],
+  "code": ".btn{background:linear-gradient(#eee,#ccc);border:1px solid #555;border-radius:4px;box-shadow:inset 1px 1px #fff,inset -1px -1px #999} /* [inferred] values */",
+  "traits": {
+   "surface": "solid",
+   "edge": "beveled",
+   "depth": "extruded",
+   "shape": "subtle",
+   "color": "neutral-accent",
+   "contrast": "normal",
+   "type": "neo-grotesque",
+   "texture": "none",
+   "ornament": "none",
+   "layout": "layered",
+   "motion": "still",
+   "theme": "light"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Retro creative tools, music apps, calm utilities and nostalgic Apple-flavoured portfolios.",
+  "goes_wrong": "Grey on grey with faint bevels makes every control look disabled.",
+  "accessibility": "Light grey surfaces cut contrast; keep text near black (4.5:1 or more on the grey), give controls a 3:1 edge, and show focus with an outline, not only the accent colour.",
+  "related": [
+   "windows-95-classic",
+   "aqua",
+   "classic-mac-1bit",
+   "skeuomorphism"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://discmaster.textfiles.com/file/31888/Apple%20Developer%20CD%20Series%20Reference%20Library%20(Apple,%20Inc.)%20(September%201999)(Disk%202).iso/Technical%20Publications/mac/HIGOS8Guide/thig-7.html?html=true",
+    "supports": "Apple Mac OS 8 Human Interface Guidelines: system-wide platinum appearance that people can switch on or off"
+   },
+   {
+    "id": "S2",
+    "url": "https://discmaster.textfiles.com/file/31888/Apple%20Developer%20CD%20Series%20Reference%20Library%20(Apple,%20Inc.)%20(September%201999)(Disk%202).iso/Technical%20Publications/mac/HIGOS8Guide/thig-8.html?html=true",
+    "supports": "Same guidelines: figures use platinum appearance; the Appearance control panel offers a range of accent and highlight colours"
+   },
+   {
+    "id": "S3",
+    "url": "https://discmaster.textfiles.com/file/31888/Apple%20Developer%20CD%20Series%20Reference%20Library%20(Apple,%20Inc.)%20(September%201999)(Disk%202).iso/Technical%20Publications/mac/HIGOS8Guide/thig-9.html?html=true",
+    "supports": "Same guidelines: controls chapter lists push buttons, radio buttons, checkboxes and bevel buttons"
+   },
+   {
+    "id": "S4",
+    "url": "https://en.wikipedia.org/wiki/Appearance_Manager",
+    "supports": "Platinum was meant for Copland; shades of grey replace black and white; Charcoal default font with Chicago option; palettes for progress bars, scroll thumbs and selections"
+   }
+  ],
+  "examples": [
+   {
+    "name": "Classicy",
+    "url": "https://github.com/robbiebyrd/classicy",
+    "what": "React components replicating Mac OS 8 interface parts, including bevel buttons and Platinum list views"
+   }
+  ],
+  "confidence": "medium"
+ },
+ {
+  "id": "aqua",
+  "name": "Aqua (early Mac OS X)",
+  "aliases": [
+   "Aqua",
+   "lickable UI",
+   "gel buttons",
+   "Mac OS X Tiger look",
+   "pinstripe Mac"
+  ],
+  "plain": "Shiny blue gel buttons, pinstriped windows and soft shadows.",
+  "people_say": [
+   "shiny Mac buttons",
+   "glossy blue buttons",
+   "early 2000s Mac",
+   "candy buttons",
+   "jelly buttons",
+   "OS X look",
+   "lickable"
+  ],
+  "origin": "Apple Mac OS X, unveiled at Macworld San Francisco in January 2000 [S1]",
+  "defining": [
+   "Luminous, semi-transparent buttons, scroll bars and windows with fluid animation [S1]",
+   "Blue, white and grey palette; the default button is blue and pulses [S2]",
+   "Gel or glass highlight on rounded controls; red, yellow and green window buttons [S2]",
+   "Early window backgrounds use fine pinstripes, later plain white; windows are separated by drop shadows, not frames [S2]",
+   "Lucida Grande system type; windows shrink into the Dock with the Genie effect [S2]"
+  ],
+  "code": "button{border-radius:999px;background:linear-gradient(#cfe6ff 0%,#5aa6f2 50%,#2f7fe0 51%,#8cc8ff 100%);box-shadow:0 2px 4px rgba(0,0,0,.35)} /* [inferred] values */",
+  "traits": {
+   "surface": "glossy",
+   "edge": "hairline",
+   "depth": "soft-shadow",
+   "shape": "pill",
+   "color": "neutral-accent",
+   "contrast": "normal",
+   "type": "humanist",
+   "texture": "pattern",
+   "ornament": "none",
+   "layout": "layered",
+   "motion": "subtle",
+   "theme": "light"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Media players, playful utilities, nostalgic product pages and early-2000s tributes.",
+  "goes_wrong": "Gloss on everything: when every control shines, nothing reads as the main action.",
+  "accessibility": "White text on mid-blue gel can fall below 4.5:1; use dark text on light gel or deepen the blue, and stop pulsing buttons under prefers-reduced-motion.",
+  "related": [
+   "skeuomorphism",
+   "web-2-gloss",
+   "frutiger-aero",
+   "liquid-glass",
+   "mac-os-platinum"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://www.apple.com/newsroom/2000/01/05Apple-Unveils-Mac-OS-X/",
+    "supports": "Apple press release, 5 January 2000: Aqua has luminous, semi-transparent buttons, scroll bars and windows and fluid animation"
+   },
+   {
+    "id": "S2",
+    "url": "https://en.wikipedia.org/wiki/Aqua_(user_interface)",
+    "supports": "Blue, white and grey palette, gel effect, pulsing default button, pinstripes then white, drop shadows, Lucida Grande, Genie effect, graphite option"
+   }
+  ],
+  "examples": [],
+  "confidence": "high"
+ },
+ {
+  "id": "windows-xp-luna",
+  "name": "Windows XP Luna",
+  "aliases": [
+   "Luna",
+   "Windows XP look",
+   "XP blue",
+   "Fisher-Price UI"
+  ],
+  "plain": "Bright blue rounded title bars, green Start button, beige windows.",
+  "people_say": [
+   "Windows XP",
+   "XP style",
+   "2000s PC",
+   "blue title bar",
+   "green start button",
+   "early 2000s computer"
+  ],
+  "origin": "Microsoft Windows XP (2001), visual style developed with Frog Design [S2]",
+  "defining": [
+   "Saturated blue title bars with a glossy vertical gradient and about 8px rounded top corners [S1][S2]",
+   "Warm beige-grey window body (#ece9d8); buttons with a 3px radius, dark blue border and white-to-beige gradient [S1]",
+   "Trebuchet MS for title bars, Tahoma for most other text [S2]",
+   "Shipped in blue, olive green and silver; critics called it a Fisher-Price interface [S2]",
+   "Differs from frutiger-aero: opaque plastic chrome, not glass, water or nature imagery [inferred]"
+  ],
+  "code": ".title-bar{background:linear-gradient(180deg,#0997ff,#0053ee 8%,#0050ee 40%,#06f 88%,#003dd7);border-radius:8px 8px 0 0;font-family:'Trebuchet MS',sans-serif;color:#fff}",
+  "traits": {
+   "surface": "gradient",
+   "edge": "outline",
+   "depth": "extruded",
+   "shape": "rounded",
+   "color": "vivid",
+   "contrast": "normal",
+   "type": "humanist",
+   "texture": "none",
+   "ornament": "none",
+   "layout": "layered",
+   "motion": "still",
+   "theme": "light"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Nostalgia sites, retro game interfaces, playful dashboards and 2000s-themed campaigns.",
+  "goes_wrong": "Heavy saturated chrome competes with content and reads as childish in serious products.",
+  "accessibility": "White title text on the light end of the blue gradient can dip below 4.5:1; deepen the gradient or add a dark text shadow, and keep focus outlines visible on beige.",
+  "related": [
+   "windows-95-classic",
+   "frutiger-aero",
+   "aqua",
+   "web-2-gloss"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://unpkg.com/xp.css@0.2.6/dist/XP.css",
+    "supports": "XP.css stylesheet: title bar blue gradient, 8px top radius, Trebuchet MS title, #ece9d8 body, 3px button radius with gradient"
+   },
+   {
+    "id": "S2",
+    "url": "https://en.wikipedia.org/wiki/Windows_XP_visual_styles",
+    "supports": "Luna by Frog Design, saturated colours and rounded window corners, blue, olive green and silver variants, Trebuchet MS and Tahoma, Fisher-Price nickname"
+   }
+  ],
+  "examples": [
+   {
+    "name": "XP.css",
+    "url": "https://botoxparty.github.io/XP.css/",
+    "what": "A CSS library extending 98.css with Windows XP windows, buttons and title bars"
+   }
+  ],
+  "confidence": "medium"
+ },
+ {
+  "id": "web-2-gloss",
+  "name": "Web 2.0 gloss",
+  "aliases": [
+   "Web 2.0",
+   "glossy web",
+   "2000s startup look",
+   "wet floor reflection",
+   "beta badge style"
+  ],
+  "plain": "Shiny buttons, reflections, big friendly text and a 'Free!' starburst.",
+  "people_say": [
+   "Web 2.0",
+   "glossy buttons",
+   "2007 website",
+   "shiny startup site",
+   "reflection under the logo",
+   "beta badge",
+   "old app landing page"
+  ],
+  "origin": "Web-app and startup sites from the mid 2000s to the early 2010s [S1][S3]",
+  "defining": [
+   "Bright saturated colours, green the unofficial favourite, plus blues, oranges and pinks [S1]",
+   "Rounded corners on everything and rounded typefaces in logos [S1]",
+   "Big text, short copy, white space and starburst badges shouting Free or Beta [S1][S2]",
+   "Glossy buttons: a two-tone gradient with a hard split near the middle and a white highlight over the top half; mirror reflections under product shots [S3][S2]",
+   "Differs from frutiger-aero: a landing-page formula without its sky, water and nature imagery [inferred]"
+  ],
+  "code": ".btn{border-radius:20px;background:linear-gradient(#c8ffc5 0%,#1fbf24 55%,#009a05 55%,#457a28 100%);box-shadow:0 2px 4px rgba(0,0,0,.3)} /* shadow and radius [inferred] */",
+  "traits": {
+   "surface": "glossy",
+   "edge": "none",
+   "depth": "soft-shadow",
+   "shape": "rounded",
+   "color": "vivid",
+   "contrast": "normal",
+   "type": "rounded",
+   "texture": "none",
+   "ornament": "stickers",
+   "layout": "minimal",
+   "motion": "still",
+   "theme": "light"
+  },
+  "ui_fit": "marketing",
+  "fits": "Retro-themed landing pages, playful product launches and nostalgic SaaS tributes.",
+  "goes_wrong": "The checklist trap: gradient, badge, reflection and huge type added by habit rather than purpose [S2].",
+  "accessibility": "White text on bright green or orange gloss often fails; test the lightest gradient stop behind text at 4.5:1.",
+  "related": [
+   "frutiger-aero",
+   "aqua",
+   "windows-xp-luna",
+   "y2k",
+   "skeuomorphism"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://jonathannicol.com/blog/2006/10/21/the-visual-design-of-web-20/",
+    "supports": "2006 essay: bright colours with green as the unofficial colour, rounded corners and typefaces, Free starbursts, big text, white space"
+   },
+   {
+    "id": "S2",
+    "url": "https://thenextweb.com/news/3-ways-to-go-beyond-web-20-design",
+    "supports": "2008 article: the unwritten Web 2.0 checklist of gradients, round corners, mirror effects, a badge and very large key text"
+   },
+   {
+    "id": "S3",
+    "url": "https://frutigeraeroarchive.org/blog/posts/20_09_2025",
+    "supports": "2025 how-to: Web 2.0 Gloss common about 2007 to early 2010s; glossy two-tone gradient button with a top highlight, reflections under objects"
+   }
+  ],
+  "examples": [
+   {
+    "name": "Frutiger Aero Archive",
+    "url": "https://frutigeraeroarchive.org/blog/posts/20_09_2025",
+    "what": "Site built with CSS glossy buttons in the Web 2.0 Gloss manner"
+   }
+  ],
+  "confidence": "medium"
+ },
+ {
+  "id": "metro",
+  "name": "Metro (Microsoft Design Language)",
+  "aliases": [
+   "Metro UI",
+   "Modern UI",
+   "Windows Phone style",
+   "live tiles",
+   "Microsoft Design Language"
+  ],
+  "plain": "Flat bright tiles and big thin lowercase words, no decoration.",
+  "people_say": [
+   "Windows Phone",
+   "Windows 8 tiles",
+   "big tiles",
+   "flat colored squares",
+   "huge thin text",
+   "Zune look",
+   "tile dashboard"
+  ],
+  "origin": "Microsoft: early signs in Encarta 95, Media Center and Zune, launched as Metro with Windows Phone 7 in 2010 [S1]",
+  "defining": [
+   "Typography first: very large, light headings, often lowercase, on sideways-scrolling canvases [S1]",
+   "Flat solid-colour square and wide tiles; live tiles animate fresh content [S1][S3]",
+   "No faux textures, shadows, bevels or 3D icons; content before chrome [S2]",
+   "Rooted in Swiss graphic design and public transit signage [S1]",
+   "Motion acknowledges every tap and transition to make the UI feel alive [S1]"
+  ],
+  "code": "h1{font:300 4.5rem/1 'Segoe UI',sans-serif;text-transform:lowercase;margin-left:-.05em} .tile{background:#0078d7;aspect-ratio:1} /* [inferred] values */",
+  "traits": {
+   "surface": "solid",
+   "edge": "none",
+   "depth": "flat",
+   "shape": "sharp",
+   "color": "vivid",
+   "contrast": "high",
+   "type": "humanist",
+   "texture": "none",
+   "ornament": "none",
+   "layout": "grid",
+   "motion": "kinetic",
+   "theme": "both"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Glanceable status dashboards, media hubs, kiosks, TV and touch-first apps.",
+  "goes_wrong": "Flat tiles hide what is clickable and spread little information over a lot of space [S3].",
+  "accessibility": "Flat text links lack affordance and white text on light tile colours can fail; mark actions with icons or underlines, check every tile colour at 4.5:1, and stop live-tile animation under reduced motion.",
+  "related": [
+   "flat",
+   "swiss",
+   "bento",
+   "fluent"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://en.wikipedia.org/wiki/Metro_(design_language)",
+    "supports": "History from Encarta 95 to Windows Phone 7 (2010), Swiss design and transit-sign roots, light thin font, lowercase headings, large titles, live tiles, motion"
+   },
+   {
+    "id": "S2",
+    "url": "https://principles.design/examples/design-principles-for-windows-store-apps",
+    "supports": "Microsoft's Windows Store app principles: authentically digital, bold vibrant colours, beautiful typography, content before chrome"
+   },
+   {
+    "id": "S3",
+    "url": "https://www.nngroup.com/articles/windows-8-disappointing-usability/",
+    "supports": "NN/g 2012: flat style reduces discoverability, low information density, overly live tiles backfire"
+   }
+  ],
+  "examples": [],
+  "confidence": "high"
+ },
+ {
+  "id": "material-you",
+  "name": "Material You / Material 3 Expressive",
+  "aliases": [
+   "Material 3",
+   "M3",
+   "M3 Expressive",
+   "dynamic color",
+   "Android 12+ look"
+  ],
+  "plain": "Soft colour pulled from your wallpaper, chunky rounded shapes, springy motion.",
+  "people_say": [
+   "Android style",
+   "Pixel phone look",
+   "colors from my wallpaper",
+   "bubbly rounded buttons",
+   "playful Google look",
+   "big pill buttons",
+   "bouncy shapes"
+  ],
+  "origin": "Google: dynamic colour arrived in Android 12; Material 3 Expressive pairs with Android 16 [S1][S2]",
+  "defining": [
+   "One source colour from the wallpaper becomes five key colours, each turned into a 13-tone palette for light and dark schemes [S1]",
+   "A shape scale from square to fully round, and polygon shapes that morph into each other in animation [S2][S4]",
+   "Spring-based motion: neighbouring items react as you drag and dismiss [S3]",
+   "Expressive version uses size, colour, shape and containment to push the key action; 46 studies with 18,000+ people found key elements spotted up to 4x faster [S5]",
+   "Differs from material-elevation (Material 1 paper and shadow): depth comes mostly from tonal colour, not drop shadows [inferred]"
+  ],
+  "code": ".fab{border-radius:28px;background:var(--md-sys-color-primary-container);color:var(--md-sys-color-on-primary-container);transition:border-radius .35s cubic-bezier(.34,1.56,.64,1)} /* [inferred] values */",
+  "traits": {
+   "surface": "solid",
+   "edge": "none",
+   "depth": "tonal",
+   "shape": "rounded",
+   "color": "tonal",
+   "contrast": "normal",
+   "type": "neo-grotesque",
+   "texture": "none",
+   "ornament": "geometric-shapes",
+   "layout": "grid",
+   "motion": "springy",
+   "theme": "both"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Android apps, consumer mobile products, personalised dashboards and friendly productivity tools.",
+  "goes_wrong": "Wallpaper colours mixed by hand give muddy, low-contrast pairs; use the paired on-colour roles instead.",
+  "accessibility": "Always pair each container colour with its on-colour role to keep 4.5:1, and turn shape morphs and springs off under reduced motion.",
+  "related": [
+   "material-elevation",
+   "flat",
+   "playful",
+   "claymorphism"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://developer.android.com/develop/ui/views/theming/dynamic-colors",
+    "supports": "Dynamic Color added in Android 12: wallpaper source colour, five key colours, 13-tone palettes, light and dark schemes"
+   },
+   {
+    "id": "S2",
+    "url": "https://developer.android.com/develop/ui/compose/designsystems/material3",
+    "supports": "Compose implements Material You and Material 3 Expressive, which complements Android 16; shape scale from square to fully circular"
+   },
+   {
+    "id": "S3",
+    "url": "https://blog.google/products/android/material-3-expressive-android-wearos-launch/",
+    "supports": "Google: Material 3 Expressive builds on Material You with springy animations, notifications that respond to drag, blurred shade, shape-morphing on Wear OS"
+   },
+   {
+    "id": "S4",
+    "url": "https://developer.android.com/develop/ui/compose/graphics/draw/shapes",
+    "supports": "Graphics-shapes library: rounded polygons and Morph objects for animating between shapes"
+   },
+   {
+    "id": "S5",
+    "url": "https://design.google/library/expressive-material-design-google-research",
+    "supports": "46 studies, 18,000+ participants; colour, shape, size, motion and containment; key elements found up to four times faster"
+   }
+  ],
+  "examples": [],
+  "confidence": "high"
+ },
+ {
+  "id": "fluent",
+  "name": "Microsoft Fluent (Acrylic and Mica)",
+  "aliases": [
+   "Fluent Design",
+   "Fluent 2",
+   "Windows 11 look",
+   "acrylic",
+   "Mica",
+   "Project Neon"
+  ],
+  "plain": "Frosted, slightly grainy panels over a softly tinted Windows backdrop.",
+  "people_say": [
+   "Windows 11",
+   "frosted Windows panels",
+   "modern Microsoft look",
+   "acrylic blur",
+   "soft rounded Windows",
+   "Office style"
+  ],
+  "origin": "Microsoft, announced at Build 2017 (codename Project Neon) as the successor to Metro [S4][S5]",
+  "defining": [
+   "Acrylic recipe: background, blur, exclusion blend, colour tint and a layer of noise; the noise and tint set it apart from plain glassmorphism [S1]",
+   "Mica: an opaque base layer tinted once from the desktop wallpaper, falling back to neutral when the window is inactive [S2]",
+   "Two-layer layout: Mica base, then a low-opacity content layer or cards on top [S2]",
+   "8px radius for windows, flyouts and dialogs; 4px for buttons and in-page items [S3]",
+   "Built on light, depth, motion, material and scale; the Reveal hover light on borders has been discontinued [S4][S5]"
+  ],
+  "code": ".pane{background:rgba(243,243,243,.7);backdrop-filter:blur(30px) saturate(125%);border-radius:8px} /* [inferred] values; add a faint noise image for acrylic */",
+  "traits": {
+   "surface": "translucent",
+   "edge": "hairline",
+   "depth": "layered",
+   "shape": "subtle",
+   "color": "neutral-accent",
+   "contrast": "normal",
+   "type": "humanist",
+   "texture": "grain",
+   "ornament": "none",
+   "layout": "layered",
+   "motion": "subtle",
+   "theme": "both"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Windows apps, productivity and enterprise tools, settings panels and Office-like web apps.",
+  "goes_wrong": "Acrylic placed edge to edge creates seams and visual noise; it belongs on transient or secondary surfaces [S1].",
+  "accessibility": "Acrylic turns solid in High Contrast, Battery Saver and with transparency off; mirror that with prefers-reduced-transparency and avoid accent-coloured text on acrylic [S1].",
+  "related": [
+   "glassmorphism",
+   "metro",
+   "liquid-glass",
+   "material-elevation"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://learn.microsoft.com/en-us/windows/apps/design/style/acrylic",
+    "supports": "Acrylic recipe (blur, exclusion blend, tint, noise), seams when placed edge to edge, solid fallbacks, no accent text on acrylic"
+   },
+   {
+    "id": "S2",
+    "url": "https://learn.microsoft.com/en-us/windows/apps/design/style/mica",
+    "supports": "Mica is opaque, samples the wallpaper once, neutral when inactive; base layer plus content layer"
+   },
+   {
+    "id": "S3",
+    "url": "https://learn.microsoft.com/en-us/windows/apps/design/signature-experiences/geometry",
+    "supports": "Windows 11 corner radii: 8px top-level containers, 4px in-page controls"
+   },
+   {
+    "id": "S4",
+    "url": "https://www.engadget.com/2017-05-11-microsoft-windows-10-fluent-design.html",
+    "supports": "Fluent announced 2017 with five elements: light, depth, motion, material and scale"
+   },
+   {
+    "id": "S5",
+    "url": "https://en.wikipedia.org/wiki/Fluent_Design_System",
+    "supports": "Codename Project Neon, revamp of Metro, Reveal highlight discontinued with WinUI 2.6"
+   }
+  ],
+  "examples": [],
+  "confidence": "high"
+ },
+ {
+  "id": "liquid-glass",
+  "name": "Apple Liquid Glass",
+  "aliases": [
+   "Liquid Glass",
+   "iOS 26 look",
+   "lensing glass",
+   "macOS Tahoe style"
+  ],
+  "plain": "Clear floating glass controls that bend light and shine at edges.",
+  "people_say": [
+   "iOS 26 look",
+   "new Apple glass",
+   "liquid glass",
+   "floating glass buttons",
+   "see-through tab bar",
+   "glass that bends the background",
+   "Apple 2025 design"
+  ],
+  "origin": "Apple, announced 9 June 2025 for iOS 26, iPadOS 26, macOS Tahoe 26, watchOS 26 and tvOS 26 [S1]",
+  "defining": [
+   "Lensing: the glass bends and concentrates light from the content below, where older materials only scattered it (the frosted blur of glassmorphism) [S2]",
+   "Highlights from virtual light sources move around the edge on interaction and with device motion; bigger pieces look thicker, with deeper shadows and stronger refraction [S2]",
+   "Only for a floating layer of controls and navigation such as tab bars and sidebars, never the content layer [S3]",
+   "Two variants: regular (blurs and adjusts luminosity) and clear (very see-through, with a 35% dark dimming layer over bright media) [S3]",
+   "Controls nest concentrically in rounded window corners and shrink or morph as you scroll [S1][S2]"
+  ],
+  "code": ".bar{border-radius:999px;background:rgba(255,255,255,.12);backdrop-filter:blur(2px) saturate(180%);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 8px 24px rgba(0,0,0,.2)} /* [inferred] approximation; real lensing needs an SVG displacement filter */",
+  "traits": {
+   "surface": "translucent",
+   "edge": "glow",
+   "depth": "glass",
+   "shape": "pill",
+   "color": "neutral-accent",
+   "contrast": "low",
+   "type": "neo-grotesque",
+   "texture": "none",
+   "ornament": "none",
+   "layout": "layered",
+   "motion": "springy",
+   "theme": "both"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Media, photo and map apps and immersive consumer apps with rich content behind the controls.",
+  "goes_wrong": "Clear glass over busy content loses contrast, and controls that animate for no reason distract [S4].",
+  "accessibility": "Support Reduce Transparency and Increase Contrast (prefers-reduced-transparency, prefers-contrast) with an opaque fallback; dim behind clear glass and check text at 4.5:1 over the worst background [S3][S4].",
+  "related": [
+   "glassmorphism",
+   "visionos-spatial",
+   "aqua",
+   "fluent"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://www.apple.com/newsroom/2025/06/apple-introduces-a-delightful-and-elegant-new-software-design/",
+    "supports": "Apple newsroom, 9 June 2025: translucent material that reflects and refracts surroundings, real-time specular highlights, tab bars shrink on scroll, platforms list"
+   },
+   {
+    "id": "S2",
+    "url": "https://developer.apple.com/videos/play/wwdc2025/219/",
+    "supports": "WWDC25 Meet Liquid Glass: lensing bends and concentrates light, highlights layer, thicker material when larger, concentric nesting in window corners"
+   },
+   {
+    "id": "S3",
+    "url": "https://developer.apple.com/design/human-interface-guidelines/materials",
+    "supports": "HIG Materials: not in the content layer, use sparingly, regular and clear variants, 35% dimming layer for bright content"
+   },
+   {
+    "id": "S4",
+    "url": "https://www.nngroup.com/articles/liquid-glass/",
+    "supports": "NN/g, October 2025: legibility and contrast problems over busy backgrounds, motion for motion's sake"
+   }
+  ],
+  "examples": [],
+  "confidence": "high"
+ },
+ {
+  "id": "visionos-spatial",
+  "name": "visionOS spatial UI",
+  "aliases": [
+   "spatial computing UI",
+   "Vision Pro style",
+   "spatial glass windows",
+   "visionOS"
+  ],
+  "plain": "Floating glass windows in your room that light up when looked at.",
+  "people_say": [
+   "Vision Pro look",
+   "floating windows",
+   "spatial UI",
+   "AR glass panels",
+   "3D interface",
+   "mixed reality app"
+  ],
+  "origin": "Apple visionOS for Apple Vision Pro [S1]; visionOS guidance added to Apple's design guidelines in June 2023 [S2]",
+  "defining": [
+   "Windows sit on a fixed glass material that lets light, the room and other content show through [S2][S3]",
+   "No separate dark mode: glass adapts to the brightness behind it, and vibrancy keeps text legible [S2]",
+   "The system adds highlights, specular reflections and shadows for depth; ornaments float just off a window's edge [S3]",
+   "Looking at a control lights it up (hover effect); keep target centres at least 60 pt apart [S4]",
+   "Differs from glassmorphism and liquid-glass: whole windows are glass placed at real distances in 3D space [inferred]"
+  ],
+  "code": ".window{background:rgba(128,128,128,.3);backdrop-filter:blur(40px) saturate(150%);border-radius:46px;color:#fff} /* [inferred] values */",
+  "traits": {
+   "surface": "translucent",
+   "edge": "hairline",
+   "depth": "layered",
+   "shape": "rounded",
+   "color": "neutral-accent",
+   "contrast": "normal",
+   "type": "neo-grotesque",
+   "texture": "none",
+   "ornament": "3d-objects",
+   "layout": "layered",
+   "motion": "subtle",
+   "theme": "both"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Spatial and AR apps, immersive media, 3D product viewers and pages that preview spatial products.",
+  "goes_wrong": "Pasting a flat-screen layout onto glass: small, crowded targets and opaque panels feel heavy and are hard to aim at with the eyes [S3][S4].",
+  "accessibility": "Space targets 60 pt apart, avoid repeating patterns that fill the view, use high-legibility vibrancy for text, and give an opaque option for reduced transparency [S4][S2].",
+  "related": [
+   "liquid-glass",
+   "glassmorphism",
+   "fluent"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://developer.apple.com/design/human-interface-guidelines/designing-for-visionos",
+    "supports": "visionOS basics: windows, volumes, immersion, passthrough, eyes and hands"
+   },
+   {
+    "id": "S2",
+    "url": "https://developer.apple.com/design/human-interface-guidelines/materials",
+    "supports": "visionOS windows use glass; no distinct Dark Mode, glass adapts to luminance; vibrancy for text; visionOS guidance added June 21, 2023"
+   },
+   {
+    "id": "S3",
+    "url": "https://developer.apple.com/design/human-interface-guidelines/windows",
+    "supports": "Default window is an upright plane of glass with specular reflections and shadows; ornaments; opaque backgrounds feel heavy"
+   },
+   {
+    "id": "S4",
+    "url": "https://developer.apple.com/design/human-interface-guidelines/eyes",
+    "supports": "Hover effect on gaze; 16 pt margin or 60 pt between centres; avoid repeating patterns that fill the field of view"
+   }
+  ],
+  "examples": [],
+  "confidence": "high"
+ },
+ {
+  "id": "e-ink",
+  "name": "E-ink / e-paper",
+  "aliases": [
+   "e-paper",
+   "Kindle look",
+   "electronic paper",
+   "e-reader UI",
+   "paper display"
+  ],
+  "plain": "Calm black ink on grey-white paper, no glow and no animation.",
+  "people_say": [
+   "Kindle",
+   "e-reader",
+   "paper screen",
+   "calm screen",
+   "newspaper-like app",
+   "no blue light",
+   "ink look"
+  ],
+  "origin": "Electrophoretic ink from E Ink, used in e-readers, shelf labels and calendars [S1][S2]",
+  "defining": [
+   "Reflective with no backlight: black and white particles in tiny capsules, so it reads like print and holds an image with no power [S1][S2]",
+   "Slow changes: a full refresh takes about 2 to 4 seconds and flashes, and fast partial refreshes leave ghosting [S2]",
+   "So no animation: state changes are hard cuts, with paging instead of smooth scrolling [S2][inferred]",
+   "Very few grey levels (one panel gets 4 greys with a slower waveform); colour panels show a handful of inks with grainy dithering [S2]"
+  ],
+  "code": "body{background:#f4f4f0;color:#111} *{transition:none!important;animation:none!important;box-shadow:none!important} /* [inferred] values */",
+  "traits": {
+   "surface": "paper",
+   "edge": "outline",
+   "depth": "flat",
+   "shape": "sharp",
+   "color": "monochrome",
+   "contrast": "high",
+   "type": "serif",
+   "texture": "paper",
+   "ornament": "none",
+   "layout": "minimal",
+   "motion": "still",
+   "theme": "light"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Reading apps, focus and calm tools, rarely updated dashboards, low-power devices and wellbeing products.",
+  "goes_wrong": "Faking it with flat light greys and hairlines, which looks washed out rather than inky.",
+  "accessibility": "Keep near-black on off-white well above 4.5:1, use thick strokes and large type, and give focus a heavy outline; the lack of motion already suits reduced motion.",
+  "related": [
+   "minimal-monochrome",
+   "editorial",
+   "palm-pda",
+   "braun-functionalism"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://www.eink.com/tech/detail/How_it_works",
+    "supports": "E Ink: electronic ink of microcapsules holding white and black charged particles, used to make ePaper displays"
+   },
+   {
+    "id": "S2",
+    "url": "https://docs.waveshare.com/ESP32-Peripheral-Tutorials/Display/E-Paper",
+    "supports": "Waveshare docs: bistable and reflective, no backlight, full refresh about 2 to 4 s with flashing, ghosting after partial refresh, not suitable for animation, 4-grey mode, Spectra 6 colours with dithering"
+   }
+  ],
+  "examples": [],
+  "confidence": "medium"
+ },
+ {
+  "id": "dos-tui",
+  "name": "DOS text-mode TUI",
+  "aliases": [
+   "text user interface",
+   "Turbo Vision look",
+   "Norton Commander style",
+   "blue screen app",
+   "ASCII UI",
+   "CP437 boxes"
+  ],
+  "plain": "Full-screen text windows drawn with line characters on bright blue.",
+  "people_say": [
+   "old DOS program",
+   "blue text screen",
+   "ASCII boxes",
+   "Norton Commander",
+   "retro text menu",
+   "terminal app with windows",
+   "BIOS setup look"
+  ],
+  "origin": "IBM PC programs of the 1980s and early 1990s such as Norton Commander, WordPerfect and Borland's Turbo Vision IDEs (1990) [S1][S2]",
+  "defining": [
+   "Usually a blue background with white or yellow characters [S1]",
+   "Frames, windows and dialogs drawn with box-drawing characters from IBM code page 437, such as ┌ and ╣ [S1]",
+   "A fixed grid of character cells set in raster text-mode fonts such as IBM VGA 8x16 [S3]",
+   "Menu bars, list boxes, check boxes and radio buttons all built from text, with mouse support [S2]",
+   "Differs from terminal: a full-screen windowed app made of text, not a scrolling command prompt [inferred]"
+  ],
+  "code": "body{background:#0000aa;color:#fff;font:16px/1 'IBM VGA 8x16',monospace} .win{border:3px double #fff;box-shadow:1ch 1ch 0 #000} /* shadow [inferred] */",
+  "traits": {
+   "surface": "solid",
+   "edge": "outline",
+   "depth": "hard-offset",
+   "shape": "sharp",
+   "color": "vivid",
+   "contrast": "high",
+   "type": "mono",
+   "texture": "none",
+   "ornament": "ascii",
+   "layout": "dense",
+   "motion": "stepped",
+   "theme": "dark-first"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Developer tools, CLIs with a UI, keyboard-first internal tools, retro games and hacker-themed sites.",
+  "goes_wrong": "Mixing proportional fonts or fractional widths so the box characters stop lining up.",
+  "accessibility": "White on deep blue passes, but yellow and cyan accents need checking; make every action keyboard reachable and hide box-drawing art from screen readers.",
+  "related": [
+   "terminal",
+   "crt-phosphor",
+   "pixel-art",
+   "financial-terminal"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://en.wikipedia.org/wiki/Text-based_user_interface",
+    "supports": "Blue background with white or yellow characters, box-drawing characters from code page 437, examples Norton Commander, WordPerfect, Turbo Pascal"
+   },
+   {
+    "id": "S2",
+    "url": "https://en.wikipedia.org/wiki/Turbo_Vision",
+    "supports": "Borland character-mode framework, 1990, with menus, list boxes, check boxes, radio buttons and mouse support"
+   },
+   {
+    "id": "S3",
+    "url": "https://int10h.org/oldschool-pc-fonts/",
+    "supports": "Archive of DOS-era text-mode raster fonts such as IBM VGA 8x16, free under CC BY-SA 4.0"
+   }
+  ],
+  "examples": [
+   {
+    "name": "WebTUI",
+    "url": "https://webtui.ironclad.sh/",
+    "what": "A CSS library of terminal-style components with ASCII boxes for the web"
+   },
+   {
+    "name": "Turbo Vision (magiblot port)",
+    "url": "https://github.com/magiblot/tvision",
+    "what": "The classic Turbo Vision text UI framework, ported to modern systems"
+   }
+  ],
+  "confidence": "medium"
+ },
+ {
+  "id": "crt-phosphor",
+  "name": "CRT phosphor glow",
+  "aliases": [
+   "green screen",
+   "amber monitor",
+   "retro CRT",
+   "scanline glow",
+   "phosphor terminal"
+  ],
+  "plain": "Glowing green or amber letters on black with faint scanlines.",
+  "people_say": [
+   "old monitor",
+   "green screen",
+   "amber screen",
+   "glowing text",
+   "scanlines",
+   "retro computer screen",
+   "80s computer screen"
+  ],
+  "origin": "Monochrome CRT monitors of the 1960s to 1980s; P1 phosphor glows green, P3 amber, P4 white [S1]",
+  "defining": [
+   "One colour of light on black: green, amber or 'page white'; emulators keep amber and green presets [S1][S3]",
+   "Soft bloom around text, faked with a text-shadow of about 5px [S2]",
+   "Horizontal scanlines: a repeating gradient with a 1px dark line every 2px over the content [S2]",
+   "A radial glow brightest at the centre of the screen [S2]",
+   "Differs from terminal: this is the display's physics (glow, lines, flicker) and can wrap any content, not only a command line [inferred]"
+  ],
+  "code": "body{background:radial-gradient(rgba(0,150,0,.75),#000 120%);color:#33ff66;text-shadow:0 0 5px currentColor} body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.15) 0 1px,transparent 1px 2px)} /* text colour [inferred] */",
+  "traits": {
+   "surface": "luminous",
+   "edge": "glow",
+   "depth": "glow",
+   "shape": "sharp",
+   "color": "monochrome",
+   "contrast": "high",
+   "type": "mono",
+   "texture": "scanlines",
+   "ornament": "none",
+   "layout": "minimal",
+   "motion": "subtle",
+   "theme": "dark"
+  },
+  "ui_fit": "marketing",
+  "fits": "Game interfaces, title screens, retro-tech landing pages, event sites and music visuals.",
+  "goes_wrong": "Blur and scanlines over long body text make it tiring to read; it works for headlines and short bursts.",
+  "accessibility": "Glow and scanlines lower legibility; keep core text crisp at 4.5:1, put effects on a decorative layer, and remove flicker under reduced motion.",
+  "related": [
+   "terminal",
+   "dos-tui",
+   "pixel-art",
+   "financial-terminal"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://en.wikipedia.org/wiki/Monochrome_monitor",
+    "supports": "Monochrome CRTs of the 1960s to 1980s; P1 green, P3 amber, P4 page white; amber seen as easier on the eyes"
+   },
+   {
+    "id": "S2",
+    "url": "https://css-tricks.com/old-timey-terminal-styling/",
+    "supports": "CSS-Tricks: radial gradient green glow, text-shadow 0 0 5px for blur, repeating 1px/2px gradient for monitor lines"
+   },
+   {
+    "id": "S3",
+    "url": "https://github.com/Swordfish90/cool-retro-term",
+    "supports": "Terminal emulator that mimics old cathode tube screens, with default amber and green profiles"
+   }
+  ],
+  "examples": [
+   {
+    "name": "cool-retro-term",
+    "url": "https://github.com/Swordfish90/cool-retro-term",
+    "what": "A terminal emulator styled like an old amber or green cathode screen"
+   }
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "financial-terminal",
+  "name": "Financial terminal (dense trading screen)",
+  "aliases": [
+   "Bloomberg-style terminal",
+   "trading terminal",
+   "market data screen",
+   "amber on black"
+  ],
+  "plain": "Packed tables of amber numbers on black, built for experts.",
+  "people_say": [
+   "Bloomberg look",
+   "trading screen",
+   "stock terminal",
+   "data heavy dashboard",
+   "black and orange screen",
+   "lots of numbers",
+   "pro trader UI"
+  ],
+  "origin": "Market data terminals; the Bloomberg Terminal has worked this way since 1982 [S1]",
+  "defining": [
+   "Amber characters on black by default, a scheme from early computing [S1]",
+   "Screens dense with text, mostly tables, with charts where useful [S1]",
+   "Multi-monitor setups and a dedicated keyboard with keys such as EQUITY, GOVT and NEWS [S1][S3]",
+   "Yellow and orange text on black that outsiders find ugly but experts are proud to master [S2]",
+   "Change is slow: loyal users notice even a slightly changed font [S1]"
+  ],
+  "code": "body{background:#000;color:#ffb000;font:13px/1.2 ui-monospace,monospace} td{padding:0 .5ch;font-variant-numeric:tabular-nums} /* [inferred] values */",
+  "traits": {
+   "surface": "solid",
+   "edge": "hairline",
+   "depth": "flat",
+   "shape": "sharp",
+   "color": "neutral-accent",
+   "contrast": "high",
+   "type": "mono",
+   "texture": "none",
+   "ornament": "none",
+   "layout": "dense",
+   "motion": "stepped",
+   "theme": "dark"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Trading and analytics tools, operations consoles, observability and power-user dashboards.",
+  "goes_wrong": "Density without hierarchy: when everything is amber and tight, nothing stands out and newcomers are lost [S2].",
+  "accessibility": "Amber on black passes contrast, but red and green price moves fail for colour-blind users; add arrows or signs, use tabular figures, and allow zoom without breaking the grid.",
+  "related": [
+   "terminal",
+   "dos-tui",
+   "dark-luxe",
+   "crt-phosphor"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://web.archive.org/web/2020/https://www.fastcompany.com/3051883/the-bloomberg-terminal",
+    "supports": "Fast Company 2015 (archived): as in 1982, screens dense with tabular text and charts, amber characters on black by default, custom keyboard, users notice small font changes"
+   },
+   {
+    "id": "S2",
+    "url": "https://uxmag.com/articles/the-impossible-bloomberg-makeover",
+    "supports": "UX Magazine 2010: black background with yellow and orange text; users take pride in the complex interface"
+   },
+   {
+    "id": "S3",
+    "url": "https://core77.com/posts/24893/moneymaking-multi-monitor-mayhem-and-why-some-prefer-interface-design-that-sucks-24893",
+    "supports": "Core77 2013: two-, four- or six-monitor terminal setups"
+   }
+  ],
+  "examples": [
+   {
+    "name": "Bloomberg Terminal",
+    "url": "https://web.archive.org/web/2020/https://www.fastcompany.com/3051883/the-bloomberg-terminal",
+    "what": "Amber-on-black, table-heavy market screens"
+   }
+  ],
+  "confidence": "medium"
+ },
+ {
+  "id": "braun-functionalism",
+  "name": "Braun functionalism (Dieter Rams)",
+  "aliases": [
+   "Dieter Rams style",
+   "Braun style",
+   "less but better",
+   "German functionalism",
+   "Rams calculator look"
+  ],
+  "plain": "Quiet white, grey or black panels with one bright colour-coded button.",
+  "people_say": [
+   "Dieter Rams",
+   "Braun calculator",
+   "old Apple calculator look",
+   "clean German design",
+   "less but better",
+   "simple product design",
+   "retro hi-fi"
+  ],
+  "origin": "Braun, Kronberg, Germany, products from the late 1950s to the 1980s; Rams wrote his ten principles in the late 1970s [S1][S3]",
+  "defining": [
+   "Neutral, restrained bodies so the product leaves room for its user [S1]",
+   "Colour only to explain function: on the 1987 ET66 calculator numbers are black, operators brown and the equals key yellow [S2][S3]",
+   "Round, slightly convex buttons on a strict grid [S3]",
+   "As little design as possible: nothing decorative [S1]",
+   "On screen: flat neutral panels, circular controls and a single warm accent for the main action [inferred]"
+  ],
+  "code": ".key{border-radius:50%;background:#222;color:#eee;box-shadow:inset 0 2px 2px rgba(255,255,255,.15)} .key--primary{background:#f2c200;color:#111} /* [inferred] values */",
+  "traits": {
+   "surface": "solid",
+   "edge": "none",
+   "depth": "extruded",
+   "shape": "geometric",
+   "color": "neutral-accent",
+   "contrast": "normal",
+   "type": "neo-grotesque",
+   "texture": "none",
+   "ornament": "none",
+   "layout": "grid",
+   "motion": "still",
+   "theme": "both"
+  },
+  "ui_fit": "core-ui",
+  "fits": "Calculators and utilities, audio and hardware companion apps, settings screens and calm product sites.",
+  "goes_wrong": "Copying the surface (dots and one orange key) without the discipline, so colour becomes decoration instead of meaning.",
+  "accessibility": "Colour-coded keys must also differ by label or position; keep control edges at 3:1 on grey bodies and labels at 4.5:1.",
+  "related": [
+   "swiss",
+   "minimal-monochrome",
+   "bauhaus",
+   "synth-panel"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://www.vitsoe.com/us/about/good-design",
+    "supports": "Vitsoe: Rams's ten principles from the late 1970s; neutral and restrained, as little design as possible; Braun products from 1958 onward"
+   },
+   {
+    "id": "S2",
+    "url": "https://collections.vam.ac.uk/item/O1360553",
+    "supports": "V&A: ET66 calculator, 1987, Rams and Lubs; black number buttons, brown operator buttons, yellow equals"
+   },
+   {
+    "id": "S3",
+    "url": "https://sammlung-digital.museumangewandtekunst.de/detailpage/collection/8aaba9e5-2b9b-47ac-b304-11074467d180",
+    "supports": "Museum Angewandte Kunst: ET 66, Kronberg, 1987; colour-coded buttons as the interface; convex buttons"
+   }
+  ],
+  "examples": [
+   {
+    "name": "Braun ET66 calculator",
+    "url": "https://collections.vam.ac.uk/item/O1360553",
+    "what": "Black body with round, colour-coded buttons and a yellow equals key"
+   }
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "synth-panel",
+  "name": "Synth hardware panel (Teenage Engineering-style)",
+  "aliases": [
+   "Teenage Engineering style",
+   "OP-1 look",
+   "hardware synth UI",
+   "gadget panel",
+   "control-surface UI"
+  ],
+  "plain": "Metal gadget panel with four bright knobs and a tiny playful screen.",
+  "people_say": [
+   "Teenage Engineering",
+   "OP-1",
+   "synth look",
+   "music gadget",
+   "hardware buttons",
+   "colorful knobs",
+   "tiny screen graphics"
+  ],
+  "origin": "Teenage Engineering's OP-1 synthesizer, prototype shown in 2010 and released in 2011 [S2]",
+  "defining": [
+   "A brushed aluminium slab with keys, buttons and a small colour display [S1]",
+   "Four colour-coded rotary knobs; the screen shows each knob's effect in the matching colour [S1]",
+   "Screen graphics are playful characters and geometric motifs, one per mode, recalling early 8-bit game art [S1]",
+   "A 320 x 160 px OLED screen; the makers call limits the product's biggest feature [S2]",
+   "On screen: light grey panel, black display window, small labels and a few saturated control colours [inferred]"
+  ],
+  "code": ".panel{background:linear-gradient(#e6e6e6,#cfcfcf)} .knob{width:48px;aspect-ratio:1;border-radius:50%} .knob--blue{background:#2d6cdf} .screen{background:#000} /* [inferred] values */",
+  "traits": {
+   "surface": "metallic",
+   "edge": "none",
+   "depth": "flat",
+   "shape": "geometric",
+   "color": "neutral-accent",
+   "contrast": "normal",
+   "type": "mono",
+   "texture": "none",
+   "ornament": "illustration",
+   "layout": "grid",
+   "motion": "kinetic",
+   "theme": "both"
+  },
+  "ui_fit": "marketing",
+  "fits": "Music and audio apps, creative tools, hardware companion apps and playful product launches.",
+  "goes_wrong": "Mystery controls: colour-coded knobs that change jobs raise the learning curve unless the screen labels them.",
+  "accessibility": "Do not rely on knob colour alone; label every control, keep small labels at 12px or more and 4.5:1, and let animated screen characters pause.",
+  "related": [
+   "braun-functionalism",
+   "pixel-art",
+   "playful",
+   "skeuomorphism"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://metropolismag.com/products/teenage-engineerings-new-synthesizer-is-class-one/",
+    "supports": "Metropolis: brushed aluminium case, small colour display, four coloured knobs with a colour-coded display, mode graphics recalling early Nintendo 8-bit characters"
+   },
+   {
+    "id": "S2",
+    "url": "https://en.wikipedia.org/wiki/Teenage_Engineering_OP-1",
+    "supports": "OP-1 shown 2010, released 2011, 320 x 160 OLED display with mode graphics, limitations as its biggest feature"
+   }
+  ],
+  "examples": [],
+  "confidence": "medium"
+ },
+ {
+  "id": "sci-fi-fui",
+  "name": "Sci-fi FUI / HUD",
+  "aliases": [
+   "FUI",
+   "fictional user interface",
+   "HUD",
+   "movie interface",
+   "sci-fi UI"
+  ],
+  "plain": "Glowing blue lines, rings and readouts like a movie spaceship screen.",
+  "people_say": [
+   "sci-fi interface",
+   "spaceship screen",
+   "hologram UI",
+   "HUD",
+   "futuristic dashboard",
+   "Iron Man screen",
+   "cockpit display"
+  ],
+  "origin": "Interfaces designed for film, TV and games, now a named craft: FUI [S1]",
+  "defining": [
+   "Mostly blue or cyan on dark; one FUI designer says primaries survive bright set lighting best [S2]",
+   "Often one hue per screen (all orange or all blue), made to be glanced at rather than read [S3]",
+   "Busy data readouts and fake widgets ('fuidgets'), drawn in thin lines, rings and brackets [S3][inferred]",
+   "Animated build-ins and sound effects are part of the interface [S4]",
+   "Mixes film storytelling, motion graphics and UI design [S1]"
+  ],
+  "code": ".hud{background:#02080f;color:#5ee7ff;border:1px solid rgba(94,231,255,.6);box-shadow:0 0 12px rgba(94,231,255,.4);clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)} /* [inferred] values */",
+  "traits": {
+   "surface": "luminous",
+   "edge": "glow",
+   "depth": "glow",
+   "shape": "geometric",
+   "color": "neon",
+   "contrast": "high",
+   "type": "mono",
+   "texture": "none",
+   "ornament": "geometric-shapes",
+   "layout": "layered",
+   "motion": "kinetic",
+   "theme": "dark"
+  },
+  "ui_fit": "marketing",
+  "fits": "Game interfaces, launch and keynote visuals, space and deep-tech marketing, data-art installations.",
+  "goes_wrong": "Decoration over data: screens built to look busy on camera become unreadable when people must actually use them [S3].",
+  "accessibility": "Thin glowing cyan text on near-black blurs; use regular weight or heavier, keep 4.5:1, limit motion and sound, and respect reduced motion.",
+  "related": [
+   "crt-phosphor",
+   "terminal",
+   "dark-luxe",
+   "visionos-spatial"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://www.hudsandguis.com/fui-media",
+    "supports": "HUDS+GUIS book page: FUI (Fictional User Interfaces) mixes film, storytelling, motion graphics, UX and UI"
+   },
+   {
+    "id": "S2",
+    "url": "https://pushing-pixels.org/coleran/2014/04/why-so-blue",
+    "supports": "Mark Coleran, FUI designer: why blue dominates film interfaces; set lighting washes out screens, primaries look stronger"
+   },
+   {
+    "id": "S3",
+    "url": "https://scifiinterfaces.com/2015/12/15/orangeblue-shield-agent-interfaces/",
+    "supports": "Christopher Noessel: screens strictly orange or strictly blue, meant to be seen not read; fuidget-filled screens"
+   },
+   {
+    "id": "S4",
+    "url": "https://github.com/arwes/arwes",
+    "supports": "Arwes: web framework for futuristic sci-fi designs, animations and sound effects"
+   }
+  ],
+  "examples": [
+   {
+    "name": "Arwes",
+    "url": "https://github.com/arwes/arwes",
+    "what": "An open-source web framework for sci-fi interfaces with animated frames and sounds"
+   }
+  ],
+  "confidence": "medium"
+ },
+ {
+  "id": "palm-pda",
+  "name": "Palm OS / early PDA",
+  "aliases": [
+   "Palm Pilot look",
+   "PDA UI",
+   "Palm OS",
+   "early mobile monochrome"
+  ],
+  "plain": "Tiny black-and-white pocket screen with rounded text buttons.",
+  "people_say": [
+   "Palm Pilot",
+   "PDA",
+   "old pocket computer",
+   "early smartphone",
+   "tiny black and white screen",
+   "stylus app"
+  ],
+  "origin": "Palm Computing handheld organisers; the first devices had 160 x 160 px screens [S1]",
+  "defining": [
+   "160 x 160 px screen at 1 bit per pixel until Palm OS 3.0 added 2-bit grey [S1]",
+   "Buttons are text centred in a rounded rectangle; pressing inverts it to white on black [S1]",
+   "Full-screen forms; dialogs span the screen width and sit at the bottom [S1]",
+   "Built on the 80/20 rule: the most common tasks one tap away, the rest tucked out of sight [S2]",
+   "Differs from classic-mac-1bit: one full-screen form per task with stylus-sized buttons, no overlapping windows [inferred]"
+  ],
+  "code": ".btn{border:1px solid #000;border-radius:6px;padding:2px 8px;font-weight:bold} .btn:active{background:#000;color:#fff} /* [inferred] values */",
+  "traits": {
+   "surface": "solid",
+   "edge": "outline",
+   "depth": "flat",
+   "shape": "subtle",
+   "color": "monochrome",
+   "contrast": "high",
+   "type": "pixel",
+   "texture": "none",
+   "ornament": "none",
+   "layout": "minimal",
+   "motion": "still",
+   "theme": "light"
+  },
+  "ui_fit": "core-ui",
+  "fits": "To-do and notes apps, utilities, watch and other small-screen UIs, retro mobile tributes.",
+  "goes_wrong": "Shrinking a modern app into a fake tiny screen; the point is fewer features, not smaller pixels.",
+  "accessibility": "Inverted selection is clear but tiny bitmap type is not; set text at 16px or more, keep targets at least 24px and label icon buttons.",
+  "related": [
+   "classic-mac-1bit",
+   "pixel-art",
+   "minimal-monochrome",
+   "e-ink"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://www.fuw.edu.pl/~michalj/palmos/UserInterface.html",
+    "supports": "Palm OS Programmer's Companion: 160x160 LCD, 1 bit per pixel until OS 3.0, rounded-rectangle buttons that invert, full-width dialogs at the bottom"
+   },
+   {
+    "id": "S2",
+    "url": "https://archive.org/download/zen-of-palm/zenofpalm.pdf",
+    "supports": "Zen of Palm (PalmSource): apply the 80/20 rule, focus on what users do 80 percent of the time"
+   }
+  ],
+  "examples": [],
+  "confidence": "medium"
+ },
+ {
+  "id": "console-channel-grid",
+  "name": "Console channel menu (Wii era)",
+  "aliases": [
+   "Wii Menu style",
+   "channel grid",
+   "10-foot UI",
+   "TV menu tiles"
+  ],
+  "plain": "A calm grid of TV-like panes you point at.",
+  "people_say": [
+   "Wii menu",
+   "Wii vibe",
+   "game console menu",
+   "TV app grid",
+   "channel tiles",
+   "2000s console look",
+   "friendly TV interface"
+  ],
+  "origin": "Nintendo Wii Menu, 2006, modelled on rows of TVs in an electronics shop [S1][S2]",
+  "defining": [
+   "Rows of equal panes, each one a 'channel', like TVs lined up in a shop [S1]",
+   "Pages of 4 x 3 panes, 48 slots in all, with the time and date always on screen [S2]",
+   "Games sit beside news and weather at the same size so non-gamers feel welcome [S1]",
+   "Navigated by pointing with the remote [S2]",
+   "White and pale grey rounded panes with soft blue accents [inferred]"
+  ],
+  "code": ".channels{display:grid;grid-template-columns:repeat(4,1fr);gap:16px} .pane{aspect-ratio:16/9;border-radius:16px;background:#fff;border:2px solid #d6dbe0} /* [inferred] values */",
+  "traits": {
+   "surface": "solid",
+   "edge": "outline",
+   "depth": "soft-shadow",
+   "shape": "rounded",
+   "color": "neutral-accent",
+   "contrast": "normal",
+   "type": "rounded",
+   "texture": "none",
+   "ornament": "illustration",
+   "layout": "grid",
+   "motion": "subtle",
+   "theme": "light"
+  },
+  "ui_fit": "core-ui",
+  "fits": "TV and set-top apps, kiosks, family and kids products, launchers and home screens.",
+  "goes_wrong": "Equal panes make everything equally important, so the key action drowns.",
+  "accessibility": "Pale panes on white need 3:1 edges; focus must be visible from across a room, so use thick outlines and large type for viewing at a distance.",
+  "related": [
+   "metro",
+   "bento",
+   "frutiger-aero",
+   "playful"
+  ],
+  "sources": [
+   {
+    "id": "S1",
+    "url": "https://iwataasks.nintendo.com/interviews/wii/wii_channels/0/1",
+    "supports": "Iwata Asks (Nintendo): menu of panes inspired by rows of TVs in an electronics shop; the word Channel; panes treated equally"
+   },
+   {
+    "id": "S2",
+    "url": "https://en.wikipedia.org/wiki/Wii_Menu",
+    "supports": "Wii Menu, first released November 2006: four pages of 4x3 grids, 48 slots, time and date, pointer navigation"
+   }
+  ],
+  "examples": [],
+  "confidence": "medium"
+ }
+]

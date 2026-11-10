@@ -1,0 +1,92 @@
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/02-laptop-desk/opendesigner sketch --name "Halde Studio Desk" --brand #D7351F --audience regular --platforms web --feel calm,sober,understated --surfaces "case study:experience" --delegated feel,audience,platforms
+initialized brand/showcase/mockups/02-laptop-desk/opendesigner/state.json
+Applied 289 OpenDesigner house standards (v2) for accessibility, color, components, elevation, layout, motion, platforms, process, tokens, tooling, typography. They are locked; say if you want to change one (`engine.py standards` lists them).
+built brand/showcase/mockups/02-laptop-desk/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg), DESIGN.md, PRODUCT.md, preview.html
+Passes: no errors. 0 warnings, 5 notes.  (brand/showcase/mockups/02-laptop-desk/opendesigner)
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 55 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 54 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  11 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.16). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+Checked 164 color pairs in every mode, 12 mode combinations and 423 tokens.
+Feel: calm -> deferential + minimal; sober -> serious + minimal; understated -> minimal + deferential.
+Your brand color is on the buttons exactly, with white text that reads clearly on it.
+This is a sketch: every part works, and most choices are still defaults. Zoom into any area later (see the Zoom lines in DESIGN.md).
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/02-laptop-desk/opendesigner set raw.textFace "Inter" --set-by chosen --why "open-licence face (SIL OFL) picked for this scene; one family per scene"
+D-0010 set raw.textFace = "Inter" (chosen)
+  previous value: "system"
+  tokens: 1 value change (font.family.text). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/02-laptop-desk/opendesigner set raw.fontLicence "{\"web\": true, \"app\": true, \"selfHost\": true}" --set-by chosen --why "Inter is SIL OFL, loaded from Google Fonts"
+D-0011 set raw.fontLicence = {"web": true, "app": true, "selfHost": true} (chosen)
+  previous value: {"web": null, "app": null, "selfHost": null}
+  recorded; this changes the files in build/ on the next build, not the tokens.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/02-laptop-desk/opendesigner set dials.expression 35 --set-by delegated --why "a photograph does the mood; type is a credit line"
+D-0012 set dials.expression = 35 (delegated)
+  tokens: 30 values change (font.weight.label, icon.stroke.lg, icon.stroke.md, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/02-laptop-desk/opendesigner set dials.brandPresence 20 --set-by delegated --why "red appears only as one dot"
+D-0013 set dials.brandPresence = 20 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/02-laptop-desk/opendesigner set dials.density 10 --set-by delegated --why "one object on a table"
+D-0014 set dials.density = 10 (delegated)
+  previous value: 50
+  tokens: 43 values change (modes, size.icon.default, text.body.lg, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/02-laptop-desk/opendesigner set dials.energy 15 --set-by delegated --why "afternoon light"
+D-0015 set dials.energy = 15 (delegated)
+  note: motion.spring.spatial.dampingRatio stays 1.0: house standard STD-springs-gestures-04 holds it; everything else this dial drives follows the new value
+  note: motion.spring.spatial.stiffness stays 246.7: house standard STD-springs-gestures-04 holds it; everything else this dial drives follows the new value
+  note: motion.easing.standard stays [0.77, 0, 0.175, 1]: house standard STD-easing-duration-02 holds it; everything else this dial drives follows the new value
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/02-laptop-desk/opendesigner set dials.roundness 20 --set-by delegated --why "machined aluminium, tight radii"
+D-0016 set dials.roundness = 20 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/02-laptop-desk/opendesigner set dials.depth 60 --set-by delegated --why "a real object casting a real shadow"
+D-0017 set dials.depth = 60 (delegated)
+  tokens: 11 values change (color.shadow.ambient, color.shadow.key, elevation.floating, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/02-laptop-desk/opendesigner set dials.colorfulness 15 --set-by delegated --why "plaster grey, oak, aluminium"
+D-0018 set dials.colorfulness = 15 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/02-laptop-desk/opendesigner set dials.warmth 30 --set-by delegated --why "cool grade on the photo"
+D-0019 set dials.warmth = 30 (delegated)
+  tokens: 96 values change (color.border.default, color.border.subtle, color.overlay.scrim, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/mockups/02-laptop-desk/opendesigner build
+built brand/showcase/mockups/02-laptop-desk/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg), DESIGN.md, PRODUCT.md, preview.html
+Passes: no errors. 0 warnings, 5 notes.  (brand/showcase/mockups/02-laptop-desk/opendesigner)
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 55 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 54 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  11 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.16). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+Checked 164 color pairs in every mode, 12 mode combinations and 429 tokens.
+(exit 0)
+

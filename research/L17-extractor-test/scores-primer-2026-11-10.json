@@ -1,0 +1,526 @@
+{
+ "OpenDesigner": {
+  "color": {
+   "reported": 19,
+   "rendered": 16,
+   "onKey": 11,
+   "recallRenderedKey": "11/18",
+   "missed": [
+    "#002d1133",
+    "#1f232826",
+    "#818b9826",
+    "#d1242f",
+    "#d1d9e0b3",
+    "#e6eaef",
+    "#eff2f5"
+   ],
+   "offPage": [
+    "#0055d5",
+    "#08872b",
+    "#8534f3"
+   ]
+  },
+  "fontSize": {
+   "reported": 9,
+   "rendered": 9,
+   "onKey": 6,
+   "recallRenderedKey": "6/6",
+   "missed": [],
+   "offPage": [],
+   "values": [
+    12.0,
+    13.0,
+    14.0,
+    16.0,
+    18.0,
+    20.0,
+    22.0,
+    28.0,
+    40.0
+   ]
+  },
+  "spacing": {
+   "reported": 14,
+   "rendered": 13,
+   "onKey": 11,
+   "recallRenderedKey": "11/11",
+   "missed": [],
+   "offPage": [
+    3
+   ],
+   "values": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    8,
+    10,
+    12,
+    16,
+    24,
+    32,
+    36,
+    40,
+    47
+   ]
+  },
+  "radius": {
+   "reported": 2,
+   "rendered": 2,
+   "onKey": 2,
+   "recallRenderedKey": "2/3",
+   "missed": [
+    9999.01
+   ],
+   "offPage": [],
+   "values": [
+    6.0,
+    12.0
+   ]
+  },
+  "shadow": {
+   "reported": 1,
+   "rendered": 1,
+   "onKey": 1,
+   "recallRenderedKey": "1/3",
+   "missed": [
+    [
+     [
+      false,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      "#1f23280a"
+     ]
+    ],
+    [
+     [
+      true,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      "#1f23280a"
+     ]
+    ]
+   ],
+   "offPage": []
+  }
+ },
+ "Dembrandt": {
+  "color": {
+   "reported": 19,
+   "rendered": 18,
+   "onKey": 15,
+   "recallRenderedKey": "14/18",
+   "missed": [
+    "#002d1133",
+    "#1f232826",
+    "#818b9826",
+    "#d1d9e0b3"
+   ],
+   "offPage": [
+    "#818b98"
+   ]
+  },
+  "fontSize": {
+   "reported": 10,
+   "rendered": 10,
+   "onKey": 6,
+   "recallRenderedKey": "6/6",
+   "missed": [],
+   "offPage": [],
+   "values": [
+    12.0,
+    13.0,
+    14.0,
+    16.0,
+    18.0,
+    20.0,
+    22.0,
+    24.0,
+    28.0,
+    40.0
+   ]
+  },
+  "spacing": {
+   "reported": 12,
+   "rendered": 12,
+   "onKey": 7,
+   "recallRenderedKey": "7/11",
+   "missed": [
+    2.0,
+    12.0,
+    32.0,
+    36.0
+   ],
+   "offPage": [],
+   "values": [
+    1,
+    2.72,
+    4,
+    6,
+    7,
+    8,
+    8.4,
+    10,
+    16,
+    24,
+    40,
+    47
+   ]
+  },
+  "radius": {
+   "reported": 5,
+   "rendered": 5,
+   "onKey": 3,
+   "recallRenderedKey": "3/3",
+   "missed": [],
+   "offPage": [],
+   "values": [
+    6.0,
+    8.0,
+    12.0,
+    999.0,
+    9999.0
+   ]
+  },
+  "shadow": {
+   "reported": 4,
+   "rendered": 4,
+   "onKey": 3,
+   "recallRenderedKey": "3/3",
+   "missed": [],
+   "offPage": []
+  }
+ },
+ "Project Wallace": {
+  "color": {
+   "reported": 900,
+   "rendered": 21,
+   "onKey": 280,
+   "recallRenderedKey": "18/18",
+   "missed": [],
+   "offPage": [
+    "#00000000",
+    "#00000003",
+    "#00000004",
+    "#00000005",
+    "#00000006",
+    "#00000007",
+    "#00000008",
+    "#00000009",
+    "#0000000a",
+    "#0000000b",
+    "#0000000f",
+    "#00000012"
+   ]
+  },
+  "fontSize": {
+   "reported": 11,
+   "rendered": 6,
+   "onKey": 5,
+   "recallRenderedKey": "4/6",
+   "missed": [
+    13.0,
+    40.0
+   ],
+   "offPage": [
+    11.0,
+    26.0,
+    32.0,
+    48.0,
+    64.0
+   ],
+   "values": [
+    11.0,
+    12.0,
+    14.0,
+    16.0,
+    18.0,
+    20.0,
+    24.0,
+    26.0,
+    32.0,
+    48.0,
+    64.0
+   ]
+  },
+  "spacing": {
+   "reported": 0,
+   "note": "no spacing output"
+  },
+  "radius": {
+   "reported": 11,
+   "rendered": 5,
+   "onKey": 4,
+   "recallRenderedKey": "3/3",
+   "missed": [],
+   "offPage": [
+    2.0,
+    3.0,
+    4.0,
+    5.6,
+    7.2,
+    20.0
+   ],
+   "values": [
+    2.0,
+    3.0,
+    4.0,
+    5.6,
+    6.0,
+    7.2,
+    8.0,
+    12.0,
+    20.0,
+    999.0,
+    9999.01
+   ]
+  },
+  "shadow": {
+   "reported": 18,
+   "rendered": 3,
+   "onKey": 6,
+   "recallRenderedKey": "3/3",
+   "missed": [],
+   "offPage": [
+    [
+     [
+      false,
+      -9.0,
+      10.0,
+      39.0,
+      0,
+      "#00000040"
+     ]
+    ],
+    [
+     [
+      false,
+      -1.0,
+      0.0,
+      0,
+      0,
+      "#000000"
+     ]
+    ],
+    [
+     [
+      false,
+      -1.0,
+      0.0,
+      0,
+      0,
+      "#ffffff"
+     ]
+    ],
+    [
+     [
+      false,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      "#d1d9e080"
+     ],
+     [
+      false,
+      0.0,
+      6.0,
+      12.0,
+      -3.0,
+      "#25292e0a"
+     ],
+     [
+      false,
+      0.0,
+      6.0,
+      18.0,
+      0.0,
+      "#25292e1f"
+     ]
+    ],
+    [
+     [
+      false,
+      0.0,
+      0.0,
+      0.0,
+      2.0,
+      "#00000000"
+     ]
+    ],
+    [
+     [
+      false,
+      0.0,
+      0.0,
+      0.0,
+      3.0,
+      "#00000000"
+     ]
+    ],
+    [
+     [
+      false,
+      0.0,
+      1.0,
+      1.0,
+      0.0,
+      "#25292e1a"
+     ],
+     [
+      false,
+      0.0,
+      3.0,
+      6.0,
+      0.0,
+      "#25292e1f"
+     ]
+    ],
+    [
+     [
+      false,
+      0.0,
+      3.0,
+      6.0,
+      0,
+      "#8c959f26"
+     ],
+     [
+      false,
+      0.0,
+      1.0,
+      1.0,
+      0,
+      "#0000001a"
+     ]
+    ],
+    [
+     [
+      false,
+      0.0,
+      8.0,
+      24.0,
+      0,
+      "#01040926"
+     ]
+    ],
+    [
+     [
+      false,
+      0.0,
+      100.0,
+      80.0,
+      0,
+      "#00000003"
+     ],
+     [
+      false,
+      0.0,
+      41.0,
+      33.0,
+      0,
+      "#00000005"
+     ],
+     [
+      false,
+      0.0,
+      22.0,
+      17.0,
+      0,
+      "#00000005"
+     ],
+     [
+      false,
+      0.0,
+      12.0,
+      10.0,
+      0,
+      "#00000008"
+     ],
+     [
+      false,
+      0.0,
+      6.0,
+      5.0,
+      0,
+      "#0000000a"
+     ],
+     [
+      false,
+      0.0,
+      2.0,
+      2.0,
+      0,
+      "#00000012"
+     ]
+    ],
+    [
+     [
+      false,
+      1.0,
+      0.0,
+      0,
+      0,
+      "#000000"
+     ]
+    ],
+    [
+     [
+      false,
+      1.0,
+      0.0,
+      0,
+      0,
+      "#ffffff"
+     ]
+    ]
+   ]
+  }
+ },
+ "_truth": {
+  "color": 26,
+  "fontSize": 11,
+  "spacing": 18,
+  "radius": 5,
+  "shadow": 4
+ },
+ "_truthOnKey": {
+  "color": 18,
+  "fontSize": [
+   12.0,
+   13.0,
+   14.0,
+   16.0,
+   20.0,
+   40.0
+  ],
+  "spacing": [
+   2.0,
+   4.0,
+   6.0,
+   8.0,
+   10.0,
+   12.0,
+   16.0,
+   24.0,
+   32.0,
+   36.0,
+   40.0
+  ],
+  "radius": [
+   6.0,
+   12.0,
+   9999.01
+  ],
+  "shadow": 3
+ },
+ "_wallaceUnresolved": {
+  "fontSizes": 42,
+  "borderRadiuses": 36
+ }
+}

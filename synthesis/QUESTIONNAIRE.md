@@ -179,6 +179,26 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Time weight:** medium (fan-out 0)
 - **Evidence:** S-L17-007; DC-L02-08, DC-L02-11, DC-L03-10
 
+### Q-scope-07 · What phase is the project in: an idea, being built, close to launch, or live? · Standard
+- **Why:** The project's phase changes which questions come first. An idea needs its purpose and an analogous product before any screen; a product close to launch needs an audit of what exists, its copy and a preflight; a live product needs the audit and rules for who may change the system [DC-L11-04, DC-L19-179, DC-L11-21; inferred from the owner's direction of 2026-11-02, OWNER-FEEDBACK row 6].
+- **Ask:** "Where is the project now: an idea, being built, close to launch, or live with real users?"
+- **Example:** Show the four phases on one line, with the one read from the repo marked and the file that showed it.
+- **Control:** single choice, pre-filled from the repo (`engine.py detect`); asked only when the repo and their words say nothing, otherwise confirmed in one line
+- **Options:**
+  - `idea` An idea, no code yet: the alignment first (mission, vision, purpose, goals) and the analogous product, then the sketch; there is nothing to audit yet [S-L11-105; inferred].
+  - `building` Being built: the sketch, then the areas the screens being built need most [inferred].
+  - `near-launch` Close to launch: an audit of the screens that exist (the interface inventory), then copy and voice, then preflight before release; launch and share surfaces join the scope [DC-L11-04, DC-L19-179].
+  - `live` Live, with real users: the audit first, mapping onto the tokens the code already has, then governance and versioning [DC-L19-189, DC-L11-21].
+- **Default:** none: read from the repo first (no code: idea; code without deploy settings: building; code with deploy settings: near launch; a changelog with released versions, or a version past 1.0.0: live). An empty folder says nothing, so ask once. *Source:* the owner's direction of 2026-11-02 (OWNER-FEEDBACK row 6) and its proposal [inferred].
+- **Decides:** none (an owner input; it orders the questions and does not change tokens)
+- **Changes:** DC-L11-04, DC-L11-21, DC-L19-179 · blocks: Strategy > Scope; Process > Discovery > Audit
+- **Preview:** none visual; the next-step offer after the sketch leads with what this phase needs first (zoom.md, "The project's phase").
+- **Use / avoid:** use the phase to choose what to offer first; avoid asking a near-launch product the idea-phase questions again, and avoid reading npm's default version 1.0.0 as a release [inferred].
+- **Skip:** yes; when nothing shows the phase, the offer after the sketch stays as it is.
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** DC-L11-04, DC-L11-21, DC-L19-179, DC-L19-189; S-L11-105
+
 ### Q-scope-02 · Is there existing UI to clean up and merge, or is this a new product? · Standard
 - **Why:** Checking the screens you have (an audit) shows how much to merge. For example, 40 grays can merge into one 10-step color ramp [DC-L11-04, inferred].
 - **Ask:** "Do you have screens already that we should clean up and merge, or are we starting fresh?"
@@ -267,6 +287,118 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Time weight:** medium (fan-out 2)
 - **Evidence:** DC-L17-02, DC-L11-01, DC-L17-03; S-L11-006, S-L11-071, S-L11-073, S-L17-003, S-L17-023
 - **Merges:** K0.5, K2.6 (starting library)
+
+### Q-site-01 · What must the site achieve, and how will you know it worked? · Standard
+- **Show if:** a site that persuades: Q-scope-06 includes `persuade`, or Q-scope-01 includes `marketing`
+- **Why:** The goal decides what every page leads with and which action gets the main button. Sections are chosen for the goal they serve [S-L19-038; DC-L15-03].
+- **Ask:** "What should the site get done, and how will you count it? For example: booked demos from senior buyers, about ten a month."
+- **Example:** Show the one action recorded at the sketch (`context.purpose`) as the draft, with a blank for who and how many.
+- **Control:** single choice for the kind of goal, then text for who and how it is counted; drafted from `context.purpose`, never asked twice
+- **Options:**
+  - `demos` Booked demos or sales calls: one main button to book, repeated after each proof section [S-L19-038; inferred].
+  - `signups` Sign-ups or trials: the button starts the product, and a real screen of it sits near the top [inferred].
+  - `purchases` Purchases: the price and what is included come before the button [inferred].
+  - `enquiries` Enquiries or quotes: a short form, and who answers it and how soon [inferred].
+  - `installs` App installs: store badges, and the app's own screens instead of a mock-up [inferred].
+  - `understanding` Understanding and trust, with no direct action: explainers lead and the button is secondary [inferred].
+- **Default:** none: drafted from the one action recorded at the sketch; the measure is theirs to give. *Source:* owner inputs are never invented [DC-L17-08].
+- **Decides:** none (an owner input; it orders sections and sets the main action, not tokens)
+- **Changes:** DC-L15-03, DC-L19-36 · blocks: Strategy > Scope
+- **Preview:** none visual; PRODUCT.md's Site brief shows the goal and its measure.
+- **Use / avoid:** use one goal per site, with a measure; avoid two equal main actions on one page [DC-L15-03].
+- **Skip:** yes; PRODUCT.md then says Not enough information (Q-site-01).
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** DC-L15-03, DC-L19-36, DC-L17-08; S-L19-038
+
+### Q-site-02 · Which roles must the site convince, and what does each need to see? · Standard
+- **Show if:** a site that persuades: Q-scope-06 includes `persuade`, or Q-scope-01 includes `marketing`
+- **Why:** A business purchase is often decided by several people with different questions: the person who will use it, the one who signs, the one who checks security or cost. One page for everyone answers none of them well [inferred; S-L19-038].
+- **Ask:** "Who has to say yes, and what does each of them need to see? For example: the operations head needs the outcome, IT needs security, finance needs the price."
+- **Example:** Show the roles drafted from the user research (`research/users.md`), each with an empty "needs to see" line.
+- **Control:** a list of rows, `{"role": ..., "needs": ...}`; drafted from the user research or their words, recorded as assumed until they confirm
+- **Options:**
+  - `user` The person who will use it every day: a real screen, and how their day gets easier [inferred].
+  - `buyer` The person who signs: the outcome in numbers, and named clients like them [inferred].
+  - `technical` The person who checks it fits (IT, security, engineering): integrations, security and data handling, on a page of their own [inferred].
+  - `finance` The person who checks the cost: the price, or how pricing works [inferred].
+  - `single` One kind of visitor who decides alone (a shop, a club, an app): one path and no role pages [inferred].
+- **Default:** none: drafted from the user research or their words. *Source:* owner inputs are never invented [DC-L17-08].
+- **Decides:** none (an owner input)
+- **Changes:** DC-L19-36 · blocks: Strategy > Scope
+- **Preview:** none visual; PRODUCT.md's Site brief lists each role and what it needs to see.
+- **Use / avoid:** use a role's need to choose its section or page; avoid one generic "for teams" message aimed at every role [inferred].
+- **Skip:** yes; PRODUCT.md then says Not enough information (Q-site-02).
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** DC-L19-36, DC-L17-08; S-L19-038
+
+### Q-site-03 · What can you prove, and may we show it? · Standard
+- **Show if:** a site that persuades: Q-scope-06 includes `persuade`, or Q-scope-01 includes `marketing`
+- **Why:** Proof carries a page that persuades: named clients, quotes, outcome figures. Invented proof is a deceptive pattern (fake social proof), and a figure without its qualifier overclaims [S-L13-071; DC-L13-15].
+- **Ask:** "What can you prove? Clients you may name, quotes with a name and role, and figures with what they mean: for whom, over what time, compared with what."
+- **Example:** Show three empty rows (a client, a quote, a figure) and the qualifier each one needs.
+- **Control:** a list of rows, `{"kind": ..., "what": ..., "qualifier": ...}`; only the person fills it, word for word
+- **Options:**
+  - `clients` Named clients, with their permission: a line of names or logos [inferred].
+  - `testimonials` Quotes with a real name and role [S-L19-038].
+  - `figures` Outcome figures with their qualifier: the number, for whom, over what time, compared with what [inferred].
+  - `credentials` Certifications, awards or standards met, with where to check them [inferred].
+  - `none-yet` Nothing to show yet: pages lead with how it works and a real product screen, with no placeholder logos or quotes [DC-L13-15].
+- **Default:** none: only the person has it. The proof in a confirmed positioning (research.md section 8) fills the line until they answer. *Source:* fake social proof is a deceptive pattern [S-L13-071; DC-L13-15].
+- **Decides:** none (an owner input)
+- **Changes:** DC-L13-15, DC-L19-36 · blocks: Principles > Ethics > Deceptive patterns
+- **Preview:** none visual; PRODUCT.md's Site brief lists each proof, and flags a figure with no qualifier.
+- **Use / avoid:** use only what they gave, in their words; avoid placeholder logos, "trusted by" with no names, and rounded-up figures [DC-L13-15].
+- **Skip:** yes; PRODUCT.md then says Not enough information (Q-site-03), and pages leave proof sections out.
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** DC-L13-15, DC-L19-36; S-L13-071, S-L19-038
+
+### Q-site-04 · How should people find the site, and in which languages? · Standard
+- **Show if:** a site that persuades: Q-scope-06 includes `persuade`, or Q-scope-01 includes `marketing`
+- **Why:** How people arrive shapes the pages: search needs a page for each question people ask, AI answer tools need those answers in the page's text, and each language needs its own pages [inferred].
+- **Ask:** "How do people find you: search, AI answers such as ChatGPT or Perplexity, links you send, or social posts? In which languages? And which questions should the site answer?"
+- **Example:** Show the languages read from the repo (`<html lang>`, locale folders) and three questions drafted from the user research.
+- **Control:** multi-select for channels, then lists for languages (read from the repo) and questions, recorded as `{"channels": [...], "languages": [...], "questions": [...]}`
+- **Options:**
+  - `search` Search engines: a page for each main question, each with its own title, description and one main heading [inferred].
+  - `answer` Answer boxes and voice answers: each question answered in the first sentence under its heading [inferred].
+  - `generative` AI answer tools (generative engines): ChatGPT, Perplexity and Google's AI answers read the page's text, so answers, names and figures sit in plain text, not only inside images or scripts [inferred]. In one study with a 2023 engine, real quotations, statistics and cited sources raised a page's share of the answer by 27 to 41% and keyword stuffing lowered it; the quotes and figures must be the owner's own proof from Q-site-03, with its qualifiers [S-L06-124].
+  - `links` Links you send (sales emails, decks, events): each link lands on a page that keeps the link's promise [inferred].
+  - `social` Social posts: each page has its own share image and title [inferred].
+- **Default:** none: languages read from the repo, else the language they write in; channels and questions are theirs. *Source:* [inferred].
+- **Decides:** none (an owner input)
+- **Changes:** DC-L19-36 · blocks: Strategy > Scope
+- **Preview:** none visual; PRODUCT.md's Site brief lists the channels, languages and questions.
+- **Use / avoid:** use the questions buyers really ask (from the research or sales calls); avoid keyword lists with no page that answers them [inferred].
+- **Skip:** yes; PRODUCT.md then says Not enough information (Q-site-04).
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** DC-L19-36; S-L06-124
+
+### Q-site-05 · Which kinds of pages does the site need? · Standard
+- **Show if:** a site that persuades: Q-scope-06 includes `persuade`, or Q-scope-01 includes `marketing`
+- **Why:** Page families are the site's structure. Each family shares one layout and one job, so pages stay consistent and the structure is not invented page by page [inferred; S-L19-038].
+- **Ask:** "Which kinds of pages does the site need? I read these from your repo; add or remove any."
+- **Example:** Show the families read from the repo's routes (for example `app/pricing/page.tsx`), beside the ones the roles in Q-site-02 need.
+- **Control:** multi-select, read from the repo (`engine.py detect`): an idea gets a plan from the goal and roles; a built or live site is confirmed in one line
+- **Options:**
+  - `platform` Platform or product: what it does, a page per main feature [inferred].
+  - `industry` Industry or use case: a page per kind of customer, each with its own proof [inferred].
+  - `explainer` Explainers: how it works, guides, and the questions from Q-site-04 [inferred].
+  - `company` Company and proof: about, team, customers, case studies, contact [S-L19-038].
+  - `pricing` Pricing: the price, or how pricing works [inferred].
+  - `legal` Legal and trust: privacy, terms, cookies, security [inferred].
+- **Default:** none: read from the repo's routes; an idea gets the families its goal and roles need. *Source:* [inferred].
+- **Decides:** none (an owner input; step 4 of PROTOCOL.md builds the structure from it)
+- **Changes:** DC-L19-50 · blocks: Strategy > Scope; Patterns > Navigation
+- **Preview:** none visual; PRODUCT.md's Site brief lists the families, and the structure step draws one wireframe per family.
+- **Use / avoid:** use one layout per family; avoid a page that belongs to no family [inferred].
+- **Skip:** yes; PRODUCT.md then says Not enough information (Q-site-05).
+- **Block class:** I (owner input)
+- **Time weight:** medium (fan-out 0)
+- **Evidence:** DC-L19-50; S-L19-038
 ---
 
 ## Stage 02 · Audience and commitments
@@ -278,8 +410,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Example:** Show one table-and-form screen at dense, regular and large densities side by side.
 - **Control:** single choice
 - **Options:**
-  - `dense` All day, in tools full of data: body 13-14px, controls 28-32px; compact and utilitarian (Polaris 13px, SLDS 13px, Carbon, Atlassian, Primer, Ant 14px) [DC-L09-04; S-L09-403].
-  - `regular` Often, in an everyday app: body 16px, controls 36-40px (Radix, shadcn, Mantine, Chakra) [DC-L09-04; L09 A3 density].
+  - `dense` All day, in tools full of data: body 13-14px, controls 28-32px; compact and utilitarian (Polaris 13px, SLDS 13px, Carbon, Atlassian, Primer, Ant 14px) [DC-L09-04; S-L09-403]. Corners, weights, accent and surfaces you have not chosen follow the work-tool defaults: 6px controls, three weights, one colored accent for selection, links and focus, borders instead of shadows on static cards [DC-L23-01].
+  - `regular` Often, in an everyday app: body 16px (14px once Q-aud-02 or Q-layout-03 says it is a work tool), controls 36-40px (Radix, shadcn, Mantine, Chakra) [DC-L09-04; L09 A3 density].
   - `large` Now and then, on a phone or in public: body 17px or more, controls and targets 44-48px (iOS 17pt, GOV.UK 19px, Material, USWDS 48px targets) [DC-L09-04; S-L09-540].
 - **Default:** regular. *Source:* L09 shared default row 8 (body 16px general, 14px tools) [L09 A1].
 - **Decides:** DC-L09-04
@@ -340,7 +472,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Options:**
   - `text-size` Text size: layouts must reflow at large sizes (DC-L02-21).
   - `density` Compact or roomy switch: adds a compact/comfortable token mode (DC-L03-11).
-  - `contrast` Contrast themes: adds a high-contrast mode (DC-L01-20).
+  - `contrast` Contrast themes: asks for a high-contrast mode (DC-L01-20); the engine records this but does not generate the mode yet.
   - `reduced-motion` Reduced motion: swaps movement for fades (DC-L04-25).
   - `situational` Tough conditions (one hand busy, bright light, older users): larger targets and higher contrast by default; reads calmer and more legible [DC-L13-14; S-L13-076, S-L13-038].
 - **Default:** text-size + reduced-motion. *Source:* accessibility rule (WCAG 2.2 AA as the floor; text resize and motion preferences are OS settings the system should honor) [DC-L13-14, DC-L10-16].
@@ -515,7 +647,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 
 ### Q-brand-07 · What are your 3-5 design principles, and which one wins a tie? · Standard
 - **Why:** When two sliders pull the same setting in opposite ways, your ranked principles break the tie [DC-L06-15; L06 section 4.2].
-- **Ask:** "What 3-5 principles should break ties, and which one wins? I can draft some from your sliders."
+- **Ask:** "What 3-5 principles should break ties, and which one wins? I can draft some from your goals."
 - **Example:** Show GOV.UK-style imperatives and a do/don't pair per principle.
 - **Control:** text list (3-5) + drag to rank + single choice (format)
 - **Options:**
@@ -523,8 +655,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `pairs` Functional and emotional pairs (Fluent) [S-L06-043].
   - `imperatives` Commands that say what they give up (GOV.UK, 11 principles, updated 2 Apr 2025) [S-L06-044].
   - `value-words` Short value words (Carbon system principles) [S-L06-114].
-  - `generate` Let the builder draft principles from the sliders, for you to edit [inferred].
-- **Default:** generate, 3-5 principles, each naming what it outranks, with one making accessibility non-negotiable. *Source:* card heuristic [DC-L06-15; S-L06-077, S-L06-044].
+  - `generate` Let the builder draft principles from your goals and purpose (PRODUCT.md, Purpose and goals), then the sliders, for you to edit [inferred].
+- **Default:** generate, 3-5 principles drafted from the recorded goals and purpose first (one principle per goal it protects), then from the sliders where no goal is recorded; each names what it outranks, and one makes accessibility non-negotiable. Never invent a goal to draft from: with no goals recorded, draft from the sliders and say so. *Source:* card heuristic [DC-L06-15; S-L06-077, S-L06-044]; drafting from the goals follows the owner's direction of 2026-11-02 [inferred].
 - **Decides:** DC-L06-15, DC-L11-05
 - **Changes:** tie-break rules for slider conflicts; ADRs (DC-L11-12) · blocks: Foundations > Principles; Governance > Principles
 - **Preview:** each principle shown with a do/don't pair generated from the current draft.
@@ -875,7 +1007,8 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `comfortable` Comfortable: calmer, touch-friendly, consumer feel [DC-L08-13].
   - `spacious` Spacious: calm, premium, focused message [DC-L15-04].
   - `user-selectable` Let people choose: default plus a compact mode (Atlassian `spacing="compact"`, Salesforce comfy/compact) [S-L08-063; DC-L03-10].
-- **Default:** comfortable for app surfaces, spacious for marketing, compact as a user option for data-heavy components (tables, lists, menus, trees). *Source:* card heuristic [DC-L15-04, DC-L08-13].
+- **Default:** comfortable for app surfaces once Q-aud-01 is regular, compact once it is dense, spacious once it is large; spacious for marketing, compact as a user option for data-heavy components (tables, lists, menus, trees). *Source:* card heuristic [DC-L15-04, DC-L08-13]; the density Q-aud-01 already set, so accepting the default never undoes it [DC-L23-01].
+- **Default follows:** Q-aud-01 `dense` = `compact`, `regular` = `comfortable`, `large` = `spacious`
 - **Decides:** DC-L15-04, DC-L08-13
 - **Changes:** DC-L15-02, DC-L15-05, DC-L15-09, DC-L03-10, DC-L03-11, DC-L02-08 · blocks: Foundations > Visual language > Density voice; Components > Density
 - **Preview:** a data table and a settings form at each density, with the target-size floor drawn so it visibly does not shrink [DC-L15-04].
@@ -1411,7 +1544,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `brand-gray` One brand chart color plus gray: calm, branded, focused [DC-L05-23].
   - `categorical-6-8` 6-8 group colors in set order, plus one light-to-dark ramp. Two-way only for above or below target (Atlassian) [S-L01-032; DC-L05-23].
   - `carbon-14` A long list in set order (Carbon's 14 colors, starting Purple 70 #6929c4, Cyan 50 #1192e8) [S-L01-056].
-- **Default:** brand-gray by default, categorical-6-8 for dashboards. *Source:* card heuristics [DC-L05-23, DC-L01-24].
+- **Default:** brand-gray by default, categorical-6-8 for dashboards. Every palette also gets a single-series brand color, status colors, a 7-step diverging ramp around a midpoint (the brand hue above it, the opposite hue below, every step 3:1 against the page) and axis, gridline and label colors taken from the border and text roles. *Source:* card heuristics [DC-L05-23, DC-L05-24, DC-L01-24].
 - **Decides:** DC-L01-24, DC-L05-23
 - **Changes:** DC-L05-22, DC-L05-24, DC-L05-25 · blocks: Foundations > Color > Data visualization palettes
 - **Preview:** a bar chart, line chart and heatmap in light and dark, with the 3:1 check against the surface.
@@ -1874,7 +2007,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `size-table` A size-specific table (SF Pro: +41/1000 em at 6pt, 0 at 12pt, -26/1000 em at 17pt), applied automatically by the OS [S-L02-001].
   - `per-style` Per-style tracking tokens (Material: Display Large -0.2sp, Body Large 0.5sp) [S-L02-005].
   - `zero` No extra letter spacing beyond the font's defaults [DC-L02-14].
-- **Default:** 0 at body sizes, +0.02 to +0.05em at 11-12px and all caps, -0.01 to -0.02em from about 32px, in em units. *Source:* card heuristic [DC-L02-14].
+- **Default:** 0 at body sizes, +0.02em at 11-12px, -0.01 to -0.02em from about 32px, in em units; capitals never negative: small capital labels +0.06em (Spectrum 2 detail), capital headings 0 to +0.02em. *Source:* card heuristic [DC-L02-14; S-L02-021].
 - **Decides:** DC-L02-14
 - **Changes:** DC-L07-12 · blocks: Foundations > Typography > Metrics > Letter spacing
 - **Preview:** a headline and an all-caps label with tracking on and off.
@@ -2280,22 +2413,22 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Evidence:** DC-L06-09; S-L06-003, S-L06-009, S-L06-030, S-L06-073, S-L06-088
 
 
-### Q-shape-01 · How soft should corners feel? · Quick
+### Q-shape-01 · What shape should buttons be, with corners to match? · Quick
 - **Why:** In L09's (inferred) ranking, corner radius is what differs most in how systems look (divergence 1). Every 2025-2026 update got rounder [DC-L09-01; L09 A2].
-- **Ask:** "How soft should corners feel: square, slightly rounded, rounded, or pill?"
+- **Ask:** "What shape should buttons be: square, slightly rounded, rounded, or pill? Cards and dialogs follow."
 - **Example:** Show a button, input, card and dialog at 0, 6, 12px and pill side by side.
 - **Control:** single choice + radius factor slider (0, 0.75, 1, 1.5, full)
 - **Options:**
-  - `square` 0-2px: official, engineered (GOV.UK, Carbon v11 buttons) [DC-L09-01, DC-L04-02].
-  - `subtle` 4-6px: businesslike (Fluent 4, Primer and Atlassian 6) [S-L04-007, S-L04-024, S-L04-016].
-  - `soft` 8-12px: friendly, modern (Polaris, Paste, Blade, Mantine v9 8px; Airbnb 12px) [DC-L09-01].
+  - `square` 0px: official, engineered (GOV.UK, Carbon v11 buttons) [DC-L09-01, DC-L04-02].
+  - `subtle` 6px: businesslike (Fluent 4, Primer and Atlassian 6) [S-L04-007, S-L04-024, S-L04-016].
+  - `soft` 8px: friendly, modern (Polaris, Paste, Blade, Mantine v9 8px; Airbnb 12px) [DC-L09-01].
   - `pill` Pill: consumer, playful, touch-first (Material 3, Spectrum 2, SLDS Cosmos; iOS 26 capsule controls) [DC-L09-01; S-L04-038].
   - `rule-based` Set by size (Spectrum 6-10 by size) or matched to the container's corners (Apple) [DC-L09-01; S-L04-035].
-- **Default:** 6px controls, 8-12px containers. *Source:* L09 shared default row 7 (16 of 23 control defaults at 4-8px, median 6) [L09 A1; DC-L09-01]; a radius factor slider as Radix offers [S-L09-559].
+- **Default:** 6px controls, 8-12px containers; square and pill only when chosen. The answer stores the button radius itself (`radius.control`), and a typed value ("6px") is stored as that value. A chosen answer is locked, so the shape holds across iterations until the owner changes it. *Source:* L09 shared default row 7 (16 of 23 control defaults at 4-8px, median 6) [L09 A1; DC-L09-01]; a radius factor slider as Radix offers [S-L09-559].
 - **Decides:** DC-L09-01, DC-L04-02
 - **Changes:** DC-L04-01, DC-L04-03, DC-L04-04, DC-L04-06, DC-L04-19, DC-L04-09, DC-L05-18 · blocks: Foundations > Shape > Radius scale and default; Shape personality
 - **Preview:** the component sheet morphing as the slider moves; the focus ring follows the radius.
-- **Use / avoid:** use sharp corners when density and precision are brand values (data, developer tools) and pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
+- **Use / avoid:** use 0-2px corners only as a deliberate brand statement (GOV.UK, Carbon v11 buttons): top-tier data and developer tools use about 6px controls, 8px panels and 12px overlays [DC-L23-02]; use pill when the brand is consumer and touch-first; avoid pill on dense, short controls, which need taller heights [DC-L04-02, DC-L09-01].
 - **Skip:** yes, 6px.
 - **Block class:** G (generatable)
 - **Time weight:** high (fan-out 4)
@@ -2342,14 +2475,14 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Evidence:** DC-L04-03; S-L04-007, S-L04-016, S-L04-018, S-L04-035
 
 ### Q-shape-04 · Plain round corners, or smooth Apple-style corners? · Expert
-- **Why:** Smooth (continuous) corners blend into the edges. At the same radius they look softer and more "Apple" [DC-L04-04].
-- **Ask:** "Use standard round corners, or smooth Apple-style squircle corners where they work?"
+- **Why:** Smooth (continuous) corners ease into the straight edges instead of bending all at once, so they look softer and more "Apple". The difference is small: at the same radius a plain arc stays within 1.4% of the radius of Apple's curve [DC-L04-04].
+- **Ask:** "Use standard round corners, or Apple's smooth corners where they work?"
 - **Example:** Show a 24px card with a circular arc and with 60% corner smoothing, magnified.
 - **Control:** single choice
 - **Options:**
   - `circular` Circular arc (CSS `border-radius`; every web system) [DC-L04-04].
-  - `continuous` Continuous curvature: SwiftUI `.continuous`, Figma corner smoothing (iOS preset 60%) [S-L04-036, S-L04-055].
-  - `squircle-enhance` CSS `corner-shape: squircle` as progressive enhancement (experimental, not Baseline as of 2026-08-27) [DC-L04-04].
+  - `continuous` Continuous curvature: SwiftUI `.continuous`, Figma corner smoothing (iOS preset 60%); the web keeps plain arcs [S-L04-036, S-L04-055].
+  - `squircle-enhance` Continuous on the web too: CSS `corner-shape` drawn to match iOS, `superellipse(1.35)` at 1.22 times the radius, where the browser has it (experimental, not Baseline as of 2026-08-27) [DC-L04-04, S-L04-080].
 - **Default:** circular on the web; continuous on iOS-targeted components. *Source:* card heuristic [DC-L04-04].
 - **Decides:** DC-L04-04
 - **Changes:** DC-L07-13 · blocks: Foundations > Shape > Corner geometry
@@ -2689,7 +2822,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
   - `transparency` Reduce Transparency [S-L10-008].
   - `motion` Reduce Motion [DC-L04-25].
   - `bold-text` Bold Text [DC-L10-16].
-- **Default:** all, with high contrast and reduced transparency as token modes. *Source:* platform convention [DC-L10-16; L10 baked-in rules 9-10].
+- **Default:** all. Reduced motion is a token mode, and each glass surface gets a solid fallback when the system uses glass; high-contrast and reduced-transparency modes are not generated yet. *Source:* platform convention [DC-L10-16; L10 baked-in rules 9-10].
 - **Decides:** DC-L10-16
 - **Changes:** DC-L07-15, DC-L04-09 · blocks: Foundations > Accessibility > Platform settings
 - **Preview:** a settings simulator panel with each toggle applied live.
@@ -2718,7 +2851,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Default:** platform-native on native apps, one open-source set on web; platform glyphs for system actions (share, back, close, more, search, settings), brand icons for product concepts. *Source:* card heuristics [DC-L05-01, DC-L10-25].
 - **Decides:** DC-L05-01, DC-L10-25
 - **Changes:** DC-L05-02, DC-L05-03, DC-L05-05, DC-L05-10 · blocks: Foundations > Iconography > Icon library source; Platform mapping
-- **Hook:** Accepts one SVG per icon on a 16 or 24px master (outlined strokes, no text), or a Figma icon library; icon fonts are accepted but converted, since fonts blur and flash (GitHub moved Octicons to SVG for this reason) [S-L05-038]. If no: (1) adopt an open-source set whose stroke and corners match the type (the default); (2) commission a designer only for domain icons the library lacks, drawn on the library's template; (3) use AI icon generators only as sketches, with the caveat that stroke, keylines and optical size rarely match across a set [inferred]. Apple's terms forbid SF Symbols or look-alikes in app icons and logos [S-L05-010].
+- **Hook:** Accepts one SVG per icon on a 16 or 24px master (outlined strokes, no text), or a Figma icon library; icon fonts are accepted but converted, since fonts blur and flash (GitHub moved Octicons to SVG for this reason) [S-L05-038]. If only a few: read their construction (badge or ring, glyph box, line weight, caps, colour), then offer glyphs from the open set closest to it, redrawn in that construction with each licence recorded, beside the originals and before a designer brief [inferred]. If no: (1) adopt an open-source set whose stroke and corners match the type (the default); (2) commission a designer only for domain icons the library lacks, drawn on the library's template; (3) use AI icon generators only as sketches, with the caveat that stroke, keylines and optical size rarely match across a set [inferred]. Apple's terms forbid SF Symbols or look-alikes in app icons and logos [S-L05-010].
 - **Preview:** the icon sheet in context; swapping libraries updates every icon.
 - **Use / avoid:** use one icon family per product; avoid mixing two libraries' strokes in one toolbar [DC-L05-01, inferred].
 - **Skip:** yes; the default library is applied.
@@ -3320,7 +3453,7 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Control:** single choice + width/offset numbers
 - **Options:**
   - `outer-2-2` 2px ring, 2px gap, corners = the part's radius + the gap (Atlassian radius.focus, Primer 2px) [S-L04-016, S-L04-024].
-  - `material-3` 3px ring, 2px gap outside, or -3px inside where an outer ring would be cut off (Material 3) [S-L04-003].
+  - `material-3` 3px ring, 2px gap outside, or -3px inside where an outer ring would be cut off (Material 3) [S-L04-003; S-L08-123].
   - `inset` Border drawn inside, for tight grids (Carbon $focus + $focus-inset) [S-L08-062].
   - `two-tone` Two-tone ring (inner white, outer dark) that is 3:1 on every surface [DC-L08-11].
 - **Default:** outer-2-2 in a high-contrast brand or neutral color with light and dark values, plus a forced-colors fallback (an outline, not a box-shadow alone). *Source:* card heuristics and accessibility rule [DC-L04-09, DC-L08-11; S-L10-031].
@@ -3577,6 +3710,30 @@ The product brief (`_coordination/BRIEF.md`) sets three rules this flow follows:
 - **Block class:** G (generatable)
 - **Time weight:** low (fan-out 0)
 - **Evidence:** DC-L08-21; S-L08-017, S-L08-041, S-L08-073
+
+### Q-pattern-07 · How should data tables look: rows, header and numbers? · Standard
+- **Show if:** Q-scope-06 includes operate, or Q-scope-01 includes internal-tools
+- **Why:** Tables are where work tools are read most. Lines or stripes keep the eye on one row, a header that stays in view keeps each column's meaning on screen, and right-aligned digits compare at a glance [DC-L19-43, DC-L19-121; S-L08-092].
+- **Ask:** "How should your tables look: lines between rows or striped rows, a header that stays on screen, and numbers lined up on the right?"
+- **Example:** Show one table three ways (lines, stripes, space), scrolled so the header is over the rows, with a money column.
+- **Control:** single choice (rows) + yes or no (sticky header) + single choice (numbers)
+- **Options:**
+  - `lines` Lines between rows: a quiet 1px line under each row (Carbon's default) [S-L08-092; DC-L19-43].
+  - `zebra` Striped rows: every other row one step darker, no lines; reads well when rows sit tight. Sets the striped-row color [DC-L19-43; S-L19-070].
+  - `space` Space between rows: no lines or stripes; for short lists, not wide data tables [DC-L19-43].
+  - `sticky-header` Header stays on screen while rows scroll, with a soft fade where rows pass under it, not a line [S-L08-092].
+  - `static-header` Header scrolls away: for tables that fit on one screen [inferred].
+  - `numbers-right` Numbers right-aligned in tabular digits, with their headers right-aligned too [DC-L19-121, DC-L02-26].
+  - `numbers-left` Numbers left-aligned like text: only for IDs and codes people read rather than compare [inferred].
+- **Default:** lines, with sticky-header and numbers-right; striped rows instead of lines when the density is compact. *Source:* card heuristics [DC-L19-43, DC-L19-121, DC-L08-13].
+- **Decides:** DC-L19-43, DC-L19-121
+- **Changes:** DC-L08-13, DC-L02-26 · blocks: Patterns > Collections > Data tables
+- **Preview:** the same table with lines, stripes and space, header pinned, a right-aligned money column.
+- **Use / avoid:** use stripes or lines for wide tables people scan across; avoid stripes as the only cue for a selected or hovered row, and avoid left-aligned amounts [DC-L19-43, DC-L19-121].
+- **Skip:** yes, defaults to lines, sticky header and right-aligned numbers.
+- **Block class:** G (generatable)
+- **Time weight:** low (fan-out 0)
+- **Evidence:** DC-L19-43, DC-L19-121, DC-L08-13, DC-L02-26; S-L08-092, S-L19-070
 
 ### Q-pattern-03 · How much should be visible up front, and how much behind "more"? · Expert
 - **Why:** Keeping extras one step away (progressive disclosure) makes screens calm and short. Showing it all at once feels strong, but busy [DC-L13-03].
@@ -4221,6 +4378,10 @@ These cards have one defensible answer backed by a platform rule, an accessibili
 | DC-L13-12 | Each interactive component documents trigger, rules, feedback, loops and modes plus its state list | S-L13-079, S-L13-106 |
 | DC-L02-22 | Text survives WCAG 1.4.12 overrides (line height 1.5x, paragraph 2x, letter 0.12x, word 0.16x); no fixed-height text boxes | S-L02-027 |
 | DC-L02-23 | Every text style is contrast-checked in every mode; below 18.5px bold / 24px regular it needs 4.5:1 | S-L02-007, S-L02-052 |
+| DC-L23-01, DC-L23-02, DC-L23-03, DC-L23-04 | When Q-aud-01 = dense: corners, weights, accent and static surfaces the person has not answered, set or locked default to 6/8/12 px, 400/500/600, one colored accent for selection, links and focus, and a ring with no shadow on static cards (levers.json `profiles.work-tool`). Each is recorded as auto_default with a reason and never locked | S-L23-001, S-L23-002, S-L23-003, S-L23-004, S-L23-005 |
+| DC-L23-05 | Static surfaces flat and floating ones shadowed in the work-tool profile; `color.border.separator` for row hairlines in every system | S-L23-001, S-L23-002, S-L23-010 |
+| DC-L23-06 | Row heights `size.row.sm/md/lg/two-line` = default control height + 4 / 8 / 16 / 32 px in each density mode | S-L23-014, S-L23-004, S-L23-003 |
+| DC-L23-07 | Tabular digits (`text.numeric.*`) in every system unless `raw.numericStyles` is set to false (STD-visual-details-02) | S-L23-007, S-L23-011 |
 
 ## Not asked: builder product decisions
 
@@ -4354,7 +4515,6 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-39 | Typographic punctuation in interface text | new question |
 | DC-L19-41 | Proximity ladder inside a content block | new question |
 | DC-L19-42 | When a card earns its place, and how deep cards may nest | new question |
-| DC-L19-43 | How list rows are separated | new question |
 | DC-L19-44 | Edge-built alignment inside compact components | new question |
 | DC-L19-45 | Axis for heroes and single-message sections (start, centered or split) | new question |
 | DC-L19-46 | Hierarchy recipe: which lever carries each text level | new question |
@@ -4422,7 +4582,6 @@ Decision Cards from the learning wiki (`research/L19-learning-wiki.md`) that no 
 | DC-L19-117 | A command menu, and how it opens | Q-comp-02 |
 | DC-L19-118 | What goes in the sidebar, and in what order | Q-layout-04 |
 | DC-L19-119 | The phone tab bar and where the main action goes | Q-icon-05, Q-layout-04 |
-| DC-L19-121 | Tables and lists: the data picks the display form | new question |
 | DC-L19-122 | How charts are drawn on product dashboards | new question |
 | DC-L19-123 | How visible each action is (the spectrum of explicitness) | new question |
 | DC-L19-124 | Which surface a task opens in: popover, modal, sheet or new page | new question |

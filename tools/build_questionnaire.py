@@ -34,9 +34,10 @@ FIELD = re.compile(r"^- \*\*(.+?):\*\* ?(.*)$")
 CLASS_NAMES = {"G": "generatable", "E": "extractable", "D": "designer-owned", "T": "tool-assisted", "I": "owner input"}
 CLASS = {}
 for c, ids in {
-    "I": "scope-01 scope-02 scope-03 scope-04 scope-05 scope-06 aud-01 aud-02 aud-03 aud-04 brand-01 brand-02 brand-05 brand-07 "
+    "I": "scope-01 scope-02 scope-03 scope-04 scope-05 scope-06 scope-07 aud-01 aud-02 aud-03 aud-04 brand-01 brand-02 brand-05 brand-07 "
          "plat-01 plat-02 plat-03 plat-04 plat-05 plat-07 plat-08 plat-09 tool-01 tool-02 tool-03 theme-03 type-04 "
-         "voice-06 comp-02 color-19 ai-01 pattern-05 pattern-06 gov-01 gov-02 gov-03 gov-04 gov-05 gov-06 pref-01 pref-02 pref-03",
+         "voice-06 comp-02 color-19 ai-01 pattern-05 pattern-06 gov-01 gov-02 gov-03 gov-04 gov-05 gov-06 pref-01 pref-02 pref-03 "
+         "site-01 site-02 site-03 site-04 site-05",
     "E": "ref-01 color-01",
     "D": "brand-03 brand-08 icon-06 img-01 img-04 img-06 img-07 motion-08 shape-05",
     "T": "icon-01 type-01 type-02 voice-01 tool-04 token-07 token-08 dist-01 dist-02 dist-03 viz-01 comp-01 gov-07 motion-09 color-06 depth-04 icon-07",
@@ -107,6 +108,9 @@ def finish(q):
         "skip": f.get("Skip", ""), "evidence": {"cards": sorted(set(DC.findall(ev))), "sources": sorted(set(SID.findall(ev)))},
         "merges": re.findall(r"\b([KBPD]\d+(?:\.\d+)?)\b", f.get("Merges", "")),
     })
+    fol = re.match(r"^(Q-[a-z]+-\d\d)\s+(.+)$", f.get("Default follows", ""))
+    if fol:  # the default depends on an earlier answer: Q-aud-01 `dense` = `compact`, ...
+        q["default_follows"] = {"question": fol.group(1), "map": dict(re.findall(r"`([^`]+)` = `([^`]+)`", fol.group(2)))}
     st = f.get("Status", "")
     q["status"] = "planned" if st.lower().startswith("planned") else "active"
     if q["status"] == "planned":

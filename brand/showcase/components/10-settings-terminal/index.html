@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ackwire · Notification settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Round 5: the settings page itself (no dialog over a dimmed page), caught mid-change: Tomas is dragging the end of his
+     quiet hours from 07:00 to 08:30. Type roles (three sizes): label 12, body 14 (section headings semibold), title 20. Weights 400 / 500 / 600.
+     Green has one job: the change being made (the 90 minutes being added to quiet hours). Switches are monochrome, white when
+     on, as in most dark settings pages; the quiet block, the handle and the logo are neutral. One depth technique: hairlines. */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { font: var(--ds-text-body-md); color: var(--ds-color-text-primary); background: var(--ds-color-surface-base); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  a { color: inherit; }
+  .ic { width: 16px; height: 16px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  :focus-visible { outline: 2px solid var(--ds-color-neutral-dark-12); outline-offset: 2px; }
+  .page { display: grid; grid-template-columns: 248px 1fr; height: 100vh; }
+
+  /* settings navigation */
+  .nav { background: var(--ds-color-surface-sunken); border-right: 1px solid var(--ds-color-neutral-alpha-dark-4); padding: var(--ds-space-16) var(--ds-space-12); display: flex; flex-direction: column; }
+  .back { display: flex; align-items: center; gap: var(--ds-space-8); height: 32px; padding: 0 var(--ds-space-8); color: var(--ds-color-text-secondary); text-decoration: none; border-radius: var(--ds-radius-control); }
+  .nav h2 { margin: var(--ds-space-16) 0 var(--ds-space-8); padding: 0 var(--ds-space-8); font-size: var(--ds-font-size-14); line-height: 20px; font-weight: var(--ds-font-weight-heading); }
+  .grp { font-size: var(--ds-font-size-12); line-height: 16px; color: var(--ds-color-text-tertiary); padding: var(--ds-space-16) var(--ds-space-8) var(--ds-space-6); }
+  .nav a.it { display: flex; align-items: center; gap: var(--ds-space-8); height: 32px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control); color: var(--ds-color-text-secondary); text-decoration: none; }
+  .nav a.it .ic { color: var(--ds-color-icon-subtle); }
+  .nav a.it .n { margin-left: auto; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); }
+  .nav a.it[aria-current] { background: var(--ds-color-neutral-alpha-dark-4); color: var(--ds-color-text-primary); }
+  .nav a.it[aria-current] .ic { color: var(--ds-color-icon-default); }
+  .ws { margin-top: auto; display: flex; align-items: center; gap: var(--ds-space-8); height: 40px; padding: 0 var(--ds-space-8); }
+  .ws .mk { width: 20px; height: 20px; }
+  .ws b { font-weight: var(--ds-font-weight-label); }
+  .ws span { margin-left: auto; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); }
+
+  /* content */
+  .content { overflow: hidden; }
+  .col { width: 880px; margin: 0 auto; padding-top: var(--ds-space-40); }
+  h1 { margin: 0; font-size: var(--ds-font-size-20); line-height: 28px; font-weight: var(--ds-font-weight-heading); letter-spacing: -0.01em; }
+  .sec { margin-top: var(--ds-space-32); }
+  .sec h3 { margin: 0; padding-bottom: var(--ds-space-8); border-bottom: 1px solid var(--ds-color-neutral-alpha-dark-5); font-size: var(--ds-font-size-14); line-height: 24px; font-weight: var(--ds-font-weight-heading); }
+  .item { display: flex; align-items: center; gap: var(--ds-space-24); min-height: 60px; padding: var(--ds-space-12) 0; border-bottom: 1px solid var(--ds-color-neutral-alpha-dark-4); }
+  .item .lbl { flex: 1; min-width: 0; }
+  .item .t { line-height: 20px; font-weight: var(--ds-font-weight-label); }
+  .item .d { margin-top: 2px; line-height: 20px; color: var(--ds-color-text-secondary); }
+  .sw { position: relative; width: 36px; height: 20px; border-radius: 10px; background: var(--ds-color-neutral-dark-7); flex: none; }
+  .sw::after { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--ds-color-neutral-dark-12); }
+  .sw[aria-checked="true"] { background: var(--ds-color-neutral-dark-12); }
+  .sw[aria-checked="true"]::after { left: 18px; background: var(--ds-color-neutral-dark-1); }
+  .sel { display: inline-flex; align-items: center; gap: var(--ds-space-8); height: 32px; padding: 0 var(--ds-space-8) 0 var(--ds-space-12); border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-alpha-dark-3); box-shadow: inset 0 0 0 1px var(--ds-color-neutral-alpha-dark-5); min-width: 152px; }
+  .sel .ic { margin-left: auto; color: var(--ds-color-icon-subtle); width: 14px; height: 14px; }
+
+  /* quiet hours: Thursday 07:00 to Friday 12:00 (29 hours), being edited */
+  .qh { padding: var(--ds-space-16) 0 var(--ds-space-20); border-bottom: 1px solid var(--ds-color-neutral-alpha-dark-4); }
+  .qh .k { display: flex; justify-content: space-between; align-items: baseline; line-height: 20px; color: var(--ds-color-text-secondary); }
+  .qh .k b { font-weight: var(--ds-font-weight-label); color: var(--ds-color-text-primary); }
+  .qh .k .was-t { font-style: normal; color: var(--ds-color-text-tertiary); }
+  .strip { position: relative; margin-top: var(--ds-space-48); height: 56px; border-radius: var(--ds-radius-6); background: var(--ds-color-neutral-alpha-dark-4); }
+  .quiet { position: absolute; top: 0; bottom: 0; border-radius: var(--ds-radius-6) 0 0 var(--ds-radius-6); background: var(--ds-color-neutral-alpha-dark-7); display: flex; align-items: center; padding: 0 var(--ds-space-12); font-weight: var(--ds-font-weight-label); }
+  /* the 90 minutes being added: the only green on the page */
+  .added { position: absolute; top: 0; bottom: 0; background: var(--ds-color-accent-dark-6); box-shadow: inset 0 2px 0 var(--ds-color-accent-dark-9), inset 0 -2px 0 var(--ds-color-accent-dark-9); }
+  .was { position: absolute; top: 0; bottom: 0; border-left: 1px dashed var(--ds-color-neutral-alpha-dark-9); }
+  .now { position: absolute; top: -6px; bottom: -6px; width: 2px; margin-left: -1px; border-radius: 1px; background: var(--ds-color-neutral-alpha-dark-8); }
+  .grip { position: absolute; top: -6px; bottom: -6px; width: 12px; margin-left: -6px; border-radius: 6px; background: #fff; box-shadow: 0 0 0 4px var(--ds-color-neutral-alpha-dark-6); }
+  .grip::after { content: ""; position: absolute; left: 5px; top: 24px; bottom: 24px; width: 2px; border-radius: 1px; background: var(--ds-color-neutral-dark-7); }
+  .tip { position: absolute; bottom: calc(100% + 14px); transform: translateX(-50%); padding: var(--ds-space-4) var(--ds-space-8); border-radius: var(--ds-radius-6); background: #fff; color: var(--ds-color-neutral-dark-1); font-weight: var(--ds-font-weight-heading); line-height: 20px; white-space: nowrap; }
+  .ticks { position: relative; height: 16px; margin-top: var(--ds-space-12); font-size: var(--ds-font-size-12); line-height: 16px; color: var(--ds-color-text-tertiary); }
+  .ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+  .ticks span:first-child { transform: none; }
+  .ticks span:last-child { transform: translateX(-100%); }
+  .ticks .hi { color: var(--ds-color-text-secondary); }
+  .effect { margin: var(--ds-space-20) 0 0; line-height: 20px; color: var(--ds-color-text-primary); }
+  .effect b { font-weight: var(--ds-font-weight-heading); }
+  .effect span { color: var(--ds-color-text-secondary); }
+  .oncall { display: flex; gap: var(--ds-space-8); align-items: flex-start; padding: var(--ds-space-16) 0 0; color: var(--ds-color-text-secondary); line-height: 20px; }
+  .oncall b { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
+  .oncall .ic { color: var(--ds-color-icon-default); margin-top: 2px; }
+  .nw { white-space: nowrap; }
+  .link { color: var(--ds-color-text-primary); text-decoration: underline; text-decoration-color: var(--ds-color-neutral-alpha-dark-7); text-underline-offset: 3px; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-x" viewBox="0 0 16 16"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 16 16"><path d="M4.5 6.5 8 10l3.5-3.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="m3.5 8.5 3 3 6-7"/></symbol>
+  <symbol id="i-user" viewBox="0 0 16 16"><circle cx="8" cy="5.5" r="2.5"/><path d="M3 13.5a5 5 0 0 1 10 0"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 16 16"><path d="M4 11.5V7a4 4 0 0 1 8 0v4.5l1 1H3l1-1ZM6.5 14h3"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 16 16"><rect x="4.5" y="1.5" width="7" height="13" rx="1.5"/><path d="M7 12.5h2"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 16 16"><rect x="2.5" y="3.5" width="11" height="10" rx="1.5"/><path d="M2.5 6.5h11M5.5 2v3M10.5 2v3"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 16 16"><path d="M3 4.5h6M12 4.5h1M3 11.5h1M7 11.5h6"/><circle cx="10.5" cy="4.5" r="1.5"/><circle cx="5.5" cy="11.5" r="1.5"/></symbol>
+  <symbol id="i-team" viewBox="0 0 16 16"><circle cx="6" cy="6" r="2.2"/><circle cx="11" cy="6.5" r="1.8"/><path d="M2 13a4 4 0 0 1 8 0M10 9.6a3.2 3.2 0 0 1 4 3.1"/></symbol>
+  <symbol id="i-rot" viewBox="0 0 16 16"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v2.5h-2.5"/></symbol>
+  <symbol id="i-esc" viewBox="0 0 16 16"><path d="M3 12.5h3v-3h3v-3h3v-3"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 16 16"><path d="M6 2.5v3M10 2.5v3M4.5 5.5h7v2a3.5 3.5 0 0 1-7 0v-2ZM8 11v2.5"/></symbol>
+  <symbol id="i-card" viewBox="0 0 16 16"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></symbol>
+  <symbol id="i-call" viewBox="0 0 16 16"><path d="M5.5 2.5h-2a1 1 0 0 0-1 1.1 10.5 10.5 0 0 0 9.9 9.9 1 1 0 0 0 1.1-1v-2l-2.5-1-1.5 1.5a7 7 0 0 1-3-3L8 7.5l-1-2.5-1.5-2.5Z"/></symbol>
+  <symbol id="i-sms" viewBox="0 0 16 16"><path d="M2.5 4A1.5 1.5 0 0 1 4 2.5h8A1.5 1.5 0 0 1 13.5 4v6a1.5 1.5 0 0 1-1.5 1.5H6.5l-3 2.5v-2.5H4A1.5 1.5 0 0 1 2.5 10V4Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 16 16"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="m2.5 4.5 5.5 4 5.5-4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 16 16"><path d="M13 9.5A5.5 5.5 0 0 1 6.5 3a5.5 5.5 0 1 0 6.5 6.5Z"/></symbol>
+  <symbol id="i-info" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5v3M8 5.3v.2"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 16 16"><path d="m6 8.5 1.5 1.5L10.5 7"/><path d="M4.5 12.5a3 3 0 0 1-.4-6 4 4 0 0 1 7.7.8 2.6 2.6 0 0 1-.3 5.2h-7Z"/></symbol>
+  <symbol id="i-send" viewBox="0 0 16 16"><path d="M13.5 2.5 7 9M13.5 2.5l-4 11-2.5-4.5-4.5-2.5 11-4Z"/></symbol>
+  <symbol id="i-left" viewBox="0 0 16 16"><path d="M9.5 4 5.5 8l4 4"/></symbol>
+</svg>
+
+<div class="page">
+  <nav class="nav" aria-label="Settings">
+    <a class="back" href="#"><svg class="ic"><use href="#i-left"/></svg>Incidents</a>
+    <h2>Settings</h2>
+    <div class="grp" style="padding-top:0">Your account</div>
+    <a class="it" href="#"><svg class="ic"><use href="#i-user"/></svg>Profile</a>
+    <a class="it" href="#" aria-current="page"><svg class="ic"><use href="#i-bell"/></svg>Notifications</a>
+    <a class="it" href="#"><svg class="ic"><use href="#i-phone"/></svg>Devices<span class="n">2</span></a>
+    <a class="it" href="#"><svg class="ic"><use href="#i-cal"/></svg>Calendar sync</a>
+    <div class="grp">Fernbank Grocery</div>
+    <a class="it" href="#"><svg class="ic"><use href="#i-gear"/></svg>General</a>
+    <a class="it" href="#"><svg class="ic"><use href="#i-team"/></svg>Members<span class="n">38</span></a>
+    <a class="it" href="#"><svg class="ic"><use href="#i-rot"/></svg>Rotations<span class="n">6</span></a>
+    <a class="it" href="#"><svg class="ic"><use href="#i-esc"/></svg>Escalation policies<span class="n">9</span></a>
+    <a class="it" href="#"><svg class="ic"><use href="#i-plug"/></svg>Integrations<span class="n">5</span></a>
+    <a class="it" href="#"><svg class="ic"><use href="#i-card"/></svg>Billing</a>
+    <div class="ws"><svg class="mk" viewBox="0 0 20 20" aria-hidden="true"><rect width="20" height="20" rx="5" fill="var(--ds-color-neutral-dark-12)"/><path d="M6 14.5 10 5.5l4 9M7.4 11.3h5.2" fill="none" stroke="#151515" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Ackwire</b><span>Tomas</span></div>
+  </nav>
+
+  <main class="content">
+    <div class="col">
+      <h1>Notifications</h1>
+
+      <section class="sec" aria-labelledby="sq">
+        <h3 id="sq">Quiet hours</h3>
+        <div class="item" style="border-bottom:0"><div class="lbl"><div class="t">Hold low-urgency pages overnight</div><div class="d">High-urgency pages still reach you.</div></div><span class="sw" role="switch" aria-checked="true" aria-label="Quiet hours"></span></div>
+        <div class="qh">
+          <div class="k"><span>Weeknights <b>22:00 to 08:30</b><i class="was-t">, was 07:00</i></span><span>Pacific time</span></div>
+          <div class="strip" role="group" aria-label="Thursday 07:00 to Friday 12:00">
+            <span class="quiet" style="left:51.724%; width:36.207%">Quiet</span>
+            <span class="added" style="left:82.759%; width:5.172%" aria-hidden="true"></span>
+            <span class="was" style="left:82.759%" aria-hidden="true"></span>
+            <span class="now" style="left:23.678%" aria-hidden="true"></span>
+            <span class="grip" style="left:87.931%" role="slider" tabindex="0" aria-label="Quiet hours end" aria-valuetext="08:30" aria-valuemin="0" aria-valuemax="1440" aria-valuenow="510"><span class="tip">Fri 08:30</span></span>
+          </div>
+          <div class="ticks"><span style="left:0">Thu 07:00</span><span class="hi" style="left:23.678%">Now 13:52</span><span style="left:51.724%">22:00</span><span style="left:82.759%">07:00</span><span style="left:100%">Fri 12:00</span></div>
+          <p class="effect"><b>90 more quiet minutes</b> each weekday morning: low-urgency pages from 07:00 wait until 08:30. <span>Last week, 4 did.</span></p>
+        </div>
+        <div class="oncall"><svg class="ic"><use href="#i-info"/></svg><div>You’re primary on call for <b>checkout-svc</b> until Mon, Oct 19 at 09:00; pages left open for 10 minutes go to the secondary, <b class="nw">Bea Ashby</b>. <a class="link" href="#"><span class="nw">Edit policy</span></a></div></div>
+      </section>
+      <section class="sec" aria-labelledby="s1">
+        <h3 id="s1">When you’re paged</h3>
+        <div class="item"><div class="lbl"><div class="t">Push to your phone</div><div class="d">Tomas’s phone, seen 4 min ago. High-urgency pages sound in Do Not Disturb.</div></div><span class="sw" role="switch" aria-checked="true" aria-label="Push to your phone"></span></div>
+        <div class="item"><div class="lbl"><div class="t">Phone call</div><div class="d">Calls you if a page is still open</div></div><button class="sel" type="button" aria-haspopup="listbox">After 5 minutes<svg class="ic"><use href="#i-chev"/></svg></button></div>
+        <div class="item"><div class="lbl"><div class="t">Text message</div><div class="d">To +1 (503) 555-0148, with a link to acknowledge</div></div><span class="sw" role="switch" aria-checked="true" aria-label="Text message"></span></div>
+        <div class="item"><div class="lbl"><div class="t">Email summary</div><div class="d">To tomas@fernbank.example</div></div><button class="sel" type="button" aria-haspopup="listbox">Daily at 09:00<svg class="ic"><use href="#i-chev"/></svg></button></div>
+      </section>
+
+    </div>
+  </main>
+</div>
+</body>
+</html>

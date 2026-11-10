@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tarrow · Shipments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+/* Tarrow shipments table. Colour, space, radius, type and motion come from the --ds-* tokens.
+   OFF-TOKEN values are marked with the reason. Orange is the brand mark only; the selection and its bar lead. */
+:root {
+  /* OFF-TOKEN: row rules. border.subtle (neutral 7) is too heavy repeated 18 times; neutral 4 is the nearest step. */
+  --rule: var(--ds-color-neutral-light-4);
+  --rule-strong: var(--ds-color-neutral-light-6);
+  /* 36 px rows: control.md (32) plus the 4 px step, between the compact and comfortable densities */
+  --row: calc(var(--ds-size-control-md) + var(--ds-space-4));
+  --pad: var(--ds-space-32);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  min-width: 1280px; height: 100vh; height: 100dvh; overflow: hidden; position: relative;
+  display: flex; flex-direction: column;
+  background: var(--ds-color-surface-raised);
+  color: var(--ds-color-text-primary);
+  font: var(--ds-text-body-md);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.i { width: var(--ds-size-icon-sm); height: var(--ds-size-icon-sm); flex: none; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- top bar ---------- */
+.top { height: 52px; flex: none; display: flex; align-items: center; gap: var(--ds-space-32); padding: 0 var(--pad); border-bottom: 1px solid var(--rule); }
+.brand { display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-title-sm); font-size: var(--ds-font-size-17); letter-spacing: -0.01em; }
+.mark { width: 22px; height: 22px; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-brand); display: grid; place-items: center; color: var(--ds-color-white); }
+.mark .i { width: 14px; height: 14px; stroke-width: 2.6; }
+.nav { display: flex; gap: var(--ds-space-4); height: 100%; }
+.nav a { display: flex; align-items: center; padding: 0 var(--ds-space-12); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.nav a.on { color: var(--ds-color-text-primary); font-weight: 500; border-bottom-color: var(--ds-color-text-primary); }
+.top .right { margin-left: auto; display: flex; align-items: center; gap: var(--ds-space-16); color: var(--ds-color-icon-default); }
+.search { width: 300px; height: var(--ds-size-control-md); display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-6) 0 var(--ds-space-12); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-sunken); color: var(--ds-color-text-tertiary); }
+.search kbd { margin-left: auto; font: var(--ds-text-code-sm); padding: 1px var(--ds-space-6); border: 1px solid var(--rule-strong); border-radius: var(--ds-radius-detail); background: var(--ds-color-surface-raised); }
+.avatar { width: 28px; height: 28px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-4); display: grid; place-items: center; font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+
+/* ---------- page head ---------- */
+.head { padding: var(--ds-space-32) var(--pad) 0; display: flex; align-items: center; gap: var(--ds-space-12); }
+.head h1 { margin: 0; font: var(--ds-text-headline-sm); letter-spacing: -0.01em; }
+.head .acts { margin-left: auto; display: flex; gap: var(--ds-space-8); }
+.btn { height: var(--ds-size-control-md); display: inline-flex; align-items: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: 500; border: 1px solid var(--rule-strong); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); white-space: nowrap; }
+.btn.primary { background: var(--ds-color-bg-action-primary); border-color: transparent; color: var(--ds-color-text-on-action); }
+.btn.ghost { border-color: transparent; color: var(--ds-color-text-secondary); }
+.btn.ghost .i { color: var(--ds-color-icon-subtle); }
+.btn.ink { background: var(--ds-color-bg-inverse); border-color: transparent; color: var(--ds-color-text-inverse); }
+
+.tabs { display: flex; gap: var(--ds-space-24); padding: 0 var(--pad); margin-top: var(--ds-space-16); border-bottom: 1px solid var(--rule); }
+.tab { height: 40px; display: flex; align-items: center; gap: var(--ds-space-6); color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tab .n { color: var(--ds-color-text-tertiary); }
+.tab.on { color: var(--ds-color-text-primary); font-weight: 500; border-bottom-color: var(--ds-color-text-primary); }
+
+.tools { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-16) var(--pad); }
+.chip { height: 28px; display: inline-flex; align-items: center; border: 1px solid var(--rule-strong); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); overflow: hidden; }
+.chip span { padding: 0 var(--ds-space-8); height: 100%; display: flex; align-items: center; }
+.chip .k { color: var(--ds-color-text-secondary); border-right: 1px solid var(--rule); }
+.chip .x { padding: 0 var(--ds-space-6); color: var(--ds-color-icon-subtle); }
+.chip .x .i { width: 14px; height: 14px; }
+.chip.add { border-style: dashed; color: var(--ds-color-text-secondary); padding: 0 var(--ds-space-8); gap: var(--ds-space-4); }
+.tools .meta { margin-left: auto; color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); }
+.tools .btn { height: 28px; }
+
+/* ---------- table ---------- */
+.wrap { padding: 0 var(--pad); flex: 1; min-height: 0; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+th, td { height: var(--row); padding: 0 var(--ds-space-12); text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px solid var(--rule); }
+th { font: var(--ds-text-label-md); font-weight: 500; color: var(--ds-color-text-tertiary); border-top: 1px solid var(--rule); border-bottom-color: var(--rule-strong); }
+th.sorted { color: var(--ds-color-text-primary); }
+th .i { width: 12px; height: 12px; vertical-align: -1px; margin-left: var(--ds-space-2); }
+th.r, td.r { text-align: right; }
+th:first-child, td:first-child { padding-left: var(--ds-space-8); padding-right: 0; }
+tr.group td { height: 36px; padding-top: var(--ds-space-12); vertical-align: bottom; font: var(--ds-text-label-md); font-weight: 600; color: var(--ds-color-text-primary); border-bottom-color: var(--rule-strong); }
+tr.group td span { color: var(--ds-color-text-tertiary); font-weight: 400; margin-left: var(--ds-space-8); }
+tr.sel td { background: var(--ds-color-neutral-light-3); }
+tr.hover td { background: var(--ds-color-surface-sunken); }
+
+.cb { width: 16px; height: 16px; border-radius: var(--ds-radius-detail); border: 1px solid var(--ds-color-border-default); background: var(--ds-color-surface-raised); display: grid; place-items: center; flex: none; }
+.cb.on, .cb.mixed { background: var(--ds-color-bg-inverse); border-color: var(--ds-color-bg-inverse); color: var(--ds-color-white); }
+.cb svg { width: 12px; height: 12px; stroke-width: 3; }
+
+.id { font: var(--ds-text-code-md); }
+.lane .to { color: var(--ds-color-text-secondary); }
+.lane .ar { color: var(--ds-color-text-tertiary); margin: 0 var(--ds-space-4); }
+.ping { color: var(--ds-color-text-secondary); }
+.ping time { color: var(--ds-color-text-tertiary); margin-left: var(--ds-space-6); }
+.mode, .appt { color: var(--ds-color-text-secondary); }
+.delta { margin-left: var(--ds-space-6); font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+.unit { color: var(--ds-color-text-tertiary); margin-left: 3px; }
+.st { color: var(--ds-color-text-secondary); }
+.st.late { color: var(--ds-color-text-danger); font-weight: 500; }
+.st.ofd { color: var(--ds-color-text-success); }
+.rowact { visibility: hidden; color: var(--ds-color-icon-default); display: grid; place-items: center; width: 24px; height: 24px; border-radius: var(--ds-radius-control); }
+tr.hover .rowact { visibility: visible; background: var(--ds-color-surface-raised); box-shadow: var(--ds-elevation-raised); }
+
+/* ---------- docked selection bar ---------- */
+.dock { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--pad) 0 calc(var(--pad) + var(--ds-space-8)); background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); }
+.dock .btn.ink { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.dock .btn.ghost { background: transparent; border-color: transparent; color: var(--ds-color-neutral-dark-12); }
+.dock .btn.ghost .i { color: var(--ds-color-neutral-dark-11); }
+.dock .count small { color: var(--ds-color-neutral-dark-11); }
+.dock .cb.mixed { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); border-color: transparent; }
+.dock .count { display: flex; align-items: center; gap: var(--ds-space-12); font: var(--ds-text-label-lg); font-weight: 500; margin-right: var(--ds-space-16); }
+.dock .count small { font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); font-weight: 400; }
+.dock .end { margin-left: auto; display: flex; gap: var(--ds-space-8); }
+@media (hover: hover) and (pointer: fine) {
+  tbody tr:not(.group):hover td { background: var(--ds-color-surface-sunken); }
+  tbody tr:hover .rowact { visibility: visible; }
+  .btn:hover { background: var(--ds-color-surface-sunken); }
+  .btn.primary:hover { background: var(--ds-color-bg-action-primary-hover); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dock { transition: transform var(--ds-motion-transition-enter-duration) var(--ds-motion-transition-enter-easing); }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-mark" viewBox="0 0 24 24"><path d="M8 5.5 14.5 12 8 18.5M13 5.5l6.5 6.5-6.5 6.5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6.5 16.5V11a5.5 5.5 0 0 1 11 0v5.5l1.5 2H5z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4.5v11M7 10.5l5 5 5-5M5 19.5h14"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></symbol>
+  <symbol id="i-cols" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M9.5 5v14M14.5 5v14"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6.5 10.5 12 5l5.5 5.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5.5 12.5 4 4 9-9"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><circle cx="6" cy="12" r=".9"/><circle cx="12" cy="12" r=".9"/><circle cx="18" cy="12" r=".9"/></symbol>
+  <symbol id="i-ping" viewBox="0 0 24 24"><path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3"/><circle cx="12" cy="12" r="5.5"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14" rx="1.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5.5 21V4.5M5.5 4.5h11l-2 4 2 4h-11"/></symbol>
+</svg>
+
+<header class="top">
+  <a class="brand" href="#"><span class="mark"><svg class="i"><use href="#i-mark"/></svg></span>Tarrow</a>
+  <nav class="nav" aria-label="Main">
+    <a href="#" class="on" aria-current="page">Shipments</a>
+    <a href="#">Load board</a>
+    <a href="#">Carriers</a>
+    <a href="#">Lanes</a>
+    <a href="#">Docks</a>
+    <a href="#">Freight bills</a>
+  </nav>
+  <div class="right">
+    <label class="search"><svg class="i"><use href="#i-search"/></svg>Search PRO, BOL or shipment<kbd>⌘K</kbd></label>
+    <svg class="i" aria-label="Notifications"><use href="#i-bell"/></svg>
+    <span class="avatar" aria-label="Signed in as RM">RM</span>
+  </div>
+</header>
+
+<div class="head">
+  <h1>Shipments</h1>
+  <div class="acts">
+    <button class="btn"><svg class="i"><use href="#i-down"/></svg>Export</button>
+    <button class="btn"><svg class="i"><use href="#i-plus"/></svg>New booking</button>
+  </div>
+</div>
+
+<div class="tabs" role="tablist">
+  <div class="tab" role="tab">All<span class="n">1,284</span></div>
+  <div class="tab" role="tab">Booked<span class="n">96</span></div>
+  <div class="tab on" role="tab" aria-selected="true">In transit<span class="n">412</span></div>
+  <div class="tab" role="tab">Delivered<span class="n">776</span></div>
+  <div class="tab" role="tab" style="margin-left:auto">Exceptions<span class="n">23</span></div>
+</div>
+
+<div class="tools">
+  <span class="chip"><span class="k">ETA</span><span>Next 24 hours</span><button class="x" aria-label="Remove ETA filter"><svg class="i"><use href="#i-x"/></svg></button></span>
+  <span class="chip"><span class="k">Mode</span><span class="op" style="color:var(--ds-color-text-tertiary);padding-right:0">is not</span><span>Air</span><button class="x" aria-label="Remove mode filter"><svg class="i"><use href="#i-x"/></svg></button></span>
+  <button class="chip add"><svg class="i"><use href="#i-plus"/></svg>Filter</button>
+  <button class="btn ghost" style="margin-left:auto"><svg class="i"><use href="#i-cols"/></svg>Columns</button>
+</div>
+
+<div class="wrap">
+  <table>
+    <colgroup>
+      <col style="width:32px"><col style="width:112px"><col style="width:216px"><col style="width:208px"><col style="width:148px">
+      <col style="width:104px"><col style="width:132px"><col style="width:112px"><col style="width:104px"><col><col style="width:40px">
+    </colgroup>
+    <thead><tr>
+      <th><span class="cb mixed" role="checkbox" aria-checked="mixed" aria-label="Select all"><svg class="i"><use href="#i-minus"/></svg></span></th>
+      <th>Shipment</th><th>Lane</th><th>Last ping</th><th>Carrier</th><th>Mode</th>
+      <th>Appointment, CDT</th>
+      <th class="sorted">ETA, CDT<svg class="i"><use href="#i-up"/></svg></th>
+      <th class="r">Weight</th><th>Status</th><th></th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</div>
+
+<div class="dock" role="toolbar" aria-label="2 shipments selected">
+  <span class="count"><span class="cb mixed" aria-hidden="true"><svg class="i"><use href="#i-minus"/></svg></span>2 selected<small>TRW-48207, TRW-48190</small></span>
+  <button class="btn ink"><svg class="i"><use href="#i-ping"/></svg>Request ETA update</button>
+  <button class="btn ghost"><svg class="i"><use href="#i-cal"/></svg>Reschedule delivery</button>
+  <button class="btn ghost"><svg class="i"><use href="#i-flag"/></svg>Escalate to carrier</button>
+  <div class="end"><button class="btn ghost">Clear selection</button></div>
+</div>
+
+<script>
+// Each row: id, from, to, last ping place, ping time, carrier, mode, ETA, appointment window [start, end], weight lb, status, flag.
+// Times are CDT; "now" is Thu 15 Oct 2026, 14:06. Every ping is before now. Hours past 24 are Friday (25:30 = Fri 01:30).
+const G = [
+  ["Today", "Thu 15 Oct", 11, [
+    ["TRW-48244","Dallas","Houston","Houston, TX","14:01","Pellam Carriers","LTL","15:10",[15,17],3120,"ofd"],
+    ["TRW-48231","Los Angeles","Phoenix","Buckeye, AZ","13:58","Brennock Haul","FTL","15:25",[15,16],21300,"ok"],
+    ["TRW-48252","Memphis","Birmingham","Jasper, AL","14:03","Brennock Haul","FTL","15:45",[15.5,16.5],17880,"ok"],
+    ["TRW-48207","Newark","Boston","Hartford, CT","13:47","Brisk Line","FTL","16:15",[14,15.25],18420,"late","sel","+1h"],
+    ["TRW-48219","Houston","New Orleans","Lafayette, LA","13:55","Brisk Line","FTL","16:30",[16,18],19730,"ok"],
+    ["TRW-48256","Savannah","Charlotte","Orangeburg, SC","14:00","Pellam Carriers","FTL","17:05",[17,18],15600,"ok"],
+    ["TRW-48198","Chicago","Indianapolis","Indianapolis terminal","09:12","Ostrel Freight","LTL","17:20",[16,19],2475,"terminal"],
+    ["TRW-48233","Kansas City","St. Louis","Higginsville, MO","13:59","Brennock Haul","FTL","18:30",[18,20],22140,"ok"],
+    ["TRW-48190","Atlanta","Dallas","Monroe, LA","13:50","Brisk Line","FTL","19:05",[15,16],26210,"late","sel","+3h"],
+    ["TRW-48174","Seattle","Denver","Cheyenne, WY","13:30","Corrin Rail","Intermodal","22:40",[22,24],41900,"ok"],
+    ["TRW-48126","Oakland","Salt Lake City","Wendover, UT","13:41","Corrin Rail","Intermodal","23:30",[21.5,22.5],38250,"late","","+1h"],
+  ]],
+  ["Tomorrow", "Fri 16 Oct", 15, [
+    ["TRW-48203","Chicago","Denver","Kearney, NE","13:57","Brennock Haul","FTL","06:20",[30,32],20560,"ok"],
+    ["TRW-48261","Detroit","Pittsburgh","Detroit terminal","13:40","Pellam Carriers","LTL","08:30",[32,36],4105,"terminal"],
+    ["TRW-48168","Memphis","Phoenix","Albuquerque, NM","13:44","Brennock Haul","FTL","09:20",[33,34],22880,"ok"],
+    ["TRW-48249","Kansas City","Minneapolis","Des Moines terminal","13:20","Ostrel Freight","LTL","09:40",[33,37],1860,"terminal"],
+    ["TRW-48240","Atlanta","Miami","Cordele, GA","13:58","Pellam Carriers","FTL","10:15",[34,35],14220,"ok"],
+    ["TRW-48226","Denver","Albuquerque","Pueblo, CO","13:10","Corrin Rail","Intermodal","11:50",[35,37],36400,"ok"],
+  ]],
+];
+const ST = { ok: "On time", late: "Late", terminal: "At terminal", ofd: "Out for delivery" };
+const use = (id) => `<svg class="i"><use href="#${id}"/></svg>`;
+const hm = (h) => String(Math.floor(h % 24)).padStart(2, "0") + ":" + String(Math.round(h % 1 * 60)).padStart(2, "0");
+document.getElementById("rows").innerHTML = G.map(([day, date, n, rows]) =>
+  `<tr class="group"><td></td><td colspan="10">${day}, ${date}<span>${n} arriving</span></td></tr>` +
+  rows.map(([id, a, b, at, t, car, mode, eta, win, w, st, flag, d]) => {
+    const sel = flag === "sel";
+    return `<tr class="${flag || ""}">
+      <td><span class="cb${sel ? " on" : ""}" role="checkbox" aria-checked="${sel}" aria-label="Select ${id}">${sel ? use("i-check") : ""}</span></td>
+      <td class="id">${id}</td>
+      <td class="lane">${a}<span class="ar">→</span><span class="to">${b}</span></td>
+      <td class="ping">${at}<time>${t}</time></td>
+      <td>${car}</td>
+      <td class="mode">${mode}</td>
+      <td class="appt">${hm(win[0])}–${hm(win[1])}</td>
+      <td>${eta}${d ? `<span class="delta" title="past the appointment">${d}</span>` : ""}</td>
+      <td class="r">${w.toLocaleString("en-US")}<span class="unit">lb</span></td>
+      <td><span class="st ${st}">${ST[st]}</span></td>
+      <td><span class="rowact" aria-label="More actions">${use("i-more")}</span></td>
+    </tr>`;
+  }).join("")).join("");
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 type: topic
 title: Web implementation (CSS and React)
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -54,3 +54,8 @@ Describes a single CSS line that scales text linearly between the smallest (320)
 - [[sources/vaul-getting-started-getting-started-vaul|Getting Started – Vaul]]: A 'use client' React component styled with utility classes: fixed inset-0 bg-black/40 overlay and fixed bottom-0 left-0 right-0 h-fit content.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Tailwind utilities and CSS details: ring vs border, inline-flex p-px span wrapper, max width in ch on the font-size element, text-wrap pretty and balance, absolutely positioned inset rings over images.
 - See also: [[synthesis/web-implementation-css-and-react|Web implementation (CSS and React) synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-color-referodesign-refero-skill-skills-refero-design-references-color-md|referodesign/refero_skill: skills/refero-design/references/color.md]]: CSS custom property examples, meta color-scheme and theme-color tags, and a dark-mode fix for native select on Windows.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-craft-details-referodesign-refero-skill-skills-refero-design-references-craft-details-md|referodesign/refero_skill: skills/refero-design/references/craft-details.md]]: CSS and JSX snippets for focus, touch, images, virtualization, ResizeObserver, uncontrolled inputs, preconnect and font preload, URL state with nuqs.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-icons-referodesign-refero-skill-skills-refero-design-references-icons-md|referodesign/refero_skill: skills/refero-design/references/icons.md]]: Shows font-variation-settings for Material Symbols and align-items: center for icon and text alignment.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-motion-referodesign-refero-skill-skills-refero-design-references-motion-md|referodesign/refero_skill: skills/refero-design/references/motion.md]]: CSS transition examples, SVG transform-box fix, and library choice for React/Next.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-typography-referodesign-refero-skill-skills-refero-design-references-typography-md|referodesign/refero_skill: skills/refero-design/references/typography.md]]: clamp() fluid type, breakpoints, truncation and line clamp, min-width: 0 for flex children, font-display: swap.

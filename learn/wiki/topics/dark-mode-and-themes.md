@@ -2,7 +2,7 @@
 type: topic
 title: Dark mode and themes
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -34,3 +34,6 @@ Dark mode needs about double the step distance between neutrals, a lighter prima
 - [[sources/sonner-toaster-toaster-sonner|Toaster – Sonner]]: The toaster's theme defaults to light; pass resolvedTheme from a theme provider such as next-themes so toasts follow the app theme.
 - [[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily|Awful To AMAZING Web Designs Easily]]: Dark mode won't suit all sites but should work on most modern-themed ones; flip text to white, lighten over-saturated primary and accent colors, and consider frosted glass on cards. It entirely changes the look and feel.
 - See also: [[synthesis/dark-mode-and-themes|Dark mode and themes synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop-referodesign-refero-skill-skills-refero-design-references-anti-ai-slop-md|referodesign/refero_skill: skills/refero-design/references/anti-ai-slop.md]]: Treats dark-by-default as an AI fingerprint; use light mode unless the brief asks for dark.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-color-referodesign-refero-skill-skills-refero-design-references-color-md|referodesign/refero_skill: skills/refero-design/references/color.md]]: Dark theme needs its own neutrals (#0f0f0f bg, #f0f0f0 text, not pure black/white), lighter elevated surfaces, rgba white borders, and color-scheme/theme-color settings.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-typography-referodesign-refero-skill-skills-refero-design-references-typography-md|referodesign/refero_skill: skills/refero-design/references/typography.md]]: Dark text tokens: #F5F5F5 primary, 0.7 and 0.5 white for secondary and tertiary.

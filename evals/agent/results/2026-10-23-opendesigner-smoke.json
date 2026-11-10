@@ -1,0 +1,36 @@
+{
+  "kind": "agent",
+  "date": "2026-10-23",
+  "commit": "ffdf89d",
+  "skillsRef": "working tree",
+  "label": "opendesigner-smoke",
+  "model": "sonnet",
+  "judgeModel": "haiku",
+  "runsPerArm": 1,
+  "claudeVersion": "2.1.302",
+  "overallScore": 1,
+  "meanDelta": 0.45,
+  "casesPassed": 2,
+  "casesTotal": 2,
+  "costUsd": 0.4371151999999999,
+  "durationSeconds": 95,
+  "partial": false,
+  "cases": [
+    {
+      "name": "one-question-first",
+      "score": 1,
+      "without": 0.5,
+      "delta": 0.5,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "sketch-five-answers",
+      "score": 1,
+      "without": 0.6,
+      "delta": 0.4,
+      "runs": 1,
+      "errors": []
+    }
+  ]
+}

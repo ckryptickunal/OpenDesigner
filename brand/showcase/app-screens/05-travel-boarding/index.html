@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aerlo: boarding pass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300..700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ds-color-surface-base); }
+  body { width: 390px; height: 844px; overflow: hidden; position: relative; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); -webkit-font-smoothing: antialiased; }
+  /* ART: the sky behind the ticket, from the pale-sky ramp (accent2) */
+  .sky { position: absolute; inset: 0; pointer-events: none; overflow: hidden; background: linear-gradient(180deg, var(--ds-color-accent2-light-3) 40%, var(--ds-color-surface-base) 85%); }
+  .sky img { position: absolute; left: 0; top: 0; width: 390px; height: 420px; object-fit: cover; display: block; }
+  .sky::after { content: ""; position: absolute; left: 0; top: 0; width: 390px; height: 424px;
+    background: linear-gradient(180deg, rgb(4 22 64 / .5) 0%, rgb(4 22 64 / .32) 22%, rgb(4 22 64 / 0) 40%, transparent 62%, var(--ds-color-accent2-light-3) 100%); }
+  .mono { font-family: var(--ds-font-family-mono); }
+
+  .status { position: relative; height: 54px; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-4) var(--ds-space-32) 0 var(--ds-space-40); }
+  .status { color: var(--ds-color-white); }
+  .status time { font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); letter-spacing: -0.01em; }
+  .status .sys { display: flex; gap: var(--ds-space-6); align-items: center; }
+  .status svg { display: block; fill: var(--ds-color-white); }
+
+  .nav { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 0 var(--ds-space-16); height: 48px; }
+  .nav h1 { font: var(--ds-text-title-sm); letter-spacing: -0.01em; color: var(--ds-color-white); }
+  .ib { all: unset; box-sizing: border-box; width: 44px; height: 44px; border-radius: var(--ds-radius-full); display: grid; place-items: center; color: var(--ds-color-white); background: color-mix(in oklab, var(--ds-color-white) 18%, transparent); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ds-color-white) 35%, transparent); }
+
+  .state { position: relative; display: flex; justify-content: center; margin-top: var(--ds-space-8); }
+  .pill { display: inline-flex; align-items: center; gap: var(--ds-space-8); height: 32px; padding: 0 var(--ds-space-12) 0 var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--ds-color-white); box-shadow: var(--ds-elevation-raised); font: 500 var(--ds-font-size-15)/1 var(--ds-font-family-text); }
+  .pill .ok { display: inline-flex; align-items: center; gap: var(--ds-space-6); height: 22px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-success-subtle); color: var(--ds-color-text-success); font-weight: 600; }
+  .pill .ok i { width: 6px; height: 6px; border-radius: 50%; background: var(--ds-color-bg-success-bold); }
+  .pill b { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* the ticket: three parts with punched notches; drop-shadow follows the cut-outs */
+  .ticket { position: relative; margin: var(--ds-space-16) var(--ds-space-16) 0; filter: drop-shadow(0 0 0.5px var(--ds-color-shadow-ring)) drop-shadow(0 1px 1px var(--ds-color-shadow-key)) drop-shadow(0 18px 28px rgb(34 72 140 / .12)); }
+  .part { --n: 11px; --w: var(--ds-color-white); position: relative; }
+  .part.a { border-radius: var(--ds-radius-overlay) var(--ds-radius-overlay) 0 0;
+    background: radial-gradient(circle at 0 100%, #0000 var(--n), var(--w) calc(var(--n) + .5px)) bottom left / 51% 51% no-repeat,
+                radial-gradient(circle at 100% 100%, #0000 var(--n), var(--w) calc(var(--n) + .5px)) bottom right / 51% 51% no-repeat,
+                linear-gradient(var(--w), var(--w)) top / 100% 50% no-repeat; }
+  .part.b { background: radial-gradient(circle at 0 0, #0000 var(--n), var(--w) calc(var(--n) + .5px)) top left / 51% 51% no-repeat,
+                radial-gradient(circle at 100% 0, #0000 var(--n), var(--w) calc(var(--n) + .5px)) top right / 51% 51% no-repeat,
+                radial-gradient(circle at 0 100%, #0000 var(--n), var(--w) calc(var(--n) + .5px)) bottom left / 51% 51% no-repeat,
+                radial-gradient(circle at 100% 100%, #0000 var(--n), var(--w) calc(var(--n) + .5px)) bottom right / 51% 51% no-repeat; }
+  .part.c { border-radius: 0 0 var(--ds-radius-overlay) var(--ds-radius-overlay);
+    background: radial-gradient(circle at 0 0, #0000 var(--n), var(--w) calc(var(--n) + .5px)) top left / 51% 51% no-repeat,
+                radial-gradient(circle at 100% 0, #0000 var(--n), var(--w) calc(var(--n) + .5px)) top right / 51% 51% no-repeat,
+                linear-gradient(var(--w), var(--w)) bottom / 100% 50% no-repeat; }
+  .part.b::before, .part.c::before { content: ""; position: absolute; top: -1px; left: 20px; right: 20px; border-top: 2px dashed var(--ds-color-border-subtle); }
+
+  .thead { display: flex; justify-content: space-between; align-items: center; padding: var(--ds-space-16) var(--ds-space-20) 0; }
+  .mark { display: flex; align-items: center; gap: var(--ds-space-8); font: 600 var(--ds-font-size-22)/1 var(--ds-font-family-text); letter-spacing: -0.03em; color: var(--ds-color-text-primary); }
+  .mark svg { color: var(--ds-color-bg-accent-bold); }
+  .flt { text-align: right; font: 500 var(--ds-font-size-13)/1.4 var(--ds-font-family-mono); color: var(--ds-color-text-secondary); }
+  .flt b { color: var(--ds-color-text-primary); font-weight: 500; }
+  .flt span { display: block; }
+
+  .map { position: relative; height: 172px; margin: var(--ds-space-12) var(--ds-space-8) var(--ds-space-8); border-radius: var(--ds-radius-container); overflow: hidden; background: linear-gradient(180deg, var(--ds-color-accent2-light-2), var(--ds-color-white) 85%); }
+  .map svg { display: block; width: 100%; height: 100%; }
+
+  .route { display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; padding: 0 var(--ds-space-20) var(--ds-space-20); }
+  .code { font: 600 var(--ds-font-size-52)/0.95 var(--ds-font-family-text); letter-spacing: -0.03em; }
+  .city { margin-top: var(--ds-space-6); font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+  .city b { display: block; font-weight: 600; font-size: var(--ds-font-size-17); color: var(--ds-color-text-primary); font-variant-numeric: tabular-nums; }
+  .r { text-align: right; }
+  .dur { text-align: center; padding-bottom: var(--ds-space-32); font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-mono); color: var(--ds-color-text-primary); }
+  .dur span { display: block; margin-top: var(--ds-space-6); font-family: var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+
+  .grid { display: grid; grid-template-columns: 70px 86px 52px 1fr; row-gap: var(--ds-space-16); padding: var(--ds-space-20) var(--ds-space-20) var(--ds-space-20); }
+  .f small { display: block; font: 500 var(--ds-font-size-13)/1.3 var(--ds-font-family-text); color: var(--ds-color-text-tertiary); }
+  .f b { display: block; margin-top: var(--ds-space-4); font: 600 var(--ds-font-size-22)/1.15 var(--ds-font-family-text); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .f.seat { grid-row: span 2; text-align: right; }
+  .f.seat b { font-size: var(--ds-font-size-52); line-height: .95; letter-spacing: -0.03em; color: var(--ds-color-text-accent); margin-top: var(--ds-space-8); }
+  .f.seat span { display: inline-block; margin-top: var(--ds-space-8); font: 500 var(--ds-font-size-13)/1 var(--ds-font-family-text); padding: var(--ds-space-4) var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); }
+
+  .stub { display: flex; gap: var(--ds-space-16); align-items: center; padding: var(--ds-space-16) var(--ds-space-20) var(--ds-space-20); }
+  .code2d { flex: none; width: 104px; height: 104px; padding: var(--ds-space-8); border-radius: var(--ds-radius-control); box-shadow: inset 0 0 0 1px var(--ds-color-border-subtle); }
+  .code2d svg { display: block; width: 100%; height: 100%; }
+  .stub .t small { display: block; font: 500 var(--ds-font-size-13)/1.3 var(--ds-font-family-text); color: var(--ds-color-text-tertiary); }
+  .stub .t b { display: block; margin-top: var(--ds-space-4); font: 500 var(--ds-font-size-22)/1.1 var(--ds-font-family-mono); letter-spacing: 0.06em; }
+  .stub .t p { margin-top: var(--ds-space-12); font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); display: flex; gap: var(--ds-space-6); align-items: center; }
+
+  .home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: var(--ds-color-text-primary); }
+  :focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"><img src="https://images.unsplash.com/photo-1647363377737-8d0ad7c2f494?w=1170&h=1260&fit=crop&crop=focalpoint&fp-x=.31&fp-y=.45&q=80&auto=format" alt=""></div>
+
+<div class="status" aria-hidden="true">
+  <time>9:41</time>
+  <div class="sys">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.2A10.2 10.2 0 0 0 8 .7 10.2 10.2 0 0 0 .9 3.5L2 4.7a8.6 8.6 0 0 1 6-2.4Zm0 3.3c1.4 0 2.7.5 3.7 1.4l1.1-1.2A7 7 0 0 0 8 3.9a7 7 0 0 0-4.8 1.9l1.1 1.2A5.4 5.4 0 0 1 8 5.6Zm0 3.2c.6 0 1.1.2 1.5.6L8 11 6.5 9.4c.4-.4.9-.6 1.5-.6Z"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" style="stroke: var(--ds-color-text-secondary)"/><rect x="2" y="2" width="18" height="9" rx="2.5"/><path d="M25 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" style="fill: var(--ds-color-text-secondary)"/></svg>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="ib" aria-label="Back to trip"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg></button>
+  <h1>Boarding pass</h1>
+  <button class="ib" aria-label="Share pass"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5"/><path d="M6 12H5v8h14v-8h-1"/></svg></button>
+</nav>
+
+<div class="state"><span class="pill"><span class="ok"><i></i>On time</span>Gate closes <b>07:25</b></span></div>
+
+<article class="ticket" aria-label="Boarding pass, flight AL 214, Reykjavík to Copenhagen">
+  <div class="part a">
+    <div class="thead">
+      <div class="mark"><svg width="26" height="26" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M3 20.5 29 9.5l-6.5 13.5-6-5z"/><path d="M16.5 18 22.5 23l-9 3.5z" opacity=".55"/></svg>aerlo</div>
+      <div class="flt"><span><b>AL 214</b> · Economy</span><span>Wed 22 Oct</span></div>
+    </div>
+    <div class="map"><svg id="map" viewBox="0 0 342 172" role="img" aria-label="Route map from Reykjavík, over the Faroe Islands, to Copenhagen"></svg></div>
+    <div class="route">
+      <div><div class="code">KEF</div><div class="city"><b>07:40</b>Reykjavík</div></div>
+      <div class="dur">3h 15m<span>nonstop</span></div>
+      <div class="r"><div class="code">CPH</div><div class="city"><b>12:55</b>Copenhagen</div></div>
+    </div>
+  </div>
+  <div class="part b">
+    <div class="grid">
+      <div class="f" style="grid-column: 1 / span 3"><small>Passenger</small><b>Mara Lindqvist</b></div>
+      <div class="f seat" style="grid-column: 4; grid-row: 1 / span 2"><small>Seat</small><b>14A</b><span>Window</span></div>
+      <div class="f"><small>Gate</small><b>D7</b></div>
+      <div class="f"><small>Boarding</small><b>07:05</b></div>
+      <div class="f"><small>Group</small><b>2</b></div>
+    </div>
+  </div>
+  <div class="part c">
+    <div class="stub">
+      <div class="code2d"><svg id="code" viewBox="0 0 27 27" shape-rendering="crispEdges" role="img" aria-label="Boarding code"></svg></div>
+      <div class="t">
+        <small>Booking</small><b>QX7-R4N</b>
+        <p><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg>Brightens at the gate</p>
+      </div>
+    </div>
+  </div>
+</article>
+<div class="home-ind" aria-hidden="true"></div>
+
+<script>
+(() => {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  // a dot-matrix map, lon -26..16, lat 54..67 (stretched vertically for the card; a diagram, not a chart)
+  const W = 342, H = 172, L0 = -26, L1 = 16, A0 = 54.2, A1 = 67.9;
+  const P = ([lon, lat]) => [(lon - L0) / (L1 - L0) * W, (A1 - lat) / (A1 - A0) * H];
+  const land = [
+    [[-22.0,63.8],[-24.0,64.9],[-22.4,65.5],[-24.3,65.6],[-22.0,66.4],[-19.0,66.2],[-16.0,66.5],[-14.5,66.2],[-13.6,65.1],[-15.0,64.3],[-18.7,63.4],[-20.5,63.7]],
+    [[-7.6,62.1],[-6.6,62.4],[-6.4,62.0],[-7.0,61.4]],
+    [[-5.0,54.6],[-3.0,54.9],[-1.6,55.6],[-2.1,56.0],[-2.5,56.5],[-1.8,57.5],[-3.3,58.6],[-5.0,58.6],[-6.2,57.5],[-5.6,56.3],[-5.7,55.4],[-4.0,54.2],[-1.0,54.2],[-0.5,54.5]],
+    [[-1.4,59.9],[-1.0,60.7],[-1.4,60.5]],
+    [[-5.5,54.6],[-6.0,55.2],[-7.3,55.3],[-8.2,55.1],[-8.6,54.2],[-6.0,54.2]],
+    [[4.9,60.5],[5.0,61.5],[5.3,62.2],[6.5,62.6],[8.0,63.2],[9.6,63.7],[10.5,64.3],[11.5,65.0],[12.4,66.0],[13.0,67.2],[16,67.2],[16,56.2],[14.3,55.5],[13.0,55.4],[12.6,56.2],[11.9,57.6],[11.2,58.9],[10.6,59.4],[10.2,59.0],[9.0,58.6],[8.0,58.1],[6.6,58.1],[5.6,58.6],[5.2,59.3]],
+    [[8.6,54.9],[8.1,55.6],[8.1,56.6],[8.6,57.1],[9.6,57.5],[10.6,57.7],[10.4,57.2],[10.3,56.4],[10.9,56.4],[10.2,56.0],[9.8,55.3],[9.6,54.9]],
+    [[11.0,55.7],[11.7,56.0],[12.6,56.0],[12.6,55.5],[12.1,55.0],[11.2,55.2]],
+    [[9.7,55.5],[10.3,55.6],[10.8,55.3],[10.6,55.0],[9.9,55.1]],
+    [[8.6,54.9],[9.6,54.9],[10.0,54.2],[8.6,54.2]]
+  ].map(p => p.map(P));
+  const inside = (x, y, poly) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const [xi, yi] = poly[i], [xj, yj] = poly[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
+  let dots = '';
+  const step = 5.2;
+  for (let y = step / 2, row = 0; y < H; y += step, row++) for (let x = step / 2, col = 0; x < W; x += step, col++) {
+    const isLand = land.some(p => inside(x, y, p));
+    if (!isLand && (row + col) % 2) continue;
+    dots += isLand ? `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.7" fill="${css('--ds-color-accent2-light-9')}"/>`
+                   : `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r=".75" fill="${css('--ds-color-accent2-light-6')}"/>`;
+  }
+  const kef = P([-22.6, 63.98]), cph = P([12.65, 55.62]);
+  const ctrl = [(kef[0] + cph[0]) / 2 + 14, Math.min(kef[1], cph[1]) - 44]; // great circles bow toward the pole
+  const q = t => [(1 - t) ** 2 * kef[0] + 2 * (1 - t) * t * ctrl[0] + t * t * cph[0], (1 - t) ** 2 * kef[1] + 2 * (1 - t) * t * ctrl[1] + t * t * cph[1]];
+  const t0 = .5, pt = q(t0), d1 = q(t0 + .01), ang = Math.atan2(d1[1] - pt[1], d1[0] - pt[0]) * 180 / Math.PI;
+  const A = css('--ds-color-accent-light-9'), I = css('--ds-color-accent3-light-9');
+  const pin = ([x, y]) => `<circle cx="${x}" cy="${y}" r="11" fill="${A}" opacity=".16"/><circle cx="${x}" cy="${y}" r="5" fill="#fff" stroke="${A}" stroke-width="2.5"/>`;
+  document.getElementById('map').innerHTML = `
+    <defs><linearGradient id="rt" x1="0" x2="1"><stop offset="0" stop-color="${A}"/><stop offset="1" stop-color="${I}"/></linearGradient>
+      <linearGradient id="fadeL" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
+    ${dots}
+    <rect width="${W}" height="${H}" fill="url(#fadeL)"/>
+    <path d="M${kef} Q${ctrl} ${cph}" fill="none" stroke="${A}" stroke-opacity=".18" stroke-width="7" stroke-linecap="round"/>
+    <path d="M${kef} Q${ctrl} ${cph}" fill="none" stroke="url(#rt)" stroke-width="2" stroke-dasharray="1 6" stroke-linecap="round"/>
+    <path d="M${kef} Q${ctrl} ${pt}" fill="none" stroke="url(#rt)" stroke-width="2.2" stroke-linecap="round" opacity="0"/>
+    ${pin(kef)}${pin(cph)}
+    <g transform="translate(${pt[0]} ${pt[1]}) rotate(${ang})"><circle r="13" fill="#fff" stroke="${css('--ds-color-shadow-ring')}"/><path d="M-6 -1.2 L1 -1.2 L-2.5 -7 L0 -7 L5.5 -1.2 L8 -1.2 C9.2 -1.2 9.2 1.2 8 1.2 L5.5 1.2 L0 7 L-2.5 7 L1 1.2 L-6 1.2 L-7.5 3.2 L-9 3.2 L-8 0 L-9 -3.2 L-7.5 -3.2 Z" fill="${A}"/></g>`;
+  // a deterministic 2D code (an Aztec-style bullseye with seeded modules); it is a mock, not a scannable code
+  let s = 2140; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const N = 27, c = 13, cells = [];
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const r = Math.max(Math.abs(x - c), Math.abs(y - c));
+    let on;
+    if (r <= 5) on = r % 2 === 1 || r === 0; else if (r === 6) on = (x + y) % 2 === 0; else on = rnd() < .5;
+    if (on) cells.push(`<rect x="${x}" y="${y}" width="1" height="1"/>`);
+  }
+  document.getElementById('code').innerHTML = `<g fill="${css('--ds-color-text-primary')}">${cells.join('')}</g>`;
+})();
+</script>
+</body>
+</html>

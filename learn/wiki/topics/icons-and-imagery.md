@@ -2,7 +2,7 @@
 type: topic
 title: Icons and imagery
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -47,3 +47,8 @@ A high-quality asset makes or breaks a landing page; the image's focal point mus
 - See also: [[synthesis/icons-and-imagery|Icons and imagery synthesis]]
 - [[sources/ARq1bx3Sfg8-the-psychology-behind-streaks|The Psychology Behind Streaks]]: Mascots such as Duolingo's owl or a little bird that grows alongside you are designed to create attachment through anthropomorphism, not only to make apps feel cute.
 - [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: Realistic images beat Disney-style 3D characters because the paying audience is over 35; personalizing images with the user's face failed; a realistic look suited the AI astrologer.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop-referodesign-refero-skill-skills-refero-design-references-anti-ai-slop-md|referodesign/refero_skill: skills/refero-design/references/anti-ai-slop.md]]: No emoji as icons; preserve image-led media with real assets, simple code-native primitives or labelled placeholders, never weak CSS fakes.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-icons-referodesign-refero-skill-skills-refero-design-references-icons-md|referodesign/refero_skill: skills/refero-design/references/icons.md]]: Icon sizing, stroke, style consistency, optical corrections, pairing with text, color and library choice for product UI.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-visual-workflow-referodesign-refero-skill-skills-refero-design-references-visual-workflow-md|referodesign/refero_skill: skills/refero-design/references/visual-workflow.md]]: Generate bitmap assets only for hero imagery, illustrations, textures, thumbnails and cutouts, with an asset lock first.
+- [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: Preserve the imagery role of an image-led style; use real, generated or stock assets, or an intentional placeholder with art direction.
+- [[sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont|The Reason Why Some Apps Feel Expensive, But Most Don’t]]: One icon style across the set: a filled icon next to stroke icons feels wrong even to people who cannot say why.

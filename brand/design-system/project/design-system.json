@@ -1,0 +1,92 @@
+{
+ "v": 3,
+ "layout": "files",
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-10-14T11:18:45Z"
+ },
+ "title": "OpenDesigner",
+ "namespace": "OpenDesigner",
+ "libraries": [],
+ "sections": {},
+ "groups": [
+  "Logos"
+ ],
+ "assetGroups": {
+  "Logos": {
+   "name": "Logos",
+   "tile": "l",
+   "order": [
+    "lockup-light.svg",
+    "lockup-dark.svg",
+    "lockup-cobalt.svg",
+    "lockup-light-mono.svg",
+    "lockup-dark-mono.svg",
+    "mark-light.svg",
+    "mark-dark.svg",
+    "mark-cobalt.svg"
+   ],
+   "files": {
+    "lockup-light.svg": {
+     "name": "lockup-light.svg",
+     "blob": "5cbc882911ea862cdd8a9813084f8ade",
+     "size": 8350,
+     "type": "image/svg+xml"
+    },
+    "lockup-dark.svg": {
+     "name": "lockup-dark.svg",
+     "blob": "82aa979dd4b9c7fd3007110fa17d5935",
+     "size": 8350,
+     "type": "image/svg+xml"
+    },
+    "lockup-cobalt.svg": {
+     "name": "lockup-cobalt.svg",
+     "blob": "f6cc05a7e1417c691e0cb080a5bdb2c4",
+     "size": 8350,
+     "type": "image/svg+xml"
+    },
+    "lockup-light-mono.svg": {
+     "name": "lockup-light-mono.svg",
+     "blob": "718cc1bee55f72a8859aae86b143bd8d",
+     "size": 8350,
+     "type": "image/svg+xml"
+    },
+    "lockup-dark-mono.svg": {
+     "name": "lockup-dark-mono.svg",
+     "blob": "9583d90d2a5b38ee1fc5d5a0b6ee7abd",
+     "size": 8350,
+     "type": "image/svg+xml"
+    },
+    "mark-light.svg": {
+     "name": "mark-light.svg",
+     "blob": "17cb271b3aac673531966c596e6ce5d8",
+     "size": 407,
+     "type": "image/svg+xml"
+    },
+    "mark-dark.svg": {
+     "name": "mark-dark.svg",
+     "blob": "2b21221fa7788bb397e8c85bf49bf8c0",
+     "size": 407,
+     "type": "image/svg+xml"
+    },
+    "mark-cobalt.svg": {
+     "name": "mark-cobalt.svg",
+     "blob": "9831932d059280804a2c6d449e1a9448",
+     "size": 407,
+     "type": "image/svg+xml"
+    }
+   }
+  }
+ },
+ "blobs": {},
+ "docs": {
+  "readme": "project/README.md",
+  "sections": []
+ },
+ "lastChange": {
+  "by": "Kunal",
+  "at": "2026-10-14T11:18:45Z",
+  "via": "Claude Code",
+  "note": "New brand system: cobalt on cool neutrals, Hanken Grotesk light titles, social templates"
+ }
+}

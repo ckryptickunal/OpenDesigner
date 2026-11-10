@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halftone Yard · Upload artwork</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+/* Halftone Yard: the artwork upload dialog on an order. Colour, space, radius, type and motion are --ds-* tokens;
+   OFF-TOKEN values say why. Yellow has one job: the go-ahead. It fills "Send for proof" once every file passes (shot-ready.png), and the logo. */
+:root {
+  --rule: var(--ds-color-neutral-light-4);       /* OFF-TOKEN: hairline; border.subtle (neutral 7) is too heavy for row rules */
+  --rule-strong: var(--ds-color-neutral-light-6);
+  --ink: var(--ds-color-text-primary);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  min-width: 1280px; height: 100vh; height: 100dvh; overflow: hidden; position: relative;
+  background: var(--ds-color-surface-base);
+  color: var(--ds-color-text-primary);
+  font: var(--ds-text-body-md);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ink); outline-offset: var(--ds-focus-ring-offset); }
+.i { width: var(--ds-size-icon-sm); height: var(--ds-size-icon-sm); flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.mono { font-family: var(--ds-font-family-mono); }
+
+/* ---------- the order page behind (context, under the scrim) ---------- */
+.top { height: 56px; display: flex; align-items: center; gap: var(--ds-space-32); padding: 0 var(--ds-space-40); border-bottom: 1px solid var(--rule); background: var(--ds-color-surface-raised); }
+.logo { display: flex; align-items: center; gap: var(--ds-space-8); font: 600 var(--ds-font-size-18)/1 var(--ds-font-family-text); letter-spacing: -0.01em; }
+.logo svg { width: 22px; height: 22px; }
+.top nav { display: flex; gap: var(--ds-space-24); color: var(--ds-color-text-secondary); }
+.top nav .on { color: var(--ink); font-weight: 500; }
+.top .end { margin-left: auto; color: var(--ds-color-text-secondary); }
+.order { display: grid; grid-template-columns: 1fr 360px; gap: var(--ds-space-40); padding: var(--ds-space-32) var(--ds-space-40); }
+.order h1 { margin: 0; font: 600 var(--ds-font-size-27)/1.2 var(--ds-font-family-text); letter-spacing: -0.015em; }
+.order .sub { margin-top: var(--ds-space-8); color: var(--ds-color-text-secondary); }
+.steps { margin-top: var(--ds-space-24); display: grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid var(--ink); }
+.steps div { padding-top: var(--ds-space-12); color: var(--ds-color-text-tertiary); }
+.steps div b { display: block; color: var(--ink); font-weight: 500; }
+.ph { margin-top: var(--ds-space-32); border: 1px solid var(--rule-strong); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); padding: var(--ds-space-8) var(--ds-space-20); }
+.ph-h { padding: var(--ds-space-12) 0; font-weight: 600; }
+.ph-r { display: flex; justify-content: space-between; padding: var(--ds-space-12) 0; border-top: 1px solid var(--rule); color: var(--ds-color-text-secondary); }
+.ph-r b { font-weight: 500; color: var(--ink); }
+.side { border: 1px solid var(--rule-strong); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); padding: var(--ds-space-20); display: grid; gap: var(--ds-space-12); align-content: start; }
+.side .row { display: flex; justify-content: space-between; color: var(--ds-color-text-secondary); }
+.side .row b { color: var(--ink); font-weight: 500; }
+.scrim { position: fixed; inset: 0; background: rgb(38 36 33 / .28); backdrop-filter: blur(6px); } /* OFF-TOKEN: the token scrim colour at 28% with a 6 px blur: the order reads as a page behind, its text does not compete */
+
+/* ---------- the dialog ---------- */
+.dlg { position: absolute; left: 50%; top: 132px; transform: translateX(-50%); width: 800px; background: var(--ds-color-surface-raised); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-overlay), 0 0 0 1px var(--ds-color-shadow-ring); overflow: hidden; }
+.dh { display: flex; align-items: flex-start; gap: var(--ds-space-16); padding: var(--ds-space-20) var(--ds-space-24) var(--ds-space-16); }
+.dh h2 { margin: 0; font: 600 var(--ds-font-size-18)/1.3 var(--ds-font-family-text); letter-spacing: -0.01em; }
+.dh p { margin: var(--ds-space-4) 0 0; color: var(--ds-color-text-secondary); }
+.dh .x { margin-left: auto; width: 32px; height: 32px; display: grid; place-items: center; border-radius: var(--ds-radius-control); color: var(--ds-color-icon-default); }
+
+.drop { margin: 0 var(--ds-space-24); height: 104px; border: 1px dashed var(--ds-color-neutral-light-8); border-radius: var(--ds-radius-container); display: flex; align-items: center; gap: var(--ds-space-16); padding: 0 var(--ds-space-24); background: var(--ds-color-surface-base); }
+.drop .ic { width: 40px; height: 40px; border-radius: var(--ds-radius-control); border: 1px solid var(--rule-strong); background: var(--ds-color-surface-raised); display: grid; place-items: center; }
+.drop b { font-weight: 500; }
+.drop b u { text-underline-offset: 3px; }
+.drop p { margin: var(--ds-space-4) 0 0; font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); }
+.drop .hint { margin-left: auto; font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); }
+
+.lh { display: flex; justify-content: space-between; align-items: baseline; padding: var(--ds-space-20) var(--ds-space-24) var(--ds-space-8); font: var(--ds-text-label-md); color: var(--ds-color-text-tertiary); }
+.lh b { font: var(--ds-text-label-lg); font-weight: 500; color: var(--ink); }
+.files { list-style: none; margin: 0; padding: 0 var(--ds-space-24); }
+.file { display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: var(--ds-space-16); padding: var(--ds-space-12) 0; border-top: 1px solid var(--rule); }
+.file .nm { display: flex; align-items: baseline; gap: var(--ds-space-8); }
+.file .nm b { font-weight: 500; }
+.tag { font: var(--ds-text-label-md); color: var(--ds-color-text-secondary); padding: 1px var(--ds-space-6); border-radius: var(--ds-radius-detail); background: var(--ds-color-neutral-light-3); }
+.file .meta { margin-top: var(--ds-space-4); font: var(--ds-text-body-sm); color: var(--ds-color-text-tertiary); }
+.file .meta.bad { font: var(--ds-text-body-sm); color: var(--ds-color-text-danger); }
+.file .meta.ask { font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+.state { display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-label-lg); white-space: nowrap; }
+.state.ok { color: var(--ds-color-text-success); }
+.state.ok .i { width: 16px; height: 16px; }
+.bar { margin-top: var(--ds-space-8); height: 4px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-3); overflow: hidden; width: 100%; max-width: 420px; }
+.bar b { display: block; height: 100%; background: var(--ink); }
+.bar b::after { content: ""; display: block; height: 100%; }
+.btn { height: var(--ds-size-control-md); display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-12); border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: 500; border: 1px solid var(--rule-strong); background: var(--ds-color-surface-raised); color: var(--ink); white-space: nowrap; }
+.btn.ink { background: var(--ink); border-color: var(--ink); color: var(--ds-color-text-inverse); }
+.btn.go { background: var(--ds-color-bg-action-primary); border-color: var(--ink); color: var(--ds-color-text-on-action); }
+.btn[disabled] { background: var(--ds-color-bg-disabled); border-color: transparent; color: var(--ds-color-text-disabled); cursor: not-allowed; }
+.btn.go:not([disabled]) { background: var(--ds-color-bg-action-primary); border-color: transparent; color: var(--ds-color-text-on-action); }
+.btn.quiet { border-color: transparent; color: var(--ds-color-text-secondary); }
+.choice { display: inline-flex; padding: var(--ds-space-2); border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-3); }
+.choice button { height: calc(var(--ds-size-control-sm) - 4px); padding: 0 var(--ds-space-12); font: var(--ds-text-label-lg); color: var(--ds-color-text-secondary); display: inline-flex; align-items: center; gap: var(--ds-space-6); }
+.choice button { border-radius: calc(var(--ds-radius-control) - 2px); }
+.choice button[aria-checked="true"] { background: var(--ds-color-surface-raised); color: var(--ink); font-weight: 500; box-shadow: var(--ds-elevation-raised), 0 0 0 1px var(--ds-color-shadow-ring); }
+
+/* file previews: each one is the file's own content at thumbnail size */
+.pv { width: 56px; height: 36px; border-radius: var(--ds-radius-detail); border: 1px solid var(--rule-strong); background: var(--ds-color-surface-raised); position: relative; overflow: hidden; }
+.pv.card-front { background: var(--ds-color-neutral-light-12); border-color: var(--ds-color-neutral-light-12); }
+.pv.card-front i { position: absolute; left: 7px; height: 3px; border-radius: 1px; background: var(--ds-color-neutral-light-5); }
+.pv.card-front .lg { left: 7px; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: none; border: 2px solid var(--ds-color-neutral-light-5); }
+.pv.card-back i { position: absolute; left: 7px; height: 3px; border-radius: 1px; background: var(--ds-color-neutral-light-7); }
+.pv.foil .lg { position: absolute; left: 7px; top: 7px; width: 9px; height: 9px; border-radius: 50%; border: 2px solid #B8923A; } /* OFF-TOKEN: the file's own spot colour (Gold 871 shown as a tint), not a UI colour */
+.pv.uv .lg { position: absolute; left: 7px; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--ink); }
+.pv.uv .bar1 { position: absolute; left: 7px; top: 20px; width: 26px; height: 3px; border-radius: 1px; background: var(--ink); }
+.pv.foil, .pv.uv { background-color: var(--ds-color-surface-raised); background-image: conic-gradient(var(--ds-color-neutral-light-3) 25%, transparent 0 50%, var(--ds-color-neutral-light-3) 0 75%, transparent 0); background-size: 8px 8px; }
+.pv.foil .ghost { display: none; }
+.btn.icon { width: var(--ds-size-control-sm); padding: 0; justify-content: center; }
+.file .btn { height: var(--ds-size-control-sm); }
+.nm .pct { margin-left: auto; font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+
+.foot { margin-top: var(--ds-space-12); display: flex; align-items: center; gap: var(--ds-space-12); padding: var(--ds-space-16) var(--ds-space-24); border-top: 1px solid var(--rule); background: var(--ds-color-surface-base); }
+.foot .sum { color: var(--ds-color-text-secondary); }
+.foot .sum b { color: var(--ink); font-weight: 500; }
+.foot .end { margin-left: auto; display: flex; gap: var(--ds-space-8); }
+
+/* upload progress: the yellow fill sits inside an ink-outlined track, so it reads on white (3:1 against the track edge) */
+.bar.live { height: 6px; max-width: none; background: var(--ds-color-neutral-light-3); border-radius: var(--ds-radius-full); }
+.bar.live b { background: var(--ink); border-radius: var(--ds-radius-full); }
+@media (hover: hover) and (pointer: fine) {
+  .btn:not([disabled]):hover { background: var(--ds-color-neutral-light-2); }
+  .dh .x:hover { background: var(--ds-color-neutral-light-3); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bar.live b { transition: width var(--ds-motion-transition-move-duration) linear; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 15.5V4.5M7 9.5l5-5 5 5M5 19.5h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.2 2.4 2.4 4.6-4.8"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4.5 8.5h14M15 5l3.5 3.5L15 12M19.5 15.5h-14M9 12l-3.5 3.5L9 19"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V5h4v2M7 7l1 12.5h8L17 7"/></symbol>
+</svg>
+
+<div aria-hidden="true">
+  <header class="top">
+    <span class="logo"><svg viewBox="0 0 22 22"><rect width="22" height="22" rx="3" fill="#ffe500"/><g fill="#262421"><circle cx="6" cy="6" r="2.2"/><circle cx="11" cy="6" r="1.7"/><circle cx="16" cy="6" r="1.2"/><circle cx="6" cy="11" r="1.7"/><circle cx="11" cy="11" r="1.2"/><circle cx="16" cy="11" r=".8"/><circle cx="6" cy="16" r="1.2"/><circle cx="11" cy="16" r=".8"/></g></svg>Halftone Yard</span>
+    <nav><span class="on">Orders</span><span>Quotes</span><span>Brand kits</span><span>Invoices</span></nav>
+    <span class="end">Account</span>
+  </header>
+  <div class="order">
+    <div>
+      <h1>Order HY-4471</h1>
+      <div class="sub">500 business cards · placed Thu 15 Oct, 10:42</div>
+      <div class="steps"><div><b>Artwork</b>Waiting for files</div><div><b>Proof</b>About 2 hours</div><div><b>Print</b>After you approve</div><div><b>Ship</b>Tue 20 Oct</div></div>
+      <div class="ph">
+        <div class="ph-h">Artwork checklist</div>
+        <div class="ph-r"><span>Front, 85 × 55 mm with 3 mm bleed</span><b>Needed</b></div>
+        <div class="ph-r"><span>Back, 85 × 55 mm with 3 mm bleed</span><b>Needed</b></div>
+        <div class="ph-r"><span>Foil layer, as a separate file</span><b>Ordered</b></div>
+        <div class="ph-r"><span>Spot UV mask, same size as the front</span><b>Ordered</b></div>
+        <div class="ph-r"><span>Proof from us, within 2 hours</span><b>Free</b></div>
+      </div>
+      <div class="ph" style="margin-top: var(--ds-space-24)">
+        <div class="ph-h">History</div>
+        <div class="ph-r"><span>Thu 15 Oct, 10:42 · Order placed by the account owner</span><b>$148.00</b></div>
+        <div class="ph-r"><span>Thu 15 Oct, 10:43 · Card payment received</span><b>Paid</b></div>
+        <div class="ph-r"><span>Thu 15 Oct, 10:44 · Artwork requested</span><b>4 files</b></div>
+      </div>
+    </div>
+    <aside class="side">
+      <div class="row"><span>Cards</span><b>500</b></div>
+      <div class="row"><span>Stock</span><b>350 gsm silk, matt laminated</b></div>
+      <div class="row"><span>Print</span><b>4/4, both sides</b></div>
+      <div class="row"><span>Finish</span><b>Gold foil and spot UV, front</b></div>
+      <div class="row"><span>Turnaround</span><b>3 working days</b></div>
+      <div class="row"><span>Subtotal, foil included</span><b>$148.00</b></div>
+      <div class="row"><span>Arrives</span><b>Wed 21 Oct</b></div>
+    </aside>
+  </div>
+  <div class="scrim"></div>
+</div>
+
+<section class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlg-t">
+  <div class="dh">
+    <div>
+      <h2 id="dlg-t">Upload artwork</h2>
+      <p>HY-4471 · 500 business cards · 85 × 55 mm · 350 gsm silk, matt laminated, both sides</p>
+    </div>
+    <button class="x" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button>
+  </div>
+
+  <div class="drop" role="button" tabindex="0" aria-label="Add files: drop them here or browse">
+    <span class="ic"><svg class="i"><use href="#i-up"/></svg></span>
+    <div>
+      <b>Drop files here, or <u>browse</u></b>
+      <p>PDF, AI, EPS or TIFF · CMYK · 300 dpi or more · 3 mm bleed · up to 500 MB each</p>
+    </div>
+    <span class="hint">or paste with ⌘V</span>
+  </div>
+
+  <div class="lh"><b>4 files</b><span>Press profile: PSO Coated v3</span></div>
+  <ul class="files">
+    <li class="file">
+      <span class="pv card-front" aria-hidden="true"><i class="lg"></i><i style="top:20px;width:26px"></i><i style="top:26px;width:18px"></i></span>
+      <div><div class="nm"><b>front-v3.pdf</b><span class="tag">Front</span></div><div class="meta">18.4 MB · CMYK · 342 dpi · 3 mm bleed · fonts embedded</div></div>
+      <span class="state ok"><svg class="i"><use href="#i-ok"/></svg>Ready</span>
+    </li>
+    <li class="file">
+      <span class="pv card-back" aria-hidden="true"><i style="top:8px;width:30px"></i><i style="top:14px;width:22px"></i><i style="top:20px;width:26px"></i></span>
+      <div><div class="nm"><b>back-v3.pdf</b><span class="tag">Back</span><span class="pct">64%</span></div>
+        <div class="bar live" role="progressbar" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100" aria-label="Uploading back-v3.pdf"><b style="width:64%"></b></div>
+        <div class="meta">11.5 of 17.9 MB · about 6 s left</div></div>
+      <button class="btn icon" aria-label="Stop uploading back-v3.pdf"><svg class="i"><use href="#i-x"/></svg></button>
+    </li>
+    <li class="file">
+      <span class="pv foil" aria-hidden="true"><i class="ghost"></i><i class="lg"></i></span>
+      <div><div class="nm"><b>foil-logo.ai</b><span class="tag">Front, foil layer</span></div>
+        <div class="meta">0.2 MB · 91 × 61 mm · 1 spot colour, Foil Gold · prints as gold foil, which you ordered</div>
+        <div class="choice" role="radiogroup" aria-label="How to print Foil Gold" style="margin-top: var(--ds-space-8)">
+          <button role="radio" aria-checked="true">Gold foil</button>
+          <button role="radio" aria-checked="false">Print in CMYK instead, −$38.00</button>
+        </div></div>
+      <span class="state ok"><svg class="i"><use href="#i-ok"/></svg>Ready</span>
+    </li>
+    <li class="file">
+      <span class="pv uv" aria-hidden="true"><i class="lg"></i><i class="bar1"></i></span>
+      <div><div class="nm"><b>spot-uv.pdf</b><span class="tag">Front, spot UV mask</span></div><div class="meta bad">The mask is 85 × 55 mm with no bleed. It must match the front: 91 × 61 mm.</div></div>
+      <div style="display:flex; gap: var(--ds-space-8)"><button class="btn"><svg class="i"><use href="#i-swap"/></svg>Replace</button><button class="btn icon" aria-label="Remove spot-uv.pdf"><svg class="i"><use href="#i-trash"/></svg></button></div>
+    </li>
+  </ul>
+
+  <div class="foot">
+    <span class="sum"><b>2 of 4 ready.</b> Waiting for back-v3.pdf to finish and a new spot-uv.pdf.</span>
+    <div class="end">
+      <button class="btn">Close</button>
+      <button class="btn go" id="send" disabled>Send for proof</button>
+    </div>
+  </div>
+</section>
+<script>
+// ?state=ready shows the same dialog a minute later: the upload has finished and spot-uv-v2.pdf replaced the bad mask.
+if (new URLSearchParams(location.search).get("state") === "ready") {
+  const rows = document.querySelectorAll(".file");
+  const ready = '<span class="state ok"><svg class="i"><use href="#i-ok"/></svg>Ready</span>';
+  rows[1].querySelector(".bar").remove(); rows[1].querySelector(".pct").remove();
+  rows[1].querySelector(".meta").textContent = "17.9 MB · CMYK · 318 dpi · 3 mm bleed · fonts embedded";
+  rows[1].lastElementChild.outerHTML = ready;
+  rows[3].querySelector("b").textContent = "spot-uv-v2.pdf";
+  const m = rows[3].querySelector(".meta"); m.className = "meta"; m.textContent = "0.4 MB · 91 × 61 mm · 100% K mask · matches the front";
+  rows[3].lastElementChild.outerHTML = ready;
+  document.querySelector(".lh b").textContent = "4 files";
+  document.querySelector(".foot .sum").innerHTML = "<b>4 of 4 ready.</b> Your proof arrives within 2 hours.";
+  document.getElementById("send").disabled = false;
+}
+</script>
+</body>
+</html>

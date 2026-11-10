@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sasame footer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Round 5: a quiet footer on sumi ink. One signature element: this month's note from the tea house, set large in the Mincho.
+     Below it, the name and four link columns in one text size, one muted heading style, one rule and one legal line.
+     The band at the top is the end of the section above, on paper, so the shot reads as the foot of a page.
+     Type: Shippori Mincho (name, note) and Zen Kaku Gothic New (everything else). Sizes 13, 16, 25, 76 (tokens); 39 on phones. */
+  :root {
+    --bg: var(--ds-color-neutral-dark-2);          /* sumi, with the system's green cast */
+    --ink: var(--ds-color-neutral-dark-12);
+    --muted: var(--ds-color-neutral-dark-11);
+    --rule: var(--ds-color-neutral-dark-5);
+    --above: var(--ds-color-neutral-light-1);
+    --above-ink: var(--ds-color-neutral-light-12);
+    --above-muted: var(--ds-color-neutral-light-11);
+    --gutter: var(--ds-space-80);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); }
+  body { font-family: var(--ds-font-family-text); font-size: var(--ds-font-size-16); line-height: 1.5; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  .above { background: var(--above); padding: 0 var(--gutter); }
+  .above p { display: flex; gap: var(--ds-space-16); padding: 24px 0 28px; border-top: 1px solid var(--ds-color-neutral-light-6); color: var(--above-muted); }
+  .above b { font-weight: 500; color: var(--above-ink); }
+
+  footer { padding: 112px var(--gutter) 32px; }
+  .note { max-width: 15em; font-family: var(--ds-font-family-display); font-weight: 500; font-size: var(--ds-font-size-76); line-height: 1.12; letter-spacing: -0.01em; text-wrap: balance; }
+  
+  .grid { margin-top: 112px; padding-top: var(--ds-space-32); border-top: 1px solid var(--rule);
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--ds-space-24); }
+  .name { grid-column: 1 / span 4; font-family: var(--ds-font-family-display); font-weight: 500; font-size: var(--ds-font-size-25); line-height: 32px; }
+  .name span { display: block; margin-top: var(--ds-space-4); font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-16); line-height: 24px; color: var(--muted); }
+  nav.cols { grid-column: 5 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--ds-space-24); }
+  .cols h3 { font-size: var(--ds-font-size-13); line-height: 24px; font-weight: 500; letter-spacing: .04em; color: var(--muted); margin-bottom: var(--ds-space-12); }
+  .cols ul { list-style: none; }
+  .cols li { line-height: 24px; padding: 4px 0; color: var(--muted); }
+  .cols li a { color: var(--ink); }
+  @media (hover: hover) and (pointer: fine) { .cols a:hover, .legal a:hover { text-decoration: underline; text-underline-offset: 4px; } }
+
+  .legal { display: flex; justify-content: space-between; align-items: center; gap: var(--ds-space-24); margin-top: 64px; padding-top: var(--ds-space-16);
+    font-size: var(--ds-font-size-13); line-height: 20px; color: var(--muted); }
+  .legal nav { display: flex; gap: var(--ds-space-24); }
+  .legal a { display: inline-flex; align-items: center; min-height: 32px; }
+  .legal a[aria-current] { color: var(--ink); }
+
+  @media (max-width: 1100px) {
+    .name { grid-column: 1 / -1; margin-bottom: var(--ds-space-40); }
+    nav.cols { grid-column: 1 / -1; }
+  }
+  @media (max-width: 760px) {
+    :root { --gutter: var(--ds-space-20); }
+    .above p { flex-direction: column; gap: 4px; padding: 16px 0 20px; }
+    footer { padding-top: 64px; }
+    .note { font-size: var(--ds-font-size-39); line-height: 1.2; }
+    .grid { margin-top: 64px; grid-template-columns: 1fr; }
+    nav.cols { grid-template-columns: 1fr 1fr; row-gap: var(--ds-space-32); }
+    .legal { flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 56px; }
+    .legal nav { flex-wrap: wrap; column-gap: 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="above" aria-hidden="true"><p><b>Sittings</b><span>10:00, 11:30, 13:00, 14:30 and 16:00. Seats are held for fifteen minutes.</span></p></div>
+<footer aria-label="Site footer">
+  <p class="note">Hojicha is roasting in the back room.</p>
+  <div class="grid">
+    <a class="name" href="#">Sasame<span lang="ja">茶房ささめ</span></a>
+    <nav class="cols" aria-label="Footer">
+      <div><h3>Visit</h3><ul><li>Higashiyama 2-chome</li><li>Kanazawa, Ishikawa</li><li><a href="#">Directions</a></li></ul></div>
+      <div><h3>Hours</h3><ul><li>Tue&ndash;Sun, 10:00&ndash;17:30</li><li>Last pot at 17:00</li><li>Closed 30 Dec&ndash;1 Jan</li></ul></div>
+      <div><h3>Seats</h3><ul><li>Eight at the counter</li><li>Five sittings a day</li><li><a href="#">Ask for a seat</a></li></ul></div>
+      <div><h3>More</h3><ul><li><a href="#">Teas to take home</a></li><li><a href="#">Our three farms</a></li><li><a href="#">Journal</a></li><li><a href="#">Write to us</a></li></ul></div>
+    </nav>
+  </div>
+  <div class="legal">
+    <p>&copy; 2026 Sasame Tea House, Kanazawa</p>
+    <nav aria-label="Legal"><a href="#">Privacy</a><a href="#">Legal notice</a><a href="#"><span lang="ja">日本語</span></a><a href="#" aria-current="true">English</a></nav>
+  </div>
+</footer>
+</body>
+</html>

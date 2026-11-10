@@ -1,0 +1,70 @@
+{
+ "piece": "footers/01-brask-wordmark",
+ "title": "01 Brask: giant wordmark footer",
+ "pattern": "footer-brand",
+ "platform": "web",
+ "industry": "creative studio",
+ "style": [
+  "minimal",
+  "swiss",
+  "dark"
+ ],
+ "tags": [
+  "footer-brand",
+  "creative studio",
+  "wordmark",
+  "dark",
+  "local time",
+  "one typeface",
+  "grid"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "One typeface (Archivo) in two weights does the whole footer: the invitation, four columns, the legal row and the cropped wordmark",
+  "The signal orange is used exactly three times (open-slot dot, 'Send it over.' block, the full stop of BRASK.), as the direction said",
+  "Studio cities with live local time in a hairline-ruled list, and copy with facts ('Twenty-two people, three cities, one long table')"
+ ],
+ "slop_signals": [
+  "'Send it over.' in an orange highlight block: the highlighted-phrase move",
+  "'BOOKING SPRING 2027 · TWO SLOTS LEFT' availability line with a pulsing dot is now on every studio site",
+  "Giant cropped wordmark at the bottom is a widely shipped pattern (BAGGU, Zellerfeld, TravelPerk, Graza); competent, not distinctive"
+ ],
+ "fixes": [
+  "Set 'Send it over.' in orange text without the block, or keep the block and drop the orange full stop so the colour count stays at three",
+  "Tighten the empty band between the columns and the legal row; the wordmark can start higher"
+ ],
+ "references": [
+  {
+   "site": "Zellerfeld",
+   "url": "https://mobbin.com/sites/sections/18df6730-6569-49da-9c23-3bee32fbe638",
+   "what": "Giant wordmark across the bottom with addresses top-left and tiny link columns top-right; the same structure"
+  },
+  {
+   "site": "BAGGU",
+   "url": "https://mobbin.com/sites/sections/ddfad441-10db-4949-9baa-299e7e0edeee",
+   "what": "Wordmark cropped by the bottom edge with everything else tiny; our crop follows this"
+  },
+  {
+   "site": "KODE Immersive",
+   "url": "https://mobbin.com/sites/sections/6804358a-2a64-40d2-a123-cf6321dc0aa5",
+   "what": "'LET'S CONNECT' and an email as the one invitation above an edge-to-edge wordmark; the invitation-plus-mark idea"
+  },
+  {
+   "site": "MOUTHWASH Studio",
+   "url": "https://mobbin.com/sites/sections/082f5fac-4648-4314-aa7d-a06fe0235b77",
+   "what": "'MW.S' with the full stop as the only extra mark and the address in tiny type; a lesson in how little is needed"
+  },
+  {
+   "site": "TravelPerk",
+   "url": "https://mobbin.com/sites/sections/338aab87-bc64-496c-9ab5-a716e5da4f2f",
+   "what": "Link grid above a huge wordmark with the legal row below; the mainstream version of the pattern"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "okay",
+  "date": "2026-10-14"
+ }
+}

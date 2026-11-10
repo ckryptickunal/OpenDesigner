@@ -1,0 +1,1431 @@
+{
+  "kind": "checkers",
+  "date": "2026-10-20",
+  "time": "2026-10-20T19:37:10",
+  "commit": "9dcd6ba",
+  "checkersChangedSinceCommit": [],
+  "environment": {
+    "python": "3.10.11",
+    "chrome": "155.0.8059.82",
+    "platform": "darwin"
+  },
+  "runs": 2,
+  "sameEveryRun": true,
+  "scoring": "recall = planted defects caught / planted; precision = findings that match a planted defect / all findings; falseAlarms = findings on clean pages. Errors and warnings count; info notes do not. A layout finding at several widths counts once.",
+  "checkers": {
+    "layout": {
+      "script": "site/check_layout.py",
+      "planted": 20,
+      "caught": 19,
+      "recall": 0.95,
+      "findings": 23,
+      "true": 19,
+      "false": 4,
+      "precision": 0.826,
+      "cleanPages": 2,
+      "falseAlarms": 3,
+      "mislocated": 1,
+      "perCheck": {
+        "actions": {
+          "planted": 2,
+          "caught": 2,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "anchor": {
+          "planted": 2,
+          "caught": 2,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "clipped": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 1,
+          "precision": 0.5,
+          "falseAlarms": 1
+        },
+        "edge": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "inner-scroll": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "label-break": {
+          "planted": 2,
+          "caught": 2,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "overlap": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "page-overflow": {
+          "planted": 2,
+          "caught": 1,
+          "recall": 0.5,
+          "findings": 2,
+          "true": 1,
+          "precision": 0.5,
+          "falseAlarms": 0
+        },
+        "partial-row": {
+          "planted": 0,
+          "caught": 0,
+          "recall": null,
+          "findings": 1,
+          "true": 0,
+          "precision": 0.0,
+          "falseAlarms": 1
+        },
+        "symmetry": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "target": {
+          "planted": 2,
+          "caught": 2,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "text-edge": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 1,
+          "precision": 0.5,
+          "falseAlarms": 1
+        },
+        "text-left": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "under-control": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "widow": {
+          "planted": 2,
+          "caught": 2,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
+          "precision": 1.0,
+          "falseAlarms": 0
+        }
+      },
+      "missed": [
+        {
+          "id": "L-overflow-svg",
+          "page": "layout/overflow-svg.html",
+          "check": "page-overflow",
+          "what": "a 400 px inline svg chart makes the page scroll sideways at 320 px; the finding must name the svg"
+        }
+      ],
+      "unexpected": [
+        {
+          "page": "layout/overflow-svg.html",
+          "check": "page-overflow",
+          "level": "error",
+          "loc": [
+            "html"
+          ],
+          "msg": "the page is 416 px wide in a 320 px window; widest: unknown",
+          "widths": [
+            320
+          ],
+          "mislocatedFor": [
+            "L-overflow-svg"
+          ]
+        },
+        {
+          "page": "layout/clean-basics.html",
+          "check": "partial-row",
+          "level": "warning",
+          "loc": [
+            "main"
+          ],
+          "msg": "row 2 (1 box, 16–336 px) is centred at 176 px; row 1 (1, 16–344 px) at 180 px: 4 px left",
+          "widths": [
+            360,
+            390,
+            430,
+            600,
+            768,
+            820,
+            900,
+            1024,
+            1180,
+            1280,
+            1440,
+            1920
+          ]
+        },
+        {
+          "page": "layout/clean-docs.html",
+          "check": "clipped",
+          "level": "error",
+          "loc": [
+            "main > div.x-card.gallery-card:nth-of-type(4) > p > a > span.visually-hidden"
+          ],
+          "msg": "overflow: hidden cuts off content: 184.4 px on the right, 20 px at the bottom (box 1 × 1 px)",
+          "widths": [
+            320,
+            360,
+            390,
+            430,
+            600,
+            768,
+            820,
+            900,
+            1024,
+            1180,
+            1280,
+            1440,
+            1920
+          ]
+        },
+        {
+          "page": "layout/clean-docs.html",
+          "check": "text-edge",
+          "level": "error",
+          "loc": [
+            "main > div.x-card.gallery-card:nth-of-type(4) > p > a > span.visually-hidden"
+          ],
+          "msg": "\"(opens the guide section)\" spans 142.5–327.9 px in a 320 px window",
+          "widths": [
+            320
+          ]
+        }
+      ],
+      "caughtBy": {
+        "L-overflow-img": [
+          {
+            "check": "page-overflow",
+            "level": "error",
+            "msg": "the page is 416 px wide in a 320 px window; widest: img#wide-chart (right edge 416 px)"
+          }
+        ],
+        "L-inner-scroll": [
+          {
+            "check": "inner-scroll",
+            "level": "error",
+            "msg": "content is 716 px wide in a 254 px box (462 px over, overflow-x: auto), so it scrolls sideways"
+          }
+        ],
+        "L-clipped": [
+          {
+            "check": "clipped",
+            "level": "error",
+            "msg": "overflow: hidden cuts off content: 93 px at the bottom (box 254 × 48 px)"
+          }
+        ],
+        "L-symmetry": [
+          {
+            "check": "symmetry",
+            "level": "error",
+            "msg": "row 2 (2 boxes, 16–432 px) is centred at 224 px; row 1 (1, 124–644 px) at 384 px: 160 px left"
+          }
+        ],
+        "L-overlap": [
+          {
+            "check": "overlap",
+            "level": "error",
+            "msg": "overlaps div#card-b by 480 × 24 px"
+          }
+        ],
+        "L-edge": [
+          {
+            "check": "edge",
+            "level": "error",
+            "msg": "3 .x-card boxes stacked in one column: left edges at 176, 188, 176 px"
+          }
+        ],
+        "L-target-in": [
+          {
+            "check": "target",
+            "level": "warning",
+            "msg": "\"+\" is 20 × 20 px, and button#zoom-out is within its 24 px circle"
+          }
+        ],
+        "L-target-out": [
+          {
+            "check": "target",
+            "level": "warning",
+            "msg": "\"-\" is 20 × 20 px, and button#zoom-in is within its 24 px circle"
+          }
+        ],
+        "L-text-edge": [
+          {
+            "check": "text-edge",
+            "level": "error",
+            "msg": "\"od_example_key_not_real_0123456789ab\" spans 193–496.4 px, past its card's 176–376 px"
+          }
+        ],
+        "L-anchor-band": [
+          {
+            "check": "anchor",
+            "level": "error",
+            "msg": "centre 21 px from the box's top, but the first line's centre is 61 px"
+          }
+        ],
+        "L-anchor-inset": [
+          {
+            "check": "anchor",
+            "level": "warning",
+            "msg": "insets differ: 17 px from the top, 5 px from the side"
+          }
+        ],
+        "L-widow-h2": [
+          {
+            "check": "widow",
+            "level": "error",
+            "msg": "3 lines, and the last holds one word"
+          }
+        ],
+        "L-widow-lede": [
+          {
+            "check": "widow",
+            "level": "error",
+            "msg": "3 lines, and the last holds one word"
+          }
+        ],
+        "L-text-left": [
+          {
+            "check": "text-left",
+            "level": "error",
+            "msg": "text blocks start at 176, 438.4, 176 px"
+          }
+        ],
+        "L-under-control": [
+          {
+            "check": "under-control",
+            "level": "error",
+            "msg": "text at 29–290.3 px runs under the control at 237.6–291 px"
+          }
+        ],
+        "L-label-default": [
+          {
+            "check": "label-break",
+            "level": "error",
+            "msg": "\"Default\" runs over 2 lines"
+          }
+        ],
+        "L-label-readonly": [
+          {
+            "check": "label-break",
+            "level": "error",
+            "msg": "\"Read only\" runs over 2 lines"
+          }
+        ],
+        "L-actions-stacked": [
+          {
+            "check": "actions",
+            "level": "error",
+            "msg": "2 actions on 2 rows"
+          }
+        ],
+        "L-actions-reversed": [
+          {
+            "check": "actions",
+            "level": "error",
+            "msg": "the primary action is not on the right"
+          }
+        ]
+      },
+      "layoutInstances": 46
+    },
+    "preflight": {
+      "script": "skills/opendesigner-preflight/scripts/preflight.py",
+      "planted": 11,
+      "caught": 10,
+      "recall": 0.909,
+      "findings": 10,
+      "true": 10,
+      "false": 0,
+      "precision": 1.0,
+      "cleanPages": 1,
+      "falseAlarms": 0,
+      "mislocated": 0,
+      "perCheck": {
+        "M18": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "M2": {
+          "planted": 2,
+          "caught": 1,
+          "recall": 0.5,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "M5": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "M6": {
+          "planted": 2,
+          "caught": 2,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "M7": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "M8": {
+          "planted": 2,
+          "caught": 2,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "M9": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "missing-sheet": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        }
+      },
+      "missed": [
+        {
+          "id": "P-off-scale-fs",
+          "page": "preflight/off-scale.html",
+          "check": "M2",
+          "what": "an 18 px label off a scale named --fs-* (14, 16, 20, 24, 32)"
+        }
+      ],
+      "unexpected": [],
+      "caughtBy": {
+        "P-text-10": [
+          {
+            "check": "M8",
+            "level": "error",
+            "msg": "text under 11px for web: [10]; below 11 px is under every platform minimum; 12 px is the web floor for text people read, and 11 px fits only short labels (stage 11, Material label-small)  [M8]"
+          }
+        ],
+        "P-text-11": [
+          {
+            "check": "M8",
+            "level": "warn",
+            "msg": "text under 12px for web: [11]; below 11 px is under every platform minimum; 12 px is the web floor for text people read, and 11 px fits only short labels (stage 11, Material label-small)  [M8]"
+          }
+        ],
+        "P-font-missing": [
+          {
+            "check": "M9",
+            "level": "error",
+            "msg": "font \"Fixture Grotesk\" is used but has no @font-face, so another face may render  [M9]"
+          }
+        ],
+        "P-many-sizes": [
+          {
+            "check": "M6",
+            "level": "warn",
+            "msg": "11 distinct font sizes; a scale has about 8  [M6]"
+          }
+        ],
+        "P-close-sizes": [
+          {
+            "check": "M6",
+            "level": "warn",
+            "msg": "sizes within 10% of each other: 14/15, 15/16  [M6]"
+          }
+        ],
+        "P-off-scale-ds": [
+          {
+            "check": "M2",
+            "level": "warn",
+            "msg": "sizes outside the token scale [14, 16, 20, 24, 32]: [18]  [M2, M6]"
+          }
+        ],
+        "P-tracking": [
+          {
+            "check": "M5",
+            "level": "warn",
+            "msg": "letter-spacing tighter than -0.03em: [-0.05]; check glyphs and word spaces at 200%  [M5]"
+          }
+        ],
+        "P-br": [
+          {
+            "check": "M7",
+            "level": "warn",
+            "msg": "<br> in a heading; let it wrap with text-wrap: balance  [M7]"
+          }
+        ],
+        "P-tween": [
+          {
+            "check": "M18",
+            "level": "warn",
+            "msg": "a tween animates width; layout properties snap to whole pixels, use x, y or scale  [M18]"
+          }
+        ],
+        "P-missing-sheet": [
+          {
+            "check": "missing-sheet",
+            "level": "warn",
+            "msg": "stylesheet styles/theme.css is linked but not found next to the page, so its sizes and fonts were not read"
+          }
+        ]
+      },
+      "infoLines": 22
+    },
+    "review": {
+      "script": "skills/opendesigner-review/scripts/review.py",
+      "planted": 18,
+      "caught": 18,
+      "recall": 1.0,
+      "findings": 23,
+      "true": 20,
+      "false": 3,
+      "precision": 0.87,
+      "cleanPages": 1,
+      "falseAlarms": 1,
+      "mislocated": 0,
+      "perCheck": {
+        "CV-05": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "EN-01": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "EN-02": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "EN-06": {
+          "planted": 0,
+          "caught": 0,
+          "recall": null,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "IN-01": {
+          "planted": 0,
+          "caught": 0,
+          "recall": null,
+          "findings": 2,
+          "true": 0,
+          "precision": 0.0,
+          "falseAlarms": 0
+        },
+        "IN-02": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "IN-03": {
+          "planted": 2,
+          "caught": 2,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "IN-04": {
+          "planted": 0,
+          "caught": 0,
+          "recall": null,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "MS-01": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "MS-02": {
+          "planted": 2,
+          "caught": 2,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "MS-03": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "MS-04": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 1,
+          "precision": 0.5,
+          "falseAlarms": 1
+        },
+        "MS-06": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "MS-07": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "MS-08": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "MS-09": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "MS-10": {
+          "planted": 2,
+          "caught": 2,
+          "recall": 1.0,
+          "findings": 2,
+          "true": 2,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "ST-06": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        }
+      },
+      "missed": [],
+      "unexpected": [
+        {
+          "page": "review/floors-b.html",
+          "check": "IN-01",
+          "level": "error",
+          "loc": [
+            "4 Tab presses, focus stayed on the page"
+          ],
+          "msg": "Tab never reached any control: 4 Tab presses, focus stayed on the page"
+        },
+        {
+          "page": "review/drift.html",
+          "check": "IN-01",
+          "level": "error",
+          "loc": [
+            "4 Tab presses, focus stayed on the page"
+          ],
+          "msg": "Tab never reached any control: 4 Tab presses, focus stayed on the page"
+        },
+        {
+          "page": "review/clean.html",
+          "check": "MS-04",
+          "level": "error",
+          "loc": [
+            "main > div.card:nth-of-type(2) > p.meta:nth-of-type(2)",
+            "#858587 on #f5f5f7, 14 px, 1 element(s)"
+          ],
+          "msg": "Text contrast 3.4:1 is below 4.5:1: #858587 on #f5f5f7, 14 px, 1 element(s)"
+        }
+      ],
+      "caughtBy": {
+        "R-contrast": [
+          {
+            "check": "MS-04",
+            "level": "error",
+            "msg": "Text contrast 2.81:1 is below 4.5:1: #9a9a9a on #ffffff, 16 px, 1 element(s)"
+          }
+        ],
+        "R-targets": [
+          {
+            "check": "MS-06",
+            "level": "error",
+            "msg": "Targets smaller than 24x24 px with another target close by: 2 target(s): button#pg-prev 16x16; button#pg-next 16x16"
+          },
+          {
+            "check": "IN-04",
+            "level": "warn",
+            "msg": "Touch targets under 44 px: 2 target(s), e.g. button#pg-prev at 16x16"
+          }
+        ],
+        "R-lang": [
+          {
+            "check": "IN-03",
+            "level": "error",
+            "msg": "The page does not declare its language: <html> has no lang"
+          }
+        ],
+        "R-zoom": [
+          {
+            "check": "EN-01",
+            "level": "error",
+            "msg": "The page stops people from zooming: viewport meta: width=device-width, initial-scale=1, user-scalable=no"
+          }
+        ],
+        "R-alt": [
+          {
+            "check": "MS-10",
+            "level": "error",
+            "msg": "Images with no alt attribute: 1: img#hero-photo"
+          }
+        ],
+        "R-focus": [
+          {
+            "check": "IN-02",
+            "level": "error",
+            "msg": "Focused controls show no focus indicator: 1 of 3 stops: a#more (Tab 3)"
+          }
+        ],
+        "R-hscroll": [
+          {
+            "check": "CV-05",
+            "level": "error",
+            "msg": "The page scrolls sideways: 96 px wider than the viewport (320 px)"
+          }
+        ],
+        "R-small-text": [
+          {
+            "check": "MS-02",
+            "level": "warn",
+            "msg": "Text smaller than 12 px: 10 px: 'Taxes are added at checkout.' in span#fine"
+          }
+        ],
+        "R-reduced-motion": [
+          {
+            "check": "EN-02",
+            "level": "error",
+            "msg": "Motion with no prefers-reduced-motion rule: 1 running animation(s), 0 transition duration(s), 0 reduced-motion rules in the stylesheets I can read"
+          }
+        ],
+        "R-placeholder": [
+          {
+            "check": "ST-06",
+            "level": "warn",
+            "msg": "Placeholder or broken template text on the page: span#price: 'undefined'"
+          }
+        ],
+        "R-heading-skip": [
+          {
+            "check": "IN-03",
+            "level": "warn",
+            "msg": "Heading levels skip: h1 is followed by h3 (1 skip(s))"
+          }
+        ],
+        "R-broken-img": [
+          {
+            "check": "EN-06",
+            "level": "error",
+            "msg": "Requests failed or returned an error status: 1: 404 <fixtures>/review/img/missing-avatar.png"
+          },
+          {
+            "check": "MS-10",
+            "level": "error",
+            "msg": "Images failed to load: 1: img#avatar"
+          }
+        ],
+        "R-long-lines": [
+          {
+            "check": "MS-07",
+            "level": "warn",
+            "msg": "Lines longer than 80 characters: p#long is about 128 characters wide"
+          }
+        ],
+        "R-color-drift": [
+          {
+            "check": "MS-08",
+            "level": "warn",
+            "msg": "Text colors that are not in the palette (1): #5a3fd1 x6"
+          }
+        ],
+        "R-type-drift": [
+          {
+            "check": "MS-02",
+            "level": "warn",
+            "msg": "Font sizes off the type scale (1 value(s), 6 of 13 text elements): 18px x6 (nearest 16)"
+          }
+        ],
+        "R-radius-drift": [
+          {
+            "check": "MS-09",
+            "level": "warn",
+            "msg": "Corner radii off the system's: 6px x3 (nearest 4)"
+          }
+        ],
+        "R-space-drift": [
+          {
+            "check": "MS-01",
+            "level": "warn",
+            "msg": "Spacing off the ladder (2 value(s), 26 of 53 uses): 10px x24 (nearest 8); 160px x2 (nearest 64)"
+          }
+        ],
+        "R-face-drift": [
+          {
+            "check": "MS-03",
+            "level": "warn",
+            "msg": "Most text is not in the system's typeface: most text is Georgia; the system says system-ui"
+          }
+        ]
+      },
+      "infoNotes": 5,
+      "notes": []
+    },
+    "dates": {
+      "script": "brand/tools/check_dates.py",
+      "planted": 5,
+      "caught": 5,
+      "recall": 1.0,
+      "findings": 5,
+      "true": 5,
+      "false": 0,
+      "precision": 1.0,
+      "cleanPages": 1,
+      "falseAlarms": 0,
+      "mislocated": 0,
+      "perCheck": {
+        "not-a-date": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "weekday": {
+          "planted": 4,
+          "caught": 4,
+          "recall": 1.0,
+          "findings": 4,
+          "true": 4,
+          "precision": 1.0,
+          "falseAlarms": 0
+        }
+      },
+      "missed": [],
+      "unexpected": [],
+      "caughtBy": {
+        "D-thu-24-oct": [
+          {
+            "check": "weekday",
+            "level": "error",
+            "msg": "\"Thu 24 Oct 2026\" is a Saturday in 2026"
+          }
+        ],
+        "D-fri-oct-18": [
+          {
+            "check": "weekday",
+            "level": "error",
+            "msg": "\"Fri Oct 18, 2026\" is a Sunday in 2026"
+          }
+        ],
+        "D-mon-3-nov": [
+          {
+            "check": "weekday",
+            "level": "error",
+            "msg": "\"Monday, 3 November 2026\" is a Tuesday in 2026"
+          }
+        ],
+        "D-31-sep": [
+          {
+            "check": "not-a-date",
+            "level": "error",
+            "msg": "\"Wed 31 Sep 2026\" is not a date"
+          }
+        ],
+        "D-fri-dec-26": [
+          {
+            "check": "weekday",
+            "level": "error",
+            "msg": "\"Friday, December 26, 2026\" is a Saturday in 2026"
+          }
+        ]
+      }
+    },
+    "names": {
+      "script": "brand/tools/check_names.py",
+      "planted": 5,
+      "caught": 4,
+      "recall": 0.8,
+      "findings": 4,
+      "true": 4,
+      "false": 0,
+      "precision": 1.0,
+      "cleanPages": 1,
+      "falseAlarms": 0,
+      "mislocated": 0,
+      "perCheck": {
+        "cross-near": {
+          "planted": 2,
+          "caught": 1,
+          "recall": 0.5,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "registry-name": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "registry-near": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        },
+        "registry-word": {
+          "planted": 1,
+          "caught": 1,
+          "recall": 1.0,
+          "findings": 1,
+          "true": 1,
+          "precision": 1.0,
+          "falseAlarms": 0
+        }
+      },
+      "missed": [
+        {
+          "id": "N-near-two-words",
+          "page": "names/piece-b.html",
+          "check": "cross-near",
+          "what": "\"Vosberg Health\" here, one letter from \"Vossberg Health\" in piece-a"
+        }
+      ],
+      "unexpected": [],
+      "caughtBy": {
+        "N-near-one-word": [
+          {
+            "check": "cross-near",
+            "level": "error",
+            "msg": "\"Stellwick\" (piece-b) is one or two letters from \"Tellwick\" (piece-a)"
+          }
+        ],
+        "N-registry-name": [
+          {
+            "check": "registry-name",
+            "level": "error",
+            "msg": "\"Corvantis\" is already a company in other-piece"
+          }
+        ],
+        "N-registry-near": [
+          {
+            "check": "registry-near",
+            "level": "error",
+            "msg": "\"Marrowend\" is one or two letters from \"Marrowind\" (\"Marrowind Freight\", other-piece)"
+          }
+        ],
+        "N-registry-word": [
+          {
+            "check": "registry-word",
+            "level": "error",
+            "msg": "\"Quillfeather\" is part of \"Quillfeather Bay Hotel\" in other-piece"
+          }
+        ]
+      },
+      "newNames": 10
+    }
+  },
+  "history": [
+    {
+      "commit": "14e441e",
+      "date": "2026-10-15",
+      "time": "2026-10-15T03:03:20+05:30",
+      "subject": "Website: a landing page at the root, the docs directory at /docs/, a craft guide, and every width checked",
+      "current": false,
+      "checkNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "findingTypes": [
+        "anchor",
+        "clipped",
+        "edge",
+        "ellipsis",
+        "inner-scroll",
+        "overlap",
+        "page-overflow",
+        "partial-row",
+        "row-overflow",
+        "symmetry",
+        "target",
+        "text-edge"
+      ],
+      "planted": 20,
+      "caught": 11,
+      "recall": 0.55,
+      "findings": 18,
+      "precision": 0.611,
+      "falseAlarms": 6,
+      "missed": [
+        "L-overflow-svg",
+        "L-widow-h2",
+        "L-widow-lede",
+        "L-text-left",
+        "L-under-control",
+        "L-label-default",
+        "L-label-readonly",
+        "L-actions-stacked",
+        "L-actions-reversed"
+      ],
+      "perCheck": {
+        "actions": {
+          "planted": 2,
+          "caught": 0,
+          "falseAlarms": 0
+        },
+        "anchor": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 2
+        },
+        "clipped": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 1
+        },
+        "edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "inner-scroll": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 1
+        },
+        "label-break": {
+          "planted": 2,
+          "caught": 0,
+          "falseAlarms": 0
+        },
+        "overlap": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "page-overflow": {
+          "planted": 2,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "partial-row": {
+          "planted": 0,
+          "caught": 0,
+          "falseAlarms": 1
+        },
+        "symmetry": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "target": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "text-edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 1
+        },
+        "text-left": {
+          "planted": 1,
+          "caught": 0,
+          "falseAlarms": 0
+        },
+        "under-control": {
+          "planted": 1,
+          "caught": 0,
+          "falseAlarms": 0
+        },
+        "widow": {
+          "planted": 2,
+          "caught": 0,
+          "falseAlarms": 0
+        }
+      },
+      "falseAlarmList": [
+        {
+          "page": "layout/clean-basics.html",
+          "check": "partial-row",
+          "element": "main"
+        },
+        {
+          "page": "layout/clean-docs.html",
+          "check": "anchor",
+          "element": "main > div.pieces > figure.piece > div.slides > button.sl-arrow.sl-next:nth-of-type(2)"
+        },
+        {
+          "page": "layout/clean-docs.html",
+          "check": "anchor",
+          "element": "main > div.pieces > figure.piece > div.slides > button.sl-arrow.sl-prev:nth-of-type(1)"
+        },
+        {
+          "page": "layout/clean-docs.html",
+          "check": "clipped",
+          "element": "main > div.x-card.gallery-card:nth-of-type(4) > p > a > span.visually-hidden"
+        },
+        {
+          "page": "layout/clean-docs.html",
+          "check": "inner-scroll",
+          "element": "main > div.x-card.gallery-card:nth-of-type(3) > div.filters"
+        },
+        {
+          "page": "layout/clean-docs.html",
+          "check": "text-edge",
+          "element": "main > div.x-card.gallery-card:nth-of-type(4) > p > a > span.visually-hidden"
+        }
+      ],
+      "newlyCaught": [
+        "L-anchor-band",
+        "L-anchor-inset",
+        "L-clipped",
+        "L-edge",
+        "L-inner-scroll",
+        "L-overflow-img",
+        "L-overlap",
+        "L-symmetry",
+        "L-target-in",
+        "L-target-out",
+        "L-text-edge"
+      ],
+      "ownerFeedback": [
+        8,
+        13
+      ],
+      "note": "First version: checks 1 to 8; catches 11 of 20 planted defects; they answer owner feedback items 8, 13."
+    },
+    {
+      "commit": "5d436d4",
+      "date": "2026-10-15",
+      "time": "2026-10-15T05:59:49+05:30",
+      "subject": "Website: phones checked on every page, a booking page, gallery frames in their own card, and tighter headline spacing",
+      "current": true,
+      "checkNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "findingTypes": [
+        "actions",
+        "anchor",
+        "clipped",
+        "edge",
+        "ellipsis",
+        "inner-scroll",
+        "label-break",
+        "overlap",
+        "page-overflow",
+        "partial-row",
+        "row-overflow",
+        "symmetry",
+        "target",
+        "text-edge",
+        "text-left",
+        "under-control",
+        "widow"
+      ],
+      "planted": 20,
+      "caught": 19,
+      "recall": 0.95,
+      "findings": 23,
+      "precision": 0.826,
+      "falseAlarms": 3,
+      "missed": [
+        "L-overflow-svg"
+      ],
+      "perCheck": {
+        "actions": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "anchor": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "clipped": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 1
+        },
+        "edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "inner-scroll": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "label-break": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "overlap": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "page-overflow": {
+          "planted": 2,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "partial-row": {
+          "planted": 0,
+          "caught": 0,
+          "falseAlarms": 1
+        },
+        "symmetry": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "target": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        },
+        "text-edge": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 1
+        },
+        "text-left": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "under-control": {
+          "planted": 1,
+          "caught": 1,
+          "falseAlarms": 0
+        },
+        "widow": {
+          "planted": 2,
+          "caught": 2,
+          "falseAlarms": 0
+        }
+      },
+      "falseAlarmList": [
+        {
+          "page": "layout/clean-basics.html",
+          "check": "partial-row",
+          "element": "main"
+        },
+        {
+          "page": "layout/clean-docs.html",
+          "check": "clipped",
+          "element": "main > div.x-card.gallery-card:nth-of-type(4) > p > a > span.visually-hidden"
+        },
+        {
+          "page": "layout/clean-docs.html",
+          "check": "text-edge",
+          "element": "main > div.x-card.gallery-card:nth-of-type(4) > p > a > span.visually-hidden"
+        }
+      ],
+      "newlyCaught": [
+        "L-actions-reversed",
+        "L-actions-stacked",
+        "L-label-default",
+        "L-label-readonly",
+        "L-text-left",
+        "L-under-control",
+        "L-widow-h2",
+        "L-widow-lede"
+      ],
+      "ownerFeedback": [
+        14,
+        16,
+        17
+      ],
+      "falseAlarmsRemoved": [
+        {
+          "page": "layout/clean-docs.html",
+          "check": "anchor",
+          "element": "main > div.pieces > figure.piece > div.slides > button.sl-arrow.sl-next:nth-of-type(2)"
+        },
+        {
+          "page": "layout/clean-docs.html",
+          "check": "anchor",
+          "element": "main > div.pieces > figure.piece > div.slides > button.sl-arrow.sl-prev:nth-of-type(1)"
+        },
+        {
+          "page": "layout/clean-docs.html",
+          "check": "inner-scroll",
+          "element": "main > div.x-card.gallery-card:nth-of-type(3) > div.filters"
+        }
+      ],
+      "falseAlarmsAdded": [],
+      "note": "Adds checks 9 to 13. Newly catches 8 planted defects (actions, label-break, text-left, under-control, widow); they answer owner feedback items 14, 16, 17. Removes 3 clean-page false alarms (anchor, inner-scroll)."
+    }
+  ],
+  "historyChecker": "site/check_layout.py",
+  "ownerFeedback": {
+    "source": "_coordination/OWNER-FEEDBACK.md, section 2026-10-14 to 2026-10-15: showcase and website reviews",
+    "8": "A pair of cards off the centre line at a narrow width: alignment measured at every width (check 3, symmetry).",
+    "13": "The Copy button in code blocks 'feels out of place': a pinned control lines up with the content (check 8, anchor).",
+    "14": "'The word it is always on the next line': no heading or short line ends on one word (check 9, widow).",
+    "16": "Phone screenshots: a Copy button over a command, 'Defaul / t': every page checked at phone widths (checks 11 under-control and 12 label-break).",
+    "17": "'Skip today should always come on the left of Mark today done': opposite actions on one row, primary right (check 13, actions)."
+  }
+}

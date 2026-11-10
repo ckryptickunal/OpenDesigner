@@ -9,10 +9,21 @@ import io
 import json
 import os
 import re
+import shlex
 import sys
 import tempfile
 import unittest
 from urllib.parse import parse_qs, urlparse
+
+# No test reads or writes the real home folder or the machine's git config (a guard test once wrote a hook into this Mac's
+# global core.hooksPath for a minute, 2026-11-10). Set before engine (and taste.py, which reads ~/.opendesigner) is imported.
+REAL_HOME = os.path.expanduser("~")
+TEST_HOME = tempfile.mkdtemp(prefix="opendesigner-tests-home-")
+os.environ.update(HOME=TEST_HOME, OD_HOME=os.path.join(TEST_HOME, ".opendesigner"), XDG_CONFIG_HOME=os.path.join(TEST_HOME, ".config"),
+                  GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1")
+import atexit  # noqa: E402
+import shutil  # noqa: E402
+atexit.register(shutil.rmtree, TEST_HOME, True)
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import engine as e  # noqa: E402
@@ -177,6 +188,82 @@ class TypeScale(unittest.TestCase):
         self.assertEqual(p["type.ratio"], 1.2)
 
 
+class TrackingTableAndCorners(unittest.TestCase):
+    """Q-type-13 size-table applies Apple's SF Pro table, and Q-shape-04 reaches the exports (both were recorded but unused
+    before 2026-10-21). The table rows are from the HIG (S-L02-001)."""
+
+    def styles(self, **raw):
+        files, meta, _ = e.generate_system(state_with(**raw))
+        flat = e.resolve_all(files, {})
+        out = {k: (v["resolved"]["fontSize"]["value"], v["$extensions"]["opendesigner"]["letterSpacingEm"])
+               for k, v in flat.items() if v["type"] == "typography" and not k.startswith("text.emphasized.")}
+        return out, files, meta
+
+    def test_the_table_is_apples(self):
+        for size, em in ((6, 0.041), (11, 0.006), (12, 0), (17, -0.026), (20, -0.023), (24, 0.003), (28, 0.014), (80, 0), (96, 0)):
+            self.assertAlmostEqual(e.sf_pro_tracking(size), em, places=4, msg=size)
+        self.assertAlmostEqual(e.sf_pro_tracking(16.5), -0.023, places=4)   # straight line between 16 (-20) and 17 (-26)
+        self.assertEqual((e.sf_pro_tracking(4), e.sf_pro_tracking(120)), (0.041, 0))
+
+    def test_the_system_font_takes_the_whole_table(self):
+        out, _, _ = self.styles(tracking="sf-pro")
+        for k, (size, em) in out.items():
+            if k.startswith(("text.code.", "text.label.sm")):
+                continue  # code keeps the bands; uppercase labels stay at least +0.05em
+            self.assertAlmostEqual(em, e.sf_pro_tracking(size), places=4, msg=k)
+        self.assertTrue(any(size >= 24 and em > 0 for size, em in out.values()))  # SF Pro Display is loosened, as Apple sets it
+
+    def test_another_face_keeps_its_headings_tight(self):
+        out, _, _ = self.styles(tracking="sf-pro", textFace="Inter")
+        for k, (size, em) in out.items():
+            if size <= 19 and not k.startswith(("text.code.", "text.label.sm")):
+                self.assertAlmostEqual(em, e.sf_pro_tracking(size), places=4, msg=k)
+            if size >= 24:
+                self.assertLessEqual(em, 0, k)  # STD-visual-details-05: headings tighten, never loosen
+
+    def test_uppercase_labels_stay_looser(self):
+        out, _, _ = self.styles(tracking="sf-pro")
+        self.assertGreaterEqual(out["text.label.sm"][1], 0.05)  # STD-visual-details-04
+
+    def test_default_and_per_style_keep_the_bands(self):
+        default, _, _ = self.styles()
+        self.assertEqual(self.styles(tracking="per-style")[0], default)  # per-style is not the SF Pro table
+        self.assertEqual(e.ANSWER_TABLE["Q-type-13"]["per-style"], {"raw.tracking": "per-style"})
+
+    def test_states_from_before_keep_their_tracking_unless_the_person_chose_the_table(self):
+        """Every state before 2026-10-21 stored raw.tracking size-table as the default, when it meant the bands."""
+        self.assertEqual(e.ANSWER_TABLE["Q-type-13"]["size-table"], {"raw.tracking": "sf-pro"})
+        default, _, _ = self.styles()
+        self.assertEqual(self.styles(tracking="size-table")[0], default)
+        s = state_with(tracking="size-table")
+        s["answers"] = {"Q-type-13": "size-table"}
+        files, _, _ = e.generate_system(s)
+        body = e.resolve_all(files, {})["text.body.md"]
+        self.assertAlmostEqual(body["$extensions"]["opendesigner"]["letterSpacingEm"], e.sf_pro_tracking(body["resolved"]["fontSize"]["value"]), places=4)
+
+    def test_corner_shape_reaches_every_export(self):
+        self.assertEqual(e.ANSWER_TABLE["Q-shape-04"]["squircle-enhance"], {"raw.cornerShape": "squircle-enhance"})
+        _, files, meta = self.styles(cornerShape="squircle-enhance")
+        css = e.export_css(files, meta, "ds")
+        # Apple's continuous corner, not the squircle keyword, which is squarer than iOS (tools/fit_corner.py)
+        self.assertIn("@supports (corner-shape: superellipse(1.35)) { :root { --ds-corner-scale: 1.22; --ds-corner-shape: superellipse(1.35); } }", css)
+        self.assertIn(".ds-corners { border-radius: calc(var(--ds-corner-radius) * var(--ds-corner-scale)); corner-shape: var(--ds-corner-shape); }", css)
+        self.assertIn('@property --ds-corner-radius { syntax: "<length-percentage>"; inherits: false; initial-value: 0px; }', css)  # boxes inside keep their own radius
+        self.assertNotIn("squircle;", css)
+        self.assertIn("border-radius: calc(var(--ds-corner-radius) * var(--ds-corner-scale));", e.export_tailwind(files, meta, "ds"))
+        cont = e.levers()["formulas"]["radius"]["continuous"]
+        self.assertLess(cont["maxError"], cont["circleError"])  # the fit is closer to Apple's curve than a plain arc
+        self.assertLess(cont["circleError"], cont["squircleError"])  # and a plain arc is closer than the squircle keyword
+        self.assertEqual(e.export_figma(files, meta, state_with(), "ds")["corners"]["cornerSmoothing"], 0.6)
+        self.assertIn("RoundedRectangle(cornerRadius: radius, style: cornerStyle)", e.export_swift(files, meta, "ds"))
+
+    def test_circular_corners_add_nothing_to_the_web(self):
+        _, files, meta = self.styles()
+        self.assertNotIn("corner-shape", e.export_css(files, meta, "ds"))
+        self.assertEqual(e.export_figma(files, meta, state_with(), "ds")["corners"]["cornerSmoothing"], 0)
+        self.assertIn(".continuous", e.export_swift(files, meta, "ds"))  # iOS draws continuous corners whatever the web does (DC-L04-04)
+
+
 class Scales(unittest.TestCase):
     def test_space_ladders(self):
         self.assertEqual(e.space_ladder(4), [0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96])  # Atlassian set + 96 (spec 6.2)
@@ -282,6 +369,13 @@ class Exports(unittest.TestCase):
         self.assertEqual([c["name"] for c in fig["collections"]][:2], ["Primitives", "Color"])
         self.assertTrue(all(len(v.get("codeSyntax", {})) <= 3 for c in fig["collections"] for v in c["variables"]))
 
+    def test_dtcg_export_drops_a_resolver_left_by_an_earlier_name(self):
+        stale = os.path.join(self.d, "build", "dtcg", "old-name.resolver.json")
+        with open(stale, "w", encoding="utf-8") as f:
+            f.write("{}")
+        quiet(e.cmd_export, self.d, "dtcg", self.files, self.meta)
+        self.assertEqual(os.listdir(os.path.join(self.d, "build", "dtcg")), ["export-test.resolver.json"])
+
     def test_css_has_variables_and_modes(self):
         css = self.read("build", "css", "tokens.css")
         for needle in ("--ds-color-text-primary:", "--ds-space-inset-md:", "--ds-radius-control:", "prefers-color-scheme: dark",
@@ -332,7 +426,9 @@ class StateAndLog(unittest.TestCase):
             with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
                 log = f.read()
             self.assertIn("set_by: delegated", log)
-            self.assertRegex(log, r"## D-0003 · answers\.Q-aud-01 = \"regular\"\n- set_by: chosen · locked: no · date: [\d-]+ · supersedes: D-0002")
+            self.assertRegex(log, r"## D-0004 · answers\.Q-aud-01 = \"regular\"\n- set_by: chosen · locked: no · date: [\d-]+ · supersedes: D-0002")
+            self.assertRegex(log, r"## D-0003 · defaults\.work-tool = \[\"corners\", \"weights\", \"accent\", \"surfaces\"\]\n- set_by: auto_default")
+            self.assertRegex(log, r"## D-0005 · defaults\.work-tool = \[\]\n- set_by: auto_default .* supersedes: D-0003")
             quiet(e.cmd_lock, d, "dials.roundness")
             with self.assertRaises(SystemExit):
                 quiet(e.cmd_set, d, "dials.roundness", 80, "should be refused")
@@ -484,6 +580,328 @@ class Intake(unittest.TestCase):
         self.assertEqual(e.fit_reference(dict(self.SCAN, tag="competitor"))["proposals"], [])
 
 
+class KeepBlocks(unittest.TestCase):
+    """Owner text inside od:keep blocks survives design-md, whatever it holds (a real project lost two blocks, 2026-11-09)."""
+
+    ICP = ("<!-- od:keep -->\n## ICP: who buys first\n\nChartering managers at mid-size dry bulk operators.\n\n"
+           "- They run 10 to 40 ships.\n<!-- /od:keep -->")
+    HERO = "<!-- od:keep -->\nThe hero headline stays at 48 px.\n<!-- /od:keep -->"
+
+    def test_blocks_are_found_by_their_markers(self):
+        text = ("# T\n\n> Notes survive only inside `<!-- od:keep -->` blocks.\n\n## Audience\n\nWords.\n\n" + self.ICP
+                + "\n\n## Gone section\n\n" + self.HERO + "\n\n```\n<!-- od:keep -->quoted<!-- /od:keep -->\n```\n")
+        self.assertEqual(e._keep_blocks(text), [("Audience", self.ICP), ("Gone section", self.HERO)])
+        self.assertEqual(e._keep_blocks(""), [])
+
+    def test_design_md_round_trip_keeps_every_block(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Hull", "#b8321f", "regular", "web", "calm,serious")
+            quiet(e.cmd_design_md, d)
+            for name, section in (("PRODUCT.md", "## Audience\n"), ("DESIGN.md", "## Colors\n")):
+                path = os.path.join(t, name)
+                with open(path, encoding="utf-8") as f:
+                    text = f.read()
+                self.assertIn("`<!-- od:keep -->`", text)           # the header quotes the marker; it must not count
+                head, rest = text.split(section, 1)
+                body, tail = rest.split("\n## ", 1)
+                edited = head + section + body.rstrip("\n") + "\n\n" + self.ICP + "\n\n## " + tail.rstrip("\n") \
+                    + "\n\n## Pricing notes\n\n" + self.HERO + "\n"
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write(edited)
+                quiet(e.cmd_design_md, d)
+                with open(path + ".hand-edited", encoding="utf-8") as f:
+                    self.assertEqual(f.read(), edited)               # the backup is the file as it was, not a fragment
+                with open(path, encoding="utf-8") as f:
+                    once = f.read()
+                for block in (self.ICP, self.HERO):
+                    self.assertEqual(once.count(block), 1, name)
+                self.assertLess(once.index(section), once.index(self.ICP))                   # still under its own section
+                self.assertLess(once.index("\n## Notes\n"), once.index(self.HERO))         # unknown section: under Notes
+                quiet(e.cmd_design_md, d)
+                with open(path, encoding="utf-8") as f:
+                    self.assertEqual(f.read(), once, name)          # a second run changes nothing
+
+
+def _git(cwd, *args, when=None):
+    import subprocess
+    env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t",
+               GIT_CONFIG_GLOBAL=os.environ.get("GIT_CONFIG_GLOBAL", os.devnull), GIT_CONFIG_NOSYSTEM="1")  # never the machine's hooks
+    if when:
+        env.update(GIT_AUTHOR_DATE=when, GIT_COMMITTER_DATE=when)
+    subprocess.run(["git", *args], cwd=cwd, env=env, check=True, capture_output=True)
+
+
+class ReviewFindsWhatShips(unittest.TestCase):
+    """A real project (2026-11-09): review of site/app read one file and said the code uses the tokens, while the page that
+    shipped was static HTML in site/public/home with a different brand color and font."""
+
+    def project(self, t):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Hull", "#b8321f", "regular", "web", "calm,serious", quiet=True)
+        quiet(e.cmd_set, d, "raw.textFace", "Outfit", "the brand face")
+        quiet(e.cmd_design_md, d)
+        files = {
+            "site/app/layout.tsx": "export default function L({ children }) { return <main>{children}</main>; }\n",
+            "site/public/home/index.html": ('<!doctype html><link rel="stylesheet" href="/home/iter7.css">'
+                                            '<script src="iter7.js"></script><h1>Pinpoint</h1>\n'),
+            "site/public/home/iter7.css": "".join(f".a{i} {{ color: #0051ff; background: #0a0a0a; }}\n" for i in range(4))
+                                          + ".h { font-family: 'Hanken Grotesk', sans-serif; border-radius: 7px; }\n.b { border-radius: 9px; }\n",
+            "site/public/home/iter7.js": "document.body.dataset.ready = 1;\n",
+            "site/public/home/home.css": ".old { color: #ff0000; }\n",
+            "site/public/home/od-tokens.css": "/* Hull design tokens. Generated by the OpenDesigner engine 0.2.0 from state.json; */\n"
+                                              ":root { --ds-color-x: #123123; }\n",
+            "docs/mock.html": "<p style=\"color: #abcdef\">mock</p>\n",
+        }
+        for rel, text in files.items():
+            os.makedirs(os.path.dirname(os.path.join(t, rel)), exist_ok=True)
+            with open(os.path.join(t, rel), "w", encoding="utf-8") as f:
+                f.write(text)
+        return d
+
+    def run_review(self, d, **kw):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = e.cmd_review(d, **kw)
+        return code, out.getvalue()
+
+    def test_review_reads_the_page_that_ships(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            _code, out = self.run_review(d, project=os.path.join(t, "site", "app"), as_json=True)
+            res = json.loads(out)
+            files_ = {f_["file"] for f_ in res["findings"]}
+            self.assertTrue(any(f.endswith("iter7.css") for f in files_), files_)
+            self.assertFalse(any(f.endswith(("home.css", "od-tokens.css", "mock.html")) for f in files_), files_)
+            self.assertEqual(res["filesScanned"], 4)      # layout.tsx, index.html, iter7.css, iter7.js
+            self.assertTrue(any("also read site/public/home/index.html and the 2 files it loads" in n for n in res["notes"]), res["notes"])
+            self.assertTrue(any("Skipped" in n and "home.css" in n for n in res["notes"]), res["notes"])
+            self.assertEqual(res["tokens"], "none")
+            self.assertEqual({x["what"] for x in res["lookDrift"]}, {"brand color", "fonts"})
+            brand = next(x for x in res["lookDrift"] if x["what"] == "brand color")
+            self.assertEqual((brand["system"], brand["code"][0]), (["#b8321f"], "#0051ff (4)"))
+            fonts = next(x for x in res["lookDrift"] if x["what"] == "fonts")
+            self.assertEqual((fonts["system"], fonts["code"]), (["Outfit"], ["Hanken Grotesk (1)"]))
+            _code, text = self.run_review(d, project=os.path.join(t, "site", "app"))
+            self.assertIn("2 radii", text)                 # not "radiuss"
+            self.assertIn("DESIGN.md and the code disagree on the brand color: DESIGN.md has #b8321f", text)
+            self.assertNotIn("the code uses the tokens", text)
+
+    def test_no_tokens_in_use_is_never_called_clean(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            for f in ("iter7.css", "index.html", "home.css"):
+                os.remove(os.path.join(t, "site", "public", "home", f))
+            app = os.path.join(t, "site", "app")
+            for n_ in range(3):                             # enough style files: nothing else is looked for
+                with open(os.path.join(app, f"s{n_}.css"), "w") as f:
+                    f.write(".x { display: block; }\n")
+            _code, out = self.run_review(d, project=app, as_json=True)
+            res = json.loads(out)
+            self.assertEqual((res["findings"], res["tokens"], res["notes"]), ([], "none", []))
+            _code, text = self.run_review(d, project=app)
+            self.assertIn("no tokens in use either", text)
+            self.assertNotIn("the code uses the tokens", text)
+
+    def test_a_single_file_and_newest_first(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.project(t)
+            _git(t, "init", "-q")
+            _git(t, "add", "-A")
+            _git(t, "commit", "-qm", "system and pages", when="2026-11-01T10:00:00")
+            with open(os.path.join(t, "site", "public", "home", "late.css"), "w") as f:
+                f.write(".late { color: #00ff00; }\n")
+            with open(os.path.join(t, "site", "public", "home", "iter7.js"), "a") as f:
+                f.write("// changed\n")
+            _git(t, "add", "-A")
+            _git(t, "commit", "-qm", "late page work", when="2026-11-08T10:00:00")
+            one = os.path.join(t, "site", "public", "home", "iter7.css")
+            _code, out = self.run_review(d, project=one, as_json=True)
+            res = json.loads(out)
+            self.assertEqual(res["filesScanned"], 1)
+            self.assertTrue(res["findings"] and all(f_["file"] == "iter7.css" for f_ in res["findings"]))
+            self.assertEqual(res["systemAge"]["commitsSince"], 1)   # counted across the repository, not the folder given
+            _code, out = self.run_review(d, project=os.path.join(t, "site", "public", "home"), as_json=True)
+            order = [f_["file"] for f_ in json.loads(out)["findings"]]
+            self.assertEqual(order[0], "late.css")         # the newest file first
+            self.assertNotIn("od-tokens.css", order)       # OpenDesigner's own export is the system, not code
+
+
+class GuardStrictAndHonesty(unittest.TestCase):
+    """2026-11-09/10 process audit: review without a system, docs that point at a missing folder, --strict for commits,
+    how a key value was set, and the opt-in commit guard Kunal approved. Git runs with no global or system config, so a
+    machine-wide core.hooksPath can never receive a test's hook."""
+
+    def setUp(self):
+        self._env = {k: os.environ.get(k) for k in ("GIT_CONFIG_GLOBAL", "GIT_CONFIG_NOSYSTEM")}
+        os.environ["GIT_CONFIG_GLOBAL"], os.environ["GIT_CONFIG_NOSYSTEM"] = os.devnull, "1"
+
+    def tearDown(self):
+        for k, v in self._env.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
+
+    def system(self, t):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "G", "#2563eb", "regular", "web", "calm", quiet=True)
+        quiet(e.cmd_build, d)
+        return d
+
+    def write(self, t, rel, text):
+        os.makedirs(os.path.dirname(os.path.join(t, rel)), exist_ok=True)
+        with open(os.path.join(t, rel), "w", encoding="utf-8") as f:
+            f.write(text)
+
+    def run_(self, fn, *a, **kw):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = fn(*a, **kw)
+        return code, out.getvalue()
+
+    def test_review_without_a_system_still_scans(self):
+        with tempfile.TemporaryDirectory() as t:
+            self.write(t, "site/main.css", ".a { color: #ff0000; padding: 12px; }\n.b { background: rgb(1, 2, 3); }\n")
+            self.write(t, "CLAUDE.md", "Every value comes from opendesigner/tokens.\n")
+            quiet(e.cmd_sketch, os.path.join(t, "sandbox", "opendesigner"), "S", "#2563eb", "regular", "web", "calm", quiet=True)
+            d = os.path.join(t, "opendesigner")
+            code, out = self.run_(e.cmd_review, d, project=t, as_json=True)
+            res = json.loads(out)
+            self.assertEqual(code, 1)                                   # CLAUDE.md points at a folder that is not there
+            self.assertEqual((res["bound"], res["hardCoded"], res["counts"]), (False, 3, {"color": 2, "size": 1}))
+            self.assertEqual((res["systemsFound"], res["broken"]), ([os.path.join("sandbox", "opendesigner")], ["CLAUDE.md"]))
+            _code, text = self.run_(e.cmd_review, d, project=t)
+            self.assertIn("No design system is bound here", text)
+            self.assertIn("engine.py review --dir sandbox/opendesigner --project .", text)
+            os.remove(os.path.join(t, "CLAUDE.md"))
+            self.assertEqual(self.run_(e.cmd_review, d, project=t)[0], 0)
+            self.assertEqual(self.run_(e.cmd_review, d, project=t, strict=True)[0], 1)
+
+    def test_strict_names_its_reasons(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            self.write(t, "src/a.css", ".x { color: #ff0000; }\n")
+            code, out = self.run_(e.cmd_review, d, strict=True)
+            self.assertEqual(code, 1)
+            self.assertIn("Review: 2 to fix: 1 finding; tokens are not in charge.", out)
+            self.write(t, "src/a.css", ".x { color: var(--ds-color-text-primary); }\n")
+            code, out = self.run_(e.cmd_review, d, strict=True)
+            self.assertEqual(code, 0, out)
+            self.assertEqual(out.strip().splitlines()[-1], "Review: ok")
+            self.write(t, "AGENTS.md", "Tokens live in opendesigner/.\n")     # the folder is there: not broken
+            self.assertEqual(self.run_(e.cmd_review, d)[0], 0)
+
+    def test_key_values_say_how_they_were_set(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            for argv in (["pick", "Q-shape-01", "pill"], ["set", "dials.roundness", "60"], ["set", "raw.textFace", '"Inter"'],
+                         ["set", "dials.roundness", "60", "--set-by", "chosen"], ["set", "dials.roundness", "60", "--why", "chosen: rounder"]):
+                with self.subTest(argv=argv), self.assertRaises(SystemExit):
+                    quiet(e.main, ["--dir", d, *argv, "--no-doc"])
+            quiet(e.main, ["--dir", d, "set", "dials.roundness", "60", "--set-by", "chosen", "--quote", "rounder, like a pebble", "--no-doc"])
+            quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "pill", "--set-by", "delegated", "--no-doc"])
+            quiet(e.main, ["--dir", d, "set", "dials.roundness", "70", "--dry-run"])          # a preview records nothing, so no status
+            quiet(e.main, ["--dir", d, "set", "taste.brief", '"calm"', "--no-doc"])         # not a key value: unchanged
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn('- quote: "rounder, like a pebble"', text)
+            self.assertIn("set_by: delegated", text)
+            e.cmd_set(d, "dials.energy", 30, quiet=True)          # the Python call and older records stay as they were
+            e.generate_system(e.load_state(d))
+
+    def test_guard_blocks_a_failing_commit_and_leaves_other_hooks_alone(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            _git(t, "init", "-q")
+            _git(t, "add", "-A")
+            _git(t, "commit", "-qm", "system")
+            env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
+            commit = lambda *extra: subprocess.run(["git", "commit", "-qm", "work", *extra], cwd=t, env=env, capture_output=True, text=True)
+            code, out = self.run_(e.cmd_guard, d, "install")
+            hook = os.path.join(t, ".git", "hooks", "pre-commit")
+            self.assertEqual(code, 0)
+            self.assertIn("git commit --no-verify", out)
+            self.assertTrue(os.access(hook, os.X_OK))
+            _git(t, "add", "-A")
+            self.assertEqual(commit().returncode, 0)                 # the guard's own decision and DESIGN.md: clean
+            self.write(t, "src/a.css", ".x { color: #ff0000; }\n")
+            _git(t, "add", "-A")
+            blocked = commit()
+            self.assertNotEqual(blocked.returncode, 0)
+            self.assertIn("review --strict failed", blocked.stderr)
+            self.assertEqual(commit("--no-verify").returncode, 0)    # the escape hatch still works
+            self.write(t, "src/a.css", ".x { color: var(--ds-color-text-primary); }\n")
+            _git(t, "add", "-A")
+            self.assertEqual(commit().returncode, 0, commit().stdout)
+            self.assertEqual(self.run_(e.cmd_guard, d, "remove")[0], 0)
+            self.assertFalse(os.path.exists(hook))
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("Commit guard: on", text)
+            self.assertIn("Commit guard: off", text)
+            with open(hook, "w") as f:                               # someone else's hook is never replaced
+                f.write("#!/bin/sh\necho theirs\n")
+            code, out = self.run_(e.cmd_guard, d, "install")
+            self.assertEqual(code, 1)
+            self.assertIn("leaves it alone", out)
+            with open(hook) as f:
+                self.assertEqual(f.read(), "#!/bin/sh\necho theirs\n")
+            self.assertEqual(self.run_(e.cmd_guard, d, "remove")[0], 0)
+            self.assertTrue(os.path.exists(hook))
+
+    def test_tests_never_touch_the_real_home_or_git_config(self):
+        import subprocess
+        self.assertNotEqual(os.path.expanduser("~"), REAL_HOME)
+        self.assertTrue(os.path.expanduser("~").startswith(tempfile.gettempdir()) or "opendesigner-tests-home-" in os.path.expanduser("~"))
+        self.assertTrue(str(e.taste_py.HOME).startswith(TEST_HOME) if e.taste_py else True)
+        r = subprocess.run(["git", "config", "--get", "core.hooksPath"], cwd=TEST_HOME, capture_output=True, text=True)
+        self.assertEqual(r.stdout.strip(), "")                          # the machine's global hooks folder is out of sight
+
+    def test_guard_never_writes_into_a_shared_hooks_folder(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            shared, cfg = os.path.join(t, "shared-hooks"), os.path.join(t, "gitconfig")
+            os.makedirs(shared)
+            with open(cfg, "w") as f:
+                f.write(f"[core]\n\thooksPath = {shared}\n")
+            os.environ["GIT_CONFIG_GLOBAL"] = cfg                     # like a machine-wide hooks folder
+            _git(t, "init", "-q")
+            code, out = self.run_(e.cmd_guard, d, "install")
+            self.assertEqual(code, 1)
+            self.assertIn("core.hooksPath", out)
+            self.assertEqual(os.listdir(shared), [])
+            self.assertFalse(os.path.exists(os.path.join(t, ".git", "hooks", "pre-commit")))
+
+
+class ContrastAndVersion(unittest.TestCase):
+    def test_contrast_command(self):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.assertEqual(e.main(["contrast", "#777", "#fff", "--min", "4.5"]), 1)
+        self.assertIn("#777777 on #ffffff: 4.47:1", out.getvalue())
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.assertEqual(e.main(["contrast", "767676", "#FFFFFF", "--json"]), 0)
+        res = json.loads(out.getvalue())
+        self.assertEqual(res["ratio"], 4.54)
+        self.assertEqual([x["pass"] for x in res["floors"]], [True, True, False])
+        with self.assertRaises(SystemExit):
+            quiet(e.main, ["contrast", "red", "white"])
+
+    def test_generated_files_show_the_release_number(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "V", "#2563eb", "regular", "web,ios,android", "calm", quiet=True)
+            quiet(e.cmd_export, d, "all")
+            for rel in (("css", "tokens.css"), ("tailwind", "theme.css"), ("swift", "DesignTokens.swift"), ("compose", "DesignTokens.kt")):
+                with open(os.path.join(d, "build", *rel), encoding="utf-8") as f:
+                    head = "".join(f.readlines()[:3])
+                self.assertIn(f"Generated by the OpenDesigner engine {e.OPENDESIGNER_VERSION}", head, rel)
+                self.assertNotIn(e.ENGINE_VERSION, head, rel)
+
+
 class ReviewAndFeedback(unittest.TestCase):
     def test_review_finds_bypasses_and_stale_sections(self):
         with tempfile.TemporaryDirectory() as t:
@@ -508,6 +926,49 @@ class ReviewAndFeedback(unittest.TestCase):
             with open(os.path.join(t, "DESIGN.md"), "w", encoding="utf-8") as f:
                 f.write(text.replace("## Motion\n", "## Motion\n\nold text\n"))
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
+
+    def test_review_dates_the_share_image_against_what_it_shows(self):                                  # review case EN-09
+        import shutil
+        import subprocess
+        if not shutil.which("git"):
+            self.skipTest("git is not installed")
+        with tempfile.TemporaryDirectory() as t:
+            def git(*a, when=None):
+                env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t.example", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t.example")
+                if when:
+                    env.update(GIT_AUTHOR_DATE=when, GIT_COMMITTER_DATE=when)
+                subprocess.run(["git", "-C", t, *a], check=True, capture_output=True, env=env)
+
+            def write(rel, text):
+                os.makedirs(os.path.dirname(os.path.join(t, rel)), exist_ok=True)
+                with open(os.path.join(t, rel), "w", encoding="utf-8") as f:
+                    f.write(text)
+            d = os.path.join(t, "opendesigner")
+            git("init", "-q")
+            write("public/og.png", "png v1")
+            write("public/hero.jpg", "jpg v1")
+            write("src/index.html", "<h1>Invoices that <em>chase</em>\n  themselves</h1><p>Old lead.</p>")
+            write("opendesigner/state.json", '{"brandColor": "#FF5A36"}')
+            git("add", "-A")
+            git("commit", "-qm", "first", when="2026-11-01T10:00:00+00:00")
+            self.assertEqual(e.share_card_age(d, t), [])   # no review/share.json yet: nothing to date
+            write("opendesigner/review/share.json", json.dumps({"pages": {"/": {"image": "https://draft.example/og.png?v=6", "h1": "Invoices that chase themselves",
+                                                                                "hero": "http://localhost:3000/hero.jpg", "logo": "inline svg"}}}))
+            self.assertEqual(e.share_card_age(d, t, "#ff5a36"), [])   # everything landed with the image
+            write("src/index.html", "<h1>Invoices that <em>chase</em>\n  themselves</h1><p>A new lead, same headline.</p>")
+            git("commit", "-qam", "lead only", when="2026-11-03T10:00:00+00:00")
+            self.assertEqual(e.share_card_age(d, t, "#ff5a36"), [])   # the headline's text did not change
+            write("opendesigner/state.json", '{"brandColor": "#0051FF"}')
+            git("commit", "-qam", "new accent", when="2026-11-04T10:00:00+00:00")
+            [hit] = e.share_card_age(d, t, "#0051ff")
+            self.assertEqual((hit["route"], hit["image"], hit["imageDate"]), ("/", "public/og.png", "2026-11-01 10:00"))
+            self.assertIn("the brand colour #0051ff in opendesigner/state.json (commit", hit["since"][0])
+            write("public/og.png", "png v2")
+            git("commit", "-qam", "new card", when="2026-11-05T10:00:00+00:00")
+            self.assertEqual(e.share_card_age(d, t, "#0051ff"), [])
+            write("public/hero.jpg", "jpg v2")   # a new hero picture, not committed yet
+            [hit] = e.share_card_age(d, t, "#0051ff")
+            self.assertIn("the hero picture public/hero.jpg (an uncommitted edit", hit["since"][0])
 
     def test_review_finds_shadows_and_durations(self):
         with tempfile.TemporaryDirectory() as t:
@@ -633,7 +1094,7 @@ class KeepDecidedSystem(unittest.TestCase):
             self.assertEqual([(f_["kind"], f_["removed"]) for f_ in res["findings"]], [("removed", "R-01")])
             self.assertIn("gives no reason, so it does not keep it", res["findings"][0]["fix"])
             self.assertEqual(len(res["ignoredWithoutReason"]), 1)
-            self.assertEqual(std_run(e.cmd_review, d)[1].strip().splitlines()[-1], "Review: 1 to fix (run with --strict to make this fail)")
+            self.assertEqual(std_run(e.cmd_review, d)[1].strip().splitlines()[-1], "Review: 1 to fix: 1 finding. Run with --strict to make this fail.")
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
             self.write(t, ".row { border-bottom: 1px solid var(--ds-color-border-default); } /* od-ignore: menu separators stay */\n")
             res = review_json(d)                                        # a reason keeps it, and the line is listed
@@ -907,9 +1368,9 @@ class KeepDecidedSystem(unittest.TestCase):
             e.dump_json(mp, meta)
             res = review_json(d)
             self.assertEqual(res["guard"], [])
-            self.assertIn("1 token file in", res["notes"][0]["message"])
-            self.assertIn("differs from what this engine", res["notes"][0]["message"])
-            self.assertIn("the engine is newer than the one that built them", res["notes"][0]["message"])
+            self.assertIn("1 token file in", res["guardNotes"][0]["message"])
+            self.assertIn("differs from what this engine", res["guardNotes"][0]["message"])
+            self.assertIn("the engine is newer than the one that built them", res["guardNotes"][0]["message"])
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
 
     def test_token_files_hand_edit_versus_engine_change(self):
@@ -922,7 +1383,7 @@ class KeepDecidedSystem(unittest.TestCase):
             self.assertIn("semantic.tokens.json", meta["fileHashes"])
             meta["notes"] = ["a teammate's engine wrote another note"]  # the meta file alone never counts
             e.dump_json(mp, meta)
-            self.assertEqual((review_json(d)["guard"], review_json(d)["notes"]), ([], []))
+            self.assertEqual((review_json(d)["guard"], review_json(d)["guardNotes"]), ([], []))
             data = e.read_json(tok)                                     # 1. a hand edit: counts toward --strict
             data["$extensions"] = {"edited": "by hand"}
             e.dump_json(tok, data)
@@ -933,18 +1394,18 @@ class KeepDecidedSystem(unittest.TestCase):
             e.dump_json(mp, meta)
             res = review_json(d)
             self.assertEqual(res["guard"], [])
-            self.assertIn("the engine is newer than the one that built them (built by engine 0.9.0", res["notes"][0]["message"])
-            self.assertEqual(res["notes"][0]["fix"], "run engine.py build and look at the diff")
+            self.assertIn("the engine is newer than the one that built them (built by engine 0.9.0", res["guardNotes"][0]["message"])
+            self.assertEqual(res["guardNotes"][0]["fix"], "run engine.py build and look at the diff")
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
             del meta["fileHashes"]                                      # 3. an older project with no recorded hashes: a note
             meta["engine"] = e.ENGINE_VERSION
             e.dump_json(mp, meta)
             res = review_json(d)
             self.assertEqual(res["guard"], [])
-            self.assertIn("recorded no file hashes, so a hand edit cannot be told apart from a newer engine", res["notes"][0]["message"])
+            self.assertIn("recorded no file hashes, so a hand edit cannot be told apart from a newer engine", res["guardNotes"][0]["message"])
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 0)
             quiet(e.cmd_build, d)
-            self.assertEqual((review_json(d)["guard"], review_json(d)["notes"]), ([], []))
+            self.assertEqual((review_json(d)["guard"], review_json(d)["guardNotes"]), ([], []))
 
     def test_recorded_changes_to_a_locked_value_are_not_drift(self):
         with tempfile.TemporaryDirectory() as t:
@@ -1038,7 +1499,7 @@ class KeepDecidedSystem(unittest.TestCase):
             self.assertEqual([g["check"] for g in res["guard"]], ["required-file"])
             self.assertIn("opendesigner.meta.json is missing or cannot be read", res["guard"][0]["message"])
             self.assertIn("1 token file differs from what state.json generates now: semantic.tokens.json", res["guard"][0]["message"])
-            self.assertEqual(res["notes"], [])
+            self.assertEqual(res["guardNotes"], [])
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
             with open(mp, "w", encoding="utf-8") as f:                   # a half-merged record reads the same as none
                 f.write("<<<<<<< ours")
@@ -1060,8 +1521,8 @@ class KeepDecidedSystem(unittest.TestCase):
             self.assertEqual(len(res["validateErrors"]), e.validate_dir(d).count("error"))
             self.assertEqual((res["toFix"], res["ok"]), (len(res["validateErrors"]), False))
             lines = std_run(e.cmd_review, d)[1].strip().splitlines()
-            self.assertEqual(lines[-1], f"Review: {res['toFix']} to fix (run with --strict to make this fail)")
-            self.assertTrue(lines[-2].startswith("Validate: "), lines[-2])
+            self.assertEqual(lines[-1], f"Review: {res['toFix']} to fix: {'; '.join(res['reasons'])}. Run with --strict to make this fail.")
+            self.assertTrue(any(x.startswith("Validate: ") for x in lines), lines)
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
             quiet(e.cmd_set, d, "size.target.pointer", {"value": 24, "unit": "px"}, "back to the floor")
             self.assertEqual(quiet(e.cmd_build, d), 0)
@@ -1074,8 +1535,164 @@ class KeepDecidedSystem(unittest.TestCase):
             text = std_run(e.cmd_review, d)[1].strip().splitlines()
             self.assertEqual(text[-1], "Review: ok")
             self.write(t, ".x { color: #ff0000; }\n")
-            self.assertEqual(std_run(e.cmd_review, d)[1].strip().splitlines()[-1], "Review: 1 to fix (run with --strict to make this fail)")
-            self.assertEqual(std_run(e.cmd_review, d, strict=True)[1].strip().splitlines()[-1], "Review: 1 to fix")
+            self.assertEqual(std_run(e.cmd_review, d)[1].strip().splitlines()[-1],
+                             "Review: 2 to fix: 1 finding; tokens are not in charge. Run with --strict to make this fail.")
+            self.assertEqual(std_run(e.cmd_review, d, strict=True)[1].strip().splitlines()[-1], "Review: 2 to fix: 1 finding; tokens are not in charge.")
+
+
+class DryRun(unittest.TestCase):
+    """set and pick --dry-run preview a value so the person can compare before choosing: the same report a real set gives,
+    each token's old and new value, and nothing written. In the extend-rounder eval an agent compared roundness 55, 60 and
+    65 with real sets, which logged three decisions the person never made."""
+
+    def snapshot(self, root):
+        out = {}
+        for dp, _dn, fns in os.walk(root):
+            for fn in fns:
+                with open(os.path.join(dp, fn), "rb") as f:
+                    out[os.path.relpath(os.path.join(dp, fn), root)] = f.read()
+        return out
+
+    def lines(self, argv):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            e.main(argv)
+        return buf.getvalue().splitlines()
+
+    def system(self, t):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Dry", "#2563eb", "dense", "web", "calm", quiet=True)
+        quiet(e.cmd_build, d)  # DESIGN.md exists, so a real set would also refresh it
+        e.journey.set_tracking(d, True)
+        return d
+
+    def test_a_dry_run_writes_nothing_and_says_what_the_real_set_then_says(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            for argv, path in ((["set", "dials.roundness", "65"], "dials.roundness"),
+                               (["pick", "Q-shape-01", "pill"], "answers.Q-shape-01")):
+                with self.subTest(argv=argv):
+                    old_files = e.generate_system(e.load_state(d))[0]
+                    before = self.snapshot(t)
+                    dry = self.lines(["--dir", d] + argv + ["--why", "compare", "--dry-run"])
+                    self.assertEqual(self.snapshot(t), before)  # state.json, decisions.md, the journey log, DESIGN.md: byte for byte
+                    self.assertTrue(dry[0].startswith(f"dry run: {path} = "), dry[0])
+                    keep = dry[-1].split("To keep it: ", 1)[1]
+                    cmd = [("picked after comparing" if x == "<the person's words>" else x) for x in shlex.split(keep)]
+                    self.assertEqual(cmd[:2], ["engine.py", argv[0]])
+                    real = self.lines(["--dir", d] + cmd[1:])  # the command the dry run printed
+                    self.assertRegex(real[0], r"^D-\d{4} set " + re.escape(dry[0][len("dry run: "):].split(" was not recorded")[0]) + "$")
+                    body = [e.dry_line(x) for x in real[1:] if not x.startswith("  DESIGN.md and PRODUCT.md updated")]
+                    self.assertEqual(dry[1:1 + len(body)], body)  # the same lines, said for a value not recorded yet
+                    self.assertTrue(any(x.startswith("  tokens: ") for x in body), body)
+                    new_files = e.generate_system(e.load_state(d))[0]
+                    a, b = (e._short_value(e.resolve_all(f, {})["radius.control"]["resolved"]) for f in (old_files, new_files))
+                    self.assertNotEqual(a, b)
+                    self.assertIn(f"  radius.control: {a} -> {b}", dry)  # the corner sizes the real set then wrote
+            events = [x["event"] for x in e.journey.read_events(e.journey.jpath(d, "events.jsonl"))]
+            self.assertEqual(events.count("step_answered"), 1)  # the real pick only
+
+    def test_a_refused_value_is_refused_the_same_way(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            quiet(e.cmd_lock, d, "dials.roundness")
+            before = self.snapshot(t)
+            with self.assertRaises(SystemExit) as dry:
+                quiet(e.cmd_set, d, "dials.roundness", 80, "compare", dry_run=True)
+            with self.assertRaises(SystemExit) as real:
+                quiet(e.cmd_set, d, "dials.roundness", 80, "compare")
+            self.assertEqual(str(dry.exception), str(real.exception))
+            self.assertEqual(self.snapshot(t), before)
+
+    def test_it_names_a_floor_the_value_would_break(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            before = self.snapshot(t)
+            dry = self.lines(["--dir", d, "set", "size.target.pointer", '{"value": 20, "unit": "px"}', "--dry-run"])
+            self.assertEqual(self.snapshot(t), before)
+            self.assertIn("  size.target.pointer: 24px -> 20px", dry)
+            self.assertTrue(any(x.startswith("  checks: new error: ") and "24px" in x for x in dry), dry)
+
+
+class RadiusBetweenSteps(unittest.TestCase):
+    """`engine.py set radius.control 10` was recorded, then every role aliased {radius.10}, a step the scale did not have,
+    and build stopped in all 12 mode combinations. A radius between the steps now gets its own step; a value that cannot
+    be a radius is refused before anything is written."""
+
+    def system(self, t):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Round", "#2563eb", "dense", "web", "calm", quiet=True)
+        return d
+
+    def text(self, path):
+        with open(path, encoding="utf-8") as f:
+            return f.read()
+
+    def check(self, d):
+        state = e.load_state(d)
+        files, meta, _ = e.generate_system(state)
+        rep = e.validate_generated(files, state, e.Report())
+        return e.resolve_all(files, {}), files, [i["message"] for i in rep.items if i["severity"] in ("error", "warn")]
+
+    def test_a_radius_between_steps_builds(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            for key, value, stored in (("radius.control", 10, 10), ("radius.control", "12px", 12), ("radius.container", 10, 10),
+                                       ("radius.overlay", 14, 14), ("radius.detail", 3, 3), ("radius.detail", "full", "full")):
+                with self.subTest(key=key, value=value):
+                    quiet(e.cmd_set, d, key, value, "between steps")
+                    self.assertEqual(e.load_state(d)["overrides"][key], stored)
+                    flat, files, problems = self.check(d)
+                    self.assertEqual(problems, [])
+                    px = e.FULL if stored == "full" else stored
+                    self.assertEqual(flat[key]["resolved"]["value"], px)
+                    if px < e.FULL:
+                        self.assertEqual(files["semantic.tokens.json"]["radius"][key.split(".")[1]]["$value"], f"{{radius.{px}}}")
+                        self.assertIn(str(px), files["primitives.tokens.json"]["radius"])
+                    state = e.load_state(d)
+                    del state["overrides"][key]  # back to the Roundness dial for the next case
+                    e.dump_json(os.path.join(d, "state.json"), state)
+            quiet(e.cmd_set, d, "radius.control", 10, "between steps")
+            flat, files, _p = self.check(d)
+            self.assertEqual(flat["radius.control-sm"]["resolved"]["value"], 8)  # one step below 10, not below 8
+            self.assertNotIn("10", e.generate_system(e.default_state("Plain"))[0]["primitives.tokens.json"]["radius"])
+
+    def test_a_value_that_is_not_a_radius_is_refused_before_anything_is_written(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            paths = [os.path.join(d, fn) for fn in ("state.json", "decisions.md")]
+            before = [self.text(p) for p in paths]
+            for key, value in (("radius.control", -4), ("radius.control", 10.5), ("radius.control", "1rem"),
+                               ("radius.container", "full"), ("radius.overlay", "full"), ("icon.defaultSize", 19)):
+                for dry in (True, False):
+                    with self.subTest(key=key, value=value, dry=dry), self.assertRaises(SystemExit) as cm:
+                        quiet(e.cmd_set, d, key, value, "odd", dry_run=dry)
+                    self.assertTrue(str(cm.exception).startswith(f"Nothing was changed: {key} takes "), str(cm.exception))
+            with self.assertRaises(SystemExit) as cm:
+                quiet(e.cmd_set, d, "radius.control", -4, "odd")
+            self.assertIn("The scale has 0, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32 and full", str(cm.exception))  # names the steps
+            self.assertEqual([self.text(p) for p in paths], before)
+            quiet(e.cmd_set, d, "icon.defaultSize", "20px", "button-sized icons")
+            self.assertEqual(e.load_state(d)["overrides"]["icon.defaultSize"], 20)
+
+    def test_standards_are_checked_the_same_way(self):
+        state = e.default_state("Std")
+        self.assertEqual(e.std_target(state, "radius.control", 10, trial=False), ("overrides.radius.control", 10))
+        with self.assertRaises(ValueError):
+            e.std_target(state, "radius.control", -4, trial=False)
+
+    def test_a_bad_value_recorded_before_the_check_still_builds(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            dial = self.check(d)[0]["radius.control"]["resolved"]
+            state = e.load_state(d)
+            state["overrides"].update({"radius.control": -4, "radius.overlay": 10.5})  # what an older engine.py set recorded
+            e.dump_json(os.path.join(d, "state.json"), state)
+            flat, files, problems = self.check(d)
+            self.assertEqual(flat["radius.overlay"]["resolved"]["value"], 10)
+            self.assertEqual(flat["radius.control"]["resolved"], dial)  # the Roundness dial's value, and validate says so
+            self.assertEqual(len(problems), 1)
+            self.assertIn("radius.control is missing from every export", problems[0].lower())
 
 
 class JourneyTracking(unittest.TestCase):
@@ -1088,7 +1705,7 @@ class JourneyTracking(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             d = os.path.join(t, "opendesigner")
             quiet(e.cmd_init, d, name="Quiet")
-            quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "soft", "--no-doc"])
+            quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "soft", "--set-by", "chosen", "--quote", "soft corners", "--no-doc"])
             self.assertEqual(self.events(d), [])
 
     def test_engine_logs_its_own_steps(self):
@@ -1103,7 +1720,8 @@ class JourneyTracking(unittest.TestCase):
             self.assertEqual(answered, {"Q-scope-01": "free", "Q-aud-01": "option", "Q-plat-01": "option", "Q-brand-01": "option"})
             self.assertIn(("export", None, {"kind": "all"}), got)
             self.assertEqual(got[-1][:2], ("level_complete", None))
-            quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "soft", "--no-doc"])
+            quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "soft", "--set-by", "chosen", "--quote", "soft corners", "--no-doc"])
+            quiet(e.main, ["--dir", d, "unlock", "answers.Q-shape-01"])  # a chosen button shape is locked until the owner changes it
             quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "subtle", "--set-by", "delegated", "--no-doc"])
             self.assertEqual(self.events(d)[-3:], [("step_answered", "Q-shape-01", {"how": "option"}),
                                                    ("step_changed", "Q-shape-01", {}),
@@ -1277,6 +1895,109 @@ class BrandColor(unittest.TestCase):
         self.assertEqual(meta["color"]["scheme"], "monochrome")
 
 
+class TypedColorsStayExact(unittest.TestCase):
+    """STRESS-TEST findings 1, 6 and 19: a hex the person typed is never replaced. The brand and secondary colors stay exact
+    with white or dark text, in each mode where that mode's text reads on them; when no text reads on one, fills that carry
+    text use a readable shade and the exact color stays in its seed token."""
+
+    def tokens(self, s):
+        files, meta, _c = e.generate_system(s)
+        return {m: e.resolve_all(files, {"theme": m}) for m in ("light", "dark")}, meta
+
+    def at(self, flat, path):
+        return e.hex_of(flat[path]["resolved"]).lower()
+
+    def test_light_brand_typed_under_delegated_all_stays_exact(self):
+        for hx in ("#FFE500", "#D4FF3A", "#FFC24B", "#FFE45C"):  # yellow, acid lime, lantern gold, lemon
+            with tempfile.TemporaryDirectory() as t:
+                d = os.path.join(t, "opendesigner")
+                quiet(e.cmd_sketch, d, "Typed", hx, "regular", "web", "bold,playful", quiet=True, delegated="all")
+                s = std_read(d)
+                self.assertEqual(s["raw"]["brandColor"], hx.lower(), hx)
+                self.assertFalse(e.brand_delegated(d), hx)
+                flat, meta = self.tokens(s)
+                self.assertEqual(self.at(flat["light"], "color.brand.seed"), hx.lower())
+                self.assertNotEqual(self.at(flat["light"], "color.text.on-brand"), "#ffffff", hx)   # dark text, not a darker fill
+                for mode in ("light", "dark"):
+                    for fill in ("color.bg.brand", "color.bg.action.primary"):
+                        self.assertEqual(self.at(flat[mode], fill), hx.lower(), (hx, mode, fill))
+                    self.assertGreaterEqual(e.contrast(hx, self.at(flat[mode], "color.text.on-brand")), 4.5, (hx, mode))
+                line = e.brand_line(meta, s, plain=True, delegated=e.brand_delegated(d))
+                self.assertTrue(line.startswith("Your brand color is on the buttons exactly, with dark text on it"), line)
+                self.assertNotIn("dark mode", line)
+                for word in ("olive", "brown", "crimson", "I picked"):
+                    self.assertNotIn(word, line)
+
+    def test_keep_hex_restores_the_hex_an_older_sketch_replaced(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Memphis", "#FFE45C", "regular", "web", "bold,playful", quiet=True, delegated="all")
+            quiet(e.cmd_set, d, "raw.brandColor", "#877400", "sketch: picked for them, a readable shade of #ffe45c (an olive)",
+                  set_by="delegated")                                  # what the old sketch wrote (styles/06 D-0005)
+            self.assertTrue(e.brand_delegated(d))
+            quiet(e.cmd_set, d, "answers.Q-color-01", "keep-hex", "keep my lemon")
+            self.assertEqual(std_read(d)["raw"]["brandColor"], "#ffe45c")
+            self.assertFalse(e.brand_delegated(d))
+            quiet(e.cmd_set, d, "raw.brandColor", "#123456", "a new brand")
+            quiet(e.cmd_set, d, "answers.Q-color-01", "keep-hex", "again")  # a color set since then is never undone
+            self.assertEqual(std_read(d)["raw"]["brandColor"], "#123456")
+
+    def test_secondary_colors_are_pinned_like_the_brand(self):
+        s = u5_state(brandColor="#D7261E", secondaryColors=["#1E4AA8", "#F2C200"], accentCount=3)  # Bauhaus (styles/08)
+        flat, meta = self.tokens(s)
+        lt, dk = flat["light"], flat["dark"]
+        self.assertEqual(self.at(lt, "color.accent2.seed"), "#1e4aa8")
+        self.assertEqual(self.at(lt, "color.accent3.seed"), "#f2c200")
+        self.assertEqual(self.at(lt, "color.bg.accent2.bold"), "#1e4aa8")       # ultramarine carries white text
+        self.assertEqual(self.at(lt, "color.text.on-accent2"), "#ffffff")
+        self.assertEqual(self.at(lt, "color.bg.accent3.bold"), "#f2c200")       # cadmium carries dark text
+        self.assertEqual(self.at(dk, "color.bg.accent3.bold"), "#f2c200")       # and dark mode's dark text reads on it too
+        # one dark-mode rule for every typed color: exact where dark text reads, else a lighter shade at the color's own chroma
+        for fill, on, hx in (("color.bg.brand", "color.text.on-brand", "#d7261e"),
+                             ("color.bg.accent2.bold", "color.text.on-accent2", "#1e4aa8")):
+            got = self.at(dk, fill)
+            self.assertNotEqual(got, hx)
+            self.assertGreaterEqual(e.contrast(got, self.at(dk, on)), 4.5, fill)
+            gL, gC, gH = e.hex_to_oklch(got)
+            self.assertGreaterEqual(gC, 0.97 * min(e.hex_to_oklch(hx)[1], e.max_chroma(gL, gH)), fill)
+        self.assertIn("Your second color #1E4AA8 is exact on its fills; in dark mode they use", e.brand_line(meta, s))
+        sage = u5_state(brandColor="#2F6B4F", secondaryColors=["#7E9475"], accentCount=2)  # heroes/03: sage, not grass green
+        flat, _m = self.tokens(sage)
+        for mode in ("light", "dark"):
+            self.assertEqual(self.at(flat[mode], "color.bg.accent2.bold"), "#7e9475", mode)
+
+    def test_brand_line_names_the_action_color_on_buttons(self):
+        """With raw.primaryActionColor the buttons are the action color, so the brand line never claims the buttons."""
+        s = u5_state(brandColor="#D7261E", primaryActionColor="#17181c")  # vermilion is not exact in dark mode
+        _f, meta, _c = e.generate_system(s)
+        self.assertIn("action", meta["color"]["ramps"])
+        for line in (e.brand_line(meta, s, plain=True), e.brand_line(meta, s), e.brand_line(meta, s, plain=True, delegated=True)):
+            self.assertNotRegex(line, r"(on the buttons|buttons use a lighter|buttons, links)")
+            self.assertIn("links, selection and focus", line)
+            self.assertIn("Buttons use your primary action color", line)
+        self.assertIn("In dark mode, brand fills use a lighter shade", e.brand_line(meta, s, plain=True))
+        self.assertIn("Buttons use your primary action color (#17181C).", e.brand_line(meta, s))
+
+    def test_no_readable_text_keeps_the_exact_color_for_non_text_uses(self):
+        s = u5_state(brandColor="#E0457B", secondaryColors=["#E0457B"], accentCount=2)  # white 3.96:1, dark text 3.92:1
+        flat, meta = self.tokens(s)
+        lt = flat["light"]
+        self.assertEqual(self.at(lt, "color.brand.seed"), "#e0457b")
+        self.assertEqual(self.at(lt, "color.accent2.seed"), "#e0457b")
+        for fill, on in (("color.bg.brand", "color.text.on-brand"), ("color.bg.action.primary", "color.text.on-action"),
+                         ("color.bg.accent2.bold", "color.text.on-accent2")):
+            self.assertNotEqual(self.at(lt, fill), "#e0457b", fill)
+            self.assertGreaterEqual(e.contrast(self.at(lt, fill), self.at(lt, on)), 4.5, fill)
+        plain = e.brand_line(meta, s, plain=True)
+        for words in ("Neither white nor dark text", "anything without text", "Your second color"):
+            self.assertIn(words, plain)
+        for bad in ("#", ":1", "color."):
+            self.assertNotIn(bad, plain)
+        docs = e.brand_line(meta, s)
+        self.assertIn("color.brand.seed", docs)
+        self.assertIn("color.accent2.seed", docs)
+
+
 class FeelWordsAndDelegation(unittest.TestCase):
     """U5 fixes 3 and 9."""
 
@@ -1307,7 +2028,12 @@ class FeelWordsAndDelegation(unittest.TestCase):
             with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
                 log = f.read()
             self.assertRegex(log, r"## D-\d+ · macros = .*\n- set_by: delegated")
-            self.assertRegex(log, r"## D-\d+ · raw.brandColor = .*\n- set_by: delegated")
+            self.assertRegex(log, r"## D-\d+ · raw.brandColor = .*\n- set_by: chosen")   # a --brand hex stays theirs under 'all'
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Ops", "#2563eb", "dense", "web", "serious,minimal", quiet=True, delegated="all,brand")
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                self.assertRegex(f.read(), r"## D-\d+ · raw.brandColor = .*\n- set_by: delegated")
         with tempfile.TemporaryDirectory() as t:
             d = os.path.join(t, "opendesigner")
             quiet(e.cmd_sketch, d, "Ops", "#2563eb", "dense", "web", "serious", quiet=True, delegated="feel")
@@ -1415,6 +2141,41 @@ class PersonalOutputs(unittest.TestCase):
             self.assertEqual(e.zoom_levels(d, st)["color"]["level"], "broad")
 
 
+class PreviewFloors(unittest.TestCase):
+    """The preview page itself keeps the floors it checks in the person's system: 4.5:1 text and no sideways scroll at
+    320 CSS px (WCAG 1.4.3, 1.4.10). Static checks only (a real browser is not a dependency of the skills): they pin the
+    colors and the layout mechanisms that were measured in Chrome to fix the overflow."""
+
+    SURFACES = (("app:operate", "Internal admin for users and jobs"), ("app:operate", "Personal finance: budgets and bills"),
+                ("docs:read", "Developer guides"), ("website:persuade", "A website for our school robotics club"))
+
+    def previews(self, name="Pilot"):
+        """(directory, preview.html text) for each sample-screen kind. The caller's temp dir outlives the loop."""
+        with tempfile.TemporaryDirectory() as t:
+            for i, (surf, product) in enumerate(self.SURFACES):
+                d = os.path.join(t, f"p{i}", "opendesigner")
+                quiet(e.cmd_init, d, name=name)
+                quiet(e.cmd_set, d, "context.product", product, "x")
+                quiet(e.cmd_sketch, d, name, None, "regular", "web", surfaces=surf)
+                with open(os.path.join(d, "preview.html"), encoding="utf-8") as f:
+                    yield d, f.read()
+
+    def test_page_greys_reach_text_contrast(self):
+        for _, html in self.previews():
+            page = re.search(r"body\{margin:0;background:(#[0-9a-f]{6})", html).group(1)
+            for sel, bgs in ((r"\.pv-note", (page, "#ffffff")), (r"\.pv-sub", (page,)), (r"\.pv-details summary", (page,)),
+                             (r"\.pv-chip", ("#ffffff",))):
+                fg = re.search(sel + r"\{[^}]*?(?<![-\w])color:(#[0-9a-f]{6})", html).group(1)
+                for bg in bgs:
+                    self.assertGreaterEqual(e.contrast(fg, bg), 4.5, f"{sel} {fg} on {bg}")
+
+    def test_wide_content_scrolls_or_wraps_instead_of_widening_the_page(self):
+        for _, html in self.previews():
+            self.assertIn("minmax(min(360px,100%),1fr)", html)              # a grid track may shrink below 360px
+            self.assertNotIn("minmax(360px", html)
+            self.assertEqual(html.count("<table"), html.count('<div class="pv-scroll"><table'))   # each table scrolls on its own
+
+
 class PlatformsAndLicences(unittest.TestCase):
     """U5 fix 6: font licence scope per platform; iOS Dynamic Type."""
 
@@ -1480,6 +2241,187 @@ class ReviewReactAndTailwind(unittest.TestCase):
             self.assertIn("off", vals["bg-blue-600"])                           # the reset removes default palette classes
 
 
+class WorkToolDefaults(unittest.TestCase):
+    """The dense work-tool defaults (levers.json profiles, DC-L23-01..07): they fill only what the person left open,
+    and each is recorded as auto_default with a reason. Plus the three smaller bugs the B2B study found."""
+
+    def sketch(self, t, brand=None, audience="dense", feel="professional,minimal"):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Ledger", brand, audience, "web", feel, quiet=True)
+        return d
+
+    def tokens(self, d):
+        files, meta, _c = quiet(e.cmd_generate, d)
+        return e.resolve_all(files, {"theme": "light"}), meta
+
+    def test_dense_sketch_gets_the_work_tool_defaults(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t)
+            flat, meta = self.tokens(d)
+            px = lambda p: flat[p]["resolved"]["value"]
+            self.assertEqual([px(f"radius.{r}") for r in ("control", "container", "overlay")], [6, 8, 12])  # feel words gave 2 / 8 / 12
+            self.assertEqual([flat[f"font.weight.{r}"]["resolved"] for r in ("body", "label", "heading")], [400, 500, 600])
+            for p in ("color.text.link", "color.border.focus", "color.bg.accent.subtle"):
+                self.assertGreater(e.hex_to_oklch(e.hex_of(flat[p]["resolved"]))[1], 0.02, p)  # colored, not grey
+            self.assertLess(e.hex_to_oklch(e.hex_of(flat["color.bg.action.primary"]["resolved"]))[1], 0.01)  # the primary stays ink
+            self.assertEqual([(x["blur"]["value"], x["spread"]["value"]) for x in flat["elevation.raised"]["resolved"]], [(0, 1)])
+            self.assertTrue(any(x["blur"]["value"] > 0 for x in flat["elevation.floating"]["resolved"]))  # menus keep their shadow
+            self.assertEqual([px(f"size.row.{k}") for k in ("sm", "md", "lg", "two-line")], [36, 40, 48, 64])
+            self.assertEqual(flat["color.border.separator"]["$value"], "{color.neutral.light.4}")  # row hairlines, under border.subtle
+            self.assertEqual(flat["text.numeric.md"]["$extensions"]["opendesigner"]["fontVariantNumeric"], "tabular-nums")
+            prof = meta["profile"]
+            self.assertEqual([x["item"] for x in prof["applied"]], ["corners", "weights", "accent", "surfaces"])
+            self.assertTrue(all(x["set_by"] == "auto_default" and x["reason"] and x["evidence"] for x in prof["applied"]))
+            self.assertIn("work-tool floor", meta["dialSources"]["roundness"])
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                self.assertRegex(f.read(), r"defaults\.work-tool = \[\"corners\", \"weights\", \"accent\", \"surfaces\"\]\n- set_by: auto_default")
+            rep = e.validate_dir(d)
+            self.assertEqual(rep.count("error"), 0)
+            self.assertTrue(any("stand-in blue" in i["message"] for i in rep.items))  # the person is told the blue is a stand-in
+
+    def test_floating_layers_keep_a_shadow_at_low_depth(self):
+        """'everyday' pulls depth to 10, the borders-only model: static cards stay flat, menus and dialogs still float."""
+        with tempfile.TemporaryDirectory() as t:
+            flat, meta = self.tokens(self.sketch(t, feel="everyday"))
+            self.assertEqual(meta["elevation"]["model"], "borders")
+            self.assertFalse(any(x["blur"]["value"] or x["spread"]["value"] for x in flat["elevation.raised"]["resolved"]))
+            for p in ("elevation.floating", "elevation.overlay"):
+                self.assertTrue(any(x["blur"]["value"] > 0 for x in flat[p]["resolved"]), p)
+
+    def test_the_defaults_never_override_a_choice(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, brand="#0f766e")
+            quiet(e.cmd_set, d, "Q-shape-01", "square", "sharp corners are our brand")
+            quiet(e.cmd_set, d, "Q-type-12", "two", "two weights")
+            quiet(e.cmd_set, d, "dials.depth", 70, "we like shadows")
+            flat, meta = self.tokens(d)
+            self.assertEqual(flat["radius.control"]["resolved"]["value"], 0)
+            self.assertEqual(flat["font.weight.label"]["resolved"], 400)
+            self.assertTrue(any(x["blur"]["value"] > 0 for x in flat["elevation.raised"]["resolved"]))
+            self.assertEqual(meta["profile"]["applied"], [])
+            self.assertEqual(meta["profile"]["skipped"], {"corners": "you answered Q-shape-01", "weights": "you answered Q-type-12",
+                                                         "accent": "your brand color decides it", "surfaces": "the depth dial is set"})
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                log = f.read()
+            self.assertIn("no longer a default: accent (your brand color decides it)", log)
+            self.assertRegex(log, r"defaults\.work-tool = \[\]\n- set_by: auto_default .*\n- reason: Dense work tool defaults off: "
+                                  r"Q-aud-01 = dense, but you decided each of them yourself\.")
+        with tempfile.TemporaryDirectory() as t:  # one value set or locked by the person wins too
+            d = self.sketch(t)
+            quiet(e.cmd_set, d, "radius.control", 2, "keep 2px")
+            quiet(e.cmd_lock, d, "dials.colorfulness")
+            flat, meta = self.tokens(d)
+            self.assertEqual(flat["radius.control"]["resolved"]["value"], 2)
+            self.assertLess(e.hex_to_oklch(e.hex_of(flat["color.text.link"]["resolved"]))[1], 0.02)
+            self.assertEqual(sorted(meta["profile"]["skipped"]), ["accent", "corners"])
+        with tempfile.TemporaryDirectory() as t:  # a regular audience gets none of them
+            _flat, meta = self.tokens(self.sketch(t, audience="regular"))
+            self.assertIsNone(meta["profile"])
+
+    def test_regular_body_text_is_16_unless_it_is_a_work_tool(self):
+        """Q-aud-01 regular promises body 16px (questions.json); a work tool, said by Q-aud-02 or Q-layout-03, is 14."""
+        cases = [({"Q-aud-01": "regular"}, 16), ({"Q-aud-01": "regular", "Q-aud-02": "consumer"}, 16),
+                 ({"Q-aud-01": "regular", "Q-aud-02": "work"}, 14), ({"Q-aud-01": "regular", "Q-layout-03": "working"}, 14),
+                 ({"Q-aud-01": "dense"}, 14), ({}, 14)]
+        for answers, want in cases:
+            s = e.default_state("T")
+            for qid, v in answers.items():
+                s["answers"][qid] = {"value": v}
+                for path, val in e.answer_effects(qid, v, s).items():
+                    e.set_path(s, path, {"value": val} if path.startswith("dials.") else val)
+            _files, meta, _c = e.generate_system(s)
+            self.assertEqual(meta["type"]["base"], want, answers)
+
+    def test_density_default_follows_the_audience(self):
+        self.assertEqual(e.questions()["Q-dir-02"]["default_follows"]["question"], "Q-aud-01")
+        for aud, want in ((None, "comfortable"), ("dense", "compact"), ("regular", "comfortable"), ("large", "spacious")):
+            s = e.default_state("T")
+            if aud:
+                s["answers"]["Q-aud-01"] = {"value": aud}
+            self.assertEqual(e.question_default(s, "Q-dir-02"), want, aud)
+        with tempfile.TemporaryDirectory() as t:  # accepting the recommended default keeps the dense density
+            d = self.sketch(t)
+            quiet(e.cmd_set, d, "Q-dir-02", e.question_default(e.load_state(d), "Q-dir-02"), "the default", set_by="confirmed_default")
+            self.assertEqual(e.load_state(d)["dials"]["density"]["value"], 80)
+        with open(os.path.join(e.REFERENCES, "stages", "06-visual-direction.md"), encoding="utf-8") as f:
+            self.assertIn("Default follows Q-aud-01:** recommend `compact` when it is `dense`", f.read())
+
+    def test_shape_stage_matches_the_evidence_for_data_tools(self):
+        with open(os.path.join(e.REFERENCES, "stages", "14-shape.md"), encoding="utf-8") as f:
+            stage = f.read()
+        self.assertNotIn("use sharp corners when density and precision are brand values", stage)
+        self.assertIn("top-tier data and developer tools use about 6px controls", stage)
+
+    def test_tabular_digits_are_on_unless_switched_off(self):
+        """STD-visual-details-02 makes tabular digits a must, so every system gets text.numeric.* by default."""
+        s = e.default_state("T")
+        self.assertIn("text.numeric.md", e.resolve_all(e.generate_system(s)[0], {"theme": "light"}))
+        s["raw"]["numericStyles"] = False
+        self.assertNotIn("text.numeric.md", e.resolve_all(e.generate_system(s)[0], {"theme": "light"}))
+
+
+class WebTextFloor(unittest.TestCase):
+    """Owner decision 2026-10-14: on the web, text people read is at least 12px; iOS and Android keep 11 pt/sp."""
+
+    def test_small_text_is_12px_on_the_web(self):
+        for plats, want in ((["web"], 12), (["web", "ios"], 12), (["ios"], 11)):
+            s = state_with(platforms=plats, density=95)  # base 13, ratio 1.2: the step below body was 11
+            files, _meta, _c = e.generate_system(s)
+            fl = e.resolve_all(files, {"theme": "light"})
+            for p in ("body.sm", "code.sm"):
+                self.assertEqual(fl[f"text.{p}"]["resolved"]["fontSize"]["value"], want, (plats, p))
+        s = state_with()  # the default web system: base 14, ratio 1.25 gave an 11px body.sm before
+        fl = e.resolve_all(e.generate_system(s)[0], {"theme": "light"})
+        self.assertGreaterEqual(fl["text.body.sm"]["resolved"]["fontSize"]["value"], 12)
+
+
+class PrimaryActionColor(unittest.TestCase):
+    """raw.primaryActionColor keeps the color typed: a near-black stays ink (it was periwinkle, #17181c -> #5f6dcc), and a
+    colored one keeps its hue. Showcase builds needed a near-black primary beside one colored accent (DC-L23-04)."""
+
+    def action(self, seed, brand="#2f6fd6"):
+        s = state_with(brandColor=brand, primaryActionColor=seed)
+        files, _meta, _c = e.generate_system(s)
+        rep = e.Report()
+        e.validate_files(files, s, rep)
+        self.assertEqual(rep.count("error"), 0, seed)
+        out = {}
+        for theme in ("light", "dark"):
+            fl = e.resolve_all(files, {"theme": theme})
+            h = lambda p: e.hex_of(fl[p]["resolved"])
+            out[theme] = {k: h(f"color.bg.action.{k}") for k in ("primary", "primary-hover", "primary-pressed")}
+            out[theme]["on"] = h("color.text.on-action")
+            for k in ("primary", "primary-hover", "primary-pressed"):
+                self.assertGreaterEqual(e.contrast(out[theme]["on"], out[theme][k]), 4.5, (seed, theme, k))
+        return out
+
+    def test_a_near_black_stays_ink(self):
+        for seed in ("#17181c", "#0f172a", "#111827"):  # near-black, Tailwind slate-900 and gray-900
+            a = self.action(seed)
+            self.assertEqual(a["light"]["primary"], seed)  # exact
+            seed_c = e.hex_to_oklch(seed)[1]
+            for k in ("primary-hover", "primary-pressed"):  # states stay in the seed's family, no jump to a vivid blue
+                self.assertLess(e.hex_to_oklch(a["light"][k])[1], seed_c + 0.01, (seed, k))
+            self.assertGreater(e.hex_to_oklch(a["dark"]["primary"])[0], 0.85, seed)  # dark mode inverts the ink: near-white
+            self.assertLess(e.hex_to_oklch(a["dark"]["primary"])[1], 0.05, seed)
+            self.assertNotEqual(a["dark"]["on"], "#ffffff")
+
+    def test_design_md_says_which_color_the_buttons_use(self):
+        s = state_with(brandColor="#2f6fd6", primaryActionColor="#17181c")
+        files, meta, _c = e.generate_system(s)
+        lead = e.colors_lead(meta, s, e.resolve_all(files, {"theme": "light"}))
+        self.assertIn("Buttons use your primary action color `#17181c`, an ink that turns near-white in dark mode", lead)
+        self.assertIn("`#2f6fd6` marks links, selection and focus", lead)
+
+    def test_a_colored_seed_keeps_its_hue(self):
+        for seed in ("#e11d48", "#1e3a8a"):
+            a = self.action(seed)
+            self.assertEqual(a["light"]["primary"], seed)  # white text reads on it, so it stays exact
+            for theme in ("light", "dark"):
+                hue = abs(e.hex_to_oklch(a[theme]["primary"])[2] - e.hex_to_oklch(seed)[2])
+                self.assertLess(min(hue, 360 - hue), 10, (seed, theme))
+
+
 class ExtendTokens(unittest.TestCase):
     """U5 fix 8: set adds a new token and keeps DTCG and density modes."""
 
@@ -1492,9 +2434,9 @@ class ExtendTokens(unittest.TestCase):
             quiet(e.cmd_set, d, "space.inset.md", 12, "default density only")
             quiet(e.cmd_set, d, "color.bg.highlight", "#fff4c2", "new color")
             files, meta, _c = quiet(e.cmd_generate, d)
-            self.assertEqual(files["semantic.tokens.json"]["size"]["row"]["md"]["$value"], {"value": 36, "unit": "px"})
-            self.assertEqual(files["semantic.tokens.json"]["size"]["row"]["md"]["$type"], "dimension")
             dens = {n: files[f"semantic.density.{n}.tokens.json"] for n in e.DENSITIES}
+            self.assertEqual(dens["compact"]["size"]["row"]["md"]["$value"], {"value": 36, "unit": "px"})  # rows are density tokens
+            self.assertEqual(dens["comfortable"]["size"]["row"]["md"]["$value"], {"value": 48, "unit": "px"})
             self.assertEqual(dens["compact"]["space"]["inset"]["md"]["$value"], {"value": 12, "unit": "px"})
             self.assertNotEqual(dens["spacious"]["space"]["inset"]["md"]["$value"], {"value": 12, "unit": "px"})
             self.assertEqual(dens["compact"]["size"]["control"]["md"]["$value"], {"value": 30, "unit": "px"})
@@ -1552,6 +2494,34 @@ class ShowTemplates(unittest.TestCase):
             accents = {o["value"]: o["ramps"][0]["light"][8] for o in pal["options"]}
             self.assertEqual(accents["tonal"], "#1f6f5c")                            # the brand stays exact in every option
             self.assertNotEqual(pal["options"][0]["ramps"][0]["light"][2], pal["options"][1]["ramps"][0]["light"][2])
+
+    def test_palette_contrast_table_has_rows(self):
+        """Issue #47: every palette option carries the pairs validate checks, per mode, measured the same way."""
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Showcase", "#1f6f5c", "regular", "web", "serious,minimal", quiet=True)
+            state = e.merge_defaults(e.read_json(os.path.join(d, "state.json")))
+            pal = e.build_payload(state, "palette")
+            for opt in pal["options"]:
+                files, meta, _s = e.what_if(state, pal["question"], opt["value"])
+                promised = {(pr["mode"], pr["fg"], pr["bg"]): pr["min"] for pr in meta["contrastPairs"]}
+                labels = [p["label"] for p in opt["pairs"]]
+                self.assertIn("Body text on the page", labels, opt["value"])
+                self.assertIn("Label on the main button", labels, opt["value"])
+                self.assertEqual(len(labels), len(set(labels)))
+                for p in opt["pairs"]:
+                    self.assertEqual(set(p["fg"]), set(meta["modes"]))
+                    self.assertIn(p["kind"], ("text", "edge"))
+                    for m in meta["modes"]:
+                        self.assertRegex(p["fg"][m], r"^#[0-9a-fA-F]{6}$")
+                        self.assertGreaterEqual(e.contrast(p["fg"][m], p["bg"][m]), p["min"], (opt["value"], p["label"], m))
+                    self.assertIn(p["min"], promised.values())
+            body = pal["options"][0]["pairs"][0]
+            self.assertEqual(body["min"], 4.5)
+            aaa = e.build_payload(dict(state, raw=dict(state.get("raw") or {}, contrastTarget="AAA")), "palette")
+            self.assertEqual(aaa["options"][0]["pairs"][0]["min"], 7.0)          # the table follows the person's target
+            html = open(os.path.join(e.HERE, "..", "assets", "templates", "palette.html"), encoding="utf-8").read()
+            self.assertIn("(o&&o.pairs)||D.pairs", html)                           # the page reads each option's own pairs
 
 
 class IntakeU5(unittest.TestCase):
@@ -1774,7 +2744,7 @@ class Standards(unittest.TestCase):
             self.assertEqual(state["overrides"]["size.row.md"], {"value": 40, "unit": "px"})
             self.assertIn("overrides.size.row.md", state["locks"])
             files, _m, _c = quiet(e.cmd_generate, d)
-            self.assertEqual(files["semantic.tokens.json"]["size"]["row"]["md"]["$value"], {"value": 40, "unit": "px"})
+            self.assertEqual(files["semantic.density.compact.tokens.json"]["size"]["row"]["md"]["$value"], {"value": 40, "unit": "px"})
             with self.assertRaises(SystemExit) as cm:
                 quiet(e.cmd_set, d, "size.row.md", 44, "try")
             self.assertIn("project standard PRJ-01: Table rows are 40px tall", str(cm.exception))
@@ -1938,7 +2908,7 @@ class Standards(unittest.TestCase):
             self.assertEqual(sorted(un), ["STD-t-02", "STD-t-03", "STD-t-04"])
             self.assertIn("would break a check the engine enforces", un["STD-t-02"])
             self.assertIn("needs 4.5:1", un["STD-t-02"])
-            self.assertIn("cannot build the tokens", un["STD-t-03"])
+            self.assertIn("radius.container takes a corner radius in whole px", un["STD-t-03"])  # names what it takes
             self.assertIn("cubicBezier token, but the standard gives a duration", un["STD-t-04"])
             with self.assertRaises(SystemExit) as cm:
                 quiet(e.cmd_standard, d, "override", sid="STD-t-01", why="ours", value=[0, 0, 1, 1])
@@ -2016,6 +2986,7 @@ class Standards(unittest.TestCase):
             self.assertEqual(set(sheet["$value"]), {"duration", "delay", "timingFunction"})
             ext = sheet["$extensions"]["opendesigner"]
             self.assertEqual((ext["spring"], ext["apple"]), ({"dampingRatio": 0.8, "stiffness": 438.6, "mass": 1}, {"duration": 0.3, "bounce": 0.2}))
+            quiet(e.cmd_export, d, "all")  # build writes only the web's code files; export --format all writes Swift and Compose too
             b = os.path.join(d, "build")
             with open(os.path.join(b, "css", "tokens.css"), encoding="utf-8") as f:
                 css = f.read()
@@ -3183,14 +4154,18 @@ class PersonaOutputFixes(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             d = os.path.join(t, "opendesigner")
             out = std_run(e.cmd_sketch, d, "Picked", "#ffd54f", "large", "web", "fun", delegated="brand")[1]
-            brand = std_read(d)["raw"]["brandColor"]
-            self.assertNotEqual(brand, "#ffd54f")                                         # a readable shade, picked for them
-            self.assertGreaterEqual(e.contrast(brand, "#ffffff"), 4.5)
-            self.assertIn("I picked an olive for buttons, links and focus, with white text", out)
+            self.assertEqual(std_read(d)["raw"]["brandColor"], "#ffd54f")                 # dark text reads on it: kept
+            self.assertIn("I picked a light yellow for buttons, links and focus, with dark text on it.", out)
             self.assertNotIn("#", out.split("I picked", 1)[1].split("\n", 1)[0])
             summary = design_text(t).split("\n> Generated", 1)[0]
-            self.assertIn("**Brand color:** Picked for you, not chosen by you: an olive (#", summary)
+            self.assertIn("**Brand color:** Picked for you, not chosen by you: a light yellow (#FFD54F)", summary)
             self.assertNotIn("Your brand color", summary)
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            out = std_run(e.cmd_sketch, d, "Picked", "#e0457b", "large", "web", "fun", quiet=True, delegated="brand")[1]
+            brand = std_read(d)["raw"]["brandColor"]
+            self.assertNotEqual(brand, "#e0457b")              # neither text reads on the color the model picked: a shade of it
+            self.assertGreaterEqual(e.contrast(brand, "#ffffff"), 4.5)
 
     def test_d05_design_md_says_exits_are_derived(self):
         with tempfile.TemporaryDirectory() as t:
@@ -3204,6 +4179,1923 @@ class PersonaOutputFixes(unittest.TestCase):
                 self.assertEqual(motion.count("Decisions: "), 1)
                 ids = re.findall(r"D-\d{4}", motion.split("Decisions: ", 1)[1])
                 self.assertEqual(len(ids), len(set(ids)))                                   # each decision once (R29)
+
+
+class OverviewAndArtifact(unittest.TestCase):
+    """overview.html is the person's own system page: what is set shows, what needs a person says so; the visual templates
+    are filled with their values; export --format artifact writes a Design System artifact in its list grammar."""
+
+    def test_overview_and_artifact(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Fern", "#0f766e", "regular", "web", "calm,friendly")
+            rd = lambda *p: open(os.path.join(*p), encoding="utf-8").read()
+            html = rd(d, "overview.html")
+            self.assertIn("Not enough information", html)                       # no logo yet: the gap is shown, not hidden
+            self.assertIn("Fern", html)
+            self.assertIn("answers you gave", html)                             # counted the same way as DESIGN.md's summary
+            on = re.search(r"text\.on-action</b>(#[0-9a-f]{6}) · ([0-9.]+):1", html)
+            self.assertGreaterEqual(float(on.group(2)), 4.5)                     # measured on the button fill, not the page
+            self.assertIn('href="preview/palette.html"', html)
+            self.assertNotRegex(html, r"https?://(?!github\.com)")                   # no network: nothing loads from another host
+            tpl = rd(d, "preview", "palette.html")
+            self.assertIn("Fern", tpl)                                          # the template shows their system, not Acme
+            self.assertNotIn(">Acme<", tpl)
+            proj = os.path.join(d, "build", "artifact", "project")
+            tok = e.read_json(os.path.join(proj, "tokens.json"))
+            self.assertEqual([th["id"] for th in tok["color"]["themes"]][:1], ["light"])
+            names = [c["name"] for c in tok["color"]["tokens"]]
+            self.assertIn("accent", names)
+            self.assertEqual(len(names), len(set(names)))                        # artifact names are one namespace
+            for c in tok["color"]["tokens"]:
+                for v in (c["value"].values() if isinstance(c["value"], dict) else [c["value"]]):
+                    self.assertRegex(v, r"^#[0-9a-f]{6}$")
+            self.assertTrue(tok["type"]["groups"][0]["styles"])
+            idx = e.read_json(os.path.join(proj, "design-system.json"))
+            self.assertEqual((idx["v"], idx["layout"], idx["title"]), (3, "files", "Fern"))
+            first = idx["createdOnFiles"]["at"]
+            quiet(e.cmd_export, d, "artifact")
+            self.assertEqual(e.read_json(os.path.join(proj, "design-system.json"))["createdOnFiles"]["at"], first)  # stable across builds
+            readme = rd(proj, "README.md")
+            self.assertFalse(readme.startswith("---"))                           # no front matter in the brand book
+            self.assertIn("`opendesigner/decisions.md`", readme)                 # the repo path stays readable, as code
+            prose = re.sub(r"`[^`\n]*`", "", re.sub(r"^(```|~~~).*?^\1", "", readme, flags=re.S | re.M))
+            for target in re.findall(r"!?\[[^\]\n]*\]\(([^)\s]+)\)", prose):  # tools/check_links.py's rule, from the README's folder
+                rel = target.split("#", 1)[0]
+                if rel and not re.match(r"^[a-z][a-z0-9+.-]*:", rel, re.I):
+                    self.assertTrue(os.path.exists(os.path.join(proj, rel)), target)
+
+    def test_for_agents_names_real_platform_identifiers(self):
+        """DESIGN.md's For Agents section names only Swift and Compose identifiers the exports define (no DsTheme)."""
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Fern", "#0f766e", "regular", "web,ios,android", "calm,friendly")
+            step = next(ln for ln in design_section(t, "For Agents").splitlines() if ln.startswith("2. "))
+            swift_part, compose_part = step.split(" in Swift", 1)
+            swift = re.findall(r"`([A-Za-z_]\w*)", swift_part.rsplit(", ", 1)[1])
+            compose = re.findall(r"`([A-Za-z_]\w*)", compose_part.split("In Compose:", 1)[1])
+            self.assertEqual(swift, ["DS"])
+            self.assertGreaterEqual(len(compose), 5)
+            with open(os.path.join(d, "build", "swift", "DesignTokens.swift"), encoding="utf-8") as f:
+                sw = f.read()
+            with open(os.path.join(d, "build", "compose", "DesignTokens.kt"), encoding="utf-8") as f:
+                kt = f.read()
+            for name in swift:
+                self.assertRegex(sw, rf"\b(enum|struct|class)\s+{name}\b", name)
+            for name in compose:
+                self.assertRegex(kt, rf"\b(val|object|class)\s+{name}\b", name)
+            with open(os.path.join(d, "build", "artifact", "project", "README.md"), encoding="utf-8") as f:
+                self.assertIn(step, f.read())                                   # build writes DESIGN.md before the artifact copies it
+
+def styled(style=None, **raw):
+    """A state that answered Q-dir-01 with a preset or a named style, the way pick does."""
+    s = u5_state(**raw)
+    if style:
+        s["answers"]["Q-dir-01"] = {"value": style, "set_by": "chosen"}
+        for pth, x in e.answer_effects("Q-dir-01", style, s).items():
+            e._store(s, pth, x, "chosen", "t", False)
+    return s
+
+
+def flat_light(files):
+    return e.resolve_all(files, {"theme": "light", "density": "comfortable", "motion": "standard"})
+
+
+class StyleVocabulary(unittest.TestCase):
+    """U8: named styles from references/styles.md reach the interview, the state, the tokens and DESIGN.md."""
+
+    def test_look_words_name_styles(self):
+        """Item 1: everyday look words propose named styles; feel words keep their feel; unknown words are still asked."""
+        macros, mapping, unknown, looks, look_only, start = e.feel_and_looks(
+            ["frosty", "comic", "soft buttons", "bold", "grainy", "zesty", "like my iPhone"])
+        self.assertEqual(looks["frosty"][0], "glassmorphism")
+        self.assertEqual(looks["like my iPhone"][0], "glassmorphism")
+        self.assertEqual(looks["comic"], ["comic"])
+        self.assertEqual(looks["soft buttons"][0], "neumorphism")      # a whole look phrase, not the feel word "soft"
+        self.assertIn("soft buttons", look_only)
+        self.assertNotIn("soft buttons", mapping)
+        self.assertIn("bold", mapping)                                    # shared word: the feel stays...
+        self.assertNotIn("bold", look_only)                               # ...and the looks are only suggested
+        self.assertEqual(looks["bold"][0], "neo-brutalism")
+        self.assertEqual(unknown, ["zesty"])
+        self.assertEqual(start, "glassmorphism")                          # the first look-only word's best style
+        self.assertEqual(e.feel_and_looks(["grainy"])[5], None)          # a texture never becomes the look
+        words = e.styles_doc()["styleWords"]["words"]
+        ids = set(e.style_list())
+        self.assertGreaterEqual(len(ids), 28)
+        self.assertTrue(all(set(v) <= ids for v in words.values()))
+        self.assertEqual({i for v in words.values() for i in v}, ids)   # every style is reachable from some word
+        self.assertFalse(set(words) & e.COLOR_WORDS)                     # "gold" is a color, never Art Deco
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            e.cmd_feel(["frosty", "comic"])
+        self.assertIn("frosty -> glassmorphism: frosted see-through panels", out.getvalue())
+        self.assertIn("comic -> comic style", out.getvalue())
+        self.assertNotIn("not known yet", out.getvalue())
+
+    def test_sketch_starts_from_a_look_word_as_assumed(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(e.cmd_sketch(d, "Fjord", "#0f766e", "regular", "web,ios", "frosty, calm"), 0)
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertEqual(st["style"], "glassmorphism")
+            self.assertEqual(st["preset"], "glass")
+            self.assertEqual(st["answers"]["Q-dir-01"]["set_by"], "assumed")
+            self.assertEqual(st["answers"]["Q-dir-01"]["via"], "sketch")
+            self.assertIn("deferential", [m if isinstance(m, str) else m["id"] for m in st["macros"]])
+            self.assertIn("frosty", st["taste"]["feelWords"])
+            self.assertIn("designers call it glassmorphism", out.getvalue())
+            self.assertNotIn("I don't know the feel word 'frosty'", out.getvalue())
+            self.assertIn("Direction: style glassmorphism (frosted see-through panels), built on preset glass",
+                          design_section(t, "Overview"))
+            quiet(e.cmd_set, d, "Q-dir-01", "flat2", "the person's own pick")
+            quiet(e.cmd_sketch, d, None, None, None, None, "comic")            # a later sketch never overrides a chosen style
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertEqual((st["answers"]["Q-dir-01"]["value"], st["style"]), ("flat2", None))
+
+    def test_q_dir_01_keeps_the_style_name(self):
+        """Item 2: the named style is recorded beside its preset; presets group the styles as STYLE-VOCAB-PROPOSALS section 2 says."""
+        fam = {}
+        for s in e.style_list().values():
+            fam.setdefault(s["preset"], set()).add(s["id"])
+        self.assertTrue({"flat", "swiss", "editorial", "minimal-monochrome"} <= fam["flat2"])
+        self.assertIn("material-elevation", fam["tonal"])
+        self.assertTrue({"glassmorphism", "frutiger-aero"} <= fam["glass"])
+        self.assertTrue({"neo-brutalism", "brutalism", "comic"} <= fam["neobrutal"])
+        self.assertTrue({"neumorphism", "claymorphism"} <= fam["soft"])
+        self.assertTrue({"mesh-gradient", "memphis", "y2k", "risograph"} <= fam["maximal"])
+        self.assertTrue(all(s["kind"] != "look" for s in e.style_list().values() if s["preset"] is None))
+        self.assertTrue(all(s.get("dials", {}).get("warmth", 0) <= 45 for s in e.style_list().values()))  # no beige greys
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="Pick")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_set(d, "Q-dir-01", "neo-brutalism", "chunky and loud")
+            self.assertNotIn("not one of the listed options", out.getvalue())
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertEqual((st["preset"], st["style"]), ("neobrutal", "neo-brutalism"))
+            quiet(e.cmd_set, d, "Q-dir-01", "neo-brutalist", "same family keeps the name")
+            self.assertEqual(e.read_json(os.path.join(d, "state.json"))["style"], "neo-brutalism")
+            quiet(e.cmd_set, d, "Q-dir-01", "glass", "another family clears it")
+            self.assertIsNone(e.read_json(os.path.join(d, "state.json"))["style"])
+            with self.assertRaises(SystemExit) as cm:
+                quiet(e.cmd_set, d, "Q-dir-01", "grain", "a texture is not a look")
+            self.assertIn("pairs with a style", str(cm.exception))
+            with self.assertRaises(SystemExit):
+                quiet(e.cmd_set, d, "style", "comic", "one route only")
+            with self.assertRaises(SystemExit):
+                quiet(e.cmd_set, d, "raw.borderDefault", 9, "out of range")
+        s = styled("claymorphism")
+        s["macros"] = ["friendly"]                                         # warmth +30 would turn the greys beige
+        dials, src, conflicts = e.resolve_dials(s)
+        self.assertEqual((dials["warmth"], src["warmth"]), (30, "style:claymorphism"))
+        self.assertEqual(src["expression"], "style:claymorphism")
+        s["dials"]["roundness"] = {"value": 40, "set_by": "chosen"}
+        self.assertEqual(e.resolve_dials(s)[0]["roundness"], 40)          # the person's own value beats the style
+        plain = e.default_state("Same")
+        self.assertEqual(e.state_hash(plain), e.state_hash({k: v for k, v in plain.items() if k != "style"}))
+
+    def test_neo_brutalist_builds_thick_borders_and_offset_shadow(self):
+        """Item 3: the preset's extras are built, not ignored."""
+        files, meta, _c = e.generate_system(styled("neo-brutalist"))
+        fl = flat_light(files)
+        self.assertEqual(fl["border.width.default"]["$value"], "{border.width.3}")
+        self.assertEqual(meta["elevation"]["model"], "offset")
+        raised = fl["elevation.raised"]["$value"]
+        self.assertEqual(len(raised), 1)
+        self.assertEqual((raised[0]["color"], raised[0]["offsetX"], raised[0]["blur"]), ("{color.shadow.offset}", e.dim(4), e.dim(0)))
+        self.assertEqual(fl["color.shadow.offset"]["$value"], fl["color.text.primary"]["$value"])
+        self.assertIn("elevation.pressed", fl)
+        css = e.export_css(files, meta, "ds")
+        self.assertIn("--ds-elevation-raised: 4px 4px 0px 0px var(--ds-color-shadow-offset);", css)
+        for style, border, model in (("brutalism", "{border.width.1}", "borders"), ("comic", "{border.width.3}", "borders")):
+            f2, m2, _c = e.generate_system(styled(style))
+            self.assertEqual((flat_light(f2)["border.width.default"]["$value"], m2["elevation"]["model"]), (border, model), style)
+        f3, _m, _c = e.generate_system(styled("neo-brutalist", borderDefault=2))
+        self.assertEqual(flat_light(f3)["border.width.default"]["$value"], "{border.width.2}")
+        self.assertNotIn("color.shadow.offset", flat_light(e.generate_system(u5_state())[0]))   # nothing new without a style
+
+    def test_paired_and_inner_shadows(self):
+        """Item 3: neumorphism gets paired light and dark shadows; claymorphism gets inner shadows; Figma keeps inset."""
+        files, meta, _c = e.generate_system(styled("neumorphism"))
+        fl = flat_light(files)
+        self.assertEqual(meta["elevation"]["model"], "extruded")
+        hi, key = fl["elevation.raised"]["$value"]
+        self.assertEqual((hi["color"], key["color"]), ("{color.shadow.highlight}", "{color.shadow.key}"))
+        self.assertLess(e._px(hi["offsetX"]), 0)
+        self.assertGreater(e._px(key["offsetX"]), 0)
+        self.assertTrue(all(lay.get("inset") for lay in fl["elevation.pressed"]["$value"]))
+        self.assertEqual(fl["color.shadow.highlight"]["resolved"]["alpha"], 0.8)
+        rep = e.Report()
+        e.validate_files(files, styled("neumorphism"), rep)
+        self.assertIn("neumorphic-preset", json.dumps(rep.items))
+        files, meta, _c = e.generate_system(styled("claymorphism"))
+        self.assertEqual(meta["elevation"]["model"], "clay")
+        layers = flat_light(files)["elevation.raised"]["$value"]
+        self.assertEqual([bool(x.get("inset")) for x in layers], [False, True, True])
+        fig = e.export_figma(files, meta, styled("claymorphism"), "ds")
+        kinds = {fx["type"] for st in fig["effectStyles"] if st["name"] == "elevation/raised" for fx in st["effects"]}
+        self.assertEqual(kinds, {"DROP_SHADOW", "INNER_SHADOW"})
+        rep = e.Report()
+        e.validate_files(files, styled("claymorphism"), rep)
+        self.assertNotIn("neumorphic-preset", json.dumps(rep.items))        # clay states its border rule in DESIGN.md instead
+
+    def test_gradient_and_texture_tokens(self):
+        """Item 3: gradients are DTCG gradient tokens with kind and interpolation in $extensions; grain is a recipe, not a token."""
+        files, meta, _c = e.generate_system(styled("mesh-gradient"))
+        fl = flat_light(files)
+        brand = fl["gradient.brand"]
+        self.assertEqual(brand["type"], "gradient")
+        self.assertEqual([s_["position"] for s_ in brand["$value"]], [0, 1])
+        self.assertTrue(all(isinstance(s_["color"], str) and s_["color"].startswith("{") for s_ in brand["$value"]))  # stops alias colors
+        ext = brand["$extensions"]["opendesigner"]
+        self.assertEqual((ext["kind"], ext["interpolation"]), ("linear", "oklab"))
+        self.assertIn("marketing", ext["allowedSurfaces"])
+        self.assertEqual(fl["gradient.mesh.1"]["$extensions"]["opendesigner"]["kind"], "radial")
+        rep = e.Report()
+        e.validate_files(files, styled("mesh-gradient"), rep)
+        self.assertEqual([i for i in rep.items if i["severity"] == "error"], [])
+        css = e.export_css(files, meta, "ds")
+        self.assertIn("--ds-gradient-brand: linear-gradient(180deg in oklab, var(--ds-color-", css)
+        self.assertIn("--ds-gradient-mesh: var(--ds-gradient-mesh-1), var(--ds-gradient-mesh-2), var(--ds-gradient-mesh-3);", css)
+        none = styled("mesh-gradient", gradients="none")                   # Q-color-25 "none" beats the style
+        self.assertFalse([p for p in flat_light(e.generate_system(none)[0]) if p.startswith("gradient.")])
+        self.assertFalse([p for p in flat_light(e.generate_system(u5_state())[0]) if p.startswith(("gradient.", "texture."))])
+        allowed = u5_state()
+        for pth, x in e.answer_effects("Q-color-25", "brand-only").items():
+            e._store(allowed, pth, x, "chosen", "t", False)
+        self.assertIn("gradient.brand", flat_light(e.generate_system(allowed)[0]))
+        files, meta, _c = e.generate_system(styled("risograph"))
+        grain = flat_light(files)["texture.grain.opacity"]
+        self.assertEqual((grain["type"], grain["$value"]), ("number", 0.06))
+        css = e.export_css(files, meta, "ds")
+        self.assertIn(".ds-grain::before", css)
+        self.assertIn("@media (prefers-contrast: more), (forced-colors: active) { .ds-grain::before { display: none; } }", css)
+        self.assertNotIn("texture.grain.opacity", flat_light(e.generate_system(styled("risograph", texture="none"))[0]))
+        rep = e.Report()
+        e._check_value("gradient", [{"color": "#fff", "position": 0}], "gradient.bad", rep)
+        self.assertTrue(rep.items)
+
+    def test_literal_hex_in_a_shadow_override_builds(self):
+        """Item 4: a hex color in a shadow override used to stop the build (ValueError: not a color) and write var(--ds-fffff)."""
+        layer = {"color": "#ffffff", "offsetX": {"value": 4, "unit": "px"}, "offsetY": {"value": 4, "unit": "px"},
+                 "blur": {"value": 0, "unit": "px"}, "spread": {"value": 0, "unit": "px"}}
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Hex", "#2563eb", "regular", "web", "bold")
+            quiet(e.cmd_set, d, "elevation.raised", [layer], "white offset shadow")
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertEqual(st["overrides"]["elevation.raised"][0]["color"]["colorSpace"], "srgb")   # stored in DTCG form
+            self.assertEqual(quiet(e.cmd_build, d), 0)
+            with open(os.path.join(d, "build", "css", "tokens.css"), encoding="utf-8") as f:
+                css = f.read()
+            self.assertIn("--ds-elevation-raised: 4px 4px 0px 0px #ffffff;", css)
+            self.assertNotIn("var(--ds-fffff", css)
+            st["overrides"]["elevation.raised"] = [layer]                  # a state saved before the fix still builds
+            e.dump_json(os.path.join(d, "state.json"), st)
+            self.assertEqual(quiet(e.cmd_build, d), 0)
+            with self.assertRaises(SystemExit) as cm:
+                quiet(e.cmd_set, d, "elevation.raised", [dict(layer, color="tomato")], "not a color")
+            self.assertIn("each layer needs color", str(cm.exception))
+        rep = e.Report()
+        e._check_value("shadow", [dict(layer, color="#ffffff")], "elevation.raised", rep)   # validate names it, never crashes
+        self.assertIn("color must be an object", json.dumps(rep.items))
+
+    def test_floors_stay_locked_in_every_style(self):
+        """Item 5: every look style validates with no errors (contrast, focus, targets), glass is checked over the worst content
+        behind it and turns solid under reduced transparency, and reduced motion still has its own context."""
+        for sid, st in sorted(e.style_list().items()):
+            if st["kind"] != "look":
+                continue
+            s = styled(sid)
+            files, meta, _c = e.generate_system(s)
+            rep = e.Report()
+            e.validate_files(files, s, rep)
+            self.assertEqual([i["message"] for i in rep.items if i["severity"] == "error"], [], sid)
+            self.assertIn("motion.reduced.tokens.json", files, sid)
+        s = styled("glassmorphism")
+        files, meta, _c = e.generate_system(s)
+        kinds = {(p["mode"], p["kind"]) for p in meta["contrastPairs"] if p.get("behind")}
+        self.assertEqual(kinds, {(m, k) for m in ("light", "dark") for k in ("text-on-glass", "icon-on-glass")})
+        for mode in ("light", "dark"):
+            fl = e.resolve_all(files, {"theme": mode, "density": "comfortable", "motion": "standard"})
+            glass = fl["color.surface.glass"]["resolved"]
+            behind = "#000000" if mode == "light" else "#ffffff"
+            bg = e.composite(e.hex_of(glass), glass["alpha"], behind)
+            self.assertGreaterEqual(e.contrast(e.hex_of(fl["color.text.primary"]["resolved"]), bg), 4.5, mode)
+            self.assertGreaterEqual(e.contrast(e.hex_of(fl["color.icon.default"]["resolved"]), bg), 3.0, mode)
+        css = e.export_css(files, meta, "ds")
+        self.assertIn("@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {", css)
+        self.assertIn("--ds-color-surface-glass: var(--ds-color-surface-glass-fallback); --ds-material-glass-blur: 0px;", css)
+        # the solid twin must out-rank the dark-scheme block, which sets glass on :root:not([data-theme="light"])
+        rt = css[css.index("@media (prefers-reduced-transparency"):]
+        self.assertIn(':root:not([data-theme="light"])', rt.split("{", 2)[1])
+        self.assertLess(css.index('@media (prefers-color-scheme: dark)'), css.index("@media (prefers-reduced-transparency"))
+        self.assertIn("@media (prefers-reduced-motion: reduce)", css)
+
+
+class StyleLab(unittest.TestCase):
+    """U9: an open style space. Every style sits on 12 trait axes; new ones are searched, mixed, mutated, explored and defined
+    on the same axes, repaired when they pile up effects, and held to the same floors."""
+
+    def test_catalogue_is_consistent(self):
+        doc = e.styles_doc()
+        axes = doc["axes"]
+        self.assertEqual(tuple(axes), e.STYLE_AXES)
+        ids = [s["id"] for s in doc["list"]]
+        self.assertEqual(len(ids), len(set(ids)))
+        for s in doc["list"]:
+            self.assertTrue(re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)*", s["id"]), s["id"])
+            for ax in e.STYLE_AXES:
+                self.assertIn(s["traits"][ax], axes[ax]["values"], (s["id"], ax))
+            self.assertIn(s.get("ui_fit"), ("core-ui", "marketing", "illustration-only"), s["id"])
+            self.assertLessEqual(s.get("dials", {}).get("warmth", 0), 45, s["id"])        # no beige greys
+            if not s.get("evidence"):                                                     # researched entries carry real sources
+                urls = [x["url"] for x in s.get("sources") or [] if x.get("url", "").startswith("http")]
+                self.assertGreaterEqual(len(urls), 2, s["id"])
+        self.assertTrue(all(set(v) <= set(ids) for v in doc["styleWords"]["words"].values()))
+        for ax, vals in doc["traitWords"]["words"].items():
+            self.assertTrue(set(vals) <= set(axes[ax]["values"] if ax in axes else doc["motionRisks"]), ax)
+        self.assertTrue(all(set(s.get("motionRisks") or []) <= set(doc["motionRisks"]) for s in doc["list"]))
+        self.assertTrue(set(doc["styleWords"]["suggestOnly"]) <= set(doc["styleWords"]["words"]))
+        derived = [e.complete_style(s) for s in doc["list"] if "dials" not in s]
+        self.assertTrue(all(s["preset"] in {p["id"] for p in e.levers()["presets"]} for s in derived if s["kind"] == "look"))
+
+    def test_traits_become_settings(self):
+        preset, dials, build = e.style_from_traits({"depth": "glow", "color": "neon", "shape": "sharp", "texture": "halftone",
+                                                    "edge": "thick-outline", "density": "dense", "scale": "dramatic"})
+        self.assertEqual((dials["colorfulness"], dials["roundness"], dials["density"]), (95, 0, 75))
+        self.assertEqual((build["elevationModel"], build["borderDefault"], build["texture"], build["typeRatio"]), ("glow", 3, "halftone", 1.333))
+        self.assertEqual(preset, "neobrutal")
+        self.assertEqual(e.style_from_traits({"depth": "glass"})[0], "glass")
+        self.assertEqual(e.style_from_traits({"color": "earthy"})[1]["warmth"], 45)
+        traits, unknown = e.words_to_traits(["shiny chrome", "neon glow", "zesty"])
+        self.assertEqual(traits["surface"], "glossy")
+        self.assertEqual(traits["depth"], "glow")
+        self.assertNotIn("color", traits)                              # "neon" inside "neon glow" is the glow, not the color
+        self.assertEqual(unknown, ["zesty"])
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            e.cmd_feel(["shiny"])
+        self.assertIn("no named style yet; it describes shiny glossy surfaces", out.getvalue())
+
+    def test_guard_repairs_risky_combinations(self):
+        t, notes = e.guard_traits(dict(e.NEUTRAL_TRAITS, surface="gradient", depth="glass", color="neon", theme="light-first",
+                                       density="dense", texture="grain", ornament="stickers", motion="glitchy", edge="thick-outline"),
+                                  risks=["flashing"])
+        self.assertEqual(sum(1 for ax in ("depth", "surface") if (ax, t[ax]) in e.SURFACE_EFFECTS), 1)   # one surface effect
+        self.assertLessEqual(len(e._loud(t, ["flashing"])), 3)
+        self.assertEqual((t["density"], t["texture"]), ("balanced", "none"))
+        self.assertTrue(t["color"] != "neon" or t["theme"] == "dark-first")
+        self.assertEqual(e.guard_traits(dict(e.NEUTRAL_TRAITS, color="neon"))[0]["theme"], "dark-first")   # neon on its own goes dark
+        self.assertTrue(any("three in any second" in n for n in notes))                   # WCAG 2.3.1 for flashing
+        self.assertTrue(notes)
+
+    def test_explore_offers_new_but_recognizable_styles(self):
+        a = e.explore_styles(["neon", "sharp", "dark"], n=4, seed=3)
+        b = e.explore_styles(["neon", "sharp", "dark"], n=4, seed=3)
+        self.assertEqual([c["traits"] for c in a], [c["traits"] for c in b])              # the same seed draws the same styles
+        self.assertGreaterEqual(len(a), 2)
+        for c in a:
+            self.assertTrue(3 <= c["novelty"] <= 7, c)
+            self.assertEqual(c["traits"]["shape"], "sharp")                               # the person's own trait words hold
+            self.assertEqual(c["traits"], e.guard_traits(c["traits"], c["ui_fit"])[0])   # already repaired
+        keys = {tuple(c["traits"].values()) for c in a}
+        self.assertEqual(len(keys), len(a))
+        mix = e.blend_styles(e.style_list()["swiss"], e.style_list()["glassmorphism"])
+        self.assertEqual((mix["traits"]["layout"], mix["traits"]["depth"]), ("grid", "glass"))   # Swiss bones, glass skin
+
+    def test_define_and_use_an_experimental_style(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Lab", "#7c3aed", "regular", "web", "calm")
+            quiet(e.cmd_style, d, "define", ["terminal", "color=neon", "depth=glow"], name="Night market", use=True)
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertIn("x-night-market", st["customStyles"])
+            self.assertEqual(st["style"], "x-night-market")
+            self.assertTrue(st["customStyles"]["x-night-market"]["experimental"])
+            self.assertEqual(quiet(e.cmd_build, d), 0)
+            meta = e.read_json(os.path.join(d, "tokens", "opendesigner.meta.json"))
+            self.assertEqual((meta["style"], meta["elevation"]["model"]), ("x-night-market", "glow"))
+            with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+                self.assertIn("Style:** Night market", f.read())
+            with open(os.path.join(d, "build", "css", "tokens.css"), encoding="utf-8") as f:
+                self.assertIn("var(--ds-color-shadow-glow)", f.read())
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                self.assertIn("customStyles.x-night-market", f.read())
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_style(d, "explore", ["grainy", "editorial"], n=2, seed=1, save=1, name="Paper desk")
+            self.assertIn("Saved as x-paper-desk", out.getvalue())
+            with self.assertRaises(SystemExit):
+                quiet(e.cmd_style, d, "define", ["depth=sideways"], name="Bad")
+
+    def test_tiles_show_styles_built_for_real(self):
+        """The option gallery shows any named or unsaved experimental style, with its outlines, shadows, glass and texture."""
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Tiles", "#2563eb", "regular", "web", "calm")
+            quiet(e.cmd_style, d, "tiles", ["neo-brutalism", "glassmorphism", "newsprint"])
+            with open(os.path.join(d, "preview", "style-tiles.html"), encoding="utf-8") as f:
+                html = f.read()
+            data = json.loads(re.search(r'<script type="application/json" id="od-data">(.*?)</script>', html, re.S).group(1))
+            opts = {o["value"]: o["vars"]["light"] for o in data["options"]}
+            self.assertEqual(list(opts), ["neo-brutalism", "glassmorphism", "newsprint"])
+            self.assertEqual(data["recommended"], "glassmorphism")                       # the recommendation sits in the middle
+            self.assertIn("4px 4px", opts["neo-brutalism"]["btn-shadow"])
+            self.assertEqual(data["options"][0]["vars"]["light"]["border-w"], "3px")
+            self.assertIn("blur(", opts["glassmorphism"]["backdrop"])
+            self.assertIn("radial-gradient", opts["newsprint"]["texture"])
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_style(d, "explore", ["glow", "sharp"], n=2, seed=4, tiles=True)
+            with open(os.path.join(d, "preview", "style-tiles.html"), encoding="utf-8") as f:
+                self.assertIn("(new)", f.read())
+            self.assertNotIn("customStyles\": {\"x-", json.dumps(e.read_json(os.path.join(d, "state.json"))))  # shown, not saved
+            with self.assertRaises(SystemExit) as cm:
+                quiet(e.cmd_set, d, "Q-dir-01", "x-not-saved", "a typo or an unsaved direction")
+            self.assertIn("not saved yet", str(cm.exception))
+
+    def test_every_style_and_some_experiments_keep_the_floors(self):
+        cands = e.explore_styles(["glow", "pastel"], n=3, seed=7) + e.explore_styles([], n=3, seed=11, wild=True)
+        for c in cands:
+            s = u5_state()
+            s["customStyles"] = {c["id"]: {k: c[k] for k in ("name", "plain", "kind", "ui_fit", "traits")}}
+            for pth, x in e.answer_effects("Q-dir-01", c["id"], s).items():
+                e._store(s, pth, x, "chosen", "t", False)
+            files, _m, _c = e.generate_system(s)
+            rep = e.Report()
+            e.validate_files(files, s, rep)
+            self.assertEqual([i["message"] for i in rep.items if i["severity"] == "error"], [], c["name"])
+        files, meta, _c = e.generate_system(styled(None, texture="halftone"))
+        self.assertIn(".ds-halftone::before", e.export_css(files, meta, "ds"))
+        self.assertEqual(e.state_hash(e.default_state("A")), e.state_hash({k: v for k, v in e.default_state("A").items()
+                                                                           if k not in ("style", "customStyles")}))
+
+
+class TasteCard(unittest.TestCase):
+    """The taste card (references/taste.md): five lines at the top of DESIGN.md's Overview. The picture and the Never list
+    are only the person's; color, shape and motion repeat their sections' sentences; DESIGN.md keeps its 17 headings."""
+
+    def _sketch(self, t, **kw):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Fieldnote", None, "regular", "web", "calm,minimal", **kw)
+        return d, open(os.path.join(t, "DESIGN.md"), encoding="utf-8").read()
+
+    @staticmethod
+    def _overview(md):
+        return md.split("## Overview", 1)[1].split("\n## ", 1)[0]
+
+    def test_brief_and_never_are_the_persons(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, md = self._sketch(t, brief="a quiet library at night")
+            quiet(e.cmd_set, d, "taste.never", ["gradients", "emoji in buttons"], "their words")
+            quiet(e.cmd_design_md, d)
+            md = open(os.path.join(t, "DESIGN.md"), encoding="utf-8").read()
+            ov = self._overview(md)
+            self.assertGreater(ov.index("**Taste card.**"), ov.index("</details>"))  # shown, not folded; the three-voice opening stays
+            self.assertIn('| In your words | "a quiet library at night" | your words |', ov)
+            self.assertIn("| Never | gradients, emoji in buttons (your words) |", ov)
+            dos = md.split("## Do's and Don'ts", 1)[1].split("\n## ", 1)[0]
+            self.assertIn("- gradients (your words)", dos)
+            self.assertIn("never add anything on its Never list without asking", md)  # For Agents
+
+    def test_nothing_is_invented(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, md = self._sketch(t)
+            ov = self._overview(md)
+            self.assertIn("| In your words | Not given yet.", ov)
+            self.assertIn("| Never | Nothing yet.", ov)
+            self.assertNotIn("**Never** (the person's taste", md)                    # no empty block in Do's and Don'ts
+            self.assertIn("about 15% of a screen at most (a rule of thumb, DC-L15-03)", ov)   # sourced, not 60-30-10
+            self.assertNotIn("60-30-10", ov)
+
+    def test_a_picked_brief_is_labeled(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, md = self._sketch(t, brief="a field notebook", delegated="brief")
+            self.assertIn('"a field notebook" | picked for you; say it in your own words to replace it |', md)
+        with tempfile.TemporaryDirectory() as t:
+            with self.assertRaises(SystemExit):
+                self._sketch(t, brief="x" * 161)                                    # one short line, checked before writing
+            self.assertFalse(os.path.exists(os.path.join(t, "opendesigner", "state.json")))
+
+    def test_never_list_names_each_source(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, _md = self._sketch(t)
+            quiet(e.cmd_set, d, "taste.never", ["glass"], "their words")
+            index = {"redLines": [{"dial": "depth", "side": "high", "value": 85, "limit": 70}], "genericAllergy": 0.7}
+            items = e.taste_nevers(d, e.load_state(d), index)
+            self.assertEqual(items[0], ("glass", "your words"))
+            self.assertIn(("too deep", "screens you rated 'I hate it'"), items)
+            self.assertIn(("safe, middle-of-the-road defaults", "your taste poll ratings"), items)
+            self.assertEqual(e.never_words(items[:2]), "glass (your words); too deep (screens you rated 'I hate it')")
+
+    def test_card_agrees_with_its_sections_and_headings_stay(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, md = self._sketch(t)
+            ov = self._overview(md)
+            shapes = re.search(r"^## Shapes\n(?:.*\n)*?\*\*(Buttons and fields[^*]+)\*\*", md, re.M).group(1)
+            motion = re.search(r"^## Motion\n(?:.*\n)*?\*\*(Most movements take \d+ms\.)\*\*", md, re.M).group(1)
+            card = ov.split("**Taste card.**", 1)[1]
+            self.assertIn(f"| Shape | {shapes}", card)
+            self.assertIn(motion, card.split("| Motion |", 1)[1].split("\n", 1)[0])
+            heads = re.findall(r"^## (.+)$", md, re.M)
+            self.assertEqual(heads, [h for h in e.DESIGN_SECTIONS if h in heads])   # the contract's headings, in order
+            self.assertEqual(set(heads) - set(e.DESIGN_SECTIONS), set())           # the card adds no heading
+            html = open(os.path.join(d, "overview.html"), encoding="utf-8").read()
+            self.assertIn("<h3>Taste card</h3>", html)
+            self.assertIn("Not given yet.", html)
+
+
+class VersionStamps(unittest.TestCase):
+    """OWNER-FEEDBACK row 24: each system records the OpenDesigner release that made, saved and built it, and the engine
+    says when the system is older or newer than this copy. It never checks online."""
+    V = e.OPENDESIGNER_VERSION
+
+    def _system(self, t, build=True):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_init, d, name="Stamps")
+        if build:
+            quiet(e.cmd_build, d)
+        return d
+
+    def _restamp(self, d, od):
+        """Write a stamp the way an older or newer copy would have, bypassing dump_json (which stamps this copy)."""
+        sp = os.path.join(d, "state.json")
+        with open(sp, encoding="utf-8") as f:
+            st = json.load(f)
+        if od is None:
+            st.pop("opendesigner", None)
+        else:
+            st["opendesigner"] = od
+        with open(sp, "w", encoding="utf-8") as f:
+            json.dump(st, f)
+
+    def _stamp(self, d):
+        with open(os.path.join(d, "state.json"), encoding="utf-8") as f:
+            return json.load(f).get("opendesigner")
+
+    def test_a_new_state_gets_the_stamp(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._system(t, build=False)
+            self.assertEqual(self._stamp(d), {"version": self.V, "created": self.V})   # never built yet
+            self.assertEqual(e.version_status(e.load_state(d)), ("current", self.V))
+            quiet(e.cmd_build, d)
+            self.assertEqual(self._stamp(d), {"version": self.V, "created": self.V, "built": self.V})
+            self.assertNotIn("opendesigner", e.merge_defaults({"name": "Old"}))         # never filled in for an old state
+            with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+                md = f.read()
+            self.assertEqual(len(re.findall(rf"^> Generated from .+\. Made with OpenDesigner {re.escape(self.V)}\. ", md, re.M)), 1)
+            code, out = run_cli("version", "--dir", d)
+            self.assertEqual(code, 0)
+            self.assertIn(f"OpenDesigner {self.V}. This system is up to date with it.", out)
+            self.assertIn("never checks online", out)
+
+    def test_an_older_stamp_prints_the_notice_and_build_updates_it(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._system(t)
+            self._restamp(d, {"version": "0.0.9", "created": "0.0.5", "built": "0.0.9"})
+            notice = (f"This system was last built with OpenDesigner 0.0.9; you have {self.V}. Run `engine.py build` to bring the "
+                      f"files up to date. What changed: CHANGELOG.md ({e.CHANGELOG_URL}).")
+            code, out = run_cli("validate", "--dir", d)
+            self.assertEqual(code, 0)
+            self.assertEqual(out.count(notice), 1)                       # once per command, not once per read of the state
+            code, out = run_cli("validate", "--json", "--dir", d)
+            self.assertNotIn("OpenDesigner 0.0.9", out)
+            json.loads(out)                                              # machine output stays plain JSON
+            code, out = run_cli("build", "--dir", d)
+            self.assertEqual(code, 0)
+            self.assertNotIn("Run `engine.py build`", out)               # build does not tell the person to run build
+            self.assertIn(f"This system was last built with OpenDesigner 0.0.9; this build brought its files up to OpenDesigner "
+                          f"{self.V}. What changed: CHANGELOG.md ({e.CHANGELOG_URL}).", out)
+            self.assertEqual(self._stamp(d), {"version": self.V, "created": "0.0.5", "built": self.V})
+            self.assertNotIn("CHANGELOG.md", run_cli("validate", "--dir", d)[1])   # up to date: nothing more to say
+
+    def test_a_state_without_a_stamp_works_and_counts_as_old(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._system(t)
+            self._restamp(d, None)
+            self.assertEqual(e.version_status(e.load_state(d)), ("unstamped", None))
+            code, out = run_cli("set", "dials.roundness", "60", "--why", "rounder", "--set-by", "chosen", "--quote", "rounder please", "--dir", d)
+            self.assertEqual(code, 0)
+            self.assertIn(f"This system was made before OpenDesigner recorded its version; you have {self.V}. Run `engine.py build`", out)
+            self.assertEqual(e.load_state(d)["dials"]["roundness"]["value"], 60)
+            self.assertEqual(self._stamp(d), {"version": self.V, "created": None, "built": None})
+            self.assertEqual(e.version_status(e.load_state(d))[0], "unstamped")      # saving alone does not rebuild the files
+            out = run_cli("build", "--dir", d)[1]
+            self.assertIn("made before OpenDesigner recorded its version; this build brought its files up to", out)
+            self.assertEqual(self._stamp(d), {"version": self.V, "created": None, "built": self.V})
+            self.assertEqual(e.version_status(e.load_state(d))[0], "current")
+
+    def test_a_newer_state_prints_the_other_notice(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._system(t)
+            self._restamp(d, {"version": "99.0.0", "created": self.V, "built": "99.0.0"})
+            self.assertEqual(e.version_status(e.load_state(d)), ("newer", "99.0.0"))
+            for cmd in (("validate",), ("version",)):
+                out = run_cli(*cmd, "--dir", d)[1]
+                self.assertIn(f"This system was last saved with OpenDesigner 99.0.0, which is newer than this copy ({self.V}). "
+                              "Update OpenDesigner before you change it", out)
+                self.assertNotIn("Run `engine.py build`", out)
+
+    def test_versions_compare_as_numbers(self):
+        self.assertGreater(e.version_key("0.10.0"), e.version_key("0.9.0"))
+        self.assertGreater(e.version_key("1.0.0"), e.version_key("0.99.99"))
+        self.assertLess(e.version_key("0.2.0-beta.1"), e.version_key("0.2.0"))
+        self.assertEqual(e.version_key("v0.1.0"), e.version_key("0.1.0"))
+        for bad in (None, "", "0.1", "latest"):
+            self.assertIsNone(e.version_key(bad))
+        st = {"opendesigner": {"version": "0.9.0", "created": "0.9.0", "built": "0.9.0"}}
+        from unittest import mock
+        with mock.patch.object(e, "OPENDESIGNER_VERSION", "0.10.0"):
+            self.assertEqual(e.version_status(st), ("built", "0.9.0"))   # as strings, "0.9.0" would look newer
+        with mock.patch.object(e, "OPENDESIGNER_VERSION", "0.9.1"):
+            self.assertEqual(e.version_status(st), ("built", "0.9.0"))
+        with mock.patch.object(e, "OPENDESIGNER_VERSION", "0.8.10"):
+            self.assertEqual(e.version_status(st), ("newer", "0.9.0"))
+
+    def test_engine_version_matches_the_manifests(self):
+        for manifest in ("plugin.json", os.path.join(".claude-plugin", "plugin.json")):
+            with open(os.path.join(REPO, manifest), encoding="utf-8") as f:
+                self.assertEqual(json.load(f)["version"], self.V, manifest)
+
+    def test_an_older_copy_never_hides_a_newer_system(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._system(t, build=False)
+            self._restamp(d, {"version": "0.10.0", "created": "0.10.0"})  # made by a newer release, never built
+            quiet(e.main, ["--dir", d, "set", "dials.roundness", "50", "--set-by", "assumed", "--no-doc"])  # this older copy writes the state
+            self.assertEqual(self._stamp(d)["version"], "0.10.0")
+            with open(os.path.join(d, "state.json"), encoding="utf-8") as f:
+                self.assertEqual(e.version_status(json.load(f))[0], "newer")
+
+    def test_an_agent_note_is_not_a_design_decision(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self._system(t, build=False)
+            quiet(e.main, ["--dir", d, "set", "profile.seen.recommend", "true"])
+            with open(os.path.join(d, "state.json"), encoding="utf-8") as f:
+                self.assertIs(json.load(f)["profile"]["seen"]["recommend"], True)
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                self.assertNotIn("profile.seen", f.read())
+
+    def test_pre_releases_compare_by_number(self):
+        self.assertGreater(e.version_key("0.2.0-beta.10"), e.version_key("0.2.0-beta.2"))
+        self.assertGreater(e.version_key("0.2.0"), e.version_key("0.2.0-rc.1"))
+        self.assertGreater(e.version_key("0.2.0-rc.1"), e.version_key("0.2.0-beta.9"))
+
+
+
+def write_tree(root, files):
+    """Write {relative path: text or dict (as JSON)} under root, making folders as needed."""
+    for rel, body in files.items():
+        fp = os.path.join(root, rel)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
+        with open(fp, "w", encoding="utf-8") as f:
+            f.write(json.dumps(body) if isinstance(body, dict) else body)
+
+
+def findings(got):
+    return {f["path"]: f["value"] for f in got["findings"]}
+
+
+NEXT_APP = {
+    "package.json": {"name": "budget-buddy", "version": "0.1.0",
+                     "dependencies": {"next": "16", "react": "19", "react-dom": "19", "next-themes": "0.4"}},
+    "README.md": "# Budget Buddy\n\n![build](https://img.shields.io/badge/build-passing-green)\n\n"
+                 "Budget Buddy helps freelancers send invoices and get paid on time. It runs in the browser.\n\n## Setup\n\nnpm i\n",
+    "app/layout.tsx": 'import { Inter, Roboto_Mono } from "next/font/google";\nexport const metadata = { title: "Create Next App" };\n',
+    "app/globals.css": ":root { --primary: #2563eb; --primary-foreground: #ffffff; }\n.btn-primary { background: #2563eb; color: #fff; }\n"
+                       "a { color: #2563eb; }\nbody { color: #111827; background: #f9fafb; }\n",
+    "vercel.json": {"framework": "nextjs"},
+}
+
+
+class DetectProject(unittest.TestCase):
+    """Look before you ask (owner direction 2026-11-02): the repo answers what it can, each answer recorded as assumed."""
+
+    def test_a_next_app_close_to_launch(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, NEXT_APP)
+            before = sorted(os.listdir(t))
+            got = findings(e.detect_project(t))
+            self.assertEqual(sorted(os.listdir(t)), before)                       # read-only
+            self.assertEqual(got["name"], "Budget Buddy")                         # the README heading, not the package slug
+            self.assertEqual(got["context.product"], "Budget Buddy helps freelancers send invoices and get paid on time.")
+            self.assertEqual(got["answers.Q-plat-01"], ["web"])
+            self.assertEqual(got["raw.brandColor"], "#2563eb")
+            self.assertEqual(got["raw.textFace"], "Inter")                        # Roboto Mono is the code font
+            self.assertEqual(got["answers.Q-theme-01"], "light-dark-toggle")      # next-themes
+            self.assertEqual(got["answers.Q-scope-07"], "near-launch")            # code plus vercel.json
+
+    def test_sketch_records_readings_as_assumed_and_the_persons_answers_win(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, NEXT_APP)
+            d = os.path.join(t, "opendesigner")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_sketch(d, None, None, "regular", "ios", "calm")
+            state = std_read(d)
+            log = decision_text(d)
+            self.assertEqual(state["name"], "Budget Buddy")
+            self.assertEqual(state["answers"]["Q-plat-01"]["value"], ["ios"])     # what they said beats what the files say
+            self.assertEqual(state["answers"]["Q-plat-01"]["set_by"], "chosen")
+            self.assertEqual(state["raw"]["brandColor"], "#2563eb")
+            self.assertEqual(state["raw"]["textFace"], "Inter")
+            self.assertEqual(state["answers"]["Q-scope-07"], {"value": "near-launch", "set_by": "assumed",
+                                                              "decision": state["answers"]["Q-scope-07"]["decision"],
+                                                              "via": "repo", "locked": False})
+            self.assertEqual(state["answers"]["Q-theme-01"]["via"], "repo")
+            self.assertRegex(log, r'## D-\d+ · raw\.brandColor = "#2563eb"\n- set_by: assumed .*\n- reason: read from the code: '
+                                  r"the colour the CSS uses most on .*; say if that's wrong")
+            self.assertRegex(log, r"## D-\d+ · name = \"Budget Buddy\"\n- set_by: assumed .*\n- reason: read from the first heading of README.md")
+            self.assertNotIn("Q-plat-01 = [\"web\"]", log)                       # never recorded over their answer
+            text = out.getvalue()
+            self.assertIn("Read from your repo (recorded as assumed; say if any is wrong):", text)
+            self.assertIn("  brand colour: #2563EB", text)
+            self.assertIn("Phase: close to launch. What comes first: an audit of what exists", text)
+            zoom = e.zoom_levels(d, e.merge_defaults(state))
+            self.assertEqual(zoom["modes"]["level"], "sketch")                    # a reading does not zoom an area in
+            with open(os.path.join(t, "PRODUCT.md"), encoding="utf-8") as f:
+                product = f.read()
+            self.assertIn("## Phase\n\n**Close to launch** (read from the repo: code and deploy settings (vercel.json)", product)
+            self.assertIn("*(assumed, not confirmed yet)*\n\nWhat comes first in this phase: an audit of what exists", product)
+            # a second sketch keeps every reading and adds no decision for them
+            n = len(e._decision_entries(d))
+            quiet(e.cmd_sketch, d, None, None, None, None, None, quiet=True)
+            self.assertEqual(len(e._decision_entries(d)), n)
+
+    def test_init_prints_the_readings_and_detect_writes_nothing(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, NEXT_APP)
+            d = os.path.join(t, "opendesigner")
+            _r, out = std_run(e.cmd_detect, d)
+            self.assertFalse(os.path.exists(d))
+            self.assertIn("  where it runs: web (next)", out)
+            self.assertIn("  phase: close to launch (vercel.json)", out)
+            self.assertIn('README says: "Budget Buddy helps freelancers', out)
+            _r, out = std_run(e.cmd_init, d)
+            self.assertIn("read from your repo (recorded as assumed; say if any is wrong):", out)
+            self.assertIn("    name: Budget Buddy (the first heading of README.md)", out)
+            self.assertIn("    code stack: react (package.json)", out)
+            _r, out = std_run(e.cmd_detect, d)
+            self.assertIn("  font: Inter (next/font in app/layout.tsx)  [already recorded]", out)
+
+    def test_platforms_from_each_kind_of_project(self):
+        cases = [
+            ({"package.json": {"name": "trail-mix", "dependencies": {"expo": "54", "react-native": "0.81", "react-dom": "19",
+                                                                     "react-native-web": "0.21"}},
+              "app.json": {"expo": {"name": "Trail Mix", "version": "1.0.0", "userInterfaceStyle": "automatic"}}},
+             ["ios", "android"], "building"),
+            ({"package.json": {"name": "notes-desk", "dependencies": {"electron": "38", "react-dom": "19"}}}, ["desktop"], "building"),
+            ({"pubspec.yaml": "name: my_app\ndescription: \"A new Flutter project.\"\nversion: 1.0.0+1\n",
+              "ios/Runner/Info.plist": "<plist/>", "android/app/build.gradle": "", "lib/main.dart": "void main() {}"},
+             ["ios", "android"], "building"),
+            ({"index.html": "<!doctype html><title>Robotics Club</title><p>Hi</p>"}, ["web"], "building"),
+        ]
+        for files, plats, phase in cases:
+            with self.subTest(plats=plats, files=sorted(files)):
+                with tempfile.TemporaryDirectory() as t:
+                    write_tree(t, files)
+                    got = e.detect_project(t)
+                    self.assertEqual(findings(got)["answers.Q-plat-01"], plats)
+                    self.assertEqual(findings(got)["answers.Q-scope-07"], phase)
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, cases[0][0])
+            got = e.detect_project(t)
+            self.assertEqual(findings(got)["name"], "Trail Mix")
+            self.assertEqual(findings(got)["answers.Q-theme-01"], "system-light-dark")
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, cases[2][0])
+            got = e.detect_project(t)
+            self.assertNotIn("name", findings(got))                               # my_app is a starter's name
+            self.assertNotIn("context.product", findings(got))                    # and "A new Flutter project." its description
+            self.assertTrue(any("1.0.0+1 in pubspec.yaml is the starter's default" in n for n in got["notes"]))
+
+    def test_the_phase_from_notes_code_deploy_settings_and_releases(self):
+        cases = [({"README.md": "# Plant Pal\n\nAn app idea: remind people to water their plants, with photos.\n",
+                   "notes/ideas.txt": "screens"}, "idea"),
+                 ({"src/app.py": "print(1)"}, "building"),
+                 ({"src/app.py": "print(1)", ".github/workflows/ship.yml": "jobs:\n  deploy:\n    runs-on: ubuntu-latest\n"}, "near-launch"),
+                 ({"package.json": {"name": "acme", "version": "2.3.0"}, "Dockerfile": "FROM node"}, "live"),
+                 ({"index.html": "<p>x</p>", "CHANGELOG.md": "# Changelog\n\n## [Unreleased]\n\n## [1.2.0] - 2026-01-01\n- first\n"}, "live"),
+                 ({"index.html": "<p>x</p>", "CHANGELOG.md": "# Changelog\n\n## [Unreleased]: planned as 0.1.0\n"}, "building")]
+        for files, phase in cases:
+            with self.subTest(phase=phase, files=sorted(files)):
+                with tempfile.TemporaryDirectory() as t:
+                    write_tree(t, files)
+                    self.assertEqual(findings(e.detect_project(t)).get("answers.Q-scope-07"), phase)
+        with tempfile.TemporaryDirectory() as t:                                  # their own product brief is a note
+            write_tree(t, {"PRODUCT.md": "# Plant Pal\n\nA brief: remind people to water their plants.\n"})
+            self.assertEqual(findings(e.detect_project(t))["answers.Q-scope-07"], "idea")
+        with tempfile.TemporaryDirectory() as t:                                  # an icon font is not the text font
+            write_tree(t, {"a.css": "@font-face { font-family: 'icomoon'; }\n@font-face { font-family: 'Font Awesome 6 Free'; }\n"
+                                    ".i { font-family: 'icomoon'; } .j { font-family: 'icomoon'; }"})
+            self.assertNotIn("raw.textFace", findings(e.detect_project(t)))
+        for files in ({}, {"std.json": {"standards": []}}):                       # nothing to read: the phase is asked
+            with tempfile.TemporaryDirectory() as t:
+                write_tree(t, files)
+                got = e.detect_project(t)
+                self.assertNotIn("answers.Q-scope-07", findings(got))
+                self.assertIn("the folder has no code and no notes, so the phase is asked", got["notes"])
+
+    def test_starters_say_nothing_and_weak_signals_are_notes(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, {"package.json": {"name": "vite-project", "version": "0.0.0", "dependencies": {"react": "19", "react-dom": "19"},
+                                            "devDependencies": {"vite": "7"}},
+                           "README.md": "# React + TypeScript + Vite\n\nThis template provides a minimal setup to get React working in Vite.\n",
+                           "index.html": "<title>Vite + React + TS</title>",
+                           "src/index.css": ".dark { color: white; }\n.hero { background: #e11d48; }\n"})
+            got = e.detect_project(t)
+            self.assertNotIn("name", findings(got))
+            self.assertNotIn("context.product", findings(got))
+            self.assertNotIn("answers.Q-theme-01", findings(got))                 # a lone .dark class switches nothing on
+            self.assertNotIn("raw.brandColor", findings(got))                     # a colour on nothing clickable
+            notes = " ".join(got["notes"])
+            self.assertIn("a .dark class in your CSS but nothing that switches it on", notes)
+            self.assertIn("a possible brand colour #E11D48", notes)
+
+    def test_opendesigner_own_files_are_never_evidence(self):
+        with tempfile.TemporaryDirectory() as t:                                  # the state folder is the project root (--dir .)
+            quiet(e.cmd_sketch, t, "Club", "#167874", "large", "web", "fun", quiet=True)
+            quiet(e.cmd_build, t)
+            self.assertTrue(os.path.exists(os.path.join(t, "build")))
+            self.assertEqual(e.detect_project(t, t)["findings"], [])
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, {"design/x.css": ".btn { background: #2563eb; }"})
+            self.assertEqual(e.project_files(t, os.path.join(t, "design")), ([], [], False))
+
+    def test_a_big_folder_is_capped(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, {f"f{i}.txt": "x" for i in range(6)})
+            old = e.DETECT_MAX_FILES
+            try:
+                e.DETECT_MAX_FILES = 3
+                got = e.detect_project(t)
+            finally:
+                e.DETECT_MAX_FILES = old
+            self.assertTrue(got["capped"])
+            self.assertIn("the folder has more than 3 files, so only the first 3 were read", got["notes"])
+
+    def test_product_md_purpose_goals_and_market(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Club", "#167874", "large", "web", "fun")
+            with open(os.path.join(t, "PRODUCT.md"), encoding="utf-8") as f:
+                product = f.read()
+            for head in ("## Purpose and goals", "## Phase", "## Market"):
+                self.assertIn(head, product)
+            self.assertIn("- **Mission** (the change it exists to make): Not enough information.", product)
+            self.assertIn("- **Goals**: Not enough information.", product)
+            self.assertIn("- **Analogous product** (a product from another field that solves the same kind of problem): "
+                          "Not enough information.", product)
+            self.assertIn("## Phase\n\nNot enough information (Q-scope-07)", product)
+            self.assertLess(product.index("## Product"), product.index("## Purpose and goals"))
+            quiet(e.cmd_set, d, "context.purpose", "get more students to join the club", "from their words", set_by="assumed")
+            quiet(e.cmd_set, d, "context.goals", ["more sign-ups before the autumn fair", "a page teachers can share"], "their words")
+            quiet(e.cmd_set, d, "context.market.competitors", ["the school's own club list", "a Google Form"], "research", set_by="assumed")
+            quiet(e.cmd_set, d, "answers.Q-scope-07", "idea", "they said it is an idea")
+            quiet(e.cmd_design_md, d)
+            with open(os.path.join(t, "PRODUCT.md"), encoding="utf-8") as f:
+                product = f.read()
+            self.assertIn("- **Purpose** (what the person is trying to do with it): get more students to join the club. "
+                          "*(assumed, not confirmed yet)*", product)
+            self.assertIn("- **Goals**, most important first:\n  1. more sign-ups before the autumn fair\n  2. a page teachers can share", product)
+            self.assertIn("- **Competitors** (what people would use instead): the school's own club list; a Google Form. *(assumed", product)
+            self.assertIn("**An idea, no code yet** (they said it is an idea).\n\nWhat comes first in this phase: the alignment", product)
+            self.assertNotIn("Q-scope-07", product.split("## Team and Governance", 1)[1])
+            quiet(e.cmd_set, d, "context.purpose", "get more students to join the club", "they confirmed it", set_by="confirmed")
+            quiet(e.cmd_design_md, d)
+            with open(os.path.join(t, "PRODUCT.md"), encoding="utf-8") as f:
+                self.assertIn("get more students to join the club.\n", f.read())     # confirmed: no longer marked assumed
+
+    def test_zoom_md_names_every_phase_the_engine_knows(self):
+        with open(os.path.join(e.REFERENCES, "zoom.md"), encoding="utf-8") as f:
+            zoom = f.read()
+        table = zoom.split("## The project's phase", 1)[1].split("\n## ", 1)[0]
+        for ph in e.PHASES:
+            self.assertIn(f"(`{ph}`)", table)
+        q = e.questions()["Q-scope-07"]
+        self.assertEqual([o["v"] for o in q["options"]], e.PHASES)
+        self.assertEqual(q["zoom"], 0)
+        with open(os.path.join(e.REFERENCES, "rules.md"), encoding="utf-8") as f:
+            self.assertNotIn("Always ask; never infer", f.read())
+
+
+class LandingPageRules(unittest.TestCase):
+    """A private B2B landing page (2026-11-05) ended up using none of the engine's tokens: capitals tracked -0.03em, a 1.2
+    scale with no hero, 2px then pill buttons, six text greys. These hold the rules that came out of it."""
+
+    def build(self, t, feel="serious,minimal,authoritative", surfaces="landing page:persuade", audience="regular"):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Corvala", "#B8321F", audience, "web", feel, surfaces=surfaces, delegated="all", quiet=True)
+        return d, self.system(d)
+
+    def system(self, d):
+        files, meta, _ = e.generate_system(e.load_state(d))
+        return e.resolve_all(files, {}), files, meta
+
+    def test_serious_landing_page_gets_room_a_hero_and_subtle_buttons(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, (flat, files, meta) = self.build(t)
+            params = {k: v["value"] for k, v in meta["params"].items()}
+            self.assertEqual(meta["profile"]["id"], "persuade")
+            self.assertGreaterEqual(params["type.ratio"], 1.25)
+            self.assertEqual((params["emphasis.heroMoments"], params["space.densityMode"]), ("significant-moments", "spacious"))
+            hero, sec = flat["font.size.display-lg"], flat["font.size.display-md"]
+            self.assertGreaterEqual(hero["resolved"]["value"], 96)
+            self.assertLessEqual(sec["resolved"]["value"], 48)
+            css = e.export_css(files, meta, "ds")
+            self.assertRegex(css, r"--ds-font-size-display-lg: clamp\(2\.5rem, [\d.]+rem \+ [\d.]+vw, 6rem\);")
+            self.assertEqual(flat["text.display.lg"]["$value"]["fontSize"], "{font.size.display-lg}")
+            self.assertTrue(all(v["resolved"]["value"] == int(v["resolved"]["value"]) for k, v in flat.items() if k.startswith("font.size.")))
+            for k in ("display-md", "display-lg"):  # 200% text zoom still grows fluid text (WCAG 1.4.4)
+                fl = flat[f"font.size.{k}"]["$extensions"]["opendesigner"]["fluid"]
+                self.assertLess(fl["maxPx"], 2.5 * fl["minPx"], k)
+            self.assertEqual((meta["shape"]["control"], meta["shape"]["ctaShape"]), (6, "subtle"))  # feel words gave roundness 0
+            self.assertTrue(48 <= flat["size.control.cta"]["resolved"]["value"] <= 56)
+            self.assertEqual(flat["layout.container.max"]["resolved"]["value"], 1280)
+            self.assertIn("--ds-layout-measure-prose: 65ch;", css)
+            lim = meta["limits"]
+            self.assertEqual((lim["sizes"]["max"], lim["weights"]["max"], lim["families"]["max"], lim["containers"]["max"]), (8, 3, 2, 1))
+            self.assertLessEqual(len(lim["sizes"]["scale"]) + len(lim["sizes"]["fluid"]), 8)
+            self.assertEqual(lim["cta"]["case"], "sentence")
+            self.assertFalse(any(i["severity"] in ("error", "warn") for i in e.validate_generated(files, e.load_state(_d), e.Report()).items))
+
+    def test_capitals_never_take_negative_tracking(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, (flat, files, meta) = self.build(t)
+            caps = {k: v for k, v in flat.items() if k.startswith("text.") and (v.get("$extensions") or {}).get("opendesigner", {}).get("textTransform")}
+            self.assertTrue(caps)
+            for k, v in caps.items():
+                self.assertTrue(0.05 <= v["$extensions"]["opendesigner"]["letterSpacingEm"] <= 0.08, k)
+            self.assertTrue(0 <= flat["font.tracking.caps-display"]["resolved"] <= 0.02)
+            css = e.export_css(files, meta, "ds")
+            self.assertIn("--ds-font-tracking-caps-label: 0.06em;", css)
+            self.assertIn("the font shorthand alone drops tracking", css)
+            self.assertIn("--tracking-caps-label: var(--ds-font-tracking-caps-label);", e.export_tailwind(files, meta, "ds"))
+            state = e.load_state(d)
+            state["overrides"]["font.tracking.caps-label"] = -0.03
+            files2, _m, _c = e.generate_system(state)
+            rep = e.validate_generated(files2, state, e.Report())
+            self.assertTrue(any("negative tracking" in i["message"] for i in rep.items if i["severity"] == "error"))
+
+    def test_text_keeps_three_greys(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, (flat, files, meta) = self.build(t)
+            self.assertEqual(files["semantic.color.light.tokens.json"]["color"]["text"]["tertiary"]["$value"], "{color.text.secondary}")
+            greys = {json.dumps(flat[f"color.text.{k}"]["resolved"], sort_keys=True) for k in ("primary", "secondary", "tertiary", "disabled")}
+            self.assertEqual(len(greys), 3)
+
+    def test_square_and_pill_are_choices(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "a")
+            quiet(e.cmd_sketch, d, "Bubbly", "#E0457B", "regular", "web", "playful,friendly,rich", quiet=True)
+            flat, _f, meta = self.system(d)
+            self.assertNotEqual(meta["shape"]["control"], "full")
+            self.assertLessEqual(flat["radius.control"]["resolved"]["value"], 12)
+            quiet(e.cmd_set, d, "Q-shape-01", "pill", "we want pills")
+            self.assertEqual(self.system(d)[2]["shape"]["ctaShape"], "pill")
+
+    def test_a_chosen_button_shape_holds_and_stated_values_stay_values(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, _s = self.build(t)
+            quiet(e.cmd_set, d, "Q-shape-01", "6px", "buttons 6px")
+            st = e.load_state(d)
+            self.assertEqual(st["overrides"]["radius.control"], 6)
+            self.assertTrue(e.is_locked(st, "answers.Q-shape-01") and e.is_locked(st, "overrides.radius.control"))
+            with self.assertRaises(SystemExit):
+                quiet(e.cmd_set, d, "Q-shape-01", "pill", "the agent's idea")
+            quiet(e.cmd_set, d, "dials.roundness", 97, "rounder")  # the dial moves cards; the button keeps its radius
+            self.assertEqual(self.system(d)[0]["radius.control"]["resolved"]["value"], 6)
+            quiet(e.cmd_lock, d, "answers.Q-shape-01", on=False)
+            self.assertFalse(e.is_locked(e.load_state(d), "overrides.radius.control"))
+            quiet(e.cmd_set, d, "Q-type-12", "400/500", "weights 400/500")
+            quiet(e.cmd_set, d, "Q-type-09", "major third", "a major third scale")
+            flat, _f, meta = self.system(d)
+            self.assertEqual(sorted(set(meta["type"]["weights"].values())), [400, 500])
+            self.assertEqual(meta["params"]["type.ratio"]["value"], 1.25)
+
+    def test_product_screens_keep_one_scale(self):
+        with tempfile.TemporaryDirectory() as t:
+            _d, (flat, _f, meta) = self.build(t, feel="precise,calm", surfaces="app:operate", audience="dense")
+            self.assertNotIn("font.size.display-lg", flat)
+            self.assertNotIn("size.control.cta", flat)
+            self.assertEqual(meta["profile"]["id"], "work-tool")
+
+
+class ProtocolRulesAndTokenUse(unittest.TestCase):
+    """Owner review 2026-11-05 (a private B2B landing page): a protocol in every project, repeated notes kept as rules, and a
+    review that says when the code has left the tokens behind."""
+
+    def test_init_and_sketch_write_the_protocol_once(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="P")
+            fp = os.path.join(d, "PROTOCOL.md")
+            with open(fp, encoding="utf-8") as f:
+                text = f.read()
+            for step in ("1 Discover", "2 Research", "3 System", "4 Structure", "5 Build", "6 Verify"):
+                self.assertIn(step, text)
+            self.assertIn("engine.py review", text)
+            self.assertIn("references/audit.md", text)
+            self.assertNotIn("{{", text)
+            with open(fp, "a", encoding="utf-8") as f:
+                f.write("| 2026-11-05 | Deploy? | At each gate |\n")
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            with open(fp, encoding="utf-8") as f:
+                self.assertIn("Deploy?", f.read())  # kept: never overwritten
+            os.remove(fp)
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            self.assertTrue(os.path.exists(fp))  # a system made before the protocol gets it at the next sketch
+        with open(os.path.join(e.SKILL_ROOT, "assets", "output", "AGENTS-snippet.md"), encoding="utf-8") as f:
+            self.assertIn("opendesigner/PROTOCOL.md` is binding", f.read())
+
+    def test_a_note_said_twice_becomes_a_rule(self):
+        with tempfile.TemporaryDirectory() as t:
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(e.cmd_feedback(t, "Centre every heading", "note")["said"], 1)
+                self.assertEqual(e.cmd_feedback(t, "center the headings", "note")["said"], 2)
+                self.assertEqual(e.cmd_feedback(t, "No full pills on buttons", "note")["id"], "N-02")
+                self.assertEqual(e.cmd_feedback(t, "keep the corners rounded, not pills", "note", same="N-02")["said"], 2)
+                self.assertEqual(e.cmd_feedback(t, "Centre all headings", "note")["said"], 3)
+            text = out.getvalue()
+            self.assertIn("Said twice: N-01 is now a rule", text)
+            self.assertEqual(text.count("draft a GitHub issue"), 1)  # offered once, at the third time, and only offered
+            self.assertNotIn("issues/new", text)
+            notes = e.read_notes(os.path.join(t, "RULES.md"))
+            self.assertEqual([(n["id"], n["said"]) for n in notes], [("N-01", 3), ("N-02", 2)])
+            self.assertFalse(os.path.exists(os.path.join(t, "feedback.md")))  # a note on the work is not OpenDesigner feedback
+            with self.assertRaises(SystemExit):
+                e.cmd_feedback(t, "x", "note", same="N-09")
+            with self.assertRaises(SystemExit):
+                e.cmd_feedback(t, "x", "gap", same="N-01")
+            q = lambda txt, **k: quiet(e.cmd_feedback, t, txt, "note", **k)
+            self.assertEqual(q("Use dark mode")["said"], 1)
+            self.assertEqual(q("Never use dark mode")["said"], 1)      # opposite notes never merge
+            self.assertEqual(q("Make headings bigger")["said"], 1)
+            self.assertEqual(q("Make headings smaller")["said"], 1)
+            self.assertEqual(q("centre every heading", same="new")["said"], 1)
+            self.assertEqual(e.read_notes(os.path.join(t, "RULES.md"))[0]["text"], "Centre every heading")  # first wording kept
+
+    def test_review_says_when_tokens_are_not_in_charge(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="R")
+            quiet(e.cmd_build, d)
+            os.makedirs(os.path.join(t, "site"))
+            css = os.path.join(t, "site", "a.css")
+            with open(css, "w") as f:
+                f.write(".h { color: #ff0000; padding: 12px; }\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d)
+            self.assertIn("Tokens are not in charge", out.getvalue())
+            with open(css, "a") as f:
+                f.write(".ok { color: var(--ds-color-text-primary); }\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            res = json.loads(out.getvalue())
+            self.assertEqual((res["tokenUses"], res["tokens"], res["systemBehind"]), (1, "losing", False))
+            with open(os.path.join(t, "site", "a.html"), "w") as f:
+                f.write('<a class="bg-action-primary text-fg-on-action rounded-control p-inset-md shadow-raised">Go</a>\n')
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            res = json.loads(out.getvalue())
+            self.assertEqual((res["tokenUses"], res["tokens"]), (6, "ok"))  # Tailwind theme classes are tokens at work
+
+    @unittest.skipUnless(__import__("shutil").which("git"), "needs git")
+    def test_review_says_when_the_system_is_behind_the_code(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="G")
+            quiet(e.cmd_build, d)
+            git = lambda *a: subprocess.run(["git", "-c", "user.email=t@t", "-c", "user.name=t", *a], cwd=t, capture_output=True, check=True)
+            git("init", "-q")
+            git("add", "-A")
+            git("commit", "-qm", "system")
+            os.makedirs(os.path.join(t, "site"))
+            for i in range(e.SYSTEM_AGE_COMMITS):
+                with open(os.path.join(t, "site", "a.css"), "a") as f:
+                    f.write(f".x{i} {{ color: var(--ds-color-text-primary); }}\n")
+                git("add", "-A")
+                git("commit", "-qm", f"page {i}")
+            with open(os.path.join(t, "notes.md"), "w") as f:
+                f.write("not code\n")
+            git("add", "-A")
+            git("commit", "-qm", "notes")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d)
+            self.assertIn(f"The system is behind the code: {e.SYSTEM_AGE_COMMITS} commits", out.getvalue())
+
+    def test_research_steps_pass_through_and_positioning_has_its_own_section(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            quiet(e.cmd_design_md, d)
+            with open(os.path.join(t, "PRODUCT.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("## Positioning\n\nNot enough information", text)
+            self.assertLess(text.index("## Market"), text.index("## Positioning"))
+            with self.assertRaisesRegex(SystemExit, "research/users.json"):     # research.py answers: no findings yet
+                quiet(e.main, ["research", "market", "--dir", d])
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(e.main(["research", "positioning", "show", "--dir", d]), 0)
+            self.assertIn("No positioning yet", out.getvalue())
+
+
+
+def chart_state(cp="categorical-8", brand=None, **raw):
+    st = e.default_state("Charts")
+    st["raw"]["chartPalette"] = cp
+    if brand:
+        st["raw"]["brandColor"] = brand
+    st["raw"].update(raw)
+    return st
+
+
+class ChartAndTableTokens(unittest.TestCase):
+    """Issue #23: chart tokens (brand, status, diverging, axis, gridline) and the table question (Q-pattern-07)."""
+
+    def hexes(self, files, mode):
+        fl = e.resolve_all(files, {"theme": mode})
+        return {p: t["resolved"]["hex"] for p, t in fl.items() if t["type"] == "color" and isinstance(t["resolved"], dict)}
+
+    def test_every_chart_palette_gets_brand_status_diverging_and_chrome(self):
+        for cp in ("brand-gray", "categorical-8", "categorical-14"):
+            for brand in (None, "#e11d48", "#facc15", "#16a34a"):
+                with self.subTest(cp=cp, brand=brand):
+                    files, meta, _ctx = e.generate_system(chart_state(cp, brand))
+                    for mode in meta["modes"]:
+                        hx = self.hexes(files, mode)
+                        page = hx["color.surface.base"]
+                        marks = ["color.chart.brand"] + [f"color.chart.diverging.{i}" for i in range(1, 8)] + \
+                                [f"color.chart.status.{x}" for x in ("success", "warning", "danger", "info")]
+                        for m in marks:
+                            self.assertGreaterEqual(e.contrast(hx[m], page), 3.0, f"{mode} {m} {hx[m]} on {page}")
+                        self.assertEqual(hx["color.chart.gridline"], hx["color.border.subtle"])
+                        self.assertEqual(hx["color.chart.axis"], hx["color.border.default"])
+                        self.assertEqual(hx["color.chart.label"], hx["color.text.secondary"])
+                        self.assertEqual(hx["color.chart.reference"], hx["color.chart.neutral"])
+                        L1, C1, H1 = e.hex_to_oklch(hx["color.chart.diverging.1"])
+                        L4, C4, _ = e.hex_to_oklch(hx["color.chart.diverging.4"])
+                        L7, C7, H7 = e.hex_to_oklch(hx["color.chart.diverging.7"])
+                        self.assertLess(C4, min(C1, C7))                               # the midpoint is the quietest
+                        self.assertGreater(min(abs(H1 - H7), 360 - abs(H1 - H7)), 120)  # two hues far apart
+                        if cp == "brand-gray":                                       # the brand series is a mark too
+                            self.assertEqual(hx["color.chart.categorical.1"], hx["color.chart.brand"])
+                    self.assertEqual(e.resolve_all(files, {})["opacity.chart.dimmed"]["resolved"], 0.3)
+                    rep = e.Report()
+                    e.validate_files(files, chart_state(cp, brand), rep)
+                    self.assertEqual([i["message"] for i in rep.items if "color.chart." in i["message"]], [])
+
+    def test_no_chart_palette_no_chart_tokens(self):
+        files, _m, _c = e.generate_system(chart_state("none"))
+        fl = e.resolve_all(files, {"theme": "light"})
+        self.assertFalse([p for p in fl if p.startswith(("color.chart.", "opacity.chart."))])
+
+    def test_chart_colors_reach_every_export(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Charts", "#2563eb", "dense", "web,ios,android", "calm", quiet=True)
+            quiet(e.cmd_set, d, "answers.Q-color-19", "categorical-6-8", "dashboards")
+            quiet(e.cmd_export, d, "all")
+            b = os.path.join(d, "build")
+            rd = lambda *p: open(os.path.join(b, *p), encoding="utf-8").read()
+            self.assertIn("--ds-color-chart-diverging-4:", rd("css", "tokens.css"))
+            self.assertIn("--ds-opacity-chart-dimmed:", rd("css", "tokens.css"))
+            self.assertIn("--color-chart-status-danger:", rd("tailwind", "theme.css"))
+            self.assertIn("chartDiverging4", rd("swift", "DesignTokens.swift"))
+            self.assertIn("chartGridline", rd("compose", "DesignTokens.kt"))
+            self.assertIn("chart-diverging-4", rd("paper", "tokens.json"))
+            figma = json.loads(rd("figma", "variables.json"))
+            chart = {v["name"]: v["scopes"] for c in figma["collections"] for v in c["variables"] if v["name"].startswith("color/chart/")}
+            self.assertEqual(chart["color/chart/label"], ["TEXT_FILL"])
+            self.assertEqual(chart["color/chart/brand"], ["SHAPE_FILL", "STROKE_COLOR"])
+
+    def test_light_sequential_steps_say_they_are_for_cells(self):
+        """Issue #81 (owner, 2026-11-09): the light end stays under 3:1, described as for touching cells, never a lone mark."""
+        for brand in (None, "#e11d48", "#facc15", "#16a34a", "#2f6f8f"):
+            with self.subTest(brand=brand):
+                files, meta, _ctx = e.generate_system(chart_state("categorical-8", brand))
+                for mode in meta["modes"]:
+                    fl = e.resolve_all(files, {"theme": mode})
+                    hx = self.hexes(files, mode)
+                    light = [i for i in range(1, 6) if e.contrast(hx[f"color.chart.sequential.{i}"], hx["color.surface.base"]) < 3.0 * e.MARGIN]
+                    self.assertEqual(e.light_sequential_resolved(fl), light)
+                    self.assertIn(1, light)                       # the light end is kept, not moved to darker steps
+                    for i in range(1, 6):
+                        desc = fl[f"color.chart.sequential.{i}"]["$description"]
+                        if i in light:
+                            self.assertIn("Under 3:1 against the page", desc)
+                            self.assertIn("heatmap", desc)
+                            self.assertIn("never for a line, bar or dot on its own (WCAG 1.4.11)", desc)
+                        else:
+                            self.assertEqual(desc, "At least 3:1 against the page: also for a line, bar or dot.")
+                    tree = json.loads(json.dumps(files[f"semantic.color.{mode}.tokens.json"]))
+                    group = tree["color"]["chart"]["$description"]
+                    self.assertIn("A mark that stands alone on the page (a line, a bar, a dot) is at least 3:1 against it", group)
+                    self.assertIn(f"sequential {e.step_span(light)} are under 3:1", group)
+                rep = e.Report()
+                e.validate_files(files, chart_state("categorical-8", brand), rep)   # a heatmap's light end is never an error
+                self.assertEqual([i for i in rep.items if "sequential" in i["message"]], [])
+        self.assertEqual((e.step_span([1]), e.step_span([1, 2, 3]), e.step_span([1, 3])), ("step 1", "steps 1-3", "steps 1 and 3"))
+
+    def test_design_md_states_the_chart_contrast_rule(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Heat", "#2f6f8f", "regular", "web", "calm", quiet=True)
+            quiet(e.cmd_set, d, "answers.Q-color-19", "categorical-6-8", "dashboards")
+            quiet(e.cmd_design_md, d)
+            with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("A mark that stands alone on the page (a line, a bar, a dot) is at least 3:1 against it (WCAG 1.4.11).", text)
+            self.assertRegex(text, r"The light end of `color\.chart\.sequential` \(steps? [0-9]")
+            self.assertIn("with a 1 px gap between cells that shows the surface behind, or the value in each cell", text)
+            self.assertNotIn("Every mark is at least 3:1", text)
+            self.assertRegex(text, r"\| `color\.chart\.sequential\.1` \| `#[0-9a-f]{6}` \| `#[0-9a-f]{6}` \| Under 3:1 against the page")
+
+    def test_review_warns_only_for_a_line_in_a_light_sequential_step(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Heat", "#2f6f8f", "regular", "web,ios,android", "calm", quiet=True)
+            quiet(e.cmd_set, d, "answers.Q-color-19", "categorical-6-8", "dashboards")
+            files, meta, _c = e.generate_system(e.load_state(d))
+            light = e.light_sequential_resolved(e.resolve_all(files, {"theme": "light"}))
+            dark_step = min(set(range(1, 6)) - set(light))
+            os.makedirs(os.path.join(t, "src"))
+            def w(name, text):
+                with open(os.path.join(t, "src", name), "w") as f:
+                    f.write(text)
+            w("chart.css", ".trend { stroke: var(--ds-color-chart-sequential-1); }\n"          # a line: warned
+                           ".cell { fill: var(--ds-color-chart-sequential-1); }\n"             # a heatmap cell: fine
+                           ".cell-2 { background: var(--ds-color-chart-sequential-2); }\n"
+                           f".trend-ok {{ stroke: var(--ds-color-chart-sequential-{dark_step}); }}\n"
+                           ".kept { stroke: var(--ds-color-chart-sequential-1); } /* od-ignore */\n")
+            w("Chart.tsx", 'export const L = () => <path stroke="var(--ds-color-chart-sequential-1)" d="M0 0" />;\n'
+                           'export const H = () => <rect className="fill-chart-sequential-1 stroke-chart-sequential-1" />;\n')
+            w("Chart.swift", "Path { p in p.move(to: .zero) }.stroke(DS.Colors.chartSequential1, lineWidth: 2)\n"
+                             "Rectangle().fill(DS.Colors.chartSequential1)\n")
+            w("Chart.kt", "drawLine(color = colors.chartSequential1, start = a, end = b)\ndrawRect(color = colors.chartSequential1)\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            res = json.loads(out.getvalue())
+            got = sorted((f_["file"].split(os.sep)[-1], f_["line"]) for f_ in res["findings"] if f_["kind"] == "chart")
+            self.assertEqual(got, [("Chart.kt", 1), ("Chart.swift", 1), ("Chart.tsx", 1), ("Chart.tsx", 2), ("chart.css", 1)])
+            self.assertTrue(all(f_["severity"] == "warning" and f_["rule"] == "WCAG 2.2 SC 1.4.11" for f_ in res["findings"] if f_["kind"] == "chart"))
+            self.assertEqual(res["tokens"], "ok")                 # a warning is not a hard-coded value
+            text = io.StringIO()
+            with contextlib.redirect_stdout(text):
+                e.cmd_review(d)
+            self.assertIn("5 chart lines use a light sequential step (a warning, WCAG 1.4.11):", text.getvalue())
+            self.assertIn(f"use color.chart.sequential.{dark_step} or a later step", text.getvalue())
+            self.assertNotIn("chart", text.getvalue().split("skip the tokens:")[-1].split("\n")[0] if "skip the tokens:" in text.getvalue() else "")
+
+    def test_the_table_question_sets_stripes_and_rules(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Ledger", "#167874", "dense", "web", "calm")
+            design = lambda: open(os.path.join(t, "DESIGN.md"), encoding="utf-8").read()
+            self.assertIn("**Tables** (defaults; Q-pattern-07 changes them):", design())
+            self.assertIn("- Rows: a 1px `color.border.subtle` line between rows", design())
+            files, _m, _c = e.generate_system(e.load_state(d))
+            self.assertNotIn("color.surface.row-alternate", e.resolve_all(files, {"theme": "light"}))
+            quiet(e.cmd_set, d, "answers.Q-pattern-07", ["zebra", "static-header", "numbers-right"], "dense finance tables")
+            st = e.load_state(d)
+            self.assertEqual((st["raw"]["tableRows"], st["raw"]["tableHeader"], st["raw"]["tableNumbers"]), ("zebra", "static", "right"))
+            files, meta, _c = e.generate_system(st)
+            for mode in meta["modes"]:
+                hx = self.hexes(files, mode)
+                self.assertNotEqual(hx["color.surface.row-alternate"], hx["color.surface.base"])
+                for fg in ("color.text.primary", "color.text.secondary"):
+                    self.assertGreaterEqual(e.contrast(hx[fg], hx["color.surface.row-alternate"]), 4.5)
+            quiet(e.cmd_design_md, d)
+            text = design()
+            self.assertIn("- Rows: every other row on `color.surface.row-alternate`", text)
+            self.assertIn("- Header: scrolls away with the rows", text)
+            self.assertIn("- Numbers: right-aligned in `text.numeric.*`", text)
+            self.assertNotIn("(defaults; Q-pattern-07 changes them)", text)
+            q = e.questions()["Q-pattern-07"]
+            self.assertEqual([o["v"] for o in q["options"]][:3], ["lines", "zebra", "space"])
+
+
+SITE = {
+    "package.json": {"name": "acme-site", "dependencies": {"next": "16", "react-dom": "19"}},
+    "README.md": "# Acme\n\nShipping software for freight teams.\n",
+    "app/layout.tsx": 'export default function L({ children }) { return <html lang="en"><body>{children}</body></html> }\n',
+    "app/pricing/page.tsx": "export default function P() { return null }\n",
+    "app/(marketing)/about/page.tsx": "export default function P() { return null }\n",
+    "app/industries/[slug]/page.tsx": "export default function P() { return null }\n",
+    "app/privacy/page.tsx": "export default function P() { return null }\n",
+    "app/api/leads/route.ts": "export async function GET() {}\n",
+    "messages/de.json": {}, "messages/en.json": {},
+    "i18n/api.ts": "export const x = 1\n",
+}
+
+
+class SiteBrief(unittest.TestCase):
+    """Issue 48: a site that persuades gets five owner questions at zoom 1 (goal, roles, proof, how it is found, page
+    families), drafted from the repo where it can be, and a PRODUCT.md section that says what is still missing."""
+
+    def sketch(self, t, surfaces):
+        d = os.path.join(t, "opendesigner")
+        with contextlib.redirect_stdout(io.StringIO()):
+            e.cmd_sketch(d, "Acme", None, "regular", "web", "calm", quiet=True, surfaces=surfaces)
+        return d
+
+    def product(self, d):
+        e.cmd_design_md(d, quiet=True)
+        with open(os.path.join(os.path.dirname(d), "PRODUCT.md"), encoding="utf-8") as f:
+            return f.read()
+
+    def test_questions_sit_at_zoom_1_apart_from_the_eight_screens(self):
+        qs = e.questions()
+        for i in range(1, 6):
+            q = qs[f"Q-site-0{i}"]
+            self.assertEqual((q["zoom"], q["area"], q["when"], q["class"]), (1, "overview", "persuade", "I"))
+        with open(os.path.join(e.REFERENCES, "pacing.json"), encoding="utf-8") as f:
+            pacing = json.load(f)
+        self.assertEqual(pacing["site_brief"]["questions"], [f"Q-site-0{i}" for i in range(1, 6)])
+        level1 = [q for a in pacing["areas"] for q in (a["levels"].get("1") or {}).get("questions", [])]
+        self.assertEqual(sorted(level1), sorted(pacing["zoom1"]))                # the eight screens everyone gets
+        self.assertEqual(e.ANSWER_RECORDS["Q-site-03"], "owner")
+
+    def test_detect_reads_page_families_and_languages(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, SITE)
+            got = findings(e.detect_project(t))
+            self.assertEqual(got["answers.Q-site-05"], ["industry", "company", "pricing", "legal"])  # route groups and [slug] skipped
+            self.assertEqual(got["answers.Q-site-04"], {"languages": ["en", "de"]})  # i18n/api.ts is not a language
+
+    def test_readings_are_recorded_only_for_a_site_that_persuades(self):
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, SITE)
+            state = std_read(self.sketch(t, "site:persuade"))
+            self.assertEqual(state["answers"]["Q-site-05"]["set_by"], "assumed")
+            self.assertEqual(state["answers"]["Q-site-04"]["value"], {"languages": ["en", "de"]})
+        with tempfile.TemporaryDirectory() as t:
+            write_tree(t, SITE)
+            d = self.sketch(t, "app:operate")
+            self.assertFalse([q for q in std_read(d)["answers"] if q.startswith("Q-site-")])
+            text = self.product(d)
+            self.assertNotIn("## Site brief", text)                               # an app has no site brief
+            self.assertEqual(e.zoom_levels(d, e.merge_defaults(std_read(d)))["overview"]["next"][:2], ["Q-dir-01", "Q-dir-02"])
+
+    def test_product_md_says_what_is_missing_and_never_drafts_proof(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, "persuade")
+            text = self.product(d)
+            for i in range(1, 6):
+                self.assertIn(f"Not enough information (Q-site-0{i})", text)
+            self.assertIn("Pages leave proof sections out until then.", text)
+            with contextlib.redirect_stdout(io.StringIO()):
+                e.cmd_set(d, "answers.Q-site-01", {"goal": "demos", "measure": "ten a month from heads of operations"}, "their words")
+                e.cmd_set(d, "answers.Q-site-02", [{"role": "operations head", "needs": "the outcome in numbers"}, "IT"], "their words")
+                e.cmd_set(d, "answers.Q-site-03", [{"kind": "figures", "what": "40% fewer missed pickups"},
+                                                   {"kind": "testimonials", "what": "a named quote", "qualifier": "permission given"}],
+                          "their words")
+                e.cmd_set(d, "answers.Q-site-04", {"channels": ["search", "generative"], "questions": ["How do I cut missed pickups?"]},
+                          "their words")
+                e.cmd_set(d, "answers.Q-site-05", ["platform", "company", "legal"], "their words")
+            text = self.product(d)
+            brief = text.split("## Site brief", 1)[1].split("\n## ", 1)[0]
+            self.assertNotIn("Not enough information", brief)
+            self.assertIn("Booked demos or sales calls; counted as ten a month from heads of operations.", brief)
+            self.assertIn("  - operations head: the outcome in numbers", brief)
+            self.assertIn("40% fewer missed pickups *(no qualifier yet", brief)    # a figure needs its qualifier
+            self.assertIn("a named quote (permission given)", brief)
+            self.assertIn("Answers: How do I cut missed pickups?", brief)
+            self.assertNotIn("Q-site-0", text.split("## Team and Governance", 1)[1])  # its own section, not owner inputs
+
+    def test_malformed_answers_are_refused(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, "persuade")
+            for qid, v in (("Q-site-02", [{"who": "IT"}]), ("Q-site-03", [{"what": ""}]), ("Q-site-04", {"engines": ["x"]}),
+                           ("Q-site-05", []), ("Q-site-01", {"measure": "ten"})):
+                with self.assertRaises(SystemExit) as cm:
+                    e.cmd_set(d, f"answers.{qid}", v, "test", quiet=True)
+                self.assertIn("Nothing was changed", str(cm.exception))
+            self.assertFalse([q for q in std_read(d)["answers"] if q.startswith("Q-site-")])
+
+    def test_confirmed_positioning_fills_the_proof_line(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, "persuade")
+            st = e.read_json(os.path.join(d, "state.json"))
+            st.setdefault("research", {})["positioning"] = {"confirmed": "2026-11-05", "proof": ["three named pilots"]}
+            e.dump_json(os.path.join(d, "state.json"), st)
+            self.assertIn("three named pilots *(from the confirmed positioning)*", self.product(d))
+
+    def test_overview_lists_the_missing_lines(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, "persuade")
+            with contextlib.redirect_stdout(io.StringIO()):
+                e.cmd_overview(d)
+            with open(os.path.join(d, "overview.html"), encoding="utf-8") as f:
+                html = f.read()
+            site = html.split('id="site"', 1)[1].split("</section>", 1)[0]
+            self.assertEqual(site.count('<div class="ov-missing">'), 5)           # one block for each unanswered line
+            self.assertIn("Q-site-03", site)
+
+
+def png_bytes(w, h, rows, ctype=6, depth=8, palette=None, trns=None, filt=0):
+    """A PNG from rows of samples (one int per channel, or palette index), packed at depth and encoded with one filter."""
+    import struct
+    import zlib
+    ch = {0: 1, 2: 3, 3: 1, 4: 2, 6: 4}[ctype]
+    bpp = max(1, ch * depth // 8)
+    prev, out = None, bytearray()
+    for row in rows:
+        if depth == 16:
+            line = bytearray(b for v in row for b in (v >> 8, v & 255))
+        elif depth == 8:
+            line = bytearray(row)
+        else:
+            per, line, acc, n = 8 // depth, bytearray(), 0, 0
+            for v in row:
+                acc, n = (acc << depth) | v, n + 1
+                if n == per:
+                    line.append(acc)
+                    acc, n = 0, 0
+            if n:
+                line.append(acc << (depth * (per - n)))
+        prev = prev or bytearray(len(line))
+        enc = bytearray(len(line))
+        for i, x in enumerate(line):
+            a, b, c = (line[i - bpp] if i >= bpp else 0), prev[i], (prev[i - bpp] if i >= bpp else 0)
+            pa, pb, pc = abs(b - c), abs(a - c), abs(a + b - 2 * c)
+            pred = (0, a, b, (a + b) // 2, a if pa <= pb and pa <= pc else b if pb <= pc else c)[filt]
+            enc[i] = (x - pred) & 255
+        out += bytes([filt]) + enc
+        prev = line
+    chunk = lambda t, b: struct.pack(">I", len(b)) + t + b + struct.pack(">I", zlib.crc32(t + b) & 0xffffffff)
+    body = chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, depth, ctype, 0, 0, 0))
+    if palette:
+        body += chunk(b"PLTE", bytes(c for rgb in palette for c in rgb))
+    if trns is not None:
+        body += chunk(b"tRNS", bytes(trns))
+    return b"\x89PNG\r\n\x1a\n" + body + chunk(b"IDAT", zlib.compress(bytes(out))) + chunk(b"IEND", b"")
+
+
+def logo_rows(w=100, h=50):
+    """A red mark (60%), a blue bar (10%), a near-black wordmark, a one-pixel pink edge and a see-through ground (RGBA)."""
+    def px(x, y):
+        if x < 60:
+            return (227, 6, 19, 255)
+        if x == 60:
+            return (241, 130, 137, 255)
+        if x < 70:
+            return (37, 99, 235, 255)
+        if x < 90 and y < 25:
+            return (29, 29, 27, 255)
+        return (255, 255, 255, 0)
+    return [[c for x in range(w) for c in px(x, y)] for y in range(h)]
+
+
+class LogoColors(unittest.TestCase):
+    """Issue 24: sketch --logo proposes brand-color candidates from a PNG or SVG, and records nothing until the person picks."""
+
+    def colors(self, p):
+        with open(p, "rb") as f:
+            return dict(e.png_colors(f.read()))
+
+    def write(self, t, name, data):
+        p = os.path.join(t, name)
+        with open(p, "wb" if isinstance(data, bytes) else "w") as f:
+            f.write(data)
+        return p
+
+    def test_png_candidates_leave_out_ground_ink_and_edges(self):
+        with tempfile.TemporaryDirectory() as t:
+            for filt in range(5):
+                cands, kind = e.logo_candidates(self.write(t, f"logo{filt}.png", png_bytes(100, 50, logo_rows(), filt=filt)))
+                self.assertEqual(kind, "area")
+                self.assertEqual([c["hex"] for c in cands], ["#e30613", "#2563eb"], filt)
+                self.assertAlmostEqual(cands[0]["share"], 60 / 70, places=2)
+                self.assertEqual({c["text"] for c in cands}, {"light"})
+
+    def test_png_kinds_palette_gray_and_16_bit(self):
+        with tempfile.TemporaryDirectory() as t:
+            pal = [(255, 255, 255), (15, 118, 110), (245, 158, 11), (0, 0, 0)]
+            rows = [[1 if x < 6 else 2 if x < 8 else 0 for x in range(10)] for _y in range(4)]
+            p = self.write(t, "pal.png", png_bytes(10, 4, rows, ctype=3, depth=2, palette=pal, trns=[0]))
+            self.assertEqual(self.colors(p), {(15, 118, 110): 24, (245, 158, 11): 8})
+            rows = [[v for x in range(8) for v in ((0x0f00, 0x7600, 0x6e00) if x < 5 else (0xffff, 0xffff, 0xffff))] for _y in range(2)]
+            p = self.write(t, "deep.png", png_bytes(8, 2, rows, ctype=2, depth=16, filt=4))
+            self.assertEqual(e.logo_candidates(p)[0][0]["hex"], "#0f766e")
+            p = self.write(t, "gray.png", png_bytes(8, 1, [[1, 0, 1, 1, 0, 0, 0, 0]], ctype=0, depth=1, trns=[0, 0]))
+            self.assertEqual(self.colors(p), {(255, 255, 255): 3})
+
+    def test_svg_fills_styles_and_stops(self):
+        svg = ('<svg xmlns="http://www.w3.org/2000/svg"><style>.a{fill:#0F766E}</style><!-- fill="#ff00ff" -->'
+               '<defs><linearGradient><stop stop-color="hsl(38, 92%, 50%)"/></linearGradient></defs>'
+               '<path class="a" d="M0 0"/><path fill="#0f766e"/><path fill="rgb(15 118 110)"/><path fill="#ff000040"/>'
+               '<path fill="currentColor"/><path fill="none" stroke="white"/><path fill="url(#g)"/></svg>')
+        with tempfile.TemporaryDirectory() as t:
+            cands, kind = e.logo_candidates(self.write(t, "logo.svg", svg))
+        self.assertEqual(kind, "fills")
+        self.assertEqual([(c["hex"], round(c["share"], 2)) for c in cands], [("#0f766e", 0.75), ("#f59f0a", 0.25)])
+        self.assertEqual(cands[1]["text"], "dark")
+
+    def test_sketch_logo_writes_nothing_until_the_person_picks(self):
+        with tempfile.TemporaryDirectory() as t:
+            logo = self.write(t, "logo.png", png_bytes(100, 50, logo_rows()))
+            d = os.path.join(t, "opendesigner")
+            code, out = run_cli("sketch", "--dir", d, "--name", "Acme", "--platforms", "web", "--feel", "calm", "--logo", logo)
+            self.assertEqual(code, 0)
+            self.assertFalse(os.path.exists(d))
+            self.assertIn("1. #e30613, a bright red: 86% of its colored area; white text reads on it.", out)
+            cmd = next(ln.strip() for ln in out.splitlines() if ln.strip().startswith("engine.py sketch "))
+            self.assertIn("--brand '#e30613'", cmd)
+            quiet(e.main, shlex.split(cmd)[1:])
+            st = e.read_json(os.path.join(d, "state.json"))
+            self.assertEqual(st["raw"]["brandColor"], "#e30613")
+            self.assertEqual((st["hooks"]["H-logo"]["status"], st["hooks"]["H-logo"]["files"]), ("have", ["logo.png"]))
+            self.assertIn("their pick from the logo's colors", e._decisions(d)["raw.brandColor"]["reason"])
+
+    def test_logo_files_it_cannot_read(self):
+        with tempfile.TemporaryDirectory() as t:
+            for name, data, said in (("logo.jpg", b"\xff\xd8\xff\xe0", "this one is a JPEG"), ("missing.png", None, "no file at"),
+                                     ("line.png", png_bytes(4, 1, [[0, 0, 0, 255] * 4]), "No brand color in line.png"),
+                                     ("photo.svg", '<svg><image href="logo.png"/></svg>', "this SVG holds a picture, not shapes")):
+                p = self.write(t, name, data) if data else os.path.join(t, name)
+                try:
+                    code, out = run_cli("sketch", "--dir", os.path.join(t, "od"), "--logo", p)
+                except SystemExit as x:
+                    out = str(x)
+                self.assertIn(said, out)
+                self.assertFalse(os.path.exists(os.path.join(t, "od")))
+
+
+class BuildFormats(unittest.TestCase):
+    """Issue 24: build writes the code exports for the platforms in Q-plat-01; export --format all writes every one."""
+
+    def build_dir(self, t, platforms):
+        d = os.path.join(t, "opendesigner")
+        code, out = run_cli("sketch", "--dir", d, "--name", "Fern", "--audience", "regular", "--platforms", platforms, "--feel", "calm")
+        self.assertEqual(code, 0, out)
+        return d, out, sorted(os.listdir(os.path.join(d, "build")))
+
+    def test_web_gets_css_and_tailwind_and_says_what_it_left_out(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, out, built = self.build_dir(t, "web")
+            self.assertEqual(built, ["artifact", "brand", "css", "dtcg", "figma", "paper", "tailwind"])
+            self.assertIn("build/ (css, tailwind, figma, paper, dtcg, artifact, brand)", out)
+            self.assertIn("Not written: swift and compose, because it runs on web (Q-plat-01). To write one anyway: "
+                          "engine.py export --format swift.", out)
+            agents = next(ln for ln in design_section(t, "For Agents").splitlines() if ln.startswith("2. "))
+            self.assertNotIn("Swift", agents)
+            self.assertNotIn("Compose", agents)
+            quiet(e.main, ["export", "--dir", d, "--format", "all"])
+            self.assertEqual(len(os.listdir(os.path.join(d, "build"))), len(e.EXPORT_FORMATS))
+
+    def test_ios_gets_swift_only(self):
+        with tempfile.TemporaryDirectory() as t:
+            d, out, built = self.build_dir(t, "ios")
+            self.assertEqual(built, ["artifact", "brand", "dtcg", "figma", "paper", "swift"])
+            agents = next(ln for ln in design_section(t, "For Agents").splitlines() if ln.startswith("2. "))
+            self.assertEqual(agents, "2. Use tokens, never raw values: `DS.*` in Swift.")
+
+    def test_unnamed_or_untagged_platforms_keep_everything_and_built_files_stay_fresh(self):
+        st = e.default_state("Test")
+        self.assertEqual(e.build_formats(st), (list(e.EXPORT_FORMATS), []))
+        st["answers"]["Q-plat-01"] = {"value": ["web", "secondary"]}
+        self.assertEqual(e.build_formats(st)[1], [])
+        st["answers"]["Q-plat-01"] = {"value": ["desktop"]}
+        self.assertEqual(e.build_formats(st)[1], ["swift", "compose"])
+        with tempfile.TemporaryDirectory() as t:
+            d, _out, built = self.build_dir(t, "web,android")
+            self.assertIn("compose", built)
+            quiet(e.cmd_set, d, "answers.Q-plat-01", ["web"], "web only now", resync=False)
+            self.assertEqual(e.build_formats(e.load_state(d), d)[1], ["swift"])  # compose is in build/ already, so it is refreshed
+
+
+class NearBlackAndPlatformChanges(unittest.TestCase):
+    """Issue 67: a near-black brand builds, because the engine never pairs pure white with pure black itself. Issue 68:
+    adding a platform raises a value a standard held to that platform's floor, as a fresh sketch does. Both need the
+    shipped house standards (STD-visual-details-66, STD-mobile-touch-09)."""
+
+    def run(self, result=None):
+        with house_standards(os.path.join(e.REFERENCES, "standards.json")):
+            return super().run(result)
+
+    def test_near_black_brand_builds_with_an_off_shade(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            code, out = run_cli("sketch", "--dir", d, "--name", "Mono", "--feel", "minimal,precise", "--brand", "#18181B")
+            self.assertEqual(code, 0, out)
+            files, _m, _c = e.generate_system(e.load_state(d))
+            light = e.resolve_all(files, {"theme": "light"})
+            ink = {light[k]["resolved"]["hex"] for k in ("color.text.accent", "color.text.link", "color.icon.accent")}
+            self.assertEqual(len(ink), 1)
+            hx = ink.pop()
+            self.assertNotEqual(hx, "#000000")
+            self.assertAlmostEqual(e.hex_to_oklch(hx)[0], e.hex_to_oklch(e.OFF_BLACK)[0], places=2)
+            self.assertGreaterEqual(e.contrast(hx, "#ffffff"), 7)
+            quiet(e.cmd_set, d, "color.text.accent", "#000000", "the person asked for pure black")  # their own pair is still refused
+            self.assertTrue(any(e.WHITE_BLACK_RULE in i["message"] for i in e.validate_dir(d).items if i["severity"] == "error"))
+
+    def sketch_web(self, t):
+        d = os.path.join(t, "opendesigner")
+        self.assertEqual(run_cli("sketch", "--dir", d, "--name", "Web", "--audience", "regular", "--platforms", "web",
+                                 "--feel", "calm")[0], 0)
+        return d
+
+    def test_adding_android_raises_the_touch_target(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch_web(t)
+            code, out = run_cli("pick", "Q-plat-01", '["web", "android"]', "--set-by", "chosen", "--quote", "web and android", "--dir", d)
+            self.assertIn("STD-mobile-touch-09: size.target.touch went back to the engine's own value", out)
+            st = e.load_state(d)
+            self.assertNotIn("size.target.touch", st["overrides"])
+            self.assertFalse(e.is_locked(st, "overrides.size.target.touch"))
+            rec = st["standards"]["records"]["STD-mobile-touch-09"]
+            self.assertEqual([u["path"] for u in rec["unmapped"]], ["size.target.touch"])
+            self.assertEqual(run_cli("build", "--dir", d)[0], 0)
+            sem = e.resolve_all(e.generate_system(e.load_state(d))[0], {"theme": "light"})
+            self.assertEqual(e._px(sem["size.target.touch"]["resolved"]), 48)
+
+    def test_a_touch_target_the_person_set_stays_and_the_conflict_is_said(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch_web(t)
+            quiet(e.main, ["standard", "override", "STD-mobile-touch-09", "--why", "we want 44 everywhere", "--dir", d])
+            quiet(e.main, ["set", "overrides.size.target.touch", '"44px"', "--why", "our own", "--lock", "--dir", d])
+            code, out = run_cli("pick", "Q-plat-01", '["web", "android"]', "--set-by", "chosen", "--quote", "web and android", "--dir", d)
+            self.assertIn("size.target.touch stays 44px, as you set it", out)
+            self.assertIn("engine.py unlock overrides.size.target.touch", out)
+            st = e.load_state(d)
+            self.assertEqual(st["overrides"]["size.target.touch"], {"value": 44, "unit": "px"})
+            self.assertTrue(e.is_locked(st, "overrides.size.target.touch"))
+
+LOGO_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="#167874"/></svg>'
+ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="6" width="12" height="10"/></svg>'
+
+
+class BrandPage(unittest.TestCase):
+    """Issue 49: export --format brand writes a brand and press page from the system. Owner facts stay 'Not enough
+    information' until the person gives them; logos and icons are only the person's own files; font files never ship."""
+
+    def sketch(self, t, **files):
+        write_tree(t, files)
+        d = os.path.join(t, "opendesigner")
+        with contextlib.redirect_stdout(io.StringIO()):
+            e.cmd_sketch(d, "Fennel", "#167874", "regular", "web", "calm", quiet=True)
+        return d
+
+    def page(self, d):
+        with contextlib.redirect_stdout(io.StringIO()):
+            e.cmd_export(d, "brand")
+        with open(os.path.join(d, "build", "brand", "index.html"), encoding="utf-8") as f:
+            return f.read()
+
+    def put(self, d, path, value, set_by=None):
+        with contextlib.redirect_stdout(io.StringIO()):
+            e.cmd_set(d, path, value, "their words", quiet=True, set_by=set_by)
+
+    def test_a_bare_sketch_shows_placeholders_and_invents_nothing(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t)
+            html = self.page(d)
+            for key, label, _h in e.PRESS_FIELDS:
+                self.assertIn(f"context.press.{key}", html)                       # each fact says what fills it
+            self.assertGreaterEqual(html.count('<div class="bp-missing">'), len(e.PRESS_FIELDS) + 3)  # plus logo, icons, voice
+            self.assertIn("Q-brand-03 and the H-logo asset", html)
+            self.assertNotIn("<img", html)                                       # no logo or icon that the person did not give
+            self.assertFalse(os.path.exists(os.path.join(d, "build", "brand", "assets")))
+            self.assertIn("--ds-color-surface-base", html)                       # built from the system's own tokens
+            self.assertIn("#167874", html.split("</style>", 1)[1])                # the brand colour, with RGB and OKLCH
+            self.assertRegex(html, r"RGB 22 120 116<br>OKLCH [\d.]+% [\d.]+ \d+")
+            self.assertEqual(html.count('class="bp-tag bp-default"'), 2)          # both logo rules: Default until confirmed
+            self.assertNotIn("fonts.googleapis.com", html)                        # the system font needs no link
+
+    def test_a_full_system_uses_only_what_the_person_gave(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t, **{"brand/logo.svg": LOGO_SVG, "icons/truck.svg": ICON_SVG, "fonts/Brand.woff2": "not a font"})
+            self.put(d, "hooks.H-logo.files", ["brand/logo.svg"], "asset")
+            self.put(d, "hooks.H-icons.files", ["icons/truck.svg"], "asset")
+            self.put(d, "hooks.H-type.files", ["fonts/Brand.woff2"], "asset")
+            self.put(d, "hooks.H-icons.library", "lucide")
+            self.put(d, "hooks.H-logo.clearSpace", 0.75)
+            self.put(d, "context.press.boilerplate", "Fennel helps freight teams book pickups in one place.")
+            self.put(d, "context.press.facts", ["Founded in 2024"], "assumed")      # assumed is not the person's: not shown
+            self.put(d, "answers.Q-site-03", [{"kind": "figures", "what": "40% fewer missed pickups", "qualifier": "one client, six months"},
+                                               {"kind": "figures", "what": "2x faster booking"}])
+            self.put(d, "answers.Q-voice-01", "plainspoken")
+            self.put(d, "raw.textFace", "Inter")
+            html = self.page(d)
+            self.assertIn('href="https://fonts.googleapis.com/css2?family=Inter:wght@', html)  # an open face shows as itself
+            self.put(d, "raw.textFace", "Brand Grotesk")                          # a face only the owner has: a note, no file
+            self.assertIn("Brand Grotesk is not installed on this computer", self.page(d))
+            assets = os.path.join(d, "build", "brand", "assets")
+            self.assertEqual(sorted(os.listdir(assets)), ["icons", "logo"])        # the font file is never shipped
+            with open(os.path.join(assets, "logo", "logo.svg"), encoding="utf-8") as f:
+                self.assertEqual(f.read(), LOGO_SVG)
+            self.assertIn('href="assets/icons/truck.svg" download', html)
+            self.assertIn("Fennel helps freight teams book pickups in one place.", html)
+            self.assertNotIn("Founded in 2024", html)
+            self.assertIn("40% fewer missed pickups (one client, six months)", html)
+            self.assertIn("2x faster booking <span", html)                       # a figure with no qualifier is flagged
+            self.assertIn("no qualifier yet", html)
+            self.assertIn("0.75 × the logo", html)
+            self.assertEqual(html.count('class="bp-tag bp-chosen"'), 1)           # clear space chosen, smallest size still Default
+            self.assertIn("Do and don", html)
+            self.assertIn("<b>Lucide</b>, ISC licence", html)
+            self.assertIn("It is not bundled here", html)
+            self.assertNotIn("Mailchimp", html)                                  # a reference's name is never the brand's voice
+            self.assertIn("Plainspoken", html)
+            self.put(d, "hooks.H-icons.files", [], "asset")                       # a file the person removed leaves the page
+            self.page(d)
+            self.assertFalse(os.path.exists(os.path.join(assets, "icons")))
+
+    def test_logo_rules_and_library_are_checked(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.sketch(t)
+            for path, v in (("hooks.H-logo.clearSpace", 9), ("hooks.H-logo.minSize", 4), ("hooks.H-logo.minSize", {"badge": 20}),
+                            ("hooks.H-icons.library", "Lucide Icons!")):
+                with self.assertRaises(SystemExit) as cm:
+                    e.cmd_set(d, path, v, "test", quiet=True)
+                self.assertIn("Nothing was changed", str(cm.exception))
+            self.put(d, "hooks.H-logo.minSize", 20)
+            self.assertEqual(e.logo_rules(e.load_state(d), e._decisions(d))["minSize"], ({"symbol": 20, "lockup": 24}, "chosen"))
+
+    def test_build_writes_it_for_every_platform(self):
+        self.assertIn("brand", e.NEUTRAL_FORMATS)
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            code, out = run_cli("sketch", "--dir", d, "--name", "Fern", "--audience", "regular", "--platforms", "ios", "--feel", "calm")
+            self.assertEqual(code, 0, out)
+            self.assertTrue(os.path.exists(os.path.join(d, "build", "brand", "index.html")))
+
+
+
+class DialLinesMatchTheTokens(unittest.TestCase):
+    """Issue #69: each DESIGN.md dial line reports the value the tokens hold, and says why when the engine moved it off the band."""
+
+    def lines(self, t, *sketch):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, *sketch)
+        text = design_text(t)
+        return {m.group(1): m.group(0) for m in re.finditer(r"^- \*\*(\w[\w ]*?) \d+/100\*\*.*$", text, re.M)}, e.read_json(
+            os.path.join(d, "tokens", "opendesigner.meta.json"))
+
+    def test_corners_nobody_chose(self):
+        with tempfile.TemporaryDirectory() as t:                                   # issue 69's Fernhollow
+            dl, meta = self.lines(t, "Fernhollow", "#1E3A8A", "large", "web", "calm,trustworthy")
+            self.assertEqual(meta["shape"]["control"], 6)
+            self.assertIn("control radius 6px (the band gives 0px; until someone picks a corner shape, Q-shape-01, corners stay "
+                          "between 6 and 12px)", dl["Roundness"])
+            self.assertIn("Buttons and fields have 6px corners", design_text(t))
+        with tempfile.TemporaryDirectory() as t:                                   # Pebbleday: 16 from the band, 12 in the tokens
+            dl, meta = self.lines(t, "Pebbleday", "#E0457B", "regular", "ios,web", "friendly,playful")
+            self.assertEqual(meta["shape"]["control"], 12)
+            self.assertIn("control radius 12px (the band gives 16px;", dl["Roundness"])
+
+    def test_chosen_corners_need_no_note(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Sharp", "#1E3A8A", "dense", "web", "calm")
+            quiet(e.cmd_set, d, "dials.roundness", 0, "they want square corners")
+            quiet(e.cmd_design_md, d)
+            line = next(x for x in design_text(t).splitlines() if x.startswith("- **Roundness"))
+            self.assertIn("control radius 0px, icon corners", line)
+            self.assertNotIn("the band gives", line)
+
+    def test_every_dial_line_holds_the_token_value(self):
+        states = [{"macros": ["minimal"]}, {"macros": ["serious", "authoritative"]}, {"style": "neumorphism"}, {"style": "neo-brutalism"}]
+        for spec in states:
+            with self.subTest(spec=spec):
+                st = e.default_state("T")
+                st["macros"] = spec.get("macros", [])
+                if spec.get("style"):
+                    st["answers"]["Q-dir-01"] = {"value": spec["style"]}
+                    for k, v in e.answer_effects("Q-dir-01", spec["style"], st).items():
+                        if v != e.UNSET:
+                            e.set_path(st, k, v)
+                _f, meta, _c = e.generate_system(st)
+                P = {k: v["value"] for k, v in meta["params"].items()}
+                dials = {k: (x["value"] if isinstance(x, dict) else x) for k, x in meta["dials"].items()}
+                say = lambda dial: e.dial_words(dial, dials[dial], P, meta["color"], meta)
+                ctl = meta["shape"]["control"]
+                self.assertIn(f"control radius {'full' if ctl >= e.FULL else str(ctl) + 'px'}", say("roundness"))
+                self.assertIn(f"heading weight {meta['type']['weights']['heading']}", say("energy"))
+                self.assertIn(f"depth model: {meta['elevation']['model']}", say("depth"))
+                if meta["elevation"]["model"] != P["elevation.model"]:
+                    self.assertIn("the style builds its own", say("depth"))
+
+    def test_levers_says_where_the_engine_leaves_its_band(self):
+        drives = {x["param"]: x for d in e.levers()["dials"] for x in d["drives"]}
+        for param, words in (("radius.control", "formulas.radius.unchosen"), ("type.headingWeight", "two weights"),
+                             ("elevation.model", "style or preset")):
+            self.assertIn(words, drives[param].get("note", ""), param)
+
+
+class SurvivesContextResets(unittest.TestCase):
+    """Real projects (2026-11-09): after a context reset Claude stopped using OpenDesigner. The rules lived only in chat, the
+    re-attached skill was cut at 20,000 characters, and no project file carried them. So: binding rules first in SKILL.md,
+    a Now line in PROTOCOL.md that the engine keeps current, engine.py status, and a hand-off file every host reads."""
+
+    def protocol(self, d):
+        with open(os.path.join(d, "PROTOCOL.md"), encoding="utf-8") as f:
+            return f.read()
+
+    def test_commands_that_change_the_system_keep_the_now_line(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.main, ["--dir", d, "init", "--name", "P"])
+            text = self.protocol(d)
+            self.assertEqual(text.count("**Now:**"), 1)
+            self.assertIn("**Now:** step 1 Discover", text)
+            self.assertIn("Last engine command: `init`", text)
+            self.assertIn("the log question", text)
+            quiet(e.main, ["--dir", d, "review"])  # read-only commands never touch it
+            quiet(e.main, ["--dir", d, "status"])
+            self.assertEqual(self.protocol(d), text)
+            with open(os.path.join(d, "PROTOCOL.md"), "w", encoding="utf-8") as f:
+                f.write(text.replace("| The brief | [ ] |", "| The brief | [x] 2026-11-09 |"))
+            quiet(e.main, ["--dir", d, "set", "dials.roundness", "40", "--why", "test", "--set-by", "assumed"])
+            text = self.protocol(d)
+            self.assertIn("**Now:** step 2 Research", text)
+            self.assertIn("Last engine command: `set`", text)
+            self.assertEqual(text.count("**Now:**"), 1)
+
+    def test_status_prints_the_step_the_wait_and_the_next_command(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(e.cmd_status(d), 0)
+            self.assertIn("No OpenDesigner system", out.getvalue())
+            quiet(e.main, ["--dir", d, "init", "--name", "P"])
+            quiet(e.cmd_sketch, d, "P", None, "large", "web", "calm", quiet=True)
+            quiet(e.cmd_build, d)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_status(d)
+            said = out.getvalue()
+            for bit in ("Now: step 1 Discover", "Waiting for the owner:", "hand-off", "Next:", "handoff yes", "engine.py review"):
+                self.assertIn(bit, said)
+            f = e.now_facts(d)
+            self.assertEqual(f["step"], "step 1 Discover")
+
+    def test_handoff_writes_agents_and_claude_once_and_records_either_answer(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="P")
+            with open(os.path.join(t, "CLAUDE.md"), "w", encoding="utf-8") as f:
+                f.write("# Ours\n\nKeep it short.\n")
+            quiet(e.cmd_handoff, d, "yes", "yes please")
+            quiet(e.cmd_handoff, d, "yes")
+            with open(os.path.join(t, "AGENTS.md"), encoding="utf-8") as f:
+                agents = f.read()
+            with open(os.path.join(t, "CLAUDE.md"), encoding="utf-8") as f:
+                claude = f.read()
+            self.assertEqual(agents.count(e.HANDOFF_START), 1)
+            self.assertIn("engine.py status", agents)
+            self.assertIn("--kind note", agents)
+            self.assertIn("Keep it short.", claude)
+            self.assertEqual(claude.count("@AGENTS.md"), 1)
+            self.assertEqual(e.load_state(d)["profile"]["handoff"], "yes")
+            self.assertEqual(e.handoff_reminder(e.load_state(d)), "")
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="P")
+            self.assertIn("handoff yes", e.handoff_reminder(e.load_state(d)))
+            quiet(e.cmd_handoff, d, "no")
+            self.assertFalse(os.path.exists(os.path.join(t, "AGENTS.md")))
+            self.assertFalse(os.path.exists(os.path.join(t, "CLAUDE.md")))
+            self.assertEqual(e.load_state(d)["profile"]["handoff"], "no")
+
+    def test_an_older_protocol_gets_the_now_block_under_its_first_paragraph(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_init, d, name="P")
+            fp = os.path.join(d, "PROTOCOL.md")
+            text = re.sub(r"<!-- od:now.*?<!-- /od:now -->\n", "", self.protocol(d), flags=re.S)
+            self.assertNotIn("**Now:**", text)
+            with open(fp, "w", encoding="utf-8") as f:
+                f.write(text)
+            e.refresh_now(d, "build")
+            new = self.protocol(d)
+            self.assertLess(new.index("How work runs"), new.index("**Now:**"))
+            self.assertLess(new.index("**Now:**"), new.index("## Six steps"))
+            self.assertIn("Last engine command: `build`", new)
+
+    def test_skill_md_fits_the_reattach_cap_with_binding_rules_first(self):
+        with open(os.path.join(e.SKILL_ROOT, "SKILL.md"), encoding="utf-8") as f:
+            skill = f.read()
+        self.assertLess(len(skill), 20000)  # re-attached after compaction only up to about this length
+        head = skill[:2500].lower()
+        for bit in ("tokens only", "one question per call", "engine.py review", "design.md", "--kind note", "protocol.md",
+                    "rules.md", "engine.py status", "handoff"):
+            self.assertIn(bit, head, bit)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=1)

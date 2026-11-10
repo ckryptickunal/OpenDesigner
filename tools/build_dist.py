@@ -8,21 +8,24 @@ Each zip holds the skill folder at its root (opendesigner.zip -> opendesigner/SK
 Claude Help Center asks for. Frontmatter is checked against the portable Agent Skills fields: name
 (1-64, a-z 0-9 and hyphens, matches the folder, no "anthropic" or "claude"), description (1-1024;
 warn above 200 because the claude.ai Help Center states a 200-character limit), and only license,
-compatibility, metadata and allowed-tools besides. dist/ is git-ignored. Standard library only.
+compatibility, metadata and allowed-tools besides. It also checks that the release the engine stamps into each system
+(OPENDESIGNER_VERSION in skills/opendesigner/scripts/engine.py) equals the version in plugin.json and
+.claude-plugin/plugin.json. dist/ is git-ignored. Standard library only.
 """
-import argparse, re, sys, zipfile
+import argparse, json, re, sys, zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC, DIST = ROOT / "skills", ROOT / "dist"
 ALLOWED = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
-IGNORE = {"__pycache__", ".DS_Store"}
+IGNORE = {"__pycache__", ".DS_Store", "node_modules", "out", ".vite"}  # the painting engine must ship without installs or renders
 # claude.ai installs each uploaded skill on its own, so the sub-skills' zips carry the engine and the data it
 # reads (spec 8.2). In the repo and in plugin installs they use the sibling opendesigner skill instead.
 BUNDLE = {p: p for p in ("scripts/engine.py", "scripts/journey.py", "references/levers.json", "references/hooks.json",
                           "references/graph.json", "references/questions.json", "references/pacing.json",
                           "references/report.schema.json", "references/rules.md", "references/zoom.md",
-                          "references/improve.md", "references/making.md")}  # engine.py imports journey.py, which reads pacing and the report schema
+                          "references/improve.md", "references/making.md", "references/audit.md", "assets/picker.js",
+                          "assets/output/PROTOCOL.md")}  # engine.py imports journey.py, which reads pacing and the report schema; review.py compare inlines picker.js
 
 
 def check(skill):
@@ -55,12 +58,30 @@ def check(skill):
     return errs, warns
 
 
+def check_version():
+    """Errors when the engine's OPENDESIGNER_VERSION differs from a manifest's version (a skill zip carries only the engine)."""
+    src = (SRC / "opendesigner" / "scripts" / "engine.py").read_text(encoding="utf-8")
+    m = re.search(r'^OPENDESIGNER_VERSION = "([^"]+)"$', src, re.M)
+    if not m:
+        return ["skills/opendesigner/scripts/engine.py has no OPENDESIGNER_VERSION line"]
+    errs = []
+    for manifest in ("plugin.json", ".claude-plugin/plugin.json"):
+        v = json.loads((ROOT / manifest).read_text(encoding="utf-8")).get("version")
+        if v != m.group(1):
+            errs.append(f"{manifest} says version {v}, but engine.py stamps systems with OPENDESIGNER_VERSION {m.group(1)}. "
+                        "Set both to the same release")
+    return errs
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--check", action="store_true")
     args = ap.parse_args()
     skills = sorted(p for p in SRC.iterdir() if (p / "SKILL.md").exists())
-    failed = False
+    version_errs = check_version()
+    for e in version_errs:
+        print(f"error version: {e}")
+    failed = bool(version_errs)
     for s in skills:
         errs, warns = check(s)
         for w in warns:
@@ -68,7 +89,7 @@ def main():
         for e in errs:
             print(f"error {s.name}: {e}")
         failed |= bool(errs)
-        if errs or args.check:
+        if errs or args.check or version_errs:
             continue
         DIST.mkdir(exist_ok=True)
         out = DIST / f"{s.name}.zip"

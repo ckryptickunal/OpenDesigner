@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halde on the desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Scene: a generic laptop drawn in CSS 3D on a real desk photograph.
+     The 3D stage uses the photo's own vanishing point (808, 598): the image centre, which the table's
+     receding side edge passes through (measured: slope 0.70 through 1271,920 and 1557,1120), so the laptop's keyboard deck recedes the same way the table does.
+     Outside the tokens on purpose: device geometry, aluminium gradients and the photo grade. */
+  html, body { margin: 0; }
+  body {
+    width: 1600px; height: 1200px; overflow: hidden; position: relative;
+    background: var(--ds-color-neutral-light-7);
+    font-family: var(--ds-font-family-text);
+    -webkit-font-smoothing: antialiased;
+  }
+  .photo {
+    position: absolute; left: -100px; top: 0; width: 1800px; height: 1200px; object-fit: cover;
+    /* cool, quiet grade: the oak keeps its grain but loses its orange */
+    filter: saturate(.62) brightness(1.03) contrast(1.04);
+  }
+  /* soft window light from the left, falling across the wall */
+  .light {
+    position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(100deg, rgb(255 255 255 / .16) 0%, rgb(255 255 255 / 0) 45%, rgb(0 0 0 / .08) 100%); /* od-ignore: device or photo art */
+  }
+
+  .stage { position: absolute; inset: 0; perspective: 4000px; perspective-origin: 808px 598px; transform-style: preserve-3d; }
+  .stage * { transform-style: preserve-3d; }
+  /* laptop is 1190 x 833 (deck) in 3D units; front edge 577 units behind the picture plane */
+  .rig { position: absolute; left: 112px; top: 0; width: 1190px; height: 1200px; }
+
+  .foot { position: absolute; inset: 0; }
+  .deck {
+    position: absolute; left: 0; top: 1186px; width: 1190px; height: 833px;
+    transform-origin: top; transform: translateZ(-577px) rotateX(-90deg);
+    border-radius: var(--ds-radius-24) var(--ds-radius-24) 6px 6px; /* od-ignore: device or photo art */
+    background: linear-gradient(180deg, #d3d6da 0%, #c8cbd0 45%, #b4b8be 100%); /* od-ignore: device or photo art */
+    box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / .55); /* od-ignore: device or photo art */
+  }
+  .trackpad {
+    position: absolute; left: 50%; top: 60px; width: 470px; height: 300px; transform: translateX(-50%);
+    border-radius: var(--ds-radius-16); background: linear-gradient(180deg, #c3c6cb, #cdd0d4); /* od-ignore: device or photo art */
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / .08); /* od-ignore: device or photo art */
+  }
+  .keys {
+    position: absolute; left: 70px; right: 70px; top: 410px; height: 390px; border-radius: var(--ds-radius-8);
+    background:
+      repeating-linear-gradient(90deg, transparent 0 62px, #8f9399 62px 72px), /* od-ignore: device or photo art */
+      repeating-linear-gradient(180deg, transparent 0 46px, #8f9399 46px 66px), /* od-ignore: device or photo art */
+      #303237; /* od-ignore: device or photo art */
+    box-shadow: 0 0 0 6px #aeb2b8; /* od-ignore: device or photo art */
+  }
+  .front {
+    position: absolute; left: 0; top: 1186px; width: 1190px; height: 14px;
+    transform: translateZ(-577px);
+    border-radius: 0 0 10px 10px;
+    background: linear-gradient(180deg, #e6e8eb 0%, #a9adb3 55%, #7d8188 100%); /* od-ignore: device or photo art */
+  }
+  .notch { position: absolute; left: 50%; top: 0; width: 110px; height: 6px; transform: translateX(-50%); /* od-ignore: device or photo art */
+    border-radius: 0 0 8px 8px; background: #8d9198; } /* od-ignore: device or photo art */
+
+  .lid {
+    position: absolute; left: 0; top: 416px; width: 1190px; height: 770px;
+    transform-origin: bottom; transform: translateZ(-1410px) rotateX(13deg);
+    border-radius: var(--ds-radius-28) var(--ds-radius-28) 10px 10px; /* od-ignore: device or photo art */
+    background: #0c0d0f; /* od-ignore: device or photo art */
+    box-shadow: 0 0 0 3px #b8bcc2, 0 0 0 4px #8a8e95; /* od-ignore: device or photo art */
+  }
+  .cam { position: absolute; left: 50%; top: 9px; width: 7px; height: 7px; border-radius: 50%; transform: translateX(-50%);
+    background: radial-gradient(circle at 35% 35%, #3a4152, #07080a 65%); } /* od-ignore: device or photo art */
+  .screen { position: absolute; left: 24px; top: 22px; width: 1142px; height: 714px; overflow: hidden; border-radius: 6px; background: #000; } /* od-ignore: device or photo art */
+  .screen img { display: block; width: 100%; height: 100%; }
+  .screen::after { /* glass: one soft reflection from the window on the left */
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(105deg, rgb(255 255 255 / .10) 0%, rgb(255 255 255 / .03) 30%, transparent 30.4%); /* od-ignore: device or photo art */
+  }
+
+  .credit {
+    position: absolute; left: var(--ds-space-64); top: var(--ds-space-64);
+    display: flex; align-items: baseline; gap: var(--ds-space-12);
+    font: var(--ds-text-body-md); color: var(--ds-color-text-primary);
+  }
+  .credit i { width: 10px; height: 10px; border-radius: 50%; background: var(--ds-color-brand-seed); align-self: center; }
+  .credit b { font-weight: var(--ds-font-weight-heading); }
+</style>
+</head>
+<body>
+  <img class="photo" src="https://images.unsplash.com/photo-1717911100016-17d359d902da?w=3600&q=80&auto=format&fit=crop" alt="">
+  <div class="light"></div>
+
+  <!-- the laptop's footprint, projected with the same vanishing point, as a soft 2D shadow on the oak -->
+  <svg class="foot" width="1600" height="1200" viewBox="0 0 1600 1200" aria-hidden="true">
+    <defs>
+      <filter id="b1" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="22"/></filter>
+      <filter id="b2" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="5"/></filter>
+    </defs>
+    <!-- broad soft shadow falling right and forward (window light from the left), then the dark contact line -->
+    <polygon points="330,1030 1240,1030 1370,1172 230,1172" fill="rgb(24 20 16 / .38)" filter="url(#b1)"/> <!-- od-ignore: shadow art -->
+    <polygon points="292,1040 1176,1040 1250,1136 196,1136" fill="rgb(14 12 10 / .5)" filter="url(#b2)"/> <!-- od-ignore: shadow art -->
+    <rect x="196" y="1122" width="1052" height="10" rx="5" fill="rgb(10 9 8 / .55)" filter="url(#b2)"/> <!-- od-ignore: shadow art -->
+  </svg>
+  <div class="stage">
+    <div class="rig">
+      <div class="deck"><div class="trackpad"></div><div class="keys"></div></div>
+      <div class="front"><div class="notch"></div></div>
+      <div class="lid"><div class="cam"></div>
+        <div class="screen"><img src="../../heroes/01-swiss-architecture/shot.png" alt="Halde Architekten website hero: a section through Haus am Hang in Flims with the solar-noon sun angles for 21 December and 21 June, and the headline Houses that follow the sun."></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="credit" style="margin:0"><i></i><b>Halde Architekten</b><span>Website, 2026</span></p>
+</body>
+</html>

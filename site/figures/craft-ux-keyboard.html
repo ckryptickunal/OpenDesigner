@@ -1,0 +1,22 @@
+<figure class="fig cr">
+<div class="dodont">
+<div class="dont"><p class="dd-h">The highlight glides after each key</p><p class="dd-why">Watch the key and the highlight. Every press starts a 200&nbsp;ms slide, so the highlight trails behind your fingers.</p>
+<div class="dd-art"><div class="cr-stage" tabindex="0" role="group" aria-label="A command menu whose highlight slides after each arrow key press. Hover or focus to pause.">
+<div class="cr-meta"><span><b>transition: transform 200ms</b> on each key</span></div>
+<div class="cr-cmd cr-pop cr-ui" aria-hidden="true">
+<div class="cr-cmd-in"><span>Search commands…</span><span class="cr-key cr-loop">↓</span></div>
+<div class="cr-cmd-list"><i class="cr-hl cr-loop cr-hl-ease"></i><span>New issue</span><span>Assign to me</span><span>Change status</span><span>Copy link</span><span>Archive</span></div>
+</div>
+</div></div></div>
+<div class="do"><p class="dd-h">The highlight moves with the key</p><p class="dd-why">No transition at all. The highlight is on the next row in the same frame as the key press.</p>
+<div class="dd-art"><div class="cr-stage" tabindex="0" role="group" aria-label="A command menu whose highlight moves at the moment of each arrow key press. Hover or focus to pause.">
+<div class="cr-meta"><span><b>no transition</b>: 0&nbsp;ms</span></div>
+<div class="cr-cmd cr-pop cr-ui" aria-hidden="true">
+<div class="cr-cmd-in"><span>Search commands…</span><span class="cr-key cr-loop">↓</span></div>
+<div class="cr-cmd-list"><i class="cr-hl cr-loop cr-hl-jump"></i><span>New issue</span><span>Assign to me</span><span>Change status</span><span>Copy link</span><span>Archive</span></div>
+</div>
+</div></div></div>
+</div>
+<div class="cr-foot"><span>The ring on the arrow key marks each press, four presses <span class="num">300&nbsp;ms</span> apart.</span><span class="cr-hint" aria-hidden="true"><span class="cr-hint-play">Hover or focus to pause.</span><span class="cr-hint-paused">Paused.</span></span><span class="cr-rm">Reduced motion is on, so both highlights rest on the last row.</span></div>
+<figcaption>A command menu moved through with the arrow key. With a short slide on each press, the highlight lags behind the keys; with no transition it lands on the next row in the same frame. Anything started from the keyboard, and anything used a hundred times a day, should not animate.</figcaption>
+</figure>

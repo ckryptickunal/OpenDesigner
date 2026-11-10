@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fluid type fixture</title>
+<!-- Checker eval fixture for preflight.py html (M8): a caption sized 2.2vw, which preflight used to skip as "loose". At a
+     320 px window it is 7 px, under the 11 px web floor. The title's calc(1.5rem + 2.4vw) is fine at every width. -->
+<style>
+body { font: 16px/1.5 system-ui, sans-serif; }
+.title { font-size: calc(1.5rem + 2.4vw); }
+.caption { font-size: 2.2vw; }
+</style>
+</head>
+<body><h1 class="title">Invoices in one place</h1><p class="caption">Figure 1: invoices by week.</p><p>Body text.</p></body>
+</html>

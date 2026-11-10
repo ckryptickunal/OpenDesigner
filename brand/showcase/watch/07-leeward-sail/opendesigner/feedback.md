@@ -1,0 +1,8 @@
+# Feedback
+
+Gaps, bugs, confusing steps and ideas found while using OpenDesigner. Each entry has a ready-to-file issue link. Nothing is posted unless you open the link and submit it yourself.
+
+## F-001 · 2026-10-14 · gap
+Status colours do not move with the Colorfulness dial on a near-neutral brand: 15 -> 45 left success-dark-11 #6faa7b and danger-dark-11 #d78a81 unchanged (only the unused accent ramp moved). Port red / starboard green and heart-rate zones need vivid, luminous colours on black; the dark ramps give dusty mid-tones. A 'signal' or 'data on dark' palette option is missing; I derived colours from tokens with relative oklch.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bgap%5D%20Status%20colours%20do%20not%20move%20with%20the%20Colorfulness%20dial%20on%20a%20near-neutra...&body=%2A%2AKind%3A%2A%2A%20gap%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0AStatus%20colours%20do%20not%20move%20with%20the%20Colorfulness%20dial%20on%20a%20near-neutral%20brand%3A%2015%20-%3E%2045%20left%20success-dark-11%20%236faa7b%20and%20danger-dark-11%20%23d78a81%20unchanged%20%28only%20the%20unused%20accent%20ramp%20moved%29.%20Port%20red%20/%20starboard%20green%20and%20heart-rate%20zones%20need%20vivid%2C%20luminous%20colours%20on%20black%3B%20the%20dark%20ramps%20give%20dusty%20mid-tones.%20A%20%27signal%27%20or%20%27data%20on%20dark%27%20palette%20option%20is%20missing%3B%20I%20derived%20colours%20from%20tokens%20with%20relative%20oklch.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=gap%2Cfrom-engine)

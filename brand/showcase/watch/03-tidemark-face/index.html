@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=205, initial-scale=1">
+<title>Tidemark: today's tide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&family=Sora:wght@300..600&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Round 4: an app screen, not a face (watchOS has no third-party faces). One glanceable thing: the water height now,
+     over today's tide. The system draws the time small at the top right. Black ground, no sky, no texture.
+     App face: Sora, two weights. Hardware, not design tokens: the 49 mm-class display is 205 x 251 pt with rounded corners. */
+  :root { --display-w: 205px; --display-h: 251px; --display-r: 48px; }
+  /* Type roles, watchOS text styles at xLarge: the hours at 13, Caption 2 15, Headline 17, and one data numeral (64, outside the HIG styles on purpose). */
+  :root {
+    --t-caption: 15px;                    /* HIG Caption 2; the engine scale steps 14 and 17 */
+    --t-display: 64px;
+    --sea: var(--ds-color-brand-seed);    /* the one colour: the water, from now on */
+  }
+  /* System chrome: watchOS draws the title and the time itself, in San Francisco; Inter (SIL OFL) stands in, the same in every watch piece. */
+  :root { --t-sys: 600 17px/1 "Inter", system-ui, sans-serif; }
+  html, body { margin: 0; background: var(--ds-color-black); }
+  .display {
+    position: relative; width: var(--display-w); height: var(--display-h); overflow: hidden;
+    border-radius: var(--display-r); background: var(--ds-color-surface-base);
+    color: var(--ds-color-white); font-family: var(--ds-font-family-text);
+    font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+  }
+  .status { position: absolute; top: var(--ds-space-12); left: 20px; right: 22px; display: flex; justify-content: space-between; font: var(--t-sys); font-variant-numeric: tabular-nums; }
+  .status .place { color: var(--sea); }
+
+  .now { position: absolute; left: var(--ds-space-16); top: 44px; }
+  .now .v { display: block; font: 400 var(--t-display)/0.9 var(--ds-font-family-text); letter-spacing: -0.03em; }
+  .now .v small { font-size: 0.42em; letter-spacing: 0; margin-left: 4px; }
+  .now .s { display: block; margin-top: var(--ds-space-8); font: 400 var(--t-caption)/1.2 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+
+  .chart { position: absolute; left: var(--ds-space-16); width: 173px; top: 128px; height: 96px; }
+  .chart svg { display: block; width: 100%; height: 100%; overflow: visible; }
+</style>
+</head>
+<body>
+<main class="display" aria-label="Tidemark at Kellan Bay, 6:18: the water is 2.1 m and rising; high water 4.3 m at 9:42">
+  <div class="status"><span class="place">Kellan Bay</span><span class="clock">6:18</span></div>
+  <div class="now"><span class="v">2.1<small>m</small></span><span class="s">Rising · high at 9:42</span></div>
+  <div class="chart" aria-hidden="true"><svg id="tide" viewBox="0 0 173 96"></svg></div>
+</main>
+
+<script>
+/* Today's tide from midnight to midnight, a twice-daily tide with a small daily inequality:
+   h(t) = 2.25 + 1.83 cos(2 pi (t - 9.7) / 12.42) + 0.22 cos(2 pi (t - 9.7) / 24.84), in metres, t in hours.
+   That gives high water 4.3 m at 9:42, 2.1 m and rising at 6:18, a lower high (about 3.9 m) at 22:07 and lows near 0.5 m.
+   The water from now on is the accent line, the past is a grey line, a white dot is now; 6, 12 and 18 mark the hours. */
+(function () {
+  const svg = document.getElementById('tide');
+  const css = getComputedStyle(document.documentElement);
+  const sea = css.getPropertyValue('--ds-color-brand-seed').trim();
+  const past = css.getPropertyValue('--ds-color-neutral-dark-7').trim();
+  const hours = css.getPropertyValue('--ds-color-neutral-dark-10').trim();
+  const W = 173, H = 96, CH = 76, NOW = 6.3, HIGH = 9.7;
+  const h = t => 2.25 + 1.83 * Math.cos(2 * Math.PI * (t - HIGH) / 12.42) + 0.22 * Math.cos(2 * Math.PI * (t - HIGH) / 24.84);
+  const x = t => t / 24 * W, y = v => 6 + (4.6 - v) / 4.6 * (CH - 8);
+  const NS = 'http://www.w3.org/2000/svg';
+  const add = (n, a, txt) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (txt) e.textContent = txt; svg.appendChild(e); return e; };
+  const line = (a, b) => { let d = ''; for (let t = a; t <= b + 1e-9; t += 0.1) d += (d ? 'L' : 'M') + x(t).toFixed(1) + ' ' + y(h(t)).toFixed(1); return d; };
+  add('path', { d: line(0, NOW), fill: 'none', stroke: past, 'stroke-width': 2, 'stroke-linecap': 'round' });
+  add('path', { d: line(NOW, 24), fill: 'none', stroke: sea, 'stroke-width': 2.5, 'stroke-linecap': 'round' });
+  add('circle', { cx: x(HIGH), cy: y(h(HIGH)), r: 3, fill: sea });
+  add('circle', { cx: x(NOW), cy: y(h(NOW)), r: 5, fill: '#fff', stroke: '#000', 'stroke-width': 2 });
+  [6, 12, 18].forEach(t => add('text', { x: x(t), y: H - 4, fill: hours, 'font-family': 'Sora, sans-serif', 'font-size': 13, 'text-anchor': 'middle' }, String(t)));
+})();
+</script>
+</body>
+</html>

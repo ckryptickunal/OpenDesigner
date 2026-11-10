@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arrivant: Your first week at Northcote</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Round 4. Clay on one object only: the first week as six clay capsules, one row per day, each as long as its
+     tasks, with one clay bead per task, green when done. Clay is the engine's clay elevation (soft cast shadow + inner shade bottom-right + inner light top-left).
+     Everything else is flat: hairlines, ink, one green for done and progress. */
+  :root {
+    --page: var(--ds-color-neutral-light-2);
+    --stage: var(--ds-color-neutral-light-3);
+    --hair: var(--ds-color-neutral-light-6);
+    --ink: var(--ds-color-text-primary);
+    --ink-2: var(--ds-color-text-secondary);
+    --green: var(--ds-color-bg-action-primary);
+    --green-ink: var(--ds-color-text-accent);
+    --rim: var(--ds-color-border-strong);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body { background: var(--page); color: var(--ink); font: var(--ds-text-body-md); font-feature-settings: "tnum" 1; -webkit-font-smoothing: antialiased; overflow: hidden; }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+  .sm { font: var(--ds-text-body-sm); color: var(--ink-2); }
+
+  .app { height: 100vh; height: 100dvh; display: grid; grid-template-rows: auto 1fr; padding: var(--ds-space-20) var(--ds-space-40) var(--ds-space-32); gap: var(--ds-space-20); }
+  .top { display: flex; align-items: center; gap: var(--ds-space-16); height: 44px; }
+  .logo { display: flex; align-items: center; gap: var(--ds-space-8); font: var(--ds-text-title-md); font-weight: 600; letter-spacing: -0.02em; }
+  .emp { color: var(--ink-2); padding-left: var(--ds-space-16); margin-left: var(--ds-space-4); border-left: 1px solid var(--hair); }
+  .emp b { color: var(--ink); font-weight: 600; }
+  .top .sp { flex: 1; }
+  .link { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rim); text-underline-offset: 4px; padding: var(--ds-space-8) 0; }
+  .me { display: flex; align-items: center; gap: var(--ds-space-8); margin-left: var(--ds-space-16); }
+  .me .av { width: 32px; height: 32px; border-radius: 50%; }
+
+  .main { display: grid; grid-template-columns: 600px 1fr; gap: var(--ds-space-48); min-height: 0; }
+
+  /* ---- stage: the one clay object, the first week as a tray of clay beads, one bead per task */
+  .stage { position: relative; display: flex; flex-direction: column; gap: var(--ds-space-24); }
+  .sh { padding: var(--ds-space-4) 0 0; display: flex; align-items: baseline; justify-content: space-between; }
+  .sh h2 { font: var(--ds-text-title-md); font-weight: 400; }
+  .scene { margin-bottom: var(--ds-space-16); }
+  .tray { display: grid; grid-template-columns: 104px auto; justify-content: start; align-items: center; row-gap: 14px; padding: 8px 0 0; }
+  /* each day is one raised clay capsule, as tall as its tasks; beads sit in it, green when done */
+  .well { border-radius: 38px; background: linear-gradient(160deg, var(--ds-color-accent-light-4), var(--ds-color-accent-light-6));
+    box-shadow: 0 14px 24px rgb(24 58 44 / 0.14), 0 3px 6px rgb(24 58 44 / 0.08), inset -5px -8px 12px rgb(24 58 44 / 0.12), inset 5px 6px 10px rgb(255 255 255 / 0.85);
+    display: flex; flex-direction: row; align-items: center; gap: 8px; padding: 0 7px; height: 76px; justify-self: start; }
+  .bead { width: 62px; height: 62px; flex: none; border-radius: 50%; display: grid; place-items: center;
+    background: linear-gradient(150deg, var(--ds-color-white), var(--ds-color-neutral-light-3));
+    box-shadow: inset -3px -5px 8px rgb(24 58 44 / 0.10), inset 3px 3px 6px rgb(255 255 255 / 0.9), 0 2px 3px rgb(24 58 44 / 0.10); }
+  .bead.done { background: linear-gradient(160deg, #188a65, var(--ds-color-accent-light-9));
+    box-shadow: inset -3px -5px 8px rgb(10 40 28 / 0.26), inset 3px 3px 6px rgb(255 255 255 / 0.16), 0 2px 3px rgb(14 60 40 / 0.16); color: var(--ds-color-white); }
+  .bead.next { box-shadow: inset -3px -5px 8px rgb(24 58 44 / 0.10), inset 3px 3px 6px rgb(255 255 255 / 0.9), 0 2px 3px rgb(24 58 44 / 0.10), 0 0 0 2px var(--green); }
+  .day { font: var(--ds-text-body-sm); color: var(--ink-2); }
+  .day b { display: block; font-weight: 600; color: var(--ink); font-size: var(--ds-font-size-16); line-height: 22px; }
+  .when { margin-top: auto; padding: 0 0 var(--ds-space-4); display: grid; gap: var(--ds-space-6); }
+  .kick { font: var(--ds-text-label-lg); color: var(--ink-2); font-weight: 600; }
+  .when h2 { font: var(--ds-text-title-lg); font-weight: 400; letter-spacing: -0.015em; }
+  .when p { color: var(--ink-2); }
+  .when p b { color: var(--ink); font-weight: 600; }
+  .when .cal { justify-self: start; font-weight: 600; padding: var(--ds-space-4) 0; }
+  .me .av { display: grid; place-items: center; background: var(--ds-color-accent-light-4); color: var(--ds-color-accent-light-12); font: var(--ds-text-label-md); font-weight: 600; }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ---- checklist: flat */
+  .list { display: flex; flex-direction: column; min-height: 0; padding-top: var(--ds-space-4); }
+  .list h1 { font: var(--ds-text-headline-sm); font-weight: 400; letter-spacing: -0.025em; }
+  .lede { color: var(--ink-2); margin-top: var(--ds-space-8); }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .prog { display: flex; align-items: center; gap: var(--ds-space-16); margin-top: var(--ds-space-24); }
+  .prog b { font-weight: 600; white-space: nowrap; }
+  .bar { flex: 1; height: 8px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-4); position: relative; overflow: hidden; }
+  .bar i { position: absolute; inset: 0 auto 0 0; border-radius: var(--ds-radius-full); background: var(--green); }
+
+  .group { margin-top: var(--ds-space-24); }
+  .gh { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: var(--ds-space-8); border-bottom: 1px solid var(--hair); }
+  .gh h3 { font: var(--ds-text-label-lg); font-weight: 600; }
+  .tasks { list-style: none; padding: 0; }
+  .task { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: var(--ds-space-16); padding: var(--ds-space-8) 0; border-bottom: 1px solid var(--hair); min-height: 60px; }
+  .task .t { font-weight: 400; }
+  .task .s { font: var(--ds-text-body-sm); color: var(--ink-2); margin-top: var(--ds-space-2); }
+  .task.done .t { color: var(--ink-2); }
+  .chk { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; }
+  .chk.on { background: var(--green); color: var(--ds-color-text-on-accent); }
+  .chk.off { box-shadow: inset 0 0 0 1.5px var(--rim); }
+  .when-r { color: var(--ink); text-align: right; white-space: nowrap; }
+  .btn { height: 40px; padding: 0 var(--ds-space-20); border: 0; border-radius: var(--ds-radius-full); background: var(--ink); color: var(--ds-color-white); font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--rim); }
+  .task.next .t { font-weight: 600; }
+  @media (pointer: fine) { .btn:hover { filter: brightness(1.08); } .btn.ghost:hover { background: var(--ds-color-neutral-light-3); filter: none; } }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="top">
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path d="M15 3.5h7.5a2 2 0 0 1 2 2v17a2 2 0 0 1-2 2H15" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/><path d="M3.5 14h13M12 9l5 5-5 5" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      arrivant
+    </div>
+    <div class="emp">Onboarding for <b>Northcote Labs</b></div>
+    <div class="sp"></div>
+    <a class="link" href="#">Ask the People team</a>
+    <div class="me"><span class="av" aria-hidden="true">IC</span><span>Imani</span></div>
+  </header>
+
+  <div class="main">
+    <section class="stage" aria-labelledby="day-h">
+      <div class="sh"><h2>Your first week</h2></div>
+      <div class="scene">
+        <div class="tray" role="img" aria-label="Tasks by day: before day one 5, all done; Monday 19 October 3; Tuesday 20 October 1; Wednesday 21 October 1; Thursday 22 October 1; Friday 23 October 1.">
+          <div class="day"><b>Before</b>done</div><div class="well"><i class="bead done"><svg width="22" height="22" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.5 2.5L11 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i><i class="bead done"><svg width="22" height="22" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.5 2.5L11 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i><i class="bead done"><svg width="22" height="22" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.5 2.5L11 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i><i class="bead done"><svg width="22" height="22" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.5 2.5L11 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i><i class="bead done"><svg width="22" height="22" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.5 2.5L11 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></div><div class="day"><b>Mon</b>19 Oct</div><div class="well"><i class="bead next"></i><i class="bead "></i><i class="bead "></i></div><div class="day"><b>Tue</b>20 Oct</div><div class="well"><i class="bead "></i></div><div class="day"><b>Wed</b>21 Oct</div><div class="well"><i class="bead "></i></div><div class="day"><b>Thu</b>22 Oct</div><div class="well"><i class="bead "></i></div><div class="day"><b>Fri</b>23 Oct</div><div class="well"><i class="bead "></i></div>
+        </div>
+      </div>
+      <div class="when">
+        <span class="kick">Your first day, in 4 days</span>
+        <h2 id="day-h">Monday 19 October</h2>
+        <p><b>41 Ropewalk Lane, 3rd floor.</b> Side door, open from 08:30.</p>
+        <a class="link cal" href="#">Add day one to your calendar</a>
+      </div>
+    </section>
+
+    <section class="list" aria-labelledby="wk-h">
+      <h1 id="wk-h">Welcome to Northcote, Imani</h1>
+      <p class="lede">Your buddy is <b>Tove Nyström</b> (Design). Your manager is <b>Lena Fischer</b>.</p>
+      <div class="prog"><div class="bar" role="progressbar" aria-label="Onboarding progress" aria-valuemin="0" aria-valuemax="12" aria-valuenow="5"><i style="width: 41.667%"></i></div><b>5 of 12 done</b></div>
+
+      <div class="group">
+        <div class="gh"><h3>Before day one</h3><span class="sm">5 of 5 done</span></div>
+        <ul class="tasks">
+          <li class="task done"><span class="chk on" aria-label="Done"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.5 2.5L11 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div><div class="t">Contract, payroll, right to work, laptop choice, accounts</div><div class="s">5 tasks · last one done Mon 12 Oct</div></div><span class="when-r"></span></li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <div class="gh"><h3>Day one</h3><span class="sm">0 of 3 done</span></div>
+        <ul class="tasks">
+          <li class="task next"><span class="chk off" aria-label="To do"></span>
+            <div><div class="t">Collect your badge and laptop</div><div class="s">At reception · Tove meets you</div></div>
+            <span class="when-r">09:30</span></li>
+          <li class="task"><span class="chk off" aria-label="To do"></span>
+            <div><div class="t">Coffee with your buddy, Tove Nyström</div><div class="s">Kitchen · 30 min</div></div><span class="when-r">11:00</span></li>
+          <li class="task"><span class="chk off" aria-label="To do"></span>
+            <div><div class="t">Welcome lunch with the design team</div><div class="s">Vegetarian, picked Fri 9 Oct</div></div><span class="when-r">12:30</span></li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <div class="gh"><h3>Rest of week one</h3><span class="sm">0 of 4 done</span></div>
+        <ul class="tasks">
+          <li class="task"><span class="chk off" aria-label="To do"></span>
+            <div><div class="t">Security and privacy basics</div><div class="s">25-minute course</div></div><span class="when-r">By Tue 20 Oct</span></li>
+          <li class="task"><span class="chk off" aria-label="To do"></span>
+            <div><div class="t">First one-to-one with Lena</div><div class="s">Goals for your first 30 days</div></div><span class="when-r">Wed 21 Oct, 14:00</span></li>
+          <li class="task"><span class="chk off" aria-label="To do"></span>
+            <div><div class="t">Read the design handbook</div><div class="s">18 pages · about 40 minutes</div></div><span class="when-r">By Thu 22 Oct</span></li>
+          <li class="task"><span class="chk off" aria-label="To do"></span>
+            <div><div class="t">Ship your first small fix</div><div class="s">From the “Good first tasks” board</div></div><span class="when-r">By Fri 23 Oct</span></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</div>
+</body>
+</html>

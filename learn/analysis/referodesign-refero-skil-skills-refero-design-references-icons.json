@@ -1,0 +1,581 @@
+{
+  "summary": "A short reference from the Refero design skill on icons in product UI. It argues icons should be treated like typography: functional, consistent, and drawn from one set. It gives display sizes by context, stroke weight trade-offs, icon-to-text size pairings, color and contrast rules, accessibility requirements, optical corrections, and a pre-ship checklist. It closes with a table of when to pick Lucide, Heroicons, Phosphor, Material Symbols or SF Symbols. For a design system it supplies concrete defaults for the icon size, stroke and library decisions.",
+  "key_ideas": [
+    "In product UI icons are functional, like type, not decoration",
+    "Marketing may use duotone, gradients and illustrative icons, but that style must not leak into the product",
+    "Display size depends on context: 16px dense/inline, 20-24px controls, 28-32px feature cards and empty states",
+    "Thinner strokes suit larger sizes; thicker strokes hold up better at small sizes",
+    "Round caps and joins read friendlier; square ones read technical and precise",
+    "Consistency across one library matters more than the specific values",
+    "Geometric center is not visual center; play triangles and chevrons need nudging",
+    "Aim for equal visual mass across shapes, not equal measurements",
+    "Icons default to currentColor so they follow text color and themes",
+    "Semantic colors on icons are for status only",
+    "Meaningful icons need 3:1 contrast; decorative ones are hidden from assistive tech",
+    "Variable glyph systems (Material Symbols, SF Symbols) can match icon weight to text weight"
+  ],
+  "entities": [
+    {
+      "name": "Refero",
+      "type": "company",
+      "description": "Publisher of the refero_skill repository this guide comes from"
+    },
+    {
+      "name": "Lucide",
+      "type": "library",
+      "description": "Outline-only icon set, 24x24 with 2px stroke; suggested SaaS default"
+    },
+    {
+      "name": "Heroicons",
+      "type": "library",
+      "description": "Outline and solid icon set; suggested for Tailwind projects"
+    },
+    {
+      "name": "Phosphor",
+      "type": "library",
+      "description": "Icon set with 6 weights, for weight flexibility without variable fonts"
+    },
+    {
+      "name": "Material Symbols",
+      "type": "library",
+      "description": "Variable icon font with FILL, wght and opsz axes, for syncing icon weight with text on the web"
+    },
+    {
+      "name": "SF Symbols",
+      "type": "library",
+      "description": "Apple's glyph system that matches San Francisco weight; for native apps, not web"
+    },
+    {
+      "name": "currentColor",
+      "type": "concept",
+      "description": "CSS keyword recommended as the default icon color so icons inherit text color"
+    }
+  ],
+  "topics": [
+    {
+      "name": "Icons and imagery",
+      "summary": "Icon sizing, stroke, style consistency, optical corrections, pairing with text, color and library choice for product UI."
+    },
+    {
+      "name": "Accessibility",
+      "summary": "Icons carrying meaning need 3:1 contrast, action icons need aria-label or visible text, decorative icons get aria-hidden, and icon buttons need 44x44px touch or 32x32px desktop hit areas."
+    },
+    {
+      "name": "Design systems and tokens",
+      "summary": "Pick one icon library or define your own spec so icons stay consistent; variable glyph systems fit design systems."
+    },
+    {
+      "name": "Web implementation (CSS and React)",
+      "summary": "Shows font-variation-settings for Material Symbols and align-items: center for icon and text alignment."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Most icon libraries use a 24x24px canvas, but this is convention, not law.",
+      "evidence": "Icon Sizing: Most libraries use 24×24px as base"
+    },
+    {
+      "claim": "A 2px stroke is the common default in Lucide and Heroicons.",
+      "evidence": "Stroke weight: Standard (2px): common default in Lucide, Heroicons"
+    },
+    {
+      "claim": "Circles look lighter than squares and diagonals look thinner than horizontals at the same stroke.",
+      "evidence": "Optical Corrections: Weight"
+    },
+    {
+      "claim": "Mixing icon libraries such as Lucide and Heroicons produces a collage effect.",
+      "evidence": "Style Consistency: Don'ts"
+    },
+    {
+      "claim": "Semibold text next to a thin icon looks like it comes from different systems.",
+      "evidence": "Icon + Text Pairing: Weight harmony"
+    },
+    {
+      "claim": "Optical corrections are what separate adequate icon work from premium.",
+      "evidence": "Optical Corrections: What separates \"adequate\" from \"premium.\""
+    },
+    {
+      "claim": "SF Symbols automatically match San Francisco font weight.",
+      "evidence": "SF Symbols (Apple/Native)"
+    }
+  ],
+  "quotes": [
+    "In product UI, treat icons as typography — functional, not decorative.",
+    "Consistency matters more than specific values.",
+    "Geometric center ≠ visual center."
+  ],
+  "tags": [
+    "icons",
+    "iconography",
+    "stroke-weight",
+    "optical-correction",
+    "icon-libraries",
+    "accessibility",
+    "refero"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Use one icon style and one library across the whole product; do not mix outline in nav with solid in buttons and duotone in cards.",
+      "why": "Mixing styles or libraries reads as a collage.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Style Consistency: One language per product. No exceptions."
+    },
+    {
+      "rule": "Keep duotone, gradient and illustrative icons in marketing surfaces only, never in product UI.",
+      "why": "Product icons must be predictable, scalable and themeable.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Two Contexts: Never leaks into product"
+    },
+    {
+      "rule": "Size icons by context: 16px inline with body text, in table cells and dense UI; 20-24px in buttons, nav items and form inputs; 28-32px in feature cards, empty states and marketing.",
+      "why": "Display size depends on context.",
+      "kind": "do",
+      "strength": "should",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [
+        "16px",
+        "20–24px",
+        "28–32px"
+      ],
+      "evidence": "Icon Sizing: Display sizes"
+    },
+    {
+      "rule": "Use a thinner stroke (1.5px) for larger icons and a thicker stroke (2.5px+) for small icons; 2px is the standard default.",
+      "why": "Thinner feels lighter and works better large; thicker has more presence and holds up small.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [
+        "1.5px",
+        "2px",
+        "2.5px+"
+      ],
+      "evidence": "Stroke weight varies by library and style"
+    },
+    {
+      "rule": "Choose round caps and joins for a friendly, modern tone, or square ones for a technical, precise tone, to match the product.",
+      "why": "Caps and joins change the felt tone of the icons.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Round vs square caps/joins"
+    },
+    {
+      "rule": "Do not draw custom icons that ignore the chosen system's grid and stroke.",
+      "why": "They break the one-language consistency.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Style Consistency: Don'ts"
+    },
+    {
+      "rule": "Optically center asymmetric icons: shift play triangles right by 0.5-1px and chevrons or arrows toward their point; check by placing the icon in a circle.",
+      "why": "Geometric center is not visual center.",
+      "kind": "do",
+      "strength": "should",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [
+        "0.5–1px"
+      ],
+      "evidence": "Optical Corrections: Centering"
+    },
+    {
+      "rule": "Balance icons for equal visual mass rather than equal measurements.",
+      "why": "Circles appear lighter than squares and diagonals thinner than horizontals at the same stroke.",
+      "kind": "do",
+      "strength": "should",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Optical Corrections: Weight"
+    },
+    {
+      "rule": "Pair icon size with text size: 16px icons with 14-16px text, 18-20px icons with 16-18px text, 20-24px icons with headings, then adjust by visual testing.",
+      "why": "Given as a starting point for icon and text pairing.",
+      "kind": "do",
+      "strength": "should",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [
+        "14–16px",
+        "16px",
+        "16–18px",
+        "18–20px",
+        "20–24px"
+      ],
+      "evidence": "Icon + Text Pairing"
+    },
+    {
+      "rule": "Align icons with text using align-items: center plus a 0.5-1px manual tweak where needed.",
+      "why": "The source says icons often need a 0.5-1px manual tweak beyond align-items: center.",
+      "kind": "do",
+      "strength": "should",
+      "area": "iconography",
+      "applies_to": "css",
+      "values": [
+        "align-items: center",
+        "0.5–1px"
+      ],
+      "evidence": "Icon + Text Pairing: Alignment"
+    },
+    {
+      "rule": "Match icon weight to adjacent text weight, or use solid icons next to heavy text.",
+      "why": "Semibold text with a thin icon looks like it comes from different systems.",
+      "kind": "do",
+      "strength": "should",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Weight harmony"
+    },
+    {
+      "rule": "Color icons with currentColor by default.",
+      "why": "It inherits text color and syncs with themes automatically.",
+      "kind": "do",
+      "strength": "should",
+      "area": "iconography",
+      "applies_to": "css",
+      "values": [
+        "currentColor"
+      ],
+      "evidence": "Color: Default"
+    },
+    {
+      "rule": "Use red, green and amber on icons only to signal error, success and warning status, never as decoration.",
+      "why": "Semantic colors are for status.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Color: Semantic"
+    },
+    {
+      "rule": "Give meaningful icons, including icon buttons, toggles and status indicators, at least 3:1 contrast.",
+      "why": "WCAG non-text contrast; applies to icon buttons, toggles and status indicators.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [
+        "3:1"
+      ],
+      "evidence": "Color: Contrast"
+    },
+    {
+      "rule": "Put an aria-label on icon-only action buttons (or show visible text nearby) and mark decorative icons aria-hidden=\"true\".",
+      "why": "Accessibility requirements for action vs decorative icons.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "web",
+      "values": [
+        "aria-label",
+        "aria-hidden=\"true\""
+      ],
+      "evidence": "Accessibility table"
+    },
+    {
+      "rule": "Give icon buttons a hit area of 44x44px on touch and 32x32px on desktop, even if the visible icon is smaller.",
+      "why": "Hit area requirement for icon buttons.",
+      "kind": "do",
+      "strength": "must",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [
+        "44×44px",
+        "32×32px"
+      ],
+      "evidence": "Accessibility: Icon buttons"
+    },
+    {
+      "rule": "Before shipping, check icons at 50% scale, in grayscale, in dark theme, in table rows, for 3:1 contrast, 44px+ touch targets and same style everywhere.",
+      "why": "Pre-ship checklist.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "50%",
+        "3:1",
+        "44px+"
+      ],
+      "evidence": "Pre-Ship Checklist"
+    },
+    {
+      "rule": "With Material Symbols, sync the wght axis with text weight, raise opsz for smaller icons, and toggle FILL between outline (0) and solid (1).",
+      "why": "Variable glyphs can match text weight dynamically.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "iconography",
+      "applies_to": "css",
+      "values": [
+        "'FILL' 0",
+        "'wght' 500",
+        "'opsz' 24",
+        "400",
+        "500",
+        "600"
+      ],
+      "evidence": "Material Symbols (Web)"
+    },
+    {
+      "rule": "Use SF Symbols in SwiftUI/UIKit apps, not on the web.",
+      "why": "They match San Francisco weight and are a native system.",
+      "kind": "do",
+      "strength": "should",
+      "area": "platforms",
+      "applies_to": "ios",
+      "values": [],
+      "evidence": "SF Symbols (Apple/Native)"
+    },
+    {
+      "rule": "Pick one icon library or define your own icon spec (canvas, stroke, caps) and hold to it.",
+      "why": "Consistency matters more than specific values.",
+      "kind": "do",
+      "strength": "should",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Icon Sizing: Key principle"
+    },
+    {
+      "rule": "If an icon does not read instantly, simplify it.",
+      "why": "Icons are typography: consistent, optical, accessible.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Closing line"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Which icon library should the product start from?",
+      "options": [
+        {
+          "name": "Lucide",
+          "effect": "Clean, consistent outline icons on 24x24 with 2px stroke",
+          "when": "Web SaaS, quick start"
+        },
+        {
+          "name": "Heroicons",
+          "effect": "Outline and solid variant per icon",
+          "when": "Tailwind projects"
+        },
+        {
+          "name": "Material Symbols",
+          "effect": "Variable glyphs whose weight, fill and optical size can follow the text",
+          "when": "Need weight sync with text"
+        },
+        {
+          "name": "SF Symbols",
+          "effect": "Glyphs that match San Francisco weight, with a scale axis",
+          "when": "Apple native app"
+        },
+        {
+          "name": "Phosphor",
+          "effect": "Six weights of the same icon",
+          "when": "Multiple weights without variable fonts"
+        }
+      ],
+      "recommendation": "Lucide as the SaaS default; otherwise choose by scenario per the When to Use What table.",
+      "maps_to": "Q-icon-01",
+      "evidence": "Libraries: When to Use What"
+    },
+    {
+      "question": "Should product icons be outline, solid or variable glyphs?",
+      "options": [
+        {
+          "name": "Outline",
+          "effect": "Lighter, less dominant icons",
+          "when": "Dense UIs, data-heavy products"
+        },
+        {
+          "name": "Solid",
+          "effect": "Bolder, clearer action icons",
+          "when": "Consumer apps, clear actions"
+        },
+        {
+          "name": "Variable glyphs",
+          "effect": "Icons whose weight and fill follow tokens",
+          "when": "Design systems (SF Symbols, Material Symbols)"
+        }
+      ],
+      "recommendation": "Pick one style for the whole product; no mixing.",
+      "maps_to": "Q-icon-02",
+      "evidence": "Style Consistency table"
+    },
+    {
+      "question": "How thick should icon strokes be?",
+      "options": [
+        {
+          "name": "Thinner (1.5px)",
+          "effect": "Lighter feel",
+          "when": "Works better at larger sizes"
+        },
+        {
+          "name": "Standard (2px)",
+          "effect": "Common default look of Lucide and Heroicons",
+          "when": "Default"
+        },
+        {
+          "name": "Thicker (2.5px+)",
+          "effect": "Bolder presence",
+          "when": "Better at small sizes"
+        }
+      ],
+      "recommendation": "Pick one library or define your own spec; consistency matters more than the value.",
+      "maps_to": "Q-icon-03",
+      "evidence": "Stroke weight varies by library and style"
+    },
+    {
+      "question": "Round or square caps and joins on icons?",
+      "options": [
+        {
+          "name": "Round",
+          "effect": "Friendlier, modern feel",
+          "when": "Friendly product tone"
+        },
+        {
+          "name": "Square",
+          "effect": "More technical, precise feel",
+          "when": "Technical product tone"
+        }
+      ],
+      "recommendation": "Match the product's tone.",
+      "maps_to": "Q-icon-02",
+      "evidence": "Round vs square caps/joins"
+    },
+    {
+      "question": "Which icon display sizes does the product need?",
+      "options": [
+        {
+          "name": "Small (16px)",
+          "effect": "Fits inline with body text, table cells, dense UI",
+          "when": "Dense UI"
+        },
+        {
+          "name": "Medium (20–24px)",
+          "effect": "Buttons, nav items, form inputs",
+          "when": "Controls"
+        },
+        {
+          "name": "Large (28–32px)",
+          "effect": "Feature cards, empty states, marketing",
+          "when": "Feature and empty-state surfaces"
+        }
+      ],
+      "recommendation": "Use all three by context on a 24×24px canvas convention; adjust by visual testing.",
+      "maps_to": "Q-icon-04",
+      "evidence": "Icon Sizing: Display sizes"
+    }
+  ],
+  "process": [
+    {
+      "step": "Separate contexts",
+      "detail": "Decide product UI icon style (clean outline or solid, one set) separately from marketing illustration style, and keep the marketing style out of the product."
+    },
+    {
+      "step": "Pick library or spec",
+      "detail": "Choose one library from the When to Use What table, or define your own canvas, stroke and cap spec."
+    },
+    {
+      "step": "Set sizes and pairing",
+      "detail": "Use context sizes (16 / 20-24 / 28-32px) and the icon-to-text pairing table as a starting point, then adjust visually."
+    },
+    {
+      "step": "Apply optical corrections",
+      "detail": "Nudge asymmetric glyphs toward visual center and balance visual mass; test centering inside a circle."
+    },
+    {
+      "step": "Wire color and accessibility",
+      "detail": "Default to currentColor, reserve semantic colors for status, check 3:1 contrast, add aria-label or aria-hidden, and give hit areas of 44px touch / 32px desktop."
+    },
+    {
+      "step": "Run the pre-ship checklist",
+      "detail": "Check 50% scale, grayscale, dark theme, table rows, contrast, touch targets and consistency."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Material Symbols CSS with font-variation-settings 'FILL' 0, 'wght' 500, 'opsz' 24",
+      "where": "Material Symbols (Web)",
+      "visual_note": "An outline icon whose weight is set to match medium-weight text; FILL 1 would make it solid."
+    },
+    {
+      "what": "Anti-pattern: outline icons in nav, solid in buttons, duotone in cards",
+      "where": null,
+      "visual_note": "Three icon styles on one screen read as icons from different systems."
+    },
+    {
+      "what": "Test: put the icon in a circle and check whether it looks centered; shift a play triangle right 0.5-1px if not",
+      "where": null,
+      "visual_note": "Demonstrates optical centering: the nudged triangle looks centered while the geometric one looks left-heavy [inferred]."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "24×24px",
+      "context": "Common icon canvas base",
+      "evidence": "Icon Sizing"
+    },
+    {
+      "value": "16px / 20–24px / 28–32px",
+      "context": "Small, medium and large icon display sizes",
+      "evidence": "Display sizes"
+    },
+    {
+      "value": "1.5px / 2px / 2.5px+",
+      "context": "Thin, standard and thick stroke weights",
+      "evidence": "Stroke weight"
+    },
+    {
+      "value": "0.5–1px",
+      "context": "Optical shift for play triangles and alignment tweak",
+      "evidence": "Optical Corrections; Alignment"
+    },
+    {
+      "value": "3:1",
+      "context": "Minimum contrast for meaningful icons (WCAG non-text)",
+      "evidence": "Color: Contrast"
+    },
+    {
+      "value": "44×44px / 32×32px",
+      "context": "Icon button hit area on touch / desktop",
+      "evidence": "Accessibility"
+    },
+    {
+      "value": "6 weights",
+      "context": "Phosphor weight count",
+      "evidence": "Libraries"
+    },
+    {
+      "value": "20, 24, 40, 48",
+      "context": "Material Symbols optical size values",
+      "evidence": "Material Symbols (Web)"
+    }
+  ],
+  "caveats": [
+    "Part of Refero's own design skill; library recommendations are opinion rather than measured findings.",
+    "Size, pairing and stroke values are framed by the source as starting points to adjust by visual testing.",
+    "Source pinned at commit a9b54a3; library features (e.g. Phosphor weights, Material Symbols axes) may change."
+  ]
+}

@@ -1,0 +1,169 @@
+{
+  "_about": "Licence ledger: one row per illustration used in this project (hooks.md rule 5).",
+  "items": [
+    {
+      "name": "monstera",
+      "status": "chosen",
+      "file": "src/monstera.svg",
+      "source": "cocomaterial",
+      "id": "cocomaterial:1242",
+      "title": "Plant 3",
+      "page": "https://cocomaterial.com/results?q=potted",
+      "download": "https://cocomaterial.com/media/house_plants_flowerpot_pot_04.svg",
+      "author": "CocoMaterial",
+      "author_url": null,
+      "licence": "CC0",
+      "licence_url": "https://cocomaterial.com/license",
+      "attribution": "",
+      "verdict": "ok",
+      "restrictions": "",
+      "set": null,
+      "fetched": "2026-10-14",
+      "sanitized": [],
+      "metrics": {
+        "colors": 2,
+        "hues": 0,
+        "shapes": 2,
+        "stroke_ratio": 0.0,
+        "aspect": 1.03,
+        "bytes": 19048,
+        "gradients": 0,
+        "raster": 0,
+        "text": 0
+      },
+      "mapping": {
+        "#ffffff": "accent-4",
+        "#030303": "accent-12"
+      },
+      "variants": [
+        "dark",
+        "light",
+        "mono",
+        "swap",
+        "themed",
+        "tint"
+      ],
+      "palette": "brand/showcase/app-screens/06-plant-care/opendesigner/build/css/tokens.css",
+      "applied": [
+        "brand/showcase/app-screens/06-plant-care/art/monstera.illustration.css",
+        "brand/showcase/app-screens/06-plant-care/art/monstera.svg"
+      ],
+      "slot": "hero"
+    },
+    {
+      "name": "snake-plant",
+      "status": "chosen",
+      "file": "src/snake-plant.svg",
+      "source": "cocomaterial",
+      "id": "cocomaterial:1243",
+      "title": "Plant 2",
+      "page": "https://cocomaterial.com/results?q=potted",
+      "download": "https://cocomaterial.com/media/house_plants_flowerpot_pot_01.svg",
+      "author": "CocoMaterial",
+      "author_url": null,
+      "licence": "CC0",
+      "licence_url": "https://cocomaterial.com/license",
+      "attribution": "",
+      "verdict": "ok",
+      "restrictions": "",
+      "set": null,
+      "fetched": "2026-10-14",
+      "sanitized": [],
+      "metrics": {
+        "colors": 2,
+        "hues": 0,
+        "shapes": 2,
+        "stroke_ratio": 0.0,
+        "aspect": 0.7,
+        "bytes": 6131,
+        "gradients": 0,
+        "raster": 0,
+        "text": 0
+      },
+      "mapping": {
+        "#ffffff": "accent-5",
+        "#030303": "accent-12"
+      },
+      "variants": [
+        "dark",
+        "light",
+        "mono",
+        "swap",
+        "themed",
+        "tint"
+      ],
+      "palette": "brand/showcase/app-screens/06-plant-care/opendesigner/build/css/tokens.css",
+      "applied": [
+        "brand/showcase/app-screens/06-plant-care/art/snake-plant.illustration.css",
+        "brand/showcase/app-screens/06-plant-care/art/snake-plant.svg"
+      ],
+      "slot": "hero"
+    },
+    {
+      "name": "trailing-plant",
+      "status": "chosen",
+      "file": "src/trailing-plant.svg",
+      "source": "cocomaterial",
+      "id": "cocomaterial:1244",
+      "title": "Plant 1",
+      "page": "https://cocomaterial.com/results?q=potted",
+      "download": "https://cocomaterial.com/media/house_plants_flowerpot_pot_02.svg",
+      "author": "CocoMaterial",
+      "author_url": null,
+      "licence": "CC0",
+      "licence_url": "https://cocomaterial.com/license",
+      "attribution": "",
+      "verdict": "ok",
+      "restrictions": "",
+      "set": null,
+      "fetched": "2026-10-14",
+      "sanitized": [],
+      "metrics": {
+        "colors": 2,
+        "hues": 0,
+        "shapes": 2,
+        "stroke_ratio": 0.0,
+        "aspect": 0.59,
+        "bytes": 28405,
+        "gradients": 0,
+        "raster": 0,
+        "text": 0
+      },
+      "mapping": {
+        "#ffffff": "accent-3",
+        "#030303": "accent-12"
+      },
+      "variants": [
+        "dark",
+        "light",
+        "mono",
+        "swap",
+        "themed",
+        "tint"
+      ],
+      "palette": "brand/showcase/app-screens/06-plant-care/opendesigner/build/css/tokens.css",
+      "applied": [
+        "brand/showcase/app-screens/06-plant-care/art/trailing-plant.illustration.css",
+        "brand/showcase/app-screens/06-plant-care/art/trailing-plant.svg"
+      ],
+      "slot": "hero"
+    }
+  ],
+  "style": {
+    "source": "cocomaterial",
+    "set": null,
+    "by": "monstera",
+    "metrics": {
+      "colors": 2,
+      "hues": 0,
+      "shapes": 2,
+      "stroke_ratio": 0.0,
+      "aspect": 1.03,
+      "bytes": 19048,
+      "gradients": 0,
+      "raster": 0,
+      "text": 0
+    },
+    "locked": "2026-10-14"
+  }
+}

@@ -1,0 +1,11 @@
+# Rebuilt from what is committed: capture.py makes the screenshots (kept local, like the showcase renders), review.py compare
+# makes the report at site build, and engine.py build makes the exports.
+shots/
+review/compare.html
+review/findings*.json
+review/ledger.json
+opendesigner/build/*
+!opendesigner/build/css/
+opendesigner/preview/
+opendesigner/preview.html
+opendesigner/overview.html

@@ -1,0 +1,65 @@
+{
+ "piece": "heroes/06-playful-fintech",
+ "title": "06 Plumpot: playful fintech hero",
+ "pattern": "product hero",
+ "platform": "web",
+ "industry": "fintech",
+ "style": [
+  "playful",
+  "glass"
+ ],
+ "tags": [
+  "product hero",
+  "fintech",
+  "teen banking",
+  "playful",
+  "card",
+  "coins",
+  "floating cards",
+  "gradient"
+ ],
+ "score": 2,
+ "verdict": "remake",
+ "strengths": [
+  "Copy is specific and honest: 'Get paid for chores, split the pizza, watch your jars fill. Parents see the big picture, never every move.'",
+  "The coin recipe (elliptical face, darker knurled edge, one highlight) and the card with chip, contactless mark and 'MAYA R.' are drawn consistently",
+  "Spacing is tidy and the pill nav with an active tab is clean"
+ ],
+ "slop_signals": [
+  "A large pastel gradient circle (pink to lavender to mint) behind the card, there only to be a backdrop",
+  "Four four-point sparkles scattered around the headline and the card",
+  "'New  Savings jars that fill themselves' pill badge above the headline",
+  "Headline with 'big plans.' in a pink highlight block, two buttons underneath, then three check-mark reassurances: the full template stack in order",
+  "A tilted card with three floating UI cards at different angles and shadows (Festival ticket 64%, £5.00 dog walking, Sneaker fund), plus five coins scattered for depth",
+  "A round 'AGES 13-17 · NO FEES' rotating-text sticker in the bottom corner"
+ ],
+ "fixes": [
+  "Pick one object and make it real: the card standing on something physical (a desk, a lunch tray) or one phone screen, as Revolut <18 and UGLYCASH do; cut the gradient circle, sparkles, sticker and most coins",
+  "Remove the pill badge, the highlight block and the check row; one button",
+  "If a second element is needed, show one jar (a savings goal) as part of the product, not as a floating card",
+  "Let the headline be smaller so the product carries the page; Fredoka at this size plus the highlight reads as a toy, not a bank"
+ ],
+ "references": [
+  {
+   "site": "Revolut",
+   "url": "https://mobbin.com/sites/sections/a24bfc41-27e4-4c8e-8dd8-db4f1d1a847f",
+   "what": "Teen account hero: the card standing on a rendered desk with a notebook and pencil, uppercase headline, one button; no floating UI, no badge, no sparkles"
+  },
+  {
+   "site": "Revolut",
+   "url": "https://mobbin.com/sites/sections/873daa4e-17bc-4d64-a26c-98ac29af2a96",
+   "what": "Two cards and two squiggles on white, one button; playful with four objects, not fourteen"
+  },
+  {
+   "site": "UGLYCASH",
+   "url": "https://mobbin.com/sites/sections/38f98d17-c8cf-41d7-8da7-737c54b4217d",
+   "what": "Huge headline and one phone, nothing else; scale contrast does the fun"
+  },
+  {
+   "site": "Revolut",
+   "url": "https://mobbin.com/sites/sections/481d7e3c-d983-486f-a906-e8f003e52831",
+   "what": "Rendered coins with real edge detail and lighting; ours follow the recipe but flatter, and there are too many"
+  }
+ ],
+ "audited": "2026-10-14"
+}

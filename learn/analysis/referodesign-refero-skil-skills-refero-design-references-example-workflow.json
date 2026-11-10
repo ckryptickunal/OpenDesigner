@@ -1,0 +1,452 @@
+{
+  "summary": "This Refero walkthrough shows the full design process on an example task: a pricing page for Northstar, a fictional B2B analytics product for operations teams that must feel trustworthy and precise without looking like a generic AI SaaS template. It moves through discovery (a written brief with audience, goal, tone, main objection and constraints), style research, screen research, flow research, synthesis and an implementation blueprint. The key moves are choosing one primary reference and writing a 'reference lock' that lists what to preserve, what to borrow, role rules, media strategy, what to reject and token commitments, then recording every choice in a design decision ledger with its source and reason. It ends with tokens, a page structure and a quality gate. For a design system it models how to turn research into locked, sourced decisions and tokens.",
+  "key_ideas": [
+    "Start with a written brief: audience, goal, tone, main objection, what must be remembered, constraints and research needed.",
+    "Research styles first for visual or brand tasks, then screens for concrete patterns, then flows for what happens after the click.",
+    "Pick one primary reference as the foundation and borrow only specific details from the others.",
+    "Write a reference lock: preserve, borrow only, role rules, media strategy, reject, token commitments.",
+    "Explicitly reject the generic defaults, such as cream editorial canvas, serif hero, muted clay accent and decorative cards.",
+    "Reserve the accent for one role, here value proof and the selected plan.",
+    "Use product screenshots as evidence, or labelled fixed-ratio placeholders, never fake decorative mockups.",
+    "Place proof modules next to the decision they support, such as ROI near plans and security near Enterprise.",
+    "Record each decision in a ledger with area, decision, source, source rule and why.",
+    "Give the page one memorable detail tied to the product's value.",
+    "Close with a quality gate that checks research influenced each layer and no reference was copied directly."
+  ],
+  "entities": [
+    {
+      "name": "Northstar",
+      "type": "product",
+      "description": "Fictional B2B analytics product used as the example task."
+    },
+    {
+      "name": "Refero MCP",
+      "type": "tool",
+      "description": "Research tool whose refero_get_style, refero_get_screen, refero_get_similar_screens and refero_get_flow calls the workflow uses."
+    },
+    {
+      "name": "Reference lock",
+      "type": "concept",
+      "description": "A written commitment to one primary direction, listing what is preserved, borrowed, rejected and which tokens are committed."
+    },
+    {
+      "name": "Design decision ledger",
+      "type": "concept",
+      "description": "Table recording each decision with its source, the source's role rule and the reason."
+    },
+    {
+      "name": "Inter",
+      "type": "product",
+      "description": "Sans font used in the example token set."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Design process",
+      "summary": "Six phases: discovery brief, styles research, screen research, flow research, synthesis with a decision ledger, and an implementation blueprint with a quality gate."
+    },
+    {
+      "name": "Paywalls and pricing pages",
+      "summary": "3 plan cards with Pro highlighted, monthly/annual toggle above cards with exact savings, ROI strip, compact comparison table, Enterprise 'Talk to sales' with security cues, FAQ."
+    },
+    {
+      "name": "AI-assisted design",
+      "summary": "Shows how an agent should use reference research without averaging it: lock one primary direction and reject generic AI defaults."
+    },
+    {
+      "name": "Design systems and tokens",
+      "summary": "Token commitments from the reference lock become a small token set: white bg, #171717 text, green accent #1f8a5b, 8px card radius, 4px-based spacing."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Preserve the primary reference's signature traits, borrow bounded details, and justify each choice in a ledger."
+    },
+    {
+      "name": "A/B testing and conversion",
+      "summary": "Conversion tactics: 'No credit card required' near the trial CTA, exact annual savings, objection killers under the primary CTA, proof near decision points."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Full styles are large, so larger research should be split into multiple batches.",
+      "evidence": "Open 3-4 strong styles with refero_get_style"
+    },
+    {
+      "claim": "Screens should be used for concrete pricing decisions after the visual direction is clear.",
+      "evidence": "Phase 2: Screen Research"
+    },
+    {
+      "claim": "Flows matter because pricing can lead into upgrade, checkout or sales contact journeys.",
+      "evidence": "Phase 3: Flow Research"
+    },
+    {
+      "claim": "A muted green accent with white, charcoal and cool neutrals reads trustworthy and precise and avoids generic blue/purple SaaS.",
+      "evidence": "Design Decision Ledger, Palette"
+    }
+  ],
+  "quotes": [
+    "Make Enterprise feel like a tailored plan, not a vague catch-all.",
+    "The page has one memorable detail tied to this product's value."
+  ],
+  "tags": [
+    "design-process",
+    "pricing-page",
+    "reference-lock",
+    "decision-ledger",
+    "research",
+    "saas",
+    "tokens",
+    "refero"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Write a discovery brief before research that states audience, goal, tone, main objection or risk, what must be remembered, constraints and research needed.",
+      "why": "It frames which research to run and what the page must achieve [inferred].",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Phase 0: Discovery"
+    },
+    {
+      "rule": "For a visual or brand task, research styles first, then screens for concrete patterns, then flows for the post-click journey.",
+      "why": "Screens are used for concrete decisions after the visual direction is clear.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Start with styles because this is a visual/brand task."
+    },
+    {
+      "rule": "Write a reference lock naming the primary direction, what to preserve, what to borrow only, role rules, media strategy, what to reject, and token commitments.",
+      "why": "It keeps the primary direction from being diluted by secondary references [inferred].",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Reference lock"
+    },
+    {
+      "rule": "Record every design decision in a ledger with area, decision, source, the source's rule or role, and why.",
+      "why": "Makes each choice traceable to research and the brief [inferred].",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Design Decision Ledger"
+    },
+    {
+      "rule": "Reserve the accent color for one role, such as value proof and the selected plan state.",
+      "why": "Accent discipline keeps the page trustworthy and precise.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "values": [
+        "#1f8a5b",
+        "#e8f5ee"
+      ],
+      "evidence": "Role rules: green proof accent only for selected state/value proof"
+    },
+    {
+      "rule": "Use real product screenshots as evidence, or fixed-ratio labelled placeholders with art direction when none exist, not fake decorative app mockups.",
+      "why": "Keeps proof honest without low-quality invented imagery.",
+      "kind": "do",
+      "strength": "should",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Media strategy"
+    },
+    {
+      "rule": "Place proof modules next to the decision they support, for example ROI metrics near plans and security/procurement cues near the Enterprise CTA.",
+      "why": "Answers buyer objections where they appear.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Proof: ROI metrics near pricing, security near Enterprise"
+    },
+    {
+      "rule": "Put \"No credit card required\" next to the trial CTA rather than in the FAQ.",
+      "why": "Concrete tactic from screen research.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Concrete tactics to adapt"
+    },
+    {
+      "rule": "Show annual savings as an exact value where possible, not just a percentage.",
+      "why": "Pricing should feel transparent.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Concrete tactics to adapt"
+    },
+    {
+      "rule": "Give primary button treatment only to the self-serve action (Pro trial) and make Enterprise sales secondary.",
+      "why": "Supports both self-serve and sales-led paths.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "CTA hierarchy"
+    },
+    {
+      "rule": "Use cards only for plan comparison and interaction, with thin borders, a subtle selected state and no heavy shadows.",
+      "why": "Keeps evaluation calm and scannable.",
+      "kind": "do",
+      "strength": "should",
+      "area": "components",
+      "applies_to": "web",
+      "values": [
+        "8px max radius"
+      ],
+      "evidence": "Cards: Thin borders, subtle selected state, no heavy shadows"
+    },
+    {
+      "rule": "Repeat the selected plan, billing period, savings and renewal date in checkout, and keep the selected plan visible through signup.",
+      "why": "Flow research decisions for confirming annual billing and letting users recover without losing state.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Flow Findings"
+    },
+    {
+      "rule": "Before shipping, check that styles shaped the visual language, screens the structure, flows the journey, no reference was copied directly, the palette is not indigo/violet, and the first viewport makes the decision clear. Also check buyer objections are handled near the relevant action and the page has one memorable detail tied to the product's value.",
+      "why": "Quality gate.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Quality Gate"
+    },
+    {
+      "rule": "Keep the first viewport decisive: use a comparison table for evaluation buyers, but compact by default, under the cards, grouped by buyer concern, with expandable details.",
+      "why": "Concrete tactic from screen research.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "keep the first viewport decisive"
+    },
+    {
+      "rule": "Make Enterprise a tailored plan with a \"Talk to sales\" CTA that opens a short form asking only essential qualification fields such as company size.",
+      "why": "Enterprise should not feel like a vague catch-all.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "patterns",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Enterprise CTA opens short sales form with company size"
+    },
+    {
+      "rule": "Use a literal page headline (\"Pricing\") with a short value sentence, and put an objection killer under the primary CTA.",
+      "why": "Part of the example page structure.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "content",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Literal headline: \"Pricing\""
+    },
+    {
+      "rule": "Explicitly list what the direction rejects, such as a cream editorial canvas, serif hero, muted clay/orange accent and decorative cards.",
+      "why": "The reference lock names generic defaults to avoid.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Reject: cream editorial canvas, serif hero, muted clay/orange accent, decorative cards."
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Which reference should be the primary foundation when several conflict?",
+      "options": [
+        {
+          "name": "Data infrastructure website",
+          "effect": "Dense technical credibility, grid structure, product screenshot framing.",
+          "when": "Chosen here for a precise, evidence-led B2B analytics page."
+        },
+        {
+          "name": "Editorial monochrome SaaS",
+          "effect": "Strong type hierarchy, low color, confidence through restraint.",
+          "when": "Borrowed only for type hierarchy and low color discipline."
+        },
+        {
+          "name": "Productivity SaaS",
+          "effect": "Airy spacing, friendly trust, softer sections.",
+          "when": "Borrowed only for section spacing and proof blocks."
+        },
+        {
+          "name": "Premium fintech",
+          "effect": "Accent discipline, numbers presented with authority.",
+          "when": "Borrowed only for the proof treatment."
+        }
+      ],
+      "recommendation": "Data infrastructure website as the primary, with the others contributing bounded details.",
+      "maps_to": "Q-brand-02",
+      "evidence": "Visual Direction Synthesis"
+    },
+    {
+      "question": "How many plans and which is highlighted?",
+      "options": [
+        {
+          "name": "3 plans, Pro highlighted",
+          "effect": "Starter, Pro, Enterprise with Pro as the default choice.",
+          "when": "This example."
+        }
+      ],
+      "recommendation": "3 plans with Pro highlighted as default.",
+      "maps_to": null,
+      "evidence": "Screen Findings, Plan cards"
+    },
+    {
+      "question": "Where does the monthly/annual toggle go?",
+      "options": [
+        {
+          "name": "Above the plan cards",
+          "effect": "Billing period is set before comparing plans; show exact annual savings.",
+          "when": "This example."
+        }
+      ],
+      "recommendation": "Above the cards, with exact annual savings.",
+      "maps_to": null,
+      "evidence": "Screen Findings, Billing toggle"
+    },
+    {
+      "question": "How detailed should the feature comparison be?",
+      "options": [
+        {
+          "name": "Compact with expandable details",
+          "effect": "First viewport stays decisive; evaluation buyers can dig in.",
+          "when": "This example."
+        },
+        {
+          "name": "Complete table",
+          "effect": "All features at once.",
+          "when": "Not chosen."
+        }
+      ],
+      "recommendation": "Compact comparison under the cards, grouped by buyer concern, with expandable details.",
+      "maps_to": "Q-pattern-03",
+      "evidence": "Screen Findings, Feature comparison"
+    },
+    {
+      "question": "What does the trial CTA start with?",
+      "options": [
+        {
+          "name": "Account creation before payment",
+          "effect": "Lower friction to start a trial.",
+          "when": "This example."
+        }
+      ],
+      "recommendation": "Account creation before payment.",
+      "maps_to": null,
+      "evidence": "Flow Findings"
+    }
+  ],
+  "process": [
+    {
+      "step": "Phase 0: Discovery",
+      "detail": "Write a brief: audience, goal, tone, main objection/risk, must remember, constraints, research needed."
+    },
+    {
+      "step": "Phase 1: Styles research",
+      "detail": "Run several style searches, open 3-4 strong styles, note what each contributes and what to adapt, choose a primary foundation and write a reference lock."
+    },
+    {
+      "step": "Phase 2: Screen research",
+      "detail": "Search for concrete patterns (toggle, comparison table, contact sales, ROI calculator), open the strongest screens, and record a decision per pattern."
+    },
+    {
+      "step": "Phase 3: Flow research",
+      "detail": "Search the journeys after the click (upgrade, checkout, sales contact, trial signup) and decide each journey question."
+    },
+    {
+      "step": "Phase 4: Synthesis",
+      "detail": "Write a research summary and a design decision ledger with area, decision, source, source rule and why."
+    },
+    {
+      "step": "Phase 5: Implementation blueprint",
+      "detail": "Define tokens and the page structure, then pass the quality gate before shipping."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Northstar pricing page direction",
+      "where": "Northstar (fictional)",
+      "visual_note": "White canvas, deep charcoal text, compact sans-led headlines, thin rule lines, quiet plan cards, exact operational metrics, one muted green accent for value proof and selected actions."
+    },
+    {
+      "what": "Example token set",
+      "where": "Northstar (fictional)",
+      "visual_note": "Inter sans, bg #ffffff, text #171717, muted #6b7280, line #e5e7eb, accent #1f8a5b, accent-soft #e8f5ee, 8px card radius, spacing 4/8/12/16/24/32/48/64px."
+    },
+    {
+      "what": "Page structure",
+      "where": "Northstar (fictional)",
+      "visual_note": "Literal 'Pricing' header with toggle, three plan cards, operational value strip (saved hours, faster reporting, forecast confidence), compact comparison, Enterprise proof, FAQ."
+    },
+    {
+      "what": "Memorable detail",
+      "where": "Northstar (fictional)",
+      "visual_note": "An 'Operational value' strip showing saved hours and cost by plan, used as evidence rather than decoration."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "3-4",
+      "context": "Strong styles to open with refero_get_style.",
+      "evidence": "Open 3-4 strong styles"
+    },
+    {
+      "value": "5",
+      "context": "Styles reviewed in the research summary.",
+      "evidence": "Styles reviewed: 5"
+    },
+    {
+      "value": "8px",
+      "context": "Maximum radius / card radius committed in the tokens.",
+      "evidence": "8px max radius; --radius-card: 8px"
+    },
+    {
+      "value": "15-16px",
+      "context": "Readable body text size.",
+      "evidence": "readable 15-16px body"
+    },
+    {
+      "value": "4px, 8px, 12px, 16px, 24px, 32px, 48px, 64px",
+      "context": "Spacing scale in the example tokens.",
+      "evidence": "--space-1 to --space-16"
+    },
+    {
+      "value": "3",
+      "context": "Number of plans, with Pro highlighted.",
+      "evidence": "Use 3 plans; highlight Pro as default"
+    }
+  ],
+  "caveats": [
+    "Northstar and its references (Style A-D) are placeholders; the source says to replace them with real MCP results.",
+    "The workflow depends on Refero's MCP tools, which are a product of the source's authors.",
+    "Pricing decisions (3 plans, Pro highlighted) are specific to this example, not general rules.",
+    "The research summary says 5 styles were reviewed while the findings table lists four (Style A-D); the numbers are illustrative."
+  ]
+}

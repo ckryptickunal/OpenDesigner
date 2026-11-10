@@ -1,0 +1,21 @@
+/* OpenDesigner brand parts shared by the previews and the export templates. Values come from tokens.json only. */
+.od-post { position: relative; overflow: hidden; background: var(--surface); color: var(--ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; font-kerning: normal; }
+.od-post h1, .od-post h2, .od-post p { margin: 0; text-wrap: balance; }
+.od-muted { color: var(--ink-muted); }
+.od-strong { font-weight: 650; }
+.od-hl { display: inline-block; line-height: 0.98; padding: 0.04em 0.1em 0.1em; margin: 0 -0.04em; background: var(--highlight); color: var(--on-highlight); border-radius: var(--radius-detail); white-space: nowrap; }
+.od-accent { color: var(--accent-text); }
+.od-panel { box-sizing: border-box; background: var(--surface-raised); border-radius: var(--radius-overlay); box-shadow: var(--shadow-raised); }
+.od-rule { height: 1px; background: var(--line); border: 0; margin: 0; }
+.od-logo { display: block; height: 100%; width: auto; }
+.od-tiles { display: grid; }
+.od-tiles i { display: block; background: var(--line); }
+.od-tiles--quiet i { background: var(--surface-sunken); box-shadow: inset 0 0 0 1px var(--line); }
+.od-tiles i.on { background: var(--accent); }
+.od-tiles i.ink { background: var(--ink); }
+.od-btn { font: inherit; display: inline-flex; align-items: center; gap: var(--space-8); border-radius: var(--radius-control); padding: 0 var(--space-16); min-height: 44px; border: 1px solid transparent; cursor: pointer; }
+.od-btn--primary { background: var(--accent); color: var(--on-accent); }
+.od-btn--secondary { background: transparent; color: var(--ink); border-color: var(--line-strong); }
+.od-btn--text { background: transparent; color: var(--accent-text); padding: 0 var(--space-8); }
+.od-btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.od-btn[disabled] { opacity: 0.45; cursor: not-allowed; }

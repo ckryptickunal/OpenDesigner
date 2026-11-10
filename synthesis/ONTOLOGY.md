@@ -930,7 +930,7 @@ Whether corners are circular arcs or continuous curvature (squircles), and how i
 - Decided by: DC-L04-04, DC-L04-05
 - DTCG: no DTCG type for corner smoothing; needs an extension. Inner radius is a computed alias (DC-L15-10)
 - Varies by platform/device: iOS continuous corners are native and `ConcentricRectangle` exists from iOS 26; web has `corner-shape` with a `border-radius` fallback; Android uses `RoundedPolygon` (DC-L04-04, DC-L04-05).
-- Default: Circular arcs on the web, with `corner-shape: squircle` as progressive enhancement if parity with iOS matters; 60% smoothing in Figma (DC-L04-04). Inner radius equals the larger of outer radius minus padding and the smallest non-zero radius, derived automatically (DC-L04-05).
+- Default: Circular arcs on the web, with `corner-shape: superellipse(1.35)` at 1.22 times the radius as progressive enhancement if parity with iOS matters (the `squircle` keyword is squarer than iOS); 60% smoothing in Figma (DC-L04-04). Inner radius equals the larger of outer radius minus padding and the smallest non-zero radius, derived automatically (DC-L04-05).
 - Provenance: generatable (the radius scale follows a rhythm and a factor slider (DC-L04-01, DC-L09-01); inner radii are computed (DC-L04-05))
 - Sources: S-L04-035 S-L04-054 S-L04-057
 

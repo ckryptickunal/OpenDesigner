@@ -1,0 +1,163 @@
+{
+  "made": "2026-10-14",
+  "project": "Larder",
+  "slot": "hero",
+  "slot_info": {
+    "kind": "film or still",
+    "size": "16:9, plates 1920x864 inside 1920x1080",
+    "max_seconds": 24,
+    "where": "marketing pages and the top of onboarding"
+  },
+  "message": "a bowl of charred tomato and butter bean stew, seen from above",
+  "product": "",
+  "audience": "people who use it often, as an everyday app",
+  "style": "watercolour",
+  "recommendations": [
+    {
+      "style": "watercolour",
+      "why": "delicate, archival, calm; pale paper under text (close on energy 35, colorfulness 65, expression 70)"
+    },
+    {
+      "style": "pointillism",
+      "why": "luminous, saturated, textured; forms that dissolve into dots (close on colorfulness 65, expression 70)"
+    },
+    {
+      "style": "cel",
+      "why": "flat 2D animation; mechanisms, impacts, friendly characters (close on colorfulness 65, expression 70)"
+    }
+  ],
+  "mixing": "One style for the whole piece (mixing needs Expression 75+ and a hero or launch film)",
+  "dials": {
+    "expression": 70,
+    "brandPresence": 75,
+    "density": 45,
+    "energy": 35,
+    "roundness": 20,
+    "depth": 8,
+    "colorfulness": 65,
+    "warmth": 85
+  },
+  "palette_source": "/Users/Kunal/Desktop/Design-System/brand/showcase/app-screens/03-recipe-editorial/opendesigner/build/css/tokens.css",
+  "families": {
+    "brand-paper": {
+      "ground": "#fffcf9",
+      "keys": [
+        "#c8401f",
+        "#6c7d00",
+        "#e6b339",
+        "#9f3117"
+      ],
+      "ink": "#272420",
+      "text": "charcoal",
+      "text_contrast": 15.11
+    },
+    "brand-tint": {
+      "ground": "#ffe6e0",
+      "keys": [
+        "#c8401f",
+        "#9f3117",
+        "#6c7d00",
+        "#e6b339"
+      ],
+      "ink": "#272420",
+      "text": "charcoal",
+      "text_contrast": 12.98
+    },
+    "brand-night": {
+      "ground": "#171511",
+      "keys": [
+        "#d1644b",
+        "#7a8c21",
+        "#deb55d",
+        "#f99077"
+      ],
+      "ink": "#ece8e3",
+      "text": "ivory",
+      "text_contrast": 17.84
+    },
+    "saturated-field": {
+      "ground": "#c8401f",
+      "keys": [
+        "#6c7d00",
+        "#e6b339",
+        "#fffcf9",
+        "#ffdbd2"
+      ],
+      "ink": "#272420",
+      "text": "ivory",
+      "text_contrast": 4.88
+    },
+    "archival-ink": {
+      "ground": "#faf3e9",
+      "keys": [
+        "#9f3117",
+        "#e0d0b9",
+        "#877255"
+      ],
+      "ink": "#272420",
+      "text": "charcoal",
+      "text_contrast": 14.02
+    },
+    "almost-nothing": {
+      "ground": "#fffcf9",
+      "keys": [
+        "#c8401f",
+        "#ede1d1"
+      ],
+      "ink": "#766144",
+      "text": "charcoal",
+      "text_contrast": 15.11
+    },
+    "monument": {
+      "ground": "#171511",
+      "keys": [
+        "#d1644b",
+        "#f99077",
+        "#ece8e3"
+      ],
+      "ink": "#ece8e3",
+      "text": "ivory",
+      "text_contrast": 17.84
+    },
+    "accent2-paper": {
+      "ground": "#f3f5ec",
+      "keys": [
+        "#6c7d00",
+        "#505d00",
+        "#c8401f"
+      ],
+      "ink": "#272420",
+      "text": "charcoal",
+      "text_contrast": 14.04
+    },
+    "accent3-paper": {
+      "ground": "#f8f4ec",
+      "keys": [
+        "#e6b339",
+        "#805f00",
+        "#c8401f"
+      ],
+      "ink": "#272420",
+      "text": "charcoal",
+      "text_contrast": 14.08
+    }
+  },
+  "accent_mark": null,
+  "paper": "#faf3e9",
+  "font": {
+    "face": "Fraunces",
+    "status": "check-source",
+    "say": "Fraunces: confirm it is OFL or Apache on its source page, then ship the woff2 with its licence and a SHA-256 (widescreen-and-titles.md)."
+  },
+  "text": "Words go in a fixed-anchor phrase track over the plates, never painted in. Only families whose 'text' is not 'none' may carry words; measure 4.5:1 under the glyph mask (widescreen-and-titles.md). WCAG 2.2 AA is a locked OpenDesigner floor.",
+  "motion": "Films and loops only in marketing, onboarding and celebration (DC-L05-21; STD-when-to-animate-11 keeps decorative motion off functional screens; STD-easing-duration-09 allows over 1 s only for illustrative motion). In the app: muted, a still for prefers-reduced-motion, and a pause control when it plays over 5 s (WCAG 2.2.2).",
+  "sound": "Muted in the product. The soft score is only for the downloadable film or a page where the person presses play.",
+  "identity": "The engine's scene library recreates one earlier film ('reconstructed'; the three 'supplied' ports of unnamed sketches are left out). Use it for structure only (composition, rhythm, archetypes); every shipped plate needs this product's subject and palette. References give structure, never identity (guardrails.md).",
+  "upstream": {
+    "repo": "https://github.com/ckryptickunal/generative-painting-skills",
+    "commit": "1ff8212779985e573507ebd51e5da080605af48d",
+    "path": "skills/opendesigner-paint (engine/, styles/)",
+    "licence": "MIT (generative-painting-skills contributors)",
+    "runtime": "p5.js 2.3.3 (LGPL-2.1) and p5.brush 2.2.3 (MIT), installed from npm into each film, not shipped in frames"
+  }
+}

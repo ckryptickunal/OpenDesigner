@@ -13,9 +13,9 @@ Zoom 0 sketch · weight high · changes 0 decisions · class I · cards DC-L09-0
 - **Ask:** "Who uses it, and how often: all day for work, often, or now and then on the go?"
 - **Why:** Who uses it sets density (how packed the screen is) and base text size. Across systems, body text runs 13-19px. Our L09 study puts this fourth on its list of ways systems look most different (an inferred ranking) [DC-L09-04; L09 A2 row 4].
 - **Options:**
-  - `regular` Often, in an everyday app: body 16px, controls 36-40px (Radix, shadcn, Mantine, Chakra) [DC-L09-04; L09 A3 density].
+  - `regular` Often, in an everyday app: body 16px (14px once Q-aud-02 or Q-layout-03 says it is a work tool), controls 36-40px (Radix, shadcn, Mantine, Chakra) [DC-L09-04; L09 A3 density].
     - Now: Body text 16 px and controls 36-40 px: balanced for an everyday app. As it grows: The safe middle: data-heavy pages can add a compact mode later instead of a second system.
-  - `dense` All day, in tools full of data: body 13-14px, controls 28-32px; compact and utilitarian (Polaris 13px, SLDS 13px, Carbon, Atlassian, Primer, Ant 14px) [DC-L09-04].
+  - `dense` All day, in tools full of data: body 13-14px, controls 28-32px; compact and utilitarian (Polaris 13px, SLDS 13px, Carbon, Atlassian, Primer, Ant 14px) [DC-L09-04]. Corners, weights, accent and surfaces you have not chosen follow the work-tool defaults: 6px controls, three weights, one colored accent for selection, links and focus, borders instead of shadows on static cards [DC-L23-01].
     - Now: Body text 13-14 px and controls 28-32 px, so more rows fit; it looks professional and packed. As it grows: Fits data tools as they grow, but touch and occasional use need a roomier mode; tap targets never shrink.
   - `large` Now and then, on a phone or in public: body 17px or more, controls and targets 44-48px (iOS 17pt, GOV.UK 19px, Material, USWDS 48px targets) [DC-L09-04].
     - Now: Body text 17 px or more and 44-48 px targets: calm and easy to read and tap on phones. As it grows: Suits public and phone use; dense admin screens added later would need a compact mode. [inferred]
@@ -57,7 +57,7 @@ Zoom 2 defined · weight medium · changes 1 decisions · class I · cards DC-L1
 - **Options:**
   - `text-size` Text size: layouts must reflow at large sizes (DC-L02-21).
   - `density` Compact or roomy switch: adds a compact/comfortable token mode (DC-L03-11).
-  - `contrast` Contrast themes: adds a high-contrast mode (DC-L01-20).
+  - `contrast` Contrast themes: asks for a high-contrast mode (DC-L01-20); the engine records this but does not generate the mode yet.
   - `reduced-motion` Reduced motion: swaps movement for fades (DC-L04-25).
   - `situational` Tough conditions (one hand busy, bright light, older users): larger targets and higher contrast by default; reads calmer and more legible [DC-L13-14].
 - **Default:** `text-size`: text-size + reduced-motion *Source:* accessibility rule (WCAG 2.2 AA as the floor; text resize and motion preferences are OS settings the system should honor) [DC-L13-14, DC-L10-16].

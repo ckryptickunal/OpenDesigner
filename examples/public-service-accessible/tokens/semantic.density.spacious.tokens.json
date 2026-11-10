@@ -102,6 +102,33 @@
           "unit": "px"
         }
       }
+    },
+    "row": {
+      "$description": "List and table row heights, spacious: one line dense (sm), default (md) and roomy (lg), and a row whose cells hold two lines. Hairlines between rows; hit areas follow size.target.min (DC-L23-06).",
+      "sm": {
+        "$value": {
+          "value": 52,
+          "unit": "px"
+        }
+      },
+      "md": {
+        "$value": {
+          "value": 56,
+          "unit": "px"
+        }
+      },
+      "lg": {
+        "$value": {
+          "value": 64,
+          "unit": "px"
+        }
+      },
+      "two-line": {
+        "$value": {
+          "value": 80,
+          "unit": "px"
+        }
+      }
     }
   }
 }

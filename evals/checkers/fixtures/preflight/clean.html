@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clean</title>
+<!-- Checker eval fixture for skills/opendesigner-preflight/scripts/preflight.py html (--medium web). Clean control: one face with an @font-face, sizes only from the page's scale, named like the engine's tokens so the token-scale check runs (14 to 32 px, each step at least 10%), tracking no tighter than -0.02em, no <br> in headings, a transform tween. Every finding here is a false alarm.
+     Expected findings are in evals/checkers/manifest.json. -->
+<style>
+:root { --ds-font-size-14: 14px; --ds-font-size-16: 16px; --ds-font-size-20: 20px; --ds-font-size-24: 24px; --ds-font-size-32: 32px; }
+body { margin: 0; padding: 24px; font-family: system-ui, sans-serif; font-size: var(--ds-font-size-16); line-height: 1.5; }
+h1 { font-size: var(--ds-font-size-32); line-height: 1.2; }
+h2 { font-size: var(--ds-font-size-24); }
+.meta { font-size: var(--ds-font-size-14); }
+@font-face { font-family: "Fixture Text"; src: local("Helvetica"); }
+body { font-family: "Fixture Text", system-ui, sans-serif; }
+h1 { letter-spacing: -0.02em; }
+.lede { font-size: var(--ds-font-size-20); }
+.bar { height: 8px; background: #1f4fd8; }
+</style>
+</head>
+<body>
+<h1>Clean preflight page</h1>
+<p class="lede">Every size comes from the scale.</p>
+<h2>Details</h2>
+<p>Body text at 16px.</p>
+<p class="meta">Small print at 14px.</p>
+<div class="bar"></div>
+<script>
+  window.gsap && gsap.to(".bar", { x: 120, duration: 0.3 });
+</script>
+</body>
+</html>

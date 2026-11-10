@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<!-- A page's social preview (1200 × 630): its section and title beside the home card's drawing, so a shared link says which
+     page it is and still looks like OpenDesigner. build.py og_images() fills it for every docs page (site/.cache/og/docs/). -->
+<style>
+@font-face { font-family: "Hanken Grotesk"; font-weight: 300 700; src: url("{{FONT_HANKEN}}") format("woff2"); }
+@font-face { font-family: "Source Code Pro"; font-weight: 500; src: url("{{FONT_MONO}}") format("woff2"); }
+* { box-sizing: border-box; margin: 0; }
+html, body { width: 1200px; height: 630px; overflow: hidden; }
+body { position: relative; font-family: "Hanken Grotesk", sans-serif; color: #fff; -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(60% 75% at 86% 18%, #3a52ff 0%, rgba(35, 56, 255, .55) 38%, rgba(35, 56, 255, 0) 72%),
+    radial-gradient(55% 60% at 64% 108%, #5b7bff 0%, rgba(91, 123, 255, 0) 70%),
+    radial-gradient(70% 90% at 0% 0%, #10196b 0%, rgba(16, 25, 107, 0) 70%),
+    linear-gradient(160deg, #0b1252 0%, #070b33 60%, #050826 100%); }
+/* film grain and a faint 24 px layout grid */
+body::before { content: ""; position: absolute; inset: 0; opacity: .22; mix-blend-mode: overlay; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"); }
+body::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size: 24px 24px; background-position: 0 6px; -webkit-mask: linear-gradient(90deg, transparent 0%, #000 45%, #000 100%); }
+
+/* left column: everything on one left edge, x = 72 */
+.lockup { position: absolute; left: 72px; top: 60px; height: 30px; }
+.lockup svg { height: 30px; width: auto; display: block; }
+h1 { position: absolute; left: 72px; top: 168px; width: 600px; font-size: 50px; line-height: 58px; font-weight: 300; letter-spacing: 0.008em; }
+h1 b { font-weight: 650; display: block; }
+.sub { position: absolute; left: 72px; top: 382px; width: 500px; font-size: 22px; line-height: 30px; color: rgba(255,255,255,.78); letter-spacing: -0.012em; }
+.foot { position: absolute; left: 72px; bottom: 56px; display: flex; align-items: center; gap: 18px; }
+.foot .label { font: 500 13px/16px "Source Code Pro", monospace; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.62); }
+.foot .marks { display: flex; gap: 14px; color: #fff; opacity: .92; }
+.foot .marks svg { width: 22px; height: 22px; display: block; }
+.domain { position: absolute; right: 60px; bottom: 56px; font: 500 15px/16px "Source Code Pro", monospace; letter-spacing: .02em; color: rgba(255,255,255,.72); }
+
+.kicker { position: absolute; left: 72px; top: 170px; font: 500 15px/18px "Source Code Pro", monospace; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.66); }
+.page-title { position: absolute; left: 72px; top: 206px; width: 560px; font-size: 54px; line-height: 62px; font-weight: 600; letter-spacing: -0.012em; text-wrap: balance; }
+.foot .domain-l { font: 500 16px/18px "Source Code Pro", monospace; letter-spacing: .02em; color: rgba(255,255,255,.8); }
+
+/* right: the illustration */
+.art { position: absolute; left: 660px; top: 0; width: 540px; height: 630px; }
+.guide { position: absolute; border: 0 dashed rgba(170, 190, 255, .55); }
+.guide.v { top: 70px; bottom: 70px; border-left-width: 1px; }
+.guide.h { left: 40px; right: 30px; border-top-width: 1px; }
+.tick { position: absolute; font: 500 11px/14px "Source Code Pro", monospace; color: #cfd8ff; background: rgba(35, 56, 255, .55); border: 1px solid rgba(170, 190, 255, .55); border-radius: 6px; padding: 2px 6px; letter-spacing: .02em; }
+
+/* the drift: three buttons that disagree */
+.drift { position: absolute; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; color: #fff; opacity: .55; }
+.d1 { left: 46px; top: 96px; width: 104px; height: 34px; border-radius: 3px; background: #6b5cff; transform: rotate(-7deg); }
+.d2 { left: 168px; top: 70px; width: 120px; height: 44px; border-radius: 22px; background: #2f8bff; transform: rotate(5deg); }
+.d3 { left: 110px; top: 150px; width: 92px; height: 30px; border-radius: 11px; background: #3b45c9; transform: rotate(-3deg); }
+.arc { position: absolute; left: 228px; top: 128px; width: 120px; height: 90px; }
+
+/* the system: cards that share one radius, one accent, one left edge */
+.cards { position: absolute; left: 140px; top: 232px; width: 340px; display: grid; gap: 16px; }
+.card { position: relative; background: #fff; color: #1b1e2b; border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(5, 8, 38, .25), 0 24px 48px -20px rgba(5, 8, 38, .65); }
+.c1 { height: 64px; display: flex; align-items: center; gap: 12px; padding: 0 18px; }
+.c2 { padding: 18px; }
+.c3 { height: 64px; display: flex; align-items: center; gap: 12px; padding: 0 18px; }
+.dot { width: 30px; height: 30px; border-radius: 50%; background: #2338ff; flex: none; }
+.bar { height: 9px; border-radius: 5px; background: #dfe3ee; }
+.bar.ink { background: #1b1e2b; }
+.stack { display: grid; gap: 8px; flex: 1; }
+.c2 .title { font-size: 19px; line-height: 24px; font-weight: 650; letter-spacing: -0.02em; }
+.c2 .row { display: flex; justify-content: space-between; gap: 8px; margin-top: 14px; }  /* opposite actions far apart: decline left, approve right */
+.btn { height: 34px; border-radius: 10px; display: flex; align-items: center; padding: 0 14px; font-size: 14px; font-weight: 600; }
+.btn.p { background: #2338ff; color: #fff; }
+.btn.s { border: 1px solid #c9cfdd; color: #1b1e2b; }
+.toggle { width: 38px; height: 22px; border-radius: 11px; background: #2338ff; position: relative; flex: none; }
+.toggle::after { content: ""; position: absolute; right: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; }
+.chip { position: absolute; font: 500 12px/16px "Source Code Pro", monospace; color: #fff; background: rgba(255, 255, 255, .12); border: 1px solid rgba(255, 255, 255, .28); border-radius: 999px; padding: 5px 11px; backdrop-filter: blur(6px); }
+</style></head>
+<body>
+<div class="lockup">{{LOCKUP}}</div>
+<p class="kicker">{{KICKER}}</p>
+<h1 class="page-title">{{TITLE}}</h1>
+<div class="foot"><span class="domain-l">{{DOMAIN}}</span></div>
+<script>/* a long title steps down in size until it fits three lines */
+const t = document.querySelector(".page-title"); let px = 54;
+while (t.scrollHeight > 3 * px * 1.15 + 2 && px > 38) { px -= 2; t.style.fontSize = px + "px"; t.style.lineHeight = Math.round(px * 1.15) + "px"; }</script>
+
+<div class="art" aria-hidden="true">
+  <!-- alignment guides through the cards' shared edges -->
+  <div class="guide v" style="left:140px"></div>
+  <div class="guide v" style="left:480px"></div>
+  <div class="guide h" style="top:312px"></div>
+  <span class="tick" style="left:150px;top:206px">one edge</span>
+  <span class="tick" style="left:384px;top:206px">radius 18</span>
+  <!-- before: buttons that each made their own choice -->
+  <div class="drift d1">Save</div>
+  <div class="drift d2">Continue</div>
+  <div class="drift d3">Send</div>
+  <svg class="arc" viewBox="0 0 120 90" fill="none"><path d="M6 8 C 60 6, 96 30, 104 78" stroke="rgba(207,216,255,.75)" stroke-width="1.6" stroke-dasharray="4 5" stroke-linecap="round"/><path d="M96 70 L104 80 L110 68" stroke="rgba(207,216,255,.85)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <!-- after: one system -->
+  <div class="cards">
+  <div class="card c1"><span class="dot"></span><div class="stack"><div class="bar ink" style="width:46%"></div><div class="bar" style="width:72%"></div></div></div>
+  <div class="card c2"><div class="title">Invoice 2207</div><div class="stack" style="margin-top:12px"><div class="bar" style="width:88%"></div><div class="bar" style="width:64%"></div></div>
+    <div class="row"><span class="btn s">Decline</span><span class="btn p">Approve</span></div></div>
+  <div class="card c3"><span class="toggle"></span><div class="stack"><div class="bar ink" style="width:38%"></div><div class="bar" style="width:58%"></div></div></div>
+  </div>
+  <span class="chip" style="left:356px;top:96px">#2338FF</span>
+  <span class="chip" style="left:400px;top:138px">space 16</span>
+</div>
+</body></html>

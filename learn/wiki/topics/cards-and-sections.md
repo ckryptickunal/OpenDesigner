@@ -2,7 +2,7 @@
 type: topic
 title: Cards and sections
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -38,3 +38,4 @@ Swipeable scrolling cards are presented as better than stacking vertically, impr
 - [[sources/ulSOdTgoGeY-awful-to-amazing-web-designs-easily|Awful To AMAZING Web Designs Easily]]: Mix in full-screen sections and cards, shift cards up and down, let a sliding card section extend past the frame, and separate sections with adjusted backgrounds.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Feature cards as tinted wells with inset, cropped screenshots; testimonial cards with a portrait background, white quote at the bottom and a dark gradient; stats separated by dividers.
 - See also: [[synthesis/cards-and-sections|Cards and sections synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop-referodesign-refero-skill-skills-refero-design-references-anti-ai-slop-md|referodesign/refero_skill: skills/refero-design/references/anti-ai-slop.md]]: Default is no cards; use sections, columns, dividers or media blocks unless the container is interactive.

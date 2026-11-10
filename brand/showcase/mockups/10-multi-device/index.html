@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1600, initial-scale=1">
+<title>Quillon on two devices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..600&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Scene: one approval in Quillon on a laptop and a phone, drawn flat and straight from the front, as shipped
+     multi-device sections do (structure from Riverside and Wispr Flow on Mobbin; nothing copied). Both devices are
+     generic and belong to no brand: a laptop lid with an even bezel and a plain camera dot over a thin base lip
+     (no notch, no logo, no thumb cut-out), and a phone that is a plain rounded slab with an even bezel and no camera
+     cut-out, so it never contradicts the iOS screen it shows. One material family (graphite: the system's dark
+     neutrals), one corner logic (each screen's radius is its frame's radius minus the bezel).
+     The phone stands in front of the laptop's lower-left corner, where it covers only the web app's sidebar: the
+     lower right holds the Approve and Decline buttons, which must stay readable.
+     Screens: desktop.html (rendered to desktop.png, 1440 x 900 at 2x) and ../../app-screens/11-approvals-mobile/shot.png
+     (390 x 844 pt at 3x). render.py renders desktop.png, then this page to shot.png (1600 x 1200 at scale 2). */
+  :root {
+    --scr-w: 1160px;  --scr-h: 725px;   /* od-ignore: device art. 16:10 panel, 1440 x 900 shown at 0.806 */
+    --bz: 20px;       --lid-r: 22px;    /* od-ignore: device art. even lid bezel; screen radius = lid radius - bezel */
+    --lip-out: 44px;  --lip-h: 17px;    /* od-ignore: device art. base lip: wider than the lid, thin */
+    --ph-w: 318px;    --ph-bz: 12px;   --ph-r: 48px;   /* od-ignore: device art. phone slab; screen 294 pt-wide view at 0.754 */
+    --ph-reach: 172px;                  /* od-ignore: device art. how far the phone reaches into the laptop screen (the sidebar is 187 px) */
+    --ph-drop: 40px;                    /* od-ignore: device art. the phone stands nearer, so its foot sits lower than the lip */
+    --S: 261px;  --T: 153px;            /* od-ignore: device art. left and top of the laptop screen in the frame */
+    --ph-h: calc((var(--ph-w) - 2 * var(--ph-bz)) * 844 / 390 + 2 * var(--ph-bz));
+  }
+  html, body { margin: 0; }
+  body { width: 1600px; height: 1200px; overflow: hidden; position: relative; background: var(--ds-color-neutral-light-3);
+    font-family: var(--ds-font-family-text); -webkit-font-smoothing: antialiased; }
+  img { display: block; }
+
+  /* laptop */
+  .lid { position: absolute; left: calc(var(--S) - var(--bz)); top: var(--T); box-sizing: border-box;
+    width: calc(var(--scr-w) + 2 * var(--bz)); height: calc(var(--scr-h) + 2 * var(--bz)); padding: var(--bz);
+    border-radius: var(--lid-r) var(--lid-r) var(--ds-radius-4) var(--ds-radius-4);
+    background: var(--ds-color-neutral-dark-1);
+    box-shadow: inset 0 0 0 1.5px var(--ds-color-neutral-dark-7), inset 0 0 0 3px var(--ds-color-neutral-dark-3); }   /* od-ignore: device art. metal edge, then black glass */
+  .lid .cam { position: absolute; left: 50%; top: calc(var(--bz) / 2); width: var(--ds-space-6); height: var(--ds-space-6); margin: calc(var(--ds-space-6) / -2);
+    border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-dark-5); box-shadow: inset 0 0 0 1px var(--ds-color-neutral-dark-3); }   /* od-ignore: device art */
+  .lid img { width: var(--scr-w); height: var(--scr-h); border-radius: calc(var(--lid-r) - var(--bz)); }
+  .lip { position: absolute; left: calc(var(--S) - var(--bz) - var(--lip-out)); top: calc(var(--T) + var(--scr-h) + 2 * var(--bz));
+    width: calc(var(--scr-w) + 2 * var(--bz) + 2 * var(--lip-out)); height: var(--lip-h);
+    border-radius: var(--ds-radius-2) var(--ds-radius-2) 40px 40px / var(--ds-radius-2) var(--ds-radius-2) var(--lip-h) var(--lip-h);   /* od-ignore: device art. the front edge rounds under */
+    background: linear-gradient(var(--ds-color-neutral-dark-10), var(--ds-color-neutral-dark-7) 22%, var(--ds-color-neutral-dark-5) 60%, var(--ds-color-neutral-dark-3)); 
+    box-shadow: var(--ds-elevation-floating); }   /* od-ignore: device art. lit deck edge, then the front face turning under; the floating elevation is its contact shadow, so the laptop sits on the plate like the phone */
+
+  /* phone */
+  .phone { position: absolute; left: calc(var(--S) + var(--ph-reach) - var(--ph-w));
+    top: calc(var(--T) + var(--scr-h) + 2 * var(--bz) + var(--lip-h) + var(--ph-drop) - var(--ph-h));
+    width: var(--ph-w); height: var(--ph-h); box-sizing: border-box; padding: var(--ph-bz); border-radius: var(--ph-r);
+    background: var(--ds-color-neutral-dark-1);
+    box-shadow: inset 0 0 0 2px var(--ds-color-neutral-dark-7), inset 0 0 0 3.5px var(--ds-color-neutral-dark-3), var(--ds-elevation-overlay); }   /* od-ignore: device art. metal edge, black glass; the scene's one shadow (the system's overlay elevation) */
+  .phone img { width: 100%; height: 100%; border-radius: calc(var(--ph-r) - var(--ph-bz)); }
+
+  /* caption, aligned to the outer edges of the pair */
+  .caption { position: absolute; margin: 0; display: flex; justify-content: space-between; align-items: baseline;
+    left: calc(var(--S) + var(--ph-reach) - var(--ph-w)); right: calc(1600px - var(--S) - var(--scr-w) - var(--bz) - var(--lip-out));   /* od-ignore: device art. frame width */
+    top: calc(var(--T) + var(--scr-h) + 2 * var(--bz) + var(--lip-h) + var(--ph-drop) + var(--ds-space-48));
+    font: var(--ds-text-body-sm); color: var(--ds-color-text-secondary); }
+  .caption .lead { color: var(--ds-color-text-primary); }
+  .caption b { font-weight: var(--ds-font-weight-heading); }
+  .hide-text .caption, .hide-text .caption .lead { color: transparent; }
+</style>
+</head>
+<body>
+  <div class="lid" role="img" aria-label="Laptop showing Quillon on the web: the approval queue with PR-2207 open">
+    <span class="cam"></span>
+    <img src="desktop.png" alt="">
+  </div>
+  <div class="lip"></div>
+  <div class="phone" role="img" aria-label="Phone showing the same request in the Quillon iPhone app">
+    <img src="../../app-screens/11-approvals-mobile/shot.png" alt="">
+  </div>
+  <p class="caption"><span class="lead"><b>Quillon</b> · one approval, on the phone and on the web</span><span>PR-2207 · $14,860 · waiting on you</span></p>
+  <script>if (new URLSearchParams(location.search).has('hide-text')) document.body.classList.add('hide-text');</script>
+</body>
+</html>

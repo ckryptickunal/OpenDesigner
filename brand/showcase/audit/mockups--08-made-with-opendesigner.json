@@ -1,0 +1,97 @@
+{
+  "piece": "mockups/08-made-with-opendesigner",
+  "title": "08 · Made with OpenDesigner: launch post",
+  "pattern": "launch card",
+  "platform": "web",
+  "industry": "design tools",
+  "style": [
+    "minimal",
+    "swiss"
+  ],
+  "tags": [
+    "launch card",
+    "design tools",
+    "showcase",
+    "mosaic",
+    "headline",
+    "social",
+    "light"
+  ],
+  "score": 4,
+  "verdict": "keep",
+  "strengths": [
+    "The work is the proof: one headline in Hanken Grotesk with the second line highlighted by weight only, cobalt used once in the lockup, and a mosaic of real renders bleeding off the right and bottom",
+    "The tiles are a true mix (an ocean observatory, a podcast app, a fashion editorial, a watch face, a cassette player, a clinic, a calendar) with 1 px lines and no shadow, so the mosaic reads as evidence rather than decoration"
+  ],
+  "slop_signals": [
+    "The second row is cut at about 40% of its height, so the card reads as a crop of a longer page rather than a deliberate bleed",
+    "The tiles have mixed aspect ratios and the right bleed cuts the Pomelo and Wayfern tiles at different points, which loosens the grid"
+  ],
+  "fixes": [
+    "Show at least 60% of the second row, or stop the mosaic on a tile edge and let only the right side bleed",
+    "Align the right-hand cut so both rows end at the same x"
+  ],
+  "references": [
+    {
+      "site": "Relume",
+      "url": "https://mobbin.com/sites/sections/d98a6f2d-d400-4fe6-bd5b-91ff3fdf9383",
+      "what": "Two rows of site tiles bleeding off both edges with the headline below; the rows are cut at the same point on each side"
+    },
+    {
+      "site": "Squarespace",
+      "url": "https://mobbin.com/sites/sections/5749aa40-d43e-4d7c-865d-f899f7b066b2",
+      "what": "'Made with Squarespace' at the centre of a wall of real sites; the work carries the claim"
+    },
+    {
+      "site": "Podia",
+      "url": "https://mobbin.com/sites/sections/3d2e2673-94b8-41ca-b001-999d3e1f9548",
+      "what": "Headline above a grid of site thumbnails cut off at the bottom; the same device, with the cut landing lower so the second row still reads"
+    },
+    {
+      "site": "Squarespace",
+      "url": "https://mobbin.com/sites/sections/25ffe0bf-0296-4f39-8c68-1a4e217a5493",
+      "what": "A giant three-line 'MADE WITH SQUARESPACE' with one site card; the loud alternative to our quiet headline"
+    }
+  ],
+  "audited": "2026-10-14",
+  "owner": {
+    "verdict": "remove",
+    "said": "Hide all 6: approved the round 4 audit's removals (mockups showing removed pieces, heroes repeating the product screens, a generic timer)",
+    "date": "2026-10-15"
+  },
+  "round3": {
+    "date": "2026-10-15",
+    "score": 4,
+    "audited_by": "fresh-context agent (did not build it), then a fresh check of the fixes",
+    "references": [
+      {
+        "site": "Squarespace",
+        "url": "https://mobbin.com/sites/sections/5749aa40-d43e-4d7c-865d-f899f7b066b2"
+      },
+      {
+        "site": "Intercom",
+        "url": "https://mobbin.com/sites/sections/f9204160-0727-4c99-9b0d-ab5f3bd3c4ce"
+      },
+      {
+        "site": "Mixpanel",
+        "url": "https://mobbin.com/sites/sections/229af221-2f6b-48be-81f3-093001c5b3c8"
+      }
+    ],
+    "changed": [
+      "Rendered last, with every tile at its piece's final render",
+      "Alt texts: Voltfield (Tempo 6 x 800 is the workout), Calamondin Tapes, Fellrise",
+      "Phone tiles cropped on whole elements (Undertow 12.3%, Voltfield 15.4%)",
+      "Trail watch brought onto the canvas; both rows end at the same point; watch tiles swapped so the edge cuts Tidemark through its sea"
+    ],
+    "remaining": [
+      "Minor: aria-label on a plain div; the Voltfield alt text is longer than the others; '2.1 km' sits above '2.1 m rising'"
+    ]
+  },
+  "owner_history": [
+    {
+      "verdict": "improve",
+      "said": "when designs are bad, mockups will also be bad; work on them",
+      "date": "2026-10-14"
+    }
+  ]
+}

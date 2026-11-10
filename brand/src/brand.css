@@ -1,0 +1,84 @@
+/* OpenDesigner brand: themes and shared parts for every marketing asset.
+   Colors come from the engine sketch in brand/opendesigner/ (build/css/tokens.css).
+   Fonts: Geist, Geist Mono and Playfair Display Italic (all SIL OFL 1.1), installed locally. */
+
+:root {
+  /* from tokens.css */
+  --paper: #f6f4f2;          /* neutral-light-2 */
+  --paper-2: #eeebe9;        /* neutral-light-3 */
+  --paper-rule: #dddad7;     /* neutral-light-5 */
+  --ink: #161514;            /* neutral-dark-1 */
+  --ink-2: #1e1d1c;          /* neutral-dark-2 */
+  --ink-3: #272523;          /* neutral-dark-3 */
+  --ink-text: #262422;       /* neutral-light-12 */
+  --ink-muted: #5b5653;      /* neutral-light-11 */
+  --paper-text: #ece8e5;     /* neutral-dark-12 */
+  --paper-muted: #afaaa6;    /* neutral-dark-11 */
+  --ember: #d04418;          /* accent-light-9, brand seed */
+  --ember-deep: #9f300c;     /* accent-light-11 */
+  --ember-soft: #ffd0c3;     /* accent-light-5 */
+  --ember-glow: #fb9073;     /* accent-dark-11, text-safe on ink */
+
+  --sans: "Geist", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, Menlo, monospace;
+  --serif: "Playfair Display", Georgia, serif;
+}
+
+/* themes: set on <body data-theme> */
+[data-theme="ink"]   { --bg: var(--ink);   --fg: var(--paper-text); --muted: var(--paper-muted); --rule: rgb(255 240 230 / .10); --tile: rgb(255 240 230 / .045); --tile-line: rgb(255 240 230 / .09); --accent: var(--ember); --accent-text: var(--ember-glow); --card: rgb(255 240 230 / .04); --solid: #1c1b1a; }
+[data-theme="paper"] { --bg: var(--paper); --fg: var(--ink-text);   --muted: var(--ink-muted);   --rule: rgb(40 18 1 / .12);    --tile: rgb(40 18 1 / .035);    --tile-line: rgb(40 18 1 / .10);    --accent: var(--ember); --accent-text: var(--ember-deep); --card: #fefcfc; --solid: #fefcfc; }
+[data-theme="ember"] { --bg: var(--ember); --fg: #fffaf7;           --muted: rgb(255 246 240 / .80); --rule: rgb(255 246 240 / .22); --tile: rgb(255 246 240 / .07); --tile-line: rgb(255 246 240 / .16); --accent: var(--ink); --accent-text: var(--ink); --card: rgb(22 21 20 / .10); --solid: #c23f16; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { overflow: hidden; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--sans); -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "cv11";
+  position: relative;
+}
+.canvas { position: absolute; inset: 0; overflow: hidden; }
+
+/* type */
+.eyebrow { font: 500 var(--eyebrow, 18px)/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: .8em; }
+.eyebrow .dot { width: .62em; height: .62em; border-radius: 50%; background: var(--accent); flex: none; }
+.display { font-weight: 600; letter-spacing: -0.052em; line-height: .94; text-wrap: balance; }
+.display em, .serif { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.02em; }
+.display em { color: var(--accent-text); padding-right: .04em; }
+[data-theme="ember"] .display em { color: #fffaf7; }
+.lede { text-wrap: balance; font-weight: 400; letter-spacing: -0.018em; line-height: 1.28; color: var(--muted); }
+.lede b { color: var(--fg); font-weight: 500; }
+.mono { font-family: var(--mono); }
+.meta { font: 400 var(--meta, 17px)/1.4 var(--mono); color: var(--muted); letter-spacing: .02em; }
+
+/* the mark: a radius ramp, square to circle; the circle is the decision */
+.mark { display: grid; grid-template-columns: 1fr 1fr; gap: 12%; width: var(--m, 48px); height: var(--m, 48px); flex: none; }
+.mark i { display: block; background: currentColor; }
+.mark i:nth-child(1) { border-radius: 0; }
+.mark i:nth-child(2) { border-radius: 18%; }
+.mark i:nth-child(3) { border-radius: 36%; }
+.mark i:nth-child(4) { border-radius: 50%; background: var(--accent); }
+[data-theme="ember"] .mark i:nth-child(4) { background: var(--ink); }
+.lockup { display: flex; align-items: center; gap: calc(var(--m, 48px) * .36); font-weight: 600; letter-spacing: -0.04em; font-size: calc(var(--m, 48px) * .74); line-height: 1; }
+
+/* tile field: the signature device (filled by brand.js) */
+.tiles { position: absolute; display: grid; }
+.tiles i { display: block; background: var(--tile); box-shadow: inset 0 0 0 1px var(--tile-line); }
+.tiles i.on { background: var(--accent); box-shadow: none; }
+.tiles i.on2 { background: color-mix(in oklab, var(--accent) 58%, var(--bg)); box-shadow: none; }
+.tiles i.on3 { background: color-mix(in oklab, var(--accent) 28%, var(--bg)); box-shadow: none; }
+.tiles i.on4 { background: color-mix(in oklab, var(--accent) 12%, var(--bg)); box-shadow: inset 0 0 0 1px var(--tile-line); }
+.glow { position: absolute; border-radius: 50%; filter: blur(var(--blur, 120px)); background: radial-gradient(circle, rgb(208 68 24 / .55), rgb(208 68 24 / 0) 70%); pointer-events: none; }
+[data-theme="paper"] .glow { background: radial-gradient(circle, rgb(255 197 180 / .9), rgb(255 197 180 / 0) 70%); }
+.grain { position: absolute; inset: 0; pointer-events: none; opacity: .5; mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+
+/* cards and specimens */
+.panel { background: var(--solid); border: 1px solid var(--rule); border-radius: 20px; }
+[data-theme="ink"] .panel { box-shadow: 0 40px 80px -30px rgb(0 0 0 / .7), inset 0 1px 0 rgb(255 240 230 / .06); }
+[data-theme="paper"] .panel { box-shadow: 0 1px 0 rgb(40 18 1 / .04), 0 24px 48px -24px rgb(60 25 2 / .18); }
+.pill { display: inline-flex; align-items: center; gap: .5em; border: 1px solid var(--rule); border-radius: 999px; padding: .5em .95em; font: 500 1em/1 var(--mono); color: var(--fg); background: var(--card); white-space: nowrap; }
+.pill.solid { background: var(--accent); border-color: transparent; color: #fffaf7; }
+[data-theme="ember"] .pill.solid { color: var(--paper-text); }
+.rule { height: 1px; background: var(--rule); }
+.num { font: 500 var(--num, 18px)/1 var(--mono); color: var(--accent-text); letter-spacing: .06em; }

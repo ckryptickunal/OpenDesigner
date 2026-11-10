@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lullwort Sleep Teas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..500,100,1;1,9..144,300..500,100,1&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root {
+    --ground: var(--ds-color-bg-neutral-subtle);       /* cool green-grey paper (neutral step 3) */
+    --ink: var(--ds-color-text-primary);
+    --ink-2: var(--ds-color-text-secondary);
+    /* The tin keeps light-ramp pigments in both themes: it is an object, not UI. */
+    --tin: var(--ds-color-accent-light-9);             /* the brand green: the tin and the one button */
+    --tin-deep: var(--ds-color-accent-light-12);
+    --label: var(--ds-color-neutral-light-1);
+    --label-ink: var(--ds-color-neutral-light-12);
+    --label-ink-2: var(--ds-color-neutral-light-11);
+    --m: var(--ds-space-32);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--ground); color: var(--ink); font-family: var(--ds-font-family-text); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+
+  /* the scene: the wall, and the table top from 700 px down; the tin stands on the table */
+  .table { position: absolute; left: 0; right: 0; top: 770px; bottom: 0; background: var(--ds-color-neutral-light-5); } /* od-ignore: the table's edge */
+  .page { position: relative; height: 100vh; height: 100svh; min-height: 820px; padding: 0 var(--m); display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: auto 1fr; column-gap: var(--ds-space-16); }
+  .nav { grid-column: 1 / -1; position: relative; height: var(--ds-space-80); display: flex; align-items: center; gap: var(--ds-space-40); }
+  .logo { display: inline-flex; align-items: center; gap: var(--ds-space-8); font: italic 400 var(--ds-font-size-28)/1 var(--ds-font-family-display); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 72; letter-spacing: -0.01em; min-height: var(--ds-size-target-min); }
+  .logo svg { width: var(--ds-space-20); height: var(--ds-space-20); }
+  .links { display: flex; gap: var(--ds-space-32); font-size: var(--ds-font-size-16); color: var(--ink-2); }
+  .links a { min-height: var(--ds-size-target-min); display: inline-flex; align-items: center; }
+  .links a[aria-current] { color: var(--ink); }
+  .bag { margin-left: auto; font-size: var(--ds-font-size-16); min-height: var(--ds-size-target-min); display: inline-flex; align-items: center; gap: var(--ds-space-6); }
+  .bag span { color: var(--ink-2); }
+
+  .copy { grid-column: 1 / 7; position: relative; align-self: start; margin-top: 168px; } /* od-ignore: centred on the wall above the table */
+  h1 { font-family: var(--ds-font-family-display); font-weight: 340; font-size: var(--ds-font-size-90); line-height: 1; letter-spacing: -0.022em; font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144; margin-left: -0.03em; }
+  .lede { margin-top: var(--ds-space-32); max-width: 25em; font-size: var(--ds-font-size-21); line-height: 1.45; color: var(--ink-2); text-wrap: pretty; }
+  .buy { margin-top: var(--ds-space-32); display: inline-flex; align-items: center; gap: var(--ds-space-12); min-height: var(--ds-size-control-lg); padding: 0 var(--ds-space-32); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font-size: var(--ds-font-size-16); font-weight: 500; transition: background var(--ds-motion-duration-medium) var(--ds-motion-easing-standard); }
+  .buy span { opacity: .8; }
+  @media (hover: hover) and (pointer: fine) { .buy:hover { background: var(--ds-color-bg-action-primary-hover); } .links a:hover { color: var(--ink); } }
+
+  /* the one object: the tin, straight on, a little above eye level */
+  .tin { position: absolute; left: 800px; top: 104px; } /* od-ignore: the tin's base stands 30 px in front of the table's back edge */
+  .tin svg { display: block; width: 580px; height: auto; overflow: visible; } /* od-ignore: the object's drawn size */
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="table" aria-hidden="true"></div>
+  <header class="nav">
+    <a class="logo" href="#" aria-label="Lullwort, home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 3.5a8.5 8.5 0 1 0 5 13.9A7 7 0 0 1 15.5 3.5Z" fill="currentColor"/></svg>Lullwort</a>
+    <nav class="links" aria-label="Main"><a href="#" aria-current="page">Sleep teas</a><a href="#">The ritual</a><a href="#">Our farms</a><a href="#">Journal</a></nav>
+    <a class="bag" href="#">Bag <span>(2)</span></a>
+  </header>
+
+  <section class="copy">
+    <h1>Let the day steep<br>out of you.</h1>
+    <p class="lede">No. 3 Dusk Blend: chamomile, lemon balm and valerian root, for the last hour of your evening.</p>
+    <a class="buy" href="#">Add to bag <span aria-hidden="true">·</span> £14</a>
+  </section>
+
+  <figure class="tin" aria-label="A 40 gram tin of Lullwort No. 3 Dusk Blend: a deep green tin with a paper label.">
+    <svg viewBox="0 0 480 620" aria-hidden="true">
+      <defs>
+        <!-- one light from the upper left, across the cylinder -->
+        <!-- one light from the upper left; the tin is matte powder-coat, so the highlight is broad and soft (Lambert plus a weak, wide specular) -->
+        <linearGradient id="shade" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0.0000" stop-color="#000" stop-opacity="0.106"/>
+          <stop offset="0.0625" stop-color="#fff" stop-opacity="0.054"/>
+          <stop offset="0.1250" stop-color="#fff" stop-opacity="0.072"/>
+          <stop offset="0.1875" stop-color="#fff" stop-opacity="0.076"/>
+          <stop offset="0.2500" stop-color="#fff" stop-opacity="0.071"/>
+          <stop offset="0.3125" stop-color="#fff" stop-opacity="0.060"/>
+          <stop offset="0.3750" stop-color="#fff" stop-opacity="0.044"/>
+          <stop offset="0.4375" stop-color="#fff" stop-opacity="0.024"/>
+          <stop offset="0.5000" stop-color="#fff" stop-opacity="0.000"/>
+          <stop offset="0.5625" stop-color="#000" stop-opacity="0.026"/>
+          <stop offset="0.6250" stop-color="#000" stop-opacity="0.055"/>
+          <stop offset="0.6875" stop-color="#000" stop-opacity="0.089"/>
+          <stop offset="0.7500" stop-color="#000" stop-opacity="0.127"/>
+          <stop offset="0.8125" stop-color="#000" stop-opacity="0.174"/>
+          <stop offset="0.8750" stop-color="#000" stop-opacity="0.235"/>
+          <stop offset="0.9375" stop-color="#000" stop-opacity="0.264"/>
+          <stop offset="1.0000" stop-color="#000" stop-opacity="0.307"/>
+        </linearGradient>
+        <linearGradient id="sheen" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0.0000" stop-color="#fff" stop-opacity="0.000"/>
+          <stop offset="0.0625" stop-color="#fff" stop-opacity="0.006"/>
+          <stop offset="0.1250" stop-color="#fff" stop-opacity="0.027"/>
+          <stop offset="0.1875" stop-color="#fff" stop-opacity="0.058"/>
+          <stop offset="0.2500" stop-color="#fff" stop-opacity="0.086"/>
+          <stop offset="0.3125" stop-color="#fff" stop-opacity="0.099"/>
+          <stop offset="0.3750" stop-color="#fff" stop-opacity="0.095"/>
+          <stop offset="0.4375" stop-color="#fff" stop-opacity="0.078"/>
+          <stop offset="0.5000" stop-color="#fff" stop-opacity="0.054"/>
+          <stop offset="0.5625" stop-color="#fff" stop-opacity="0.031"/>
+          <stop offset="0.6250" stop-color="#fff" stop-opacity="0.014"/>
+          <stop offset="0.6875" stop-color="#fff" stop-opacity="0.005"/>
+          <stop offset="0.7500" stop-color="#fff" stop-opacity="0.001"/>
+          <stop offset="0.8125" stop-color="#fff" stop-opacity="0.000"/>
+          <stop offset="0.8750" stop-color="#fff" stop-opacity="0.000"/>
+          <stop offset="0.9375" stop-color="#fff" stop-opacity="0.000"/>
+          <stop offset="1.0000" stop-color="#fff" stop-opacity="0.000"/>
+        </linearGradient>
+        <linearGradient id="top" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0" stop-color="#fff" stop-opacity=".18"/>
+          <stop offset=".6" stop-color="#fff" stop-opacity="0"/>
+          <stop offset="1" stop-color="#000" stop-opacity=".12"/>
+        </linearGradient>
+        <filter id="soft" x="-30%" y="-300%" width="160%" height="700%"><feGaussianBlur stdDeviation="10"/></filter>
+        <filter id="tight" x="-10%" y="-200%" width="120%" height="500%"><feGaussianBlur stdDeviation="2"/></filter>
+        <clipPath id="body"><path d="M50 184 V560 A170 22 0 0 0 390 560 V184 Z"/></clipPath>
+        <clipPath id="lid"><path d="M42 124 V184 A178 23 0 0 0 398 184 V124 Z"/></clipPath>
+        <!-- the label's lines sit on the front of the cylinder, so they bow with it -->
+        <path id="l1" d="M50 322 A170 22 0 0 0 390 322"/>
+        <path id="l2" d="M50 368 A170 22 0 0 0 390 368"/>
+        <path id="l3" d="M50 400 A170 22 0 0 0 390 400"/>
+        <path id="l4" d="M50 472 A170 22 0 0 0 390 472"/>
+      </defs>
+
+      <!-- contact shadow on the paper -->
+      <ellipse cx="226" cy="586" rx="200" ry="16" fill="var(--tin-deep)" opacity=".18" filter="url(#soft)"/>
+      <ellipse cx="220" cy="580" rx="169" ry="5" fill="var(--tin-deep)" opacity=".75" filter="url(#tight)"/>
+
+      <!-- body: the green tin and its paper label, then one shade and one broad sheen over both -->
+      <g clip-path="url(#body)">
+        <rect x="50" y="140" width="340" height="450" fill="var(--tin)"/>
+        <path d="M50 222 A170 22 0 0 0 390 222 V500 A170 22 0 0 1 50 500 Z" fill="var(--label)"/>
+      </g>
+
+      <!-- the shade: full on the green tin, light on the matte paper label, so the paper stays white -->
+      <rect x="50" y="140" width="340" height="450" fill="url(#shade)" clip-path="url(#body)"/>
+      <rect x="50" y="140" width="340" height="450" fill="url(#sheen)" clip-path="url(#body)" opacity=".7"/>
+      <path d="M50 222 A170 22 0 0 0 390 222 V500 A170 22 0 0 1 50 500 Z" fill="#fff" opacity=".25"/>
+      <!-- label print, on the front of the cylinder -->
+      <g text-anchor="middle" fill="var(--label-ink)">
+        <path d="M228.5 264a10 10 0 1 0 6 16.4 8.2 8.2 0 0 1-6-16.4Z" fill="var(--tin)"/>
+        <text font-family="Fraunces" font-style="italic" font-size="44" style="font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 72"><textPath href="#l1" startOffset="50%">Lullwort</textPath></text>
+        <text font-family="Instrument Sans" font-size="13" font-weight="600" letter-spacing="2.6"><textPath href="#l2" startOffset="50%">NO. 3 · DUSK BLEND</textPath></text>
+        <text font-family="Instrument Sans" font-size="13" fill="var(--label-ink-2)"><textPath href="#l3" startOffset="50%">Chamomile, lemon balm, valerian root</textPath></text>
+        <text font-family="Instrument Sans" font-size="13" fill="var(--label-ink-2)"><textPath href="#l4" startOffset="50%">Loose-leaf sleep tea · 40 g</textPath></text>
+      </g>
+      <path d="M150 454.05 A170 22 0 0 0 290 454.05" fill="none" stroke="var(--tin)" stroke-width="1.2"/>
+
+      <!-- the label's paper edges: a hairline where it meets the tin -->
+      <path d="M50 222 A170 22 0 0 0 390 222" fill="none" stroke="#000" stroke-opacity=".10" stroke-width="1"/>
+      <path d="M50 500 A170 22 0 0 0 390 500" fill="none" stroke="#000" stroke-opacity=".10" stroke-width="1"/>
+      <!-- the lid's shadow on the body -->
+      <path d="M50 184 A170 22 0 0 0 390 184 V192 A170 22 0 0 1 50 192 Z" fill="#000" opacity=".22"/>
+
+      <!-- lid: a shallow slip lid, a little wider than the body -->
+      <g clip-path="url(#lid)">
+        <rect x="42" y="110" width="356" height="100" fill="var(--tin)"/>
+        <rect x="42" y="110" width="356" height="100" fill="url(#shade)"/>
+        <rect x="42" y="110" width="356" height="100" fill="url(#sheen)"/>
+      </g>
+      <path d="M42 174 A178 23 0 0 0 398 174 V184 A178 23 0 0 1 42 184 Z" fill="#000" opacity=".14"/>
+      <ellipse cx="220" cy="124" rx="178" ry="23" fill="var(--tin)"/>
+      <ellipse cx="220" cy="124" rx="178" ry="23" fill="url(#top)"/>
+      <ellipse cx="220" cy="124" rx="162" ry="19" fill="none" stroke="#000" stroke-opacity=".16" stroke-width="1.5"/>
+      <ellipse cx="220" cy="125.5" rx="162" ry="19" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="1"/>
+      <path d="M42 124 A178 23 0 0 0 398 124" fill="none" stroke="#fff" stroke-opacity=".34" stroke-width="1.5"/>
+      <path d="M42 184 A178 23 0 0 0 398 184" fill="none" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/>
+    </svg>
+  </figure>
+</main>
+</body>
+</html>

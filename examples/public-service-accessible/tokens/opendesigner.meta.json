@@ -26,6 +26,10 @@
   "preset": "flat2",
   "presetIsDefault": true,
   "macros": [],
+  "style": null,
+  "look": {
+    "gradient": null
+  },
   "params": {
     "behavior.navigationNative": {
       "value": true,
@@ -427,6 +431,15 @@
       ],
       "inferred": false
     },
+    "type.displayMax": {
+      "value": 96,
+      "dial": "expression",
+      "evidence": [
+        "DC-L02-09",
+        "S-L19-052"
+      ],
+      "inferred": true
+    },
     "type.emphasizedVariants": {
       "value": false,
       "dial": "expression",
@@ -518,6 +531,11 @@
     "brandPinFailed": false,
     "brandAdjustedTo": null,
     "brandContrastWhite": 7.72,
+    "brandContrastDark": 2.27,
+    "brandPinnedDark": false,
+    "brandContrastDarkMode": 2.36,
+    "brandDark": "#68adb4",
+    "secondary": [],
     "statusPeakHct": 48.0,
     "textMin": 7.0,
     "ramps": [
@@ -528,74 +546,75 @@
       "info"
     ],
     "accentCount": 1,
-    "chart": {}
+    "chart": {},
+    "chartDiverging": {}
   },
   "ramps": {
     "accent": {
       "dark": {
         "hex": [
-          "#161919",
-          "#1c2021",
-          "#20292a",
-          "#243233",
-          "#283b3d",
-          "#2b4446",
-          "#2d4d51",
-          "#5c898e",
-          "#75abb1",
-          "#84babf",
-          "#acdfe4",
-          "#d5e7e8"
+          "#151919",
+          "#1b2121",
+          "#1e292b",
+          "#213234",
+          "#233b3e",
+          "#254548",
+          "#254e53",
+          "#518a90",
+          "#68adb4",
+          "#77bcc3",
+          "#a1e1e8",
+          "#d2e7ea"
         ],
         "textOnSolid": "light",
         "oklch": [
           [
-            0.21,
-            0.005
+            0.209,
+            0.006
           ],
           [
             0.241,
-            0.007
+            0.008
           ],
           [
             0.272,
-            0.013
+            0.016
           ],
           [
-            0.304,
-            0.019
+            0.303,
+            0.023
           ],
           [
             0.335,
-            0.025
-          ],
-          [
-            0.367,
             0.03
           ],
           [
-            0.398,
-            0.038
+            0.366,
+            0.037
           ],
           [
-            0.601,
-            0.05
+            0.397,
+            0.047
           ],
           [
-            0.706,
-            0.057
+            0.597,
+            0.061
           ],
           [
-            0.752,
-            0.057
+            0.704,
+            0.07
+          ],
+          [
+            0.751,
+            0.07
           ],
           [
             0.869,
-            0.053
+            0.065
           ],
           [
             0.914,
-            0.019
+            0.023
           ]
         ]
       },
@@ -1376,7 +1395,7 @@
       47
     ],
     "merged": [],
-    "minSize": 11,
+    "minSize": 12,
     "scaleSizes": [
       13,
       16,
@@ -1387,6 +1406,7 @@
       39,
       47
     ],
+    "fluid": {},
     "weights": {
       "body": 400,
       "label": 400,
@@ -1433,6 +1453,14 @@
         "selfHost": true,
         "open": true
       }
+    },
+    "tracking": {
+      "small": 0.02,
+      "body": 0,
+      "heading": -0.01,
+      "display": -0.02,
+      "caps-label": 0.06,
+      "caps-display": 0.01
     }
   },
   "space": {
@@ -1462,7 +1490,29 @@
       "20": 1.5,
       "24": 2.0
     },
-    "breakpoints": {}
+    "breakpoints": {},
+    "layout": {
+      "container": 1280,
+      "columns": {
+        "compact": 4,
+        "medium": 8,
+        "expanded": 12
+      },
+      "gutter": {
+        "compact": 16,
+        "expanded": 24
+      },
+      "margin": {
+        "compact": 16,
+        "expanded": 24
+      },
+      "measure": {
+        "prose": 65,
+        "lead": 52,
+        "unit": "ch"
+      },
+      "alignment": "A centred hero is fine; within a section the heading and its content share one alignment."
+    }
   },
   "density": {
     "spacious": {
@@ -1494,6 +1544,12 @@
         "sm": 40,
         "md": 48,
         "lg": 56
+      },
+      "row": {
+        "sm": 52,
+        "md": 56,
+        "lg": 64,
+        "two-line": 80
       },
       "ratio": 3.5
     },
@@ -1527,6 +1583,12 @@
         "md": 40,
         "lg": 48
       },
+      "row": {
+        "sm": 44,
+        "md": 48,
+        "lg": 56,
+        "two-line": 72
+      },
       "ratio": 2.5
     },
     "compact": {
@@ -1559,6 +1621,12 @@
         "md": 32,
         "lg": 40
       },
+      "row": {
+        "sm": 36,
+        "md": 40,
+        "lg": 48,
+        "two-line": 64
+      },
       "ratio": 2.0
     }
   },
@@ -1572,7 +1640,11 @@
     "focusWidth": 3,
     "focusRadius": 0,
     "iconCorners": "sharp",
-    "iconCaps": "square"
+    "iconCaps": "square",
+    "borderDefault": 1,
+    "ctaShape": "square",
+    "chosen": false,
+    "cornerShape": "circular"
   },
   "elevation": {
     "model": "borders",
@@ -1586,8 +1658,8 @@
       "medium": 200,
       "long": 320,
       "extra": 560,
-      "medium-exit": 150,
-      "long-exit": 240
+      "medium-exit": 160,
+      "long-exit": 260
     },
     "multiplier": 0.8,
     "standard": [
@@ -1603,9 +1675,9 @@
       0.9
     ],
     "exit": [
-      0.2,
       0,
-      1,
+      0,
+      0.38,
       0.9
     ],
     "spatial": {
@@ -2370,5 +2442,77 @@
   ],
   "textScaling": "full",
   "notes": [],
-  "stateHash": "11d97d6419351e42"
+  "limits": {
+    "_about": "Caps for one page. opendesigner-review counts a built page against them; the values are the tokens.",
+    "sizes": {
+      "max": 8,
+      "scale": [
+        16,
+        19,
+        23,
+        27,
+        33,
+        39,
+        47
+      ],
+      "fluid": {}
+    },
+    "weights": {
+      "max": 3,
+      "values": [
+        400,
+        600
+      ]
+    },
+    "families": {
+      "max": 2,
+      "values": [
+        "Atkinson Hyperlegible"
+      ],
+      "note": "a code face only where code is shown"
+    },
+    "tracking": {
+      "small": 0.02,
+      "body": 0,
+      "heading": -0.01,
+      "display": -0.02,
+      "caps-label": 0.06,
+      "caps-display": 0.01,
+      "capsNeverNegative": true
+    },
+    "textGreys": {
+      "max": 3,
+      "tokens": [
+        "color.text.primary",
+        "color.text.secondary",
+        "color.text.disabled"
+      ]
+    },
+    "accents": {
+      "max": 1
+    },
+    "filledPrimaryPerView": 1,
+    "radius": {
+      "control": 0,
+      "container": 0,
+      "overlay": 0,
+      "detail": 0
+    },
+    "ctaShape": "square",
+    "containers": {
+      "max": 1,
+      "width": 1280
+    },
+    "alignment": "A centred hero is fine; within a section the heading and its content share one alignment.",
+    "heroMaxLines": 2,
+    "evidence": [
+      "DC-L02-10",
+      "DC-L02-15",
+      "L15-P04",
+      "DC-L15-03",
+      "S-L15-038"
+    ]
+  },
+  "stateHash": "11d97d6419351e42",
+  "profile": null
 }

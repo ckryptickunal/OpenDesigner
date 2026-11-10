@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en-GB" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Loam: Gus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Round 5: Gus's soil diary. One bar per morning reading, so the plant's own rhythm is the picture: a drink,
+     nine days of drying, then thirsty mornings (ink) until the next drink. One face (Onest), one accent (moss)
+     with one job: watering (the morning after each drink, the last drink's label and the button). */
+  :root {
+    --ink: var(--ds-color-text-primary);
+    --ink-2: var(--ds-color-text-secondary);
+    --water: var(--ds-color-accent-light-9);
+    --gutter: var(--ds-space-20);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ds-color-surface-raised); }
+  body { width: 390px; height: 844px; overflow: hidden; position: relative; color: var(--ink);
+    font: 400 var(--ds-font-size-17)/22px var(--ds-font-family-text); -webkit-font-smoothing: antialiased; }
+  button { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+  button:focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .status { height: 54px; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-4) 30px 0 46px; }
+  .status time { font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); letter-spacing: -0.01em; }
+  .status .sys { display: flex; gap: var(--ds-space-6); align-items: center; }
+  .status svg { display: block; fill: var(--ink); }
+
+  .nav { height: 44px; display: flex; justify-content: space-between; padding: 0 8px; }
+  .nav button { width: 44px; height: 44px; color: var(--ink); }
+
+  /* who: the owner's own photo of the plant (here a free Unsplash photo) */
+  .who { margin-top: var(--ds-space-8); padding: 0 var(--gutter); display: flex; align-items: center; gap: var(--ds-space-16); }
+  .who img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; display: block; background: var(--ds-color-neutral-light-3); }
+  .who h1 { font: 600 var(--ds-font-size-28)/34px var(--ds-font-family-display); letter-spacing: -0.015em; }
+  .who p { font: 400 var(--ds-font-size-15)/20px var(--ds-font-family-text); color: var(--ink-2); }
+
+  /* the reading */
+  .reading { margin-top: var(--ds-space-32); padding: 0 var(--gutter); display: flex; align-items: flex-end; gap: var(--ds-space-16); }
+  .reading .v { font: 500 var(--ds-font-size-64)/56px var(--ds-font-family-display); letter-spacing: -0.03em; }
+  .reading .v span { font-size: var(--ds-font-size-34); letter-spacing: -0.01em; margin-left: 2px; }
+  .reading .t { padding-bottom: 2px; }
+  .reading small { display: block; font: 400 var(--ds-font-size-13)/18px var(--ds-font-family-text); color: var(--ink-2); }
+  .reading b { display: block; font: 600 var(--ds-font-size-17)/22px var(--ds-font-family-text); }
+
+  /* the diary: one bar a morning */
+  .diary { margin-top: var(--ds-space-32); padding: 0 var(--gutter); }
+  .diary svg { display: block; overflow: visible; }
+  .diary text { font: 400 var(--ds-font-size-11)/1 var(--ds-font-family-text); fill: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .diary .w { fill: var(--water); font-weight: 600; }
+  .diary .k { fill: var(--ink); font-weight: 600; }
+
+  .learned { margin-top: var(--ds-space-24); padding: 0 var(--gutter); font: 400 var(--ds-font-size-17)/22px var(--ds-font-family-text); color: var(--ink-2); }
+  .learned b { color: var(--ink); font-weight: 600; }
+
+  .action { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 44px; display: flex; }
+  .action .log { flex: 1; height: 52px; border-radius: var(--ds-radius-12); background: var(--water); color: var(--ds-color-text-on-accent); font: 600 var(--ds-font-size-17)/1 var(--ds-font-family-text); gap: var(--ds-space-8); }
+  .home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: var(--ink); }
+</style>
+</head>
+<body>
+<div class="status" aria-hidden="true">
+  <time>08:14</time>
+  <div class="sys">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.2A10.2 10.2 0 0 0 8 .7 10.2 10.2 0 0 0 .9 3.5L2 4.7a8.6 8.6 0 0 1 6-2.4Zm0 3.3c1.4 0 2.7.5 3.7 1.4l1.1-1.2A7 7 0 0 0 8 3.9a7 7 0 0 0-4.8 1.9l1.1 1.2A5.4 5.4 0 0 1 8 5.6Zm0 3.2c.6 0 1.1.2 1.5.6L8 11 6.5 9.4c.4-.4.9-.6 1.5-.6Z"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="17" height="9" rx="2.5"/><path d="M25 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" fill-opacity=".4"/></svg>
+  </div>
+</div>
+
+<nav class="nav">
+  <button aria-label="Back to Plants"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg></button>
+  <button aria-label="More"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5.5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18.5" cy="12" r="1.6"/></svg></button>
+</nav>
+
+<main>
+  <header class="who">
+    <!-- Photo: Rumman Amin, "Green rubber fig in pot", Unsplash (free licence), photo-1544474921-9df05bc76d66, cropped to the leaves -->
+    <img src="https://images.unsplash.com/photo-1544474921-9df05bc76d66?rect=600,0,2600,2600&w=192&h=192&fit=crop&q=90&auto=format" alt="Gus, a young rubber fig, by the east window">
+    <div><h1>Gus</h1><p>Rubber fig · Living room, east window</p></div>
+  </header>
+
+  <section class="reading" aria-label="Soil moisture">
+    <b class="v num">18<span>%</span></b>
+    <div class="t"><small>Soil moisture at 08:10</small><b>Thirsty since Tue 22:30</b></div>
+  </section>
+
+  <figure class="diary" aria-label="Soil moisture each morning from 8 September to today: three drinks of 250 ml, each followed by about nine days of drying and then thirsty mornings below 20%"><svg id="diary" width="350" height="340" viewBox="0 0 350 340"></svg></figure>
+
+  <p class="learned"><b>Gus dries out about 9 days after a drink.</b> You’ve watered every 12.</p>
+
+  <div class="action">
+    <button class="log"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5s-6 6.6-6 10.9a6 6 0 0 0 12 0C18 10.1 12 3.5 12 3.5Z"/></svg>Log 250 ml</button>
+  </div>
+</main>
+<div class="home-ind" aria-hidden="true"></div>
+
+<script>
+  // Morning readings (%) at 08:10, Tue 8 Sep to Thu 15 Oct 2026 (38 days). Model: after each 250 ml drink at 19:00
+  // (Sat 29 Aug, Thu 10 Sep, Tue 22 Sep, Sun 4 Oct; peaks 55, 58, 54 and 57%) the soil dries 14 to 15.5% a day of what
+  // is above a 9% floor. This cycle last crossed 20% on Tue 13 Oct at 22:26; today's 17.8% reads as 18%.
+  const past = [18.7,17.3,16.0, 53.7,46.8,40.9,36.0,31.8,28.2,25.3,22.7,20.6,18.8,17.3,16.0,
+                50.4,44.6,39.6,35.3,31.7,28.5,25.8,23.4,21.4,19.7,18.2,16.9,
+                52.9,46.4,40.8,36.1,32.1,28.6,25.7,23.2,21.1,19.3,17.8];
+  const drink = [3, 15, 27];                 // the first morning after each drink
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const ink = css('--ds-color-text-primary'), grey = css('--ds-color-neutral-light-8'), pale = css('--ds-color-neutral-light-6'), water = css('--ds-color-accent-light-9'), rule = css('--ds-color-border-default'), paper = css('--ds-color-surface-raised');
+  const P = 9.2, BW = 6, B = 318, H = 300, MAX = 60;      // 9.2 pt per day across 350 pt, 0 to 60% over 300 pt
+  const y = v => B - v / MAX * H;
+  let s = '';
+  s += `<line x1="0" x2="350" y1="${y(60) + .5}" y2="${y(60) + .5}" stroke="${css('--ds-color-border-separator')}"/>`;
+  s += `<line x1="0" x2="350" y1="${y(20)}" y2="${y(20)}" stroke="${grey}" stroke-dasharray="2 3"/>`;
+  past.forEach((v, i) => {
+    const x = i * P, c = drink.includes(i) ? water : v < 20 ? ink : pale;   // pale: the drying days are the shape, not the message
+    s += `<rect x="${x}" y="${y(v).toFixed(1)}" width="${BW}" height="${(B - y(v)).toFixed(1)}" rx="1.5" fill="${c}"/>`;
+  });
+  s += `<line x1="0" x2="350" y1="${B + .5}" y2="${B + .5}" stroke="${rule}"/>`;
+  // labels: each drink above its bar, the 20% line, today and the forecast
+  s += `<text class="w" x="${27 * P}" y="${(y(past[27]) - 8).toFixed(1)}">Watered 4 Oct</text>`;
+  // the last full cycle's thirsty run: Fri 2 to Sun 4 Oct, bars 24 to 26
+  const r0 = 24 * P, r1 = 26 * P + BW, ry = B + 7;
+  s += `<path d="M${r0} ${ry - 4}V${ry}H${r1}V${ry - 4}" fill="none" stroke="${ink}" stroke-width="1"/><text class="k" x="${(r0 + r1) / 2}" y="${B + 22}" text-anchor="middle">3 dry mornings</text>`;
+  s += `<text x="0" y="${y(60) - 6}">60%</text><text x="0" y="${y(20) - 6}">20%</text>`;
+  const tx = (past.length - 1) * P + BW / 2;  // the last bar ends at 346.4 pt
+  s += `<line x1="${tx}" x2="${tx}" y1="${B + 1}" y2="${B + 5}" stroke="${ink}"/><text class="k" x="350" y="${B + 22}" text-anchor="end">Today</text>`;
+  [['14 Sep', 6]].forEach(([l, i]) => { s += `<text x="${i * P + BW / 2}" y="${B + 22}" text-anchor="middle">${l}</text>`; });
+  document.getElementById('diary').innerHTML = s;
+</script>
+</body>
+</html>

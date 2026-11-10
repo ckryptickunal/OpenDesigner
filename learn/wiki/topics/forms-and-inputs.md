@@ -2,7 +2,7 @@
 type: topic
 title: Forms and inputs
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -30,3 +30,4 @@ User input is one of the four core dashboard components, found in modals such as
 - [[sources/vaul-inputs-inputs-vaul|Inputs – Vaul]]: Inputs inside drawers are tricky because the keyboard pushes content up; Vaul repositions the drawer.
 - See also: [[synthesis/forms-and-inputs|Forms and inputs synthesis]]
 - [[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]: A password field that checks requirements live removes a reason to get stuck; splitting sign-up across screens raised conversions in one case.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-craft-details-referodesign-refero-skill-skills-refero-design-references-craft-details-md|referodesign/refero_skill: skills/refero-design/references/craft-details.md]]: type/inputmode/autocomplete values, no paste blocking, spellcheck off for codes and emails, clickable labels with no dead zones, placeholders ending in an ellipsis, spinner on submit, inline errors focused on submit, unsaved-changes warning.

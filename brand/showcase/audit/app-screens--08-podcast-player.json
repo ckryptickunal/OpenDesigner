@@ -1,0 +1,80 @@
+{
+ "piece": "app-screens/08-podcast-player",
+ "title": "08 · Undertow: podcast now playing (phone, 390×844 @3x, dark)",
+ "pattern": "now playing",
+ "platform": "ios",
+ "industry": "media",
+ "style": [
+  "editorial",
+  "dark",
+  "minimal"
+ ],
+ "tags": [
+  "now playing",
+  "media",
+  "podcast",
+  "player",
+  "dark",
+  "serif",
+  "chapters",
+  "ios"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "A real editorial idea carried through: the episode title as a 54 px light serif over the art, the current transcript line as a pull-quote with a fill-box highlight, chapters set as a table of contents with dotted leaders and times.",
+  "A chapter-aware scrubber (six segments), 1.2× speed, skip 15 and 30, a sleep moon: the real control set for long-form listening.",
+  "Zero radius everywhere and one ice-blue accent: the print idea is held in every element."
+ ],
+ "slop_signals": [
+  "The cover art is generated contour-map texture with a glowing moon and a decorative coordinate label '46°12'N': the topographic-texture motif recurs across this showcase (also on the banking card).",
+  "The first name 'Ines' and the value '18:24' appear in other pieces of the set: reused invented data."
+ ],
+ "fixes": [
+  "Use a real or commissioned cover image for the show, or a flat typographic cover; drop the coordinate label and the moon glow.",
+  "Vary names and numbers across the showcase."
+ ],
+ "references": [
+  {
+   "site": "Neuecast",
+   "url": "https://mobbin.com/screens/c1987944-c25e-4f79-ad38-2a2d44bdd7f9",
+   "what": "A huge title as the hero with a plain scrubber and episode notes below: the same type-led player."
+  },
+  {
+   "site": "Brink",
+   "url": "https://mobbin.com/screens/cf024e3b-bc8b-4981-b433-0cfbe5ae11bd",
+   "what": "Art, a chapters control with a count, 15/30 skips and a sleep timer in one row."
+  },
+  {
+   "site": "Bloomberg",
+   "url": "https://mobbin.com/screens/a10206a4-9fb9-4545-ab53-e299fb68eb69",
+   "what": "Headlines between hairlines with durations and no cards: the list this piece's chapters follow."
+  },
+  {
+   "site": "Spotify",
+   "url": "https://mobbin.com/screens/646eefc4-43bd-4950-8b14-11a1431f9bfd",
+   "what": "Speed, skips and timer in one control row under the scrubber."
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "improve",
+  "said": "can be a little better",
+  "date": "2026-10-14"
+ },
+ "round3": {
+  "score": 4,
+  "changed": [
+   "Generated contour-map art, moon glow and coordinate label replaced by a 132 pt square cover: a free Unsplash photo (Dave Hoefler) as a navy-to-ice duotone with the show's name set on it; page behind it flat navy",
+   "Ice blue only marks 'now' (played time, the spoken phrase, the current chapter); play is ice white with a navy glyph",
+   "Letterspaced capitals replaced by sentence-case labels; one chapter line; 'Transcript' (not 'Live')",
+   "44 pt targets (the token resolved to 24 under pointer: fine); play centred; edges on 20 and 370",
+   "Chapters under a sticky header, scrolled so the current chapter reads; baseline-aligned rows, m:ss times",
+   "Data: fill 43% matches 17:05; 17:05 + 34:55 = 52:00; reused 'Ines' and '18:xx' gone",
+   "Fresh-eyes audit: 3/5, 3/5, then 4/5; polish items applied"
+  ]
+ },
+ "facts": [
+  "mockups/01-phone-trio and mockups/08-made-with-opendesigner show this shot.png and need a re-render; their alt text may still describe the contour-map cover"
+ ]
+}

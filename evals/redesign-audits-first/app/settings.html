@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings · Brindlewick Dispatch</title>
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/legacy.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">Brindlewick</div>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="shipments.html">Shipments</a>
+      <a href="#">Drivers</a>
+      <a href="#">Reports</a>
+      <a href="settings.html" class="active">Settings</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar"><h1>Settings</h1></div>
+
+    <div class="section">
+      <h4 class="section-title">Your account</h4>
+      <p class="section-sub">This is shown to other dispatchers.</p>
+      <div class="form-row"><label for="name">Full name</label><input id="name" value="Priya Natarajan"></div>
+      <div class="form-row"><label for="email">Email</label><input id="email" value="priya@brindlewick.example"><div class="hint">We'll send delay alerts here.</div></div>
+      <div class="form-row"><label for="depot">Home depot</label>
+        <select id="depot"><option>Leeds</option><option>Hull</option><option>Sheffield</option></select></div>
+      <button class="button">Save changes</button> <button class="button grey">Cancel</button>
+    </div>
+
+    <div class="section">
+      <h4 class="section-title">Notifications</h4>
+      <p class="section-sub">Choose what you hear about.</p>
+      <div class="toggle"><span>Shipment delayed</span><div class="switch on"></div></div>
+      <div class="toggle"><span>Driver reassigned</span><div class="switch on"></div></div>
+      <div class="toggle"><span>Daily summary email</span><div class="switch"></div></div>
+    </div>
+
+    <div class="section" style="border-color:#fecaca">
+      <h4 class="section-title">Danger zone</h4>
+      <p class="section-sub">Deleting your account cannot be undone.</p>
+      <button class="btn btn-danger">Delete account</button>
+    </div>
+  </main>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>

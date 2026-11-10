@@ -1,0 +1,138 @@
+{
+  "made": "2026-10-14T16:25:25",
+  "system": "Undertow",
+  "probes": 1,
+  "inputs": [
+    "p08.json"
+  ],
+  "findings": [
+    {
+      "id": "M-MS01-0208",
+      "case": "MS-01",
+      "severity": "warn",
+      "basis": "measured",
+      "title": "Spacing off the ladder (3 value(s), 7 of 34 uses)",
+      "where": [
+        "index.html · 390x844 · dark"
+      ],
+      "measured": "13px x4 (nearest 12); 3px x2 (nearest 2); 196px x1 (nearest 96)",
+      "expected": "steps: 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96",
+      "evidence": [
+        "main > section.toc > div.row:nth-of-type(2)",
+        "main > div.scrub:nth-of-type(3) > div.track:nth-of-type(2)",
+        "main > p.meta"
+      ],
+      "fix": "use the spacing tokens; 1-2 px values are usually borders or browser defaults",
+      "standard": "tokens",
+      "status": "confirmed"
+    },
+    {
+      "id": "M-MS02-5146",
+      "case": "MS-02",
+      "severity": "warn",
+      "basis": "measured",
+      "title": "Text smaller than 11 px",
+      "where": [
+        "index.html · 390x844 · dark"
+      ],
+      "measured": "10 px: '15' in div.transport:nth-of-type(4) > button.skip:nth-of-type(2) > span",
+      "expected": "at least 11 px (the system's minimum)",
+      "evidence": [
+        "div.transport:nth-of-type(4) > button.skip:nth-of-type(2) > span"
+      ],
+      "fix": "raise it to a text style",
+      "standard": null,
+      "status": "confirmed"
+    },
+    {
+      "id": "M-MS02-8007",
+      "case": "MS-02",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Font sizes off the type scale (1 value(s), 2 of 31 text elements)",
+      "where": [
+        "index.html · 390x844 · dark"
+      ],
+      "measured": "10px x2 (nearest 13)",
+      "expected": "sizes from the scale: 13, 17, 23, 30, 40, 54, 72, 95",
+      "evidence": [
+        "div.transport:nth-of-type(4) > button.skip:nth-of-type(2) > span"
+      ],
+      "fix": "use a text style; a browser default (buttons 13.33 px, h3 18.72 px) means the element does not inherit",
+      "standard": "tokens",
+      "status": "confirmed"
+    },
+    {
+      "id": "M-MS02-2927",
+      "case": "MS-02",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Font weights outside the system's",
+      "where": [
+        "index.html · 390x844 · dark"
+      ],
+      "measured": "weight 600 on 3 element(s); the system uses [400, 500, 650, 750]",
+      "expected": "the system's weights",
+      "evidence": [
+        "div.status:nth-of-type(2) > time"
+      ],
+      "fix": null,
+      "standard": null,
+      "status": "confirmed"
+    },
+    {
+      "id": "M-MS11-5224",
+      "case": "MS-11",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Negative margins in use",
+      "where": [
+        "index.html · 390x844 · dark"
+      ],
+      "measured": "main > div.top:nth-of-type(1) marginRight -10 px",
+      "expected": "usually a workaround that overlaps neighbours",
+      "evidence": [
+        "main > div.top:nth-of-type(1)"
+      ],
+      "fix": null,
+      "standard": null,
+      "status": "confirmed"
+    },
+    {
+      "id": "M-ST01-8541",
+      "case": "ST-01",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Most controls have no :hover style",
+      "where": [
+        "index.html · 390x844 · dark"
+      ],
+      "measured": "9 of 9 have none in the stylesheets I can read",
+      "expected": "a hover cue on pointer devices (and nothing that only appears on hover)",
+      "evidence": [
+        "main > div.top:nth-of-type(1) > button.ib:nth-of-type(1)",
+        "main > div.top:nth-of-type(1) > button.ib:nth-of-type(2)",
+        "main > div.scrub:nth-of-type(3) > div.track:nth-of-type(2)"
+      ],
+      "fix": "confirm by hovering a few; touch-only products can skip this",
+      "standard": null,
+      "status": "confirmed"
+    },
+    {
+      "id": "M-TM05-3836",
+      "case": "TM-05",
+      "severity": "info",
+      "basis": "measured",
+      "title": "canvas on the page: its motion is not in the animation list",
+      "where": [
+        "index.html · 390x844 · dark"
+      ],
+      "measured": "1 found",
+      "expected": "sample frames over time and look at them; the probe cannot read this motion",
+      "evidence": [],
+      "fix": null,
+      "standard": null,
+      "status": "confirmed"
+    }
+  ]
+}

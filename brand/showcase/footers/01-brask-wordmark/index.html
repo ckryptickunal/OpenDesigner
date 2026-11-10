@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brask Studio footer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Brask: the footer is the signature. Everything is a --ds-* token except the wordmark size,
+     which is fitted to the page width on purpose (it is art, not a step on the type scale). */
+  :root {
+    --ink: var(--ds-color-neutral-dark-1);
+    --bone: var(--ds-color-text-primary);
+    --signal: var(--ds-color-brand-seed);         /* exact brand orange; 5.5:1 on --ink */
+    --gutter: var(--ds-space-48);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ink); }
+  body { font-family: var(--ds-font-family-text); color: var(--bone); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible {
+    outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus);
+    outline-offset: var(--ds-focus-ring-offset);
+  }
+
+  .footer { position: relative; overflow: hidden; background: var(--ink); }
+  .wrap { padding: var(--ds-space-80) var(--gutter) 0; }
+
+  /* Row 1: the invitation */
+  .lead { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--ds-space-24); align-items: end; }
+  .kicker { grid-column: 1 / span 12; display: flex; align-items: center; gap: var(--ds-space-12);
+    font: var(--ds-text-label-sm); letter-spacing: var(--ds-text-label-sm-tracking); text-transform: uppercase;
+    color: var(--ds-color-text-secondary); margin-bottom: var(--ds-space-24); }
+  .dot { width: 8px; height: 8px; background: var(--signal); border-radius: var(--ds-radius-full);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--signal) 22%, transparent); }
+  .ask { grid-column: 1 / span 8; font-family: var(--ds-font-family-display); font-weight: var(--ds-font-weight-body);
+    font-size: var(--ds-font-size-67); line-height: 1.02; letter-spacing: -0.02em; text-wrap: balance;
+    font-variation-settings: "wdth" 100; }
+  .ask em { font-style: normal; font-weight: var(--ds-font-weight-heading); background: var(--signal); color: var(--ink); padding: 0 .12em; margin-left: -.04em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .mail { grid-column: 9 / span 4; justify-self: end; display: inline-flex; align-items: center; gap: var(--ds-space-12);
+    min-height: var(--ds-size-target-min); padding: 0 0 var(--ds-space-6);
+    font-size: var(--ds-font-size-21); font-weight: var(--ds-font-weight-label);
+    border-bottom: var(--ds-border-width-2) solid var(--signal);
+    transition: gap var(--ds-motion-duration-medium) var(--ds-motion-easing-enter); }
+  .mail:hover { gap: var(--ds-space-20); }
+  .mail svg { width: 20px; height: 20px; }
+
+  /* Row 2: index */
+  .index { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--ds-space-24);
+    margin-top: var(--ds-space-80); padding-top: var(--ds-space-24); border-top: 1px solid var(--ds-color-border-subtle); }
+  .col h2 { font: var(--ds-text-label-sm); letter-spacing: var(--ds-text-label-sm-tracking); text-transform: uppercase;
+    color: var(--ds-color-text-tertiary); margin-bottom: var(--ds-space-16); }
+  .col ul { list-style: none; }
+  .col li a { display: inline-flex; align-items: center; min-height: 32px; font-size: var(--ds-font-size-16);
+    color: var(--bone); background: linear-gradient(var(--signal), var(--signal)) 0 100% / 0 1px no-repeat;
+    transition: background-size var(--ds-motion-duration-medium) var(--ds-motion-easing-enter); }
+  .col li a:hover { background-size: 100% 1px; }
+  .c1 { grid-column: 1 / span 3; } .c2 { grid-column: 4 / span 2; } .c3 { grid-column: 6 / span 2; } .c4 { grid-column: 9 / span 4; }
+  .office { display: grid; grid-template-columns: 1fr auto; align-items: baseline; padding: var(--ds-space-6) 0;
+    border-bottom: 1px solid var(--ds-color-border-subtle); font-size: var(--ds-font-size-16); }
+  .office:first-of-type { border-top: 1px solid var(--ds-color-border-subtle); }
+  .office time { font-variant-numeric: tabular-nums; color: var(--ds-color-text-secondary); }
+  .office time b { font-weight: var(--ds-font-weight-body); color: var(--signal); }
+  .blurb { font-size: var(--ds-font-size-16); line-height: 1.5; color: var(--ds-color-text-secondary); max-width: 30ch; }
+
+  /* Row 3: meta strip right above the mark */
+  .meta { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--ds-space-24); align-items: center;
+    margin-top: var(--ds-space-64); font: var(--ds-text-label-sm); letter-spacing: var(--ds-text-label-sm-tracking);
+    text-transform: uppercase; color: var(--ds-color-text-secondary); }
+  .meta .m1 { grid-column: 1 / span 3; } .meta .m2 { grid-column: 4 / span 4; } .meta .m3 { grid-column: 9 / span 2; }
+  .meta .m4 { grid-column: 11 / span 2; justify-self: end; }
+  .meta a { display: inline-flex; align-items: center; gap: var(--ds-space-8); min-height: var(--ds-size-target-pointer); }
+  .meta a:hover { color: var(--bone); }
+
+  /* The mark: set once, fitted to the full width, cropped by the bottom edge */
+  .mark { position: relative; margin-top: var(--ds-space-16); height: var(--crop, 300px); }
+  .mark span { position: absolute; left: 50%; top: 0; transform: translateX(-50%); white-space: nowrap;
+    font-family: var(--ds-font-family-display); font-weight: 860; font-variation-settings: "wdth" 125;
+    letter-spacing: -0.035em; line-height: 0.74; color: var(--bone); font-size: 300px; } /* od-ignore: start size, replaced by the fit script */
+  .mark i { font-style: normal; color: var(--signal); }
+  .grain { position: absolute; inset: 0; pointer-events: none; opacity: 0.06; mix-blend-mode: screen; }
+
+  @media (max-width: 720px) {
+    :root { --gutter: var(--ds-space-20); }
+    .wrap { padding-top: var(--ds-space-64); }
+    .ask { grid-column: 1 / -1; font-size: var(--ds-font-size-38); }
+    .mail { grid-column: 1 / -1; justify-self: start; margin-top: var(--ds-space-32); font-size: var(--ds-font-size-16); }
+    .index { row-gap: var(--ds-space-40); margin-top: var(--ds-space-64); }
+    .c1 { grid-column: 1 / -1; } .c2 { grid-column: 1 / span 6; } .c3 { grid-column: 7 / span 6; } .c4 { grid-column: 1 / -1; }
+    .meta { row-gap: var(--ds-space-8); }
+    .meta .m1, .meta .m2 { grid-column: 1 / -1; } .meta .m3 { grid-column: 1 / span 6; } .meta .m4 { grid-column: 7 / span 6; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<footer class="footer" aria-labelledby="ft-title">
+  <svg class="grain" aria-hidden="true" width="100%" height="100%"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+  <div class="wrap">
+    <div class="lead">
+      <p class="kicker"><span class="dot" aria-hidden="true"></span>Booking spring 2027 &middot; two slots left</p>
+      <h2 class="ask" id="ft-title">Got a brief that keeps you up at night? <em>Send it over.</em></h2>
+      <a class="mail" href="#">new@brask.studio
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8" stroke="currentColor" stroke-width="1.75"/></svg>
+      </a>
+    </div>
+
+    <nav class="index" aria-label="Footer">
+      <div class="col c1">
+        <h2>Brask</h2>
+        <p class="blurb">An independent studio for identity, type and motion. Twenty-two people, three cities, one long table.</p>
+      </div>
+      <div class="col c2">
+        <h2>Studio</h2>
+        <ul><li><a href="#">Work</a></li><li><a href="#">Approach</a></li><li><a href="#">People</a></li><li><a href="#">Journal</a></li></ul>
+      </div>
+      <div class="col c3">
+        <h2>Follow</h2>
+        <ul><li><a href="#">Field notes</a></li><li><a href="#">Showreel</a></li><li><a href="#">Careers</a></li><li><a href="#">Press kit</a></li></ul>
+      </div>
+      <div class="col c4">
+        <h2>Studios</h2>
+        <div class="office"><span>Copenhagen</span><time>14<b>:</b>32 CET</time></div>
+        <div class="office"><span>Lisbon</span><time>13<b>:</b>32 WET</time></div>
+        <div class="office"><span>Mexico City</span><time>07<b>:</b>32 CST</time></div>
+      </div>
+    </nav>
+
+    <div class="meta">
+      <span class="m1">&copy; 2026 Brask Studio ApS</span>
+      <span class="m2">Identity &middot; Type &middot; Motion</span>
+      <a class="m3" href="#">Privacy</a>
+      <a class="m4" href="#top">Back to top
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 11V1M1.5 5.5 6 1l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="mark" aria-hidden="true"><span id="mark">BRASK<i>.</i></span></div>
+</footer>
+<script>
+  // Fit the wordmark so its ink (not its advance width) runs exactly from gutter to gutter,
+  // then crop it about two fifths into the letters. Ink is found by scanning a canvas render.
+  (function () {
+    const el = document.getElementById('mark');
+    const box = el.parentElement;
+    function inkBounds(size) {
+      const cs = getComputedStyle(el);
+      const cv = document.createElement('canvas');
+      cv.width = Math.ceil(size * 6); cv.height = Math.ceil(size * 1.4);
+      const c = cv.getContext('2d');
+      c.font = `${cs.fontWeight} expanded ${size}px ${cs.fontFamily}`;
+      c.letterSpacing = (parseFloat(cs.letterSpacing) / parseFloat(cs.fontSize) * size) + 'px';
+      c.textBaseline = 'alphabetic';
+      c.fillText(el.textContent, size * 0.5, size);
+      const d = c.getImageData(0, 0, cv.width, cv.height).data;
+      let L = cv.width, R = 0;
+      for (let x = 0; x < cv.width; x++) for (let y = 0; y < cv.height; y += 2)
+        if (d[(y * cv.width + x) * 4 + 3] > 40) { if (x < L) L = x; if (x > R) R = x; break; }
+      return { left: L - size * 0.5, width: R - L + 1 };
+    }
+    function fit() {
+      const gutter = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gutter')) || 48;
+      const target = document.documentElement.clientWidth - gutter * 2;
+      const ref = 200, b = inkBounds(ref);
+      const size = ref * target / b.width;
+      el.style.fontSize = size + 'px';
+      el.style.transform = 'none';
+      el.style.left = (gutter - b.left * size / ref) + 'px';
+      box.style.setProperty('--crop', (size * (document.documentElement.clientWidth < 720 ? 0.74 : 0.6)) + 'px');
+    }
+    document.fonts.ready.then(fit);
+    addEventListener('resize', fit);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shipments · Brindlewick Dispatch</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">Brindlewick</div>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="shipments.html" class="active">Shipments</a>
+      <a href="#">Drivers</a>
+      <a href="#">Reports</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <h1>Shipments</h1>
+      <a href="#" class="btn btn-primary" style="background:#2f6fed;border-radius:6px">+ New shipment</a>
+    </div>
+
+    <div class="toolbar">
+      <input class="search" type="text" placeholder="Search by ID, driver or city">
+      <button class="filter on" data-f="all">All</button>
+      <button class="filter" data-f="transit">In transit</button>
+      <button class="filter" data-f="late">Delayed</button>
+      <button class="filter" data-f="ok">Delivered</button>
+    </div>
+
+    <section class="panel" style="padding:0;overflow:visible">
+      <table id="list">
+        <thead><tr><th>ID</th><th>Customer</th><th>Route</th><th>Driver</th><th>Weight (kg)</th><th>Value (£)</th><th>ETA</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr data-s="transit"><td>BW-20912</td><td>Harrowgate Mills</td><td>Leeds → London</td><td>Sam Whitfield</td><td class="weight">12,900</td><td>48,210.00</td><td class="eta">12:10</td><td><span class="badge transit">In transit</span></td><td><button class="icon-btn" aria-label="More">&#8942;</button></td></tr>
+          <tr data-s="late"><td>BW-20931</td><td>Corvel Foods</td><td>Leeds → Bristol</td><td>Tomás Reyes</td><td class="weight">18,400</td><td>9,870.50</td><td class="eta">14:20</td><td><span class="badge late">Delayed</span></td><td><button class="icon-btn" aria-label="More">&#8942;</button></td></tr>
+          <tr data-s="ok"><td>BW-20936</td><td>Northgate Steel</td><td>Sheffield → Hull</td><td>Ola Bergström</td><td class="weight">24,000</td><td>112,400.00</td><td class="eta">09:45</td><td><span class="badge ok">Delivered</span></td><td><button class="icon-btn" aria-label="More">&#8942;</button></td></tr>
+          <tr data-s="late"><td>BW-20944</td><td>Pennant Retail</td><td>Hull → Cardiff</td><td>Amara Okafor</td><td class="weight">6,250</td><td>3,115.75</td><td class="eta">16:05</td><td><span class="badge late">Delayed</span></td><td><button class="icon-btn" aria-label="More">&#8942;</button></td></tr>
+          <tr data-s="transit"><td>BW-20950</td><td>Marlow &amp; Finch</td><td>Derby → Norwich</td><td>Grace Lindqvist</td><td class="weight">880</td><td>1,020.00</td><td class="eta">13:30</td><td><span class="badge transit">In transit</span></td><td><button class="icon-btn" aria-label="More">&#8942;</button></td></tr>
+          <tr data-s="ok"><td>BW-20955</td><td>Corvel Foods</td><td>Leeds → York</td><td>Dev Malhotra</td><td class="weight">15,300</td><td>7,640.20</td><td class="eta">08:15</td><td><span class="badge ok">Delivered</span></td><td><button class="icon-btn" aria-label="More">&#8942;</button></td></tr>
+          <tr data-s="late"><td>BW-20958</td><td>Halton Paper</td><td>York → Plymouth</td><td>Jin Park</td><td class="weight">21,000</td><td>15,900.00</td><td class="eta">18:40</td><td><span class="badge late">Delayed</span></td><td><button class="icon-btn" aria-label="More">&#8942;</button></td></tr>
+          <tr data-s="cancelled"><td>BW-20961</td><td>Pennant Retail</td><td>Hull → Leeds</td><td>—</td><td class="weight">0</td><td>0.00</td><td class="eta">—</td><td><span class="badge cancelled">Cancelled</span></td><td><button class="icon-btn" aria-label="More">&#8942;</button></td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>

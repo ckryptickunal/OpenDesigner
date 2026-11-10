@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Components at real size</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Scene: a studio components page. Five tiles, each a window onto a finished component render shown
+     at 1:1 (one CSS pixel of the component = one CSS pixel here; the 2x renders are drawn at 1440 x 900).
+     Board, tiles, borders, radius, spacing and type are tokens (dark theme pinned). The crop offsets
+     are measured from each component page's own layout boxes; the palette tile stops 8 px short of the
+     palette's right edge so the spec sheet's numbered callout dots stay out of frame.
+     Round 3 (new layouts for components 01, 03, 05 and 08, and a fresh audit), measured at 1440 x 900; each
+     tile now frames whole elements:
+     music    -50 -104: the player card (x 120-860, from y 120), and the start of the track list; the
+              release column starts at x 908, so the tile stops at 906 (70 px left, 46 px right);
+     pricing  -376 -236 (664 x 304): the Spark and Studio plan heads side by side, ending at the bottom of the
+              Studio head (y 540), so no table values appear without their row labels; Premiere starts at 1044;
+     toasts   -776 -752 (664 x 144): the stack of three toasts (x 1128-1416, y 790-868) over the room's bottom
+              right, with the composer's Send button whole at the left;
+     dates    -96 -114 (792 x 464): the whole calendar, month labels to Sunday (x 120-862), from the step label
+              (ends y 112) to the end of the fifth week (y 574), so the stay Fri 23 to Tue 27 Oct shows whole. */
+  html, body { margin: 0; }
+  body {
+    width: 1600px; height: 1200px; overflow: hidden; position: relative;
+    background: var(--ds-color-surface-sunken);
+    font-family: var(--ds-font-family-text);
+    color: var(--ds-color-text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+  .board {
+    position: absolute; left: var(--ds-space-64); top: var(--ds-space-64); right: var(--ds-space-64);
+    display: grid; gap: var(--ds-space-16);
+    grid-template-columns: 344px 240px 48px 792px;   /* round 3: row 1 keeps 600 + 856; row 2 is 664 (pricing over toasts) + 792 (the whole calendar) */
+    grid-template-rows: 556px 304px 144px;
+  }
+  .tile {
+    position: relative; overflow: hidden; margin: 0;
+    border-radius: var(--ds-radius-20);
+    background-repeat: no-repeat; background-size: 1440px 900px;
+    box-shadow: inset 0 0 0 1px var(--ds-color-border-subtle); /* od-ignore: a hairline border drawn as an inset shadow, not elevation */
+  }
+  .tile::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ds-color-white) 9%, transparent); } /* od-ignore: hairline highlight, not elevation */
+  .t-palette { grid-column: 1 / 3; grid-row: 1; background-image: url(../../components/02-command-palette/shot.png); background-position: -66px -170px; }
+  .t-music   { grid-column: 3 / 5; grid-row: 1; background-image: url(../../components/08-music-player/shot.png); background-position: -50px -104px; }
+  .t-pricing { grid-column: 1 / 4; grid-row: 2; background-image: url(../../components/01-pricing-glass/shot.png); background-position: -376px -236px; }
+  .t-toasts  { grid-column: 1 / 4; grid-row: 3; background-image: url(../../components/05-toast-stack/shot.png); background-position: -776px -752px; }
+  .t-dates   { grid-column: 4; grid-row: 2 / 4; background-image: url(../../components/03-date-range-picker/shot.png); background-position: -96px -114px; }
+
+  .caption { position: absolute; left: var(--ds-space-64); right: var(--ds-space-64); bottom: var(--ds-space-40);
+    display: flex; align-items: center; gap: var(--ds-space-12); font: var(--ds-text-body-md); }
+  .caption .scale { font: var(--ds-text-label-md); padding: var(--ds-space-2) var(--ds-space-8); border-radius: var(--ds-radius-6);
+    background: var(--ds-color-brand-seed); color: var(--ds-color-text-on-brand); }
+  .caption b { font-weight: var(--ds-font-weight-heading); }
+  .caption span:last-child { margin-left: auto; color: var(--ds-color-text-secondary); }
+</style>
+</head>
+<body>
+  <div class="board">
+    <figure class="tile t-palette" role="img" aria-label="Margin command palette: a fuzzy search for shrev with commands, drafts and settings"></figure>
+    <figure class="tile t-music" role="img" aria-label="Calamondin Tapes player: Sodium Summer by Juniper Static from Heat Lamp Lullabies, cover art, playback controls, a waveform scrubber with the song's sections, and the start of the track list"></figure>
+    <figure class="tile t-pricing" role="img" aria-label="Gloaming pricing: the free Spark plan beside the featured Studio plan at 19 dollars a month, 228 dollars billed yearly, with a 7-day trial"></figure>
+    <figure class="tile t-toasts" role="img" aria-label="Kinroom: a stack of three toasts, the front one Message deleted with Undo, at the bottom right of a room beside its message box"></figure>
+    <figure class="tile t-dates" role="img" aria-label="Wayfern date range picker, step 1 of 3, Choose your nights: October and November 2026 with nightly prices, Fri 23 to Tue 27 Oct selected"></figure>
+  </div>
+  <p class="caption" style="margin:0"><span class="scale">1:1</span><b>Five components at their real size</b><span>Margin, Calamondin Tapes, Gloaming, Kinroom, Wayfern</span></p>
+</body>
+</html>

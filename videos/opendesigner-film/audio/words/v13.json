@@ -1,0 +1,128 @@
+[
+  {
+    "text": "Some",
+    "start": 0,
+    "end": 0.44,
+    "id": "w0"
+  },
+  {
+    "text": "rules",
+    "start": 0.44,
+    "end": 0.99,
+    "id": "w1"
+  },
+  {
+    "text": "never",
+    "start": 0.99,
+    "end": 1.34,
+    "id": "w2"
+  },
+  {
+    "text": "move.",
+    "start": 1.95,
+    "end": 2,
+    "id": "w3"
+  },
+  {
+    "text": "Readable",
+    "start": 2,
+    "end": 2.49,
+    "id": "w4"
+  },
+  {
+    "text": "contrast,",
+    "start": 2.49,
+    "end": 3.17,
+    "id": "w5"
+  },
+  {
+    "text": "targets",
+    "start": 3.17,
+    "end": 3.36,
+    "id": "w6"
+  },
+  {
+    "text": "big",
+    "start": 3.95,
+    "end": 4.03,
+    "id": "w7"
+  },
+  {
+    "text": "enough",
+    "start": 4.03,
+    "end": 4.55,
+    "id": "w8"
+  },
+  {
+    "text": "to",
+    "start": 4.55,
+    "end": 4.72,
+    "id": "w9"
+  },
+  {
+    "text": "tap,",
+    "start": 4.72,
+    "end": 5,
+    "id": "w10"
+  },
+  {
+    "text": "visible",
+    "start": 5,
+    "end": 5.58,
+    "id": "w11"
+  },
+  {
+    "text": "focus,",
+    "start": 5.58,
+    "end": 6.11,
+    "id": "w12"
+  },
+  {
+    "text": "and",
+    "start": 6.11,
+    "end": 6.27,
+    "id": "w13"
+  },
+  {
+    "text": "calmer",
+    "start": 6.27,
+    "end": 6.53,
+    "id": "w14"
+  },
+  {
+    "text": "motion",
+    "start": 6.95,
+    "end": 7,
+    "id": "w15"
+  },
+  {
+    "text": "for",
+    "start": 7,
+    "end": 7.16,
+    "id": "w16"
+  },
+  {
+    "text": "those",
+    "start": 7.17,
+    "end": 7.46,
+    "id": "w17"
+  },
+  {
+    "text": "who",
+    "start": 7.46,
+    "end": 7.58,
+    "id": "w18"
+  },
+  {
+    "text": "need",
+    "start": 7.66,
+    "end": 7.85,
+    "id": "w19"
+  },
+  {
+    "text": "it.",
+    "start": 7.85,
+    "end": 8,
+    "id": "w20"
+  }
+]

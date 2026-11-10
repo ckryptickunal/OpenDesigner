@@ -1,0 +1,121 @@
+{
+  "made": "2026-10-14T16:18:25",
+  "system": "Loam",
+  "probes": 1,
+  "inputs": [
+    "p06.json"
+  ],
+  "findings": [
+    {
+      "id": "M-MS09-0932",
+      "case": "MS-09",
+      "severity": "warn",
+      "basis": "measured",
+      "title": "Corner radii off the system's",
+      "where": [
+        "index.html · 390x844 · light"
+      ],
+      "measured": "30px x2 (nearest 28); 78px x1 (nearest 32)",
+      "expected": "radii: 0, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32",
+      "evidence": [
+        "div.list:nth-of-type(5) > div.item:nth-of-type(1) > div.thumb.t1:nth-of-type(1)",
+        "main > article.hero > div.arch:nth-of-type(1)"
+      ],
+      "fix": "use the radius tokens",
+      "standard": "tokens",
+      "status": "confirmed"
+    },
+    {
+      "id": "M-MS01-0073",
+      "case": "MS-01",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Spacing off the ladder (1 value(s), 8 of 98 uses)",
+      "where": [
+        "index.html · 390x844 · light"
+      ],
+      "measured": "3px x8 (nearest 2)",
+      "expected": "steps: 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96",
+      "evidence": [
+        "nav.tabbar > button.tab.on:nth-of-type(1)"
+      ],
+      "fix": "use the spacing tokens; 1-2 px values are usually borders or browser defaults",
+      "standard": "tokens",
+      "status": "confirmed"
+    },
+    {
+      "id": "M-MS02-0955",
+      "case": "MS-02",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Font sizes off the type scale (1 value(s), 4 of 42 text elements)",
+      "where": [
+        "index.html · 390x844 · light"
+      ],
+      "measured": "12px x4 (nearest 14)",
+      "expected": "sizes from the scale: 14, 17, 21, 27, 33, 42",
+      "evidence": [
+        "nav.tabbar > button.tab.on:nth-of-type(1)"
+      ],
+      "fix": "use a text style; a browser default (buttons 13.33 px, h3 18.72 px) means the element does not inherit",
+      "standard": "tokens",
+      "status": "confirmed"
+    },
+    {
+      "id": "M-MS08-0052",
+      "case": "MS-08",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Bg colors that are not in the palette (1)",
+      "where": [
+        "index.html · 390x844 · light"
+      ],
+      "measured": "#fffdf8 x1 (closest token --ds-color-neutral-light-1)",
+      "expected": "colors from the tokens",
+      "evidence": [
+        "nav.tabbar"
+      ],
+      "fix": "use a color token; check dark mode too",
+      "standard": "tokens",
+      "status": "confirmed"
+    },
+    {
+      "id": "M-MS11-5224",
+      "case": "MS-11",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Negative margins in use",
+      "where": [
+        "index.html · 390x844 · light"
+      ],
+      "measured": "nav.tabbar > button.tab.on:nth-of-type(1) > span.pill marginTop -3 px",
+      "expected": "usually a workaround that overlaps neighbours",
+      "evidence": [
+        "nav.tabbar > button.tab.on:nth-of-type(1) > span.pill"
+      ],
+      "fix": null,
+      "standard": null,
+      "status": "confirmed"
+    },
+    {
+      "id": "M-ST01-8541",
+      "case": "ST-01",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Most controls have no :hover style",
+      "where": [
+        "index.html · 390x844 · light"
+      ],
+      "measured": "12 of 12 have none in the stylesheets I can read",
+      "expected": "a hover cue on pointer devices (and nothing that only appears on hover)",
+      "evidence": [
+        "div.topbar:nth-of-type(1) > div.top-actions:nth-of-type(2) > button.icon-btn:nth-of-type(1)",
+        "div.topbar:nth-of-type(1) > div.top-actions:nth-of-type(2) > button.avatar:nth-of-type(2)",
+        "main > div.sec-head:nth-of-type(2) > a"
+      ],
+      "fix": "confirm by hovering a few; touch-only products can skip this",
+      "standard": null,
+      "status": "confirmed"
+    }
+  ]
+}

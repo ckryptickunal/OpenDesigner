@@ -1,0 +1,1554 @@
+[
+  {
+    "id": "vaporwave",
+    "name": "Vaporwave",
+    "aliases": [
+      "vapor",
+      "A E S T H E T I C",
+      "mallsoft look"
+    ],
+    "plain": "Pink and teal computer dream with old statues and palm trees",
+    "people_say": [
+      "80s mall vibes",
+      "pink and teal",
+      "Greek statue and palm trees",
+      "retro computer aesthetic",
+      "A E S T H E T I C text",
+      "dreamy old internet",
+      "Windows 95 nostalgia"
+    ],
+    "origin": "Online music scenes on Bandcamp, SoundCloud and Turntable.fm, 2010 to 2011 [S1][S4]",
+    "defining": [
+      "Soft pink, lavender, cyan and peach over deep violet or navy, with neon sunsets and faded gradients [S1][S3]",
+      "Classical busts, palm trees, checker floors, perspective grids and floating old-computer windows [S1][S3][S4]",
+      "Bold capitals in full-width or stretched letters, sometimes WordArt-like; Adobe's 2021 revival adds pixel and extruded lettering [S1][S2][S4]",
+      "VHS grain, screensaver graphics and slow, detached looping drift [S1][S3]",
+      "Square corners: radius 0 to 0.25rem [S3]"
+    ],
+    "code": "background: linear-gradient(180deg, #ff9ad5 0%, #b39dff 50%, #7fe7ff 100%); text-transform: uppercase; letter-spacing: 0.5em;",
+    "traits": {
+      "surface": "gradient",
+      "edge": "beveled",
+      "depth": "layered",
+      "shape": "sharp",
+      "color": "pastel",
+      "contrast": "normal",
+      "type": "display",
+      "texture": "scanlines",
+      "ornament": "3d-objects",
+      "layout": "collage",
+      "motion": "subtle",
+      "theme": "dark-first"
+    },
+    "ui_fit": "marketing",
+    "fits": "Music releases, game menus, digital art portfolios and nostalgic campaign pages",
+    "goes_wrong": "Becomes a clip-art pile of busts and decorative Japanese text with no idea behind it; critics call that use techno-orientalism [S5]",
+    "accessibility": "Pastel text on gradient skies often falls below 4.5:1, so put copy on solid dark panels; full-width letters can be read out one by one, so give the real words as an accessible name; stop VHS loops under reduced motion",
+    "related": [
+      "synthwave",
+      "y2k",
+      "memphis",
+      "glitch",
+      "seapunk"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://eyeondesign.aiga.org/vaporwave-is-dead-long-live-vaporwave/",
+        "supports": "Origin around 2010 to 2011 on online music platforms; pink and turquoise palette; statues, palms, WordArt, full-width type, VHS grain; Floral Shoppe cover"
+      },
+      {
+        "id": "S2",
+        "url": "https://blog.adobe.com/en/publish/2021/05/25/explore-the-lighthearted-retro-futurism-of-vintage-vaporwave-design",
+        "supports": "Adobe Stock's Vintage Vaporwave trend: neon and candy pastels, pixel and extruded lettering, grids, stickers and pop-ups"
+      },
+      {
+        "id": "S3",
+        "url": "https://trends.daisyui.com/trend/vaporwave/",
+        "supports": "Palette, motifs (busts, grids, floating windows), slow drifting motion, radius 0 to 0.25rem, fit for music, gaming and art"
+      },
+      {
+        "id": "S4",
+        "url": "https://en.wikipedia.org/wiki/Vaporwave",
+        "supports": "Dates (Eccojams 2010, term in October 2011, Floral Shoppe December 2011); Windows 95 imagery, statues, full-width lettering"
+      },
+      {
+        "id": "S5",
+        "url": "https://mixmag.asia/feature/ctrl-print-vol-2-vaporwave-acidgrafix-cybersigilism",
+        "supports": "Retro-Japanese type criticised as techno-orientalism; Hiroshi Nagai city-pop art as a visual blueprint"
+      }
+    ],
+    "examples": [
+      {
+        "name": "Floral Shoppe album cover (Macintosh Plus, 2011)",
+        "url": "https://eyeondesign.aiga.org/vaporwave-is-dead-long-live-vaporwave/",
+        "what": "Pixel graphics, a disembodied Greek bust, Japanese lettering and sickly pink"
+      }
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "synthwave",
+    "name": "Synthwave",
+    "aliases": [
+      "Outrun",
+      "Retrowave",
+      "neon 80s"
+    ],
+    "plain": "Glowing pink grid road racing toward a striped sunset at night",
+    "people_say": [
+      "80s neon",
+      "retro sunset grid",
+      "night drive vibe",
+      "neon grid",
+      "retro arcade glow",
+      "laser sunset",
+      "80s synth album cover"
+    ],
+    "origin": "Online electronic music scenes, mid to late 2000s; the Outrun name comes from Sega's 1986 racing game [S1][S2]",
+    "defining": [
+      "Midnight navy and black grounds with electric magenta, cyan, violet and sunset orange, plus chrome white highlights [S1]",
+      "Wireframe floor grid in deep perspective meeting a low neon horizon and a sun disc [S1]",
+      "Italic chrome or techno display titles; small text in a condensed sans or mono [S1]",
+      "Glowing lines and text, VHS tracking artifacts; radius 0.25 to 1rem [S1][S2]",
+      "Motion: the grid rolls toward the viewer and neon pulses [S1]"
+    ],
+    "code": "color: #fff; text-shadow: 0 0 4px #fff, 0 0 12px #ff2bd6, 0 0 28px #ff2bd6;",
+    "traits": {
+      "surface": "luminous",
+      "edge": "glow",
+      "depth": "glow",
+      "shape": "subtle",
+      "color": "neon",
+      "contrast": "high",
+      "type": "display",
+      "texture": "scanlines",
+      "ornament": "geometric-shapes",
+      "layout": "full-bleed",
+      "motion": "parallax",
+      "theme": "dark"
+    },
+    "ui_fit": "marketing",
+    "fits": "Music players, game launchers, streaming, automotive and nightlife promos",
+    "goes_wrong": "Glow on every element turns text into blurry halos and the page into a poster with no hierarchy",
+    "accessibility": "Glow softens edges: keep body text solid and unglowed at 4.5:1 on the dark ground, keep glow for headings, and stop grid motion under reduced motion",
+    "related": [
+      "vaporwave",
+      "cyberpunk-neon-noir",
+      "y3k",
+      "glitch"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://trends.daisyui.com/trend/synthwave-outrun/",
+        "supports": "Origin as a later internet-era reconstruction, Outrun naming, palette, grid and sun motifs, type, motion, radius and fit"
+      },
+      {
+        "id": "S2",
+        "url": "https://en.wikipedia.org/wiki/Synthwave",
+        "supports": "Mid to late 2000s French house origins; VHS artifacts, magenta neon and gridlines; Drive (2011) brought it mainstream; Out Run name"
+      }
+    ],
+    "examples": [],
+    "confidence": "medium"
+  },
+  {
+    "id": "cyberpunk-neon-noir",
+    "name": "Cyberpunk (neon noir)",
+    "aliases": [
+      "neon noir",
+      "tech noir",
+      "cyber",
+      "sci-fi HUD"
+    ],
+    "plain": "Dark rainy city screens with sharp neon signs and glitchy readouts",
+    "people_say": [
+      "futuristic hacker",
+      "Blade Runner vibe",
+      "neon city at night",
+      "sci-fi HUD",
+      "dark tech with neon",
+      "dystopian",
+      "gamer futuristic"
+    ],
+    "origin": "Early 1980s science fiction; Syd Mead's neon-lit Los Angeles for Blade Runner (1982) set the look [S1][S2]",
+    "defining": [
+      "Near-black and dirty blue-gray grounds with cyan, magenta, acid green and warning red accents [S1]",
+      "Clipped-corner panels, angled brackets, segmented bars and cable-like lines [S1][S3]",
+      "Condensed technical sans with monospace data text [S1]",
+      "Scanlines, RGB split and brief flicker tied to loading or system events [S1]",
+      "Dense, layered data panels with radius 0 to 0.25rem [S1]"
+    ],
+    "code": "clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%); border: 1px solid #00f0ff;",
+    "traits": {
+      "surface": "luminous",
+      "edge": "outline",
+      "depth": "layered",
+      "shape": "geometric",
+      "color": "neon",
+      "contrast": "high",
+      "type": "condensed",
+      "texture": "scanlines",
+      "ornament": "geometric-shapes",
+      "layout": "dense",
+      "motion": "glitchy",
+      "theme": "dark"
+    },
+    "ui_fit": "core-ui",
+    "fits": "Game HUDs and menus, security and developer tools, nightlife and sci-fi launches",
+    "goes_wrong": "Decoration in the same neon as live data, so people cannot tell controls from ornament; a cut-corner tag can look like a button [S3]",
+    "accessibility": "Check every neon on black for 4.5:1 text and 3:1 edges, keep flashes under 3 per second, give decoration a dimmer color than data, and turn off glitch under reduced motion",
+    "related": [
+      "terminal",
+      "glitch",
+      "synthwave",
+      "dark-luxe",
+      "y3k"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://trends.daisyui.com/trend/cyberpunk/",
+        "supports": "Term origins (Bethke, Gibson 1984), palette, type, glitch motifs, clipped panels, motion, density and radius"
+      },
+      {
+        "id": "S2",
+        "url": "https://repozytorium.uw.edu.pl//entities/publication/9d3554af-6060-47cb-adb1-e9c345302498",
+        "supports": "Frelik (Routledge, 2022): Syd Mead's neon-lit Blade Runner city shaped later sci-fi visuals"
+      },
+      {
+        "id": "S3",
+        "url": "https://interfaceingame.com/articles/cyberpunk-2077-ux-ui-critique",
+        "supports": "Cyberpunk 2077 UI critique: decorative tech styling in one red blends with functional info; cut-corner tag reads as a button; chromatic aberration"
+      }
+    ],
+    "examples": [
+      {
+        "name": "Cyberpunk 2077 game interface",
+        "url": "https://interfaceingame.com/articles/cyberpunk-2077-ux-ui-critique",
+        "what": "Red and yellow HUD with cut-corner tags, cable-line decoration and optional chromatic aberration"
+      }
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "solarpunk",
+    "name": "Solarpunk",
+    "aliases": [
+      "green futurism",
+      "eco-futurism"
+    ],
+    "plain": "Sunny green future with plants, solar panels and curvy shapes",
+    "people_say": [
+      "hopeful future",
+      "green and sunny",
+      "plants everywhere but futuristic",
+      "nature plus tech",
+      "eco friendly vibe",
+      "optimistic climate",
+      "Ghibli city of the future"
+    ],
+    "origin": "Named in a 2008 blog post reacting to steampunk; grew on Tumblr, Medium and forums in the 2010s [S1][S2]",
+    "defining": [
+      "Leaf and algae greens, terracotta, solar blue, warm yellow, soil tones and pale concrete in daylight [S2]",
+      "Curving Art Nouveau lines with vines, leaves and floral motifs [S1]",
+      "Rooftop gardens, solar greenhouses, geodesic domes and community infrastructure as imagery [S1][S2]",
+      "Humanist sans with warm editorial serif accents; radius 0.75 to 1.5rem [S2]",
+      "Gentle cycles: plants that grow, energy and water that flow [S2]"
+    ],
+    "code": "background: linear-gradient(180deg, #fdf6e3, #e6f2da); color: #1f3d2b; border-radius: 1rem;",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "soft-shadow",
+      "shape": "rounded",
+      "color": "earthy",
+      "contrast": "normal",
+      "type": "humanist",
+      "texture": "none",
+      "ornament": "illustration",
+      "layout": "full-bleed",
+      "motion": "subtle",
+      "theme": "light"
+    },
+    "ui_fit": "core-ui",
+    "fits": "Climate and energy apps, community tools, sustainability reports, civic projects",
+    "goes_wrong": "Turns into stock leaf icons on an ordinary corporate page, losing the hopeful, community-made feel",
+    "accessibility": "Leaf greens and sage on cream often fall below 4.5:1, so darken greens for text; pair color with labels in energy charts for color-blind users",
+    "related": [
+      "organic",
+      "frutiger-aero",
+      "cottagecore",
+      "risograph"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.acmi.net.au/stories-and-ideas/an-introduction-to-solarpunk-on-screen-acmi/",
+        "supports": "ACMI: 2008 term on Republic of the Bees, Art Nouveau curves, vines and florals, Ghibli and Fuller influences, screen examples"
+      },
+      {
+        "id": "S2",
+        "url": "https://trends.daisyui.com/trend/solarpunk/",
+        "supports": "Palette, type, motifs, growth and flow motion, radius 0.75 to 1.5rem, fit for climate and community products"
+      }
+    ],
+    "examples": [
+      {
+        "name": "Saltsea Chronicles (game, 2023)",
+        "url": "https://www.acmi.net.au/stories-and-ideas/an-introduction-to-solarpunk-on-screen-acmi/",
+        "what": "Bright palette and a risograph-like picture-book style"
+      }
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "seapunk",
+    "name": "Seapunk",
+    "aliases": [
+      "sea punk"
+    ],
+    "plain": "Bright aqua water, dolphins and shiny 90s 3D shapes floating",
+    "people_say": [
+      "mermaid internet",
+      "aqua and dolphins",
+      "90s underwater",
+      "Tumblr ocean vibe",
+      "holographic sea",
+      "Ecco the Dolphin look"
+    ],
+    "origin": "Tumblr and Twitter, 2011; named in a joke tweet by DJ Lil Internet [S1][S3]",
+    "defining": [
+      "Turquoise, aqua, seafoam, cobalt and purple with chrome and watery highlights [S1][S2]",
+      "Dolphins, shells, yin-yang and smiley symbols, early-CGI shapes rotating over water [S1][S2]",
+      "Playful display faces over a simple sans body [S2]",
+      "Bobbing, rippling motion with trailing bubbles [S2]",
+      "Loose collage over wave bands rather than a strict grid; radius 0.75 to 1.5rem [S2]"
+    ],
+    "code": "background: linear-gradient(180deg, #8ff7ea 0%, #2bb8d6 55%, #5b3fd1 100%);",
+    "traits": {
+      "surface": "gradient",
+      "edge": "none",
+      "depth": "layered",
+      "shape": "rounded",
+      "color": "vivid",
+      "contrast": "normal",
+      "type": "display",
+      "texture": "none",
+      "ornament": "3d-objects",
+      "layout": "collage",
+      "motion": "subtle",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Music releases, fashion drops, summer events and nostalgic youth campaigns",
+    "goes_wrong": "Without the early-CGI kitsch it reads as a generic ocean or spa theme; with too much it blurs into vaporwave",
+    "accessibility": "White text on aqua usually fails 4.5:1, so use dark navy text or opaque panels; keep ripple loops off under reduced motion",
+    "related": [
+      "vaporwave",
+      "y2k",
+      "frutiger-aero",
+      "acid-graphics"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://en.wikipedia.org/wiki/Seapunk",
+        "supports": "Tumblr origin 2011, DJ Lil Internet coinage, aquatic palette, rotating shapes over water, 1990s 3D net art, mainstream examples"
+      },
+      {
+        "id": "S2",
+        "url": "https://trends.daisyui.com/trend/seapunk/",
+        "supports": "Palette, type, motifs, motion, layout, radius and fit"
+      },
+      {
+        "id": "S3",
+        "url": "https://www.tinymixtapes.com/features/2011-dispatches-pop-museum?page=2",
+        "supports": "December 2011 account of seapunk as a Tumblr microgenre built on aquamarine hair and Ecco the Dolphin"
+      }
+    ],
+    "examples": [
+      {
+        "name": "Azealia Banks, Atlantis video (2012)",
+        "url": "https://en.wikipedia.org/wiki/Seapunk",
+        "what": "Used seapunk imagery in a mainstream music video"
+      }
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "frutiger-metro",
+    "name": "Frutiger Metro (Vectordelia)",
+    "aliases": [
+      "Vectordelia",
+      "vector pop",
+      "vector maximalism"
+    ],
+    "plain": "Black dancing silhouettes on bright stripes, swooshes and vector flowers",
+    "people_say": [
+      "old iPod ad look",
+      "2000s vector swooshes",
+      "silhouette on bright colors",
+      "mid 2000s music graphics",
+      "flat swirly vectors",
+      "Xbox 360 era"
+    ],
+    "origin": "Commercial vector art of about 2006 to 2010; the Frutiger Metro label was coined online in 2023 [S1][S2]",
+    "defining": [
+      "Dark human silhouettes over bright, striped or flat color fields [S2]",
+      "Vivid lime, orange, cyan, magenta and violet in flat overlapping layers with no realistic depth [S1]",
+      "Swooshes, ribbons, birds, headphones, skylines and floral vectors [S1]",
+      "Rounded or humanist display type over a plain sans body; radius 0.75 to 1.5rem [S1]",
+      "Distinct from Frutiger Aero: flat and graphic, not glossy or bubbly [S1][S2]"
+    ],
+    "code": "background: repeating-linear-gradient(90deg, #9be000 0 48px, #ff7a00 48px 96px, #00c2ff 96px 144px);",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "rounded",
+      "color": "vivid",
+      "contrast": "high",
+      "type": "rounded",
+      "texture": "pattern",
+      "ornament": "illustration",
+      "layout": "layered",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Music and audio promos, youth events, education and nostalgic campaigns",
+    "goes_wrong": "Adding gloss and bubbles turns it into Frutiger Aero; the name itself misleads, since it has no link to Frutiger type or Windows Metro",
+    "accessibility": "Text over stripes loses contrast at every color change, so set copy on solid panels at 4.5:1",
+    "related": [
+      "frutiger-aero",
+      "flat",
+      "y2k",
+      "corporate-memphis"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://trends.daisyui.com/trend/vectordelia-frutiger-metro/",
+        "supports": "Mid-2000s commercial vector origin, 2023 coinage of the alias and why it misleads, palette, motifs, type, radius and fit"
+      },
+      {
+        "id": "S2",
+        "url": "https://www.pi.fyi/rec/cmocyhw9311xypx493mz3t8as",
+        "supports": "Personal essay: about 2006 to 2010, dark silhouettes on bright striped backgrounds, iPod ads and Xbox 360 dashboard as examples"
+      }
+    ],
+    "examples": [
+      {
+        "name": "iPod silhouette TV ads",
+        "url": "https://www.pi.fyi/rec/cmocyhw9311xypx493mz3t8as",
+        "what": "Dark dancing silhouettes with white earbuds over vivid flat backgrounds"
+      }
+    ],
+    "confidence": "low"
+  },
+  {
+    "id": "corporate-memphis",
+    "name": "Corporate Memphis",
+    "aliases": [
+      "Alegria",
+      "big tech illustration",
+      "flat corporate art"
+    ],
+    "plain": "Flat cartoon people with long bendy arms in bright colors",
+    "people_say": [
+      "those tech company cartoon people",
+      "bendy arm people",
+      "friendly flat illustrations",
+      "startup website drawings",
+      "Facebook-style illustrations",
+      "diverse cartoon team"
+    ],
+    "origin": "Facebook's Alegria illustration system, made by the agency Buck in 2017; Mike Merrill named it on Are.na [S1][S3]",
+    "defining": [
+      "Flat vector people with long limbs, small heads and simplified faces, always in motion [S1][S2]",
+      "Skin in non-literal colors such as purple or blue; bright fills on pale neutral grounds [S1][S3]",
+      "Flat, bright, simplified shapes in geometric settings with workplace props [S2][S3]",
+      "Approachable geometric sans in sentence case; the illustration carries the personality [S3]",
+      "Rounded UI around it, radius 0.75 to 1.5rem, medium to low density [S3]"
+    ],
+    "code": ".illustration path { stroke: none; filter: none; } .card { background: #f7f3ee; border-radius: 1.25rem; box-shadow: none; }",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "rounded",
+      "color": "vivid",
+      "contrast": "normal",
+      "type": "geometric",
+      "texture": "none",
+      "ornament": "illustration",
+      "layout": "grid",
+      "motion": "subtle",
+      "theme": "light"
+    },
+    "ui_fit": "illustration-only",
+    "fits": "SaaS onboarding, empty states, explainers, HR and fintech marketing",
+    "goes_wrong": "Looks the same across thousands of brands, so it reads as generic and is widely mocked as safe and soulless",
+    "accessibility": "Mark purely decorative scenes with empty alt text, describe the ones that carry meaning, and never set text over illustration fills",
+    "related": [
+      "flat",
+      "memphis",
+      "playful",
+      "kawaii"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://en.wikipedia.org/wiki/Corporate_Memphis",
+        "supports": "Traits (long limbs, small heads, non-literal skin), Alegria by Buck for Facebook in 2017, Mike Merrill coinage, companies using it"
+      },
+      {
+        "id": "S2",
+        "url": "https://eyeondesign.aiga.org/what-the-think-pieces-about-corporate-memphis-tell-us-about-the-state-of-illustration/",
+        "supports": "Flat, bright, simplified style; long-limbed figures in motion; the Alegria origin story and the criticism around it"
+      },
+      {
+        "id": "S3",
+        "url": "https://trends.daisyui.com/trend/corporate-memphis/",
+        "supports": "Palette, geometric sans type, Xoana Herrera on Alegria, radius and fit for SaaS onboarding and empty states"
+      }
+    ],
+    "examples": [
+      {
+        "name": "Facebook Alegria system",
+        "url": "https://en.wikipedia.org/wiki/Corporate_Memphis",
+        "what": "The 2017 illustration guide that set the template"
+      }
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "kawaii",
+    "name": "Kawaii",
+    "aliases": [
+      "Japanese cute",
+      "cute style",
+      "chibi UI"
+    ],
+    "plain": "Round pastel shapes and tiny smiling faces on everything",
+    "people_say": [
+      "cute",
+      "super cute Japanese style",
+      "Sanrio vibe",
+      "pastel and adorable",
+      "little faces on things",
+      "soft and squishy",
+      "Hello Kitty style"
+    ],
+    "origin": "Japan, 1970s, from rounded teen handwriting and Sanrio goods; Hello Kitty arrived in 1974 [S1][S3]",
+    "defining": [
+      "Pastel base (pink, blue, white, mint, lavender) with candy-bright accents [S1][S2]",
+      "Circles, hearts, stars, clouds, pill controls and scalloped frames with thick, clean dark outlines [S2]",
+      "Large eyes and small mouths; faces added to food, animals and objects [S1][S2]",
+      "Rounded display type for short headings over a plain body; radius 1 to 2rem [S2]",
+      "Motion: blinks, small hops, squashy presses and sparkle bursts [S2]"
+    ],
+    "code": "border-radius: 9999px; border: 3px solid #5a3e36; background: #ffd6e8; color: #3a2a26;",
+    "traits": {
+      "surface": "solid",
+      "edge": "thick-outline",
+      "depth": "flat",
+      "shape": "pill",
+      "color": "pastel",
+      "contrast": "normal",
+      "type": "rounded",
+      "texture": "none",
+      "ornament": "illustration",
+      "layout": "grid",
+      "motion": "bouncy",
+      "theme": "light"
+    },
+    "ui_fit": "core-ui",
+    "fits": "Games, social and messaging apps, stationery shops, kids' products and mascot-led brands",
+    "goes_wrong": "Feels childish on serious tasks, and cute faces on errors or money states can feel dismissive",
+    "accessibility": "Pastel text on pastel fails, so keep text dark (the cocoa or navy outline color works); keep targets large and calm the hops and sparkles under reduced motion",
+    "related": [
+      "playful",
+      "claymorphism",
+      "kidcore",
+      "comic"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://en.wikipedia.org/wiki/Kawaii",
+        "supports": "Rounded forms, pastels, large eyes and small mouths, Hello Kitty 1974, 1970s round handwriting, mascots in business and government"
+      },
+      {
+        "id": "S2",
+        "url": "https://trends.daisyui.com/trend/kawaii-ui/",
+        "supports": "Palette, outlines, shapes, rounded type, motion, radius 1 to 2rem and fit"
+      },
+      {
+        "id": "S3",
+        "url": "https://www.timeout.com/tokyo/things-to-do/sanrio-exhibition-the-beginning-of-kawaii",
+        "supports": "Sanrio exhibition at Mori Arts Center Gallery: kawaii as a visual language of softness and warmth, predating Hello Kitty's 1974 debut"
+      }
+    ],
+    "examples": [
+      {
+        "name": "Sanrio characters",
+        "url": "https://www.timeout.com/tokyo/things-to-do/sanrio-exhibition-the-beginning-of-kawaii",
+        "what": "The company's early designs shaped kawaii as a visual language"
+      }
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "lofi",
+    "name": "Lo-fi (study beats)",
+    "aliases": [
+      "lofi hip hop look",
+      "chillhop",
+      "study girl aesthetic",
+      "lo-fi art"
+    ],
+    "plain": "Cozy anime room at night, warm lamp, rain on window",
+    "people_say": [
+      "lofi",
+      "chill study vibe",
+      "cozy anime room",
+      "beats to study to",
+      "rainy night window",
+      "calm and warm",
+      "late night desk"
+    ],
+    "origin": "YouTube lo-fi hip hop streams from 2017; Juan Pablo Machado's study-girl loop arrived in 2018 [S1]",
+    "defining": [
+      "Muted indigo, dusty blue, mauve and soft teal with small pockets of warm lamp amber or peach [S2]",
+      "One cozy scene: desk, headphones, books, plants, a pet and a city through the window [S2][S3]",
+      "Soft hand-drawn anime look with film grain or VHS noise [S2][S3]",
+      "Seamless low-amplitude loops: rain, steam, a swaying tail, day turning to night [S1][S2]",
+      "Quiet friendly sans, low density, controls in an edge overlay, radius 0.25 to 1rem [S2]"
+    ],
+    "code": "background: #2b2d42; color: #f2e9e4; filter: saturate(0.85);",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "tonal",
+      "shape": "subtle",
+      "color": "muted",
+      "contrast": "low",
+      "type": "humanist",
+      "texture": "grain",
+      "ornament": "illustration",
+      "layout": "full-bleed",
+      "motion": "subtle",
+      "theme": "dark-first"
+    },
+    "ui_fit": "marketing",
+    "fits": "Focus timers, study and music streams, journaling and sleep apps",
+    "goes_wrong": "Copies the famous study girl too closely; the style is a mood, not a character to trace",
+    "accessibility": "Low contrast is part of the mood, but text and controls still need 4.5:1 and 3:1; make the loop pausable",
+    "related": [
+      "grain",
+      "dark-academia",
+      "manga-ui",
+      "risograph"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://en.wikipedia.org/wiki/Lofi_Girl",
+        "supports": "Streaming since February 2017, character in use from March 2018, Machado's design, cat, window and time-of-day sky"
+      },
+      {
+        "id": "S2",
+        "url": "https://trends.daisyui.com/trend/lo-fi-art/",
+        "supports": "Palette, cozy motifs, grain and VHS noise, seamless loops, edge-overlay controls, radius and fit; links it to lo-fi hip hop imagery"
+      },
+      {
+        "id": "S3",
+        "url": "https://elephant.art/licence-to-chill-why-is-lofi-girl-our-dream-study-partner-16062022",
+        "supports": "Elephant (2022): Ghibli-inspired study scene, plants, books, cat, warm hand-drawn feel, slow refuge-like mood"
+      }
+    ],
+    "examples": [
+      {
+        "name": "Lofi Girl YouTube stream",
+        "url": "https://en.wikipedia.org/wiki/Lofi_Girl",
+        "what": "A looping study scene that became the template for lo-fi visuals"
+      }
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "glitch",
+    "name": "Glitch art",
+    "aliases": [
+      "glitch",
+      "datamosh",
+      "databending",
+      "digital error look"
+    ],
+    "plain": "Broken screen look: split colors, torn stripes and blocky pixels",
+    "people_say": [
+      "glitchy",
+      "broken TV look",
+      "corrupted file effect",
+      "RGB split",
+      "static and distortion",
+      "hacked screen"
+    ],
+    "origin": "Digital practice named in the late 1990s and 2000s; Oslo symposium 2002, GLI.TC/H Chicago 2010 [S1][S3]",
+    "defining": [
+      "Red, green and blue channels shifted apart [S2]",
+      "Torn horizontal bands, compression blocks, pixel sorting and datamosh smears [S1][S2]",
+      "Dark or neutral ground with electric error colors and blown signal white [S2]",
+      "Distortion only on a decorative copy or large heading, with intact text underneath [S2]",
+      "Brief error bursts on transitions that settle back to stable; radius 0 to 0.25rem [S2]"
+    ],
+    "code": "text-shadow: -2px 0 #ff004c, 2px 0 #00e5ff;",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "sharp",
+      "color": "neon",
+      "contrast": "high",
+      "type": "mono",
+      "texture": "glitch",
+      "ornament": "none",
+      "layout": "full-bleed",
+      "motion": "glitchy",
+      "theme": "dark"
+    },
+    "ui_fit": "marketing",
+    "fits": "Music and film promos, security and tech launches, error and loading moments in games",
+    "goes_wrong": "People read the intended corruption as a real bug, or the effect covers content they need",
+    "accessibility": "Keep flashes under 3 per second, run effects once instead of looping, honour reduced motion, and keep a clean text copy for screen readers",
+    "related": [
+      "cyberpunk-neon-noir",
+      "vaporwave",
+      "terminal",
+      "acid-graphics"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://en.wikipedia.org/wiki/Glitch_art",
+        "supports": "Definition, databending and datamoshing, compression artifacts, 2002 Oslo symposium, 2010 GLI.TC/H"
+      },
+      {
+        "id": "S2",
+        "url": "https://trends.daisyui.com/trend/glitch-art/",
+        "supports": "Palette, RGB split, pixel sorting, scanlines, type advice, burst-then-stable motion, radius and fit"
+      },
+      {
+        "id": "S3",
+        "url": "https://networkcultures.org/blog/publication/no-04-the-glitch-momentum-rosa-menkman/",
+        "supports": "Rosa Menkman, The Glitch Moment(um), Institute of Network Cultures 2011: glitch as artifact and filter"
+      }
+    ],
+    "examples": [],
+    "confidence": "high"
+  },
+  {
+    "id": "acid-graphics",
+    "name": "Acid graphics",
+    "aliases": [
+      "Acidgrafix",
+      "acid design",
+      "new rave graphics",
+      "Y2K acid"
+    ],
+    "plain": "Melting chrome letters, warped shapes and loud neon on black",
+    "people_say": [
+      "rave poster",
+      "melting chrome font",
+      "trippy techno flyer",
+      "liquid metal text",
+      "acid green on black",
+      "warped typography"
+    ],
+    "origin": "Mid-2010s online design scenes, drawing on late-1980s acid house and 1990s rave flyers [S2][S3]",
+    "defining": [
+      "Fluorescent yellow, green, pink and blue against black or metallic gray [S1][S2]",
+      "Warped, flipped or melting lettering, often liquid chrome [S1][S3]",
+      "Organic blobs, liquid spikes, op-art stripes, checkerboards and concentric targets [S1][S2][S3]",
+      "Heavy 3D rendering and distorted portraits collaged like a flyer [S1][S2]",
+      "One fixed, undistorted panel for date, place, price and action [S2]"
+    ],
+    "code": "background: #0a0a0a; color: #c6ff00; font-stretch: 150%; transform: skewX(-10deg);",
+    "traits": {
+      "surface": "metallic",
+      "edge": "none",
+      "depth": "layered",
+      "shape": "irregular",
+      "color": "neon",
+      "contrast": "high",
+      "type": "display",
+      "texture": "pattern",
+      "ornament": "3d-objects",
+      "layout": "collage",
+      "motion": "kinetic",
+      "theme": "dark"
+    },
+    "ui_fit": "marketing",
+    "fits": "Club nights, festivals, record sleeves, fashion drops and experimental portfolios",
+    "goes_wrong": "Every word gets warped, so the date, venue and ticket link become unreadable",
+    "accessibility": "Keep all key information in plain type at 4.5:1, avoid strobe cuts, and stop warping under reduced motion",
+    "related": [
+      "y2k",
+      "glitch",
+      "cybersigilism",
+      "y3k",
+      "brutalism"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://eyeondesign.aiga.org/acid-graphics-are-the-new-psychedelia-with-a-heady-dose-of-cynicism/",
+        "supports": "Organic forms, distorted and liquid-metal lettering, neon green, heavy 3D, rave roots, @acidgraphix from 2018, uses beyond posters"
+      },
+      {
+        "id": "S2",
+        "url": "https://trends.daisyui.com/trend/acid-graphics/",
+        "supports": "Mid-2010s origin, palette, chrome type, motifs, motion limits and the fixed info panel advice"
+      },
+      {
+        "id": "S3",
+        "url": "https://mixmag.asia/feature/ctrl-print-vol-2-vaporwave-acidgrafix-cybersigilism",
+        "supports": "Acid house and rave lineage, liquid chrome type, checkerboards, op-art, mid-2010s online revival"
+      }
+    ],
+    "examples": [
+      {
+        "name": "@acidgraphix Instagram archive (Luigi Brusciano)",
+        "url": "https://eyeondesign.aiga.org/acid-graphics-are-the-new-psychedelia-with-a-heady-dose-of-cynicism/",
+        "what": "Collects real and speculative posters in the style"
+      }
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "dark-academia",
+    "name": "Dark academia",
+    "aliases": [
+      "dark academic",
+      "light academia (pale variant)"
+    ],
+    "plain": "Old library mood: dark wood, candlelight, serif books and parchment",
+    "people_say": [
+      "old library",
+      "Oxford vibe",
+      "moody scholarly",
+      "vintage bookish",
+      "candlelit study",
+      "Secret History mood",
+      "old university"
+    ],
+    "origin": "Tumblr around 2014 to 2015 among fans of The Secret History; spread on TikTok in 2020 [S1][S3]",
+    "defining": [
+      "Parchment, dark walnut, forest green, burgundy, tarnished brass and ink black, with subdued contrast [S1][S2]",
+      "Old-style serif body with small caps and italics for hierarchy [S2]",
+      "Marginalia, bookplates, ruled margins, wax-seal circles and engraved frames [S2]",
+      "Light paper noise; radius 0.25 to 1rem [S2]",
+      "Slow page turns and index-drawer reveals [S2]"
+    ],
+    "code": "font-family: 'EB Garamond', Georgia, serif; font-variant-caps: small-caps; background: #1e1a16; color: #ece2cc;",
+    "traits": {
+      "surface": "paper",
+      "edge": "hairline",
+      "depth": "tonal",
+      "shape": "subtle",
+      "color": "earthy",
+      "contrast": "low",
+      "type": "serif",
+      "texture": "paper",
+      "ornament": "ornamental",
+      "layout": "editorial",
+      "motion": "subtle",
+      "theme": "dark-first"
+    },
+    "ui_fit": "core-ui",
+    "fits": "Reading and note apps, museums, literary brands, courses and archives",
+    "goes_wrong": "Brown on brown with small old-style serif text gets hard to read; critics also flag its Eurocentric, elitist canon",
+    "accessibility": "Parchment on walnut must still reach 4.5:1; keep body text at 16px or more with generous leading and avoid italic body copy",
+    "related": [
+      "editorial",
+      "dark-luxe",
+      "cottagecore",
+      "whimsigothic"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://en.wikipedia.org/wiki/Dark_academia",
+        "supports": "Tumblr 2014 to 2015 origin, TikTok spread, colors, Gothic architecture and libraries, criticism of Eurocentrism and elitism"
+      },
+      {
+        "id": "S2",
+        "url": "https://trends.daisyui.com/trend/dark-academia/",
+        "supports": "Palette, serif type and small caps, scholarly motifs, motion, radius, noise and fit for reading and knowledge tools"
+      },
+      {
+        "id": "S3",
+        "url": "https://www.vice.com/en/article/m7vbma/the-year-in-aesthetics-from-dark-academia-to-mcbling",
+        "supports": "Vice (December 2021): antique books, tweed, black, oak brown, grey and swamp green; light academia variant"
+      }
+    ],
+    "examples": [],
+    "confidence": "high"
+  },
+  {
+    "id": "cottagecore",
+    "name": "Cottagecore",
+    "aliases": [
+      "cottage aesthetic",
+      "pastoral"
+    ],
+    "plain": "Soft country cottage look: flowers, linen, baking and gardens",
+    "people_say": [
+      "cozy countryside",
+      "floral and soft",
+      "cottage in the woods",
+      "vintage farmhouse",
+      "picnic vibes",
+      "homemade and gentle",
+      "wildflowers"
+    ],
+    "origin": "Named on Tumblr in 2018; surged in 2020 during pandemic lockdowns and stayed a top aesthetic in 2021 [S1][S2][S3]",
+    "defining": [
+      "Warm cream, sage, dusty rose, butter yellow, faded blue and soil brown, with no neon [S2]",
+      "Floral prints and frames, fabric labels, baskets, ribbons and rounded plaques [S1][S2]",
+      "Book serif for reading, restrained handwriting for notes and recipes [S2]",
+      "Handmade, slightly imperfect texture with paper noise; radius 0.75 to 1.5rem [S2]",
+      "Breeze-like motion, stitched-line draws and unhurried timing [S2]"
+    ],
+    "code": "background: #f7f1e3; color: #3f3a2e; font-family: Lora, Georgia, serif; border-radius: 1rem;",
+    "traits": {
+      "surface": "paper",
+      "edge": "hairline",
+      "depth": "soft-shadow",
+      "shape": "rounded",
+      "color": "muted",
+      "contrast": "low",
+      "type": "serif",
+      "texture": "paper",
+      "ornament": "illustration",
+      "layout": "editorial",
+      "motion": "subtle",
+      "theme": "light"
+    },
+    "ui_fit": "core-ui",
+    "fits": "Recipe and food apps, craft shops, cafes and guesthouses, wellness and gardening",
+    "goes_wrong": "Slides into twee clip-art florals; critics note it romanticizes a rural past that relied on hard labor",
+    "accessibility": "Sage and dusty rose text on cream often fails 4.5:1, so darken text colors; keep handwriting fonts to short notes",
+    "related": [
+      "organic",
+      "dark-academia",
+      "solarpunk",
+      "kidcore"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://en.wikipedia.org/wiki/Cottagecore",
+        "supports": "Tumblr 2018 naming, 2020 surge, March 2020 New York Times framing, florals, gardens, handmade furnishings and crafts"
+      },
+      {
+        "id": "S2",
+        "url": "https://trends.daisyui.com/trend/cottagecore/",
+        "supports": "Palette, type, motifs, motion, radius, noise and fit for food, craft and hospitality"
+      },
+      {
+        "id": "S3",
+        "url": "https://www.vice.com/en/article/m7vbma/the-year-in-aesthetics-from-dark-academia-to-mcbling",
+        "supports": "Vice (2021): second most-visited Aesthetics Wiki page that year"
+      }
+    ],
+    "examples": [],
+    "confidence": "medium"
+  },
+  {
+    "id": "indie-web",
+    "name": "Indie web (handmade personal sites)",
+    "aliases": [
+      "webcore",
+      "Web 1.0 revival",
+      "small web",
+      "Neocities style",
+      "GeoCities look"
+    ],
+    "plain": "Homemade website with tiled backgrounds, tiny buttons and blinking GIFs",
+    "people_say": [
+      "old GeoCities page",
+      "90s personal website",
+      "handmade website",
+      "Neocities vibe",
+      "little pixel buttons",
+      "early internet homepage",
+      "Myspace-like page"
+    ],
+    "origin": "GeoCities pages from 1994; revived through Neocities (2013) and the early-2020s personal-site wave [S1][S2]",
+    "defining": [
+      "88 by 31 pixel badges and link buttons in footers and sidebars [S2]",
+      "Tiled backgrounds, animated GIFs, visitor counters, marquees and pixel dividers [S3]",
+      "Browser-safe colors, blue underlined links, purple visited links [S3]",
+      "Browser-default serif, system sans or monospace; radius 0 to 0.25rem; table-like framing [S3]",
+      "Visible document flow and hand-assembled sections instead of a polished app shell [S1][S3]"
+    ],
+    "code": "body { background: #fff url(tile.gif); font-family: 'Times New Roman', serif; } a { color: #0000ee; } a:visited { color: #551a8b; }",
+    "traits": {
+      "surface": "textured",
+      "edge": "beveled",
+      "depth": "flat",
+      "shape": "sharp",
+      "color": "vivid",
+      "contrast": "high",
+      "type": "serif",
+      "texture": "pattern",
+      "ornament": "stickers",
+      "layout": "dense",
+      "motion": "stepped",
+      "theme": "both"
+    },
+    "ui_fit": "core-ui",
+    "fits": "Personal sites, fan pages, zines, art projects, developer and hobby communities",
+    "goes_wrong": "Pastiche without a person behind it, or real usability loss from moving text and unlabeled image links",
+    "accessibility": "Marquees and blinking GIFs need a pause control, every badge needs alt text, and link colors must hold 4.5:1 on tiled backgrounds",
+    "related": [
+      "pixel-art",
+      "brutalism",
+      "y2k",
+      "terminal"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.figma.com/blog/making-space-for-a-handmade-web/",
+        "supports": "Figma blog (January 2025): GeoCities 1994 and 38 million pages, Neocities 2013, the case for personal, imperfect sites, named examples"
+      },
+      {
+        "id": "S2",
+        "url": "https://en.wikipedia.org/wiki/Web_badge",
+        "supports": "88 by 31 badges from the 1990s browser wars and their early-2020s comeback on Neocities"
+      },
+      {
+        "id": "S3",
+        "url": "https://trends.daisyui.com/trend/web-1-0-webcore/",
+        "supports": "Palette, default fonts, tiled backgrounds, GIFs, counters, marquees, beveled buttons, radius and fit"
+      }
+    ],
+    "examples": [
+      {
+        "name": "Neocities",
+        "url": "https://www.figma.com/blog/making-space-for-a-handmade-web/",
+        "what": "Free host for hand-built personal sites, grown to nearly a million sites"
+      },
+      {
+        "name": "everythingi.love",
+        "url": "https://www.figma.com/blog/making-space-for-a-handmade-web/",
+        "what": "A personal site laid out as a desktop-like landscape of browser windows"
+      }
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "brat",
+    "name": "Brat",
+    "aliases": [
+      "brat green",
+      "brat summer"
+    ],
+    "plain": "Harsh lime green square with one blurry lowercase word",
+    "people_say": [
+      "brat green",
+      "brat summer",
+      "lime green with blurry text",
+      "intentionally ugly",
+      "low effort cool",
+      "that Charli XCX cover style"
+    ],
+    "origin": "Charli XCX's 2024 album cover by Brent David Freaney of Special Offer Inc. [S1]",
+    "defining": [
+      "One flat acid-lime field picked from about 500 test greens (reported as Pantone 3507C, about #8ACE00); choose your own nearby lime [S1][S2]",
+      "One lowercase word in a plain, slightly stretched Arial-style sans, centered [S2][S4]",
+      "Blur from drawing the art at 100 by 100 pixels and enlarging it [S2]",
+      "No image, no ornament, deliberately neutral type size [S2]",
+      "Works as a meme template: fans, brands and a presidential campaign swapped in their own word [S3][S4]"
+    ],
+    "code": "background: #9ad600; color: #000; font: 400 clamp(3rem, 12vw, 9rem)/1 Arimo, Arial, sans-serif; text-transform: lowercase; filter: blur(1.5px);",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "sharp",
+      "color": "vivid",
+      "contrast": "high",
+      "type": "neo-grotesque",
+      "texture": "none",
+      "ornament": "none",
+      "layout": "minimal",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Campaign drops, meme-led social posts, merch and youth launches with a self-aware tone",
+    "goes_wrong": "Brands arrive late and it reads as trying too hard; the joke expires fast",
+    "accessibility": "Blurred text fails low-vision readers, so blur only one large display word and keep all other text sharp; black on this lime clears 4.5:1 easily",
+    "related": [
+      "brutalism",
+      "neo-brutalism",
+      "minimal-monochrome",
+      "acid-graphics"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.wallpaper.com/art/music/best-album-artwork-2024",
+        "supports": "Designer Brent David Freaney, about 500 greens tested, Pantone 3507C, low-resolution Arial-style title, deliberate lack of appeal"
+      },
+      {
+        "id": "S2",
+        "url": "https://thenightly.com.au/politics/brat-green-aka-hex-8ace00-you-cant-escape-this-colour-thanks-to-charlie-xcx-c-15494520",
+        "supports": "Hex #8ACE00, slightly stretched Arial base, 100 by 100 pixel source scaled up, neutral sizing"
+      },
+      {
+        "id": "S3",
+        "url": "https://www.acmi.net.au/works/122677--original-kamala-brat-video/",
+        "supports": "ACMI: July 2024 remix with lime overlay and fuzzy type; Harris campaign turned its X account lime with a brat-style font"
+      },
+      {
+        "id": "S4",
+        "url": "https://nbcsandiego.com/news/national-international/how-brat-green-became-the-color-of-the-year-and-how-businesses-cashed-in/3605578",
+        "supports": "Green paired with Arial; sellers and businesses copied the look on products"
+      }
+    ],
+    "examples": [
+      {
+        "name": "brat album cover (2024)",
+        "url": "https://www.wallpaper.com/art/music/best-album-artwork-2024",
+        "what": "Low-resolution lowercase title on flat lime green"
+      },
+      {
+        "name": "Kamala HQ X account (2024)",
+        "url": "https://www.acmi.net.au/works/122677--original-kamala-brat-video/",
+        "what": "Campaign banner switched to lime with brat-style lettering"
+      }
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "y3k",
+    "name": "Y3K (chrome futurism)",
+    "aliases": [
+      "chrome futurism",
+      "liquid metal",
+      "cyber Y2K"
+    ],
+    "plain": "Cold silver chrome, sleek shapes and a far-future glow",
+    "people_say": [
+      "futuristic chrome",
+      "silver metallic",
+      "year 3000",
+      "liquid metal",
+      "sleek sci-fi",
+      "K-pop future look"
+    ],
+    "origin": "East Asian fashion and K-pop styling, trending on TikTok in 2024 [S1][S2]",
+    "defining": [
+      "Black, gunmetal and silver with blown-white highlights and one hot accent [S3]",
+      "Mirror reflections, molten metal forms and sharp specular highlights [S3]",
+      "Extended geometric display type; mirrored effects only at headline size [S3]",
+      "Metallic finishes, neon light and sleek minimal composition around one object [S1][S3]",
+      "Unlike y2k, it looks forward to the year 3000, mixing utopian and dystopian sci-fi [S1]"
+    ],
+    "code": "background: linear-gradient(135deg, #0b0b0d, #3a3d42 45%, #eef1f5 50%, #3a3d42 55%, #0b0b0d); -webkit-background-clip: text; background-clip: text; color: transparent;",
+    "traits": {
+      "surface": "metallic",
+      "edge": "hairline",
+      "depth": "extruded",
+      "shape": "rounded",
+      "color": "metallic",
+      "contrast": "high",
+      "type": "geometric",
+      "texture": "none",
+      "ornament": "3d-objects",
+      "layout": "minimal",
+      "motion": "subtle",
+      "theme": "dark"
+    },
+    "ui_fit": "marketing",
+    "fits": "Fashion and beauty launches, music and K-pop campaigns, automotive and luxury tech heroes",
+    "goes_wrong": "Chrome text over chrome: when the bright highlight sits behind a letter the word disappears",
+    "accessibility": "Gradient text has no single contrast value, so check the darkest and lightest stops against the background and keep body text solid",
+    "related": [
+      "y2k",
+      "cybersigilism",
+      "acid-graphics",
+      "dark-luxe",
+      "glassmorphism"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://stylus.com/articles/forget-y2k-in-turbulent-times-we-re-all-about-y3k",
+        "supports": "Stylus (November 2024): metallics, neon, sleek minimal visuals; year-3000 framing; fashion origin; Gentle Monster and Maison Margiela pop-ups"
+      },
+      {
+        "id": "S2",
+        "url": "https://refinery29.com/en-us/y3k-fashion-trend-tiktok",
+        "supports": "East Asian and K-pop origin, 2024 TikTok rise, metallic and holographic pieces"
+      },
+      {
+        "id": "S3",
+        "url": "https://trends.daisyui.com/trend/chrome-liquid-metal/",
+        "supports": "Chrome palette, motifs, type, slow reflection motion, radius and fit (page does not use the Y3K name)"
+      }
+    ],
+    "examples": [
+      {
+        "name": "Gentle Monster x Maison Margiela pop-ups",
+        "url": "https://stylus.com/articles/forget-y2k-in-turbulent-times-we-re-all-about-y3k",
+        "what": "Installations imagining futuristic versions of both brands"
+      }
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "kidcore",
+    "name": "Kidcore",
+    "aliases": [
+      "kid core",
+      "childcore"
+    ],
+    "plain": "Bright crayon colors, stickers, smiley faces and toy-box patterns",
+    "people_say": [
+      "like a 90s lunchbox",
+      "rainbow and childish",
+      "playground colors",
+      "cartoon stickers everywhere",
+      "toy store vibe",
+      "fun kid style"
+    ],
+    "origin": "Social platforms around 2020, as a childhood-nostalgia counterpart to cottagecore [S2]",
+    "defining": [
+      "Primary red, blue and yellow at the core, balanced with greens, pinks and pastels [S1]",
+      "Smiley faces, rainbows, clouds, hearts, stars, checkerboards and doodle squiggles [S1][S2]",
+      "Layered stickers, cut-out photos and slightly rotated collage pieces [S1]",
+      "Rounded, bubble, handwritten or blocky headings over readable body text [S1]"
+    ],
+    "code": "background: repeating-conic-gradient(#ffd400 0 25%, #ff3b30 0 50%) 0 0 / 48px 48px;",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "layered",
+      "shape": "rounded",
+      "color": "rainbow",
+      "contrast": "high",
+      "type": "rounded",
+      "texture": "pattern",
+      "ornament": "stickers",
+      "layout": "collage",
+      "motion": "bouncy",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Toy and kids' brands, playful merch, creator pages, summer events",
+    "goes_wrong": "Patterns clash everywhere, so nothing reads as the main action",
+    "accessibility": "Yellow on white fails; set text on plain white or dark panels, never on patterns, and use primaries for fills rather than small text",
+    "related": [
+      "kawaii",
+      "playful",
+      "memphis",
+      "comic"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.adobe.com/uk/express/learn/blog/what-is-kidcore",
+        "supports": "Adobe Express: primary palette, patterns, stickers, rotated collage, rounded and bubble type, keep the palette consistent"
+      },
+      {
+        "id": "S2",
+        "url": "https://www.nylon.com/fashion/kidcore-is-the-internet-aesthetic-that-takes-us-back-to-childhood",
+        "supports": "NYLON: around 2020, counterpart to cottagecore, rainbow palette, smileys, checkerboards, cartoon graphics, platforms"
+      }
+    ],
+    "examples": [],
+    "confidence": "medium"
+  },
+  {
+    "id": "manga-ui",
+    "name": "Manga UI (anime and manga look)",
+    "aliases": [
+      "anime UI",
+      "Persona-style menus",
+      "screentone UI"
+    ],
+    "plain": "Black and white comic panels with speed lines and dot shading",
+    "people_say": [
+      "anime style",
+      "manga look",
+      "like Persona menus",
+      "speed lines",
+      "Japanese comic panels",
+      "action lines background"
+    ],
+    "origin": "Japanese manga drawing devices, carried into game menus such as Persona 5 [S1][S2]",
+    "defining": [
+      "Screentone dots or hatching for shading instead of gradients [S1]",
+      "Speed lines and converging lines that pull focus to the main element [S1]",
+      "Persona 5 version: red, black and white with a cut-out look, moving baselines and extra-bold type [S3]",
+      "Actions arranged around a character like speech bubbles [S2]",
+      "Unlike the comic style, it leans on black ink and gray tone more than four-color halftone [inferred]"
+    ],
+    "code": "background: radial-gradient(circle, #000 1px, transparent 1.6px) 0 0 / 6px 6px, #fff;",
+    "traits": {
+      "surface": "solid",
+      "edge": "thick-outline",
+      "depth": "hard-offset",
+      "shape": "geometric",
+      "color": "spot-inks",
+      "contrast": "high",
+      "type": "display",
+      "texture": "halftone",
+      "ornament": "illustration",
+      "layout": "asymmetric",
+      "motion": "kinetic",
+      "theme": "both"
+    },
+    "ui_fit": "marketing",
+    "fits": "Game menus, anime and manga streaming or publishing, fan events, youth campaigns",
+    "goes_wrong": "Tilted, moving type and heavy display faces hurt reading; Persona 5's menus were called a readability nightmare",
+    "accessibility": "Keep body text level and still, keep screentone out from behind text, and offer a reduced-motion mode for slashing transitions",
+    "related": [
+      "comic",
+      "kawaii",
+      "neo-brutalism",
+      "lofi"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://en.wikipedia.org/wiki/Manga_iconography",
+        "supports": "Speed lines, converging lines, screentone sheets and their digital versions, sweat drops"
+      },
+      {
+        "id": "S2",
+        "url": "https://www.siliconera.com/what-makes-the-ui-and-menus-in-persona-games-so-good/",
+        "supports": "Persona 5 combat actions circle the character like manga speech bubbles; one consistent look across all menus"
+      },
+      {
+        "id": "S3",
+        "url": "https://www.inverse.com/gaming/persona-5-tactica-user-interface",
+        "supports": "Persona 5 red, black and white cut-out look, moving type axes and baselines, extra-bold face, legibility criticism"
+      }
+    ],
+    "examples": [
+      {
+        "name": "Persona 5 menus",
+        "url": "https://www.inverse.com/gaming/persona-5-tactica-user-interface",
+        "what": "Red, black and white cut-out menus with dynamic baselines"
+      }
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "whimsigothic",
+    "name": "Whimsigothic",
+    "aliases": [
+      "whimsigoth",
+      "witchy",
+      "celestial goth"
+    ],
+    "plain": "Moons, stars and velvet in deep purple and gold, witchy",
+    "people_say": [
+      "witchy",
+      "mystical",
+      "celestial",
+      "tarot vibes",
+      "90s witch movie",
+      "moon and stars",
+      "magical but dark"
+    ],
+    "origin": "1990s pop-culture look, named by CARI co-founder Evan Collins around 2020, then spread on TikTok [S1][S2][S3]",
+    "defining": [
+      "Midnight blue, plum, emerald, ruby and antique gold in deep shadow, sometimes with an orange or yellow pop [S1][S3]",
+      "Moons, crescents, stars, tarot-like figures, candles, arches and medallion frames [S1][S3]",
+      "Ornate display capitals for short lines over a refined serif body [S3]",
+      "Slow twinkles, orbiting symbols and card-like reveals; radius 0.75 to 1.5rem [S3]"
+    ],
+    "code": "background: radial-gradient(circle at 70% 20%, #3b2a5a, #120d1f 70%); color: #f3e6c4;",
+    "traits": {
+      "surface": "gradient",
+      "edge": "hairline",
+      "depth": "tonal",
+      "shape": "rounded",
+      "color": "muted",
+      "contrast": "normal",
+      "type": "serif",
+      "texture": "none",
+      "ornament": "ornamental",
+      "layout": "layered",
+      "motion": "subtle",
+      "theme": "dark"
+    },
+    "ui_fit": "marketing",
+    "fits": "Astrology and tarot apps, beauty and candle brands, music and fantasy entertainment",
+    "goes_wrong": "Ornate capitals for whole paragraphs and starry backgrounds behind body text",
+    "accessibility": "Gold on plum can fall short of 4.5:1, so use cream for text; keep twinkles small and off under reduced motion",
+    "related": [
+      "dark-academia",
+      "cottagecore",
+      "dark-luxe",
+      "organic"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.nylon.com/fashion/whimsigothic-aesthetic-clothing-fashion",
+        "supports": "CARI coinage, TikTok spread, 1990s roots, celestial motifs, tarot, palette, Practical Magic and Sabrina references"
+      },
+      {
+        "id": "S2",
+        "url": "https://en.wikipedia.org/wiki/Whimsigoth",
+        "supports": "Evan Collins coined it; celestial and astrological motifs, jewel tones, overlap with witchcore and cottagecore"
+      },
+      {
+        "id": "S3",
+        "url": "https://trends.daisyui.com/trend/whimsigothic/",
+        "supports": "Retrospective label coined in 2020, palette, display and serif type, motifs, slow motion, radius and fit"
+      }
+    ],
+    "examples": [],
+    "confidence": "medium"
+  },
+  {
+    "id": "mcbling",
+    "name": "McBling",
+    "aliases": [
+      "2000s bling",
+      "rhinestone era"
+    ],
+    "plain": "Hot pink, rhinestones, leopard print and glossy celebrity glamour",
+    "people_say": [
+      "Paris Hilton era",
+      "bedazzled",
+      "hot pink and sparkly",
+      "2000s glam",
+      "rhinestone everything",
+      "tabloid glamour"
+    ],
+    "origin": "US celebrity and pop culture of about 2000 to 2008; named by Froyo Tam in 2017 according to CARI [S2]",
+    "defining": [
+      "Hot pink first, then gold or a jewel tone, with black, white and silver accents [S2]",
+      "Bright saturated color and glitter [S1]",
+      "Rhinestone sparkle, hearts, starbursts, shields, chain borders and selective leopard print [S2]",
+      "Ornate script for names over a bold sans for promotions; radius 1 to 2rem [S2]",
+      "Camera-flash, twinkle and glossy logo-reveal motion with exaggerated timing [S2]"
+    ],
+    "code": "background: linear-gradient(135deg, #ff2fa0, #ff8cc6); box-shadow: 0 0 0 2px #fff, 0 0 14px #ffd1ec; border-radius: 1.5rem;",
+    "traits": {
+      "surface": "glossy",
+      "edge": "glow",
+      "depth": "soft-shadow",
+      "shape": "pill",
+      "color": "vivid",
+      "contrast": "high",
+      "type": "script",
+      "texture": "pattern",
+      "ornament": "ornamental",
+      "layout": "layered",
+      "motion": "bouncy",
+      "theme": "both"
+    },
+    "ui_fit": "marketing",
+    "fits": "Beauty and nail brands, nightlife promos, fashion drops and nostalgic campaigns",
+    "goes_wrong": "Sparkle on sparkle until prices and buttons vanish; often mislabeled as y2k, which leans tech rather than celebrity",
+    "accessibility": "White text on hot pink often fails 4.5:1, so use dark text or a deeper pink; stop twinkle loops under reduced motion",
+    "related": [
+      "y2k",
+      "kawaii",
+      "dark-luxe",
+      "brat"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.vice.com/en/article/m7vbma/the-year-in-aesthetics-from-dark-academia-to-mcbling",
+        "supports": "Vice (December 2021): bright saturated colors, glitter, flashy hip-hop and pop-princess influences"
+      },
+      {
+        "id": "S2",
+        "url": "https://trends.daisyui.com/trend/mcbling/",
+        "supports": "About 2000 to 2008, Froyo Tam coinage in January 2017 per CARI, palette, type, motifs, motion, radius and fit"
+      }
+    ],
+    "examples": [],
+    "confidence": "medium"
+  },
+  {
+    "id": "cybersigilism",
+    "name": "Cybersigilism",
+    "aliases": [
+      "cyber sigilism",
+      "cyber tribal",
+      "neo-tribal"
+    ],
+    "plain": "Thin, spiky, mirrored lines like sci-fi tattoos or alien veins",
+    "people_say": [
+      "spiky tattoo lines",
+      "cyber tribal",
+      "sharp thorny lines",
+      "alien tattoo font",
+      "techno gothic lines",
+      "Y2K tribal"
+    ],
+    "origin": "Late-2010s Berlin underground techno scene, first as tattoo art [S2]",
+    "defining": [
+      "Needle-thin, spearlike lines ending in sharp points [S1][S2]",
+      "Mirror symmetry and tribal-like forms that read as armor, veins or river branches [S1]",
+      "Biomechanical influence from H.R. Giger [S2]",
+      "Usually one ink color on a dark or skin-tone ground, often paired with chrome or neon nearby [inferred]"
+    ],
+    "code": "svg.sigil path { fill: none; stroke: currentColor; stroke-width: 1.25; stroke-linecap: round; }",
+    "traits": {
+      "surface": "solid",
+      "edge": "hairline",
+      "depth": "flat",
+      "shape": "irregular",
+      "color": "monochrome",
+      "contrast": "high",
+      "type": "display",
+      "texture": "none",
+      "ornament": "ornamental",
+      "layout": "minimal",
+      "motion": "still",
+      "theme": "dark"
+    },
+    "ui_fit": "illustration-only",
+    "fits": "Club and techno flyers, band and fashion merch, tattoo-studio and music branding",
+    "goes_wrong": "Used for body text or tiny icons, where hairline spikes vanish below about 24px [inferred]",
+    "accessibility": "Thin strokes fail 3:1 non-text contrast when small, so keep sigils decorative with empty alt text and never as the only label",
+    "related": [
+      "acid-graphics",
+      "y3k",
+      "whimsigothic",
+      "glitch"
+    ],
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.thedailybeast.com/tattooings-biggest-trend-is-spooky-sensual-cybersigilism/",
+        "supports": "Long spearlike lines, symmetry, tribal-like patterns with cyberpunk precision, armor and vein-like forms"
+      },
+      {
+        "id": "S2",
+        "url": "https://mixmag.asia/feature/ctrl-print-vol-2-vaporwave-acidgrafix-cybersigilism",
+        "supports": "Late-2010s Berlin techno origin as tattoo art, needle-thin linework, Giger influence, spread into fashion"
+      }
+    ],
+    "examples": [],
+    "confidence": "medium"
+  }
+]

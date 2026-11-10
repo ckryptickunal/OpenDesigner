@@ -1,0 +1,132 @@
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner sketch --name Thrum --brand #FF5436 --audience large --platforms watch --feel bold,warm,strong --delegated feel,audience,platforms
+initialized brand/showcase/watch/02-thrum-heart/opendesigner/state.json
+Applied 194 OpenDesigner house standards (v2) for accessibility, color, components, elevation, layout, motion, platforms, process, tokens, tooling, typography. They are locked; say if you want to change one (`engine.py standards` lists them).
+built brand/showcase/watch/02-thrum-heart/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg), DESIGN.md, PRODUCT.md, preview.html
+Passes: no errors. 2 warnings, 5 notes.  (brand/showcase/watch/02-thrum-heart/opendesigner)
+WARN  The feel words friendly, authoritative pull warmth in opposite directions. Pick which one wins  [Macro conflict; L06 4.2 usage note]
+WARN  The feel words friendly, authoritative pull roundness in opposite directions. Pick which one wins  [Macro conflict; L06 4.2 usage note]
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 55 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 54 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  10 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.0). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+Checked 164 color pairs in every mode, 12 mode combinations and 403 tokens.
+Feel: bold -> bold; warm -> friendly; strong -> bold + authoritative.
+Your brand color is on the buttons exactly, with dark text on it, because white text would be too faint.
+This is a sketch: every part works, and most choices are still defaults. Zoom into any area later (see the Zoom lines in DESIGN.md).
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner standard override STD-visual-details-24 --why "Brief: smartwatch app, black background edge-to-edge (watch platform convention, OLED); no light mode"
+D-0009 overrode house standard STD-visual-details-24: Make interface colors adapt to light and dark mode: give each color role a light value and a dark value.
+  The person's reason is recorded: "Brief: smartwatch app, black background edge-to-edge (watch platform convention, OLED); no light mode". Unlocked: nothing (it sets no values).
+  To follow it again: engine.py standard restore STD-visual-details-24
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner pick Q-theme-01 dark-only --set-by chosen --why "watch app: black edge-to-edge, per the brief"
+D-0010 set answers.Q-theme-01 = "dark-only" (chosen)
+  also set: raw.flags.darkMode = true (from Q-theme-01)
+  also set: raw.defaultTheme = "dark" (from Q-theme-01)
+  tokens: 1 value change (modes). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner pick Q-color-21 black --set-by chosen --why "watch: pure black OLED edge-to-edge"
+D-0011 set answers.Q-color-21 = "black" (chosen)
+  also set: raw.darkBase = "black" (from Q-color-21)
+  tokens: 86 values change (color.bg.field, color.shadow.ring, color.surface.base, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner pick Q-plat-02 watch --set-by chosen --why "the product is a watch app"
+D-0012 set answers.Q-plat-02 = "watch" (chosen)
+  also set: raw.devices = ["watch"] (from Q-plat-02)
+  recorded; the tokens already match this answer.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner pick Q-plat-04 watch --set-by chosen --why "used on the wrist, in seconds"
+D-0013 set answers.Q-plat-04 = "watch" (chosen)
+  also set: raw.situations = ["wrist"] (from Q-plat-04)
+  recorded; the tokens already match this answer.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner set raw.textFace "\"Bricolage Grotesque\"" --set-by chosen --why "open-licence face picked for the direction"
+D-0014 set raw.textFace = "Bricolage Grotesque" (chosen)
+  previous value: "system"
+  tokens: 1 value change (font.family.text). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner set raw.baseSize 17 --set-by chosen --why "watchOS Body at the xLarge default for 44/45/49 mm is 17 pt (HIG typography, watchOS Dynamic Type)"
+D-0015 set raw.baseSize = 17 (chosen)
+  tokens: 29 values change (text.body.lg, text.body.md, text.body.sm, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner set dials.expression 70 --set-by delegated --why "big numerals are the show"
+D-0016 set dials.expression = 70 (delegated)
+  tokens: 33 values change (font.weight.display, text.body.lg, text.body.sm, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner set dials.brandPresence 70 --set-by delegated --why "warm red owns the screen"
+D-0017 set dials.brandPresence = 70 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner set dials.density 25 --set-by delegated --why "one number, one bar"
+D-0018 set dials.density = 25 (delegated)
+  previous value: 15
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner set dials.energy 75 --set-by delegated --why "live, beating data"
+D-0019 set dials.energy = 75 (delegated)
+  tokens: 4 values change (color.surface.nav, font.weight.display, font.weight.heading, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  note: motion.spring.spatial.dampingRatio stays 1.0: house standard STD-springs-gestures-04 holds it; everything else this dial drives follows the new value
+  note: motion.spring.spatial.stiffness stays 246.7: house standard STD-springs-gestures-04 holds it; everything else this dial drives follows the new value
+  note: motion.easing.standard stays [0.77, 0, 0.175, 1]: house standard STD-easing-duration-02 holds it; everything else this dial drives follows the new value
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner set dials.roundness 55 --set-by delegated --why "soft but not bubbly"
+D-0020 set dials.roundness = 55 (delegated)
+  tokens: 6 values change (radius.container, radius.control, radius.control-sm, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner set dials.depth 20 --set-by delegated --why "flat with a warm glow"
+D-0021 set dials.depth = 20 (delegated)
+  tokens: 2 values change (color.shadow.ambient, color.shadow.key). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner set dials.colorfulness 70 --set-by delegated --why "five zone colors in one warm family"
+D-0022 set dials.colorfulness = 70 (delegated)
+  tokens: 65 values change (color.bg.accent2.bold, color.bg.accent2.bold-hover, color.bg.accent2.bold-pressed, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner set dials.warmth 50 --set-by delegated --why "owner rule: high warmth turns the neutrals brown; the warmth lives in the zone colors, not the greys"
+D-0023 set dials.warmth = 50 (delegated)
+  tokens: 52 values change (color.overlay.scrim, color.shadow.ambient, color.shadow.key, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/02-thrum-heart/opendesigner build
+built brand/showcase/watch/02-thrum-heart/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg), DESIGN.md, PRODUCT.md, preview.html
+Passes: no errors. 2 warnings, 5 notes.  (brand/showcase/watch/02-thrum-heart/opendesigner)
+WARN  The feel words friendly, authoritative pull warmth in opposite directions. Pick which one wins  [Macro conflict; L06 4.2 usage note]
+WARN  The feel words friendly, authoritative pull roundness in opposite directions. Pick which one wins  [Macro conflict; L06 4.2 usage note]
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 46 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 46 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  10 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.0). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+Checked 188 color pairs in every mode, 12 mode combinations and 475 tokens.
+(exit 0)
+

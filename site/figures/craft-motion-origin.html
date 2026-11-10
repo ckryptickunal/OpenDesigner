@@ -1,0 +1,20 @@
+<figure class="fig cr">
+<div class="dodont">
+<div class="dont"><p class="dd-h">Grows from its own center</p><p class="dd-why">The default origin is the center, so the menu swells in place. It is not clear which button opened it.</p>
+<div class="dd-art"><div class="cr-stage" tabindex="0" role="group" aria-label="A popover that scales from its own center. Hover or focus to pause.">
+<div class="cr-meta"><span><b>transform-origin: center</b></span><span>slowed 3×</span></div>
+<div class="cr-scene cr-ui"><span class="cr-pill cr-trigger">Filter</span>
+<div class="cr-menu cr-pop o-center cr-loop cr-grow"><span class="on">Open</span><span>Mine</span><span>Closed</span></div>
+<span class="cr-origin" style="left:82px;top:94px" aria-hidden="true"></span></div>
+</div></div></div>
+<div class="do"><p class="dd-h">Grows out of its trigger</p><p class="dd-why">The origin sits under the button, so the menu seems to unfold from it. The link between the two is obvious.</p>
+<div class="dd-art"><div class="cr-stage" tabindex="0" role="group" aria-label="A popover that scales from the button that opened it. Hover or focus to pause.">
+<div class="cr-meta"><span><b>transform-origin</b>: the trigger</span><span>slowed 3×</span></div>
+<div class="cr-scene cr-ui"><span class="cr-pill cr-trigger">Filter</span>
+<div class="cr-menu cr-pop cr-loop cr-grow"><span class="on">Open</span><span>Mine</span><span>Closed</span></div>
+<span class="cr-origin" style="left:32px;top:34px" aria-hidden="true"></span></div>
+</div></div></div>
+</div>
+<div class="cr-foot"><span>The ring marks each origin. Both scale from <span class="num">0.9</span> over <span class="num">600&nbsp;ms</span>, three times the <span class="num">200&nbsp;ms</span> recipe, so the difference is easy to see.</span><span class="cr-hint" aria-hidden="true"><span class="cr-hint-play">Hover or focus to pause.</span><span class="cr-hint-paused">Paused.</span></span><span class="cr-rm">Reduced motion is on, so both menus stay open.</span></div>
+<figcaption>The same popover with two origins, the point it grows from. From its center it swells in place; from under its button it unfolds out of the thing you clicked. Modals are the exception: they have no trigger, so they stay centered.</figcaption>
+</figure>

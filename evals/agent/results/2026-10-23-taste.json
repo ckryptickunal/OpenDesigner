@@ -1,0 +1,36 @@
+{
+  "kind": "agent",
+  "date": "2026-10-23",
+  "commit": "ffdf89d",
+  "skillsRef": "working tree",
+  "label": "taste",
+  "model": "sonnet",
+  "judgeModel": "haiku",
+  "runsPerArm": 1,
+  "claudeVersion": "2.1.302",
+  "overallScore": 0,
+  "meanDelta": 0,
+  "casesPassed": 2,
+  "casesTotal": 2,
+  "costUsd": 0.7672445000000001,
+  "durationSeconds": 89,
+  "partial": false,
+  "cases": [
+    {
+      "name": "taste-all-past",
+      "score": 0,
+      "without": 0.0,
+      "delta": 0,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "taste-leaves-out",
+      "score": 0,
+      "without": 0.0,
+      "delta": 0,
+      "runs": 1,
+      "errors": []
+    }
+  ]
+}

@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plumpot: small money, big plans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Fredoka:wdth,wght@75..125,300..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Outside the tokens, on purpose (see notes.md):
+     - plum-tinted shadows: the elevation tokens use a neutral shadow color; floating candy objects need a tinted one
+     - the display headline is 124px; the scale tops out at 90px (display-sm) */
+  :root {
+    --ink: var(--ds-color-accent-light-12);          /* plum ink */
+    --cream: var(--ds-color-warning-light-2);
+    --lilac: var(--ds-color-accent-light-5);
+    --lilac-deep: var(--ds-color-accent-light-7);
+    --pink: var(--ds-color-accent2-light-6);
+    --sky: var(--ds-color-info-light-5);
+    --mint: var(--ds-color-success-light-5);
+    --butter: var(--ds-color-accent3-light-9);
+    --gold: var(--ds-color-warning-light-9);
+    --shadow-plum: 0 40px 80px -24px rgb(59 40 103 / 0.38), 0 12px 24px -12px rgb(59 40 103 / 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font: var(--ds-text-body-md);
+    overflow: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+
+  .page { position: relative; width: 100%; height: 100vh; height: 100svh; min-height: 820px; overflow: hidden; }
+
+  /* nav */
+  nav {
+    position: relative; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: var(--ds-space-24) var(--ds-space-48);
+  }
+  .logo { display: flex; align-items: center; gap: var(--ds-space-8); font-family: var(--ds-font-family-display); font-weight: 600; font-size: var(--ds-font-size-28); letter-spacing: -0.01em; font-variation-settings: "wdth" 110; }
+  .links {
+    display: flex; gap: var(--ds-space-4); padding: var(--ds-space-6);
+    background: var(--ds-color-white); border-radius: var(--ds-radius-full);
+    box-shadow: var(--ds-elevation-raised);
+  }
+  .links a { font: var(--ds-text-label-lg); font-weight: 600; padding: var(--ds-space-8) var(--ds-space-16); border-radius: var(--ds-radius-full); min-height: var(--ds-size-control-sm); display: inline-flex; align-items: center; }
+  .links a:hover { background: var(--ds-color-bg-accent-subtle); }
+  .links a.on { background: var(--lilac); }
+  .nav-right { display: flex; align-items: center; gap: var(--ds-space-20); }
+  .nav-right .login { font: var(--ds-text-label-lg); font-weight: 600; }
+  .btn {
+    display: inline-flex; align-items: center; gap: var(--ds-space-8);
+    border-radius: var(--ds-radius-control); font-family: var(--ds-font-family-text); font-weight: 700;
+    transition: transform var(--ds-motion-duration-short) var(--ds-motion-easing-hover);
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-ink { background: var(--ink); color: var(--ds-color-white); padding: 0 var(--ds-space-24); height: var(--ds-size-control-md); font-size: var(--ds-font-size-16); }
+
+  /* hero copy */
+  .copy { position: absolute; left: var(--ds-space-48); top: 136px; width: 700px; z-index: 6; }
+  .kicker {
+    display: inline-flex; align-items: center; gap: var(--ds-space-8);
+    background: var(--ds-color-white); border-radius: var(--ds-radius-full);
+    padding: var(--ds-space-6) var(--ds-space-16) var(--ds-space-6) var(--ds-space-6);
+    font: var(--ds-text-label-lg); font-weight: 600; box-shadow: var(--ds-elevation-raised);
+  }
+  .kicker b { background: var(--mint); border-radius: var(--ds-radius-full); padding: var(--ds-space-2) var(--ds-space-12); font-weight: 700; color: var(--ds-color-success-light-12); }
+  h1 {
+    margin-top: var(--ds-space-24);
+    font-family: var(--ds-font-family-display);
+    font-weight: 700; font-variation-settings: "wdth" 118;
+    font-size: 124px; line-height: 0.9; letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+  h1 .line { display: block; white-space: nowrap; }
+  /* highlight: a candy fill box behind the phrase (no color-only or italic highlight) */
+  h1 .box { display: inline-block; margin-top: 0.17em; padding: 0 0.14em 0.08em; border-radius: 0.24em; background: var(--ds-color-accent2-light-6); transform: rotate(-2deg); box-shadow: 0 0 0 5px var(--ds-color-white), var(--shadow-plum); }
+  .coin-inline { display: inline-block; width: 0.62em; height: 0.62em; vertical-align: 0.02em; margin-left: 0.06em; }
+  .lede { margin-top: var(--ds-space-32); max-width: 34ch; font-size: var(--ds-text-body-lg-size); line-height: 1.45; color: var(--ds-color-neutral-light-11); font-weight: 500; }
+  .ctas { margin-top: var(--ds-space-32); display: flex; gap: var(--ds-space-12); align-items: center; }
+  .btn-primary {
+    background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+    height: var(--ds-size-control-lg); padding: 0 var(--ds-space-4) 0 var(--ds-space-32); font-size: var(--ds-font-size-16);
+    box-shadow: 0 10px 0 -2px var(--ds-color-accent-light-12), 0 18px 30px -10px rgb(123 63 228 / 0.55);
+  }
+  .btn-primary .arr { width: var(--ds-size-control-md); height: var(--ds-size-control-md); border-radius: var(--ds-radius-full); background: var(--butter); color: var(--ink); display: grid; place-items: center; margin-left: var(--ds-space-8); }
+  .btn-ghost { height: var(--ds-size-control-lg); padding: 0 var(--ds-space-24); background: var(--ds-color-white); font-size: var(--ds-font-size-16); box-shadow: inset 0 0 0 2px var(--ds-color-accent-light-8); }
+  .proof { margin-top: var(--ds-space-32); display: flex; gap: var(--ds-space-20); font: var(--ds-text-label-lg); font-weight: 600; color: var(--ds-color-neutral-light-11); }
+  .proof span { display: inline-flex; align-items: center; gap: var(--ds-space-6); }
+  .proof i { width: 20px; height: 20px; border-radius: var(--ds-radius-full); display: grid; place-items: center; font-style: normal; font-size: var(--ds-font-size-12); color: var(--ink); }
+
+  /* stage */
+  .stage { position: absolute; right: -40px; top: 96px; width: 760px; height: 840px; }
+  .blob {
+    position: absolute; left: 90px; top: 30px; width: 640px; height: 700px;
+    border-radius: 280px 300px 260px 320px / 300px 280px 320px 260px;
+    background:
+      radial-gradient(60% 50% at 25% 20%, var(--pink) 0%, transparent 70%),
+      radial-gradient(55% 55% at 85% 35%, var(--sky) 0%, transparent 70%),
+      radial-gradient(60% 50% at 65% 90%, var(--mint) 0%, transparent 70%),
+      radial-gradient(50% 40% at 15% 80%, var(--butter) 0%, transparent 70%),
+      var(--lilac);
+  }
+  .blob::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit;
+    background-image: radial-gradient(rgb(255 255 255 / 0.55) 1.6px, transparent 1.8px);
+    background-size: 22px 22px; mask-image: radial-gradient(70% 70% at 50% 50%, #000 30%, transparent 75%);
+  }
+  .persp { position: absolute; inset: 0; perspective: 1400px; }
+
+  .card {
+    position: absolute; left: 150px; top: 210px; width: 430px; height: 272px; border-radius: var(--ds-radius-container);
+    transform: rotateX(10deg) rotateY(-14deg) rotateZ(-9deg);
+    background:
+      radial-gradient(120% 90% at 0% 0%, rgb(255 255 255 / 0.55), transparent 45%),
+      linear-gradient(135deg, var(--ds-color-accent-light-8) 0%, var(--ds-color-accent-light-9) 45%, var(--ds-color-accent-light-11) 100%);
+    box-shadow: 0 1px 0 var(--ds-color-accent-light-10), 0 2px 0 var(--ds-color-accent-light-10), 0 3px 0 var(--ds-color-accent-light-11), 0 4px 0 var(--ds-color-accent-light-11), 0 5px 0 var(--ds-color-accent-light-12), var(--shadow-plum);
+    color: var(--ds-color-white); padding: var(--ds-space-32);
+    z-index: 3;
+  }
+  .card .brand { font-family: var(--ds-font-family-display); font-weight: 600; font-size: var(--ds-font-size-28); font-variation-settings: "wdth" 110; display: flex; align-items: center; gap: var(--ds-space-8); }
+  .card .chip { position: absolute; left: 32px; top: 112px; width: 56px; height: 42px; border-radius: 10px; background: linear-gradient(135deg, var(--ds-color-warning-light-4), var(--ds-color-warning-light-9)); box-shadow: inset 0 0 0 1px rgb(132 93 0 / 0.35); }
+  .card .chip::before { content: ""; position: absolute; inset: 10px 18px; border: 1.5px solid rgb(132 93 0 / 0.45); border-radius: 6px; }
+  .card .num { position: absolute; left: 32px; bottom: 30px; font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-21); letter-spacing: 0.08em; font-weight: 500; }
+  .card .name { position: absolute; right: 32px; bottom: 30px; font-size: var(--ds-font-size-12); letter-spacing: 0.14em; font-weight: 700; opacity: 0.92; }
+  .card .wave { position: absolute; right: 32px; top: 34px; width: 28px; height: 28px; }
+  .card .sticker {
+    position: absolute; right: -26px; top: 92px; transform: rotate(14deg);
+    background: var(--butter); color: var(--ink); font-family: var(--ds-font-family-display); font-weight: 700; font-size: var(--ds-font-size-21);
+    padding: var(--ds-space-8) var(--ds-space-16); border-radius: var(--ds-radius-full); box-shadow: 0 0 0 4px var(--ds-color-white), 0 10px 20px -8px rgb(59 40 103 / 0.35);
+  }
+
+  .jar {
+    position: absolute; left: 400px; top: 470px; width: 300px; padding: var(--ds-space-20);
+    background: var(--ds-color-white); border-radius: var(--ds-radius-container);
+    transform: rotate(5deg); box-shadow: var(--shadow-plum); z-index: 4;
+  }
+  .jar .row { display: flex; align-items: center; gap: var(--ds-space-12); }
+  .jar .ico { width: 44px; height: 44px; border-radius: 16px; background: var(--mint); display: grid; place-items: center; }
+  .jar h3 { font-family: var(--ds-font-family-display); font-weight: 600; font-size: var(--ds-font-size-21); font-variation-settings: "wdth" 105; }
+  .jar small { display: block; color: var(--ds-color-neutral-light-11); font-size: var(--ds-font-size-12); font-weight: 600; }
+  .jar .amt { margin-top: var(--ds-space-16); font-family: var(--ds-font-family-display); font-weight: 700; font-size: var(--ds-font-size-38); letter-spacing: -0.02em; line-height: 1; }
+  .jar .amt span { font-size: var(--ds-font-size-16); color: var(--ds-color-neutral-light-11); font-weight: 600; letter-spacing: 0; }
+  .bar { margin-top: var(--ds-space-12); height: 16px; border-radius: var(--ds-radius-full); background: var(--ds-color-success-light-3); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 72%; border-radius: inherit; background: repeating-linear-gradient(-45deg, var(--ds-color-success-light-7) 0 8px, var(--ds-color-success-light-6) 8px 16px); }
+
+  .toast {
+    position: absolute; left: 60px; top: 500px; display: flex; align-items: center; gap: var(--ds-space-12);
+    padding: var(--ds-space-12) var(--ds-space-20) var(--ds-space-12) var(--ds-space-12);
+    background: var(--ds-color-white); border-radius: var(--ds-radius-full); box-shadow: var(--shadow-plum);
+    transform: rotate(-4deg); z-index: 5; font-weight: 600;
+  }
+  .toast .plus { width: 40px; height: 40px; border-radius: var(--ds-radius-full); background: var(--pink); display: grid; place-items: center; font-family: var(--ds-font-family-display); font-weight: 700; font-size: var(--ds-font-size-21); }
+  .toast b { font-family: var(--ds-font-family-display); font-weight: 700; font-size: var(--ds-font-size-21); }
+  .toast small { display: block; color: var(--ds-color-neutral-light-11); font-size: var(--ds-font-size-12); }
+
+  .goal {
+    position: absolute; left: 470px; top: 120px; padding: var(--ds-space-12) var(--ds-space-16);
+    background: var(--ds-color-white); border-radius: 22px; box-shadow: var(--shadow-plum); transform: rotate(7deg); z-index: 2;
+    display: flex; gap: var(--ds-space-12); align-items: center; font-weight: 600;
+  }
+  .goal .ring { width: 48px; height: 48px; border-radius: 50%; background: conic-gradient(var(--ds-color-accent-light-9) 0 64%, var(--ds-color-accent-light-4) 0); display: grid; place-items: center; }
+  .goal .ring::after { content: "64%"; width: 36px; height: 36px; border-radius: 50%; background: var(--ds-color-white); display: grid; place-items: center; font-size: var(--ds-font-size-12); font-weight: 800; letter-spacing: -0.02em; }
+  .goal small { display: block; color: var(--ds-color-neutral-light-11); font-size: var(--ds-font-size-12); }
+
+  .coin { position: absolute; z-index: 6; filter: drop-shadow(0 18px 18px rgb(59 40 103 / 0.28)); }
+  .spark { position: absolute; z-index: 6; }
+
+  .badge { position: absolute; left: 70px; top: 640px; width: 150px; height: 150px; z-index: 7; }
+  .badge .disc { position: absolute; inset: 0; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 6px var(--ds-color-white), var(--shadow-plum); }
+  .badge svg { position: absolute; inset: 0; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* one entrance, no ambient loops (STD-accessibility-motion-08): objects drop in on the spatial spring, staggered */
+    .float, .badge, .coin, .spark { animation: drop var(--ds-motion-spring-spatial-default-duration) var(--ds-motion-spring-momentum-easing) both; }
+    .float.d2 { animation-delay: calc(var(--ds-motion-duration-stagger) * 2); }
+    .float.d3 { animation-delay: calc(var(--ds-motion-duration-stagger) * 3); }
+    .badge { animation-delay: calc(var(--ds-motion-duration-stagger) * 4); }
+    @keyframes drop { from { opacity: 0; translate: 0 24px; scale: 0.96; } }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <nav aria-label="Main">
+    <a class="logo" href="#" aria-label="Plumpot home">
+      <svg width="36" height="38" viewBox="0 0 36 38" aria-hidden="true">
+        <path d="M18 6c2-4 7-6 11-5-1 4-5 7-10 7z" fill="var(--ds-color-success-light-8)"/>
+        <circle cx="18" cy="22" r="15" fill="var(--ds-color-accent-light-9)"/>
+        <rect x="12" y="15" width="12" height="4" rx="2" fill="var(--ds-color-accent-light-12)"/>
+        <circle cx="12" cy="27" r="3" fill="rgb(255 255 255 / 0.35)"/>
+      </svg>
+      plumpot
+    </a>
+    <div class="links">
+      <a class="on" href="#">For teens</a><a href="#">For parents</a><a href="#">The card</a><a href="#">Safety</a>
+    </div>
+    <div class="nav-right">
+      <a class="login" href="#">Log in</a>
+      <a class="btn btn-ink" href="#">Get the app</a>
+    </div>
+  </nav>
+
+  <section class="copy">
+    <span class="kicker"><b>New</b> Savings jars that fill themselves</span>
+    <h1>
+      <span class="line">Small</span>
+      <span class="line">money,<svg class="coin-inline" viewBox="0 0 100 100" aria-hidden="true"><use href="#coin-face"/></svg></span>
+      <span class="line"><span class="box">big plans.</span></span>
+    </h1>
+    <p class="lede">The money app for 13 to 17s. Get paid for chores, split the pizza, watch your jars fill. Parents see the big picture, never every move.</p>
+    <div class="ctas">
+      <a class="btn btn-primary" href="#">Get Plumpot free <span class="arr" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M3 9h11M10 4l5 5-5 5" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+      <a class="btn btn-ghost" href="#">I'm a parent</a>
+    </div>
+    <div class="proof">
+      <span><i style="background:var(--mint)">✓</i>No monthly fees</span>
+      <span><i style="background:var(--sky)">✓</i>Card in 5 days</span>
+      <span><i style="background:var(--pink)">✓</i>Built with parents</span>
+    </div>
+  </section>
+
+  <div class="stage" aria-hidden="true">
+    <div class="blob"></div>
+    <div class="persp">
+      <div class="goal float d3"><span class="ring"></span><div>Festival ticket<small>£58 to go</small></div></div>
+      <div class="card float">
+        <div class="brand">
+          <svg width="28" height="30" viewBox="0 0 36 38"><path d="M18 6c2-4 7-6 11-5-1 4-5 7-10 7z" fill="var(--ds-color-success-light-6)"/><circle cx="18" cy="22" r="15" fill="var(--ds-color-white)"/><rect x="12" y="15" width="12" height="4" rx="2" fill="var(--ds-color-accent-light-9)"/></svg>
+          plumpot
+        </div>
+        <svg class="wave" viewBox="0 0 28 28"><g fill="none" stroke="var(--ds-color-white)" stroke-width="2.4" stroke-linecap="round"><path d="M8 8c3 3 3 9 0 12"/><path d="M13 5c5 5 5 13 0 18"/><path d="M18 2c7 7 7 17 0 24"/></g></svg>
+        <span class="chip"></span>
+        <span class="num">•••• 0417</span>
+        <span class="name">MAYA R.</span>
+        <span class="sticker">mine!</span>
+      </div>
+      <div class="toast float d2"><span class="plus">+</span><div><b>£5.00</b> dog walking<small>from Mum · just now</small></div></div>
+      <div class="jar float d3">
+        <div class="row"><span class="ico"><svg width="22" height="22" viewBox="0 0 22 22"><path d="M2 15V7.5C2 6.7 2.7 6 3.5 6H7l2.2 3.4 4.3 1.2c3.6 1 6.5 2 6.5 4.4v.5H2z" fill="var(--ds-color-success-light-11)"/><rect x="2" y="16" width="18" height="2.6" rx="1.3" fill="var(--ds-color-success-light-11)"/><path d="M8 11.5l1.6-.4M10 13l1.6-.4" stroke="var(--ds-color-success-light-5)" stroke-width="1.4" stroke-linecap="round"/></svg></span><div><h3>Sneaker fund</h3><small>Rounds up every tap</small></div></div>
+        <div class="amt">£86.40 <span>of £120</span></div>
+        <div class="bar"><i></i></div>
+      </div>
+      <div class="badge">
+        <div class="disc"></div>
+        <svg viewBox="0 0 150 150"><defs><path id="circ" d="M75 75 m -54 0 a 54 54 0 1 1 108 0 a 54 54 0 1 1 -108 0"/></defs>
+          <text font-family="Fredoka" font-weight="600" font-size="16" letter-spacing="0.5" fill="var(--ds-color-accent3-light-9)"><textPath href="#circ" textLength="336" lengthAdjust="spacing">AGES 13–17 · NO FEES · AGES 13–17 · NO FEES · </textPath></text>
+          <g transform="translate(75 75)"><path d="M0 -20 C 3 -4, 4 -3, 20 0 C 4 3, 3 4, 0 20 C -3 4, -4 3, -20 0 C -4 -3, -3 -4, 0 -20Z" fill="var(--ds-color-accent2-light-6)"/></g>
+        </svg>
+      </div>
+    </div>
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <radialGradient id="g-face" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff6d6"/><!-- od-ignore: coin highlight --><stop offset="0.45" stop-color="var(--ds-color-warning-light-7)"/><stop offset="1" stop-color="var(--ds-color-warning-light-9)"/></radialGradient>
+        <symbol id="coin-face" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="48" fill="var(--ds-color-warning-light-10)"/>
+          <circle cx="50" cy="48" r="46" fill="url(#g-face)"/>
+          <circle cx="50" cy="48" r="35" fill="none" stroke="var(--ds-color-warning-light-10)" stroke-width="3" stroke-dasharray="2 5"/>
+          <text x="50" y="64" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="44" fill="var(--ds-color-warning-light-11)">p</text>
+        </symbol>
+      </defs>
+    </svg>
+    <div id="coins"></div>
+  </div>
+</div>
+<script>
+// 3D-looking coins drawn as SVG: a tilted face ellipse over a darker edge of thickness t.
+const coins = [
+  // x, y, size, tilt (0 flat..1 edge-on), rotation deg, hue
+  {x: 70,  y: 150, s: 120, tilt: 0.42, r: -24, c: 'gold'},
+  {x: 590, y: 40,  s: 92,  tilt: 0.55, r: 30,  c: 'gold'},
+  {x: 600, y: 395, s: 80,  tilt: 0.30, r: -12, c: 'lilac'},
+  {x: 330, y: 690, s: 104, tilt: 0.62, r: 18,  c: 'gold'},
+  {x: 30,  y: 420, s: 56,  tilt: 0.35, r: 40,  c: 'mint'},
+  {x: 420, y: 30,  s: 50,  tilt: 0.25, r: -30, c: 'pink'},
+];
+const pal = {
+  gold:  ['#fff6d6' /* od-ignore: specular highlight on a gold coin */, 'var(--ds-color-warning-light-7)', 'var(--ds-color-warning-light-9)', 'var(--ds-color-warning-light-10)', 'var(--ds-color-warning-light-11)'],
+  lilac: ['var(--ds-color-white)', 'var(--ds-color-accent-light-5)', 'var(--ds-color-accent-light-7)', 'var(--ds-color-accent-light-8)', 'var(--ds-color-accent-light-11)'],
+  mint:  ['var(--ds-color-white)', 'var(--ds-color-success-light-5)', 'var(--ds-color-success-light-7)', 'var(--ds-color-success-light-8)', 'var(--ds-color-success-light-11)'],
+  pink:  ['var(--ds-color-white)', 'var(--ds-color-accent2-light-5)', 'var(--ds-color-accent2-light-7)', 'var(--ds-color-accent2-light-8)', 'var(--ds-color-accent2-light-11)'],
+};
+const host = document.getElementById('coins');
+coins.forEach((k, i) => {
+  const [hi, mid, lo, edge, emb] = pal[k.c];
+  const rx = 50, ry = 50 * (1 - k.tilt), t = 10 + k.tilt * 8;
+  const H = ry * 2 + t + 4;
+  const svg = `<svg class="coin" style="left:${k.x}px;top:${k.y}px;width:${k.s}px;transform:rotate(${k.r}deg)" viewBox="-2 ${-ry - 2} 104 ${H}" aria-hidden="true">
+    <defs><radialGradient id="cf${i}" cx="35%" cy="25%" r="85%"><stop offset="0" stop-color="${hi}"/><stop offset=".45" stop-color="${mid}"/><stop offset="1" stop-color="${lo}"/></radialGradient>
+    <linearGradient id="ce${i}" x1="0" x2="1"><stop offset="0" stop-color="${edge}"/><stop offset=".35" stop-color="${lo}"/><stop offset=".7" stop-color="${edge}"/><stop offset="1" stop-color="${emb}"/></linearGradient></defs>
+    <path d="M0 0 v${t} a${rx} ${ry} 0 0 0 100 0 v${-t} z" fill="url(#ce${i})"/>
+    <g opacity=".35" stroke="${emb}" stroke-width="1.2">${Array.from({length: 22}, (_, j) => { const a = Math.PI * (j + .5) / 22; const x = 50 - 50 * Math.cos(a); const y = ry * Math.sin(a); return `<line x1="${x}" y1="${y}" x2="${x}" y2="${y + t}"/>`; }).join('')}</g>
+    <ellipse cx="50" cy="0" rx="${rx}" ry="${ry}" fill="url(#cf${i})"/>
+    <ellipse cx="50" cy="0" rx="${rx * .74}" ry="${ry * .74}" fill="none" stroke="${edge}" stroke-width="2.5" stroke-dasharray="1.5 4" opacity=".7"/>
+    <text x="50" y="${ry * .32}" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="40" fill="${emb}" opacity=".85" transform="translate(0 ${-ry * .32}) scale(1 ${(1 - k.tilt).toFixed(3)}) translate(0 ${ry * .32 / (1 - k.tilt) * (1 - k.tilt)})" >p</text>
+    <ellipse cx="34" cy="${-ry * .45}" rx="14" ry="${Math.max(2, ry * .12)}" fill="var(--ds-color-white)" opacity=".55" transform="rotate(-20 34 ${-ry * .45})"/>
+  </svg>`;
+  host.insertAdjacentHTML('beforeend', svg);
+});
+// sparkles
+[[20, 330, 34, 'var(--ds-color-warning-light-7)'], [700, 250, 26, 'var(--ds-color-accent2-light-7)'], [560, 760, 30, 'var(--ds-color-accent-light-8)'], [360, 140, 18, 'var(--ds-color-success-light-7)']].forEach(([x, y, s, c]) => {
+  host.insertAdjacentHTML('beforeend', `<svg class="spark" style="left:${x}px;top:${y}px;width:${s}px;height:${s}px" viewBox="-20 -20 40 40" aria-hidden="true"><path d="M0 -20 C 3 -4, 4 -3, 20 0 C 4 3, 3 4, 0 20 C -3 4, -4 3, -20 0 C -4 -3, -3 -4, 0 -20Z" fill="${c}"/></svg>`);
+});
+</script>
+</body>
+</html>

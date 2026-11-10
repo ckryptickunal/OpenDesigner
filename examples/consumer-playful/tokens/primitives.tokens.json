@@ -67,7 +67,7 @@
           ],
           "hex": "#ff5a36"
         },
-        "$description": "The brand color exactly as given. For logos and marketing; UI fills use color.bg.brand."
+        "$description": "The brand color exactly as given: logos, marketing, large color areas and other uses that carry no text. Fills that carry text use color.bg.brand."
       }
     },
     "neutral": {
@@ -602,11 +602,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.2116,
-              0.0123,
+              0.2119,
+              0.0152,
               33.86
             ],
-            "hex": "#1e1715"
+            "hex": "#1f1614"
           },
           "$description": "app background"
         },
@@ -614,11 +614,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.2453,
-              0.0185,
+              0.246,
+              0.0228,
               33.86
             ],
-            "hex": "#291d1b"
+            "hex": "#2b1d1a"
           },
           "$description": "subtle background"
         },
@@ -626,11 +626,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.279,
-              0.0355,
+              0.2801,
+              0.0437,
               33.86
             ],
-            "hex": "#38221d"
+            "hex": "#3c211a"
           },
           "$description": "component background"
         },
@@ -638,11 +638,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.3127,
-              0.0509,
+              0.3143,
+              0.0627,
               33.86
             ],
-            "hex": "#47271f"
+            "hex": "#4c241b"
           },
           "$description": "component hover"
         },
@@ -650,11 +650,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.3464,
-              0.0664,
+              0.3484,
+              0.0817,
               33.86
             ],
-            "hex": "#572c22"
+            "hex": "#5d281c"
           },
           "$description": "component pressed or selected"
         },
@@ -662,11 +662,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.3801,
-              0.0818,
+              0.3826,
+              0.1007,
               33.86
             ],
-            "hex": "#673024"
+            "hex": "#6f2a1c"
           },
           "$description": "subtle border"
         },
@@ -674,11 +674,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.4138,
-              0.1034,
+              0.4167,
+              0.1273,
               33.86
             ],
-            "hex": "#793223"
+            "hex": "#832916"
           },
           "$description": "interactive border (decorative)"
         },
@@ -686,11 +686,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.6216,
-              0.1343,
+              0.6249,
+              0.1653,
               33.86
             ],
-            "hex": "#ca654e"
+            "hex": "#d95a3e"
           },
           "$description": "strong border, focus, 3:1 boundary"
         },
@@ -699,31 +699,53 @@
             "colorSpace": "oklch",
             "components": [
               0.6839,
-              0.1543,
+              0.2069,
               33.86
             ],
-            "hex": "#e97156"
+            "hex": "#ff5a36"
           },
-          "$description": "solid fill (peak chroma)"
+          "$description": "solid fill (peak chroma)",
+          "$extensions": {
+            "opendesigner": {
+              "pinned": "brand color kept exactly (flags.brandExact, S-L06-083)"
+            }
+          }
         },
         "10": {
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.7296,
-              0.1543,
+              0.7242,
+              0.1728,
               33.86
             ],
-            "hex": "#f97f64"
+            "hex": "#ff7759"
           },
-          "$description": "solid hover, tertiary text"
+          "$description": "solid hover, tertiary text",
+          "$extensions": {
+            "opendesigner": {
+              "p3": {
+                "colorSpace": "display-p3",
+                "components": [
+                  0.958,
+                  0.4742,
+                  0.3501
+                ],
+                "oklch": [
+                  0.7242,
+                  0.19,
+                  33.86
+                ]
+              }
+            }
+          }
         },
         "11": {
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.7611,
-              0.1435,
+              0.761,
+              0.1441,
               33.86
             ],
             "hex": "#ff8d73"
@@ -734,11 +756,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.88,
-              0.0509,
+              0.8813,
+              0.0627,
               33.86
             ],
-            "hex": "#f7ccc2"
+            "hex": "#fecabd"
           },
           "$description": "high-contrast text"
         },
@@ -746,11 +768,11 @@
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.7619,
-              0.1435,
+              0.7547,
+              0.1489,
               33.86
             ],
-            "hex": "#ff8d73"
+            "hex": "#ff896e"
           },
           "$description": "Pressed solid: at least 1.3:1 from step 9, still carrying its text (visible states, U5)."
         }
@@ -3441,22 +3463,19 @@
   "font": {
     "size": {
       "$type": "dimension",
-      "$description": "Type scale: round(16 x 1.333^n), n from -2 to 6; sizes under 11px dropped; adjacent sizes under 10% apart merged; only the steps a named text style uses are kept (DC-L02-09, DC-L02-10).",
+      "$description": "Type scale: round(16 x 1.333^n), n from -2 to 3; sizes under 12px dropped; adjacent sizes under 10% apart merged; only the steps a named text style uses are kept (DC-L02-09, DC-L02-10).",
       "$extensions": {
         "opendesigner": {
           "base": 16,
           "ratio": 1.333,
-          "displayReach": 5.5,
+          "displayReach": 2.5,
           "formulaSizes": [
             9,
             12,
             16,
             21,
             28,
-            38,
-            51,
-            67,
-            90
+            38
           ],
           "merged": [],
           "evidence": [
@@ -3497,22 +3516,44 @@
           "unit": "px"
         }
       },
-      "51": {
+      "display-md": {
         "$value": {
-          "value": 51,
+          "value": 48,
           "unit": "px"
+        },
+        "$description": "display.md: fluid from 32px on a phone to 48px at the container width.",
+        "$extensions": {
+          "opendesigner": {
+            "fluid": {
+              "minPx": 32,
+              "maxPx": 48,
+              "viewport": [
+                360,
+                1280
+              ]
+            },
+            "css": "clamp(2rem, 1.6087rem + 1.7391vw, 3rem)"
+          }
         }
       },
-      "67": {
+      "display-lg": {
         "$value": {
-          "value": 67,
+          "value": 120,
           "unit": "px"
-        }
-      },
-      "90": {
-        "$value": {
-          "value": 90,
-          "unit": "px"
+        },
+        "$description": "display.lg: fluid from 52px on a phone to 120px at the container width.",
+        "$extensions": {
+          "opendesigner": {
+            "fluid": {
+              "minPx": 52,
+              "maxPx": 120,
+              "viewport": [
+                360,
+                1280
+              ]
+            },
+            "css": "clamp(3.25rem, 1.587rem + 7.3913vw, 7.5rem)"
+          }
         }
       }
     },
@@ -3546,24 +3587,6 @@
       "48": {
         "$value": {
           "value": 48,
-          "unit": "px"
-        }
-      },
-      "56": {
-        "$value": {
-          "value": 56,
-          "unit": "px"
-        }
-      },
-      "76": {
-        "$value": {
-          "value": 76,
-          "unit": "px"
-        }
-      },
-      "100": {
-        "$value": {
-          "value": 100,
           "unit": "px"
         }
       }
@@ -4065,7 +4088,7 @@
   "motion": {
     "duration": {
       "$type": "duration",
-      "$description": "Duration ladder (DC-L04-20); Energy multiplies medium and longer by 1.12 (0.8-1.2, A4). Exits 25% shorter.",
+      "$description": "Duration ladder (DC-L04-20); Energy multiplies medium and longer by 1.12 (0.8-1.2, A4). Exits about 20% shorter (STD-easing-duration-11).",
       "instant": {
         "$value": {
           "value": 0,
@@ -4100,24 +4123,27 @@
         "$value": {
           "value": 780,
           "unit": "ms"
-        }
+        },
+        "$description": "Illustrative and marketing motion only: UI animations stay under 300ms (house standard STD-easing-duration-06)."
       },
       "medium-exit": {
         "$value": {
-          "value": 210,
+          "value": 220,
           "unit": "ms"
-        }
+        },
+        "$description": "About 0.8 x medium, the entrance in force (STD-easing-duration-11)."
       },
       "long-exit": {
         "$value": {
-          "value": 340,
+          "value": 360,
           "unit": "ms"
-        }
+        },
+        "$description": "About 0.8 x long, the entrance in force (STD-easing-duration-11)."
       }
     },
     "easing": {
       "$type": "cubicBezier",
-      "$description": "Standard, enter (decelerate), exit (accelerate); linear only for spinners and progress (DC-L04-21).",
+      "$description": "Standard, enter (decelerate) and exit curves; linear only for spinners and progress (DC-L04-21).",
       "standard": {
         "$value": [
           0.4,
@@ -4138,12 +4164,12 @@
       },
       "exit": {
         "$value": [
-          0.4,
-          0.14,
-          1,
+          0,
+          0,
+          0.3,
           1
         ],
-        "$description": "Leaving: accelerate out of the way."
+        "$description": "Leaving the screen."
       },
       "linear": {
         "$value": [
@@ -4278,7 +4304,7 @@
                 "bounce": 0.0
               },
               "css": {
-                "easing": "cubic-bezier(0.4, 0.14, 0.3, 1)",
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
                 "durationMs": 150
               },
               "use": "small components (switches, buttons)"
@@ -4309,7 +4335,7 @@
                 "bounce": 0.0
               },
               "css": {
-                "easing": "cubic-bezier(0.4, 0.14, 0.3, 1)",
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
                 "durationMs": 230
               },
               "use": "partial-screen (sheets, drawers)"
@@ -4340,7 +4366,7 @@
                 "bounce": 0.0
               },
               "css": {
-                "easing": "cubic-bezier(0.4, 0.14, 0.3, 1)",
+                "easing": "linear(0, 0.057, 0.179, 0.319, 0.453, 0.571, 0.669, 0.748, 0.811, 0.859, 0.895, 0.923, 0.944, 0.959, 0.97, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1)",
                 "durationMs": 330
               },
               "use": "full-screen"

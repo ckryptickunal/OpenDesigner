@@ -2,7 +2,7 @@
 type: topic
 title: Mobile app patterns
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -35,3 +35,5 @@ Uses the phone's screen edges for effects (3D card ring, a horizon that shrinks 
 - [[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]: Many standout dashboards were on mobile, such as Opal's story-style swipeable screen time insights and Orbit's enjoyable subscription tracking.
 - [[sources/qK7WYCMvjUw-he-spent-1m-on-a-b-tests-here-s-what-won|He Spent $1M on A/B Tests. Here's What Won.]]: The app has no login screen, keeps data in the Apple keychain, customizes home quick access buttons from onboarding answers, and offers a one-tap share flow when a user takes a screenshot.
 - See also: [[synthesis/mobile-app-patterns|Mobile app patterns synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-craft-details-referodesign-refero-skill-skills-refero-design-references-craft-details-md|referodesign/refero_skill: skills/refero-design/references/craft-details.md]]: Remove the 300ms tap delay, set tap highlight intentionally, contain overscroll in modals and sheets, avoid autofocus on mobile.
+- [[sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont|The Reason Why Some Apps Feel Expensive, But Most Don’t]]: Every example is a mobile app screen: suggested-reply chips, a pre-filled vehicle confirmation sheet, analysing and setup screens, completion screens, empty tabs and inline form errors.

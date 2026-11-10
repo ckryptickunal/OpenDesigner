@@ -109,7 +109,7 @@ Zoom 3 detailed · weight low · changes 0 decisions · class G · cards DC-L10-
   - `transparency` Reduce Transparency.
   - `motion` Reduce Motion [DC-L04-25].
   - `bold-text` Bold Text [DC-L10-16].
-- **Default:** all, with high contrast and reduced transparency as token modes *Source:* platform convention [DC-L10-16; L10 baked-in rules 9-10].
+- **Default:** all. Reduced motion is a token mode, and each glass surface gets a solid fallback when the system uses glass; high-contrast and reduced-transparency modes are not generated yet *Source:* platform convention [DC-L10-16; L10 baked-in rules 9-10].
 - **Show:** a settings simulator panel with each toggle applied live.
 - **Use / avoid:** never convey a boundary or focus state with shadow or translucency alone; avoid app-level switches that override these settings [DC-L10-16].
 - **Skip:** yes.

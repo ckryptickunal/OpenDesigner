@@ -1089,7 +1089,7 @@ Designers: end-of-step rebuild · Code: `engine.py build`
 
 **Designer:** The one command to run at the end of a step or session. It rebuilds values, exports, guides and preview, then reports any problems.
 
-**Engineer:** engine.py build runs generate, then validate. Only with no errors (or --force) does it run export --format all, design-md and preview. It exits 1 on errors.
+**Engineer:** engine.py build runs generate and validate, then (no errors, or --force) design-md, export and preview, exporting only the chosen platforms' code files. Exits 1 on errors.
 
 **Example:** Run build before you show the result to your team.
 
@@ -1119,7 +1119,7 @@ Designers: hand off to every tool · Code: `engine.py export --format all`
 
 **Designer:** Hands the system to each place it lives: web styles, a Tailwind theme, Figma variables, Paper, iOS and Android code, all from one source.
 
-**Engineer:** engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|all writes one subfolder per format in opendesigner/build/, for example css/tokens.css or swift/DesignTokens.swift.
+**Engineer:** engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|brand|all writes a folder per format in opendesigner/build/, like css/tokens.css or brand/index.html.
 
 **Example:** Export to Tailwind for the website and Swift for the iPhone app.
 
@@ -1211,7 +1211,7 @@ Designers: answer a question by id · Code: `engine.py pick <Q-id> <option-value
 
 **Designer:** The shortcut for answering an interview question by its id. One answer can also move linked dials, such as corner softness setting roundness.
 
-**Engineer:** engine.py pick <Q-id> <option-value> --why "reason". Same as set on answers.<Q-id>; mapped answers also set dials or raw inputs (Q-shape-01 subtle sets dials.roundness to 40).
+**Engineer:** engine.py pick <Q-id> <value> --set-by chosen --quote "their words" (or delegated, assumed): set on answers.<Q-id>; mapped answers also set dials (Q-shape-01 subtle sets roundness 40).
 
 **Example:** Pick subtle corners for a busy work tool.
 
@@ -1331,7 +1331,7 @@ Designers: rules for later AI sessions · Code: `assets/output/AGENTS-snippet.md
 
 **Designer:** Keeps later AI sessions on-system: they read the design guide and values before touching UI, stop hard-coding values, and ask before changing locked decisions.
 
-**Engineer:** assets/output/AGENTS-snippet.md, appended to AGENTS.md or CLAUDE.md after asking: read DESIGN.md, PRODUCT.md and tokens first, never hard-code values, run engine.py review after implementation.
+**Engineer:** engine.py handoff writes it into AGENTS.md and CLAUDE.md imports it: read DESIGN.md and RULES.md first, no hard-coded values, review before each draft and commit.
 
 **Example:** A new AI session reads it before styling a page.
 
@@ -1348,7 +1348,7 @@ Designers: exports for each tool · Code: `opendesigner/build/`
 
 **Designer:** Where the exports land, one per tool the team uses: web styles, Tailwind theme, Figma import files, Paper, iOS and Android. Rebuilt, never edited by hand.
 
-**Engineer:** opendesigner/build/, written by engine.py export: css/tokens.css, tailwind/theme.css, figma/variables.json, paper/, swift/DesignTokens.swift, compose/DesignTokens.kt, dtcg/<name>.resolver.json.
+**Engineer:** opendesigner/build/: css and tailwind (web), swift (iOS), compose (Android), figma, paper, dtcg. build writes the chosen platforms' code files; export --format all writes every one.
 
 **Example:** Your web app imports the file in css.
 
@@ -1557,6 +1557,51 @@ Designers: recommended option with a reason · Code: `--set-by confirmed_default
 
 </details>
 
+### AEO (answer engine optimisation)
+
+Writing each page so tools that answer questions pick it to quote.  
+Designers: be the quoted answer · Code: `references/probe.md`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Each page answers one real question in its first sentence, under a heading in the words people type.
+
+**Engineer:** references/probe.md: a few questions by hand, logged out; record each engine's searches, sources and follow-ups. fixes.md turns them into page changes.
+
+**Example:** Answer "how much does it cost?" in the first line of the pricing page.
+
+</details>
+
+### GEO (generative engine optimisation)
+
+Helping AI chat tools like ChatGPT read your site and name it in their answers.  
+Designers: get named by AI · Code: `search.py robots robots.txt`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Real facts, quotes and named sources make AI answers more likely to use a page; repeating keywords makes it less likely.
+
+**Engineer:** Allow OAI-SearchBot, PerplexityBot and Claude-SearchBot in robots.txt; GPTBot and ClaudeBot only gather training data. search.py robots lists each bot.
+
+**Example:** Let ChatGPT's search crawler in, even if training crawlers stay out.
+
+</details>
+
+### SEO (search engine optimisation)
+
+Making your pages easy for search sites like Google to find, read and show.  
+Designers: get found in search · Code: `search.py audit dist/`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** How pages are named, titled, linked and described, so search results show them and people choose to click.
+
+**Engineer:** search.py audit <build folder> checks robots.txt, sitemap.xml, canonicals, titles, descriptions, the h1 and JSON-LD in the served HTML. Read-only.
+
+**Example:** Give the pricing page its own title so search shows it.
+
+</details>
+
 ### standard
 
 A rule your design always follows. It is set for you, and only you can ask to change it.  
@@ -1706,6 +1751,40 @@ Designers: surface mode: persuade, operate, read, experience · Code: `answers.Q
 **Engineer:** answers.Q-scope-06 fills context.surfaces with {name, mode}. The main surface sets raw.productType; any Persuade or Experience surface sets raw.marketingSurfaces. No dial moves.
 
 **Example:** A landing page is Persuade; the dashboard behind it is Operate.
+
+</details>
+
+### Taste card
+
+Five lines at the top of your design file: your picture of it, color, shape, motion, and what to avoid.  
+Designers: style brief, mood in words · Code: `taste.brief, taste.never`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** A one-glance style brief in the Overview. The picture and the Never list are only ever the person's own; color, shape and motion repeat each section's opening sentence.
+
+**Engineer:** Rendered into DESIGN.md's Overview by taste_card() in engine.py, from taste.brief (sketch --brief), taste.never and the taste index's red lines.
+
+**Example:** In your words: "a quiet library at night". Never: gradients, emoji (your words).
+
+**Also called:** taste summary, style brief, never list
+
+</details>
+
+### Taste Index
+
+A full write-up of one look you love, so your AI can make new pages that match it.  
+Designers: brand guide for one look · Code: `taste_index.py`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** One look described in full: a picture, 5 to 7 principles with reasons, colour jobs and shares, type, components, motion, voice, a Never list and a live specimen.
+
+**Engineer:** opendesigner-extract taste_index.py draft writes opendesigner/taste-indexes/<id>/: TASTE-INDEX.md, a CSS file of variables and specimen.html; use <id> --fonts exact|free makes the system follow it.
+
+**Example:** Warm paper, near-black ink, one teal accent, a lot of empty space.
+
+**Also called:** look guide, taste index of a site
 
 </details>
 
@@ -2195,6 +2274,186 @@ Designers: ranked design principles · Code: `principles: ordered strings in sta
 **Engineer:** Not tokens: principles in state.json is an ordered list of statements; order is rank, and DESIGN.md and PRODUCT.md print them as tie-breakers.
 
 **Example:** Clarity over density: when unsure, show fewer items per screen.
+
+</details>
+
+### bento grid
+
+Content in neat boxes of different sizes, like the parts of a lunch box.  
+Designers: bento grid, bento box layout · Code: `grid-column: span 2`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Tiles of two or three spans in one grid with one gap; one idea per tile, the hero tile largest. A layout that borrows its look from another style.
+
+**Engineer:** CSS grid with grid-column and grid-row spans; Q-dir-04 containers. Keep DOM order equal to reading order (WCAG 1.3.2) and reflow to one column.
+
+**Also called:** bento, bento box, tile grid, feature tiles
+
+</details>
+
+### claymorphism
+
+Puffy, round shapes that look made of soft clay or toy plastic.  
+Designers: claymorphism, clay 3D · Code: `box-shadow with inset pairs`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Large radius, a soft outer shadow plus light and dark inner shadows, pastel color and 3D clay art. Friendly and cute; keep product controls calmer.
+
+**Engineer:** No preset of its own: start from soft, then raise roundness above 80 and colorfulness. Inner shadows are not generated yet (proposed); 3D art is an asset (Q-img-06).
+
+**Also called:** clay, puffy, squishy, inflated 3D, soft 3D
+
+</details>
+
+### comic style
+
+Looks like a comic book, with thick ink outlines, bright flat colors, dots and speech bubbles.  
+Designers: comic style, pop art, halftone · Code: `radial-gradient dot pattern`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Black outlines, primary colors, halftone dot shading, speech balloons and burst shapes; pop art is its gallery cousin. Keep hand lettering to short labels.
+
+**Engineer:** Start from the neobrutal preset with colorfulness above 88. Halftone is a radial-gradient dot pattern; drawings are assets (Q-img-04, opendesigner-illustrate).
+
+**Also called:** comic, comic book, pop art, cartoon, halftone, speech bubbles
+
+</details>
+
+### editorial style
+
+Pages that read like a good magazine: big titles, calm text and large photos.  
+Designers: editorial, magazine layout · Code: `max-width: 65ch`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Serif display headlines, dramatic size jumps (1.333 or more), 60-75 character lines, pull quotes and thin rules. For reading products and long content.
+
+**Engineer:** Q-type-03 serif, Q-dir-03 dramatic (type ratio 1.333) and Q-dir-04 lines. Body text stays 16px or larger; limit lines with max-width: 65ch.
+
+**Also called:** magazine style, magazine layout, long-form
+
+</details>
+
+### flat design
+
+Plain solid colors with no shadows, no shine and no texture.  
+Designers: flat design, flat 2.0 · Code: `box-shadow: none`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Solid fills, simple icons, hierarchy from color and size. Flat 2.0 brings subtle shadows back. Keep strong signs of what to click, or people search longer.
+
+**Engineer:** Depth 0-15 builds the borders model with no shadows. The default flat2 preset (Q-dir-01) sets Depth 30: a ring plus a faint shadow.
+
+**Also called:** flat, flat 2.0, semi-flat, no shadows
+
+</details>
+
+### glassmorphism
+
+See-through panels that look like frosted glass, so you see a blur of what is behind them.  
+Designers: glassmorphism, frosted glass · Code: `backdrop-filter, material.glass.blur`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Translucent fill, background blur and a thin light edge over rich content. Use it on bars, sheets and menus, never on reading surfaces, and give it a solid twin.
+
+**Engineer:** Q-dir-01 glass, or Depth above 80, builds the materials model: material.glass.blur (24px), color.surface.glass and color.surface.glass-fallback. Web uses backdrop-filter.
+
+**Also called:** frosted glass, frosty, glassy, see-through, backdrop blur
+
+</details>
+
+### grain texture
+
+A fine speckle over colors, like old film or printed paper.  
+Designers: grain, noise texture · Code: `feTurbulence overlay`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Fine noise at 3-8% strength over fills and gradients. It warms flat color and hides gradient banding; keep it off body text and keep it still.
+
+**Engineer:** An SVG feTurbulence image on a pseudo-element with mix-blend-mode: overlay. Not a token yet (proposed); record it with the H-motif hook (Q-img-07).
+
+**Also called:** grain, noise, film grain, grainy, paper texture
+
+</details>
+
+### mesh gradient
+
+Soft clouds of a few colors that melt into each other, like the northern lights.  
+Designers: mesh gradient, aurora gradient · Code: `radial-gradient layers`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Three to five colors blending in many directions, often blurred and slowly moving. Marketing and brand moments only, never on buttons or forms.
+
+**Engineer:** Stacked radial-gradient layers or blurred shapes, interpolated in OKLab. DTCG gradient tokens hold stops only; the engine does not generate gradients yet (proposed).
+
+**Also called:** aurora gradient, aurora, gradient blur, gradient background, northern lights
+
+</details>
+
+### neo-brutalism
+
+Bright flat colors with thick black lines and hard black shadows, like stickers.  
+Designers: neo-brutalism, neubrutalism · Code: `box-shadow: 4px 4px 0`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Thick borders, a solid 4px offset shadow, 2-3 bold colors, 24-32px padding and a quirky display face over a neutral body face. Loud and indie.
+
+**Engineer:** Q-dir-01 neo-brutalist selects the neobrutal preset (roundness 5, depth 0, colorfulness 80). Thick borders and the offset shadow need overrides of border.width.default and elevation.raised.
+
+**Also called:** neubrutalism, neo brutalist, black borders, chunky outlines
+
+</details>
+
+### neumorphism
+
+Soft buttons that look pushed up out of the page, or pressed in, all one color.  
+Designers: neumorphism, soft UI · Code: `paired box-shadow, inset`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Same-color surfaces with paired light and dark soft shadows. Tactile but vague: edges usually fail 3:1, so every control needs an added border or fill.
+
+**Engineer:** Q-dir-01 soft selects the soft preset (roundness 80, colorfulness 20) and the lint warns neumorphic-preset. Paired and inset shadows are not generated yet (proposed).
+
+**Also called:** soft UI, soft buttons, pillowy, new skeuomorphism
+
+</details>
+
+### skeuomorphism
+
+Screens that copy real objects and materials, like a record player, a tape or wood.  
+Designers: skeuomorphism, realism · Code: `layered gradients and box-shadow`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Realistic textures, lighting and shadows that mimic physical objects. Useful as a metaphor, like a folder or trash can; as full realism it clutters screens and loads slowly.
+
+**Engineer:** Mostly assets, not tokens: textures and objects use the H-motif hook (Q-img-07), custom controls Q-plat-06 custom, and Depth in the shadow-ladder band (56-80).
+
+**Also called:** realistic, real-world look, physical metaphor
+
+</details>
+
+### Swiss style
+
+A strict, tidy grid with plain bold letters lined up on the left and lots of space.  
+Designers: Swiss style, International Typographic Style · Code: `display: grid; text-align: start`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** International Typographic Style: a column grid, neo-grotesque type set flush left, big size jumps, asymmetric layouts, neutral colors plus one accent.
+
+**Engineer:** Q-type-03 neo-grotesque, Q-dir-05 start and the flat2 preset, with roundness 0-25 and colorfulness 11-45. The grid itself is layout, not a token.
+
+**Also called:** International Typographic Style, Swiss design, grid style, Helvetica look
 
 </details>
 
@@ -2977,13 +3236,13 @@ Designers: brand voice: 3-4 traits with but-nots · Code: `voice guide (H-voice)
 ### Data visualization
 
 Charts that match the rest of the app, with set colors, parts and rules so all can read them.  
-Designers: data viz, themed to the system · Code: `color.chart.* (proposed)`
+Designers: data viz, themed to the system · Code: `color.chart.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Charts as part of the system: a small set of chart types, palettes, shared anatomy and accessibility rules, so charts look native to the product rather than pasted in.
 
-**Engineer:** Planned via the H-dataviz hook: chart palettes as color tokens, with chrome reusing text, border and dimension tokens; no chart tokens are generated yet. DTCG has no chart-specific types.
+**Engineer:** color.chart.* (Q-color-19): brand, categorical, sequential, diverging, status colors; axis, gridline and label aliases. Lines, bars, dots are 3:1 on the page; light sequential steps suit touching cells.
 
 **Also called:** charts, dataviz
 
@@ -3026,13 +3285,13 @@ Designers: axes, gridlines, labels, legends · Code: `chart.gridline.color (prop
 ### Data-visualization palettes
 
 Chart colors: one per group, light to dark for how much, and two-way for above or below the middle.  
-Designers: categorical, sequential, diverging palettes · Code: `color.chart.categorical (proposed), .sequential, .diverging`
+Designers: categorical, sequential, diverging palettes · Code: `color.chart.categorical, .sequential, .diverging`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** One brand chart color plus grey by default; 6-8 categorical colors in fixed order for neighbor contrast; one sequential ramp per primary hue and one diverging ramp, per mode.
 
-**Engineer:** Not generated yet: per-mode color tokens color.chart.categorical.1 (proposed) onward, color.chart.sequential (proposed) and color.chart.diverging (proposed) ramps, plus brand, neutral and status sets.
+**Engineer:** Per-mode tokens: color.chart.categorical.1 onward, color.chart.sequential.1 to .5 (the light end for heatmap cells), color.chart.diverging.1 to .7, plus brand, neutral and status.
 
 **Example:** This year in brand blue, last year in grey for context.
 
@@ -3043,13 +3302,13 @@ Designers: categorical, sequential, diverging palettes · Code: `color.chart.cat
 ### Chart scope and library
 
 Which kinds of charts the app has, like bars and lines, and which ready-made chart kit it styles.  
-Designers: 5-6 chart types plus KPI number · Code: `color.chart.* (proposed)`
+Designers: 5-6 chart types plus KPI number · Code: `color.chart.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Start with 5-6 types (bar, line, area, stacked bar, donut or meter, scatter) plus a KPI big number. Fewer types stay consistent; theme a library rather than build one.
 
-**Engineer:** Not a token: the Q-viz-01 scope answer in state.json. The themed chart library would consume color.chart.* (proposed) and existing chrome tokens, as would native chart frameworks.
+**Engineer:** Not a token: the Q-viz-01 scope answer in state.json. The themed chart library reads color.chart.* and the existing chrome tokens, as do native chart frameworks.
 
 **Example:** A dashboard with bars, lines and one big number, all from one library.
 
@@ -3940,9 +4199,9 @@ Designers: squircle corners, concentric nesting · Code: `radius.nested`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Circular arcs or continuous squircle corners, which look softer and more Apple-like. Nested shapes stay concentric: inner radius is outer radius minus padding, so the gap stays even.
+**Designer:** Circular arcs, or Apple's continuous corners, which ease into the edge. Nested shapes stay concentric: inner radius is outer radius minus padding, so the gap stays even.
 
-**Engineer:** Inner radius is computed at generation, max(outer - padding, smallest step), and emitted as radius.nested. The engine emits circular arcs; web corner-shape: squircle is an optional enhancement, not generated.
+**Engineer:** Inner radius is computed at generation, max(outer - padding, smallest step), and emitted as radius.nested. iOS uses .continuous; squircle-enhance adds CSS superellipse(1.35) corners at 1.22 times the radius.
 
 **Example:** Card 16px, padding 8px, so the photo inside gets 8px corners.
 
@@ -6272,14 +6531,14 @@ Designers: live specimens, all modes side by side · Code: `preview.html bound t
 
 ### Review and visual diff
 
-How changes get checked before they go out, ideally with before and after views side by side.  
-Designers: visual diff, before and after · Code: `graph.json edges; visual diff (planned)`
+How changes get checked before they go out: the page before, the problems marked on it, then the page after.  
+Designers: visual diff, before and after · Code: `review.py compare; graph.json edges`
 
 <details><summary>Designer and engineer</summary>
 
-**Designer:** Planned: a visual diff page per change set, before and after in each mode, exported as a pull request. Today opendesigner-extend shows old and new values and git diff --stat.
+**Designer:** review.py compare shows the page today, the audit drawn on it and the fix, each with what it improves. Planned: a diff per change set, in every mode.
 
-**Engineer:** Planned: list changed tokens, walk the alias graph to find affected components. Today graph.json names the decisions a change moves, and engine.py review flags stale DESIGN.md sections.
+**Engineer:** review.py compare builds one HTML file from two screenshots and __od.marks() boxes. Planned: walk the alias graph to find the components a token change moves.
 
 </details>
 

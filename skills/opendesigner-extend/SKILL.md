@@ -1,10 +1,10 @@
 ---
 name: opendesigner-extend
-description: Changes or extends an existing OpenDesigner design system safely. Reads DESIGN.md, tokens, decisions and locks first, asks only about what is new, validates after. Use when opendesigner/ exists.
+description: Changes an existing OpenDesigner system (an opendesigner/ folder), such as a new colour, rounder corners, dark mode or a component. Reads DESIGN.md, decisions and locks first, asks only what is new.
 license: MIT
 compatibility: Python 3.10+ (standard library). Needs the opendesigner skill's engine for generate and validate.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 
@@ -14,34 +14,39 @@ Use this skill when the project already has an OpenDesigner system and someone w
 
 The engine is `scripts/engine.py` in this skill when it was installed from a release zip. Otherwise use the sibling opendesigner skill's `scripts/engine.py`. Run it from the project root; state lives in `./opendesigner/`. Stage files, zoom levels, rules, the glossary and the Decision Cards live in `<opendesigner>/references/`. Talk the way `rules.md` says: one idea per message, plain words first, and the person's `profile.voice`.
 
+**The opendesigner skill's binding rules hold here too,** in every round and after a context reset: tokens only; one question per call; show every round; every change ends with `engine.py review` and a re-read of DESIGN.md; owner corrections go to `engine.py feedback "<the rule>" --kind note`.
+
 ## 1. Start-up routine (before touching anything)
-1. Read, in order:
+1. Run `engine.py status`. It prints the Now line from `opendesigner/PROTOCOL.md`: the step, what waits for the owner and the next command. If it lists the hand-off as not answered, ask about it once, in its own message (`engine.py handoff yes` or `handoff no`). Then read, in order:
    - `DESIGN.md` and `PRODUCT.md` (project root). Note each section's zoom line.
+   - `opendesigner/PROTOCOL.md` and `opendesigner/RULES.md` (the owner's repeated notes).
    - `opendesigner/state.json` (`profile.voice`, `zoom`, answers, `locks`, hooks).
    - `opendesigner/decisions.md` (newest entries last), including the open questions in its newest `## Open items` entry. Ask the ones that block what the person wants now; carry the rest forward (`<opendesigner>/references/rules.md` section 7).
    - `opendesigner/tokens/`.
    - `git log --oneline -15 -- opendesigner/ DESIGN.md`, if the project uses git.
 2. If `DESIGN.md.hand-edited` exists, someone edited the generated file by hand. Offer to turn each edit into a decision.
-3. Run `engine.py validate`. It checks the system and reports the house standards version. If it says OpenDesigner's house standards are newer than this system's, say so in one line, run `engine.py standards --update`, then `engine.py build`, and show what changed by area. Their overrides and project standards stay as they are.
-4. Run `engine.py review`. If it reports errors or drift, say so first. Fixing them may be the real task. Its guard lines catch the accidental reverts: a missing system file (a branch that lacks the design work), a token file edited after the last build, tokens older than `state.json` (a decision recorded without a build, or a merge that brought in another `state.json`; tokens that differ only because the engine is newer are a note), and a locked decision whose value changed (often a merge that took the older side of `state.json`). Never "fix" a guard line by picking a value yourself: show both values and ask which is right.
-   - If the project has an agent file (AGENTS.md, CLAUDE.md) that no longer holds the "Design system (OpenDesigner)" note, and `profile.agentsNote` in `state.json` is not `"no"`, say so in one line and offer to add it back.
-5. Tell the person in three lines or fewer: the direction, the zoom level of the area they care about, and anything locked or open.
-6. Ask only about what is new. Never re-run the whole interview.
+3. Run `engine.py version`. It compares the system with this installed copy of OpenDesigner, never with releases online. If the system was built with an older release, say so in one line, run `engine.py build`, and show what changed. If it was saved with a newer release, tell the person before you change anything: this copy may miss features, so they should update OpenDesigner first (the main skill's "Versions" says how).
+4. Run `engine.py validate`. It checks the system and reports the house standards version. If it says OpenDesigner's house standards are newer than this system's, say so in one line, run `engine.py standards --update`, then `engine.py build`, and show what changed by area. Their overrides and project standards stay as they are.
+5. Run `engine.py review`. If it reports errors or drift, say so first. Fixing them may be the real task. Its "User research" lines say whether the users were researched: when not, offer it once, the first time the work touches audience, density, text size, navigation or voice; when the research is old, offer to run it again (`<opendesigner>/references/research.md`). Its guard lines catch the accidental reverts: a missing system file (a branch that lacks the design work), a token file edited after the last build, tokens older than `state.json` (a decision recorded without a build, or a merge that brought in another `state.json`; tokens that differ only because the engine is newer are a note), and a locked decision whose value changed (often a merge that took the older side of `state.json`). Never "fix" a guard line by picking a value yourself: show both values and ask which is right.
+   - If `engine.py status` says the hand-off was answered yes but AGENTS.md or CLAUDE.md no longer holds the OpenDesigner note, say so in one line and offer `engine.py handoff yes` to write it back.
+6. Tell the person in three lines or fewer: the direction, the zoom level of the area they care about, and anything locked or open.
+7. Ask only about what is new. Never re-run the whole interview.
 
 In a chat-only host, ask the person to upload `state.json`, `decisions.md` and DESIGN.md before changing anything.
 
 ## 2. Classify the request
 | Request | Treat it as | Do |
 |---|---|---|
-| "Add a date picker / pricing table / settings page" | New component or pattern | Build it from existing tokens only. List the tokens it uses. Add states and keyboard behavior |
+| "Add a date picker / pricing table / settings page" | New component or pattern | Build it from existing tokens only. List the tokens it uses. Add states and keyboard behavior. Before you design it, check the optional component library (`<opendesigner>/references/library.md`): offer a library part only as that file says (one pick for a novice; for a designer, only when the library has that part in a matching style and they have none of their own), and only if `profile.library` is not `"declined"` |
 | A new screen or flow that shows data: a list, a total, a status, progress against a limit | New screen with states | Build it like a new component, and offer to list its states first in `opendesigner/STATES.md` (copy `<opendesigner>/assets/output/STATES.md` the first time): each state's words, tone and next step, and the rows below, at and above each threshold. Build the states the person wants. When someone flags one wrong state, list every state of that feature before fixing the one named. For engineers, the template's "Building from it" offers one function per screen that returns the state's words |
-| "Make buttons a bit rounder", "denser tables" | One decision | Find the question in the stage file. Show the current value and the options, then `set` it |
+| "Make buttons a bit rounder", "denser tables" | One decision | Find the question in the stage file. Show the current value and the options (section 4, step 1), then `set` the one they pick |
 | "Let's define colors properly", "more detail on type" | Zoom in | Run the next zoom level for that area (`<opendesigner>/references/zoom.md`), then record it, for example `set zoom.color '"defined"'` |
 | "Build the landing page", "redo this section", "show me some options" | A page built with the system | Follow `<opendesigner>/references/making.md`: one round at a time, options on a review copy of the page with the current version kept, every value from the tokens, and a check of the rendered page before you show it |
 | "These sections don't match", "it doesn't feel like one page" | A page that does not hang together | Change nothing yet. Run the cohesion audit (`<opendesigner>/references/making.md` section 4, with `<opendesigner>/assets/output/COHESION-AUDIT.md`), then build the directions they choose as options |
 | "New brand color", "dark mode", "add Android" | An area reopened | Ask that area's questions at its current zoom level |
 | "Make it feel more playful", a new direction | A challenge | It touches most decisions. Say what would move (`graph.json`), offer safe choices and risks, and change nothing without a clear yes |
 | "It looks dull", "this screen is wrong", a marked screenshot, a comment on a built screen | Feedback on what was built | Follow `<opendesigner>/references/rules.md` section 7, "Feedback on what was built": answer every numbered part, read for the intent, check the decisions first, treat one example as a class, and say the smallest change and what stays before you touch anything. After two rejected tries, follow the reference instead of inventing |
+| "Which style directions can I pick?", "which look would you go with?" | Choosing a direction | Follow the opendesigner skill's taste flow (`references/taste.md`): answer from `engine.py show option-gallery --json` first, including its subtitle's red lines; use `engine.py style search <words>` only for more choices. Both order by the taste index and mark or leave out red lines. Recommend only from what they show |
 | "Why is X like this?" | A question | Answer from `decisions.md`, the standards (`engine.py standards`) and the cards. Change nothing |
 | "Follow this guide", "use this article as a rule", a link to learn from | A new source | `<opendesigner>/references/rules.md` section 12: agree its weight, read it with consent, keep the rules they pick |
 | A value that doesn't exist yet | A token addition | Add it through the engine with a reason (section 4, "Add a token"). Never hard-code it |
@@ -64,6 +69,9 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 
 ## 4. Make the change
 1. Show it first: the current value, the new value, and what else moves (`graph.json`). Use a template from `<opendesigner>/assets/templates/` when the host can show one.
+   - To see what a value would do, or to compare a few (roundness 55, 60 or 65; soft or pill corners), preview each one with `engine.py set <path> <value> --dry-run` or `engine.py pick <Q-id> <value> --dry-run`. It lists each token's old and new value and any check the value would break, and writes nothing. For corners, `engine.py show radius` also puts the options side by side.
+   - Never try a value with a real `set`: each one is a permanent entry in `decisions.md`. Record only the value the person picks, or the one you recommend when they asked for a single change.
+   - The dials move in steps, so two values can give the same corners. If two previews match, say so and offer one of them.
 2. Apply it with `engine.py set <Q-id or path> <value> --why "..."`. Add `--lock` if the owner wants it locked. `--force` is for person locks, never standards: use it only with the owner's consent to change a value they locked. A value a standard holds changes only through `standard override` (section 3, "Standards").
 3. Refresh with `engine.py build`. It generates, validates (fix errors first), and rewrites the exports, DESIGN.md and the preview.
 4. Show what changed: `git diff --stat opendesigner/ DESIGN.md` and a short table of changed values. Refresh `opendesigner/RATIONALE.md` if a big decision changed.

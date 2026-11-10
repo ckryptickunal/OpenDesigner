@@ -1,0 +1,33 @@
+<figure class="fig">
+<div class="dodont">
+<div class="dont"><p class="dd-h">Values typed in by hand</p><p class="dd-why">One button gets <span class="num">8</span> px corners and the next gets <span class="num">6</span> px. A gray typed from memory is a step off the others, and nobody can say why.</p>
+<div class="dd-art">
+<div class="ui-row" style="margin-bottom:12px"><span class="ui-btn" style="border-radius:8px">Button</span><span class="ui-btn secondary" style="border-radius:6px;color:var(--ink-muted)">Button</span></div>
+<pre class="code-lines" style="white-space:pre-wrap">.button {
+  border-radius: <span class="bad">8px</span>;
+}
+.button.secondary {
+  border-radius: <span class="bad">6px</span>;
+  color: <span class="bad">#5e6471</span>;
+}
+.card {
+  color: <span class="bad">#515762</span>;
+}</pre>
+</div></div>
+<div class="do"><p class="dd-h">Named values, used everywhere</p><p class="dd-why">Each decision has one name. Change it once and every button and card follows.</p>
+<div class="dd-art">
+<div class="ui-row" style="margin-bottom:12px"><span class="ui-btn">Button</span><span class="ui-btn secondary" style="color:var(--ink-muted)">Button</span></div>
+<pre class="code-lines" style="white-space:pre-wrap">.button,
+.button.secondary {
+  border-radius:
+    <span class="ok">var(--ds-radius-control)</span>;
+}
+.button.secondary,
+.card {
+  color:
+    <span class="ok">var(--ds-color-text-secondary)</span>;
+}</pre>
+</div></div>
+</div>
+<figcaption>Hand-typed values drift: two buttons with different corners and two grays a step apart. A named value is set once and read everywhere, so every use changes together.</figcaption>
+</figure>

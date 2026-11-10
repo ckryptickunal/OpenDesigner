@@ -2,7 +2,7 @@
 type: topic
 title: Accessibility
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -38,3 +38,8 @@ Colored cards and brand colors with white text often fail WCAG contrast checks; 
 - [[sources/vaul-other-other-vaul|Other – Vaul]]: A non-dismissible drawer ignores the Escape key, outside clicks and drag-down, and its demo can only be closed by refreshing; the page does not frame this as accessibility [inferred].
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: Contrast on the generated chips needed fixing during the Figma pass.
 - See also: [[synthesis/accessibility|Accessibility synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-color-referodesign-refero-skill-skills-refero-design-references-color-md|referodesign/refero_skill: skills/refero-design/references/color.md]]: WCAG AA minimums of 4.5:1 for body text and 3:1 for large text and UI components; pale secondary text and text on tints are the common failures.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-craft-details-referodesign-refero-skill-skills-refero-design-references-craft-details-md|referodesign/refero_skill: skills/refero-design/references/craft-details.md]]: :focus-visible focus rings, semantic elements, keyboard handlers for custom controls, heading hierarchy, aria-live announcements, labels, aria-label on icon buttons, and never disabling zoom.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-icons-referodesign-refero-skill-skills-refero-design-references-icons-md|referodesign/refero_skill: skills/refero-design/references/icons.md]]: Icons carrying meaning need 3:1 contrast, action icons need aria-label or visible text, decorative icons get aria-hidden, and icon buttons need 44x44px touch or 32x32px desktop hit areas.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-typography-referodesign-refero-skill-skills-refero-design-references-typography-md|referodesign/refero_skill: skills/refero-design/references/typography.md]]: WCAG AA 4.5:1 for body and 3:1 for large text; light text for an airy feel destroys readability.
+- [[sources/palantir-workshop-applic-application-design-best-practices-palantir|Palantir]]: Avoid horizontal scrolling where possible, and keep touch targets inside scrolling sections at least 30px.

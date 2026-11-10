@@ -2,7 +2,7 @@
 type: topic
 title: Design resources
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -32,3 +32,6 @@ Names prompt sites (Good Brief, Sharpen Design) and inspiration sites (Dribbble,
 - See also: [[synthesis/design-resources|Design resources synthesis]]
 - [[sources/YbLF42BaoZs-i-gave-claude-600-000-ui-screens-then-this-happened|I Gave Claude 600,000 UI Screens… Then This Happened]]: A library of over 600,000 real app and website screens, flows and animations, reachable from AI tools, used for research, quick lookups and competitor comparisons.
 - [[sources/a1DBwxKuioA-mobbin|Mobbin]]: Promotes Mobbin as a searchable library of real mobile and web app screenshots, flows and apps for design inspiration; the counts come from the description, not the video.
+- [[sources/referodesign-refero-skil-readme-referodesign-refero-skill-readme-md|referodesign/refero_skill: README.md]]: Refero offers curated visual styles, 150,000+ real app screens and 6,000+ user flows; live research needs a paid plan, bundled craft references need no account.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-mcp-tools-referodesign-refero-skill-skills-refero-design-references-mcp-tools-md|referodesign/refero_skill: skills/refero-design/references/mcp-tools.md]]: Refero as a searchable reference library of styles, real screens and user flows.
+- [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: Explains how to use a reference library's styles, screens and flows and what to extract from each.

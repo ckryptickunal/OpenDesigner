@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Howl Hill Weekender</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root {
+    --yellow: var(--ds-color-bg-accent2-bold);       /* #ffd60a, pinned in the engine */
+    --blue: var(--ds-color-brand-seed);              /* #2433ff */
+    --ink: var(--ds-color-neutral-light-12);
+    --paper: var(--ds-color-white);
+    --line: var(--ds-border-width-4);
+    --hard: var(--ds-elevation-raised);              /* 6px 6px 0 ink: hard offset, set in the engine */
+    --hard-lg: var(--ds-elevation-floating);         /* 10px 10px 0 ink */
+    --m: var(--ds-space-24);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--yellow); color: var(--ink); font-family: var(--ds-font-family-text); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible { outline: var(--line) solid var(--blue); outline-offset: var(--ds-space-4); }
+
+  .hero { position: relative; height: 100vh; height: 100svh; min-height: 840px; overflow: hidden; isolation: isolate;
+    background-image: radial-gradient(color-mix(in oklab, var(--ink) 16%, transparent) 1.4px, transparent 1.6px); background-size: var(--ds-space-24) var(--ds-space-24); }
+
+  /* nav: bordered cells */
+  .nav { position: absolute; z-index: 6; top: var(--m); left: var(--m); right: var(--m); height: var(--ds-space-64); display: flex; background: var(--paper); border: var(--line) solid var(--ink); box-shadow: var(--hard); }
+  .nav > * { display: flex; align-items: center; padding: 0 var(--ds-space-24); border-right: var(--line) solid var(--ink); }
+  .logo { gap: var(--ds-space-8); font: 900 var(--ds-font-size-38)/1 var(--ds-font-family-display); letter-spacing: -0.01em; text-transform: uppercase; }
+  .logo svg { width: 34px; height: 34px; }
+  .links { flex: 1; gap: var(--ds-space-32); font: 700 var(--ds-font-size-16)/1 var(--ds-font-family-text); text-transform: uppercase; letter-spacing: .02em; }
+  .links a { min-height: var(--ds-size-target-min); display: inline-flex; align-items: center; }
+  .links a[aria-current] { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 5px; }
+  .when { font: 500 var(--ds-font-size-16)/1 var(--ds-font-family-text); }
+  .buy { border-right: 0; background: var(--blue); color: var(--paper); font: 900 var(--ds-font-size-21)/1 var(--ds-font-family-display); letter-spacing: .04em; text-transform: uppercase; padding: 0 var(--ds-space-32); }
+
+  /* headline */
+  h1 { position: absolute; z-index: 3; left: calc(var(--m) - 6px); top: 104px; font: 900 var(--ds-font-size-283)/.8 var(--ds-font-family-display); text-transform: uppercase; letter-spacing: -0.005em; color: var(--blue);
+    -webkit-text-stroke: var(--line) var(--ink); paint-order: stroke fill; text-shadow: var(--ds-space-12) var(--ds-space-12) 0 var(--ink); white-space: nowrap; } /* od-ignore: text-shadow cannot take an elevation token (it has a spread value) */
+  .wk { position: absolute; z-index: 4; left: 300px; top: 318px; transform: rotate(-3deg); background: var(--paper); border: var(--line) solid var(--ink); box-shadow: var(--hard); padding: var(--ds-space-12) var(--ds-space-20) var(--ds-space-8);
+    font: 900 var(--ds-font-size-67)/.9 var(--ds-font-family-display); text-transform: uppercase; }
+  .wk small { display: block; font: 700 var(--ds-font-size-16)/1.2 var(--ds-font-family-text); letter-spacing: .06em; margin-top: var(--ds-space-4); }
+
+  /* left: copy + actions */
+  .copy { position: absolute; z-index: 3; left: var(--m); top: 456px; width: 640px; }
+  .tag { display: inline-flex; align-items: center; gap: var(--ds-space-8); background: var(--ink); color: var(--yellow); font: 700 var(--ds-font-size-16)/1 var(--ds-font-family-text); text-transform: uppercase; letter-spacing: .04em; padding: var(--ds-space-8) var(--ds-space-12); }
+  .lede { margin-top: var(--ds-space-20); font: 500 var(--ds-font-size-21)/1.4 var(--ds-font-family-text); max-width: 30em; }
+  .lede b { background: var(--paper); padding: 0 var(--ds-space-4); border: var(--ds-border-width-2) solid var(--ink); font-weight: 700; }
+  .ctas { margin-top: var(--ds-space-32); display: flex; gap: var(--ds-space-20); }
+  .btn { display: inline-flex; white-space: nowrap; align-items: center; gap: var(--ds-space-12); min-height: var(--ds-space-64); padding: 0 var(--ds-space-24); border: var(--line) solid var(--ink); box-shadow: var(--hard); font: 900 var(--ds-font-size-38)/1 var(--ds-font-family-display); text-transform: uppercase; letter-spacing: .02em; transition: transform var(--ds-motion-duration-short) var(--ds-motion-easing-standard), box-shadow var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+  .btn.primary { background: var(--blue); color: var(--paper); }
+  .btn.alt { background: var(--paper); }
+  .btn .price { font: 700 var(--ds-font-size-16)/1 var(--ds-font-family-text); background: var(--yellow); color: var(--ink); border: var(--ds-border-width-2) solid var(--ink); padding: var(--ds-space-4) var(--ds-space-8); letter-spacing: 0; }
+  .btn:active { transform: translate(6px, 6px); box-shadow: none; }
+  @media (hover: hover) and (pointer: fine) { .btn:hover { transform: translate(-2px, -2px); box-shadow: var(--hard-lg); } }
+
+  /* right: poster card */
+  .card { position: absolute; z-index: 2; left: 734px; top: 398px; width: 682px; height: 300px; background: var(--blue); border: var(--line) solid var(--ink); box-shadow: var(--hard-lg); overflow: hidden; }
+  .card svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .dates { position: absolute; right: var(--ds-space-24); top: var(--ds-space-16); color: var(--paper); text-align: right; font: 900 var(--ds-font-size-90)/.85 var(--ds-font-family-display); text-transform: uppercase; }
+  .dates small { display: block; margin-top: var(--ds-space-8); font: 700 var(--ds-font-size-16)/1.3 var(--ds-font-family-text); letter-spacing: .06em; }
+
+  /* stickers */
+  .stk { position: absolute; z-index: 5; display: grid; place-items: center; text-align: center; border: var(--line) solid var(--ink); box-shadow: var(--hard); font: 900 var(--ds-font-size-21)/1 var(--ds-font-family-display); text-transform: uppercase; }
+  .s3 { left: 1178px; top: 118px; width: 176px; height: 176px; border-radius: var(--ds-radius-full); background: var(--ink); color: var(--yellow); transform: rotate(9deg); font-size: var(--ds-font-size-21); box-shadow: var(--hard); border-color: var(--ink); }
+  .s3 em { font-style: normal; display: block; font-size: var(--ds-font-size-90); line-height: .8; color: var(--paper); }
+  .s1 { left: 690px; top: 600px; width: 132px; height: 132px; border-radius: var(--ds-radius-full); background: var(--paper); transform: rotate(-14deg); }
+  .s1 em { font-style: normal; display: block; font-size: var(--ds-font-size-38); }
+  .s1 s { text-decoration-thickness: 3px; }
+  .s2 { left: 1272px; top: 560px; width: 150px; height: 150px; border: 0; box-shadow: none; background: none; transform: rotate(10deg); }
+  .s2 svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .s2 span { position: relative; font-size: var(--ds-font-size-21); line-height: .95; }
+  .s2 span em { display: block; font-style: normal; font-size: var(--ds-font-size-38); }
+
+  /* tickers */
+  .tickers { position: absolute; z-index: 4; left: -40px; right: -40px; bottom: 26px; height: 150px; }
+  .band { position: absolute; left: 0; right: 0; height: var(--ds-space-64); display: flex; align-items: center; overflow: hidden; border-top: var(--line) solid var(--ink); border-bottom: var(--line) solid var(--ink); }
+  .band .run { display: flex; white-space: nowrap; font: 800 var(--ds-font-size-38)/1 var(--ds-font-family-display); text-transform: uppercase; letter-spacing: .02em; }
+  .band .run span { padding-right: var(--ds-space-24); }
+  .band .run i { font-style: normal; padding-right: var(--ds-space-24); }
+  .b1 { top: var(--ds-space-6); background: var(--ink); color: var(--yellow); transform: rotate(-1.4deg); }
+  .b2 { top: 84px; background: var(--paper); color: var(--ink); transform: rotate(1.1deg); }
+  .b2 .run i { color: var(--blue); }
+  .pause { position: absolute; z-index: 7; right: var(--m); bottom: var(--ds-space-16); width: var(--ds-space-40); height: var(--ds-space-40); display: grid; place-items: center; background: var(--paper); color: var(--ink); border: var(--ds-border-width-2) solid var(--ink); box-shadow: var(--hard); cursor: pointer; }
+  .pause:focus-visible { outline: var(--line) solid var(--blue); outline-offset: var(--ds-space-4); }
+  .paused .band .run { animation-play-state: paused !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .b1 .run { animation: run 40s linear infinite; }
+    .b2 .run { animation: run 52s linear infinite reverse; }
+    @keyframes run { to { transform: translateX(-50%); } }
+  }
+</style>
+</head>
+<body>
+<main class="hero">
+  <header class="nav">
+    <a class="logo" href="#" aria-label="Howl Hill Weekender, home"><svg viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15" fill="var(--yellow)" stroke="var(--ink)" stroke-width="3"/><path d="M3 24 C10 15 14 14 17 18 C20 14 25 15 31 24 Z" fill="var(--ink)"/></svg>Howl Hill</a>
+    <nav class="links" aria-label="Main"><a href="#" aria-current="page">Lineup</a><a href="#">Tickets</a><a href="#">Camping</a><a href="#">Getting there</a><a href="#">FAQ</a></nav>
+    <span class="when">17–19 July 2027</span>
+    <a class="buy" href="#">Buy tickets</a>
+  </header>
+
+  <h1>Howl Hill</h1>
+  <div class="wk" aria-hidden="true">Weekender<small>Vol. 6 · Est. 2021</small></div>
+
+  <section class="copy">
+    <span class="tag">✶ Three days on a small hill</span>
+    <p class="lede">41 loud bands, three tiny stages, a lake to cool off in and camping under the biggest sky you have seen. <b>No VIP. Ever.</b></p>
+    <div class="ctas">
+      <a class="btn primary" href="#">Get tickets <span class="price">£89</span></a>
+      <a class="btn alt" href="#"><svg width="18" height="20" viewBox="0 0 18 20" aria-hidden="true"><path d="M2 2 L16 10 L2 18 Z" fill="var(--ink)"/></svg>Play lineup</a>
+    </div>
+  </section>
+
+  <div class="card" aria-hidden="true">
+    <svg viewBox="0 0 682 300" preserveAspectRatio="xMidYMid slice">
+      <g fill="var(--paper)">
+        <path d="M60 46 l3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3z"/><path d="M296 112 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z"/><path d="M210 110 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z"/><path d="M262 40 l3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3z"/>
+      </g>
+      <circle cx="160" cy="118" r="78" fill="var(--yellow)" stroke="var(--ink)" stroke-width="4"/>
+      <circle cx="132" cy="98" r="12" fill="none" stroke="var(--ink)" stroke-width="3"/><circle cx="186" cy="140" r="8" fill="none" stroke="var(--ink)" stroke-width="3"/>
+      <path d="M-10 300 L-10 232 C70 190 150 168 240 172 C320 176 360 214 430 214 C520 214 600 160 700 170 L700 300 Z" fill="var(--ink)"/>
+      <!-- three tiny stages on the hill -->
+      <g stroke="var(--ink)" stroke-width="3" stroke-linejoin="round">
+        <path d="M206 176 L236 140 L266 176 Z" fill="var(--paper)"/>
+        <path d="M402 214 L424 188 L446 214 Z" fill="var(--yellow)"/>
+        <path d="M560 184 L590 150 L620 184 Z" fill="var(--paper)"/>
+      </g>
+      <g fill="var(--yellow)"><circle cx="236" cy="196" r="3"/><circle cx="252" cy="206" r="3"/><circle cx="220" cy="210" r="3"/><circle cx="590" cy="204" r="3"/><circle cx="604" cy="214" r="3"/><circle cx="424" cy="232" r="3"/></g>
+    </svg>
+    <div class="dates">17–19 Jul<small>2027 · Camping included</small></div>
+  </div>
+
+  <div class="stk s3" aria-hidden="true"><span><em>41</em>bands, 3 stages</span></div>
+  <div class="stk s1" aria-hidden="true"><span><s>Early bird</s><em>Sold out</em></span></div>
+  <div class="stk s2" aria-hidden="true">
+    <svg viewBox="0 0 150 150"><polygon points="75,4 88,30 116,18 112,48 142,52 122,75 142,98 112,102 116,132 88,120 75,146 62,120 34,132 38,102 8,98 28,75 8,52 38,48 34,18 62,30" fill="var(--yellow)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round" transform="translate(5 5)" opacity="1" style="fill: var(--ink)"/><polygon points="75,4 88,30 116,18 112,48 142,52 122,75 142,98 112,102 116,132 88,120 75,146 62,120 34,132 38,102 8,98 28,75 8,52 38,48 34,18 62,30" fill="var(--yellow)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/></svg>
+    <span>All<em>ages</em></span>
+  </div>
+
+  <div class="tickers" aria-label="Lineup so far">
+    <div class="band b1"><div class="run">
+      <span>Moth Choir</span><i>✶</i><span>Kiln Daughters</span><i>✶</i><span>Okapi Okapi</span><i>✶</i><span>Pillow Fight Club</span><i>✶</i><span>Grey Mare Rodeo</span><i>✶</i><span>The Late Frosts</span><i>✶</i><span>Dana &amp; the Dogs</span><i>✶</i><span>Tin Lungs</span><i>✶</i><span>Velvet Ditch</span><i>✶</i>
+      <span aria-hidden="true">Moth Choir</span><i>✶</i><span aria-hidden="true">Kiln Daughters</span><i>✶</i><span aria-hidden="true">Okapi Okapi</span><i>✶</i><span aria-hidden="true">Pillow Fight Club</span><i>✶</i><span aria-hidden="true">Grey Mare Rodeo</span><i>✶</i>
+    </div></div>
+    <div class="band b2" aria-hidden="true"><div class="run">
+      <span>Lake swims at dawn</span><i>✶</i><span>Trains every hour</span><i>✶</i><span>Kids under 12 free</span><i>✶</i><span>Quiet camping field</span><i>✶</i><span>Local beer, cheap</span><i>✶</i><span>Bring a jumper</span><i>✶</i><span>Lake swims at dawn</span><i>✶</i><span>Trains every hour</span><i>✶</i><span>Kids under 12 free</span><i>✶</i><span>Quiet camping field</span><i>✶</i>
+    </div></div>
+  </div>
+  <button class="pause" type="button" aria-pressed="false" aria-label="Pause the moving lineup"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><rect x="1" y="1" width="4" height="14" fill="currentColor"/><rect x="9" y="1" width="4" height="14" fill="currentColor"/></svg></button>
+</main>
+<script>
+  // WCAG 2.2.2: moving content that lasts more than 5 s needs a pause control.
+  const pb = document.querySelector('.pause'), hero = document.querySelector('.hero');
+  pb.addEventListener('click', () => { const on = pb.getAttribute('aria-pressed') !== 'true'; pb.setAttribute('aria-pressed', on); hero.classList.toggle('paused', on); pb.setAttribute('aria-label', on ? 'Play the moving lineup' : 'Pause the moving lineup'); });
+</script>
+</body>
+</html>

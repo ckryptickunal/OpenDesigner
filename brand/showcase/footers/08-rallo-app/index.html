@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rallo footer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root {
+    --cobalt: var(--ds-color-accent-light-9);
+    --cobalt-hi: var(--ds-color-accent-light-8);
+    --mint: var(--ds-color-accent2-light-9);
+    --night: var(--ds-color-neutral-dark-1);
+    --gutter: var(--ds-space-64);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ds-color-surface-base); }
+  body { font: var(--ds-text-body-md); color: var(--ds-color-text-primary); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-detail); }
+  .panel :focus-visible { outline-color: #fff; }
+
+  footer { padding: var(--ds-space-24) var(--ds-space-24) 0; }
+
+  /* the cobalt panel */
+  .panel { position: relative; overflow: hidden; display: grid; grid-template-columns: 1.08fr 1fr; min-height: 540px; border-radius: var(--ds-radius-32);
+    background: radial-gradient(120% 90% at 0% 0%, var(--cobalt-hi), var(--cobalt) 55%), var(--cobalt); color: #fff; }
+  .track { position: absolute; right: -180px; top: -40px; width: 980px; height: 720px; pointer-events: none; }
+  .pitch { position: relative; z-index: 2; padding: var(--ds-space-64) 0 var(--ds-space-64) var(--ds-space-64); }
+  .new { display: inline-flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-6) var(--ds-space-12) var(--ds-space-6) var(--ds-space-8); border-radius: var(--ds-radius-full);
+    background: rgb(255 255 255 / .12); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .22); font-size: var(--ds-font-size-12); font-weight: 600; letter-spacing: .02em; }
+  .new i { width: 8px; height: 8px; border-radius: var(--ds-radius-full); background: var(--mint); box-shadow: 0 0 0 3px rgb(0 233 165 / .25); }
+  h2 { margin-top: var(--ds-space-24); font-size: var(--ds-font-size-67); font-weight: 500; line-height: 1; letter-spacing: -0.03em; text-wrap: balance; max-width: 9.5em; }
+  h2 em { font-style: normal; font-weight: 800; }
+  .lede { margin-top: var(--ds-space-20); font-size: var(--ds-font-size-21); line-height: 1.45; color: rgb(255 255 255 / .86); max-width: 25em; }
+  .get { display: flex; align-items: center; gap: var(--ds-space-12); margin-top: var(--ds-space-32); }
+  .badge { display: inline-flex; align-items: center; gap: var(--ds-space-12); height: 60px; padding: 0 var(--ds-space-20) 0 var(--ds-space-16); border-radius: var(--ds-radius-control);
+    background: var(--night); color: #fff; box-shadow: 0 1px 0 rgb(255 255 255 / .12) inset, 0 10px 24px -10px rgb(0 0 30 / .55);
+    transition: transform var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
+  .badge:hover { transform: translateY(-2px); }
+  .badge svg { width: 26px; height: 26px; flex: none; }
+  .badge small { display: block; font-size: var(--ds-font-size-12); font-weight: 500; opacity: .8; line-height: 1.1; }
+  .badge b { display: block; font-size: var(--ds-font-size-21); font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; }
+  .qr { display: flex; align-items: center; gap: var(--ds-space-12); margin-left: var(--ds-space-8); font-size: var(--ds-font-size-12); font-weight: 600; line-height: 1.35; color: rgb(255 255 255 / .86); }
+  .qr canvas { width: 60px; height: 60px; border-radius: var(--ds-radius-detail); background: #fff; padding: 5px; }
+  .rating { display: flex; align-items: center; gap: var(--ds-space-12); margin-top: var(--ds-space-32); font-size: var(--ds-font-size-16); }
+  .rating .stars { display: inline-flex; gap: 2px; color: var(--mint); }
+  .stars svg { width: 18px; height: 18px; }
+  .rating b { font-weight: 800; font-size: var(--ds-font-size-21); }
+  .rating span { color: rgb(255 255 255 / .86); }
+  .rating .sep { width: 1px; height: 18px; background: rgb(255 255 255 / .3); }
+
+  /* the phone, peeking up from the bottom edge */
+  .stage { position: relative; z-index: 1; }
+  .phone { position: absolute; left: 50%; top: 96px; width: 300px; height: 620px; margin-left: -110px; transform: rotate(-6deg); border-radius: 50px; padding: 11px;
+    background: linear-gradient(145deg, #3a3d48, #0d0e12 40%, #1b1c22); box-shadow: 0 0 0 1.5px #5a5e6b inset, 0 40px 80px -20px rgb(0 0 40 / .6), 0 18px 30px -12px rgb(0 0 40 / .5); }
+  .screen { position: relative; height: 100%; border-radius: 40px; overflow: hidden; background: var(--night); color: var(--ds-color-neutral-dark-12); padding: var(--ds-space-16) var(--ds-space-20); }
+  .island { position: absolute; left: 50%; top: 10px; width: 92px; height: 26px; margin-left: -46px; border-radius: var(--ds-radius-full); background: #000; }
+  .sb { display: flex; justify-content: space-between; font-size: var(--ds-font-size-12); font-weight: 700; padding: 0 var(--ds-space-8); }
+  .sb svg { width: 40px; height: 12px; }
+  .wo { margin-top: var(--ds-space-24); display: flex; justify-content: space-between; align-items: center; }
+  .wo b { font-size: var(--ds-font-size-21); font-weight: 800; letter-spacing: -0.01em; }
+  .wo span { font-size: var(--ds-font-size-12); font-weight: 700; color: var(--night); background: var(--mint); padding: 3px var(--ds-space-8); border-radius: var(--ds-radius-full); }
+  .wo small { display: block; font-size: var(--ds-font-size-12); color: var(--ds-color-neutral-dark-11); margin-top: 2px; }
+  .ring { position: relative; width: 210px; height: 210px; margin: var(--ds-space-16) auto 0; }
+  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring .mid { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+  .ring .mid b { font-size: var(--ds-font-size-51); font-weight: 800; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .ring .mid small { font-size: var(--ds-font-size-12); color: var(--ds-color-neutral-dark-11); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: var(--ds-space-16); text-align: center; }
+  .stats b { display: block; font-size: var(--ds-font-size-21); font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .stats small { font-size: var(--ds-font-size-12); color: var(--ds-color-neutral-dark-11); }
+  .hr { margin-top: var(--ds-space-16); height: 64px; }
+
+  .float { position: absolute; z-index: 3; border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
+    box-shadow: 0 24px 48px -16px rgb(0 0 40 / .45), 0 2px 6px rgb(0 0 40 / .12); }
+  .vo2 { left: 6%; top: 300px; width: 214px; padding: var(--ds-space-16); transform: rotate(-3deg); }
+  .vo2 small { display: block; font-size: var(--ds-font-size-12); font-weight: 600; color: var(--ds-color-text-secondary); }
+  .vo2 b { font-size: var(--ds-font-size-28); font-weight: 800; letter-spacing: -0.02em; }
+  .vo2 b span { font-size: var(--ds-font-size-16); color: var(--ds-color-accent2-light-11); margin-left: var(--ds-space-6); }
+  .vo2 svg { display: block; width: 100%; height: 40px; margin-top: var(--ds-space-8); }
+  .streak { right: 5%; top: 52px; display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-8) var(--ds-space-12) var(--ds-space-8) var(--ds-space-8); border-radius: var(--ds-radius-full); transform: rotate(4deg); font-size: var(--ds-font-size-12); font-weight: 700; }
+  .streak i { display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--ds-radius-full); background: var(--mint); font-style: normal; color: var(--night); }
+
+  /* links below the panel */
+  .below { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: var(--ds-space-32); padding: var(--ds-space-48) var(--ds-space-40) var(--ds-space-32); }
+  .mark { display: inline-flex; align-items: center; gap: var(--ds-space-8); font-size: var(--ds-font-size-28); font-weight: 800; font-style: italic; letter-spacing: -0.04em; min-height: var(--ds-size-target-min); }
+  .mark svg { width: 30px; height: 30px; }
+  .below p { margin-top: var(--ds-space-8); color: var(--ds-color-text-secondary); max-width: 18em; }
+  .below h3 { font-size: var(--ds-font-size-12); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ds-color-text-tertiary); margin-bottom: var(--ds-space-8); }
+  .below ul { list-style: none; }
+  .below li a { display: inline-flex; align-items: center; min-height: 36px; font-weight: 500; }
+  .below li a:hover { color: var(--ds-color-text-link); }
+  .legal { display: flex; align-items: center; gap: var(--ds-space-24); margin: 0 var(--ds-space-40); padding: var(--ds-space-16) 0 var(--ds-space-24); border-top: 1px solid var(--ds-color-border-subtle); font-size: var(--ds-font-size-12); color: var(--ds-color-text-secondary); }
+  .legal a { display: inline-flex; align-items: center; min-height: var(--ds-size-target-pointer); }
+  .legal a:hover { color: var(--ds-color-text-primary); }
+  .legal .lang { margin-left: auto; }
+
+  @media (max-width: 900px) {
+    footer { padding: var(--ds-space-12) var(--ds-space-12) 0; }
+    .panel { grid-template-columns: 1fr; min-height: 0; }
+    .pitch { padding: var(--ds-space-40) var(--ds-space-24) 0; }
+    h2 { font-size: var(--ds-font-size-38); }
+    .lede { font-size: var(--ds-font-size-16); }
+    .get { flex-wrap: wrap; }
+    .qr { display: none; }
+    .rating { flex-wrap: wrap; row-gap: var(--ds-space-4); }
+    .stage { height: 400px; }
+    .phone { top: 48px; width: 260px; height: 540px; margin-left: -130px; }
+    .ring { width: 180px; height: 180px; }
+    .vo2, .rating .sep, .track { display: none; }
+    .streak { right: var(--ds-space-12); top: 12px; }
+    .below { grid-template-columns: 1fr 1fr; padding: var(--ds-space-40) var(--ds-space-12) var(--ds-space-24); }
+    .below > div:first-child { grid-column: 1 / -1; }
+    .legal { flex-wrap: wrap; margin: 0 var(--ds-space-12); gap: var(--ds-space-4) var(--ds-space-16); }
+    .legal .lang { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<footer aria-label="Site footer">
+  <section class="panel" aria-labelledby="get-h">
+    <svg class="track" viewBox="0 0 980 720" fill="none" aria-hidden="true">
+      <g stroke="#fff" stroke-opacity=".09" stroke-width="2">
+        <rect x="60" y="60" width="860" height="600" rx="300"/><rect x="100" y="100" width="780" height="520" rx="260"/>
+        <rect x="140" y="140" width="700" height="440" rx="220"/><rect x="180" y="180" width="620" height="360" rx="180"/>
+        <rect x="220" y="220" width="540" height="280" rx="140"/>
+      </g>
+      <g stroke="#fff" stroke-opacity=".18" stroke-width="2" stroke-dasharray="2 10"><path d="M490 60v160"/></g>
+    </svg>
+
+    <div class="pitch">
+      <span class="new"><i aria-hidden="true"></i>New &middot; Adaptive half-marathon plans</span>
+      <h2 id="get-h">Train like someone&rsquo;s <em>counting on you.</em></h2>
+      <p class="lede">Plans that adapt to how you slept, live pacing in your ear, and a coach voice that knows when to push and when to back off.</p>
+      <div class="get">
+        <a class="badge" href="#">
+          <svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="7" y="2" width="12" height="22" rx="3" stroke="currentColor" stroke-width="2"/><path d="M13 8v7m-3-3 3 3 3-3" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 20h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span><small>Get it on</small><b>your phone</b></span>
+        </a>
+        <a class="badge" href="#">
+          <svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="5" y="6" width="16" height="14" rx="5" stroke="currentColor" stroke-width="2"/><path d="M9 6V2h8v4M9 20v4h8v-4" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 13.5h2l1-2.5 2 5 1-2.5" stroke="var(--mint)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span><small>Also on</small><b>your watch</b></span>
+        </a>
+        <span class="qr"><canvas id="qr" width="50" height="50" aria-hidden="true"></canvas>Scan to<br>install</span>
+      </div>
+      <div class="rating">
+        <span class="stars" aria-hidden="true">
+          <svg viewBox="0 0 18 18"><path fill="currentColor" d="m9 1.5 2.3 4.8 5.2.7-3.8 3.6.9 5.2L9 13.3l-4.6 2.5.9-5.2L1.5 7l5.2-.7z"/></svg><svg viewBox="0 0 18 18"><path fill="currentColor" d="m9 1.5 2.3 4.8 5.2.7-3.8 3.6.9 5.2L9 13.3l-4.6 2.5.9-5.2L1.5 7l5.2-.7z"/></svg><svg viewBox="0 0 18 18"><path fill="currentColor" d="m9 1.5 2.3 4.8 5.2.7-3.8 3.6.9 5.2L9 13.3l-4.6 2.5.9-5.2L1.5 7l5.2-.7z"/></svg><svg viewBox="0 0 18 18"><path fill="currentColor" d="m9 1.5 2.3 4.8 5.2.7-3.8 3.6.9 5.2L9 13.3l-4.6 2.5.9-5.2L1.5 7l5.2-.7z"/></svg><svg viewBox="0 0 18 18"><path fill="currentColor" d="m9 1.5 2.3 4.8 5.2.7-3.8 3.6.9 5.2L9 13.3l-4.6 2.5.9-5.2L1.5 7l5.2-.7z"/></svg>
+        </span>
+        <b>4.9</b><span>from 38,200 ratings</span><i class="sep" aria-hidden="true"></i><span>14 days free</span>
+      </div>
+    </div>
+
+    <div class="stage" aria-hidden="true">
+      <div class="phone">
+        <div class="screen">
+          <div class="island"></div>
+          <div class="sb"><span>7:42</span><svg viewBox="0 0 40 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="1" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx="1" fill="currentColor"/><rect x="15" y="1" width="3" height="11" rx="1" fill="currentColor"/><rect x="23" y="1.5" width="15" height="9" rx="2.5" stroke="currentColor" fill="none"/><rect x="25" y="3.5" width="10" height="5" rx="1" fill="var(--mint)"/></svg></div>
+          <div class="wo"><div><b>Tempo run</b><small>Week 6 &middot; Day 3</small></div><span>Zone 3</span></div>
+          <div class="ring">
+            <svg viewBox="0 0 210 210"><circle cx="105" cy="105" r="92" stroke="#262a35" stroke-width="16" fill="none"/>
+              <circle cx="105" cy="105" r="92" stroke="url(#rg)" stroke-width="16" fill="none" stroke-linecap="round" stroke-dasharray="393 578"/>
+              <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--cobalt-hi)"/><stop offset="1" stop-color="var(--mint)"/></linearGradient></defs></svg>
+            <div class="mid"><b>6.42</b><small>of 9.5 km</small></div>
+          </div>
+          <div class="stats"><div><b>4&prime;52&Prime;</b><small>pace /km</small></div><div><b>156</b><small>bpm</small></div><div><b>31:14</b><small>time</small></div></div>
+          <svg class="hr" viewBox="0 0 260 64" preserveAspectRatio="none"><defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--mint)" stop-opacity=".45"/><stop offset="1" stop-color="var(--mint)" stop-opacity="0"/></linearGradient></defs>
+            <path d="M0 50C20 46 30 40 50 41S80 30 100 28 130 34 150 24 180 14 200 18 230 12 260 10V64H0Z" fill="url(#hg)"/>
+            <path d="M0 50C20 46 30 40 50 41S80 30 100 28 130 34 150 24 180 14 200 18 230 12 260 10" stroke="var(--mint)" stroke-width="2.5" fill="none"/></svg>
+        </div>
+      </div>
+      <div class="float vo2">
+        <small>VO&#8322; max &middot; this month</small>
+        <b>52.4<span>&uarr; 12%</span></b>
+        <svg viewBox="0 0 180 40" preserveAspectRatio="none"><path d="M0 34 30 30 60 31 90 22 120 24 150 12 180 6" stroke="var(--cobalt)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="180" cy="6" r="0"/></svg>
+      </div>
+      <div class="float streak"><i>18</i>day streak, keep it going</div>
+    </div>
+  </section>
+
+  <div class="below">
+    <div>
+      <a class="mark" href="#" aria-label="Rallo home"><svg viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="9" fill="var(--cobalt)"/><path d="M8 20c3-8 9-11 15-10" stroke="var(--mint)" stroke-width="3.2" fill="none" stroke-linecap="round"/><circle cx="23" cy="10" r="2.6" fill="#fff"/></svg>rallo</a>
+      <p>Coaching for people who run before work and lift after it.</p>
+    </div>
+    <nav aria-label="Product"><h3>Product</h3><ul><li><a href="#">Plans</a></li><li><a href="#">Live coaching</a></li><li><a href="#">Pricing</a></li><li><a href="#">Gift a year</a></li></ul></nav>
+    <nav aria-label="Train"><h3>Train</h3><ul><li><a href="#">Running</a></li><li><a href="#">Strength</a></li><li><a href="#">Mobility</a></li><li><a href="#">Recovery</a></li></ul></nav>
+    <nav aria-label="Company"><h3>Company</h3><ul><li><a href="#">About</a></li><li><a href="#">Coaches</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li></ul></nav>
+    <nav aria-label="Support"><h3>Support</h3><ul><li><a href="#">Help center</a></li><li><a href="#">Contact</a></li><li><a href="#">Accessibility</a></li><li><a href="#">Status</a></li></ul></nav>
+  </div>
+  <div class="legal">
+    <span>&copy; 2026 Rallo Fitness Ltd</span><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Your health data</a><a class="lang" href="#">English (UK)</a>
+  </div>
+</footer>
+<script>
+  // A decorative QR-style pattern (not a real code): three finder squares plus seeded noise.
+  (function () {
+    const c = document.getElementById('qr').getContext('2d'), n = 25, s = 2;
+    let x = 7; const r = () => (x = (x * 48271) % 2147483647) / 2147483647;
+    c.fillStyle = '#151515';
+    const finder = (ox, oy) => { c.fillRect(ox*s, oy*s, 7*s, 7*s); c.clearRect((ox+1)*s, (oy+1)*s, 5*s, 5*s); c.fillRect((ox+2)*s, (oy+2)*s, 3*s, 3*s); };
+    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
+      const inF = (i < 8 && j < 8) || (i > n-9 && j < 8) || (i < 8 && j > n-9);
+      if (!inF && r() > 0.52) c.fillRect(i*s, j*s, s, s);
+    }
+    finder(0, 0); finder(n-7, 0); finder(0, n-7);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=205, initial-scale=1">
+<title>Pagewright: paged</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&family=Barlow+Semi+Condensed:wght@500;600&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Round 4: one glanceable thing, the decline rate that paged you, and one action. The second action sits below the fold.
+     One face (Barlow Semi Condensed), two weights, five clearly different sizes.
+     Hardware, not design tokens: the 49 mm-class display is 205 x 251 pt with rounded corners. */
+  :root { --display-w: 205px; --display-h: 251px; --display-r: 48px; }
+  /* Type roles, watchOS text styles at xLarge: Caption 2 15, Headline 17, and one data numeral (64, outside the HIG styles on purpose). */
+  :root {
+    --t-caption: 15px;                    /* HIG Caption 2; the engine scale steps 14 and 17 */
+    --t-headline: var(--ds-font-size-17);
+    --t-display: 64px;
+    --sev: var(--ds-color-brand-seed);    /* the one red: severity, used once */
+  }
+  /* System chrome: watchOS draws the title and the time itself, in San Francisco; Inter (SIL OFL) stands in, the same in every watch piece. */
+  :root { --t-sys: 600 17px/1 "Inter", system-ui, sans-serif; }
+  html, body { margin: 0; background: var(--ds-color-black); }
+  .display {
+    position: relative; width: var(--display-w); height: var(--display-h); overflow: hidden;
+    border-radius: var(--display-r); background: var(--ds-color-surface-base);
+    color: var(--ds-color-white); font-family: var(--ds-font-family-text);
+    font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+  }
+  .status { position: absolute; top: var(--ds-space-12); left: 20px; right: 22px; display: flex; justify-content: space-between; font: var(--t-sys); font-variant-numeric: tabular-nums; }
+  .status .sev { color: var(--sev); }
+
+  .body { position: absolute; left: var(--ds-space-16); right: var(--ds-space-16); top: 46px; }
+  .svc { margin: 0 0 var(--ds-space-4); font: 500 var(--t-caption)/1.2 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+  .num { display: block; margin-top: 0; font: 600 var(--t-display)/0.9 var(--ds-font-family-text); letter-spacing: -0.02em; }
+  .num small { font-size: 0.56em; margin-left: 1px; }
+  .what { margin: var(--ds-space-4) 0 0; font: 500 var(--t-caption)/1.25 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+
+  .join {
+    all: unset; box-sizing: border-box; position: absolute; left: 12px; right: 12px; bottom: 14px; height: var(--ds-size-target-touch);
+    border-radius: var(--ds-radius-full); display: grid; place-items: center; cursor: pointer;
+    font: 600 var(--t-headline)/1 var(--ds-font-family-text); background: var(--ds-color-neutral-dark-6); color: var(--ds-color-white);
+  }
+  .join:focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<main class="display" aria-label="Pagewright: severity 1 on card-auth. Card declines at 31 percent, usually 4 percent; Noor and Bastian are on it">
+  <div class="status"><span class="sev">Sev 1</span><span class="clock">3:12</span></div>
+  <section class="body">
+    <p class="svc">card-auth</p>
+    <span class="num">31<small>%</small></span>
+    <p class="what">of cards declined, usually 4%</p>
+  </section>
+  <button class="join">Join incident</button>
+</main>
+</body>
+</html>

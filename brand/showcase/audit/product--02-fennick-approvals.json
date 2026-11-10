@@ -1,0 +1,74 @@
+{
+ "piece": "product/02-fennick-approvals",
+ "title": "02 · Bill approvals · Fennick",
+ "pattern": "approval queue with review drawer",
+ "platform": "web",
+ "industry": "fintech",
+ "style": [
+  "enterprise",
+  "minimal",
+  "dense"
+ ],
+ "tags": [
+  "accounts payable",
+  "approvals",
+  "drawer",
+  "timeline",
+  "toast",
+  "tabs with counts",
+  "b2b"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "The consequence comes before the decision: an 'If you approve' ledger on Operating ••4410 ($63,904.52 − $15,277.75 − $7,418.60 = $41,208.17 left on Oct 20) and the named policy 'Over $5,000: needs CFO approval'",
+  "A queue that reads like a shipped AP tool: tabs with counts (Draft 3 / To approve 14 / Scheduled 22 / Paid 318), two-line rows with mono invoice numbers, '1/2 approved' with progress pips, quiet inline ✓/×, and a total that matches the 14 rows ($92,663.95)",
+  "After the decision the toast says what happens next ('$3,912.08 pays on Oct 17 from Operating ••4410') with Undo; the ⌘↵ shortcut sits in the Approve tooltip, not in a footer",
+  "One forest-green accent; red only on '2 days overdue' and the Reject tint"
+ ],
+ "slop_signals": [
+  "Four transients staged at once: open drawer, selected row, the Undo toast over the list, and a hover tooltip ('Approve and schedule payment ⌘↵') covering the comment field",
+  "The toast hides the 'Brightline Telecom' row's amount and approvals ('$412.36' is cut)"
+ ],
+ "fixes": [
+  "Drop the hover tooltip from the main frame; keep either the toast or the drawer focus, not both over content",
+  "Make the Harlow toast pay on a business day (Fri Oct 16 or Mon Oct 19)",
+  "Change 'Waiting for you, CFO · 5 days' to 4 days (Dana approved Oct 10, 9:03 AM; today is Oct 14)",
+  "Rename Wrenfield Water Co. (Sounding's workspace is Wrenfield Pay) and Quillon Software (the mobile approvals app is called Quillon)"
+ ],
+ "references": [
+  {
+   "site": "Mercury",
+   "url": "https://mobbin.com/screens/acd32944-7f4b-445f-a510-5a7750b11a19",
+   "what": "List stays visible, drawer with large amount, mini timeline, Approve/Decline/More, GL code; ours adds the balance-after ledger and policy reason"
+  },
+  {
+   "site": "Airwallex",
+   "url": "https://mobbin.com/screens/f163ee8f-79d1-4dc5-a626-68c25a971bca",
+   "what": "Drawer with Reject split button and Approve in a sticky footer; ours matches and states the consequence"
+  },
+  {
+   "site": "Acctual",
+   "url": "https://mobbin.com/screens/bbf2b4b2-ae0d-4a32-897e-dee96af10a5e",
+   "what": "Bills tabs with counts (Draft/Approve/Ready/Paid); ours has the same tab model with more exact data"
+  }
+ ],
+ "audited": "2026-10-14",
+ "self_score": 5,
+ "audited_by": "independent",
+ "facts": [],
+ "fixed": [
+  "Harlow toast pays on Fri, Oct 16 (Oct 17 is a Saturday); it stays inside '6 bills scheduled before Oct 20' and 'Scheduled 22', so no balance changes ($41,208.17 re-checked)",
+  "'Waiting for you, CFO' is 4 days (budget owner approved Sat Oct 10, today Wed Oct 14)",
+  "Comment no longer says 'Q4' on a September invoice: 'Includes the fuel surcharge we agreed on Sep 2. Fine to pay.'",
+  "One temporary state per frame: main frame is the review drawer only; the toast is shot-toast.png (?state=toast) and the Approve hover tooltip is shot-tooltip.png (?state=tooltip)",
+  "Names: Marcus Oyelaran (MO) is Gideon Afolabi (GA); Dana Whitfield (DW) is Lorna Petrakis (LP); vendors Quillon Software → Kanbrook Software, Wrenfield Water Co. → Sagebrush Water Co., Northgate Uniform Supply → Workline Uniform Supply, Pellworth Insurance Brokers → Dunstan Insurance Brokers",
+  "GL account 6420 (the hero's Repairs account) is now 6150 Freight & shipping",
+  "Re-rendered shot.png, shot-toast.png and shot-tooltip.png at 1440 × 900, 2×"
+ ],
+ "owner": {
+  "verdict": "keep",
+  "said": "I love the B2B product screens; they look absolutely crazy",
+  "date": "2026-10-14"
+ }
+}

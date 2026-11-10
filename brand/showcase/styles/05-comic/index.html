@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The case of the three-second timeout · Nightjar Engineering</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Shantell+Sans:wght,INFM,BNCE@600,0,0&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Round 4. Sizes: 12, 16, 21, 28 and 51. Weights: Inter 400 and 600, lettering 600.
+     The comic lives in one zone: the three-panel strip under the title, as an engineering
+     blog's lead illustration. The page around it is one calm face (Inter, the engine's text face);
+     hand lettering (Shantell Sans, the display face) is used only inside the strip.
+     Two inks: black and one red, and red only where something is broken. Halftone is never
+     texture: it fills the area under a measured line (error rate, queued retries). */
+  :root {
+    --ink: var(--ds-color-black);
+    --ink-2: var(--ds-color-text-secondary);
+    --paper: var(--ds-color-white);
+    --hair: var(--ds-color-neutral-light-5);
+    --red: var(--ds-color-brand-seed);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--paper); color: var(--ds-color-text-primary); font-family: var(--ds-font-family-text); font-size: var(--ds-font-size-16); line-height: 24px; -webkit-font-smoothing: antialiased; overflow: hidden; }
+  .facts, .strip { font-feature-settings: "tnum" 1; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+  .wrap { width: 1312px; margin: 0 auto; }
+
+  .top { height: 64px; border-bottom: 1px solid var(--hair); }
+  .top .wrap { height: 100%; display: flex; align-items: center; gap: var(--ds-space-32); }
+  .logo { font-weight: 600; display: flex; align-items: center; gap: var(--ds-space-8); }
+  .logo span { font-weight: 400; color: var(--ink-2); }
+  .top nav { margin-left: auto; display: flex; gap: var(--ds-space-32); color: var(--ink-2); }
+  .top nav a[aria-current] { color: var(--ds-color-text-primary); font-weight: 600; }
+
+  .head { display: grid; grid-template-columns: 1fr 360px; column-gap: var(--ds-space-64); padding: var(--ds-space-40) 0 var(--ds-space-32); align-items: end; }
+  .kick { font-size: var(--ds-font-size-12); line-height: 16px; color: var(--ink-2); letter-spacing: 0.01em; }
+  .kick b { color: var(--red); font-weight: 600; }
+  h1 { font-size: 51px; line-height: 60px; font-weight: 400; letter-spacing: -0.025em; margin-top: var(--ds-space-12); }
+  .stand { font-size: var(--ds-font-size-21); line-height: 30px; color: var(--ink-2); margin-top: var(--ds-space-12); max-width: 760px; }
+  .by { margin-top: var(--ds-space-16); font-size: var(--ds-font-size-12); line-height: 16px; color: var(--ink-2); }
+  .by b { color: var(--ds-color-text-primary); font-weight: 600; }
+  .facts { list-style: none; border-top: 1px solid var(--ds-color-text-primary); }
+  .facts li { display: grid; grid-template-columns: 76px 1fr; gap: var(--ds-space-12); padding: var(--ds-space-8) 0; border-bottom: 1px solid var(--hair); font-size: var(--ds-font-size-12); line-height: 18px; }
+  .facts li span { color: var(--ink-2); }
+
+  .strip svg { display: block; width: 1312px; height: 540px; }
+  .strip text { font-family: var(--ds-font-family-display); }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="#"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M2 14c4-1 6-4 9-4s5 3 9 4c-3 3-6 5-9 5s-6-2-9-5z" fill="currentColor"/><circle cx="11" cy="6" r="3" fill="currentColor"/></svg>Nightjar <span>Engineering</span></a>
+  <nav aria-label="Blog"><a href="#" aria-current="page">Postmortems</a><a href="#">On-call notes</a><a href="#">Runbooks</a><a href="#">Status</a></nav>
+</div></header>
+
+<main class="wrap">
+  <div class="head">
+    <div>
+      <p class="kick"><b>SEV-2</b> · Postmortem INC-4471 · Tuesday 6 October 2026</p>
+      <h1>The case of the three-second timeout</h1>
+      <p class="stand">A rollback that fixed nothing, a config key nobody read, and the night one checkout call turned into 16.</p>
+      <p class="by">By <b>Ilse Brandt</b>, on call, and <b>Kwame Mensah</b>, incident lead · 7 min read</p>
+    </div>
+    <ul class="facts" aria-label="Incident summary">
+      <li><span>Window</span>02:06 to 02:47 UTC, 41 min</li>
+      <li><span>Impact</span>4,180 of 33,712 card checkouts failed (12.4%)</li>
+      <li><span>Cause</span>A renamed config key left the ledger client on a 3 s default timeout</li>
+      <li><span>Status</span>Resolved · 3 of 3 actions shipped</li>
+    </ul>
+  </div>
+
+  <figure class="strip">
+    <svg viewBox="0 0 1312 540" aria-hidden="true">
+      <defs>
+        <pattern id="dotsRed" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="5" cy="5" r="2.3" fill="var(--red)"/></pattern>
+        <pattern id="dotsInk" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="5" cy="5" r="1.9" fill="#000"/></pattern>
+        <clipPath id="pA"><rect x="0.0" y="0" width="426.7" height="540"/></clipPath>
+        <clipPath id="pB"><rect x="442.7" y="0" width="426.7" height="540"/></clipPath>
+        <clipPath id="pC"><rect x="885.3" y="0" width="426.7" height="540"/></clipPath>
+      </defs>
+      <g font-weight="600">
+      <!-- Three equal panels, 426.7 px wide with 16 px gutters. Captions are lettering, without boxes. -->
+      <!-- Panel 1, 02:13: a close-up of the phone, cropped by the panel -->
+      <g clip-path="url(#pA)">
+        <rect x="0.0" y="0" width="426.7" height="540" fill="#fff"/>
+        <g transform="translate(13.3 0)">
+          <rect x="52" y="128" width="296" height="520" rx="46" fill="#fff" stroke="#000" stroke-width="4"/>
+          <rect x="68" y="144" width="264" height="520" rx="32" fill="none" stroke="#000" stroke-width="2.5"/>
+          <rect x="164" y="158" width="72" height="18" rx="9" fill="#000"/>
+          <text x="200" y="250" font-size="51" fill="#000" text-anchor="middle">02:13</text>
+          <text x="200" y="278" font-size="16" fill="#000" text-anchor="middle">Tuesday 6 October</text>
+          <rect x="84" y="306" width="232" height="168" rx="18" fill="#fff" stroke="#000" stroke-width="3"/>
+          <path d="M102 306 h196 a18 18 0 0 1 18 18 v22 h-232 v-22 a18 18 0 0 1 18 -18z" fill="var(--red)" stroke="#000" stroke-width="3"/>
+          <text x="102" y="334" font-size="16" fill="#fff">Nightjar · SEV-2</text>
+          <text x="102" y="378" font-size="21" fill="#000">ledger-api</text>
+          <text x="102" y="414" font-size="28" fill="var(--red)">5xx at 38%</text>
+          <text x="102" y="452" font-size="12" fill="#000">Tap to acknowledge</text>
+        </g>
+        <text x="24.0" y="48" font-size="21" fill="#000">Tuesday, 02:13.</text>
+        <text x="24.0" y="78" font-size="21" fill="#000">Ilse is paged.</text>
+      </g>
+      <rect x="1.5" y="1.5" width="423.7" height="537" fill="none" stroke="#000" stroke-width="3"/>
+
+      <!-- Panel 2, 02:24: the rollback lands and the error rate barely moves.
+           0 to 40% over 322 px; 02:06 to 02:30 over 353 px. Red halftone fills the area under the line. -->
+      <g clip-path="url(#pB)">
+        <rect x="442.7" y="0" width="426.7" height="540" fill="#fff"/>
+        <path d="M496.7 479.6 L526.1 478.8 L540.8 449.8 L555.4 361.2 L570.1 264.6 L584.8 208.3 L599.5 176.1 L643.6 171.3 L702.4 176.1 L761.2 184.1 L775.9 224.4 L790.6 245.3 L819.9 243.7 L849.3 248.5 L849.3 482 L496.7 482 Z" fill="url(#dotsRed)"/>
+        <path d="M496.7 479.6 L526.1 478.8 L540.8 449.8 L555.4 361.2 L570.1 264.6 L584.8 208.3 L599.5 176.1 L643.6 171.3 L702.4 176.1 L761.2 184.1 L775.9 224.4 L790.6 245.3 L819.9 243.7 L849.3 248.5" fill="none" stroke="var(--red)" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M496.7 150 V482 H857.3" fill="none" stroke="#000" stroke-width="3"/>
+        <path d="M761.2 150 V482" stroke="#000" stroke-width="2.5" stroke-dasharray="7 6"/>
+        <text x="599.5" y="160" font-size="28" fill="var(--red)" text-anchor="middle">38%</text>
+        <text x="849.3" y="232" font-size="28" fill="var(--red)" text-anchor="end">29%</text>
+        <text x="486.7" y="160" font-size="12" fill="#000" text-anchor="end">40%</text>
+        <text x="486.7" y="486" font-size="12" fill="#000" text-anchor="end">0</text>
+        <text x="496.7" y="504" font-size="12" fill="#000" text-anchor="middle">02:06</text>
+        <text x="628.9" y="504" font-size="12" fill="#000" text-anchor="middle">02:15</text>
+        <text x="761.2" y="504" font-size="12" fill="#000" text-anchor="middle">02:24</text>
+        <text x="761.2" y="520" font-size="12" fill="#000" text-anchor="middle">rollback</text>
+        <text x="466.7" y="48" font-size="21" fill="#000">02:24. Rolled back to v4.17.</text>
+        <text x="466.7" y="78" font-size="21" fill="#000">Errors still 29%. Not fixed.</text>
+      </g>
+      <rect x="444.2" y="1.5" width="423.7" height="537" fill="none" stroke="#000" stroke-width="3"/>
+
+      <!-- Panel 3, 02:36: the breaker opens and the retry queue drains.
+           0 to 2.0 M over 282 px; 02:13 to 02:47 over 353 px. The queue builds from the first failures. Black halftone under the line. -->
+      <g clip-path="url(#pC)">
+        <rect x="885.3" y="0" width="426.7" height="540" fill="#fff"/>
+        <path d="M933.3 482.0 L964.5 446.8 L1005.9 383.3 L1047.4 312.8 L1109.7 239.5 L1171.9 200.0 L1258.3 482.0 L1286.0 482.0 L933.3 482 Z" fill="url(#dotsInk)"/>
+        <path d="M933.3 482.0 L964.5 446.8 L1005.9 383.3 L1047.4 312.8 L1109.7 239.5 L1171.9 200.0 L1258.3 482.0 L1286.0 482.0" fill="none" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M933.3 150 V482 H1296.0" fill="none" stroke="#000" stroke-width="3"/>
+        <path d="M1171.9 200 V482" stroke="#000" stroke-width="2.5" stroke-dasharray="7 6"/>
+        <text x="945.3" y="156" font-size="16" fill="#000">2.0 M retries queued,</text>
+        <text x="945.3" y="178" font-size="16" fill="#000">from every ledger caller</text>
+        <text x="933.3" y="504" font-size="12" fill="#000" text-anchor="middle">02:13</text>
+        <text x="1171.9" y="504" font-size="12" fill="#000" text-anchor="middle">02:36</text>
+        <text x="1171.9" y="520" font-size="12" fill="#000" text-anchor="end">breaker open</text>
+        <text x="1258.3" y="504" font-size="12" fill="#000" text-anchor="middle">02:44</text>
+        <text x="1258.3" y="520" font-size="12" fill="#000" text-anchor="middle">empty</text>
+        <text x="909.3" y="48" font-size="21" fill="#000">02:36. Breaker open.</text>
+        <text x="909.3" y="78" font-size="21" fill="#000">Retries drain, 4,000 a second.</text>
+      </g>
+      <rect x="886.8" y="1.5" width="423.7" height="537" fill="none" stroke="#000" stroke-width="3"/>
+      </g>
+    </svg>
+    <figcaption class="vh">Three panels. Tuesday, 02:13: Ilse is paged; her phone shows a SEV-2 page, ledger-api 5xx at 38%. 02:24: the gateway is rolled back to v4.17, and the error rate falls only from 38% to 29%, not fixed. 02:36: the retry worker's breaker opens, and the 2.0 million retries queued from every ledger caller drain at 4,000 a second, empty by 02:44.</figcaption>
+  </figure>
+</main>
+</body>
+</html>

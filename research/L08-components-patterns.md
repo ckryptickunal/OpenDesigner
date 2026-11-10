@@ -527,7 +527,7 @@ Synthesized from M3, Carbon, Atlassian, Fluent, Primer and EightShapes [S-L08-03
 - [L08 -> S1] Questionnaire seeds: DC-L08-05, -06, -07, -09, -10, -11, -13, -14, -18, -19 are the highest-leverage component questions; disagreements between systems (disabled, tooltips on disabled, toasts) should be surfaced as explicit trade-offs, not defaults.
 
 ## Open questions / gaps
-- **M3 focus indicator dimensions** (thickness, offset) were not found on the rendered states page; only "ring-like" was confirmed [S-L08-095].
+- **M3 focus indicator dimensions (found 2026-11-09):** Material Web's focus ring is 3px wide, 2px outside the element (0px inward), and grows to 8px during its animation [S-L08-123] [S-L08-124]. The M3 site's states page still says only "ring-like" [S-L08-095]. The engine's Q-state-03 `material-3` option (3px, 2px outside) matches.
 - **Fluent appearance values and sizes** beyond primary/outline/subtle/transparent were not verified this session; the Fluent UI React v9 storybook was not opened [S-L08-066].
 - **Polaris admin-only UI** (toast, navigation via App Bridge) was not checked; the catalog treats Polaris toast as absent from the web component index [S-L08-022].
 - **Radix activity gap** (Aug 2025 to Jun 2026) is visible in the releases page, but I did not find a statement explaining it [S-L08-030].

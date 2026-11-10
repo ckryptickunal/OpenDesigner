@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Text left fixture</title>
+<!-- Checker eval fixture for site/check_layout.py. Planted, at 1280 px: a section whose lede has max-width: 40ch and margin-inline: auto with left-aligned text, so it starts to the right of its heading.
+     The planted defects and where each must be found are listed in evals/checkers/manifest.json. -->
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font: 16px/1.5 system-ui, -apple-system, sans-serif; color: #1c1c1e; background: #ffffff; }
+body { margin: 0; }
+main { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 28px; line-height: 1.2; margin: 0 0 16px; text-wrap: balance; }
+h2 { font-size: 20px; line-height: 1.3; margin: 24px 0 8px; text-wrap: balance; }
+p { margin: 0 0 16px; text-wrap: pretty; }
+.x-card { border: 1px solid #d1d1d6; border-radius: 12px; padding: 16px; background: #f7f7f8; }
+button { font: inherit; font-size: 15px; min-height: 40px; padding: 0 16px; border: 1px solid #8e8e93; border-radius: 8px; background: #ffffff; color: #1c1c1e; }
+button.primary { background: #1f4fd8; border-color: #1f4fd8; color: #ffffff; }
+#offset-lede { max-width: 40ch; margin: 0 auto 16px; text-align: left; }
+</style>
+</head>
+<body>
+<main>
+<h1>Text left fixture</h1>
+<section id="intro">
+  <h2>How it works</h2>
+  <p id="offset-lede">Five questions sketch the whole system. Then you zoom in only where it matters.</p>
+  <p>Each answer is written to a file.</p>
+</section>
+</main>
+</body>
+</html>

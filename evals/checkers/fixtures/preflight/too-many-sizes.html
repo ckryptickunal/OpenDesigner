@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Too many sizes</title>
+<!-- Checker eval fixture for skills/opendesigner-preflight/scripts/preflight.py html (--medium web). Planted: eleven distinct font sizes (12 to 56 px), each at least 10% from the next; a scale has about eight (a warning, M6). The page defines no scale variables, so only the count is planted.
+     Expected findings are in evals/checkers/manifest.json. -->
+<style>
+body { margin: 0; padding: 24px; font-family: system-ui, sans-serif; line-height: 1.5; }
+.s12 { font-size: 12px; } .s14 { font-size: 14px; } .s16 { font-size: 16px; } .s18 { font-size: 18px; } .s20 { font-size: 20px; } .s24 { font-size: 24px; }
+.s28 { font-size: 28px; } .s32 { font-size: 32px; } .s40 { font-size: 40px; } .s48 { font-size: 48px; } .s56 { font-size: 56px; }
+</style>
+</head>
+<body>
+<p class="s12">Size 12</p>
+<p class="s14">Size 14</p>
+<p class="s16">Size 16</p>
+<p class="s18">Size 18</p>
+<p class="s20">Size 20</p>
+<p class="s24">Size 24</p>
+<p class="s28">Size 28</p>
+<p class="s32">Size 32</p>
+<p class="s40">Size 40</p>
+<p class="s48">Size 48</p>
+<p class="s56">Size 56</p>
+</body>
+</html>

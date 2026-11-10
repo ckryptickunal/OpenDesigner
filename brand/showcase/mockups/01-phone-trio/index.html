@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Three dark interfaces</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Scene (round 3): three iOS screens in three generic phones, the middle one face-on and the outer two turned
+     toward it, in front of a pale wall tinted from Undertow's periwinkle (the system's brand colour is now
+     Undertow's #A9C4FF, so the accent ramp is that hue). One light from the upper left: the bezel rims and the
+     outer phones' edges are lit on that side, every shadow falls down and to the right. The phones have no
+     punch-hole: the screens are iOS, so the camera is a short pill in the status bar's gap. Colours, type and
+     spacing are tokens; device geometry, metal and shadows are art (od-ignore). */
+  :root { --shade: var(--ds-color-accent-light-12); }
+  html, body { margin: 0; }
+  body {
+    width: 1600px; height: 1200px; overflow: hidden; position: relative;
+    background: var(--ds-color-accent-light-4);
+    font-family: var(--ds-font-family-text);
+    color: var(--ds-color-text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* the wall: lit from the upper left, falling off to the lower right */
+  .field {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(110% 85% at 18% 6%, var(--ds-color-accent-light-2) 0%, transparent 60%),
+      radial-gradient(80% 70% at 92% 100%, var(--ds-color-accent-light-6) 0%, transparent 65%),
+      linear-gradient(170deg, var(--ds-color-accent-light-3), var(--ds-color-accent-light-5));
+  }
+  .grain { position: absolute; inset: 0; opacity: .18; mix-blend-mode: multiply; pointer-events: none; }
+
+  .head { position: absolute; left: 0; right: 0; top: calc(var(--ds-space-80) + var(--ds-space-16)); text-align: center; margin: 0; }
+  .head h1 { margin: 0; font: var(--ds-font-weight-heading) var(--ds-font-size-46)/1.13 var(--ds-font-family-text); letter-spacing: -0.02em; color: var(--ds-color-text-primary); }
+  /* one caption under each phone: the app, then one fact its screen shows (Bevel's pattern: name and a sentence) */
+  .cap { position: absolute; top: 1020px; width: 440px; margin: 0; text-align: center; font: var(--ds-text-body-md); color: var(--ds-color-accent-light-12); }
+  .cap b { display: block; font-weight: var(--ds-font-weight-heading); color: var(--ds-color-text-primary); }
+
+  .stage { position: absolute; inset: 0; perspective: 2800px; perspective-origin: 800px 600px; }
+
+  /* --w is the screen's width; the bezel is 3.4% of it, as on the previous build */
+  .phone {
+    --b: calc(var(--w) * .034);
+    position: absolute; margin: 0; transform-style: preserve-3d;
+    width: calc(var(--w) + 2 * var(--b)); height: calc(var(--w) * 844 / 390 + 2 * var(--b));
+  }
+  .front {
+    position: absolute; inset: 0; padding: var(--b); box-sizing: border-box;
+    border-radius: calc(var(--w) * .165);
+    background: linear-gradient(135deg, #3a3b43 0%, #17181c 22%, #111215 70%, #24252b 100%); /* od-ignore: device or photo art */
+    box-shadow:
+      inset 1.5px 1.5px 0 rgb(255 255 255 / .28), /* od-ignore: device or photo art. the rim lit from the upper left */
+      inset -1px -1px 0 rgb(0 0 0 / .55), /* od-ignore: device or photo art */
+      inset 0 0 0 3px #0b0b0d; /* od-ignore: device or photo art */
+  }
+  .screen { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: calc(var(--w) * .135); background: #000; } /* od-ignore: device or photo art */
+  .screen img { display: block; width: 100%; height: 100%; }
+  /* the glass: a 4% diagonal reflection from the light, and 5% darker toward the edges */
+  .screen::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+    background:
+      linear-gradient(122deg, rgb(255 255 255 / var(--refl, .045)) 0%, rgb(255 255 255 / calc(var(--refl, .045) * .45)) 34%, transparent 34.3%), /* od-ignore: device or photo art */
+      radial-gradient(120% 90% at 50% 45%, transparent 62%, rgb(0 0 0 / .05) 100%); /* od-ignore: device or photo art */
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / .6); /* od-ignore: device or photo art */
+  }
+  /* camera: a short pill centred in the status bar's gap, between the clock and the icons */
+  .pill { position: absolute; z-index: 2; left: 50%; top: calc(var(--w) * .03); width: calc(var(--w) * .2); height: calc(var(--w) * .056);
+    transform: translateX(-50%); border-radius: var(--ds-radius-full); background: #050506; } /* od-ignore: device or photo art */
+
+  /* the frame's thickness, seen on the outer phones: a second silhouette just behind the front, offset toward
+     the edge that faces out, so the metal side shows as a crescent along that edge, corners included */
+  .side { position: absolute; inset: 0; border-radius: calc(var(--w) * .165); }
+  .p1 .side { transform: translate3d(calc(var(--w) * -.046), 0, -2px);
+    background: linear-gradient(90deg, #6d6f79 0%, #c9cbd3 3%, #8d8f99 6%, #45464e 13%, #2a2b31 20%); } /* od-ignore: device or photo art. faces the light: one bright line along the metal */
+  .p3 .side { transform: translate3d(calc(var(--w) * .046), 0, -2px);
+    background: linear-gradient(270deg, #3a3b42 0%, #55565f 3%, #2a2b31 7%, #17181b 18%); } /* od-ignore: device or photo art. faces away from it */
+  /* plain side keys on the visible edges: volume on the left phone's left side, power on the right phone's right side */
+  .key { position: absolute; width: calc(var(--w) * .012); border-radius: var(--ds-radius-full); transform: translateZ(-1px); }
+  .p1 .key { left: calc(var(--w) * -.052); background: linear-gradient(90deg, #b9bbc4, #6b6c76); } /* od-ignore: device or photo art */
+  .p1 .key.a { top: 21%; height: 7%; } .p1 .key.b { top: 30%; height: 7%; }
+  .p3 .key { right: calc(var(--w) * -.052); top: 26%; height: 11%; background: linear-gradient(270deg, #4a4b53, #26272c); } /* od-ignore: device or photo art */
+
+  /* one light from the upper left: every shadow falls the same way, down and right, onto the wall. They are drawn
+     on the wall itself (not inside the turned phones, where they turned with them), over each phone's projected
+     outline, which the script reads from the rendered page */
+  .wall { position: absolute; inset: 0; pointer-events: none; overflow: visible; } /* od-ignore: device or photo art */
+  .wall .far { fill: var(--shade); opacity: .24; filter: blur(30px); transform: translate(34px, 54px); } /* od-ignore: device or photo art */
+  .wall .near { fill: var(--shade); opacity: .2; filter: blur(9px); transform: translate(10px, 16px); } /* od-ignore: device or photo art */
+  .corner { position: absolute; width: 0; height: 0; }
+
+  /* layout: the middle phone face-on and nearest; the outer two turned 24 degrees toward it */
+  .p2 { --w: 356px; --refl: .04; left: 610px; top: 196px; transform: translateZ(40px); }
+  .p1 { --w: 330px; --refl: .02; left: 202px; top: 225px; transform: rotateY(24deg); }   /* faces away from the light: least reflection */
+  .p3 { --w: 330px; --refl: .06; left: 1046px; top: 225px; transform: rotateY(-24deg); }  /* faces the light: most */
+</style>
+</head>
+<body>
+  <div class="field"></div>
+  <canvas class="grain" width="800" height="600" aria-hidden="true"></canvas>
+
+  <header class="head">
+    <h1>Three dark interfaces</h1>
+  </header>
+
+  <div class="stage">
+    <figure class="phone p1"><div class="side"></div><i class="key a"></i><i class="key b"></i>
+      <div class="front"><div class="screen"><img src="../../app-screens/02-sleep-meditation/shot.png" alt="Lullwater sleep session at 23:22: Low tide at Merrow Bay, a breathing orb over a dusk bay, 16:52 left of 30 minutes, fading out by 23:40, and a pause control"><span class="pill"></span></div></div></figure>
+    <figure class="phone p2">
+      <div class="front"><div class="screen"><img src="../../app-screens/08-podcast-player/shot.png" alt="Undertow now playing: Maps of places that moved, episode 41 of Night Cartography, with a square river-photo cover, a highlighted transcript line, chapter 3 of 6 and the chapter list"><span class="pill"></span></div></div></figure>
+    <figure class="phone p3"><div class="side"></div><i class="key"></i>
+      <div class="front"><div class="screen"><img src="../../app-screens/01-private-banking/shot.png" alt="Halden Private home: total wealth of £4,862,310.54 at close on 13 Oct with a month's chart, a pending £150,000.00 payment to Cardew Aske LLP to approve by Fri 16 Oct, and three holdings"><span class="pill"></span></div></div></figure>
+  </div>
+
+  <p class="cap" style="left:158px"><b>Lullwater, a sleep app</b>Fades out by 23:40</p>
+  <p class="cap" style="left:580px"><b>Undertow, a podcast player</b>Chapter 3 of 6, 17:05 in</p>
+  <p class="cap" style="left:1002px"><b>Halden Private, a bank for private clients</b>£150,000.00 to approve by Fri 16 Oct</p>
+
+<script>
+  // wall shadows: each phone's projected outline (its four corners as rendered, so a turned phone's far edge is
+  // shorter), drawn on the wall and offset down and right by the CSS. The corners are inset by the corner radius
+  // and the blur rounds them.
+  addEventListener('load', () => {
+    const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'wall'); svg.setAttribute('width', '1600'); svg.setAttribute('height', '1200');
+    for (const f of document.querySelectorAll('.phone .front')) {
+      const pts = ['0% 0%', '100% 0%', '100% 100%', '0% 100%'].map(pos => {
+        const c = document.createElement('i'); c.className = 'corner';
+        const [x, y] = pos.split(' '); Object.assign(c.style, { left: x, top: y }); f.appendChild(c);
+        const r = c.getBoundingClientRect(); c.remove(); return r.left + ',' + r.top;
+      }).join(' ');
+      for (const k of ['far', 'near']) {
+        const poly = document.createElementNS(NS, 'polygon'); poly.setAttribute('points', pts); poly.setAttribute('class', k);
+        svg.appendChild(poly);
+      }
+    }
+    document.querySelector('.stage').before(svg);
+  });
+  // grain: deterministic noise so every render is identical
+  const c = document.querySelector('.grain'), g = c.getContext('2d'), d = g.createImageData(c.width, c.height);
+  let s = 7; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < d.data.length; i += 4) { const v = 200 + r() * 55; d.data[i] = d.data[i+1] = d.data[i+2] = v; d.data[i+3] = 255; }
+  g.putImageData(d, 0, 0); c.style.width = '1600px'; c.style.height = '1200px';
+</script>
+</body>
+</html>

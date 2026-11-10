@@ -1,0 +1,58 @@
+/* Shared styles for the README images (brand/kit/readme/src/*.html), inlined by render.py.
+   The site's visual language (site/static/home.css, deco.css, figures.css): cobalt, ink and white, Hanken Grotesk with light
+   titles, Source Code Pro only for code and labels, photo stages with film grain, iOS-style continuous corners, and a few
+   Press-proof marks. Light only. Fonts are the site's own files, fetched into site/.cache by site/build.py. */
+@font-face { font-family: "Hanken Grotesk"; font-weight: 300 700; src: url("{{ROOT}}/site/.cache/hanken-300-700.woff2") format("woff2"); }
+@font-face { font-family: "Source Code Pro"; font-weight: 400; src: url("{{ROOT}}/site/.cache/sourcecodepro-400.woff2") format("woff2"); }
+@font-face { font-family: "Source Code Pro"; font-weight: 500; src: url("{{ROOT}}/site/.cache/sourcecodepro-500.woff2") format("woff2"); }
+
+:root {
+  /* brand/design-system/project/tokens.json, light */
+  --surface: #fcfdff; --surface-raised: #ffffff; --surface-sunken: #f2f4f9;
+  --line: #cdd2dc; --line-soft: #e3e6ee; --line-strong: #808793;
+  --ink: #222428; --ink-muted: #515762;
+  --accent: #2338ff; --accent-text: #1c31ce; --accent-soft: #e3ecff; --on-accent: #ffffff;
+  --ok: #1a6b3a; --ok-soft: #e4f3e8;
+  /* the site's continuous-corner radii (site/static/site.css) */
+  --r-detail: 8px; --r-control: 16px; --r-card: 22px; --r-panel: 32px;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: transparent; }
+body { font-family: "Hanken Grotesk", system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; font-kerning: normal; }
+.mono, .kicker, .num, code, pre { font-family: "Source Code Pro", ui-monospace, monospace; }
+.num { font-variant-numeric: tabular-nums; }
+.kicker { font-size: 11px; line-height: 16px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-muted); }
+
+/* the canvas: one rounded sheet, so the image sits cleanly on GitHub's light and dark pages */
+#canvas { position: relative; overflow: hidden; isolation: isolate; border-radius: var(--r-panel); background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line-soft); }
+html.full #canvas { border-radius: 0; box-shadow: none; }
+
+/* a photo stage: a free Unsplash photo with film grain, as on the site */
+.stage { position: relative; overflow: hidden; isolation: isolate; border-radius: var(--r-card); background: var(--accent) center / cover no-repeat; }
+.stage::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .26; mix-blend-mode: overlay; background-image: var(--grain); }
+.stage > * { position: relative; z-index: 2; }
+/* a screen in a soft glass bezel */
+.bezel { padding: 5px; border-radius: 16px; background: rgb(255 255 255 / .34);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .5), 0 2px 4px rgb(10 14 40 / .12), 0 32px 64px -28px rgb(10 14 40 / .6); }
+.bezel img { display: block; width: 100%; height: auto; border-radius: 11px; }
+
+/* a floating card, as in the site's figures */
+.card { background: var(--surface-raised); border-radius: var(--r-card); overflow: hidden;
+  box-shadow: 0 0 0 1px rgb(205 210 220 / .7), 0 1px 2px rgb(10 14 40 / .10), 0 28px 56px -28px rgb(10 14 40 / .55); }
+.card-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 46px; padding: 0 16px; border-bottom: 1px solid var(--line-soft); background: var(--surface); }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 9px; border-radius: 999px; font: 500 12px/16px "Source Code Pro", ui-monospace, monospace;
+  background: var(--surface-sunken); color: var(--ink-muted); white-space: nowrap; }
+.chip.ok { background: var(--ok-soft); color: var(--ok); }
+.chip.ok::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.chip.accent { background: var(--accent-soft); color: var(--accent-text); }
+
+/* Press-proof: a spec callout, a registration target, the contrast stamp */
+.call { position: absolute; z-index: 3; display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 6px; background: #fff;
+  font: 500 11px/16px "Source Code Pro", ui-monospace, monospace; letter-spacing: .02em; color: var(--accent-text); white-space: nowrap; box-shadow: 0 1px 2px rgb(10 14 40 / .18); }
+.call b { font-weight: 500; color: var(--ink); margin-left: 5px; }
+
+@supports (corner-shape: squircle) {
+  #canvas, .stage, .bezel, .bezel img, .card { corner-shape: squircle; }
+}

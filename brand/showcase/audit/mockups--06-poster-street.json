@@ -1,0 +1,71 @@
+{
+  "piece": "mockups/06-poster-street",
+  "title": "06 · Roadside board: Howl Hill Weekender",
+  "pattern": "poster mockup",
+  "platform": "mixed",
+  "industry": "festival",
+  "style": [
+    "brutalist",
+    "playful",
+    "retro"
+  ],
+  "tags": [
+    "poster mockup",
+    "festival",
+    "billboard",
+    "photo",
+    "golden hour",
+    "yellow",
+    "print"
+  ],
+  "score": 4,
+  "verdict": "keep",
+  "strengths": [
+    "The most believable composite of the set: the print is perspective-matched to the board and multiplied, so the corrugated ridges show through the yellow, the eucalyptus shadow falls across 'HOWL', and the low sun stays on top of the ink",
+    "The photo is real, empty of people, and the caption is one white line on the tarmac; nothing else is added",
+    "The hero itself prints well: flat yellow and blue, hard shapes, a lineup ticker that runs off the board's edge like a real wrap"
+  ],
+  "slop_signals": [
+    "Two web buttons are printed on a billboard: 'GET TICKETS £89' and '▸ PLAY LINEUP' with button chrome and an offset shadow; a print would carry a URL or a price line, not controls",
+    "The feathered blur band across the shops behind the fence reads as a smudge rather than depth of field, because nothing else at that distance is blurred"
+  ],
+  "fixes": [
+    "Swap the two buttons for printed text in the same voice: 'TICKETS £89 · HOWLHILL.LIVE' and 'LINEUP ON THE BACK' (or a QR mark)",
+    "Replace the blur band with a 4 to 6 px blur applied to the whole far plane behind the fence, or crop 60 px off the right so the shop signs leave the frame"
+  ],
+  "references": [
+    {
+      "site": "The New Yorker",
+      "url": "https://mobbin.com/sites/sections/7b8ee3c6-6b9d-4058-a654-295734f0233a",
+      "what": "Golden-hour photograph with type; the light is the subject and the type sits inside it, which is what the board does"
+    },
+    {
+      "site": "Daylight",
+      "url": "https://mobbin.com/sites/sections/a934cc95-697d-4051-8d07-16e8d1a75e34",
+      "what": "A product in real sunlight; the screen reads as paper because it takes the scene's light, the same multiply logic as our print"
+    },
+    {
+      "site": "Melius",
+      "url": "https://mobbin.com/sites/sections/3f4ed450-3eec-4694-acd7-5176809c4b32",
+      "what": "A flat yellow card over a photograph stays believable when the photo keeps its texture"
+    },
+    {
+      "site": "Canva",
+      "url": "https://mobbin.com/sites/sections/82b99a88-cd90-4c31-b375-3b59dcd2cdcd",
+      "what": "Case-study tiles with work shown in photographed places; the register the poster plate belongs in"
+    }
+  ],
+  "audited": "2026-10-14",
+  "owner": {
+    "verdict": "remove",
+    "said": "Hide all 6: approved the round 4 audit's removals (mockups showing removed pieces, heroes repeating the product screens, a generic timer)",
+    "date": "2026-10-15"
+  },
+  "owner_history": [
+    {
+      "verdict": "improve",
+      "said": "when designs are bad, mockups will also be bad; work on them",
+      "date": "2026-10-14"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# Feedback
+
+Gaps, bugs, confusing steps and ideas found while using OpenDesigner. Each entry has a ready-to-file issue link. Nothing is posted unless you open the link and submit it yourself.
+
+## F-001 · 2026-10-14 · gap
+Preflight cannot judge a page that links its tokens: for this post it listed 13 font sizes and 2 pairs within 10% (48/51, 67/72) because it counts every size declared in tokens.css, while the page uses two (32 and 108). It also says 'Source Code Pro is used' when it is only declared. For engine pages it reads no sizes at all (rem). It should measure rendered sizes.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bgap%5D%20Preflight%20cannot%20judge%20a%20page%20that%20links%20its%20tokens%3A%20for%20this%20post%20it%20...&body=%2A%2AKind%3A%2A%2A%20gap%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0APreflight%20cannot%20judge%20a%20page%20that%20links%20its%20tokens%3A%20for%20this%20post%20it%20listed%2013%20font%20sizes%20and%202%20pairs%20within%2010%25%20%2848/51%2C%2067/72%29%20because%20it%20counts%20every%20size%20declared%20in%20tokens.css%2C%20while%20the%20page%20uses%20two%20%2832%20and%20108%29.%20It%20also%20says%20%27Source%20Code%20Pro%20is%20used%27%20when%20it%20is%20only%20declared.%20For%20engine%20pages%20it%20reads%20no%20sizes%20at%20all%20%28rem%29.%20It%20should%20measure%20rendered%20sizes.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=gap%2Cfrom-engine)

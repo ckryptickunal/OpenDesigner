@@ -26,6 +26,10 @@
   "preset": "flat2",
   "presetIsDefault": true,
   "macros": [],
+  "style": null,
+  "look": {
+    "gradient": null
+  },
   "params": {
     "behavior.navigationNative": {
       "value": true,
@@ -427,6 +431,15 @@
       ],
       "inferred": false
     },
+    "type.displayMax": {
+      "value": 96,
+      "dial": "expression",
+      "evidence": [
+        "DC-L02-09",
+        "S-L19-052"
+      ],
+      "inferred": true
+    },
     "type.emphasizedVariants": {
       "value": false,
       "dial": "expression",
@@ -490,12 +503,13 @@
       "inferred": false
     },
     "type.weightCount": {
-      "value": 2,
+      "value": 3,
       "dial": "expression",
       "evidence": [
         "DC-L02-15"
       ],
-      "inferred": true
+      "inferred": true,
+      "profile": "work-tool"
     }
   },
   "color": {
@@ -518,6 +532,11 @@
     "brandPinFailed": false,
     "brandAdjustedTo": null,
     "brandContrastWhite": 5.15,
+    "brandContrastDark": 3.01,
+    "brandPinnedDark": false,
+    "brandContrastDarkMode": 3.55,
+    "brandDark": "#6078ff",
+    "secondary": [],
     "statusPeakHct": 84.0,
     "textMin": 4.5,
     "ramps": [
@@ -550,66 +569,86 @@
         "#b64d00",
         "#0095c0"
       ]
+    },
+    "chartDiverging": {
+      "light": [
+        "#574500",
+        "#765e00",
+        "#977901",
+        "#868d9b",
+        "#6578c5",
+        "#4558bd",
+        "#2d33b5"
+      ],
+      "dark": [
+        "#e6ba00",
+        "#bc9800",
+        "#977902",
+        "#676d7a",
+        "#6578c5",
+        "#7c95ff",
+        "#aabdff"
+      ]
     }
   },
   "ramps": {
     "accent": {
       "dark": {
         "hex": [
-          "#16181f",
-          "#1c1f2a",
-          "#21273c",
-          "#262e4e",
-          "#2b3560",
-          "#303c73",
-          "#34428a",
-          "#647be1",
-          "#637bf2",
-          "#6f89ff",
+          "#151821",
+          "#1b1f2d",
+          "#1f2641",
+          "#242d55",
+          "#28346a",
+          "#2d3a7f",
+          "#313f99",
+          "#5f77f7",
+          "#6078ff",
+          "#6f88ff",
           "#91a8ff",
-          "#c8d5fe"
+          "#c8d5ff"
         ],
         "textOnSolid": "light",
         "oklch": [
           [
             0.21,
-            0.014
+            0.018
           ],
           [
-            0.243,
-            0.022
+            0.244,
+            0.026
           ],
           [
-            0.276,
-            0.041
+            0.277,
+            0.051
           ],
           [
-            0.309,
-            0.059
+            0.311,
+            0.073
           ],
           [
-            0.342,
-            0.077
-          ],
-          [
-            0.376,
+            0.345,
             0.095
           ],
           [
-            0.409,
-            0.12
+            0.378,
+            0.117
           ],
           [
-            0.614,
-            0.156
+            0.412,
+            0.148
           ],
           [
-            0.624,
-            0.179
+            0.618,
+            0.192
           ],
           [
-            0.667,
-            0.176
+            0.627,
+            0.201
+          ],
+          [
+            0.666,
+            0.177
           ],
           [
             0.75,
@@ -617,7 +656,7 @@
           ],
           [
             0.876,
-            0.059
+            0.06
           ]
         ]
       },
@@ -1535,7 +1574,7 @@
       35
     ],
     "merged": [],
-    "minSize": 11,
+    "minSize": 12,
     "scaleSizes": [
       12,
       14,
@@ -1545,9 +1584,10 @@
       29,
       35
     ],
+    "fluid": {},
     "weights": {
       "body": 400,
-      "label": 400,
+      "label": 500,
       "heading": 600
     },
     "styles": [
@@ -1594,6 +1634,14 @@
         "selfHost": true,
         "open": true
       }
+    },
+    "tracking": {
+      "small": 0.02,
+      "body": 0,
+      "heading": -0.01,
+      "display": -0.02,
+      "caps-label": 0.06,
+      "caps-display": 0.01
     }
   },
   "space": {
@@ -1621,8 +1669,8 @@
     "iconDefault": 16,
     "iconStroke": {
       "16": 1.5,
-      "20": 1.5,
-      "24": 2.0
+      "20": 2.0,
+      "24": 2.5
     },
     "breakpoints": {
       "sm": 640,
@@ -1630,6 +1678,28 @@
       "lg": 1024,
       "xl": 1280,
       "2xl": 1536
+    },
+    "layout": {
+      "container": 1280,
+      "columns": {
+        "compact": 4,
+        "medium": 8,
+        "expanded": 12
+      },
+      "gutter": {
+        "compact": 16,
+        "expanded": 24
+      },
+      "margin": {
+        "compact": 16,
+        "expanded": 24
+      },
+      "measure": {
+        "prose": 65,
+        "lead": 52,
+        "unit": "ch"
+      },
+      "alignment": "A centred hero is fine; within a section the heading and its content share one alignment."
     }
   },
   "density": {
@@ -1663,6 +1733,12 @@
         "md": 48,
         "lg": 56
       },
+      "row": {
+        "sm": 52,
+        "md": 56,
+        "lg": 64,
+        "two-line": 80
+      },
       "ratio": 3.5
     },
     "comfortable": {
@@ -1694,6 +1770,12 @@
         "sm": 32,
         "md": 40,
         "lg": 48
+      },
+      "row": {
+        "sm": 44,
+        "md": 48,
+        "lg": 56,
+        "two-line": 72
       },
       "ratio": 2.5
     },
@@ -1727,6 +1809,12 @@
         "md": 32,
         "lg": 40
       },
+      "row": {
+        "sm": 36,
+        "md": 40,
+        "lg": 48,
+        "two-line": 64
+      },
       "ratio": 2.0
     }
   },
@@ -1740,7 +1828,11 @@
     "focusWidth": 2,
     "focusRadius": 6,
     "iconCorners": "default",
-    "iconCaps": "square"
+    "iconCaps": "square",
+    "borderDefault": 1,
+    "ctaShape": "subtle",
+    "chosen": false,
+    "cornerShape": "circular"
   },
   "elevation": {
     "model": "ring+faint-shadow",
@@ -1754,8 +1846,8 @@
       "medium": 220,
       "long": 350,
       "extra": 620,
-      "medium-exit": 160,
-      "long-exit": 260
+      "medium-exit": 180,
+      "long-exit": 280
     },
     "multiplier": 0.88,
     "standard": [
@@ -1771,9 +1863,9 @@
       0.9
     ],
     "exit": [
-      0.2,
       0,
-      1,
+      0,
+      0.38,
       0.9
     ],
     "spatial": {
@@ -2677,6 +2769,123 @@
     },
     {
       "mode": "light",
+      "fg": "color.chart.brand",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.1",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.2",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.3",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.4",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.5",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.6",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.diverging.7",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.status.success",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.status.warning",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.status.danger",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.status.info",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
+      "fg": "color.chart.status.discovery",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "light",
       "fg": "color.bg.action.primary",
       "bg": "color.surface.base",
       "min": 3.0,
@@ -3586,6 +3795,123 @@
     },
     {
       "mode": "dark",
+      "fg": "color.chart.brand",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.1",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.2",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.3",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.4",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.5",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.6",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.diverging.7",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.status.success",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.status.warning",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.status.danger",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.status.info",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
+      "fg": "color.chart.status.discovery",
+      "bg": "color.surface.base",
+      "min": 3.0,
+      "kind": "chart",
+      "rule": "WCAG 2.2 SC 1.4.11 (chart marks)",
+      "level": "warning"
+    },
+    {
+      "mode": "dark",
       "fg": "color.bg.action.primary",
       "bg": "color.surface.base",
       "min": 3.0,
@@ -3613,5 +3939,104 @@
   ],
   "textScaling": "full",
   "notes": [],
-  "stateHash": "e6912ebbc473edd6"
+  "limits": {
+    "_about": "Caps for one page. opendesigner-review counts a built page against them; the values are the tokens.",
+    "sizes": {
+      "max": 8,
+      "scale": [
+        12,
+        14,
+        17,
+        20,
+        24,
+        29,
+        35
+      ],
+      "fluid": {}
+    },
+    "weights": {
+      "max": 3,
+      "values": [
+        400,
+        500,
+        600
+      ]
+    },
+    "families": {
+      "max": 2,
+      "values": [
+        "Inter"
+      ],
+      "note": "a code face only where code is shown"
+    },
+    "tracking": {
+      "small": 0.02,
+      "body": 0,
+      "heading": -0.01,
+      "display": -0.02,
+      "caps-label": 0.06,
+      "caps-display": 0.01,
+      "capsNeverNegative": true
+    },
+    "textGreys": {
+      "max": 3,
+      "tokens": [
+        "color.text.primary",
+        "color.text.secondary",
+        "color.text.disabled"
+      ]
+    },
+    "accents": {
+      "max": 1
+    },
+    "filledPrimaryPerView": 1,
+    "radius": {
+      "control": 4,
+      "container": 8,
+      "overlay": 12,
+      "detail": 2
+    },
+    "ctaShape": "subtle",
+    "containers": {
+      "max": 1,
+      "width": 1280
+    },
+    "alignment": "A centred hero is fine; within a section the heading and its content share one alignment.",
+    "heroMaxLines": 2,
+    "evidence": [
+      "DC-L02-10",
+      "DC-L02-15",
+      "L15-P04",
+      "DC-L15-03",
+      "S-L15-038"
+    ]
+  },
+  "stateHash": "e6912ebbc473edd6",
+  "profile": {
+    "id": "work-tool",
+    "name": "Dense work tool",
+    "trigger": "Q-aud-01 = dense",
+    "why": "Premium B2B work tools used all day share six traits; feel words such as professional or minimal otherwise push corners to 2px, labels to the body weight and the accent to grey, a look the evidence does not support.",
+    "evidence": [
+      "DC-L23-01"
+    ],
+    "applied": [
+      {
+        "item": "weights",
+        "what": "Three weights: body 400, labels, column headers and row titles 500, headings 600",
+        "set_by": "auto_default",
+        "reason": "Dense work tool default (Q-aud-01 = dense); nothing you answered, set or locked decides it",
+        "evidence": [
+          "DC-L23-03",
+          "DC-L02-15"
+        ],
+        "inferred": false
+      }
+    ],
+    "skipped": {
+      "corners": "the roundness dial is set",
+      "accent": "the colorfulness dial is set",
+      "surfaces": "the depth dial is set"
+    }
+  }
 }

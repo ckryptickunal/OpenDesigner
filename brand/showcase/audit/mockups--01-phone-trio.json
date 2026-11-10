@@ -1,0 +1,105 @@
+{
+  "piece": "mockups/01-phone-trio",
+  "title": "01 · Phone trio: three evening apps",
+  "pattern": "phone mockup",
+  "platform": "ios",
+  "industry": "consumer apps",
+  "style": [
+    "minimal",
+    "dark",
+    "luxury"
+  ],
+  "tags": [
+    "phone mockup",
+    "consumer apps",
+    "case study",
+    "lilac",
+    "sleep",
+    "podcast",
+    "banking"
+  ],
+  "score": 3,
+  "verdict": "polish",
+  "strengths": [
+    "The hardware is genuinely generic: uniform black bezel, a punch-hole camera, plain side keys, no island or brand cues",
+    "Three sizes and heights with the middle phone forward, long soft violet shadows and film grain on the field lift it above the flat template",
+    "The screens inside are strong and specific (Lullwater's breathing orb and '18:24 left', Undertow's topographic cover and transcript, Halden's card and holdings)"
+  ],
+  "slop_signals": [
+    "All three phones are dead frontal on a plain lilac gradient field: the stock 'three flat phones on a tinted background' plate (compare Calm, which the notes name as what to avoid)",
+    "The glass has no reflection or edge highlight, so the screens read as pasted PNGs rather than lit objects; the shadows fall straight down while nothing else in the scene says where the light is",
+    "Three unrelated apps (sleep, podcast, banking) with one caption reads as a portfolio dump rather than a case"
+  ],
+  "fixes": [
+    "Rotate the outer phones 8 to 12 degrees around Y with matching perspective and shift their shadows to one light direction",
+    "Add a 3 to 5% white diagonal reflection on each screen and a 1 px lighter rim on the bezel edge facing the light",
+    "Let the field take its tint from one of the screens (Undertow's blue or Lullwater's peach) and crop tighter so the phones fill two thirds of the frame",
+    "Caption as a case ('Lullwater, Undertow and Halden Private: three night-mode systems') or show one app's three screens"
+  ],
+  "references": [
+    {
+      "site": "Sana",
+      "url": "https://mobbin.com/sites/sections/cf567c70-dd59-4cc6-99c9-a8d4e761bb55",
+      "what": "Three phones with the outer two rotated in 3D and the middle frontal; the trio reads as one lit object"
+    },
+    {
+      "site": "Calm",
+      "url": "https://mobbin.com/sites/sections/aea0407a-ddaa-4cf2-ab72-3c1744dd9c71",
+      "what": "Three flat phones on a gradient, equal heights, no shadow: the template look our plate is halfway toward"
+    },
+    {
+      "site": "Riverside",
+      "url": "https://mobbin.com/sites/sections/601ce269-1efe-407c-9fb5-7272f7504f43",
+      "what": "Devices overlapping at different depths with real content; depth comes from overlap, not only size"
+    },
+    {
+      "site": "Luffu",
+      "url": "https://mobbin.com/sites/sections/b15a9d8b-347b-4d09-bc86-d06470ad03bc",
+      "what": "One phone on a soft field whose tint comes from the app's own gradient"
+    }
+  ],
+  "audited": "2026-10-14",
+  "owner": {
+    "verdict": "hold",
+    "said": "Hide until it is re-rendered with the rebuilt screens",
+    "date": "2026-10-15"
+  },
+  "round3": {
+    "date": "2026-10-15",
+    "score": 4,
+    "audited_by": "fresh-context agent (did not build it); two earlier fresh audits this round scored 3",
+    "references": [
+      {
+        "site": "Sana",
+        "url": "https://mobbin.com/sites/sections/cf567c70-dd59-4cc6-99c9-a8d4e761bb55"
+      },
+      {
+        "site": "Bevel",
+        "url": "https://mobbin.com/sites/sections/f324f5f1-a03a-4788-b1ef-9ddb8a4352c8"
+      },
+      {
+        "site": "Apple, All in the family (structure only)",
+        "url": "https://mobbin.com/sites/sections/fae8666e-aa8f-401c-8456-63eea00ed5d9"
+      }
+    ],
+    "changed": [
+      "Round punch-hole removed (the screens are iOS); a short camera pill in the status bar's gap",
+      "Outer phones turned 24 degrees toward a face-on middle phone, with metal edges and side keys",
+      "One light from the upper left: lit rims, reflections 2/4/6%, wall shadows drawn over each phone's projected outline (fixed after the audit: no shadow above the far corners)",
+      "Wall tinted from Undertow's #A9C4FF through the engine (raw.brandColor)",
+      "A 46 px heading 'Three dark interfaces' and one caption per phone with one fact its screen shows",
+      "Alt texts rewritten for the changed screens; Lullwater's clock and timer fixed in app-screens/02"
+    ],
+    "remaining": [
+      "Nice-to-have: a heading that makes a claim, a graphite left edge with one bright line, clearer keys, a longer shadow for the middle phone, captions 16 px lower, stronger reflections",
+      "The post-audit shadow fix is measured but not re-audited"
+    ]
+  },
+  "owner_history": [
+    {
+      "verdict": "improve",
+      "said": "when designs are bad, mockups will also be bad; work on them",
+      "date": "2026-10-14"
+    }
+  ]
+}

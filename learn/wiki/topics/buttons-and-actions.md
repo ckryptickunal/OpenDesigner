@@ -2,7 +2,7 @@
 type: topic
 title: Buttons and actions
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -50,3 +50,4 @@ Swipes can replace a button (swipe to add a friend instead of a plus button) and
 - [[sources/sonner-toast-toast-sonner|Toast – Sonner]]: Action renders a primary button and cancel a secondary one; both close the toast on click, and event.preventDefault() keeps it open.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Hero buttons at 14px text and 38px tall via padding, nav button 28px with text-sm, no icon, pill shape, secondary button with a small shadow and an outer ring, and a span wrapper so ringed and plain buttons are the same height.
 - See also: [[synthesis/buttons-and-actions|Buttons and actions synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-copywriting-referodesign-refero-skill-skills-refero-design-references-copywriting-md|referodesign/refero_skill: skills/refero-design/references/copywriting.md]]: Replace OK, Submit, Confirm with action plus object, such as Create project or Save changes.

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fixture Ledger: plans</title>
+<!-- Checker eval fixture for skills/opendesigner-review. What the owner kept catching on a private B2B landing page
+     (2026-11-03 to 2026-11-05), planted: an uppercase eyebrow tracked at -0.04em; a 44 px title tracked looser (+0.02em)
+     than 15 px text under it (-0.01em); a hero title that runs to 4 lines at 390 px; a centred section heading over a
+     left-aligned lede and button row; a heading 14 px off its section's centre (a one-sided padding); three button styles
+     with three corner shapes and a 13 px primary label, two of them filled side by side in two fills; a face loaded by
+     script that no text uses; 12 font sizes, two of them between whole pixels. Invented brand; .example domains only. -->
+<style>
+@font-face { font-family: "Fixture Display"; src: local("Georgia"), local("Times New Roman"); }
+* { box-sizing: border-box; }
+:focus-visible { outline: 2px solid #1f4fd8; outline-offset: 2px; }
+body { margin: 0; font: 16px/1.5 Arial, Helvetica, sans-serif; color: #1c1c1e; background: #ffffff; }
+section { padding: 48px 24px; }
+p { margin: 0 0 8px; }
+.eyebrow { text-transform: uppercase; letter-spacing: -0.04em; font-size: 12px; margin: 0 0 8px; }
+#hero-title { font-size: 44px; line-height: 52px; letter-spacing: 0.02em; margin: 0 0 16px; max-width: 900px; }
+.note { font-size: 15px; letter-spacing: -0.01em; color: #3a3a3c; margin: 0 0 8px; }
+.fine { font-size: 13px; color: #3a3a3c; }
+.meta { font-size: 14.4px; color: #3a3a3c; }
+.kicker { font-size: 18.72px; }
+.s1 { font-size: 21px; } .s2 { font-size: 26px; } .s3 { font-size: 30px; }
+#plans { text-align: center; }
+#plans .lede, #plans .row { text-align: left; }
+#plans h2 { font-size: 32px; margin: 0 0 12px; }
+.row { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn { display: inline-block; text-decoration: none; padding: 0 16px; white-space: nowrap; }
+#trial { background: #1f4fd8; color: #ffffff; height: 40px; line-height: 40px; border-radius: 8px; font-size: 13px; }
+#call { background: #1c1c1e; color: #ffffff; height: 48px; line-height: 48px; border-radius: 24px; font-size: 16px; }
+#guide { border: 1px solid #1c1c1e; color: #1c1c1e; height: 34px; line-height: 32px; border-radius: 2px; font-size: 12px; text-transform: uppercase; }
+#proof { padding-left: 52px; }
+#proof h2 { text-align: center; font-size: 28px; margin: 0; }
+</style>
+</head>
+<body>
+<main>
+<section id="hero">
+  <p class="eyebrow" id="eyebrow">For small finance teams</p>
+  <h1 id="hero-title">Every invoice, every receipt and every payment in one quiet place</h1>
+  <p class="note" id="note">Built with accountants, for accountants.</p>
+  <p class="fine">Billed yearly. Prices exclude tax.</p>
+  <p class="meta">Updated weekly.</p>
+  <p class="kicker">Three plans.</p>
+  <p class="s1">Starter</p><p class="s2">Team</p><p class="s3">Company</p>
+</section>
+<section id="plans">
+  <div class="head" id="plans-head">
+    <h2 id="plans-title">Pick a plan</h2>
+    <p class="lede" id="plans-lede">Start small and add seats later.</p>
+    <div class="row" id="plans-row"><a class="btn" id="trial" href="#trial">Start a trial</a><a class="btn" id="call" href="#call">Book a call</a><a class="btn" id="guide" href="#guide">Read the guide</a></div>
+  </div>
+</section>
+<section id="proof"><h2 id="proof-title">Trusted by small teams</h2></section>
+</main>
+<script>document.fonts.load('16px "Fixture Display"');</script>
+</body>
+</html>

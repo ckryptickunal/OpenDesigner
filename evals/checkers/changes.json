@@ -1,0 +1,21 @@
+{
+  "_about": "Checker bugs the checker evals found, and the fix for each. site/evals_html.py shows each checker's numbers from the results file named in 'before' against latest.json.",
+  "before": "results/2026-10-20-before-fixes.json",
+  "fixes": [
+    {
+      "checker": "review",
+      "date": "2026-10-20",
+      "what": "The page probe shared one cached color between elements, so after one semi-transparent element every later element with the same text color was measured as faded (6.72:1 reported as 3.48:1). It now hands out a copy."
+    },
+    {
+      "checker": "review",
+      "date": "2026-10-20",
+      "what": "A page with no links or buttons was reported as a keyboard trap (\"Tab never reached any control\"). The Tab walk now counts what can take focus, and a page with none gets a note instead of an error."
+    },
+    {
+      "checker": "layout",
+      "date": "2026-10-20",
+      "what": "Text for screen readers only (a 1 x 1 px box that hides its overflow on purpose) was flagged as clipped and as running past the edge. The layout checker now skips it, and an overflowing svg is named instead of \"unknown\"."
+    }
+  ]
+}

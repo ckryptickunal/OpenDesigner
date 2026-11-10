@@ -1,0 +1,888 @@
+[
+  {
+    "id": "ai-glow",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2024 (Dec 17)",
+        "note": "Webflow names 'Glow effects' a 2025 trend: halos and blooms around buttons, navigation and key components, some pulsing. Example uplink.xyz still uses glow CSS."
+      },
+      {
+        "id": "S2",
+        "status": "partly",
+        "year": "2025 (Jun 7)",
+        "note": "Supports tinted near-black (brand colour at 1-10% lightness), dark mode, gradients, Linear and Raycast. It describes 'linear design' and never mentions glow or AI."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "2024 (Dec 5)",
+        "note": "Trends to avoid: a green-to-purple gradient called the AI language of choice."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "2026 (Apr 16, from page metadata)",
+        "note": "Lists neon-on-dark palettes, dark-mode radial glow and purple gradients as tells of AI-made UI."
+      },
+      {
+        "id": "S5",
+        "status": "ok",
+        "year": "2024 (Oct 31)",
+        "note": "Trend 9 'Dark Mode With Neon Accents'. URL now redirects to https://www.svgator.com/blog/graphic-design-trends-prediction/"
+      }
+    ],
+    "fixes": [
+      {
+        "field": "origin",
+        "problem": "'about 2020 to 2025, often traced to the Linear product site [S2]' is unsupported: S2 traces 'linear design' (not glow) to Linear and gives no dates.",
+        "correct": "Dark SaaS and AI landing pages of the mid-2020s. Webflow named glow effects a 2025 trend and traces them to photo and game light bloom, Y2K and OLED screens [S1]; LogRocket ties the dark, gradient SaaS look to Linear [S2].",
+        "url": "https://webflow.com/blog/web-design-trends-2025"
+      },
+      {
+        "field": "sources",
+        "problem": "S5 URL redirects.",
+        "correct": "Use https://www.svgator.com/blog/graphic-design-trends-prediction/",
+        "url": "https://www.svgator.com/blog/graphic-design-trends-prediction/"
+      }
+    ],
+    "note": "Named by Webflow, SVGator and Fountain Institute; only the Linear attribution and dates need fixing."
+  },
+  {
+    "id": "immersive-3d",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "Undated page written for 2026 (says 2026 is 'around the corner'), so late 2025",
+        "note": "Trend 1 '3D and immersive elements': WebGL, scroll-triggered animation, AR previews; names Nike and IKEA (IKEA link is a VR store tour)."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "2024 (Dec 17)",
+        "note": "Animated scrolls built with Three.js and GSAP reveal product imagery in an immersive format."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "undated collection",
+        "note": "Awwwards WebGL collection lists mouse deformation, a globe view, WebGL storytelling and page transitions. A showcase, not a trend report."
+      }
+    ],
+    "fixes": [],
+    "note": "Figma and Webflow name it independently; SVGator 2025 also lists 3D design animation. Examples are real."
+  },
+  {
+    "id": "kinetic-type",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2023 (Dec 12)",
+        "note": "Kinetic typography is trend 5 for 2024, expected to respond to user actions."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "2025 (Dec 28)",
+        "note": "Trend 8 kinetic typography with Spotify Wrapped as poster child; variable fonts are a separate trend 6."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "Undated page written for 2026 (says 2026 is 'around the corner'), so late 2025",
+        "note": "Bold typography trend mentions kinetic lettering and variable fonts that respond to interaction."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "undated",
+        "note": "Undated style-catalogue page from daisyUI's Blueprint MCP (a vendor); its radius and colour numbers are prescriptions, not observed trend data. Saul Bass 1959 precedent, limited high-contrast palette, radius 0-0.25rem, static reduced-motion state."
+      },
+      {
+        "id": "S5",
+        "status": "ok",
+        "year": "2026 (Jan 7)",
+        "note": "'Expressive, Elastic Typography'; its example has continuously rotating text."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "origin",
+        "problem": "'thanks to variable fonts [S1][S2]' is an unsupported cause: S1 credits easier tools and a cultural shift; S2 lists variable fonts as a separate trend.",
+        "correct": "Film title sequences of the 1950s [S4]; named a web trend for 2024 by Webflow [S1] and a 2026 type trend by Creative Bloq [S2]. Variable fonts make weight and width animation practical [S2].",
+        "url": "https://www.creativebloq.com/design/fonts-typography/breaking-rules-and-bringing-joy-top-typography-trends-for-2026"
+      },
+      {
+        "field": "examples",
+        "problem": "Spotify Wrapped points to spotify.com, which redirects to the web player and does not show Wrapped.",
+        "correct": "Link the Wrapped campaign page Creative Bloq links to.",
+        "url": "https://newsroom.spotify.com/2025-12-03/wrapped-marketing-campaign/"
+      }
+    ],
+    "note": "Well sourced; only the causal origin claim and one example link need fixing."
+  },
+  {
+    "id": "oversized-type",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "Undated page written for 2026 (says 2026 is 'around the corner'), so late 2025",
+        "note": "Trend 4 bold typography: custom fonts, oversized headlines; names Glossier and Samsung. Also suggests layering type over imagery."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "2025 (Dec 23)",
+        "note": "'Type as design' (Dalziel & Pow); cites the Whitney Museum identity."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "undated",
+        "note": "Undated style-catalogue page from daisyUI's Blueprint MCP (a vendor); its radius and colour numbers are prescriptions, not observed trend data. Oversized words set the grid, crop at edges, minimal imagery, radius 0-0.25rem, Bauhaus and Swiss lineage."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "2025 (Apr 29)",
+        "note": "'Editorial Energy': oversized type, bold high-impact photography, white space; names Glossier."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "defining",
+        "problem": "'with little or no imagery [S1][S2]': neither S1 nor S2 says this. Figma suggests type layered over imagery, and Wacom pairs oversized type with bold photography.",
+        "correct": "Custom or expressive fonts carry the brand voice [S1][S2]; imagery is kept subordinate to the type [S3], often a single bold photo [S4].",
+        "url": "https://community.wacom.com/en-us/graphic-design-trends-2025/"
+      }
+    ],
+    "note": "Named by Figma, Creative Bloq and Wacom; one defining line overstates."
+  },
+  {
+    "id": "scrollytelling",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2020 (Aug 25; updated 2021)",
+        "note": "Snow Fall, Dec 2012; step-triggered graphics and sticky positioning; Kosara's scrolljacking criticism."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "2024 (Dec 17)",
+        "note": "'Sophisticated, animated scrolls' trend going beyond traditional scrollytelling; Three.js and GSAP; example thisisonward.com."
+      },
+      {
+        "id": "S3",
+        "status": "partly",
+        "year": "2025 (Dec 23)",
+        "note": "Names 'Guided scrolling' (progress indicators, numbered steps) but explicitly says it is not scrollytelling; it treats scroll as wayfinding."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "Undated page written for 2026 (says 2026 is 'around the corner'), so late 2025",
+        "note": "Motion design trend includes scroll-based narratives, called scrollytelling."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "defining",
+        "problem": "'Progress bars and numbered steps show how much of the story remains [S3]': Webflow presents guided scrolling as a separate trend from scrollytelling.",
+        "correct": "Drop it as a defining trait, or mark it as the related 'guided scrolling' pattern.",
+        "url": "https://webflow.com/blog/web-design-trends-2026"
+      },
+      {
+        "field": "aliases",
+        "problem": "'guided scrolling' is listed as an alias, but its own source says it is a different thing.",
+        "correct": "Remove the alias.",
+        "url": "https://webflow.com/blog/web-design-trends-2026"
+      },
+      {
+        "field": "examples",
+        "problem": "Emons is Webflow's example of guided scrolling, not scrollytelling.",
+        "correct": "Replace with Snow Fall, the piece Nightingale cites.",
+        "url": "http://www.nytimes.com/projects/2012/snow-fall/index.html"
+      }
+    ],
+    "note": "Style is solid; the Webflow 2026 material was attached to the wrong trend."
+  },
+  {
+    "id": "tactile-sensory",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2025 (Dec 12)",
+        "note": "'All our senses, to the max': puffy, soft, squishy textures and hyper-realistic objects with playful distortions. Bubbly, puffy letterforms sit in its separate type trend. Blocks curl but loads."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "2025 (Dec 15)",
+        "note": "Reprint (Dec 15 2025) of Canva's 2026 Design Trends Report; the original exists (Canva release on Business Wire, Dec 10 2025; canva.com/design-trends/ blocks bots). Short URL redirects to https://campaignbrief.com/canvas-2026-design-trends-report-highlights-shift-toward-imperfect-by-design/. 'Texture Check': CGI and hyper-real materials, related searches up 30%."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "2025 (Apr 29)",
+        "note": "'Hyper-Real Texture Play': detailed 3D renders, often rotating on scroll; example is Wacom's Cintiq Pro 27 page."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "2025 (Dec 16)",
+        "note": "Adobe's 2026 'All the feels': visuals with depth and detail to suggest texture and taste."
+      }
+    ],
+    "fixes": [],
+    "note": "Adobe, Canva and Wacom name it independently. Examples are empty; the only example a source shows is wacom.com/en-us/products/wacom-cintiq-pro-27."
+  },
+  {
+    "id": "dopamine",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "Undated page written for 2026 (says 2026 is 'around the corner'), so late 2025",
+        "note": "Trend 3 vibrant colour, citing 'dopamine design', neon gradients, high-contrast pairings; names Lush, Headspace, Starface."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "undated",
+        "note": "Undated style-catalogue page from daisyUI's Blueprint MCP (a vendor); its radius and colour numbers are prescriptions, not observed trend data. Early-2020s label from dopamine dressing and decor (cites AP); radius 1-2rem; pops and confetti at rewards."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "2025 (Apr 29)",
+        "note": "'Dopamine Design', born on social media: saturated colour, glossy or iridescent sticker-like graphics, smiley motif; Starface."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "2025 (Dec 23)",
+        "note": "'Explosion of color': from one accent to full colour systems. Does not use the word dopamine."
+      },
+      {
+        "id": "S5",
+        "status": "ok",
+        "year": "2025 (Dec 28)",
+        "note": "'Intense joy' (Frere-Jones Type): bright, clashing type and colour."
+      }
+    ],
+    "fixes": [],
+    "note": "Figma and Wacom name it; examples match Figma's list."
+  },
+  {
+    "id": "maximalism",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "Undated page written for 2026 (says 2026 is 'around the corner'), so late 2025",
+        "note": "Trend 10: rich colours, overlapping visuals, bold fonts, dense compositions; names Spotify and Liquid Death."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "2023 (Dec 12)",
+        "note": "'Denser, richer graphics', moving away from the past decade's minimalism."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "2025 (Dec 12)",
+        "note": "'Maximalist, chaotic layouts': heavy layering, overlapping backgrounds, colour clashes."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "undated",
+        "note": "Undated style-catalogue page from daisyUI's Blueprint MCP (a vendor); its radius and colour numbers are prescriptions, not observed trend data. Two or three expressive families, radius 0.25-1rem, calm space around actions."
+      },
+      {
+        "id": "S5",
+        "status": "ok",
+        "year": "2025 (Jan 12)",
+        "note": "Recent maximalist rebrands (Figma, Harvey Nichols) and a predicted swing to understatement."
+      }
+    ],
+    "fixes": [],
+    "note": "Well supported by four independent publishers."
+  },
+  {
+    "id": "scrapbook-collage",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "Undated page written for 2026 (says 2026 is 'around the corner'), so late 2025",
+        "note": "Trend 11 Collage: sticker graphics, torn textures, cutout photos, hand-drawn fonts; names La Palatine."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "undated",
+        "note": "Undated style-catalogue page from daisyUI's Blueprint MCP (a vendor); its radius and colour numbers are prescriptions, not observed trend data. 19th-century scrapbook precedents, 2010s-2020s revival, warm paper and cork neutrals, radius 0.75-1.5rem. Does not mention zines."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "2025 (Dec 15)",
+        "note": "Reprint (Dec 15 2025) of Canva's 2026 Design Trends Report; the original exists (Canva release on Business Wire, Dec 10 2025; canva.com/design-trends/ blocks bots). Short URL redirects to https://campaignbrief.com/canvas-2026-design-trends-report-highlights-shift-toward-imperfect-by-design/. 'Notes App Chic': scrapbook visuals; DIY and collage elements up 90%."
+      },
+      {
+        "id": "S4",
+        "status": "partly",
+        "year": "2026 (Jan 12)",
+        "note": "'The visual index' is about flattened, numbered, orderly inventories of cut-outs: a tidier look than layered scrapbook."
+      },
+      {
+        "id": "S5",
+        "status": "ok",
+        "year": "2025 (Dec 11)",
+        "note": "Pinterest's 'Pen Pals': handmade collage with paper and stickers."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "origin",
+        "problem": "'Personal albums and zines [S2]': S2 names albums, stationery, fan culture and social media, not zines.",
+        "correct": "Personal albums, stationery and fan culture, revived online in the 2010s and 2020s [S2].",
+        "url": "https://trends.daisyui.com/trend/scrapbook-sticker-ui/"
+      },
+      {
+        "field": "defining",
+        "problem": "The 'visual index' line (and alias) describes an orderly inventory look that It's Nice That treats as its own trend.",
+        "correct": "Keep it as a variant note, not a defining trait.",
+        "url": "https://www.itsnicethat.com/features/forward-thinking-graphic-trends-2026-graphic-design-120126"
+      },
+      {
+        "field": "examples",
+        "problem": "Empty, though Figma shows a real example.",
+        "correct": "Add La Palatine, which Figma cites for blending real photos and digital elements.",
+        "url": "https://www.ensemblelapalatine.com/"
+      }
+    ],
+    "note": "Strongly named (Figma, Canva, Pinterest; SVGator 2025 also lists scrapbooking); small accuracy fixes only."
+  },
+  {
+    "id": "photocopy-zine",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2026 (Jan 12)",
+        "note": "'Make me a copy': greyscale pages, platen-glass debris, a 'warning low ink' look, prints scanned back in; How&How's Big Cartel branding."
+      },
+      {
+        "id": "S2",
+        "status": "partly",
+        "year": "2025 (Dec 15)",
+        "note": "Reprint (Dec 15 2025) of Canva's 2026 Design Trends Report; the original exists (Canva release on Business Wire, Dec 10 2025; canva.com/design-trends/ blocks bots). Short URL redirects to https://campaignbrief.com/canvas-2026-design-trends-report-highlights-shift-toward-imperfect-by-design/. 'Zinegeist' (collaged, anti-gloss, oversized type, +77%) fits but is a Mexico-only trend. 'Explorecore' (zine and Substack layouts, +85%) is about calm and clarity, not grit."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "2025 (Dec 12)",
+        "note": "'Freeform and storytelling layouts': loose, asymmetric, zine-like, overlapping."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "2024 (Dec 5)",
+        "note": "Waste Creative cites zines and physical textures within the handcrafted, analogue trend."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "origin",
+        "problem": "The 85% figure is Canva's Explorecore, a calm, clarity-first trend that contradicts the gritty photocopy look.",
+        "correct": "Punk and DIY zines; named a 2026 print trend by It's Nice That [S1]; Canva's Zinegeist, a Mexico trend of collaged, anti-gloss zine layouts (related searches up 77%) [S2].",
+        "url": "https://campaignbrief.com/canvas-2026-design-trends-report-highlights-shift-toward-imperfect-by-design/"
+      },
+      {
+        "field": "aliases",
+        "problem": "'Explorecore' names a different, calm trend.",
+        "correct": "Remove it.",
+        "url": "https://campaignbrief.com/canvas-2026-design-trends-report-highlights-shift-toward-imperfect-by-design/"
+      },
+      {
+        "field": "examples",
+        "problem": "bigcartel.com is the storefront platform; the photocopy look is in How&How's branding campaign, which is what It's Nice That shows.",
+        "correct": "Link the campaign post It's Nice That cites.",
+        "url": "https://www.instagram.com/p/DJY_YULiy2F/"
+      }
+    ],
+    "note": "Photocopy look named by It's Nice That; zine look by Canva, Adobe and Creative Bloq."
+  },
+  {
+    "id": "anti-ai-handmade",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2025 (Dec 23)",
+        "note": "Landor's Graham Sykes names 'Anti-AI Crafting': hand-built sets, stitched texture, ink, fabric, clay."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "2025 (Dec 27)",
+        "note": "FutureBrand's Kate Binns: 'embrace the mess', naive drawings, minimal intentional palettes; Studio Frith's Jolene Bakery."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "undated",
+        "note": "Undated style-catalogue page from daisyUI's Blueprint MCP (a vendor); its radius and colour numbers are prescriptions, not observed trend data. Sketchy outlines, handwritten labels, paper texture, radius 0.25-1rem."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "2025 (Dec 12)",
+        "note": "'Organic and imperfect design': hand-rendered, letterpress-inspired type, earthy textures, low-contrast minimal forms."
+      },
+      {
+        "id": "S5",
+        "status": "ok",
+        "year": "2024 (Oct 31)",
+        "note": "'Hand-Drawn Illustrations' trend 5. URL redirects to https://www.svgator.com/blog/graphic-design-trends-prediction/"
+      }
+    ],
+    "fixes": [],
+    "note": "Well supported; update the SVGator URL when convenient."
+  },
+  {
+    "id": "surreal-absurd",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2025 (Dec 16)",
+        "note": "Adobe's 'Surreal Silliness': generative AI stretching logic and bending physics for fun."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "2025 (Dec 15)",
+        "note": "Reprint (Dec 15 2025) of Canva's 2026 Design Trends Report; the original exists (Canva release on Business Wire, Dec 10 2025; canva.com/design-trends/ blocks bots). Short URL redirects to https://campaignbrief.com/canvas-2026-design-trends-report-highlights-shift-toward-imperfect-by-design/. 'Reality Warp': 'liminal' and 'uncanny' searches up 220%; nearly a quarter of creators call it 2026's defining look."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "2025 (Dec 12)",
+        "note": "'Surreal and absurdist imagery': visual jokes, Easter eggs, exaggerated scale, dreamlike collage. No mention of AI."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "2025 (Dec 23)",
+        "note": "FORM Brands' Alex Andlaw sees surreal, escapist imagery with brighter colours."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "defining",
+        "problem": "'In-between, transitional spaces used as a visual language [S2]': Canva reports only that searches for 'liminal' and 'uncanny' rose; it does not describe the spaces.",
+        "correct": "Mark the line [inferred] or reword: 'Liminal and uncanny imagery, blurring real and surreal [S2]'.",
+        "url": "https://campaignbrief.com/canvas-2026-design-trends-report-highlights-shift-toward-imperfect-by-design/"
+      }
+    ],
+    "note": "Adobe and Canva name it independently; one interpretive line needs a tag."
+  },
+  {
+    "id": "bold-minimalism",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2025 (Apr 16)",
+        "note": "Defines Bold Minimalism as simple designs with one strikingly loud element; re-quotes Andy Harris (M&C Saatchi UK); Nike, Burger King, Brat."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "2025 (Jan 12)",
+        "note": "'Not quite minimalism': negative space and clean lines with vibrant colour and bold type."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "2026 (Jan 7)",
+        "note": "'Bold Minimalism with Impact': hierarchy and colour do the bold work; Instacart image credited to mockplus.com."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "2025 (Dec 23)",
+        "note": "Heritage merging with bold minimalism in Pepsi, Burger King and Harvey Nichols rebrands."
+      },
+      {
+        "id": "S5",
+        "status": "ok",
+        "year": "2024 (Dec 5)",
+        "note": "Bold Minimalism (trend 8) and 'ugly minimalism' (trend 2); Harris's 'minimalism on acid' quote first appears here."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "plain",
+        "problem": "'one loud color and huge type': S1 says one loud element, and its lead example (the Brat cover) pairs a loud lime field with small lowercase text.",
+        "correct": "Simple, empty layouts where one thing is loud: a vivid color or huge type.",
+        "url": "https://www.creativebloq.com/design/graphic-design/what-is-bold-minimalism-the-bold-new-trend-sweeping-the-design-world"
+      },
+      {
+        "field": "origin",
+        "problem": "The 'minimalism on acid' quote is cited to S1, which re-quotes it.",
+        "correct": "Cite S5 (Creative Bloq, Dec 2024) as the first appearance, S1 for the definition.",
+        "url": "https://www.creativebloq.com/design/graphic-design/10-graphic-design-trends-to-watch-in-2025-plus-4-to-avoid"
+      }
+    ],
+    "note": "Creative Bloq and Wacom name it; examples are real."
+  },
+  {
+    "id": "quiet-luxury",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "undated",
+        "note": "Undated style-catalogue page from daisyUI's Blueprint MCP (a vendor); its radius and colour numbers are prescriptions, not observed trend data. 2023 fashion label moved into UI; ivory, stone, taupe, ink; refined serif; hairlines; radius 0-0.25rem; slow fades."
+      },
+      {
+        "id": "S2",
+        "status": "partly",
+        "year": "2025 (Dec 15)",
+        "note": "Reprint (Dec 15 2025) of Canva's 2026 Design Trends Report; the original exists (Canva release on Business Wire, Dec 10 2025; canva.com/design-trends/ blocks bots). Short URL redirects to https://campaignbrief.com/canvas-2026-design-trends-report-highlights-shift-toward-imperfect-by-design/. 'Opt-Out Era' (clean layouts, serif, simple branding, +54%) is a neighbouring trend, not called quiet luxury."
+      },
+      {
+        "id": "S3",
+        "status": "partly",
+        "year": "2025 (Jan 12)",
+        "note": "'Functional and serene' (Japandi): muted tones, natural textures, soft neutrals. Not called quiet luxury."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "2026 (Jun 6)",
+        "note": "Criticises wellness-brand sameness: muted earth tones, lowercase wordmarks, white space. Supports goes_wrong."
+      },
+      {
+        "id": "S5",
+        "status": "partly",
+        "year": "2025 (Apr 29)",
+        "note": "'Neo-Minimalism' with muted colours and open space; Aesop. Not called quiet luxury."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "sources",
+        "problem": "Only S1 uses the name 'quiet luxury'; the rest describe neighbours under other names.",
+        "correct": "Add a second source that names it: Digital Silk's May 20 2025 release on rising 'quiet luxury' branding requests (low-saturation palettes, sparse type, magazine-style pages). Agency self-reported data, so weak but on-topic.",
+        "url": "https://finance.yahoo.com/news/surge-quiet-luxury-branding-requests-143000574.html"
+      },
+      {
+        "field": "origin",
+        "problem": "Canva's 'Opt-Out Era' is presented as this style.",
+        "correct": "Fashion label from 2023 that moved into branding and UI [S1]; Canva's related 'Opt-Out Era' saw clean-layout and serif searches up 54% [S2].",
+        "url": "https://campaignbrief.com/canvas-2026-design-trends-report-highlights-shift-toward-imperfect-by-design/"
+      }
+    ],
+    "note": "Keep, but the name itself rests on daisyUI plus one agency release; the look is well supported under other names."
+  },
+  {
+    "id": "serif-renaissance",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2025 (Dec 28)",
+        "note": "'A comeback for serifs' against hyper-uniform AI polish; AI assistant LittleBird; Edge Digital on high-contrast serifs signalling craft and permanence."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "2025 (Mar 17)",
+        "note": "Says she first noticed the shift with Claude, then Perplexity in some touchpoints; calls condensed, Caslon-inspired serifs the trend. WIRED credits her with the term."
+      },
+      {
+        "id": "S3",
+        "status": "partly",
+        "year": "2026 (Jun 11)",
+        "note": "Spanish reprint of WIRED's 'AI Has Come for Serif Fonts' (2026); names Claude, Manus, Runway, Perplexity and 'tasteslop'. WIRED blocks fetching; confirmed through syndicated copies."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "2024 (Dec 5)",
+        "note": "'Another dull sans serif' listed as a trend to avoid."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "defining",
+        "problem": "'often calligraphic' is Vadgama's own taste and her reason serifs feel human, not a trait she describes in the trend.",
+        "correct": "Serif or condensed, Caslon-inspired serif headlines in software UI and branding [S2].",
+        "url": "https://keyavadgama.substack.com/p/the-serif-renaissance-in-ai-branding"
+      },
+      {
+        "field": "sources",
+        "problem": "S3 is a reprint.",
+        "correct": "Cite WIRED's original and keep Xataka as a backup.",
+        "url": "https://www.wired.com/story/ai-has-come-for-serif-fonts/"
+      }
+    ],
+    "note": "Named by Vadgama, WIRED and Creative Bloq; the Claude example is real and no proprietary typeface is named."
+  },
+  {
+    "id": "neo-heritage",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2025 (Apr 16)",
+        "note": "Heritage branding: brands from Burberry to Burger King resurrecting old logos."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "2025 (Dec 23)",
+        "note": "Pepsi, Burger King and Harvey Nichols update retro logos with cleaner lines and sharper contrast."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "2025 (Dec 28)",
+        "note": "FutureBrand's 'Mutant Heritage' and BUCK's return of 1960s-70s ITC photo-lettering."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "sources",
+        "problem": "All three sources are Creative Bloq, so the style lacks an independent second source.",
+        "correct": "Add AIGA Eye on Design (Dec 9 2021), which names legacy brands reviving archival logos: Burger King, Campbell's, Colt 45, ABC, Zagat, Peugeot. (PRINT's 2023 piece on Pepsi's nostalgic rebrand also appeared in search; not opened.)",
+        "url": "https://eyeondesign.aiga.org/the-rebrand-trend-of-2021-acting-your-age/"
+      },
+      {
+        "field": "defining",
+        "problem": "'tomato, brown and cream [inferred]' and the code (#5a2d0c on #fbeedd) nearly match Burger King's 2021 palette (Flaming Orange, BBQ Brown, Mayo; third-party hex values about #502314 and #F5EBDC), the entry's lead example. That copies one brand's colours, and it also breaks the house rule against brown with orange and cream.",
+        "correct": "Drop the palette line, or say 'a period palette taken from the brand's own archive'; use neutral demo colours in the code.",
+        "url": "https://www.itsnicethat.com/news/burger-king-rebrand-jkr-graphic-design-070121"
+      }
+    ],
+    "note": "Real trend, but needs a non-Creative-Bloq source and a palette that is not Burger King's."
+  },
+  {
+    "id": "retro-futurism",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "Undated page written for 2026 (says 2026 is 'around the corner'), so late 2025",
+        "note": "Trend 9 Retrofuturism: neon accents, chrome textures, pixel art, gradients inspired by sci-fi films."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "2025 (Apr 29)",
+        "note": "'Modular Retro-Futurism': metallics, chrome, transparent plastic, grid textures; names Nothing."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "2024 (Oct 31)",
+        "note": "'Retro Futurism' trend 4: vibrant colours, geometric shapes. URL redirects to https://www.svgator.com/blog/graphic-design-trends-prediction/"
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "undated",
+        "note": "Undated style-catalogue page from daisyUI's Blueprint MCP (a vendor); its radius and colour numbers are prescriptions, not observed trend data. Label from 1980s publishing (Lloyd Dunn); Wikipedia dates the earliest related term to 1981, which fits."
+      }
+    ],
+    "fixes": [],
+    "note": "Figma, Wacom and SVGator name it independently."
+  },
+  {
+    "id": "playful-interactive",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2024 (Dec 17)",
+        "note": "'Flash-era nostalgia': GSAP's Cassie Evans on animated loaders, fun 404s, konami codes, cursor interactions; Retronova. Webflow owns GSAP, so it has an interest."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "2026 (Jan 7)",
+        "note": "'Modern Nostalgia': cursor trackers and MySpace-era image effects; Lisa Says Gah."
+      },
+      {
+        "id": "S3",
+        "status": "ok",
+        "year": "Undated page written for 2026 (says 2026 is 'around the corner'), so late 2025",
+        "note": "Micro-animations: scroll triggers, button ripples, animated states."
+      },
+      {
+        "id": "S4",
+        "status": "ok",
+        "year": "2023 (Dec 12)",
+        "note": "Microinteractions trend: small responses to hovers and clicks."
+      }
+    ],
+    "fixes": [],
+    "note": "Webflow and Wacom name it independently; examples load."
+  },
+  {
+    "id": "window-light",
+    "verdict": "drop",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2024 (Dec 17)",
+        "note": "Names 'Window and shadow overlays', rooted in product mockups; Webflow's Corey Moen calls it skeuomorphism resurfacing; Daylight Computer."
+      },
+      {
+        "id": "S2",
+        "status": "unsupported",
+        "year": "2026 (Jul 14)",
+        "note": "Loads (now framer.com/marketplace/components/real-shadows/). A $5 component with window, blinds and leaf shadow patterns: shows the technique, names no trend."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "sources",
+        "problem": "Searches found only listicles that repeat Webflow's list and examples (Haddington Creative, May 2025, reuses Daylight and ChainGPT) and stock overlay packs. No second independent source names it.",
+        "correct": "Drop as a style, or fold the overlay into skeuomorphism or quiet-luxury as an optional technique.",
+        "url": "https://www.haddingtoncreative.com/post/top-web-design-trends-to-look-out-for-in-2025"
+      }
+    ],
+    "note": "One original naming source only."
+  },
+  {
+    "id": "painterly-ui",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2025 (Dec 23)",
+        "note": "'Art converging with advanced UI': product UI on painted backdrops; Rootly's impressionist landscape; Pencil.dev's ASCII classical figure."
+      },
+      {
+        "id": "S2",
+        "status": "partly",
+        "year": "2026 (Aug 3)",
+        "note": "A browser maker's blog column showing three sites using classical art (Shopify Editions Winter '26, Contra Labs, Ruinart). Real examples; names no trend."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "sources",
+        "problem": "S2 is weak and does not name a trend.",
+        "correct": "Add Qode Interactive (Mar 25 2021), which calls Renaissance elements a popular web design trend. Broader than the SaaS framing: mostly museum, luxury and portfolio sites.",
+        "url": "https://qodeinteractive.com/magazine/renaissance-web-design-trend/"
+      },
+      {
+        "field": "origin",
+        "problem": "'SaaS and AI sites of 2025 to 2026' is Webflow's framing alone; classical art in web design was already called a trend in 2021.",
+        "correct": "Classical and vintage art in web design, called a trend by 2021 (Qode); its SaaS form, product UI framed against paintings, was named by Webflow for 2026 [S1].",
+        "url": "https://qodeinteractive.com/magazine/renaissance-web-design-trend/"
+      },
+      {
+        "field": "examples",
+        "problem": "www.pencil.dev now redirects to pen.dev; not confirmed whether the homepage still shows the ASCII figure.",
+        "correct": "Re-check pen.dev, or swap in Shopify Editions Winter '26 from S2.",
+        "url": "https://www.shopify.com/editions/winter2026"
+      }
+    ],
+    "note": "Keep with the broader origin; the SaaS-specific form rests on Webflow."
+  },
+  {
+    "id": "technical-micrographics",
+    "verdict": "fix",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2026 (Jan 12)",
+        "note": "'In layout: Micrographics': label and packaging copy, blueprints, grids, timestamps implying expertise; Astrae Studio, Uncommon."
+      },
+      {
+        "id": "S2",
+        "status": "unsupported",
+        "year": "2025 (Dec 23)",
+        "note": "Names 'The infinite canvas' (dot grids, node lines, open space for creative tools; Flim). A different trend; never mentions micrographics."
+      }
+    ],
+    "fixes": [
+      {
+        "field": "sources",
+        "problem": "S2 names another trend, leaving one naming source.",
+        "correct": "Use MalbarDesign (Jul 2 2026; cites It's Nice That) and ATTLAS (Jul 4 2026; independent), which both name micrographics: gridded modules, monospaced spec lines, barcodes, measurement marks.",
+        "url": "https://www.attlasdesign.com/articles/micrographics-branding"
+      },
+      {
+        "field": "defining",
+        "problem": "'Dot-grid backgrounds, node lines and wide open space... [S2]' and the alias 'infinite canvas' describe Webflow's separate trend.",
+        "correct": "Move them to a related note; cite micrographics traits from S1 and the new sources.",
+        "url": "https://malbardesign.com/micrographics-design/"
+      },
+      {
+        "field": "examples",
+        "problem": "Flim is Webflow's infinite-canvas example (film stills on a grid), not micrographics.",
+        "correct": "Use Astrae Studio, which It's Nice That cites for grids and symbols as page furniture.",
+        "url": "https://astrae.studio/"
+      }
+    ],
+    "note": "Real 2026 trend once the infinite-canvas material is separated out."
+  },
+  {
+    "id": "sci-fi-hud",
+    "verdict": "ok",
+    "sources": [
+      {
+        "id": "S1",
+        "status": "ok",
+        "year": "2024 (Dec 17)",
+        "note": "Trend 1 'Futuristic, sci-fi gaming UI aesthetics': glowing edges, holographic elements, translucent panels, electric blues, stark whites, neon; chaingpt.org."
+      },
+      {
+        "id": "S2",
+        "status": "ok",
+        "year": "undated",
+        "note": "Undated style-catalogue page from daisyUI's Blueprint MCP (a vendor); its radius and colour numbers are prescriptions, not observed trend data. HUD roots in gunsights and aviation head-up displays, film and game FUI; cyan, amber or green on deep blue-black; clipped polygons; condensed and mono type; scanning sweeps."
+      }
+    ],
+    "fixes": [],
+    "note": "Two independent sources name it; fine to fold into sci-fi-fui."
+  }
+]

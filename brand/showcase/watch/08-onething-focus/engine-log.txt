@@ -1,0 +1,135 @@
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner sketch --name Onething --brand #FF4F9A --audience large --platforms watch --feel minimal,focused,understated --delegated feel,audience,platforms
+initialized brand/showcase/watch/08-onething-focus/opendesigner/state.json
+Applied 194 OpenDesigner house standards (v2) for accessibility, color, components, elevation, layout, motion, platforms, process, tokens, tooling, typography. They are locked; say if you want to change one (`engine.py standards` lists them).
+built brand/showcase/watch/08-onething-focus/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg), DESIGN.md, PRODUCT.md, preview.html
+Passes: no errors. 0 warnings, 5 notes.  (brand/showcase/watch/08-onething-focus/opendesigner)
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 55 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 54 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  10 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.0). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+Checked 164 color pairs in every mode, 12 mode combinations and 406 tokens.
+Feel: minimal -> minimal; focused -> minimal; understated -> minimal + deferential.
+Your brand color is on the buttons exactly, with dark text on it, because white text would be too faint.
+This is a sketch: every part works, and most choices are still defaults. Zoom into any area later (see the Zoom lines in DESIGN.md).
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner standard override STD-visual-details-24 --why "Brief: smartwatch app, black background edge-to-edge (watch platform convention, OLED); no light mode"
+D-0009 overrode house standard STD-visual-details-24: Make interface colors adapt to light and dark mode: give each color role a light value and a dark value.
+  The person's reason is recorded: "Brief: smartwatch app, black background edge-to-edge (watch platform convention, OLED); no light mode". Unlocked: nothing (it sets no values).
+  To follow it again: engine.py standard restore STD-visual-details-24
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner pick Q-theme-01 dark-only --set-by chosen --why "watch app: black edge-to-edge, per the brief"
+D-0010 set answers.Q-theme-01 = "dark-only" (chosen)
+  also set: raw.flags.darkMode = true (from Q-theme-01)
+  also set: raw.defaultTheme = "dark" (from Q-theme-01)
+  tokens: 1 value change (modes). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner pick Q-color-21 black --set-by chosen --why "watch: pure black OLED edge-to-edge"
+D-0011 set answers.Q-color-21 = "black" (chosen)
+  also set: raw.darkBase = "black" (from Q-color-21)
+  tokens: 86 values change (color.bg.field, color.shadow.ring, color.surface.base, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner pick Q-plat-02 watch --set-by chosen --why "the product is a watch app"
+D-0012 set answers.Q-plat-02 = "watch" (chosen)
+  also set: raw.devices = ["watch"] (from Q-plat-02)
+  recorded; the tokens already match this answer.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner pick Q-plat-04 watch --set-by chosen --why "used on the wrist, in seconds"
+D-0013 set answers.Q-plat-04 = "watch" (chosen)
+  also set: raw.situations = ["wrist"] (from Q-plat-04)
+  recorded; the tokens already match this answer.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner set raw.textFace "Geist" --set-by chosen --why "open-licence face picked for the direction"
+D-0014 set raw.textFace = "Geist" (chosen)
+  previous value: "system"
+  tokens: 1 value change (font.family.text). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner set raw.monoFace "\"Geist Mono\"" --set-by chosen --why "tabular readouts"
+D-0015 set raw.monoFace = "Geist Mono" (chosen)
+  previous value: "ui-monospace"
+  tokens: 1 value change (font.family.mono). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner set raw.baseSize 17 --set-by chosen --why "watchOS Body at the xLarge default for 44/45/49 mm is 17 pt (HIG typography, watchOS Dynamic Type)"
+D-0016 set raw.baseSize = 17 (chosen)
+  tokens: 32 values change (text.body.lg, text.body.md, text.body.sm, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner set dials.expression 30 --set-by delegated --why "nothing extra"
+D-0017 set dials.expression = 30 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner set dials.brandPresence 35 --set-by delegated --why "one accent ring only"
+D-0018 set dials.brandPresence = 35 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner set dials.density 20 --set-by delegated --why "one task, one timer"
+D-0019 set dials.density = 20 (delegated)
+  previous value: 15
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner set dials.energy 30 --set-by delegated --why "steady focus"
+D-0020 set dials.energy = 30 (delegated)
+  tokens: 2 values change (color.surface.nav, motion.duration.extra). Run `engine.py build` to refresh the tokens, exports and preview.
+  note: motion.spring.spatial.dampingRatio stays 1.0: house standard STD-springs-gestures-04 holds it; everything else this dial drives follows the new value
+  note: motion.spring.spatial.stiffness stays 246.7: house standard STD-springs-gestures-04 holds it; everything else this dial drives follows the new value
+  note: motion.easing.standard stays [0.77, 0, 0.175, 1]: house standard STD-easing-duration-02 holds it; everything else this dial drives follows the new value
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner set dials.roundness 60 --set-by delegated --why "round ring, soft buttons"
+D-0021 set dials.roundness = 60 (delegated)
+  tokens: 6 values change (radius.container, radius.control, radius.control-sm, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner set dials.depth 0 --set-by delegated --why "flat black"
+D-0022 set dials.depth = 0 (delegated)
+  tokens: 5 values change (color.shadow.ambient, color.shadow.key, elevation.floating, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner set dials.colorfulness 15 --set-by delegated --why "monochrome plus one pink"
+D-0023 set dials.colorfulness = 15 (delegated)
+  no token changed: the system already had this value.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner set dials.warmth 40 --set-by delegated --why neutral
+D-0024 set dials.warmth = 40 (delegated)
+  tokens: 51 values change (color.overlay.scrim, color.shadow.ambient, color.shadow.key, ...). Run `engine.py build` to refresh the tokens, exports and preview.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+(exit 0)
+
+$ python3 skills/opendesigner/scripts/engine.py --dir brand/showcase/watch/08-onething-focus/opendesigner build
+built brand/showcase/watch/08-onething-focus/opendesigner: tokens, build/ (css, tailwind, figma, paper, swift, compose, dtcg), DESIGN.md, PRODUCT.md, preview.html
+Passes: no errors. 0 warnings, 5 notes.  (brand/showcase/watch/08-onething-focus/opendesigner)
+NOTE  Advice only: in dark mode, secondary text on the base surface scores Lc 47 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  Advice only: in dark mode, secondary text on the raised surface scores Lc 47 on APCA, a newer reading-contrast score. 60 or more is advised  [APCA advisory only; WCAG 3 contrast is undetermined; S-L01-026, S-L01-021]
+NOTE  The smallest control is 24px tall. Give it a 44px tap area with padding (size.target.min), never a smaller one  [L14 I-1; DC-L03-12, S-L03-029]
+NOTE  10 scale steps are not used by any named value yet (for example motion.duration.extra, motion.duration.long-exit, radius.0). That is fine if you plan to use them  [Orphan tokens; spec 6.3]
+NOTE  Not asked yet (assets a person must make): logo, wordmark, symbol, lockups; app icon; favicon set; custom icons, pictograms, spot icons; illustration, characters, empty-state art; photography and art direction; brand typeface files; fixed brand colors; motion signature and rich media; graphic devices, patterns, textures, brand gradients, signature shape; UI sounds and sonic logo; custom haptic patterns; voice and tone guide; brand guidelines PDF  [Designer hooks, not designer replacement; BRIEF req. 2, Q-brand-08]
+Checked 164 color pairs in every mode, 12 mode combinations and 406 tokens.
+(exit 0)
+

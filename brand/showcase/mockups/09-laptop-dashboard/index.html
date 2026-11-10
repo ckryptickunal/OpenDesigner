@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quoin on a laptop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Scene: the Quoin Receipts screen (../../product/01-quoin-payments/index.html, the page its shot.png is rendered
+     from) on a small sage laptop on a white desk by a window, with a calculator, an envelope and a notebook.
+     Photo: "a laptop on a desk" by Windows on Unsplash (free Unsplash License), hotlinked at its full 5504 px.
+     The laptop's display is a 3:2 panel, so the product page is shown live in a 1440 x 960 frame (the same page
+     and state as shot.png, one more table row tall) instead of the 16:10 shot.png, which would have to be cropped.
+     The four corners of the lit display were measured on the full-size photo (lines fitted to all four edges
+     of the lit area, rms under 0.25 px) and the frame is mapped onto them with a homography (matrix3d). Check:
+     the four corners fit a true 3:2 rectangle at 90 degrees with a focal length of about 8,500 px.
+     Type, spacing and caption colours are tokens; the photo and the screen are the art. */
+  html, body { margin: 0; }
+  body {
+    width: 1600px; height: 1200px; overflow: hidden; position: relative;
+    background: var(--ds-color-neutral-dark-2);
+    font-family: var(--ds-font-family-text);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* the photo at 0.6 of its 5504 x 3669 original, offset so the laptop sits in the upper two thirds */
+  .photo { position: absolute; left: -1020px; top: -750px; width: 3302.4px; height: 2201.4px; } /* od-ignore: device or photo art */
+
+  .screen { position: absolute; left: 0; top: 0; width: 1440px; height: 960px; transform-origin: 0 0; overflow: hidden; background: var(--ds-color-black); }
+  .screen iframe { display: block; width: 1440px; height: 960px; border: 0; pointer-events: none;
+    filter: blur(0.35px); } /* od-ignore: device or photo art */
+  /* the panel's white as this photo records it: the lit taskbar (about #eeeeee) reads (153, 157, 160) next to a
+     desk that reads (241, 243, 245), so white maps to (164, 168, 172), a little cool like the daylight */
+  .tint { position: absolute; inset: 0; mix-blend-mode: multiply; pointer-events: none;
+    background: rgb(164 168 172); } /* od-ignore: device or photo art */
+  /* the glossy glass: the bezel reads 30-39 on the left and 9-20 on the right, so the room's reflection lifts the
+     panel's blacks by about 5% on the window side and fades out to the right */
+  .sheen { position: absolute; inset: 0; mix-blend-mode: screen; pointer-events: none;
+    background: linear-gradient(100deg, rgb(255 255 255 / 0.06) 0%, rgb(255 255 255 / 0.035) 45%, rgb(255 255 255 / 0.012) 100%); } /* od-ignore: device or photo art */
+  /* the panel's edge sits under the black glass */
+  .edge { position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 4px rgb(0 0 0 / 0.3); } /* od-ignore: device or photo art */
+  /* grain: the photo has a noise of about 1.4 levels in flat areas; the panel gets the same */
+  .grain { position: absolute; inset: 0; opacity: .22; mix-blend-mode: overlay; pointer-events: none; }
+
+  /* the captions sit on the white desk top at the lower right, in ink, clear of the desk's front edge (which
+     crosses the bottom right corner); the window and the plant at the top are busy */
+  .caption {
+    position: absolute; right: var(--ds-space-64); bottom: calc(var(--ds-space-64) * 2 + var(--ds-space-48)); margin: 0;
+    display: flex; flex-direction: column; align-items: flex-end;
+    font: var(--ds-text-body-sm); color: var(--ds-color-text-primary); text-align: right;
+  }
+  .caption b { font-weight: 500; }
+</style>
+</head>
+<body>
+  <img class="photo" src="https://images.unsplash.com/photo-1664575196412-ed801e8333a1?w=5504&q=85&auto=format" alt="">
+
+  <div class="screen" id="screen" role="img" aria-label="Quoin Receipts screen for Tamsin &amp; Rowe, a tableware wholesaler: 2,418 customer payments received from 1 to 14 October, 192 still waiting to be matched to an invoice, three suggested matches selected for confirmation">
+    <iframe src="../../product/01-quoin-payments/index.html" title="Quoin Receipts" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+    <div class="tint"></div>
+    <div class="sheen"></div>
+    <svg class="grain" width="1440" height="960" aria-hidden="true"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+    <div class="edge"></div>
+  </div>
+
+  <p class="caption"><b>Quoin · Matching each customer payment to the invoice it pays</b><span>Tamsin &amp; Rowe, tableware wholesaler · 2,418 receipts, Oct 1–14</span></p>
+
+<script>
+  // Homography from the 1440 x 960 frame to the display's lit area, in page px (photo at 0.6 of its 5504 px
+  // original, shifted 1020 px left and 750 px up). Order: top-left, top-right, bottom-right, bottom-left.
+  const W = 1440, H = 960;
+  const dst = [[291.83, 162.37], [818.57, 85.43], [903.28, 530.13], [376.32, 650.96]];
+  function solve(A, b) {
+    const n = b.length;
+    for (let i = 0; i < n; i++) {
+      let m = i; for (let r = i + 1; r < n; r++) if (Math.abs(A[r][i]) > Math.abs(A[m][i])) m = r;
+      [A[i], A[m]] = [A[m], A[i]]; [b[i], b[m]] = [b[m], b[i]];
+      for (let r = i + 1; r < n; r++) { const f = A[r][i] / A[i][i]; for (let c = i; c < n; c++) A[r][c] -= f * A[i][c]; b[r] -= f * b[i]; }
+    }
+    const x = Array(n).fill(0);
+    for (let i = n - 1; i >= 0; i--) { let s = b[i]; for (let c = i + 1; c < n; c++) s -= A[i][c] * x[c]; x[i] = s / A[i][i]; }
+    return x;
+  }
+  const src = [[0, 0], [W, 0], [W, H], [0, H]], A = [], b = [];
+  for (let i = 0; i < 4; i++) {
+    const [x, y] = src[i], [u, v] = dst[i];
+    A.push([x, y, 1, 0, 0, 0, -u * x, -u * y]); b.push(u);
+    A.push([0, 0, 0, x, y, 1, -v * x, -v * y]); b.push(v);
+  }
+  const [a, bb, c, d, e, f, g, h] = solve(A, b);
+  document.getElementById('screen').style.transform = `matrix3d(${[a, d, 0, g, bb, e, 0, h, 0, 0, 1, 0, c, f, 0, 1].join(',')})`;
+</script>
+</body>
+</html>

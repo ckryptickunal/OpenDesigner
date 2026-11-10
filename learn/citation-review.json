@@ -1440,6 +1440,33 @@
    "decision": "confirmed",
    "note": "Line 217 says you cannot call a method that takes an associated type on an any P. It says erasure works in producing position but not in consuming position, and that the fix is to pass the existential into a function taking some P, which the compiler unboxes. The rule and 'why' match this. The evide",
    "date": "2026-09-27"
+  },
+  {
+   "kind": "rule",
+   "id": "palantir-workshop-applic-application-design-best-practices",
+   "source": "3",
+   "hash": "de4e706acf59",
+   "decision": "confirmed",
+   "note": "Supported: the source says to maintain sufficient whitespace, ideally 30 to 40 percent of your screen (Create intuitive user interfaces). Read against the raw text.",
+   "date": "2026-10-13"
+  },
+  {
+   "kind": "rule",
+   "id": "palantir-workshop-applic-application-design-best-practices",
+   "source": "4",
+   "hash": "75a57d9cf4f3",
+   "decision": "confirmed",
+   "note": "Supported: the source says to limit visible components to no more than ten in a single view, including buttons, panels and widgets.",
+   "date": "2026-10-13"
+  },
+  {
+   "kind": "rule",
+   "id": "palantir-workshop-applic-application-design-best-practices",
+   "source": "6",
+   "hash": "1a31cac1a588",
+   "decision": "confirmed",
+   "note": "Supported: under Row and column combination the source says to anchor filters in the left-most section so content flows to the right.",
+   "date": "2026-10-13"
   }
  ]
 }

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Made with OpenDesigner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300..700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="../../../design-system/project/components/bundle.css">
+<style>
+  /* Launch post, 1600 x 900, Light theme, OpenDesigner's own brand system (brand/design-system/project).
+     Styles used (4, the post maximum): social-label, social-headline (weight 300, one phrase at 650),
+     and the lockup. Margins are space-80. The one accent is the circle in the lockup; the headline highlight
+     is the weight method, so no second cobalt appears. Work whose own colour sits close to cobalt
+     (the Howl Hill blue) is left out of the mosaic so the accent stays single. The mosaic tiles are the real showcase renders:
+     radius-container, a 1px line, no shadow (only specimens get shadow-raised). */
+  html, body { margin: 0; }
+  body { width: 1600px; height: 900px; overflow: hidden; background: var(--surface); }
+  #root { width: 1600px; height: 900px; }
+  .top { position: absolute; left: var(--space-80); right: var(--space-80); top: var(--space-80);
+    display: flex; justify-content: space-between; align-items: flex-start; }
+  .lockup { height: 44px; display: block; }
+  h1 { position: absolute; left: var(--space-80); top: calc(var(--space-80) + 40px + var(--space-32)); }
+
+  .mosaic { position: absolute; left: var(--space-80); top: 424px; display: grid; gap: var(--space-16); }
+  .row { display: flex; gap: var(--space-16); height: 280px; }
+  .tile { flex: none; height: 280px; margin: 0; border-radius: var(--radius-container); overflow: hidden; position: relative; background: var(--surface-sunken); }
+  .tile::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px var(--line); pointer-events: none; }
+  .tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .w-web { width: 448px; } .w-phone { width: 210px; } .w-watch { width: 229px; }
+  /* phone tiles show 520 of the screen's 844 pt; each crop starts and ends on whole elements:
+     Undertow from 40 pt (the chevron row) to 560 pt (above the play controls), Voltfield from 50 pt (above the workout
+     row and its lock button) to 570 pt (below the zone times). 12.3% and 15.4% are those starts over the 174.5 px
+     of overflow. The watch tiles: Fellrise sits in row 1 and Tidemark in row 2, where the canvas edge cuts
+     Tidemark through its sea rather than through Fellrise's "+312 m". */
+  .phone.und img { object-position: 50% 12.3%; }
+  .phone.volt img { object-position: 50% 15.4%; }
+  /* both rows have the same tile widths at the same places from the fourth tile on, so their last tiles both
+     start at x 1479 and are cut by the canvas edge at the same point */
+</style>
+</head>
+<body>
+<div id="root" class="od-post" data-theme="light">
+  <div class="top">
+    <span class="social-label od-muted">The showcase</span>
+    <img class="lockup" src="../../../design-system/project/assets/Logos/lockup-light.svg" alt="OpenDesigner">
+  </div>
+  <h1 class="social-headline">Every piece has its own<br><span class="od-strong">design system.</span></h1>
+
+  <div class="mosaic" aria-label="A mosaic of showcase work">
+    <div class="row">
+      <figure class="tile w-web"><img src="../../heroes/07-climate-observatory/shot.png" alt="Isobath ocean observatory hero"></figure>
+      <figure class="tile w-phone phone und"><img src="../../app-screens/08-podcast-player/shot.png" alt="Undertow podcast player"></figure>
+      <figure class="tile w-web"><img src="../../heroes/05-luxury-maison/shot.png" alt="Maison Auberval hero"></figure>
+      <figure class="tile w-watch"><img src="../../watch/01-ridgeline-trail/shot.png" alt="Fellrise trail watch app" style="background:#000"></figure>
+      <figure class="tile w-web"><img src="../../components/08-music-player/shot.png" alt="Calamondin Tapes music player"></figure>
+    </div>
+    <div class="row">
+      <figure class="tile w-web"><img src="../../footers/03-quietfield-horizon/shot.png" alt="Quietfield footer"></figure>
+      <figure class="tile w-web"><img src="../../heroes/01-swiss-architecture/shot.png" alt="Halde Architekten hero"></figure>
+      <figure class="tile w-phone phone volt"><img src="../../app-screens/04-fitness-neon/shot.png" alt="Voltfield run screen during the Tempo 6 × 800 workout: rep 4 of 6, heart rate 172 in zone 4"></figure>
+      <figure class="tile w-watch"><img src="../../watch/03-tidemark-face/shot.png" alt="Tidemark watch face" style="background:#000"></figure>
+      <figure class="tile w-web"><img src="../../components/03-date-range-picker/shot.png" alt="Wayfern date range picker"></figure>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440, initial-scale=1">
+<title>Quillon: approvals (web)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..600&display=block" rel="stylesheet">
+<!-- The web app uses the phone app's own system (app-screens/11-approvals-mobile), so both screens are one product. -->
+<link rel="stylesheet" href="../../app-screens/11-approvals-mobile/opendesigner/build/css/tokens.css">
+<style>
+  /* Quillon on the web, 1440 x 900, the same request the phone shows. Type: Footnote 13 (meta, labels),
+     Subheadline 15 (rows, body), Title 2 22 (request title), Large Title 34 (amount): the phone's own four sizes. */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ds-color-surface-base); }
+  body { width: 1440px; height: 900px; overflow: hidden; display: grid; grid-template-columns: 232px 1fr; color: var(--ds-color-text-primary);
+    font: var(--ds-font-weight-body) var(--ds-font-size-15)/1.4 var(--ds-font-family-text); -webkit-font-smoothing: antialiased; }
+  .num { font-variant-numeric: tabular-nums; }
+  .f13 { font-size: var(--ds-font-size-13); line-height: 1.38; }
+  .sec { color: var(--ds-color-text-secondary); }
+  .ter { color: var(--ds-color-text-tertiary); }
+  button { font: inherit; border: 0; background: none; color: inherit; }
+  svg { display: block; flex: none; }
+
+  /* sidebar */
+  .side { background: var(--ds-color-surface-nav); border-right: 1px solid var(--ds-color-neutral-light-5); padding: var(--ds-space-12) var(--ds-space-12); display: flex; flex-direction: column; gap: var(--ds-space-2); }
+  .org { display: flex; align-items: center; gap: var(--ds-space-8); height: var(--ds-space-40); padding: 0 var(--ds-space-8); font-weight: var(--ds-font-weight-heading); margin-bottom: var(--ds-space-8); }
+  .org i { width: var(--ds-space-24); height: var(--ds-space-24); border-radius: var(--ds-radius-detail); background: var(--ds-color-text-primary); color: var(--ds-color-white); display: grid; place-items: center; font: var(--ds-font-weight-heading) var(--ds-font-size-13)/1 var(--ds-font-family-text); font-style: normal; }
+  .nav { display: flex; align-items: center; gap: var(--ds-space-8); height: 34px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control); color: var(--ds-color-text-secondary); }
+  .nav.on { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); outline: 1px solid var(--ds-color-neutral-light-5); outline-offset: -1px; }
+  .nav .ct { margin-left: auto; font-size: var(--ds-font-size-13); color: var(--ds-color-text-secondary); }
+  .nav.on .ct { color: var(--ds-color-text-accent); font-weight: var(--ds-font-weight-heading); }
+  .grp { margin: var(--ds-space-16) var(--ds-space-8) var(--ds-space-4); }
+  .me { margin-top: auto; display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-8); }
+  .av { width: 28px; height: 28px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-4); display: grid; place-items: center; font: var(--ds-font-weight-label) var(--ds-font-size-13)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+
+  /* main */
+  .main { display: grid; grid-template-rows: 52px 1fr; min-width: 0; }
+  .top { display: flex; align-items: center; gap: var(--ds-space-12); padding: 0 var(--ds-space-20); border-bottom: 1px solid var(--ds-color-neutral-light-5); }
+  .search { width: 360px; height: var(--ds-space-32); display: flex; align-items: center; gap: var(--ds-space-8); padding: 0 var(--ds-space-8) 0 var(--ds-space-12); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-sunken); color: var(--ds-color-text-tertiary); }
+  .kbd { margin-left: auto; font-size: var(--ds-font-size-13); color: var(--ds-color-text-tertiary); border: 1px solid var(--ds-color-neutral-light-6); border-radius: var(--ds-radius-detail); padding: 0 var(--ds-space-4); }
+  .top .r { margin-left: auto; display: flex; gap: var(--ds-space-16); color: var(--ds-color-text-secondary); }
+  .work { display: grid; grid-template-columns: 460px 1fr; min-height: 0; }
+
+  /* queue */
+  .queue { border-right: 1px solid var(--ds-color-neutral-light-5); padding: var(--ds-space-20) 0 0; min-height: 0; overflow: hidden; }
+  .queue h1 { font-size: var(--ds-font-size-22); line-height: 1.27; font-weight: var(--ds-font-weight-heading); letter-spacing: -0.02em; padding: 0 var(--ds-space-20); }
+  .tabs { display: flex; gap: var(--ds-space-20); padding: 0 var(--ds-space-20); margin-top: var(--ds-space-12); border-bottom: 1px solid var(--ds-color-neutral-light-5); }
+  .tab { height: 36px; box-sizing: border-box; border-bottom: var(--ds-space-2) solid transparent; display: flex; align-items: center; gap: var(--ds-space-6); color: var(--ds-color-text-secondary); }
+  .tab b { font-weight: var(--ds-font-weight-label); font-size: var(--ds-font-size-13); color: var(--ds-color-text-tertiary); }
+  .tab.on { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); border-bottom: var(--ds-space-2) solid var(--ds-color-text-primary); }
+  .tab.on b { color: var(--ds-color-text-accent); }
+  .bar2 { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-12) var(--ds-space-20); }
+  .chip { height: 28px; display: flex; align-items: center; gap: var(--ds-space-6); padding: 0 var(--ds-space-8); border: 1px solid var(--ds-color-neutral-light-6); border-radius: var(--ds-radius-control); font-size: var(--ds-font-size-13); color: var(--ds-color-text-secondary); }
+  .chip em { font-style: normal; color: var(--ds-color-text-accent); font-weight: var(--ds-font-weight-label); }
+  .bar2 .tot { margin-left: auto; }
+  .gh { display: flex; justify-content: space-between; padding: var(--ds-space-12) var(--ds-space-20) var(--ds-space-6); background: var(--ds-color-surface-sunken); border-top: 1px solid var(--ds-color-neutral-light-4); border-bottom: 1px solid var(--ds-color-neutral-light-4); }
+  .row { display: grid; grid-template-columns: 1fr auto; column-gap: var(--ds-space-12); padding: var(--ds-space-12) var(--ds-space-20); border-bottom: 1px solid var(--ds-color-neutral-light-4); position: relative; }
+  .row .t { font-weight: var(--ds-font-weight-label); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row .a { text-align: right; font-weight: var(--ds-font-weight-label); }
+  .row .a small, .amt small { font-size: 0.82em; color: var(--ds-color-text-tertiary); font-weight: var(--ds-font-weight-body); }
+  .row .s { text-align: right; }
+  .row.sel { background: var(--ds-color-accent-light-2); }
+  .row.sel::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--ds-color-bg-accent-bold); }
+  .pips { display: inline-flex; gap: var(--ds-space-2); vertical-align: middle; margin-right: var(--ds-space-6); }
+  .pips i { width: 10px; height: var(--ds-space-4); border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-6); }
+  .pips i.d { background: var(--ds-color-bg-accent-bold); }
+  .row.other { padding-block: var(--ds-space-8); }   /* the six rows waiting on others are secondary, so a little denser: all six fit above the fold */
+  .row.other .t, .row.other .a { color: var(--ds-color-text-secondary); font-weight: var(--ds-font-weight-body); }
+
+  /* detail */
+  .detail { display: grid; grid-template-rows: 1fr auto; min-height: 0; }
+  .dscroll { padding: var(--ds-space-16) var(--ds-space-32) 0; overflow: hidden; }
+  .crumb { display: flex; align-items: center; gap: var(--ds-space-8); }
+  .crumb .step { margin-left: auto; display: flex; align-items: center; gap: var(--ds-space-4); }
+  .ib { width: 28px; height: 28px; display: grid; place-items: center; border-radius: var(--ds-radius-control); color: var(--ds-color-text-secondary); }
+  .ib[disabled] { color: var(--ds-color-text-disabled); }
+  .detail h2 { margin-top: var(--ds-space-16); font-size: var(--ds-font-size-22); line-height: 1.27; font-weight: var(--ds-font-weight-heading); letter-spacing: -0.02em; }
+  .amt { margin-top: var(--ds-space-8); font-size: var(--ds-font-size-34); line-height: 1.12; font-weight: var(--ds-font-weight-label); letter-spacing: -0.025em; }
+  .amt .cur { font-size: var(--ds-font-size-15); font-weight: var(--ds-font-weight-body); color: var(--ds-color-text-secondary); letter-spacing: 0; margin-left: var(--ds-space-6); }
+  .cols { display: grid; grid-template-columns: 1fr 300px; gap: var(--ds-space-24); margin-top: var(--ds-space-20); }
+  .lbl { color: var(--ds-color-text-secondary); font-weight: var(--ds-font-weight-body); margin-bottom: var(--ds-space-8); }
+  .card { border: 1px solid var(--ds-color-neutral-light-5); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+  .budget { padding: var(--ds-space-12) var(--ds-space-16); }
+  .budget .rr { display: flex; justify-content: space-between; align-items: baseline; }
+  .budget b { font-weight: var(--ds-font-weight-heading); }
+  .meter { margin-top: var(--ds-space-12); height: var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-6); display: flex; overflow: hidden; }
+  .meter i { height: 100%; }
+  .meter .sp { width: 60.2%; background: var(--ds-color-neutral-light-9); }
+  .meter .th { width: 15.5%; background: var(--ds-color-text-primary); border-left: var(--ds-space-2) solid var(--ds-color-surface-raised); }
+  .leg { position: relative; margin-top: var(--ds-space-8); height: 18px; color: var(--ds-color-text-secondary); }
+  .leg span { position: absolute; top: 0; white-space: nowrap; }
+  .leg .l2 { left: 60.2%; color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }   /* starts under its own segment, as on the phone */
+  .budget .left { margin-top: var(--ds-space-2); color: var(--ds-color-text-secondary); }
+  .budget .left b { color: var(--ds-color-text-primary); }
+  .quote { margin-top: var(--ds-space-4); display: flex; align-items: center; gap: var(--ds-space-6); }
+  .quote a { color: var(--ds-color-text-accent); font-weight: var(--ds-font-weight-label); }
+  .rows .r { display: flex; justify-content: space-between; align-items: center; min-height: 40px; padding: 0 var(--ds-space-16); }
+  .rows .r + .r { border-top: 1px solid var(--ds-color-neutral-light-4); }
+  .rows .r span:last-child { color: var(--ds-color-text-secondary); text-align: right; }
+  .lbl + .card, .lbl + .chain { margin-top: 0; }
+  .gap { margin-top: var(--ds-space-20); }
+  .acc { color: var(--ds-color-text-accent); }
+    .ledger { margin-top: var(--ds-space-20); }
+  .li { display: flex; justify-content: space-between; padding: var(--ds-space-8) 0; border-bottom: 1px solid var(--ds-color-neutral-light-4); }
+  .li.total { border-bottom: 0; border-top: 1px solid var(--ds-color-text-primary); font-weight: var(--ds-font-weight-heading); }
+  .li > span:last-child, .qt > span:last-child { font-variant-numeric: tabular-nums; }   /* figures only: tabular hyphens widened "three-phase" and the IDs */
+  .li .q { color: var(--ds-color-text-tertiary); margin-left: var(--ds-space-6); }
+  .quotes { margin-top: var(--ds-space-20); }
+  .qt { display: grid; grid-template-columns: 1fr auto; padding: var(--ds-space-6) 0; }
+  .qt .tag { font-size: var(--ds-font-size-13); color: var(--ds-color-text-accent); font-weight: var(--ds-font-weight-label); margin-left: var(--ds-space-6); }
+  .chain { list-style: none; }
+  .chain li { display: grid; grid-template-columns: 22px 1fr auto; column-gap: var(--ds-space-12); padding-bottom: var(--ds-space-16); position: relative; }
+  .chain .tm { color: var(--ds-color-text-secondary); text-align: right; }   /* the time, or Waiting and Next, in its own column */
+  .chain li:not(:last-child)::after { content: ""; position: absolute; left: 10.25px; top: 26px; bottom: var(--ds-space-2); width: 1.5px; background: var(--ds-color-neutral-light-6); }
+  .chain .you .n { font-weight: var(--ds-font-weight-heading); }
+  .file { display: flex; align-items: center; gap: var(--ds-space-8); padding: var(--ds-space-8) var(--ds-space-12); margin-top: var(--ds-space-8); }
+  .foot { display: flex; align-items: center; gap: var(--ds-space-12); padding: var(--ds-space-12) var(--ds-space-32); border-top: 1px solid var(--ds-color-neutral-light-5); background: var(--ds-color-surface-base); }
+  .foot .why { margin-right: auto; }
+  .btn { height: 36px; padding: 0 var(--ds-space-16); border-radius: var(--ds-radius-control); font-weight: var(--ds-font-weight-heading); }
+  .decline { background: var(--ds-color-surface-raised); border: 1px solid var(--ds-color-border-strong); color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-body); }
+  .approve { background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
+</style>
+</head>
+<body>
+  <aside class="side">
+    <div class="org"><i>T</i>Thornquay<svg width="12" height="12" viewBox="0 0 12 12" style="margin-left:auto;color:var(--ds-color-text-tertiary)"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+    <a class="nav on"><svg width="16" height="16" viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5.2 8.2l2 2 3.8-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Approvals<span class="ct">4</span></a>
+    <a class="nav"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 1.8h6l3 3v9.4H4z" stroke-linejoin="round"/><path d="M6.5 8.5h4.5M6.5 11h4.5"/></svg>Requests</a>
+    <a class="nav"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2.5 3.5h11v9h-11z"/><path d="M2.5 6.5h11"/></svg>Purchase orders</a>
+    <a class="nav"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2.5 13.5v-7l5.5-4 5.5 4v7z" stroke-linejoin="round"/><path d="M6.5 13.5v-4h3v4"/></svg>Vendors</a>
+    <a class="nav"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="5.8"/><path d="M8 2.2V8h5.8"/></svg>Budgets</a>
+    <a class="nav"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.8" y="3.5" width="12.4" height="9" rx="1.8"/><path d="M1.8 6.5h12.4"/></svg>Cards</a>
+    <p class="grp f13 ter">Facilities</p>
+    <a class="nav"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 13.5h12M3.5 13.5V6M8 13.5V3M12.5 13.5V8.5"/></svg>Jul–Dec budget<span class="ct num">60%</span></a>
+    <a class="nav"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="6" cy="6" r="2.5"/><circle cx="11.5" cy="7" r="2"/><path d="M1.8 13.5c.5-2.6 2.2-4 4.2-4s3.7 1.4 4.2 4M10.5 10c1.8 0 3.2 1.2 3.6 3.5"/></svg>Team<span class="ct num">9</span></a>
+    <div class="me"><span class="av">HV</span><span><span style="display:block;font-weight:var(--ds-font-weight-label)">Hanne Varga</span><span class="f13 sec">Facilities head</span></span></div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <div class="search"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.8"/><path d="M10.6 10.6l3.4 3.4" stroke-linecap="round"/></svg>Search requests, vendors, POs<span class="kbd">⌘K</span></div>
+      <div class="r">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="7"/><path d="M7 7a2 2 0 1 1 2.8 1.8c-.5.3-.8.7-.8 1.3v.4M9 12.6v.4" stroke-linecap="round"/></svg>
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 12.5V8a4.5 4.5 0 0 1 9 0v4.5l1.2 1.5H3.3z" stroke-linejoin="round"/><path d="M7.5 15.5h3" stroke-linecap="round"/></svg>
+      </div>
+    </header>
+
+    <div class="work">
+      <section class="queue" aria-label="Approval queue">
+        <h1>Approvals</h1>
+        <nav class="tabs"><a class="tab on">Open <b>10</b></a><a class="tab">Done <b>312</b></a></nav>
+        <div class="bar2"><span class="chip">Department <em>Facilities</em></span><span class="chip">Amount</span><span class="tot f13 sec num">$28,698.90 waiting on you</span></div>
+        <div class="gh f13 sec"><span>Waiting on you · 4</span><span>Amount</span></div>
+        <div class="row sel"><div><p class="t">Forklift battery for FL-07</p><p class="f13 sec">Ashbury Traction Power · Elif Demir</p></div><div><p class="a num">$14,860<small>.00</small></p><p class="s f13 sec num"><span class="pips"><i class="d"></i><i></i><i></i></span>1 of 3</p></div></div>
+        <div class="row"><div><p class="t">Pallet racking, aisle 6</p><p class="f13 sec">Brisemont Racking · Dario Feld</p></div><div><p class="a num">$8,412<small>.50</small></p><p class="s f13 sec num"><span class="pips"><i class="d"></i><i></i></span>1 of 2</p></div></div>
+        <div class="row"><div><p class="t">Q4 forklift safety course, 12 seats</p><p class="f13 sec">Tolleth Safety Training · Aiko Tan</p></div><div><p class="a num">$3,240<small>.00</small></p><p class="s f13 sec num"><span class="pips"><i class="d"></i><i></i></span>1 of 2</p></div></div>
+        <div class="row"><div><p class="t">Dock door seals, bays 1–4</p><p class="f13 sec">Quenby Door Systems · Elif Demir</p></div><div><p class="a num">$2,186<small>.40</small></p><p class="s f13 sec num"><span class="pips"><i class="d"></i><i></i></span>1 of 2</p></div></div>
+        <div class="gh f13 sec"><span>Waiting on others · 6</span><span>With</span></div>
+        <div class="row other"><div><p class="t">Warehouse LED retrofit, phase 2</p><p class="f13 ter">Lumarch Electrical · Elif Demir</p></div><div><p class="a num">$22,900<small>.00</small></p><p class="s f13 ter">Rhea Kapoor, CFO</p></div></div>
+        <div class="row other"><div><p class="t">Pallet wrap, 40 rolls</p><p class="f13 ter">Ashlund Packaging · Dario Feld</p></div><div><p class="a num">$1,148<small>.80</small></p><p class="s f13 ter">Procurement</p></div></div>
+        <div class="row other"><div><p class="t">Yard sweeper hire, November</p><p class="f13 ter">Orrinford Plant Hire · Aiko Tan</p></div><div><p class="a num">$1,960<small>.00</small></p><p class="s f13 ter">Procurement</p></div></div>
+        <div class="row other"><div><p class="t">Fire extinguisher service, Q4</p><p class="f13 ter">Moydell Fire Service · Aiko Tan</p></div><div><p class="a num">$684<small>.00</small></p><p class="s f13 ter">Procurement</p></div></div>
+        <div class="row other"><div><p class="t">Mezzanine handrail repair</p><p class="f13 ter">Corlay Steelworks · Dario Feld</p></div><div><p class="a num">$2,730<small>.00</small></p><p class="s f13 ter">Owen Marchetti</p></div></div>
+        <div class="row other"><div><p class="t">Floor line repainting, aisles 1–8</p><p class="f13 ter">Brantlow Floor Marking · Elif Demir</p></div><div><p class="a num">$4,738<small>.60</small></p><p class="s f13 ter">Owen Marchetti</p></div></div>
+      </section>
+
+      <section class="detail" aria-label="Request PR-2207">
+        <div class="dscroll">
+          <div class="crumb f13 sec"><span>Approvals</span><svg width="12" height="12" viewBox="0 0 12 12"><path d="M4.5 3l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><span >PR-2207</span>
+            <span class="step num">1 of 4<button class="ib" disabled aria-label="Previous request"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 9l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><button class="ib" aria-label="Next request"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></span></div>
+          <h2>Forklift battery for FL-07</h2>
+          <p class="sec" style="margin-top:var(--ds-space-4)">Ashbury Traction Power · Facilities · requested by Elif Demir</p>
+          <p class="amt num">$14,860<span class="cur">USD</span></p>
+          <p class="quote"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.6V8l2.2 1.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Quote valid until Fri 16 Oct · <a>Q-5571.pdf</a></p>
+
+          <div class="cols">
+            <div>
+              <p class="lbl f13">Budget after approval</p>
+              <div class="card budget">
+                <p>Facilities, Jul–Dec</p>
+                <p class="left num"><b>$23,340</b> of $96,000 left</p>
+                <div class="meter" role="img" aria-label="Jul–Dec budget: 60% spent, this request adds 15%, 24% left"><i class="sp"></i><i class="th"></i></div>
+                <p class="leg f13 num"><span>60% spent</span><span class="l2">+15% this request</span></p>
+              </div>
+
+              <p class="lbl f13 gap">Details</p>
+              <div class="card rows">
+                <div class="r"><span>Then</span><span>PO-10482 to Ashbury, Net 30</span></div>
+                <div class="r"><span>GL account</span><span>6420 Equipment upkeep</span></div>
+                <div class="r"><span>Deliver by</span><span>Wed 21 Oct</span></div>
+              </div>
+
+              <div class="ledger">
+                <p class="lbl f13">Line items</p>
+                <div class="li"><span>Traction battery, 48 V<span class="q">× 1</span></span><span>$12,940.00</span></div>
+                <div class="li"><span>Charger, three-phase<span class="q">× 1</span></span><span>$1,420.00</span></div>
+                <div class="li"><span>Delivery and fitting</span><span>$500.00</span></div>
+                <div class="li total"><span>Total</span><span>$14,860.00</span></div>
+              </div>
+            </div>
+
+            <div>
+              <p class="lbl f13">Sign-off · 1 of 3 approved</p>
+              <ol class="chain">
+                <li><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="var(--ds-color-neutral-light-4)"/><path d="M7 11h8M11.5 7.5 15 11l-3.5 3.5" fill="none" stroke="var(--ds-color-text-secondary)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span><span class="n" style="display:block">Elif Demir</span><span class="f13 sec">Requested it</span></span><span class="tm f13 num">08:12</span></li>
+                <li><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="11" fill="var(--ds-color-bg-accent-bold)"/><path d="M6.5 11.3l3 3 6-6.2" fill="none" stroke="var(--ds-color-text-on-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span><span class="n" style="display:block">Owen Marchetti</span><span class="f13 sec">Procurement, compared 3 quotes</span></span><span class="tm f13 num">09:40</span></li>
+                <li class="you"><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="var(--ds-color-surface-base)" stroke="var(--ds-color-bg-accent-bold)" stroke-width="2"/><circle cx="11" cy="11" r="4.5" fill="var(--ds-color-bg-accent-bold)"/></svg><span><span class="n" style="display:block">You</span><span class="f13 sec">Department head</span></span><span class="tm f13">Waiting</span></li>
+                <li><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="var(--ds-color-surface-base)" stroke="var(--ds-color-neutral-light-8)" stroke-width="2"/></svg><span><span class="n" style="display:block">Rhea Kapoor</span><span class="f13 sec">CFO, over $10,000 (FIN-04)</span></span><span class="tm f13">Next</span></li>
+              </ol>
+              <p class="lbl f13" style="margin-top:var(--ds-space-8)">Quotes compared · 3</p>
+              <div class="qt"><span>Ashbury Traction<span class="tag">Lowest</span></span><span>$14,860.00</span></div>
+              <div class="qt sec"><span>Vardeck Lift Parts</span><span>$15,320.00</span></div>
+              <div class="qt sec"><span>Dunmerrow Handling</span><span>$16,050.00</span></div>
+              <div class="card file"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--ds-color-text-secondary)"><path d="M4 1.8h6l3 3v9.4H4z" stroke-linejoin="round"/></svg><span><span style="display:block">Quote Q-5571.pdf</span><span class="f13 sec">2 pages · 212 KB</span></span></div>
+            </div>
+          </div>
+        </div>
+        <div class="foot">
+          <p class="why f13 sec">Approving sends it to Rhea Kapoor, CFO, for the last step</p>
+          <button class="btn decline">Decline</button>
+          <button class="btn approve num">Approve $14,860</button>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

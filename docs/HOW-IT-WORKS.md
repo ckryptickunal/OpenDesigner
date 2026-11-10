@@ -11,6 +11,17 @@ It does not replace a designer. It makes what can be made well: spacing, type sc
 
 This page is the easy-to-read version. The full product specification is [SPEC.md](SPEC.md), and [RESEARCH.md](RESEARCH.md) maps the evidence behind each step. Unfamiliar words are in the [glossary](GLOSSARY.md).
 
+## Four things you can ask for
+
+Most requests are one of four jobs. They are names for what the existing skills already do, not new commands; the AI picks the skill from your words.
+
+| Ask for | What happens | Skills and commands |
+|---|---|---|
+| **Audit** what you have | It measures a site, repo, Figma file or brand book you point it at, then checks the built UI at every size, theme and state | `opendesigner-extract`, then `opendesigner-review` |
+| **Establish** a system | The 5-question sketch and a complete first build | `opendesigner`: `engine.py sketch`, then `engine.py build` |
+| **Improve** it | A change to the system, with everything it would move named first | `opendesigner-extend` |
+| **Check** the work | Rules on the code and on the rendered page, then what still needs a person's eye | `engine.py review`, `opendesigner-review`, `opendesigner-preflight` |
+
 ## The process at a glance
 
 The diagram shows the full process from the specification: ten phases. Three of them end at a gate, where you approve before the model moves on. In practice, the skill starts with a 5-question sketch (section 2). Then, for each area you zoom into, it asks questions in this order.
@@ -63,10 +74,10 @@ You start with a rough version of the whole system. Then you zoom in only where 
 |---|---|---|---|
 | 0 | sketch | A complete but coarse system: every token exists, and every `DESIGN.md` section is filled from sourced defaults | 3 to 5 questions (3 in plain voice), about 3 minutes |
 | 1 | broad | One short screen for each foundation: style, density, color use, text, corners, depth, motion, and where the files live | 8 questions, about 8 minutes |
-| 2 | defined | One area at a time, for example Color: ramps, roles, contrast | 1 to 15 questions per area |
+| 2 | defined | One area at a time, for example Color: ramps, roles, contrast | Up to 12 questions per area |
 | 3 | detailed | Components, patterns and the fine print of each area | the rest |
 
-You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 193 questions has a zoom level, except the reference panel (Q-ref-01), which is open at every level. Six questions are marked planned: their feature is not built yet, so the interview skips them. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 93 and 192 questions).
+You can stop at any level. Every level leaves working files, and `DESIGN.md` shows how far each area has been zoomed. Each of the 200 questions has a zoom level, except the reference panel (Q-ref-01), which is open at every level. Six questions are marked planned: their feature is not built yet, so the interview skips them. The questionnaire also keeps its earlier Quick, Standard and Expert tags (10, 100 and 199 questions).
 
 Every term is explained in three voices. Plain words come first, so a school student can follow. The designer's word and the code name sit on one line below. The [glossary](GLOSSARY.md) lists them all.
 
@@ -120,6 +131,15 @@ Some things the model never decides for you. It asks you and records your answer
 - which element matters most on each screen;
 - which actions get undo or confirmation.
 
+### Your taste
+
+Taste can move the dials too, but only as a recommendation you confirm ([`references/taste.md`](../skills/opendesigner/references/taste.md)):
+- **The taste poll** (optional, about 5 minutes): you rate 20 to 30 real screens from shipped products, never AI-made ones. The screen images stay on your machine.
+- **The taste index** merges every taste signal in your project into a value and a confidence for each dial, plus red lines: the poll, your own decisions, your inspirations, a style you picked and your feel words. Dials it is sure about are offered as "confirm this?". Options past a red line are left out. If every option is past one, they are all shown with a warning that names the line. `engine.py review` points out when the system drifts from your taste.
+- **The taste card** sits at the top of `DESIGN.md`'s Overview and on the overview page. It has five lines: your own picture of the look, color, shape, motion and what it should never look like. Each line says where it comes from. The picture and the Never list are only ever yours. Color, shape and motion repeat what the system already says.
+
+Taste never moves an accessibility floor or a house standard, and it stays in your project.
+
 ## 5. Visual-first editing, on the best surface your tool has
 
 Each generatable block gets a detail panel. It shows:
@@ -139,7 +159,7 @@ How it is shown depends on your AI tool. The model picks the best option availab
 5. The host's multiple-choice question tool
 6. Plain text with hex values, ratios and numbered options, which works everywhere
 
-The same HTML templates feed every surface: palette, type scale, spacing ruler, radius, elevation, motion, component sheet and option gallery. Every visual also prints its values as text. [SPEC.md section 3.6](SPEC.md#36-visual-surfaces-per-host) says which host gets which surface.
+The same HTML templates feed every surface: palette, type scale, spacing ruler, radius, elevation, motion, component sheet, option gallery, taste poll and direction board. Every visual also prints its values as text. [SPEC.md section 3.6](SPEC.md#36-visual-surfaces-per-host) says which host gets which surface.
 
 ## 6. Reference intake, at any point
 
@@ -148,6 +168,8 @@ You can add an example website, screenshot, Figma file, repo or brand book whene
 The model measures what it can: color, type, spacing, radius, depth model, motion character and components. It shows every value with where it came from and how sure it is, then pre-fills it. You accept, adjust or ignore each one. A reference never decides on its own.
 
 Hard rule: a reference gives structure and quality, never identity. OpenDesigner does not copy another brand's name, logo, brand hue, proprietary typeface, imagery or copy. It always asks how brand-led you want to be, instead of guessing from the reference.
+
+The one exception is a **Taste Index** (owner decision, 2026-10-23). Ask for one when you love a look and want everything new to match it. The model reads a few pages of the site (or a screenshot) and writes a full description an AI can follow: a one-line picture, 5 to 7 principles with their reasons, every colour with its job and its share of the page, type roles with exact font names and free substitutes, component rules, motion, voice (counted, never copied) and a Never list. It also writes a CSS variable for every value and a live specimen page, and marks each line measured or inferred. When it is first shown, it keeps the site's exact colours and font names, with a plain notice: what you keep or change is your call and your responsibility. Logos, brand names, imagery and written copy never go in, and font files are never downloaded or shipped. You can keep several (one per surface or brand). Each one nudges your taste dials as an inspiration, and your system follows one only if you choose it. It's also what OpenDesigner offers if you ask it to copy another brand's look: the logo, name, images and copy are left out, and the look is offered as a Taste Index.
 
 ## 7. Validate before you trust it
 
@@ -158,13 +180,31 @@ Rule-based checks run first, before the model gives any opinion ([`synthesis/LEV
   - 3:1 contrast for borders, focus rings and other non-text parts.
   - Minimum target sizes for each input type: 24 CSS px on the web, 44pt on iOS, 48dp on Android.
   - A generated focus ring.
-  - Reduced-motion and reduced-transparency modes.
+  - A reduced-motion mode in the tokens.
+  - A solid fallback for every see-through glass surface, if the system uses glass. The CSS export swaps it in when the browser reports reduced transparency or more contrast. A glass surface without one is a lint error.
   - Text that scales to 200%.
   - Inner spacing smaller than outer spacing.
-- **Lint errors** block publishing unless you waive them with a written reason. Examples: targets under 24 px, fields with no label, meaning shown by color alone, and dialogs with no way out.
+- **Lint errors** block publishing unless you waive them with a written reason. Today `engine.py validate` blocks token errors, such as targets under 24 px or contrast below the floor. Errors for fields with no label, meaning shown by color alone and dialogs with no way out are planned; `review.py` already reports controls with no accessible name on a built page.
 - **Warnings** you can override. Examples: too many type sizes or primary actions in one view, or very high colorfulness with high density. These come from practitioner advice and are labelled as guidance, not law.
 
-The model critiques the system only after it passes, using a rubric fixed in advance. Then a coverage check shows every block's status. Nothing is silently skipped.
+The model critiques the system only after it passes. The skills judge it with a nine-line scorecard, 1 to 5 each, against shipped work (`references/quality.md`); a score can rule work out, never approve it. The overview page marks every area Chosen, Picked for you, Default or Not enough information, so a gap shows instead of being skipped. `build` refuses to write exports while an error stands. To ship anyway, record the reason as a waiver (`engine.py set waivers.<rule> '"<reason>"' --why "..."`), which DESIGN.md lists, and run `build --force`.
+
+### What the rules check, and what is judgment
+
+| Checked by rules (same result every time) | Judged by the AI or a person |
+|---|---|
+| Contrast, target sizes, focus rings and reduced motion in the tokens (`engine.py validate`) | Hierarchy: what the eye reads first, and whether that is the right thing |
+| Hard-coded values in code that skip the tokens, code that uses no tokens or fewer tokens than raw values, a system more than 10 commits behind the code, house-standard patterns, `DESIGN.md` sections that no longer match the state, user research findings that lost a source or are more than 180 days old, and a share image older than the headline, hero picture, logo or brand colour it shows (`engine.py review`) | Personality: whether the page feels like the brand, or generic |
+| On the rendered page: text contrast as styled, sizes and spacing off the scale, missing focus rings, overflow and fonts that did not load, and, with or without a design system, counts against practice: filled buttons competing in one view, typefaces, weights and colors; share text the headline no longer says, and a variant picker on a public address (`opendesigner-review`'s `review.py`, from `probe.js` measurements) | Whether it reads as premium next to shipped work (`making.md` section 5 scores it 1 to 5) |
+| Type and font mistakes in a page's CSS, frozen time, flashing or noise in a video, and, in a build folder, the variant picker, files no page names and local paths (`preflight.py`) | Layout balance, variety and rhythm (`opendesigner-preflight`'s checklist marks these as looks) |
+| What crawlers can read: robots.txt for each bot, the sitemap, canonicals and noindex, titles, descriptions and the h1, structured data against the page, and llms.txt against the pages (`opendesigner-search`'s `search.py`) | What people ask and what answer engines cite, and the wording of each page fix (`opendesigner-search`'s probe and fixes) |
+| User research findings: each cites a page that was opened or says it is a guess, no personal data, and each recommendation lands on a real question and option (`engine.py research check`, `add`) | Whether a finding holds for this product's own users: the person decides, and five real conversations beat desk research |
+
+The review skill labels each finding by how it is known: measured, operated, seen or inferred. A finding with no evidence is not reported. An AI score can rule work out but never approve it; the person's verdict outranks every score.
+
+### Nothing changes your interface without your yes
+
+The checks only report. `engine.py review`, `review.py` and `preflight.py` never edit your code. A fix to code that already exists, such as replacing a hard-coded color with its token, waits for your yes (`opendesigner-extend` section 5). The skills ask before wiring an export into your build, before adding a note to your `AGENTS.md`, and before installing anything. The illustration and paint skills write new files into your app only after you picked the piece to add.
 
 ## 8. Export, and what lands in your repo
 
@@ -173,23 +213,26 @@ The source of truth is `opendesigner/state.json` plus the DTCG tokens made from 
 | Output | What it is for |
 |---|---|
 | `DESIGN.md` (project root) | The readable view of the system that you, your team and any AI tool can follow |
-| `PRODUCT.md` (project root) | Product truth: audience, purpose, surfaces, principles |
+| `PRODUCT.md` (project root) | Product truth: audience, purpose, surfaces, principles, and the site brief for a site that persuades |
 | `opendesigner/tokens/` | DTCG 2025.10 design tokens (the canonical format), with modes in one resolver file |
-| CSS variables, Tailwind theme | Use in web code right away, including shadcn/ui |
+| CSS variables, Tailwind theme | Use in web code right away; for shadcn/ui, map its variables to the tokens once |
 | Figma variables, Paper tokens | Mirror the system in your design tool |
 | Swift and Jetpack Compose | Native apps |
+| `opendesigner/build/brand/` | A brand and press page: logo rules, colours, type, icons and the owner's facts, which stay empty until the owner gives them |
 | `opendesigner/decisions.md` | Every decision with its reason, source and what it changed, append-only |
 | `opendesigner/RATIONALE.md` | One page for the team: what was chosen, why, and what is still open |
 | `opendesigner/coverage.md`, asset briefs | Every block's status; briefs a designer can act on |
-| `opendesigner/state.json`, `preview.html` | Continue later; see every token and the components on one page |
+| `opendesigner/state.json`, `overview.html`, `preview.html` | Continue later; see your whole system on one page (`overview.html` grows with every decision and marks what is still missing) and every token (`preview.html`) |
 
-This is the full contract from [SPEC.md section 7](SPEC.md#7-outputs). Today the engine writes the core set: tokens, exports, `DESIGN.md`, `PRODUCT.md`, the decision log, `state.json` and the preview. The skill also writes `RATIONALE.md` from a template and, if you agree, adds a snippet to your `AGENTS.md`. The README's status table says what has shipped.
+This is the full contract from [SPEC.md section 7](SPEC.md#7-outputs). Today `build` writes tokens, exports, `DESIGN.md`, `PRODUCT.md`, the decision log, `state.json`, `PROTOCOL.md`, the standards, the overview and the preview. `coverage.md` and asset briefs are not written yet. The skill also writes `RATIONALE.md` from a template. If you agree, `engine.py handoff yes` writes a short note into your `AGENTS.md` and a `CLAUDE.md` that imports it, so later sessions follow the system after a context reset. In Claude Code, the plugin's one hook (`hooks/hooks.json`) prints `engine.py status --hook` at session start, on resume, after /clear and after compaction, in projects with `opendesigner/state.json` only. It reads files, writes nothing and sends nothing.
 
 ## 9. Keeping it coherent later
 
 You may come back later to change something, maybe in a different AI tool. The extend flow (the `opendesigner-extend` skill) first reads `DESIGN.md`, the tokens and the decision log. It shows the change on the block's detail panel, with everything further down that it touches. Then it records the change as a new decision that replaces the old one. Locked decisions change only with your consent.
 
 The engine gives the same result every time: the same `state.json` makes the same tokens on any machine. That is what lets different models extend the same system without drift. Details: [SPEC.md section 9](SPEC.md#9-harmony-and-extension-across-sessions-and-models).
+
+Each system also records which OpenDesigner release made it and which one last built it. Open it with a newer copy and the engine says its files are out of date, with a link to what changed; `engine.py build` brings them up to date. If the system was saved with a newer release than your copy, it asks you to update OpenDesigner first. It compares the system with the copy you have installed and never checks online (`engine.py version`).
 
 ### Making and reviewing pages
 

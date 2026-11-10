@@ -1,0 +1,619 @@
+{
+ "v": 1,
+ "url": "file:///Users/Kunal/Desktop/Design-System/site/demo/before-after/after.html",
+ "title": "Invoices \u00b7 Merriweft",
+ "at": "2026-10-21T20:54:54.698Z",
+ "viewport": {
+  "w": 1280,
+  "h": 800,
+  "innerW": 1280,
+  "innerH": 800,
+  "dpr": 2,
+  "docW": 1280,
+  "docH": 1055,
+  "scale": 1
+ },
+ "media": {
+  "colorScheme": "light",
+  "reducedMotion": false,
+  "forcedColors": false,
+  "pointer": "fine",
+  "hover": true
+ },
+ "doc": {
+  "lang": "en",
+  "dir": "ltr",
+  "viewportMeta": "width=device-width,initial-scale=1",
+  "blocksZoom": false,
+  "dataTheme": "light",
+  "colorScheme": "light",
+  "hOverflow": 0,
+  "rootClipsX": false,
+  "elements": 307,
+  "truncated": false
+ },
+ "type": {
+  "sizes": {
+   "12": {
+    "n": 63,
+    "ex": [
+     "header.top > span.avatar:nth-of-type(2)"
+    ],
+    "chars": 590
+   },
+   "14": {
+    "n": 48,
+    "ex": [
+     "header.top > nav > a:nth-of-type(1)"
+    ],
+    "chars": 509
+   },
+   "17": {
+    "n": 1,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
+    ],
+    "chars": 9
+   },
+   "20": {
+    "n": 2,
+    "ex": [
+     "div.money:nth-of-type(2) > section.tile.t-late:nth-of-type(3) > strong.fig.md"
+    ],
+    "chars": 13
+   },
+   "24": {
+    "n": 3,
+    "ex": [
+     "div.head:nth-of-type(1) > div:nth-of-type(1) > h1"
+    ],
+    "chars": 23
+   },
+   "14.9": {
+    "n": 2,
+    "ex": [
+     "section.tile.t-cash:nth-of-type(1) > strong.fig > span.c"
+    ],
+    "chars": 6
+   },
+   "12.4": {
+    "n": 2,
+    "ex": [
+     "section.tile.t-late:nth-of-type(3) > strong.fig.md > span.c"
+    ],
+    "chars": 6
+   }
+  },
+  "lineHeights": {
+   "16": {
+    "n": 63,
+    "ex": [
+     "header.top > span.avatar:nth-of-type(2)"
+    ],
+    "chars": 590
+   },
+   "20": {
+    "n": 48,
+    "ex": [
+     "header.top > nav > a:nth-of-type(1)"
+    ],
+    "chars": 509
+   },
+   "24": {
+    "n": 1,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
+    ],
+    "chars": 9
+   },
+   "28": {
+    "n": 2,
+    "ex": [
+     "div.money:nth-of-type(2) > section.tile.t-late:nth-of-type(3) > strong.fig.md"
+    ],
+    "chars": 13
+   },
+   "32": {
+    "n": 3,
+    "ex": [
+     "div.head:nth-of-type(1) > div:nth-of-type(1) > h1"
+    ],
+    "chars": 23
+   },
+   "19.8": {
+    "n": 2,
+    "ex": [
+     "section.tile.t-cash:nth-of-type(1) > strong.fig > span.c"
+    ],
+    "chars": 6
+   },
+   "17.4": {
+    "n": 2,
+    "ex": [
+     "section.tile.t-late:nth-of-type(3) > strong.fig.md > span.c"
+    ],
+    "chars": 6
+   }
+  },
+  "weights": {
+   "400": {
+    "n": 48,
+    "ex": [
+     "div.head:nth-of-type(1) > div:nth-of-type(1) > p.sub"
+    ],
+    "chars": 599
+   },
+   "500": {
+    "n": 71,
+    "ex": [
+     "header.top > nav > a:nth-of-type(1)"
+    ],
+    "chars": 540
+   },
+   "650": {
+    "n": 2,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
+    ],
+    "chars": 17
+   }
+  },
+  "families": {
+   "system-ui": {
+    "n": 94,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
+    ],
+    "chars": 1002
+   },
+   "ui-monospace": {
+    "n": 27,
+    "ex": [
+     "div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1) > p.lbl:nth-of-type(1)"
+    ],
+    "chars": 154
+   }
+  },
+  "letterSpacing": {
+   "0.72": {
+    "n": 11,
+    "ex": [
+     "div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1) > p.lbl:nth-of-type(1)"
+    ]
+   },
+   "0.24": {
+    "n": 9,
+    "ex": [
+     "div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1) > p.meta:nth-of-type(2)"
+    ]
+   },
+   "-0.48": {
+    "n": 2,
+    "ex": [
+     "div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1) > strong.fig"
+    ]
+   },
+   "-0.4": {
+    "n": 2,
+    "ex": [
+     "div.money:nth-of-type(2) > section.tile.t-late:nth-of-type(3) > strong.fig.md"
+    ]
+   },
+   "-0.34": {
+    "n": 1,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
+    ]
+   },
+   "-0.24": {
+    "n": 1,
+    "ex": [
+     "div.head:nth-of-type(1) > div:nth-of-type(1) > h1"
+    ]
+   }
+  },
+  "smallest": {
+   "px": 12,
+   "sel": "header.top > span.avatar:nth-of-type(2)",
+   "text": "JP"
+  },
+  "lineHeightTight": [],
+  "longLines": [],
+  "textElements": 121
+ },
+ "space": {
+  "values": {
+   "2": {
+    "n": 9,
+    "ex": [
+     "div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1) > p.meta:nth-of-type(2)"
+    ]
+   },
+   "4": {
+    "n": 60,
+    "ex": [
+     "header.top > nav"
+    ]
+   },
+   "6": {
+    "n": 23,
+    "ex": [
+     "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn:nth-of-type(1)"
+    ]
+   },
+   "8": {
+    "n": 39,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
+    ]
+   },
+   "12": {
+    "n": 36,
+    "ex": [
+     "header.top > nav > a:nth-of-type(1)"
+    ]
+   },
+   "16": {
+    "n": 119,
+    "ex": [
+     "main > div.head:nth-of-type(1)"
+    ]
+   },
+   "20": {
+    "n": 8,
+    "ex": [
+     "main > div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1)"
+    ]
+   },
+   "24": {
+    "n": 2,
+    "ex": [
+     "main > div.money:nth-of-type(2)"
+    ]
+   },
+   "32": {
+    "n": 7,
+    "ex": [
+     "header.top"
+    ]
+   },
+   "40": {
+    "n": 2,
+    "ex": [
+     "main"
+    ]
+   },
+   "48": {
+    "n": 1,
+    "ex": [
+     "main"
+    ]
+   },
+   "406.83": {
+    "n": 1,
+    "ex": [
+     "header.top > input.search"
+    ]
+   },
+   "423.03": {
+    "n": 1,
+    "ex": [
+     "main > div.head:nth-of-type(1) > div.acts:nth-of-type(2)"
+    ]
+   },
+   "704.36": {
+    "n": 1,
+    "ex": [
+     "main > div.bar:nth-of-type(3) > span.count"
+    ]
+   }
+  },
+  "negativeMargins": []
+ },
+ "radius": {
+  "2": {
+   "n": 2,
+   "ex": [
+    "ul.rows > li:nth-of-type(1) > i.m-ok"
+   ]
+  },
+  "4": {
+   "n": 26,
+   "ex": [
+    "div.weeks:nth-of-type(1) > div.wk:nth-of-type(1) > span.v"
+   ]
+  },
+  "6": {
+   "n": 22,
+   "ex": [
+    "header.top > nav > a:nth-of-type(1)"
+   ]
+  },
+  "8": {
+   "n": 5,
+   "ex": [
+    "main > div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1)"
+   ]
+  },
+  "50%": {
+   "n": 1,
+   "ex": [
+    "header.top > span.avatar:nth-of-type(2)"
+   ]
+  }
+ },
+ "shadows": {
+  "rgba(36, 36, 36, 0.1) 0px 0px 0px 1px": {
+   "n": 1,
+   "ex": [
+    "div.bar:nth-of-type(3) > nav.seg > a:nth-of-type(1)"
+   ]
+  }
+ },
+ "colors": {
+  "text": {
+   "#575757": {
+    "n": 77,
+    "ex": [
+     "header.top > nav > a:nth-of-type(1)"
+    ]
+   },
+   "#242424": {
+    "n": 35,
+    "ex": [
+     "header.top > span.logo:nth-of-type(1)"
+    ]
+   },
+   "#a82321": {
+    "n": 6,
+    "ex": [
+     "section.tile.t-late:nth-of-type(3) > p.lbl > span.trend.bad"
+    ]
+   },
+   "#00652c": {
+    "n": 2,
+    "ex": [
+     "tr:nth-of-type(3) > td.st:nth-of-type(7) > span.pill.paid"
+    ]
+   },
+   "#ffffff": {
+    "n": 1,
+    "ex": [
+     "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.primary:nth-of-type(3)"
+    ]
+   }
+  },
+  "bg": {
+   "#ffffff": {
+    "n": 15,
+    "ex": [
+     "header.top"
+    ]
+   },
+   "#ebebeb": {
+    "n": 11,
+    "ex": [
+     "header.top > nav > a:nth-of-type(2)"
+    ]
+   },
+   "#f4f4f4": {
+    "n": 7,
+    "ex": [
+     "thead > tr > th:nth-of-type(1)"
+    ]
+   },
+   "#242424": {
+    "n": 4,
+    "ex": [
+     "div.weeks:nth-of-type(1) > div.wk:nth-of-type(1) > i.b"
+    ]
+   },
+   "#868686": {
+    "n": 2,
+    "ex": [
+     "section.tile.t-open:nth-of-type(2) > div.meter:nth-of-type(2) > i.m-ok:nth-of-type(1)"
+    ]
+   },
+   "#d93834": {
+    "n": 2,
+    "ex": [
+     "section.tile.t-open:nth-of-type(2) > div.meter:nth-of-type(2) > i.m-late:nth-of-type(2)"
+    ]
+   },
+   "#ffe6e3": {
+    "n": 2,
+    "ex": [
+     "tr:nth-of-type(2) > td.st:nth-of-type(7) > span.pill.late"
+    ]
+   },
+   "#d9f1dd": {
+    "n": 2,
+    "ex": [
+     "tr:nth-of-type(3) > td.st:nth-of-type(7) > span.pill.paid"
+    ]
+   },
+   "#fdfdfd": {
+    "n": 1,
+    "ex": [
+     "body"
+    ]
+   },
+   "#1f6f5c": {
+    "n": 1,
+    "ex": [
+     "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.primary:nth-of-type(3)"
+    ]
+   }
+  },
+  "border": {
+   "#d2d2d2": {
+    "n": 6,
+    "ex": [
+     "main > div.money:nth-of-type(2) > section.tile.t-cash:nth-of-type(1)"
+    ]
+   },
+   "#c9c9c9": {
+    "n": 3,
+    "ex": [
+     "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn:nth-of-type(1)"
+    ]
+   },
+   "#646464": {
+    "n": 2,
+    "ex": [
+     "section.tile.t-cash:nth-of-type(1) > div.weeks:nth-of-type(1) > span.avg"
+    ]
+   },
+   "#242424": {
+    "n": 2,
+    "ex": [
+     "div.weeks:nth-of-type(1) > div.wk.now:nth-of-type(4) > i.b"
+    ]
+   },
+   "#868686": {
+    "n": 1,
+    "ex": [
+     "header.top > input.search"
+    ]
+   }
+  }
+ },
+ "contrast": {
+  "checked": 12,
+  "failing": [],
+  "lowest": [
+   {
+    "sel": "div.head:nth-of-type(1) > div.acts:nth-of-type(2) > button.btn.primary:nth-of-type(3)",
+    "ratio": 6.02,
+    "fg": "#ffffff",
+    "bg": "#1f6f5c",
+    "fs": 14,
+    "large": false,
+    "backdrop": "solid",
+    "n": 1
+   },
+   {
+    "sel": "tr:nth-of-type(2) > td.st:nth-of-type(7) > span.pill.late",
+    "ratio": 6.04,
+    "fg": "#a82321",
+    "bg": "#ffe6e3",
+    "fs": 12,
+    "large": false,
+    "backdrop": "solid",
+    "n": 2
+   },
+   {
+    "sel": "div.bar:nth-of-type(3) > nav.seg > a:nth-of-type(2)",
+    "ratio": 6.06,
+    "fg": "#575757",
+    "bg": "#ebebeb",
+    "fs": 14,
+    "large": false,
+    "backdrop": "solid",
+    "n": 8
+   }
+  ]
+ },
+ "overflow": {
+  "list": [],
+  "clipped": [],
+  "scrollers": []
+ },
+ "content": {
+  "placeholders": []
+ },
+ "labels": {
+  "checked": 10,
+  "broken": []
+ },
+ "fixed": [],
+ "targets": {
+  "count": 25,
+  "small": [],
+  "noName": [],
+  "hiddenFocusable": [],
+  "coarse": false
+ },
+ "images": {
+  "total": 0,
+  "broken": [],
+  "noAlt": [],
+  "oversize": [],
+  "blurry": [],
+  "stretched": [],
+  "lazyPending": 0
+ },
+ "media_counts": {
+  "svg": 26,
+  "canvas": 0,
+  "video": 0,
+  "iframe": 0,
+  "iframeCross": 0,
+  "audio": 0,
+  "shadowHosts": 0,
+  "smil": 0,
+  "lottie": 0,
+  "autoplayVideo": 0
+ },
+ "a11y": {
+  "headings": {
+   "levels": [
+    1
+   ],
+   "h1": 1,
+   "skips": []
+  },
+  "landmarks": {
+   "main": 1,
+   "nav": 2
+  },
+  "duplicateIds": [],
+  "states": {
+   "noHover": [
+    "header.top > input.search",
+    "div.bar:nth-of-type(3) > nav.seg > a:nth-of-type(1)",
+    "div.bar:nth-of-type(3) > nav.seg > a:nth-of-type(2)",
+    "div.bar:nth-of-type(3) > nav.seg > a:nth-of-type(3)",
+    "div.bar:nth-of-type(3) > nav.seg > a:nth-of-type(4)"
+   ],
+   "noFocusStyle": [],
+   "focusRingRemoved": [],
+   "noActive": 25,
+   "blockedSheets": 1,
+   "checked": 25
+  }
+ },
+ "fonts": {
+  "faces": [],
+  "failed": 0,
+  "familyState": {
+   "system-ui": "generic",
+   "ui-monospace": "generic"
+  },
+  "ready": "loaded"
+ },
+ "motion": {
+  "running": 0,
+  "infinite": 0,
+  "animations": [],
+  "transitionDurations": {},
+  "transitionProps": {},
+  "declared": {
+   "transitionAll": 0,
+   "layoutProps": [],
+   "willChange": 0,
+   "animatedNames": {},
+   "infiniteDeclared": []
+  },
+  "reducedMotionRules": 0,
+  "blockedSheets": 1,
+  "libs": {},
+  "note": "Only CSS and Web Animations are listed. Canvas, WebGL, video, SMIL and script-driven (requestAnimationFrame) motion is not introspectable here: sample frames instead."
+ },
+ "stress": [],
+ "mode": {
+  "theme": "light",
+  "density": null,
+  "motion": null
+ }
+}

@@ -2,7 +2,7 @@
 type: topic
 title: Color
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-07
 sources: []
 tags: []
 ---
@@ -38,3 +38,7 @@ Replaces the 60-30-10 rule with four layers for product UI (neutrals, accent ram
 - [[sources/xHD01_Onac0-vibe-coding-a-pro-ui-in-seconds-with-ai|Vibe Coding a Pro UI in SECONDS With AI]]: Color is one of the three biggest fixes: purples made bluer, backgrounds darker and more purplish gray, chip contrast fixed, status colors made to match state.
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Swap slate grays for neutral to match the product, and replace the AI-picked emerald accent with gray 950 for a neutral look; use opacity-based near-black for rings and backgrounds.
 - See also: [[synthesis/color|Color synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-anti-ai-slop-referodesign-refero-skill-skills-refero-design-references-anti-ai-slop-md|referodesign/refero_skill: skills/refero-design/references/anti-ai-slop.md]]: Bans indigo/violet without brand justification, warns against defaulting to warm ivory and earth tones, and asks for a dominant color plus a sharp accent.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-color-referodesign-refero-skill-skills-refero-design-references-color-md|referodesign/refero_skill: skills/refero-design/references/color.md]]: Four-layer palette structure, neutral and accent scales with step roles, semantic sets, 60/30/10 distribution, 2-colors-per-component limit, OKLCH workflow, gradients and the indigo ban.
+- [[sources/referodesign-refero-skil-skills-refero-design-references-typography-referodesign-refero-skill-skills-refero-design-references-typography-md|referodesign/refero_skill: skills/refero-design/references/typography.md]]: Text color system by opacity (100/65/45/30%), never pure black, dark-mode inversion.
+- [[sources/referodesign-refero-skil-skills-refero-design-skill-referodesign-refero-skill-skills-refero-design-skill-md|referodesign/refero_skill: skills/refero-design/SKILL.md]]: Use brand-appropriate colors from research, keep accents rare when the reference does, and do not default to indigo or violet.

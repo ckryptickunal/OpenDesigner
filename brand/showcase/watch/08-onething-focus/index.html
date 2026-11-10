@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=205, initial-scale=1">
+<title>Onething: focus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=block" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  :root { --display-w: 205px; --display-h: 251px; --display-r: 48px; --ring: var(--ds-color-brand-seed); }  /* hardware shape; ring = the one accent */
+  /* Type roles: watchOS text styles at xLarge (49 mm default). Body 17 is an engine token; Caption 2 15 and Large Title 40
+     are HIG values (the engine scale steps 14, 17, 20, 24, 29, 35, 42). Three sizes, one family. */
+  :root { --t-caption: 15px; --t-body: var(--ds-font-size-17); --t-large: 40px; }
+  html, body { margin: 0; background: var(--ds-color-black); }
+  .display {
+    position: relative; width: var(--display-w); height: var(--display-h); overflow: hidden; border-radius: var(--display-r);
+    background: var(--ds-color-surface-base); color: var(--ds-color-text-primary); font-family: var(--ds-font-family-text);
+  }
+  .status { position: absolute; top: var(--ds-space-12); left: 28px; right: var(--ds-space-24); display: flex; justify-content: space-between; align-items: center; }
+  .pips { display: flex; gap: var(--ds-space-4); align-items: center; }
+  .pips i { width: 12px; height: 4px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-dark-6); }
+  .pips i.done { background: var(--ds-color-text-secondary); }
+  .pips i.now { width: 18px; background: var(--ds-color-text-primary); }
+  .clock { font: 500 var(--t-caption)/1 var(--ds-font-family-text); font-variant-numeric: tabular-nums; color: var(--ds-color-text-secondary); }
+
+  .ring { position: absolute; left: 0; right: 0; top: 28px; height: 146px; display: grid; place-items: center; }
+  .ring svg { position: absolute; width: 146px; height: 146px; left: calc(50% - 73px); top: 0; }
+  .ring .t { position: relative; text-align: center; }
+  .ring .t .v {
+    /* timer readout, Large Title set light: the only number on the screen */
+    font: 300 var(--t-large)/1 var(--ds-font-family-text); letter-spacing: -0.045em; font-variant-numeric: tabular-nums;
+  }
+  .ring .t .k { margin-top: var(--ds-space-6); font: 500 var(--t-caption)/1 var(--ds-font-family-text); letter-spacing: .02em; color: var(--ds-color-text-secondary); }
+
+  .task { position: absolute; left: var(--ds-space-24); right: var(--ds-space-24); top: 179px; text-align: center; font: 500 var(--t-body)/1.2 var(--ds-font-family-text); letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ctrl { position: absolute; left: 0; right: 0; top: 202px; display: flex; justify-content: center; gap: var(--ds-space-12); }
+  .ctrl button {
+    all: unset; box-sizing: border-box; width: var(--ds-size-target-touch); height: var(--ds-size-target-touch); border-radius: var(--ds-radius-full);
+    display: grid; place-items: center; background: var(--ds-color-neutral-dark-4); color: var(--ds-color-text-primary); cursor: pointer;
+  }
+  .ctrl button.primary { background: var(--ds-color-text-primary); color: var(--ds-color-black); }
+  .ctrl button:focus-visible { outline: 2px solid var(--ds-color-border-focus); outline-offset: 2px; }
+  .ctrl svg { width: 16px; height: 16px; }
+</style>
+</head>
+<body>
+<main class="display" aria-label="Onething focus: 18 minutes 24 seconds left on Draft the grant intro, session 3 of 4">
+  <div class="status">
+    <span class="pips" aria-label="Session 3 of 4"><i class="done"></i><i class="done"></i><i class="now"></i><i></i></span>
+    <span class="clock">2:41</span>
+  </div>
+
+  <div class="ring">
+    <svg viewBox="0 0 146 146" aria-hidden="true">
+      <g id="ticks"></g>
+      <circle id="arc" cx="73" cy="73" r="66" fill="none" stroke="var(--ring)" stroke-width="8" stroke-linecap="round" style="filter: drop-shadow(0 0 6px color-mix(in oklch, var(--ring) 55%, transparent))"
+              transform="rotate(-90 73 73)"/>
+      <circle id="tip" r="2.2" fill="var(--ds-color-black)"/>
+    </svg>
+    <div class="t"><div class="v">18:24</div><div class="k">of 25 min</div></div>
+  </div>
+
+  <div class="task">Draft the grant intro</div>
+  <div class="ctrl">
+    <button aria-label="End session"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="3.5" width="9" height="9" rx="1.5" fill="currentColor"/></svg></button>
+    <button class="primary" aria-label="Pause"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="3" width="2.6" height="10" rx="1" fill="currentColor"/><rect x="9.4" y="3" width="2.6" height="10" rx="1" fill="currentColor"/></svg></button>
+  </div>
+</main>
+<script>
+  // 6:36 of 25:00 done: the ring shows time spent, the readout time left
+  (function () {
+    const r = 66, C = 2 * Math.PI * r, done = 1 - (18 * 60 + 24) / (25 * 60);
+    const arc = document.getElementById('arc'), ticks = document.getElementById('ticks');
+    for (let i = 0; i < 60; i++) {   // a minute dial as the track: hairlines, every fifth a little longer
+      const t = 2 * Math.PI * i / 60 - Math.PI / 2, l = i % 5 ? 4 : 7, x = Math.cos(t), y = Math.sin(t);
+      const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      ln.setAttribute('x1', 73 + (r - l / 2) * x); ln.setAttribute('y1', 73 + (r - l / 2) * y);
+      ln.setAttribute('x2', 73 + (r + l / 2) * x); ln.setAttribute('y2', 73 + (r + l / 2) * y);
+      ln.setAttribute('stroke', i % 5 ? 'var(--ds-color-neutral-dark-6)' : 'var(--ds-color-neutral-dark-8)'); ln.setAttribute('stroke-width', 1.1);
+      ticks.appendChild(ln);
+    }
+    arc.setAttribute('stroke-dasharray', `${(C * done).toFixed(2)} ${C.toFixed(2)}`);
+    const a = -Math.PI / 2 + 2 * Math.PI * done, tip = document.getElementById('tip');
+    tip.setAttribute('cx', (73 + r * Math.cos(a)).toFixed(2)); tip.setAttribute('cy', (73 + r * Math.sin(a)).toFixed(2));
+  })();
+</script>
+</body>
+</html>

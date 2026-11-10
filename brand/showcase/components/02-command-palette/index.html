@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Margin command palette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Outside the tokens, on purpose (notes.md): the paper veil over the window is white at 64%;
+     the system's alpha neutrals are all ink-tinted, so there is no white veil token. */
+  :root { --veil: rgb(253 253 253 / .64); --ink: var(--ds-color-neutral-light-12); --rule: var(--ds-color-border-subtle); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ds-color-neutral-light-2); }
+  body { font-variant-numeric: tabular-nums; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); -webkit-font-smoothing: antialiased; font-synthesis: none; }
+  .sheet { position: relative; width: 1440px; height: 900px; overflow: hidden; background: var(--ds-color-surface-overlay); }
+
+  /* Round 4: the palette in its product. The binder (chapters) on the left, the manuscript on the right. */
+  .binder { position: absolute; left: 0; top: 0; bottom: 0; width: 248px; background: var(--ds-color-neutral-light-2); border-right: 1px solid var(--rule); padding: var(--ds-space-16) var(--ds-space-12); }
+  .mark { display: flex; align-items: center; gap: var(--ds-space-8); height: 32px; padding: 0 var(--ds-space-8); }
+  .mark b { font: 500 var(--ds-font-size-20)/1 var(--ds-font-family-display); letter-spacing: -0.01em; font-variation-settings: "opsz" 36; }
+  .book { margin: var(--ds-space-24) 0 var(--ds-space-8); padding: 0 var(--ds-space-8); font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+  .binder a { display: flex; align-items: center; gap: var(--ds-space-8); height: 32px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-control); font: 400 var(--ds-font-size-14)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); text-decoration: none; }
+  .binder a span { margin-left: auto; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); }
+  .binder a.on { background: var(--ds-color-surface-overlay); color: var(--ds-color-text-primary); box-shadow: 0 0 0 1px var(--rule); }
+
+  /* the editor behind */
+  .editor { position: absolute; left: 248px; top: 0; right: 0; bottom: 0; background: var(--ds-color-surface-overlay); overflow: hidden; }
+  .bar { height: 44px; display: flex; align-items: center; gap: var(--ds-space-12); padding: 0 var(--ds-space-20); border-bottom: 1px solid var(--rule); font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+  .bar .crumb b { color: var(--ds-color-text-primary); font-weight: 500; }
+  .bar .sp { margin-left: auto; }
+  .page { position: absolute; left: 0; right: 0; top: 44px; bottom: 0; padding: 112px 0 0 216px; }
+  .page h2 { font: 400 var(--ds-font-size-35)/1.15 var(--ds-font-family-display); font-variation-settings: "opsz" 60; letter-spacing: -0.01em; }
+  .page .kick { font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); letter-spacing: .12em; text-transform: uppercase; color: var(--ds-color-text-secondary); margin-bottom: var(--ds-space-12); }
+  .page p { font: 400 var(--ds-font-size-20)/1.6 var(--ds-font-family-display); font-variation-settings: "opsz" 18; max-width: 640px; margin-top: var(--ds-space-20); position: relative; }
+  .page p.rev::before { content: ""; position: absolute; left: -24px; top: 6px; bottom: 6px; width: 2px; background: var(--ink); }
+  .page s { text-decoration-thickness: 1px; color: var(--ds-color-text-tertiary); }
+  .page .ins { border-bottom: 1px solid var(--ink); }
+  .page .lower { margin-top: var(--ds-space-32); }
+  .veil { position: absolute; inset: 0; background: var(--veil); }
+
+  /* ---------- the palette ---------- */
+  .pal { position: absolute; left: 464px; top: 112px; width: 640px; background: var(--ds-color-surface-overlay);
+    border-radius: var(--ds-radius-overlay); box-shadow: var(--ds-elevation-overlay), 0 32px 64px -24px rgb(36 36 36 / .18); overflow: hidden; }
+  .q { position: relative; display: flex; align-items: center; gap: var(--ds-space-12); height: 56px; padding: 0 var(--ds-space-20); border-bottom: 1px solid var(--rule); }
+  .q svg { flex: none; color: var(--ds-color-text-secondary); }
+  .scope { flex: none; display: inline-flex; align-items: center; gap: var(--ds-space-6); height: 24px; padding: 0 var(--ds-space-6) 0 var(--ds-space-8); border: 1px solid var(--ds-color-border-default);
+    border-radius: var(--ds-radius-control); font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); white-space: nowrap; }
+  .scope button { all: unset; cursor: pointer; display: grid; place-items: center; width: 16px; height: 16px; color: var(--ds-color-text-secondary); border-radius: var(--ds-radius-control); }
+  .scope button:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ink); }
+  .scope button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: 1px; }
+  .q input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font: 400 var(--ds-font-size-17)/1 var(--ds-font-family-text); color: var(--ink); caret-color: var(--ink); letter-spacing: .01em; }
+  .q input::placeholder { color: var(--ds-color-text-secondary); }
+  .q::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--ink); transform: scaleX(0); transform-origin: left; }
+  .q:has(input:focus-visible)::after, .q.is-focus::after { transform: scaleX(1); }
+  .fakecaret { display: inline-block; width: 1px; height: 20px; background: var(--ink); margin-left: 1px; vertical-align: -4px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .key { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 var(--ds-space-6); border: 1px solid var(--ds-color-border-default); border-bottom-width: 2px;
+    border-radius: var(--ds-radius-control); font: 500 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); background: var(--ds-color-surface-overlay); }
+  .key.pressed { border-bottom-width: 1px; transform: translateY(1px); background: var(--ds-color-bg-neutral-subtle); color: var(--ink); }
+  .keys { display: inline-flex; gap: var(--ds-space-4); }
+
+  .list { padding: var(--ds-space-6) 0; max-height: 420px; overflow: auto; }
+  .grp { display: flex; align-items: center; justify-content: space-between; height: 32px; padding: 0 var(--ds-space-20); font: 600 var(--ds-font-size-12)/1 var(--ds-font-family-text);
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ds-color-text-secondary); }
+  .grp + .row, .row + .grp { }
+  .sep { height: 1px; background: var(--rule); margin: var(--ds-space-6) 0; }
+  .row { position: relative; display: grid; grid-template-columns: 20px 1fr auto; align-items: center; gap: var(--ds-space-12); height: 44px; padding: 0 var(--ds-space-20); cursor: default; color: var(--ds-color-text-secondary); }
+  .row .ic { color: var(--ds-color-text-secondary); display: grid; place-items: center; }
+  .row .t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font: 400 var(--ds-font-size-14)/1.4286 var(--ds-font-family-text); }
+  .row .t mark { background: none; color: var(--ink); font-weight: 600; }
+  .row .path { font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-tertiary); margin-left: var(--ds-space-8); }
+  .row .end { font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); white-space: nowrap; }
+  .row:hover, .row.is-hover { background: var(--ds-color-neutral-light-2); }
+  .row[aria-selected="true"], .row.is-sel { background: var(--ds-color-bg-neutral-subtle); color: var(--ink); }
+  .row[aria-selected="true"]::before, .row.is-sel::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px; background: var(--ink); }
+  .row[aria-selected="true"] .ic, .row.is-sel .ic { color: var(--ink); }
+  .sc { font: 400 var(--ds-font-size-14)/1 var(--ds-font-family-text); letter-spacing: .12em; color: var(--ds-color-text-tertiary); }
+  .row[aria-selected="true"] .sc, .row.is-sel .sc { color: var(--ink); }
+  .row[aria-disabled="true"], .row.is-dis { color: var(--ds-color-text-disabled); }
+  .row[aria-disabled="true"] .ic, .row.is-dis .ic, .row.is-dis .end { color: var(--ds-color-text-disabled); }
+  .sw { position: relative; width: 28px; height: 16px; border-radius: var(--ds-radius-full); background: var(--ds-color-border-default); }
+  .sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: var(--ds-color-surface-overlay); }
+  .sw.on { background: var(--ink); }
+  .sw.on::after { left: 14px; }
+
+  .foot { display: flex; align-items: center; gap: var(--ds-space-16); height: 44px; padding: 0 var(--ds-space-20); border-top: 1px solid var(--rule); background: var(--ds-color-neutral-light-1);
+    font: 400 var(--ds-font-size-12)/1 var(--ds-font-family-text); color: var(--ds-color-text-secondary); white-space: nowrap; }
+  .foot > span { display: inline-flex; align-items: center; gap: var(--ds-space-6); }
+  .foot .count { margin-left: auto; color: var(--ds-color-text-secondary); }
+  .foot .key { min-width: 20px; height: 20px; }
+  .empty { padding: var(--ds-space-32) var(--ds-space-20); text-align: center; }
+  .empty b { display: block; font: 500 var(--ds-font-size-14)/1.4286 var(--ds-font-family-text); color: var(--ink); }
+  .empty span { display: block; margin-top: var(--ds-space-4); font: 400 var(--ds-font-size-12)/1.3333 var(--ds-font-family-text); color: var(--ds-color-text-secondary); }
+
+
+  @media (prefers-reduced-motion: reduce) { .fakecaret { animation: none; } }
+</style>
+</head>
+<body>
+<main class="sheet" aria-label="Margin, chapter 3 with the command palette open">
+  <aside class="binder" aria-hidden="true">
+    <div class="mark">
+      <svg width="18" height="22" viewBox="0 0 22 26" aria-hidden="true"><rect x=".5" y=".5" width="21" height="25" rx="2" fill="none" stroke="#242424"/><path d="M6 1v24" stroke="#242424"/><path d="M10 8h8M10 12h8M10 16h5" stroke="#242424"/></svg>
+      <b>Margin</b>
+    </div>
+    <p class="book">The Salt Road · draft 4</p>
+    <a>1 · Low water<span>3,412</span></a>
+    <a>2 · The salt pans<span>2,986</span></a>
+    <a class="on">3 · The lighthouse<span>2,140</span></a>
+    <a>4 · Wreck season<span>1,077</span></a>
+    <a>5 · Lamps out<span>—</span></a>
+    <p class="book">Notebook</p>
+    <a>Shore leave: reverse outline</a>
+    <a>Workshop comments</a>
+  </aside>
+
+  <section class="editor" aria-hidden="true">
+    <div class="bar"><span class="crumb">The Salt Road / <b>Chapter 3 · The lighthouse</b></span><span class="sp">2,140 words</span><span>Saved</span></div>
+    <div class="page">
+      <p class="kick">Chapter 3</p>
+      <h2>The lighthouse</h2>
+      <div class="lower">
+        <p>The keeper’s daughter counted ships by their lamps, not their sails. Sails <s>could lie</s> <span class="ins">lied</span>; a lamp told you who was hungry and who was late.</p>
+        <p>Salt got into everything: hinges, bread, pages.</p>
+        <p>Her father kept the log in pencil, because ink ran in the damp, and every night he wrote the same three words before the weather: lit, trimmed, watched.</p>
+        <p>She read it the way other children read the Bible, for the names of ships and the order they came in.</p>
+        <p>In March the lamp failed twice. The second time she trimmed the wick herself, burned two fingers, and wrote nothing about it in the log.</p>
+        <p>The inspector came in May with a ledger of his own. He read the pencil entries back to her father one by one, like charges, and stopped at the night in March where the hand was hers.</p>
+        <p>“Who trimmed this?” he asked, and nobody answered.</p>
+      </div>
+    </div>
+  </section>
+  <div class="veil" aria-hidden="true"></div>
+
+  <div class="pal" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="q is-focus">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M12.2 12.2L16 16" stroke-linecap="round"/></svg>
+      <span class="scope">in The Salt Road <button aria-label="Search every notebook"><svg width="10" height="10" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 2l6 6M8 2L2 8"/></svg></button></span>
+      <input id="q" type="text" value="shrev" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true" aria-controls="list" aria-autocomplete="list" aria-label="Search commands and drafts">
+      <span class="key">esc</span>
+    </div>
+    <div class="list" id="list" role="listbox" aria-label="Results"></div>
+    <div class="foot">
+      <span><span class="keys"><span class="key">↑</span><span class="key">↓</span></span>move</span>
+      <span><span class="key">↵</span>open</span>
+      <span><span class="keys"><span class="key">⌘</span><span class="key">↵</span></span>open beside</span>
+      <span class="count" id="count" aria-live="polite"></span>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  const ICON = {
+    history: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2.5 8a5.5 5.5 0 105.5-5.5A5.5 5.5 0 004 4.3"/><path d="M3.5 2v2.6h2.6"/><path d="M8 5v3l2 1.5"/></svg>',
+    link: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6.5 9.5l3-3"/><path d="M7 4.5l1-1a2.8 2.8 0 014 4l-1 1M9 11.5l-1 1a2.8 2.8 0 01-4-4l1-1"/></svg>',
+    doc: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 2.5h5l3 3v8H4z"/><path d="M9 2.5v3h3"/></svg>',
+    focus: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2.5 5.5v-3h3M10.5 2.5h3v3M13.5 10.5v3h-3M5.5 13.5h-3v-3"/></svg>',
+    brk: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2.5 8h2M6.5 8h3M11.5 8h2M4 4.5h8M4 11.5h8"/></svg>',
+    out: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M8 2.5v7M5 6.5l3 3 3-3M3 11v2.5h10V11"/></svg>',
+    jump: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 8h10M9 4l4 4-4 4"/></svg>',
+    gear: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 5h6M11 5h2M3 11h2M7 11h6"/><circle cx="10" cy="5" r="1.5"/><circle cx="6" cy="11" r="1.5"/></svg>',
+  };
+  const DATA = [
+    { g: 'Commands', items: [
+      { t: 'Show revision history', ic: 'history', keys: ['⌥', '⌘', 'R'] },
+      { t: 'Share review link', ic: 'link', keys: ['⇧', '⌘', 'L'] },
+      { t: 'Start focus mode', ic: 'focus', keys: ['⇧', '⌘', 'F'] },
+      { t: 'Insert section break', ic: 'brk', keys: ['⇧', '⌘', '↵'] },
+      { t: 'Export as manuscript (.docx)', ic: 'out', keys: ['⌘', 'E'] },
+    ]},
+    { g: 'Drafts', items: [
+      { t: 'Shore lamp scene, revised', ic: 'doc', path: 'Chapter 3', end: '1,312 w' },
+      { t: 'Shore leave: reverse outline', ic: 'doc', path: 'Notebook', end: '640 w' },
+      { t: 'Revision notes, spring', ic: 'doc', path: 'Notebook', end: '860 w' },
+      { t: 'Show, don’t tell: workshop notes', ic: 'doc', path: 'Craft', end: '1,020 w' },
+    ]},
+    { g: 'Jump to', items: [
+      { t: 'Chapter 3 · The lighthouse', ic: 'jump', end: 'here' },
+      { t: 'Margin notes', ic: 'jump', end: '12' },
+    ]},
+    { g: 'Settings', items: [
+      { t: 'Show revision marks in margin', ic: 'gear', sw: true },
+      { t: 'Typewriter scrolling', ic: 'gear', sw: false },
+    ]},
+  ];
+  // Fuzzy match: best placement of the query letters, rewarding word starts and runs.
+  function fuzzy(q, s) {
+    q = q.toLowerCase().replace(/\s+/g, ''); const t = s.toLowerCase();
+    if (!q) return { score: 0, pos: [] };
+    const memo = new Map();
+    function best(qi, prev) {
+      if (qi === q.length) return { score: 0, pos: [] };
+      const key = qi + ':' + prev; if (memo.has(key)) return memo.get(key);
+      let out = null;
+      for (let p = prev + 1; p < t.length; p++) {
+        if (t[p] !== q[qi]) continue;
+        const rest = best(qi + 1, p); if (!rest) continue;
+        const ws = p === 0 || /[\s,:·(/.\-’]/.test(t[p - 1]);
+        const sc = 1 + (ws ? 8 : 0) + (p === prev + 1 ? 5 : 0) - (prev >= 0 ? (p - prev - 1) * 0.05 : p * 0.02) + rest.score;
+        if (!out || sc > out.score) out = { score: sc, pos: [p, ...rest.pos] };
+      }
+      memo.set(key, out); return out;
+    }
+    return best(0, -1);
+  }
+  const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  function hl(s, pos) {
+    let out = '', open = false; const set = new Set(pos);
+    [...s].forEach((ch, i) => { const on = set.has(i); if (on && !open) { out += '<mark>'; open = true; } if (!on && open) { out += '</mark>'; open = false; } out += esc(ch); });
+    return out + (open ? '</mark>' : '');
+  }
+  const input = document.getElementById('q'), list = document.getElementById('list'), count = document.getElementById('count');
+  let rows = [], sel = 0;
+  function render() {
+    const q = input.value.trim(); let html = '', n = 0; rows = [];
+    const groups = DATA.map(g => ({ g: g.g, items: g.items.map(it => ({ it, m: fuzzy(q, it.t) })).filter(x => x.m).sort((a, b) => b.m.score - a.m.score) })).filter(g => g.items.length);
+    groups.forEach((g, gi) => {
+      if (gi) html += '<div class="sep" role="presentation"></div>';
+      html += `<div class="grp" role="presentation">${g.g}<span>${g.items.length}</span></div>`;
+      g.items.forEach(({ it, m }) => {
+        const id = 'r' + n++;
+        const end = it.keys ? `<span class="sc" aria-label="Shortcut ${it.keys.join(' ')}">${it.keys.join('')}</span>`
+          : it.sw !== undefined ? `<span class="sw ${it.sw ? 'on' : ''}" aria-hidden="true"></span>` : `<span class="end">${it.end}</span>`;
+        html += `<div class="row" role="option" id="${id}" aria-selected="false"${it.sw !== undefined ? ` aria-checked="${it.sw}"` : ''}><span class="ic" aria-hidden="true">${ICON[it.ic]}</span><span class="t">${hl(it.t, m.pos)}${it.path ? `<span class="path">${it.path}</span>` : ''}</span>${end}</div>`;
+        rows.push(it);
+      });
+    });
+    if (!rows.length) html = `<div class="empty"><b>No matches for “${esc(q)}”</b><span>Try fewer letters, or ⌘N to start a draft with this name.</span></div>`;
+    list.innerHTML = html; sel = 0; mark();
+    count.textContent = rows.length === 1 ? '1 result' : rows.length + ' results';
+  }
+  function mark() {
+    [...list.querySelectorAll('.row')].forEach((r, i) => r.setAttribute('aria-selected', i === sel));
+    const cur = list.querySelector('#r' + sel);
+    input.setAttribute('aria-activedescendant', cur ? cur.id : '');
+    if (cur) cur.scrollIntoView({ block: 'nearest' });
+  }
+  function run(i) {
+    const it = rows[i]; if (!it) return;
+    if (it.sw !== undefined) { it.sw = !it.sw; const keep = sel; render(); sel = keep; mark(); count.textContent = `${it.t}: ${it.sw ? 'on' : 'off'}`; return; }
+    count.textContent = 'Ran: ' + it.t;
+  }
+  input.addEventListener('input', render);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); sel = Math.min(rows.length - 1, sel + 1); mark(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); sel = Math.max(0, sel - 1); mark(); }
+    else if (e.key === 'Enter') { e.preventDefault(); run(sel); }
+    else if (e.key === 'Escape') { input.value = ''; render(); }
+  });
+  list.addEventListener('mousemove', e => { const r = e.target.closest('.row'); if (r) { const i = +r.id.slice(1); if (i !== sel) { sel = i; mark(); } } });
+  list.addEventListener('click', e => { const r = e.target.closest('.row'); if (r) { sel = +r.id.slice(1); mark(); run(sel); input.focus(); } });
+  render();
+  input.focus(); input.setSelectionRange(input.value.length, input.value.length);
+</script>
+</body>
+</html>

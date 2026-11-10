@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Type specimen</title>
+<!-- Compares the current brand type with three candidate directions, same words, same sizes (display scale 1.5: 32 / 48 / 108). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Schibsted+Grotesk:wght@400..700&family=Inter:opsz,wght@14..32,300..700&family=JetBrains+Mono:wght@400;500&display=block" rel="stylesheet">
+<style>
+  :root { --ink:#161514; --paper:#ece8e5; --muted:#afaaa6; --rule:rgb(255 240 230 / .12); --ember:#fb9073; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--ink); color:var(--paper); width:1600px; padding:64px 80px; -webkit-font-smoothing:antialiased; }
+  .row { display:grid; grid-template-columns:260px 1fr; gap:48px; padding:56px 0; border-top:1px solid var(--rule); }
+  .tag { font:500 15px/1.4 "JetBrains Mono", monospace; color:var(--muted); }
+  .tag b { display:block; color:var(--paper); font:600 22px/1.2 "Inter", sans-serif; margin-bottom:10px; letter-spacing:-.01em; }
+  h2 { font-size:108px; text-wrap:balance; max-width:1150px; }
+  p { font-size:48px; margin-top:28px; max-width:1100px; color:var(--muted); text-wrap:pretty; }
+  .label { margin-top:32px; font-size:32px; color:var(--paper); }
+  code { font-family:"JetBrains Mono", monospace; font-size:.9em; color:var(--ember); }
+
+  /* current */
+  .now h2 { font-family:Geist; font-weight:600; letter-spacing:-.052em; line-height:.94; }
+  .now h2 em { font-family:"Playfair Display"; font-style:italic; font-weight:400; letter-spacing:-.02em; color:var(--ember); }
+  .now p, .now .label { font-family:Geist; letter-spacing:-.018em; line-height:1.28; }
+  /* A: one characterful grotesk, optical sizes */
+  .a h2 { font-family:"Bricolage Grotesque"; font-variation-settings:"opsz" 96; font-weight:600; letter-spacing:-.025em; line-height:1.0; }
+  .a p, .a .label { font-family:"Bricolage Grotesque"; font-variation-settings:"opsz" 36; font-weight:400; letter-spacing:-.005em; line-height:1.3; }
+  .a .label { font-weight:600; }
+  /* B: editorial serif display + grotesk text */
+  .b h2 { font-family:Newsreader; font-variation-settings:"opsz" 72; font-weight:500; letter-spacing:-.02em; line-height:1.0; }
+  .b p, .b .label { font-family:"Schibsted Grotesk"; font-weight:400; letter-spacing:-.01em; line-height:1.3; }
+  .b .label { font-weight:600; }
+  /* C: neutral, set well */
+  .c h2 { font-family:Inter; font-variation-settings:"opsz" 32; font-weight:600; letter-spacing:-.022em; line-height:1.02; }
+  .c p, .c .label { font-family:Inter; font-variation-settings:"opsz" 28; font-weight:400; letter-spacing:-.015em; line-height:1.3; }
+  .c .label { font-weight:600; }
+</style>
+</head>
+<body>
+  <div class="row now"><div class="tag"><b>Now</b>Geist 600 + Playfair Display Italic<br>tracking −0.052em, leading 0.94</div>
+    <div><h2>Design systems, <em>one decision</em> at a time.</h2><p>A free helper for the AI you already use. It asks, recommends, explains, and writes it all to files.</p><div class="label">Start with <code>Create a design system for this project.</code></div></div></div>
+  <div class="row a"><div class="tag"><b>A · Crafted</b>Bricolage Grotesque<br>opsz 96 / 36, 600 / 400<br>tracking −0.025em, leading 1.0</div>
+    <div><h2>Design systems, one decision at a time.</h2><p>A free helper for the AI you already use. It asks, recommends, explains, and writes it all to files.</p><div class="label">Start with <code>Create a design system for this project.</code></div></div></div>
+  <div class="row b"><div class="tag"><b>B · Editorial</b>Newsreader display<br>+ Schibsted Grotesk text<br>tracking −0.02em, leading 1.0</div>
+    <div><h2>Design systems, one decision at a time.</h2><p>A free helper for the AI you already use. It asks, recommends, explains, and writes it all to files.</p><div class="label">Start with <code>Create a design system for this project.</code></div></div></div>
+  <div class="row c"><div class="tag"><b>C · Neutral</b>Inter with optical size<br>opsz 32 / 28, 600 / 400<br>tracking −0.022em, leading 1.02</div>
+    <div><h2>Design systems, one decision at a time.</h2><p>A free helper for the AI you already use. It asks, recommends, explains, and writes it all to files.</p><div class="label">Start with <code>Create a design system for this project.</code></div></div></div>
+</body>
+</html>

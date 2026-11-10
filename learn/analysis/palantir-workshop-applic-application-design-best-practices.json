@@ -1,0 +1,712 @@
+{
+  "summary": "Palantir's documentation for Workshop, its builder for internal operational applications, sets out how to lay out a work tool so that people can carry out workflows efficiently. It has two core principles: component clarity over complexity, and one unified, consistent experience across every application in a suite. It then gives concrete limits and patterns: no more than five primary actions in the top navigation, no more than ten visible components in a view, 30 to 40 percent whitespace, layouts that follow an F-shaped reading pattern with filters anchored on the left, three levels of headings, padding between groups and dividers inside them, one elevated area per page, navigation pinned in a header that does not scroll, and overlays only for short secondary tasks. For a design system this is a clear statement of the enterprise side: attention and efficiency come first, nothing in it is about delight, and it never mentions animation.",
+  "key_ideas": [
+    "The interface exists to guide a user's actions and keep their attention so workflows are efficient, effective and logical.",
+    "Clarity of components matters more than complexity; a clear interface is what gets an application adopted.",
+    "Two separate failure modes: overloaded (too many actionable items) and overcrowded (too many components, too little whitespace).",
+    "Layout follows the F-shaped reading pattern: scan across the top from the left corner, then down the left side.",
+    "Filters and configuration sit on the left and content flows to the right; summary metric cards sit on top.",
+    "Headings come in three levels with one job each: page purpose, section grouping, short description.",
+    "Space separates groups; dividers separate related content inside a group. Too many nested containers add clutter.",
+    "Elevation is a signal of importance and is used once per page, on the area where users act.",
+    "Lighter backgrounds mark important areas; darker ones mark less critical areas such as filters and collapsible panels.",
+    "A suite feels unified when the home page centralises navigation, the header keeps logo and global settings in the same corners, and high-use components sit in the same place everywhere.",
+    "Navigation and tabs are pinned in the header; only content sections scroll.",
+    "Overlays are for temporary, secondary interactions, never for analysis that needs several layers of information in view.",
+    "Every element should have to earn being visible where it is; otherwise show it only when the user needs to act on it.",
+    "Squinting at the screen is a quick test of whether the hierarchy works."
+  ],
+  "entities": [
+    {
+      "name": "Palantir",
+      "type": "company",
+      "description": "Publisher of the guidance; maker of Foundry and Workshop."
+    },
+    {
+      "name": "Palantir Foundry",
+      "type": "product",
+      "description": "The enterprise data platform Workshop belongs to; its default font is Source Sans Pro."
+    },
+    {
+      "name": "Workshop",
+      "type": "tool",
+      "description": "Foundry's application builder for operational, internal applications; the guidance is written for people building in it."
+    },
+    {
+      "name": "F-shaped pattern",
+      "type": "concept",
+      "description": "The reading pattern the layout guidance is built on: horizontal scanning from the top left, then vertical scanning down the left side."
+    },
+    {
+      "name": "Metric Card",
+      "type": "concept",
+      "description": "A Workshop widget for a single key number, recommended for a holistic view of key data at the top of an application."
+    },
+    {
+      "name": "Object Table",
+      "type": "concept",
+      "description": "Workshop's data table widget; 'Fit columns horizontally' is the recommended way to avoid sideways scrolling."
+    },
+    {
+      "name": "Source Sans Pro",
+      "type": "product",
+      "description": "The default Foundry typeface, used when no other is selected and as the fallback for a missing custom font."
+    }
+  ],
+  "topics": [
+    {
+      "name": "Visual hierarchy",
+      "summary": "Hierarchy should draw attention to the right areas of interaction. Avoid overload (limit actionable items; at most five primary actions in top navigation) and overcrowding (30 to 40 percent whitespace; at most ten visible components). Check it by squinting."
+    },
+    {
+      "name": "Spacing and layout",
+      "summary": "Use grid, column, or row-and-column layouts that follow the F-shaped reading pattern, with filters anchored on the left. Use compact padding in most cases; separate groups with padding and containers, and related content with dividers; do not over-nest containers."
+    },
+    {
+      "name": "Dashboards and data display",
+      "summary": "Work-tool layouts: metric cards for key numbers across the top, a filter panel on the left, an object table that fits its columns to the width, and a list, table and detail panel side by side."
+    },
+    {
+      "name": "Depth, shadows and borders",
+      "summary": "A drop shadow signals that content is important and an inner shadow that it is less so; lighter backgrounds signal importance and darker ones less critical areas. Apply the elevated or shaded style once per page, on the main content or primary dialog."
+    },
+    {
+      "name": "Navigation and sidebars",
+      "summary": "At most five primary actions in top-level navigation; a home page that centralises navigation to all modules; navigation bars and tabs pinned inside the primary header so they never scroll away."
+    },
+    {
+      "name": "Modals and popovers",
+      "summary": "Overlays suit temporary, secondary interactions such as a questionnaire. Avoid them for analysis. A dialog blocks the background, so reference text needed while typing must sit beside the inputs or be repeated."
+    },
+    {
+      "name": "Typography",
+      "summary": "The page header is the largest text and states the purpose; section headers are second largest; subheadings are descriptions. In Workshop, prefer a system font over a custom typeface because custom fonts cannot be uploaded and only render if installed on the viewer's device."
+    },
+    {
+      "name": "Content and microcopy",
+      "summary": "Headings and their descriptions should be succinct and help a new user understand what the section is for."
+    },
+    {
+      "name": "Design systems and tokens",
+      "summary": "A unified suite standardises where high-use components go and applies the same styles to tabs, metric cards, headers and buttons across every application."
+    },
+    {
+      "name": "SaaS product UI",
+      "summary": "The whole page describes internal, operational work tools: dense tables, filter panels, status tags and detail panels built for efficient workflows."
+    },
+    {
+      "name": "Accessibility",
+      "summary": "Avoid horizontal scrolling where possible, and keep touch targets inside scrolling sections at least 30px."
+    },
+    {
+      "name": "Design process",
+      "summary": "Validate as you build: squint to test hierarchy, stay close to real user workflows, and ask of every element whether it must be visible where it is."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "A well-designed interface guides a user's actions and maintains their attention so they can execute workflows efficiently, effectively and logically.",
+      "evidence": "Application design best practices: 'guides a user's actions and maintains their attention'"
+    },
+    {
+      "claim": "Designs without a clear, logical visual hierarchy that are overloaded or overcrowded confuse users, block adoption and limit the application's usefulness.",
+      "evidence": "Create intuitive user interfaces: 'can confuse users, blocking their application adoption'"
+    },
+    {
+      "claim": "Users scan content in an F shape: horizontally from the top-left corner, then vertically down the left side of a section.",
+      "evidence": "Configure a logical layout structure: 'a user will scan content following an \"F\" shape'"
+    },
+    {
+      "claim": "Properly spaced and aligned sections enhance readability, reduce cognitive load and create logical visual connections between related elements.",
+      "evidence": "Set section spacing and alignment: 'enhance user readability, reduce cognitive load'"
+    },
+    {
+      "claim": "A dialog prevents users from scrolling or interacting with background content.",
+      "evidence": "Overlay usage best practices: 'A dialog prevents users from scrolling'"
+    },
+    {
+      "claim": "System fonts render consistently because they are present on most devices; a custom typeface in Workshop renders only if it is installed on the viewer's device.",
+      "evidence": "Set module typography: 'These render consistently because they are present on most devices'"
+    }
+  ],
+  "quotes": [
+    "prioritize component clarity over complexity"
+  ],
+  "tags": [
+    "enterprise",
+    "work-tools",
+    "dashboards",
+    "layout",
+    "visual-hierarchy",
+    "density",
+    "navigation",
+    "overlays",
+    "internal-tools",
+    "consistency"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Prioritise component clarity over complexity when building a work tool.",
+      "why": "An intuitive interface is what gets the application adopted.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [],
+      "evidence": "Core design principles: 'prioritize component clarity over complexity'"
+    },
+    {
+      "rule": "Limit the total number of actionable items per screen, such as tasks, notifications and choices.",
+      "why": "Too many actionable items overload the user and confuse them.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Create intuitive user interfaces: 'To avoid overload, limit the amount of total actionable items'"
+    },
+    {
+      "rule": "Do not show more than five primary actions in the application's top-level navigation.",
+      "why": "It avoids overloading the user.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [
+        "five"
+      ],
+      "evidence": "Create intuitive user interfaces: 'avoid showing more than five primary actions'"
+    },
+    {
+      "rule": "Maintain sufficient whitespace; ideally it makes up 30 to 40 percent of the screen.",
+      "why": "It avoids overcrowding.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [
+        "30 to 40 percent"
+      ],
+      "evidence": "Create intuitive user interfaces: 'To avoid overcrowding, maintain sufficient whitespace'"
+    },
+    {
+      "rule": "Limit the number of visible components to no more than ten in a single view, counting buttons, panels and widgets.",
+      "why": "It avoids overcrowding.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [
+        "ten"
+      ],
+      "evidence": "Create intuitive user interfaces: 'limit the number of visible components to no more than ten in a single view'"
+    },
+    {
+      "rule": "Lay the application out along the F-shaped reading pattern, and clearly separate configuration sections from content sections.",
+      "why": "It supports natural eye tracking: users scan across the top from the left corner, then down the left side.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [],
+      "evidence": "Configure a logical layout structure: 'following an F-shaped hierarchical design pattern'"
+    },
+    {
+      "rule": "In a row and column combination layout, anchor filters in the left-most section so the application's content flows to the right.",
+      "why": "It facilitates natural reading patterns and linear eye tracking.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [],
+      "evidence": "Configure a logical layout structure: 'Row and column combination: Anchor filters in the left-most section'"
+    },
+    {
+      "rule": "Use metric cards to give a holistic view of the key data in the application.",
+      "why": "They summarise the key numbers at a glance.",
+      "kind": "do",
+      "strength": "consider",
+      "area": "components",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [],
+      "evidence": "Configure a logical layout structure: 'Use the Metric Card widget'"
+    },
+    {
+      "rule": "Use three heading levels with one job each: a page header (the largest text) for the application's purpose, section headers (second largest) to group nested content, and subheadings as short descriptions where needed.",
+      "why": "All other content should relate to the primary heading, and the levels organise what is nested under them.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Write descriptive headers: 'Use a page header to establish your application's overarching purpose'"
+    },
+    {
+      "rule": "Write heading descriptions that are succinct and tell a new user what the section is for.",
+      "why": "A new user should understand the purpose of each section.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Write descriptive headers: 'succinct and help a new user understand the purpose'"
+    },
+    {
+      "rule": "Use compact padding in most cases in a work tool.",
+      "why": "The source gives this as the default without a stated reason.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [
+        "Compact",
+        "80 percent height or width",
+        "16px spacing"
+      ],
+      "evidence": "Set section spacing and alignment: 'In most cases, you should use Compact padding'"
+    },
+    {
+      "rule": "Separate distinct content groups with containers and padding between them, and use dividers only to separate related content inside a section. Do not rely on dividers alone to separate groups.",
+      "why": "Padding between groups helps the user understand the separation.",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Set section spacing and alignment: 'use containers to separate distinct content groups across sections and dividers to separate related content'"
+    },
+    {
+      "rule": "Do not over-nest section containers (stated only in the page's Do and Don't figure, not in its body text).",
+      "why": "Too many containers clutter the view and impede legibility (stated in the page's Do and Don't figure).",
+      "kind": "dont",
+      "strength": "consider",
+      "area": "layout",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Set section spacing and alignment: figure 'A Do and Do not comparison shows when to use padding and dividers within a section'"
+    },
+    {
+      "rule": "Use a drop shadow on a bordered section to signal that its content is important, and an inner shadow to signal lesser importance.",
+      "why": "Elevation highlights important sections and creates spatial separation.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Apply border and elevation styles: 'you should use a drop shadow to provide an elevated appearance'"
+    },
+    {
+      "rule": "Use lighter background colors for important areas and darker ones for less critical areas such as filters or collapsible panels.",
+      "why": "Background lightness signals importance.",
+      "kind": "do",
+      "strength": "should",
+      "area": "color",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [],
+      "evidence": "Apply border and elevation styles: 'use lighter colors to signify importance'"
+    },
+    {
+      "rule": "Apply the shaded or elevated style only once per page, on the main content or the primary dialog where users take action.",
+      "why": "It keeps the visual hierarchy, so users can tell which element is the most important.",
+      "kind": "do",
+      "strength": "should",
+      "area": "elevation",
+      "applies_to": "all",
+      "product": "both",
+      "values": [
+        "once per page"
+      ],
+      "evidence": "Apply border and elevation styles: 'only apply shaded padding styles once per page'"
+    },
+    {
+      "rule": "In a suite of applications, make the landing page centralise all navigation and give an overview of the modules with thumbnails.",
+      "why": "Users can take quick action to reach exactly what they need.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [],
+      "evidence": "Build unified applications: 'The landing or homepage centralizes all navigation activity'"
+    },
+    {
+      "rule": "Keep one primary header across all modules, with the logo in the top-left corner and global settings in the top-right.",
+      "why": "It keeps logo design and global settings control consistent across the suite.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [
+        "top-left",
+        "top-right"
+      ],
+      "evidence": "Build unified applications: 'A primary header maintains consistent logo design and global settings control'"
+    },
+    {
+      "rule": "Standardise where high-touch components go (for example, filters on the left side of the page) and apply the same styles to tabs, metric cards, headers and buttons everywhere.",
+      "why": "Users should feel they are working within one unified suite of tools.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tokens",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Build unified applications: 'Standardized layout elements ensure high-touch user components follow a consistent layout'"
+    },
+    {
+      "rule": "Avoid horizontal scrolling wherever possible; fit table columns to the available width instead.",
+      "why": "The source states this as a best practice without a reason.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Scrolling best practices: 'Avoid horizontal scrolling whenever possible'"
+    },
+    {
+      "rule": "Put navigation bars and tabs inside the primary header so that only content sections scroll.",
+      "why": "It pins navigation and tabs in the user's view.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Scrolling best practices: 'This acts as a pinning mechanism'"
+    },
+    {
+      "rule": "Inside a scrolling section, make every touch target, such as a button, at least 30px.",
+      "why": "The source states this as a best practice without a reason.",
+      "kind": "do",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [
+        "30px"
+      ],
+      "evidence": "Scrolling best practices: 'are at least 30px'"
+    },
+    {
+      "rule": "Use overlays for temporary and secondary interactions, such as completing a questionnaire.",
+      "why": "Overlays suit short tasks that sit on top of the main work.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Overlay usage best practices: 'Use overlays for temporary and secondary interactions'"
+    },
+    {
+      "rule": "Do not put analytical sections in overlays.",
+      "why": "In analysis, users need to view several layers of information at the same time.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [],
+      "evidence": "Overlay usage best practices: 'Avoid overlays for analytical sections'"
+    },
+    {
+      "rule": "Design overlay workflows for users who select objects first and then perform one or several actions on them.",
+      "why": "That is the order in which users work with objects.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [],
+      "evidence": "Overlay usage best practices: 'account for users selecting objects before performing one or multiple actions'"
+    },
+    {
+      "rule": "If users must refer to long text while entering data, place the inputs beside the content or repeat the needed content in a non-blocking area, not in a dialog over it.",
+      "why": "A dialog prevents users from scrolling or interacting with the background content.",
+      "kind": "do",
+      "strength": "should",
+      "area": "patterns",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Overlay usage best practices: 'place the inputs beside the content'"
+    },
+    {
+      "rule": "In Workshop, prefer a system font over a custom typeface.",
+      "why": "A custom font cannot be uploaded and renders only if installed on the viewer's device, so it may look different for different users.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "all",
+      "product": "enterprise",
+      "values": [
+        "Source Sans Pro",
+        "Arial",
+        "Georgia",
+        "Helvetica",
+        "Times New Roman",
+        "Verdana"
+      ],
+      "evidence": "Set module typography: 'prefer a system font over a custom typeface'"
+    },
+    {
+      "rule": "Squint at the interface from time to time to see which elements stand out.",
+      "why": "It shows whether the hierarchy matches the intended importance of each element.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Validate your design: 'Periodically squint at your interface'"
+    },
+    {
+      "rule": "Stay closely aligned with actual user workflows while designing.",
+      "why": "You keep an understanding of what users want to accomplish in each section.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Validate your design: 'Stay closely aligned with actual user workflows'"
+    },
+    {
+      "rule": "For every element, check whether it must be visible where it is. If not, show it only when the user needs to interact with it.",
+      "why": "Elements that do not need to be visible add to overload and overcrowding [inferred].",
+      "kind": "do",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "all",
+      "product": "both",
+      "values": [],
+      "evidence": "Validate your design: 'Validate whether or not every element must be visible from its current location'"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "How much should fit on one screen of a work tool?",
+      "options": [
+        {
+          "name": "Within the limits",
+          "effect": "At most ten visible components, 30 to 40 percent whitespace, compact padding; the screen reads as ordered and the main area stands out.",
+          "when": "The source's recommendation."
+        },
+        {
+          "name": "Overloaded",
+          "effect": "Many competing actions: several colored buttons and repeated action rows fight for attention.",
+          "when": "The source treats this as a failure."
+        },
+        {
+          "name": "Overcrowded",
+          "effect": "Panels, tables and scrollbars packed edge to edge with almost no whitespace.",
+          "when": "The source treats this as a failure."
+        }
+      ],
+      "recommendation": "Compact padding, but capped: no more than ten components in view and 30 to 40 percent whitespace.",
+      "maps_to": "Q-dir-02",
+      "product": "enterprise",
+      "evidence": "Create intuitive user interfaces: 'To avoid overcrowding, maintain sufficient whitespace'"
+    },
+    {
+      "question": "Which layout pattern should an application screen use?",
+      "options": [
+        {
+          "name": "Grid",
+          "effect": "Information flows horizontally from left to right.",
+          "when": "Not stated."
+        },
+        {
+          "name": "Columns",
+          "effect": "Information flows vertically, with important navigation elements at the top of each panel.",
+          "when": "Not stated."
+        },
+        {
+          "name": "Rows and columns combined",
+          "effect": "Filters are anchored in the left-most section and content flows to the right, with metric cards for key data.",
+          "when": "Not stated; it is the pattern the page describes in most detail."
+        }
+      ],
+      "recommendation": "Any of the three, as long as it follows the F-shaped reading pattern.",
+      "maps_to": null,
+      "product": "enterprise",
+      "evidence": "Configure a logical layout structure: 'your applications should leverage the layout patterns below'"
+    },
+    {
+      "question": "Should related things be separated by space, containers or lines?",
+      "options": [
+        {
+          "name": "Padding and containers between groups",
+          "effect": "Each group is its own block with clear space around it.",
+          "when": "Between distinct content groups."
+        },
+        {
+          "name": "Dividers",
+          "effect": "A thin line splits content that belongs together.",
+          "when": "Inside a section, between related content."
+        },
+        {
+          "name": "Dividers only, or containers inside containers",
+          "effect": "Groups run together, or the view fills with boxes and becomes harder to read.",
+          "when": "The source's figures mark both as Don't."
+        }
+      ],
+      "recommendation": "Padding between groups, dividers within them, and as few nested containers as clarity needs.",
+      "maps_to": "Q-dir-04",
+      "product": "both",
+      "evidence": "Set section spacing and alignment: 'Use a combination of padding and dividers to create groupings within sections'"
+    },
+    {
+      "question": "How should the most important area of a page stand out?",
+      "options": [
+        {
+          "name": "Drop shadow",
+          "effect": "The area looks raised and reads as important.",
+          "when": "Once per page, on the main content or the primary dialog."
+        },
+        {
+          "name": "Inner shadow",
+          "effect": "The area looks recessed and reads as less important.",
+          "when": "For lesser content."
+        },
+        {
+          "name": "Background lightness",
+          "effect": "Lighter areas read as important; darker areas read as secondary.",
+          "when": "Darker for filters and collapsible panels."
+        }
+      ],
+      "recommendation": "One elevated area per page, where the user takes action.",
+      "maps_to": "Q-depth-01",
+      "product": "both",
+      "evidence": "Apply border and elevation styles: 'Use borders and configure their elevation levels'"
+    },
+    {
+      "question": "When should a task open in an overlay?",
+      "options": [
+        {
+          "name": "Overlay",
+          "effect": "Sits on top of the page; a dialog blocks scrolling and interaction with what is behind it.",
+          "when": "Temporary, secondary interactions such as a questionnaire."
+        },
+        {
+          "name": "In the page",
+          "effect": "Inputs sit beside the content, or analysis panels sit side by side, so several things stay visible at once.",
+          "when": "Analysis, or data entry that needs reference text."
+        }
+      ],
+      "recommendation": "Overlays only for short secondary tasks; keep analysis and reference-heavy entry in the page.",
+      "maps_to": "Q-pattern-01",
+      "product": "enterprise",
+      "evidence": "Overlay usage best practices: 'Avoid overlays for analytical sections'"
+    }
+  ],
+  "process": [
+    {
+      "step": "Squint test",
+      "detail": "Periodically squint at the interface; what still stands out should be the most important elements for the intended use."
+    },
+    {
+      "step": "Stay with real workflows",
+      "detail": "Keep checking each section against what users actually want to accomplish there."
+    },
+    {
+      "step": "Visibility check",
+      "detail": "For every element, ask whether it must be visible where it is; if not, surface it only when the user needs to act on it."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Overloaded versus overcrowded screens",
+      "where": "Palantir's diagram, under 'Create intuitive user interfaces'",
+      "visual_note": "Two laptop wireframes side by side. 'Overloaded' has red, orange, green, purple and blue buttons spread over three rows of actions, so nothing leads. 'Overcrowded' has a sidebar, a second column of controls, two large panels and two tables with their own scrollbars packed together with almost no space between them."
+    },
+    {
+      "what": "Row-and-column layout",
+      "where": "Palantir's example application, under 'Configure a logical layout structure'",
+      "visual_note": "A header with the title, three tabs and a search box. Below it a 'Filters' panel on the left with a two-way toggle and checkbox lists that carry counts and small bars. To the right, four metric cards in a row above a wide seven-column table. A small diagram beside it draws one arrow down the left and three arrows running right."
+    },
+    {
+      "what": "Padding between groups: Do and Don't",
+      "where": "Palantir's figure, under 'Set section spacing and alignment'",
+      "visual_note": "Do: three titled white cards stacked on a pale gray background with a clear gap between them. Don't: the same three groups in one continuous white block, split only by thin lines, so they read as one thing."
+    },
+    {
+      "what": "Over-nested containers: Do and Don't",
+      "where": "Palantir's figure, under 'Set section spacing and alignment'",
+      "visual_note": "Do: a section title on the page background, then a card split into two labelled halves by a single divider, then a second card. Don't: the title, each section and each labelled block all get their own bordered box, three levels deep, and the content ends up smaller inside rings of borders."
+    },
+    {
+      "what": "Sample Claims Dashboard",
+      "where": "Palantir's sample Workshop application",
+      "visual_note": "Three areas side by side: a narrow left list of four group cards, each with four counts (Unreviewed, Escalated, Pending, Resolved), the selected one outlined in blue; a table of claims with checkboxes, linked titles and small outlined status tags ('Not reviewed' gray, 'Resolved' green, 'Escalated' orange); and a detail panel for the selected claim with labelled fields, comments, and two full-width buttons pinned at the bottom, a plain 'Escalate' and a solid green 'Resolve'. Only the table-and-detail block is raised on a white card with a soft shadow; the page behind is pale gray. Dense, quiet, one accent per meaning."
+    },
+    {
+      "what": "Primary header with scrolling content",
+      "where": "Palantir's diagram, under 'Scrolling best practices'",
+      "visual_note": "A colored bar with the logo and a row of tabs beneath it are bracketed together as 'Primary header'. Everything below is bracketed as 'Scrollable content' with an up-and-down arrow, showing that the header and tabs stay put while only the content moves."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "five",
+      "context": "Most primary actions to show in top-level navigation",
+      "evidence": "Create intuitive user interfaces"
+    },
+    {
+      "value": "30 to 40 percent",
+      "context": "Ideal share of the screen left as whitespace",
+      "evidence": "Create intuitive user interfaces"
+    },
+    {
+      "value": "ten",
+      "context": "Most visible components in a single view, counting buttons, panels and widgets",
+      "evidence": "Create intuitive user interfaces"
+    },
+    {
+      "value": "80 percent",
+      "context": "Height or width for a reliable custom padding setting in Workshop, used with 16px spacing",
+      "evidence": "Set section spacing and alignment"
+    },
+    {
+      "value": "16px",
+      "context": "Spacing for the reliable custom padding setting in Workshop",
+      "evidence": "Set section spacing and alignment"
+    },
+    {
+      "value": "30px",
+      "context": "Smallest touch target inside a scrolling section",
+      "evidence": "Scrolling best practices"
+    },
+    {
+      "value": "once per page",
+      "context": "How often to apply the shaded or elevated style",
+      "evidence": "Apply border and elevation styles"
+    }
+  ],
+  "caveats": [
+    "Enterprise focus: this is vendor documentation for people building internal, operational applications in Palantir Workshop. Its limits (ten components, five navigation actions, 30 to 40 percent whitespace, compact padding) are for desktop work tools and should not be carried over to consumer apps as they stand. The 'product' tag on each rule is this analysis's judgement: rules that depend on dense, data-heavy work screens are tagged enterprise; general hierarchy, grouping and overlay rules are tagged both.",
+    "Tool-specific: several instructions are about Workshop's own settings (Compact padding, the Section header toggle, Fit columns horizontally, Module Appearance typography). The font advice follows from a Workshop limit (no custom font upload) and is not general typography advice.",
+    "The numbers are stated without evidence or citations. Under OpenDesigner's rules a number from a single reference source is a proposal until another source or the existing research agrees.",
+    "The page says nothing about animation, delight, empty states or error messages; its silence on them is not a rule against them.",
+    "The 30px touch target is above OpenDesigner's locked 24px floor, so there is no conflict.",
+    "The over-nesting rule and its reason come from the text inside a Do and Don't figure, read from the image, not from the page's body text. Six of the page's twelve figures were looked at; the other six are screenshots of Workshop's settings panels."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "kind": "agent",
+  "date": "2026-10-23",
+  "commit": "0fe5d98",
+  "skillsRef": "working tree",
+  "label": "extend-dry-run",
+  "model": "sonnet",
+  "judgeModel": "haiku",
+  "runsPerArm": 1,
+  "claudeVersion": "2.1.302",
+  "overallScore": 1,
+  "meanDelta": 1,
+  "casesPassed": 1,
+  "casesTotal": 1,
+  "costUsd": 0.218759,
+  "durationSeconds": 170,
+  "partial": false,
+  "cases": [
+    {
+      "name": "extend-rounder",
+      "score": 1,
+      "without": 0.0,
+      "delta": 1,
+      "runs": 1,
+      "errors": []
+    }
+  ],
+  "note": "After engine.py set/pick --dry-run and the extend skill's rule to preview values and record only the chosen one. The agent's reply says its numbers came from the engine's change preview, that roundness 50 and 60 give the same corners (the next visible step is 70), and that the change is decision D-0011: the fixture ends at D-0010, so the values it compared left no entries. The run's trace file was deleted after the run, so the commands themselves were not read. One run per arm, Sonnet agent, Haiku judge."
+}

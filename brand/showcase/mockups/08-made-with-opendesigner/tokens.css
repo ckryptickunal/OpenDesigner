@@ -1,0 +1,23 @@
+/* OpenDesigner brand tokens, compiled from brand/design-system/project/tokens.json by build_tokens.py */
+:root, [data-theme="light"] { --surface: #fcfdff; --surface-raised: #ffffff; --surface-sunken: #f2f4f9; --line: #cdd2dc; --line-strong: #808793; --ink: #222428; --ink-muted: #515762; --accent: #2338ff; --accent-text: #1c31ce; --on-accent: #ffffff; --accent-soft: #e3ecff; --highlight: #2338ff; --on-highlight: #ffffff; --focus-ring: #2338ff; --shadow-raised: 0 1px 2px rgb(20 21 23 / 0.06), 0 12px 32px -12px rgb(20 21 23 / 0.18); }
+[data-theme="dark"] { --surface: #141517; --surface-raised: #1b1d20; --surface-sunken: #0f1012; --line: #3b3f47; --line-strong: #7a808c; --ink: #e6e9ee; --ink-muted: #a5abb8; --accent: #517cff; --accent-text: #89aaff; --on-accent: #141517; --accent-soft: #1c2742; --highlight: #e6e9ee; --on-highlight: #141517; --focus-ring: #89aaff; --shadow-raised: 0 1px 0 rgb(255 255 255 / 0.04), 0 16px 40px -16px rgb(0 0 0 / 0.7); }
+[data-theme="cobalt"] { --surface: #2338ff; --surface-raised: #1e2fe6; --surface-sunken: #1c31ce; --line: #537eff; --line-strong: #d7e3ff; --ink: #ffffff; --ink-muted: #d7e3ff; --accent: #ffffff; --accent-text: #ffffff; --on-accent: #2338ff; --accent-soft: #1e2fe6; --highlight: #ffffff; --on-highlight: #2338ff; --focus-ring: #ffffff; --shadow-raised: 0 16px 40px -16px rgb(10 14 80 / 0.5); }
+:root { --space-4: 4px; --space-8: 8px; --space-12: 12px; --space-16: 16px; --space-24: 24px; --space-32: 32px; --space-48: 48px; --space-64: 64px; --space-80: 80px; --radius-detail: 2px; --radius-control: 6px; --radius-container: 8px; --radius-overlay: 12px; --radius-full: 9999px; --font-sans: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --font-mono: "Source Code Pro", ui-monospace, Menlo, Consolas, monospace; }
+.display { font-family: var(--font-sans); font-size: 90px; line-height: 92px; font-weight: 300; letter-spacing: -0.03em; }
+.h1 { font-family: var(--font-sans); font-size: 67px; line-height: 72px; font-weight: 300; letter-spacing: -0.025em; }
+.h2 { font-family: var(--font-sans); font-size: 51px; line-height: 56px; font-weight: 400; letter-spacing: -0.02em; }
+.h3 { font-family: var(--font-sans); font-size: 38px; line-height: 44px; font-weight: 400; letter-spacing: -0.015em; }
+.h4 { font-family: var(--font-sans); font-size: 28px; line-height: 36px; font-weight: 500; letter-spacing: -0.01em; }
+.h5 { font-family: var(--font-sans); font-size: 21px; line-height: 28px; font-weight: 600; letter-spacing: -0.005em; }
+.h6 { font-family: var(--font-sans); font-size: 16px; line-height: 24px; font-weight: 600; letter-spacing: 0em; }
+.body-lg { font-family: var(--font-sans); font-size: 21px; line-height: 32px; font-weight: 400; letter-spacing: -0.005em; }
+.body { font-family: var(--font-sans); font-size: 16px; line-height: 24px; font-weight: 400; letter-spacing: 0em; }
+.label { font-family: var(--font-sans); font-size: 16px; line-height: 20px; font-weight: 500; letter-spacing: 0.005em; }
+.caption { font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.social-statement { font-family: var(--font-sans); font-size: 162px; line-height: 160px; font-weight: 300; letter-spacing: -0.035em; }
+.social-headline { font-family: var(--font-sans); font-size: 108px; line-height: 112px; font-weight: 300; letter-spacing: -0.03em; }
+.social-subhead { font-family: var(--font-sans); font-size: 72px; line-height: 80px; font-weight: 400; letter-spacing: -0.02em; }
+.social-body { font-family: var(--font-sans); font-size: 48px; line-height: 64px; font-weight: 400; letter-spacing: -0.005em; }
+.social-label { font-family: var(--font-sans); font-size: 32px; line-height: 40px; font-weight: 500; letter-spacing: 0.02em; }
+.code { font-family: var(--font-mono); font-size: 16px; line-height: 24px; font-weight: 400; letter-spacing: 0em; }
+.code-sm { font-family: var(--font-mono); font-size: 12px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }

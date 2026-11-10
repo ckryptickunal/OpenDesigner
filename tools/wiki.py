@@ -50,6 +50,7 @@ QUESTIONS = ROOT / "skills" / "opendesigner" / "references" / "questions.json"  
 CARDS = ROOT / "synthesis" / "cards.json"                                        # Decision Card ids (supersedes)
 WORK_ITEM_MAX = 5                 # files one learn-analyze agent reads together
 # Platform and stack tags a rule or standard can apply to (a project's tags: its platforms plus its recorded stack).
+PRODUCTS = ("consumer", "enterprise", "both")  # who a rule or decision is for; see docs/KNOWLEDGE.md section 3
 TAGS = ("all", "web", "css", "react", "react-native", "ios", "swift", "android", "compose", "desktop")
 RULE_AREAS = ("color", "typography", "layout", "shape", "elevation", "motion", "iconography", "components", "patterns",
               "content", "accessibility", "platforms", "process", "tokens", "tooling")
@@ -470,12 +471,14 @@ def learn_section(a):
         out += ["", "### Rules and practices", ""]
         for r in a["rules"]:
             vals = f" Values: {', '.join(r['values'])}." if r.get("values") else ""
-            out.append(f"- **{r['strength']}** ({r['area']}, {r.get('applies_to', 'all')}): {r['rule']} "
+            product = f", {r['product']} products" if r.get("product") else ""
+            out.append(f"- **{r['strength']}** ({r['area']}, {r.get('applies_to', 'all')}{product}): {r['rule']} "
                        f"Why: {r['why']}{vals} [{r.get('evidence', '')}]")
     if a.get("decisions"):
         out += ["", "### Decisions it informs", ""]
         for d in a["decisions"]:
             q = f" (`{d['maps_to']}`)" if d.get("maps_to") else ""
+            q += f" ({d['product']} products)" if d.get("product") else ""
             out.append(f"- {d['question']}{q}")
             out += [f"  - {o['name']}: {o['effect']}" + (f" When: {o['when']}" if o.get("when") else "") for o in d.get("options", [])]
             if d.get("recommendation"):
@@ -1532,6 +1535,8 @@ def check_analysis(a, topics, questions=None):
         for tag in tags if isinstance(tags, list) else [tags]:
             if tag not in TAGS:
                 errs.append(f"rule applies_to {tag!r} is not one of {', '.join(TAGS)}")
+        if r.get("product") is not None and r["product"] not in PRODUCTS:
+            errs.append(f"rule product {r['product']!r} is not one of {', '.join(PRODUCTS)}")
         if "values" in r and (not isinstance(r["values"], list) or not all(isinstance(v, (str, int, float)) for v in r["values"])):
             errs.append(f"rule values must be a list of strings: {str(r.get('values'))[:60]}")
     for d in a["decisions"]:
@@ -1542,6 +1547,8 @@ def check_analysis(a, topics, questions=None):
             errs.append(f"decision without question/options: {str(d)[:60]}")
         elif not isinstance(d["options"], list) or not all(isinstance(o, dict) and o.get("name") for o in d["options"]):
             errs.append(f"decision options must be objects with a name: {str(d['options'])[:60]}")
+        if d.get("product") is not None and d["product"] not in PRODUCTS:
+            errs.append(f"decision product {d['product']!r} is not one of {', '.join(PRODUCTS)}")
         m = d.get("maps_to")
         if m is not None and (not isinstance(m, str) or (questions and m not in questions)):
             errs.append(f"maps_to {m!r} is not a question id in skills/opendesigner/references/questions.json")

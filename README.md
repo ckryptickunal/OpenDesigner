@@ -1,32 +1,65 @@
-# OpenDesigner
+<p align="center">
+  <a href="https://opendesigner.dev">
+    <picture>
+      <source media="(max-width: 600px)" srcset="https://raw.githubusercontent.com/ckryptickunal/OpenDesigner/main/brand/kit/readme/banner-narrow.png">
+      <img src="brand/kit/readme/banner.png" width="1012" alt="OpenDesigner. Make everything you build look like it belongs together. Your AI tools know what to build. OpenDesigner tells them how it should look.">
+    </picture>
+  </a>
+</p>
 
-**Make your app look good and stay consistent, with the AI you already use.**
+<p align="center">
+  <a href="https://opendesigner.dev"><b>Website</b></a> &nbsp;·&nbsp;
+  <a href="https://opendesigner.dev/docs/">Docs</a> &nbsp;·&nbsp;
+  <a href="https://opendesigner.dev/showcase/">Showcase</a> &nbsp;·&nbsp;
+  <a href="#quickstart">Install</a> &nbsp;·&nbsp;
+  <a href="CONTRIBUTING.md">Contribute</a> &nbsp;·&nbsp;
+  <a href="https://calendar.app.google/42qSQUrBiSL4CHfv6">Book a 20-minute intro call</a>
+</p>
 
-OpenDesigner is a free, open-source add-on for AI tools like Claude, ChatGPT, Codex and Cursor. It helps you build a **design system**: the rules for how your app looks, such as colors, text sizes, spacing, corners and buttons.
+**A free, open-source (MIT) add-on for your AI coding tool. It gives your product one design system and checks every screen against it.**
 
-It asks simple questions one at a time, shows you choices you can see, and saves your answers as files in your project.
+<p align="center">
+  <picture>
+    <source media="(max-width: 600px)" srcset="https://raw.githubusercontent.com/ckryptickunal/OpenDesigner/main/brand/kit/readme/works-in-narrow.png">
+    <img src="brand/kit/readme/works-in.png" width="1012" alt="Works in Claude Code and the Claude app, ChatGPT and Codex, Cursor, GitHub Copilot and Gemini CLI.">
+  </picture>
+</p>
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+## Two ways in
 
-![OpenDesigner: build a real design system with the AI you already use](docs/assets/social-preview.png)
+**Fix what you built.** It audits every button, font, size, color and alignment on your pages, marks each problem with the rule it breaks, and fixes it after your yes.
 
-[Quickstart](#quickstart) · [How it works](docs/HOW-IT-WORKS.md) · [FAQ](docs/FAQ.md) · [Glossary](docs/GLOSSARY.md) · [Research](docs/RESEARCH.md) · [Privacy](docs/PRIVACY.md) · [Contributing](CONTRIBUTING.md)
+**Build a system.** It reads your repo, studies your competitors, proposes a positioning and three directions, then writes the rules your AI follows.
+
+<picture>
+  <source media="(max-width: 600px)" srcset="https://raw.githubusercontent.com/ckryptickunal/OpenDesigner/main/brand/kit/readme/before-after-narrow.png">
+  <img src="brand/kit/readme/before-after.png" width="1012" alt="Two versions of an invoices page. Today: seven issues boxed and numbered, such as three filled buttons, gray text at 2.54:1, amounts that don't line up and status shown by color alone. Fixed: the same page on its own design system, with a check where each fix landed and the money shown as a bento of small charts.">
+</picture>
+
+
+## Every round
+
+- **A plan you sign off,** step by step, written to `opendesigner/PROTOCOL.md` so any AI follows it.
+- **Checks before you see it:** contrast, tap targets, type scale, letter-spacing, alignment, buttons, text over images.
+- **Screenshots,** before and after. Not a link to open.
+- **Your notes stick.** Say something twice and it becomes a rule.
+
+## What lands in your repo
+
+`DESIGN.md`, `PRODUCT.md`, design tokens (DTCG), CSS, Tailwind, Figma, Swift and Compose exports, a brand and press page, and a log of every choice with its reason.
 
 ## Quickstart
 
 1. Add OpenDesigner to your AI tool. Pick yours below.
-2. Say: **"Create a design system for this project."**
-3. Answer about 5 short questions. In about 3 minutes you have a complete, working design system.
+2. Open your project and say: **"Create a design system for this project."**
+3. Answer a few short questions. It reads your files first, so it asks less.
 
-<details open>
-<summary><b>Claude Code</b></summary>
+**Claude Code**
 
 ```
 /plugin marketplace add ckryptickunal/OpenDesigner
 /plugin install opendesigner@opendesigner
 ```
-
-</details>
 
 <details>
 <summary><b>Claude app</b> (claude.ai or Desktop)</summary>
@@ -62,124 +95,55 @@ cp -R OpenDesigner/.agents/skills/opendesigner* your-project/.agents/skills/
 
 </details>
 
-## What you get
+<details>
+<summary><b>No AI at all</b> (the engine on its own)</summary>
 
-Files in your project that any person or AI tool can read:
-
-- **`DESIGN.md`:** your design rules, explained in plain words.
-- **Design tokens:** the same rules saved as named values (colors, sizes, spacing), in the open DTCG format.
-- **Code you can use right away:** CSS variables, a Tailwind theme, and Swift and Jetpack Compose files.
-- **Figma variables and Paper tokens,** so your design tool matches your code.
-- **A decision log:** every choice with its reason, so your team and the next AI session don't undo it.
-- **A preview page** that shows every color, size and core component.
-
-## How it works
-
-1. **It reads your project first,** so it doesn't ask what it can already see.
-2. **It starts with a sketch.** About 5 questions give you a complete system.
-3. **You zoom in only where you care:** color, text, spacing, buttons or motion. Stop whenever it's enough.
-4. **It checks its own work:** readable contrast (WCAG 2.2 AA), tap targets that are big enough, visible keyboard focus and reduced motion.
-5. **It writes everything down,** so later changes stay consistent.
-
-Two things it will not do:
-
-- **Fake what only a person should make.** For a logo, custom icons, illustration, photos or a brand typeface, it asks you.
-- **Copy someone's brand.** Show it a website, screenshot or Figma file you like, and it borrows the structure and quality, never the identity.
-
-A shortened example of a session (it shows the idea; it is not a recorded transcript):
-
-```
-You:    Create a design system for this project.
-Model:  I read your project: Next.js, Tailwind, 14 colors, 3 corner sizes.
-        Let's start with a 5-question sketch. First: what should people
-        remember about this product?
-You:    It should feel calm and fast.
-        ...
-Model:  Sketch done. Here are three directions for "calm and fast",
-        in light and dark: [A] [B] [C]
-```
-
-The full walkthrough is in [docs/HOW-IT-WORKS.md](docs/HOW-IT-WORKS.md).
-
-## Who it's for
-
-- **New to design:** plain words, one question at a time, and a recommendation for every choice.
-- **Designers:** it does the repetitive system work (scales, tokens, states, accessibility checks) and leaves the creative parts to you.
-- **Engineers:** each decision becomes tokens, CSS variables, a Tailwind theme and a `DESIGN.md` that your code and AI agents can follow.
-
-## Examples
-
-Three complete systems for made-up products. Each folder has the `DESIGN.md`, the tokens, every export and a preview page.
-
-| [Devtool Dense](examples/devtool-dense/) | [Consumer Playful](examples/consumer-playful/) | [Public Service Accessible](examples/public-service-accessible/) |
-|---|---|---|
-| ![Devtool Dense preview](docs/assets/examples/devtool-dense.png) | ![Consumer Playful preview](docs/assets/examples/consumer-playful.png) | ![Public Service Accessible preview](docs/assets/examples/public-service-accessible.png) |
-| Calm, compact, sharp: a CI console | Expressive, rounded, colorful: a habit app | Plain, high contrast, no motion: a benefits service |
-
-You can also try the engine on its own, with no AI (Python 3.10+, nothing to install):
+The engine is one Python file (Python 3.10 or newer, nothing to install). It writes `DESIGN.md`, `PRODUCT.md` and an `opendesigner/` folder with tokens, exports and an overview page.
 
 ```bash
 python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py sketch --name "Acme" --feel friendly,minimal
 ```
 
-It writes `DESIGN.md`, `PRODUCT.md` and an `opendesigner/` folder with tokens, exports and a preview.
+</details>
 
-## Why trust its advice
+You need your own AI tool and Python 3.10 or newer. The engine makes no network calls ([privacy](docs/PRIVACY.md)). Help for each tool: [install guide](https://opendesigner.dev/docs/install/).
 
-OpenDesigner's defaults are not taste. They come from research in this repo that anyone can check:
+## Component library
 
-- 25 public design systems compared side by side, including Material, Apple HIG, Carbon, Fluent, Polaris, Primer and shadcn/ui.
-- More than 500 Decision Cards. Each one covers a single design decision, with its options, a recommended default and its sources.
-- Every claim cites a source or is marked as an inference.
+<picture>
+  <source media="(max-width: 600px)" srcset="https://raw.githubusercontent.com/ckryptickunal/OpenDesigner/main/brand/kit/readme/library-narrow.png">
+  <img src="brand/kit/readme/library.png" width="1012" alt="Six ready-made parts: an approval panel, a monthly spend chart, a command menu, an AI answer with citations, an order summary and settings switches.">
+</picture>
 
-Start with [docs/RESEARCH.md](docs/RESEARCH.md).
 
-## Common questions
+82 ready-made parts built only on your tokens. Optional. [Browse them](https://opendesigner.dev/library/).
 
-- **How long does it take?** About 3 minutes for a first complete version. Go deeper only where you want to. [More](docs/FAQ.md#getting-started)
-- **Does it work with Tailwind, shadcn/ui and Figma?** Yes. It exports Tailwind and CSS, and Figma is both a source it can learn from and a place it can export to. [More](docs/FAQ.md#tools-and-hosts)
-- **Is it accessible?** Yes. Contrast, target sizes, focus rings and reduced motion are built into every system it makes. [More](docs/FAQ.md#accessibility)
-- **Does it send my code or data anywhere?** No. The skills and the engine run on your machine, and the engine makes no network calls. Your chat still goes to your AI provider, as with any prompt. Sharing anonymous feedback with the maintainers is off unless you say yes. [More](docs/PRIVACY.md)
-- **How is it different from Claude Design, Figma Make or tweakcn?** It is open source, runs in any model, and keeps your system in open files with the evidence for each decision. [More](docs/FAQ.md#how-it-compares)
-- **Does it replace designers?** No. It does what can be generated well and asks a person for the rest. [More](docs/FAQ.md#designers-brands-and-references)
+## Status
 
-## Status and roadmap
+- Version 0.2.0, the first tagged release, 5 November 2026. One maintainer.
+- Engine tests pass locally. No CI runs, and no watched user trials yet.
+- Next: choices you can click inside your AI tool ([#20](https://github.com/ckryptickunal/OpenDesigner/issues/20)).
 
-This is the first public version (0.1.0).
+[Changelog](CHANGELOG.md) · [How it works](docs/HOW-IT-WORKS.md) · [Research behind the defaults](docs/RESEARCH.md) · [Showcase](https://opendesigner.dev/showcase/)
 
-- **Works today:** the skills, the engine and every export format. Packaging for Claude, ChatGPT, Codex, Cursor and other agents is in the repo, with three worked examples.
-- **Planned next:** choices you can click inside your AI tool, through an MCP server.
-- **Help wanted:** hands-on Figma research. See the [seed issues](docs/SEED-ISSUES.md).
+## Help it get better
 
-What has shipped is in [CHANGELOG.md](CHANGELOG.md). The full plan is in [docs/SPEC.md](docs/SPEC.md).
-
-## Report a problem or suggest an improvement
-
-- **While you use it:** tell your AI what went wrong. It saves the note in your project and gives you a ready-to-file GitHub link. Nothing is posted until you open the link and submit it. You can also run it yourself:
-
-  ```bash
-  python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py feedback "the spacing question was confusing" --kind confusing
-  ```
-
-- **On GitHub:** [open an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose) or ask in [Discussions](https://github.com/ckryptickunal/OpenDesigner/discussions).
-
-## Contributing
-
-All kinds of help are welcome: research corrections, better questions, support for more AI tools, translations and examples. Start with [CONTRIBUTING.md](CONTRIBUTING.md) and the [good first issues](https://github.com/ckryptickunal/OpenDesigner/labels/good%20first%20issue).
-
-Questions go to [Discussions](https://github.com/ckryptickunal/OpenDesigner/discussions); see [SUPPORT.md](SUPPORT.md). Everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md). For security issues, see [SECURITY.md](SECURITY.md).
-
-## Sponsors
-
-OpenDesigner is free and open source. Sponsorship pays for maintenance, model credits for testing across AI tools, and the hosted MCP server. [Sponsor OpenDesigner](docs/SPONSORSHIP.md#for-sponsors)
+Tell your AI what went wrong. It saves the note and gives you a ready-to-file GitHub link; nothing is posted until you send it. Or [open an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose). Contributions: [CONTRIBUTING.md](CONTRIBUTING.md). Sponsorship: [docs/SPONSORSHIP.md](docs/SPONSORSHIP.md#for-sponsors).
 
 <!-- Partners: large logos. Companies: small logos. Backers: names. Supported by: in-kind credit programs (never leave the wall empty). -->
 <!-- When GitHub Sponsors is approved, point the link above at https://github.com/sponsors/ckryptickunal (see docs/SPONSORSHIP.md). -->
 
+## Star history
+
+<a href="https://github.com/ckryptickunal/OpenDesigner/stargazers">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="brand/kit/readme/stars-dark.svg">
+    <img src="brand/kit/readme/stars-light.svg" width="600" alt="OpenDesigner's GitHub stars over time, redrawn from GitHub every 3 hours">
+  </picture>
+</a>
+
 ## License
 
-Code, skills, templates and data files are under the [MIT license](LICENSE). Written research and documentation are under [CC BY 4.0](LICENSE-CONTENT), so you can reuse them with credit. That covers `research/`, `benchmarks/`, `sources/`, `traces/`, `synthesis/` Markdown and `docs/`. Product and design-system names in the research belong to their owners.
+Code, skills, templates and data files are under the [MIT license](LICENSE). Written research and documentation are under [CC BY 4.0](LICENSE-CONTENT), so you can reuse them with credit. That covers `research/`, `benchmarks/`, `sources/`, `traces/`, `synthesis/` Markdown and `docs/`. Product and design-system names in the research belong to their owners. The tool marks in the "works in" row belong to their owners and only show where OpenDesigner runs (from [Simple Icons](https://simpleicons.org), CC0). Photos in the README images are from Unsplash: [Philipp Hubert](https://unsplash.com/photos/dVVjhUcdb30) (banner), [Annie Spratt](https://unsplash.com/photos/5yKrcO8FKwM) (before and after), and [Adam Rasheed](https://unsplash.com/photos/BGEqCc-bQHg) and [Brina Blum](https://unsplash.com/photos/mNXTZu7AeGA) (component library).
 
-## Citation
-
-If OpenDesigner or its research helps your work, cite it with [CITATION.cff](CITATION.cff). GitHub's "Cite this repository" button uses it.
+To cite OpenDesigner or its research, use [CITATION.cff](CITATION.cff) (GitHub's "Cite this repository" button).

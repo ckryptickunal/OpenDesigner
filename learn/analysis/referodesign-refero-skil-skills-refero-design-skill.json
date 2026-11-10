@@ -1,0 +1,717 @@
+{
+  "summary": "This is the main SKILL.md of Refero's agent skill, a research-first methodology for AI agents doing UI and product design. It says every design must be grounded in references before implementation, using three research layers: styles for visual direction, screens for concrete UI patterns, and flows for multi-step journeys. It teaches agents to pick one dominant reference and preserve its sharp traits rather than averaging several references into a safe middle, and to keep each token in the role its source gave it. Before building, the agent writes a design brief, a reference lock and a decision ledger that traces every major choice to a reference, a user constraint or a craft rule. It ends with craft rules aimed at avoiding generic AI design defaults and a quality gate checklist, which matters to a design system builder because it shows how to keep a chosen direction from drifting into the bland centroid.",
+  "key_ideas": [
+    "Research references before any design work instead of relying on the model's generic taste.",
+    "Use three research layers: styles for look and feel, screens for concrete UI patterns, flows for journeys.",
+    "Do not copy one reference and do not average several; choose one dominant direction and borrow 1-2 narrow details.",
+    "Keep token roles from the source: a CTA color stays CTA-only, syntax colors stay inside code, decorative gradients stay decorative.",
+    "Write a short brief first and ask only for information that would materially change the result.",
+    "Lock the direction before building with a reference lock: primary source, traits to preserve, borrowed details, role rules, media strategy, rejects, token commitments.",
+    "Convert research into a decision ledger; a major choice with no source is researched more, tied to a constraint, or removed.",
+    "Choose the lightest workflow: direct build, visual exploration with three options, audit, or asset generation.",
+    "Match research depth to task risk.",
+    "Preserve imagery roles; an honest, well-sized placeholder beats a weak fake illustration made of CSS.",
+    "Treat calm editorial looks, cream canvases, earthy palettes, decorative headline word swaps and default indigo/violet as AI-slop risks unless research justifies them.",
+    "Create at least one memorable detail users would remember.",
+    "Validate the rendered build against the locked target and fix drift before handoff."
+  ],
+  "entities": [
+    {
+      "name": "Refero",
+      "type": "product",
+      "description": "Design reference library whose agent skill this is; offers styles, screens and flows through an MCP server."
+    },
+    {
+      "name": "Refero MCP",
+      "type": "tool",
+      "description": "MCP server at api.refero.design with tools such as refero_search_styles, refero_get_style, refero_search_screens and refero_search_flows."
+    },
+    {
+      "name": "Reference lock",
+      "type": "concept",
+      "description": "A written commitment to one primary reference and the traits, roles and tokens that must survive implementation."
+    },
+    {
+      "name": "Decision ledger",
+      "type": "concept",
+      "description": "Table tying each design decision to its source, the role to preserve and the reason."
+    },
+    {
+      "name": "Claude Code",
+      "type": "tool",
+      "description": "Host where the skill installs the Refero MCP with claude mcp add."
+    },
+    {
+      "name": "Attio",
+      "type": "company",
+      "description": "Named in an example style query for editorial SaaS typography."
+    },
+    {
+      "name": "Linear",
+      "type": "company",
+      "description": "Named in an example style query for a dark developer-tool changelog."
+    },
+    {
+      "name": "shadcn",
+      "type": "library",
+      "description": "Named in an example style query for a monochrome design system."
+    }
+  ],
+  "topics": [
+    {
+      "name": "AI-assisted design",
+      "summary": "A full methodology for AI agents doing design: research first, lock a reference, keep a decision ledger, and pass a quality gate against generic AI defaults."
+    },
+    {
+      "name": "Design process",
+      "summary": "Brief, workflow routing, research by layer, synthesis into three buckets, presenting findings, building, then visual validation."
+    },
+    {
+      "name": "Design taste and judgement",
+      "summary": "Pick one dominant direction, preserve its sharp traits, avoid averaging references and avoid listed AI-slop defaults."
+    },
+    {
+      "name": "Design resources",
+      "summary": "Explains how to use a reference library's styles, screens and flows and what to extract from each."
+    },
+    {
+      "name": "Design systems and tokens",
+      "summary": "Define tokens before implementation and keep each token in the role its source assigned."
+    },
+    {
+      "name": "Landing pages",
+      "summary": "Styles cover marketing pages; avoid the generic hero, features grid, pricing, FAQ, CTA sequence unless research supports it."
+    },
+    {
+      "name": "Typography",
+      "summary": "Use text-wrap: balance for headings and short display text, text-wrap: pretty selectively for prose; avoid decorative serif or italic word swaps."
+    },
+    {
+      "name": "Color",
+      "summary": "Use brand-appropriate colors from research, keep accents rare when the reference does, and do not default to indigo or violet."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Preserve the imagery role of an image-led style; use real, generated or stock assets, or an intentional placeholder with art direction."
+    },
+    {
+      "name": "Paywalls and pricing pages",
+      "summary": "Example pattern: billing toggle above plan cards, one highlighted plan, detailed comparison below."
+    },
+    {
+      "name": "Onboarding",
+      "summary": "Onboarding and signup are listed as flow research cases; extract entry point, step count, friction reducers and system responses."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Generic frontend or product design skills tend to pull work back toward generic AI design.",
+      "evidence": "Non-Negotiables: generic design skills tend to pull work back toward generic AI design"
+    },
+    {
+      "claim": "Refero styles currently cover web marketing and product pages, not in-app dashboards, auth screens, settings screens or iOS app screens.",
+      "evidence": "Current limitation: Refero styles currently cover web marketing/product pages"
+    },
+    {
+      "claim": "A style is a semantic design reference extracted from a real web page, not a screenshot and not a component library.",
+      "evidence": "Use Styles First For Visual Work"
+    },
+    {
+      "claim": "Averaging conflicting references produces a bland result, e.g. dark, acid and serif references collapse into warm cream, muted orange and a polite serif.",
+      "evidence": "Synthesis rule: the answer is not warm cream + muted orange + polite serif"
+    },
+    {
+      "claim": "Image generation can be slow and may not exist in every coding environment.",
+      "evidence": "Non-Negotiables: Use image generation only when it changes the outcome"
+    },
+    {
+      "claim": "Calm editorial styling is a current AI-slop risk.",
+      "evidence": "Core craft rules: Treat \"calm editorial\" as a current AI-slop risk"
+    },
+    {
+      "claim": "Pricing pages commonly put the billing toggle above plan cards, highlight one plan and move detailed feature comparison below.",
+      "evidence": "Synthesis, Product Pattern output example"
+    },
+    {
+      "claim": "Cancellation flows usually collect a reason, offer an alternative, confirm the destructive action and state when access ends.",
+      "evidence": "Synthesis, Journey Logic output example"
+    }
+  ],
+  "quotes": [
+    "Do not average references into a safe middle.",
+    "A brief is not a build target.",
+    "No design from vibe memory."
+  ],
+  "tags": [
+    "ai-agents",
+    "research-first",
+    "references",
+    "reference-lock",
+    "decision-ledger",
+    "anti-ai-slop",
+    "design-process",
+    "token-roles",
+    "agent-skill"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Ground every design in researched references before implementation instead of the model's generic design taste.",
+      "why": "The source says not to rely on the model's generic design taste; references give taste and product evidence.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Non-Negotiables: Research before design work"
+    },
+    {
+      "rule": "When references conflict, choose one dominant direction, preserve its sharp traits and let secondary references add only narrow details.",
+      "why": "Averaging collapses the direction into a safe middle.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Do not average references into a safe middle"
+    },
+    {
+      "rule": "Do not copy a single reference; study several strong references and synthesize a new direction for the product.",
+      "why": "The result should be a new direction inspired by several references, not a copy.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Do not copy one reference"
+    },
+    {
+      "rule": "Use a token only for the role its source assigns: CTA colors stay CTA-only, syntax colors stay inside code, decorative gradients stay decorative.",
+      "why": "Repurposing tokens changes their meaning and breaks the direction.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "tokens",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Do not change token meanings; Never move a token outside its source role"
+    },
+    {
+      "rule": "Do not turn a CTA accent into a background, a code-only color into UI chrome, or a decorative gradient into an interface surface.",
+      "why": "Token roles from references must be preserved.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Core craft rules: Preserve token roles from references"
+    },
+    {
+      "rule": "Keep card and button rules at their specified radius, shadow and state behavior when borrowing them.",
+      "why": "The source says never to move a token outside its source role, and lists card and button rules among those roles.",
+      "kind": "do",
+      "strength": "must",
+      "area": "components",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "card/button rules keep their specified radius, shadow, and state behavior"
+    },
+    {
+      "rule": "If the primary style is image-led, keep the image slot with stable dimensions, aspect ratio, caption or alt text and an art-direction note rather than switching to a text-only layout.",
+      "why": "The media role is part of the style; weak fakes are worse than an honest placeholder.",
+      "kind": "do",
+      "strength": "must",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "If the primary style is image-led, do not replace it with text-only layout"
+    },
+    {
+      "rule": "Do not fake complex imagery with weak CSS, text or decorative boxes.",
+      "why": "An honest, well-sized placeholder beats a poor fake illustration or photo.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Respect imagery guidance"
+    },
+    {
+      "rule": "Write a reference lock (primary direction, 3-5 traits to preserve, 1-2 borrowed details, role rules, media strategy, rejects, token commitments) before implementation.",
+      "why": "It stops implementation drifting into safer colors, fonts, radius or generic layouts.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "3-5",
+        "1-2"
+      ],
+      "evidence": "Before implementation, create a reference lock"
+    },
+    {
+      "rule": "If implementation drifts from the lock, stop and correct it; do not soften distinctive traits into safer colors, fonts, softer radius or generic section layouts.",
+      "why": "Softening loses the chosen direction.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "If implementation drifts from the lock, stop and correct it"
+    },
+    {
+      "rule": "Before implementation, fill a decision ledger with Decision, Source, Source rule / role and Why for each major choice, and remove any major choice that has no source.",
+      "why": "Every major choice must trace to a reference, user constraint or craft rule.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "convert research into a short decision ledger"
+    },
+    {
+      "rule": "In discovery, ask only for missing information that would materially change the result; otherwise assume and proceed.",
+      "why": "Keeps the brief short without blocking work.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Discovery"
+    },
+    {
+      "rule": "For variants, a new visual language, a major redesign or a landing page, default to three reference-locked options and ask the user to choose.",
+      "why": "High-visibility surfaces have several plausible directions.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "three"
+      ],
+      "evidence": "Workflow Routing: Visual exploration"
+    },
+    {
+      "rule": "Use image generation only for visual exploration, mockups, imagery, illustrations, textures and difficult assets; skip it for small fixes, obvious production edits or code-native UI.",
+      "why": "It can be slow and may not exist in every environment.",
+      "kind": "do",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Use image generation only when it changes the outcome"
+    },
+    {
+      "rule": "Use styles, not screens, as the primary source for visual direction; use screens afterwards for structure and concrete details.",
+      "why": "Styles are the layer for visual direction and taste; screens are for structure and concrete UI patterns.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Avoid using screens as the primary style source when the task is visual"
+    },
+    {
+      "rule": "Define tokens before implementation: type scale, colors, spacing, radius, shadows.",
+      "why": "Core craft rule after research.",
+      "kind": "do",
+      "strength": "must",
+      "area": "tokens",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Core craft rules"
+    },
+    {
+      "rule": "Do not default to indigo or violet unless the user explicitly asks for it; use brand-appropriate colors from research.",
+      "why": "Listed as a generic AI design default.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Core craft rules: Do not default to indigo/violet"
+    },
+    {
+      "rule": "Do not default to decorative headline word swaps (one word or short phrase set in a different display, serif, script or italic style or accent color) unless research and product context justify them.",
+      "why": "The source treats calm editorial as a current AI-slop risk, and the quality gate checks for these swaps.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "typography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Treat \"calm editorial\" as a current AI-slop risk"
+    },
+    {
+      "rule": "Do not default to warm ivory or cream canvases or olive, clay or terracotta palettes unless research and product context justify them.",
+      "why": "The source lists these as part of the calm editorial look it treats as a current AI-slop risk.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "color",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Core craft rules: Treat \"calm editorial\" as a current AI-slop risk"
+    },
+    {
+      "rule": "Avoid the generic hero, features grid, pricing, FAQ, CTA page sequence unless research supports it.",
+      "why": "It is a generic AI design default.",
+      "kind": "dont",
+      "strength": "should",
+      "area": "layout",
+      "applies_to": "web",
+      "values": [],
+      "evidence": "Avoid generic hero -> features grid -> pricing -> FAQ -> CTA"
+    },
+    {
+      "rule": "Use text-wrap: balance on headings and short display text, use text-wrap: pretty selectively for prose, and check key breakpoints for orphan words.",
+      "why": "Avoids orphan words and awkward final lines.",
+      "kind": "do",
+      "strength": "should",
+      "area": "typography",
+      "applies_to": "css",
+      "values": [
+        "text-wrap: balance",
+        "text-wrap: pretty"
+      ],
+      "evidence": "Core craft rules: Balance headings"
+    },
+    {
+      "rule": "Create at least one memorable detail: a visual move, interaction, layout choice or copy detail.",
+      "why": "Users should remember something about the design.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Create at least one memorable detail"
+    },
+    {
+      "rule": "Use real product evidence for copy, trust signals, objection handling and section order.",
+      "why": "Avoids invented content decisions.",
+      "kind": "do",
+      "strength": "should",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Core craft rules"
+    },
+    {
+      "rule": "Build accessibility and responsive behavior into the design, not as a late pass.",
+      "why": "Core craft rule.",
+      "kind": "do",
+      "strength": "should",
+      "area": "accessibility",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Keep accessibility and responsive behavior in the design"
+    },
+    {
+      "rule": "After building visual work, compare the rendered implementation against the locked target and fix actionable drift before handoff.",
+      "why": "Research alone is not sufficient.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Validate after building visual work"
+    },
+    {
+      "rule": "Give the user a short research summary before designing a non-trivial task instead of dumping every result.",
+      "why": "Keeps findings readable.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Present Findings"
+    },
+    {
+      "rule": "Make research output specific: name the references, describe concrete choices and explain what will be adapted.",
+      "why": "Stated as a non-negotiable so that every decision can be traced.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Non-Negotiables: Research output must be specific"
+    },
+    {
+      "rule": "Before implementation, lock a build target: a user-provided visual source, an existing product or design-system target, a selected generated mockup, or an approved reference-locked direction; a brief alone is not enough.",
+      "why": "A brief is not a build target.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Non-Negotiables: A brief is not a build target"
+    },
+    {
+      "rule": "When combining styles, give each source a bounded job, for example one owns canvas and type, another the code-window treatment, another the primary CTA.",
+      "why": "Keeps borrowed details from spreading beyond their role.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "When combining styles, assign each source a bounded job"
+    },
+    {
+      "rule": "Build simple diagrams, icons, code windows or geometric primitives only when they match the source style.",
+      "why": "Code-native stand-ins must fit the primary style's media role.",
+      "kind": "do",
+      "strength": "should",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Build simple diagrams, icons, code windows, or geometric primitives only when they match the source style"
+    },
+    {
+      "rule": "Preserve the primary reference's strongest traits instead of normalizing them.",
+      "why": "Normalizing traits collapses the chosen direction.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Core craft rules"
+    },
+    {
+      "rule": "Present the result as a new direction inspired by several references, never as copying one.",
+      "why": "The aim is a new direction for the user's product, not a clone.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "content",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Never present the result as \"copying X\""
+    },
+    {
+      "rule": "Before final delivery, run the quality gate checklist; if any answer is no, research or refine more before delivering.",
+      "why": "Catches copying, averaging, lost token roles and generic AI defaults before handoff.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Quality Gate"
+    },
+    {
+      "rule": "Load bundled craft references only when relevant; do not load every file by default.",
+      "why": "Stated in the Design Craft section [inferred: keeps context small].",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Design Craft: do not load every file by default"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Which workflow fits this design task?",
+      "options": [
+        {
+          "name": "Direct build",
+          "effect": "Research and lock the direction, then code straight away.",
+          "when": "Small UI fixes, clear production edits, existing design-system work, or a concrete source to match."
+        },
+        {
+          "name": "Visual exploration",
+          "effect": "Three reference-locked options the user chooses between.",
+          "when": "Variants, a new visual language, a major redesign, a landing page or another high-visibility surface."
+        },
+        {
+          "name": "Audit",
+          "effect": "Critique grounded in screenshots, screens or flows as evidence.",
+          "when": "Reviewing an existing design."
+        },
+        {
+          "name": "Asset generation",
+          "effect": "Generated bitmap imagery.",
+          "when": "The reference lock needs bitmap media that code, icons or existing assets cannot provide."
+        }
+      ],
+      "recommendation": "Choose the lightest workflow that can produce a high-quality result.",
+      "maps_to": null,
+      "evidence": "Workflow Routing"
+    },
+    {
+      "question": "How do you combine several references that point in different directions?",
+      "options": [
+        {
+          "name": "Copy one reference",
+          "effect": "A clone of someone else's product.",
+          "when": "Never."
+        },
+        {
+          "name": "Average all references",
+          "effect": "A safe, bland centroid such as warm cream, muted orange and a polite serif.",
+          "when": "Never."
+        },
+        {
+          "name": "One primary plus borrowed details",
+          "effect": "The primary style sets mood, density and structure; secondary styles add 1-2 bounded details.",
+          "when": "Always."
+        }
+      ],
+      "recommendation": "One primary foundation with 1-2 borrowed details, each source given a bounded job, because averaging loses the sharp traits.",
+      "maps_to": null,
+      "evidence": "Synthesis rule; Do not average references into a safe middle"
+    },
+    {
+      "question": "Which research layer should answer this question?",
+      "options": [
+        {
+          "name": "Styles",
+          "effect": "Look and feel: typography, palette, layout, spacing, radius, elevation, imagery.",
+          "when": "Any task with a visual component; start here."
+        },
+        {
+          "name": "Screens",
+          "effect": "What a screen contains: layout, hierarchy, components, CTAs, copy, states.",
+          "when": "A specific screen type, component or UI pattern."
+        },
+        {
+          "name": "Flows",
+          "effect": "Steps, decision points, confirmations, recovery and system responses.",
+          "when": "Onboarding, signup, checkout, cancellation or any multi-step process."
+        }
+      ],
+      "recommendation": "Combine layers: styles for visual direction, screens for patterns, flows for sequencing.",
+      "maps_to": null,
+      "evidence": "Refero has three research layers"
+    },
+    {
+      "question": "What do you put in an image slot when you cannot make the image the style needs?",
+      "options": [
+        {
+          "name": "Fake it in CSS or text",
+          "effect": "Weak decorative boxes standing in for imagery.",
+          "when": "Never."
+        },
+        {
+          "name": "Switch to a text-only layout",
+          "effect": "Loses the image-led character of the style.",
+          "when": "Never for an image-led primary style."
+        },
+        {
+          "name": "Intentional placeholder",
+          "effect": "Stable dimensions, aspect ratio, caption or alt text and an art-direction note.",
+          "when": "When real, generated or stock assets are not available."
+        }
+      ],
+      "recommendation": "Use real, generated or stock assets when available; otherwise an honest, well-sized placeholder.",
+      "maps_to": null,
+      "evidence": "Respect imagery guidance; If the primary style is image-led"
+    }
+  ],
+  "process": [
+    {
+      "step": "Write a brief",
+      "detail": "Designing [WHAT] for [WHO] on [PLATFORM], with goal, tone, main objection, must-remember hook, constraints, research needed and path."
+    },
+    {
+      "step": "Route the workflow",
+      "detail": "Pick direct build, visual exploration, audit or asset generation; the lightest that gives a high-quality result."
+    },
+    {
+      "step": "Research styles",
+      "detail": "Search 3-5 visual angles (one broad aesthetic, one domain, one known brand), retrieve 3-4 full styles, compare, pick one primary and borrow 1-2 details."
+    },
+    {
+      "step": "Research screens",
+      "detail": "Search by page type, component, state, company or on-screen text; extract layout, hierarchy, components, CTAs, copy, states and tactics."
+    },
+    {
+      "step": "Research flows",
+      "detail": "For multi-step tasks, extract entry and exit, step count, decisions, friction reducers, confirmations, recovery, errors and system responses; broaden or reconstruct from screens if sparse."
+    },
+    {
+      "step": "Match depth to risk",
+      "detail": "Quick improvement: 2-3 style searches, 2-3 full styles, 1 short synthesis. New landing page or redesign: 3-5 searches, 3-4 full styles, plus screen research."
+    },
+    {
+      "step": "Synthesize into three buckets",
+      "detail": "Visual direction from styles, product pattern from screens, journey logic from flows."
+    },
+    {
+      "step": "Create a reference lock",
+      "detail": "Primary direction, traits to preserve, borrowed details, role rules, media strategy, rejects and token commitments."
+    },
+    {
+      "step": "Present findings and ledger",
+      "detail": "Give a short research summary and a decision ledger with source, role and reason for each choice."
+    },
+    {
+      "step": "Build with craft rules",
+      "detail": "Define tokens first, preserve roles and signature traits, avoid listed AI defaults."
+    },
+    {
+      "step": "Quality gate and visual QA",
+      "detail": "Run the checklist and compare the rendered result to the lock; research or refine more if any answer is no."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Visual direction synthesis for an analytics SaaS",
+      "where": null,
+      "visual_note": "White canvas, compact UI copy, restrained black primary actions, thin borders, product screenshots in framed panels, accent color kept rare."
+    },
+    {
+      "what": "Pricing page pattern",
+      "where": null,
+      "visual_note": "Billing toggle above plan cards, one plan highlighted, detailed feature comparison moved below; hero kept quieter for a product that sells trust."
+    },
+    {
+      "what": "Cancellation flow logic",
+      "where": null,
+      "visual_note": "Collect a reason, offer a relevant alternative, confirm the destructive action, state when access ends, give a clear return path."
+    },
+    {
+      "what": "Example style queries",
+      "where": "Attio, Linear, shadcn",
+      "visual_note": "Queries like 'Linear changelog dark developer tool' and 'shadcn monochrome design system' show how to search by brand, domain and aesthetic."
+    },
+    {
+      "what": "Averaging failure",
+      "where": null,
+      "visual_note": "Dark, acid and serif references averaged into warm cream, muted orange and a polite serif: the bland centroid to avoid."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "3-5",
+      "context": "Different visual angles to search for styles; also traits to preserve in a reference lock",
+      "evidence": "Recommended loop; Preserve: [3-5 traits"
+    },
+    {
+      "value": "3-4",
+      "context": "Full styles to retrieve in one batch",
+      "evidence": "Retrieve 3-4 strong styles"
+    },
+    {
+      "value": "1-2",
+      "context": "Specific details to borrow from secondary styles",
+      "evidence": "borrow 1-2 specific details"
+    },
+    {
+      "value": "2-3",
+      "context": "Style searches and full styles for a quick visual improvement",
+      "evidence": "Research Depth: For a quick visual improvement"
+    },
+    {
+      "value": "three",
+      "context": "Default number of reference-locked options in visual exploration",
+      "evidence": "Default to three reference-locked options"
+    },
+    {
+      "value": "1",
+      "context": "Short synthesis for a quick visual improvement",
+      "evidence": "Research Depth: 1 short synthesis"
+    }
+  ],
+  "caveats": [
+    "This is a vendor's own skill: it insists on Refero MCP research and tells agents not to use generic design skills as a parallel design authority, which is self-promotion.",
+    "The style library is limited to web marketing and product pages, per the source's own stated limitation.",
+    "The AI-slop list (calm editorial, cream canvases, indigo/violet) is the authors' opinion of current trends and may date.",
+    "Linked reference files (typography.md, color.md, visual-workflow.md and others) were not part of this raw source."
+  ]
+}

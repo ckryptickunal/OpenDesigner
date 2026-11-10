@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orvita: clinical AI for hospitals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wdth,wght@75..100,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Outside the tokens, on purpose (see notes.md):
+     - the blueprint grid and the teal wash behind the product are art
+     - the six customer wordmarks are invented type treatments in the same two faces
+     Two fonts only (owner rule): Instrument Sans for words, Geist Mono for clinical data. */
+  :root {
+    --teal: var(--ds-color-accent-light-9);
+    --blue: var(--ds-color-accent2-light-9);
+    --ink: var(--ds-color-neutral-light-12);
+    --muted: var(--ds-color-text-secondary);
+    --line: var(--ds-color-neutral-light-5);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body { background: var(--ds-color-white); color: var(--ink); font: var(--ds-text-body-md); overflow: hidden; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+  .page { position: relative; height: 100vh; height: 100svh; min-height: 820px; overflow: hidden; }
+  .mono { font-family: var(--ds-font-family-mono); font-variant-numeric: tabular-nums; }
+
+  .bg { position: absolute; inset: 0; pointer-events: none;
+        background:
+          radial-gradient(40% 50% at 78% 46%, rgb(11 122 133 / 0.10), transparent 70%),
+          radial-gradient(30% 40% at 92% 20%, rgb(49 113 227 / 0.08), transparent 70%); }
+  .grid { position: absolute; left: 640px; right: 0; top: 72px; bottom: 140px; pointer-events: none;
+          background-image: linear-gradient(var(--ds-color-accent-light-3) 1px, transparent 1px), linear-gradient(90deg, var(--ds-color-accent-light-3) 1px, transparent 1px);
+          background-size: 32px 32px; mask-image: radial-gradient(60% 60% at 60% 50%, #000 30%, transparent 80%); }
+
+  nav { position: relative; z-index: 10; height: 72px; display: flex; align-items: center; padding: 0 var(--ds-space-64); border-bottom: 1px solid var(--line); background: rgb(255 255 255 / 0.85); backdrop-filter: blur(8px); }
+  .logo { display: flex; align-items: center; gap: var(--ds-space-8); font-weight: 600; font-size: var(--ds-font-size-20); letter-spacing: -0.02em; margin-right: var(--ds-space-48); }
+  .links { display: flex; gap: var(--ds-space-4); }
+  .links a { font: var(--ds-text-label-lg); color: var(--muted); padding: 0 var(--ds-space-12); height: var(--ds-size-control-sm); display: inline-flex; align-items: center; border-radius: var(--ds-radius-control); }
+  .links a:hover { background: var(--ds-color-neutral-light-2); color: var(--ink); }
+  .nav-r { margin-left: auto; display: flex; gap: var(--ds-space-12); align-items: center; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-8); height: var(--ds-size-control-sm); padding: 0 var(--ds-space-16);
+         border-radius: var(--ds-radius-control); font: var(--ds-text-label-lg); font-weight: 600; transition: background var(--ds-motion-duration-short) var(--ds-motion-easing-hover); white-space: nowrap; }
+  .btn-primary { background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
+  .btn-primary:hover { background: var(--ds-color-bg-action-primary-hover); }
+  .btn-line { box-shadow: inset 0 0 0 1px var(--ds-color-border-default); color: var(--ink); background: var(--ds-color-white); }
+  .btn-line:hover { background: var(--ds-color-neutral-light-2); }
+  .btn-lg { height: var(--ds-size-control-md); padding: 0 var(--ds-space-20); }
+
+  .copy { position: absolute; z-index: 5; left: var(--ds-space-64); top: 148px; width: 572px; }
+  .pill { display: inline-flex; align-items: center; gap: var(--ds-space-8); height: 32px; padding: 0 var(--ds-space-12) 0 var(--ds-space-4); border-radius: var(--ds-radius-full);
+          box-shadow: inset 0 0 0 1px var(--ds-color-accent-light-6); background: var(--ds-color-accent-light-2); font-size: var(--ds-font-size-13); font-weight: 500; color: var(--ds-color-accent-light-11); }
+  .pill b { background: var(--teal); color: var(--ds-color-white); border-radius: var(--ds-radius-full); padding: var(--ds-space-2) var(--ds-space-8); font-weight: 600; }
+  /* regular display, the phrase in bold: same color, weight does the highlighting */
+  h1 { margin-top: var(--ds-space-24); font: var(--ds-text-display-md); font-weight: 400; letter-spacing: -0.03em; line-height: 1.02; font-variation-settings: "wdth" 92; }
+  h1 strong { font-weight: 650; }
+  .lede { margin-top: var(--ds-space-24); font: var(--ds-text-body-lg); color: var(--muted); max-width: 30em; }
+  .ctas { margin-top: var(--ds-space-32); display: flex; gap: var(--ds-space-12); }
+  .facts { margin-top: var(--ds-space-32); display: flex; gap: var(--ds-space-24); font-size: var(--ds-font-size-13); color: var(--muted); }
+  .facts span { display: inline-flex; gap: var(--ds-space-8); align-items: center; }
+  .facts svg { color: var(--teal); }
+
+  /* product */
+  .win { position: absolute; z-index: 3; left: 716px; top: 164px; width: 780px; height: 520px; background: var(--ds-color-white); border-radius: var(--ds-radius-overlay);
+         box-shadow: var(--ds-elevation-overlay), 0 40px 80px -40px rgb(23 57 61 / 0.35); overflow: hidden; display: grid; grid-template-columns: 52px 1fr; grid-template-rows: 48px 1fr; }
+  .w-top { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--ds-space-12); padding: 0 var(--ds-space-16); border-bottom: 1px solid var(--line); font-size: var(--ds-font-size-13); }
+  .w-top .crumb { color: var(--muted); } .w-top .crumb b { color: var(--ink); font-weight: 600; }
+  .w-top .search { margin-left: auto; width: 200px; height: 28px; border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-2); display: flex; align-items: center; padding: 0 var(--ds-space-8); color: var(--ds-color-text-tertiary); gap: var(--ds-space-6); }
+  .w-top .av { width: 28px; height: 28px; border-radius: 50%; background: var(--ds-color-accent2-light-3); color: var(--ds-color-accent2-light-11); display: grid; place-items: center; font-size: var(--ds-font-size-13); font-weight: 600; }
+  .rail { border-right: 1px solid var(--line); display: flex; flex-direction: column; align-items: center; gap: var(--ds-space-8); padding-top: var(--ds-space-12); background: var(--ds-color-neutral-light-1); }
+  .rail i { width: 32px; height: 32px; border-radius: var(--ds-radius-container); display: grid; place-items: center; color: var(--ds-color-neutral-light-9); }
+  .rail i.on { background: var(--ds-color-accent-light-3); color: var(--ds-color-accent-light-11); }
+  .main { padding: var(--ds-space-16) var(--ds-space-20); }
+  .m-head { display: flex; align-items: center; gap: var(--ds-space-12); }
+  .m-head h3 { font-size: var(--ds-font-size-16); font-weight: 600; }
+  .chips { display: flex; gap: var(--ds-space-6); margin-left: var(--ds-space-8); }
+  .chip { height: 24px; padding: 0 var(--ds-space-8); border-radius: var(--ds-radius-full); font-size: var(--ds-font-size-13); display: inline-flex; align-items: center; gap: var(--ds-space-4); background: var(--ds-color-neutral-light-2); color: var(--muted); font-weight: 500; }
+  .chip.on { background: var(--ink); color: var(--ds-color-white); }
+  .m-head .upd { margin-left: auto; font-size: var(--ds-font-size-13); color: var(--ds-color-text-tertiary); display: flex; gap: var(--ds-space-6); align-items: center; }
+  .m-head .upd i { width: 6px; height: 6px; border-radius: 50%; background: var(--ds-color-success-light-9); }
+  table { margin-top: var(--ds-space-12); width: 100%; border-collapse: collapse; font-size: var(--ds-font-size-13); }
+  th { text-align: left; font-weight: 500; font-size: var(--ds-font-size-13); color: var(--ds-color-text-tertiary); padding: var(--ds-space-8) var(--ds-space-8); border-bottom: 1px solid var(--line); white-space: nowrap; }
+  td { padding: 0 var(--ds-space-8); height: 52px; border-bottom: 1px solid var(--ds-color-neutral-light-3); white-space: nowrap; }
+  tr.hot td { background: var(--ds-color-danger-light-2); }
+  tr.hot td:first-child { box-shadow: inset 3px 0 0 var(--ds-color-danger-light-9); }
+  .pt b { display: block; font-weight: 600; color: var(--ink); } .pt small { color: var(--ds-color-text-tertiary); font-size: var(--ds-font-size-13); }
+  .score { display: flex; align-items: center; gap: var(--ds-space-8); }
+  .score .n { font-family: var(--ds-font-family-mono); font-weight: 500; width: 22px; }
+  .score .bar { width: 56px; height: 6px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-3); overflow: hidden; }
+  .score .bar i { display: block; height: 100%; border-radius: inherit; }
+  .sig { display: inline-flex; gap: var(--ds-space-4); }
+  .sig span { font-size: var(--ds-font-size-13); padding: var(--ds-space-2) var(--ds-space-6); border-radius: var(--ds-radius-control); background: var(--ds-color-neutral-light-2); color: var(--muted); }
+  .st { font-size: var(--ds-font-size-13); font-weight: 600; padding: var(--ds-space-2) var(--ds-space-8); border-radius: var(--ds-radius-full); display: inline-flex; gap: var(--ds-space-4); align-items: center; }
+  .st::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .st.high { background: var(--ds-color-danger-light-3); color: var(--ds-color-danger-light-11); }
+  .st.watch { background: var(--ds-color-warning-light-3); color: var(--ds-color-warning-light-11); }
+  .st.ok { background: var(--ds-color-success-light-3); color: var(--ds-color-success-light-11); }
+
+  .card { position: absolute; z-index: 6; background: var(--ds-color-white); border-radius: var(--ds-radius-overlay); box-shadow: var(--ds-elevation-overlay), 0 30px 60px -30px rgb(23 57 61 / 0.4); }
+  .why { left: 636px; top: 456px; width: 326px; padding: var(--ds-space-16); }
+  .why header { display: flex; align-items: center; gap: var(--ds-space-8); font-size: var(--ds-font-size-13); font-weight: 600; }
+  .why header .ai { width: 24px; height: 24px; border-radius: var(--ds-radius-container); background: linear-gradient(135deg, var(--teal), var(--blue)); display: grid; place-items: center; }
+  .why header small { margin-left: auto; font-weight: 500; color: var(--ds-color-text-tertiary); font-size: var(--ds-font-size-13); }
+  .why p { margin-top: var(--ds-space-8); font-size: var(--ds-font-size-13); line-height: 1.5; color: var(--muted); }
+  .why p b { color: var(--ink); font-weight: 600; }
+  .ev { margin-top: var(--ds-space-12); display: grid; gap: var(--ds-space-6); }
+  .ev div { display: grid; grid-template-columns: 1fr auto; gap: var(--ds-space-8); align-items: center; font-size: var(--ds-font-size-13); padding: var(--ds-space-8) var(--ds-space-8); border-radius: var(--ds-radius-container); background: var(--ds-color-neutral-light-2); }
+  .ev div span:first-child { color: var(--ink); }
+  .ev div span:last-child { font-family: var(--ds-font-family-mono); font-size: var(--ds-font-size-13); color: var(--ds-color-accent-light-11); background: var(--ds-color-accent-light-3); padding: var(--ds-space-2) var(--ds-space-6); border-radius: var(--ds-radius-control); }
+  .why footer { margin-top: var(--ds-space-12); display: flex; gap: var(--ds-space-8); }
+  .why footer .btn { height: 32px; font-size: var(--ds-font-size-13); padding: 0 var(--ds-space-12); }
+
+  .trend { left: 1176px; top: 96px; width: 236px; padding: var(--ds-space-12) var(--ds-space-16) var(--ds-space-8); }
+  .trend .t { display: flex; justify-content: space-between; align-items: baseline; font-size: var(--ds-font-size-13); color: var(--ds-color-text-tertiary); }
+  .trend .v { font-family: var(--ds-font-family-mono); font-size: var(--ds-font-size-25); font-weight: 500; color: var(--ds-color-danger-light-11); letter-spacing: -0.02em; }
+  .trend .v small { font-size: var(--ds-font-size-13); color: var(--ds-color-danger-light-11); margin-left: var(--ds-space-4); }
+  .trend svg { display: block; width: 100%; height: 72px; margin-top: var(--ds-space-4); }
+
+  /* customers */
+  .logos { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; height: 132px; border-top: 1px solid var(--line); display: grid; grid-template-columns: 220px repeat(6, 1fr); background: var(--ds-color-white); }
+  .logos > div { display: flex; align-items: center; justify-content: center; border-left: 1px solid var(--ds-color-neutral-light-3); color: var(--ds-color-neutral-light-10); }
+  .logos > div:first-child { border-left: 0; justify-content: flex-start; padding-left: var(--ds-space-64); font-size: var(--ds-font-size-13); color: var(--muted); line-height: 1.5; }
+  .logos > div:first-child b { color: var(--ink); font-weight: 600; display: block; }
+  .wm { display: flex; align-items: center; gap: var(--ds-space-8); }
+  .wm1 { font-weight: 500; font-size: var(--ds-font-size-20); letter-spacing: 0.16em; }
+  .wm2 { font-weight: 600; font-size: var(--ds-font-size-20); letter-spacing: -0.02em; }
+  .wm3 { font-weight: 500; font-size: var(--ds-font-size-13); letter-spacing: 0.32em; font-variation-settings: "wdth" 100; line-height: 1.25; }
+  .wm4 { font-weight: 700; font-size: var(--ds-font-size-20); line-height: 1; font-variation-settings: "wdth" 80; letter-spacing: -0.01em; }
+  .wm4 small { display: block; font-weight: 500; font-variation-settings: "wdth" 100; font-size: var(--ds-font-size-13); letter-spacing: 0.08em; text-transform: uppercase; margin-top: var(--ds-space-4); }
+  .wm5 { font-weight: 700; font-size: var(--ds-font-size-16); letter-spacing: -0.01em; font-variation-settings: "wdth" 75; }
+  .wm6 { font-family: var(--ds-font-family-mono); font-size: var(--ds-font-size-16); letter-spacing: -0.02em; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .win, .card { animation: up var(--ds-motion-duration-reveal) var(--ds-motion-easing-enter) both; }
+    .why { animation-delay: calc(var(--ds-motion-duration-stagger) * 3); }
+    .trend { animation-delay: calc(var(--ds-motion-duration-stagger) * 5); }
+    @keyframes up { from { opacity: 0; translate: 0 12px; } }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="bg"></div><div class="grid"></div>
+
+  <nav aria-label="Main">
+    <a class="logo" href="#" aria-label="Orvita home">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="11.5" fill="none" stroke="var(--ds-color-accent-light-9)" stroke-width="3"/><path d="M4 14h5l2.5-5 4 10 2.5-5H24" fill="none" stroke="var(--ds-color-accent2-light-9)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      orvita
+    </a>
+    <div class="links"><a href="#">Platform</a><a href="#">Clinical evidence</a><a href="#">Customers</a><a href="#">Security</a><a href="#">Resources</a></div>
+    <div class="nav-r"><a class="btn btn-line" href="#">Sign in</a><a class="btn btn-primary" href="#">Book a demo</a></div>
+  </nav>
+
+  <section class="copy">
+    <a class="pill" href="#"><b>New</b> Sepsis Watch validated across 41 hospitals →</a>
+    <h1>Know which patient <strong>needs you next.</strong></h1>
+    <p class="lede">Orvita reads vitals, labs and nursing notes from your EHR, flags deterioration hours earlier, and shows the evidence behind every alert.</p>
+    <div class="ctas"><a class="btn btn-primary btn-lg" href="#">Book a clinical demo</a><a class="btn btn-line btn-lg" href="#">Read the validation study</a></div>
+    <div class="facts">
+      <span><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Works inside your existing EHR</span>
+      <span><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>HIPAA · SOC 2 Type II</span>
+    </div>
+  </section>
+
+  <div class="win" aria-hidden="true">
+    <div class="w-top">
+      <svg width="18" height="18" viewBox="0 0 28 28"><circle cx="14" cy="14" r="11.5" fill="none" stroke="var(--ds-color-accent-light-9)" stroke-width="3"/><path d="M4 14h5l2.5-5 4 10 2.5-5H24" fill="none" stroke="var(--ds-color-accent2-light-9)" stroke-width="2.4" stroke-linejoin="round"/></svg>
+      <span class="crumb">St. Aldric Health / <b>Ward 4B · Medical</b></span>
+      <span class="search"><svg width="12" height="12" viewBox="0 0 12 12"><circle cx="5" cy="5" r="3.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 8l2.5 2.5" stroke="currentColor" stroke-width="1.4"/></svg>Search patients</span>
+      <span class="av">RN</span>
+    </div>
+    <div class="rail">
+      <i class="on"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 4h12M2 8h12M2 12h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></i>
+      <i><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 2.5a4 4 0 014 4v2.5l1.5 2.5h-11L4 9V6.5a4 4 0 014-4zM6.5 13.5h3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></i>
+      <i><svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 12l3.5-4 3 2.5L14 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i>
+      <i><svg width="16" height="16" viewBox="0 0 16 16"><rect x="3" y="2" width="10" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 6h5M5.5 9h5" stroke="currentColor" stroke-width="1.4"/></svg></i>
+    </div>
+    <div class="main">
+      <div class="m-head"><h3>Watchlist</h3>
+        <div class="chips"><span class="chip on">All 28</span><span class="chip">Rising 3</span><span class="chip">New labs 5</span></div>
+        </div>
+      <table>
+        <thead><tr><th>Bed</th><th>Patient</th><th>Orvita risk</th><th>12 h</th><th>Signals</th><th>Status</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card trend" aria-hidden="true">
+    <div class="t"><span>Bed 12 · risk, last 12 h</span><span class="mono">21:42</span></div>
+    <div class="v">82<small>▲ 41</small></div>
+    <svg viewBox="0 0 204 72" preserveAspectRatio="none">
+      <defs><linearGradient id="ar" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--ds-color-danger-light-9)" stop-opacity=".22"/><stop offset="1" stop-color="var(--ds-color-danger-light-9)" stop-opacity="0"/></linearGradient></defs>
+      <line x1="0" x2="204" y1="22" y2="22" stroke="var(--ds-color-danger-light-9)" stroke-dasharray="3 3" stroke-width="1"/>
+      <text x="2" y="17" font-family="Geist Mono" font-size="13" fill="var(--ds-color-danger-light-11)">alert 70</text>
+      <path d="M0 58 L17 56 L34 57 L51 55 L68 54 L85 55 L102 50 L119 46 L136 38 L153 30 L170 22 L187 16 L204 12 L204 72 L0 72Z" fill="url(#ar)"/>
+      <path d="M0 58 L17 56 L34 57 L51 55 L68 54 L85 55 L102 50 L119 46 L136 38 L153 30 L170 22 L187 16 L204 12" fill="none" stroke="var(--ds-color-danger-light-9)" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="204" cy="12" r="3.5" fill="var(--ds-color-white)" stroke="var(--ds-color-danger-light-9)" stroke-width="2"/>
+    </svg>
+  </div>
+
+  <div class="card why" aria-hidden="true">
+    <header><span class="ai"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M7 1l1.4 3.6L12 6 8.4 7.4 7 11 5.6 7.4 2 6l3.6-1.4z" fill="#fff"/></svg></span>Why Orvita flagged Bed 12<small>3 sources</small></header>
+    <p>Risk rose from <b>41 to 82</b> in 4 hours. Pattern matches early sepsis.</p>
+    <div class="ev">
+      <div><span>Resp. rate 24/min, +6 in 4 h</span><span>Vitals 21:30</span></div>
+      <div><span>Lactate 2.9 mmol/L</span><span>Lab 21:12</span></div>
+      <div><span>“More confused tonight”</span><span>RN note 21:40</span></div>
+    </div>
+    <footer><span class="btn btn-primary">Page rapid response</span><span class="btn btn-line">Acknowledge</span></footer>
+  </div>
+
+  <div class="logos" aria-label="Customers">
+    <div><span><b>Trusted at 41 health systems</b>across 9 countries</span></div>
+    <div><span class="wm wm1"><svg width="18" height="22" viewBox="0 0 18 22" aria-hidden="true"><path d="M9 1c5 5 5 13 0 20C4 14 4 6 9 1z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 5v14" stroke="currentColor" stroke-width="1.2"/></svg>ST. ALDRIC</span></div>
+    <div><span class="wm wm2"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 14l8-8 8 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Northvale Medical</span></div>
+    <div><span class="wm wm3"><span><span style="display:block">KESTREL BAY</span><span style="display:block">HOSPITALS</span></span></span></div>
+    <div><span class="wm wm4"><span>Lindqvist<small>University Clinic</small></span></span></div>
+    <div><span class="wm wm5"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.5l2.4 5.3 5.8.6-4.3 3.9 1.2 5.7L10 14l-5.1 3 1.2-5.7L1.8 7.4l5.8-.6z" fill="currentColor"/></svg>Harrowgate Children's</span></div>
+    <div><span class="wm wm6"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="7.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="9" r="3" fill="currentColor"/></svg>thornfield/health</span></div>
+  </div>
+</div>
+<script>
+const rows = [
+  ['12', 'M. Okafor', '67 · Sepsis watch', 82, 'danger', [30, 32, 31, 35, 41, 48, 57, 66, 74, 82], ['RR ↑', 'Lactate'], ['high', 'High']],
+  ['07', 'J. Lindgren', '54 · Post-op day 2', 64, 'warning', [40, 42, 41, 46, 50, 52, 55, 58, 61, 64], ['HR ↑'], ['watch', 'Watch']],
+  ['03', 'A. Haddad', '71 · CHF', 58, 'warning', [56, 58, 57, 59, 58, 60, 57, 58, 59, 58], ['SpO₂'], ['watch', 'Watch']],
+  ['15', 'R. Castillo', '45 · Pneumonia', 31, 'success', [52, 50, 47, 44, 42, 40, 37, 35, 33, 31], ['Temp ↓'], ['ok', 'Improving']],
+  ['09', 'S. Nakamura', '80 · Hip fracture', 27, 'success', [28, 27, 29, 28, 26, 27, 28, 27, 26, 27], [], ['ok', 'Stable']],
+  ['21', 'P. Adeyemi', '62 · COPD', 22, 'success', [26, 25, 24, 24, 23, 23, 22, 23, 22, 22], [], ['ok', 'Stable']],
+  ['18', 'L. Ferreira', '38 · DKA', 19, 'success', [34, 31, 29, 26, 24, 23, 21, 20, 19, 19], [], ['ok', 'Improving']],
+];
+const col = c => `var(--ds-color-${c}-light-9)`;
+document.getElementById('rows').innerHTML = rows.map(([bed, name, sub, s, c, tr, sig, [st, stl]], i) => {
+  const max = 90, pts = tr.map((v, j) => `${j * 8},${22 - v / max * 20}`).join(' ');
+  return `<tr class="${i === 0 ? 'hot' : ''}"><td class="mono">${bed}</td><td class="pt"><b>${name}</b><small>${sub}</small></td>
+    <td><span class="score"><span class="n">${s}</span><span class="bar"><i style="width:${s}%;background:${col(c)}"></i></span></span></td>
+    <td><svg width="72" height="24" viewBox="0 0 72 24"><polyline points="${pts}" fill="none" stroke="${col(c)}" stroke-width="1.6" stroke-linejoin="round"/></svg></td>
+    <td><span class="sig">${sig.map(x => `<span>${x}</span>`).join('') || '<span style="background:none;color:var(--ds-color-text-tertiary)">—</span>'}</span></td>
+    <td><span class="st ${st}">${stl}</span></td></tr>`;
+}).join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quillon: purchase request approval</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* iPhone, 390 x 844 pt. Round 3: spacing rebuilt on an 8 pt rhythm with room between groups; every value is a --ds-* token unless marked RAW.
+     Type (Apple Dynamic Type, Large): Large Title 34 (the amount) · Title 2 22 (the request) · Body 17 (names, labels, values) · Subheadline 15 (details, legend, times) · Footnote 13 (section headers).
+     Cobalt is the iOS tint: back, the quote link, approved steps, Approve. A pushed detail with a pinned decision bar hides the tab bar, as Brex does. */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ds-color-surface-sunken); }
+  body { width: 390px; height: 844px; overflow: hidden; position: relative; color: var(--ds-color-text-primary);
+    font: var(--ds-font-weight-body) var(--ds-font-size-17)/1.3 var(--ds-font-family-text);
+    letter-spacing: -0.012em; /* RAW: Inter's tracking at 17 pt, close to SF Text */ -webkit-font-smoothing: antialiased; }
+  .num { font-variant-numeric: tabular-nums; }
+  button { font: inherit; letter-spacing: inherit; border: 0; background: none; color: inherit; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+  .s15 { font-size: var(--ds-font-size-15); line-height: 1.33; letter-spacing: -0.008em; }
+  .sec { color: var(--ds-color-text-secondary); }
+
+  .status { height: 54px; display: flex; align-items: center; justify-content: space-between; padding: var(--ds-space-4) var(--ds-space-32) 0 var(--ds-space-48); }
+  .status time { font-weight: var(--ds-font-weight-heading); font-size: var(--ds-font-size-17); letter-spacing: -0.02em; }
+  .status .sys { display: flex; align-items: center; gap: var(--ds-space-6); }
+  .status svg { display: block; fill: var(--ds-color-text-primary); }
+
+  .navbar { position: relative; height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 var(--ds-space-8); }
+  .back { display: flex; align-items: center; gap: var(--ds-space-2); height: 44px; padding: 0 var(--ds-space-8) 0 var(--ds-space-2); color: var(--ds-color-text-accent); }
+  .navbar .title { position: absolute; left: 0; right: 0; text-align: center; font-weight: var(--ds-font-weight-heading); pointer-events: none; }
+  .more { width: 44px; height: 44px; display: grid; place-items: center; color: var(--ds-color-text-accent); }
+
+  .content { padding: var(--ds-space-8) var(--ds-space-16) 0; }
+  .req h1 { font-size: var(--ds-font-size-22); line-height: 1.27; font-weight: var(--ds-font-weight-heading); letter-spacing: -0.02em; }
+  .req .vendor { margin-top: var(--ds-space-8); color: var(--ds-color-text-secondary); }
+  .amount { margin-top: var(--ds-space-12); font-size: var(--ds-font-size-34); line-height: 1.12; font-weight: var(--ds-font-weight-label); letter-spacing: -0.025em; }
+  .amount .cur { font-size: var(--ds-font-size-15); font-weight: var(--ds-font-weight-body); color: var(--ds-color-text-secondary); letter-spacing: 0; margin-left: var(--ds-space-6); }
+  .expires { margin-top: var(--ds-space-4); display: flex; align-items: center; gap: var(--ds-space-6); }
+  .expires a { color: var(--ds-color-text-accent); font-weight: var(--ds-font-weight-label); text-decoration: none; }
+
+  .hdr { margin: var(--ds-space-24) var(--ds-space-16) var(--ds-space-8); font-size: var(--ds-font-size-13); line-height: 1.38; letter-spacing: 0; font-weight: var(--ds-font-weight-body); color: var(--ds-color-text-secondary); }
+  .hdr.first { margin-top: var(--ds-space-24); } /* sections every 24; inside cards 16; header to card 8 */
+  .hdr.under { margin-top: var(--ds-space-24); }
+  .card { background: var(--ds-color-surface-raised); border-radius: var(--ds-radius-container); }
+
+  .budget { padding: var(--ds-space-16); }
+  .budget .left { margin-top: var(--ds-space-2); color: var(--ds-color-text-secondary); }
+  .budget .left b { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-heading); }
+  .bar { margin-top: var(--ds-space-12); height: var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-6); display: flex; overflow: hidden; }
+  .bar i { display: block; height: 100%; }
+  .bar .spent { width: 60.2%; background: var(--ds-color-neutral-light-9); }
+  .bar .this { width: 15.5%; background: var(--ds-color-text-primary); border-left: var(--ds-space-2) solid var(--ds-color-surface-raised); }
+  .legend { position: relative; margin-top: var(--ds-space-8); height: 20px; color: var(--ds-color-text-secondary); }
+  .legend span { position: absolute; top: 0; white-space: nowrap; }
+  .legend .l2 { left: 60.2%; color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
+
+  .chain { list-style: none; }
+  .chain li { position: relative; display: grid; grid-template-columns: 52px 1fr auto; align-items: center; min-height: 52px; }
+  .chain li + li .txt, .chain li + li .tm { border-top: 1px solid var(--ds-color-neutral-light-4); }
+  .chain .ico { display: grid; place-items: center; height: 100%; position: relative; }
+  .chain li:not(:last-child) .ico::after { content: ""; position: absolute; left: 50%; top: 40px; bottom: -18px; width: 1.5px; margin-left: -0.75px; background: var(--ds-color-neutral-light-6); } /* RAW: 1.5 pt connector. od-ignore */
+  .chain .txt { padding: var(--ds-space-8) 0; min-height: 52px; display: flex; flex-direction: column; justify-content: center; }
+  .chain .tm { align-self: stretch; display: flex; align-items: center; padding: 0 var(--ds-space-16) 0 var(--ds-space-12); color: var(--ds-color-text-secondary); }
+  .chain .you .name { font-weight: var(--ds-font-weight-heading); }
+
+  .rows .r { display: flex; justify-content: space-between; align-items: center; min-height: 48px; margin-left: var(--ds-space-16); padding-right: var(--ds-space-16); }
+  .rows .r + .r { border-top: 1px solid var(--ds-color-neutral-light-4); }
+  .rows .r span:last-child { color: var(--ds-color-text-secondary); text-align: right; }
+
+  .decide { position: absolute; left: 0; right: 0; bottom: 0; padding: var(--ds-space-12) var(--ds-space-16) 2.125rem; /* the 34 pt home-indicator area */ background: color-mix(in oklab, var(--ds-color-surface-sunken) 72%, transparent); backdrop-filter: blur(16px) saturate(1.2); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--ds-color-neutral-light-5); display: grid; grid-template-columns: 1fr 2fr; gap: var(--ds-space-12); }
+  .decide button { height: 50px; border-radius: var(--ds-radius-container); }
+  .decline { background: var(--ds-color-surface-raised); border: 1px solid var(--ds-color-border-strong); color: var(--ds-color-text-primary); }
+  .approve { background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font-weight: var(--ds-font-weight-heading); }
+  .home { position: absolute; bottom: var(--ds-space-8); left: 0; right: 0; margin: 0 auto; width: 134px; height: 5px; border-radius: var(--ds-radius-full); background: var(--ds-color-text-primary); }
+</style>
+</head>
+<body>
+  <header class="status" aria-hidden="true">
+    <time>10:06</time>
+    <div class="sys">
+      <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.6c2.3 0 4.4.9 6 2.4l1.3-1.4A10.6 10.6 0 0 0 8 .6C5.2.6 2.6 1.7.7 3.6L2 5c1.6-1.5 3.7-2.4 6-2.4zm0 3.6c1.3 0 2.5.5 3.4 1.3l1.3-1.4A7 7 0 0 0 8 4.2a7 7 0 0 0-4.7 1.9l1.3 1.4c.9-.8 2.1-1.3 3.4-1.3zm0 3.5c.5 0 .9.2 1.2.5L8 11.6 6.8 10.2c.3-.3.7-.5 1.2-.5z"/></svg>
+      <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="16" height="9" rx="2"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" opacity=".5"/></svg>
+    </div>
+  </header>
+
+  <nav class="navbar" aria-label="Request navigation">
+    <button class="back" aria-label="Back to Approvals">
+      <svg width="13" height="21" viewBox="0 0 13 21" aria-hidden="true"><path d="M11 2L2.5 10.5 11 19" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Approvals
+    </button>
+    <span class="title">PR-2207</span>
+    <button class="more" aria-label="More actions"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="currentColor"><circle cx="4.5" cy="11" r="1.8"/><circle cx="11" cy="11" r="1.8"/><circle cx="17.5" cy="11" r="1.8"/></svg></button>
+  </nav>
+
+  <main class="content">
+    <section class="req">
+      <h1>Forklift battery for FL-07</h1>
+      <p class="vendor">Ashbury Traction Power · Facilities</p>
+      <p class="amount num">$14,860<span class="cur">USD</span></p>
+      <p class="expires s15"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.6V8l2.2 1.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Quote valid until Fri 16 Oct · <a>Q-5571.pdf</a></p>
+    </section>
+
+    <h2 class="hdr first">Budget after approval</h2>
+    <section class="card budget">
+      <p>Facilities, Jul–Dec</p>
+      <p class="left s15 num"><b>$23,340</b> of $96,000 left</p>
+      <div class="bar" role="img" aria-label="Jul–Dec budget: 60% spent, this request adds 15%, 24% left"><i class="spent"></i><i class="this"></i></div>
+      <p class="legend s15 num"><span>60% spent</span><span class="l2">+15% this request</span></p>
+    </section>
+
+    <h2 class="hdr">Sign-off · 1 of 3 approved</h2>
+    <ol class="card chain">
+      <li>
+        <span class="ico"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="var(--ds-color-neutral-light-4)"/><path d="M7 11h8M11.5 7.5 15 11l-3.5 3.5" fill="none" stroke="var(--ds-color-text-secondary)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="txt"><span class="name">Elif Demir</span><span class="s15 sec">Requested it</span></span><span class="tm s15 num">08:12</span>
+      </li>
+      <li>
+        <span class="ico"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="11" fill="var(--ds-color-bg-accent-bold)"/><path d="M6.5 11.3l3 3 6-6.2" fill="none" stroke="var(--ds-color-text-on-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="txt"><span class="name">Owen Marchetti</span><span class="s15 sec">Procurement, compared 3 quotes</span></span><span class="tm s15 num">09:40</span>
+      </li>
+      <li class="you">
+        <span class="ico"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="none" stroke="var(--ds-color-bg-accent-bold)" stroke-width="2"/><circle cx="11" cy="11" r="4.5" fill="var(--ds-color-bg-accent-bold)"/></svg></span>
+        <span class="txt"><span class="name">You</span><span class="s15 sec">Department head</span></span><span class="tm s15">Waiting</span>
+      </li>
+      <li>
+        <span class="ico"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="none" stroke="var(--ds-color-neutral-light-8)" stroke-width="2"/></svg></span>
+        <span class="txt"><span class="name">Rhea Kapoor</span><span class="s15 sec">CFO, over $10,000 (FIN-04)</span></span><span class="tm s15">Next</span>
+      </li>
+    </ol>
+
+    <h2 class="hdr under" id="dt">Details</h2>
+    <section class="card rows" aria-labelledby="dt">
+      <div class="r"><span>Then</span><span class="num">PO-10482 to Ashbury, Net 30</span></div>
+      <div class="r"><span>GL account</span><span class="num">6420 Equipment upkeep</span></div>
+      <div class="r"><span>Deliver by</span><span class="num">Wed 21 Oct</span></div>
+    </section>
+  </main>
+
+  <div class="decide">
+    <button class="decline">Decline</button>
+    <button class="approve">Approve $14,860</button>
+  </div>
+  <span class="home" aria-hidden="true"></span>
+</body>
+</html>

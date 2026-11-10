@@ -2,7 +2,7 @@
 type: topic
 title: Feedback, empty and loading states
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -42,3 +42,5 @@ Real apps need empty, loading, success and error states; examples from Dub (empt
 - [[sources/Qsq-Sj_rojU-i-studied-1-460-onboarding-flows-here-s-what-i-found|I Studied 1,460 Onboarding Flows. Here's What I Found.]]: Replace blank empty states with a small nudge, and give loading and verification states smooth animation so long flows stay engaging.
 - [[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]: Mercury shows a game instead of an empty table after all bills are paid, as an example of a non-template empty state.
 - See also: [[synthesis/feedback-empty-and-loading-states|Feedback, empty and loading states synthesis]]
+- [[sources/referodesign-refero-skil-skills-refero-design-references-copywriting-referodesign-refero-skill-skills-refero-design-references-copywriting-md|referodesign/refero_skill: skills/refero-design/references/copywriting.md]]: Error messages follow what happened, why, what next; empty states teach and offer one CTA.
+- [[sources/SAxKK5fbjbc-the-reason-why-some-apps-feel-expensive-but-most-dont|The Reason Why Some Apps Feel Expensive, But Most Don’t]]: Empty states always offer an exit: an alternative route, a first action ('Create your first post'), or an upsell. Loading and analysing screens are treated as designed transitional states. Errors say how to fix the problem.

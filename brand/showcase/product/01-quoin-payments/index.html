@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Receipts · Quoin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+/* Values the engine has no token for (recorded in notes.md):
+   --row: table row height; --sep: row hairline lighter than border.subtle;
+   --float: shadow for floating layers (depth 10 zeroes every elevation, floating included). */
+:root {
+  --row: 36px;
+  --badge: 20px;
+  --sep: var(--ds-color-neutral-light-4);
+  --line: var(--ds-color-neutral-light-5);
+  --float: 0 0 0 1px rgb(35 36 38 / 0.08), 0 4px 8px rgb(35 36 38 / 0.06), 0 12px 32px rgb(35 36 38 / 0.12);
+  --sidebar: 220px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font: var(--ds-text-body-md);
+  font-family: var(--ds-font-family-text);
+  color: var(--ds-color-text-primary);
+  background: var(--ds-color-surface-raised);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-control); }
+svg.i { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+svg.i.s12 { width: 12px; height: 12px; stroke-width: 2; }
+.num { font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--ds-font-family-mono); font-size: var(--ds-font-size-12); letter-spacing: 0; }
+
+.app { display: grid; grid-template-columns: var(--sidebar) 1fr; grid-template-rows: 100vh; height: 100vh; overflow: hidden; }
+
+/* Sidebar */
+.side { min-height: 0; overflow: hidden; background: var(--ds-color-surface-nav); border-right: 1px solid var(--sep); display: flex; flex-direction: column; padding: 12px; gap: 2px; }
+.ws { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 8px; border-radius: var(--ds-radius-control); margin-bottom: 10px; }
+.ws .mark { width: 24px; height: 24px; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); display: grid; place-items: center; }
+.ws .name { font-weight: var(--ds-font-weight-heading); }
+.ws .env { margin-left: auto; color: var(--ds-color-text-tertiary); }
+.nav { display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 8px; border-radius: var(--ds-radius-control); color: var(--ds-color-text-secondary); font-weight: var(--ds-font-weight-label); }
+.nav svg { color: var(--ds-color-icon-subtle); }
+.nav.on { background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); box-shadow: 0 0 0 1px var(--sep); }
+.nav.on svg { color: var(--ds-color-text-primary); }
+.nav .count { margin-left: auto; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); }
+.group { font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); padding: 18px 8px 6px; font-weight: var(--ds-font-weight-label); }
+.side .foot { margin-top: auto; }
+
+/* Top bar */
+.main { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; position: relative; }
+.top { height: 52px; flex: none; display: flex; align-items: center; gap: 12px; padding: 0 24px 0 28px; border-bottom: 1px solid var(--sep); }
+.search { display: flex; align-items: center; gap: 8px; width: 400px; height: var(--ds-size-control-md); padding: 0 8px 0 10px; border-radius: var(--ds-radius-control); background: var(--ds-color-surface-nav); color: var(--ds-color-text-tertiary); }
+.kbd { margin-left: auto; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); border: 1px solid var(--line); border-radius: var(--ds-radius-control-sm); padding: 0 5px; line-height: 18px; background: var(--ds-color-surface-raised); }
+.top .right { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+.iconbtn { width: 32px; height: 32px; display: grid; place-items: center; border-radius: var(--ds-radius-control); color: var(--ds-color-icon-default); }
+.avatar { width: 28px; height: 28px; padding-top: 1px; border-radius: var(--ds-radius-person); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); font-size: var(--ds-font-size-12); font-weight: var(--ds-font-weight-heading); display: grid; place-items: center; margin-left: 8px; }
+
+/* Page */
+.page { padding: 20px 28px 0; display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.head { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.head h1 { font: var(--ds-text-headline-sm); letter-spacing: -0.01em; margin-right: auto; }
+.btn { display: inline-flex; align-items: center; gap: 6px; height: var(--ds-size-control-md); padding: 0 12px; border-radius: var(--ds-radius-control); font-weight: var(--ds-font-weight-label); white-space: nowrap; }
+.btn.sec { border: 1px solid var(--line); background: var(--ds-color-surface-raised); }
+.btn.sec svg { color: var(--ds-color-icon-default); }
+.btn.pri { background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
+.btn.sm { height: 28px; padding: 0 10px; font-size: var(--ds-font-size-12); }
+
+/* Money summary: four figures as plain text, no cards; the tabs below are the filters */
+.sums { display: grid; grid-template-columns: 1.15fr 1.25fr 1fr 1fr; margin-bottom: 14px; }
+.sum { padding: 0 20px; border-left: 1px solid var(--sep); min-width: 0; }
+.sum:first-child { padding-left: 0; border-left: 0; }
+.sum .l { font-size: var(--ds-font-size-12); color: var(--ds-color-text-secondary); font-weight: var(--ds-font-weight-label); }
+.sum .v { font: var(--ds-text-numeric-lg); font-weight: var(--ds-font-weight-label); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; margin: 2px 0 2px; white-space: nowrap; }
+.sum .v .c { color: var(--ds-color-text-tertiary); font-weight: var(--ds-font-weight-body); }
+.sum .m { font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.meter { width: 96px; height: 4px; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-light-4); overflow: hidden; flex: none; }
+.meter i { display: block; height: 100%; background: var(--ds-color-bg-accent-bold); }
+
+/* Work queues as underline tabs, in the order the team works them */
+.tabs { display: flex; gap: 24px; border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+.tab { height: 36px; display: inline-flex; align-items: center; gap: 6px; color: var(--ds-color-text-secondary); font-weight: var(--ds-font-weight-label); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tab .n { font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); font-variant-numeric: tabular-nums; }
+.tab.on { color: var(--ds-color-text-primary); border-bottom-color: var(--ds-color-bg-accent-bold); }
+.tab.on .n { color: var(--ds-color-text-accent); }
+
+/* Filters: one Filter button, then the filters in force */
+.filters { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.chip { display: inline-flex; align-items: center; height: 28px; border: 1px solid var(--line); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-raised); font-size: var(--ds-font-size-12); color: var(--ds-color-text-secondary); white-space: nowrap; padding: 0 4px 0 8px; gap: 6px; }
+.chip b { font-weight: var(--ds-font-weight-label); color: var(--ds-color-text-primary); }
+.chip .clr { display: inline-grid; place-items: center; width: 18px; height: 18px; color: var(--ds-color-icon-subtle); }
+.filters .right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.meta { font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); }
+
+/* Table */
+.tablewrap { position: relative; flex: 1; min-height: 0; overflow: hidden; border-top: 1px solid var(--line); }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+th, td { height: var(--row); padding: 0 10px; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px solid var(--sep); }
+th { font-size: var(--ds-font-size-12); font-weight: var(--ds-font-weight-label); color: var(--ds-color-text-secondary); height: 32px; background: var(--ds-color-surface-raised); }
+th .s { display: inline-flex; align-items: center; gap: 4px; color: var(--ds-color-text-primary); }
+th.r, td.r { text-align: right; }
+td.r { font-variant-numeric: tabular-nums; }
+td.cb, th.cb { width: 36px; padding: 0 4px 0 6px; }
+.box { width: 16px; height: 16px; border-radius: var(--ds-radius-control-sm); border: 1px solid var(--ds-color-border-input); display: grid; place-items: center; background: var(--ds-color-bg-field); }
+.box.on { background: var(--ds-color-bg-accent-bold); border-color: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent); }
+.box.on svg { width: 12px; height: 12px; stroke-width: 2.6; }
+tr.sel td { background: var(--ds-color-bg-accent-subtle); border-bottom-color: var(--ds-color-accent-light-5); }
+tr.open td { background: var(--ds-color-bg-neutral-subtle); }
+.amt { font-weight: var(--ds-font-weight-label); font-variant-numeric: tabular-nums; }
+.amt .c { color: var(--ds-color-text-tertiary); font-weight: var(--ds-font-weight-body); }
+.cur { color: var(--ds-color-text-tertiary); font-size: var(--ds-font-size-12); font-weight: var(--ds-font-weight-label); margin-left: 6px; display: inline-block; width: 26px; text-align: left; }
+.badge { vertical-align: middle; display: inline-flex; align-items: center; gap: 4px; height: var(--badge); padding: 0 6px 0 5px; border-radius: var(--ds-radius-control-sm); font-size: var(--ds-font-size-12); font-weight: var(--ds-font-weight-label); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); font-variant-numeric: tabular-nums; }
+.badge.warn { background: var(--ds-color-bg-warning-subtle); color: var(--ds-color-text-warning); }
+.badge.quiet { background: none; padding-left: 0; }   /* the queue's normal state: icon and word, no fill */
+.ref { font-size: var(--ds-font-size-12); color: var(--ds-color-text-secondary); letter-spacing: 0.02em; }
+.payer-unknown { color: var(--ds-color-text-secondary); font-size: var(--ds-font-size-12); letter-spacing: 0.02em; }   /* the payer's name as the bank sent it */
+.inv { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.inv .mono { color: var(--ds-color-text-primary); }
+.inv .plus { font-size: var(--ds-font-size-12); color: var(--ds-color-text-secondary); font-weight: var(--ds-font-weight-label); margin-left: -4px; }
+.inv .why { font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); overflow: hidden; text-overflow: ellipsis; }
+.inv .none { color: var(--ds-color-text-tertiary); }
+.muted { color: var(--ds-color-text-secondary); }
+.id { color: var(--ds-color-text-tertiary); }
+td.date { color: var(--ds-color-text-secondary); font-variant-numeric: tabular-nums; }
+
+/* Bulk bar: secondary text, icons and dividers are the inverse text mixed into the inverse surface,
+   so they hold in both themes (white at 66% read 1.14:1 on the light bar in dark mode). */
+.bulk { position: absolute; z-index: 4; left: 50%; bottom: 20px; transform: translateX(-50%); display: flex; align-items: center; gap: 2px; height: 44px; padding: 0 6px 0 14px; background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); border-radius: var(--ds-radius-overlay); box-shadow: var(--float); white-space: nowrap; }
+.bulk .n { font-weight: var(--ds-font-weight-label); padding-right: 12px; margin-right: 6px; border-right: 1px solid color-mix(in srgb, var(--ds-color-text-inverse) 16%, var(--ds-color-bg-inverse)); }
+.bulk .n .num { margin-right: 4px; }
+.bulk .sum2 { color: color-mix(in srgb, var(--ds-color-text-inverse) 66%, var(--ds-color-bg-inverse)); font-weight: var(--ds-font-weight-body); margin-left: 8px; }
+.bulk button { height: 32px; padding: 0 10px; border-radius: var(--ds-radius-control); display: inline-flex; align-items: center; gap: 6px; font-weight: var(--ds-font-weight-label); color: var(--ds-color-text-inverse); }
+.bulk button svg { color: color-mix(in srgb, var(--ds-color-text-inverse) 72%, var(--ds-color-bg-inverse)); }
+.bulk .close { width: 32px; padding: 0; justify-content: center; margin-left: 4px; border-left: 1px solid color-mix(in srgb, var(--ds-color-text-inverse) 16%, var(--ds-color-bg-inverse)); border-radius: 0 var(--ds-radius-control) var(--ds-radius-control) 0; }
+
+/* Match panel (?state=match): one receipt, the customer's open invoices, apply */
+.panel { display: none; }
+body.is-match .panel { display: flex; }
+body.is-match .bulk, body.is-empty .bulk { display: none; }
+.panel { position: absolute; z-index: 6; top: 52px; right: 0; bottom: 0; width: 460px; flex-direction: column; background: var(--ds-color-surface-overlay); border-left: 1px solid var(--line); box-shadow: var(--float); }
+.panel .ph { display: flex; align-items: flex-start; gap: 12px; padding: 18px 20px 14px; border-bottom: 1px solid var(--sep); }
+.panel .ph h2 { font: var(--ds-text-title-sm); font-weight: var(--ds-font-weight-heading); }
+.panel .ph p { color: var(--ds-color-text-secondary); margin-top: 2px; }
+.panel .ph .iconbtn { margin: -4px -8px 0 auto; }
+.facts { display: grid; grid-template-columns: 112px 1fr; row-gap: 8px; padding: 14px 20px 16px; border-bottom: 1px solid var(--sep); }
+.facts dt { font-size: var(--ds-font-size-12); color: var(--ds-color-text-secondary); font-weight: var(--ds-font-weight-label); line-height: 20px; }
+.facts dd { line-height: 20px; }
+.pbody { padding: 16px 20px 0; flex: 1; min-height: 0; }
+.pbody .lh { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.pbody .lh b { font-weight: var(--ds-font-weight-label); }
+.oi { display: grid; grid-template-columns: 24px 1fr auto; align-items: center; column-gap: 8px; height: 52px; border-bottom: 1px solid var(--sep); }
+.oi:first-of-type { border-top: 1px solid var(--sep); }
+.oi .t { display: block; }
+.oi .s { display: block; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); }
+.oi .s.late { color: var(--ds-color-text-warning); }
+.oi.on { background: var(--ds-color-bg-accent-subtle); }
+.oi .amt { text-align: right; }
+.hint { display: flex; gap: 8px; align-items: flex-start; margin-top: 14px; color: var(--ds-color-text-secondary); font-size: var(--ds-font-size-12); line-height: 1.45; }
+.hint svg { margin-top: 1px; color: var(--ds-color-icon-subtle); }
+.rule { display: grid; grid-template-columns: 24px 1fr; column-gap: 8px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--sep); }
+.rule .box { margin-top: 2px; }
+.rule .t { display: block; }
+.rule .s { display: block; font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); margin-top: 2px; }
+.tally { margin: 16px 20px 0; padding: 12px 0 0; border-top: 1px solid var(--ds-color-neutral-light-6); display: grid; grid-template-columns: 1fr auto; row-gap: 4px; }
+.tally .k { color: var(--ds-color-text-secondary); }
+.tally .x { text-align: right; font-variant-numeric: tabular-nums; }
+.tally .ok { color: var(--ds-color-text-success); font-weight: var(--ds-font-weight-label); display: inline-flex; align-items: center; gap: 4px; }
+.pf { display: flex; gap: 8px; align-items: center; padding: 14px 20px; border-top: 1px solid var(--sep); margin-top: 16px; }
+.pf .btn.pri { margin-left: auto; }
+
+/* Empty-filter frame (?state=empty) */
+.emptystate { display: none; }
+body.is-empty .emptystate { display: flex; }
+body.is-empty tbody { display: none; }
+.emptystate { flex-direction: column; align-items: center; text-align: center; padding: 80px 0 0; }
+.emptystate .ico { width: 36px; height: 36px; border-radius: var(--ds-radius-container); border: 1px solid var(--line); display: grid; place-items: center; color: var(--ds-color-icon-default); margin-bottom: 14px; }
+.emptystate h2 { font: var(--ds-text-title-sm); font-weight: var(--ds-font-weight-heading); }
+.emptystate p { color: var(--ds-color-text-secondary); max-width: 440px; margin: 4px 0 16px; }
+.emptystate .acts { display: flex; gap: 8px; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v12h14V9"/></symbol>
+  <symbol id="file" viewBox="0 0 24 24"><path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></symbol>
+  <symbol id="receipt" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></symbol>
+  <symbol id="users" viewBox="0 0 24 24"><path d="M16 20v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 18.5V20"/><circle cx="10" cy="8" r="3.5"/><path d="M20 20v-1.5a3.5 3.5 0 0 0-2.5-3.35"/><path d="M15.5 4.6a3.5 3.5 0 0 1 0 6.8"/></symbol>
+  <symbol id="credit" viewBox="0 0 24 24"><path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z"/><path d="M14 3v5h5"/><path d="M9 14h6"/></symbol>
+  <symbol id="bank" viewBox="0 0 24 24"><path d="M3 9.5 12 4l9 5.5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20.5h18"/></symbol>
+  <symbol id="stmt" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+  <symbol id="ledger" viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5z"/><path d="M13 4h5.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H13z"/></symbol>
+  <symbol id="cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></symbol>
+  <symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></symbol>
+  <symbol id="bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6.5 2.5 8 2.5 8h-17S6 15.5 6 9"/><path d="M10.3 20.5a2 2 0 0 0 3.4 0"/></symbol>
+  <symbol id="help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 4.9.7c0 1.8-2.4 2.2-2.4 3.8"/><path d="M12 17.2h.01"/></symbol>
+  <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="upload" viewBox="0 0 24 24"><path d="M12 15V4M7 8.5l5-5 5 5M5 20h14"/></symbol>
+  <symbol id="filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+  <symbol id="rules" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
+  <symbol id="x" viewBox="0 0 24 24"><path d="M17 7 7 17M7 7l10 10"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="M19.5 6.5 9 17l-4.5-4.5"/></symbol>
+  <symbol id="link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></symbol>
+  <symbol id="short" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12h7"/></symbol>
+  <symbol id="split" viewBox="0 0 24 24"><path d="M5 12h6M11 12l7-6M11 12l7 6"/><circle cx="19" cy="6" r="1.5"/><circle cx="19" cy="18" r="1.5"/></symbol>
+  <symbol id="nomatch" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" stroke-dasharray="3 2.6"/><path d="M12 8v4.5M12 16h.01"/></symbol>
+  <symbol id="wallet" viewBox="0 0 24 24"><path d="M4 7.5A1.5 1.5 0 0 1 5.5 6H18v3"/><path d="M4 7.5v10A1.5 1.5 0 0 0 5.5 19H20V9H5.5A1.5 1.5 0 0 1 4 7.5z"/><path d="M16 14h.01"/></symbol>
+  <symbol id="assign" viewBox="0 0 24 24"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20v-1A4.5 4.5 0 0 1 8 14.5h4"/><path d="M18 14v6M15 17h6"/></symbol>
+  <symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></symbol>
+  <symbol id="chev" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
+  <symbol id="arrowdown" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+  <symbol id="minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+</svg>
+
+<div class="app">
+  <aside class="side" aria-label="Workspace navigation">
+    <div class="ws">
+      <span class="mark" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="1" width="7" height="4"/><rect x="1" y="6" width="4" height="7"/><rect x="6" y="9" width="7" height="4" opacity=".55"/><rect x="9" y="1" width="4" height="7" opacity=".55"/></svg>
+      </span>
+      <span class="name">Tamsin &amp; Rowe</span>
+      <svg class="i env"><use href="#chev"/></svg>
+    </div>
+    <a class="nav"><svg class="i"><use href="#home"/></svg>Overview</a>
+    <a class="nav"><svg class="i"><use href="#file"/></svg>Invoices</a>
+    <a class="nav on" aria-current="page"><svg class="i"><use href="#receipt"/></svg>Receipts<span class="count num" id="navcount">192</span></a>
+    <a class="nav"><svg class="i"><use href="#users"/></svg>Customers</a>
+    <a class="nav"><svg class="i"><use href="#credit"/></svg>Credit notes</a>
+    <a class="nav"><svg class="i"><use href="#bank"/></svg>Deposits</a>
+    <div class="group">Month end</div>
+    <a class="nav"><svg class="i"><use href="#stmt"/></svg>Statements</a>
+    <a class="nav"><svg class="i"><use href="#ledger"/></svg>Ledger export</a>
+    <div class="foot">
+      <a class="nav"><svg class="i"><use href="#cog"/></svg>Settings</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <label class="search"><svg class="i"><use href="#search"/></svg><span>Search receipts, invoices, references</span><span class="kbd">⌘K</span></label>
+      <div class="right">
+        <button class="iconbtn" aria-label="Help"><svg class="i"><use href="#help"/></svg></button>
+        <button class="iconbtn" aria-label="Notifications"><svg class="i"><use href="#bell"/></svg></button>
+        <span class="avatar" aria-label="Celeste Arnaud">CA</span>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="head">
+        <h1>Receipts</h1>
+        <button class="btn sec"><svg class="i"><use href="#upload"/></svg>Import bank file</button>
+        <button class="btn pri"><svg class="i"><use href="#plus"/></svg>Record receipt</button>
+      </div>
+
+      <div class="sums" id="sums"></div>
+      <nav class="tabs" role="tablist" aria-label="Receipt queues" id="tabs"></nav>
+      <div class="filters" id="filters"></div>
+
+      <div class="tablewrap">
+        <table aria-label="Receipts to match">
+          <colgroup>
+            <col style="width:36px"><col style="width:112px"><col style="width:180px"><col style="width:152px"><col style="width:104px"><col style="width:132px"><col style="width:140px"><col><col style="width:92px">
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="cb"><span class="box on" aria-label="3 of 192 selected"><svg class="i"><use href="#minus"/></svg></span></th>
+              <th><span class="s">Received <svg class="i s12"><use href="#arrowdown"/></svg></span></th>
+              <th>Customer</th>
+              <th>Their reference</th>
+              <th>Paid by</th>
+              <th class="r">Amount</th>
+              <th>Match</th>
+              <th>Invoice</th>
+              <th>Receipt</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <div class="emptystate" role="status">
+          <div class="ico"><svg class="i"><use href="#check"/></svg></div>
+          <h2>Nothing to match for Penwarden Hotels</h2>
+          <p>All 12 of their receipts from Oct 1 to 14 are accounted for: 11 are matched to invoices, and $212.40 is held as credit on their account.</p>
+          <div class="acts">
+            <button class="btn sec">Clear customer filter</button>
+          </div>
+        </div>
+        <div class="bulk" role="toolbar" aria-label="Bulk actions">
+          <span class="n"><span class="num">3</span>selected<span class="sum2 num">$21,162.82 USD</span></span>
+          <button><svg class="i"><use href="#check"/></svg>Confirm matches</button>
+          <button><svg class="i"><use href="#wallet"/></svg>Hold as credit</button>
+          <button><svg class="i"><use href="#assign"/></svg>Assign…</button>
+          <button class="close" aria-label="Clear selection"><svg class="i"><use href="#x"/></svg></button>
+        </div>
+      </div>
+    </main>
+
+    <aside class="panel" role="dialog" aria-label="Match receipt RC-412846">
+      <div class="ph">
+        <div>
+          <h2>Match $12,960.00 from Stonebridge Hall</h2>
+          <p>Two sets of their open invoices add up to this amount, so Quoin left it for you.</p>
+        </div>
+        <button class="iconbtn" aria-label="Close"><svg class="i"><use href="#x"/></svg></button>
+      </div>
+      <dl class="facts">
+        <dt>Received</dt><dd class="num">Oct 14, 08:30 · ACH</dd>
+        <dt>Their reference</dt><dd><span class="ref">PAYMENT</span></dd>
+        <dt>Deposited to</dt><dd class="num">Operating USD ••6120, Oct 14</dd>
+        <dt>Receipt</dt><dd><span class="mono id">RC-412846</span></dd>
+      </dl>
+      <div class="pbody">
+        <div class="lh"><b>Open invoices · 4</b><span class="meta">Oldest first</span></div>
+        <div class="oi on"><span class="box on"><svg class="i"><use href="#check"/></svg></span><span><span class="t mono">TR-256178</span><span class="s late num">Due Oct 11 · 3 days late</span></span><span class="amt num">$4,320<span class="c">.00</span></span></div>
+        <div class="oi on"><span class="box on"><svg class="i"><use href="#check"/></svg></span><span><span class="t mono">TR-257326</span><span class="s num">Due Oct 18</span></span><span class="amt num">$8,640<span class="c">.00</span></span></div>
+        <div class="oi"><span class="box"></span><span><span class="t mono">TR-258479</span><span class="s num">Due Oct 25</span></span><span class="amt num">$8,640<span class="c">.00</span></span></div>
+        <div class="oi"><span class="box"></span><span><span class="t mono">TR-259625</span><span class="s num">Due Nov 1</span></span><span class="amt num">$2,118<span class="c">.60</span></span></div>
+        <p class="hint"><svg class="i s12"><use href="#info"/></svg><span>TR-257326 and TR-258479 are both weekly deliveries of $8,640.00. Paying the earlier one clears the late invoice and the next one due.</span></p>
+        <label class="rule"><span class="box"></span><span><span class="t">Next time, apply Stonebridge Hall's unreferenced payments to their oldest invoices first</span><span class="s">Adds a match rule for this customer</span></span></label>
+      </div>
+      <div class="tally num">
+        <span class="k">Selected, 2 invoices</span><span class="x">$12,960.00</span>
+        <span class="k">Received</span><span class="x">$12,960.00</span>
+        <span class="k">Left over</span><span class="x"><span class="ok"><svg class="i s12"><use href="#check"/></svg>$0.00</span></span>
+      </div>
+      <div class="pf">
+        <button class="btn sec"><svg class="i"><use href="#wallet"/></svg>Hold as credit</button>
+        <button class="btn pri">Apply to 2 invoices</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+/* One temporary state per frame: the main frame has three suggested matches selected and the bulk bar;
+   ?state=match opens the match panel for one receipt with nothing selected; ?state=empty filters to nothing. */
+const state = new URLSearchParams(location.search).get('state');
+const empty = state === 'empty', match = state === 'match';
+if (empty) document.body.classList.add('is-empty');
+if (match) document.body.classList.add('is-match');
+if (empty || match) {
+  const hb = document.querySelector('th.cb .box'); hb.className = 'box'; hb.innerHTML = ''; hb.setAttribute('aria-label', 'Select all');
+}
+
+const use = (id, cls = '') => `<svg class="i ${cls}"><use href="#${id}"/></svg>`;
+const money = (v, sym = '$') => {
+  const [w, c] = Number(v).toFixed(2).split('.');
+  return `${sym}${Number(w).toLocaleString('en-US')}<span class="c">.${c}</span>`;
+};
+
+/* Money for Oct 1-14, in USD at booking rates (EUR 1.165, GBP 1.34). Matched + waiting + held = received:
+   $2,492,802.73 + $311,482.09 + $41,906.55 = $2,846,191.37 (2,163 + 192 + 63 = 2,418 receipts); matched is 87.58%.
+   The 19 rows below come to $148,599.49 of the $311,482.09 waiting; the other 173 average about $940. */
+const S = empty
+  ? { rec: '18422.60', recN: '12 receipts', mat: '18210.20', pct: 98.8, matN: '11 receipts', wait: '0.00', waitN: '0 receipts', held: '212.40', heldN: '1 receipt' }
+  : { rec: '2846191.37', recN: '2,418 receipts · USD at booking rates', mat: '2492802.73', pct: 87.6, matN: '2,163 receipts', wait: '311482.09', waitN: '192 receipts · oldest from Oct 9', held: '41906.55', heldN: '63 receipts on 58 accounts' };
+document.getElementById('sums').innerHTML = `
+  <div class="sum"><div class="l">Received</div><div class="v">${money(S.rec)}</div><div class="m">${S.recN}</div></div>
+  <div class="sum"><div class="l">Matched to invoices</div><div class="v">${money(S.mat)}</div><div class="m"><span class="meter" aria-hidden="true"><i style="width:${S.pct}%"></i></span>${S.pct}% of value · ${S.matN}</div></div>
+  <div class="sum"><div class="l">Waiting to match</div><div class="v">${money(S.wait)}</div><div class="m">${S.waitN}</div></div>
+  <div class="sum"><div class="l">Held as credit</div><div class="v">${money(S.held)}</div><div class="m">${S.heldN}</div></div>`;
+
+/* Queues in the order the team works them; counts add up to All. */
+const T = empty ? [['To match', '0', 1], ['Held as credit', '1'], ['Matched', '11'], ['All', '12']]
+               : [['To match', '192', 1], ['Held as credit', '63'], ['Matched', '2,163'], ['All', '2,418']];
+document.getElementById('tabs').innerHTML = T.map(([l, n, on]) =>
+  `<a class="tab${on ? ' on' : ''}" role="tab" aria-selected="${!!on}">${l}<span class="n">${n}</span></a>`).join('');
+if (empty) document.getElementById('navcount').textContent = '192';
+
+document.getElementById('filters').innerHTML = `
+  <button class="btn sec sm"><svg class="i s12"><use href="#filter"/></svg>Filter</button>
+  <span class="chip">Received <b>Oct 1 – 14</b><span class="clr">${use('x', 's12')}</span></span>
+  ${empty ? `<span class="chip">Customer <b>Penwarden Hotels</b><span class="clr">${use('x', 's12')}</span></span>` : ''}
+  <div class="right"><span class="meta">${empty ? '0 receipts' : '192 receipts'} · newest first · bank feeds updated 11:06 · times in EDT (UTC−4)</span>
+    <button class="btn sec sm"><svg class="i s12"><use href="#rules"/></svg>Match rules</button></div>`;
+
+/* Receipts waiting to match, newest first (Wed Oct 14 back to Tue Oct 13, EDT). Bank money only: card orders
+   match themselves. Rates that hold the page together, over Oct 1-14 (10 working days):
+   - receipts: 2,418, about 250 a working day; receipt numbers run on at that rate (RC-412603 at Oct 13 05:00 to
+     RC-412917 at Oct 14 11:04 is 314, about 1.25 working days);
+   - invoices: Tamsin & Rowe issues about 230 a working day; TR-261480 was issued this morning, so an invoice on
+     Net 30 due today is about TR-256300.
+   Arrival times: next-day ACH settles at 08:30 ET and the first same-day window at 13:00, the lockbox check file
+   lands at 09:40, SEPA credits at 05:00 (11:00 CEST), Bacs at 02:10 (07:10 BST); wires and Faster Payments any time.
+   Exact-amount rows are only suggestions because the reference names no invoice ("amount only").
+   [received, customer (null: the bank's payer name, not a customer), reference, paid by, amount, currency, match,
+    invoice, extra invoices, note, receipt, selected] */
+const R = [
+  ['Oct 14, 11:04', 'Lakemont Resort & Spa', 'LRS AP WIRE 1014', 'Wire', '18400.00', 'USD', ['short', '25.00'], 'TR-256379', 0, '$18,425.00 billed', 'RC-412917'],
+  ['Oct 14, 10:52', 'VARNHOLD HOSP GRP LLC', 'INV OCT 77-3815', 'Wire', '7912.40', 'USD', ['none'], null, 0, 'payer is not a customer', 'RC-412911', 0, 1],
+  ['Oct 14, 10:12', 'Coldwater Bay Hotel', 'CBH REFIT STAGE 2', 'Wire', '26015.33', 'USD', ['part'], 'TR-253740', 0, 'leaves $14,544.67', 'RC-412893'],
+  ['Oct 14, 09:40', 'Rosemount House Hotel', 'ROSEMOUNT HOUSE', 'Check 7716', '14250.00', 'USD', ['sug'], 'TR-256641', 0, 'amount only, no ref', 'RC-412872'],
+  ['Oct 14, 09:40', 'Hawthorn Steakhouse', '—', 'Check 3302', '1500.00', 'USD', ['none'], null, 0, '3 open, none this size', 'RC-412869'],
+  ['Oct 14, 08:30', 'Stonebridge Hall', 'PAYMENT', 'ACH', '12960.00', 'USD', ['two'], null, 0, '4 open invoices', 'RC-412846'],
+  ['Oct 14, 08:30', 'Cordwain Coffee Co.', 'CORDWAIN COFFEE', 'ACH', '452.08', 'USD', ['sug'], 'TR-259068', 0, 'amount only, no ref', 'RC-412841', 1],
+  ['Oct 14, 08:30', 'Brine Street Oyster Bar', 'BRINE ST OYSTER BAR', 'ACH', '1029.99', 'USD', ['sug'], 'TR-258933', 0, 'amount only, no ref', 'RC-412838', 1],
+  ['Oct 14, 08:30', 'Grayson Ridge Vineyards', 'GRV AP 5208', 'ACH', '19680.75', 'USD', ['sug'], 'TR-255872', 1, 'sum of 2', 'RC-412833', 1],
+  ['Oct 14, 08:30', 'Silverpine Lodge', 'SILVERPINE LDG LLC', 'ACH', '6400.00', 'USD', ['short', '112.50'], 'TR-256760', 0, '$6,512.50 billed', 'RC-412822'],
+  ['Oct 14, 08:30', 'Thackery Inn', 'THACKERY INN OCT', 'ACH', '3399.00', 'USD', ['sug'], 'TR-257499', 0, 'amount only, no ref', 'RC-412815'],
+  ['Oct 14, 05:00', 'Ravintola Kuusiluoto Oy', 'LASKUT SYYSKUU', 'SEPA credit', '7340.00', 'EUR', ['sug'], 'TR-254547', 1, 'sum of 2', 'RC-412788'],
+  ['Oct 14, 05:00', 'Grand Café Hoeksma BV', 'FACTUUR SEPT', 'SEPA credit', '2730.60', 'EUR', ['sug'], 'TR-256260', 0, 'amount only, no ref', 'RC-412784'],
+  ['Oct 14, 05:00', 'Hotel Brakelduin BV', 'BRAKELDUIN REF 0911', 'SEPA credit', '4012.00', 'EUR', ['short', '35.00'], 'TR-256132', 0, '€4,047.00 billed', 'RC-412779'],
+  ['Oct 14, 02:10', 'Haddleby Inns Ltd', 'HADDLEBY INNS', 'Bacs', '2215.40', 'GBP', ['sug'], 'TR-256216', 0, 'amount only, no ref', 'RC-412760'],
+  ['Oct 14, 02:10', 'Eastbrook Catering Ltd', 'EASTBROOK OCT', 'Bacs', '9724.50', 'GBP', ['none'], null, 0, '2 open, none this size', 'RC-412757'],
+  ['Oct 13, 16:12', 'GRANTHORPE EVENTS LTD', '1310 PAYMENT', 'FPS', '612.00', 'GBP', ['none'], null, 0, 'payer is not a customer', 'RC-412716', 0, 1],
+  ['Oct 13, 13:00', 'Linwood Hall Catering', 'LINWOOD HALL', 'ACH', '1188.14', 'USD', ['sug'], 'TR-258873', 0, 'amount only, no ref', 'RC-412668'],
+  ['Oct 13, 05:00', 'Maison Delacroix Traiteur', 'FACTURE 25761', 'SEPA credit', '1876.42', 'EUR', ['sug'], 'TR-255761', 0, 'reference close', 'RC-412603'],
+];
+const SYM = { USD: '$', EUR: '€', GBP: '£' };
+const MATCH = {
+  sug:   (m) => `<span class="badge quiet">${use('link', 's12')}Suggested</span>`,
+  part:  (m) => `<span class="badge quiet">${use('link', 's12')}Part payment</span>`,
+  two:   (m) => `<span class="badge">${use('split', 's12')}2 sets fit</span>`,
+  short: (m, cur) => `<span class="badge">${use('short', 's12')}Short ${SYM[cur]}${Number(m[1]).toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>`,
+  none:  (m) => `<span class="badge warn">${use('nomatch', 's12')}No match</span>`,
+};
+document.getElementById('rows').innerHTML = R.map(([when, cust, ref, by, v, cur, m, inv, more, note, id, sel, payer]) => {
+  if (empty || match) sel = 0;
+  const cur2 = match && id === 'RC-412846';
+  const invoice = inv
+    ? `<span class="inv"><span class="mono">${inv}</span>${more ? `<span class="plus">+${more}</span>` : ''}<span class="why">${note}</span></span>`
+    : `<span class="inv"><span class="none">—</span><span class="why">${note}</span></span>`;
+  return `<tr${sel ? ' class="sel" aria-selected="true"' : cur2 ? ' class="open"' : ''}>
+    <td class="cb"><span class="box${sel ? ' on' : ''}">${sel ? use('check') : ''}</span></td>
+    <td class="date">${when}</td>
+    <td>${payer ? `<span class="payer-unknown">${cust}</span>` : cust}</td>
+    <td><span class="ref">${ref}</span></td>
+    <td class="muted">${by}</td>
+    <td class="r"><span class="amt">${money(v, SYM[cur])}</span><span class="cur">${cur}</span></td>
+    <td>${MATCH[m[0]](m, cur)}</td>
+    <td>${invoice}</td>
+    <td><span class="mono id">${id}</span></td>
+  </tr>`;
+}).join('');
+</script>
+</body>
+</html>

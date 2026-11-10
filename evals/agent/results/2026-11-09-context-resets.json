@@ -1,0 +1,92 @@
+{
+  "kind": "agent",
+  "date": "2026-11-09",
+  "commit": "85fcf22",
+  "skillsRef": "working tree",
+  "label": "context-resets",
+  "model": "sonnet",
+  "judgeModel": "haiku",
+  "runsPerArm": 1,
+  "claudeVersion": "2.1.302",
+  "overallScore": 0.5148148148148148,
+  "meanDelta": 0.11851851851851852,
+  "casesPassed": 9,
+  "casesTotal": 9,
+  "costUsd": 2.6007443,
+  "durationSeconds": 402,
+  "partial": false,
+  "cases": [
+    {
+      "name": "contrast-floor",
+      "score": 1,
+      "without": 1.0,
+      "delta": 0,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "no-identity-copy",
+      "score": 0,
+      "without": 0.0,
+      "delta": 0,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "one-question-first",
+      "score": 0.5,
+      "without": 0.5,
+      "delta": 0,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "one-question-per-call",
+      "score": 0.5,
+      "without": 0.5,
+      "delta": 0,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "redesign-audits-first",
+      "score": 0.3333333333333333,
+      "without": 0.667,
+      "delta": -0.3333333333333333,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "research-no-web",
+      "score": 0.5,
+      "without": 0.5,
+      "delta": 0,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "sketch-five-answers",
+      "score": 0.8,
+      "without": 0.4,
+      "delta": 0.4,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "taste-all-past",
+      "score": 1,
+      "without": 0.0,
+      "delta": 1,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "taste-leaves-out",
+      "score": 0,
+      "without": 0.0,
+      "delta": 0,
+      "runs": 1,
+      "errors": []
+    }
+  ]
+}

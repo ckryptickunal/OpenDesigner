@@ -1,0 +1,9 @@
+# Build output and caches; the sources are build.py, content/ and static/.
+dist/
+preview/
+.cache/
+__pycache__/
+.vercel
+.env*
+.env.local
+.env*

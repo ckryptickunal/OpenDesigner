@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Off scale ds</title>
+<!-- Checker eval fixture for skills/opendesigner-preflight/scripts/preflight.py html (--medium web). Planted: an 18px label when the page's scale, named the way the OpenDesigner engine exports it (--ds-font-size-*), is 14, 16, 20, 24 and 32 px (a warning, M2). off-scale.html is the same page with --fs-* names.
+     Expected findings are in evals/checkers/manifest.json. -->
+<style>
+:root { --ds-font-size-14: 14px; --ds-font-size-16: 16px; --ds-font-size-20: 20px; --ds-font-size-24: 24px; --ds-font-size-32: 32px; }
+body { margin: 0; padding: 24px; font-family: system-ui, sans-serif; font-size: var(--ds-font-size-16); line-height: 1.5; }
+h1 { font-size: var(--ds-font-size-32); line-height: 1.2; }
+h2 { font-size: var(--ds-font-size-24); }
+.meta { font-size: var(--ds-font-size-14); }
+.badge-label { font-size: 18px; }
+</style>
+</head>
+<body>
+<h1>Team</h1>
+<h2>Members</h2>
+<p>Four people.</p>
+<p class="meta">Owner: you.</p>
+<p class="badge-label">Pro</p>
+</body>
+</html>

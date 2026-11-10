@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tracking break tween</title>
+<!-- Checker eval fixture for skills/opendesigner-preflight/scripts/preflight.py html (--medium web). Planted: (1) a heading tracked at -0.05em, tighter than -0.03em (M5); (2) a <br> inside a heading (M7); (3) a script tween that animates width, a layout property (M18). Three warnings.
+     Expected findings are in evals/checkers/manifest.json. -->
+<style>
+:root { --fs-sm: 14px; --fs-md: 16px; --fs-lg: 20px; --fs-xl: 24px; --fs-2xl: 32px; }
+body { margin: 0; padding: 24px; font-family: system-ui, sans-serif; font-size: var(--fs-md); line-height: 1.5; }
+h1 { font-size: var(--fs-2xl); line-height: 1.2; }
+h2 { font-size: var(--fs-xl); }
+.meta { font-size: var(--fs-sm); }
+.hero-title { letter-spacing: -0.05em; }
+.bar { height: 8px; background: #1f4fd8; }
+</style>
+</head>
+<body>
+<h1 class="hero-title">Ship it<br>today</h1>
+<div class="bar"></div>
+<script>
+  // a GSAP-style call; the library is not loaded, the checker reads the source
+  window.gsap && gsap.to(".bar", { width: 320, duration: 0.4 });
+</script>
+</body>
+</html>

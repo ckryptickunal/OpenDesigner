@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kumo Kōbō: bowls made slowly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Outside the tokens, on purpose (see notes.md):
+     - the ink painting and paper fibres are canvas art; their greys are mixed from neutral tokens with alpha
+     - display text at weight 400: the engine's lightest heading weight is 600 */
+  :root {
+    --paper: var(--ds-color-neutral-light-3);
+    --sumi: var(--ds-color-neutral-light-12);
+    --seal: var(--ds-color-accent-light-9);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body { background: var(--paper); color: var(--sumi); font: var(--ds-text-body-md); overflow: hidden; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+  .page { position: relative; height: 100vh; height: 100svh; min-height: 820px; overflow: hidden; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  nav { position: relative; z-index: 3; display: flex; justify-content: space-between; align-items: baseline; padding: var(--ds-space-40) var(--ds-space-64) 0; }
+  .wm { font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-20); letter-spacing: 0.06em; display: flex; align-items: baseline; gap: var(--ds-space-12); }
+  .wm span { font-size: var(--ds-font-size-13); letter-spacing: 0.3em; color: var(--ds-color-text-secondary); }
+  .links { display: flex; gap: var(--ds-space-32); font-size: var(--ds-font-size-13); letter-spacing: 0.08em; color: var(--ds-color-text-secondary); }
+  .links a { min-height: var(--ds-size-target-pointer); display: inline-flex; align-items: center; }
+  .links a:hover, .links a.on { color: var(--sumi); }
+  .links a.on { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1px; }
+
+  .inscription { position: absolute; z-index: 2; left: 892px; top: 168px; writing-mode: vertical-rl; text-orientation: upright;
+                 font-family: var(--ds-font-family-display); font-size: var(--ds-font-size-25); letter-spacing: 0.42em; line-height: 1.9; }
+  .inscription small { font-size: var(--ds-font-size-13); letter-spacing: 0.3em; color: var(--ds-color-text-secondary); margin-top: var(--ds-space-24); display: inline-block; }
+  .seal { position: absolute; z-index: 2; left: 896px; top: 676px; width: 40px; height: 40px; }
+
+  .copy { position: absolute; z-index: 2; left: 1024px; top: 372px; width: 376px; }
+  .label { font-size: var(--ds-font-size-13); letter-spacing: 0.16em; color: var(--ds-color-text-secondary); display: flex; gap: var(--ds-space-12); align-items: center; }
+  .label::before { content: ""; width: 24px; height: 1px; background: currentColor; }
+  h1 { margin-top: var(--ds-space-20); font-family: var(--ds-font-family-display); font-weight: 400; font-size: var(--ds-font-size-39);
+       line-height: 1.3; letter-spacing: 0.01em; text-wrap: balance; }
+  .lede { margin-top: var(--ds-space-20); font-size: var(--ds-font-size-16); line-height: 1.8; color: var(--ds-color-text-secondary); }
+  .ctas { margin-top: var(--ds-space-32); display: flex; flex-direction: column; gap: var(--ds-space-12); align-items: flex-start; }
+  .cta { font-size: var(--ds-font-size-16); display: inline-flex; gap: var(--ds-space-12); align-items: center; min-height: var(--ds-size-control-sm);
+         border-bottom: 1px solid var(--sumi); transition: gap var(--ds-motion-duration-medium) var(--ds-motion-easing-standard); }
+  .cta:hover { gap: var(--ds-space-20); }
+  .cta.quiet { border-bottom-color: var(--ds-color-border-strong); color: var(--ds-color-text-secondary); }
+
+  .caption { position: absolute; z-index: 2; left: 160px; top: 712px; font-size: var(--ds-font-size-13); line-height: 1.7; color: var(--ds-color-text-secondary); letter-spacing: 0.04em; }
+  .caption b { display: block; font-family: var(--ds-font-family-display); font-weight: 500; color: var(--sumi); font-size: var(--ds-font-size-16); letter-spacing: 0.02em; }
+
+  .foot { position: absolute; z-index: 2; left: var(--ds-space-64); right: var(--ds-space-64); bottom: var(--ds-space-40); display: flex; justify-content: space-between;
+          font-size: var(--ds-font-size-13); letter-spacing: 0.08em; color: var(--ds-color-text-secondary); }
+  .count { display: flex; gap: var(--ds-space-12); align-items: center; }
+  .count i { display: block; width: 64px; height: 1px; background: var(--ds-color-border-default); position: relative; }
+  .count i::after { content: ""; position: absolute; left: 0; top: 0; height: 1px; width: 16%; background: var(--sumi); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    canvas { animation: ink var(--ds-motion-duration-reveal) var(--ds-motion-easing-enter) both; }
+    @keyframes ink { from { opacity: 0; } }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <canvas id="paper" aria-hidden="true"></canvas>
+
+  <nav aria-label="Main">
+    <a class="wm" href="#" aria-label="Kumo Kōbō, home">Kumo Kōbō <span lang="ja">雲工房</span></a>
+    <div class="links"><a class="on" href="#">Works</a><a href="#">The kiln</a><a href="#">Visit</a><a href="#">Journal</a><a href="#">Shop (0)</a></div>
+  </nav>
+
+  <p class="inscription" lang="ja">土をこね、火を待つ。<small>雲工房　陶</small></p>
+  <svg class="seal" viewBox="0 0 40 40" aria-hidden="true">
+    <defs><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.2"/></filter></defs>
+    <g filter="url(#rough)"><rect x="2" y="2" width="36" height="36" rx="3" fill="var(--ds-color-accent-light-9)"/>
+    <text x="20" y="28.5" text-anchor="middle" font-family="Shippori Mincho" font-weight="600" font-size="23" fill="var(--ds-color-neutral-light-2)">雲</text></g>
+  </svg>
+
+  <section class="copy">
+    <p class="label">Wood-fired stoneware · since 1998</p>
+    <h1>Bowls made slowly, fired in wood.</h1>
+    <p class="lede">Two potters, one wood-burning kiln, clay dug a short walk from the door. Each firing takes three days; we open the kiln twice a year.</p>
+    <div class="ctas">
+      <a class="cta" href="#">See the autumn kiln opening <span aria-hidden="true">→</span></a>
+      <a class="cta quiet" href="#">Visit the workshop</a>
+    </div>
+  </section>
+
+  <p class="caption"><b>No. 214, tea bowl</b><span style="display:block">Iron glaze, ash run · 11.5 × 8 cm</span></p>
+
+  <div class="foot"><span>Autumn opening · 2 November</span><span class="count">01 <i></i> 06</span></div>
+</div>
+<script>
+(() => {
+  const css = getComputedStyle(document.documentElement), tok = n => css.getPropertyValue(n).trim();
+  const cv = document.getElementById('paper'), W = innerWidth, H = innerHeight, dpr = devicePixelRatio || 1;
+  cv.width = W * dpr; cv.height = H * dpr;
+  let ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
+  let seed = 214;
+  const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+  const G = 256, perm = Array.from({length: G}, rnd);
+  const n1 = x => { const i = Math.floor(x), f = x - i, u = f * f * (3 - 2 * f); return perm[i & 255] * (1 - u) + perm[(i + 1) & 255] * u; };
+  const hexA = (hex, a) => { const h = hex.replace('#', ''); return `rgba(${parseInt(h.slice(0, 2), 16)},${parseInt(h.slice(2, 4), 16)},${parseInt(h.slice(4, 6), 16)},${a})`; };
+  const SUMI = tok('--ds-color-neutral-light-12'), GREY = tok('--ds-color-neutral-light-10'), WASH = tok('--ds-color-neutral-light-8');
+
+  // ---- paper: base, fibres, grain
+  ctx.fillStyle = tok('--ds-color-neutral-light-3'); ctx.fillRect(0, 0, W, H);
+  const lg = ctx.createRadialGradient(W * 0.38, H * 0.5, 0, W * 0.38, H * 0.5, W * 0.8);
+  lg.addColorStop(0, hexA(tok('--ds-color-neutral-light-1'), 0.7)); lg.addColorStop(1, hexA(tok('--ds-color-neutral-light-5'), 0.5));
+  ctx.fillStyle = lg; ctx.fillRect(0, 0, W, H);
+  for (let i = 0; i < 2600; i++) {
+    const x = rnd() * W, y = rnd() * H, l = 6 + rnd() * 26, a = rnd() * Math.PI * 2, c = rnd() < 0.5;
+    ctx.strokeStyle = c ? hexA(tok('--ds-color-neutral-light-1'), 0.5) : hexA(tok('--ds-color-neutral-light-8'), 0.08);
+    ctx.lineWidth = 0.4 + rnd() * 0.6;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(x + Math.cos(a + 0.6) * l * 0.6, y + Math.sin(a + 0.6) * l * 0.6, x + Math.cos(a) * l, y + Math.sin(a) * l); ctx.stroke();
+  }
+
+  // ---- brush: a stroke made of bristles that run dry
+  function stroke(pts, o) {
+    const {w = 20, n = 50, ink = SUMI, alpha = 0.55, dry = 0.6, grain = 0.12, taper = 0.35} = o;
+    const path = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const [x0, y0, w0] = pts[i], [x1, y1, w1] = pts[i + 1];
+      const L = Math.hypot(x1 - x0, y1 - y0), k = Math.max(1, Math.ceil(L / 1.2));
+      for (let j = 0; j < k; j++) { const t = j / k; path.push([x0 + (x1 - x0) * t, y0 + (y1 - y0) * t, (w0 ?? 1) + ((w1 ?? 1) - (w0 ?? 1)) * t]); }
+    }
+    const bristles = Array.from({length: n}, (_, b) => ({o: (b / (n - 1) - 0.5) + (rnd() - 0.5) * 0.02, load: 0.65 + rnd() * 0.35, ph: rnd() * 100, r: 0.5 + rnd() * 0.9}));
+    const N = path.length;
+    for (let i = 0; i < N; i++) {
+      const t = i / (N - 1), [x, y, ws] = path[i];
+      const [xa, ya] = path[Math.max(0, i - 2)], [xb, yb] = path[Math.min(N - 1, i + 2)];
+      const ang = Math.atan2(yb - ya, xb - xa), nx = -Math.sin(ang), ny = Math.cos(ang);
+      const tp = Math.min(1, t / taper * 3, (1 - t) / taper * 1.4 + 0.15);
+      const width = w * ws * Math.max(0.15, tp);
+      for (const br of bristles) {
+        const left = br.load - t * dry - (n1(br.ph + t * 9) - 0.5) * 0.9 * (0.3 + t);
+        if (left < 0.08) continue;
+        const px = x + nx * br.o * width, py = y + ny * br.o * width;
+        ctx.fillStyle = hexA(ink, Math.min(1, alpha * left * (1 - grain + rnd() * grain * 2)));
+        ctx.beginPath(); ctx.arc(px, py, br.r * Math.max(0.6, width / n * 1.6), 0, Math.PI * 2); ctx.fill();
+      }
+    }
+  }
+  function wash(shape, fill, blur, alpha) {
+    ctx.save(); ctx.filter = `blur(${blur}px)`; ctx.globalAlpha = alpha; ctx.fillStyle = fill;
+    ctx.beginPath(); shape(); ctx.fill(); ctx.restore();
+  }
+
+  // ---- composition (1440 x 900 frame). Ink goes on a separate layer, then multiplies into the paper.
+  const S = Math.min(W / 1440, H / 900);
+  const paperCtx = ctx;
+  const layer = document.createElement('canvas'); layer.width = cv.width; layer.height = cv.height;
+  const L = layer.getContext('2d'); L.scale(dpr * S, dpr * S);
+  ctx = L;
+
+  // moon: a pale wash
+  wash(() => ctx.arc(700, 318, 146, 0, Math.PI * 2), hexA(tok('--ds-color-neutral-light-7'), 1), 22, 0.5);
+
+  const cx = 500, top = 404, Hb = 220, R = 216;
+  const half = y => { const u = Math.max(0, Math.min(1, y / Hb)); return R * (1 - 0.6 * Math.pow(u, 2.5)) * (1 - 0.04 * Math.sin(u * Math.PI)); };
+  const RY = 30;
+  // 2D value noise for streaks
+  const vn = (x, y) => { const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+    const h = (i, j) => perm[(i * 73 + j * 151) & 255]; const a = h(xi, yi), b = h(xi + 1, yi), c = h(xi, yi + 1), d = h(xi + 1, yi + 1);
+    return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v; };
+  const fbm = (x, y) => vn(x, y) * 0.55 + vn(x * 2.1, y * 2.1) * 0.3 + vn(x * 4.3, y * 4.3) * 0.15;
+  const sstep = (a, b, x) => { const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+  const drips = Array.from({length: 13}, (_, k) => ({x: -R * 0.82 + k * R * 0.135 + (rnd() - 0.5) * 16, len: 22 + rnd() * 70, w: 2.5 + rnd() * 3.5}));
+  // the bowl, painted per pixel: pale ash glaze over dark iron glaze, streaked along the form, darker at the edges
+  {
+    const bx0 = cx - R - 12, by0 = top - RY - 6, bw = 2 * R + 24, bh = Hb + RY + 46, k = S * dpr;
+    const pw = Math.ceil(bw * k), ph = Math.ceil(bh * k);
+    const bc = document.createElement('canvas'); bc.width = pw; bc.height = ph;
+    const bctx = bc.getContext('2d'), id = bctx.createImageData(pw, ph), D8 = id.data;
+    const sumi = SUMI.replace('#', ''), sr = parseInt(sumi.slice(0, 2), 16), sg = parseInt(sumi.slice(2, 4), 16), sb = parseInt(sumi.slice(4, 6), 16);
+    for (let py = 0; py < ph; py++) for (let px = 0; px < pw; px++) {
+      const X = bx0 + px / k, Y = by0 + py / k, dx = X - cx, y = Y - top;
+      let D = 0, A = 0;
+      const rimFront = RY * Math.sqrt(Math.max(0, 1 - (dx / R) ** 2));
+      const inEll = (dx / R) ** 2 + (y / RY) ** 2 <= 1;
+      const hb = half(Hb), baseCurve = Hb + 12 * Math.sqrt(Math.max(0, 1 - (dx / hb) ** 2));
+      const hy = half(y);
+      if (inEll) {                                  // inside the bowl: far wall in soft grey
+        const v = (y + rimFront) / (2 * rimFront + 0.001);
+        D = 0.05 + 0.2 * Math.pow(1 - v, 1.6) + (fbm(dx * 0.02, y * 0.4) - 0.5) * 0.06;
+        A = 1;
+      } else if (y > 0 && Math.abs(dx) < hy && y < baseCurve) {
+        const e = Math.min(hy - Math.abs(dx), baseCurve - y);              // distance to the side or bottom edge
+        const sag = RY * (1 - y / Hb * 0.6) * Math.sqrt(Math.max(0, 1 - (dx / hy) ** 2));
+        const s = y - sag + RY;                                              // a coordinate that follows the form
+        const glaze = 70 + 10 * Math.sin(dx * 0.035) + 14 * (fbm(dx * 0.03, 3.7) - 0.5) + 8 * (fbm(dx * 0.12, 9.1) - 0.5);
+        const streak = fbm(dx * 0.004 + 3, s * 0.21), fine = fbm(dx * 0.02, s * 0.9);
+        const pale = 0.13 + 0.12 * streak + 0.05 * fine;
+        let dark = 0.74 + 0.26 * (s / (Hb + RY)) + 0.12 * (streak - 0.5);
+        const light = sstep(0.15, 0.95, dx / hy);                           // light from the right: the brush runs dry
+        dark *= 1 - 0.5 * light * sstep(0.35, 0.7, streak + fine * 0.3);
+        let t = sstep(glaze - 2, glaze + 7, s + (fine - 0.5) * 8);
+        for (const dr of drips) {                                          // ash runs into the dark glaze
+          const along = (s - glaze) / dr.len;
+          if (along > -0.1 && along < 1) t *= 1 - 0.85 * Math.exp(-(((dx - dr.x) / (dr.w * (1 - along * 0.6))) ** 2)) * (1 - Math.max(0, along) ** 1.5);
+        }
+        D = pale * (1 - t) + dark * t;
+        D += 0.2 * Math.exp(-e / 2.2);                                      // ink pools at the edge
+        D += (0.55 + 0.25 * fine) * Math.exp(-(y - rimFront) / (2.2 + 2.2 * (1 - Math.abs(dx) / R)));   // the lip: thicker at the front
+        D += (rnd() - 0.5) * 0.05;
+        A = Math.min(1, e / 1.1);
+      } else if (y >= baseCurve - 2 && y < Hb + 26 && Math.abs(dx) < 64 - (y - Hb) * 0.3) {   // foot ring, bare clay
+        const e = Math.min(64 - (y - Hb) * 0.3 - Math.abs(dx), Hb + 26 - y);
+        D = 0.42 + 0.3 * fbm(dx * 0.08, y * 0.6) + 0.3 * Math.exp(-e / 2) - 0.15 * sstep(0, 50, dx) + (rnd() - 0.5) * 0.08;
+        A = Math.min(1, e / 1.1);
+      }
+      if (A <= 0) continue;
+      const o = (py * pw + px) * 4;
+      D8[o] = sr; D8[o + 1] = sg; D8[o + 2] = sb; D8[o + 3] = Math.max(0, Math.min(255, D * A * 255));
+    }
+    bctx.putImageData(id, 0, 0);
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(bc, bx0 * k, by0 * k); ctx.restore();
+  }
+  // far rim: a thin, slightly uneven line
+  ctx.save(); ctx.strokeStyle = hexA(SUMI, 0.55); ctx.lineWidth = 1.4; ctx.beginPath();
+  for (let a = Math.PI; a <= 2 * Math.PI + 0.001; a += 0.02) { const x = cx + Math.cos(a) * (R - 1), y = top + Math.sin(a) * (RY - 1) + Math.sin(a * 11) * 0.6; a === Math.PI ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+  ctx.stroke(); ctx.restore();
+  // foot
+  stroke([[cx - 66, top + Hb + 12, 0.6], [cx - 10, top + Hb + 17, 1], [cx + 60, top + Hb + 13, 0.4]], {w: 6, n: 14, alpha: 0.5, dry: 0.7, taper: 0.3});
+  // shadow and a short ground stroke
+  wash(() => ctx.ellipse(cx + 18, top + Hb + 31, 140, 7, 0, 0, Math.PI * 2), hexA(GREY, 1), 6, 0.45);
+  // ink spots
+  [[820, 584, 2.6], [834, 594, 1.3], [846, 606, 0.9], [262, 628, 1.4]].forEach(([x, y, r]) => { ctx.fillStyle = hexA(SUMI, 0.75); ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); });
+
+  ctx = paperCtx;
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'multiply'; ctx.filter = 'blur(0.5px)'; ctx.drawImage(layer, 0, 0); ctx.restore();
+
+  // grain over everything
+  const img = ctx.getImageData(0, 0, cv.width, cv.height), d = img.data;
+  for (let i = 0; i < d.length; i += 4) { const g = (rnd() - 0.5) * 10; d[i] += g; d[i + 1] += g; d[i + 2] += g; }
+  ctx.putImageData(img, 0, 0);
+})();
+</script>
+</body>
+</html>

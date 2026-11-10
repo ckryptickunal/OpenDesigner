@@ -1,0 +1,74 @@
+{
+ "piece": "heroes/10-enterprise-health",
+ "title": "10 Orvita: enterprise clinical AI hero",
+ "pattern": "saas hero",
+ "platform": "web",
+ "industry": "healthcare",
+ "style": [
+  "enterprise",
+  "minimal"
+ ],
+ "tags": [
+  "saas hero",
+  "healthcare",
+  "clinical ai",
+  "enterprise",
+  "dashboard",
+  "logo row",
+  "light"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "The product UI is specific and credible: a ward watchlist with bed, patient, risk score bar, 12-hour sparkline, signals (RR up, Lactate, SpO2) and status pills; the 'Why Orvita flagged Bed 12' card cites three sources with timestamps",
+  "Customer logos sit in equal cells with hairline dividers under a factual label ('Trusted at 41 health systems across 9 countries'), the more credible treatment",
+  "Instrument Sans with Geist Mono for timestamps; one teal, risk colours reserved for the data"
+ ],
+ "slop_signals": [
+  "'New  Sepsis Watch validated across 41 hospitals ->' pill badge above the headline",
+  "Headline mixes weights to emphasise 'needs you next.'; the bold-phrase trick",
+  "Two buttons ('Book a clinical demo' filled, 'Read the validation study' outlined) and two check-mark reassurances (EHR, HIPAA · SOC 2 Type II) beneath",
+  "Three product fragments float at different offsets with soft shadows (the watchlist, the explanation card over it, a risk chart top right); the explanation card hides part of the table",
+  "Six invented hospital logos (St. Aldric, Northvale Medical, Kestrel Bay...) in five different type styles",
+  "Headline left, product right, logo row below: the enterprise template in full"
+ ],
+ "fixes": [
+  "Show one product frame face-on, with the explanation card docked inside the UI as a side panel, so nothing floats or overlaps",
+  "Remove the pill badge; set the validation fact as the sub-line's first sentence",
+  "One weight in the headline; one button; move the compliance line into the footer",
+  "Replace the logo row with the validation line or a single named health system plus the study citation, until real logos exist"
+ ],
+ "references": [
+  {
+   "site": "Amigo",
+   "url": "https://mobbin.com/sites/sections/20e495f3-f34a-4015-9106-747e9d84f1ef",
+   "what": "Healthcare AI hero: serif headline left, one dark product panel right, one button, a logo row below with a small label; the 'New' note lives in the nav, not above the headline"
+  },
+  {
+   "site": "Amigo",
+   "url": "https://mobbin.com/sites/sections/e07ba966-7fda-4699-b107-2147745a8d81",
+   "what": "Headline with a second phrase in grey rather than bold; numbered steps instead of floating cards"
+  },
+  {
+   "site": "Mistral AI",
+   "url": "https://mobbin.com/sites/sections/e6e87f69-8f6e-42cd-adb6-99a06f281082",
+   "what": "Customer logos in equal hairline cells; our row follows this and it is the strongest part"
+  },
+  {
+   "site": "Frontify",
+   "url": "https://mobbin.com/sites/sections/4304a783-e6de-4867-b2ff-51662137b505",
+   "what": "Enterprise hero with small buttons and the logo row directly under the headline; shows buttons at a quieter scale"
+  },
+  {
+   "site": "Titan Intake",
+   "url": "https://mobbin.com/sites/sections/726ffa26-f3df-4f7b-b49f-75e351974821",
+   "what": "A health-systems logo strip floating without cells, which reads weaker; what to avoid"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "remove",
+  "said": "very ugly",
+  "date": "2026-10-14"
+ }
+}

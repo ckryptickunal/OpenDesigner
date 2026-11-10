@@ -1,0 +1,66 @@
+{
+ "piece": "heroes/05-luxury-maison",
+ "title": "05 Maison Auberval: luxury maison hero",
+ "pattern": "editorial hero",
+ "platform": "web",
+ "industry": "fashion",
+ "style": [
+  "luxury",
+  "editorial",
+  "minimal"
+ ],
+ "tags": [
+  "editorial hero",
+  "fashion",
+  "luxury",
+  "didone",
+  "ivory",
+  "lookbook",
+  "tracked caps"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "A confident type system: Bodoni Moda hairline display with Jost tracked caps, two faces, three sizes, and most of the page left empty",
+  "The headline's second line crossing onto the plate and turning ivory is a real typographic idea, executed cleanly",
+  "Chapter list with roman numerals, 'PLATE IV' caption in italic, 'EN · FR' and 'PARIS, RIVE GAUCHE' in the footer line: the details of a printed lookbook"
+ ],
+ "slop_signals": [
+  "The black silk plate is a generated texture: smooth vertical stripes with blurred highlights, no weave, no selvedge, no light source; a fashion reader would spot it",
+  "'SCROLL' label centred in the bottom bar is a portfolio-template reflex",
+  "'DISCOVER THE COLLECTION ----' label-plus-rule under the paragraph is a third call to action on a page that wants one"
+ ],
+ "fixes": [
+  "Replace the plate with a photograph of real cloth (the hook asks the owner for it), or paint the drape with a visible light source and a fold structure",
+  "Remove 'SCROLL'; let the chapter list and the plate caption be the navigation",
+  "Keep one CTA: either the chapter list or 'Discover the collection', not both plus the plate caption"
+ ],
+ "references": [
+  {
+   "site": "SSENSE",
+   "url": "https://mobbin.com/sites/sections/4de98a06-dbff-4e54-83c6-a301c519bba0",
+   "what": "Plain uppercase sans paired with a large serif line; our caps labels and Bodoni follow this pairing"
+  },
+  {
+   "site": "Claude Type",
+   "url": "https://mobbin.com/sites/sections/87c2dd71-75a5-4bf1-8d12-86e29d509e35",
+   "what": "Serif display over a real photograph, type touching the image; the photograph is what makes the restraint feel expensive"
+  },
+  {
+   "site": "Studio Freight",
+   "url": "https://mobbin.com/sites/sections/37214c10-d891-48bc-a46e-6050033671b4",
+   "what": "A large serif headline with an inset artwork that the type overlaps; the same crossing move with a real image"
+  },
+  {
+   "site": "In Common With",
+   "url": "https://mobbin.com/sites/sections/a87f2a50-8a78-4193-b491-5589059041fa",
+   "what": "One photograph owns the frame, type is tiny and in the quiet corners; scale contrast is the luxury"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "remove",
+  "said": "very, very, very ugly",
+  "date": "2026-10-14"
+ }
+}

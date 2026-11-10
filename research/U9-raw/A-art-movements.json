@@ -1,0 +1,974 @@
+[
+  {
+    "id": "art-nouveau",
+    "name": "Art Nouveau",
+    "aliases": ["Jugendstil", "Stile Liberty", "Modern Style", "whiplash style", "Mucha style"],
+    "plain": "Curvy plant shapes, flowing hair and swirly lines framing soft pictures",
+    "people_say": ["flowery and curvy", "old French poster look", "elegant vines and flowers", "swirly vintage border", "fancy 1900s style", "lady with flowing hair", "storybook ornate frame"],
+    "origin": "Paris, Brussels, Glasgow and across Europe, about 1890 to the First World War [S1][S3][S5]",
+    "defining": [
+      "Whiplash line: an asymmetric S-curve taken from plant stems and sea creatures, used for borders, ironwork and textiles [S1]",
+      "Long stylised hair used as pattern, echoing the curve of the lettering [S2]",
+      "Flowing lines with opulent colour on posters (Mucha for Sarah Bernhardt, from 1894 to 1896) [S4][S5]",
+      "Lettering drawn or cut to match the image, for example the Arnold Boecklin typeface of 1904 [S6]",
+      "Shape trait 'irregular' is the closest fit for organic curves; on screen this means arched panels and curved dividers [inferred]"
+    ],
+    "code": ".panel{background:#f3e9d2;border:2px solid #7a5c2e;border-radius:50% 50% 8px 8px/18% 18% 8px 8px;padding:3rem 2rem}",
+    "traits": {
+      "surface": "paper",
+      "edge": "outline",
+      "depth": "flat",
+      "shape": "irregular",
+      "color": "muted",
+      "contrast": "normal",
+      "type": "display",
+      "texture": "paper",
+      "ornament": "ornamental",
+      "layout": "layered",
+      "motion": "subtle",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Beauty, tea, wine, florists, theatre, book covers and boutique hotel pages",
+    "goes_wrong": "Every edge gets a vine, so ornament crowds out content and the page feels like a costume",
+    "accessibility": "Ornate display lettering on patterned grounds fails contrast; keep body text in a plain face on a flat panel at 4.5:1 and use ornament only around it",
+    "related": ["vienna-secession", "arts-and-crafts", "art-deco", "psychedelic-poster", "organic"],
+    "sources": [
+      {"id": "S1", "url": "https://www.vam.ac.uk/articles/the-whiplash", "supports": "whiplash S-curve, natural origins, use in borders, ironwork, textiles; Beardsley and Mucha"},
+      {"id": "S2", "url": "https://collections.vam.ac.uk/item/O89346/", "supports": "Mucha treats hair as decorative pattern echoing the lettering"},
+      {"id": "S3", "url": "https://www.tate.org.uk/art/art-terms/a/art-nouveau", "supports": "emerged in the 1890s; sinuous lines and organic plant shapes; ended by the First World War"},
+      {"id": "S4", "url": "https://collections.vam.ac.uk/item/O76331/", "supports": "Mucha posters with flowing lines and opulent colouring as the peak of Art Nouveau graphics; 1896"},
+      {"id": "S5", "url": "https://internationalposter.com/style-primers/art-nouveau-posters/", "supports": "began around 1890, lasted to World War I; organic flowing line; Mucha's Bernhardt poster late 1894; Jugendstil and Stile Liberty names"},
+      {"id": "S6", "url": "https://en.wikipedia.org/wiki/Art_Nouveau", "supports": "whiplash and asymmetry; designers made typefaces to match images, Arnold Boecklin 1904"}
+    ],
+    "examples": [
+      {"name": "Alphonse Mucha, La Dame aux Camelias poster, 1896 (V&A)", "url": "https://collections.vam.ac.uk/item/O76331/", "what": "flowing lines, decorative frame, opulent colour"},
+      {"name": "Alphonse Mucha, Job cigarette paper poster (V&A)", "url": "https://collections.vam.ac.uk/item/O89346/", "what": "hair as pattern, lettering curves echoed in the figure"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "vienna-secession",
+    "name": "Vienna Secession",
+    "aliases": ["Secessionstil", "Wiener Werkstaette style", "Viennese modernism", "Ver Sacrum style"],
+    "plain": "Neat grids of squares, big lettering filling the page, few colors",
+    "people_say": ["Art Nouveau but with straight lines", "Klimt era graphic", "elegant geometric poster", "black and white squares border", "old Vienna poster", "tidy decorative", "boxy vintage lettering"],
+    "origin": "Vienna, 1897, when artists left the Academy; Wiener Werkstaette workshops from 1903 [S1][S2]",
+    "defining": [
+      "Lettering as the main image: a 1902 exhibition poster lets the type fill the whole sheet [S1]",
+      "Planar art, linear drawing, basic geometric forms and a reduced colour palette [S2]",
+      "Turn from floral curves to straight lines, squares and stacked cubic forms after about 1899 [S3]",
+      "Small repeated squares, ovals and diamonds as ornament (Moser armchair, 1904) [S4]"
+    ],
+    "code": ".band{height:12px;background:repeating-linear-gradient(90deg,#111 0 12px,#f4efe4 12px 24px)}",
+    "traits": {
+      "surface": "solid",
+      "edge": "outline",
+      "depth": "flat",
+      "shape": "geometric",
+      "color": "spot-inks",
+      "contrast": "high",
+      "type": "display",
+      "texture": "pattern",
+      "ornament": "geometric-shapes",
+      "layout": "grid",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Galleries, architecture studios, design shops, music and arts festivals, editorial headers",
+    "goes_wrong": "Custom lettering squeezed into boxes becomes unreadable, and checker borders turn busy at small sizes",
+    "accessibility": "Stretched display lettering loses legibility; keep it to headings, set body text plainly at 4.5:1, and keep pattern bands decorative",
+    "related": ["art-nouveau", "art-deco", "arts-and-crafts", "bauhaus", "swiss"],
+    "sources": [
+      {"id": "S1", "url": "https://collections.vam.ac.uk/item/O74615/", "supports": "group seceded in 1897; Roller's 1902 poster uses lettering as the main design across the whole sheet"},
+      {"id": "S2", "url": "https://prestelpublishing.penguinrandomhouse.de/leseprobe/Wiener-Werkstaette-1903-1932/leseprobe_9783791357164.pdf", "supports": "planar art, linearity, basic geometric forms and reduced palette as hallmarks of Viennese modernism, first seen in graphics"},
+      {"id": "S3", "url": "https://en.wikipedia.org/wiki/Vienna_Secession", "supports": "Ver Sacrum magazine; shift to straight lines and geometric forms after 1899; Hoffmann's cubic forms"},
+      {"id": "S4", "url": "https://collections.vam.ac.uk/item/O84641/", "supports": "Moser 1904 chair with elongated oval and diamond shapes in the Secession style"}
+    ],
+    "examples": [
+      {"name": "Alfred Roller, poster for the 16th Secession exhibition (V&A)", "url": "https://collections.vam.ac.uk/item/O74615/", "what": "lettering fills the sheet as the main image"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "arts-and-crafts",
+    "name": "Arts and Crafts",
+    "aliases": ["William Morris style", "Morris and Co. pattern", "design reform pattern"],
+    "plain": "Leafy repeating patterns of birds and flowers in soft old colors",
+    "people_say": ["William Morris wallpaper", "cottage garden pattern", "old English botanical", "heritage handmade feel", "vintage floral print", "cozy library look", "leafy vines everywhere"],
+    "origin": "England, 1861, from William Morris's design firm [S1]",
+    "defining": [
+      "Plant forms treated as flat repeating pattern on wallpapers and fabrics [S1]",
+      "Simple bird and flower forms on a plain coloured ground (Trellis wallpaper, 1862) [S2]",
+      "Formalised flat patterns in muted tones, the look design reformers promoted [S2]",
+      "Rejects excess ornament and imitation of past styles [S1]"
+    ],
+    "code": "body{background:#efe6d2 url(leaf-repeat.svg) 0 0/240px repeat;color:#2f3a2a;font-family:Georgia,serif}",
+    "traits": {
+      "surface": "paper",
+      "edge": "hairline",
+      "depth": "flat",
+      "shape": "subtle",
+      "color": "earthy",
+      "contrast": "normal",
+      "type": "serif",
+      "texture": "pattern",
+      "ornament": "ornamental",
+      "layout": "editorial",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Bookshops, publishers, heritage brands, garden and home goods, tea rooms",
+    "goes_wrong": "Full-strength pattern sits behind text, so pages feel like wallpaper samples",
+    "accessibility": "Busy pattern behind words breaks reading; keep pattern to borders or headers and set text on a plain panel at 4.5:1",
+    "related": ["art-nouveau", "vienna-secession", "organic", "editorial"],
+    "sources": [
+      {"id": "S1", "url": "https://www.tate.org.uk/art/art-terms/a/arts-and-crafts", "supports": "Morris and Co. founded 1861; plant forms as flat pattern; against Victorian excess ornament"},
+      {"id": "S2", "url": "https://collections.vam.ac.uk/item/O248458/", "supports": "Trellis 1862: simple bird and flower forms on plain ground; flat patterns in muted tones"}
+    ],
+    "examples": [
+      {"name": "William Morris, Trellis wallpaper, 1862 (V&A)", "url": "https://collections.vam.ac.uk/item/O248458/", "what": "flat repeat of birds and roses on a plain ground"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "plakatstil",
+    "name": "Plakatstil",
+    "aliases": ["Sachplakat", "object poster", "German poster style", "Bernhard style"],
+    "plain": "One big product, its name in bold letters, flat bright colors",
+    "people_say": ["simple old ad poster", "just the product and the name", "bold vintage advertising", "clean retro poster", "flat colors big letters", "classic German poster"],
+    "origin": "Berlin, about 1905, Lucian Bernhard (sources give 1902 to 1906) [S1][S2][S3]",
+    "defining": [
+      "The product shown alone with only its brand name [S2]",
+      "Flat colours and shapes with naturalism stripped back [S1]",
+      "Bold, eye-catching lettering and one central simplified object [S3]",
+      "Limited colours, silhouette and lettering built into the image (Hohlwein, 1910) [S4]"
+    ],
+    "code": ".hero{display:grid;place-items:center;background:#e8402a;color:#111;font:900 clamp(3rem,10vw,8rem)/.9 system-ui,sans-serif}",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "sharp",
+      "color": "vivid",
+      "contrast": "high",
+      "type": "display",
+      "texture": "none",
+      "ornament": "illustration",
+      "layout": "minimal",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Product launch pages, single-product shops, food and drink brands, campaign banners",
+    "goes_wrong": "Several products or messages on one screen kill the single-object idea",
+    "accessibility": "Bright flat grounds often fail with mid-tone text; pair each ground with black or white type checked at 4.5:1, or 3:1 for large display type",
+    "related": ["flat", "swiss", "art-deco", "mid-century-modern"],
+    "sources": [
+      {"id": "S1", "url": "https://internationalposter.com/style-primers/plakatstil-the-poster-style/", "supports": "begun 1905 by Bernhard in Berlin; flat colours and shapes; Hohlwein in Munich"},
+      {"id": "S2", "url": "https://collections.vam.ac.uk/item/O75708/", "supports": "product in isolation with only its name, rich colours; V&A dates the style to 1902"},
+      {"id": "S3", "url": "https://en.wikipedia.org/wiki/Plakatstil", "supports": "bold lettering, flat colours, simplified central object; started 1905 to 1906"},
+      {"id": "S4", "url": "https://collections.vam.ac.uk/item/O75875/", "supports": "Hohlwein used limited colours, pattern, silhouette and integral lettering"}
+    ],
+    "examples": [
+      {"name": "Lucian Bernhard, Stiller shoe poster (V&A)", "url": "https://collections.vam.ac.uk/item/O75708/", "what": "one object and one word on a flat ground"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "de-stijl",
+    "name": "De Stijl",
+    "aliases": ["Neoplasticism", "Mondrian style", "Mondrian grid"],
+    "plain": "Black lines making boxes, a few filled red, blue or yellow",
+    "people_say": ["Mondrian look", "primary colors and black lines", "colored boxes grid", "red yellow blue blocks", "modern art squares", "geometric primary colors"],
+    "origin": "Netherlands, 1917, Mondrian and Van Doesburg's magazine [S1]",
+    "defining": [
+      "Only horizontal and vertical lines and rectangles [S1][S3]",
+      "Colour limited to red, blue and yellow plus black, white and grey [S2][S3]",
+      "Lines and planes layered so each element stays separate (Rietveld) [S3]",
+      "On screen: thick black gutters between white and primary panels [inferred]"
+    ],
+    "code": ".grid{display:grid;gap:8px;background:#111;grid-template-columns:2fr 1fr}.grid>*{background:#fff}.grid>.red{background:#d62818}",
+    "traits": {
+      "surface": "solid",
+      "edge": "thick-outline",
+      "depth": "flat",
+      "shape": "sharp",
+      "color": "vivid",
+      "contrast": "high",
+      "type": "geometric",
+      "texture": "none",
+      "ornament": "geometric-shapes",
+      "layout": "grid",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Art and architecture sites, design education, kids' learning apps, playful bento pages",
+    "goes_wrong": "Primary fills clash with error, warning and link colours, so status meaning gets lost",
+    "accessibility": "Yellow or red text fails on white; use primaries only as fills with black text checked at 4.5:1 and keep black dividers at 3:1 against fills",
+    "related": ["bauhaus", "bento", "swiss", "suprematism", "neo-brutalism"],
+    "sources": [
+      {"id": "S1", "url": "https://www.tate.org.uk/art/art-terms/d/de-stijl", "supports": "Dutch group begun 1917 as a publication; strict horizontals and verticals; Mondrian and Van Doesburg"},
+      {"id": "S2", "url": "https://collections.vam.ac.uk/item/O89395/", "supports": "abstract and geometric, vertical and horizontal lines, colour restricted to red, blue, yellow, black and white"},
+      {"id": "S3", "url": "https://en.wikipedia.org/wiki/De_Stijl", "supports": "primary colours plus black, white and grey; straight lines and rectangles; layered non-intersecting planes"}
+    ],
+    "examples": [
+      {"name": "Gerrit Rietveld, Bolderwagen buggy (V&A)", "url": "https://collections.vam.ac.uk/item/O89395/", "what": "straight members painted in primaries and black"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "constructivism",
+    "name": "Russian Constructivism",
+    "aliases": ["Constructivist poster", "Soviet avant-garde", "agitprop design", "Rodchenko style", "Constructivist photomontage"],
+    "plain": "Red and black diagonals, bold blocky words and cut-out photos",
+    "people_say": ["Soviet poster", "red and black propaganda look", "revolutionary poster", "angled bold text", "photo collage with slogans", "loud and political"],
+    "origin": "Russia, about 1915; the leading Soviet poster style from 1924 to 1933 [S1][S2]",
+    "defining": [
+      "Dynamic compositions built on strong diagonals [S2]",
+      "Photography used as a graphic element, often as photomontage [S2][S3][S4]",
+      "Strident slogans in powerful typefaces [S2]",
+      "Black and red as the main colours (Rodchenko poster, about 1926) [S3]",
+      "Brightly coloured geometric film posters by the Stenberg brothers [S5]"
+    ],
+    "code": ".hero h1{display:inline-block;transform:rotate(-12deg);background:#c8102e;color:#fff;text-transform:uppercase;font-weight:900;letter-spacing:.02em}",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "geometric",
+      "color": "spot-inks",
+      "contrast": "high",
+      "type": "condensed",
+      "texture": "none",
+      "ornament": "photo",
+      "layout": "asymmetric",
+      "motion": "kinetic",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Campaigns and causes, festival and event pages, editorial features, bold product launches",
+    "goes_wrong": "Rotated text everywhere slows reading, and the look reads as state propaganda when the brand is not political",
+    "accessibility": "Keep body text horizontal; red on black fails contrast so pair red with white or cream at 4.5:1, and stop sliding diagonals under reduced motion",
+    "related": ["suprematism", "dada-photomontage", "futurism", "bauhaus", "neo-brutalism"],
+    "sources": [
+      {"id": "S1", "url": "https://www.tate.org.uk/art/art-terms/c/constructivism", "supports": "founded in Russia around 1915 by Tatlin and Rodchenko; industrial, no 'style'"},
+      {"id": "S2", "url": "https://internationalposter.com/style-primers/constructivist-posters/", "supports": "dominant 1924 to 1933; first posters to use photography; strident slogans, powerful type, strong diagonals"},
+      {"id": "S3", "url": "https://collections.vam.ac.uk/item/O222892/", "supports": "Rodchenko photomontage poster using black and red"},
+      {"id": "S4", "url": "https://collections.vam.ac.uk/item/O76004/", "supports": "Kulagina's 1929 photomontage poster in the Constructivist circle"},
+      {"id": "S5", "url": "https://en.wikipedia.org/wiki/Constructivism_(art)", "supports": "Stenberg brothers' brightly coloured geometric posters; Klutsis and Kulagina photomontage"}
+    ],
+    "examples": [
+      {"name": "Aleksandr Rodchenko, History of the Communist Party poster (V&A)", "url": "https://collections.vam.ac.uk/item/O222892/", "what": "photomontage in black and red"},
+      {"name": "Valentina Kulagina, 1905. The Road to October, 1929 (V&A)", "url": "https://collections.vam.ac.uk/item/O76004/", "what": "montage of giant marching figures and cut-out photos"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "suprematism",
+    "name": "Suprematism",
+    "aliases": ["Malevich style", "Suprematist composition"],
+    "plain": "Flat colored squares, bars and circles floating on white",
+    "people_say": ["floating shapes on white", "abstract tilted rectangles", "Malevich look", "minimal geometric art", "shapes flying in space", "simple colored blocks at angles"],
+    "origin": "Russia, Kazimir Malevich, from 1913; first shown at '0.10' in St Petersburg, December 1915 [S1]",
+    "defining": [
+      "Basic geometric forms only: circles, squares, lines and rectangles [S1][S2]",
+      "A limited range of colours [S1][S2]",
+      "Forms set on a usually white ground so they seem to float in space [S1]",
+      "Shapes tilted off the grid at different sizes, which suggests depth [inferred]"
+    ],
+    "code": "body{background:#f7f5f0}.shape{position:absolute;background:#111;transform:rotate(-18deg)}",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "geometric",
+      "color": "neutral-accent",
+      "contrast": "high",
+      "type": "geometric",
+      "texture": "none",
+      "ornament": "geometric-shapes",
+      "layout": "asymmetric",
+      "motion": "subtle",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Gallery and architecture sites, portfolios, calm premium hero art",
+    "goes_wrong": "Random floating shapes with no balance look like clip art instead of tension",
+    "accessibility": "Shapes must carry no meaning; keep text on clear white areas at 4.5:1 and make any drifting shapes respect reduced motion",
+    "related": ["constructivism", "de-stijl", "bauhaus", "minimal-monochrome"],
+    "sources": [
+      {"id": "S1", "url": "https://www.tate.org.uk/art/art-terms/s/suprematism", "supports": "Malevich from 1913; 0.10 exhibition December 1915; basic geometric forms, limited colours, white ground, floating colour in space"},
+      {"id": "S2", "url": "https://en.wikipedia.org/wiki/Suprematism", "supports": "geometry of circles, squares, rectangles in a limited range of colours; Black Square 1915"}
+    ],
+    "examples": [],
+    "confidence": "medium"
+  },
+  {
+    "id": "futurism",
+    "name": "Italian Futurism",
+    "aliases": ["Futurist typography", "parole in liberta", "words in freedom", "Depero style"],
+    "plain": "Words flying at angles with speed lines and machine energy",
+    "people_say": ["fast and loud", "words exploding across the page", "speed lines", "racing car energy", "noisy typography", "1910s avant-garde", "chaotic dynamic text"],
+    "origin": "Italy, 1909, Marinetti's manifesto printed in Le Figaro [S1]",
+    "defining": [
+      "Celebrates speed and machines and tries to show the energy of modern life [S1]",
+      "Lines of force drawn to express speed and noise [S2]",
+      "Words in freedom: poetry set loose from the traditional page grid [S3][S4]",
+      "Coloured papers and inks, typographic games and fold-outs (Depero's book, 1927) [S3]"
+    ],
+    "code": "h1 span{display:inline-block;transform:rotate(-8deg) skewX(-12deg);font-size:clamp(2rem,8vw,7rem)}",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "sharp",
+      "color": "vivid",
+      "contrast": "high",
+      "type": "display",
+      "texture": "none",
+      "ornament": "geometric-shapes",
+      "layout": "asymmetric",
+      "motion": "kinetic",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Motorsport, music and sound brands, event promos, kinetic type headers",
+    "goes_wrong": "Every word moves and spins, so nothing can be read and the page feels like noise",
+    "accessibility": "Rotated mixed-size words are slow to read and kinetic type can cause motion sickness; keep one static readable line per message and respect reduced motion",
+    "related": ["constructivism", "dada-photomontage", "art-deco", "new-wave-typography"],
+    "sources": [
+      {"id": "S1", "url": "https://www.tate.org.uk/art/art-terms/f/futurism", "supports": "launched by Marinetti in 1909 in Le Figaro; speed, dynamism and energy of the modern world"},
+      {"id": "S2", "url": "https://internationalposter.com/style-primers/futurist-posters/", "supports": "Futurists invented lines of force to express speed and noise; Depero, Venna, Diulgheroff"},
+      {"id": "S3", "url": "https://www.estorickcollection.com/exhibitions/zang-tumb-tumb-the-futurist-graphic-revolution", "supports": "words-in-freedom freed text from the page grid and shaped later graphic design; Depero Futurista 1927 with coloured papers and typographic games"},
+      {"id": "S4", "url": "https://en.wikipedia.org/wiki/Futurism", "supports": "parole in liberta rejected metre and made the word the main unit"}
+    ],
+    "examples": [
+      {"name": "Fortunato Depero, Depero Futurista, 1927 (Estorick Collection exhibition)", "url": "https://www.estorickcollection.com/exhibitions/zang-tumb-tumb-the-futurist-graphic-revolution", "what": "coloured papers, inventive type games and fold-out pages"}
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "dada-photomontage",
+    "name": "Dada photomontage",
+    "aliases": ["Dada collage", "Berlin Dada", "cut-up", "Merz", "photomontage"],
+    "plain": "Cut-up photos and mismatched letters glued together to make nonsense",
+    "people_say": ["cut and paste collage", "weird magazine cutouts", "surreal photo collage", "absurd and arty", "mixed letters glued on", "scrapbook chaos", "anti-design art"],
+    "origin": "Zurich, 1916 (Cabaret Voltaire); photomontage developed by Berlin Dada from about 1915 to 1918 [S1][S2][S4]",
+    "defining": [
+      "Scissors and glue instead of paint: collage from press photographs [S3]",
+      "Satirical and nonsensical in tone, often used for political protest [S1][S2]",
+      "Chance collage: torn scraps dropped on a sheet and pasted where they land [S3]",
+      "Cut-and-paste as a working method (Schwitters' Merz, from 1919) [S5]"
+    ],
+    "code": ".cutout{clip-path:polygon(2% 0,98% 3%,100% 96%,0 100%);transform:rotate(-3deg);box-shadow:2px 3px 0 rgba(0,0,0,.25)}",
+    "traits": {
+      "surface": "paper",
+      "edge": "rough",
+      "depth": "layered",
+      "shape": "irregular",
+      "color": "neutral-accent",
+      "contrast": "high",
+      "type": "display",
+      "texture": "paper",
+      "ornament": "photo",
+      "layout": "collage",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Art and culture magazines, satire, music releases, exhibition promos",
+    "goes_wrong": "The collage swallows the message so nobody can find the call to action",
+    "accessibility": "Text baked into collage images is invisible to screen readers; keep real HTML text for anything important and give collages alt text",
+    "related": ["punk-zine", "constructivism", "grunge-typography", "risograph"],
+    "sources": [
+      {"id": "S1", "url": "https://www.tate.org.uk/art/art-terms/d/dada", "supports": "formed in Zurich during the First World War; Cabaret Voltaire 1916; satirical and nonsensical; collage"},
+      {"id": "S2", "url": "https://www.tate.org.uk/art/art-terms/p/photomontage", "supports": "first used by dadaists in 1915; a means of political dissent; Heartfield"},
+      {"id": "S3", "url": "https://en.wikipedia.org/wiki/Dada", "supports": "monteurs used scissors and glue with press photographs; chance collage"},
+      {"id": "S4", "url": "https://en.wikipedia.org/wiki/Photomontage", "supports": "Heartfield and Grosz pasting pictures in Berlin, 1916; term widely known around 1918"},
+      {"id": "S5", "url": "https://collections.vam.ac.uk/item/O71750/", "supports": "Schwitters, Dada cut-and-paste collage principle, Merz from 1919"}
+    ],
+    "examples": [
+      {"name": "Kurt Schwitters, Merz 8, The Cathedral, 1920 (V&A)", "url": "https://collections.vam.ac.uk/item/O71750/", "what": "cut-and-paste cover with a stuck-on sticker"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "mid-century-modern",
+    "name": "Mid-century modern (graphic)",
+    "aliases": ["MCM", "1950s modern", "mid-mod", "Contemporary style (UK 1950s)"],
+    "plain": "Simple cheerful shapes, friendly drawings and warm flat colors from the 1950s",
+    "people_say": ["retro 50s", "mid-century", "Mad Men vibe", "vintage modern", "cheerful retro illustration", "Eames era", "mustard and teal"],
+    "origin": "North America and Europe, about 1945 to 1970 [S1]",
+    "defining": [
+      "Clean, simple lines with no added embellishment [S1]",
+      "Simple, almost cartoon-like drawing with visual puns and eye-catching colour, common in posters until about 1965 [S2]",
+      "Abstract patterns from plant forms and bold geometric designs (Lucienne Day, 1951) [S3]",
+      "Slightly more organic and relaxed than the International Style [S1]"
+    ],
+    "code": ".card{background:#f2e8d5;color:#2b2b2b;border-radius:6px}.accent{background:#d9822b;color:#1d1d1d}",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "rounded",
+      "color": "muted",
+      "contrast": "normal",
+      "type": "geometric",
+      "texture": "none",
+      "ornament": "illustration",
+      "layout": "asymmetric",
+      "motion": "subtle",
+      "theme": "light"
+    },
+    "ui_fit": "core-ui",
+    "fits": "Home and furniture shops, travel, cafes, lifestyle apps, friendly onboarding",
+    "goes_wrong": "Becomes a pastiche of boomerangs and cocktail-hour clip art that dates the brand",
+    "accessibility": "Warm muted palettes often sit near the contrast line; check text at 4.5:1 and mark illustrations decorative or give them alt text",
+    "related": ["googie-atomic", "scandinavian", "plakatstil", "flat", "organic"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Mid-century_modern", "supports": "about 1945 to 1970; clean simple lines, no embellishment; more organic than the International Style; includes graphic design"},
+      {"id": "S2", "url": "https://internationalposter.com/style-primers/1950s-style-posters/", "supports": "simple almost cartoon-like drawing, visual puns, eye-catching colour; Leupin, Savignac, Rand; lasted to about 1965"},
+      {"id": "S3", "url": "https://collections.vam.ac.uk/item/O85223/", "supports": "Lucienne Day's abstraction from plant forms and bold geometric designs, Festival of Britain 1951"}
+    ],
+    "examples": [
+      {"name": "Lucienne Day, Calyx furnishing fabric, 1951 (V&A)", "url": "https://collections.vam.ac.uk/item/O85223/", "what": "abstract plant shapes in flat colour"}
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "googie-atomic",
+    "name": "Googie and Atomic Age",
+    "aliases": ["Googie", "Atomic Age design", "space-age", "Populuxe", "Doo Wop", "Jetsons style"],
+    "plain": "Starbursts, boomerangs, atom symbols and neon signs from 1950s diners",
+    "people_say": ["Jetsons style", "retro space age", "50s diner sign", "atomic starbursts", "retro futuristic", "old Vegas motel sign", "boomerang shapes"],
+    "origin": "Southern California, about 1945 to the early 1970s; named, at first mockingly, after a 1949 Hollywood coffee shop [S1][S4]",
+    "defining": [
+      "Motion symbols: boomerangs, flying saucers, diagrammatic atoms and parabolas [S1]",
+      "Upswept roofs, curved geometric shapes, bold neon signs and bright colours [S1]",
+      "Atomic starburst: spokes radiating from a centre, often tipped with balls [S2]",
+      "White grounds with warm mustard yellow and orange; turquoise, yellow and green stars on cream (1954 dinnerware) [S2]",
+      "Crystal and atom diagrams reused as repeat patterns (Festival of Britain, 1951) [S3]"
+    ],
+    "code": ".star{width:3rem;aspect-ratio:1;background:#e3a72f;clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%)}",
+    "traits": {
+      "surface": "solid",
+      "edge": "outline",
+      "depth": "flat",
+      "shape": "geometric",
+      "color": "vivid",
+      "contrast": "high",
+      "type": "display",
+      "texture": "none",
+      "ornament": "geometric-shapes",
+      "layout": "asymmetric",
+      "motion": "subtle",
+      "theme": "both"
+    },
+    "ui_fit": "marketing",
+    "fits": "Diners, retro games, travel and motel brands, space themes for kids, event promos",
+    "goes_wrong": "Starbursts on every element make it read as theme-park kitsch",
+    "accessibility": "Neon glow on dark grounds blurs small text; keep glow to large display type, check text at 4.5:1 without the glow, and avoid flicker animations",
+    "related": ["mid-century-modern", "y2k", "art-deco", "playful"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Googie_architecture", "supports": "Southern California, 1945 to early 1970s; Googies coffee shop 1949; boomerangs, saucers, atoms, parabolas; neon signs; bright colours"},
+      {"id": "S2", "url": "https://en.wikipedia.org/wiki/Atomic_Age_(design)", "supports": "1945 to 1967; starburst motif; white with mustard yellows and oranges; turquoise, yellow and green Starburst dinnerware 1954"},
+      {"id": "S3", "url": "https://collections.vam.ac.uk/item/O140765/", "supports": "Festival Pattern Group 1951 patterns from crystal-structure diagrams"},
+      {"id": "S4", "url": "https://hyperallergic.com/space-age-architecture-in-an-unexpected-place/", "supports": "space-age commercial buildings of the 1940s to 1960s; 'Googie' name first used derisively; flying saucer forms"}
+    ],
+    "examples": [
+      {"name": "Festival Pattern Group fabric from a crystal diagram, 1951 (V&A)", "url": "https://collections.vam.ac.uk/item/O140765/", "what": "atomic structure drawn as a repeat pattern"}
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "psychedelic-poster",
+    "name": "Psychedelic poster (1960s)",
+    "aliases": ["San Francisco psychedelic", "Fillmore poster style", "acid rock poster", "hippie poster", "trippy 60s"],
+    "plain": "Melting swirly letters and clashing bright colors that seem to vibrate",
+    "people_say": ["trippy", "60s hippie poster", "groovy swirly letters", "Woodstock vibe", "melting text", "rainbow and wavy", "far out"],
+    "origin": "San Francisco, mid-1960s, concert posters for the Fillmore and Avalon Ballroom [S1][S2]",
+    "defining": [
+      "Day-glo, anti-naturalistic colour and swirling patterns [S1]",
+      "Lettering stylised until it is nearly illegible, filling every gap and recalling Art Nouveau [S2][S3]",
+      "Richly saturated colours in glaring contrast with strongly symmetrical layouts [S4]",
+      "Overprinted double images that reveal themselves slowly, a 'slow poster' [S5]"
+    ],
+    "code": "h1{background:conic-gradient(#ff2fa3,#ffe600,#00d4ff,#ff2fa3);-webkit-background-clip:text;background-clip:text;color:transparent}",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "blob",
+      "color": "neon",
+      "contrast": "high",
+      "type": "display",
+      "texture": "pattern",
+      "ornament": "squiggles",
+      "layout": "dense",
+      "motion": "kinetic",
+      "theme": "both"
+    },
+    "ui_fit": "marketing",
+    "fits": "Music festivals, gig posters, record releases, retro event nights",
+    "goes_wrong": "Illegible lettering and vibrating colour pairs carry dates and prices, so people cannot read them",
+    "accessibility": "Complementary colours side by side vibrate and tire the eyes; keep key info in plain type at 4.5:1, never flash more than 3 times a second, and respect reduced motion",
+    "related": ["art-nouveau", "op-art", "pop-art-silkscreen", "y2k"],
+    "sources": [
+      {"id": "S1", "url": "https://www.tate.org.uk/art/art-terms/p/psychedelic-art", "supports": "1960s; day-glo anti-naturalistic colour, swirling patterns; San Francisco poster artists for Bill Graham"},
+      {"id": "S2", "url": "https://collections.vam.ac.uk/item/O108983/", "supports": "Wes Wilson, 1966; bold colours for light shows; lettering increasingly stylised and illegible; Fillmore posters defined the style"},
+      {"id": "S3", "url": "https://collections.vam.ac.uk/item/O75994/", "supports": "1967 Byrds poster with sinuous forms and lettering evocative of Art Nouveau"},
+      {"id": "S4", "url": "https://en.wikipedia.org/wiki/Psychedelic_art", "supports": "saturated colours in glaring contrast, ornate lettering, symmetrical composition"},
+      {"id": "S5", "url": "https://collections.vam.ac.uk/item/O126428/", "supports": "Moscoso's overprinting and hidden double images; the 'slow poster'"}
+    ],
+    "examples": [
+      {"name": "Wes Wilson, Byrds Byrds Byrds poster, 1967 (V&A)", "url": "https://collections.vam.ac.uk/item/O75994/", "what": "melting lettering filling the sheet"},
+      {"name": "Victor Moscoso, Neon Rose #13, 1967 (V&A)", "url": "https://collections.vam.ac.uk/item/O126428/", "what": "overprinted colours and a hidden second image"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "op-art",
+    "name": "Op Art",
+    "aliases": ["optical art", "optical illusion art", "Riley style", "Vasarely style"],
+    "plain": "Black and white stripes and dots that trick your eyes into moving",
+    "people_say": ["optical illusion", "trippy black and white lines", "hypnotic pattern", "wavy stripes", "60s mod pattern", "eye-bending", "moving checkerboard"],
+    "origin": "Europe and the US, 1960s; 'The Responsive Eye' exhibition, New York, 1965 [S1][S3]",
+    "defining": [
+      "A framework of purely geometric forms built to create optical effects [S1]",
+      "Simple forms repeated and contrasted until the surface seems to vibrate and figure and ground swap [S2]",
+      "Many key works in black and white only [S3]",
+      "Square-in-square grids with few colours but endless combinations (Vasarely) [S4]"
+    ],
+    "code": ".band{background:repeating-linear-gradient(90deg,#000 0 6px,#fff 6px 12px)}",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "geometric",
+      "color": "monochrome",
+      "contrast": "high",
+      "type": "geometric",
+      "texture": "pattern",
+      "ornament": "geometric-shapes",
+      "layout": "full-bleed",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "illustration-only",
+    "fits": "Section breaks, album and event art, fashion lookbooks, static splash screens",
+    "goes_wrong": "The pattern goes behind text or gets animated, causing eye strain and unreadable copy",
+    "accessibility": "High-contrast stripes can trigger visual discomfort and, if animated, seizures; never put text on the pattern, keep it static or off under reduced motion, and avoid fine stripes over large areas",
+    "related": ["psychedelic-poster", "minimal-monochrome", "bauhaus", "duotone"],
+    "sources": [
+      {"id": "S1", "url": "https://www.tate.org.uk/art/art-terms/o/op-art", "supports": "1960s painting using purely geometric forms for optical effects; Riley, Soto, Vasarely"},
+      {"id": "S2", "url": "https://collections.vam.ac.uk/item/O72306/", "supports": "illusions of vibrating surfaces through repetition of simple forms; foreground and background change place; wavy lines"},
+      {"id": "S3", "url": "https://en.wikipedia.org/wiki/Op_art", "supports": "better-known pieces in black and white; The Responsive Eye, February to April 1965"},
+      {"id": "S4", "url": "https://collections.vam.ac.uk/item/O72297/", "supports": "Vasarely's square-within-square formula with limited colours and forms"}
+    ],
+    "examples": [
+      {"name": "Bridget Riley, Coloured Greys III, 1972 (V&A)", "url": "https://collections.vam.ac.uk/item/O72306/", "what": "wavy repeated lines that seem to move"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "pop-art-silkscreen",
+    "name": "Pop Art silkscreen",
+    "aliases": ["Warhol style", "pop art print", "screenprint pop", "repeated portrait grid"],
+    "plain": "Same photo repeated in bright flat colors, like a printed poster grid",
+    "people_say": ["Warhol look", "repeated colorful portraits", "pop art grid", "bright photo in four colors", "soup can style", "celebrity pop print", "60s gallery poster"],
+    "origin": "Britain in the mid-1950s and the US in the late 1950s; peak in the 1960s [S1]",
+    "defining": [
+      "Imagery taken from advertising, packaging, film and comics [S1][S4]",
+      "Hard edges, distinct forms and impersonal everyday subjects [S1]",
+      "One photo reused across many colourways (Warhol's Marilyn, ten colourways, 1967) [S2]",
+      "Screenprinting, a cheap sign-makers' technique, taken up by 1960s artists [S3]",
+      "Differs from the existing 'comic' style: photo-based colour blocks and repetition instead of drawn panels, outlines and dots [inferred]"
+    ],
+    "code": ".tile{background:#ff3fa4}.tile img{filter:grayscale(1) contrast(2.2);mix-blend-mode:multiply}",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "sharp",
+      "color": "vivid",
+      "contrast": "high",
+      "type": "display",
+      "texture": "none",
+      "ornament": "photo",
+      "layout": "grid",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Music and fashion campaigns, gallery shops, creator or team profile grids, social posts",
+    "goes_wrong": "Neon fills hide the faces, and the page turns into a copy of famous artworks",
+    "accessibility": "Text on hot pink or yellow often fails; set type on white or black at 4.5:1 and give a repeated image alt text once, marking the repeats decorative",
+    "related": ["comic", "duotone", "risograph", "memphis"],
+    "sources": [
+      {"id": "S1", "url": "https://www.tate.org.uk/art/art-terms/p/pop-art", "supports": "mid-1950s Britain, late 1950s America; advertising and packaging sources; hard edges and distinct forms"},
+      {"id": "S2", "url": "https://collections.vam.ac.uk/item/O72301/", "supports": "Marilyn print issued in ten colourways from one publicity photograph, 1967"},
+      {"id": "S3", "url": "https://collections.vam.ac.uk/item/O71746/", "supports": "screenprinting was cheap and used by sign-makers, then taken up by Warhol and others in the 1960s"},
+      {"id": "S4", "url": "https://collections.vam.ac.uk/item/O142809/", "supports": "Warhol took imagery from magazines, TV, cinema, advertising and packaging and repeated press photos"}
+    ],
+    "examples": [
+      {"name": "Andy Warhol, Marilyn Monroe (Marilyn), 1967 (V&A)", "url": "https://collections.vam.ac.uk/item/O72301/", "what": "one photo printed in flat colour blocks across a colourway series"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "supergraphics",
+    "name": "Supergraphics",
+    "aliases": ["1970s supergraphics", "environmental graphics", "giant stripes", "seventies stripes"],
+    "plain": "Huge stripes, arcs and letters painted across walls and screens",
+    "people_say": ["giant stripes", "70s retro stripes", "huge bold shapes", "wall-sized graphics", "groovy arcs", "giant letters cut off at the edge", "retro wayfinding"],
+    "origin": "Sea Ranch, California, 1965 to 1966, by Barbara Stauffacher Solomon; peaked in the 1970s [S1][S2]",
+    "defining": [
+      "Oversized painted graphics that wrap walls, floors and ceilings and change how big a space feels [S1]",
+      "Typography, multicoloured abstract shapes and patterns at architectural scale [S1]",
+      "Used for wayfinding and branding in public spaces, from Sea Ranch to the 1984 Los Angeles Olympics [S1][S2]",
+      "On screen: shapes and letters cropped by the frame so they feel bigger than the viewport [inferred]"
+    ],
+    "code": ".hero{background:linear-gradient(180deg,#e94e1b 0 25%,#f6a800 25% 50%,#2a9d8f 50% 75%,#1d3557 75%)}",
+    "traits": {
+      "surface": "solid",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "geometric",
+      "color": "vivid",
+      "contrast": "high",
+      "type": "neo-grotesque",
+      "texture": "none",
+      "ornament": "geometric-shapes",
+      "layout": "full-bleed",
+      "motion": "parallax",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Wayfinding, events, school and civic brands, landing-page heroes, offices",
+    "goes_wrong": "Stripes and giant type everywhere, so nothing feels big any more",
+    "accessibility": "Cropped giant letters are not readable words; repeat the message in normal text at 4.5:1 and switch off parallax under reduced motion",
+    "related": ["swiss", "memphis", "mid-century-modern", "bauhaus"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Supergraphics", "supports": "definition, scale, typography and abstract shapes; mid-1960s origin, 1970s peak; Sea Ranch 1965; wayfinding; on-screen use"},
+      {"id": "S2", "url": "https://eyemagazine.com/review/article/type-space", "supports": "Supergraphics book review: Stauffacher Solomon at Sea Ranch (1966), Hear Hear store (1969), Sussman's 1984 Olympics work"}
+    ],
+    "examples": [
+      {"name": "Sea Ranch graphics by Barbara Stauffacher Solomon, 1966 (Eye review)", "url": "https://eyemagazine.com/review/article/type-space", "what": "large-scale graphics painted on architecture"}
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "new-wave-typography",
+    "name": "New Wave typography",
+    "aliases": ["Swiss Punk", "Weingart style", "Basel New Wave", "Swiss New Wave"],
+    "plain": "Swiss-style letters broken loose: tilted, layered, stepped and spaced oddly",
+    "people_say": ["80s design poster", "messy but clean type", "broken grid", "tilted text blocks", "layered type collage", "experimental typography", "Swiss but rebellious"],
+    "origin": "Basel School of Design, Switzerland, early 1970s, Wolfgang Weingart [S1][S2]",
+    "defining": [
+      "Inconsistent letterspacing, several weights inside one word and type set at non-right angles [S1]",
+      "Breaks the grid: centred, ragged or chaotic setting and the bold stairstep form [S1]",
+      "Text layered and textured with film transparencies and collage [S1]",
+      "Posters that look complex and chaotic yet playful, from offset printing experiments [S3]",
+      "Sans serif still dominates, from its Swiss roots [S1]"
+    ],
+    "code": ".step>span{display:block}.step>span:nth-child(2){margin-left:4ch}.step>span:nth-child(3){margin-left:8ch;letter-spacing:.3em}",
+    "traits": {
+      "surface": "solid",
+      "edge": "hairline",
+      "depth": "layered",
+      "shape": "sharp",
+      "color": "neutral-accent",
+      "contrast": "high",
+      "type": "neo-grotesque",
+      "texture": "halftone",
+      "ornament": "geometric-shapes",
+      "layout": "asymmetric",
+      "motion": "subtle",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Design studios, culture and architecture posters, conference sites, editorial openers",
+    "goes_wrong": "Random tilts with no hidden grid look sloppy instead of deliberate",
+    "accessibility": "Rotated, widely spaced text slows reading; keep body text horizontal with normal spacing, save the play for headings, and check layered text at 4.5:1",
+    "related": ["swiss", "grunge-typography", "editorial", "memphis", "constructivism"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/New_Wave_(design)", "supports": "definition: inconsistent letterspacing, mixed weights, non-right angles, stairstep, layered film textures; Weingart early 1970s at Basel; sans serif predominates"},
+      {"id": "S2", "url": "https://collections.vam.ac.uk/item/O1155283/", "supports": "Weingart credited as father of new wave or swiss punk; 'playfully liberated chaos'"},
+      {"id": "S3", "url": "https://internationalposter.com/style-primers/post-modernist-posters/", "supports": "Weingart's offset experiments made posters complex, chaotic, playful and spontaneous"}
+    ],
+    "examples": [
+      {"name": "Wolfgang Weingart, Kunsthalle Basel Kunstkredit 76-77 poster (V&A)", "url": "https://collections.vam.ac.uk/item/O1155283/", "what": "layered, stepped type breaking the Swiss grid"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "grunge-typography",
+    "name": "Grunge typography",
+    "aliases": ["deconstructivist typography", "Ray Gun style", "David Carson style", "90s grunge layout", "distressed type"],
+    "plain": "Messy layered type, scratched textures and photos that overlap and bleed",
+    "people_say": ["90s skate magazine", "dirty grunge look", "messy layered text", "distressed and chaotic", "Ray Gun magazine vibe", "broken type", "raw and gritty"],
+    "origin": "United States, about 1989 to 1995; Ray Gun magazine from about 1992 [S1]",
+    "defining": [
+      "Chaotic, collage-like pages with layered photos and messy typography [S1]",
+      "Words, textures and background fused together in one image [S2]",
+      "Deliberately unfinished experimental alphabets made on the Mac (FUSE, from 1990) [S3]",
+      "Text that runs off edges and over pictures; texture trait 'grain' stands in for photocopy dirt and scratches [inferred]"
+    ],
+    "code": ".title{mix-blend-mode:difference;letter-spacing:-.06em;line-height:.8;filter:url(#roughen)}",
+    "traits": {
+      "surface": "textured",
+      "edge": "rough",
+      "depth": "layered",
+      "shape": "irregular",
+      "color": "muted",
+      "contrast": "normal",
+      "type": "display",
+      "texture": "grain",
+      "ornament": "photo",
+      "layout": "collage",
+      "motion": "glitchy",
+      "theme": "both"
+    },
+    "ui_fit": "marketing",
+    "fits": "Music, skate and surf brands, zines, festival sites, youth culture editorial",
+    "goes_wrong": "The chaos leaks into body copy, forms and checkout, where people need to read and act",
+    "accessibility": "Overlapping, distressed text fails contrast and screen readers; keep content and controls as real unlayered text at 4.5:1 and limit texture to images",
+    "related": ["new-wave-typography", "punk-zine", "dada-photomontage", "brutalism", "grain"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/David_Carson_(graphic_designer)", "supports": "Beach Culture 1989, then Ray Gun three years later; chaotic collage-like style with layered photos and messy type"},
+      {"id": "S2", "url": "https://collections.vam.ac.uk/item/O1364133/", "supports": "Carson described as 'godfather of grunge typography'; words, textures and background fused in a chaotic form"},
+      {"id": "S3", "url": "https://collections.vam.ac.uk/item/O1041541/", "supports": "FUSE started 1990 by Neville Brody; experimental, often unfinished alphabets for the Mac"}
+    ],
+    "examples": [
+      {"name": "David Carson, National Theatre 50th anniversary poster, 2013 (V&A)", "url": "https://collections.vam.ac.uk/item/O1364133/", "what": "type, texture and background fused together"}
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "punk-zine",
+    "name": "Punk zine",
+    "aliases": ["DIY punk", "ransom-note type", "cut-and-paste zine", "photocopy aesthetic", "xerox punk"],
+    "plain": "Photocopied cut-out letters, ripped paper and scrawled words in black and white",
+    "people_say": ["punk flyer", "ransom note letters", "photocopied zine", "DIY rebel look", "ripped and taped", "Sex Pistols style", "raw handmade", "black and white xerox"],
+    "origin": "London and New York, 1976 to 1977; ransom-note lettering on a Sex Pistols flyer, August 1976 [S1][S2]",
+    "defining": [
+      "Ransom-note lettering: letters cut from newspapers and magazines [S2][S4]",
+      "Cut-and-paste newsprint with handwritten additions and found images [S1]",
+      "Stencils, Letraset, hand-scrawled lettering and graffiti [S1]",
+      "Black-and-white photocopied flyers [S3]",
+      "Mostly black or grey, with crude DIY graphics [S4]"
+    ],
+    "code": "main{background:#f2f2f0;filter:grayscale(1) contrast(1.4)}.clip{display:inline-block;background:#fff;transform:rotate(-4deg)}",
+    "traits": {
+      "surface": "paper",
+      "edge": "rough",
+      "depth": "layered",
+      "shape": "irregular",
+      "color": "monochrome",
+      "contrast": "high",
+      "type": "display",
+      "texture": "grain",
+      "ornament": "photo",
+      "layout": "collage",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Gig promos, indie zines, activist campaigns, streetwear drops",
+    "goes_wrong": "Clean vector 'tape' and fake grit look like a punk template rather than something made",
+    "accessibility": "Letters as images are invisible to screen readers and hard to read; set real text, keep collage for headings with alt text, and hold body text at 4.5:1",
+    "related": ["dada-photomontage", "grunge-typography", "risograph", "brutalism", "neo-brutalism"],
+    "sources": [
+      {"id": "S1", "url": "https://eyeondesign.aiga.org/too-fast-to-live-too-young-to-die-how-punk-is-still-impacting-graphic-design/", "supports": "ransom-note type and cut-and-paste newsprint; zines; stencils, Letraset, hand-scrawled lettering, graffiti; purists date punk to 1976 to 1977"},
+      {"id": "S2", "url": "https://collections.vam.ac.uk/item/O1153675/", "supports": "ripped, ransom-note style lettering first used on a Sex Pistols flyer, 31 August 1976; Reid's cut-and-paste aesthetic"},
+      {"id": "S3", "url": "https://collections.vam.ac.uk/item/O1155084/", "supports": "1976 flyer as a black and white photocopy with ransom-note text"},
+      {"id": "S4", "url": "https://en.wikipedia.org/wiki/Punk_visual_art", "supports": "black or grey colours, cut-out letters linked to Dada and ransom notes; DIY crude graphics"}
+    ],
+    "examples": [
+      {"name": "Jamie Reid, Sex Pistols banner poster, 1976 (V&A)", "url": "https://collections.vam.ac.uk/item/O1153675/", "what": "ripped ransom-note lettering"},
+      {"name": "Sex Pistols Notre Dame Hall flyer, 1976 (V&A)", "url": "https://collections.vam.ac.uk/item/O1155084/", "what": "photocopied flyer with cut-out letters"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "japanese-minimalism",
+    "name": "Japanese minimalism (ma and wabi-sabi)",
+    "aliases": ["wabi-sabi", "Muji style", "Zen minimal", "emptiness design", "ma (negative space)"],
+    "plain": "Calm empty space, soft paper colors and a few quiet marks",
+    "people_say": ["zen and calm", "Muji vibe", "Japanese minimal", "quiet and natural", "imperfect handmade beauty", "lots of white space", "earthy and simple", "tea house feel"],
+    "origin": "Japan; the wabi aesthetic of the late 15th-century tea ceremony, restated by Kenya Hara for Muji from 2001 [S1]",
+    "defining": [
+      "Emptiness rather than simplicity: open space left for the viewer to fill with meaning [S1]",
+      "Austere beauty and elegant rusticity with unadorned objects [S1]",
+      "Asymmetry, roughness, simplicity, economy, modesty and natural materials [S2]",
+      "Acceptance of imperfection and impermanence; work shows its process [S2]",
+      "On screen: off-white paper grounds, earth tones and wide margins [inferred]"
+    ],
+    "code": "body{background:#f4f1ea;color:#34332f;max-width:34rem;margin:18vh auto;line-height:1.9;letter-spacing:.02em}",
+    "traits": {
+      "surface": "paper",
+      "edge": "none",
+      "depth": "flat",
+      "shape": "subtle",
+      "color": "earthy",
+      "contrast": "low",
+      "type": "serif",
+      "texture": "paper",
+      "ornament": "none",
+      "layout": "minimal",
+      "motion": "subtle",
+      "theme": "light"
+    },
+    "ui_fit": "core-ui",
+    "fits": "Wellness, tea and food, craft goods, reading and journaling apps, architecture portfolios",
+    "goes_wrong": "Empty turns vague: grey-on-beige text and hidden controls that nobody can find",
+    "accessibility": "Soft palettes drift below 4.5:1; keep body text dark enough to pass, controls at 3:1 against the paper tone, and never let empty space hide navigation",
+    "related": ["minimal-monochrome", "scandinavian", "organic", "editorial"],
+    "sources": [
+      {"id": "S1", "url": "https://metropolismag.com/projects/kenya-hara-breaks-down-muji-unique-appeal/", "supports": "Hara: emptiness not simplicity; wabi from the late 15th-century tea ceremony; austere beauty and elegant rusticity; Hara at Muji since 2001"},
+      {"id": "S2", "url": "https://en.wikipedia.org/wiki/Wabi-sabi", "supports": "asymmetry, roughness, simplicity, economy, austerity, modesty, natural objects; imperfection and impermanence"}
+    ],
+    "examples": [
+      {"name": "Muji", "url": "https://muji.us/", "what": "unadorned products and quiet, mostly empty brand surfaces (described by S1)"}
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "scandinavian",
+    "name": "Scandinavian (Nordic) design",
+    "aliases": ["Nordic design", "Scandi", "Scandinavian Modern", "Danish modern", "Marimekko style"],
+    "plain": "Light, calm and simple, with soft wood tones and one bold pattern",
+    "people_say": ["Scandi", "clean and cozy", "hygge", "light and airy", "Nordic minimal", "like a nice furniture catalog", "simple with a bold flower print"],
+    "origin": "Denmark, Finland, Norway, Sweden and Iceland; flourished in the 1950s; 'Design in Scandinavia' toured North America from 1954 [S1][S2]",
+    "defining": [
+      "Simplicity, minimalism and functionality [S1]",
+      "Durability, beauty, simplicity and natural forms; simple clean lines [S1]",
+      "Simple, curving wooden furniture and homeware, promoted as honest, organic and handcrafted [S2]",
+      "Marimekko textiles with simple shapes and bold patterns, a shock in the US in 1959 [S2]",
+      "Hygge: simplicity, warmth and coziness [S2]"
+    ],
+    "code": ":root{--bg:#f7f5f1;--ink:#26292b;--wood:#d9c3a5;--accent:#1f6f8b}.card{background:#fff;border-radius:12px;border:1px solid #e4dfd6}",
+    "traits": {
+      "surface": "solid",
+      "edge": "hairline",
+      "depth": "tonal",
+      "shape": "rounded",
+      "color": "neutral-accent",
+      "contrast": "normal",
+      "type": "humanist",
+      "texture": "pattern",
+      "ornament": "none",
+      "layout": "grid",
+      "motion": "subtle",
+      "theme": "light"
+    },
+    "ui_fit": "core-ui",
+    "fits": "Home goods, furniture, family and wellbeing apps, public services, productivity tools",
+    "goes_wrong": "Beige on beige with no hierarchy, so every screen looks the same and nothing guides the eye",
+    "accessibility": "Light neutrals produce faint text and borders; keep text at 4.5:1 and input borders at 3:1, and use the bold accent for one primary action only",
+    "related": ["mid-century-modern", "japanese-minimalism", "minimal-monochrome", "organic", "flat"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Scandinavian_design", "supports": "simplicity, minimalism and functionality; flourished in 1950s in five Nordic countries; Brooklyn Museum 1954; clean lines and natural forms"},
+      {"id": "S2", "url": "https://www.1stdibs.com/introspective-magazine/scandinavian-design-in-the-us/", "supports": "LACMA show: simple curvilinear wooden furniture; honest, organic, handcrafted; Marimekko simple shapes and bold patterns in 1959; hygge; Design in Scandinavia 1954 tour"}
+    ],
+    "examples": [
+      {"name": "Marimekko textiles (in LACMA's Scandinavian Design and the United States show)", "url": "https://www.1stdibs.com/introspective-magazine/scandinavian-design-in-the-us/", "what": "simple shapes and bold flat patterns"}
+    ],
+    "confidence": "medium"
+  },
+  {
+    "id": "ukiyo-e",
+    "name": "Ukiyo-e flat colour",
+    "aliases": ["Japanese woodblock print style", "Hokusai style", "Hiroshige style", "Japonisme", "Edo print"],
+    "plain": "Bold outlines filled with flat colors, deep blues and soft fades",
+    "people_say": ["Japanese wave print", "Hokusai look", "old Japanese art", "flat colors with outlines", "Edo poster", "Great Wave style", "deep blue and paper"],
+    "origin": "Edo (now Tokyo), Japan, 17th to 19th centuries [S1]",
+    "defining": [
+      "Bold, flat lines that define and contain areas of flat colour [S1]",
+      "Asymmetric compositions seen from unusual angles, such as from above [S1]",
+      "Prussian blue prominent in Hokusai and Hiroshige landscapes, plus bokashi colour fades [S1][S3]",
+      "Flatness, brilliant colour and strong stylisation that shaped Western art and Art Nouveau [S2]",
+      "Differs from the craft entry 'woodcut': this is the flat-colour and outline look, not carved texture [inferred]"
+    ],
+    "code": ".scene{background:linear-gradient(#1d3b6e 0,#f2e8d0 65%);border:3px solid #1b1b1b}",
+    "traits": {
+      "surface": "paper",
+      "edge": "thick-outline",
+      "depth": "flat",
+      "shape": "sharp",
+      "color": "spot-inks",
+      "contrast": "normal",
+      "type": "serif",
+      "texture": "paper",
+      "ornament": "illustration",
+      "layout": "asymmetric",
+      "motion": "still",
+      "theme": "light"
+    },
+    "ui_fit": "marketing",
+    "fits": "Travel, food and sake brands, editorial illustration, games, tea and craft shops",
+    "goes_wrong": "Turns into costume Orientalism: borrowed waves and fake brush fonts with no real reference",
+    "accessibility": "Blue-grey text on pale paper can dip below 4.5:1; check text contrast and keep illustrated scenes decorative with short alt text",
+    "related": ["art-nouveau", "japanese-minimalism", "flat", "duotone"],
+    "sources": [
+      {"id": "S1", "url": "https://en.wikipedia.org/wiki/Ukiyo-e", "supports": "17th to 19th centuries; bold flat lines containing flat colour; asymmetric unusual viewpoints; Prussian blue in Hokusai and Hiroshige; bokashi gradations"},
+      {"id": "S2", "url": "https://www.tate.org.uk/art/art-terms/j/japonisme", "supports": "flatness, brilliant colour and stylisation of Japanese woodcut prints shaped Western art and Art Nouveau"},
+      {"id": "S3", "url": "https://collections.vam.ac.uk/item/O92913/", "supports": "Hiroshige fan print with blue predominant"}
+    ],
+    "examples": [
+      {"name": "Utagawa Hiroshige, Swimming Turtles fan print (V&A)", "url": "https://collections.vam.ac.uk/item/O92913/", "what": "outlined forms on a dominant flat blue"}
+    ],
+    "confidence": "high"
+  },
+  {
+    "id": "polish-poster",
+    "name": "Polish poster school",
+    "aliases": ["Polish School of Posters", "Polish film poster", "Cyrk posters"],
+    "plain": "Painted, surreal poster pictures with hand-lettered titles and a clever twist",
+    "people_say": ["arty film poster", "surreal hand-painted poster", "quirky Eastern European poster", "clever visual metaphor", "brushy and bold", "hand-lettered title", "witty and dark"],
+    "origin": "Poland, 1947 to the 1980s, led by Henryk Tomaszewski in Warsaw [S1][S3]",
+    "defining": [
+      "One succinct visual metaphor carries the whole message [S2][S5]",
+      "A vibrantly coloured, painterly approach; the brush stays the main tool [S2][S4]",
+      "Hand-lettered, self-expressive titles instead of typeset type [S2][S3]",
+      "Brash wit, irony and sardonic surrealism [S3][S5][S6]"
+    ],
+    "code": ".poster{background:#e63b2e;color:#111}.poster h1{font-family:'Caveat Brush',cursive;transform:rotate(-2deg)}",
+    "traits": {
+      "surface": "textured",
+      "edge": "rough",
+      "depth": "flat",
+      "shape": "irregular",
+      "color": "vivid",
+      "contrast": "high",
+      "type": "handwritten",
+      "texture": "paper",
+      "ornament": "illustration",
+      "layout": "full-bleed",
+      "motion": "still",
+      "theme": "both"
+    },
+    "ui_fit": "marketing",
+    "fits": "Film, theatre and festivals, book covers, cultural institutions, editorial illustration",
+    "goes_wrong": "Weird for its own sake: surreal images without one clear idea leave people confused",
+    "accessibility": "Hand-lettered titles on painted grounds are hard to read; repeat dates, venues and prices in plain text at 4.5:1 and write alt text that explains the metaphor",
+    "related": ["dada-photomontage", "plakatstil", "pop-art-silkscreen", "playful"],
+    "sources": [
+      {"id": "S1", "url": "https://bfi.org.uk/features/polish-poster-art-classic-british-films", "supports": "established 1947, headed by Tomaszewski; painterly film posters; 1948 Vienna medals"},
+      {"id": "S2", "url": "https://en.wikipedia.org/wiki/Polish_School_of_Posters", "supports": "succinct metaphors, vibrantly coloured painterly approach, hand-lettered typography"},
+      {"id": "S3", "url": "https://hmctartcenter.org/exhibitions/polski-projekt-polish-posters-and-typefaces", "supports": "brash wit, painterly approaches based on ambiguity and metaphor; hand-drawn self-expressive lettering"},
+      {"id": "S4", "url": "https://eyemagazine.com/feature/article/the-painted-word1", "supports": "Tomaszewski keeps the paintbrush as his key instrument; painterly approach"},
+      {"id": "S5", "url": "https://collections.vam.ac.uk/item/O193584/", "supports": "Polish Poster School known from the 1950s for painterly approach, irony and visual metaphor"},
+      {"id": "S6", "url": "https://internationalposter.com/style-primers/mid-century-modern-1960s-style-posters/", "supports": "Polish school known for sardonic, gut-wrenching surrealism, 1950s to 1980s"}
+    ],
+    "examples": [
+      {"name": "Henryk Tomaszewski, May Poland be Poland poster, 1989 (V&A)", "url": "https://collections.vam.ac.uk/item/O193584/", "what": "hand-made lettering and a single visual idea"},
+      {"name": "Marian Stachurski, Five Tumbling Men circus poster, 1974 (V&A)", "url": "https://collections.vam.ac.uk/item/O1607475/", "what": "simplified forms and comic hand-drawn elements"}
+    ],
+    "confidence": "high"
+  }
+]

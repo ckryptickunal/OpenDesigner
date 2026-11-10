@@ -1,0 +1,91 @@
+{
+  "piece": "heroes/13-ferrule-security",
+  "title": "13 Ferrule: security and audit hero",
+  "pattern": "product hero",
+  "platform": "web",
+  "industry": "B2B data platform, security and access",
+  "style": [
+    "minimal",
+    "product-led",
+    "flat",
+    "typographic"
+  ],
+  "tags": [
+    "product hero",
+    "b2b",
+    "security",
+    "audit log",
+    "it admins",
+    "product screenshot",
+    "brand colour field",
+    "plum",
+    "column-aligned headline"
+  ],
+  "score": 4,
+  "verdict": "keep",
+  "strengths": [
+    "An idea only this product could own: the headline 'When. Who. What. Where.' is set as the header of the audit log below, each word within 1-2 px of its column (Time 328, Actor 485, Action 689, IP address 1167) on a hairline that matches the log's own header rule (317 to 1355 px), and the open row answers it: 13:58:07, Amara Sjöberg, session length 24 h → 12 h, 198.51.100.24 Stockholm",
+    "The real audit log, flat and whole at full grid width (1440 layout at 0.9333, 13 px body), white on Ferrule's own plum (accent 11, #63295f, flat); the 900 px fold lands on the claims-archive row's bottom border and the frame ends on a row boundary below it",
+    "Restraint and contrast: one face (Red Hat Text), regular weight, one white button, white on plum 10.4:1 and the sentence 7.2:1 measured; the nav links start on the same 328 px edge as the headline, sentence and button"
+  ],
+  "slop_signals": [
+    "The word spacing follows the product's column widths (gaps of about 23, 95 and 355 px), so it can read as broken spacing before the eye reaches the column labels",
+    "A full plum page is the closest thing in the set to the owner's 'no violet' rule (it is a flat aubergine, not a glow)",
+    "Shares the copy-band-over-full-width-product skeleton with heroes/11 and 14; the column headline and the plum field are what set it apart"
+  ],
+  "fixes": [
+    "Product-side: change larchfieldmutual.com addresses in product/06 to larchfieldmutual.example (new .example rule) and set data-theme=\"light\" on its <html>",
+    "Product-side: the event ID evt_01JA7X… decodes (ULID) to 2024-10-15; regenerate it for 2026-10-14. The row summary names only the session-length change though the details show the idle timeout changed too",
+    "If the owner reads the word gaps as a bug or the plum as violet, fall back to the near-black page from the product"
+  ],
+  "references": [
+    {
+      "site": "Current",
+      "url": "https://mobbin.com/sites/sections/432bd327-9a31-4c91-9790-fa7177212f8b",
+      "what": "Security hero on a dark brand field with one action; ours uses the product's own plum and the real log instead of a checklist"
+    },
+    {
+      "site": "Retool",
+      "url": "https://mobbin.com/sites/sections/4cba4337-40f7-4bc9-b877-ed1339104bd0",
+      "what": "Product UI taking most of the hero; ours keeps it whole inside the grid instead of bleeding off the edge"
+    },
+    {
+      "site": "1Password",
+      "url": "https://mobbin.com/sites/sections/ffe8e8fc-2ad0-439a-b5a4-cd3fa615cf1b",
+      "what": "Product screenshot on one brand-colour field; ours makes the field the whole page and ties the headline to the screenshot's columns"
+    }
+  ],
+  "audited": "2026-10-15",
+  "self_score": 4,
+  "audited_by": "independent",
+  "facts": [
+    "Product-side: larchfieldmutual.com emails and domain visible in the embedded screen (should be .example); no data-theme on product/06; 'Updated 14:02 UTC' also in product/04; ULID event ID decodes to 2024",
+    "The column-locked headline is capped at 50 px by the 157 px Time column"
+  ],
+  "fixed": [
+    "Overclaims removed: 'two-factor required for every member', 'data' for 'data access', an invented 30-day trial (button is now 'Start a workspace'), 'every event keeps the before and after values'",
+    "Feature strip, mono spec rows and pastel panel replaced by the column-aligned headline on the product's plum",
+    "Crop measured in Chrome so the fold and the frame end both fall on row boundaries",
+    "Hidden caption no longer names larchfieldmutual.com (.example rule); unused Red Hat Mono link removed; hover only on fine pointers"
+  ],
+  "owner": {
+    "verdict": "remove",
+    "said": "Hide all 6: approved the round 4 audit's removals (mockups showing removed pieces, heroes repeating the product screens, a generic timer)",
+    "date": "2026-10-15"
+  },
+  "round3": {
+    "score": 4,
+    "changed": [
+      "New piece: marketing hero for product/06 Ferrule, using the product's own system extended with a display set (Q-brand-06 two-sets)",
+      "About sixteen fresh-eyes audit rounds: 3 through every centred-template version, then 4 twice for the column-aligned headline on the plum page",
+      "Distinct from heroes/12 (dark, product first, one grid-wide line) and heroes/14 (headline beside a footed ledger)"
+    ]
+  },
+  "owner_history": [
+    {
+      "verdict": "new",
+      "said": "built after the owner's review",
+      "date": "2026-10-14"
+    }
+  ]
+}

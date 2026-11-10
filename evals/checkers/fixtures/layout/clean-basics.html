@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clean basics</title>
+<!-- Checker eval fixture for site/check_layout.py. Clean control: the corrected version of every planted layout defect (an image that shrinks, code that wraps, a hero whose rows share one centre line, aligned stacks, 32 px targets, a key that wraps, a Copy button on the first line with room beside it, balanced headings, one-line chips, actions on one row with the primary on the right). Checked at all 13 widths; every finding here is a false alarm.
+     The planted defects and where each must be found are listed in evals/checkers/manifest.json. -->
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html { font: 16px/1.5 system-ui, -apple-system, sans-serif; color: #1c1c1e; background: #ffffff; }
+body { margin: 0; }
+main { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 28px; line-height: 1.2; margin: 0 0 16px; text-wrap: balance; }
+h2 { font-size: 20px; line-height: 1.3; margin: 24px 0 8px; text-wrap: balance; }
+p { margin: 0 0 16px; text-wrap: pretty; }
+.x-card { border: 1px solid #d1d1d6; border-radius: 12px; padding: 16px; background: #f7f7f8; }
+button { font: inherit; font-size: 15px; min-height: 40px; padding: 0 16px; border: 1px solid #8e8e93; border-radius: 8px; background: #ffffff; color: #1c1c1e; }
+button.primary { background: #1f4fd8; border-color: #1f4fd8; color: #ffffff; }
+img { max-width: 100%; height: auto; }
+.fig-card { border: 1px solid #d1d1d6; border-radius: 12px; padding: 16px; margin: 0 0 16px; background: #f7f7f8; }
+.fig-card pre { margin: 0; font: 14px/24px ui-monospace, Menlo, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+#hero-cards { display: flex; gap: 16px; margin: 0 0 24px; }
+#hero-cards .x-card { min-height: 120px; }
+#big { flex: 2 1 0; }
+.pair { flex: 2 1 0; display: flex; gap: 16px; }
+.pair .x-card { flex: 1 1 0; min-width: 0; }
+@media (max-width: 900px) {
+  #hero-cards { flex-direction: column; }
+  #big, .pair { width: 100%; max-width: 520px; margin-inline: auto; }
+}
+#stack { display: grid; gap: 16px; max-width: 560px; margin: 0 0 24px; }
+.tools { display: flex; gap: 8px; margin: 0 0 24px; }
+.icon { min-height: 0; width: 32px; height: 32px; padding: 0; border-radius: 8px; }
+#key-card { max-width: 320px; margin: 0 0 24px; }
+#api-key { font: 14px/24px ui-monospace, Menlo, monospace; overflow-wrap: anywhere; }
+.code { position: relative; padding: 12px 84px 12px 12px; border: 1px solid #d1d1d6; border-radius: 12px; background: #f7f7f8; margin: 0 0 24px; }
+.code pre { margin: 0; font: 14px/24px ui-monospace, Menlo, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+.copy { position: absolute; top: 12px; right: 12px; min-height: 0; height: 24px; padding: 0 10px; font-size: 13px; line-height: 22px; border-radius: 6px; }
+.lede { font-size: 18px; text-wrap: balance; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; }
+.chip { display: inline-block; white-space: nowrap; padding: 2px 8px; border: 1px solid #8e8e93; border-radius: 999px; font-size: 13px; line-height: 18px; }
+.x-actions { display: flex; justify-content: space-between; gap: 8px; margin: 0 0 24px; }
+.x-actions button { white-space: nowrap; }
+</style>
+</head>
+<body>
+<main>
+<h1>Clean basics</h1>
+<p class="lede">Every width is checked before shipping, so the layout holds from a small phone to a wide screen.</p>
+<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='120'%3E%3Crect width='400' height='120' fill='%23dfe6f7'/%3E%3Cpath d='M0 100 L80 60 L160 80 L240 30 L320 50 L400 20' stroke='%231f4fd8' stroke-width='4' fill='none'/%3E%3C/svg%3E" width="400" height="120" alt="Signups rose from 40 to 90 a month">
+<h2>Install the skills</h2>
+<div class="fig-card"><pre>python3 tools/build_data.py --check --source synthesis/questionnaire.json --out data/</pre></div>
+<div id="hero-cards">
+  <div class="x-card" id="big"><strong>Tokens</strong><p>One source for every surface.</p></div>
+  <div class="pair">
+    <div class="x-card"><strong>Checks</strong></div>
+    <div class="x-card"><strong>Exports</strong></div>
+  </div>
+</div>
+<div id="stack">
+  <div class="x-card"><strong>Sketch</strong><p>Five answers.</p></div>
+  <div class="x-card"><strong>Build</strong><p>Tokens and exports.</p></div>
+  <div class="x-card"><strong>Review</strong><p>Every width.</p></div>
+</div>
+<div class="tools"><button class="icon" aria-label="Zoom in">+</button><button class="icon" aria-label="Zoom out">-</button></div>
+<div class="x-card" id="key-card"><strong>Your key</strong><br><code id="api-key">od_example_key_not_real_0123456789ab</code></div>
+<div class="code"><button class="copy">Copy</button><pre>git clone https://github.example/opendesigner/opendesigner.git && cd opendesigner && python3 tools/sync_skills.py --check</pre></div>
+<section>
+  <h2>How it works</h2>
+  <p>Five questions sketch the whole system. Then you zoom in only where it matters.</p>
+  <p>Each answer is written to a file.</p>
+</section>
+<div class="chips"><span class="chip">Default</span><span class="chip">Read only</span><span class="chip">Starter plan</span></div>
+<div class="x-actions"><button>Skip today</button><button class="primary">Mark today done</button></div>
+</main>
+</body>
+</html>

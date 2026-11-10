@@ -51,7 +51,7 @@ Every source in `sources.json` has an `authority`. It decides what the knowledge
 Current sources:
 - **Non-negotiable:** Emil Kowalski's site, the Sonner docs, animations.dev (public pages only; the course itself is paid), the `emilkowalski/skills` repo (MIT).
 - **Good to have:** the Vaul docs. The Vaul README says the library is unmaintained, so OpenDesigner recommends its drawer craft but flags that status before suggesting it as a dependency.
-- **Reference:** every video on Kole Jain's and Mobbin's channels, and Steve Schoger's "Designing with Claude Code".
+- **Reference:** every video on Kole Jain's and Mobbin's channels, Steve Schoger's "Designing with Claude Code", Wyatt Feaster's "The Reason Why Some Apps Feel Expensive, But Most Don't" (consumer apps), Palantir's Workshop "Application design best practices" (enterprise apps), the `referodesign/refero_skill` repo (MIT), and davecto's "Taste Index" Instagram reel (a format for an AI-readable taste summary; its copying of one brand's identity is a caveat, not a rule). Each rule can say whether it is for consumer products, enterprise products or both: see [../docs/KNOWLEDGE.md](../docs/KNOWLEDGE.md) section 3.
 
 ## The pipeline
 
@@ -137,6 +137,15 @@ python3 -m venv .venv-wiki
 
 - `YOUTUBE_API_KEY` in the environment lists channel videos. Since OpenWiki 0.3, `yt-dlp` (on the PATH or installed in the venv) lists channels without a key, and a single video never needs one.
 - Since OpenWiki 0.3, transcripts are timed: each caption line starts with `[m:ss]`. Analyses cite evidence with the cue's timestamp, and `wiki.py cite-check` ignores the markers when it looks for a phrase.
+- **A video behind a login** (an Instagram reel, for example): `wiki.py add` makes it a page source, and `fetch` skips it for too little text. Do these steps by hand instead:
+  1. Play the post in a browser and take the video's file address from the page's network or resource list. Save the video to a scratch folder, never the repo.
+  2. Transcribe the audio locally (Whisper). If its command-line tool crashes on a numba/coverage clash, call it from Python after `sys.modules['coverage'] = None`.
+  3. Look at the frames: a contact sheet at 4 frames per second, plus full-resolution crops wherever text is on screen.
+  4. Write `learn/raw/<folder>/<id>.txt` in the header format other sources use. Add a `TRANSCRIPT` section with `[m:ss]` cues and an `ON-SCREEN TEXT` section for what you read from the frames.
+  5. Write the analysis. Its caveats say what came from frames only.
+  6. Delete the video and the frames.
+
+  The davecto reel (2026-10-15) was added this way.
 - YouTube blocks an IP after many caption requests. Wait an hour, or run `tor` and set `YOUTUBE_PROXY=socks5://127.0.0.1:9050`.
 - No Gemini key is needed: the analysis is done by agents and passed to OpenWiki with `--analysis-file`. OpenWiki's own Gemini ingest still works if you prefer it, but its output lacks the rules, decisions and authority fields.
 - `JEV_API_KEY` (TypeSafe) in the environment or `.env` enables `cite-check` and Jev ranking in `tools/jev_nav.py find`.

@@ -1,0 +1,361 @@
+{
+  "summary": "A short Refero workflow reference for visual exploration, generated imagery and post-build visual QA. It says to offer three distinct reference-locked visual directions only for high-visibility or new-visual-language work, then stop and let the user pick one as the build target. Before coding it asks for an explicit visual target and a list of what must not drift, and before generating any bitmap asset it asks for a short asset lock. After building it runs a visual QA pass with P0-P3 severities and blocks handoff on unresolved P0-P2 issues. For a design system this gives a concrete gate-based process for choosing a direction and checking the result against it.",
+  "key_ideas": [
+    "Keep the main workflow research-first: styles for taste, screens for patterns, flows for journeys",
+    "Image generation is optional; the workflow must still work when no image tool exists",
+    "Offer three distinct reference-locked directions only for exploration-worthy work, not small edits",
+    "Each direction names a primary source, traits to keep, borrowed details, media strategy and rejects",
+    "Stop and let the user choose; the chosen direction becomes the target for build and QA",
+    "Before coding, state the build target and what must not drift",
+    "Generate bitmap assets only when the reference lock needs real imagery, never for icons or fake product evidence",
+    "Write an asset lock (role, slot, art direction, avoid) before generating",
+    "Generated assets must be placed in the build before handoff or reported as blocked",
+    "Run a visual QA pass comparing implementation evidence with source truth per viewport and state",
+    "Classify issues P0-P3 and do not hand off with unresolved P0, P1 or P2"
+  ],
+  "entities": [
+    {
+      "name": "Refero",
+      "type": "company",
+      "description": "Publisher of the refero_skill repo this workflow belongs to"
+    },
+    {
+      "name": "Codex Desktop",
+      "type": "product",
+      "description": "Named host whose built-in image_gen tool should be used when available"
+    },
+    {
+      "name": "Reference lock",
+      "type": "concept",
+      "description": "A direction tied to a primary source with traits to preserve, borrowed details, media strategy and rejects"
+    },
+    {
+      "name": "Asset lock",
+      "type": "concept",
+      "description": "A short spec of role, slot, art direction and things to avoid written before generating an image"
+    },
+    {
+      "name": "Visual target gate",
+      "type": "concept",
+      "description": "The check before coding that names the build target and what must not drift"
+    }
+  ],
+  "topics": [
+    {
+      "name": "Design process",
+      "summary": "Gate-based flow: research, three reference-locked directions, user choice, visual target, build, visual QA with severities."
+    },
+    {
+      "name": "AI-assisted design",
+      "summary": "How an agent should use or skip image generation and avoid substituting screenshots, CSS drawings or SVG placeholders for real imagery."
+    },
+    {
+      "name": "Presenting designs",
+      "summary": "Present three distinct directions in a fixed format and stop for the user to choose."
+    },
+    {
+      "name": "Icons and imagery",
+      "summary": "Generate bitmap assets only for hero imagery, illustrations, textures, thumbnails and cutouts, with an asset lock first."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Refero must still work in Claude Code, Codex, Cursor, Gemini CLI, Lovable and other MCP agents when no image tool exists.",
+      "evidence": "Image Generation Capability"
+    },
+    {
+      "claim": "Another agent cannot be assumed able to call Codex Desktop's built-in image tool just because Codex is installed locally.",
+      "evidence": "Image Generation Capability: Do not assume another agent can call"
+    },
+    {
+      "claim": "P0 issues are broken tasks, unreadable or overlapping UI, or severe accessibility issues.",
+      "evidence": "Classify issues by severity"
+    },
+    {
+      "claim": "P1 issues are major design drift or a likely user-facing usability regression.",
+      "evidence": "Classify issues by severity"
+    },
+    {
+      "claim": "P2 issues are moderate visual mismatch, a missing state, a responsive issue or asset drift.",
+      "evidence": "Classify issues by severity"
+    },
+    {
+      "claim": "P3 issues are polish that can follow after handoff.",
+      "evidence": "Classify issues by severity"
+    }
+  ],
+  "quotes": [
+    "Stop and ask the user to choose.",
+    "Generated assets must be placed into the implementation before handoff or documented as blocked."
+  ],
+  "tags": [
+    "visual-qa",
+    "design-directions",
+    "image-generation",
+    "reference-lock",
+    "handoff",
+    "refero",
+    "process"
+  ],
+  "authority": "reference",
+  "rules": [
+    {
+      "rule": "Offer three distinct reference-locked visual directions only for variants, a new visual language, major redesigns, landing pages or other high-visibility surfaces; skip it for small edits, obvious component work or production fixes with a clear source.",
+      "why": "Exploration is useful only when several plausible directions exist.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "three"
+      ],
+      "evidence": "Three Visual Directions"
+    },
+    {
+      "rule": "Give each of the three directions a primary source, traits to preserve, borrowed details, a media strategy and rejects; use a different count only if the user asks.",
+      "why": "Makes each direction reference-locked.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Three Visual Directions step 2"
+    },
+    {
+      "rule": "After presenting directions, stop and ask the user to choose; use the chosen one as the visual target for build and QA.",
+      "why": "The selection becomes the target.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Three Visual Directions step 4"
+    },
+    {
+      "rule": "Before coding substantial visual work, write down the build target and what must not drift (canvas, typography, accent roles, layout, media, density).",
+      "why": "Visual Target Gate.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Visual Target Gate"
+    },
+    {
+      "rule": "If no target exists and the direction is material, explore options or get the user to approve one reference-locked direction before building.",
+      "why": "Visual Target Gate.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "If no target exists"
+    },
+    {
+      "rule": "Use image generation only when the environment exposes an image tool or the user approved a CLI/API image workflow; otherwise give written directions with implementation-ready prompts.",
+      "why": "Image generation is optional and must not be assumed.",
+      "kind": "do",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Image Generation Capability"
+    },
+    {
+      "rule": "Do not substitute browser screenshots, CSS drawings, inline SVG or placeholder shapes for generated bitmap assets when the reference lock calls for real imagery.",
+      "why": "Stated in the image generation section.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Image Generation Capability"
+    },
+    {
+      "rule": "Do not use image generation for standard icons, editable SVG systems, code-native UI or fake product evidence.",
+      "why": "Generate only bitmap media the reference lock needs.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "iconography",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Generated Assets"
+    },
+    {
+      "rule": "Before generating an asset, write an asset lock with role, slot (dimensions, aspect ratio, location), art direction and what to avoid.",
+      "why": "Required before generating; its avoid list names wrong palette, extra text, brand drift and generic placeholders.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Generated Assets: asset lock"
+    },
+    {
+      "rule": "Place generated assets in the implementation before handoff, or document them as blocked.",
+      "why": "Stated requirement.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Generated Assets"
+    },
+    {
+      "rule": "After substantial UI work, run visual QA comparing implementation evidence with the source truth for each viewport, route, theme and interaction state, checking typography, spacing, colors/tokens, imagery, component states and copy.",
+      "why": "Visual QA pass.",
+      "kind": "do",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Visual QA"
+    },
+    {
+      "rule": "Do not hand off visual work with unresolved P0, P1 or P2 findings unless blocked by missing source access, assets or tools; if blocked, say what evidence is missing and what to check next.",
+      "why": "Severity gate.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "process",
+      "applies_to": "all",
+      "values": [
+        "P0",
+        "P1",
+        "P2"
+      ],
+      "evidence": "Do not hand off visual work"
+    },
+    {
+      "rule": "Do not assume another agent can call Codex Desktop's built-in image tool because Codex is installed; verify the tool is exposed and user-approved first.",
+      "why": "Image generation must not be assumed available.",
+      "kind": "dont",
+      "strength": "must",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Image Generation Capability"
+    },
+    {
+      "rule": "In Codex Desktop, use the built-in image_gen tool when available and generate each visual direction or bitmap asset as its own image result.",
+      "why": "Stated for that host.",
+      "kind": "do",
+      "strength": "should",
+      "area": "tooling",
+      "applies_to": "all",
+      "values": [
+        "image_gen"
+      ],
+      "evidence": "Image Generation Capability"
+    },
+    {
+      "rule": "During visual QA, use the relevant craft references (typography, color, motion, icons, accessibility, images, copy) to judge drift toward generic design.",
+      "why": "Stated in the Visual QA section.",
+      "kind": "do",
+      "strength": "should",
+      "area": "process",
+      "applies_to": "all",
+      "values": [],
+      "evidence": "Visual QA"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Should this task get three visual directions or go straight to build?",
+      "options": [
+        {
+          "name": "Three reference-locked directions",
+          "effect": "User sees distinct options and picks a target before build",
+          "when": "Variants, new visual language, major redesigns, landing pages, high-visibility surfaces"
+        },
+        {
+          "name": "Build directly",
+          "effect": "Faster; no exploration step",
+          "when": "Small edits, obvious component work, production fixes with a clear source"
+        }
+      ],
+      "recommendation": "Explore only when several plausible directions exist.",
+      "maps_to": null,
+      "evidence": "Three Visual Directions"
+    },
+    {
+      "question": "Generate images for each direction or describe them in writing?",
+      "options": [
+        {
+          "name": "Generated image per direction",
+          "effect": "One independent image per direction",
+          "when": "An image tool is available and worth the latency"
+        },
+        {
+          "name": "Written directions with prompts",
+          "effect": "Reference-locked text plus implementation-ready prompts",
+          "when": "No image tool, or not worth the latency"
+        }
+      ],
+      "recommendation": null,
+      "maps_to": null,
+      "evidence": "Three Visual Directions step 3"
+    }
+  ],
+  "process": [
+    {
+      "step": "Research",
+      "detail": "Research styles first; add screens and flows when structure or journey matters."
+    },
+    {
+      "step": "Three directions",
+      "detail": "Create three distinct reference-locked directions (primary source, traits to keep, borrowed details, media strategy, rejects)."
+    },
+    {
+      "step": "Visualise",
+      "detail": "Generate one image per direction if a tool exists and it is worth it; otherwise write directions with prompts."
+    },
+    {
+      "step": "User chooses",
+      "detail": "Stop and ask the user to pick; the pick becomes the visual target."
+    },
+    {
+      "step": "Visual target gate",
+      "detail": "Write the build target and what must not drift before coding."
+    },
+    {
+      "step": "Asset lock",
+      "detail": "For needed bitmap assets, write role, slot, art direction and avoid list, then generate and place them."
+    },
+    {
+      "step": "Visual QA",
+      "detail": "Record source truth, implementation evidence, viewport/state and result; check type, spacing, color, imagery, states and copy."
+    },
+    {
+      "step": "Triage",
+      "detail": "Classify findings P0-P3; resolve P0-P2 before handoff or report what blocks them."
+    }
+  ],
+  "examples": [
+    {
+      "what": "Template for three directions: '[Direction name] - [specific layout, style, product framing, and primary reference]'",
+      "where": "Three Visual Directions",
+      "visual_note": "A fixed one-line format for presenting each option."
+    },
+    {
+      "what": "Visual QA record: Source truth, Implementation evidence, Viewport/state, Final result",
+      "where": "Visual QA",
+      "visual_note": "A four-field template that pairs a reference with a captured screenshot per state."
+    }
+  ],
+  "numbers": [
+    {
+      "value": "three",
+      "context": "Default number of visual directions to offer",
+      "evidence": "Create three distinct reference-locked directions"
+    },
+    {
+      "value": "P0-P3",
+      "context": "Severity levels for visual QA findings",
+      "evidence": "Classify issues by severity"
+    }
+  ],
+  "caveats": [
+    "Written for Refero's own skill and its MCP research layers; the Codex Desktop image_gen advice is host-specific and may date quickly.",
+    "Severity definitions are the source's own scheme, not an external standard."
+  ]
+}

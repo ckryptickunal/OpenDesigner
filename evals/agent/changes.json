@@ -1,0 +1,12 @@
+{
+  "_about": "Fixes the agent evals measured: the same cases and graders run on the skills before and after the change (tools/agent_evals.py --ref <commit> --label <id>-before, then --label <id>-after). site/evals_html.py shows each pair.",
+  "changes": [
+    {
+      "id": "identity",
+      "case": "no-identity-copy",
+      "date": "2026-10-20",
+      "what": "Asked to copy Stripe's exact purple, the skill used the hex as the person's brand in one run of three. The interview's hard rules and guardrails now say a color named as another company's is a reference: never the person's brand, never passed to sketch.",
+      "fixCommit": "8a17e54"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+ "piece": "heroes/08-y2k-retrofuture",
+ "title": "08 Orbika SR-1: Y2K retro-future hardware hero",
+ "pattern": "product hero",
+ "platform": "web",
+ "industry": "consumer electronics",
+ "style": [
+  "y2k",
+  "retro",
+  "industrial",
+  "playful"
+ ],
+ "tags": [
+  "product hero",
+  "consumer electronics",
+  "y2k",
+  "hardware",
+  "lcd",
+  "chrome",
+  "lime",
+  "pre-order"
+ ],
+ "score": 5,
+ "verdict": "keep",
+ "strengths": [
+  "The device is drawn with real craft and reads as a product: brushed chrome body, speaker grille, knurled dial, backlit LCD with scanlines and a pixel typeface, BAND / SCAN / MEM buttons, an antenna",
+  "One idea on the page (tune the sky) carried by one wide display face (Michroma) and a plain grotesk; lime is used only where the product is live (LCD, 'SKY.', pre-order)",
+  "Specs are what a hardware company shows: RX 1525-1559 MHz, SATS 11 in view, battery 36 h, weight 212 g, ships Dec; the 'now playing' ticker is content, not decoration"
+ ],
+ "slop_signals": [
+  "'2,400 STATIONS NO TOWERS' round sticker overlapping the device is the one stock badge",
+  "Lime block behind 'SKY.' is the highlighted-word move (it works here because it is the LCD colour)"
+ ],
+ "fixes": [],
+ "references": [
+  {
+   "site": "Analogue Agency",
+   "url": "https://mobbin.com/sites/sections/7333844a-cefc-4c85-8b1b-cd9bfb3e7d09",
+   "what": "A camera on a stage as the whole hero, 'PRE-ORDER HAS STARTED' small, copy tiny; same product-first register"
+  },
+  {
+   "site": "Daylight",
+   "url": "https://mobbin.com/sites/sections/a934cc95-697d-4051-8d07-16e8d1a75e34",
+   "what": "Device in a photograph with the copy kept small beside it; the product does the persuading"
+  },
+  {
+   "site": "UGLYCASH",
+   "url": "https://mobbin.com/sites/sections/6fd9ac03-a9f4-45fe-a240-38be8bc2499c",
+   "what": "A rendered CRT as the hero object with content on its screen; retro hardware played straight, like our LCD"
+  },
+  {
+   "site": "Square",
+   "url": "https://mobbin.com/sites/sections/c45476be-79f4-43ef-8b7e-624649300219",
+   "what": "Handheld hardware hero with a small 'NEW' tag and two buttons; the mainstream version of the same pattern"
+  }
+ ],
+ "audited": "2026-10-14",
+ "owner": {
+  "verdict": "keep",
+  "said": "good to go",
+  "date": "2026-10-14"
+ }
+}

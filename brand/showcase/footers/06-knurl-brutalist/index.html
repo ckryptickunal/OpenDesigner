@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knurl Supply footer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* Round 4 rebuild: a quiet footer with one signature element, the house rule set large in lime (it does not date).
+     No marquee, countdown, stamp, texture block, boxes or offset shadows. One depth technique: hairline rules.
+     Type: Big Shoulders Display for the one statement, Space Mono for everything else. Sizes 12, 16, 90 (tokens); 67 on phones. */
+  :root {
+    --lime: var(--ds-color-brand-seed);
+    --bg: var(--ds-color-neutral-dark-1);          /* near-black */
+    --ink: var(--ds-color-neutral-dark-12);
+    --muted: var(--ds-color-neutral-dark-10);
+    --rule: var(--ds-color-neutral-dark-5);
+    --above: var(--ds-color-neutral-light-2);
+    --above-ink: var(--ds-color-neutral-light-12);
+    --above-muted: var(--ds-color-neutral-light-11);
+    --gutter: var(--ds-space-48);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); }
+  body { font-family: var(--ds-font-family-text); font-size: var(--ds-font-size-16); line-height: 1.5; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: var(--ds-border-width-2) solid var(--lime); outline-offset: 3px; }
+  .cap { font-size: var(--ds-font-size-12); line-height: 20px; letter-spacing: .06em; text-transform: uppercase; }
+
+  /* the last row of the section above, so the shot reads as the end of a page */
+  .above { background: var(--above); color: var(--above-muted); padding: 0 var(--gutter); }
+  .above p { display: flex; gap: var(--ds-space-16); padding: 24px 0 28px; border-top: var(--ds-border-width-1) solid var(--ds-color-neutral-light-6); }
+  .above b { font-weight: 700; color: var(--above-ink); }
+
+  footer { padding: 88px var(--gutter) 32px; }
+  .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--ds-space-24); }
+
+  .drop { grid-column: 1 / span 9; }
+  .drop .cap { color: var(--muted); }
+  .drop h2 { margin-top: var(--ds-space-16); font-family: var(--ds-font-family-display); font-weight: 800; font-size: var(--ds-font-size-90);
+    line-height: .92; letter-spacing: .005em; text-transform: uppercase; color: var(--lime); }
+
+  .join { grid-column: 10 / -1; align-self: start; }
+  .join p { color: var(--muted); font-size: var(--ds-font-size-12); line-height: 20px; letter-spacing: .06em; text-transform: uppercase; }
+  .join form { margin-top: var(--ds-space-16); display: flex; }
+  .join label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .join input { flex: 1; min-width: 0; height: 48px; padding: 0 var(--ds-space-16); font: inherit; color: var(--ink); background: transparent;
+    border: var(--ds-border-width-1) solid var(--ds-color-neutral-dark-7); border-right: 0; border-radius: 0; }
+  .join input::placeholder { color: var(--muted); }
+  .join button { height: 48px; padding: 0 var(--ds-space-24); font: 700 var(--ds-font-size-16)/1 var(--ds-font-family-text); text-transform: uppercase;
+    color: var(--ink); background: transparent; border: var(--ds-border-width-1) solid var(--ds-color-neutral-dark-7); border-radius: 0; cursor: pointer; }
+
+  .cols { grid-column: 1 / -1; margin-top: 88px; padding-top: var(--ds-space-32); border-top: var(--ds-border-width-1) solid var(--rule);
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--ds-space-24); }
+  .cols h3 { font-weight: 400; color: var(--muted); margin-bottom: var(--ds-space-12); }
+  .cols ul { list-style: none; }
+  .cols li.t { color: var(--muted); }
+  .cols li { line-height: 24px; padding: 4px 0; }
+    @media (hover: hover) and (pointer: fine) { .cols a:hover, .legal a:hover { color: var(--lime); } }
+
+  .legal { margin-top: 72px; display: flex; justify-content: space-between; align-items: center; color: var(--muted); }
+  .legal nav { display: flex; gap: var(--ds-space-32); }
+  .legal a { display: inline-flex; align-items: center; min-height: 32px; }
+
+  @media (max-width: 1100px) {
+    .drop { grid-column: 1 / -1; }
+    .join { grid-column: 1 / span 6; margin-top: var(--ds-space-48); }
+  }
+  @media (max-width: 760px) {
+    :root { --gutter: var(--ds-space-20); }
+    .above p { flex-direction: column; gap: 4px; padding: 16px 0 20px; }
+    footer { padding-top: 56px; }
+    .grid { grid-template-columns: 1fr; }
+    .drop h2 { font-size: var(--ds-font-size-67); }
+    .join { grid-column: 1 / -1; margin-top: var(--ds-space-40); }
+    .cols { grid-template-columns: 1fr 1fr; row-gap: var(--ds-space-32); margin-top: 56px; }
+    .legal { flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 48px; }
+    .legal nav { flex-wrap: wrap; column-gap: var(--ds-space-20); }
+  }
+</style>
+</head>
+<body>
+<div class="above" aria-hidden="true"><p><b>Archive</b><span>Last pieces from drops 01 to 06, while they last.</span></p></div>
+<footer aria-label="Site footer">
+  <div class="grid">
+    <section class="drop" aria-labelledby="drop-h">
+      <p class="cap">Knurl Supply, Rotterdam</p>
+      <h2 id="drop-h">Made once.<br>No restocks.</h2>
+    </section>
+    <section class="join" aria-label="Drop emails">
+      <p>One email per drop</p>
+      <form onsubmit="return false">
+        <label for="em">Email address</label>
+        <input id="em" type="email" placeholder="Your email" autocomplete="email">
+        <button type="submit">Join</button>
+      </form>
+    </section>
+    <nav class="cols" aria-label="Footer">
+      <div><h3 class="cap">Shop</h3><ul><li><a href="#">New in</a></li><li><a href="#">Outerwear</a></li><li><a href="#">Pants</a></li><li><a href="#">Tees</a></li><li><a href="#">Archive</a></li></ul></div>
+      <div><h3 class="cap">Help</h3><ul><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Size guide</a></li><li><a href="#">Track order</a></li></ul></div>
+      <div><h3 class="cap">Flagship</h3><ul><li class="t">Unit 4, Canal Yard 41</li><li class="t">Rotterdam</li><li class="t">Wed–Sun 12–19</li><li><a href="#">Directions</a></li></ul></div>
+      <div><h3 class="cap">Knurl</h3><ul><li><a href="#">Journal</a></li><li><a href="#">Stockists</a></li><li><a href="#">Careers</a></li></ul></div>
+    </nav>
+  </div>
+  <div class="legal cap">
+    <span>&copy; 2026 Knurl Supply Co.</span>
+    <nav aria-label="Legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a><a href="#">EUR &euro;</a></nav>
+  </div>
+</footer>
+</body>
+</html>

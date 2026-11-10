@@ -1,0 +1,112 @@
+{
+ "piece": "mockups/09-laptop-dashboard",
+ "title": "09 · Quoin payments on a laptop",
+ "pattern": "laptop mockup",
+ "platform": "web",
+ "industry": "payments / finance operations (B2B)",
+ "style": [
+  "photographic",
+  "minimal",
+  "daylight"
+ ],
+ "tags": [
+  "laptop mockup",
+  "photo",
+  "perspective",
+  "homography",
+  "B2B",
+  "payments",
+  "dashboard",
+  "window light"
+ ],
+ "score": 3,
+ "verdict": "polish",
+ "strengths": [
+  "The photo work is excellent: at 100% the screen sits inside the real display with the right perspective, an even bezel, the photo's grain and a faint falloff; no seam where the model name was cloned out",
+  "The laptop fills about 80% of the frame and the real keyboard, hinge, contact shadow and table reflection carry the scene; the old piece's drawn keyboard and missing shadow are gone",
+  "Both captions sit in ink over the bright window and wall and read cleanly; the copy has numbers ('2,418 payments in 7 days')"
+ ],
+ "slop_signals": [
+  "The device is a real Apple MacBook Pro, and an old one: the Touch Bar strip above the number row dates it to 2016 to 2019. Removing the bezel name does not change whose hardware it is, which is what the house rule and the old audit asked to avoid",
+  "The screen it shows is a near copy of Stripe's Transactions page: the same six status tiles in the same order ('All, Succeeded, Refunded, Disputed, Failed, Uncaptured'), the same filter chips, 'Edit columns', 'Export', 'Create payment', and IDs styled like Stripe's ('qpy_3NfT8kQ2aXwL'). A finance buyer will read it as a Stripe reskin",
+  "The photo is a widely used Unsplash laptop shot, so the scene itself is not ownable",
+  "Caption 'Quoin · Payments, on a 15-inch laptop' describes the mockup, not the product"
+ ],
+ "fixes": [
+  "Re-shoot or re-source the device: an open-licence photo of a current non-Apple laptop with its display off (or a person working at one, as Mailchimp and Dropbox do), placed with the same measured method",
+  "Give the Quoin screen its own structure (in product/01, which this page links, so the mockup updates on re-render): for example a reconciliation view with payouts against bank lines, or tiles by money state rather than Stripe's six statuses, and a non-Stripe ID format",
+  "Rewrite the left caption to say what the team does with the product, not the device size"
+ ],
+ "references": [
+  {
+   "site": "Mailchimp",
+   "url": "https://mobbin.com/sites/sections/6f6f0323-3daa-4130-a9dc-03ca1bf8a988",
+   "mobbin_url": "https://mobbin.com/sites/sections/6f6f0323-3daa-4130-a9dc-03ca1bf8a988",
+   "what": "A real laptop in a lived-in scene with a person; the device is incidental to the work"
+  },
+  {
+   "site": "Dropbox",
+   "url": "https://mobbin.com/sites/sections/f85c8d3f-ce8f-4019-8659-4db0c1d1476a",
+   "mobbin_url": "https://mobbin.com/sites/sections/f85c8d3f-ce8f-4019-8659-4db0c1d1476a",
+   "what": "A photographed workplace where the laptop is part of the room, not the subject"
+  },
+  {
+   "site": "Runway",
+   "url": "https://mobbin.com/sites/sections/1f16d8d7-71d9-483a-8110-80b9df0a0aa0",
+   "mobbin_url": "https://mobbin.com/sites/sections/1f16d8d7-71d9-483a-8110-80b9df0a0aa0",
+   "what": "A B2B finance product shown flat and whole with no device, which is the more common choice in this field"
+  },
+  {
+   "site": "Stripe",
+   "url": "https://mobbin.com/screens/f576b06e-b290-4864-a0be-2d753324fd1d",
+   "mobbin_url": "https://mobbin.com/screens/f576b06e-b290-4864-a0be-2d753324fd1d",
+   "what": "Transactions page: the tile set, filter chips and button labels the Quoin screen repeats"
+  }
+ ],
+ "audited": "2026-10-14",
+ "self_score": 4,
+ "facts": [
+  "Owner decision pending: the device is a recognisable Microsoft Surface Laptop Go (sage, 3:2 panel, ports, Windows key) in Microsoft's own photo; it meets 'a current non-Apple laptop' with no logo in frame, but it is one company's hardware, the issue raised about the MacBook",
+  "The photo is widely used (6.7 million views, 57,822 downloads), so the scene is not ownable",
+  "Not done (visible only at 200%): a top-to-bottom screen falloff of about 12% to match the photo's own display, grain at about 0.33 instead of 0.22, a 0.5 px blur instead of 0.35",
+  "Screen text renders about 7 px at 100%, so the rows read as structure; the title and the four money figures read",
+  "check_dates.py --year 2026: every weekday matches"
+ ],
+ "audited_by": "independent",
+ "owner": {
+  "verdict": "improve",
+  "said": "when designs are bad, mockups will also be bad; work on them",
+  "date": "2026-10-14"
+ },
+ "rework": {
+  "date": "2026-10-14",
+  "score": 4,
+  "audited_by": "fresh-context agent (did not build it)",
+  "references": [
+   {
+    "site": "Legora",
+    "url": "https://mobbin.com/sites/sections/de997de8-3e43-4060-a258-2b2e10dea2ca",
+    "what": "One quiet unbranded laptop in raking light, copy beside the photo; ours is busier and reads as stock next to it"
+   },
+   {
+    "site": "Mailchimp",
+    "url": "https://mobbin.com/sites/sections/6f6f0323-3daa-4130-a9dc-03ca1bf8a988",
+    "what": "A person working in a lived-in room; the laptop is incidental"
+   },
+   {
+    "site": "Deel",
+    "url": "https://mobbin.com/sites/sections/2b9279ed-4c25-4c50-84f2-5c23af38b44e",
+    "what": "A real moment with a person; the screen is unimportant"
+   }
+  ],
+  "changed": [
+   "New photo: 'a laptop on a desk' by Windows (@windows) on Unsplash, https://unsplash.com/photos/a-laptop-on-a-desk-FV6Pma5U_98, free Unsplash License (not Unsplash+), checked 2026-10-15, hotlinked at 5504 px; credited in notes.md and the page comment, as mockups/06 and 07 do",
+   "No logo or brand text in frame and no clone stamp needed; no Touch Bar or notch",
+   "Corners measured by line fits on the full-size photo (0.11-0.21 px error) and mapped with a homography; the fresh audit found them on the lit area to about 1 px",
+   "Light matched to this photo: multiply rgb(164 168 172) from the taskbar and desk readings, window-side sheen, 4 px edge darkening, 0.35 px blur, 22% grain",
+   "The 3:2 display frames the live product page at 1440 x 960, so the reworked Receipts screen (no longer a Stripe-like page) appears on every render",
+   "Captions say what the team does: 'Quoin · Matching each customer payment to the invoice it pays' and 'Tamsin & Rowe, tableware wholesaler · 2,418 receipts, Oct 1-14'; 12.5:1 and 12.4:1 against the darkest 5% of the desk behind them",
+   "Re-rendered shot.png at 1600 x 1200, 2x"
+  ]
+ }
+}

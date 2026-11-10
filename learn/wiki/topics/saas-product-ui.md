@@ -2,7 +2,7 @@
 type: topic
 title: SaaS product UI
 created: 2026-09-24
-updated: 2026-09-28
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -23,3 +23,4 @@ Product and dashboard UIs need far more neutral roles than landing pages: severa
 - [[sources/tNMAFjzapOk-the-formula-behind-truly-captivating-ui-sections|The Formula Behind Truly Captivating UI Sections]]: The formula also applies to web apps, shown with a Linear menu whose structure makes clickable items and keyboard shortcuts clear.
 - [[sources/kdRkuqu8apE-i-studied-2-108-dashboards-to-see-what-sticks|I Studied 2,108 Dashboards To See What Sticks]]: Nearly one in five products on Mobbin use the dashboard as the home screen, and when platforms do roughly the same thing, the dashboard does much of the convincing.
 - See also: [[synthesis/saas-product-ui|SaaS product UI synthesis]]
+- [[sources/palantir-workshop-applic-application-design-best-practices-palantir|Palantir]]: The whole page describes internal, operational work tools: dense tables, filter panels, status tags and detail panels built for efficient workflows.

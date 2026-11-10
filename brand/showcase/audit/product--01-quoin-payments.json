@@ -1,0 +1,120 @@
+{
+ "piece": "product/01-quoin-payments",
+ "title": "01 · Payments table · Quoin",
+ "pattern": "data table",
+ "platform": "web",
+ "industry": "fintech",
+ "style": [
+  "enterprise",
+  "minimal",
+  "dense"
+ ],
+ "tags": [
+  "payments",
+  "data table",
+  "status tiles",
+  "filter chips",
+  "edit columns",
+  "bulk actions",
+  "empty state",
+  "b2b"
+ ],
+ "score": 4,
+ "verdict": "keep",
+ "strengths": [
+  "Reads as a shipped payments console: status tiles that add up (2,291 + 61 + 4 + 3 + 59 = 2,418) and act as quick filters, chips that show their values ('Currency | USD, EUR, GBP'), '2,418 results · times in EDT (UTC−4)', 36 px rows on hairlines",
+  "Ledger amounts: right-aligned tabular digits, cents and currency code muted, three currencies and four bank rails, mono IDs ('qpy_3NfT8kQ2aXwL'), failed amounts struck through",
+  "Restraint in status: the normal 'Succeeded' state is a quiet ✓ with no fill, so Uncaptured, Refunded and the one amber Disputed badge stand out; the × on 'Failed 3' is the only red on screen",
+  "The bulk bar leads with the count and the selection's sum ('3 selected $21,162.82 USD'), and the column popover has Fixed / Shown / Hidden groups, drag handles and 'Saved to this view'"
+ ],
+ "slop_signals": [
+  "Every transient state is staged at once: the 'Edit columns' popover is open over the Created and Payment ID columns while three rows are selected and the bulk bar ('3 selected $21,162.82 USD') covers the last rows. Stripe and Attio show one transient at a time",
+  "The popover hides the two columns that prove the data is real (Created, mono Payment ID) in the hero frame",
+  "The customer list does not belong to one business: a 'retailer' (notes) billing 'Retainer · October', 'Subscription · Growth', 'Membership · 12 seats' and dental groups",
+  "Signed-in avatar 'MO' (Mira Okafor) is the same initials and look as the avatars in Fennick and Sounding"
+ ],
+ "fixes": [
+  "Close the column popover in the main frame (keep it as a second state) so the Created and ID columns read; keep the bulk bar",
+  "Make the uncaptured EUR row a card payment, not SEPA Direct Debit",
+  "Give Tamsin & Rowe one business model and write descriptions that fit it, or call it a platform whose customers are mixed",
+  "Rename reused names: Tidewell Marine Supply (Kilnworks' workspace is Tidewell Analytics), Kovač Structural (hero's Mirela Kovač), Calder & Voss (hero's Calder Inn), Juniper & Pell (components/08 Juniper Static), Mira Okafor"
+ ],
+ "references": [
+  {
+   "site": "Stripe",
+   "url": "https://mobbin.com/screens/140880ca-003b-4498-8932-c09c223ed9de",
+   "what": "Same structure (count tiles, chips, Edit columns with fixed columns). Ours matches it and has quieter status; theirs shows one transient at a time"
+  },
+  {
+   "site": "Deel",
+   "url": "https://mobbin.com/screens/2b18ac2e-4083-483c-84b5-e955b2a2b5d1",
+   "what": "Selection with a total in the footer ('Pay selected'), heavier red overdue status; ours is calmer"
+  },
+  {
+   "site": "Whop",
+   "url": "https://mobbin.com/screens/93688e15-ee7b-420c-bd94-47cb0e10a827",
+   "what": "Filter chips with values and 'Showing 1 to 1 of 1'; ours is denser and more exact"
+  }
+ ],
+ "audited": "2026-10-14",
+ "self_score": 5,
+ "audited_by": "independent",
+ "facts": [
+  "Fresh audit nice-to-haves not done: the Maison Delacroix Traiteur cell (row 19, below the fold in every frame) is 2 px short; Oct 12 was Columbus Day, so banks settled on 9 of the 10 working days",
+  "engine.py review lists 89 raw values (88 px sizes, 1 shadow): spacing is written in px, as before the rework",
+  "Penwarden Hotels' empty frame is the only place the 12-receipt figures appear; they are internally consistent ($18,210.20 + $212.40 = $18,422.60)",
+  "check_dates.py --year 2026: every weekday matches; weekdays inside the script data were checked by hand (Oct 13 Tuesday, Oct 14 Wednesday)"
+ ],
+ "fixed": [
+  "Main frame keeps one temporary state (three rows selected with the bulk bar); the Edit columns popover moved to shot-columns.png (?state=columns), with nothing selected and no hover row, so the Created and Payment ID columns read",
+  "Uncaptured is now only on card payments: the SEPA DD row (and an ACH row also marked Uncaptured) are card orders",
+  "Tamsin & Rowe is now a wholesale supplier of tableware and kitchen equipment; all 40 customers are restaurants, hotels, caterers, cafés and venues, and descriptions are only 'Order …' or 'Invoice …' (no retainers, subscriptions or seat memberships)",
+  "Rows fit the counts: 2,418 payments in 7 days is about 15 an hour, so the 40 rows are now the last two hours (Oct 14, 09:00-11:02 EDT) instead of two and a half days",
+  "Statuses fit that timing: no disputed payment created this morning (Disputed tile 1; sidebar open disputes 6), no direct debits that would still be pending (bank rails are customer-sent ACH, Wire, SEPA, Bacs), the failed SEPA debit is a declined card; tiles 2,259 + 61 + 1 + 38 + 59 = 2,418",
+  "Names: Mira Okafor (MO) is Celeste Arnaud (CA); replaced colliding customers Calder & Voss, Tidewell, Kovač, Juniper & Pell, Halvard, Brightwater, Quarry Lane, Fenwick, Harrowfield, Northbank, Norrell and Corlett; empty frame names Penwarden Hotels",
+  "Re-rendered shot.png, shot-columns.png and shot-empty.png at 1440 × 900, 2×"
+ ],
+ "owner": {
+  "verdict": "keep",
+  "said": "I love the B2B product screens; they look absolutely crazy",
+  "date": "2026-10-14"
+ },
+ "rework": {
+  "date": "2026-10-14",
+  "score": 4,
+  "audited_by": "fresh-context agent (did not build it), then a second fresh agent verified the fixes",
+  "references": [
+   {
+    "site": "Deel",
+    "url": "https://mobbin.com/screens/2b18ac2e-4083-483c-84b5-e955b2a2b5d1",
+    "what": "Two total cards, filter dropdowns, selected rows with a 'Pay selected' total; ours is quieter and its data more specific"
+   },
+   {
+    "site": "Mercury",
+    "url": "https://mobbin.com/screens/9b38d5b4-4b72-4c88-8c3c-8fd754225324",
+    "what": "Plain summary strip and muted cents; ours adds work queues and the reference, match and invoice columns"
+   },
+   {
+    "site": "Xero",
+    "url": "https://mobbin.com/screens/b433257a-a7a0-4249-a4a5-04e2681d1432",
+    "what": "Bank reconciliation one statement line at a time; ours handles the queue in one table with a side panel for one receipt"
+   }
+  ],
+  "too_close": "No: compared with Stripe's Transactions page, ours shares none of its tiles, chips, buttons, column order or ID format; the only shared patterns (a plain summary strip, a floating dark bulk bar) appear in many products",
+  "changed": [
+   "The screen is now Receipts: incoming customer payments matched to invoices (cash application), the job a wholesale supplier's finance team does all day; Quoin is a receivables product",
+   "Six Stripe-order count tiles replaced by four money figures as plain text (Received, Matched to invoices with a meter, Waiting to match, Held as credit) and work-queue tabs in working order: To match 192, Held as credit 63, Matched 2,163, All 2,418; the main frame opens on To match",
+   "States the business really has: Suggested (quiet), Part payment (quiet), Short with the amount, 2 sets fit, No match (the only amber, 3 of 16 visible rows); payers who are not customers shown by the bank's payer name",
+   "One Filter button plus the filter in force, chip values in ink, Match rules instead of Edit columns, Import bank file and Record receipt instead of Export and Create payment, a bank-feed freshness stamp",
+   "Columns: Received, Customer, Their reference (raw bank text), Paid by (ACH, Wire, Check, SEPA credit, Bacs, FPS), Amount, Match, Invoice, Receipt; IDs RC-412917 and TR-256379 instead of qpy_3N...",
+   "Bulk bar: 3 selected $21,162.82 USD, Confirm matches, Hold as credit, Assign...",
+   "Second frame shot-match.png (?state=match) replaces the Edit columns frame: the match panel for a $12,960.00 ACH that two sets of invoices fit, with the oldest-first pick, a tally and a save-as-rule option; shot-columns.png moved to the macOS Trash",
+   "Empty frame: nothing to match for Penwarden Hotels, figures follow the filter, one action",
+   "Consistent rates: period Oct 1-14 (10 working days, about 250 receipts a day), receipt numbers at that rate, invoices about 230 a working day, ACH at Federal Reserve settlement times (08:30, 13:00 ET)",
+   "Waiting to match raised to $311,482.09 so it covers its own rows ($148,599.49 for the 19 in the table); Matched lowered to $2,492,802.73 (87.6%)",
+   "Real names replaced: Whitlock Inn, Hotel De Zwaluw BV, Ravintola Saaristo Oy and Ravensworth Inns Ltd are now Thackery Inn, Hotel Brakelduin BV, Ravintola Kuusiluoto Oy and Haddleby Inns Ltd; references 4410 and 4471 shared with other pieces changed; NAMES.md updated (22 unused names removed, 6 added)",
+   "Dark mode: the bulk bar's secondary text, icons and dividers and the workspace mark now use text.inverse mixed into bg.inverse (sum 5.4:1 in dark, was 1.14:1)",
+   "Re-rendered shot.png, shot-match.png and shot-empty.png at 1440 x 900, 2x"
+  ]
+ }
+}

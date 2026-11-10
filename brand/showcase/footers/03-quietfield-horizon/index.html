@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quietfield footer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<style>
+  /* The horizon light is drawn from the three accent ramps the engine made (violet, magenta, amber). */
+  :root {
+    --violet: var(--ds-color-accent-dark-10);
+    --magenta: var(--ds-color-accent2-dark-10);
+    --amber: var(--ds-color-accent3-dark-10);
+    --hot: var(--ds-color-accent3-dark-12);
+    --night: var(--ds-color-neutral-dark-1);
+    --gutter: var(--ds-space-80);
+    --planet: 3600px;        /* art: the planet's diameter, so the visible arc is gentle */
+    --arc-top: 150px;        /* where the arc peaks inside the horizon band */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--night); }
+  body { font-family: var(--ds-font-family-text); color: var(--ds-color-text-primary); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+
+  footer { position: relative; overflow: hidden; isolation: isolate; }
+  #stars { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
+  .inner { position: relative; padding: var(--ds-space-48) var(--gutter) 0; }
+
+  /* top: brand + small index */
+  .top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .logo { display: inline-flex; align-items: center; gap: var(--ds-space-12); font-size: var(--ds-font-size-21); font-weight: var(--ds-font-weight-label); letter-spacing: -0.01em; min-height: var(--ds-size-target-min); }
+  .logo svg { width: 28px; height: 28px; }
+  .index { display: grid; grid-template-columns: repeat(3, 168px); gap: var(--ds-space-24); }
+  .index h2 { font-weight: 400; font-size: var(--ds-font-size-12); letter-spacing: .08em; text-transform: uppercase; color: var(--ds-color-text-tertiary); margin-bottom: var(--ds-space-12); }
+  .index ul { list-style: none; }
+  .index a { display: inline-flex; align-items: center; min-height: 28px; font-size: var(--ds-font-size-12); letter-spacing: .01em; color: var(--ds-color-text-secondary); transition: color var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
+  .index a:hover { color: var(--ds-color-text-primary); }
+
+  /* center: the ask */
+  .ask { max-width: 860px; margin: var(--ds-space-32) auto 0; text-align: center; }
+  .eyebrow { display: inline-flex; align-items: center; gap: var(--ds-space-12); font-size: var(--ds-font-size-12); letter-spacing: .08em; text-transform: uppercase; color: var(--ds-color-text-secondary); }
+  .eyebrow i { width: 24px; height: 1px; background: linear-gradient(90deg, transparent, var(--amber)); }
+  .eyebrow i:last-child { transform: scaleX(-1); }
+  h1 { margin-top: var(--ds-space-24); font-weight: 300; font-size: var(--ds-font-size-67); line-height: 1.04; letter-spacing: -0.03em; text-wrap: balance; }
+  h1 span { display: block; font-weight: 600; letter-spacing: -0.035em; }
+  .sub { margin: var(--ds-space-24) auto 0; max-width: 40em; font-size: var(--ds-font-size-16); line-height: 1.6; color: var(--ds-color-text-secondary); text-wrap: pretty; }
+  form { margin: var(--ds-space-40) auto 0; width: min(520px, 100%); display: flex; align-items: center; gap: var(--ds-space-8);
+    padding: var(--ds-space-6); border-radius: var(--ds-radius-full);
+    background: color-mix(in oklab, var(--ds-color-neutral-dark-4) 80%, transparent);
+    border: 1px solid var(--ds-color-neutral-dark-7);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--violet) 18%, transparent), 0 24px 80px -24px color-mix(in oklab, var(--violet) 55%, transparent); backdrop-filter: blur(8px); }
+  form label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  input { flex: 1; min-width: 0; height: var(--ds-size-target-min); padding: 0 var(--ds-space-20); border: 0; background: transparent; color: var(--ds-color-text-primary); font: inherit; font-size: var(--ds-font-size-16); }
+  input::placeholder { color: var(--ds-color-text-tertiary); }
+  input:focus-visible { outline: none; }
+  form:focus-within { border-color: var(--violet); }
+  button { display: inline-flex; align-items: center; gap: var(--ds-space-8); height: var(--ds-size-target-min); padding: 0 var(--ds-space-20) 0 var(--ds-space-24); border: 0; border-radius: var(--ds-radius-full);
+    background: var(--ds-color-text-primary); color: var(--night); font: inherit; font-size: var(--ds-font-size-16); font-weight: var(--ds-font-weight-label); cursor: pointer;
+    transition: transform var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
+  button:hover { transform: translateY(-1px); }
+  button svg { width: 16px; height: 16px; }
+  .fine { margin-top: var(--ds-space-16); font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); }
+  .latest { display: inline-flex; align-items: center; gap: var(--ds-space-12); margin-top: var(--ds-space-32); padding: var(--ds-space-6) var(--ds-space-16) var(--ds-space-6) var(--ds-space-6); border-radius: var(--ds-radius-full); border: 1px solid var(--ds-color-neutral-dark-6); font-size: var(--ds-font-size-12); color: var(--ds-color-text-secondary); min-height: var(--ds-size-target-pointer); }
+  .latest b { font-weight: 500; letter-spacing: .06em; text-transform: uppercase; padding: var(--ds-space-4) var(--ds-space-8); border-radius: var(--ds-radius-full); background: color-mix(in oklab, var(--amber) 16%, transparent); color: var(--ds-color-accent3-dark-11); }
+  .latest:hover { color: var(--ds-color-text-primary); }
+
+  /* bottom: the horizon */
+  .horizon { position: relative; height: 270px; margin-top: var(--ds-space-16); }
+  .sun { position: absolute; left: 50%; top: calc(var(--arc-top) - 70px); width: 720px; height: 140px; transform: translateX(-50%); border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in oklab, var(--hot) 70%, transparent), color-mix(in oklab, var(--amber) 35%, transparent) 40%, color-mix(in oklab, var(--magenta) 12%, transparent) 70%, transparent);
+    filter: blur(18px); mix-blend-mode: screen; }
+  .horizon > .orb { position: absolute; left: 50%; width: var(--planet); height: var(--planet); border-radius: 50%; transform: translateX(-50%); }
+  .haze { top: calc(var(--arc-top) - 120px); background: radial-gradient(closest-side, transparent 92%, color-mix(in oklab, var(--violet) 40%, transparent) 97%, transparent 100%); filter: blur(30px); }
+  .glow { top: calc(var(--arc-top) - 6px);
+    background: linear-gradient(90deg, transparent 30%, var(--violet) 38%, var(--magenta) 45%, var(--amber) 49%, var(--hot) 50%, var(--amber) 51%, var(--magenta) 55%, var(--violet) 62%, transparent 70%);
+    filter: blur(22px); opacity: 1; }
+  .rim { top: calc(var(--arc-top) - 2px);
+    background: linear-gradient(90deg, transparent 32%, var(--violet) 40%, var(--magenta) 46%, var(--amber) 49.2%, var(--hot) 50%, var(--amber) 50.8%, var(--magenta) 54%, var(--violet) 60%, transparent 68%); }
+  .planet { top: var(--arc-top); background: radial-gradient(closest-side at 50% 4%, color-mix(in oklab, var(--magenta) 14%, var(--night)), var(--night) 60%);
+    box-shadow: inset 0 18px 40px -20px color-mix(in oklab, var(--amber) 60%, transparent); }
+  .legal { position: absolute; left: var(--gutter); right: var(--gutter); bottom: var(--ds-space-24); display: flex; justify-content: center; align-items: center; gap: var(--ds-space-24); z-index: 2;
+    font-size: var(--ds-font-size-12); color: var(--ds-color-text-tertiary); }
+  .legal nav { display: flex; gap: var(--ds-space-24); }
+  .legal .bar { width: 1px; height: 12px; background: var(--ds-color-neutral-dark-7); }
+  .legal a { display: inline-flex; align-items: center; min-height: var(--ds-size-target-pointer); }
+  .legal a:hover { color: var(--ds-color-text-primary); }
+
+  @media (max-width: 760px) {
+    :root { --gutter: var(--ds-space-20); --planet: 1500px; --arc-top: 120px; }
+    .top { flex-direction: column; gap: var(--ds-space-32); }
+    .index { grid-template-columns: repeat(2, 1fr); width: 100%; row-gap: var(--ds-space-24); }
+    .ask { margin-top: var(--ds-space-48); }
+    h1 { font-size: var(--ds-font-size-38); }
+    .horizon { height: 280px; }
+    .sun { width: 360px; }
+    .legal { flex-direction: column-reverse; gap: var(--ds-space-4); text-align: center; }
+    .legal .bar { display: none; }
+    .legal nav { display: grid; grid-template-columns: auto auto; justify-content: center; column-gap: var(--ds-space-24); row-gap: 0; }
+    .latest { text-align: left; }
+    button { padding: 0 var(--ds-space-16) 0 var(--ds-space-20); }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<footer aria-label="Site footer">
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="inner">
+    <div class="top">
+      <a class="logo" href="#" aria-label="Quietfield home">
+        <svg viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <circle cx="14" cy="14" r="12.25" stroke="var(--ds-color-text-primary)" stroke-width="1.5"/>
+          <path d="M3.2 17.5h21.6" stroke="var(--amber)" stroke-width="1.5"/>
+          <path d="M6.5 21h15" stroke="var(--ds-color-text-primary)" stroke-width="1.5" opacity=".45"/>
+        </svg>
+        Quietfield
+      </a>
+      <nav class="index" aria-label="Footer">
+        <div><h2>Research</h2><ul><li><a href="#">Papers</a></li><li><a href="#">Interpretability</a></li><li><a href="#">Evaluations</a></li><li><a href="#">Open datasets</a></li></ul></div>
+        <div><h2>Lab</h2><ul><li><a href="#">About</a></li><li><a href="#">People</a></li><li><a href="#">Careers</a></li><li><a href="#">Fellowships</a></li></ul></div>
+        <div><h2>Elsewhere</h2><ul><li><a href="#">Talks</a></li><li><a href="#">Podcast</a></li><li><a href="#">Press</a></li><li><a href="#">Contact</a></li></ul></div>
+      </nav>
+    </div>
+
+    <section class="ask" aria-labelledby="ask-title">
+      <p class="eyebrow"><i aria-hidden="true"></i>Dispatch no. 41 &middot; October 2026<i aria-hidden="true"></i></p>
+      <h1 id="ask-title">Read the research <span>before it becomes a paper.</span></h1>
+      <p class="sub">One letter a month from the lab: what we tried, what broke, and what we would do next. Read by 31,000 researchers and a few very patient parents.</p>
+      <form onsubmit="return false">
+        <label for="em">Email address</label>
+        <input id="em" type="email" placeholder="you@lab.org" autocomplete="email">
+        <button type="submit">Subscribe
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6"/></svg>
+        </button>
+      </form>
+      <p class="fine">No tracking pixels. Leave with one click.</p>
+      <a class="latest" href="#"><b>Latest</b>Why sparse features drift during fine&#8209;tuning &middot; 12 min</a>
+    </section>
+  </div>
+
+  <div class="horizon" aria-hidden="false">
+    <div class="orb haze"></div>
+    <div class="orb glow"></div>
+    <div class="sun"></div>
+    <div class="orb rim"></div>
+    <div class="orb planet"></div>
+    <div class="legal">
+      <span>&copy; 2026 Quietfield Research, Oslo</span><span class="bar" aria-hidden="true"></span>
+      <nav aria-label="Legal"><a href="#">Privacy</a><a href="#">Responsible disclosure</a><a href="#">Model cards</a><a href="#">Terms</a></nav>
+    </div>
+  </div>
+</footer>
+<script>
+  // A deterministic starfield that thins out toward the horizon.
+  (function () {
+    const cv = document.getElementById('stars'), dpr = window.devicePixelRatio || 1;
+    function draw() {
+      const w = cv.clientWidth, h = cv.clientHeight;
+      cv.width = w * dpr; cv.height = h * dpr;
+      const c = cv.getContext('2d'); c.scale(dpr, dpr);
+      let s = 41; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+      const n = Math.round(w * h / 2600);
+      for (let i = 0; i < n; i++) {
+        const x = rnd() * w, y = rnd() * h * 0.82, fade = 1 - y / (h * 0.82);
+        const r = rnd() < 0.06 ? 1.1 : 0.55, a = (0.15 + rnd() * 0.55) * fade;
+        c.fillStyle = `rgba(232,226,255,${a.toFixed(3)})`;
+        c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill();
+      }
+    }
+    draw(); addEventListener('resize', draw);
+  })();
+</script>
+</body>
+</html>

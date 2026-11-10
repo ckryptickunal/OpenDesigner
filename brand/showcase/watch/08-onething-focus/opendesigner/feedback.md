@@ -1,0 +1,8 @@
+# Feedback
+
+Gaps, bugs, confusing steps and ideas found while using OpenDesigner. Each entry has a ready-to-file issue link. Nothing is posted unless you open the link and submit it yourself.
+
+## F-001 · 2026-10-14 · bug
+Preflight html flags ERROR M9 'no @font-face' for every Google Fonts <link> (the brief's allowed way), on all 8 pages; it cannot see font sizes that come from linked tokens.css (rem), so the minimum-size check M8 only saw the few px literals; the tracking warning M5 ignores size (-0.045em on a 68 px numeral is normal display tracking). A --medium watch with a 12 pt floor would help.
+
+[File this as an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new?title=%5Bbug%5D%20Preflight%20html%20flags%20ERROR%20M9%20%27no%20%40font-face%27%20for%20every%20Google%20Fonts%20%3C...&body=%2A%2AKind%3A%2A%2A%20bug%0A%0A%2A%2AWhat%20happened%20or%20what%20is%20missing%3A%2A%2A%0APreflight%20html%20flags%20ERROR%20M9%20%27no%20%40font-face%27%20for%20every%20Google%20Fonts%20%3Clink%3E%20%28the%20brief%27s%20allowed%20way%29%2C%20on%20all%208%20pages%3B%20it%20cannot%20see%20font%20sizes%20that%20come%20from%20linked%20tokens.css%20%28rem%29%2C%20so%20the%20minimum-size%20check%20M8%20only%20saw%20the%20few%20px%20literals%3B%20the%20tracking%20warning%20M5%20ignores%20size%20%28-0.045em%20on%20a%2068%20px%20numeral%20is%20normal%20display%20tracking%29.%20A%20--medium%20watch%20with%20a%2012%20pt%20floor%20would%20help.%0A%0A%2A%2AEngine%3A%2A%2A%201.0.0%20%28Python%203.10%29%0A%0A_Filed%20from%20%60engine.py%20feedback%60.%20Please%20remove%20anything%20private%20before%20submitting._&labels=bug%2Cfrom-engine)

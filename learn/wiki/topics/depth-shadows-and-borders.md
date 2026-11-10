@@ -2,7 +2,7 @@
 type: topic
 title: Depth, shadows and borders
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-13
 sources: []
 tags: []
 ---
@@ -36,3 +36,4 @@ On light backgrounds, card edges read best with a roughly 85% white border rathe
 - [[sources/lkKGQVHrXzE-designing-with-claude-code|Designing with Claude Code]]: Outer rings of gray 950 at 10% instead of solid borders beside shadows; inset rings on top of screenshots; a small shadow to lift secondary buttons; tinted wells instead of bordered containers.
 
 - See also: [[synthesis/depth-shadows-and-borders|Depth, shadows and borders synthesis]]
+- [[sources/palantir-workshop-applic-application-design-best-practices-palantir|Palantir]]: A drop shadow signals that content is important and an inner shadow that it is less so; lighter backgrounds signal importance and darker ones less critical areas. Apply the elevated or shaded style once per page, on the main content or primary dialog.
