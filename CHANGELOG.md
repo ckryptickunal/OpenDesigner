@@ -8,6 +8,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Three style extractors, measured on one site** (2026-11-10). OpenDesigner's extractor, Dembrandt and Project Wallace's analyzer were scored against Primer's published tokens on primer.style. The two browser tools reported real values 84-100% of the time but got one or two colour roles wrong; reading the CSS without a browser listed 900 colours, 2% of them on the page. Our accent bug is #110.
 - **Review reads the page that ships** (2026-11-09). When the folder given to `engine.py review` has fewer than three style files, it also reads the newest `index.html` (in `public/` first) and the files it loads, and lists what it skipped. It takes a single file, counts "behind the code" across the whole repository, lists the newest files first and skips `docs/`.
 - **DESIGN.md checked against the code** (2026-11-09). When the code uses no color, font or text tokens, `engine.py review` says if the brand color or fonts in `DESIGN.md` appear nowhere in it, and names the ones the code uses instead.
 - **`engine.py contrast`** (2026-11-09). `engine.py contrast "#767676" "#ffffff"` prints the contrast ratio, rounded down, and which WCAG minimums it meets. `--min 4.5` exits with an error under 4.5:1, for scripts.
