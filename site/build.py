@@ -1221,13 +1221,15 @@ INSTALL_MARKS = {"claude-code": [], "claude-app": [], "agents": [], "chatgpt": [
 INSTALL = [
     ("claude-code", "Claude Code", "Add the plugin, then ask for a design system in your project.",
      "/plugin marketplace add ckryptickunal/OpenDesigner\n/plugin install opendesigner@opendesigner", "Then say: “Create a design system for this project.”"),
-    ("claude-app", "Claude app", "Build the skill zip, then upload dist/opendesigner.zip under Customize > Skills. Code execution must be on.",
-     "git clone https://github.com/ckryptickunal/OpenDesigner && cd OpenDesigner\npython3 tools/build_dist.py", "Then, in a chat: “Create a design system for my app.”"),
-    ("agents", "Codex, Cursor, Copilot, Gemini CLI", "These tools read skills from .agents/skills/ in your project.",
-     "git clone https://github.com/ckryptickunal/OpenDesigner\nmkdir -p your-project/.agents/skills\ncp -R OpenDesigner/.agents/skills/opendesigner* your-project/.agents/skills/",
+    ("claude-app", "Claude app", "No terminal needed. Download [opendesigner.zip](/.well-known/agent-skills/opendesigner.zip) and upload it under Customize > Skills. "
+     "Code execution must be on. To audit an app you already built, add two more zips from [the install page](/docs/install/).",
+     f"1. Download {SITE_URL}/.well-known/agent-skills/opendesigner.zip\n2. In Claude, open Customize > Skills and upload it.", "Then, in a chat: “Create a design system for my app.”"),
+    ("agents", "Codex, Cursor, Copilot, Gemini CLI", "These tools read skills from .agents/skills/. Run this inside your project: it copies in the nine skill folders and leaves nothing else behind.",
+     "git clone --depth 1 https://github.com/ckryptickunal/OpenDesigner .opendesigner-tmp\nmkdir -p .agents/skills\ncp -R .opendesigner-tmp/.agents/skills/opendesigner* .agents/skills/\nrm -rf .opendesigner-tmp",
      "Then ask your agent: “Create a design system for this project.”"),
-    ("chatgpt", "ChatGPT", "No install: a Project with an instructions file and five knowledge files from chatgpt-project/ in the repository.",
-     "1. Create a Project.\n2. Paste the part of chatgpt-project/instructions.md below its line into the Project instructions.\n3. Upload the five files in chatgpt-project/knowledge/.", "Then: “Create a design system for my app.”"),
+    ("chatgpt", "ChatGPT", "No install and no terminal: one download, [opendesigner-chatgpt.zip](/downloads/opendesigner-chatgpt.zip), and a Project.",
+     f"1. Download {SITE_URL}/downloads/opendesigner-chatgpt.zip and unzip it.\n2. Create a Project and paste everything in instructions.txt into the Project instructions.\n3. Upload the five files in the knowledge folder.",
+     "Then: “Create a design system for my app.”"),
     ("engine", "Engine only", "No AI needed: Python 3.10 or newer, and nothing else to install. The same answers give the same tokens and exports.",
      'git clone https://github.com/ckryptickunal/OpenDesigner\npython3 OpenDesigner/skills/opendesigner/scripts/engine.py sketch --name "Acme" --feel friendly,minimal\npython3 OpenDesigner/skills/opendesigner/scripts/engine.py build',
      "Then open opendesigner/overview.html.")]
@@ -1310,7 +1312,7 @@ def demo_panel(ex, i):
 def install_tabs():
     tabs = "".join(f'<button type="button" role="tab" id="inst-tab-{k}" aria-controls="inst-{k}" aria-selected="{"true" if i == 0 else "false"}">{"".join(logo(m, 16) for m in INSTALL_MARKS[k])}{esc(label)}</button>'
                    for i, (k, label, _d, _c, _t) in enumerate(INSTALL))
-    panels = "".join(f'<div class="inst-panel" role="tabpanel" tabindex="0" id="inst-{k}" aria-labelledby="inst-tab-{k}"><p>{esc(d)}</p>'
+    panels = "".join(f'<div class="inst-panel" role="tabpanel" tabindex="0" id="inst-{k}" aria-labelledby="inst-tab-{k}"><p>{inline(d)}</p>'
                      f'<div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>{code_html(esc(c))}</code></pre></div><p class="inst-then">{esc(then)}</p></div>'
                      for k, _label, d, c, then in INSTALL)
     return f'<div class="tabs" data-tabs><div class="tablist" role="tablist" aria-label="Your AI tool">{tabs}</div>{panels}</div>'
@@ -2164,6 +2166,10 @@ def agent_skills():
         skills.append({"name": d.name, "type": "archive", "description": desc[:1024], "url": f"/.well-known/agent-skills/{zipped.name}",
                        "digest": "sha256:" + hashlib.sha256(zipped.read_bytes()).hexdigest()})
     (out / "index.json").write_text(json.dumps({"$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json", "skills": skills}, indent=1) + "\n")
+    # The ChatGPT Project files in one download, from the same build_dist.py run. It is not a skill, so it stays out of the index.
+    bundle = DIST / "downloads/opendesigner-chatgpt.zip"
+    bundle.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy(ROOT / "dist" / bundle.name, bundle)
     return len(skills)
 
 

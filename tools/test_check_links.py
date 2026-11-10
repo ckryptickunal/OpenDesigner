@@ -63,6 +63,23 @@ class SiteLinks(unittest.TestCase):
         self.assertNotIn("/changelog/", text)
         self.assertIn("5 relative links checked, 2 broken", text)
 
+    def test_the_root_llms_txt_may_only_link_to_files_that_exist(self):
+        gh = "https://raw.githubusercontent.com/ckryptickunal/OpenDesigner/main/"
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "docs").mkdir()
+            (root / "docs" / "note.md").write_text("plain\n")
+            (root / "llms.txt").write_text(f"- [Note]({gh}docs/note.md): here\n- [Moved]({gh}docs/moved.md): gone\n"
+                                           "- [Folder](https://github.com/ckryptickunal/OpenDesigner/tree/main/docs): a folder\n"
+                                           "- [Site](https://opendesigner.dev/llms.txt): not a repository file\n")
+            out = io.StringIO()
+            with mock.patch.object(C, "ROOT", root), mock.patch.object(C, "SITE_DOCS", root / "site" / "docs"), \
+                    contextlib.redirect_stdout(out):
+                code = C.main([])
+        self.assertEqual(code, 1)
+        self.assertIn("llms.txt:2: docs/moved.md", out.getvalue())
+        self.assertIn("3 relative links checked, 1 broken", out.getvalue())
+
     @unittest.skipUnless(shutil.which("git"), "needs git")
     def test_a_git_checkout_reads_only_what_git_would_commit(self):     # issue 72
         with tempfile.TemporaryDirectory() as tmp:

@@ -50,7 +50,8 @@ Its options:
 - `--brand`: your brand color as a hex value, such as `"#167874"`.
 - `--surfaces`: the main surface first, such as `"app:operate,landing page:persuade"`.
 - `--delegated`: marks answers as handed over when you said "just pick", for example `--delegated feel,brand`.
-- `--brief` (your own picture of the look), `--stack` (your code stack), `--theme` (light, dark or both) and `--logo` (your logo, PNG or SVG) are also accepted. `engine.py sketch --help` explains each.
+- `--theme`: `system-light-dark` (light and dark, matching the device setting), `light-dark-toggle` (light and dark, plus a switch in the app), `light-only` or `dark-only`.
+- `--brief` (your own picture of the look), `--stack` (your code stack) and `--logo` (your logo, PNG or SVG) are also accepted. `engine.py sketch --help` explains each.
 :::
 
 ## Record decisions
@@ -128,8 +129,17 @@ The templates `show` fills are `palette`, `type-scale`, `spacing-ruler`, `radius
 
 With no system in the project, it still counts the hard-coded values and names any system it finds in a subfolder. It fails when `AGENTS.md`, `CLAUDE.md` or `DESIGN.md` point at an `opendesigner/` folder that isn't there.
 
+Two more commands keep later sessions on the same system:
+
+| Command | What it does |
+|---|---|
+| `engine.py status` | Prints where the work stands: the step you're on, what waits for you and the next command. It changes nothing. Run it first in a new session. |
+| `engine.py handoff yes` | Writes a short note into your `AGENTS.md`, and a `CLAUDE.md` that imports it, so later AI sessions read the system first. `handoff no` writes nothing. Either answer is recorded, so you're asked once. |
+
 :::dev
-`--project src` scans one folder, or one file. When that folder has fewer than three style files, review also reads the page the site ships (the newest `index.html`, in `public/` first) and the files it loads, and lists what it skipped. Findings come newest file first. `docs/` and OpenDesigner's own exports are skipped. `--strict` exits with an error on any finding, tokens not in charge, a `DESIGN.md` that disagrees with the code or validate errors, and names each reason. `engine.py guard install` runs it before every commit, after you say yes; `git commit --no-verify` skips it once and `guard remove` takes it out.
+`--project src` scans one folder, or one file. When that folder has fewer than three style files, review also reads the page the site ships (the newest `index.html`, in `public/` first) and the files it loads, and lists what it skipped. Findings come newest file first. `docs/` and OpenDesigner's own exports are skipped. `--strict` exits with an error on any finding, tokens not in charge, a `DESIGN.md` that disagrees with the code or validate errors, and names each reason. `engine.py guard install` runs it before every commit, after you say yes; `git commit --no-verify` skips it once and `guard remove` takes it out. `guard status` says whether it is on.
+
+`status --json` prints the same facts as JSON. `status --hook` is what the Claude Code plugin runs when a session starts: five short lines, and nothing in a project with no system.
 :::
 
 **Things removed on purpose.** Code keeps no record of what was taken out, so a later session tends to add it back. Record a removal the day it happens.

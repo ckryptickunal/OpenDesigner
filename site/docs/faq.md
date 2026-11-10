@@ -4,7 +4,7 @@ seo_title: OpenDesigner FAQ: AI design systems, tokens, teams, privacy
 description: Plain answers about OpenDesigner: what it is, which AI tools it works with, privacy, accessibility, how it compares, team governance, and how early it is.
 section: Reference
 order: 5
-updated: 2026-11-07
+updated: 2026-11-10
 ---
 
 ### What is OpenDesigner?
@@ -35,6 +35,24 @@ In Claude Code it takes two commands and a new session; the Claude app, ChatGPT,
 /plugin install opendesigner@opendesigner
 ```
 :::
+
+### What does it cost?
+
+Nothing. OpenDesigner is free and open source, with no account to create: code, skills and data are MIT, and the written research and docs are CC BY 4.0. You need your own AI tool, which may cost money. The engine also runs with no AI at all. See [Install](/docs/install/).
+
+### How do I update it?
+
+In Claude Code it takes one command and a new session. In the Claude app you delete the old skill and upload the newest zip. In Codex, Cursor and other agents you run the copy commands again. The [changelog](/changelog/) says what changed. See [Update it](/docs/install/#update-it).
+
+:::dev
+```
+claude plugin update opendesigner@opendesigner
+```
+:::
+
+### How do I remove it or undo what it did?
+
+Everything it writes is a plain file in your project, so undoing it means deleting `DESIGN.md`, `PRODUCT.md` and the `opendesigner/` folder. If you said yes to the note for later sessions, also delete its part of `AGENTS.md` and the `@AGENTS.md` line in `CLAUDE.md`. Then uninstall the plugin, or delete the skill you uploaded or copied. See [Remove it](/docs/install/#remove-it).
 
 ### What does it ask during setup?
 
@@ -84,7 +102,9 @@ No. It does the repetitive system work: scales, tokens, states and contrast. It 
 
 That's a fair worry. OpenDesigner asks what people should remember about your product, sets eight dials from your answers, and asks for your own logo, fonts and art instead of faking them. It won't copy another brand; if you love a site's look, it can write a Taste Index of it, and what you keep is your call and your responsibility. Logos, names, images and copy never go in.
 
-The limits, honestly: in our stress test, AI agents made 46 pieces plus 8 mockups by following the process. An audit against shipped products passed 28 of the 54, sent 20 back for polish and rebuilt 6, and much of the striking work was made outside the tokens. The tokens give you consistency and readable contrast; a distinctive look still needs your input.
+The limits, honestly: in our stress test in October 2026, AI agents made 46 pieces plus 8 mockups by following the process. An audit against shipped products passed 28 of the 54, sent 20 back for polish and rebuilt 6, and much of the striking work was made outside the tokens. The tokens give you consistency and readable contrast; a distinctive look still needs your input.
+
+The [showcase](/showcase/) shows a different count today: since that audit, pieces were rebuilt or held back, and B2B product screens and style studies were added.
 
 ### Does it check color contrast?
 
@@ -116,6 +136,6 @@ You don't have to trust them. You can check them. They rest on more than 500 Dec
 
 ### How early is it, and how do I report a problem?
 
-Early. Version 0.2.0, the first tagged release, came out on 5 November 2026, and no watched user trials have happened. The evidence so far is the engine's tests, three worked examples, usability tests role-played by AI testers, and the stress test above.
+Early. Version 0.3.0 came out on 10 November 2026, five days after the first tagged release, and no watched user trials have happened. The evidence so far is the engine's tests, three worked examples, usability tests role-played by AI testers, and the stress test above.
 
 To report a problem, tell your AI what went wrong. It saves a note in your project with a ready-to-file GitHub link, or you can [open an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose) directly. Nothing is posted unless you submit it.

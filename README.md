@@ -18,6 +18,15 @@
 
 **A free, open-source (MIT) add-on for your AI coding tool. It gives your product one design system and checks every screen against it.**
 
+```
+/plugin marketplace add ckryptickunal/OpenDesigner
+/plugin install opendesigner@opendesigner
+```
+
+Two commands in Claude Code. Then up to five questions, planned at about 3 minutes, give you a first version.
+
+On the Claude app, ChatGPT, Cursor or Codex, or have no terminal? [Pick your tool below](#quickstart).
+
 <p align="center">
   <picture>
     <source media="(max-width: 600px)" srcset="https://raw.githubusercontent.com/ckryptickunal/OpenDesigner/main/brand/kit/readme/works-in-narrow.png">
@@ -51,47 +60,44 @@
 ## Quickstart
 
 1. Add OpenDesigner to your AI tool. Pick yours below.
-2. Open your project and say: **"Create a design system for this project."**
+2. Open your project and say: **"Create a design system for this project."** Already built something? Say: **"Make this app look professional."** It audits first and changes nothing until you say yes.
 3. Answer a few short questions. It reads your files first, so it asks less.
 
-**Claude Code**
+The audit measures your running app in a browser, so it needs a coding agent that can drive one or run Playwright, such as Claude Code. The ChatGPT bundle doesn't include it.
 
-```
-/plugin marketplace add ckryptickunal/OpenDesigner
-/plugin install opendesigner@opendesigner
-```
+**Claude Code:** the two commands at the top of this page, then start a new session.
 
 <details>
-<summary><b>Claude app</b> (claude.ai or Desktop)</summary>
+<summary><b>Claude app</b> (claude.ai or Desktop, no terminal)</summary>
 
-Build the skill zip, then upload `dist/opendesigner.zip` under Customize > Skills. Code execution must be on.
+Download [opendesigner.zip](https://opendesigner.dev/.well-known/agent-skills/opendesigner.zip) and upload it under Customize > Skills. Code execution must be on. That zip builds a system. To audit an app you already built, also upload [opendesigner-review.zip](https://opendesigner.dev/.well-known/agent-skills/opendesigner-review.zip) and [opendesigner-extract.zip](https://opendesigner.dev/.well-known/agent-skills/opendesigner-extract.zip). The [install guide](https://opendesigner.dev/docs/install/) lists the other six.
 
-```bash
-git clone https://github.com/ckryptickunal/OpenDesigner && cd OpenDesigner
-python3 tools/build_dist.py        # writes the zip files into dist/
-```
+To build the zips yourself, clone the repo and run `python3 tools/build_dist.py`. They land in `dist/`.
 
 </details>
 
 <details>
 <summary><b>Codex, Cursor, VS Code with Copilot, Gemini CLI and other agents</b></summary>
 
-These tools read skills from `.agents/skills/`. Copy the OpenDesigner skills into your project. Tools that support Agent Plugins can also read the root `plugin.json`.
+These tools read skills from `.agents/skills/`. Run this inside your project. It copies in the nine skill folders and leaves nothing else behind.
 
 ```bash
-git clone https://github.com/ckryptickunal/OpenDesigner
-mkdir -p your-project/.agents/skills
-cp -R OpenDesigner/.agents/skills/opendesigner* your-project/.agents/skills/
+git clone --depth 1 https://github.com/ckryptickunal/OpenDesigner .opendesigner-tmp
+mkdir -p .agents/skills
+cp -R .opendesigner-tmp/.agents/skills/opendesigner* .agents/skills/
+rm -rf .opendesigner-tmp
 ```
+
+Tools that support Agent Plugins can also read the root `plugin.json`.
 
 </details>
 
 <details>
-<summary><b>ChatGPT</b> (web, any plan, nothing to install)</summary>
+<summary><b>ChatGPT</b> (a Project, nothing to install)</summary>
 
-1. Create a Project.
-2. Paste [`chatgpt-project/instructions.md`](chatgpt-project/instructions.md) (the part below its line) into the Project instructions.
-3. Upload the five files in [`chatgpt-project/knowledge/`](chatgpt-project/knowledge/).
+1. Download [opendesigner-chatgpt.zip](https://opendesigner.dev/downloads/opendesigner-chatgpt.zip) and unzip it.
+2. Create a Project and paste `instructions.txt` into the Project instructions.
+3. Upload the five files in the `knowledge` folder.
 
 </details>
 
@@ -108,6 +114,10 @@ python3 path/to/OpenDesigner/skills/opendesigner/scripts/engine.py sketch --name
 
 You need your own AI tool and Python 3.10 or newer. The engine makes no network calls ([privacy](docs/PRIVACY.md)). Help for each tool: [install guide](https://opendesigner.dev/docs/install/).
 
+Tested so far: the Claude Code install (2026-10-21) and the engine on Python 3.10.11. Not yet recorded: a run in the Claude app, Codex, Cursor, other agents or ChatGPT. Tried one? Say what you saw in [issue #19](https://github.com/ckryptickunal/OpenDesigner/issues/19) or in [Discussions](https://github.com/ckryptickunal/OpenDesigner/discussions).
+
+New to the repo? You only need `skills/` or a zip from above. Everything else here (research, benchmarks, the website, the brand kit) is how OpenDesigner is made.
+
 ## Component library
 
 <picture>
@@ -120,7 +130,7 @@ You need your own AI tool and Python 3.10 or newer. The engine makes no network 
 
 ## Status
 
-- Version 0.2.0, the first tagged release, 5 November 2026. One maintainer.
+- Version 0.3.0, 10 November 2026. The first tagged release was 0.2.0, on 5 November. One maintainer.
 - Engine tests pass locally. No CI runs, and no watched user trials yet.
 - Next: choices you can click inside your AI tool ([#20](https://github.com/ckryptickunal/OpenDesigner/issues/20)).
 

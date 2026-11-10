@@ -107,9 +107,9 @@ Use the skill's own folder path when it is installed elsewhere (for example a pl
 | Host | How |
 |---|---|
 | Claude Code | `/plugin marketplace add ckryptickunal/OpenDesigner` then `/plugin install opendesigner@opendesigner`. Or clone the repo: `.claude/skills/` loads automatically |
-| claude.ai (web, desktop, mobile) | Upload `dist/opendesigner.zip` (built by `python3 tools/build_dist.py`) in Customize > Skills. Code execution must be on |
-| Codex, Cursor, VS Code + Copilot, Gemini CLI | Clone or add the repo: `.agents/skills/` is discovered. Agent Plugins hosts read the root `plugin.json` |
-| ChatGPT without plugins | A Project with `chatgpt-project/instructions.md` and the 5 files in `chatgpt-project/knowledge/` |
+| claude.ai (web, desktop, mobile) | Download `https://opendesigner.dev/.well-known/agent-skills/opendesigner.zip` and upload it in Customize > Skills. Code execution must be on. Each skill is its own zip in that folder: an audit of a built app also needs `opendesigner-review.zip` and `opendesigner-extract.zip`. `python3 tools/build_dist.py` builds the same zips into `dist/` |
+| Codex, Cursor, VS Code + Copilot, Gemini CLI | Inside the person's project: `git clone --depth 1 https://github.com/ckryptickunal/OpenDesigner .opendesigner-tmp`, `mkdir -p .agents/skills`, `cp -R .opendesigner-tmp/.agents/skills/opendesigner* .agents/skills/`, `rm -rf .opendesigner-tmp`. Working inside a clone of this repo also works: `.agents/skills/` is discovered. Agent Plugins hosts read the root `plugin.json` |
+| ChatGPT without plugins | A Project. Download `https://opendesigner.dev/downloads/opendesigner-chatgpt.zip` (built by `tools/build_dist.py` from `chatgpt-project/`), paste its `instructions.txt` into the Project instructions and upload the 5 files in its `knowledge` folder |
 
 ## Contributing to this repo
 
@@ -170,7 +170,7 @@ python3 skills/opendesigner/scripts/library.py check   every library component u
 python3 site/post_change_audit.py          after changing the website or the library: every automatic check, then walk skills/opendesigner/references/post-change-audit.md by eye
 python3 tools/changelog_check.py                  every CHANGELOG.md entry is short, dated and in the format the website reads; add one entry per change you push
 python3 tools/build_examples.py --check           the worked examples in examples/ are what the engine makes now (else: build_examples.py, which rebuilds them)
-python3 tools/check_links.py                      every relative Markdown link resolves; a /link in site/docs must be a page the website makes
+python3 tools/check_links.py                      every relative Markdown link resolves; a /link in site/docs must be a page the website makes; the root llms.txt links only to files that exist
 python3 tools/check_glossary.py --check           every glossary term passes the three-voice rules against today's engine, and docs/GLOSSARY.md is current
                                                    (edit synthesis/glossary.json, then: check_glossary.py --build, build_data.py, sync_skills.py)
 ```

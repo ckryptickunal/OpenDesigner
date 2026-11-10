@@ -4,7 +4,7 @@ seo_title: OpenDesigner evals: how we test it, with every result
 description: How OpenDesigner tests itself, what each test can and can't show yet, and every saved result with its date and number of runs, failures included.
 section: Reference
 order: 7
-updated: 2026-11-08
+updated: 2026-11-10
 ---
 
 Each test here answers a question you might ask before trusting OpenDesigner. An eval is a fixed task with fixed checks and a saved result, and every number on this page is read from those result files, with its date and how many times it ran. Failures stay on the page until they pass.

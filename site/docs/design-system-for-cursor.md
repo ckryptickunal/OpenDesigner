@@ -4,7 +4,7 @@ seo_title: Give Cursor your design tokens so every screen matches
 description: Cursor needs three things to keep every screen consistent: design tokens, components built on them, and a rule that points at DESIGN.md. Here is each one.
 section: Guides
 order: 20
-updated: 2026-11-07
+updated: 2026-11-10
 ---
 
 To make every screen match, give Cursor three things:
@@ -37,12 +37,13 @@ your-app/
 
 ## Set it up
 
-**1. Copy the skills into your project.** Cursor loads skills from `.agents/skills/`:
+**1. Copy the skills into your project.** Cursor loads skills from `.agents/skills/`. Run this inside your project. It copies in the nine skill folders and leaves nothing else behind:
 
 ```
-git clone https://github.com/ckryptickunal/OpenDesigner
-mkdir -p your-project/.agents/skills
-cp -R OpenDesigner/.agents/skills/opendesigner* your-project/.agents/skills/
+git clone --depth 1 https://github.com/ckryptickunal/OpenDesigner .opendesigner-tmp
+mkdir -p .agents/skills
+cp -R .opendesigner-tmp/.agents/skills/opendesigner* .agents/skills/
+rm -rf .opendesigner-tmp
 ```
 
 The skills come with a small Python engine that does the math. You need Python 3.10 or newer. The engine uses only Python's standard library and makes no network calls.

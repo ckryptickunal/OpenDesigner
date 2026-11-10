@@ -14,6 +14,19 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 - **A catalogue of states** (2026-11-10). A new template, `assets/output/STATES.md`, lists every state of a screen that shows data, with its words, tone and next step, and the rows just under, on and over each limit. The skills offer it before such a screen is built.
 - **The AGENTS.md note fits the system** (2026-11-10). A first version, or a system the owner keeps loose, gets a shorter note without the strict rules, unless the owner asked for strict ones. Once the owner zooms in or tightens the rules, the next `set` or `pick` rewrites the note in place, unless someone edited it. No comment meant only for the agent reaches AGENTS.md.
 - **Agent notes that route and forbid** (2026-11-10). The AGENTS.md note now says which file decides what, what never to do as part of other work, and how to settle a merge conflict in `opendesigner/`. Reports keep written, built and verified apart, and the export skill asks before replying in a Figma or Paper comment thread.
+
+### Changed
+
+- **Review ends with one verdict** (2026-11-10). The last line of `engine.py review` is `Review: ok` or how many things are left to fix and why, and it counts the errors `engine.py validate` finds. `--strict` exits with an error exactly when that line is not `Review: ok`.
+
+## [0.3.0]: 2026-11-10
+
+The second release. OpenDesigner now stays in use across long sessions and new ones, its review no longer calls code clean when it uses no tokens, text you protect in `DESIGN.md` survives every refresh, and people without a terminal get ready downloads. To update in Claude Code, run `claude plugin update opendesigner@opendesigner` and start a new session; the [install page](https://opendesigner.dev/docs/install/#update-it) covers the other tools. This release adds a start-of-session hook to the Claude Code plugin: in a project that has `opendesigner/state.json` it prints the current step, and anywhere else it does nothing.
+
+### Added
+
+- **Downloads that need no terminal** (2026-11-10). The README, the install page and the home page link the ready skill zips for the Claude app, so nobody has to clone and build. A new `opendesigner-chatgpt.zip` holds the five ChatGPT files and the text to paste; `tools/build_dist.py` builds it and the site serves it at `/downloads/`.
+- **How to update it and how to remove it** (2026-11-10). The install page and the FAQ now say how to update OpenDesigner in each tool, how to take it out, and which files to delete to undo it in a project. The FAQ also answers what it costs.
 - **Three style extractors, measured on one site** (2026-11-10). OpenDesigner's extractor, Dembrandt and Project Wallace's analyzer were scored against Primer's published tokens on primer.style. The two browser tools reported real values 84-100% of the time but got one or two colour roles wrong; reading the CSS without a browser listed 900 colours, 2% of them on the page. Our accent bug is #110.
 - **Review runs without a system** (2026-11-10). With no `opendesigner/state.json`, `engine.py review` still scans the code and says "No design system is bound here", with the count of hard-coded values. It names any system found in a subfolder and the command that checks the code against it.
 - **`review --strict` for commits** (2026-11-10). `engine.py review --strict` exits with an error on any finding, tokens not in charge, a `DESIGN.md` that disagrees with the code or validate errors, and its last line names each reason.
@@ -53,7 +66,6 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 ### Changed
 
 - **Install and the test numbers come second on the home page** (2026-11-10). "Add it to your AI tool" and the four test results now follow the before-and-after demo, about a fifth of the way down the page instead of two thirds. Most visitors left before reaching them. The "Get started free" click at the top is now counted as an install click.
-- **Review ends with one verdict** (2026-11-10). The last line of `engine.py review` is `Review: ok` or how many things are left to fix and why, and it counts the errors `engine.py validate` finds. `--strict` exits with an error exactly when that line is not `Review: ok`.
 - **Fonts, brand color, dials and answers say who chose them** (2026-11-10). `engine.py set` and `pick` now need `--set-by` for these values, and `chosen` needs the person's words in `--quote`, so an agent's own pick is no longer recorded as the owner's. Older systems still load.
 - **Binding rules come first in the skill** (2026-11-09). After a long chat, Claude keeps only about the first 20,000 characters of a skill, and the main skill was 32,864. It is now 19,296, and its first 2,000 hold seven binding rules, among them tokens only, one question at a time, show every round and review at the end. The detail moved to reference files, unchanged.
 - **One question per call** (2026-11-09). The skill now says it outright: one question per message and one per call of a question tool, the log question alone and first. Ask for "something new" and you get three options to pick from, never one picked for you. A new eval case fails any turn that asks two.
@@ -67,6 +79,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **Install steps and counts that disagreed** (2026-11-10). The Codex and Cursor steps run inside your project with no folder name to edit. The README opens with the install commands and adds the prompt for an app you already built. The evals tile says 20 briefs after a fresh run, the engine page lists `status` and `handoff`, and the styles page says 194 questions, like the tour.
 - **A missing system is caught** (2026-11-10). When `AGENTS.md`, `CLAUDE.md` or `DESIGN.md` say the system lives in `opendesigner/` and that folder is missing, `engine.py review` fails and says so.
 - **design-md keeps every od:keep block** (2026-11-09). A kept block that holds its own heading, or sits in a section the file no longer has, is no longer deleted; the second kind moves to a Notes section. The `.hand-edited` backup is now the whole previous file, not a 201-byte fragment.
 - **Review never calls token-free code clean** (2026-11-09). When no token is in use, `engine.py review` says "no tokens in use" instead of "the code uses the tokens", and counts radii, not "radiuss".

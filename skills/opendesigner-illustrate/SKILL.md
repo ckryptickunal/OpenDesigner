@@ -4,7 +4,7 @@ description: Illustrations, stock photos and icons. Finds open-licence art, reco
 license: MIT
 compatibility: Python 3.10+ (standard library). Search and fetch need HTTPS access. A browser or image view helps you judge candidates; web search finds more sources.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 

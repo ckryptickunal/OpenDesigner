@@ -1,13 +1,13 @@
 {
   "kind": "design",
-  "date": "2026-11-05",
-  "commit": "25519f7",
-  "briefs": 19,
-  "checks": 171,
-  "passed": 171,
+  "date": "2026-11-10",
+  "commit": "5849f67",
+  "briefs": 20,
+  "checks": 180,
+  "passed": 180,
   "rate": 1.0,
-  "qualityChecks": 58,
-  "qualityPassed": 54,
+  "qualityChecks": 61,
+  "qualityPassed": 57,
   "rows": [
     {
       "id": "b2b-dense-cobalt",
@@ -30,7 +30,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.8,
+      "seconds": 2.1,
       "lowest": {
         "dark fill-boundary": "4.15:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.33:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -75,7 +75,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.2,
+      "seconds": 2.1,
       "lowest": {
         "dark fill-boundary": "4.05:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.31:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -120,7 +120,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 4.1,
+      "seconds": 2.7,
       "lowest": {
         "dark fill-boundary": "3.86:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.35:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -164,7 +164,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.2,
+      "seconds": 2.2,
       "lowest": {
         "dark fill-boundary": "9.98:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "10.31:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -208,7 +208,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.2,
+      "seconds": 2.1,
       "lowest": {
         "dark fill-boundary": "6.31:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "6.49:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -253,7 +253,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.1,
+      "seconds": 2.1,
       "lowest": {
         "dark fill-boundary": "3.83:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.35:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -297,7 +297,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.2,
+      "seconds": 2.2,
       "lowest": {
         "dark fill-boundary": "4.06:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.32:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -322,6 +322,51 @@
       "contrastPairs": 164
     },
     {
+      "id": "zinc-ink",
+      "why": "A near-black brand whose accent ramp runs out of darker steps (issue 67)",
+      "checks": {
+        "builds": true,
+        "no-errors": true,
+        "text-contrast": true,
+        "ui-contrast": true,
+        "targets": true,
+        "brand-kept": true,
+        "exports": true,
+        "design-md": true,
+        "same-twice": true
+      },
+      "quality": {
+        "type-steps": true,
+        "button-visible": true,
+        "says-so": true
+      },
+      "passed": 9,
+      "of": 9,
+      "seconds": 2.2,
+      "lowest": {
+        "dark fill-boundary": "4.10:1 (color.bg.action.primary on color.surface.raised)",
+        "dark focus": "5.30:1 (color.border.focus on color.bg.neutral.subtle)",
+        "dark non-text": "3.06:1 (color.border.input on color.bg.neutral.subtle)",
+        "dark text": "4.59:1 (color.text.secondary on color.bg.neutral.subtle-hover)",
+        "light fill-boundary": "17.42:1 (color.bg.action.primary on color.surface.base)",
+        "light focus": "14.86:1 (color.border.focus on color.bg.neutral.subtle)",
+        "light non-text": "3.05:1 (color.border.input on color.bg.neutral.subtle)",
+        "light text": "4.58:1 (color.text.on-success on color.bg.success.bold)"
+      },
+      "typeScale": [
+        13,
+        16,
+        19,
+        23,
+        28,
+        33,
+        40
+      ],
+      "brandStored": "#18181b",
+      "tokens": 443,
+      "contrastPairs": 164
+    },
+    {
       "id": "near-white",
       "why": "A brand color that is almost white",
       "checks": {
@@ -342,7 +387,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.3,
+      "seconds": 2.2,
       "lowest": {
         "dark fill-boundary": "14.06:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "10.31:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -387,7 +432,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.2,
+      "seconds": 2.2,
       "lowest": {
         "dark fill-boundary": "4.10:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.33:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -432,7 +477,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.4,
+      "seconds": 2.2,
       "lowest": {
         "dark fill-boundary": "4.11:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.37:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -477,7 +522,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.3,
+      "seconds": 2.3,
       "lowest": {
         "dark fill-boundary": "4.09:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.30:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -522,7 +567,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 4.3,
+      "seconds": 2.9,
       "lowest": {
         "dark fill-boundary": "4.29:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.36:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -566,7 +611,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 6.2,
+      "seconds": 4.2,
       "lowest": {
         "dark fill-boundary": "4.11:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.35:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -610,7 +655,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.0,
+      "seconds": 2.2,
       "lowest": {
         "dark fill-boundary": "4.11:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.29:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -655,7 +700,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.1,
+      "seconds": 2.4,
       "lowest": {
         "dark fill-boundary": "4.17:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.35:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -699,7 +744,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.3,
+      "seconds": 2.3,
       "lowest": {
         "dark fill-boundary": "4.12:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.40:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -743,7 +788,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.3,
+      "seconds": 2.2,
       "lowest": {
         "dark fill-boundary": "4.13:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.34:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -787,7 +832,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.4,
+      "seconds": 2.4,
       "lowest": {
         "dark fill-boundary": "7.76:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "8.04:1 (color.border.focus on color.bg.neutral.subtle)",
@@ -832,7 +877,7 @@
       },
       "passed": 9,
       "of": 9,
-      "seconds": 3.1,
+      "seconds": 2.5,
       "lowest": {
         "dark fill-boundary": "4.13:1 (color.bg.action.primary on color.surface.raised)",
         "dark focus": "5.35:1 (color.border.focus on color.bg.neutral.subtle)",

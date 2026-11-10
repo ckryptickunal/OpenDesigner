@@ -4,7 +4,7 @@ description: SEO, AEO and GEO. Gets a site found by Google and AI answer engines
 license: MIT
 compatibility: Python 3.10+ (standard library, no network) for the checks. A browser the agent can drive, for the answer-engine probe.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 

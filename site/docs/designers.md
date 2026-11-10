@@ -4,7 +4,7 @@ seo_title: OpenDesigner for product designers: decisions and Figma
 description: How OpenDesigner fits a product designer's process: what it automates, what you keep control of, how logged decisions help in reviews, and Figma variables.
 section: Guides
 order: 1
-updated: 2026-11-07
+updated: 2026-11-10
 ---
 
 OpenDesigner does the repetitive part of design-system work for you: scales, tokens, component states, contrast checks and keeping the code in step with the design. You keep the direction, the taste and every asset a person should make. It writes down each decision with its reason, and it exports Figma variables so your design file can match the code.
@@ -53,10 +53,10 @@ Hands-on Figma research is still an open task ([issue #10](https://github.com/ck
 
 ## Where you are still needed
 
-In a stress test, 8 AI agents built 46 pieces by following the OpenDesigner process, all for made-up brands.
+In a stress test in October 2026, 8 AI agents built 46 pieces by following the OpenDesigner process, all for made-up brands.
 
 - The engine helped most where things are easy to get wrong: contrast-safe colors, spacing, radii, focus rings and motion.
 - A later audit of these and 8 mockups against shipped products kept 28 of the 54, sent 20 back for polish and rebuilt 6.
 - Most display type, light weights, tinted backgrounds, hard shadows and art colors were made outside the tokens, or against them.
 
-So the tokens give you consistency and readable contrast, and a distinctive look still needs your eye. The full findings are in the [stress test report](https://github.com/ckryptickunal/OpenDesigner/blob/main/brand/showcase/STRESS-TEST.md).
+So the tokens give you consistency and readable contrast, and a distinctive look still needs your eye. The full findings are in the [stress test report](https://github.com/ckryptickunal/OpenDesigner/blob/main/brand/showcase/STRESS-TEST.md). The [showcase](/showcase/) shows a different count today: since that audit, pieces were rebuilt or held back, and B2B product screens and style studies were added.

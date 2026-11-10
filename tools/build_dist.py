@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Zip each skill for upload to claude.ai (Customize > Skills) or the Claude API, into dist/.
+"""Zip each skill for upload to claude.ai (Customize > Skills) or the Claude API, into dist/, and the ChatGPT Project
+files into one download.
 
-    python3 tools/build_dist.py            validate frontmatter, then write dist/<skill>.zip
-    python3 tools/build_dist.py --check    validate only (exit 1 on errors)
+    python3 tools/build_dist.py            validate frontmatter, then write dist/<skill>.zip and dist/opendesigner-chatgpt.zip
+    python3 tools/build_dist.py --check    validate only (exit 1 on errors); writes nothing
 
 Each zip holds the skill folder at its root (opendesigner.zip -> opendesigner/SKILL.md), the layout the
 Claude Help Center asks for. Frontmatter is checked against the portable Agent Skills fields: name
@@ -11,12 +12,17 @@ warn above 200 because the claude.ai Help Center states a 200-character limit), 
 compatibility, metadata and allowed-tools besides. It also checks that the release the engine stamps into each system
 (OPENDESIGNER_VERSION in skills/opendesigner/scripts/engine.py) equals the version in plugin.json and
 .claude-plugin/plugin.json. dist/ is git-ignored. Standard library only.
+
+opendesigner-chatgpt.zip is not a skill. It holds what a ChatGPT Project needs, so nobody fetches six files by hand: the
+files of chatgpt-project/knowledge/, instructions.txt (only the part of chatgpt-project/instructions.md below its "---"
+line, the text people paste) and a README.txt with the three steps.
 """
 import argparse, json, re, sys, zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC, DIST = ROOT / "skills", ROOT / "dist"
+GPT, GPT_ZIP = ROOT / "chatgpt-project", "opendesigner-chatgpt"
 ALLOWED = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
 IGNORE = {"__pycache__", ".DS_Store", "node_modules", "out", ".vite"}  # the painting engine must ship without installs or renders
 # claude.ai installs each uploaded skill on its own, so the sub-skills' zips carry the engine and the data it
@@ -73,6 +79,52 @@ def check_version():
     return errs
 
 
+def chatgpt_parts():
+    """(errors, the paste text, the knowledge files) for the ChatGPT bundle. The paste text is everything below the
+    first "---" line of chatgpt-project/instructions.md; the lines above it are notes for people reading the repository."""
+    _notes, line, paste = (GPT / "instructions.md").read_text(encoding="utf-8").partition("\n---\n")
+    files = sorted(f for f in (GPT / "knowledge").iterdir() if f.is_file() and f.name not in IGNORE)
+    errs = []
+    if not line or not paste.strip():
+        errs.append('chatgpt-project/instructions.md has no "---" line with the text to paste below it')
+    if not files:
+        errs.append("chatgpt-project/knowledge/ holds no files (python3 tools/build_data.py writes them)")
+    return errs, paste.strip() + "\n", files
+
+
+def chatgpt_readme(files):
+    return f"""OpenDesigner for ChatGPT
+
+1. Unzip this file.
+2. In ChatGPT, create a Project. Copy everything in instructions.txt and paste it into the Project's instructions.
+3. Upload the {len(files)} files in the knowledge folder as Project files:
+   {", ".join(f.name for f in files)}
+
+Then start a chat in the Project and say: "Create a design system for my app."
+
+Help with each step: https://opendesigner.dev/docs/install/
+Source (MIT): https://github.com/ckryptickunal/OpenDesigner
+"""
+
+
+def write_chatgpt(paste, files):
+    """dist/opendesigner-chatgpt.zip: one folder with README.txt, instructions.txt and knowledge/."""
+    out = DIST / f"{GPT_ZIP}.zip"
+    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
+        z.writestr(f"{GPT_ZIP}/README.txt", chatgpt_readme(files))
+        z.writestr(f"{GPT_ZIP}/instructions.txt", paste)
+        for f in files:
+            z.write(f, Path(GPT_ZIP) / "knowledge" / f.name)
+    return out
+
+
+def shown(out):
+    try:
+        return out.relative_to(ROOT)
+    except ValueError:
+        return out
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--check", action="store_true")
@@ -108,11 +160,15 @@ def main():
                     dst = Path("assets/templates") / template.name
                     if not (s / dst).exists():
                         z.write(template, Path(s.name) / dst)
-        try:
-            shown = out.relative_to(ROOT)
-        except ValueError:
-            shown = out
-        print(f"wrote {shown} ({out.stat().st_size // 1024} KB)")
+        print(f"wrote {shown(out)} ({out.stat().st_size // 1024} KB)")
+    gpt_errs, paste, files = chatgpt_parts()
+    for e in gpt_errs:
+        print(f"error chatgpt: {e}")
+    failed |= bool(gpt_errs)
+    if not (gpt_errs or args.check or version_errs):
+        DIST.mkdir(exist_ok=True)
+        out = write_chatgpt(paste, files)
+        print(f"wrote {shown(out)} ({out.stat().st_size // 1024} KB)")
     sys.exit(1 if failed else 0)
 
 
