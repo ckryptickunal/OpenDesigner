@@ -84,7 +84,7 @@ Yes. In Claude Code, add this repo as a plugin marketplace and install the plugi
 /plugin install opendesigner@opendesigner
 ```
 
-In the Claude app (claude.ai, Desktop), upload the skill zip that `python3 tools/build_dist.py` builds, under Customize > Skills. Claude can show choices visually through custom visuals and artifacts. Full steps: [README](../README.md#quickstart).
+In the Claude app (claude.ai, Desktop), download [opendesigner.zip](https://opendesigner.dev/.well-known/agent-skills/opendesigner.zip) and upload it under Customize > Skills. Claude can show choices visually through custom visuals and artifacts. Full steps: [README](../README.md#quickstart).
 
 ### Does it work with ChatGPT?
 

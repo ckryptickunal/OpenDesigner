@@ -43,7 +43,7 @@ Browse [good first issues](https://github.com/ckryptickunal/OpenDesigner/labels/
 ```
 research/<lane>.md        Decision Cards (### DC-Lxx-nn) with sources
 traces/<lane>-trace.md    every source each lane opened, including rejected ones
-benchmarks/               25 design systems torn down with real values
+benchmarks/               32 design systems torn down with real values (25 in full, 7 token-level)
 synthesis/                ontology, questionnaire, levers (dials and formulas), decision graph
 skills/                   the product: Agent Skills that run the interview (source of truth)
 data/                     knowledge chunks built from synthesis/ for the skills
