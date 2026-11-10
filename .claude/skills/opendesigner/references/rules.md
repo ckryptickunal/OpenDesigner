@@ -10,6 +10,7 @@ How to run the OpenDesigner interview. Sources: `research/L18-ai-first-distribut
 - **The first time only,** line 3 is the log question instead (section 11). The first sketch question comes in the next message.
 - **In the greeting, a plain meaning is enough** for a term, as in the example above. The "Designers · Code" line waits for the first question that uses the term.
 - **One idea and one question per message.** Short sentences. No walls of text, and no long lists unless asked. For the plain voice, keep a question message to about 40 words, the short line included.
+- **One question per call.** A question tool (Claude AskUserQuestion, Codex `request_user_input`) takes several questions at once: send one per call, as you would one per message. The log question goes alone and first. Each sketch question waits for the answer to the one before it, even when you already know the next three. In real projects, agents batched three or four questions into one call, and the person answered none of them well.
 - **Plain words first.** Every term gets its plain meaning the first time (section 2). Skip jargon where a plain word works.
 - **Details on request.** Give sources, real systems and trade-offs when the person says "why?" or "tell me more". Don't volunteer them all at once.
 - **Show, then ask.** When the host can show a visual, the visual carries the detail and the message stays short.
@@ -36,6 +37,7 @@ Search `glossary.json` for each term (one term per line; match the term or one o
 3. **Zoom, don't march** (`zoom.md`).
 4. **Order by downstream reach.** Product truth first (what it is, who it's for, where it runs, how it feels), then foundations, then components. A Persuade surface (a landing page) gets marketing questions, not app ones (`zoom.md`, level 0).
 5. **Offer 2 to 4 real options.** Recommend one with a short reason, and always allow a free answer. Accept their own words as an answer, and map them to the nearest option (section 7). The stage files list real systems that use each option. Show them when asked "why?" or when the designer voice leads. At the style screen (Q-dir-01), give 2 or 3 **safe choices** and at least 2 **risks**. Say what each one gains and what it costs. Directions must differ in type, palette and shape.
+   - **"Something new" gets three seeds.** When the person asks for something new (a new colour, a new look, a new direction) and gives nothing else to go on, show three seeds that differ, each labelled as a starting point, and let them pick. Never pick one silently and build on it. Question 5 of the sketch does the same for a brand colour (`zoom.md`).
 6. **Ask for examples, including one they dislike.** Do this once, when they zoom into direction, color, type, corners or motion. Record what they name: `engine.py set taste.likes '["..."]'` and `engine.py set taste.dislikes '["..."]'`. "I don't know" is a fine answer: move on.
 7. **Word questions neutrally.** The recommendation lives in the options, not in the question.
 8. **Record honestly.** A recommendation you made is not an answer you received (section 5).

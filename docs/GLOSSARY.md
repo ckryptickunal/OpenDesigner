@@ -1331,7 +1331,7 @@ Designers: rules for later AI sessions · Code: `assets/output/AGENTS-snippet.md
 
 **Designer:** Keeps later AI sessions on-system: they read the design guide and values before touching UI, stop hard-coding values, and ask before changing locked decisions.
 
-**Engineer:** assets/output/AGENTS-snippet.md, appended to AGENTS.md or CLAUDE.md after asking: read DESIGN.md, PRODUCT.md and tokens first, never hard-code values, run engine.py review after implementation.
+**Engineer:** engine.py handoff writes it into AGENTS.md and CLAUDE.md imports it: read DESIGN.md and RULES.md first, no hard-coded values, review before each draft and commit.
 
 **Example:** A new AI session reads it before styling a page.
 

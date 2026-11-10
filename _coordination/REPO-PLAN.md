@@ -10,6 +10,7 @@ OpenDesigner/
 ├── CLAUDE.md, GEMINI.md       R3  "@AGENTS.md" plus host notes
 ├── plugin.json                R3  Agent Plugins 1.0 manifest (Codex, ChatGPT, Cursor, VS Code, Copilot, Kiro)
 ├── .claude-plugin/            R3  plugin.json + marketplace.json (the repo doubles as a Claude marketplace)
+├── hooks/                     R3  hooks.json: one read-only SessionStart hook for Claude Code, `engine.py status --hook` when opendesigner/state.json exists (owner 2026-11-09; tools/test_plugin_hook.py)
 ├── skills/                    R3  SOURCE OF TRUTH, Agent Skills format, portable frontmatter only
 │   ├── opendesigner/          router skill: interview flow, depth modes, pacing, visual ladder, output contract
 │   │   ├── SKILL.md           (<500 lines)

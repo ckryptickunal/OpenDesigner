@@ -73,6 +73,8 @@ python3 skills/opendesigner/scripts/engine.py build     (generate + validate; if
 python3 skills/opendesigner/scripts/engine.py overview --open   (overview.html: the person's whole system on one page; what is missing says "Not enough information")
 python3 skills/opendesigner/scripts/engine.py review    (end of every implementation: hard-coded values, whether tokens are in charge, a system behind the code, standards, stale DESIGN.md, a share image older than what it shows; reports only, edits nothing)
 python3 skills/opendesigner/scripts/engine.py version   (this copy's release, and whether the system was made or built with an older one; never checks online)
+python3 skills/opendesigner/scripts/engine.py status    (the Now line: the step, what waits for the owner, the next command; first after a context reset or in a new session)
+python3 skills/opendesigner/scripts/engine.py handoff yes|no   (after asking once: the AGENTS.md snippet and a CLAUDE.md that imports it, or nothing; recorded either way)
 python3 skills/opendesigner/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea   (--kind note: the owner's note on the work, counted in opendesigner/RULES.md)
 python3 skills/opendesigner/scripts/engine.py research plan --brief "..." --tools web-search,browser,last30days   (then research add <findings.json> [--accept], or research skip --why "...")
 ```
@@ -95,9 +97,9 @@ Use the skill's own folder path when it is installed elsewhere (for example a pl
   - `opendesigner/overview.html`: the person's own design-system page, rebuilt by every `build`, with the visual templates filled in `opendesigner/preview/`
   - `DESIGN.md` and `PRODUCT.md` at the project root
   - `opendesigner/decisions.md`, `opendesigner/state.json`, `opendesigner/RATIONALE.md`
-  - `opendesigner/PROTOCOL.md` (written at `init`: six steps with owner gates, and the checks every round runs) and `opendesigner/RULES.md` (the owner's notes; said twice, a rule)
+  - `opendesigner/PROTOCOL.md` (written at `init`: six steps with owner gates, the checks every round runs, and a Now line the engine keeps current; `engine.py status` prints it) and `opendesigner/RULES.md` (the owner's notes; said twice, a rule)
   - `opendesigner/research/users.json` and `users.md`: the user research, with its sources
-  - an AGENTS.md snippet (`skills/opendesigner/assets/output/AGENTS-snippet.md`), added after asking
+  - the hand-off: the AGENTS.md snippet (`skills/opendesigner/assets/output/AGENTS-snippet.md`) and a CLAUDE.md that imports it, written by `engine.py handoff yes` after asking once (a no is recorded too)
 - DESIGN.md is living: refresh it after every confirmed decision; at the end of every implementation run `engine.py review` and re-read it.
 - When a step is missing, wrong or confusing, follow `skills/opendesigner/references/improve.md`: record it with `engine.py feedback`; nothing is posted without the person's OK.
 
@@ -125,6 +127,7 @@ Use the skill's own folder path when it is installed elsewhere (for example a pl
 | `.agents/skills/`, `.claude/skills/` | Generated copies of `skills/`. Never edit them. Run `python3 tools/sync_skills.py` |
 | `data/`, `skills/*/references/*.json`, `references/stages/`, `references/cards/`, `chatgpt-project/knowledge/` | Generated from `synthesis/` (including `glossary.json`) by `python3 tools/build_data.py`. `chatgpt-project/knowledge/` also copies the main skill's `SKILL.md`, hand-written references, output templates and `engine.py`. Edit the source instead |
 | `.claude-plugin/`, `plugin.json` | Claude plugin and marketplace manifests, and the Agent Plugins 1.0 manifest. Keep `version` in step |
+| `hooks/` | `hooks.json`: the plugin's one Claude Code hook. At session start, on resume, after /clear and after compaction it runs `engine.py status --hook` when the project has `opendesigner/state.json`: read-only, offline, silent everywhere else (owner decision 2026-11-09). Other hosts ignore it |
 | `design/` | Tokens and artboards written to Figma and Paper for review |
 | `tools/` | `od.py` (coordination), `jev_nav.py` (research navigation, Jev search, card export, decision graph, citation check), `wiki.py` (the learning wiki: add, remove, fetch, check, ingest, trace, cite-check, standards, map, next, upstream), `build_questionnaire.py`, `build_data.py`, `sync_skills.py`, `build_dist.py`, `build_examples.py` (rebuilds `examples/` with the engine; `--check` finds drift), `fit_corner.py` (measures Apple's continuous corner for the web export; macOS) |
 | `.claude/workflows/` | Saved Claude Code workflows for the learning wiki: `learn-analyze`, `learn-standards`, `learn-synthesis`, `learn-escalate`, `learn-personas` |
@@ -161,6 +164,7 @@ python3 tools/wiki.py standards          house standards valid and versioned (el
 python3 tools/wiki.py map --check        learn/MAP.md is current (else: wiki.py map)
 python3 tools/wiki.py proposals --check  the pending-proposals table in synthesis/QUESTIONNAIRE.md is current
 python3 tools/test_wiki.py               learning wiki tests (.venv-wiki/bin/python also runs the OpenWiki ones)
+python3 tools/test_plugin_hook.py        the plugin's start-of-session hook stays silent without a system, read-only and fast
 python3 tools/design_evals.py --check --no-save   the engine on 20 fixed briefs: every required check passes (evals/README.md)
 python3 skills/opendesigner/scripts/library.py check   every library component uses only tokens every engine system writes, is scoped, and has complete tags
 python3 site/post_change_audit.py          after changing the website or the library: every automatic check, then walk skills/opendesigner/references/post-change-audit.md by eye

@@ -1,6 +1,6 @@
 ---
 name: opendesigner-preflight
-description: Checks anything visual before export or sharing (a video, page, deck or UI) for the silly mistakes that make it look cheap or wrong. Use before any render, export or publish.
+description: A launch checklist for anything visual (page, video, deck, share image, UI) that catches the silly mistakes that look cheap or wrong. Use before any render, export, deploy, post or publish.
 license: MIT
 compatibility: Python 3.10+ (standard library, no network) for the helper. ffmpeg and ffprobe for the video, frame and audio checks.
 metadata:

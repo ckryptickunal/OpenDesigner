@@ -2,6 +2,12 @@
 
 How work runs in this project. Every agent follows it. Written by OpenDesigner on {{date}}; edit it to fit.
 
+<!-- od:now: the engine rewrites this block after each command that changes the system; engine.py status prints it -->
+**Now:** not recorded yet. `engine.py status` prints it.
+<!-- /od:now -->
+
+After a context reset or in a new session, read the Now line first. The engine keeps it current; everything else here is yours to edit.
+
 ## Six steps, each ending at a gate
 Show what the gate names, get the owner's yes, tick the box with the date, then start the next step. Skip a step only when the owner says so ("just do it" counts); name the steps you skip, in one line.
 
@@ -15,7 +21,7 @@ Show what the gate names, get the owner's yes, tick the box with the date, then 
 | 6 Verify | The milestone checks (below) on every page | The audit and its fixes | [ ] |
 
 ## Every round
-1. Read this file, `RULES.md` and `decisions.md`.
+1. Read this file (the Now line first), `RULES.md`, `DESIGN.md` and `decisions.md`.
 2. Take every value from the tokens. A value the system lacks becomes a decision (`engine.py set`), never a literal.
 3. Render it. Run `engine.py review`, opendesigner-review on each changed page, and opendesigner-preflight before anything is shared.
 4. Screenshot desktop (1440) and phone (390).
