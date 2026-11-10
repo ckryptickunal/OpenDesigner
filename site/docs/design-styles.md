@@ -4,7 +4,7 @@ seo_title: Design styles named: from glassmorphism to brutalism
 description: Glassmorphism, neumorphism, brutalism and 25 more design styles, each drawn in code with its name, the words people use for it, where it fits and how it fails.
 section: Concepts
 order: 7
-updated: 2026-11-08
+updated: 2026-11-10
 ---
 
 You don't need to know the names of design styles. Describe the look in your own words, like "frosty" or "soft buttons", and OpenDesigner shows the matching styles side by side, so you can point at the one you mean. This page draws 28 of the 133 it knows, and it finds the rest from your words.

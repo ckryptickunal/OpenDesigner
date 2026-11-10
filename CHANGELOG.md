@@ -8,6 +8,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Downloads that need no terminal** (2026-11-10). The README, the install page and the home page link the ready skill zips for the Claude app, so nobody has to clone and build. A new `opendesigner-chatgpt.zip` holds the five ChatGPT files and the text to paste; `tools/build_dist.py` builds it and the site serves it at `/downloads/`.
+- **How to update it and how to remove it** (2026-11-10). The install page and the FAQ now say how to update OpenDesigner in each tool, how to take it out, and which files to delete to undo it in a project. The FAQ also answers what it costs.
 - **Three style extractors, measured on one site** (2026-11-10). OpenDesigner's extractor, Dembrandt and Project Wallace's analyzer were scored against Primer's published tokens on primer.style. The two browser tools reported real values 84-100% of the time but got one or two colour roles wrong; reading the CSS without a browser listed 900 colours, 2% of them on the page. Our accent bug is #110.
 - **Review runs without a system** (2026-11-10). With no `opendesigner/state.json`, `engine.py review` still scans the code and says "No design system is bound here", with the count of hard-coded values. It names any system found in a subfolder and the command that checks the code against it.
 - **`review --strict` for commits** (2026-11-10). `engine.py review --strict` exits with an error on any finding, tokens not in charge, a `DESIGN.md` that disagrees with the code or validate errors, and its last line names each reason.
@@ -60,6 +62,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **Install steps and counts that disagreed** (2026-11-10). The Codex and Cursor steps run inside your project with no folder name to edit. The README opens with the install commands and adds the prompt for an app you already built. The evals tile says 20 briefs after a fresh run, the engine page lists `status` and `handoff`, and the styles page says 194 questions, like the tour.
 - **A missing system is caught** (2026-11-10). When `AGENTS.md`, `CLAUDE.md` or `DESIGN.md` say the system lives in `opendesigner/` and that folder is missing, `engine.py review` fails and says so.
 - **design-md keeps every od:keep block** (2026-11-09). A kept block that holds its own heading, or sits in a section the file no longer has, is no longer deleted; the second kind moves to a Notes section. The `.hand-edited` backup is now the whole previous file, not a 201-byte fragment.
 - **Review never calls token-free code clean** (2026-11-09). When no token is in use, `engine.py review` says "no tokens in use" instead of "the code uses the tokens", and counts radii, not "radiuss".

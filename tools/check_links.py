@@ -11,6 +11,8 @@ Web links (http, https, mailto) are skipped, so it needs no network. Anchors (#s
 A link that starts with / in site/docs/*.md is an address on the website, not a file: it must be a page site/build.py
 makes (site/build.py page_paths), that page's Markdown copy (index.md) or a file the build writes at the root. A link to an
 old address that only redirects is reported too, with the address to use.
+llms.txt at the root is a map of the repository for AI assistants. It links to files by their GitHub address on main, and
+each of those must exist here too, so the map never points at a file that moved (checked on a whole-repo run).
 Exits 1 if any link is broken.
 """
 import importlib.util, re, subprocess, sys
@@ -21,6 +23,8 @@ SKIP_DIRS = {".git", "node_modules", "__pycache__", "last30days-raw", "dist"}  #
 SITE_DOCS = ROOT / "site" / "docs"
 LINK = re.compile(r"(?<!\!)\[[^\]\n]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)|!\[[^\]\n]*\]\(([^)\s]+)\)")
 FENCE = re.compile(r"^\s*(```|~~~)")
+REPO_FILE = re.compile(r"https://(?:raw\.githubusercontent\.com/ckryptickunal/OpenDesigner|"
+                       r"github\.com/ckryptickunal/OpenDesigner/(?:blob|tree))/main/([^)\s#?]+)")
 
 
 def git_md_files():
@@ -107,6 +111,13 @@ def main(args):
             dest = (ROOT / rel.lstrip("/")) if rel.startswith("/") else (p.parent / rel)
             if not dest.exists():
                 broken.append(f"{p.relative_to(ROOT)}:{n}: {target}")
+    llms = ROOT / "llms.txt"
+    if not args and llms.is_file():
+        for n, line in enumerate(llms.read_text(errors="replace").splitlines(), 1):
+            for rel in REPO_FILE.findall(line):
+                checked += 1
+                if not (ROOT / rel).exists():
+                    broken.append(f"llms.txt:{n}: {rel} (no such file or folder in the repository)")
     print("\n".join(broken))
     print(f"{checked} relative links checked, {len(broken)} broken")
     return 1 if broken else 0
