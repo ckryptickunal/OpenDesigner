@@ -356,7 +356,7 @@
   "references": {},
   "taste": {},
   "hashes": {
-    "DESIGN.md": "30eb236d1a6ae2d4",
+    "DESIGN.md": "9caaa491742bb97c",
     "PRODUCT.md": "3d629420afa66b8c"
   },
   "exports": {
@@ -366,8 +366,8 @@
   },
   "locks": [],
   "opendesigner": {
-    "version": "0.2.0",
+    "version": "0.3.0",
     "created": null,
-    "built": "0.2.0"
+    "built": "0.3.0"
   }
 }

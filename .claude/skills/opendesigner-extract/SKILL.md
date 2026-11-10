@@ -4,7 +4,7 @@ description: Learns a look from a website, screenshot, Figma file, repo CSS or b
 license: MIT
 compatibility: Python 3.10+ (standard library). A browser tool or Figma MCP improves accuracy but is optional.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 

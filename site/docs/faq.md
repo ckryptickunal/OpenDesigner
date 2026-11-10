@@ -136,6 +136,6 @@ You don't have to trust them. You can check them. They rest on more than 500 Dec
 
 ### How early is it, and how do I report a problem?
 
-Early. Version 0.2.0, the first tagged release, came out on 5 November 2026, and no watched user trials have happened. The evidence so far is the engine's tests, three worked examples, usability tests role-played by AI testers, and the stress test above.
+Early. Version 0.3.0 came out on 10 November 2026, five days after the first tagged release, and no watched user trials have happened. The evidence so far is the engine's tests, three worked examples, usability tests role-played by AI testers, and the stress test above.
 
 To report a problem, tell your AI what went wrong. It saves a note in your project with a ready-to-file GitHub link, or you can [open an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose) directly. Nothing is posted unless you submit it.

@@ -447,3 +447,39 @@ Merged by the coordinator session at the reviewed head with `--match-head-commit
 ### State after this review
 - One PR is open: #52 (changes requested on 2026-10-13; conflicts with `main`).
 - Issue #81 waits for Kunal's decision on light chart steps.
+
+## Seventh review: PRs 104 to 118, and PR 52 again (2026-11-08 to 2026-11-10)
+
+Merged by the coordinator session at the reviewed head with `--match-head-commit`, the head re-fetched right before each merge.
+
+| PR | What | Reviewed head | Merge | Review |
+|---|---|---|---|---|
+| #104 | PR log for #100 to #103; COPY.md "A cut keeps its facts" | `bd80577` | `7adf019` | docs only |
+| #105 | Sources and verification: hover and pressed steps, Polaris, M3 tracking, component anatomy (closes #26, #4, #3) | `65d2027` | `12a6ae3` | research and citation edits only, no engine change; every check passed on its head |
+| #106 | Light chart steps are for heatmaps, with separators (#81) | `1dab0c6` | `7408abf` | the owner's choice on #81 (keep the steps, add separators); review notes were not kept at the time |
+| #107 | Research: type sizes for other scripts, corner radius and personality, accessibility law (closes #14, #13, #8) | `31838b9` | `c4bb26f` | nothing in the engine changed; its eight proposals wait for the owner |
+| #108 | Launch files stay true: share card age and text, llms.txt claims, `preflight.py public`, the launch checklist | `4d24aee` | `0cc36d0` | reread; its tests rerun on the final commit; every place that states the review case count agrees |
+| #109 | Surviving context resets: binding rules first, SKILL.md under 20,000 characters, `status`, `handoff`, a start-of-session hook the owner approved | `0e77061` | `f03444a` | hook read line by line: it runs only with state, only reads, and cannot block a session. The identity eval ran 6 times on the PR and 3 on main; both average 0.67. **Miss:** the first merge of main was against a stale fetch (543 cards, not 550); fetched and merged again |
+| #111 | Engine: every `od:keep` block survives, an honest review, `engine.py contrast` | `8573498` | `d0d6d5c` | its session hit a usage limit before pushing; the coordinator took the branch and resolved `engine.py` by hand, carrying the chart-line warning and the share-image check into the rewritten review loop; full suite passed |
+| #112 | Research: three style extractors measured on primer.style (closes #11) | `109f6b3` | `48974f5` | measurements read; a bug in our own extractor filed as #110 |
+| #113 | Engine: review without a system, `--strict`, `--set-by` for key values, an opt-in commit guard the owner approved | `8608a9e` | `5849f67` | agent evals compared with main: four of five equal; extend-rounder lower from a quirk both share (#115). **Miss:** a guard test wrote a pre-commit hook into the maintainer's global hooks folder for about a minute. It was removed, the five original hooks confirmed, and the tests now isolate HOME and the git config |
+| #117 | Home page: install and the test numbers follow the before-and-after demo; the hero's install click is counted | `1ea2c94` | `84f9733` | written by the coordinator; layout at 13 widths, `post_change_audit --quick` 8 of 8, looked at 1440 and 375 px |
+| #118 | Front door: install first in the README, zip downloads for the Claude app, a ChatGPT bundle, update and remove steps, facts that agree | `ee33cff` | `f38c890` | every code line read; the zip built and listed; `--check` writes nothing; site built: the download is there and outside the sitemap, the tabs render their links; design evals 180 of 180 on 20 briefs; the `claude plugin` commands confirmed in its help |
+
+### PR 52, reviewed again at `3ebe12e`, `e47eaaf` and `31b2043` (not merged)
+
+Updated onto today's `main` by a session, as a fast-forward each time.
+
+- **Held:** scan with 0 BLOCK at each head; `test_engine` 280, then 289 OK, with the maintainer's global hooks folder untouched; three mutations (floor check off, validate errors left out of the verdict, a missing build record not reported) each failed their test; the new guard gave no false failure on copies of three real systems (Hullstack, Personal-Website, the brand system).
+- **Found at `3ebe12e`:** `engine.py handoff yes` wrote the snippet's comment "For the agent adding this note..." and its `strict` markers into the person's AGENTS.md, and never used the lighter note. Fixed: the engine now picks the note (the owner's Q-gov-01 answer decides; with none, a sketch gets the lighter one).
+- **Also fixed on request:** `removed add` without the owner's words logs `assumed`; a reasoned `od-ignore` that keeps a removed thing names the removal; the website's engineers and engine pages describe today's behaviour.
+- **Found at `e47eaaf`:** the automatic refresh rewrote the note between its markers on every decision, which would delete a line added by hand. Fixed at `31b2043`: only a note the engine wrote and nobody changed is rewritten. Reproduced in a scratch project.
+- **Evals:** extend-rounder and redesign-audits-first, 3 runs each on the branch and on main, score the same within noise. The extend-rounder fixture predates version stamps and should be rebuilt in its own PR.
+- **Verdict:** merge. It waits for the owner's yes, which also confirms that the private playbook (S-L21-01) is his to draw on in public.
+- **Follow-up:** an explicit `handoff yes` still replaces a hand-edited note without a copy, as on `main`.
+
+### State after this review
+- One PR is open: #52 (ready; waits for the owner).
+- Issues filed from these reviews: #110, #114, #115, #116.
+- Lesson: a version that does not change reaches no plugin user. 0.2.0 stood for 131 commits; Claude Code updates a plugin only when its version changes.
+- Lesson: a test that touches git config or hooks isolates HOME and the global git config first (#113).

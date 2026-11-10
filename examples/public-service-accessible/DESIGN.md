@@ -30,7 +30,7 @@ spacing:
 - **Next:** zoom into Colors, Typography, Layout, or stop here: each level works
 - **Licence risks:** none found
 
-> Generated from `state.json` and `decisions.md`. Made with OpenDesigner 0.2.0. `tokens/` is the source of truth. Change the system with `engine.py set ...` and `engine.py build`, not by editing this file (notes inside `<!-- od:keep -->` blocks survive). Each section opens with one plain sentence; open **More** for the designer and engineer detail.
+> Generated from `state.json` and `decisions.md`. Made with OpenDesigner 0.3.0. `tokens/` is the source of truth. Change the system with `engine.py set ...` and `engine.py build`, not by editing this file (notes inside `<!-- od:keep -->` blocks survive). Each section opens with one plain sentence; open **More** for the designer and engineer detail.
 
 ## Overview
 

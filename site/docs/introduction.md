@@ -60,7 +60,7 @@ A skill is a set of instructions your AI tool loads when a task needs it.
 
 ## How early it is
 
-- Version 0.2.0, the first tagged release, came out on 5 November 2026.
+- Version 0.3.0 came out on 10 November 2026. The first tagged release, 0.2.0, was on 5 November.
 - No watched user trials yet: the usability tests so far were role-played by AI testers. A recorded run in each AI tool is still to do.
 - If something breaks or confuses you, please [open an issue](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose). It's the most useful help right now.
 

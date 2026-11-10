@@ -4,7 +4,7 @@ description: Exports an OpenDesigner system to CSS variables, Tailwind, DTCG, Sw
 license: MIT
 compatibility: Python 3.10+ (standard library). Figma writes need Figma's remote MCP (signed in, Full seat); Paper writes need Paper Desktop running.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 

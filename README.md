@@ -130,7 +130,7 @@ New to the repo? You only need `skills/` or a zip from above. Everything else he
 
 ## Status
 
-- Version 0.2.0, the first tagged release, 5 November 2026. One maintainer.
+- Version 0.3.0, 10 November 2026. The first tagged release was 0.2.0, on 5 November. One maintainer.
 - Engine tests pass locally. No CI runs, and no watched user trials yet.
 - Next: choices you can click inside your AI tool ([#20](https://github.com/ckryptickunal/OpenDesigner/issues/20)).
 
