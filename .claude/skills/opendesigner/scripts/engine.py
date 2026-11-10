@@ -41,6 +41,12 @@ Commands (run from the user's project; state lives in ./opendesigner/ unless --d
                            [--review-pattern RE --review-message M] [--title T]
     engine.py standard remove PRJ-<nn> --why "..."   remove a project standard (house standards are only overridden)
     engine.py version                     this copy's OpenDesigner release, and whether the system here is up to date with it
+    engine.py status [--json]             the Now line: the step, what waits for the owner, the next command (read-only)
+    engine.py handoff [yes|no] [--why "<their words>"]   the hand-off later sessions read: yes writes the OpenDesigner note
+                                          into AGENTS.md and a CLAUDE.md that imports it; no writes nothing. Recorded either way
+
+The Now line: opendesigner/PROTOCOL.md carries one block between <!-- od:now --> markers. Every command that changes the system
+rewrites it (main, NOW_CMDS), so a session that lost its context reads where the work stands from a file, not from chat.
 
 Version stamps: every write of state.json records `opendesigner` = {version: the newest release that has written it, created: the
 release that first made it (null: made before version stamps), built: the release whose `build` last wrote the files}.
@@ -5581,6 +5587,237 @@ def write_protocol(d, quiet=True):
     if not quiet:
         print(f"wrote {fp}: the steps, gates and checks every agent follows here")
     return fp
+
+
+# The Now line (SKILL.md, binding rule 6): where the work stands, in PROTOCOL.md, so it survives a context reset and a new
+# session. The engine writes only the block between the markers; the rest of PROTOCOL.md stays the agent's and the owner's.
+NOW_START = "<!-- od:now: the engine rewrites this block after each command that changes the system; engine.py status prints it -->"
+NOW_END = "<!-- /od:now -->"
+NOW_RX = re.compile(r"<!-- od:now\b[^>]*-->.*?<!-- /od:now -->\n?", re.S)
+NOW_LAST_RX = re.compile(r"Last engine command: `([^`]+)` \((\d{4}-\d{2}-\d{2})\)")
+# the commands that change the system; the read-only ones (detect, review, validate, resolve, version, status, feel, show,
+# style) never touch PROTOCOL.md
+NOW_CMDS = {"init", "set", "pick", "lock", "unlock", "generate", "export", "design-md", "preview", "overview", "intake", "build",
+            "sketch", "standards", "standard", "research", "feedback", "handoff"}
+NEXT_BY_STEP = {
+    1: "fill in the brief in PROTOCOL.md and show it",
+    2: "engine.py research market, then the positioning and the direction board",
+    3: "engine.py build, then show the overview",
+    4: "grey wireframes from the tokens, at desktop and phone",
+    5: "engine.py review after each implementation, then show the round",
+    6: "the audit (the opendesigner skill's references/audit.md) on every page",
+}
+
+
+def protocol_gates(text):
+    """[(number, name, what the gate shows, ticked)] from the six-steps table in PROTOCOL.md. A gate is ticked when its box
+    holds an x ("[x] 2026-11-09"); the agent ticks it after the owner's yes."""
+    out = []
+    for line in (text or "").splitlines():
+        if not line.lstrip().startswith("|"):
+            continue
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        m = re.match(r"(\d)\s+(.+)", cells[0]) if len(cells) >= 4 else None
+        if m and re.match(r"\[", cells[-1]):
+            out.append((int(m.group(1)), m.group(2), cells[-2], bool(re.match(r"\[\s*[xX✓]", cells[-1]))))
+    return out
+
+
+def now_facts(d, state=None, text=None):
+    """What the Now line says, from facts the engine can see: the step (the first gate not ticked), what waits for the owner,
+    the next command, and the last engine command recorded in the block."""
+    fp = os.path.join(d, "PROTOCOL.md")
+    if text is None:
+        try:
+            with open(fp, encoding="utf-8") as f:
+                text = f.read()
+        except OSError:
+            text = ""
+    state = merge_defaults(state if state is not None else load_state(d))
+    gates = protocol_gates(text)
+    cur = next((g for g in gates if not g[3]), None)
+    prof = state.get("profile") or {}
+    built = bool((state.get("opendesigner") or {}).get("built")) or os.path.exists(os.path.join(doc_dir(d), "DESIGN.md"))
+    sketched = bool((state.get("context") or {}).get("product") or (state.get("answers") or {}).get("Q-aud-01"))
+    research = ((state.get("research") or {}).get("status")) or "none"
+    waiting = []
+    if not prof.get("tracking"):
+        waiting.append("the log question, asked alone and first (rules.md section 11)")
+    if cur:
+        show = cur[2][:1].lower() + cur[2][1:]
+        waiting.append(f"a yes at gate {cur[0]} on {show}")
+    if built and not prof.get("handoff"):
+        waiting.append("whether to write the hand-off for later sessions (AGENTS.md and a CLAUDE.md that imports it)")
+    if not built:
+        nxt = "engine.py build" if sketched else "engine.py sketch (zoom.md, level 0)"
+    elif not prof.get("handoff"):
+        nxt = "ask once, then engine.py handoff yes (or handoff no)"
+    elif research == "planned":
+        nxt = "engine.py research add <findings.json>"
+    elif research not in ("done", "skipped"):
+        nxt = "engine.py research plan (or research skip --why \"...\")"
+    elif cur:
+        nxt = NEXT_BY_STEP.get(cur[0], "engine.py review")
+    else:
+        nxt = "engine.py review at the end of every implementation"
+    last = NOW_LAST_RX.search(text or "")
+    return {"step": f"step {cur[0]} {cur[1]}" if cur else ("all six gates ticked" if gates else "no gates found in PROTOCOL.md"),
+            "waiting": waiting, "next": nxt, "last": {"command": last.group(1), "date": last.group(2)} if last else None}
+
+
+def now_text(f, bold=True):
+    b = "**" if bold else ""
+    last = f" Last engine command: `{f['last']['command']}` ({f['last']['date']})." if f.get("last") else ""
+    return (f"{b}Now:{b} {f['step']}. {b}Waiting for the owner:{b} {'; '.join(f['waiting']) or 'nothing the engine can see'}. "
+            f"{b}Next:{b} {f['next']}.{last}")
+
+
+def now_block(f):
+    return f"{NOW_START}\n{now_text(f)}\n{NOW_END}\n"
+
+
+def refresh_now(d, command=None):
+    """Rewrite the Now block in opendesigner/PROTOCOL.md (or add it under the first paragraph of an older file). Nothing
+    happens without a PROTOCOL.md or a state; a failure here never fails the command that ran."""
+    fp = os.path.join(d, "PROTOCOL.md")
+    if not (os.path.exists(fp) and os.path.exists(os.path.join(d, STATE_FILE))):
+        return None
+    try:
+        with open(fp, encoding="utf-8") as f:
+            text = f.read()
+        facts = now_facts(d, text=text)
+        if command:
+            facts["last"] = {"command": command, "date": _dt.date.today().isoformat()}
+        block = now_block(facts)
+        if NOW_RX.search(text):
+            new = NOW_RX.sub(lambda _m: block, text, count=1)
+        else:  # a PROTOCOL.md written before the Now line: under the title and its first paragraph
+            parts = text.split("\n\n", 2)
+            new = "\n\n".join(parts[:2]) + "\n\n" + block + ("\n" + parts[2] if len(parts) > 2 else "")
+        if new != text:
+            write_text(fp, new)
+        return facts
+    except (OSError, ValueError, SystemExit):
+        return None
+
+
+def cmd_status(d, as_json=False, hook=False):
+    """`engine.py status`: the Now line and what to read before the next round. Read-only: it writes nothing.
+    hook: the plugin's SessionStart hook (hooks/hooks.json). Nothing at all without a system; otherwise five short lines
+    that go into Claude's context at startup, on resume, after /clear and after compaction."""
+    if not os.path.exists(os.path.join(d, STATE_FILE)):
+        if hook:
+            return 0
+        msg = f"No OpenDesigner system in {d} (no {STATE_FILE}). To start one: engine.py init"
+        print(json.dumps({"system": None, "message": msg}) if as_json else msg)
+        return 0
+    state = merge_defaults(load_state(d))
+    f = now_facts(d, state)
+    notes = read_notes(os.path.join(d, "RULES.md"))
+    rules = sum(1 for n in notes if n["said"] >= 2)
+    root = doc_dir(d)
+    if hook:
+        print(f"OpenDesigner: this project has a design system, {state.get('name')}, in opendesigner/. Use the opendesigner "
+              "skills for any UI, styling or visual work.")
+        print(now_text(f, bold=False))
+        print(f"Owner notes in opendesigner/RULES.md: {rules} rule{'s' if rules != 1 else ''} and {len(notes) - rules} "
+              f"note{'s' if len(notes) - rules != 1 else ''}." if notes else "No owner notes in opendesigner/RULES.md yet.")
+        print("Read DESIGN.md and opendesigner/RULES.md first; end every implementation with engine.py review and a re-read "
+              "of DESIGN.md; owner corrections go to engine.py feedback \"<the rule>\" --kind note.")
+        print("engine.py here is: python3 " + shlex.quote(os.path.abspath(__file__)))
+        return 0
+    read = [p for p in (os.path.join(d, "PROTOCOL.md"), os.path.join(d, "RULES.md"), os.path.join(root, "DESIGN.md")) if os.path.exists(p)]
+    if as_json:
+        print(json.dumps(dict(f, system=state.get("name"), dir=d, read=read, rules=rules, notes=len(notes) - rules,
+                              version=OPENDESIGNER_VERSION), indent=2, ensure_ascii=False))
+        return 0
+    engine = "python3 " + shlex.quote(os.path.abspath(__file__))
+    print(f"OpenDesigner {OPENDESIGNER_VERSION}: {state.get('name')}, in {d}/")
+    print(f"Now: {f['step']}")
+    print(f"Waiting for the owner: {'; '.join(f['waiting']) or 'nothing the engine can see'}")
+    print(f"Next: {f['next'].replace('engine.py', engine, 1) if 'engine.py' in f['next'] else f['next']}")
+    if f["last"]:
+        print(f"Last engine command: {f['last']['command']} ({f['last']['date']})")
+    if not os.path.exists(os.path.join(d, "PROTOCOL.md")):
+        print("No PROTOCOL.md yet: the next engine command that changes the system writes it.")
+    print("Before the next round, read: " + (", ".join(os.path.relpath(p) for p in read) or "nothing written yet")
+          + (f" ({rules} rule{'s' if rules != 1 else ''} and {len(notes) - rules} note{'s' if len(notes) - rules != 1 else ''} in RULES.md)"
+             if notes else ""))
+    print("Binding: tokens only; one question per call; show every round; every implementation ends with engine.py review "
+          "and a re-read of DESIGN.md; owner corrections go to engine.py feedback \"<the rule>\" --kind note.")
+    return 0
+
+
+HANDOFF_START = "<!-- opendesigner:start -->"
+HANDOFF_END = "<!-- opendesigner:end -->"
+HANDOFF_SNIPPET = os.path.join(SKILL_ROOT, "assets", "output", "AGENTS-snippet.md")
+HANDOFF_HEADING = "## Design system (OpenDesigner)"
+
+
+def _read_or_empty(fp):
+    if not os.path.exists(fp):
+        return ""
+    with open(fp, encoding="utf-8") as f:
+        return f.read()
+
+
+def handoff_reminder(state):
+    """One line after the first build until the hand-off question is answered; '' once it is."""
+    if ((state or {}).get("profile") or {}).get("handoff"):
+        return ""
+    return ("Ask once, in its own message: shall I write a short note so later sessions follow this system (AGENTS.md, and a "
+            "CLAUDE.md that imports it)? Then: engine.py handoff yes, or handoff no.")
+
+
+def cmd_handoff(d, answer=None, why=None):
+    """The hand-off every host reads (SKILL.md, binding rule 7), asked once and recorded either way. yes: the OpenDesigner
+    note from assets/output/AGENTS-snippet.md goes into AGENTS.md at the project root, between markers so a later run
+    refreshes it in place, and CLAUDE.md imports it with @AGENTS.md (Claude Code reads CLAUDE.md, and AGENTS.md only when
+    there is no CLAUDE.md). Both are created when missing. no: nothing is written. No answer: what is recorded, and what
+    yes would write."""
+    if not os.path.exists(os.path.join(d, STATE_FILE)):
+        raise SystemExit(f"no state at {os.path.join(d, STATE_FILE)}; run engine.py init first")
+    root = doc_dir(d)
+    agents, claude = os.path.join(root, "AGENTS.md"), os.path.join(root, "CLAUDE.md")
+    have = (merge_defaults(load_state(d)).get("profile") or {}).get("handoff")
+    if answer is None:
+        print(f"hand-off: {have or 'not asked yet'}. yes writes the OpenDesigner note into {os.path.relpath(agents)} and adds "
+              f"@AGENTS.md to {os.path.relpath(claude)}; "
+              "no writes nothing. Both answers are recorded, so the question is asked once.")
+        return 0
+    if answer == "no":
+        if have != "no":
+            cmd_set(d, "profile.handoff", "no", why or "the owner said no to the hand-off note", quiet=True, resync=False)
+        print("recorded: no hand-off note. Nothing was written, and the question is not asked again.")
+        return 0
+    if not os.path.exists(HANDOFF_SNIPPET):  # an engine copied on its own (a ChatGPT project): the agent writes it
+        raise SystemExit(f"no AGENTS snippet next to this engine: add the opendesigner skill's assets/output/AGENTS-snippet.md "
+                         f"to {agents} by hand, and @AGENTS.md to {claude}")
+    with open(HANDOFF_SNIPPET, encoding="utf-8") as f:
+        block = f"{HANDOFF_START}\n{f.read().strip()}\n{HANDOFF_END}\n"
+    text = _read_or_empty(agents)
+    if HANDOFF_START in text and HANDOFF_END in text:
+        new, how = re.sub(re.escape(HANDOFF_START) + r".*?" + re.escape(HANDOFF_END) + r"\n?", lambda _m: block, text,
+                          count=1, flags=re.S), "refreshed"
+    elif HANDOFF_HEADING in text:  # a note pasted by hand before the markers: from its heading to the next heading of its level
+        i = text.index(HANDOFF_HEADING)
+        j = text.find("\n## ", i + len(HANDOFF_HEADING))
+        new, how = text[:i] + block + ("\n" + text[j + 1:] if j >= 0 else ""), "replaced the older note in"
+    else:
+        new, how = (text.rstrip() + "\n\n" if text.strip() else "") + block, "added to" if text.strip() else "wrote"
+    if new != text:
+        write_text(agents, new)
+    ctext = _read_or_empty(claude)
+    if not re.search(r"(?m)^\s*@AGENTS\.md\s*$", ctext):
+        write_text(claude, (ctext.rstrip() + "\n\n" if ctext.strip() else "") + "@AGENTS.md\n")
+        chow = "added @AGENTS.md to" if ctext.strip() else "wrote"
+    else:
+        chow = "kept"
+    if have != "yes":
+        cmd_set(d, "profile.handoff", "yes", why or "the owner said yes to the hand-off note", quiet=True, resync=False)
+    agents, claude = os.path.relpath(agents), os.path.relpath(claude)
+    print(f"{how} {agents}: the OpenDesigner note every later session reads\n{chow} {claude} (it imports AGENTS.md for Claude Code)")
+    return 0
 
 
 def cmd_init(d, src=None, name=None, force=False, standards=True, detect=True):
@@ -12758,6 +12995,9 @@ def cmd_build(d, force=False):
     nudge = research_py.reminder(state_or_none(d)) if research_py else ""
     if nudge:
         print(nudge)
+    handoff = handoff_reminder(state_or_none(d))
+    if handoff:
+        print(handoff)
     return 1 if errors else 0
 
 
@@ -12775,7 +13015,19 @@ class PairAction(argparse.Action):
         setattr(namespace, self.dest, pairs)
 
 
+_RAN = []  # (state dir, command) of the last command main parsed, for the Now line
+
+
 def main(argv=None):
+    """The command line. After a command that changes the system (NOW_CMDS), the Now line in PROTOCOL.md is rewritten."""
+    _RAN.clear()
+    rc = _main(argv)
+    if _RAN:
+        refresh_now(*_RAN[0])
+    return rc
+
+
+def _main(argv=None):
     top = argparse.ArgumentParser(add_help=False)
     top.add_argument("--dir", default=None, help=f"state directory (default ./{DEFAULT_DIR})")
     common = argparse.ArgumentParser(add_help=False)
@@ -12805,6 +13057,15 @@ def main(argv=None):
     sub.add_parser("resolve", parents=[common], help="effective dials and derived parameters as JSON")
     sub.add_parser("version", parents=[common], help="this copy's OpenDesigner release, and whether the system here is up to date "
                                                      "with it (never checks online)")
+    p = sub.add_parser("status", parents=[common], help="the Now line: the step, what waits for the owner and the next command "
+                                                       "(read-only; run it first after a context reset or in a new session)")
+    p.add_argument("--json", action="store_true")
+    p.add_argument("--hook", action="store_true", help="the plugin's start-of-session hook: silent without a system, "
+                                                       "otherwise five short lines")
+    p = sub.add_parser("handoff", parents=[common], help="the hand-off later sessions read: yes writes the OpenDesigner note into "
+                                                        "AGENTS.md and a CLAUDE.md that imports it; no writes nothing; both are recorded")
+    p.add_argument("answer", nargs="?", choices=["yes", "no"])
+    p.add_argument("--why", default=None, help="the owner's words")
     sub.add_parser("generate", parents=[common], help="write tokens/ (DTCG 2025.10 + resolver)")
     p = sub.add_parser("validate", parents=[common])
     p.add_argument("--json", action="store_true")
@@ -12949,6 +13210,9 @@ def main(argv=None):
         q.add_argument("--no-doc", dest="no_doc", action="store_true")
     a = ap.parse_args(argv)
     d = a.dir or DEFAULT_DIR
+    if a.cmd in NOW_CMDS and not getattr(a, "dry_run", False) and getattr(a, "action", None) not in ("check", "status"):
+        _RAN.append((d, a.cmd + (f" {a.action}" if a.cmd in ("research", "standard") and getattr(a, "action", None) else "")
+                     + (f" {a.answer}" if a.cmd == "handoff" and a.answer else "")))
     st = state_or_none(d) if a.cmd not in ("init", "feel", "resolve", "version", "detect") and not getattr(a, "json", False) else None
     kind = version_status(st)[0] if st else "current"
     if kind == "newer" or (kind != "current" and a.cmd not in ("build", "sketch")):  # build says it after it brings files up to date
@@ -12978,6 +13242,10 @@ def main(argv=None):
         return cmd_version(d)
     elif a.cmd == "contrast":
         return cmd_contrast(a.fg, a.bg, as_json=a.json, need=a.min)
+    elif a.cmd == "status":
+        return cmd_status(d, a.json, a.hook)
+    elif a.cmd == "handoff":
+        return cmd_handoff(d, a.answer, a.why)
     elif a.cmd == "generate":
         cmd_generate(d)
     elif a.cmd == "validate":

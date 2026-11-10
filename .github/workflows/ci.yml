@@ -78,6 +78,9 @@ jobs:
       - name: Project status board exporter
         run: python3 tools/test_project_board.py
 
+      - name: Plugin start-of-session hook stays silent, read-only and fast
+        run: python3 tools/test_plugin_hook.py
+
       - name: Reference extraction tests (css_scan.py, read_page.js with the runner's Node)
         run: python3 skills/opendesigner-extract/scripts/test_extract.py
 

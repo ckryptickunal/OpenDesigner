@@ -1,6 +1,6 @@
 ---
 name: opendesigner-search
-description: Gets a site found by search and AI answer engines (SEO, AEO, GEO): checks crawling, robots, sitemap, titles and markup, asks ChatGPT and Perplexity by hand, proposes fixes.
+description: SEO, AEO and GEO. Gets a site found by Google and AI answer engines. Checks crawling, robots, sitemap, llms.txt, titles and markup, asks ChatGPT and Perplexity by hand, proposes fixes.
 license: MIT
 compatibility: Python 3.10+ (standard library, no network) for the checks. A browser the agent can drive, for the answer-engine probe.
 metadata:

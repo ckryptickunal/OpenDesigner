@@ -38,6 +38,8 @@ Score each line against three shipped products that solve the same thing, compar
 
 **Your own score can only rule work out.** An agent that built or reviewed the work scores it kindly. A 3 means fix it. A 4 means "show it and ask", never "it passed". In a demo trial, a reviewing agent scored a dashboard about 4, and the owner called it "absolutely terrible". The person's verdict outranks every score.
 
+**A work tool** used all day earns its look from real data shown well: numbers in tabular figures, small charts where a number has a trend, and the theme its users work in (ask, or follow the product's context; never let the system's dark setting decide).
+
 ## 3. Below 4: fix it now, or ask for the input it needs
 Never show a line that scored below 4 as finished. For each one, either fix it before the person sees it, or tell them exactly what you need from them. Each line has a fix prompt: run it on yourself, or give it to the person to paste.
 

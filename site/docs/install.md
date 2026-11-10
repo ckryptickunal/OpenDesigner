@@ -27,6 +27,8 @@ claude plugin install opendesigner@opendesigner
 
 Then start a new session, because skills load when a session starts. You get all nine skills ([what each one does](/docs/introduction/#the-nine-skills)).
 
+The plugin also has one start-of-session hook. In a project with a design system (`opendesigner/state.json`), it tells Claude where the work stands each time a session starts, resumes or gets compacted, so the rules aren't lost in a long chat. It only reads files, sends nothing anywhere, and stays silent in every other project.
+
 ## Claude app (claude.ai or Claude Desktop)
 
 Build the skill zip, then upload `dist/opendesigner.zip` under **Customize > Skills**. Code execution must be on.

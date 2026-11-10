@@ -1,6 +1,6 @@
 ---
 name: opendesigner-extend
-description: Changes or extends an existing OpenDesigner design system safely. Reads DESIGN.md, tokens, decisions and locks first, asks only about what is new, validates after. Use when opendesigner/ exists.
+description: Changes an existing OpenDesigner system (an opendesigner/ folder), such as a new colour, rounder corners, dark mode or a component. Reads DESIGN.md, decisions and locks first, asks only what is new.
 license: MIT
 compatibility: Python 3.10+ (standard library). Needs the opendesigner skill's engine for generate and validate.
 metadata:
@@ -14,9 +14,12 @@ Use this skill when the project already has an OpenDesigner system and someone w
 
 The engine is `scripts/engine.py` in this skill when it was installed from a release zip. Otherwise use the sibling opendesigner skill's `scripts/engine.py`. Run it from the project root; state lives in `./opendesigner/`. Stage files, zoom levels, rules, the glossary and the Decision Cards live in `<opendesigner>/references/`. Talk the way `rules.md` says: one idea per message, plain words first, and the person's `profile.voice`.
 
+**The opendesigner skill's binding rules hold here too,** in every round and after a context reset: tokens only; one question per call; show every round; every change ends with `engine.py review` and a re-read of DESIGN.md; owner corrections go to `engine.py feedback "<the rule>" --kind note`.
+
 ## 1. Start-up routine (before touching anything)
-1. Read, in order:
+1. Run `engine.py status`. It prints the Now line from `opendesigner/PROTOCOL.md`: the step, what waits for the owner and the next command. If it lists the hand-off as not answered, ask about it once, in its own message (`engine.py handoff yes` or `handoff no`). Then read, in order:
    - `DESIGN.md` and `PRODUCT.md` (project root). Note each section's zoom line.
+   - `opendesigner/PROTOCOL.md` and `opendesigner/RULES.md` (the owner's repeated notes).
    - `opendesigner/state.json` (`profile.voice`, `zoom`, answers, `locks`, hooks).
    - `opendesigner/decisions.md` (newest entries last).
    - `opendesigner/tokens/`.
