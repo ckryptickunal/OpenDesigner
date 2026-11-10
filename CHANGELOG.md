@@ -8,6 +8,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Three style extractors, measured on one site** (2026-11-10). OpenDesigner's extractor, Dembrandt and Project Wallace's analyzer were scored against Primer's published tokens on primer.style. The two browser tools reported real values 84-100% of the time but got one or two colour roles wrong; reading the CSS without a browser listed 900 colours, 2% of them on the page. Our accent bug is #110.
 - **The review notes names that say nothing** (2026-11-08). A link, button, field or image named "Read more", "Click here", "Submit", "image" or "Field 1" now gets one note in the review, with where each one is. It is a note, not an error: the text around it may already make it clear.
 - **The search check finds a hidden noindex** (2026-11-08). The search skill now warns when robots.txt blocks a page that also says noindex, because search engines never get to read the noindex. It also stops asking for links to pages marked noindex.
 - **AI-search advice now cites its study** (2026-11-08). The site brief's answer for AI search names the study behind it (GEO, KDD 2024): real quotes, figures and sources helped pages get used, and stuffing keywords hurt. The figures must be your own.
