@@ -150,6 +150,36 @@ class Pages(unittest.TestCase):
         self.assertTrue(any(c == "SE-05" and "share one title" in t for c, t in warns))
         self.assertTrue(any(c == "SE-02" and "missing from the sitemap" in t for c, t in warns))
 
+    HOME = page(h1="Invoices that chase themselves", canonical="https://a.example/",
+                body="Reminders go out on day 3, 7 and 14. <h2>How reminders work</h2> Each one waits. <h2>Pricing for firms</h2> "
+                     "Three plans. <h2>Data and security</h2> Your data stays in the EU. " * 2)
+    PRICING = page(title="Ledgerly pricing for small firms", h1="Pricing", canonical="/pricing.html", body="Each plan and what it costs per month. " * 6)
+
+    def llms(self, text):
+        r = s.audit(site(dict(BASE, **{"index.html": self.HOME, "pricing.html": self.PRICING, "llms.txt": text})), "https://a.example")
+        return {f["title"]: f for f in r["findings"] if f["code"] == "SE-10"}
+
+    def test_llms_txt_written_for_an_earlier_page_is_named(self):
+        got = self.llms("# Ledgerly\n\n> The AI operating system for dental clinics.\n\nEvery chart audited and covered.\n"
+                        "Reminders go out on day 3, 7 and 14 and cut late payments by 40%.\n\n## How reminders work\n"
+                        "- [Pricing](/pricing.html): what each plan costs\n- [Old tour](https://a.example/tour.html)\n")
+        unsaid = got["llms.txt says what no page says"]
+        self.assertEqual(unsaid["severity"], "warn")
+        self.assertTrue(unsaid["evidence"].startswith("3 line(s): "), unsaid["evidence"])
+        for bit in ('"The AI operating system for dental clinics."', '"Every chart audited and covered."', "(no page shows 40%)"):
+            self.assertIn(bit, unsaid["evidence"])
+        self.assertNotIn("what each plan costs", unsaid["evidence"])          # the pricing page says it
+        self.assertEqual(got["llms.txt links pages the build does not have"]["evidence"], "https://a.example/tour.html")
+        gaps = got["Home page sections llms.txt does not cover"]
+        self.assertEqual(gaps["evidence"], "it covers 2 of 3; not: Data and security")
+
+    def test_llms_txt_that_matches_the_pages_is_quiet(self):
+        got = self.llms("# Ledgerly\n\n> Invoices that chase themselves: reminders go out on day 3, 7 and 14.\n\n## Docs\n"
+                        "- [Pricing](/pricing.html): each plan and what it costs\n\n## Optional\n- [Home](/): how reminders work, pricing, data and security\n")
+        self.assertEqual(sorted(got), [])
+        short = self.llms("# Ledgerly\n\n> Invoices that chase themselves.\n")   # a short summary covers no section: not judged on them
+        self.assertNotIn("Home page sections llms.txt does not cover", short)
+
     def test_llms_txt(self):
         self.assertIn(("SE-10", "info"), codes(s.audit(site({k: v for k, v in BASE.items() if k != "llms.txt"}))))
         self.assertIn(("SE-10", "warn"), codes(s.audit(site(dict(BASE, **{"llms.txt": "Ledgerly\n"})))))
