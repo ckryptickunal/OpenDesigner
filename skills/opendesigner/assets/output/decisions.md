@@ -17,3 +17,6 @@ One entry per decision, newest last. Superseded decisions stay; a later entry re
 - Assumed answers to confirm: {{question ids}}
 - Pending assets and their briefs: {{hook ids and owners}}
 - Warnings waived, with reasons: {{rule ids}}
+- Open questions (copied forward by every session until answered; never dropped without an answer):
+  - Q1 · {{question}} · recommend: {{option}} · default until answered: {{value}} · blocks: {{yes | no}}
+  - Q2 · {{question}} · answered: {{D-nnnn}}

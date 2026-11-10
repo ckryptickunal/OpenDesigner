@@ -4,7 +4,7 @@ seo_title: OpenDesigner for engineers: tokens, CSS, Tailwind v4, Swift
 description: The tokens and code exports OpenDesigner writes, how to wire them into web, iOS and Android apps, how review finds hard-coded values, and how agents use them.
 section: Guides
 order: 3
-updated: 2026-11-07
+updated: 2026-11-10
 ---
 
 OpenDesigner turns design decisions into files you import: DTCG 2025.10 tokens, CSS variables, a Tailwind v4 theme, Swift and Jetpack Compose files, and a DTCG resolver. `engine.py review` finds values typed straight into your code that skip the tokens. `DESIGN.md` and a short note in `AGENTS.md` tell coding agents to use the tokens too.
@@ -99,13 +99,13 @@ card.css:1  border-radius: 7px  ->  use var(--ds-radius-container) (12px, the co
 card.css:1  padding: 13px  ->  use var(--ds-space-12) (13 is off the 4px ladder)
 ```
 
-It also lists code that breaks a standard, and `DESIGN.md` sections that are out of date. Add the comment `od-ignore` to a line to keep a raw value on purpose. `--strict` makes the command fail when it finds anything, and `--json` prints machine-readable output.
+It also lists code that breaks a standard or brings back something removed on purpose, and `DESIGN.md` sections that are out of date. To keep a raw value on purpose, add a comment with the reason on that line: `od-ignore: <why>`. A comment without a reason shows as a note. The last line reads `Review: ok`, or how many things are left to fix and why. `--strict` makes the command fail unless it's ok, and `--json` prints machine-readable output.
 
 {{figure:engineers-review-terminal}}
 
 ## DESIGN.md and AGENTS.md for coding agents
 
-`DESIGN.md` has a section for AI agents: read the file and the tokens before changing any screen, use tokens instead of raw values, and leave locked decisions alone. At the end of a session, OpenDesigner offers to add a short note to your `AGENTS.md` that says the same, points to `opendesigner/decisions.md` for why a value is what it is, and asks for `engine.py review` at the end of every implementation. It adds the note only after you say yes.
+`DESIGN.md` has a section for AI agents: read the file and the tokens before changing any screen, use tokens instead of raw values, and leave locked decisions alone. At the end of a session, OpenDesigner offers to add a short note to your `AGENTS.md` that says the same, points to `opendesigner/decisions.md` for why a value is what it is, and asks for `engine.py review` at the end of every implementation. It adds the note only after you say yes. A first version gets a shorter note without the strict rules, and the note grows in place once you decide more or ask for stricter rules.
 
 {{figure:engineers-agent-rules}}
 

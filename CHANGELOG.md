@@ -6,7 +6,18 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ## [Unreleased]
 
-Nothing yet.
+### Added
+
+- **Things removed on purpose stay removed** (2026-11-10). `engine.py removed add "<what>" --why "<their words>"` records something the owner took out; DESIGN.md lists it and `review` flags code that brings it back. Without their words it is recorded as assumed, still guarded. A pattern that would catch a focus ring, label, alt text, reduced-motion path or target size is refused.
+- **Review guards a decided system** (2026-11-10). `engine.py review` now notices a token file edited by hand, tokens older than `state.json`, a locked decision that a merge undid, a removal that went missing, and a missing `decisions.md` or `tokens/`. Each says what to do; it never picks a value for you.
+- **od-ignore takes a reason** (2026-11-10). `od-ignore: <why>` keeps a line on purpose and lists it with its reason; a reason that repeats three times prompts a question to the owner. A bare `od-ignore` is a note, and it no longer hides something removed on purpose. A reasoned one on such a line names the removal, as in "matches R-01".
+- **A catalogue of states** (2026-11-10). A new template, `assets/output/STATES.md`, lists every state of a screen that shows data, with its words, tone and next step, and the rows just under, on and over each limit. The skills offer it before such a screen is built.
+- **The AGENTS.md note fits the system** (2026-11-10). A first version, or a system the owner keeps loose, gets a shorter note without the strict rules, unless the owner asked for strict ones. Once the owner zooms in or tightens the rules, the next `set` or `pick` rewrites the note in place, unless someone edited it. No comment meant only for the agent reaches AGENTS.md.
+- **Agent notes that route and forbid** (2026-11-10). The AGENTS.md note now says which file decides what, what never to do as part of other work, and how to settle a merge conflict in `opendesigner/`. Reports keep written, built and verified apart, and the export skill asks before replying in a Figma or Paper comment thread.
+
+### Changed
+
+- **Review ends with one verdict** (2026-11-10). The last line of `engine.py review` is `Review: ok` or how many things are left to fix and why, and it counts the errors `engine.py validate` finds. `--strict` exits with an error exactly when that line is not `Review: ok`.
 
 ## [0.3.0]: 2026-11-10
 

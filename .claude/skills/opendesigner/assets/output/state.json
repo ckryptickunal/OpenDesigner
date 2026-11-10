@@ -232,6 +232,7 @@
  "locks": [
   "raw.brandColor"
  ],
+ "removed": [],
  "profile": {
   "voice": "plain"
  },

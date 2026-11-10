@@ -4012,6 +4012,18 @@
     ]
   },
   "stateHash": "e6912ebbc473edd6",
+  "fileHashes": {
+    "motion.reduced.tokens.json": "c7955277d0b74239",
+    "motion.standard.tokens.json": "4be0703a1109daa9",
+    "opendesigner.resolver.json": "91e4f3b7d2f99a72",
+    "primitives.tokens.json": "b8fc7ca6c3aae822",
+    "semantic.color.dark.tokens.json": "dbd2668631720d94",
+    "semantic.color.light.tokens.json": "50756a082902d2dc",
+    "semantic.density.comfortable.tokens.json": "8c5970452704eeb0",
+    "semantic.density.compact.tokens.json": "fcc0cbb2cf2228cc",
+    "semantic.density.spacious.tokens.json": "006a7434b7389cc7",
+    "semantic.tokens.json": "d11c9dfbf221444f"
+  },
   "profile": {
     "id": "work-tool",
     "name": "Dense work tool",

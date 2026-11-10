@@ -20,7 +20,8 @@ python3 <skill>/scripts/engine.py overview [--open]          opendesigner/overvi
 python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html: every token
 python3 <skill>/scripts/engine.py show <template> [--open]   one visual template filled with real values (opendesigner/preview/)
 python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports, DESIGN.md, overview, filled templates and preview only if there are no errors
-python3 <skill>/scripts/engine.py review [--project src/] [--strict]   end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections; code that uses no tokens; a system older than the code. Runs with no system too. Exit 1 when AGENTS.md, CLAUDE.md or DESIGN.md point at a missing opendesigner/; --strict also exits 1 on any finding, tokens not in charge, DESIGN.md that disagrees with the code, or validate errors
+python3 <skill>/scripts/engine.py review [--project src/] [--strict]   end-of-implementation check: hard-coded values, broken standards, removed things that came back, od-ignore without a reason, guard problems (tokens edited by hand, a locked decision undone), validate errors, stale DESIGN.md; runs without a system too. Last line "Review: ok" or what is left to fix; --strict exits 1 unless it is ok, and always when AGENTS.md, CLAUDE.md or DESIGN.md point at a missing opendesigner/
+python3 <skill>/scripts/engine.py removed add "<what>" --why "<their words>" [--instead "..."] [--pattern RE]   something the owner removed on purpose; removed list; removed restore <R-id> --why "<their words>"
 python3 <skill>/scripts/engine.py guard install|no|remove|status   after asking once: a pre-commit hook that runs review --strict (git commit --no-verify skips it once); no records the answer. Never writes over another hook or into a shared core.hooksPath
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
 python3 <skill>/scripts/engine.py feedback "<the rule>" --kind note [--same N-01]   the owner's note on the work, counted in opendesigner/RULES.md
@@ -40,6 +41,16 @@ python3 <skill>/scripts/engine.py status [--json]           the Now line: the st
 python3 <skill>/scripts/engine.py status --hook             the same in five lines, and nothing without a system: the Claude Code plugin's start-of-session hook runs it
 python3 <skill>/scripts/engine.py handoff [yes|no] [--why "..."]   after asking once: yes writes the OpenDesigner note into AGENTS.md and a CLAUDE.md that imports it, no writes nothing; recorded either way
 ```
+
+## The hand-off note
+`engine.py handoff yes` writes `assets/output/AGENTS-snippet.md` into AGENTS.md between `<!-- opendesigner:start -->` and `<!-- opendesigner:end -->`, matched to the system. The owner's strictness answer (Q-gov-01) decides when there is one: "loose" gets the first-version note, "strict" or "canon-expanded" the full note. With no answer, a system still a sketch (zoom 0) in every area gets the first-version note: the first paragraph becomes "This project has a first version of its design system in `opendesigner/`, and `DESIGN.md` describes it. Follow it, and suggest changes to the owner instead of making them quietly. `engine.py` below means `python3 <opendesigner skill>/scripts/engine.py`, from the OpenDesigner skill or plugin.", and every line marked `<!-- strict -->` is left out. Otherwise it writes the full note. Neither keeps the `<!-- strict -->` markers. Each later `set` or `pick` refreshes the note in place, so it becomes the full note once an area is zoomed in or the owner tightens Q-gov-01, and the lighter one again if they loosen it. It rewrites only a note the engine wrote and nobody changed: when the block between the markers matches neither variant (a line added by hand, or a note from an older engine), it is left as it is and the engine says so; `engine.py handoff yes` rewrites it.
+
+Without the engine (a ChatGPT project), do the same by hand: copy the asset into AGENTS.md, apply the rule above, and delete the `<!-- strict -->` markers.
+
+## Removed on purpose
+Removals leave no trace in code, so a later session tends to add them back first. The day the person removes something (a control, a label, divider lines, a flow), record it: `engine.py removed add "<what>" --why "<their words>" --instead "<what replaces it>"`. Add `--pattern` when a line of code that brings it back can be found by a regular expression; `review` then flags the return, and DESIGN.md lists it under "Removed on Purpose". Only the owner brings it back: `removed restore <R-id> --why "<their words>"`. An `od-ignore` comment keeps a returned line only when it gives a reason.
+
+A removal never takes away an accessibility floor (focus rings, labels, alt text, reduced motion, contrast, target sizes). `removed add` runs the pattern against sample lines that carry each floor and refuses one that matches; `--force` is only for a false alarm the person confirmed, and is marked in decisions.md. Review never reports a line that carries a floor as removed.
 
 ## DESIGN.md, as `design-md` writes it
 Each section shows its zoom level (sketch, broad, defined, detailed). Each decision opens with one plain sentence. Text inside `<!-- od:keep -->` blocks survives each refresh.

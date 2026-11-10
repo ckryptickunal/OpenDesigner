@@ -123,6 +123,7 @@ Once the system exists, people ask for pages, and then for changes to them. Foll
 ## DESIGN.md stays alive
 - DESIGN.md is the person's living spec. Once it exists, every `set` and `lock` refreshes it and PRODUCT.md by itself. Run `engine.py design-md` to create it, or after a `--no-doc` change. Its format: `references/engine.md`.
 - **At the end of any implementation** (a page, a component, a refactor), run `engine.py review`. Then re-read DESIGN.md. Record any new value the work needed as a decision, not as a hard-coded value. The hand-off note (`engine.py handoff`, from `assets/output/AGENTS-snippet.md`) tells every later agent to do the same.
+- **Removals and data screens.** The day the person removes something, record it: `engine.py removed add` (`references/engine.md`, "Removed on purpose"); `review` then flags its return. For a new screen that shows data, offer its states first in `opendesigner/STATES.md` (`assets/output/STATES.md`).
 - **Correct is not finished.** Passing `review`, `validate` and every width check means the work is consistent, not that it is good. Before you say a visual change is done:
   1. Show it to the person (screenshots or an artifact, never only a local link), so they never have to ask to see it.
   2. Score it with the quality bar (`references/quality.md`): the floors, then nine lines judged blind against three shipped products that solve the same thing (`making.md` section 5). Any line below 4: fix it now with that line's fix prompt, or ask the person for the input it needs.
@@ -144,7 +145,7 @@ One question per message here, as everywhere.
 1. `engine.py build`. Validation passes, or each warning has a written reason. For a warning the defaults raise, write the reason yourself; don't ask the person about it.
 2. Check the outputs: `opendesigner/tokens/` (canonical), `opendesigner/build/` (exports), `DESIGN.md` and `PRODUCT.md` at the root, `opendesigner/decisions.md` and `state.json`. Write `opendesigner/RATIONALE.md` for the team from `assets/output/RATIONALE.md`.
 3. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend"). Add coverage in one line (decided, defaulted, not applicable, pending). For the plain voice, point to the preview and the short summary at the top of DESIGN.md, not the rest of the file. For the engineer voice, name the export files they will import.
-4. If the hand-off is not answered yet (`engine.py status` lists it), ask in its own message: "Want me to add a short note to AGENTS.md, and a CLAUDE.md that imports it, so other AI helpers and later sessions follow these choices?" Ask even when the project has no agent files yet. Then run `engine.py handoff yes` or `handoff no`: both are recorded, so it is asked once. If `engine.py guard status` says off and decisions.md has no "Commit guard" entry, ask the commit-check question from step 7 the same way, then `guard install` or `guard no`.
+4. If the hand-off is not answered yet (`engine.py status` lists it), or decisions.md has no "Commit guard" entry, ask each as in step 7, in its own message, even when the project has no agent files yet: `handoff yes` or `no`, then `guard install` or `no`. Each answer is recorded, so it is asked once.
 5. If you recorded feedback, mention it and offer the issue link (`references/improve.md`).
 6. If the log is on: `journey.py log session_end`, then `journey.py report`. The report line and the sharing question follow `rules.md` section 11.
 
@@ -419,6 +420,19 @@ A value outside the listed options is recorded as given, with the person's reaso
 - **In a hurry** ("just pick", "just do it", "skip the rest"): stop asking optional questions. Pick what fits their words and files, record it as `delegated`, and list it in one line (`zoom.md`, "People in a hurry").
 - **Conflicting answers** inside one cycle: show both answers and the conflict. Settle it with their ranked principles (Q-brand-07). Never quietly split the difference.
 - **Changing an earlier decision:** re-run `generate` and name the downstream decisions that moved (`graph.json` → edges).
+- **When you decide for the person** (`delegated` or `assumed`), write in `--why` what you chose over what, and how to undo it: `--why "delegated: 8px grid over 4px for the dense tables; to undo, set raw.spaceUnit 4"`. List these calls at the next gate. A flagged guess is fine; a buried one is not.
+- **Open questions last across sessions.** Keep one numbered list (Q1, Q2 and on) in the newest `## Open items` entry of `opendesigner/decisions.md`: each question with your recommendation, the default that holds until the person answers, and whether it blocks work. A new session copies every unanswered question into its own Open items entry and marks an answered one with its decision id ("answered: D-0042"). Never drop a question without an answer. Close one that a recorded decision already answers.
+
+### Feedback on what was built
+When the person reacts to built screens ("it looks dull", a marked screenshot, "this is wrong"), their words usually name a symptom or one example, not the fix (`research/L21-design-playbook.md`, DC-L21-03):
+1. **Answer every part.** Split the message into numbered parts and answer each by its number. If a word looks misheard or unclear, say how you read it in your first sentence.
+2. **Read for the intent.** What are they reacting to, and what do they like that this lacks? Open the screen, the build and any reference they name.
+3. **Check the decisions first:** `decisions.md`, the standards and "Removed on Purpose" in DESIGN.md. If the request clashes with one, name it and ask; the decision holds until they answer.
+4. **One example is a class.** Find every place with the same pattern, fix it once where it is shared (a token, a component), and report how many places changed and which you left alone, with the reason.
+5. **Say the plan in one line before you change anything:** the smallest change that meets the intent, what will not change, and how you will check it.
+6. **Words that set limits.** "At most" and "no more than" set a ceiling, not a target. A word about the whole product ("calmer", "easier to read") becomes a written rule you can check before you touch any screen.
+7. **After two rejected tries at the same intent, stop inventing.** Undo what your tries added that the reference does not have, then follow the reference's approach with the person's own tokens.
+8. **Still open:** a reply that mixes a yes with a condition, or a question they passed over. Ask again, once, with the options side by side.
 
 ## 8. Summaries and the offer after each level
 After each level or area, write 2 to 4 plain sentences a teammate could read. For example: "We chose slightly rounded 6 px corners, because the app is a busy work tool. Cards use 8 px." Name the defaults you filled in, in one line. Never dump settings: no dial numbers, token lists or hex codes unless they ask. The engine logs each `set` with its `--why` in `opendesigner/decisions.md`. Then make the offer (`zoom.md`): stop here, or zoom into at most 3 named areas. After the sketch, the first result has its own shape (`zoom.md`, "The first result").
@@ -568,7 +582,8 @@ python3 <skill>/scripts/engine.py overview [--open]          opendesigner/overvi
 python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html: every token
 python3 <skill>/scripts/engine.py show <template> [--open]   one visual template filled with real values (opendesigner/preview/)
 python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports, DESIGN.md, overview, filled templates and preview only if there are no errors
-python3 <skill>/scripts/engine.py review [--project src/] [--strict]   end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections; code that uses no tokens; a system older than the code. Runs with no system too. Exit 1 when AGENTS.md, CLAUDE.md or DESIGN.md point at a missing opendesigner/; --strict also exits 1 on any finding, tokens not in charge, DESIGN.md that disagrees with the code, or validate errors
+python3 <skill>/scripts/engine.py review [--project src/] [--strict]   end-of-implementation check: hard-coded values, broken standards, removed things that came back, od-ignore without a reason, guard problems (tokens edited by hand, a locked decision undone), validate errors, stale DESIGN.md; runs without a system too. Last line "Review: ok" or what is left to fix; --strict exits 1 unless it is ok, and always when AGENTS.md, CLAUDE.md or DESIGN.md point at a missing opendesigner/
+python3 <skill>/scripts/engine.py removed add "<what>" --why "<their words>" [--instead "..."] [--pattern RE]   something the owner removed on purpose; removed list; removed restore <R-id> --why "<their words>"
 python3 <skill>/scripts/engine.py guard install|no|remove|status   after asking once: a pre-commit hook that runs review --strict (git commit --no-verify skips it once); no records the answer. Never writes over another hook or into a shared core.hooksPath
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
 python3 <skill>/scripts/engine.py feedback "<the rule>" --kind note [--same N-01]   the owner's note on the work, counted in opendesigner/RULES.md
@@ -588,6 +603,16 @@ python3 <skill>/scripts/engine.py status [--json]           the Now line: the st
 python3 <skill>/scripts/engine.py status --hook             the same in five lines, and nothing without a system: the Claude Code plugin's start-of-session hook runs it
 python3 <skill>/scripts/engine.py handoff [yes|no] [--why "..."]   after asking once: yes writes the OpenDesigner note into AGENTS.md and a CLAUDE.md that imports it, no writes nothing; recorded either way
 ```
+
+## The hand-off note
+`engine.py handoff yes` writes `assets/output/AGENTS-snippet.md` into AGENTS.md between `<!-- opendesigner:start -->` and `<!-- opendesigner:end -->`, matched to the system. The owner's strictness answer (Q-gov-01) decides when there is one: "loose" gets the first-version note, "strict" or "canon-expanded" the full note. With no answer, a system still a sketch (zoom 0) in every area gets the first-version note: the first paragraph becomes "This project has a first version of its design system in `opendesigner/`, and `DESIGN.md` describes it. Follow it, and suggest changes to the owner instead of making them quietly. `engine.py` below means `python3 <opendesigner skill>/scripts/engine.py`, from the OpenDesigner skill or plugin.", and every line marked `<!-- strict -->` is left out. Otherwise it writes the full note. Neither keeps the `<!-- strict -->` markers. Each later `set` or `pick` refreshes the note in place, so it becomes the full note once an area is zoomed in or the owner tightens Q-gov-01, and the lighter one again if they loosen it. It rewrites only a note the engine wrote and nobody changed: when the block between the markers matches neither variant (a line added by hand, or a note from an older engine), it is left as it is and the engine says so; `engine.py handoff yes` rewrites it.
+
+Without the engine (a ChatGPT project), do the same by hand: copy the asset into AGENTS.md, apply the rule above, and delete the `<!-- strict -->` markers.
+
+## Removed on purpose
+Removals leave no trace in code, so a later session tends to add them back first. The day the person removes something (a control, a label, divider lines, a flow), record it: `engine.py removed add "<what>" --why "<their words>" --instead "<what replaces it>"`. Add `--pattern` when a line of code that brings it back can be found by a regular expression; `review` then flags the return, and DESIGN.md lists it under "Removed on Purpose". Only the owner brings it back: `removed restore <R-id> --why "<their words>"`. An `od-ignore` comment keeps a returned line only when it gives a reason.
+
+A removal never takes away an accessibility floor (focus rings, labels, alt text, reduced motion, contrast, target sizes). `removed add` runs the pattern against sample lines that carry each floor and refuses one that matches; `--force` is only for a false alarm the person confirmed, and is marked in decisions.md. Review never reports a line that carries a floor as removed.
 
 ## DESIGN.md, as `design-md` writes it
 Each section shows its zoom level (sketch, broad, defined, detailed). Each decision opens with one plain sentence. Text inside `<!-- od:keep -->` blocks survives each refresh.
@@ -665,7 +690,7 @@ You are in the repo when `_coordination/PROTOCOL.md` and `tools/od.py` exist. Th
 
 # Guardrails
 
-Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requirement 4, `research/L17` Parts F3 and H, `research/L18` DC-L18-10 to 14, and `synthesis/levers.json` → `guardrails`.
+Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requirement 4, `research/L17` Parts F3 and H, `research/L18` DC-L18-10 to 14, `research/L21` (honest reports and canvas writes), and `synthesis/levers.json` → `guardrails`.
 
 ## 1. Identity firewall (references)
 - Copy **structure and quality**: layout rhythm, scales and ratios, density, depth model, motion character, component anatomy and the quality bar.
@@ -718,12 +743,22 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
 - A generated placeholder is never shown as a finished asset.
 - Every value traces to `levers.json`, a Decision Card, the person, or a reference. If you infer, say so.
 - Don't claim you checked something you did not run.
+- **Written, built and verified are three different claims** (`research/L21-design-playbook.md`, DC-L21-02). Written: the file changed. Built: it compiled, or `engine.py build` ran. Verified: a check ran and passed, or someone looked at the result on the screen or device it is for. Never write "works", "done", "passes" or "fixed" for something that did not run. Write "written, not run" or "not verified", and say what would verify it.
+- A sweep of code you could not run is a list of guesses. Fix only what is certain, and name the rest as not verified.
+- **After code work, in the engineer voice, report in a fixed order.** In the plain voice, keep the short summary (SKILL.md, Finish step 3, and `rules.md` section 8) and say in one line what nobody could check. The fixed order:
+  1. The result, in one line.
+  2. What was checked and how: each command and its result (for example `engine.py review --strict` and its last line, or their tests), and what was only read.
+  3. What is not verified, riskiest first.
+  4. Decisions for the person: record every open question in the open-questions list of `opendesigner/decisions.md` (`rules.md` section 7), with your recommendation and the default that holds until they answer. Ask at most one in the message, the one that blocks the most.
+  5. Anything skipped or done differently from the plan, each with its reason.
+  6. A check-by-hand list when the work moves, answers a touch, or can only be judged on a real screen: numbered, riskiest first, one action per step with what should happen and what must not, and "not seen yet" on anything nobody has watched run.
 
 ## 6. Files and tools
 - Write inside `opendesigner/` freely. Ask before editing anything else in the person's repo (AGENTS.md, CLAUDE.md, CSS, Tailwind config).
 - Decisions are appended, never deleted: a change supersedes the old record.
 - Scripts are standard-library Python with no network access. Never add a dependency to the person's project without asking.
 - Before writing to Figma or Paper, confirm the target file. For Figma, suggest a duplicate first.
+- Read a design file just before each write, write only what changed, and never overwrite a frame someone else is editing or edited by hand: put yours beside it (opendesigner-export, "Before every write to Figma or Paper").
 - Never commit secrets or read `.env` files.
 
 ## 7. Never automate these (they need a human)
@@ -1498,6 +1533,19 @@ Designers: accent used sparingly · Code: `color.bg.action.primary`
 ## Motion
 ## Components
 ## Do's and Don'ts
+## Standards
+<!-- Only when standards apply. -->
+
+## Removed on Purpose
+<!-- Only when the owner has removed something (engine.py removed add). Later sessions check this table before adding anything back. -->
+**{{n}} things were removed on purpose. Don't bring them back.**
+
+| Id | Removed | Instead | Why | Since | Checked by |
+|---|---|---|---|---|---|
+| R-01 | {{what was removed, and where}} | {{what people see now, or "nothing"}} | {{the owner's words, or "not recorded"}} | {{YYYY-MM-DD}} | {{`engine.py review` when it has a pattern, else "by hand, on each screen"}} |
+
+- No row takes away an accessibility floor, whatever it is called: focus rings, labels, alt text, reduced motion, contrast and target sizes stay.
+
 <!-- The engine fills the remaining sections in the same pattern: zoom line, marker, plain decisions, collapsed detail. -->
 
 ## Open Items
@@ -1532,6 +1580,9 @@ One entry per decision, newest last. Superseded decisions stay; a later entry re
 - Assumed answers to confirm: {{question ids}}
 - Pending assets and their briefs: {{hook ids and owners}}
 - Warnings waived, with reasons: {{rule ids}}
+- Open questions (copied forward by every session until answered; never dropped without an answer):
+  - Q1 · {{question}} · recommend: {{option}} · default until answered: {{value}} · blocks: {{yes | no}}
+  - Q2 · {{question}} · answered: {{D-nnnn}}
 ```
 
 ## Output template: RATIONALE.md
@@ -1578,7 +1629,7 @@ Footnotes: {{Q-ids and D-numbers for each choice above}}
 
 ```
 ## Design system (OpenDesigner)
-This project's design system lives in `opendesigner/`, and `DESIGN.md` is its living spec. `engine.py` below means `python3 <opendesigner skill>/scripts/engine.py`, from the OpenDesigner skill or plugin.
+This project's design system lives in `opendesigner/`, and `DESIGN.md` is its living spec. `engine.py` below means `python3 <opendesigner skill>/scripts/engine.py`, from the OpenDesigner skill or plugin. This note keeps later AI sessions from undoing the decided design by accident. Keep this note, `DESIGN.md` and `opendesigner/` on the branch new work starts from: a branch without them builds the old look.
 
 **`opendesigner/PROTOCOL.md` is binding.** Follow its steps, gates and checks in every session, whoever you are.
 
@@ -1589,21 +1640,42 @@ This project's design system lives in `opendesigner/`, and `DESIGN.md` is its li
 4. **Owner notes go to `engine.py feedback "<the rule, one line>" --kind note`.** Said twice, a note becomes a rule in RULES.md: apply it everywhere.
 5. **One question at a time,** one per message and one per call of a question tool.
 
-**Before any UI, styling or visual work**
-1. Read `DESIGN.md` and `PRODUCT.md` at the project root.
-2. Use the tokens in `opendesigner/tokens/` (DTCG, canonical) or their exports in `opendesigner/build/` (for example `build/css/tokens.css` or `build/tailwind/theme.css`).
-3. Never hard-code colors, font sizes, spacing, radii, shadows or durations.
-4. Check `opendesigner/decisions.md` for why a value is what it is. Locked decisions (`locks` in `opendesigner/state.json`) change only with the owner's consent.
-5. Follow the standards listed in DESIGN.md (for example: which easing, which properties to animate, which library for toasts). They are rules, not suggestions. Only the owner can change one, and only when they ask: `engine.py standard override <id> --why "<their words>"` for one value, or `engine.py standard add ... --beats <id>` when their own rule always wins. `engine.py set --force` never changes a standard's value.
+**Which file decides what.** Before you change something, read the row that covers it.
+
+| Area | Where | Read it before you change |
+|---|---|---|
+| Colors, type, spacing, radii, shadows, motion | `opendesigner/tokens/` (canonical) and its exports in `opendesigner/build/` (for example `build/css/tokens.css` or `build/tailwind/theme.css`) | any styling |
+| What each value is for, and the rules | `DESIGN.md` and `PRODUCT.md` at the project root, including the Standards section | any screen or component |
+| Why a value is what it is, and who decided | `opendesigner/decisions.md` (newest last) | a value you want to change |
+| Things removed on purpose | "Removed on Purpose" in `DESIGN.md`, when it has one | adding a control, label, line, color treatment or flow |
+| The states of screens that show data | `opendesigner/STATES.md`, when it exists | a list, total, status or progress display |
+
+**When files disagree,** the owner's newest decision wins, then `decisions.md` and `DESIGN.md`, then the tokens, then older plans, audits and research, then the existing code. Code that differs from a decision is the bug. List every conflict you settled in your report.
+
+**Never, as part of other work**
+- Hard-code colors, font sizes, spacing, radii, shadows or durations. Use the tokens, or add a decision (below).
+- Edit generated files by hand: `opendesigner/tokens/`, `opendesigner/build/`, or `DESIGN.md` outside `<!-- od:keep -->` blocks. Change the decision and run `engine.py build`.
+- Change a locked decision (`locks` in `opendesigner/state.json`) or a standard without the owner's explicit yes. Standards are rules, not suggestions: `engine.py standard override <id> --why "<their words>"` changes one value, `engine.py standard add ... --beats <id>` records the owner's own rule, and `engine.py set --force` never changes a standard's value.
+- Bring back anything listed under "Removed on Purpose".
+- Restyle or reword a screen or component to suit another task. If the task seems to need a different look, word or interaction, ask. <!-- strict -->
+- Weaken a check to make it pass. A raw value kept on purpose gets its reason on the same line: `od-ignore: <why, at least two words>`. The comment is not a way past a standard or an accessibility floor: review still shows a standard broken on that line.
+- Rewrite or delete entries in `opendesigner/decisions.md`. It is append-only.
+
+**In a merge conflict** in `opendesigner/` or `DESIGN.md`, keep every entry from both sides of `decisions.md`. For `state.json`, keep the side with the newer decisions, then record the other side's decisions again with `engine.py set` and its removals with `engine.py removed add`. Never hand-merge tokens or exports: run `engine.py build`. In a UI file, keep the design side and re-apply your logic change on top.
 
 **At the end of every implementation** (a page, a component, a refactor)
-1. Run `engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard, DESIGN.md sections that are out of date, code that uses no tokens, and a system older than the code.
-2. Re-read the DESIGN.md sections you touched.
-3. If the work needed a value the system lacks, add it as a decision: `engine.py set <path> <value> --why "..."`, then `engine.py design-md`. Don't inline it.
+1. Run `engine.py review`. It lists hard-coded values that skip the tokens, code that breaks a standard or brings back something removed, `od-ignore` comments without a reason, missing system files, a token file edited after the last build, tokens older than `state.json`, a locked decision that changed, errors from `engine.py validate` (contrast, target sizes, standards), `DESIGN.md` sections that are out of date, code that uses no tokens, and a system older than the code. Its last line is `Review: ok` when nothing is left.
+2. Re-read the `DESIGN.md` sections you touched.
+3. If the work needed a value the system lacks, add it as a decision: `engine.py set <path> <value> --set-by <how> --why "..."` (`chosen` needs `--quote` with the owner's words), then `engine.py design-md`. Don't inline it.
 4. Fix any drift `review` reports before the next draft.
 5. Show the result: screenshots or an artifact, before and after, with each check and its result.
 
-**To change or extend the system,** use the `opendesigner-extend` skill. The accessibility floors are part of the system, not options: WCAG 2.2 AA contrast, 24 px minimum targets, visible focus and reduced motion.
+**Before you open a pull request or merge,** run `engine.py review --strict` and paste its last line in your report. `Review: ok` covers the code and the checks above; it cannot see the rendered page. <!-- strict -->
+Report "written", "built" and "verified" separately, and never call something verified that did not run.
+
+**Stop and ask the owner** when a task needs a different look, word or interaction than `DESIGN.md` gives, when a change would reverse a decision or bring back a removed thing, or when an audit or reference conflicts with a decision. Keep today's design until they answer.
+
+**To change or extend the system,** use the `opendesigner-extend` skill. When the owner removes something, record it the same day: `engine.py removed add "<what>" --why "<their words>" --instead "<what replaces it>"`. A removal never takes away an accessibility floor, and `--force` on `removed add` is only for a false alarm the owner confirmed. The accessibility floors are part of the system, not options: WCAG 2.2 AA contrast, 24 px minimum targets, visible focus and reduced motion.
 
 **`opendesigner/journey/` is a private log of the owner's steps.** It stays out of git. Never commit it, share it or read it into other work.
 
@@ -1964,6 +2036,7 @@ Nothing below is built yet. Each one is a way to make the page read as one page.
  "locks": [
   "raw.brandColor"
  ],
+ "removed": [],
  "profile": {
   "voice": "plain"
  },

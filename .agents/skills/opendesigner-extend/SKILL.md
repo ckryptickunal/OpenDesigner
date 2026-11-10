@@ -21,13 +21,14 @@ The engine is `scripts/engine.py` in this skill when it was installed from a rel
    - `DESIGN.md` and `PRODUCT.md` (project root). Note each section's zoom line.
    - `opendesigner/PROTOCOL.md` and `opendesigner/RULES.md` (the owner's repeated notes).
    - `opendesigner/state.json` (`profile.voice`, `zoom`, answers, `locks`, hooks).
-   - `opendesigner/decisions.md` (newest entries last).
+   - `opendesigner/decisions.md` (newest entries last), including the open questions in its newest `## Open items` entry. Ask the ones that block what the person wants now; carry the rest forward (`<opendesigner>/references/rules.md` section 7).
    - `opendesigner/tokens/`.
    - `git log --oneline -15 -- opendesigner/ DESIGN.md`, if the project uses git.
 2. If `DESIGN.md.hand-edited` exists, someone edited the generated file by hand. Offer to turn each edit into a decision.
 3. Run `engine.py version`. It compares the system with this installed copy of OpenDesigner, never with releases online. If the system was built with an older release, say so in one line, run `engine.py build`, and show what changed. If it was saved with a newer release, tell the person before you change anything: this copy may miss features, so they should update OpenDesigner first (the main skill's "Versions" says how).
 4. Run `engine.py validate`. It checks the system and reports the house standards version. If it says OpenDesigner's house standards are newer than this system's, say so in one line, run `engine.py standards --update`, then `engine.py build`, and show what changed by area. Their overrides and project standards stay as they are.
-5. Run `engine.py review`. If it reports errors or drift, say so first. Fixing them may be the real task. Its "User research" lines say whether the users were researched: when not, offer it once, the first time the work touches audience, density, text size, navigation or voice; when the research is old, offer to run it again (`<opendesigner>/references/research.md`).
+5. Run `engine.py review`. If it reports errors or drift, say so first. Fixing them may be the real task. Its "User research" lines say whether the users were researched: when not, offer it once, the first time the work touches audience, density, text size, navigation or voice; when the research is old, offer to run it again (`<opendesigner>/references/research.md`). Its guard lines catch the accidental reverts: a missing system file (a branch that lacks the design work), a token file edited after the last build, tokens older than `state.json` (a decision recorded without a build, or a merge that brought in another `state.json`; tokens that differ only because the engine is newer are a note), and a locked decision whose value changed (often a merge that took the older side of `state.json`). Never "fix" a guard line by picking a value yourself: show both values and ask which is right.
+   - If `engine.py status` says the hand-off was answered yes but AGENTS.md or CLAUDE.md no longer holds the OpenDesigner note, say so in one line and offer `engine.py handoff yes` to write it back.
 6. Tell the person in three lines or fewer: the direction, the zoom level of the area they care about, and anything locked or open.
 7. Ask only about what is new. Never re-run the whole interview.
 
@@ -37,21 +38,26 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 | Request | Treat it as | Do |
 |---|---|---|
 | "Add a date picker / pricing table / settings page" | New component or pattern | Build it from existing tokens only. List the tokens it uses. Add states and keyboard behavior. Before you design it, check the optional component library (`<opendesigner>/references/library.md`): offer a library part only as that file says (one pick for a novice; for a designer, only when the library has that part in a matching style and they have none of their own), and only if `profile.library` is not `"declined"` |
+| A new screen or flow that shows data: a list, a total, a status, progress against a limit | New screen with states | Build it like a new component, and offer to list its states first in `opendesigner/STATES.md` (copy `<opendesigner>/assets/output/STATES.md` the first time): each state's words, tone and next step, and the rows below, at and above each threshold. Build the states the person wants. When someone flags one wrong state, list every state of that feature before fixing the one named. For engineers, the template's "Building from it" offers one function per screen that returns the state's words |
 | "Make buttons a bit rounder", "denser tables" | One decision | Find the question in the stage file. Show the current value and the options (section 4, step 1), then `set` the one they pick |
 | "Let's define colors properly", "more detail on type" | Zoom in | Run the next zoom level for that area (`<opendesigner>/references/zoom.md`), then record it, for example `set zoom.color '"defined"'` |
 | "Build the landing page", "redo this section", "show me some options" | A page built with the system | Follow `<opendesigner>/references/making.md`: one round at a time, options on a review copy of the page with the current version kept, every value from the tokens, and a check of the rendered page before you show it |
 | "These sections don't match", "it doesn't feel like one page" | A page that does not hang together | Change nothing yet. Run the cohesion audit (`<opendesigner>/references/making.md` section 4, with `<opendesigner>/assets/output/COHESION-AUDIT.md`), then build the directions they choose as options |
 | "New brand color", "dark mode", "add Android" | An area reopened | Ask that area's questions at its current zoom level |
 | "Make it feel more playful", a new direction | A challenge | It touches most decisions. Say what would move (`graph.json`), offer safe choices and risks, and change nothing without a clear yes |
+| "It looks dull", "this screen is wrong", a marked screenshot, a comment on a built screen | Feedback on what was built | Follow `<opendesigner>/references/rules.md` section 7, "Feedback on what was built": answer every numbered part, read for the intent, check the decisions first, treat one example as a class, and say the smallest change and what stays before you touch anything. After two rejected tries, follow the reference instead of inventing |
 | "Which style directions can I pick?", "which look would you go with?" | Choosing a direction | Follow the opendesigner skill's taste flow (`references/taste.md`): answer from `engine.py show option-gallery --json` first, including its subtitle's red lines; use `engine.py style search <words>` only for more choices. Both order by the taste index and mark or leave out red lines. Recommend only from what they show |
 | "Why is X like this?" | A question | Answer from `decisions.md`, the standards (`engine.py standards`) and the cards. Change nothing |
 | "Follow this guide", "use this article as a rule", a link to learn from | A new source | `<opendesigner>/references/rules.md` section 12: agree its weight, read it with consent, keep the rules they pick |
 | A value that doesn't exist yet | A token addition | Add it through the engine with a reason (section 4, "Add a token"). Never hard-code it |
+| "Remove the divider lines", "never show that banner again" | A removal | Remove it everywhere it appears (never an accessibility floor: focus rings, labels, alt text, reduced motion, contrast, target sizes), then record it the same day: `engine.py removed add "<what, and where>" --why "<their words>" --instead "<what replaces it>"`. Add `--pattern <regex>` when code that brings it back can be found line by line; first search the code, and make sure nothing matches except survivors marked `od-ignore: <why>`. The engine refuses a pattern that matches a line carrying a floor: narrow it to the thing that was removed. `--force` is only for a false alarm the person confirmed, and it is marked in `decisions.md`. Without a pattern, it becomes a check by hand on each screen |
 
 ## 3. Locks and conflicts
 - Anything in `state.json` → `locks` (brand colors, contrast target, reduced motion, anything the owner locked) changes only with explicit consent. Name the lock and ask.
 - A conflict with an earlier decision: show both and let the person choose. The new decision supersedes the old one. Nothing is edited or deleted.
 - "You decide" is recorded with `--set-by delegated`.
+- Something listed under "Removed on Purpose" in DESIGN.md comes back only when the person asks for it: `engine.py removed restore <R-id> --why "<their words>"`. An audit, a research note or a reference product that shows a removed thing does not count as asking.
+- **Merge conflicts in the system's files.** Keep every entry from both sides of `opendesigner/decisions.md` (it is append-only). For `state.json`, keep the side with the newer decisions, then record the other side's decisions again with `engine.py set`, and its removals with `engine.py removed add`. Never hand-merge tokens or exports: run `engine.py build`, then `engine.py review --strict`. In a UI file, keep the design side and re-apply the logic change on top.
 
 ### Standards
 - A value locked by a standard (house `STD-...` or project `PRJ-...`) changes only when the person explicitly asks to improve, remove or change that standard. Restate the rule and its reason once. Then their words pick the route:
@@ -89,6 +95,8 @@ After building anything with the system (a page, a component, a refactor). Revie
 2. Re-read the DESIGN.md sections you touched.
 3. For every new value the work needed, add a decision. Never inline it.
 4. Fix any drift that review lists (raw colors, sizes, radii, shadows or durations in code that aren't tokens). Replace each with the token for that role: a background gets a `bg` token, text gets a `text` token, a border gets a `border` token, a hover transition gets the feedback transition. The nearest value alone can pick the wrong role. Add a token if the value is genuinely new. Apply only what the person approves.
+5. A raw value kept on purpose carries its reason on the same line: `od-ignore: <why, at least two words>`. Review lists those lines as kept on purpose and notes a bare `od-ignore`. With a reason the comment also keeps a removed thing on that line; a bare one does not. It is not a way past a standard or an accessibility floor: review shows a standard broken on that line as a note (not counted for now, while it is open whether a reason can excuse a standard in a test or story), and it never reports a line that carries a floor as removed. When the same reason shows up three times, it is probably a missing token or a rule to change: ask the person.
+6. Before a pull request or a merge, run `engine.py review --strict`. Its last line is `Review: ok` when nothing is left, and that includes the errors `engine.py validate` reports; quote that line in the change note.
 
 ## 6. Tell the team
 End with a change note that can be read in 20 seconds:
@@ -98,8 +106,14 @@ What changed: <decision, old -> new>
 Why: <reason in the owner's words>
 Affects: <tokens and components>
 Validation: pass | <warnings with reasons>
+Checked: <each command that ran and its result, for example "engine.py review --strict: Review: ok">
+Not verified: <what nobody ran or looked at, riskiest first> | none
+Check by hand: <numbered, riskiest first: where, one action, what should happen, what must not> | none
+Skipped: <what, and why> | none
 Decision log: opendesigner/decisions.md, D-<nnnn>
+Open questions: <numbered, each with the default that holds until answered> | none
 ```
+Keep "written", "built" and "verified" apart (`<opendesigner>/references/guardrails.md` section 5). A check by hand is needed whenever the change moves, answers a touch, or can only be judged on the screen or device it is for; mark a step "not seen yet" when nobody has watched it run.
 
 ## 7. Improve OpenDesigner
 If a question, option or building block was missing, or a step confused the person, follow `<opendesigner>/references/improve.md` (`engine.py feedback ... --kind gap|bug|confusing|idea`). Nothing is posted without their OK.

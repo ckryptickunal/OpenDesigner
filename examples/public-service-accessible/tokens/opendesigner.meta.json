@@ -2514,5 +2514,16 @@
     ]
   },
   "stateHash": "11d97d6419351e42",
+  "fileHashes": {
+    "motion.reduced.tokens.json": "545f7b0f57f6729d",
+    "motion.standard.tokens.json": "4cd816354f1df4bc",
+    "opendesigner.resolver.json": "9d74c1c53e814bee",
+    "primitives.tokens.json": "37fc8830d38bd408",
+    "semantic.color.light.tokens.json": "daa074abfa6d0cb9",
+    "semantic.density.comfortable.tokens.json": "34b37354d4b106d5",
+    "semantic.density.compact.tokens.json": "221c654d60b83c5a",
+    "semantic.density.spacious.tokens.json": "12585d9f0894246c",
+    "semantic.tokens.json": "f7107d080afa90a9"
+  },
   "profile": null
 }
