@@ -483,3 +483,34 @@ Updated onto today's `main` by a session, as a fast-forward each time.
 - Issues filed from these reviews: #110, #114, #115, #116.
 - Lesson: a version that does not change reaches no plugin user. 0.2.0 stood for 131 commits; Claude Code updates a plugin only when its version changes.
 - Lesson: a test that touches git config or hooks isolates HOME and the global git config first (#113).
+
+## Eighth review: the 0.3.0 release (PR 119) and PR 52 merged (2026-11-10 and 2026-11-11)
+
+| PR | What | Reviewed head | Merge | Review |
+|---|---|---|---|---|
+| #119 | Release 0.3.0: one number in the manifests, the package files, nine skills and the engine; 77 changelog entries under the new heading; the seventh review above | `afce5db` | `74a6f0f` | written by the coordinator. `scan_pr.py` printed 2 BLOCK, on `package.json` and `package-lock.json`: their diff is the version lines only. Examples rebuilt for the new stamp. GitHub's `mergeable` stayed UNKNOWN through GraphQL; the REST answer was `true`, `clean` |
+| #52 | L21: things removed on purpose stay removed, a review that guards a decided system, a catalogue of states, an AGENTS.md note that fits the system, write rules for Figma and Paper | `3d00d45` | `c484cd7` | below |
+
+### The 0.3.0 release
+- The owner said yes to the release in chat on 2026-11-10 ("Yes, with release").
+- Tag `v0.3.0`, annotated, on `74a6f0f`, pushed inside the deployer's five-minute wait, so the first build of that commit already said "released".
+- GitHub Release published with ten zips built at the tag: the nine skills and `opendesigner-chatgpt.zip`.
+- The deployer's log says `LIVE 74a6f0f on opendesigner.dev` at 22:16 IST.
+- **Miss:** to see the release go live, the coordinator asked the live site for a page about 50 times in a row. Vercel's bot check then answered 403 to this Mac. The checks stopped there. Read the deployer's log instead of the site.
+
+### PR 52, merged at `3d00d45`
+- The owner said yes in chat on 2026-11-11 ("Yes, merge #52"). His yes also confirms that the private playbook (S-L21-01) is his to draw on in public.
+- `3d00d45` is `31b2043`, the last head reviewed line by line, with `main` at 0.3.0 merged in. That merge changed one line of `engine.py`: the version number.
+- `main` had moved by one commit since (the README's star chart; no file in common). Tested as it lands, on a merge of `3d00d45` into `eb14aae`:
+  - `scan_pr.py`: 0 BLOCK, 41 REVIEW, all paths read in the seventh review.
+  - The 13 checks of "Before you commit": all passed. Design evals: 180 of 180 required checks on 20 briefs.
+  - 20 test files OK, `test_engine` with 289 tests among them.
+  - Website: built (124 pages), `site/check.py` with no problems, the two changed docs pages with 0 errors at 13 widths, the new figure looked at on the engineers page.
+- The squash on `main` has the same tree as the tested merge.
+- Not run this time: `test_probe_live.py` (needs a Playwright browser) and the agent evals (run during the seventh review; under `skills/`, only the version number has changed since `31b2043`).
+
+### State after this review
+- No PR is open.
+- PR 52's seven changelog entries sit under Unreleased. Plugin users get them only with the next version (0.3.1), which waits for the owner's yes.
+- The deploy of `eb14aae` (the star chart) was not promoted at 22:58 IST: `/404.webp` did not answer 200 on the uploaded copy, in a check that asks once per path. The live site stayed on the 0.3.0 build. The deployer shows a notification on a failure and, by design, tries again only at the next push; `c484cd7` is that push.
+- Lesson: the release order is now in AGENTS.md, "Releasing a version?".
