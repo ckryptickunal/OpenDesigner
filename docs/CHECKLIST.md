@@ -10,7 +10,7 @@ Everything a design system needs, as a list you can tick off.
 
 Each part that makes a product has an **Assets to make** section: the files someone has to produce (name, logo, icons, share images, store art), with sizes where a platform sets them.
 
-Status: second draft, 13 October 2026. Not yet wired into the skills or the engine.
+Status: second draft, 13 October 2026, with the website's search and launch lines added on 9 November 2026. A line that names a script is checked by it; the rest are not yet wired into the skills or the engine.
 
 ---
 
@@ -186,8 +186,18 @@ Marketing sites, landing pages, blogs, docs, shops.
 - [ ] Cookie and consent banner
 - [ ] Contact and lead forms
 - [ ] Newsletter sign-up ◆
-- [ ] Search basics: one main heading per page, headings in order, page titles, descriptions, image alt text ◆
 - [ ] Announcement bar
+
+### Search, sharing and launch files
+- [ ] Search basics: one main heading per page, headings in order, page titles, descriptions, image alt text (`search.py audit`)
+- [ ] robots.txt served from the live site, letting search crawlers in and naming the sitemap
+- [ ] A written owner decision on AI-training crawlers (GPTBot, ClaudeBot, Google-Extended): allowed or blocked. Blocking them does not remove the site from search
+- [ ] sitemap.xml lists every public page, and no page marked noindex
+- [ ] A canonical link on every page that should be found
+- [ ] llms.txt: the site's name, a one-line summary and links to the key pages, saying only what the pages say (`search.py audit`)
+- [ ] Share card rebuilt after a hero, headline, accent or logo change (`engine.py review`)
+- [ ] llms.txt and share text refreshed after copy changes (`search.py audit`, `review.py check`)
+- [ ] Nothing for reviewers in the live build: the variant picker, the variants not chosen, screenshots, dev pages and scripts (`preflight.py public`)
 
 ---
 

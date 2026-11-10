@@ -104,7 +104,7 @@ Conventions for every entry. **Names** lists what each system calls it; these co
 
 #### C02 Icon button (action) | 2 of 10 dedicated, 7 as variant
 - **Names:** M3 Icon buttons; Primer IconButton; others as an icon-only mode of Button (Carbon icon-only modifier, shadcn `size="icon"`, S2 ActionButton).
-- **Anatomy:** container (may be invisible), icon, accessible name (tooltip or aria-label) [inferred].
+- **Anatomy:** icon and container; M3's standard style has no container fill [S-L08-117]. The accessible name comes from `aria-label` or `aria-labelledby` [S-L08-108]; a tooltip can show the name, but the APG does not list it as a naming source [S-L08-108].
 - **Variants:** M3 standard, filled, tonal, outlined, each with a toggle form (Compose FilledIconButton, FilledTonalIconButton, OutlinedIconButton and their ...ToggleButton pairs) [S-L08-105].
 - **Sizes:** follows button sizes; M3 XS and S icon buttons need a 48 x 48 dp target [S-L08-034]; WCAG 2.5.8 minimum 24 x 24 CSS px [S-L08-070].
 - **States:** as Button, plus selected for toggle icon buttons.
@@ -118,7 +118,7 @@ Conventions for every entry. **Names** lists what each system calls it; these co
 - **Anatomy:** container, icon, optional label (extended FAB); FAB menu opens a list of related actions from the FAB [S-L08-008].
 - **Variants/sizes:** Compose ships FloatingActionButton, Small/Medium/Large FAB, Extended (Small/Medium/Large) and FloatingActionButtonMenu with ToggleFloatingActionButton [S-L08-105].
 - **States:** enabled, hover, focus, pressed; M3 says an unavailable FAB should not appear rather than be disabled [S-L08-095].
-- **APG:** Button; FAB menu behaves as a menu button [inferred].
+- **APG:** Button. On the web, M3 calls a FAB menu "a combination of a FAB and a menu component", so the FAB follows the menu button pattern (role button with `aria-haspopup`) [S-L08-118] [S-L08-045]. On Android, the close button that replaces the FAB is labelled "Toggle menu", with an expanded or collapsed state, and items are buttons [S-L08-118].
 - **Native:** Compose FloatingActionButton family [S-L08-105]; no iOS counterpart (HIG has no FAB) [S-L08-017].
 - **Consumes:** primary container color, large radius, elevation, motion.
 
@@ -149,7 +149,7 @@ Conventions for every entry. **Names** lists what each system calls it; these co
 
 #### C07 Segmented control / toggle group (selection) | 7 of 10 | component.gallery 28
 - **Names:** HIG Segmented controls; Carbon Content switcher; Primer SegmentedControl; S2 SegmentedControl and ToggleButtonGroup; Radix Toggle Group; shadcn Toggle Group; M3 Segmented buttons (now "no longer recommended", replaced by connected button groups) [S-L08-035].
-- **Anatomy:** track or container, 2-5 segments, selected indicator, optional icons [inferred].
+- **Anatomy:** M3 segmented buttons: container, label text and an optional icon, in 2 to 5 segments; the selected state is a state of each segment, not a separate part [S-L08-119] [S-L08-120]. M3 Expressive no longer recommends them and points to the connected button group [S-L08-119]. Other systems' anatomies were not checked [inferred].
 - **Behavior:** single-select (switches views, like tabs) or multi-select (formatting toggles). M3 Compose keeps SingleChoiceSegmentedButtonRow and MultiChoiceSegmentedButtonRow [S-L08-105].
 - **APG:** Radio Group when single-select (arrow keys move and select); Toolbar with toggle buttons when multi-select [S-L08-046] [S-L08-053]. When it switches panels, Tabs is the correct pattern [S-L08-042].
 - **Native:** SwiftUI `.segmented` picker style, UIKit UISegmentedControl [S-L08-103].
@@ -165,11 +165,11 @@ Conventions for every entry. **Names** lists what each system calls it; these co
 
 #### C09 Link (navigation) | 6 of 10 dedicated, 1 as variant | component.gallery 64
 - **Names:** Fluent Link; Carbon Link; Polaris Link; Atlassian Link and Anchor primitive; Primer Link; S2 Link and LinkButton; shadcn Button `variant="link"`.
-- **Anatomy:** text, underline (always, on hover, or never), optional trailing icon for external links [inferred].
+- **Anatomy:** link text and an optional icon (Carbon). Standalone links are underlined only on hover, focus and active; inline links are always underlined; the launch icon is common for external links [S-L08-121].
 - **Rule:** buttons for actions, links for navigation (Carbon, Atlassian) [S-L08-061] [S-L08-085].
-- **States:** enabled, hover, focus-visible, pressed, visited [inferred].
+- **States:** enabled (unvisited), hover, focus, active, visited and disabled (Carbon); Carbon's link has no visited style by default [S-L08-121].
 - **APG:** Link (Enter activates) [S-L08-041].
-- **Native:** SwiftUI Link [inferred].
+- **Native:** SwiftUI `Link`, "a control for navigating to a URL" (iOS 14, macOS 11) [S-L08-122].
 - **Consumes:** link color role, body type, focus ring.
 
 ### Input

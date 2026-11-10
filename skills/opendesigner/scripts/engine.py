@@ -41,6 +41,12 @@ Commands (run from the user's project; state lives in ./opendesigner/ unless --d
                            [--review-pattern RE --review-message M] [--title T]
     engine.py standard remove PRJ-<nn> --why "..."   remove a project standard (house standards are only overridden)
     engine.py version                     this copy's OpenDesigner release, and whether the system here is up to date with it
+    engine.py status [--json]             the Now line: the step, what waits for the owner, the next command (read-only)
+    engine.py handoff [yes|no] [--why "<their words>"]   the hand-off later sessions read: yes writes the OpenDesigner note
+                                          into AGENTS.md and a CLAUDE.md that imports it; no writes nothing. Recorded either way
+
+The Now line: opendesigner/PROTOCOL.md carries one block between <!-- od:now --> markers. Every command that changes the system
+rewrites it (main, NOW_CMDS), so a session that lost its context reads where the work stands from a file, not from chat.
 
 Version stamps: every write of state.json records `opendesigner` = {version: the newest release that has written it, created: the
 release that first made it (null: made before version stamps), built: the release whose `build` last wrote the files}.
@@ -70,6 +76,7 @@ Output layout inside the state directory (spec 7.1):
 from __future__ import annotations
 
 import argparse
+import collections
 import copy
 import datetime as _dt
 import fnmatch
@@ -82,7 +89,7 @@ import shutil
 import sys
 import webbrowser
 
-ENGINE_VERSION = "1.0.0"
+ENGINE_VERSION = "1.0.0"  # the file format, kept in state.json and the meta file for tools; people see only the release below
 # The OpenDesigner release this copy belongs to, stamped into each system's state.json. tools/build_dist.py fails when it
 # differs from the version in plugin.json and .claude-plugin/plugin.json.
 OPENDESIGNER_VERSION = "0.2.0"
@@ -288,6 +295,37 @@ def cmd_version(d):
         print(f"{head} {version_notice(st) or 'This system is up to date with it.'}")
     print("This compares the system with this copy of OpenDesigner only. It never checks online for newer releases.")
     return 0
+
+
+CONTRAST_FLOORS = (("body text", 4.5, "WCAG 2.2 SC 1.4.3"),
+                   ("large text, icons, control edges and chart marks", 3.0, "WCAG 2.2 SC 1.4.3 and 1.4.11"),
+                   ("body text at AAA", 7.0, "WCAG 2.2 SC 1.4.6"))
+
+
+def parse_hex(s):
+    """'#abc', 'abc', '#AABBCC' -> '#aabbcc'; anything else -> None."""
+    m = re.fullmatch(r"#?([0-9a-f]{3}|[0-9a-f]{6})", str(s).strip().lower())
+    return None if not m else "#" + ("".join(c * 2 for c in m.group(1)) if len(m.group(1)) == 3 else m.group(1))
+
+
+def cmd_contrast(fg, bg, as_json=False, need=None):
+    """`engine.py contrast <fg> <bg>`: the WCAG 2 contrast ratio of two colors, shown rounded down (4.499 is 4.49 and fails
+    4.5), and the floors it meets. With need, exit 1 when the ratio is under it."""
+    a, b = parse_hex(fg), parse_hex(bg)
+    if not a or not b:
+        raise SystemExit(f"contrast: give two hex colors, such as engine.py contrast \"#767676\" \"#ffffff\" (got {fg} {bg})")
+    r = contrast(a, b)
+    shown = math.floor(r * 100) / 100
+    rows = [{"use": u, "min": m, "rule": rule, "pass": r >= m} for u, m, rule in CONTRAST_FLOORS]
+    if as_json:
+        print(json.dumps({"fg": a, "bg": b, "ratio": shown, "floors": rows, **({"need": need, "pass": r >= need} if need else {})}, indent=2))
+    else:
+        print(f"{a} on {b}: {shown:.2f}:1")
+        for x in rows:
+            print(f"  {'passes' if x['pass'] else 'fails '} {x['min']:g}:1 for {x['use']} ({x['rule']})")
+        if need:
+            print(f"{'Passes' if r >= need else 'Fails'} the {need:g}:1 asked for.")
+    return 1 if need and r < need else 0
 
 
 def slug(s):
@@ -1345,6 +1383,34 @@ DIVERGING_RATIOS = (9.0, 6.0, 4.0, 3.2, 4.0, 6.0, 9.0)  # contrast with the page
 # mid neutral that still reaches 3:1, so every step is a visible mark (WCAG 1.4.11) [inferred: Carbon and ColorBrewer use a light
 # middle that fails 3:1, S-L05-075, S-L05-088]
 DIVERGING_CHROMA = (1.0, 0.8, 0.6, None, 0.6, 0.8, 1.0)  # share of the chart chroma; None: the neutral's own tint
+# color.chart.sequential.1-5 are these accent steps. The light end stays under 3:1 against the page on purpose (owner,
+# 2026-11-09, issue #81: "Keep, add separators"): it is for cells that touch, as in a heatmap, with a 1 px gap between cells
+# or the value in each cell. A mark that stands alone on the page (a line, a bar, a dot) needs 3:1 (WCAG 2.2 SC 1.4.11).
+CHART_SEQ_STEPS = (3, 5, 7, 9, 11)
+SEQ_CELLS = ("for cells that touch, as in a heatmap, with a 1 px gap between cells that shows the surface behind, or the "
+             "value in each cell; never for a line, bar or dot on its own")
+
+
+def light_sequential(hexes, page):
+    """Which color.chart.sequential steps (1-5) are under 3:1 against the page: hexes in step order, page a hex."""
+    return [i + 1 for i, hx in enumerate(hexes) if hx and contrast(hx, page) < 3.0 * MARGIN]
+
+
+def light_sequential_resolved(res):
+    """light_sequential for one mode's resolved tokens (resolve_all); [] when the system has no chart palette."""
+    if not res or "color.chart.sequential.1" not in res or "color.surface.base" not in res:
+        return []
+    return light_sequential([hex_of(res[f"color.chart.sequential.{i}"]["resolved"]) if f"color.chart.sequential.{i}" in res else None
+                             for i in range(1, len(CHART_SEQ_STEPS) + 1)], hex_of(res["color.surface.base"]["resolved"]))
+
+
+def step_span(steps):
+    """[1, 2, 3] -> "steps 1-3"; [1] -> "step 1"; [1, 3] -> "steps 1 and 3"."""
+    if len(steps) == 1:
+        return f"step {steps[0]}"
+    if steps == list(range(steps[0], steps[-1] + 1)):
+        return f"steps {steps[0]}-{steps[-1]}"
+    return "steps " + ", ".join(map(str, steps[:-1])) + f" and {steps[-1]}"
 
 
 def diverging_colors(low_hue, high_hue, chroma, mid, bg_y, light):
@@ -2063,11 +2129,16 @@ def build_color_semantic(ctx, mode):
         def mark(name, why):  # the first solid step from 9 that a chart mark can use: 3:1 against the page (WCAG 1.4.11)
             step = next((s_ for s_ in (9, 10, 11) if contrast(ctx.ramp(name, mode).steps[s_]["hex"], page) >= 3.0 * MARGIN), 11)
             return tok(r(name, step), why)
-        chart = {"$description": "Chart colors (Q-color-19): marks at least 3:1 against the page (WCAG 1.4.11). Categorical colors in a "
-                                 "fixed order, a sequential ramp from the accent, a diverging ramp around a midpoint, status colors, and "
-                                 "the chart's axis, gridline and label colors, which point at the border and text roles (DC-L05-23, DC-L05-24).",
+        light_seq = light_sequential([ctx.ramp("accent", mode).steps[s_]["hex"] for s_ in CHART_SEQ_STEPS], page)
+        chart = {"$description": "Chart colors (Q-color-19). A mark that stands alone on the page (a line, a bar, a dot) is at least 3:1 "
+                                 "against it (WCAG 1.4.11)" + (f"; sequential {step_span(light_seq)} are under 3:1, so they are only {SEQ_CELLS}. " if light_seq else ". ")
+                                 + "Categorical colors in a fixed order, a sequential ramp from the accent, a diverging ramp around a midpoint, "
+                                 "status colors, and the chart's axis, gridline and label colors, which point at the border and text roles "
+                                 "(DC-L05-23, DC-L05-24).",
                  "brand": mark("accent", "A chart with one series: the brand color (DC-L05-23)."),
-                 "sequential": {str(i + 1): tok(r("accent", s_)) for i, s_ in enumerate((3, 5, 7, 9, 11))},
+                 "sequential": {str(i + 1): tok(r("accent", s_), f"Under 3:1 against the page: {SEQ_CELLS} (WCAG 1.4.11)." if i + 1 in light_seq else
+                                                "At least 3:1 against the page: also for a line, bar or dot.")
+                                for i, s_ in enumerate(CHART_SEQ_STEPS)},
                  "neutral": tok(n(9), "Other, baseline or comparison series.")}
         if cp == "brand-gray":
             chart["categorical"] = {"1": mark("accent", "The brand series: the same step as color.chart.brand."),
@@ -5518,6 +5589,237 @@ def write_protocol(d, quiet=True):
     return fp
 
 
+# The Now line (SKILL.md, binding rule 6): where the work stands, in PROTOCOL.md, so it survives a context reset and a new
+# session. The engine writes only the block between the markers; the rest of PROTOCOL.md stays the agent's and the owner's.
+NOW_START = "<!-- od:now: the engine rewrites this block after each command that changes the system; engine.py status prints it -->"
+NOW_END = "<!-- /od:now -->"
+NOW_RX = re.compile(r"<!-- od:now\b[^>]*-->.*?<!-- /od:now -->\n?", re.S)
+NOW_LAST_RX = re.compile(r"Last engine command: `([^`]+)` \((\d{4}-\d{2}-\d{2})\)")
+# the commands that change the system; the read-only ones (detect, review, validate, resolve, version, status, feel, show,
+# style) never touch PROTOCOL.md
+NOW_CMDS = {"init", "set", "pick", "lock", "unlock", "generate", "export", "design-md", "preview", "overview", "intake", "build",
+            "sketch", "standards", "standard", "research", "feedback", "handoff"}
+NEXT_BY_STEP = {
+    1: "fill in the brief in PROTOCOL.md and show it",
+    2: "engine.py research market, then the positioning and the direction board",
+    3: "engine.py build, then show the overview",
+    4: "grey wireframes from the tokens, at desktop and phone",
+    5: "engine.py review after each implementation, then show the round",
+    6: "the audit (the opendesigner skill's references/audit.md) on every page",
+}
+
+
+def protocol_gates(text):
+    """[(number, name, what the gate shows, ticked)] from the six-steps table in PROTOCOL.md. A gate is ticked when its box
+    holds an x ("[x] 2026-11-09"); the agent ticks it after the owner's yes."""
+    out = []
+    for line in (text or "").splitlines():
+        if not line.lstrip().startswith("|"):
+            continue
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        m = re.match(r"(\d)\s+(.+)", cells[0]) if len(cells) >= 4 else None
+        if m and re.match(r"\[", cells[-1]):
+            out.append((int(m.group(1)), m.group(2), cells[-2], bool(re.match(r"\[\s*[xX✓]", cells[-1]))))
+    return out
+
+
+def now_facts(d, state=None, text=None):
+    """What the Now line says, from facts the engine can see: the step (the first gate not ticked), what waits for the owner,
+    the next command, and the last engine command recorded in the block."""
+    fp = os.path.join(d, "PROTOCOL.md")
+    if text is None:
+        try:
+            with open(fp, encoding="utf-8") as f:
+                text = f.read()
+        except OSError:
+            text = ""
+    state = merge_defaults(state if state is not None else load_state(d))
+    gates = protocol_gates(text)
+    cur = next((g for g in gates if not g[3]), None)
+    prof = state.get("profile") or {}
+    built = bool((state.get("opendesigner") or {}).get("built")) or os.path.exists(os.path.join(doc_dir(d), "DESIGN.md"))
+    sketched = bool((state.get("context") or {}).get("product") or (state.get("answers") or {}).get("Q-aud-01"))
+    research = ((state.get("research") or {}).get("status")) or "none"
+    waiting = []
+    if not prof.get("tracking"):
+        waiting.append("the log question, asked alone and first (rules.md section 11)")
+    if cur:
+        show = cur[2][:1].lower() + cur[2][1:]
+        waiting.append(f"a yes at gate {cur[0]} on {show}")
+    if built and not prof.get("handoff"):
+        waiting.append("whether to write the hand-off for later sessions (AGENTS.md and a CLAUDE.md that imports it)")
+    if not built:
+        nxt = "engine.py build" if sketched else "engine.py sketch (zoom.md, level 0)"
+    elif not prof.get("handoff"):
+        nxt = "ask once, then engine.py handoff yes (or handoff no)"
+    elif research == "planned":
+        nxt = "engine.py research add <findings.json>"
+    elif research not in ("done", "skipped"):
+        nxt = "engine.py research plan (or research skip --why \"...\")"
+    elif cur:
+        nxt = NEXT_BY_STEP.get(cur[0], "engine.py review")
+    else:
+        nxt = "engine.py review at the end of every implementation"
+    last = NOW_LAST_RX.search(text or "")
+    return {"step": f"step {cur[0]} {cur[1]}" if cur else ("all six gates ticked" if gates else "no gates found in PROTOCOL.md"),
+            "waiting": waiting, "next": nxt, "last": {"command": last.group(1), "date": last.group(2)} if last else None}
+
+
+def now_text(f, bold=True):
+    b = "**" if bold else ""
+    last = f" Last engine command: `{f['last']['command']}` ({f['last']['date']})." if f.get("last") else ""
+    return (f"{b}Now:{b} {f['step']}. {b}Waiting for the owner:{b} {'; '.join(f['waiting']) or 'nothing the engine can see'}. "
+            f"{b}Next:{b} {f['next']}.{last}")
+
+
+def now_block(f):
+    return f"{NOW_START}\n{now_text(f)}\n{NOW_END}\n"
+
+
+def refresh_now(d, command=None):
+    """Rewrite the Now block in opendesigner/PROTOCOL.md (or add it under the first paragraph of an older file). Nothing
+    happens without a PROTOCOL.md or a state; a failure here never fails the command that ran."""
+    fp = os.path.join(d, "PROTOCOL.md")
+    if not (os.path.exists(fp) and os.path.exists(os.path.join(d, STATE_FILE))):
+        return None
+    try:
+        with open(fp, encoding="utf-8") as f:
+            text = f.read()
+        facts = now_facts(d, text=text)
+        if command:
+            facts["last"] = {"command": command, "date": _dt.date.today().isoformat()}
+        block = now_block(facts)
+        if NOW_RX.search(text):
+            new = NOW_RX.sub(lambda _m: block, text, count=1)
+        else:  # a PROTOCOL.md written before the Now line: under the title and its first paragraph
+            parts = text.split("\n\n", 2)
+            new = "\n\n".join(parts[:2]) + "\n\n" + block + ("\n" + parts[2] if len(parts) > 2 else "")
+        if new != text:
+            write_text(fp, new)
+        return facts
+    except (OSError, ValueError, SystemExit):
+        return None
+
+
+def cmd_status(d, as_json=False, hook=False):
+    """`engine.py status`: the Now line and what to read before the next round. Read-only: it writes nothing.
+    hook: the plugin's SessionStart hook (hooks/hooks.json). Nothing at all without a system; otherwise five short lines
+    that go into Claude's context at startup, on resume, after /clear and after compaction."""
+    if not os.path.exists(os.path.join(d, STATE_FILE)):
+        if hook:
+            return 0
+        msg = f"No OpenDesigner system in {d} (no {STATE_FILE}). To start one: engine.py init"
+        print(json.dumps({"system": None, "message": msg}) if as_json else msg)
+        return 0
+    state = merge_defaults(load_state(d))
+    f = now_facts(d, state)
+    notes = read_notes(os.path.join(d, "RULES.md"))
+    rules = sum(1 for n in notes if n["said"] >= 2)
+    root = doc_dir(d)
+    if hook:
+        print(f"OpenDesigner: this project has a design system, {state.get('name')}, in opendesigner/. Use the opendesigner "
+              "skills for any UI, styling or visual work.")
+        print(now_text(f, bold=False))
+        print(f"Owner notes in opendesigner/RULES.md: {rules} rule{'s' if rules != 1 else ''} and {len(notes) - rules} "
+              f"note{'s' if len(notes) - rules != 1 else ''}." if notes else "No owner notes in opendesigner/RULES.md yet.")
+        print("Read DESIGN.md and opendesigner/RULES.md first; end every implementation with engine.py review and a re-read "
+              "of DESIGN.md; owner corrections go to engine.py feedback \"<the rule>\" --kind note.")
+        print("engine.py here is: python3 " + shlex.quote(os.path.abspath(__file__)))
+        return 0
+    read = [p for p in (os.path.join(d, "PROTOCOL.md"), os.path.join(d, "RULES.md"), os.path.join(root, "DESIGN.md")) if os.path.exists(p)]
+    if as_json:
+        print(json.dumps(dict(f, system=state.get("name"), dir=d, read=read, rules=rules, notes=len(notes) - rules,
+                              version=OPENDESIGNER_VERSION), indent=2, ensure_ascii=False))
+        return 0
+    engine = "python3 " + shlex.quote(os.path.abspath(__file__))
+    print(f"OpenDesigner {OPENDESIGNER_VERSION}: {state.get('name')}, in {d}/")
+    print(f"Now: {f['step']}")
+    print(f"Waiting for the owner: {'; '.join(f['waiting']) or 'nothing the engine can see'}")
+    print(f"Next: {f['next'].replace('engine.py', engine, 1) if 'engine.py' in f['next'] else f['next']}")
+    if f["last"]:
+        print(f"Last engine command: {f['last']['command']} ({f['last']['date']})")
+    if not os.path.exists(os.path.join(d, "PROTOCOL.md")):
+        print("No PROTOCOL.md yet: the next engine command that changes the system writes it.")
+    print("Before the next round, read: " + (", ".join(os.path.relpath(p) for p in read) or "nothing written yet")
+          + (f" ({rules} rule{'s' if rules != 1 else ''} and {len(notes) - rules} note{'s' if len(notes) - rules != 1 else ''} in RULES.md)"
+             if notes else ""))
+    print("Binding: tokens only; one question per call; show every round; every implementation ends with engine.py review "
+          "and a re-read of DESIGN.md; owner corrections go to engine.py feedback \"<the rule>\" --kind note.")
+    return 0
+
+
+HANDOFF_START = "<!-- opendesigner:start -->"
+HANDOFF_END = "<!-- opendesigner:end -->"
+HANDOFF_SNIPPET = os.path.join(SKILL_ROOT, "assets", "output", "AGENTS-snippet.md")
+HANDOFF_HEADING = "## Design system (OpenDesigner)"
+
+
+def _read_or_empty(fp):
+    if not os.path.exists(fp):
+        return ""
+    with open(fp, encoding="utf-8") as f:
+        return f.read()
+
+
+def handoff_reminder(state):
+    """One line after the first build until the hand-off question is answered; '' once it is."""
+    if ((state or {}).get("profile") or {}).get("handoff"):
+        return ""
+    return ("Ask once, in its own message: shall I write a short note so later sessions follow this system (AGENTS.md, and a "
+            "CLAUDE.md that imports it)? Then: engine.py handoff yes, or handoff no.")
+
+
+def cmd_handoff(d, answer=None, why=None):
+    """The hand-off every host reads (SKILL.md, binding rule 7), asked once and recorded either way. yes: the OpenDesigner
+    note from assets/output/AGENTS-snippet.md goes into AGENTS.md at the project root, between markers so a later run
+    refreshes it in place, and CLAUDE.md imports it with @AGENTS.md (Claude Code reads CLAUDE.md, and AGENTS.md only when
+    there is no CLAUDE.md). Both are created when missing. no: nothing is written. No answer: what is recorded, and what
+    yes would write."""
+    if not os.path.exists(os.path.join(d, STATE_FILE)):
+        raise SystemExit(f"no state at {os.path.join(d, STATE_FILE)}; run engine.py init first")
+    root = doc_dir(d)
+    agents, claude = os.path.join(root, "AGENTS.md"), os.path.join(root, "CLAUDE.md")
+    have = (merge_defaults(load_state(d)).get("profile") or {}).get("handoff")
+    if answer is None:
+        print(f"hand-off: {have or 'not asked yet'}. yes writes the OpenDesigner note into {os.path.relpath(agents)} and adds "
+              f"@AGENTS.md to {os.path.relpath(claude)}; "
+              "no writes nothing. Both answers are recorded, so the question is asked once.")
+        return 0
+    if answer == "no":
+        if have != "no":
+            cmd_set(d, "profile.handoff", "no", why or "the owner said no to the hand-off note", quiet=True, resync=False)
+        print("recorded: no hand-off note. Nothing was written, and the question is not asked again.")
+        return 0
+    if not os.path.exists(HANDOFF_SNIPPET):  # an engine copied on its own (a ChatGPT project): the agent writes it
+        raise SystemExit(f"no AGENTS snippet next to this engine: add the opendesigner skill's assets/output/AGENTS-snippet.md "
+                         f"to {agents} by hand, and @AGENTS.md to {claude}")
+    with open(HANDOFF_SNIPPET, encoding="utf-8") as f:
+        block = f"{HANDOFF_START}\n{f.read().strip()}\n{HANDOFF_END}\n"
+    text = _read_or_empty(agents)
+    if HANDOFF_START in text and HANDOFF_END in text:
+        new, how = re.sub(re.escape(HANDOFF_START) + r".*?" + re.escape(HANDOFF_END) + r"\n?", lambda _m: block, text,
+                          count=1, flags=re.S), "refreshed"
+    elif HANDOFF_HEADING in text:  # a note pasted by hand before the markers: from its heading to the next heading of its level
+        i = text.index(HANDOFF_HEADING)
+        j = text.find("\n## ", i + len(HANDOFF_HEADING))
+        new, how = text[:i] + block + ("\n" + text[j + 1:] if j >= 0 else ""), "replaced the older note in"
+    else:
+        new, how = (text.rstrip() + "\n\n" if text.strip() else "") + block, "added to" if text.strip() else "wrote"
+    if new != text:
+        write_text(agents, new)
+    ctext = _read_or_empty(claude)
+    if not re.search(r"(?m)^\s*@AGENTS\.md\s*$", ctext):
+        write_text(claude, (ctext.rstrip() + "\n\n" if ctext.strip() else "") + "@AGENTS.md\n")
+        chow = "added @AGENTS.md to" if ctext.strip() else "wrote"
+    else:
+        chow = "kept"
+    if have != "yes":
+        cmd_set(d, "profile.handoff", "yes", why or "the owner said yes to the hand-off note", quiet=True, resync=False)
+    agents, claude = os.path.relpath(agents), os.path.relpath(claude)
+    print(f"{how} {agents}: the OpenDesigner note every later session reads\n{chow} {claude} (it imports AGENTS.md for Claude Code)")
+    return 0
+
+
 def cmd_init(d, src=None, name=None, force=False, standards=True, detect=True):
     sp = os.path.join(d, "state.json")
     if os.path.exists(sp) and not force:
@@ -8799,7 +9101,7 @@ def export_css(files, meta, prefix):
     default_theme = mods.get("theme", {}).get("default", meta["modes"][0])
     dens = mods["density"]
     mot = mods["motion"]
-    head = [f"/* {meta.get('name')} design tokens. Generated by the OpenDesigner engine {ENGINE_VERSION} from state.json;",
+    head = [f"/* {meta.get('name')} design tokens. Generated by the OpenDesigner engine {OPENDESIGNER_VERSION} from state.json;",
             "   do not edit by hand. Source of truth: tokens/*.tokens.json (DTCG 2025.10) + opendesigner.resolver.json.",
             "   Themes: prefers-color-scheme with a [data-theme] override. Density: [data-density]. Motion: prefers-reduced-motion",
             "   with a [data-motion] override. Font sizes are rem so browser text zoom works (WCAG 1.4.4).",
@@ -8935,7 +9237,7 @@ def export_tailwind(files, meta, prefix, reset=True):
     Tailwind's default colors, text sizes, radii and shadows so only the design system's values compile."""
     flat = resolve_all(files, {})
     unit = meta["space"]["unit"]
-    lines = [f"/* Tailwind CSS v4 theme for {meta.get('name')}. Generated by the OpenDesigner engine {ENGINE_VERSION}.",
+    lines = [f"/* Tailwind CSS v4 theme for {meta.get('name')}. Generated by the OpenDesigner engine {OPENDESIGNER_VERSION}.",
              "   Usage, in your main CSS file (one import is enough; this file imports tokens.css itself):",
              "     @import \"tailwindcss\";",
              "     @import \"<path from your CSS file>/opendesigner/build/tailwind/theme.css\";",
@@ -9240,7 +9542,7 @@ def export_figma(files, meta, state, prefix):
                "about": "Corner smoothing is a layer property in Figma, not a variable (DC-L04-04, Q-shape-04). Set cornerSmoothing to this "
                         "value on every frame and component that has a radius: 0.6 is Figma's iOS preset for continuous corners, 0 is a "
                         "plain circular arc. Capsules and circles keep 0."}
-    return {"$schema": "opendesigner/figma-variables/1", "generatedBy": f"OpenDesigner engine {ENGINE_VERSION}",
+    return {"$schema": "opendesigner/figma-variables/1", "generatedBy": f"OpenDesigner engine {OPENDESIGNER_VERSION}",
             "about": "Payload for the Figma MCP use_figma write flow (or a plugin): create collections in order, primitives first, "
                      "then alias semantic variables by name. Colors are sRGB 0-1. TIMING values are seconds and EASING values are "
                      "cubic-bezier or spring objects (plugin API, 5 Aug 2026, L07); if the file rejects them, use each variable's "
@@ -9293,7 +9595,7 @@ def export_paper(files, meta, prefix):
         css[theme] = ":root {\n" + "\n".join(f"  {e['name']}: {e['value']};" for e in entries) + "\n}\n"
     payload = {"$about": "Tokens for Paper's create_tokens MCP tool (Paper has no modes yet, so each theme is a separate list; "
                          "use one theme per file or page). Values are literal, not var() aliases, so creation order cannot break references.",
-               "generatedBy": f"OpenDesigner engine {ENGINE_VERSION}", "themes": out}
+               "generatedBy": f"OpenDesigner engine {OPENDESIGNER_VERSION}", "themes": out}
     return payload, css
 
 
@@ -9312,7 +9614,7 @@ def export_swift(files, meta, prefix):
     light = resolve_all(files, {"theme": "light"} if "theme" in mods else {})
     dark = resolve_all(files, {"theme": "dark"}) if "theme" in mods and "dark" in mods["theme"]["contexts"] else light
     base = resolve_all(files, {})
-    L = [f"// {meta.get('name')} design tokens for SwiftUI. Generated by the OpenDesigner engine {ENGINE_VERSION}; do not edit.",
+    L = [f"// {meta.get('name')} design tokens for SwiftUI. Generated by the OpenDesigner engine {OPENDESIGNER_VERSION}; do not edit.",
          "// Colors switch with the system appearance. Spacing uses the default density; text uses Dynamic Type text styles.",
          "import SwiftUI", "#if canImport(UIKit)", "import UIKit", "#elseif canImport(AppKit)", "import AppKit", "#endif", "",
          f"public enum {P} {{}}", "",
@@ -9422,7 +9724,7 @@ def export_compose(files, meta, prefix):
     def argb(v):
         a = round_half_up((v.get("alpha", 1) if isinstance(v, dict) else 1) * 255)
         return f"Color(0x{a:02X}{hex_of(v)[1:].upper()})"
-    K = [f"// {meta.get('name')} design tokens for Jetpack Compose. Generated by the OpenDesigner engine {ENGINE_VERSION}; do not edit.",
+    K = [f"// {meta.get('name')} design tokens for Jetpack Compose. Generated by the OpenDesigner engine {OPENDESIGNER_VERSION}; do not edit.",
          f"package {slug(prefix).replace('-', '')}.tokens", "",
          "import androidx.compose.animation.core.spring", "import androidx.compose.runtime.Immutable",
          "import androidx.compose.runtime.staticCompositionLocalOf", "import androidx.compose.ui.graphics.Color",
@@ -10300,17 +10602,47 @@ def decision_table_rows(d, limit=40):
     return rows[:limit], max(0, len(rows) - limit)
 
 
+RX_KEEP = re.compile(r"<!-- od:keep -->.*?<!-- /od:keep -->", re.S)
+KEEP_NOTES = "Notes"  # where a kept block goes when the section it sat in is no longer written
+
+
+def _mask_code(text):
+    """text with fenced code blocks and inline code blanked to spaces, same length, so a marker quoted in code is not read."""
+    blank = lambda m: re.sub(r"[^\n]", " ", m.group(0))
+    text = re.sub(r"^(```|~~~)[^\n]*\n.*?^\1[^\n]*$", blank, text, flags=re.S | re.M)
+    return re.sub(r"(`+)[^\n]*?\1", blank, text)
+
+
 def _keep_blocks(text):
-    """od:keep blocks by section heading, so hand-written prose survives regeneration (spec 7.2)."""
-    keeps = {}
+    """Every od:keep block, found by its markers, as (section title, block) in document order, so hand-written prose survives
+    regeneration (spec 7.2). The title is the last `## ` heading before the block and outside any block (None before the
+    first), so a block may hold headings of its own. A marker quoted in code is not a marker."""
     if not text:
-        return keeps
-    for sec in re.split(r"^## ", text, flags=re.M)[1:]:
-        title = sec.split("\n", 1)[0].strip()
-        m = re.search(r"<!-- od:keep -->.*?<!-- /od:keep -->", sec, flags=re.S)
-        if m:
-            keeps[title] = m.group(0)
-    return keeps
+        return []
+    masked = _mask_code(text)
+    spans = [(m.start(), m.end()) for m in RX_KEEP.finditer(masked)]
+    heads = [(h.start(), h.group(1).strip()) for h in re.finditer(r"^## (.+)$", masked, flags=re.M)
+             if not any(a <= h.start() < b for a, b in spans)]
+    return [(next((t for at, t in reversed(heads) if at < a), None), text[a:b]) for a, b in spans]
+
+
+class _Keeps:
+    """The kept blocks of one file while it is rendered: each printed section takes its own, and notes() returns the rest
+    under a Notes section, so no block is ever dropped."""
+
+    def __init__(self, text):
+        self.blocks, self.used = _keep_blocks(text), set()
+
+    def take(self, title):
+        self.used.add(title)
+        return [x for t, b in self.blocks if t == title for x in (b, "")]
+
+    def notes(self):
+        left = [b for t, b in self.blocks if t not in self.used or t == KEEP_NOTES]
+        if not left:
+            return ""
+        return "\n".join([f"## {KEEP_NOTES}", "", "Hand-written notes kept from sections this file no longer has.", ""]
+                         + [x for b in left for x in (b, "")]).rstrip() + "\n"
 
 
 def _direction_words(state):
@@ -10712,7 +11044,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     params = {k: v["value"] for k, v in meta["params"].items()}
     dials = meta["dials"]
     decs = std_decision_rows(state, _decisions(d))  # plus values standards set (their grouped titles name no path)
-    keeps = _keep_blocks(existing)
+    keeps = _Keeps(existing)
     raw = state["raw"]
     ctx = state.get("context") or {}
     prefix = meta.get("prefix", "ds")
@@ -10780,8 +11112,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
         parts += (["<details><summary>More</summary>", ""] + detail + ["</details>", ""]) if fold and lead else detail
         if after:
             parts += [after, ""]
-        if title in keeps:
-            parts += [keeps[title], ""]
+        parts += keeps.take(title)
         return "\n".join(parts)
 
     # ---- front matter: Google DESIGN.md keys, kept as short as the template (assets/output/DESIGN.md); tokens/ has the rest
@@ -10857,6 +11188,11 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
         if light[p]["type"] == "color" and re.match(r"color\.(surface|text|bg|border|icon|overlay|chart|workflow)\.", p):
             lv, dv = _hex_pair(light, dark, p)
             rows.append((f"`{p}`", lv, dv, light[p]["$description"]))
+    seq_by_mode = {m_: light_sequential_resolved(res_) for m_, res_ in (("light", light), ("dark", dark)) if res_}
+    seq_steps = sorted({x for v in seq_by_mode.values() for x in v})
+    seq_where = "" if not seq_steps else (step_span(seq_steps) if len({tuple(v) for v in seq_by_mode.values()}) == 1 else
+                                          "; ".join(f"{step_span(v)} in {m_}" for m_, v in seq_by_mode.items() if v))
+    seq_rule = (f" The light end of `color.chart.sequential` ({seq_where}) is under 3:1, so use it only {SEQ_CELLS}." if seq_steps else "")
     nl = [luminance(hx) for hx in meta["ramps"]["neutral"]["light"]["hex"]]
     step_rows = []
     for fg in (8, 9, 10, 11, 12):
@@ -10893,8 +11229,9 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
              "`color.chart.sequential.*` for amounts; `color.chart.diverging.1-7` for values below and above a midpoint (4 is the midpoint); "
              "`color.chart.status.*` for success, warning and danger, always with a label; `color.chart.neutral` for other and baselines. "
              "Axes use `color.chart.axis`, gridlines `color.chart.gridline`, tick labels and legends `color.chart.label`, targets "
-             "`color.chart.reference`; other series fade to `opacity.chart.dimmed` while one is hovered. Every mark is at least 3:1 against "
-             "the page; marks are not 3:1 against each other, so keep a gap or a line between neighbours (DC-L05-23, DC-L05-24)."
+             "`color.chart.reference`; other series fade to `opacity.chart.dimmed` while one is hovered. A mark that stands alone on the "
+             "page (a line, a bar, a dot) is at least 3:1 against it (WCAG 1.4.11)." + seq_rule + " Marks are not 3:1 against each other, "
+             "so keep a gap or a line between neighbours (DC-L05-23, DC-L05-24)."
              if raw.get("chartPalette") not in (None, "none") else
              "- Charts: no chart palette yet (Q-color-19). Take chart colors from the status and accent hues, and check them separately.")]
     tw = tailwind_classes(files) if "tailwind" in fmts else {}
@@ -11264,6 +11601,7 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
                  + ("; Tailwind's default colors, text sizes, radii and shadows are switched off, so only these exist" if (state.get("exports") or {}).get("tailwindReset", True) else "")
                  + "):", "", _md_table(["Area", "Classes"], [(k.title(), ", ".join(f"`{c}`" for c in v)) for k, v in tw.items() if v])]
     out.append(section("For Agents", "\n".join(body), lead="**AI agents: read this file and the tokens before you change any screen.**", fold=False))
+    out.append(keeps.notes())  # kept blocks whose section is no longer written: never dropped
     return "\n".join(out).rstrip() + "\n"
 
 
@@ -11491,13 +11829,11 @@ def site_brief_md(state, decs=None):
 
 def render_product_md(state, existing="", decs=None):
     ctx = state.get("context") or {}
-    keeps = _keep_blocks(existing)
+    keeps = _Keeps(existing)
     raw = state["raw"]
 
     def sec(t, body):
-        parts = [f"## {t}", "", body.strip(), ""]
-        if t in keeps:
-            parts += [keeps[t], ""]
+        parts = [f"## {t}", "", body.strip(), ""] + keeps.take(t)
         return "\n".join(parts)
     surf = ctx.get("surfaces") or []
     sc = ctx.get("scope") or {}
@@ -11533,6 +11869,7 @@ def render_product_md(state, existing="", decs=None):
     first_sentence = lambda q: re.split(r"(?<=[?.])\s", (questions().get(q) or {}).get("ask") or q)[0]
     lines = [f"- {first_sentence(q)} **{answer_words(q, answer_value(r))}** ({q})" for q, r in owner]
     out.append(sec("Team and Governance", "\n".join(x for x in [ctx.get("team") or ""] + lines if x) or "Not recorded yet (Q-scope-03, Q-scope-04, Q-gov-01)."))
+    out.append(keeps.notes())  # kept blocks whose section is no longer written: never dropped
     return "\n".join(out).rstrip() + "\n"
 
 
@@ -11568,11 +11905,10 @@ def cmd_design_md(d, out_dir=None, files=None, meta=None, quiet=False):
             with open(path, encoding="utf-8") as f:
                 existing = f.read()
             if hashes.get(name) and _sha(existing) != hashes[name]:
-                stripped_old = re.sub(r"<!-- od:keep -->.*?<!-- /od:keep -->", "", existing, flags=re.S)
                 if not quiet:
-                    print(f"note: {name} was edited outside od:keep blocks; the previous text is saved as {name}.hand-edited "
-                          "so the extend skill can turn the edits into decisions")
-                write_text(path + ".hand-edited", stripped_old)
+                    print(f"note: {name} was edited by hand since the engine last wrote it; the previous text is saved, as it was, "
+                          f"as {name}.hand-edited so the extend skill can turn the edits into decisions")
+                write_text(path + ".hand-edited", existing)
         text = render(existing)
         write_text(path, text)
         hashes[name] = _sha(text)
@@ -12659,6 +12995,9 @@ def cmd_build(d, force=False):
     nudge = research_py.reminder(state_or_none(d)) if research_py else ""
     if nudge:
         print(nudge)
+    handoff = handoff_reminder(state_or_none(d))
+    if handoff:
+        print(handoff)
     return 1 if errors else 0
 
 
@@ -12676,7 +13015,19 @@ class PairAction(argparse.Action):
         setattr(namespace, self.dest, pairs)
 
 
+_RAN = []  # (state dir, command) of the last command main parsed, for the Now line
+
+
 def main(argv=None):
+    """The command line. After a command that changes the system (NOW_CMDS), the Now line in PROTOCOL.md is rewritten."""
+    _RAN.clear()
+    rc = _main(argv)
+    if _RAN:
+        refresh_now(*_RAN[0])
+    return rc
+
+
+def _main(argv=None):
     top = argparse.ArgumentParser(add_help=False)
     top.add_argument("--dir", default=None, help=f"state directory (default ./{DEFAULT_DIR})")
     common = argparse.ArgumentParser(add_help=False)
@@ -12706,6 +13057,15 @@ def main(argv=None):
     sub.add_parser("resolve", parents=[common], help="effective dials and derived parameters as JSON")
     sub.add_parser("version", parents=[common], help="this copy's OpenDesigner release, and whether the system here is up to date "
                                                      "with it (never checks online)")
+    p = sub.add_parser("status", parents=[common], help="the Now line: the step, what waits for the owner and the next command "
+                                                       "(read-only; run it first after a context reset or in a new session)")
+    p.add_argument("--json", action="store_true")
+    p.add_argument("--hook", action="store_true", help="the plugin's start-of-session hook: silent without a system, "
+                                                       "otherwise five short lines")
+    p = sub.add_parser("handoff", parents=[common], help="the hand-off later sessions read: yes writes the OpenDesigner note into "
+                                                        "AGENTS.md and a CLAUDE.md that imports it; no writes nothing; both are recorded")
+    p.add_argument("answer", nargs="?", choices=["yes", "no"])
+    p.add_argument("--why", default=None, help="the owner's words")
     sub.add_parser("generate", parents=[common], help="write tokens/ (DTCG 2025.10 + resolver)")
     p = sub.add_parser("validate", parents=[common])
     p.add_argument("--json", action="store_true")
@@ -12749,6 +13109,11 @@ def main(argv=None):
     p.add_argument("--out", default=None, help="folder for the page (default opendesigner/preview)")
     p.add_argument("--open", action="store_true")
     p.add_argument("--json", action="store_true", help="print the payload instead of writing the page")
+    p = sub.add_parser("contrast", parents=[common], help="the WCAG contrast ratio of two hex colors and the floors it meets")
+    p.add_argument("fg", help="foreground hex, such as #767676")
+    p.add_argument("bg", help="background hex, such as #ffffff")
+    p.add_argument("--min", type=float, default=None, help="exit 1 when the ratio is under this, such as 4.5")
+    p.add_argument("--json", action="store_true")
     p = sub.add_parser("feel", parents=[common], help="map plain feel words (fun, calm, techy...) to feel settings; no words lists them all")
     p.add_argument("words", nargs="*")
     p = sub.add_parser("style", parents=[common], help="the style lab: list, show, search, mix, mutate, explore or define visual styles")
@@ -12845,6 +13210,9 @@ def main(argv=None):
         q.add_argument("--no-doc", dest="no_doc", action="store_true")
     a = ap.parse_args(argv)
     d = a.dir or DEFAULT_DIR
+    if a.cmd in NOW_CMDS and not getattr(a, "dry_run", False) and getattr(a, "action", None) not in ("check", "status"):
+        _RAN.append((d, a.cmd + (f" {a.action}" if a.cmd in ("research", "standard") and getattr(a, "action", None) else "")
+                     + (f" {a.answer}" if a.cmd == "handoff" and a.answer else "")))
     st = state_or_none(d) if a.cmd not in ("init", "feel", "resolve", "version", "detect") and not getattr(a, "json", False) else None
     kind = version_status(st)[0] if st else "current"
     if kind == "newer" or (kind != "current" and a.cmd not in ("build", "sketch")):  # build says it after it brings files up to date
@@ -12872,6 +13240,12 @@ def main(argv=None):
         cmd_resolve(d)
     elif a.cmd == "version":
         return cmd_version(d)
+    elif a.cmd == "contrast":
+        return cmd_contrast(a.fg, a.bg, as_json=a.json, need=a.min)
+    elif a.cmd == "status":
+        return cmd_status(d, a.json, a.hook)
+    elif a.cmd == "handoff":
+        return cmd_handoff(d, a.answer, a.why)
     elif a.cmd == "generate":
         cmd_generate(d)
     elif a.cmd == "validate":
@@ -14197,6 +14571,163 @@ def token_use_rx(prefix):
 SYSTEM_AGE_COMMITS = 10  # commits that changed code since the system last changed, before review says the system is behind
 
 
+def plural_kind(kind, n):
+    """'1 radius', '3 radii', '2 colors': the finding kinds review counts."""
+    return kind if n == 1 else {"radius": "radii"}.get(kind, kind + "s")
+
+REVIEW_STYLE_EXT = {".css", ".scss", ".sass", ".less", ".html", ".vue", ".svelte"}  # files that carry the look
+REVIEW_FEW = 3  # fewer style files than this in --project: review also finds the page the site ships
+GENERATED_MARKS = ("Generated by the OpenDesigner engine", "Generated by OpenDesigner", "generated by engine.py")
+RX_FONT_DECL = re.compile(r"font-family\s*:\s*([^;}{\n]+)|fontFamily\s*:\s*[\"'`]([^\"'`]+)|fonts\.googleapis\.com/css2?\?[^\"' >]*?family=([A-Za-z0-9+%]+)")
+REVIEW_GENERIC_FONTS = {"system-ui", "-apple-system", "blinkmacsystemfont", "sans-serif", "serif", "monospace", "ui-sans-serif", "ui-serif",
+                 "ui-monospace", "inherit", "initial", "unset", "cursive", "fantasy", "emoji", "math", "fangsong", "segoe ui", "roboto",
+                 "helvetica", "helvetica neue", "arial", "apple color emoji", "segoe ui emoji", "noto sans"}
+
+
+def _git(cwd, *args):
+    import subprocess
+    try:
+        r = subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True, timeout=20)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return r.stdout.strip() if r.returncode == 0 else None
+
+
+def generated_file(lines):
+    """A file OpenDesigner wrote (a token export copied into the app, a preview): the system itself, not code bypassing it."""
+    head = "".join(lines[:5])
+    return any(m in head for m in GENERATED_MARKS)
+
+
+def _generated_path(path):
+    try:
+        with open(path, encoding="utf-8", errors="ignore") as f:
+            return generated_file([f.readline() for _ in range(5)])
+    except OSError:
+        return False
+
+
+def _code_files(top, skip):
+    """Code files under top, without dependency, build and docs folders, hidden folders or the folders in skip."""
+    out = []
+    for root, dirs, fnames in os.walk(top):
+        dirs[:] = sorted(x for x in dirs if x not in REVIEW_SKIP and x != "docs" and not x.startswith(".")
+                         and os.path.abspath(os.path.join(root, x)) not in skip)
+        if any(os.path.abspath(root).startswith(x + os.sep) or os.path.abspath(root) == x for x in skip):
+            continue
+        out += [os.path.join(root, fn) for fn in sorted(fnames) if os.path.splitext(fn)[1].lower() in REVIEW_EXT]
+    return out
+
+
+def _loads(page):
+    """The files an HTML page loads (stylesheets and scripts), in order, that exist on disk. A path from / is read from the
+    nearest folder named public above the page, or the page's own folder."""
+    try:
+        with open(page, encoding="utf-8", errors="ignore") as f:
+            html_ = f.read()
+    except OSError:
+        return []
+    here = os.path.dirname(os.path.abspath(page))
+    pub, a_ = None, here
+    while pub is None and a_ != os.path.dirname(a_):
+        pub = a_ if os.path.basename(a_) == "public" else None
+        a_ = os.path.dirname(a_)
+    out = []
+    for m in re.finditer(r"<(?:link\b[^>]*\brel=[\"']?stylesheet[^>]*\bhref|script\b[^>]*\bsrc)=[\"']([^\"']+)[\"']"
+                         r"|<link\b[^>]*\bhref=[\"']([^\"']+\.css(?:\?[^\"']*)?)[\"']", html_, flags=re.I):
+        url = (m.group(1) or m.group(2) or "").split("?")[0].split("#")[0]
+        if not url or re.match(r"^(?:[a-z]+:)?//", url, flags=re.I) or url.startswith("data:"):
+            continue
+        path = os.path.normpath(os.path.join(pub or here, url.lstrip("/")) if url.startswith("/") else os.path.join(here, url))
+        if os.path.isfile(path) and path not in out:
+            out.append(path)
+    return out
+
+
+def review_targets(project, stateroot):
+    """(files to review, the folder their names are shown from, notes). project may be one file. When the folder holds fewer
+    than REVIEW_FEW style files (a Next app whose page is static HTML in public/, say), the review also finds the page the site
+    ships: the newest index.html in the repository, public/ first, and the files it loads, and says what it left out."""
+    project = os.path.abspath(project)
+    if os.path.isfile(project):
+        return [project], os.path.dirname(project), []
+    skip = {stateroot}
+    files = _code_files(project, skip)
+    notes = []
+    styles = [f for f in files if os.path.splitext(f)[1].lower() in REVIEW_STYLE_EXT]
+    if len(styles) < REVIEW_FEW:
+        root_ = os.path.dirname(stateroot)  # without git: the project the system belongs to, never a folder above it
+        top = _git(project, "rev-parse", "--show-toplevel") or (root_ if project == root_ or project.startswith(root_ + os.sep) else project)
+        pages = [f for f in _code_files(top, skip) if os.path.basename(f) == "index.html" and not f.startswith(project + os.sep)]
+        rank = lambda f: (f"{os.sep}public{os.sep}" not in f, -os.path.getmtime(f), f.count(os.sep))
+        pages.sort(key=rank)
+        if pages:
+            entry = pages[0]
+            shipped = [entry] + [f for f in _loads(entry) if os.path.splitext(f)[1].lower() in REVIEW_EXT]
+            shipped = [f for f in shipped if f not in files]
+            near = os.path.dirname(entry)
+            left = [f for f in _code_files(near, skip) if f not in shipped and f not in files and not _generated_path(f)]
+            notes.append(f"{os.path.relpath(project, top) if project != top else 'This folder'} has {len(styles)} style file"
+                         f"{'s' if len(styles) != 1 else ''}, so the review also read {os.path.relpath(entry, top)} and the "
+                         f"{len(shipped) - 1} file{'s' if len(shipped) != 2 else ''} it loads")
+            if left:
+                notes.append(f"Skipped {len(left)} file{'s' if len(left) != 1 else ''} next to it that the page does not load, such as "
+                             + ", ".join(os.path.relpath(f, top) for f in sorted(left, key=lambda f: -os.path.getmtime(f))[:3])
+                             + "; review them with --project if they ship")
+            if len(pages) > 1:
+                notes.append("Other pages not read: " + ", ".join(os.path.relpath(f, top) for f in pages[1:4])
+                             + (f" and {len(pages) - 4} more" if len(pages) > 4 else ""))
+            files = shipped + files
+        elif not files:
+            notes.append(f"No code here, and no index.html in the repository: pass the folder or file the product ships from with --project")
+    return files, project, notes
+
+
+def look_drift(state, light, code_hex, code_fonts, look_tokens):
+    """DESIGN.md against the code: the system's brand color and named fonts when the code uses neither them nor the color,
+    font or text tokens, with what the code uses instead. Empty when the code reaches the look through the tokens."""
+    out = []
+    if look_tokens:
+        return out
+    brand = (state.get("raw", {}).get("brandColor") or "").strip().lower()
+    if re.fullmatch(r"#[0-9a-f]{3}", brand):
+        brand = "#" + "".join(c * 2 for c in brand[1:])
+    if not re.fullmatch(r"#[0-9a-f]{6}", brand) and "color.bg.accent.bold" in light:
+        brand = hex_of(light["color.bg.accent.bold"]["resolved"]).lower()
+    if brand and sum(code_hex.values()) >= 5 and brand not in code_hex:
+        out.append({"what": "brand color", "system": [brand], "code": [f"{h} ({n})" for h, n in code_hex.most_common(3)]})
+    faces = []
+    for k in ("display", "text"):
+        fam = (light.get(f"font.family.{k}") or {}).get("resolved")
+        name = next((x for x in (fam if isinstance(fam, list) else [fam] if fam else []) if str(x).lower() not in REVIEW_GENERIC_FONTS), None)
+        if name and name not in faces:
+            faces.append(str(name))
+    used = {f.lower() for f in code_fonts}
+    if faces and code_fonts and not any(f.lower() in used for f in faces):
+        out.append({"what": "fonts", "system": faces, "code": [f"{f} ({n})" for f, n in code_fonts.most_common(3)]})
+    return out
+
+
+def changed_times(paths, cwd):
+    """{path: when it last changed}: its last commit, or the file's own time when it has changes not yet committed."""
+    times = {p: os.path.getmtime(p) for p in paths if os.path.exists(p)}
+    top = _git(cwd, "rev-parse", "--show-toplevel")
+    if not top or not paths:
+        return times
+    dirty = {os.path.normpath(os.path.join(top, ln[3:].strip().strip('"'))) for ln in (_git(top, "status", "--porcelain") or "").splitlines() if ln}
+    log = _git(top, "log", "-n", "3000", "--format=@%ct", "--name-only") or ""
+    seen, when = {}, None
+    for ln in log.splitlines():
+        if ln.startswith("@"):
+            when = float(ln[1:])
+        elif ln.strip():
+            seen.setdefault(os.path.normpath(os.path.join(top, ln.strip())), when)
+    for p in times:
+        if os.path.abspath(p) not in dirty and os.path.abspath(p) in seen:
+            times[p] = seen[os.path.abspath(p)]
+    return times
+
+
 def system_age(d, project):
     """{commitsSince, since}: commits that changed the project's code after state.json or DESIGN.md last changed, read from
     git. None without git, outside a repository, or when the system was never committed."""
@@ -14208,16 +14739,137 @@ def system_age(d, project):
         except (OSError, subprocess.SubprocessError):
             return None
         return r.stdout.strip() if r.returncode == 0 else None
+    top = git("rev-parse", "--show-toplevel")  # the whole repository: the page that ships may sit outside the folder reviewed
+    if top:
+        project = top
     sys_files = [p for p in (os.path.join(d, "state.json"), os.path.join(doc_dir(d), "DESIGN.md")) if os.path.exists(p)]
-    last = git("log", "-1", "--format=%H %cs", "--", *sys_files) if sys_files and git("rev-parse", "--git-dir") else None
+    last = git("log", "-1", "--format=%H %cs", "--", *sys_files) if sys_files and top else None
     if not last or git("status", "--porcelain", "--", *sys_files):  # never committed, or changed since the last commit
         return None
     sha, since = last.split()
     code = [f"*{x}" for x in sorted(REVIEW_EXT - {".js", ".ts"})]  # UI files; plain .js and .ts are often servers and tests
     rel = os.path.relpath(os.path.abspath(d), os.path.abspath(project))
-    skip = [f":(exclude){rel}"] if rel != "." and not rel.startswith("..") else []
+    skip = ([f":(exclude){rel}"] if rel != "." and not rel.startswith("..") else []) + [":(exclude)docs"]
     n = git("rev-list", "--count", f"{sha}..HEAD", "--", *code, *skip)
     return {"commitsSince": int(n), "since": since} if n and n.isdigit() else None
+
+
+SHARE_TEXT_EXT = (".html", ".htm", ".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".vue", ".svelte", ".astro", ".mdx", ".njk",
+                  ".liquid", ".hbs", ".ejs", ".php", ".erb", ".json", ".yml", ".yaml")   # where a headline is written (Markdown: content folders)
+SHARE_SKIP = {"node_modules", ".git", DEFAULT_DIR, ".next", ".nuxt", ".svelte-kit", ".cache", ".turbo", ".vercel", "vendor"}
+SHARE_BUILD = ("dist/", "out/", "build/", "_site/", ".output/")
+
+
+def share_card_age(d, project, seed=None):
+    """Share images older than what they show (review case EN-09). review.py check saves, per page, the share image, h1,
+    hero picture and logo the browser saw (review/share.json); this dates each against git, read-only: the image file's
+    last commit against the last commit that changed the headline's text, the hero or logo file, or the brand colour in
+    state.json. A file edited since its last commit, or outside git, is dated by its file time. [] without share.json."""
+    import subprocess
+    from urllib.parse import unquote, urlparse
+    path = os.path.join(d, "review", "share.json")
+    if not os.path.exists(path):
+        return []
+    def slurp(p):
+        with open(p, encoding="utf-8", errors="ignore") as f:
+            return f.read()
+    try:
+        pages = (json.loads(slurp(path)) or {}).get("pages") or {}
+    except (OSError, ValueError):
+        return []
+
+    def git(*args):
+        try:
+            r = subprocess.run(["git", "-C", project, *args], capture_output=True, text=True, timeout=30)
+        except (OSError, subprocess.SubprocessError):
+            return None
+        return r.stdout if r.returncode == 0 else None
+
+    out = git("ls-files", "-co", "--exclude-standard", "-z")
+    if out is not None:
+        files = [n for n in out.split("\0") if n]
+    else:
+        files = []
+        for root, dirs, fs in os.walk(project):
+            dirs[:] = [x for x in dirs if x not in SHARE_SKIP]
+            files += [os.path.relpath(os.path.join(root, f), project).replace(os.sep, "/") for f in fs]
+            if len(files) > 20000:
+                break
+    files = [n for n in files if not set(n.split("/")[:-1]) & SHARE_SKIP]
+
+    def changed(rel, needle=None):
+        status = git("status", "--porcelain", "--", rel)
+        edited = bool(status and status.strip())
+        if status is not None and not status.startswith("??"):
+            if edited and needle is not None:   # an edit since the last commit counts only if it touched the text
+                edited = bool((git("diff", "HEAD", "--name-only", "-S", needle, "--", rel) or "").strip())
+            if not edited:
+                o = (git("log", "-1", "--format=%cI %h", *(["-S", needle] if needle is not None else []), "--", rel) or "").split()
+                if o:
+                    return _dt.datetime.fromisoformat(o[0].replace("Z", "+00:00")), f"commit {o[1]}"
+        try:
+            t = _dt.datetime.fromtimestamp(os.path.getmtime(os.path.join(project, rel))).astimezone()
+        except OSError:
+            return None, None
+        return t, ("an uncommitted edit" if edited or (status or "").startswith("??") else "the file's time")
+
+    def file_for(url):
+        if not url or url == "inline svg" or url.startswith("data:"):
+            return None
+        p = unquote(urlparse(url).path).lstrip("/")
+        hits = [f for f in files if p and (f == p or f.endswith("/" + p))]
+        if not hits and p:
+            hits = [f for f in files if f.rsplit("/", 1)[-1] == p.rsplit("/", 1)[-1]]
+            hits = hits if len(hits) == 1 else []
+        return sorted(hits, key=lambda f: (f.startswith(SHARE_BUILD), len(f)))[0] if hits else None   # the source over a build copy
+
+    def headline_files(text):
+        words = re.findall(r"[A-Za-z0-9]+", text or "")[:6]
+        if len(words) < 2:
+            return []
+        rx = re.compile(r"(?:[^A-Za-z0-9<&]|<[^>]*>|&[#A-Za-z0-9]+;)+".join(map(re.escape, words)), re.I)
+        hits = []
+        for rel in files:
+            if not (rel.endswith(SHARE_TEXT_EXT) or (rel.endswith(".md") and {"content", "src", "pages", "posts", "_posts"} & set(rel.split("/")[:-1]))):
+                continue
+            try:
+                if os.path.getsize(os.path.join(project, rel)) > 2_000_000:
+                    continue
+                m = rx.search(slurp(os.path.join(project, rel)))
+            except OSError:
+                continue
+            if m:
+                hits.append((rel, m.group(0)))   # the text exactly as written there, for git's -S
+                if len(hits) >= 8:
+                    break
+        return hits
+
+    stamp = lambda t: t.strftime("%Y-%m-%d %H:%M")
+    found = []
+    for route, pg in sorted(pages.items()):
+        img = file_for(pg.get("image"))
+        when, how = changed(img) if img else (None, None)
+        if not when:
+            continue
+        later = []
+        for rel, needle in headline_files(pg.get("h1")):
+            t, h = changed(rel, needle)
+            if t and t > when:
+                later.append((t, f"the headline \"{(pg.get('h1') or '')[:60]}\" in {rel} ({h}, {stamp(t)})"))
+        for label, url in (("the hero picture", pg.get("hero")), ("the logo", pg.get("logo"))):
+            f = file_for(url)
+            t, h = changed(f) if f and f != img else (None, None)
+            if t and t > when:
+                later.append((t, f"{label} {f} ({h}, {stamp(t)})"))
+        st = os.path.relpath(os.path.join(d, "state.json"), project).replace(os.sep, "/")
+        m = seed and os.path.exists(os.path.join(project, st)) and re.search(re.escape(seed), slurp(os.path.join(project, st)), re.I)
+        t, h = changed(st, m.group(0)) if m else (None, None)
+        if t and t > when:
+            later.append((t, f"the brand colour {seed} in {st} ({h}, {stamp(t)})"))
+        if later:
+            later.sort(key=lambda x: x[0], reverse=True)
+            found.append({"route": route, "image": img, "imageDate": stamp(when), "imageHow": how, "since": [x for _, x in later[:3]]})
+    return found
 
 
 def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
@@ -14231,6 +14883,18 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         project = os.path.dirname(os.path.abspath(d)) if os.path.basename(os.path.abspath(d)) == DEFAULT_DIR else os.getcwd()
     light = resolve_all(files, {"theme": meta["modes"][0]} if "theme" in files["opendesigner.resolver.json"].get("modifiers", {}) else {})
     ladder = meta["space"]["ladder"]
+    # A line drawn in a light color.chart.sequential step: a stroke is always a mark on its own, never a heatmap cell, so this is
+    # the one misuse a line scan can tell apart. A bar or dot fill looks like a cell fill in code, so those rest on DESIGN.md.
+    seq_light = set(light_sequential_resolved(light))
+    for m_ in meta["modes"][1:]:
+        seq_light |= set(light_sequential_resolved(resolve_all(files, {"theme": m_})))
+    seq_ok = min(set(range(1, len(CHART_SEQ_STEPS) + 1)) - seq_light, default=None)
+    seq_rx = None
+    if seq_light:
+        n_ = "|".join(str(x) for x in sorted(seq_light))
+        seq_rx = re.compile(rf"\bstroke\s*[:=]\s*\{{?\s*[\"'`]?\s*var\(\s*--{re.escape(prefix)}-color-chart-sequential-({n_})\b"
+                            rf"|\bstroke-chart-sequential-({n_})\b|\.stroke\([^)]*\bchartSequential({n_})\b"
+                            rf"|\bdrawLine\([^)]*\bchartSequential({n_})\b")
     # radii and durations as the tokens have them (after the person's values and the standards), not the lever ladder (R18)
     radii = {}
     for k in ("detail", "control", "container", "overlay", "person"):
@@ -14359,171 +15023,183 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     std_rules = std_review_rules(state)  # house standards followed and project standards that carry a review pattern
     locked_literals = std_locked_literals(state)
     stateroot = os.path.abspath(d)
-    for root, dirs, fnames in os.walk(project):
-        dirs[:] = sorted(x for x in dirs if x not in REVIEW_SKIP and not x.startswith("."))
-        if os.path.abspath(root).startswith(stateroot):
+    targets, base, review_notes = review_targets(project, stateroot)
+    code_hex, code_fonts, look_tokens = collections.Counter(), collections.Counter(), 0
+    for path in targets:
+        ext = os.path.splitext(path)[1].lower()
+        try:
+            if os.path.getsize(path) > 1_000_000:
+                continue
+            with open(path, encoding="utf-8", errors="ignore") as f:
+                lines = f.readlines()
+        except OSError:
             continue
-        for fn in sorted(fnames):
-            ext = os.path.splitext(fn)[1].lower()
-            if ext not in REVIEW_EXT:
+        # a token export copied into the app (tokens.css, theme.css, Tokens.swift) is the system itself, not code that bypasses it
+        if generated_file(lines):
+            continue
+        scanned += 1
+        rel = os.path.relpath(path, base)
+        jsx = ext in (".js", ".jsx", ".ts", ".tsx", ".vue", ".svelte")
+        for i, line in enumerate(lines, 1):
+            if re.search(r"^\s*(//|/\*|\*|<!--)", line) or "od-ignore" in line:
                 continue
-            path = os.path.join(root, fn)
-            try:
-                if os.path.getsize(path) > 1_000_000:
+            token_uses += len(tok_rx.findall(line))
+            look_tokens += len(re.findall(rf"var\(\s*--{re.escape(prefix)}-(?:color|font|text)-", line))
+            for m_ in RX_HEX.finditer(line[:REVIEW_LINE_CAP]):  # the colors and fonts the code uses, to compare with DESIGN.md
+                if not re.search(r"href=[\"']?$", line[max(0, m_.start() - 7):m_.start()]):
+                    h_ = m_.group(1).lower()
+                    code_hex["#" + ("".join(c * 2 for c in h_) if len(h_) == 3 else h_)] += 1
+            for m_ in RX_FONT_DECL.finditer(line[:REVIEW_LINE_CAP]):
+                fam = next((g for g in m_.groups() if g), "").replace("+", " ").replace("%20", " ").split(",")[0].strip().strip("\"'` ")
+                if fam and not fam.lower().startswith("var(") and fam.lower() not in REVIEW_GENERIC_FONTS:
+                    code_fonts[fam] += 1
+            hits = []  # every standard this line breaks, merged into one finding (R28)
+            for rx, std in std_rules:  # the first match that is not empty, in the first REVIEW_LINE_CAP characters
+                ms_ = next((m_ for m_ in rx.finditer(line[:REVIEW_LINE_CAP]) if m_.end() > m_.start()), None)
+                if ms_:
+                    hits.append((ms_.group(0).strip()[:80], (std.get("review") or {}).get("message") or std.get("rule"), std))
+            for key, comp, prop, want, std in locked_literals:  # a locked component value written as a literal
+                if comp.search(line[:REVIEW_LINE_CAP]):
+                    for m_ in prop.finditer(line[:REVIEW_LINE_CAP]):
+                        if float(m_.group(1)) != want:
+                            hits.append((m_.group(0).strip()[:80], f"{key} is {fmt_num(want)} in this system; use the "
+                                         f"{css_var(prefix, key)} token instead of {m_.group(1)}", std))
+                            break
+            if wb_std:
+                for k_, rx_ in RX_PURE.items():
+                    m_ = k_ not in wb_seen and rx_.search(line[:REVIEW_LINE_CAP])
+                    if m_:
+                        wb_seen[k_] = (rel, i, m_.group(0).strip()[:60])
+            ms_ = seq_rx.search(line[:REVIEW_LINE_CAP]) if seq_rx else None
+            if ms_:
+                k_ = next(g for g in ms_.groups() if g)
+                findings.append({"kind": "chart", "file": rel, "line": i, "value": ms_.group(0).strip()[:80],
+                                 "fix": f"color.chart.sequential.{k_} is under 3:1 against the page, so a line in it is hard to see; "
+                                        + (f"use color.chart.sequential.{seq_ok} or a later step" if seq_ok else "use color.chart.brand")
+                                        + ". The light steps are only for cells that touch, as in a heatmap",
+                                 "rule": "WCAG 2.2 SC 1.4.11", "severity": "warning"})
+            if hits:
+                ids = list(dict.fromkeys(h[2]["id"] for h in hits))
+                findings.append({"kind": "standard", "file": rel, "line": i, "value": hits[0][0],
+                                 "fix": "; ".join(dict.fromkeys(h[1].rstrip(" .") if len(hits) > 1 else h[1] for h in hits if h[1])),
+                                 "standard": ids[0], "standards": ids,
+                                 "strength": "must" if any(h[2].get("strength") == "must" for h in hits) else "should",
+                                 "severity": "warning"})
+            line = mask_vars(line)  # every literal is read, even next to a var(); a var() and its fallback are tokens at work (R18)
+            ctx = (css_selector_context(lines, i) if ext in (".css", ".scss", ".sass", ".less") else
+                   (lines[i - 2] if i > 1 else "")) + " " + line  # the selector or the line above names the element's role
+            custom_prop = bool(re.match(r"\s*--", line))  # a custom property definition is a token source, not a bypass
+            tw_ctx = bool(RX_TW_CONTEXT.search(line)) or (ext in (".css", ".scss") and "@apply" in line)
+            add = lambda kind, value, fix: findings.append({"kind": kind, "file": rel, "line": i, "value": value, "fix": fix})
+            # Tailwind arbitrary values and default scales
+            spans = []
+            if tw_ctx or ext in (".html", ".vue", ".svelte"):
+                for m in RX_TW_ARB.finditer(line):
+                    spans.append(m.span())
+                    util, val = m.group(2), m.group(3)
+                    cls = m.group(0)
+                    if val.startswith("#") or val.startswith(("rgb", "hsl", "oklch")):
+                        role = "bg" if util == "bg" else "text" if util == "text" else "icon" if util in ("fill", "stroke") else "border"
+                        hx = "#" + (val[1:] if len(val) == 7 else "".join(c * 2 for c in val[1:4])) if val.startswith("#") else None
+                        add("color", cls, color_fix(hx, role, line, tw=True) if hx and re.fullmatch(r"#[0-9a-fA-F]{6}", hx) else "use a color class from the theme")
+                    elif util.startswith("rounded"):
+                        mv = re.match(r"(\d+(?:\.\d+)?)px", val)
+                        add("radius", cls, radius_fix(float(mv.group(1)), tw=True, ctx=ctx) if mv else "use rounded-control or rounded-container")
+                    elif util == "text":
+                        mv = re.match(r"(\d+(?:\.\d+)?)(px|rem)", val)
+                        add("size", cls, text_fix(float(mv.group(1)) * (16 if mv.group(2) == "rem" else 1), tw=True) if mv else "use a text style class")
+                    elif util == "shadow":
+                        add("shadow", cls, shadow_fix(val.replace("_", " "), tw=True))
+                    elif util in ("duration", "delay"):
+                        mv = RX_TIME.search(val)
+                        v_ms = float(mv.group(1)) * (1 if mv.group(2) == "ms" else 1000) if mv else 0
+                        add("duration", cls, motion_fix(line, v_ms, tw=True, ctx=ctx))
+                    elif util in ("leading", "tracking"):
+                        add("size", cls, "use a text style class; it sets line height and letter spacing together")
+                    else:
+                        mv = re.match(r"(-?\d+(?:\.\d+)?)(px|rem)", val)
+                        add("size", cls, space_fix(float(mv.group(1)) * (16 if mv.group(2) == "rem" else 1), tw=True) if mv else "use a spacing class")
+                if tw_on and tw_ctx:
+                    gone = " (it does not exist once Tailwind's defaults are off)" if tw_reset else ""
+                    for m in RX_TW_PALETTE.finditer(line):
+                        util = m.group(2)
+                        hx = TW_PALETTE_HEX.get(f"{m.group(3)}-{m.group(4)}") if m.group(3) else ("#ffffff" if m.group(5) == "white" else "#000000")
+                        role = "bg" if util in ("bg", "from", "to", "via", "accent") else "text" if util in ("text", "placeholder", "caret", "decoration") \
+                            else "icon" if util in ("fill", "stroke") else "border"
+                        add("color", m.group(0), color_fix(hx, role, line, tw=True) + gone if hx else "use a color class from the theme" + gone)
+                    for m in RX_TW_RADIUS.finditer(line):
+                        add("radius", m.group(0), radius_fix(TW_RADIUS_PX.get(m.group(2), 4), tw=True, ctx=ctx) + gone)
+                    for m in RX_TW_SHADOW.finditer(line):
+                        add("shadow", m.group(0), f"use shadow-{TW_SHADOW_ROLE.get(m.group(2), 'raised')}" + gone)
+                    for m in RX_TW_TEXT.finditer(line):
+                        add("size", m.group(0), text_fix(TW_TEXT_PX[m.group(2)], tw=True) + gone)
+            shadow_m = RX_SHADOW.search(line) or RX_DROP_SHADOW.search(line)
+            if shadow_m:
+                spans.append(shadow_m.span())
+            for m in RX_HEX.finditer(line):  # a raw shadow is replaced whole, color included; other hexes on the line still count
+                if custom_prop or any(a <= m.start() < b for a, b in spans):
                     continue
-                with open(path, encoding="utf-8", errors="ignore") as f:
-                    lines = f.readlines()
-            except OSError:
-                continue
-            # a token export copied into the app (tokens.css, theme.css, Tokens.swift) is the system itself, not code that bypasses it
-            if "Generated by the OpenDesigner engine" in "".join(lines[:3]):
-                continue
-            scanned += 1
-            rel = os.path.relpath(path, project)
-            jsx = ext in (".js", ".jsx", ".ts", ".tsx", ".vue", ".svelte")
-            for i, line in enumerate(lines, 1):
-                if re.search(r"^\s*(//|/\*|\*|<!--)", line) or "od-ignore" in line:
+                hx = "#" + (m.group(1) if len(m.group(1)) == 6 else "".join(c * 2 for c in m.group(1)))
+                role = ROLE_OF_PROP.get(_prop_before(line, m.start()).replace("_", "-"), None)
+                add("color", hx, color_fix(hx.lower(), role, line))
+            if RX_FN.search(line) and not shadow_m and not custom_prop:
+                fm_ = RX_FN.search(line)
+                if not any(a <= fm_.start() < b for a, b in spans):
+                    add("color", fm_.group(0) + "...)", "use a color token (var(--" + prefix + "-color-...))")
+            if ext == ".swift" and RX_SWIFT_COLOR.search(line):
+                add("color", RX_SWIFT_COLOR.search(line).group(0) + "...)", f"use {P}.Colors.<role> from build/swift/DesignTokens.swift")
+            if ext in (".kt", ".kts") and RX_KT_COLOR.search(line) and "DesignTokens" not in rel:
+                add("color", RX_KT_COLOR.search(line).group(0) + ")", f"use Local{K}Colors.current.<role>")
+            for m in RX_SIZE.finditer(line):
+                prop, val = m.group(1), float(m.group(3))
+                if val == 0 or (prop in ("width", "height", "top", "left", "right", "bottom", "inset") and val not in ladder):
                     continue
-                token_uses += len(tok_rx.findall(line))
-                hits = []  # every standard this line breaks, merged into one finding (R28)
-                for rx, std in std_rules:  # the first match that is not empty, in the first REVIEW_LINE_CAP characters
-                    ms_ = next((m_ for m_ in rx.finditer(line[:REVIEW_LINE_CAP]) if m_.end() > m_.start()), None)
-                    if ms_:
-                        hits.append((ms_.group(0).strip()[:80], (std.get("review") or {}).get("message") or std.get("rule"), std))
-                for key, comp, prop, want, std in locked_literals:  # a locked component value written as a literal
-                    if comp.search(line[:REVIEW_LINE_CAP]):
-                        for m_ in prop.finditer(line[:REVIEW_LINE_CAP]):
-                            if float(m_.group(1)) != want:
-                                hits.append((m_.group(0).strip()[:80], f"{key} is {fmt_num(want)} in this system; use the "
-                                             f"{css_var(prefix, key)} token instead of {m_.group(1)}", std))
-                                break
-                if wb_std:
-                    for k_, rx_ in RX_PURE.items():
-                        m_ = k_ not in wb_seen and rx_.search(line[:REVIEW_LINE_CAP])
-                        if m_:
-                            wb_seen[k_] = (rel, i, m_.group(0).strip()[:60])
-                if hits:
-                    ids = list(dict.fromkeys(h[2]["id"] for h in hits))
-                    findings.append({"kind": "standard", "file": rel, "line": i, "value": hits[0][0],
-                                     "fix": "; ".join(dict.fromkeys(h[1].rstrip(" .") if len(hits) > 1 else h[1] for h in hits if h[1])),
-                                     "standard": ids[0], "standards": ids,
-                                     "strength": "must" if any(h[2].get("strength") == "must" for h in hits) else "should",
-                                     "severity": "warning"})
-                line = mask_vars(line)  # every literal is read, even next to a var(); a var() and its fallback are tokens at work (R18)
-                ctx = (css_selector_context(lines, i) if ext in (".css", ".scss", ".sass", ".less") else
-                       (lines[i - 2] if i > 1 else "")) + " " + line  # the selector or the line above names the element's role
-                custom_prop = bool(re.match(r"\s*--", line))  # a custom property definition is a token source, not a bypass
-                tw_ctx = bool(RX_TW_CONTEXT.search(line)) or (ext in (".css", ".scss") and "@apply" in line)
-                add = lambda kind, value, fix: findings.append({"kind": kind, "file": rel, "line": i, "value": value, "fix": fix})
-                # Tailwind arbitrary values and default scales
-                spans = []
-                if tw_ctx or ext in (".html", ".vue", ".svelte"):
-                    for m in RX_TW_ARB.finditer(line):
-                        spans.append(m.span())
-                        util, val = m.group(2), m.group(3)
-                        cls = m.group(0)
-                        if val.startswith("#") or val.startswith(("rgb", "hsl", "oklch")):
-                            role = "bg" if util == "bg" else "text" if util == "text" else "icon" if util in ("fill", "stroke") else "border"
-                            hx = "#" + (val[1:] if len(val) == 7 else "".join(c * 2 for c in val[1:4])) if val.startswith("#") else None
-                            add("color", cls, color_fix(hx, role, line, tw=True) if hx and re.fullmatch(r"#[0-9a-fA-F]{6}", hx) else "use a color class from the theme")
-                        elif util.startswith("rounded"):
-                            mv = re.match(r"(\d+(?:\.\d+)?)px", val)
-                            add("radius", cls, radius_fix(float(mv.group(1)), tw=True, ctx=ctx) if mv else "use rounded-control or rounded-container")
-                        elif util == "text":
-                            mv = re.match(r"(\d+(?:\.\d+)?)(px|rem)", val)
-                            add("size", cls, text_fix(float(mv.group(1)) * (16 if mv.group(2) == "rem" else 1), tw=True) if mv else "use a text style class")
-                        elif util == "shadow":
-                            add("shadow", cls, shadow_fix(val.replace("_", " "), tw=True))
-                        elif util in ("duration", "delay"):
-                            mv = RX_TIME.search(val)
-                            v_ms = float(mv.group(1)) * (1 if mv.group(2) == "ms" else 1000) if mv else 0
-                            add("duration", cls, motion_fix(line, v_ms, tw=True, ctx=ctx))
-                        elif util in ("leading", "tracking"):
-                            add("size", cls, "use a text style class; it sets line height and letter spacing together")
-                        else:
-                            mv = re.match(r"(-?\d+(?:\.\d+)?)(px|rem)", val)
-                            add("size", cls, space_fix(float(mv.group(1)) * (16 if mv.group(2) == "rem" else 1), tw=True) if mv else "use a spacing class")
-                    if tw_on and tw_ctx:
-                        gone = " (it does not exist once Tailwind's defaults are off)" if tw_reset else ""
-                        for m in RX_TW_PALETTE.finditer(line):
-                            util = m.group(2)
-                            hx = TW_PALETTE_HEX.get(f"{m.group(3)}-{m.group(4)}") if m.group(3) else ("#ffffff" if m.group(5) == "white" else "#000000")
-                            role = "bg" if util in ("bg", "from", "to", "via", "accent") else "text" if util in ("text", "placeholder", "caret", "decoration") \
-                                else "icon" if util in ("fill", "stroke") else "border"
-                            add("color", m.group(0), color_fix(hx, role, line, tw=True) + gone if hx else "use a color class from the theme" + gone)
-                        for m in RX_TW_RADIUS.finditer(line):
-                            add("radius", m.group(0), radius_fix(TW_RADIUS_PX.get(m.group(2), 4), tw=True, ctx=ctx) + gone)
-                        for m in RX_TW_SHADOW.finditer(line):
-                            add("shadow", m.group(0), f"use shadow-{TW_SHADOW_ROLE.get(m.group(2), 'raised')}" + gone)
-                        for m in RX_TW_TEXT.finditer(line):
-                            add("size", m.group(0), text_fix(TW_TEXT_PX[m.group(2)], tw=True) + gone)
-                shadow_m = RX_SHADOW.search(line) or RX_DROP_SHADOW.search(line)
-                if shadow_m:
-                    spans.append(shadow_m.span())
-                for m in RX_HEX.finditer(line):  # a raw shadow is replaced whole, color included; other hexes on the line still count
-                    if custom_prop or any(a <= m.start() < b for a, b in spans):
-                        continue
-                    hx = "#" + (m.group(1) if len(m.group(1)) == 6 else "".join(c * 2 for c in m.group(1)))
-                    role = ROLE_OF_PROP.get(_prop_before(line, m.start()).replace("_", "-"), None)
-                    add("color", hx, color_fix(hx.lower(), role, line))
-                if RX_FN.search(line) and not shadow_m and not custom_prop:
-                    fm_ = RX_FN.search(line)
-                    if not any(a <= fm_.start() < b for a, b in spans):
-                        add("color", fm_.group(0) + "...)", "use a color token (var(--" + prefix + "-color-...))")
-                if ext == ".swift" and RX_SWIFT_COLOR.search(line):
-                    add("color", RX_SWIFT_COLOR.search(line).group(0) + "...)", f"use {P}.Colors.<role> from build/swift/DesignTokens.swift")
-                if ext in (".kt", ".kts") and RX_KT_COLOR.search(line) and "DesignTokens" not in rel:
-                    add("color", RX_KT_COLOR.search(line).group(0) + ")", f"use Local{K}Colors.current.<role>")
-                for m in RX_SIZE.finditer(line):
+                if prop == "border-radius":
+                    add("radius", f"{prop}: {val:g}px", radius_fix(val, ctx=ctx))
+                elif prop == "font-size":
+                    add("size", f"{prop}: {val:g}px", text_fix(val))
+                else:
+                    add("size", f"{prop}: {val:g}px", space_fix(val))
+            if jsx and not custom_prop:
+                for m in RX_JSX_SIZE.finditer(line):
                     prop, val = m.group(1), float(m.group(3))
                     if val == 0 or (prop in ("width", "height", "top", "left", "right", "bottom", "inset") and val not in ladder):
                         continue
-                    if prop == "border-radius":
-                        add("radius", f"{prop}: {val:g}px", radius_fix(val, ctx=ctx))
-                    elif prop == "font-size":
-                        add("size", f"{prop}: {val:g}px", text_fix(val))
+                    if prop.startswith("border") and prop.endswith("Radius"):
+                        add("radius", f"{prop}: {m.group(3)}", radius_fix(val, ctx=ctx))
+                    elif prop == "fontSize":
+                        add("size", f"{prop}: {m.group(3)}", text_fix(val))
                     else:
-                        add("size", f"{prop}: {val:g}px", space_fix(val))
-                if jsx and not custom_prop:
-                    for m in RX_JSX_SIZE.finditer(line):
-                        prop, val = m.group(1), float(m.group(3))
-                        if val == 0 or (prop in ("width", "height", "top", "left", "right", "bottom", "inset") and val not in ladder):
-                            continue
-                        if prop.startswith("border") and prop.endswith("Radius"):
-                            add("radius", f"{prop}: {m.group(3)}", radius_fix(val, ctx=ctx))
-                        elif prop == "fontSize":
-                            add("size", f"{prop}: {m.group(3)}", text_fix(val))
-                        else:
-                            add("size", f"{prop}: {m.group(3)}", space_fix(val))
-                if shadow_m and not custom_prop:
-                    val = shadow_m.group(0)
-                    add("shadow", val.strip()[:80], shadow_fix(val))
-                m = RX_MOTION.search(line)
-                if m and not custom_prop and "infinite" not in m.group(2):  # looping spinners are not on the duration ladder
-                    tm = RX_TIME.search(m.group(2))
-                    if tm:
-                        v_ms = float(tm.group(1)) * (1 if tm.group(2) == "ms" else 1000)
-                        if v_ms > 0:
-                            fix = motion_fix(line, v_ms, ctx=ctx,
-                                             animation=m.group(1) not in ("transition", "transitionDuration", "transition-duration"))
-                            add("duration", f"{m.group(1)}: {tm.group(0)}", fix)
-                native = ext in (".swift", ".kt", ".kts") and "DesignTokens" not in rel
-                if native and RX_SHADOW_NATIVE.search(line):
-                    add("shadow", RX_SHADOW_NATIVE.search(line).group(0) + "...)",
-                        "use an elevation token: the raised, floating or overlay shadow in build/swift or build/compose")
+                        add("size", f"{prop}: {m.group(3)}", space_fix(val))
+            if shadow_m and not custom_prop:
+                val = shadow_m.group(0)
+                add("shadow", val.strip()[:80], shadow_fix(val))
+            m = RX_MOTION.search(line)
+            if m and not custom_prop and "infinite" not in m.group(2):  # looping spinners are not on the duration ladder
+                tm = RX_TIME.search(m.group(2))
+                if tm:
+                    v_ms = float(tm.group(1)) * (1 if tm.group(2) == "ms" else 1000)
+                    if v_ms > 0:
+                        fix = motion_fix(line, v_ms, ctx=ctx,
+                                         animation=m.group(1) not in ("transition", "transitionDuration", "transition-duration"))
+                        add("duration", f"{m.group(1)}: {tm.group(0)}", fix)
+            native = ext in (".swift", ".kt", ".kts") and "DesignTokens" not in rel
+            if native and RX_SHADOW_NATIVE.search(line):
+                add("shadow", RX_SHADOW_NATIVE.search(line).group(0) + "...)",
+                    "use an elevation token: the raised, floating or overlay shadow in build/swift or build/compose")
+                continue
+            if native:
+                ma = RX_SWIFT_ANIM.search(line) if ext == ".swift" else RX_KT_ANIM.search(line)
+                if ma:
+                    v_ms = float(ma.group(ma.lastindex)) * (1000 if ext == ".swift" else 1)
+                    near = _nearest_duration(v_ms, durations) if v_ms > 0 else "instant"
+                    name = camel(["duration", near])
+                    add("duration", ma.group(0) + ")", f"use {P}.Motion.{name}" if ext == ".swift" else f"use {K}Motion.{name}Ms")
                     continue
-                if native:
-                    ma = RX_SWIFT_ANIM.search(line) if ext == ".swift" else RX_KT_ANIM.search(line)
-                    if ma:
-                        v_ms = float(ma.group(ma.lastindex)) * (1000 if ext == ".swift" else 1)
-                        near = _nearest_duration(v_ms, durations) if v_ms > 0 else "instant"
-                        name = camel(["duration", near])
-                        add("duration", ma.group(0) + ")", f"use {P}.Motion.{name}" if ext == ".swift" else f"use {K}Motion.{name}Ms")
-                        continue
-                if native:
-                    for m in RX_RADIUS_NATIVE.finditer(line):
-                        add("size", m.group(0), f"use {P}.Space / {P}.Radius (Swift) or {K}Space (Compose)")
-                        break
+            if native:
+                for m in RX_RADIUS_NATIVE.finditer(line):
+                    add("size", m.group(0), f"use {P}.Space / {P}.Radius (Swift) or {K}Space (Compose)")
+                    break
     # stale or untrue DESIGN.md / PRODUCT.md sections: render now and compare section by section
     stale, untrue = [], []
     out_dir = os.path.dirname(os.path.abspath(d)) if os.path.basename(os.path.abspath(d)) == DEFAULT_DIR else d
@@ -14554,16 +15230,22 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                          "fix": f"pure black here and pure white at {wf}:{wl} ({wv}): never both in one product; use an off-black "
                                 "such as #111111 with white, or an off-white with black",
                          "standard": WHITE_BLACK_RULE, "standards": [WHITE_BLACK_RULE], "strength": "must", "severity": "warning"})
+    when = changed_times(sorted({os.path.join(base, f_["file"]) for f_ in findings}), base)
+    findings.sort(key=lambda f_: -when.get(os.path.join(base, f_["file"]), 0))  # the newest file first; lines keep their order
+    drift_look = look_drift(state, light, code_hex, code_fonts, look_tokens) if scanned else []
     by = {}
     for f_ in findings:
         by[f_["kind"]] = by.get(f_["kind"], 0) + 1
     taste = taste_index(d, state)  # dials that moved away from the person's taste: flagged, never a failure (taste is theirs)
     drift = taste_py.drift(taste, meta["dials"]) if taste else []
     r_errs, r_notes = research_py.review(d, state) if research_py else ([], [])
-    hard = sum(1 for f_ in findings if f_["kind"] != "standard")
-    age = system_age(d, project) if scanned else None
-    result = {"project": project, "filesScanned": scanned, "counts": by, "tokenUses": token_uses, "systemAge": age,
-              "tokens": "none" if hard and not token_uses else "losing" if hard > token_uses else "ok",
+    hard = sum(1 for f_ in findings if f_["kind"] not in ("standard", "chart"))
+    age = system_age(d, base) if scanned else None
+    seed = (light.get("color.brand.seed") or {}).get("resolved")
+    share = share_card_age(d, base, seed.get("hex") if isinstance(seed, dict) else None)
+    result = {"project": project, "filesScanned": scanned, "counts": by, "tokenUses": token_uses, "systemAge": age, "shareCards": share,
+              "tokens": "none" if scanned and not token_uses else "losing" if hard > token_uses else "ok",
+              "notes": review_notes, "lookDrift": drift_look,
               "systemBehind": bool(age and age["commitsSince"] >= SYSTEM_AGE_COMMITS),
               "findings": findings[:500], "staleSections": stale,
               "missing": missing, "untrue": sorted(set(untrue)), "tasteDrift": drift,
@@ -14571,32 +15253,48 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     if as_json:
         print(json.dumps(result, indent=2))
     else:
-        tokf = [f_ for f_ in findings if f_["kind"] != "standard"]
+        tokf = [f_ for f_ in findings if f_["kind"] not in ("standard", "chart")]
         stdf = [f_ for f_ in findings if f_["kind"] == "standard"]
+        chf = [f_ for f_ in findings if f_["kind"] == "chart"]
         total = len(tokf)
-        print(f"Review of {project}: {scanned} files scanned.")
+        print(f"Review of {project}: {scanned} file{'s' if scanned != 1 else ''} scanned.")
+        for n_ in review_notes:
+            print(f"  {n_}.")
         if not scanned:
             print("No code yet, so there is nothing to check.")
         elif total:
             print(f"{total} hard-coded value{'s' if total != 1 else ''} skip the tokens: "
-                  + ", ".join(f"{n} {k}{'s' if n != 1 else ''}" for k, n in sorted(by.items()) if k != "standard") + ".")
+                  + ", ".join(f"{n} {plural_kind(k, n)}" for k, n in sorted(by.items()) if k not in ("standard", "chart")) + ".")
             for f_ in tokf[:limit]:
                 print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']}")
             if total > limit:
                 print(f"  ... and {total - limit} more (use --json for all).")
             print("  To keep a raw value on purpose, add the comment od-ignore on that line.")
-        else:
+        elif token_uses:
             print("No hard-coded colors, sizes, radii, shadows or durations found: the code uses the tokens.")
-        if result["tokens"] == "none":
+        else:
+            print("No hard-coded colors, sizes, radii, shadows or durations found, and no tokens in use either.")
+        if result["tokens"] == "none" and hard:
             print(f"Tokens are not in charge: the code uses none of them (no var(--{prefix}-...)). Import "
                   "opendesigner/build/css/tokens.css, or the export for your stack, and move these values onto tokens before the next draft.")
+        elif result["tokens"] == "none":
+            print(f"No tokens in use (no var(--{prefix}-...)). If this is not where the product's styles live, pass that folder "
+                  "or file with --project.")
         elif result["tokens"] == "losing":
             print(f"Tokens are losing: {token_uses} token use{'s' if token_uses != 1 else ''} against {hard} hard-coded values. "
                   "Move values onto tokens before the next draft.")
+        for x_ in drift_look:
+            print(f"DESIGN.md and the code disagree on the {x_['what']}: DESIGN.md has {', '.join(x_['system'])}, which the code never "
+                  f"uses; the code uses {', '.join(x_['code'])}. Record what the code decided (engine.py set, then design-md), or "
+                  "bring the code back to the tokens.")
         if result["systemBehind"]:
             print(f"The system is behind the code: {age['commitsSince']} commits changed code since state.json or DESIGN.md last "
                   f"changed ({age['since']}). Record what the code decided since (engine.py set, then design-md), or bring the code "
                   "back to the tokens, before the next draft.")
+        for s_ in share:
+            print(f"The share image for {s_['route']} is older than what it shows: {s_['image']} dates from {s_['imageDate']} "
+                  f"({s_['imageHow']}); since then {'; '.join(s_['since'])}. Rebuild it from the page as it is now, then post a link "
+                  "once to check the card (review case EN-09).")
         if stdf:
             print(f"{len(stdf)} line{'s' if len(stdf) != 1 else ''} break{'s' if len(stdf) == 1 else ''} a standard:")
             for f_ in stdf[:limit]:
@@ -14610,6 +15308,12 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             if any(i.startswith("PRJ-") for i in ids_):
                 print("  Fix the code. A project standard (PRJ-...) is the person's own rule; it goes only when they ask: "
                       "engine.py standard remove <id> --why \"<their words>\".")
+        if chf:
+            print(f"{len(chf)} chart line{'s' if len(chf) != 1 else ''} use{'s' if len(chf) == 1 else ''} a light sequential step (a warning, WCAG 1.4.11):")
+            for f_ in chf[:limit]:
+                print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']}")
+            if len(chf) > limit:
+                print(f"  ... and {len(chf) - limit} more (use --json for all).")
         for u in sorted(set(untrue)):
             print(f"Untrue: {u}. Fix: run `engine.py design-md`.")
         if missing == ["DESIGN.md"]:
@@ -14633,7 +15337,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         for t_ in r_notes:
             print(f"User research: {t_}")
     track(d, "review")
-    return 1 if strict and (findings or stale or missing or untrue or r_errs) else 0
+    return 1 if strict and (findings or stale or missing or untrue or r_errs or drift_look) else 0
 
 
 # =============================================================================================
@@ -14843,7 +15547,7 @@ def build_payload(state, template, values=None, labels=None, taste=None):
     fixed = sorted(k for k, v in (state.get("dials") or {}).items() if dial_value(v) is not None)
     note_fixed = (f" Your earlier answers fix {', '.join(fixed)}, so the options differ in the rest." if fixed else "")
     payload = {"question": qid, "recommended": str(cur or question_default(state, qid) or (values[0] if values else "")),
-               "generatedBy": f"engine.py show {template} (OpenDesigner engine {ENGINE_VERSION}); real values from {name}'s state"}
+               "generatedBy": f"engine.py show {template} (OpenDesigner engine {OPENDESIGNER_VERSION}); real values from {name}'s state"}
     if template == "palette":
         payload.update(title=f"{name}: how colorful", subtitle="Each option is your palette, built for real. The shades go from light to dark; "
                        "the number under each is its contrast with the first shade. The table below checks the pairs people read "
@@ -15121,7 +15825,7 @@ def cmd_feedback(d, text, kind="idea", quiet=False, area=None, question=None, sa
     title = f"[{kind}]" + (f"[{area}]" if area else "") + f" {text[:70]}" + ("..." if len(text) > 70 else "")
     where = ", ".join(x for x in (f"area {area}" if area else "", f"question {question}" if question else "") if x)
     body = (f"**Kind:** {kind}\n\n" + (f"**Where:** {where}\n\n" if where else "") + f"**What happened or what is missing:**\n{text}\n\n"
-            f"**OpenDesigner:** {OPENDESIGNER_VERSION} (engine {ENGINE_VERSION}, Python {sys.version_info.major}.{sys.version_info.minor})\n\n"
+            f"**OpenDesigner:** {OPENDESIGNER_VERSION} (Python {sys.version_info.major}.{sys.version_info.minor})\n\n"
             "_Filed from `engine.py feedback`. Please remove anything private before submitting._")
     url = f"{ISSUES_URL}?title={quote(title)}&body={quote(body)}&labels={quote(FEEDBACK_KINDS[kind] + ',from-engine')}"
     with open(fp, encoding="utf-8") as f:

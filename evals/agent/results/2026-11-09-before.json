@@ -1,0 +1,52 @@
+{
+  "kind": "agent",
+  "date": "2026-11-09",
+  "commit": "ca1531e",
+  "skillsRef": "origin/main",
+  "label": "before",
+  "model": "sonnet",
+  "judgeModel": "haiku",
+  "runsPerArm": 2,
+  "claudeVersion": "2.1.302",
+  "overallScore": 0.75,
+  "meanDelta": null,
+  "casesPassed": 4,
+  "casesTotal": 4,
+  "costUsd": 1.1523054,
+  "durationSeconds": 162,
+  "partial": false,
+  "cases": [
+    {
+      "name": "no-identity-copy",
+      "score": 1,
+      "without": null,
+      "delta": null,
+      "runs": 2,
+      "errors": []
+    },
+    {
+      "name": "one-question-first",
+      "score": 0.3333333333333333,
+      "without": null,
+      "delta": null,
+      "runs": 2,
+      "errors": []
+    },
+    {
+      "name": "one-question-per-call",
+      "score": 0.6666666666666666,
+      "without": null,
+      "delta": null,
+      "runs": 2,
+      "errors": []
+    },
+    {
+      "name": "redesign-audits-first",
+      "score": 1,
+      "without": null,
+      "delta": null,
+      "runs": 2,
+      "errors": []
+    }
+  ]
+}

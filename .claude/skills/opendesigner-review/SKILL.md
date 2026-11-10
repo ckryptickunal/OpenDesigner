@@ -1,6 +1,6 @@
 ---
 name: opendesigner-review
-description: Checks a built UI like a careful user would: every screen size and theme, scrolling, hover, keyboard, motion frames, and measured spacing, type, fonts and contrast. Reports findings with evidence.
+description: Audits every draft of a built UI before it is shown, like a careful user. Every screen size and theme, scroll, hover, keyboard, motion, measured spacing, type and contrast. "Review this", "QA this".
 license: MIT
 compatibility: Python 3.10+ (standard library) for the helper. A browser the agent can drive (Playwright, Chrome DevTools MCP, Claude in Chrome, the in-app browser) for the capture. capture.py also needs Playwright for Python, which the skill never installs on its own.
 metadata:
@@ -24,7 +24,7 @@ Output, in the person's repo: `opendesigner/review/` with the plan, probe result
 Talk plainly: one idea and one question per message, and recommend one option with its reason. First time a term appears, give its plain meaning plus "Designers: X · Code: Y" (`references/rules.md` in the opendesigner skill).
 
 Helper: `scripts/review.py` (below: `review.py`). Run it from the person's project. Knowledge:
-- `references/cases.md` (generated; `review.py cases` prints it filtered): 77 ways a review goes wrong, each with how to catch it and where the claim comes from. Read the groups that match the page.
+- `references/cases.md` (generated; `review.py cases` prints it filtered): 78 ways a review goes wrong, each with how to catch it and where the claim comes from. Read the groups that match the page.
 - `references/capture.md`: how to capture with each kind of tool, and the traps in each.
 - `references/motion.md`: reviewing things that move.
 - `references/report.md`: finding format, severity, the verdict rules, and the prompt for a fresh-context verifier.
@@ -98,8 +98,8 @@ review.py finding "Hero image crops the face at 390 px" --severity warn --basis 
 review.py check opendesigner/review          every probe and capture file in the folder (probes/, focus/, hover/, console/, fonts/, vitals/, motion/, states/, bars/, kern/, pixels/)
 ```
 - **Floors** (always errors): contrast 4.5:1 (3:1 large; no rounding), targets 24 px unless spaced, no sideways scroll at 320, visible focus not hidden by a bar, names, language, zoom allowed, reduced motion honored, images load. They are locked (`guardrails.md` section 4).
-- **Drift from the system** (warnings): type sizes, spacing steps, radii, colors, fonts, durations that are not tokens. Each names the value, how often, and the nearest token. A deliberate exception is a recorded decision (`engine.py set ... --why`), not a hidden override. Also run `engine.py review` for the source side.
-- **Practice, with or without a system** (warnings and notes): more than one filled button standing out in the first screen, two side by side, or two different primary fills (MS-16); more than one text typeface plus a mono, more than three weights or two weights one step apart (MS-02); more than two color families, more than three gray text colors, and colors typed twice a few steps apart (MS-08); more than eight sizes or sizes between whole pixels (MS-02); capitals tracked tight (an error), tracking looser on bigger text, more than four tracking values (MS-17); headings over two lines (MS-18); mixed alignment under a heading, or centred items off centre by more than 2 px (MS-05); more than three button styles, mixed corners or case, a primary label under 15 px (MS-19); fonts loaded and never drawn (EN-08). Each names the practice and its source. They are questions for the person, not faults: the audit (`<opendesigner>/references/audit.md`) says how to report them.
+- **Drift from the system** (warnings): type sizes, spacing steps, radii, colors, fonts, durations that are not tokens. Each names the value, how often, and the nearest token. A deliberate exception is a recorded decision (`engine.py set ... --why`), not a hidden override. Also run `engine.py review` for the source side: it also dates the share image against git, from the `review/share.json` that `check` saves (EN-09).
+- **Practice, with or without a system** (warnings and notes): more than one filled button standing out in the first screen, two side by side, or two different primary fills (MS-16); more than one text typeface plus a mono, more than three weights or two weights one step apart (MS-02); more than two color families, more than three gray text colors, and colors typed twice a few steps apart (MS-08); more than eight sizes or sizes between whole pixels (MS-02); capitals tracked tight (an error), tracking looser on bigger text, more than four tracking values (MS-17); headings over two lines (MS-18); mixed alignment under a heading, or centred items off centre by more than 2 px (MS-05); more than three button styles, mixed corners or case, a primary label under 15 px (MS-19); fonts loaded and never drawn (EN-08); on a page with share tags, a share title or description the h1 and the line under it no longer say (EN-09); a variant picker on a public address (EN-07). Each names the practice and its source. They are questions for the person, not faults: the audit (`<opendesigner>/references/audit.md`) says how to report them.
 - It prints what was resolved and what is new each time you run it on the same files.
 
 ## 7. Report, fix, run the same cells again

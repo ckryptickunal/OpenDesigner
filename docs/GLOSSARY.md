@@ -1331,7 +1331,7 @@ Designers: rules for later AI sessions · Code: `assets/output/AGENTS-snippet.md
 
 **Designer:** Keeps later AI sessions on-system: they read the design guide and values before touching UI, stop hard-coding values, and ask before changing locked decisions.
 
-**Engineer:** assets/output/AGENTS-snippet.md, appended to AGENTS.md or CLAUDE.md after asking: read DESIGN.md, PRODUCT.md and tokens first, never hard-code values, run engine.py review after implementation.
+**Engineer:** engine.py handoff writes it into AGENTS.md and CLAUDE.md imports it: read DESIGN.md and RULES.md first, no hard-coded values, review before each draft and commit.
 
 **Example:** A new AI session reads it before styling a page.
 
@@ -3242,7 +3242,7 @@ Designers: data viz, themed to the system · Code: `color.chart.*`
 
 **Designer:** Charts as part of the system: a small set of chart types, palettes, shared anatomy and accessibility rules, so charts look native to the product rather than pasted in.
 
-**Engineer:** Generated when Q-color-19 asks for chart colors: color.chart.* holds brand, categorical, sequential, diverging and status colors, each 3:1 on the page, plus axis, gridline and label aliases.
+**Engineer:** color.chart.* (Q-color-19): brand, categorical, sequential, diverging, status colors; axis, gridline and label aliases. Lines, bars, dots are 3:1 on the page; light sequential steps suit touching cells.
 
 **Also called:** charts, dataviz
 
@@ -3285,13 +3285,13 @@ Designers: axes, gridlines, labels, legends · Code: `chart.gridline.color (prop
 ### Data-visualization palettes
 
 Chart colors: one per group, light to dark for how much, and two-way for above or below the middle.  
-Designers: categorical, sequential, diverging palettes · Code: `color.chart.categorical (proposed), .sequential, .diverging`
+Designers: categorical, sequential, diverging palettes · Code: `color.chart.categorical, .sequential, .diverging`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** One brand chart color plus grey by default; 6-8 categorical colors in fixed order for neighbor contrast; one sequential ramp per primary hue and one diverging ramp, per mode.
 
-**Engineer:** Not generated yet: per-mode color tokens color.chart.categorical.1 (proposed) onward, color.chart.sequential (proposed) and color.chart.diverging (proposed) ramps, plus brand, neutral and status sets.
+**Engineer:** Per-mode tokens: color.chart.categorical.1 onward, color.chart.sequential.1 to .5 (the light end for heatmap cells), color.chart.diverging.1 to .7, plus brand, neutral and status.
 
 **Example:** This year in brand blue, last year in grey for context.
 
@@ -3302,13 +3302,13 @@ Designers: categorical, sequential, diverging palettes · Code: `color.chart.cat
 ### Chart scope and library
 
 Which kinds of charts the app has, like bars and lines, and which ready-made chart kit it styles.  
-Designers: 5-6 chart types plus KPI number · Code: `color.chart.* (proposed)`
+Designers: 5-6 chart types plus KPI number · Code: `color.chart.*`
 
 <details><summary>Designer and engineer</summary>
 
 **Designer:** Start with 5-6 types (bar, line, area, stacked bar, donut or meter, scatter) plus a KPI big number. Fewer types stay consistent; theme a library rather than build one.
 
-**Engineer:** Not a token: the Q-viz-01 scope answer in state.json. The themed chart library would consume color.chart.* (proposed) and existing chrome tokens, as would native chart frameworks.
+**Engineer:** Not a token: the Q-viz-01 scope answer in state.json. The themed chart library reads color.chart.* and the existing chrome tokens, as do native chart frameworks.
 
 **Example:** A dashboard with bars, lines and one big number, all from one library.
 

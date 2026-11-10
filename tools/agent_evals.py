@@ -13,7 +13,7 @@
 
 The cases live in evals/<case>/ (prompt.md, graders/, and fixtures beside them). `claude plugin eval` refuses a plugin folder
 with more than 20,000 entries, and this repo is bigger than that, so the script first assembles the plugin exactly as a
-person installs it (the manifest and skills/) plus the cases into dist/eval-plugin/ (git-ignored), and runs it there.
+person installs it (the manifest, skills/ and hooks/) plus the cases into dist/eval-plugin/ (git-ignored), and runs it there.
 
 Every run is a real Claude Code session on your own account and counts against your plan or API bill. Each case runs twice
 per round: once with OpenDesigner loaded and once without it, so the report shows what the plugin adds (the Δ column).
@@ -63,11 +63,15 @@ def stage(ref=None, cases=None, tags=None):
         shutil.rmtree(STAGE)
     STAGE.mkdir(parents=True)
     if ref:  # the plugin as it was at that commit; the cases and graders stay today's, so only the skills differ
-        archive = subprocess.run(["git", "archive", ref, ".claude-plugin", "skills"], cwd=ROOT, capture_output=True, check=True).stdout
+        has_hooks = subprocess.run(["git", "cat-file", "-e", f"{ref}:hooks"], cwd=ROOT, capture_output=True).returncode == 0
+        archive = subprocess.run(["git", "archive", ref, ".claude-plugin", "skills", *(["hooks"] if has_hooks else [])], cwd=ROOT,
+                                 capture_output=True, check=True).stdout
         subprocess.run(["tar", "-x", "-C", str(STAGE)], input=archive, check=True)
     else:
         shutil.copytree(ROOT / ".claude-plugin", STAGE / ".claude-plugin")
         shutil.copytree(ROOT / "skills", STAGE / "skills", ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "node_modules", ".DS_Store"))
+        if (ROOT / "hooks").exists():  # the start-of-session hook, as installed (silent unless the case has opendesigner/state.json)
+            shutil.copytree(ROOT / "hooks", STAGE / "hooks")
     (STAGE / "evals").mkdir()
     for d in available():  # only the chosen cases are staged, so the eval runs exactly these
         if wanted(d, cases, tags):

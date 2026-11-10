@@ -35,7 +35,7 @@ Hard rules for every OpenDesigner skill. Sources: `_coordination/BRIEF.md` requi
 - Reduced motion is honored (WCAG 2.3.3 treated as required). Nothing flashes more than 3 times a second.
 - Never carry meaning by color alone. Every field has a programmatic label, every dialog has a way to dismiss it, and no consent box is pre-checked.
 - Text can scale to 200%, and containers grow with it.
-- `engine.py validate` checks these floors (SKILL.md, "The engine").
+- `engine.py validate` checks these floors (`references/engine.md`).
 
 ## 4b. Standards (locked unless the person explicitly asks)
 - House standards (`standards.md`) come from sources the OpenDesigner owner marked non-negotiable. Project standards come from sources the person marked non-negotiable. Both are applied and locked.

@@ -4,7 +4,7 @@ seo_title: Design tokens and the DTCG 2025.10 format, in plain words
 description: What design tokens are, the three tiers of tokens, what the DTCG 2025.10 format and its resolver do, and how OpenDesigner stores and exports its tokens.
 section: Concepts
 order: 2
-updated: 2026-11-08
+updated: 2026-11-09
 ---
 
 Design tokens are design decisions saved as named values, so code, design tools and AI agents all read the same values. DTCG is the open file format for tokens. OpenDesigner keeps every token in this format and makes all its other files from it.
@@ -58,7 +58,7 @@ Work tools show most of their data in tables and charts, so both get their own t
 - **Tables** get four row heights, and number styles whose digits all have the same width, so columns line up. One question decides how rows are separated (lines, striped rows or space), whether the header stays on screen, and how numbers align.
 - **Charts** get colors when the chart question asks for them: one color for a single series, a fixed order for groups, light to dark for amounts, a scale around a midpoint, and status colors used with a label. Axes and gridlines use the app's own border and text colors.
 
-Every chart mark reaches 3:1 against the page, the WCAG minimum for shapes people need to see. Marks don't reach 3:1 against each other, so leave a gap or a thin line between neighbors.
+A line, a bar or a dot in a chart reaches 3:1 against the page, the WCAG minimum for shapes people need to see. The palest shades for amounts don't: they're for cells that touch, as in a heatmap, with a 1 px gap between cells or the value written in each one. Marks don't reach 3:1 against each other either, so leave a gap or a thin line between neighbors.
 
 :::dev
 **Tables.** Rows come in four heights: `size.row.sm`, `md`, `lg` and `two-line`. Numbers use the `text.numeric.*` styles. The question is Q-pattern-07. Striped rows add one color, `color.surface.row-alternate`, one step away from the page. The other answers become rules in `DESIGN.md`.
@@ -66,7 +66,7 @@ Every chart mark reaches 3:1 against the page, the WCAG minimum for shapes peopl
 **Charts.** When the chart question (Q-color-19) asks for chart colors, the system adds:
 
 - `color.chart.brand` for a chart with one series, and `color.chart.categorical.*` for groups, in a fixed order.
-- `color.chart.sequential.*` for amounts, from light to dark.
+- `color.chart.sequential.*` for amounts, from light to dark. The light end is under 3:1 against the page, and each step's description says so. `engine.py review` warns when a line is drawn in one of those steps.
 - `color.chart.diverging.1` to `7` for values below and above a midpoint. Step 4 is the midpoint.
 - `color.chart.status.*` for success, warning and danger, used with a label.
 - `color.chart.axis`, `gridline`, `label` and `reference`, which point at the border and text colors, so charts look like the rest of the app.

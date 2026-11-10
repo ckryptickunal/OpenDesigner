@@ -1,6 +1,6 @@
 ---
 name: opendesigner-preflight
-description: Checks anything visual before export or sharing (a video, page, deck or UI) for the silly mistakes that make it look cheap or wrong. Use before any render, export or publish.
+description: A launch checklist for anything visual (page, video, deck, share image, UI) that catches the silly mistakes that look cheap or wrong. Use before any render, export, deploy, post or publish.
 license: MIT
 compatibility: Python 3.10+ (standard library, no network) for the helper. ffmpeg and ffprobe for the video, frame and audio checks.
 metadata:
@@ -27,9 +27,10 @@ python3 scripts/preflight.py html index.html --medium web       # sizes (tokens,
 python3 scripts/preflight.py video out.mp4 --ignore 0-17          # frozen time (with timestamps), black frames, flashing, audio, length
 python3 scripts/preflight.py frames out.mp4 --every 0.5 --out frames/   # full-size frames plus phone-size copies
 python3 scripts/preflight.py audio audio/*.wav                    # clicks and noise bursts at clip edges
+python3 scripts/preflight.py public dist/                         # before a deploy: the variant picker, files no page names, dev pages, local paths
 ```
 
-`--medium` sets the smallest text allowed: `web` 12 px for text people read (11 px warns, under 11 fails), `app` 11 pt, `watch` 12 pt (app and watch pages laid out at the device's width in points), `video` about 54 px in a 1920 px frame (under 40 fails). The `html` check reads the page's CSS, including linked token files, not the rendered page. It cannot see text over glass, photos or gradients, or text inside a scaled container: the checklist covers those. For a page, also run `opendesigner-review` (`capture.py`): it reads those pixels, the alignment, the bars and the toggles (checklist items 50 to 56).
+`--medium` sets the smallest text allowed: `web` 12 px for text people read (11 px warns, under 11 fails), `app` 11 pt, `watch` 12 pt (app and watch pages laid out at the device's width in points), `video` about 54 px in a 1920 px frame (under 40 fails). The `html` check reads the page's CSS, including linked token files, not the rendered page. It cannot see text over glass, photos or gradients, or text inside a scaled container: the checklist covers those. For a page, also run `opendesigner-review` (`capture.py`): it reads those pixels, the alignment, the bars and the toggles (checklist items 50 to 56). For a site about to go live, run `public` on the folder it serves, and walk checklist items 62 to 65: the share card, llms.txt, the crawl files and the AI-training decision, and nothing for reviewers left in the build.
 
 The `video` check also measures flashing against WCAG 2.2 SC 2.3.1, the general flash threshold: no more than 25% of a 10-degree field may flash more than three times in a second. The field is worked out from the video's size for a 13-inch tablet at 25 cm, the closest likely viewing (`--flash-field phone`, or a size in px, for others). Over the limit is an error, and over 90% of it is a warning, to leave a margin for re-encoding. `--flash-where worst.png` saves the worst moment with the flashing pixels in magenta. It runs in ffmpeg, takes about 0.6 times the video's length on a 10-core Mac, and measures the whole video, ignored sections included. It does not measure red flashes (checklist item 49).
 

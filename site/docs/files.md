@@ -68,14 +68,14 @@ The seven templates are palette, type scale, spacing ruler, radius, elevation, m
 - **`opendesigner/standards.md`:** the house and project standards this project follows, locked, with their sources.
 - **`opendesigner/state.json`:** where you left off, so you or another AI tool can continue later.
 - **`opendesigner/standards-state.json`:** a copy of each standard as this system follows it. Keep it next to `state.json`.
-- **`opendesigner/PROTOCOL.md`:** how work runs in this project: six steps, each ending at a gate where you say yes, and the checks every round runs. It's written once; edit it to fit.
+- **`opendesigner/PROTOCOL.md`:** how work runs in this project: six steps, each ending at a gate where you say yes, and the checks every round runs. It's written once; edit it to fit. Its Now line says which step you're on, what waits for you and what comes next. The engine keeps that one line current, and `engine.py status` prints it.
 
 See [Decisions, DESIGN.md and the overview page](/docs/decisions/).
 
 ## Written by the skill, or only when you ask
 
 - **`opendesigner/RATIONALE.md`:** one page for the team on what was chosen, why, and what is still open, written by the skill from a template.
-- **A short note in your `AGENTS.md`,** added only after you say yes. It tells later AI agents to read `DESIGN.md`, use the tokens and run `engine.py review`.
+- **A short note in your `AGENTS.md`, and a `CLAUDE.md` that imports it,** added only after you say yes. You're asked once, and a no is remembered. The note tells later AI agents to read `DESIGN.md` and `RULES.md` first, use the tokens, and run `engine.py review` before every draft and commit.
 - **`opendesigner/feedback.md`,** written only if you report something with `engine.py feedback`.
 - **`opendesigner/RULES.md`,** written when you give a note on the work. A note you give twice becomes a rule that later sessions follow.
 - **`opendesigner/research/`,** written only if you say yes to user research: the findings with their sources, the positioning and the direction board.

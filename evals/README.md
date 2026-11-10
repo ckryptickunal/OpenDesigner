@@ -17,7 +17,7 @@ Each folder here with a `prompt.md` is one case:
 - **`graders/`**: one file per check. Prefer the free, exact graders: `regex` on the reply or on a file the agent wrote, `file_exists`, and `tool_used` (with `arm: with-only` for "used the OpenDesigner skill", which can't pass without the plugin). Use an `llm` grader only for a rule that needs judgment, and keep it short and specific.
 - **`case.yaml`** (optional): `context.add_dirs` for read-only fixtures such as a page to review or an existing system.
 
-`claude plugin eval` refuses a plugin folder with more than 20,000 entries, and this repo is bigger than that. So `tools/agent_evals.py` first copies the plugin as a person installs it (the manifest and `skills/`), plus these cases, into `dist/eval-plugin/`, and runs there. Raw runs and the HTML report stay in `dist/eval-plugin/evals/results/`. They are git-ignored.
+`claude plugin eval` refuses a plugin folder with more than 20,000 entries, and this repo is bigger than that. So `tools/agent_evals.py` first copies the plugin as a person installs it (the manifest, `skills/` and `hooks/`), plus these cases, into `dist/eval-plugin/`, and runs there. Raw runs and the HTML report stay in `dist/eval-plugin/evals/results/`. They are git-ignored.
 
 To add a case:
 1. Copy the closest folder and write the new prompt the way a real person would ask.

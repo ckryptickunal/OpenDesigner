@@ -958,12 +958,13 @@
       "title": "Dev-only overlays, test data and flags",
       "trap": "The screenshot includes the framework's dev overlay, a debug banner, feature-flag toggles or seed data that will not ship.",
       "why_missed": "The dev server is what is running.",
-      "catch": "Look for overlays and badges in every shot. Review a production build where you can. Say in the report which mode you looked at.",
+      "catch": "Look for overlays and badges in every shot. Review a production build where you can. Say in the report which mode you looked at. A variant picker is for review copies only (STD-process-review-taste-41): on a public address the probe looks for the house picker (picker.js, .proto-picker, data-od-stage, data-od-variant) and for look-alike variant or options switchers, and review.py warns. `preflight.py public` finds the same in a build folder before it is deployed.",
       "evidence": "seen",
       "severity": "info",
       "when": "always",
       "sources": [],
-      "inferred": true
+      "inferred": true,
+      "standard": "preflight 65"
     },
     {
       "id": "PR-01",
@@ -1275,13 +1276,29 @@
       "title": "Fonts downloaded but not used",
       "trap": "Five font families download and the page draws two. Every visitor pays for the other three, and they tempt the next edit to use them.",
       "why_missed": "A font that loads looks like a font that works. Nobody compares what loaded with what is drawn.",
-      "catch": "The probe compares the families document.fonts has loaded with every family named in a visible text element's font stack (fonts.unused), and review.py warns for each loaded family no text names. Text drawn only by ::before or ::after is not read, so check an icon font by hand. It also notes a public page with no share image, favicon or description, or a noindex (a note: fine on a draft).",
+      "catch": "The probe compares the families document.fonts has loaded with every family named in a visible text element's font stack (fonts.unused), and review.py warns for each loaded family no text names. Text drawn only by ::before or ::after is not read, so check an icon font by hand.",
       "evidence": "measured",
       "severity": "warn",
       "when": "always",
       "standard": "preflight 10",
       "sources": [
         "S-R5-104"
+      ]
+    },
+    {
+      "id": "EN-09",
+      "group": "environment",
+      "title": "Share card and llms.txt out of step with the page",
+      "trap": "The headline, hero picture, logo or brand colour changes, and the share image, the share title and description, and llms.txt still describe the old page. A link posted that week shows last week's words, and an answer engine repeats a claim the owner removed.",
+      "why_missed": "None of them is on the page. They are made once, often by a script someone has to remember to run, and platforms cache the old card.",
+      "catch": "The probe reads the share tags, the title and meta description, the h1 and the line under it. On a page with share tags, review.py warns when a title shares under a third of its words with the h1 and that line, or a description under a quarter (a different share title can be deliberate, so it is a warning, not an error). `review.py check` saves the share image, headline, hero picture and logo in review/share.json, and `engine.py review` warns when the share image's git date is older than the last change to any of them or to the brand colour. `search.py audit` compares llms.txt with the pages (SE-10). It also notes a public page with no share image, favicon or description, or a noindex (a note: fine on a draft).",
+      "evidence": "measured",
+      "severity": "warn",
+      "when": "always",
+      "standard": "preflight 62 and 63",
+      "sources": [
+        "S-R5-105",
+        "S-R5-106"
       ]
     }
   ],

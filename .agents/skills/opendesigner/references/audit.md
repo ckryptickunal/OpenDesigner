@@ -1,8 +1,16 @@
 # The audit: what is wrong with a built product, and what practice says
 
-This is step 1 of the fast path for a product that is already built (`SKILL.md`, "A built product comes first as an audit"). The person wants it fixed and does not want to learn design words. You go through every button, font, weight, size and colour, say what is wrong in plain words, say what good practice says and where that comes from, and show it on their own page. Nothing changes until they say yes.
+This is step 1 of the fast path for a product that is already built (below, "The fast path"). The person wants it fixed and does not want to learn design words. You go through every button, font, weight, size and colour, say what is wrong in plain words, say what good practice says and where that comes from, and show it on their own page. Nothing changes until they say yes.
 
 The audit only reports. It never edits their code (AGENTS.md: checks report; STD-process-review-taste-14 for motion audits). The fixes are steps 2 and 3 of the fast path.
+
+## The fast path
+**A built product comes first as an audit, even when they say "just do it".** If the UI already exists, never rewrite every page in one go. The fast path is three steps, with no interview:
+1. Audit it with `references/audit.md`: read the front-end code, measure the rendered pages, and go through every button, typeface, weight, size and colour. Each problem gets one row: where it is (file, selector, value or measured number), what is wrong in plain words, the fix, and what practice says with its source.
+2. Fix them on one page, from tokens, and show that page beside the original.
+3. Roll it out to the rest after they say yes.
+
+A person in a hurry still gets a finished page in the first reply. What they don't get is three rewritten pages they never saw. Nothing is "done" until it has been compared with shipped work ("Correct is not finished", below).
 
 ## 1. How to run it
 

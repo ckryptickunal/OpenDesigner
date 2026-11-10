@@ -1,6 +1,6 @@
 ---
 name: opendesigner-search
-description: Gets a site found by search and AI answer engines (SEO, AEO, GEO): checks crawling, robots, sitemap, titles and markup, asks ChatGPT and Perplexity by hand, proposes fixes.
+description: SEO, AEO and GEO. Gets a site found by Google and AI answer engines. Checks crawling, robots, sitemap, llms.txt, titles and markup, asks ChatGPT and Perplexity by hand, proposes fixes.
 license: MIT
 compatibility: Python 3.10+ (standard library, no network) for the checks. A browser the agent can drive, for the answer-engine probe.
 metadata:
@@ -31,7 +31,7 @@ The three share most of their work. Say one plain sentence, then the term.
    - titles, descriptions and the h1;
    - text in the served HTML;
    - JSON-LD (it parses, and FAQ questions match the visible page);
-   - llms.txt, orphan pages, and images without alt or size.
+   - llms.txt against the pages (lines no page states, new sections it leaves out, links to pages that are gone), orphan pages, and images without alt or size.
 
    Every finding carries its evidence. `search.py robots <file>` prints which bots a robots.txt lets in.
 3. **Ask the answer engines:** a handful of questions, by hand, logged out, in a browser the person can see. `references/probe.md` covers what each engine shows and how to read it. Ask:
@@ -41,6 +41,14 @@ The three share most of their work. Say one plain sentence, then the term.
 4. **Turn what they searched and cited into page fixes:** `references/fixes.md`. Engines quote pages that answer the question directly in the asker's words, give something to copy (a file tree, a rule file, a prompt), and state each capability in one plain sentence. A page that only describes the product wins "which tool" questions and loses "how do I" questions.
 5. **List off-site places** where the engines found the category answers: directories, awesome-lists, comparison roundups. These are proposals only: each submission or post needs the owner's yes.
 6. **Report:** `references/report.md`.
+
+## After every content change
+A new headline, section, claim or picture makes the files around it stale. After each change:
+1. Run `search.py audit` on the new build. It names llms.txt lines no page states any more, new sections it leaves out, and links to pages that are gone.
+2. Propose updates to llms.txt, the share title and description, the share image (rebuilt from the page as it is now) and, when pages came or went, the sitemap. `review.py check` names share text the h1 no longer says; `engine.py review` names a share image older than the headline, hero, logo or brand colour.
+3. Check that robots.txt still says what the owner decided, including about AI-training crawlers.
+
+Each update waits for the owner's yes, like every fix.
 
 ## Rules and judgment
 - **The script checks** what a rule can settle: a bot blocked, a missing canonical, a title past 60 characters.

@@ -1,0 +1,17 @@
+{
+  "description": "OpenDesigner: when the project has opendesigner/state.json, print where the design work stands (engine.py status --hook) at startup, on resume, after /clear and after compaction. Read-only, no network, silent everywhere else.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f \"${CLAUDE_PROJECT_DIR:-.}/opendesigner/state.json\" ] && python3 -B \"${CLAUDE_PLUGIN_ROOT}/skills/opendesigner/scripts/engine.py\" --dir \"${CLAUDE_PROJECT_DIR:-.}/opendesigner\" status --hook 2>/dev/null; exit 0",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
