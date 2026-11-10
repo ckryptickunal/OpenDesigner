@@ -17,7 +17,7 @@ Run this on any video, page, deck or image before you call it done. Each line is
 8. **Rag.** No one-word last lines, and no breaks inside a phrase, a number and its unit, or a code expression. Use `text-wrap: balance` on headings and short labels. [M7]
 9. **Legibility.** Text that carries meaning meets the floor for where it is seen, multiplied out through any scaled container it sits in: 12 px on a web page (11 px only for short labels), 11 pt on a phone or tablet app, 12 pt on a watch, and about 54 px in a 1920 px video frame, which is about 11 pt once the frame is shrunk to a 390 pt phone. For video, shrink a frame to 390 px wide and read it. Never abbreviate a label the viewer needs. [M8, M31]
 10. **Fonts.** Every `font-family` you use is loaded, from a file you ship or a font service link such as Google Fonts, and no fallback face renders anywhere. In the browser, `document.fonts` shows each face as loaded. For a video or an image render, ship the font file or wait for `document.fonts.ready` before the first frame. [M9]
-11. **Contrast as rendered.** Wherever text sits on glass, a photo, a gradient, a texture or a drawn object, measure it against the pixels behind it, not the token colors. Hide the text, render again, and compare each line of text with the brightest (or darkest) 5% of pixels in its box. It meets 4.5:1, or 3:1 for large text. [M35]
+11. **Contrast as rendered.** Wherever text sits on glass, a photo, a gradient, a texture or a drawn object, measure it against the pixels behind it, not the token colors. Hide the text, render again, and compare each line of text with the brightest (or darkest) 5% of pixels in its box (`engine.py contrast <text> <pixel>`). It meets 4.5:1, or 3:1 for large text. [M35]
 
 ## Layout
 

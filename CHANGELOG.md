@@ -8,6 +8,10 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Review reads the page that ships** (2026-11-09). When the folder given to `engine.py review` has fewer than three style files, it also reads the newest `index.html` (in `public/` first) and the files it loads, and lists what it skipped. It takes a single file, counts "behind the code" across the whole repository, lists the newest files first and skips `docs/`.
+- **DESIGN.md checked against the code** (2026-11-09). When the code uses no color, font or text tokens, `engine.py review` says if the brand color or fonts in `DESIGN.md` appear nowhere in it, and names the ones the code uses instead.
+- **`engine.py contrast`** (2026-11-09). `engine.py contrast "#767676" "#ffffff"` prints the contrast ratio, rounded down, and which WCAG minimums it meets. `--min 4.5` exits with an error under 4.5:1, for scripts.
+- **One version number** (2026-11-09). Generated files and the feedback issue text show the OpenDesigner release (0.2.0), not a separate engine number.
 - **A Now line that survives a context reset** (2026-11-09). `opendesigner/PROTOCOL.md` now opens with one line: the step you're on, what waits for you and the next command. Every engine command that changes the system rewrites it, and `engine.py status` prints it, so a new session picks up where the last one stopped.
 - **A start-of-session hook for Claude Code** (2026-11-09). In a project with `opendesigner/state.json`, the plugin now tells Claude where the design work stands each time a session starts, resumes, clears or gets compacted: the Now line, the owner's rules count and a reminder to review. It only reads files, sends nothing, and stays silent in every other project.
 - **A note later sessions read** (2026-11-09). After the first result, the skill asks once whether to write a short note for later AI sessions. On a yes, `engine.py handoff yes` adds it to AGENTS.md and writes a CLAUDE.md that imports it, even in a project with neither file. A no is remembered too.
@@ -50,6 +54,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 
+- **design-md keeps every od:keep block** (2026-11-09). A kept block that holds its own heading, or sits in a section the file no longer has, is no longer deleted; the second kind moves to a Notes section. The `.hand-edited` backup is now the whole previous file, not a 201-byte fragment.
+- **Review never calls token-free code clean** (2026-11-09). When no token is in use, `engine.py review` says "no tokens in use" instead of "the code uses the tokens", and counts radii, not "radiuss".
 - **Concept and reference docs, plain first** (2026-11-08). Thirteen docs pages, from accessibility and tokens to the engine and security, now open in plain words. Commands, paths and JSON moved into "For developers" folds, and long passages became tables. Open text is 17% shorter, and every number, limit and privacy fact stays.
 - **Library parts follow today's tokens** (2026-11-08). The ten looks in the component library are rebuilt with today's engine, and five parts now take their corners and spacing from those tokens: the chat quote's corner is the bubble's minus its gap, the date picker clears its corner on phones, and the receipts table fits at tablet width ([#82](https://github.com/ckryptickunal/OpenDesigner/issues/82)).
 - **A shorter home page and showcase** (2026-11-07). Lines that repeated a heading, a button, a picture or another line on the page are gone. Two claims are corrected: the example system writes 50 files, not 51, and a reference never brings in another brand's logo, name, images or copy.

@@ -12,6 +12,7 @@ python3 <skill>/scripts/engine.py set <path> <json-value> --dry-run   preview a 
 python3 <skill>/scripts/engine.py resolve                    current dials and derived values, for payloads
 python3 <skill>/scripts/engine.py generate                   opendesigner/tokens/ (DTCG 2025.10)
 python3 <skill>/scripts/engine.py validate [--json]          contrast, targets, lint; exit 1 on errors
+python3 <skill>/scripts/engine.py contrast "#767676" "#fff" [--min 4.5]   the WCAG ratio of any two colors, rounded down; exit 1 under --min
 python3 <skill>/scripts/engine.py design-md                  DESIGN.md and PRODUCT.md at the project root
 python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|brand|all
 python3 <skill>/scripts/engine.py overview [--open]          opendesigner/overview.html: the whole system, what is chosen and what is still missing
