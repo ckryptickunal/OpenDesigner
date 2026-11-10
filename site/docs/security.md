@@ -74,7 +74,7 @@ You should get a first reply within 7 days. What counts, and how secrets are kep
 
 ## Release and maintenance status
 
-- **Version 0.3.0 is the latest release,** from 10 November 2026. Security fixes land on `main` and ship in the next release.
+- **Version 0.3.1 is the latest release,** from 11 November 2026. Security fixes land on `main` and ship in the next release.
 - **One maintainer.** There is no support agreement.
 - **No continuous integration runs are recorded yet.** The engine's tests pass on the maintainer's computer.
 - **Licence:** MIT for code, skills and data; CC BY 4.0 for the docs.

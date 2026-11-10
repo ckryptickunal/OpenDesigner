@@ -4,7 +4,7 @@ description: Original art painted in code in the brand's palette. A hero or laun
 license: MIT
 compatibility: Python 3.10+ (standard library) for the bridge. Painting runs the bundled engine in a film project and needs Node 18+, npm packages, Playwright's Chromium and ffmpeg, installed with the person's OK.
 metadata:
-  version: "0.3.0"
+  version: "0.3.1"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 

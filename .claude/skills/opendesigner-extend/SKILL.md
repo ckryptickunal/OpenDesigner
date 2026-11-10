@@ -4,7 +4,7 @@ description: Changes an existing OpenDesigner system (an opendesigner/ folder), 
 license: MIT
 compatibility: Python 3.10+ (standard library). Needs the opendesigner skill's engine for generate and validate.
 metadata:
-  version: "0.3.0"
+  version: "0.3.1"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 

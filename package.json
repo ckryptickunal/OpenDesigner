@@ -1,6 +1,6 @@
 {
   "name": "opendesigner",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "OpenDesigner - Free, open-source design system generator",
   "private": true,
   "dependencies": {

@@ -4,7 +4,7 @@ description: A launch checklist for anything visual (page, video, deck, share im
 license: MIT
 compatibility: Python 3.10+ (standard library, no network) for the helper. ffmpeg and ffprobe for the video, frame and audio checks.
 metadata:
-  version: "0.3.0"
+  version: "0.3.1"
   homepage: "https://github.com/ckryptickunal/OpenDesigner"
 ---
 
