@@ -101,7 +101,7 @@ Questions, gaps and results from a pilot are the most useful thing you can send 
 ## Where it does not fit yet
 
 - **No team pilots or watched user trials.** The usability tests so far were role-played by AI testers.
-- **No CI runs.** Version 0.2.0 is the first tagged release (5 November 2026). No test pass in each AI tool is recorded yet.
+- **No CI runs.** Version 0.3.0 came out on 10 November 2026; the first tagged release was 0.2.0, on 5 November. No test pass in each AI tool is recorded yet.
 - **One brand per system.** The interview can record that more brands will re-skin the system, but the engine doesn't build brand modes yet, so don't plan a multi-brand rollout on it today.
 - **A small component set on the overview.** It draws only buttons, a text field and a card. The optional [component library](/library/) has 82 finished components built on the tokens.
 - **No translations.**

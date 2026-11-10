@@ -6,6 +6,12 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ## [Unreleased]
 
+Nothing yet.
+
+## [0.3.0]: 2026-11-10
+
+The second release. OpenDesigner now stays in use across long sessions and new ones, its review no longer calls code clean when it uses no tokens, text you protect in `DESIGN.md` survives every refresh, and people without a terminal get ready downloads. To update in Claude Code, run `claude plugin update opendesigner@opendesigner` and start a new session; the [install page](https://opendesigner.dev/docs/install/#update-it) covers the other tools. This release adds a start-of-session hook to the Claude Code plugin: in a project that has `opendesigner/state.json` it prints the current step, and anywhere else it does nothing.
+
 ### Added
 
 - **Downloads that need no terminal** (2026-11-10). The README, the install page and the home page link the ready skill zips for the Claude app, so nobody has to clone and build. A new `opendesigner-chatgpt.zip` holds the five ChatGPT files and the text to paste; `tools/build_dist.py` builds it and the site serves it at `/downloads/`.
