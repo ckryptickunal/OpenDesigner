@@ -1348,7 +1348,7 @@ def home(pages, facts, faq):
     craft_html = "".join(f'<a class="craft-card {v}" href="/docs/{s}/"><span class="vg" aria-hidden="true"><i></i><i></i><i></i></span><h3>{t}</h3><p>{d}</p><span class="more">Open the guide {CHEVRON}</span></a>' for s, t, d, v in craft)
     craft_sec = f"""
 <section class="h-sec" id="craft">
-<div class="h-head">{idx("08", "Learn the craft")}<h2 class="h-h2">A field guide to interfaces that feel right.</h2>
+<div class="h-head">{idx("10", "Learn the craft")}<h2 class="h-h2">A field guide to interfaces that feel right.</h2>
 <p class="h-lede">See each rule live, with its source.</p></div>
 <div class="craft">{craft_html}</div>
 </section>
@@ -1375,20 +1375,32 @@ def home(pages, facts, faq):
 <p class="h-fine">Real review output on an invented app, measured live. Photo: {ba_credit} on Unsplash. <a href="/demo/before-after/">Full report</a></p>
 </section>
 
+<section class="h-sec" id="install">
+<div class="h-head">{idx("02", "Get started")}<h2 class="h-h2">Add it to your AI tool.</h2>
+<p class="h-lede">Your AI tool and Python 3.10 or newer. ChatGPT needs nothing installed.</p></div>
+{install_tabs()}
+</section>
+
+<section class="h-sec" id="evals">
+<div class="h-head">{idx("03", "Tested in the open")}<h2 class="h-h2">We test it on itself, and publish the numbers.</h2></div>
+{evals_block("summary")}
+<p class="h-more"><a class="h-link" href="/docs/evals/">See every test, and run them yourself {ARROW}</a></p>
+</section>
+
 <section class="h-sec" id="why">
-<div class="h-head">{idx("02", "The problem")}<h2 class="h-h2">Every new screen drifts a little.</h2></div>
+<div class="h-head">{idx("04", "The problem")}<h2 class="h-h2">Every new screen drifts a little.</h2></div>
 {figure("design-systems-one-source")}
 </section>
 
 <section class="h-sec" id="fix">
-<div class="h-head">{idx("03", "The fix")}<h2 class="h-h2">One set of rules that every screen follows.</h2></div>
+<div class="h-head">{idx("05", "The fix")}<h2 class="h-h2">One set of rules that every screen follows.</h2></div>
 <div class="tabs demo" data-tabs><div class="tablist demo-tabs" role="tablist" aria-label="Example products">{demo_tabs}</div>
 {"".join(demo_panel(e, i) for i, e in enumerate(DEMO["examples"]))}</div>
 <p class="h-fine">Real engine output, nothing tuned by hand. Photo: <a href="https://unsplash.com/photos/{SCENES["blue-soft"][2]}">{SCENES["blue-soft"][1]}</a> on Unsplash.</p>
 </section>
 
 <section class="h-sec" id="screens">
-<div class="h-head h-head-row"><div>{idx("04", "Real screens")}<h2 class="h-h2">What consistent looks like.</h2>
+<div class="h-head h-head-row"><div>{idx("06", "Real screens")}<h2 class="h-h2">What consistent looks like.</h2>
 <p class="h-lede">Invented brands, built by AI agents, reviewed by hand. Much of the identity work was done outside the tokens.</p></div>
 <a class="h-link" href="/showcase/">See all {total} designs {ARROW}</a></div>
 <div class="screens">{screens_html}</div>
@@ -1396,18 +1408,18 @@ def home(pages, facts, faq):
 </section>
 
 <section class="h-sec" id="how">
-<div class="h-head h-head-row"><div>{idx("05", "How it works")}<h2 class="h-h2">Five answers today. Consistent screens from then on.</h2></div>
+<div class="h-head h-head-row"><div>{idx("07", "How it works")}<h2 class="h-h2">Five answers today. Consistent screens from then on.</h2></div>
 <a class="h-link" href="{tour_page.PATH}">See the whole system at work {ARROW}</a></div>
 <ol class="h-steps">{"".join(f'<li class="h-step">{A_PICTS[i]}<span class="h-n num">0{i + 1}</span><h3>{t}</h3><p>{d}</p><div class="vg">{v}</div></li>' for i, (t, d, v) in enumerate(STEPS))}</ol>
 </section>
 
 <section class="h-sec" id="use-cases">
-<div class="h-head">{idx("06", "What you can build")}<h2 class="h-h2">Websites, apps, dashboards and enterprise software.</h2></div>
+<div class="h-head">{idx("08", "What you can build")}<h2 class="h-h2">Websites, apps, dashboards and enterprise software.</h2></div>
 <div class="who">{"".join(f'<a class="who-card" href="{u}"><h3>{t}</h3><p>{d}</p><span class="more">{l} {CHEVRON}</span></a>' for t, d, u, l in USES)}</div>
 </section>
 
 <section class="h-sec" id="features">
-<div class="h-head h-head-row"><div>{idx("07", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together.</h2></div>
+<div class="h-head h-head-row"><div>{idx("09", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together.</h2></div>
 <a class="h-link" href="{tour_page.PATH}#protect">See what protects you {ARROW}</a></div>
 <div class="bento">{"".join(f'<article class="bento-card span-{sp}"><h3>{t}</h3><p>{d}</p><div class="vg">{v}</div></article>' for t, d, v, sp in INSIDE)}</div>
 <div class="h-split h-files">
@@ -1417,18 +1429,6 @@ def home(pages, facts, faq):
 </div>
 </section>
 {craft_sec}
-<section class="h-sec" id="install">
-<div class="h-head">{idx("09", "Get started")}<h2 class="h-h2">Add it to your AI tool.</h2>
-<p class="h-lede">Your AI tool and Python 3.10 or newer. ChatGPT needs nothing installed.</p></div>
-{install_tabs()}
-</section>
-
-<section class="h-sec" id="evals">
-<div class="h-head">{idx("10", "Tested in the open")}<h2 class="h-h2">We test it on itself, and publish the numbers.</h2></div>
-{evals_block("summary")}
-<p class="h-more"><a class="h-link" href="/docs/evals/">See every test, and run them yourself {ARROW}</a></p>
-</section>
-
 <section class="h-sec" id="status">
 <div class="h-split">
 <div><p class="kicker">Status</p><h2 class="h-h2">Early, and honest about it.</h2>
