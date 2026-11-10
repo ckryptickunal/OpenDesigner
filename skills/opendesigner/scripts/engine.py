@@ -5886,14 +5886,15 @@ def handoff_light(d, state):
     return all(v["level"] == ZOOM_LEVELS[0] for v in zoom_levels(d, state).values())
 
 
-def handoff_note(d, state):
+def handoff_note(d, state, light=None):
     """(note, light): the hand-off note as it goes into AGENTS.md. No comment addressed to the agent and no `strict` markers
     reach the person's file: the lighter note drops the lines marked strict and opens with HANDOFF_LIGHT; the full note keeps
-    those lines without their markers."""
+    those lines without their markers. `light` picks a variant; None picks the one the system calls for."""
     with open(HANDOFF_SNIPPET, encoding="utf-8") as f:
         text = f.read()
     text = re.sub(r"\A\s*(?:<!--.*?-->\s*)+", "", text, flags=re.S)  # anything above the heading is for whoever edits the asset
-    light = handoff_light(d, state)
+    if light is None:
+        light = handoff_light(d, state)
     out = []
     for ln in text.strip().split("\n"):
         if "<!-- strict -->" in ln:
@@ -5911,7 +5912,9 @@ def handoff_note(d, state):
 
 def refresh_handoff(d, quiet=True):
     """When the owner said yes to the hand-off, rewrite the note between its markers whenever the system moved from a first
-    version to a decided one (or back), so zooming in or tightening Q-gov-01 upgrades it. Returns True when it wrote."""
+    version to a decided one (or back), so zooming in or tightening Q-gov-01 upgrades it. Only a note the engine wrote and
+    nobody changed is rewritten: the block must equal one of the two variants of today's snippet. A line someone added, or
+    a note from an older engine, stays as it is (`handoff yes` rewrites it on request). Returns True when it wrote."""
     state = merge_defaults(load_state(d))
     if (state.get("profile") or {}).get("handoff") != "yes" or not os.path.exists(HANDOFF_SNIPPET):
         return False
@@ -5920,10 +5923,17 @@ def refresh_handoff(d, quiet=True):
     if not (HANDOFF_START in text and HANDOFF_END in text):
         return False
     note, light = handoff_note(d, state)
+    m = re.search(re.escape(HANDOFF_START) + r"(.*?)" + re.escape(HANDOFF_END), text, flags=re.S)
+    block = m.group(1).strip() if m else ""
+    if block == note.strip():
+        return False
+    if block != handoff_note(d, state, light=not light)[0].strip():  # edited by hand, or written by an older engine
+        if not quiet:
+            print(f"  {os.path.relpath(agents)}: the OpenDesigner note there is not one the engine wrote (edited, or from an older "
+                  "engine), so it was left as it is; `engine.py handoff yes` rewrites it.")
+        return False
     new = re.sub(re.escape(HANDOFF_START) + r".*?" + re.escape(HANDOFF_END) + r"\n?",
                  lambda _m: f"{HANDOFF_START}\n{note}\n{HANDOFF_END}\n", text, count=1, flags=re.S)
-    if new == text:
-        return False
     write_text(agents, new)
     if not quiet:
         print(f"  AGENTS.md note refreshed ({'first-version' if light else 'full'} note)")
@@ -5993,8 +6003,8 @@ def cmd_handoff(d, answer=None, why=None):
         cmd_set(d, "profile.handoff", "yes", why or "the owner said yes to the hand-off note", quiet=True, resync=False)
     agents, claude = os.path.relpath(agents), os.path.relpath(claude)
     print(f"{how} {agents}: the OpenDesigner note every later session reads"
-          + (" (the first-version note: Q-gov-01 is loose or every area is still a sketch; it becomes the full note when you zoom "
-             "in or tighten Q-gov-01)" if light else "") + f"\n{chow} {claude} (it imports AGENTS.md for Claude Code)")
+          + (" (the first-version note: the owner chose loose rules (Q-gov-01), or chose none yet and every area is still a "
+             "sketch; it becomes the full note when you zoom in or tighten Q-gov-01)" if light else "") + f"\n{chow} {claude} (it imports AGENTS.md for Claude Code)")
     return 0
 
 

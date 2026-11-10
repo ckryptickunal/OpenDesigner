@@ -782,6 +782,33 @@ class HandoffAndRemovalsSecondReview(unittest.TestCase):
             quiet(e.main, ["--dir", d, "pick", "Q-gov-01", "loose", "--set-by", "chosen", "--quote", "keep it loose for now"])
             self.assertIn(e.HANDOFF_LIGHT, self.note(t))                         # loosened: the first-version note again
 
+    def test_an_edited_note_is_never_rewritten_by_a_decision(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            quiet(e.cmd_handoff, d, "yes")
+            agents = os.path.join(t, "AGENTS.md")
+            with open(agents, encoding="utf-8") as f:
+                text = f.read()
+            mine = "- Our team: never touch the billing screens without the payments lead."
+            text = text.replace(e.HANDOFF_END, mine + "\n" + e.HANDOFF_END)
+            with open(agents, "w", encoding="utf-8") as f:
+                f.write(text)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):                                # a decision that calls for the full note
+                e.main(["--dir", d, "set", "zoom.color", '"broad"', "--set-by", "delegated", "--why", "zoomed in"])
+            self.assertEqual(self.note(t), text)                                 # untouched, the added line included
+            self.assertIn("was left as it is; `engine.py handoff yes` rewrites it", out.getvalue())
+            # a note from an older engine (the snippet verbatim, markers and all) is left alone too
+            with open(e.HANDOFF_SNIPPET, encoding="utf-8") as f:
+                old = f"{e.HANDOFF_START}\n<!-- For the agent adding this note: delete this comment. -->\n{f.read().strip()}\n{e.HANDOFF_END}\n"
+            with open(agents, "w", encoding="utf-8") as f:
+                f.write(old)
+            quiet(e.main, ["--dir", d, "pick", "Q-gov-01", "loose", "--set-by", "chosen", "--quote", "keep it loose for now"])
+            self.assertEqual(self.note(t), old)
+            quiet(e.cmd_handoff, d, "yes")                                       # asked for: rewritten
+            self.assertIn(e.HANDOFF_LIGHT, self.note(t))
+            self.assert_clean(self.note(t))
+
     def test_strict_rules_on_a_first_version_get_the_full_note(self):
         with tempfile.TemporaryDirectory() as t:
             d = self.system(t)
