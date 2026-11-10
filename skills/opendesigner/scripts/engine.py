@@ -14872,10 +14872,114 @@ def share_card_age(d, project, seed=None):
     return found
 
 
+RX_BINDS = re.compile(r"(?<![\w-])opendesigner/")
+
+
+def binding_gaps(root, d):
+    """AGENTS.md, CLAUDE.md or DESIGN.md at root that say the system lives in opendesigner/ when there is no system there:
+    the agent reads a promise the project does not keep (z42 went 35 days so). OpenDesigner's own repository describes the
+    folder without having one, so it is left out."""
+    if os.path.exists(os.path.join(root, "skills", "opendesigner", "scripts", "engine.py")):
+        return []
+    here = os.path.join(root, DEFAULT_DIR, STATE_FILE)
+    if os.path.exists(here) or (os.path.abspath(d) == os.path.abspath(os.path.join(root, DEFAULT_DIR)) and os.path.exists(os.path.join(d, STATE_FILE))):
+        return []
+    out = []
+    for name in ("AGENTS.md", "CLAUDE.md", "DESIGN.md"):
+        fp = os.path.join(root, name)
+        try:
+            with open(fp, encoding="utf-8", errors="ignore") as f:
+                if RX_BINDS.search(f.read()):
+                    out.append(name)
+        except OSError:
+            continue
+    return out
+
+
+def systems_below(project, limit=8):
+    """OpenDesigner state.json files under project (a sketch run in a subfolder, say), nearest first."""
+    out = []
+    skip = REVIEW_SKIP - {DEFAULT_DIR}
+    for root, dirs, fnames in os.walk(project):
+        dirs[:] = sorted(x for x in dirs if x not in skip and not x.startswith("."))
+        if STATE_FILE in fnames:
+            try:
+                st = read_json(os.path.join(root, STATE_FILE))
+            except (OSError, ValueError):
+                continue
+            if isinstance(st, dict) and "raw" in st and "dials" in st:
+                out.append(root)
+        if len(out) >= limit:
+            break
+    return sorted(out, key=lambda r: r.count(os.sep))
+
+
+def cmd_review_unbound(d, project, strict, as_json, limit=40):
+    """review where no system is bound: the code is still scanned, so hard-coded values never go unnoticed because the state
+    is missing; any system found in a subfolder is named with the command that checks the code against it."""
+    if project is None:
+        project = os.path.dirname(os.path.abspath(d)) if os.path.basename(os.path.abspath(d)) == DEFAULT_DIR else os.getcwd()
+    targets, base, notes = review_targets(project, os.path.abspath(d))
+    counts, files_with, scanned = collections.Counter(), collections.Counter(), 0
+    for path in targets:
+        try:
+            if os.path.getsize(path) > 1_000_000:
+                continue
+            with open(path, encoding="utf-8", errors="ignore") as f:
+                lines = f.readlines()
+        except OSError:
+            continue
+        if generated_file(lines):
+            continue
+        scanned += 1
+        for line in lines:
+            if re.search(r"^\s*(//|/\*|\*|<!--)", line) or "od-ignore" in line or re.match(r"\s*--", line):
+                continue
+            n_c = sum(1 for m_ in RX_HEX.finditer(line[:REVIEW_LINE_CAP]) if not re.search(r"href=[\"']?$", line[max(0, m_.start() - 7):m_.start()]))
+            n_c += len(RX_FN.findall(line[:REVIEW_LINE_CAP]))
+            n_s = len(RX_SIZE.findall(line[:REVIEW_LINE_CAP]))
+            counts["color"] += n_c
+            counts["size"] += n_s
+            if n_c or n_s:
+                files_with[os.path.relpath(path, base)] += n_c + n_s
+    root = project if os.path.isdir(project) else os.path.dirname(project)
+    found = [os.path.relpath(x, root) for x in systems_below(root)]
+    broken = binding_gaps(root, d)
+    total = sum(counts.values())
+    result = {"project": project, "bound": False, "filesScanned": scanned, "counts": dict(counts), "hardCoded": total,
+              "notes": notes, "systemsFound": found, "broken": broken}
+    if as_json:
+        print(json.dumps(result, indent=2))
+    else:
+        print(f"No design system is bound here (no {os.path.join(d, STATE_FILE)}): {total} hard-coded value{'s' if total != 1 else ''} "
+              f"({counts['color']} color{'s' if counts['color'] != 1 else ''}, {counts['size']} size{'s' if counts['size'] != 1 else ''}) "
+              f"in {scanned} file{'s' if scanned != 1 else ''}.")
+        for n_ in notes:
+            print(f"  {n_}.")
+        for f_, n in files_with.most_common(5):
+            print(f"  {f_}: {n}")
+        for x in found:
+            print(f"A system is in {x}/. Check this code against it: `engine.py review --dir {x} --project "
+                  f"{os.path.relpath(project, root) if project != root else '.'}`. To make it this project's system, move it to ./{DEFAULT_DIR}/.")
+        if not found:
+            print("To bind one: run `engine.py sketch` (or `engine.py init`) here, then `engine.py review`.")
+        for b in broken:
+            print(f"Broken: {b} says the system lives in {DEFAULT_DIR}/, but there is no {DEFAULT_DIR}/{STATE_FILE} here. "
+                  "Agents that read it follow a system that is not there.")
+        if strict:
+            why = ([f"{total} hard-coded values with no system bound"] if total else []) + [f"{b} points at a missing {DEFAULT_DIR}/" for b in broken]
+            print(f"--strict: {'failing: ' + '; '.join(why) if why else 'passes'}.")
+    return 1 if broken or (strict and total) else 0
+
+
 def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     """End-of-implementation check: hard-coded colors, sizes, radii, shadows and durations that bypass tokens (CSS, JSX style
     objects, Tailwind arbitrary values and default scales, SwiftUI, Compose), role-appropriate token suggestions, and stale
-    or untrue DESIGN.md sections."""
+    or untrue DESIGN.md sections. Without a system it still scans (cmd_review_unbound). It fails when AGENTS.md, CLAUDE.md
+    or DESIGN.md point at an opendesigner/ that is missing, and --strict fails when anything is found, tokens are not in
+    charge, DESIGN.md disagrees with the code or the system has validate errors, so it can guard commits."""
+    if not os.path.exists(os.path.join(d, STATE_FILE)):
+        return cmd_review_unbound(d, project, strict, as_json, limit)
     state = merge_defaults(load_state(d))
     files, meta, _ = generate_system(load_state(d))
     prefix = slug(meta.get("prefix") or "ds").replace("-", "")
@@ -15250,9 +15354,27 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
               "findings": findings[:500], "staleSections": stale,
               "missing": missing, "untrue": sorted(set(untrue)), "tasteDrift": drift,
               "research": {"errors": r_errs, "notes": r_notes, "status": (state.get("research") or {}).get("status") or "none"}}
+    result["broken"] = broken = binding_gaps(doc_dir(d), d)
+    reasons = []
+    if strict:
+        vrep = Report()
+        validate_files(files, state, vrep)
+        verrs = vrep.count("error")
+        in_charge = not (result["tokens"] == "losing" or (result["tokens"] == "none" and hard))
+        reasons = ([f"{len(findings)} finding{'s' if len(findings) != 1 else ''}"] if findings else []) \
+            + ([] if in_charge else ["tokens are not in charge"]) \
+            + ([f"DESIGN.md disagrees with the code on the {', '.join(x_['what'] for x_ in drift_look)}"] if drift_look else []) \
+            + ([f"DESIGN.md is out of date ({', '.join(stale or missing)})"] if stale or missing else []) \
+            + ([f"{len(set(untrue))} untrue line{'s' if len(set(untrue)) != 1 else ''}"] if untrue else []) \
+            + ([f"{verrs} validate error{'s' if verrs != 1 else ''} in the system"] if verrs else []) \
+            + ([f"{len(r_errs)} user research error{'s' if len(r_errs) != 1 else ''}"] if r_errs else []) \
+            + [f"{b} points at a missing {DEFAULT_DIR}/" for b in broken]
+        result["strict"] = {"fail": bool(reasons), "reasons": reasons}
     if as_json:
         print(json.dumps(result, indent=2))
     else:
+        for b in broken:
+            print(f"Broken: {b} says the system lives in {DEFAULT_DIR}/, but there is no {DEFAULT_DIR}/{STATE_FILE} there.")
         tokf = [f_ for f_ in findings if f_["kind"] not in ("standard", "chart")]
         stdf = [f_ for f_ in findings if f_["kind"] == "standard"]
         chf = [f_ for f_ in findings if f_["kind"] == "chart"]
@@ -15336,8 +15458,10 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             print(f"User research: {t_}. Fix the file, then engine.py research add {research_py.FILE}.")
         for t_ in r_notes:
             print(f"User research: {t_}")
+        if strict:
+            print(f"--strict: {'failing: ' + '; '.join(reasons) if reasons else 'passes'}.")
     track(d, "review")
-    return 1 if strict and (findings or stale or missing or untrue or r_errs or drift_look) else 0
+    return 1 if broken or (strict and reasons) else 0
 
 
 # =============================================================================================
