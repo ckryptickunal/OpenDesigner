@@ -52,6 +52,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Changed
 
+- **Install and the test numbers come second on the home page** (2026-11-10). "Add it to your AI tool" and the four test results now follow the before-and-after demo, about a fifth of the way down the page instead of two thirds. Most visitors left before reaching them. The "Get started free" click at the top is now counted as an install click.
 - **Review ends with one verdict** (2026-11-10). The last line of `engine.py review` is `Review: ok` or how many things are left to fix and why, and it counts the errors `engine.py validate` finds. `--strict` exits with an error exactly when that line is not `Review: ok`.
 - **Fonts, brand color, dials and answers say who chose them** (2026-11-10). `engine.py set` and `pick` now need `--set-by` for these values, and `chosen` needs the person's words in `--quote`, so an agent's own pick is no longer recorded as the owner's. Older systems still load.
 - **Binding rules come first in the skill** (2026-11-09). After a long chat, Claude keeps only about the first 20,000 characters of a skill, and the main skill was 32,864. It is now 19,296, and its first 2,000 hold seven binding rules, among them tokens only, one question at a time, show every round and review at the end. The detail moved to reference files, unchanged.
