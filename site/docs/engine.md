@@ -122,7 +122,7 @@ The templates `show` fills are `palette`, `type-scale`, `spacing-ruler`, `radius
 
 ## Keep it consistent
 
-`engine.py review` scans your code for hard-coded colors, sizes, radii, shadows and durations, and for out-of-date `DESIGN.md` sections. It also says when your code uses no tokens or more raw values than tokens, when the brand color or fonts in `DESIGN.md` appear nowhere in your code, and when the system is 10 or more commits behind the code. It only reports: it never edits your code.
+`engine.py review` scans your code for hard-coded colors, sizes, radii, shadows and durations, and for out-of-date `DESIGN.md` sections. It also says when your code uses no tokens or more raw values than tokens, when the brand color or fonts in `DESIGN.md` appear nowhere in your code, and when the system is 10 or more commits behind the code. It also notices when a merge undid a locked decision or a token file was edited by hand. Its last line is `Review: ok`, or how many things are left to fix and why. It only reports: it never edits your code.
 
 {{figure:engineers-review-terminal}}
 
@@ -131,6 +131,14 @@ With no system in the project, it still counts the hard-coded values and names a
 :::dev
 `--project src` scans one folder, or one file. When that folder has fewer than three style files, review also reads the page the site ships (the newest `index.html`, in `public/` first) and the files it loads, and lists what it skipped. Findings come newest file first. `docs/` and OpenDesigner's own exports are skipped. `--strict` exits with an error on any finding, tokens not in charge, a `DESIGN.md` that disagrees with the code or validate errors, and names each reason. `engine.py guard install` runs it before every commit, after you say yes; `git commit --no-verify` skips it once and `guard remove` takes it out.
 :::
+
+**Things removed on purpose.** Code keeps no record of what was taken out, so a later session tends to add it back. Record a removal the day it happens.
+
+| Command | What it does |
+|---|---|
+| `engine.py removed add "divider lines between rows" --why "their words" --pattern "border-bottom"` | Records something the owner removed. `DESIGN.md` lists it under "Removed on Purpose", and `review` flags code that brings it back. A pattern that would catch a focus ring, label, alt text, reduced-motion code or a target size is refused. |
+| `engine.py removed list` | Lists what was removed, and what was brought back. |
+| `engine.py removed restore R-01 --why "their words"` | Allows it again. Only the owner brings a removed thing back. |
 
 ## Standards
 

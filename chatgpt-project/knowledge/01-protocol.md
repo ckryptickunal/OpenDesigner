@@ -604,6 +604,11 @@ python3 <skill>/scripts/engine.py status --hook             the same in five lin
 python3 <skill>/scripts/engine.py handoff [yes|no] [--why "..."]   after asking once: yes writes the OpenDesigner note into AGENTS.md and a CLAUDE.md that imports it, no writes nothing; recorded either way
 ```
 
+## The hand-off note
+`engine.py handoff yes` writes `assets/output/AGENTS-snippet.md` into AGENTS.md between `<!-- opendesigner:start -->` and `<!-- opendesigner:end -->`, matched to the system. While the strictness answer (Q-gov-01) is "loose", or every area is still a sketch (zoom 0), it writes the first-version note: the first paragraph becomes "This project has a first version of its design system in `opendesigner/`, and `DESIGN.md` describes it. Follow it, and suggest changes to the owner instead of making them quietly. `engine.py` below means `python3 <opendesigner skill>/scripts/engine.py`, from the OpenDesigner skill or plugin.", and every line marked `<!-- strict -->` is left out. Otherwise it writes the full note. Neither keeps the `<!-- strict -->` markers. Each later `set` or `pick` refreshes the note in place, so it becomes the full note once an area is zoomed in or Q-gov-01 is tightened.
+
+Without the engine (a ChatGPT project), do the same by hand: copy the asset into AGENTS.md, apply the rule above, and delete the `<!-- strict -->` markers.
+
 ## Removed on purpose
 Removals leave no trace in code, so a later session tends to add them back first. The day the person removes something (a control, a label, divider lines, a flow), record it: `engine.py removed add "<what>" --why "<their words>" --instead "<what replaces it>"`. Add `--pattern` when a line of code that brings it back can be found by a regular expression; `review` then flags the return, and DESIGN.md lists it under "Removed on Purpose". Only the owner brings it back: `removed restore <R-id> --why "<their words>"`. An `od-ignore` comment keeps a returned line only when it gives a reason.
 
@@ -1623,10 +1628,6 @@ Footnotes: {{Q-ids and D-numbers for each choice above}}
 ## Output template: AGENTS-snippet.md
 
 ```
-<!-- For the agent adding this note: match it to the system. If the strictness answer (Q-gov-01) is "loose", or every area is
-still a sketch (zoom 0), replace the first paragraph with this lighter one, and leave out every line that ends in a "strict" comment:
-"This project has a first version of its design system in `opendesigner/`, and `DESIGN.md` describes it. Follow it, and suggest
-changes to the owner instead of making them quietly." Then delete these comments; the "strict" markers are harmless if left. -->
 ## Design system (OpenDesigner)
 This project's design system lives in `opendesigner/`, and `DESIGN.md` is its living spec. `engine.py` below means `python3 <opendesigner skill>/scripts/engine.py`, from the OpenDesigner skill or plugin. This note keeps later AI sessions from undoing the decided design by accident. Keep this note, `DESIGN.md` and `opendesigner/` on the branch new work starts from: a branch without them builds the old look.
 

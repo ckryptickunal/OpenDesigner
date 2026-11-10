@@ -727,6 +727,128 @@ class ReviewFindsWhatShips(unittest.TestCase):
             self.assertNotIn("od-tokens.css", order)       # OpenDesigner's own export is the system, not code
 
 
+class HandoffAndRemovalsSecondReview(unittest.TestCase):
+    """PR 52 review of 3ebe12e (2026-11-10): the hand-off note is matched to the system with nothing addressed to the agent,
+    a removal without the owner's words is assumed, and a reasoned od-ignore names the removal it keeps."""
+
+    def system(self, t):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "Hand", "#2f6f8f", "regular", "web", "calm")
+        quiet(e.cmd_build, d)
+        return d
+
+    def note(self, t):
+        with open(os.path.join(t, "AGENTS.md"), encoding="utf-8") as f:
+            return f.read()
+
+    def assert_clean(self, text):
+        bare = re.sub(r"`[^`\n]*`", "", text)  # a marker quoted in code (`<!-- od:keep -->`) is text, not a comment
+        self.assertEqual(re.findall(r"<!--.*?-->", bare, flags=re.S), [e.HANDOFF_START, e.HANDOFF_END])  # no agent comment, no strict marker
+
+    def test_a_first_version_gets_the_lighter_note(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            quiet(e.cmd_handoff, d, "yes")
+            text = self.note(t)
+            self.assert_clean(text)
+            self.assertIn(e.HANDOFF_LIGHT, text)
+            self.assertNotIn("Restyle or reword a screen", text)                 # a line marked strict
+            self.assertIn("**`opendesigner/PROTOCOL.md` is binding.**", text)
+
+    def test_a_decided_system_gets_the_full_note(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            quiet(e.main, ["--dir", d, "set", "zoom.color", '"broad"', "--set-by", "delegated", "--why", "zoomed in", "--no-doc"])
+            quiet(e.cmd_handoff, d, "yes")
+            text = self.note(t)
+            self.assert_clean(text)
+            self.assertNotIn(e.HANDOFF_LIGHT, text)
+            self.assertIn("Restyle or reword a screen", text)
+            self.assertIn("This project's design system lives in `opendesigner/`", text)
+
+    def test_the_note_follows_the_system_in_place(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            with open(os.path.join(t, "AGENTS.md"), "w", encoding="utf-8") as f:
+                f.write("# Team notes\n\nKeep PRs small.\n")
+            quiet(e.cmd_handoff, d, "yes")
+            self.assertIn(e.HANDOFF_LIGHT, self.note(t))
+            quiet(e.main, ["--dir", d, "set", "zoom.color", '"broad"', "--set-by", "delegated", "--why", "zoomed in"])
+            text = self.note(t)
+            self.assertNotIn(e.HANDOFF_LIGHT, text)                              # upgraded to the full note
+            self.assertIn("Restyle or reword a screen", text)
+            self.assertTrue(text.startswith("# Team notes\n\nKeep PRs small.\n"))  # the owner's own text stays
+            self.assert_clean(text.split("Keep PRs small.\n", 1)[1])
+            quiet(e.main, ["--dir", d, "pick", "Q-gov-01", "loose", "--set-by", "chosen", "--quote", "keep it loose for now"])
+            self.assertIn(e.HANDOFF_LIGHT, self.note(t))                         # loosened: the first-version note again
+
+    def test_a_comment_above_the_note_in_the_asset_never_reaches_the_file(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            fake = os.path.join(t, "snippet.md")
+            with open(e.HANDOFF_SNIPPET, encoding="utf-8") as f, open(fake, "w", encoding="utf-8") as g:
+                g.write("<!-- For the agent adding this note: delete this comment. -->\n" + f.read())
+            orig, e.HANDOFF_SNIPPET = e.HANDOFF_SNIPPET, fake
+            try:
+                text, _light = e.handoff_note(d, e.merge_defaults(e.load_state(d)))
+            finally:
+                e.HANDOFF_SNIPPET = orig
+            self.assertTrue(text.startswith(e.HANDOFF_HEADING), text[:80])
+
+    def test_a_removal_without_the_owners_words_is_assumed(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_removed(d, "add", what="the floating help button", why="not recorded")
+            self.assertIn("Recorded as assumed, not chosen", out.getvalue())
+            quiet(e.cmd_removed, d, "add", what="divider lines between rows", why="the owner: grouping by space reads calmer")
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                log = f.read()
+            self.assertRegex(log, r"removed\.R-01 = \"the floating help button\"\n- set_by: assumed · locked: yes")
+            self.assertRegex(log, r"removed\.R-02 = \"divider lines between rows\"\n- set_by: chosen · locked: yes")
+            st = e.read_json(os.path.join(d, "state.json"))
+            st["removed"] = []
+            e.dump_json(os.path.join(d, "state.json"), st)
+            msgs = " ".join(g["message"] for g in e.review_guard(d, e.merge_defaults(e.load_state(d)), e.generate_system(e.load_state(d))[0])[0])
+            self.assertIn("R-01 (the floating help button)", msgs)              # still guarded
+            self.assertIn("R-02 (divider lines between rows)", msgs)
+
+    def test_the_list_says_a_restored_removal_is_allowed_again(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            quiet(e.cmd_removed, d, "add", what="divider lines", why="grouping by space reads calmer", pattern="border-bottom")
+            quiet(e.cmd_removed, d, "add", what="hero photos", why="the owner wants a calm top", pattern="hero")
+            quiet(e.cmd_removed, d, "restore", rid="R-01", why="the owner wants them back")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_removed(d, "list")
+            back, kept = out.getvalue().splitlines()[:2]
+            self.assertIn("brought back", back)
+            self.assertIn("allowed again", back)
+            self.assertNotIn("review checks it", back)
+            self.assertIn("review checks it", kept)
+
+    def test_a_reasoned_ignore_names_the_removal_it_keeps(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            quiet(e.cmd_removed, d, "add", what="divider lines between rows", why="grouping by space reads calmer",
+                  pattern=r"border-bottom:\s*1px")
+            os.makedirs(os.path.join(t, "src"))
+            with open(os.path.join(t, "src", "mail.css"), "w") as f:
+                f.write(".row { border-bottom: 1px solid var(--ds-color-border-default); } /* od-ignore: email clients need the rule */\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            res = json.loads(out.getvalue())
+            self.assertEqual([f_["kind"] for f_ in res["findings"]], [])
+            self.assertEqual([k_.get("removed") for k_ in res["keptOnPurpose"]], [["R-01"]])
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d)
+            self.assertIn("matches R-01 (divider lines between rows), removed on purpose", out.getvalue())
+
+
 class PlaybookShips(unittest.TestCase):
     """PR 52's third review (2026-10-13), defects 7 and 8: the cards the skills cite ship, and the export skill asks before
     it replies in a design file's comment thread. Run from the repository; a copied skill has no research/ to compare."""

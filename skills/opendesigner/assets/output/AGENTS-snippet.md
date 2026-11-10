@@ -1,7 +1,3 @@
-<!-- For the agent adding this note: match it to the system. If the strictness answer (Q-gov-01) is "loose", or every area is
-still a sketch (zoom 0), replace the first paragraph with this lighter one, and leave out every line that ends in a "strict" comment:
-"This project has a first version of its design system in `opendesigner/`, and `DESIGN.md` describes it. Follow it, and suggest
-changes to the owner instead of making them quietly." Then delete these comments; the "strict" markers are harmless if left. -->
 ## Design system (OpenDesigner)
 This project's design system lives in `opendesigner/`, and `DESIGN.md` is its living spec. `engine.py` below means `python3 <opendesigner skill>/scripts/engine.py`, from the OpenDesigner skill or plugin. This note keeps later AI sessions from undoing the decided design by accident. Keep this note, `DESIGN.md` and `opendesigner/` on the branch new work starts from: a branch without them builds the old look.
 

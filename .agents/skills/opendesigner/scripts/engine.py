@@ -5870,6 +5870,61 @@ HANDOFF_START = "<!-- opendesigner:start -->"
 HANDOFF_END = "<!-- opendesigner:end -->"
 HANDOFF_SNIPPET = os.path.join(SKILL_ROOT, "assets", "output", "AGENTS-snippet.md")
 HANDOFF_HEADING = "## Design system (OpenDesigner)"
+# The opening for a first version: the strictness answer (Q-gov-01) is "loose", or every area is still a sketch (zoom 0).
+HANDOFF_LIGHT = ("This project has a first version of its design system in `opendesigner/`, and `DESIGN.md` describes it. Follow it, "
+                 "and suggest changes to the owner instead of making them quietly. `engine.py` below means `python3 <opendesigner "
+                 "skill>/scripts/engine.py`, from the OpenDesigner skill or plugin.")
+
+
+def handoff_light(d, state):
+    """True when the note should be the lighter one: Q-gov-01 is "loose", or every area is still at zoom 0."""
+    if answer_value((state.get("answers") or {}).get("Q-gov-01")) == "loose":
+        return True
+    return all(v["level"] == ZOOM_LEVELS[0] for v in zoom_levels(d, state).values())
+
+
+def handoff_note(d, state):
+    """(note, light): the hand-off note as it goes into AGENTS.md. No comment addressed to the agent and no `strict` markers
+    reach the person's file: the lighter note drops the lines marked strict and opens with HANDOFF_LIGHT; the full note keeps
+    those lines without their markers."""
+    with open(HANDOFF_SNIPPET, encoding="utf-8") as f:
+        text = f.read()
+    text = re.sub(r"\A\s*(?:<!--.*?-->\s*)+", "", text, flags=re.S)  # anything above the heading is for whoever edits the asset
+    light = handoff_light(d, state)
+    out = []
+    for ln in text.strip().split("\n"):
+        if "<!-- strict -->" in ln:
+            if light:
+                continue
+            ln = re.sub(r"\s*<!-- strict -->", "", ln).rstrip()
+        out.append(ln)
+    text = "\n".join(out)
+    if light:
+        i = text.index(HANDOFF_HEADING + "\n") + len(HANDOFF_HEADING) + 1
+        j = text.find("\n\n", i)
+        text = text[:i] + HANDOFF_LIGHT + (text[j:] if j >= 0 else "\n")
+    return text, light
+
+
+def refresh_handoff(d, quiet=True):
+    """When the owner said yes to the hand-off, rewrite the note between its markers whenever the system moved from a first
+    version to a decided one (or back), so zooming in or tightening Q-gov-01 upgrades it. Returns True when it wrote."""
+    state = merge_defaults(load_state(d))
+    if (state.get("profile") or {}).get("handoff") != "yes" or not os.path.exists(HANDOFF_SNIPPET):
+        return False
+    agents = os.path.join(doc_dir(d), "AGENTS.md")
+    text = _read_or_empty(agents)
+    if not (HANDOFF_START in text and HANDOFF_END in text):
+        return False
+    note, light = handoff_note(d, state)
+    new = re.sub(re.escape(HANDOFF_START) + r".*?" + re.escape(HANDOFF_END) + r"\n?",
+                 lambda _m: f"{HANDOFF_START}\n{note}\n{HANDOFF_END}\n", text, count=1, flags=re.S)
+    if new == text:
+        return False
+    write_text(agents, new)
+    if not quiet:
+        print(f"  AGENTS.md note refreshed ({'first-version' if light else 'full'} note)")
+    return True
 
 
 def _read_or_empty(fp):
@@ -5911,8 +5966,8 @@ def cmd_handoff(d, answer=None, why=None):
     if not os.path.exists(HANDOFF_SNIPPET):  # an engine copied on its own (a ChatGPT project): the agent writes it
         raise SystemExit(f"no AGENTS snippet next to this engine: add the opendesigner skill's assets/output/AGENTS-snippet.md "
                          f"to {agents} by hand, and @AGENTS.md to {claude}")
-    with open(HANDOFF_SNIPPET, encoding="utf-8") as f:
-        block = f"{HANDOFF_START}\n{f.read().strip()}\n{HANDOFF_END}\n"
+    note, light = handoff_note(d, merge_defaults(load_state(d)))
+    block = f"{HANDOFF_START}\n{note}\n{HANDOFF_END}\n"
     text = _read_or_empty(agents)
     if HANDOFF_START in text and HANDOFF_END in text:
         new, how = re.sub(re.escape(HANDOFF_START) + r".*?" + re.escape(HANDOFF_END) + r"\n?", lambda _m: block, text,
@@ -5934,7 +5989,9 @@ def cmd_handoff(d, answer=None, why=None):
     if have != "yes":
         cmd_set(d, "profile.handoff", "yes", why or "the owner said yes to the hand-off note", quiet=True, resync=False)
     agents, claude = os.path.relpath(agents), os.path.relpath(claude)
-    print(f"{how} {agents}: the OpenDesigner note every later session reads\n{chow} {claude} (it imports AGENTS.md for Claude Code)")
+    print(f"{how} {agents}: the OpenDesigner note every later session reads"
+          + (" (the first-version note: Q-gov-01 is loose or every area is still a sketch; it becomes the full note when you zoom "
+             "in or tighten Q-gov-01)" if light else "") + f"\n{chow} {claude} (it imports AGENTS.md for Claude Code)")
     return 0
 
 
@@ -12021,10 +12078,12 @@ def doc_dir(d):
 
 
 def refresh_docs(d):
-    """DESIGN.md is a living document (BRIEF req. 15): once it exists, every decision re-renders it and PRODUCT.md."""
+    """DESIGN.md is a living document (BRIEF req. 15): once it exists, every decision re-renders it and PRODUCT.md, and an
+    accepted hand-off note follows the system from first version to decided (refresh_handoff)."""
     if os.path.exists(os.path.join(doc_dir(d), "DESIGN.md")):
         cmd_design_md(d, quiet=True)
         print("  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)")
+    refresh_handoff(d, quiet=False)
 
 
 def cmd_design_md(d, out_dir=None, files=None, meta=None, quiet=False):
@@ -14908,9 +14967,11 @@ def cmd_removed(d, action, what=None, why=None, instead=None, pattern=None, rid=
             print("Nothing is recorded as removed on purpose.")
         else:
             for r in removed_entries(state, active_only=False):
-                state_words = "removed" if r.get("status", "removed") == "removed" else f"brought back {(r.get('restored') or {}).get('date', '')}".strip()
+                active = r.get("status", "removed") == "removed"
+                state_words = "removed" if active else f"brought back {(r.get('restored') or {}).get('date', '')}".strip()
+                check = ("review checks it" if r.get("pattern") else "check by hand") if active else "allowed again"
                 print(f"{r['id']}  {r['what']}  ({state_words}; instead: {r.get('instead') or 'nothing'}; "
-                      f"{'review checks it' if r.get('pattern') else 'check by hand'}{'; recorded with --force' if r.get('forced') else ''})")
+                      f"{check}{'; recorded with --force' if r.get('forced') else ''})")
         return reg
     did = f"D-{len(_decision_entries(d)) + 1:04d}"
     today = _dt.date.today().isoformat()
@@ -14934,11 +14995,15 @@ def cmd_removed(d, action, what=None, why=None, instead=None, pattern=None, rid=
         reg.append({"id": rid, "what": what, "instead": (instead or "").strip() or None, "why": why.strip(), "date": today,
                     "pattern": pattern or None, "status": "removed", "decision": did, **({"forced": floor} if floor else {})})
         dump_json(sp, state)
-        log_decision(d, f"removed.{rid}", what, why.strip(), "chosen", True,
+        said = why.strip().strip(".").lower() not in ("not recorded", "unknown", "")
+        log_decision(d, f"removed.{rid}", what, why.strip(), "chosen" if said else "assumed", True,
                      extra=[f"instead: {(instead or '').strip() or 'nothing'}",
                             f"review pattern: {pattern}" if pattern else "review cannot see it: check each screen by hand"]
                      + ([f"forced: recorded with --force although {floor}. No accessibility floor is removed with it"] if floor else []))
         print(f"{did} removed on purpose: {rid} {what}" + (f" (instead: {instead.strip()})" if (instead or "").strip() else ""))
+        if not said:
+            print("  Recorded as assumed, not chosen: no reason in the owner's words. It is still listed and still guarded; "
+                  "add their words when you have them.")
         print("  engine.py review now flags code that brings it back." if pattern else
               "  No --pattern, so review cannot see it: list it as a check by hand on each screen.")
         if floor:
@@ -15765,11 +15830,14 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             why_ = ignore_reason(line) if ignored else ""
             if ignored:
                 (kept if why_ else bare).append({"file": rel, "line": i, "reason": why_})
-            for rx, r in ([] if why_ else removed_rules):  # something the owner removed on purpose is back; only a reason keeps it
+            for rx, r in removed_rules:  # something the owner removed on purpose is back; only a reason keeps it, and says so
                 m_ = next((m_ for m_ in rx.finditer(line[:REVIEW_LINE_CAP]) if m_.end() > m_.start()), None)
                 floor = floor_at(lines, i, m_.span()) if m_ else None
                 if floor:  # a removal never takes away an accessibility floor (guardrails.md section 4): the line stays
                     floor_kept.append({"file": rel, "line": i, "value": m_.group(0).strip()[:80], "removed": r["id"], "floor": floor})
+                elif m_ and why_:  # kept on purpose, but the owner should see that a removed thing is back under an exception
+                    kept[-1].setdefault("removed", []).append(r["id"])
+                    kept[-1].setdefault("removedWhat", []).append(r["what"])
                 elif m_:
                     findings.append({"kind": "removed", "file": rel, "line": i, "value": m_.group(0).strip()[:80],
                                      "fix": removed_fix(r) + (" The od-ignore on this line gives no reason, so it does not keep it."
@@ -15820,7 +15888,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                         "standard": ids[0], "standards": ids,
                         "strength": "must" if any(h[2].get("strength") == "must" for h in hits) else "should", "severity": "warning"}
                 if ignored:
-                    std_notes.append(dict(item, reason=why_))
+                    std_notes.append(dict(item, reason=why_, **{k: v for k, v in (kept[-1] if why_ else {}).items() if k.startswith("removed")}))
                     if why_:
                         kept.pop()  # shown once, in the note with its reason
                 else:
@@ -16092,11 +16160,14 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                   "Fix the line where you can:")
             for f_ in std_notes[:limit]:
                 print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']} ({', '.join(f_['standards'])}, {f_['strength']}; "
-                      + (f"reason given: {f_['reason'][:80]})" if f_["reason"] else "no reason given)"))
+                      + (f"reason given: {f_['reason'][:80]}" if f_["reason"] else "no reason given")
+                      + (f"; matches {', '.join(f_['removed'])}, removed on purpose)" if f_.get("removed") else ")"))
         if kept:
             print(f"{len(kept)} line{'s' if len(kept) != 1 else ''} kept on purpose (od-ignore with a reason; not counted as findings):")
             for k_ in kept[:limit]:
-                print(f"  {k_['file']}:{k_['line']}  {k_['reason'][:100]}")
+                back = "; ".join(f"{a} ({b})" for a, b in zip(k_.get("removed") or [], k_.get("removedWhat") or []))
+                print(f"  {k_['file']}:{k_['line']}  {k_['reason'][:100]}" + (f"  (matches {back}, removed on purpose: back under this "
+                                                                              "exception; tell the owner)" if back else ""))
             reasons_ = collections.Counter(k_["reason"].lower() for k_ in kept)
             for rsn, n in reasons_.most_common():
                 if n >= 3:  # DC-L19-165: a repeated exception is a missing token or a rule to change
