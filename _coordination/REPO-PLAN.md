@@ -20,7 +20,7 @@ OpenDesigner/
 │   │   ├── assets/output/     DESIGN.md, decisions.md, state.json templates
 │   │   ├── assets/library/    the optional component library: 82 token-only HTML components (meta.json each); scripts/library.py lists, suggests, adds and checks them (stdlib only); shown on the site at /library/ by site/library_page.py
 │   │   ├── references/post-change-audit.md  every owner-corrected rule, checked after each implementation (site/post_change_audit.py runs the automatic half)
-│   │   └── scripts/engine.py  R2  state, ramps, scales, contrast, validate, export (stdlib only, no network)
+│   │   └── scripts/engine.py  R2  state, ramps, scales, contrast, validate, export, review (stdlib only, no network); `guard install` writes the opt-in pre-commit hook (owner 2026-11-09)
 │   ├── opendesigner-extract/  reference intake (repo CSS, URL, screenshot, Figma variables), never copies identity
 │   ├── opendesigner-extend/   later-session protocol: read DESIGN.md + tokens + decisions before changing anything
 │   └── opendesigner-export/   DTCG, CSS variables, Tailwind, Figma (use_figma), Paper
@@ -52,12 +52,14 @@ Phase 2 (`server/`, a stateless MCP server with MCP Apps views reusing the templ
 Run from the user's project; state lives in `./opendesigner/` unless `--dir` is given.
 ```
 python3 <skill>/scripts/engine.py init [--dir D] [--from examples/<name>/state.json]   create state.json with defaults
-python3 <skill>/scripts/engine.py set <dotted.path> <json-value>                       record one decision (appends to decisions.md with --why "reason")
+python3 <skill>/scripts/engine.py set <dotted.path> <json-value> --set-by <how>        record one decision (appends to decisions.md with --why "reason"; fonts, brand color, dials and answers need --set-by, and chosen needs --quote)
 python3 <skill>/scripts/engine.py generate                                           state.json + levers.json -> tokens/ (DTCG 2025.10 + resolver)
 python3 <skill>/scripts/engine.py validate [--json]                                  contrast, targets, lint; exit 1 on errors; report cites the rule
 python3 <skill>/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg
 python3 <skill>/scripts/engine.py design-md                                          render DESIGN.md from state + tokens + decisions
 python3 <skill>/scripts/engine.py preview [--open]                                   render preview.html (specimen of every token and a few components)
+python3 <skill>/scripts/engine.py review [--strict]                                  hard-coded values and drift; runs without a system; --strict exits 1 so it can guard commits
+python3 <skill>/scripts/engine.py guard install|no|remove|status                     the pre-commit hook that runs review --strict, only after the person says yes; never over another hook or into core.hooksPath
 ```
 `state.json` holds the person's answers keyed by questionnaire question id, the dial values (0-100), raw inputs (brand color, typefaces, base sizes, platforms, devices), and asset-hook status (have / commissioning / using tool / skipped). The engine reads `levers.json` from the skill's own `references/` folder so the skill works offline and self-contained.
 

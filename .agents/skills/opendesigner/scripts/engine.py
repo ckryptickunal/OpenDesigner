@@ -297,6 +297,90 @@ def cmd_version(d):
     return 0
 
 
+GUARD_MARK = "# OpenDesigner guard (engine.py guard install)"
+
+
+def _guard_paths(d):
+    """(repository top, this repository's own pre-commit hook path, core.hooksPath or None); SystemExit outside git. With
+    core.hooksPath set (a global hooks folder, or a manager such as husky), the hook there may run for every repository, so
+    the guard never writes one: it says what line to add instead."""
+    root = doc_dir(d)
+    top = _git(root, "rev-parse", "--show-toplevel")
+    if not top:
+        raise SystemExit(f"guard: {root} is not in a git repository, so there is no commit to guard.")
+    custom = _git(top, "config", "core.hooksPath")
+    gitdir = _git(top, "rev-parse", "--absolute-git-dir") or os.path.join(top, ".git")
+    return top, os.path.normpath(os.path.join(gitdir, "hooks", "pre-commit")), custom
+
+
+def _guard_script(d, top):
+    engine = os.path.abspath(__file__)
+    rel = os.path.relpath(os.path.abspath(d), top)
+    return f"""#!/bin/sh
+{GUARD_MARK}
+# Stops a commit when `engine.py review --strict` fails: hard-coded values, tokens not in charge, DESIGN.md that disagrees with
+# the code, or errors in the system. Skip once: git commit --no-verify. Remove: python3 "{engine}" guard remove --dir "{rel}"
+ENGINE={shlex.quote(engine)}
+PY={shlex.quote(sys.executable or "python3")}
+command -v "$PY" >/dev/null 2>&1 || PY=python3
+if [ ! -f "$ENGINE" ]; then
+  echo "OpenDesigner guard: $ENGINE is gone, so the design check was skipped. Run guard install again from the skill's new place." >&2
+  exit 0
+fi
+cd "$(git rev-parse --show-toplevel)" || exit 0
+"$PY" "$ENGINE" review --strict --dir {shlex.quote(rel)} || {{
+  echo "OpenDesigner guard: review --strict failed, so this commit was stopped. Fix what it lists, or skip once with git commit --no-verify." >&2
+  exit 1
+}}
+"""
+
+
+def _guard_answer(d, value, why):
+    log_decision(d, "guard.pre-commit", value, why, "chosen", title=f"Commit guard: {value}")
+    if os.path.exists(os.path.join(d, STATE_FILE)):
+        refresh_docs(d)  # decisions show in DESIGN.md, so the first guarded commit does not fail on a stale file
+
+
+def cmd_guard(d, action, why=None):
+    """`engine.py guard install|remove|no|status`: the opt-in pre-commit hook that runs review --strict (owner, 2026-11-09).
+    Never automatic: the skill asks once and runs install only on a yes, and no records a no. It never overwrites a hook it
+    did not write."""
+    if action == "no":
+        _guard_answer(d, "no", why or "the person said no to the commit guard")
+        print("Recorded: no commit guard. engine.py review --strict still runs by hand.")
+        return 0
+    top, hook, custom = _guard_paths(d)
+    ours = os.path.exists(hook) and GUARD_MARK in open(hook, encoding="utf-8", errors="ignore").read()
+    line = f'python3 "{os.path.abspath(__file__)}" review --strict --dir "{os.path.relpath(os.path.abspath(d), top)}" || exit 1'
+    if action == "status":
+        print(f"Commit guard: {'on' if ours else 'a different pre-commit hook is there' if os.path.exists(hook) else 'off'} ({os.path.relpath(hook, top)}).")
+        return 0
+    if action == "remove":
+        if not ours:
+            print(f"guard: {'the pre-commit hook there is not OpenDesigner' + chr(39) + 's, so it stays' if os.path.exists(hook) else 'no guard to remove'} "
+                  f"({os.path.relpath(hook, top)}).")
+            return 0
+        os.remove(hook)
+        _guard_answer(d, "off", why or "the person turned the commit guard off")
+        print(f"Removed the commit guard ({os.path.relpath(hook, top)}).")
+        return 0
+    if custom:
+        print(f"guard: git runs hooks from {custom} (core.hooksPath), which may serve every repository, so OpenDesigner writes no "
+              f"hook there. To guard this repository, add this line to its pre-commit hook:\n  {line}")
+        return 1
+    if os.path.exists(hook) and not ours:
+        print(f"guard: a pre-commit hook is already there ({os.path.relpath(hook, top)}), so OpenDesigner leaves it alone. To add the "
+              f"check to it, add this line:\n  {line}")
+        return 1
+    os.makedirs(os.path.dirname(hook), exist_ok=True)
+    write_text(hook, _guard_script(d, top))
+    os.chmod(hook, 0o755)
+    _guard_answer(d, "on", why or "the person said yes to the commit guard")
+    print(f"Commit guard on ({os.path.relpath(hook, top)}): every commit runs engine.py review --strict first and stops when it fails. "
+          "Skip once with git commit --no-verify; turn it off with engine.py guard remove.")
+    return 0
+
+
 CONTRAST_FLOORS = (("body text", 4.5, "WCAG 2.2 SC 1.4.3"),
                    ("large text, icons, control edges and chart marks", 3.0, "WCAG 2.2 SC 1.4.3 and 1.4.11"),
                    ("body text at AAA", 7.0, "WCAG 2.2 SC 1.4.6"))
@@ -5043,6 +5127,26 @@ DECISIONS_HEADER = ("# Decisions\n\nAppend-only, ADR-style (spec 7.9): one entry
                     "assumed, delegated, reference, asset or standard.\n")
 
 
+RX_KEY_VALUE = re.compile(r"^(answers\.Q-[\w-]+|dials\.[\w-]+|raw\.(brandColor|brandFace|textFace|displayFace|monoFace))$")
+SET_BY_HELP = ("chosen with --quote \"<their words>\" when the person picked it; confirmed_default when they accepted your "
+               "recommendation; delegated when they left it to you; assumed for your own pick until they confirm it; reference when it "
+               "comes from a site or file they gave")
+
+
+def check_set_by(path, why, set_by, quote):
+    """Fonts, the brand color, dials and Q-* answers say how they were set (a project counted 8 of 27 "chosen" values that were
+    the agent's picks, 2026-11-09): --set-by is required, and chosen needs the person's words in --quote. Older states that
+    hold chosen values without a quote still load."""
+    if not RX_KEY_VALUE.match(path):
+        return
+    said = bool(set_by) or bool(re.match(r"^\s*(chosen|confirmed_default|auto_default|assumed|delegated|reference|asset|confirmed|default|pending)\s*:", why or ""))
+    if not said:
+        raise SystemExit(f"Say how {path} was set with --set-by: {SET_BY_HELP}. Your own pick is never chosen.")
+    if split_status(why, set_by)[1] == "chosen" and not (quote or "").strip():
+        raise SystemExit(f"--set-by chosen needs the person's words: add --quote \"<what they said>\". If you picked {path}, use "
+                         "--set-by assumed, or delegated when they asked you to choose.")
+
+
 def split_status(why, set_by):
     """R3's skills put a status word at the start of --why ('delegated: ...'); read it into set_by."""
     if set_by:
@@ -5276,8 +5380,8 @@ def keep_command(path, value, set_by, lock):
     """The command that records a previewed value."""
     arg = value if isinstance(value, str) and parse_value(value) == value else json.dumps(value, ensure_ascii=False)
     head = f"pick {path.split('.', 1)[1]}" if path.startswith("answers.") else f"set {path}"
-    return (f"engine.py {head} {shlex.quote(arg)} --why \"<the person's words>\""
-            + (f" --set-by {set_by}" if set_by != "chosen" else "") + (" --lock" if lock else ""))
+    said = "--set-by chosen --quote \"<the person's words>\"" if set_by == "chosen" else f"--set-by {set_by} --why \"<the person's words>\""
+    return f"engine.py {head} {shlex.quote(arg)} {said}" + (" --lock" if lock else "")
 
 
 def _touch(state, path):
@@ -5335,7 +5439,7 @@ def std_answer_blocks(state, qid, value, effects, house=None):
 
 
 def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, lock=False, source_ref=None, via=None, resync=True,
-            dry_run=False):
+            dry_run=False, quote=None):
     """Record one decision. A value a standard holds or forbids is refused, also with force (force opens only the person's
     own locks); the refusal names every standard involved and how to change it. After the platforms (Q-plat-01) or the
     stack (raw.stack) change, the house standards are re-scoped to them (resync).
@@ -5517,7 +5621,8 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
                   + keep_command(path, value, set_by, lock))
         return state
     dump_json(sp, state)
-    log_decision(d, path, value, why, set_by, lock, source_ref, extra, supersedes=sup)
+    log_decision(d, path, value, why, set_by, lock, source_ref,  # the person's words go in decisions.md, not the console
+                 ([f"quote: {json.dumps(quote, ensure_ascii=False)}"] if quote else []) + extra, supersedes=sup)
     prof_line = log_profile_change(d, old_state, state)
     qid, how = (path.split(".", 1)[1], None) if path.startswith("answers.") else ANSWER_PATHS.get(path, (None, None))
     if qid and journey:
@@ -13043,7 +13148,9 @@ def _main(argv=None):
         p.add_argument("path")
         p.add_argument("value", nargs="?")
         p.add_argument("--why", default=None)
-        p.add_argument("--set-by", dest="set_by", default=None, help="chosen (default), confirmed_default, auto_default, assumed, delegated, reference, asset, standard")
+        p.add_argument("--set-by", dest="set_by", default=None, help="chosen (with --quote), confirmed_default, auto_default, assumed, delegated, "
+                       "reference, asset, standard; required for fonts, the brand color, dials and Q-* answers")
+        p.add_argument("--quote", default=None, help="the person's own words, required with --set-by chosen for those values")
         p.add_argument("--source-ref", dest="source_ref", default=None)
         p.add_argument("--lock", action="store_true")
         p.add_argument("--force", action="store_true", help="change a locked decision (only with the owner's consent)")
@@ -13109,6 +13216,9 @@ def _main(argv=None):
     p.add_argument("--out", default=None, help="folder for the page (default opendesigner/preview)")
     p.add_argument("--open", action="store_true")
     p.add_argument("--json", action="store_true", help="print the payload instead of writing the page")
+    p = sub.add_parser("guard", parents=[common], help="the opt-in pre-commit hook that runs review --strict: install, remove, no, status")
+    p.add_argument("action", choices=["install", "remove", "no", "status"])
+    p.add_argument("--why", default=None, help="the person's words, kept in decisions.md")
     p = sub.add_parser("contrast", parents=[common], help="the WCAG contrast ratio of two hex colors and the floors it meets")
     p.add_argument("fg", help="foreground hex, such as #767676")
     p.add_argument("bg", help="background hex, such as #ffffff")
@@ -13227,7 +13337,10 @@ def _main(argv=None):
             raise SystemExit("give a value: engine.py set <path> <json-value>  (or path=value)")
         if a.cmd == "pick" and not path.startswith("answers."):
             path = "answers." + path
-        cmd_set(d, path, parse_value(value), a.why, a.force, set_by=a.set_by, lock=a.lock, source_ref=a.source_ref, dry_run=a.dry_run)
+        if not a.dry_run:
+            check_set_by(path, a.why, a.set_by, a.quote)
+        cmd_set(d, path, parse_value(value), a.why, a.force, set_by=a.set_by, lock=a.lock, source_ref=a.source_ref, dry_run=a.dry_run,
+                quote=a.quote)
         if not a.no_doc and not a.dry_run:
             refresh_docs(d)
     elif a.cmd in ("lock", "unlock"):
@@ -13242,6 +13355,8 @@ def _main(argv=None):
         return cmd_version(d)
     elif a.cmd == "contrast":
         return cmd_contrast(a.fg, a.bg, as_json=a.json, need=a.min)
+    elif a.cmd == "guard":
+        return cmd_guard(d, a.action, a.why)
     elif a.cmd == "status":
         return cmd_status(d, a.json, a.hook)
     elif a.cmd == "handoff":
@@ -14872,10 +14987,114 @@ def share_card_age(d, project, seed=None):
     return found
 
 
+RX_BINDS = re.compile(r"(?<![\w-])opendesigner/")
+
+
+def binding_gaps(root, d):
+    """AGENTS.md, CLAUDE.md or DESIGN.md at root that say the system lives in opendesigner/ when there is no system there:
+    the agent reads a promise the project does not keep (z42 went 35 days so). OpenDesigner's own repository describes the
+    folder without having one, so it is left out."""
+    if os.path.exists(os.path.join(root, "skills", "opendesigner", "scripts", "engine.py")):
+        return []
+    here = os.path.join(root, DEFAULT_DIR, STATE_FILE)
+    if os.path.exists(here) or (os.path.abspath(d) == os.path.abspath(os.path.join(root, DEFAULT_DIR)) and os.path.exists(os.path.join(d, STATE_FILE))):
+        return []
+    out = []
+    for name in ("AGENTS.md", "CLAUDE.md", "DESIGN.md"):
+        fp = os.path.join(root, name)
+        try:
+            with open(fp, encoding="utf-8", errors="ignore") as f:
+                if RX_BINDS.search(f.read()):
+                    out.append(name)
+        except OSError:
+            continue
+    return out
+
+
+def systems_below(project, limit=8):
+    """OpenDesigner state.json files under project (a sketch run in a subfolder, say), nearest first."""
+    out = []
+    skip = REVIEW_SKIP - {DEFAULT_DIR}
+    for root, dirs, fnames in os.walk(project):
+        dirs[:] = sorted(x for x in dirs if x not in skip and not x.startswith("."))
+        if STATE_FILE in fnames:
+            try:
+                st = read_json(os.path.join(root, STATE_FILE))
+            except (OSError, ValueError):
+                continue
+            if isinstance(st, dict) and "raw" in st and "dials" in st:
+                out.append(root)
+        if len(out) >= limit:
+            break
+    return sorted(out, key=lambda r: r.count(os.sep))
+
+
+def cmd_review_unbound(d, project, strict, as_json, limit=40):
+    """review where no system is bound: the code is still scanned, so hard-coded values never go unnoticed because the state
+    is missing; any system found in a subfolder is named with the command that checks the code against it."""
+    if project is None:
+        project = os.path.dirname(os.path.abspath(d)) if os.path.basename(os.path.abspath(d)) == DEFAULT_DIR else os.getcwd()
+    targets, base, notes = review_targets(project, os.path.abspath(d))
+    counts, files_with, scanned = collections.Counter(), collections.Counter(), 0
+    for path in targets:
+        try:
+            if os.path.getsize(path) > 1_000_000:
+                continue
+            with open(path, encoding="utf-8", errors="ignore") as f:
+                lines = f.readlines()
+        except OSError:
+            continue
+        if generated_file(lines):
+            continue
+        scanned += 1
+        for line in lines:
+            if re.search(r"^\s*(//|/\*|\*|<!--)", line) or "od-ignore" in line or re.match(r"\s*--", line):
+                continue
+            n_c = sum(1 for m_ in RX_HEX.finditer(line[:REVIEW_LINE_CAP]) if not re.search(r"href=[\"']?$", line[max(0, m_.start() - 7):m_.start()]))
+            n_c += len(RX_FN.findall(line[:REVIEW_LINE_CAP]))
+            n_s = len(RX_SIZE.findall(line[:REVIEW_LINE_CAP]))
+            counts["color"] += n_c
+            counts["size"] += n_s
+            if n_c or n_s:
+                files_with[os.path.relpath(path, base)] += n_c + n_s
+    root = project if os.path.isdir(project) else os.path.dirname(project)
+    found = [os.path.relpath(x, root) for x in systems_below(root)]
+    broken = binding_gaps(root, d)
+    total = sum(counts.values())
+    result = {"project": project, "bound": False, "filesScanned": scanned, "counts": dict(counts), "hardCoded": total,
+              "notes": notes, "systemsFound": found, "broken": broken}
+    if as_json:
+        print(json.dumps(result, indent=2))
+    else:
+        print(f"No design system is bound here (no {os.path.join(d, STATE_FILE)}): {total} hard-coded value{'s' if total != 1 else ''} "
+              f"({counts['color']} color{'s' if counts['color'] != 1 else ''}, {counts['size']} size{'s' if counts['size'] != 1 else ''}) "
+              f"in {scanned} file{'s' if scanned != 1 else ''}.")
+        for n_ in notes:
+            print(f"  {n_}.")
+        for f_, n in files_with.most_common(5):
+            print(f"  {f_}: {n}")
+        for x in found:
+            print(f"A system is in {x}/. Check this code against it: `engine.py review --dir {x} --project "
+                  f"{os.path.relpath(project, root) if project != root else '.'}`. To make it this project's system, move it to ./{DEFAULT_DIR}/.")
+        if not found:
+            print("To bind one: run `engine.py sketch` (or `engine.py init`) here, then `engine.py review`.")
+        for b in broken:
+            print(f"Broken: {b} says the system lives in {DEFAULT_DIR}/, but there is no {DEFAULT_DIR}/{STATE_FILE} here. "
+                  "Agents that read it follow a system that is not there.")
+        if strict:
+            why = ([f"{total} hard-coded values with no system bound"] if total else []) + [f"{b} points at a missing {DEFAULT_DIR}/" for b in broken]
+            print(f"--strict: {'failing: ' + '; '.join(why) if why else 'passes'}.")
+    return 1 if broken or (strict and total) else 0
+
+
 def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     """End-of-implementation check: hard-coded colors, sizes, radii, shadows and durations that bypass tokens (CSS, JSX style
     objects, Tailwind arbitrary values and default scales, SwiftUI, Compose), role-appropriate token suggestions, and stale
-    or untrue DESIGN.md sections."""
+    or untrue DESIGN.md sections. Without a system it still scans (cmd_review_unbound). It fails when AGENTS.md, CLAUDE.md
+    or DESIGN.md point at an opendesigner/ that is missing, and --strict fails when anything is found, tokens are not in
+    charge, DESIGN.md disagrees with the code or the system has validate errors, so it can guard commits."""
+    if not os.path.exists(os.path.join(d, STATE_FILE)):
+        return cmd_review_unbound(d, project, strict, as_json, limit)
     state = merge_defaults(load_state(d))
     files, meta, _ = generate_system(load_state(d))
     prefix = slug(meta.get("prefix") or "ds").replace("-", "")
@@ -15250,9 +15469,27 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
               "findings": findings[:500], "staleSections": stale,
               "missing": missing, "untrue": sorted(set(untrue)), "tasteDrift": drift,
               "research": {"errors": r_errs, "notes": r_notes, "status": (state.get("research") or {}).get("status") or "none"}}
+    result["broken"] = broken = binding_gaps(doc_dir(d), d)
+    reasons = []
+    if strict:
+        vrep = Report()
+        validate_files(files, state, vrep)
+        verrs = vrep.count("error")
+        in_charge = not (result["tokens"] == "losing" or (result["tokens"] == "none" and hard))
+        reasons = ([f"{len(findings)} finding{'s' if len(findings) != 1 else ''}"] if findings else []) \
+            + ([] if in_charge else ["tokens are not in charge"]) \
+            + ([f"DESIGN.md disagrees with the code on the {', '.join(x_['what'] for x_ in drift_look)}"] if drift_look else []) \
+            + ([f"DESIGN.md is out of date ({', '.join(stale or missing)})"] if stale or missing else []) \
+            + ([f"{len(set(untrue))} untrue line{'s' if len(set(untrue)) != 1 else ''}"] if untrue else []) \
+            + ([f"{verrs} validate error{'s' if verrs != 1 else ''} in the system"] if verrs else []) \
+            + ([f"{len(r_errs)} user research error{'s' if len(r_errs) != 1 else ''}"] if r_errs else []) \
+            + [f"{b} points at a missing {DEFAULT_DIR}/" for b in broken]
+        result["strict"] = {"fail": bool(reasons), "reasons": reasons}
     if as_json:
         print(json.dumps(result, indent=2))
     else:
+        for b in broken:
+            print(f"Broken: {b} says the system lives in {DEFAULT_DIR}/, but there is no {DEFAULT_DIR}/{STATE_FILE} there.")
         tokf = [f_ for f_ in findings if f_["kind"] not in ("standard", "chart")]
         stdf = [f_ for f_ in findings if f_["kind"] == "standard"]
         chf = [f_ for f_ in findings if f_["kind"] == "chart"]
@@ -15336,8 +15573,10 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             print(f"User research: {t_}. Fix the file, then engine.py research add {research_py.FILE}.")
         for t_ in r_notes:
             print(f"User research: {t_}")
+        if strict:
+            print(f"--strict: {'failing: ' + '; '.join(reasons) if reasons else 'passes'}.")
     track(d, "review")
-    return 1 if strict and (findings or stale or missing or untrue or r_errs or drift_look) else 0
+    return 1 if broken or (strict and reasons) else 0
 
 
 # =============================================================================================

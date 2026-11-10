@@ -21,7 +21,7 @@ Every export is made from the files in `opendesigner/tokens/`. Don't edit an exp
 Change a decision and rebuild:
 
 ```
-engine.py set dials.roundness 60 --why "softer corners for a friendlier feel"
+engine.py set dials.roundness 60 --set-by chosen --quote "a bit friendlier" --why "softer corners for a friendlier feel"
 engine.py build
 ```
 

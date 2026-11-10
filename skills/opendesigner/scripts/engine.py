@@ -297,6 +297,90 @@ def cmd_version(d):
     return 0
 
 
+GUARD_MARK = "# OpenDesigner guard (engine.py guard install)"
+
+
+def _guard_paths(d):
+    """(repository top, this repository's own pre-commit hook path, core.hooksPath or None); SystemExit outside git. With
+    core.hooksPath set (a global hooks folder, or a manager such as husky), the hook there may run for every repository, so
+    the guard never writes one: it says what line to add instead."""
+    root = doc_dir(d)
+    top = _git(root, "rev-parse", "--show-toplevel")
+    if not top:
+        raise SystemExit(f"guard: {root} is not in a git repository, so there is no commit to guard.")
+    custom = _git(top, "config", "core.hooksPath")
+    gitdir = _git(top, "rev-parse", "--absolute-git-dir") or os.path.join(top, ".git")
+    return top, os.path.normpath(os.path.join(gitdir, "hooks", "pre-commit")), custom
+
+
+def _guard_script(d, top):
+    engine = os.path.abspath(__file__)
+    rel = os.path.relpath(os.path.abspath(d), top)
+    return f"""#!/bin/sh
+{GUARD_MARK}
+# Stops a commit when `engine.py review --strict` fails: hard-coded values, tokens not in charge, DESIGN.md that disagrees with
+# the code, or errors in the system. Skip once: git commit --no-verify. Remove: python3 "{engine}" guard remove --dir "{rel}"
+ENGINE={shlex.quote(engine)}
+PY={shlex.quote(sys.executable or "python3")}
+command -v "$PY" >/dev/null 2>&1 || PY=python3
+if [ ! -f "$ENGINE" ]; then
+  echo "OpenDesigner guard: $ENGINE is gone, so the design check was skipped. Run guard install again from the skill's new place." >&2
+  exit 0
+fi
+cd "$(git rev-parse --show-toplevel)" || exit 0
+"$PY" "$ENGINE" review --strict --dir {shlex.quote(rel)} || {{
+  echo "OpenDesigner guard: review --strict failed, so this commit was stopped. Fix what it lists, or skip once with git commit --no-verify." >&2
+  exit 1
+}}
+"""
+
+
+def _guard_answer(d, value, why):
+    log_decision(d, "guard.pre-commit", value, why, "chosen", title=f"Commit guard: {value}")
+    if os.path.exists(os.path.join(d, STATE_FILE)):
+        refresh_docs(d)  # decisions show in DESIGN.md, so the first guarded commit does not fail on a stale file
+
+
+def cmd_guard(d, action, why=None):
+    """`engine.py guard install|remove|no|status`: the opt-in pre-commit hook that runs review --strict (owner, 2026-11-09).
+    Never automatic: the skill asks once and runs install only on a yes, and no records a no. It never overwrites a hook it
+    did not write."""
+    if action == "no":
+        _guard_answer(d, "no", why or "the person said no to the commit guard")
+        print("Recorded: no commit guard. engine.py review --strict still runs by hand.")
+        return 0
+    top, hook, custom = _guard_paths(d)
+    ours = os.path.exists(hook) and GUARD_MARK in open(hook, encoding="utf-8", errors="ignore").read()
+    line = f'python3 "{os.path.abspath(__file__)}" review --strict --dir "{os.path.relpath(os.path.abspath(d), top)}" || exit 1'
+    if action == "status":
+        print(f"Commit guard: {'on' if ours else 'a different pre-commit hook is there' if os.path.exists(hook) else 'off'} ({os.path.relpath(hook, top)}).")
+        return 0
+    if action == "remove":
+        if not ours:
+            print(f"guard: {'the pre-commit hook there is not OpenDesigner' + chr(39) + 's, so it stays' if os.path.exists(hook) else 'no guard to remove'} "
+                  f"({os.path.relpath(hook, top)}).")
+            return 0
+        os.remove(hook)
+        _guard_answer(d, "off", why or "the person turned the commit guard off")
+        print(f"Removed the commit guard ({os.path.relpath(hook, top)}).")
+        return 0
+    if custom:
+        print(f"guard: git runs hooks from {custom} (core.hooksPath), which may serve every repository, so OpenDesigner writes no "
+              f"hook there. To guard this repository, add this line to its pre-commit hook:\n  {line}")
+        return 1
+    if os.path.exists(hook) and not ours:
+        print(f"guard: a pre-commit hook is already there ({os.path.relpath(hook, top)}), so OpenDesigner leaves it alone. To add the "
+              f"check to it, add this line:\n  {line}")
+        return 1
+    os.makedirs(os.path.dirname(hook), exist_ok=True)
+    write_text(hook, _guard_script(d, top))
+    os.chmod(hook, 0o755)
+    _guard_answer(d, "on", why or "the person said yes to the commit guard")
+    print(f"Commit guard on ({os.path.relpath(hook, top)}): every commit runs engine.py review --strict first and stops when it fails. "
+          "Skip once with git commit --no-verify; turn it off with engine.py guard remove.")
+    return 0
+
+
 CONTRAST_FLOORS = (("body text", 4.5, "WCAG 2.2 SC 1.4.3"),
                    ("large text, icons, control edges and chart marks", 3.0, "WCAG 2.2 SC 1.4.3 and 1.4.11"),
                    ("body text at AAA", 7.0, "WCAG 2.2 SC 1.4.6"))
@@ -5043,6 +5127,26 @@ DECISIONS_HEADER = ("# Decisions\n\nAppend-only, ADR-style (spec 7.9): one entry
                     "assumed, delegated, reference, asset or standard.\n")
 
 
+RX_KEY_VALUE = re.compile(r"^(answers\.Q-[\w-]+|dials\.[\w-]+|raw\.(brandColor|brandFace|textFace|displayFace|monoFace))$")
+SET_BY_HELP = ("chosen with --quote \"<their words>\" when the person picked it; confirmed_default when they accepted your "
+               "recommendation; delegated when they left it to you; assumed for your own pick until they confirm it; reference when it "
+               "comes from a site or file they gave")
+
+
+def check_set_by(path, why, set_by, quote):
+    """Fonts, the brand color, dials and Q-* answers say how they were set (a project counted 8 of 27 "chosen" values that were
+    the agent's picks, 2026-11-09): --set-by is required, and chosen needs the person's words in --quote. Older states that
+    hold chosen values without a quote still load."""
+    if not RX_KEY_VALUE.match(path):
+        return
+    said = bool(set_by) or bool(re.match(r"^\s*(chosen|confirmed_default|auto_default|assumed|delegated|reference|asset|confirmed|default|pending)\s*:", why or ""))
+    if not said:
+        raise SystemExit(f"Say how {path} was set with --set-by: {SET_BY_HELP}. Your own pick is never chosen.")
+    if split_status(why, set_by)[1] == "chosen" and not (quote or "").strip():
+        raise SystemExit(f"--set-by chosen needs the person's words: add --quote \"<what they said>\". If you picked {path}, use "
+                         "--set-by assumed, or delegated when they asked you to choose.")
+
+
 def split_status(why, set_by):
     """R3's skills put a status word at the start of --why ('delegated: ...'); read it into set_by."""
     if set_by:
@@ -5276,8 +5380,8 @@ def keep_command(path, value, set_by, lock):
     """The command that records a previewed value."""
     arg = value if isinstance(value, str) and parse_value(value) == value else json.dumps(value, ensure_ascii=False)
     head = f"pick {path.split('.', 1)[1]}" if path.startswith("answers.") else f"set {path}"
-    return (f"engine.py {head} {shlex.quote(arg)} --why \"<the person's words>\""
-            + (f" --set-by {set_by}" if set_by != "chosen" else "") + (" --lock" if lock else ""))
+    said = "--set-by chosen --quote \"<the person's words>\"" if set_by == "chosen" else f"--set-by {set_by} --why \"<the person's words>\""
+    return f"engine.py {head} {shlex.quote(arg)} {said}" + (" --lock" if lock else "")
 
 
 def _touch(state, path):
@@ -5335,7 +5439,7 @@ def std_answer_blocks(state, qid, value, effects, house=None):
 
 
 def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, lock=False, source_ref=None, via=None, resync=True,
-            dry_run=False):
+            dry_run=False, quote=None):
     """Record one decision. A value a standard holds or forbids is refused, also with force (force opens only the person's
     own locks); the refusal names every standard involved and how to change it. After the platforms (Q-plat-01) or the
     stack (raw.stack) change, the house standards are re-scoped to them (resync).
@@ -5517,7 +5621,8 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
                   + keep_command(path, value, set_by, lock))
         return state
     dump_json(sp, state)
-    log_decision(d, path, value, why, set_by, lock, source_ref, extra, supersedes=sup)
+    log_decision(d, path, value, why, set_by, lock, source_ref,  # the person's words go in decisions.md, not the console
+                 ([f"quote: {json.dumps(quote, ensure_ascii=False)}"] if quote else []) + extra, supersedes=sup)
     prof_line = log_profile_change(d, old_state, state)
     qid, how = (path.split(".", 1)[1], None) if path.startswith("answers.") else ANSWER_PATHS.get(path, (None, None))
     if qid and journey:
@@ -13043,7 +13148,9 @@ def _main(argv=None):
         p.add_argument("path")
         p.add_argument("value", nargs="?")
         p.add_argument("--why", default=None)
-        p.add_argument("--set-by", dest="set_by", default=None, help="chosen (default), confirmed_default, auto_default, assumed, delegated, reference, asset, standard")
+        p.add_argument("--set-by", dest="set_by", default=None, help="chosen (with --quote), confirmed_default, auto_default, assumed, delegated, "
+                       "reference, asset, standard; required for fonts, the brand color, dials and Q-* answers")
+        p.add_argument("--quote", default=None, help="the person's own words, required with --set-by chosen for those values")
         p.add_argument("--source-ref", dest="source_ref", default=None)
         p.add_argument("--lock", action="store_true")
         p.add_argument("--force", action="store_true", help="change a locked decision (only with the owner's consent)")
@@ -13109,6 +13216,9 @@ def _main(argv=None):
     p.add_argument("--out", default=None, help="folder for the page (default opendesigner/preview)")
     p.add_argument("--open", action="store_true")
     p.add_argument("--json", action="store_true", help="print the payload instead of writing the page")
+    p = sub.add_parser("guard", parents=[common], help="the opt-in pre-commit hook that runs review --strict: install, remove, no, status")
+    p.add_argument("action", choices=["install", "remove", "no", "status"])
+    p.add_argument("--why", default=None, help="the person's words, kept in decisions.md")
     p = sub.add_parser("contrast", parents=[common], help="the WCAG contrast ratio of two hex colors and the floors it meets")
     p.add_argument("fg", help="foreground hex, such as #767676")
     p.add_argument("bg", help="background hex, such as #ffffff")
@@ -13227,7 +13337,10 @@ def _main(argv=None):
             raise SystemExit("give a value: engine.py set <path> <json-value>  (or path=value)")
         if a.cmd == "pick" and not path.startswith("answers."):
             path = "answers." + path
-        cmd_set(d, path, parse_value(value), a.why, a.force, set_by=a.set_by, lock=a.lock, source_ref=a.source_ref, dry_run=a.dry_run)
+        if not a.dry_run:
+            check_set_by(path, a.why, a.set_by, a.quote)
+        cmd_set(d, path, parse_value(value), a.why, a.force, set_by=a.set_by, lock=a.lock, source_ref=a.source_ref, dry_run=a.dry_run,
+                quote=a.quote)
         if not a.no_doc and not a.dry_run:
             refresh_docs(d)
     elif a.cmd in ("lock", "unlock"):
@@ -13242,6 +13355,8 @@ def _main(argv=None):
         return cmd_version(d)
     elif a.cmd == "contrast":
         return cmd_contrast(a.fg, a.bg, as_json=a.json, need=a.min)
+    elif a.cmd == "guard":
+        return cmd_guard(d, a.action, a.why)
     elif a.cmd == "status":
         return cmd_status(d, a.json, a.hook)
     elif a.cmd == "handoff":

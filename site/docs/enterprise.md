@@ -49,7 +49,7 @@ A suggestion nobody answered is never recorded as a decision. The log is append-
 Lock any value that must not drift, such as an exact brand color:
 
 ```
-engine.py set raw.brandColor '"#2563eb"' --why "brand team" --lock
+engine.py set raw.brandColor '"#2563eb"' --set-by reference --why "brand team" --lock
 ```
 
 After that, the engine refuses to change it and says to ask the owner first. The accessibility floors are locked too, unless you raise them.

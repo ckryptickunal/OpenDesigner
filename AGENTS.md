@@ -64,8 +64,8 @@ Rule-based checks and judgment are kept apart: [docs/HOW-IT-WORKS.md](docs/HOW-I
 ### Engine (run from the person's project; state lives in `./opendesigner/`)
 ```
 python3 skills/opendesigner/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal   (zoom 0)
-python3 skills/opendesigner/scripts/engine.py pick Q-shape-01 subtle --why "dense work tool"
-python3 skills/opendesigner/scripts/engine.py set dials.roundness 45 --why "..."   (--set-by delegated, --lock)
+python3 skills/opendesigner/scripts/engine.py pick Q-shape-01 subtle --set-by chosen --quote "keep the corners small" --why "dense work tool"
+python3 skills/opendesigner/scripts/engine.py set dials.roundness 45 --set-by delegated --why "..."   (fonts, brand color, dials and answers say how they were set; chosen needs --quote)
 python3 skills/opendesigner/scripts/engine.py generate && python3 skills/opendesigner/scripts/engine.py validate
 python3 skills/opendesigner/scripts/engine.py design-md        (DESIGN.md and PRODUCT.md at the project root)
 python3 skills/opendesigner/scripts/engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|brand|all

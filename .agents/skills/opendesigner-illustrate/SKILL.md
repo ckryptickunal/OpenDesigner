@@ -102,7 +102,7 @@ python3 illustrate.py check src/components/illustrations/*.svg                  
 - Look at the result in the running app, in light and dark, at phone and desktop width.
 
 ## 7. Record
-- Style first, if not set: `engine.py pick Q-img-04 <line|flat|hand-drawn|mascot|none> --why "..."`. This resets the hook to `placeholder`, so record the hook after it.
+- Style first, if not set: `engine.py pick Q-img-04 <line|flat|hand-drawn|mascot|none> --set-by chosen --quote "<their words>"`. This resets the hook to `placeholder`, so record the hook after it.
 - Hook: `engine.py set hooks.H-illus.status '"open-library"' --why "<source>, <slots>"` (`have` for their own art, `commissioning`, `placeholder`, or `not-needed`).
 - Then `engine.py review`, and re-read DESIGN.md. Commit `opendesigner/illustrations/ledger.json` and `ATTRIBUTION.md` with the art. `src/` holds the untouched originals; keep or delete them, but keep the ledger.
 

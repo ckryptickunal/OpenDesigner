@@ -25,7 +25,7 @@ Eight sliders, each from 0 to 100, set most of how your design system looks. You
 Set a dial yourself, then rebuild:
 
 ```
-engine.py set dials.roundness 60 --why "softer corners for a friendlier feel"
+engine.py set dials.roundness 60 --set-by chosen --quote "a bit friendlier" --why "softer corners for a friendlier feel"
 engine.py build
 ```
 

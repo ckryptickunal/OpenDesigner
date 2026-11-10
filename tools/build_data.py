@@ -350,7 +350,7 @@ def stage_md(stage, qs, n_total, note="", detailed=False, marks=({}, {})):
             lines.append(f"- **Named styles:** {sum(len(v) for v in fam.values())} looks in `references/style-catalog.md`, by preset: "
                          + "; ".join(f"`{p}` {len(fam[p])} (for example {', '.join(f'`{i}`' for i in fam[p][:4])})" for p in order if fam.get(p))
                          + ". When the person's words point at a look, find it with `engine.py style search <their words>` and show it by "
-                         "name. Record one with `engine.py pick Q-dir-01 <style id>`: it selects the preset, keeps the name for DESIGN.md "
+                         "name. Record one with `engine.py pick Q-dir-01 <style id> --set-by chosen --quote \"<their words>\"`: it selects the preset, keeps the name for DESIGN.md "
                          "and sets the style's own dials. When nothing named fits, explore new ones with them (`references/style-lab.md`).")
         if x.get("dials"):
             lines.append(f"- **Dials:** {trim_sources(x['dials'])}")

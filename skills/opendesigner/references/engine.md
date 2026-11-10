@@ -7,7 +7,8 @@ python3 <skill>/scripts/engine.py init [--name "Acme"]
 python3 <skill>/scripts/engine.py sketch --name "Acme" --audience regular --platforms web --feel friendly,minimal [--brand "#167874"] [--logo logo.svg] [--surfaces app:operate] [--delegated feel,brand]
 python3 <skill>/scripts/engine.py feel [words...]            the feel words it knows, or how it reads theirs ("fun" is playful)
 python3 <skill>/scripts/engine.py style search|show|tiles|mix|mutate|explore|define ...   the style lab: find, show, blend, change or invent a look (style-lab.md)
-python3 <skill>/scripts/engine.py set <path> <json-value> --why "..." [--set-by delegated] [--lock]
+python3 <skill>/scripts/engine.py set <path> <json-value> --set-by <how> --why "..." [--lock]   fonts, brand color, dials and Q-* answers must say how:
+                                                             chosen --quote "<their words>", confirmed_default, delegated, assumed or reference
 python3 <skill>/scripts/engine.py set <path> <json-value> --dry-run   preview a value (each token's old and new value, any check it breaks); writes nothing
 python3 <skill>/scripts/engine.py resolve                    current dials and derived values, for payloads
 python3 <skill>/scripts/engine.py generate                   opendesigner/tokens/ (DTCG 2025.10)
@@ -19,7 +20,8 @@ python3 <skill>/scripts/engine.py overview [--open]          opendesigner/overvi
 python3 <skill>/scripts/engine.py preview [--open]           opendesigner/preview.html: every token
 python3 <skill>/scripts/engine.py show <template> [--open]   one visual template filled with real values (opendesigner/preview/)
 python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports, DESIGN.md, overview, filled templates and preview only if there are no errors
-python3 <skill>/scripts/engine.py review [--project src/]    end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections; code that uses no tokens; a system older than the code
+python3 <skill>/scripts/engine.py review [--project src/] [--strict]   end-of-implementation check: hard-coded colors, sizes, radii, shadows, durations; stale DESIGN.md sections; code that uses no tokens; a system older than the code. Runs with no system too. Exit 1 when AGENTS.md, CLAUDE.md or DESIGN.md point at a missing opendesigner/; --strict also exits 1 on any finding, tokens not in charge, DESIGN.md that disagrees with the code, or validate errors
+python3 <skill>/scripts/engine.py guard install|no|remove|status   after asking once: a pre-commit hook that runs review --strict (git commit --no-verify skips it once); no records the answer. Never writes over another hook or into a shared core.hooksPath
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
 python3 <skill>/scripts/engine.py feedback "<the rule>" --kind note [--same N-01]   the owner's note on the work, counted in opendesigner/RULES.md
 python3 <skill>/scripts/engine.py research plan --brief "<users line>" --tools web-search,browser,last30days   user research: what to find, searches, missing tools

@@ -615,7 +615,8 @@ class KeepBlocks(unittest.TestCase):
 
 def _git(cwd, *args, when=None):
     import subprocess
-    env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
+    env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t",
+               GIT_CONFIG_GLOBAL=os.environ.get("GIT_CONFIG_GLOBAL", os.devnull), GIT_CONFIG_NOSYSTEM="1")  # never the machine's hooks
     if when:
         env.update(GIT_AUTHOR_DATE=when, GIT_COMMITTER_DATE=when)
     subprocess.run(["git", *args], cwd=cwd, env=env, check=True, capture_output=True)
@@ -714,6 +715,146 @@ class ReviewFindsWhatShips(unittest.TestCase):
             order = [f_["file"] for f_ in json.loads(out)["findings"]]
             self.assertEqual(order[0], "late.css")         # the newest file first
             self.assertNotIn("od-tokens.css", order)       # OpenDesigner's own export is the system, not code
+
+
+class GuardStrictAndHonesty(unittest.TestCase):
+    """2026-11-09/10 process audit: review without a system, docs that point at a missing folder, --strict for commits,
+    how a key value was set, and the opt-in commit guard Kunal approved. Git runs with no global or system config, so a
+    machine-wide core.hooksPath can never receive a test's hook."""
+
+    def setUp(self):
+        self._env = {k: os.environ.get(k) for k in ("GIT_CONFIG_GLOBAL", "GIT_CONFIG_NOSYSTEM")}
+        os.environ["GIT_CONFIG_GLOBAL"], os.environ["GIT_CONFIG_NOSYSTEM"] = os.devnull, "1"
+
+    def tearDown(self):
+        for k, v in self._env.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
+
+    def system(self, t):
+        d = os.path.join(t, "opendesigner")
+        quiet(e.cmd_sketch, d, "G", "#2563eb", "regular", "web", "calm", quiet=True)
+        quiet(e.cmd_design_md, d)
+        return d
+
+    def write(self, t, rel, text):
+        os.makedirs(os.path.dirname(os.path.join(t, rel)), exist_ok=True)
+        with open(os.path.join(t, rel), "w", encoding="utf-8") as f:
+            f.write(text)
+
+    def run_(self, fn, *a, **kw):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = fn(*a, **kw)
+        return code, out.getvalue()
+
+    def test_review_without_a_system_still_scans(self):
+        with tempfile.TemporaryDirectory() as t:
+            self.write(t, "site/main.css", ".a { color: #ff0000; padding: 12px; }\n.b { background: rgb(1, 2, 3); }\n")
+            self.write(t, "CLAUDE.md", "Every value comes from opendesigner/tokens.\n")
+            quiet(e.cmd_sketch, os.path.join(t, "sandbox", "opendesigner"), "S", "#2563eb", "regular", "web", "calm", quiet=True)
+            d = os.path.join(t, "opendesigner")
+            code, out = self.run_(e.cmd_review, d, project=t, as_json=True)
+            res = json.loads(out)
+            self.assertEqual(code, 1)                                   # CLAUDE.md points at a folder that is not there
+            self.assertEqual((res["bound"], res["hardCoded"], res["counts"]), (False, 3, {"color": 2, "size": 1}))
+            self.assertEqual((res["systemsFound"], res["broken"]), ([os.path.join("sandbox", "opendesigner")], ["CLAUDE.md"]))
+            _code, text = self.run_(e.cmd_review, d, project=t)
+            self.assertIn("No design system is bound here", text)
+            self.assertIn("engine.py review --dir sandbox/opendesigner --project .", text)
+            os.remove(os.path.join(t, "CLAUDE.md"))
+            self.assertEqual(self.run_(e.cmd_review, d, project=t)[0], 0)
+            self.assertEqual(self.run_(e.cmd_review, d, project=t, strict=True)[0], 1)
+
+    def test_strict_names_its_reasons(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            self.write(t, "src/a.css", ".x { color: #ff0000; }\n")
+            code, out = self.run_(e.cmd_review, d, strict=True)
+            self.assertEqual(code, 1)
+            self.assertIn("--strict: failing: 1 finding; tokens are not in charge", out)
+            self.write(t, "src/a.css", ".x { color: var(--ds-color-text-primary); }\n")
+            code, out = self.run_(e.cmd_review, d, strict=True)
+            self.assertEqual(code, 0, out)
+            self.assertIn("--strict: passes.", out)
+            self.write(t, "AGENTS.md", "Tokens live in opendesigner/.\n")     # the folder is there: not broken
+            self.assertEqual(self.run_(e.cmd_review, d)[0], 0)
+
+    def test_key_values_say_how_they_were_set(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            for argv in (["pick", "Q-shape-01", "pill"], ["set", "dials.roundness", "60"], ["set", "raw.textFace", '"Inter"'],
+                         ["set", "dials.roundness", "60", "--set-by", "chosen"], ["set", "dials.roundness", "60", "--why", "chosen: rounder"]):
+                with self.subTest(argv=argv), self.assertRaises(SystemExit):
+                    quiet(e.main, ["--dir", d, *argv, "--no-doc"])
+            quiet(e.main, ["--dir", d, "set", "dials.roundness", "60", "--set-by", "chosen", "--quote", "rounder, like a pebble", "--no-doc"])
+            quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "pill", "--set-by", "delegated", "--no-doc"])
+            quiet(e.main, ["--dir", d, "set", "dials.roundness", "70", "--dry-run"])          # a preview records nothing, so no status
+            quiet(e.main, ["--dir", d, "set", "taste.brief", '"calm"', "--no-doc"])         # not a key value: unchanged
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn('- quote: "rounder, like a pebble"', text)
+            self.assertIn("set_by: delegated", text)
+            e.cmd_set(d, "dials.energy", 30, quiet=True)          # the Python call and older records stay as they were
+            e.generate_system(e.load_state(d))
+
+    def test_guard_blocks_a_failing_commit_and_leaves_other_hooks_alone(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            _git(t, "init", "-q")
+            _git(t, "add", "-A")
+            _git(t, "commit", "-qm", "system")
+            env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
+            commit = lambda *extra: subprocess.run(["git", "commit", "-qm", "work", *extra], cwd=t, env=env, capture_output=True, text=True)
+            code, out = self.run_(e.cmd_guard, d, "install")
+            hook = os.path.join(t, ".git", "hooks", "pre-commit")
+            self.assertEqual(code, 0)
+            self.assertIn("git commit --no-verify", out)
+            self.assertTrue(os.access(hook, os.X_OK))
+            _git(t, "add", "-A")
+            self.assertEqual(commit().returncode, 0)                 # the guard's own decision and DESIGN.md: clean
+            self.write(t, "src/a.css", ".x { color: #ff0000; }\n")
+            _git(t, "add", "-A")
+            blocked = commit()
+            self.assertNotEqual(blocked.returncode, 0)
+            self.assertIn("review --strict failed", blocked.stderr)
+            self.assertEqual(commit("--no-verify").returncode, 0)    # the escape hatch still works
+            self.write(t, "src/a.css", ".x { color: var(--ds-color-text-primary); }\n")
+            _git(t, "add", "-A")
+            self.assertEqual(commit().returncode, 0, commit().stdout)
+            self.assertEqual(self.run_(e.cmd_guard, d, "remove")[0], 0)
+            self.assertFalse(os.path.exists(hook))
+            with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("Commit guard: on", text)
+            self.assertIn("Commit guard: off", text)
+            with open(hook, "w") as f:                               # someone else's hook is never replaced
+                f.write("#!/bin/sh\necho theirs\n")
+            code, out = self.run_(e.cmd_guard, d, "install")
+            self.assertEqual(code, 1)
+            self.assertIn("leaves it alone", out)
+            with open(hook) as f:
+                self.assertEqual(f.read(), "#!/bin/sh\necho theirs\n")
+            self.assertEqual(self.run_(e.cmd_guard, d, "remove")[0], 0)
+            self.assertTrue(os.path.exists(hook))
+
+    def test_guard_never_writes_into_a_shared_hooks_folder(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = self.system(t)
+            shared, cfg = os.path.join(t, "shared-hooks"), os.path.join(t, "gitconfig")
+            os.makedirs(shared)
+            with open(cfg, "w") as f:
+                f.write(f"[core]\n\thooksPath = {shared}\n")
+            os.environ["GIT_CONFIG_GLOBAL"] = cfg                     # like a machine-wide hooks folder
+            _git(t, "init", "-q")
+            code, out = self.run_(e.cmd_guard, d, "install")
+            self.assertEqual(code, 1)
+            self.assertIn("core.hooksPath", out)
+            self.assertEqual(os.listdir(shared), [])
+            self.assertFalse(os.path.exists(os.path.join(t, ".git", "hooks", "pre-commit")))
 
 
 class ContrastAndVersion(unittest.TestCase):
@@ -1022,7 +1163,7 @@ class JourneyTracking(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             d = os.path.join(t, "opendesigner")
             quiet(e.cmd_init, d, name="Quiet")
-            quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "soft", "--no-doc"])
+            quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "soft", "--set-by", "chosen", "--quote", "soft corners", "--no-doc"])
             self.assertEqual(self.events(d), [])
 
     def test_engine_logs_its_own_steps(self):
@@ -1037,7 +1178,7 @@ class JourneyTracking(unittest.TestCase):
             self.assertEqual(answered, {"Q-scope-01": "free", "Q-aud-01": "option", "Q-plat-01": "option", "Q-brand-01": "option"})
             self.assertIn(("export", None, {"kind": "all"}), got)
             self.assertEqual(got[-1][:2], ("level_complete", None))
-            quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "soft", "--no-doc"])
+            quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "soft", "--set-by", "chosen", "--quote", "soft corners", "--no-doc"])
             quiet(e.main, ["--dir", d, "unlock", "answers.Q-shape-01"])  # a chosen button shape is locked until the owner changes it
             quiet(e.main, ["--dir", d, "pick", "Q-shape-01", "subtle", "--set-by", "delegated", "--no-doc"])
             self.assertEqual(self.events(d)[-3:], [("step_answered", "Q-shape-01", {"how": "option"}),
@@ -4091,7 +4232,7 @@ class VersionStamps(unittest.TestCase):
             d = self._system(t)
             self._restamp(d, None)
             self.assertEqual(e.version_status(e.load_state(d)), ("unstamped", None))
-            code, out = run_cli("set", "dials.roundness", "60", "--why", "rounder", "--dir", d)
+            code, out = run_cli("set", "dials.roundness", "60", "--why", "rounder", "--set-by", "chosen", "--quote", "rounder please", "--dir", d)
             self.assertEqual(code, 0)
             self.assertIn(f"This system was made before OpenDesigner recorded its version; you have {self.V}. Run `engine.py build`", out)
             self.assertEqual(e.load_state(d)["dials"]["roundness"]["value"], 60)
@@ -4138,7 +4279,7 @@ class VersionStamps(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             d = self._system(t, build=False)
             self._restamp(d, {"version": "0.10.0", "created": "0.10.0"})  # made by a newer release, never built
-            quiet(e.main, ["--dir", d, "set", "dials.roundness", "50", "--no-doc"])  # this older copy writes the state
+            quiet(e.main, ["--dir", d, "set", "dials.roundness", "50", "--set-by", "assumed", "--no-doc"])  # this older copy writes the state
             self.assertEqual(self._stamp(d)["version"], "0.10.0")
             with open(os.path.join(d, "state.json"), encoding="utf-8") as f:
                 self.assertEqual(e.version_status(json.load(f))[0], "newer")
@@ -5123,7 +5264,7 @@ class NearBlackAndPlatformChanges(unittest.TestCase):
     def test_adding_android_raises_the_touch_target(self):
         with tempfile.TemporaryDirectory() as t:
             d = self.sketch_web(t)
-            code, out = run_cli("pick", "Q-plat-01", '["web", "android"]', "--dir", d)
+            code, out = run_cli("pick", "Q-plat-01", '["web", "android"]', "--set-by", "chosen", "--quote", "web and android", "--dir", d)
             self.assertIn("STD-mobile-touch-09: size.target.touch went back to the engine's own value", out)
             st = e.load_state(d)
             self.assertNotIn("size.target.touch", st["overrides"])
@@ -5139,7 +5280,7 @@ class NearBlackAndPlatformChanges(unittest.TestCase):
             d = self.sketch_web(t)
             quiet(e.main, ["standard", "override", "STD-mobile-touch-09", "--why", "we want 44 everywhere", "--dir", d])
             quiet(e.main, ["set", "overrides.size.target.touch", '"44px"', "--why", "our own", "--lock", "--dir", d])
-            code, out = run_cli("pick", "Q-plat-01", '["web", "android"]', "--dir", d)
+            code, out = run_cli("pick", "Q-plat-01", '["web", "android"]', "--set-by", "chosen", "--quote", "web and android", "--dir", d)
             self.assertIn("size.target.touch stays 44px, as you set it", out)
             self.assertIn("engine.py unlock overrides.size.target.touch", out)
             st = e.load_state(d)
@@ -5331,7 +5472,7 @@ class SurvivesContextResets(unittest.TestCase):
             self.assertEqual(self.protocol(d), text)
             with open(os.path.join(d, "PROTOCOL.md"), "w", encoding="utf-8") as f:
                 f.write(text.replace("| The brief | [ ] |", "| The brief | [x] 2026-11-09 |"))
-            quiet(e.main, ["--dir", d, "set", "dials.roundness", "40", "--why", "test"])
+            quiet(e.main, ["--dir", d, "set", "dials.roundness", "40", "--why", "test", "--set-by", "assumed"])
             text = self.protocol(d)
             self.assertIn("**Now:** step 2 Research", text)
             self.assertIn("Last engine command: `set`", text)

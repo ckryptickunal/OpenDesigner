@@ -103,7 +103,7 @@ The phase (Q-scope-07) says where the project is now: an idea, being built, clos
 - Put the phase's first step at the top of the offer after the sketch (below). The engine prints it after the sketch as a `Phase:` line.
 - PRODUCT.md shows the phase and what comes first, in its own section.
 - PRODUCT.md's Market section comes from the user research first: its market topic finds the competitors, what they all do, the gap and an analogous product, with sources (`research.md` sections 3 and 6). What the person tells you, or what you take from their words, is recorded in `context.market` as assumed until they confirm it, and wins over the research. `context.market.analogous` holds the analogous product and `context.market.competitors` the competitors, as a list. `pattern` is what the competitors all do, `gap` is what none of them does well, and `conventions` holds the words and habits the industry's users already know.
-- If they correct the phase, record their answer: `engine.py pick Q-scope-07 near-launch --why "<their words>"`.
+- If they correct the phase, record their answer: `engine.py pick Q-scope-07 near-launch --set-by chosen --quote "<their words>"`.
 
 ## Level 1: broad (one screen per foundation)
 **The site brief comes first for a site that persuades** (Q-scope-06 `persuade`, or Q-scope-01 `marketing`; `pacing.json` → `site_brief`). It is one screen with five lines, Q-site-01 to Q-site-05: the goal and how it is counted, the roles to convince and what each needs to see, the proof, how people find the site (search, AI answers, languages, the questions it answers), and the page families.
@@ -111,7 +111,7 @@ The phase (Q-scope-07) says where the project is now: an idea, being built, clos
 - Proof is the one line only they can give. Never draft it: take it word for word, with each figure's qualifier (for whom, over what time, compared with what). Until they give it, the confirmed positioning's proof fills the line.
 - The phase changes the page families: plan them for an idea, and read them from the routes or the live site for a built or live one, confirmed in one line.
 - Plain voice: ask only the goal and the proof, and take the rest from their words and files as assumed.
-- Record each answer: `engine.py pick Q-site-03 '[{"kind": "figures", "what": "...", "qualifier": "..."}]' --why "their words"`. PRODUCT.md's Site brief shows each line, or "Not enough information" with its question, and the overview lists what is missing.
+- Record each answer: `engine.py pick Q-site-03 '[{"kind": "figures", "what": "...", "qualifier": "..."}]' --set-by chosen --quote "<their words>"`. PRODUCT.md's Site brief shows each line, or "Not enough information" with its question, and the overview lists what is missing.
 
 After the research and the site brief, open with the competitor table and the confirmed positioning, then the three directions on the direction board (`research.md` sections 8 and 9). The pick is a starting point for these screens. Then go in this order, with the listed templates:
 - Q-dir-01, style (`option-gallery`)
