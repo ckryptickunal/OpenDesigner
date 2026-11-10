@@ -8,6 +8,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Three style extractors, measured on one site** (2026-11-10). OpenDesigner's extractor, Dembrandt and Project Wallace's analyzer were scored against Primer's published tokens on primer.style. The two browser tools reported real values 84-100% of the time but got one or two colour roles wrong; reading the CSS without a browser listed 900 colours, 2% of them on the page. Our accent bug is #110.
 - **Review runs without a system** (2026-11-10). With no `opendesigner/state.json`, `engine.py review` still scans the code and says "No design system is bound here", with the count of hard-coded values. It names any system found in a subfolder and the command that checks the code against it.
 - **`review --strict` for commits** (2026-11-10). `engine.py review --strict` exits with an error on any finding, tokens not in charge, a `DESIGN.md` that disagrees with the code or validate errors, and its last line names each reason.
 - **An opt-in commit check** (2026-11-10). `engine.py guard install` adds a git pre-commit hook that runs `review --strict`; `git commit --no-verify` skips it once and `guard remove` takes it out. The skill asks once and installs it only on a yes. It never replaces another hook or writes into a shared `core.hooksPath`.
