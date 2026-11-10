@@ -8,6 +8,11 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Things removed on purpose stay removed** (2026-11-10). `engine.py removed add "<what>" --why "<their words>"` records something the owner took out; DESIGN.md lists it under "Removed on Purpose" and `review` flags code that brings it back. A pattern that would catch a focus ring, label, alt text, reduced-motion path or target size is refused.
+- **Review guards a decided system** (2026-11-10). `engine.py review` now notices a token file edited by hand, tokens older than `state.json`, a locked decision that a merge undid, a removal that went missing, and a missing `decisions.md` or `tokens/`. Each says what to do; it never picks a value for you.
+- **od-ignore takes a reason** (2026-11-10). `od-ignore: <why>` keeps a line on purpose and lists it with its reason; a reason that repeats three times prompts a question to the owner. A bare `od-ignore` is a note, and it no longer hides something removed on purpose.
+- **A catalogue of states** (2026-11-10). A new template, `assets/output/STATES.md`, lists every state of a screen that shows data, with its words, tone and next step, and the rows just under, on and over each limit. The skills offer it before such a screen is built.
+- **Agent notes that route and forbid** (2026-11-10). The AGENTS.md note now says which file decides what, what never to do as part of other work, and how to settle a merge conflict in `opendesigner/`. Reports keep written, built and verified apart, and the export skill asks before replying in a Figma or Paper comment thread.
 - **Three style extractors, measured on one site** (2026-11-10). OpenDesigner's extractor, Dembrandt and Project Wallace's analyzer were scored against Primer's published tokens on primer.style. The two browser tools reported real values 84-100% of the time but got one or two colour roles wrong; reading the CSS without a browser listed 900 colours, 2% of them on the page. Our accent bug is #110.
 - **Review runs without a system** (2026-11-10). With no `opendesigner/state.json`, `engine.py review` still scans the code and says "No design system is bound here", with the count of hard-coded values. It names any system found in a subfolder and the command that checks the code against it.
 - **`review --strict` for commits** (2026-11-10). `engine.py review --strict` exits with an error on any finding, tokens not in charge, a `DESIGN.md` that disagrees with the code or validate errors, and its last line names each reason.
@@ -46,6 +51,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Changed
 
+- **Review ends with one verdict** (2026-11-10). The last line of `engine.py review` is `Review: ok` or how many things are left to fix and why, and it counts the errors `engine.py validate` finds. `--strict` exits with an error exactly when that line is not `Review: ok`.
 - **Fonts, brand color, dials and answers say who chose them** (2026-11-10). `engine.py set` and `pick` now need `--set-by` for these values, and `chosen` needs the person's words in `--quote`, so an agent's own pick is no longer recorded as the owner's. Older systems still load.
 - **Binding rules come first in the skill** (2026-11-09). After a long chat, Claude keeps only about the first 20,000 characters of a skill, and the main skill was 32,864. It is now 19,296, and its first 2,000 hold seven binding rules, among them tokens only, one question at a time, show every round and review at the end. The detail moved to reference files, unchanged.
 - **One question per call** (2026-11-09). The skill now says it outright: one question per message and one per call of a question tool, the log question alone and first. Ask for "something new" and you get three options to pick from, never one picked for you. A new eval case fails any turn that asks two.

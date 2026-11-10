@@ -1,35 +1,35 @@
 # {{name}}: states
 
-<!-- OpenDesigner output template: the state catalogue, kept at opendesigner/STATES.md. Offered when someone builds a new screen
-that shows data: a list, a total, a count, a status, progress against a limit, or the result of an action. Its lists are a starting
-point to adapt, not a rule. Placeholders look like {{this}}. -->
+<!-- OpenDesigner output template: the state catalogue, kept at opendesigner/STATES.md. Offer it when someone builds a screen that
+shows data, such as a list, a total, a count, a status, progress toward a limit, or what happened after an action. Adapt the lists
+to the product; they are a place to start, not a rule. Placeholders look like {{this}}. -->
 
-Agreed with {{the owner}} on {{YYYY-MM-DD}}. Read this before you change any screen that shows a state. Screens take their words from here; they never invent a state of their own.
+{{The owner}} agreed to this on {{YYYY-MM-DD}}. Check it before changing any screen that reports a state. Every screen gets its wording from this file and never makes up a state on its own.
 
 ## Rules
 
-1. **List the states first.** Before you build a new screen that shows data, write each of its states as a row in section 2. When a screen needs a state that has no row, add the row first.
-2. **Words carry the state.** Every state is said in words. Color agrees with the words and never speaks alone, so the screen reads the same in grayscale and to a screen reader (an accessibility floor).
-3. **One job per tone.** Use the system's status roles: `danger` only for something that failed, is invalid or is already over; `warning` for something that needs attention; `info` for what is not a problem; `success` for something that went well (a completed action, a real improvement), never for "no change"; no tone for ordinary states. In a family of states, only the worst one gets `danger`. The brand accent is never a state color.
-4. **Say it once per screen.** One place on each screen states the state. Nothing nearby repeats it or says the opposite.
-5. **One set of words, one set of numbers.** The same state has the same words on every screen. Each threshold is defined once (section 1), and every screen reads that definition.
-6. **The boundary gets its own row.** "Exactly at the limit" is not "over". For every threshold, write the rows below, at and above it (section 3).
-7. **Unknown is not empty.** Show loading until the first answer arrives, then the content or the designed empty state; never empty first and content after. Every wait has a failure row that says what happened and what to do next.
-8. **Every empty, blocked or failed state has a next step,** or its row says why it has none.
-9. **A state nobody designed falls back to the calmest state that is true:** neutral words, no tone. Log it as a missing row and design it.
-10. **Optional (one project's choice; confirm with the owner):** keep text and figures in the normal text color and put the tone only in a small mark beside the words: a dot, an icon, a bar, a ring, or a light tint behind a notice.
+1. **Rows before screens.** Before building a screen that shows data, add a row in section 2 for each state it can be in. If a screen turns out to need a state with no row, write the row first, then build it.
+2. **The words say it.** Each state has words. Color backs those words up and never carries the meaning by itself, so the screen means the same in grayscale and through a screen reader (an accessibility floor).
+3. **Each tone has one meaning.** Use the system's status roles: `danger` for a failure, something invalid, or a limit already passed; `warning` for what needs a look; `info` for news that is not a problem; `success` for a good result (an action finished, a real gain), and never for "nothing changed"; no tone for everyday states. Among related states, only the most serious one uses `danger`. The brand accent never marks a state.
+4. **State it in one place.** Each screen reports a state once. Nothing close by repeats it, and nothing contradicts it.
+5. **The same wording and the same thresholds everywhere.** A state reads the same on every screen. Each threshold has one definition (section 1), and every screen uses it.
+6. **Give the boundary a row of its own.** Reaching a limit is not passing it. For each threshold, write the rows for just under it, exactly on it and over it (section 3).
+7. **Not known yet is different from empty.** While nothing has loaded, show that it is loading; after that, either the content or the empty state that was designed for it, and never a blank screen that fills in later. Every wait also has a failure row: what went wrong, and what the person can do.
+8. **Empty, blocked and failed states point somewhere,** or their row explains why there is nowhere to go.
+9. **When a state was never designed, fall back to the quietest true one:** plain words, no tone. Then add the missing row and design it.
+10. **Optional (one project did this; check with the owner):** keep words and numbers in the ordinary text color, and let a small mark next to them carry the tone: a dot, an icon, a bar, a ring, or a pale tint behind a notice.
 
-## 1. Thresholds and meanings (one source of truth each)
+## 1. Thresholds and meanings (each defined once)
 
 | Question | Answer | Where it is defined |
 |---|---|---|
-| When is it "{{state name}}"? | {{the rule, with < and <= spelled out}} | {{constant or function, and file}} |
-| What do 0, empty and missing mean for {{value}}? | {{answer}} | {{where}} |
-| Why do two screens show different numbers for {{name}}? | {{the different questions, and the words that say which}} | {{where}} |
+| What makes it "{{state name}}"? | {{the rule, with < and <= written out}} | {{constant or function, and file}} |
+| For {{value}}, what do 0, empty and missing each mean? | {{answer}} | {{where}} |
+| Why might {{name}} differ between two screens? | {{the question each one answers, and the words that tell them apart}} | {{where}} |
 
 ## 2. The matrix
 
-One row per state. The id is `<class>-<number>` and is never reused. "Hidden" is what this state leaves out that a neighbouring state shows. "Next step" is `yes -> <where it goes>` or `no: <reason>`.
+A row for every state. Ids look like `<class>-<number>` and are never used twice. "Hidden" names what this state leaves out that a related state shows. "Next step" is `yes -> <destination>` or `no: <reason>`.
 
 | Id | State | Trigger | Words | Tone | Where the tone shows | Hidden | Next step | Test |
 |---|---|---|---|---|---|---|---|---|
@@ -37,18 +37,18 @@ One row per state. The id is `<class>-<number>` and is never reused. "Hidden" is
 
 *Example (generic):* `none-1 | First use | the list has never had an item | "No projects yet" | none | none | filters and sort | yes -> New project | states_none_1`.
 
-Classes to sweep. A class the product truly does not have gets one row with State `n/a` and the reason in Trigger.
+Go through each class below. If the product has no such case, give the class one row with State `n/a` and the reason under Trigger.
 
 | Class | Prompts |
 |---|---|
-| `none`: nothing there yet | first use; nothing matches a search or filter; all done; nothing this period; sample data |
-| `setup`: not set up | no limit or target; a permission not given; set up and waiting for the first data |
-| `limit`: progress against a number | under; near; exactly at; over; projected to go over |
-| `time`: time edges | first day; last day; a past or future period; the change at local midnight |
-| `load`: loading and stale | first load; refresh while old data shows; stale (say how old); partial data |
-| `fail`: failure and gates | failed; cancelled; denied; offline; a hand-off to another app that comes back with each possible outcome |
-| `hide`: hidden or left out | private values hidden; items left out of a total; archived items |
-| `edge`: data extremes | zero; one item; thousands; very large and very small values; negative; a very long name; no name; right-to-left text |
+| `none`: nothing there yet | first use; a search or filter with no matches; everything done; nothing in this period; sample data |
+| `setup`: not set up | no target or limit set; a permission not granted; set up but no data yet |
+| `limit`: progress toward a number | under; close; exactly on it; over; on course to go over |
+| `time`: edges of time | the first day; the last day; a past or future period; the switch at local midnight |
+| `load`: loading and stale | the first load; refreshing while old data is shown; stale (say how old); some data missing |
+| `fail`: failures and gates | failed; cancelled; denied; offline; handing off to another app and coming back with each possible result |
+| `hide`: hidden or left out | private values hidden; items not counted in a total; archived items |
+| `edge`: extreme data | zero; a single item; thousands; huge and tiny values; negative values; an extremely long name; a missing name; right-to-left text |
 
 ## 3. Boundaries
 
@@ -56,14 +56,14 @@ Classes to sweep. A class the product truly does not have gets one row with Stat
 |---|---|---|---|---|---|
 | {{name}} | {{value}} | {{row id}} | {{row id}} | {{row id}} | {{where}} |
 
-## 4. Modes (every row is checked in each)
+## 4. Modes (check every row in each)
 
 | Mode | What must hold | Result: seen, or "not seen" |
 |---|---|---|
-| Light and dark | text keeps 4.5:1 and marks keep 3:1 against their background | {{result}} |
-| Largest text size | words wrap or shorten; nothing overlaps or clips | {{result}} |
-| Reduced motion | nothing slides or bounces in; content appears in place | {{result}} |
-| Screen reader | each state is read as its words, never as "red dot" | {{result}} |
+| Light and dark | text at 4.5:1 or more and marks at 3:1 or more against what is behind them | {{result}} |
+| Largest text size | words wrap or shorten, and nothing overlaps or gets cut off | {{result}} |
+| Reduced motion | nothing slides or bounces in; content simply appears | {{result}} |
+| Screen reader | a state is announced by its words, never as "red dot" | {{result}} |
 
 ## 5. Contradictions settled
 
@@ -79,8 +79,8 @@ Classes to sweep. A class the product truly does not have gets one row with Stat
 
 ## Building from it
 
-- An option for engineers: one function per screen picks the state and returns everything the screen says for it (the label, the figure, the caption and the tone), so two screens cannot word one state differently.
-- Write one test per row, named with its id. Add one test that loops over every state and fails when a state lacks its words, its tone or its screen-reader text. For each threshold, test just below, exactly at and just above it.
-- Keep one hidden page or story that draws each component in every state side by side, through the same code and tokens as the real screen, in light and dark.
-- When someone flags one wrong state, list every state of that feature here before you fix the one they named.
-- A change to a word, a threshold or a tone edits this file in the same change.
+- For engineers, one option: give each screen a single function that chooses the state and returns all of its text for that state (label, figure, caption and tone), so two screens can never phrase one state two ways.
+- Name one test after each row's id. Add a test that goes through every state and fails if one is missing its words, its tone or its screen-reader text. For each threshold, test a value just under it, one exactly on it and one just over it.
+- Keep a hidden page or story that shows each component in every state next to each other, using the live screen's own code and tokens, in light and dark.
+- If someone points out one wrong state, list all of that feature's states here before fixing the one they mentioned.
+- A change to any wording, threshold or tone updates this file in the same change.

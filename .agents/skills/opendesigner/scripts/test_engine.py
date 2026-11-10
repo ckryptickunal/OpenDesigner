@@ -727,6 +727,33 @@ class ReviewFindsWhatShips(unittest.TestCase):
             self.assertNotIn("od-tokens.css", order)       # OpenDesigner's own export is the system, not code
 
 
+class PlaybookShips(unittest.TestCase):
+    """PR 52's third review (2026-10-13), defects 7 and 8: the cards the skills cite ship, and the export skill asks before
+    it replies in a design file's comment thread. Run from the repository; a copied skill has no research/ to compare."""
+
+    def setUp(self):
+        if not os.path.isdir(os.path.join(REPO, "research")):
+            self.skipTest("needs the repository's research/ folder")
+
+    def test_every_card_the_skills_cite_ships(self):
+        import glob
+        text = lambda f: open(f, encoding="utf-8").read()
+        cited = set()
+        for pat in ("skills/*/SKILL.md", "skills/opendesigner/references/*.md", "skills/opendesigner/assets/output/*.md"):
+            for f in glob.glob(os.path.join(REPO, pat)):
+                cited |= set(re.findall(r"\bDC-L\d+-\d+\b", text(f)))
+        written = {c for f in glob.glob(os.path.join(REPO, "research", "*.md")) for c in re.findall(r"^### (DC-L\d+-\d+):", text(f), re.M)}
+        shipped = {c for f in glob.glob(os.path.join(REPO, "skills/opendesigner/references/cards/*.json")) for c in re.findall(r'"(DC-L\d+-\d+)"', text(f))}
+        self.assertTrue({"DC-L21-01", "DC-L21-02", "DC-L21-03", "DC-L21-04"} <= shipped)
+        self.assertEqual(sorted(c for c in cited & written if c not in shipped), [])   # run jev_nav.py export, then build_data.py
+
+    def test_export_asks_before_replying_in_a_comment_thread(self):
+        with open(os.path.join(REPO, "skills", "opendesigner-export", "SKILL.md"), encoding="utf-8") as f:
+            steps = [x for x in f.read().splitlines() if "comment thread" in x and re.match(r"\d+\. ", x)]
+        self.assertTrue(steps)
+        self.assertTrue(any("Ask before you reply in a comment thread" in x and "post only the ones they approve" in x for x in steps), steps)
+
+
 class GuardStrictAndHonesty(unittest.TestCase):
     """2026-11-09/10 process audit: review without a system, docs that point at a missing folder, --strict for commits,
     how a key value was set, and the opt-in commit guard Kunal approved. Git runs with no global or system config, so a
