@@ -3815,6 +3815,18 @@
     }
   },
   "stateHash": "706e55906e00aea8",
+  "fileHashes": {
+    "motion.reduced.tokens.json": "c7955277d0b74239",
+    "motion.standard.tokens.json": "4be0703a1109daa9",
+    "opendesigner.resolver.json": "caeab34b9766ad8a",
+    "primitives.tokens.json": "4aa759229c84368d",
+    "semantic.color.dark.tokens.json": "714062f167f69010",
+    "semantic.color.light.tokens.json": "715ac98b57e535bd",
+    "semantic.density.comfortable.tokens.json": "a3779838b5028bcc",
+    "semantic.density.compact.tokens.json": "76b160a5107bbd83",
+    "semantic.density.spacious.tokens.json": "684b0a5681b220fb",
+    "semantic.tokens.json": "c449bd7c2a78ce82"
+  },
   "profile": {
     "id": "persuade",
     "name": "Marketing page",
