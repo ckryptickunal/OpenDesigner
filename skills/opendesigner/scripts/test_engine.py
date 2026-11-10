@@ -15,6 +15,16 @@ import tempfile
 import unittest
 from urllib.parse import parse_qs, urlparse
 
+# No test reads or writes the real home folder or the machine's git config (a guard test once wrote a hook into this Mac's
+# global core.hooksPath for a minute, 2026-11-10). Set before engine (and taste.py, which reads ~/.opendesigner) is imported.
+REAL_HOME = os.path.expanduser("~")
+TEST_HOME = tempfile.mkdtemp(prefix="opendesigner-tests-home-")
+os.environ.update(HOME=TEST_HOME, OD_HOME=os.path.join(TEST_HOME, ".opendesigner"), XDG_CONFIG_HOME=os.path.join(TEST_HOME, ".config"),
+                  GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1")
+import atexit  # noqa: E402
+import shutil  # noqa: E402
+atexit.register(shutil.rmtree, TEST_HOME, True)
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import engine as e  # noqa: E402
 
@@ -840,6 +850,14 @@ class GuardStrictAndHonesty(unittest.TestCase):
                 self.assertEqual(f.read(), "#!/bin/sh\necho theirs\n")
             self.assertEqual(self.run_(e.cmd_guard, d, "remove")[0], 0)
             self.assertTrue(os.path.exists(hook))
+
+    def test_tests_never_touch_the_real_home_or_git_config(self):
+        import subprocess
+        self.assertNotEqual(os.path.expanduser("~"), REAL_HOME)
+        self.assertTrue(os.path.expanduser("~").startswith(tempfile.gettempdir()) or "opendesigner-tests-home-" in os.path.expanduser("~"))
+        self.assertTrue(str(e.taste_py.HOME).startswith(TEST_HOME) if e.taste_py else True)
+        r = subprocess.run(["git", "config", "--get", "core.hooksPath"], cwd=TEST_HOME, capture_output=True, text=True)
+        self.assertEqual(r.stdout.strip(), "")                          # the machine's global hooks folder is out of sight
 
     def test_guard_never_writes_into_a_shared_hooks_folder(self):
         with tempfile.TemporaryDirectory() as t:
