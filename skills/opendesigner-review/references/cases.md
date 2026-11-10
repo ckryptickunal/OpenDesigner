@@ -2,7 +2,7 @@
 
 Generated from `synthesis/review-cases.json` by `tools/build_data.py`. Edit the source, not this file.
 
-77 cases in 7 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
+78 cases in 7 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
 
 ## You only looked at part of it
 
@@ -728,13 +728,13 @@ Sources: S-R5-091
 Sources: S-R5-019, S-R5-007, S-R5-021
 
 ### EN-07 Dev-only overlays, test data and flags
-*How known: seen · default severity: info · applies to: always · inferred*
+*How known: seen · default severity: info · applies to: always · preflight 65 · inferred*
 
 **What goes wrong.** The screenshot includes the framework's dev overlay, a debug banner, feature-flag toggles or seed data that will not ship.
 
 **Why it is missed.** The dev server is what is running.
 
-**How to catch it.** Look for overlays and badges in every shot. Review a production build where you can. Say in the report which mode you looked at.
+**How to catch it.** Look for overlays and badges in every shot. Review a production build where you can. Say in the report which mode you looked at. A variant picker is for review copies only (STD-process-review-taste-41): on a public address the probe looks for the house picker (picker.js, .proto-picker, data-od-stage, data-od-variant) and for look-alike variant or options switchers, and review.py warns. `preflight.py public` finds the same in a build folder before it is deployed.
 
 ### EN-08 Fonts downloaded but not used
 *How known: measured · default severity: warn · applies to: always · preflight 10*
@@ -743,9 +743,20 @@ Sources: S-R5-019, S-R5-007, S-R5-021
 
 **Why it is missed.** A font that loads looks like a font that works. Nobody compares what loaded with what is drawn.
 
-**How to catch it.** The probe compares the families document.fonts has loaded with every family named in a visible text element's font stack (fonts.unused), and review.py warns for each loaded family no text names. Text drawn only by ::before or ::after is not read, so check an icon font by hand. It also notes a public page with no share image, favicon or description, or a noindex (a note: fine on a draft).
+**How to catch it.** The probe compares the families document.fonts has loaded with every family named in a visible text element's font stack (fonts.unused), and review.py warns for each loaded family no text names. Text drawn only by ::before or ::after is not read, so check an icon font by hand.
 
 Sources: S-R5-104
+
+### EN-09 Share card and llms.txt out of step with the page
+*How known: measured · default severity: warn · applies to: always · preflight 62 and 63*
+
+**What goes wrong.** The headline, hero picture, logo or brand colour changes, and the share image, the share title and description, and llms.txt still describe the old page. A link posted that week shows last week's words, and an answer engine repeats a claim the owner removed.
+
+**Why it is missed.** None of them is on the page. They are made once, often by a script someone has to remember to run, and platforms cache the old card.
+
+**How to catch it.** The probe reads the share tags, the title and meta description, the h1 and the line under it. On a page with share tags, review.py warns when a title shares under a third of its words with the h1 and that line, or a description under a quarter (a different share title can be deliberate, so it is a warning, not an error). `review.py check` saves the share image, headline, hero picture and logo in review/share.json, and `engine.py review` warns when the share image's git date is older than the last change to any of them or to the brand colour. `search.py audit` compares llms.txt with the pages (SE-10). It also notes a public page with no share image, favicon or description, or a noindex (a note: fine on a draft).
+
+Sources: S-R5-105, S-R5-106
 
 ## How a reviewer fools itself
 

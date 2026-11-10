@@ -710,8 +710,57 @@
     const files = (performance.getEntriesByType ? performance.getEntriesByType('resource') : []).filter((e) => /\.(woff2?|ttf|otf)(\?|#|$)/i.test(e.name)).length;
     out.fonts = { faces, failed, familyState, ready: document.fonts ? document.fonts.status : 'unknown', loadedFamilies: loaded.size, unused: unused.slice(0, CAP), files };
     const q = (s) => document.querySelector(s);
+    // launch basics, and what a shared link shows next to what the page says (EN-09): the share text, the h1 and the
+    // paragraph under it, the share image, and the hero picture and logo whose change should rebuild that image
+    const content = (s) => { const e = q(s); const c = e && (e.getAttribute('content') || '').replace(/\s+/g, ' ').trim(); return c || null; };
+    const absUrl = (u) => { try { return u ? new URL(u, document.baseURI).href : null; } catch (e) { return null; } };
+    const shown = (el) => !!el && visible(el, getComputedStyle(el), el.getBoundingClientRect());
+    const said = (el) => (el ? (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 300) : null);
+    const h1 = Array.from(document.querySelectorAll('h1')).find(shown) || null;
+    let lead = null;
+    if (h1) {
+      const box = h1.closest('header,section,main,article,[role=banner]') || document.body;
+      const tw = document.createTreeWalker(box, NodeFilter.SHOW_ELEMENT);
+      tw.currentNode = h1;
+      for (let n = tw.nextNode(), i = 0; n && i < 400; n = tw.nextNode(), i++) {
+        if (h1.contains(n)) continue;
+        if (/^H[1-3]$/.test(n.tagName)) break;
+        const named = /\b(lead|lede|subtitle|subhead|subheading|intro|tagline|deck)\b/i.test(typeof n.className === 'string' ? n.className : '');
+        if ((n.tagName === 'P' || named) && (n.textContent || '').trim().length >= 20 && shown(n)) { lead = n; break; }
+      }
+    }
+    let hero = null, heroArea = 0;
+    for (const img of document.images) {
+      const r = img.getBoundingClientRect(), a = r.width * r.height;
+      if (r.top + window.scrollY >= vh || a < 0.05 * vw * vh || a <= heroArea || !shown(img)) continue;   // in the first screen, 5% of it or more
+      heroArea = a; hero = img.currentSrc || img.src;
+    }
+    if (!hero && h1) {
+      const box = h1.closest('header,section,main,[role=banner]'), m = box && /url\(["']?([^"')]+)/.exec(getComputedStyle(box).backgroundImage);
+      if (m) hero = absUrl(m[1]);
+    }
+    const logoImg = q('header a[href="/"] img, [role=banner] a[href="/"] img, a[rel~=home] img, header img, [role=banner] img');
+    const logoSvg = !logoImg && q('header a[href="/"] svg, [role=banner] a[href="/"] svg, a[rel~=home] svg');
+    const home = q('header a[href="/"], [role=banner] a[href="/"], a[rel~=home]');
     out.share = { image: !!q('meta[property="og:image"],meta[name="twitter:image"]'), icon: !!q('link[rel~=icon],link[rel=apple-touch-icon]'),
-                  description: !!q('meta[name=description]'), robots: (q('meta[name=robots]') || {}).content || null };
+                  description: !!q('meta[name=description]'), robots: (q('meta[name=robots]') || {}).content || null,
+                  title: document.title || null, metaDescription: content('meta[name=description]'),
+                  ogTitle: content('meta[property="og:title"],meta[name="og:title"]'), ogDescription: content('meta[property="og:description"],meta[name="og:description"]'),
+                  twitterTitle: content('meta[name="twitter:title"]'), twitterDescription: content('meta[name="twitter:description"]'),
+                  imageUrl: absUrl(content('meta[property="og:image"],meta[name="og:image"],meta[name="twitter:image"]')),
+                  siteName: content('meta[property="og:site_name"],meta[name=application-name]'),
+                  h1: said(h1), lead: said(lead), hero, logo: logoImg ? (logoImg.currentSrc || logoImg.src) : logoSvg ? 'inline svg' : null,
+                  logoName: (logoImg && logoImg.alt) || (home && home.getAttribute('aria-label')) || null };
+    // a variant or options picker: the house picker is for review copies only (STD-process-review-taste-41); review.py
+    // flags it on a public address (EN-07)
+    const pickerScripts = Array.from(document.scripts).map((s) => s.src).filter((s) => /(^|\/)(od-|proto-|variants?-|options?-)?picker(\.min)?\.js(\?|#|$)/i.test(s));
+    const pickerMarkup = Array.from(document.querySelectorAll('.proto-picker,[data-od-stage],[data-od-variant]')).length;
+    const switchers = Array.from(document.querySelectorAll('[id],[class],[aria-label]')).filter((el) => {
+      const name = [el.id, typeof el.className === 'string' ? el.className : '', el.getAttribute('aria-label') || ''].join(' ');
+      return /\b(variants?|options?|iterations?|versions?|directions?|drafts?)[-_ ]?(picker|switch|switcher|bar|panel|toolbar|toggle)\b/i.test(name) &&
+        el.querySelectorAll('button,[role=button],[role=radio],[role=tab]').length >= 2;
+    }).slice(0, 3).map((el) => ({ sel: sel(el), buttons: el.querySelectorAll('button,[role=button],[role=radio],[role=tab]').length }));
+    out.picker = { scripts: pickerScripts.slice(0, 3), markup: pickerMarkup, switchers };
     out.motion = od.motion();
     out.stress = Array.from(new Set(Object.keys(active).concat(Array.from(document.querySelectorAll('style[id^="__od-stress-"]')).map((e) => e.id.slice(12)))));
     out.mode = { theme: de.getAttribute('data-theme'), density: de.getAttribute('data-density'), motion: de.getAttribute('data-motion') };

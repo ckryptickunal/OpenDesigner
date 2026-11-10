@@ -177,6 +177,7 @@ These are mistakes an AI builder made in the source project (DC-L22-09). Most dr
 | A broad rule restyling a label | A rule for a card's paragraphs also turns the card's small uppercase label into 16 px body text | Scope paragraph rules away from labels and read the label's computed style (preflight 59) |
 | Quieting text with opacity | A count or unit set at 70% opacity passes on white and fails on a tinted, selected state | A muted colour token that passes where it sits (preflight 60) |
 | Links only as tall as their text | Header and breadcrumb links 18 to 22 px tall on phones | A 44 px hit area on touch, without moving anything (preflight 61) |
+| Launch files left behind | The share card shows last week's headline, llms.txt describes an earlier page, and the review picker and screenshots are served to visitors | After every content change, rebuild the share image, refresh the share text, llms.txt and the sitemap, and run `search.py audit` and `preflight.py public` before the deploy |
 
 **A repeated note is the strongest signal you get.** When the person says something a second time, or says "again" or "as I said", another small patch is the wrong answer.
 1. Stop, and re-read both of their messages word for word.

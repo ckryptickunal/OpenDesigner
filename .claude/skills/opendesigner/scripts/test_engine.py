@@ -768,6 +768,49 @@ class ReviewAndFeedback(unittest.TestCase):
                 f.write(text.replace("## Motion\n", "## Motion\n\nold text\n"))
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
 
+    def test_review_dates_the_share_image_against_what_it_shows(self):                                  # review case EN-09
+        import shutil
+        import subprocess
+        if not shutil.which("git"):
+            self.skipTest("git is not installed")
+        with tempfile.TemporaryDirectory() as t:
+            def git(*a, when=None):
+                env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t.example", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t.example")
+                if when:
+                    env.update(GIT_AUTHOR_DATE=when, GIT_COMMITTER_DATE=when)
+                subprocess.run(["git", "-C", t, *a], check=True, capture_output=True, env=env)
+
+            def write(rel, text):
+                os.makedirs(os.path.dirname(os.path.join(t, rel)), exist_ok=True)
+                with open(os.path.join(t, rel), "w", encoding="utf-8") as f:
+                    f.write(text)
+            d = os.path.join(t, "opendesigner")
+            git("init", "-q")
+            write("public/og.png", "png v1")
+            write("public/hero.jpg", "jpg v1")
+            write("src/index.html", "<h1>Invoices that <em>chase</em>\n  themselves</h1><p>Old lead.</p>")
+            write("opendesigner/state.json", '{"brandColor": "#FF5A36"}')
+            git("add", "-A")
+            git("commit", "-qm", "first", when="2026-11-01T10:00:00+00:00")
+            self.assertEqual(e.share_card_age(d, t), [])   # no review/share.json yet: nothing to date
+            write("opendesigner/review/share.json", json.dumps({"pages": {"/": {"image": "https://draft.example/og.png?v=6", "h1": "Invoices that chase themselves",
+                                                                                "hero": "http://localhost:3000/hero.jpg", "logo": "inline svg"}}}))
+            self.assertEqual(e.share_card_age(d, t, "#ff5a36"), [])   # everything landed with the image
+            write("src/index.html", "<h1>Invoices that <em>chase</em>\n  themselves</h1><p>A new lead, same headline.</p>")
+            git("commit", "-qam", "lead only", when="2026-11-03T10:00:00+00:00")
+            self.assertEqual(e.share_card_age(d, t, "#ff5a36"), [])   # the headline's text did not change
+            write("opendesigner/state.json", '{"brandColor": "#0051FF"}')
+            git("commit", "-qam", "new accent", when="2026-11-04T10:00:00+00:00")
+            [hit] = e.share_card_age(d, t, "#0051ff")
+            self.assertEqual((hit["route"], hit["image"], hit["imageDate"]), ("/", "public/og.png", "2026-11-01 10:00"))
+            self.assertIn("the brand colour #0051ff in opendesigner/state.json (commit", hit["since"][0])
+            write("public/og.png", "png v2")
+            git("commit", "-qam", "new card", when="2026-11-05T10:00:00+00:00")
+            self.assertEqual(e.share_card_age(d, t, "#0051ff"), [])
+            write("public/hero.jpg", "jpg v2")   # a new hero picture, not committed yet
+            [hit] = e.share_card_age(d, t, "#0051ff")
+            self.assertIn("the hero picture public/hero.jpg (an uncommitted edit", hit["since"][0])
+
     def test_review_finds_shadows_and_durations(self):
         with tempfile.TemporaryDirectory() as t:
             d = os.path.join(t, "opendesigner")
@@ -4648,6 +4691,85 @@ class ChartAndTableTokens(unittest.TestCase):
             chart = {v["name"]: v["scopes"] for c in figma["collections"] for v in c["variables"] if v["name"].startswith("color/chart/")}
             self.assertEqual(chart["color/chart/label"], ["TEXT_FILL"])
             self.assertEqual(chart["color/chart/brand"], ["SHAPE_FILL", "STROKE_COLOR"])
+
+    def test_light_sequential_steps_say_they_are_for_cells(self):
+        """Issue #81 (owner, 2026-11-09): the light end stays under 3:1, described as for touching cells, never a lone mark."""
+        for brand in (None, "#e11d48", "#facc15", "#16a34a", "#2f6f8f"):
+            with self.subTest(brand=brand):
+                files, meta, _ctx = e.generate_system(chart_state("categorical-8", brand))
+                for mode in meta["modes"]:
+                    fl = e.resolve_all(files, {"theme": mode})
+                    hx = self.hexes(files, mode)
+                    light = [i for i in range(1, 6) if e.contrast(hx[f"color.chart.sequential.{i}"], hx["color.surface.base"]) < 3.0 * e.MARGIN]
+                    self.assertEqual(e.light_sequential_resolved(fl), light)
+                    self.assertIn(1, light)                       # the light end is kept, not moved to darker steps
+                    for i in range(1, 6):
+                        desc = fl[f"color.chart.sequential.{i}"]["$description"]
+                        if i in light:
+                            self.assertIn("Under 3:1 against the page", desc)
+                            self.assertIn("heatmap", desc)
+                            self.assertIn("never for a line, bar or dot on its own (WCAG 1.4.11)", desc)
+                        else:
+                            self.assertEqual(desc, "At least 3:1 against the page: also for a line, bar or dot.")
+                    tree = json.loads(json.dumps(files[f"semantic.color.{mode}.tokens.json"]))
+                    group = tree["color"]["chart"]["$description"]
+                    self.assertIn("A mark that stands alone on the page (a line, a bar, a dot) is at least 3:1 against it", group)
+                    self.assertIn(f"sequential {e.step_span(light)} are under 3:1", group)
+                rep = e.Report()
+                e.validate_files(files, chart_state("categorical-8", brand), rep)   # a heatmap's light end is never an error
+                self.assertEqual([i for i in rep.items if "sequential" in i["message"]], [])
+        self.assertEqual((e.step_span([1]), e.step_span([1, 2, 3]), e.step_span([1, 3])), ("step 1", "steps 1-3", "steps 1 and 3"))
+
+    def test_design_md_states_the_chart_contrast_rule(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Heat", "#2f6f8f", "regular", "web", "calm", quiet=True)
+            quiet(e.cmd_set, d, "answers.Q-color-19", "categorical-6-8", "dashboards")
+            quiet(e.cmd_design_md, d)
+            with open(os.path.join(t, "DESIGN.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("A mark that stands alone on the page (a line, a bar, a dot) is at least 3:1 against it (WCAG 1.4.11).", text)
+            self.assertRegex(text, r"The light end of `color\.chart\.sequential` \(steps? [0-9]")
+            self.assertIn("with a 1 px gap between cells that shows the surface behind, or the value in each cell", text)
+            self.assertNotIn("Every mark is at least 3:1", text)
+            self.assertRegex(text, r"\| `color\.chart\.sequential\.1` \| `#[0-9a-f]{6}` \| `#[0-9a-f]{6}` \| Under 3:1 against the page")
+
+    def test_review_warns_only_for_a_line_in_a_light_sequential_step(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Heat", "#2f6f8f", "regular", "web,ios,android", "calm", quiet=True)
+            quiet(e.cmd_set, d, "answers.Q-color-19", "categorical-6-8", "dashboards")
+            files, meta, _c = e.generate_system(e.load_state(d))
+            light = e.light_sequential_resolved(e.resolve_all(files, {"theme": "light"}))
+            dark_step = min(set(range(1, 6)) - set(light))
+            os.makedirs(os.path.join(t, "src"))
+            def w(name, text):
+                with open(os.path.join(t, "src", name), "w") as f:
+                    f.write(text)
+            w("chart.css", ".trend { stroke: var(--ds-color-chart-sequential-1); }\n"          # a line: warned
+                           ".cell { fill: var(--ds-color-chart-sequential-1); }\n"             # a heatmap cell: fine
+                           ".cell-2 { background: var(--ds-color-chart-sequential-2); }\n"
+                           f".trend-ok {{ stroke: var(--ds-color-chart-sequential-{dark_step}); }}\n"
+                           ".kept { stroke: var(--ds-color-chart-sequential-1); } /* od-ignore */\n")
+            w("Chart.tsx", 'export const L = () => <path stroke="var(--ds-color-chart-sequential-1)" d="M0 0" />;\n'
+                           'export const H = () => <rect className="fill-chart-sequential-1 stroke-chart-sequential-1" />;\n')
+            w("Chart.swift", "Path { p in p.move(to: .zero) }.stroke(DS.Colors.chartSequential1, lineWidth: 2)\n"
+                             "Rectangle().fill(DS.Colors.chartSequential1)\n")
+            w("Chart.kt", "drawLine(color = colors.chartSequential1, start = a, end = b)\ndrawRect(color = colors.chartSequential1)\n")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                e.cmd_review(d, as_json=True)
+            res = json.loads(out.getvalue())
+            got = sorted((f_["file"].split(os.sep)[-1], f_["line"]) for f_ in res["findings"] if f_["kind"] == "chart")
+            self.assertEqual(got, [("Chart.kt", 1), ("Chart.swift", 1), ("Chart.tsx", 1), ("Chart.tsx", 2), ("chart.css", 1)])
+            self.assertTrue(all(f_["severity"] == "warning" and f_["rule"] == "WCAG 2.2 SC 1.4.11" for f_ in res["findings"] if f_["kind"] == "chart"))
+            self.assertEqual(res["tokens"], "ok")                 # a warning is not a hard-coded value
+            text = io.StringIO()
+            with contextlib.redirect_stdout(text):
+                e.cmd_review(d)
+            self.assertIn("5 chart lines use a light sequential step (a warning, WCAG 1.4.11):", text.getvalue())
+            self.assertIn(f"use color.chart.sequential.{dark_step} or a later step", text.getvalue())
+            self.assertNotIn("chart", text.getvalue().split("skip the tokens:")[-1].split("\n")[0] if "skip the tokens:" in text.getvalue() else "")
 
     def test_the_table_question_sets_stripes_and_rules(self):
         with tempfile.TemporaryDirectory() as t:
