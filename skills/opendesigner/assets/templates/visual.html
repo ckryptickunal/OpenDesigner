@@ -1,0 +1,14 @@
+
+<script>
+  window.OD_TEMPLATE = { project: "{{project_name}}", sample: "{{sample}}" };
+  document.addEventListener('DOMContentLoaded', () => {
+    const project = window.OD_TEMPLATE.project;
+    const sample = window.OD_TEMPLATE.sample;
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = walker.nextNode())) {
+      if (node.nodeValue.includes('Acme')) node.nodeValue = node.nodeValue.replaceAll('Acme', project);
+    }
+    document.querySelectorAll('[data-od-sample], .sample, #sample').forEach(el => { el.textContent = sample; });
+  });
+</script>
