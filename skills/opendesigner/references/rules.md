@@ -129,15 +129,17 @@ One line per decision. A line looks the same whether it comes from a template bu
 |---|---|
 | `OD:set <path>=<json-value> [--why "reason"]` | `engine.py set '<path>=<json-value>' --why "reason"`. The path is a question id (Q-shape-01, which records an answer), `dials.<name>`, `raw.<input>`, `hooks.<H-id>.status`, or a token path |
 | `OD:lock <path>` / `OD:unlock <path>` | `engine.py lock <path>` / `engine.py unlock <path>`. Unlock only with consent |
-| `OD:accept <ref-id>:<path>` | `engine.py set <path> <value> --set-by reference --source-ref <ref-id>`, for a value pre-filled from a reference |
+| `OD:accept <ref-id>:<path>[=<json-value>]` | `engine.py set <path> <value> --set-by reference --source-ref <ref-id>`, for a value pre-filled from a reference; the adapt page writes the value after `=` |
 | `OD:ignore <ref-id>:<path>` | Nothing: the pre-filled value is dropped |
 | `OD:remix <dimension>=<option-value>` | Option gallery: take that dimension (color, type, shape or depth) from the named option, and `set` its values. Direction board: add `--remix <axis>=<id>` to the `OD:direction` line's command |
 | `OD:direction <id> [--why "reason"]` | `engine.py research directions pick <id> [--remix <axis>=<id>]... --why "reason"` (`research.md` section 9) |
+| `OD:fix <issue>=<option>` | From the audit page (`audit-page`). The copied line is the person's yes to that change in their code: `engine.py ledger add <issue> --note "<option>"`, make the change from tokens, then `engine.py ledger done <issue>` (or `ledger broke <issue> --note "..."`). An option that needs a new token records it first with `set` |
+| `OD:waive <issue> --why "reason"` | From the audit page: keep it as it is, on purpose. `engine.py ledger add <issue>`, then `engine.py ledger waive <issue> --why "reason" --by owner --quote "<their words>"` |
 | `OD:add library.<id>` | A pick from the component gallery (the MCP server or the website). Confirm with the person, then `library.py add <id>` (`library.md`, "Adding one after a yes"). It records no decision |
 
 - Values are JSON: strings in double quotes (`"subtle"`, `"#167874"`), numbers bare (`45`). The engine also accepts a bare word.
 - Parse defensively. Ignore text outside `OD:` lines, and apply lines in order. If a value is not a listed option, confirm it as a custom value before recording it.
-- Examples: `OD:set Q-depth-01="ring-shadow"` · `OD:set dials.roundness=65 --why "a bit softer"` · `OD:lock raw.brandColor` · `OD:remix color="soft"` · `OD:direction "A" --why "calm, like our office"`.
+- Examples: `OD:set Q-depth-01="ring-shadow"` · `OD:set dials.roundness=65 --why "a bit softer"` · `OD:lock raw.brandColor` · `OD:remix color="soft"` · `OD:direction "A" --why "calm, like our office"` · `OD:fix A-space-01=down` · `OD:waive A-color-02 --why "the chart needs both"`.
 
 ## 10. Avoiding the generic AI look
 Vendors and NN/g have documented that AI-made interfaces converge on the same few looks (L17 finding 4). Flag it once when a choice lands there. Don't ban anything.

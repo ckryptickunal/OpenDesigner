@@ -27,11 +27,12 @@ ALLOWED = {"name", "description", "license", "compatibility", "metadata", "allow
 IGNORE = {"__pycache__", ".DS_Store", "node_modules", "out", ".vite"}  # the painting engine must ship without installs or renders
 # claude.ai installs each uploaded skill on its own, so the sub-skills' zips carry the engine and the data it
 # reads (spec 8.2). In the repo and in plugin installs they use the sibling opendesigner skill instead.
-BUNDLE = {p: p for p in ("scripts/engine.py", "scripts/journey.py", "references/levers.json", "references/hooks.json",
+BUNDLE = {p: p for p in ("scripts/engine.py", "scripts/journey.py", "scripts/audit.py", "references/ontology-slim.json", "references/levers.json", "references/hooks.json",
                           "references/graph.json", "references/questions.json", "references/pacing.json",
                           "references/report.schema.json", "references/rules.md", "references/zoom.md",
                           "references/improve.md", "references/making.md", "references/audit.md", "assets/picker.js",
-                          "assets/output/PROTOCOL.md")}  # engine.py imports journey.py, which reads pacing and the report schema; review.py compare inlines picker.js
+                          "assets/output/PROTOCOL.md")}  # engine.py imports journey.py, which reads pacing and the report schema; review.py compare inlines picker.js;
+# audit.py runs audit-page and adapt; the ledger names building blocks from ontology-slim.json
 
 
 def check(skill):
