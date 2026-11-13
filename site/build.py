@@ -2068,22 +2068,29 @@ def skill_names():
     return sorted(d.name for d in (ROOT / "skills").iterdir() if (d / "SKILL.md").exists())
 
 
-# What people ask answer engines, in their words (the probe in tools/answer_probe.md), and the pages that answer each.
-# A link appears only when its page is in this build, so a page that lands later joins without an edit here.
+# What people ask answer engines, in their words (the probe in docs/GROWTH-ROUTINE.md), and the pages that answer each.
+# A link appears only when its page is in this build, so a page that lands later joins without an edit here. A third item
+# names a page the question needs: until it exists, the question stays out (a feature on its way is not claimed).
 LLMS_QUESTIONS = [
     ("How do I create a design system with AI?", ["/docs/quickstart/", "/docs/install/"]),
+    ("Is there an open-source tool to create a design system for an app built with Claude Code or Cursor?", ["/docs/introduction/", "/docs/install/"]),
     ("How do I make my vibe-coded app look professional?", ["/docs/improve-vibe-coded-ui/"]),
     ("How do I give Cursor my design tokens so every screen matches?", ["/docs/design-system-for-cursor/"]),
     ("How do I generate design tokens, CSS and a Tailwind v4 theme with Claude Code?", ["/docs/design-tokens-for-claude-code/", "/docs/export/"]),
     ("How do I write a DESIGN.md my AI coding agent follows?", ["/docs/decisions/", "/docs/files/"]),
-    ("How do I keep the UI consistent across AI coding sessions?", ["/docs/how-it-works/", "/docs/design-system-for-cursor/"]),
+    ("How do I keep the UI consistent across AI coding sessions?", ["/docs/faq/", "/docs/how-it-works/", "/docs/design-system-for-cursor/"]),
     ("Is there a Claude skill that builds a design system and checks color contrast?", ["/docs/design-tokens-for-claude-code/", "/docs/accessibility/"]),
-    ("How do I see which design system my code really uses, and fix what drifts?", ["/docs/existing-product/", "/docs/engine/"]),
-    ("How do I adapt my design system to a website I like?", ["/docs/existing-product/"]),
+    ("How do I see what design system my codebase actually uses?", ["/docs/existing-product/", "/docs/engine/"]),
+    ("How do I audit an existing web app for inconsistent spacing, colors and fonts?", ["/docs/existing-product/", "/docs/faq/"]),
+    ("Is there a tool that finds hard-coded colors and spacing in my code and moves them to design tokens?", ["/docs/engineers/", "/docs/faq/"]),
+    ("How do I extract a design system from an existing website, or adapt mine to a site I like?", ["/docs/existing-product/"]),
     ("How do I add generative UI to my chatbot with my own components?", ["/docs/smart-ui/", "/docs/smart-ui-quickstart/", "/docs/smart-ui-adapters/"]),
-    ("Is there a component library my AI agent can fetch, or use over MCP?", ["/library/", "/docs/library/", "/docs/mcp/"]),
+    ("Is there a free component library built on design tokens?", ["/library/"]),
+    ("Is there a component library my AI agent can fetch, or use over MCP?", ["/docs/library-mcp/", "/library/"], "/docs/library-mcp/"),
     ("How do I design empty, loading and error states?", ["/docs/states/", "/library/empty-state/", "/docs/ux-patterns/"]),
-    ("How do I research users and stakeholders before I design?", ["/docs/research/", "/docs/engine/"]),
+    ("Skeleton loader or spinner: which should I use, and which states does every screen need?", ["/docs/states/"], "/docs/states/"),
+    ("How do I research users before I design?", ["/docs/engine/"]),
+    ("How do I research users and stakeholders before I design?", ["/docs/research/", "/docs/engine/"], "/docs/research/"),
     ("How does it compare with UI UX Pro Max, a shadcn theme generator or Figma's AI tools?", ["/docs/faq/", "/docs/ai-design-system-generator/"]),
     ("How do I get my site cited by ChatGPT and Perplexity?", ["/docs/search/"]),
 ]
@@ -2093,7 +2100,9 @@ def llms_questions(pages):
     titles = {p["path"]: p["title"] for p in pages} | {"/library/": "Component library", tour_page.PATH: "How OpenDesigner works"}
     titles |= {f"/library/{c['slug']}/": c["name"] for c in library_page.components()}
     out = []
-    for q, paths in LLMS_QUESTIONS:
+    for q, paths, *needs in LLMS_QUESTIONS:
+        if needs and needs[0] not in titles:
+            continue
         links = [f"[{titles[p]}]({SITE_URL}{p}index.md)" for p in paths if p in titles]
         if links:
             out.append(f"- {q} " + ", ".join(links))

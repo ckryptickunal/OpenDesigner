@@ -4,7 +4,7 @@ seo_title: OpenDesigner FAQ: AI design systems, tokens, teams, privacy
 description: Plain answers about OpenDesigner: what it is, which AI tools it works with, privacy, accessibility, how it compares, team governance, and how early it is.
 section: Reference
 order: 5
-updated: 2026-11-10
+updated: 2026-11-13
 ---
 
 ### What is OpenDesigner?
@@ -71,6 +71,24 @@ It reads your Tailwind config before asking anything. When your platforms includ
 ### How do AI coding agents use DESIGN.md?
 
 `DESIGN.md` holds your design rules in plain words, and coding agents read it before they touch the interface. OpenDesigner asks before adding a short note to your `AGENTS.md` that tells agents to read it, use the tokens and run `engine.py review` when they finish. See [Decisions, DESIGN.md and the overview page](/docs/decisions/).
+
+### How do I keep the UI consistent across AI coding sessions?
+
+Give every session the same rules to read. OpenDesigner writes them into your project: `DESIGN.md`, the design tokens, and, once you say yes, a note in `AGENTS.md` and `CLAUDE.md` that tells the agent to read `DESIGN.md` first. When a piece of work is done, `engine.py review` lists hard-coded colors and sizes, and any part of `DESIGN.md` that has gone stale. See [How it works](/docs/how-it-works/).
+
+### How do I find inconsistent spacing, colors and fonts in my app?
+
+One page shows your system as your code builds it: each token with how often the code uses it, then each place the code and the system disagree, with the file and line. That covers colors too close to tell apart, spacing, text sizes and corners off the scale, and values typed by hand where a token exists. Review also says when the fonts in `DESIGN.md` appear nowhere in your code. See [Start from an existing app or brand](/docs/existing-product/).
+
+:::dev
+```
+python3 skills/opendesigner/scripts/engine.py audit-page --open
+```
+:::
+
+### Can it replace hard-coded colors and spacing with design tokens?
+
+It finds them and proposes the fix; it does not edit your code by itself. `engine.py review` lists every hard-coded color, size, radius, shadow and duration, and the audit page offers up to three ways to settle each one. Your AI makes the change after you say yes. See [For engineers](/docs/engineers/).
 
 ### Does it send my code or data anywhere?
 
