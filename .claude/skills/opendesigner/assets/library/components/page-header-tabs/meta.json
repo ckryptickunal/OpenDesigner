@@ -32,5 +32,229 @@
       "author": "OSPAN ALI",
       "page": "6xv4A1VA1rU"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a record such as a company, deal or project whose content splits into sections with counts"
+    ],
+    "avoid_when": [
+      "moving between top-level areas of an app: use sidebar-nav",
+      "a person's public profile with photos and followers: use profile-hero",
+      "a header for a list with filters rather than one record: use filter-bar"
+    ],
+    "parts": [
+      {
+        "name": "breadcrumb",
+        "selector": ".odl-crumbs li",
+        "what": "the path to this record; the last item is the current page and is hidden on a phone",
+        "slot": "list"
+      },
+      {
+        "name": "mark",
+        "selector": ".odl-mark",
+        "what": "the record's initials in a tile, hidden on a phone",
+        "slot": "text"
+      },
+      {
+        "name": "title",
+        "selector": "h1",
+        "what": "the record's name",
+        "slot": "text"
+      },
+      {
+        "name": "star",
+        "selector": ".odl-star",
+        "what": "a favourite toggle beside the title",
+        "slot": "action"
+      },
+      {
+        "name": "summary",
+        "selector": ".odl-meta li",
+        "what": "one summary chip: an icon or small photo, a label and a bold value",
+        "slot": "list"
+      },
+      {
+        "name": "secondary",
+        "selector": ".odl-secondary",
+        "what": "the quieter action",
+        "slot": "action"
+      },
+      {
+        "name": "primary",
+        "selector": ".odl-primary",
+        "what": "the main action",
+        "slot": "action"
+      },
+      {
+        "name": "tabs",
+        "selector": "[role=\"tab\"]",
+        "what": "one section tab with an icon and an optional count",
+        "slot": "list"
+      },
+      {
+        "name": "more",
+        "selector": ".odl-more",
+        "what": "a More button that appears when some tabs are out of view and scrolls the row",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "tabs"
+      ],
+      "properties": {
+        "breadcrumb": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "part": "breadcrumb",
+          "items": {
+            "type": "object",
+            "required": [
+              "label"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 28
+              },
+              "href": {
+                "type": "string",
+                "maxLength": 300
+              }
+            }
+          }
+        },
+        "initials": {
+          "type": "string",
+          "maxLength": 3,
+          "part": "mark"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "title"
+        },
+        "starred": {
+          "type": "boolean",
+          "part": "star"
+        },
+        "summary": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 4,
+          "part": "summary",
+          "items": {
+            "type": "object",
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 28
+              },
+              "icon": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "photo": {
+                "type": "string",
+                "maxLength": 300
+              }
+            }
+          }
+        },
+        "actions": {
+          "type": "object",
+          "properties": {
+            "secondary": {
+              "type": "string",
+              "maxLength": 18,
+              "part": "secondary"
+            },
+            "primary": {
+              "type": "string",
+              "maxLength": 18,
+              "part": "primary"
+            }
+          }
+        },
+        "tabs": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 12,
+          "part": "tabs",
+          "items": {
+            "type": "object",
+            "required": [
+              "label"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "count": {
+                "type": "integer"
+              },
+              "icon": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "selected": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the record fails to load, keep the breadcrumb and put an alert-banners notice where the title row is"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "for someone who cannot act on the record, set disabled on the two action buttons and add a :disabled style"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "tabs scroll sideways in their own row, the clipped edge fades, and a More button appears while some are out of view",
+        "evidence": "overflow-x: auto; overscroll-behavior-x: contain"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the title balances its lines and breaks long words; tab and button labels never wrap; summary chips wrap to new lines",
+        "evidence": "overflow-wrap: break-word; text-wrap: balance"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the breadcrumb links, the favourite star, Add to list, Compose email, then the selected tab, then More when it is shown",
+      "Enter or Space on the star adds or removes the favourite",
+      "In the tab row, Left and Right arrows move to and select the previous or next tab, wrapping at the ends; Home and End go to the first and last tab"
+    ]
+  }
 }

@@ -160,8 +160,9 @@
         "evidence": "dl:not(:has(dt:not(:empty))) { display: none; }"
       },
       "loading": {
-        "status": "not_built",
-        "how": "the prompt is shown only once the action is known; while it is being prepared show nothing"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -181,6 +182,10 @@
         "status": "handled",
         "how": "titles, values and button labels wrap, also long addresses with no spaces",
         "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": [

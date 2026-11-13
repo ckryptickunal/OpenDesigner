@@ -4,10 +4,178 @@
   "use": "for telling people something about the page they are on, from a tip to a failure",
   "type": "feedback",
   "style": "quiet",
-  "industries": ["any"],
-  "tags": ["alert", "banner", "notice", "callout", "status"],
-  "states": ["info", "success", "warning", "danger", "hover", "focus", "dismissed"],
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "alert",
+    "banner",
+    "notice",
+    "callout",
+    "status"
+  ],
+  "states": [
+    "info",
+    "success",
+    "warning",
+    "danger",
+    "hover",
+    "focus",
+    "dismissed"
+  ],
   "source": null,
   "a11y": "Info, success and warning use role status and the danger notice uses role alert; actions and dismiss are real buttons, and dismissing moves focus to the next notice.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "a stack of page-level notices of mixed urgency, each with its own fix and a way to dismiss it"
+    ],
+    "avoid_when": [
+      "a short confirmation after an action that should go away on its own: use toast-stack",
+      "a page with nothing to show yet: use empty-state",
+      "a question the person must answer before going on: use confirm-dialog"
+    ],
+    "parts": [
+      {
+        "name": "notices",
+        "selector": ".odl-alert-banners li",
+        "what": "one notice, toned info, success, warning or danger",
+        "slot": "list"
+      },
+      {
+        "name": "icon",
+        "selector": ".odl-icon",
+        "what": "the tone's icon in a tinted circle",
+        "slot": "none"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-body p",
+        "what": "a bold first phrase, then one sentence",
+        "slot": "rich"
+      },
+      {
+        "name": "actions",
+        "selector": ".odl-act",
+        "what": "zero to two buttons that fix or explain the notice; one may be the strong danger button",
+        "slot": "action"
+      },
+      {
+        "name": "dismiss",
+        "selector": ".odl-close",
+        "what": "an icon button that hides the notice",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "notices"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "notices": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "part": "notices",
+          "items": {
+            "type": "object",
+            "required": [
+              "tone",
+              "title"
+            ],
+            "properties": {
+              "tone": {
+                "enum": [
+                  "info",
+                  "success",
+                  "warning",
+                  "danger"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 60,
+                "part": "message"
+              },
+              "body": {
+                "type": "string",
+                "maxLength": 160,
+                "part": "message"
+              },
+              "actions": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 2,
+                "part": "actions",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "label"
+                  ],
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "maxLength": 24
+                    },
+                    "strong": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              },
+              "dismissible": {
+                "type": "boolean",
+                "part": "dismiss"
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "shown",
+        "how": "the danger notice is the error form, announced at once as an alert, with a strong fix button",
+        "evidence": "role=\"alert\""
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "while an action runs, set disabled on its button and add a :disabled style in the muted text colour"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "action buttons wrap to a new line, and in a narrow box each takes the full width",
+        "evidence": ".odl-alert-banners .odl-acts button { flex: 1 1 100%; }"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the message column can shrink and wraps; button labels never wrap",
+        "evidence": "minmax(0, 1fr) auto"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches each notice's action buttons, then its Dismiss button, notice by notice",
+      "Enter or Space presses the focused button",
+      "Dismissing a notice moves focus to the Dismiss button of the next notice, or the previous one if it was last"
+    ]
+  }
 }

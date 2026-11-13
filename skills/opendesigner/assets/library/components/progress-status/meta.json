@@ -4,51 +4,175 @@
   "use": "to answer where an order, refund, request or job is right now",
   "type": "feedback",
   "style": "friendly",
-  "industries": ["any"],
-  "tags": ["status", "progress", "steps", "tracking", "timeline"],
-  "states": ["neutral, info, success, warning and danger tones", "step done", "current step", "next step", "progress bar"],
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "status",
+    "progress",
+    "steps",
+    "tracking",
+    "timeline"
+  ],
+  "states": [
+    "neutral, info, success, warning and danger tones",
+    "step done",
+    "current step",
+    "next step",
+    "progress bar"
+  ],
   "source": null,
   "a11y": "The status is plain text with a decorative icon; the steps are an ordered list and each step's state is read out before its label; the bar is decorative and its value is in the text beside it.",
   "width": "narrow",
   "spec": {
-    "use_when": ["an answer to 'where is my order', 'is it done yet' or 'what happens next', with one status and a few steps"],
-    "avoid_when": ["a list of tasks the person still has to do: use setup-steps", "a finished action with its reference number: use receipt", "something that failed and can be retried: use error-retry", "a live delivery on a map: use delivery-tracker"],
+    "use_when": [
+      "an answer to 'where is my order', 'is it done yet' or 'what happens next', with one status and a few steps"
+    ],
+    "avoid_when": [
+      "a list of tasks the person still has to do: use setup-steps",
+      "a finished action with its reference number: use receipt",
+      "something that failed and can be retried: use error-retry",
+      "a live delivery on a map: use delivery-tracker"
+    ],
     "parts": [
-      {"name": "title", "selector": ".odl-progress-status h3", "what": "what is being tracked", "slot": "text"},
-      {"name": "status", "selector": ".odl-status", "what": "where it is now, in a pill whose colour and icon follow the tone", "slot": "text"},
-      {"name": "progress", "selector": ".odl-progress", "what": "a bar and the share done, when a share is known", "slot": "number"},
-      {"name": "steps", "selector": ".odl-steps li", "what": "one step: done, now or next, with an optional time", "slot": "list"},
-      {"name": "updated", "selector": ".odl-updated", "what": "when the status was last checked", "slot": "text"}
+      {
+        "name": "title",
+        "selector": ".odl-progress-status h3",
+        "what": "what is being tracked",
+        "slot": "text"
+      },
+      {
+        "name": "status",
+        "selector": ".odl-status",
+        "what": "where it is now, in a pill whose colour and icon follow the tone",
+        "slot": "text"
+      },
+      {
+        "name": "progress",
+        "selector": ".odl-progress",
+        "what": "a bar and the share done, when a share is known",
+        "slot": "number"
+      },
+      {
+        "name": "steps",
+        "selector": ".odl-steps li",
+        "what": "one step: done, now or next, with an optional time",
+        "slot": "list"
+      },
+      {
+        "name": "updated",
+        "selector": ".odl-updated",
+        "what": "when the status was last checked",
+        "slot": "text"
+      }
     ],
     "data": {
       "type": "object",
-      "required": ["title", "status", "tone"],
+      "required": [
+        "title",
+        "status",
+        "tone"
+      ],
       "properties": {
-        "title": {"type": "string", "maxLength": 48, "part": "title"},
-        "status": {"type": "string", "maxLength": 60, "part": "status"},
-        "tone": {"type": "string", "enum": ["neutral", "info", "success", "warning", "danger"], "part": "status"},
-        "progress": {"type": "number", "minimum": 0, "maximum": 100, "part": "progress"},
+        "title": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "title"
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "status"
+        },
+        "tone": {
+          "type": "string",
+          "enum": [
+            "neutral",
+            "info",
+            "success",
+            "warning",
+            "danger"
+          ],
+          "part": "status"
+        },
+        "progress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "part": "progress"
+        },
         "steps": {
-          "type": "array", "minItems": 0, "maxItems": 6, "part": "steps",
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 6,
+          "part": "steps",
           "items": {
-            "type": "object", "required": ["label", "state"],
+            "type": "object",
+            "required": [
+              "label",
+              "state"
+            ],
             "properties": {
-              "label": {"type": "string", "maxLength": 60},
-              "time": {"type": "string", "maxLength": 32},
-              "state": {"type": "string", "enum": ["done", "now", "next"]}
+              "label": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "time": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "state": {
+                "type": "string",
+                "enum": [
+                  "done",
+                  "now",
+                  "next"
+                ]
+              }
             }
           }
         },
-        "updated": {"type": "string", "maxLength": 40, "part": "updated"}
+        "updated": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "updated"
+        }
       }
     },
     "edge": {
-      "empty": {"status": "handled", "how": "with no steps and no progress, only the title and the status line show", "evidence": "<div class=\"odl-progress\" data-od-optional>"},
-      "loading": {"status": "not_built", "how": "keep the card and show the status pill and two steps as muted blocks"},
-      "error": {"status": "shown", "how": "the danger tone turns the status pill red with a cross icon, for a step that failed", "evidence": ".odl-status[data-tone=\"danger\"]"},
-      "disabled": {"status": "not_built", "how": "the part has no controls"},
-      "overflow": {"status": "handled", "how": "up to six steps stack down the card; the line between markers grows with each step's text", "evidence": "li:not(:last-child)::after"},
-      "long_text": {"status": "handled", "how": "the title, status, step labels and times wrap and break long words; the share beside the bar never wraps", "evidence": "overflow-wrap: anywhere"}
+      "empty": {
+        "status": "handled",
+        "how": "with no steps and no progress, only the title and the status line show",
+        "evidence": "<div class=\"odl-progress\" data-od-optional>"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "shown",
+        "how": "the danger tone turns the status pill red with a cross icon, for a step that failed",
+        "evidence": ".odl-status[data-tone=\"danger\"]"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "the part has no controls"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "up to six steps stack down the card; the line between markers grows with each step's text",
+        "evidence": "li:not(:last-child)::after"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the title, status, step labels and times wrap and break long words; the share beside the bar never wraps",
+        "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
     },
     "keyboard": []
   }

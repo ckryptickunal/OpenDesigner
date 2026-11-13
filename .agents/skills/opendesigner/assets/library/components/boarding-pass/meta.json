@@ -4,10 +4,257 @@
   "use": "in a travel or airline app, for the pass a traveller shows at the gate",
   "type": "content",
   "style": "friendly",
-  "industries": ["travel"],
-  "tags": ["boarding pass", "flight", "wallet", "barcode", "ticket"],
-  "states": ["on time"],
+  "industries": [
+    "travel"
+  ],
+  "tags": [
+    "boarding pass",
+    "flight",
+    "wallet",
+    "barcode",
+    "ticket"
+  ],
+  "states": [
+    "on time"
+  ],
   "source": null,
   "a11y": "The pass is an article named by flight and route; gate, seat, boarding time and group are a description list, and the barcode is an image named with its booking code.",
-  "width": "narrow"
+  "width": "narrow",
+  "spec": {
+    "use_when": [
+      "a trip screen or wallet that shows one flight leg a traveller is about to take"
+    ],
+    "avoid_when": [
+      "choosing between flights before booking: use flight-results",
+      "a whole trip with several legs and stays: use itinerary",
+      "an entry pass for a concert or match: use event-ticket"
+    ],
+    "parts": [
+      {
+        "name": "airline",
+        "selector": ".odl-brand",
+        "what": "the airline mark and name",
+        "slot": "text"
+      },
+      {
+        "name": "flight",
+        "selector": ".odl-flightno",
+        "what": "flight number and date",
+        "slot": "text"
+      },
+      {
+        "name": "from",
+        "selector": ".odl-city:first-child",
+        "what": "departure airport code and city",
+        "slot": "text"
+      },
+      {
+        "name": "duration",
+        "selector": ".odl-fly span",
+        "what": "flight time under the plane line",
+        "slot": "text"
+      },
+      {
+        "name": "to",
+        "selector": ".odl-city:last-child",
+        "what": "arrival airport code and city",
+        "slot": "text"
+      },
+      {
+        "name": "facts",
+        "selector": ".odl-facts div",
+        "what": "one fact: gate, seat, boarding time or group",
+        "slot": "list"
+      },
+      {
+        "name": "passenger",
+        "selector": ".odl-who p:first-child",
+        "what": "the passenger's name",
+        "slot": "text"
+      },
+      {
+        "name": "departs",
+        "selector": ".odl-who p:last-child",
+        "what": "departure time",
+        "slot": "text"
+      },
+      {
+        "name": "status",
+        "selector": ".odl-status",
+        "what": "flight status and when the gate closes",
+        "slot": "text"
+      },
+      {
+        "name": "barcode",
+        "selector": ".odl-code",
+        "what": "a drawn barcode with the booking code under it",
+        "slot": "media"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "flight",
+        "from",
+        "to",
+        "facts",
+        "passenger",
+        "booking_code"
+      ],
+      "properties": {
+        "airline": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "airline"
+        },
+        "flight": {
+          "type": "string",
+          "maxLength": 8,
+          "part": "flight"
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 12,
+          "part": "flight"
+        },
+        "from": {
+          "type": "object",
+          "required": [
+            "code"
+          ],
+          "part": "from",
+          "properties": {
+            "code": {
+              "type": "string",
+              "maxLength": 3
+            },
+            "city": {
+              "type": "string",
+              "maxLength": 14
+            }
+          }
+        },
+        "to": {
+          "type": "object",
+          "required": [
+            "code"
+          ],
+          "part": "to",
+          "properties": {
+            "code": {
+              "type": "string",
+              "maxLength": 3
+            },
+            "city": {
+              "type": "string",
+              "maxLength": 14
+            }
+          }
+        },
+        "duration": {
+          "type": "string",
+          "maxLength": 8,
+          "part": "duration"
+        },
+        "facts": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 4,
+          "part": "facts",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "value"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 8
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 5
+              }
+            }
+          }
+        },
+        "passenger": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "passenger"
+        },
+        "departs": {
+          "type": "string",
+          "maxLength": 5,
+          "part": "departs"
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "status"
+        },
+        "booking_code": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "barcode"
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "from_code": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "from_city": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "to_code": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "to_city": {
+          "type": "string",
+          "maxLength": 80
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "for a delayed or cancelled flight, give the status pill a warning or danger fill and say what changed in its text"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "the pass has no controls; for a used pass, dim the barcode and change the status to 'Boarded'"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a narrow box the four facts become two rows of two",
+        "evidence": "@container (max-width: 21rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "city names, fact values and the status never wrap; the passenger name wraps in its column",
+        "evidence": ".odl-name { font: var(--ds-text-label-md); opacity: 0.8; white-space: nowrap; }"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": []
+  }
 }

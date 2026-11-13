@@ -32,5 +32,202 @@
       "author": "Klara Kulikova",
       "page": "yjQDnOhGE34"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a course home where the learner should see what is done, what is next and what is still locked in one unit"
+    ],
+    "avoid_when": [
+      "daily habits to tick off by day: use habit-tracker",
+      "steps to set up an account or product: use setup-steps",
+      "one question inside a lesson: use quiz-question"
+    ],
+    "parts": [
+      {
+        "name": "stats",
+        "selector": ".odl-stats li",
+        "what": "streak, total XP and today's XP against the goal, as three tiles",
+        "slot": "list"
+      },
+      {
+        "name": "goal",
+        "selector": ".odl-goal",
+        "what": "a ring showing today's XP toward the goal",
+        "slot": "number"
+      },
+      {
+        "name": "cover",
+        "selector": ".odl-unit img",
+        "what": "the unit's cover photo",
+        "slot": "media"
+      },
+      {
+        "name": "unit",
+        "selector": ".odl-unit h3",
+        "what": "the unit title, under a unit and section line",
+        "slot": "text"
+      },
+      {
+        "name": "unit_label",
+        "selector": ".odl-unit p",
+        "what": "unit and section number",
+        "slot": "text"
+      },
+      {
+        "name": "guide",
+        "selector": ".odl-guide",
+        "what": "opens the unit's words and phrases",
+        "slot": "action"
+      },
+      {
+        "name": "lessons",
+        "selector": ".odl-path > li",
+        "what": "one lesson as a round step on the winding path: done, up next or locked",
+        "slot": "list"
+      },
+      {
+        "name": "card_title",
+        "selector": ".odl-pt",
+        "what": "the chosen lesson's title in the card under it",
+        "slot": "text"
+      },
+      {
+        "name": "card_sub",
+        "selector": ".odl-ps",
+        "what": "the chosen lesson's place and XP",
+        "slot": "text"
+      },
+      {
+        "name": "start",
+        "selector": ".odl-start",
+        "what": "starts or practises the chosen lesson",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "unit",
+        "lessons"
+      ],
+      "properties": {
+        "streak": {
+          "type": "integer",
+          "minimum": 0,
+          "part": "stats"
+        },
+        "xp_total": {
+          "type": "string",
+          "maxLength": 7,
+          "part": "stats"
+        },
+        "xp_today": {
+          "type": "integer",
+          "minimum": 0,
+          "part": "goal"
+        },
+        "xp_goal": {
+          "type": "integer",
+          "minimum": 1,
+          "part": "goal"
+        },
+        "cover": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "cover"
+        },
+        "unit_label": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "unit_label"
+        },
+        "unit": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "unit"
+        },
+        "lessons": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 8,
+          "part": "lessons",
+          "items": {
+            "type": "object",
+            "required": [
+              "title",
+              "state"
+            ],
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 28
+              },
+              "state": {
+                "enum": [
+                  "done",
+                  "now",
+                  "locked"
+                ]
+              },
+              "sub": {
+                "type": "string",
+                "maxLength": 34
+              },
+              "cta": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "offset": {
+                "type": "number",
+                "minimum": -1.5,
+                "maximum": 1.5
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the path fails to load, keep the banner and put an alert-banners line where the path goes"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "locked lessons are off, show a lock and cannot be chosen",
+        "evidence": ".odl-node:disabled { cursor: not-allowed; }"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "on phones the card padding and the path's side-to-side step get smaller so the path fits",
+        "evidence": ".odl-path { --step: var(--ds-space-40); }"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the unit title wraps beside the guide button, and the lesson card is capped in width so its text wraps",
+        "evidence": "inline-size: min(calc(100cqi - var(--ds-space-8)), 19rem)"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the guide button, each lesson that is not locked, and Start lesson in the card",
+      "Enter or Space on a lesson chooses it; the card moves under it with that lesson's title and button label, and the change is announced",
+      "Locked lessons are skipped by Tab",
+      "The guide and Start lesson buttons have no action wired in the file"
+    ]
+  }
 }

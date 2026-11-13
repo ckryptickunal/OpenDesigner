@@ -32,5 +32,247 @@
       "author": "Jimmy Fermin",
       "page": "bqe0J0b26RQ"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a buyer and seller talking about one listing, where replies and reactions help keep track"
+    ],
+    "avoid_when": [
+      "a list of many conversations: use notification-inbox or member-list",
+      "a customer talking to a support agent: use live-chat",
+      "talking with an AI assistant: use chat-answer or ai-composer"
+    ],
+    "parts": [
+      {
+        "name": "back",
+        "selector": ".odl-head > button:first-child",
+        "what": "goes back to the list of conversations",
+        "slot": "action"
+      },
+      {
+        "name": "avatar",
+        "selector": ".odl-head .odl-av",
+        "what": "the other person's photo, with a green dot when they are online",
+        "slot": "media"
+      },
+      {
+        "name": "name",
+        "selector": ".odl-who b",
+        "what": "the other person's name",
+        "slot": "text"
+      },
+      {
+        "name": "presence",
+        "selector": ".odl-who small",
+        "what": "whether they are active, or when they last were",
+        "slot": "text"
+      },
+      {
+        "name": "calls",
+        "selector": ".odl-head > button:not(:first-child)",
+        "what": "voice and video call buttons; video hides in a very narrow box",
+        "slot": "action"
+      },
+      {
+        "name": "day",
+        "selector": ".odl-day",
+        "what": "the day and time the conversation starts",
+        "slot": "text"
+      },
+      {
+        "name": "messages",
+        "selector": ".odl-row",
+        "what": "one message bubble: theirs on the left, yours on the right, grouped into runs",
+        "slot": "list"
+      },
+      {
+        "name": "quote",
+        "selector": ".odl-quote",
+        "what": "the message being replied to, inside a bubble",
+        "slot": "rich"
+      },
+      {
+        "name": "reaction",
+        "selector": ".odl-react",
+        "what": "a heart reaction pinned to a bubble",
+        "slot": "none"
+      },
+      {
+        "name": "seen",
+        "selector": ".odl-seen",
+        "what": "the read receipt under your newest message",
+        "slot": "text"
+      },
+      {
+        "name": "typing",
+        "selector": ".odl-typing",
+        "what": "three moving dots while they type",
+        "slot": "none"
+      },
+      {
+        "name": "attach",
+        "selector": ".odl-composer > button[type=button]",
+        "what": "attach a photo or file",
+        "slot": "action"
+      },
+      {
+        "name": "input",
+        "selector": ".odl-composer input",
+        "what": "the message field",
+        "slot": "input"
+      },
+      {
+        "name": "send",
+        "selector": ".odl-send",
+        "what": "sends the message; disabled while the field is empty",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "name",
+        "messages"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "name"
+        },
+        "photo": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "avatar"
+        },
+        "online": {
+          "type": "boolean",
+          "part": "avatar"
+        },
+        "presence": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "presence"
+        },
+        "day": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "day"
+        },
+        "messages": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 60,
+          "part": "messages",
+          "items": {
+            "type": "object",
+            "required": [
+              "from",
+              "text"
+            ],
+            "properties": {
+              "from": {
+                "enum": [
+                  "them",
+                  "me"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 600
+              },
+              "reply_to": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "text"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 24
+                  },
+                  "text": {
+                    "type": "string",
+                    "maxLength": 120
+                  }
+                }
+              },
+              "reaction": {
+                "type": "boolean"
+              },
+              "reply_to_name": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "reply_to_text": {
+                "type": "string",
+                "maxLength": 80
+              }
+            }
+          }
+        },
+        "seen": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "seen"
+        },
+        "typing": {
+          "type": "boolean",
+          "part": "typing"
+        },
+        "placeholder": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "input"
+        },
+        "is_online": {
+          "enum": [
+            "true"
+          ]
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a message fails to send, change its receipt from 'Sent' to 'Not sent' with a retry button, or show toast-stack"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "Send is greyed out and disabled until the field has text, and again after sending",
+        "evidence": ".odl-send:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the log scrolls in its own box inside a capped card height and starts at the newest message",
+        "evidence": "overflow-y: auto; overscroll-behavior: contain"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "bubbles wrap and break long words; the person's name in the header is cut off with an ellipsis",
+        "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab moves through Back, Voice call and Video call, then the conversation, which the arrow keys scroll, then Attach, the message field and Send",
+      "Enter in the message field sends it when it has text; the field keeps focus for the next message",
+      "Enter or Space presses the focused button"
+    ]
+  }
 }

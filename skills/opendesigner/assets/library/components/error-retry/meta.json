@@ -152,6 +152,10 @@
         "status": "handled",
         "how": "title, message and error code wrap, also long codes with no spaces",
         "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": [

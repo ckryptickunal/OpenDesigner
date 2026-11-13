@@ -40,5 +40,260 @@
       "author": "Brina Blum",
       "page": "mNXTZu7AeGA"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a one-page checkout where the buyer can still change quantities and try a code before paying"
+    ],
+    "avoid_when": [
+      "a cart opened from the header while shopping: use cart-drawer",
+      "a list of past orders or bills: use receipts-table",
+      "picking a plan for a subscription: use plan-picker"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the card heading",
+        "slot": "text"
+      },
+      {
+        "name": "count",
+        "selector": ".odl-count",
+        "what": "how many items in all",
+        "slot": "text"
+      },
+      {
+        "name": "items",
+        "selector": ".odl-item",
+        "what": "one product: photo, name, variant and unit price, line total and a quantity stepper",
+        "slot": "list"
+      },
+      {
+        "name": "stepper",
+        "selector": ".odl-step",
+        "what": "fewer and more buttons around the quantity, from 1 to 20",
+        "slot": "action"
+      },
+      {
+        "name": "code",
+        "selector": ".odl-promo input",
+        "what": "the promo code field",
+        "slot": "input"
+      },
+      {
+        "name": "apply",
+        "selector": ".odl-apply",
+        "what": "applies the code",
+        "slot": "action"
+      },
+      {
+        "name": "code_error",
+        "selector": ".odl-msg",
+        "what": "the message when a code is wrong",
+        "slot": "text"
+      },
+      {
+        "name": "chip",
+        "selector": ".odl-chip",
+        "what": "the applied code and its discount, with a remove button",
+        "slot": "text"
+      },
+      {
+        "name": "totals",
+        "selector": "dl > div",
+        "what": "one line of the sum: subtotal, discount, shipping, tax; the last is the total with its currency",
+        "slot": "list"
+      },
+      {
+        "name": "pay",
+        "selector": ".odl-pay",
+        "what": "the Pay button with the total in it",
+        "slot": "action"
+      },
+      {
+        "name": "fine",
+        "selector": ".odl-fine",
+        "what": "the card used and the returns note",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "items",
+        "totals",
+        "currency"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "title"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "part": "items",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "price",
+              "quantity"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "variant": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "photo": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "photo_alt": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "price": {
+                "type": "number",
+                "minimum": 0
+              },
+              "quantity": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20
+              },
+              "unit": {
+                "type": "string",
+                "maxLength": 12
+              },
+              "units": {
+                "type": "string",
+                "maxLength": 12
+              }
+            }
+          }
+        },
+        "promo": {
+          "type": "object",
+          "part": "chip",
+          "properties": {
+            "code": {
+              "type": "string",
+              "maxLength": 12
+            },
+            "label": {
+              "type": "string",
+              "maxLength": 16
+            },
+            "rate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "totals": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "part": "totals",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "value"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 12
+              }
+            }
+          }
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 3,
+          "part": "totals"
+        },
+        "pay_label": {
+          "type": "string",
+          "maxLength": 12,
+          "part": "pay"
+        },
+        "fine": {
+          "type": "string",
+          "maxLength": 90,
+          "part": "fine"
+        },
+        "promo_code": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "promo_label": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "promo_rate": {
+          "type": "string",
+          "maxLength": 80
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "shown",
+        "how": "a wrong code turns the field's border red and shows a message that is announced",
+        "evidence": "input[aria-invalid=\"true\"] { border-color: var(--ds-color-border-danger); }"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "the fewer button is off at a quantity of 1 and the more button at 20",
+        "evidence": ".odl-step button:disabled { color: var(--ds-color-text-disabled); cursor: not-allowed; }"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "on the smallest phones the line price moves under the product name",
+        "evidence": "@container (max-width: 21rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long product name wraps in the middle column while the photo and line price keep their width",
+        "evidence": "grid-template-columns: var(--odl-thumb) minmax(0, 1fr) auto"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches each product's fewer and more buttons, the code field, Apply, the code's remove button, then Pay",
+      "Enter or Space presses the focused button; the quantity change is announced",
+      "Enter in the code field applies the code",
+      "Removing the code moves focus to the code field",
+      "Pay is a button, but the file wires no action to it"
+    ]
+  }
 }

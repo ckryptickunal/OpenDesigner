@@ -45,5 +45,239 @@
       "author": "Vojtech Bruzek",
       "page": "Yrxr3bsPdS0"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a grid of search results where each place needs several photos and a save action before the person opens it"
+    ],
+    "avoid_when": [
+      "a restaurant with cuisine and opening times: use restaurant-card",
+      "a full booked trip with times and codes: use itinerary",
+      "a list of saved places to compare: use wishlist-grid"
+    ],
+    "parts": [
+      {
+        "name": "photos",
+        "selector": ".odl-slide",
+        "what": "one photo in the swipeable carousel",
+        "slot": "list"
+      },
+      {
+        "name": "badge",
+        "selector": ".odl-badge",
+        "what": "a short label over the first photo",
+        "slot": "text"
+      },
+      {
+        "name": "favourite",
+        "selector": ".odl-fav",
+        "what": "a heart toggle to save the place",
+        "slot": "action"
+      },
+      {
+        "name": "prev",
+        "selector": ".odl-prev",
+        "what": "previous photo, shown on hover or focus",
+        "slot": "action"
+      },
+      {
+        "name": "next",
+        "selector": ".odl-next",
+        "what": "next photo, shown on hover or focus",
+        "slot": "action"
+      },
+      {
+        "name": "dots",
+        "selector": ".odl-dots",
+        "what": "one dot per photo, the current one brighter",
+        "slot": "none"
+      },
+      {
+        "name": "title",
+        "selector": ".odl-link",
+        "what": "the place's name, the card's one link",
+        "slot": "text"
+      },
+      {
+        "name": "rating",
+        "selector": ".odl-rate",
+        "what": "average rating and review count",
+        "slot": "number"
+      },
+      {
+        "name": "lines",
+        "selector": ".odl-line",
+        "what": "one line of details: host and features, then dates",
+        "slot": "list"
+      },
+      {
+        "name": "price",
+        "selector": ".odl-price",
+        "what": "old price struck through, price a night and the total",
+        "slot": "number"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "photos",
+        "price"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "title"
+        },
+        "href": {
+          "type": "string",
+          "maxLength": 300,
+          "format": "uri",
+          "part": "title"
+        },
+        "photos": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "part": "photos",
+          "items": {
+            "type": "object",
+            "required": [
+              "src",
+              "alt"
+            ],
+            "properties": {
+              "src": {
+                "type": "string",
+                "maxLength": 300,
+                "format": "uri"
+              },
+              "alt": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "photo": {
+                "type": "object",
+                "required": [
+                  "src",
+                  "alt"
+                ],
+                "properties": {
+                  "src": {
+                    "type": "string",
+                    "maxLength": 2048
+                  },
+                  "alt": {
+                    "type": "string",
+                    "maxLength": 200
+                  }
+                }
+              }
+            }
+          }
+        },
+        "badge": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "badge"
+        },
+        "saved": {
+          "type": "boolean",
+          "part": "favourite"
+        },
+        "rating": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5,
+          "part": "rating"
+        },
+        "reviews": {
+          "type": "integer",
+          "minimum": 0,
+          "part": "rating"
+        },
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "part": "lines",
+          "items": {
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 48
+              }
+            }
+          }
+        },
+        "price": {
+          "type": "string",
+          "maxLength": 8,
+          "part": "price"
+        },
+        "old_price": {
+          "type": "string",
+          "maxLength": 8,
+          "part": "price"
+        },
+        "unit": {
+          "type": "string",
+          "maxLength": 8,
+          "part": "price"
+        },
+        "total": {
+          "type": "string",
+          "maxLength": 18,
+          "part": "price"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if saving fails, set the heart back and show the reason in toast-stack"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "on the first photo the previous button is disabled and hidden, and on the last photo the next button",
+        "evidence": ".odl-nav[disabled] { visibility: hidden; }"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "photos sit in a sideways scroll strip that snaps one photo at a time, and the dots and photo count follow",
+        "evidence": "scroll-snap-type: x mandatory"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long title wraps in balanced lines beside the rating, which never shrinks; price parts wrap onto a new line",
+        "evidence": "text-wrap: balance"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the heart, then the next or previous photo button, then the title link",
+      "Enter or Space on the heart saves or unsaves the place",
+      "Enter or Space on the photo buttons moves one photo, and the photo count is updated",
+      "Enter on the title opens the place"
+    ]
+  }
 }

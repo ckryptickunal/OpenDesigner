@@ -4,10 +4,226 @@
   "use": "in a health, wellbeing or self-improvement app, for ticking off daily habits",
   "type": "form",
   "style": "friendly",
-  "industries": ["health", "fitness", "education"],
-  "tags": ["habits", "streak", "checklist", "week", "daily"],
-  "states": ["done", "not done", "today", "future day", "no streak", "hover", "pressed", "focus"],
+  "industries": [
+    "health",
+    "fitness",
+    "education"
+  ],
+  "tags": [
+    "habits",
+    "streak",
+    "checklist",
+    "week",
+    "daily"
+  ],
+  "states": [
+    "done",
+    "not done",
+    "today",
+    "future day",
+    "no streak",
+    "hover",
+    "pressed",
+    "focus"
+  ],
   "source": null,
   "a11y": "Each day is a toggle button with aria-pressed and its full date as its name, grouped per habit; days still to come are disabled, and the done-today count is a polite live region.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "a weekly check-in screen where each day of each habit can be ticked or unticked after the fact"
+    ],
+    "avoid_when": [
+      "one goal measured by amount, such as steps or minutes: use daily-goals",
+      "a one-off list of tasks with no week or streak: use setup-steps",
+      "lessons to unlock in order with a streak: use lesson-streak"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the card heading",
+        "slot": "text"
+      },
+      {
+        "name": "week",
+        "selector": ".odl-sub",
+        "what": "which week is showing",
+        "slot": "text"
+      },
+      {
+        "name": "count",
+        "selector": ".odl-count",
+        "what": "how many habits are done today, with a small meter",
+        "slot": "number"
+      },
+      {
+        "name": "days_header",
+        "selector": ".odl-week li",
+        "what": "the weekday letter and date over each column; today is marked",
+        "slot": "list"
+      },
+      {
+        "name": "habits",
+        "selector": ".odl-habit",
+        "what": "one habit: icon, name, streak, and seven day circles",
+        "slot": "list"
+      },
+      {
+        "name": "streak",
+        "selector": ".odl-streak",
+        "what": "the habit's streak in days, greyed when it is zero",
+        "slot": "number"
+      },
+      {
+        "name": "days",
+        "selector": ".odl-days button",
+        "what": "one day of one habit, done or not; days to come are off",
+        "slot": "action"
+      },
+      {
+        "name": "add",
+        "selector": ".odl-add",
+        "what": "adds a habit",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "habits",
+        "week_days",
+        "today"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "title"
+        },
+        "week": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "week"
+        },
+        "week_days": {
+          "type": "array",
+          "minItems": 7,
+          "maxItems": 7,
+          "part": "days_header",
+          "items": {
+            "type": "object",
+            "required": [
+              "letter",
+              "date"
+            ],
+            "properties": {
+              "letter": {
+                "type": "string",
+                "maxLength": 2
+              },
+              "date": {
+                "type": "string",
+                "maxLength": 2
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 24
+              }
+            }
+          }
+        },
+        "today": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 6,
+          "part": "days_header"
+        },
+        "habits": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "part": "habits",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "days"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "icon": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "streak_before_week": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "days": {
+                "type": "array",
+                "minItems": 7,
+                "maxItems": 7,
+                "items": {
+                  "enum": [
+                    "done",
+                    "not_done",
+                    "future"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "add_label": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "add"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a tick fails to save, flip the circle back and show a toast-stack message"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "days after today are off and drawn with a dashed ring",
+        "evidence": ".odl-days button:disabled > span { border-style: dashed"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "on wide boxes each habit is one row with the week on the right; on narrow ones the week drops under the name and the circles shrink",
+        "evidence": "@container (min-width: 34rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long habit name wraps beside its icon; the done-today count never wraps",
+        "evidence": "grid-template-columns: auto minmax(0, 1fr); align-items: center"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches each day circle that is not in the future, habit by habit, then Add a habit",
+      "Enter or Space ticks or unticks the focused day; the streak and the done-today count update, and the count is announced",
+      "Add a habit is a button, but the file wires no action to it"
+    ]
+  }
 }

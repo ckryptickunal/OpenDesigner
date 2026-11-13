@@ -4,10 +4,243 @@
   "use": "on a work app's sign-in page",
   "type": "form",
   "style": "quiet",
-  "industries": ["saas", "any"],
-  "tags": ["sign in", "login", "password", "sso", "auth"],
-  "states": ["hover", "focus", "error", "password shown", "checked"],
+  "industries": [
+    "saas",
+    "any"
+  ],
+  "tags": [
+    "sign in",
+    "login",
+    "password",
+    "sso",
+    "auth"
+  ],
+  "states": [
+    "hover",
+    "focus",
+    "error",
+    "password shown",
+    "checked"
+  ],
   "source": null,
   "a11y": "Each input has a visible label; the error is tied to the password with aria-describedby and aria-invalid, and the show button is a toggle with aria-pressed.",
-  "width": "narrow"
+  "width": "narrow",
+  "spec": {
+    "use_when": [
+      "a work tool where people sign in with a password or through their company's single sign-on"
+    ],
+    "avoid_when": [
+      "entering a one-time code sent by email or text: use code-input",
+      "creating a new account or inviting people: use invite-members for invites; this form only signs in",
+      "a consumer app that signs in with one tap only: this form leads with email and password"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-head h2",
+        "what": "what the person is signing in to, the one heading",
+        "slot": "text"
+      },
+      {
+        "name": "hint",
+        "selector": ".odl-head p",
+        "what": "a short line on which email to use",
+        "slot": "text"
+      },
+      {
+        "name": "email",
+        "selector": "#odl-sif-email",
+        "what": "the work email field with its label",
+        "slot": "input"
+      },
+      {
+        "name": "forgot",
+        "selector": ".odl-label-row a",
+        "what": "the link to reset the password, beside its label",
+        "slot": "action"
+      },
+      {
+        "name": "password",
+        "selector": "#odl-sif-pass",
+        "what": "the password field with its label",
+        "slot": "input"
+      },
+      {
+        "name": "reveal",
+        "selector": ".odl-reveal",
+        "what": "shows or hides the password",
+        "slot": "action"
+      },
+      {
+        "name": "error",
+        "selector": ".odl-error",
+        "what": "the message under the password when sign-in fails, after an icon",
+        "slot": "text"
+      },
+      {
+        "name": "remember",
+        "selector": ".odl-check",
+        "what": "remember this device, with how long",
+        "slot": "input"
+      },
+      {
+        "name": "submit",
+        "selector": ".odl-primary",
+        "what": "the main action",
+        "slot": "action"
+      },
+      {
+        "name": "sso",
+        "selector": ".odl-secondary",
+        "what": "the single sign-on option, under an 'or' divider",
+        "slot": "action"
+      },
+      {
+        "name": "foot",
+        "selector": ".odl-foot",
+        "what": "a line for people without an account, with a link",
+        "slot": "rich"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "title"
+        },
+        "hint": {
+          "type": "string",
+          "maxLength": 80,
+          "part": "hint"
+        },
+        "email_label": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "email"
+        },
+        "password_label": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "password"
+        },
+        "forgot_label": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "forgot"
+        },
+        "error": {
+          "type": "string",
+          "maxLength": 120,
+          "part": "error"
+        },
+        "remember": {
+          "type": "object",
+          "part": "remember",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 24
+            },
+            "note": {
+              "type": "string",
+              "maxLength": 14
+            },
+            "checked": {
+              "type": "boolean"
+            }
+          }
+        },
+        "submit_label": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "submit"
+        },
+        "sso_label": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "sso"
+        },
+        "foot": {
+          "type": "object",
+          "part": "foot",
+          "properties": {
+            "text": {
+              "type": "string",
+              "maxLength": 24
+            },
+            "link": {
+              "type": "string",
+              "maxLength": 28
+            },
+            "href": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "remember_label": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "remember_note": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "foot_text": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "foot_link": {
+          "type": "string",
+          "maxLength": 80
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "start with both fields blank; if Sign in is pressed with one empty, add the invalid style to that field and an error line under it"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "shown",
+        "how": "a wrong password gives the field a red border and a message tied to it",
+        "evidence": ".odl-field:has(> .odl-error) .odl-control { border-color: var(--ds-color-border-danger); }"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "after too many tries, set disabled on the password field and Sign in, and say when to try again in the error line"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a very narrow box the Show button drops its word and keeps the icon",
+        "evidence": "@container (max-width: 300px) { .odl-sign-in-form .odl-reveal span { display: none; } }"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long email scrolls inside its field, and the error wraps beside its icon",
+        "evidence": ".odl-control input { flex: 1; min-inline-size: 0"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the email field, Forgot password, the password field, Show, Remember this device, Sign in, Continue with single sign-on, then the invite link",
+      "Enter or Space on Show switches the password between hidden and shown",
+      "Space ticks or unticks Remember this device",
+      "Enter in a field submits the form, but the file stops the submit and does nothing else",
+      "Continue with single sign-on is a button with no action wired in the file"
+    ]
+  }
 }

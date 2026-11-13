@@ -124,8 +124,9 @@
         "evidence": ".odl-facts:not(:has(li)) { display: none; }"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show it once the place is known; the drawn map needs nothing to load"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -145,6 +146,10 @@
         "status": "handled",
         "how": "name, address and facts wrap, also long words",
         "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": [

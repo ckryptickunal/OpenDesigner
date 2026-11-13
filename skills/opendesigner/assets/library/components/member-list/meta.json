@@ -4,16 +4,259 @@
   "use": "in team or workspace settings, to manage people and roles",
   "type": "data",
   "style": "quiet",
-  "industries": ["saas", "security", "any"],
-  "tags": ["members", "team", "roles", "invite", "permissions"],
-  "states": ["hover", "focus", "owner locked", "pending invite", "online"],
+  "industries": [
+    "saas",
+    "security",
+    "any"
+  ],
+  "tags": [
+    "members",
+    "team",
+    "roles",
+    "invite",
+    "permissions"
+  ],
+  "states": [
+    "hover",
+    "focus",
+    "owner locked",
+    "pending invite",
+    "online"
+  ],
   "source": "brand/showcase/product/06-ferrule-security",
   "a11y": "Each role is a native select labelled with the person's name; the resend button names the invitee; on narrow widths the rows restack without hiding anything.",
   "width": "medium",
   "photos": [
-    {"img": "photo-1604072366595-e75dc92d6bdc", "author": "Jorik Kleen", "page": "lNNHyRbmm0o"},
-    {"img": "photo-1535713875002-d1d0cf377fde", "author": "Alex Suprun", "page": "ZHvM3XIOHoE"},
-    {"img": "photo-1500648767791-00dcc994a43e", "author": "Jurica Koletić", "page": "7YVZYZeITc8"},
-    {"img": "photo-1681097561932-36d0df02b379", "author": "Anky Lau", "page": "ntLkvt6OZvQ"}
-  ]
+    {
+      "img": "photo-1604072366595-e75dc92d6bdc",
+      "author": "Jorik Kleen",
+      "page": "lNNHyRbmm0o"
+    },
+    {
+      "img": "photo-1535713875002-d1d0cf377fde",
+      "author": "Alex Suprun",
+      "page": "ZHvM3XIOHoE"
+    },
+    {
+      "img": "photo-1500648767791-00dcc994a43e",
+      "author": "Jurica Koletić",
+      "page": "7YVZYZeITc8"
+    },
+    {
+      "img": "photo-1681097561932-36d0df02b379",
+      "author": "Anky Lau",
+      "page": "ntLkvt6OZvQ"
+    }
+  ],
+  "spec": {
+    "use_when": [
+      "a seat-limited plan where admins change roles and chase pending invites in one place"
+    ],
+    "avoid_when": [
+      "sending new invites with emails and a role: use invite-members",
+      "one person's public profile: use profile-card",
+      "a history of role changes: use audit-log"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the list's heading",
+        "slot": "text"
+      },
+      {
+        "name": "count",
+        "selector": ".odl-head p",
+        "what": "member count and free seats",
+        "slot": "text"
+      },
+      {
+        "name": "invite",
+        "selector": ".odl-invite",
+        "what": "the main action, to invite people",
+        "slot": "action"
+      },
+      {
+        "name": "columns",
+        "selector": ".odl-cols",
+        "what": "column labels, hidden in a narrow box",
+        "slot": "none"
+      },
+      {
+        "name": "members",
+        "selector": "ul > li",
+        "what": "one member or pending invite: who, role and last active",
+        "slot": "list"
+      },
+      {
+        "name": "avatar",
+        "selector": ".odl-avatar",
+        "what": "the person's photo, or a dashed mail icon for an invite",
+        "slot": "media"
+      },
+      {
+        "name": "name",
+        "selector": ".odl-name strong",
+        "what": "name, with a 'You' tag for the viewer; the email for an invite",
+        "slot": "text"
+      },
+      {
+        "name": "email",
+        "selector": ".odl-name > span",
+        "what": "email, or the invite's pending tag, sender and expiry",
+        "slot": "text"
+      },
+      {
+        "name": "role",
+        "selector": ".odl-role select",
+        "what": "a native role picker",
+        "slot": "input"
+      },
+      {
+        "name": "locked",
+        "selector": ".odl-locked",
+        "what": "the owner's role, with a lock instead of a picker",
+        "slot": "text"
+      },
+      {
+        "name": "when",
+        "selector": ".odl-when",
+        "what": "last active time, 'Active now', or the resend button",
+        "slot": "text"
+      },
+      {
+        "name": "resend",
+        "selector": ".odl-quiet",
+        "what": "resends a pending invite",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "members",
+        "roles"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "title"
+        },
+        "count": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "count"
+        },
+        "roles": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "part": "role",
+          "items": {
+            "type": "string",
+            "maxLength": 14
+          }
+        },
+        "members": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "part": "members",
+          "items": {
+            "type": "object",
+            "required": [
+              "email",
+              "role",
+              "status"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 32,
+                "part": "name"
+              },
+              "email": {
+                "type": "string",
+                "maxLength": 60,
+                "part": "email"
+              },
+              "avatar": {
+                "type": "string",
+                "maxLength": 300,
+                "format": "uri",
+                "part": "avatar"
+              },
+              "role": {
+                "type": "string",
+                "maxLength": 14,
+                "part": "role"
+              },
+              "status": {
+                "enum": [
+                  "active",
+                  "pending",
+                  "owner"
+                ]
+              },
+              "is_you": {
+                "type": "boolean",
+                "part": "name"
+              },
+              "last_active": {
+                "type": "string",
+                "maxLength": 12,
+                "part": "when"
+              },
+              "invite_note": {
+                "type": "string",
+                "maxLength": 50,
+                "part": "email"
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a role change or resend fails, put the old role back and show the reason in toast-stack"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "the owner's role has no picker: a lock and the word Owner, with a tooltip saying why",
+        "evidence": "The owner's role can be changed only by transferring ownership"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the list shows every row it is given; for a large team, cap it and add filter-bar search and pagination below"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "emails break anywhere to fit, names wrap with their tags, and in a narrow box each row restacks with the role and time under the name",
+        "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Invite, then each role picker, then the Resend button",
+      "Arrow keys or Space open and change a role picker, as in any native select",
+      "Enter or Space presses Invite or Resend"
+    ]
+  }
 }

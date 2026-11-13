@@ -4,15 +4,245 @@
   "use": "in admin and security settings, to show who changed what",
   "type": "data",
   "style": "technical",
-  "industries": ["security", "saas", "finance"],
-  "tags": ["audit", "security", "log", "events", "filter"],
-  "states": ["all events", "high risk only", "person or service account", "focus"],
+  "industries": [
+    "security",
+    "saas",
+    "finance"
+  ],
+  "tags": [
+    "audit",
+    "security",
+    "log",
+    "events",
+    "filter"
+  ],
+  "states": [
+    "all events",
+    "high risk only",
+    "person or service account",
+    "focus"
+  ],
   "source": "brand/showcase/product/06-ferrule-security",
   "a11y": "The filter is a native radio group with visible focus; risk is written as a word, not shown by colour alone.",
   "width": "medium",
   "photos": [
-    {"img": "photo-1681097561932-36d0df02b379", "author": "Anky Lau", "page": "ntLkvt6OZvQ"},
-    {"img": "photo-1604072366595-e75dc92d6bdc", "author": "Jorik Kleen", "page": "lNNHyRbmm0o"},
-    {"img": "photo-1500648767791-00dcc994a43e", "author": "Jurica Koletić", "page": "7YVZYZeITc8"}
-  ]
+    {
+      "img": "photo-1681097561932-36d0df02b379",
+      "author": "Anky Lau",
+      "page": "ntLkvt6OZvQ"
+    },
+    {
+      "img": "photo-1604072366595-e75dc92d6bdc",
+      "author": "Jorik Kleen",
+      "page": "lNNHyRbmm0o"
+    },
+    {
+      "img": "photo-1500648767791-00dcc994a43e",
+      "author": "Jurica Koletić",
+      "page": "7YVZYZeITc8"
+    }
+  ],
+  "spec": {
+    "use_when": [
+      "a compliance review where someone must find the risky changes quickly among routine ones"
+    ],
+    "avoid_when": [
+      "the history of one record with old and new field values: use activity-feed",
+      "a list of recent events with no risk or source detail: use activity-list",
+      "a large log people sort, search and page through: put it in receipts-table style rows with filter-bar and pagination"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the log's heading",
+        "slot": "text"
+      },
+      {
+        "name": "scope",
+        "selector": "header p",
+        "what": "the time span and workspace the log covers",
+        "slot": "text"
+      },
+      {
+        "name": "filter",
+        "selector": ".odl-filters",
+        "what": "a two-choice switch: all events or high risk only",
+        "slot": "input"
+      },
+      {
+        "name": "events",
+        "selector": "ol > li",
+        "what": "one change, newest first",
+        "slot": "list"
+      },
+      {
+        "name": "who",
+        "selector": ".odl-who",
+        "what": "a person's photo, or a robot icon for a service account",
+        "slot": "media"
+      },
+      {
+        "name": "severity",
+        "selector": ".odl-sev",
+        "what": "the risk level as a word, only on risky changes",
+        "slot": "text"
+      },
+      {
+        "name": "summary",
+        "selector": "li p",
+        "what": "who did what, with names in bold and system names in code",
+        "slot": "rich"
+      },
+      {
+        "name": "meta",
+        "selector": ".odl-meta",
+        "what": "where it came from: IP address, place, reason or method",
+        "slot": "list"
+      },
+      {
+        "name": "time",
+        "selector": "time",
+        "what": "when it happened",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "events"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "title"
+        },
+        "scope": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "scope"
+        },
+        "filter": {
+          "enum": [
+            "all",
+            "high"
+          ],
+          "part": "filter"
+        },
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "part": "events",
+          "items": {
+            "type": "object",
+            "required": [
+              "actor",
+              "action",
+              "time"
+            ],
+            "properties": {
+              "actor": {
+                "type": "string",
+                "maxLength": 32,
+                "part": "summary"
+              },
+              "actor_type": {
+                "enum": [
+                  "person",
+                  "service"
+                ],
+                "part": "who"
+              },
+              "avatar": {
+                "type": "string",
+                "maxLength": 300,
+                "format": "uri",
+                "part": "who"
+              },
+              "severity": {
+                "enum": [
+                  "high",
+                  "medium"
+                ],
+                "part": "severity"
+              },
+              "action": {
+                "type": "string",
+                "maxLength": 110,
+                "part": "summary"
+              },
+              "meta": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 2,
+                "part": "meta",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "text"
+                  ],
+                  "properties": {
+                    "text": {
+                      "type": "string",
+                      "maxLength": 32
+                    }
+                  }
+                }
+              },
+              "ip": {
+                "type": "string",
+                "maxLength": 39,
+                "part": "meta"
+              },
+              "time": {
+                "type": "string",
+                "maxLength": 5,
+                "part": "time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "keep the header and put an alert-banners line with a retry in place of the list"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "set disabled on both radio inputs while the log loads and dim their labels"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the list grows with every event; cap it at a day or about twenty rows and add pagination below"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the summary wraps beside a fixed who column, the time never wraps, and the row layout changes for wide and narrow boxes",
+        "evidence": "@container (min-width: 50rem)"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab moves to the filter's checked choice",
+      "Left and Right or Up and Down arrows move between All events and High risk, and the list updates at once"
+    ]
+  }
 }

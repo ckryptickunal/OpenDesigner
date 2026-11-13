@@ -43,5 +43,205 @@
       "author": "Michele Blackwell",
       "page": "rAyCBQTH7ws"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a 'near you' or 'popular' row of places on a home screen, where each card opens that place's menu"
+    ],
+    "avoid_when": [
+      "one dish with its options: use menu-item",
+      "places to stay with dates and nightly prices: use stay-card",
+      "products from one shop: use product-card or wishlist-grid"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-top h3",
+        "what": "the section heading",
+        "slot": "text"
+      },
+      {
+        "name": "subtitle",
+        "selector": ".odl-top p",
+        "what": "where the list is for, such as the delivery address",
+        "slot": "text"
+      },
+      {
+        "name": "places",
+        "selector": ".odl-restaurant-card ul > li",
+        "what": "one place card; the whole card opens the place",
+        "slot": "list"
+      },
+      {
+        "name": "cover",
+        "selector": ".odl-cover img",
+        "what": "the place's cover photo",
+        "slot": "media"
+      },
+      {
+        "name": "save",
+        "selector": ".odl-fav",
+        "what": "a heart toggle to save the place",
+        "slot": "action"
+      },
+      {
+        "name": "name",
+        "selector": "h4 a",
+        "what": "the place's name, the link that covers the card",
+        "slot": "text"
+      },
+      {
+        "name": "rating",
+        "selector": ".odl-rating",
+        "what": "the star rating and how many ratings",
+        "slot": "number"
+      },
+      {
+        "name": "cuisine",
+        "selector": ".odl-cuisine",
+        "what": "cuisines and price level",
+        "slot": "text"
+      },
+      {
+        "name": "meta",
+        "selector": ".odl-meta",
+        "what": "delivery time and fee, each with an icon",
+        "slot": "text"
+      },
+      {
+        "name": "promo",
+        "selector": ".odl-promo",
+        "what": "an offer or a 'new' line",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "places"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "title"
+        },
+        "subtitle": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "subtitle"
+        },
+        "places": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 9,
+          "part": "places",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "href",
+              "photo"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 28
+              },
+              "href": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "photo": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "photo_alt": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "rating": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 5
+              },
+              "rating_count": {
+                "type": "string",
+                "maxLength": 6
+              },
+              "cuisine": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "time": {
+                "type": "string",
+                "maxLength": 12
+              },
+              "fee": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "promo": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "promo_kind": {
+                "enum": [
+                  "offer",
+                  "new"
+                ]
+              },
+              "saved": {
+                "type": "boolean"
+              },
+              "save_label": {
+                "type": "string",
+                "maxLength": 120
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if saving fails, flip the heart back and show toast-stack; if the list fails, show alert-banners under the heading"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "for a place that is closed, dim the cover, replace the delivery time with 'Opens at 5 pm' and keep the card a link"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "cards sit in one, two or three columns by the box width; a long list adds rows",
+        "evidence": "@container (min-width: 54rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the place name is cut off with an ellipsis so the rating stays on its line; the rating count hides in a very narrow card",
+        "evidence": "white-space: nowrap; text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab moves, for each card, to the save heart and then the place's name link",
+      "Enter on the name opens the place; the focus ring shows on the cover",
+      "Enter or Space on the heart saves or unsaves the place"
+    ]
+  }
 }

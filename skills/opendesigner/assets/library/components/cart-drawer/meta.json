@@ -63,5 +63,198 @@
       "author": "Brina Blum",
       "page": "mNXTZu7AeGA"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a food or grocery shop where people change quantities often before paying"
+    ],
+    "avoid_when": [
+      "the final review on the checkout page with delivery and payment: use order-summary",
+      "one product's page with photos and sizes: use product-gallery or product-card",
+      "items saved for later rather than to buy now: use wishlist-grid"
+    ],
+    "parts": [
+      {
+        "name": "page",
+        "selector": ".odl-page",
+        "what": "a stand-in shop page behind the scrim, hidden from screen readers and on phones",
+        "slot": "none"
+      },
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the bag's heading with the item count",
+        "slot": "text"
+      },
+      {
+        "name": "close",
+        "selector": ".odl-icon",
+        "what": "close the bag",
+        "slot": "action"
+      },
+      {
+        "name": "free_delivery",
+        "selector": ".odl-free",
+        "what": "how much more for free delivery, with a bar",
+        "slot": "rich"
+      },
+      {
+        "name": "items",
+        "selector": "ul > li",
+        "what": "one item: photo, name, variant, line price, quantity stepper and Remove",
+        "slot": "list"
+      },
+      {
+        "name": "empty",
+        "selector": ".odl-empty",
+        "what": "the line shown when the bag is empty",
+        "slot": "text"
+      },
+      {
+        "name": "totals",
+        "selector": "dl",
+        "what": "subtotal, delivery and total",
+        "slot": "list"
+      },
+      {
+        "name": "checkout",
+        "selector": ".odl-go",
+        "what": "the main action",
+        "slot": "action"
+      },
+      {
+        "name": "note",
+        "selector": ".odl-note",
+        "what": "a short reassurance under Checkout",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "items",
+        "currency"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "title"
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 3,
+          "part": "totals"
+        },
+        "free_delivery_at": {
+          "type": "number",
+          "minimum": 0,
+          "part": "free_delivery"
+        },
+        "delivery_fee": {
+          "type": "number",
+          "minimum": 0,
+          "part": "totals"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 20,
+          "part": "items",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "price",
+              "quantity"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "variant": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "price": {
+                "type": "number",
+                "minimum": 0
+              },
+              "quantity": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 99
+              },
+              "image": {
+                "type": "string",
+                "maxLength": 400
+              },
+              "alt": {
+                "type": "string",
+                "maxLength": 80
+              }
+            }
+          }
+        },
+        "empty_text": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "empty"
+        },
+        "checkout_label": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "checkout"
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "note"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "when the last item is removed the list and delivery bar hide, 'Your bag is empty' shows and Checkout is disabled",
+        "evidence": ".odl-sheet.is-empty .odl-empty { display: block; }"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a quantity cannot be changed (for example out of stock), put the old number back and say why in alert-banners under that item"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "the minus button is off at a quantity of one; Checkout is off when the bag is empty",
+        "evidence": ".odl-step button:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the item list scrolls in its own box between the header and the totals",
+        "evidence": "overflow-y: auto; overscroll-behavior: contain"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long name or variant wraps beside the line price, which stays to the right",
+        "evidence": ".odl-line { display: grid; grid-template-columns: minmax(0, 1fr) auto"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Close bag, then each item's One fewer, One more and Remove, then Checkout",
+      "Enter or Space on One more or One fewer changes the quantity, and the totals and the free-delivery bar update",
+      "Enter or Space on Remove takes the item out and moves focus to the next item's Remove, or to Close bag when none are left",
+      "Close bag and Checkout are buttons with no action in the file; there is no Escape handling"
+    ]
+  }
 }

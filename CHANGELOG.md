@@ -6,9 +6,15 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed
+
+- **The library's JSON has a new shape** (2026-11-13). `/library/index.json` was a list of parts; it is now the whole catalog, `{format, components}`, and each part's name is `id` instead of `slug`. The prompts on the website now point to `/library/<id>.html`; the old `/library/r/<id>.html` addresses still work.
+- **Calmer Details on each part page** (2026-11-13). The prompt and the two commands now share one box style, each with a Copy button, a label above and a note below, with even space between them. The prompt reads in the site's text font, and web addresses no longer break inside "https://".
+
 ### Added
 
 - **Smart UI, an optional package** (2026-11-13). An assistant can answer with a part of your own system, like a fare comparison or a booking step. `smartui.py` reads your repo, proposes what the assistant should show, writes an A2UI catalog and checks every answer before `<od-surface>` draws it. Bookings and payments wait for a tap. Demo in `examples/smart-ui-chat/`.
+- **Every library part lists its data states** (2026-11-14). Each `meta.json` now says how the part handles a missing photo, loading and an empty list; the Smart UI renderer draws those from the part's marks. `library.py check` requires a `fixture.json` whose keys match the spec, and `show_ui` in the MCP server draws an assistant's answer with the project's own system.
 - **Smart UI answers live** (2026-11-14). `live.py` runs a real model (Claude or Gemini, keys read from `.env`) through the app's read actions, the validator and one repair round; a change runs only after the person approves the exact thing shown. Try it on the billing example in `examples/smart-ui-support/`, whose routes the scope step turns into intents.
 - **19 new library parts** (2026-11-13). Answer with sources, key facts, summary card, citations, data table, line chart, status, comparison, result list, quick replies, form, time slots, approval prompt, receipt, error with retry, image, location, file and code. They're built on your tokens like the rest of the library.
 - **Slot marks and fixtures in the library** (2026-11-13). Library parts mark the words and numbers that change (`data-od-slot` and the other marks, checked by `library.py check`), and each has a `fixture.json`. The Smart UI audit turns one fixture into every state: empty, loading, long text, missing image, right to left, dark and 200% text.
@@ -19,6 +25,9 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 - **A ledger for every round of building** (2026-11-13). `engine.py ledger start` lists what a round covers; each item ends done, broken or skipped on purpose, with the reason and who decided. `review --strict` fails while one is open, an agent's waiver needs the owner's words before the round closes, DESIGN.md shows the ledger, and building blocks named in it now fill the coverage check.
 - **Empty, loading and error states in the library** (2026-11-13). 22 new parts in a States aisle: 404, 500, offline, maintenance, no access and session expired pages, four kinds of empty state, five skeletons that don't jump when data arrives, a spinner, step progress, banners, a toast with undo, a field error and a success screen. A new docs page explains when to use each.
 - **Mark example files that break the rules on purpose** (2026-11-13). `engine.py exempt <folder> --why "..."` keeps a demo of mistakes out of review. Review still lists the folder and the reason, so nothing is hidden.
+- **A catalog of every library component** (2026-11-13). `library.json` says what each of the 82 parts is for and when not to use it, its parts, how much text and how many items it holds, its six hard states (289 of them left for you to build, and it says so), its tokens and its keyboard use. `library.py check` keeps it true to the files.
+- **Fetch a component by its address** (2026-11-13). Each part now has `/library/<id>.html` and `/library/<id>.json` on the website, and `/library/index.json` is the whole catalog. `library.py add <id> --from https://opendesigner.dev` or one `curl` brings a part into any project. The new docs page, Use the component library, explains all three ways.
+- **The library over MCP** (2026-11-13). A small server in `server/mcp/` lets Claude Desktop, Claude Code and other MCP apps list, suggest and fetch parts, and get a tokens file. It only reads, and the server never goes online. Apps that show MCP views get a gallery where Use this puts `OD:add library.<id>` in the chat. It runs on your computer; a hosted copy is planned.
 
 ## [0.3.1]: 2026-11-11
 

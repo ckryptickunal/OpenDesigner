@@ -4,10 +4,252 @@
   "use": "when an assistant proposes an edit a person should accept or reject",
   "type": "ai",
   "style": "quiet",
-  "industries": ["saas", "productivity", "crm"],
-  "tags": ["ai", "suggestion", "diff", "rewrite", "writing assistant"],
-  "states": ["suggested", "alternative", "accepted", "rejected", "undo", "hover", "focus"],
+  "industries": [
+    "saas",
+    "productivity",
+    "crm"
+  ],
+  "tags": [
+    "ai",
+    "suggestion",
+    "diff",
+    "rewrite",
+    "writing assistant"
+  ],
+  "states": [
+    "suggested",
+    "alternative",
+    "accepted",
+    "rejected",
+    "undo",
+    "hover",
+    "focus"
+  ],
   "source": null,
   "a11y": "Removed and added words use del and ins; the buttons are real buttons, the result is announced in a status line with focus moved to Undo, and the alternative count is a polite live region.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "a writing assistant that offers two or more rewrites of the same sentence, one at a time"
+    ],
+    "avoid_when": [
+      "the assistant answers a question rather than editing the person's text: use chat-answer",
+      "many edits across a long document at once: list them in a review panel instead of one card per sentence"
+    ],
+    "parts": [
+      {
+        "name": "label",
+        "selector": ".odl-label",
+        "what": "what the text field is, above it",
+        "slot": "text"
+      },
+      {
+        "name": "field",
+        "selector": ".odl-field",
+        "what": "the person's text, a few short paragraphs",
+        "slot": "rich"
+      },
+      {
+        "name": "target",
+        "selector": ".odl-target",
+        "what": "the one sentence the suggestion would replace, highlighted",
+        "slot": "text"
+      },
+      {
+        "name": "count",
+        "selector": ".odl-count",
+        "what": "which alternative is showing, as '1 of 2'",
+        "slot": "text"
+      },
+      {
+        "name": "diffs",
+        "selector": ".odl-diff",
+        "what": "one alternative rewrite, removed words struck and added words marked; only one shows at a time",
+        "slot": "list"
+      },
+      {
+        "name": "reason",
+        "selector": ".odl-reason",
+        "what": "why this rewrite is suggested",
+        "slot": "text"
+      },
+      {
+        "name": "note",
+        "selector": ".odl-note",
+        "what": "where a fact came from and how sure the assistant is, after an icon",
+        "slot": "text"
+      },
+      {
+        "name": "another",
+        "selector": ".odl-another",
+        "what": "shows the next alternative",
+        "slot": "action"
+      },
+      {
+        "name": "reject",
+        "selector": ".odl-reject",
+        "what": "keeps the original sentence",
+        "slot": "action"
+      },
+      {
+        "name": "accept",
+        "selector": ".odl-accept",
+        "what": "puts the rewrite into the text",
+        "slot": "action"
+      },
+      {
+        "name": "result",
+        "selector": ".odl-done-text",
+        "what": "the status line after accepting or rejecting",
+        "slot": "text"
+      },
+      {
+        "name": "undo",
+        "selector": ".odl-undo",
+        "what": "brings the original sentence and the card back",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "original",
+        "suggestions"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "label"
+        },
+        "text_before": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "field"
+        },
+        "original": {
+          "type": "string",
+          "maxLength": 200,
+          "part": "target"
+        },
+        "text_after": {
+          "type": "string",
+          "maxLength": 200,
+          "part": "field"
+        },
+        "suggestions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "part": "diffs",
+          "items": {
+            "type": "object",
+            "required": [
+              "text",
+              "diff"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "why": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "diff": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 12,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "op",
+                    "text"
+                  ],
+                  "properties": {
+                    "op": {
+                      "enum": [
+                        "keep",
+                        "remove",
+                        "add"
+                      ]
+                    },
+                    "text": {
+                      "type": "string",
+                      "maxLength": 200
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "note"
+        },
+        "actions": {
+          "type": "object",
+          "properties": {
+            "another": {
+              "type": "string",
+              "maxLength": 16,
+              "part": "another"
+            },
+            "reject": {
+              "type": "string",
+              "maxLength": 12,
+              "part": "reject"
+            },
+            "accept": {
+              "type": "string",
+              "maxLength": 12,
+              "part": "accept"
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if no rewrite comes back, put a short line in the done status row ('Could not suggest an edit') with a retry button in place of Undo"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "while a choice is being saved, set disabled on Try another, Reject and Accept"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the buttons wrap, and in a narrow box Try another takes its own row",
+        "evidence": ".odl-buttons .odl-another { flex-basis: 100%"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the highlighted sentence keeps its rounded highlight on every line it wraps to; button labels never wrap",
+        "evidence": "box-decoration-break: clone"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Try another, Reject, then Accept",
+      "Enter or Space presses the focused button",
+      "After Accept or Reject, focus moves to Undo; Undo puts focus back on Accept"
+    ]
+  }
 }

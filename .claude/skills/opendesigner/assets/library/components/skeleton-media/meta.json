@@ -61,7 +61,8 @@
           "properties": {
             "src": {
               "type": "string",
-              "format": "uri"
+              "format": "uri",
+              "maxLength": 2048
             },
             "alt": {
               "type": "string",

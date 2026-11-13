@@ -54,5 +54,247 @@
       "author": "Point3D Commercial Imaging Ltd.",
       "page": "oxeCZrodz78"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "an event or tour schedule over a few days where each stop has a place on a map and a booking code"
+    ],
+    "avoid_when": [
+      "one booking with its dates and price: use stay-card",
+      "a ticket to show at a gate: use boarding-pass or event-ticket",
+      "a day of meetings with no places or map: use calendar-agenda"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the trip's name",
+        "slot": "text"
+      },
+      {
+        "name": "summary",
+        "selector": ".odl-sub",
+        "what": "dates, travellers and number of stops",
+        "slot": "text"
+      },
+      {
+        "name": "days",
+        "selector": ".odl-tabs button",
+        "what": "one day tab: day number and date",
+        "slot": "list"
+      },
+      {
+        "name": "map",
+        "selector": ".odl-map",
+        "what": "a drawn, decorative map with a numbered pin per stop and a dashed route, one set per day",
+        "slot": "media"
+      },
+      {
+        "name": "day_name",
+        "selector": ".odl-dayname",
+        "what": "a short name for the day",
+        "slot": "text"
+      },
+      {
+        "name": "stops",
+        "selector": ".odl-line li",
+        "what": "one stop: kind icon, card with time, pin number, optional photo, name, details and code",
+        "slot": "list"
+      },
+      {
+        "name": "time",
+        "selector": ".odl-time",
+        "what": "when the stop starts",
+        "slot": "text"
+      },
+      {
+        "name": "pin",
+        "selector": ".odl-pin",
+        "what": "the stop's number; pressing it highlights its pin on the map",
+        "slot": "action"
+      },
+      {
+        "name": "photo",
+        "selector": ".odl-stop img",
+        "what": "a square photo of the place",
+        "slot": "media"
+      },
+      {
+        "name": "name",
+        "selector": ".odl-txt b",
+        "what": "what the stop is",
+        "slot": "text"
+      },
+      {
+        "name": "details",
+        "selector": ".odl-txt small",
+        "what": "one line of details",
+        "slot": "text"
+      },
+      {
+        "name": "code",
+        "selector": ".odl-code",
+        "what": "the booking's confirmation code",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "days"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "title"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 70,
+          "part": "summary"
+        },
+        "days": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 7,
+          "part": "days",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "stops"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 10,
+                "part": "days"
+              },
+              "date": {
+                "type": "string",
+                "maxLength": 12,
+                "part": "days"
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 32,
+                "part": "day_name"
+              },
+              "stops": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 6,
+                "part": "stops",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "time",
+                    "name",
+                    "kind"
+                  ],
+                  "properties": {
+                    "time": {
+                      "type": "string",
+                      "maxLength": 5,
+                      "part": "time"
+                    },
+                    "kind": {
+                      "enum": [
+                        "train",
+                        "stay",
+                        "meal",
+                        "walk",
+                        "class",
+                        "flight"
+                      ]
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 40,
+                      "part": "name"
+                    },
+                    "details": {
+                      "type": "string",
+                      "maxLength": 60,
+                      "part": "details"
+                    },
+                    "photo": {
+                      "type": "string",
+                      "maxLength": 300,
+                      "format": "uri",
+                      "part": "photo"
+                    },
+                    "photo_alt": {
+                      "type": "string",
+                      "maxLength": 80,
+                      "part": "photo"
+                    },
+                    "code": {
+                      "type": "string",
+                      "maxLength": 12,
+                      "part": "code"
+                    },
+                    "map_x": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 400,
+                      "part": "map"
+                    },
+                    "map_y": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 400,
+                      "part": "map"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "keep the tabs and put an alert-banners line with a retry in the day's panel"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "set disabled on a day tab that has nothing in it yet and dim it"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "when the day tabs do not fit, the tab row scrolls sideways without a visible bar",
+        "evidence": ".odl-tabs { display: flex; gap: var(--ds-space-inline-sm); margin-block-end: var(--ds-space-stack-lg); overflow-x: auto; scrollbar-width: none; }"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "stop names and details wrap inside the card beside the photo; dates in the tabs never wrap",
+        "evidence": ".odl-itinerary .odl-tabs small { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); white-space: nowrap; }"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the selected day tab, then each stop's number button",
+      "Left and Right arrows on a day tab move to the previous or next day and show it, wrapping at the ends",
+      "Enter or Space on a stop's number toggles the highlight on its pin on the map"
+    ]
+  }
 }

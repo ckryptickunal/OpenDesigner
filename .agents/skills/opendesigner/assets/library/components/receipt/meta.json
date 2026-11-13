@@ -194,12 +194,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "a receipt always has at least one line; with nothing to report, say it in text instead"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show it only once the outcome is known; until then the action button shows its pending state"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "shown",
@@ -220,6 +222,10 @@
         "status": "handled",
         "how": "labels, values, the title and the reference wrap; values never take more than 60% of a row",
         "evidence": "max-inline-size: 60%"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": [

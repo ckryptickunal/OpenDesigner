@@ -38,5 +38,207 @@
       "author": "Good Faces",
       "page": "lVhZ0aNzCWg"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a page where the listener picks one track to start, sees which one is playing and likes tracks one by one"
+    ],
+    "avoid_when": [
+      "controls for the track that is playing now: use music-player",
+      "a list of episodes with descriptions and dates: use podcast-episodes",
+      "a row of album or show covers to browse: use media-shelf"
+    ],
+    "parts": [
+      {
+        "name": "cover",
+        "selector": ".odl-cover",
+        "what": "the album or playlist cover",
+        "slot": "media"
+      },
+      {
+        "name": "eyebrow",
+        "selector": ".odl-eyebrow",
+        "what": "the kind of release and its year",
+        "slot": "text"
+      },
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the album or playlist title",
+        "slot": "text"
+      },
+      {
+        "name": "by",
+        "selector": ".odl-by",
+        "what": "the artist with a small photo, then the song count and length",
+        "slot": "text"
+      },
+      {
+        "name": "play",
+        "selector": ".odl-play",
+        "what": "plays or pauses",
+        "slot": "action"
+      },
+      {
+        "name": "shuffle",
+        "selector": ".odl-shuffle",
+        "what": "a shuffle toggle",
+        "slot": "action"
+      },
+      {
+        "name": "save",
+        "selector": ".odl-love",
+        "what": "a toggle to save the album to the library",
+        "slot": "action"
+      },
+      {
+        "name": "more",
+        "selector": ".odl-more",
+        "what": "more options",
+        "slot": "action"
+      },
+      {
+        "name": "tracks",
+        "selector": "ol > li",
+        "what": "one track: number (or a moving bars icon when current), title, explicit tag, artists, like heart and length",
+        "slot": "list"
+      },
+      {
+        "name": "like",
+        "selector": ".odl-like",
+        "what": "a like toggle on one track",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "tracks"
+      ],
+      "properties": {
+        "cover": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "cover"
+        },
+        "cover_alt": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "cover"
+        },
+        "eyebrow": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "eyebrow"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "title"
+        },
+        "artist": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "by"
+        },
+        "artist_photo": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "by"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "by"
+        },
+        "saved": {
+          "type": "boolean",
+          "part": "save"
+        },
+        "shuffle": {
+          "type": "boolean",
+          "part": "shuffle"
+        },
+        "tracks": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 30,
+          "part": "tracks",
+          "items": {
+            "type": "object",
+            "required": [
+              "title",
+              "length"
+            ],
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "artists": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "explicit": {
+                "type": "boolean"
+              },
+              "liked": {
+                "type": "boolean"
+              },
+              "current": {
+                "type": "boolean"
+              },
+              "length": {
+                "type": "string",
+                "maxLength": 5
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a track will not play, keep the list and show a toast-stack message naming the track"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "for a track that cannot be played, set disabled on its row button and grey its title"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "on wide boxes the cover sits beside the title and a column header appears; on narrow ones the cover sits on top",
+        "evidence": "@container (min-width: 34rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "track titles and artist names stay on one line and end in an ellipsis",
+        "evidence": "text-overflow: ellipsis; white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Play, Shuffle, Save and More options, then each track's row and its Like button in order",
+      "Enter or Space on a track row plays it and marks it as current",
+      "Enter or Space on Play switches between play and pause",
+      "Enter or Space on Shuffle, Save or a Like toggles it on or off",
+      "More options is a button with no action wired in the file"
+    ]
+  }
 }

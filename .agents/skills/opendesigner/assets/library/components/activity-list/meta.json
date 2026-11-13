@@ -83,5 +83,284 @@
       "author": "Meg Wagener",
       "page": "M7fbJyBuAag"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "any feed of reactions to the person's own posts, where some rows offer a follow-back"
+    ],
+    "avoid_when": [
+      "work alerts that need actions like approve or assign: use notification-inbox",
+      "a team's change history with exact times: use audit-log or activity-feed"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-activity-list h3",
+        "what": "the list's heading",
+        "slot": "text"
+      },
+      {
+        "name": "filter",
+        "selector": ".odl-filter label",
+        "what": "one filter chip: All or a kind of activity",
+        "slot": "list"
+      },
+      {
+        "name": "groups",
+        "selector": ".odl-group",
+        "what": "one time group with its heading, such as Today",
+        "slot": "list"
+      },
+      {
+        "name": "group_title",
+        "selector": ".odl-group h4",
+        "what": "the time group's name",
+        "slot": "text"
+      },
+      {
+        "name": "items",
+        "selector": ".odl-item",
+        "what": "one activity row; new rows carry a dot after the time",
+        "slot": "list"
+      },
+      {
+        "name": "who",
+        "selector": ".odl-who",
+        "what": "one or two profile photos with a badge for the kind",
+        "slot": "media"
+      },
+      {
+        "name": "text",
+        "selector": ".odl-text",
+        "what": "who did what, an optional quote, then the time",
+        "slot": "rich"
+      },
+      {
+        "name": "thumb",
+        "selector": ".odl-thumb",
+        "what": "a thumbnail of the post the activity is about",
+        "slot": "media"
+      },
+      {
+        "name": "story",
+        "selector": ".odl-story",
+        "what": "a ringed story thumbnail, in place of the post thumbnail",
+        "slot": "media"
+      },
+      {
+        "name": "follow_back",
+        "selector": ".odl-back",
+        "what": "a toggle to follow the person back, in place of the thumbnail",
+        "slot": "action"
+      },
+      {
+        "name": "empty",
+        "selector": ".odl-empty",
+        "what": "the line shown when the filter leaves nothing",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "groups"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "title"
+        },
+        "filters": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "part": "filter",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "kind"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 14
+              },
+              "kind": {
+                "enum": [
+                  "all",
+                  "like",
+                  "follow",
+                  "mention"
+                ]
+              }
+            }
+          }
+        },
+        "groups": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "part": "groups",
+          "items": {
+            "type": "object",
+            "required": [
+              "title",
+              "items"
+            ],
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 10,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "kind",
+                    "people",
+                    "text",
+                    "time"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "like",
+                        "follow",
+                        "mention"
+                      ]
+                    },
+                    "people": {
+                      "type": "array",
+                      "minItems": 1,
+                      "maxItems": 2,
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "name",
+                          "photo"
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "maxLength": 20
+                          },
+                          "photo": {
+                            "type": "string",
+                            "maxLength": 300
+                          }
+                        }
+                      }
+                    },
+                    "text": {
+                      "type": "string",
+                      "maxLength": 90
+                    },
+                    "quote": {
+                      "type": "string",
+                      "maxLength": 80
+                    },
+                    "time": {
+                      "type": "string",
+                      "maxLength": 4
+                    },
+                    "is_new": {
+                      "type": "boolean"
+                    },
+                    "end": {
+                      "enum": [
+                        "thumb",
+                        "story",
+                        "follow_back"
+                      ]
+                    },
+                    "thumb": {
+                      "type": "string",
+                      "maxLength": 300
+                    },
+                    "thumb_alt": {
+                      "type": "string",
+                      "maxLength": 60
+                    },
+                    "following": {
+                      "type": "boolean"
+                    },
+                    "names": {
+                      "type": "string",
+                      "maxLength": 80
+                    },
+                    "story": {
+                      "type": "object",
+                      "required": [
+                        "src",
+                        "alt"
+                      ],
+                      "properties": {
+                        "src": {
+                          "type": "string",
+                          "maxLength": 2048
+                        },
+                        "alt": {
+                          "type": "string",
+                          "maxLength": 200
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "empty": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "empty"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "when the chosen filter matches no rows, the groups hide and a centred line says there is nothing yet",
+        "evidence": "empty.hidden = any"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the list fails to load, put an alert-banners line under the chips with a retry button"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "while a follow is being sent, set disabled on that Follow back button and dim it"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the filter chips scroll sideways in one row with a fade at the end; a long list grows the card",
+        "evidence": "overflow-x: auto; scrollbar-width: none"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the activity text wraps in its own column while the photo and end item keep their size; the time never breaks",
+        "evidence": "grid-template-columns: auto minmax(0, 1fr) auto"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the filter chips as one radio group; the arrow keys move between them and change the filter",
+      "Tab then reaches each Follow back button; Enter or Space toggles it between Follow back and Following"
+    ]
+  }
 }

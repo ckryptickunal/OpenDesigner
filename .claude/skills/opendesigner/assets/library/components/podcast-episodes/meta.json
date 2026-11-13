@@ -34,5 +34,216 @@
       "author": "Jonathan Velasquez",
       "page": "c1ZN57GfDB0"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a list of recorded talks or lessons people play in order and keep offline"
+    ],
+    "avoid_when": [
+      "songs in an album or playlist: use track-list",
+      "playing the current episode with controls: use music-player",
+      "videos or shows with poster art: use media-shelf or title-detail"
+    ],
+    "parts": [
+      {
+        "name": "art",
+        "selector": ".odl-art",
+        "what": "the show's square artwork",
+        "slot": "media"
+      },
+      {
+        "name": "kicker",
+        "selector": ".odl-show",
+        "what": "the kind of show and how often it comes out",
+        "slot": "text"
+      },
+      {
+        "name": "title",
+        "selector": ".odl-podcast-episodes h3",
+        "what": "the show's name",
+        "slot": "text"
+      },
+      {
+        "name": "count",
+        "selector": ".odl-count",
+        "what": "how many episodes and the order",
+        "slot": "text"
+      },
+      {
+        "name": "episodes",
+        "selector": "ol > li",
+        "what": "one episode",
+        "slot": "list"
+      },
+      {
+        "name": "meta",
+        "selector": ".odl-meta",
+        "what": "a New tag, the date and the length",
+        "slot": "text"
+      },
+      {
+        "name": "episode_title",
+        "selector": "h4",
+        "what": "the episode's title",
+        "slot": "text"
+      },
+      {
+        "name": "description",
+        "selector": ".odl-desc",
+        "what": "what the episode is about, cut to two lines",
+        "slot": "text"
+      },
+      {
+        "name": "play",
+        "selector": ".odl-play",
+        "what": "play or pause, with the length or a bar and the time left",
+        "slot": "action"
+      },
+      {
+        "name": "played",
+        "selector": ".odl-played",
+        "what": "a tick and 'Played' for finished episodes",
+        "slot": "text"
+      },
+      {
+        "name": "download",
+        "selector": ".odl-dl",
+        "what": "download, a progress ring while downloading, then a done tick",
+        "slot": "action"
+      },
+      {
+        "name": "more",
+        "selector": ".odl-more",
+        "what": "more options for the episode",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "episodes"
+      ],
+      "properties": {
+        "art": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "art"
+        },
+        "art_alt": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "art"
+        },
+        "kicker": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "kicker"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "title"
+        },
+        "count": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "count"
+        },
+        "episodes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "part": "episodes",
+          "items": {
+            "type": "object",
+            "required": [
+              "title",
+              "date",
+              "length"
+            ],
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "date": {
+                "type": "string",
+                "maxLength": 12
+              },
+              "length": {
+                "type": "string",
+                "maxLength": 8
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "is_new": {
+                "type": "boolean"
+              },
+              "progress": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "time_left": {
+                "type": "string",
+                "maxLength": 12
+              },
+              "played": {
+                "type": "boolean"
+              },
+              "download": {
+                "enum": [
+                  "idle",
+                  "loading",
+                  "done"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a download fails, put the button back to download and show toast-stack with 'Download failed'"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "when offline, set disabled on download for episodes not yet saved and dim them"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the list grows with every episode; show about ten and add pagination or a Show more button"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "descriptions are cut to two lines; titles and the show name wrap",
+        "evidence": "-webkit-line-clamp: 2"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab moves through each episode's play, download and more buttons in order",
+      "Enter or Space on play starts that episode and pauses any other; again pauses it",
+      "Enter or Space on download starts it, and on a downloading or downloaded episode cancels or removes it"
+    ]
+  }
 }

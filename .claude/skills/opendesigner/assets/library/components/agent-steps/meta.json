@@ -4,10 +4,277 @@
   "use": "when an AI agent works through several steps and may need a person's approval",
   "type": "ai",
   "style": "technical",
-  "industries": ["finance", "saas", "devtools", "productivity"],
-  "tags": ["agent", "timeline", "steps", "approval", "run log"],
-  "states": ["done", "running", "waiting for approval", "approved", "denied", "skipped", "stopped", "expanded", "hover", "focus"],
+  "industries": [
+    "finance",
+    "saas",
+    "devtools",
+    "productivity"
+  ],
+  "tags": [
+    "agent",
+    "timeline",
+    "steps",
+    "approval",
+    "run log"
+  ],
+  "states": [
+    "done",
+    "running",
+    "waiting for approval",
+    "approved",
+    "denied",
+    "skipped",
+    "stopped",
+    "expanded",
+    "hover",
+    "focus"
+  ],
   "source": null,
   "a11y": "The steps are an ordered list with the running one marked aria-current and a labelled progressbar; tool output opens with a native details element, the run status is a live status line, and Approve, Deny and Stop run are real buttons.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "a person wants to see what an automated run did, with the raw tool output one click away"
+    ],
+    "avoid_when": [
+      "a list of setup tasks the person does themselves: use setup-steps",
+      "a past record of events with no live run: use audit-log or activity-feed",
+      "one AI answer in a conversation: use chat-answer"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-agent-steps h3",
+        "what": "what the run is doing, the panel's heading",
+        "slot": "text"
+      },
+      {
+        "name": "stop",
+        "selector": ".odl-stop",
+        "what": "stops the whole run",
+        "slot": "action"
+      },
+      {
+        "name": "run_status",
+        "selector": ".odl-run",
+        "what": "live run state: Running or Stopped",
+        "slot": "text"
+      },
+      {
+        "name": "started",
+        "selector": ".odl-sub > span:last-child",
+        "what": "start time and time so far",
+        "slot": "text"
+      },
+      {
+        "name": "steps",
+        "selector": "ol > li",
+        "what": "one step: done, running, waiting for approval, skipped or stopped",
+        "slot": "list"
+      },
+      {
+        "name": "step_title",
+        "selector": ".odl-title",
+        "what": "what the step does",
+        "slot": "text"
+      },
+      {
+        "name": "step_time",
+        "selector": ".odl-time",
+        "what": "elapsed time when the step happened",
+        "slot": "text"
+      },
+      {
+        "name": "step_detail",
+        "selector": ".odl-detail",
+        "what": "one line of detail under the step",
+        "slot": "text"
+      },
+      {
+        "name": "tool_output",
+        "selector": "details pre",
+        "what": "raw tool output, folded away",
+        "slot": "rich"
+      },
+      {
+        "name": "waiting_tag",
+        "selector": ".odl-tag",
+        "what": "marks the step that waits for a person",
+        "slot": "text"
+      },
+      {
+        "name": "progress",
+        "selector": ".odl-progress",
+        "what": "progress of the running step",
+        "slot": "number"
+      },
+      {
+        "name": "approve",
+        "selector": ".odl-yes",
+        "what": "lets the waiting step go ahead",
+        "slot": "action"
+      },
+      {
+        "name": "deny",
+        "selector": ".odl-no",
+        "what": "refuses the waiting step",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "status",
+        "steps"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "title"
+        },
+        "status": {
+          "enum": [
+            "running",
+            "stopped"
+          ],
+          "part": "run_status"
+        },
+        "started": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "started"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 8,
+          "part": "steps",
+          "items": {
+            "type": "object",
+            "required": [
+              "title",
+              "state"
+            ],
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 48,
+                "part": "step_title"
+              },
+              "state": {
+                "enum": [
+                  "done",
+                  "running",
+                  "waiting",
+                  "skipped",
+                  "stopped"
+                ]
+              },
+              "time": {
+                "type": "string",
+                "maxLength": 8,
+                "part": "step_time"
+              },
+              "detail": {
+                "type": "string",
+                "maxLength": 100,
+                "part": "step_detail"
+              },
+              "tool_output": {
+                "type": "string",
+                "maxLength": 600,
+                "part": "tool_output"
+              },
+              "progress": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "max"
+                ],
+                "part": "progress",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "maxLength": 32
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "max": {
+                    "type": "number"
+                  }
+                }
+              },
+              "progress_label": {
+                "type": "string",
+                "maxLength": 120
+              }
+            }
+          }
+        },
+        "actions": {
+          "type": "object",
+          "properties": {
+            "stop": {
+              "type": "string",
+              "maxLength": 14,
+              "part": "stop"
+            },
+            "approve": {
+              "type": "string",
+              "maxLength": 14,
+              "part": "approve"
+            },
+            "deny": {
+              "type": "string",
+              "maxLength": 14,
+              "part": "deny"
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "shown",
+        "how": "the running step has a progress bar with a moving sheen and the run badge pulses",
+        "evidence": "animation: odl-agent-steps-sheen"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "mark the failed step with the stopped style, put the reason in its detail line and set the run badge to Failed"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "after Stop run is pressed the button is disabled and greyed",
+        "evidence": ".odl-stop:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a narrow box the time moves under the title and the approve buttons share the row",
+        "evidence": "@container (max-width: 30rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "step text wraps in its column; tool output wraps at any character; times never wrap",
+        "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Stop run, each Tool output summary, then Approve and Deny",
+      "Enter or Space presses the focused button",
+      "Enter or Space on a Tool output summary opens or closes it"
+    ]
+  }
 }

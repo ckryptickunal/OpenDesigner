@@ -31,5 +31,244 @@
       "author": "Arnab De",
       "page": "WYwNK-zW7u4"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "stepping through a queue of records one by one, with previous and next, while the list stays in view"
+    ],
+    "avoid_when": [
+      "a short yes-or-no question with no record behind it: use confirm-dialog",
+      "the decision needs the approval steps and the balance effect laid out: use approval-panel",
+      "a cart or checkout side sheet: use cart-drawer"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h2",
+        "what": "the record's name, on one line",
+        "slot": "text"
+      },
+      {
+        "name": "position",
+        "selector": ".odl-pos",
+        "what": "where this record sits in the list, such as '5 of 14'",
+        "slot": "text"
+      },
+      {
+        "name": "nav",
+        "selector": ".odl-nav .odl-icon-btn",
+        "what": "previous, next and close icon buttons",
+        "slot": "action"
+      },
+      {
+        "name": "status",
+        "selector": ".odl-pill",
+        "what": "the record's status chip",
+        "slot": "text"
+      },
+      {
+        "name": "amount",
+        "selector": ".odl-amount",
+        "what": "the headline amount, with cents and currency set smaller",
+        "slot": "number"
+      },
+      {
+        "name": "subtitle",
+        "selector": ".odl-sub",
+        "what": "one or two short lines under the amount: due date, what happens next",
+        "slot": "list"
+      },
+      {
+        "name": "fields",
+        "selector": "dl > div",
+        "what": "one label and value pair",
+        "slot": "list"
+      },
+      {
+        "name": "person",
+        "selector": ".odl-person img",
+        "what": "a small round photo beside a person's name in a field",
+        "slot": "media"
+      },
+      {
+        "name": "file",
+        "selector": ".odl-file",
+        "what": "the attachment: name, type and size, and an open button",
+        "slot": "rich"
+      },
+      {
+        "name": "reject",
+        "selector": ".odl-secondary",
+        "what": "the secondary, danger-coloured decision",
+        "slot": "action"
+      },
+      {
+        "name": "approve",
+        "selector": ".odl-primary",
+        "what": "the main decision",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "fields"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "title"
+        },
+        "position": {
+          "type": "string",
+          "maxLength": 12,
+          "part": "position"
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "status"
+        },
+        "amount": {
+          "type": "number",
+          "part": "amount"
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 3,
+          "part": "amount"
+        },
+        "subtitle": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 2,
+          "part": "subtitle",
+          "items": {
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 60
+              }
+            }
+          }
+        },
+        "fields": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 10,
+          "part": "fields",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "value"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 48
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "photo": {
+                "type": "string",
+                "maxLength": 300
+              }
+            }
+          }
+        },
+        "file": {
+          "type": "object",
+          "part": "file",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 60
+            },
+            "meta": {
+              "type": "string",
+              "maxLength": 36
+            }
+          }
+        },
+        "actions": {
+          "type": "object",
+          "properties": {
+            "approve": {
+              "type": "string",
+              "maxLength": 14,
+              "part": "approve"
+            },
+            "reject": {
+              "type": "string",
+              "maxLength": 14,
+              "part": "reject"
+            }
+          }
+        },
+        "file_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "file_meta": {
+          "type": "string",
+          "maxLength": 80
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the record fails to load or a decision fails, put an alert-banners line at the top of the body and keep the footer"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "on the first or last record, set disabled on the previous or next button; after a decision, disable both footer buttons"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the body scrolls on its own between the fixed header and the sticky footer",
+        "evidence": "flex: 1 1 auto; overflow: auto"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the title and file name are cut with an ellipsis; field values break anywhere rather than overflow",
+        "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "not_built",
+        "how": "a photo that fails to load shows the browser's broken image"
+      }
+    },
+    "keyboard": [
+      "Tab moves through Previous, Next and Close, the open-file button, then Reject and Approve",
+      "Enter or Space presses the focused button",
+      "The file has no script: Esc does not close it and Previous and Next do nothing until wired"
+    ]
+  }
 }

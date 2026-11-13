@@ -83,5 +83,196 @@
       "author": "Yvette de Wit",
       "page": "NYrVisodQ2M"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a browse page that groups titles into rows by theme, with posters to pick from"
+    ],
+    "avoid_when": [
+      "one title's own page with its seasons and episodes: use title-detail",
+      "a list of episodes to play in order: use podcast-episodes or track-list",
+      "a row of short stories that open full screen: use story-rail"
+    ],
+    "parts": [
+      {
+        "name": "heading",
+        "selector": ".odl-top h3",
+        "what": "the row's name; a muted lead-in can sit before it",
+        "slot": "rich"
+      },
+      {
+        "name": "nav",
+        "selector": ".odl-nav button",
+        "what": "back and forward arrows, shown on wide screens, off at each end",
+        "slot": "action"
+      },
+      {
+        "name": "items",
+        "selector": ".odl-item",
+        "what": "one title: a still or poster, its name and a line under it",
+        "slot": "list"
+      },
+      {
+        "name": "art",
+        "selector": ".odl-art img",
+        "what": "the still (16:9) or poster (2:3)",
+        "slot": "media"
+      },
+      {
+        "name": "progress",
+        "selector": ".odl-bar",
+        "what": "how much has been watched, on stills only",
+        "slot": "number"
+      },
+      {
+        "name": "name",
+        "selector": ".odl-name",
+        "what": "the title",
+        "slot": "text"
+      },
+      {
+        "name": "sub",
+        "selector": ".odl-sub",
+        "what": "episode and time left, the kind of title, or a New label in the accent colour",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "shelves"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "shelves": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "title",
+              "items"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "continue",
+                  "posters"
+                ]
+              },
+              "lead_in": {
+                "type": "string",
+                "maxLength": 24,
+                "part": "heading"
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 32,
+                "part": "heading"
+              },
+              "items": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 20,
+                "part": "items",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "image",
+                    "alt",
+                    "label"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "maxLength": 24,
+                      "part": "name"
+                    },
+                    "sub": {
+                      "type": "string",
+                      "maxLength": 24,
+                      "part": "sub"
+                    },
+                    "new": {
+                      "type": "boolean",
+                      "part": "sub"
+                    },
+                    "image": {
+                      "type": "string",
+                      "maxLength": 400,
+                      "part": "art"
+                    },
+                    "alt": {
+                      "type": "string",
+                      "maxLength": 100,
+                      "part": "art"
+                    },
+                    "progress": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1,
+                      "part": "progress"
+                    },
+                    "label": {
+                      "type": "string",
+                      "maxLength": 90,
+                      "part": "items"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a row fails to load, keep its heading and show one alert-banners line with a retry in place of the tiles"
+      },
+      "disabled": {
+        "status": "handled",
+        "how": "the back arrow is off at the start of a row and the forward arrow at the end",
+        "evidence": "prev.disabled = list.scrollLeft <= 2"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "each row scrolls sideways in its own box with snapping; wider boxes show more tiles and the arrows",
+        "evidence": "overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long title or line under it ends in an ellipsis",
+        "evidence": ".odl-name { overflow: hidden; font: var(--ds-text-label-lg); text-overflow: ellipsis; white-space: nowrap; }"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the arrows (wide screens only), the row itself, then each title in it",
+      "with a row focused, the arrow keys scroll it, as the browser does for any scroll box",
+      "Enter or Space on an arrow scrolls the row by about one screen",
+      "Enter or Space on a title presses it; the file has no action for it"
+    ]
+  }
 }

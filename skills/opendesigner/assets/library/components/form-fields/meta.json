@@ -4,57 +4,275 @@
   "use": "when the assistant needs a few details it cannot guess, such as a delivery change, a request or a problem report",
   "type": "form",
   "style": "quiet",
-  "industries": ["any"],
-  "tags": ["form", "fields", "input", "validation", "request"],
-  "states": ["filled", "optional", "error", "switch on", "switch off", "hover", "focus", "disabled", "buttons stack on a phone"],
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "form",
+    "fields",
+    "input",
+    "validation",
+    "request"
+  ],
+  "states": [
+    "filled",
+    "optional",
+    "error",
+    "switch on",
+    "switch off",
+    "hover",
+    "focus",
+    "disabled",
+    "buttons stack on a phone"
+  ],
   "source": null,
   "a11y": "Each control sits inside its label; hints and error messages are linked with aria-describedby, a wrong field gets aria-invalid, and Continue moves focus to the first field to fix. Toggles are switches (role=switch).",
   "width": "narrow",
   "spec": {
-    "use_when": ["two to eight details the person must give before the assistant can act, each a short text, a number, a choice from a list, a date or a yes or no"],
-    "avoid_when": ["one choice from a few answers: use quick-replies", "picking an appointment time: use time-slots", "signing in or anything with a password: use sign-in-form, and never ask for a password in a generated form", "confirming an action that pays, sends or deletes: use approval-prompt after the form"],
+    "use_when": [
+      "two to eight details the person must give before the assistant can act, each a short text, a number, a choice from a list, a date or a yes or no"
+    ],
+    "avoid_when": [
+      "one choice from a few answers: use quick-replies",
+      "picking an appointment time: use time-slots",
+      "signing in or anything with a password: use sign-in-form, and never ask for a password in a generated form",
+      "confirming an action that pays, sends or deletes: use approval-prompt after the form"
+    ],
     "parts": [
-      {"name": "title", "selector": ".odl-form-fields h3", "what": "what the form is for", "slot": "text"},
-      {"name": "intro", "selector": ".odl-intro", "what": "one sentence of context, such as a deadline", "slot": "text"},
-      {"name": "fields", "selector": ".odl-field", "what": "one field: label, control, hint and error", "slot": "list"},
-      {"name": "label", "selector": ".odl-name", "what": "the field's name; 'Optional' is added when it is not required", "slot": "text"},
-      {"name": "control", "selector": ".odl-input", "what": "the native input chosen by kind: text, number, select or date, or a switch for toggle", "slot": "none"},
-      {"name": "hint", "selector": ".odl-hint", "what": "one line that helps fill it in", "slot": "text"},
-      {"name": "error", "selector": ".odl-error", "what": "what to fix, written by the component's own check", "slot": "none"},
-      {"name": "cancel", "selector": ".odl-form-fields footer .odl-btn:not(.odl-submit)", "what": "leaves things as they are", "slot": "action"},
-      {"name": "submit", "selector": ".odl-submit", "what": "sends the answers to the assistant once every field passes; effect none, because the form only collects details: anything it then books, pays or sends is confirmed in its own approval step", "slot": "action"}
+      {
+        "name": "title",
+        "selector": ".odl-form-fields h3",
+        "what": "what the form is for",
+        "slot": "text"
+      },
+      {
+        "name": "intro",
+        "selector": ".odl-intro",
+        "what": "one sentence of context, such as a deadline",
+        "slot": "text"
+      },
+      {
+        "name": "fields",
+        "selector": ".odl-field",
+        "what": "one field: label, control, hint and error",
+        "slot": "list"
+      },
+      {
+        "name": "label",
+        "selector": ".odl-name",
+        "what": "the field's name; 'Optional' is added when it is not required",
+        "slot": "text"
+      },
+      {
+        "name": "control",
+        "selector": ".odl-input",
+        "what": "the native input chosen by kind: text, number, select or date, or a switch for toggle",
+        "slot": "none"
+      },
+      {
+        "name": "hint",
+        "selector": ".odl-hint",
+        "what": "one line that helps fill it in",
+        "slot": "text"
+      },
+      {
+        "name": "error",
+        "selector": ".odl-error",
+        "what": "what to fix, written by the component's own check",
+        "slot": "none"
+      },
+      {
+        "name": "cancel",
+        "selector": ".odl-form-fields footer .odl-btn:not(.odl-submit)",
+        "what": "leaves things as they are",
+        "slot": "action"
+      },
+      {
+        "name": "submit",
+        "selector": ".odl-submit",
+        "what": "sends the answers to the assistant once every field passes; effect none, because the form only collects details: anything it then books, pays or sends is confirmed in its own approval step",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
-      "required": ["title", "fields", "submit"],
+      "required": [
+        "title",
+        "fields",
+        "submit"
+      ],
       "properties": {
-        "title": {"type": "string", "maxLength": 48, "part": "title"},
-        "intro": {"type": "string", "maxLength": 120, "part": "intro"},
-        "fields": {"type": "array", "minItems": 1, "maxItems": 8, "part": "fields",
-          "items": {"type": "object", "required": ["name", "label", "kind"], "properties": {
-            "name": {"type": "string", "maxLength": 40, "part": "control"},
-            "label": {"type": "string", "maxLength": 40, "part": "label"},
-            "kind": {"type": "string", "enum": ["text", "number", "select", "date", "toggle"], "part": "control"},
-            "hint": {"type": "string", "maxLength": 90, "part": "hint"},
-            "required": {"type": "boolean", "part": "label"},
-            "value": {"type": ["string", "number", "boolean"], "maxLength": 120, "part": "control"},
-            "min": {"type": "number", "part": "control"},
-            "max": {"type": "number", "part": "control"},
-            "options": {"type": "array", "maxItems": 12, "part": "control",
-              "items": {"type": "object", "required": ["label", "value"], "properties": {"label": {"type": "string", "maxLength": 60}, "value": {"type": "string", "maxLength": 60}}}}
-          }}},
-        "submit": {"type": "object", "part": "submit", "properties": {"label": {"type": "string", "maxLength": 40}, "event": {"type": "object"}}, "required": ["label", "event"]},
-        "cancel": {"type": "object", "part": "cancel", "properties": {"label": {"type": "string", "maxLength": 40}, "event": {"type": "object"}}, "required": ["label", "event"]}
+        "title": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "title"
+        },
+        "intro": {
+          "type": "string",
+          "maxLength": 120,
+          "part": "intro"
+        },
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "part": "fields",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "label",
+              "kind"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 40,
+                "part": "control"
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 40,
+                "part": "label"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "text",
+                  "number",
+                  "select",
+                  "date",
+                  "toggle"
+                ],
+                "part": "control"
+              },
+              "hint": {
+                "type": "string",
+                "maxLength": 90,
+                "part": "hint"
+              },
+              "required": {
+                "type": "boolean",
+                "part": "label"
+              },
+              "value": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean"
+                ],
+                "maxLength": 120,
+                "part": "control"
+              },
+              "min": {
+                "type": "number",
+                "part": "control"
+              },
+              "max": {
+                "type": "number",
+                "part": "control"
+              },
+              "options": {
+                "type": "array",
+                "maxItems": 12,
+                "part": "control",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "label",
+                    "value"
+                  ],
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "maxLength": 60
+                    },
+                    "value": {
+                      "type": "string",
+                      "maxLength": 60
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "submit": {
+          "type": "object",
+          "part": "submit",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "label",
+            "event"
+          ]
+        },
+        "cancel": {
+          "type": "object",
+          "part": "cancel",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "label",
+            "event"
+          ]
+        }
       }
     },
     "edge": {
-      "empty": {"status": "not_built", "how": "a form with no fields is not shown; ask in text instead"},
-      "loading": {"status": "not_built", "how": "keep the labels and show empty controls at their full height"},
-      "error": {"status": "shown", "how": "a missing required value or a number out of range shows a message under the field, marks it aria-invalid and moves focus to the first one on Continue", "evidence": "aria-invalid"},
-      "disabled": {"status": "shown", "how": "a field the person may not change is disabled and greyed; its value stays readable", "evidence": ".odl-input:disabled"},
-      "overflow": {"status": "handled", "how": "fields stack; on a phone the two buttons stack full width with Continue on top", "evidence": "flex-direction: column-reverse"},
-      "long_text": {"status": "handled", "how": "labels, hints and errors wrap; values scroll inside their control", "evidence": "overflow-wrap: anywhere"}
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "shown",
+        "how": "a missing required value or a number out of range shows a message under the field, marks it aria-invalid and moves focus to the first one on Continue",
+        "evidence": "aria-invalid"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "a field the person may not change is disabled and greyed; its value stays readable",
+        "evidence": ".odl-input:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "fields stack; on a phone the two buttons stack full width with Continue on top",
+        "evidence": "flex-direction: column-reverse"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "labels, hints and errors wrap; values scroll inside their control",
+        "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
     },
-    "keyboard": ["Tab moves through the fields, then Cancel and Continue", "Space turns a switch on or off; arrow keys move through a select's options", "Enter in a text field presses Continue, which checks every field first"]
+    "keyboard": [
+      "Tab moves through the fields, then Cancel and Continue",
+      "Space turns a switch on or off; arrow keys move through a select's options",
+      "Enter in a text field presses Continue, which checks every field first"
+    ]
   }
 }

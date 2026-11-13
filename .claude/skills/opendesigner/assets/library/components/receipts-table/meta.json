@@ -4,10 +4,237 @@
   "use": "for dense lists people review and act on in bulk",
   "type": "data",
   "style": "dense",
-  "industries": ["finance", "logistics", "saas"],
-  "tags": ["table", "bulk actions", "selection", "status", "reconciliation"],
-  "states": ["hover", "selected", "no selection", "focus", "four statuses"],
+  "industries": [
+    "finance",
+    "logistics",
+    "saas"
+  ],
+  "tags": [
+    "table",
+    "bulk actions",
+    "selection",
+    "status",
+    "reconciliation"
+  ],
+  "states": [
+    "hover",
+    "selected",
+    "no selection",
+    "focus",
+    "four statuses"
+  ],
   "source": "brand/showcase/product/01-quoin-payments",
   "a11y": "Each checkbox is named after its row and has a 24 px target; the bulk bar is a labelled toolbar whose count is a polite live region; the table scrolls sideways in its own box on narrow screens.",
-  "width": "wide"
+  "width": "wide",
+  "spec": {
+    "use_when": [
+      "matching bank lines, invoices or shipments where each row has a status and several rows get the same action"
+    ],
+    "avoid_when": [
+      "one item that needs a decision with its policy and steps: use approval-panel",
+      "a read-only history of changes: use audit-log",
+      "a short list with no bulk actions: use activity-list"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the table's heading",
+        "slot": "text"
+      },
+      {
+        "name": "summary",
+        "selector": ".odl-top p",
+        "what": "how many rows, where from, and their total",
+        "slot": "text"
+      },
+      {
+        "name": "columns",
+        "selector": "th",
+        "what": "column headers: select, customer, reference, amount, match",
+        "slot": "list"
+      },
+      {
+        "name": "rows",
+        "selector": "tbody tr",
+        "what": "one row: checkbox, customer, reference, amount and status",
+        "slot": "list"
+      },
+      {
+        "name": "select",
+        "selector": "tbody input",
+        "what": "a checkbox named after its row",
+        "slot": "input"
+      },
+      {
+        "name": "reference",
+        "selector": ".odl-ref",
+        "what": "the other side's reference, in code type; hidden in a narrow box",
+        "slot": "text"
+      },
+      {
+        "name": "amount",
+        "selector": ".odl-num",
+        "what": "the amount, right-aligned, with its currency",
+        "slot": "number"
+      },
+      {
+        "name": "status",
+        "selector": ".odl-pill",
+        "what": "the row's match status as a coloured pill with a word",
+        "slot": "text"
+      },
+      {
+        "name": "bulk_count",
+        "selector": ".odl-bulk output",
+        "what": "how many rows are picked; updates as rows are ticked",
+        "slot": "text"
+      },
+      {
+        "name": "bulk_secondary",
+        "selector": ".odl-bulk button",
+        "what": "the secondary bulk action",
+        "slot": "action"
+      },
+      {
+        "name": "bulk_primary",
+        "selector": ".odl-go",
+        "what": "the main bulk action",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "rows",
+        "actions"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "title"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "summary"
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 25,
+          "part": "rows",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "amount",
+              "status"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 28
+              },
+              "reference": {
+                "type": "string",
+                "maxLength": 22,
+                "part": "reference"
+              },
+              "amount": {
+                "type": "string",
+                "maxLength": 14,
+                "part": "amount"
+              },
+              "currency": {
+                "type": "string",
+                "maxLength": 3,
+                "part": "amount"
+              },
+              "status": {
+                "enum": [
+                  "matched",
+                  "suggested",
+                  "short",
+                  "none"
+                ],
+                "part": "status"
+              },
+              "status_label": {
+                "type": "string",
+                "maxLength": 14,
+                "part": "status"
+              },
+              "selected": {
+                "type": "boolean",
+                "part": "select"
+              },
+              "key": {
+                "type": "string",
+                "maxLength": 40
+              }
+            }
+          }
+        },
+        "actions": {
+          "type": "object",
+          "required": [
+            "primary"
+          ],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "maxLength": 20,
+              "part": "bulk_primary"
+            },
+            "secondary": {
+              "type": "string",
+              "maxLength": 20,
+              "part": "bulk_secondary"
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a bulk action fails, keep the rows ticked and show the reason in toast-stack or an alert-banners line above the table"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "set disabled on the checkbox of a row that cannot be acted on and dim it; set disabled on both bulk buttons while an action runs"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the table scrolls sideways in its own box when its columns do not fit, and in a narrow box each row becomes a stacked card",
+        "evidence": ".odl-receipts-table .odl-scroll { overflow-x: auto;"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "cells never wrap in the table layout; in a narrow box they wrap and the bulk buttons end in an ellipsis",
+        "evidence": "white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches each row's checkbox in turn, then the bulk buttons once a row is picked",
+      "Space ticks or unticks the focused checkbox, and the bulk count updates",
+      "Enter or Space presses the focused bulk button"
+    ]
+  }
 }

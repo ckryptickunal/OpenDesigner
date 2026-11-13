@@ -4,10 +4,251 @@
   "use": "for monthly spend or usage against a budget, with a forecast",
   "type": "chart",
   "style": "quiet",
-  "industries": ["saas", "finance", "devtools"],
-  "tags": ["bar chart", "spend", "budget", "forecast", "billing", "tooltip"],
-  "states": ["hover", "focus", "current month", "forecast over budget"],
+  "industries": [
+    "saas",
+    "finance",
+    "devtools"
+  ],
+  "tags": [
+    "bar chart",
+    "spend",
+    "budget",
+    "forecast",
+    "billing",
+    "tooltip"
+  ],
+  "states": [
+    "hover",
+    "focus",
+    "current month",
+    "forecast over budget"
+  ],
   "source": "brand/showcase/product/05-kilnworks-billing",
   "a11y": "Each bar is a button whose name says the month, the amount and how it sits against the budget; Tab moves through the months and shows the same tooltip as hover.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "a billing or usage page that must warn early when the month is heading over budget"
+    ],
+    "avoid_when": [
+      "a share of a whole, such as spend by team: use donut-breakdown",
+      "a few headline numbers with no monthly history: use kpi-strip or budget-meters",
+      "more or fewer than six periods: the columns are fixed at six"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-bar-chart h3",
+        "what": "the chart's heading",
+        "slot": "text"
+      },
+      {
+        "name": "subtitle",
+        "selector": ".odl-sub",
+        "what": "the date range and when the data was updated",
+        "slot": "text"
+      },
+      {
+        "name": "stats",
+        "selector": ".odl-stats div",
+        "what": "one headline figure: a label and a value; the forecast can carry an over-budget badge",
+        "slot": "list"
+      },
+      {
+        "name": "over",
+        "selector": ".odl-over",
+        "what": "the forecast as a share of budget, in a warning badge",
+        "slot": "text"
+      },
+      {
+        "name": "axis",
+        "selector": ".odl-axis span",
+        "what": "one value label on the side axis",
+        "slot": "list"
+      },
+      {
+        "name": "budget",
+        "selector": ".odl-budget",
+        "what": "the dashed budget line and its label",
+        "slot": "text"
+      },
+      {
+        "name": "months",
+        "selector": ".odl-col",
+        "what": "one month's bar, with a tooltip of its figures on hover or focus; the current month adds a hatched forecast",
+        "slot": "list"
+      },
+      {
+        "name": "tip",
+        "selector": ".odl-tip",
+        "what": "the month name and its figures, label then value",
+        "slot": "rich"
+      },
+      {
+        "name": "x_labels",
+        "selector": ".odl-x li",
+        "what": "one short month name under the bars",
+        "slot": "list"
+      },
+      {
+        "name": "legend",
+        "selector": ".odl-legend li",
+        "what": "one legend key: spent, forecast or budget",
+        "slot": "list"
+      },
+      {
+        "name": "note",
+        "selector": ".odl-foot > span",
+        "what": "how the forecast was made",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "currency",
+        "budget",
+        "months"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "title"
+        },
+        "subtitle": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "subtitle"
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 3,
+          "part": "months"
+        },
+        "stats": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "part": "stats",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "value"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 22
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 12
+              },
+              "badge": {
+                "type": "string",
+                "maxLength": 5
+              }
+            }
+          }
+        },
+        "axis_max": {
+          "type": "number",
+          "part": "axis"
+        },
+        "budget": {
+          "type": "number",
+          "part": "budget"
+        },
+        "months": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "part": "months",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "short",
+              "spent"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 30
+              },
+              "short": {
+                "type": "string",
+                "maxLength": 4
+              },
+              "spent": {
+                "type": "number"
+              },
+              "forecast": {
+                "type": "number"
+              },
+              "current": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "legend": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 3,
+          "part": "legend",
+          "items": {
+            "type": "string",
+            "maxLength": 22
+          }
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "note"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the spend data fails to load, replace the plot with an alert-banners line and a retry button"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "the bars have no action to disable; nothing to build unless they open a month"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a narrow box every tooltip moves to the plot's top-left corner so it cannot run past the card",
+        "evidence": "max-inline-size: 100%; transform: none"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the heading and figures wrap onto separate lines; figures, axis labels and the budget label never break",
+        "evidence": "flex-wrap: wrap; align-items: start; justify-content: space-between"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab moves through the six month bars in order",
+      "A focused bar shows its tooltip and dims the other bars, as hover does"
+    ]
+  }
 }

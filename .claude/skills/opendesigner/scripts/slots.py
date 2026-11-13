@@ -205,8 +205,10 @@ def parts(src, root_class):
         for n in nodes:
             if n["kind"] not in kind:
                 continue
+            what = {"text": "text", "list": "a list of items", "media": "a photo", "action": "a button", "measure": "a number drawn as a bar",
+                    "var": "a variant"}[n["kind"]]
             out.append({"name": prefix + n["name"], "selector": f'{root_class} [{attr[n["kind"]]}="{n["name"]}"]',
-                        "slot": kind[n["kind"]]})
+                        "what": f'{n["name"].replace("_", " ")}: {what}', "slot": kind[n["kind"]]})
             if n["kind"] in ("list", "action"):
                 walk(n.get("children", []), prefix + n["name"] + ("[]." if n["kind"] == "list" else "."))
     walk(read_marks(src), "")

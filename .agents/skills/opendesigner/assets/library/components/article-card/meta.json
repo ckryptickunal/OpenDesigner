@@ -34,5 +34,199 @@
       "author": "Elizeu Dias",
       "page": "2EGNqazbAMk"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a featured post at the top of a list, where the wide layout puts the photo beside the text"
+    ],
+    "avoid_when": [
+      "a post in a social feed with likes and replies: use social-post",
+      "a product with a price to buy: use product-card",
+      "an episode or video to play: use podcast-episodes or media-shelf"
+    ],
+    "parts": [
+      {
+        "name": "cover",
+        "selector": ".odl-cover",
+        "what": "the cover photo, 16:9 when narrow, beside the text when wide",
+        "slot": "media"
+      },
+      {
+        "name": "kicker",
+        "selector": ".odl-kicker",
+        "what": "the category in bold, then the reading time",
+        "slot": "text"
+      },
+      {
+        "name": "headline",
+        "selector": ".odl-link",
+        "what": "the headline, the card's one link",
+        "slot": "text"
+      },
+      {
+        "name": "summary",
+        "selector": ".odl-dek",
+        "what": "one or two sentences on what the post says",
+        "slot": "text"
+      },
+      {
+        "name": "avatar",
+        "selector": ".odl-avatar",
+        "what": "the author's photo, decorative",
+        "slot": "media"
+      },
+      {
+        "name": "byline",
+        "selector": ".odl-byline",
+        "what": "the author's name and the date",
+        "slot": "text"
+      },
+      {
+        "name": "save",
+        "selector": ".odl-save",
+        "what": "a Save toggle that reads Saved when on",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "headline",
+        "href"
+      ],
+      "properties": {
+        "cover": {
+          "type": "object",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "part": "cover",
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 400
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 120
+            }
+          }
+        },
+        "category": {
+          "type": "string",
+          "maxLength": 18,
+          "part": "kicker"
+        },
+        "read_time": {
+          "type": "string",
+          "maxLength": 14,
+          "part": "kicker"
+        },
+        "headline": {
+          "type": "string",
+          "maxLength": 80,
+          "part": "headline"
+        },
+        "href": {
+          "type": "string",
+          "maxLength": 400,
+          "part": "headline"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 160,
+          "part": "summary"
+        },
+        "author": {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 32,
+              "part": "byline"
+            },
+            "photo": {
+              "type": "string",
+              "maxLength": 400,
+              "part": "avatar"
+            }
+          }
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 14,
+          "part": "byline"
+        },
+        "date_iso": {
+          "type": "string",
+          "maxLength": 10,
+          "part": "byline"
+        },
+        "saved": {
+          "type": "boolean",
+          "part": "save"
+        },
+        "author_photo": {
+          "type": "object",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 2048
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no posts to list, show empty-state in place of the cards"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if saving fails, set the Save button back to not pressed and say so with toast-stack"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "set disabled on the Save button when the reader cannot save, for example when signed out"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a wide box the cover moves beside the text and fills the card's height",
+        "evidence": "@container (min-width: 34rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long author name ends in an ellipsis; the headline and summary wrap with no line limit",
+        "evidence": "text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the headline link, then Save",
+      "Enter on the headline follows the link; the whole card shows the focus ring",
+      "Enter or Space on Save switches it between Save and Saved"
+    ]
+  }
 }

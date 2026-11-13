@@ -451,6 +451,7 @@ One line per decision. A line looks the same whether it comes from a template bu
 | `OD:direction <id> [--why "reason"]` | `engine.py research directions pick <id> [--remix <axis>=<id>]... --why "reason"` (`research.md` section 9) |
 | `OD:fix <issue>=<option>` | From the audit page (`audit-page`). The copied line is the person's yes to that change in their code: `engine.py ledger add <issue> --note "<option>"`, make the change from tokens, then `engine.py ledger done <issue>` (or `ledger broke <issue> --note "..."`). An option that needs a new token records it first with `set` |
 | `OD:waive <issue> --why "reason"` | From the audit page: keep it as it is, on purpose. `engine.py ledger add <issue>`, then `engine.py ledger waive <issue> --why "reason" --by owner --quote "<their words>"` |
+| `OD:add library.<id>` | A pick from the component gallery (the MCP server or the website). Confirm with the person, then `library.py add <id>` (`library.md`, "Adding one after a yes"). It records no decision |
 
 - Values are JSON: strings in double quotes (`"subtle"`, `"#167874"`), numbers bare (`45`). The engine also accepts a bare word.
 - Parse defensively. Ignore text outside `OD:` lines, and apply lines in order. If a value is not a listed option, confirm it as a custom value before recording it.

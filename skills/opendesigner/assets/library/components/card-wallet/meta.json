@@ -31,5 +31,362 @@
       "author": "LinkedIn Sales Solutions",
       "page": "pAtA8xe_iVM"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "one card or account with a few quick actions and a short list of what it was spent on"
+    ],
+    "avoid_when": [
+      "a full statement with search, filters or many rows: use receipts-table",
+      "a points or loyalty balance: use rewards-card",
+      "saving towards a target: use savings-goal"
+    ],
+    "parts": [
+      {
+        "name": "account",
+        "selector": ".odl-label",
+        "what": "the account name, the section's heading",
+        "slot": "text"
+      },
+      {
+        "name": "balance",
+        "selector": ".odl-balance",
+        "what": "the balance, pence set smaller",
+        "slot": "number"
+      },
+      {
+        "name": "reveal",
+        "selector": ".odl-reveal",
+        "what": "a toggle that shows or masks the card number, expiry and CVC",
+        "slot": "action"
+      },
+      {
+        "name": "card",
+        "selector": ".odl-plastic",
+        "what": "the card drawn from the accent ramp, no image",
+        "slot": "none"
+      },
+      {
+        "name": "kind",
+        "selector": ".odl-kind",
+        "what": "the card's name with its type below",
+        "slot": "text"
+      },
+      {
+        "name": "number",
+        "selector": ".odl-num",
+        "what": "the card number, masked to the last four until revealed",
+        "slot": "text"
+      },
+      {
+        "name": "card_meta",
+        "selector": ".odl-meta",
+        "what": "expiry and CVC, masked until revealed",
+        "slot": "text"
+      },
+      {
+        "name": "frozen_veil",
+        "selector": ".odl-frost",
+        "what": "the Frozen overlay shown over a frozen card",
+        "slot": "none"
+      },
+      {
+        "name": "status",
+        "selector": ".odl-status",
+        "what": "a live line that says the card was frozen or unfrozen",
+        "slot": "text"
+      },
+      {
+        "name": "add_money",
+        "selector": ".odl-act.is-primary",
+        "what": "the main quick action",
+        "slot": "action"
+      },
+      {
+        "name": "send",
+        "selector": ".odl-send",
+        "what": "the second quick action, disabled while frozen",
+        "slot": "action"
+      },
+      {
+        "name": "freeze",
+        "selector": ".odl-freeze",
+        "what": "a switch that freezes and unfreezes the card",
+        "slot": "action"
+      },
+      {
+        "name": "recent_title",
+        "selector": ".odl-recent header",
+        "what": "the list heading and the period it covers",
+        "slot": "text"
+      },
+      {
+        "name": "transactions",
+        "selector": ".odl-recent ul > li",
+        "what": "one transaction: a merchant icon or a person's photo, the name, category and time, and the amount",
+        "slot": "list"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "account",
+        "balance",
+        "currency",
+        "card"
+      ],
+      "properties": {
+        "account": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "account"
+        },
+        "balance": {
+          "type": "number",
+          "part": "balance"
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 3,
+          "part": "balance"
+        },
+        "card": {
+          "type": "object",
+          "required": [
+            "name",
+            "last4"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 16,
+              "part": "kind"
+            },
+            "type": {
+              "type": "string",
+              "maxLength": 12,
+              "part": "kind"
+            },
+            "last4": {
+              "type": "string",
+              "maxLength": 4,
+              "part": "number"
+            },
+            "number": {
+              "type": "string",
+              "maxLength": 19,
+              "part": "number"
+            },
+            "expiry": {
+              "type": "string",
+              "maxLength": 5,
+              "part": "card_meta"
+            },
+            "cvc": {
+              "type": "string",
+              "maxLength": 4,
+              "part": "card_meta"
+            }
+          }
+        },
+        "frozen": {
+          "type": "boolean",
+          "part": "freeze"
+        },
+        "actions": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "type": "string",
+              "maxLength": 12,
+              "part": "add_money"
+            },
+            "send": {
+              "type": "string",
+              "maxLength": 12,
+              "part": "send"
+            },
+            "freeze": {
+              "type": "string",
+              "maxLength": 12,
+              "part": "freeze"
+            }
+          }
+        },
+        "recent": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "maxLength": 16,
+              "part": "recent_title"
+            },
+            "period": {
+              "type": "string",
+              "maxLength": 16,
+              "part": "recent_title"
+            },
+            "items": {
+              "type": "array",
+              "minItems": 0,
+              "maxItems": 6,
+              "part": "transactions",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "amount"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 28
+                  },
+                  "detail": {
+                    "type": "string",
+                    "maxLength": 32
+                  },
+                  "amount": {
+                    "type": "string",
+                    "maxLength": 10
+                  },
+                  "direction": {
+                    "enum": [
+                      "in",
+                      "out"
+                    ]
+                  },
+                  "photo": {
+                    "type": "string",
+                    "maxLength": 300
+                  }
+                }
+              }
+            }
+          }
+        },
+        "card_label": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "card_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "card_type": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "card_last4": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "card_number": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "card_expiry": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "card_cvc": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "recent_title": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "recent_period": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "transactions": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "properties": {
+              "photo": {
+                "type": "object",
+                "required": [
+                  "src",
+                  "alt"
+                ],
+                "properties": {
+                  "src": {
+                    "type": "string",
+                    "maxLength": 2048
+                  },
+                  "alt": {
+                    "type": "string",
+                    "maxLength": 200
+                  }
+                }
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "detail": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "amount": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "direction": {
+                "enum": [
+                  "in",
+                  "out"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if freezing fails, put the switch back and write the reason in the status line, or an alert-banners notice above the actions"
+      },
+      "disabled": {
+        "status": "handled",
+        "how": "freezing disables Send and Card details, and both are drawn in the disabled colours",
+        "evidence": ".odl-card-wallet .odl-act:disabled > span:first-child"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the transaction list grows without limit; cap it at five rows and add a 'See all' link under it"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "long merchant names end in an ellipsis; amounts and the card number never wrap",
+        "evidence": "text-overflow: ellipsis; white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Card details, Add money, Send and Freeze card in that order",
+      "Enter or Space on Card details shows or masks the full card number, expiry and CVC",
+      "Enter or Space on Freeze card freezes or unfreezes it; while frozen, Send and Card details are disabled and Tab skips them"
+    ]
+  }
 }
