@@ -277,7 +277,10 @@
      "maxLength": 120
     },
     "subtitle": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "stats": {
@@ -289,15 +292,24 @@
       "additionalProperties": false,
       "properties": {
        "label": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "value": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "badge": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        }
       },
@@ -309,15 +321,24 @@
      }
     },
     "currency": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "axis_max": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "budget": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "months": {
@@ -337,11 +358,17 @@
         "x-od-measure": true
        },
        "label": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "short": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        }
       },
@@ -354,7 +381,10 @@
      }
     },
     "note": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     }
    },
@@ -547,11 +577,17 @@
       "additionalProperties": false,
       "properties": {
        "label": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "value": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "share": {
@@ -559,11 +595,17 @@
         "x-od-measure": true
        },
        "warning": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "note": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        }
       },

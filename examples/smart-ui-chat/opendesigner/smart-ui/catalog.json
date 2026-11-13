@@ -636,7 +636,10 @@
      "maxLength": 120
     },
     "subtitle": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "stats": {
@@ -648,15 +651,24 @@
       "additionalProperties": false,
       "properties": {
        "label": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "value": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "badge": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        }
       },
@@ -668,15 +680,24 @@
      }
     },
     "currency": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "axis_max": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "budget": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "months": {
@@ -696,17 +717,22 @@
         "x-od-measure": true
        },
        "label": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "short": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        }
       },
       "required": [
        "spent",
-       "forecast",
        "label",
        "short"
       ],
@@ -714,7 +740,10 @@
      }
     },
     "note": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     }
    },
@@ -722,8 +751,7 @@
     "component",
     "id",
     "title",
-    "currency",
-    "budget"
+    "currency"
    ],
    "metadata": {
     "extensions": {
@@ -877,6 +905,139 @@
     }
    }
   },
+  "DonutBreakdown": {
+   "type": "object",
+   "description": "Spend split into four categories as a donut with the total in the middle, and a legend that lists each amount and share.",
+   "additionalProperties": false,
+   "properties": {
+    "component": {
+     "const": "DonutBreakdown"
+    },
+    "id": {
+     "type": "string",
+     "maxLength": 64
+    },
+    "@accessibility": {
+     "$ref": "#/$defs/Accessibility"
+    },
+    "@metadata": {
+     "$ref": "#/$defs/Metadata"
+    },
+    "title": {
+     "type": "string",
+     "maxLength": 120
+    },
+    "period": {
+     "type": [
+      "string",
+      "number"
+     ],
+     "maxLength": 120
+    },
+    "total": {
+     "type": [
+      "string",
+      "number"
+     ],
+     "maxLength": 120
+    },
+    "total_caption": {
+     "type": [
+      "string",
+      "number"
+     ],
+     "maxLength": 120
+    },
+    "categories": {
+     "type": "array",
+     "minItems": 0,
+     "maxItems": 12,
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+       "name": {
+        "type": [
+         "string",
+         "number"
+        ],
+        "maxLength": 120
+       },
+       "note": {
+        "type": [
+         "string",
+         "number"
+        ],
+        "maxLength": 120
+       },
+       "amount": {
+        "type": [
+         "string",
+         "number"
+        ],
+        "maxLength": 120
+       },
+       "share": {
+        "type": [
+         "string",
+         "number"
+        ],
+        "maxLength": 120
+       }
+      },
+      "required": [
+       "name",
+       "amount",
+       "share"
+      ],
+      "x-od-name-from": "name"
+     }
+    },
+    "foot": {
+     "type": [
+      "string",
+      "number"
+     ],
+     "maxLength": 120
+    }
+   },
+   "required": [
+    "component",
+    "id",
+    "title",
+    "total"
+   ],
+   "metadata": {
+    "extensions": {
+     "opendesigner": {
+      "slug": "donut-breakdown",
+      "group": "data",
+      "name": "Spend breakdown donut",
+      "use": "for showing how a total splits into a few categories",
+      "use_when": [],
+      "avoid_when": [],
+      "tags": [
+       "donut",
+       "breakdown",
+       "categories",
+       "share",
+       "legend"
+      ],
+      "intents": [
+       "breakdown",
+       "split",
+       "share of",
+       "by category",
+       "where does my money go",
+       "proportion",
+       "percentage of"
+      ],
+      "width": "medium",
+      "name_from": "title"
+     }
+    }
+   }
+  },
   "KpiStrip": {
    "type": "object",
    "description": "Four headline numbers in one band, each with a plain note under it, and a small bar where a share matters.",
@@ -908,11 +1069,17 @@
       "additionalProperties": false,
       "properties": {
        "label": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "value": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "share": {
@@ -920,11 +1087,17 @@
         "x-od-measure": true
        },
        "warning": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "note": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        }
       },
@@ -1476,7 +1649,10 @@
      }
     },
     "tag": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "save": {
@@ -1503,11 +1679,17 @@
      "x-od-effect": "none"
     },
     "category": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "description": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "rating": {
@@ -1515,19 +1697,31 @@
      "x-od-measure": true
     },
     "reviews": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "price": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "old_price": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "saving": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "add": {
@@ -1558,13 +1752,7 @@
     "component",
     "id",
     "name",
-    "save",
-    "rating",
-    "reviews",
-    "price",
-    "old_price",
-    "saving",
-    "add"
+    "price"
    ],
    "metadata": {
     "extensions": {
@@ -1939,15 +2127,24 @@
         ]
        },
        "title": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "note": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "detail": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "action": {
@@ -1998,9 +2195,7 @@
        }
       },
       "required": [
-       "title",
-       "action",
-       "skip"
+       "title"
       ],
       "x-od-name-from": "title"
      }
@@ -2637,11 +2832,17 @@
      "maxLength": 120
     },
     "title": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "body": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "primary": {
@@ -2694,9 +2895,7 @@
    "required": [
     "component",
     "id",
-    "title",
-    "primary",
-    "secondary"
+    "title"
    ],
    "metadata": {
     "extensions": {
@@ -3198,11 +3397,17 @@
      "$ref": "#/$defs/Metadata"
     },
     "title": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "summary": {
-     "type": "string",
+     "type": [
+      "string",
+      "number"
+     ],
      "maxLength": 120
     },
     "sorts": {
@@ -3222,22 +3427,30 @@
         ]
        },
        "label": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "price": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "duration": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        }
       },
       "required": [
        "label",
-       "price",
-       "duration"
+       "price"
       ],
       "x-od-name-from": "label"
      }
@@ -3251,47 +3464,80 @@
       "additionalProperties": false,
       "properties": {
        "depart": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "from": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "duration": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "stops": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "arrive": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "day_offset": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "to": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "airline": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "tag": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "price": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "per": {
-        "type": "string",
+        "type": [
+         "string",
+         "number"
+        ],
         "maxLength": 120
        },
        "select": {
@@ -3326,8 +3572,7 @@
        "arrive",
        "to",
        "airline",
-       "price",
-       "select"
+       "price"
       ],
       "x-od-name-from": "depart"
      }
@@ -3441,6 +3686,9 @@
     },
     {
      "$ref": "#/components/LineChart"
+    },
+    {
+     "$ref": "#/components/DonutBreakdown"
     },
     {
      "$ref": "#/components/KpiStrip"
@@ -3581,7 +3829,7 @@
    "opendesigner": {
     "system": "Orvell Travel",
     "set_version": 1,
-    "made": "2026-11-13",
+    "made": "2026-11-14",
     "allow": {
      "images": [
       "images.unsplash.com"
