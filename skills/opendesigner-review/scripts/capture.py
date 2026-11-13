@@ -332,12 +332,14 @@ def network_states(page, out, tag, probe, opts=None):
     doc["requests"] = len(set(seen))
     base_text = page.evaluate(LOADING_JS)["text"]
     if doc["requests"]:
+        held = []
         for mode in ("hang", "empty", "error", "offline"):
             def handler(route, *_, mode=mode):   # Playwright passes the request as a second argument
                 if route.request.resource_type not in DATA_TYPES:
                     return route.continue_()
                 if mode == "hang":
-                    return None          # never answered: the view should show that data is on its way
+                    held.append(route)   # not answered while we look: the view should show that data is on its way
+                    return None
                 if mode == "offline":
                     return route.abort("internetdisconnected")
                 if mode == "error":
@@ -358,6 +360,12 @@ def network_states(page, out, tag, probe, opts=None):
                     page.screenshot(path=str(sp), scale="css")
                     ev.append(str(sp))
                     doc["modes"]["hang"] = {"chars": r["chars"], "busy": r["busy"] > 0 or r["loadingWords"], "shot": str(sp)}
+                    for h in held:           # then let them go
+                        try:
+                            h.abort()
+                        except Exception:  # noqa: BLE001
+                            pass
+                    held.clear()
                     continue
                 settle(page)
                 if mode == "offline":          # the browser's own signal too: navigator.onLine and the offline event
