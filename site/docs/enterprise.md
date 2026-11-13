@@ -103,7 +103,7 @@ Questions, gaps and results from a pilot are the most useful thing you can send 
 - **No team pilots or watched user trials.** The usability tests so far were role-played by AI testers.
 - **No CI runs.** Version 0.3.1 came out on 11 November 2026; the first tagged release was 0.2.0, on 5 November. No test pass in each AI tool is recorded yet.
 - **One brand per system.** The interview can record that more brands will re-skin the system, but the engine doesn't build brand modes yet, so don't plan a multi-brand rollout on it today.
-- **A small component set on the overview.** It draws only buttons, a text field and a card. The optional [component library](/library/) has 82 finished components built on the tokens.
+- **A small component set on the overview.** It draws only buttons, a text field and a card. The optional [component library](/library/) has 104 finished components built on the tokens, including empty, loading and error states.
 - **No translations.**
 
 Try it on one product, read the decision log with your team, and [tell us](https://github.com/ckryptickunal/OpenDesigner/issues/new/choose) what is missing.

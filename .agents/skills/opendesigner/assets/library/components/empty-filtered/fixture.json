@@ -1,0 +1,15 @@
+{
+  "title": "No invoices match these filters",
+  "message": "Your filters hide all 46 invoices. Remove one, or clear them all.",
+  "filters": [
+    {
+      "label": "Status: Overdue"
+    },
+    {
+      "label": "Owner: Me"
+    },
+    {
+      "label": "Over $10,000"
+    }
+  ]
+}

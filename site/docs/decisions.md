@@ -1,10 +1,10 @@
 ---
 title: Decisions, DESIGN.md and the overview page
-seo_title: Design decisions, DESIGN.md and the overview page explained
-description: How OpenDesigner records each design decision with its reason, keeps DESIGN.md current for people and AI agents, and shows the system on one overview page.
+seo_title: Write a DESIGN.md your AI coding agent follows
+description: How OpenDesigner writes a DESIGN.md your AI coding agent follows, records each design decision with its reason, and shows the whole system on one overview page.
 section: Concepts
 order: 4
-updated: 2026-11-08
+updated: 2026-11-13
 ---
 
 OpenDesigner writes down every decision with how it was set and why. From those it keeps `DESIGN.md`, your system in plain words for people and AI tools, and an overview page that shows the whole system and what is still missing.

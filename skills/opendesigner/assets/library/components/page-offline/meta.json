@@ -1,0 +1,135 @@
+{
+  "name": "Offline page",
+  "summary": "What a person sees with no connection: that they are offline, what still works on this device, and what waits until they're back.",
+  "use": "when the app has no network connection and the next screen needs one",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "offline",
+    "no connection",
+    "network",
+    "sync",
+    "retry"
+  ],
+  "states": [
+    "offline",
+    "checking",
+    "back online",
+    "hover",
+    "focus"
+  ],
+  "source": null,
+  "a11y": "The list of what still works is a real list; a polite status line reports each reconnect check and the last sync time.",
+  "width": "wide",
+  "live_region": "polite",
+  "spec": {
+    "use_when": [
+      "the browser or device reports no connection",
+      "requests time out repeatedly and cached data exists"
+    ],
+    "avoid_when": [
+      "the server is up but failing: use page-error",
+      "only one feature needs the network: show a warning banner in that place instead (page-banners)"
+    ],
+    "keyboard": [
+      "Tab moves through the links and buttons in reading order",
+      "Enter follows a link; Enter or Space presses a button"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 24
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "works": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 56
+              }
+            },
+            "required": [
+              "text"
+            ]
+          }
+        },
+        "waits": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 72
+              }
+            },
+            "required": [
+              "text"
+            ]
+          }
+        },
+        "synced": {
+          "type": "string",
+          "maxLength": 40
+        }
+      },
+      "required": [
+        "title",
+        "message",
+        "works",
+        "waits",
+        "synced"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "Not applicable: this state screen shows no list of records."
+      },
+      "loading": {
+        "status": "shown",
+        "how": "Try again now shows a spinner while it checks the connection.",
+        "evidence": "is-busy"
+      },
+      "error": {
+        "status": "shown",
+        "how": "The part is itself an error or system state, written in plain words with a next step.",
+        "evidence": "class=\"odl-lead\""
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "The button is aria-disabled while it checks.",
+        "evidence": "aria-disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Actions stack full width under 30rem; the panel caps its width.",
+        "evidence": "@container"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}
