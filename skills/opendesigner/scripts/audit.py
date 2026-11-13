@@ -434,7 +434,7 @@ def audit_data(eng, d, project=None):
         if i["id"] in seen:
             i["ledger"] = {"status": seen[i["id"]].get("status"), "why": seen[i["id"]].get("why"), "by": seen[i["id"]].get("by")}
     raw_total = sum(1 for f in findings if f["kind"] not in ("standard", "chart", "removed"))
-    return {"name": state.get("name") or "Your product", "project": _short(proj),
+    return {"name": state.get("name") or "Your product", "project": os.path.basename(os.path.abspath(proj).rstrip(os.sep)) or _short(proj),
             "scanned": col["filesScanned"], "tokenUses": col["tokenUses"], "raw": raw_total,
             "standards": sum(1 for f in findings if f["kind"] == "standard"), "verdict": col["reasons"], "ok": col["ok"],
             "tokens": col["tokens"], "notes": col["notes"], "families": families, "decisions": decisions, "dials": dials,

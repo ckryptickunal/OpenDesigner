@@ -247,3 +247,11 @@ When the person shares a link or file and says to follow it or learn from it:
    - "It's our brand", "always", "non-negotiable for us": a project standard with `--beats STD-...`. Their rule wins in this project, and the engine stops the house standard's checks and constraints here.
    - "Just this value", "just here": `engine.py standard override <id> --why "<their words>"`.
 6. Once per session, offer: "Want to suggest this source to OpenDesigner for everyone?" After a yes: `engine.py feedback "source: <url> (<authority>): <why>" --kind idea`. Skip the offer for a local file, a company-internal document, or anything private: those stay in their project.
+
+## 13. Check-ins (owner, 2026-11-13)
+The engine checks in so nothing is quietly missed: at the start of each session (the Claude Code hook, or `engine.py status`), after every 5 decisions (`set`, `pick`) and after each closed ledger round. A check-in is a few lines: decisions and closed rounds since the last one, ledger items neither done nor waived, whether DESIGN.md is stale, review's count, and **one** next step.
+- **Relay it in two or three plain lines**, in a short paragraph that starts "Check-in:" at the end of your reply, then carry on with what the person asked. Ask at most one question, and only when the next step needs them; never a list of chores.
+- **None before the first result.** The engine stays quiet until DESIGN.md or a build exists, and so do you (section 3: the first result comes before housekeeping).
+- **In a host without hooks**, run `engine.py checkin` at the start of a session on a project that has `opendesigner/`, and when a round closes. It records the check-in, so the next one counts from there.
+- **The settings are the person's:** `engine.py checkin --every N`, `--off` and `--on` for this project; `engine.py checkin --offers off` for the one-time offer in projects with no system; `OD_CHECKINS=off` for one shell. Change one only when they ask.
+- **An offer from the hook** (installed but no `opendesigner/`, or a system nobody changed in 30 days) is a note for you, not for the person. Bring it up only when the person asks for UI, styling or visual work, in one line, once.

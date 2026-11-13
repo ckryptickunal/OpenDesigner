@@ -27,7 +27,7 @@ claude plugin install opendesigner@opendesigner
 
 Then start a new session, because skills load when a session starts. You get all nine skills ([what each one does](/docs/introduction/#the-nine-skills)).
 
-The plugin also has one start-of-session hook. In a project with a design system (`opendesigner/state.json`), it tells Claude where the work stands each time a session starts, resumes or gets compacted, so the rules aren't lost in a long chat. It only reads files, sends nothing anywhere, and stays silent in every other project.
+The plugin also has one start-of-session hook. In a project with a design system (`opendesigner/state.json`), it tells Claude where the work stands each time a session starts, resumes or gets compacted, so the rules aren't lost in a long chat. It adds a short check-in: what changed since the last one, what is still open, and the next step. In a project with UI code but no design system, it leaves Claude one note, once per project and at most once a week, so Claude can offer a sketch if you ask for UI work. It never writes in your project and sends nothing anywhere. It stays silent everywhere else. `engine.py checkin --offers off` turns the note off.
 
 ## Claude app (claude.ai or Claude Desktop)
 

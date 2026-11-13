@@ -280,6 +280,25 @@ def version_notice(state):
             f"to date. What changed: CHANGELOG.md ({CHANGELOG_URL}).")
 
 
+def version_notice_due(d, cmd):
+    """An older system's notice prints in status every time, and elsewhere once a day per system (remembered in OD_HOME),
+    so every command does not repeat it (owner's end-to-end demo, 2026-11-14)."""
+    if cmd == "status":
+        return True
+    try:
+        path = os.path.join(os.environ.get("OD_HOME") or os.path.join(os.path.expanduser("~"), ".opendesigner"), "notices.json")
+        seen = read_json(path) if os.path.exists(path) else {}
+        key, today = os.path.abspath(d), _dt.date.today().isoformat()
+        if seen.get(key) == today:
+            return False
+        seen[key] = today
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        dump_json(path, seen)
+    except (OSError, ValueError):
+        pass
+    return True
+
+
 def state_or_none(d):
     """state.json as written, or None when there is none or it cannot be read (the command then says why)."""
     try:
@@ -6032,7 +6051,8 @@ def checkin_facts(d, state, scan=True, project=None):
     elif review and review["toFix"]:
         nxt = "engine.py audit-page --open, so the owner can see and settle what the code does differently"
     else:
-        nxt = "nothing waits: carry on"
+        nf = now_facts(d, state)["next"]  # the protocol's next step (the hand-off question, research, a gate)
+        nxt = nf if nf and not nf.startswith("engine.py review at the end") else "nothing waits: carry on"
     return {"since": last.get("date"), "decisions": n_dec, "newDecisions": n_dec - last.get("decisions", 0),
             "rounds": len(closed), "newRounds": len(closed) - last.get("rounds", 0), "open": open_items, "stale": stale,
             "review": review, "reviewBefore": prev, "next": nxt}
@@ -6082,8 +6102,9 @@ def checkin_after_change(d):
     f = checkin_facts(d, state, scan=True)
     for ln in checkin_lines(f):
         print("  " + ln)
-    print("  Tell the person in two or three plain lines, then go on; ask at most one question, and only if the next step needs them. "
-          "(engine.py checkin --off turns these off.)")
+    print("  Pass this check-in on: end your reply with a short paragraph that starts \"Check-in:\" and says, in two or three "
+          "plain sentences, what changed, what is still open and the next step. Ask at most one question. "
+          "(engine.py checkin --off turns check-ins off.)")
     record_checkin(d, f)
 
 
@@ -13817,6 +13838,7 @@ def _main(argv=None):
                                                         "problems and stale DESIGN.md sections")
     p.add_argument("--project", default=None, help="folder to scan (default: the project root)")
     p.add_argument("--strict", action="store_true", help="exit 1 when anything is found")
+    p.add_argument("--all", dest="show_all", action="store_true", help="every finding on its own line (default: the 10 biggest groups)")
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("research", parents=[common], help="user research: plan it, check and add the findings, skip it, or see where it stands")
     rsub = p.add_subparsers(dest="action", required=True)
@@ -13916,8 +13938,8 @@ def _main(argv=None):
                      + (f" {a.answer}" if a.cmd == "handoff" and a.answer else "")))
     st = state_or_none(d) if a.cmd not in ("init", "feel", "resolve", "version", "detect") and not getattr(a, "json", False) else None
     kind = version_status(st)[0] if st else "current"
-    if kind == "newer" or (kind != "current" and a.cmd not in ("build", "sketch")):  # build says it after it brings files up to date
-        print(version_notice(st))
+    if kind == "newer" or (kind != "current" and a.cmd not in ("build", "sketch") and version_notice_due(d, a.cmd)):
+        print(version_notice(st))  # build says it after it brings the files up to date
     if a.cmd == "init":
         cmd_init(d, a.src, a.name, a.force)
     elif a.cmd in ("set", "pick"):
@@ -13986,7 +14008,7 @@ def _main(argv=None):
     elif a.cmd == "show":
         cmd_show(d, a.template, a.out, a.open, a.json)
     elif a.cmd == "review":
-        return cmd_review(d, a.project, a.strict, a.json)
+        return cmd_review(d, a.project, a.strict, a.json, show_all=a.show_all)
     elif a.cmd == "audit-page":
         if not audit_py:
             raise SystemExit("audit-page needs scripts/audit.py next to engine.py.")
@@ -16372,7 +16394,20 @@ def cmd_ledger(d, action, item=None, title=None, items=None, note=None, why=None
     return 0
 
 
-def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=None):
+def group_findings(fs):
+    """Findings that are the same value with the same fix, as one row: [(count, files, value, fix, first file:line)], the most
+    places first, so a long review reads as a short list of decisions (owner's end-to-end demo, 2026-11-14)."""
+    groups = {}
+    for f_ in fs:
+        v = re.sub(r"\s+", " ", str(f_.get("value", ""))).strip().lower()
+        g = groups.setdefault((f_["kind"], v, f_.get("fix", "")), {"n": 0, "files": set(), "first": f"{f_['file']}:{f_['line']}"})
+        g["n"] += 1
+        g["files"].add(f_["file"])
+    rows = [(g["n"], len(g["files"]), k[1], k[2], g["first"]) for k, g in groups.items()]
+    return sorted(rows, key=lambda x: (-x[0], -x[1], x[2]))
+
+
+def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=None, show_all=False):
     """End-of-implementation check: hard-coded colors, sizes, radii, shadows and durations that bypass tokens (CSS, JSX style
     objects, Tailwind arbitrary values and default scales, SwiftUI, Compose), role-appropriate token suggestions, code that
     breaks a standard or brings back something removed on purpose, od-ignore exceptions with and without a reason, guard
@@ -16470,13 +16505,15 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
         return f"use var({css_var(prefix, 'space.' + str(near))})" + ("" if near == val else f" ({val:g} is off the {meta['space']['unit']}px ladder)")
 
     def radius_fix(val, tw=False, ctx=""):
-        """The radius by the element's role (a button gets the control radius, R18), else the token with exactly that value,
-        else the closest."""
+        """One rule for every place a value appears (owner's end-to-end demo, 2026-11-14): the token nearest in value, so the
+        same 10px always gets the same suggestion. Between two equally near, the element's role decides (a button takes
+        the control radius, R18)."""
         if not radii:
             return "use a radius token"
         role = next((r for r, rx in RADIUS_ROLES if r in radii and re.search(rx, ctx, re.I)), None)
-        exact = next((k for k, v in radii.items() if v == val), None)
-        k = role or exact or min(radii.items(), key=lambda kv: (abs(kv[1] - val), kv[0]))[0]
+        best = min(abs(v - val) for v in radii.values())
+        near = [k for k, v in radii.items() if abs(v - val) == best]
+        k = role if role in near else sorted(near)[0]
         why = f" ({fmt_num(radii[k])}px, the {k} radius{cite('radius.' + k)})"
         return (f"use rounded-{k}" if tw else f"use var({css_var(prefix, 'radius.' + k)})") + why
 
@@ -16856,10 +16893,17 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
         elif total:
             print(f"{total} hard-coded value{'s' if total != 1 else ''} skip the tokens: "
                   + ", ".join(f"{n} {plural_kind(k, n)}" for k, n in sorted(by.items()) if k not in ("standard", "chart", "removed")) + ".")
-            for f_ in tokf[:limit]:
-                print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']}")
-            if total > limit:
-                print(f"  ... and {total - limit} more (use --json for all).")
+            if show_all:
+                for f_ in tokf:
+                    print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']}")
+            else:
+                rows = group_findings(tokf)
+                print(f"  The {min(10, len(rows))} biggest of {len(rows)} groups (same value, same fix), most places first:")
+                for n, nf, v, fix, first in rows[:10]:
+                    print(f"  {n:>4} x  {v}  ->  {fix}  ({nf} file{'s' if nf != 1 else ''}, first at {first})")
+                if len(rows) > 10:
+                    print(f"  ... and {len(rows) - 10} more groups. Every line: engine.py review --all; to see and settle them: "
+                          "engine.py audit-page --open.")
             print("  To keep a raw value on purpose, add a comment with the reason on that line: od-ignore: <why, at least two words>.")
         elif token_uses:
             print("No hard-coded colors, sizes, radii, shadows or durations found: the code uses the tokens.")
@@ -16926,11 +16970,16 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
                     print(f"  The same reason appears {n} times (\"{rsn[:60]}\"): that may be a missing token or a rule to change. Ask the owner.")
         if stdf:
             print(f"{len(stdf)} line{'s' if len(stdf) != 1 else ''} break{'s' if len(stdf) == 1 else ''} a standard:")
-            for f_ in stdf[:limit]:
-                print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']} ({', '.join(f_.get('standards') or [f_['standard']])}, "
-                      f"{f_['strength']})")
-            if len(stdf) > limit:
-                print(f"  ... and {len(stdf) - limit} more (use --json for all).")
+            if show_all:
+                for f_ in stdf:
+                    print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']} ({', '.join(f_.get('standards') or [f_['standard']])}, "
+                          f"{f_['strength']})")
+            else:
+                rows = group_findings(stdf)
+                for n, nf, v, fix, first in rows[:10]:
+                    print(f"  {n:>4} x  {v}  ->  {fix}  ({nf} file{'s' if nf != 1 else ''}, first at {first})")
+                if len(rows) > 10:
+                    print(f"  ... and {len(rows) - 10} more groups (engine.py review --all).")
             ids_ = {x for f_ in stdf for x in f_.get("standards") or [f_["standard"]]}
             if any(not i.startswith("PRJ-") for i in ids_):
                 print("  Fix the code. A house standard changes only when the person asks: engine.py standard override <id> --why \"<their words>\".")

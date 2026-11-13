@@ -17,7 +17,7 @@ The engine is `scripts/engine.py` in this skill when it was installed from a rel
 **The opendesigner skill's binding rules hold here too,** in every round and after a context reset: tokens only; one question per call; show every round; every change ends with `engine.py review` and a re-read of DESIGN.md; owner corrections go to `engine.py feedback "<the rule>" --kind note`.
 
 ## 1. Start-up routine (before touching anything)
-1. Run `engine.py status`. It prints the Now line from `opendesigner/PROTOCOL.md`: the step, what waits for the owner and the next command. If it lists the hand-off as not answered, ask about it once, in its own message (`engine.py handoff yes` or `handoff no`). Then read, in order:
+1. Run `engine.py status`. It prints the Now line from `opendesigner/PROTOCOL.md`: the step, what waits for the owner and the next command. Then `engine.py checkin`: what changed since the last check-in, what is still open and the one next step; relay it in two or three lines (`<opendesigner>/references/rules.md` section 13). If it lists the hand-off as not answered, ask about it once, in its own message (`engine.py handoff yes` or `handoff no`). Then read, in order:
    - `DESIGN.md` and `PRODUCT.md` (project root). Note each section's zoom line.
    - `opendesigner/PROTOCOL.md` and `opendesigner/RULES.md` (the owner's repeated notes).
    - `opendesigner/state.json` (`profile.voice`, `zoom`, answers, `locks`, hooks).

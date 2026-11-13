@@ -63,7 +63,7 @@ class CheckIns(unittest.TestCase):
         self.assertIn("Check-in, since the last check-in", out)
         self.assertIn("5 decisions", out)
         self.assertIn("Next:", out)
-        self.assertIn("ask at most one question", out)
+        self.assertIn("Ask at most one question", out)
         self.assertFalse(any("Check-in" in o for o in self.decide(2, start=50)), "the counter restarted")
 
     def test_every_and_off(self):
