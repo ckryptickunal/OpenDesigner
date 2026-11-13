@@ -66,7 +66,7 @@
 .odl-workout-summary .odl-btn[aria-pressed="true"] { border-color: var(--ds-color-border-accent); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); }
 .odl-workout-summary .odl-btn svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); stroke-width: var(--ds-icon-stroke-md); }
 .odl-workout-summary .odl-btn:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-.odl-workout-summary .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; clip-path: inset(50%); white-space: nowrap; }
+.odl-workout-summary .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 /* marks: hidden full template items stay out of sight; a rendered zone is named by its place; the zone bar is drawn from the zone minutes when it came empty */
 .odl-workout-summary [hidden] { display: none !important; }
 .odl-workout-summary .odl-zones { counter-reset: odl-zone; }

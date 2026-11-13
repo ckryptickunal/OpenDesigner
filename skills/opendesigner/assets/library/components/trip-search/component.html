@@ -84,7 +84,7 @@
 .odl-trip-search .odl-go:hover { background: var(--ds-color-bg-action-primary-hover); }
 .odl-trip-search .odl-go svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); stroke-width: var(--ds-icon-stroke-md); }
 .odl-trip-search .odl-step button:focus-visible, .odl-trip-search .odl-go:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-.odl-trip-search .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; contain: paint; clip-path: inset(50%); white-space: nowrap; }
+.odl-trip-search .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @container (min-width: 40rem) {
   .odl-trip-search .odl-card { --pad: var(--ds-space-inset-xl); }
   .odl-trip-search .odl-months { grid-template-columns: 1fr 1fr; column-gap: var(--ds-space-section-sm); }

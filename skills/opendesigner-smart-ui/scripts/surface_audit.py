@@ -69,7 +69,9 @@ FLOORS_JS = r"""() => {
   for (const el of surf.querySelectorAll("*")) {
     if (!vis(el)) continue;
     const cs = getComputedStyle(el);
-    const clips = /(hidden|clip)/.test(cs.overflowX + cs.overflowY) || cs.textOverflow === "ellipsis";
+    const r0 = el.getBoundingClientRect();
+    const srOnly = r0.width <= 1.5 && r0.height <= 1.5 || /inset\(50%\)/.test(cs.clipPath);  // visually hidden text for screen readers, on purpose
+    const clips = !srOnly && (/(hidden|clip)/.test(cs.overflowX + cs.overflowY) || cs.textOverflow === "ellipsis");
     const text = [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
     if (text && clips && (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 2) && !/(auto|scroll)/.test(cs.overflowX + cs.overflowY))
       out.cutoff.push({sel: sel(el), text: el.textContent.trim().slice(0, 60), sw: el.scrollWidth, cw: el.clientWidth});

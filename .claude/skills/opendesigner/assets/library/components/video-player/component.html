@@ -62,7 +62,7 @@
 .odl-video-player .odl-sub { grid-column: 1 / -1; max-inline-size: 40rem; margin: var(--ds-space-stack-sm) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-md); }
 .odl-video-player .odl-tag { grid-row: 2; grid-column: 2; align-self: center; padding: var(--ds-space-2) var(--ds-space-8); border: var(--ds-border-width-default) solid var(--ds-color-border-default);
   border-radius: var(--ds-radius-control-sm); color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); white-space: nowrap; }
-.odl-video-player .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; clip-path: inset(50%); white-space: nowrap; }
+.odl-video-player .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 /* Phone: a taller 4:3 frame gives the caption and controls room; the device sets the volume and a double tap skips, so those controls go. */
 @container (max-width: 34rem) {
   .odl-video-player .odl-frame { aspect-ratio: 4 / 3; }

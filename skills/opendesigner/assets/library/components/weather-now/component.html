@@ -39,7 +39,7 @@
   background: linear-gradient(to right, var(--ds-color-info-light-8), var(--ds-color-success-light-8), var(--ds-color-warning-light-8)); }
 .odl-weather-now .odl-bar .odl-now { clip-path: none; inset-inline: auto; inset-inline-start: var(--n); inset-block: 50% auto; inline-size: var(--ds-space-8); block-size: var(--ds-space-8); transform: translate(-50%, -50%);
   background: var(--ds-color-surface-raised); border: var(--ds-border-width-emphasis) solid var(--ds-color-text-primary); }
-.odl-weather-now .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; clip-path: inset(50%); white-space: nowrap; }
+.odl-weather-now .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .odl-weather-now .odl-hours:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: calc(-1 * var(--ds-focus-ring-width)); }
 /* marks: the big icon follows data-icon; hidden full template items stay out of sight; a day's bar is drawn from the week's lows and highs when it came without one */
 .odl-weather-now .odl-sky:not([data-icon="sunny"]) .odl-big[data-show="sunny"], .odl-weather-now .odl-sky:not([data-icon="partly-cloudy"]) .odl-big[data-show="partly-cloudy"],

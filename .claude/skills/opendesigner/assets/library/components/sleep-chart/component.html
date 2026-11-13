@@ -58,7 +58,7 @@
 .odl-sleep-chart .od-empty { grid-column: 1 / -1; color: var(--ds-color-text-secondary); font: var(--ds-text-body-md); }
 .odl-sleep-chart .odl-plot > .od-empty { position: absolute; inset: 0; display: grid; place-items: center; }
 .odl-sleep-chart .odl-axis > .od-empty { display: none; }
-.odl-sleep-chart .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; contain: paint; clip-path: inset(50%); white-space: nowrap; }
+.odl-sleep-chart .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @container (min-width: 34rem) { .odl-sleep-chart .odl-totals { grid-template-columns: repeat(4, minmax(0, 1fr)); } .odl-sleep-chart .odl-hyp { --lane: calc(var(--ds-size-icon-lg) * 1.75); } }
 @container (max-width: 26rem) { .odl-sleep-chart .odl-card { padding: var(--ds-space-inset-lg); } .odl-sleep-chart .odl-totals div { padding: var(--ds-space-inset-sm) var(--ds-space-inset-md); } }
 </style>

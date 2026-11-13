@@ -79,7 +79,7 @@
   transition: opacity var(--ds-motion-duration-short) var(--ds-motion-easing-standard); pointer-events: none; }
 .odl-share-sheet .odl-toast.is-on { opacity: 1; }
 .odl-share-sheet button:focus-visible, .odl-share-sheet .odl-send input:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-.odl-share-sheet .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; clip-path: inset(50%); white-space: nowrap; }
+.odl-share-sheet .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @container (inline-size < 26rem) {
   .odl-share-sheet .odl-head { padding-inline-start: var(--ds-space-inset-lg); }
   .odl-share-sheet .odl-search, .odl-share-sheet .odl-send { margin-inline: var(--ds-space-inset-lg); }
