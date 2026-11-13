@@ -10,9 +10,10 @@ Under five minutes. It shows stakeholder research, the coverage check and the su
 
 2. Read the output, step by step:
    - **4. Coverage** lists the seven research areas. Platform conventions and accessibility are covered by findings from pages that were opened ([findings.json](findings.json)). Content and voice is missing, and analytics is "not yet" because the product is not live.
-   - **5. Who has a say** reads CODEOWNERS, the README, the licence, the logo and one exported issue. Every role starts as "not asked": a file in the repo says a role exists, never what it thinks.
+   - **5. Who has a say** first checks for more than one decision-maker (here, CODEOWNERS names three owners), then reads CODEOWNERS, the README, the licence, the logo and one exported issue. Every role starts as "not asked": a file in the repo says a role exists, never what it thinks.
    - **8. Agree and differ** shows product and engineering disagreeing on platforms, each with who said it.
    - **9. Decide** records the agreed accessibility level with `set_by research`. It refuses to settle the platform conflict until the owner's own words are given, then records `set_by chosen` and keeps both views.
+   - **12. A solo project** with one committer and no CODEOWNERS records "solo: not needed" in one line, and coverage marks stakeholders "not needed".
 3. Open the page it prints at the end (`summary.html`) in a browser. Try it at phone width and in dark mode.
 
 One run's full output is in [example-output.txt](example-output.txt). Screenshots of the page at 1440 and 375 px, before and after its design review, are in [shots/](shots/).

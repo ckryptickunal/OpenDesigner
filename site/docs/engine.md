@@ -125,7 +125,7 @@ The templates `show` fills are `palette`, `type-scale`, `spacing-ruler`, `radius
 | `engine.py research market`, `positioning`, `directions` | Show the competitor table, draft and confirm the positioning, and write the board with three directions. |
 | `engine.py research skip --why "..."` | Records that you don't want research, and the reminders stop. `research status` says where it stands. |
 | `research.py coverage` | Checks the research against the full list: users and their tasks, the competitors' design systems, accessibility, platform conventions, content and voice, your analytics, and stakeholders. Says what is missing and which tool would fill it. |
-| `research.py stakeholders scan`, `interview`, `answer`, `show`, `decide` | Finds who has a say from your repo, drafts at most five questions for each role, records each answer with who said it, and shows where people agree and where they differ. Only an agreed point becomes a decision on its own; you settle a conflict in your own words. |
+| `research.py stakeholders scan`, `interview`, `answer`, `show`, `decide` | Skips itself on a solo project (it records "solo: not needed"). Otherwise finds who has a say from your repo, drafts at most five questions for each role, records each answer with who said it, and shows where people agree and where they differ. Only an agreed point becomes a decision on its own; you settle a conflict in your own words. |
 | `research.py summary` | Writes `research/summary.html`: the users, the market, what each stakeholder said and what is still open, on one page to share with your team. |
 
 ## Keep it consistent

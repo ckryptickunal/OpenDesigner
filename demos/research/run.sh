@@ -35,4 +35,10 @@ P stakeholders decide platforms || true
 P stakeholders decide platforms --value android --quote "Android first; the web waits until next year"
 step "10. Summary page";       P summary
 step "11. Build, then review"; E build >/dev/null; E review | grep -i "stakeholder\|research\|Review:" || true
+step "12. A solo project skips the interviews"
+mkdir -p "$T/solo" && cd "$T/solo" && echo "# A one-person app" > README.md
+git init -q . && git -c user.name=Demo -c user.email=demo@demo.example add -A && git -c user.name=Demo -c user.email=demo@demo.example commit -qm init
+E sketch --name Solo --audience regular --platforms web --feel calm > /dev/null
+P stakeholders scan | grep Stakeholders
+P coverage | grep Stakeholders
 printf '\nOpen it: %s\n' "$T/proj/opendesigner/research/summary.html"

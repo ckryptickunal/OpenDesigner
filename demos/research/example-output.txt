@@ -19,11 +19,13 @@ Design research, against the complete list:
   covered  Platform conventions: 2 finding(s) on platform
   missing  Content and voice: 0 finding(s)
   not yet  The product's own analytics: 0 analytics source(s). Next: the product is not live, so there are no analytics to read
-  missing  Stakeholders. Next: research.py stakeholders scan, then interview
+  missing  Stakeholders. Next: research.py stakeholders scan (it says whether anyone else has a say)
 Fill the gaps with the tools you have, cite each finding, and say plainly which tool is missing.
 
 == 5. Who has a say
-Stakeholders, read from the repo at /private<scratch>/proj; saved to opendesigner/research/stakeholders.json
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+Stakeholders, read from the repo at <scratch>/proj; saved to opendesigner/research/stakeholders.json
+More than one decision-maker: CODEOWNERS names 3 owners (.github/CODEOWNERS).
   Owner                  not asked  1 sign(s)
       CODEOWNERS names 3 owner(s) for 3 path rule(s): @counterly/design, @counterly/eng, @counterly/legal (.github/CODEOWNERS)
   Product                not asked  no sign in the repo
@@ -63,13 +65,13 @@ For whoever approves claims, licences and regulated words.
 
 == 7. Answers
 Marketing: nobody holds this role (no marketing team yet). Its questions are left out of the interviews.
-Recorded Product question 4 (platforms) from Head of product, 2026-11-13: Q-plat-01 = android, web.
+Recorded Product question 4 (platforms) from Head of product, 2026-11-14: Q-plat-01 = android, web.
   platforms: one view (also ask Engineering)
-Recorded Engineering question 2 (platforms) from Lead engineer, 2026-11-13: Q-plat-01 = android.
+Recorded Engineering question 2 (platforms) from Lead engineer, 2026-11-14: Q-plat-01 = android.
   platforms: conflict (Product (Head of product): android, web; Engineering (Lead engineer): android)
-Recorded Legal and compliance question 2 (a11y-level) from Compliance officer, 2026-11-13: Q-aud-03 = wcag22-aa.
+Recorded Legal and compliance question 2 (a11y-level) from Compliance officer, 2026-11-14: Q-aud-03 = wcag22-aa.
   a11y-level: one view (also ask Accessibility)
-Recorded Accessibility question 1 (a11y-level) from Accessibility champion, 2026-11-13: Q-aud-03 = wcag22-aa.
+Recorded Accessibility question 1 (a11y-level) from Accessibility champion, 2026-11-14: Q-aud-03 = wcag22-aa.
   a11y-level: agreed
 
 == 8. Agree and differ
@@ -80,10 +82,10 @@ Agreed:
 
 == 9. Decide
   DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
-Q-aud-03 = wcag22-aa (set_by research, source research/stakeholders.json#a11y-level); from Legal and compliance (Compliance officer, 2026-11-13); Accessibility (Accessibility champion, 2026-11-13).
+Q-aud-03 = wcag22-aa (set_by research, source research/stakeholders.json#a11y-level); from Legal and compliance (Compliance officer, 2026-11-14); Accessibility (Accessibility champion, 2026-11-14).
 platforms: conflict (Product (Head of product): android, web; Engineering (Lead engineer): android). Only the owner settles it: --value <option> --quote "<the owner's words>". The other views stay on record.
   DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
-Q-plat-01 = android (set_by chosen, source research/stakeholders.json#platforms); from Product (Head of product, 2026-11-13); Engineering (Lead engineer, 2026-11-13). The conflict stays on record.
+Q-plat-01 = android (set_by chosen, source research/stakeholders.json#platforms); from Product (Head of product, 2026-11-14); Engineering (Lead engineer, 2026-11-14). The conflict stays on record.
 
 == 10. Summary page
   DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
@@ -92,5 +94,9 @@ wrote opendesigner/research/summary.html: one page to share with the team (an ar
 == 11. Build, then review
 User research: Stakeholders not asked yet: Owner, Support, Brand and design (research.py stakeholders interview, or stakeholders none <role> --why ...).
 Review: ok
+
+== 12. A solo project skips the interviews
+Stakeholders: solo, not needed (one person commits, no CODEOWNERS with several owners or a team, no team in PRODUCT.md). Saved to opendesigner/research/stakeholders.json. If others do have a say, research.py stakeholders team --why "<the person's words>".
+  not needed Stakeholders: solo: one person commits, no CODEOWNERS with several owners or a team, no team in PRODUCT.md
 
 Open it: <scratch>/proj/opendesigner/research/summary.html

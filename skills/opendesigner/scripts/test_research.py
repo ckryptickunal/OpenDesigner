@@ -788,6 +788,67 @@ class Stakeholders(unittest.TestCase):
         self.assertEqual(run(self.d, "design-md").returncode, 0)
         self.assertIn("research/summary.html", Path(self.root, "DESIGN.md").read_text(encoding="utf-8"))
 
+    def test_team_shown_in_the_repo_gets_interviews(self):
+        out = self.ok("stakeholders", "scan")
+        self.assertIn("More than one decision-maker: CODEOWNERS names 2 owners", out)
+        self.assertEqual(self.stake()["mode"]["mode"], "team")
+        self.assertIn("## Product", self.ok("stakeholders", "interview"))
+
+    def test_solo_project_records_not_needed_and_moves_on(self):
+        Path(self.root, ".github/CODEOWNERS").write_text("* @founder\n", encoding="utf-8")
+        out = self.ok("stakeholders", "scan")
+        self.assertIn("Stakeholders: solo, not needed", out)
+        self.assertEqual(len([ln for ln in out.splitlines() if "Stakeholders" in ln or "not asked" in ln]), 1)  # one line, no role table
+        self.assertEqual(self.stake()["mode"]["mode"], "solo")
+        r = rp(self.d, "stakeholders", "interview")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("solo, not needed", r.stdout + r.stderr)
+        self.assertNotEqual(rp(self.d, "stakeholders", "answer", "product", "4", "--said-by", "PM", "--text", "web").returncode, 0)
+        rows = {r["id"]: r for r in json.loads(self.ok("coverage", "--json"))}
+        self.assertEqual(rows["stakeholders"]["status"], "not needed")
+        self.assertNotIn("Stakeholders not asked yet", run(self.d, "review").stdout)
+        self.assertIn("solo, not needed", Path(self.root, "PRODUCT.md").read_text(encoding="utf-8"))
+        self.ok("summary")
+        self.assertIn("Solo: not needed", Path(self.d, research.SUMMARY).read_text(encoding="utf-8"))
+        # the person says others have a say: their word outranks the repo, and a later scan keeps it
+        self.ok("stakeholders", "team", "--why", "my co-founder decides with me")
+        self.ok("stakeholders", "scan")
+        self.assertEqual(self.stake()["mode"], {**self.stake()["mode"], "mode": "team", "set_by": "person"})
+        self.assertIn("## Owner", self.ok("stakeholders", "interview"))
+
+    def test_interview_before_scan_still_checks_for_solo(self):
+        Path(self.root, ".github/CODEOWNERS").write_text("* @founder\n", encoding="utf-8")
+        r = rp(self.d, "stakeholders", "interview")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("solo, not needed", r.stdout + r.stderr)
+        self.assertNotIn("Stakeholders not asked yet", run(self.d, "review").stdout)
+
+    def test_person_says_solo_over_a_repo_team(self):
+        self.ok("stakeholders", "solo", "--why", "I decide alone; the others are contractors")
+        self.ok("stakeholders", "scan")  # CODEOWNERS names two owners, but the person's word stays
+        self.assertEqual((self.stake()["mode"]["mode"], self.stake()["mode"]["set_by"]), ("solo", "person"))
+        self.assertNotEqual(rp(self.d, "stakeholders", "interview").returncode, 0)
+
+    def test_a_team_in_product_md_or_a_team_size_counts(self):
+        Path(self.root, ".github/CODEOWNERS").write_text("* @acme/design-team\n", encoding="utf-8")
+        self.assertIn("names a team, @acme/design-team", research.team_signals(e, self.root, e.merge_defaults(e.load_state(self.d)))[0])
+        Path(self.root, ".github/CODEOWNERS").write_text("* @founder\n", encoding="utf-8")
+        prod = Path(self.root, "PRODUCT.md")
+        prod.write_text("# Acme\n\n## Team and Governance\n\nNot recorded yet (Q-scope-03, Q-scope-04, Q-gov-01).\n", encoding="utf-8")
+        self.assertEqual(research.team_signals(e, self.root, e.merge_defaults(e.load_state(self.d))), [])  # the engine's default line
+        prod.write_text("# Acme\n\n## Team and Governance\n\n<!-- od:keep -->Three designers and our CTO<!-- /od:keep -->\n", encoding="utf-8")
+        self.assertIn("PRODUCT.md names a team", research.team_signals(e, self.root, e.merge_defaults(e.load_state(self.d)))[0])
+        prod.unlink()
+        st = e.load_state(self.d)
+        st.setdefault("context", {})["team"] = "Two designers and four engineers"
+        e.dump_json(os.path.join(self.d, e.STATE_FILE), st)
+        self.assertEqual(research.team_signals(e, self.root, e.merge_defaults(e.load_state(self.d)))[0][:24], "PRODUCT.md names a team:")
+        st["context"]["team"] = ""
+        e.dump_json(os.path.join(self.d, e.STATE_FILE), st)
+        self.assertEqual(research.team_signals(e, self.root, e.merge_defaults(e.load_state(self.d))), [])
+        self.assertEqual(run(self.d, "pick", "Q-scope-04", "size-3-5", "--set-by", "chosen", "--quote", "five of us").returncode, 0)
+        self.assertTrue(research.team_signals(e, self.root, e.merge_defaults(e.load_state(self.d))))
+
     def test_none_and_not_asked(self):
         self.ok("stakeholders", "none", "marketing", "--why", "no marketing team")
         pts = {p["key"]: p for p in research.points(self.stake())}

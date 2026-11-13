@@ -689,7 +689,7 @@ def review(d, state):
     except (ValueError, OSError) as ex:
         stake = None
         notes.append(f"{STAKE} is not readable ({ex}).")
-    if stake:
+    if stake and not is_solo(stake):
         pts = points(stake)
         open_ = [p["key"] for p in pts if p["status"] == "conflict" and not p.get("resolved")]
         if open_:
@@ -1606,8 +1606,54 @@ def _git_people(root):
                              timeout=20, stdin=subprocess.DEVNULL).stdout
     except (OSError, subprocess.SubprocessError):
         return None
-    rows = [ln for ln in out.splitlines() if ln.strip()]
+    rows = [ln for ln in out.splitlines() if ln.strip() and not BOTS.search(ln)]
     return len(rows) if rows else None
+
+
+BOTS = re.compile(r"\[bot\]|dependabot|renovate|github-actions|greenkeeper", re.I)
+TEAM_SIZES = {"size-3-5", "size-6-10", "size-10plus", "model-centralized", "model-federated", "model-hybrid"}
+
+
+TEAM_WORDS = re.compile(r"\b(team|teams|co-?founders?|cto|ceo|designers|engineers|product managers?|stakeholders|we are \d+|\d+ people)\b", re.I)
+
+
+def _product_md_team(root):
+    """A team written into PRODUCT.md's Team and Governance section by hand (a kept block): the engine's own lines (the
+    'Not recorded yet' default and the answer lines that end with a question id) are not a sign."""
+    fp = os.path.join(root, "PRODUCT.md")
+    if not os.path.isfile(fp):
+        return ""
+    with open(fp, encoding="utf-8", errors="replace") as f:
+        m = re.search(r"^## Team and Governance\s*$(.*?)(?=^## |\Z)", f.read(), re.M | re.S)
+    for ln in (m.group(1) if m else "").splitlines():
+        ln = re.sub(r"<!--.*?-->", "", ln).strip()
+        if ln and not ln.startswith("Not recorded") and not re.search(r"\(Q-[a-z]+-\d+\)\.?$", ln) and TEAM_WORDS.search(ln):
+            return ln
+    return ""
+
+
+def team_signals(eng, root, state):
+    """What shows more than one decision-maker: CODEOWNERS naming two or more owners, two or more people committing, a team
+    in PRODUCT.md (context.team, the person's words), or a team size the person gave (Q-scope-04). [] means a solo project."""
+    out = []
+    where, rows = _codeowners(root)
+    owners = {o for _, os_ in rows for o in os_}
+    if len(owners) >= 2:
+        out.append(f"CODEOWNERS names {len(owners)} owners ({where})")
+    elif any("/" in o for o in owners):  # @org/team is a group of people
+        out.append(f"CODEOWNERS names a team, {next(o for o in owners if '/' in o)} ({where})")
+    people = _git_people(root)
+    if people and people >= 2:
+        out.append(f"{people} people have committed")
+    team = str(((state.get("context") or {}).get("team")) or "").strip() or _product_md_team(root)
+    if team:
+        out.append(f"PRODUCT.md names a team: {team[:80]}")
+    rec = (state.get("answers") or {}).get("Q-scope-04") or {}
+    vals = eng.answer_value(rec)
+    vals = vals if isinstance(vals, list) else [vals]
+    if rec.get("set_by") in PERSON_OWN and TEAM_SIZES & set(map(str, vals)):
+        out.append("the team size the person gave (Q-scope-04): " + ", ".join(map(str, vals)))
+    return out
 
 
 def scan_repo(root, issues=None):
@@ -1690,8 +1736,17 @@ def stake_scan(eng, d, root=None, issues=None):
         rec["roles"][r]["evidence"] = ev[r]
     rec["scanned"] = _today()
     rec["issues_read"] = bool(issues)
+    if (rec.get("mode") or {}).get("set_by") != "person":  # the person's own word on solo or team outranks the repo
+        rec.pop("mode", None)
+    _detect_mode(eng, d, rec, root)
     _save_stake(eng, d, rec)
+    eng.refresh_docs(d)
+    if is_solo(rec):
+        print(f"Stakeholders: solo, not needed ({rec['mode']['why']}). Saved to {os.path.join(d, STAKE)}. If others do have a say, "
+              "research.py stakeholders team --why \"<the person's words>\".")
+        return 0
     print(f"Stakeholders, read from the repo at {os.path.abspath(root)}; saved to {os.path.join(d, STAKE)}")
+    print(f"More than one decision-maker: {rec['mode']['why']}.")
     for r in ROLE_IDS:
         x = rec["roles"][r]
         sign = f"{len(x['evidence'])} sign(s)" if x["evidence"] else "no sign in the repo"
@@ -1707,13 +1762,59 @@ def stake_scan(eng, d, root=None, issues=None):
     return 0
 
 
+def is_solo(rec):
+    return ((rec or {}).get("mode") or {}).get("mode") == "solo"
+
+
+def _root(eng, d):
+    return os.path.dirname(os.path.abspath(d)) if os.path.basename(os.path.abspath(d)) == eng.DEFAULT_DIR else "."
+
+
+def _detect_mode(eng, d, rec, root=None):
+    """Solo or team from the repo, unless the person already said. Runs before any interview step, so the questions are
+    never drafted for a project with one decision-maker."""
+    if (rec.get("mode") or {}).get("set_by") == "person":
+        return rec
+    signals = team_signals(eng, root or _root(eng, d), eng.merge_defaults(eng.load_state(d)))
+    rec["team_signals"] = signals
+    rec["mode"] = ({"mode": "team", "why": "; ".join(signals), "set_by": "repo", "date": _today()} if signals else
+                   {"mode": "solo", "why": "one person commits, no CODEOWNERS with several owners or a team, no team in PRODUCT.md",
+                    "set_by": "repo", "date": _today()})
+    return rec
+
+
+def _not_solo(rec, eng=None, d=None):
+    if eng is not None and not rec.get("mode"):
+        _detect_mode(eng, d, rec)
+        _save_stake(eng, d, rec)
+    if is_solo(rec):
+        raise SystemExit(f"Stakeholders: solo, not needed ({rec['mode']['why']}). If others do have a say: "
+                         "research.py stakeholders team --why \"<the person's words>\".")
+
+
+def stake_mode(eng, d, mode, why):
+    """The person says whether anyone else has a say: their word outranks what the repo shows."""
+    if not (why or "").strip():
+        raise SystemExit(f"Say why, in the person's words: research.py stakeholders {mode} --why \"...\"")
+    rec = load_stake(d) or blank_stake()
+    if mode == "solo" and any(x.get("answers") for x in rec["roles"].values()):
+        raise SystemExit("Stakeholder answers are already recorded; nothing was changed.")
+    rec["mode"] = {"mode": mode, "why": why.strip(), "set_by": "person", "date": _today()}
+    _save_stake(eng, d, rec)
+    eng.refresh_docs(d)
+    print("Stakeholders: solo, not needed (" + why.strip() + ")." if mode == "solo" else
+          f"Stakeholders: a team ({why.strip()}). Next: research.py stakeholders interview.")
+    return 0
+
+
 def _save_stake(eng, d, rec):
     rec["date"] = _today()
     _write(os.path.join(d, STAKE), rec)
     state = eng.merge_defaults(eng.load_state(d))
     r = summary(state)
     pts = points(rec)
-    r["stakeholders"] = {"file": STAKE, "date": rec["date"],
+    r["stakeholders"] = {"file": STAKE, "date": rec["date"], "mode": (rec.get("mode") or {}).get("mode") or "team",
+                         "mode_why": (rec.get("mode") or {}).get("why") or "",
                          "roles": {k: v.get("status") for k, v in rec["roles"].items()},
                          "agreed": [p["key"] for p in pts if p["status"] == "agreed"],
                          "conflicts": [p["key"] for p in pts if p["status"] == "conflict" and not p.get("resolved")],
@@ -1745,6 +1846,7 @@ def interview_md(rec, roles=None, name=""):
 
 def stake_interview(eng, d, roles=None):
     rec = load_stake(d) or blank_stake()
+    _not_solo(rec, eng, d)
     for r in roles or []:
         _role(rec, r)
     state = eng.merge_defaults(eng.load_state(d))
@@ -1760,6 +1862,7 @@ def stake_interview(eng, d, roles=None):
 
 def stake_sent(eng, d, role, who=None):
     rec = load_stake(d) or blank_stake()
+    _not_solo(rec, eng, d)
     x = _role(rec, role)
     if who and _private(who):
         raise SystemExit("--who takes a role or a name, never an email or a phone number.")
@@ -1777,6 +1880,7 @@ def stake_none(eng, d, role, why):
     if not (why or "").strip():
         raise SystemExit("Say why, in the person's words: research.py stakeholders none <role> --why \"...\"")
     rec = load_stake(d) or blank_stake()
+    _not_solo(rec, eng, d)
     x = _role(rec, role)
     if x.get("answers"):
         raise SystemExit(f"{ROLES[role][0]} has answers recorded; nothing was changed.")
@@ -1809,6 +1913,7 @@ def stake_answer(eng, d, role, n, said_by, text, value=None, how="interview", da
     if how not in HOW:
         raise SystemExit(f"--how must be one of {', '.join(HOW)}")
     rec = load_stake(d) or blank_stake()
+    _not_solo(rec, eng, d)
     x = _role(rec, role)
     qs = ROLES[role][2]
     if not 1 <= int(n) <= len(qs):
@@ -1937,7 +2042,11 @@ def stake_show(eng, d, as_json=False):
         return 0
     pts = points(rec)
     if as_json:
-        print(json.dumps({"roles": rec["roles"], "points": pts, "decisions": rec.get("decisions") or []}, indent=2, ensure_ascii=False))
+        print(json.dumps({"mode": rec.get("mode"), "roles": rec["roles"], "points": pts, "decisions": rec.get("decisions") or []},
+                         indent=2, ensure_ascii=False))
+        return 0
+    if is_solo(rec):
+        print(f"Stakeholders: solo, not needed ({rec['mode']['why']}).")
         return 0
     print(f"Stakeholders ({os.path.join(d, STAKE)}, {rec.get('date')}):")
     for r in ROLE_IDS:
@@ -1959,6 +2068,8 @@ def stake_lines(r):
     s = (r or {}).get("stakeholders") or {}
     if not s:
         return ""
+    if s.get("mode") == "solo":
+        return f"Stakeholders: solo, not needed ({s.get('mode_why')})."
     roles = s.get("roles") or {}
     n = lambda st: sum(1 for v in roles.values() if v == st)
     line = (f"Stakeholders ({s.get('date')}): {n('answered')} answered, {n('sent')} asked and waiting, {n(NOT_ASKED)} not asked"
@@ -2031,7 +2142,9 @@ def coverage(d, state):
         if cid == "stakeholders":
             rec = load_stake(d)
             if not rec:
-                row["next"] = "research.py stakeholders scan, then interview"
+                row["next"] = "research.py stakeholders scan (it says whether anyone else has a say)"
+            elif is_solo(rec):
+                row["status"], row["evidence"] = "not needed", "solo: " + rec["mode"]["why"]
             else:
                 sts = [x.get("status") for x in rec["roles"].values()]
                 ans, none_, asked = sts.count("answered"), sts.count("no one"), sts.count("sent")
@@ -2157,7 +2270,9 @@ def summary_html(eng, d, state):
     if systems:
         sec.append('<section><h2>Design systems they publish</h2><ul class="box refs">' + "".join(
             f"<li>{_link(x.get('url'), x.get('name'))}: {_e(x.get('why'))} {cite(x.get('sources'))}</li>" for x in systems) + "</ul></section>")
-    if stake:
+    if stake and is_solo(stake):
+        sec.append(f"<section><h2>Stakeholders</h2><div class='box'><p>Solo: not needed. {_e(stake['mode']['why'])}.</p></div></section>")
+    elif stake:
         body = ""
         for rid in ROLE_IDS:
             x = stake["roles"].get(rid) or {}
@@ -2282,6 +2397,9 @@ def main(argv=None):
     c = ss.add_parser("scan", help="read CODEOWNERS, the README, docs, brand and legal files, the commit count and exported issues")
     c.add_argument("--root", help="the project folder (default: the folder that holds opendesigner/)")
     c.add_argument("--issues", help="issues exported as JSON: gh issue list --state all --limit 300 --json number,title,labels")
+    for m, h in (("solo", "the person is the only decision-maker: no interviews"), ("team", "others have a say: interviews follow")):
+        c = ss.add_parser(m, help=h)
+        c.add_argument("--why", required=True, help="the person's words")
     c = ss.add_parser("interview", help=f"draft at most five questions per role into {INTERVIEWS}")
     c.add_argument("--role", action="append", choices=ROLE_IDS)
     c = ss.add_parser("sent", help="the interview went out to this role")
@@ -2315,6 +2433,8 @@ def main(argv=None):
     if a.cmd == "stakeholders":
         if a.sub == "scan":
             return stake_scan(eng, d, a.root, a.issues)
+        if a.sub in ("solo", "team"):
+            return stake_mode(eng, d, a.sub, a.why)
         if a.sub == "interview":
             return stake_interview(eng, d, a.role)
         if a.sub == "sent":

@@ -128,6 +128,7 @@ After the positioning is confirmed, propose exactly three directions. Each chang
 
 ## 11. Stakeholders: who has a say
 A design system is decided by more than one person. Find out who has a say, ask them, and keep what each one said, with their name or role on it.
+0. **Solo or a team?** `research.py stakeholders scan` first decides whether this step is needed at all. It counts as a team when CODEOWNERS names two or more owners or a team handle (`@org/team`), two or more people have committed (bots left out), PRODUCT.md names a team (`context.team`, or a line you kept in its Team and Governance section), or the person gave a team size (Q-scope-04). With none of these, it records **"solo: not needed"** with one line and you move on: no interviews, no questions. The same check runs before `interview`, `sent`, `none` and `answer`, so skipping `scan` never drafts questions for a solo project. The person's word outranks the repo either way: `research.py stakeholders team --why "<their words>"` when others do have a say, `stakeholders solo --why "..."` when only they decide.
 1. **Read the repo:** `research.py stakeholders scan`. It reads CODEOWNERS, the README, the docs, brand, legal and accessibility files, `package.json`, and how many people have committed (a count; names stay in git). With the GitHub CLI or a GitHub tool, export the issues first and add `--issues issues.json` (`gh issue list --state all --limit 300 --json number,title,labels`); without one, say that the issues were not read. What it finds is a sign that a role exists, never a view.
 2. **Ask the person** in one message who holds each role: owner, product, engineering, marketing, legal, accessibility, support, brand. A role nobody holds: `research.py stakeholders none <role> --why "<their words>"`. Never guess who holds a role from a name in the repo.
 3. **Draft the interviews:** `research.py stakeholders interview [--role legal ...]` writes `research/interviews.md`: at most five plain questions per role, to send as they are or to answer in the session. When one goes out: `stakeholders sent <role> --who "<their role or name>"`.
@@ -153,7 +154,7 @@ A design system is decided by more than one person. Find out who has a say, ask 
 | Platform conventions | a finding on platform |
 | Content and voice | a finding on voice |
 | The product's own analytics | a source of kind `analytics`; "not yet" while the product is not live |
-| Stakeholders | every role answered, or marked as held by nobody |
+| Stakeholders | every role answered, or marked as held by nobody; "not needed" on a solo project |
 
 Fill the gaps with the tools you have, citing each finding, then run `engine.py research add` again. When a tool that would fill a gap is missing (analytics, a browser), say so plainly in one line, with what it would add. Never mark an area covered without a finding or a source behind it.
 
