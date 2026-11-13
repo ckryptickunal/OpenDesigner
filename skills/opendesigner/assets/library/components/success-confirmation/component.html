@@ -1,0 +1,50 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-success-confirmation { box-sizing: border-box; inline-size: 100%; max-inline-size: 26rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-success-confirmation *, .odl-success-confirmation *::before, .odl-success-confirmation *::after { box-sizing: border-box; }
+.odl-success-confirmation svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-success-confirmation h2, .odl-success-confirmation h3, .odl-success-confirmation p, .odl-success-confirmation ul, .odl-success-confirmation ol, .odl-success-confirmation dl, .odl-success-confirmation dd { margin: 0; }
+.odl-success-confirmation h2, .odl-success-confirmation h3 { text-wrap: balance; }
+.odl-success-confirmation .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-success-confirmation .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-success-confirmation .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-success-confirmation .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-success-confirmation .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-success-confirmation .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-success-confirmation .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-success-confirmation .odl-btn[disabled], .odl-success-confirmation .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-success-confirmation button:focus-visible, .odl-success-confirmation a:focus-visible, .odl-success-confirmation input:focus-visible, .odl-success-confirmation textarea:focus-visible, .odl-success-confirmation [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-success-confirmation .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-success-confirmation.odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-success-confirmation.odl-card { padding: var(--ds-space-inset-lg); } }
+
+.odl-success-confirmation { padding: var(--ds-space-inset-xl); text-align: center; border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+.odl-success-confirmation .odl-art { display: grid; place-items: center; inline-size: var(--ds-size-control-lg); aspect-ratio: 1; margin: 0 auto var(--ds-space-stack-md); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-success-subtle); color: var(--ds-color-text-success); }
+.odl-success-confirmation .odl-art svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); stroke-width: var(--ds-icon-stroke-lg); }
+.odl-success-confirmation h2 { font: var(--ds-text-title-lg); font-weight: var(--ds-font-weight-heading); }
+.odl-success-confirmation h2:focus { outline: none; }
+.odl-success-confirmation .odl-lead { margin-block-start: var(--ds-space-stack-xs); color: var(--ds-color-text-secondary); }
+.odl-success-confirmation dl { display: grid; margin-block-start: var(--ds-space-stack-lg); padding: var(--ds-space-inset-md); text-align: start; border-radius: var(--ds-radius-nested); background: var(--ds-color-surface-sunken); font-variant-numeric: tabular-nums; }
+.odl-success-confirmation dl div { display: flex; justify-content: space-between; gap: var(--ds-space-inline-md); padding-block: var(--ds-space-stack-xs); }
+.odl-success-confirmation dt { color: var(--ds-color-text-secondary); }
+.odl-success-confirmation dd { min-inline-size: 0; overflow-wrap: anywhere; text-align: end; font-weight: var(--ds-font-weight-label); }
+.odl-success-confirmation .odl-next { margin-block-start: var(--ds-space-stack-md); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-success-confirmation .odl-acts { display: grid; gap: var(--ds-space-inline-sm); margin-block-start: var(--ds-space-stack-xl); }
+@container (max-width: 26rem) { .odl-success-confirmation { padding: var(--ds-space-inset-lg); } }
+@media (prefers-reduced-motion: reduce) { .odl-success-confirmation, .odl-success-confirmation *, .odl-success-confirmation *::before, .odl-success-confirmation *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-success-confirmation" aria-label="Invoice sent">
+  <span class="odl-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>
+  <h2 tabindex="-1" data-od-slot="title">Invoice sent</h2>
+  <p class="odl-lead" data-od-slot="message">Gorsedown Print will get INV-2042 by email in a minute.</p>
+  <dl data-od-list="details">
+    <div data-od-item><dt data-od-slot="label">Amount</dt><dd data-od-slot="value">$4,280.00</dd></div>
+    <div data-od-item><dt>Due</dt><dd>Dec 13, 2026</dd></div>
+    <div data-od-item><dt>Sent to</dt><dd>billing@gorsedown.example</dd></div>
+  </dl>
+  <p class="odl-next" data-od-slot="next">We'll email you when they open it and when they pay.</p>
+  <div class="odl-acts"><a class="odl-btn" href="#" data-od-action="view">View invoice</a><a class="odl-btn is-text" href="#" data-od-action="another">Send another</a></div>
+</section>

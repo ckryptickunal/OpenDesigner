@@ -1,10 +1,10 @@
 ---
 title: Start from an existing app or brand
-seo_title: Start a design system from an existing app or brand
-description: How the opendesigner-extract skill reads your app, a website, screenshot, Figma file or brand book, measures its values, and turns them into suggested answers.
+seo_title: Audit your app's colors, spacing and fonts, then build on it
+description: See which colors, spacing and fonts your app really uses and where they drift, turn them into a design system, or adapt your system to a site you like.
 section: Guides
 order: 4
-updated: 2026-11-07
+updated: 2026-11-13
 ---
 
 If you already have an app, a brand book or a site you like, OpenDesigner can learn from it with the opendesigner-extract skill. It measures values such as text sizes, spacing, corners, shadows and colors, shows you where each one came from, and offers them as suggested answers. Nothing is decided until you accept it, and it never copies another brand's identity.

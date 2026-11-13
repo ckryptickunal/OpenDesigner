@@ -1,0 +1,86 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-inline-spinner { box-sizing: border-box; inline-size: 100%; max-inline-size: 26rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-inline-spinner *, .odl-inline-spinner *::before, .odl-inline-spinner *::after { box-sizing: border-box; }
+.odl-inline-spinner svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-inline-spinner h2, .odl-inline-spinner h3, .odl-inline-spinner p, .odl-inline-spinner ul, .odl-inline-spinner ol, .odl-inline-spinner dl, .odl-inline-spinner dd { margin: 0; }
+.odl-inline-spinner h2, .odl-inline-spinner h3 { text-wrap: balance; }
+.odl-inline-spinner .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-inline-spinner .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-inline-spinner .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-inline-spinner .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-inline-spinner .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-inline-spinner .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-inline-spinner .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-inline-spinner .odl-btn[disabled], .odl-inline-spinner .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-inline-spinner button:focus-visible, .odl-inline-spinner a:focus-visible, .odl-inline-spinner input:focus-visible, .odl-inline-spinner textarea:focus-visible, .odl-inline-spinner [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-inline-spinner .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-inline-spinner.odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-inline-spinner.odl-card { padding: var(--ds-space-inset-lg); } }
+
+.odl-inline-spinner .odl-spin { display: none; animation: odl-spin calc(var(--ds-motion-duration-long) * 3) var(--ds-motion-easing-linear) infinite; }
+.odl-inline-spinner .is-busy .odl-spin { display: block; }
+.odl-inline-spinner .is-busy .odl-idle { display: none; }
+@keyframes odl-spin { to { rotate: 1turn; } }
+
+.odl-inline-spinner form { display: grid; gap: var(--ds-space-stack-lg); }
+.odl-inline-spinner label { display: grid; gap: var(--ds-space-stack-xs); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); }
+.odl-inline-spinner .odl-row { display: flex; align-items: center; gap: var(--ds-space-inline-sm); }
+.odl-inline-spinner .odl-field { display: grid; gap: var(--ds-space-stack-xs); }
+.odl-inline-spinner input { flex: 1; min-inline-size: 0; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-sm);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-field); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
+.odl-inline-spinner .odl-check { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); min-block-size: 1lh; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-inline-spinner .odl-check svg { display: none; }
+.odl-inline-spinner .odl-check.is-busy .odl-spin { display: block; }
+.odl-inline-spinner .odl-check.is-ok { color: var(--ds-color-text-success); }
+.odl-inline-spinner .odl-check.is-ok .odl-yes { display: block; }
+.odl-inline-spinner .odl-check.is-bad { color: var(--ds-state-error-text, var(--ds-color-text-danger)); }
+.odl-inline-spinner .odl-check.is-bad .odl-no { display: block; }
+.odl-inline-spinner .odl-hint { color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); font-weight: var(--ds-font-weight-body); }
+.odl-inline-spinner .odl-foot { display: flex; align-items: center; justify-content: flex-end; gap: var(--ds-space-inline-sm); }
+.odl-inline-spinner .odl-foot .odl-live { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-inline-spinner .odl-btn.is-busy { cursor: progress; }
+@media (prefers-reduced-motion: reduce) { .odl-inline-spinner, .odl-inline-spinner *, .odl-inline-spinner *::before, .odl-inline-spinner *::after { transition: none !important; animation: none !important; } }
+</style>
+<form class="odl-inline-spinner odl-card" action="#" aria-label="Workspace settings">
+  <div class="odl-field"><label>Workspace address<span class="odl-row"><input name="slug" value="larkspur-finance" autocomplete="off" spellcheck="false"></span></label>
+    <span class="odl-hint">Type a new address to see the check. “team” is taken.</span>
+    <span class="odl-check" role="status"><svg class="odl-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><svg class="odl-yes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><svg class="odl-no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span></span></span></div>
+  <div class="odl-foot"><p class="odl-live" role="status"></p><button type="button" class="odl-btn" data-od-action="save" data-od-effect="change"><svg class="odl-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><span class="odl-label" data-od-slot="label">Save changes</span></button></div>
+</form>
+<script>
+document.querySelectorAll(".odl-inline-spinner").forEach(function (root) {
+  if (root.hasAttribute("data-odl-wired")) return;
+  root.setAttribute("data-odl-wired", "");
+  function wait(name, fallback) {  // the system's wait thresholds (--ds-state-wait-*), in ms; older systems lack them
+    var v = getComputedStyle(root).getPropertyValue(name).trim(), n = parseFloat(v);
+    return isNaN(n) ? fallback : (/ms$/.test(v) || !/s$/.test(v) ? n : n * 1000);
+  }
+  var save = root.querySelector("[data-od-action='save']"), label = save.querySelector(".odl-label"), live = root.querySelector(".odl-live");
+  var input = root.querySelector("input"), check = root.querySelector(".odl-check"), timer, slowSave, slowCheck, answer;
+  save.addEventListener("click", function () {
+    if (save.getAttribute("aria-disabled") === "true") return;
+    save.setAttribute("aria-disabled", "true"); label.textContent = "Saving…"; live.textContent = "Saving";
+    slowSave = setTimeout(function () { save.classList.add("is-busy"); }, wait("--ds-state-wait-button-pending-after", 1000));  // no spinner for quick saves
+    setTimeout(function () {  // demo only: a save that takes 2.5 seconds
+      clearTimeout(slowSave); save.removeAttribute("aria-disabled"); save.classList.remove("is-busy"); label.textContent = "Save changes"; live.textContent = "Changes saved";
+    }, 2500);
+  });
+  input.addEventListener("input", function () {  // a check that starts after the person stops typing
+    clearTimeout(timer); clearTimeout(slowCheck); clearTimeout(answer); check.className = "odl-check"; check.querySelector("span").textContent = "";
+    if (!input.value.trim()) return;
+    timer = setTimeout(function () {
+      check.querySelector("span").textContent = "Checking…";
+      slowCheck = setTimeout(function () { check.className = "odl-check is-busy"; }, wait("--ds-state-wait-indicator-after", 1000));
+      answer = setTimeout(function () {  // demo only: the check answers after 1.8 seconds
+        clearTimeout(slowCheck);
+        var ok = !/^(team|admin)$/i.test(input.value.trim());
+        check.className = "odl-check " + (ok ? "is-ok" : "is-bad"); check.querySelector("span").textContent = ok ? "Available" : "Already taken";
+      }, 1800);
+    }, 400);
+  });
+});
+</script>

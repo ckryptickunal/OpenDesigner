@@ -1,0 +1,29 @@
+{
+  "rows": [
+    {
+      "name": "Maya Thornquist",
+      "detail": "Approved the Q4 vendor budget",
+      "when": "2m"
+    },
+    {
+      "name": "Oren Balliwick",
+      "detail": "Commented on Invoice 2041",
+      "when": "14m"
+    },
+    {
+      "name": "Sunniva Eckhart",
+      "detail": "Uploaded statement-oct.pdf",
+      "when": "1h"
+    },
+    {
+      "name": "Jun Kessaly",
+      "detail": "Asked for access to Payroll",
+      "when": "3h"
+    },
+    {
+      "name": "Rafe Ambersole",
+      "detail": "Closed the books",
+      "when": "Yesterday"
+    }
+  ]
+}

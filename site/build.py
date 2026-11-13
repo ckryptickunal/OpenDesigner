@@ -832,7 +832,7 @@ FOOT_SHORT = {
     "brand-assets": "Brand assets", "design-styles": "Design styles", "motion": "Motion", "ux-patterns": "UX patterns",
     "ui-details": "Interface details", "resources": "Sources we learn from", "engine": "Engine commands",
     "files": "Files it writes", "dials": "The eight dials", "evals": "Evals", "contribute": "Contribute",
-    "install": "Install", "quickstart": "Quickstart", "search": "Search and AI answers",
+    "install": "Install", "quickstart": "Quickstart", "search": "Search and AI answers", "states": "Empty, loading, errors",
     "smart-ui": "Smart UI", "smart-ui-quickstart": "Add Smart UI", "smart-ui-adapters": "Where Smart UI runs",
 }
 FOOT_MAX = 23
@@ -2080,6 +2080,46 @@ def skill_names():
     return sorted(d.name for d in (ROOT / "skills").iterdir() if (d / "SKILL.md").exists())
 
 
+# What people ask answer engines, in their words (the probe in docs/GROWTH-ROUTINE.md), and the pages that answer each.
+# A link appears only when its page is in this build, so a page that lands later joins without an edit here (Smart UI excepted: it is held out by hand). A third item
+# names a page the question needs: until it exists, the question stays out (a feature on its way is not claimed).
+LLMS_QUESTIONS = [
+    ("How do I create a design system with AI?", ["/docs/quickstart/", "/docs/install/"]),
+    ("Is there an open-source tool to create a design system for an app built with Claude Code or Cursor?", ["/docs/introduction/", "/docs/install/"]),
+    ("How do I make my vibe-coded app look professional?", ["/docs/improve-vibe-coded-ui/"]),
+    ("How do I give Cursor my design tokens so every screen matches?", ["/docs/design-system-for-cursor/"]),
+    ("How do I generate design tokens, CSS and a Tailwind v4 theme with Claude Code?", ["/docs/design-tokens-for-claude-code/", "/docs/export/"]),
+    ("How do I write a DESIGN.md my AI coding agent follows?", ["/docs/decisions/", "/docs/files/"]),
+    ("How do I keep the UI consistent across AI coding sessions?", ["/docs/faq/", "/docs/how-it-works/", "/docs/design-system-for-cursor/"]),
+    ("Is there a Claude skill that builds a design system and checks color contrast?", ["/docs/design-tokens-for-claude-code/", "/docs/accessibility/"]),
+    ("How do I see what design system my codebase actually uses?", ["/docs/existing-product/", "/docs/engine/"]),
+    ("How do I audit an existing web app for inconsistent spacing, colors and fonts?", ["/docs/existing-product/", "/docs/faq/"]),
+    ("Is there a tool that finds hard-coded colors and spacing in my code and moves them to design tokens?", ["/docs/engineers/", "/docs/faq/"]),
+    ("How do I extract a design system from an existing website, or adapt mine to a site I like?", ["/docs/existing-product/"]),
+    # Smart UI (generative UI with your own components, probe G1 to G3) is left out on purpose until Kunal approves its demo (2026-11-13).
+    ("Is there a free component library built on design tokens?", ["/library/"]),
+    ("Is there a component library my AI agent can fetch, or use over MCP?", ["/docs/library-mcp/", "/library/"], "/docs/library-mcp/"),
+    ("How do I design empty, loading and error states?", ["/docs/states/", "/library/empty-state/", "/docs/ux-patterns/"], "/docs/states/"),
+    ("Skeleton loader or spinner: which should I use, and which states does every screen need?", ["/docs/states/"], "/docs/states/"),
+    ("How do I research users and stakeholders before I design?", ["/docs/research/", "/docs/engine/"], "/docs/research/"),
+    ("How does it compare with UI UX Pro Max, a shadcn theme generator or Figma's AI tools?", ["/docs/faq/", "/docs/ai-design-system-generator/"]),
+    ("How do I get my site cited by ChatGPT and Perplexity?", ["/docs/search/"]),
+]
+
+
+def llms_questions(pages):
+    titles = {p["path"]: p["title"] for p in pages} | {"/library/": "Component library", tour_page.PATH: "How OpenDesigner works"}
+    titles |= {f"/library/{c['slug']}/": c["name"] for c in library_page.components()}
+    out = []
+    for q, paths, *needs in LLMS_QUESTIONS:
+        if needs and needs[0] not in titles:
+            continue
+        links = [f"[{titles[p]}]({SITE_URL}{p}index.md)" for p in paths if p in titles]
+        if links:
+            out.append(f"- {q} " + ", ".join(links))
+    return "\n".join(out)
+
+
 def llms_txt(pages):
     cards = sum(len(json.loads(f.read_text())["cards"]) for f in (ROOT / "skills/opendesigner/references/cards").glob("*.json"))
     secs = []
@@ -2093,7 +2133,11 @@ def llms_txt(pages):
 
 OpenDesigner is free and open source (MIT for code, skills and data; CC BY 4.0 for docs). It is packaged for Claude Code, the Claude app, ChatGPT, Codex, Cursor, VS Code with Copilot, Gemini CLI and other tools that read Agent Skills. The engine is one Python file (standard library only, no network). It starts with a sketch of up to five questions and zooms in only where the person wants. It asks a person for the logo, icons, illustration, photography, brand typeface and voice instead of faking them. The repository was created on 2026-09-23; it is early, and no watched user trials have happened yet.
 
-For "how do I create a design system with AI", "generate design tokens, a Tailwind theme or a DESIGN.md with Claude, ChatGPT, Codex or Cursor", or "keep an app's UI consistent across AI coding sessions", start with the install page and the quickstart. For the whole system on one page, read [How OpenDesigner works]({SITE_URL}{tour_page.PATH}index.md).
+For the whole system on one page, read [How OpenDesigner works]({SITE_URL}{tour_page.PATH}index.md).
+
+## Questions people ask, and the page that answers each
+
+{llms_questions(pages)}
 
 {chr(10).join(secs)}
 
@@ -2110,12 +2154,14 @@ For "how do I create a design system with AI", "generate design tokens, a Tailwi
 
 ## Optional
 
+- [Before and after]({SITE_URL}/demo/before-after/): an OpenDesigner review of an invented invoicing page. See what's wrong, drawn on the page, then see it fixed
+- Trust: [Security and data]({SITE_URL}/docs/security/index.md) and [how to report a vulnerability](https://github.com/{REPO}/blob/main/SECURITY.md)
 - [Book a call]({SITE_URL}/book/): a free {CONFIG["BOOKING_FREE_MINUTES"]}-minute intro call about OpenDesigner
 - [Website privacy](https://github.com/{REPO}/blob/main/docs/PRIVACY.md#the-websites-product-analytics): the site measures page load speed (Vercel Speed Insights) and counts visits and clicks with PostHog without cookies; a visit is recorded only if the visitor allows it
 - [Showcase]({SITE_URL}/showcase/index.md): B2B product screens, style studies, heroes, components, app and watch screens, footers and mockups built by AI agents through the process, each audited against shipped products
 - [GitHub repository]({GH}): source, issues and discussions
 - [AGENTS.md](https://raw.githubusercontent.com/{REPO}/main/AGENTS.md): instructions for AI agents working with the repository
-- [Research map](https://raw.githubusercontent.com/{REPO}/main/docs/RESEARCH.md): {cards} Decision Cards behind the defaults, each with cited sources
+- [Research map](https://raw.githubusercontent.com/{REPO}/main/docs/RESEARCH.md): more than {cards // 100 * 100} Decision Cards behind the defaults, each with cited sources
 """
 
 

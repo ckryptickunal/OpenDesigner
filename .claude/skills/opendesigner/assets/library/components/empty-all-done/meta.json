@@ -1,0 +1,98 @@
+{
+  "name": "All done empty state",
+  "summary": "Inbox zero: a calm note that everything is handled, when new items will show up, and a quiet way to see what's done.",
+  "use": "when a person has finished every item in a queue, inbox or to-do list",
+  "type": "states",
+  "style": "friendly",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "inbox zero",
+    "all done",
+    "caught up",
+    "empty state",
+    "queue"
+  ],
+  "states": [
+    "all done",
+    "hover",
+    "focus"
+  ],
+  "source": null,
+  "a11y": "The heading says the state in words; the check drawing is decorative and hidden from screen readers.",
+  "width": "medium",
+  "live_region": "none",
+  "tokens_planned": {
+    "--ds-state-empty-gap": "--ds-space-stack-md",
+    "--ds-state-empty-measure": "--ds-layout-measure-lead",
+    "--ds-state-empty-media": "--ds-size-icon-lg"
+  },
+  "spec": {
+    "use_when": [
+      "a queue, inbox or review list has been cleared by the person"
+    ],
+    "avoid_when": [
+      "the list has never had items: use empty-first-use",
+      "items are hidden by a filter: use empty-filtered"
+    ],
+    "keyboard": [
+      "Tab reaches See what you approved"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "checked": {
+          "type": "string",
+          "maxLength": 32
+        }
+      },
+      "required": [
+        "title",
+        "message",
+        "checked"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "shown",
+        "how": "This part is the empty state itself.",
+        "evidence": "class=\"odl-art\""
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "Not applicable: shown after the data has loaded and come back empty; while loading, show a skeleton."
+      },
+      "error": {
+        "status": "not_built",
+        "how": "Not applicable: an error isn't an empty list. Use page-banners or page-error."
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "No control here is ever disabled; each one always does something."
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Actions stack full width under 30rem; the panel caps its width.",
+        "evidence": "@container"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}

@@ -41,7 +41,8 @@
     "event": {
      "name": "resend_invite"
     }
-   }
+   },
+   "email": "arjun.mehta@brightwell.example"
   }
  ]
 }

@@ -143,7 +143,7 @@ document.querySelectorAll(".odl-seat-picker").forEach((root) => {
   const cur = val("currency") || "USD", max = Number(val("max_seats")) || 8;
   const money = new Intl.NumberFormat(root.closest("[lang]")?.getAttribute("lang") || "en", { style: "currency", currency: cur });
   // Rendered from data: rows built from the template get their aisles, prices, names, states and tier headings here.
-  const tiers = new Map([...root.querySelectorAll('[data-od-list="tiers"] > li:not([hidden])')].map((li) => [li.querySelector('[data-od-slot="label"]').textContent.trim(), Number(li.querySelector('[data-od-slot="price"]').textContent)]));
+  const tiers = new Map([...root.querySelectorAll('[data-od-list="tiers"] > li:not([hidden])')].filter((li) => li.querySelector('[data-od-slot="label"]')).map((li) => [li.querySelector('[data-od-slot="label"]').textContent.trim(), Number(li.querySelector('[data-od-slot="price"]').textContent)]));
   let lastTier = null;
   root.querySelectorAll(".odl-row:not([hidden])").forEach((row) => {
     const box = row.querySelector(".odl-seats");
