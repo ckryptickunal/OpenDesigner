@@ -368,7 +368,7 @@ def _guard_answer(d, value, why):
 
 def owner_quote(what, quote):
     """Choices that write the owner's files take their own words (S4 #9: agents ran handoff yes and guard install unasked)."""
-    if not quote or len(re.findall(r"[A-Za-z]{2,}", quote)) < 1:
+    if not quote or len(re.findall(r"[A-Za-z]{2,}", quote)) < 2:
         raise SystemExit(f"`engine.py {what}` writes files the owner did not write, so it needs their yes in their own words: "
                          f"ask them once, then `engine.py {what} --quote \"<their words>\"`. Nothing was written.")
 
@@ -5913,7 +5913,7 @@ def now_facts(d, state=None, text=None):
     if not built:
         nxt = "engine.py build" if sketched else "engine.py sketch (zoom.md, level 0)"
     elif not prof.get("handoff"):
-        nxt = "ask once, then engine.py handoff yes (or handoff no)"
+        nxt = "ask once, then engine.py handoff yes --quote \"<their words>\" (or handoff no)"
     elif research == "planned":
         nxt = "engine.py research add <findings.json>"
     elif research not in ("done", "skipped"):
@@ -6243,8 +6243,8 @@ def cmd_status(d, as_json=False, hook=False):
     root = doc_dir(d)
     if hook:
         rules_md = os.path.join(REFERENCES, "rules.md")
-        print(f"OpenDesigner: this project has a design system, {state.get('name')}, in opendesigner/. Load the opendesigner "
-              "skill (opendesigner-extend once it exists) for any UI, styling or visual work, including building a page on it.")
+        print(f"OpenDesigner: this project has a design system, {state.get('name')}, in opendesigner/. Load the "
+              "opendesigner-extend skill for any UI, styling or visual work, including building a page on this system.")
         print(f"Now: {f['step']}.")
         for w_ in f["waiting"] or ["nothing the engine can see"]:
             print(f"Waiting for the owner: {w_.replace('(rules.md section', '(' + rules_md + ' section')}.")
@@ -6363,7 +6363,7 @@ def refresh_handoff(d, quiet=True):
     if block != handoff_note(d, state, light=not light)[0].strip():  # edited by hand, or written by an older engine
         if not quiet:
             print(f"  {os.path.relpath(agents)}: the OpenDesigner note there is not one the engine wrote (edited, or from an older "
-                  "engine), so it was left as it is; `engine.py handoff yes` rewrites it.")
+                  "engine), so it was left as it is; `engine.py handoff yes --quote \"<their words>\"` rewrites it.")
         return False
     new = re.sub(re.escape(HANDOFF_START) + r".*?" + re.escape(HANDOFF_END) + r"\n?",
                  lambda _m: f"{HANDOFF_START}\n{note}\n{HANDOFF_END}\n", text, count=1, flags=re.S)
@@ -6385,7 +6385,7 @@ def handoff_reminder(state):
     if ((state or {}).get("profile") or {}).get("handoff"):
         return ""
     return ("Ask once, in its own message: shall I write a short note so later sessions follow this system (AGENTS.md, and a "
-            "CLAUDE.md that imports it)? Then: engine.py handoff yes, or handoff no.")
+            "CLAUDE.md that imports it)? Then: engine.py handoff yes --quote \"<their words>\", or handoff no.")
 
 
 def cmd_handoff(d, answer=None, why=None):
@@ -11665,6 +11665,21 @@ def tailwind_classes(files):
 TW_TOKEN = {}  # Tailwind class -> the token path behind it, filled by tailwind_classes (S4 #5: one token, one name per world)
 
 
+def plain_css_for(cls, area, prefix, css_names):
+    """The plain-CSS name for a Tailwind class, only as the CSS export writes it (a name it does not write is the mistake
+    review flags). A text style is a class; a transition is its duration and easing."""
+    p = TW_TOKEN.get(cls)
+    if not p:
+        return "—"
+    if area == "type":
+        return f"`.{prefix}-{'-'.join(p.split('.'))}` (a text style class)"
+    v = css_var(prefix, p)
+    if v in css_names:
+        return f"`var({v})`"
+    parts = [f"`var({v}-{x})`" for x in ("duration", "easing") if f"{v}-{x}" in css_names]
+    return " and ".join(parts) or "—"
+
+
 def render_design_md(d, files, meta, state, existing="", out_dir=None):
     rel = os.path.relpath(os.path.abspath(d), os.path.abspath(out_dir or doc_dir(d))).replace(os.sep, "/")
     R = lambda p: p if rel in (".", "") else f"{rel}/{p}"  # paths as seen from DESIGN.md, which sits at the project root (R21)
@@ -12272,14 +12287,13 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
     if removed_entries(state):
         body.append(f"{len(body) + 1}. Never bring back anything in Removed on Purpose. Only the owner can: `engine.py removed restore <id> --why \"<their words>\"`.")
     if tw:
+        css_names = set(re.findall(r"(--[a-zA-Z0-9_-]+)\s*:", export_css(files, meta, prefix)))
         body += ["", "**Tailwind v4 classes** (one import: `@import \"tailwindcss\"; @import \"<path>/opendesigner/build/tailwind/theme.css\";`"
                  + ("; Tailwind's default colors, text sizes, radii and shadows are switched off, so only these exist" if (state.get("exports") or {}).get("tailwindReset", True) else "")
                  + "). They need a Tailwind build that imports that file. In plain HTML with no build step, use the CSS name beside each "
                  f"class from `{R('build/css/tokens.css')}`; never load Tailwind from a CDN script. Each row is one token under its two names:",
                  "", _md_table(["Area", "Tailwind class", "Plain CSS (no build step)"],
-                               [(k.title(), f"`{c}`", (f"`.{prefix}-{'-'.join(TW_TOKEN[c].split('.'))}` (a text style class)" if k == "type"
-                                                        else f"`var({css_var(prefix, TW_TOKEN[c])})`") if c in TW_TOKEN else "—")
-                                for k, v in tw.items() for c in v])]
+                               [(k.title(), f"`{c}`", plain_css_for(c, k, prefix, css_names)) for k, v in tw.items() for c in v])]
     note_ = research_py.design_md_note(state) if research_py and hasattr(research_py, "design_md_note") else ""  # S3: the research summary page
     if note_:
         body += ["", note_]
@@ -16270,6 +16284,57 @@ def exempt_match(rules, path, root):
     return None
 
 
+GENERIC_FAMILIES = {"serif", "sans-serif", "monospace", "cursive", "fantasy", "system-ui", "ui-serif", "ui-sans-serif",
+                    "ui-monospace", "ui-rounded", "math", "emoji", "fangsong"}
+TW_WEIGHTS = {"thin": 100, "extralight": 200, "light": 300, "normal": 400, "medium": 500, "semibold": 600, "bold": 700,
+              "extrabold": 800, "black": 900}
+
+
+def font_literals(line, rel, i, ext, sys_weights, selector=""):
+    """Typed font stacks and weights off the system on one line (S4 #1): font-family, the font shorthand, JSX fontFamily and
+    fontWeight, Tailwind font-[...] and weight classes. Not inside @font-face (it declares a face, it does not pick one), not a
+    var(), not a lone generic family such as monospace."""
+    if "@font-face" in selector or "@font-face" in line:
+        return []
+    out = []
+
+    def family(v, raw):
+        v = v.strip().rstrip("\"'`,) ")
+        if v and not v.lower().startswith(("var(", "inherit", "initial", "unset", "revert")) and v.lower().strip("\"'") not in GENERIC_FAMILIES:
+            out.append((rel, i, "font", raw))
+
+    def weight(w, raw):
+        w = {"bold": 700, "normal": 400}.get(str(w).lower(), w)
+        if sys_weights and str(w).isdigit() and int(w) not in sys_weights:
+            out.append((rel, i, "weight", raw))
+    for m in re.finditer(r"(?<![\w-])font-family\s*:\s*([^;}{\n<>]+)", line):
+        v = m.group(1)
+        if ext in (".html", ".vue", ".svelte") and re.search(r"style\s*=\s*\"[^\"]*$", line[:m.start()]):
+            v = v.split('"')[0]
+        family(v, f"font-family: {v.strip().rstrip(chr(34) + chr(39) + ',) ')[:60]}")
+    for m in re.finditer(r"(?<![\w-])font\s*:\s*([^;}{\n<>]+)", line):  # the shorthand: [style] [weight] size[/lh] family
+        v = m.group(1).strip()
+        if v.lower().startswith(("var(", "inherit", "initial", "unset", "revert")):
+            continue
+        out.append((rel, i, "font", f"font: {v[:60]}"))
+    for m in re.finditer(r"(?<![\w-])font-weight\s*:\s*(\d{3}|bold|normal)\b", line):
+        weight(m.group(1), f"font-weight: {m.group(1)}")
+    for m in re.finditer(r"\bfontFamily\s*:\s*[\"'`]([^\"'`]+)", line):
+        family(m.group(1), f"fontFamily: {m.group(1)[:60]}")
+    for m in re.finditer(r"\bfontWeight\s*:\s*[\"'`]?(\d{3}|bold|normal)\b", line):
+        weight(m.group(1), f"fontWeight: {m.group(1)}")
+    if RX_TW_CONTEXT.search(line) or ext in (".html", ".vue", ".svelte"):
+        for m in re.finditer(r"(?<![\w\[-])font-\[([^\]]+)\]", line):
+            v = m.group(1).replace("_", " ")
+            if re.fullmatch(r"\d{3}", v):
+                weight(v, m.group(0))
+            else:
+                family(v, m.group(0))
+        for m in re.finditer(r"(?<![\w\[-])font-(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)(?![\w-])", line):
+            weight(TW_WEIGHTS[m.group(1)], m.group(0))
+    return out
+
+
 def cmd_keep(d, reason=None, quote=None, remove=False):
     """The owner approves an od-ignore reason: lines with that exact reason count as kept on purpose. Without approval review
     counts them as open, so an agent cannot quiet review by commenting lines out (S4 #2). Recorded in state.keeps and as a
@@ -16727,14 +16792,8 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
                     tok_by[m_.group(1)].append((rel, i))
                 for m_ in re.finditer(rf"--{re.escape(prefix)}-([a-zA-Z0-9_-]+)\s*:", line[:REVIEW_LINE_CAP]):
                     local_vars.add(m_.group(1))
-                for m_ in re.finditer(r"(?<![\w-])font-family\s*:\s*([^;}{\n\"'`]+(?:[\"'][^\"']*[\"'][^;}{\n]*)*)", line[:REVIEW_LINE_CAP]):
-                    v_ = m_.group(1).strip()
-                    if v_ and not v_.lower().startswith(("var(", "inherit", "initial", "unset", "revert")):
-                        font_findings.append((rel, i, "font", f"font-family: {v_[:60]}"))
-                for m_ in re.finditer(r"(?<![\w-])font-weight\s*:\s*(\d{3}|bold|bolder|normal|lighter)\b", line[:REVIEW_LINE_CAP]):
-                    w_ = {"bold": 700, "normal": 400}.get(m_.group(1), m_.group(1))
-                    if sys_weights and str(w_).isdigit() and int(w_) not in sys_weights:
-                        font_findings.append((rel, i, "weight", f"font-weight: {m_.group(1)}"))
+                font_findings.extend(font_literals(line[:REVIEW_LINE_CAP], rel, i, ext, sys_weights,
+                                                   css_selector_context(lines, i) if ext in (".css", ".scss", ".sass", ".less", ".html", ".vue", ".svelte") else ""))
                 look_tokens += len(re.findall(rf"var\(\s*--{re.escape(prefix)}-(?:color|font|text)-", line))
                 for m_ in RX_HEX.finditer(line[:REVIEW_LINE_CAP]):  # the colors and fonts the code uses, to compare with DESIGN.md
                     if not re.search(r"href=[\"']?$", line[max(0, m_.start() - 7):m_.start()]):
@@ -17003,7 +17062,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
         + ([plural(len(unapproved), "od-ignore line") + " the owner has not approved"] if unapproved else [])
     to_fix = len(findings) + (0 if in_charge else 1) + len(drift_look) + (1 if stale or missing else 0) + len(set(untrue)) \
         + len(guard) + len(invalid) + len(r_errs) + len(broken) + len(open_items) + len(unapproved)
-    result.update({"keptOnPurpose": kept[:500], "ignoredByAgent": unapproved[:500], "ignoredWithoutReason": bare[:500], "guard": guard, "guardNotes": guard_notes,
+    result.update({"keptOnPurpose": [k_ for k_ in kept if k_ not in unapproved][:500], "ignoredByAgent": unapproved[:500], "ignoredWithoutReason": bare[:500], "guard": guard, "guardNotes": guard_notes,
                    "standardNotes": std_notes[:500], "floorKept": floor_kept[:500],
                    "validateErrors": [{"category": i_["category"], "message": i_["message"], "where": i_["where"]} for i_ in invalid[:500]],
                    "toFix": to_fix, "ok": not reasons, "reasons": reasons})
@@ -17043,7 +17102,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
             print("No code yet, so there is nothing to check.")
         elif total:
             print(f"{total} hard-coded value{'s' if total != 1 else ''} skip the tokens: "
-                  + ", ".join(f"{n} {plural_kind(k, n)}" for k, n in sorted(by.items()) if k not in ("standard", "chart", "removed")) + ".")
+                  + ", ".join(f"{n} {plural_kind(k, n)}" for k, n in sorted(by.items()) if k not in ("standard", "chart", "removed", "unknown-token")) + ".")
             if show_all:
                 for f_ in tokf:
                     print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']}")
@@ -17117,8 +17176,9 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
                 k_ = next(x for x in unapproved if x["reason"] == rsn)
                 print(f"  {n_:>4} x  \"{rsn[:70]}\"  (first at {k_['file']}:{k_['line']})")
             print("  Ask the owner. If they agree: engine.py keep \"<the reason>\" --quote \"<their words>\". If not, fix the lines.")
+        kept = [k_ for k_ in kept if k_ not in unapproved]  # only what the owner approved is kept on purpose
         if kept:
-            print(f"{len(kept)} line{'s' if len(kept) != 1 else ''} kept on purpose (od-ignore with a reason; not counted as findings):")
+            print(f"{len(kept)} line{'s' if len(kept) != 1 else ''} kept on purpose (od-ignore with a reason the owner approved):")
             for k_ in kept[:limit]:
                 back = "; ".join(f"{a} ({b})" for a, b in zip(k_.get("removed") or [], k_.get("removedWhat") or []))
                 print(f"  {k_['file']}:{k_['line']}  {k_['reason'][:100]}" + (f"  (matches {back}, removed on purpose: back under this "

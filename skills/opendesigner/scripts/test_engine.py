@@ -797,7 +797,7 @@ class HandoffAndRemovalsSecondReview(unittest.TestCase):
             with contextlib.redirect_stdout(out):                                # a decision that calls for the full note
                 e.main(["--dir", d, "set", "zoom.color", '"broad"', "--set-by", "delegated", "--why", "zoomed in"])
             self.assertEqual(self.note(t), text)                                 # untouched, the added line included
-            self.assertIn("was left as it is; `engine.py handoff yes` rewrites it", out.getvalue())
+            self.assertIn("was left as it is; `engine.py handoff yes --quote \"<their words>\"` rewrites it", out.getvalue())
             # a note from an older engine (the snippet verbatim, markers and all) is left alone too
             with open(e.HANDOFF_SNIPPET, encoding="utf-8") as f:
                 old = f"{e.HANDOFF_START}\n<!-- For the agent adding this note: delete this comment. -->\n{f.read().strip()}\n{e.HANDOFF_END}\n"
@@ -875,6 +875,7 @@ class HandoffAndRemovalsSecondReview(unittest.TestCase):
             os.makedirs(os.path.join(t, "src"))
             with open(os.path.join(t, "src", "mail.css"), "w") as f:
                 f.write(".row { border-bottom: 1px solid var(--ds-color-border-default); } /* od-ignore: email clients need the rule */\n")
+            quiet(e.cmd_keep, d, "email clients need the rule", "yes, email needs it")  # the owner approves the reason (S4 #2)
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
                 e.cmd_review(d, as_json=True)

@@ -757,6 +757,6 @@ Your own decisions first (the newest value per path), then your changes to stand
 | Type | `text-body-md` | `.ds-text-body-md` (a text style class) |
 | Type | `text-label-lg` | `.ds-text-label-lg` (a text style class) |
 | Type | `text-title-md` | `.ds-text-title-md` (a text style class) |
-| Motion | `transition-feedback` | `var(--ds-motion-transition-feedback)` |
+| Motion | `transition-feedback` | `var(--ds-motion-transition-feedback-duration)` and `var(--ds-motion-transition-feedback-easing)` |
 | Motion | `ease-enter` | `var(--ds-motion-easing-enter)` |
 | Motion | `ease-exit` | `var(--ds-motion-easing-exit)` |

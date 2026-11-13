@@ -155,7 +155,7 @@ One question per message here, as everywhere.
 1. `engine.py build`. Validation passes, or each warning has a written reason. For a warning the defaults raise, write the reason yourself; don't ask the person about it.
 2. Check the outputs: `opendesigner/tokens/` (canonical), `opendesigner/build/` (exports), `DESIGN.md` and `PRODUCT.md` at the root, `opendesigner/decisions.md` and `state.json`. Write `opendesigner/RATIONALE.md` for the team from `assets/output/RATIONALE.md`.
 3. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend"). Add coverage in one line (decided, defaulted, not applicable, pending). For the plain voice, point to the preview and the short summary at the top of DESIGN.md, not the rest of the file. For the engineer voice, name the export files they will import.
-4. If the hand-off is not answered yet (`engine.py status` lists it), or decisions.md has no "Commit guard" entry, ask each as in step 7, in its own message, even when the project has no agent files yet: `handoff yes` or `no`, then `guard install` or `no`. Each answer is recorded, so it is asked once.
+4. If the hand-off is not answered yet (`engine.py status` lists it), or decisions.md has no "Commit guard" entry, ask each as in step 7, in its own message, even when the project has no agent files yet, each yes with `--quote`. Each answer is recorded, so it is asked once.
 5. If you recorded feedback, mention it and offer the issue link (`references/improve.md`).
 6. If the log is on: `journey.py log session_end`, then `journey.py report`. The report line and the sharing question follow `rules.md` section 11.
 
