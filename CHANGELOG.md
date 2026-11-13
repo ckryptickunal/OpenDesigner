@@ -12,6 +12,11 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 - **Adapt your system to a site you like** (2026-11-13). `engine.py adapt <measurements.json> --open` puts your system beside the same system with a reference's corners, density, depth and type proportions. Your brand color, fonts and locked values stay yours, values you chose start unticked, and nothing is recorded until you tick what to take.
 - **A ledger for every round of building** (2026-11-13). `engine.py ledger start` lists what a round covers; each item ends done, broken or skipped on purpose, with the reason and who decided. `review --strict` fails while one is open, an agent's waiver needs the owner's words before the round closes, DESIGN.md shows the ledger, and building blocks named in it now fill the coverage check.
 - **Mark example files that break the rules on purpose** (2026-11-13). `engine.py exempt <folder> --why "..."` keeps a demo of mistakes out of review. Review still lists the folder and the reason, so nothing is hidden.
+- **Evals on Gemini** (2026-11-13). `tools/gemini_evals.py` runs the agent eval cases with a Gemini model, through a small sandboxed agent loop, and scores them with the same graders as the Claude runs. `drift` gives a model a finished system and three pages to build, then measures how far the pages strayed from it.
+
+### Changed
+
+- **Fewer ways to drift from a system** (2026-11-13). The skills now say that only the person adds an `od-ignore`, that the log question never replaces what they asked for, which command lists style directions, and that research with no way to read the web stops at a plan instead of writing findings.
 
 ## [0.3.1]: 2026-11-11
 

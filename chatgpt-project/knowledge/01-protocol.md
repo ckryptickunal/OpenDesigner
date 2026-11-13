@@ -2,8 +2,8 @@
 
 ## Binding rules
 They hold in every round, after a context reset and in a new session. `engine.py` is `<skill>/scripts/engine.py`, in this skill's folder.
-1. **Tokens only.** Every colour, size, space, radius, shadow and duration comes from `opendesigner/tokens/` or `opendesigner/build/`. A value the system lacks becomes `engine.py set <path> <value> --why "..."`, never a literal.
-2. **One question per call.** One per message, and one per call of a question tool, even one that takes four. The log question goes alone, first.
+1. **Tokens only.** Every colour, size, space, radius, shadow and duration comes from `opendesigner/tokens/` or `opendesigner/build/`. A value the system lacks becomes `engine.py set <path> <value> --why "..."`, never a literal. Never add `od-ignore` to make `review` pass: an exception is the person's to grant, so ask first.
+2. **One question per call.** One per message, and one per call of a question tool, even one that takes four. The log question is the only question in the first message, on its last line. It never replaces what they asked for: answer or do that first.
 3. **Show every round without being asked:** screenshots at desktop and phone, or an artifact, before and after, with each check and its result. Never only a local link.
 4. **Every implementation is an `engine.py ledger` round that ends with `engine.py review`, then a re-read of DESIGN.md.** Fix what it reports first.
 5. **Owner corrections go to `engine.py feedback "<the rule>" --kind note`.** Said twice, a note is a rule in `opendesigner/RULES.md`.
@@ -69,7 +69,7 @@ Read at the start: `references/rules.md` (how to talk), `references/zoom.md` (th
 Details are in `references/zoom.md`.
 - **Level 0, sketch:** up to 5 questions, one per message, fewer when their words already answer some. Then `engine.py sketch ...` records the answers and builds a complete first version. Show the first result: a plain line on what they got, the overview (`opendesigner/overview.html`), and one clear next step (`zoom.md`, "The first result").
 - **People in a hurry** ("just pick") get the sketch with `--delegated` and no optional questions. People who talk in plain words get fewer questions (`zoom.md`).
-- **Around the levels** (`zoom.md`, "Around the levels"): user research right after the first result (`references/research.md`: one yes, then you run it with web search, a browser or `/last30days`, and `engine.py research add`), the taste poll, the taste index, the project's three directions, and style directions from the option gallery. Never name a style direction without its fit.
+- **Around the levels** (`zoom.md`, "Around the levels"): user research right after the first result (`references/research.md`: one yes, then you run it with web search, a browser or `/last30days`, and `engine.py research add`; with none of them, write the plan and say so, never findings you did not read), the taste poll, the taste index, the project's three directions, and style directions from the option gallery (`engine.py show option-gallery --json`; the `engine.py style` catalogue only when they want more). Never name a style direction without its fit.
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
 - **Skip what a standard settles:** a question marked **Settled by: STD-...** is skipped like a **Planned** one, and an option marked **(breaks STD-...)** is never recommended (`rules.md` section 6).
@@ -1308,7 +1308,7 @@ Look at your own tool list, the person's connectors and the project, without ope
 | `deep-research` | A deep-research skill or agent | A long report across many sources, for a group little is written about |
 | `analytics` | PostHog, Google Analytics, Amplitude or Mixpanel tools or exports | How the product's existing users really behave: devices, screen sizes, languages, dark-mode share. It beats desk research when the product is live |
 
-Pass the ones you have to the plan: `engine.py research plan --tools web-search,browser,last30days`. It prints every missing tool with what it would add. Name the missing ones that would clearly change the result **once**, in the plan message, with how to get them (for `/last30days`, the link above). Then go on with what you have: a missing tool never stops the research.
+Pass the ones you have to the plan: `engine.py research plan --tools web-search,browser,last30days`. It prints every missing tool with what it would add. Name the missing ones that would clearly change the result **once**, in the plan message, with how to get them (for `/last30days`, the link above). Then go on with what you have: a missing tool never stops the research. With no tool that can read the web, write the plan (`research plan`), say plainly that you could not search, and stop there or `research skip`. Never write a finding, a source or a URL you did not open.
 
 With nothing that reads the web, say so in one line and offer two ways on: the person fills in the findings file themselves (`assets/output/research-users.example.json` shows the shape), or they skip it.
 

@@ -37,7 +37,7 @@ To add a case:
 ## Gemini runs
 
 `tools/gemini_evals.py` runs the cases above with a Gemini model (default `gemini-3.1-pro-preview`), to see how another model follows the skills. What differs from a Claude run:
-- **The harness is ours, not Claude Code.** A small loop gives the model the tools the case allows, shaped like Claude Code's (Read, Glob, Grep, Bash, Write, Edit, Skill, AskUserQuestion), lists the skills the way Claude Code does, and runs the plugin's start-of-session hook. A low score can be the loop's fault, so read the transcript before you blame the skill.
+- **The agent loop is ours, not Claude Code.** A small loop gives the model the tools the case allows, shaped like Claude Code's (Read, Glob, Grep, Bash, Write, Edit, Skill, AskUserQuestion), lists the skills the way Claude Code does, and runs the plugin's start-of-session hook. A low score can be the loop's fault, so read the transcript before you blame the skill.
 - **Bash runs in a macOS sandbox:** no network, writes only inside the run's folder, no `.env` or other credentials.
 - **Only the "with" arm runs** (OpenDesigner loaded). Compare its score with the Claude summary's `score` column, not with the delta.
 - **The key** comes from `GEMINI_API_KEY` in `.env` and is never printed or saved. One call at a time, a backoff on 429, and a cost ceiling per run (`--max-cost-usd`, default $20) checked before every call.
