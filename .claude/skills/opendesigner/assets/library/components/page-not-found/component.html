@@ -1,0 +1,65 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-page-not-found { box-sizing: border-box; inline-size: 100%; max-inline-size: 45rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-page-not-found *, .odl-page-not-found *::before, .odl-page-not-found *::after { box-sizing: border-box; }
+.odl-page-not-found svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-page-not-found h2, .odl-page-not-found h3, .odl-page-not-found p, .odl-page-not-found ul, .odl-page-not-found ol, .odl-page-not-found dl, .odl-page-not-found dd { margin: 0; }
+.odl-page-not-found h2, .odl-page-not-found h3 { text-wrap: balance; }
+.odl-page-not-found .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-page-not-found .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-page-not-found .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-page-not-found .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-page-not-found .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-page-not-found .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-page-not-found .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-page-not-found .odl-btn[disabled], .odl-page-not-found .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-page-not-found button:focus-visible, .odl-page-not-found a:focus-visible, .odl-page-not-found input:focus-visible, .odl-page-not-found textarea:focus-visible, .odl-page-not-found [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-page-not-found .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-page-not-found { display: grid; justify-items: center; align-content: center; min-block-size: 32rem; padding: var(--ds-space-section-md) var(--ds-space-inset-xl); text-align: center;
+  background: var(--ds-color-surface-base); border-radius: var(--ds-radius-container); }
+.odl-page-not-found .odl-art { display: grid; place-items: center; inline-size: calc(var(--ds-size-control-lg) * 1.5); aspect-ratio: 1; margin-block-end: var(--ds-space-stack-lg);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-sunken); color: var(--ds-color-icon-default); }
+.odl-page-not-found .odl-art svg { inline-size: var(--ds-size-icon-lg); block-size: var(--ds-size-icon-lg); stroke-width: var(--ds-icon-stroke-sm); }
+.odl-page-not-found .odl-code { margin-block-end: var(--ds-space-stack-xs); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
+.odl-page-not-found h2 { font: var(--ds-text-headline-sm); font-weight: var(--ds-font-weight-heading); }
+.odl-page-not-found .odl-lead { max-inline-size: 44ch; margin-block-start: var(--ds-space-stack-sm); color: var(--ds-color-text-secondary); }
+.odl-page-not-found .odl-acts { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--ds-space-inline-sm); margin-block-start: var(--ds-space-stack-xl); }
+.odl-page-not-found .odl-box { inline-size: 100%; max-inline-size: 30rem; margin-block-start: var(--ds-space-stack-xl); padding: var(--ds-space-inset-lg); text-align: start;
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+.odl-page-not-found .odl-box + .odl-acts { margin-block-start: var(--ds-space-stack-lg); }
+.odl-page-not-found .odl-box h3 { font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); }
+.odl-page-not-found .odl-box p { color: var(--ds-color-text-secondary); }
+.odl-page-not-found .odl-live { min-block-size: 1lh; margin-block-start: var(--ds-space-stack-md); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+@container (max-width: 30rem) {
+  .odl-page-not-found { padding: var(--ds-space-section-sm) var(--ds-space-inset-lg); }
+  .odl-page-not-found .odl-acts { flex-direction: column; align-self: stretch; inline-size: 100%; }
+  .odl-page-not-found .odl-acts > * { inline-size: 100%; white-space: normal; text-align: center; }
+}
+
+.odl-page-not-found .odl-find { display: flex; gap: var(--ds-space-inline-sm); inline-size: 100%; max-inline-size: 28rem; margin-block-start: var(--ds-space-stack-xl); }
+.odl-page-not-found .odl-field { position: relative; flex: 1; min-inline-size: 0; }
+.odl-page-not-found .odl-field svg { position: absolute; inset-inline-start: var(--ds-space-inset-sm); inset-block-start: 50%; translate: 0 -50%; color: var(--ds-color-icon-subtle); pointer-events: none; }
+.odl-page-not-found input { inline-size: 100%; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-sm) 0 calc(var(--ds-space-inset-sm) * 2 + var(--ds-size-icon-sm));
+  border: var(--ds-border-width-default) solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-field); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
+.odl-page-not-found input::placeholder { color: var(--ds-color-text-tertiary); }
+.odl-page-not-found .odl-links { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--ds-space-inline-xs) var(--ds-space-inline-md); margin-block-start: var(--ds-space-stack-lg); padding: 0; list-style: none; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-page-not-found .odl-links li { display: flex; align-items: center; }
+.odl-page-not-found .odl-links a { display: inline-flex; align-items: center; min-block-size: var(--ds-size-target-min); color: var(--ds-color-text-link); }
+@container (max-width: 30rem) { .odl-page-not-found .odl-find { flex-direction: column; } }
+@media (prefers-reduced-motion: reduce) { .odl-page-not-found, .odl-page-not-found *, .odl-page-not-found *::before, .odl-page-not-found *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-page-not-found" aria-label="Page not found">
+  <span class="odl-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m13.5 8.5-5 5"/><path d="m8.5 8.5 5 5"/><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
+  <p class="odl-code" data-od-slot="code">Error 404</p>
+  <h2 data-od-slot="title">We can't find that page</h2>
+  <p class="odl-lead" data-od-slot="message">The link may be old, or the page may have moved. Search for it, or start again from the home page.</p>
+  <form class="odl-find" role="search" action="#">
+    <label class="odl-field"><span class="odl-sr">Search Larkspur</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="search" name="q" placeholder="Search pages, people and files" autocomplete="off"></label>
+    <button type="submit" class="odl-btn is-quiet" data-od-action="search">Search</button>
+  </form>
+  <div class="odl-acts"><a class="odl-btn" href="/" data-od-action="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Go to home</a><button type="button" class="odl-btn is-text" data-od-action="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Go back</button></div>
+  <ul class="odl-links" aria-label="Popular pages"><li>Popular:</li><li><a href="#">Invoices</a></li><li><a href="#">Reports</a></li><li><a href="#">Help center</a></li></ul>
+</section>

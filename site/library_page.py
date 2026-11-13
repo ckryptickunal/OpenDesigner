@@ -19,9 +19,9 @@ STATIC = ROOT / "site/static"
 LOOKS = json.loads((ROOT / "site/library-looks.json").read_text())
 esc = html.escape
 TYPES = {"data": "Data", "chart": "Charts", "form": "Forms", "overlay": "Overlays", "navigation": "Navigation", "feedback": "Feedback",
-         "ai": "AI", "commerce": "Commerce", "content": "Content"}
+         "states": "States", "ai": "AI", "commerce": "Commerce", "content": "Content"}
 BLURB = {"data": "Tables, feeds, records", "chart": "Meters, bars, trends", "form": "Inputs and pickers",
-         "overlay": "Dialogs, drawers, menus", "navigation": "Menus, tabs, steps", "feedback": "Toasts and banners",
+         "overlay": "Dialogs, drawers, menus", "navigation": "Menus, tabs, steps", "feedback": "Toasts and banners", "states": "Empty, loading, errors",
          "ai": "Composers and answers", "commerce": "Plans and checkout", "content": "Media and profiles"}  # one line in a tile
 INDUSTRY = {"saas": "SaaS", "crm": "CRM", "devtools": "Dev tools", "money": "Personal finance", "food": "Food and delivery", "home": "Smart home"}
 STYLES = ["quiet", "dense", "technical", "friendly", "editorial"]
@@ -30,8 +30,11 @@ INDUSTRIES = ["finance", "saas", "devtools", "security", "crm", "logistics", "pr
 CONSUMER = {"retail", "health", "education", "social", "media", "travel", "food", "fitness", "events", "home", "money", "games"}
 VIEW0 = {"narrow": "phone", "medium": "tablet", "wide": "desktop"}  # the view a part opens on, on its card and its page: the one it is designed for
 FRAME_W = {"narrow": 400, "medium": 560, "wide": 720}  # card previews: the parts reflow, so a card shows them whole, at a readable size
-# The bento: each aisle's cell span (columns x rows) on a 4-column grid, in order; together they fill 4 x 4.
-BENTO = [(t, 1, 1) for t in ("data", "chart", "form", "overlay", "navigation", "feedback", "ai", "commerce", "content", "looks")]  # ten equal tiles
+# The bento: each aisle's cell span (columns x rows) on the 5-column grid in library.css, in order; together they fill 5 x 3.
+# States (empty, loading and error screens) is the large tile; Looks is two wide (one wide on a phone). The grid packs dense.
+BENTO = ([(t, 1, 1) for t in ("data", "chart", "form", "overlay", "navigation", "feedback")] + [("states", 2, 2)]
+         + [(t, 1, 1) for t in ("ai", "commerce", "content")] + [("looks", 2, 1)])
+AISLE_PICK = {"states": ("skeleton-card", "empty-all-done")}  # a tile that should show one loading and one empty part
 BAG = ('<svg class="i-bag" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8Z" fill="none" stroke="currentColor" '
        'stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>')
 PLUS = '<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>'
@@ -264,8 +267,8 @@ def shop(b, cs):
             continue
         if not by[t]:
             continue
-        pick = next((c for c in by[t] if (c["width"] == "wide") == (w == 2)), by[t][0])
-        more = next((c for c in by[t] if c is not pick and c["width"] == "wide"), None) if h == 2 else None  # a tall tile shows two
+        pick = next((c for c in by[t] if c["slug"] == AISLE_PICK.get(t, ("",))[0]), None) or next((c for c in by[t] if (c["width"] == "wide") == (w == 2)), by[t][0])
+        more = (next((c for c in by[t] if c["slug"] == AISLE_PICK.get(t, ("", ""))[1]), None) or next((c for c in by[t] if c is not pick and c["width"] == "wide"), None)) if h == 2 else None  # a tall tile shows two
         tiles.append(f'<a class="aisle c{w} r{h}" href="#shelf" data-aisle="{t}"><span class="aisle-prev">{live(pick)}{live(more) if more else ""}</span>'
                      f'<span class="aisle-txt"><strong>{TYPES[t]}</strong><span>{BLURB[t]} · {len(by[t])}</span></span></a>')
     chips = (f'<button type="button" class="filter is-on" data-type="all" aria-pressed="true">All <span class="num">{n}</span></button>'

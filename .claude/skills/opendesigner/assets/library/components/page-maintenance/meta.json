@@ -1,0 +1,101 @@
+{
+  "name": "Maintenance page",
+  "summary": "A planned-downtime page that says what is paused, that nothing is lost, and when it will be back, in the person's time zone.",
+  "use": "during planned maintenance, when part or all of the product is paused",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "maintenance",
+    "downtime",
+    "status",
+    "scheduled",
+    "back soon"
+  ],
+  "states": [
+    "in maintenance",
+    "hover",
+    "focus"
+  ],
+  "source": null,
+  "a11y": "The return time is a time element with a machine-readable datetime; the status link and email option are real links and buttons.",
+  "width": "wide",
+  "live_region": "none",
+  "notes": "Show the return time in the person's own time zone and keep the minutes left current; Email me when it's back is an action for your app to wire.",
+  "spec": {
+    "use_when": [
+      "planned work pauses the product or one area of it",
+      "a deploy needs the app read-only for a known time"
+    ],
+    "avoid_when": [
+      "an unplanned outage with no known end: use page-error with a status link",
+      "only a small feature is paused: use a warning banner (page-banners)"
+    ],
+    "keyboard": [
+      "Tab moves through the links and buttons in reading order",
+      "Enter follows a link; Enter or Space presses a button"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 48
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 176
+        },
+        "until": {
+          "type": "string",
+          "maxLength": 24
+        },
+        "detail": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "title",
+        "message",
+        "until",
+        "detail"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "Not applicable: this state screen shows no list of records."
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "Not applicable: this page stands in for content; it isn't loaded data itself."
+      },
+      "error": {
+        "status": "shown",
+        "how": "The part is itself an error or system state, written in plain words with a next step.",
+        "evidence": "class=\"odl-lead\""
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "No control here is ever disabled; each one always does something."
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Actions stack full width under 30rem; the panel caps its width.",
+        "evidence": "@container"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}

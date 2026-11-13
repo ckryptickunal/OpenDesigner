@@ -1,0 +1,67 @@
+<style>
+.odl-skeleton-media { box-sizing: border-box; inline-size: 100%; max-inline-size: 40rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-skeleton-media *, .odl-skeleton-media *::before, .odl-skeleton-media *::after { box-sizing: border-box; }
+.odl-skeleton-media svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-skeleton-media h2, .odl-skeleton-media h3, .odl-skeleton-media p, .odl-skeleton-media ul, .odl-skeleton-media ol, .odl-skeleton-media dl, .odl-skeleton-media dd { margin: 0; }
+.odl-skeleton-media h2, .odl-skeleton-media h3 { text-wrap: balance; }
+.odl-skeleton-media .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-skeleton-media .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-skeleton-media .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-skeleton-media .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-skeleton-media .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-skeleton-media .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-skeleton-media .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-skeleton-media .odl-btn[disabled], .odl-skeleton-media .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-skeleton-media button:focus-visible, .odl-skeleton-media a:focus-visible, .odl-skeleton-media input:focus-visible, .odl-skeleton-media textarea:focus-visible, .odl-skeleton-media [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-skeleton-media .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-skeleton-media.odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-skeleton-media.odl-card { padding: var(--ds-space-inset-lg); } }
+
+.odl-skeleton-media .odl-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-inline-sm); margin-block-end: var(--ds-space-stack-md); }
+.odl-skeleton-media .odl-bar h2 { font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading); }
+.odl-skeleton-media .odl-demo { min-block-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); }
+.odl-skeleton-media .odl-one { display: block; white-space: nowrap; }
+.odl-skeleton-media .odl-one > .odl-t { display: inline-block; max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis; vertical-align: top; }
+.odl-skeleton-media [aria-busy="true"] .odl-t { color: transparent; border-radius: var(--ds-state-skeleton-radius, var(--ds-radius-detail)); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.odl-skeleton-media [aria-busy="true"] .odl-t, .odl-skeleton-media [aria-busy="true"] .odl-pic, .odl-skeleton-media [aria-busy="true"] .odl-ctl.odl-ctl {
+  background: linear-gradient(90deg, var(--ds-state-skeleton-base, var(--ds-color-bg-neutral-subtle)) 30%, var(--ds-state-skeleton-highlight, var(--ds-color-surface-raised)) 50%, var(--ds-state-skeleton-base, var(--ds-color-bg-neutral-subtle)) 70%) 0 0 / 300% 100%;
+  animation: odl-sweep var(--ds-state-skeleton-pulse, calc(var(--ds-motion-duration-extra) * 2.5)) var(--ds-motion-easing-linear) infinite; }
+.odl-skeleton-media [aria-busy="true"] .odl-pic > *, .odl-skeleton-media [aria-busy="true"] .odl-ctl > * { visibility: hidden; }
+.odl-skeleton-media [aria-busy="true"] .odl-ctl.odl-ctl { border-color: transparent; color: transparent; }
+@keyframes odl-sweep { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
+.odl-skeleton-media .odl-body { display: grid; gap: var(--ds-space-stack-xs); }
+.odl-skeleton-media .odl-pic { position: relative; display: block; aspect-ratio: 16 / 9; margin-block-end: var(--ds-space-stack-sm); overflow: hidden; border-radius: var(--ds-radius-nested); background: var(--ds-color-surface-sunken); }
+.odl-skeleton-media .odl-pic img { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
+.odl-skeleton-media .odl-dur { position: absolute; inset-block-end: var(--ds-space-inset-sm); inset-inline-end: var(--ds-space-inset-sm); padding: 0 var(--ds-space-inset-xs); border-radius: var(--ds-radius-detail);
+  background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; }
+.odl-skeleton-media .odl-body h3 { font: var(--ds-text-title-sm); font-weight: var(--ds-font-weight-heading); }
+.odl-skeleton-media .odl-sub { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+@media (prefers-reduced-motion: reduce) { .odl-skeleton-media, .odl-skeleton-media *, .odl-skeleton-media *::before, .odl-skeleton-media *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-skeleton-media odl-card" aria-label="Lesson video">
+  <div class="odl-bar"><h2>Lesson 3</h2><button type="button" class="odl-btn is-quiet odl-demo" data-odl-demo>Show loaded</button></div><p class="odl-live odl-sr" role="status" data-odl-busy="Loading the video" data-odl-done="Video loaded">Loading the video</p>
+  <div class="odl-body" aria-busy="true">
+    <span class="odl-pic"><img src="https://images.unsplash.com/photo-1578429827733-272eb6d7972e?w=1280&h=720&fit=crop&auto=format&q=70" alt="Empty road through bare trees in fog" width="640" height="360" loading="lazy" decoding="async" data-od-media="poster"><span class="odl-dur">12:48</span></span>
+    <h3 class="odl-one"><span class="odl-t" data-od-slot="title">Shooting in fog</span></h3>
+    <p class="odl-one odl-sub"><span class="odl-t" data-od-slot="detail">Field photography · 12 min · Lesson 3 of 9</span></p>
+  </div>
+</section>
+<script>
+document.querySelectorAll(".odl-skeleton-media").forEach(function (root) {
+  if (root.hasAttribute("data-odl-wired")) return;
+  root.setAttribute("data-odl-wired", "");
+  var body = root.querySelector(".odl-body"), live = root.querySelector(".odl-live"), demo = root.querySelector("[data-odl-demo]");
+  function set(busy) {
+    body.setAttribute("aria-busy", busy ? "true" : "false");
+    body.toggleAttribute("inert", busy);
+    live.textContent = busy ? live.getAttribute("data-odl-busy") : live.getAttribute("data-odl-done");
+    if (demo) demo.textContent = busy ? "Show loaded" : "Show loading";
+  }
+  if (demo) demo.addEventListener("click", function () { set(body.getAttribute("aria-busy") !== "true"); });
+  set(body.getAttribute("aria-busy") === "true");
+});
+</script>

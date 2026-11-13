@@ -1,0 +1,105 @@
+{
+  "name": "Something went wrong page",
+  "summary": "A 500 page that says the problem is on our side, that the person's work is safe, and gives a retry and a reference code for support.",
+  "use": "when the server or a service fails and the page can't load",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "500",
+    "server error",
+    "retry",
+    "reference code",
+    "error page"
+  ],
+  "states": [
+    "error",
+    "retrying",
+    "copied",
+    "hover",
+    "focus"
+  ],
+  "source": null,
+  "a11y": "A polite status line under the buttons says when a retry starts, how it ended and when the code is copied; the reference code is plain text people can select.",
+  "width": "wide",
+  "live_region": "polite",
+  "spec": {
+    "use_when": [
+      "the server returned an error page could not recover from",
+      "a page-level request failed twice"
+    ],
+    "avoid_when": [
+      "one part of the page failed: show an error banner in that part (page-banners)",
+      "there is no connection: use page-offline",
+      "a planned outage: use page-maintenance"
+    ],
+    "keyboard": [
+      "Tab reaches Copy code, Try again and Contact support",
+      "Enter or Space presses a button; focus stays on Try again while it retries"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "maxLength": 24
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 48
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 176
+        },
+        "reference": {
+          "type": "string",
+          "maxLength": 24
+        }
+      },
+      "required": [
+        "code",
+        "title",
+        "message",
+        "reference"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "Not applicable: this state screen shows no list of records."
+      },
+      "loading": {
+        "status": "shown",
+        "how": "Try again shows a spinner and is aria-disabled while it retries.",
+        "evidence": "is-busy"
+      },
+      "error": {
+        "status": "shown",
+        "how": "The part is itself an error or system state, written in plain words with a next step.",
+        "evidence": "class=\"odl-lead\""
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "Try again is aria-disabled during a retry, so it can't be pressed twice.",
+        "evidence": "aria-disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Actions stack full width under 30rem; the panel caps its width.",
+        "evidence": "@container"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}
