@@ -23,6 +23,7 @@
   "a11y": "One heading says what happened; the search is a labelled form; Go home is a real link and Go back a button, both reachable by Tab.",
   "width": "wide",
   "live_region": "none",
+  "notes": "Search and Go back are actions for your app to wire (your search route, history back); the part only marks them.",
   "spec": {
     "use_when": [
       "a URL matches no page or record",
@@ -66,7 +67,7 @@
       },
       "loading": {
         "status": "not_built",
-        "how": "Not applicable: shown instead of content, after loading has failed or been refused."
+        "how": "Not applicable: this page stands in for content; it isn't loaded data itself."
       },
       "error": {
         "status": "shown",

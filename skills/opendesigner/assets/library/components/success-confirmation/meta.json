@@ -20,9 +20,10 @@
     "focus"
   ],
   "source": null,
-  "a11y": "The heading sits in a status region and takes focus when the screen appears, so it is read first; details are a description list.",
+  "a11y": "When this screen replaces the form, move focus to its heading (it has tabindex -1 for that), so it is read first; the part never moves focus on its own. Details are a description list.",
   "width": "narrow",
-  "live_region": "polite",
+  "live_region": "none",
+  "notes": "Move focus to the heading when this screen replaces the form.",
   "spec": {
     "use_when": [
       "a multi-step flow or important form has finished",

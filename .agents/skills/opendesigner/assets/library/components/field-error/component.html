@@ -24,7 +24,7 @@
 .odl-field-error form { display: grid; gap: var(--ds-space-stack-lg); }
 .odl-field-error h2 { font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading); }
 .odl-field-error .odl-field { display: grid; gap: var(--ds-state-error-gap, var(--ds-space-stack-xs)); }
-.odl-field-error .odl-field label { font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); }
+.odl-field-error .odl-lab { display: grid; gap: var(--ds-state-error-gap, var(--ds-space-stack-xs)); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); }
 .odl-field-error input { inline-size: 100%; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-sm);
   border: var(--ds-border-width-default) solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-field); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
 .odl-field-error .is-bad input { border-color: var(--ds-state-error-border, var(--ds-color-border-danger)); border-width: var(--ds-border-width-emphasis); }
@@ -39,10 +39,10 @@
 </style>
 <form class="odl-field-error odl-card" action="#" novalidate aria-label="Invite a teammate">
   <h2>Invite a teammate</h2>
-  <div class="odl-field"><label for="odl-fe-email">Work email</label>
-    <input id="odl-fe-email" type="email" name="email" value="maya@larkspur" autocomplete="email" aria-describedby="odl-fe-msg odl-fe-hint" data-od-slot="value">
-    <p class="odl-msg" id="odl-fe-msg" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span class="odl-msg-t" data-od-slot="error"></span></p>
-    <p class="odl-hint" id="odl-fe-hint">We'll send the invite here. It works for 7 days.</p></div>
+  <div class="odl-field is-bad"><label class="odl-lab"><span>Work email</span>
+    <input type="email" name="email" value="maya@larkspur" autocomplete="email" aria-invalid="true" data-od-slot="value"></label>
+    <p class="odl-msg" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span class="odl-msg-t" data-od-slot="error">Add the part after the @ with a dot, like name@company.example.</span></p>
+    <p class="odl-hint">We'll send the invite here. It works for 7 days.</p></div>
   <button type="submit" class="odl-btn" data-od-action="invite" data-od-effect="change"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>Send invite</button>
   <p class="odl-done" role="status"></p>
 </form>
@@ -60,11 +60,13 @@ document.querySelectorAll(".odl-field-error").forEach(function (root) {
   function show(text) { field.classList.toggle("is-bad", !!text); input.setAttribute("aria-invalid", text ? "true" : "false"); msg.textContent = text; }
   input.addEventListener("input", function () { if (field.classList.contains("is-bad")) show(check()); });  // clears as soon as it's right; never shouts while typing
   input.addEventListener("blur", function () { if (input.value.trim()) show(check()); });
+  var n = Math.random().toString(36).slice(2, 8);  // its own ids, so two copies on one page each describe their own field
+  field.querySelector(".odl-msg").id = "odl-fe-msg-" + n; field.querySelector(".odl-hint").id = "odl-fe-hint-" + n;
+  input.setAttribute("aria-describedby", "odl-fe-msg-" + n + " odl-fe-hint-" + n);
   root.addEventListener("submit", function (e) {
     e.preventDefault();
     var err = check(); show(err);
     if (err) { input.focus(); done.textContent = ""; } else done.textContent = "Invite sent to " + input.value.trim() + ".";
   });
-  show(check());
 });
 </script>

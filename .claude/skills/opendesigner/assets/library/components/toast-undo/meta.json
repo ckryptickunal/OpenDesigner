@@ -22,7 +22,7 @@
     "focus"
   ],
   "source": null,
-  "a11y": "The toast is a polite status region; after Archive, focus moves to Undo so keyboard users can reach it, and returns to the restored row or the list after Undo or close. There is no timer, so nobody loses the chance to undo.",
+  "a11y": "A polite live region that is always on the page reads what was archived; after Archive, focus moves to Undo so keyboard users can reach it, and returns to the restored row or the list after Undo or close. Escape closes the toast. There is no timer, so nobody loses the chance to undo.",
   "width": "medium",
   "live_region": "polite",
   "spec": {

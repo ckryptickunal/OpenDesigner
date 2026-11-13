@@ -130,7 +130,7 @@ class StatesKit(unittest.TestCase):
         for c in self.kit:
             html = (L.LIB / c["slug"] / "component.html").read_text()
             if c.get("live_region", "none") != "none":
-                self.assertTrue(re.search(r'role="(status|alert|alertdialog)"|aria-live=', html), c["slug"])
+                self.assertTrue(re.search(r'role="(status|alert)"|aria-live=', html), c["slug"])
 
     def test_reduced_motion(self):
         for c in self.kit:

@@ -23,6 +23,7 @@
   "a11y": "The return time is a time element with a machine-readable datetime; the status link and email option are real links and buttons.",
   "width": "wide",
   "live_region": "none",
+  "notes": "Show the return time in the person's own time zone and keep the minutes left current; Email me when it's back is an action for your app to wire.",
   "spec": {
     "use_when": [
       "planned work pauses the product or one area of it",
@@ -53,7 +54,7 @@
         },
         "detail": {
           "type": "string",
-          "maxLength": 80
+          "maxLength": 64
         }
       },
       "required": [
@@ -70,7 +71,7 @@
       },
       "loading": {
         "status": "not_built",
-        "how": "Not applicable: shown instead of content, after loading has failed or been refused."
+        "how": "Not applicable: this page stands in for content; it isn't loaded data itself."
       },
       "error": {
         "status": "shown",

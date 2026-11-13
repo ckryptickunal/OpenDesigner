@@ -20,9 +20,10 @@
     "focus"
   ],
   "source": null,
-  "a11y": "The result count is a polite status, so it is read when the search runs; each way to widen the search is a real button.",
+  "a11y": "A polite status repeats the outcome, so it is read when a search runs; each way to widen the search is a real button for your app to wire.",
   "width": "medium",
   "live_region": "polite",
+  "notes": "The three ways to widen the search are actions for your app to wire; write them from the search that ran (a spelling fix, a wider folder, any date).",
   "tokens_planned": {
     "--ds-state-empty-gap": "--ds-space-stack-md",
     "--ds-state-empty-measure": "--ds-layout-measure-lead",
@@ -64,7 +65,7 @@
       },
       "loading": {
         "status": "not_built",
-        "how": "Not applicable: shown instead of content, after loading has failed or been refused."
+        "how": "Not applicable: shown after the data has loaded and come back empty; while loading, show a skeleton."
       },
       "error": {
         "status": "not_built",

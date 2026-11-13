@@ -53,7 +53,7 @@ The inline spinner waits about a second before it shows, so a quick answer never
 
 {{figure:states-skeleton}}
 
-The five skeleton parts ([text](/library/skeleton-text/), [card](/library/skeleton-card/), [list](/library/skeleton-list/), [table](/library/skeleton-table/) and [media](/library/skeleton-media/)) are the loaded layout itself, greyed out. Each line keeps its font and line height and stays on one line, and each picture keeps its frame. Measured at 1440 and 375 px wide, none of the five moves by a single pixel when its data arrives.
+The five skeleton parts ([text](/library/skeleton-text/), [card](/library/skeleton-card/), [list](/library/skeleton-list/), [table](/library/skeleton-table/) and [media](/library/skeleton-media/)) are the loaded layout itself, greyed out. Each line keeps its font and line height and stays on one line, and each picture keeps its frame. Each was measured in a browser at 1440 and 375 px wide, and none of the five moved by a single pixel when its data arrived. While your data loads, fill the part with placeholder text of a typical length. Each line is held to one line, so the real text can be longer or shorter without changing the height.
 
 While loading, the area is marked busy for screen readers and can't be tabbed into. A short status says when it starts and when it's done. With reduced motion turned on, the grey bars stay still instead of shimmering.
 
@@ -73,5 +73,5 @@ While loading, the area is marked busy for screen readers and can't be tabbed in
 | [Success confirmation](/library/success-confirmation/) | The end of a task people want proof of: what happened, the details to keep, and what happens next |
 
 :::dev
-Each part's `meta.json` lists when to use it and when not, its keyboard behaviour and how it handles six edge cases. Those are empty, loading, error, disabled, overflow and long text, plus a missing image. A `fixture.json` beside it holds its sample data. `python3 skills/opendesigner/scripts/library.py list --type states` lists all 22. Where a system has the `--ds-state-*` tokens, the parts use them; every use falls back to a token every system has, and `library.py check` enforces that.
+Each part's `meta.json` lists when to use it and when not, its keyboard behaviour and how it handles seven edge cases: empty, loading, error, disabled, overflow, long text and a missing image. A `fixture.json` beside it holds its sample data. `python3 skills/opendesigner/scripts/library.py list --type states` lists all 22. Where a system has the `--ds-state-*` tokens, the parts use them; every use falls back to a token every system has, and `library.py check` enforces that.
 :::

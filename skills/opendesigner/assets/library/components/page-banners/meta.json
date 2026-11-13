@@ -87,9 +87,8 @@
     },
     "edge": {
       "empty": {
-        "status": "handled",
-        "how": "With no notices, render nothing: the region has no frame of its own.",
-        "evidence": "display: grid"
+        "status": "not_built",
+        "how": "With no notices, render no banner: the region has no frame of its own, so nothing shows."
       },
       "loading": {
         "status": "not_built",

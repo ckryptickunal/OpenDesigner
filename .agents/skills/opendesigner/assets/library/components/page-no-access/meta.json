@@ -71,7 +71,7 @@
       },
       "loading": {
         "status": "not_built",
-        "how": "Not applicable: shown instead of content, after loading has failed or been refused."
+        "how": "Not applicable: this page stands in for content; it isn't loaded data itself."
       },
       "error": {
         "status": "shown",

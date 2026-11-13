@@ -41,7 +41,7 @@
 @media (prefers-reduced-motion: reduce) { .odl-skeleton-text, .odl-skeleton-text *, .odl-skeleton-text *::before, .odl-skeleton-text *::after { transition: none !important; animation: none !important; } }
 </style>
 <article class="odl-skeleton-text odl-card">
-  <div class="odl-bar"><h2>Help center</h2><button type="button" class="odl-btn is-quiet odl-demo" data-odl-demo aria-pressed="false">Show loaded</button></div><p class="odl-live odl-sr" role="status" data-odl-busy="Loading the article" data-odl-done="Article loaded">Loading the article</p>
+  <div class="odl-bar"><h2>Help center</h2><button type="button" class="odl-btn is-quiet odl-demo" data-odl-demo>Show loaded</button></div><p class="odl-live odl-sr" role="status" data-odl-busy="Loading the article" data-odl-done="Article loaded">Loading the article</p>
   <div class="odl-body" aria-busy="true">
     <h3 class="odl-one"><span class="odl-t" data-od-slot="title">Set up approval rules</span></h3>
     <p class="odl-by odl-one"><span class="odl-t" data-od-slot="byline">Updated Nov 10 · 4 minute read</span></p>
@@ -58,7 +58,7 @@ document.querySelectorAll(".odl-skeleton-text").forEach(function (root) {
     body.setAttribute("aria-busy", busy ? "true" : "false");
     body.toggleAttribute("inert", busy);
     live.textContent = busy ? live.getAttribute("data-odl-busy") : live.getAttribute("data-odl-done");
-    if (demo) { demo.setAttribute("aria-pressed", busy ? "false" : "true"); demo.textContent = busy ? "Show loaded" : "Show loading"; }
+    if (demo) demo.textContent = busy ? "Show loaded" : "Show loading";
   }
   if (demo) demo.addEventListener("click", function () { set(body.getAttribute("aria-busy") !== "true"); });
   set(body.getAttribute("aria-busy") === "true");

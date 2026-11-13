@@ -43,7 +43,7 @@
 @media (prefers-reduced-motion: reduce) { .odl-skeleton-media, .odl-skeleton-media *, .odl-skeleton-media *::before, .odl-skeleton-media *::after { transition: none !important; animation: none !important; } }
 </style>
 <section class="odl-skeleton-media odl-card" aria-label="Lesson video">
-  <div class="odl-bar"><h2>Lesson 3</h2><button type="button" class="odl-btn is-quiet odl-demo" data-odl-demo aria-pressed="false">Show loaded</button></div><p class="odl-live odl-sr" role="status" data-odl-busy="Loading the video" data-odl-done="Video loaded">Loading the video</p>
+  <div class="odl-bar"><h2>Lesson 3</h2><button type="button" class="odl-btn is-quiet odl-demo" data-odl-demo>Show loaded</button></div><p class="odl-live odl-sr" role="status" data-odl-busy="Loading the video" data-odl-done="Video loaded">Loading the video</p>
   <div class="odl-body" aria-busy="true">
     <span class="odl-pic"><img src="https://images.unsplash.com/photo-1578429827733-272eb6d7972e?w=1280&h=720&fit=crop&auto=format&q=70" alt="Empty road through bare trees in fog" width="640" height="360" loading="lazy" decoding="async" data-od-media="poster"><span class="odl-dur">12:48</span></span>
     <h3 class="odl-one"><span class="odl-t" data-od-slot="title">Shooting in fog</span></h3>
@@ -59,7 +59,7 @@ document.querySelectorAll(".odl-skeleton-media").forEach(function (root) {
     body.setAttribute("aria-busy", busy ? "true" : "false");
     body.toggleAttribute("inert", busy);
     live.textContent = busy ? live.getAttribute("data-odl-busy") : live.getAttribute("data-odl-done");
-    if (demo) { demo.setAttribute("aria-pressed", busy ? "false" : "true"); demo.textContent = busy ? "Show loaded" : "Show loading"; }
+    if (demo) demo.textContent = busy ? "Show loaded" : "Show loading";
   }
   if (demo) demo.addEventListener("click", function () { set(body.getAttribute("aria-busy") !== "true"); });
   set(body.getAttribute("aria-busy") === "true");

@@ -22,7 +22,7 @@
     "focus"
   ],
   "source": null,
-  "a11y": "The input is aria-invalid while wrong and described by the message; the message is a polite live region and is checked on leaving the field and on submit, not on every key; on a failed submit, focus moves to the field.",
+  "a11y": "The label wraps the input; the input is aria-invalid while wrong and described by the message and the hint (the script gives each copy its own ids). The message is a polite live region, checked on leaving the field and on submit, never on every key, and it clears as soon as the value is right; on a failed submit, focus moves to the field.",
   "width": "narrow",
   "live_region": "polite",
   "tokens_planned": {
@@ -51,7 +51,7 @@
         },
         "error": {
           "type": "string",
-          "maxLength": 24
+          "maxLength": 96
         }
       },
       "required": [

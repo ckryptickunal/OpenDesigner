@@ -85,7 +85,7 @@
       },
       "loading": {
         "status": "not_built",
-        "how": "Not applicable: shown instead of content, after loading has failed or been refused."
+        "how": "Not applicable: shown after the data has loaded and come back empty; while loading, show a skeleton."
       },
       "error": {
         "status": "not_built",

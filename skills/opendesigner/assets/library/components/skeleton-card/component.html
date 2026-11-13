@@ -40,7 +40,7 @@
 @media (prefers-reduced-motion: reduce) { .odl-skeleton-card, .odl-skeleton-card *, .odl-skeleton-card *::before, .odl-skeleton-card *::after { transition: none !important; animation: none !important; } }
 </style>
 <section class="odl-skeleton-card" aria-label="Stays">
-  <div class="odl-bar"><h2>Stays this weekend</h2><button type="button" class="odl-btn is-quiet odl-demo" data-odl-demo aria-pressed="false">Show loaded</button></div><p class="odl-live odl-sr" role="status" data-odl-busy="Loading stays" data-odl-done="3 stays loaded">Loading stays</p>
+  <div class="odl-bar"><h2>Stays this weekend</h2><button type="button" class="odl-btn is-quiet odl-demo" data-odl-demo>Show loaded</button></div><p class="odl-live odl-sr" role="status" data-odl-busy="Loading stays" data-odl-done="3 stays loaded">Loading stays</p>
   <ul class="odl-body" aria-busy="true" data-od-list="items"><li class="odl-c" data-od-item><span class="odl-pic"><img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=640&h=480&fit=crop&auto=format&q=70" alt="Hotel bed with white linen and pillows" width="320" height="240" loading="lazy" decoding="async" data-od-media="photo"></span><h3 class="odl-one"><span class="odl-t" data-od-slot="name">Linen room, Old Town</span></h3><p class="odl-one odl-sub"><span class="odl-t" data-od-slot="detail">2 guests · 1 bed</span></p><p class="odl-one odl-price"><span class="odl-t" data-od-slot="price">$148 night</span></p></li><li class="odl-c" data-od-item><span class="odl-pic"><img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=640&h=480&fit=crop&auto=format&q=70" alt="Hotel bedroom with a wooden bed and garden view" width="320" height="240" loading="lazy" decoding="async" data-od-media="photo"></span><h3 class="odl-one"><span class="odl-t" data-od-slot="name">Garden suite, Harbourside</span></h3><p class="odl-one odl-sub"><span class="odl-t" data-od-slot="detail">4 guests · 2 beds</span></p><p class="odl-one odl-price"><span class="odl-t" data-od-slot="price">$212 night</span></p></li><li class="odl-c" data-od-item><span class="odl-pic"><img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=640&h=480&fit=crop&auto=format&q=70" alt="Bedroom with a blue headboard" width="320" height="240" loading="lazy" decoding="async" data-od-media="photo"></span><h3 class="odl-one"><span class="odl-t" data-od-slot="name">Blue room, Riverside</span></h3><p class="odl-one odl-sub"><span class="odl-t" data-od-slot="detail">2 guests · 1 bed</span></p><p class="odl-one odl-price"><span class="odl-t" data-od-slot="price">$119 night</span></p></li></ul>
 </section>
 <script>
@@ -52,7 +52,7 @@ document.querySelectorAll(".odl-skeleton-card").forEach(function (root) {
     body.setAttribute("aria-busy", busy ? "true" : "false");
     body.toggleAttribute("inert", busy);
     live.textContent = busy ? live.getAttribute("data-odl-busy") : live.getAttribute("data-odl-done");
-    if (demo) { demo.setAttribute("aria-pressed", busy ? "false" : "true"); demo.textContent = busy ? "Show loaded" : "Show loading"; }
+    if (demo) demo.textContent = busy ? "Show loaded" : "Show loading";
   }
   if (demo) demo.addEventListener("click", function () { set(body.getAttribute("aria-busy") !== "true"); });
   set(body.getAttribute("aria-busy") === "true");

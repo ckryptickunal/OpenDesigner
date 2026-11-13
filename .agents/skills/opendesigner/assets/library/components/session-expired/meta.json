@@ -20,9 +20,10 @@
     "focus"
   ],
   "source": null,
-  "a11y": "An alert dialog with a heading and description; Sign in again is the first focusable control, and the saved draft is described in text, not only by an icon.",
+  "a11y": "The title and reason sit in an alert, read as soon as the card appears. Move focus to Sign in again when you show it: the part never moves focus on its own, so a page that only displays it isn't hijacked. The saved draft is described in text, not only by an icon.",
   "width": "narrow",
   "live_region": "assertive",
+  "notes": "Keep the draft in the browser before the session ends, and move focus to Sign in again when you show the card.",
   "spec": {
     "use_when": [
       "an idle or security timeout signs the person out mid-task",
@@ -70,7 +71,7 @@
       },
       "loading": {
         "status": "not_built",
-        "how": "Not applicable: shown instead of content, after loading has failed or been refused."
+        "how": "Not applicable: this page stands in for content; it isn't loaded data itself."
       },
       "error": {
         "status": "shown",

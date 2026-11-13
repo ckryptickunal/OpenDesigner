@@ -29,6 +29,7 @@
 .odl-inline-spinner form { display: grid; gap: var(--ds-space-stack-lg); }
 .odl-inline-spinner label { display: grid; gap: var(--ds-space-stack-xs); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); }
 .odl-inline-spinner .odl-row { display: flex; align-items: center; gap: var(--ds-space-inline-sm); }
+.odl-inline-spinner .odl-field { display: grid; gap: var(--ds-space-stack-xs); }
 .odl-inline-spinner input { flex: 1; min-inline-size: 0; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-sm);
   border: var(--ds-border-width-default) solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-field); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
 .odl-inline-spinner .odl-check { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); min-block-size: 1lh; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
@@ -45,9 +46,9 @@
 @media (prefers-reduced-motion: reduce) { .odl-inline-spinner, .odl-inline-spinner *, .odl-inline-spinner *::before, .odl-inline-spinner *::after { transition: none !important; animation: none !important; } }
 </style>
 <form class="odl-inline-spinner odl-card" action="#" aria-label="Workspace settings">
-  <label>Workspace address<span class="odl-row"><input name="slug" value="larkspur-finance" autocomplete="off" spellcheck="false"></span>
+  <div class="odl-field"><label>Workspace address<span class="odl-row"><input name="slug" value="larkspur-finance" autocomplete="off" spellcheck="false"></span></label>
     <span class="odl-hint">Type a new address to see the check. “team” is taken.</span>
-    <span class="odl-check" role="status"><svg class="odl-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><svg class="odl-yes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><svg class="odl-no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span></span></span></label>
+    <span class="odl-check" role="status"><svg class="odl-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><svg class="odl-yes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><svg class="odl-no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span></span></span></div>
   <div class="odl-foot"><p class="odl-live" role="status"></p><button type="button" class="odl-btn" data-od-action="save" data-od-effect="change"><svg class="odl-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><span class="odl-label" data-od-slot="label">Save changes</span></button></div>
 </form>
 <script>
@@ -59,23 +60,23 @@ document.querySelectorAll(".odl-inline-spinner").forEach(function (root) {
     return isNaN(n) ? fallback : (/ms$/.test(v) || !/s$/.test(v) ? n : n * 1000);
   }
   var save = root.querySelector("[data-od-action='save']"), label = save.querySelector(".odl-label"), live = root.querySelector(".odl-live");
-  var input = root.querySelector("input"), check = root.querySelector(".odl-check"), timer, slow;
+  var input = root.querySelector("input"), check = root.querySelector(".odl-check"), timer, slowSave, slowCheck, answer;
   save.addEventListener("click", function () {
     if (save.getAttribute("aria-disabled") === "true") return;
     save.setAttribute("aria-disabled", "true"); label.textContent = "Saving…"; live.textContent = "Saving";
-    slow = setTimeout(function () { save.classList.add("is-busy"); }, wait("--ds-state-wait-button-pending-after", 1000));  // no spinner for quick saves
+    slowSave = setTimeout(function () { save.classList.add("is-busy"); }, wait("--ds-state-wait-button-pending-after", 1000));  // no spinner for quick saves
     setTimeout(function () {  // demo only: a save that takes 2.5 seconds
-      clearTimeout(slow); save.removeAttribute("aria-disabled"); save.classList.remove("is-busy"); label.textContent = "Save changes"; live.textContent = "Changes saved";
+      clearTimeout(slowSave); save.removeAttribute("aria-disabled"); save.classList.remove("is-busy"); label.textContent = "Save changes"; live.textContent = "Changes saved";
     }, 2500);
   });
   input.addEventListener("input", function () {  // a check that starts after the person stops typing
-    clearTimeout(timer); clearTimeout(slow); check.className = "odl-check"; check.querySelector("span").textContent = "";
+    clearTimeout(timer); clearTimeout(slowCheck); clearTimeout(answer); check.className = "odl-check"; check.querySelector("span").textContent = "";
     if (!input.value.trim()) return;
     timer = setTimeout(function () {
       check.querySelector("span").textContent = "Checking…";
-      slow = setTimeout(function () { check.className = "odl-check is-busy"; }, wait("--ds-state-wait-indicator-after", 1000));
-      setTimeout(function () {  // demo only: the check answers after 1.8 seconds
-        clearTimeout(slow);
+      slowCheck = setTimeout(function () { check.className = "odl-check is-busy"; }, wait("--ds-state-wait-indicator-after", 1000));
+      answer = setTimeout(function () {  // demo only: the check answers after 1.8 seconds
+        clearTimeout(slowCheck);
         var ok = !/^(team|admin)$/i.test(input.value.trim());
         check.className = "odl-check " + (ok ? "is-ok" : "is-bad"); check.querySelector("span").textContent = ok ? "Available" : "Already taken";
       }, 1800);
