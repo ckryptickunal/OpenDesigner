@@ -824,7 +824,7 @@ FOOT_COLS = [  # the top row: short labels that fit on one line down to 320 px
 # the build warns when a label is longer than FOOT_MAX characters.
 FOOT_SHORT = {
     "designers": "For designers", "enterprise": "For enterprise teams", "existing-product": "Existing app or brand",
-    "extend": "Change a system", "export": "Export to code", "library": "Library by fetch or MCP", "good-practices": "Good practices",
+    "extend": "Change a system", "export": "Export to code", "library-mcp": "Library by fetch or MCP", "good-practices": "Good practices",
     "design-system-for-cursor": "Cursor design system", "design-tokens-for-claude-code": "Claude Code tokens",
     "improve-vibe-coded-ui": "Polish a vibe-coded app", "ai-design-system-generator": "AI system generators",
     "design-systems": "Design systems", "design-tokens": "Design tokens", "decisions": "Decisions and DESIGN.md",

@@ -447,7 +447,7 @@ def llms_section(site_url):
             + f"- [Component catalog]({site_url}/library/index.json): every component as JSON: purpose, when to use it and when not, parts, "
               "the data it holds with limits, states, the tokens it reads, accessibility and where to fetch it. One component: "
               f"/library/<id>.json; its file: /library/<id>.html\n"
-            + f"- [Library over MCP]({site_url}/docs/library/index.md): the same catalog through a local, read-only MCP server\n"
+            + f"- [Library over MCP]({site_url}/docs/library-mcp/index.md): the same catalog through a local, read-only MCP server\n"
             + "\n".join(f"- [{c['name']}]({site_url}/library/{c['slug']}/index.md): {lead(c)} [File]({site_url}/library/{c['slug']}.html), "
                          f"[JSON]({site_url}/library/{c['slug']}.json)" for c in components()))
 

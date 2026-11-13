@@ -1,7 +1,7 @@
 ---
 title: Use the component library
-seo_title: Component library by fetch, curl or a local MCP server
-description: Pull an OpenDesigner component into a project with one command, read its catalog entry as JSON, or browse the library in Claude Desktop over a local MCP server.
+seo_title: A component library your AI agent can fetch or use over MCP
+description: Use the OpenDesigner component library from Claude Code or Cursor through a local MCP server, or fetch one part with curl. Every part uses your design tokens.
 section: Guides
 order: 9
 updated: 2026-11-13
@@ -72,7 +72,13 @@ To add it to Claude Desktop, clone the repository, then add this to `claude_desk
 }
 ```
 
-Claude Code takes the same server with `claude mcp add opendesigner-library -- python3 /path/to/OpenDesigner/server/mcp/server.py`. It needs Python 3.10 or newer and nothing else.
+Claude Code takes the same server with one command:
+
+```
+claude mcp add opendesigner-library -- python3 /path/to/OpenDesigner/server/mcp/server.py
+```
+
+In Cursor, put the same `mcpServers` entry in `.cursor/mcp.json` in your project. Any app that runs local MCP servers takes the same command. It needs Python 3.10 or newer and nothing else.
 
 :::dev
 The server is `server/mcp/server.py`, one Python file with only the standard library, to match the skills. It speaks MCP over stdio: the 2026-07-28 version (`server/discover`, no handshake) and the older `initialize` handshake. Every tool is marked `readOnlyHint: true` and `destructiveHint: false`. The gallery is an MCP Apps view (`ui://opendesigner/library-gallery`, `text/html;profile=mcp-app`) whose only outside source is the sample photos from `images.unsplash.com`, declared in `_meta.ui.csp`. A hosted copy that needs no sign-in is planned, not live.

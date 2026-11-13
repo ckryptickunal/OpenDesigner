@@ -41,4 +41,4 @@ claude mcp add opendesigner-library -- python3 "$REPO/server/mcp/server.py"
 Then ask Claude Code: "Suggest library components for a finance approvals screen, then get the top one." Remove it again with `claude mcp remove opendesigner-library`.
 
 ## 5. The gallery in Claude Desktop
-See `site/docs/library.md` ("Browse it from your AI"). It needs a Claude Desktop restart after the config change.
+See `site/docs/library-mcp.md` ("Browse it from your AI"). It needs a Claude Desktop restart after the config change.

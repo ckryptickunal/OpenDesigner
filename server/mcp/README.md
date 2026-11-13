@@ -2,7 +2,7 @@
 
 A local, read-only MCP server for the OpenDesigner component library. An AI app (Claude Desktop, Claude Code, Cursor, VS Code and others) starts it on your computer and calls its tools. It reads the catalog and the component files from this repository and writes nothing. The server makes no network calls; the gallery's previews load the parts' sample photos from images.unsplash.com.
 
-Setup for people: [site/docs/library.md](../../site/docs/library.md) (on the website at `/docs/library/`).
+Setup for people: [site/docs/library-mcp.md](../../site/docs/library-mcp.md) (on the website at `/docs/library-mcp/`).
 
 ## Files
 | File | What it is |
