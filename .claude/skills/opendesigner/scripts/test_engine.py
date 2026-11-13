@@ -797,7 +797,7 @@ class HandoffAndRemovalsSecondReview(unittest.TestCase):
             with contextlib.redirect_stdout(out):                                # a decision that calls for the full note
                 e.main(["--dir", d, "set", "zoom.color", '"broad"', "--set-by", "delegated", "--why", "zoomed in"])
             self.assertEqual(self.note(t), text)                                 # untouched, the added line included
-            self.assertIn("was left as it is; `engine.py handoff yes` rewrites it", out.getvalue())
+            self.assertIn("was left as it is; `engine.py handoff yes --quote \"<their words>\"` rewrites it", out.getvalue())
             # a note from an older engine (the snippet verbatim, markers and all) is left alone too
             with open(e.HANDOFF_SNIPPET, encoding="utf-8") as f:
                 old = f"{e.HANDOFF_START}\n<!-- For the agent adding this note: delete this comment. -->\n{f.read().strip()}\n{e.HANDOFF_END}\n"

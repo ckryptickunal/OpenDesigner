@@ -539,7 +539,9 @@ def read_for_real(rec):
                    "and stop (research.md section 1); never write findings you did not read")
     for s in web:
         if RX_PLACEHOLDER_HOST.match(str(s["url"])):
-            out.append(f"source {s.get('id')} is a placeholder address ({s['url']}), not a page that was opened")
+            out.append(f"source {s.get('id')} is a placeholder address ({s['url']}), not a page that was opened"
+                       + (" (the shipped example shows the shape only; add takes findings from pages you opened)"
+                          if str(rec.get("_about", "")).startswith("An example") else ""))
         acc = str(s.get("accessed") or "")
         try:
             ok = _dt.date.fromisoformat(acc) <= _dt.date.today()
