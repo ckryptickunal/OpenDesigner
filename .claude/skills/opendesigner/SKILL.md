@@ -51,7 +51,7 @@ Read `references/guardrails.md` before writing files or reading a reference. Its
 | A screen or page is built and they ask "does it look right?", "review this" or "QA this", or you built it and are about to say it is done | **opendesigner-review** |
 | Anything visual is about to be exported or shared (a page, video, deck or card): "is this ready?" | **opendesigner-preflight** |
 | They want the site found: "do SEO", AEO, GEO, "show up in ChatGPT or Google", or a site is about to launch | **opendesigner-search**. Give it the Site brief in PRODUCT.md: Q-site-04 (how people find it, languages, the questions it answers) and Q-site-05 (page families) |
-| They have an assistant or chatbot and want its answers to show interface (a table, a comparison, a booking step), "generative UI" | **opendesigner-smart-ui** (optional, in the same plugin) |
+| An assistant in the product, or answers that should show interface | **opendesigner-smart-ui**; offer once (`references/smart-ui.md`) |
 | A one-off UI task in a project that already has a system | Follow its DESIGN.md. Don't interview |
 
 **Run these without being asked.** Never wait for the person to name a tool.
@@ -61,7 +61,6 @@ Read `references/guardrails.md` before writing files or reading a reference. Its
 | Before anything is shared or deployed | **opendesigner-preflight** |
 | The person names a site or URL as a reference | **opendesigner-extract**: measure the live site. A thumbnail is not enough |
 | You are about to draw line art, icons or illustrations by hand | **opendesigner-illustrate** first (a few icons of their own: `illustrate.py icons`) |
-| The system exists and `smartui.py offer` finds an assistant in the product (or they mention one) | Offer **opendesigner-smart-ui** once, in plain words with the reason, and build only on a yes (`references/smart-ui.md`) |
 | Before you propose colours or directions | Mobbin, when connected, for shipped references (`practices.md` section 2). Then `engine.py research market` and a positioning the person confirms (`research.md` section 8) |
 
 ## Files in this skill
