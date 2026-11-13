@@ -16,6 +16,7 @@ import copy
 import functools
 import http.server
 import json
+import os
 import pathlib
 import re
 import shutil
@@ -36,7 +37,7 @@ def fixture_path(slug):
         if f.exists():
             return f
     return None
-REVIEW = SKILL.parent / "opendesigner-review" / "scripts"
+REVIEW = pathlib.Path(os.environ.get("OD_REVIEW_DIR") or SKILL.parent / "opendesigner-review" / "scripts")  # the craft checks
 ENGINE = SKILL.parent / "opendesigner" / "scripts" / "engine.py"
 
 HARNESS = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
