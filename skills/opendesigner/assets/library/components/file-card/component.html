@@ -1,0 +1,50 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-file-card { box-sizing: border-box; inline-size: 100%; max-inline-size: 36rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-file-card *, .odl-file-card *::before { box-sizing: border-box; }
+.odl-file-card .odl-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--ds-space-stack-md) var(--ds-space-inline-md); align-items: center;
+  padding: var(--ds-space-inset-lg) var(--ds-space-inset-xl); background: var(--ds-color-surface-raised); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); }
+.odl-file-card svg { flex: none; fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-file-card .odl-icon { display: grid; place-items: center; inline-size: var(--ds-size-control-lg); block-size: var(--ds-size-control-lg); border-radius: var(--ds-radius-nested);
+  background: var(--ds-color-surface-sunken); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); color: var(--ds-color-icon-default); }
+.odl-file-card .odl-icon svg { display: none; inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
+/* One icon per kind of file; anything else gets the plain page. */
+.odl-file-card[data-kind="pdf"] .odl-i-pdf, .odl-file-card[data-kind="sheet"] .odl-i-sheet, .odl-file-card[data-kind="image"] .odl-i-image,
+.odl-file-card[data-kind="doc"] .odl-i-doc, .odl-file-card[data-kind="other"] .odl-i-other { display: block; }
+.odl-file-card .odl-info { display: grid; gap: var(--ds-space-stack-xs); min-inline-size: 0; }
+.odl-file-card h3 { margin: 0; font: var(--ds-text-title-md); overflow-wrap: anywhere; }
+.odl-file-card .odl-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--ds-space-2) var(--ds-space-inline-sm); margin: 0; color: var(--ds-color-text-secondary);
+  font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
+.odl-file-card .odl-meta > span + span::before { content: "·"; margin-inline-end: var(--ds-space-inline-sm); color: var(--ds-color-text-tertiary); }
+.odl-file-card .odl-kind { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); letter-spacing: var(--ds-text-label-md-tracking); }
+.odl-file-card .odl-acts { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--ds-space-inline-sm); }
+.odl-file-card button { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); max-inline-size: 100%;
+  min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: var(--ds-space-inset-xs) var(--ds-space-inset-lg); border-radius: var(--ds-radius-control);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-align: center; overflow-wrap: anywhere; cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-file-card button svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-file-card .odl-download { border: var(--ds-border-width-default) solid transparent; background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
+.odl-file-card .odl-download:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-file-card .odl-preview { border: var(--ds-border-width-default) solid var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-file-card .odl-preview:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-file-card button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+/* Narrower: the buttons drop under the name and share the row. */
+@container (max-width: 34rem) {
+  .odl-file-card .odl-card { grid-template-columns: auto minmax(0, 1fr); }
+  .odl-file-card .odl-acts { grid-column: 1 / -1; justify-content: stretch; }
+  .odl-file-card button { flex: 1 1 8rem; }
+}
+@container (max-width: 26rem) { .odl-file-card .odl-card { padding: var(--ds-space-inset-lg); } }
+@media (prefers-reduced-motion: reduce) { .odl-file-card, .odl-file-card *, .odl-file-card *::before { transition: none !important; animation: none !important; } }
+</style>
+<article class="odl-file-card" data-od-var="kind" data-kind="pdf" aria-labelledby="odl-fc-title">
+  <div class="odl-card">
+    <span class="odl-icon" aria-hidden="true"><svg class="odl-i-pdf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg><svg class="odl-i-sheet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h2"/><path d="M14 13h2"/><path d="M8 17h2"/><path d="M14 17h2"/></svg><svg class="odl-i-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><circle cx="10" cy="12" r="2"/><path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22"/></svg><svg class="odl-i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M9 13v-1h6v1"/><path d="M12 12v6"/><path d="M11 18h2"/></svg><svg class="odl-i-other" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg></span>
+    <div class="odl-info">
+      <h3 id="odl-fc-title" data-od-slot="name">Lease agreement, Flat 4B, signed.pdf</h3>
+      <p class="odl-meta"><span class="odl-kind" data-od-slot="kind_label">PDF</span><span data-od-slot="size">1.8 MB</span><span data-od-slot="date" data-od-optional>Signed 9 Nov</span></p>
+    </div>
+    <div class="odl-acts"><button type="button" class="odl-preview" data-od-action="preview">Preview</button><button type="button" class="odl-download" data-od-action="download"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg><span data-od-slot="label">Download</span></button></div>
+  </div>
+</article>

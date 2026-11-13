@@ -1,0 +1,62 @@
+{
+  "name": "Receipt",
+  "summary": "What just happened: a status line in its tone, what was done, a reference number, the lines that matter, a total, a note and up to two next steps.",
+  "use": "right after a booking, payment, order or change went through (or did not), to say what happened",
+  "type": "commerce",
+  "style": "quiet",
+  "industries": ["any"],
+  "tags": ["receipt", "confirmation", "booking", "order", "summary"],
+  "states": ["success", "warning", "danger", "info", "hover", "focus"],
+  "source": null,
+  "a11y": "An article named by its heading; the status is text next to a decorative icon, so it never relies on colour, and the lines are a description list.",
+  "width": "narrow",
+  "spec": {
+    "use_when": ["an action finished and the person needs the outcome, its reference number and what to do next"],
+    "avoid_when": ["the action has not happened yet and needs a yes: use approval-prompt", "the action failed and can be tried again: use error-retry", "a long history of payments or orders: use data-table"],
+    "parts": [
+      {"name": "status", "selector": ".odl-status", "what": "the outcome in a few words, with an icon in its tone", "slot": "text"},
+      {"name": "title", "selector": ".odl-receipt h3", "what": "what was done", "slot": "text"},
+      {"name": "reference", "selector": ".odl-ref", "what": "the booking or order number", "slot": "text"},
+      {"name": "lines", "selector": ".odl-lines > div", "what": "one detail: label and value", "slot": "list"},
+      {"name": "total", "selector": ".odl-total", "what": "the amount paid or due, set heavier", "slot": "text"},
+      {"name": "note", "selector": ".odl-note", "what": "one plain sentence: what happens next or a rule to know", "slot": "text"},
+      {"name": "primary", "selector": ".odl-primary", "what": "the main next step", "slot": "action"},
+      {"name": "secondary", "selector": ".odl-secondary", "what": "a quieter next step", "slot": "action"}
+    ],
+    "data": {
+      "type": "object",
+      "required": ["status", "title", "lines"],
+      "properties": {
+        "tone": {"type": "string", "enum": ["success", "warning", "danger", "info"], "part": "status"},
+        "status": {"type": "string", "maxLength": 32, "part": "status"},
+        "title": {"type": "string", "maxLength": 60, "part": "title"},
+        "reference": {"type": "string", "maxLength": 24, "part": "reference"},
+        "lines": {
+          "type": "array", "minItems": 1, "maxItems": 10, "part": "lines",
+          "items": {
+            "type": "object",
+            "required": ["label", "value"],
+            "properties": {
+              "label": {"type": "string", "maxLength": 28},
+              "value": {"type": "string", "maxLength": 40}
+            }
+          }
+        },
+        "total_label": {"type": "string", "maxLength": 24, "part": "total"},
+        "total_value": {"type": "string", "maxLength": 16, "part": "total"},
+        "note": {"type": "string", "maxLength": 160, "part": "note"},
+        "primary": {"type": "object", "part": "primary", "properties": {"label": {"type": "string", "maxLength": 40}, "event": {"type": "object"}}, "required": ["label", "event"]},
+        "secondary": {"type": "object", "part": "secondary", "properties": {"label": {"type": "string", "maxLength": 40}, "event": {"type": "object"}}, "required": ["label", "event"]}
+      }
+    },
+    "edge": {
+      "empty": {"status": "not_built", "how": "a receipt always has at least one line; with nothing to report, say it in text instead"},
+      "loading": {"status": "not_built", "how": "show it only once the outcome is known; until then the action button shows its pending state"},
+      "error": {"status": "shown", "how": "the danger tone says the action did not go through, with its icon and text colour", "evidence": "[data-tone=\"danger\"]"},
+      "disabled": {"status": "not_built", "how": "the next-step buttons have no disabled state; leave out a step that is not available"},
+      "overflow": {"status": "handled", "how": "up to ten lines; the buttons wrap to a full-width stack when there is no room side by side", "evidence": "flex: 1 1 10rem"},
+      "long_text": {"status": "handled", "how": "labels, values, the title and the reference wrap; values never take more than 60% of a row", "evidence": "max-inline-size: 60%"}
+    },
+    "keyboard": ["Tab reaches the main step, then the quieter one", "Enter or Space presses either"]
+  }
+}

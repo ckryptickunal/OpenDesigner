@@ -1,0 +1,210 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-line-chart { box-sizing: border-box; inline-size: 100%; max-inline-size: 45rem; margin-inline: auto; container-type: inline-size; text-wrap: pretty; }
+.odl-line-chart *, .odl-line-chart *::before, .odl-line-chart *::after { box-sizing: border-box; }
+.odl-line-chart .odl-card { display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); }
+.odl-line-chart .odl-head { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: var(--ds-space-stack-sm) var(--ds-space-inset-md); }
+.odl-line-chart .odl-head > div { display: grid; gap: var(--ds-space-stack-xs); flex: 1 1 14rem; min-inline-size: 0; }
+.odl-line-chart h3 { margin: 0; font: var(--ds-text-title-md); overflow-wrap: anywhere; }
+.odl-line-chart .odl-sub { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.odl-line-chart .odl-toggle { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); flex: none; min-block-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); margin: 0;
+  padding: 0 var(--ds-space-inset-sm); border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-control-md); background: var(--ds-color-surface-raised);
+  color: var(--ds-color-text-primary); font: var(--ds-text-label-md); cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-line-chart .odl-toggle:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-line-chart .odl-toggle:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-line-chart .odl-toggle svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); stroke-linecap: round; stroke-linejoin: round; }
+
+.odl-line-chart .odl-legend { display: flex; flex-wrap: wrap; gap: var(--ds-space-stack-xs) var(--ds-space-inset-md); margin: 0; padding: 0; list-style: none; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-line-chart .odl-legend[hidden] { display: none; }
+.odl-line-chart .odl-legend li { display: inline-flex; align-items: center; gap: var(--ds-space-inline-sm); min-inline-size: 0; overflow-wrap: anywhere; }
+.odl-line-chart .odl-key { flex: none; inline-size: var(--ds-space-16); block-size: 0; border-block-start: var(--ds-border-width-emphasis) solid var(--ds-color-bg-accent-bold); }
+.odl-line-chart .odl-key.is-2 { border-block-start-style: dashed; border-block-start-color: var(--ds-color-text-secondary); }
+
+/* The plot: an SVG for the lines and grid, HTML for every label so the type never stretches. */
+.odl-line-chart .odl-chart { display: grid; gap: var(--ds-space-stack-sm); }
+.odl-line-chart .odl-chart[hidden] { display: none; }
+.odl-line-chart .odl-unit { color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); overflow-wrap: anywhere; }
+.odl-line-chart .odl-plot { position: relative; block-size: 12rem; margin-inline-end: var(--ds-space-inset-xs); }
+.odl-line-chart .odl-plot svg { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; overflow: visible; }
+.odl-line-chart .odl-grid { stroke: var(--ds-color-border-subtle); stroke-width: var(--ds-border-width-default); }
+.odl-line-chart .odl-grid.is-base { stroke: var(--ds-color-border-strong); }
+.odl-line-chart .odl-line { fill: none; stroke: var(--ds-color-bg-accent-bold); stroke-width: var(--ds-border-width-emphasis); stroke-linecap: round; stroke-linejoin: round; }
+.odl-line-chart .odl-line.is-2 { stroke: var(--ds-color-text-secondary); stroke-dasharray: 5 4; }
+.odl-line-chart .odl-ylab { position: absolute; inset-inline-start: 0; transform: translateY(-100%); padding-block-end: var(--ds-space-2); background: var(--ds-color-surface-raised); border-radius: var(--ds-radius-detail); color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.odl-line-chart .odl-ylab.is-low { transform: none; padding-block: var(--ds-space-2) 0; }
+.odl-line-chart .odl-none { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; border-radius: var(--ds-radius-nested); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-line-chart .odl-dot { position: absolute; inline-size: var(--ds-space-8); block-size: var(--ds-space-8); margin: calc(var(--ds-space-8) / -2); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-bold);
+  box-shadow: 0 0 0 var(--ds-border-width-emphasis) var(--ds-color-surface-raised); }
+.odl-line-chart .odl-dot.is-2 { background: var(--ds-color-text-secondary); }
+.odl-line-chart .odl-x { position: relative; block-size: 1lh; color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; }
+.odl-line-chart .odl-x span { position: absolute; inset-block-start: 0; transform: translateX(-50%); white-space: nowrap; }
+.odl-line-chart .odl-x span:first-child { transform: none; }
+.odl-line-chart .odl-x span:last-child { transform: translateX(-100%); }
+
+/* The table: the chart's data. Hidden from sight until asked for, always there for a screen reader. */
+.odl-line-chart .odl-table { overflow-x: auto; }
+.odl-line-chart .odl-table.is-off { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.odl-line-chart table { inline-size: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.odl-line-chart th, .odl-line-chart td { padding: var(--ds-space-inset-xs) var(--ds-space-inset-sm); block-size: var(--ds-size-row-sm); border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-separator); text-align: end; overflow-wrap: anywhere; }
+.odl-line-chart th:first-child { text-align: start; padding-inline-start: 0; }
+.odl-line-chart td:last-child, .odl-line-chart thead th:last-child { padding-inline-end: 0; }
+.odl-line-chart thead th { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); border-block-end-color: var(--ds-color-border-subtle); }
+.odl-line-chart tbody th { font-weight: var(--ds-font-weight-body); }
+.odl-line-chart tbody tr:last-child > * { border-block-end: 0; }
+
+@container (max-width: 30rem) {
+  .odl-line-chart .odl-card { padding: var(--ds-space-inset-lg); gap: var(--ds-space-stack-md); }
+  .odl-line-chart .odl-plot { block-size: 10rem; }
+}
+@media (prefers-reduced-motion: reduce) { .odl-line-chart, .odl-line-chart *, .odl-line-chart *::before { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-line-chart" aria-label="Median page load" data-od-label="title">
+  <div class="odl-card">
+    <div class="odl-head">
+      <div>
+        <h3 data-od-slot="title">Median page load</h3>
+        <p class="odl-sub" data-od-slot="summary" data-od-optional>Checkout pages, last 12 weeks · lower is better</p>
+      </div>
+      <button type="button" class="odl-toggle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/></svg><span>Show as table</span></button>
+    </div>
+    <ul class="odl-legend" aria-hidden="true"><li data-od-sample><span class="odl-key"></span>This year</li><li data-od-sample><span class="odl-key is-2"></span>Last year</li></ul>
+    <div class="odl-chart" aria-hidden="true">
+      <span class="odl-unit" data-od-slot="unit">milliseconds</span>
+      <div class="odl-plot"><svg viewBox="0 0 1000 300" preserveAspectRatio="none"></svg></div>
+      <div class="odl-x"></div>
+    </div>
+    <div class="odl-table is-off" role="region" aria-label="Chart data">
+      <table>
+        <thead><tr><th scope="col" data-od-slot="x_label" data-od-optional>Week</th><th scope="col" data-od-slot="series">This year</th><th scope="col" class="odl-s2" data-od-slot="series2" data-od-optional>Last year</th></tr></thead>
+        <tbody data-od-list="points">
+          <tr data-od-item data-od-template hidden><th scope="row" data-od-slot="label"></th><td data-od-slot="value"></td><td class="odl-s2" data-od-slot="value2"></td></tr>
+          <tr data-od-item><th scope="row">Aug 24</th><td>1,840</td><td class="odl-s2">2,310</td></tr>
+          <tr data-od-item><th scope="row">Aug 31</th><td>1,795</td><td class="odl-s2">2,280</td></tr>
+          <tr data-od-item><th scope="row">Sep 7</th><td>1,910</td><td class="odl-s2">2,350</td></tr>
+          <tr data-od-item><th scope="row">Sep 14</th><td>1,720</td><td class="odl-s2">2,240</td></tr>
+          <tr data-od-item><th scope="row">Sep 21</th><td></td><td class="odl-s2">2,190</td></tr>
+          <tr data-od-item><th scope="row">Sep 28</th><td>1,650</td><td class="odl-s2">2,205</td></tr>
+          <tr data-od-item><th scope="row">Oct 5</th><td>1,580</td><td class="odl-s2">2,160</td></tr>
+          <tr data-od-item><th scope="row">Oct 12</th><td>1,610</td><td class="odl-s2">2,120</td></tr>
+          <tr data-od-item><th scope="row">Oct 19</th><td>1,490</td><td class="odl-s2">2,080</td></tr>
+          <tr data-od-item><th scope="row">Oct 26</th><td>1,430</td><td class="odl-s2">2,095</td></tr>
+          <tr data-od-item><th scope="row">Nov 2</th><td>1,385</td><td class="odl-s2">2,010</td></tr>
+          <tr data-od-item><th scope="row">Nov 9</th><td>1,340</td><td class="odl-s2">1,980</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<script>
+document.querySelectorAll(".odl-line-chart").forEach((root) => {
+  const table = root.querySelector(".odl-table table"), svg = root.querySelector(".odl-plot svg");
+  if (!table || !svg) return;
+  const SVG = "http://www.w3.org/2000/svg";
+  const wrap = root.querySelector(".odl-table"), chart = root.querySelector(".odl-chart"), btn = root.querySelector(".odl-toggle");
+  if (!root.dataset.odlReady) {
+    root.dataset.odlReady = "1"; // the toggle is wired once per root
+    btn.addEventListener("click", () => {
+      const on = !root.classList.contains("is-table");
+      root.classList.toggle("is-table", on);
+      wrap.classList.toggle("is-off", !on);
+      chart.hidden = on;
+      btn.querySelector("span").textContent = on ? "Show as chart" : "Show as table";
+    });
+  }
+  const key = table.textContent.replace(/\s+/g, " ").trim();
+  if (root.dataset.odlKey === key) return; // already drawn from this table; a changed table redraws
+  root.dataset.odlKey = key;
+
+  const lang = root.closest("[lang]")?.getAttribute("lang") || undefined;
+  const dec = (new Intl.NumberFormat(lang).formatToParts(1.5).find((p) => p.type === "decimal") || { value: "." }).value;
+  const num = (t) => {
+    t = (t || "").trim();
+    if (!t || !/\d/.test(t)) return null; // an empty cell is a gap, never a zero
+    const n = Number(t.split(dec).map((x) => x.replace(/[^\d-]/g, "")).join("."));
+    return Number.isFinite(n) ? n : null;
+  };
+  const two = !!table.querySelector("thead .odl-s2");
+  if (!two) table.querySelectorAll("tbody .odl-s2").forEach((c) => c.remove());
+  const rows = [...table.querySelectorAll("tbody tr")].filter((r) => !r.hasAttribute("data-od-template") && !r.classList.contains("od-empty"));
+  const labels = rows.map((r) => (r.querySelector("th") ? r.querySelector("th").textContent.trim() : ""));
+  const texts = [0, 1].map((c) => rows.map((r) => (r.querySelectorAll("td")[c]?.textContent || "").trim()));
+  const series = [texts[0].map(num)];
+  if (two) series.push(texts[1].map(num));
+  const shown = (v) => { for (let s = 0; s < series.length; s++) { const i = series[s].indexOf(v); if (i > -1) return texts[s][i]; } return String(v); }; // the value as the table writes it
+  const heads = [...table.querySelectorAll("thead th")].slice(1).map((h) => h.textContent.trim());
+
+  // legend from the table's headers
+  const legend = root.querySelector(".odl-legend");
+  legend.replaceChildren(...heads.slice(0, series.length).map((h, i) => {
+    const li = document.createElement("li"), k = document.createElement("span");
+    k.className = "odl-key" + (i ? " is-2" : "");
+    li.append(k, h);
+    return li;
+  }));
+  legend.hidden = series.length < 2;
+
+  const plot = root.querySelector(".odl-plot"), xax = root.querySelector(".odl-x");
+  svg.replaceChildren();
+  plot.querySelectorAll(".odl-ylab, .odl-dot").forEach((n) => n.remove());
+  xax.replaceChildren();
+  const all = series.flat().filter((v) => v !== null);
+  plot.querySelectorAll(".odl-none").forEach((x) => x.remove());
+  if (!all.length || rows.length < 1) { // nothing to draw: say so where the lines would be
+    const none = document.createElement("p");
+    none.className = "odl-none";
+    none.textContent = "No values to show yet.";
+    plot.append(none);
+    return;
+  }
+  let lo = Math.min(...all), hi = Math.max(...all);
+  const pad = (hi - lo) * 0.15 || Math.abs(hi) * 0.1 || 1;
+  const top = hi + pad, bot = lo >= 0 && lo - pad < 0 ? 0 : lo - pad;
+  const W = 1000, H = 300, n = rows.length;
+  const xf = (i) => (n === 1 ? W / 2 : (i / (n - 1)) * W), yf = (v) => H - ((v - bot) / (top - bot)) * H;
+  const line = (y, cls) => { const l = document.createElementNS(SVG, "line"); l.setAttribute("x1", 0); l.setAttribute("x2", W); l.setAttribute("y1", y); l.setAttribute("y2", y);
+    l.setAttribute("class", cls); l.setAttribute("vector-effect", "non-scaling-stroke"); svg.append(l); };
+  // a light grid: the highest and lowest values, labelled, and the base line
+  if (bot === 0) line(H, "odl-grid is-base");
+  [[hi, "Highest"], [lo, "Lowest"]].forEach(([v, word], i) => {
+    if (i && hi === lo) return;
+    line(yf(v), "odl-grid");
+    const t = document.createElement("span");
+    t.className = "odl-ylab" + (i ? " is-low" : "");
+    t.style.insetBlockStart = (yf(v) / H) * 100 + "%";
+    t.textContent = `${word} ${shown(v)}`;
+    plot.append(t);
+  });
+  series.forEach((vals, s) => {
+    let d = "";
+    vals.forEach((v, i) => {
+      if (v === null) return;
+      const joined = i > 0 && vals[i - 1] !== null;
+      d += `${joined ? "L" : "M"}${xf(i).toFixed(1)} ${yf(v).toFixed(1)} `;
+      const alone = !joined && (i === n - 1 || vals[i + 1] === null);
+      if (alone || i === n - 1 || (i < n - 1 && vals.slice(i + 1).every((x) => x === null))) { // a point with no neighbour, and each line's last value, get a dot
+        const dot = document.createElement("span");
+        dot.className = "odl-dot" + (s ? " is-2" : "");
+        dot.style.left = (xf(i) / W) * 100 + "%"; // physical: the plot is not mirrored right to left
+        dot.style.insetBlockStart = (yf(v) / H) * 100 + "%";
+        plot.append(dot);
+      }
+    });
+    if (!d) return;
+    const p = document.createElementNS(SVG, "path");
+    p.setAttribute("d", d.trim());
+    p.setAttribute("class", "odl-line" + (s ? " is-2" : ""));
+    p.setAttribute("vector-effect", "non-scaling-stroke");
+    svg.append(p);
+  });
+  // x labels: first, middle and last, so they never crowd
+  const pick = n > 2 ? [0, Math.round((n - 1) / 2), n - 1] : n === 2 ? [0, 1] : [0];
+  pick.forEach((i) => {
+    const s = document.createElement("span");
+    s.textContent = labels[i];
+    s.style.left = (xf(i) / W) * 100 + "%";
+    if (n === 1) s.style.transform = "translateX(-50%)";
+    xax.append(s);
+  });
+});
+</script>

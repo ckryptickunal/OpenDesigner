@@ -1,0 +1,11 @@
+{
+ "filename": "components/SaveButton.html",
+ "language": "HTML",
+ "code": "<button class=\"save\" type=\"submit\">Save changes</button>\n\n<style>\n  .save { padding: 0.5rem 1rem; border-radius: 6px; background: #1f6feb; color: white; }\n  .save:hover { background: color-mix(in oklab, #1f6feb 85%, black); } /* a little darker on hover, so the change is easy to see */\n</style>",
+ "copy": {
+  "label": "Copy",
+  "event": {
+   "name": "copy_code"
+  }
+ }
+}

@@ -1,0 +1,13 @@
+{"question": "Which suppliers raised prices after the June contract review, and by how much?",
+ "assistant": "Ledgerly",
+ "byline": [{"text": "Read 3 contracts"}, {"text": "Answered in 9 s"}],
+ "answer": [
+  {"text": "Two suppliers raised prices after the review on 18 June. Harbour Paper added 4% to every order from 1 July, and Tamsin Office Goods moved its delivery fee from £12 to £18.", "cites": [{"number": 1}, {"number": 2}]},
+  {"text": "Northgate Print kept its prices as they were, but its new contract ends in March instead of December.", "cites": [{"number": 3}]},
+  {"text": "None of the three changed their payment terms."}
+ ],
+ "sources": [
+  {"number": 1, "title": "Harbour Paper contract 2026", "detail": "PDF · 18 pages · signed 18 Jun", "pages": "pp. 3, 11"},
+  {"number": 2, "title": "Tamsin Office Goods price letter", "detail": "Email attachment · 2 pages", "pages": "p. 1"},
+  {"number": 3, "title": "Northgate Print renewal"}
+ ]}

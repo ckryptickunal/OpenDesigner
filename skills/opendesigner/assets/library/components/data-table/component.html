@@ -1,0 +1,218 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-data-table { box-sizing: border-box; inline-size: 100%; max-inline-size: 48rem; margin-inline: auto; container-type: inline-size; text-wrap: pretty; }
+.odl-data-table *, .odl-data-table *::before, .odl-data-table *::after { box-sizing: border-box; }
+.odl-data-table .odl-card { display: grid; gap: var(--ds-space-stack-md); padding-block: var(--ds-space-inset-xl) var(--ds-space-inset-lg); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); overflow: hidden; }
+.odl-data-table .odl-top { display: grid; gap: var(--ds-space-stack-xs); padding-inline: var(--ds-space-inset-xl); }
+.odl-data-table h3 { margin: 0; font: var(--ds-text-title-md); overflow-wrap: anywhere; }
+.odl-data-table .odl-sum { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+/* The table scrolls sideways inside its own box; the page never does. */
+.odl-data-table .odl-scroll { overflow-x: auto; overscroll-behavior-inline: contain; }
+.odl-data-table table { inline-size: 100%; border-collapse: separate; border-spacing: 0; font-variant-numeric: tabular-nums; }
+.odl-data-table th, .odl-data-table td { text-align: start; vertical-align: middle; }
+.odl-data-table th:has(> [data-align="end"]), .odl-data-table td[data-align="end"] { text-align: end; }
+.odl-data-table th:has(> [data-align="start"]), .odl-data-table td[data-align="start"] { text-align: start; }
+.odl-data-table thead th { padding: 0 calc(var(--ds-space-inset-sm) - var(--ds-space-inset-xs)); background: var(--ds-color-surface-sunken); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md);
+  border-block: var(--ds-border-width-default) solid var(--ds-color-border-subtle); white-space: nowrap; }
+.odl-data-table td { padding: var(--ds-space-inset-xs) var(--ds-space-inset-sm); block-size: var(--ds-size-row-md); border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-separator); background: var(--ds-color-surface-raised);
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-data-table tbody:last-of-type td, .odl-data-table tbody:has(+ tbody[hidden]) td { border-block-end: 0; }
+.odl-data-table td > span { display: block; inline-size: max-content; max-inline-size: 14rem; white-space: normal; overflow-wrap: anywhere; }
+.odl-data-table td[data-align="end"] > span { margin-inline-start: auto; }
+.odl-data-table td:first-child { padding-inline-start: var(--ds-space-inset-xl); }
+.odl-data-table td:last-child { padding-inline-end: var(--ds-space-inset-xl); }
+/* header text lines up with the cells under it: the header pads by the sort button's own padding less */
+.odl-data-table thead th:first-child { padding-inline-start: calc(var(--ds-space-inset-xl) - var(--ds-space-inset-xs)); }
+.odl-data-table thead th:last-child { padding-inline-end: calc(var(--ds-space-inset-xl) - var(--ds-space-inset-xs)); }
+.odl-data-table td:first-child { font-weight: var(--ds-font-weight-label); }
+/* When the table is wider than its box, the first column stays put while the others scroll under it. */
+.odl-data-table th:first-child, .odl-data-table td:first-child { position: sticky; inset-inline-start: 0; z-index: 1; }
+.odl-data-table .odl-scroll.is-wide th:first-child, .odl-data-table .odl-scroll.is-wide td:first-child { border-inline-end: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-data-table tbody tr:hover td { background: var(--ds-color-bg-neutral-subtle); }
+
+/* Header buttons sort the rows; the arrow shows the order. */
+.odl-data-table .odl-sort { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); min-block-size: var(--ds-size-target-min); margin: 0; padding: 0 var(--ds-space-inset-xs);
+  border: 0; border-radius: var(--ds-radius-control-sm); background: transparent; color: inherit; font: inherit; cursor: pointer; white-space: nowrap;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-data-table .odl-sort[data-align="end"] { flex-direction: row-reverse; }
+.odl-data-table .odl-sort:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
+.odl-data-table .odl-sort:focus-visible, .odl-data-table .odl-pager button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-data-table .odl-sort svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); stroke-linecap: round; stroke-linejoin: round; }
+.odl-data-table .odl-i-none { color: var(--ds-color-text-tertiary); }
+.odl-data-table .odl-i-dir { display: none; }
+.odl-data-table th[aria-sort="ascending"] .odl-sort, .odl-data-table th[aria-sort="descending"] .odl-sort { color: var(--ds-color-text-primary); }
+.odl-data-table th[aria-sort="ascending"] .odl-i-none, .odl-data-table th[aria-sort="descending"] .odl-i-none { display: none; }
+.odl-data-table th[aria-sort="ascending"] .odl-i-dir, .odl-data-table th[aria-sort="descending"] .odl-i-dir { display: block; }
+.odl-data-table th[aria-sort="descending"] .odl-i-dir { transform: rotate(180deg); }
+
+.odl-data-table .odl-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-stack-sm) var(--ds-space-inset-md); padding-inline: var(--ds-space-inset-xl); }
+.odl-data-table .odl-more { margin: 0; flex: 1 1 16rem; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); overflow-wrap: anywhere; }
+.odl-data-table .odl-pager { display: flex; align-items: center; gap: var(--ds-space-inline-sm); margin-inline-start: auto; }
+.odl-data-table .odl-pager[hidden] { display: none; }
+.odl-data-table .odl-range { margin: 0 var(--ds-space-inline-sm) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.odl-data-table .odl-pager button { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-xs); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min));
+  padding: 0 var(--ds-space-inset-sm); border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-control-md); background: var(--ds-color-surface-raised);
+  color: var(--ds-color-text-primary); font: var(--ds-text-label-md); cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-data-table .odl-pager button:hover:not(:disabled) { background: var(--ds-color-bg-neutral-subtle); }
+.odl-data-table .odl-pager button:disabled { border-color: var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); cursor: default; }
+.odl-data-table .odl-pager svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); stroke-linecap: round; stroke-linejoin: round; }
+/* No rows: one quiet line across the table, under the headers. */
+.odl-data-table tbody.od-empty { display: table-caption; caption-side: bottom; padding: var(--ds-space-inset-lg) var(--ds-space-inset-xl); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); text-align: center; }
+.odl-data-table .od-empty td { color: var(--ds-color-text-secondary); text-align: center; }
+
+/* Phone: tighter edges, shorter cells, arrows without words. */
+@container (max-width: 34rem) {
+  .odl-data-table .odl-card { padding-block: var(--ds-space-inset-lg) var(--ds-space-inset-md); }
+  .odl-data-table .odl-top, .odl-data-table .odl-foot { padding-inline: var(--ds-space-inset-lg); }
+  .odl-data-table td:first-child { padding-inline-start: var(--ds-space-inset-lg); }
+  .odl-data-table td:last-child { padding-inline-end: var(--ds-space-inset-lg); }
+  .odl-data-table thead th:first-child { padding-inline-start: calc(var(--ds-space-inset-lg) - var(--ds-space-inset-xs)); }
+  .odl-data-table thead th:last-child { padding-inline-end: calc(var(--ds-space-inset-lg) - var(--ds-space-inset-xs)); }
+  .odl-data-table td > span { max-inline-size: 12rem; }
+  .odl-data-table td:first-child > span { max-inline-size: 9rem; }
+  .odl-data-table .odl-sort .odl-label { white-space: normal; }
+  .odl-data-table .odl-pager { inline-size: 100%; }
+  .odl-data-table .odl-range { margin-inline-end: auto; }
+  .odl-data-table .odl-pager .odl-word { display: none; }
+  .odl-data-table .odl-pager button { min-inline-size: var(--ds-size-target-min); padding: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .odl-data-table, .odl-data-table *, .odl-data-table *::before { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-data-table" aria-label="Open invoices" data-od-label="title">
+  <div class="odl-card">
+    <div class="odl-top" data-od-optional>
+      <h3 data-od-slot="title" data-od-optional>Open invoices</h3>
+      <p class="odl-sum" data-od-slot="summary" data-od-optional>14 unpaid · $48,210.40 due · oldest from Sep 2</p>
+    </div>
+    <ul class="odl-columns" data-od-list="columns" hidden>
+      <li data-od-item data-od-template hidden><span data-od-slot="label"></span><span data-od-var="align" data-align="start"></span></li>
+      <li data-od-item><span>Invoice</span><span data-align="start"></span></li>
+      <li data-od-item><span>Customer</span><span data-align="start"></span></li>
+      <li data-od-item><span>Due</span><span data-align="start"></span></li>
+      <li data-od-item><span>Amount</span><span data-align="end"></span></li>
+    </ul>
+    <div class="odl-scroll">
+      <table data-od-list="rows">
+        <thead>
+          <tr data-od-sample>
+            <th scope="col" aria-sort="none"><button type="button" class="odl-sort" data-align="start"><span class="odl-label">Invoice</span><svg class="odl-i-none" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg><svg class="odl-i-dir" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg></button></th>
+            <th scope="col" aria-sort="none"><button type="button" class="odl-sort" data-align="start"><span class="odl-label">Customer</span><svg class="odl-i-none" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg><svg class="odl-i-dir" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg></button></th>
+            <th scope="col" aria-sort="none"><button type="button" class="odl-sort" data-align="start"><span class="odl-label">Due</span><svg class="odl-i-none" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg><svg class="odl-i-dir" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg></button></th>
+            <th scope="col" aria-sort="none"><button type="button" class="odl-sort" data-align="end"><span class="odl-label">Amount</span><svg class="odl-i-none" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg><svg class="odl-i-dir" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg></button></th>
+          </tr>
+        </thead>
+        <tbody data-od-item data-od-template hidden><tr data-od-list="cells"><td data-od-item><span data-od-slot="text"></span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2051</span></td><td><span>Harbourline Freight</span></td><td><span>Sep 2, 2026</span></td><td><span>$12,400.00</span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2058</span></td><td><span>Quillon Studio</span></td><td><span>Sep 9, 2026</span></td><td><span>$860.00</span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2063</span></td><td><span>Marrowfield Dental</span></td><td><span>Sep 15, 2026</span></td><td><span>$2,140.50</span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2066</span></td><td><span>Tessaly Outdoor Co.</span></td><td><span>Sep 21, 2026</span></td><td><span>$5,975.00</span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2070</span></td><td><span>Brightwater Clinic</span></td><td><span>Sep 28, 2026</span></td><td><span>$1,312.75</span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2072</span></td><td><span>Okafor and Lindqvist</span></td><td><span>Oct 3, 2026</span></td><td><span>$3,600.00</span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2075</span></td><td><span>Pellam Bakery</span></td><td><span>Oct 7, 2026</span></td><td><span>$418.20</span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2079</span></td><td><span>Northgate Robotics</span></td><td><span>Oct 12, 2026</span></td><td><span>$9,050.00</span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2081</span></td><td><span>Cinderbank Press</span></td><td><span>Oct 16, 2026</span></td><td><span>$2,275.00</span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2084</span></td><td><span>Velloway Hotels</span></td><td><span>Oct 20, 2026</span></td><td><span>$4,980.00</span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2086</span></td><td><span>Arden Mill Coffee</span></td><td><span>Oct 24, 2026</span></td><td><span>$736.40</span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2089</span></td><td><span>Seren Bike Works</span></td><td><span>Oct 29, 2026</span></td><td><span>$1,890.00</span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2093</span></td><td><span>Lowmoor Veterinary</span></td><td><span>Nov 4, 2026</span></td><td><span>$1,422.55</span></td></tr></tbody>
+        <tbody data-od-item><tr><td><span>INV-2097</span></td><td><span>Fenwick Dance School</span></td><td><span>Nov 10, 2026</span></td><td><span>$1,150.00</span></td></tr></tbody>
+      </table>
+    </div>
+    <div class="odl-foot">
+      <p class="odl-more" data-od-slot="more_note" data-od-optional>Showing the 14 unpaid invoices. Paid ones are in the ledger.</p>
+      <div class="odl-pager" role="group" aria-label="Pages" hidden>
+        <p class="odl-range" role="status">1–10 of 14</p>
+        <button type="button" class="odl-prev" aria-label="Previous page" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span class="odl-word">Previous</span></button>
+        <button type="button" class="odl-next" aria-label="Next page"><span class="odl-word">Next</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+document.querySelectorAll(".odl-data-table").forEach((root) => {
+  const table = root.querySelector("table"), list = root.querySelector(".odl-columns");
+  if (!table || !list) return;
+  const PER = 10, SVG = "http://www.w3.org/2000/svg";
+  const real = (els) => [...els].filter((n) => !n.hasAttribute("data-od-template"));
+  const rows = () => real(table.querySelectorAll(":scope > tbody")).filter((b) => !b.classList.contains("od-empty"));
+  const cols = real(list.querySelectorAll(":scope > li")).filter((li) => !li.classList.contains("od-empty"))
+    .map((li) => ({ label: li.firstElementChild ? li.firstElementChild.textContent.trim() : "", align: li.querySelector("[data-align]")?.getAttribute("data-align") || "start" }));
+  const key = cols.map((c) => c.label + c.align).join("\n") + "|" + rows().map((b) => b.textContent.trim()).sort().join("\n");
+  if (root.dataset.odlKey === key) return; // already drawn for this data; new data redraws
+  root.dataset.odlKey = key;
+
+  // the header row, built from the columns list (the list is the data; the row is what people see)
+  const icon = (cls, ds) => { const s = document.createElementNS(SVG, "svg"); s.setAttribute("class", cls); s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("aria-hidden", "true");
+    ds.forEach((d) => { const p = document.createElementNS(SVG, "path"); p.setAttribute("d", d); s.append(p); }); return s; };
+  const tr = document.createElement("tr");
+  cols.forEach((c) => {
+    const th = document.createElement("th"), b = document.createElement("button"), l = document.createElement("span");
+    th.scope = "col"; th.setAttribute("aria-sort", "none");
+    b.type = "button"; b.className = "odl-sort"; b.setAttribute("data-align", c.align);
+    l.className = "odl-label"; l.textContent = c.label;
+    b.append(l, icon("odl-i-none", ["m7 15 5 5 5-5", "m7 9 5-5 5 5"]), icon("odl-i-dir", ["m5 12 7-7 7 7", "M12 19V5"]));
+    th.append(b); tr.append(th);
+  });
+  let head = table.querySelector("thead");
+  if (!head) { head = document.createElement("thead"); table.prepend(head); }
+  if (cols.length) head.replaceChildren(tr);
+  rows().forEach((b) => b.querySelectorAll("td").forEach((td, i) => td.setAttribute("data-align", (cols[i] || {}).align || "start")));
+
+  const pager = root.querySelector(".odl-pager"), range = root.querySelector(".odl-range");
+  const prev = root.querySelector(".odl-prev"), next = root.querySelector(".odl-next");
+  const st = { page: 0, col: -1, dir: 1 };
+  const lang = root.closest("[lang]")?.getAttribute("lang") || undefined;
+  const dec = (new Intl.NumberFormat(lang).formatToParts(1.5).find((p) => p.type === "decimal") || { value: "." }).value;
+  const num = (t) => {
+    if (!/^[^\d]{0,4}-?[\d\s.,'’]+\s?[^\d\s]{0,4}$/.test(t)) return null;
+    const n = Number(t.split(dec).map((x) => x.replace(/[^\d-]/g, "")).join("."));
+    return Number.isFinite(n) ? n : null;
+  };
+  const cell = (b, i) => { const c = b.querySelectorAll("td")[i]; return c ? c.textContent.trim() : ""; };
+  const collator = new Intl.Collator(lang, { numeric: true, sensitivity: "base" });
+  const show = () => {
+    const rs = rows(), n = rs.length, pages = Math.max(1, Math.ceil(n / PER));
+    st.page = Math.max(0, Math.min(st.page, pages - 1));
+    rs.forEach((b, i) => { b.hidden = Math.floor(i / PER) !== st.page; });
+    pager.hidden = n <= PER;
+    const a = st.page * PER + 1, z = Math.min(n, a + PER - 1);
+    range.textContent = `${a}–${z} of ${n}`;
+    prev.disabled = st.page === 0;
+    next.disabled = st.page >= pages - 1;
+  };
+  const sortBy = (i) => {
+    if (i < 0) return;
+    st.dir = st.col === i ? -st.dir : 1;
+    st.col = i;
+    const rs = rows(), vals = rs.map((b) => cell(b, i).replace(/^–$/, "")), filled = vals.filter(Boolean);
+    const nums = filled.length > 0 && filled.every((v) => num(v) !== null);
+    const dates = !nums && filled.length > 0 && filled.every((v) => /\d/.test(v) && /[a-z]|[-/.]/i.test(v) && !Number.isNaN(Date.parse(v)));
+    const k = (v) => (nums ? num(v) : dates ? Date.parse(v) : v);
+    rs.map((b, j) => ({ b, v: vals[j] })).sort((x, y) => {
+      if (!x.v || !y.v) return !x.v - !y.v; // empty cells go last either way
+      const a = k(x.v), c = k(y.v);
+      return st.dir * (typeof a === "number" ? a - c : collator.compare(a, c));
+    }).forEach((o) => table.append(o.b));
+    head.querySelectorAll("th").forEach((th, j) => th.setAttribute("aria-sort", j === i ? (st.dir > 0 ? "ascending" : "descending") : "none"));
+    st.page = 0;
+    show();
+  };
+  root._odl = { sortBy, show, st, head };
+  if (!root.dataset.odlReady) {
+    root.dataset.odlReady = "1"; // listeners once per root; they act on the current table
+    table.addEventListener("click", (e) => {
+      const b = e.target.closest(".odl-sort");
+      if (b && table.contains(b)) root._odl.sortBy([...root._odl.head.querySelectorAll("th")].indexOf(b.closest("th")));
+    });
+    prev.addEventListener("click", () => { root._odl.st.page -= 1; root._odl.show(); });
+    next.addEventListener("click", () => { root._odl.st.page += 1; root._odl.show(); });
+  }
+  const box = root.querySelector(".odl-scroll");
+  const wide = () => box.classList.toggle("is-wide", box.scrollWidth > box.clientWidth + 1);
+  wide();
+  if (!root._odlRO && typeof ResizeObserver !== "undefined") { root._odlRO = new ResizeObserver(wide); root._odlRO.observe(box); }
+  show();
+});
+</script>

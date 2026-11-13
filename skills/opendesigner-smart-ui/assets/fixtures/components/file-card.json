@@ -1,0 +1,3 @@
+{"kind": "sheet", "name": "expenses-october-2026-team-design.csv", "kind_label": "CSV", "size": "48 KB", "date": "Exported today, 09:12",
+ "preview": {"label": "Preview", "event": {"name": "preview_file"}},
+ "download": {"label": "Download", "event": {"name": "download_file", "context": {"file": "expenses-october"}}}}

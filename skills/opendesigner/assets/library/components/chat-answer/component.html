@@ -58,24 +58,27 @@
   .odl-chat-answer .odl-pages { grid-column: 2; margin-block-start: calc(-1 * var(--ds-space-stack-sm)); }
 }
 @media (prefers-reduced-motion: reduce) { .odl-chat-answer, .odl-chat-answer *, .odl-chat-answer *::before { transition: none !important; animation: none !important; } }
+.odl-chat-answer [data-od-template] { display: none; }
 </style>
-<section class="odl-chat-answer" aria-label="Answer about dredging on the sands">
+<section class="odl-chat-answer" aria-label="Answer about dredging on the sands" data-od-label="question">
   <div class="odl-thread">
-    <p class="odl-ask">Who did the board let dredge the sands, and when?</p>
+    <p class="odl-ask" data-od-slot="question">Who did the board let dredge the sands, and when?</p>
     <article class="odl-turn">
       <span class="odl-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg></span>
       <div class="odl-main">
-        <p class="odl-who"><b>Saxifrage</b><span>Careful reading · 2 sources</span><span>Answered in 14 s</span></p>
-        <div class="odl-text">
-          <p>The board licensed dredging on the east sands twice in the 1950s. It granted two licences on 12 March 1953
+        <p class="odl-who"><b data-od-slot="assistant">Saxifrage</b><span style="display: contents" data-od-list="byline"><span data-od-item><span data-od-slot="text">Careful reading · 2 sources</span></span><span data-od-item>Answered in 14 s</span></span></p>
+        <div class="odl-text" data-od-list="answer">
+          <p data-od-item data-od-template hidden><span data-od-slot="text"></span><span data-od-list="cites"><a class="odl-cite" href="#" data-od-item><span data-od-slot="number"></span></a></span></p>
+          <p data-od-item>The board licensed dredging on the east sands twice in the 1950s. It granted two licences on 12 March 1953
             and renewed them for four boats on 9 May <span class="odl-nw">1958.<a class="odl-cite" href="#sands-src-1" data-src="1" aria-label="Source 1, pages 14 and 141">1</a></span></p>
-          <p>In between, the cockle beds were closed: the minute of 3 October 1956 says so, and the pier master turned two boats away that same <span class="odl-nw">week.<a class="odl-cite" href="#sands-src-2" data-src="2" aria-label="Source 2, page 41">2</a></span>
+          <p data-od-item>In between, the cockle beds were closed: the minute of 3 October 1956 says so, and the pier master turned two boats away that same <span class="odl-nw">week.<a class="odl-cite" href="#sands-src-2" data-src="2" aria-label="Source 2, page 41">2</a></span>
             Okonjo leaves the closure out, so in her account the sands look open the whole time.</p>
         </div>
-        <div class="odl-sources" role="group" aria-label="Sources">
+        <div class="odl-sources" role="group" aria-label="Sources" data-od-list="sources">
           <h4>Sources</h4>
-          <div class="odl-src" id="sands-src-1" data-src="1" tabindex="-1"><span class="odl-num" aria-hidden="true">1</span><span class="odl-src-text"><b>Quay commission minutes 1952–60</b><small>Scan · 212 pages · county record office</small></span><span class="odl-pages">pp. 14, 96, 141</span></div>
-          <div class="odl-src" id="sands-src-2" data-src="2" tabindex="-1"><span class="odl-num" aria-hidden="true">2</span><span class="odl-src-text"><b>Pier master’s log (1956)</b><small>Scan · 112 pages · read Oct 9</small></span><span class="odl-pages">p. 41</span></div>
+          <div class="odl-src" data-od-item data-od-template hidden tabindex="-1"><span class="odl-num" aria-hidden="true" data-od-slot="number"></span><span class="odl-src-text"><b data-od-slot="title"></b><small data-od-slot="detail" data-od-optional></small></span><span class="odl-pages" data-od-slot="pages" data-od-optional></span></div>
+          <div class="odl-src" data-od-item id="sands-src-1" data-src="1" tabindex="-1"><span class="odl-num" aria-hidden="true">1</span><span class="odl-src-text"><b>Quay commission minutes 1952–60</b><small>Scan · 212 pages · county record office</small></span><span class="odl-pages">pp. 14, 96, 141</span></div>
+          <div class="odl-src" data-od-item id="sands-src-2" data-src="2" tabindex="-1"><span class="odl-num" aria-hidden="true">2</span><span class="odl-src-text"><b>Pier master’s log (1956)</b><small>Scan · 112 pages · read Oct 9</small></span><span class="odl-pages">p. 41</span></div>
         </div>
         <div class="odl-actions">
           <button type="button" class="odl-copy" aria-label="Copy answer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span class="odl-label">Copy</span></button>
@@ -95,7 +98,8 @@ document.querySelectorAll(".odl-chat-answer").forEach((root) => {
   root.dataset.odlReady = "1";
   const note = root.querySelector("output");
   root.querySelectorAll(".odl-cite").forEach((a) => a.addEventListener("click", (e) => {
-    const src = root.querySelector(`.odl-src[data-src="${a.dataset.src}"]`);
+    const key = a.dataset.src || a.textContent.trim(); // rendered citations carry only their number
+    const src = [...root.querySelectorAll(".odl-src")].find((s) => (s.dataset.src || s.querySelector(".odl-num").textContent.trim()) === key);
     if (!src) return;
     e.preventDefault();
     src.focus(); // the person clicked the citation: moving to its source is expected

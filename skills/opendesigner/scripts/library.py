@@ -17,6 +17,8 @@ import subprocess
 import sys
 import tempfile
 
+import slots  # slot marks: the variable parts Smart UI and library.json read
+
 HERE = pathlib.Path(__file__).resolve().parent
 LIB = HERE.parent / "assets" / "library" / "components"
 ENGINE = HERE / "engine.py"
@@ -246,6 +248,8 @@ def check_one(c, known):
             errs.append(f'script must start from document.querySelectorAll(".odl-{slug}")')
     for v in sorted(used_vars(html_) - known):
         errs.append(f"{v} is not a variable every engine system writes")
+    if slots.has_marks(html_):  # marked parts (Smart UI): the marks are well formed and match spec.data
+        errs += [f"slot marks: {e}" for e in slots.check_marks(html_) + slots.check_against_spec(html_, (c.get("spec") or {}).get("data"))]
     if f'class="odl-{slug}' not in rest:
         errs.append(f"the root element needs class odl-{slug}")
     return errs

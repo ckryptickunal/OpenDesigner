@@ -1,0 +1,12 @@
+{"title": "Dublin to Montreal", "summary": "Thu 3 Dec · 2 adults · Economy · 3 of 21 flights",
+ "sorts": [
+  {"key": "best", "label": "Best", "price": "€498", "duration": "9h 40m"},
+  {"key": "price", "label": "Cheapest", "price": "€431", "duration": "13h 15m"},
+  {"key": "time", "label": "Fastest", "price": "€566", "duration": "7h 25m"}],
+ "flights": [
+  {"depart": "11:20", "from": "DUB", "arrive": "16:00", "to": "YUL", "duration": "9h 40m", "stops": "1 stop · BOS", "airline": "Corrin Air", "tag": "Best", "price": "€498", "per": "per adult",
+   "select": {"label": "Choose", "a11y_label": "Choose Corrin Air, 11:20 from DUB, €498", "event": {"name": "choose_flight", "context": {"flight": "CR412"}}}},
+  {"depart": "06:05", "from": "DUB", "arrive": "14:20", "to": "YUL", "duration": "13h 15m", "stops": "2 stops · LHR, YYZ", "airline": "Marlow Atlantic", "tag": "Cheapest", "price": "€431", "per": "per adult",
+   "select": {"label": "Choose", "a11y_label": "Choose Marlow Atlantic, 06:05 from DUB, €431", "event": {"name": "choose_flight", "context": {"flight": "MA208"}}}},
+  {"depart": "22:35", "from": "DUB", "arrive": "01:00", "to": "YUL", "day_offset": "1", "duration": "7h 25m", "stops": "Direct", "airline": "Brevik Airways", "price": "€566",
+   "select": {"label": "Choose", "a11y_label": "Choose Brevik Airways, 22:35 from DUB, €566", "event": {"name": "choose_flight", "context": {"flight": "BV77"}}}}]}

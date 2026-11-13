@@ -1,0 +1,10 @@
+{"title": "Report a problem with an order", "intro": "Tell us what went wrong with order 58-1172 and we will suggest a fix before anything is sent.",
+ "fields": [
+  {"name": "issue", "label": "What went wrong", "kind": "select", "required": true, "value": "damaged",
+   "options": [{"label": "Something arrived damaged", "value": "damaged"}, {"label": "Something is missing", "value": "missing"}, {"label": "Wrong item", "value": "wrong_item"}, {"label": "It never arrived", "value": "not_arrived"}]},
+  {"name": "item", "label": "Which item", "kind": "text", "required": true, "value": "Stoneware serving bowl", "hint": "As it reads on the packing slip"},
+  {"name": "quantity", "label": "How many", "kind": "number", "required": true, "value": 1, "min": 1, "max": 6, "hint": "You ordered 6"},
+  {"name": "noticed_on", "label": "Date you noticed", "kind": "date", "value": "2026-11-12"},
+  {"name": "photos_later", "label": "I can send photos later", "kind": "toggle", "value": true, "hint": "Photos make a refund faster"}],
+ "submit": {"label": "Continue", "event": {"name": "submit_problem_report"}},
+ "cancel": {"label": "Cancel", "event": {"name": "cancel_report"}}}

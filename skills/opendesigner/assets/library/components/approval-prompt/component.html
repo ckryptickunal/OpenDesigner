@@ -1,0 +1,65 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-approval-prompt { box-sizing: border-box; inline-size: 100%; max-inline-size: 30rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-approval-prompt .odl-card { box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-stack-lg);
+  padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); border: var(--ds-border-width-default) solid var(--ds-color-border-default);
+  border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-floating); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-approval-prompt *, .odl-approval-prompt *::before { box-sizing: border-box; }
+.odl-approval-prompt svg { flex: none; fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-approval-prompt .odl-head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--ds-space-inline-md); align-items: start; }
+.odl-approval-prompt .odl-icon { display: grid; place-items: center; inline-size: var(--ds-size-control-md); block-size: var(--ds-size-control-md); border-radius: var(--ds-radius-nested);
+  background: var(--ds-color-surface-sunken); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); color: var(--ds-color-icon-default); }
+.odl-approval-prompt .odl-icon svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
+.odl-approval-prompt h3 { margin: 0; font: var(--ds-text-title-md); overflow-wrap: anywhere; text-wrap: balance; }
+.odl-approval-prompt .odl-summary { margin: var(--ds-space-stack-xs) 0 0; color: var(--ds-color-text-secondary); overflow-wrap: anywhere; }
+.odl-approval-prompt dl { display: grid; gap: var(--ds-space-stack-sm); margin: 0; padding: var(--ds-space-inset-md) var(--ds-space-inset-lg); border-radius: var(--ds-radius-nested);
+  background: var(--ds-color-surface-sunken); font-variant-numeric: tabular-nums; }
+.odl-approval-prompt dl > div { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: var(--ds-space-inline-md); align-items: baseline; }
+.odl-approval-prompt dt { color: var(--ds-color-text-secondary); overflow-wrap: anywhere; }
+.odl-approval-prompt dd { margin: 0; overflow-wrap: anywhere; }
+/* No details to show: the box goes, rather than an empty panel or a "nothing here" line. */
+.odl-approval-prompt dl:not(:has(dt:not(:empty))) { display: none; }
+.odl-approval-prompt .odl-warning { display: flex; gap: var(--ds-space-inline-md); margin: 0; padding: var(--ds-space-inset-md) var(--ds-space-inset-lg); border-radius: var(--ds-radius-nested);
+  background: var(--ds-color-bg-warning-subtle); color: var(--ds-color-text-primary); overflow-wrap: anywhere; }
+.odl-approval-prompt .odl-warning svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); margin-block-start: calc((1lh - var(--ds-size-icon-sm)) / 2); color: var(--ds-color-text-warning); }
+.odl-approval-prompt .odl-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--ds-space-inline-sm); padding-block-start: var(--ds-space-stack-xs); }
+.odl-approval-prompt button { display: inline-flex; align-items: center; justify-content: center; flex: 0 1 auto; min-inline-size: 7rem; max-inline-size: 100%;
+  min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: var(--ds-space-inset-xs) var(--ds-space-inset-lg); border-radius: var(--ds-radius-control);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-align: center; overflow-wrap: anywhere; cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), border-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+/* The action that changes something gets the full touch target in every system. */
+.odl-approval-prompt [data-od-effect="change"] { min-block-size: max(var(--ds-size-control-lg), var(--ds-size-target-min), 2.75rem); }
+.odl-approval-prompt .odl-cancel { min-block-size: max(var(--ds-size-control-lg), var(--ds-size-target-min), 2.75rem); border: var(--ds-border-width-default) solid var(--ds-color-border-default);
+  background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-approval-prompt .odl-cancel:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-approval-prompt .odl-approve { border: var(--ds-border-width-default) solid transparent; background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
+.odl-approval-prompt .odl-approve:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-approval-prompt .odl-approve:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-approval-prompt button:disabled { cursor: not-allowed; background: var(--ds-color-bg-disabled); border-color: transparent; color: var(--ds-color-text-disabled); }
+.odl-approval-prompt button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+/* Phone: the two buttons share the row, each half; a long label wraps inside its own button. */
+@container (max-width: 26rem) {
+  .odl-approval-prompt .odl-card { padding: var(--ds-space-inset-lg); }
+  .odl-approval-prompt dl { padding: var(--ds-space-inset-md); }
+  .odl-approval-prompt dl > div { grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-2); }
+  .odl-approval-prompt button { flex: 1 1 auto; }
+}
+@media (prefers-reduced-motion: reduce) { .odl-approval-prompt, .odl-approval-prompt *, .odl-approval-prompt *::before { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-approval-prompt" aria-labelledby="odl-ap-title"><div class="odl-card">
+  <div class="odl-head">
+    <span class="odl-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span>
+    <div>
+      <h3 id="odl-ap-title" data-od-slot="title">Send 3 invoices to Halden &amp; Rowe?</h3>
+      <p class="odl-summary" data-od-slot="summary">Nothing is sent until you confirm.</p>
+    </div>
+  </div>
+  <dl data-od-list="details">
+    <div data-od-item><dt data-od-slot="label">To</dt><dd data-od-slot="value">accounts@haldenrowe.example</dd></div>
+    <div data-od-item><dt>Invoices</dt><dd>INV-2207, INV-2208, INV-2211</dd></div>
+    <div data-od-item><dt>Total</dt><dd>€18,420.00</dd></div>
+    <div data-od-item><dt>Due</dt><dd>12 Dec, 30 days</dd></div>
+  </dl>
+  <p class="odl-warning" data-od-optional><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span data-od-slot="warning">The client sees them right away, and a sent invoice can't be taken back.</span></p>
+  <div class="odl-actions"><button type="button" class="odl-cancel" data-od-action="cancel">Cancel</button><button type="button" class="odl-approve" data-od-action="approve" data-od-effect="change">Send invoices</button></div>
+</div></section>

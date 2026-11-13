@@ -1,0 +1,64 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-receipt { box-sizing: border-box; inline-size: 100%; max-inline-size: 30rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-receipt .odl-card { box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-stack-lg);
+  padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-receipt *, .odl-receipt *::before { box-sizing: border-box; }
+.odl-receipt svg { flex: none; fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-receipt .odl-status { display: flex; align-items: center; gap: var(--ds-space-inline-xs); margin: 0; font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); }
+.odl-receipt .odl-status svg { display: none; inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
+/* The status line takes its tone: one icon and the text colour, never a filled block. */
+.odl-receipt .odl-status[data-tone="success"] { color: var(--ds-color-text-success); }
+.odl-receipt .odl-status[data-tone="warning"] { color: var(--ds-color-text-warning); }
+.odl-receipt .odl-status[data-tone="danger"] { color: var(--ds-color-text-danger); }
+.odl-receipt .odl-status[data-tone="info"] { color: var(--ds-color-text-info); }
+.odl-receipt .odl-status[data-tone="success"] .odl-i-success, .odl-receipt .odl-status[data-tone="warning"] .odl-i-warning,
+.odl-receipt .odl-status[data-tone="danger"] .odl-i-danger, .odl-receipt .odl-status[data-tone="info"] .odl-i-info { display: block; }
+.odl-receipt .odl-head { display: grid; gap: var(--ds-space-stack-sm); }
+.odl-receipt h3 { margin: 0; font: var(--ds-text-title-lg); overflow-wrap: anywhere; text-wrap: balance; }
+.odl-receipt .odl-ref { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--ds-space-inline-xs); margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-receipt .odl-ref span { color: var(--ds-color-text-primary); font: var(--ds-text-code-md); letter-spacing: var(--ds-text-label-md-tracking); overflow-wrap: anywhere; }
+.odl-receipt dl { margin: 0; display: grid; gap: var(--ds-space-stack-sm); font-variant-numeric: tabular-nums; }
+.odl-receipt .odl-lines { padding-block-start: var(--ds-space-stack-lg); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-receipt dl > div { display: flex; justify-content: space-between; align-items: baseline; gap: var(--ds-space-inline-md); }
+.odl-receipt dt { min-inline-size: 0; color: var(--ds-color-text-secondary); overflow-wrap: anywhere; }
+.odl-receipt dd { margin: 0; flex: none; max-inline-size: 60%; text-align: end; overflow-wrap: anywhere; }
+.odl-receipt .odl-total { padding-block-start: var(--ds-space-stack-md); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); font-weight: var(--ds-font-weight-heading); }
+.odl-receipt .odl-total dt { color: var(--ds-color-text-primary); }
+.odl-receipt .odl-total dd { font: var(--ds-text-title-md); }
+.odl-receipt .odl-note { margin: 0; color: var(--ds-color-text-secondary); overflow-wrap: anywhere; }
+.odl-receipt .odl-acts { display: flex; flex-wrap: wrap; gap: var(--ds-space-inline-sm); }
+.odl-receipt .odl-acts:not(:has(button)) { display: none; }
+.odl-receipt button { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); flex: 1 1 10rem; max-inline-size: 100%;
+  min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: var(--ds-space-inset-xs) var(--ds-space-inset-lg); border-radius: var(--ds-radius-control);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-align: center; overflow-wrap: anywhere; cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-receipt button svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
+.odl-receipt .odl-primary { border: var(--ds-border-width-default) solid transparent; background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
+.odl-receipt .odl-primary:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-receipt .odl-secondary { border: var(--ds-border-width-default) solid var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-receipt .odl-secondary:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-receipt button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+@container (max-width: 26rem) {
+  .odl-receipt .odl-card { padding: var(--ds-space-inset-lg); }
+  .odl-receipt h3 { font: var(--ds-text-title-md); }
+}
+@media (prefers-reduced-motion: reduce) { .odl-receipt, .odl-receipt *, .odl-receipt *::before { transition: none !important; animation: none !important; } }
+</style>
+<article class="odl-receipt" aria-labelledby="odl-rc-title"><div class="odl-card">
+  <div class="odl-head">
+    <p class="odl-status" data-od-var="tone" data-tone="success"><svg class="odl-i-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg><svg class="odl-i-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><svg class="odl-i-danger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg><svg class="odl-i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span data-od-slot="status">Booking confirmed</span></p>
+    <h3 id="odl-rc-title" data-od-slot="title">Table for 4 at Casa Verbena</h3>
+    <p class="odl-ref" data-od-optional>Reference <span data-od-slot="reference">VRB-48213</span></p>
+  </div>
+  <dl class="odl-lines" data-od-list="lines">
+    <div data-od-item><dt data-od-slot="label">Date</dt><dd data-od-slot="value">Fri 20 Nov</dd></div>
+    <div data-od-item><dt>Time</dt><dd>19:30</dd></div>
+    <div data-od-item><dt>Guests</dt><dd>4 adults</dd></div>
+    <div data-od-item><dt>Deposit</dt><dd>€40.00</dd></div>
+  </dl>
+  <dl class="odl-total" data-od-optional><div><dt data-od-slot="total_label">Paid today</dt><dd data-od-slot="total_value">€40.00</dd></div></dl>
+  <p class="odl-note" data-od-slot="note" data-od-optional>The deposit comes off your bill. Free to cancel until Thu 19 Nov, 19:30.</p>
+  <div class="odl-acts"><button type="button" class="odl-primary" data-od-action="primary">View booking</button><button type="button" class="odl-secondary" data-od-action="secondary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><path d="M21 13V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8"/><path d="M3 10h18"/><path d="M16 19h6"/><path d="M19 16v6"/></svg><span data-od-slot="label">Add to calendar</span></button></div>
+</div></article>

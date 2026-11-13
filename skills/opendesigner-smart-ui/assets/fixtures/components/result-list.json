@@ -1,0 +1,13 @@
+{"title": "Dinner near Graça tonight", "note": "4 places open after 21:00, within a 10 minute walk",
+ "results": [
+  {"image": {"src": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=240&h=240&fit=crop&auto=format&q=70", "alt": "Restaurant dining room in daylight"},
+   "title": "Taberna Sete Colinas", "badge": "Table for 2 at 21:30", "meta": "Portuguese · 4.7 · 6 min walk", "detail": "Grilled fish and a short list of local wines, booked out most weekends.", "value": "€€", "value_note": "about €35 each",
+   "action": {"label": "View", "event": {"name": "open_place", "context": {"place": "sete_colinas"}}}},
+  {"image": {"src": "https://images.unsplash.com/photo-1583354608715-177553a4035e?w=240&h=240&fit=crop&auto=format&q=70", "alt": "Café with a white round table and chairs"},
+   "title": "Café Lanterna", "meta": "Café and small plates · 4.5 · 3 min walk", "value": "€", "value_note": "about €18 each",
+   "action": {"label": "View", "event": {"name": "open_place", "context": {"place": "lanterna"}}}},
+  {"image": {"src": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=240&h=240&fit=crop&auto=format&q=70", "alt": "Restaurant with a view of the water"},
+   "title": "Miradouro Grill", "badge": "River view", "meta": "Grill · 4.4 · 9 min walk", "detail": "Terrace seats go first; ask for one when you arrive.",
+   "action": {"label": "View", "event": {"name": "open_place", "context": {"place": "miradouro_grill"}}}},
+  {"title": "Pátio do Forno", "meta": "Bakery and wine bar · 4.8 · 8 min walk", "value": "€€", "value_note": "about €28 each",
+   "action": {"label": "View", "event": {"name": "open_place", "context": {"place": "patio_forno"}}}}]}

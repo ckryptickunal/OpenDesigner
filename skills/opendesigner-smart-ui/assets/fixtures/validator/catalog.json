@@ -1,0 +1,380 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+ "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+ "protocolVersion": "1.0",
+ "title": "Validator test catalog",
+ "description": "A small fixed catalog for the shared validator fixtures. Hand-written so the fixtures do not move when the library changes.",
+ "instructions": "",
+ "components": {
+  "Facts": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "component",
+    "id",
+    "title",
+    "facts"
+   ],
+   "properties": {
+    "component": {
+     "const": "Facts"
+    },
+    "id": {
+     "type": "string",
+     "maxLength": 64
+    },
+    "@accessibility": {
+     "$ref": "#/$defs/Accessibility"
+    },
+    "@metadata": {
+     "$ref": "#/$defs/Metadata"
+    },
+    "title": {
+     "type": "string",
+     "maxLength": 40
+    },
+    "tone": {
+     "type": "string",
+     "enum": [
+      "neutral",
+      "success",
+      "danger"
+     ],
+     "x-od-token": true
+    },
+    "facts": {
+     "type": "array",
+     "minItems": 1,
+     "maxItems": 4,
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "label",
+       "value"
+      ],
+      "x-od-name-from": "label",
+      "properties": {
+       "label": {
+        "type": "string",
+        "maxLength": 24
+       },
+       "value": {
+        "type": "string",
+        "maxLength": 24
+       },
+       "share": {
+        "type": [
+         "number",
+         "null"
+        ],
+        "minimum": 0,
+        "maximum": 100,
+        "x-od-measure": true
+       }
+      }
+     }
+    }
+   },
+   "metadata": {
+    "extensions": {
+     "opendesigner": {
+      "slug": "facts",
+      "group": "answer"
+     }
+    }
+   }
+  },
+  "Results": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "component",
+    "id",
+    "items"
+   ],
+   "properties": {
+    "component": {
+     "const": "Results"
+    },
+    "id": {
+     "type": "string",
+     "maxLength": 64
+    },
+    "@accessibility": {
+     "$ref": "#/$defs/Accessibility"
+    },
+    "@metadata": {
+     "$ref": "#/$defs/Metadata"
+    },
+    "items": {
+     "type": "array",
+     "minItems": 1,
+     "maxItems": 3,
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "title",
+       "book"
+      ],
+      "x-od-name-from": "title",
+      "properties": {
+       "title": {
+        "type": "string",
+        "maxLength": 40
+       },
+       "price": {
+        "type": "number"
+       },
+       "photo": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "src",
+         "alt"
+        ],
+        "properties": {
+         "src": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048,
+          "x-od-url": "image"
+         },
+         "alt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+         }
+        }
+       },
+       "book": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "label",
+         "event"
+        ],
+        "x-od-effect": "change",
+        "properties": {
+         "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+         },
+         "a11y_label": {
+          "type": "string",
+          "maxLength": 120
+         },
+         "event": {
+          "$ref": "#/$defs/Event"
+         }
+        }
+       }
+      }
+     }
+    }
+   },
+   "metadata": {
+    "extensions": {
+     "opendesigner": {
+      "slug": "results",
+      "group": "choose"
+     }
+    }
+   }
+  },
+  "Code": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "component",
+    "id",
+    "code"
+   ],
+   "properties": {
+    "component": {
+     "const": "Code"
+    },
+    "id": {
+     "type": "string",
+     "maxLength": 64
+    },
+    "code": {
+     "type": "string",
+     "maxLength": 400,
+     "x-od-code": true
+    }
+   },
+   "metadata": {
+    "extensions": {
+     "opendesigner": {
+      "slug": "code",
+      "group": "media"
+     }
+    }
+   }
+  },
+  "Column": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "component",
+    "id",
+    "children"
+   ],
+   "properties": {
+    "component": {
+     "const": "Column"
+    },
+    "id": {
+     "type": "string",
+     "maxLength": 64
+    },
+    "children": {
+     "type": "array",
+     "minItems": 2,
+     "maxItems": 4,
+     "items": {
+      "type": "string",
+      "maxLength": 64
+     }
+    },
+    "gap": {
+     "type": "string",
+     "enum": [
+      "sm",
+      "md",
+      "lg"
+     ]
+    },
+    "@accessibility": {
+     "$ref": "#/$defs/Accessibility"
+    }
+   },
+   "metadata": {
+    "extensions": {
+     "opendesigner": {
+      "slug": null,
+      "group": "layout",
+      "container": true
+     }
+    }
+   }
+  }
+ },
+ "functions": {},
+ "$defs": {
+  "anyComponent": {
+   "oneOf": [
+    {
+     "$ref": "#/components/Facts"
+    },
+    {
+     "$ref": "#/components/Results"
+    },
+    {
+     "$ref": "#/components/Code"
+    },
+    {
+     "$ref": "#/components/Column"
+    }
+   ]
+  },
+  "anyFunction": {
+   "not": {}
+  },
+  "Event": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "name"
+   ],
+   "properties": {
+    "name": {
+     "type": "string",
+     "pattern": "^[a-z][a-z0-9_]*$",
+     "maxLength": 40
+    },
+    "context": {
+     "type": "object",
+     "maxProperties": 8,
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ],
+      "maxLength": 200
+     }
+    }
+   }
+  },
+  "Accessibility": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "label": {
+     "type": "string",
+     "maxLength": 120
+    },
+    "description": {
+     "type": "string",
+     "maxLength": 240
+    },
+    "live": {
+     "type": "string",
+     "enum": [
+      "off",
+      "polite"
+     ]
+    },
+    "hidden": {
+     "type": "boolean"
+    }
+   }
+  },
+  "Metadata": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "stale_since": {
+     "type": "string",
+     "maxLength": 40
+    },
+    "permission": {
+     "type": "string",
+     "enum": [
+      "granted",
+      "denied"
+     ]
+    },
+    "permission_note": {
+     "type": "string",
+     "maxLength": 160
+    }
+   }
+  }
+ },
+ "metadata": {
+  "extensions": {
+   "opendesigner": {
+    "system": "test",
+    "set_version": 1,
+    "allow": {
+     "images": [
+      "images.unsplash.com",
+      "*.cdn.example"
+     ],
+     "links": []
+    },
+    "limits": {
+     "components": 8,
+     "depth": 3,
+     "leaves": 1
+    }
+   }
+  }
+ }
+}

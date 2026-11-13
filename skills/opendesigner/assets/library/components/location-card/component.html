@@ -1,0 +1,62 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence. The street pattern is drawn here; it is not a map of any real place. -->
+<style>
+.odl-location-card { box-sizing: border-box; inline-size: 100%; max-inline-size: 30rem; margin-inline: auto; container-type: inline-size; overflow: hidden; background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-location-card *, .odl-location-card *::before { box-sizing: border-box; }
+.odl-location-card svg { flex: none; }
+/* The drawn placeholder: blocks and streets in the system's neutral colours, a pin in the middle. No map tiles. */
+.odl-location-card .odl-map { position: relative; display: grid; place-items: center; aspect-ratio: 12 / 5; overflow: hidden; background: var(--ds-color-surface-sunken);
+  border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-location-card .odl-streets { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; }
+.odl-location-card .odl-block { fill: var(--ds-color-bg-neutral-subtle); }
+.odl-location-card .odl-block.is-soft { fill: var(--ds-color-bg-neutral-subtle-hover); }
+.odl-location-card .odl-avenue { fill: none; stroke: var(--ds-color-surface-raised); stroke-width: 14; stroke-linecap: round; }
+.odl-location-card .odl-pin { position: relative; display: grid; place-items: center; inline-size: var(--ds-size-control-lg); block-size: var(--ds-size-control-lg); border-radius: var(--ds-radius-full);
+  background: var(--ds-color-surface-raised); color: var(--ds-color-icon-accent); box-shadow: var(--ds-elevation-floating); }
+.odl-location-card .odl-pin svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-lg); }
+.odl-location-card .odl-body { display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xl); }
+.odl-location-card .odl-place { display: grid; gap: var(--ds-space-stack-xs); }
+.odl-location-card h3 { margin: 0; font: var(--ds-text-title-md); overflow-wrap: anywhere; text-wrap: balance; }
+.odl-location-card address { display: grid; font-style: normal; color: var(--ds-color-text-secondary); overflow-wrap: anywhere; }
+.odl-location-card .odl-facts { display: grid; gap: var(--ds-space-stack-sm); margin: 0; padding: 0; list-style: none; }
+.odl-location-card .odl-facts:not(:has(li)) { display: none; }
+.odl-location-card .odl-facts li { display: flex; align-items: flex-start; gap: var(--ds-space-inline-md); overflow-wrap: anywhere; }
+.odl-location-card .odl-facts svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); margin-block-start: calc((1lh - var(--ds-size-icon-sm)) / 2); fill: none; stroke: currentColor;
+  stroke-width: var(--ds-icon-stroke-md); color: var(--ds-color-icon-subtle); }
+.odl-location-card button { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); justify-self: start; max-inline-size: 100%;
+  min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: var(--ds-space-inset-xs) var(--ds-space-inset-lg); border-radius: var(--ds-radius-control);
+  border: var(--ds-border-width-default) solid transparent; background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-align: center; overflow-wrap: anywhere; cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-location-card button:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-location-card button svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-location-card button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+@container (max-width: 26rem) {
+  .odl-location-card .odl-map { aspect-ratio: 2 / 1; }
+  .odl-location-card .odl-body { padding: var(--ds-space-inset-lg); }
+  .odl-location-card button { justify-self: stretch; }
+}
+@media (prefers-reduced-motion: reduce) { .odl-location-card, .odl-location-card *, .odl-location-card *::before { transition: none !important; animation: none !important; } }
+</style>
+<article class="odl-location-card" aria-labelledby="odl-lc-title">
+  <div class="odl-map" aria-hidden="true">
+    <svg class="odl-streets" viewBox="0 0 480 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect class="odl-block" x="-8" y="-8" width="100" height="64" rx="6"/><rect class="odl-block is-soft" x="108" y="-8" width="104" height="64" rx="6"/><rect class="odl-block" x="228" y="-8" width="72" height="64" rx="6"/><rect class="odl-block" x="316" y="-8" width="88" height="64" rx="6"/><rect class="odl-block is-soft" x="420" y="-8" width="72" height="64" rx="6"/>
+      <rect class="odl-block is-soft" x="-8" y="72" width="100" height="56" rx="6"/><rect class="odl-block" x="108" y="72" width="104" height="56" rx="6"/><rect class="odl-block" x="228" y="72" width="72" height="56" rx="6"/><rect class="odl-block is-soft" x="316" y="72" width="88" height="56" rx="6"/><rect class="odl-block" x="420" y="72" width="72" height="56" rx="6"/>
+      <rect class="odl-block" x="-8" y="144" width="100" height="64" rx="6"/><rect class="odl-block" x="108" y="144" width="104" height="64" rx="6"/><rect class="odl-block is-soft" x="228" y="144" width="72" height="64" rx="6"/><rect class="odl-block" x="316" y="144" width="88" height="64" rx="6"/><rect class="odl-block is-soft" x="420" y="144" width="72" height="64" rx="6"/>
+      <path class="odl-avenue" d="M-20 214 C 120 160, 300 70, 500 -14"/>
+    </svg>
+    <span class="odl-pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></span>
+  </div>
+  <div class="odl-body">
+    <div class="odl-place">
+      <h3 id="odl-lc-title" data-od-slot="name">Casa Verbena</h3>
+      <address><span data-od-slot="address">Rua das Amoreiras 28</span><span data-od-slot="locality" data-od-optional>1250-020 Lisbon</span></address>
+    </div>
+    <ul class="odl-facts">
+      <li data-od-optional><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z"/><path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z"/><path d="M16 17h4"/><path d="M4 13h4"/></svg><span data-od-slot="distance">850 m away · 11 min walk</span></li>
+      <li data-od-optional><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-od-slot="hours">Open today 12:00 to 23:00</span></li>
+    </ul>
+    <button type="button" data-od-action="open_maps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg><span data-od-slot="label">Open in maps</span></button>
+  </div>
+</article>

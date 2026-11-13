@@ -1,0 +1,17 @@
+{"title": "Evening routine",
+ "week": "Week of 9 Nov",
+ "week_days": [
+  {"letter": "M", "date": "9", "label": "Monday 9 Nov"},
+  {"letter": "T", "date": "10", "label": "Tuesday 10 Nov"},
+  {"letter": "W", "date": "11", "label": "Wednesday 11 Nov"},
+  {"letter": "T", "date": "12", "label": "Thursday 12 Nov"},
+  {"letter": "F", "date": "13", "label": "Friday 13 Nov"},
+  {"letter": "S", "date": "14", "label": "Saturday 14 Nov"},
+  {"letter": "S", "date": "15", "label": "Sunday 15 Nov"}
+ ],
+ "habits": [
+  {"name": "Phone off by 22:00"},
+  {"name": "Journal three lines"},
+  {"name": "Lay out tomorrow's clothes"}
+ ],
+ "add": {"label": "New habit", "event": {"name": "add_habit"}}}

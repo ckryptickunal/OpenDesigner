@@ -1,0 +1,54 @@
+{
+  "name": "Time slots",
+  "summary": "Free times grouped by day, one button per time, with the time zone stated and a plain line for a day with nothing free.",
+  "use": "when someone wants to book or move an appointment and needs to pick one of the free times",
+  "type": "form",
+  "style": "friendly",
+  "industries": ["health", "home", "events", "saas", "any"],
+  "tags": ["booking", "schedule", "appointment", "times", "calendar"],
+  "states": ["picked", "almost full", "no times that day", "hover", "focus", "disabled", "wraps on a phone"],
+  "source": null,
+  "a11y": "Each day is a labelled group; each time is a button named with its time and day (\"11:00, Tue 18 Nov\"), and the picked one is marked with aria-pressed.",
+  "width": "medium",
+  "spec": {
+    "use_when": ["picking one free time for an appointment, a call or a delivery window, over one to seven days"],
+    "avoid_when": ["picking a date range or dates months ahead: use date-range-picker", "a day's existing plan to read: use calendar-agenda", "only two or three times: quick-replies may be enough"],
+    "parts": [
+      {"name": "title", "selector": ".odl-time-slots h3", "what": "what is being booked", "slot": "text"},
+      {"name": "timezone", "selector": ".odl-tz", "what": "length, with whom, and the time zone the times are in", "slot": "text"},
+      {"name": "days", "selector": ".odl-day", "what": "one day and its free times", "slot": "list"},
+      {"name": "label", "selector": ".odl-dlabel", "what": "the day, such as 'Tue 18 Nov'", "slot": "text"},
+      {"name": "slots", "selector": ".odl-day li", "what": "one free time", "slot": "list"},
+      {"name": "tone", "selector": ".odl-wrap", "what": "warning marks a time that is almost full with a small dot; say so in the action's a11y_label too", "slot": "none"},
+      {"name": "select", "selector": ".odl-slot", "what": "picks this time; its label is the time", "slot": "action"},
+      {"name": "legend", "selector": ".odl-legend", "what": "what the dot means, when any time carries it", "slot": "text"}
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "days"],
+      "properties": {
+        "title": {"type": "string", "maxLength": 48, "part": "title"},
+        "timezone": {"type": "string", "maxLength": 72, "part": "timezone"},
+        "legend": {"type": "string", "maxLength": 48, "part": "legend"},
+        "days": {"type": "array", "minItems": 1, "maxItems": 7, "part": "days",
+          "items": {"type": "object", "required": ["label", "slots"], "properties": {
+            "label": {"type": "string", "maxLength": 20, "part": "label"},
+            "slots": {"type": "array", "minItems": 0, "maxItems": 12, "part": "slots",
+              "items": {"type": "object", "required": ["select"], "properties": {
+                "tone": {"type": "string", "enum": ["neutral", "warning"], "part": "tone"},
+                "select": {"type": "object", "part": "select", "properties": {"label": {"type": "string", "maxLength": 40}, "event": {"type": "object"}}, "required": ["label", "event"]}
+              }}}
+          }}}
+      }
+    },
+    "edge": {
+      "empty": {"status": "handled", "how": "a day with no free times says 'No free times' in place of the buttons", "evidence": ".odl-day:not(:has(.odl-slot)) .odl-none"},
+      "loading": {"status": "not_built", "how": "keep the day names and show three empty time buttons per day"},
+      "error": {"status": "not_built", "how": "if a picked time was just taken, the host disables it and the assistant offers the next free time"},
+      "disabled": {"status": "shown", "how": "a time that was just taken is disabled and struck through", "evidence": ".odl-slot:disabled"},
+      "overflow": {"status": "handled", "how": "times wrap onto more lines; on a phone the day's name moves above its times", "evidence": "repeat(auto-fill, minmax(5.5rem, 1fr))"},
+      "long_text": {"status": "handled", "how": "titles, day names and the time-zone line wrap; times never wrap", "evidence": "overflow-wrap: anywhere"}
+    },
+    "keyboard": ["Tab moves through the times, day by day", "Enter or Space picks one"]
+  }
+}

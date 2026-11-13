@@ -1,0 +1,51 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-citation-list { box-sizing: border-box; inline-size: 100%; max-inline-size: 40rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-citation-list *, .odl-citation-list *::before, .odl-citation-list *::after { box-sizing: border-box; }
+.odl-citation-list .odl-card { display: grid; gap: var(--ds-space-stack-md); padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); }
+.odl-citation-list h3 { margin: 0; font: var(--ds-text-title-md); overflow-wrap: anywhere; }
+.odl-citation-list ol { display: grid; margin: 0; padding: 0; list-style: none; counter-reset: odl-src; }
+.odl-citation-list li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; gap: var(--ds-space-stack-xs) var(--ds-space-inline-md);
+  padding-block: var(--ds-space-inset-md); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); counter-increment: odl-src; }
+.odl-citation-list li:first-child, .odl-citation-list li[hidden] + li { border-block-start: 0; padding-block-start: var(--ds-space-inset-xs); }
+.odl-citation-list li:last-child { padding-block-end: 0; }
+.odl-citation-list li::before { content: counter(odl-src); display: grid; place-items: center; min-inline-size: var(--ds-size-control-sm); block-size: var(--ds-size-control-sm); padding: 0 var(--ds-space-2);
+  border-radius: var(--ds-radius-control-sm); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); font-variant-numeric: tabular-nums; }
+.odl-citation-list .odl-body { display: grid; gap: var(--ds-space-stack-xs); min-inline-size: 0; }
+.odl-citation-list .odl-body p { margin: 0; overflow-wrap: anywhere; }
+.odl-citation-list .odl-src-title { font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); }
+.odl-citation-list .odl-meta { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-citation-list .odl-date::before { content: " · "; }
+.odl-citation-list .odl-excerpt { margin-block-start: var(--ds-space-stack-xs); padding-inline-start: var(--ds-space-inline-md); border-inline-start: var(--ds-border-width-default) solid var(--ds-color-border-default);
+  color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-citation-list .odl-open { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min));
+  min-inline-size: var(--ds-size-target-min); padding: 0 var(--ds-space-inset-sm); border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-control);
+  background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); font: var(--ds-text-label-md); white-space: nowrap; cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-citation-list .odl-open:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-citation-list .odl-open:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-citation-list .odl-open svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); stroke-width: var(--ds-icon-stroke-md); }
+/* While the answer is still arriving, the button keeps its place but stays out of sight until it has a label. */
+.odl-citation-list .odl-open[data-od-pending] { visibility: hidden; }
+/* Phone: the button moves under the text, in line with it. */
+@container (max-width: 28rem) {
+  .odl-citation-list .odl-card { padding: var(--ds-space-inset-lg); }
+  .odl-citation-list li { grid-template-columns: auto minmax(0, 1fr); }
+  .odl-citation-list .odl-open { grid-column: 2; justify-self: start; margin-block-start: var(--ds-space-stack-xs); }
+}
+@media (prefers-reduced-motion: reduce) { .odl-citation-list .odl-open { transition: none; } }
+/* The hidden full template item stays hidden, whatever display its row has. */
+.odl-citation-list [hidden] { display: none; }
+</style>
+<section class="odl-citation-list" aria-label="Sources">
+  <div class="odl-card">
+    <h3 data-od-slot="title" data-od-optional>Sources</h3>
+    <ol data-od-list="items">
+      <li data-od-item data-od-template hidden><div class="odl-body"><p class="odl-src-title" data-od-slot="title"></p><p class="odl-meta"><span data-od-slot="publisher"></span><span class="odl-date" data-od-slot="date" data-od-optional></span></p><p class="odl-excerpt" data-od-slot="excerpt" data-od-optional></p></div><button type="button" class="odl-open" data-od-action="open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg><span data-od-slot="label"></span></button></li>
+      <li data-od-item><div class="odl-body"><p class="odl-src-title">Heat pumps in older homes: a field study</p><p class="odl-meta"><span>Building Energy Review</span><span class="odl-date">March 2026</span></p><p class="odl-excerpt">Homes built before 1950 kept a steady indoor temperature after loft and wall insulation, even on the coldest days.</p></div><button type="button" class="odl-open" aria-label="Open Heat pumps in older homes: a field study"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg><span>Open</span></button></li>
+      <li data-od-item><div class="odl-body"><p class="odl-src-title">Grants for home heating, 2026</p><p class="odl-meta"><span>energy-advice.example</span><span class="odl-date">Updated 4 Nov 2026</span></p></div><button type="button" class="odl-open" aria-label="Open Grants for home heating, 2026"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg><span>Open</span></button></li>
+      <li data-od-item><div class="odl-body"><p class="odl-src-title">Running costs calculator: method notes</p><p class="odl-meta"><span>Tamsworth Home Lab</span></p><p class="odl-excerpt">Prices use the average unit rate for the last twelve months, not today's tariff.</p></div><button type="button" class="odl-open" aria-label="Open Running costs calculator: method notes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg><span>Open</span></button></li>
+    </ol>
+  </div>
+</section>
