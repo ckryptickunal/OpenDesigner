@@ -118,9 +118,13 @@ document.querySelectorAll(".odl-savings-goal").forEach((root) => {
   root.dataset.odlReady = "1";
   // Rendered from data: goal, saved, currency, account and amounts come from the marked values.
   const val = (n) => root.querySelector(`[data-od-slot="${n}"]`)?.textContent.trim() || "";
-  const GOAL = Number(val("goal")) || 3000, cur = val("currency") || "GBP", from = val("from_account") || "Everyday";
-  const fmt = new Intl.NumberFormat("en-GB", { style: "currency", currency: cur, minimumFractionDigits: 0, maximumFractionDigits: 2 }), money = (n) => fmt.format(n);
-  let saved = Number(val("saved")) || 0;
+  // a rendered number arrives formatted for the reader ("1,800" or "1.800"): read it back with the page's decimal sign
+  const dec = (new Intl.NumberFormat(root.closest("[lang]")?.getAttribute("lang") || undefined).formatToParts(1.5).find((p) => p.type === "decimal") || { value: "." }).value;
+  const num = (t) => Number(t.split(dec).map((x) => x.replace(/[^\d-]/g, "")).join("."));
+  const GOAL = num(val("goal")) || 3000, cur = val("currency") || "GBP", from = val("from_account") || "Everyday";
+  let fmt; try { fmt = new Intl.NumberFormat("en-GB", { style: "currency", currency: cur, minimumFractionDigits: 0, maximumFractionDigits: 2 }); } catch (e) { fmt = new Intl.NumberFormat("en-GB", { minimumFractionDigits: 0, maximumFractionDigits: 2 }); } // an unknown currency code: plain numbers
+  const money = (n) => fmt.format(n);
+  let saved = num(val("saved")) || 0;
   root.querySelectorAll(".odl-amounts label:not([hidden])").forEach((l) => { const v = l.querySelector('[data-od-slot="value"]')?.textContent.trim(); if (v) l.querySelector("input").value = v; });
   const radios = [...root.querySelectorAll(".odl-amounts label:not([hidden]) input")];
   if (radios.length && !radios.some((i) => i.checked)) radios[Math.min(1, radios.length - 1)].checked = true;

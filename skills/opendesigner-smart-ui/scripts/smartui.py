@@ -157,7 +157,7 @@ def props_for(nodes, spec, css, tokens, where=""):
         [n["name"] for n in nodes if n["kind"] == "text" and not n.get("optional")]
     # buttons are optional unless the part's spec says so: a step's Start exists only on the current step
     return {"properties": props, "required": sorted(set(req), key=list(props).index),
-            "name_from": next((t for t in names_text if props.get(t, {}).get("type") == "string"), None)}
+            "name_from": next((t for t in names_text if "string" in (lambda ty: ty if isinstance(ty, list) else [ty])(props.get(t, {}).get("type"))), None)}
 
 
 def pascal(slug):

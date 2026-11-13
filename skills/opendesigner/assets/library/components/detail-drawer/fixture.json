@@ -5,10 +5,10 @@
  "currency": "EUR",
  "subtitle": [{"text": "Due Nov 20 · in 7 days · Net 14"}, {"text": "Approving pays it by SEPA on Nov 19."}],
  "fields": [
-  {"label": "Invoice", "value": "OTH-20417"},
+  {"label": "Invoice", "value": "OTH-20417", "note": ""},
   {"label": "Submitted by", "value": "Lukas Brenner", "note": "Nov 6"},
-  {"label": "Cost centre", "value": "Site works · Brno"},
-  {"label": "Pay from", "value": "Main account ··0381"},
+  {"label": "Cost centre", "value": "Site works · Brno", "note": ""},
+  {"label": "Pay from", "value": "Main account ··0381", "note": ""},
   {"label": "Matched to", "value": "PO-7742", "note": "2 of 2 lines"}
  ],
  "file_name": "OTH-20417.pdf",

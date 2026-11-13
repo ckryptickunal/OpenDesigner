@@ -196,7 +196,7 @@ document.querySelectorAll(".odl-product-gallery").forEach((root) => {
   const cur = root.querySelector('[data-od-slot="currency"]')?.textContent.trim();
   if (cur) root.querySelectorAll('[data-od-slot="price"], [data-od-slot="was_price"]').forEach((el) => {
     const n = Number(el.textContent.replace(/[^\d.]/g, ""));
-    if (Number.isFinite(n)) el.textContent = new Intl.NumberFormat(root.closest("[lang]")?.getAttribute("lang") || "en", { style: "currency", currency: cur, minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(n);
+    if (Number.isFinite(n)) try { el.textContent = new Intl.NumberFormat(root.closest("[lang]")?.getAttribute("lang") || "en", { style: "currency", currency: cur, minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(n); } catch (e) { /* an unknown currency code: the price stays as sent */ }
   });
   const avg = Number(root.querySelector('[data-od-slot="rating_average"]')?.textContent), count = root.querySelector('[data-od-slot="rating_count"]')?.textContent.trim();
   const rate = root.querySelector(".odl-rating");

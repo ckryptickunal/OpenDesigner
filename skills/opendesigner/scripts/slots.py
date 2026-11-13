@@ -122,8 +122,18 @@ def _scope_children(el):
 class _Self:
     """A list item read as part of its own scope: its own marks count, but not item/list/action (no recursion)."""
     def __init__(self, el):
-        self.tag, self.line, self.children = el.tag, el.line, el.children
+        self.tag, self.line, self.children, self.parent = el.tag, el.line, el.children, None
         self.attrs = {k: v for k, v in el.attrs.items() if k not in ("data-od-item", "data-od-list", "data-od-action", "data-od-template")}
+
+
+def _optional_within(c, scope_el):
+    """The element, or a wrapper of it inside this scope, is data-od-optional (the renderer drops it when empty)."""
+    n = c
+    while n is not None and n is not scope_el:
+        if "data-od-optional" in n.attrs:
+            return True
+        n = n.parent
+    return False
 
 
 def _node(el, kind, name):
@@ -138,7 +148,7 @@ def _read_scope(el, include_self=False):
         a = c.attrs
         if "data-od-slot" in a:
             n = _node(c, "text", a["data-od-slot"])
-            n["optional"] = "data-od-optional" in a
+            n["optional"] = _optional_within(c, el)
             out.append(n)
         if "data-od-var" in a:
             n = _node(c, "var", a["data-od-var"])

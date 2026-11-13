@@ -18,7 +18,7 @@
     {
       "tone": "danger",
       "title": "The bank feed stopped syncing.",
-      "message": "Transactions after 9:12 AM aren't in yet. Reconnect to fetch them."
+      "message": "Transactions after 9:12 AM aren't in. Reconnect to fetch them."
     }
   ]
 }

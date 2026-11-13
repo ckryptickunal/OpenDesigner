@@ -192,9 +192,16 @@ def fill_to_max(xs, p):
                 mx = p.get("items", {}).get("properties", {}).get(key, {}).get("maxLength", 200)
                 suffix = f" {i + 1}"
                 it[key] = it[key][: max(1, mx - len(suffix))] + suffix
-            for v in it.values():  # a copied button would repeat its spoken name: number the copies
-                if isinstance(v, dict) and "event" in v and isinstance(v.get("label"), str):
-                    v["a11y_label"] = (v.get("a11y_label") or v["label"])[:110] + f" {i + 1}"
+            def number(node):  # a copied button would repeat its spoken name, also in nested lists: number the copies
+                if isinstance(node, dict):
+                    if "event" in node and isinstance(node.get("label"), str):
+                        node["a11y_label"] = (node.get("a11y_label") or node["label"])[:110] + f" {i + 1}"
+                    for x in node.values():
+                        number(x)
+                elif isinstance(node, list):
+                    for x in node:
+                        number(x)
+            number(it)
         out.append(it)
     return out
 

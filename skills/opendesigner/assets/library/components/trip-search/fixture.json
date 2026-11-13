@@ -9,5 +9,5 @@
  "guests": [
   {"label": "Adults", "hint": "Ages 13 or above", "count": 3, "min": 1},
   {"label": "Children", "hint": "Ages 2 to 12", "count": 0, "min": 0},
-  {"label": "Infants", "hint": "Under 2", "count": 1}
+  {"label": "Infants", "hint": "Under 2", "count": 1, "min": 0}
  ]}

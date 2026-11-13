@@ -298,7 +298,7 @@ def report():
             lines += ["Misses: " + "; ".join(f"`{c['id']}` (wanted {', '.join(c['expect']) or 'text'}, sent {', '.join(c['candidates']) or 'none'})" for c in miss), ""]
     rows = []
     for m in MODELS:
-        f = EV / "results" / f"{m}.json"
+        f = EV / "results" / f"{m}.json"  # the latest round on the recorded-data path
         if f.exists():
             rows.append(json.loads(f.read_text()))
     if rows:
@@ -323,6 +323,29 @@ def report():
                         why.append("floors: " + "; ".join(x.get("floors", [])[:3]))
                     lines.append(f"- `{x['id']}` run {x['run']}: " + " · ".join(why))
                 lines.append("")
+    live = sorted((EV / "results").glob("live-*.json"))
+    if live:
+        lines += ["## The live path (examples/smart-ui-support)", "",
+                  "A real model routes to the app's read actions, answers, and the answer is validated against the data it got, with one "
+                  "repair round. Cases come from `live-cases.json`: 20 that need a part (some are follow-ups that need the conversation, five "
+                  "are changes that must end in an approval prompt) and 5 that should stay text.", "",
+                  "| Run | Model | Date | Runs | Selector recall | Right part | Valid first time | Valid after one repair | Held back (text-only) | Approval shown for changes | Changes the model ran | Rendered | Floor findings |",
+                  "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+        for f in live:
+            r = json.loads(f.read_text())
+            s_ = r["summary"]
+            lines.append(f"| {f.stem} | {r['model']} | {r['date']} | {s_['runs']} | {s_['selector_recall_pct']}% | {s_['picked_right_pct']}% | "
+                         f"{s_['valid_first_pct']}% | {s_['valid_after_repair_pct']}% | {s_['held_back_pct']}% | {s_['approval_shown_pct']}% | "
+                         f"{s_['changes_run_by_model']} | {s_['rendered']} | {s_['floor_findings']} |")
+        lines.append("")
+    older = sorted(f for f in (EV / "results").glob("*-round*.json") if not f.name.startswith("live-"))
+    if older:
+        lines += ["## Earlier rounds of the recorded-data path", "", "| Round | Model | Right part | Valid first time | Held back |", "|---|---|---|---|---|"]
+        for f in older:
+            r = json.loads(f.read_text())
+            s_ = r["summary"]
+            lines.append(f"| {f.stem} | {r['model']} | {s_['picked_right_pct']}% | {s_['valid_first_pct']}% | {s_['held_back_pct']}% |")
+        lines.append("")
     lines += ["## Not measured", "", "- Repair rounds: a failed answer is not sent back to the model here; valid-first is the strictest number.",
               "- Streaming: every reply is scored whole.", "- Copy quality inside the parts, and whether a person would prefer the part to text.", ""]
     (EV / "REPORT.md").write_text("\n".join(lines))

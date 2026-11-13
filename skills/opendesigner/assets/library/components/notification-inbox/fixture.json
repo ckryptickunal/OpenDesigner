@@ -41,7 +41,8 @@
       "event": {
        "name": "open_bill"
       }
-     }
+     },
+     "done": ""
     },
     {
      "kind": "approval",
@@ -75,7 +76,8 @@
      "kind": "system",
      "line": "9 payments went out by SEPA, €18,402.55 in total",
      "time": "Nov 7",
-     "source": "Payments"
+     "source": "Payments",
+     "done": ""
     }
    ]
   }
