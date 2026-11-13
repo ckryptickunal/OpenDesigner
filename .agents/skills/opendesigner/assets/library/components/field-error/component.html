@@ -1,0 +1,72 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-field-error { box-sizing: border-box; inline-size: 100%; max-inline-size: 26rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-field-error *, .odl-field-error *::before, .odl-field-error *::after { box-sizing: border-box; }
+.odl-field-error svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-field-error h2, .odl-field-error h3, .odl-field-error p, .odl-field-error ul, .odl-field-error ol, .odl-field-error dl, .odl-field-error dd { margin: 0; }
+.odl-field-error h2, .odl-field-error h3 { text-wrap: balance; }
+.odl-field-error .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-field-error .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-field-error .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-field-error .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-field-error .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-field-error .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-field-error .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-field-error .odl-btn[disabled], .odl-field-error .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-field-error button:focus-visible, .odl-field-error a:focus-visible, .odl-field-error input:focus-visible, .odl-field-error textarea:focus-visible, .odl-field-error [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-field-error .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-field-error.odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-field-error.odl-card { padding: var(--ds-space-inset-lg); } }
+
+.odl-field-error form { display: grid; gap: var(--ds-space-stack-lg); }
+.odl-field-error h2 { font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading); }
+.odl-field-error .odl-field { display: grid; gap: var(--ds-state-error-gap, var(--ds-space-stack-xs)); }
+.odl-field-error .odl-lab { display: grid; gap: var(--ds-state-error-gap, var(--ds-space-stack-xs)); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); }
+.odl-field-error input { inline-size: 100%; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-sm);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-field); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
+.odl-field-error .is-bad input { border-color: var(--ds-state-error-border, var(--ds-color-border-danger)); border-width: var(--ds-border-width-emphasis); }
+.odl-field-error .odl-hint { color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); }
+.odl-field-error .odl-msg { display: flex; align-items: start; gap: var(--ds-space-inline-xs); min-block-size: 0; color: var(--ds-state-error-text, var(--ds-color-text-danger)); font: var(--ds-text-body-sm); }
+.odl-field-error .odl-msg svg { display: none; margin-block-start: calc((1lh - var(--ds-size-icon-sm)) / 2); }
+.odl-field-error .is-bad .odl-msg svg { display: block; }
+.odl-field-error .odl-done { color: var(--ds-color-text-success); font: var(--ds-text-body-sm); }
+.odl-field-error .odl-done:empty { display: none; }
+.odl-field-error .odl-btn { justify-self: start; }
+@media (prefers-reduced-motion: reduce) { .odl-field-error, .odl-field-error *, .odl-field-error *::before, .odl-field-error *::after { transition: none !important; animation: none !important; } }
+</style>
+<form class="odl-field-error odl-card" action="#" novalidate aria-label="Invite a teammate">
+  <h2>Invite a teammate</h2>
+  <div class="odl-field is-bad"><label class="odl-lab"><span>Work email</span>
+    <input type="email" name="email" value="maya@larkspur" autocomplete="email" aria-invalid="true" data-od-slot="value"></label>
+    <p class="odl-msg" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span class="odl-msg-t" data-od-slot="error">Add the part after the @ with a dot, like name@company.example.</span></p>
+    <p class="odl-hint">We'll send the invite here. It works for 7 days.</p></div>
+  <button type="submit" class="odl-btn" data-od-action="invite" data-od-effect="change"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>Send invite</button>
+  <p class="odl-done" role="status"></p>
+</form>
+<script>
+document.querySelectorAll(".odl-field-error").forEach(function (root) {
+  if (root.hasAttribute("data-odl-wired")) return;
+  root.setAttribute("data-odl-wired", "");
+  var input = root.querySelector("input[type='email']"), field = input.closest(".odl-field"), msg = field.querySelector(".odl-msg-t"), done = root.querySelector(".odl-done");
+  function check() {
+    var v = input.value.trim();
+    if (!v) return "Enter your work email.";
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) return "Add the part after the @ with a dot, like name@company.example.";
+    return "";
+  }
+  function show(text) { field.classList.toggle("is-bad", !!text); input.setAttribute("aria-invalid", text ? "true" : "false"); msg.textContent = text; }
+  input.addEventListener("input", function () { if (field.classList.contains("is-bad")) show(check()); });  // clears as soon as it's right; never shouts while typing
+  input.addEventListener("blur", function () { if (input.value.trim()) show(check()); });
+  var n = Math.random().toString(36).slice(2, 8);  // its own ids, so two copies on one page each describe their own field
+  field.querySelector(".odl-msg").id = "odl-fe-msg-" + n; field.querySelector(".odl-hint").id = "odl-fe-hint-" + n;
+  input.setAttribute("aria-describedby", "odl-fe-msg-" + n + " odl-fe-hint-" + n);
+  root.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var err = check(); show(err);
+    if (err) { input.focus(); done.textContent = ""; } else done.textContent = "Invite sent to " + input.value.trim() + ".";
+  });
+});
+</script>

@@ -1,0 +1,23 @@
+{
+  "title": "Importing 4,812 contacts",
+  "left": "About 2 minutes left. You can close this page; we'll keep going.",
+  "progress": 0.62,
+  "steps": [
+    {
+      "label": "Upload file",
+      "state": "done"
+    },
+    {
+      "label": "Check columns",
+      "state": "done"
+    },
+    {
+      "label": "Import contacts",
+      "state": "now"
+    },
+    {
+      "label": "Email you a summary",
+      "state": "next"
+    }
+  ]
+}

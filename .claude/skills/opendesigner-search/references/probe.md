@@ -18,16 +18,16 @@ A handful of questions, by hand, logged out, in a browser the person can see. Th
   - more than a handful of questions per engine in one sitting.
 - Copy no answer text into the person's site. Use what you learn, in their words.
 
-## What to ask (about six questions)
+## What to ask (about six questions, or a fixed set you repeat)
 1. **Brand:** "What is <name>?" and "What is <domain>?". Does it know them, and does it mix them up with something of the same name?
 2. **Category:** two or three questions a customer asks before they know the brand, in their words. Take them from Q-site-04's questions in PRODUCT.md, or ask the owner once.
 3. **How-to:** one question the product answers, phrased the way a person types it.
 
-## What each engine shows (checked 2026-11-07)
+## What each engine shows (checked 2026-11-07, ChatGPT and Perplexity again 2026-11-13)
 | Engine | Logged out? | Shows |
 |---|---|---|
-| ChatGPT | Yes | The answer and its sources. The conversation stream also carries the entity it resolved (its name, category and a one-line description), any image search it ran, and every source it read. Its typed web searches run on OpenAI's servers and do not reach the browser |
-| Perplexity | Yes | The answer, its sources, and the steps it took. The thread data the page loads (`/rest/thread/<id>`) carries the exact searches, every source URL and the follow-up questions it suggests |
+| ChatGPT | Yes | The answer and its sources. The conversation stream also carries the entity it resolved (its name, category and a one-line description), any image search it ran, and every source it read. Its typed web searches run on OpenAI's servers and do not reach the browser. Logged out (2026-11-13), the stream the page loads (`conversation/updates`) lists every page it read, with titles (`searchSources`), and shows "Searched N websites" but not the words. For many how-to questions it answered without searching at all |
+| Perplexity | Yes | The answer, its sources, and the steps it took. The thread data the page loads (`/rest/thread/<id>`) carries the exact searches, every source URL and the follow-up questions it suggests. On 2026-11-13 it ran one search per question, the question word for word, so a page whose title says the question in the asker's words is the one it finds |
 | Claude | No: claude.ai needs a sign-in | Skip it. Never sign in for this |
 | Google AI Overviews | Shown in Search when Google chooses | The sources linked in the overview. Logged out, in the person's region |
 
@@ -39,6 +39,18 @@ Engines change. When one shows less or more than this table, note it in the repo
 - whom it named, in order;
 - the suggested follow-up questions;
 - whether the answer was right about us.
+
+## Run it again each month
+One probe is a snapshot; the trend is what tells you a fix worked. Keep the question set fixed so runs compare.
+1. **Keep the questions in a file** in the person's repo, each with an id and the use case it stands for. Change a question only on purpose; give a reworded one a new id.
+2. **Ask the same set** about once a month, and after a release that adds a page. Same engines, logged out, same wording.
+3. **Save each run's raw notes** (searches, sources, names) in a private folder. They quote the engines, so they stay out of the public repo.
+4. **Add one row per run** to a results table next to the questions:
+
+   | Date | Engine | Asked | Named us | Our pages read | First named most often | Change since last run |
+   |---|---|---|---|---|---|---|
+
+5. **Read the change, then act.** A question that moved from "no" to "yes" after a page went live is the evidence that page works. One that stayed "no" goes to `fixes.md`.
 
 ## Worked example: OpenDesigner (2026-11-07)
 **Brand questions found us.**
