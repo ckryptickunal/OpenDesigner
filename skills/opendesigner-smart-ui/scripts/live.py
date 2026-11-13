@@ -148,6 +148,14 @@ class Conversation:
     def __init__(self, app, provider, catalog=None):
         self.app, self.provider = app, provider
         self.catalog = catalog or json.loads(pathlib.Path(app.CATALOG).read_text())
+        sp = pathlib.Path(app.CATALOG).parent / "scope.json"
+        self.scope = json.loads(sp.read_text()) if sp.exists() else None
+        # action name -> the parts the scope step mapped to its route (GET /api/usage -> LineChart, BarChart)
+        self.route_parts = {}
+        for name, a in app.ACTIONS.items():
+            for it in (self.scope or {}).get("intents", []):
+                if a.get("path") and it.get("from", "").startswith(f"{a.get('method', 'GET')} {a['path']} "):
+                    self.route_parts[name] = it.get("components", [])
         self.turns = []        # [{"role", "text"}] as the model sees them
         self.data = {}         # action name -> its latest result
         self.surfaces = 0
@@ -192,7 +200,14 @@ class Conversation:
         data = {**self.data, **fresh}
         surface = f"s{self.surfaces + 1}"
         history = "\n".join(f"{'Person' if t['role'] == 'user' else 'You'}: {t['text'][:400]}" for t in self.turns[-6:])
-        system, sel = smartui.build_prompt(message, self.catalog, 3, None, data)
+        boost = {}
+        for name, _ in calls:  # the parts this repo's scope tied to the actions just run
+            for i, part in enumerate(self.route_parts.get(name, [])):
+                boost[part] = boost.get(part, 0) + (3 if i == 0 else 2)
+        said = " ".join([t["text"] for t in self.turns if t["role"] == "user"] + [message])
+        source = {**data, "_the_person_said": said}  # numbers the person typed count as given (R6)
+        always = ["ApprovalPrompt"] if any(a.get("changes") for a in self.app.ACTIONS.values()) else []
+        system, sel = smartui.build_prompt(message, self.catalog, 3, self.scope, data, boost, always)
         if history:
             system += "\n\nThe conversation so far (for follow-up questions):\n" + history
         system += ("\n\nActions that change data are buttons only. When the person wants one, show an ApprovalPrompt whose approve "
@@ -203,14 +218,14 @@ class Conversation:
                        + actions_text(self.app.ACTIONS, True))
         turns = self.turns[-8:] + [{"role": "user", "text": message}]
         reply = ask(self.provider, system, turns)
-        result = self._check(reply, data, surface, max_parts)
+        result = self._check(reply, source, surface, max_parts)
         first_errors = result["errors"]
         repaired = False
         if result["errors"]:
             fix = ("Your answer was not shown: it failed these checks. Send the corrected text and part, or text only.\n"
                    + "\n".join(f"- {e['rule']} at {e['path']}: {e['message']}" + (f" ({e['fix']})" if e.get("fix") else "") for e in result["errors"][:10]))
             reply = ask(self.provider, system, turns + [{"role": "assistant", "text": reply}, {"role": "user", "text": fix}])
-            result = self._check(reply, data, surface, max_parts)
+            result = self._check(reply, source, surface, max_parts)
             repaired = True
             if result["errors"]:
                 result["answer"] = None  # still wrong after one repair: text only

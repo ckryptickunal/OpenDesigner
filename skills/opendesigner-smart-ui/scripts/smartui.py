@@ -475,10 +475,13 @@ def data_signals(data):
     return out
 
 
-def select(msg, catalog, k=3, scope=None, data=None):
-    """The top-k components for one message, and whether the message gives a reason for UI at all (R1)."""
+def select(msg, catalog, k=3, scope=None, data=None, boost=None):
+    """The top-k components for one message, and whether the message gives a reason for UI at all (R1).
+    boost: extra weight per part, for example the parts the scope step mapped to the actions the app just ran."""
     ranked = []
     sig = data_signals(data) if data is not None else {}
+    for n, w in (boost or {}).items():
+        sig[n] = sig.get(n, 0) + w
     for name, c in catalog["components"].items():
         if od(c).get("container"):
             continue
@@ -522,8 +525,9 @@ def compact(schema):
                      if k not in ("component", "id", "@accessibility", "@metadata"))
 
 
-def build_prompt(msg, catalog, k=3, scope=None, data=None):
-    sel = select(msg, catalog, k, scope, data)
+def build_prompt(msg, catalog, k=3, scope=None, data=None, boost=None, always=()):
+    """always: parts whose properties are listed whenever there is UI (the approval prompt, when the app can change data)."""
+    sel = select(msg, catalog, k, scope, data, boost)
     lines = [
         "You can answer with interface parts from the person's own design system (OpenDesigner Smart UI).",
         catalog["instructions"],
@@ -537,7 +541,7 @@ def build_prompt(msg, catalog, k=3, scope=None, data=None):
     ]
     if sel["ui"]:
         lines.append("Parts that may fit this message (use at most one, or none):")
-        for n in sel["candidates"]:
+        for n in list(sel["candidates"]) + [a for a in always if a not in sel["candidates"] and a in catalog["components"]]:
             c = catalog["components"][n]
             lines.append(f"- {n}: {c['description']} When: {'; '.join(od(c).get('use_when', [])[:2]) or od(c).get('use')}. "
                          f"Properties: {compact(c)}")
