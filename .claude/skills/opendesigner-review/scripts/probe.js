@@ -486,6 +486,17 @@
   const sig = (e) => e.localName + '@' + Math.round(px(getComputedStyle(e).fontSize)) + '.' + clsOf(e).split(/\s+/).filter((c) => c && !/^(is-|has-)|active|current|selected|open|first|last|odd|even/.test(c)).sort().join('.');
 
   const TOUCH = 4;                 // px: closer than this reads as touching (review.py TOUCH_GAP)
+  // inside a scaled-down preview (transform: scale), real gaps draw as 1 to 3 px: spacing is judged on the full-size part
+  const scaleCache = new Map();
+  function scaled(el) {
+    if (!el || el.nodeType !== 1 || el === document.body) return false;
+    if (scaleCache.has(el)) return scaleCache.get(el);
+    const t = getComputedStyle(el).transform; let v = false;
+    if (t && t !== 'none') { const m = t.match(/matrix\(([^,]+),([^,]+)/); if (m && Math.abs(Math.hypot(+m[1], +m[2]) - 1) > 0.02) v = true; }
+    if (!v && parseFloat(getComputedStyle(el).zoom || 1) !== 1) v = true;
+    v = v || scaled(parentEl(el));
+    scaleCache.set(el, v); return v;
+  }
   function craftCheck(els) {
     const de = document.documentElement, vw = de.clientWidth;
     const out = { spill: [], hiddenByParent: [], truncated: [], orphans: [], tight: [], touching: [], insetVsGap: [], siblings: [], sections: [], measure: [],
@@ -559,7 +570,7 @@
         out.monoProse.push({ sel: sel(el), font: cs.fontFamily.split(',')[0].replace(/["']/g, '').trim(), text: own.slice(0, 60), box: pageBox(r) });
 
       // a box with a visible edge: text that touches the edge, and padding smaller than the gap between its children
-      const edge = /^(inline)$/.test(cs.display) || /^(code|kbd|samp|mark|input|textarea|select|img|svg|video|canvas|iframe)$/.test(el.localName) ? null : boundary(el, cs);
+      const edge = /^(inline)$/.test(cs.display) || /^(code|kbd|samp|mark|input|textarea|select|img|svg|video|canvas|iframe)$/.test(el.localName) || scaled(el) ? null : boundary(el, cs);
       if (edge && r.width >= 16 && r.height >= 12) {
         const rs = allRects(el);
         const u = union(rs);
@@ -590,7 +601,7 @@
       }
 
       // neighbours: text blocks that sit too close, and siblings of one kind spaced unevenly
-      if (el.children.length >= 2) {
+      if (el.children.length >= 2 && !scaled(el)) {
         const kids = [];
         for (const k of el.children) { const kc = getComputedStyle(k), kr = k.getBoundingClientRect(); if (visible(k, kc, kr) && inFlow(kc)) kids.push({ k, kc, kr }); }
         if (kids.length >= 2) out.checked.parents++;
