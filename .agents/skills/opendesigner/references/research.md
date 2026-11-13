@@ -24,7 +24,7 @@ Look at your own tool list, the person's connectors and the project, without ope
 | `deep-research` | A deep-research skill or agent | A long report across many sources, for a group little is written about |
 | `analytics` | PostHog, Google Analytics, Amplitude or Mixpanel tools or exports | How the product's existing users really behave: devices, screen sizes, languages, dark-mode share. It beats desk research when the product is live |
 
-Pass the ones you have to the plan: `engine.py research plan --tools web-search,browser,last30days`. It prints every missing tool with what it would add. Name the missing ones that would clearly change the result **once**, in the plan message, with how to get them (for `/last30days`, the link above). Then go on with what you have: a missing tool never stops the research.
+Pass the ones you have to the plan: `engine.py research plan --tools web-search,browser,last30days`. It prints every missing tool with what it would add. Name the missing ones that would clearly change the result **once**, in the plan message, with how to get them (for `/last30days`, the link above). Then go on with what you have: a missing tool never stops the research. With no tool that can read the web, write the plan (`research plan`), say plainly that you could not search, and stop there or `research skip`. Never write a finding, a source or a URL you did not open.
 
 With nothing that reads the web, say so in one line and offer two ways on: the person fills in the findings file themselves (`assets/output/research-users.example.json` shows the shape), or they skip it.
 

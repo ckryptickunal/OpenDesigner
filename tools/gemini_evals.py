@@ -195,7 +195,7 @@ def skills_index(stage):
 
 def sandbox_profile(ws):
     home = str(pathlib.Path.home())
-    allow = [ws, "/private/tmp", "/private/var/folders", "/dev", tempfile.gettempdir()]
+    allow = [ws, str(pathlib.Path(ws).parent / "tmp"), "/dev"]  # the workspace and this run's own temp folder only
     allow = " ".join(f'(subpath "{os.path.realpath(p)}")' for p in allow)
     return f"""(version 1)
 (allow default)
@@ -211,9 +211,10 @@ class Workspace:
     def __init__(self, ws, extra, stage, allowed):
         self.ws, self.extra, self.stage, self.allowed = ws, extra, stage, allowed
         self.profile = ws.parent / "sandbox.sb"
+        (ws.parent / "tmp").mkdir(exist_ok=True)
         self.profile.write_text(sandbox_profile(str(ws)))
         self.env = {"PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin", "HOME": str(ws),
-                    "LANG": "en_US.UTF-8", "PYTHONDONTWRITEBYTECODE": "1", "TMPDIR": tempfile.gettempdir(),
+                    "LANG": "en_US.UTF-8", "PYTHONDONTWRITEBYTECODE": "1", "TMPDIR": str(ws.parent / "tmp"),
                     "CLAUDE_PROJECT_DIR": str(ws), "CLAUDE_PLUGIN_ROOT": str(stage),
                     "GIT_CEILING_DIRECTORIES": str(ws.parent)}  # the run is not inside this repo's git
 
