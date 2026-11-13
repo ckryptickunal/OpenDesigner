@@ -594,6 +594,16 @@ class Live(unittest.TestCase):
             rv.check_probe(self.craft_probe("craft-good.html", 375, stress), None, fs)
             self.assertEqual([(f["title"], f["measured"]) for f in fs.done() if f["case"] == "ST-19" and f["severity"] != "info"], [], stress)
 
+    def test_screen_reader_text_and_faded_tooltips_are_not_judged(self):      # MS-15, MS-04 (S6 report)
+        pg = self.page()
+        pg.set_content("""<style>.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:normal}
+          .tip{opacity:0;background:#222428;color:#222428;position:absolute}</style>
+          <button style="width:40px"><svg width=16 height=16></svg><span class=sr>Save to favourites</span></button>
+          <div style="position:relative"><span class=tip>Revenue 4,200</span><p>Chart</p></div>""")
+        p = pg.evaluate(PROBE)
+        self.assertEqual(p["labels"]["broken"], [])
+        self.assertFalse([c for c in p["contrast"]["failing"] if c["fg"] == c["bg"]])
+
     def test_missing_names_and_pictures_that_collapse_are_measured(self):     # ST-19
         pg = self.page()
         pg.set_content("<ul><li class=item><strong style='display:block'>Ana Ruiz</strong><img src='x.png' alt=''><span>Admin</span></li></ul>")

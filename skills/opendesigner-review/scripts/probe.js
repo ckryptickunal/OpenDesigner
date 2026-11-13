@@ -969,7 +969,9 @@
         if (!srOnly && ((el.scrollWidth > el.clientWidth + 1 && /hidden|clip/.test(cs.overflowX)) || (el.scrollHeight > el.clientHeight + 1 && /hidden|clip/.test(cs.overflowY)))) {
           if (clipped.length < CAP) clipped.push({ sel: sel(el), role: roleOf(el), box: pageBox(r), text: txt.slice(0, 40), sw: el.scrollWidth, cw: el.clientWidth, sh: el.scrollHeight, ch: el.clientHeight, ellipsis: cs.textOverflow === 'ellipsis', clamp: !!cs.webkitLineClamp && cs.webkitLineClamp !== 'none' });
         }
-        if (cs.backgroundClip !== 'text' && !el.matches(':disabled,[aria-disabled=true]')) {
+        // text inside something faded to nothing (a tooltip waiting for hover) is not on screen: no contrast to judge (MS-04)
+        const faded = () => { let o = 1; for (let n = el; n && n.nodeType === 1; n = parentEl(n)) o *= parseFloat(getComputedStyle(n).opacity); return o < 0.05; };
+        if (cs.backgroundClip !== 'text' && !el.matches(':disabled,[aria-disabled=true]') && !faded()) {
           const bd = backdrop(el);
           const fgc = rgba(cs.color); fgc[3] *= bd.opacity;
           const fg = over(fgc, bd.color);
@@ -1033,6 +1035,8 @@
       for (let n = tw.nextNode(); n; n = tw.nextNode()) {
         const t = n.textContent.replace(/\s+/g, ' ').trim();
         if (!t) continue;
+        const pe = n.parentElement;   // visually hidden text for screen readers wraps in a 1 px box: not a broken label (MS-15)
+        if (pe && (srOnly(pe, el) || hiddenByDesign(pe, getComputedStyle(pe)))) continue;
         const rg = document.createRange(); rg.selectNodeContents(n);
         const fs = px(getComputedStyle(n.parentElement).fontSize) || 16;
         const mids = [];
