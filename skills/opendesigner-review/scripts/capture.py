@@ -246,15 +246,17 @@ def run_cell(browser, url, route, vp, theme, out, opts, anchor, log):
     return cell, evidence, done_tasks
 
 
-CROP_LISTS = ("spill", "hiddenByParent", "truncated", "orphans", "tight", "touching", "insetVsGap", "siblings")
+CROP_LISTS = ("spill", "hiddenByParent", "truncated", "orphans", "tight", "touching", "insetVsGap", "siblings", "radii", "monoProse", "brokenUrls",
+              "twins", "collapsedImages", "collapsedNamed")
 
 
-def crop_items(page, probe, out, tag, most=12):
+def crop_items(page, probe, out, tag, most=16):
     """A screenshot of each craft finding's box (probe.craft), padded 16 px, saved beside the shots; the path goes into the
     item as `crop`, which review.py lists as evidence. Returns the crop paths."""
     craft, done = (probe or {}).get("craft") or {}, []
-    items = [x for k in CROP_LISTS for x in craft.get(k) or [] if x.get("box")]
-    items += [x for x in ((probe or {}).get("overflow") or {}).get("clipped") or [] if x.get("box")]
+    lists = [[x for x in craft.get(k) or [] if x.get("box")] for k in CROP_LISTS]
+    lists.append([x for x in ((probe or {}).get("overflow") or {}).get("clipped") or [] if x.get("box")])
+    items = [l[i] for i in range(max(map(len, lists), default=0)) for l in lists if i < len(l)]   # one of each kind first
     doc_w, doc_h = page.evaluate("[document.documentElement.scrollWidth, document.documentElement.scrollHeight]")
     for i, x in enumerate(items[:most]):
         b = x["box"]
