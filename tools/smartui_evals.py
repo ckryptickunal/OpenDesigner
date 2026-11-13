@@ -153,7 +153,7 @@ def run_selector(data, cs):
     cat = catalog(data)
     out = []
     for c in cs:
-        sel = smartui.select(c["message"], cat, 3)
+        sel = smartui.select(c["message"], cat, 3, None, c["data"])
         hit = (not c["expect"] and not sel["ui"]) or (bool(c["expect"]) and any(n in sel["candidates"] for n in c["expect"]))
         out.append({"id": c["id"], "expect": c["expect"], "ui": sel["ui"], "candidates": sel["candidates"], "hit": hit})
     ui_c = [o for o in out if o["expect"]]

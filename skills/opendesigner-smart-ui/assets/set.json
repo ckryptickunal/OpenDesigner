@@ -11,31 +11,383 @@
     "domain": "Parts made for one kind of product; offered only when the scope step picks them"
   },
   "components": [
-    {"slug": "answer-sources", "as": "AnswerSources", "group": "answer", "intents": ["explain with sources", "research answer", "what does the policy say", "summarise these documents", "cite", "according to"]},
-    {"slug": "key-facts", "as": "KeyFacts", "group": "answer", "intents": ["key facts", "at a glance", "details of", "specs", "facts about", "what are the details", "opening hours", "baggage allowance"]},
-    {"slug": "summary-card", "as": "SummaryCard", "group": "answer", "intents": ["define", "what is", "definition", "summary", "tl;dr", "explain the term", "meaning of"]},
-    {"slug": "citation-list", "as": "CitationList", "group": "answer", "intents": ["sources", "references", "where did you find", "list the sources", "links to read", "further reading"]},
-    {"slug": "data-table", "as": "DataTable", "group": "data", "intents": ["table", "list all", "rows", "every transaction", "export", "show me the records", "sort by", "invoices", "orders"]},
-    {"slug": "bar-chart", "as": "BarChart", "group": "data", "intents": ["by month", "per month", "compare amounts", "bar chart", "spend over", "monthly", "how much each"]},
-    {"slug": "line-chart", "as": "LineChart", "group": "data", "intents": ["trend", "over time", "line chart", "history", "how has it changed", "price history", "growth"]},
-    {"slug": "donut-breakdown", "as": "DonutBreakdown", "group": "data", "intents": ["breakdown", "split", "share of", "by category", "where does my money go", "proportion", "percentage of"]},
-    {"slug": "kpi-strip", "as": "KpiStrip", "group": "data", "intents": ["headline numbers", "kpis", "metrics", "totals", "how are we doing", "summary numbers", "dashboard"]},
-    {"slug": "progress-status", "as": "ProgressStatus", "group": "data", "intents": ["status", "progress", "where is my", "how far", "tracking", "is it done", "delivery status", "refund status"]},
-    {"slug": "comparison", "as": "Comparison", "group": "choose", "intents": ["compare", "versus", "vs", "difference between", "which is better", "side by side", "fare types", "plans"]},
-    {"slug": "result-list", "as": "ResultList", "group": "choose", "intents": ["find", "search", "options for", "show me", "recommend", "hotels", "places", "results", "suggest some"]},
-    {"slug": "product-card", "as": "ProductCard", "group": "choose", "intents": ["this product", "buy", "price of", "add to bag", "one item", "product details"]},
-    {"slug": "quick-replies", "as": "QuickReplies", "group": "choose", "intents": ["which one", "pick one", "do you mean", "choose", "options", "follow up", "what next"]},
-    {"slug": "form-fields", "as": "FormFields", "group": "act", "intents": ["fill in", "form", "sign up", "update my details", "change my address", "request", "submit", "report a problem"]},
-    {"slug": "setup-steps", "as": "SetupSteps", "group": "act", "intents": ["steps", "how do i set up", "walk me through", "onboarding", "checklist", "what's left to do"]},
-    {"slug": "time-slots", "as": "TimeSlots", "group": "act", "intents": ["book a time", "available times", "schedule", "appointment", "when can", "slot", "reschedule", "meeting time"]},
-    {"slug": "approval-prompt", "as": "ApprovalPrompt", "group": "act", "intents": ["confirm before", "approve", "are you sure", "pay", "send", "delete", "cancel my", "book it"]},
-    {"slug": "receipt", "as": "Receipt", "group": "confirm", "intents": ["confirmation", "receipt", "booked", "it's done", "order placed", "payment sent", "reference number"]},
-    {"slug": "error-retry", "as": "ErrorRetry", "group": "confirm", "intents": ["failed", "error", "couldn't", "try again", "didn't work", "unavailable"]},
-    {"slug": "empty-state", "as": "EmptyState", "group": "confirm", "intents": ["nothing found", "no results", "none", "empty", "there aren't any"]},
-    {"slug": "image-card", "as": "ImageCard", "group": "media", "intents": ["photo", "picture", "image", "what does it look like", "show me a picture"]},
-    {"slug": "location-card", "as": "LocationCard", "group": "media", "intents": ["where is", "address", "directions", "location", "how do i get to", "map", "near me"]},
-    {"slug": "file-card", "as": "FileCard", "group": "media", "intents": ["file", "document", "attachment", "download", "pdf", "invoice copy", "send me the"]},
-    {"slug": "code-block", "as": "CodeBlock", "group": "media", "intents": ["code", "snippet", "command", "script", "how do i run", "example request", "curl"]},
-    {"slug": "flight-results", "as": "FlightResults", "group": "domain", "intents": ["flights", "fly to", "flight options", "cheapest flight", "nonstop", "departures"]}
+    {
+      "slug": "answer-sources",
+      "as": "AnswerSources",
+      "group": "answer",
+      "intents": [
+        "explain with sources",
+        "research answer",
+        "what does the policy say",
+        "summarise these documents",
+        "cite",
+        "according to",
+        "say about",
+        "where it says",
+        "show me where",
+        "what do the rules say"
+      ]
+    },
+    {
+      "slug": "key-facts",
+      "as": "KeyFacts",
+      "group": "answer",
+      "intents": [
+        "key facts",
+        "at a glance",
+        "details of",
+        "specs",
+        "facts about",
+        "what are the details",
+        "opening hours",
+        "baggage allowance"
+      ]
+    },
+    {
+      "slug": "summary-card",
+      "as": "SummaryCard",
+      "group": "answer",
+      "intents": [
+        "define",
+        "definition",
+        "summary",
+        "tl;dr",
+        "explain the term",
+        "meaning of",
+        "explain what",
+        "main points",
+        "what it means",
+        "what does it mean"
+      ]
+    },
+    {
+      "slug": "citation-list",
+      "as": "CitationList",
+      "group": "answer",
+      "intents": [
+        "sources",
+        "references",
+        "where did you find",
+        "list the sources",
+        "links to read",
+        "further reading"
+      ]
+    },
+    {
+      "slug": "data-table",
+      "as": "DataTable",
+      "group": "data",
+      "intents": [
+        "table",
+        "list all",
+        "rows",
+        "every transaction",
+        "export",
+        "show me the records",
+        "sort by",
+        "invoices",
+        "orders"
+      ]
+    },
+    {
+      "slug": "bar-chart",
+      "as": "BarChart",
+      "group": "data",
+      "intents": [
+        "by month",
+        "per month",
+        "compare amounts",
+        "bar chart",
+        "spend over",
+        "monthly",
+        "how much each"
+      ]
+    },
+    {
+      "slug": "line-chart",
+      "as": "LineChart",
+      "group": "data",
+      "intents": [
+        "trend",
+        "over time",
+        "line chart",
+        "history",
+        "how has it changed",
+        "price history",
+        "growth"
+      ]
+    },
+    {
+      "slug": "donut-breakdown",
+      "as": "DonutBreakdown",
+      "group": "data",
+      "intents": [
+        "breakdown",
+        "split",
+        "share of",
+        "by category",
+        "where does my money go",
+        "proportion",
+        "percentage of"
+      ]
+    },
+    {
+      "slug": "kpi-strip",
+      "as": "KpiStrip",
+      "group": "data",
+      "intents": [
+        "headline numbers",
+        "kpis",
+        "metrics",
+        "totals",
+        "how are we doing",
+        "summary numbers",
+        "dashboard",
+        "how is my",
+        "looking so far",
+        "year so far",
+        "how many trips"
+      ]
+    },
+    {
+      "slug": "progress-status",
+      "as": "ProgressStatus",
+      "group": "data",
+      "intents": [
+        "status",
+        "progress",
+        "where is my",
+        "how far",
+        "tracking",
+        "is it done",
+        "delivery status",
+        "refund status"
+      ]
+    },
+    {
+      "slug": "comparison",
+      "as": "Comparison",
+      "group": "choose",
+      "intents": [
+        "compare",
+        "versus",
+        "vs",
+        "difference between",
+        "which is better",
+        "side by side",
+        "fare types",
+        "plans"
+      ]
+    },
+    {
+      "slug": "result-list",
+      "as": "ResultList",
+      "group": "choose",
+      "intents": [
+        "find",
+        "search",
+        "options for",
+        "show me",
+        "recommend",
+        "hotels",
+        "places",
+        "results",
+        "suggest some"
+      ]
+    },
+    {
+      "slug": "product-card",
+      "as": "ProductCard",
+      "group": "choose",
+      "intents": [
+        "this product",
+        "buy",
+        "price of",
+        "add to bag",
+        "one item",
+        "product details"
+      ]
+    },
+    {
+      "slug": "quick-replies",
+      "as": "QuickReplies",
+      "group": "choose",
+      "intents": [
+        "which one",
+        "pick one",
+        "do you mean",
+        "choose",
+        "options",
+        "follow up",
+        "what next",
+        "i want to change",
+        "help me with",
+        "not sure which"
+      ]
+    },
+    {
+      "slug": "form-fields",
+      "as": "FormFields",
+      "group": "act",
+      "intents": [
+        "fill in",
+        "form",
+        "sign up",
+        "update my details",
+        "change my address",
+        "request",
+        "submit",
+        "report a problem"
+      ]
+    },
+    {
+      "slug": "setup-steps",
+      "as": "SetupSteps",
+      "group": "act",
+      "intents": [
+        "steps",
+        "how do i set up",
+        "walk me through",
+        "onboarding",
+        "checklist",
+        "what's left to do"
+      ]
+    },
+    {
+      "slug": "time-slots",
+      "as": "TimeSlots",
+      "group": "act",
+      "intents": [
+        "book a time",
+        "available times",
+        "schedule",
+        "appointment",
+        "when can",
+        "slot",
+        "reschedule",
+        "meeting time"
+      ]
+    },
+    {
+      "slug": "approval-prompt",
+      "as": "ApprovalPrompt",
+      "group": "act",
+      "intents": [
+        "confirm before",
+        "approve",
+        "are you sure",
+        "pay",
+        "send",
+        "delete",
+        "cancel my",
+        "book it"
+      ]
+    },
+    {
+      "slug": "receipt",
+      "as": "Receipt",
+      "group": "confirm",
+      "intents": [
+        "confirmation",
+        "receipt",
+        "booked",
+        "it's done",
+        "order placed",
+        "payment sent",
+        "reference number"
+      ]
+    },
+    {
+      "slug": "error-retry",
+      "as": "ErrorRetry",
+      "group": "confirm",
+      "intents": [
+        "failed",
+        "error",
+        "couldn't",
+        "try again",
+        "didn't work",
+        "unavailable"
+      ]
+    },
+    {
+      "slug": "empty-state",
+      "as": "EmptyState",
+      "group": "confirm",
+      "intents": [
+        "nothing found",
+        "no results",
+        "none",
+        "empty",
+        "there aren't any"
+      ]
+    },
+    {
+      "slug": "image-card",
+      "as": "ImageCard",
+      "group": "media",
+      "intents": [
+        "photo",
+        "picture",
+        "image",
+        "what does it look like",
+        "show me a picture"
+      ]
+    },
+    {
+      "slug": "location-card",
+      "as": "LocationCard",
+      "group": "media",
+      "intents": [
+        "where is",
+        "address",
+        "directions",
+        "location",
+        "how do i get to",
+        "map",
+        "near me"
+      ]
+    },
+    {
+      "slug": "file-card",
+      "as": "FileCard",
+      "group": "media",
+      "intents": [
+        "file",
+        "document",
+        "attachment",
+        "download",
+        "pdf",
+        "invoice copy",
+        "send me the"
+      ]
+    },
+    {
+      "slug": "code-block",
+      "as": "CodeBlock",
+      "group": "media",
+      "intents": [
+        "code",
+        "snippet",
+        "command",
+        "script",
+        "how do i run",
+        "example request",
+        "curl"
+      ]
+    },
+    {
+      "slug": "flight-results",
+      "as": "FlightResults",
+      "group": "domain",
+      "intents": [
+        "flights",
+        "fly to",
+        "flight options",
+        "cheapest flight",
+        "nonstop",
+        "departures"
+      ]
+    }
   ]
 }

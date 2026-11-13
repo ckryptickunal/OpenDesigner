@@ -417,42 +417,86 @@ def cmd_components(a):
 # ----------------------------------------------------------------------------------------------- selector and prompt
 
 STOP = set("a an the of to in on for and or with my me i is are be it this that what how do does can you your our we at by from show tell give please about".split())
-UI_CUES = re.compile(r"\b(compare|vs\.?|versus|options|list|table|chart|graph|trend|breakdown|book|schedule|pick|choose|form|fill|steps|"
-                     r"show me|find|search|status|track|receipt|confirm|approve|pay|send|delete|cancel|upload|download|file|code|snippet|where is|map|photo|picture)\b", re.I)
+UI_CUES = re.compile(r"\b(compare|vs\.?|versus|options|list|table|chart|graph|trend|breakdown|break down|split|book|schedule|pick|choose|form|fill|steps|"
+                     r"show me|find|search|status|track|receipt|confirm|approve|pay|send|delete|cancel|upload|download|file|code|snippet|where is|"
+                     r"map|photo|picture|each month|per month|by month|over time|changed|moved|how much|spend|spent|update|change|details|"
+                     r"explain|define|meaning|go through|went through|times?|slots?|available|invoice|refund|year)\b", re.I)
+CONTRACT = [(r"\bwhere's\b", "where is"), (r"\bwhat's\b", "what is"), (r"\bhow's\b", "how is"), (r"\bwhen's\b", "when is"),
+            (r"\bit's\b", "it is"), (r"\bthat's\b", "that is"), (r"\bi'm\b", "i am"), (r"\bdidn't\b", "did not")]
+
+
+def norm(t):
+    t = t.lower()
+    for a, b in CONTRACT:
+        t = re.sub(a, b, t)
+    return t
+
+
+def stem(w):
+    for suf in ("ings", "ing", "ies", "ied", "es", "ed", "s"):
+        if len(w) > len(suf) + 2 and w.endswith(suf):
+            return w[: -len(suf)] + ("y" if suf in ("ies", "ied") else "")
+    return w
 
 
 def words(t):
-    return [w for w in re.findall(r"[a-z0-9']+", t.lower()) if w not in STOP]
+    return [stem(w) for w in re.findall(r"[a-z0-9']+", norm(t)) if w not in STOP]
 
 
 def score(msg, comp):
-    m, xs, s = msg.lower(), od(comp), 0.0
+    """How well one part fits a message: whole intent phrases, then shared words with its intents, tags and use."""
+    m, xs, s = norm(msg), od(comp), 0.0
+    mw = set(words(msg))
     for phrase in xs.get("intents", []):
-        if phrase.lower() in m:
+        pw = set(words(phrase))
+        if norm(phrase) in m:
             s += 3 + len(phrase.split()) * 0.5
+        elif pw and len(pw & mw) == len(pw) and len(pw) > 1:
+            s += 2.5
+        elif pw & mw:
+            s += 0.8 * len(pw & mw) / len(pw)
     bag = set(words(" ".join(xs.get("tags", []) + xs.get("use_when", []) + [xs.get("use") or "", xs.get("name") or ""])))
-    s += 0.5 * len(bag & set(words(msg)))
+    s += 0.4 * len(bag & mw)
     return s
 
 
-def select(msg, catalog, k=3, scope=None):
+def data_signals(data):
+    """What the data itself says: an error to report, or a search that found nothing."""
+    out = {}
+    def walk(v, key=""):
+        if isinstance(v, dict):
+            if any(k in v for k in ("error", "errors")) or (key.endswith("error") and v):
+                out["ErrorRetry"] = 4
+            for k, x in v.items():
+                walk(x, k)
+        elif isinstance(v, list) and not v and key:
+            out["EmptyState"] = 4
+    walk(data)
+    return out
+
+
+def select(msg, catalog, k=3, scope=None, data=None):
     """The top-k components for one message, and whether the message gives a reason for UI at all (R1)."""
     ranked = []
+    sig = data_signals(data) if data is not None else {}
     for name, c in catalog["components"].items():
         if od(c).get("container"):
             continue
-        s = score(msg, c)
+        s = score(msg, c) + sig.get(name, 0)
         for it in (scope or {}).get("intents", []):
-            if name in it.get("components", []) and any(p.lower() in msg.lower() for p in it.get("phrases", [])):
+            if name in it.get("components", []) and any(norm(p) in norm(msg) for p in it.get("phrases", [])):
                 s += 4
         ranked.append((s, name))
     ranked.sort(key=lambda x: (-x[0], x[1]))
-    top = [n for s, n in ranked[:k] if s > 0]
-    reason = bool(UI_CUES.search(msg)) or (ranked and ranked[0][0] >= 3.5)
-    short_fact = len(words(msg)) <= 6 and re.match(r"^\s*(what|when|who|how many|how much|is|are|does|did|which)\b", msg, re.I) and not UI_CUES.search(msg)
-    ui = bool(top) and bool(reason) and not short_fact
+    top = [n for s, n in ranked[:k] if s >= 0.8]
+    best = ranked[0][0] if ranked else 0
+    cue = bool(UI_CUES.search(norm(msg)))
+    reason = cue or best >= 3
+    short_fact = (len(words(msg)) <= 6 and re.match(r"^\s*(what|when|who|how many|is|are|does|did|can|do)\b", norm(msg))
+                  and not cue and best < 3)
+    ui = bool(top) and reason and not short_fact
     return {"ui": ui, "candidates": top if ui else [], "scores": {n: round(s, 2) for s, n in ranked[:k + 2]},
-            "why": ("a cue for UI and a component that fits" if ui else "no reason for UI: answer in text (R1)")}
+            "why": ("a cue for UI and a part that fits" if ui else "no reason for UI: answer in text (R1)")}
 
 
 def compact(schema):
@@ -477,7 +521,7 @@ def compact(schema):
 
 
 def build_prompt(msg, catalog, k=3, scope=None, data=None):
-    sel = select(msg, catalog, k, scope)
+    sel = select(msg, catalog, k, scope, data)
     lines = [
         "You can answer with interface parts from the person's own design system (OpenDesigner Smart UI).",
         catalog["instructions"],

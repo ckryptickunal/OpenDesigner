@@ -136,7 +136,11 @@
        "what does the policy say",
        "summarise these documents",
        "cite",
-       "according to"
+       "according to",
+       "say about",
+       "where it says",
+       "show me where",
+       "what do the rules say"
       ],
       "width": "medium",
       "name_from": "title"
@@ -339,12 +343,15 @@
       ],
       "intents": [
        "define",
-       "what is",
        "definition",
        "summary",
        "tl;dr",
        "explain the term",
-       "meaning of"
+       "meaning of",
+       "explain what",
+       "main points",
+       "what it means",
+       "what does it mean"
       ],
       "width": "medium",
       "name_from": "kind"
@@ -956,7 +963,11 @@
        "totals",
        "how are we doing",
        "summary numbers",
-       "dashboard"
+       "dashboard",
+       "how is my",
+       "looking so far",
+       "year so far",
+       "how many trips"
       ],
       "width": "wide",
       "name_from": null
@@ -1680,7 +1691,10 @@
        "choose",
        "options",
        "follow up",
-       "what next"
+       "what next",
+       "i want to change",
+       "help me with",
+       "not sure which"
       ],
       "width": "medium",
       "name_from": "prompt"
