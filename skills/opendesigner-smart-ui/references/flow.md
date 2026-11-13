@@ -35,7 +35,7 @@ Ask once for the image hosts and link domains the assistant may use (`--allow-im
 ## 4. Select and prompt (each message)
 `smartui.py prompt --for "<message>" [--data data.json]` (or `build_prompt()` from Python) does two things:
 - **Select.** Scores every part against the message (its intents, tags and "use when"), adds the confirmed scope phrases, and keeps the top three. It also decides whether the message gives any reason for UI (R1). No reason: the prompt says "answer in text only".
-- **Prompt.** The rules, the output format (one fenced `a2ui` block of A2UI messages after the text), and only the selected parts' properties in a compact form. With `--data`, the data the model may use, so R6 can be checked.
+- **Prompt.** The rules, the output format (after the text, one fenced `a2ui` block holding just the part as a JSON object, which the code wraps in an A2UI `createSurface`; full A2UI messages are accepted too. The short form exists because, in the first eval round, 31 of 75 Claude replies closed the five-deep A2UI brackets in the wrong order), and only the selected parts' properties in a compact form. With `--data`, the data the model may use, so R6 can be checked.
 
 ## 5. Validate
 Before anything renders: `smartui.py validate reply.txt --source data.json` (or `validate()` from `od-validate.js`, which `<od-surface>` calls itself). The two validators share one fixture suite (`assets/fixtures/validator/`), so a rule cannot exist in one and not the other. Send failures back once as A2UI errors (`--a2ui`); then fall back to text.

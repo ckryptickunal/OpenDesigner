@@ -1,0 +1,1708 @@
+{
+ "model": "claude-sonnet-5-5",
+ "date": "2026-11-13",
+ "runs_per_case": 3,
+ "summary": {
+  "runs": 75,
+  "picked_right_pct": 80.0,
+  "held_back_pct": 100.0,
+  "over_trigger_pct": 0.0,
+  "valid_first_pct": 98.0,
+  "no_ui_when_needed_pct": 18.3,
+  "floor_findings": 0,
+  "rendered": 48
+ },
+ "rows": [
+  {
+   "ui": true,
+   "parts": [
+    "AnswerSources"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "answer-policy",
+   "run": 1,
+   "expect": [
+    "AnswerSources",
+    "CitationList"
+   ],
+   "selector": [
+    "AnswerSources",
+    "ResultList",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "cost_usd": 0.012146
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "AnswerSources"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "answer-policy",
+   "run": 2,
+   "expect": [
+    "AnswerSources",
+    "CitationList"
+   ],
+   "selector": [
+    "AnswerSources",
+    "ResultList",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "cost_usd": 0.0359303
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "AnswerSources"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "answer-policy",
+   "run": 3,
+   "expect": [
+    "AnswerSources",
+    "CitationList"
+   ],
+   "selector": [
+    "AnswerSources",
+    "ResultList",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "cost_usd": 0.005651
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KeyFacts"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "facts-hotel",
+   "run": 1,
+   "expect": [
+    "KeyFacts",
+    "Receipt"
+   ],
+   "selector": [
+    "KeyFacts",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.010028
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KeyFacts"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "facts-hotel",
+   "run": 2,
+   "expect": [
+    "KeyFacts",
+    "Receipt"
+   ],
+   "selector": [
+    "KeyFacts",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.0343663
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KeyFacts"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "facts-hotel",
+   "run": 3,
+   "expect": [
+    "KeyFacts",
+    "Receipt"
+   ],
+   "selector": [
+    "KeyFacts",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.0212708
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "SummaryCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "define-term",
+   "run": 1,
+   "expect": [
+    "SummaryCard",
+    "KeyFacts"
+   ],
+   "selector": [
+    "SummaryCard"
+   ],
+   "usage": {
+    "cost_usd": 0.0318303
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "SummaryCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "define-term",
+   "run": 2,
+   "expect": [
+    "SummaryCard",
+    "KeyFacts"
+   ],
+   "selector": [
+    "SummaryCard"
+   ],
+   "usage": {
+    "cost_usd": 0.028176800000000002
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "SummaryCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "define-term",
+   "run": 3,
+   "expect": [
+    "SummaryCard",
+    "KeyFacts"
+   ],
+   "selector": [
+    "SummaryCard"
+   ],
+   "usage": {
+    "cost_usd": 0.0274606
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "table-bookings",
+   "run": 1,
+   "expect": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.015088
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "table-bookings",
+   "run": 2,
+   "expect": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.038994299999999996
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "table-bookings",
+   "run": 3,
+   "expect": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.032005000000000006
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "bars-spend",
+   "run": 1,
+   "expect": [
+    "BarChart",
+    "LineChart",
+    "DataTable"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.009622
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "bars-spend",
+   "run": 2,
+   "expect": [
+    "BarChart",
+    "LineChart",
+    "DataTable"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.0051097
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "bars-spend",
+   "run": 3,
+   "expect": [
+    "BarChart",
+    "LineChart",
+    "DataTable"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.0052357
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LineChart"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "line-fare",
+   "run": 1,
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "selector": [
+    "LineChart",
+    "Comparison"
+   ],
+   "usage": {
+    "cost_usd": 0.010522
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LineChart"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "line-fare",
+   "run": 2,
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "selector": [
+    "LineChart",
+    "Comparison"
+   ],
+   "usage": {
+    "cost_usd": 0.036426299999999995
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LineChart"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "line-fare",
+   "run": 3,
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "selector": [
+    "LineChart",
+    "Comparison"
+   ],
+   "usage": {
+    "cost_usd": 0.0059343
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "donut-categories",
+   "run": 1,
+   "expect": [
+    "DonutBreakdown",
+    "DataTable",
+    "BarChart"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.028068600000000003
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "donut-categories",
+   "run": 2,
+   "expect": [
+    "DonutBreakdown",
+    "DataTable",
+    "BarChart"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.0343
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "donut-categories",
+   "run": 3,
+   "expect": [
+    "DonutBreakdown",
+    "DataTable",
+    "BarChart"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.007212
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KpiStrip"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "kpi-year",
+   "run": 1,
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "selector": [
+    "KpiStrip",
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.010062
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KpiStrip"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "kpi-year",
+   "run": 2,
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "selector": [
+    "KpiStrip",
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.0054786999999999995
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KpiStrip"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "kpi-year",
+   "run": 3,
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "selector": [
+    "KpiStrip",
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.029556600000000002
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ProgressStatus"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "status-refund",
+   "run": 1,
+   "expect": [
+    "ProgressStatus"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "FlightResults"
+   ],
+   "usage": {
+    "cost_usd": 0.0340043
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ProgressStatus"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "status-refund",
+   "run": 2,
+   "expect": [
+    "ProgressStatus"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "FlightResults"
+   ],
+   "usage": {
+    "cost_usd": 0.031618600000000004
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ProgressStatus"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "status-refund",
+   "run": 3,
+   "expect": [
+    "ProgressStatus"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "FlightResults"
+   ],
+   "usage": {
+    "cost_usd": 0.0202791
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "Comparison"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "compare-fares",
+   "run": 1,
+   "expect": [
+    "Comparison"
+   ],
+   "selector": [
+    "Comparison",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "cost_usd": 0.013874
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "Comparison"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "compare-fares",
+   "run": 2,
+   "expect": [
+    "Comparison"
+   ],
+   "selector": [
+    "Comparison",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "cost_usd": 0.009850000000000001
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "Comparison"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "compare-fares",
+   "run": 3,
+   "expect": [
+    "Comparison"
+   ],
+   "selector": [
+    "Comparison",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "cost_usd": 0.0394243
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ResultList"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "results-hotels",
+   "run": 1,
+   "expect": [
+    "ResultList"
+   ],
+   "selector": [
+    "ResultList",
+    "LocationCard"
+   ],
+   "usage": {
+    "cost_usd": 0.0341266
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ResultList"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "results-hotels",
+   "run": 2,
+   "expect": [
+    "ResultList"
+   ],
+   "selector": [
+    "ResultList",
+    "LocationCard"
+   ],
+   "usage": {
+    "cost_usd": 0.01409
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ResultList"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "results-hotels",
+   "run": 3,
+   "expect": [
+    "ResultList"
+   ],
+   "selector": [
+    "ResultList",
+    "LocationCard"
+   ],
+   "usage": {
+    "cost_usd": 0.0242568
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FlightResults"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "flights-search",
+   "run": 1,
+   "expect": [
+    "FlightResults",
+    "ResultList"
+   ],
+   "selector": [
+    "FlightResults"
+   ],
+   "usage": {
+    "cost_usd": 0.0401943
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FlightResults"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "flights-search",
+   "run": 2,
+   "expect": [
+    "FlightResults",
+    "ResultList"
+   ],
+   "selector": [
+    "FlightResults"
+   ],
+   "usage": {
+    "cost_usd": 0.0286191
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FlightResults"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "flights-search",
+   "run": 3,
+   "expect": [
+    "FlightResults",
+    "ResultList"
+   ],
+   "selector": [
+    "FlightResults"
+   ],
+   "usage": {
+    "cost_usd": 0.0352566
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "QuickReplies"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "chips-change",
+   "run": 1,
+   "expect": [
+    "QuickReplies"
+   ],
+   "selector": [
+    "QuickReplies",
+    "FormFields"
+   ],
+   "usage": {
+    "cost_usd": 0.035438300000000006
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "QuickReplies"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "chips-change",
+   "run": 2,
+   "expect": [
+    "QuickReplies"
+   ],
+   "selector": [
+    "QuickReplies",
+    "FormFields"
+   ],
+   "usage": {
+    "cost_usd": 0.010304
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "QuickReplies"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "chips-change",
+   "run": 3,
+   "expect": [
+    "QuickReplies"
+   ],
+   "selector": [
+    "QuickReplies",
+    "FormFields"
+   ],
+   "usage": {
+    "cost_usd": 0.0056783
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FormFields"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "form-passport",
+   "run": 1,
+   "expect": [
+    "FormFields"
+   ],
+   "selector": [
+    "FormFields",
+    "KeyFacts",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.0361203
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FormFields"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "form-passport",
+   "run": 2,
+   "expect": [
+    "FormFields"
+   ],
+   "selector": [
+    "FormFields",
+    "KeyFacts",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.01179
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FormFields"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "form-passport",
+   "run": 3,
+   "expect": [
+    "FormFields"
+   ],
+   "selector": [
+    "FormFields",
+    "KeyFacts",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.0067392
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "TimeSlots"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "slots-transfer",
+   "run": 1,
+   "expect": [
+    "TimeSlots"
+   ],
+   "selector": [
+    "TimeSlots",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.012586
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "TimeSlots"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "slots-transfer",
+   "run": 2,
+   "expect": [
+    "TimeSlots"
+   ],
+   "selector": [
+    "TimeSlots",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.0368903
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "TimeSlots"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "slots-transfer",
+   "run": 3,
+   "expect": [
+    "TimeSlots"
+   ],
+   "selector": [
+    "TimeSlots",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.0315843
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "approve-cancel",
+   "run": 1,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ResultList"
+   ],
+   "usage": {
+    "cost_usd": 0.012898
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "approve-cancel",
+   "run": 2,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ResultList"
+   ],
+   "usage": {
+    "cost_usd": 0.0243448
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "approve-cancel",
+   "run": 3,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ResultList"
+   ],
+   "usage": {
+    "cost_usd": 0.007724
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "receipt-seat",
+   "run": 1,
+   "expect": [
+    "Receipt",
+    "ProgressStatus"
+   ],
+   "selector": [
+    "Receipt",
+    "FormFields"
+   ],
+   "usage": {
+    "cost_usd": 0.00853
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "receipt-seat",
+   "run": 2,
+   "expect": [
+    "Receipt",
+    "ProgressStatus"
+   ],
+   "selector": [
+    "Receipt",
+    "FormFields"
+   ],
+   "usage": {
+    "cost_usd": 0.0028982
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "receipt-seat",
+   "run": 3,
+   "expect": [
+    "Receipt",
+    "ProgressStatus"
+   ],
+   "selector": [
+    "Receipt",
+    "FormFields"
+   ],
+   "usage": {
+    "cost_usd": 0.0327983
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "error-search",
+   "run": 1,
+   "expect": [
+    "ErrorRetry"
+   ],
+   "selector": [
+    "FlightResults",
+    "ErrorRetry",
+    "ResultList"
+   ],
+   "usage": {
+    "cost_usd": 0.010312
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "error-search",
+   "run": 2,
+   "expect": [
+    "ErrorRetry"
+   ],
+   "selector": [
+    "FlightResults",
+    "ErrorRetry",
+    "ResultList"
+   ],
+   "usage": {
+    "cost_usd": 0.0047667000000000005
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ErrorRetry"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "error-search",
+   "run": 3,
+   "expect": [
+    "ErrorRetry"
+   ],
+   "selector": [
+    "FlightResults",
+    "ErrorRetry",
+    "ResultList"
+   ],
+   "usage": {
+    "cost_usd": 0.0338243
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LocationCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "location-hotel",
+   "run": 1,
+   "expect": [
+    "LocationCard"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "AnswerSources"
+   ],
+   "usage": {
+    "cost_usd": 0.033536300000000005
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LocationCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "location-hotel",
+   "run": 2,
+   "expect": [
+    "LocationCard"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "AnswerSources"
+   ],
+   "usage": {
+    "cost_usd": 0.0299414
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LocationCard"
+   ],
+   "valid": false,
+   "errors": [
+    "length /0/createSurface/components/0/distance text is 48 characters, the most is 40"
+   ],
+   "warnings": 0,
+   "right": true,
+   "id": "location-hotel",
+   "run": 3,
+   "expect": [
+    "LocationCard"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "AnswerSources"
+   ],
+   "usage": {
+    "cost_usd": 0.0292214
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FileCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "file-invoice",
+   "run": 1,
+   "expect": [
+    "FileCard"
+   ],
+   "selector": [
+    "FileCard",
+    "ApprovalPrompt"
+   ],
+   "usage": {
+    "cost_usd": 0.010156
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FileCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "file-invoice",
+   "run": 2,
+   "expect": [
+    "FileCard"
+   ],
+   "selector": [
+    "FileCard",
+    "ApprovalPrompt"
+   ],
+   "usage": {
+    "cost_usd": 0.035590300000000005
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": false,
+   "id": "file-invoice",
+   "run": 3,
+   "expect": [
+    "FileCard"
+   ],
+   "selector": [
+    "FileCard",
+    "ApprovalPrompt"
+   ],
+   "usage": {
+    "cost_usd": 0.0253028
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-visa",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.267254
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-visa",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0188608
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-visa",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.030406000000000002
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-checkin",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0254206
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-checkin",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0296763
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-checkin",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.026891200000000004
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-breakfast",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0291923
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-breakfast",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0052959999999999995
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-breakfast",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0025884
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-bags",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.005405999999999999
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-bags",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0233443
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-bags",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.026499
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-thanks",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0049960000000000004
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-thanks",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0289523
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-thanks",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0263023
+   }
+  }
+ ]
+}
