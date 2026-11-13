@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "name": "Linen room, Old Town",
+      "detail": "2 guests · 1 bed",
+      "price": "$148 night",
+      "photo": {
+        "src": "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=640&h=480&fit=crop&auto=format&q=70",
+        "alt": "Hotel bed with white linen and pillows"
+      }
+    },
+    {
+      "name": "Garden suite, Harbourside",
+      "detail": "4 guests · 2 beds",
+      "price": "$212 night",
+      "photo": {
+        "src": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=640&h=480&fit=crop&auto=format&q=70",
+        "alt": "Hotel bedroom with a wooden bed and garden view"
+      }
+    },
+    {
+      "name": "Blue room, Riverside",
+      "detail": "2 guests · 1 bed",
+      "price": "$119 night",
+      "photo": {
+        "src": "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=640&h=480&fit=crop&auto=format&q=70",
+        "alt": "Bedroom with a blue headboard"
+      }
+    }
+  ]
+}

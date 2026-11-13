@@ -1,0 +1,109 @@
+{
+  "name": "Toast with undo",
+  "summary": "A toast that confirms an archive and offers Undo, which puts the item back where it was. It stays until it's used or closed.",
+  "use": "for reversible actions such as archive, move or remove, instead of asking 'Are you sure?' first",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "toast",
+    "undo",
+    "snackbar",
+    "archive",
+    "confirmation"
+  ],
+  "states": [
+    "archived",
+    "restored",
+    "closed",
+    "hover",
+    "focus"
+  ],
+  "source": null,
+  "a11y": "A polite live region that is always on the page reads what was archived; after Archive, focus moves to Undo so keyboard users can reach it, and returns to the restored row or the list after Undo or close. Escape closes the toast. There is no timer, so nobody loses the chance to undo.",
+  "width": "medium",
+  "live_region": "polite",
+  "spec": {
+    "use_when": [
+      "the action can be undone for a while",
+      "the person should keep working without a dialog"
+    ],
+    "avoid_when": [
+      "the action can't be undone (deleting for good, sending money): use confirm-dialog",
+      "news about the whole page: use page-banners"
+    ],
+    "keyboard": [
+      "Tab reaches each Archive button",
+      "After Archive, focus moves to Undo; after Undo, it returns to the restored row"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "messages": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "properties": {
+              "from": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "subject": {
+                "type": "string",
+                "maxLength": 56
+              }
+            },
+            "required": [
+              "from",
+              "subject"
+            ]
+          }
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 24
+        }
+      },
+      "required": [
+        "messages",
+        "message"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "When every message is archived, show empty-all-done in place of the list."
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "Not applicable: archive is instant here; a slow server would use optimistic-update's rollback."
+      },
+      "error": {
+        "status": "not_built",
+        "how": "If the archive fails, put the row back and say so in the toast with Try again."
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "No control here is ever disabled; each one always does something."
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Long subjects and toast messages end in an ellipsis.",
+        "evidence": "text-overflow: ellipsis"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}

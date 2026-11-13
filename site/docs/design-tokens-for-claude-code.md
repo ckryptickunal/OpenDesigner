@@ -99,7 +99,7 @@ Classes follow the token roles: `bg-action-primary`, `text-fg-primary`, `rounded
 ## Not yet
 
 - No direct React Native or Flutter export.
-- The overview page draws only buttons, a text field and a card. The optional [component library](/library/) has 82 finished components built on the tokens.
+- The overview page draws only buttons, a text field and a card. The optional [component library](/library/) has 104 finished components built on the tokens, including empty, loading and error states.
 - No watched user trials yet.
 
 ## Next
