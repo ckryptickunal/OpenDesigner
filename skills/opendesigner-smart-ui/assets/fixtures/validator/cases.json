@@ -1818,6 +1818,171 @@
    ],
    "opts": {},
    "expect": []
+  },
+  {
+   "name": "ok-table",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Table",
+        "title": "Unpaid invoices",
+        "columns": [
+         {
+          "label": "Invoice"
+         },
+         {
+          "label": "Amount",
+          "align": "end"
+         }
+        ],
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "$120.00"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": []
+  },
+  {
+   "name": "bad-table-no-columns",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Table",
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "$120.00"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "required@/0/createSurface/components/0/columns",
+    "table-headers@/0/createSurface/components/0/columns"
+   ]
+  },
+  {
+   "name": "bad-table-blank-header",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Table",
+        "columns": [
+         {
+          "label": "Invoice"
+         },
+         {
+          "label": "  "
+         }
+        ],
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "$120.00"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "table-headers@/0/createSurface/components/0/columns/1/label"
+   ]
+  },
+  {
+   "name": "bad-table-more-cells-than-headers",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Table",
+        "columns": [
+         {
+          "label": "Invoice"
+         },
+         {
+          "label": "Amount",
+          "align": "end"
+         }
+        ],
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "$120.00"
+           },
+           {
+            "text": "Sep 2"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "table-headers@/0/createSurface/components/0/rows/0/cells"
+   ]
   }
  ]
 }

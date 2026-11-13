@@ -176,6 +176,10 @@ class Selector(unittest.TestCase):
             with self.subTest(m):
                 self.assertFalse(smartui.select(m, self.cat)["ui"])
 
+    def test_fetched_data_does_not_override_r1(self):
+        sel = smartui.select("How many seats do we have right now?", self.cat, 3, None, None, {"KeyFacts": 5})
+        self.assertFalse(sel["ui"])
+
     def test_prompt_lists_only_candidates(self):
         text, sel = smartui.build_prompt("Compare the three fare types side by side", self.cat, k=3)
         self.assertTrue(sel["ui"])
@@ -291,6 +295,36 @@ class Live(unittest.TestCase):
         r = self.live.Conversation(self.app, "scripted").answer("Compare the plans")
         self.assertIsNone(r["answer"])
         self.assertTrue(r["log"]["final_errors"])
+
+
+class Render(unittest.TestCase):
+    def test_a_part_rendered_before_it_is_attached_still_runs_its_script(self):
+        try:
+            from playwright.sync_api import sync_playwright
+        except ImportError:
+            self.skipTest("Playwright for Python is not installed")
+        import surface_audit as A
+        with tempfile.TemporaryDirectory() as t:
+            cat, bundle = smartui.build_catalog(TOKENS, "Test", ["images.unsplash.com"], only={"data-table"})
+            pathlib.Path(t, "cat").mkdir()
+            pathlib.Path(t, "cat", "catalog.json").write_text(json.dumps(cat))
+            pathlib.Path(t, "cat", "od-components.js").write_text(smartui.bundle_js(bundle))
+            fx = json.loads(A.fixture_path("data-table").read_text())
+            with tempfile.TemporaryDirectory() as site, A.serve(site) as url:
+                A.stage(pathlib.Path(t, "cat"), TOKENS, site)
+                with sync_playwright() as p:
+                    b = A.launch(p)
+                    pg = b.new_page()
+                    pg.goto(url + "/index.html")
+                    pg.wait_for_function("window.__ready === true")
+                    n = pg.evaluate("""async (fx) => {
+                      const s = document.createElement("od-surface");
+                      s.catalog = await (await fetch("catalog.json")).json();
+                      s.process([{version: "1.0", createSurface: {surfaceId: "x", components: [{...fx, id: "root", component: "DataTable"}]}}]);
+                      document.body.append(s);   // attached after rendering, as a chat that builds a turn first does
+                      return s.querySelectorAll("thead th").length; }""", fx)
+                    b.close()
+        self.assertGreater(n, 0, "the table's own script never built its header row")
 
 
 class Offer(unittest.TestCase):

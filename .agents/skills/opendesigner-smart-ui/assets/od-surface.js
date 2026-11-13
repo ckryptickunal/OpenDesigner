@@ -98,6 +98,7 @@ export class ODSurface extends (G.HTMLElement || class {}) {
   connectedCallback() {
     this.classList.add("od-surface");
     live();
+    if (this._wireLater) this.wireParts();  // rendered before it was attached
   }
 
   /** Apply A2UI messages. Invalid answers render nothing new and fire od-error with repairable A2UI errors. */
@@ -148,6 +149,12 @@ export class ODSurface extends (G.HTMLElement || class {}) {
       if (el) { el.dataset.odSurfaceId = sid; frag.append(el); }
     }
     this.replaceChildren(frag);
+    // a part's own script finds its roots in the document, so it runs once this surface is on the page
+    if (this.isConnected) this.wireParts(); else this._wireLater = true;
+  }
+
+  wireParts() {
+    this._wireLater = false;
     for (const name of new Set([...this.querySelectorAll("[data-od-component]")].map((e) => e.dataset.odComponent))) {
       const def = REG()[name];
       if (def && def.wire) try { def.wire(); } catch (e) { console.warn("od-surface: wiring " + name + " failed", e); }

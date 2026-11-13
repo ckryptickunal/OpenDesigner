@@ -61,7 +61,8 @@ def main():
                     page.wait_for_function(f"document.querySelectorAll('.od-chat-turn, .od-chat-error').length > {n}", timeout=timeout)
                     page.wait_for_timeout(700)  # the scroll to the newest answer
                     top = page.evaluate("() => { const t = [...document.querySelectorAll('.od-chat-turn')].pop(); const r = t.getBoundingClientRect(); return [r.top, innerHeight]; }")
-                    if not (-2 <= top[0] < top[1] * 0.6):
+                    bottom = page.evaluate("() => [...document.querySelectorAll('.od-chat-turn')].pop().getBoundingClientRect().bottom")
+                    if not (-2 <= top[0] < top[1] * 0.6 or (top[0] >= -2 and bottom <= top[1] + 2)):  # its top near the top, or all of it on screen
                         problems.append(f"{width}: after '{q}' the newest answer starts at {round(top[0])} px, not in view")
                     for tbl in turn().locator("table").all():
                         if not tbl.locator("thead th").count() or not tbl.locator("thead th").first.is_visible():

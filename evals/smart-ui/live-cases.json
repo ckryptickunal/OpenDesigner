@@ -21,6 +21,18 @@
    ]
   },
   {
+   "id": "invoices-unpaid",
+   "turns": [
+    "Which invoices haven't we paid yet?"
+   ],
+   "expect": [
+    "DataTable"
+   ],
+   "checks": [
+    "headers"
+   ]
+  },
+  {
    "id": "invoice-one",
    "turns": [
     "Can I get invoice TH-1046?"

@@ -168,6 +168,16 @@ def run_selector(data, cs):
     return res
 
 
+def table_has_headers(answer):
+    """Every DataTable in the answer has a non-blank label for each column, and no row wider than its headers."""
+    tables = [c for m in (answer or []) if isinstance(m, dict) for k in ("createSurface", "updateComponents")
+              for c in (m.get(k) or {}).get("components", []) if isinstance(c, dict) and c.get("component") == "DataTable"]
+    def ok(t):
+        cols = t.get("columns") or []
+        return bool(cols) and all(str(c.get("label", "")).strip() for c in cols) and all(len(r.get("cells", [])) <= len(cols) for r in t.get("rows", []))
+    return bool(tables) and all(ok(t) for t in tables)
+
+
 def render(valid, cat_path, tokens):
     """Render each valid answer at desktop and phone and run the audit floors on it."""
     sys.path.insert(0, str(ROOT / "skills" / "opendesigner-smart-ui" / "scripts"))
@@ -251,6 +261,9 @@ def run_live(model, runs, pattern, do_render):
                    "selector_hit": (not c["expect"] and not log.get("selector")) or any(x in log.get("selector", []) for x in c["expect"]),
                    "right": (not c["expect"] and not part) or (bool(part) and part in c["expect"])}
             row["valid"] = (not row["first_errors"]) if (part or row["first_errors"]) else None
+            if "headers" in c.get("checks", []):  # a table names every column it shows (check_live.py also checks the drawn <th>)
+                row["headers_ok"] = table_has_headers(r.get("answer"))
+                row["right"] = row["right"] and row["headers_ok"]
             rows.append(row)
             if part and r.get("answer"):
                 valid.append((f"live-{model}.{c['id']}.{n}", r["answer"]))

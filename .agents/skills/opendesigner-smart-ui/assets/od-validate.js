@@ -35,6 +35,15 @@ function duplicateRows(v, path, errs, sid) {
   });
 }
 
+/** A table (columns plus rows of cells) names every column it shows: a header per cell, and no blank header. */
+function tableHeaders(v, path, errs, sid) {
+  const cols = v.columns, rows = v.rows;
+  if (!(Array.isArray(rows) && rows.some((r) => isObj(r) && Array.isArray(r.cells)))) return;
+  if (!Array.isArray(cols) || !cols.length) { err(errs, "table-headers", `${path}/columns`, "a table needs a header for each column", sid, "add columns with a label for each"); return; }
+  cols.forEach((c, i) => { if (isObj(c) && typeof c.label === "string" && !c.label.trim()) err(errs, "table-headers", `${path}/columns/${i}/label`, "a column header is blank", sid, "name the column"); });
+  rows.forEach((r, i) => { if (isObj(r) && Array.isArray(r.cells) && r.cells.length > cols.length) err(errs, "table-headers", `${path}/rows/${i}/cells`, `${r.cells.length} cells but ${cols.length} column headers`, sid, "add a header for each column, or drop the extra cells"); });
+}
+
 function namesIn(obj, out = new Set()) {
   if (typeof obj === "string") { for (const w of obj.match(WORD) || []) if (w[0] >= "A" && w[0] <= "Z") out.add(w.toLowerCase()); }
   else if (Array.isArray(obj)) obj.forEach((x) => namesIn(x, out));
@@ -137,6 +146,7 @@ function checkValue(v, schema, path, errs, sid, cat, opts, ctx) {
       else out[k] = x;
     }
     if (!opts.partial) for (const r of schema.required || []) if (!(r in v)) err(errs, "required", `${path}/${r}`, `${r} is required`, sid);
+    tableHeaders(v, path, errs, sid);
     if (schema["x-od-effect"] === "change" && isObj(v.event) && isObj(v.event.context) && "approved" in v.event.context)
       err(errs, "R3-approval", `${path}/event/context/approved`, "an action that changes data is approved by the person, never in the answer", sid, "remove approved");
     return out;
