@@ -1611,6 +1611,378 @@
     }
    },
    "expect": []
+  },
+  {
+   "name": "copy-title-case",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Unpaid Invoices",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": [
+    "copy-case@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "copy-sentence-case-ok",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Unpaid invoices",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": []
+  },
+  {
+   "name": "copy-name-from-data",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Casa do Rio",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true,
+    "source": {
+     "hotel": "Casa do Rio"
+    }
+   },
+   "expect": []
+  },
+  {
+   "name": "copy-acronym-ok",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Invoice TH-1043",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": []
+  },
+  {
+   "name": "copy-banned-word",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Paid successfully",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": [
+    "copy-word@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "copy-duplicate-row",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Number",
+          "value": "TH-1043"
+         },
+         {
+          "label": "Invoice number",
+          "value": "TH-1043"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": [
+    "duplicate-row@/0/createSurface/components/0/facts/1"
+   ]
+  },
+  {
+   "name": "copy-off-by-default",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Payment Confirmation",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": []
+  },
+  {
+   "name": "ok-table",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Table",
+        "title": "Unpaid invoices",
+        "columns": [
+         {
+          "label": "Invoice"
+         },
+         {
+          "label": "Amount",
+          "align": "end"
+         }
+        ],
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "$120.00"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": []
+  },
+  {
+   "name": "bad-table-no-columns",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Table",
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "$120.00"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "required@/0/createSurface/components/0/columns",
+    "table-headers@/0/createSurface/components/0/columns"
+   ]
+  },
+  {
+   "name": "bad-table-blank-header",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Table",
+        "columns": [
+         {
+          "label": "Invoice"
+         },
+         {
+          "label": "  "
+         }
+        ],
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "$120.00"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "table-headers@/0/createSurface/components/0/columns/1/label"
+   ]
+  },
+  {
+   "name": "bad-table-more-cells-than-headers",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Table",
+        "columns": [
+         {
+          "label": "Invoice"
+         },
+         {
+          "label": "Amount",
+          "align": "end"
+         }
+        ],
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "$120.00"
+           },
+           {
+            "text": "Sep 2"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "table-headers@/0/createSurface/components/0/rows/0/cells"
+   ]
   }
  ]
 }

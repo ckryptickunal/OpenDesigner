@@ -2,6 +2,8 @@
 
 Every file in the opendesigner skill, and when to read it. SKILL.md names the ones to read at the start.
 
+Read `references/guardrails.md` before writing files or reading a reference, and `references/standards/<theme>.md` before you offer options in its area or build anything it covers. Zooming into an area: its file in `references/stages/`. A look in their own words: `references/styles.md` (`style-lab.md` when no named style fits). Taste: `references/taste.md`.
+
 | Path | Read it when |
 |---|---|
 | `references/rules.md` | At the start. How to talk: message style, the three voices, the question card, answer statuses, `OD:` lines |

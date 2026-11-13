@@ -228,7 +228,9 @@ class Conversation:
             reply = ask(self.provider, system, turns + [{"role": "assistant", "text": reply}, {"role": "user", "text": fix}])
             result = self._check(reply, source, surface, max_parts)
             repaired = True
-            if result["errors"]:
+            if result["errors"] and all(e["rule"] in smartui.COPY_RULES for e in result["errors"]) and result.get("draft"):
+                result["answer"] = result["draft"]  # only wording is left after the repair: show it, log what's left
+            elif result["errors"] and not all(e["rule"] in smartui.COPY_RULES for e in result["errors"]):
                 result["answer"] = None  # still wrong after one repair: text only
         text = result["text"] or "Sorry, I couldn't show that. Here is what I found: " + json.dumps(fresh)[:300]
         self.turns += [{"role": "user", "text": message},
@@ -245,8 +247,13 @@ class Conversation:
     def _check(self, reply, data, surface, max_parts):
         ans = smartui.extract_answer(reply)
         text = re.sub(r"```a2ui.*?```", "", reply, flags=re.S).strip()
+        said = []  # the reply's own words follow the house voice too (copy rules)
+        m = smartui.BANNED_WORDS.search(text)
+        if m:
+            said.append({"code": "VALIDATION_FAILED", "rule": "copy-word", "path": "text", "surfaceId": surface,
+                         "message": f"'{m.group(0)}' in your text reads as filler", "fix": f"say it plainly without '{m.group(0)}'"})
         if ans is None:
-            return {"text": text, "answer": None, "errors": [], "part": None}
+            return {"text": text, "answer": None, "errors": said, "part": None, "draft": None}
         if isinstance(ans, dict) and "__parse_error__" in ans:
             return {"text": text, "answer": None, "part": None,
                     "errors": [{"rule": "json", "path": "", "message": "the a2ui block is not valid JSON: " + ans["__parse_error__"][:120]}]}
@@ -255,9 +262,14 @@ class Conversation:
             for k in ("createSurface", "updateComponents", "updateDataModel", "deleteSurface"):
                 if isinstance(m, dict) and isinstance(m.get(k), dict):
                     m[k]["surfaceId"] = surface
-        r = smartui.validate(msgs, self.catalog, {"source": data, "limits": {"leaves": max_parts}})
+        r = smartui.validate(msgs, self.catalog, {"source": data, "limits": {"leaves": max_parts}, "copy": True})
         part = next((c.get("component") for m in msgs for c in (m.get("createSurface") or {}).get("components", []) if c.get("id") == "root"), None)
-        return {"text": text, "answer": msgs if r["ok"] else None, "errors": r["errors"], "part": part}
+        # copy rules (sentence case, plain words, one row per value) are repair errors; "draft" keeps an answer whose only
+        # problems are those, for after the repair round
+        errors = r["errors"] + said
+        only_copy = bool(errors) and all(e["rule"] in smartui.COPY_RULES for e in errors)
+        return {"text": text, "answer": msgs if not errors else None, "errors": errors, "part": part,
+                "draft": msgs if only_copy else None}
 
     def _remember_offers(self, answer):
         def walk(v):

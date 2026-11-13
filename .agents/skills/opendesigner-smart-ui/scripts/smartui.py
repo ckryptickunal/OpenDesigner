@@ -49,6 +49,10 @@ BANNED_KEYS = {"style", "class", "classname", "css", "theme", "html", "innerhtml
 HTML = re.compile(r"<\s*/?\s*[a-zA-Z!][^>]*>|<\s*[a-zA-Z]")
 WHOLE_STYLE = re.compile(r"^\s*(#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})|-?\d*\.?\d+(px|rem|em|vh|vw|pt)|(rgba?|hsla?|oklch|oklab|lab|lch|color-mix|var|calc|url|expression)\(.*)\s*$", re.I)
 NUM = re.compile(r"(?<![\w.])-?\d[\d,]*(?:\.\d+)?")
+# copy rules (docs/COPY.md, opendesigner-review CP-01 and CP-02), checked when opts["copy"]: the model's words follow the house voice
+BANNED_WORDS = re.compile(r"\b(successfully|seamless(ly)?|effortless(ly)?|leverag(e|es|ing)|utili[sz](e|es|ing)|robust|delve|unlock(s|ing)?|"
+                          r"empower(s|ing)?|elevate(s|d)?|streamline(s|d)?|cutting-edge|hassle-free|please note)\b", re.I)
+WORD = re.compile(r"[A-Za-z][A-Za-z'’-]*")
 
 
 # ----------------------------------------------------------------------------------------------- the set and the library
@@ -230,7 +234,8 @@ def build_catalog(tokens_path=None, system="system", allow_images=(), allow_link
 
 INSTRUCTIONS = (
     "Answer in plain text first. Show a component only when it does a job text cannot: a list to pick from, numbers to compare, "
-    "a form to fill, a step to approve. A short factual answer stays text (R1). One component per answer unless the person asked "
+    "a form to fill, a step to approve. When the person asks to see several records (which invoices, my orders), show them in a list "
+    "or table, not bullets, even two. A question about one thing (when is the next invoice due?) is a short factual answer and stays text (R1). One component per answer unless the person asked "
     "for more (R2). Actions that change data (book, pay, send, delete) are buttons the person presses; never claim they happened (R3). "
     "Use only the components and properties in this catalog; there are no colour, size, style, class or URL-of-your-choice properties (R4). "
     "Every number must come from the data you were given; leave a value out when you do not have it (R6). Text is plain: no HTML or markdown.")
@@ -495,10 +500,12 @@ def select(msg, catalog, k=3, scope=None, data=None, boost=None):
     ranked.sort(key=lambda x: (-x[0], x[1]))
     top = [n for s, n in ranked[:k] if s >= 0.8]
     best = ranked[0][0] if ranked else 0
+    # R1 is decided by the words alone: data the app fetched for a short question doesn't make it need a part
+    best_words = max((score(msg, c) for n, c in catalog["components"].items() if not od(c).get("container")), default=0)
     cue = bool(UI_CUES.search(norm(msg)))
     reason = cue or best >= 3
     short_fact = (len(words(msg)) <= 6 and re.match(r"^\s*(what|when|who|how many|is|are|does|did|can|do)\b", norm(msg))
-                  and not cue and best < 3)
+                  and not cue and best_words < 3)
     ui = bool(top) and reason and not short_fact
     return {"ui": ui, "candidates": top if ui else [], "scores": {n: round(s, 2) for s, n in ranked[:k + 2]},
             "why": ("a cue for UI and a part that fits" if ui else "no reason for UI: answer in text (R1)")}
@@ -631,6 +638,8 @@ def check_value(v, schema, path, errs, sid, cat, opts, ctx):
                 _err(errs, "R4-html", path, "text holds HTML; text is plain only", sid, "write the words without tags")
             elif WHOLE_STYLE.match(v):
                 _err(errs, "R4-style", path, f"{v!r} is a style value (colour, size or CSS); there are no style properties", sid)
+        if opts.get("copy") and not schema.get("x-od-code") and "enum" not in schema and "pattern" not in schema and schema.get("format") != "uri":
+            copy_check(v, path, errs, sid, ctx.get("names") or set())
         if ctx.get("numbers") is not None and not schema.get("x-od-code"):
             for n in NUM.findall(v):
                 if _num(n) not in ctx["numbers"]:
@@ -646,6 +655,8 @@ def check_value(v, schema, path, errs, sid, cat, opts, ctx):
         if len(v) < schema.get("minItems", 0) and not opts.get("partial") and not opts.get("allow_empty"):
             _err(errs, "items", path, f"{len(v)} items, the fewest is {schema['minItems']}", sid)
         it = schema.get("items", {})
+        if opts.get("copy"):
+            duplicate_rows(v, path, errs, sid)
         return [check_value(x, it, f"{path}/{i}", errs, sid, cat, opts, ctx) for i, x in enumerate(v)]
     if isinstance(v, dict):
         props = schema.get("properties", {})
@@ -669,10 +680,66 @@ def check_value(v, schema, path, errs, sid, cat, opts, ctx):
             for r in schema.get("required", []):
                 if r not in v:
                     _err(errs, "required", f"{path}/{r}", f"{r} is required", sid)
+        table_headers(v, path, errs, sid)
         if schema.get("x-od-effect") == "change" and isinstance(v.get("event"), dict) and "approved" in (v["event"].get("context") or {}):
             _err(errs, "R3-approval", f"{path}/event/context/approved", "an action that changes data is approved by the person, never in the answer", sid, "remove approved")
         return out
     return v
+
+
+def copy_check(v, path, errs, sid, names):
+    """Sentence case and plain words. A capitalised word that the data or the person used is a name, not Title Case."""
+    m = BANNED_WORDS.search(v)
+    if m:
+        _err(errs, "copy-word", path, f"'{m.group(0)}' reads as filler", sid, f"say it plainly without '{m.group(0)}'")
+    words = WORD.findall(v)
+    if 2 <= len(words) <= 8 and not re.search(r"[.!?]\s", v):
+        later = [w for w in words[1:] if len(w) >= 3 and not (sum(c.isupper() for c in w) > 1)]
+        caps = [w for w in later if w[0].isupper() and w.lower() not in names]
+        if caps and all(w[0].isupper() for w in later):
+            _err(errs, "copy-case", path, f"'{v}' is in Title Case", sid, "use sentence case: capitalise the first word and names only")
+
+
+def duplicate_rows(v, path, errs, sid):
+    """A list of label-value rows shows each value once ("Number TH-1043" and "Invoice number TH-1043" is one row)."""
+    seen = {}
+    for i, row in enumerate(v):
+        if isinstance(row, dict) and "label" in row and isinstance(row.get("value"), (str, int, float)):
+            key = str(row["value"]).strip().lower()
+            if key in seen:
+                _err(errs, "duplicate-row", f"{path}/{i}", f"'{row['value']}' is already shown as '{seen[key]}'", sid, "keep one row for each value")
+            else:
+                seen[key] = row.get("label")
+
+
+def table_headers(v, path, errs, sid):
+    """A table (columns plus rows of cells) names every column it shows: a header per cell, and no blank header."""
+    cols, rows = v.get("columns"), v.get("rows")
+    if not (isinstance(rows, list) and any(isinstance(r, dict) and isinstance(r.get("cells"), list) for r in rows)):
+        return
+    if not isinstance(cols, list) or not cols:
+        _err(errs, "table-headers", f"{path}/columns", "a table needs a header for each column", sid, "add columns with a label for each")
+        return
+    for i, c in enumerate(cols):
+        if isinstance(c, dict) and isinstance(c.get("label"), str) and not c["label"].strip():
+            _err(errs, "table-headers", f"{path}/columns/{i}/label", "a column header is blank", sid, "name the column")
+    for i, r in enumerate(rows):
+        if isinstance(r, dict) and isinstance(r.get("cells"), list) and len(r["cells"]) > len(cols):
+            _err(errs, "table-headers", f"{path}/rows/{i}/cells", f"{len(r['cells'])} cells but {len(cols)} column headers", sid, "add a header for each column, or drop the extra cells")
+
+
+def names_in(obj, out=None):
+    """Capitalised words in the data the model was given: names (Lisbon, Tallyhaus, Casa do Rio)."""
+    out = set() if out is None else out
+    if isinstance(obj, str):
+        out.update(w.lower() for w in WORD.findall(obj) if w[0].isupper())
+    elif isinstance(obj, dict):
+        for k, x in obj.items():
+            names_in(x, out)
+    elif isinstance(obj, list):
+        for x in obj:
+            names_in(x, out)
+    return out
 
 
 def _num(s):
@@ -744,6 +811,9 @@ def accessible_names(comp, schema, cat, base, out):
     walk(comp, schema, base, None)
 
 
+COPY_RULES = ("copy-word", "copy-case", "duplicate-row")  # repairable wording; a renderer may still draw the answer
+
+
 def validate(answer, cat, opts=None):
     """Errors (A2UI error objects plus the rule and a fix) and warnings for one answer. Same rules as od-validate.js."""
     opts = opts or {}
@@ -754,6 +824,7 @@ def validate(answer, cat, opts=None):
         return {"ok": False, "errors": errs, "warnings": warns, "surfaces": {}}
     surfaces = {}
     numbers = numbers_in(opts["source"]) if opts.get("source") is not None else None
+    names = names_in(opts.get("source")) if opts.get("copy") else set()
     for i, m in enumerate(msgs):
         base = f"/{i}"
         if not isinstance(m, dict):
@@ -822,7 +893,7 @@ def validate(answer, cat, opts=None):
                 _err(errs, "unknown-component", f"{cpath}/component", f"unknown component {name!r}", sid,
                      "use one of: " + ", ".join(k for k in cat["components"]))
                 continue
-            ctx = {"data": surfaces[sid]["data"], "numbers": numbers, "warnings": warns}
+            ctx = {"data": surfaces[sid]["data"], "numbers": numbers, "warnings": warns, "names": names}
             checked = check_value(c, schema, cpath, errs, sid, cat, opts, ctx)
             acc = c.get("@accessibility") or {}
             if isinstance(acc, dict) and acc.get("live") == "assertive":

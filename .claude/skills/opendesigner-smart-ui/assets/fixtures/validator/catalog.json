@@ -262,6 +262,101 @@
      }
     }
    }
+  },
+  "Table": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "component",
+    "id",
+    "columns",
+    "rows"
+   ],
+   "properties": {
+    "component": {
+     "const": "Table"
+    },
+    "id": {
+     "type": "string",
+     "maxLength": 64
+    },
+    "@accessibility": {
+     "$ref": "#/$defs/Accessibility"
+    },
+    "@metadata": {
+     "$ref": "#/$defs/Metadata"
+    },
+    "title": {
+     "type": "string",
+     "maxLength": 60
+    },
+    "columns": {
+     "type": "array",
+     "minItems": 2,
+     "maxItems": 6,
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "label"
+      ],
+      "properties": {
+       "label": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 24
+       },
+       "align": {
+        "type": "string",
+        "enum": [
+         "start",
+         "end"
+        ]
+       }
+      }
+     }
+    },
+    "rows": {
+     "type": "array",
+     "minItems": 1,
+     "maxItems": 50,
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "cells"
+      ],
+      "properties": {
+       "cells": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 6,
+        "items": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "text"
+         ],
+         "properties": {
+          "text": {
+           "type": "string",
+           "maxLength": 80
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   },
+   "metadata": {
+    "extensions": {
+     "opendesigner": {
+      "slug": "table",
+      "group": "data"
+     }
+    }
+   }
   }
  },
  "functions": {},

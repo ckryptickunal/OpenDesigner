@@ -4,8 +4,8 @@
   python3 examples/smart-ui-support/check_live.py [--provider gemini|claude-cli|anthropic] [--out shots/]
 
 Needs Playwright for Python and a model (GEMINI_API_KEY or ANTHROPIC_API_KEY in .env, or the `claude` command). It starts
-server.py on a free loopback port, then: asks for the open invoices (a table must show), asks to pay the one due on the
-20th (an approval prompt must show, and nothing is paid), presses the approve button (a receipt or a confirmation must
+server.py on a free loopback port, then: asks which invoices are unpaid (a table must show, with column headers), asks to pay
+the smaller one (an approval prompt must show, and nothing is paid), presses the approve button (a receipt or a confirmation must
 follow), asks a short fact (no part may show), and fails on console errors. Screenshots at 1440 and 375 px go to --out.
 """
 import argparse
@@ -59,12 +59,20 @@ def main():
                     page.fill(".od-chat-form input", q)
                     page.click(".od-chat-form button")
                     page.wait_for_function(f"document.querySelectorAll('.od-chat-turn, .od-chat-error').length > {n}", timeout=timeout)
+                    page.wait_for_timeout(700)  # the scroll to the newest answer
+                    top = page.evaluate("() => { const t = [...document.querySelectorAll('.od-chat-turn')].pop(); const r = t.getBoundingClientRect(); return [r.top, innerHeight]; }")
+                    bottom = page.evaluate("() => [...document.querySelectorAll('.od-chat-turn')].pop().getBoundingClientRect().bottom")
+                    if not (-2 <= top[0] < top[1] * 0.6 or (top[0] >= -2 and bottom <= top[1] + 2)):  # its top near the top, or all of it on screen
+                        problems.append(f"{width}: after '{q}' the newest answer starts at {round(top[0])} px, not in view")
+                    for tbl in turn().locator("table").all():
+                        if not tbl.locator("thead th").count() or not tbl.locator("thead th").first.is_visible():
+                            problems.append(f"{width}: a table without visible column headers after '{q}'")
 
-                ask("Show my open invoices")
-                if not turn().locator('[data-od-component="DataTable"]').count():
-                    problems.append(f"{width}: no table for the open invoices")
+                ask("Which invoices haven't we paid yet?")
+                if not turn().locator('[data-od-component="DataTable"], [data-od-component="KeyFacts"]').count():
+                    problems.append(f"{width}: no table or list for the unpaid invoices")
                 page.screenshot(path=str(out / f"live-{width}-1-invoices.png"))
-                ask("Pay the one that's due on the 20th")
+                ask("OK, pay the smaller one")
                 if not turn().locator('[data-od-component="ApprovalPrompt"]').count():
                     problems.append(f"{width}: no approval prompt before paying")
                 page.screenshot(path=str(out / f"live-{width}-2-approve.png"))
@@ -77,7 +85,7 @@ def main():
                     if not ("paid" in t or "py-55309" in t or turn().locator('[data-od-component="Receipt"]').count()):
                         problems.append(f"{width}: no confirmation after approving")
                     page.screenshot(path=str(out / f"live-{width}-3-paid.png"))
-                ask("When is the next invoice due?")
+                ask("How many seats do we have right now?")
                 if turn().locator("[data-od-component]").count():
                     problems.append(f"{width}: a part for a short fact (R1)")
                 page.screenshot(path=str(out / f"live-{width}-4-fact.png"), full_page=False)

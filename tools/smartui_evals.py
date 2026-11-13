@@ -168,6 +168,16 @@ def run_selector(data, cs):
     return res
 
 
+def table_has_headers(answer):
+    """Every DataTable in the answer has a non-blank label for each column, and no row wider than its headers."""
+    tables = [c for m in (answer or []) if isinstance(m, dict) for k in ("createSurface", "updateComponents")
+              for c in (m.get(k) or {}).get("components", []) if isinstance(c, dict) and c.get("component") == "DataTable"]
+    def ok(t):
+        cols = t.get("columns") or []
+        return bool(cols) and all(str(c.get("label", "")).strip() for c in cols) and all(len(r.get("cells", [])) <= len(cols) for r in t.get("rows", []))
+    return bool(tables) and all(ok(t) for t in tables)
+
+
 def render(valid, cat_path, tokens):
     """Render each valid answer at desktop and phone and run the audit floors on it."""
     sys.path.insert(0, str(ROOT / "skills" / "opendesigner-smart-ui" / "scripts"))
@@ -251,6 +261,9 @@ def run_live(model, runs, pattern, do_render):
                    "selector_hit": (not c["expect"] and not log.get("selector")) or any(x in log.get("selector", []) for x in c["expect"]),
                    "right": (not c["expect"] and not part) or (bool(part) and part in c["expect"])}
             row["valid"] = (not row["first_errors"]) if (part or row["first_errors"]) else None
+            if "headers" in c.get("checks", []):  # a table names every column it shows (check_live.py also checks the drawn <th>)
+                row["headers_ok"] = table_has_headers(r.get("answer"))
+                row["right"] = row["right"] and row["headers_ok"]
             rows.append(row)
             if part and r.get("answer"):
                 valid.append((f"live-{model}.{c['id']}.{n}", r["answer"]))
@@ -277,7 +290,9 @@ def run_live(model, runs, pattern, do_render):
                "changes_run_by_model": sum(len(r.get("changes_run", [])) for r in rows),
                "approval_shown_pct": pct(sum(r["right"] for r in ui_cases if r["expect"] == ["ApprovalPrompt"]), sum(1 for r in ui_cases if r["expect"] == ["ApprovalPrompt"])),
                "rendered": sum(1 for r in rows if r.get("rendered")), "floor_findings": sum(r.get("floor_findings", 0) for r in rows),
-               "errors": sum(1 for r in rows if r.get("error"))}
+               "errors": sum(1 for r in rows if r.get("error")),
+               "copy_problems_first": sum(1 for r in rows for e in r.get("first_errors", []) if e.split()[0] in smartui.COPY_RULES),
+               "copy_problems_left": sum(1 for r in rows for e in r.get("final_errors", []) if e.split()[0] in smartui.COPY_RULES)}
     (EV / "results").mkdir(exist_ok=True)
     (EV / "results" / f"live-{model}.json").write_text(json.dumps({"model": live.MODELS.get(provider, provider), "provider": provider,
         "date": datetime.date.today().isoformat(), "runs_per_case": runs, "summary": summary, "rows": rows}, indent=1) + "\n")

@@ -8,6 +8,48 @@ const BANNED_KEYS = new Set(["style", "class", "classname", "css", "theme", "htm
 const HTML = /<\s*\/?\s*[a-zA-Z!][^>]*>|<\s*[a-zA-Z]/;
 const WHOLE_STYLE = /^\s*(#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})|-?\d*\.?\d+(px|rem|em|vh|vw|pt)|(rgba?|hsla?|oklch|oklab|lab|lch|color-mix|var|calc|url|expression)\(.*)\s*$/i;
 const NUM = /(?<![\w.])-?\d[\d,]*(?:\.\d+)?/g;
+// copy rules (docs/COPY.md), checked when opts.copy; the same as smartui.py
+const BANNED_WORDS = /\b(successfully|seamless(ly)?|effortless(ly)?|leverag(e|es|ing)|utili[sz](e|es|ing)|robust|delve|unlock(s|ing)?|empower(s|ing)?|elevate(s|d)?|streamline(s|d)?|cutting-edge|hassle-free|please note)\b/i;
+const WORD = /[A-Za-z][A-Za-z'’-]*/g;
+export const COPY_RULES = ["copy-word", "copy-case", "duplicate-row"];
+
+function copyCheck(v, path, errs, sid, names) {
+  const m = BANNED_WORDS.exec(v);
+  if (m) err(errs, "copy-word", path, `'${m[0]}' reads as filler`, sid, `say it plainly without '${m[0]}'`);
+  const words = v.match(WORD) || [];
+  if (words.length >= 2 && words.length <= 8 && !/[.!?]\s/.test(v)) {
+    const later = words.slice(1).filter((w) => w.length >= 3 && !([...w].filter((c) => c >= "A" && c <= "Z").length > 1));
+    const caps = later.filter((w) => w[0] >= "A" && w[0] <= "Z" && !names.has(w.toLowerCase()));
+    if (caps.length && later.every((w) => w[0] >= "A" && w[0] <= "Z")) err(errs, "copy-case", path, `'${v}' is in Title Case`, sid, "use sentence case: capitalise the first word and names only");
+  }
+}
+
+function duplicateRows(v, path, errs, sid) {
+  const seen = new Map();
+  v.forEach((row, i) => {
+    if (isObj(row) && "label" in row && (typeof row.value === "string" || typeof row.value === "number")) {
+      const key = String(row.value).trim().toLowerCase();
+      if (seen.has(key)) err(errs, "duplicate-row", `${path}/${i}`, `'${row.value}' is already shown as '${seen.get(key)}'`, sid, "keep one row for each value");
+      else seen.set(key, row.label);
+    }
+  });
+}
+
+/** A table (columns plus rows of cells) names every column it shows: a header per cell, and no blank header. */
+function tableHeaders(v, path, errs, sid) {
+  const cols = v.columns, rows = v.rows;
+  if (!(Array.isArray(rows) && rows.some((r) => isObj(r) && Array.isArray(r.cells)))) return;
+  if (!Array.isArray(cols) || !cols.length) { err(errs, "table-headers", `${path}/columns`, "a table needs a header for each column", sid, "add columns with a label for each"); return; }
+  cols.forEach((c, i) => { if (isObj(c) && typeof c.label === "string" && !c.label.trim()) err(errs, "table-headers", `${path}/columns/${i}/label`, "a column header is blank", sid, "name the column"); });
+  rows.forEach((r, i) => { if (isObj(r) && Array.isArray(r.cells) && r.cells.length > cols.length) err(errs, "table-headers", `${path}/rows/${i}/cells`, `${r.cells.length} cells but ${cols.length} column headers`, sid, "add a header for each column, or drop the extra cells"); });
+}
+
+function namesIn(obj, out = new Set()) {
+  if (typeof obj === "string") { for (const w of obj.match(WORD) || []) if (w[0] >= "A" && w[0] <= "Z") out.add(w.toLowerCase()); }
+  else if (Array.isArray(obj)) obj.forEach((x) => namesIn(x, out));
+  else if (isObj(obj)) Object.values(obj).forEach((x) => namesIn(x, out));
+  return out;
+}
 
 /** Our extra facts, kept where A2UI allows them: metadata.extensions.opendesigner. */
 export function od(o) { return ((o && o.metadata) || {}).extensions?.opendesigner || {}; }
@@ -77,6 +119,7 @@ function checkValue(v, schema, path, errs, sid, cat, opts, ctx) {
       if (HTML.test(v)) err(errs, "R4-html", path, "text holds HTML; text is plain only", sid, "write the words without tags");
       else if (WHOLE_STYLE.test(v)) err(errs, "R4-style", path, `'${v}' is a style value (colour, size or CSS); there are no style properties`, sid);
     }
+    if (opts.copy && !schema["x-od-code"] && !schema.enum && !schema.pattern && schema.format !== "uri") copyCheck(v, path, errs, sid, ctx.names || new Set());
     if (ctx.numbers && !schema["x-od-code"]) {
       for (const n of v.match(NUM) || []) if (!ctx.numbers.has(num(n))) ctx.warnings.push({ rule: "R6-text", path, message: `${n} in the text is not in the data you were given` });
     }
@@ -88,6 +131,7 @@ function checkValue(v, schema, path, errs, sid, cat, opts, ctx) {
   if (Array.isArray(v)) {
     if (v.length > (schema.maxItems ?? Infinity)) err(errs, "items", path, `${v.length} items, the most is ${schema.maxItems}`, sid, "show fewer, or say how many more there are");
     if (v.length < (schema.minItems ?? 0) && !opts.partial && !opts.allowEmpty) err(errs, "items", path, `${v.length} items, the fewest is ${schema.minItems}`, sid);
+    if (opts.copy) duplicateRows(v, path, errs, sid);
     return v.map((x, i) => checkValue(x, schema.items || {}, `${path}/${i}`, errs, sid, cat, opts, ctx));
   }
   if (isObj(v)) {
@@ -102,6 +146,7 @@ function checkValue(v, schema, path, errs, sid, cat, opts, ctx) {
       else out[k] = x;
     }
     if (!opts.partial) for (const r of schema.required || []) if (!(r in v)) err(errs, "required", `${path}/${r}`, `${r} is required`, sid);
+    tableHeaders(v, path, errs, sid);
     if (schema["x-od-effect"] === "change" && isObj(v.event) && isObj(v.event.context) && "approved" in v.event.context)
       err(errs, "R3-approval", `${path}/event/context/approved`, "an action that changes data is approved by the person, never in the answer", sid, "remove approved");
     return out;
@@ -190,6 +235,7 @@ export function validate(answer, cat, opts = {}) {
   const msgs = normalize(answer);
   if (!msgs) { err(errs, "shape", "", "an answer is a list of A2UI messages", ""); return { ok: false, errors: errs, warnings: warns, surfaces: {} }; }
   const numbers = opts.source !== undefined && opts.source !== null ? numbersIn(opts.source) : null;
+  const names = opts.copy ? namesIn(opts.source) : new Set();
   const KINDS = ["createSurface", "updateComponents", "updateDataModel", "deleteSurface"];
   msgs.forEach((m, i) => {
     const base = `/${i}`;
@@ -227,7 +273,7 @@ export function validate(answer, cat, opts = {}) {
       if (!isObj(c)) { err(errs, "shape", cpath, "a component is an object", sid); return; }
       const schema = cat.components[c.component];
       if (!schema) { err(errs, "unknown-component", `${cpath}/component`, `unknown component '${c.component}'`, sid, "use one of: " + Object.keys(cat.components).join(", ")); return; }
-      const ctx = { data: surfaces[sid].data, numbers, warnings: warns };
+      const ctx = { data: surfaces[sid].data, numbers, warnings: warns, names };
       const checked = checkValue(c, schema, cpath, errs, sid, cat, opts, ctx);
       if (typeof c.id === "string") surfaces[sid].components[c.id] = { c: isObj(checked) ? checked : c, path: cpath, schema };
     });

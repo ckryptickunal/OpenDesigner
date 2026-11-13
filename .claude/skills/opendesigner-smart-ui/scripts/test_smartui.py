@@ -31,7 +31,7 @@ def keys(errors):
 
 
 def py_opts(o):
-    return {"partial": o.get("partial"), "source": o.get("source"), "limits": o.get("limits"), "allow_empty": o.get("allowEmpty")}
+    return {"partial": o.get("partial"), "source": o.get("source"), "limits": o.get("limits"), "allow_empty": o.get("allowEmpty"), "copy": o.get("copy")}
 
 
 class Validator(unittest.TestCase):
@@ -60,6 +60,29 @@ console.log(JSON.stringify(out));
         for c in CASES:
             with self.subTest(c["name"]):
                 self.assertEqual(got[c["name"]], sorted(c["expect"]))
+
+    def test_renderer_dates_and_approval_rows(self):
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("node is not installed")
+        js = """
+globalThis.HTMLElement = class {};
+const { fmt, ODSurface } = await import(%s);
+const out = { dates: [fmt("2026-11-01", "en-GB"), fmt("2026-11-01", "en-US"), fmt("TH-1043", "en-GB"), fmt("2026-11-14T09:30", "en-GB")] };
+const c = { component: "ApprovalPrompt", details: [{ label: "Invoice number", value: "TH-1043" }, { label: "Number", value: "TH-1043" }, { label: "Amount", value: "€184.00" }],
+            approve: { label: "Pay", event: { name: "pay_invoice", context: { number: "TH-1043", amount: "€500.00" } } } };
+out.rows = ODSurface.prototype.approvalDetails.call({}, c).details;
+console.log(JSON.stringify(out));
+""" % json.dumps((SKILL / "assets" / "od-surface.js").as_uri())
+        r = subprocess.run([node, "--input-type=module", "-e", js], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        got = json.loads(r.stdout)
+        self.assertEqual(got["dates"], ["1 Nov 2026", "Nov 1, 2026", "TH-1043", "14 Nov 2026, 09:30"])
+        rows = got["rows"]
+        self.assertEqual([d["value"] for d in rows].count("TH-1043"), 1)  # one row per value
+        self.assertEqual(rows[0], {"label": "Invoice number", "value": "TH-1043"})  # the answer's own label
+        self.assertIn({"label": "Amount", "value": "€500.00"}, rows)  # what the button sends wins over what the text says
+        self.assertNotIn({"label": "Amount", "value": "€184.00"}, rows)
 
     def test_extract(self):
         self.assertIsNone(smartui.extract_answer("Paris is the capital of France."))
@@ -153,6 +176,10 @@ class Selector(unittest.TestCase):
             with self.subTest(m):
                 self.assertFalse(smartui.select(m, self.cat)["ui"])
 
+    def test_fetched_data_does_not_override_r1(self):
+        sel = smartui.select("How many seats do we have right now?", self.cat, 3, None, None, {"KeyFacts": 5})
+        self.assertFalse(sel["ui"])
+
     def test_prompt_lists_only_candidates(self):
         text, sel = smartui.build_prompt("Compare the three fare types side by side", self.cat, k=3)
         self.assertTrue(sel["ui"])
@@ -245,12 +272,59 @@ class Live(unittest.TestCase):
         conv.press({"name": "pay_invoice", "context": {"number": "TH-1043", "approved": True}})  # an offer is used once
         self.assertEqual(len(self.ran), 1)
 
+    def test_copy_rules_are_repair_errors(self):
+        title_case = 'All set.\n```a2ui\n{"component": "KeyFacts", "title": "Unpaid Invoices", "facts": [{"label": "TH-1047", "value": "€1,104.00"}, {"label": "TH-1043", "value": "€184.00"}]}\n```'
+        fixed = 'Two are open.\n```a2ui\n{"component": "KeyFacts", "title": "Unpaid invoices", "facts": [{"label": "TH-1047", "value": "€1,104.00"}, {"label": "TH-1043", "value": "€184.00"}]}\n```'
+        self.script(['{"calls": [{"action": "list_invoices", "args": {"status": "open"}}]}', title_case, fixed])
+        r = self.live.Conversation(self.app, "scripted").answer("Which invoices haven't we paid?")
+        self.assertIn("copy-case /0/createSurface/components/0/title", r["log"]["first_errors"])
+        self.assertTrue(r["log"]["repaired"])
+        self.assertIsNotNone(r["answer"])
+
+    def test_only_wording_left_still_shows(self):
+        filler = 'The invoice was successfully paid.\n```a2ui\n{"component": "KeyFacts", "title": "Paid", "facts": [{"label": "Invoice", "value": "TH-1043"}, {"label": "Amount", "value": "€184.00"}]}\n```'
+        self.script(['{"calls": []}', filler, filler])
+        r = self.live.Conversation(self.app, "scripted").answer("Did it go through?")
+        self.assertTrue(r["log"]["repaired"])
+        self.assertIsNotNone(r["answer"])  # wording alone never costs the person the part
+        self.assertEqual(r["log"]["final_errors"], ["copy-word text"])
+
     def test_still_wrong_after_repair_is_text_only(self):
         bad = '```a2ui\n{"component": "Nope"}\n```'
         self.script(['{"calls": []}', "Here.\n" + bad, "Here again.\n" + bad])
         r = self.live.Conversation(self.app, "scripted").answer("Compare the plans")
         self.assertIsNone(r["answer"])
         self.assertTrue(r["log"]["final_errors"])
+
+
+class Render(unittest.TestCase):
+    def test_a_part_rendered_before_it_is_attached_still_runs_its_script(self):
+        try:
+            from playwright.sync_api import sync_playwright
+        except ImportError:
+            self.skipTest("Playwright for Python is not installed")
+        import surface_audit as A
+        with tempfile.TemporaryDirectory() as t:
+            cat, bundle = smartui.build_catalog(TOKENS, "Test", ["images.unsplash.com"], only={"data-table"})
+            pathlib.Path(t, "cat").mkdir()
+            pathlib.Path(t, "cat", "catalog.json").write_text(json.dumps(cat))
+            pathlib.Path(t, "cat", "od-components.js").write_text(smartui.bundle_js(bundle))
+            fx = json.loads(A.fixture_path("data-table").read_text())
+            with tempfile.TemporaryDirectory() as site, A.serve(site) as url:
+                A.stage(pathlib.Path(t, "cat"), TOKENS, site)
+                with sync_playwright() as p:
+                    b = A.launch(p)
+                    pg = b.new_page()
+                    pg.goto(url + "/index.html")
+                    pg.wait_for_function("window.__ready === true")
+                    n = pg.evaluate("""async (fx) => {
+                      const s = document.createElement("od-surface");
+                      s.catalog = await (await fetch("catalog.json")).json();
+                      s.process([{version: "1.0", createSurface: {surfaceId: "x", components: [{...fx, id: "root", component: "DataTable"}]}}]);
+                      document.body.append(s);   // attached after rendering, as a chat that builds a turn first does
+                      return s.querySelectorAll("thead th").length; }""", fx)
+                    b.close()
+        self.assertGreater(n, 0, "the table's own script never built its header row")
 
 
 class Offer(unittest.TestCase):

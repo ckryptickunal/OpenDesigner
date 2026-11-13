@@ -1,6 +1,6 @@
 // The demo chat. Each turn is recorded (turns.json): the person's message, the assistant's text, and its answer as A2UI
 // messages. Every answer goes through <od-surface>, which validates it against the catalog before anything renders.
-import "../../skills/opendesigner-smart-ui/assets/od-surface.js";
+import { announce } from "../../skills/opendesigner-smart-ui/assets/od-surface.js";
 
 const base = new URL(".", import.meta.url);
 const catalog = await (await fetch(new URL("opendesigner/smart-ui/catalog.json", base))).json();
@@ -17,7 +17,13 @@ function el(tag, cls, text) {
   return n;
 }
 
-function scroll() { log.scrollTop = log.scrollHeight; }
+// bring the newest turn's top into view (not just the bottom of the log: a tall answer would hide its own heading)
+function scroll() {
+  const last = log.lastElementChild;
+  if (!last) return;
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  requestAnimationFrame(() => last.scrollIntoView({ block: "start", behavior: still ? "auto" : "smooth" }));
+}
 
 function surfaceFor(turn) {
   const s = document.createElement("od-surface");
@@ -69,6 +75,7 @@ async function liveTurn(userText, call) {
   try { r = await call(); } catch (e) { wait.textContent = "The assistant couldn't answer: " + (e.message || e); return; }
   wait.remove();
   show({ text: r.text, answer: r.answer, data: r.data, live: true }, wrap);
+  if (!r.answer && r.text) announce(r.text.slice(0, 200));
   const lg = r.log || {};
   if (lg.first_errors && lg.first_errors.length) wrap.append(el("p", "checked", `Repaired once: the first answer failed ${lg.first_errors.length} check(s).`));
   scroll();

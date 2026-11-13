@@ -37,7 +37,7 @@ body { background: var(--ds-color-bg-canvas, var(--ds-color-surface-default)); c
 .od-chat-form button { background: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent, var(--ds-color-text-inverse)); border-color: transparent; }
 .od-chat [disabled] { opacity: 0.6; cursor: progress; }
 @media (max-width: 48rem) {
-  .app { grid-template-columns: 1fr; }
+  .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr; align-content: start; }
   .side { display: flex; flex-wrap: wrap; border-inline-end: 0; border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-subtle); padding: var(--ds-space-inset-md); }
   .side .brand { inline-size: 100%; margin: 0; }
   .main { padding: var(--ds-space-inset-md); }
