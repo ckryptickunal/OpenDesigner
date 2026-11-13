@@ -4,6 +4,7 @@
   python3 smartui.py scope [--project .] [--json]          read the repo: product, chat surface, framework, tokens,
                                                             actions; propose intents and components (writes nothing
                                                             unless --write)
+  python3 smartui.py offer [--project .]                  read-only: a reason to suggest Smart UI, or none
   python3 smartui.py catalog [--tokens T] [--out D]        A2UI v1.0 catalog + the component bundle for the renderer
   python3 smartui.py prompt --for "<message>" [--k 3]      pick the few components that fit and print the prompt
   python3 smartui.py validate <answer.json> [--source data.json] [--partial] [--a2ui]
@@ -1157,6 +1158,30 @@ def cmd_scope(a):
     return 0
 
 
+def offer_reason(root):
+    """Why Smart UI might help this project, in plain words, or None. Read-only. The main skill offers it once on a reason."""
+    root = pathlib.Path(root).resolve()
+    st = _load_json(root / "opendesigner" / "state.json") or {}
+    said = ((st.get("profile") or {}).get("smart_ui") if isinstance(st, dict) else None)
+    if said in ("yes", "declined"):
+        return None
+    s = scope(root)
+    if s["chat_surface"]:
+        return f"your product has an assistant or chat ({s['chat_surface'][0]}): its answers could show parts of your system, like a table or a booking step, instead of only text"
+    if s["ai_sdks"]:
+        return f"your code uses {s['ai_sdks'][0]}: if it powers an assistant, its answers could show parts of your system instead of only text"
+    text = " ".join(((root / f).read_text(errors="ignore") if (root / f).exists() else "") for f in ("PRODUCT.md", "README.md"))
+    if re.search(r"\b(assistant|chatbot|copilot|ai agent|chat with)\b", text, re.I):
+        return "your product description mentions an assistant: its answers could show parts of your system instead of only text"
+    return None
+
+
+def cmd_offer(a):
+    r = offer_reason(a.project)
+    print(f"offer: {r}" if r else "no reason to offer Smart UI here")
+    return 0
+
+
 def cmd_confirm(a):
     p = pathlib.Path(a.project) / "opendesigner" / "smart-ui" / "scope.json"
     s = _load_json(p)
@@ -1197,6 +1222,8 @@ def main(argv=None):
     p.add_argument("--project", default=".")
     p.add_argument("--json", action="store_true")
     p.add_argument("--write", action="store_true", help="save opendesigner/smart-ui/scope.json")
+    p = sub.add_parser("offer", help="read-only: is there a reason to suggest Smart UI in this project?")
+    p.add_argument("--project", default=".")
     p = sub.add_parser("confirm", help="record the components the person confirmed")
     p.add_argument("names")
     p.add_argument("--project", default=".")
@@ -1244,7 +1271,7 @@ def main(argv=None):
     p.add_argument("--no-shots", action="store_true", help="no screenshots (saves disk)")
     p.add_argument("--ledger", action="store_true", help="record each failure with engine.py ledger (asks nothing; read the report first)")
     a = ap.parse_args(argv)
-    return {"scope": cmd_scope, "confirm": cmd_confirm, "catalog": cmd_catalog, "prompt": cmd_prompt, "validate": cmd_validate,
+    return {"scope": cmd_scope, "offer": cmd_offer, "confirm": cmd_confirm, "catalog": cmd_catalog, "prompt": cmd_prompt, "validate": cmd_validate,
             "text": cmd_text, "audit": cmd_audit, "view": cmd_view, "components": cmd_components}[a.cmd](a)
 
 

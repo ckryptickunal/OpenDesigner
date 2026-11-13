@@ -180,5 +180,24 @@ class Scope(unittest.TestCase):
             self.assertEqual(s["intents"][0]["intent"], "not known")
 
 
+class Offer(unittest.TestCase):
+    def test_offer_on_a_chat_and_not_without(self):
+        with tempfile.TemporaryDirectory() as t:
+            root = pathlib.Path(t)
+            (root / "index.html").write_text("<h1>Shop</h1>")
+            self.assertIsNone(smartui.offer_reason(root))
+            (root / "src").mkdir()
+            (root / "src" / "SupportChat.tsx").write_text("export const SupportChat = () => null")
+            self.assertIn("SupportChat.tsx", smartui.offer_reason(root))
+
+    def test_no_second_offer_after_an_answer(self):
+        with tempfile.TemporaryDirectory() as t:
+            root = pathlib.Path(t)
+            (root / "assistant.js").write_text("")
+            (root / "opendesigner").mkdir()
+            (root / "opendesigner" / "state.json").write_text(json.dumps({"profile": {"smart_ui": "declined"}}))
+            self.assertIsNone(smartui.offer_reason(root))
+
+
 if __name__ == "__main__":
     unittest.main()
