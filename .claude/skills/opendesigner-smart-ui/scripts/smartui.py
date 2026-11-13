@@ -49,6 +49,10 @@ BANNED_KEYS = {"style", "class", "classname", "css", "theme", "html", "innerhtml
 HTML = re.compile(r"<\s*/?\s*[a-zA-Z!][^>]*>|<\s*[a-zA-Z]")
 WHOLE_STYLE = re.compile(r"^\s*(#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})|-?\d*\.?\d+(px|rem|em|vh|vw|pt)|(rgba?|hsla?|oklch|oklab|lab|lch|color-mix|var|calc|url|expression)\(.*)\s*$", re.I)
 NUM = re.compile(r"(?<![\w.])-?\d[\d,]*(?:\.\d+)?")
+# copy rules (docs/COPY.md, opendesigner-review CP-01 and CP-02), checked when opts["copy"]: the model's words follow the house voice
+BANNED_WORDS = re.compile(r"\b(successfully|seamless(ly)?|effortless(ly)?|leverag(e|es|ing)|utili[sz](e|es|ing)|robust|delve|unlock(s|ing)?|"
+                          r"empower(s|ing)?|elevate(s|d)?|streamline(s|d)?|cutting-edge|hassle-free|please note)\b", re.I)
+WORD = re.compile(r"[A-Za-z][A-Za-z'’-]*")
 
 
 # ----------------------------------------------------------------------------------------------- the set and the library
@@ -631,6 +635,8 @@ def check_value(v, schema, path, errs, sid, cat, opts, ctx):
                 _err(errs, "R4-html", path, "text holds HTML; text is plain only", sid, "write the words without tags")
             elif WHOLE_STYLE.match(v):
                 _err(errs, "R4-style", path, f"{v!r} is a style value (colour, size or CSS); there are no style properties", sid)
+        if opts.get("copy") and not schema.get("x-od-code") and "enum" not in schema and "pattern" not in schema and schema.get("format") != "uri":
+            copy_check(v, path, errs, sid, ctx.get("names") or set())
         if ctx.get("numbers") is not None and not schema.get("x-od-code"):
             for n in NUM.findall(v):
                 if _num(n) not in ctx["numbers"]:
@@ -646,6 +652,8 @@ def check_value(v, schema, path, errs, sid, cat, opts, ctx):
         if len(v) < schema.get("minItems", 0) and not opts.get("partial") and not opts.get("allow_empty"):
             _err(errs, "items", path, f"{len(v)} items, the fewest is {schema['minItems']}", sid)
         it = schema.get("items", {})
+        if opts.get("copy"):
+            duplicate_rows(v, path, errs, sid)
         return [check_value(x, it, f"{path}/{i}", errs, sid, cat, opts, ctx) for i, x in enumerate(v)]
     if isinstance(v, dict):
         props = schema.get("properties", {})
@@ -673,6 +681,45 @@ def check_value(v, schema, path, errs, sid, cat, opts, ctx):
             _err(errs, "R3-approval", f"{path}/event/context/approved", "an action that changes data is approved by the person, never in the answer", sid, "remove approved")
         return out
     return v
+
+
+def copy_check(v, path, errs, sid, names):
+    """Sentence case and plain words. A capitalised word that the data or the person used is a name, not Title Case."""
+    m = BANNED_WORDS.search(v)
+    if m:
+        _err(errs, "copy-word", path, f"'{m.group(0)}' reads as filler", sid, f"say it plainly without '{m.group(0)}'")
+    words = WORD.findall(v)
+    if 2 <= len(words) <= 8 and not re.search(r"[.!?]\s", v):
+        later = [w for w in words[1:] if len(w) >= 3 and not (sum(c.isupper() for c in w) > 1)]
+        caps = [w for w in later if w[0].isupper() and w.lower() not in names]
+        if caps and all(w[0].isupper() for w in later):
+            _err(errs, "copy-case", path, f"'{v}' is in Title Case", sid, "use sentence case: capitalise the first word and names only")
+
+
+def duplicate_rows(v, path, errs, sid):
+    """A list of label-value rows shows each value once ("Number TH-1043" and "Invoice number TH-1043" is one row)."""
+    seen = {}
+    for i, row in enumerate(v):
+        if isinstance(row, dict) and "label" in row and isinstance(row.get("value"), (str, int, float)):
+            key = str(row["value"]).strip().lower()
+            if key in seen:
+                _err(errs, "duplicate-row", f"{path}/{i}", f"'{row['value']}' is already shown as '{seen[key]}'", sid, "keep one row for each value")
+            else:
+                seen[key] = row.get("label")
+
+
+def names_in(obj, out=None):
+    """Capitalised words in the data the model was given: names (Lisbon, Tallyhaus, Casa do Rio)."""
+    out = set() if out is None else out
+    if isinstance(obj, str):
+        out.update(w.lower() for w in WORD.findall(obj) if w[0].isupper())
+    elif isinstance(obj, dict):
+        for k, x in obj.items():
+            names_in(x, out)
+    elif isinstance(obj, list):
+        for x in obj:
+            names_in(x, out)
+    return out
 
 
 def _num(s):
@@ -744,6 +791,9 @@ def accessible_names(comp, schema, cat, base, out):
     walk(comp, schema, base, None)
 
 
+COPY_RULES = ("copy-word", "copy-case", "duplicate-row")  # repairable wording; a renderer may still draw the answer
+
+
 def validate(answer, cat, opts=None):
     """Errors (A2UI error objects plus the rule and a fix) and warnings for one answer. Same rules as od-validate.js."""
     opts = opts or {}
@@ -754,6 +804,7 @@ def validate(answer, cat, opts=None):
         return {"ok": False, "errors": errs, "warnings": warns, "surfaces": {}}
     surfaces = {}
     numbers = numbers_in(opts["source"]) if opts.get("source") is not None else None
+    names = names_in(opts.get("source")) if opts.get("copy") else set()
     for i, m in enumerate(msgs):
         base = f"/{i}"
         if not isinstance(m, dict):
@@ -822,7 +873,7 @@ def validate(answer, cat, opts=None):
                 _err(errs, "unknown-component", f"{cpath}/component", f"unknown component {name!r}", sid,
                      "use one of: " + ", ".join(k for k in cat["components"]))
                 continue
-            ctx = {"data": surfaces[sid]["data"], "numbers": numbers, "warnings": warns}
+            ctx = {"data": surfaces[sid]["data"], "numbers": numbers, "warnings": warns, "names": names}
             checked = check_value(c, schema, cpath, errs, sid, cat, opts, ctx)
             acc = c.get("@accessibility") or {}
             if isinstance(acc, dict) and acc.get("live") == "assertive":

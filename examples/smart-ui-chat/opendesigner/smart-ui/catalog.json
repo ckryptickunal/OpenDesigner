@@ -513,7 +513,8 @@
       "properties": {
        "label": {
         "type": "string",
-        "maxLength": 24
+        "maxLength": 24,
+        "minLength": 1
        },
        "align": {
         "type": "string",
@@ -3840,7 +3841,8 @@
      "components": 8,
      "depth": 3,
      "leaves": 1
-    }
+    },
+    "host_look": false
    }
   }
  }

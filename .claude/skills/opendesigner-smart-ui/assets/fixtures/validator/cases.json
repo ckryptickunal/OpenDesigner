@@ -1611,6 +1611,213 @@
     }
    },
    "expect": []
+  },
+  {
+   "name": "copy-title-case",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Unpaid Invoices",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": [
+    "copy-case@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "copy-sentence-case-ok",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Unpaid invoices",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": []
+  },
+  {
+   "name": "copy-name-from-data",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Casa do Rio",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true,
+    "source": {
+     "hotel": "Casa do Rio"
+    }
+   },
+   "expect": []
+  },
+  {
+   "name": "copy-acronym-ok",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Invoice TH-1043",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": []
+  },
+  {
+   "name": "copy-banned-word",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Paid successfully",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": [
+    "copy-word@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "copy-duplicate-row",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Number",
+          "value": "TH-1043"
+         },
+         {
+          "label": "Invoice number",
+          "value": "TH-1043"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": [
+    "duplicate-row@/0/createSurface/components/0/facts/1"
+   ]
+  },
+  {
+   "name": "copy-off-by-default",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Payment Confirmation",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": []
   }
  ]
 }

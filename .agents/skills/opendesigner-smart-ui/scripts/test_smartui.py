@@ -31,7 +31,7 @@ def keys(errors):
 
 
 def py_opts(o):
-    return {"partial": o.get("partial"), "source": o.get("source"), "limits": o.get("limits"), "allow_empty": o.get("allowEmpty")}
+    return {"partial": o.get("partial"), "source": o.get("source"), "limits": o.get("limits"), "allow_empty": o.get("allowEmpty"), "copy": o.get("copy")}
 
 
 class Validator(unittest.TestCase):
@@ -60,6 +60,29 @@ console.log(JSON.stringify(out));
         for c in CASES:
             with self.subTest(c["name"]):
                 self.assertEqual(got[c["name"]], sorted(c["expect"]))
+
+    def test_renderer_dates_and_approval_rows(self):
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("node is not installed")
+        js = """
+globalThis.HTMLElement = class {};
+const { fmt, ODSurface } = await import(%s);
+const out = { dates: [fmt("2026-11-01", "en-GB"), fmt("2026-11-01", "en-US"), fmt("TH-1043", "en-GB"), fmt("2026-11-14T09:30", "en-GB")] };
+const c = { component: "ApprovalPrompt", details: [{ label: "Invoice number", value: "TH-1043" }, { label: "Number", value: "TH-1043" }, { label: "Amount", value: "€184.00" }],
+            approve: { label: "Pay", event: { name: "pay_invoice", context: { number: "TH-1043", amount: "€500.00" } } } };
+out.rows = ODSurface.prototype.approvalDetails.call({}, c).details;
+console.log(JSON.stringify(out));
+""" % json.dumps((SKILL / "assets" / "od-surface.js").as_uri())
+        r = subprocess.run([node, "--input-type=module", "-e", js], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        got = json.loads(r.stdout)
+        self.assertEqual(got["dates"], ["1 Nov 2026", "Nov 1, 2026", "TH-1043", "14 Nov 2026, 09:30"])
+        rows = got["rows"]
+        self.assertEqual([d["value"] for d in rows].count("TH-1043"), 1)  # one row per value
+        self.assertEqual(rows[0], {"label": "Invoice number", "value": "TH-1043"})  # the answer's own label
+        self.assertIn({"label": "Amount", "value": "€500.00"}, rows)  # what the button sends wins over what the text says
+        self.assertNotIn({"label": "Amount", "value": "€184.00"}, rows)
 
     def test_extract(self):
         self.assertIsNone(smartui.extract_answer("Paris is the capital of France."))
@@ -244,6 +267,23 @@ class Live(unittest.TestCase):
         self.assertEqual(self.ran, [{"number": "TH-1043"}])
         conv.press({"name": "pay_invoice", "context": {"number": "TH-1043", "approved": True}})  # an offer is used once
         self.assertEqual(len(self.ran), 1)
+
+    def test_copy_rules_are_repair_errors(self):
+        title_case = 'All set.\n```a2ui\n{"component": "KeyFacts", "title": "Unpaid Invoices", "facts": [{"label": "TH-1047", "value": "€1,104.00"}, {"label": "TH-1043", "value": "€184.00"}]}\n```'
+        fixed = 'Two are open.\n```a2ui\n{"component": "KeyFacts", "title": "Unpaid invoices", "facts": [{"label": "TH-1047", "value": "€1,104.00"}, {"label": "TH-1043", "value": "€184.00"}]}\n```'
+        self.script(['{"calls": [{"action": "list_invoices", "args": {"status": "open"}}]}', title_case, fixed])
+        r = self.live.Conversation(self.app, "scripted").answer("Which invoices haven't we paid?")
+        self.assertIn("copy-case /0/createSurface/components/0/title", r["log"]["first_errors"])
+        self.assertTrue(r["log"]["repaired"])
+        self.assertIsNotNone(r["answer"])
+
+    def test_only_wording_left_still_shows(self):
+        filler = 'The invoice was successfully paid.\n```a2ui\n{"component": "KeyFacts", "title": "Paid", "facts": [{"label": "Invoice", "value": "TH-1043"}, {"label": "Amount", "value": "€184.00"}]}\n```'
+        self.script(['{"calls": []}', filler, filler])
+        r = self.live.Conversation(self.app, "scripted").answer("Did it go through?")
+        self.assertTrue(r["log"]["repaired"])
+        self.assertIsNotNone(r["answer"])  # wording alone never costs the person the part
+        self.assertEqual(r["log"]["final_errors"], ["copy-word text"])
 
     def test_still_wrong_after_repair_is_text_only(self):
         bad = '```a2ui\n{"component": "Nope"}\n```'

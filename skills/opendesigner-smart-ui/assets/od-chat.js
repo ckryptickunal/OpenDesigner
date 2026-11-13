@@ -4,7 +4,7 @@
    only after the approval prompt (od-surface adds approved: true). Copy it, or read it as an example. MIT.
 
    <od-chat data-catalog="/system/smart-ui/catalog.json"></od-chat>   (needs od-surface.js loaded) */
-import "./od-surface.js";
+import { announce } from "./od-surface.js";
 
 const SID = Math.random().toString(36).slice(2, 10);
 
@@ -100,7 +100,14 @@ class ODChat extends HTMLElement {
       turn.append(el("p", "od-chat-note", `Repaired once: the first answer failed ${log.first_errors.length} check${log.first_errors.length > 1 ? "s" : ""} (${log.first_errors.slice(0, 2).join("; ")}).`));
     }
     this.log.append(turn);
-    this.scroll();
+    this.reveal(turn);
+    if (!r.answer && r.text) announce(r.text.slice(0, 200));  // a part announces itself; a text-only reply is read here
+  }
+
+  /** Bring the newest answer's top into view, in the log and on the page (a phone shows the reply, not the old turns). */
+  reveal(turn) {
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    requestAnimationFrame(() => turn.scrollIntoView({ block: "start", behavior: still ? "auto" : "smooth" }));
   }
 }
 

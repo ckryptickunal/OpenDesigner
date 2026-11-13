@@ -66,8 +66,21 @@ function marked(scope, sel) {
 
 const missing = (v) => v === undefined || v === null || (typeof v === "string" && v === "");
 
-function fmt(v, locale) {
+const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::\d{2}(?:\.\d+)?)?(Z|[+-]\d{2}:?\d{2})?)?$/;
+
+/** Numbers and plain ISO dates are written for the reader's locale; everything else is shown as sent. */
+export function fmt(v, locale) {
   if (typeof v === "number") return new Intl.NumberFormat(locale || undefined, { maximumFractionDigits: 2 }).format(v);
+  const m = typeof v === "string" && ISO_DATE.exec(v.trim());
+  if (m) {
+    const [, y, mo, d, h, mi, zone] = m;
+    const date = h ? new Date(v.trim()) : new Date(Date.UTC(+y, +mo - 1, +d));
+    if (!isNaN(date)) {
+      const opts = { day: "numeric", month: "short", year: "numeric", ...(h ? { hour: "2-digit", minute: "2-digit" } : { timeZone: "UTC" }) };
+      if (h && !zone) { opts.timeZone = "UTC"; return new Intl.DateTimeFormat(locale || undefined, opts).format(new Date(Date.UTC(+y, +mo - 1, +d, +h, +mi))); }
+      return new Intl.DateTimeFormat(locale || undefined, opts).format(date);
+    }
+  }
   return String(v);
 }
 
@@ -369,9 +382,15 @@ export class ODSurface extends (G.HTMLElement || class {}) {
   approvalDetails(c) {
     const ctx = (c.approve && c.approve.event && c.approve.event.context) || {};
     const human = (k) => k.replace(/_/g, " ").replace(/^./, (x) => x.toUpperCase());
-    const sent = Object.entries(ctx).filter(([k]) => k !== "approved").map(([k, v]) => ({ label: human(k).slice(0, 24), value: String(v).slice(0, 80) }));
-    const seen = new Set(sent.map((d) => d.label.toLowerCase()));
-    const extra = (Array.isArray(c.details) ? c.details : []).filter((d) => d && !seen.has(String(d.label).toLowerCase()));
+    const given = Array.isArray(c.details) ? c.details.filter((d) => d && d.label !== undefined) : [];
+    const same = (a, b) => String(a).trim().toLowerCase() === String(b).trim().toLowerCase();
+    // each value the button sends, under the answer's own label for it when it has one ("Invoice number", not "Number")
+    const sent = Object.entries(ctx).filter(([k]) => k !== "approved").map(([k, v]) => {
+      const named = given.find((d) => same(d.value, v));
+      return { label: String(named ? named.label : human(k)).slice(0, 24), value: String(v).slice(0, 80) };
+    });
+    // then the answer's other lines, once each: no second row for a label or a value already shown
+    const extra = given.filter((d) => !sent.some((x) => same(x.label, d.label) || same(x.value, d.value)));
     return { ...c, details: sent.concat(extra).slice(0, 6) };
   }
 

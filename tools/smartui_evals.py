@@ -277,7 +277,9 @@ def run_live(model, runs, pattern, do_render):
                "changes_run_by_model": sum(len(r.get("changes_run", [])) for r in rows),
                "approval_shown_pct": pct(sum(r["right"] for r in ui_cases if r["expect"] == ["ApprovalPrompt"]), sum(1 for r in ui_cases if r["expect"] == ["ApprovalPrompt"])),
                "rendered": sum(1 for r in rows if r.get("rendered")), "floor_findings": sum(r.get("floor_findings", 0) for r in rows),
-               "errors": sum(1 for r in rows if r.get("error"))}
+               "errors": sum(1 for r in rows if r.get("error")),
+               "copy_problems_first": sum(1 for r in rows for e in r.get("first_errors", []) if e.split()[0] in smartui.COPY_RULES),
+               "copy_problems_left": sum(1 for r in rows for e in r.get("final_errors", []) if e.split()[0] in smartui.COPY_RULES)}
     (EV / "results").mkdir(exist_ok=True)
     (EV / "results" / f"live-{model}.json").write_text(json.dumps({"model": live.MODELS.get(provider, provider), "provider": provider,
         "date": datetime.date.today().isoformat(), "runs_per_case": runs, "summary": summary, "rows": rows}, indent=1) + "\n")
