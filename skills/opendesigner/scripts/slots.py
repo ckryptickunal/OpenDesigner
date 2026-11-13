@@ -297,9 +297,7 @@ def check_against_spec(src, data):
     def walk(names, props, where):
         for k, v in names.items():
             if isinstance(v, dict) and v["kind"] == "action":
-                if k not in props:
-                    errs.append(f"action {k} is not a property in spec.data ({where})")
-                continue
+                continue  # buttons are parts in S5's format, not data: spec.data need not list them
             if k not in props:
                 errs.append(f"mark {k} is not a property in spec.data ({where})")
                 continue
