@@ -110,6 +110,25 @@ def prompt(b, c):
             f"Keep its markup and states; map its --ds-* variables to my tokens.")
 
 
+def add_cmd(c):
+    return f"python3 path/to/skills/opendesigner/scripts/library.py add {c['slug']}"
+
+
+def wrap_url(text):
+    """Escaped text with a break chance after each path slash, never inside "https://"."""
+    out = re.sub(r"(?<![:/])/(?!/)", "/<wbr>", esc(text))
+    return re.sub(r"(?<![\w-])([a-z0-9]+(?:-[a-z0-9]+)+(?:\.[a-z]+)?)", r'<span class="nb">\1</span>', out)  # a name never breaks at its hyphen
+
+
+def get_group(label, text, kind, note=""):
+    """One way to get the part: a label, the text in a box with its own Copy button, and an optional note, kept together."""
+    body = f'<code>{wrap_url(text)}</code>' if kind == "cmd" else f'<p>{wrap_url(text)}</p>'
+    return (f'<div class="part-get"><p class="part-get-label">{esc(label)}</p>'
+            f'<div class="part-get-box part-get-{kind}">{body}<button class="copy" type="button" data-copy-text="{esc(text)}" '
+            f'aria-label="Copy: {esc(label.lower())}">Copy</button></div>'
+            + (f'<p class="part-get-note">{note}</p>' if note else "") + "</div>")
+
+
 def curl(b, c):
     return f'curl -fsSLo {c["slug"]}.html {b.SITE_URL}/library/{c["slug"]}.html'
 
@@ -386,17 +405,17 @@ def detail(b, c, cs):
 <ul class="part-states" aria-label="States">{states}</ul>
 <p class="part-fits">{", ".join(ind(x) if x != "any" else "Any product" for x in c["industries"])} · {c["style"].capitalize()}</p>
 <details class="part-info"><summary>Details</summary>
+<div class="part-info-body">
 <p class="part-full">{esc(c["summary"])}</p>
-<div class="part-prompt"><p class="kicker">Prompt for your coding agent</p><p class="part-prompt-text">{esc(prompt(b, c)).replace("/", "/<wbr>")}</p></div>
-<div class="cmd"><code>python3 &lt;skill&gt;/scripts/library.py add {c["slug"]}</code><button class="copy" type="button">Copy</button></div>
-<p class="part-cmd-note">With OpenDesigner installed: copies the file and lists any token your project lacks.</p>
-<div class="cmd"><code>{esc(curl(b, c))}</code><button class="copy" type="button">Copy</button></div>
-<p class="part-cmd-note">Without it: downloads the one file. Its <a href="/library/{c["slug"]}.json">catalog entry</a> lists its parts, the data it holds, its states and tokens.</p>
+{get_group("Prompt for your coding agent", prompt(b, c), "prose")}
+{get_group("With OpenDesigner installed", add_cmd(c), "cmd", "Copies the file and lists any token your project lacks. Put the folder where OpenDesigner is in place of <code>path/to</code>; your AI knows it.")}
+{get_group("Without OpenDesigner", curl(b, c), "cmd", f'Downloads the one file. Its <a href="/library/{c["slug"]}.json">catalog entry</a> lists its parts, the data it holds, its states and tokens.')}
 <dl class="part-facts">
 <div><dt>Accessibility</dt><dd>{esc(c["a11y"])}</dd></div>
 {photo_credits(c)}<div><dt>File</dt><dd><a href="/library/{c["slug"]}.html">{c["slug"]}.html</a>, {c["kb"]} KB, MIT{"" if not c["js"].strip() else ", with a short script"}</dd></div>
 <div><dt>From</dt><dd>{src_link}</dd></div>
 </dl>
+</div>
 </details>
 </aside>
 </div>

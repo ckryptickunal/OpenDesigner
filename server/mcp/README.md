@@ -22,8 +22,10 @@ All four carry `readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: 
 
 Resources: the gallery view, and `od://library/catalog` (the whole `library.json`).
 
+Each result has `structuredContent` and a plain-text summary written for the model. The spec says a tool with structured content SHOULD also send the same JSON as text; this server sends the summary instead (and `get_component` puts the full entry in its text), because 82 rows of JSON would cost the model far more than the summary. Hosts that read `structuredContent` get all of it.
+
 ## How a pick comes back
-The gallery's **Use this** sends one line to the chat with `ui/message`: `OD:add library.<id>` (DC-L18-07, `skills/opendesigner/references/rules.md` section 9). The agent confirms with the person, then runs `library.py add <id>`. A host that refuses `ui/message` gets the line on screen to copy, so there is always a text path.
+Inline in a chat the view is a short card with one button, **Open the gallery** (Claude's inline cards allow at most two actions and no filters); the full gallery opens in fullscreen. The gallery's **Use this** sends one line to the chat with `ui/message`: `OD:add library.<id>` (DC-L18-07, `skills/opendesigner/references/rules.md` section 9). The agent confirms with the person, then runs `library.py add <id>`. A host that refuses `ui/message` gets the line on screen to copy, so there is always a text path.
 
 ## Protocol
 - MCP 2026-07-28: `server/discover`, per-request `_meta` with the protocol version, `resultType`, `ttlMs` and `cacheScope` on list and read results, error -32022 for a version it doesn't speak.

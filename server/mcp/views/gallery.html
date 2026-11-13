@@ -15,6 +15,7 @@
   --fg: var(--color-text-primary, #141413);
   --fg2: var(--color-text-secondary, #55554f);
   --line: var(--color-border-primary, #d4d3cc);
+  --ctl-line: #85837b;  /* 3.8:1 on the page: a control's edge must reach 3:1 (WCAG 1.4.11) */
   --accent: var(--color-text-info, #1f4fbf);
   --focus: var(--color-ring-primary, #1f4fbf);
   --font: var(--font-sans, system-ui, -apple-system, "Segoe UI", sans-serif);
@@ -24,13 +25,13 @@
 }
 :root[data-theme="dark"] {
   --bg: var(--color-background-primary, #30302e); --bg2: var(--color-background-secondary, #262624);
-  --fg: var(--color-text-primary, #faf9f5); --fg2: var(--color-text-secondary, #c2c0b6); --line: var(--color-border-primary, #4a4945);
+  --fg: var(--color-text-primary, #faf9f5); --fg2: var(--color-text-secondary, #c2c0b6); --line: var(--color-border-primary, #4a4945); --ctl-line: #9a988f;
   --accent: var(--color-text-info, #8fb3ff); --focus: var(--color-ring-primary, #8fb3ff);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: var(--color-background-primary, #30302e); --bg2: var(--color-background-secondary, #262624);
-    --fg: var(--color-text-primary, #faf9f5); --fg2: var(--color-text-secondary, #c2c0b6); --line: var(--color-border-primary, #4a4945);
+    --fg: var(--color-text-primary, #faf9f5); --fg2: var(--color-text-secondary, #c2c0b6); --line: var(--color-border-primary, #4a4945); --ctl-line: #9a988f;
     --accent: var(--color-text-info, #8fb3ff); --focus: var(--color-ring-primary, #8fb3ff);
   }
 }
@@ -39,11 +40,11 @@ body { margin: 0; padding: 16px; background: var(--bg); color: var(--fg); font: 
 h1 { font-size: 17px; font-weight: 600; margin: 0 0 4px; }
 .sub { color: var(--fg2); margin: 0 0 12px; font-size: 14px; }
 .bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-.search { flex: 1 1 220px; min-height: 44px; padding: 0 12px; border: var(--bw) solid var(--line); border-radius: var(--r); background: var(--bg); color: var(--fg); font: inherit; }
+.search { flex: 1 1 220px; min-height: 44px; padding: 0 12px; border: 1px solid var(--ctl-line); border-radius: var(--r); background: var(--bg); color: var(--fg); font: inherit; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; padding: 0; border: 0; }
 .chips legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 button, .chip { font: inherit; color: inherit; cursor: pointer; }
-.chip { min-height: 44px; min-width: 44px; padding: 0 14px; border: var(--bw) solid var(--line); border-radius: 999px; background: var(--bg); }
+.chip { min-height: 44px; min-width: 44px; padding: 0 14px; border: 1px solid var(--ctl-line); border-radius: 999px; background: var(--bg); }
 .chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; }
 .item { display: flex; flex-direction: column; gap: 6px; padding: 14px; border: var(--bw) solid var(--line); border-radius: var(--r-lg); background: var(--bg); }
@@ -51,7 +52,13 @@ button, .chip { font: inherit; color: inherit; cursor: pointer; }
 .meta { color: var(--fg2); font-size: 13px; margin: 0; }
 .purpose { margin: 0; font-size: 14px; }
 .acts { display: flex; gap: 8px; margin-top: auto; padding-top: 6px; }
-.btn { min-height: 44px; padding: 0 14px; border-radius: var(--r); border: var(--bw) solid var(--line); background: var(--bg2); }
+.btn { min-height: 44px; padding: 0 14px; border-radius: var(--r); border: 1px solid var(--ctl-line); background: var(--bg2); }
+/* inline in a chat, Claude's card limits apply (two actions at most, no filters, no inner scroll): a short summary and one
+   button that opens the full gallery. Hosts with no fullscreen get the full gallery in place. */
+.compact { display: none; }
+body.inline .full { display: none; }
+body.inline .compact { display: block; }
+.compact ul { margin: 0 0 12px; padding-left: 18px; }
 .btn.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); font-weight: 600; }
 .more { margin-top: 12px; }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
@@ -69,11 +76,14 @@ button, .chip { font: inherit; color: inherit; cursor: pointer; }
 <body>
 <h1>Component library</h1>
 <p class="sub" id="sub">Waiting for the list from the server.</p>
-<div class="bar"><label class="visually-hidden" for="q" hidden>Search</label>
+<div class="compact"><ul id="names"></ul><button type="button" class="btn primary" id="open">Open the gallery</button></div>
+<div class="full">
+<div class="bar">
   <input class="search" id="q" type="search" placeholder="Search: table, checkout, approval" aria-label="Search components" autocomplete="off"></div>
 <fieldset class="chips" id="types"><legend>Filter by type</legend></fieldset>
 <ul class="grid" id="grid" aria-live="off"></ul>
 <button type="button" class="btn more" id="more" hidden>Show all</button>
+</div>
 <p class="status" id="status" role="status" aria-live="polite"></p>
 <section class="preview" id="preview" hidden aria-label="Preview">
   <header><p id="pv-title">Preview</p><button type="button" class="btn" id="pv-close">Close preview</button></header>
@@ -84,17 +94,18 @@ button, .chip { font: inherit; color: inherit; cursor: pointer; }
   "use strict";
   var TYPES = { data: "Data", chart: "Charts", form: "Forms", feedback: "Feedback", navigation: "Navigation", overlay: "Overlays", ai: "AI", commerce: "Commerce", content: "Content" };
   var INLINE = 6;
-  var all = [], type = "", query = "", expanded = false, nextId = 1, pending = {}, tokensCss = null, hostOk = false, modes = [];
+  var all = [], type = "", query = "", expanded = false, nextId = 1, pending = {}, tokensCss = null, modes = [], mode = "inline", opener = null;
   var $ = function (id) { return document.getElementById(id); };
 
   // ---- the host bridge: JSON-RPC 2.0 over postMessage (MCP Apps)
   function send(msg) { if (window.parent !== window) window.parent.postMessage(msg, "*"); }
-  function request(method, params) {
+  // wait: how long to wait for the host in ms; 0 waits for good (a host may ask the person before it sends a message)
+  function request(method, params, wait) {
     var id = nextId++;
     return new Promise(function (resolve, reject) {
       pending[id] = { resolve: resolve, reject: reject };
       send({ jsonrpc: "2.0", id: id, method: method, params: params || {} });
-      setTimeout(function () { if (pending[id]) { delete pending[id]; reject(new Error("no answer from the host")); } }, 15000);
+      if (wait !== 0) setTimeout(function () { if (pending[id]) { delete pending[id]; reject(new Error("no answer from the host")); } }, wait || 15000);
     });
   }
   function notify(method, params) { send({ jsonrpc: "2.0", method: method, params: params || {} }); }
@@ -118,12 +129,18 @@ button, .chip { font: inherit; color: inherit; cursor: pointer; }
     var v = c.styles && c.styles.variables;
     if (v) Object.keys(v).forEach(function (k) { if (/^--[\w-]+$/.test(k) && v[k] != null) document.documentElement.style.setProperty(k, String(v[k])); });
     if (c.availableDisplayModes) modes = c.availableDisplayModes;
-    if (c.displayMode === "fullscreen") { expanded = true; render(); }
+    if (c.displayMode) mode = c.displayMode;
+    if (mode === "fullscreen") expanded = true;
+    document.body.classList.toggle("inline", mode !== "fullscreen" && modes.indexOf("fullscreen") >= 0);
+    render();
   }
 
   function onResult(r) {
     var sc = r.structuredContent || {};
-    if (!sc.components) return;
+    if (r.isError || !sc.components) {
+      $("sub").textContent = (r.content && r.content[0] && r.content[0].text) || "The server sent no components.";
+      return;
+    }
     all = sc.components;
     $("sub").textContent = sc.count + " of " + sc.of + " components. Each one uses only your design tokens. Pick one to add it to your project.";
     chips(); render();
@@ -147,6 +164,8 @@ button, .chip { font: inherit; color: inherit; cursor: pointer; }
     return query.split(/\s+/).every(function (w) { return hay.indexOf(w) >= 0; });
   }
   function render() {
+    var names = $("names"); names.textContent = "";
+    all.slice(0, 3).forEach(function (c) { var li = document.createElement("li"); li.textContent = c.name + ": " + c.purpose; names.appendChild(li); });
     var rows = all.filter(matches), grid = $("grid");
     var shown = expanded ? rows : rows.slice(0, INLINE);
     grid.textContent = "";
@@ -159,17 +178,21 @@ button, .chip { font: inherit; color: inherit; cursor: pointer; }
       var pur = document.createElement("p"); pur.className = "purpose"; pur.textContent = c.purpose;
       var acts = document.createElement("div"); acts.className = "acts";
       var pv = document.createElement("button"); pv.type = "button"; pv.className = "btn"; pv.textContent = "Preview";
-      pv.setAttribute("aria-label", "Preview " + c.name); pv.addEventListener("click", function () { preview(c, pv); });
+      pv.setAttribute("aria-label", "Preview: " + c.name); pv.dataset.id = c.id; pv.addEventListener("click", function () { preview(c, pv); });
       var use = document.createElement("button"); use.type = "button"; use.className = "btn primary"; use.textContent = "Use this";
-      use.setAttribute("aria-label", "Use " + c.name); use.addEventListener("click", function () { choose(c); });
+      use.setAttribute("aria-label", "Use this: " + c.name); use.addEventListener("click", function () { choose(c); });
       acts.appendChild(pv); acts.appendChild(use);
       li.appendChild(h); li.appendChild(meta); li.appendChild(pur); li.appendChild(acts); grid.appendChild(li);
     });
     var more = $("more");
     more.hidden = expanded || rows.length <= INLINE;
     more.textContent = "Show all " + rows.length;
-    sized();
   }
+  $("open").addEventListener("click", function () {
+    request("ui/request-display-mode", { mode: "fullscreen" }).then(function (r) {
+      if (r && r.mode === "fullscreen") applyContext({ displayMode: "fullscreen" });
+    }).catch(function () {});
+  });
   $("q").addEventListener("input", function (e) { query = e.target.value.trim().toLowerCase(); render(); });
   $("more").addEventListener("click", function () {
     expanded = true; render();
@@ -182,7 +205,8 @@ button, .chip { font: inherit; color: inherit; cursor: pointer; }
     var line = "OD:add library." + c.id;
     var st = $("status");
     st.textContent = "";
-    request("ui/message", { role: "user", content: [{ type: "text", text: line }] }).then(function (r) {
+    st.textContent = "Sending " + line + " to the chat…";
+    request("ui/message", { role: "user", content: [{ type: "text", text: line }] }, 0).then(function (r) {
       if (r && r.isError) throw new Error("refused");
       st.textContent = "Sent to the chat: " + line;
     }).catch(function () {
@@ -201,7 +225,8 @@ button, .chip { font: inherit; color: inherit; cursor: pointer; }
       return r.structuredContent;
     });
   }
-  function preview(c, opener) {
+  function preview(c, btn) {
+    opener = btn;
     var st = $("status"); st.textContent = "Loading the preview of " + c.name + "…";
     var tok = tokensCss ? Promise.resolve(tokensCss) : call("get_tokens_template", {}).then(function (t) { tokensCss = scopeTokens(t.css); return tokensCss; });
     Promise.all([tok, call("get_component", { id: c.id })]).then(function (res) {
@@ -210,20 +235,28 @@ button, .chip { font: inherit; color: inherit; cursor: pointer; }
       var root = box.attachShadow ? box.attachShadow({ mode: "open" }) : box;
       var theme = document.documentElement.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
       // the file's markup only: its script is left out of the preview (scripts do not run from innerHTML anyway)
+      var markup = res[1].markup.replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "");  // no inline handlers either
       root.innerHTML = "<style>" + res[0] + "\n.od-stage{background:var(--ds-color-bg-canvas,transparent);color:var(--ds-color-text-primary);padding:16px}</style>"
-        + "<style>" + res[1].css + "</style><div class=\"od-stage\" data-theme=\"" + theme + "\">" + res[1].markup + "</div>";
+        + "<style>" + res[1].css + "</style><div class=\"od-stage\" data-theme=\"" + theme + "\">" + markup + "</div>";
       $("pv-title").textContent = "Preview: " + c.name + " (sample tokens; yours will differ)";
       $("preview").hidden = false; $("preview").dataset.opener = c.id;
       st.textContent = "Preview of " + c.name + " is below.";
-      $("pv-close").focus(); sized();
+      $("pv-close").focus();
     }).catch(function (e) { st.textContent = "No preview here (" + e.message + "). Use this still works."; });
   }
   $("pv-close").addEventListener("click", function () {
-    var id = $("preview").dataset.opener; $("preview").hidden = true; $("stage").textContent = ""; sized();
-    var b = $("grid").querySelector("[aria-label='Preview " + (all.filter(function (c) { return c.id === id; })[0] || {}).name + "']"); if (b) b.focus();
+    var id = $("preview").dataset.opener; $("preview").hidden = true; $("stage").textContent = "";
+    var back = opener && opener.isConnected ? opener : Array.prototype.filter.call($("grid").querySelectorAll("button[data-id]"), function (b) { return b.dataset.id === id; })[0];
+    (back || $("q")).focus();
   });
 
-  function sized() { notify("ui/notifications/size-changed", { height: Math.ceil(document.documentElement.scrollHeight) }); }
+  // the height the content needs (the body, not the frame, so it can shrink), reported whenever it changes
+  var lastH = 0;
+  function sized() {
+    var h = Math.ceil(document.body.getBoundingClientRect().height + 32);
+    if (h !== lastH) { lastH = h; notify("ui/notifications/size-changed", { height: h }); }
+  }
+  if (window.ResizeObserver) new ResizeObserver(sized).observe(document.body);
 
   if (window.parent === window) {
     $("sub").textContent = "Open this through the OpenDesigner MCP server: list_components fills it.";
@@ -231,7 +264,7 @@ button, .chip { font: inherit; color: inherit; cursor: pointer; }
   }
   request("ui/initialize", { protocolVersion: "2026-01-26", appInfo: { name: "opendesigner-library-gallery", version: "0.3.1" },
                              appCapabilities: { availableDisplayModes: ["inline", "fullscreen"] } })
-    .then(function (r) { hostOk = true; applyContext((r && r.hostContext) || {}); notify("ui/notifications/initialized", {}); })
+    .then(function (r) { applyContext((r && r.hostContext) || {}); notify("ui/notifications/initialized", {}); sized(); })
     .catch(function () { $("sub").textContent = "The host did not answer. Ask in the chat for list_components as text."; });
 })();
 </script>

@@ -128,7 +128,7 @@ def t_tokens(a):
 
 
 STOP = set("a an and the of for to in on with without my our your their this that is are be as by at or it its from into page "
-           "screen app show shows showing want need make build".split())
+           "screen app show shows showing want need make build where which who when what how use used one".split())
 
 
 def words(s):
@@ -140,7 +140,7 @@ def t_suggest(a):
     screen = (a.get("screen") or "").strip()
     if not screen:
         raise ToolError("Describe the screen in a sentence, like 'a dashboard of overdue invoices for a finance team'.")
-    limit = max(1, min(int(a.get("limit", 5)), 10))
+    limit = a.get("limit", 5)
     want = set(words(screen))
     ranked = []
     for e in entries():
@@ -189,7 +189,7 @@ TOOLS = [
      "inputSchema": {"type": "object", "additionalProperties": False, "properties": {
          "brand": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "default": "#2F5BD3"},
          "audience": {"type": "string", "enum": ["dense", "regular", "large"], "default": "regular"},
-         "feel": {"type": "string", "description": "up to six words joined by commas, like calm,precise", "default": "calm,precise"}}},
+         "feel": {"type": "string", "pattern": "^[a-z]+(,[a-z]+){0,5}$", "description": "up to six words joined by commas, like calm,precise", "default": "calm,precise"}}},
      "fn": t_tokens},
     {"name": "suggest_components", "title": "Suggest components for a screen",
      "description": "Components that fit a described screen, best first, by keyword match against the catalog (not a model). "
@@ -204,6 +204,33 @@ TOOLS = [
 
 class ToolError(Exception):
     pass
+
+
+PY_TYPES = {"string": str, "integer": int, "number": (int, float), "boolean": bool, "object": dict, "array": list}
+
+
+def check_args(schema, args):
+    """The input schema, enforced: no unknown names, required present, and each value's type, enum, pattern, length and range."""
+    props = schema["properties"]
+    extra = sorted(set(args) - set(props))
+    if extra:
+        raise ToolError(f"Unknown argument(s): {', '.join(extra)}")
+    for k in schema.get("required", []):
+        if k not in args:
+            raise ToolError(f"{k} is required")
+    for k, v in args.items():
+        sch = props[k]
+        t = sch.get("type")
+        if t and (not isinstance(v, PY_TYPES[t]) or (t in ("integer", "number") and isinstance(v, bool))):
+            raise ToolError(f"{k} must be a {t}")
+        if "enum" in sch and v not in sch["enum"]:
+            raise ToolError(f"{k} must be one of: {', '.join(sch['enum'])}")
+        if "pattern" in sch and not re.fullmatch(sch["pattern"].strip("^$"), v):
+            raise ToolError(f"{k} does not have the right form")
+        if "maxLength" in sch and len(v) > sch["maxLength"]:
+            raise ToolError(f"{k} is longer than {sch['maxLength']} characters")
+        if "minimum" in sch and v < sch["minimum"] or "maximum" in sch and v > sch["maximum"]:
+            raise ToolError(f"{k} must be between {sch.get('minimum')} and {sch.get('maximum')}")
 
 
 class RpcError(Exception):
@@ -247,8 +274,8 @@ class Server:
                 "extensions": {"io.modelcontextprotocol/ui": {}}}
 
     def ui_ok(self, params):
-        caps = (params.get("_meta") or {}).get("io.modelcontextprotocol/clientCapabilities")
-        caps = caps if caps is not None else self.client_caps
+        # a modern request carries its own capabilities and may not lean on earlier requests; a legacy one uses initialize's
+        caps = (params.get("_meta") or {}).get("io.modelcontextprotocol/clientCapabilities") if self.modern(params) else self.client_caps
         if caps is None or "extensions" not in caps:
             return True  # the client did not say; hosts without views ignore the _meta keys
         ext = (caps.get("extensions") or {}).get("io.modelcontextprotocol/ui")
@@ -284,18 +311,20 @@ class Server:
         meta = params.get("_meta") or {}
         if self.modern(params):
             v = meta["io.modelcontextprotocol/protocolVersion"]
-            if v not in MODERN:
-                raise RpcError(-32022, "Unsupported protocol version", {"supported": MODERN + LEGACY, "requested": v})
+            if v not in MODERN:  # older versions are reachable only through initialize
+                raise RpcError(-32022, "Unsupported protocol version", {"supported": MODERN, "requested": v})
+            if not isinstance(meta.get("io.modelcontextprotocol/clientCapabilities"), dict):
+                raise RpcError(-32602, "Missing _meta io.modelcontextprotocol/clientCapabilities")
         cache = {"ttlMs": 3600000, "cacheScope": "public"} if self.modern(params) else {}
         if method == "server/discover":
             return {"supportedVersions": MODERN, "capabilities": self.capabilities(), "instructions": INSTRUCTIONS, **cache}
         if method == "initialize":
             asked = params.get("protocolVersion")
-            self.legacy_version = asked if asked in LEGACY + MODERN else LEGACY[0]
+            self.legacy_version = asked if asked in LEGACY else LEGACY[0]  # 2026-07-28 has no handshake
             self.client_caps = params.get("capabilities") or {}
             return {"protocolVersion": self.legacy_version, "capabilities": self.capabilities(), "serverInfo": SERVER_INFO,
                     "instructions": INSTRUCTIONS}
-        if method == "ping":
+        if method == "ping" and not self.modern(params):  # removed in 2026-07-28
             return {}
         if method == "tools/list":
             return {"tools": tool_defs(self.ui_ok(params)), **cache}
@@ -313,7 +342,7 @@ class Server:
                                       "_meta": {"ui": {"csp": v["csp"], "prefersBorder": True}}}], **cache}
             if uri == "od://library/catalog":
                 return {"contents": [{"uri": uri, "mimeType": "application/json", "text": json.dumps(catalog(), ensure_ascii=False)}], **cache}
-            raise RpcError(-32002, "Resource not found", {"uri": uri})
+            raise RpcError(-32602 if self.modern(params) else -32002, "Resource not found", {"uri": uri})
         if method == "prompts/list":
             return {"prompts": [], **cache}
         raise RpcError(-32601, f"Method not found: {method}")
@@ -325,16 +354,13 @@ class Server:
             raise RpcError(-32602, f"Unknown tool: {name}")
         if not isinstance(args, dict):
             raise RpcError(-32602, "arguments must be an object")
-        extra = set(args) - set(tool["inputSchema"]["properties"])
-        if extra:
-            return {"content": [{"type": "text", "text": f"Unknown argument(s): {', '.join(sorted(extra))}"}], "isError": True}
-        for k, sch in tool["inputSchema"]["properties"].items():
-            if k in args and "enum" in sch and args[k] not in sch["enum"]:
-                return {"content": [{"type": "text", "text": f"{k} must be one of: {', '.join(sch['enum'])}"}], "isError": True}
         try:
+            check_args(tool["inputSchema"], args)
             structured, text = tool["fn"](args)
-        except ToolError as e:
+        except ToolError as e:  # input mistakes are tool errors, so the model can correct itself
             return {"content": [{"type": "text", "text": str(e)}], "isError": True}
+        except subprocess.TimeoutExpired:
+            return {"content": [{"type": "text", "text": "The engine took too long. Try again."}], "isError": True}
         res = {"content": [{"type": "text", "text": text}], "structuredContent": structured}
         if len(text) > 20000:
             res["_meta"] = {"anthropic/maxResultSizeChars": min(500000, len(text) + 1000)}
@@ -352,8 +378,8 @@ def serve(stdin=sys.stdin, stdout=sys.stdout):
         except json.JSONDecodeError:
             out = {"jsonrpc": "2.0", "id": None, "error": {"code": -32700, "message": "Parse error"}}
         else:
-            if isinstance(msg, list):  # batches were removed in 2025-06-18; answer each anyway
-                out = [r for r in (s.handle(m) for m in msg) if r] or None
+            if isinstance(msg, list):  # batches were removed in 2025-06-18; answer each anyway (an empty one is invalid)
+                out = [r for r in (s.handle(m) for m in msg) if r] or None if msg else {"jsonrpc": "2.0", "id": None, "error": {"code": -32600, "message": "Invalid request"}}
             else:
                 out = s.handle(msg)
         if out:

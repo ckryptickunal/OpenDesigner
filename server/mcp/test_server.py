@@ -75,8 +75,22 @@ class Legacy(unittest.TestCase):
     def test_unknown_version_gets_ours(self):
         s = Session()
         r = s.send("initialize", {"protocolVersion": "1999-01-01", "capabilities": {}, "clientInfo": {"name": "t"}})
-        self.assertIn(r["result"]["protocolVersion"], ["2025-11-25", "2025-06-18", "2025-03-26", "2026-07-28"])
+        self.assertIn(r["result"]["protocolVersion"], ["2025-11-25", "2025-06-18", "2025-03-26"])
         s.close()
+
+    def test_initialize_never_agrees_to_the_handshake_free_version(self):
+        s = Session()
+        r = s.send("initialize", {"protocolVersion": "2026-07-28", "capabilities": {}, "clientInfo": {"name": "t"}})
+        self.assertEqual(r["result"]["protocolVersion"], "2025-11-25")
+        s.close()
+
+    def test_wrong_argument_types_are_tool_errors(self):
+        for name, args in (("get_tokens_template", {"brand": 123}), ("suggest_components", {"screen": "a table", "limit": "abc"}),
+                           ("suggest_components", {"screen": 5}), ("suggest_components", {"screen": "x" * 501}),
+                           ("suggest_components", {"screen": "a table", "limit": 99}), ("get_component", {}),
+                           ("get_component", {"id": "Bad Id"})):
+            r = self.s.send("tools/call", {"name": name, "arguments": args})
+            self.assertTrue(r["result"]["isError"], (name, args, r))
 
     def test_tools_are_read_only_and_described(self):
         tools = self.s.send("tools/list")["result"]["tools"]
@@ -116,6 +130,8 @@ class Legacy(unittest.TestCase):
     def test_get_unknown_component(self):
         r = self.s.send("tools/call", {"name": "get_component", "arguments": {"id": "../../etc/passwd"}})["result"]
         self.assertTrue(r["isError"])
+        r = self.s.send("tools/call", {"name": "get_component", "arguments": {"id": "no-such-part"}})["result"]
+        self.assertTrue(r["isError"])
         self.assertIn("No component", r["content"][0]["text"])
 
     def test_suggest(self):
@@ -154,6 +170,7 @@ class Legacy(unittest.TestCase):
         self.assertEqual(self.s.send("no/such/method")["error"]["code"], -32601)
         self.assertEqual(self.s.send("tools/call", {"name": "write_files", "arguments": {}})["error"]["code"], -32602)
         self.assertEqual(self.s.raw("{not json")["error"]["code"], -32700)
+        self.assertEqual(self.s.raw("[]")["error"]["code"], -32600)
         self.assertEqual(self.s.send("ping")["result"], {})
 
 
@@ -173,7 +190,11 @@ class Modern(unittest.TestCase):
         self.assertEqual(r["resultType"], "complete")
         bad = s.send("tools/list", {"_meta": {**MODERN, "io.modelcontextprotocol/protocolVersion": "2099-01-01"}})
         self.assertEqual(bad["error"]["code"], -32022)
-        self.assertIn("2026-07-28", bad["error"]["data"]["supported"])
+        self.assertEqual(bad["error"]["data"]["supported"], ["2026-07-28"])
+        self.assertEqual(s.send("resources/read", {"uri": "od://nothing", "_meta": MODERN})["error"]["code"], -32602)
+        self.assertEqual(s.send("ping", {"_meta": MODERN})["error"]["code"], -32601)
+        no_caps = {k: v for k, v in MODERN.items() if k != "io.modelcontextprotocol/clientCapabilities"}
+        self.assertEqual(s.send("tools/list", {"_meta": no_caps})["error"]["code"], -32602)
         code, _ = s.close()
         self.assertEqual(code, 0)
 
@@ -194,8 +215,9 @@ class Static(unittest.TestCase):
 
     def test_server_writes_and_fetches_nothing(self):
         src = (HERE / "server.py").read_text()
-        for bad in ("urllib", "http.client", "socket", "requests", "open(", "write_text", "unlink", "rmtree"):
-            self.assertNotIn(bad, src, bad)
+        self.assertIsNone(re.search(r"^\s*(import|from)\s+(urllib|http|socket|requests|ssl|ftplib|smtplib)\b", src, re.M))
+        for bad in ("open(", "write_text", "write_bytes", "unlink", "rmtree", "os.remove", "shell=True"):
+            self.assertFalse(bad in src, bad)
 
     def test_view_floors(self):
         """The gallery keeps the MCP Apps floors: 44 px targets, visible focus, reduced motion, dark mode, no external loads."""

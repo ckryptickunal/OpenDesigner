@@ -169,6 +169,7 @@ python3 tools/test_plugin_hook.py        the plugin's start-of-session hook stay
 python3 tools/design_evals.py --check --no-save   the engine on 20 fixed briefs: every required check passes (evals/README.md)
 python3 skills/opendesigner/scripts/library.py check   every library component uses only tokens every engine system writes, is scoped, and has complete tags, a complete spec, and library.json is current (else: library.py catalog)
 python3 server/mcp/test_server.py           the library MCP server over stdio: read-only tools, the gallery view, both protocol versions
+python3 tools/test_library_catalog.py        the library catalog's spec checks (known good and bad), drift, and library.py add --from
 python3 site/post_change_audit.py          after changing the website or the library: every automatic check, then walk skills/opendesigner/references/post-change-audit.md by eye
 python3 tools/changelog_check.py                  every CHANGELOG.md entry is short, dated and in the format the website reads; add one entry per change you push
 python3 tools/build_examples.py --check           the worked examples in examples/ are what the engine makes now (else: build_examples.py, which rebuilds them)

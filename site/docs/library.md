@@ -50,12 +50,12 @@ MCP is the way AI apps such as Claude Desktop call tools on your computer. OpenD
 
 | Tool | What it does |
 |---|---|
-| `list_components` | Lists the parts, filtered by type, style, width, audience or industry. In Claude it opens a gallery |
+| `list_components` | Lists the parts, filtered by type, style, width, audience or industry. In Claude Desktop it opens a gallery; Claude Code shows the list as text |
 | `get_component` | One part: its catalog entry and its file |
 | `suggest_components` | Parts that fit a screen you describe. It matches words against the catalog, so check each suggestion's "avoid when" |
 | `get_tokens_template` | A `tokens.css` with every variable the parts read, made from a brand colour, for a project with no system yet |
 
-In the gallery, **Use this** puts one line in the chat, for example `OD:add library.approval-panel`. Your AI reads it, asks you, and then adds the file. Where the gallery can't send it, the line stays on screen to copy.
+In the chat it starts as a short card; **Open the gallery** shows every part with search and filters. **Use this** puts one line in the chat, for example `OD:add library.approval-panel`. Your AI reads it, asks you, and then adds the file. Where the gallery can't send it, the line stays on screen to copy.
 
 To add it to Claude Desktop, clone the repository, then add this to `claude_desktop_config.json` (Settings, Developer, Edit Config) with your own path, and restart Claude:
 
