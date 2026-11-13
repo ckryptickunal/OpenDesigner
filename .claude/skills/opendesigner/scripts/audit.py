@@ -268,7 +268,7 @@ def audit_data(eng, d, project=None):
             words, effects = str(rec), {}
         fam_name, kind = area_kind.get(area, (None, None))
         decisions.append({"id": qid, "answer": str(words)[:120], "setBy": (rec.get("set_by") if isinstance(rec, dict) else None) or "chosen",
-                          "changesTokens": bool(effects), "family": fam_name,
+                          "changesTokens": bool(effects) or qid in getattr(eng, "STATE_QS", ()), "family": fam_name,
                           "follows": fam_uses.get(fam_name) if fam_name else None, "raw": raw_by_kind.get(kind) if kind else None})
     dials = [{"id": k, "value": v.get("value") if isinstance(v, dict) else v,
               "setBy": (v.get("set_by") if isinstance(v, dict) else None) or "default"} for k, v in sorted((state.get("dials") or {}).items())]
@@ -303,7 +303,7 @@ def audit_data(eng, d, project=None):
             opts.append(_opt("token", f"Use {tok}", f"Every one of these becomes var({eng.css_var(prefix, tok)}), {tokens_hex[tok]}.",
                              {"color": tokens_hex[tok]}, recommended=True))
         if not (tok and tokens_hex[tok] == top):
-            opts.append(_opt("common", f"Merge into {top}, the one used most", f"{_plural(len(rows) - hex_count[top], 'use')} change to {top}. "
+            opts.append(_opt("common", f"Merge into {top}, the one used most", f"{_plural(len(rows) - hex_count[top], 'use')} {'changes' if len(rows) - hex_count[top] == 1 else 'change'} to {top}. "
                              + ("It is not a token yet: add it as one first (engine.py set color.<role>.<name>)." if not (tok and dist < 0.01) else ""),
                              {"color": top}, recommended=not opts))
         opts.append(_keep(iid))

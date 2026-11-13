@@ -425,6 +425,16 @@ Decisions: D-0034 (answers.Q-state-03), D-0036 (answers.Q-form-01).
 
 </details>
 
+## States
+
+**Every screen says what is happening while it loads, when it is empty, and when something goes wrong.** The overview draws each one with these tokens.
+
+- **Waiting** (Q-state-08, not decided yet: the default is shown): Nothing under 1 second; a looping sign from 1 to 10 seconds; percent done over 10 seconds. No tokens until it is answered: `engine.py pick Q-state-08 <option>`.
+- **Empty screens** (Q-pattern-04, not decided yet: the default is shown): Each empty screen says which kind it is (first use, cleared, no results, no permission, error), why it is empty, and one next step. No tokens until it is answered: `engine.py pick Q-pattern-04 <option>`.
+- **Errors** (Q-form-03, not decided yet: the default is shown): Each error sits next to the field it is about. No tokens until it is answered: `engine.py pick Q-form-03 <option>`.
+- **Not found (404) and offline**: a page that says what happened in one line and offers a way on (home, search or retry), in the page's own layout, never a dead end.
+- **Every screen that shows data** has its loading, empty and error state before it ships; skeletons take the final layout's shape, so nothing jumps when the content arrives. Reduced motion stops the skeleton shimmer.
+
 ## Do's and Don'ts
 
 **These rules keep screens clear and easy to read.** The engine checks the ones it can.

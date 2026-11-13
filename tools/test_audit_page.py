@@ -194,6 +194,44 @@ class Ledger(unittest.TestCase):
         self.assertNotIn("Audit Ledger", (self.p.root / "DESIGN.md").read_text())
 
 
+class States(unittest.TestCase):
+    """Q-state-08, Q-pattern-04 and Q-form-03 change real output: state.* tokens, DESIGN.md's States section, the overview."""
+
+    def setUp(self):
+        self.p = Project()
+
+    def tearDown(self):
+        self.p.close()
+
+    def tokens(self):
+        return json.loads((self.p.root / "opendesigner" / "tokens" / "semantic.tokens.json").read_text())
+
+    def test_no_answer_no_tokens_but_the_section_shows_defaults(self):
+        run("build", cwd=self.p.root)
+        self.assertNotIn("state", self.tokens())
+        design = (self.p.root / "DESIGN.md").read_text()
+        self.assertIn("## States", design)
+        self.assertIn("Q-state-08, not decided yet", design)
+        self.assertIn('id="states"', (self.p.root / "opendesigner" / "overview.html").read_text())
+
+    def test_answers_make_tokens(self):
+        r = run("pick", "Q-state-08", "skeleton-first", "--set-by", "assumed", cwd=self.p.root)
+        self.assertIn("tokens:", r.stdout)
+        self.assertNotIn("not tokens", r.stdout)
+        run("pick", "Q-form-03", "inline", "--set-by", "assumed", cwd=self.p.root)
+        run("build", cwd=self.p.root)
+        st = self.tokens()["state"]
+        self.assertEqual(st["wait"]["indicator-after"]["$value"], {"value": 0, "unit": "ms"})
+        self.assertEqual(st["skeleton"]["base"]["$value"], "{color.bg.neutral.subtle}")
+        self.assertEqual(st["error"]["text"]["$value"], "{color.text.danger}")
+        self.assertNotIn("empty", st, "Q-pattern-04 is not answered")
+        css = (self.p.root / "opendesigner" / "build" / "css" / "tokens.css").read_text()
+        self.assertIn("--ds-state-skeleton-base: var(--ds-color-bg-neutral-subtle)", css)
+        self.assertIn("Q-state-08, decided", (self.p.root / "DESIGN.md").read_text())
+        v = json.loads(run("validate", "--json", cwd=self.p.root, ok=False).stdout)
+        self.assertFalse([i for i in v.get("items", []) if i.get("severity") == "error"])
+
+
 class Adapt(unittest.TestCase):
     def setUp(self):
         self.p = Project()

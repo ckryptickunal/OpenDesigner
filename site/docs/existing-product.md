@@ -82,7 +82,7 @@ When the reference is your own product, it reads what exists and fills the gaps.
 
 ## See your own code against your system
 
-Once your project has a system, `engine.py audit-page --open` shows what your code really does with it. Each token comes with the number of places that use it, and a token nobody uses is faded. Then come the places where the code and the system disagree: colors so close nobody can tell them apart, spacing, text sizes and corners that are off the scale, values typed by hand where a token exists, and buttons or cards drawn several different ways. Each one names the file and line, how often it happens, and up to three ways to settle it, one of them keeping it as it is. Pick one and the page shows the change with your own values. Nothing in your code changes until you copy your choices back and say yes.
+Once your project has a system, `engine.py audit-page --open` shows what your code really does with it. Each token comes with the number of places that use it, and a token nobody uses has a dashed border. Then come the places where the code and the system disagree: colors so close nobody can tell them apart, spacing, text sizes and corners that are off the scale, values typed by hand where a token exists, and buttons or cards drawn several different ways. Each one names the file and line, how often it happens, and up to three ways to settle it, one of them keeping it as it is. Pick one and the page shows the change with your own values. Nothing in your code changes until you copy your choices back and say yes.
 
 On 2026-11-13, the first run on this project's own website found 36 such places in 111 files.
 
