@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>States: done right</title>
+<!-- states-bad.html done right: a skeleton the size of the list, an empty state with a next step, and an error with a retry. -->
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; } main { max-width: 640px; margin: 0 auto; padding: 24px; }
+  #list { min-height: 144px; margin: 0; padding: 0; list-style: none; }
+  #list li { height: 72px; box-sizing: border-box; padding: 24px 0; margin: 0; }
+  .skeleton { background: #eee; border-radius: 6px; margin-bottom: 12px !important; height: 60px !important; }
+</style>
+</head><body><main>
+<h1>Invoices</h1>
+<ul id="list" aria-busy="true"><li class="skeleton"></li><li class="skeleton"></li></ul>
+<p>Totals are shown in your account currency.</p>
+<section style="height:600px;background:#f4f4f4;padding:24px"><h2>Recent activity</h2><p>Payments and refunds from the last 30 days.</p></section>
+</main>
+<script>
+const list = document.getElementById('list');
+fetch('data.json').then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then((d) => {
+  list.removeAttribute('aria-busy');
+  list.innerHTML = d.items.length ? d.items.map((i) => '<li>' + i.name + ': ' + i.total + '</li>').join('')
+    : '<li>No invoices yet. <a href="#new">Create your first invoice</a></li>';
+}).catch(() => { list.removeAttribute('aria-busy'); list.innerHTML = '<li>We couldn\'t load your invoices. <button type="button" onclick="location.reload()">Try again</button></li>'; });
+</script>
+</body></html>

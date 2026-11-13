@@ -20,7 +20,8 @@
  *   __od.seekTime(sec)    pause SMIL svg animations and <video> at a time in seconds (seek() does not move these)
  *   __od.vitals()         a Promise: layout shift (CLS) and long animation frames since page load
  *   __od.stress(kind, on) reversible stress: textSpacing (WCAG 1.4.12), text200 (1.4.4), rtl, longWords, pseudoloc (+40% text),
- *                         translate (every word 30% longer with no new spaces, a German stand-in; {grow: 0.5} for more)
+ *                         translate (every word 30% longer with no new spaces, a German stand-in; {grow: 0.5} for more),
+ *                         longNames (a 200-character name in every heading, link, button and label), noImages (every image fails)
  *   __od.craft()          text cut off, breathing room, spacing rhythm (also in probe() as craft; copy holds the page's words)
  *   __od.setMode(m)       {theme, density, motion} on <html>: the data-theme / data-density / data-motion switches OpenDesigner CSS reads
  *   __od.marks(list)      boxes for the issues you will draw: [{sel, title, gives, source}] in (a selector matching several elements,
@@ -487,6 +488,7 @@
   function craftCheck(els) {
     const de = document.documentElement, vw = de.clientWidth;
     const out = { spill: [], hiddenByParent: [], truncated: [], orphans: [], tight: [], touching: [], insetVsGap: [], siblings: [], sections: [], measure: [],
+                  radii: [], monoProse: [], brokenUrls: [], twins: [],
                   checked: { text: 0, boxes: 0, parents: 0, labels: 0 } };
     const bodyStack = [];
     for (const el of els) {
@@ -550,6 +552,11 @@
         if (lines >= 3) bodyStack.push({ sel: sel(el), fs: round(fs, 10), lh: round(lh), ch: round(ch, 1), lines, box: pageBox(r) });
       }
 
+      // prose set in a monospace face: running text over 80 characters, outside code
+      if (own.length > 80 && /^(p|li|dd|blockquote|td|figcaption|span|div)$/.test(el.localName) && !el.closest('pre,code,kbd,samp,textarea,[contenteditable]') &&
+          /mono|courier|consolas|menlo|monaco|source code|fira code|jetbrains|ibm plex mono|sf mono|ui-monospace/i.test(cs.fontFamily.split(',')[0]) && out.monoProse.length < CAP)
+        out.monoProse.push({ sel: sel(el), font: cs.fontFamily.split(',')[0].replace(/["']/g, '').trim(), text: own.slice(0, 60), box: pageBox(r) });
+
       // a box with a visible edge: text that touches the edge, and padding smaller than the gap between its children
       const edge = /^(inline)$/.test(cs.display) || /^(code|kbd|samp|mark|input|textarea|select|img|svg|video|canvas|iframe)$/.test(el.localName) ? null : boundary(el, cs);
       if (edge && r.width >= 16 && r.height >= 12) {
@@ -588,21 +595,46 @@
         if (kids.length >= 2) out.checked.parents++;
         for (let i = 1; i < kids.length; i++) {
           const a = kids[i - 1], b = kids[i];
-          if (!words(a.k.textContent) || !words(b.k.textContent)) continue;
+          const ea = boundary(a.k, a.kc), eb = boundary(b.k, b.kc);
+          if ((!ea && !words(a.k.textContent)) || (!eb && !words(b.k.textContent))) continue;
           const below = b.kr.top >= a.kr.bottom - 0.5, sameRow = !below && b.kr.left >= a.kr.right - 0.5 && Math.min(a.kr.bottom, b.kr.bottom) > Math.max(a.kr.top, b.kr.top);
           if (!below && !sameRow) continue;
           const box = below ? b.kr.top - a.kr.bottom : b.kr.left - a.kr.right;
-          const edged = boundary(a.k, a.kc) || boundary(b.k, b.kc);
-          let seen = box;
-          if (!edged) {                     // the space between the text itself: padding and half the line height count as room
-            const clipTo = (x, u) => (u && /hidden|clip/.test(x.kc.overflowX + ' ' + x.kc.overflowY) ? { left: Math.max(u.left, x.kr.left), right: Math.min(u.right, x.kr.right), top: Math.max(u.top, x.kr.top), bottom: Math.min(u.bottom, x.kr.bottom) } : u);
-            const ua = clipTo(a, union(allRects(a.k, 60))), ub = clipTo(b, union(allRects(b.k, 60)));   // hidden text is not a neighbour
-            if (!ua || !ub) continue;
-            seen = below ? ub.top - ua.bottom : ub.left - ua.right;
-            if (seen < 0 && box >= TOUCH) continue;   // text placed outside its own box (positioned): the boxes are apart, so it is not crowding
+          const clipTo = (x, u) => (u && /hidden|clip/.test(x.kc.overflowX + ' ' + x.kc.overflowY) ? { left: Math.max(u.left, x.kr.left), right: Math.min(u.right, x.kr.right), top: Math.max(u.top, x.kr.top), bottom: Math.min(u.bottom, x.kr.bottom) } : u);
+          // what each side shows the other: a box with an edge shows its edge, anything else shows its text
+          const face = (x, e) => (e ? x.kr : clipTo(x, union(allRects(x.k, 60))));   // hidden text is not a neighbour
+          const fa = face(a, ea), fb = face(b, eb);
+          if (!fa || !fb) continue;
+          const seen = below ? fb.top - fa.bottom : fb.left - fa.right;
+          if (seen < 0 && box >= TOUCH) continue;   // text placed outside its own box (positioned): the boxes are apart, so it is not crowding
+          let kind = ea && eb ? 'boxes' : ea || eb ? 'caption' : 'text';
+          if (kind === 'boxes' && Math.round(box) <= 0) {
+            // two boxes that touch are a joined group (a segmented control, a table, a stack of rows) when the corners
+            // that meet are square, or the parent names a group; rounded corners touching are two blocks with no gap
+            const rad = (cs, c) => px(cs['border' + c + 'Radius']);
+            const facing = below ? [rad(a.kc, 'BottomLeft'), rad(a.kc, 'BottomRight'), rad(b.kc, 'TopLeft'), rad(b.kc, 'TopRight')]
+                                 : [rad(a.kc, 'TopRight'), rad(a.kc, 'BottomRight'), rad(b.kc, 'TopLeft'), rad(b.kc, 'BottomLeft')];
+            if (Math.max(...facing) < 1 || el.matches('[role=group],[role=toolbar],[role=tablist],[role=radiogroup],table,thead,tbody,tr')) continue;
+            kind = 'boxes-touching';
           }
-          if ((edged ? box > 0 && Math.round(box) < TOUCH : Math.round(seen) < TOUCH) && out.tight.length < CAP)
-            out.tight.push({ sel: sel(b.k), after: sel(a.k), axis: below ? 'vertical' : 'horizontal', gap: round(box), seen: round(seen), box: pageBox(union([a.kr, b.kr])) });
+          if (Math.round(seen) < TOUCH && out.tight.length < CAP)
+            out.tight.push({ sel: sel(b.k), after: sel(a.k), kind, axis: below ? 'vertical' : 'horizontal', gap: round(box), seen: round(seen), box: pageBox(union([a.kr, b.kr])) });
+        }
+        // boxes side by side or stacked as one set (same width in a column, same height in a row) should share a corner radius
+        const boxes = kids.filter((x) => boundary(x.k, x.kc));
+        if (boxes.length >= 2) {
+          const sets = [];
+          for (const x of boxes) {
+            const s2 = sets.find((g) => Math.abs(g[0].kr.width - x.kr.width) <= 2 || Math.abs(g[0].kr.top - x.kr.top) <= 2 && Math.abs(g[0].kr.height - x.kr.height) <= 2);
+            s2 ? s2.push(x) : sets.push([x]);
+          }
+          for (const g of sets) {
+            if (g.length < 2) continue;
+            const radii = g.map((x) => round(px(x.kc.borderTopLeftRadius)));
+            const distinct = Array.from(new Set(radii.map((v) => Math.round(v))));
+            if (distinct.length > 1 && Math.max(...distinct) - Math.min(...distinct) > 1 && out.radii.length < CAP)
+              out.radii.push({ sel: sel(el), items: g.slice(0, 6).map((x, n) => ({ sel: sel(x.k), radius: radii[n] })), box: pageBox(union(g.map((x) => x.kr))) });
+          }
         }
         // a run of three or more siblings of the same kind, in one column or one row: are the gaps the same?
         for (let i = 0; i < kids.length;) {
@@ -640,6 +672,53 @@
       const u = union(rs); if (!u) continue;
       if (prev) out.sections.push({ sel: sel(s), after: prev.sel, space: round(u.top - prev.bottom), box: pageBox({ left: 0, right: vw, top: prev.bottom, bottom: u.top }) });
       prev = { sel: sel(s), bottom: u.bottom };
+    }
+    // a web address broken across lines, worst when the break falls inside "https://"
+    const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let t = tw.nextNode(); t && out.brokenUrls.length < CAP; t = tw.nextNode()) {
+      const pe = t.parentElement; if (!pe || SKIP.has(pe.tagName) || srOnly(pe, pe)) continue;
+      const re = /\b(?:https?:\/\/|www\.)[^\s<>"')]+/g; let m;
+      while ((m = re.exec(t.nodeValue)) && out.brokenUrls.length < CAP) {
+        const rg = document.createRange(); rg.setStart(t, m.index); rg.setEnd(t, m.index + m[0].length);
+        const qs = Array.from(rg.getClientRects()).filter((q) => q.width >= 1);
+        const mids = []; for (const q of qs) { const mid = q.top + q.height / 2; if (!mids.some((v) => Math.abs(v - mid) < q.height * 0.5)) mids.push(mid); }
+        if (mids.length < 2) continue;
+        let inScheme = false;   // is the first line only the scheme ("https:" or "https://")?
+        const sch = /^https?:\/\//.exec(m[0]);
+        if (sch) {
+          const r2 = document.createRange(); r2.setStart(t, m.index); r2.setEnd(t, m.index + sch[0].length);
+          const q2 = Array.from(r2.getClientRects()).filter((q) => q.width >= 1);
+          const tops = new Set(q2.map((q) => Math.round(q.top)));
+          inScheme = tops.size > 1 || (q2.length > 0 && qs[0].width <= q2.reduce((w, q) => w + q.width, 0) + 1);   // split inside it, or a line of it alone
+        }
+        out.brokenUrls.push({ sel: sel(pe), url: m[0].slice(0, 80), lines: mids.length, inScheme, box: pageBox(union(qs)) });
+      }
+    }
+    // twins treated differently: blocks of one kind where most have a control (Copy, Download) that one or more lack.
+    // Code blocks are matched by being code blocks, whatever wraps them
+    const labelOf = (b) => words(b.getAttribute('aria-label') || b.getAttribute('title') || b.textContent || b.value).toLowerCase().replace(/[^a-z ]/g, '').trim();
+    const controlsIn = (x) => new Set(Array.from(x.querySelectorAll('button,[role=button],a[href]')).filter((b) => visible(b, getComputedStyle(b), b.getBoundingClientRect())).map(labelOf).filter((l) => l && l.length <= 24));
+    const groups = new Map();
+    for (const pre of document.querySelectorAll('pre')) {
+      const c = getComputedStyle(pre), q = pre.getBoundingClientRect(); if (!visible(pre, c, q)) continue;
+      let host = pre; for (let i = 0; i < 2 && host.parentElement && host.parentElement.querySelectorAll('pre').length === 1 && host.parentElement !== document.body; i++) host = host.parentElement;
+      (groups.get('code block') || groups.set('code block', []).get('code block')).push(host);
+    }
+    for (const el of els) {
+      if (!/^(article|section|figure|li|div)$/.test(el.localName) || !clsOf(el).trim()) continue;
+      const c = getComputedStyle(el), q = el.getBoundingClientRect(); if (!visible(el, c, q) || q.height < 40 || el.querySelector('pre')) continue;
+      const k = 'block ' + sig(el); (groups.get(k) || groups.set(k, []).get(k)).push(el);
+    }
+    for (const [kind, members] of groups) {
+      if (members.length < 2 || members.length > 60) continue;
+      const sets = members.map(controlsIn), count = new Map();
+      for (const st of sets) for (const l of st) count.set(l, (count.get(l) || 0) + 1);
+      for (const [label, n] of count) {
+        if (n < 2 || n === members.length || n < members.length / 2 || !/copy|download|share|expand|open|edit|delete|remove|install|run|view|preview|try/.test(label)) continue;
+        const without = members.filter((_, i) => !sets[i].has(label));
+        if (out.twins.length < CAP)
+          out.twins.push({ kind: kind.split('@')[0], control: label, has: n, of: members.length, missing: without.slice(0, 4).map(sel), box: pageBox(without[0].getBoundingClientRect()), sel: sel(without[0]) });
+      }
     }
     out.measure = bodyStack.slice(0, 60);
     return out;
@@ -1276,7 +1355,8 @@
     const out = { cls: 0, shifts: [], longFrames: [], supported: [] };
     const watch = (type, on) => {
       try {
-        const po = new PerformanceObserver(() => {}); po.observe({ type, buffered: true }); out.supported.push(type);
+        // buffered entries arrive in the callback, not in takeRecords(): an empty callback threw them away and CLS read 0
+        const po = new PerformanceObserver((list) => { for (const e of list.getEntries()) on(e); }); po.observe({ type, buffered: true }); out.supported.push(type);
         setTimeout(() => { for (const e of po.takeRecords()) on(e); po.disconnect(); }, 120);
       } catch (e) { /* not supported in this browser */ }
     };
@@ -1574,6 +1654,7 @@
     return out;
   }
   const GERMAN = 'ungsverwaltungseinstellungsbereichsuebersicht';
+  const LONG_NAME = 'Maximiliana Alexandrina Featherstonehaugh-Cholmondeley of the Northern Highlands Regional Procurement and Facilities Management Directorate, Building Seven, Floor Twelve, Desk Forty-Three, Westminster';
   od.stress = (kind, on = true, opts = {}) => {
     if (STRESS_CSS[kind]) {
       let st = document.getElementById('__od-stress-' + kind);
@@ -1582,6 +1663,41 @@
     } else if (kind === 'rtl') {
       if (on) { if (!('dir' in originals)) originals.dir = document.documentElement.getAttribute('dir'); document.documentElement.setAttribute('dir', 'rtl'); }
       else if ('dir' in originals) { originals.dir === null ? document.documentElement.removeAttribute('dir') : document.documentElement.setAttribute('dir', originals.dir); delete originals.dir; }
+    } else if (kind === 'longNames') {
+      // a 200-character name wherever a name or title sits: headings, links, buttons, labels, table heads, .name and .title
+      if (on) {
+        if (active[kind]) return { kind, on: true, changed: 0, note: 'already on' };
+        if (Object.keys(active).some((k) => /^(longWords|pseudoloc|translate)$/.test(k))) return { error: 'turn the other text stress off first' };
+        let n = 0;
+        for (const t of textNodes()) {
+          const host = t.parentElement.closest('h1,h2,h3,h4,h5,h6,a,button,label,th,dt,strong,figcaption,[class*=name],[class*=title]');
+          const v = t.nodeValue; if (!host || v.trim().length > 60) continue;
+          originals.set(t, v); t.nodeValue = (v.trim() + ' ' + LONG_NAME).slice(0, 200); n++;
+        }
+        active[kind] = true;
+        return { kind, on: true, changed: n };
+      }
+      for (const [t, v] of originals) if (t && t.nodeType === 3) t.nodeValue = v;
+      for (const k of Array.from(originals.keys())) if (k && k.nodeType === 3) originals.delete(k);
+      delete active[kind];
+      return { kind, on: false };
+    } else if (kind === 'noImages') {
+      // every picture fails to load, as on a slow or blocked network: what is left must still hold its place and say what it was
+      const imgs = Array.from(document.querySelectorAll('img'));
+      if (on) {
+        if (active[kind]) return { kind, on: true, changed: 0, note: 'already on' };
+        for (const im of imgs) { originals.set(im, { src: im.getAttribute('src'), srcset: im.getAttribute('srcset') }); im.removeAttribute('srcset'); im.setAttribute('src', 'data:image/png;base64,AA=='); }
+        active[kind] = true;
+        return { kind, on: true, changed: imgs.length };
+      }
+      for (const [im, v] of originals) {
+        if (!im || im.nodeType !== 1 || !v || typeof v !== 'object') continue;
+        v.srcset === null ? im.removeAttribute('srcset') : im.setAttribute('srcset', v.srcset);
+        v.src === null ? im.removeAttribute('src') : im.setAttribute('src', v.src);
+        originals.delete(im);
+      }
+      delete active[kind];
+      return { kind, on: false };
     } else if (kind === 'longWords' || kind === 'pseudoloc' || kind === 'translate') {
       if (on) {
         if (active[kind]) return { kind, on: true, changed: 0, note: 'already on' };
@@ -1611,7 +1727,7 @@
       for (const k of Array.from(originals.keys())) if (k && k.nodeType === 3) originals.delete(k);
       delete active[kind];
       return { kind, on: false };
-    } else return { error: 'unknown stress ' + kind + '; use textSpacing, text200, rtl, longWords, pseudoloc or translate' };
+    } else return { error: 'unknown stress ' + kind + '; use textSpacing, text200, rtl, longWords, pseudoloc, translate, longNames or noImages' };
     if (on) active[kind] = true; else delete active[kind];
     return { kind, on };
   };

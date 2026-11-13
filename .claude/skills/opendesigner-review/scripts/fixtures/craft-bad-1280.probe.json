@@ -2,7 +2,7 @@
  "v": 1,
  "url": "http://localhost:3000/craft-bad.html",
  "title": "Craft checks: one of every defect",
- "at": "2026-11-13T12:04:48.357Z",
+ "at": "2026-11-13T16:40:24.816Z",
  "viewport": {
   "w": 1280,
   "h": 800,
@@ -10,7 +10,7 @@
   "innerH": 800,
   "dpr": 1,
   "docW": 1280,
-  "docH": 2183,
+  "docH": 3244,
   "scale": 1
  },
  "media": {
@@ -29,7 +29,7 @@
   "colorScheme": "normal",
   "hOverflow": 0,
   "rootClipsX": false,
-  "elements": 47,
+  "elements": 69,
   "truncated": false
  },
  "type": {
@@ -42,18 +42,18 @@
     "chars": 90
    },
    "14": {
-    "n": 1,
+    "n": 2,
     "ex": [
      "p#wide"
     ],
-    "chars": 320
+    "chars": 357
    },
    "16": {
-    "n": 20,
+    "n": 32,
     "ex": [
      "section#s-one > p"
     ],
-    "chars": 1082
+    "chars": 1394
    },
    "20": {
     "n": 1,
@@ -107,18 +107,18 @@
     "chars": 17
    },
    "21": {
-    "n": 1,
+    "n": 2,
     "ex": [
      "p#wide"
     ],
-    "chars": 320
+    "chars": 357
    },
    "24": {
-    "n": 18,
+    "n": 30,
     "ex": [
      "section#s-one > p"
     ],
-    "chars": 819
+    "chars": 1131
    },
    "36": {
     "n": 1,
@@ -172,11 +172,11 @@
   },
   "weights": {
    "400": {
-    "n": 24,
+    "n": 37,
     "ex": [
      "section#s-one > p"
     ],
-    "chars": 1515
+    "chars": 1864
    },
    "700": {
     "n": 5,
@@ -188,11 +188,25 @@
   },
   "families": {
    "system-ui": {
-    "n": 29,
+    "n": 38,
     "ex": [
      "h1#title-case"
     ],
-    "chars": 1655
+    "chars": 1847
+   },
+   "monospace": {
+    "n": 3,
+    "ex": [
+     "section#s-library > div.code:nth-of-type(6) > pre"
+    ],
+    "chars": 47
+   },
+   "ui-monospace": {
+    "n": 1,
+    "ex": [
+     "p#mono"
+    ],
+    "chars": 110
    }
   },
   "letterSpacing": {
@@ -217,11 +231,18 @@
   },
   "tracking": {
    "16|0|0": {
-    "n": 19,
+    "n": 27,
     "ex": [
      "section#s-one > p"
     ],
-    "chars": 898
+    "chars": 1053
+   },
+   "16|0|0|m": {
+    "n": 4,
+    "ex": [
+     "p#mono"
+    ],
+    "chars": 157
    },
    "32|0|0": {
     "n": 2,
@@ -230,19 +251,19 @@
     ],
     "chars": 75
    },
+   "14|0|0": {
+    "n": 2,
+    "ex": [
+     "p#wide"
+    ],
+    "chars": 357
+   },
    "24|0|0": {
     "n": 1,
     "ex": [
      "h2#ellipsis-h"
     ],
     "chars": 36
-   },
-   "14|0|0": {
-    "n": 1,
-    "ex": [
-     "p#wide"
-    ],
-    "chars": 320
    },
    "16|0.05|0": {
     "n": 1,
@@ -325,7 +346,7 @@
     "ch": 106
    }
   ],
-  "textElements": 29
+  "textElements": 42
  },
  "layout": {
   "groups": 5,
@@ -390,13 +411,13 @@
     ]
    },
    "8": {
-    "n": 9,
+    "n": 13,
     "ex": [
      "button#clamp-btn"
     ]
    },
    "12": {
-    "n": 4,
+    "n": 16,
     "ex": [
      "p#track-small"
     ]
@@ -408,7 +429,7 @@
     ]
    },
    "16": {
-    "n": 22,
+    "n": 67,
     "ex": [
      "section#s-one > p"
     ]
@@ -438,7 +459,7 @@
     ]
    },
    "48": {
-    "n": 6,
+    "n": 8,
     "ex": [
      "section#s-one"
     ]
@@ -483,10 +504,22 @@
   "negativeMargins": []
  },
  "radius": {
-  "8": {
+  "2": {
    "n": 1,
    "ex": [
+    "div#rad-b"
+   ]
+  },
+  "8": {
+   "n": 4,
+   "ex": [
     "div#inset-card"
+   ]
+  },
+  "10": {
+   "n": 4,
+   "ex": [
+    "div#gap0-a"
    ]
   }
  },
@@ -494,13 +527,13 @@
  "colors": {
   "text": {
    "#1a1a1a": {
-    "n": 24,
+    "n": 35,
     "ex": [
      "h1#title-case"
     ]
    },
    "#000000": {
-    "n": 3,
+    "n": 5,
     "ex": [
      "button#clamp-btn"
     ]
@@ -514,9 +547,21 @@
   },
   "bg": {
    "#efefef": {
-    "n": 3,
+    "n": 5,
     "ex": [
      "button#clamp-btn"
+    ]
+   },
+   "#f3f3f6": {
+    "n": 5,
+    "ex": [
+     "div#gap0-a"
+    ]
+   },
+   "#f6f6f6": {
+    "n": 3,
+    "ex": [
+     "section#s-library > div.code:nth-of-type(6)"
     ]
    },
    "#ffffff": {
@@ -546,15 +591,27 @@
   },
   "border": {
    "#000000": {
-    "n": 3,
+    "n": 5,
     "ex": [
      "button#clamp-btn"
+    ]
+   },
+   "#cccccc": {
+    "n": 5,
+    "ex": [
+     "div#gap0-a"
+    ]
+   },
+   "#dddddd": {
+    "n": 3,
+    "ex": [
+     "section#s-library > div.code:nth-of-type(6)"
     ]
    }
   }
  },
  "contrast": {
-  "checked": 8,
+  "checked": 10,
   "failing": [],
   "lowest": [
    {
@@ -659,7 +716,7 @@
   ]
  },
  "labels": {
-  "checked": 5,
+  "checked": 7,
   "broken": [
    {
     "sel": "button#clamp-btn",
@@ -672,7 +729,7 @@
   ]
  },
  "buttons": {
-  "checked": 5,
+  "checked": 7,
   "filled": [
    {
     "sel": "button#clamp-btn",
@@ -759,12 +816,32 @@
     "fs": 16,
     "weight": "400",
     "upper": false
+   },
+   {
+    "sel": "section#s-library > div.code:nth-of-type(6) > button.copy",
+    "text": "Copy",
+    "kind": "outline",
+    "h": 44,
+    "radius": 0,
+    "fs": 16,
+    "weight": "400",
+    "upper": false
+   },
+   {
+    "sel": "section#s-library > div.code:nth-of-type(7) > button.copy",
+    "text": "Copy",
+    "kind": "outline",
+    "h": 44,
+    "radius": 0,
+    "fs": 16,
+    "weight": "400",
+    "upper": false
    }
   ]
  },
  "fixed": [],
  "targets": {
-  "count": 5,
+  "count": 7,
   "small": [],
   "noName": [],
   "vague": [],
@@ -815,26 +892,32 @@
     "a#cta-a",
     "a#cta-b",
     "button#not-verb",
-    "button#fixed-btn"
+    "button#fixed-btn",
+    "section#s-library > div.code:nth-of-type(6) > button.copy",
+    "section#s-library > div.code:nth-of-type(7) > button.copy"
    ],
    "noFocusStyle": [
     "button#clamp-btn",
     "a#cta-a",
     "a#cta-b",
     "button#not-verb",
-    "button#fixed-btn"
+    "button#fixed-btn",
+    "section#s-library > div.code:nth-of-type(6) > button.copy",
+    "section#s-library > div.code:nth-of-type(7) > button.copy"
    ],
    "focusRingRemoved": [],
-   "noActive": 5,
+   "noActive": 7,
    "blockedSheets": 0,
-   "checked": 5
+   "checked": 7
   }
  },
  "fonts": {
   "faces": [],
   "failed": 0,
   "familyState": {
-   "system-ui": "generic"
+   "system-ui": "generic",
+   "monospace": "generic",
+   "ui-monospace": "generic"
   },
   "ready": "loaded",
   "loadedFamilies": 0,
@@ -898,6 +981,7 @@
     "role": "text",
     "text": "This label runs out of its box",
     "by": 113.66,
+    "dir": "side",
     "box": {
      "x": 160,
      "y": 178.88,
@@ -975,8 +1059,23 @@
   ],
   "tight": [
    {
+    "sel": "section#s-one > div.clipbox:nth-of-type(2)",
+    "after": "div#spill",
+    "kind": "caption",
+    "axis": "vertical",
+    "gap": 0,
+    "seen": 3,
+    "box": {
+     "x": 160,
+     "y": 178.88,
+     "w": 120,
+     "h": 48
+    }
+   },
+   {
     "sel": "p#tight-b",
     "after": "h3#tight-a",
+    "kind": "text",
     "axis": "vertical",
     "gap": 0,
     "seen": -2,
@@ -985,6 +1084,90 @@
      "y": 1451.19,
      "w": 960,
      "h": 37.59
+    }
+   },
+   {
+    "sel": "div#gap0-b",
+    "after": "div#gap0-a",
+    "kind": "boxes-touching",
+    "axis": "vertical",
+    "gap": 0,
+    "seen": 0,
+    "box": {
+     "x": 160,
+     "y": 2078.78,
+     "w": 960,
+     "h": 180
+    }
+   },
+   {
+    "sel": "div#rad-a",
+    "after": "div#gap0-b",
+    "kind": "boxes-touching",
+    "axis": "vertical",
+    "gap": 0,
+    "seen": 0,
+    "box": {
+     "x": 160,
+     "y": 2168.78,
+     "w": 960,
+     "h": 180
+    }
+   },
+   {
+    "sel": "div#figure",
+    "after": "div#rad-b",
+    "kind": "boxes-touching",
+    "axis": "vertical",
+    "gap": 0,
+    "seen": 0,
+    "box": {
+     "x": 160,
+     "y": 2364.78,
+     "w": 960,
+     "h": 180
+    }
+   },
+   {
+    "sel": "p#cap",
+    "after": "div#figure",
+    "kind": "caption",
+    "axis": "vertical",
+    "gap": 0,
+    "seen": 2,
+    "box": {
+     "x": 160,
+     "y": 2454.78,
+     "w": 960,
+     "h": 111
+    }
+   },
+   {
+    "sel": "section#s-library > div.code:nth-of-type(6) > button.copy",
+    "after": "section#s-library > div.code:nth-of-type(6) > pre",
+    "kind": "caption",
+    "axis": "vertical",
+    "gap": 0,
+    "seen": 3,
+    "box": {
+     "x": 173,
+     "y": 2658.78,
+     "w": 934,
+     "h": 68
+    }
+   },
+   {
+    "sel": "section#s-library > div.code:nth-of-type(7) > button.copy",
+    "after": "section#s-library > div.code:nth-of-type(7) > pre",
+    "kind": "caption",
+    "axis": "vertical",
+    "gap": 0,
+    "seen": 3,
+    "box": {
+     "x": 173,
+     "y": 2768.78,
+     "w": 934,
+     "h": 68
     }
    }
   ],
@@ -1035,6 +1218,24 @@
      "w": 920,
      "h": 122
     }
+   },
+   {
+    "sel": "section#s-library",
+    "kind": "div@16.blk",
+    "axis": "vertical",
+    "gaps": [
+     0,
+     0,
+     16,
+     0
+    ],
+    "distinct": 2,
+    "box": {
+     "x": 160,
+     "y": 2078.78,
+     "w": 960,
+     "h": 466
+    }
    }
   ],
   "sections": [
@@ -1072,14 +1273,25 @@
     }
    },
    {
-    "sel": "section#s-five",
+    "sel": "section#s-library",
     "after": "section#s-four",
-    "space": 206,
+    "space": 187,
     "box": {
      "x": 0,
      "y": 1891.78,
      "w": 1280,
-     "h": 206
+     "h": 187
+    }
+   },
+   {
+    "sel": "section#s-five",
+    "after": "section#s-library",
+    "space": 134,
+    "box": {
+     "x": 0,
+     "y": 3024.78,
+     "w": 1280,
+     "h": 134
     }
    }
   ],
@@ -1137,10 +1349,92 @@
     }
    }
   ],
+  "radii": [
+   {
+    "sel": "section#s-library",
+    "items": [
+     {
+      "sel": "div#gap0-a",
+      "radius": 10
+     },
+     {
+      "sel": "div#gap0-b",
+      "radius": 10
+     },
+     {
+      "sel": "div#rad-a",
+      "radius": 10
+     },
+     {
+      "sel": "div#rad-b",
+      "radius": 2
+     },
+     {
+      "sel": "div#figure",
+      "radius": 10
+     },
+     {
+      "sel": "section#s-library > div.code:nth-of-type(6)",
+      "radius": 8
+     }
+    ],
+    "box": {
+     "x": 160,
+     "y": 2078.78,
+     "w": 960,
+     "h": 837
+    }
+   }
+  ],
+  "monoProse": [
+   {
+    "sel": "p#mono",
+    "font": "ui-monospace",
+    "text": "This paragraph of ordinary prose is set in a monospace face,",
+    "box": {
+     "x": 160,
+     "y": 2581.78,
+     "w": 577.97,
+     "h": 48
+    }
+   }
+  ],
+  "brokenUrls": [
+   {
+    "sel": "p#url",
+    "url": "https://example.com/docs/install",
+    "lines": 2,
+    "inScheme": false,
+    "box": {
+     "x": 160,
+     "y": 2958.78,
+     "w": 124.69,
+     "h": 42
+    }
+   }
+  ],
+  "twins": [
+   {
+    "kind": "code block",
+    "control": "copy",
+    "has": 2,
+    "of": 3,
+    "missing": [
+     "div#twin-missing"
+    ],
+    "box": {
+     "x": 160,
+     "y": 2865.78,
+     "w": 960,
+     "h": 50
+    },
+    "sel": "div#twin-missing"
+   }
+  ],
   "checked": {
-   "text": 29,
-   "boxes": 6,
-   "parents": 8,
+   "text": 42,
+   "boxes": 16,
+   "parents": 11,
    "labels": 13
   }
  },
@@ -1186,6 +1480,7 @@
     "href": null,
     "upper": false,
     "menu": false,
+    "toggle": false,
     "box": {
      "x": 160,
      "y": 302.69,
@@ -1200,6 +1495,7 @@
     "href": "/signup",
     "upper": false,
     "menu": false,
+    "toggle": false,
     "box": {
      "x": 160,
      "y": 1823.78,
@@ -1214,6 +1510,7 @@
     "href": "/register",
     "upper": false,
     "menu": false,
+    "toggle": false,
     "box": {
      "x": 218.84,
      "y": 1823.78,
@@ -1228,6 +1525,7 @@
     "href": null,
     "upper": false,
     "menu": false,
+    "toggle": false,
     "box": {
      "x": 282.83,
      "y": 1810.78,
@@ -1242,15 +1540,46 @@
     "href": null,
     "upper": false,
     "menu": false,
+    "toggle": false,
     "box": {
      "x": 425.02,
      "y": 1810.78,
      "w": 96,
      "h": 40
     }
+   },
+   {
+    "sel": "section#s-library > div.code:nth-of-type(6) > button.copy",
+    "kind": "button",
+    "text": "Copy",
+    "href": null,
+    "upper": false,
+    "menu": false,
+    "toggle": false,
+    "box": {
+     "x": 173,
+     "y": 2682.78,
+     "w": 73.8,
+     "h": 44
+    }
+   },
+   {
+    "sel": "section#s-library > div.code:nth-of-type(7) > button.copy",
+    "kind": "button",
+    "text": "Copy",
+    "href": null,
+    "upper": false,
+    "menu": false,
+    "toggle": false,
+    "box": {
+     "x": 173,
+     "y": 2792.78,
+     "w": 73.8,
+     "h": 44
+    }
    }
   ],
-  "text": "Lorem ipsum dolor sit amet, this text was never replaced.\nBody text set with a line height of 1.2 is hard to follow across lines: the eye drops back to the start of the wrong line. This paragraph is long enough to wrap onto several lines at most widths so the check can see it.\nA line that runs the whole width of a wide layout makes the eye travel too far, so readers lose their place when they come back for the next one. This paragraph is long enough to wrap over three or more lines at desktop widths, which is where the measure check looks, and it keeps going a little longer to be sure of it.\nA narrow column of body text breaks every few words, so the reader spends more time jumping between lines than reading them, and the rag turns ragged and uneven down the page.\nBody copy tracked open reads as spaced out letters rather than words, and it is slower to read than text at the font's own spacing. This paragraph is long enough to count as body text.\nSmall print tracked tight makes its letters touch at small sizes.\nCapitals at zero tracking\nDisplay text left loose\nThe gap between the heading and this text is wider than the card's own padding.\nText that touches its own edge\nA line right under it, with no room between.\nFirst item\nSecond item\nThird item\nFourth item\nPick a DTCG token from the semantic token set to change the accent color.\nFooter text for the last section.",
+  "text": "Lorem ipsum dolor sit amet, this text was never replaced.\nBody text set with a line height of 1.2 is hard to follow across lines: the eye drops back to the start of the wrong line. This paragraph is long enough to wrap onto several lines at most widths so the check can see it.\nA line that runs the whole width of a wide layout makes the eye travel too far, so readers lose their place when they come back for the next one. This paragraph is long enough to wrap over three or more lines at desktop widths, which is where the measure check looks, and it keeps going a little longer to be sure of it.\nA narrow column of body text breaks every few words, so the reader spends more time jumping between lines than reading them, and the rag turns ragged and uneven down the page.\nBody copy tracked open reads as spaced out letters rather than words, and it is slower to read than text at the font's own spacing. This paragraph is long enough to count as body text.\nSmall print tracked tight makes its letters touch at small sizes.\nCapitals at zero tracking\nDisplay text left loose\nThe gap between the heading and this text is wider than the card's own padding.\nText that touches its own edge\nA line right under it, with no room between.\nFirst item\nSecond item\nThird item\nFourth item\nPick a DTCG token from the semantic token set to change the accent color.\nBlock one\nBlock two, with no gap above\nRounded 10 px\nRounded 2 px, its twin above is 10 px\nA figure\nCaption touching the figure above it.\nThis paragraph of ordinary prose is set in a monospace face, which makes running text slow and uneven to read.\nRead https://example.com/docs/install for the steps.\nFooter text for the last section.",
   "truncatedText": false
  }
 }

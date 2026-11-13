@@ -28,6 +28,10 @@
   .actions { display: flex; flex-wrap: wrap; gap: 12px; }
   button, .btn { font: inherit; padding: 8px 16px; min-height: 40px; display: inline-flex; align-items: center; text-align: center;
                  border: 1px solid #444; border-radius: 8px; background: #fff; color: #1a1a1a; text-decoration: none; overflow-wrap: anywhere; }
+  .blk { background: #f3f3f6; border: 1px solid #ccc; border-radius: 10px; padding: 16px; margin: 0 0 16px; }
+  .caption { margin: 8px 0 16px; font-size: 14px; }
+  .code { margin: 16px 0; background: #f6f6f6; border: 1px solid #ddd; border-radius: 10px; padding: 12px; display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+  .code pre { margin: 0; font-family: ui-monospace, Menlo, monospace; overflow-x: auto; min-width: 0; }
 </style>
 </head>
 <body>
@@ -61,6 +65,15 @@
       <button>Continue to checkout</button>
     </div>
     <p>Pick a colour from the list to change how your buttons look.</p>
+  </section>
+  <section>
+    <div class="blk"><p>Block one</p></div>
+    <div class="blk"><p>Block two, with a gap above</p></div>
+    <div class="blk"><p>A figure</p></div>
+    <p class="caption">A caption with room above it.</p>
+    <div class="code"><pre>npm install one</pre><button class="copy">Copy</button></div>
+    <div class="code"><pre>npm install two</pre><button class="copy">Copy</button></div>
+    <p>Read the <a href="/docs/install">install steps</a> on example.com.</p>
   </section>
 </main>
 </body>

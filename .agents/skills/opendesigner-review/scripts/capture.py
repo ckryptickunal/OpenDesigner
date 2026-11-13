@@ -10,7 +10,9 @@ it, by running probe.js and taking screenshots with whatever browser tool the ho
 
 What it does, per route x viewport x theme: load the page, wait for fonts, run probe.js, scroll from top to bottom in viewport
 steps taking a screenshot at each (viewport shots, not a stitched full page), plus a crop of each
-cut-off, cramped or unevenly spaced element the probe found (shots/crops/). At the "anchor" cells (the narrowest phone and
+cut-off, cramped or unevenly spaced element the probe found (shots/crops/). It opens an address that cannot exist
+(the not-found page), and at the anchors loads each page on a slow network and answers its data requests empty, with
+an error and not at all. At the "anchor" cells (the narrowest phone and
 the widest desktop, first theme; every cell with --full) it also: walks the keyboard with Tab and records the focus ring
 and whether anything covers the focused control, hovers a sample of controls and records what changed, applies the text
 stress passes (WCAG 1.4.12 spacing, 200% text, long words, +40% pseudo-localized text, 30% longer words, RTL), repeats the probe with reduced
@@ -33,6 +35,7 @@ import base64
 import ipaddress
 import json
 import re
+import secrets
 import sys
 import time
 from pathlib import Path
@@ -44,7 +47,7 @@ import review  # noqa: E402  (same folder)
 
 PROBE_JS = (HERE / "probe.js").read_text(encoding="utf-8")
 WATCH_JS = PROBE_JS + "\n;window.__od && __od.watchKern();"   # an init script: logs letters that jump when a reveal ends
-STRESS = ["textSpacing", "text200", "longWords", "pseudoloc", "translate", "rtl"]
+STRESS = ["textSpacing", "text200", "longWords", "pseudoloc", "translate", "longNames", "noImages", "rtl"]
 
 
 def is_loopback(host):
@@ -221,7 +224,8 @@ def run_cell(browser, url, route, vp, theme, out, opts, anchor, log):
                 log.append(f"{cell}: rendered-font check skipped ({str(e).splitlines()[0]}; it needs Chromium)")
             for name, fn in (("letter-reveals", letter_reveals), ("text-pixels", text_pixels), ("floating-bars", floating_bars),
                              ("focus-walk", focus_walk), ("hover-and-press", hover_sample), ("stress-text", stress_passes),
-                             ("reduced-motion", reduced_motion), ("forced-colors", forced_colors), ("motion", motion_frames), ("toggles", toggles)):
+                             ("reduced-motion", reduced_motion), ("forced-colors", forced_colors), ("motion", motion_frames), ("toggles", toggles),
+                             ("network-states", network_states)):
                 try:
                     evidence += fn(page, out, tag, probe, opts)
                     done_tasks.add(name)
@@ -267,6 +271,118 @@ def crop_items(page, probe, out, tag, most=12):
         x["crop"] = str(p)
         done.append(str(p))
     return done
+
+
+# ---- states: slow network, data that is empty, fails or never arrives, and the not-found page (ST-16 to ST-18) ----
+LOADING_JS = """() => { const t = (document.body && document.body.innerText || '').trim();
+  const busy = document.querySelectorAll('[aria-busy=true],[role=progressbar],progress,[class*=skeleton],[class*=spinner],[class*=loading],[class*=shimmer],[class*=placeholder]').length;
+  return { chars: t.length, busy, loadingWords: /\\b(loading|fetching|please wait|one moment)\\b/i.test(t), text: t.slice(0, 4000) }; }"""
+EMPTY_WORDS = r"\b(no \w+( \w+)? (yet|found|here)|nothing (here|yet|to show|found)|empty|no results|no items|no data|get started|add your first|create your first)\b"
+ERROR_WORDS = r"\b(error|went wrong|couldn.t|could not|can.t load|cannot load|failed|try again|retry|unavailable|offline|no connection|not connected)\b"
+DATA_TYPES = ("fetch", "xhr")
+
+
+def empty_like(v):
+    """The same JSON shape with every list emptied: what an account with no data returns."""
+    if isinstance(v, list):
+        return []
+    if isinstance(v, dict):
+        return {k: empty_like(x) if isinstance(x, (list, dict)) else x for k, x in v.items()}
+    return v
+
+
+def network_states(page, out, tag, probe, opts=None):
+    """Load the page on a slow network (CDP throttling) and read it 1 s in and when settled: a loading sign, blank time and
+    layout shift as content lands. Then, when the page asks for data (fetch or XHR), answer every request empty, with a
+    500, and not at all (offline), and read each: a message people can act on, or nothing and broken template text."""
+    url, ev = page.url, []
+    vp = page.viewport_size or {"width": 0, "height": 0}
+    doc = {"kind": "datastates", "url": url, "viewport": {"w": vp["width"], "h": vp["height"]}, "media": {"colorScheme": "light"}, "slow": None, "requests": 0, "modes": {}}
+    seen = []
+    page.on("request", lambda r: seen.append(r.url) if r.resource_type in DATA_TYPES else None)
+    try:
+        cdp = page.context.new_cdp_session(page)
+        cdp.send("Network.enable")
+        cdp.send("Network.setCacheDisabled", {"cacheDisabled": True})   # a first visit: nothing comes from the cache
+        cdp.send("Network.emulateNetworkConditions", {"offline": False, "latency": 400, "downloadThroughput": 50 * 1024, "uploadThroughput": 20 * 1024})
+        t0 = time.time()
+        page.goto(url, wait_until="commit", timeout=60000)
+        page.wait_for_timeout(1000)
+        early = page.evaluate(LOADING_JS)
+        sp = out / "shots" / f"{tag}-slow-1s.png"
+        page.screenshot(path=str(sp), scale="css")
+        ev.append(str(sp))
+        page.wait_for_load_state("load", timeout=60000)
+        page.evaluate(PROBE_JS)
+        page.wait_for_timeout(300)
+        vit = page.evaluate("__od.vitals()")
+        cdp.send("Network.emulateNetworkConditions", {"offline": False, "latency": 0, "downloadThroughput": -1, "uploadThroughput": -1})
+        cdp.send("Network.setCacheDisabled", {"cacheDisabled": False})
+        doc["slow"] = {"at1s": {k: early[k] for k in ("chars", "busy", "loadingWords")}, "loadMs": round((time.time() - t0) * 1000), "cls": vit.get("cls"), "shifts": vit.get("shifts", [])[:4]}
+    except Exception as e:  # noqa: BLE001
+        doc["slow"] = {"error": str(e).splitlines()[0][:160]}
+    page.goto(url, wait_until="load")
+    settle(page)
+    doc["requests"] = len(set(seen))
+    base_text = page.evaluate(LOADING_JS)["text"]
+    if doc["requests"]:
+        for mode in ("empty", "error", "offline"):
+            def handler(route, *_, mode=mode):   # Playwright passes the request as a second argument
+                if route.request.resource_type not in DATA_TYPES:
+                    return route.continue_()
+                if mode == "offline":
+                    return route.abort("internetdisconnected")
+                if mode == "error":
+                    return route.fulfill(status=500, content_type="application/json", body='{"error": "server error"}')
+                try:
+                    resp = route.fetch()
+                    data = resp.json()
+                    return route.fulfill(response=resp, json=empty_like(data))
+                except Exception:  # noqa: BLE001
+                    return route.fulfill(status=200, content_type="application/json", body="[]")
+            page.route("**/*", handler)
+            try:
+                page.reload(wait_until="load")
+                settle(page)
+                r = page.evaluate(LOADING_JS)
+                pr = page.evaluate(PROBE_JS)
+                sp = out / "shots" / f"{tag}-data-{mode}.png"
+                page.screenshot(path=str(sp), scale="css")
+                ev.append(str(sp))
+                words = EMPTY_WORDS if mode == "empty" else ERROR_WORDS
+                doc["modes"][mode] = {"chars": r["chars"], "message": bool(re.search(words, r["text"], re.I)) and not re.search(words, base_text, re.I),
+                                      "busyStill": r["busy"] > 0 or r["loadingWords"], "placeholders": ((pr.get("content") or {}).get("placeholders") or [])[:4],
+                                      "shot": str(sp)}
+            finally:
+                page.unroute("**/*", handler)
+        page.reload(wait_until="load")
+        settle(page)
+        page.evaluate(PROBE_JS)
+    pf = out / "datastates" / f"{tag}.json"
+    review.write_json(pf, doc)
+    return ev + [str(pf)]
+
+
+def not_found(browser, base, out, log):
+    """Open an address that cannot exist and read what the site says: the status, a heading in plain words, and a way on."""
+    page = browser.new_page(viewport={"width": 1280, "height": 900})
+    try:
+        target = urljoin(base, "/__od-no-such-page-" + secrets.token_hex(4))
+        resp = page.goto(target, wait_until="load", timeout=30000)
+        settle(page)
+        info = page.evaluate("""() => { const h = document.querySelector('h1,h2'); const vis = (e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+          return { heading: h ? h.textContent.replace(/\\s+/g, ' ').trim().slice(0, 120) : null, links: Array.from(document.querySelectorAll('a[href]')).filter(vis).length,
+                   chars: (document.body && document.body.innerText || '').trim().length, title: document.title }; }""")
+        sp = out / "shots" / "not-found.png"
+        sp.parent.mkdir(parents=True, exist_ok=True)
+        page.screenshot(path=str(sp), scale="css")
+        doc = {"kind": "notfound", "url": target, "viewport": {"w": 1280, "h": 900}, "media": {"colorScheme": "light"}, "status": resp.status if resp else None, **info, "shot": str(sp)}
+        review.write_json(out / "notfound" / "not-found.json", doc)
+        log.append(f"not-found page: status {doc['status']}, heading {doc['heading']!r}, {doc['links']} link(s)")
+    except Exception as e:  # noqa: BLE001
+        log.append(f"not-found check skipped: {str(e).splitlines()[0]}")
+    finally:
+        page.close()
 
 
 def focus_walk(page, out, tag, probe, opts):
@@ -576,6 +692,7 @@ def main():
     with sync_playwright() as pw:
         browser = launch(pw, opts.channel, opts.headed)
         ledger = review.read_json(out / "ledger.json", {"cells": {}})
+        not_found(browser, opts.url, out, log)
         for route in routes:
             route_tasks = {"scroll-walk"}
             for vp in vps:

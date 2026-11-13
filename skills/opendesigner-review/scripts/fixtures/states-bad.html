@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>States: done badly</title>
+<!-- Planted for test_probe_live.py (ST-16, ST-17): nothing shows while loading, an empty list shows nothing, a failed
+     request prints "undefined", and the list pushes the page down when it lands. states-good.html does each right. -->
+<style>body { margin: 0; font: 16px/1.5 system-ui, sans-serif; } main { max-width: 640px; margin: 0 auto; padding: 24px; }</style>
+</head><body><main>
+<h1>Invoices</h1>
+<ul id="list"></ul>
+<p>Totals are shown in your account currency.</p>
+<section style="height:600px;background:#f4f4f4;padding:24px"><h2>Recent activity</h2><p>Payments and refunds from the last 30 days.</p></section>
+</main>
+<script>
+fetch('data.json').then((r) => r.json()).then((d) => {
+  document.getElementById('list').innerHTML = d.items.map((i) => '<li style="padding:90px 0">' + i.name + ': ' + i.total + '</li>').join('');
+}).catch(() => { document.getElementById('list').innerHTML = '<li>' + undefined + '</li>'; });
+</script>
+</body></html>

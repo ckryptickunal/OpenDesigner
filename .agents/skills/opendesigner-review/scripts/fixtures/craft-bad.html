@@ -35,6 +35,13 @@
   .list > li:nth-child(4) { margin-top: 8px; }
   button { font: inherit; padding: 8px 16px; }
   #fixed-btn { width: 96px; height: 40px; white-space: nowrap; overflow: hidden; }
+  .blk { background: #f3f3f6; border: 1px solid #ccc; border-radius: 10px; padding: 16px; margin: 0; }
+  #rad-b { border-radius: 2px; margin-top: 16px; }
+  #cap { margin: 0; font-size: 14px; }
+  #mono { font-family: ui-monospace, Menlo, monospace; max-width: 60ch; }
+  .code { position: relative; margin: 16px 0; background: #f6f6f6; border: 1px solid #ddd; border-radius: 8px; padding: 12px; }
+  .code pre { margin: 0; }
+  #url { width: 130px; overflow-wrap: anywhere; }
 </style>
 </head>
 <body>
@@ -76,6 +83,19 @@
     <button id="not-verb">Pricing details</button>
     <button id="fixed-btn">Continue to checkout</button>
     <p>Pick a DTCG token from the semantic token set to change the accent color.</p>
+  </section>
+  <section id="s-library">
+    <div class="blk" id="gap0-a"><p>Block one</p></div>
+    <div class="blk" id="gap0-b"><p>Block two, with no gap above</p></div>
+    <div class="blk" id="rad-a"><p>Rounded 10 px</p></div>
+    <div class="blk" id="rad-b"><p>Rounded 2 px, its twin above is 10 px</p></div>
+    <div class="blk" id="figure"><p>A figure</p></div>
+    <p id="cap">Caption touching the figure above it.</p>
+    <p id="mono">This paragraph of ordinary prose is set in a monospace face, which makes running text slow and uneven to read.</p>
+    <div class="code"><pre>npm install one</pre><button class="copy">Copy</button></div>
+    <div class="code"><pre>npm install two</pre><button class="copy">Copy</button></div>
+    <div class="code" id="twin-missing"><pre>npm install three</pre></div>
+    <p id="url">Read https://example.com/docs/install for the steps.</p>
   </section>
   <section id="s-five"><p>Footer text for the last section.</p></section>
 </main>

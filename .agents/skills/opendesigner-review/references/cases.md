@@ -2,7 +2,7 @@
 
 Generated from `synthesis/review-cases.json` by `tools/build_data.py`. Edit the source, not this file.
 
-89 cases in 8 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
+97 cases in 8 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
 
 ## You only looked at part of it
 
@@ -384,6 +384,61 @@ Sources: S-R5-040, S-R5-057, S-R5-109
 
 Sources: S-R5-035, S-R5-109
 
+### ST-15 One block lacks a control its twins have
+*How known: measured · default severity: warn · applies to: always*
+
+**What goes wrong.** Three code blocks on a page; two have a Copy button and the third does not, because it was written by hand instead of with the component. Or one card of a set has no Download link.
+
+**Why it is missed.** Each block looks finished on its own. Nobody compares them.
+
+**How to catch it.** probe.js groups code blocks (any pre, whatever wraps it) and blocks of the same tag and classes, collects the controls inside each (Copy, Download, Share, Expand, Open, Edit, Delete, Install, Run, View, Try), and lists a control that at least half the group and at least two members have but some lack (craft.twins). review.py warns (ST-15).
+
+Sources: S-R5-112
+
+### ST-16 No loading, empty, error or offline state
+*How known: operated · default severity: warn · applies to: always*
+
+**What goes wrong.** A view that loads data shows a blank screen while it loads, nothing when the account has no data, and "undefined" or a spinner forever when the request fails or the network is down. Only the happy path was ever built or reviewed.
+
+**Why it is missed.** The reviewer's own account has data and a fast connection, so these states never appear. ST-03 asks for them by hand.
+
+**How to catch it.** capture.py (network_states, at the anchor cells) loads each page on a throttled network (400 ms latency, 50 KB/s) and reads it 1 s in: no text and no loading sign is a warning. When the page makes fetch or XHR requests it then answers them empty (every list emptied), with a 500, and not at all (offline), and reads each: broken template text is an error, a loading sign that never ends is a warning, and no state words ("no ... yet", "try again" and the like) is a judgment, since the words are a list. A page with no data requests is noted as not applicable. Evidence: one screenshot per state (datastates/).
+
+Sources: S-R5-033, S-R5-111, S-R5-112
+
+### ST-17 Skeletons that do not match what replaces them
+*How known: operated · default severity: warn · applies to: always*
+
+**What goes wrong.** A skeleton or spinner holds a small box, then the real content arrives larger and pushes everything down. On a fast connection nobody sees it.
+
+**Why it is missed.** Layout shift happens while loading, and on a fast local server loading takes a few milliseconds.
+
+**How to catch it.** On the same throttled load, capture.py reads layout shift with __od.vitals() after the page settles: CLS over 0.1 is a warning (ST-17) naming the elements that moved. Fix: size each skeleton like its content, and give images width and height or aspect-ratio.
+
+Sources: S-R5-034, S-R5-074, S-R5-112
+
+### ST-18 The not-found page
+*How known: operated · default severity: warn · applies to: always*
+
+**What goes wrong.** A mistyped address shows the server's bare default, a page that answers 200 (a soft 404 to search engines), a heading that says only "404", or no link anywhere to carry on.
+
+**Why it is missed.** Nobody visits a page that does not exist while reviewing the pages that do.
+
+**How to catch it.** capture.py opens an address that cannot exist once per run and records the status, the first heading, the number of links and a screenshot (notfound/). review.py warns (ST-18) when the status is not 404, when there is no heading, when the heading is only a code ("404", "Not Found", "Error response"), and when there are no links. A local static server may not serve the site's own 404 page: run it against the real server too.
+
+Sources: S-R5-110, S-R5-111, S-R5-112
+
+### ST-19 Long names and missing pictures
+*How known: measured · default severity: warn · applies to: always*
+
+**What goes wrong.** A 200-character name, a name that is missing, or a picture that fails to load: the card breaks, the header wraps over the content, and an empty hole sits where the image was.
+
+**Why it is missed.** Sample data has short names and every image loads.
+
+**How to catch it.** __od.stress('longNames') puts a 200-character name in every heading, link, button, label and .name or .title, and __od.stress('noImages') makes every image fail; capture.py runs both with the other stresses and probes again. Anything that spills or is cut is reported as ST-19, and the no-images screenshot is a note to look at (cards should keep their size, with alt text or a placeholder). ST-04 and ST-14 cover long words and longer translations.
+
+Sources: S-R5-112
+
 ## Eyes cannot read numbers off pixels
 
 ### MS-01 Spacing judged by eye
@@ -624,9 +679,9 @@ Sources: S-R5-057, S-R5-109
 
 **Why it is missed.** Each value is on the scale, so a spacing check passes; what is wrong is how the values relate. Screenshots are judged at a glance, and eyes cannot read a 2 px gap.
 
-**How to catch it.** probe.js measures from the text itself, as a reader sees it: the space between neighbouring text blocks (craft.tight, under 4 px), the inset of text in any box with a visible edge (craft.touching, under 4 px at the sides or under 1 px above and below), and a box's text inset against the median gap between the items inside it (craft.insetVsGap). review.py warns (MS-22) and suggests the system's spacing token for the fix.
+**How to catch it.** probe.js measures from the text itself, as a reader sees it: the space between neighbouring text blocks (craft.tight, under 4 px), the inset of text in any box with a visible edge (craft.touching, under 4 px at the sides or under 1 px above and below), and a box's text inset against the median gap between the items inside it (craft.insetVsGap). review.py warns (MS-22) and suggests the system's spacing token for the fix. Since the library-page review (2026-11-13) it also flags boxes with rounded corners that touch with no gap (square corners where they meet are a joined group, as is a role=group, toolbar, tablist or table), and a caption or label under 4 px from the box it belongs to.
 
-Sources: S-R5-001, S-R5-109
+Sources: S-R5-001, S-R5-109, S-R5-112
 
 ### MS-23 Items of one kind spaced unevenly
 *How known: measured · default severity: warn · applies to: always · tokens*
@@ -649,6 +704,39 @@ Sources: S-R5-001, S-R5-109
 **How to catch it.** probe.js measures, down the page, the space between the last thing drawn in one top-level section (text, images, boxes with an edge) and the first thing in the next (craft.sections). review.py warns (MS-24) when there are three or more breaks, the largest is 1.5 times the smallest or more, and they take three or more values; a gap taller than the screen is left out. It is a judgment: a bigger break before a new part can be on purpose, so read each one.
 
 Sources: S-R5-109
+
+### MS-25 Boxes that sit together with different corner radii
+*How known: measured · default severity: warn · applies to: always · preflight 45*
+
+**What goes wrong.** A code block, a card and a callout stacked in one column, or cards in one row, have corners of 10, 8 and 2 px. Each was styled on its own, so the set looks assembled from different kits.
+
+**Why it is missed.** Each radius is a token, so the radius check passes. The mismatch shows only when the boxes sit next to each other.
+
+**How to catch it.** probe.js groups the boxes with a visible edge under each parent that share a width (a column) or a top and a height (a row), and lists any set whose top-left radii differ by more than 1 px (craft.radii). review.py warns (MS-25) and names the radius tokens. Nested corners are preflight 45.
+
+Sources: S-R5-112
+
+### MS-26 Prose set in a monospace font
+*How known: measured · default severity: warn · applies to: always · DC-L02-03*
+
+**What goes wrong.** A paragraph or list of ordinary sentences is set in the code face, often because it sits inside a docs component styled for code. Running text in monospace reads slowly and unevenly.
+
+**Why it is missed.** The font is loaded and on the system's list, so the font checks pass.
+
+**How to catch it.** probe.js lists elements with more than 80 characters of their own text whose first font is a monospace face, outside pre, code, kbd, samp and editors (craft.monoProse). review.py warns (MS-26) and points to the text font token.
+
+Sources: S-R5-112
+
+### MS-27 A web address broken across lines
+*How known: measured · default severity: warn · applies to: always · preflight 8*
+
+**What goes wrong.** A long address in running text wraps, often right after "https://", because overflow-wrap: anywhere breaks it wherever it likes. The reader sees "https://" alone at the end of a line.
+
+**Why it is missed.** It happens only at some widths, and nothing overflows, so overflow checks are quiet.
+
+**How to catch it.** probe.js finds every http, https or www address in the page's text and counts the lines it sits on, and notes whether the break falls inside the scheme (craft.brokenUrls). review.py warns (MS-27), on runs without stress. Fix: make the link text words, or keep the scheme whole and allow breaks only after slashes.
+
+Sources: S-R5-112
 
 ## It works for a mouse and a good pair of eyes, not for everyone
 
@@ -1102,3 +1190,6 @@ Sources: S-R5-109
 | S-R5-107 | [Microsoft Style Guide: capitalization](https://learn.microsoft.com/en-us/style-guide/capitalization) | opened: "Microsoft style uses sentence-style capitalization", headings and titles included |
 | S-R5-108 | [Baymard Institute: readability, the optimal line length](https://baymard.com/blog/line-length-readability) | opened: 50 to 75 characters a line for body text; cites WCAG 1.4.8's 80 |
 | S-R5-109 | [OpenDesigner owner: problems people hit most in use (2026-11-13)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: kerning, spacing, breathing room, text cut off and copy; coverage before: 0 checks for cut-off text and copy, 1 for breathing room; asked for a 1.4 body line height and a 45 to 75 character measure |
+| S-R5-110 | [Google Search Central: how HTTP status codes affect Google's crawlers](https://developers.google.com/search/docs/crawling-indexing/http-network-errors) | opened: a 2xx page whose content suggests an error shows as a soft 404 in Search Console; a 4xx tells the crawler the content does not exist |
+| S-R5-111 | [NN/g: error-message guidelines](https://www.nngroup.com/articles/error-message-guidelines/) | opened: hide or minimize obscure error codes; offer potential remedies |
+| S-R5-112 | [OpenDesigner owner: design review of a library part page, and state coverage (2026-11-13)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: blocks with no gap, captions touching the box above, sibling radii that differ, prose in monospace, a copyable block missing its Copy button, https:// broken across lines; loading, empty, error, 404, offline, slow network, long and missing content |

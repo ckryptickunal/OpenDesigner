@@ -12,7 +12,7 @@ the bookkeeping and the arithmetic. Work goes in ./opendesigner/review/ (or --di
                                                    the coverage matrix (route x viewport x theme, plus the tasks that need a
                                                    real browser state), all "todo", in review/plan.json and review/ledger.json
     review.py mark CELL done|skipped|blocked [--evidence PATH ...] [--why "reason"]     (CELL from plan; "task:" cells too)
-    review.py check PROBE.json|DIR [...] [--project P] [--json] [--audience everyone]
+    review.py check PROBE.json|DIR [...] [--project P] [--json] [--audience everyone]   (also datastates/ and notfound/ from capture.py)
                                                    findings from probe runs (and focus-walk files) against the accessibility
                                                    floors, against practice any product can be judged on (primary buttons
                                                    per view, typefaces, weights, colors) and, when the project has an
@@ -642,7 +642,14 @@ def check_craft(p, sysm, w, F):
     wcag = bool(stress & {"textSpacing", "text200"})
     translate = "translate" in stress
     sfx = (" when every word is 30% longer (a German stand-in)" if translate else " under " + "+".join(sorted(stress))) if stress else ""
-    cut_case = "ST-14" if translate else "ST-12"
+    cut_case = "ST-14" if translate else "ST-19" if stress & {"longNames", "noImages"} else "ST-12"
+    if "longNames" in stress:
+        sfx = " with a 200-character name"
+    if "noImages" in stress:
+        sfx = " with every image missing"
+        F.add("ST-19", "info", "Look at the page with every image missing", w, f"{fmt(((p.get('images') or {}).get('total')))} image(s) made to fail",
+              "cards and rows keep their size, and alt text or a placeholder says what was there", [], "reserve the box (width and height or aspect-ratio) and give it a background", None,
+              key="no-images", basis="seen", decided="judgment")
     std = "WCAG 1.4.12" if "textSpacing" in stress else "WCAG 1.4.4" if "text200" in stress else None
     vw = (p.get("viewport") or {}).get("w") or 0
 
@@ -687,7 +694,8 @@ def check_craft(p, sysm, w, F):
               "text-wrap: balance on headings and labels, text-wrap: pretty on ledes; or rewrite the line", "preflight 39", key="orphans")
 
     # --- breathing room --------------------------------------------------------------------------------------
-    tg = cr.get("tight") or []
+    tg_all = cr.get("tight") or []
+    tg = [x for x in tg_all if x.get("kind", "text") == "text"]
     if tg and not stress:
         F.add("MS-22", "warn", f"Text blocks closer than {TOUCH_GAP} px to each other", w,
               "; ".join((f"{x['sel']} overlaps the text of {x['after']} by {fmt(-x['seen'])} px" if x["seen"] < 0 else f"{x['sel']} sits {fmt(x['seen'])} px from the text of {x['after']}")
@@ -695,6 +703,43 @@ def check_craft(p, sysm, w, F):
               f"at least {TOUCH_GAP} px of visible space between neighbouring text, counting half the line height; usually a step of the scale",
               [x["sel"] for x in tg[:4]] + crops(tg[:4]),
               f"add a gap from the scale between them: gap or margin-block-start of {space_hint(sysm, 8, True)}", "tokens", key="tight")
+    bx = [x for x in tg_all if x.get("kind") == "boxes-touching" or (x.get("kind") == "boxes" and x["gap"] > 0)]
+    if bx and not stress:
+        F.add("MS-22", "warn", "Blocks with no gap between them", w,
+              "; ".join(f"{x['sel']} is {fmt(x['gap'])} px from {x['after']} ({x['axis']})" for x in bx[:4]),
+              "a step of the spacing scale between boxes with rounded corners; boxes that share an edge on purpose have square corners where they meet",
+              [x["sel"] for x in bx[:4]] + crops(bx[:4]), f"gap: {space_hint(sysm, 16)} on the parent", "tokens", key="boxes-touching")
+    cap = [x for x in tg_all if x.get("kind") == "caption"]
+    if cap and not stress:
+        F.add("MS-22", "warn", "Text touching the box next to it", w,
+              "; ".join(f"{x['sel']} is {fmt(x['seen'])} px from {x['after']} ({x['axis']})" for x in cap[:4]),
+              "a caption or label at least 8 px from the box it belongs to", [x["sel"] for x in cap[:4]] + crops(cap[:4]),
+              f"margin-block-start: {space_hint(sysm, 8, True)} on the caption", "tokens", key="caption-touching")
+    rd = cr.get("radii") or []
+    if rd and not stress:
+        F.add("MS-25", "warn", "Boxes side by side with different corner radii", w,
+              "; ".join(f"{x['sel']}: " + ", ".join(f"{i['sel'].split(' > ')[-1]} {fmt(i['radius'])} px" for i in x["items"][:4]) for x in rd[:3]),
+              "one radius for boxes that sit together as a set", [x["items"][0]["sel"] for x in rd[:3]] + crops(rd[:3]),
+              "use one radius token for the set" + (f" ({', '.join('var(--' + (sysm or {}).get('prefix', 'ds') + '-radius-' + fmt(v) + ')' for v in ((sysm or {}).get('radius_ladder') or [])[:3])})" if (sysm or {}).get("radius_ladder") else ""),
+              "preflight 45", key="radii")
+    mp = cr.get("monoProse") or []
+    if mp and not stress:
+        F.add("MS-26", "warn", "Prose set in a monospace font", w,
+              "; ".join(f"{x['sel']}: \"{x['text']}\" in {x['font']}" for x in mp[:4]),
+              "monospace for code, numbers in tables and file names; running text in the text face", [x["sel"] for x in mp[:4]] + crops(mp[:4]),
+              f"font-family: var(--{(sysm or {}).get('prefix', 'ds')}-font-family-text)" if sysm else "the text font-family token", "DC-L02-03", key="mono-prose")
+    bu = cr.get("brokenUrls") or []
+    if bu and not stress:
+        F.add("MS-27", "warn", "A web address broken across lines" + (", inside \"https://\"" if any(x.get("inScheme") for x in bu) else ""), w,
+              "; ".join(f"{x['sel']}: {x['url']} over {x['lines']} lines" + (" (the break is inside https://)" if x.get("inScheme") else "") for x in bu[:4]),
+              "an address on one line: show a short form as link text, or let it break only after a slash", [x["sel"] for x in bu[:4]] + crops(bu[:4]),
+              "make the link text words (\"install guide\") or drop https://; for an address that must show, overflow-wrap: anywhere breaks anywhere, so wrap the scheme in a nowrap span or insert <wbr> after slashes", "preflight 8", key="broken-url")
+    tw = cr.get("twins") or []
+    if tw and not stress:
+        F.add("ST-15", "warn", "One block lacks a control its twins have", w,
+              "; ".join(f"{x['has']} of {x['of']} {x['kind']}s have \"{x['control']}\"; missing on {', '.join(x['missing'][:3])}" for x in tw[:3]),
+              "blocks of one kind offer the same controls", [x["sel"] for x in tw[:3]] + crops(tw[:3]),
+              "render the control from the block's component, not per page; or say why this one differs", None, key="twins")
     to = cr.get("touching") or []
     if to and not stress:
         F.add("MS-22", "warn", "Text touches the edge of its box", w,
@@ -1491,10 +1536,61 @@ def cmd_probe(args):
 
 
 
+def check_datastates(d, F):
+    """The page on a slow network and with its data empty, failing and offline (capture.py network_states): ST-16, ST-17."""
+    w = where_of(d)
+    sl = d.get("slow") or {}
+    a1 = sl.get("at1s") or {}
+    if a1 and not a1.get("chars") and not a1.get("busy") and not a1.get("loadingWords"):
+        F.add("ST-16", "warn", "A blank screen while the page loads on a slow network", w, f"1 s into a throttled load (400 ms latency, 50 KB/s): no text and no loading sign; full load took {fmt(sl.get('loadMs'))} ms",
+              "something on screen at once: the layout with a skeleton, or a loading sign", [], "render the page frame first, then a skeleton the size of the content that is coming", None, key="blank-load", basis="operated")
+    if (sl.get("cls") or 0) > 0.1:
+        F.add("ST-17", "warn", f"The layout moves as content arrives (CLS {sl['cls']})", w,
+              "; ".join(f"{s['value']} at {s['at']} ms in {', '.join(n for n in s.get('nodes', []) if n) or 'the page'}" for s in sl.get("shifts", [])[:3]) or f"CLS {sl['cls']}",
+              "CLS 0.1 or less on a slow load: a skeleton or reserved box the size of what replaces it", [n for s in sl.get("shifts", [])[:3] for n in s.get("nodes", []) if n],
+              "give images width and height (or aspect-ratio), and make each skeleton the size and shape of the content it stands for", "Core Web Vitals (CLS)", key="arrival-shift", basis="operated")
+    if not d.get("requests"):
+        F.add("ST-16", "info", "No data requests: empty, error and offline states not tried", w, "the page made no fetch or XHR request while loading",
+              "for a page with data, each state shows a message people can act on", [], "if data arrives another way (server-rendered, a socket), set each state by hand and look", None, key="no-data", basis="operated")
+        return
+    names = {"empty": ("empty", "an empty state that says there is nothing yet and what to do"), "error": ("failing with a server error", "an error that says what failed and offers a retry"),
+             "offline": ("unreachable (offline)", "a message that the connection is down, with a retry")}
+    for mode, m in (d.get("modes") or {}).items():
+        said, want = names.get(mode, (mode, "a message"))
+        if m.get("placeholders"):
+            F.add("ST-16", "error", f"Broken text when the data is {said}", w, "; ".join(f"{x['sel']}: {x['match']!r}" for x in m["placeholders"][:3]),
+                  "no undefined, NaN or empty template text in any state", [x["sel"] for x in m["placeholders"][:3]] + [m.get("shot")],
+                  "handle the missing value before rendering it", None, key="state-broken-" + mode, basis="operated")
+        if m.get("busyStill") and mode != "empty":
+            F.add("ST-16", "warn", f"Still loading forever when the data is {said}", w, "a loading sign is still on screen after the request ended", "the loading sign gives way to a message",
+                  [m.get("shot")], "end the loading state on failure as well as on success", None, key="state-stuck-" + mode, basis="operated")
+        elif not m.get("message"):
+            F.add("ST-16", "warn", f"No message when the data is {said}", w, f"{fmt(m.get('chars'))} characters on screen and none of the usual words for this state",
+                  want, [m.get("shot")], "write the state into the view: say what happened and offer the next step", None, key="state-silent-" + mode, basis="operated", decided="judgment")
+
+
+def check_notfound(d, F):
+    """What an address that cannot exist shows (capture.py not_found): ST-18."""
+    w = where_of(d)
+    st, h = d.get("status"), (d.get("heading") or "").strip()
+    if st != 404:
+        F.add("ST-18", "warn", f"A missing page answers {st}, not 404", w, f"{d.get('url')} returned {st}", "status 404, so search engines drop it and tools can tell",
+              [d.get("shot")], "serve the not-found page with status 404", None, key="nf-status", basis="operated")
+    if not h:
+        F.add("ST-18", "warn", "The not-found page has no heading", w, f"{fmt(d.get('chars'))} characters, no h1", "a heading that says the page is not here, in plain words",
+              [d.get("shot")], "an h1 such as \"We can't find that page\"", None, key="nf-heading", basis="operated")
+    elif re.fullmatch(r"(error\s*)?(404|not found|error response|page not found)[.!]?", h, re.I) or re.fullmatch(r"[\d\W]+", h):
+        F.add("ST-18", "warn", "The not-found page says a code, not what happened", w, f"heading: \"{h}\"", "plain words: what happened and what to do", [d.get("shot")],
+              "say it as a person would (\"We can't find that page\") and keep 404 as small print", None, key="nf-plain", basis="operated")
+    if not d.get("links"):
+        F.add("ST-18", "warn", "The not-found page offers no way on", w, "0 links on the page", "a link home, to search or to the main sections", [d.get("shot")],
+              "add the site header, or at least a link home", None, key="nf-links", basis="operated")
+
+
 CAPTURE_CHECKS = {"focus": check_focus, "console": check_console, "hover": check_hover, "vitals": check_vitals, "fonts": check_fonts,
-                  "states": check_states, "bars": check_bars, "kern": check_kern, "pixels": check_pixels}
+                  "states": check_states, "bars": check_bars, "kern": check_kern, "pixels": check_pixels, "datastates": check_datastates, "notfound": check_notfound}
 SAVE_KINDS = set(CAPTURE_CHECKS)
-CHECK_FOLDERS = ("probes", "focus", "hover", "console", "fonts", "vitals", "motion", "states", "bars", "kern", "pixels")   # where serve and capture.py write
+CHECK_FOLDERS = ("probes", "focus", "hover", "console", "fonts", "vitals", "motion", "states", "bars", "kern", "pixels", "datastates", "notfound")   # where serve and capture.py write
 MAX_POST = 4 * 1024 * 1024
 
 

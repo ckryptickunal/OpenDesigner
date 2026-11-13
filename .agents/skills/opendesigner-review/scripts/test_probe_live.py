@@ -489,6 +489,106 @@ class Live(unittest.TestCase):
         pg.evaluate("__od.stress('translate', false)")
         self.assertEqual(pg.evaluate("a.textContent"), "Save changes now")
 
+    # ---- the S5 library-page problems (MS-22, MS-25 to MS-27, ST-15) ----------------------------------------------------
+    def test_library_page_problems_are_measured(self):
+        c = self.craft_probe("craft-bad.html")["craft"]
+        touching = {x["sel"].split("#")[-1] for x in c["tight"] if x["kind"] == "boxes-touching"}
+        self.assertTrue({"gap0-b", "rad-a"} <= touching, touching)
+        self.assertIn("cap", {x["sel"].split("#")[-1] for x in c["tight"] if x["kind"] == "caption"})
+        self.assertTrue({10, 2} <= {i["radius"] for x in c["radii"] for i in x["items"]})
+        self.assertEqual([x["sel"] for x in c["monoProse"]], ["p#mono"])
+        self.assertEqual([x["sel"] for x in c["brokenUrls"]], ["p#url"])
+        self.assertEqual([(x["control"], x["sel"]) for x in c["twins"]], [("copy", "div#twin-missing")])
+        g = self.craft_probe("craft-good.html")["craft"]
+        for k in ("radii", "monoProse", "brokenUrls", "twins"):
+            self.assertEqual(g[k], [], k)
+        self.assertEqual([x for x in g["tight"] if x["kind"] != "text"], [])
+
+    # ---- states: slow network, empty, failing and offline data, the not-found page, long names, no images ---------------
+    def states_for(self, name):
+        import capture
+        pg = self.page()
+        pg.goto(f"http://localhost:{self.port}/{name}")
+        capture.settle(pg)
+        probe = pg.evaluate(PROBE)
+        with tempfile.TemporaryDirectory() as d:
+            capture.network_states(pg, Path(d), "t", probe)
+            doc = json.loads((Path(d) / "datastates" / "t.json").read_text())
+        F = rv.Findings()
+        rv.check_datastates(doc, F)
+        return doc, {(f["case"], f["severity"], f["title"]) for f in F.done()}
+
+    def test_data_states_done_badly_are_found(self):                       # ST-16, ST-17
+        doc, got = self.states_for("states-bad.html")
+        self.assertEqual(doc["requests"], 1)
+        self.assertIn(("ST-16", "error", "Broken text when the data is failing with a server error"), got)
+        self.assertIn(("ST-16", "error", "Broken text when the data is unreachable (offline)"), got)
+        self.assertIn(("ST-16", "warn", "No message when the data is empty"), got)
+        self.assertTrue(any(g[0] == "ST-17" for g in got), doc["slow"])
+
+    def test_data_states_done_right_are_quiet(self):
+        doc, got = self.states_for("states-good.html")
+        self.assertEqual(doc["requests"], 1)
+        self.assertEqual({g for g in got if g[0] in ("ST-16", "ST-17") and g[1] != "info"}, set(), doc)
+
+    def test_the_not_found_page_is_read(self):                             # ST-18
+        import capture
+        with tempfile.TemporaryDirectory() as d:
+            log = []
+            capture.not_found(_browser, f"http://localhost:{self.port}/", Path(d), log)
+            bad = json.loads((Path(d) / "notfound" / "not-found.json").read_text())
+        F = rv.Findings()
+        rv.check_notfound(bad, F)
+        titles = {f["title"] for f in F.done()}
+        self.assertEqual(bad["status"], 404)
+        self.assertIn("The not-found page offers no way on", titles)        # the bare server page: "Error response", no links
+        self.assertIn("The not-found page says a code, not what happened", titles)
+        fixtures = HERE / "fixtures"
+
+        class Friendly(http.server.SimpleHTTPRequestHandler):
+            def __init__(self, *a, **k):
+                super().__init__(*a, directory=str(fixtures), **k)
+
+            def send_error(self, code, message=None, explain=None):
+                if code != 404:
+                    return super().send_error(code, message, explain)
+                body = (fixtures / "404.html").read_bytes()
+                self.send_response(404)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+            def log_message(self, *a):
+                pass
+        srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Friendly)
+        threading.Thread(target=srv.serve_forever, daemon=True).start()
+        self.addCleanup(srv.server_close)
+        self.addCleanup(srv.shutdown)
+        with tempfile.TemporaryDirectory() as d:
+            capture.not_found(_browser, f"http://localhost:{srv.server_address[1]}/", Path(d), [])
+            good = json.loads((Path(d) / "notfound" / "not-found.json").read_text())
+        F = rv.Findings()
+        rv.check_notfound(good, F)
+        self.assertEqual(F.done(), [], good)
+
+    def test_long_names_and_missing_images_stress_and_put_back(self):     # ST-19
+        pg = self.page()
+        pg.set_content("<div style='width:200px'><h3 id=n>Ana</h3><img id=i src='data:image/gif;base64,R0lGODlhAQABAAAAACw=' width=10 height=10 alt=''></div>")
+        pg.evaluate(PROBE)
+        self.assertEqual(pg.evaluate("__od.stress('longNames', true)")["changed"], 1)
+        self.assertEqual(len(pg.evaluate("n.textContent")), 200)
+        pg.evaluate("__od.stress('longNames', false)")
+        self.assertEqual(pg.evaluate("n.textContent"), "Ana")
+        before = pg.evaluate("i.getAttribute('src')")
+        pg.evaluate("__od.stress('noImages', true)")
+        self.assertNotEqual(pg.evaluate("i.getAttribute('src')"), before)
+        pg.evaluate("__od.stress('noImages', false)")
+        self.assertEqual(pg.evaluate("i.getAttribute('src')"), before)
+        fs = rv.Findings()
+        rv.check_probe(self.craft_probe("craft-bad.html", 1280, "longNames"), None, fs)
+        self.assertIn("ST-19", {f["case"] for f in fs.done()})
+
 
 def png_size(data):
     import struct

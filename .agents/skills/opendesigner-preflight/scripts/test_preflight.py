@@ -229,13 +229,14 @@ class TestFlash(unittest.TestCase):
 
 
 CRAFT_BAD = """<!doctype html><html><head><style>
-p { font-size: 16px; line-height: 1.2; max-width: 100ch; letter-spacing: 0.04em; }
+p { font-size: 16px; line-height: 1.2; max-width: 100ch; letter-spacing: 0.04em; overflow-wrap: anywhere; }
+.lede { font-family: ui-monospace, Menlo, monospace; }
 h2 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .btn { height: 36px; white-space: nowrap; overflow: hidden; }
 .small { font-size: 12px; letter-spacing: -0.02em; }
 h1 { font-size: 48px; letter-spacing: 0.01em; }
 </style></head><body><h1>Plan Your Next Big Project</h1><h2>Quarterly revenue by region</h2><h2>Design tokens for every team</h2>
-<p>Lorem ipsum dolor sit amet. <span class="small">x</span></p><a class="btn" href="/s">Sign up</a> <a href="/r">Register</a></body></html>"""
+<p>Lorem ipsum dolor sit amet. <span class="small">x</span></p><p class="lede">y</p><a class="btn" href="/s">Sign up</a> <a href="/r">Register</a></body></html>"""
 
 CRAFT_GOOD = """<!doctype html><html><head><style>
 p { font-size: 16px; line-height: 1.5; max-width: 65ch; letter-spacing: 0; }
@@ -252,13 +253,14 @@ class TestCraft(unittest.TestCase):
         r = run(CRAFT_BAD, "--case", "sentence")
         for needle in ("line height under 1.4", "ellipsis or line clamp", "fixed height with nowrap", "outside 45-75",
                        "body text tracked open", "small text tracked tight", "display text not tightened",
-                       "placeholder text left in", "'sign up' / 'register'", "Title Case headings where the system says sentence case"):
+                       "placeholder text left in", "'sign up' / 'register'", "Title Case headings where the system says sentence case",
+                       "body text set in a monospace font", "breaks addresses"):
             self.assertIn(needle, r.stdout, needle)
 
     def test_the_good_page_is_quiet(self):
         r = run(CRAFT_GOOD, "--case", "sentence")
         self.assertEqual(r.returncode, 0, r.stdout)
-        for needle in ("[M67]", "[M68]", "[M70]", "tracked open", "tracked tight", "not tightened"):
+        for needle in ("[M67]", "[M68]", "[M70]", "[M71]", "tracked open", "tracked tight", "not tightened"):
             self.assertNotIn(needle, r.stdout, needle)
 
     def test_without_a_recorded_rule_mixed_case_is_only_a_note(self):

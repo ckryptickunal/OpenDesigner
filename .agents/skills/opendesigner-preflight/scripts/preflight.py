@@ -330,7 +330,7 @@ def heading_case(text):
 def craft_checks(r, craft_rules, rules, page, root_px, case=None):
     """Text cut off, breathing room, tracking by role and copy, from the CSS and the markup [M67-M70, M5, M58].
     The rendered page is measured by opendesigner-review (probe.js craft and copy); these are the parts a file shows."""
-    lh_low, trunc, fixed, measure, flat = [], [], [], [], []
+    lh_low, trunc, fixed, measure, flat, mono_prose, break_any = [], [], [], [], [], [], []
     for where, props in craft_rules:
         size = None
         if props.get("font-size"):
@@ -356,6 +356,12 @@ def craft_checks(r, craft_rules, rules, page, root_px, case=None):
                 trunc.append(where)
             if re.fullmatch(r"[\d.]+(px|rem)", props.get("height", "")) and "nowrap" in props.get("white-space", "") and re.search(r"hidden|clip", props.get("overflow", "") + props.get("overflow-x", "")):
                 fixed.append(f"{where} height {props['height']}")
+        fam = props.get("font-family", "") or (parse_font(props["font"])[1] or "" if props.get("font") else "")
+        if BODY_SEL.search(where) and not re.search(r"(^|[\s>])(code|pre|kbd|samp)\b", where) and \
+                re.match(r"\s*[\"']?(ui-monospace|monospace|[\w -]*mono\b|courier|consolas|menlo|monaco|source code)", fam, re.I):
+            mono_prose.append(f"{where} {fam[:40]}")
+        if BODY_SEL.search(where) and (props.get("overflow-wrap") == "anywhere" or props.get("word-break") == "break-all"):
+            break_any.append(where)
         mw = re.fullmatch(r"([\d.]+)ch", props.get("max-width", "").strip())
         if mw and BODY_SEL.search(where) and not (45 <= float(mw.group(1)) <= 75):
             measure.append(f"{where} max-width {mw.group(1)}ch")
@@ -368,6 +374,11 @@ def craft_checks(r, craft_rules, rules, page, root_px, case=None):
                "longer language the label is cut off; use min-height and let it wrap  [M67]")
     if measure:
         r.warn(f"body text measure outside 45-75 characters: {'; '.join(measure[:5])}  [M68]")
+    if mono_prose:
+        r.warn(f"body text set in a monospace font: {'; '.join(mono_prose[:4])}; use the text face for prose  [M71]")
+    if break_any:
+        r.warn(f"overflow-wrap: anywhere or word-break: break-all on body text: {', '.join(break_any[:4])}; it breaks addresses "
+               "anywhere, \"https://\" included; keep it to the element that needs it  [M71]")
     # tracking by role (kerning.md): near 0 on body, never negative on small text, tightened at display sizes
     body_open = [(s, em) for s, sz, em, c in rules if sz and 14 <= sz <= 20 and not c and em > 0.01 and BODY_SEL.search(s)]
     small_tight = [(s, em) for s, sz, em, c in rules if sz and sz < 14 and not c and em < -0.005]

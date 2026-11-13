@@ -1381,12 +1381,13 @@
       "title": "No breathing room: text crowds its neighbours or its box",
       "trap": "Text sits right against the text next to it, touches the edge of its own fill or border, or a card's padding is smaller than the gap between the things inside it, so the group does not read as a group. People call it cramped without being able to say why.",
       "why_missed": "Each value is on the scale, so a spacing check passes; what is wrong is how the values relate. Screenshots are judged at a glance, and eyes cannot read a 2 px gap.",
-      "catch": "probe.js measures from the text itself, as a reader sees it: the space between neighbouring text blocks (craft.tight, under 4 px), the inset of text in any box with a visible edge (craft.touching, under 4 px at the sides or under 1 px above and below), and a box's text inset against the median gap between the items inside it (craft.insetVsGap). review.py warns (MS-22) and suggests the system's spacing token for the fix.",
+      "catch": "probe.js measures from the text itself, as a reader sees it: the space between neighbouring text blocks (craft.tight, under 4 px), the inset of text in any box with a visible edge (craft.touching, under 4 px at the sides or under 1 px above and below), and a box's text inset against the median gap between the items inside it (craft.insetVsGap). review.py warns (MS-22) and suggests the system's spacing token for the fix. Since the library-page review (2026-11-13) it also flags boxes with rounded corners that touch with no gap (square corners where they meet are a joined group, as is a role=group, toolbar, tablist or table), and a caption or label under 4 px from the box it belongs to.",
       "severity": "warn",
       "standard": "tokens",
       "sources": [
         "S-R5-001",
-        "S-R5-109"
+        "S-R5-109",
+        "S-R5-112"
       ],
       "evidence": "measured",
       "when": "always"
@@ -1482,6 +1483,127 @@
       "inferred": true,
       "sources": [
         "S-R5-109"
+      ],
+      "evidence": "measured",
+      "when": "always"
+    },
+    {
+      "id": "MS-25",
+      "group": "measure",
+      "title": "Boxes that sit together with different corner radii",
+      "trap": "A code block, a card and a callout stacked in one column, or cards in one row, have corners of 10, 8 and 2 px. Each was styled on its own, so the set looks assembled from different kits.",
+      "why_missed": "Each radius is a token, so the radius check passes. The mismatch shows only when the boxes sit next to each other.",
+      "catch": "probe.js groups the boxes with a visible edge under each parent that share a width (a column) or a top and a height (a row), and lists any set whose top-left radii differ by more than 1 px (craft.radii). review.py warns (MS-25) and names the radius tokens. Nested corners are preflight 45.",
+      "severity": "warn",
+      "standard": "preflight 45",
+      "sources": [
+        "S-R5-112"
+      ],
+      "evidence": "measured",
+      "when": "always"
+    },
+    {
+      "id": "MS-26",
+      "group": "measure",
+      "title": "Prose set in a monospace font",
+      "trap": "A paragraph or list of ordinary sentences is set in the code face, often because it sits inside a docs component styled for code. Running text in monospace reads slowly and unevenly.",
+      "why_missed": "The font is loaded and on the system's list, so the font checks pass.",
+      "catch": "probe.js lists elements with more than 80 characters of their own text whose first font is a monospace face, outside pre, code, kbd, samp and editors (craft.monoProse). review.py warns (MS-26) and points to the text font token.",
+      "severity": "warn",
+      "standard": "DC-L02-03",
+      "sources": [
+        "S-R5-112"
+      ],
+      "evidence": "measured",
+      "when": "always"
+    },
+    {
+      "id": "MS-27",
+      "group": "measure",
+      "title": "A web address broken across lines",
+      "trap": "A long address in running text wraps, often right after \"https://\", because overflow-wrap: anywhere breaks it wherever it likes. The reader sees \"https://\" alone at the end of a line.",
+      "why_missed": "It happens only at some widths, and nothing overflows, so overflow checks are quiet.",
+      "catch": "probe.js finds every http, https or www address in the page's text and counts the lines it sits on, and notes whether the break falls inside the scheme (craft.brokenUrls). review.py warns (MS-27), on runs without stress. Fix: make the link text words, or keep the scheme whole and allow breaks only after slashes.",
+      "severity": "warn",
+      "standard": "preflight 8",
+      "sources": [
+        "S-R5-112"
+      ],
+      "evidence": "measured",
+      "when": "always"
+    },
+    {
+      "id": "ST-15",
+      "group": "states",
+      "title": "One block lacks a control its twins have",
+      "trap": "Three code blocks on a page; two have a Copy button and the third does not, because it was written by hand instead of with the component. Or one card of a set has no Download link.",
+      "why_missed": "Each block looks finished on its own. Nobody compares them.",
+      "catch": "probe.js groups code blocks (any pre, whatever wraps it) and blocks of the same tag and classes, collects the controls inside each (Copy, Download, Share, Expand, Open, Edit, Delete, Install, Run, View, Try), and lists a control that at least half the group and at least two members have but some lack (craft.twins). review.py warns (ST-15).",
+      "severity": "warn",
+      "sources": [
+        "S-R5-112"
+      ],
+      "evidence": "measured",
+      "when": "always"
+    },
+    {
+      "id": "ST-16",
+      "group": "states",
+      "title": "No loading, empty, error or offline state",
+      "trap": "A view that loads data shows a blank screen while it loads, nothing when the account has no data, and \"undefined\" or a spinner forever when the request fails or the network is down. Only the happy path was ever built or reviewed.",
+      "why_missed": "The reviewer's own account has data and a fast connection, so these states never appear. ST-03 asks for them by hand.",
+      "catch": "capture.py (network_states, at the anchor cells) loads each page on a throttled network (400 ms latency, 50 KB/s) and reads it 1 s in: no text and no loading sign is a warning. When the page makes fetch or XHR requests it then answers them empty (every list emptied), with a 500, and not at all (offline), and reads each: broken template text is an error, a loading sign that never ends is a warning, and no state words (\"no ... yet\", \"try again\" and the like) is a judgment, since the words are a list. A page with no data requests is noted as not applicable. Evidence: one screenshot per state (datastates/).",
+      "severity": "warn",
+      "evidence": "operated",
+      "sources": [
+        "S-R5-033",
+        "S-R5-111",
+        "S-R5-112"
+      ],
+      "when": "always"
+    },
+    {
+      "id": "ST-17",
+      "group": "states",
+      "title": "Skeletons that do not match what replaces them",
+      "trap": "A skeleton or spinner holds a small box, then the real content arrives larger and pushes everything down. On a fast connection nobody sees it.",
+      "why_missed": "Layout shift happens while loading, and on a fast local server loading takes a few milliseconds.",
+      "catch": "On the same throttled load, capture.py reads layout shift with __od.vitals() after the page settles: CLS over 0.1 is a warning (ST-17) naming the elements that moved. Fix: size each skeleton like its content, and give images width and height or aspect-ratio.",
+      "severity": "warn",
+      "evidence": "operated",
+      "sources": [
+        "S-R5-034",
+        "S-R5-074",
+        "S-R5-112"
+      ],
+      "when": "always"
+    },
+    {
+      "id": "ST-18",
+      "group": "states",
+      "title": "The not-found page",
+      "trap": "A mistyped address shows the server's bare default, a page that answers 200 (a soft 404 to search engines), a heading that says only \"404\", or no link anywhere to carry on.",
+      "why_missed": "Nobody visits a page that does not exist while reviewing the pages that do.",
+      "catch": "capture.py opens an address that cannot exist once per run and records the status, the first heading, the number of links and a screenshot (notfound/). review.py warns (ST-18) when the status is not 404, when there is no heading, when the heading is only a code (\"404\", \"Not Found\", \"Error response\"), and when there are no links. A local static server may not serve the site's own 404 page: run it against the real server too.",
+      "severity": "warn",
+      "evidence": "operated",
+      "sources": [
+        "S-R5-110",
+        "S-R5-111",
+        "S-R5-112"
+      ],
+      "when": "always"
+    },
+    {
+      "id": "ST-19",
+      "group": "states",
+      "title": "Long names and missing pictures",
+      "trap": "A 200-character name, a name that is missing, or a picture that fails to load: the card breaks, the header wraps over the content, and an empty hole sits where the image was.",
+      "why_missed": "Sample data has short names and every image loads.",
+      "catch": "__od.stress('longNames') puts a 200-character name in every heading, link, button, label and .name or .title, and __od.stress('noImages') makes every image fail; capture.py runs both with the other stresses and probes again. Anything that spills or is cut is reported as ST-19, and the no-images screenshot is a note to look at (cards should keep their size, with alt text or a placeholder). ST-04 and ST-14 cover long words and longer translations.",
+      "severity": "warn",
+      "sources": [
+        "S-R5-112"
       ],
       "evidence": "measured",
       "when": "always"
@@ -2081,6 +2203,24 @@
       "url": "https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md",
       "status": "opened",
       "note": "kerning, spacing, breathing room, text cut off and copy; coverage before: 0 checks for cut-off text and copy, 1 for breathing room; asked for a 1.4 body line height and a 45 to 75 character measure"
+    },
+    "S-R5-110": {
+      "title": "Google Search Central: how HTTP status codes affect Google's crawlers",
+      "url": "https://developers.google.com/search/docs/crawling-indexing/http-network-errors",
+      "status": "opened",
+      "note": "a 2xx page whose content suggests an error shows as a soft 404 in Search Console; a 4xx tells the crawler the content does not exist"
+    },
+    "S-R5-111": {
+      "title": "NN/g: error-message guidelines",
+      "url": "https://www.nngroup.com/articles/error-message-guidelines/",
+      "status": "opened",
+      "note": "hide or minimize obscure error codes; offer potential remedies"
+    },
+    "S-R5-112": {
+      "title": "OpenDesigner owner: design review of a library part page, and state coverage (2026-11-13)",
+      "url": "https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md",
+      "status": "opened",
+      "note": "blocks with no gap, captions touching the box above, sibling radii that differ, prose in monospace, a copyable block missing its Copy button, https:// broken across lines; loading, empty, error, 404, offline, slow network, long and missing content"
     }
   }
 }
