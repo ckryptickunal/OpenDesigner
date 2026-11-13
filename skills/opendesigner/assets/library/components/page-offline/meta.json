@@ -86,6 +86,22 @@
         "synced": {
           "type": "string",
           "maxLength": 40
+        },
+        "reconnect": {
+          "type": "object",
+          "required": [
+            "label",
+            "event"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          }
         }
       },
       "required": [

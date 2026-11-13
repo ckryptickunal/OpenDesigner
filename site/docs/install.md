@@ -114,6 +114,10 @@ It writes `DESIGN.md`, `PRODUCT.md` and an `opendesigner/` folder. Every command
 - **To write straight into Figma:** Figma's remote MCP server and a Full seat. Without them, import the variable files by hand ([Export](/docs/export/)).
 - **To write into Paper:** Paper Desktop, running.
 
+## Smart UI
+
+Nothing extra to install: Smart UI comes with OpenDesigner in every way above, and stays off until you ask for it ("make our assistant answer with our components"), or until OpenDesigner sees an assistant in your product and you say yes to its one offer. In the Claude app, upload `opendesigner-smart-ui.zip` next to `opendesigner.zip`. Its live mode needs your own model key or the `claude` command; without one, the demo replays recorded answers. [Add it to your assistant](/docs/smart-ui-quickstart/).
+
 ## What has been tested so far
 
 Tested: the Claude Code install from GitHub with the terminal commands (2026-10-21), the plugin and skill packaging checks, and the engine on Python 3.10.11. Not yet recorded: a run in the Claude app, Codex, Cursor, other agents or ChatGPT.

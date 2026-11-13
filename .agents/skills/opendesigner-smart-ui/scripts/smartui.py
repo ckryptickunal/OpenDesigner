@@ -164,7 +164,7 @@ def pascal(slug):
     return "".join(w.capitalize() for w in slug.split("-"))
 
 
-def build_catalog(tokens_path=None, system="system", allow_images=(), allow_links=(), only=None, library=False):
+def build_catalog(tokens_path=None, system="system", allow_images=(), allow_links=(), only=None, library=False, host_look=False):
     """library=True adds every other marked library part (group "library"), for audits of the whole library."""
     tokens = token_names(tokens_path) if tokens_path else set()
     cset = load_set()
@@ -222,7 +222,8 @@ def build_catalog(tokens_path=None, system="system", allow_images=(), allow_link
                                "properties": {"stale_since": {"type": "string", "maxLength": 40}, "permission": {"type": "string", "enum": ["granted", "denied"]},
                                               "permission_note": {"type": "string", "maxLength": 160}}}},
         "metadata": ext({"system": system, "set_version": cset["version"], "made": datetime.date.today().isoformat(),
-                         "allow": {"images": sorted(allow_images), "links": sorted(allow_links)}, "limits": LIMITS}),
+                         "allow": {"images": sorted(allow_images), "links": sorted(allow_links)}, "limits": LIMITS,
+                         "host_look": bool(host_look)}),
     }
     return catalog, bundle
 
@@ -294,6 +295,7 @@ VIEW_BRIDGE = r"""
     request("ui/message", { role: "user", content: [{ type: "text", text: "OD:action " + a.name + " " + JSON.stringify(a.context) }] });
   });
   window.addEventListener("message", function (ev) {
+    if (ev.source !== window.parent) return;  // only the host that embeds this view
     var m = ev.data; if (!m || m.jsonrpc !== "2.0") return;
     if (m.id && waiting[m.id]) { var ok = waiting[m.id]; delete waiting[m.id]; ok(m.result || null); return; }
     if (m.method === "ui/notifications/tool-result") show((m.params || {}).structuredContent);
@@ -349,7 +351,7 @@ def cmd_catalog(a):
     out = pathlib.Path(a.out)
     tokens = a.tokens
     catalog, bundle = build_catalog(tokens, a.system or _system_name(), a.allow_images or [], a.allow_links or [],
-                                    _chosen(a) if not (a.all or a.library) else None, library=a.library)
+                                    _chosen(a) if not (a.all or a.library) else None, library=a.library, host_look=a.host_look)
     out.mkdir(parents=True, exist_ok=True)
     (out / "catalog.json").write_text(json.dumps(catalog, indent=1) + "\n")
     (out / "od-components.js").write_text(bundle_js(bundle))
@@ -1289,6 +1291,7 @@ def main(argv=None):
     p.add_argument("--allow-links", nargs="*")
     p.add_argument("--all", action="store_true", help="every component in the set, not only the confirmed ones")
     p.add_argument("--library", action="store_true", help="also every other marked library part (for auditing the library)")
+    p.add_argument("--host-look", action="store_true", help="the owner's opt-in: inside Claude or ChatGPT, let the host's colours and font apply (R7)")
     p = sub.add_parser("view", help="one self-contained HTML file: tokens, renderer, parts, catalog (the MCP Apps view)")
     p.add_argument("--out", default=dflt)
     p.add_argument("--tokens", default="opendesigner/build/css/tokens.css")

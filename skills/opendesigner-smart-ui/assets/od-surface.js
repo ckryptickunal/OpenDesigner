@@ -144,6 +144,7 @@ export class ODSurface extends (G.HTMLElement || class {}) {
   build(c, partial, surface) {
     const schema = this.catalog.components[c.component];
     if (!schema) return null;
+    if (c.component === "ApprovalPrompt") c = this.approvalDetails(c);
     if (od(schema).container) {
       const col = document.createElement("div");
       col.className = "od-column";
@@ -361,6 +362,17 @@ export class ODSurface extends (G.HTMLElement || class {}) {
     // a button inside an approval prompt the answer showed is itself the person's approval: don't ask twice
     if (el.closest('[data-od-component="ApprovalPrompt"]')) { send(true); this.setActionState(el, "pending"); return; }
     this.askApproval(el, a, context, () => send(true));
+  }
+
+  /** R3: what an approval sends is what it shows. The details are rebuilt from the approve button's own context first, so
+      a prompt cannot show "5 seats" and send 50; the answer's own lines follow only where they add a label not already there. */
+  approvalDetails(c) {
+    const ctx = (c.approve && c.approve.event && c.approve.event.context) || {};
+    const human = (k) => k.replace(/_/g, " ").replace(/^./, (x) => x.toUpperCase());
+    const sent = Object.entries(ctx).filter(([k]) => k !== "approved").map(([k, v]) => ({ label: human(k).slice(0, 24), value: String(v).slice(0, 80) }));
+    const seen = new Set(sent.map((d) => d.label.toLowerCase()));
+    const extra = (Array.isArray(c.details) ? c.details : []).filter((d) => d && !seen.has(String(d.label).toLowerCase()));
+    return { ...c, details: sent.concat(extra).slice(0, 6) };
   }
 
   askApproval(trigger, a, context, onYes) {

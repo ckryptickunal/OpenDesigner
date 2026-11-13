@@ -38,7 +38,7 @@ The OpenDesigner MCP server adds a `show_ui` tool and a `ui://opendesigner/surfa
 
 A button pressed in the view comes back to the chat as a message. Nothing runs on its own, and the server never changes anything.
 
-Your look draws the answer by default. To blend into the host instead, the owner turns on `host_look`, which maps the host's colours and font onto a few of your roles.
+Your look draws the answer by default. To blend into the host instead, the owner builds the catalog with `--host-look`, which maps the host's colours and font onto a few of your roles.
 
 ## What we haven't tried
 

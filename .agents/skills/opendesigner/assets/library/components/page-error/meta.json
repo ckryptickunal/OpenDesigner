@@ -57,6 +57,54 @@
         "reference": {
           "type": "string",
           "maxLength": 24
+        },
+        "retry": {
+          "type": "object",
+          "required": [
+            "label",
+            "event"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          }
+        },
+        "copy": {
+          "type": "object",
+          "required": [
+            "label",
+            "event"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          }
+        },
+        "support": {
+          "type": "object",
+          "required": [
+            "label",
+            "event"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          }
         }
       },
       "required": [

@@ -48,7 +48,24 @@
     ],
     "data": {
       "type": "object",
-      "properties": {}
+      "properties": {
+        "save": {
+          "type": "object",
+          "required": [
+            "label",
+            "event"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          }
+        }
+      }
     },
     "edge": {
       "empty": {

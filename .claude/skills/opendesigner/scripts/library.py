@@ -272,8 +272,13 @@ def check_one(c, known):
         if v.startswith("--ds-state-") and all(fb and used_vars(fb) and used_vars(fb) <= known for fb in fallbacks(html_, v)):
             continue
         errs.append(f"{v} is not a variable every engine system writes" + (" (a --ds-state-* one needs a fallback to one that is)" if v.startswith("--ds-state-") else ""))
-    if slots.has_marks(html_):  # marked parts (Smart UI): the marks are well formed and match spec.data
+    # every part marks the words and numbers that change, and has a fixture: Smart UI and the state audit read both
+    if not slots.has_marks(html_):
+        errs.append("no slot marks: mark the parts that hold data (data-od-slot and the others, see slots.py)")
+    else:
         errs += [f"slot marks: {e}" for e in slots.check_marks(html_) + slots.check_against_spec(html_, (c.get("spec") or {}).get("data"))]
+    if not (LIB / slug / "fixture.json").exists():
+        errs.append("no fixture.json: the part's data as an app sends it")
     if f'class="odl-{slug}' not in rest:
         errs.append(f"the root element needs class odl-{slug}")
     return errs

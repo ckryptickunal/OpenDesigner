@@ -160,6 +160,7 @@ class Conversation:
         self.data = {}         # action name -> its latest result
         self.surfaces = 0
         self.log = []          # per turn: calls, first errors, repaired, ui
+        self.offered = []      # the changes an answer offered as buttons: (name, context); a press must match one (R3)
 
     # -- routing: which read actions to run
     def route(self, message):
@@ -234,6 +235,7 @@ class Conversation:
                        {"role": "assistant", "text": text + (f" [showed {result['part']}]" if result["answer"] else "")}]
         if result["answer"]:
             self.surfaces += 1
+            self._remember_offers(result["answer"])
         entry = {"message": message, "calls": calls, "selector": sel["candidates"], "ui": bool(result["answer"]),
                  "part": result["part"], "first_errors": [f"{e['rule']} {e['path']}" for e in first_errors], "repaired": repaired,
                  "final_errors": [f"{e['rule']} {e['path']}" for e in result["errors"]]}
@@ -257,13 +259,29 @@ class Conversation:
         part = next((c.get("component") for m in msgs for c in (m.get("createSurface") or {}).get("components", []) if c.get("id") == "root"), None)
         return {"text": text, "answer": msgs if r["ok"] else None, "errors": r["errors"], "part": part}
 
+    def _remember_offers(self, answer):
+        def walk(v):
+            if isinstance(v, dict):
+                ev = v.get("event")
+                if isinstance(ev, dict) and self.app.ACTIONS.get(ev.get("name"), {}).get("changes"):
+                    self.offered.append((ev["name"], json.dumps(ev.get("context") or {}, sort_keys=True)))
+                for x in v.values():
+                    walk(x)
+            elif isinstance(v, list):
+                for x in v:
+                    walk(x)
+        walk(answer)
+
     # -- a button the person pressed
     def press(self, action):
         name, ctx = action.get("name"), dict(action.get("context") or {})
         a = self.app.ACTIONS.get(name)
         if a and a.get("changes"):
-            if ctx.pop("approved", None) is not True:
+            approved = ctx.pop("approved", None) is True
+            offer = (name, json.dumps(ctx, sort_keys=True))
+            if not approved or offer not in self.offered:  # only a change this conversation showed, after the prompt said yes
                 return {"text": "That needs your confirmation first.", "answer": None, "log": {"refused": name}}
+            self.offered.remove(offer)
             args = {k: v for k, v in ctx.items() if k in a.get("params", {})}
             try:
                 result = a["fn"](**args)
@@ -276,12 +294,18 @@ class Conversation:
         return self.answer(f"I picked {name.replace('_', ' ')}" + (f": {said}" if said else "") + ".")
 
     def _recorded(self, message):
-        rec = getattr(self.app, "RECORDED", {})
+        rec = getattr(self.app, "RECORDED", None)
+        if rec is None:
+            f = pathlib.Path(getattr(self.app, "__file__", "")).parent / "recorded.json"
+            rec = json.loads(f.read_text()).get("turns", {}) if f.is_file() else {}
         hit = next((v for k, v in rec.items() if k.lower() in message.lower()), None)
         if not hit:
             return {"text": "This demo is in recorded mode (no model key found). Pick one of the suggested questions.", "answer": None, "log": {}}
         self.surfaces += 1
-        return {"text": hit.get("text", ""), "answer": hit.get("answer"), "data": hit.get("data", {}), "log": {"recorded": True}}
+        ans = hit.get("answer")
+        if ans and not smartui.validate(ans, self.catalog, {"source": hit.get("data")})["ok"]:
+            ans = None  # a recording that no longer passes today's checks is shown as text only
+        return {"text": hit.get("text", ""), "answer": ans, "data": hit.get("data", {}), "log": {"recorded": True}}
 
 
 # ----------------------------------------------------------------------------------------------- the reference server
@@ -341,7 +365,17 @@ def serve(app_path, port, provider):
                     return self.wfile.write(b)
             return super().do_GET()
 
+        def _same_site(self):
+            """Loopback pages from this server only: a JSON body, our own Host, and our own Origin when the browser sends one
+            (stops another site, or a DNS rebinding, from posting a press)."""
+            here = f"127.0.0.1:{srv.server_address[1]}", f"localhost:{srv.server_address[1]}"
+            origin = self.headers.get("Origin")
+            return (self.headers.get("Host") in here and (origin is None or origin in {f"http://{h}" for h in here})
+                    and (self.headers.get("Content-Type") or "").split(";")[0].strip() == "application/json")
+
         def do_POST(self):
+            if not self._same_site():
+                return self._json(403, {"error": "only this page may talk to this server"})
             n = int(self.headers.get("content-length") or 0)
             if n > 100_000:
                 return self._json(413, {"error": "too large"})
@@ -380,6 +414,9 @@ def main(argv=None):
     p.add_argument("--app", required=True)
     p.add_argument("--provider", choices=list(MODELS) + ["recorded"])
     p.add_argument("message", nargs="+")
+    p = sub.add_parser("record", help="answer the app's suggestions with a real model once, and save them as its recorded mode")
+    p.add_argument("--app", required=True)
+    p.add_argument("--provider", choices=list(MODELS))
     p = sub.add_parser("providers")
     a = ap.parse_args(argv)
     if a.cmd == "providers":
@@ -387,6 +424,19 @@ def main(argv=None):
         return 0
     if a.cmd == "serve":
         serve(a.app, a.port, a.provider)
+        return 0
+    if a.cmd == "record":
+        app = load_app(a.app)
+        prov = a.provider or next(p for p in available() if p != "recorded")
+        out = {}
+        for q in getattr(app, "SUGGESTIONS", []):
+            r = Conversation(app, prov).answer(q)
+            out[q] = {"text": r["text"], "answer": r["answer"], "data": r["data"], "model": MODELS.get(prov)}
+            print(f"{q}: {r['log'].get('part') or 'text'}")
+        dest = pathlib.Path(a.app).parent / "recorded.json"
+        dest.write_text(json.dumps({"about": f"Answers recorded from {MODELS.get(prov)} with live.py record; replayed when there is no model.",
+                                    "turns": out}, indent=1, ensure_ascii=False) + "\n")
+        print(f"wrote {dest}")
         return 0
     app = load_app(a.app)
     conv = Conversation(app, a.provider or available()[0])

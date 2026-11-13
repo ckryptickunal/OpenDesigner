@@ -38,10 +38,10 @@ OpenDesigner is a catalog and renderer provider:
 
 ## 3. MCP Apps (inside Claude, ChatGPT and other hosts)
 The OpenDesigner MCP server (`server/mcp/`) adds:
-- **`show_ui`**: takes `answer` (A2UI messages), optional `source`, `max_parts` and `host_look`. It validates against the project's catalog; a failure returns the A2UI errors as a tool error the model can fix. A pass returns `structuredContent` for the view and the plain-text version as `content` (what a host without views shows). Read-only: data in, view out.
+- **`show_ui`**: takes `answer` (A2UI messages), optional `source` and `max_parts`. `source` is what the model says it was given, so the R6 number check is only as good as that; where the server has the data itself, check against it there. It validates against the project's catalog; a failure returns the A2UI errors as a tool error the model can fix. A pass returns `structuredContent` for the view and the plain-text version as `content` (what a host without views shows). Read-only: data in, view out.
 - **`ui://opendesigner/surface`**: one HTML file with the project's tokens, the renderer, the confirmed parts and the catalog (`smartui.py view` writes the same file). Its CSP allows images only from the owner's image hosts.
 - A button pressed in the view comes back as a chat message: `OD:action <name> <context>`. A change goes through the approval prompt in the view first.
-- **R7:** the host's CSS variables are mapped onto a few `--ds-*` roles only when `host_look` is true. By default the person's own system draws the answer.
+- **R7:** the host's CSS variables are mapped onto a few `--ds-*` roles only when the owner built the catalog with `--host-look`; a model cannot turn it on. By default the person's own system draws the answer.
 
 ## What has been tested, by host
 Tested means: run, looked at, and the result recorded here with its date. Anything not in this table has not been tried.

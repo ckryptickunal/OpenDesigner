@@ -126,7 +126,7 @@ New to the repo? You only need `skills/` or a zip from above. Everything else he
 </picture>
 
 
-82 ready-made parts built only on your tokens. Optional. [Browse them](https://opendesigner.dev/library/).
+123 ready-made parts built only on your tokens, each with its words and numbers marked so an app or assistant can fill it. Optional. [Browse them](https://opendesigner.dev/library/).
 
 ## Smart UI
 

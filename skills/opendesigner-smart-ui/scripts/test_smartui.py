@@ -230,13 +230,20 @@ class Live(unittest.TestCase):
         self.assertIsNotNone(r["answer"])
 
     def test_change_needs_the_renderers_approval(self):
-        self.script(["Done.", '{"calls": []}', "It's paid."])
+        self.script(['{"calls": []}', "It's paid."])
         conv = self.live.Conversation(self.app, "scripted")
-        r = conv.press({"name": "pay_invoice", "context": {"number": "TH-1043"}})
+        r = conv.press({"name": "pay_invoice", "context": {"number": "TH-1043"}})  # no approval
         self.assertEqual(self.ran, [])
         self.assertIn("confirmation", r["text"])
+        conv.press({"name": "pay_invoice", "context": {"number": "TH-1043", "approved": True}})  # approved, but never offered
+        self.assertEqual(self.ran, [])
+        conv._remember_offers([{"createSurface": {"components": [{"approve": {"label": "Pay", "event": {"name": "pay_invoice", "context": {"number": "TH-1043"}}}}]}}])
+        conv.press({"name": "pay_invoice", "context": {"number": "TH-1047", "approved": True}})  # offered one invoice, sent another
+        self.assertEqual(self.ran, [])
         conv.press({"name": "pay_invoice", "context": {"number": "TH-1043", "approved": True}})
         self.assertEqual(self.ran, [{"number": "TH-1043"}])
+        conv.press({"name": "pay_invoice", "context": {"number": "TH-1043", "approved": True}})  # an offer is used once
+        self.assertEqual(len(self.ran), 1)
 
     def test_still_wrong_after_repair_is_text_only(self):
         bad = '```a2ui\n{"component": "Nope"}\n```'

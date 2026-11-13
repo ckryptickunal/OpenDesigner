@@ -8,6 +8,7 @@ presses in the view comes back to the chat as an "OD:action <name> <context>" me
 The project: OD_PROJECT (or the server's working folder) with opendesigner/smart-ui/catalog.json and
 od-components.js (smartui.py catalog) and opendesigner/build/css/tokens.css. server.py registers TOOL and VIEW.
 """
+import html
 import json
 import os
 import pathlib
@@ -51,7 +52,7 @@ def view_text():
     try:
         cat, comps, tokens = load()
     except NoCatalog as e:
-        return f"<!doctype html><meta charset=utf-8><p style='font:14px system-ui'>{e}</p>"
+        return f"<!doctype html><meta charset=utf-8><p style='font:14px system-ui'>{html.escape(str(e))}</p>"
     return smartui.view_html(cat, comps, tokens)
 
 
@@ -69,7 +70,8 @@ def show_ui(args, tool_error):
         raise tool_error("The answer was not shown: it does not pass the Smart UI checks. Fix these and call show_ui again, "
                          "or answer in text:\n" + "\n".join(lines))
     text = smartui.to_text(r["surfaces"], cat).strip() or "(shown)"
-    return {"answer": answer, "catalogId": cat["catalogId"], "host_look": bool(args.get("host_look"))}, text
+    # R7: the host's look only when the owner turned it on (smartui.py catalog --host-look); the model can't
+    return {"answer": answer, "catalogId": cat["catalogId"], "host_look": bool(smartui.od(cat).get("host_look"))}, text
 
 
 TOOL = {
@@ -82,9 +84,9 @@ TOOL = {
                    "'OD:action <name> <context>' messages; nothing happens on its own.",
     "inputSchema": {"type": "object", "additionalProperties": False, "required": ["answer"], "properties": {
         "answer": {"type": "array", "minItems": 1, "maxItems": 8, "description": "A2UI v1.0 messages: createSurface (and updateComponents)"},
-        "source": {"type": "object", "description": "the data you were given; every number shown must come from it"},
+        "source": {"type": "object", "description": "the data you were given; every number shown must come from it (the server can only check against what you pass)"},
         "max_parts": {"type": "integer", "minimum": 1, "maximum": 4, "description": "more than one part, only when the person asked for more"},
-        "host_look": {"type": "boolean", "default": False, "description": "use the host's colours and fonts; only when the owner asked for it"}}},
+        }},
     "ui": SURFACE_URI,
 }
 
