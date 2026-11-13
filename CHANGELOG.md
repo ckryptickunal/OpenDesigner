@@ -8,6 +8,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Check-ins while you work** (2026-11-13). At the start of each session, after every five decisions and after each closed ledger round, the engine says in a few lines what changed, what is still open, whether DESIGN.md is stale and what to do next. `engine.py checkin --off` or `--every N` changes it. A project with UI code but no design system gets one short offer, once.
+
 - **See your system as your code builds it** (2026-11-13). `engine.py audit-page --open` writes one page: each token with how often the code uses it, then every place the code and the system disagree, with the file, line and count, and up to three ways to settle each, previewed with your own values. It changes nothing; your picks come back as `OD:fix` and `OD:waive` lines.
 - **Adapt your system to a site you like** (2026-11-13). `engine.py adapt <measurements.json> --open` puts your system beside the same system with a reference's corners, density, depth and type proportions. Your brand color, fonts and locked values stay yours, values you chose start unticked, and nothing is recorded until you tick what to take.
 - **A ledger for every round of building** (2026-11-13). `engine.py ledger start` lists what a round covers; each item ends done, broken or skipped on purpose, with the reason and who decided. `review --strict` fails while one is open, an agent's waiver needs the owner's words before the round closes, DESIGN.md shows the ledger, and building blocks named in it now fill the coverage check.

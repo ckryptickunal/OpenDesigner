@@ -77,9 +77,11 @@ from __future__ import annotations
 
 import argparse
 import collections
+import contextlib
 import copy
 import datetime as _dt
 import fnmatch
+import io
 import json
 import math
 import os
@@ -5935,6 +5937,249 @@ def refresh_now(d, command=None):
         return None
 
 
+# =============================================================================================
+# check-ins: a few lines on where the work stands, at session start and after every N decisions or a closed round, and one
+# polite offer when OpenDesigner is installed but not used (owner, 2026-11-13). The engine decides; hooks and skills deliver.
+# =============================================================================================
+
+CHECKIN_EVERY = 5         # decisions between check-ins, unless the project sets its own (engine.py checkin --every N)
+CHECKIN_IDLE_DAYS = 30    # a system nobody changed for this long gets one offer at session start
+OFFER_QUIET_DAYS = 7      # at most one install-without-use offer across all projects in this many days
+OFFER_UI = (".css", ".scss", ".less", ".tsx", ".jsx", ".vue", ".svelte", ".html", ".swift", ".kt")
+OFFER_SKIP = {"node_modules", ".git", "dist", "build", ".next", "vendor", "Pods", ".venv", "venv", "__pycache__"}
+
+
+def od_home():
+    return os.environ.get("OD_HOME") or os.path.join(os.path.expanduser("~"), ".opendesigner")
+
+
+def checkins_off_by_env():
+    return os.environ.get("OD_CHECKINS", "").strip().lower() in ("off", "0", "no", "false")
+
+
+def _home_json(name):
+    try:
+        return read_json(os.path.join(od_home(), name))
+    except (OSError, ValueError):
+        return {}
+
+
+def _home_write(name, data):
+    """Best effort: a check-in or an offer never fails because the home folder is read-only."""
+    try:
+        os.makedirs(od_home(), exist_ok=True)
+        dump_json(os.path.join(od_home(), name), data)
+    except OSError:
+        pass
+
+
+def checkin_settings(state):
+    c = (state or {}).get("checkins") or {}
+    every = c.get("every", CHECKIN_EVERY)
+    return {"enabled": c.get("enabled", True) is not False and not checkins_off_by_env(),
+            "every": every if isinstance(every, int) and every > 0 else CHECKIN_EVERY,
+            "offers": _home_json("config.json").get("offers", True) is not False and not checkins_off_by_env()}
+
+
+def decision_count(d):
+    return len(re.findall(r"^## D-\d+", _decisions_text(d), flags=re.M))
+
+
+def first_result_shown(d, state):
+    """No housekeeping before the first result (rules.md): check-ins start once DESIGN.md or a build exists."""
+    return os.path.exists(os.path.join(doc_dir(d), "DESIGN.md")) or bool((state.get("opendesigner") or {}).get("built"))
+
+
+def checkin_facts(d, state, scan=True, project=None):
+    """What changed since the last check-in, what the ledger still holds, whether DESIGN.md is stale, review's count (scan
+    False: the count from the last check-in), and the one next step. Reads only."""
+    last = ((state.get("checkins") or {}).get("last")) or {}
+    n_dec = decision_count(d)
+    closed = [r_ for r_ in ledger_rounds(state) if r_.get("closed")]
+    open_items = ledger_open(state)
+    stale = []
+    dm = os.path.join(doc_dir(d), "DESIGN.md")
+    if os.path.exists(dm):
+        try:
+            files, meta, _ = generate_system(load_state(d))
+            with open(dm, encoding="utf-8") as f:
+                cur = f.read()
+            fresh = render_design_md(d, files, meta, merge_defaults(load_state(d)), cur)
+            secs = lambda t: {x.split("\n", 1)[0].strip(): x for x in re.split(r"^## ", t, flags=re.M)[1:]}
+            a_, b_ = secs(cur), secs(fresh)
+            stale = [t for t in b_ if a_.get(t) != b_[t]]
+        except Exception:  # a check-in never stops the work; review reports the real error
+            stale = []
+    review = None
+    if scan:
+        col = {}
+        out = io.StringIO()
+        try:
+            with contextlib.redirect_stdout(out):
+                cmd_review(d, project, collect=col)
+            review = {"toFix": col.get("toFix", 0), "reasons": col.get("reasons", [])}
+        except (Exception, SystemExit):
+            review = None
+    prev = last.get("toFix")
+    if open_items:
+        o = open_items[0]
+        nxt = (f"settle ledger item {o['round']}/{o['item']} ({o['status']}): engine.py ledger done {o['item']}, or waive it with "
+               "the owner's words")
+    elif stale:
+        nxt = "engine.py design-md (DESIGN.md is out of date in " + ", ".join(stale[:3]) + ("..." if len(stale) > 3 else "") + ")"
+    elif review and prev is not None and review["toFix"] > prev:
+        nxt = f"engine.py review: {review['toFix'] - prev} new thing(s) to fix since the last check-in"
+    elif review and review["toFix"]:
+        nxt = "engine.py audit-page --open, so the owner can see and settle what the code does differently"
+    else:
+        nxt = "nothing waits: carry on"
+    return {"since": last.get("date"), "decisions": n_dec, "newDecisions": n_dec - last.get("decisions", 0),
+            "rounds": len(closed), "newRounds": len(closed) - last.get("rounds", 0), "open": open_items, "stale": stale,
+            "review": review, "reviewBefore": prev, "next": nxt}
+
+
+def checkin_due(d, state, settings=None):
+    st = settings or checkin_settings(state)
+    if not st["enabled"] or not first_result_shown(d, state):
+        return False
+    last = ((state.get("checkins") or {}).get("last")) or {}
+    closed = sum(1 for r_ in ledger_rounds(state) if r_.get("closed"))
+    return decision_count(d) - last.get("decisions", 0) >= st["every"] or closed > last.get("rounds", 0)
+
+
+def checkin_lines(f):
+    since = f"since the last check-in ({f['since']})" if f["since"] else "so far"
+    out = [f"Check-in, {since}: {f['newDecisions']} decision{'s' if f['newDecisions'] != 1 else ''} and {f['newRounds']} "
+           f"closed round{'s' if f['newRounds'] != 1 else ''}."]
+    out.append(f"Ledger: {len(f['open'])} item{'s' if len(f['open']) != 1 else ''} neither done nor waived." if f["open"]
+               else "Ledger: nothing open.")
+    out.append("DESIGN.md: out of date in " + ", ".join(f["stale"]) + "." if f["stale"] else "DESIGN.md: matches the system.")
+    if f["review"] is not None:
+        was = f" (was {f['reviewBefore']})" if f["reviewBefore"] is not None and f["reviewBefore"] != f["review"]["toFix"] else ""
+        out.append(f"Review: {f['review']['toFix']} to fix{was}." if f["review"]["toFix"] else "Review: ok.")
+    elif f["reviewBefore"] is not None:
+        out.append(f"Review at the last check-in: {f['reviewBefore']} to fix (run engine.py review for today's count).")
+    out.append(f"Next: {f['next']}.")
+    return out
+
+
+def record_checkin(d, f):
+    sp = os.path.join(d, STATE_FILE)
+    st = read_json(sp)
+    st.setdefault("checkins", {})["last"] = {"date": _dt.date.today().isoformat(), "decisions": f["decisions"], "rounds": f["rounds"],
+                                             **({"toFix": f["review"]["toFix"]} if f["review"] is not None else
+                                                {"toFix": f["reviewBefore"]} if f["reviewBefore"] is not None else {})}
+    dump_json(sp, st)
+
+
+def checkin_after_change(d):
+    """After set, pick or ledger close: when a check-in is due, print it and record it. Silent otherwise."""
+    if not os.path.exists(os.path.join(d, STATE_FILE)):
+        return
+    state = merge_defaults(load_state(d))
+    if not checkin_due(d, state):
+        return
+    f = checkin_facts(d, state, scan=True)
+    for ln in checkin_lines(f):
+        print("  " + ln)
+    print("  Tell the person in two or three plain lines, then go on; ask at most one question, and only if the next step needs them. "
+          "(engine.py checkin --off turns these off.)")
+    record_checkin(d, f)
+
+
+def idle_days(d):
+    """Days since decisions.md last changed (its file time), or None."""
+    fp = os.path.join(d, "decisions.md")
+    if not os.path.exists(fp):
+        return None
+    return int((_dt.datetime.now().timestamp() - os.path.getmtime(fp)) // 86400)
+
+
+def looks_like_ui(project, depth=2):
+    top = os.path.abspath(project)
+    for root, dirs, files in os.walk(top):
+        if root[len(top):].count(os.sep) >= depth:
+            dirs[:] = []
+        dirs[:] = [x for x in dirs if x not in OFFER_SKIP and not x.startswith(".")]
+        if "package.json" in files or any(f.lower().endswith(OFFER_UI) for f in files):
+            return True
+    return False
+
+
+def cmd_offer(project):
+    """The start-of-session hook in a project with no opendesigner/: one short line for the agent, only when OpenDesigner is
+    installed, offers are on, the project has UI code, this project never got one, and no project got one in the last
+    OFFER_QUIET_DAYS. Remembered in OD_HOME (never in the project). Silent otherwise, and on any error."""
+    try:
+        st = checkin_settings({})
+        if not st["offers"] or not project or not looks_like_ui(project):
+            return 0
+        rec = _home_json("checkins.json")
+        key = os.path.abspath(project)
+        offered = rec.setdefault("offered", {})
+        if key in offered:
+            return 0
+        last = rec.get("lastOffer")
+        if last and (_dt.date.today() - _dt.date.fromisoformat(last)).days < OFFER_QUIET_DAYS:
+            return 0
+        print("OpenDesigner is installed, and this project has UI code but no design system yet (no opendesigner/ folder). "
+              "Do not bring it up unprompted; if the person asks for UI, styling or visual work, offer once, in one line: "
+              "\"Want me to sketch a design system from what is already here? About five questions.\" "
+              "(engine.py detect reads what exists first.) This note shows once per project; "
+              "engine.py checkin --offers off turns these notes off everywhere.")
+        offered[key] = rec["lastOffer"] = _dt.date.today().isoformat()
+        _home_write("checkins.json", rec)
+    except Exception:
+        pass
+    return 0
+
+
+def cmd_checkin(d, project=None, hook=False, as_json=False, every=None, on=None, offers=None, offer=False):
+    """engine.py checkin: where the work stands since the last check-in, and the one next step. It records the check-in
+    (state.checkins.last) unless --hook. --every N, --off/--on (this project) and --offers on|off (every project, in
+    OD_HOME/config.json) change the settings; OD_CHECKINS=off turns all of it off for one shell."""
+    if offer:
+        return cmd_offer(project or os.getcwd())
+    if offers is not None:
+        cfg = _home_json("config.json")
+        cfg["offers"] = offers == "on"
+        _home_write("config.json", cfg)
+        print(f"Offers in projects without a design system are {'on' if offers == 'on' else 'off'} (all projects; {od_home()}/config.json).")
+        return 0
+    sp = os.path.join(d, STATE_FILE)
+    if not os.path.exists(sp):
+        if not hook:
+            print(f"No OpenDesigner system in {d}. Check-ins start once there is one (engine.py sketch).")
+        return 0
+    if every is not None or on is not None:
+        st = read_json(sp)
+        c = st.setdefault("checkins", {})
+        if every is not None:
+            if every < 1:
+                raise SystemExit("--every takes a whole number of decisions, 1 or more.")
+            c["every"] = every
+        if on is not None:
+            c["enabled"] = on
+        dump_json(sp, st)
+        cfg = checkin_settings(st)
+        print(f"Check-ins are {'on' if cfg['enabled'] else 'off'} for this project" + (f", every {cfg['every']} decisions and after each "
+              "closed ledger round, and at the start of each session." if cfg["enabled"] else "; engine.py checkin --on brings them back."))
+        return 0
+    state = merge_defaults(load_state(d))
+    cfg = checkin_settings(state)
+    if hook and (not cfg["enabled"] or not first_result_shown(d, state)):
+        return 0
+    f = checkin_facts(d, state, scan=not hook, project=project)
+    if as_json:
+        print(json.dumps(dict(f, settings=cfg), indent=2, ensure_ascii=False))
+    else:
+        for ln in checkin_lines(f):
+            print(ln)
+    if not hook:
+        record_checkin(d, f)
+    return 0
+
+
 def cmd_status(d, as_json=False, hook=False):
     """`engine.py status`: the Now line and what to read before the next round. Read-only: it writes nothing.
     hook: the plugin's SessionStart hook (hooks/hooks.json). Nothing at all without a system; otherwise five short lines
@@ -5959,6 +6204,23 @@ def cmd_status(d, as_json=False, hook=False):
         print("Read DESIGN.md and opendesigner/RULES.md first; end every implementation with engine.py review and a re-read "
               "of DESIGN.md; owner corrections go to engine.py feedback \"<the rule>\" --kind note.")
         print("engine.py here is: python3 " + shlex.quote(os.path.abspath(__file__)))
+        try:
+            cfg = checkin_settings(state)
+            if cfg["enabled"] and first_result_shown(d, state):
+                for ln in checkin_lines(checkin_facts(d, state, scan=False)):  # no code scan at session start: it must stay fast
+                    print(ln)
+                idle = idle_days(d)
+                if idle is not None and idle >= CHECKIN_IDLE_DAYS:
+                    rec = _home_json("checkins.json")
+                    seen = rec.setdefault("idle", {})
+                    key = os.path.abspath(d)
+                    if seen.get(key) != decision_count(d):  # once per quiet stretch: a new decision resets it
+                        print(f"Nothing in the design system changed for {idle} days. If the person is doing UI work, offer once: "
+                              "\"Want a quick check of the code against the design system?\" (engine.py audit-page --open).")
+                        seen[key] = decision_count(d)
+                        _home_write("checkins.json", rec)
+        except Exception:  # the hook never fails a session start
+            pass
         return 0
     read = [p for p in (os.path.join(d, "PROTOCOL.md"), os.path.join(d, "RULES.md"), os.path.join(root, "DESIGN.md")) if os.path.exists(p)]
     if as_json:
@@ -13529,6 +13791,17 @@ def _main(argv=None):
     p.add_argument("--by", default=None, choices=["owner", "agent"], help="who decided: the owner, or an agent (then ask the owner)")
     p.add_argument("--remove", action="store_true")
     p.add_argument("--json", action="store_true")
+    p = sub.add_parser("checkin", parents=[common], help="where the work stands since the last check-in, and the one next step "
+                                                         "(session start, every N decisions, each closed round); settings")
+    p.add_argument("--project", default=None, help="folder review scans (default: the project root)")
+    p.add_argument("--hook", action="store_true", help="as the start-of-session hook: records nothing and scans no code")
+    p.add_argument("--json", action="store_true")
+    p.add_argument("--every", type=int, default=None, help="decisions between check-ins for this project (default 5)")
+    p.add_argument("--off", action="store_true", help="turn check-ins off for this project")
+    p.add_argument("--on", action="store_true", help="turn them back on")
+    p.add_argument("--offers", choices=["on", "off"], default=None, help="the one-time offer in projects with no design system, "
+                                                                         "for every project (OD_HOME/config.json)")
+    p.add_argument("--offer", action="store_true", help="the hook in a project with no opendesigner/: one offer, once per project")
     p = sub.add_parser("ledger", parents=[common], help="the audit ledger: what each implementation round did, broke and skipped on purpose")
     p.add_argument("action", choices=["start", "add", "done", "broke", "waive", "close", "show"])
     p.add_argument("item", nargs="?", help="the item id (a building block such as comp.action.button, an audit issue such as A-color-01, "
@@ -13661,6 +13934,8 @@ def _main(argv=None):
                 quote=a.quote)
         if not a.no_doc and not a.dry_run:
             refresh_docs(d)
+        if not a.dry_run:
+            checkin_after_change(d)
     elif a.cmd in ("lock", "unlock"):
         cmd_lock(d, a.path, a.cmd == "lock")
         if not a.no_doc:
@@ -13724,8 +13999,14 @@ def _main(argv=None):
         return cmd_exempt(d, a.glob, a.why, a.by, a.remove, a.json)
     elif a.cmd == "ledger":
         start = a.action == "start"
-        return cmd_ledger(d, a.action, item=None if start else a.item, title=a.item if start else None, items=a.items, note=a.note,
-                          why=a.why, by=a.by, quote=a.quote, files=a.files, as_json=a.json)
+        rc_ = cmd_ledger(d, a.action, item=None if start else a.item, title=a.item if start else None, items=a.items, note=a.note,
+                         why=a.why, by=a.by, quote=a.quote, files=a.files, as_json=a.json)
+        if a.action == "close" and rc_ == 0:
+            checkin_after_change(d)
+        return rc_
+    elif a.cmd == "checkin":
+        return cmd_checkin(d, a.project, hook=a.hook, as_json=a.json, every=a.every, on=True if a.on else False if a.off else None,
+                           offers=a.offers, offer=a.offer)
     elif a.cmd == "standards":
         res = {}
         cmd_standards(d, a.json, a.update, a.show_all, result=res)
