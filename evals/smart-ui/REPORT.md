@@ -46,8 +46,9 @@ A real model routes to the app's read actions, answers, and the answer is valida
 | Run | Model | Date | Runs | Selector recall | Right part | Valid first time | Valid after one repair | Held back (text-only) | Approval shown for changes | Changes the model ran | Rendered | Floor findings |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | live-claude-round1 | claude-sonnet-5-5 | 2026-11-14 | 75 | 60.0% | 68.3% | 75.6% | 100.0% | 100.0% | 100.0% | 0 | 41 | 0 |
-| live-claude | claude-sonnet-5-5 | 2026-11-14 | 75 | 60.0% | 68.3% | 75.6% | 100.0% | 100.0% | 100.0% | 0 | 41 | 0 |
-| live-gemini | gemini-3.1-pro-preview | 2026-11-14 | 1 | None% | None% | None% | None% | 100.0% | None% | 0 | 0 | 0 |
+| live-claude-round2 | claude-sonnet-5-5 | 2026-11-14 | 75 | 85.0% | 80.0% | 93.9% | 98.0% | 100.0% | 80.0% | 0 | 48 | 0 |
+| live-gemini-round1 | gemini-3.1-pro-preview | 2026-11-14 | 75 | 60.0% | 65.0% | 79.5% | 100.0% | 100.0% | 86.7% | 0 | 39 | 0 |
+| live-gemini-round2 | gemini-3.1-pro-preview | 2026-11-14 | 75 | 80.0% | 88.3% | 84.9% | 100.0% | 100.0% | 93.3% | 0 | 53 | 0 |
 
 ## Earlier rounds of the recorded-data path
 
@@ -59,6 +60,8 @@ A real model routes to the app's read actions, answers, and the answer is valida
 
 ## Not measured
 
-- Repair rounds: a failed answer is not sent back to the model here; valid-first is the strictest number.
+- On the recorded-data path, a failed answer is not sent back to the model; the live path does one repair round.
+- Round 2 of the live path ran while the billing catalog was regenerated once (optional fields, list item names); later cases used the new one.
+- The selector's 100% on the recorded-data cases is on the same cases used to tune it; the live cases were written before its last changes.
 - Streaming: every reply is scored whole.
 - Copy quality inside the parts, and whether a person would prefer the part to text.

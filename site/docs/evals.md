@@ -73,6 +73,21 @@ The first run found these. Each one was fixed, and the same test pages ran again
 
 {{evals:checker-changes}}
 
+## Smart UI: does the assistant show the right part?
+
+Smart UI is tested on a small billing app with a real model in the loop (`examples/smart-ui-support/`). 25 questions, three runs each: 20 that need a part, some of them follow-ups, five of them changes like paying an invoice, and 5 that should stay text. Results from 14 November 2026, after one round of fixes:
+
+| | Claude Sonnet 5.5 | Gemini 3.1 Pro |
+|---|---|---|
+| Showed the right part | 80% | 88% |
+| Answer passed every check the first time | 94% | 85% |
+| Passed after one repair round | 98% | 100% |
+| Kept a short fact as text | 100% | 100% |
+| Asked for approval before a change | 80% | 93% |
+| Changes the model ran on its own | 0 | 0 |
+
+When a change didn't get an approval prompt, the model answered in text and nothing happened: changes run only after the person presses the button. The full report, with every miss, is `evals/smart-ui/REPORT.md`.
+
 ## Run them yourself
 
 The design and checker evals are free and run on your machine without an AI. The agent evals use [`claude plugin eval`](https://code.claude.com/docs/en/plugin-evals): every run is a real Claude Code session on your own account, so it counts against your plan or API bill (the last full run cost about the amount shown under its table).

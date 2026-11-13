@@ -346,7 +346,9 @@ def report():
             s_ = r["summary"]
             lines.append(f"| {f.stem} | {r['model']} | {s_['picked_right_pct']}% | {s_['valid_first_pct']}% | {s_['held_back_pct']}% |")
         lines.append("")
-    lines += ["## Not measured", "", "- Repair rounds: a failed answer is not sent back to the model here; valid-first is the strictest number.",
+    lines += ["## Not measured", "", "- On the recorded-data path, a failed answer is not sent back to the model; the live path does one repair round.",
+              "- Round 2 of the live path ran while the billing catalog was regenerated once (optional fields, list item names); later cases used the new one.",
+              "- The selector's 100% on the recorded-data cases is on the same cases used to tune it; the live cases were written before its last changes.",
               "- Streaming: every reply is scored whole.", "- Copy quality inside the parts, and whether a person would prefer the part to text.", ""]
     (EV / "REPORT.md").write_text("\n".join(lines))
     print(f"wrote {EV / 'REPORT.md'}")
